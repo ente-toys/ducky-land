@@ -17,14 +17,42 @@ move your duck; Q quacks, E dances, F follows your duck, and Home (or 0) fits th
 whole island. Tap a duck to greet it. M toggles sound after the first interaction.
 Reduced-motion preferences disable environmental sway, drifting leaves, and camera easing.
 
-The production build includes both island renderers, both asset galleries, and the Rive runtime.
+The production build includes all three island renderers, both asset galleries, and the original Rive runtime.
 `npm run build` creates the production app in
 `dist/`, and `npm run preview` previews that build. The original game server still
 runs with `npm start`; its existing asset build is available as `npm run build:rive`.
 
+## PixiJS illustrated island
+
+`/pixi/` is a separate 2D page using PixiJS and the original vector artwork.
+It loads no Rive runtime, `.riv` files, WASM, or Three.js. The island starts at
+the plaza; Home/0 fits all seven areas. Drag pans, wheel/pinch zooms around its
+anchor, click/tap walks, WASD/arrows move, Q/1 quacks, E dances, 2–7 trigger
+heart/laugh/wave/sleep/grumpy/party, M toggles sound, F follows, and +/− zooms.
+Tap another duck to greet it; double-tap your duck to dance.
+
+The 29 ducks use eight original illustrated directions with separately animated
+wings, feet, bill, eyes and wardrobe attachments. Movement, routing, NPC decisions,
+emote durations and sound reuse renderer-independent modules. Trees sway, boats
+bob, water ripples and leaves drift. Reduced motion quiets the animation; hidden
+tabs pause simulation and audio. There are no interface panels over the scene.
+
+`src/pixi/engine.js` owns one renderer and animation loop. SVG textures are shared,
+off-screen props and ducks are culled, and pixel ratio is capped at 2. Ground art
+is split into 12 tiles to stay below mobile texture-size limits. Source SVGs and
+metadata live in `public/pixi-art/` and `public/pixi-duck/`.
+The static extraction scripts read existing artwork without executing the legacy
+Rive build: `python3 scripts/extract-pixi-art.py` and
+`python3 scripts/extract-pixi-duck.py`. Nothing requires the Rive editor.
+`node --test qa/pixi.test.mjs` covers pinch anchors, gesture cancellation and
+original-art placement/clip integrity. Production builds include `/pixi/index.html`
+for direct route loads. Browser evidence and device limits are recorded in
+`qa/pixi-acceptance.json`.
+
 ## Three.js island and model catalog
 
 - `/` — the existing Rive island.
+- `/pixi/` — the new illustrated island, running entirely in PixiJS.
 - `/three/` — a separate, fully 3D island with one player and 28 autonomous ducks.
 - `/three/assets/` — one orbitable preview canvas, search/category filters, source SVGs, outfit previews, and ten duck animations.
 - `/extracted-assets/` — the existing source asset gallery.

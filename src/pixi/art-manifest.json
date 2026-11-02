@@ -1,0 +1,3350 @@
+{
+  "schemaVersion": 1,
+  "source": "rive/island.rml",
+  "sourceSha256": "bea57803c6180dc6fcb0fc6c452deeed6bc39e2e012fb6e8945ef77c5f310c96",
+  "worldSource": "rive/web/world.json",
+  "worldSha256": "2733884c372152e78bbe2309491568c7278e4b89b9ca490640e743f902eab749",
+  "exporter": "scripts/extract-pixi-art.py",
+  "world": {
+    "width": 5800,
+    "height": 4400
+  },
+  "coordinateConvention": "Prop SVGs retain local ground-contact (0,0). Set sprite.anchor to anchor and position to (x,y); native dimensions are world units. Ground tiles use top-left anchors and their (x,y) positions.",
+  "ground": {
+    "src": "/pixi-art/ground.svg",
+    "width": 5800,
+    "height": 4400,
+    "viewBox": [
+      0,
+      0,
+      5800,
+      4400
+    ],
+    "transparent": true,
+    "excludedShape": "Sea",
+    "tiles": [
+      {
+        "src": "/pixi-art/ground-r0-c0.svg",
+        "x": 0,
+        "y": 0,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          0,
+          0,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r0-c1.svg",
+        "x": 1450,
+        "y": 0,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          1450,
+          0,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r0-c2.svg",
+        "x": 2900,
+        "y": 0,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          2900,
+          0,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r0-c3.svg",
+        "x": 4350,
+        "y": 0,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          4350,
+          0,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r1-c0.svg",
+        "x": 0,
+        "y": 1467,
+        "width": 1450,
+        "height": 1466,
+        "viewBox": [
+          0,
+          1467,
+          1450,
+          1466
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r1-c1.svg",
+        "x": 1450,
+        "y": 1467,
+        "width": 1450,
+        "height": 1466,
+        "viewBox": [
+          1450,
+          1467,
+          1450,
+          1466
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r1-c2.svg",
+        "x": 2900,
+        "y": 1467,
+        "width": 1450,
+        "height": 1466,
+        "viewBox": [
+          2900,
+          1467,
+          1450,
+          1466
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r1-c3.svg",
+        "x": 4350,
+        "y": 1467,
+        "width": 1450,
+        "height": 1466,
+        "viewBox": [
+          4350,
+          1467,
+          1450,
+          1466
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r2-c0.svg",
+        "x": 0,
+        "y": 2933,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          0,
+          2933,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r2-c1.svg",
+        "x": 1450,
+        "y": 2933,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          1450,
+          2933,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r2-c2.svg",
+        "x": 2900,
+        "y": 2933,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          2900,
+          2933,
+          1450,
+          1467
+        ]
+      },
+      {
+        "src": "/pixi-art/ground-r2-c3.svg",
+        "x": 4350,
+        "y": 2933,
+        "width": 1450,
+        "height": 1467,
+        "viewBox": [
+          4350,
+          2933,
+          1450,
+          1467
+        ]
+      }
+    ],
+    "stats": {
+      "paintedShapes": 1645,
+      "paths": 1645,
+      "clippingShapes": 800,
+      "textNodes": 0
+    }
+  },
+  "props": [
+    {
+      "id": 0,
+      "name": "Drip fountain",
+      "artboard": "Prop 0",
+      "src": "/pixi-art/prop-00.svg",
+      "width": 468,
+      "height": 336,
+      "viewBox": [
+        -235,
+        -205,
+        468,
+        336
+      ],
+      "anchor": {
+        "x": 0.5021367521367521,
+        "y": 0.6101190476190477
+      },
+      "origin": {
+        "x": 235,
+        "y": 205
+      },
+      "bounds": {
+        "minX": -235,
+        "minY": -205,
+        "maxX": 233,
+        "maxY": 131
+      },
+      "x": 2820,
+      "y": 2350,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 39,
+        "paths": 45,
+        "clippingShapes": 15,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 1,
+      "name": "Market stall",
+      "artboard": "Prop 1",
+      "src": "/pixi-art/prop-01.svg",
+      "width": 316,
+      "height": 261,
+      "viewBox": [
+        -158,
+        -240,
+        316,
+        261
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9195402298850575
+      },
+      "origin": {
+        "x": 158,
+        "y": 240
+      },
+      "bounds": {
+        "minX": -158,
+        "minY": -240,
+        "maxX": 158,
+        "maxY": 21
+      },
+      "x": 2380,
+      "y": 2080,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 92,
+        "paths": 92,
+        "clippingShapes": 61,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 2,
+      "name": "Market stall",
+      "artboard": "Prop 2",
+      "src": "/pixi-art/prop-02.svg",
+      "width": 316,
+      "height": 261,
+      "viewBox": [
+        -158,
+        -240,
+        316,
+        261
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9195402298850575
+      },
+      "origin": {
+        "x": 158,
+        "y": 240
+      },
+      "bounds": {
+        "minX": -158,
+        "minY": -240,
+        "maxX": 158,
+        "maxY": 21
+      },
+      "x": 2820,
+      "y": 1960,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 92,
+        "paths": 92,
+        "clippingShapes": 61,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 3,
+      "name": "Market stall",
+      "artboard": "Prop 3",
+      "src": "/pixi-art/prop-03.svg",
+      "width": 316,
+      "height": 261,
+      "viewBox": [
+        -158,
+        -240,
+        316,
+        261
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9195402298850575
+      },
+      "origin": {
+        "x": 158,
+        "y": 240
+      },
+      "bounds": {
+        "minX": -158,
+        "minY": -240,
+        "maxX": 158,
+        "maxY": 21
+      },
+      "x": 3280,
+      "y": 2080,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 92,
+        "paths": 92,
+        "clippingShapes": 61,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 4,
+      "name": "Plaza bench",
+      "artboard": "Prop 4",
+      "src": "/pixi-art/prop-04.svg",
+      "width": 200,
+      "height": 128,
+      "viewBox": [
+        -100,
+        -113,
+        200,
+        128
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8828125
+      },
+      "origin": {
+        "x": 100,
+        "y": 113
+      },
+      "bounds": {
+        "minX": -100,
+        "minY": -113,
+        "maxX": 100,
+        "maxY": 15
+      },
+      "x": 2290,
+      "y": 2550,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 13,
+        "paths": 13,
+        "clippingShapes": 8,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 5,
+      "name": "Plaza bench",
+      "artboard": "Prop 5",
+      "src": "/pixi-art/prop-05.svg",
+      "width": 200,
+      "height": 128,
+      "viewBox": [
+        -100,
+        -113,
+        200,
+        128
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8828125
+      },
+      "origin": {
+        "x": 100,
+        "y": 113
+      },
+      "bounds": {
+        "minX": -100,
+        "minY": -113,
+        "maxX": 100,
+        "maxY": 15
+      },
+      "x": 3390,
+      "y": 2530,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 13,
+        "paths": 13,
+        "clippingShapes": 8,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 6,
+      "name": "Plaza bench",
+      "artboard": "Prop 6",
+      "src": "/pixi-art/prop-06.svg",
+      "width": 200,
+      "height": 128,
+      "viewBox": [
+        -100,
+        -113,
+        200,
+        128
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8828125
+      },
+      "origin": {
+        "x": 100,
+        "y": 113
+      },
+      "bounds": {
+        "minX": -100,
+        "minY": -113,
+        "maxX": 100,
+        "maxY": 15
+      },
+      "x": 2730,
+      "y": 2810,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 13,
+        "paths": 13,
+        "clippingShapes": 8,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 7,
+      "name": "Plaza lantern",
+      "artboard": "Prop 7",
+      "src": "/pixi-art/prop-07.svg",
+      "width": 82,
+      "height": 252,
+      "viewBox": [
+        -41,
+        -239,
+        82,
+        252
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9484126984126984
+      },
+      "origin": {
+        "x": 41,
+        "y": 239
+      },
+      "bounds": {
+        "minX": -41,
+        "minY": -239,
+        "maxX": 41,
+        "maxY": 13
+      },
+      "x": 2510,
+      "y": 2230,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 16,
+        "paths": 16,
+        "clippingShapes": 11,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 8,
+      "name": "Plaza lantern",
+      "artboard": "Prop 8",
+      "src": "/pixi-art/prop-08.svg",
+      "width": 82,
+      "height": 252,
+      "viewBox": [
+        -41,
+        -239,
+        82,
+        252
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9484126984126984
+      },
+      "origin": {
+        "x": 41,
+        "y": 239
+      },
+      "bounds": {
+        "minX": -41,
+        "minY": -239,
+        "maxX": 41,
+        "maxY": 13
+      },
+      "x": 3130,
+      "y": 2230,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 16,
+        "paths": 16,
+        "clippingShapes": 11,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 9,
+      "name": "Plaza lantern",
+      "artboard": "Prop 9",
+      "src": "/pixi-art/prop-09.svg",
+      "width": 82,
+      "height": 252,
+      "viewBox": [
+        -41,
+        -239,
+        82,
+        252
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9484126984126984
+      },
+      "origin": {
+        "x": 41,
+        "y": 239
+      },
+      "bounds": {
+        "minX": -41,
+        "minY": -239,
+        "maxX": 41,
+        "maxY": 13
+      },
+      "x": 2440,
+      "y": 2770,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 16,
+        "paths": 16,
+        "clippingShapes": 11,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 10,
+      "name": "Plaza lantern",
+      "artboard": "Prop 10",
+      "src": "/pixi-art/prop-10.svg",
+      "width": 82,
+      "height": 252,
+      "viewBox": [
+        -41,
+        -239,
+        82,
+        252
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9484126984126984
+      },
+      "origin": {
+        "x": 41,
+        "y": 239
+      },
+      "bounds": {
+        "minX": -41,
+        "minY": -239,
+        "maxX": 41,
+        "maxY": 13
+      },
+      "x": 3230,
+      "y": 2780,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 16,
+        "paths": 16,
+        "clippingShapes": 11,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 11,
+      "name": "Flower planter",
+      "artboard": "Prop 11",
+      "src": "/pixi-art/prop-11.svg",
+      "width": 107,
+      "height": 91,
+      "viewBox": [
+        -55,
+        -78,
+        107,
+        91
+      ],
+      "anchor": {
+        "x": 0.514018691588785,
+        "y": 0.8571428571428571
+      },
+      "origin": {
+        "x": 55,
+        "y": 78
+      },
+      "bounds": {
+        "minX": -55,
+        "minY": -78,
+        "maxX": 52,
+        "maxY": 13
+      },
+      "x": 2230,
+      "y": 2380,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 22,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 12,
+      "name": "Flower planter",
+      "artboard": "Prop 12",
+      "src": "/pixi-art/prop-12.svg",
+      "width": 107,
+      "height": 91,
+      "viewBox": [
+        -52,
+        -78,
+        107,
+        91
+      ],
+      "anchor": {
+        "x": 0.48598130841121495,
+        "y": 0.8571428571428571
+      },
+      "origin": {
+        "x": 52,
+        "y": 78
+      },
+      "bounds": {
+        "minX": -52,
+        "minY": -78,
+        "maxX": 55,
+        "maxY": 13
+      },
+      "x": 3420,
+      "y": 2380,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 22,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 13,
+      "name": "Flower planter",
+      "artboard": "Prop 13",
+      "src": "/pixi-art/prop-13.svg",
+      "width": 109,
+      "height": 91,
+      "viewBox": [
+        -56,
+        -78,
+        109,
+        91
+      ],
+      "anchor": {
+        "x": 0.5137614678899083,
+        "y": 0.8571428571428571
+      },
+      "origin": {
+        "x": 56,
+        "y": 78
+      },
+      "bounds": {
+        "minX": -56,
+        "minY": -78,
+        "maxX": 53,
+        "maxY": 13
+      },
+      "x": 2650,
+      "y": 2050,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 22,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 14,
+      "name": "Flower planter",
+      "artboard": "Prop 14",
+      "src": "/pixi-art/prop-14.svg",
+      "width": 109,
+      "height": 91,
+      "viewBox": [
+        -55,
+        -78,
+        109,
+        91
+      ],
+      "anchor": {
+        "x": 0.5045871559633027,
+        "y": 0.8571428571428571
+      },
+      "origin": {
+        "x": 55,
+        "y": 78
+      },
+      "bounds": {
+        "minX": -55,
+        "minY": -78,
+        "maxX": 54,
+        "maxY": 13
+      },
+      "x": 3020,
+      "y": 2050,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 22,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 15,
+      "name": "Market bunting",
+      "artboard": "Prop 15",
+      "src": "/pixi-art/prop-15.svg",
+      "width": 672,
+      "height": 77,
+      "viewBox": [
+        -336,
+        -216,
+        672,
+        77
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 2.8051948051948052
+      },
+      "origin": {
+        "x": 336,
+        "y": 216
+      },
+      "bounds": {
+        "minX": -336,
+        "minY": -216,
+        "maxX": 336,
+        "maxY": -139
+      },
+      "x": 2820,
+      "y": 2030,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 64,
+        "paths": 64,
+        "clippingShapes": 42,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 16,
+      "name": "Lily bridge",
+      "artboard": "Prop 16",
+      "src": "/pixi-art/prop-16.svg",
+      "width": 940,
+      "height": 218,
+      "viewBox": [
+        -470,
+        -158,
+        940,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7247706422018348
+      },
+      "origin": {
+        "x": 470,
+        "y": 158
+      },
+      "bounds": {
+        "minX": -470,
+        "minY": -158,
+        "maxX": 470,
+        "maxY": 60
+      },
+      "x": 1640,
+      "y": 2630,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 108,
+        "paths": 108,
+        "clippingShapes": 78,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 17,
+      "name": "Pond reeds",
+      "artboard": "Prop 17",
+      "src": "/pixi-art/prop-17.svg",
+      "width": 72,
+      "height": 95,
+      "viewBox": [
+        -44,
+        -91,
+        72,
+        95
+      ],
+      "anchor": {
+        "x": 0.6111111111111112,
+        "y": 0.9578947368421052
+      },
+      "origin": {
+        "x": 44,
+        "y": 91
+      },
+      "bounds": {
+        "minX": -44,
+        "minY": -91,
+        "maxX": 28,
+        "maxY": 4
+      },
+      "x": 1310,
+      "y": 2440,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 21,
+        "paths": 21,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 18,
+      "name": "Pond reeds",
+      "artboard": "Prop 18",
+      "src": "/pixi-art/prop-18.svg",
+      "width": 72,
+      "height": 96,
+      "viewBox": [
+        -44,
+        -92,
+        72,
+        96
+      ],
+      "anchor": {
+        "x": 0.6111111111111112,
+        "y": 0.9583333333333334
+      },
+      "origin": {
+        "x": 44,
+        "y": 92
+      },
+      "bounds": {
+        "minX": -44,
+        "minY": -92,
+        "maxX": 28,
+        "maxY": 4
+      },
+      "x": 2000,
+      "y": 2500,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 21,
+        "paths": 21,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 19,
+      "name": "Pond reeds",
+      "artboard": "Prop 19",
+      "src": "/pixi-art/prop-19.svg",
+      "width": 72,
+      "height": 93,
+      "viewBox": [
+        -44,
+        -89,
+        72,
+        93
+      ],
+      "anchor": {
+        "x": 0.6111111111111112,
+        "y": 0.956989247311828
+      },
+      "origin": {
+        "x": 44,
+        "y": 89
+      },
+      "bounds": {
+        "minX": -44,
+        "minY": -89,
+        "maxX": 28,
+        "maxY": 4
+      },
+      "x": 1460,
+      "y": 2870,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 21,
+        "paths": 21,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 20,
+      "name": "Pond reeds",
+      "artboard": "Prop 20",
+      "src": "/pixi-art/prop-20.svg",
+      "width": 72,
+      "height": 94,
+      "viewBox": [
+        -44,
+        -90,
+        72,
+        94
+      ],
+      "anchor": {
+        "x": 0.6111111111111112,
+        "y": 0.9574468085106383
+      },
+      "origin": {
+        "x": 44,
+        "y": 90
+      },
+      "bounds": {
+        "minX": -44,
+        "minY": -90,
+        "maxX": 28,
+        "maxY": 4
+      },
+      "x": 1970,
+      "y": 2790,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 21,
+        "paths": 21,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 21,
+      "name": "Pond bench",
+      "artboard": "Prop 21",
+      "src": "/pixi-art/prop-21.svg",
+      "width": 200,
+      "height": 128,
+      "viewBox": [
+        -100,
+        -113,
+        200,
+        128
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8828125
+      },
+      "origin": {
+        "x": 100,
+        "y": 113
+      },
+      "bounds": {
+        "minX": -100,
+        "minY": -113,
+        "maxX": 100,
+        "maxY": 15
+      },
+      "x": 1900,
+      "y": 3020,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 13,
+        "paths": 13,
+        "clippingShapes": 8,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 22,
+      "name": "Croissant tree",
+      "artboard": "Prop 22",
+      "src": "/pixi-art/prop-22.svg",
+      "width": 204,
+      "height": 235,
+      "viewBox": [
+        -102,
+        -219,
+        204,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9319148936170213
+      },
+      "origin": {
+        "x": 102,
+        "y": 219
+      },
+      "bounds": {
+        "minX": -102,
+        "minY": -219,
+        "maxX": 102,
+        "maxY": 16
+      },
+      "x": 1020,
+      "y": 1460,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 23,
+      "name": "Baguette tree",
+      "artboard": "Prop 23",
+      "src": "/pixi-art/prop-23.svg",
+      "width": 157,
+      "height": 242,
+      "viewBox": [
+        -80,
+        -227,
+        157,
+        242
+      ],
+      "anchor": {
+        "x": 0.5095541401273885,
+        "y": 0.9380165289256198
+      },
+      "origin": {
+        "x": 80,
+        "y": 227
+      },
+      "bounds": {
+        "minX": -80,
+        "minY": -227,
+        "maxX": 77,
+        "maxY": 15
+      },
+      "x": 1230,
+      "y": 1350,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 24,
+      "name": "Croissant tree",
+      "artboard": "Prop 24",
+      "src": "/pixi-art/prop-24.svg",
+      "width": 204,
+      "height": 235,
+      "viewBox": [
+        -102,
+        -219,
+        204,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9319148936170213
+      },
+      "origin": {
+        "x": 102,
+        "y": 219
+      },
+      "bounds": {
+        "minX": -102,
+        "minY": -219,
+        "maxX": 102,
+        "maxY": 16
+      },
+      "x": 1530,
+      "y": 1300,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 25,
+      "name": "Baguette tree",
+      "artboard": "Prop 25",
+      "src": "/pixi-art/prop-25.svg",
+      "width": 157,
+      "height": 242,
+      "viewBox": [
+        -80,
+        -227,
+        157,
+        242
+      ],
+      "anchor": {
+        "x": 0.5095541401273885,
+        "y": 0.9380165289256198
+      },
+      "origin": {
+        "x": 80,
+        "y": 227
+      },
+      "bounds": {
+        "minX": -80,
+        "minY": -227,
+        "maxX": 77,
+        "maxY": 15
+      },
+      "x": 1770,
+      "y": 1460,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 26,
+      "name": "Croissant tree",
+      "artboard": "Prop 26",
+      "src": "/pixi-art/prop-26.svg",
+      "width": 204,
+      "height": 235,
+      "viewBox": [
+        -102,
+        -219,
+        204,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9319148936170213
+      },
+      "origin": {
+        "x": 102,
+        "y": 219
+      },
+      "bounds": {
+        "minX": -102,
+        "minY": -219,
+        "maxX": 102,
+        "maxY": 16
+      },
+      "x": 1100,
+      "y": 1710,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 27,
+      "name": "Baguette tree",
+      "artboard": "Prop 27",
+      "src": "/pixi-art/prop-27.svg",
+      "width": 157,
+      "height": 242,
+      "viewBox": [
+        -80,
+        -227,
+        157,
+        242
+      ],
+      "anchor": {
+        "x": 0.5095541401273885,
+        "y": 0.9380165289256198
+      },
+      "origin": {
+        "x": 80,
+        "y": 227
+      },
+      "bounds": {
+        "minX": -80,
+        "minY": -227,
+        "maxX": 77,
+        "maxY": 15
+      },
+      "x": 1680,
+      "y": 1710,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 28,
+      "name": "Croissant tree",
+      "artboard": "Prop 28",
+      "src": "/pixi-art/prop-28.svg",
+      "width": 204,
+      "height": 235,
+      "viewBox": [
+        -102,
+        -219,
+        204,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9319148936170213
+      },
+      "origin": {
+        "x": 102,
+        "y": 219
+      },
+      "bounds": {
+        "minX": -102,
+        "minY": -219,
+        "maxX": 102,
+        "maxY": 16
+      },
+      "x": 1000,
+      "y": 1990,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 29,
+      "name": "Baguette tree",
+      "artboard": "Prop 29",
+      "src": "/pixi-art/prop-29.svg",
+      "width": 157,
+      "height": 242,
+      "viewBox": [
+        -80,
+        -227,
+        157,
+        242
+      ],
+      "anchor": {
+        "x": 0.5095541401273885,
+        "y": 0.9380165289256198
+      },
+      "origin": {
+        "x": 80,
+        "y": 227
+      },
+      "bounds": {
+        "minX": -80,
+        "minY": -227,
+        "maxX": 77,
+        "maxY": 15
+      },
+      "x": 1230,
+      "y": 2110,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 30,
+      "name": "Croissant tree",
+      "artboard": "Prop 30",
+      "src": "/pixi-art/prop-30.svg",
+      "width": 204,
+      "height": 235,
+      "viewBox": [
+        -102,
+        -219,
+        204,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9319148936170213
+      },
+      "origin": {
+        "x": 102,
+        "y": 219
+      },
+      "bounds": {
+        "minX": -102,
+        "minY": -219,
+        "maxX": 102,
+        "maxY": 16
+      },
+      "x": 1760,
+      "y": 2050,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 31,
+      "name": "Baguette tree",
+      "artboard": "Prop 31",
+      "src": "/pixi-art/prop-31.svg",
+      "width": 157,
+      "height": 242,
+      "viewBox": [
+        -80,
+        -227,
+        157,
+        242
+      ],
+      "anchor": {
+        "x": 0.5095541401273885,
+        "y": 0.9380165289256198
+      },
+      "origin": {
+        "x": 80,
+        "y": 227
+      },
+      "bounds": {
+        "minX": -80,
+        "minY": -227,
+        "maxX": 77,
+        "maxY": 15
+      },
+      "x": 1910,
+      "y": 1800,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 32,
+      "name": "Croissant tree",
+      "artboard": "Prop 32",
+      "src": "/pixi-art/prop-32.svg",
+      "width": 204,
+      "height": 235,
+      "viewBox": [
+        -102,
+        -219,
+        204,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9319148936170213
+      },
+      "origin": {
+        "x": 102,
+        "y": 219
+      },
+      "bounds": {
+        "minX": -102,
+        "minY": -219,
+        "maxX": 102,
+        "maxY": 16
+      },
+      "x": 1430,
+      "y": 1500,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 33,
+      "name": "Forest picnic",
+      "artboard": "Prop 33",
+      "src": "/pixi-art/prop-33.svg",
+      "width": 228,
+      "height": 113,
+      "viewBox": [
+        -114,
+        -59,
+        228,
+        113
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5221238938053098
+      },
+      "origin": {
+        "x": 114,
+        "y": 59
+      },
+      "bounds": {
+        "minX": -114,
+        "minY": -59,
+        "maxX": 114,
+        "maxY": 54
+      },
+      "x": 1510,
+      "y": 2020,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 19,
+        "paths": 19,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 34,
+      "name": "Little library",
+      "artboard": "Prop 34",
+      "src": "/pixi-art/prop-34.svg",
+      "width": 558,
+      "height": 332,
+      "viewBox": [
+        -279,
+        -301,
+        558,
+        332
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9066265060240963
+      },
+      "origin": {
+        "x": 279,
+        "y": 301
+      },
+      "bounds": {
+        "minX": -279,
+        "minY": -301,
+        "maxX": 279,
+        "maxY": 31
+      },
+      "x": 2920,
+      "y": 1140,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 50,
+        "paths": 50,
+        "clippingShapes": 35,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 35,
+      "name": "Outdoor reading",
+      "artboard": "Prop 35",
+      "src": "/pixi-art/prop-35.svg",
+      "width": 228,
+      "height": 113,
+      "viewBox": [
+        -114,
+        -59,
+        228,
+        113
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5221238938053098
+      },
+      "origin": {
+        "x": 114,
+        "y": 59
+      },
+      "bounds": {
+        "minX": -114,
+        "minY": -59,
+        "maxX": 114,
+        "maxY": 54
+      },
+      "x": 2570,
+      "y": 1370,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 19,
+        "paths": 19,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 36,
+      "name": "Hill tree",
+      "artboard": "Prop 36",
+      "src": "/pixi-art/prop-36.svg",
+      "width": 206,
+      "height": 229,
+      "viewBox": [
+        -104,
+        -210,
+        206,
+        229
+      ],
+      "anchor": {
+        "x": 0.5048543689320388,
+        "y": 0.9170305676855895
+      },
+      "origin": {
+        "x": 104,
+        "y": 210
+      },
+      "bounds": {
+        "minX": -104,
+        "minY": -210,
+        "maxX": 102,
+        "maxY": 19
+      },
+      "x": 2450,
+      "y": 1120,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 37,
+      "name": "Hill tree",
+      "artboard": "Prop 37",
+      "src": "/pixi-art/prop-37.svg",
+      "width": 207,
+      "height": 228,
+      "viewBox": [
+        -106,
+        -209,
+        207,
+        228
+      ],
+      "anchor": {
+        "x": 0.5120772946859904,
+        "y": 0.9166666666666666
+      },
+      "origin": {
+        "x": 106,
+        "y": 209
+      },
+      "bounds": {
+        "minX": -106,
+        "minY": -209,
+        "maxX": 101,
+        "maxY": 19
+      },
+      "x": 3350,
+      "y": 1190,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 38,
+      "name": "Library flowers",
+      "artboard": "Prop 38",
+      "src": "/pixi-art/prop-38.svg",
+      "width": 107,
+      "height": 91,
+      "viewBox": [
+        -53,
+        -78,
+        107,
+        91
+      ],
+      "anchor": {
+        "x": 0.4953271028037383,
+        "y": 0.8571428571428571
+      },
+      "origin": {
+        "x": 53,
+        "y": 78
+      },
+      "bounds": {
+        "minX": -53,
+        "minY": -78,
+        "maxX": 54,
+        "maxY": 13
+      },
+      "x": 2730,
+      "y": 1300,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 22,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 39,
+      "name": "Library flowers",
+      "artboard": "Prop 39",
+      "src": "/pixi-art/prop-39.svg",
+      "width": 107,
+      "height": 91,
+      "viewBox": [
+        -55,
+        -78,
+        107,
+        91
+      ],
+      "anchor": {
+        "x": 0.514018691588785,
+        "y": 0.8571428571428571
+      },
+      "origin": {
+        "x": 55,
+        "y": 78
+      },
+      "bounds": {
+        "minX": -55,
+        "minY": -78,
+        "maxX": 52,
+        "maxY": 13
+      },
+      "x": 3180,
+      "y": 1330,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 22,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 40,
+      "name": "Racing sailboat",
+      "artboard": "Prop 40",
+      "src": "/pixi-art/prop-40.svg",
+      "width": 238,
+      "height": 203,
+      "viewBox": [
+        -120,
+        -159,
+        238,
+        203
+      ],
+      "anchor": {
+        "x": 0.5042016806722689,
+        "y": 0.7832512315270936
+      },
+      "origin": {
+        "x": 120,
+        "y": 159
+      },
+      "bounds": {
+        "minX": -120,
+        "minY": -159,
+        "maxX": 118,
+        "maxY": 44
+      },
+      "x": 4030,
+      "y": 1580,
+      "scale": 1,
+      "zone": "race-lake",
+      "stats": {
+        "paintedShapes": 17,
+        "paths": 17,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 41,
+      "name": "Blue racing sailboat",
+      "artboard": "Prop 41",
+      "src": "/pixi-art/prop-41.svg",
+      "width": 238,
+      "height": 203,
+      "viewBox": [
+        -120,
+        -159,
+        238,
+        203
+      ],
+      "anchor": {
+        "x": 0.5042016806722689,
+        "y": 0.7832512315270936
+      },
+      "origin": {
+        "x": 120,
+        "y": 159
+      },
+      "bounds": {
+        "minX": -120,
+        "minY": -159,
+        "maxX": 118,
+        "maxY": 44
+      },
+      "x": 4410,
+      "y": 1470,
+      "scale": 1,
+      "zone": "race-lake",
+      "stats": {
+        "paintedShapes": 17,
+        "paths": 17,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 42,
+      "name": "Finish pole",
+      "artboard": "Prop 42",
+      "src": "/pixi-art/prop-42.svg",
+      "width": 20,
+      "height": 198,
+      "viewBox": [
+        -10,
+        -193,
+        20,
+        198
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9747474747474747
+      },
+      "origin": {
+        "x": 10,
+        "y": 193
+      },
+      "bounds": {
+        "minX": -10,
+        "minY": -193,
+        "maxX": 10,
+        "maxY": 5
+      },
+      "x": 4050,
+      "y": 2070,
+      "scale": 1,
+      "zone": "race-lake",
+      "stats": {
+        "paintedShapes": 4,
+        "paths": 4,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 43,
+      "name": "Finish pole",
+      "artboard": "Prop 43",
+      "src": "/pixi-art/prop-43.svg",
+      "width": 20,
+      "height": 198,
+      "viewBox": [
+        -10,
+        -193,
+        20,
+        198
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9747474747474747
+      },
+      "origin": {
+        "x": 10,
+        "y": 193
+      },
+      "bounds": {
+        "minX": -10,
+        "minY": -193,
+        "maxX": 10,
+        "maxY": 5
+      },
+      "x": 4260,
+      "y": 2070,
+      "scale": 1,
+      "zone": "race-lake",
+      "stats": {
+        "paintedShapes": 4,
+        "paths": 4,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 44,
+      "name": "Race finish banner",
+      "artboard": "Prop 44",
+      "src": "/pixi-art/prop-44.svg",
+      "width": 216,
+      "height": 64,
+      "viewBox": [
+        -109,
+        -228,
+        216,
+        64
+      ],
+      "anchor": {
+        "x": 0.5046296296296297,
+        "y": 3.5625
+      },
+      "origin": {
+        "x": 109,
+        "y": 228
+      },
+      "bounds": {
+        "minX": -109,
+        "minY": -228,
+        "maxX": 107,
+        "maxY": -164
+      },
+      "x": 4155,
+      "y": 2070,
+      "scale": 1,
+      "zone": "race-lake",
+      "stats": {
+        "paintedShapes": 32,
+        "paths": 32,
+        "clippingShapes": 24,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 45,
+      "name": "Race bench",
+      "artboard": "Prop 45",
+      "src": "/pixi-art/prop-45.svg",
+      "width": 200,
+      "height": 128,
+      "viewBox": [
+        -100,
+        -113,
+        200,
+        128
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8828125
+      },
+      "origin": {
+        "x": 100,
+        "y": 113
+      },
+      "bounds": {
+        "minX": -100,
+        "minY": -113,
+        "maxX": 100,
+        "maxY": 15
+      },
+      "x": 4610,
+      "y": 2000,
+      "scale": 1,
+      "zone": "race-lake",
+      "stats": {
+        "paintedShapes": 13,
+        "paths": 13,
+        "clippingShapes": 8,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 46,
+      "name": "Rubber duck lighthouse",
+      "artboard": "Prop 46",
+      "src": "/pixi-art/prop-46.svg",
+      "width": 270,
+      "height": 469,
+      "viewBox": [
+        -141,
+        -436,
+        270,
+        469
+      ],
+      "anchor": {
+        "x": 0.5222222222222223,
+        "y": 0.929637526652452
+      },
+      "origin": {
+        "x": 141,
+        "y": 436
+      },
+      "bounds": {
+        "minX": -141,
+        "minY": -436,
+        "maxX": 129,
+        "maxY": 33
+      },
+      "x": 4860,
+      "y": 2600,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 68,
+        "paths": 68,
+        "clippingShapes": 50,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 47,
+      "name": "Beach umbrella",
+      "artboard": "Prop 47",
+      "src": "/pixi-art/prop-47.svg",
+      "width": 240,
+      "height": 235,
+      "viewBox": [
+        -120,
+        -211,
+        240,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8978723404255319
+      },
+      "origin": {
+        "x": 120,
+        "y": 211
+      },
+      "bounds": {
+        "minX": -120,
+        "minY": -211,
+        "maxX": 120,
+        "maxY": 24
+      },
+      "x": 4560,
+      "y": 2560,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 48,
+      "name": "Beach umbrella",
+      "artboard": "Prop 48",
+      "src": "/pixi-art/prop-48.svg",
+      "width": 240,
+      "height": 235,
+      "viewBox": [
+        -120,
+        -211,
+        240,
+        235
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8978723404255319
+      },
+      "origin": {
+        "x": 120,
+        "y": 211
+      },
+      "bounds": {
+        "minX": -120,
+        "minY": -211,
+        "maxX": 120,
+        "maxY": 24
+      },
+      "x": 4960,
+      "y": 2920,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 12,
+        "paths": 12,
+        "clippingShapes": 6,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 49,
+      "name": "Beach blanket",
+      "artboard": "Prop 49",
+      "src": "/pixi-art/prop-49.svg",
+      "width": 228,
+      "height": 113,
+      "viewBox": [
+        -114,
+        -59,
+        228,
+        113
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5221238938053098
+      },
+      "origin": {
+        "x": 114,
+        "y": 59
+      },
+      "bounds": {
+        "minX": -114,
+        "minY": -59,
+        "maxX": 114,
+        "maxY": 54
+      },
+      "x": 4520,
+      "y": 2660,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 19,
+        "paths": 19,
+        "clippingShapes": 12,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 50,
+      "name": "Beach shell",
+      "artboard": "Prop 50",
+      "src": "/pixi-art/prop-50.svg",
+      "width": 48,
+      "height": 37,
+      "viewBox": [
+        -24,
+        -29,
+        48,
+        37
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7837837837837838
+      },
+      "origin": {
+        "x": 24,
+        "y": 29
+      },
+      "bounds": {
+        "minX": -24,
+        "minY": -29,
+        "maxX": 24,
+        "maxY": 8
+      },
+      "x": 4380,
+      "y": 3020,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 7,
+        "paths": 7,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 51,
+      "name": "Beach shell",
+      "artboard": "Prop 51",
+      "src": "/pixi-art/prop-51.svg",
+      "width": 48,
+      "height": 37,
+      "viewBox": [
+        -24,
+        -29,
+        48,
+        37
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7837837837837838
+      },
+      "origin": {
+        "x": 24,
+        "y": 29
+      },
+      "bounds": {
+        "minX": -24,
+        "minY": -29,
+        "maxX": 24,
+        "maxY": 8
+      },
+      "x": 5040,
+      "y": 2810,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 7,
+        "paths": 7,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 52,
+      "name": "Beach shell",
+      "artboard": "Prop 52",
+      "src": "/pixi-art/prop-52.svg",
+      "width": 48,
+      "height": 37,
+      "viewBox": [
+        -24,
+        -29,
+        48,
+        37
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7837837837837838
+      },
+      "origin": {
+        "x": 24,
+        "y": 29
+      },
+      "bounds": {
+        "minX": -24,
+        "minY": -29,
+        "maxX": 24,
+        "maxY": 8
+      },
+      "x": 5060,
+      "y": 2390,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 7,
+        "paths": 7,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 53,
+      "name": "Beach shell",
+      "artboard": "Prop 53",
+      "src": "/pixi-art/prop-53.svg",
+      "width": 48,
+      "height": 37,
+      "viewBox": [
+        -24,
+        -29,
+        48,
+        37
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7837837837837838
+      },
+      "origin": {
+        "x": 24,
+        "y": 29
+      },
+      "bounds": {
+        "minX": -24,
+        "minY": -29,
+        "maxX": 24,
+        "maxY": 8
+      },
+      "x": 4650,
+      "y": 3060,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 7,
+        "paths": 7,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 54,
+      "name": "Beach shell",
+      "artboard": "Prop 54",
+      "src": "/pixi-art/prop-54.svg",
+      "width": 48,
+      "height": 37,
+      "viewBox": [
+        -24,
+        -29,
+        48,
+        37
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7837837837837838
+      },
+      "origin": {
+        "x": 24,
+        "y": 29
+      },
+      "bounds": {
+        "minX": -24,
+        "minY": -29,
+        "maxX": 24,
+        "maxY": 8
+      },
+      "x": 4910,
+      "y": 3100,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 7,
+        "paths": 7,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 55,
+      "name": "Beach shell",
+      "artboard": "Prop 55",
+      "src": "/pixi-art/prop-55.svg",
+      "width": 48,
+      "height": 37,
+      "viewBox": [
+        -24,
+        -29,
+        48,
+        37
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7837837837837838
+      },
+      "origin": {
+        "x": 24,
+        "y": 29
+      },
+      "bounds": {
+        "minX": -24,
+        "minY": -29,
+        "maxX": 24,
+        "maxY": 8
+      },
+      "x": 4750,
+      "y": 2350,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 7,
+        "paths": 7,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 56,
+      "name": "Coast rock",
+      "artboard": "Prop 56",
+      "src": "/pixi-art/prop-56.svg",
+      "width": 108,
+      "height": 70,
+      "viewBox": [
+        -54,
+        -53,
+        108,
+        70
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7571428571428571
+      },
+      "origin": {
+        "x": 54,
+        "y": 53
+      },
+      "bounds": {
+        "minX": -54,
+        "minY": -53,
+        "maxX": 54,
+        "maxY": 17
+      },
+      "x": 5080,
+      "y": 2690,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 4,
+        "paths": 4,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 57,
+      "name": "Coast rock",
+      "artboard": "Prop 57",
+      "src": "/pixi-art/prop-57.svg",
+      "width": 110,
+      "height": 70,
+      "viewBox": [
+        -56,
+        -53,
+        110,
+        70
+      ],
+      "anchor": {
+        "x": 0.509090909090909,
+        "y": 0.7571428571428571
+      },
+      "origin": {
+        "x": 56,
+        "y": 53
+      },
+      "bounds": {
+        "minX": -56,
+        "minY": -53,
+        "maxX": 54,
+        "maxY": 17
+      },
+      "x": 4950,
+      "y": 3130,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 4,
+        "paths": 4,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 58,
+      "name": "Coast rock",
+      "artboard": "Prop 58",
+      "src": "/pixi-art/prop-58.svg",
+      "width": 109,
+      "height": 70,
+      "viewBox": [
+        -55,
+        -53,
+        109,
+        70
+      ],
+      "anchor": {
+        "x": 0.5045871559633027,
+        "y": 0.7571428571428571
+      },
+      "origin": {
+        "x": 55,
+        "y": 53
+      },
+      "bounds": {
+        "minX": -55,
+        "minY": -53,
+        "maxX": 54,
+        "maxY": 17
+      },
+      "x": 4420,
+      "y": 3150,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 4,
+        "paths": 4,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 59,
+      "name": "Coast rock",
+      "artboard": "Prop 59",
+      "src": "/pixi-art/prop-59.svg",
+      "width": 108,
+      "height": 71,
+      "viewBox": [
+        -54,
+        -53,
+        108,
+        71
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.7464788732394366
+      },
+      "origin": {
+        "x": 54,
+        "y": 53
+      },
+      "bounds": {
+        "minX": -54,
+        "minY": -53,
+        "maxX": 54,
+        "maxY": 18
+      },
+      "x": 5190,
+      "y": 2350,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 4,
+        "paths": 4,
+        "clippingShapes": 3,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 60,
+      "name": "Drip tree",
+      "artboard": "Prop 60",
+      "src": "/pixi-art/prop-60.svg",
+      "width": 184,
+      "height": 205,
+      "viewBox": [
+        -91,
+        -188,
+        184,
+        205
+      ],
+      "anchor": {
+        "x": 0.4945652173913043,
+        "y": 0.9170731707317074
+      },
+      "origin": {
+        "x": 91,
+        "y": 188
+      },
+      "bounds": {
+        "minX": -91,
+        "minY": -188,
+        "maxX": 93,
+        "maxY": 17
+      },
+      "x": 2140,
+      "y": 1020,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 61,
+      "name": "Drip tree",
+      "artboard": "Prop 61",
+      "src": "/pixi-art/prop-61.svg",
+      "width": 148,
+      "height": 166,
+      "viewBox": [
+        -76,
+        -152,
+        148,
+        166
+      ],
+      "anchor": {
+        "x": 0.5135135135135135,
+        "y": 0.9156626506024096
+      },
+      "origin": {
+        "x": 76,
+        "y": 152
+      },
+      "bounds": {
+        "minX": -76,
+        "minY": -152,
+        "maxX": 72,
+        "maxY": 14
+      },
+      "x": 2260,
+      "y": 1160,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 62,
+      "name": "Drip tree",
+      "artboard": "Prop 62",
+      "src": "/pixi-art/prop-62.svg",
+      "width": 187,
+      "height": 202,
+      "viewBox": [
+        -95,
+        -185,
+        187,
+        202
+      ],
+      "anchor": {
+        "x": 0.5080213903743316,
+        "y": 0.9158415841584159
+      },
+      "origin": {
+        "x": 95,
+        "y": 185
+      },
+      "bounds": {
+        "minX": -95,
+        "minY": -185,
+        "maxX": 92,
+        "maxY": 17
+      },
+      "x": 840,
+      "y": 2320,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 63,
+      "name": "Drip tree",
+      "artboard": "Prop 63",
+      "src": "/pixi-art/prop-63.svg",
+      "width": 185,
+      "height": 204,
+      "viewBox": [
+        -92,
+        -187,
+        185,
+        204
+      ],
+      "anchor": {
+        "x": 0.4972972972972973,
+        "y": 0.9166666666666666
+      },
+      "origin": {
+        "x": 92,
+        "y": 187
+      },
+      "bounds": {
+        "minX": -92,
+        "minY": -187,
+        "maxX": 93,
+        "maxY": 17
+      },
+      "x": 1070,
+      "y": 2900,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 64,
+      "name": "Drip tree",
+      "artboard": "Prop 64",
+      "src": "/pixi-art/prop-64.svg",
+      "width": 170,
+      "height": 186,
+      "viewBox": [
+        -86,
+        -170,
+        170,
+        186
+      ],
+      "anchor": {
+        "x": 0.5058823529411764,
+        "y": 0.9139784946236559
+      },
+      "origin": {
+        "x": 86,
+        "y": 170
+      },
+      "bounds": {
+        "minX": -86,
+        "minY": -170,
+        "maxX": 84,
+        "maxY": 16
+      },
+      "x": 2110,
+      "y": 3130,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 65,
+      "name": "Drip tree",
+      "artboard": "Prop 65",
+      "src": "/pixi-art/prop-65.svg",
+      "width": 185,
+      "height": 201,
+      "viewBox": [
+        -95,
+        -184,
+        185,
+        201
+      ],
+      "anchor": {
+        "x": 0.5135135135135135,
+        "y": 0.9154228855721394
+      },
+      "origin": {
+        "x": 95,
+        "y": 184
+      },
+      "bounds": {
+        "minX": -95,
+        "minY": -184,
+        "maxX": 90,
+        "maxY": 17
+      },
+      "x": 2550,
+      "y": 3260,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 66,
+      "name": "Drip tree",
+      "artboard": "Prop 66",
+      "src": "/pixi-art/prop-66.svg",
+      "width": 176,
+      "height": 190,
+      "viewBox": [
+        -89,
+        -174,
+        176,
+        190
+      ],
+      "anchor": {
+        "x": 0.5056818181818182,
+        "y": 0.9157894736842105
+      },
+      "origin": {
+        "x": 89,
+        "y": 174
+      },
+      "bounds": {
+        "minX": -89,
+        "minY": -174,
+        "maxX": 87,
+        "maxY": 16
+      },
+      "x": 3520,
+      "y": 2890,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 67,
+      "name": "Drip tree",
+      "artboard": "Prop 67",
+      "src": "/pixi-art/prop-67.svg",
+      "width": 185,
+      "height": 203,
+      "viewBox": [
+        -91,
+        -186,
+        185,
+        203
+      ],
+      "anchor": {
+        "x": 0.4918918918918919,
+        "y": 0.916256157635468
+      },
+      "origin": {
+        "x": 91,
+        "y": 186
+      },
+      "bounds": {
+        "minX": -91,
+        "minY": -186,
+        "maxX": 94,
+        "maxY": 17
+      },
+      "x": 3880,
+      "y": 3230,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 68,
+      "name": "Drip tree",
+      "artboard": "Prop 68",
+      "src": "/pixi-art/prop-68.svg",
+      "width": 186,
+      "height": 205,
+      "viewBox": [
+        -92,
+        -188,
+        186,
+        205
+      ],
+      "anchor": {
+        "x": 0.4946236559139785,
+        "y": 0.9170731707317074
+      },
+      "origin": {
+        "x": 92,
+        "y": 188
+      },
+      "bounds": {
+        "minX": -92,
+        "minY": -188,
+        "maxX": 94,
+        "maxY": 17
+      },
+      "x": 3760,
+      "y": 850,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 69,
+      "name": "Drip tree",
+      "artboard": "Prop 69",
+      "src": "/pixi-art/prop-69.svg",
+      "width": 172,
+      "height": 193,
+      "viewBox": [
+        -84,
+        -177,
+        172,
+        193
+      ],
+      "anchor": {
+        "x": 0.4883720930232558,
+        "y": 0.917098445595855
+      },
+      "origin": {
+        "x": 84,
+        "y": 177
+      },
+      "bounds": {
+        "minX": -84,
+        "minY": -177,
+        "maxX": 88,
+        "maxY": 16
+      },
+      "x": 4680,
+      "y": 1020,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 70,
+      "name": "Drip tree",
+      "artboard": "Prop 70",
+      "src": "/pixi-art/prop-70.svg",
+      "width": 161,
+      "height": 177,
+      "viewBox": [
+        -81,
+        -162,
+        161,
+        177
+      ],
+      "anchor": {
+        "x": 0.5031055900621118,
+        "y": 0.9152542372881356
+      },
+      "origin": {
+        "x": 81,
+        "y": 162
+      },
+      "bounds": {
+        "minX": -81,
+        "minY": -162,
+        "maxX": 80,
+        "maxY": 15
+      },
+      "x": 5020,
+      "y": 1910,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 71,
+      "name": "Drip tree",
+      "artboard": "Prop 71",
+      "src": "/pixi-art/prop-71.svg",
+      "width": 164,
+      "height": 178,
+      "viewBox": [
+        -82,
+        -163,
+        164,
+        178
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9157303370786517
+      },
+      "origin": {
+        "x": 82,
+        "y": 163
+      },
+      "bounds": {
+        "minX": -82,
+        "minY": -163,
+        "maxX": 82,
+        "maxY": 15
+      },
+      "x": 3280,
+      "y": 3180,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 72,
+      "name": "Drip tree",
+      "artboard": "Prop 72",
+      "src": "/pixi-art/prop-72.svg",
+      "width": 156,
+      "height": 173,
+      "viewBox": [
+        -77,
+        -158,
+        156,
+        173
+      ],
+      "anchor": {
+        "x": 0.4935897435897436,
+        "y": 0.9132947976878613
+      },
+      "origin": {
+        "x": 77,
+        "y": 158
+      },
+      "bounds": {
+        "minX": -77,
+        "minY": -158,
+        "maxX": 79,
+        "maxY": 15
+      },
+      "x": 3430,
+      "y": 3650,
+      "scale": 1,
+      "zone": "islets",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 73,
+      "name": "Drip tree",
+      "artboard": "Prop 73",
+      "src": "/pixi-art/prop-73.svg",
+      "width": 143,
+      "height": 152,
+      "viewBox": [
+        -72,
+        -138,
+        143,
+        152
+      ],
+      "anchor": {
+        "x": 0.5034965034965035,
+        "y": 0.9078947368421053
+      },
+      "origin": {
+        "x": 72,
+        "y": 138
+      },
+      "bounds": {
+        "minX": -72,
+        "minY": -138,
+        "maxX": 71,
+        "maxY": 14
+      },
+      "x": 3240,
+      "y": 3850,
+      "scale": 1,
+      "zone": "islets",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 74,
+      "name": "Drip tree",
+      "artboard": "Prop 74",
+      "src": "/pixi-art/prop-74.svg",
+      "width": 124,
+      "height": 133,
+      "viewBox": [
+        -63,
+        -121,
+        124,
+        133
+      ],
+      "anchor": {
+        "x": 0.5080645161290323,
+        "y": 0.9097744360902256
+      },
+      "origin": {
+        "x": 63,
+        "y": 121
+      },
+      "bounds": {
+        "minX": -63,
+        "minY": -121,
+        "maxX": 61,
+        "maxY": 12
+      },
+      "x": 4020,
+      "y": 3810,
+      "scale": 1,
+      "zone": "islets",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 75,
+      "name": "Drip tree",
+      "artboard": "Prop 75",
+      "src": "/pixi-art/prop-75.svg",
+      "width": 117,
+      "height": 125,
+      "viewBox": [
+        -59,
+        -113,
+        117,
+        125
+      ],
+      "anchor": {
+        "x": 0.5042735042735043,
+        "y": 0.904
+      },
+      "origin": {
+        "x": 59,
+        "y": 113
+      },
+      "bounds": {
+        "minX": -59,
+        "minY": -113,
+        "maxX": 58,
+        "maxY": 12
+      },
+      "x": 900,
+      "y": 3410,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 76,
+      "name": "Drip tree",
+      "artboard": "Prop 76",
+      "src": "/pixi-art/prop-76.svg",
+      "width": 94,
+      "height": 103,
+      "viewBox": [
+        -47,
+        -93,
+        94,
+        103
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9029126213592233
+      },
+      "origin": {
+        "x": 47,
+        "y": 93
+      },
+      "bounds": {
+        "minX": -47,
+        "minY": -93,
+        "maxX": 47,
+        "maxY": 10
+      },
+      "x": 5510,
+      "y": 1690,
+      "scale": 1,
+      "zone": "",
+      "stats": {
+        "paintedShapes": 20,
+        "paths": 20,
+        "clippingShapes": 14,
+        "textNodes": 0
+      }
+    },
+    {
+      "id": 77,
+      "name": "Wayfinding LILY POND",
+      "artboard": "Prop 77",
+      "src": "/pixi-art/prop-77.svg",
+      "width": 258,
+      "height": 129,
+      "viewBox": [
+        -129,
+        -120,
+        258,
+        129
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9302325581395349
+      },
+      "origin": {
+        "x": 129,
+        "y": 120
+      },
+      "bounds": {
+        "minX": -129,
+        "minY": -120,
+        "maxX": 129,
+        "maxY": 9
+      },
+      "x": 1850,
+      "y": 3030,
+      "scale": 1,
+      "zone": "pond",
+      "stats": {
+        "paintedShapes": 8,
+        "paths": 8,
+        "clippingShapes": 6,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 78,
+      "name": "Wayfinding BREAD WOODS",
+      "artboard": "Prop 78",
+      "src": "/pixi-art/prop-78.svg",
+      "width": 258,
+      "height": 129,
+      "viewBox": [
+        -129,
+        -120,
+        258,
+        129
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9302325581395349
+      },
+      "origin": {
+        "x": 129,
+        "y": 120
+      },
+      "bounds": {
+        "minX": -129,
+        "minY": -120,
+        "maxX": 129,
+        "maxY": 9
+      },
+      "x": 1430,
+      "y": 1750,
+      "scale": 1,
+      "zone": "bread-forest",
+      "stats": {
+        "paintedShapes": 8,
+        "paths": 8,
+        "clippingShapes": 6,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 79,
+      "name": "Wayfinding READING HILL",
+      "artboard": "Prop 79",
+      "src": "/pixi-art/prop-79.svg",
+      "width": 258,
+      "height": 129,
+      "viewBox": [
+        -129,
+        -120,
+        258,
+        129
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9302325581395349
+      },
+      "origin": {
+        "x": 129,
+        "y": 120
+      },
+      "bounds": {
+        "minX": -129,
+        "minY": -120,
+        "maxX": 129,
+        "maxY": 9
+      },
+      "x": 3090,
+      "y": 1550,
+      "scale": 1,
+      "zone": "library",
+      "stats": {
+        "paintedShapes": 8,
+        "paths": 8,
+        "clippingShapes": 6,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 80,
+      "name": "Wayfinding DUCKY PLAZA",
+      "artboard": "Prop 80",
+      "src": "/pixi-art/prop-80.svg",
+      "width": 258,
+      "height": 129,
+      "viewBox": [
+        -129,
+        -120,
+        258,
+        129
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9302325581395349
+      },
+      "origin": {
+        "x": 129,
+        "y": 120
+      },
+      "bounds": {
+        "minX": -129,
+        "minY": -120,
+        "maxX": 129,
+        "maxY": 9
+      },
+      "x": 2810,
+      "y": 2910,
+      "scale": 1,
+      "zone": "plaza",
+      "stats": {
+        "paintedShapes": 8,
+        "paths": 8,
+        "clippingShapes": 6,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 81,
+      "name": "Wayfinding BEAK BEACON",
+      "artboard": "Prop 81",
+      "src": "/pixi-art/prop-81.svg",
+      "width": 258,
+      "height": 129,
+      "viewBox": [
+        -129,
+        -120,
+        258,
+        129
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9302325581395349
+      },
+      "origin": {
+        "x": 129,
+        "y": 120
+      },
+      "bounds": {
+        "minX": -129,
+        "minY": -120,
+        "maxX": 129,
+        "maxY": 9
+      },
+      "x": 4650,
+      "y": 2940,
+      "scale": 1,
+      "zone": "lighthouse-beach",
+      "stats": {
+        "paintedShapes": 8,
+        "paths": 8,
+        "clippingShapes": 6,
+        "textNodes": 1
+      }
+    },
+    {
+      "id": 82,
+      "name": "Wayfinding LITTLE ISLE",
+      "artboard": "Prop 82",
+      "src": "/pixi-art/prop-82.svg",
+      "width": 258,
+      "height": 129,
+      "viewBox": [
+        -129,
+        -120,
+        258,
+        129
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9302325581395349
+      },
+      "origin": {
+        "x": 129,
+        "y": 120
+      },
+      "bounds": {
+        "minX": -129,
+        "minY": -120,
+        "maxX": 129,
+        "maxY": 9
+      },
+      "x": 3430,
+      "y": 3830,
+      "scale": 1,
+      "zone": "islets",
+      "stats": {
+        "paintedShapes": 8,
+        "paths": 8,
+        "clippingShapes": 6,
+        "textNodes": 1
+      }
+    }
+  ],
+  "text": {
+    "method": "SVG text with embedded original Gilroy Black TrueType font",
+    "fontSource": "rive/fonts/Gilroy-Black.ttf"
+  }
+}

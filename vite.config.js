@@ -9,7 +9,7 @@ export default defineConfig({
     closeBundle() {
       const output = resolve(import.meta.dirname, 'dist');
       mkdirSync(resolve(output, 'rive'), { recursive: true });
-      for (const route of ['three', 'three/assets']) {
+      for (const route of ['three', 'three/assets', 'pixi']) {
         mkdirSync(resolve(output, route), { recursive: true });
         cpSync(resolve(output, 'index.html'), resolve(output, route, 'index.html'));
       }
