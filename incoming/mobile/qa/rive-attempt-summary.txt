@@ -1,0 +1,16 @@
+13-duckies 375 bench exit 1
+13-duckies 375 capture exit 1
+13-duckies 390 bench exit 1
+13-duckies 390 capture exit 1
+13-duckies 412 bench exit 1
+13-duckies 412 capture exit 1
+13-duckies 768 bench exit 1
+13-duckies 768 capture exit 1
+lite 375 bench exit 1
+lite 375 capture exit 1
+lite 390 bench exit 1
+lite 390 capture exit 1
+lite 412 bench exit 1
+lite 412 capture exit 1
+lite 768 bench exit 1
+lite 768 capture exit 1

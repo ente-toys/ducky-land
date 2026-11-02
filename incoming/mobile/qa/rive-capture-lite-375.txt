@@ -1,0 +1,2 @@
+Metal is not available on this device.
+Failed to create graphics context.

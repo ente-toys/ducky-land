@@ -1,0 +1,10 @@
+const fs=require('fs'),sharp=require('/Users/pragadees.xd/Developer/ente-merch/node_modules/sharp');
+const m=JSON.parse(fs.readFileSync('assets/manifest.json'));const tiles=m.assets.filter(a=>a.category==='tiles');
+const cols=4,cw=560,ch=600,W=cols*cw+40,H=Math.ceil(tiles.length/cols)*ch+100;
+let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="100%" height="100%" fill="#FFF4C5"/><text x="24" y="44" font-family="Arial" font-weight="bold" font-size="27" fill="#232323">Periodic tile joins / 3 × 3 or edge-axis repeats</text>`;
+tiles.forEach((a,i)=>{const x=20+(i%cols)*cw,y=90+Math.floor(i/cols)*ch,sz=170;
+ const inside=fs.readFileSync(a.file,'utf8').split('>').slice(1).join('>').replace('</svg>','');
+ const xx=!a.repeat_axes||a.repeat_axes==='y'?1:3,yy=!a.repeat_axes||a.repeat_axes==='x'?1:3;
+ for(let r=0;r<yy;r++)for(let c=0;c<xx;c++)svg+=`<svg x="${x+c*sz}" y="${y+r*sz}" width="${sz}" height="${sz}" viewBox="0 0 713 713">${inside}</svg>`;
+ svg+=`<text x="${x}" y="${y+540}" font-family="Arial" font-size="18" font-weight="bold" fill="#232323">${a.name}</text><text x="${x}" y="${y+563}" font-family="Arial" font-size="15" fill="#565656">${a.repeat_axes?`Repeats: ${a.repeat_axes}`:'Corner connector, no repeat claim'}</text>`;
+});svg+='</svg>';fs.writeFileSync('sheets/tile-joins.svg',svg);sharp(Buffer.from(svg)).png().toFile('sheets/tile-joins.png');

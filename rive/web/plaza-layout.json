@@ -1,0 +1,287 @@
+{
+  "width": 1600,
+  "height": 1000,
+  "groundScale": 1.65,
+  "floor": {
+    "x": 800,
+    "y": 610,
+    "rx": 690,
+    "ry": 375
+  },
+  "fountain": {
+    "x": 800,
+    "y": 560
+  },
+  "obstacles": [
+    {
+      "name": "fountain",
+      "x": 680,
+      "y": 565,
+      "radius": 128
+    },
+    {
+      "name": "fountain",
+      "x": 800,
+      "y": 565,
+      "radius": 170
+    },
+    {
+      "name": "fountain",
+      "x": 920,
+      "y": 565,
+      "radius": 128
+    },
+    {
+      "name": "fountain",
+      "x": 800,
+      "y": 603,
+      "radius": 130
+    },
+    {
+      "name": "fruit",
+      "x": 245,
+      "y": 303,
+      "radius": 64
+    },
+    {
+      "name": "fruit",
+      "x": 330,
+      "y": 303,
+      "radius": 64
+    },
+    {
+      "name": "fruit",
+      "x": 415,
+      "y": 303,
+      "radius": 64
+    },
+    {
+      "name": "bakery",
+      "x": 715,
+      "y": 248,
+      "radius": 64
+    },
+    {
+      "name": "bakery",
+      "x": 800,
+      "y": 248,
+      "radius": 64
+    },
+    {
+      "name": "bakery",
+      "x": 885,
+      "y": 248,
+      "radius": 64
+    },
+    {
+      "name": "flowers",
+      "x": 1185,
+      "y": 303,
+      "radius": 64
+    },
+    {
+      "name": "flowers",
+      "x": 1270,
+      "y": 303,
+      "radius": 64
+    },
+    {
+      "name": "flowers",
+      "x": 1355,
+      "y": 303,
+      "radius": 64
+    },
+    {
+      "name": "west-bench",
+      "x": 153,
+      "y": 626,
+      "radius": 33
+    },
+    {
+      "name": "west-bench",
+      "x": 215,
+      "y": 626,
+      "radius": 33
+    },
+    {
+      "name": "west-bench",
+      "x": 277,
+      "y": 626,
+      "radius": 33
+    },
+    {
+      "name": "east-bench",
+      "x": 1323,
+      "y": 626,
+      "radius": 33
+    },
+    {
+      "name": "east-bench",
+      "x": 1385,
+      "y": 626,
+      "radius": 33
+    },
+    {
+      "name": "east-bench",
+      "x": 1447,
+      "y": 626,
+      "radius": 33
+    },
+    {
+      "name": "lamp",
+      "x": 470,
+      "y": 420,
+      "radius": 22
+    },
+    {
+      "name": "lamp",
+      "x": 1130,
+      "y": 420,
+      "radius": 22
+    },
+    {
+      "name": "lamp",
+      "x": 330,
+      "y": 880,
+      "radius": 22
+    },
+    {
+      "name": "lamp",
+      "x": 1270,
+      "y": 880,
+      "radius": 22
+    },
+    {
+      "name": "planter",
+      "x": 132,
+      "y": 486,
+      "radius": 54
+    },
+    {
+      "name": "planter",
+      "x": 1468,
+      "y": 486,
+      "radius": 54
+    }
+  ],
+  "seats": [
+    {
+      "id": "west-bench-37",
+      "prop": "west-bench",
+      "x": 178,
+      "y": 608,
+      "approachY": 702
+    },
+    {
+      "id": "west-bench37",
+      "prop": "west-bench",
+      "x": 252,
+      "y": 608,
+      "approachY": 702
+    },
+    {
+      "id": "east-bench-37",
+      "prop": "east-bench",
+      "x": 1348,
+      "y": 608,
+      "approachY": 702
+    },
+    {
+      "id": "east-bench37",
+      "prop": "east-bench",
+      "x": 1422,
+      "y": 608,
+      "approachY": 702
+    }
+  ],
+  "stalls": [
+    {
+      "id": "fruit-48",
+      "prop": "fruit",
+      "x": 282,
+      "y": 413
+    },
+    {
+      "id": "fruit48",
+      "prop": "fruit",
+      "x": 378,
+      "y": 413
+    },
+    {
+      "id": "bakery-48",
+      "prop": "bakery",
+      "x": 752,
+      "y": 358
+    },
+    {
+      "id": "bakery48",
+      "prop": "bakery",
+      "x": 848,
+      "y": 358
+    },
+    {
+      "id": "flowers-48",
+      "prop": "flowers",
+      "x": 1222,
+      "y": 413
+    },
+    {
+      "id": "flowers48",
+      "prop": "flowers",
+      "x": 1318,
+      "y": 413
+    }
+  ],
+  "ring": [
+    {
+      "id": "ring0",
+      "x": 490,
+      "y": 538
+    },
+    {
+      "id": "ring1",
+      "x": 565,
+      "y": 410
+    },
+    {
+      "id": "ring2",
+      "x": 724,
+      "y": 372
+    },
+    {
+      "id": "ring3",
+      "x": 900,
+      "y": 372
+    },
+    {
+      "id": "ring4",
+      "x": 1050,
+      "y": 414
+    },
+    {
+      "id": "ring5",
+      "x": 1115,
+      "y": 564
+    },
+    {
+      "id": "ring6",
+      "x": 1044,
+      "y": 717
+    },
+    {
+      "id": "ring7",
+      "x": 882,
+      "y": 745
+    },
+    {
+      "id": "ring8",
+      "x": 704,
+      "y": 745
+    },
+    {
+      "id": "ring9",
+      "x": 546,
+      "y": 706
+    }
+  ]
+}

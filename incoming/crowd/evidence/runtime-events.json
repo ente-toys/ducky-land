@@ -1,0 +1,360 @@
+{
+  "time": 20.04,
+  "party": {
+    "members": [
+      0,
+      12,
+      11,
+      4
+    ],
+    "ends": 28.469385165721157,
+    "leader": 0
+  },
+  "ducks": [
+    {
+      "id": 0,
+      "name": "you",
+      "x": 853.3,
+      "y": 825,
+      "goal": "dance",
+      "action": 3,
+      "settled": true
+    },
+    {
+      "id": 1,
+      "name": "quackers",
+      "x": 162,
+      "y": 602,
+      "goal": "bench",
+      "phase": "dock",
+      "action": 4,
+      "settled": true
+    },
+    {
+      "id": 2,
+      "name": "mo",
+      "x": 1332,
+      "y": 607.2,
+      "goal": "bench",
+      "phase": "leave",
+      "action": 1,
+      "settled": false
+    },
+    {
+      "id": 3,
+      "name": "aya_22",
+      "x": 1038.5,
+      "y": 716.1,
+      "goal": "fountain",
+      "action": 7,
+      "settled": true
+    },
+    {
+      "id": 4,
+      "name": "bread_boy",
+      "x": 741.5,
+      "y": 860.7,
+      "goal": "dance",
+      "action": 3,
+      "settled": true
+    },
+    {
+      "id": 5,
+      "name": "pip",
+      "x": 806.2,
+      "y": 719.9,
+      "goal": "fountain",
+      "action": 1,
+      "settled": false
+    },
+    {
+      "id": 6,
+      "name": "lulu",
+      "x": 287,
+      "y": 414.5,
+      "action": 0,
+      "settled": false
+    },
+    {
+      "id": 7,
+      "name": "nori",
+      "x": 573.1,
+      "y": 473.2,
+      "goal": "bench",
+      "phase": "approach",
+      "action": 1,
+      "settled": false
+    },
+    {
+      "id": 8,
+      "name": "miso",
+      "x": 1224.3,
+      "y": 416.3,
+      "goal": "look",
+      "action": 6,
+      "settled": true
+    },
+    {
+      "id": 9,
+      "name": "toto",
+      "x": 486.1,
+      "y": 540.8,
+      "goal": "fountain",
+      "action": 6,
+      "settled": true
+    },
+    {
+      "id": 10,
+      "name": "sunny",
+      "x": 1438,
+      "y": 602,
+      "goal": "bench",
+      "phase": "dock",
+      "action": 4,
+      "settled": true
+    },
+    {
+      "id": 11,
+      "name": "peep",
+      "x": 960.9,
+      "y": 865.6,
+      "goal": "dance",
+      "action": 3,
+      "settled": true
+    },
+    {
+      "id": 12,
+      "name": "boba",
+      "x": 857.7,
+      "y": 748.2,
+      "goal": "dance",
+      "action": 3,
+      "settled": true
+    }
+  ],
+  "events": [
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "quackers",
+      "goal": "bench"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "mo",
+      "goal": "bench"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "aya_22",
+      "goal": "fountain"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "bread_boy",
+      "goal": "fountain"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "pip",
+      "goal": "fountain"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "lulu",
+      "goal": "stall"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "nori",
+      "goal": "stall"
+    },
+    {
+      "time": 0,
+      "type": "goal",
+      "duck": "miso",
+      "goal": "stall"
+    },
+    {
+      "time": 0,
+      "type": "sleep",
+      "duck": "toto"
+    },
+    {
+      "time": 0,
+      "type": "preen",
+      "duck": "sunny"
+    },
+    {
+      "time": 0,
+      "type": "look",
+      "duck": "peep"
+    },
+    {
+      "time": 0,
+      "type": "follow",
+      "duck": "boba"
+    },
+    {
+      "time": 0.38,
+      "type": "gather",
+      "duck": "pip",
+      "place": "ring8"
+    },
+    {
+      "time": 0.71,
+      "type": "visit",
+      "duck": "miso",
+      "place": "flowers-48"
+    },
+    {
+      "time": 1,
+      "type": "visit",
+      "duck": "nori",
+      "place": "bakery-48"
+    },
+    {
+      "time": 1.38,
+      "type": "visit",
+      "duck": "lulu",
+      "place": "fruit-48"
+    },
+    {
+      "time": 1.83,
+      "type": "gather",
+      "duck": "bread_boy",
+      "place": "ring7"
+    },
+    {
+      "time": 2.67,
+      "type": "sit",
+      "duck": "mo",
+      "seat": "east-bench-53"
+    },
+    {
+      "time": 3.17,
+      "type": "sit",
+      "duck": "quackers",
+      "seat": "west-bench-53"
+    },
+    {
+      "time": 3.46,
+      "type": "goal",
+      "duck": "sunny",
+      "goal": "bench"
+    },
+    {
+      "time": 4,
+      "type": "quack",
+      "duck": "you"
+    },
+    {
+      "time": 4,
+      "type": "wave",
+      "duck": "bread_boy",
+      "to": "you"
+    },
+    {
+      "time": 4,
+      "type": "wave",
+      "duck": "aya_22",
+      "to": "you"
+    },
+    {
+      "time": 4.37,
+      "type": "follow",
+      "duck": "peep"
+    },
+    {
+      "time": 6.42,
+      "type": "wave",
+      "duck": "peep",
+      "to": "you"
+    },
+    {
+      "time": 6.83,
+      "type": "wave",
+      "duck": "boba",
+      "to": "you"
+    },
+    {
+      "time": 7.71,
+      "type": "gather",
+      "duck": "aya_22",
+      "place": "ring6"
+    },
+    {
+      "time": 9.62,
+      "type": "sit",
+      "duck": "sunny",
+      "seat": "east-bench53"
+    },
+    {
+      "time": 11,
+      "type": "party",
+      "duck": "you",
+      "members": [
+        "you",
+        "boba",
+        "peep",
+        "bread_boy"
+      ],
+      "size": 4
+    },
+    {
+      "time": 13.04,
+      "type": "dance",
+      "duck": "peep"
+    },
+    {
+      "time": 13.25,
+      "type": "dance",
+      "duck": "boba"
+    },
+    {
+      "time": 13.29,
+      "type": "goal",
+      "duck": "toto",
+      "goal": "fountain"
+    },
+    {
+      "time": 13.58,
+      "type": "dance",
+      "duck": "bread_boy"
+    },
+    {
+      "time": 17.54,
+      "type": "goal",
+      "duck": "nori",
+      "goal": "bench"
+    },
+    {
+      "time": 17.62,
+      "type": "preen",
+      "duck": "lulu"
+    },
+    {
+      "time": 17.75,
+      "type": "gather",
+      "duck": "toto",
+      "place": "ring0"
+    },
+    {
+      "time": 18.79,
+      "type": "look",
+      "duck": "miso"
+    },
+    {
+      "time": 18.87,
+      "type": "goal",
+      "duck": "pip",
+      "goal": "fountain"
+    }
+  ]
+}

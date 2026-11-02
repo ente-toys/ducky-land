@@ -1,0 +1,5 @@
+{
+  "status": "blocked",
+  "reason": "Chrome launch denied by sandbox; CUA browser access host unavailable",
+  "details": "browser-blocker.txt"
+}

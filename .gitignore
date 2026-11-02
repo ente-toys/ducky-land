@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.DS_Store
+# build output and big generated files (rebuild with build.py / pull_rig.py)
+rive/build/
+rive/scene.rml
+# heavy evidence and archives from the build lanes
+incoming/assets/ducky-land-assets.zip
+incoming/**/evidence/*.mp4

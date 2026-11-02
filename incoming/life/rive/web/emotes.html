@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">
+<title>Ducky Land · Emote sheet</title>
+<style>html,body{margin:0;background:#fff4c5;color:#232323;font:18px system-ui}main{max-width:1600px;margin:auto}.grid{display:grid;grid-template-columns:repeat(4,1fr)}figure{margin:0;position:relative}canvas{width:100%;height:auto;display:block}figcaption{position:absolute;bottom:14px;width:100%;text-align:center;font-weight:800}button{position:fixed;right:20px;bottom:15px;border:2px solid #232323;border-radius:22px;background:#fff;padding:10px 18px;color:#232323;cursor:pointer}</style>
+</head><body><main><div class="grid" id="grid"></div></main><button onclick="location.reload()">Replay emotes</button><script src="rive.js"></script><script>rive.RuntimeLoader.setWasmUrl("rive.wasm");rive.RuntimeLoader.setWasmFallbackUrl("rive_fallback.wasm");</script><script>
+let reviewVersion=null;setInterval(async()=>{try{const v=await(await fetch('review-version.json',{cache:'no-store'})).text();if(reviewVersion&&v!==reviewVersion)location.reload();reviewVersion=v;}catch{}},1500);
+const labels=['1 Quack','2 Heart','3 Laugh','4 Wave','5 Sleep','6 Angry','7 Party'];
+const actions=[2,4,5,6,7,8,9], entries=[], errors=[];let loaded=0;
+addEventListener('error',e=>{errors.push(e.message);save('emote-debug.json',new Blob([JSON.stringify({errors,loaded})]));});
+addEventListener('unhandledrejection',e=>{errors.push(String(e.reason));save('emote-debug.json',new Blob([JSON.stringify({errors,loaded})]));});
+setTimeout(()=>save('emote-debug.json',new Blob([JSON.stringify({errors,loaded,entries:entries.length,visibility:document.visibilityState})])),8000);
+const bytes=fetch('ducky-land.riv?v=living-1').then(r=>r.arrayBuffer());
+async function save(name,blob){await fetch('/__qa/'+name,{method:'POST',body:blob});}
+function blob(c){return new Promise(r=>c.toBlob(r,'image/png'));}
+async function finish(){
+  const sheet=document.createElement('canvas');sheet.width=1600;sheet.height=1060;
+  const ctx=sheet.getContext('2d');ctx.fillStyle='#FFF4C5';ctx.fillRect(0,0,1600,1060);
+  ctx.fillStyle='#232323';ctx.textAlign='center';ctx.font='bold 24px system-ui';
+  for(let i=0;i<entries.length;i++){
+    const x=i%4*400,y=Math.floor(i/4)*530;
+    const im=new Image();im.src=entries[i].url;await im.decode();ctx.drawImage(im,x,y,400,530);
+    ctx.fillText(labels[i],x+200,y+510);
+    await save('emote-'+(i+1)+'-close.png',await (await fetch(entries[i].url)).blob());
+  }
+  ctx.textAlign='left';ctx.font='bold 28px system-ui';ctx.fillText('Ducky Land',1230,770);
+  ctx.font='17px system-ui';ctx.fillText('Seven native Rive emotes',1230,810);ctx.fillText('Drip ink, flat colour, elastic poses',1230,840);
+  await save('emote-sheet.png',await blob(sheet));
+  await save('emote-sheet.json',new Blob([JSON.stringify({visibility:document.visibilityState,loaded,errors,actions,bounds:entries.map(e=>({bounds:e.r.artboard.bounds,frames:e.r.frameCount,context:e.canvas.getContext('2d')?'2d':'webgl'})),bytes:(await bytes).byteLength},null,2)]));
+  document.title='Ducky Land · Emotes captured';
+}
+bytes.then(buffer=>{
+  for(let i=0;i<7;i++){
+    const fig=document.createElement('figure'),c=document.createElement('canvas'),cap=document.createElement('figcaption');
+    c.width=400;c.height=530;cap.textContent=labels[i];fig.append(c,cap);grid.append(fig);
+    const r=new rive.Rive({buffer:buffer.slice(0),canvas:c,artboard:'Ducky',stateMachines:'Ducky',autoplay:true,autoBind:true,
+      layout:new rive.Layout({fit:rive.Fit.Contain,alignment:rive.Alignment.Center}),
+      onLoad(){
+        const vm=r.viewModelInstance; vm.number('cap').value=8;vm.string('name').value=' you ';vm.number('city').value=1;vm.number('action').value=actions[i];
+        r.stopRendering();
+        // A deterministic native runtime capture also works if another review tab takes focus.
+        for(let f=0;f<(i===4?45:27);f++)r.advanceAndReportChanges(1/60);
+        r.renderer.clear();r.renderer.save();r.renderer.align(r.runtime.Fit.contain,r.runtime.Alignment.center,{minX:0,minY:0,maxX:c.width,maxY:c.height},{minX:-45,minY:-15,maxX:900,maxY:960});r.artboard.draw(r.renderer);r.renderer.restore();r.renderer.flush();
+        r.runtime.resolveAnimationFrame();r.pause();
+        entries[i]={r,canvas:c,url:c.toDataURL('image/png')};loaded++;if(loaded===7)setTimeout(finish,50);
+      },onLoadError:e=>errors.push(String(e))});
+  }
+});
+</script></body></html>

@@ -1,0 +1,12 @@
+{
+  "assets": [
+    "tree-palm",
+    "bakery",
+    "bench-wood",
+    "float-duck",
+    "croissant"
+  ],
+  "scale": 0.32,
+  "converter": "/Users/pragadees.xd/Developer/hallow-os/tools/svg2rml.py",
+  "reference": "reference/drip-ducky-flat.svg"
+}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7FD0F3">
+<title>Ducky Land</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7FD0F3;overscroll-behavior:none}
+canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#error{position:fixed;inset:0;display:grid;place-items:center;font:18px system-ui;background:#FFF4C5;color:#232323;padding:40px}
+#error[hidden]{display:none}
+</style>
+</head>
+<body>
+<canvas id="world" tabindex="0" aria-label="Ducky Land island. Walk with WASD, arrow keys, or tap a destination. Q to quack, E to dance."></canvas>
+<div id="error" hidden></div>
+<script src="rive.js"></script>
+<script src="game.js"></script>
+<script>
+// Local authoring preview: pick up rebuilt native art and host code without cache.
+(async()=>{let version=await fetch('/__version').then(r=>r.text());setInterval(async()=>{try{const next=await fetch('/__version').then(r=>r.text());if(next!==version)location.reload();}catch{}},1500);})();
+</script>
+</body>
+</html>

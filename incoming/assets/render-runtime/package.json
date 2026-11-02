@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
+    "@rive-app/canvas-advanced": "^2.43.1"
+  }
+}

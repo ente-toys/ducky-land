@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>Ducky Land · Make an entrance</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="integrated.css">
+</head>
+<body>
+  <main id="join" aria-labelledby="join-title">
+    <header><a class="wordmark" href="./">Ducky Land<span class="wordmark-dot" aria-hidden="true"></span></a><span class="header-note">Your Drip Ducky, now alive.</span></header>
+    <section class="join-body">
+      <div class="intro"><p class="eyebrow">A little island. A lot of drip.</p><h1 id="join-title">Make an entrance.</h1><p>Dress your Ducky. Find your flock.</p></div>
+      <div class="wardrobe">
+        <div class="side" id="slots-left"></div>
+        <div class="preview"><canvas id="ducky" aria-label="Live preview of your Drip Ducky"></canvas><button id="randomize" class="randomize" type="button">↻ &nbsp;Randomize</button></div>
+        <div class="side" id="slots-right"></div>
+      </div>
+      <form id="join-form">
+        <label class="field">Your name<input id="name" name="name" autocomplete="nickname" placeholder="What do they call you?" maxlength="18" required></label>
+        <label class="field city-field">Your city<select id="city" name="city" required><option value="" disabled selected>Pick your flock</option><option>Kochi</option><option>Chennai</option><option>Bengaluru</option><option>London</option><option>Mumbai</option><option>Delhi</option><option>Hyderabad</option><option>Pune</option><option value="Other">Other</option></select></label>
+        <button id="enter" class="primary" type="submit" disabled>Loading Ducky…</button>
+      </form>
+      <p class="join-foot">Tap a path to walk. Drag to steer. Double tap your Ducky for emotes and photos.</p>
+      <p id="load-error" role="alert" hidden>Our Ducky got a little lost. Refresh to try again.</p>
+    </section>
+  </main>
+  <section id="world" aria-label="Ducky Land island" hidden>
+    <canvas id="world-canvas" tabindex="0" aria-label="Your Ducky on the island. Tap to waddle, or use WASD or arrow keys. Q to quack, E to dance."></canvas>
+    
+  </section>
+  <dialog id="photo-dialog" aria-labelledby="photo-title">
+    <div class="photo-top"><div><h2 id="photo-title">A moment in Ducky Land.</h2><p>The island is paused. Take this one with you.</p></div><button id="close-photo" class="close" aria-label="Close photo mode" type="button">×</button></div>
+    <img id="photo-preview" alt="Frozen Drip postcard with your Ducky and nearby Duckies on the island">
+    <div class="photo-actions"><a id="download-wide" class="primary download" download="my-ducky-in-ducky-land-x.png">↓ &nbsp;X · 1600 × 900</a><a id="download-square" class="download" download="my-ducky-in-ducky-land-square.png">↓ &nbsp;Square · 1200 × 1200</a><button id="copy-link" type="button">Copy my drip link</button></div>
+    <p id="photo-status" class="photo-status" role="status"></p>
+  </dialog>
+  <dialog id="menu"><h2>Your little island.</h2><p>Tap a path to waddle. Drag to steer. Double tap your Ducky for this menu.</p><div class="menu-grid"><button data-emote="2">Quack</button><button data-emote="3">Dance</button><button data-emote="4">Love</button><button data-emote="5">Laugh</button><button data-emote="6">Wave</button><button data-emote="7">Sleep</button><button data-emote="8">Grumpy</button><button data-emote="9">Party</button></div><div class="menu-grid"><button id="open-photo">Take a photo</button><button id="change-outfit">Change your drip</button><button id="sound-toggle">Sound on</button><button id="close-menu">Back to the island</button></div><p>Keyboard: WASD, Q, E. P takes a photo. Escape opens this menu.</p></dialog>
+<div id="activity-ui" hidden aria-live="polite"><span id="activity-message"></span><button id="activity-accept">Start</button><button id="activity-close">Leave</button></div><p id="error" hidden></p>
+<div id="toast" role="status"></div>
+  <script src="rive.js"></script>
+  <script src="core.js"></script>
+  <script src="sounds.js"></script>
+  <script src="game.js"></script>
+  <script type="module" src="integration.js"></script>
+</body>
+</html>

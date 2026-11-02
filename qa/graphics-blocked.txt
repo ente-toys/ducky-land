@@ -1,0 +1,19 @@
+The Rive CLI screenshot route was attempted with --screenshot --advance=60.
+It reported:
+  Metal is not available on this device.
+  Failed to create graphics context.
+
+Headless Chromium, Google Chrome and a second installed Playwright/Chromium
+version were attempted. Launch aborts before a page can be created. Chromium:
+  bootstrap_check_in ... Permission denied (1100)
+Google Chrome exited with SIGABRT. See browser-blocked.txt for the full final
+headless launch output from qa/browser.mjs.
+
+The browser connector inventory reported:
+  The browser access host is unavailable.
+
+No visible browser was opened to bypass the headless-only house rule.
+Integrated PNGs are genuine Rive Canvas2D WASM renders using a software raster.
+They are named software-*.png and are not claimed as Chrome screenshots.
+Join-form and photo-dialog browser screenshots remain pending, as do trusted
+phone gestures, Safari/Firefox behavior and GPU/frame-rate measurements.

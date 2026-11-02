@@ -1,0 +1,11 @@
+wrote scene.rml 1013 KB
+wrote plaza.rml 1098 KB
+[22:48:40.879] rive  compiling 2 markup files as one document: plaza.rml, scene.rml
+[22:48:43.713] rive  verified (0 bytes, 2846ms, 0 errors, 0 warnings)
+[22:48:44.856] rive  compiling 2 markup files as one document: plaza.rml, scene.rml
+[22:48:47.681] rive  built /Users/pragadees.xd/Downloads/Ducky Land/codex-mobile/rive/build/ducky-land.riv (667306 bytes, 2834ms, 0 errors, 0 warnings)
+[22:48:47.735] rive  compiling 2 markup files as one document: plaza.rml, scene.rml
+[22:48:50.689] rive  verified (0 bytes, 2962ms, 0 errors, 0 warnings)
+[22:48:51.696] rive  compiling 2 markup files as one document: plaza.rml, scene.rml
+[22:48:54.044] rive  built /Users/pragadees.xd/Downloads/Ducky Land/codex-mobile/rive-lite/build/ducky-land-lite.riv (663490 bytes, 2356ms, 0 errors, 0 warnings)
+Native variants: 16 placements / 6 placements. No scripts or signed builds.

@@ -1,0 +1,169 @@
+/* Every visible element is native Rive. One shared renderer draws the ground,
+   then native prop artboards and native Drip rigs in exact foot-y order.
+   This host owns input, navigation, camera transforms and the simulation only. */
+'use strict';
+(async()=>{
+const canvas=document.getElementById('world-canvas'), query=new URLSearchParams(location.search);
+rive.RuntimeLoader.setWasmUrl('rive.wasm');
+const [runtime,world,buffer]=await Promise.all([rive.RuntimeLoader.awaitInstance(),fetch('world.json').then(r=>r.json()),fetch('ducky-land.riv?v='+Date.now()).then(r=>r.arrayBuffer())]);
+// These trees stand in front of the plaza in the isometric view and hide it (art pass will re-place the scenery).
+const HIDES_PLAZA=[[2110,3130],[2550,3260],[3280,3180],[3520,2890]],near=(o,[x,y])=>Math.abs(o.x-x)<5&&Math.abs(o.y-y)<12;
+world.props=world.props.filter(p=>!(p.name==='Drip tree'&&HIDES_PLAZA.some(t=>near(p,t))));
+world.obstacles=world.obstacles.filter(o=>!(o.rx===28&&HIDES_PLAZA.some(t=>near(o,t))));
+const file=await runtime.load(new Uint8Array(buffer),undefined,false);
+const renderer=runtime.makeRenderer(canvas,true), ground=file.artboardByName('Island Ground');
+const cameraMatrix=new runtime.Mat2D();
+function matrix(m,s,x,y){m.xx=s;m.xy=0;m.yx=0;m.yy=s;m.tx=x;m.ty=y;return m;}
+ground.advance(0);
+const props=world.props.map(p=>{const art=file.artboardByName(p.artboard);art.frameOrigin=false;art.advance(0);return {...p,art};});
+let seed=8612;function random(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+const rnd=(a,b)=>a+(b-a)*random(), clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const names=['miso','pip','bread_boy','nori','lulu','boba','aya_22','sunny','mo','peep','kai','bea','toast','waddles','mango','quackers','coco','poppy','toto','kiki','bao','peach','olive','momo','pico','crumb','biscuit','basil'];
+let now=0,last=0,frames=0,paused=false,overview=query.get('view')==='overview';
+const keys=new Set(), visited=new Set();
+function inPoly(x,y){let inside=false,p=world.coast;for(let i=0,j=p.length-1;i<p.length;j=i++){if((p[i][1]>y)!=(p[j][1]>y)&&x<(p[j][0]-p[i][0])*(y-p[i][1])/(p[j][1]-p[i][1])+p[i][0])inside=!inside;}return inside;}
+function ellipse(x,y,o,pad=0){return ((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;}
+function walkable(x,y){
+ const onBoard=world.walkways.some(b=>{
+ const dx=b.b[0]-b.a[0],dy=b.b[1]-b.a[1],t=clamp(((x-b.a[0])*dx+(y-b.a[1])*dy)/(dx*dx+dy*dy),0,1);
+ return Math.hypot(x-b.a[0]-dx*t,y-b.a[1]-dy*t)<b.w/2-10;
+ });
+ const onIsle=world.islets.some(a=>((x-a[0])/(a[2]-20))**2+((y-a[1])/(a[3]-20))**2<1);
+ if(!inPoly(x,y)&&!onBoard&&!onIsle)return false;
+ const bridge=world.bridges.some(b=>Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
+ if(!bridge&&world.water.some(o=>ellipse(x,y,o,20)))return false;
+ if(world.obstacles.some(o=>ellipse(x,y,o,16)))return false;
+ return true;
+}
+// A* across the island. Diagonal neighbours require both adjacent cells clear.
+const CELL=32,COLS=Math.ceil(world.width/CELL),ROWS=Math.ceil(world.height/CELL);
+const grid=new Uint8Array(COLS*ROWS);
+for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)grid[y*COLS+x]=walkable((x+.5)*CELL,(y+.5)*CELL)?1:0;
+function point(id){return [(id%COLS+.5)*CELL,(Math.floor(id/COLS)+.5)*CELL];}
+function cell(x,y){return Math.floor(y/CELL)*COLS+Math.floor(x/CELL);}
+function nearest(x,y,radius=150){
+ if(walkable(x,y))return [x,y];
+ for(let r=16;r<=radius;r+=16)for(let a=0;a<24;a++){let xx=x+Math.cos(a*Math.PI/12)*r,yy=y+Math.sin(a*Math.PI/12)*r;if(walkable(xx,yy))return [xx,yy];}
+ return null;
+}
+function clearLine(a,b){let n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/3);for(let i=1;i<=n;i++)if(!walkable(a[0]+(b[0]-a[0])*i/n,a[1]+(b[1]-a[1])*i/n))return false;return true;}
+function route(sx,sy,tx,ty){
+ const target=nearest(tx,ty);if(!target)return [];
+ if(clearLine([sx,sy],target))return [target];
+ function nearCell(x,y){const c=cell(x,y);if(grid[c])return c;for(let r=1;r<6;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){let xx=Math.floor(x/CELL)+dx,yy=Math.floor(y/CELL)+dy,id=yy*COLS+xx;if(xx>=0&&xx<COLS&&yy>=0&&yy<ROWS&&grid[id]&&clearLine([x,y],point(id)))return id;}return -1;}
+ const start=nearCell(sx,sy),end=nearCell(...target);if(start<0||end<0)return [];
+ const cost=new Float32Array(grid.length).fill(Infinity),parent=new Int32Array(grid.length).fill(-1),closed=new Uint8Array(grid.length),heap=[];
+ const heuristic=id=>{const a=point(id),b=point(end);return Math.hypot(a[0]-b[0],a[1]-b[1])/CELL;};
+ function push(id,f){let i=heap.length;heap.push({id,f});while(i){let p=(i-1)>>1;if(heap[p].f<=f)break;heap[i]=heap[p];i=p;}heap[i]={id,f};}
+ function pop(){let top=heap[0],end=heap.pop();if(heap.length){let i=0;while(i*2+1<heap.length){let c=i*2+1;if(c+1<heap.length&&heap[c+1].f<heap[c].f)c++;if(heap[c].f>=end.f)break;heap[i]=heap[c];i=c;}heap[i]=end;}return top.id;}
+ cost[start]=0;push(start,heuristic(start));let found=false;
+ while(heap.length){let cur=pop();if(closed[cur])continue;closed[cur]=1;if(cur===end){found=true;break;}
+ const x=cur%COLS,y=Math.floor(cur/COLS);
+ for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;let xx=x+dx,yy=y+dy,n=yy*COLS+xx;if(xx<0||yy<0||xx>=COLS||yy>=ROWS||!grid[n]||closed[n])continue;if(dx&&dy&&(!grid[y*COLS+xx]||!grid[yy*COLS+x]))continue;const nc=cost[cur]+(dx&&dy?Math.SQRT2:1);if(!clearLine(point(cur),point(n)))continue;if(nc<cost[n]){cost[n]=nc;parent[n]=cur;push(n,nc+heuristic(n));}}}
+ if(!found)return [];
+ const raw=[];for(let n=end;n!==start;n=parent[n])raw.push(point(n));raw.reverse();raw.push(target);
+ let out=[],anchor=[sx,sy];for(let i=0;i<raw.length;){let j=i;while(j+1<raw.length&&clearLine(anchor,raw[j+1]))j++;out.push(raw[j]);anchor=raw[j];i=j+1;}return out;
+}
+const nativeVM=file.viewModelByName('DuckyVM');
+function createDuck(i,zone,player=false){
+ const z=world.zones[zone];let pos=nearest(z.spawn[0]+(player?0:rnd(-250,250)),z.spawn[1]+(player?0:rnd(-130,130)),400)||z.spawn;
+ const art=file.artboardByName('Ducky'),vm=nativeVM.instance(),sm=new runtime.StateMachineInstance(art.stateMachineByName('Ducky'),art);
+ art.frameOrigin=false;
+ const controls={};for(const key of ['x','y','bg','cap','shades','acc','shoes','city','action','facing','turn','isPlayer','tagVisible','arrival'])controls[key]=vm.number(key);
+ art.bindViewModelInstance(vm);sm.bindViewModelInstance(vm);
+ const data={x:pos[0],y:pos[1],art,vm,sm,controls,player,zone,name:player?'you':names[i%names.length],action:0,facing:1,turn:0,targetTurn:0,path:[],wait:rnd(.3,3),until:0,speed:player?245:rnd(65,105),scale:query.get('view')==='flat'?.24:.2};
+ for(const [k,v] of Object.entries({x:0,y:0,bg:0,cap:player?8:1+i%13,shades:i%4===0?1+i%3:0,acc:i%3===0?1+i%7:0,shoes:1+i%10,city:player?1:i%4,action:0,facing:1,turn:360,tagVisible:1,arrival:1,isPlayer:player?1:0}))controls[k].value=v;
+ vm.string('name').value=' '+data.name+' ';sm.advanceAndApply(0);art.advance(0);return data;
+}
+const zoneNames=Object.keys(world.zones),startZone=query.get('zone') in world.zones?query.get('zone'):'plaza';
+const ducks=[createDuck(0,startZone,true)];
+for(let i=0;i<28;i++)ducks.push(createDuck(i,zoneNames[Math.floor(i/4)]));
+const player=ducks[0];
+// View projection (boss 30 Oct: whole world in the isometric view). Simulation, collisions, paths and multiplayer stay
+// in flat world coordinates; only drawing and input go through this. The ground is sheared, props and Duckies stay upright.
+const VIEWS={iso:{a:.7071,b:.3536,c:-.7071,d:.3536},camp:{a:1,b:0,c:0,d:.72},flat:{a:1,b:0,c:0,d:1}};
+const view=VIEWS[query.get('view')]||VIEWS.iso,det=view.a*view.d-view.b*view.c;
+const project=(x,y)=>[view.a*x+view.c*y,view.b*x+view.d*y];
+const unproject=(x,y)=>[(view.d*x-view.c*y)/det,(-view.b*x+view.a*y)/det];
+const corners=[[0,0],[world.width,0],[0,world.height],[world.width,world.height]].map(p=>project(...p));
+const bounds={x0:Math.min(...corners.map(p=>p[0])),x1:Math.max(...corners.map(p=>p[0])),y0:Math.min(...corners.map(p=>p[1])),y1:Math.max(...corners.map(p=>p[1]))};
+const screenTurn=t=>{const r=t*Math.PI/180,[x,y]=project(Math.sin(r),Math.cos(r));return Math.atan2(x,y)*180/Math.PI;};
+const frontTurn=(()=>{const [x,y]=unproject(0,1);return Math.atan2(x,y)*180/Math.PI;})();
+const groundMatrix=new runtime.Mat2D();Object.assign(groundMatrix,{xx:view.a,xy:view.b,yx:view.c,yy:view.d,tx:0,ty:0});
+if(view!==VIEWS.flat)for(const p of props)p.scale=(p.scale||1)*.72;   // the squashed ground needs smaller scenery so it doesn't hide the paths
+const start=project(player.x,player.y);
+const camera={x:start[0],y:start[1]-85,zoom:1};
+const updateHooks=[],drawHooks=[],overlayHooks=[];let inputLocked=false;
+let viewW=innerWidth,viewH=innerHeight,dpr=1;
+function resize(){viewW=innerWidth;viewH=innerHeight;dpr=(window.game?.controls?.quality==='low'||query.get('quality')==='low')?Math.min(devicePixelRatio||1,1.5):(devicePixelRatio||1);canvas.width=Math.round(viewW*dpr);canvas.height=Math.round(viewH*dpr);camera.zoom=overview?Math.min(viewW/(bounds.x1-bounds.x0),viewH/(bounds.y1-bounds.y0)):clamp(viewW/1440,.62,1)*(view===VIEWS.flat?1:.78);if(overview){camera.x=(bounds.x0+bounds.x1)/2;camera.y=(bounds.y0+bounds.y1)/2;}}
+resize();addEventListener('resize',resize);
+function quack(d){d.action=2;d.until=now+1.3;d.path=[];}
+addEventListener('keydown',e=>{if(inputLocked||e.target.closest?.('input,select,button,dialog'))return;const k=e.key.toLowerCase();if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();keys.add(k);if(!e.repeat&&k==='q'){if(window.game?.emote)window.game.emote(2);else quack(player);}if(!e.repeat&&k==='e'){if(window.game?.emote)window.game.emote(3);else{player.action=3;player.until=now+6;player.path=[];}}});
+addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));addEventListener('blur',()=>keys.clear());
+function toWorld(x,y){return unproject((x-viewW/2)/camera.zoom+camera.x,(y-viewH/2)/camera.zoom+camera.y);}
+function toScreen(x,y){const p=project(x,y);return [(p[0]-camera.x)*camera.zoom+viewW/2,(p[1]-camera.y)*camera.zoom+viewH/2];}
+canvas.addEventListener('worldtap',e=>{canvas.focus({preventScroll:true});if(overview||inputLocked)return;const [x,y]=toWorld(e.detail.x,e.detail.y);player.path=route(player.x,player.y,x,y);if(player.path.length){player.action=1;player.until=0;}});
+function move(d,vx,vy,dt){
+ const len=Math.hypot(vx,vy);if(!len)return false;
+ const distance=d.speed*dt*(d.player?(window.game?.controls?.strength??1):1),dx=vx/len*distance,dy=vy/len*distance;
+ let moved=false;
+ if(walkable(d.x+dx,d.y+dy)){d.x+=dx;d.y+=dy;moved=true;}
+ else{if(walkable(d.x+dx,d.y)){d.x+=dx;moved=true;}if(walkable(d.x,d.y+dy)){d.y+=dy;moved=true;}}
+ if(Math.abs(vx)>.03)d.facing=vx<0?-1:1;d.targetTurn=Math.atan2(vx,vy)*180/Math.PI;
+ if(moved)d.action=1;return moved;
+}
+function stepDuck(d,dt){
+ let vx=0,vy=0;
+ if(d.player&&inputLocked)return;
+ if(d.player){vx=(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0);vy=(keys.has('s')||keys.has('arrowdown')?1:0)-(keys.has('w')||keys.has('arrowup')?1:0);if(vx||vy){d.path=[];d.until=0;const [wx,wy]=unproject(vx,vy);move(d,wx,wy,dt);return;}}
+ if(now<d.until)return;
+ if(d.action>1)d.action=0;
+ if(d.path.length){let [tx,ty]=d.path[0],dist=Math.hypot(tx-d.x,ty-d.y);if(dist<Math.max(5,d.speed*dt)){d.x=tx;d.y=ty;d.path.shift();}else if(!move(d,tx-d.x,ty-d.y,dt)){d.path=[];}if(!d.path.length)d.action=0;return;}
+ d.action=0;if(d.player)return;
+ d.wait-=dt;if(d.wait>0)return;d.wait=rnd(1.5,4.5);
+ const chance=random();if(chance<.12){quack(d);return;}if(chance<.2){d.action=3;d.until=now+rnd(2,4);return;}
+ const z=world.zones[d.zone];
+ for(let i=0;i<12;i++){const x=z.spawn[0]+rnd(-330,330),y=z.spawn[1]+rnd(-210,210);if(walkable(x,y)){d.path=route(d.x,d.y,x,y);if(d.path.length)break;}}
+}
+let renderOrder=[],frameTimes=[];
+function render(dt){
+ if(!canvas.getClientRects().length)return;
+ renderer.clear();renderer.save();
+ const sc=dpr*camera.zoom;
+ renderer.transform(matrix(cameraMatrix,sc,dpr*viewW/2-camera.x*sc,dpr*viewH/2-camera.y*sc));
+ renderer.save();renderer.transform(groundMatrix);ground.draw(renderer);renderer.restore();
+ // Sort all feet together: scenery and characters, with stable ties.
+ const low=window.game?.controls?.quality==='low'||query.get('quality')==='low';const drawnDucks=low?[player,...ducks.filter(d=>!d.player).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y)).slice(0,5)]:ducks;
+ const entities=[...props,...drawnDucks,...drawHooks.flatMap(fn=>fn())].sort((a,b)=>(view.b*a.x+view.d*a.y)-(view.b*b.x+view.d*b.y));
+ renderOrder=entities.map(e=>({name:e.name,y:e.y,player:!!e.player}));
+ const halfW=viewW/(2*camera.zoom),halfH=viewH/(2*camera.zoom);
+ for(const e of entities){
+  const [px,py]=project(e.x,e.y);
+  if(Math.abs(px-camera.x)>halfW+650||Math.abs(py-camera.y)>halfH+650)continue;
+  if(e.sm){const delta=((e.targetTurn-e.turn+540)%360)-180;e.turn+=delta*(1-Math.exp(-13*dt));e.turn=((e.turn+180)%360+360)%360-180;e.controls.action.value=e.action;const shown=screenTurn(e.turn);e.controls.facing.value=shown<0?-1:1;if(e.controls.turn)e.controls.turn.value=shown+360;e.sm.advanceAndApply(dt);e.art.advance(dt);}else if(e.advance)e.advance(dt);
+  e.matrix ||= new runtime.Mat2D();
+  renderer.save();renderer.transform(matrix(e.matrix,e.scale||1,px,py));e.art.draw(renderer);renderer.restore();
+ }
+ renderer.restore();for(const fn of overlayHooks)fn(renderer,dt);renderer.flush();runtime.resolveAnimationFrame();
+}
+function simulate(dt){
+ now+=dt;for(const d of ducks)if(!d.managed)stepDuck(d,dt);for(const fn of updateHooks)fn(dt,now);
+ if(!overview){const [fx,fy]=project(player.x,player.y);const hw=viewW/(2*camera.zoom),hh=viewH/(2*camera.zoom);const targetX=clamp(fx,bounds.x0+hw,bounds.x1-hw);const targetY=clamp(fy-85,bounds.y0+hh,bounds.y1-hh);const a=matchMedia('(prefers-reduced-motion: reduce)').matches?1:1-Math.exp(-7*dt);camera.x+=(targetX-camera.x)*a;camera.y+=(targetY-camera.y)*a;}
+ for(const [name,z]of Object.entries(world.zones))if(Math.hypot(player.x-z.spawn[0],player.y-z.spawn[1])<190)visited.add(name);
+}
+function frame(t){
+ if(document.hidden){last=t;requestAnimationFrame(frame);return;}
+ const elapsed=(t-last)/1000||0,dt=Math.min(.035,elapsed);last=t;
+ if(!paused)simulate(dt);
+ render(paused?0:dt);frames++;if(elapsed)frameTimes.push(elapsed*1000);if(frameTimes.length>240)frameTimes.shift();requestAnimationFrame(frame);
+}
+// Read-only diagnostics + explicit review helpers, no on-screen HUD.
+window.game={project,unproject,frontTurn,simulate,renderer,ground,createDuck,resize,updateHooks,drawHooks,overlayHooks,quack,
+ get inputLocked(){return inputLocked;},set inputLocked(v){inputLocked=!!v;keys.clear();},get now(){return now;},get view(){return {width:viewW,height:viewH,dpr};},runtime,file,world,props,ducks,player,camera,keys,walkable,route,toScreen,toWorld,visited,
+ get frames(){return frames;},get renderOrder(){return renderOrder;},get fps(){return 1000/(frameTimes.reduce((a,b)=>a+b,0)/frameTimes.length);},
+ get paused(){return paused;},set paused(v){paused=!!v;},
+ goTo(name){const z=world.zones[name];if(!z)return false;player.path=route(player.x,player.y,...z.spawn);return player.path.length>0;},
+ reviewZone(name){const z=world.zones[name];if(!z)return false;overview=false;resize();[player.x,player.y]=z.spawn;player.path=[];player.action=0;[camera.x,camera.y]=project(z.x,z.y);return true;},
+ overview(){overview=true;resize();},follow(){overview=false;resize();},render(){render(0);},drawFrame(dt){render(dt);},captureView(w=1600,h=1000,pixelRatio=2){const saved={viewW,viewH,dpr,width:canvas.width,height:canvas.height,camera:{...camera}};viewW=w;viewH=h;dpr=pixelRatio;canvas.width=w*dpr;canvas.height=h*dpr;[camera.x,camera.y]=project(player.x,player.y);camera.y-=100;camera.zoom=1;render(0);const copy=document.createElement('canvas');copy.width=canvas.width;copy.height=canvas.height;copy.getContext('2d').drawImage(canvas,0,0);viewW=saved.viewW;viewH=saved.viewH;dpr=saved.dpr;canvas.width=saved.width;canvas.height=saved.height;Object.assign(camera,saved.camera);render(0);return copy;},ready:true};
+window.dispatchEvent(new Event('ducky-ready'));requestAnimationFrame(frame);
+})().catch(e=>{console.error(e);window.gameError=String(e);const el=document.querySelector('#error');el.hidden=false;el.textContent='The island could not load. '+e.message;});

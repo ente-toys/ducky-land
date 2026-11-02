@@ -1,0 +1,70 @@
+No WebGL support. Image mesh will not be drawn.
+{
+  "rendered": 203,
+  "worst": [
+    {
+      "name": "wave-small",
+      "category": "water",
+      "width": 149,
+      "height": 45,
+      "mean_absolute_rgb": 1.1870246085011185,
+      "fraction_pixels_channel_delta_gt_40": 0.0019388516032811335
+    },
+    {
+      "name": "fountain-bowl",
+      "category": "water",
+      "width": 387,
+      "height": 141,
+      "mean_absolute_rgb": 1.0295416643759048,
+      "fraction_pixels_channel_delta_gt_40": 0.0017043267909175876
+    },
+    {
+      "name": "pond-edge-straight",
+      "category": "water",
+      "width": 625,
+      "height": 72,
+      "mean_absolute_rgb": 0.9115111111111112,
+      "fraction_pixels_channel_delta_gt_40": 0.0036444444444444445
+    },
+    {
+      "name": "wave-long",
+      "category": "water",
+      "width": 393,
+      "height": 55,
+      "mean_absolute_rgb": 0.8915259464877785,
+      "fraction_pixels_channel_delta_gt_40": 0.0007402266944251677
+    },
+    {
+      "name": "seed-bag",
+      "category": "food",
+      "width": 100,
+      "height": 100,
+      "mean_absolute_rgb": 0.8908,
+      "fraction_pixels_channel_delta_gt_40": 0.0003
+    },
+    {
+      "name": "bench-wood",
+      "category": "street",
+      "width": 328,
+      "height": 186,
+      "mean_absolute_rgb": 0.8512053064079028,
+      "fraction_pixels_channel_delta_gt_40": 0.0021636506687647524
+    },
+    {
+      "name": "quack",
+      "category": "icons",
+      "width": 185,
+      "height": 126,
+      "mean_absolute_rgb": 0.8413270413270413,
+      "fraction_pixels_channel_delta_gt_40": 0.0016302016302016302
+    },
+    {
+      "name": "float-ring",
+      "category": "water",
+      "width": 247,
+      "height": 114,
+      "mean_absolute_rgb": 0.8397258328006251,
+      "fraction_pixels_channel_delta_gt_40": 0.0012784998934583422
+    }
+  ]
+}

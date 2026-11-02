@@ -1,0 +1,120 @@
+{
+  "passed": true,
+  "simulatedSeconds": 900,
+  "reports": [
+    {
+      "seed": 2808,
+      "simulatedSeconds": 180,
+      "collisions": 0,
+      "maxDancers": 6,
+      "parties": 4,
+      "counts": {
+        "goal": 81,
+        "sleep": 11,
+        "preen": 13,
+        "look": 15,
+        "follow": 6,
+        "gather": 31,
+        "visit": 19,
+        "sit": 16,
+        "quack": 3,
+        "wave": 13,
+        "party": 4,
+        "dance": 20,
+        "party-end": 4,
+        "replan": 1
+      }
+    },
+    {
+      "seed": 1,
+      "simulatedSeconds": 180,
+      "collisions": 0,
+      "maxDancers": 6,
+      "parties": 4,
+      "counts": {
+        "goal": 79,
+        "sleep": 8,
+        "preen": 6,
+        "look": 21,
+        "follow": 8,
+        "gather": 28,
+        "visit": 22,
+        "sit": 17,
+        "quack": 8,
+        "wave": 9,
+        "party": 4,
+        "dance": 18,
+        "party-end": 4,
+        "replan": 4
+      }
+    },
+    {
+      "seed": 42,
+      "simulatedSeconds": 180,
+      "collisions": 0,
+      "maxDancers": 6,
+      "parties": 4,
+      "counts": {
+        "goal": 76,
+        "sleep": 11,
+        "preen": 12,
+        "look": 26,
+        "follow": 8,
+        "gather": 27,
+        "visit": 21,
+        "sit": 18,
+        "quack": 5,
+        "wave": 12,
+        "party": 4,
+        "dance": 19,
+        "party-end": 4
+      }
+    },
+    {
+      "seed": 12345,
+      "simulatedSeconds": 180,
+      "collisions": 0,
+      "maxDancers": 6,
+      "parties": 4,
+      "counts": {
+        "goal": 83,
+        "sleep": 12,
+        "preen": 11,
+        "look": 22,
+        "follow": 4,
+        "gather": 29,
+        "visit": 25,
+        "sit": 16,
+        "quack": 5,
+        "wave": 13,
+        "party": 4,
+        "dance": 19,
+        "party-end": 4,
+        "replan": 1
+      }
+    },
+    {
+      "seed": 98765,
+      "simulatedSeconds": 180,
+      "collisions": 0,
+      "maxDancers": 5,
+      "parties": 4,
+      "counts": {
+        "goal": 85,
+        "sleep": 9,
+        "preen": 8,
+        "look": 17,
+        "follow": 4,
+        "gather": 32,
+        "visit": 27,
+        "sit": 19,
+        "quack": 3,
+        "wave": 11,
+        "party": 4,
+        "dance": 14,
+        "party-end": 4,
+        "replan": 1
+      }
+    }
+  ]
+}
