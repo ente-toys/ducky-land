@@ -1,0 +1,3151 @@
+[
+  {
+    "name": "beach-ball",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/beach-ball.svg",
+    "sources": [
+      "assets/beach/beach-ball.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7312
+  },
+  {
+    "name": "bucket",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/bucket.svg",
+    "sources": [
+      "assets/beach/bucket.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5507
+  },
+  {
+    "name": "sand-edge-bank",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/sand-edge-bank.svg",
+    "sources": [
+      "assets/beach/sand-edge-bank.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4111
+  },
+  {
+    "name": "sand-edge-cove",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/sand-edge-cove.svg",
+    "sources": [
+      "assets/beach/sand-edge-cove.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4268
+  },
+  {
+    "name": "sand-edge-island",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/sand-edge-island.svg",
+    "sources": [
+      "assets/beach/sand-edge-island.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3692
+  },
+  {
+    "name": "sandcastle-small",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/sandcastle-small.svg",
+    "sources": [
+      "assets/beach/sandcastle-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14091
+  },
+  {
+    "name": "sandcastle-turrets",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/sandcastle-turrets.svg",
+    "sources": [
+      "assets/beach/sandcastle-turrets.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 28645
+  },
+  {
+    "name": "shell-conch",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/shell-conch.svg",
+    "sources": [
+      "assets/beach/shell-conch.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5978
+  },
+  {
+    "name": "shell-cowrie",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/shell-cowrie.svg",
+    "sources": [
+      "assets/beach/shell-cowrie.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10190
+  },
+  {
+    "name": "shell-scallop",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/shell-scallop.svg",
+    "sources": [
+      "assets/beach/shell-scallop.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10342
+  },
+  {
+    "name": "spade",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/spade.svg",
+    "sources": [
+      "assets/beach/spade.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5462
+  },
+  {
+    "name": "starfish-orange",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/starfish-orange.svg",
+    "sources": [
+      "assets/beach/starfish-orange.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4952
+  },
+  {
+    "name": "starfish-pink",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/starfish-pink.svg",
+    "sources": [
+      "assets/beach/starfish-pink.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4991
+  },
+  {
+    "name": "towel-striped",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/towel-striped.svg",
+    "sources": [
+      "assets/beach/towel-striped.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10622
+  },
+  {
+    "name": "towel-sun",
+    "category": "Beach",
+    "role": "Game asset library",
+    "path": "assets/beach/towel-sun.svg",
+    "sources": [
+      "assets/beach/towel-sun.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10217
+  },
+  {
+    "name": "bakery",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/bakery.svg",
+    "sources": [
+      "assets/buildings/bakery.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 52811
+  },
+  {
+    "name": "cafe",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/cafe.svg",
+    "sources": [
+      "assets/buildings/cafe.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 50310
+  },
+  {
+    "name": "cottage",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/cottage.svg",
+    "sources": [
+      "assets/buildings/cottage.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 27196
+  },
+  {
+    "name": "gazebo",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/gazebo.svg",
+    "sources": [
+      "assets/buildings/gazebo.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 19650
+  },
+  {
+    "name": "kiosk",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/kiosk.svg",
+    "sources": [
+      "assets/buildings/kiosk.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 22524
+  },
+  {
+    "name": "library",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/library.svg",
+    "sources": [
+      "assets/buildings/library.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 50284
+  },
+  {
+    "name": "lighthouse-duck",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/lighthouse-duck.svg",
+    "sources": [
+      "assets/buildings/lighthouse-duck.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 39561
+  },
+  {
+    "name": "pond-house",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/pond-house.svg",
+    "sources": [
+      "assets/buildings/pond-house.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 37988
+  },
+  {
+    "name": "stall-bread",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/stall-bread.svg",
+    "sources": [
+      "assets/buildings/stall-bread.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 47679
+  },
+  {
+    "name": "stall-flower",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/stall-flower.svg",
+    "sources": [
+      "assets/buildings/stall-flower.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 71102
+  },
+  {
+    "name": "stall-fruit",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/stall-fruit.svg",
+    "sources": [
+      "assets/buildings/stall-fruit.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 83289
+  },
+  {
+    "name": "stall-ice-cream",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/stall-ice-cream.svg",
+    "sources": [
+      "assets/buildings/stall-ice-cream.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 55382
+  },
+  {
+    "name": "townhouse",
+    "category": "Buildings",
+    "role": "Game asset library",
+    "path": "assets/buildings/townhouse.svg",
+    "sources": [
+      "assets/buildings/townhouse.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 38712
+  },
+  {
+    "name": "apple",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/apple.svg",
+    "sources": [
+      "assets/food/apple.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5425
+  },
+  {
+    "name": "baguette",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/baguette.svg",
+    "sources": [
+      "assets/food/baguette.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5819
+  },
+  {
+    "name": "bread-slice",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/bread-slice.svg",
+    "sources": [
+      "assets/food/bread-slice.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3555
+  },
+  {
+    "name": "cherries",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/cherries.svg",
+    "sources": [
+      "assets/food/cherries.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7642
+  },
+  {
+    "name": "croissant",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/croissant.svg",
+    "sources": [
+      "assets/food/croissant.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6480
+  },
+  {
+    "name": "cupcake",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/cupcake.svg",
+    "sources": [
+      "assets/food/cupcake.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7235
+  },
+  {
+    "name": "donut",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/donut.svg",
+    "sources": [
+      "assets/food/donut.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7128
+  },
+  {
+    "name": "egg",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/egg.svg",
+    "sources": [
+      "assets/food/egg.svg",
+      "assets/icons/egg.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2242
+  },
+  {
+    "name": "golden-bread",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/golden-bread.svg",
+    "sources": [
+      "assets/food/golden-bread.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5566
+  },
+  {
+    "name": "golden-egg",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/golden-egg.svg",
+    "sources": [
+      "assets/food/golden-egg.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2249
+  },
+  {
+    "name": "ice-cream-double",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/ice-cream-double.svg",
+    "sources": [
+      "assets/food/ice-cream-double.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7782
+  },
+  {
+    "name": "ice-cream-swirl",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/ice-cream-swirl.svg",
+    "sources": [
+      "assets/food/ice-cream-swirl.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6965
+  },
+  {
+    "name": "loaf",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/loaf.svg",
+    "sources": [
+      "assets/food/loaf.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5558
+  },
+  {
+    "name": "pear",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/pear.svg",
+    "sources": [
+      "assets/food/pear.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5063
+  },
+  {
+    "name": "pretzel",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/pretzel.svg",
+    "sources": [
+      "assets/food/pretzel.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10106
+  },
+  {
+    "name": "seed-bag",
+    "category": "Food",
+    "role": "Game asset library",
+    "path": "assets/food/seed-bag.svg",
+    "sources": [
+      "assets/food/seed-bag.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7330
+  },
+  {
+    "name": "bubble-quack",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/bubble-quack.svg",
+    "sources": [
+      "assets/fx/bubble-quack.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5586
+  },
+  {
+    "name": "bubble-round",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/bubble-round.svg",
+    "sources": [
+      "assets/fx/bubble-round.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2104
+  },
+  {
+    "name": "bubble-speech",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/bubble-speech.svg",
+    "sources": [
+      "assets/fx/bubble-speech.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3452
+  },
+  {
+    "name": "bubble-thought",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/bubble-thought.svg",
+    "sources": [
+      "assets/fx/bubble-thought.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5476
+  },
+  {
+    "name": "bubble-typing",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/bubble-typing.svg",
+    "sources": [
+      "assets/fx/bubble-typing.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2717
+  },
+  {
+    "name": "droplet",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/droplet.svg",
+    "sources": [
+      "assets/fx/droplet.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1555
+  },
+  {
+    "name": "exclamation",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/exclamation.svg",
+    "sources": [
+      "assets/fx/exclamation.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3530
+  },
+  {
+    "name": "heart-pink",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/heart-pink.svg",
+    "sources": [
+      "assets/fx/heart-pink.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2401
+  },
+  {
+    "name": "heart-red",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/heart-red.svg",
+    "sources": [
+      "assets/fx/heart-red.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2400
+  },
+  {
+    "name": "heart-small",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/heart-small.svg",
+    "sources": [
+      "assets/fx/heart-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2225
+  },
+  {
+    "name": "puff-small",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/puff-small.svg",
+    "sources": [
+      "assets/fx/puff-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3177
+  },
+  {
+    "name": "puff-trail",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/puff-trail.svg",
+    "sources": [
+      "assets/fx/puff-trail.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4247
+  },
+  {
+    "name": "puff-wide",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/puff-wide.svg",
+    "sources": [
+      "assets/fx/puff-wide.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4255
+  },
+  {
+    "name": "question",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/question.svg",
+    "sources": [
+      "assets/fx/question.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11308
+  },
+  {
+    "name": "splash-crown",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/splash-crown.svg",
+    "sources": [
+      "assets/fx/splash-crown.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6846
+  },
+  {
+    "name": "splash-small",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/splash-small.svg",
+    "sources": [
+      "assets/fx/splash-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6739
+  },
+  {
+    "name": "splash-wide",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/splash-wide.svg",
+    "sources": [
+      "assets/fx/splash-wide.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6501
+  },
+  {
+    "name": "star-rounded",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/star-rounded.svg",
+    "sources": [
+      "assets/fx/star-rounded.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3671
+  },
+  {
+    "name": "star-small",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/star-small.svg",
+    "sources": [
+      "assets/fx/star-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3531
+  },
+  {
+    "name": "zzz",
+    "category": "Fx",
+    "role": "Game asset library",
+    "path": "assets/fx/zzz.svg",
+    "sources": [
+      "assets/fx/zzz.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 618
+  },
+  {
+    "name": "bread",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/bread.svg",
+    "sources": [
+      "assets/icons/bread.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5559
+  },
+  {
+    "name": "camera",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/camera.svg",
+    "sources": [
+      "assets/icons/camera.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9882
+  },
+  {
+    "name": "compass",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/compass.svg",
+    "sources": [
+      "assets/icons/compass.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4604
+  },
+  {
+    "name": "flag",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/flag.svg",
+    "sources": [
+      "assets/icons/flag.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3766
+  },
+  {
+    "name": "flock",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/flock.svg",
+    "sources": [
+      "assets/icons/flock.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 8854
+  },
+  {
+    "name": "heart",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/heart.svg",
+    "sources": [
+      "assets/icons/heart.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2396
+  },
+  {
+    "name": "home",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/home.svg",
+    "sources": [
+      "assets/icons/home.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9183
+  },
+  {
+    "name": "location",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/location.svg",
+    "sources": [
+      "assets/icons/location.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3010
+  },
+  {
+    "name": "map",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/map.svg",
+    "sources": [
+      "assets/icons/map.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5251
+  },
+  {
+    "name": "moon",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/moon.svg",
+    "sources": [
+      "assets/icons/moon.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2790
+  },
+  {
+    "name": "mute",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/mute.svg",
+    "sources": [
+      "assets/icons/mute.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5907
+  },
+  {
+    "name": "quack",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/quack.svg",
+    "sources": [
+      "assets/icons/quack.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4650
+  },
+  {
+    "name": "return",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/return.svg",
+    "sources": [
+      "assets/icons/return.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3043
+  },
+  {
+    "name": "settings",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/settings.svg",
+    "sources": [
+      "assets/icons/settings.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9177
+  },
+  {
+    "name": "sound",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/sound.svg",
+    "sources": [
+      "assets/icons/sound.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4086
+  },
+  {
+    "name": "sun",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/sun.svg",
+    "sources": [
+      "assets/icons/sun.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9954
+  },
+  {
+    "name": "trophy",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/trophy.svg",
+    "sources": [
+      "assets/icons/trophy.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7879
+  },
+  {
+    "name": "walk",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/walk.svg",
+    "sources": [
+      "assets/icons/walk.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3511
+  },
+  {
+    "name": "wave",
+    "category": "Icons",
+    "role": "Game asset library",
+    "path": "assets/icons/wave.svg",
+    "sources": [
+      "assets/icons/wave.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2742
+  },
+  {
+    "name": "bush-berry",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/bush-berry.svg",
+    "sources": [
+      "assets/nature/bush-berry.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13917
+  },
+  {
+    "name": "bush-flowering",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/bush-flowering.svg",
+    "sources": [
+      "assets/nature/bush-flowering.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 33931
+  },
+  {
+    "name": "bush-round",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/bush-round.svg",
+    "sources": [
+      "assets/nature/bush-round.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 8637
+  },
+  {
+    "name": "bush-wide",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/bush-wide.svg",
+    "sources": [
+      "assets/nature/bush-wide.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 8747
+  },
+  {
+    "name": "cattails",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/cattails.svg",
+    "sources": [
+      "assets/nature/cattails.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14307
+  },
+  {
+    "name": "flower-cluster",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/flower-cluster.svg",
+    "sources": [
+      "assets/nature/flower-cluster.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 32316
+  },
+  {
+    "name": "flower-daisy",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/flower-daisy.svg",
+    "sources": [
+      "assets/nature/flower-daisy.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10324
+  },
+  {
+    "name": "flower-pink",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/flower-pink.svg",
+    "sources": [
+      "assets/nature/flower-pink.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10477
+  },
+  {
+    "name": "flower-poppy",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/flower-poppy.svg",
+    "sources": [
+      "assets/nature/flower-poppy.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10813
+  },
+  {
+    "name": "flower-sunflower",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/flower-sunflower.svg",
+    "sources": [
+      "assets/nature/flower-sunflower.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10986
+  },
+  {
+    "name": "flower-tulip",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/flower-tulip.svg",
+    "sources": [
+      "assets/nature/flower-tulip.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4712
+  },
+  {
+    "name": "grass-tuft-curl",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/grass-tuft-curl.svg",
+    "sources": [
+      "assets/nature/grass-tuft-curl.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3789
+  },
+  {
+    "name": "grass-tuft-three",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/grass-tuft-three.svg",
+    "sources": [
+      "assets/nature/grass-tuft-three.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3448
+  },
+  {
+    "name": "grass-tuft-wide",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/grass-tuft-wide.svg",
+    "sources": [
+      "assets/nature/grass-tuft-wide.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3920
+  },
+  {
+    "name": "lily-pad-flower",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/lily-pad-flower.svg",
+    "sources": [
+      "assets/nature/lily-pad-flower.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13170
+  },
+  {
+    "name": "lily-pad-large",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/lily-pad-large.svg",
+    "sources": [
+      "assets/nature/lily-pad-large.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4771
+  },
+  {
+    "name": "lily-pad-small",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/lily-pad-small.svg",
+    "sources": [
+      "assets/nature/lily-pad-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4442
+  },
+  {
+    "name": "log",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/log.svg",
+    "sources": [
+      "assets/nature/log.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4750
+  },
+  {
+    "name": "mushroom-cluster",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/mushroom-cluster.svg",
+    "sources": [
+      "assets/nature/mushroom-cluster.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13172
+  },
+  {
+    "name": "mushroom-purple",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/mushroom-purple.svg",
+    "sources": [
+      "assets/nature/mushroom-purple.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4786
+  },
+  {
+    "name": "mushroom-red",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/mushroom-red.svg",
+    "sources": [
+      "assets/nature/mushroom-red.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5733
+  },
+  {
+    "name": "reeds",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/reeds.svg",
+    "sources": [
+      "assets/nature/reeds.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7882
+  },
+  {
+    "name": "rock-boulder",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/rock-boulder.svg",
+    "sources": [
+      "assets/nature/rock-boulder.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2399
+  },
+  {
+    "name": "rock-flat",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/rock-flat.svg",
+    "sources": [
+      "assets/nature/rock-flat.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3473
+  },
+  {
+    "name": "rock-round",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/rock-round.svg",
+    "sources": [
+      "assets/nature/rock-round.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2156
+  },
+  {
+    "name": "rock-upright",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/rock-upright.svg",
+    "sources": [
+      "assets/nature/rock-upright.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2151
+  },
+  {
+    "name": "stump",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/stump.svg",
+    "sources": [
+      "assets/nature/stump.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3740
+  },
+  {
+    "name": "tree-baguette",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-baguette.svg",
+    "sources": [
+      "assets/nature/tree-baguette.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 45732
+  },
+  {
+    "name": "tree-banyan",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-banyan.svg",
+    "sources": [
+      "assets/nature/tree-banyan.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 19894
+  },
+  {
+    "name": "tree-blossom",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-blossom.svg",
+    "sources": [
+      "assets/nature/tree-blossom.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 55908
+  },
+  {
+    "name": "tree-coconut-palm",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-coconut-palm.svg",
+    "sources": [
+      "assets/nature/tree-coconut-palm.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 24455
+  },
+  {
+    "name": "tree-croissant",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-croissant.svg",
+    "sources": [
+      "assets/nature/tree-croissant.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 48283
+  },
+  {
+    "name": "tree-oak",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-oak.svg",
+    "sources": [
+      "assets/nature/tree-oak.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 21878
+  },
+  {
+    "name": "tree-palm",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-palm.svg",
+    "sources": [
+      "assets/nature/tree-palm.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 17045
+  },
+  {
+    "name": "tree-pine",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-pine.svg",
+    "sources": [
+      "assets/nature/tree-pine.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9174
+  },
+  {
+    "name": "tree-round",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-round.svg",
+    "sources": [
+      "assets/nature/tree-round.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10818
+  },
+  {
+    "name": "tree-willow",
+    "category": "Nature",
+    "role": "Game asset library",
+    "path": "assets/nature/tree-willow.svg",
+    "sources": [
+      "assets/nature/tree-willow.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 24450
+  },
+  {
+    "name": "bench-park",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/bench-park.svg",
+    "sources": [
+      "assets/street/bench-park.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 20957
+  },
+  {
+    "name": "bench-wood",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/bench-wood.svg",
+    "sources": [
+      "assets/street/bench-wood.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 23456
+  },
+  {
+    "name": "bin-litter",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/bin-litter.svg",
+    "sources": [
+      "assets/street/bin-litter.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9576
+  },
+  {
+    "name": "bin-recycling",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/bin-recycling.svg",
+    "sources": [
+      "assets/street/bin-recycling.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5120
+  },
+  {
+    "name": "bollard",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/bollard.svg",
+    "sources": [
+      "assets/street/bollard.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6597
+  },
+  {
+    "name": "bunting",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/bunting.svg",
+    "sources": [
+      "assets/street/bunting.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15504
+  },
+  {
+    "name": "cycle-rack",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/cycle-rack.svg",
+    "sources": [
+      "assets/street/cycle-rack.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7870
+  },
+  {
+    "name": "fence-gate",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/fence-gate.svg",
+    "sources": [
+      "assets/street/fence-gate.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 23030
+  },
+  {
+    "name": "fence-picket",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/fence-picket.svg",
+    "sources": [
+      "assets/street/fence-picket.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13576
+  },
+  {
+    "name": "fence-rail",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/fence-rail.svg",
+    "sources": [
+      "assets/street/fence-rail.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11739
+  },
+  {
+    "name": "flag-bengaluru",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-bengaluru.svg",
+    "sources": [
+      "assets/street/flag-bengaluru.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14238
+  },
+  {
+    "name": "flag-chennai",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-chennai.svg",
+    "sources": [
+      "assets/street/flag-chennai.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14644
+  },
+  {
+    "name": "flag-delhi",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-delhi.svg",
+    "sources": [
+      "assets/street/flag-delhi.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10422
+  },
+  {
+    "name": "flag-hyderabad",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-hyderabad.svg",
+    "sources": [
+      "assets/street/flag-hyderabad.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 16437
+  },
+  {
+    "name": "flag-kochi",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-kochi.svg",
+    "sources": [
+      "assets/street/flag-kochi.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13823
+  },
+  {
+    "name": "flag-london",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-london.svg",
+    "sources": [
+      "assets/street/flag-london.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12908
+  },
+  {
+    "name": "flag-mumbai",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-mumbai.svg",
+    "sources": [
+      "assets/street/flag-mumbai.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13606
+  },
+  {
+    "name": "flag-pune",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/flag-pune.svg",
+    "sources": [
+      "assets/street/flag-pune.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 18641
+  },
+  {
+    "name": "hydrant",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/hydrant.svg",
+    "sources": [
+      "assets/street/hydrant.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11984
+  },
+  {
+    "name": "lamp-gooseneck",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/lamp-gooseneck.svg",
+    "sources": [
+      "assets/street/lamp-gooseneck.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9355
+  },
+  {
+    "name": "lamp-lantern",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/lamp-lantern.svg",
+    "sources": [
+      "assets/street/lamp-lantern.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12172
+  },
+  {
+    "name": "mailbox",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/mailbox.svg",
+    "sources": [
+      "assets/street/mailbox.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13501
+  },
+  {
+    "name": "picnic-basket",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/picnic-basket.svg",
+    "sources": [
+      "assets/street/picnic-basket.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11718
+  },
+  {
+    "name": "picnic-blanket",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/picnic-blanket.svg",
+    "sources": [
+      "assets/street/picnic-blanket.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14457
+  },
+  {
+    "name": "picnic-table",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/picnic-table.svg",
+    "sources": [
+      "assets/street/picnic-table.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 19702
+  },
+  {
+    "name": "planter-flowers",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/planter-flowers.svg",
+    "sources": [
+      "assets/street/planter-flowers.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 36668
+  },
+  {
+    "name": "planter-leaf",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/planter-leaf.svg",
+    "sources": [
+      "assets/street/planter-leaf.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10303
+  },
+  {
+    "name": "sign-bakery",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/sign-bakery.svg",
+    "sources": [
+      "assets/street/sign-bakery.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4769
+  },
+  {
+    "name": "sign-park",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/sign-park.svg",
+    "sources": [
+      "assets/street/sign-park.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4631
+  },
+  {
+    "name": "sign-welcome",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/sign-welcome.svg",
+    "sources": [
+      "assets/street/sign-welcome.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5273
+  },
+  {
+    "name": "signpost-three-way",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/signpost-three-way.svg",
+    "sources": [
+      "assets/street/signpost-three-way.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12647
+  },
+  {
+    "name": "umbrella-cafe",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/umbrella-cafe.svg",
+    "sources": [
+      "assets/street/umbrella-cafe.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9660
+  },
+  {
+    "name": "umbrella-garden",
+    "category": "Street",
+    "role": "Game asset library",
+    "path": "assets/street/umbrella-garden.svg",
+    "sources": [
+      "assets/street/umbrella-garden.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9662
+  },
+  {
+    "name": "cobble-large",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/cobble-large.svg",
+    "sources": [
+      "assets/tiles/cobble-large.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 27701
+  },
+  {
+    "name": "cobble",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/cobble.svg",
+    "sources": [
+      "assets/tiles/cobble.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 63727
+  },
+  {
+    "name": "grass-edge-east",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/grass-edge-east.svg",
+    "sources": [
+      "assets/tiles/grass-edge-east.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1601
+  },
+  {
+    "name": "grass-edge-north",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/grass-edge-north.svg",
+    "sources": [
+      "assets/tiles/grass-edge-north.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1600
+  },
+  {
+    "name": "grass-edge-south",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/grass-edge-south.svg",
+    "sources": [
+      "assets/tiles/grass-edge-south.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1604
+  },
+  {
+    "name": "grass-edge-west",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/grass-edge-west.svg",
+    "sources": [
+      "assets/tiles/grass-edge-west.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1605
+  },
+  {
+    "name": "grass",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/grass.svg",
+    "sources": [
+      "assets/tiles/grass.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9456
+  },
+  {
+    "name": "path-brick",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/path-brick.svg",
+    "sources": [
+      "assets/tiles/path-brick.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 55033
+  },
+  {
+    "name": "path-dirt",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/path-dirt.svg",
+    "sources": [
+      "assets/tiles/path-dirt.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3624
+  },
+  {
+    "name": "path-stepping",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/path-stepping.svg",
+    "sources": [
+      "assets/tiles/path-stepping.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9518
+  },
+  {
+    "name": "sand-edge-east",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/sand-edge-east.svg",
+    "sources": [
+      "assets/tiles/sand-edge-east.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1600
+  },
+  {
+    "name": "sand-edge-north",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/sand-edge-north.svg",
+    "sources": [
+      "assets/tiles/sand-edge-north.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1599
+  },
+  {
+    "name": "sand-edge-south",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/sand-edge-south.svg",
+    "sources": [
+      "assets/tiles/sand-edge-south.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1603
+  },
+  {
+    "name": "sand-edge-west",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/sand-edge-west.svg",
+    "sources": [
+      "assets/tiles/sand-edge-west.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1604
+  },
+  {
+    "name": "sand",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/sand.svg",
+    "sources": [
+      "assets/tiles/sand.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1554
+  },
+  {
+    "name": "water-corner-ne",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-corner-ne.svg",
+    "sources": [
+      "assets/tiles/water-corner-ne.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1067
+  },
+  {
+    "name": "water-corner-nw",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-corner-nw.svg",
+    "sources": [
+      "assets/tiles/water-corner-nw.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1077
+  },
+  {
+    "name": "water-corner-se",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-corner-se.svg",
+    "sources": [
+      "assets/tiles/water-corner-se.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1051
+  },
+  {
+    "name": "water-corner-sw",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-corner-sw.svg",
+    "sources": [
+      "assets/tiles/water-corner-sw.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1061
+  },
+  {
+    "name": "water-edge-east",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-edge-east.svg",
+    "sources": [
+      "assets/tiles/water-edge-east.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1601
+  },
+  {
+    "name": "water-edge-north",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-edge-north.svg",
+    "sources": [
+      "assets/tiles/water-edge-north.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1600
+  },
+  {
+    "name": "water-edge-south",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-edge-south.svg",
+    "sources": [
+      "assets/tiles/water-edge-south.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1604
+  },
+  {
+    "name": "water-edge-west",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water-edge-west.svg",
+    "sources": [
+      "assets/tiles/water-edge-west.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1605
+  },
+  {
+    "name": "water",
+    "category": "Tiles",
+    "role": "Game asset library",
+    "path": "assets/tiles/water.svg",
+    "sources": [
+      "assets/tiles/water.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4039
+  },
+  {
+    "name": "bridge-arch",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/bridge-arch.svg",
+    "sources": [
+      "assets/water/bridge-arch.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7270
+  },
+  {
+    "name": "bridge-deck",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/bridge-deck.svg",
+    "sources": [
+      "assets/water/bridge-deck.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12715
+  },
+  {
+    "name": "bridge-rail",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/bridge-rail.svg",
+    "sources": [
+      "assets/water/bridge-rail.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 18729
+  },
+  {
+    "name": "buoy-channel",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/buoy-channel.svg",
+    "sources": [
+      "assets/water/buoy-channel.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5641
+  },
+  {
+    "name": "buoy-red",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/buoy-red.svg",
+    "sources": [
+      "assets/water/buoy-red.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5637
+  },
+  {
+    "name": "dock-piece",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/dock-piece.svg",
+    "sources": [
+      "assets/water/dock-piece.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14425
+  },
+  {
+    "name": "float-duck",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/float-duck.svg",
+    "sources": [
+      "assets/water/float-duck.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 8400
+  },
+  {
+    "name": "float-ring",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/float-ring.svg",
+    "sources": [
+      "assets/water/float-ring.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6936
+  },
+  {
+    "name": "fountain-base",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/fountain-base.svg",
+    "sources": [
+      "assets/water/fountain-base.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6012
+  },
+  {
+    "name": "fountain-bowl",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/fountain-bowl.svg",
+    "sources": [
+      "assets/water/fountain-bowl.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4606
+  },
+  {
+    "name": "fountain-jet",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/fountain-jet.svg",
+    "sources": [
+      "assets/water/fountain-jet.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7899
+  },
+  {
+    "name": "paper-boat",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/paper-boat.svg",
+    "sources": [
+      "assets/water/paper-boat.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3560
+  },
+  {
+    "name": "pond-edge-corner",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/pond-edge-corner.svg",
+    "sources": [
+      "assets/water/pond-edge-corner.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2933
+  },
+  {
+    "name": "pond-edge-cove",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/pond-edge-cove.svg",
+    "sources": [
+      "assets/water/pond-edge-cove.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3233
+  },
+  {
+    "name": "pond-edge-island",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/pond-edge-island.svg",
+    "sources": [
+      "assets/water/pond-edge-island.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2717
+  },
+  {
+    "name": "pond-edge-straight",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/pond-edge-straight.svg",
+    "sources": [
+      "assets/water/pond-edge-straight.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2694
+  },
+  {
+    "name": "pond",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/pond.svg",
+    "sources": [
+      "assets/water/pond.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12134
+  },
+  {
+    "name": "ripple-medium",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/ripple-medium.svg",
+    "sources": [
+      "assets/water/ripple-medium.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3309
+  },
+  {
+    "name": "ripple-small",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/ripple-small.svg",
+    "sources": [
+      "assets/water/ripple-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3136
+  },
+  {
+    "name": "ripple-wide",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/ripple-wide.svg",
+    "sources": [
+      "assets/water/ripple-wide.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 3453
+  },
+  {
+    "name": "rowboat",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/rowboat.svg",
+    "sources": [
+      "assets/water/rowboat.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13297
+  },
+  {
+    "name": "sailboat",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/sailboat.svg",
+    "sources": [
+      "assets/water/sailboat.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13624
+  },
+  {
+    "name": "wave-crest",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/wave-crest.svg",
+    "sources": [
+      "assets/water/wave-crest.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 2924
+  },
+  {
+    "name": "wave-long",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/wave-long.svg",
+    "sources": [
+      "assets/water/wave-long.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1915
+  },
+  {
+    "name": "wave-small",
+    "category": "Water",
+    "role": "Game asset library",
+    "path": "assets/water/wave-small.svg",
+    "sources": [
+      "assets/water/wave-small.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 1965
+  },
+  {
+    "name": "spin_10",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_10.svg",
+    "sources": [
+      "duck-spin/clean/spin_10.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14543
+  },
+  {
+    "name": "spin_11",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_11.svg",
+    "sources": [
+      "duck-spin/clean/spin_11.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9619
+  },
+  {
+    "name": "spin_12",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_12.svg",
+    "sources": [
+      "duck-spin/clean/spin_12.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12159
+  },
+  {
+    "name": "spin_13",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_13.svg",
+    "sources": [
+      "duck-spin/clean/spin_13.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12135
+  },
+  {
+    "name": "spin_14",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_14.svg",
+    "sources": [
+      "duck-spin/clean/spin_14.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12142
+  },
+  {
+    "name": "spin_15",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_15.svg",
+    "sources": [
+      "duck-spin/clean/spin_15.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9603
+  },
+  {
+    "name": "spin_16",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_16.svg",
+    "sources": [
+      "duck-spin/clean/spin_16.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15189
+  },
+  {
+    "name": "spin_9",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/clean/spin_9.svg",
+    "sources": [
+      "duck-spin/clean/spin_9.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14721
+  },
+  {
+    "name": "spin_10",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_10.svg",
+    "sources": [
+      "duck-spin/spin_10.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14751
+  },
+  {
+    "name": "spin_11",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_11.svg",
+    "sources": [
+      "duck-spin/spin_11.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9827
+  },
+  {
+    "name": "spin_12",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_12.svg",
+    "sources": [
+      "duck-spin/spin_12.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12367
+  },
+  {
+    "name": "spin_13",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_13.svg",
+    "sources": [
+      "duck-spin/spin_13.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12343
+  },
+  {
+    "name": "spin_14",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_14.svg",
+    "sources": [
+      "duck-spin/spin_14.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12350
+  },
+  {
+    "name": "spin_15",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_15.svg",
+    "sources": [
+      "duck-spin/spin_15.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9811
+  },
+  {
+    "name": "spin_16",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_16.svg",
+    "sources": [
+      "duck-spin/spin_16.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15397
+  },
+  {
+    "name": "spin_9",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_9.svg",
+    "sources": [
+      "duck-spin/spin_9.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14929
+  },
+  {
+    "name": "spin_strip",
+    "category": "Duck views",
+    "role": "Character source artwork",
+    "path": "duck-spin/spin_strip.png",
+    "sources": [
+      "duck-spin/spin_strip.png"
+    ],
+    "extension": ".png",
+    "bytes": 47261
+  },
+  {
+    "name": "Acc 10-C4Nqr69D",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 10-C4Nqr69D.svg",
+    "sources": [
+      "drip-ref/svg/Acc 10-C4Nqr69D.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5001
+  },
+  {
+    "name": "Acc 11-Bx4gkJ2m",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 11-Bx4gkJ2m.svg",
+    "sources": [
+      "drip-ref/svg/Acc 11-Bx4gkJ2m.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11999
+  },
+  {
+    "name": "Acc 12-DmQnOVug",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 12-DmQnOVug.svg",
+    "sources": [
+      "drip-ref/svg/Acc 12-DmQnOVug.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6304
+  },
+  {
+    "name": "Acc 4-DZTm7x-U",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 4-DZTm7x-U.svg",
+    "sources": [
+      "drip-ref/svg/Acc 4-DZTm7x-U.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6357
+  },
+  {
+    "name": "Acc 5-U2R1Nk2A",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 5-U2R1Nk2A.svg",
+    "sources": [
+      "drip-ref/svg/Acc 5-U2R1Nk2A.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14929
+  },
+  {
+    "name": "Acc 6-ApWubo30",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 6-ApWubo30.svg",
+    "sources": [
+      "drip-ref/svg/Acc 6-ApWubo30.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9047
+  },
+  {
+    "name": "Acc 8-B-TC1T5x",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 8-B-TC1T5x.svg",
+    "sources": [
+      "drip-ref/svg/Acc 8-B-TC1T5x.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13548
+  },
+  {
+    "name": "Acc 9-C6lDQyid",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc 9-C6lDQyid.svg",
+    "sources": [
+      "drip-ref/svg/Acc 9-C6lDQyid.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15511
+  },
+  {
+    "name": "Acc prev 10-dzH4-2L5",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 10-dzH4-2L5.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 10-dzH4-2L5.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4972
+  },
+  {
+    "name": "Acc prev 11-Cr7f2lAh",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 11-Cr7f2lAh.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 11-Cr7f2lAh.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 12007
+  },
+  {
+    "name": "Acc prev 12-D0syDDC9",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 12-D0syDDC9.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 12-D0syDDC9.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4500
+  },
+  {
+    "name": "Acc prev 4-El-gDIaf",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 4-El-gDIaf.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 4-El-gDIaf.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6353
+  },
+  {
+    "name": "Acc prev 5-CUanarPF",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 5-CUanarPF.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 5-CUanarPF.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 14955
+  },
+  {
+    "name": "Acc prev 6-Bca7t9kl",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 6-Bca7t9kl.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 6-Bca7t9kl.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 9017
+  },
+  {
+    "name": "Acc prev 8-P0Zd0jkr",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 8-P0Zd0jkr.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 8-P0Zd0jkr.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13813
+  },
+  {
+    "name": "Acc prev 9-VMtuHL-f",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Acc prev 9-VMtuHL-f.svg",
+    "sources": [
+      "drip-ref/svg/Acc prev 9-VMtuHL-f.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15496
+  },
+  {
+    "name": "CAP 1-DNIKtNKT",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 1-DNIKtNKT.svg",
+    "sources": [
+      "drip-ref/svg/CAP 1-DNIKtNKT.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 10975
+  },
+  {
+    "name": "CAP 10-BDQKCoTm",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 10-BDQKCoTm.svg",
+    "sources": [
+      "drip-ref/svg/CAP 10-BDQKCoTm.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6908
+  },
+  {
+    "name": "CAP 11-Cl02vBcE",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 11-Cl02vBcE.svg",
+    "sources": [
+      "drip-ref/svg/CAP 11-Cl02vBcE.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7082
+  },
+  {
+    "name": "CAP 12-DS4PTPq7",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 12-DS4PTPq7.svg",
+    "sources": [
+      "drip-ref/svg/CAP 12-DS4PTPq7.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11052
+  },
+  {
+    "name": "CAP 13-BSM07WKk",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 13-BSM07WKk.svg",
+    "sources": [
+      "drip-ref/svg/CAP 13-BSM07WKk.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7045
+  },
+  {
+    "name": "CAP 2-BSJGXQzg",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 2-BSJGXQzg.svg",
+    "sources": [
+      "drip-ref/svg/CAP 2-BSJGXQzg.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 16371
+  },
+  {
+    "name": "CAP 3-C1fk9KHJ",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 3-C1fk9KHJ.svg",
+    "sources": [
+      "drip-ref/svg/CAP 3-C1fk9KHJ.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6187
+  },
+  {
+    "name": "CAP 4-7qulB_LH",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 4-7qulB_LH.svg",
+    "sources": [
+      "drip-ref/svg/CAP 4-7qulB_LH.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7171
+  },
+  {
+    "name": "CAP 5-dXKbYJXv",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 5-dXKbYJXv.svg",
+    "sources": [
+      "drip-ref/svg/CAP 5-dXKbYJXv.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7534
+  },
+  {
+    "name": "CAP 6-Dqjgvjqr",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 6-Dqjgvjqr.svg",
+    "sources": [
+      "drip-ref/svg/CAP 6-Dqjgvjqr.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11426
+  },
+  {
+    "name": "CAP 7-D8qf1IRa",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 7-D8qf1IRa.svg",
+    "sources": [
+      "drip-ref/svg/CAP 7-D8qf1IRa.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13061
+  },
+  {
+    "name": "CAP 8-Bea8yobv",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 8-Bea8yobv.svg",
+    "sources": [
+      "drip-ref/svg/CAP 8-Bea8yobv.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4728
+  },
+  {
+    "name": "CAP 9-DqXsAbWE",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/CAP 9-DqXsAbWE.svg",
+    "sources": [
+      "drip-ref/svg/CAP 9-DqXsAbWE.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15385
+  },
+  {
+    "name": "Cap prev 1-J3zl9c-K",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 1-J3zl9c-K.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 1-J3zl9c-K.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11047
+  },
+  {
+    "name": "Cap prev 10-BiB6z13F",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 10-BiB6z13F.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 10-BiB6z13F.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7058
+  },
+  {
+    "name": "Cap prev 11-BoBVXR_0",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 11-BoBVXR_0.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 11-BoBVXR_0.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7081
+  },
+  {
+    "name": "Cap prev 12-CMu1O6N_",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 12-CMu1O6N_.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 12-CMu1O6N_.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11086
+  },
+  {
+    "name": "Cap prev 13-ymXOc4mW",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 13-ymXOc4mW.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 13-ymXOc4mW.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7054
+  },
+  {
+    "name": "Cap prev 2-BD5sOyJR",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 2-BD5sOyJR.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 2-BD5sOyJR.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 16767
+  },
+  {
+    "name": "Cap prev 3-BaLvgcDb",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 3-BaLvgcDb.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 3-BaLvgcDb.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 6276
+  },
+  {
+    "name": "Cap prev 4-H_y1x2KC",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 4-H_y1x2KC.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 4-H_y1x2KC.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7430
+  },
+  {
+    "name": "Cap prev 5-Db4J9lu8",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 5-Db4J9lu8.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 5-Db4J9lu8.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7758
+  },
+  {
+    "name": "Cap prev 6-CE6F1-OA",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 6-CE6F1-OA.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 6-CE6F1-OA.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 11500
+  },
+  {
+    "name": "Cap prev 7-BHLVusGr",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 7-BHLVusGr.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 7-BHLVusGr.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 13224
+  },
+  {
+    "name": "Cap prev 8-B7xatrhK",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 8-B7xatrhK.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 8-B7xatrhK.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4911
+  },
+  {
+    "name": "Cap prev 9-C-ahB0B8",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Cap prev 9-C-ahB0B8.svg",
+    "sources": [
+      "drip-ref/svg/Cap prev 9-C-ahB0B8.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15198
+  },
+  {
+    "name": "Shades 12-CXtvPSHt",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shades 12-CXtvPSHt.svg",
+    "sources": [
+      "drip-ref/svg/Shades 12-CXtvPSHt.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 18090
+  },
+  {
+    "name": "Shades 2-BV_7yFlj",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shades 2-BV_7yFlj.svg",
+    "sources": [
+      "drip-ref/svg/Shades 2-BV_7yFlj.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4466
+  },
+  {
+    "name": "Shades 8-DZUoK_Yx",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shades 8-DZUoK_Yx.svg",
+    "sources": [
+      "drip-ref/svg/Shades 8-DZUoK_Yx.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5901
+  },
+  {
+    "name": "Shades prev 12-dQOu5t7P",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shades prev 12-dQOu5t7P.svg",
+    "sources": [
+      "drip-ref/svg/Shades prev 12-dQOu5t7P.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 18094
+  },
+  {
+    "name": "Shades prev 2-DrRvDBKv",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shades prev 2-DrRvDBKv.svg",
+    "sources": [
+      "drip-ref/svg/Shades prev 2-DrRvDBKv.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4402
+  },
+  {
+    "name": "Shades prev 8-CLSuAlkC",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shades prev 8-CLSuAlkC.svg",
+    "sources": [
+      "drip-ref/svg/Shades prev 8-CLSuAlkC.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5804
+  },
+  {
+    "name": "Shoes 1-CgUhwjGu",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 1-CgUhwjGu.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 1-CgUhwjGu.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7683
+  },
+  {
+    "name": "Shoes 10-Cwf-yX91",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 10-Cwf-yX91.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 10-Cwf-yX91.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4564
+  },
+  {
+    "name": "Shoes 11-WvpMUfEj",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 11-WvpMUfEj.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 11-WvpMUfEj.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7693
+  },
+  {
+    "name": "Shoes 12-DflFAMA2",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 12-DflFAMA2.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 12-DflFAMA2.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4561
+  },
+  {
+    "name": "Shoes 2-b9vbYMYR",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 2-b9vbYMYR.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 2-b9vbYMYR.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4553
+  },
+  {
+    "name": "Shoes 5-5bIFK-Jn",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 5-5bIFK-Jn.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 5-5bIFK-Jn.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7679
+  },
+  {
+    "name": "Shoes 6-DYC9gQ7q",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 6-DYC9gQ7q.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 6-DYC9gQ7q.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7680
+  },
+  {
+    "name": "Shoes 7-Bikof7Po",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 7-Bikof7Po.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 7-Bikof7Po.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 7680
+  },
+  {
+    "name": "Shoes 8-BqY5bUcn",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 8-BqY5bUcn.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 8-BqY5bUcn.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4561
+  },
+  {
+    "name": "Shoes 9-DO5ZuNlm",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/Shoes 9-DO5ZuNlm.svg",
+    "sources": [
+      "drip-ref/svg/Shoes 9-DO5ZuNlm.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 4561
+  },
+  {
+    "name": "ducky_base-CyE3RFV7",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/ducky_base-CyE3RFV7.svg",
+    "sources": [
+      "drip-ref/svg/ducky_base-CyE3RFV7.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 15501
+  },
+  {
+    "name": "share-wI_vY9Cx",
+    "category": "Wardrobe",
+    "role": "Character and wardrobe source artwork",
+    "path": "drip-ref/svg/share-wI_vY9Cx.svg",
+    "sources": [
+      "drip-ref/svg/share-wI_vY9Cx.svg"
+    ],
+    "extension": ".svg",
+    "bytes": 5597
+  },
+  {
+    "name": "Gilroy-Black",
+    "category": "Fonts",
+    "role": "Bundled font",
+    "path": "rive/fonts/Gilroy-Black.ttf",
+    "sources": [
+      "rive/fonts/Gilroy-Black.ttf",
+      "rive/web/fonts/Gilroy-Black.ttf"
+    ],
+    "extension": ".ttf",
+    "bytes": 82952
+  },
+  {
+    "name": "Gilroy-Medium",
+    "category": "Fonts",
+    "role": "Bundled font",
+    "path": "rive/fonts/Gilroy-Medium.ttf",
+    "sources": [
+      "rive/fonts/Gilroy-Medium.ttf",
+      "rive/web/fonts/Gilroy-Medium.ttf"
+    ],
+    "extension": ".ttf",
+    "bytes": 84564
+  },
+  {
+    "name": "pop",
+    "category": "Sounds",
+    "role": "Runtime sound effect",
+    "path": "rive/web/audio/pop.wav",
+    "sources": [
+      "rive/web/audio/pop.wav"
+    ],
+    "extension": ".wav",
+    "bytes": 7724
+  },
+  {
+    "name": "quack",
+    "category": "Sounds",
+    "role": "Runtime sound effect",
+    "path": "rive/web/audio/quack.wav",
+    "sources": [
+      "rive/web/audio/quack.wav"
+    ],
+    "extension": ".wav",
+    "bytes": 15884
+  },
+  {
+    "name": "splash",
+    "category": "Sounds",
+    "role": "Runtime sound effect",
+    "path": "rive/web/audio/splash.wav",
+    "sources": [
+      "rive/web/audio/splash.wav"
+    ],
+    "extension": ".wav",
+    "bytes": 17804
+  },
+  {
+    "name": "step",
+    "category": "Sounds",
+    "role": "Runtime sound effect",
+    "path": "rive/web/audio/step.wav",
+    "sources": [
+      "rive/web/audio/step.wav"
+    ],
+    "extension": ".wav",
+    "bytes": 4604
+  },
+  {
+    "name": "ducky-land",
+    "category": "Animation",
+    "role": "Compiled Rive runtime; includes generated scenery and animations",
+    "path": "rive/web/ducky-land.riv",
+    "sources": [
+      "rive/web/ducky-land.riv"
+    ],
+    "extension": ".riv",
+    "bytes": 6713472
+  }
+]

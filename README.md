@@ -1,5 +1,18 @@
 # Ducky Land
 
+## React app
+
+The React starter lives in `src/` and uses Vite. With Node.js 22.12+ installed:
+
+```sh
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite. `npm run build` creates the production app in
+`dist/`, and `npm run preview` previews that build. The original game server still
+runs with `npm start`; its existing asset build is available as `npm run build:rive`.
+
 A small multiplayer island for Ente's Ducky. Everything you see is native Rive; the browser page only runs input,
 movement, the camera and the network. Local prototype, nothing deployed.
 
