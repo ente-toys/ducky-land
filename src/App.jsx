@@ -1,20 +1,4 @@
-import { useState } from 'react';
-
-export default function App() {
-  const [quacks, setQuacks] = useState(0);
-
-  return (
-    <main>
-      <span className="duck" role="img" aria-label="Duck">🦆</span>
-      <p className="eyebrow">WELCOME TO YOUR NEXT LITTLE ADVENTURE</p>
-      <h1>Ducky Land</h1>
-      <p>Your React app is ready. Let’s make something fun.</p>
-      <button onClick={() => setQuacks((count) => count + 1)}>
-        Quack{quacks > 0 ? ` · ${quacks}` : ''}
-      </button>
-      <p className="hint" aria-live="polite">
-        {quacks > 0 ? 'A little louder, a little happier.' : 'Go on, say hello.'}
-      </p>
-    </main>
-  );
-}
+import {lazy,Suspense} from 'react';
+const ThreePage=lazy(()=>import('./three/ThreePage.jsx'));
+const AssetCatalog=lazy(()=>import('./three/AssetCatalog.jsx'));
+export default function App(){const path=window.location.pathname.replace(/\/$/,'');if(path==='/three/assets')return <Suspense fallback={null}><AssetCatalog/></Suspense>;if(path==='/three')return <Suspense fallback={null}><ThreePage/></Suspense>;return <main className="island-app"><iframe className="island-scene" src="/rive/web/island.html?scene=1&view=flat" title="Ducky Land. Scroll or pinch to zoom, drag to explore, click to walk. WASD moves, Q quacks, E dances, Home shows the island." allow="autoplay"/></main>;}

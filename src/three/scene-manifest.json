@@ -1,0 +1,2994 @@
+{
+  "source": [
+    "rive/world.py",
+    "rive/island.rml#Island Ground"
+  ],
+  "paths": [
+    [
+      [
+        2820,
+        2460
+      ],
+      [
+        2280,
+        2300
+      ],
+      [
+        2030,
+        2050
+      ],
+      [
+        1490,
+        1890
+      ]
+    ],
+    [
+      [
+        2810,
+        2220
+      ],
+      [
+        2880,
+        1780
+      ],
+      [
+        2920,
+        1440
+      ]
+    ],
+    [
+      [
+        3020,
+        2240
+      ],
+      [
+        3370,
+        2030
+      ],
+      [
+        3630,
+        2020
+      ],
+      [
+        4150,
+        2070
+      ]
+    ],
+    [
+      [
+        3240,
+        2500
+      ],
+      [
+        3780,
+        2720
+      ],
+      [
+        4290,
+        2800
+      ],
+      [
+        4730,
+        2860
+      ]
+    ],
+    [
+      [
+        2670,
+        2650
+      ],
+      [
+        2290,
+        2880
+      ],
+      [
+        1820,
+        2930
+      ]
+    ],
+    [
+      [
+        1450,
+        1970
+      ],
+      [
+        1160,
+        2200
+      ],
+      [
+        1130,
+        2650
+      ],
+      [
+        1620,
+        2970
+      ]
+    ],
+    [
+      [
+        1860,
+        2980
+      ],
+      [
+        2380,
+        3130
+      ],
+      [
+        3050,
+        3080
+      ],
+      [
+        3320,
+        3360
+      ]
+    ],
+    [
+      [
+        3200,
+        3040
+      ],
+      [
+        3800,
+        3090
+      ],
+      [
+        4310,
+        2890
+      ]
+    ],
+    [
+      [
+        1680,
+        1760
+      ],
+      [
+        2100,
+        1410
+      ],
+      [
+        2490,
+        1360
+      ]
+    ],
+    [
+      [
+        3120,
+        1300
+      ],
+      [
+        3480,
+        1160
+      ],
+      [
+        3650,
+        1240
+      ]
+    ]
+  ],
+  "hill": {
+    "x": 2910,
+    "y": 1120,
+    "rx": 510,
+    "ry": 310,
+    "height": 0.65
+  },
+  "stairs": {
+    "x": 2920,
+    "y": 1400,
+    "count": 9,
+    "step": 24
+  },
+  "beach": {
+    "x": 4770,
+    "y": 2660,
+    "rx": 490,
+    "ry": 555
+  },
+  "plaza": {
+    "x": 2820,
+    "y": 2390,
+    "rx": 725,
+    "ry": 505
+  },
+  "raceTrack": {
+    "x": 4140,
+    "y": 1520,
+    "rx": 670,
+    "ry": 445
+  },
+  "clearing": {
+    "x": 1400,
+    "y": 1770,
+    "rx": 445,
+    "ry": 340
+  },
+  "decorations": [
+    {
+      "kind": "Pond lily",
+      "x": 1413.14,
+      "y": 2507.82,
+      "flower": true
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1564.5,
+      "y": 2448.52,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1611.89,
+      "y": 2465.97,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1620.68,
+      "y": 2796.0,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1495.49,
+      "y": 2733.55,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1793.86,
+      "y": 2738.07,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1529.69,
+      "y": 2773.44,
+      "flower": true
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1866.06,
+      "y": 2715.91,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1687.78,
+      "y": 2464.28,
+      "flower": true
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1725.75,
+      "y": 2529.82,
+      "flower": false
+    },
+    {
+      "kind": "Pond lily",
+      "x": 1734.96,
+      "y": 2701.87,
+      "flower": false
+    },
+    {
+      "kind": "Race marker",
+      "x": 4540.0,
+      "y": 1520.0
+    },
+    {
+      "kind": "Race marker",
+      "x": 4463.61,
+      "y": 1640.5
+    },
+    {
+      "kind": "Race marker",
+      "x": 4263.61,
+      "y": 1714.97
+    },
+    {
+      "kind": "Race marker",
+      "x": 4016.39,
+      "y": 1714.97
+    },
+    {
+      "kind": "Race marker",
+      "x": 3816.39,
+      "y": 1640.5
+    },
+    {
+      "kind": "Race marker",
+      "x": 3740.0,
+      "y": 1520.0
+    },
+    {
+      "kind": "Race marker",
+      "x": 3816.39,
+      "y": 1399.5
+    },
+    {
+      "kind": "Race marker",
+      "x": 4016.39,
+      "y": 1325.03
+    },
+    {
+      "kind": "Race marker",
+      "x": 4263.61,
+      "y": 1325.03
+    },
+    {
+      "kind": "Race marker",
+      "x": 4463.61,
+      "y": 1399.5
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3139.72,
+      "y": 2714.99
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2781.39,
+      "y": 2709.58
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2431.25,
+      "y": 2356.25
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2315.55,
+      "y": 2439.91
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2439.87,
+      "y": 2316.83
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2563.88,
+      "y": 2586.85
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3160.67,
+      "y": 2490.09
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2734.42,
+      "y": 2448.29
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2464.1,
+      "y": 2494.84
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3274.67,
+      "y": 2147.02
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3392.39,
+      "y": 2464.48
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3237.26,
+      "y": 2500.28
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3122.2,
+      "y": 2719.7
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2815.57,
+      "y": 2543.54
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2356.88,
+      "y": 2112.22
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2998.21,
+      "y": 2329.76
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2407.08,
+      "y": 2381.05
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2647.61,
+      "y": 2089.53
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3160.98,
+      "y": 2307.57
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2864.98,
+      "y": 2505.73
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3307.77,
+      "y": 2139.75
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2226.66,
+      "y": 2300.01
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3344.47,
+      "y": 2267.82
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2791.86,
+      "y": 2481.87
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2529.81,
+      "y": 2050.58
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2712.33,
+      "y": 2278.21
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2596.28,
+      "y": 2652.97
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2907.58,
+      "y": 2123.2
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2507.02,
+      "y": 2048.18
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3196.85,
+      "y": 2139.37
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2872.94,
+      "y": 2682.12
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2821.52,
+      "y": 2254.1
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2688.67,
+      "y": 2305.0
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3194.87,
+      "y": 2330.56
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2566.78,
+      "y": 2216.86
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2676.66,
+      "y": 2341.87
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2876.17,
+      "y": 2530.65
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2859.68,
+      "y": 1978.1
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2618.8,
+      "y": 2203.92
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3117.75,
+      "y": 2487.46
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2847.99,
+      "y": 2573.26
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3386.87,
+      "y": 2575.84
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2861.25,
+      "y": 2408.39
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3016.72,
+      "y": 2492.07
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2210.72,
+      "y": 2353.94
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2642.65,
+      "y": 2098.91
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3342.04,
+      "y": 2431.79
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2258.43,
+      "y": 2415.85
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2601.36,
+      "y": 2590.61
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3315.26,
+      "y": 2517.21
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2702.28,
+      "y": 2160.33
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2978.56,
+      "y": 2125.29
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2773.75,
+      "y": 2267.42
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2910.71,
+      "y": 2637.6
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2403.74,
+      "y": 2191.92
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3087.83,
+      "y": 2442.08
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2454.23,
+      "y": 2738.14
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2590.05,
+      "y": 2632.48
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2635.28,
+      "y": 2216.14
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2610.78,
+      "y": 2738.01
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2397.77,
+      "y": 2075.49
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2887.52,
+      "y": 2377.99
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3187.55,
+      "y": 2699.41
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3020.14,
+      "y": 2370.44
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2949.65,
+      "y": 2795.09
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2668.18,
+      "y": 2253.07
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2596.29,
+      "y": 2716.22
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2460.14,
+      "y": 2590.66
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2206.0,
+      "y": 2479.31
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3380.3,
+      "y": 2229.63
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3038.53,
+      "y": 2300.23
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3201.07,
+      "y": 2341.99
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3178.62,
+      "y": 2264.33
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3277.49,
+      "y": 2492.69
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2351.45,
+      "y": 2375.05
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2378.21,
+      "y": 2180.23
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2555.53,
+      "y": 2613.67
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2702.69,
+      "y": 2788.26
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3184.58,
+      "y": 2574.95
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2671.21,
+      "y": 2401.74
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3177.54,
+      "y": 2231.33
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2628.47,
+      "y": 2530.18
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2973.36,
+      "y": 2099.51
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3297.84,
+      "y": 2352.66
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2546.41,
+      "y": 2249.46
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2709.28,
+      "y": 2671.01
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2715.22,
+      "y": 2585.88
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2680.27,
+      "y": 2128.74
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2510.53,
+      "y": 2086.33
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2384.69,
+      "y": 2642.04
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3033.33,
+      "y": 2427.56
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2806.77,
+      "y": 2799.3
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2714.51,
+      "y": 2250.52
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2687.82,
+      "y": 2044.01
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2450.58,
+      "y": 2102.06
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2751.23,
+      "y": 2454.23
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2567.65,
+      "y": 2344.48
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2794.67,
+      "y": 2771.06
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3249.72,
+      "y": 2559.94
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2377.5,
+      "y": 2572.15
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3233.41,
+      "y": 2418.45
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2696.68,
+      "y": 2667.74
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2575.1,
+      "y": 2672.92
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2550.79,
+      "y": 2417.71
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2964.66,
+      "y": 2128.86
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2491.15,
+      "y": 2745.15
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3162.01,
+      "y": 2683.08
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3097.16,
+      "y": 2256.25
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3201.77,
+      "y": 2400.33
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2823.31,
+      "y": 2117.56
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2629.31,
+      "y": 2764.92
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2858.16,
+      "y": 2169.52
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3336.84,
+      "y": 2233.48
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3172.4,
+      "y": 2162.14
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3127.44,
+      "y": 2097.5
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3087.53,
+      "y": 2062.02
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2495.22,
+      "y": 2541.1
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2963.42,
+      "y": 2193.36
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2795.52,
+      "y": 2789.97
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2834.19,
+      "y": 2278.17
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3355.15,
+      "y": 2190.3
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2825.64,
+      "y": 2753.49
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2319.44,
+      "y": 2573.69
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2669.71,
+      "y": 2449.3
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2670.35,
+      "y": 2508.63
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2498.64,
+      "y": 2307.15
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3250.44,
+      "y": 2100.01
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2587.99,
+      "y": 2195.02
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2815.6,
+      "y": 2678.77
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3256.27,
+      "y": 2228.12
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2454.96,
+      "y": 2493.84
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2937.39,
+      "y": 2059.52
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3357.65,
+      "y": 2473.3
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 2808.27,
+      "y": 2446.41
+    },
+    {
+      "kind": "Plaza cobble",
+      "x": 3272.87,
+      "y": 2667.29
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4511.43,
+      "y": 2586.66
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 5033.67,
+      "y": 3055.83
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4893.47,
+      "y": 3001.27
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4763.06,
+      "y": 2336.93
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 5067.06,
+      "y": 2908.87
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4747.98,
+      "y": 2648.84
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4431.92,
+      "y": 2685.26
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 5063.08,
+      "y": 2895.92
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4716.26,
+      "y": 2343.97
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4572.3,
+      "y": 2784.77
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4821.04,
+      "y": 2418.95
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4615.38,
+      "y": 3048.98
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4973.08,
+      "y": 2510.07
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4762.36,
+      "y": 2722.6
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4622.76,
+      "y": 2422.09
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 5015.07,
+      "y": 2622.21
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4970.87,
+      "y": 2784.43
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4693.29,
+      "y": 2634.59
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4704.78,
+      "y": 2376.07
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4825.49,
+      "y": 2721.04
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4838.68,
+      "y": 2789.46
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4629.34,
+      "y": 2361.02
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4957.2,
+      "y": 2837.67
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4823.89,
+      "y": 2394.5
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4957.82,
+      "y": 2715.4
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4587.3,
+      "y": 2610.57
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4983.9,
+      "y": 3025.1
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4565.18,
+      "y": 2797.34
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4694.11,
+      "y": 3034.7
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 5004.76,
+      "y": 2390.61
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4444.11,
+      "y": 2403.65
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4763.97,
+      "y": 2355.91
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4703.11,
+      "y": 2687.06
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4505.58,
+      "y": 2559.85
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4800.38,
+      "y": 2747.26
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 5020.73,
+      "y": 2958.64
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4651.11,
+      "y": 2656.99
+    },
+    {
+      "kind": "Beach pebble",
+      "x": 4878.58,
+      "y": 2700.5
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4438.76,
+      "y": 3129.74
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3543.49,
+      "y": 2089.05
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1449.18,
+      "y": 2460.05
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3765.6,
+      "y": 2325.63
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2660.02,
+      "y": 1087.92
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4753.55,
+      "y": 1438.37
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2184.72,
+      "y": 1492.59
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3905.82,
+      "y": 861.47
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1223.77,
+      "y": 3116.29
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3144.92,
+      "y": 1517.65
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1788.74,
+      "y": 2619.05
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 5056.26,
+      "y": 1701.28
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4295.11,
+      "y": 2880.54
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1839.72,
+      "y": 2213.93
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4225.68,
+      "y": 1782.29
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2130.48,
+      "y": 1637.48
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3335.43,
+      "y": 2545.62
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1207.6,
+      "y": 1444.74
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4219.46,
+      "y": 2822.58
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3196.99,
+      "y": 2818.74
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3891.7,
+      "y": 1086.01
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2975.11,
+      "y": 1404.48
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3832.08,
+      "y": 1135.64
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1354.18,
+      "y": 1446.08
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1406.52,
+      "y": 2622.76
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3234.24,
+      "y": 1438.45
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3420.47,
+      "y": 2041.56
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1652.35,
+      "y": 2796.01
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2632.52,
+      "y": 1274.21
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1722.34,
+      "y": 2861.39
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1781.37,
+      "y": 2956.89
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1935.92,
+      "y": 1919.16
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4819.97,
+      "y": 2529.7
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2681.29,
+      "y": 1333.89
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2177.99,
+      "y": 1537.87
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4197.68,
+      "y": 884.81
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4218.03,
+      "y": 1093.21
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4128.5,
+      "y": 1225.6
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1112.61,
+      "y": 1384.93
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1984.74,
+      "y": 1350.37
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3923.28,
+      "y": 1367.91
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1565.58,
+      "y": 2697.8
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2293.63,
+      "y": 2033.48
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4205.89,
+      "y": 2146.59
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4125.31,
+      "y": 3168.05
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 5035.91,
+      "y": 1705.86
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4177.39,
+      "y": 1896.46
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2595.71,
+      "y": 2306.13
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1609.13,
+      "y": 1519.57
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1236.24,
+      "y": 1016.26
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4571.65,
+      "y": 2159.49
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3453.39,
+      "y": 2869.87
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1014.28,
+      "y": 1635.21
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1504.2,
+      "y": 1029.11
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4251.13,
+      "y": 2174.02
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4416.97,
+      "y": 2626.44
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4088.05,
+      "y": 1419.89
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4137.26,
+      "y": 2272.8
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4220.4,
+      "y": 2897.89
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4533.69,
+      "y": 2397.25
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2624.34,
+      "y": 1870.15
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4869.23,
+      "y": 2007.82
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3415.54,
+      "y": 2990.71
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3242.01,
+      "y": 1945.53
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1345.3,
+      "y": 1991.83
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4220.24,
+      "y": 3079.26
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3634.89,
+      "y": 2666.0
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2560.05,
+      "y": 1618.91
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4973.15,
+      "y": 1281.48
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1148.52,
+      "y": 2654.21
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4789.38,
+      "y": 1311.6
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4257.28,
+      "y": 2354.52
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4701.15,
+      "y": 1610.61
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1207.19,
+      "y": 1059.78
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4767.3,
+      "y": 3010.27
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4370.94,
+      "y": 3070.44
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1102.42,
+      "y": 1448.8
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1184.88,
+      "y": 1589.18
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2561.44,
+      "y": 862.67
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1904.47,
+      "y": 1307.56
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3489.1,
+      "y": 2724.29
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1247.24,
+      "y": 2387.43
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2829.97,
+      "y": 1492.65
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2233.14,
+      "y": 1982.34
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1771.0,
+      "y": 1319.13
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3715.17,
+      "y": 3160.67
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 868.34,
+      "y": 2682.58
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2760.35,
+      "y": 1504.87
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1878.68,
+      "y": 2159.29
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3359.1,
+      "y": 1599.64
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3477.39,
+      "y": 1503.68
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2260.8,
+      "y": 2745.72
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3526.26,
+      "y": 2262.75
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4096.08,
+      "y": 1922.42
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1185.11,
+      "y": 2577.76
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3426.78,
+      "y": 1463.95
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3058.41,
+      "y": 1426.59
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1334.18,
+      "y": 1727.76
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2534.19,
+      "y": 1922.33
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4257.05,
+      "y": 2286.43
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3776.78,
+      "y": 2738.88
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3401.79,
+      "y": 2615.25
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2692.04,
+      "y": 1905.53
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3468.07,
+      "y": 2252.33
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 818.34,
+      "y": 1879.52
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3851.25,
+      "y": 3063.5
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3110.81,
+      "y": 950.64
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2394.19,
+      "y": 1033.1
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4731.18,
+      "y": 1149.63
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1372.46,
+      "y": 2545.74
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1434.11,
+      "y": 1347.75
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2120.42,
+      "y": 2737.96
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2488.51,
+      "y": 1048.29
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 969.03,
+      "y": 1262.46
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2776.46,
+      "y": 3086.45
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4416.93,
+      "y": 2282.7
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1992.21,
+      "y": 1397.13
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4444.61,
+      "y": 2704.2
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3175.97,
+      "y": 3193.09
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3202.69,
+      "y": 1799.74
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1822.29,
+      "y": 887.86
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4106.17,
+      "y": 1787.36
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4748.23,
+      "y": 1948.65
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2738.19,
+      "y": 2709.97
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3061.56,
+      "y": 939.52
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2626.72,
+      "y": 2789.74
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1871.83,
+      "y": 2850.31
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3115.29,
+      "y": 1017.24
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1222.32,
+      "y": 1128.58
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1535.02,
+      "y": 2595.46
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 833.58,
+      "y": 1315.36
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3506.05,
+      "y": 1289.39
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1468.71,
+      "y": 1001.47
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2570.83,
+      "y": 2810.61
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1550.58,
+      "y": 2755.95
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3118.36,
+      "y": 1913.81
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3685.63,
+      "y": 1680.43
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2928.57,
+      "y": 2554.77
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1857.01,
+      "y": 2088.75
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3285.73,
+      "y": 1252.27
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1928.51,
+      "y": 1383.28
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1939.19,
+      "y": 2217.52
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3675.24,
+      "y": 2899.8
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4728.82,
+      "y": 1592.9
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1295.65,
+      "y": 1340.1
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3458.09,
+      "y": 3176.86
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1682.51,
+      "y": 2411.12
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4185.49,
+      "y": 3147.25
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4793.11,
+      "y": 2277.99
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4814.15,
+      "y": 2838.67
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3210.47,
+      "y": 2133.17
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3923.63,
+      "y": 3104.1
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1957.69,
+      "y": 2906.29
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 953.11,
+      "y": 2286.32
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3494.68,
+      "y": 2225.93
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2804.39,
+      "y": 929.6
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3167.93,
+      "y": 1354.76
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1887.09,
+      "y": 2721.57
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 886.47,
+      "y": 1372.65
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4455.73,
+      "y": 1364.62
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1428.15,
+      "y": 1080.05
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3044.26,
+      "y": 1055.53
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2512.43,
+      "y": 2734.45
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2539.12,
+      "y": 1802.57
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3513.38,
+      "y": 2823.64
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1022.39,
+      "y": 1439.39
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3805.36,
+      "y": 2191.91
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4670.55,
+      "y": 1200.41
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1701.55,
+      "y": 2183.36
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4689.31,
+      "y": 1137.89
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1736.22,
+      "y": 2156.65
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1916.04,
+      "y": 1684.01
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2526.49,
+      "y": 2641.85
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4604.1,
+      "y": 1348.36
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1523.89,
+      "y": 3014.98
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2731.85,
+      "y": 2904.57
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2965.39,
+      "y": 1804.57
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1126.05,
+      "y": 2877.86
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1308.12,
+      "y": 2833.34
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2543.02,
+      "y": 1627.87
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3748.68,
+      "y": 1326.42
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3152.48,
+      "y": 1476.78
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2894.07,
+      "y": 2661.61
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4301.9,
+      "y": 2606.2
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3653.66,
+      "y": 2341.17
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2124.57,
+      "y": 2798.26
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4692.7,
+      "y": 1310.67
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2329.88,
+      "y": 3098.05
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3019.91,
+      "y": 2400.66
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4428.42,
+      "y": 1449.42
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2754.56,
+      "y": 2979.96
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3112.68,
+      "y": 1252.1
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3695.56,
+      "y": 1215.89
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1825.52,
+      "y": 2193.82
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3041.74,
+      "y": 2659.75
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4640.92,
+      "y": 2962.53
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1378.76,
+      "y": 2695.77
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3850.86,
+      "y": 1183.6
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3429.66,
+      "y": 966.99
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3982.44,
+      "y": 2490.99
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1418.09,
+      "y": 2734.98
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4409.78,
+      "y": 1396.93
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4359.01,
+      "y": 1262.5
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4024.14,
+      "y": 3238.91
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3135.55,
+      "y": 1096.62
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4759.05,
+      "y": 1111.92
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2132.24,
+      "y": 1165.69
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1991.02,
+      "y": 938.72
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4930.47,
+      "y": 1909.52
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2302.77,
+      "y": 1769.55
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1314.71,
+      "y": 1499.11
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4165.48,
+      "y": 1290.27
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4004.04,
+      "y": 2214.55
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2618.87,
+      "y": 2175.66
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4456.35,
+      "y": 2324.33
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2410.94,
+      "y": 1636.77
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1514.79,
+      "y": 1480.28
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2483.81,
+      "y": 2399.15
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1624.41,
+      "y": 2147.69
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4368.18,
+      "y": 2604.88
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1196.22,
+      "y": 2587.77
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4202.41,
+      "y": 2482.4
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1068.7,
+      "y": 1624.28
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4483.69,
+      "y": 2194.14
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3129.55,
+      "y": 2096.32
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1662.38,
+      "y": 2853.88
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1217.81,
+      "y": 1075.36
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4507.91,
+      "y": 1870.51
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4357.1,
+      "y": 2385.95
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4742.48,
+      "y": 2648.76
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4653.82,
+      "y": 2908.41
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 5021.54,
+      "y": 1406.55
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2179.2,
+      "y": 3001.9
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1406.53,
+      "y": 2653.56
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1033.1,
+      "y": 2126.22
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4009.14,
+      "y": 1706.57
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3646.07,
+      "y": 1952.7
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1183.58,
+      "y": 1744.64
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2118.9,
+      "y": 1398.17
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3922.14,
+      "y": 2613.0
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2675.29,
+      "y": 2032.55
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3310.06,
+      "y": 1342.4
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2420.8,
+      "y": 2203.67
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1093.37,
+      "y": 2193.11
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4551.03,
+      "y": 1877.2
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4599.3,
+      "y": 1511.99
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4702.37,
+      "y": 2897.55
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3553.11,
+      "y": 2769.45
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3088.17,
+      "y": 1032.77
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3308.55,
+      "y": 2731.31
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4171.87,
+      "y": 1885.27
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2710.57,
+      "y": 2482.83
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4426.69,
+      "y": 2102.73
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2455.67,
+      "y": 3256.35
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 4013.93,
+      "y": 2612.14
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 2692.92,
+      "y": 1620.78
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 1300.4,
+      "y": 2483.53
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3053.02,
+      "y": 1519.34
+    },
+    {
+      "kind": "Grass tuft",
+      "x": 3513.75,
+      "y": 2236.85
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2397.31,
+      "y": 1003.06,
+      "rx": 91.39,
+      "ry": 16.17
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2473.85,
+      "y": 2814.19,
+      "rx": 63.33,
+      "ry": 15.88
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2350.31,
+      "y": 2768.57,
+      "rx": 100.31,
+      "ry": 27.26
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1561.87,
+      "y": 1021.54,
+      "rx": 82.76,
+      "ry": 19.75
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3765.78,
+      "y": 1710.58,
+      "rx": 66.06,
+      "ry": 15.58
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2494.22,
+      "y": 2727.16,
+      "rx": 83.39,
+      "ry": 14.72
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 918.04,
+      "y": 2009.87,
+      "rx": 51.85,
+      "ry": 20.77
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2914.75,
+      "y": 2312.52,
+      "rx": 51.95,
+      "ry": 13.66
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3721.62,
+      "y": 1384.93,
+      "rx": 51.33,
+      "ry": 19.76
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4591.03,
+      "y": 2321.59,
+      "rx": 83.17,
+      "ry": 27.17
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4129.31,
+      "y": 2081.67,
+      "rx": 53.38,
+      "ry": 31.54
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4434.75,
+      "y": 1797.59,
+      "rx": 103.41,
+      "ry": 21.88
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4389.95,
+      "y": 2105.69,
+      "rx": 41.2,
+      "ry": 28.13
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1242.12,
+      "y": 2210.56,
+      "rx": 68.07,
+      "ry": 15.81
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1749.49,
+      "y": 2869.14,
+      "rx": 107.17,
+      "ry": 15.97
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4891.46,
+      "y": 2810.4,
+      "rx": 67.3,
+      "ry": 19.72
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1510.59,
+      "y": 2525.43,
+      "rx": 56.97,
+      "ry": 24.46
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2998.37,
+      "y": 2932.09,
+      "rx": 95.13,
+      "ry": 30.83
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1149.69,
+      "y": 2698.89,
+      "rx": 78.79,
+      "ry": 21.98
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2807.58,
+      "y": 2146.99,
+      "rx": 55.41,
+      "ry": 29.91
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3923.18,
+      "y": 2786.75,
+      "rx": 44.67,
+      "ry": 14.06
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3401.5,
+      "y": 2941.45,
+      "rx": 63.05,
+      "ry": 31.62
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 942.51,
+      "y": 1216.24,
+      "rx": 81.54,
+      "ry": 23.67
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1069.67,
+      "y": 1017.81,
+      "rx": 49.69,
+      "ry": 12.64
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1987.82,
+      "y": 3149.61,
+      "rx": 44.83,
+      "ry": 24.68
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1982.82,
+      "y": 1927.36,
+      "rx": 76.09,
+      "ry": 12.58
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2678.1,
+      "y": 2533.55,
+      "rx": 87.19,
+      "ry": 23.48
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1012.56,
+      "y": 2819.98,
+      "rx": 92.75,
+      "ry": 12.85
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 997.25,
+      "y": 1161.97,
+      "rx": 81.89,
+      "ry": 25.83
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1421.24,
+      "y": 2546.47,
+      "rx": 98.99,
+      "ry": 25.9
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4634.72,
+      "y": 2619.67,
+      "rx": 94.95,
+      "ry": 18.5
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2647.26,
+      "y": 2807.26,
+      "rx": 85.37,
+      "ry": 28.11
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2320.25,
+      "y": 2432.32,
+      "rx": 53.87,
+      "ry": 26.68
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2849.57,
+      "y": 2352.62,
+      "rx": 87.33,
+      "ry": 29.41
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1724.79,
+      "y": 973.94,
+      "rx": 74.35,
+      "ry": 29.02
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1358.28,
+      "y": 2991.51,
+      "rx": 78.71,
+      "ry": 27.62
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4740.22,
+      "y": 2349.3,
+      "rx": 69.91,
+      "ry": 22.36
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2466.57,
+      "y": 1543.09,
+      "rx": 104.2,
+      "ry": 29.76
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3807.46,
+      "y": 2489.29,
+      "rx": 97.87,
+      "ry": 25.33
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4506.08,
+      "y": 1908.33,
+      "rx": 109.66,
+      "ry": 19.88
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4388.37,
+      "y": 1977.26,
+      "rx": 64.4,
+      "ry": 31.84
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3378.13,
+      "y": 2432.98,
+      "rx": 70.68,
+      "ry": 32.48
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3062.75,
+      "y": 2269.53,
+      "rx": 94.84,
+      "ry": 25.1
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3746.75,
+      "y": 3154.63,
+      "rx": 52.85,
+      "ry": 20.51
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1760.91,
+      "y": 1448.59,
+      "rx": 77.56,
+      "ry": 18.22
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2095.42,
+      "y": 1366.2,
+      "rx": 95.57,
+      "ry": 14.51
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4251.67,
+      "y": 2327.25,
+      "rx": 109.73,
+      "ry": 12.96
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2567.12,
+      "y": 1875.31,
+      "rx": 56.09,
+      "ry": 21.08
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2591.35,
+      "y": 2863.06,
+      "rx": 100.04,
+      "ry": 29.68
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4088.9,
+      "y": 2167.29,
+      "rx": 71.31,
+      "ry": 19.19
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3589.45,
+      "y": 1361.99,
+      "rx": 48.36,
+      "ry": 23.52
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1050.18,
+      "y": 1212.21,
+      "rx": 91.67,
+      "ry": 13.23
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2215.7,
+      "y": 2204.98,
+      "rx": 50.55,
+      "ry": 15.88
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3578.51,
+      "y": 2010.79,
+      "rx": 71.39,
+      "ry": 27.45
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2014.36,
+      "y": 2596.46,
+      "rx": 106.91,
+      "ry": 25.28
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3796.05,
+      "y": 1869.39,
+      "rx": 61.58,
+      "ry": 20.35
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3631.83,
+      "y": 1902.65,
+      "rx": 79.48,
+      "ry": 21.64
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3075.6,
+      "y": 2215.18,
+      "rx": 93.72,
+      "ry": 23.74
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1402.63,
+      "y": 2590.39,
+      "rx": 101.53,
+      "ry": 19.57
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2762.43,
+      "y": 1655.85,
+      "rx": 98.5,
+      "ry": 26.92
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4693.08,
+      "y": 3023.82,
+      "rx": 61.37,
+      "ry": 15.78
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1334.35,
+      "y": 2183.05,
+      "rx": 67.42,
+      "ry": 28.66
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1555.09,
+      "y": 1204.41,
+      "rx": 68.6,
+      "ry": 22.37
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3628.77,
+      "y": 2061.21,
+      "rx": 93.13,
+      "ry": 25.36
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1459.72,
+      "y": 956.82,
+      "rx": 96.08,
+      "ry": 26.95
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3427.04,
+      "y": 1064.48,
+      "rx": 50.99,
+      "ry": 21.11
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2438.3,
+      "y": 984.2,
+      "rx": 108.42,
+      "ry": 30.91
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2790.69,
+      "y": 2852.13,
+      "rx": 65.0,
+      "ry": 13.9
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 936.96,
+      "y": 2064.16,
+      "rx": 44.12,
+      "ry": 13.46
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 1122.8,
+      "y": 1066.48,
+      "rx": 86.97,
+      "ry": 30.37
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 4615.45,
+      "y": 1131.55,
+      "rx": 52.6,
+      "ry": 26.83
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 3455.7,
+      "y": 2874.33,
+      "rx": 56.98,
+      "ry": 14.12
+    },
+    {
+      "kind": "Meadow patch",
+      "x": 2220.97,
+      "y": 1616.0,
+      "rx": 43.47,
+      "ry": 26.82
+    }
+  ]
+}

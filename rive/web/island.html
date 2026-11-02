@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ducky Land · Island</title>
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7fcde7}
+    canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+    #world-canvas{touch-action:none;outline:none;cursor:grab}
+    #world-canvas.dragging{cursor:grabbing}
+    #atmosphere{pointer-events:none}
+    #error{position:fixed;inset:auto 20px 20px;padding:16px;background:#fff7db;border-radius:12px;font:14px system-ui;color:#354831}
+  </style>
+</head>
+<body>
+  <canvas id="world-canvas" tabindex="0" aria-label="Explore Ducky Land. Scroll or pinch to zoom, drag to pan, click to walk. Q to quack, E to dance, Home to fit the island."></canvas>
+  <canvas id="atmosphere" aria-hidden="true"></canvas>
+  <p id="error" role="alert" hidden></p>
+  <script src="rive.js"></script>
+  <script src="sounds.js"></script>
+  <script src="game.js"></script>
+  <script type="module" src="island-host.js"></script>
+</body>
+</html>

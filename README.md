@@ -2,18 +2,71 @@
 
 ## React app
 
-The React starter lives in `src/` and uses Vite. With Node.js 22.12+ installed:
+The React shell lives in `src/` and uses Vite. It mounts the original Rive/WASM
+island through `rive/web/island.html`, with the camera and ambient behavior in
+`rive/web/island-host.js`. With Node.js 22.12+ installed:
 
 ```sh
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. `npm run build` creates the production app in
+Open the local URL printed by Vite. The island has no interface overlays.
+Scroll or pinch to zoom, drag to pan, and click a path to walk. WASD or arrow keys
+move your duck; Q quacks, E dances, F follows your duck, and Home (or 0) fits the
+whole island. Tap a duck to greet it. M toggles sound after the first interaction.
+Reduced-motion preferences disable environmental sway, drifting leaves, and camera easing.
+
+The production build includes both island renderers, both asset galleries, and the Rive runtime.
+`npm run build` creates the production app in
 `dist/`, and `npm run preview` previews that build. The original game server still
 runs with `npm start`; its existing asset build is available as `npm run build:rive`.
 
-A small multiplayer island for Ente's Ducky. Everything you see is native Rive; the browser page only runs input,
+## Three.js island and model catalog
+
+- `/` — the existing Rive island.
+- `/three/` — a separate, fully 3D island with one player and 28 autonomous ducks.
+- `/three/assets/` — one orbitable preview canvas, search/category filters, source SVGs, outfit previews, and ten duck animations.
+- `/extracted-assets/` — the existing source asset gallery.
+
+The 3D catalog has 245 entries: all 203 manifest assets, 34 canonical wardrobe
+models (24 preview SVGs remain aliases), one duck rig, and seven island-specific
+landmarks. The latter reproduce the original bread crowns, book-roof library,
+duck beacon, fountain statue, bridge, and finish gate, separately from the reusable SVG kit.
+
+Left-drag or one-finger drag pans. Right-drag or two-finger twist orbits.
+Wheel/pinch zoom keeps its ground anchor. Click/tap walks along a collision-safe
+route; tap a duck to greet it, and double-tap your duck to dance. WASD/arrows move
+relative to the camera. Q quacks, E toggles dance, 1–7 trigger quack/heart/laugh/
+wave/sleep/grumpy/party, M toggles sound, F follows, and Home/0 fits the island.
+
+`src/three/engine.js` owns the renderer, fixed 60 Hz simulation, interpolation,
+audio, input and lifecycle. `mount`, `resize`, `dispose`, `setDestination`,
+`triggerEmote`, `fit`, `follow` and `focusZone` form its interface. World X/Y maps to scene X/Z
+at 100:1; rendering elevation never changes the shared walkability rules.
+Animation runs outside React. Static geometry is merged in spatial batches;
+repeated moving scenery and duck parts use instancing. Pixel ratio is capped at
+2; sustained slow frames reduce resolution, shadows and decorative density.
+Hidden tabs pause, blur clears input, and reduced motion disables environmental
+movement and camera easing while slowing character motion.
+
+The world uses `rive/web/world.json` plus `src/three/scene-manifest.json`, which
+retains ten original paths and 526 decorative placements from existing RML.
+`python3 scripts/extract-three-scene.py` refreshes this manifest by reading the
+existing files. It does **not** import or execute `rive/world.py` or `build.py`.
+
+`node --test qa/three.test.mjs` checks asset coverage, all wardrobe/action
+combinations, original collision parity, connected routes, deterministic NPCs,
+emote timing, camera anchors, cancelled gestures, terrain heights and lifecycle.
+For the complete suite, run `npm start` in another terminal, then `npm test`.
+`npm run build` emits direct-load HTML for `/three/` and `/three/assets/`.
+For reproducible zone framing, use `/three/?zone=pond` (or any zone ID from `world.json`).
+Measured browser results and device-testing limits are in `qa/three-acceptance.json`.
+The Three.js library is route-loaded and is not requested by the original page.
+
+## Legacy multiplayer prototype
+
+A small multiplayer island for Ente's Ducky. Its artwork is native Rive; the browser page only runs input,
 movement, the camera and the network. Local prototype, nothing deployed.
 
 ## Run it

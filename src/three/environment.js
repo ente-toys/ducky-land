@@ -1,0 +1,15 @@
+import * as THREE from 'three';
+import {P,mat,group,sphere} from './models/primitives.js';
+import {toScene,world} from './world.js';
+export function createEnvironment(scene){const root=group();scene.add(root);const dummy=new THREE.Object3D();const leaves=new THREE.InstancedMesh(new THREE.SphereGeometry(1,5,3),mat(0xe5c963),32);root.add(leaves);
+const ripples=new THREE.InstancedMesh(new THREE.TorusGeometry(1,.012,3,32),new THREE.MeshBasicMaterial({color:0xc8f1ff,transparent:true,opacity:.35,depthWrite:false}),32);root.add(ripples);
+const drops=new THREE.InstancedMesh(new THREE.SphereGeometry(.025,5,3),mat(P.water),45);root.add(drops);const critters=[];
+for(let i=0;i<7;i++){const g=group();sphere(g,.025,.02,.09,P.ink);const a=sphere(g,.11,.012,.075,i%2?P.purple:P.orange,-.09,0,0),b=sphere(g,.11,.012,.075,i%2?P.purple:P.orange,.09,0,0);g.userData={a,b};critters.push(g);root.add(g);}
+const waterGeo=new THREE.PlaneGeometry(220,220,1,1);waterGeo.rotateX(-Math.PI/2);const waterUniforms={time:{value:0},color:{value:new THREE.Color(0x7fcde7)}};const water=new THREE.Mesh(waterGeo,new THREE.ShaderMaterial({uniforms:waterUniforms,vertexShader:`varying vec2 vWorld;void main(){vWorld=position.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`uniform float time;uniform vec3 color;varying vec2 vWorld;void main(){float ripple=sin(vWorld.x*2.+vWorld.y*1.6-time*.7)*sin(vWorld.y*1.3-time*.5);gl_FragColor=vec4(color*(.99+ripple*.015),1.);
+#include <tonemapping_fragment>
+#include <colorspace_fragment>
+}`}));water.position.y=-.12;scene.add(water);
+return {root,water,setQuality(high){leaves.count=high?32:12;ripples.count=high?32:16;drops.count=high?45:20;},update(time,reduced){waterUniforms.time.value=reduced?0:time;root.visible=!reduced;if(reduced)return;for(let i=0;i<32;i++){const phase=(time*.045+i*.137)%1,p=toScene(900+(i*319)%3800+phase*260,1000+(i*467)%1900+Math.sin(phase*6+i)*45);dummy.position.set(p.x,.4+Math.sin(phase*Math.PI)*.7,p.z);dummy.rotation.set(phase*3,i+phase*5,phase*4);dummy.scale.set(.08,.015,.04);dummy.updateMatrix();leaves.setMatrixAt(i,dummy.matrix);const lake=world.water[i%2],rp=(time*.11+i*.173)%1,w=toScene(lake.x+Math.sin(i*13.1)*lake.rx*.72,lake.y+Math.cos(i*7.3)*lake.ry*.72);dummy.position.set(w.x,.075,w.z);dummy.rotation.set(-Math.PI/2,0,0);dummy.scale.setScalar(.15+rp*.5);dummy.updateMatrix();ripples.setMatrixAt(i,dummy.matrix);}leaves.instanceMatrix.needsUpdate=true;ripples.instanceMatrix.needsUpdate=true;
+const f=toScene(2820,2312);for(let i=0;i<45;i++){const t=(time*.7+i*.133)%1,a=i*2.399;dummy.position.set(f.x+Math.cos(a)*t*1.3,.7+Math.sin(t*Math.PI)*1.8,f.z+Math.sin(a)*t*1.3);dummy.scale.setScalar(1);dummy.rotation.set(0,0,0);dummy.updateMatrix();drops.setMatrixAt(i,dummy.matrix);}drops.instanceMatrix.needsUpdate=true;
+critters.forEach((c,i)=>{const p=toScene(2020+Math.sin(time*.16+i)*160,1780+Math.cos(time*.2+i)*120);c.position.set(p.x,.8+Math.sin(time*2+i)*.2,p.z);c.rotation.y=time*.2+i;c.userData.a.rotation.z=Math.sin(time*15+i)*.8;c.userData.b.rotation.z=-Math.sin(time*15+i)*.8;});}};
+}
