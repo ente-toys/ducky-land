@@ -100,7 +100,7 @@ export async function createDuck({seed = 0, isPlayer = false} = {}) {
     shown += angleDiff(goal, shown) * (1 - Math.exp(-12 * dt));
     // Sleep keeps the plain idle for now (the old sleep pose squashes the final Ducky); others use the soft quack/dance.
     let rigAction = action === 7 ? 0 : action;
-    if (!isPlayer && (rigAction === 2 || rigAction === 3)) rigAction += 14;
+    if (rigAction === 3 || (!isPlayer && rigAction === 2)) rigAction += 14;   // boss 3 Nov: soft dance only, for everyone
     c.action.value = rigAction; c.facing.value = shown < 0 ? -1 : 1; c.turn.value = shown + 360;
     sm.advanceAndApply(reducedMotion ? dt * .5 : dt); art.advance(reducedMotion ? dt * .5 : dt);
     feedback.update(action, actionTime, reducedMotion, false);
