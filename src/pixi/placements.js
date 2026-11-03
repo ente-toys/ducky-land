@@ -248,7 +248,7 @@ function consolidate(out, world, walkable) {
     }
   };
   pathSeat(9, .5, -1, null, 'library');     // beside the path east of the library, on its north verge, facing the path
-  pathSeat(2, .78, -1, 'back', 'race-lake');   // beside the path to the race lake, on its north verge, looking out over the lake
+  pathSeat(2, .6, -1, 'back', 'race-lake');   // beside the path to the race lake, on its north verge, looking out over the lake
   out.push(...seats);
 
   // plaza: a lamp and a planter at the four main path entries, one on each side of the path, so the square reads as designed
@@ -297,7 +297,8 @@ function consolidate(out, world, walkable) {
   const BUSH_KINDS = ['bush-1', 'bush-2', 'bush-3', 'bush-4', 'bush-5', 'bush-6'].filter(k => PLANTS[k]);
   const canopy = (kind, scale) => [PLANTS[kind][0] * scale / 2, PLANTS[kind][1] * scale];   // half width, height
   const nTrees = Math.max(24, plants.filter(isTree).length), nBushes = Math.max(10, plants.filter(isBush).length);
-  const treeOk = (x, y) => onLand(x, y) && coastDist(x, y) > H + 40 && pathDist(x, y) > 135 && !sandy(x, y, 100) && !jetty(x, y, 200)
+  const stairsClear = (x, y) => !(x > 2620 && x < 3220 && y > 1330 && y < 2000);   // boss 4 Nov: no tree over the museum stairs
+  const treeOk = (x, y) => stairsClear(x, y) && onLand(x, y) && coastDist(x, y) > H + 40 && pathDist(x, y) > 135 && !sandy(x, y, 100) && !jetty(x, y, 200)
     && !inEllipse(x, y, PLAZA.x, PLAZA.y, PLAZA.rx + 260, PLAZA.ry + 190) && roomFor(x, y, 150, true)
     && [[0, .5], [0, .85], [-.7, .6], [.7, .6]].every(([u, v]) => !wet(x + u * 150, y - v * 420, 30));   // the crown never hangs over a pond
   const treeSpots = spots.filter(s => treeOk(...s));
