@@ -9,11 +9,7 @@ export function setWalkDestination(actor, nav, x, y) {
   return actor.path.at(-1);
 }
 
-// Boss 3 Nov: only quack (2), dance (3) and sleep (7); the server and the client both use this.
-export const KEPT_EMOTES = new Set([2, 3, 7]);
-
 export function playEmote(actor, action, now) {
-  if (!KEPT_EMOTES.has(action)) return;
   actor.path = [];
   actor.travel = 0;
   if (action === 3 && actor.action === 3) {
