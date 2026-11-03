@@ -111,9 +111,7 @@ export function createPlacements(world, walkable) {
     if (prop.name === 'Flower planter') return plant('bush-3', prop);
     if (prop.name === 'Library flowers') return plant(prop.id % 2 ? 'flower-1' : 'flower-3', prop);
     const asset = byName.get(replacements[prop.name]);
-    if (asset?.name === 'sailboat') {
-      return place(asset, {...prop, x: world.water[1].x - 205});
-    }
+    if (asset?.name === 'sailboat') return null;   // boss 4 Nov: no sailboat on the race lake
     return asset ? place(asset, prop) : prop;
   }).filter(Boolean);
   const zones = ['bread-forest','pond','library','plaza','race-lake','lighthouse-beach','islets'];
