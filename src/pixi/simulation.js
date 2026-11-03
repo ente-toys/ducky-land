@@ -1,5 +1,6 @@
 import {createNavigation} from './navigation.js';
-export const DURATIONS={2:1.3,3:6,4:1.5,5:1.55,6:1.55,7:2.3,8:1.5,9:1.75};
+import {DURATIONS} from './player-motion.js';
+export {DURATIONS};
 export function createSimulation(world,seed=8612,{sleepingNpcs=false}={}){
  const nav=createNavigation(world),zones=Object.keys(world.zones),ducks=[],responses=[];
  const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};

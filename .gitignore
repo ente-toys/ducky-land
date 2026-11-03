@@ -8,3 +8,7 @@ rive/scene.rml
 # heavy evidence and archives from the build lanes
 incoming/assets/ducky-land-assets.zip
 incoming/**/evidence/*.mp4
+
+# Cloudflare development state and secrets
+.wrangler/
+.dev.vars*

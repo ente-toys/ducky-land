@@ -2,5 +2,123 @@
 .pixi-host canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; outline: none; }
 .pixi-host canvas:active { cursor: grabbing; }
 .pixi-host canvas:focus-visible { outline: 3px solid #f8d164; outline-offset: -3px; }
+.pixi-ente-logo {
+  position: fixed;
+  z-index: 1;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
+  width: 76px;
+  height: auto;
+  padding: 10px 12px;
+  background: #332b23;
+  border: 1px solid #564537;
+  border-radius: 12px;
+  box-shadow: 0 3px 0 #56453755;
+  pointer-events: none;
+}
 .pixi-error { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; flex-direction: column; padding: 24px; color: #33302e; background: #e5f5e9; font: 18px/1.4 system-ui, sans-serif; }
 .pixi-error button { color: inherit; padding: 12px 20px; border-radius: 24px; border: 2px solid #33302e; background: #fff4c5; font: inherit; cursor: pointer; }
+.pixi-live {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
+  max-width: calc(100vw - 32px);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 8px 8px 14px;
+  color: #332b23;
+  background: #fff9df;
+  border: 1px solid #564537;
+  border-radius: 16px;
+  box-shadow: 0 3px 0 #56453755;
+  font: 600 14px/1.35 system-ui, sans-serif;
+}
+.pixi-live button, .pixi-live a {
+  padding: 8px 13px;
+  color: inherit;
+  background: #ffda69;
+  border: 1px solid #564537;
+  border-radius: 10px;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pixi-live button:disabled { opacity: .65; cursor: default; }
+@media (max-width: 480px) {
+  .pixi-ente-logo { width: 60px; }
+  .pixi-live { max-width: calc(100vw - 128px); }
+}
+.pixi-live :is(button, a):focus-visible { outline: 2px solid #564537; outline-offset: 2px; }
+.pixi-live kbd {
+  margin-left: 3px;
+  padding: 1px 4px;
+  border: 1px solid #56453780;
+  border-radius: 4px;
+  font: inherit;
+}
+.pixi-chat-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.pixi-chat-bubble, .pixi-duck-name {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -100%);
+  width: max-content;
+}
+.pixi-duck-name {
+  padding: 1px 5px;
+  color: #584534;
+  background: #fff9df;
+  border: 1px solid #785f4655;
+  border-radius: 7px;
+  font: 600 10px/1.25 system-ui, sans-serif;
+}
+.pixi-chat-bubble, .pixi-chat {
+  color: #3d2b1c;
+  background: #ffda69;
+  border: 2px solid #8a5c2a;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px #785f4640;
+}
+.pixi-chat-bubble {
+  transform: translateX(-50%);
+  max-width: min(240px, 70vw);
+  padding: 4px 9px;
+  overflow-wrap: anywhere;
+  font: 500 14px/1.35 system-ui, sans-serif;
+}
+.pixi-chat {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px 2px 0;
+  translate: -200vw -200vh;
+}
+.pixi-chat input {
+  box-sizing: border-box;
+  width: min(var(--chat-size), calc(100vw - 60px));
+  padding: 6px 8px 6px 10px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font: 500 16px/1.35 system-ui, sans-serif;
+}
+.pixi-chat input::placeholder { color: #694521; }
+.pixi-chat:focus-within { outline: 2px solid #fff; outline-offset: 1px; }
+.pixi-live .pixi-chat button {
+  padding: 2px 6px;
+  color: inherit;
+  background: #efb942;
+  border: 0;
+  border-radius: 50%;
+}
