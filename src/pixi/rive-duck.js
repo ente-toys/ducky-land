@@ -8,9 +8,9 @@ import {createDuckFeedback} from './feedback.js';
 
 export const duckAnimationNames = Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
 const RIV = '/rive/ducky.riv', WASM = '/rive/rive.wasm';
-// Rig units: the Ducky spans about x -360..353 and y -776..161 around its feet.
-const RIG = {left:-370, top:-800, width:740, height:980};
-const CELL_W = 240, CELL_H = Math.round(CELL_W * RIG.height / RIG.width), COLS = 8, ROWS = 4;
+// Rig units: the Ducky spans about x -360..353 and y -776..161 around its feet; its emote bubbles reach x 440, y -800.
+const RIG = {left:-370, top:-830, width:840, height:1010};
+const CELL_W = 260, CELL_H = Math.round(CELL_W * RIG.height / RIG.width), COLS = 8, ROWS = 4;
 const WORLD_SCALE = .24;   // rig units -> world units, sized to the island's paths and benches
 const WALKS = new Set([1, 14, 15]);
 const angleDiff = (a, b) => ((a - b + 540) % 360) - 180;
@@ -70,9 +70,9 @@ export async function createDuck({seed = 0, isPlayer = false} = {}) {
   sprite.scale.set(WORLD_SCALE / k);
   sprite.position.set(RIG.left * WORLD_SCALE, RIG.top * WORLD_SCALE);
   root.addChild(sprite);
-  // Ashwin's emote bubbles and sleep Zzz stay as Pixi overlays; the rig draws its own player ring.
+  // The rig draws its own emote bubbles and player ring; only the sleep Zzz stays a Pixi overlay (sleep has no Rive pose yet).
   const feedback = createDuckFeedback(false), overlay = new Container();
-  overlay.scale.set(WORLD_SCALE * 1.15); overlay.addChild(feedback.bubble, feedback.sleep); root.addChild(overlay);
+  overlay.scale.set(WORLD_SCALE * 1.15); overlay.addChild(feedback.sleep); root.addChild(overlay);
 
   const mat = new rive.Mat2D();
   let shown, turn = 0, action = 0, actionTime = 0, version, disposed = false;
