@@ -70,9 +70,8 @@ export async function createDuck({seed = 0, isPlayer = false} = {}) {
   sprite.scale.set(WORLD_SCALE / k);
   sprite.position.set(RIG.left * WORLD_SCALE, RIG.top * WORLD_SCALE);
   root.addChild(sprite);
-  // The rig draws its own emote bubbles and player ring; only the sleep Zzz stays a Pixi overlay (sleep has no Rive pose yet).
-  const feedback = createDuckFeedback(false), overlay = new Container();
-  overlay.scale.set(WORLD_SCALE * 1.15); overlay.addChild(feedback.sleep); root.addChild(overlay);
+  // The rig draws its own emote bubbles, sleep Z letters and player ring; nothing extra in Pixi.
+  const feedback = createDuckFeedback(false);
 
   const mat = new rive.Mat2D();
   let shown, turn = 0, action = 0, actionTime = 0, version, disposed = false;
@@ -98,8 +97,8 @@ export async function createDuck({seed = 0, isPlayer = false} = {}) {
     const goal = side * (WALKS.has(action) && Math.abs(raw) > 90 ? 135 : 45);
     if (shown === undefined) shown = goal;
     shown += angleDiff(goal, shown) * (1 - Math.exp(-12 * dt));
-    // Sleep keeps the plain idle for now (the old sleep pose squashes the final Ducky); others use the soft quack/dance.
-    let rigAction = action === 7 ? 0 : action;
+    // Sleep (7) is the new Rive nap made for the final Ducky, Z letters included.
+    let rigAction = action;
     if (rigAction === 3 || (!isPlayer && rigAction === 2)) rigAction += 14;   // boss 3 Nov: soft dance only, for everyone
     c.action.value = rigAction; c.facing.value = shown < 0 ? -1 : 1; c.turn.value = shown + 360;
     sm.advanceAndApply(reducedMotion ? dt * .5 : dt); art.advance(reducedMotion ? dt * .5 : dt);
