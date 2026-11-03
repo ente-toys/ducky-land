@@ -105,7 +105,7 @@ export function createPlacements(world, walkable) {
   const props = original.props.filter(prop => !prop.name.startsWith('Wayfinding')).map(prop => {
     if (prop.zone === 'lighthouse-beach') return prop;   // keeps its own art; the scale sheet still applies below
     if (prop.name === 'Drip fountain') return {...prop, asset: 'fountain-wishing', src: '/pixi-art/fountain-wishing.svg',
-      width: 480, height: 339, anchor: {x: .5, y: 229 / 339}, ...FOUNTAIN};   // boss 3 Nov: GPT's wishing bowls
+      y: 2370, width: 480, height: 480, anchor: {x: .5, y: .625}, ...FOUNTAIN};   // boss 4 Nov: garden fountain drawn in the plaza ring's perspective, centred on the ring
     if (prop.name === 'Croissant tree' || prop.name === 'Baguette tree') return prop.id % 3 ? null : plant(prop.id % 2 ? 'tree-1' : 'tree-2', prop);   // boss 3 Nov: bread trees were ugly; keep a third as green trees
     if (prop.name === 'Drip tree' || prop.name === 'Hill tree') return plant(prop.id % 2 ? 'tree-2' : 'tree-1', prop);
     if (prop.name === 'Flower planter') return plant('bush-3', prop);

@@ -5,15 +5,15 @@
 import {Container, Graphics} from 'pixi.js';
 
 // Points in the SVG's own units (480 x 339 viewBox, the art is shifted up 50 inside it).
-const CENTRE = {x: 240, y: 229};                      // centre of the lower pool, sits on the prop's x, y
+const CENTRE = {x: 240, y: 300};                      // centre of the lower pool, sits on the prop's x, y
 const SPILLS = [                                      // top, bottom and width of each falling ribbon
-  {x: 147, top: 207, bottom: 252, w: 14},
-  {x: 240, top: 221, bottom: 270, w: 26},
-  {x: 334, top: 207, bottom: 252, w: 15},
+  {x: 158, top: 281, bottom: 358, w: 14},
+  {x: 240, top: 309, bottom: 395, w: 26},
+  {x: 322, top: 281, bottom: 358, w: 14},
 ];
-const BOWL = {x: 240, y: 194, rx: 100, ry: 23};       // upper bowl water
-const POOL = {x: 240, y: 229, rx: 200, ry: 52};       // lower pool water
-const SPRAY = {x: 240, y: 186};                        // the bubbler at the statue's feet
+const BOWL = {x: 240, y: 223, rx: 96, ry: 73.531915};       // upper bowl water
+const POOL = {x: 240, y: 290, rx: 180, ry: 137.87234};       // lower pool water
+const SPRAY = {x: 240, y: 213};                        // the bubbler at the statue's feet
 const WATER = 0x6CCBF2, HI = 0xEAF9FF, WHITE = 0xFFFFFF, GRAVITY = 520;
 const fract = v => v - Math.floor(v);
 
