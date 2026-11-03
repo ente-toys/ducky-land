@@ -20,9 +20,31 @@ async function library(){
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);
     const data=await response.json();
     await Promise.all([...NAP_POSES.map(pose => loadTexture(pose.url)), ...data.views.flatMap(v=>v.parts.map(p=>loadTexture(p.url)))]);
+    await Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}}));
     return data;
   })().catch(error=>{libraryPromise=undefined;throw error;});
   return libraryPromise;
+}
+// boss 4 Nov: turning like the Rive rig, the body outline MORPHS between the drawn directions instead of swapping.
+// Each direction's body art is sampled once into point rings (body, belly, shine) in the view's ground space.
+const RING=120,INK=0x232323,BODY=0xFFD525,BELLY=0xFFE161;
+function sampleRing(svg,d){
+  const sub=d.split(/(?=M)/).map(x=>x.trim()).filter(Boolean);let best=null;
+  for(const part of sub){const el=document.createElementNS('http://www.w3.org/2000/svg','path');el.setAttribute('d',part);svg.appendChild(el);const len=el.getTotalLength();if(!best||len>best.len)best={el,len};}
+  const pts=[];for(let i=0;i<RING;i++){const q=best.el.getPointAtLength(best.len*i/RING);pts.push([q.x,q.y]);}
+  let area=0;for(let i=0;i<RING;i++){const a=pts[i],b=pts[(i+1)%RING];area+=a[0]*b[1]-b[0]*a[1];}if(area<0)pts.reverse();
+  let top=0;for(let i=1;i<RING;i++)if(pts[i][1]<pts[top][1])top=i;
+  return pts.slice(top).concat(pts.slice(0,top));
+}
+async function bodyShapes(view){
+  const part=view.parts.find(p=>p.role==='body');if(!part||typeof document==='undefined')return null;
+  const text=await (await fetch(part.url)).text(),doc=new DOMParser().parseFromString(text,'image/svg+xml');
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.style.cssText='position:absolute;width:0;height:0;visibility:hidden';document.body.appendChild(svg);
+  const pick=color=>[...doc.querySelectorAll('path')].find(p=>(p.getAttribute('fill')||'').toLowerCase()===color);
+  const [gx,gy]=view.ground,toGround=pts=>pts&&pts.map(([x,y])=>[x-gx,y-gy]);
+  const ring=el=>el?toGround(sampleRing(svg,el.getAttribute('d'))):null;
+  const out={body:ring(pick('#ffd525')),belly:ring(pick('#ffe161')),shine:ring(pick('white'))};svg.remove();
+  return out.body?out:null;
 }
 /** Shared textures stay alive until the last duck is disposed. Never destroys Texture.WHITE. */
 export async function disposeDuckAssets(){
@@ -50,10 +72,12 @@ function makeView(spec){
   }
   const bodyIndex=body.children.findIndex(child=>child.label?.startsWith('body-'));
   body.addChildAt(held,bodyIndex+1);
+  const bodyPart=parts.find(p=>p.role==='body');let morph=null;
+  if(spec.morph&&bodyPart){morph=new Graphics();bodyPart.joint.addChild(morph);bodyPart.sprite.visible=false;}
   const expressions=new Graphics();body.addChildAt(expressions,body.children.length-1);
   const brows=new Graphics();body.addChildAt(brows,body.children.length-1);
   root.visible=false;
-  return {root,shadow,feet,body,clothes,held,behind,parts,spec,brows,expressions,garments:[]};
+  return {root,shadow,feet,body,clothes,held,behind,parts,spec,brows,expressions,morph,bodyPart,garments:[]};
 }
 const defaultPose=()=>({sqx:1,sqy:1,bob:0,sway:0,lean:0,breath:0,headY:0,headTilt:0,wingL:0,wingR:0,wingForward:0,footL:0,footR:0,stepL:0,stepR:0,bill:0,eye:1,angry:0,tail:0});
 function samplePose(action,t,walkPhase,reduced,speed=165){
@@ -189,6 +213,15 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       if(part.role==='tuft'){joint.y+=p.headY*.42;joint.rotation=p.headTilt+p.tail*.35;}
       if(part.role==='tail')joint.rotation=p.tail;
       if(part.role==='toe')joint.visible=!clothing.shoes&&currentAction!==1;
+    }
+    if(view.morph){
+      const me=view.spec.morph,other=glide.other?.spec.morph,w=other?glide.w:0,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y];
+      const mix=(a,b,k)=>a.map((p,i)=>[p[0]+((b?b[i][0]:p[0])-p[0])*k-ox,p[1]+((b?b[i][1]:p[1])-p[1])*k-oy]);
+      const shrink=(a,k)=>{const cx=a.reduce((s,p)=>s+p[0],0)/a.length,cy=a.reduce((s,p)=>s+p[1],0)/a.length;return a.map(p=>[cx+(p[0]-cx)*k-ox,cy+(p[1]-cy)*k-oy]);};
+      const g=view.morph;g.clear();
+      g.poly(mix(me.body,other?.body,w).flat()).fill(BODY).stroke({color:INK,width:9,join:'round'});
+      if(me.belly)g.poly((other&&!other.belly?shrink(me.belly,Math.max(0,1-w*2)):mix(me.belly,other?.belly,w)).flat()).fill(BELLY);
+      if(me.shine)g.poly((other&&!other.shine?shrink(me.shine,Math.max(0,1-w*2)):mix(me.shine,other?.shine,w)).flat()).fill(0xFFFFFF);
     }
     const eyes=view.parts.filter(part=>part.role==='eye');
     for(const garment of view.garments){
