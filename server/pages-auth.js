@@ -1,0 +1,138 @@
+const sessionCookie = '__Host-ducky_session';
+const flowCookie = '__Host-ducky_oauth';
+const cookieAge = 7 * 24 * 60 * 60;
+const tokenPattern = /^[A-Za-z0-9_-]{43}$/;
+
+function base64url(bytes) {
+  return btoa(String.fromCharCode(...bytes)).replaceAll('+','-').replaceAll('/','_').replaceAll('=','');
+}
+
+function randomToken() {
+  return base64url(crypto.getRandomValues(new Uint8Array(32)));
+}
+
+async function digest(value) {
+  if (!value) return null;
+  return base64url(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))));
+}
+
+function cookie(request, name) {
+  const entry = (request.headers.get('Cookie') ?? '').split(';')
+    .map(part => part.trim()).find(part => part.startsWith(name+'='));
+  const value = entry?.slice(name.length+1);
+  return tokenPattern.test(value ?? '') ? value : null;
+}
+
+function setCookie(name, value, age) {
+  return `${name}=${value}; Path=/; Max-Age=${age}; Secure; HttpOnly; SameSite=Lax`;
+}
+
+function json(body, status = 200, headers = {}) {
+  return Response.json(body, {status, headers:{'Cache-Control':'no-store', ...headers}});
+}
+
+function redirect(to, cookies = []) {
+  const headers = new Headers({Location:to,'Cache-Control':'no-store','Referrer-Policy':'no-referrer'});
+  for (const value of cookies) headers.append('Set-Cookie', value);
+  return new Response(null,{status:303,headers});
+}
+
+function room(env) {
+  return env.ISLAND.get(env.ISLAND.idFromName('main-island'));
+}
+
+function call(env, path, data) {
+  return room(env).fetch(new Request('https://island.internal'+path, {
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),
+  }));
+}
+
+function configured(env) {
+  return !!(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET && env.SITE_ORIGIN);
+}
+
+export async function start({request,env}) {
+  if (!configured(env)) return json({error:'GitHub sign-in is not configured yet.'},503);
+  if (new URL(request.url).origin !== env.SITE_ORIGIN) {
+    return redirect(env.SITE_ORIGIN+'/auth/github/start');
+  }
+  const state = randomToken(), verifier = randomToken();
+  const previous = await digest(cookie(request,flowCookie));
+  const saved = await call(env,'/flow',{state:await digest(state),verifier,previous});
+  if (!saved.ok) return json({error:'Sign-in is busy. Try again shortly.'},saved.status);
+  const target = new URL('https://github.com/login/oauth/authorize');
+  target.search = new URLSearchParams({
+    client_id:env.GITHUB_CLIENT_ID, redirect_uri:env.SITE_ORIGIN+'/auth/github/callback',
+    state, code_challenge:await digest(verifier), code_challenge_method:'S256',
+  });
+  return redirect(target.href,[setCookie(flowCookie,state,600)]);
+}
+
+export async function callback({request,env}, fetchGitHub = fetch) {
+  const url = new URL(request.url);
+  const clearFlow = setCookie(flowCookie,'',0);
+  const failed = reason => redirect('/?auth='+reason,[clearFlow]);
+  if (!configured(env) || url.origin !== env.SITE_ORIGIN) return failed('failed');
+  const state = cookie(request,flowCookie);
+  if (!state || url.searchParams.get('state') !== state) return failed('failed');
+  try {
+    const response = await call(env,'/consume',{state:await digest(state)});
+    if (!response.ok) return failed('failed');
+    const {verifier} = await response.json();
+    if (url.searchParams.get('error') === 'access_denied') return failed('cancelled');
+    const code = url.searchParams.get('code');
+    if (!code || code.length > 512) return failed('failed');
+    const exchange = await fetchGitHub('https://github.com/login/oauth/access_token',{
+      method:'POST',headers:{Accept:'application/json'},
+      body:new URLSearchParams({
+        client_id:env.GITHUB_CLIENT_ID, client_secret:env.GITHUB_CLIENT_SECRET, code,
+        code_verifier:verifier, redirect_uri:env.SITE_ORIGIN+'/auth/github/callback',
+      }),
+    });
+    if (!exchange.ok) return failed('failed');
+    const token = (await exchange.json()).access_token;
+    if (!token) return failed('failed');
+    const user = await fetchGitHub('https://api.github.com/user',{
+      headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'User-Agent':'Ducky Land'},
+    });
+    if (!user.ok) return failed('failed');
+    const {id,login} = await user.json();
+    if (!Number.isSafeInteger(id) || id <= 0 || typeof login !== 'string' || !/^[A-Za-z0-9-]{1,39}$/.test(login)) return failed('failed');
+    const session = randomToken();
+    const saved = await call(env,'/session/new',{digest:await digest(session),account:String(id),login});
+    if (!saved.ok) return failed('failed');
+    const previous = await digest(cookie(request,sessionCookie));
+    if (previous) await call(env,'/session/revoke',{digest:previous});
+    return redirect('/',[clearFlow,setCookie(sessionCookie,session,cookieAge)]);
+  } catch {
+    return failed('failed');
+  }
+}
+
+export async function session({request,env}) {
+  const key = await digest(cookie(request,sessionCookie));
+  if (!key) return json({user:null,signInAvailable:configured(env)});
+  const result = await call(env,'/session/get',{digest:key});
+  if (!result.ok) return json({error:'Session unavailable'},503);
+  const user = await result.json();
+  return json({user:user ? {login:user.login} : null,signInAvailable:configured(env)},
+    200, user ? {} : {'Set-Cookie':setCookie(sessionCookie,'',0)});
+}
+
+export async function logout({request,env}) {
+  if (request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
+  const key = await digest(cookie(request,sessionCookie));
+  if (key && !(await call(env,'/session/revoke',{digest:key})).ok) return json({},503);
+  return json({},200,{'Set-Cookie':setCookie(sessionCookie,'',0)});
+}
+
+export async function connect({request,env}) {
+  const url = new URL(request.url);
+  if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return json({},426);
+  if (request.headers.get('Origin') !== url.origin) return json({},403);
+  const headers = new Headers({Upgrade:'websocket'});
+  const key = await digest(cookie(request,sessionCookie));
+  if (key) headers.set('X-Session-Digest',key);
+  const play = url.searchParams.get('play') === '1' ? '1' : '0';
+  return room(env).fetch(new Request('https://island.internal/room?play='+play,{headers}));
+}

@@ -15,6 +15,7 @@ import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, zoomAt} 
 
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
+const ZERO = {x:0,y:0};
 function acquire(src, resolution = 1) {
   let entry = textureLeases.get(src);
   if (!entry) {
@@ -35,7 +36,9 @@ function release(src) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}} = {}) {
+  constructor({onError = () => {}, room = null} = {}) {
+    this.room = room;
+    this.liveRigs = new Map();
     this.onError = onError;
     this.disposed = false;
     this.ready = false;
@@ -56,6 +59,8 @@ export class PixiIsland {
     this.audio = createAudio();
   }
 
+  get player() { return this.room ? this.room.player : this.sim?.player; }
+
   async mount(host) {
     this.host = host;
     this.app = new Application();
@@ -69,7 +74,7 @@ export class PixiIsland {
       this.canvas = this.app.canvas;
       this.canvas.tabIndex = 0;
       this.canvas.setAttribute('role', 'application');
-      this.canvas.setAttribute('aria-label', 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom, click to walk. WASD or arrows move. Q quacks, E dances, 1 to 7 emote, M toggles sound, F follows, Home shows the island.');
+      this.updateControlLabel();
       this.canvas.dataset.renderer = 'pixijs';
       this.canvas.dataset.state = 'loading';
       host.appendChild(this.canvas);
@@ -84,6 +89,7 @@ export class PixiIsland {
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       this.sim = createSimulation(world, 8612, {sleepingNpcs: true});
+      this.room?.configure(this.sim.nav, world);
       this.resize(true);
       this.listen(this.canvas, 'webglcontextlost', event => {event.preventDefault(); cancelAnimationFrame(this.raf); this.audio.suspend(); this.onError();});
       const props = createPlacements(world, this.sim.nav.walkable);
@@ -127,13 +133,14 @@ export class PixiIsland {
         this.objects.addChild(sprite);
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
-      const results = await Promise.allSettled(this.sim.ducks.map(d => createDuck({outfit: d.outfit, seed: d.id + 21, isPlayer:d.player})));
+      this.localDucks = this.room ? this.sim.ducks.slice(1) : this.sim.ducks;
+      const results = await Promise.allSettled(this.localDucks.map(d => createDuck({outfit: d.outfit, seed: d.id + 21, isPlayer:d.player})));
       this.rigs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
       if (this.disposed) {this.rigs.forEach(r => r.dispose()); this.rigs = []; disposeDuckAssets().catch(() => {}); return;}
       const failure = results.find(r => r.status === 'rejected');
       if (failure) throw failure.reason;
       this.rigs.forEach((rig, i) => {
-        const duck = this.sim.ducks[i];
+        const duck = this.localDucks[i];
         // The original flat view scales the source drawing by .88 × .24.
         // The reusable rig's own scale is 1/3; compensate at its world root.
         rig.root.scale.set(.88 * .24 * 3);
@@ -252,7 +259,7 @@ export class PixiIsland {
       this.follow = false;this.fitMode=false;this.constrain(this.target);
     }, {passive: false});
     this.listen(window, 'keydown', event => {
-      if (event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON/.test(event.target?.tagName) || event.target?.isContentEditable) return;
+      if (event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
       const key = event.key.toLowerCase();
       if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-'].includes(key)) return;
       event.preventDefault();
@@ -263,37 +270,45 @@ export class PixiIsland {
       if (key === 'e') this.triggerEmote(3);
       if (/^[1-7]$/.test(key)) this.triggerEmote(key === '1' ? 2 : Number(key) + 2);
       if (key === 'm') this.audio.toggle();
-      if (key === 'f') {this.follow=true;this.fitMode=false;this.target.zoom=Math.max(.65,this.target.zoom);}
+      if (key === 'f' && this.player) {this.follow=true;this.fitMode=false;this.target.zoom=Math.max(.65,this.target.zoom);}
       if (key === 'home' || key === '0') this.fit();
       if (['+','=','-'].includes(key)) {
         this.target.zoom = clamp(this.target.zoom * (key === '-' ? .8 : 1.25), this.minZoom*.8, 1.8);this.fitMode=false;this.follow=false;
       }
     });
     this.listen(window, 'keyup', event => this.keys.delete(event.key.toLowerCase()));
-    this.listen(window, 'blur', () => {this.keys.clear(); this.gestures.clear();});
+    this.listen(window, 'blur', () => {this.keys.clear(); this.gestures.clear(); this.room?.stopInput();});
     this.listen(document, 'visibilitychange', () => {
-      this.keys.clear(); this.gestures.clear(); this.accumulator = 0;
+      this.keys.clear(); this.gestures.clear(); this.room?.stopInput(); this.accumulator = 0;
       cancelAnimationFrame(this.raf);
       if (document.hidden) this.audio.suspend();
       else {this.audio.resume(); this.lastFrame = performance.now(); this.raf = requestAnimationFrame(time => this.tick(time));}
     });
   }
 
+  updateControlLabel() {
+    const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home shows the island.';
+    const play = ' Click to walk. WASD or arrows move. Q quacks, E dances, 1 to 7 emote, F follows.';
+    this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play));
+  }
+
   tap(point) {
+    if (!this.player) return;
     const p = screenToWorld(this.camera, point, this.width, this.height);
     const hitRadius=Math.max(65,20/this.camera.zoom);
-    const hit = this.sim.ducks.find(duck => {
+    const candidates = this.room ? [this.player, ...this.room.poses().filter(duck => !duck.player), ...this.localDucks] : this.localDucks;
+    const hit = candidates.find(duck => {
       if (duck.action !== 7) return Math.hypot(p.x - duck.x, p.y - (duck.y - 50)) < hitRadius;
       const width = Math.max(62, 20 / this.camera.zoom);
       const height = Math.max(31, 12 / this.camera.zoom);
       return Math.hypot((p.x - duck.x) / width, (p.y - (duck.y - 27)) / height) < 1;
     });
     const now = performance.now();
-    if (hit?.player) {
+    if (hit === this.player) {
       this.triggerEmote(now - this.lastTap < 450 ? 3 : 2);
       this.lastTap = now;
     } else if (hit) {
-      if (!hit.sleeping) {
+      if (!this.room && !hit.sleeping) {
         this.sim.emote(2, hit);
         hit.turn = Math.atan2(this.sim.player.x-hit.x, this.sim.player.y-hit.y);
       }
@@ -305,7 +320,7 @@ export class PixiIsland {
   }
 
   setDestination(point) {
-    const destination = this.sim.destination(point.x, point.y);
+    const destination = this.room ? this.room.destination(point.x, point.y) : this.sim.destination(point.x, point.y);
     if (destination) {
       this.marker.position.set(...destination);
       this.markerUntil = this.sim.time + 1.5;
@@ -315,8 +330,12 @@ export class PixiIsland {
   }
 
   triggerEmote(action) {
-    this.sim.emote(action);
-    if(this.sim.player.action===action)this.sim.player.turn=0;
+    if (this.room) {
+      if (!this.room.emote(action)) return;
+    } else {
+      this.sim.emote(action);
+      if (this.player.action === action) this.player.turn = 0;
+    }
     this.audio.unlock().then(() => this.audio.play(action === 2 ? 'quack' : 'pop', action === 2 ? .12 : .06));
   }
 
@@ -351,14 +370,24 @@ export class PixiIsland {
       x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')),
       y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')),
     };
-    while (this.accumulator >= 1 / 60) {this.sim.step(1 / 60, input); this.accumulator -= 1 / 60;}
+    while (this.accumulator >= 1 / 60) {
+      this.sim.step(1 / 60, this.room ? ZERO : input);
+      this.room?.step(1 / 60, input);
+      this.accumulator -= 1 / 60;
+    }
+    const player = this.player;
+    if (Boolean(player) !== this.hadPlayer) {
+      this.hadPlayer = Boolean(player);
+      this.updateControlLabel();
+      if (!player) { this.keys.clear(); this.follow = false; this.markerUntil = 0; }
+    }
     const t = this.sim.time;
     const reduced = this.motion.matches;
-    if(this.sim.player.action===1&&!this.fitMode&&!this.gestures.pointers.size){
-      const x=this.width/2+(this.sim.player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(this.sim.player.y-this.camera.y)*this.camera.zoom;
+    if(player?.action===1&&!this.fitMode&&!this.gestures.pointers.size){
+      const x=this.width/2+(player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(player.y-this.camera.y)*this.camera.zoom;
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
-    if (this.follow) Object.assign(this.target, {x: this.sim.player.x, y: this.sim.player.y - 90});
+    if (this.follow && player) Object.assign(this.target, {x:player.x, y:player.y-90});
     easeCamera(this.camera, this.target, dt, reduced);
     this.scene.scale.set(this.camera.zoom);
     this.scene.position.set(this.width / 2 - this.camera.x * this.camera.zoom, this.height / 2 - this.camera.y * this.camera.zoom);
@@ -382,7 +411,7 @@ export class PixiIsland {
     this.floating.forEach(item=>{const pose=floatingPose(item,t,reduced);item.sprite.position.set(pose.x,pose.y);item.sprite.rotation=pose.rotation;item.sprite.visible=visible(item.x,item.y,100);});
     const alpha = this.accumulator * 60;
     this.rigs.forEach((rig, i) => {
-      const duck = this.sim.ducks[i];
+      const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
       rig.root.position.set(x, y);
@@ -390,6 +419,8 @@ export class PixiIsland {
       rig.root.visible = visible(x, y, 200);
       if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping});
     });
+    const live = this.room?.poses(now / 1000) ?? [];
+    if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
     this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>wing.rotation=(i?1:-1)*pose.flap);});
     for (const crow of this.crows) {
@@ -420,17 +451,18 @@ export class PixiIsland {
     this.splashes.forEach(({sprite,phase})=>{const age=(t*.7+phase)%1;sprite.visible=!reduced;sprite.scale.set(.4+age*1.3,.5+age*.9);sprite.alpha=Math.max(0,1-age*2)*.6;});
     this.marker.visible = this.markerUntil > t;
     if (this.marker.visible) {const age=1.5-(this.markerUntil-t);this.marker.alpha=1-age/1.5;this.marker.scale.set(1+age*.9,1+age*8/9);}
-    if (this.sim.player.travel && t > (this.nextStep || 0)) {this.audio.play('step', .045); this.nextStep = t + .28;}
+    if (player?.travel && t > (this.nextStep || 0)) {this.audio.play('step', .045); this.nextStep = t + .28;}
     this.app.render();
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;
-      d.ducks = String(this.sim.ducks.length);
+      d.ducks = String(this.localDucks.length + live.length);
+      d.livePlayers = String(live.length);
       d.sleepingDucks = String(this.sim.ducks.filter(duck => duck.sleeping && duck.action === 7).length);
-      d.player = `${this.sim.player.x.toFixed(1)},${this.sim.player.y.toFixed(1)}`;
-      d.action = String(this.sim.player.action);
+      d.player = player ? `${player.x.toFixed(1)},${player.y.toFixed(1)}` : '';
+      d.action = player ? String(player.action) : '';
       d.quackBubbles=String(this.sim.ducks.filter(duck=>duck.action===2).length);
-      d.playerRing='true';d.muted=String(this.audio.muted);d.follow=String(this.follow);d.destinationMarker=String(this.marker.visible);d.birds=String(this.birds.length);
+      d.playerRing=String(Boolean(player));d.muted=String(this.audio.muted);d.follow=String(this.follow);d.destinationMarker=String(this.marker.visible);d.birds=String(this.birds.length);
       d.camera = JSON.stringify(this.camera);
       d.frameMs = (dt * 1000).toFixed(2);
       if (this.frame % 60 === 0) {
@@ -444,6 +476,48 @@ export class PixiIsland {
     this.raf = requestAnimationFrame(time => this.tick(time));
   }
 
+  renderLiveDucks(poses, dt, time, reducedMotion, visible) {
+    const ids = new Set(poses.map(pose => pose.id));
+    for (const [id, entry] of this.liveRigs) {
+      if (ids.has(id)) continue;
+      entry.rig?.dispose();
+      this.liveRigs.delete(id);
+    }
+    for (const pose of poses) {
+      const {id,x,y,action,turn,travel,emoteVersion} = pose;
+      const isPlayer = Boolean(pose.player);
+      let entry = this.liveRigs.get(id);
+      if (!entry || entry.isPlayer !== isPlayer) {
+        entry?.rig?.dispose();
+        entry = {isPlayer, rig:null, emoteVersion};
+        this.liveRigs.set(id, entry);
+        createDuck({outfit:pose.outfit, seed:parseInt(id.slice(0,8),16), isPlayer}).then(rig => {
+          if (this.disposed || this.liveRigs.get(id) !== entry) {
+            rig.dispose();
+            disposeDuckAssets().catch(() => {});
+            return;
+          }
+          entry.rig = rig;
+          rig.root.scale.set(.88 * .24 * 3);
+          rig.root.visible = false;
+          this.objects.addChild(rig.root);
+        }).catch(error => {
+          if (!this.disposed) console.error('Could not load a duck', error);
+        });
+      }
+      if (entry.emoteVersion !== emoteVersion && !isPlayer && action === 2 && visible(x,y)) {
+        this.audio.play('quack', .08);
+      }
+      entry.emoteVersion = emoteVersion;
+      const rig = entry.rig;
+      if (!rig) continue;
+      rig.root.position.set(x,y);
+      rig.root.zIndex = y;
+      rig.root.visible = visible(x,y,200);
+      if (rig.root.visible) rig.update(dt, {action, speed:travel, turn, time, reducedMotion, emoteVersion});
+    }
+  }
+
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
@@ -453,6 +527,8 @@ export class PixiIsland {
     this.keys.clear();
     this.gestures.clear();
     this.audio.dispose();
+    this.liveRigs.forEach(entry => entry.rig?.dispose());
+    this.liveRigs.clear();
     this.rigs.forEach(rig => rig.dispose());
     this.rigs = [];
     disposeDuckAssets().catch(() => {});
