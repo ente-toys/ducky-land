@@ -7,7 +7,7 @@ export function bubblePose(action,time,reduced=false){
   return {visible:true,alpha,scale:reduced?1:1+Math.sin(Math.min(1,(time-.08)/.3)*Math.PI)*.12,y:action===7&&!reduced?-time/duration*64:0};
 }
 export function createDuckFeedback(isPlayer){
-  const ring=new Graphics({label:'Player ring'}).ellipse(0,4,267,62.5).fill({color:0xff6b5b,alpha:.25}).stroke({color:0xff6b5b,width:18});
+  const ring=new Graphics({label:'Player ring'}).ellipse(0,4,267,62.5).stroke({color:0xff6b5b,width:16});   // boss 3 Nov: no fill under your Ducky
   ring.visible=Boolean(isPlayer);
   const bubble=new Container({label:'Emote bubble'});bubble.position.set(280,-660);bubble.visible=false;
   const card=new Graphics().poly([-142,22,-183,95,-89,22]).fill(0xffffff).stroke({color:0x232323,width:8})

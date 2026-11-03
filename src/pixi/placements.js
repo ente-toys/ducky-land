@@ -1,6 +1,9 @@
 import library from '../../assets/manifest.json';
 import original from './art-manifest.json';
-import layout from './layout.json';   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
+import layout from './layout.json';
+import footpaths from './paths.json';   // the island's footpath centre lines (from our world.json)
+const segDist = (x, y, a, b) => {const dx = b[0]-a[0], dy = b[1]-a[1], t = Math.max(0, Math.min(1, ((x-a[0])*dx + (y-a[1])*dy) / (dx*dx + dy*dy))); return Math.hypot(x-a[0]-t*dx, y-a[1]-t*dy);};
+const pathDist = (x, y) => Math.min(...footpaths.flatMap(l => l.slice(1).map((b, i) => segDist(x, y, l[i], b))));   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
 
 const urls = import.meta.glob('../../assets/**/*.svg', {eager: true, query: '?url', import: 'default'});
 const byName = new Map(library.assets.map(asset => [asset.name, asset]));
@@ -40,6 +43,7 @@ export function createPlacements(world, walkable) {
     if (prop.zone === 'lighthouse-beach') return prop;
     if (prop.name === 'Drip fountain') return {...prop, asset: 'fountain-wishing', src: '/pixi-art/fountain-wishing.svg',
       width: 480, height: 339, anchor: {x: .5, y: 229 / 339}, scale: 1.05, resolution: 2.5};   // boss 3 Nov: GPT's wishing bowls
+    if (prop.name === 'Croissant tree' || prop.name === 'Baguette tree') return prop.id % 3 ? null : plant(prop.id % 2 ? 'tree-1' : 'tree-2', prop);   // boss 3 Nov: bread trees were ugly; keep a third as green trees
     if (prop.name === 'Drip tree' || prop.name === 'Hill tree') return plant(prop.id % 2 ? 'tree-2' : 'tree-1', prop);
     if (prop.name === 'Flower planter') return plant('bush-3', prop);
     if (prop.name === 'Library flowers') return plant(prop.id % 2 ? 'flower-1' : 'flower-3', prop);
@@ -48,10 +52,10 @@ export function createPlacements(world, walkable) {
       return place(asset, {...prop, x: world.water[1].x - 205});
     }
     return asset ? place(asset, prop) : prop;
-  });
+  }).filter(Boolean);
   const zones = ['bread-forest','pond','library','plaza','race-lake','lighthouse-beach','islets'];
   const details = library.assets.filter(asset => ['food','nature','beach','street'].includes(asset.category)
-    && !/^(tree-|fence-|sand-edge|bench-|lamp-|sign|flag)/.test(asset.name));   // boss 3 Nov: no city flags
+    && !/^(tree-|fence-|sand-edge|bench-|lamp-|sign|flag|bush-|grass-|log|stump|reeds|cattails|lily)/.test(asset.name));   // no flags; plants come from the GPT set   // boss 3 Nov: no city flags
   // A few bushes and flower clumps beside the trees, kept sparse on purpose (boss 3 Nov: minimal, no crowding).
   const trees = props.filter(p => /^tree-/.test(p.asset));
   trees.forEach((tree, i) => {
@@ -59,17 +63,17 @@ export function createPlacements(world, walkable) {
     if (i % 3 === 0) {const x = tree.x + side * 150, y = tree.y + 30; if (walkable(x, y)) props.push(plant(['bush-1','bush-2'][i % 2], {id: `bush-${i}`, name: 'Bush', x, y, zone: tree.zone}));}
     if (i % 4 === 1) {const x = tree.x - side * 110, y = tree.y + 45; if (walkable(x, y)) props.push(plant(['flower-1','flower-2','flower-3'][i % 3], {id: `flower-${i}`, name: 'Flowers', x, y, zone: tree.zone}));}
   });
-  // Boss 3 Nov: fewer details. The scattered food, nature, beach and street pieces are off.
-  if (true) return applyLayout(props);
+  // Boss 3 Nov (later): the small food, nature, beach and street props are back (no flags or signs).
   details.forEach((asset, i) => {
     const zone = asset.category === 'beach' ? 'lighthouse-beach' : asset.category === 'food' ? 'bread-forest' : zones[i % zones.length];
-    if (zone === 'lighthouse-beach') return;
+    if (zone === 'lighthouse-beach' || zone === 'islets') return;   // keep the jetty islets clear
     const z = world.zones[zone], angle = i * 2.399963, radius = 190 + (i % 5) * 53;
     const x = z.x + Math.cos(angle) * radius, y = z.y + 180 + Math.sin(angle) * radius * .6;
     if (!walkable(x,y) || Math.hypot(x-z.spawn[0],y-z.spawn[1]) < 110) return;
+    if (pathDist(x, y) < 100 || Math.hypot(x - 2820, y - 2350) < 360) return;   // off the paths, clear of the fountain
     props.push(place(asset, {id: `detail-${i}`, name: asset.name, x, y, zone}));
   });
-  return props;
+  return applyLayout(props);
 }
 
 function applyLayout(props) {
