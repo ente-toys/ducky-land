@@ -5,13 +5,16 @@ import {createRowboat} from './rowboat.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
-import world from '../../rive/web/world.json';
+import rawWorld from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
-import {createPlacements} from './placements.js';
+import {createPlacements, decalsFor, deckY, groundAt, H, JETTIES, obstaclesFor, trimWorld} from './placements.js';
+const world = trimWorld(rawWorld);   // round 4: the east islet and its jetty are gone
+import {geometry} from '../../rive/web/island-geometry.mjs';
+import {PALETTE} from './palette.js';
 import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from './camera.js';
 import {CHAT_DURATION} from './chat.js';
 
@@ -19,6 +22,19 @@ import {CHAT_DURATION} from './chat.js';
 const textureLeases = new Map();
 const ZERO = {x:0,y:0};
 const CHAT_LABEL_GAP = 4;
+// boss 3 Nov, fix 4: ONE contact shadow for every grounded prop: a flat unoutlined ellipse tucked under the base,
+// 12-18% opacity, tinted for the ground under it, nudged at most .15H toward the lower right. [pattern, width share, depth ratio]
+const SHADOW_TINT = {sand: [PALETTE.sandShade, .18], grass: [PALETTE.deepLeaf, .15], water: [PALETTE.ink, .12]};
+const FOOTPRINT = [[/bench-wood-(left|right)/, .1, 2.4], [/fountain/, .25, .82], [/^tree-/, .3, .3], [/^(bush|flower)-/, .4, .32], [/lamp|pole/, .4, .34],
+  [/lighthouse/, .3, .32], [/umbrella/, .32, .4], [/library/, .44, .26], [/boat/, .36, .3]];
+const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds/i;
+function contactShadow(prop) {
+  const name = prop.asset || prop.name, [, share, depth] = FOOTPRINT.find(([re]) => re.test(name)) || [, .38, .3];
+  const rx = Math.max(8, Math.min(300, prop.width * prop.scale * share)), ry = rx * depth;
+  const [color, alpha] = SHADOW_TINT[/boat/i.test(name) ? 'water' : groundAt(prop.x, prop.y, world)];
+  const nudge = Math.min(1, rx / 80) * .15 * H / Math.hypot(2, 1);   // up to .15H along (2, 1)
+  return new Graphics().ellipse(nudge * 2, nudge, rx, ry).fill({color, alpha});
+}
 function acquire(src, resolution = 1) {
   let entry = textureLeases.get(src);
   if (!entry) {
@@ -74,7 +90,7 @@ export class PixiIsland {
     try {
       await this.app.init({width: host.clientWidth || 1280, height: host.clientHeight || 720,
         resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true,
-        antialias: true, background: '#86cee6', preference: 'webgl', autoStart: false,
+        antialias: true, background: '#6EC9DE', preference: 'webgl', autoStart: false,
         sharedTicker: false});
       if (this.disposed) { this.app.destroy(true, {children: true}); return; }
       this.initialized = true;
@@ -92,21 +108,29 @@ export class PixiIsland {
       this.air = new Container();
       this.floatLayer=new Container();
       this.contactShadows=new Container();
-      this.scene.addChild(this.ground, this.water, this.floatLayer, this.contactShadows, this.objects, this.air);
+      this.decks=new Container();   // boss 3 Nov: the arched bridges, over the water and its lily pads, under every Ducky
+      this.scene.addChild(this.ground, this.water, this.floatLayer, this.decks, this.contactShadows, this.objects, this.air);
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
-      this.sim = createSimulation(world, 8612, {sleepingNpcs: true});
-      this.room?.configure(this.sim.nav, world);
+      // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
+      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable), local = {...world, obstacles: obstaclesFor(props, world)};
+      globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));   // QA readback
+      this.sim = createSimulation(local, 8612, {sleepingNpcs: true});
+      this.room?.configure(this.sim.nav, local);
       this.resize(true);
       this.listen(this.canvas, 'webglcontextlost', event => {event.preventDefault(); cancelAnimationFrame(this.raf); this.audio.suspend(); this.onError();});
-      const props = createPlacements(world, this.sim.nav.walkable);
       const tiles = art.ground.tiles;
-      const entries = [...tiles, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}];
+      // round 4: ground detail decals and the plaza paving lie on the tiles; the library stair is a deck like the jetties
+      const decals = decalsFor(world, props, geometry({...world, obstacles: []}).walkable);
+      const flats = [{src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1}, ...decals.map(d => ({...d, resolution: 2.5}))];
+      const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
+      const decks = [...JETTIES, ...STEPS];
+      const entries = [...tiles, ...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];   // boss 3 Nov: arched jetties right after the tiles
       const sources = entries.map(p => p.src);
       this.loaded.push(...sources);
       const textures = await Promise.all(entries.map(p => acquire(p.src, p.resolution)));
       if (this.disposed) return;
-      this.ocean=new TilingSprite({texture:textures[textures.length-1],width:world.width,height:world.height});this.scene.addChildAt(this.ocean,0);
+      this.ocean=new TilingSprite({texture:textures[tiles.length + decks.length + props.length + art.floating.length],width:world.width,height:world.height});this.scene.addChildAt(this.ocean,0);
       tiles.forEach((tile, i) => {
         const sprite = new Sprite(textures[i]);
         sprite.position.set(tile.x, tile.y);
@@ -114,31 +138,43 @@ export class PixiIsland {
         sprite.height = tile.height;
         this.ground.addChild(sprite);
       });
+      const base = tiles.length + decks.length, flatBase = base + props.length + art.floating.length + 1;
+      this.flats = new Container({label: 'Ground detail'}); this.ground.addChild(this.flats);
+      flats.forEach((d, i) => {
+        const sprite = new Sprite(textures[flatBase + i]);
+        sprite.position.set(d.x, d.y); sprite.width = d.width; sprite.height = d.height;
+        if (i) {sprite.anchor.set(.5, 1); sprite.width = d.width; if (d.flip) sprite.scale.x *= -1;}   // decals sit on their base point
+        this.flats.addChild(sprite);
+      });
+      decks.forEach((jetty, i) => {
+        const sprite = new Sprite(textures[tiles.length + i]);
+        sprite.position.set(jetty.x, jetty.y);
+        sprite.width = jetty.width;
+        sprite.height = jetty.height;
+        this.decks.addChild(sprite);
+      });
       this.floating=art.floating.map((item,i)=>{
-        const sprite=new Sprite(textures[tiles.length+props.length+i]);
+        const sprite=new Sprite(textures[base+props.length+i]);
         sprite.anchor.set(item.anchor.x,item.anchor.y);sprite.position.set(item.x,item.y);
         sprite.width=item.width;sprite.height=item.height;this.floatLayer.addChild(sprite);
         return {...item,sprite};
       });
       this.props = props.map((prop, i) => {
-        const name=prop.asset||prop.name,tree=/tree/i.test(name),boat=/boat/i.test(name);
+        const name=prop.asset||prop.name;
         let shadow;
-        // GPT plants carry their own tight base shadow (boss 3 Nov: fix the tree base), so no extra ground shadow here.
-        if(!/bunting|banner|flag|bridge|reeds|shell|blanket|^(tree|bush|flower)-\d/i.test(name)){
-          const width=prop.width*prop.scale,height=prop.height*prop.scale;
-          const radius=Math.max(7,Math.min(140,width*(tree?.34:.32))),depth=Math.max(3,Math.min(20,height*.04));
-          shadow=new Graphics().ellipse(radius*.22,5,radius*1.16,depth*1.2).fill({color:boat?0x245569:0x304732,alpha:.065})
-            .ellipse(0,2,tree?Math.max(9,width*.075):radius*.65,tree?5:depth*.58).fill({color:0x243a2b,alpha:.13});
-          shadow.position.set(prop.x,prop.y);this.contactShadows.addChild(shadow);
-        }
+        // boss 3 Nov, fix 4: the redrawn plants carry no baked shadow, so plants get the one engine shadow too
+        if(!NO_SHADOW.test(name)){shadow=contactShadow(prop);shadow.position.set(prop.x,prop.y);this.contactShadows.addChild(shadow);}
 
-        const sprite = new Sprite(textures[tiles.length + i]);
+        const sprite = new Sprite(textures[base + i]);
         sprite.anchor.set(prop.anchor.x, prop.anchor.y);
         sprite.position.set(prop.x, prop.y);
         sprite.width = prop.width * prop.scale;
         sprite.height = prop.height * prop.scale;
         sprite.zIndex = prop.y;
-        this.objects.addChild(sprite);
+        sprite.standing = true;
+        if (prop.flip) sprite.scale.x *= -1;   // round 4: plants flip and tint so a spread-out lawn does not look stamped
+        if (prop.tint) sprite.tint = prop.tint;
+        (/bridge/i.test(name) ? this.decks : this.objects).addChild(sprite);   // boss 3 Nov: bridges lie under the Duckies who cross them
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
       this.localDucks = this.room ? this.sim.ducks.slice(1) : this.sim.ducks;
@@ -176,10 +212,10 @@ export class PixiIsland {
     this.props = this.props.filter(prop => prop !== rowingProp);
     this.ripples = [];
     world.water.forEach((lake, index) => {
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 4; i++) {   // fix 9: 2-4 cream ripples per water feature
         const phase = i * 2.399 + index;
-        const ripple = new Graphics().ellipse(0, 0, 21, 5).stroke({width: 2, color: '#d5fbff', alpha: .6});
-        ripple.position.set(lake.x + Math.cos(phase) * lake.rx * (.2 + i / 18), lake.y + Math.sin(phase) * lake.ry * .7);
+        const ripple = new Graphics().moveTo(-21, 0).quadraticCurveTo(0, -6, 21, 0).stroke({width: 2, color: PALETTE.cream, alpha: .6, cap: 'round'});   // boss 3 Nov fix 9: cream ripple marks, no rings
+        ripple.position.set(lake.x + Math.cos(phase) * lake.rx * (.25 + i / 8), lake.y + Math.sin(phase) * lake.ry * .7);
         this.water.addChild(ripple);
         this.ripples.push({sprite: ripple, phase,x:ripple.x,y:ripple.y});
       }
@@ -191,13 +227,13 @@ export class PixiIsland {
       this.air.addChild(crow.root);
       return {...crow,...flight};
     });
-    this.butterflies=[{x:2230,y:2280,color:'#ff669d'},{x:3420,y:2270,color:'#9271cf'}].map((item,i)=>{
+    this.butterflies=[{x:2230,y:2280,color:PALETTE.coral},{x:3420,y:2270,color:PALETTE.sun}].map((item,i)=>{
       const butterfly=createButterfly(item.color);this.air.addChild(butterfly.root);
       return {...item,...butterfly,phase:i*2.4+1};
     });
     this.leaves = [];
     this.props.filter(p => /tree/.test(p.name)).forEach((tree, i) => {
-      const leaf = new Graphics().ellipse(0, 0, 6, 2.5).fill(i % 3 ? '#a9c96d' : '#f3d77b');
+      const leaf = new Graphics().ellipse(0, 0, 6, 2.5).fill(i % 3 ? PALETTE.grass : PALETTE.sandShade);
       this.air.addChild(leaf);
       this.leaves.push({sprite: leaf, x: tree.x, y: tree.y - 150, phase: i * 1.93});
     });
@@ -206,13 +242,13 @@ export class PixiIsland {
     const fountain = this.props.find(p => p.asset === 'fountain-wishing');
     this.fountainWater = fountain ? createFountainWater(fountain, this.objects) : null;
     for (let i = 0; i < 0; i++) {
-      const drop = new Graphics().ellipse(0, 0, 2.5, 4).fill('#ddfaff');
+      const drop = new Graphics().ellipse(0, 0, 2.5, 4).fill(PALETTE.cream);
       this.objects.addChild(drop);
       drop.zIndex = 2351;
       this.droplets.push(drop);
     }
-    this.splashes=[].map((side,i)=>{const sprite=new Graphics().ellipse(0,0,16,5).stroke({color:0xddfaff,width:1.8});sprite.position.set(2820+side*62,2260);this.objects.addChild(sprite);sprite.zIndex=2351;return {sprite,phase:i*.5};});
-    this.marker = new Graphics().ellipse(0, 0, 20, 9).stroke({width: 3, color: '#fff9da', alpha: .8});
+    this.splashes=[].map((side,i)=>{const sprite=new Graphics().ellipse(0,0,16,5).stroke({color:PALETTE.cream,width:1.8});sprite.position.set(2820+side*62,2260);this.objects.addChild(sprite);sprite.zIndex=2351;return {sprite,phase:i*.5};});
+    this.marker = new Graphics().ellipse(0, 0, 20, 9).stroke({width: 3, color: PALETTE.cream, alpha: .8});
     this.marker.visible = false;
     this.water.addChild(this.marker);
   }
@@ -424,6 +460,8 @@ export class PixiIsland {
     this.minZoom = fitZoom(this.width, this.height, world.width, world.height);
     if (initial) {
       this.camera.zoom = Math.min(this.width / 1500, this.height / 1000);   // closer in, like Cursor Camp
+      const cam = new URLSearchParams(location.search).get('cam')?.split(',').map(Number);   // boss 3 Nov: ?cam=x,y,zoom for QA shots
+      if (cam?.length === 3 && cam.every(Number.isFinite)) Object.assign(this.camera, {x: cam[0], y: cam[1], zoom: cam[2]});
       Object.assign(this.target, this.camera);
     } else if(this.fitMode){this.fit();Object.assign(this.camera,this.target);}
   }
@@ -462,7 +500,7 @@ export class PixiIsland {
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
     this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);
     this.scene.position.set(this.width / 2 - this.camera.x * this.camera.zoom, this.height / 2 - this.camera.y * this.camera.zoom * TILT);
-    for (const layer of [this.objects, this.air]) for (const child of layer.children) if (!child.upright) {child.upright = true; child.scale.y /= TILT;}
+    for (const layer of [this.objects, this.air, this.decks]) for (const child of layer.children) if (!child.upright && (layer !== this.decks || child.standing)) {child.upright = true; child.scale.y /= TILT;}   // the pond bridge stands up; the jetties lie flat
     const halfWidth = this.width / (2 * this.camera.zoom), halfHeight = this.height / (2 * this.camera.zoom * TILT);
     const visible = (x,y,pad=350) => Math.abs(x-this.camera.x)<halfWidth+pad && Math.abs(y-this.camera.y)<halfHeight+pad;
     this.ocean.position.set(this.camera.x-halfWidth-256,this.camera.y-halfHeight-256);this.ocean.width=halfWidth*2+512;this.ocean.height=halfHeight*2+512;
@@ -486,7 +524,7 @@ export class PixiIsland {
       const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
-      rig.root.position.set(x, y);
+      rig.root.position.set(x, deckY(x, y));   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
       rig.root.visible = visible(x, y, 200);
       if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping});
@@ -607,7 +645,7 @@ export class PixiIsland {
       entry.emoteVersion = emoteVersion;
       const rig = entry.rig;
       if (!rig) continue;
-      rig.root.position.set(x,y);
+      rig.root.position.set(x,deckY(x,y));
       rig.root.zIndex = y;
       rig.root.visible = visible(x,y,200);
       if (rig.root.visible) rig.update(dt, {action, speed:travel, turn, time, reducedMotion, emoteVersion});

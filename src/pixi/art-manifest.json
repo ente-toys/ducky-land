@@ -805,24 +805,24 @@
       "artboard": "Prop 16",
       "src": "/pixi-art/prop-16.svg",
       "width": 940,
-      "height": 218,
+      "height": 300,
       "viewBox": [
         -470,
-        -158,
+        -240,
         940,
-        218
+        300
       ],
       "anchor": {
         "x": 0.5,
-        "y": 0.7247706422018348
+        "y": 0.8
       },
       "origin": {
         "x": 470,
-        "y": 158
+        "y": 240
       },
       "bounds": {
         "minX": -470,
-        "minY": -158,
+        "minY": -240,
         "maxX": 470,
         "maxY": 60
       },

@@ -1,4 +1,5 @@
 import {Graphics} from 'pixi.js';
+import {PALETTE} from './palette.js';
 
 // The southeastern stretch of the "Sandy coast" path in ground.svg.
 const shore = [
@@ -56,9 +57,9 @@ export function createBeachSurf(layer) {
         const fade = Math.min(1, age * 6, (1 - age) * 8);
         crest.clear();
         trace(crest, offset, age, false);
-        crest.stroke({color:0x80cce5, width:20 + 14 * age, alpha:.36 * fade, cap:'round', join:'round'});
+        crest.stroke({color:PALETTE.cream, width:20 + 14 * age, alpha:.14 * fade, cap:'round', join:'round'});   // boss 3 Nov fix 9: a faint cream wash
         trace(crest, offset, age, true);
-        crest.stroke({color:0xf5ffff, width:5 + 4 * age, alpha:.9 * fade, cap:'round', join:'round'});
+        crest.stroke({color:PALETTE.cream, width:5 + 4 * age, alpha:.9 * fade, cap:'round', join:'round'});   // the one broken foam band
       }
     },
   };

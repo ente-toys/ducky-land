@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="260" viewBox="2780 1370 280 260">
+  <title>Stone steps cut into the library bank</title>
+  <g stroke="#39472D" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Continuous stonework fills the cut between the two retaining walls. -->
+    <path d="M2845 1382H2995L3015 1582 3030 1618H2810L2825 1582Z" fill="#FDE48C" stroke="none"/>
+    <g id="top-landing">
+      <path d="M2845 1382H2995L2998 1410H2842Z" fill="#FFF0C7" stroke="none"/>
+      <path d="M2845 1382H2995" fill="none" stroke-width="2.22"/>
+      <path d="M2916 1382 2918 1410" fill="none" stroke-width="1.11"/>
+    </g>
+    <g id="five-deep-treads" stroke-width="1.11">
+      <path d="M2842 1410H2998L3001 1435H2839Z" fill="#FDE48C" stroke="none"/>
+      <path d="M2839 1435H3001L3002 1444H2838Z" fill="#E4C567" stroke="none"/>
+      <path d="M2838 1444H3002L3005 1469H2835Z" fill="#FDE48C" stroke="none"/>
+      <path d="M2835 1469H3005L3006 1478H2834Z" fill="#E4C567" stroke="none"/>
+      <path d="M2834 1478H3006L3009 1503H2831Z" fill="#FDE48C" stroke="none"/>
+      <path d="M2831 1503H3009L3010 1512H2830Z" fill="#E4C567" stroke="none"/>
+      <path d="M2830 1512H3010L3013 1537H2827Z" fill="#FDE48C" stroke="none"/>
+      <path d="M2827 1537H3013L3014 1546H2826Z" fill="#E4C567" stroke="none"/>
+      <path d="M2826 1546H3014L3017 1571H2823Z" fill="#FDE48C" stroke="none"/>
+      <path d="M2823 1571H3017L3018 1580H2822Z" fill="#E4C567" stroke="none"/>
+      <path d="M2842 1410H2998M2839 1435H3001M2838 1444H3002M2835 1469H3005M2834 1478H3006M2831 1503H3009M2830 1512H3010M2827 1537H3013M2826 1546H3014M2823 1571H3017M2822 1580H3018" fill="none"/>
+    </g>
+    <g id="paved-apron">
+      <path d="M2822 1580H3018L3030 1618H2810Z" fill="#FDE48C" stroke="none"/>
+      <path d="M2810 1618H3030" fill="none" stroke-width="2.22"/>
+      <path d="M2816 1599H3024M2878 1580 2875 1599M2960 1580 2963 1599M2918 1599 2917 1618" fill="none" stroke-width="1.11"/>
+    </g>
+    <g id="left-bank-wall">
+      <path d="M2825 1382 2845 1382 2822 1580 2810 1618 2799 1604 2805 1568Z" fill="#E4C567" stroke="none"/>
+      <path d="M2825 1382H2845L2822 1568 2805 1568Z" fill="#FFF0C7" stroke="none"/>
+      <path d="M2825 1382H2845L2822 1568V1580L2810 1618 2799 1604 2805 1568Z" fill="none" stroke-width="2.22"/>
+      <path d="M2805 1568H2822M2810 1526 2827 1526M2816 1479 2833 1479M2820 1431 2839 1431" fill="none" stroke-width="1.11"/>
+    </g>
+    <g id="right-bank-wall">
+      <path d="M2995 1382H3015L3035 1568 3041 1604 3030 1618 3018 1580Z" fill="#E4C567" stroke="none"/>
+      <path d="M2995 1382H3015L3035 1568H3018Z" fill="#FFF0C7" stroke="none"/>
+      <path d="M2995 1382H3015L3035 1568 3041 1604 3030 1618 3018 1580V1568Z" fill="none" stroke-width="2.22"/>
+      <path d="M3018 1568H3035M3013 1526 3030 1526M3007 1479 3024 1479M3001 1431 3020 1431" fill="none" stroke-width="1.11"/>
+    </g>
+  </g>
+</svg>

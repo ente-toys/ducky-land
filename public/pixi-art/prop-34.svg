@@ -1,50 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="475" viewBox="-285 -430 600 475" data-detail="1">
-<title>The Little Library</title>
-<defs><clipPath id="roof-panels"><path d="M-25-377 43-425 282-285 215-234Z" /></clipPath><linearGradient id="light-ace0d5d1" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#638f63" /><stop offset="32%" stop-color="#407540" /><stop offset="68%" stop-color="#326632" /><stop offset="100%" stop-color="#2b582b" /></linearGradient><linearGradient id="light-cf2d5f8b" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#ece1c9" /><stop offset="32%" stop-color="#e7dabd" /><stop offset="68%" stop-color="#d7caad" /><stop offset="100%" stop-color="#baaf96" /></linearGradient><linearGradient id="light-123e7498" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#d5c8ae" /><stop offset="32%" stop-color="#cbbc9c" /><stop offset="68%" stop-color="#bbac8c" /><stop offset="100%" stop-color="#a2957a" /></linearGradient><linearGradient id="light-3b9aab9f" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#fff7e4" /><stop offset="32%" stop-color="#fff5de" /><stop offset="68%" stop-color="#eee4ce" /><stop offset="100%" stop-color="#cfc6b2" /></linearGradient><pattern id="surface-masonry" patternUnits="userSpaceOnUse" width="52.77777777777778" height="52.77777777777778"><path d="M0 26.38888888888889 H52.77777777777778 M0 52.77777777777778 H52.77777777777778 M17.15277777777778 0 V26.38888888888889 M43.541666666666664 26.38888888888889 V52.77777777777778" fill="none" stroke="#8a7960" stroke-width="0.6597222222222223" opacity=".12" /></pattern><linearGradient id="light-5286132d" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#8a96a9" /><stop offset="32%" stop-color="#6f7e95" /><stop offset="68%" stop-color="#606e86" /><stop offset="100%" stop-color="#536074" /></linearGradient><linearGradient id="light-3ceff564" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#7a859a" /><stop offset="32%" stop-color="#5c6a83" /><stop offset="68%" stop-color="#4d5b74" /><stop offset="100%" stop-color="#424f64" /></linearGradient><linearGradient id="light-77b2d7cd" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#f7ecca" /><stop offset="32%" stop-color="#f6e7be" /><stop offset="68%" stop-color="#e5d7ae" /><stop offset="100%" stop-color="#c6ba97" /></linearGradient><linearGradient id="light-8fa40f87" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#d4c8a8" /><stop offset="32%" stop-color="#cabb94" /><stop offset="68%" stop-color="#baab85" /><stop offset="100%" stop-color="#a19473" /></linearGradient><linearGradient id="light-4ec9f58b" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#c9b999" /><stop offset="32%" stop-color="#bda982" /><stop offset="68%" stop-color="#ad9973" /><stop offset="100%" stop-color="#968564" /></linearGradient><linearGradient id="light-8a48ed2f" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#c0ae8f" /><stop offset="32%" stop-color="#b29c76" /><stop offset="68%" stop-color="#a28c67" /><stop offset="100%" stop-color="#8c7a59" /></linearGradient><linearGradient id="light-4e525016" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#d5d1c8" /><stop offset="32%" stop-color="#cbc6bb" /><stop offset="68%" stop-color="#bbb6ab" /><stop offset="100%" stop-color="#a29e94" /></linearGradient><linearGradient id="light-0692c8f4" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#bebab2" /><stop offset="32%" stop-color="#afaba0" /><stop offset="68%" stop-color="#9f9b91" /><stop offset="100%" stop-color="#8a867e" /></linearGradient><linearGradient id="light-374d6f46" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#e2ede9" /><stop offset="32%" stop-color="#dbe8e5" /><stop offset="68%" stop-color="#cbd8d4" /><stop offset="100%" stop-color="#b0bbb8" /></linearGradient><linearGradient id="light-a385920b" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#fffbf3" /><stop offset="32%" stop-color="#fffaf1" /><stop offset="68%" stop-color="#eeeae0" /><stop offset="100%" stop-color="#cfcac2" /></linearGradient><linearGradient id="light-796648ec" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#d0c0a0" /><stop offset="32%" stop-color="#c5b28a" /><stop offset="68%" stop-color="#b5a27a" /><stop offset="100%" stop-color="#9d8c6a" /></linearGradient><linearGradient id="light-d27cd753" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#8674b5" /><stop offset="32%" stop-color="#6b55a4" /><stop offset="68%" stop-color="#5c4695" /><stop offset="100%" stop-color="#4f3d81" /></linearGradient><linearGradient id="light-85dfa0a6" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#aa97dc" /><stop offset="32%" stop-color="#967fd4" /><stop offset="68%" stop-color="#8770c4" /><stop offset="100%" stop-color="#7561aa" /></linearGradient><linearGradient id="light-edf4f6fa" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#f5dd7b" /><stop offset="32%" stop-color="#f3d55d" /><stop offset="68%" stop-color="#e2c54f" /><stop offset="100%" stop-color="#c4ab44" /></linearGradient><linearGradient id="light-0b9acf66" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#e2dfd7" /><stop offset="32%" stop-color="#dbd7ce" /><stop offset="68%" stop-color="#cbc7be" /><stop offset="100%" stop-color="#b0ada4" /></linearGradient><linearGradient id="light-c88edd93" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#c8c6c0" /><stop offset="32%" stop-color="#bcb9b2" /><stop offset="68%" stop-color="#aca9a2" /><stop offset="100%" stop-color="#95938c" /></linearGradient><linearGradient id="light-9fe9850e" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#e8e5dd" /><stop offset="32%" stop-color="#e3dfd5" /><stop offset="68%" stop-color="#d2cfc5" /><stop offset="100%" stop-color="#b6b3ab" /></linearGradient><linearGradient id="light-30f5b871" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#dde9e6" /><stop offset="32%" stop-color="#d5e5e1" /><stop offset="68%" stop-color="#c5d4d1" /><stop offset="100%" stop-color="#abb8b5" /></linearGradient></defs>
-<g stroke="#292a30" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
-<ellipse cx="15" cy="12" rx="270" ry="29" fill="url(#light-ace0d5d1)" opacity=".2" stroke="none" />
-<path d="M-235-235 190-235 255-285 255-42 190 12-235 12Z" fill="url(#light-cf2d5f8b)" />
-<path d="M190-235 255-285 255-42 190 12Z" fill="url(#light-123e7498)" />
-<path d="M-235-235-25-359 190-235V0H-235Z" fill="url(#light-3b9aab9f)" />
-<path d="M-235-235-25-359 190-235V0H-235Z" fill="url(#surface-masonry)" stroke="none" />
-<path d="M-235-235-25-359 190-235" fill="none" stroke="#b9aa8c" stroke-width="9" />
-<path d="M-260-236-25-377 43-425 282-285 215-234-25-362Z" fill="url(#light-5286132d)" />
-<path d="M-25-377 43-425 282-285 215-234Z" fill="url(#light-3ceff564)" />
-<path d="M-260-236-25-377 215-234 215-219-25-359-260-221Z" fill="url(#light-77b2d7cd)" />
-<path d="M215-234 282-285 282-270 215-219Z" fill="url(#light-8fa40f87)" />
-<path d="M-251-231-25-367 207-231 M-244-222-25-355 200-222" fill="none" stroke="#d3bf8e" stroke-width="2" />
-<path clip-path="url(#roof-panels)" d="M35-341 103-390 M95-305 163-355 M155-270 222-320 M-3-393 237-251 M20-409 260-268" fill="none" stroke="#74839d" stroke-width="2" />
-<path d="M-238-217H188V-202H-238Z" fill="url(#light-4ec9f58b)" />
-<path d="M190-218 255-268V-254L190-203Z" fill="url(#light-8a48ed2f)" />
-<path d="M-235-13H190V12H-235Z" fill="url(#light-4e525016)" />
-<path d="M-235-13H190V12H-235Z" fill="url(#surface-masonry)" stroke="none" />
-<path d="M190-13 255-65V-42L190 12Z" fill="url(#light-0692c8f4)" />
-<path d="M190-13 255-65V-42L190 12Z" fill="url(#surface-masonry)" stroke="none" />
-<path d="M-218-205V-25 M174-205V-25" fill="none" stroke="#e7d8b6" stroke-width="8" />
-<circle cx="-25" cy="-281" r="27" fill="url(#light-374d6f46)" stroke="#846b4b" stroke-width="6" />
-<path d="M-25-306V-256 M-50-281H0" fill="none" stroke="#846b4b" stroke-width="4" />
-<rect x="-180" y="-187" width="310" height="43" rx="5" fill="url(#light-a385920b)" stroke="#a89069" stroke-width="2" />
-<rect x="-180" y="-187" width="310" height="43" rx="5" fill="url(#surface-masonry)" stroke="none" stroke-width="2" />
-<text x="-25" y="-159" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="21" fill="#292a30" stroke="none">THE LITTLE LIBRARY</text>
-<g fill="#e1eeee" stroke="#876d4a" stroke-width="6">
-<path d="M-194-123Q-194-139-178-139H-130Q-114-139-114-123V-56H-194Z" />
-<path d="M59-123Q59-139 75-139H123Q139-139 139-123V-56H59Z" />
-</g>
-<path d="M-154-136V-59 M-191-103H-117 M99-136V-59 M62-103H136" fill="none" stroke="#a28256" stroke-width="5" />
-<path d="M-190-131-172-135-190-114 M65-131 84-135 65-114" fill="none" stroke="white" stroke-width="4" />
-<path d="M-203-53H-105V-45H-203Z M50-53H148V-45H50Z" fill="url(#light-796648ec)" />
-<path d="M-79 0V-81C-79-149 29-149 29-81V0Z" fill="url(#light-d27cd753)" stroke="#483b69" stroke-width="5" />
-<path d="M-68 0V-81C-68-135 17-135 17-81V0Z" fill="url(#light-85dfa0a6)" stroke="none" />
-<path d="M-58-11V-77C-58-117 7-117 7-77V-11Z" fill="none" stroke="#b7a5e8" stroke-width="2" />
-<circle cx="5" cy="-48" r="5" fill="url(#light-edf4f6fa)" stroke-width="1.7" />
-<path d="M-94 0H44L55 13H-105Z" fill="url(#light-0b9acf66)" />
-<path d="M-94 0H44L55 13H-105Z" fill="url(#surface-masonry)" stroke="none" />
-<path d="M-105 13H55V25H-105Z" fill="url(#light-c88edd93)" />
-<path d="M-105 13H55V25H-105Z" fill="url(#surface-masonry)" stroke="none" />
-<path d="M-113 25H63L72 37H-122Z" fill="url(#light-9fe9850e)" />
-<path d="M-113 25H63L72 37H-122Z" fill="url(#surface-masonry)" stroke="none" />
-<path d="M209-211 237-233V-137L209-115Z" fill="url(#light-30f5b871)" stroke="#846b4b" stroke-width="5" />
-<path d="M223-222V-125 M209-164 237-185" fill="none" stroke="#846b4b" stroke-width="4" />
-<path d="M-213-29H-180 M120-29H153 M198-55 219-72" fill="none" stroke="#b6a98f" stroke-width="2" />
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="475" viewBox="-285 -430 600 475">
+  <title>Hilltop library</title>
+  <g stroke="#39472D" stroke-linecap="round" stroke-linejoin="round">
+    <!-- All receding edges use the same (70, -230) ground direction. -->
+    <g id="building">
+      <path d="M-235 -110H235L305 -340H-165Z" fill="#FDE48C" stroke="none"/>
+      <path d="M235 -110 305 -340V-258L235 -28Z" fill="#E4C567" stroke="none"/>
+      <path d="M-235 -110 0 -185 235 -110V-28H-235Z" fill="#FDE48C" stroke="none"/>
+      <path d="M-235 -110 0 -185 235 -110V-96L0 -171 -235 -96Z" fill="#E4C567" stroke="none"/>
+      <path d="M-235 -110V-28H235L305 -258V-340M235 -110V-28" fill="none" stroke-width="1.71"/>
+    </g>
+    <g id="roof">
+      <path d="M-235 -110 -165 -340 70 -415 305 -340 235 -110 0 -185Z" fill="#C88941" stroke="none"/>
+      <!-- One broad shade along the lower right roof slope. -->
+      <path d="M151 -137 221 -367 305 -340 235 -110Z" fill="#885931" stroke="none"/>
+      <path d="M-235 -110 -165 -340 70 -415 305 -340 235 -110 0 -185Z" fill="none" stroke-width="1.71"/>
+      <path d="M0 -185 70 -415" fill="none" stroke-width="0.85"/>
+      <path d="M-137 -199 -103 -311M101 -239 133 -344" fill="none" stroke="#885931" stroke-width="0.85"/>
+    </g>
+    <g id="gable" stroke-width="0.85">
+      <circle cx="0" cy="-151" r="13" fill="#6EC9DE"/>
+      <path d="M0 -164V-138M-13 -151H13" fill="none"/>
+      <!-- A book carved into the facade, with two pages and a wooden spine. -->
+      <path d="M-39 -120Q-20 -125 0 -113Q20 -125 39 -120V-89Q20 -94 0 -83Q-20 -94 -39 -89Z" fill="#C88941"/>
+      <path d="M-34 -116Q-18 -120 -4 -111V-90Q-18 -98 -34 -94Z" fill="#FFF0C7"/>
+      <path d="M4 -111Q18 -120 34 -116V-94Q18 -98 4 -90Z" fill="#FFF0C7"/>
+    </g>
+    <g id="shelf-windows" stroke-width="0.85">
+      <rect x="-177" y="-91" width="84" height="52" rx="7" fill="#885931"/>
+      <rect x="93" y="-91" width="84" height="52" rx="7" fill="#885931"/>
+      <g stroke="none">
+        <path d="M-169 -84H-158V-67H-169Z M-134 -85H-122V-67H-134Z M101 -84H112V-67H101Z M137 -85H149V-67H137Z" fill="#6EC9DE"/>
+        <path d="M-155 -81H-140V-67H-155Z M-118 -82H-103V-67H-118Z M116 -81H131V-67H116Z M153 -82H167V-67H153Z" fill="#E4C567"/>
+        <path d="M-169 -59H-155V-43H-169Z M-135 -59H-122V-43H-135Z M101 -59H115V-43H101Z M137 -59H150V-43H137Z" fill="#C88941"/>
+        <path d="M-151 -56H-139V-43H-151Z M-118 -58H-103V-43H-118Z M119 -56H131V-43H119Z M154 -58H167V-43H154Z" fill="#6EC9DE"/>
+      </g>
+      <path d="M-177 -63H-93M93 -63H177" fill="none"/>
+      <path d="M-181 -37H-89M89 -37H181" fill="none"/>
+    </g>
+    <g id="door" stroke-width="0.85">
+      <path d="M-33 -28V-56Q-33 -82 0 -82Q33 -82 33 -56V-28Z" fill="#C88941"/>
+      <path d="M22 -75Q33 -68 33 -56V-28H20V-62Q20 -70 22 -75Z" fill="#885931" stroke="none"/>
+      <path d="M0 -78V-31" fill="none"/>
+      <circle cx="15" cy="-48" r="2.8" fill="#39472D" stroke="none"/>
+    </g>
+    <g id="doorstep">
+      <path d="M-64 -5H64V0H-64Z" fill="#E4C567" stroke="none"/>
+      <path d="M-64 -5 -57 -28H71L64 -5Z" fill="#FFF0C7" stroke="none"/>
+      <path d="M-57 -28H71L64 -5V0H-64V-5Z" fill="none" stroke-width="1.71"/>
+      <path d="M-64 -5H64" fill="none" stroke-width="0.85"/>
+    </g>
+  </g>
 </svg>

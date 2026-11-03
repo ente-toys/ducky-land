@@ -5,7 +5,10 @@ export function createSimulation(world,seed=8612,{sleepingNpcs=false}={}){
  const nav=createNavigation(world),zones=Object.keys(world.zones),ducks=[],responses=[];
  const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
  const rnd=(a,b)=>a+(b-a)*random();let time=0;
- for(let i=0;i<29;i++){const zone=i===0?'plaza':zones[Math.floor((i-1)/4)],z=world.zones[zone];const p=nav.nearest(z.spawn[0]+(i?rnd(-250,250):0),z.spawn[1]+(i?rnd(-130,130):0),400)||z.spawn;
+ // round 4: a Ducky never spawns on furniture (any footprint plus .5H) or stacked on another (1H apart)
+ const furnitureNear=(x,y)=>(world.obstacles||[]).some(o=>((x-o.x)/(o.rx+65))**2+((y-o.y)/(o.ry+65))**2<1);
+ const spawnAt=(i,z)=>{let best=null;for(let k=0;k<40;k++){const r=1+k/14,p=nav.nearest(z.spawn[0]+(i?rnd(-250,250)*r:0),z.spawn[1]+(i?rnd(-130,130)*r:0),400);if(!p)continue;best=best||p;if(!i||(!furnitureNear(...p)&&ducks.every(d=>Math.hypot(d.x-p[0],d.y-p[1])>130)))return p;}return best;};
+ for(let i=0;i<29;i++){const zone=i===0?'plaza':zones[Math.floor((i-1)/4)],z=world.zones[zone];const p=spawnAt(i,z)||z.spawn;
  ducks.push({id:i,x:p[0],y:p[1],previousX:p[0],previousY:p[1],zone,player:i===0,sleeping:i>0&&sleepingNpcs,action:i>0&&sleepingNpcs?7:0,until:0,turn:0,path:[],wait:rnd(.3,3),speed:i?rnd(65,105):245,travel:0,emoteVersion:0,outfit:{cap:i?1+(i-1)%13:8,shades:i%4===0?1+i%3:0,acc:i%3===0?1+i%7:0,shoes:1+i%10}});}
  const player=ducks[0];
  // Boss 3 Nov: only quack, dance and sleep; heart, laugh, wave, grumpy and party are off.
