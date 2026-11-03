@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 360">
+  <title>Tall soft pear tree</title>
+  <desc>Original Ducky Land plant. Bottom-centre anchor (0.5, 1). Height 360 map units; Ducky height 120.</desc>
+  <g id="plant" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g id="trunk" fill="#D58E50">
+      <path d="M76 358.25 Q82 327 80 287 L100 287 Q98 327 104 358.25 Z" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="crown" fill="#08C225">
+      <path d="M90 2 C116 2 128 35 132 70 C136 106 143 129 157 156 C170 181 178 207 178 232 C178 277 147 305 90 305 C33 305 2 277 2 232 C2 207 10 181 23 156 C37 129 44 106 48 70 C52 35 64 2 90 2 Z" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="highlight" fill="#73E861" stroke="none">
+      <path d="M65 76 C68 45 76 24 90 17 C80 41 81 63 79 83 C77 114 69 143 58 165 C52 176 42 172 47 159 C57 134 62 106 65 76 Z" stroke="none" stroke-opacity="0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>

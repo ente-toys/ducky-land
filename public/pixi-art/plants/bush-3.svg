@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 116 104">
+  <title>Small berry bush</title>
+  <desc>Original Ducky Land plant. Bottom-centre anchor (0.5, 1). Height 104 map units; Ducky height 120.</desc>
+  <g id="plant" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g id="crown" fill="#08C225">
+      <path d="M30 102.25 C12 102.25 2 88 2 72 C2 54 13 41 29 39 C27 18 42 2 61 2 C82 2 97 20 92 42 C107 47 114 59 114 74 C114 91 103 102.25 85 102.25 Z" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="highlight" fill="#73E861" stroke="none">
+      <path d="M42 30 C44 20 51 14 61 14 C53 20 54 27 51 33 C48 39 40 37 42 30 Z" stroke="none" stroke-opacity="0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="berries" fill="#F4779E">
+      <circle cx="35" cy="67" r="7" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="73" cy="47" r="7" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="84" cy="78" r="7" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>

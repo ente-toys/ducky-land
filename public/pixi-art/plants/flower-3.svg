@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 36">
+  <title>Blue bell flower pair</title>
+  <desc>Original Ducky Land plant. Bottom-centre anchor (0.5, 1). Height 36 map units; Ducky height 120.</desc>
+  <g id="plant" stroke="#232323" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <g id="stems" fill="none">
+      <path d="M22 34.5 Q20 19 11 10 M22 34.5 Q24 18 34 14" stroke="#232323" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="leaf" fill="#08C225">
+      <path d="M22 33 C13 34 8 30 7 25 C14 23 20 26 22 33 Z" stroke="#232323" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="petals" fill="#91BCFF">
+      <path d="M11 1.5 C17 1.5 20 7 19 12 L22 16 Q18 21 15 17 Q11 22 7 17 Q3 21 1.5 16 L4 12 C3 7 5 1.5 11 1.5 Z" stroke="#232323" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M33 7 C39 7 41 12 40 17 L42.5 21 Q39 26 36 22 Q33 27 30 22 Q26 26 24 21 L27 17 C26 12 28 7 33 7 Z" stroke="#232323" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g id="highlight" fill="#D8E8FF" stroke="none">
+      <path d="M8 7 C8 4 12 4 13 6 C11 8 10 11 8 11 C6 11 7 8 8 7 Z" stroke="none" stroke-opacity="0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>
