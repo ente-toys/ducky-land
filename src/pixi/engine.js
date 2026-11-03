@@ -11,7 +11,7 @@ import {createSimulation} from './simulation.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets, renderDuckAtlas} from './rive-duck.js';   // boss 3 Nov: the approved Rive Ducky
 import {createPlacements} from './placements.js';
-import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, zoomAt} from './camera.js';
+import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from './camera.js';
 
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
@@ -222,7 +222,7 @@ export class PixiIsland {
         movePinch(this.camera, movement.before, movement.after, this.minZoom*.8, 1.8, this.width, this.height);
       } else if (movement.drag) {
         this.camera.x -= movement.dx / this.camera.zoom;
-        this.camera.y -= movement.dy / this.camera.zoom;
+        this.camera.y -= movement.dy / (this.camera.zoom * TILT);
         this.gust = clamp(movement.dx * .005, -.5, .5);
       } else return;
       this.follow = false;
@@ -245,7 +245,7 @@ export class PixiIsland {
       const p = point(event);
       const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? this.height : 1);
       Object.assign(this.target, this.camera);
-      zoomAt(this.target, clamp(this.camera.zoom * Math.exp(-delta * .0018), this.minZoom*.8, 1.8), p.x, p.y, this.width, this.height);
+      zoomAt(this.target, clamp(this.camera.zoom * Math.exp(-delta * .0018), this.minZoom*.8, 1.8), p.x, this.height / 2 + (p.y - this.height / 2) / TILT, this.width, this.height);   // tilt-aware wheel anchor
       this.follow = false;this.fitMode=false;this.constrain(this.target);
     }, {passive: false});
     this.listen(window, 'keydown', event => {
@@ -331,7 +331,7 @@ export class PixiIsland {
     this.app.renderer.resize(this.width, this.height);
     this.minZoom = fitZoom(this.width, this.height, world.width, world.height);
     if (initial) {
-      this.camera.zoom = Math.min(this.width / 1850, this.height / 1250);
+      this.camera.zoom = Math.min(this.width / 1500, this.height / 1000);   // closer in, like Cursor Camp
       Object.assign(this.target, this.camera);
     } else if(this.fitMode){this.fit();Object.assign(this.camera,this.target);}
   }
@@ -352,14 +352,16 @@ export class PixiIsland {
     const t = this.sim.time;
     const reduced = this.motion.matches;
     if(this.sim.player.action===1&&!this.fitMode&&!this.gestures.pointers.size){
-      const x=this.width/2+(this.sim.player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(this.sim.player.y-this.camera.y)*this.camera.zoom;
+      const x=this.width/2+(this.sim.player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(this.sim.player.y-this.camera.y)*this.camera.zoom*TILT;
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
     if (this.follow) Object.assign(this.target, {x: this.sim.player.x, y: this.sim.player.y - 90});
     easeCamera(this.camera, this.target, dt, reduced);
-    this.scene.scale.set(this.camera.zoom);
-    this.scene.position.set(this.width / 2 - this.camera.x * this.camera.zoom, this.height / 2 - this.camera.y * this.camera.zoom);
-    const halfWidth = this.width / (2 * this.camera.zoom), halfHeight = this.height / (2 * this.camera.zoom);
+    // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
+    this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);
+    this.scene.position.set(this.width / 2 - this.camera.x * this.camera.zoom, this.height / 2 - this.camera.y * this.camera.zoom * TILT);
+    for (const layer of [this.objects, this.air]) for (const child of layer.children) if (!child.upright) {child.upright = true; child.scale.y /= TILT;}
+    const halfWidth = this.width / (2 * this.camera.zoom), halfHeight = this.height / (2 * this.camera.zoom * TILT);
     const visible = (x,y,pad=350) => Math.abs(x-this.camera.x)<halfWidth+pad && Math.abs(y-this.camera.y)<halfHeight+pad;
     this.ocean.position.set(this.camera.x-halfWidth-256,this.camera.y-halfHeight-256);this.ocean.width=halfWidth*2+512;this.ocean.height=halfHeight*2+512;
     this.ocean.tilePosition.set(-this.ocean.x+(reduced?0:t*2),-this.ocean.y+(reduced?0:t*.7));
