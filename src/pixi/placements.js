@@ -13,13 +13,14 @@ const replacements = {
 };
 
 function place(asset, point) {
-  return {...point, asset: asset.name, src: urls[`../../${asset.file}`],
+  return {...point, asset: asset.name, src: original.enhancedAssets[asset.file] || urls[`../../${asset.file}`],
     width: asset.size.width, height: asset.size.height, resolution: .5,
     anchor: {x: asset.anchor.x / asset.size.width, y: asset.anchor.y / asset.size.height}, scale: .24};
 }
 
 export function createPlacements(world, walkable) {
   const props = original.props.map(prop => {
+    if (prop.zone === 'lighthouse-beach') return prop;
     const asset = byName.get(replacements[prop.name]);
     return asset ? place(asset, prop) : prop;
   });
@@ -28,6 +29,7 @@ export function createPlacements(world, walkable) {
     && !/^(tree-|fence-|sand-edge|bench-|lamp-|sign)/.test(asset.name));
   details.forEach((asset, i) => {
     const zone = asset.category === 'beach' ? 'lighthouse-beach' : asset.category === 'food' ? 'bread-forest' : zones[i % zones.length];
+    if (zone === 'lighthouse-beach') return;
     const z = world.zones[zone], angle = i * 2.399963, radius = 190 + (i % 5) * 53;
     const x = z.x + Math.cos(angle) * radius, y = z.y + 180 + Math.sin(angle) * radius * .6;
     if (!walkable(x,y) || Math.hypot(x-z.spawn[0],y-z.spawn[1]) < 110) return;

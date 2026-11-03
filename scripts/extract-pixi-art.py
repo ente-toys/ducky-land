@@ -15,12 +15,15 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import hashlib
 import json
 import math
 from pathlib import Path
 import struct
 import sys
+sys.dont_write_bytecode=True
+from polish_svg import polish_svg,pigment,tint
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape, quoteattr
 
@@ -364,6 +367,74 @@ def cropped_view_box(board, padding=3):
     return [x, y, width, height]
 
 
+def continuous_footpaths(ground,world):
+    paths=[path_data(node.find('PointsPath')) for node in ground.artboard.iter('Shape') if node.get('name')=='Footpath']
+    links=['M1620 2970 C1690 2970 1750 2930 1820 2930',
+           'M1490 1890 C1560 1870 1620 1800 1680 1760',
+           'M2490 1360 C2650 1430 2780 1440 2920 1440',
+           'M2920 1440 L3120 1300',
+           'M3050 3080 L3200 3040',
+           'M4150 2070 L4150 1910',
+           'M3650 1240 L3660 1350',
+           'M4740 1640 L5050 1640',
+           'M1130 3080 C1180 2990 1260 2900 1350 2870',
+           'M2320 3280 C2325 3220 2350 3170 2380 3130',
+           'M3320 3335 L3320 3230',
+           'M3940 3260 C3940 3170 3920 3120 3910 3070',
+           'M2920 1440 L2920 1210']
+    d=' '.join([path[0] for path in paths]+links)
+    indices=[i for i,record in enumerate(ground.records) if 'data-name="Footpath' in record[0]]
+    first=indices[0]
+    ground.records[:]=[record for i,record in enumerate(ground.records) if i not in indices]
+    paved_names={'Cream plaza','Race track sand','Lighthouse beach'}
+    green_names={'Forest bread crumbs clearing','Library hill top','Library hill side'}
+    background=f'<rect width="{world["width"]}" height="{world["height"]}" fill="white"/>'
+    mask_box=f'maskUnits="userSpaceOnUse" x="0" y="0" width="{world["width"]}" height="{world["height"]}"'
+    paved=[];green=[];race=[]
+    for node in ground.geometry:
+        if node.get('name') in paved_names:
+            geometry,_=ground.geometry[node]
+            paved.append(f'<path d="{geometry}" transform="{matrix_svg(ground.transforms[node])}" fill="black"/>')
+        if node.get('name') in green_names:
+            geometry,_=ground.geometry[node]
+            green.append(f'<path d="{geometry}" transform="{matrix_svg(ground.transforms[node])}" fill="white"/>')
+        if node.get('name')=='Race track grassy rim':
+            geometry,_=ground.geometry[node]
+            race.append(f'<path d="{geometry}" transform="{matrix_svg(ground.transforms[node])}" fill="white"/>')
+    ground.clip_defs['race-paths']=f'<mask id="race-paths" {mask_box}><rect width="{world["width"]}" height="{world["height"]}" fill="black"/>{"".join(race)}</mask>'
+    ground.clip_defs['green-paths']=f'<mask id="green-paths" {mask_box}><rect width="{world["width"]}" height="{world["height"]}" fill="black"/>{"".join(green)}</mask>'
+    ground.clip_defs['paved-surfaces']=f'<mask id="paved-surfaces" {mask_box}>{background}{"".join(paved)}</mask>'
+    ground.clip_defs['path-openings']=f'<mask id="path-openings" {mask_box}>{background}<path d="{d}" fill="none" stroke="black" stroke-width="115" stroke-linecap="round" stroke-linejoin="round"/></mask>'
+    for i,record in enumerate(ground.records):
+        if any(f'data-name="{name} Ink"' in record[0] for name in paved_names|green_names|{'Race track grassy rim'}):
+            ground.records[i]=(f'<g mask="url(#path-openings)">{record[0]}</g>',record[1],(*record[2],'path-openings'),record[3])
+    svg=f'<g data-name="Continuous footpaths" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="{d}" mask="url(#paved-surfaces)" stroke="#232323" stroke-width="119"/><path d="{d}" stroke="#fff4c5" stroke-width="115"/></g>'
+    bounds=grow(bounds_of([point for _,points in paths for point in points]+[(5050,1640),(3940,3260),(1130,3080)]),60)
+    ground.records.insert(first,(svg,bounds,('paved-surfaces',),False))
+    above_green=max(i for i,record in enumerate(ground.records) if any(f'data-name="{name} Ink"' in record[0] for name in green_names))+1
+    ground.records.insert(above_green,(f'<g mask="url(#green-paths)">{svg}</g>',bounds,('paved-surfaces','green-paths'),False))
+    above_rim=next(i for i,record in enumerate(ground.records) if 'data-name="Race track grassy rim Ink"' in record[0])+1
+    ground.records.insert(above_rim,(f'<g mask="url(#race-paths)">{svg}</g>',bounds,('paved-surfaces','race-paths'),False))
+
+
+def boardwalk_depth(world):
+    parts=[]
+    for bridge in world['walkways']:
+        ax,ay=bridge['a'];bx,by=bridge['b'];dx,dy=bx-ax,by-ay;length=math.hypot(dx,dy)
+        nx,ny=dy/length*bridge['w']/2,-dx/length*bridge['w']/2
+        top=[(ax-nx,ay-ny),(ax+nx,ay+ny),(bx+nx,by+ny),(bx-nx,by-ny)]
+        polygon=lambda points:' '.join(number(x)+','+number(y) for x,y in points)
+        parts.append(f'<polygon points="{polygon([(x+13,y+28) for x,y in top])}" fill="#245c69" opacity=".19"/>')
+        for fraction in (.18,.5,.82):
+            for side in (-1,1):
+                x=ax+dx*fraction+nx*side*1.05;y=ay+dy*fraction+ny*side*1.05
+                parts.append(f'<ellipse cx="{number(x+9)}" cy="{number(y+30)}" rx="13" ry="5" fill="#245c69" opacity=".18"/>')
+                parts.append(f'<path d="M{number(x-6)} {number(y)} v31 l12 3 v-34Z" fill="#714323" stroke="#232323" stroke-width="1.5"/>')
+        parts.append(f'<polygon points="{polygon([top[1],top[2],(top[2][0]+5,top[2][1]+15),(top[1][0]+5,top[1][1]+15)])}" fill="#89502c" stroke="#232323" stroke-width="1.6"/>')
+        parts.append(f'<polygon points="{polygon([top[2],top[3],(top[3][0]+5,top[3][1]+15),(top[2][0]+5,top[2][1]+15)])}" fill="#a45f32" stroke="#232323" stroke-width="1.6"/>')
+    return ('<g data-name="Boardwalk depth">'+''.join(parts)+'</g>',[0,0,world['width'],world['height']],(),False)
+
+
 def exports():
     source_bytes, world_bytes, font_data = SOURCE.read_bytes(), WORLD.read_bytes(), FONT.read_bytes()
     root, world, font_metrics = ET.fromstring(source_bytes), json.loads(world_bytes), FontMetrics(font_data)
@@ -371,7 +442,60 @@ def exports():
     if len(world['props']) != 83:
         raise ValueError('Expected the original 83 island props')
     output = {}
+    enhanced_assets={}
+    library=json.loads((ROOT/'assets/manifest.json').read_text())
+    for asset in library['assets']:
+        file='detail/'+asset['file'].removeprefix('assets/').replace('/','--')
+        output[OUTPUT/file]=polish_svg((ROOT/asset['file']).read_text(),asset['name'])
+        enhanced_assets[asset['file']]='/pixi-art/'+file
+    floating=[]
+    for i,node in enumerate(list(artboards['Island Ground'])):
+        if node.get('name')!='Pond lily':continue
+        x,y=attr(node,'x'),attr(node,'y')
+        board_root=ET.Element('Artboard',{'name':f'Floating lily {i}'})
+        local=copy.deepcopy(node);local.set('x','0');local.set('y','0');board_root.append(local)
+        board=Board(board_root,font_data,font_metrics);box=cropped_view_box(board);vx,vy,w,h=box
+        file=f'lily-{len(floating):02d}.svg'
+        output[OUTPUT/file]=polish_svg(board.svg(box,'Floating pond lily'),'lily')
+        floating.append({'src':'/pixi-art/'+file,'x':x,'y':y,'width':w,'height':h,'anchor':{'x':-vx/w,'y':-vy/h},'phase':len(floating)*2.399963})
+        artboards['Island Ground'].remove(node)
+    water_texture='<g fill="none"><path d="M-20 36 C25 10 70 9 98 32 S160 62 193 32 S241 6 276 36 M-20 111 C18 138 68 131 96 106 S154 78 194 110 S244 140 276 111 M98 32 C125 60 66 80 96 106 M193 32 C163 60 223 83 194 110" stroke="#e3fbff" stroke-width="1.5" opacity=".16"/><path d="M25 73 Q39 68 53 73 M153 145 Q169 140 187 145 M215 72 Q229 77 242 72" stroke="#f0ffff" stroke-width="1.8" opacity=".3"/><path d="M4 151 Q27 144 43 151 M131 10 Q145 17 161 10" stroke="#285e82" stroke-width="1.2" opacity=".08"/></g>'
+    output[OUTPUT/'water-texture.svg']='<svg xmlns="http://www.w3.org/2000/svg" width="256" height="160" viewBox="0 0 256 160">'+water_texture+'</svg>\n'
     ground = Board(artboards['Island Ground'], font_data, font_metrics, exclude_sea=True)
+    ground.clip_defs['lake-texture']='<pattern id="lake-texture" patternUnits="userSpaceOnUse" width="256" height="160">'+water_texture+'</pattern>'
+    for i,record in enumerate(ground.records):
+        if not any(f'data-name="{name}"' in record[0] for name in ('Lake water','Lake water Lit')):continue
+        element=ET.fromstring(record[0]);keys=[]
+        parents={child:parent for parent in element.iter() for child in parent}
+        for painted in list(element.iter('path')):
+            rgb=pigment(painted.get('fill',''))
+            if not rgb:continue
+            key='water-depth-'+''.join(f'{c:02x}' for c in rgb)
+            stops=''.join(f'<stop offset="{offset}" stop-color="{tint(rgb,amount)}"/>' for offset,amount in [('0%',.17),('40%',0),('100%',-.24)])
+            ground.clip_defs[key]=f'<linearGradient id="{key}" x1="0%" y1="0%" x2="75%" y2="100%">{stops}</linearGradient>'
+            painted.set('fill',f'url(#{key})');keys.append(key)
+            texture=copy.deepcopy(painted);texture.set('fill','url(#lake-texture)');texture.set('stroke','none');parent=parents[painted];parent.insert(list(parent).index(painted)+1,texture);keys.append('lake-texture')
+        ground.records[i]=(ET.tostring(element,encoding='unicode'),record[1],(*record[2],*keys),record[3])
+    ground.clip_defs['boardwalk-grain']='<pattern id="boardwalk-grain" patternUnits="userSpaceOnUse" width="36" height="12"><path d="M-5 3 C7 0 19 7 41 2 M-4 10 C12 6 22 13 40 8" fill="none" stroke="#704122" stroke-width=".7" opacity=".22"/></pattern>'
+    for i,record in enumerate(ground.records):
+        timber=any(f'data-name="{name}"' in record[0] for name in ('Boardwalk plank','Boardwalk plank Lit'))
+        stone=any(f'data-name="{name}"' in record[0] for name in ('Hill stair','Hill stair Lit'))
+        if not timber and not stone:continue
+        element=ET.fromstring(record[0]);keys=[]
+        for parent in list(element.iter()):
+            for painted in list(parent):
+                rgb=pigment(painted.get('fill',''))
+                if painted.tag!='path' or not rgb:continue
+                key='ground-material-'+''.join(f'{c:02x}' for c in rgb)
+                stops=''.join(f'<stop offset="{offset}" stop-color="{tint(rgb,amount)}"/>' for offset,amount in [('0%',.23),('45%',.03),('100%',-.18)])
+                ground.clip_defs[key]=f'<linearGradient id="{key}" x1="0%" y1="0%" x2="0%" y2="100%">{stops}</linearGradient>'
+                painted.set('fill',f'url(#{key})');keys.append(key)
+                if timber:
+                    grain=copy.deepcopy(painted);grain.set('fill','url(#boardwalk-grain)');grain.set('stroke','none');parent.insert(list(parent).index(painted)+1,grain);keys.append('boardwalk-grain')
+        ground.records[i]=(ET.tostring(element,encoding='unicode'),record[1],(*record[2],*keys),record[3])
+    continuous_footpaths(ground,world)
+    first_plank=next(i for i,record in enumerate(ground.records) if 'data-name="Boardwalk plank' in record[0])
+    ground.records.insert(first_plank,boardwalk_depth(world))
     width, height = world['width'], world['height']
     ground_box = [0, 0, width, height]
     output[OUTPUT/'ground.svg'] = ground.svg(ground_box, 'Ducky Land — original island ground')
@@ -391,16 +515,26 @@ def exports():
         view_box = cropped_view_box(board)
         x, y, w, h = view_box
         file = f'prop-{i:02d}.svg'
-        output[OUTPUT/file] = board.svg(view_box, prop['name'])
+        stats=board.stats
+        if prop['name']=='Little library':
+            building=(ROOT/'assets/library-building.svg').read_text()
+            svg_root=ET.fromstring(building)
+            view_box=[float(n) for n in svg_root.get('viewBox').split()]
+            names=[el.tag.split('}')[-1] for el in svg_root.iter()]
+            stats={'paintedShapes':sum(names.count(tag) for tag in ('path','rect','circle','ellipse')),'paths':names.count('path'),'clippingShapes':names.count('clipPath'),'textNodes':names.count('text')}
+            x,y,w,h=view_box
+            output[OUTPUT/file]=polish_svg(building,prop['name'])
+        else:output[OUTPUT/file] = polish_svg(board.svg(view_box, prop['name']),prop['name'])
         props.append({'id': i, 'name': prop['name'], 'artboard': prop['artboard'], 'src': '/pixi-art/'+file,
                       'width': w, 'height': h, 'viewBox': view_box,
                       'anchor': {'x': -x/w, 'y': -y/h}, 'origin': {'x': -x, 'y': -y},
                       'bounds': {'minX': x, 'minY': y, 'maxX': x+w, 'maxY': y+h},
                       'x': prop['x'], 'y': prop['y'], 'scale': prop.get('scale', 1), 'zone': prop['zone'],
-                      'stats': board.stats})
+                      'stats': stats})
     manifest = {
         'schemaVersion': 1,
         'source': 'rive/island.rml',
+        'overrides':{'Prop 34':'assets/library-building.svg'},
         'sourceSha256': hashlib.sha256(source_bytes).hexdigest(),
         'worldSource': 'rive/web/world.json',
         'worldSha256': hashlib.sha256(world_bytes).hexdigest(),
@@ -410,12 +544,16 @@ def exports():
         'ground': {'src': '/pixi-art/ground.svg', 'width': width, 'height': height, 'viewBox': ground_box,
                    'transparent': True, 'excludedShape': 'Sea', 'tiles': tiles, 'stats': ground.stats},
         'props': props,
+        'floating':floating,
+        'enhancedAssets':enhanced_assets,
         'text': {'method': 'SVG text with embedded original Gilroy Black TrueType font', 'fontSource': 'rive/fonts/Gilroy-Black.ttf'},
     }
     output[MANIFEST] = json.dumps(manifest, indent=2, ensure_ascii=False)+'\n'
     # A plain SVG/HTML review page, independent of any rendering engine.
     # It is useful for inspecting source parity before consuming the textures.
     images = [f'<image href="ground.svg" width="{width}" height="{height}"/>']
+    for lily in floating:
+        images.append(f'<image href="{lily["src"].split("/")[-1]}" x="{number(lily["x"]-lily["anchor"]["x"]*lily["width"])}" y="{number(lily["y"]-lily["anchor"]["y"]*lily["height"])}" width="{lily["width"]}" height="{lily["height"]}"/>')
     for prop in sorted(props, key=lambda p: p['y']):
         vx, vy, pw, ph = prop['viewBox']
         s = prop['scale']

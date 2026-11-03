@@ -1,0 +1,17 @@
+<!doctype html><html><meta charset="utf-8"><title>Scenery review</title><style>body{margin:0;background:#fff4d7;font:16px system-ui;display:flex;gap:20px;padding:15px}figure{margin:0}figcaption{padding:10px}svg{background:#80c5dc;height:620px;width:510px;border:1px solid #d3c89c}body:has(figure:only-of-type) svg{width:900px;height:650px}</style><script type="module">
+import art from '../src/pixi/art-manifest.json';import {floatingPose}from '../src/pixi/floating.js';
+import {createNavigation} from '../src/three/navigation.js';import world from '../rive/web/world.json';import {createPlacements}from '../src/pixi/placements.js';
+const props=createPlacements(world,createNavigation(world).walkable).sort((a,b)=>a.y-b.y);
+for(const [label,box]of (new URLSearchParams(location.search).has('library')?[['Library: roof, side wall, windows, and entrance',[2490,670,870,850]]]:new URLSearchParams(location.search).has('pond')?[['Pond: gently drifting lily pads',[1150,2300,1000,720]]]:new URLSearchParams(location.search).has('paths')?[['Lily pond: continuous path junction',[1350,2740,900,500]],['Woods and southern junctions',[1100,1650,2550,1850]]]:[['Beach: original props, no extra scatter',[4250,2080,1100,1250]],['Boardwalk: supports, thickness, shadow',[2120,3210,380,760]]])){
+const figure=document.createElement('figure'),caption=document.createElement('figcaption');caption.textContent=label;figure.append(caption);
+const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox',box.join(' '));
+function image(src,x,y,w,h){const el=document.createElementNS(svg.namespaceURI,'image');for(const [key,value]of Object.entries({href:src,x,y,width:w,height:h}))el.setAttribute(key,value);svg.append(el);return el;}
+image('/pixi-art/ground.svg',0,0,world.width,world.height);
+const lilies=art.floating.map(item=>({item,el:image(item.src,item.x-item.anchor.x*item.width,item.y-item.anchor.y*item.height,item.width,item.height)}));
+const start=performance.now();
+function tick(now){for(const {item,el}of lilies){const pose=floatingPose(item,(now-start)/1000,matchMedia('(prefers-reduced-motion: reduce)').matches);el.setAttribute('transform',`translate(${pose.x-item.x} ${pose.y-item.y}) rotate(${pose.rotation*180/Math.PI} ${item.x} ${item.y})`);}requestAnimationFrame(tick);}requestAnimationFrame(tick);
+
+for(const prop of props)image(prop.src,prop.x-prop.anchor.x*prop.width*prop.scale,prop.y-prop.anchor.y*prop.height*prop.scale,prop.width*prop.scale,prop.height*prop.scale);
+figure.append(svg);document.body.append(figure);
+}
+</script></html>

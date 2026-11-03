@@ -13,5 +13,5 @@ export function createAudio(){
   const source=context.createBufferSource(),gain=context.createGain();source.buffer=buffers.get(name);gain.gain.value=volume;source.connect(gain).connect(context.destination);sources.add(source);
   source.onended=()=>{sources.delete(source);source.disconnect();gain.disconnect();};source.start();
  }
- return {unlock:()=>unlock().catch(()=>{}),play,toggle(){muted=!muted;if(muted)for(const source of sources)source.stop();},suspend(){context?.suspend().catch(()=>{});},resume(){if(context)context.resume().catch(()=>{});},dispose(){disposed=true;buffers.clear();for(const source of sources)source.stop();sources.clear();context?.close().catch(()=>{});}};
+ return {unlock:()=>unlock().catch(()=>{}),play,get muted(){return muted;},toggle(){muted=!muted;if(muted)for(const source of sources)source.stop();},suspend(){context?.suspend().catch(()=>{});},resume(){if(context)context.resume().catch(()=>{});},dispose(){disposed=true;buffers.clear();for(const source of sources)source.stop();sources.clear();context?.close().catch(()=>{});}};
 }

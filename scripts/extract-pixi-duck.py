@@ -1,6 +1,8 @@
 """Extract original illustrated duck layers; no Rive runtime or editor required."""
 from pathlib import Path
-import copy, json, math, re, xml.etree.ElementTree as E
+import copy, json, math, re, sys, xml.etree.ElementTree as E
+sys.dont_write_bytecode=True
+from polish_svg import polish_svg
 ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'public/pixi-duck';OUT.mkdir(parents=True,exist_ok=True)
 NS='{http://www.w3.org/2000/svg}'
@@ -49,12 +51,12 @@ def bounds(el):
 def write_svg(name,elements,defs=()):
     wrapper=E.Element(NS+'g')
     for el in elements:wrapper.append(copy.deepcopy(el))
-    b=bounds(wrapper);x,y=math.floor(b[0]-3),math.floor(b[1]-3);w,h=math.ceil(b[2]-x+3),math.ceil(b[3]-y+3)
+    b=bounds(wrapper);padding=max(3,max((float(el.get('stroke-width',0))/2+1 for el in wrapper.iter()),default=0));x,y=math.floor(b[0]-padding),math.floor(b[1]-padding);w,h=math.ceil(b[2]-x+padding),math.ceil(b[3]-y+padding)
     svg=E.Element(NS+'svg',{'width':str(w),'height':str(h),'viewBox':f'{x} {y} {w} {h}'})
     for definition in defs:svg.append(copy.deepcopy(definition))
     svg.append(wrapper)
     for el in svg.iter():el.attrib.pop('style',None)
-    E.ElementTree(svg).write(OUT/name,encoding='unicode')
+    (OUT/name).write_text(polish_svg(E.tostring(svg,encoding='unicode'),name))
     return {'url':'/pixi-duck/'+name,'rect':[x,y,w,h]}
 
 views=[]
@@ -104,9 +106,12 @@ for slot,values in numbers.items():
             for side in [-1,1]:
                 selected=[el for el in drawable if (-1 if sum(bounds(el)[::2])/2<355 else 1)==side]
                 part=write_svg(f'{slot}-{n}-{side}.svg',selected,defs);part['side']=side;item['parts'].append(part)
-        else:item['parts']=[write_svg(f'{slot}-{n}.svg',drawable,defs)]
+        else:
+            item['parts']=[write_svg(f'{slot}-{n}.svg',drawable,defs)]
         preview=list((ROOT/'drip-ref/svg').glob(f'{prefix.title() if slot=="cap" else prefix} prev {n}-*.svg'));item['aliases']=[str(p.relative_to(ROOT)) for p in preview]
         wardrobe.append(item)
-manifest={'version':1,'scale':1/3,'sourceCoordinateScale':.88,'sourceAnchor':[360,776],'views':views,'wardrobe':wardrobe}
+from pixi_wardrobe_frames import build_frames
+build_frames(views,wardrobe,OUT,write_svg,ROOT)
+manifest={'version':2,'scale':1/3,'sourceCoordinateScale':.88,'sourceAnchor':[360,776],'views':views,'wardrobe':wardrobe}
 (OUT/'manifest.json').write_text(json.dumps(manifest,separators=(',',':'))+'\n')
 print(f'Extracted {len(views)} directions, {sum(len(v["parts"]) for v in views)} articulated layers, and {len(wardrobe)} wardrobe designs.')

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="475" viewBox="-285 -430 600 475">
+<title>The Little Library</title>
+<defs><clipPath id="roof-panels"><path d="M-25-377 43-425 282-285 215-234Z"/></clipPath></defs>
+<g stroke="#292a30" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+<ellipse cx="15" cy="12" rx="270" ry="29" fill="#356d35" opacity=".2" stroke="none"/>
+<path d="M-235-235 190-235 255-285 255-42 190 12-235 12Z" fill="#e6d8b9"/>
+<path d="M190-235 255-285 255-42 190 12Z" fill="#c8b896"/>
+<path d="M-235-235-25-359 190-235V0H-235Z" fill="#fff4dc"/>
+<path d="M-235-235-25-359 190-235" fill="none" stroke="#b9aa8c" stroke-width="9"/>
+<path d="M-260-236-25-377 43-425 282-285 215-234-25-362Z" fill="#67768f"/>
+<path d="M-25-377 43-425 282-285 215-234Z" fill="#52617c"/>
+<path d="M-260-236-25-377 215-234 215-219-25-359-260-221Z" fill="#f5e6ba"/>
+<path d="M215-234 282-285 282-270 215-219Z" fill="#c7b78e"/>
+<path d="M-251-231-25-367 207-231 M-244-222-25-355 200-222" fill="none" stroke="#d3bf8e" stroke-width="2"/>
+<path clip-path="url(#roof-panels)" d="M35-341 103-390 M95-305 163-355 M155-270 222-320 M-3-393 237-251 M20-409 260-268" fill="none" stroke="#74839d" stroke-width="2"/>
+<path d="M-238-217H188V-202H-238Z" fill="#b9a47b"/>
+<path d="M190-218 255-268V-254L190-203Z" fill="#ad966e"/>
+<path d="M-235-13H190V12H-235Z" fill="#c8c3b7"/>
+<path d="M190-13 255-65V-42L190 12Z" fill="#aaa69b"/>
+<path d="M-218-205V-25 M174-205V-25" fill="none" stroke="#e7d8b6" stroke-width="8"/>
+<circle cx="-25" cy="-281" r="27" fill="#d9e7e3" stroke="#846b4b" stroke-width="6"/>
+<path d="M-25-306V-256 M-50-281H0" fill="none" stroke="#846b4b" stroke-width="4"/>
+<rect x="-180" y="-187" width="310" height="43" rx="5" fill="#fffaf0" stroke="#a89069" stroke-width="2"/>
+<text x="-25" y="-159" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="21" fill="#292a30" stroke="none">THE LITTLE LIBRARY</text>
+<g fill="#e1eeee" stroke="#876d4a" stroke-width="6">
+<path d="M-194-123Q-194-139-178-139H-130Q-114-139-114-123V-56H-194Z"/>
+<path d="M59-123Q59-139 75-139H123Q139-139 139-123V-56H59Z"/>
+</g>
+<path d="M-154-136V-59 M-191-103H-117 M99-136V-59 M62-103H136" fill="none" stroke="#a28256" stroke-width="5"/>
+<path d="M-190-131-172-135-190-114 M65-131 84-135 65-114" fill="none" stroke="white" stroke-width="4"/>
+<path d="M-203-53H-105V-45H-203Z M50-53H148V-45H50Z" fill="#c2ad83"/>
+<path d="M-79 0V-81C-79-149 29-149 29-81V0Z" fill="#624b9f" stroke="#483b69" stroke-width="5"/>
+<path d="M-68 0V-81C-68-135 17-135 17-81V0Z" fill="#9078d2" stroke="none"/>
+<path d="M-58-11V-77C-58-117 7-117 7-77V-11Z" fill="none" stroke="#b7a5e8" stroke-width="2"/>
+<circle cx="5" cy="-48" r="5" fill="#f2d354" stroke-width="1.7"/>
+<path d="M-94 0H44L55 13H-105Z" fill="#d9d5cb"/>
+<path d="M-105 13H55V25H-105Z" fill="#b8b5ad"/>
+<path d="M-113 25H63L72 37H-122Z" fill="#e1ddd3"/>
+<path d="M209-211 237-233V-137L209-115Z" fill="#d3e3df" stroke="#846b4b" stroke-width="5"/>
+<path d="M223-222V-125 M209-164 237-185" fill="none" stroke="#846b4b" stroke-width="4"/>
+<path d="M-213-29H-180 M120-29H153 M198-55 219-72" fill="none" stroke="#b6a98f" stroke-width="2"/>
+</g>
+</svg>
