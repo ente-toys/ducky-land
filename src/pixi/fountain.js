@@ -1,6 +1,7 @@
-// Living water for the wishing-bowls fountain (boss 3 Nov). The stone, bowls and statue are one static SVG
-// (public/pixi-art/fountain-wishing.svg); this layer animates the water on top of it: highlights running down the three
-// spills, rings spreading where they land, a few splash drops, a slow swirl in the upper bowl and glints on the pool.
+// Living water for the wishing-bowls fountain (boss 3 Nov: "make the fountain water more lively"). The stone, bowls and
+// statue are one static SVG (public/pixi-art/fountain-wishing.svg); this layer animates the water on top of it:
+// wobbling spills with fast streaks, foam and rings where they land, a bubbling spray round the statue's feet,
+// droplets thrown out under gravity, and shimmer travelling round both pools.
 import {Container, Graphics} from 'pixi.js';
 
 // Points in the SVG's own units (480 x 339 viewBox, the art is shifted up 50 inside it).
@@ -12,7 +13,8 @@ const SPILLS = [                                      // top, bottom and width o
 ];
 const BOWL = {x: 240, y: 194, rx: 100, ry: 23};       // upper bowl water
 const POOL = {x: 240, y: 229, rx: 200, ry: 52};       // lower pool water
-const HI = 0xEAF9FF, RIPPLE = 0xFFFFFF;
+const SPRAY = {x: 240, y: 186};                        // the bubbler at the statue's feet
+const WATER = 0x6CCBF2, HI = 0xEAF9FF, WHITE = 0xFFFFFF, GRAVITY = 520;
 const fract = v => v - Math.floor(v);
 
 export function createFountainWater(prop, parent) {
@@ -24,48 +26,82 @@ export function createFountainWater(prop, parent) {
   const g = new Graphics();
   root.addChild(g);
   parent.addChild(root);
-  // Fixed glint spots on the pool, kept off the spill landings.
-  const glints = Array.from({length: 7}, (_, i) => {
-    const a = i * 2.39 + .6, r = .45 + .45 * fract(i * .618);
-    return {x: POOL.x + Math.cos(a) * POOL.rx * r, y: POOL.y + 8 + Math.sin(a) * POOL.ry * r * .8, phase: i * .37};
-  }).filter(p => !SPILLS.some(sp => Math.abs(p.x - sp.x) < 40 && p.y > POOL.y));
+  let last = null, seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const drops = [];                                   // {x, y, vx, vy, floor, r, life}
+  const spawn = (x, y, vx, vy, floor, r) => {if (drops.length < 90) drops.push({x, y, vx, vy, floor, r, life: 1});};
+  const glints = Array.from({length: 9}, (_, i) => {
+    const a = i * 2.39 + .6, r = .4 + .5 * fract(i * .618);
+    return {x: POOL.x + Math.cos(a) * POOL.rx * r, y: POOL.y + 6 + Math.sin(a) * POOL.ry * r * .8, phase: i * .37};
+  }).filter(p => !SPILLS.some(sp => Math.abs(p.x - sp.x) < 36 && p.y > POOL.y));
+  let sprayAcc = 0, splashAcc = 0;
 
   function update(t, reduced, visible) {
     root.visible = visible;
+    const dt = last === null ? 0 : Math.min(.05, Math.max(0, t - last)); last = t;
     if (!visible) return;
     g.clear();
     if (reduced) return;
+
+    // pool shimmer: two bright arcs sweeping round the lower pool, one round the upper bowl
+    for (let i = 0; i < 2; i++) {
+      const a = t * .45 + i * Math.PI;
+      const x = POOL.x + Math.cos(a) * POOL.rx * .78, y = POOL.y + 4 + Math.sin(a) * POOL.ry * .7;
+      g.ellipse(x, y, 30, 4).fill({color: WHITE, alpha: .35 + .25 * Math.sin(a)});
+    }
+    for (let i = 0; i < 3; i++) {
+      const a = t * 1.1 + i * 2.09;
+      g.ellipse(BOWL.x + Math.cos(a) * BOWL.rx * .7, BOWL.y + Math.sin(a) * BOWL.ry * .62, 18, 3.4).fill({color: HI, alpha: .5 + .3 * Math.sin(a)});
+    }
+    // glints winking on the pool
+    for (const p of glints) {
+      const a = Math.max(0, Math.sin(t * 2.2 + p.phase * 6));
+      if (a < .05) continue;
+      g.roundRect(p.x - 11 * a, p.y - 1.6, 22 * a, 3.2, 1.6).fill({color: WHITE, alpha: .85 * a});
+    }
+
     for (const [k, sp] of SPILLS.entries()) {
       const len = sp.bottom - sp.top;
-      // three highlight streaks sliding down the ribbon, accelerating like falling water
+      // the ribbon itself wobbles a little wider and narrower
+      const wob = 1 + .14 * Math.sin(t * 11 + k * 1.7);
+      g.roundRect(sp.x - sp.w * wob / 2, sp.top + 2, sp.w * wob, len - 2, sp.w * .4).fill({color: WATER, alpha: .55});
+      // five streaks racing down, accelerating like falling water
+      for (let i = 0; i < 5; i++) {
+        const u = fract(t * 2.1 + i / 5 + k * .21), y = sp.top + len * u * u, h = 5 + 12 * u;
+        const x = sp.x + (fract(i * .37 + k * .5) - .5) * sp.w * .6 + Math.sin(t * 13 + i) * 1.2;
+        g.roundRect(x - 1.5, y, 3, Math.min(h, sp.bottom - y), 1.5).fill({color: i % 2 ? WHITE : HI, alpha: .9 * (1 - u * .35)});
+      }
+      // foam: a cluster of bubbles churning where the ribbon lands
+      for (let i = 0; i < 6; i++) {
+        const u = fract(t * 1.8 + i / 6 + k * .13), a = i * 1.05 + t * 2;
+        const x = sp.x + Math.cos(a) * sp.w * (.35 + .5 * u), y = sp.bottom + 2 + Math.sin(a) * 4;
+        g.circle(x, y, (2.8 + 2.2 * Math.sin(u * Math.PI)) * (1 - u * .4)).fill({color: WHITE, alpha: .9 * (1 - u)});
+      }
+      // three rings spreading out from the landing
       for (let i = 0; i < 3; i++) {
-        const u = fract(t * 1.35 + i / 3 + k * .21), y = sp.top + len * u * u, h = 6 + 10 * u;
-        const x = sp.x + Math.sin(t * 9 + i + k) * sp.w * .12 - sp.w * .18;
-        g.roundRect(x - 1.6, y, 3.2, Math.min(h, sp.bottom - y), 1.6).fill({color: HI, alpha: .85 * (1 - u * .4)});
-      }
-      // rings spreading where the ribbon lands
-      for (let i = 0; i < 2; i++) {
-        const u = fract(t * .9 + i / 2 + k * .33), rx = sp.w * .5 + 26 * u;
-        g.ellipse(sp.x, sp.bottom + 3, rx, rx * .3).stroke({color: RIPPLE, width: 2.2 * (1 - u) + .6, alpha: .8 * (1 - u)});
-      }
-      // two small drops hopping out of the splash
-      for (let i = 0; i < 2; i++) {
-        const u = fract(t * 1.6 + i * .5 + k * .17), side = i ? 1 : -1;
-        const x = sp.x + side * (4 + 14 * u), y = sp.bottom - 14 * Math.sin(u * Math.PI);
-        g.circle(x, y, 2.4 * (1 - u * .5)).fill({color: HI, alpha: 1 - u});
+        const u = fract(t * 1.05 + i / 3 + k * .33), rx = sp.w * .55 + 44 * u;
+        g.ellipse(sp.x, sp.bottom + 3, rx, rx * .3).stroke({color: WHITE, width: 2.6 * (1 - u) + .5, alpha: .85 * (1 - u)});
       }
     }
-    // slow swirl in the upper bowl: two arcs travelling round the rim of the water
-    for (let i = 0; i < 2; i++) {
-      const a = t * .8 + i * Math.PI;
-      const x = BOWL.x + Math.cos(a) * BOWL.rx * .62, y = BOWL.y + Math.sin(a) * BOWL.ry * .62;
-      g.ellipse(x, y, 16, 3.2).fill({color: HI, alpha: .55 + .25 * Math.sin(a)});
+
+    // particles: the bubbler sprays up round the statue's feet, and every landing throws small splashes
+    sprayAcc += dt * 26;
+    while (sprayAcc >= 1) {
+      sprayAcc--;
+      const side = rnd() * 2 - 1;
+      spawn(SPRAY.x + side * 38, SPRAY.y + 2, side * (30 + 50 * rnd()), -(120 + 90 * rnd()), BOWL.y + 4 + Math.abs(side) * 6, 1.8 + 1.6 * rnd());
     }
-    // glints on the lower pool that fade in and out
-    for (const p of glints) {
-      const a = Math.max(0, Math.sin(t * 1.4 + p.phase * 6));
-      if (a < .05) continue;
-      g.roundRect(p.x - 9 * a, p.y - 1.4, 18 * a, 2.8, 1.4).fill({color: RIPPLE, alpha: .8 * a});
+    splashAcc += dt * 30;
+    while (splashAcc >= 1) {
+      splashAcc--;
+      const sp = SPILLS[Math.floor(rnd() * SPILLS.length)], side = rnd() * 2 - 1;
+      spawn(sp.x + side * sp.w * .4, sp.bottom, side * (40 + 50 * rnd()), -(60 + 70 * rnd()), sp.bottom + 4, 1.6 + 1.4 * rnd());
+    }
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+      d.vy += GRAVITY * dt; d.x += d.vx * dt; d.y += d.vy * dt;
+      if (d.vy > 0 && d.y >= d.floor) {drops.splice(i, 1); continue;}
+      g.circle(d.x, d.y, d.r).fill({color: HI, alpha: .95});
     }
   }
   return {root, update};
