@@ -3,7 +3,7 @@ export {fitZoom, zoomAt, easeCamera, clamp} from '../../rive/web/island-camera.m
 
 // Boss 3 Nov, Cursor Camp look: the ground is seen at a tilt, so screen y is world y squashed by TILT.
 // Trees, stalls and Duckies stay upright (engine.js counter-scales them); only the ground plane foreshortens.
-export const TILT = .72;
+export const TILT = Math.min(1, Math.max(.4, Number(new URLSearchParams(location.search).get('tilt')) || 1));   // boss 3 Nov: top-down (A); ?tilt= still compares angles   // ?tilt= to compare angles
 
 export function screenToWorld(camera, point, width, height) {
   return {
