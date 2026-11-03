@@ -88,7 +88,7 @@ function samplePose(action,t,walkPhase,reduced,speed=165){
       // head, tuft, wings and tail follow a beat late so it reads as many in-between frames
       const k=clamp(speed/165,.7,1.5),c2=walkPhase*2;
       p.bob=-(1-Math.cos(c2))*.5*8*k;p.sway=Math.sin(walkPhase-.35)*.055*k;p.lean=.025*k;
-      p.footL=Math.pow(Math.max(0,step),1.3)*17*k;p.footR=Math.pow(Math.max(0,-step),1.3)*17*k;p.stepL=step*9*k;p.stepR=-step*9*k;
+      p.footL=Math.pow(Math.max(0,step),1.3)*17*k;p.footR=Math.pow(Math.max(0,-step),1.3)*17*k;p.stepL=-Math.cos(walkPhase)*26*k;p.stepR=Math.cos(walkPhase)*26*k;   // boss 4 Nov: planted feet: back while down, forward in the air
       p.wingL=-Math.sin(walkPhase+.6)*.12*k-.03;p.wingR=-Math.sin(walkPhase+.6)*.12*k+.03;
       p.headY=-Math.cos(c2-.9)*2.6*k;p.headTilt=-Math.sin(walkPhase-.7)*.028*k;p.tail=-Math.sin(walkPhase-1.1)*.2*k;break;}
     case 2:{const q=Math.max(0,Math.sin(t*TAU/1.1));p.bill=q*.85;p.headY=-q*9;p.bob=3*(1-q);p.wingL=q*.09;p.wingR=-q*.09;break;}
@@ -137,7 +137,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
   // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
-  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9;
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
   // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
   const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
   const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
@@ -197,8 +197,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   }
   let glide={other:null,w:0};
   function renderView(view,t){
-    const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx();
-    view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
+    const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx(),fwdX=Math.sin(view.spec.angle*Math.PI/180),fwdY=Math.cos(view.spec.angle*Math.PI/180)*.35;
+    view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide+turnLean;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
     view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=1-clamp(-p.bob,0,35)*.01;
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     for(const part of view.parts){
@@ -207,9 +207,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         if(twin){joint.x+=(twin.joint.rest.x-joint.rest.x)*glide.w;joint.y+=(twin.joint.rest.y-joint.rest.y)*glide.w;}
         else joint.scale.set(Math.max(0,1-glide.w*2));}
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
-      if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*.55;joint.rotation=-side*lift*.005;}
-      if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.y+=p.headY;joint.rotation=p.headTilt;}
-      if(part.role==='beak'){joint.y+=p.headY;joint.rotation=p.headTilt;joint.scale.set(1+p.bill*.08,1+p.bill*1.8);}
+      if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;}
+      if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.x+=look.x;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;}
+      if(part.role==='beak'){joint.x+=look.x*1.15;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;joint.scale.set(1+p.bill*.08,1+p.bill*1.8);}
       if(part.role==='tuft'){joint.y+=p.headY*.42;joint.rotation=p.headTilt+p.tail*.35;}
       if(part.role==='tail')joint.rotation=p.tail;
       if(part.role==='toe')joint.visible=!clothing.shoes&&currentAction!==1;
@@ -248,9 +248,21 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
     if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
     landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
-    actionTime+=dt;walkPhase+=dt*9.8*clamp(safe(speed)/165,.55,1.8);
-    const desired=samplePose(currentAction,actionTime,walkPhase,reducedMotion,safe(speed)||165),smoothing=1-Math.exp(-dt/0.11);
+    actionTime+=dt;
+    // boss 4 Nov: steps follow the distance walked (one step per 45 world units), and the waddle eases in over two steps and out on stopping
+    const walking=currentAction===1,v=walking?Math.max(safe(speed),40):lastSpeed*gait;
+    gait+=((walking?1:0)-gait)*(1-Math.exp(-dt/(walking?.22:.16)));
+    walkPhase+=dt*v/45*Math.PI*(walking?1:gait);
+    const still=samplePose(walking?0:currentAction,actionTime,walkPhase,reducedMotion),stride=samplePose(1,actionTime,walkPhase,reducedMotion,v||165);
+    const desired={};for(const key of Object.keys(still))desired[key]=still[key]+(stride[key]-still[key])*(walking||currentAction===0?gait:0);
+    const smoothing=1-Math.exp(-dt/0.08);
     for(const key of Object.keys(pose))pose[key]+=(desired[key]-pose[key])*smoothing;
+    // lean into turns: tilt toward the inside of the curve, head a touch more
+    const turnRate=angleDifference(turnAngle,lastTurn)/Math.max(dt,1e-3);lastTurn=turnAngle;
+    turnLean+=(clamp(-turnRate*.035*gait,-.13,.13)*(reducedMotion?0:1)-turnLean)*(1-Math.exp(-dt/.12));
+    // idle: eyes and beak glance around together now and then (the beak always moves with the eyes)
+    if(!walking&&currentAction===0&&!reducedMotion){lookAt-=dt;if(lookAt<=0){const r=((Math.sin(elapsed*12.9898+phase)*43758.5453)%1+1)%1;lookGoal=r<.4?{x:0,y:0}:{x:(r-.7)*26,y:(r*7%1-.5)*6};lookAt=1.6+r*2.4;}}else lookGoal={x:0,y:0};
+    const ls=1-Math.exp(-dt/.09);look.x+=(lookGoal.x-look.x)*ls;look.y+=(lookGoal.y-look.y)*ls;
     turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.24));   // boss 4 Nov: unhurried turn so the parts are seen moving
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
     if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){current.root.visible=false;current=target;}
