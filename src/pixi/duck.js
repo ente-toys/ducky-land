@@ -179,7 +179,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     for(const part of view.parts){
       const joint=part.joint,side=part.side;joint.position.set(joint.rest.x,joint.rest.y);joint.rotation=0;joint.scale.set(1);
-      if(glide.other&&part.role!=='body'&&part.role!=='shadow'){const twin=partMatch(view,glide.other).get(part);
+      if(glide.other&&part.role!=='shadow'){const twin=partMatch(view,glide.other).get(part);
         if(twin){joint.x+=(twin.joint.rest.x-joint.rest.x)*glide.w;joint.y+=(twin.joint.rest.y-joint.rest.y)*glide.w;}
         else joint.scale.set(Math.max(0,1-glide.w*2));}
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
@@ -218,9 +218,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     actionTime+=dt;walkPhase+=dt*9.8*clamp(safe(speed)/165,.55,1.8);
     const desired=samplePose(currentAction,actionTime,walkPhase,reducedMotion,safe(speed)||165),smoothing=1-Math.exp(-dt/0.11);
     for(const key of Object.keys(pose))pose[key]+=(desired[key]-pose[key])*smoothing;
-    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.16));
+    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.24));   // boss 4 Nov: unhurried turn so the parts are seen moving
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
-    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8){current.root.visible=false;current=target;}
+    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){current.root.visible=false;current=target;}
     {const a=((degrees%360)+540)%360-180,i=byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
       const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
       const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0}:{other,w:current===lo?u:1-u};}
