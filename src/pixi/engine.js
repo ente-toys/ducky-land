@@ -181,6 +181,7 @@ export class PixiIsland {
       this.localDucks = this.room ? this.sim.ducks.slice(1) : this.sim.ducks;
       const results = await Promise.allSettled(this.localDucks.map(d => createDuck({outfit: {}, seed: d.id + 21, isPlayer:d.player})));   // plain Ducky, no Drip outfits
       this.rigs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+      this.rigs.forEach((rig, i) => {if (this.localDucks[i]?.player) rig.arrive?.();});   // boss 4 Nov: your Ducky drops in like the Rive arrival
       if (this.disposed) {this.rigs.forEach(r => r.dispose()); this.rigs = []; disposeDuckAssets().catch(() => {}); return;}
       const failure = results.find(r => r.status === 'rejected');
       if (failure) throw failure.reason;
@@ -615,6 +616,7 @@ export class PixiIsland {
             disposeDuckAssets().catch(() => {});
             return;
           }
+          rig.arrive?.();   // boss 4 Nov: a joining Ducky drops in
           entry.rig = rig;
           rig.root.scale.set(.88 * .24 * 3);
           rig.root.visible = false;

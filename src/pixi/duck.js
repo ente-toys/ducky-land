@@ -44,7 +44,7 @@ function makeView(spec){
   for(const part of spec.parts){
     const created=makeJoint(Assets.get(part.url),part.rect,part.pivot,spec.ground,part.id);
     const item={...part,...created};parts.push(item);
-    if(part.role==='shadow'){created.sprite.alpha=.22;shadow.addChild(created.joint);}
+    if(part.role==='shadow'){shadow.addChild(created.joint);shadow.visible=false;}   // boss 4 Nov: no dark shade under the belly and legs
     else if(part.role==='foot'||part.role==='toe')feet.addChild(created.joint);
     else body.addChildAt(created.joint,body.children.length-1);
   }
@@ -55,12 +55,17 @@ function makeView(spec){
   root.visible=false;
   return {root,shadow,feet,body,clothes,held,behind,parts,spec,brows,expressions,garments:[]};
 }
-const defaultPose=()=>({bob:0,sway:0,lean:0,breath:0,headY:0,headTilt:0,wingL:0,wingR:0,wingForward:0,footL:0,footR:0,stepL:0,stepR:0,bill:0,eye:1,angry:0,tail:0});
-function samplePose(action,t,walkPhase,reduced){
+const defaultPose=()=>({sqx:1,sqy:1,bob:0,sway:0,lean:0,breath:0,headY:0,headTilt:0,wingL:0,wingR:0,wingForward:0,footL:0,footR:0,stepL:0,stepR:0,bill:0,eye:1,angry:0,tail:0});
+function samplePose(action,t,walkPhase,reduced,speed=165){
   const p=defaultPose(),s=Math.sin(t*TAU/2.8),dance=Math.sin(t*TAU/1.35),step=Math.sin(walkPhase);
   p.breath=Math.sin(t*1.8)*.012;p.sway=s*.012;p.headTilt=Math.sin(t*.85)*.014;p.tail=Math.sin(t*2)*.025;
   switch(action){
-    case 1:p.bob=-Math.abs(step)*7;p.sway=step*.035;p.footL=Math.max(0,step)*16;p.footR=Math.max(0,-step)*16;p.stepL=step*8;p.stepR=-step*8;p.wingL=-step*.09;p.wingR=-step*.09;p.headY=Math.cos(walkPhase*2)*2;break;
+    case 1:{// boss 4 Nov: the Rive waddle: rock onto the standing foot, squash on each footfall, stretch as it passes, head and tail follow late
+      const k=clamp(speed/165,.7,1.5),lift=Math.abs(step),contact=Math.pow(1-lift,4);
+      p.bob=-Math.pow(lift,.8)*9*k;p.sqy=1-contact*.07*k+lift*.025;p.sqx=1+contact*.06*k-lift*.012;
+      p.sway=step*.065*k;p.lean=.03*k;
+      p.footL=Math.pow(Math.max(0,step),1.4)*18*k;p.footR=Math.pow(Math.max(0,-step),1.4)*18*k;p.stepL=step*9*k;p.stepR=-step*9*k;
+      p.wingL=-step*.13-.04*k;p.wingR=-step*.13+.04*k;p.headY=Math.cos(walkPhase*2-.7)*3*k;p.headTilt=-step*.03;p.tail=-step*.2;break;}
     case 2:{const q=Math.max(0,Math.sin(t*TAU/1.1));p.bill=q*.85;p.headY=-q*9;p.bob=3*(1-q);p.wingL=q*.09;p.wingR=-q*.09;break;}
     case 3:p.sway=dance*.13;p.bob=-Math.abs(dance)*12;p.headTilt=-dance*.10;p.wingL=.35+Math.cos(t*5)*.30;p.wingR=-.35+Math.cos(t*5)*.30;p.footL=Math.max(0,-dance)*11;p.footR=Math.max(0,dance)*11;p.tail=dance*.12;break;
     case 4:p.headTilt=.08;p.wingL=.56;p.wingR=-.56;p.wingForward=.12;p.bob=-3*(1+Math.sin(t*3));break;
@@ -69,7 +74,7 @@ function samplePose(action,t,walkPhase,reduced){
     case 8:p.headY=5;p.headTilt=Math.sin(t*2.8)*.035;p.wingL=.28;p.wingR=-.28;p.angry=1;p.footR=Math.max(0,Math.sin(t*9))*7;break;
     case 9:p.bob=-Math.max(0,Math.sin(t*7))*25;p.sway=Math.cos(t*7)*.08;p.wingL=1.45+Math.sin(t*7)*.25;p.wingR=-1.45-Math.sin(t*7)*.25;p.footL=p.footR=Math.max(0,Math.sin(t*7))*10;p.bill=.3;p.headTilt=Math.sin(t*3)*.1;break;
   }
-  if(reduced){for(const k of ['bob','sway','lean','breath','headY','headTilt','wingL','wingR','wingForward','footL','footR','stepL','stepR','tail'])p[k]*=.12;p.bill*=.45;}
+  if(reduced){p.sqx=1+(p.sqx-1)*.12;p.sqy=1+(p.sqy-1)*.12;for(const k of ['bob','sway','lean','breath','headY','headTilt','wingL','wingR','wingForward','footL','footR','stepL','stepR','tail'])p[k]*=.12;p.bill*=.45;}
   return p;
 }
 
@@ -106,6 +111,19 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const napView = data.views.find(view => view.angle === napPose.view);
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
+  // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9;
+  // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
+  const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
+  const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
+  const artHeight=art.getLocalBounds().height||900;
+  function moveFx(){
+    const fx={sqx:1,sqy:1,bob:0};
+    if(landT<.45){const u=landT/.45,w=Math.exp(-5*u)*Math.cos(u*Math.PI*2.4),k=clamp(lastSpeed/165,.6,1.4);fx.sqy-=.11*w*k;fx.sqx+=.09*w*k;}
+    if(startT<.14){const w=Math.sin(Math.PI*startT/.14);fx.sqy-=.06*w;fx.sqx+=.05*w;}
+    if(turnT<.18){const w=Math.cos(Math.PI*.5*turnT/.18);fx.sqx*=1-.24*w;fx.bob-=6*w;}
+    return fx;
+  }
   current.root.visible=true;current.root.alpha=1;
   async function setOutfit(next){
     const request=++outfitVersion;
@@ -143,8 +161,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   try{await setOutfit(outfit);}catch(error){root.destroy({children:true});liveDucks--;throw error;}
 
   function renderView(view,t){
-    const p=pose,face=Math.abs(view.spec.angle)<=90;
-    view.body.y=p.bob;view.body.rotation=p.sway;view.body.scale.set(1-p.breath*.32,1+p.breath);
+    const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx();
+    view.body.y=p.bob;view.body.rotation=p.sway+p.lean*lookSide;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
     view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=1-clamp(-p.bob,0,35)*.01;
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     for(const part of view.parts){
@@ -180,13 +198,14 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
-    if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){currentAction=chosen;actionTime=0;version=emoteVersion;}
+    if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
+    landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
     actionTime+=dt;walkPhase+=dt*9.8*clamp(safe(speed)/165,.55,1.8);
-    const desired=samplePose(currentAction,actionTime,walkPhase,reducedMotion),smoothing=1-Math.exp(-dt/0.11);
+    const desired=samplePose(currentAction,actionTime,walkPhase,reducedMotion,safe(speed)||165),smoothing=1-Math.exp(-dt/0.11);
     for(const key of Object.keys(pose))pose[key]+=(desired[key]-pose[key])*smoothing;
     turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.075));
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
-    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8+.025){current.root.visible=false;current=target;}
+    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8+.025){current.root.visible=false;current=target;if(!reducedMotion)turnT=0;}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;
@@ -202,9 +221,12 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       feedback.sleep.position.set(napDirection * napPose.z[0], napPose.z[1]);
       feedback.bubble.y += 285;
     }
+    if(arriveT<1.1&&!reducedMotion){const f=arriveT*60;art.y=keyAt(DROP.y,f)*artHeight*SCALE;art.scale.set(SCALE*keyAt(DROP.sx,f),SCALE*keyAt(DROP.sy,f));}
+    else{art.y=0;art.scale.set(SCALE);}
     root.duckDirection=degrees;
   }
   function dispose(){if(disposed)return;disposed=true;outfitVersion++;liveDucks--;root.removeFromParent();root.destroy({children:true});}
   update(0,{action:0});
-  return {root,update,dispose,setOutfit,animationNames:duckAnimationNames};
+  const arrive=()=>{arriveT=0;};
+  return {root,update,dispose,setOutfit,arrive,animationNames:duckAnimationNames};
 }
