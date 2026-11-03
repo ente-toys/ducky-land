@@ -113,7 +113,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
   // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
-  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,fading=null;
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9;
   // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
   const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
   const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
@@ -159,6 +159,19 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   }
   try{await setOutfit(outfit);}catch(error){root.destroy({children:true});liveDucks--;throw error;}
 
+  // boss 4 Nov: turning like the Rive rig: between two drawn directions the eyes, beak, wings, tail, tuft and feet glide
+  // to where the next direction has them, and the body outline swaps at the halfway point, so a turn has many frames
+  const byAngle=[...views].sort((a,b)=>a.spec.angle-b.spec.angle);
+  function partMatch(view,other){
+    if(view.match?.has(other))return view.match.get(other);
+    const map=new Map(),roles=new Set(view.parts.map(p=>p.role));
+    for(const role of roles){
+      const mine=view.parts.filter(p=>p.role===role).sort((a,b)=>a.joint.rest.x-b.joint.rest.x),theirs=other.parts.filter(p=>p.role===role).sort((a,b)=>a.joint.rest.x-b.joint.rest.x);
+      mine.forEach((part,i)=>{const twin=theirs.length===mine.length?theirs[i]:theirs.reduce((best,q)=>!best||Math.abs(q.joint.rest.x-part.joint.rest.x)<Math.abs(best.joint.rest.x-part.joint.rest.x)?q:best,null);map.set(part,twin||null);});
+    }
+    (view.match||=new Map()).set(other,map);return map;
+  }
+  let glide={other:null,w:0};
   function renderView(view,t){
     const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx();
     view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
@@ -166,6 +179,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     for(const part of view.parts){
       const joint=part.joint,side=part.side;joint.position.set(joint.rest.x,joint.rest.y);joint.rotation=0;joint.scale.set(1);
+      if(glide.other&&part.role!=='body'&&part.role!=='shadow'){const twin=partMatch(view,glide.other).get(part);
+        if(twin){joint.x+=(twin.joint.rest.x-joint.rest.x)*glide.w;joint.y+=(twin.joint.rest.y-joint.rest.y)*glide.w;}
+        else joint.scale.set(Math.max(0,1-glide.w*2));}
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
       if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*.55;joint.rotation=-side*lift*.005;}
       if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.y+=p.headY;joint.rotation=p.headTilt;}
@@ -202,22 +218,20 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     actionTime+=dt;walkPhase+=dt*9.8*clamp(safe(speed)/165,.55,1.8);
     const desired=samplePose(currentAction,actionTime,walkPhase,reducedMotion,safe(speed)||165),smoothing=1-Math.exp(-dt/0.11);
     for(const key of Object.keys(pose))pose[key]+=(desired[key]-pose[key])*smoothing;
-    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.075));
+    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.16));
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
-    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8+.025){if(fading&&fading!==target)fading.root.visible=false;fading=reducedMotion?null:current;if(!fading)current.root.visible=false;current=target;turnT=0;}
+    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8){current.root.visible=false;current=target;}
+    {const a=((degrees%360)+540)%360-180,i=byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
+      const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
+      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0}:{other,w:current===lo?u:1-u};}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;
     nap.visible = sleeping;
-    if (sleeping && fading) {fading.root.visible = false; fading = null;}
     if (sleeping) {
       // Keep the belly planted as the back rises and falls.
       napBody.scale.y = reducedMotion ? 1 : 1 + Math.sin(t * 1.5 + phase) * .025;
     } else {
-      // boss 4 Nov: the old direction fades out over the new one (.14 s), so turning has in-between frames and no squash
-      const f=fading?clamp(turnT/.14,0,1):1;
-      if(fading){fading.root.visible=f<1;fading.root.alpha=1-f;if(f<1)renderView(fading,t);else fading=null;}
-      current.root.alpha=1;if(fading)art.setChildIndex(current.root,Math.max(art.getChildIndex(fading.root),art.getChildIndex(current.root)));   // new view solid on top, old one fades out behind it
       renderView(current,t);
     }
     feedback.update(currentAction,actionTime+ (persistentSleep?phase:0),reducedMotion,persistentSleep);
