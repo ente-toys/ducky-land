@@ -9,7 +9,8 @@ import world from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
 import {createAudio} from './audio.js';
-import {createDuck, disposeDuckAssets, renderDuckAtlas} from './rive-duck.js';   // boss 3 Nov: the approved Rive Ducky
+import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
+import {createFountainWater} from './fountain.js';
 import {createPlacements} from './placements.js';
 import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from './camera.js';
 
@@ -128,13 +129,15 @@ export class PixiIsland {
         this.objects.addChild(sprite);
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
-      const results = await Promise.allSettled(this.sim.ducks.map(d => createDuck({outfit: d.outfit, seed: d.id + 21, isPlayer:d.player})));
+      const results = await Promise.allSettled(this.sim.ducks.map(d => createDuck({outfit: {}, seed: d.id + 21, isPlayer:d.player})   /* plain Ducky, no Drip outfits */));
       this.rigs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
       if (this.disposed) {this.rigs.forEach(r => r.dispose()); this.rigs = []; disposeDuckAssets().catch(() => {}); return;}
       const failure = results.find(r => r.status === 'rejected');
       if (failure) throw failure.reason;
       this.rigs.forEach((rig, i) => {
         const duck = this.sim.ducks[i];
+        // The original flat view scales the source drawing by .88 × .24; the rig's own scale is 1/3.
+        rig.root.scale.set(.88 * .24 * 3);
         rig.root.position.set(duck.x, duck.y);
         this.objects.addChild(rig.root);
       });
@@ -189,13 +192,16 @@ export class PixiIsland {
       this.leaves.push({sprite: leaf, x: tree.x, y: tree.y - 150, phase: i * 1.93});
     });
     this.droplets = [];
-    for (let i = 0; i < 12; i++) {
+    // boss 3 Nov: the wishing-bowls fountain animates its own water (fountain.js); the old statue drops are off
+    const fountain = this.props.find(p => p.asset === 'fountain-wishing');
+    this.fountainWater = fountain ? createFountainWater(fountain, this.objects) : null;
+    for (let i = 0; i < 0; i++) {
       const drop = new Graphics().ellipse(0, 0, 2.5, 4).fill('#ddfaff');
       this.objects.addChild(drop);
       drop.zIndex = 2351;
       this.droplets.push(drop);
     }
-    this.splashes=[-1,1].map((side,i)=>{const sprite=new Graphics().ellipse(0,0,16,5).stroke({color:0xddfaff,width:1.8});sprite.position.set(2820+side*62,2260);this.objects.addChild(sprite);sprite.zIndex=2351;return {sprite,phase:i*.5};});
+    this.splashes=[].map((side,i)=>{const sprite=new Graphics().ellipse(0,0,16,5).stroke({color:0xddfaff,width:1.8});sprite.position.set(2820+side*62,2260);this.objects.addChild(sprite);sprite.zIndex=2351;return {sprite,phase:i*.5};});
     this.marker = new Graphics().ellipse(0, 0, 20, 9).stroke({width: 3, color: '#fff9da', alpha: .8});
     this.marker.visible = false;
     this.water.addChild(this.marker);
@@ -417,11 +423,11 @@ export class PixiIsland {
       sprite.position.set(2820+Math.sin(i*2.4)*65*phase, 2260-100*Math.sin(phase*Math.PI));
       sprite.alpha = Math.sin(phase*Math.PI)*.7;
     });
+    this.fountainWater?.update(t, reduced, this.fountainWater && visible(this.fountainWater.root.x + 250, this.fountainWater.root.y + 240, 400));
     this.splashes.forEach(({sprite,phase})=>{const age=(t*.7+phase)%1;sprite.visible=!reduced;sprite.scale.set(.4+age*1.3,.5+age*.9);sprite.alpha=Math.max(0,1-age*2)*.6;});
     this.marker.visible = this.markerUntil > t;
     if (this.marker.visible) {const age=1.5-(this.markerUntil-t);this.marker.alpha=1-age/1.5;this.marker.scale.set(1+age*.9,1+age*8/9);}
     if (this.sim.player.travel && t > (this.nextStep || 0)) {this.audio.play('step', .045); this.nextStep = t + .28;}
-    renderDuckAtlas();
     this.app.render();
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {

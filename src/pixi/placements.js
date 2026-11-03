@@ -38,6 +38,8 @@ export function createPlacements(world, walkable) {
   // Boss 2 + 3 Nov: no place-name signs, cities or flags on the island.
   const props = original.props.filter(prop => !prop.name.startsWith('Wayfinding')).map(prop => {
     if (prop.zone === 'lighthouse-beach') return prop;
+    if (prop.name === 'Drip fountain') return {...prop, asset: 'fountain-wishing', src: '/pixi-art/fountain-wishing.svg',
+      width: 480, height: 339, anchor: {x: .5, y: 229 / 339}, scale: 1.05, resolution: 2.5};   // boss 3 Nov: GPT's wishing bowls
     if (prop.name === 'Drip tree' || prop.name === 'Hill tree') return plant(prop.id % 2 ? 'tree-2' : 'tree-1', prop);
     if (prop.name === 'Flower planter') return plant('bush-3', prop);
     if (prop.name === 'Library flowers') return plant(prop.id % 2 ? 'flower-1' : 'flower-3', prop);
