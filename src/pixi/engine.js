@@ -171,11 +171,7 @@ export class PixiIsland {
       }
     });
     this.birds=[[2419,1928],[3185,1897],[3427,2126]].map(([x,y],phase)=>{const bird=createBird();this.air.addChild(bird.root);return {...bird,x,y,phase};});
-    this.crows = [
-      {x:2770,y:2130,rx:640,ry:410,phase:.4,speed:.27},
-      {x:2770,y:2130,rx:680,ry:430,phase:.75,speed:.27},
-      {x:4560,y:2440,rx:680,ry:530,phase:1.45,speed:.23},
-      {x:4560,y:2440,rx:730,ry:500,phase:1.8,speed:.23},
+    this.crows = [   // boss 3 Nov: no black crows
     ].map(flight => {
       const crow = createCrow();
       this.air.addChild(crow.root);
