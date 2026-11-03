@@ -110,7 +110,8 @@ export class PixiIsland {
       this.props = props.map((prop, i) => {
         const name=prop.asset||prop.name,tree=/tree/i.test(name),boat=/boat/i.test(name);
         let shadow;
-        if(!/bunting|banner|flag|bridge|reeds|shell|blanket/i.test(name)){
+        // GPT plants carry their own tight base shadow (boss 3 Nov: fix the tree base), so no extra ground shadow here.
+        if(!/bunting|banner|flag|bridge|reeds|shell|blanket|^(tree|bush|flower)-\d/i.test(name)){
           const width=prop.width*prop.scale,height=prop.height*prop.scale;
           const radius=Math.max(7,Math.min(140,width*(tree?.34:.32))),depth=Math.max(3,Math.min(20,height*.04));
           shadow=new Graphics().ellipse(radius*.22,5,radius*1.16,depth*1.2).fill({color:boat?0x245569:0x304732,alpha:.065})

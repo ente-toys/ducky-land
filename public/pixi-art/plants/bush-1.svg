@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 100">
   <title>Low round bush</title>
   <desc>Original Ducky Land plant. Bottom-centre anchor (0.5, 1). Height 100 map units; Ducky height 120.</desc>
+  <ellipse id="ground-shadow" cx="65" cy="93" rx="60" ry="6" fill="#1E5A23" fill-opacity="0.22"/>
   <g id="plant" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
     <g id="crown" fill="#08C225">
       <path d="M65 2 C101 2 128 31 128 64 C128 88 104 98.25 65 98.25 C26 98.25 2 88 2 64 C2 31 29 2 65 2 Z" stroke="#232323" stroke-opacity="1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />

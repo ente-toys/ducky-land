@@ -28,7 +28,7 @@ const PLANTS = {
 const PLANT_SCALE = 1.6;
 function plant(kind, point) {
   const [width, height] = PLANTS[kind];
-  return {...point, asset: kind, src: `/pixi-art/plants/${kind}.svg`, width, height, resolution: 1,
+  return {...point, asset: kind, src: `/pixi-art/plants/${kind}.svg`, width, height, resolution: 5,   // rasterised 5x: drawn 1.6x and zoomed up to 1.8x on 2x screens
     anchor: {x: .5, y: 1}, scale: PLANT_SCALE};
 }
 
