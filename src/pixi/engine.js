@@ -209,7 +209,8 @@ export class PixiIsland {
     this.weather=createWeather(world,this.scene,this.air);
     this.surf = createBeachSurf(this.water);
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
-    this.rowboat = createRowboat(rowingProp,world.water[1],this.objects,this.water);
+    this.rowboat = null;   // boss 4 Nov: no boats on the race lake
+    rowingProp?.sprite?.destroy?.(); rowingProp?.shadow?.destroy?.();
     this.props = this.props.filter(prop => prop !== rowingProp);
     this.ripples = [];
     world.water.forEach((lake, index) => {
@@ -507,7 +508,7 @@ export class PixiIsland {
     this.ocean.position.set(this.camera.x-halfWidth-256,this.camera.y-halfHeight-256);this.ocean.width=halfWidth*2+512;this.ocean.height=halfHeight*2+512;
     this.ocean.tilePosition.set(-this.ocean.x+(reduced?0:t*2),-this.ocean.y+(reduced?0:t*.7));
     this.surf.update(t, reduced, visible);
-    this.rowboat.update(t, reduced, visible);
+    this.rowboat?.update(t, reduced, visible);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
