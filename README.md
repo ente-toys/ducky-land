@@ -29,7 +29,7 @@ run `python3 scripts/extract-pixi-art.py` and
 `python3 scripts/extract-pixi-duck.py`. The duck exporter uses the installed Node
 dependencies to measure the artwork.
 
-## Multiplayer preview and rollout
+## Multiplayer and deployment
 
 Guests can watch the live island, pan, and zoom. Use **Play with GitHub** to
 move and emote as a duck. The latest playing tab for an account controls that
@@ -37,34 +37,15 @@ duck. Signed-in users can see GitHub usernames above the ducks. Signed-in
 players can press C or choose Chat to open a yellow text bubble under their username.
 It follows the duck while walking. Text appears live to other signed-in users,
 disappears after five seconds, and has no history. Esc clears it immediately.
-The preview and production use different GitHub apps and room storage.
 
-1. Register a GitHub OAuth app for the [preview island](https://multiplayer.ducky-land.pages.dev/).
-   Use `https://multiplayer.ducky-land.pages.dev/auth/github/callback` as its exact
-   redirect URI. Add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to the
-   **Preview** environment in the Cloudflare Pages project's **Variables and
-   Secrets** settings.
-2. Build and deploy the preview Worker and Pages branch.
+Pushes to `main` trigger GitHub Actions to test and build the project, then
+deploy the production room Worker and [Ducky Land](https://ducky-land.pages.dev/).
+Set the Actions variable `CLOUDFLARE_ACCOUNT_ID` and the Actions secret
+`CLOUDFLARE_API_TOKEN` with Cloudflare Pages and Workers Scripts edit access.
 
-   ```sh
-   npm run build
-   npx wrangler deploy --config worker/wrangler.jsonc --env preview
-   npx wrangler pages deploy dist --project-name ducky-land --branch multiplayer
-   ```
-
-3. In two browser profiles signed in to different GitHub accounts and a third
-   signed-out profile, check that both ducks spawn and can move and emote
-   independently, and that the guest sees both. Check sign-out, reconnect, and
-   tab takeover. The automated tests exercise the actual room and WebSockets
-   using simulated GitHub responses.
-4. After preview acceptance, create a separate production OAuth app with
-   `https://ducky-land.pages.dev/auth/github/callback` as its redirect URI. Set
-   its ID and secret in the **Production** environment. Record the current Pages
-   production deployment for rollback. Deploy the room Worker with
-   `npx wrangler deploy --config worker/wrangler.jsonc`, then deploy the build
-   with `npx wrangler pages deploy dist --project-name ducky-land --branch main`.
-   Verify the production homepage and sign-in callback. Use the Pages dashboard
-   to roll back to the recorded deployment if needed.
+The GitHub OAuth app uses `https://ducky-land.pages.dev/auth/github/callback` as
+its redirect URI. Set its client ID and secret as `GITHUB_CLIENT_ID` and
+`GITHUB_CLIENT_SECRET` in the Cloudflare Pages **Production** environment.
 
 Vite and its static preview serve the artwork. Live play needs the Pages
 Functions and a bound room Worker. The Node server started by `npm start`
