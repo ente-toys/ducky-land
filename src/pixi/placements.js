@@ -26,11 +26,12 @@ const PLANTS = {
   'tree-1': [260, 360], 'tree-2': [180, 360], 'bush-1': [130, 100], 'bush-2': [168, 110], 'bush-3': [116, 104],
   'flower-1': [48, 36], 'flower-2': [48, 36], 'flower-3': [44, 36],
 };
-const PLANT_SCALE = 1.6;
+// boss 3 Nov: trees smaller (about 2 Duckies), bushes a touch smaller, flowers as they were
+const PLANT_SCALE = {tree: 1.15, bush: 1.3, flower: 1.6};
 function plant(kind, point) {
   const [width, height] = PLANTS[kind];
   return {...point, asset: kind, src: `/pixi-art/plants/${kind}.svg`, width, height, resolution: 5,   // rasterised 5x: drawn 1.6x and zoomed up to 1.8x on 2x screens
-    anchor: {x: .5, y: 1}, scale: PLANT_SCALE};
+    anchor: {x: .5, y: 1}, scale: PLANT_SCALE[kind.split('-')[0]]};
 }
 
 export function createPlacements(world, walkable) {
@@ -75,5 +76,13 @@ function applyLayout(props) {
   for (const {id, kind} of layout.swap || []) {const p = byId.get(String(id)); if (p && PLANTS[kind]) Object.assign(p, plant(kind, p));}
   const out = props.filter(p => !gone.has(String(p.id)));
   for (const a of layout.add || []) if (PLANTS[a.kind]) out.push(plant(a.kind, {id: `add-${out.length}`, name: a.kind, x: a.x, y: a.y, zone: a.zone}));
+  // boss 3 Nov: paired trees were touching; push any two trees closer than 330 apart sideways
+  const trees = out.filter(p => /^tree-/.test(p.asset));
+  for (let i = 0; i < trees.length; i++) for (let j = i + 1; j < trees.length; j++) {
+    const a = trees[i], b = trees[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (d >= 330) continue;
+    const push = (330 - d) / 2, dir = a.x <= b.x ? -1 : 1;
+    a.x += dir * push; b.x -= dir * push;
+  }
   return out;
 }
