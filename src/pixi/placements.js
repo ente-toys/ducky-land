@@ -76,6 +76,8 @@ function applyLayout(props) {
   for (const {id, kind} of layout.swap || []) {const p = byId.get(String(id)); if (p && PLANTS[kind]) Object.assign(p, plant(kind, p));}
   const out = props.filter(p => !gone.has(String(p.id)));
   for (const a of layout.add || []) if (PLANTS[a.kind]) out.push(plant(a.kind, {id: `add-${out.length}`, name: a.kind, x: a.x, y: a.y, zone: a.zone}));
+  // boss 3 Nov: a handful of rocks on the open lawns, very few
+  for (const r of layout.rocks || []) {const asset = byName.get(r.kind); if (asset) out.push(place(asset, {id: `rock-${out.length}`, name: r.kind, x: r.x, y: r.y}));}
   // boss 3 Nov: paired trees were touching; push any two trees closer than 330 apart sideways
   const trees = out.filter(p => /^tree-/.test(p.asset));
   for (let i = 0; i < trees.length; i++) for (let j = i + 1; j < trees.length; j++) {

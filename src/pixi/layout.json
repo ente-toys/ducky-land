@@ -200,5 +200,42 @@
    "y": 1860,
    "zone": ""
   }
+ ],
+ "rocks": [
+  {
+   "kind": "rock-round",
+   "x": 2450,
+   "y": 750
+  },
+  {
+   "kind": "rock-flat",
+   "x": 3200,
+   "y": 1500
+  },
+  {
+   "kind": "rock-boulder",
+   "x": 2150,
+   "y": 3200
+  },
+  {
+   "kind": "rock-round",
+   "x": 1950,
+   "y": 1750
+  },
+  {
+   "kind": "rock-flat",
+   "x": 3500,
+   "y": 3200
+  },
+  {
+   "kind": "rock-boulder",
+   "x": 4200,
+   "y": 2350
+  },
+  {
+   "kind": "rock-round",
+   "x": 4850,
+   "y": 1550
+  }
  ]
 }
