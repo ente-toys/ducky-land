@@ -122,7 +122,8 @@ export class PixiIsland {
       const tiles = art.ground.tiles;
       // round 4: ground detail decals and the plaza paving lie on the tiles; the library stair is a deck like the jetties
       const decals = decalsFor(world, props, geometry({...world, obstacles: []}).walkable);
-      const flats = [{src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1}, ...decals.map(d => ({...d, resolution: 2.5}))];
+      const flats = [{src: '/pixi-art/lake-race.svg', x: 3400, y: 1050, width: 1500, height: 950, resolution: 1, topLeft: true},   // boss 4 Nov: race lake D, the spring cove, laid over the old oval
+        {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true}, ...decals.map(d => ({...d, resolution: 2.5}))];
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS];
       const entries = [...tiles, ...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];   // boss 3 Nov: arched jetties right after the tiles
@@ -143,7 +144,7 @@ export class PixiIsland {
       flats.forEach((d, i) => {
         const sprite = new Sprite(textures[flatBase + i]);
         sprite.position.set(d.x, d.y); sprite.width = d.width; sprite.height = d.height;
-        if (i) {sprite.anchor.set(.5, 1); sprite.width = d.width; if (d.flip) sprite.scale.x *= -1;}   // decals sit on their base point
+        if (!d.topLeft) {sprite.anchor.set(.5, 1); sprite.width = d.width; if (d.flip) sprite.scale.x *= -1;}   // decals sit on their base point
         this.flats.addChild(sprite);
       });
       decks.forEach((jetty, i) => {
