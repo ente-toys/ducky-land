@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="350" viewBox="-300 -350 600 350">
+  <defs>
+    <linearGradient id="feathers" x2="0" y2="1">
+      <stop stop-color="#ffdf4b"/>
+      <stop offset="1" stop-color="#ffd525"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#232323" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f6c828" d="M-205 -58 C-266 -67 -270 -107 -244 -102 Q-221 -97 -198 -80Z"/>
+    <path fill="url(#feathers)" d="M-224 -63 C-254 -134 -192 -215 -105 -225 C-81 -272 -30 -296 28 -293 Q46 -323 61 -313 Q67 -308 64 -297 Q92 -312 106 -299 Q113 -290 91 -285 C166 -273 202 -225 202 -174 C243 -142 255 -78 220 -43 C179 -3 86 -4 0 -4 C-102 -4 -194 -13 -224 -63Z"/>
+    <path fill="#ffe675" stroke="none" d="M-113 -17 C-90 -64 -34 -86 35 -83 C104 -80 157 -55 168 -19 Q48 5 -113 -17Z"/>
+    <path fill="none" d="M77 -188 Q95 -170 117 -187"/>
+    <path fill="#ff814a" d="M143 -167 Q167 -181 182 -162 Q187 -152 170 -147 L141 -151Z"/>
+    <path fill="#ffda39" d="M-44 -178 C3 -136 66 -125 135 -151 C175 -169 198 -178 211 -152 C225 -122 180 -83 143 -69 C111 -56 77 -52 45 -58"/>
+    <path fill="none" stroke="#f5c52c" d="M87 -70 Q147 -78 178 -107"/>
+  </g>
+</svg>

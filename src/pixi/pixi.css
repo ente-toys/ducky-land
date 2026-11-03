@@ -3,4 +3,4 @@
 .pixi-host canvas:active { cursor: grabbing; }
 .pixi-host canvas:focus-visible { outline: 3px solid #f8d164; outline-offset: -3px; }
 .pixi-error { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; flex-direction: column; padding: 24px; color: #33302e; background: #e5f5e9; font: 18px/1.4 system-ui, sans-serif; }
-.pixi-error button, .pixi-error a { color: inherit; padding: 12px 20px; border-radius: 24px; border: 2px solid #33302e; background: #fff4c5; font: inherit; text-decoration: none; cursor: pointer; }
+.pixi-error button { color: inherit; padding: 12px 20px; border-radius: 24px; border: 2px solid #33302e; background: #fff4c5; font: inherit; cursor: pointer; }

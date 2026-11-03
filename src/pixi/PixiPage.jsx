@@ -17,7 +17,6 @@ export default function PixiPage() {
     {error && <div className="pixi-error" role="alert">
       <p>The island could not be displayed.</p>
       <button onClick={() => location.reload()}>Try again</button>
-      <a href="/three/">Open the 3D island</a>
     </div>}
   </main>;
 }

@@ -1,5 +1,3 @@
 * { box-sizing: border-box; }
 html, body, #root { width: 100%; height: 100%; margin: 0; }
 body { background: #7fcde7; overflow: hidden; }
-.island-app { width: 100%; height: 100svh; }
-.island-scene { width: 100%; height: 100%; display: block; border: 0; }

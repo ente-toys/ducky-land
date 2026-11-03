@@ -1,12 +1,14 @@
 import {createWeather,windStrength} from './weather.js';
-import {createBird,birdPose} from './birds.js';
+import {createBird,birdPose,createCrow,crowPose} from './birds.js';
+import {createBeachSurf} from './surf.js';
+import {createRowboat} from './rowboat.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
 import world from '../../rive/web/world.json';
 import art from './art-manifest.json';
-import {createSimulation} from '../three/simulation.js';
-import {createAudio} from '../three/audio.js';
+import {createSimulation} from './simulation.js';
+import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';
 import {createPlacements} from './placements.js';
 import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, zoomAt} from './camera.js';
@@ -81,7 +83,7 @@ export class PixiIsland {
       this.scene.addChild(this.ground, this.water, this.floatLayer, this.contactShadows, this.objects, this.air);
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
-      this.sim = createSimulation(world);
+      this.sim = createSimulation(world, 8612, {sleepingNpcs: true});
       this.resize(true);
       this.listen(this.canvas, 'webglcontextlost', event => {event.preventDefault(); cancelAnimationFrame(this.raf); this.audio.suspend(); this.onError();});
       const props = createPlacements(world, this.sim.nav.walkable);
@@ -153,6 +155,10 @@ export class PixiIsland {
 
   createAmbient() {
     this.weather=createWeather(world,this.scene,this.air);
+    this.surf = createBeachSurf(this.water);
+    const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
+    this.rowboat = createRowboat(rowingProp,world.water[1],this.objects,this.water);
+    this.props = this.props.filter(prop => prop !== rowingProp);
     this.ripples = [];
     world.water.forEach((lake, index) => {
       for (let i = 0; i < 12; i++) {
@@ -164,6 +170,16 @@ export class PixiIsland {
       }
     });
     this.birds=[[2419,1928],[3185,1897],[3427,2126]].map(([x,y],phase)=>{const bird=createBird();this.air.addChild(bird.root);return {...bird,x,y,phase};});
+    this.crows = [
+      {x:2770,y:2130,rx:640,ry:410,phase:.4,speed:.27},
+      {x:2770,y:2130,rx:680,ry:430,phase:.75,speed:.27},
+      {x:4560,y:2440,rx:680,ry:530,phase:1.45,speed:.23},
+      {x:4560,y:2440,rx:730,ry:500,phase:1.8,speed:.23},
+    ].map(flight => {
+      const crow = createCrow();
+      this.air.addChild(crow.root);
+      return {...crow,...flight};
+    });
     this.butterflies=[{x:2230,y:2280,color:'#ff669d'},{x:3420,y:2270,color:'#9271cf'}].map((item,i)=>{
       const butterfly=createButterfly(item.color);this.air.addChild(butterfly.root);
       return {...item,...butterfly,phase:i*2.4+1};
@@ -266,14 +282,21 @@ export class PixiIsland {
   tap(point) {
     const p = screenToWorld(this.camera, point, this.width, this.height);
     const hitRadius=Math.max(65,20/this.camera.zoom);
-    const hit=this.sim.ducks.find(duck=>Math.hypot(p.x-duck.x,p.y-(duck.y-50))<hitRadius);
+    const hit = this.sim.ducks.find(duck => {
+      if (duck.action !== 7) return Math.hypot(p.x - duck.x, p.y - (duck.y - 50)) < hitRadius;
+      const width = Math.max(62, 20 / this.camera.zoom);
+      const height = Math.max(31, 12 / this.camera.zoom);
+      return Math.hypot((p.x - duck.x) / width, (p.y - (duck.y - 27)) / height) < 1;
+    });
     const now = performance.now();
     if (hit?.player) {
       this.triggerEmote(now - this.lastTap < 450 ? 3 : 2);
       this.lastTap = now;
     } else if (hit) {
-      this.sim.emote(2, hit);
-      hit.turn = Math.atan2(this.sim.player.x-hit.x, this.sim.player.y-hit.y);
+      if (!hit.sleeping) {
+        this.sim.emote(2, hit);
+        hit.turn = Math.atan2(this.sim.player.x-hit.x, this.sim.player.y-hit.y);
+      }
       this.triggerEmote(6);
     } else {
       this.lastTap = -Infinity;
@@ -343,6 +366,8 @@ export class PixiIsland {
     const visible = (x,y,pad=350) => Math.abs(x-this.camera.x)<halfWidth+pad && Math.abs(y-this.camera.y)<halfHeight+pad;
     this.ocean.position.set(this.camera.x-halfWidth-256,this.camera.y-halfHeight-256);this.ocean.width=halfWidth*2+512;this.ocean.height=halfHeight*2+512;
     this.ocean.tilePosition.set(-this.ocean.x+(reduced?0:t*2),-this.ocean.y+(reduced?0:t*.7));
+    this.surf.update(t, reduced, visible);
+    this.rowboat.update(t, reduced, visible);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
@@ -363,10 +388,17 @@ export class PixiIsland {
       rig.root.position.set(x, y);
       rig.root.zIndex = y;
       rig.root.visible = visible(x, y, 200);
-      if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion});
+      if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping});
     });
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
     this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>wing.rotation=(i?1:-1)*pose.flap);});
+    for (const crow of this.crows) {
+      const pose = crowPose(crow,t,reduced);
+      crow.root.position.set(pose.x,pose.y);
+      crow.root.rotation = pose.heading;
+      crow.root.visible = visible(pose.x,pose.y,100);
+      for (const wing of crow.wings) wing.scale.y = pose.flap;
+    }
     this.butterflies.forEach(item=>{
       const pose=butterflyPose(item.x,item.y,item.phase,t,reduced);
       item.root.visible=visible(pose.x,pose.y,80);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;
@@ -394,6 +426,7 @@ export class PixiIsland {
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;
       d.ducks = String(this.sim.ducks.length);
+      d.sleepingDucks = String(this.sim.ducks.filter(duck => duck.sleeping && duck.action === 7).length);
       d.player = `${this.sim.player.x.toFixed(1)},${this.sim.player.y.toFixed(1)}`;
       d.action = String(this.sim.player.action);
       d.quackBubbles=String(this.sim.ducks.filter(duck=>duck.action===2).length);

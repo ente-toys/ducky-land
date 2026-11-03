@@ -13,7 +13,9 @@ const replacements = {
 };
 
 function place(asset, point) {
-  return {...point, asset: asset.name, src: original.enhancedAssets[asset.file] || urls[`../../${asset.file}`],
+  const src = asset.name === 'rowboat' ? '/pixi-art/rowing-hull.svg'
+    : original.enhancedAssets[asset.file] || urls[`../../${asset.file}`];
+  return {...point, asset: asset.name, src,
     width: asset.size.width, height: asset.size.height, resolution: .5,
     anchor: {x: asset.anchor.x / asset.size.width, y: asset.anchor.y / asset.size.height}, scale: .24};
 }
@@ -22,6 +24,9 @@ export function createPlacements(world, walkable) {
   const props = original.props.map(prop => {
     if (prop.zone === 'lighthouse-beach') return prop;
     const asset = byName.get(replacements[prop.name]);
+    if (asset?.name === 'sailboat') {
+      return place(asset, {...prop, x: world.water[1].x - 205});
+    }
     return asset ? place(asset, prop) : prop;
   });
   const zones = ['bread-forest','pond','library','plaza','race-lake','lighthouse-beach','islets'];

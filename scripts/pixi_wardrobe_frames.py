@@ -62,31 +62,63 @@ def headgear(n,angle,m,part,out):
         k=x+math.cos(a)*-165
         if rear or angle<=0:elements.extend([path(f'M{k} {y+19} L{k-50} {y-3} L{k-29} {y+31} L{k-56} {y+50} L{k-3} {y+37}Z','#58BF43'),ellipse(k,y+26,13,12,'#58BF43')])
     elif n==8:
-        elements=[path(f'M{x-160} {rim+5} C{x-170} {rim-152} {x+170} {rim-152} {x+160} {rim+5} C{x+65} {rim-15} {x-65} {rim-15} {x-160} {rim+5}Z','#4794D8')]
+        # Seat the rear opening below the skull crown, so it reveals the head
+        # rather than the background. The former yellow patch floated above it.
+        rim=m['headY']+88
+        elements=[path(f'M{x-175} {rim+8} C{x-191} {rim-171} {x+191} {rim-171} {x+175} {rim+8} C{x+100} {rim-5} {x+67} {rim-10} {x+45} {rim+2} C{x+48} {rim-48} {x-48} {rim-48} {x-45} {rim+2} C{x-85} {rim-10} {x-125} {rim-3} {x-175} {rim+8}Z' if rear else f'M{x-175} {rim+8} C{x-191} {rim-171} {x+191} {rim-171} {x+175} {rim+8} C{x+80} {rim-12} {x-80} {rim-12} {x-175} {rim+8}Z','#4794D8')]
+        elements.extend([path(f'M{x} {rim-120} C{x-18} {rim-84} {x-18} {rim-50} {x-15} {rim-18}','none','#3471B8',3),ellipse(x,rim-124,13,6,'#3471B8',width=3)])
         if not rear:
-            s=1 if angle>0 else -1
-            elements.append(path(f'M{x+s*145} {rim-3} L{x+s*255} {rim+12} C{x+s*261} {rim+32} {x+s*165} {rim+26} {x+s*116} {rim+14}Z','#4794D8'))
+            side=1 if angle>0 else -1
+            elements.append(path(f'M{x+side*122} {rim-3} C{x+side*165} {rim-4} {x+side*219} {rim+4} {x+side*264} {rim+20} C{x+side*222} {rim+40} {x+side*150} {rim+27} {x+side*111} {rim+13}Z','#4794D8'))
             if front:
                 bx=x+math.sin(a)*88
                 elements.append(path(f'M{bx-21} {rim-23} L{bx-21} {rim-48} C{bx-5} {rim-57} {bx+10} {rim-57} {bx+21} {rim-48} L{bx+21} {rim-23}Z','#F4D93B'))
-        else:elements.extend([path(f'M{x-45} {rim+3} C{x-45} {rim-49} {x+45} {rim-49} {x+45} {rim+3}','#FFD525'),path(f'M{x-150} {rim-5} C{x-90} {rim-18} {x-50} {rim-18} {x-45} {rim-5} M{x+45} {rim-5} C{x+85} {rim-18} {x+130} {rim-18} {x+150} {rim-5}')])
+        else:
+            elements.extend([path(f'M{x-49} {rim+4} Q{x} {rim+15} {x+49} {rim+4} L{x+47} {rim+17} Q{x} {rim+28} {x-47} {rim+17}Z','#3471B8'),ellipse(x+25,rim+12,3,3,'#F4D93B',width=0)])
     elif n==9:
-        y=rim-8
-        s=1 if angle>0 else -1
-        elements=[path(f'M{x-190} {y+79} C{x-247} {y-105} {x-136} {y-155} {x} {y-145} C{x+136} {y-155} {x+247} {y-105} {x+190} {y+79} C{x+94} {y+113} {x-94} {y+113} {x-190} {y+79}Z','#EF8DB7'),path(f'M{x-160} {y-38} L{x-233} {y-72} L{x-233} {y+29}Z','#EF8DB7'),path(f'M{x+160} {y-38} L{x+233} {y-72} L{x+233} {y+29}Z','#EF8DB7'),path(f'M{x-60} {y-140} L{x-25} {y-179} L{x+33} {y-170} L{x+65} {y-140}Z','#E86C9E')]
+        # The fish is a hood around the head, not a shallow cap with a corner
+        # missing. Keep the face opening inside the actual head silhouette.
+        y=m['headY']+50
+        side=1 if angle>0 else -1
+        outer=path('M-195 35 C-232 -109 -132 -182 25 -165 C170 -155 225 -43 200 80 C90 159 -125 148 -195 35Z','#EF8DB7')
+        shape=[path('M-184 -35 L-261 -91 L-252 35 L-183 8Z','#E879A9'),path('M-45 -160 L-20 -198 L18 -178 L48 -201 L79 -154Z','#E86C9E'),outer]
+        defs=[]
         if not rear:
-            hole=E.Element(NS+'mask',{'id':'face-opening','maskUnits':'userSpaceOnUse','x':str(x-260),'y':str(y-200),'width':'520','height':'400'})
-            hole.append(E.Element(NS+'rect',{'x':str(x-260),'y':str(y-200),'width':'520','height':'400','fill':'white'}))
-            hole.append(ellipse(x+s*145,y+91,147,111,'black',stroke='black',width=0))
-            wrapped=E.Element(NS+'g',{'mask':'url(#face-opening)'});wrapped.extend(elements[:1]);elements[:1]=[wrapped]
-            fx=x+s*154
-            elements.extend([ellipse(fx,y-72,19,25,'white'),ellipse(fx+s*5,y-72,6,10,INK,width=0)])
-            return elements,[hole]
+            opening_x=130 if profile else 90
+            opening_rx=125 if profile else 145
+            mask=E.Element(NS+'mask',{'id':'face-opening','maskUnits':'userSpaceOnUse','x':'-280','y':'-220','width':'580','height':'430'})
+            mask.append(E.Element(NS+'rect',{'x':'-280','y':'-220','width':'580','height':'430','fill':'white'}))
+            mask.append(ellipse(opening_x,75,opening_rx,110,'black',stroke='black',width=0))
+            wrapped=E.Element(NS+'g',{'mask':'url(#face-opening)'});wrapped.append(shape.pop());shape.append(wrapped)
+            clip=E.Element(NS+'clipPath',{'id':'fish-outline'});clip.append(copy.deepcopy(outer))
+            lip=ellipse(opening_x,75,opening_rx,110,'none',width=5);lip.set('clip-path','url(#fish-outline)')
+            shape.extend([lip,ellipse(145,-80,19,25,'white'),ellipse(151,-79,6,10,INK,width=0)])
+            defs=[mask,clip]
+        else:
+            shape.extend([path('M-130 -80 Q-108 -65 -130 -50 M-119 -38 Q-97 -23 -119 -8','none','#D56693',3),path('M120 40 Q80 60 121 86 L142 62Z','#E879A9')])
+        elements=[group(shape,f'translate({x} {y}) scale({side} 1)')]
+        return elements,defs
     elif n==11:
-        elements=[path(f'M{x-40} {rim-90} C{x-49} {rim-213} {x+50} {rim-213} {x+43} {rim-90}Z','#AF5750'),path(f'M{x-175} {rim+65} L{x-175} {rim-15} C{x-180} {rim-157} {x+180} {rim-157} {x+175} {rim-15} L{x+175} {rim+65} L{x+110} {rim+48} L{x+110} {rim-4} C{x+30} {rim+6} {x-30} {rim+6} {x-110} {rim-4} L{x-110} {rim+48}Z','#B8945D')]
-        if profile:
-            fx=x+(1 if angle>0 else -1)*140
-            elements.append(path(f'M{fx} {rim-26} L{fx} {rim+73} L{fx-15*math.sin(a)} {rim+70}', '#B8945D'))
+        rim=m['headY']+82
+        gold='#D7A35D'
+        # Preserve the tall red brush and gold cheek guards from the front
+        # design. Rear views have a closed shell, never a front visor cutout.
+        if profile or abs(angle)==135:
+            crest=[path('M-91 -113 C-122 -243 72 -291 133 -148 L105 -125 C67 -211 -26 -194 -36 -111Z','#E55B51'),path('M-36 -111 C-23 -180 68 -202 105 -125 L115 -85 L-38 -85Z','#A94D46')]
+            for cx,cy in [(-70,-170),(-35,-202),(9,-211),(51,-197),(87,-171)]:crest.append(path(f'M{cx} {cy-15} L{cx+9} {cy+20}','none','#8F4240',3))
+        else:
+            crest=[path('M-42 -114 L-52 -247 Q0 -266 52 -247 L42 -114Z','#E55B51'),path('M-23 -240 L-18 -132 M0 -247 L0 -132 M23 -240 L18 -132','none','#8F4240',4)]
+        if rear:
+            shell=path('M-175 35 L-175 -15 C-180 -170 180 -170 175 -15 L175 35 Q0 82 -175 35Z',gold)
+            detail=[path('M-153 20 Q0 58 153 20','none','#AF793E',4)]
+        elif front:
+            shell=path('M-175 65 L-175 -15 C-180 -170 180 -170 175 -15 L175 65 L142 75 L131 5 Q86 -2 50 5 L48 80 L32 80 L30 5 Q-45 -8 -112 5 L-122 77Z',gold)
+            detail=[ellipse(158,29,6,6,'#F9C990',width=3)]
+        else:
+            shell=path('M-175 65 L-175 -15 C-180 -170 180 -170 175 -15 L175 13 L113 10 L89 116 L44 120 L43 16 Q-28 0 -103 14 L-122 77Z',gold)
+            detail=[ellipse(72,30,8,8,'#F9C990',width=3),path('M64 48 L61 97','none','#F9C990',4)]
+        detail.append(path('M-143 -38 C-115 -112 76 -124 133 -58','none','#F9C990',5))
+        elements=[group([*crest,shell,*detail],f'translate({x} {rim}) scale({1 if angle>0 else -1} 1)')]
     elif n in (12,13):
         y=rim+57;blue=n==13;color='#5D6CF9' if blue else '#DBDBDB'
         elements=[path(f'M{x-166} {y} C{x-179} {y-165} {x+179} {y-165} {x+166} {y}','none',INK,17),path(f'M{x-166} {y} C{x-179} {y-165} {x+179} {y-165} {x+166} {y}','none',color,9)]

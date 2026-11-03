@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="-300 -320 600 320">
+  <defs>
+    <linearGradient id="feathers" x2="0" y2="1">
+      <stop stop-color="#ffdf4b"/>
+      <stop offset="1" stop-color="#ffd525"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#232323" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f6c828" d="M205 -94 Q253 -143 278 -128 Q294 -106 243 -65Z"/>
+    <path fill="url(#feathers)" d="M-232 -67 C-274 -106 -257 -194 -199 -226 Q-192 -259 -175 -253 Q-166 -250 -168 -233 Q-152 -260 -137 -250 Q-125 -244 -140 -229 C-100 -241 -54 -229 -22 -205 C45 -240 128 -229 187 -185 C241 -145 264 -79 237 -37 C211 1 111 -4 17 -4 C-88 -4 -190 -7 -232 -67Z"/>
+    <path fill="#ffe675" stroke="none" d="M-93 -16 C-69 -63 -17 -91 56 -88 C135 -85 191 -48 205 -19 C155 -4 -23 -4 -93 -16Z"/>
+    <path fill="#ffdb38" d="M39 -157 C74 -126 132 -113 174 -127 Q203 -137 203 -158"/>
+    <path fill="none" d="M-205 -107 Q-185 -99 -179 -118 M-126 -143 Q-107 -136 -102 -156"/>
+    <path fill="#ff814a" d="M-165 -94 C-156 -119 -118 -128 -115 -111 C-115 -95 -146 -76 -160 -80 Q-168 -84 -165 -94Z"/>
+    <path fill="#ffda39" d="M-253 -41 C-261 -66 -230 -90 -190 -89 C-153 -88 -116 -65 -111 -44 C-106 -20 -140 -9 -185 -10 C-223 -10 -246 -18 -253 -41Z"/>
+    <path fill="none" stroke="#f5c52c" d="M-238 -37 Q-186 -21 -129 -38"/>
+  </g>
+</svg>

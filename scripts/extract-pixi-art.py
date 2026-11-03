@@ -448,6 +448,12 @@ def exports():
         file='detail/'+asset['file'].removeprefix('assets/').replace('/','--')
         output[OUTPUT/file]=polish_svg((ROOT/asset['file']).read_text(),asset['name'])
         enhanced_assets[asset['file']]='/pixi-art/'+file
+    # The Racing Lake boat draws its oars separately so they can move.
+    rowboat = ET.parse(ROOT/'assets/water/rowboat.svg').getroot()
+    for path in list(rowboat):
+        if '-oar-' in path.get('id',''):
+            rowboat.remove(path)
+    output[OUTPUT/'rowing-hull.svg'] = polish_svg(ET.tostring(rowboat, encoding='unicode'), 'rowboat')
     floating=[]
     for i,node in enumerate(list(artboards['Island Ground'])):
         if node.get('name')!='Pond lily':continue
@@ -549,21 +555,6 @@ def exports():
         'text': {'method': 'SVG text with embedded original Gilroy Black TrueType font', 'fontSource': 'rive/fonts/Gilroy-Black.ttf'},
     }
     output[MANIFEST] = json.dumps(manifest, indent=2, ensure_ascii=False)+'\n'
-    # A plain SVG/HTML review page, independent of any rendering engine.
-    # It is useful for inspecting source parity before consuming the textures.
-    images = [f'<image href="ground.svg" width="{width}" height="{height}"/>']
-    for lily in floating:
-        images.append(f'<image href="{lily["src"].split("/")[-1]}" x="{number(lily["x"]-lily["anchor"]["x"]*lily["width"])}" y="{number(lily["y"]-lily["anchor"]["y"]*lily["height"])}" width="{lily["width"]}" height="{lily["height"]}"/>')
-    for prop in sorted(props, key=lambda p: p['y']):
-        vx, vy, pw, ph = prop['viewBox']
-        s = prop['scale']
-        images.append(f'<image href="{prop["src"].split("/")[-1]}" x="{number(prop["x"]+vx*s)}" y="{number(prop["y"]+vy*s)}" width="{number(pw*s)}" height="{number(ph*s)}"><title>{escape(prop["name"])}</title></image>')
-    cards = [f'<figure><img src="{p["src"].split("/")[-1]}" alt={quoteattr(p["name"])}><figcaption>{p["id"]}: {escape(p["name"])}</figcaption></figure>' for p in props]
-    output[OUTPUT/'preview.html'] = ('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Original Ducky Land SVG artwork</title>'
-        '<style>body{margin:0;background:#7fd0f3;color:#232323;font:14px system-ui}nav{padding:8px 16px;background:#fff4c5}nav a{color:inherit;margin-right:24px}.map{display:block;width:100%;height:calc(100vh - 36px)}#catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;padding:20px;background:#fff4c5}figure{margin:0;padding:10px;text-align:center;background:#fff9e1;border-radius:12px}figure img{width:100%;height:180px;object-fit:contain}figcaption{padding:8px}</style>'
-        '<nav><a href="#map">Original island</a><a href="#catalog">83 vector props</a>Static SVG preview — no Rive runtime</nav>'
-        f'<svg id="map" class="map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}">'+''.join(images)+'</svg>'
-        '<div id="catalog">'+''.join(cards)+'</div></html>\n')
     return output, manifest
 
 

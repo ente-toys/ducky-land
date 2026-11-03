@@ -5,6 +5,39 @@ import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {floatingPose} from '../src/pixi/floating.js';
 import {Gestures, movePinch, screenToWorld} from '../src/pixi/camera.js';
+import {createSimulation} from '../src/pixi/simulation.js';
+
+test('all 28 NPCs remain asleep through greetings and quacks while the player can move', () => {
+  const world = JSON.parse(readFileSync(new URL('../rive/web/world.json', import.meta.url)));
+  const sim = createSimulation(world, 8612, {sleepingNpcs: true});
+  const sleeping = sim.ducks.filter(duck => !duck.player);
+  const positions = sleeping.map(duck => [duck.x, duck.y, duck.turn]);
+  assert.equal(sleeping.length, 28);
+  assert.equal(sim.player.sleeping, false);
+  assert.equal(sim.player.action, 0);
+  for (let frame = 0; frame < 3600; frame++) {
+    if (frame % 90 === 0) {
+      sim.emote(2);
+      sleeping.forEach(duck => sim.emote(6, duck));
+    }
+    sim.step(1 / 60);
+  }
+  for (const [i, duck] of sleeping.entries()) {
+    assert.equal(duck.action, 7);
+    assert.equal(duck.sleeping, true);
+    assert.equal(duck.travel, 0);
+    assert.equal(duck.path.length, 0);
+    assert.deepEqual([duck.x, duck.y, duck.turn], positions[i]);
+  }
+  const start = sim.player.x;
+  sim.step(1 / 60, {x: 1, y: 0});
+  assert.ok(sim.player.x > start);
+  assert.equal(sim.player.action, 1);
+  assert.ok(sim.destination(sim.player.x + 100, sim.player.y));
+  sim.emote(7);
+  sim.step(1 / 60, {x: 1, y: 0});
+  assert.equal(sim.player.action, 1, 'player can interrupt their own sleep emote');
+});
 
 test('pinch keeps its world anchor while translating, zooming, and hitting zoom limits', () => {
   for (const ratio of [.01, .6, 1.8, 30]) {
@@ -115,6 +148,27 @@ test('all 34 wearables cover eight measured directions without missing or clippe
   }
 });
 
+test('corrected caps leave both eyes clear in every facing that shows a face', async () => {
+  const {createCanvas,loadImage}=await import('@napi-rs/canvas');
+  const manifest=JSON.parse(readFileSync(new URL('../public/pixi-duck/manifest.json',import.meta.url)));
+  for(const id of ['cap-8','cap-9','cap-11']){
+    const entry=manifest.wardrobe.find(item=>item.id===id);
+    for(const view of manifest.views){
+      const eyes=view.parts.filter(part=>part.role==='eye');
+      if(!eyes.length)continue;
+      const frame=entry.frames[String(view.angle)][0];
+      const canvas=createCanvas(frame.rect[2],frame.rect[3]),context=canvas.getContext('2d');
+      context.drawImage(await loadImage(new URL(`../public${frame.url}`,import.meta.url)),0,0);
+      for(const eye of eyes){
+        const x=Math.round(eye.pivot[0]-view.ground[0]-frame.rect[0]);
+        const y=Math.round(eye.pivot[1]-view.ground[1]-frame.rect[1]);
+        if(x<0||y<0||x>=canvas.width||y>=canvas.height)continue;
+        assert.ok(context.getImageData(x,y,1,1).data[3]<32,`${id} ${view.angle} covers an eye`);
+      }
+    }
+  }
+});
+
 test('all eleven extracted lilies drift within their pond positions and respect reduced motion', () => {
   const art=JSON.parse(readFileSync(new URL('../src/pixi/art-manifest.json',import.meta.url)));
   assert.equal(art.floating.length,11);
@@ -214,8 +268,26 @@ test('all original emote bubbles appear, expire, and retain feedback under reduc
   for(const feedback of [player,npc]){
     feedback.update(2,.3,false);assert.equal(feedback.bubble.emoteAction,2);
     feedback.update(1,.1,false);assert.equal(feedback.bubble.visible,false);
-    feedback.ring.destroy();feedback.bubble.destroy({children:true});
+    feedback.ring.destroy();feedback.bubble.destroy({children:true});feedback.sleep.destroy({children:true});
   }
+});
+
+test('persistent sleep indicators remain visible and stop drifting with reduced motion',async()=>{
+  const {createDuckFeedback}=await import('../src/pixi/feedback.js');
+  const feedback=createDuckFeedback(false);
+  try {
+    for(const time of [.1,3,60,600]){
+      feedback.update(7,time,false,true);
+      assert.equal(feedback.sleep.visible,true);
+      assert.equal(feedback.bubble.visible,false);
+    }
+    feedback.update(7,10,true,true);
+    const positions=feedback.sleep.children.map(z=>[z.x,z.y,z.alpha]);
+    feedback.update(7,50,true,true);
+    assert.deepEqual(feedback.sleep.children.map(z=>[z.x,z.y,z.alpha]),positions);
+    feedback.update(0,0,false,false);
+    assert.equal(feedback.sleep.visible,false);
+  } finally {feedback.ring.destroy();feedback.bubble.destroy({children:true});feedback.sleep.destroy({children:true});}
 });
 
 test('clouds drift continuously through the world and wind respects reduced motion',async()=>{

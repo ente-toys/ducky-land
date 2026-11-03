@@ -1,7 +1,4 @@
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { resolve, extname, sep } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 import { WebSocketServer, WebSocket } from 'ws';
@@ -10,7 +7,6 @@ import { world } from './server-world.mjs';
 import { createIslandBrain, CROWD_ACTION } from './rive/web/crowd.js';
 
 const HOST = '127.0.0.1';
-const root = fileURLToPath(new URL('./rive/web/', import.meta.url));
 const players = new Map(), bots = new Map();
 const {brain,ox,oy}=createIslandBrain(world,walkable);
 brain.updatePlayer=()=>{const p=players.values().next().value;if(p){brain.player.x=p.x-ox;brain.player.y=p.y-oy;}};
@@ -134,25 +130,10 @@ const heartbeat = setInterval(() => {
     else { p.alive = false; p.ws.ping(); }
   }
 }, 5000);
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.wasm': 'application/wasm', '.riv': 'application/octet-stream', '.ico': 'image/x-icon' };
-const page = createServer(async (req, res) => {
-  if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405).end(); return; }
-  let path;
-  try { path = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); } catch { res.writeHead(400).end(); return; }
-  if (path === '/favicon.ico') { res.writeHead(204).end(); return; }
-  const target = resolve(root, '.' + (path === '/' ? '/index.html' : path));
-  if (!target.startsWith(root.endsWith(sep) ? root : root + sep)) { res.writeHead(403).end(); return; }
-  try {
-    const data = await readFile(target);
-    res.writeHead(200, { 'Content-Type': types[extname(target)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
-    res.end(req.method === 'HEAD' ? undefined : data);
-  } catch { res.writeHead(404).end('Not found'); }
-});
-for (const server of [realtime, page]) server.on('error', error => { console.error(error.message); process.exit(1); });
+realtime.on('error', error => { console.error(error.message); process.exit(1); });
 realtime.listen(Number(process.env.DUCKY_WS_PORT)||8810, HOST, () => console.log('Realtime: ws://127.0.0.1:8810/room'));
-// Static island is served by Python on 8800.
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => {
   clearInterval(loop); clearInterval(heartbeat);
   for (const p of players.values()) p.ws.terminate();
-  wss.close(); realtime.close(); page.close();
+  wss.close(); realtime.close();
 });

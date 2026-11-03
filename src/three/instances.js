@@ -1,8 +1,0 @@
-import * as THREE from 'three';
-// Animate source hierarchies normally, then submit repeated geometry in batches.
-function signature(g){if(g.userData.instanceKey)return g.userData.instanceKey;let hash=2166136261;for(const name of ['position','normal','uv']){const a=g.attributes[name]?.array;if(!a)continue;const bytes=new Uint8Array(a.buffer,a.byteOffset,a.byteLength);for(let i=0;i<bytes.length;i++)hash=Math.imul(hash^bytes[i],16777619);}if(g.index)for(const v of g.index.array)hash=Math.imul(hash^v,16777619);return g.userData.instanceKey=`${g.attributes.position.count}:${g.index?.count||0}:${hash>>>0}`;}
-export class DynamicInstances {
- constructor(scene,roots){this.scene=scene;this.batches=[];const groups=new Map();for(const root of roots)root.traverse(o=>{if(!o.isMesh||o.isInstancedMesh||Array.isArray(o.material))return;const key=signature(o.geometry)+':'+o.material.uuid;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(o);o.layers.set(1);});for(const nodes of groups.values()){const first=nodes[0],mesh=new THREE.InstancedMesh(first.geometry,first.material,nodes.length);mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.castShadow=true;mesh.receiveShadow=true;mesh.frustumCulled=false;mesh.name='Animated instances';scene.add(mesh);this.batches.push({mesh,nodes});}this.zero=new THREE.Matrix4().makeScale(0,0,0);}
- update(){this.scene.updateMatrixWorld(true);for(const {mesh,nodes}of this.batches){nodes.forEach((node,i)=>{let visible=true;for(let parent=node;parent;parent=parent.parent)if(!parent.visible){visible=false;break;}mesh.setMatrixAt(i,visible?node.matrixWorld:this.zero);});mesh.instanceMatrix.needsUpdate=true;}}
- dispose(){for(const {mesh}of this.batches){mesh.removeFromParent();mesh.dispose();}this.batches=[];}
-}
