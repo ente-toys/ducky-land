@@ -1,6 +1,7 @@
 import world from '../rive/web/world.json';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {chatText} from '../src/pixi/chat.js';
 
 const nav = createNavigation(world);
 const PLAYER_LIMIT = 16;
@@ -43,7 +44,8 @@ export class IslandRoom {
       const info = socket.deserializeAttachment();
       if (!info) continue;
       const actor = info.actor && {...info.actor, action:0, travel:0, path:[], until:0};
-      this.connections.set(socket, {...info, actor, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
+      const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
+      this.connections.set(socket, {...info, actor, login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
@@ -109,7 +111,7 @@ export class IslandRoom {
       socket.close(1013, 'Live view full');
       return new Response(null,{status:101,webSocket:client});
     }
-    const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires,
+    const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login,
       input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
       const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
@@ -130,8 +132,8 @@ export class IslandRoom {
   }
 
   attach(socket, info) {
-    const {actor,account,digest,expires,ack,lastDestination,lastEmote,tokens,tokenTime} = info;
-    socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,ack,lastDestination,lastEmote,tokens,tokenTime});
+    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime} = info;
+    socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime});
   }
 
   send(socket, message) {
@@ -140,12 +142,16 @@ export class IslandRoom {
   }
 
   broadcast() {
-    const players = [...this.connections.values()].filter(info => info.actor).map(info => publicPose(info.actor));
+    const active = [...this.connections.values()].filter(info => info.actor);
+    const players = active.map(info => publicPose(info.actor));
+    const namedPlayers = players.map((pose,index) => ({...pose, login:active[index].login}));
+    const now = Date.now();
     const tick = ++this.tickCount;
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
-      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, players, self:actor ? {
-        ack:info.ack, path:actor.path, emoteLeft:Math.max(0,actor.until-Date.now()/1000),
+      const visiblePlayers = info.digest && info.expires > now ? namedPlayers : players;
+      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, players:visiblePlayers, self:actor ? {
+        ack:info.ack, path:actor.path, emoteLeft:Math.max(0,actor.until-now/1000),
       } : null});
     }
   }
@@ -158,6 +164,7 @@ export class IslandRoom {
       info.digest = null;
       info.account = null;
       info.expires = null;
+      info.login = null;
     }
     const spectators = [...this.connections.values()].filter(entry => !entry.actor).length;
     if (wasPlayer && spectators > SPECTATOR_LIMIT) {
@@ -214,6 +221,16 @@ export class IslandRoom {
     if (!info.actor) return; // Spectators have no gameplay authority.
     let command;
     try { command = JSON.parse(message); } catch { return; }
+    if (command?.type === 'chat') {
+      const text = chatText(command.text);
+      if (text === null || now - (info.lastChat ?? -Infinity) < 100) return;
+      info.lastChat = now;
+      const event = {type:'chat', id:info.actor.id, text};
+      for (const [peer, viewer] of this.connections) {
+        if (viewer.digest && viewer.expires > now) this.send(peer, event);
+      }
+      return;
+    }
     if (!command || !Number.isSafeInteger(command.seq) || command.seq <= info.ack) return;
     const actor = info.actor;
     switch (command.type) {

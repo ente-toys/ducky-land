@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {PixiIsland} from './engine.js';
 import {RoomClient} from './room-client.js';
+import IslandChat from './IslandChat.jsx';
 import './pixi.css';
 
 const notices = {
@@ -20,6 +21,10 @@ const authNotices = {
 export default function PixiPage() {
   const host = useRef(null);
   const room = useRef(null);
+  const island = useRef(null);
+  const chatLayer = useRef(null);
+  const chatEditor = useRef(null);
+  const nameLayer = useRef(null);
   const [error, setError] = useState(false);
   const [status, setStatus] = useState('connecting');
   const [session, setSession] = useState(null);
@@ -45,17 +50,23 @@ export default function PixiPage() {
     }
     const client = new RoomClient(state => {
       setStatus(state);
+      if (['connecting','reconnecting','expired','signed-out','spectators-full'].includes(state)) {
+        island.current?.clearChat();
+      }
       if (state === 'expired' || state === 'signed-out') refresh();
-    });
+    }, (id,text) => island.current?.showChat(id,text));
     room.current = client;
-    const island = new PixiIsland({room:client, onError:() => setError(true)});
-    island.mount(host.current);
+    const game = new PixiIsland({room:client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
+      onError:() => setError(true)});
+    island.current = game;
+    game.mount(host.current);
     client.connect();
     refresh();
     return () => {
       abort.abort();
       client.dispose();
-      island.dispose();
+      game.dispose();
+      island.current = null;
       room.current = null;
     };
   }, []);
@@ -79,8 +90,13 @@ export default function PixiPage() {
   const retryPlay = session?.user && ['players-full','taken-over','watching'].includes(status);
   return <main className="pixi-page">
     <div className="pixi-host" ref={host}/>
+    <div className="pixi-chat-layer">
+      <div ref={nameLayer}/>
+      <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>
+    </div>
     {!error && <aside className="pixi-live" aria-label="Live island">
       <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
+      {status === 'playing' && <IslandChat room={room} island={island} editor={chatEditor}/>}
       {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
       {retryPlay && <button onClick={() => room.current?.connect()}>
         {status === 'taken-over' ? 'Take control' : 'Join island'}

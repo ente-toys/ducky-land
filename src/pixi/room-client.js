@@ -1,4 +1,5 @@
 import {DURATIONS, playEmote, setWalkDestination, walkStep} from './player-motion.js';
+import {CHAT_INTERVAL, chatText} from './chat.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -13,8 +14,9 @@ function sample(track, now) {
 }
 
 export class RoomClient {
-  constructor(onStatus) {
+  constructor(onStatus, onChat = () => {}) {
     this.onStatus = onStatus;
+    this.onChat = onChat;
     this.tracks = new Map();
     this.reset();
   }
@@ -25,6 +27,8 @@ export class RoomClient {
   }
 
   reset() {
+    clearTimeout(this.chatTimer);
+    this.lastChat = -Infinity;
     this.tracks.clear();
     this.id = null;
     this.player = null;
@@ -70,6 +74,7 @@ export class RoomClient {
       if (data === 'pong') { pendingPing = null; return; }
       const message = JSON.parse(data);
       if (message.type === 'snapshot') this.snapshot(message);
+      if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
         this.failures = 0;
         this.id = message.id;
@@ -141,6 +146,21 @@ export class RoomClient {
 
   emote(action) {
     return Object.hasOwn(DURATIONS, action) && this.send({type:'emote',action});
+  }
+
+  chat(value) {
+    const text = chatText(value);
+    if (text === null || !this.id || this.socket?.readyState !== WebSocket.OPEN) return;
+    clearTimeout(this.chatTimer);
+    const socket = this.socket;
+    const send = () => {
+      if (!this.id || socket !== this.socket || socket.readyState !== WebSocket.OPEN) return;
+      socket.send(JSON.stringify({type:'chat',text}));
+      this.lastChat = performance.now();
+    };
+    const wait = CHAT_INTERVAL - (performance.now() - this.lastChat);
+    if (wait > 0) this.chatTimer = setTimeout(send, wait);
+    else send();
   }
 
   stopInput() {

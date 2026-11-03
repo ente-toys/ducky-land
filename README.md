@@ -33,7 +33,11 @@ dependencies to measure the artwork.
 
 Guests can watch the live island, pan, and zoom. Use **Play with GitHub** to
 move and emote as a duck. The latest playing tab for an account controls that
-duck. The preview and production use different GitHub apps and room storage.
+duck. Signed-in users can see GitHub usernames above the ducks. Signed-in
+players can press C or choose Chat to open a yellow text bubble under their username.
+It follows the duck while walking. Text appears live to other signed-in users,
+disappears after five seconds, and has no history. Esc clears it immediately.
+The preview and production use different GitHub apps and room storage.
 
 1. Register a GitHub OAuth app for the [preview island](https://multiplayer.ducky-land.pages.dev/).
    Use `https://multiplayer.ducky-land.pages.dev/auth/github/callback` as its exact

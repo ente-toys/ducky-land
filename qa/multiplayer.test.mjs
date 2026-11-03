@@ -146,6 +146,8 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     const spawn = guest.duck(id);
     assert.deepEqual([spawn.x,spawn.y],world.zones.plaza.spawn);
     assert.deepEqual(Object.keys(spawn).sort(),['action','emoteVersion','id','outfit','travel','turn','x','y']);
+    assert.equal((await eventually(() => b.duck(id)))?.login,'account-101');
+    assert.equal(b.duck()?.login,'account-102');
     assert.equal(guest.snapshot.self,null);
     assert.equal((await request('/api/room?play=1',{headers:{Upgrade:'websocket',Origin:'https://elsewhere.example',Cookie:one.session}})).status,403);
 
@@ -209,6 +211,44 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     await eventually(() => guest.snapshot.players.length === 1);
   } finally {
     clients.forEach(client => client.close());
+  }
+});
+
+test('player chat reaches signed-in users only and is never replayed', async () => {
+  const [first,second,third] = await Promise.all([signIn(103),signIn(104),signIn(105)]);
+  const player = await socket(first.session);
+  const viewer = await socket(second.session);
+  const guest = await socket();
+  let latePlayer;
+  try {
+    const chatEvents = client => client.messages.filter(message => message.type === 'chat');
+    guest.send({type:'chat',text:'Guest message'});
+    player.send({type:'chat',text:'x'.repeat(121)});
+    player.send({type:'chat',id:'spoofed',text:'  Hello\n island!  '});
+    player.send({type:'chat',text:'Too soon'});
+    await eventually(() => chatEvents(viewer).length > 0);
+    latePlayer = await socket(third.session);
+    await eventually(() => latePlayer.snapshot);
+    const event = {type:'chat',id:player.welcome.id,text:'Hello island!'};
+    assert.deepEqual(chatEvents(player),[event]);
+    assert.deepEqual(chatEvents(viewer),[event]);
+    assert.equal(viewer.duck(player.welcome.id)?.login,'account-103');
+    assert.equal(guest.duck(player.welcome.id)?.login,undefined);
+    assert.deepEqual(chatEvents(guest),[]);
+    assert.deepEqual(chatEvents(latePlayer),[]);
+    assert.ok(!JSON.stringify(latePlayer.snapshot).includes(event.text));
+    await delay(120);
+    player.send({type:'chat',text:'Hello island! 🦆'});
+    await eventually(() => chatEvents(viewer).at(-1)?.text === 'Hello island! 🦆');
+    await delay(120);
+    player.send({type:'chat',text:''});
+    await eventually(() => chatEvents(viewer).at(-1)?.text === '');
+    assert.deepEqual(chatEvents(guest),[]);
+  } finally {
+    player.close();
+    viewer.close();
+    guest.close();
+    latePlayer?.close();
   }
 });
 

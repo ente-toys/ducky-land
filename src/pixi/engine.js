@@ -12,10 +12,12 @@ import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';
 import {createPlacements} from './placements.js';
 import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, zoomAt} from './camera.js';
+import {CHAT_DURATION} from './chat.js';
 
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
 const ZERO = {x:0,y:0};
+const CHAT_LABEL_GAP = 4;
 function acquire(src, resolution = 1) {
   let entry = textureLeases.get(src);
   if (!entry) {
@@ -36,8 +38,12 @@ function release(src) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}, room = null} = {}) {
+  constructor({onError = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null} = {}) {
     this.room = room;
+    this.chatLayer = chatLayer;
+    this.chatEditor = chatEditor;
+    this.nameLayer = nameLayer;
+    this.chatBubbles = new Map();
     this.liveRigs = new Map();
     this.onError = onError;
     this.disposed = false;
@@ -220,7 +226,7 @@ export class PixiIsland {
     this.listen(this.canvas, 'pointerdown', event => {
       if (event.button !== 0 && event.button !== 1) return;
       event.preventDefault();
-      this.canvas.focus({preventScroll: true});
+      (this.chatEditor?.current ?? this.canvas).focus({preventScroll: true});
       this.audio.unlock();
       this.canvas.setPointerCapture(event.pointerId);
       this.gestures.down(event.pointerId, point(event));
@@ -277,19 +283,82 @@ export class PixiIsland {
       }
     });
     this.listen(window, 'keyup', event => this.keys.delete(event.key.toLowerCase()));
-    this.listen(window, 'blur', () => {this.keys.clear(); this.gestures.clear(); this.room?.stopInput();});
+    this.listen(window, 'blur', () => this.stopInput());
     this.listen(document, 'visibilitychange', () => {
-      this.keys.clear(); this.gestures.clear(); this.room?.stopInput(); this.accumulator = 0;
+      this.stopInput();
+      this.accumulator = 0;
       cancelAnimationFrame(this.raf);
       if (document.hidden) this.audio.suspend();
       else {this.audio.resume(); this.lastFrame = performance.now(); this.raf = requestAnimationFrame(time => this.tick(time));}
     });
   }
 
+  stopInput() {
+    this.keys.clear();
+    this.gestures.clear();
+    this.room?.stopInput();
+  }
+
+  showChat(id, text) {
+    if (this.disposed || !this.chatLayer) return;
+    if (!text) {
+      this.removeChat(id);
+      return;
+    }
+    const entry = this.chatBubbles.get(id);
+    const bubble = entry?.bubble ?? document.createElement('div');
+    if (!entry) {
+      bubble.className = 'pixi-chat-bubble';
+      bubble.hidden = true;
+      this.chatLayer.appendChild(bubble);
+    }
+    clearTimeout(entry?.timer);
+    bubble.textContent = text;
+    const timer = setTimeout(() => this.removeChat(id), CHAT_DURATION);
+    this.chatBubbles.set(id,{bubble,timer});
+  }
+
+  removeChat(id) {
+    const entry = this.chatBubbles.get(id);
+    if (!entry) return;
+    clearTimeout(entry.timer);
+    entry.bubble.remove();
+    this.chatBubbles.delete(id);
+  }
+
+  clearChat() {
+    for (const id of this.chatBubbles.keys()) this.removeChat(id);
+  }
+
+  placeLabel(label, x, y) {
+    label.hidden = x < 0 || x > this.width || y < 0 || y > this.height;
+    if (!label.hidden) label.style.translate = `${x}px ${y}px`;
+  }
+
+  duckLabelPosition(pose) {
+    const {zoom,x,y} = this.camera;
+    return {
+      x:this.width / 2 + (pose.x - x) * zoom,
+      y:this.height / 2 + (pose.y - y - 165) * zoom - 8,
+    };
+  }
+
+  positionChatEditor(pose = this.player) {
+    const form = this.chatEditor?.current?.form;
+    if (!form || !pose || !this.width || !this.height) return;
+    const anchor = this.duckLabelPosition(pose);
+    const left = anchor.x - form.offsetWidth / 2;
+    const maxLeft = Math.max(8, this.width - form.offsetWidth - 8);
+    const maxTop = Math.max(8, this.height - form.offsetHeight - 8);
+    const top = anchor.y + CHAT_LABEL_GAP;
+    form.style.translate = `${clamp(left, 8, maxLeft)}px ${clamp(top, 8, maxTop)}px`;
+  }
+
   updateControlLabel() {
     const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home shows the island.';
     const play = ' Click to walk. WASD or arrows move. Q quacks, E dances, 1 to 7 emote, F follows.';
-    this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play));
+    const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
+    this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
   }
 
   tap(point) {
@@ -481,14 +550,19 @@ export class PixiIsland {
     for (const [id, entry] of this.liveRigs) {
       if (ids.has(id)) continue;
       entry.rig?.dispose();
+      entry.nameplate?.remove();
       this.liveRigs.delete(id);
+      this.removeChat(id);
     }
     for (const pose of poses) {
       const {id,x,y,action,turn,travel,emoteVersion} = pose;
       const isPlayer = Boolean(pose.player);
+      const editing = isPlayer && this.chatEditor?.current;
+      if (editing) this.positionChatEditor(pose);
       let entry = this.liveRigs.get(id);
       if (!entry || entry.isPlayer !== isPlayer) {
         entry?.rig?.dispose();
+        entry?.nameplate?.remove();
         entry = {isPlayer, rig:null, emoteVersion};
         this.liveRigs.set(id, entry);
         createDuck({outfit:pose.outfit, seed:parseInt(id.slice(0,8),16), isPlayer}).then(rig => {
@@ -504,6 +578,24 @@ export class PixiIsland {
         }).catch(error => {
           if (!this.disposed) console.error('Could not load a duck', error);
         });
+      }
+      if (this.nameLayer && entry.login !== pose.login) {
+        entry.nameplate?.remove();
+        entry.login = pose.login;
+        entry.nameplate = null;
+        if (pose.login) {
+          entry.nameplate = document.createElement('div');
+          entry.nameplate.className = 'pixi-duck-name';
+          entry.nameplate.textContent = `@${pose.login}`;
+          this.nameLayer.appendChild(entry.nameplate);
+        }
+      }
+      const chat = this.chatBubbles.get(id);
+      if (entry.nameplate || chat) {
+        const anchor = this.duckLabelPosition(pose);
+        if (entry.nameplate) this.placeLabel(entry.nameplate,anchor.x,anchor.y);
+        if (chat && editing) chat.bubble.hidden = true;
+        else if (chat) this.placeLabel(chat.bubble,anchor.x,anchor.y + CHAT_LABEL_GAP);
       }
       if (entry.emoteVersion !== emoteVersion && !isPlayer && action === 2 && visible(x,y)) {
         this.audio.play('quack', .08);
@@ -524,10 +616,14 @@ export class PixiIsland {
     cancelAnimationFrame(this.raf);
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());
+    this.clearChat();
     this.keys.clear();
     this.gestures.clear();
     this.audio.dispose();
-    this.liveRigs.forEach(entry => entry.rig?.dispose());
+    this.liveRigs.forEach(entry => {
+      entry.rig?.dispose();
+      entry.nameplate?.remove();
+    });
     this.liveRigs.clear();
     this.rigs.forEach(rig => rig.dispose());
     this.rigs = [];
