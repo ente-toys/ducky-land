@@ -1,5 +1,6 @@
 import library from '../../assets/manifest.json';
 import original from './art-manifest.json';
+import layout from './layout.json';   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
 
 const urls = import.meta.glob('../../assets/**/*.svg', {eager: true, query: '?url', import: 'default'});
 const byName = new Map(library.assets.map(asset => [asset.name, asset]));
@@ -56,7 +57,7 @@ export function createPlacements(world, walkable) {
     if (i % 4 === 1) {const x = tree.x - side * 110, y = tree.y + 45; if (walkable(x, y)) props.push(plant(['flower-1','flower-2','flower-3'][i % 3], {id: `flower-${i}`, name: 'Flowers', x, y, zone: tree.zone}));}
   });
   // Boss 3 Nov: fewer details. The scattered food, nature, beach and street pieces are off.
-  if (true) return props;
+  if (true) return applyLayout(props);
   details.forEach((asset, i) => {
     const zone = asset.category === 'beach' ? 'lighthouse-beach' : asset.category === 'food' ? 'bread-forest' : zones[i % zones.length];
     if (zone === 'lighthouse-beach') return;
@@ -66,4 +67,13 @@ export function createPlacements(world, walkable) {
     props.push(place(asset, {id: `detail-${i}`, name: asset.name, x, y, zone}));
   });
   return props;
+}
+
+function applyLayout(props) {
+  const gone = new Set(layout.remove.map(String)), byId = new Map(props.map(p => [String(p.id), p]));
+  for (const {id, x, y} of layout.move || []) {const p = byId.get(String(id)); if (p) Object.assign(p, {x, y});}
+  for (const {id, kind} of layout.swap || []) {const p = byId.get(String(id)); if (p && PLANTS[kind]) Object.assign(p, plant(kind, p));}
+  const out = props.filter(p => !gone.has(String(p.id)));
+  for (const a of layout.add || []) if (PLANTS[a.kind]) out.push(plant(a.kind, {id: `add-${out.length}`, name: a.kind, x: a.x, y: a.y, zone: a.zone}));
+  return out;
 }
