@@ -21,7 +21,8 @@ function place(asset, point) {
 }
 
 export function createPlacements(world, walkable) {
-  const props = original.props.map(prop => {
+  // Boss 2 + 3 Nov: no place-name signs, cities or flags on the island.
+  const props = original.props.filter(prop => !prop.name.startsWith('Wayfinding')).map(prop => {
     if (prop.zone === 'lighthouse-beach') return prop;
     const asset = byName.get(replacements[prop.name]);
     if (asset?.name === 'sailboat') {
@@ -31,7 +32,7 @@ export function createPlacements(world, walkable) {
   });
   const zones = ['bread-forest','pond','library','plaza','race-lake','lighthouse-beach','islets'];
   const details = library.assets.filter(asset => ['food','nature','beach','street'].includes(asset.category)
-    && !/^(tree-|fence-|sand-edge|bench-|lamp-|sign)/.test(asset.name));
+    && !/^(tree-|fence-|sand-edge|bench-|lamp-|sign|flag)/.test(asset.name));   // boss 3 Nov: no city flags
   details.forEach((asset, i) => {
     const zone = asset.category === 'beach' ? 'lighthouse-beach' : asset.category === 'food' ? 'bread-forest' : zones[i % zones.length];
     if (zone === 'lighthouse-beach') return;

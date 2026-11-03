@@ -9,7 +9,7 @@ import world from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
 import {createAudio} from './audio.js';
-import {createDuck, disposeDuckAssets} from './duck.js';
+import {createDuck, disposeDuckAssets, renderDuckAtlas} from './rive-duck.js';   // boss 3 Nov: the approved Rive Ducky
 import {createPlacements} from './placements.js';
 import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, zoomAt} from './camera.js';
 
@@ -134,9 +134,6 @@ export class PixiIsland {
       if (failure) throw failure.reason;
       this.rigs.forEach((rig, i) => {
         const duck = this.sim.ducks[i];
-        // The original flat view scales the source drawing by .88 × .24.
-        // The reusable rig's own scale is 1/3; compensate at its world root.
-        rig.root.scale.set(.88 * .24 * 3);
         rig.root.position.set(duck.x, duck.y);
         this.objects.addChild(rig.root);
       });
@@ -421,6 +418,7 @@ export class PixiIsland {
     this.marker.visible = this.markerUntil > t;
     if (this.marker.visible) {const age=1.5-(this.markerUntil-t);this.marker.alpha=1-age/1.5;this.marker.scale.set(1+age*.9,1+age*8/9);}
     if (this.sim.player.travel && t > (this.nextStep || 0)) {this.audio.play('step', .045); this.nextStep = t + .28;}
+    renderDuckAtlas();
     this.app.render();
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
