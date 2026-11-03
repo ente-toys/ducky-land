@@ -60,12 +60,13 @@ function samplePose(action,t,walkPhase,reduced,speed=165){
   const p=defaultPose(),s=Math.sin(t*TAU/2.8),dance=Math.sin(t*TAU/1.35),step=Math.sin(walkPhase);
   p.breath=Math.sin(t*1.8)*.012;p.sway=s*.012;p.headTilt=Math.sin(t*.85)*.014;p.tail=Math.sin(t*2)*.025;
   switch(action){
-    case 1:{// boss 4 Nov: the Rive waddle: rock onto the standing foot, squash on each footfall, stretch as it passes, head and tail follow late
-      const k=clamp(speed/165,.7,1.5),lift=Math.abs(step),contact=Math.pow(1-lift,4);
-      p.bob=-Math.pow(lift,.8)*9*k;p.sqy=1-contact*.07*k+lift*.025;p.sqx=1+contact*.06*k-lift*.012;
-      p.sway=step*.065*k;p.lean=.03*k;
-      p.footL=Math.pow(Math.max(0,step),1.4)*18*k;p.footR=Math.pow(Math.max(0,-step),1.4)*18*k;p.stepL=step*9*k;p.stepR=-step*9*k;
-      p.wingL=-step*.13-.04*k;p.wingR=-step*.13+.04*k;p.headY=Math.cos(walkPhase*2-.7)*3*k;p.headTilt=-step*.03;p.tail=-step*.2;break;}
+    case 1:{// boss 4 Nov: smooth Rive-like waddle, no squash: two soft bounces per stride, body rocks onto the standing foot,
+      // head, tuft, wings and tail follow a beat late so it reads as many in-between frames
+      const k=clamp(speed/165,.7,1.5),c2=walkPhase*2;
+      p.bob=-(1-Math.cos(c2))*.5*8*k;p.sway=Math.sin(walkPhase-.35)*.055*k;p.lean=.025*k;
+      p.footL=Math.pow(Math.max(0,step),1.3)*17*k;p.footR=Math.pow(Math.max(0,-step),1.3)*17*k;p.stepL=step*9*k;p.stepR=-step*9*k;
+      p.wingL=-Math.sin(walkPhase+.6)*.12*k-.03;p.wingR=-Math.sin(walkPhase+.6)*.12*k+.03;
+      p.headY=-Math.cos(c2-.9)*2.6*k;p.headTilt=-Math.sin(walkPhase-.7)*.028*k;p.tail=-Math.sin(walkPhase-1.1)*.2*k;break;}
     case 2:{const q=Math.max(0,Math.sin(t*TAU/1.1));p.bill=q*.85;p.headY=-q*9;p.bob=3*(1-q);p.wingL=q*.09;p.wingR=-q*.09;break;}
     case 3:p.sway=dance*.13;p.bob=-Math.abs(dance)*12;p.headTilt=-dance*.10;p.wingL=.35+Math.cos(t*5)*.30;p.wingR=-.35+Math.cos(t*5)*.30;p.footL=Math.max(0,-dance)*11;p.footR=Math.max(0,dance)*11;p.tail=dance*.12;break;
     case 4:p.headTilt=.08;p.wingL=.56;p.wingR=-.56;p.wingForward=.12;p.bob=-3*(1+Math.sin(t*3));break;
@@ -112,16 +113,14 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
   // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
-  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9;
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,fading=null;
   // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
   const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
   const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
   const artHeight=art.getLocalBounds().height||900;
   function moveFx(){
-    const fx={sqx:1,sqy:1,bob:0};
-    if(landT<.45){const u=landT/.45,w=Math.exp(-5*u)*Math.cos(u*Math.PI*2.4),k=clamp(lastSpeed/165,.6,1.4);fx.sqy-=.11*w*k;fx.sqx+=.09*w*k;}
-    if(startT<.14){const w=Math.sin(Math.PI*startT/.14);fx.sqy-=.06*w;fx.sqx+=.05*w;}
-    if(turnT<.18){const w=Math.cos(Math.PI*.5*turnT/.18);fx.sqx*=1-.24*w;fx.bob-=6*w;}
+    const fx={sqx:1,sqy:1,bob:0,tip:0};
+    if(landT<.5){const u=landT/.5;fx.tip=Math.exp(-5*u)*Math.sin(u*Math.PI*2.2)*.06*clamp(lastSpeed/165,.6,1.4);}
     return fx;
   }
   current.root.visible=true;current.root.alpha=1;
@@ -162,7 +161,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
 
   function renderView(view,t){
     const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx();
-    view.body.y=p.bob;view.body.rotation=p.sway+p.lean*lookSide;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
+    view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
     view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=1-clamp(-p.bob,0,35)*.01;
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     for(const part of view.parts){
@@ -205,15 +204,20 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     for(const key of Object.keys(pose))pose[key]+=(desired[key]-pose[key])*smoothing;
     turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.075));
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
-    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8+.025){current.root.visible=false;current=target;if(!reducedMotion)turnT=0;}
+    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8+.025){if(fading&&fading!==target)fading.root.visible=false;fading=reducedMotion?null:current;if(!fading)current.root.visible=false;current=target;turnT=0;}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;
     nap.visible = sleeping;
+    if (sleeping && fading) {fading.root.visible = false; fading = null;}
     if (sleeping) {
       // Keep the belly planted as the back rises and falls.
       napBody.scale.y = reducedMotion ? 1 : 1 + Math.sin(t * 1.5 + phase) * .025;
     } else {
+      // boss 4 Nov: the old direction fades out over the new one (.14 s), so turning has in-between frames and no squash
+      const f=fading?clamp(turnT/.14,0,1):1;
+      if(fading){fading.root.visible=f<1;fading.root.alpha=1-f;if(f<1)renderView(fading,t);else fading=null;}
+      current.root.alpha=1;if(fading)art.setChildIndex(current.root,Math.max(art.getChildIndex(fading.root),art.getChildIndex(current.root)));   // new view solid on top, old one fades out behind it
       renderView(current,t);
     }
     feedback.update(currentAction,actionTime+ (persistentSleep?phase:0),reducedMotion,persistentSleep);
