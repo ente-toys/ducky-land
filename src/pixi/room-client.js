@@ -79,7 +79,7 @@ export class RoomClient {
         this.failures = 0;
         this.id = message.id;
         if (!this.id) this.player = null;
-        if (message.type === 'role' || message.reason === 'players-full') this.wantsPlay = false;
+        if (message.type === 'role' || ['players-full','star-required'].includes(message.reason)) this.wantsPlay = false;
         full = message.reason === 'spectators-full';
         this.onStatus(this.id ? 'playing' : message.reason ?? 'watching');
       }

@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import {PixiIsland} from './engine.js';
 import {RoomClient} from './room-client.js';
 import IslandChat from './IslandChat.jsx';
+import StarDialog from './StarDialog.jsx';
 import './pixi.css';
 
 const notices = {
@@ -11,11 +12,13 @@ const notices = {
   'players-full':'The island is full. You can still watch.',
   'taken-over':'Your duck is playing in another tab.',
   expired:'Your session expired.',
+  'star-required':'Star ente/ente to play. You can still watch.',
 };
 
 const authNotices = {
   cancelled:'GitHub sign-in was cancelled.',
   failed:'GitHub sign-in failed. Try again.',
+  'star-check':'Could not check your GitHub star. Please sign in again.',
 };
 
 export default function PixiPage() {
@@ -30,6 +33,7 @@ export default function PixiPage() {
   const [session, setSession] = useState(null);
   const [notice, setNotice] = useState('');
   const [signingOut, setSigningOut] = useState(false);
+  const [starDialogOpen, setStarDialogOpen] = useState(true);
 
   useEffect(() => {
     const abort = new AbortController();
@@ -53,7 +57,8 @@ export default function PixiPage() {
       if (['connecting','reconnecting','expired','signed-out','spectators-full'].includes(state)) {
         island.current?.clearChat();
       }
-      if (state === 'expired' || state === 'signed-out') refresh();
+      if (state === 'star-required') setStarDialogOpen(true);
+      if (['expired','signed-out','star-required'].includes(state)) refresh();
     }, (id,text) => island.current?.showChat(id,text));
     room.current = client;
     const game = new PixiIsland({room:client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
@@ -87,7 +92,8 @@ export default function PixiPage() {
   }
 
   const retryLive = status === 'spectators-full';
-  const retryPlay = session?.user && ['players-full','taken-over','watching'].includes(status);
+  const starRequired = session?.user && !session.user.canPlay;
+  const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
   return <main className="pixi-page">
     <div className="pixi-host" ref={host}/>
     <img className="pixi-ente-logo" src="/ente-wordmark-white.png" alt="Ente" width="844" height="264"/>
@@ -98,6 +104,7 @@ export default function PixiPage() {
     {!error && <aside className="pixi-live" aria-label="Live island">
       <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
       {status === 'playing' && <IslandChat room={room} island={island} editor={chatEditor}/>}
+      {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
       {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
       {retryPlay && <button onClick={() => room.current?.connect()}>
         {status === 'taken-over' ? 'Take control' : 'Join island'}
@@ -108,6 +115,11 @@ export default function PixiPage() {
           ? <a href="/auth/github/start">Play with GitHub</a>
           : <button disabled title="GitHub sign-in is unavailable">Play with GitHub</button>}
     </aside>}
+    {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {
+      setSession(previous => ({...previous,user:{...previous.user,canPlay:true}}));
+      setStarDialogOpen(false);
+      room.current?.connect();
+    }}/>}
     {error && <div className="pixi-error" role="alert">
       <p>The island could not be displayed.</p>
       <button onClick={() => location.reload()}>Try again</button>

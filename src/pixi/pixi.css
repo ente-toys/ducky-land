@@ -47,6 +47,34 @@
   cursor: pointer;
 }
 .pixi-live button:disabled { opacity: .65; cursor: default; }
+.pixi-star-dialog {
+  box-sizing: border-box;
+  width: min(440px, calc(100vw - 32px));
+  padding: 24px;
+  color: #332b23;
+  background: #fff9df;
+  border: 2px solid #564537;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px #332b2340;
+  font: 16px/1.5 system-ui, sans-serif;
+}
+.pixi-star-dialog::backdrop { background: #332b2370; }
+.pixi-star-dialog h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.2; }
+.pixi-star-dialog p { margin: 0 0 20px; }
+.pixi-star-actions { display: grid; gap: 10px; }
+.pixi-star-actions :is(a, button) {
+  padding: 10px 12px;
+  color: inherit;
+  background: #ffda69;
+  border: 1px solid #564537;
+  border-radius: 10px;
+  font: 600 14px/1.4 system-ui, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pixi-star-actions button { background: transparent; }
+.pixi-star-actions :is(a, button):focus-visible { outline: 2px solid #564537; outline-offset: 3px; }
 @media (max-width: 480px) {
   .pixi-ente-logo { width: 60px; }
   .pixi-live { max-width: calc(100vw - 128px); }

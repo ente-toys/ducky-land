@@ -15,17 +15,19 @@ before(async () => {
   const root = fileURLToPath(new URL('../',import.meta.url));
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
     import {IslandRoom} from './worker/index.js';
-    import {start, callback, session, logout, connect} from './server/pages-auth.js';
+    import {start, callback, session, logout, connect, playAccess} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
       fetch(request) {
         const path = new URL(request.url).pathname;
         if (path === '/test/expire-flow') this.sql.exec('UPDATE flows SET expires=0');
         if (path === '/test/expire-resume') this.sql.exec('UPDATE resumes SET expires=0');
         if (path === '/test/expire-session') this.sql.exec('UPDATE sessions SET expires=0');
+        if (path === '/test/legacy-session') this.sql.exec('UPDATE sessions SET can_play=0,github_token=NULL');
         if (path.startsWith('/test/')) return new Response(null, {status:204});
         return super.fetch(request);
       }
     }
+    const starredAccounts = new Set();
     const fakeGitHub = async (url, options) => {
       if (url.endsWith('/access_token')) {
         const {code,code_verifier} = Object.fromEntries(options.body);
@@ -33,13 +35,19 @@ before(async () => {
         return Response.json({access_token:code});
       }
       const login = options.headers.Authorization.split(' ')[1];
+      if (url.endsWith('/user/starred/ente/ente')) {
+        const status = login === 'account-9000' && !starredAccounts.has(login) ? 404 : login === 'account-9001' ? 503 : 204;
+        return new Response(null,{status});
+      }
       return Response.json({id:Number(login.slice(8)),login});
     };
     export default {fetch(request,env) {
       const path = new URL(request.url).pathname;
+      if (path === '/test/star') { starredAccounts.add('account-9000'); return new Response(null,{status:204}); }
+      if (path === '/test/unstar') { starredAccounts.delete('account-9000'); return new Response(null,{status:204}); }
       if (path.startsWith('/test/')) return env.ISLAND.get(env.ISLAND.idFromName('main-island')).fetch(request);
       const handler = {'/auth/github/start':start,'/auth/github/callback':callback,'/api/session':session,
-        '/auth/logout':logout,'/api/room':connect}[path];
+        '/auth/logout':logout,'/api/room':connect,'/api/play-access':playAccess}[path];
       return handler?.({request,env},fakeGitHub) ?? new Response(null,{status:404});
     }};
   `}, bundle:true, format:'esm', write:false});
@@ -95,7 +103,7 @@ test('OAuth state is bound to its cookie and consumed on success, cancellation a
     {headers:{Cookie:expired.cookie}})).headers.get('Location'),'/?auth=failed');
 
   const good = await signIn(1);
-  assert.deepEqual((await request('/api/session',{headers:{Cookie:good.session}}).then(r=>r.json())).user,{login:'account-1'});
+  assert.deepEqual((await request('/api/session',{headers:{Cookie:good.session}}).then(r=>r.json())).user,{login:'account-1',canPlay:true});
   assert.equal((await request(good.path,{headers:{Cookie:good.flowCookie}})).headers.get('Location'),'/?auth=failed');
   const response = await request('/auth/logout',{method:'POST',headers:{Origin:'https://elsewhere.example',Cookie:good.session}});
   assert.equal(response.status,403);
@@ -133,6 +141,59 @@ async function eventually(predicate) {
   }
   assert.fail('Expected WebSocket message did not arrive');
 }
+
+test('non-stargazers and unverified legacy sessions cannot play through the room endpoint', async () => {
+  const nonStar = await signIn(9000);
+  const result = await request('/api/session',{headers:{Cookie:nonStar.session}}).then(r=>r.json());
+  assert.deepEqual(result.user,{login:'account-9000',canPlay:false});
+  const viewer = await socket(nonStar.session);
+  try {
+    assert.equal(viewer.welcome.id,null);
+    assert.equal(viewer.welcome.reason,'star-required');
+    viewer.send({type:'input',x:1,y:0});
+    viewer.send({type:'emote',action:2});
+    await delay(100);
+    assert.equal(viewer.snapshot.players.length,0);
+  } finally { viewer.close(); }
+
+  const verified = await signIn(9002);
+  await request('/test/legacy-session');
+  const legacy = await socket(verified.session);
+  try {
+    assert.equal(legacy.welcome.id,null);
+    assert.equal(legacy.welcome.reason,'star-required');
+  } finally { legacy.close(); }
+  const rechecked = await signIn(9002);
+  const player = await socket(rechecked.session);
+  try { assert.ok(player.welcome.id); } finally { player.close(); }
+  await request('/test/expire-resume');
+});
+
+test('retry checks the star again, unlocks play, and rejects an unstarred reconnect', async () => {
+  const signedIn = await signIn(9000);
+  const retry = () => request('/api/play-access',{method:'POST',headers:{Origin:origin,Cookie:signedIn.session}});
+  assert.equal((await retry().then(r=>r.json())).canPlay,false);
+  assert.equal((await request('/api/play-access',{method:'POST',headers:{Origin:'https://elsewhere.example',Cookie:signedIn.session}})).status,403);
+  await request('/test/star');
+  assert.deepEqual(await retry().then(r=>r.json()),{canPlay:true});
+  const player = await socket(signedIn.session);
+  try { assert.ok(player.welcome.id); } finally { player.close(); }
+  await request('/test/unstar');
+  const viewer = await socket(signedIn.session);
+  try {
+    assert.equal(viewer.welcome.id,null);
+    assert.equal(viewer.welcome.reason,'star-required');
+  } finally { viewer.close(); }
+  await request('/test/expire-resume');
+});
+
+test('a GitHub star-check outage never grants play access or creates a session', async () => {
+  const {state,cookie} = await startFlow();
+  const result = await request('/auth/github/callback?state='+state+'&code=account-9001',
+    {headers:{Cookie:cookie}});
+  assert.equal(result.headers.get('Location'),'/?auth=star-check');
+  assert.equal(result.headers.getSetCookie().some(value=>value.startsWith('__Host-ducky_session=')),false);
+});
 
 test('two GitHub sessions and a guest share server-owned movement, emotes and presence', async () => {
   const [one,two] = await Promise.all([signIn(101),signIn(102)]);
