@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import {PixiIsland} from './engine.js';
 import {RoomClient} from './room-client.js';
 import IslandChat from './IslandChat.jsx';
+import IslandPresence from './IslandPresence.jsx';
 import StarDialog from './StarDialog.jsx';
 import './pixi.css';
 
@@ -28,6 +29,8 @@ export default function PixiPage() {
   const chatLayer = useRef(null);
   const chatEditor = useRef(null);
   const nameLayer = useRef(null);
+  const [online, setOnline] = useState(null);
+  const [latestJoin, setLatestJoin] = useState(null);
   const [error, setError] = useState(false);
   const [status, setStatus] = useState('connecting');
   const [session, setSession] = useState(null);
@@ -59,7 +62,7 @@ export default function PixiPage() {
       }
       if (state === 'star-required') setStarDialogOpen(true);
       if (['expired','signed-out','star-required'].includes(state)) refresh();
-    }, (id,text) => island.current?.showChat(id,text));
+    }, (id,text) => island.current?.showChat(id,text), setOnline, setLatestJoin);
     room.current = client;
     const game = new PixiIsland({room:client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
       onError:() => setError(true)});
@@ -115,6 +118,7 @@ export default function PixiPage() {
           ? <a href="/auth/github/start">Play with GitHub</a>
           : <button disabled title="GitHub sign-in is unavailable">Play with GitHub</button>}
     </aside>}
+    {!error && <IslandPresence online={online} latestJoin={latestJoin}/>}
     {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {
       setSession(previous => ({...previous,user:{...previous.user,canPlay:true}}));
       setStarDialogOpen(false);

@@ -146,6 +146,13 @@ export class IslandRoom {
     this.attach(socket, info);
     this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
       reason:user && wantsPlayer && !user.canPlay ? 'star-required' : user && wantsPlayer && !playing ? 'players-full' : null});
+    if (playing && !previous && !resume) {
+      for (const [viewer,viewerInfo] of this.connections) {
+        if (viewer === socket || viewerInfo.account === user.account) continue;
+        this.send(viewer,{type:'joined',id:info.actor.id,
+          ...(viewerInfo.digest && viewerInfo.expires > now ? {login:user.login} : {})});
+      }
+    }
     this.broadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
     return new Response(null, {status:101, webSocket:client});
@@ -166,11 +173,13 @@ export class IslandRoom {
     const players = active.map(info => publicPose(info.actor));
     const namedPlayers = players.map((pose,index) => ({...pose, login:active[index].login}));
     const now = Date.now();
+    const online = new Set([...this.connections].map(([socket,info]) =>
+      info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       const visiblePlayers = info.digest && info.expires > now ? namedPlayers : players;
-      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, players:visiblePlayers, self:actor ? {
+      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, online, players:visiblePlayers, self:actor ? {
         ack:info.ack, path:actor.path, emoteLeft:Math.max(0,actor.until-now/1000),
       } : null});
     }
@@ -314,8 +323,8 @@ export class IslandRoom {
         this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',
           info.account, JSON.stringify(publicPose(info.actor)), now+RESUME_MS);
       }
-      this.broadcast();
     }
+    this.broadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
   }
 

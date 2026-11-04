@@ -111,10 +111,10 @@ test('OAuth state is bound to its cookie and consumed on success, cancellation a
   assert.equal((await request('/api/session',{headers:{Cookie:good.session}}).then(r=>r.json())).user,null);
 });
 
-async function socket(cookie) {
+async function socket(cookie, play = true) {
   const headers = {Upgrade:'websocket', Origin:origin};
   if (cookie) headers.Cookie = cookie;
-  const response = await request('/api/room?play=1',{headers});
+  const response = await request('/api/room?play='+(play ? '1' : '0'),{headers});
   assert.equal(response.status,101);
   const ws = response.webSocket;
   const messages = [];
@@ -141,6 +141,47 @@ async function eventually(predicate) {
   }
   assert.fail('Expected WebSocket message did not arrive');
 }
+
+test('join notifications respect name privacy and live counts include viewers without double-counting tabs', async () => {
+  const observerAccount = await signIn(9200);
+  const playerAccount = await signIn(9201);
+  const observer = await socket(observerAccount.session,false);
+  const guest = await socket();
+  const clients = [observer,guest];
+  try {
+    await eventually(() => observer.snapshot?.online === 2);
+    assert.equal(observer.messages.some(message => message.type === 'joined'),false);
+    const player = await socket(playerAccount.session);
+    clients.push(player);
+    const event = await eventually(() => observer.messages.find(message => message.type === 'joined'));
+    assert.equal(event.login,'account-9201');
+    assert.equal(event.id,player.welcome.id);
+    const anonymous = await eventually(() => guest.messages.find(message => message.type === 'joined'));
+    assert.equal(anonymous.login,undefined);
+    assert.equal(player.messages.some(message => message.type === 'joined'),false);
+    await eventually(() => observer.snapshot.online === 3);
+    const tab = await socket(playerAccount.session);
+    clients.push(tab);
+    await eventually(() => player.messages.some(message => message.type === 'role'));
+    await delay(50);
+    assert.equal(observer.snapshot.online,3);
+    assert.equal(observer.messages.filter(message => message.type === 'joined').length,1);
+    tab.close();
+    await eventually(() => observer.snapshot.players.length === 0);
+    const resumed = await socket(playerAccount.session);
+    clients.push(resumed);
+    await eventually(() => observer.snapshot.players.length === 1);
+    assert.equal(observer.messages.filter(message => message.type === 'joined').length,1);
+    guest.close();
+    await eventually(() => observer.snapshot.online === 2);
+    resumed.close();
+    player.close();
+    await eventually(() => observer.snapshot.online === 1);
+  } finally {
+    clients.forEach(client => client.close());
+    await request('/test/expire-resume');
+  }
+});
 
 test('non-stargazers and unverified legacy sessions cannot play through the room endpoint', async () => {
   const nonStar = await signIn(9000);

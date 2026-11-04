@@ -40,7 +40,12 @@ created before this requirement need one new sign-in. OAuth tokens stay in
 server-side session storage and are removed when the session expires or is revoked. The latest playing tab for an account controls that
 duck. Signed-in users can see GitHub usernames above the ducks. Signed-in
 players can press C or choose Chat to open a yellow text bubble under their username.
-It follows the duck while walking. Text appears live to other signed-in users,
+A live user count appears at the bottom left, including players and viewers
+(signed-in accounts count once across tabs). New players trigger a join toast
+at the bottom right; quick reconnects and tab takeovers do not repeat it.
+Guests see anonymous join notices.
+
+Chat follows the duck while walking. Text appears live to other signed-in users,
 disappears after five seconds, and has no history. Esc clears it immediately.
 
 Pushes to `main` trigger GitHub Actions to test and build the project, then
