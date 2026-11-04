@@ -165,7 +165,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       napHat.addChild(sprite);
     }
     for(const view of views){
-      for(const garment of view.garments)garment.node.destroy({children:true});
+      for(const garment of view.garments){garment.mask?.destroy();garment.node.destroy({children:true});}
       view.garments=[];
       for(const part of view.parts){
         if(part.role==='foot'||part.role==='toe')part.joint.visible=!entries.some(e=>e.slot==='shoes');
@@ -177,7 +177,13 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         const [x,y]=frame.anchor;
         node.position.set(x,y);sprite.position.set(frame.rect[0]-x,frame.rect[1]-y);node.addChild(sprite);
         (frame.layer==='feet'?view.feet:frame.layer==='held'?view.held:frame.layer==='behind'?view.behind:view.clothes).addChild(node);
-        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,ghosts:new Map()});
+        // boss 4 Nov: collars and scarves WRAP: drawn a touch wider than the neck and clipped to the (morphing) body outline, so the ends always land on it
+        let mask=null;if((frame.attachment==='neck'||frame.wrap)&&view.morph){mask=new Graphics();view.bodyPart.joint.addChild(mask);node.mask=mask;
+          const me=view.spec.morph.body,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y],ny=frame.rect[1]+Math.min(45,frame.rect[3]/2),band=me.filter(q=>Math.abs(q[1]-ny)<40).map(q=>q[0]);
+          const cx=band.length?(Math.min(...band)+Math.max(...band))/2:frame.rect[0]+frame.rect[2]/2,k=frame.wrapScale||1.15;sprite.scale.x=k;sprite.x=cx+(frame.rect[0]-cx)*k-x;}
+        // the body's ink line is redrawn over the garment where it crosses the outline, so the cut ends carry the same ink edge
+        let ink=null;if(mask){const cut=new Sprite(sprite.texture);cut.position.copyFrom(sprite.position);cut.scale.copyFrom(sprite.scale);ink=new Graphics();ink.mask=cut;node.addChild(cut,ink);}
+        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,ghosts:new Map(),mask,ink});
       }
     }
   }
@@ -212,6 +218,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       if(glide.other&&part.role!=='shadow'){const twin=partMatch(view,glide.other).get(part);
         if(twin){const dx=(twin.joint.rest.x-joint.rest.x)*glide.w,dy=(twin.joint.rest.y-joint.rest.y)*glide.w;joint.x+=dx;joint.y+=dy;shift[part.role+(part.side<0?'L':'R')]=shift[part.role]={x:dx,y:dy};}
         else joint.scale.set(Math.max(0,1-glide.w*2));}
+      part.gx=joint.x;part.gy=joint.y;   // glided seat, before pose offsets (eye pieces sit on it)
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
       if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;}
       if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.x+=look.x;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;}
@@ -225,14 +232,19 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       const mix=(a,b,k)=>a.map((p,i)=>[p[0]+((b?b[i][0]:p[0])-p[0])*k-ox,p[1]+((b?b[i][1]:p[1])-p[1])*k-oy]);
       const shrink=(a,k)=>{const cx=a.reduce((s,p)=>s+p[0],0)/a.length,cy=a.reduce((s,p)=>s+p[1],0)/a.length;return a.map(p=>[cx+(p[0]-cx)*k-ox,cy+(p[1]-cy)*k-oy]);};
       const g=view.morph;g.clear();
-      g.poly(mix(me.body,other?.body,w).flat()).fill(BODY).stroke({color:INK,width:9,join:'round'});
+      const outline=mix(me.body,other?.body,w).flat();g.poly(outline).fill(BODY).stroke({color:INK,width:9,join:'round'});
+      for(const garment of view.garments)if(garment.mask){garment.mask.clear().poly(outline).fill(0xffffff);garment.outline=outline;}
       if(me.belly)g.poly((other&&!other.belly?shrink(me.belly,Math.max(0,1-w*2)):mix(me.belly,other?.belly,w)).flat()).fill(BELLY);
       if(me.shine)g.poly((other&&!other.shine?shrink(me.shine,Math.max(0,1-w*2)):mix(me.shine,other?.shine,w)).flat()).fill(0xFFFFFF);
     }
     const eyes=view.parts.filter(part=>part.role==='eye');
+    // boss 4 Nov: eye pieces sit on the glided eyes: centred on their midpoint and squeezed by the eye spacing, so 3/4 turns never hang off the head
+    const seat=(list,at)=>{if(!list.length)return null;const q=list.map(at),xs=q.map(s=>s.x);return {x:xs.reduce((a,b)=>a+b)/q.length,y:q.reduce((a,s)=>a+s.y,0)/q.length,span:Math.max(...xs)-Math.min(...xs)};};
+    const eyeRest=seat(eyes,e=>e.joint.rest),eyeNow=seat(eyes,e=>({x:e.gx,y:e.gy})),eyeOther=glide.other?seat(glide.other.parts.filter(q=>q.role==='eye'),e=>e.joint.rest):null;
+    const eyeSpan=!eyeRest?0:eyes.length>1?eyeNow.span:eyeOther&&eyeOther.span>20?eyeOther.span*glide.w:0;
     for(const garment of view.garments){
       const {node,frame}=garment;
-      node.position.set(garment.baseX,garment.baseY);node.rotation=0;
+      node.position.set(garment.baseX,garment.baseY);node.rotation=0;node.alpha=1;
       // boss 4 Nov: head and eye pieces glide to where their OWN frame sits in the next direction (the tuft wanders between
       // drawings and dragged hats off the head), and the two drawings cross-fade with a fixed stacking so the turn never pops
       const headish=frame.attachment==='head'||frame.attachment==='eyes',tf=headish&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.other.spec.angle):null;
@@ -242,7 +254,22 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         if(tf.url!==frame.url){let ghost=garment.ghosts.get(glide.other.spec.angle);
           if(!ghost){ghost=new Sprite(Assets.get(tf.url));ghost.position.set(tf.rect[0]-hx-frame.anchor[0],tf.rect[1]-hy-frame.anchor[1]);glide.lo?node.addChild(ghost):node.addChildAt(ghost,0);garment.ghosts.set(glide.other.spec.angle,ghost);}
           const top=smooth(.25,.6,u),bottom=1-smooth(.45,.8,u);ghost.alpha=glide.lo?top:bottom;garment.sprite.alpha=glide.lo?bottom:top;}}
-      const g=tf?{x:0,y:0}:(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
+      if(frame.attachment==='eyes'&&eyeRest){
+        const fit=(span,s)=>s>1&&span>20?clamp(eyeSpan/span,.05,1.3):1,sx=fit(eyeRest.span,eyes.length);
+        node.position.set(eyeNow.x,eyeNow.y);garment.sprite.position.set((frame.rect[0]-eyeRest.x)*sx,frame.rect[1]-eyeRest.y);garment.sprite.scale.x=sx;
+        const ghost=tf&&glide.other&&garment.ghosts.get(glide.other.spec.angle);
+        if(ghost&&eyeOther){const gx=fit(eyeOther.span,glide.other.parts.filter(q=>q.role==='eye').length);ghost.position.set((tf.rect[0]-eyeOther.x)*gx,tf.rect[1]-eyeOther.y);ghost.scale.x=gx;
+          // a short swap, the more side-on drawing owning the middle, so two half-faded pairs never stack on the face
+          const side=a=>Math.abs(90-Math.abs(a)),otherWins=side(glide.other.spec.angle)<side(view.spec.angle),t=otherWins?glide.w:1-glide.w,win=smooth(.3,.42,t),lose=1-smooth(.38,.48,t);
+          ghost.alpha=otherWins?win:lose;garment.sprite.alpha=otherWins?lose:win;}
+      }else if(frame.attachment==='eyes')garment.sprite.scale.x=1;
+      // boss 4 Nov: a head or eye piece with nothing to turn into (the back views) tucks away with its eyes instead of popping at the halfway
+      if(headish&&glide.other&&!tf){const k=Math.max(0,1-glide.w*2);node.alpha=k;if(frame.attachment==='eyes'&&eyeRest){garment.sprite.scale.x*=k;garment.sprite.x*=k;}}
+      // boss 4 Nov: held and worn pieces travel to where the SAME piece sits in the next drawing (no 140-unit snap at the halfway);
+      // a piece with no drawing on the same layer there (a guitar from behind, a board going behind the body) fades out before the swap
+      let lerp=null;if(!headish&&glide.other&&(frame.attachment==='body'||frame.attachment==='wing')){const on=a=>(garment.entry.frames[String(a)]||[]).filter(f=>f.visible&&f.layer===frame.layer),t=on(glide.other.spec.angle)[on(view.spec.angle).indexOf(frame)];
+        if(t)lerp={x:(t.rect[0]+t.rect[2]/2-frame.rect[0]-frame.rect[2]/2)*glide.w,y:(t.rect[1]+t.rect[3]/2-frame.rect[1]-frame.rect[3]/2)*glide.w};else node.alpha=1-smooth(.05,.45,glide.w);}
+      const g=lerp?lerp:tf||(frame.attachment==='eyes'&&eyeRest)?{x:0,y:0}:(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
       node.x+=g.x;node.y+=g.y;   // boss 4 Nov: dresses glide with the body parts while turning
       if(frame.attachment==='head'||frame.attachment==='eyes'){
         node.x+=frame.attachment==='eyes'?look.x:look.x*.4;node.y+=p.headY;node.rotation=p.headTilt+turnLean*.6;
@@ -254,8 +281,14 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       if(frame.attachment==='wing'){
         node.y+=Math.abs(p.sway)*10;node.rotation=frame.wingSide<0?p.wingL:p.wingR;
       }
+      if(garment.ink&&garment.outline){const j=view.bodyPart.joint,c=Math.cos(-node.rotation),s=Math.sin(-node.rotation),o=garment.outline,pts=[];
+        for(let i=0;i<o.length;i+=2){const dx=o[i]+j.x-node.x,dy=o[i+1]+j.y-node.y;pts.push(dx*c-dy*s,dx*s+dy*c);}
+        garment.ink.clear().poly(pts).stroke({color:INK,width:16,join:'round'});}
       if(frame.attachment==='grip')node.visible=Math.max(Math.abs(p.wingL),Math.abs(p.wingR))<.3;
     }
+    // boss 4 Nov: no see-through outfits while turning: each outfit shows only its own drawing, solid, switching at the halfway point
+    // with the body; a piece the next direction does not have shrinks away instead of fading
+    for(const g of view.garments){for(const gh of g.ghosts.values())gh.visible=false;g.sprite.alpha=1;if(g.node.alpha<1){g.node.scale.set(Math.max(0,g.node.alpha));g.node.alpha=1;}else g.node.scale.set(1);}
     view.expressions.clear();if(currentAction===5)for(const eye of eyes){const {x,y}=eye.joint;view.expressions.moveTo(x-14,y).quadraticCurveTo(x,y-17,x+14,y).stroke({color:0x232323,width:5,cap:'round'});}
     view.brows.clear();if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
