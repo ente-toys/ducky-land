@@ -177,7 +177,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         const [x,y]=frame.anchor;
         node.position.set(x,y);sprite.position.set(frame.rect[0]-x,frame.rect[1]-y);node.addChild(sprite);
         (frame.layer==='feet'?view.feet:frame.layer==='held'?view.held:frame.layer==='behind'?view.behind:view.clothes).addChild(node);
-        view.garments.push({node,frame,entry,baseX:x,baseY:y});
+        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,ghosts:new Map()});
       }
     }
   }
@@ -195,7 +195,12 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     }
     (view.match||=new Map()).set(other,map);return map;
   }
-  let glide={other:null,w:0};
+  let glide={other:null,w:0,lo:false};
+  const smooth=(a,b,x)=>{const k=clamp((x-a)/(b-a),0,1);return k*k*(3-2*k);};
+  function twinFrame(entry,frame,angle,otherAngle){
+    const i=(entry.frames[String(angle)]||[]).indexOf(frame),theirs=entry.frames[String(otherAngle)]||[],t=theirs[i];
+    return t&&t.visible&&t.attachment===frame.attachment?t:theirs.find(f=>f.visible&&f.attachment===frame.attachment)||null;
+  }
   function renderView(view,t){
     const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx(),fwdX=Math.sin(view.spec.angle*Math.PI/180),fwdY=Math.cos(view.spec.angle*Math.PI/180)*.35;
     view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide+turnLean;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
@@ -228,7 +233,16 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     for(const garment of view.garments){
       const {node,frame}=garment;
       node.position.set(garment.baseX,garment.baseY);node.rotation=0;
-      const g=(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
+      // boss 4 Nov: head and eye pieces glide to where their OWN frame sits in the next direction (the tuft wanders between
+      // drawings and dragged hats off the head), and the two drawings cross-fade with a fixed stacking so the turn never pops
+      const headish=frame.attachment==='head'||frame.attachment==='eyes',tf=headish&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.other.spec.angle):null;
+      for(const [k,ghost] of garment.ghosts)ghost.visible=!!tf&&k===glide.other.spec.angle;garment.sprite.alpha=1;
+      if(tf){const u=glide.lo?glide.w:1-glide.w,hm=view.spec.attachments,ho=glide.other.spec.attachments,hx=(ho.head[0]+ho.head[1]-hm.head[0]-hm.head[1])/2,hy=ho.headY-hm.headY;
+        node.x+=hx*glide.w;node.y+=hy*glide.w;   // the hat rides the head centre; each drawing keeps its own seat on its own head
+        if(tf.url!==frame.url){let ghost=garment.ghosts.get(glide.other.spec.angle);
+          if(!ghost){ghost=new Sprite(Assets.get(tf.url));ghost.position.set(tf.rect[0]-hx-frame.anchor[0],tf.rect[1]-hy-frame.anchor[1]);glide.lo?node.addChild(ghost):node.addChildAt(ghost,0);garment.ghosts.set(glide.other.spec.angle,ghost);}
+          const top=smooth(.25,.6,u),bottom=1-smooth(.45,.8,u);ghost.alpha=glide.lo?top:bottom;garment.sprite.alpha=glide.lo?bottom:top;}}
+      const g=tf?{x:0,y:0}:(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
       node.x+=g.x;node.y+=g.y;   // boss 4 Nov: dresses glide with the body parts while turning
       if(frame.attachment==='head'||frame.attachment==='eyes'){
         node.x+=frame.attachment==='eyes'?look.x:look.x*.4;node.y+=p.headY;node.rotation=p.headTilt+turnLean*.6;
@@ -269,9 +283,10 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.24));   // boss 4 Nov: unhurried turn so the parts are seen moving
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
     if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){current.root.visible=false;current=target;}
-    {const a=((degrees%360)+540)%360-180,i=byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
+    // boss 4 Nov: below the first drawn angle the turn pair wraps (180 to -135), so -157.5 is no longer a side profile
+    {const a=((degrees%360)+540)%360-180,i=a<byAngle[0].spec.angle?byAngle.length-1:byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
       const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
-      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0}:{other,w:current===lo?u:1-u};}
+      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0,lo:false}:{other,w:current===lo?u:1-u,lo:current===lo};}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;

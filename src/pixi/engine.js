@@ -565,7 +565,7 @@ export class PixiIsland {
     this.splashes.forEach(({sprite,phase})=>{const age=(t*.7+phase)%1;sprite.visible=!reduced;sprite.scale.set(.4+age*1.3,.5+age*.9);sprite.alpha=Math.max(0,1-age*2)*.6;});
     this.marker.visible = this.markerUntil > t;
     if (this.marker.visible) {const age=1.5-(this.markerUntil-t);this.marker.alpha=1-age/1.5;this.marker.scale.set(1+age*.9,1+age*8/9);}
-    if (player?.travel && t > (this.nextStep || 0)) {this.audio.play('step', .045); this.nextStep = t + .28;}
+    // boss 4 Nov: no walking sound (Ashwin found it annoying)
     this.app.render();
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
