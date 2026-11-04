@@ -20,9 +20,31 @@ async function library(){
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);
     const data=await response.json();
     await Promise.all([...NAP_POSES.map(pose => loadTexture(pose.url)), ...data.views.flatMap(v=>v.parts.map(p=>loadTexture(p.url)))]);
+    await Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}}));
     return data;
   })().catch(error=>{libraryPromise=undefined;throw error;});
   return libraryPromise;
+}
+// boss 4 Nov: turning like the Rive rig, the body outline MORPHS between the drawn directions instead of swapping.
+// Each direction's body art is sampled once into point rings (body, belly, shine) in the view's ground space.
+const RING=120,INK=0x232323,BODY=0xFFD525,BELLY=0xFFE161;
+function sampleRing(svg,d){
+  const sub=d.split(/(?=M)/).map(x=>x.trim()).filter(Boolean);let best=null;
+  for(const part of sub){const el=document.createElementNS('http://www.w3.org/2000/svg','path');el.setAttribute('d',part);svg.appendChild(el);const len=el.getTotalLength();if(!best||len>best.len)best={el,len};}
+  const pts=[];for(let i=0;i<RING;i++){const q=best.el.getPointAtLength(best.len*i/RING);pts.push([q.x,q.y]);}
+  let area=0;for(let i=0;i<RING;i++){const a=pts[i],b=pts[(i+1)%RING];area+=a[0]*b[1]-b[0]*a[1];}if(area<0)pts.reverse();
+  let top=0;for(let i=1;i<RING;i++)if(pts[i][1]<pts[top][1])top=i;
+  return pts.slice(top).concat(pts.slice(0,top));
+}
+async function bodyShapes(view){
+  const part=view.parts.find(p=>p.role==='body');if(!part||typeof document==='undefined')return null;
+  const text=await (await fetch(part.url)).text(),doc=new DOMParser().parseFromString(text,'image/svg+xml');
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.style.cssText='position:absolute;width:0;height:0;visibility:hidden';document.body.appendChild(svg);
+  const pick=color=>[...doc.querySelectorAll('path')].find(p=>(p.getAttribute('fill')||'').toLowerCase()===color);
+  const [gx,gy]=view.ground,toGround=pts=>pts&&pts.map(([x,y])=>[x-gx,y-gy]);
+  const ring=el=>el?toGround(sampleRing(svg,el.getAttribute('d'))):null;
+  const out={body:ring(pick('#ffd525')),belly:ring(pick('#ffe161')),shine:ring(pick('white'))};svg.remove();
+  return out.body?out:null;
 }
 /** Shared textures stay alive until the last duck is disposed. Never destroys Texture.WHITE. */
 export async function disposeDuckAssets(){
@@ -44,23 +66,31 @@ function makeView(spec){
   for(const part of spec.parts){
     const created=makeJoint(Assets.get(part.url),part.rect,part.pivot,spec.ground,part.id);
     const item={...part,...created};parts.push(item);
-    if(part.role==='shadow'){created.sprite.alpha=.22;shadow.addChild(created.joint);}
+    if(part.role==='shadow'){shadow.addChild(created.joint);shadow.visible=false;}   // boss 4 Nov: no dark shade under the belly and legs
     else if(part.role==='foot'||part.role==='toe')feet.addChild(created.joint);
     else body.addChildAt(created.joint,body.children.length-1);
   }
   const bodyIndex=body.children.findIndex(child=>child.label?.startsWith('body-'));
   body.addChildAt(held,bodyIndex+1);
+  const bodyPart=parts.find(p=>p.role==='body');let morph=null;
+  if(spec.morph&&bodyPart){morph=new Graphics();bodyPart.joint.addChild(morph);bodyPart.sprite.visible=false;}
   const expressions=new Graphics();body.addChildAt(expressions,body.children.length-1);
   const brows=new Graphics();body.addChildAt(brows,body.children.length-1);
   root.visible=false;
-  return {root,shadow,feet,body,clothes,held,behind,parts,spec,brows,expressions,garments:[]};
+  return {root,shadow,feet,body,clothes,held,behind,parts,spec,brows,expressions,morph,bodyPart,garments:[]};
 }
-const defaultPose=()=>({bob:0,sway:0,lean:0,breath:0,headY:0,headTilt:0,wingL:0,wingR:0,wingForward:0,footL:0,footR:0,stepL:0,stepR:0,bill:0,eye:1,angry:0,tail:0});
-function samplePose(action,t,walkPhase,reduced){
+const defaultPose=()=>({sqx:1,sqy:1,bob:0,sway:0,lean:0,breath:0,headY:0,headTilt:0,wingL:0,wingR:0,wingForward:0,footL:0,footR:0,stepL:0,stepR:0,bill:0,eye:1,angry:0,tail:0});
+function samplePose(action,t,walkPhase,reduced,speed=165){
   const p=defaultPose(),s=Math.sin(t*TAU/2.8),dance=Math.sin(t*TAU/1.35),step=Math.sin(walkPhase);
   p.breath=Math.sin(t*1.8)*.012;p.sway=s*.012;p.headTilt=Math.sin(t*.85)*.014;p.tail=Math.sin(t*2)*.025;
   switch(action){
-    case 1:p.bob=-Math.abs(step)*7;p.sway=step*.035;p.footL=Math.max(0,step)*16;p.footR=Math.max(0,-step)*16;p.stepL=step*8;p.stepR=-step*8;p.wingL=-step*.09;p.wingR=-step*.09;p.headY=Math.cos(walkPhase*2)*2;break;
+    case 1:{// boss 4 Nov: smooth Rive-like waddle, no squash: two soft bounces per stride, body rocks onto the standing foot,
+      // head, tuft, wings and tail follow a beat late so it reads as many in-between frames
+      const k=clamp(speed/165,.7,1.5),c2=walkPhase*2;
+      p.bob=-(1-Math.cos(c2))*.5*8*k;p.sway=Math.sin(walkPhase-.35)*.055*k;p.lean=.025*k;
+      p.footL=Math.pow(Math.max(0,step),1.3)*17*k;p.footR=Math.pow(Math.max(0,-step),1.3)*17*k;p.stepL=-Math.cos(walkPhase)*26*k;p.stepR=Math.cos(walkPhase)*26*k;   // boss 4 Nov: planted feet: back while down, forward in the air
+      p.wingL=-Math.sin(walkPhase+.6)*.12*k-.03;p.wingR=-Math.sin(walkPhase+.6)*.12*k+.03;
+      p.headY=-Math.cos(c2-.9)*2.6*k;p.headTilt=-Math.sin(walkPhase-.7)*.028*k;p.tail=-Math.sin(walkPhase-1.1)*.2*k;break;}
     case 2:{const q=Math.max(0,Math.sin(t*TAU/1.1));p.bill=q*.85;p.headY=-q*9;p.bob=3*(1-q);p.wingL=q*.09;p.wingR=-q*.09;break;}
     case 3:p.sway=dance*.13;p.bob=-Math.abs(dance)*12;p.headTilt=-dance*.10;p.wingL=.35+Math.cos(t*5)*.30;p.wingR=-.35+Math.cos(t*5)*.30;p.footL=Math.max(0,-dance)*11;p.footR=Math.max(0,dance)*11;p.tail=dance*.12;break;
     case 4:p.headTilt=.08;p.wingL=.56;p.wingR=-.56;p.wingForward=.12;p.bob=-3*(1+Math.sin(t*3));break;
@@ -69,7 +99,7 @@ function samplePose(action,t,walkPhase,reduced){
     case 8:p.headY=5;p.headTilt=Math.sin(t*2.8)*.035;p.wingL=.28;p.wingR=-.28;p.angry=1;p.footR=Math.max(0,Math.sin(t*9))*7;break;
     case 9:p.bob=-Math.max(0,Math.sin(t*7))*25;p.sway=Math.cos(t*7)*.08;p.wingL=1.45+Math.sin(t*7)*.25;p.wingR=-1.45-Math.sin(t*7)*.25;p.footL=p.footR=Math.max(0,Math.sin(t*7))*10;p.bill=.3;p.headTilt=Math.sin(t*3)*.1;break;
   }
-  if(reduced){for(const k of ['bob','sway','lean','breath','headY','headTilt','wingL','wingR','wingForward','footL','footR','stepL','stepR','tail'])p[k]*=.12;p.bill*=.45;}
+  if(reduced){p.sqx=1+(p.sqx-1)*.12;p.sqy=1+(p.sqy-1)*.12;for(const k of ['bob','sway','lean','breath','headY','headTilt','wingL','wingR','wingForward','footL','footR','stepL','stepR','tail'])p[k]*=.12;p.bill*=.45;}
   return p;
 }
 
@@ -106,6 +136,17 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const napView = data.views.find(view => view.angle === napPose.view);
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
+  // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
+  // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
+  const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
+  const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
+  const artHeight=art.getLocalBounds().height||900;
+  function moveFx(){
+    const fx={sqx:1,sqy:1,bob:0,tip:0};
+    if(landT<.5){const u=landT/.5;fx.tip=Math.exp(-5*u)*Math.sin(u*Math.PI*2.2)*.06*clamp(lastSpeed/165,.6,1.4);}
+    return fx;
+  }
   current.root.visible=true;current.root.alpha=1;
   async function setOutfit(next){
     const request=++outfitVersion;
@@ -142,20 +183,45 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   }
   try{await setOutfit(outfit);}catch(error){root.destroy({children:true});liveDucks--;throw error;}
 
+  // boss 4 Nov: turning like the Rive rig: between two drawn directions the eyes, beak, wings, tail, tuft and feet glide
+  // to where the next direction has them, and the body outline swaps at the halfway point, so a turn has many frames
+  const byAngle=[...views].sort((a,b)=>a.spec.angle-b.spec.angle);
+  function partMatch(view,other){
+    if(view.match?.has(other))return view.match.get(other);
+    const map=new Map(),roles=new Set(view.parts.map(p=>p.role));
+    for(const role of roles){
+      const mine=view.parts.filter(p=>p.role===role).sort((a,b)=>a.joint.rest.x-b.joint.rest.x),theirs=other.parts.filter(p=>p.role===role).sort((a,b)=>a.joint.rest.x-b.joint.rest.x);
+      mine.forEach((part,i)=>{const twin=theirs.length===mine.length?theirs[i]:theirs.reduce((best,q)=>!best||Math.abs(q.joint.rest.x-part.joint.rest.x)<Math.abs(best.joint.rest.x-part.joint.rest.x)?q:best,null);map.set(part,twin||null);});
+    }
+    (view.match||=new Map()).set(other,map);return map;
+  }
+  let glide={other:null,w:0};
   function renderView(view,t){
-    const p=pose,face=Math.abs(view.spec.angle)<=90;
-    view.body.y=p.bob;view.body.rotation=p.sway;view.body.scale.set(1-p.breath*.32,1+p.breath);
+    const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx(),fwdX=Math.sin(view.spec.angle*Math.PI/180),fwdY=Math.cos(view.spec.angle*Math.PI/180)*.35;
+    view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide+turnLean;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
     view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=1-clamp(-p.bob,0,35)*.01;
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     for(const part of view.parts){
       const joint=part.joint,side=part.side;joint.position.set(joint.rest.x,joint.rest.y);joint.rotation=0;joint.scale.set(1);
+      if(glide.other&&part.role!=='shadow'){const twin=partMatch(view,glide.other).get(part);
+        if(twin){joint.x+=(twin.joint.rest.x-joint.rest.x)*glide.w;joint.y+=(twin.joint.rest.y-joint.rest.y)*glide.w;}
+        else joint.scale.set(Math.max(0,1-glide.w*2));}
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
-      if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*.55;joint.rotation=-side*lift*.005;}
-      if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.y+=p.headY;joint.rotation=p.headTilt;}
-      if(part.role==='beak'){joint.y+=p.headY;joint.rotation=p.headTilt;joint.scale.set(1+p.bill*.08,1+p.bill*1.8);}
+      if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;}
+      if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.x+=look.x;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;}
+      if(part.role==='beak'){joint.x+=look.x*1.15;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;joint.scale.set(1+p.bill*.08,1+p.bill*1.8);}
       if(part.role==='tuft'){joint.y+=p.headY*.42;joint.rotation=p.headTilt+p.tail*.35;}
       if(part.role==='tail')joint.rotation=p.tail;
       if(part.role==='toe')joint.visible=!clothing.shoes&&currentAction!==1;
+    }
+    if(view.morph){
+      const me=view.spec.morph,other=glide.other?.spec.morph,w=other?glide.w:0,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y];
+      const mix=(a,b,k)=>a.map((p,i)=>[p[0]+((b?b[i][0]:p[0])-p[0])*k-ox,p[1]+((b?b[i][1]:p[1])-p[1])*k-oy]);
+      const shrink=(a,k)=>{const cx=a.reduce((s,p)=>s+p[0],0)/a.length,cy=a.reduce((s,p)=>s+p[1],0)/a.length;return a.map(p=>[cx+(p[0]-cx)*k-ox,cy+(p[1]-cy)*k-oy]);};
+      const g=view.morph;g.clear();
+      g.poly(mix(me.body,other?.body,w).flat()).fill(BODY).stroke({color:INK,width:9,join:'round'});
+      if(me.belly)g.poly((other&&!other.belly?shrink(me.belly,Math.max(0,1-w*2)):mix(me.belly,other?.belly,w)).flat()).fill(BELLY);
+      if(me.shine)g.poly((other&&!other.shine?shrink(me.shine,Math.max(0,1-w*2)):mix(me.shine,other?.shine,w)).flat()).fill(0xFFFFFF);
     }
     const eyes=view.parts.filter(part=>part.role==='eye');
     for(const garment of view.garments){
@@ -180,13 +246,29 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
-    if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){currentAction=chosen;actionTime=0;version=emoteVersion;}
-    actionTime+=dt;walkPhase+=dt*9.8*clamp(safe(speed)/165,.55,1.8);
-    const desired=samplePose(currentAction,actionTime,walkPhase,reducedMotion),smoothing=1-Math.exp(-dt/0.11);
+    if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
+    landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
+    actionTime+=dt;
+    // boss 4 Nov: steps follow the distance walked (one step per 45 world units), and the waddle eases in over two steps and out on stopping
+    const walking=currentAction===1,v=walking?Math.max(safe(speed),40):lastSpeed*gait;
+    gait+=((walking?1:0)-gait)*(1-Math.exp(-dt/(walking?.22:.16)));
+    walkPhase+=dt*v/45*Math.PI*(walking?1:gait);
+    const still=samplePose(walking?0:currentAction,actionTime,walkPhase,reducedMotion),stride=samplePose(1,actionTime,walkPhase,reducedMotion,v||165);
+    const desired={};for(const key of Object.keys(still))desired[key]=still[key]+(stride[key]-still[key])*(walking||currentAction===0?gait:0);
+    const smoothing=1-Math.exp(-dt/0.08);
     for(const key of Object.keys(pose))pose[key]+=(desired[key]-pose[key])*smoothing;
-    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.075));
+    // lean into turns: tilt toward the inside of the curve, head a touch more
+    const turnRate=angleDifference(turnAngle,lastTurn)/Math.max(dt,1e-3);lastTurn=turnAngle;
+    turnLean+=(clamp(-turnRate*.035*gait,-.13,.13)*(reducedMotion?0:1)-turnLean)*(1-Math.exp(-dt/.12));
+    // idle: eyes and beak glance around together now and then (the beak always moves with the eyes)
+    if(!walking&&currentAction===0&&!reducedMotion){lookAt-=dt;if(lookAt<=0){const r=((Math.sin(elapsed*12.9898+phase)*43758.5453)%1+1)%1;lookGoal=r<.4?{x:0,y:0}:{x:(r-.7)*26,y:(r*7%1-.5)*6};lookAt=1.6+r*2.4;}}else lookGoal={x:0,y:0};
+    const ls=1-Math.exp(-dt/.09);look.x+=(lookGoal.x-look.x)*ls;look.y+=(lookGoal.y-look.y)*ls;
+    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.24));   // boss 4 Nov: unhurried turn so the parts are seen moving
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
-    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/8+.025){current.root.visible=false;current=target;}
+    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){current.root.visible=false;current=target;}
+    {const a=((degrees%360)+540)%360-180,i=byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
+      const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
+      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0}:{other,w:current===lo?u:1-u};}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;
@@ -202,9 +284,12 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       feedback.sleep.position.set(napDirection * napPose.z[0], napPose.z[1]);
       feedback.bubble.y += 285;
     }
+    if(arriveT<1.1&&!reducedMotion){const f=arriveT*60;art.y=keyAt(DROP.y,f)*artHeight*SCALE;art.scale.set(SCALE*keyAt(DROP.sx,f),SCALE*keyAt(DROP.sy,f));}
+    else{art.y=0;art.scale.set(SCALE);}
     root.duckDirection=degrees;
   }
   function dispose(){if(disposed)return;disposed=true;outfitVersion++;liveDucks--;root.removeFromParent();root.destroy({children:true});}
   update(0,{action:0});
-  return {root,update,dispose,setOutfit,animationNames:duckAnimationNames};
+  const arrive=()=>{arriveT=0;};
+  return {root,update,dispose,setOutfit,arrive,animationNames:duckAnimationNames};
 }

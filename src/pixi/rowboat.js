@@ -1,6 +1,8 @@
 import {Container, Graphics} from 'pixi.js';
+import {PALETTE} from './palette.js';
 
-const ink = 0x232323;
+const ink = 0x232323;   // the rowing Ducky keeps its own colours (boss: never change the Duckies)
+const {ink: worldInk, wood, darkWood, cream} = PALETTE;   // boss 3 Nov: oars and water marks in the world palette
 const strokePeriod = 1.55;
 
 export function rowboatPose(lake, time, reduced = false) {
@@ -19,12 +21,12 @@ export function rowboatPose(lake, time, reduced = false) {
 
 function makeOar() {
   return new Graphics()
-    .roundRect(-27,-2.5,93,5,2.5).fill(0xc99057).stroke({color:ink,width:1.3})
+    .roundRect(-27,-2.5,93,5,2.5).fill(wood).stroke({color:worldInk,width:1.3})
     .moveTo(53,-2).quadraticCurveTo(62,-9,75,-8)
     .quadraticCurveTo(83,-7,83,0).quadraticCurveTo(83,7,75,8)
     .quadraticCurveTo(62,9,53,2).closePath()
-    .fill(0xda9f65).stroke({color:ink,width:1.5})
-    .moveTo(61,-3).quadraticCurveTo(69,-6,76,-5).stroke({color:0xffdbab,width:1.2,cap:'round'});
+    .fill(wood).stroke({color:worldInk,width:1.5})
+    .moveTo(61,-3).quadraticCurveTo(69,-6,76,-5).stroke({color:darkWood,width:1.2,cap:'round'});
 }
 
 export function createRowboat(prop, lake, objects, water) {
@@ -58,12 +60,12 @@ export function createRowboat(prop, lake, objects, water) {
 
   const wake = Array.from({length:3}, () => {
     const ripple = new Graphics().moveTo(5,-17).quadraticCurveTo(-13,0,5,17)
-      .stroke({color:0xe7fbff,width:2.6,cap:'round'});
+      .stroke({color:cream,width:2.6,cap:'round'});
     water.addChild(ripple);
     return ripple;
   });
   const splashes = [farOar,nearOar].map(() => {
-    const ripple = new Graphics().ellipse(0,0,11,4).stroke({color:0xe7fbff,width:2});
+    const ripple = new Graphics().moveTo(-11,0).quadraticCurveTo(0,-4,11,0).stroke({color:cream,width:2,cap:'round'});
     water.addChild(ripple);
     return ripple;
   });

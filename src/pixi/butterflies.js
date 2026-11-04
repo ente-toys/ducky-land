@@ -1,4 +1,5 @@
 import {Container,Graphics} from 'pixi.js';
+import {PALETTE} from './palette.js';
 
 export function butterflyPose(x,y,phase,time,reduced=false){
   return {x:x+(reduced?0:44*Math.sin(time*.35+phase)),
@@ -11,12 +12,12 @@ export function createButterfly(color){
   const root=new Container({label:'Butterfly'}),wings=[];
   for(const side of [-1,1]){
     const wing=new Graphics().moveTo(0,-2).bezierCurveTo(side*3,-22,side*23,-22,side*17,-3)
-      .bezierCurveTo(side*24,12,side*8,20,0,3).closePath().fill(color).stroke({color:0x232323,width:1.2});
-    wing.ellipse(side*10,-8,3,5).fill({color:0xffffff,alpha:.35});
+      .bezierCurveTo(side*24,12,side*8,20,0,3).closePath().fill(color).stroke({color:PALETTE.ink,width:1.2});   // boss 3 Nov: world ink, coral / sun wings
+    wing.ellipse(side*10,-8,3,5).fill({color:PALETTE.cream,alpha:.45});
     root.addChild(wing);wings.push(wing);
   }
-  const body=new Graphics().ellipse(0,0,2,7.5).fill(0x232323)
-    .moveTo(-1,-5).quadraticCurveTo(-5,-14,-7,-12).moveTo(1,-5).quadraticCurveTo(5,-14,7,-12).stroke({color:0x232323,width:1});
+  const body=new Graphics().ellipse(0,0,2,7.5).fill(PALETTE.ink)
+    .moveTo(-1,-5).quadraticCurveTo(-5,-14,-7,-12).moveTo(1,-5).quadraticCurveTo(5,-14,7,-12).stroke({color:PALETTE.ink,width:1});
   root.addChild(body);
   return {root,wings};
 }

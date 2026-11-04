@@ -1,10 +1,14 @@
 // The camera remains in the original artwork's world coordinates.
 export {fitZoom, zoomAt, easeCamera, clamp} from '../../rive/web/island-camera.mjs';
 
+// Boss 3 Nov, Cursor Camp look: the ground is seen at a tilt, so screen y is world y squashed by TILT.
+// Trees, stalls and Duckies stay upright (engine.js counter-scales them); only the ground plane foreshortens.
+export const TILT = Math.min(1, Math.max(.4, Number(new URLSearchParams(globalThis.location?.search).get('tilt')) || 1));   // boss 3 Nov: top-down (A); ?tilt= still compares angles   // ?tilt= to compare angles
+
 export function screenToWorld(camera, point, width, height) {
   return {
     x: camera.x + (point.x - width / 2) / camera.zoom,
-    y: camera.y + (point.y - height / 2) / camera.zoom,
+    y: camera.y + (point.y - height / 2) / (camera.zoom * TILT),
   };
 }
 
@@ -15,7 +19,7 @@ export function movePinch(camera, before, after, minZoom, maxZoom, width, height
   const next = midpoint(after);
   camera.zoom = Math.max(minZoom, Math.min(maxZoom, camera.zoom * distance(after) / Math.max(1, distance(before))));
   camera.x = anchor.x - (next.x - width / 2) / camera.zoom;
-  camera.y = anchor.y - (next.y - height / 2) / camera.zoom;
+  camera.y = anchor.y - (next.y - height / 2) / (camera.zoom * TILT);
 }
 
 // Any multi-touch, cancelled, or dragged gesture is permanently ineligible for a tap.
