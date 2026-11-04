@@ -2,6 +2,8 @@ import library from '../../assets/manifest.json';
 import original from './art-manifest.json';
 import layout from './layout.json';
 import rawPaths from './paths.json';   // footpath centre lines, sampled from the painted curves in the ground tiles (boss 3 Nov: the old corner-only lines missed the bends by up to 85)
+import shapes from './walk-shapes.json';   // boss 4 Nov: the client's coast and race-lake outlines, traced from the art (walk-map overlay)
+import {inShape} from '../../rive/web/island-geometry.mjs';
 const footpaths = rawPaths.filter(l => !(l[0][0] === 3940 && l[0][1] === 3260));   // round 4: the east jetty's stub path went with its islet
 const segDist = (x, y, a, b) => {const dx = b[0]-a[0], dy = b[1]-a[1], t = Math.max(0, Math.min(1, ((x-a[0])*dx + (y-a[1])*dy) / (dx*dx + dy*dy))); return Math.hypot(x-a[0]-t*dx, y-a[1]-t*dy);};
 const pathDist = (x, y) => Math.min(...footpaths.flatMap(l => l.slice(1).map((b, i) => segDist(x, y, l[i], b))));   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
@@ -36,7 +38,7 @@ const SCALE_SHEET = {
 const FOUNTAIN = {scale: 1.05, resolution: 2.5};                     // boss 3 Nov: keep the previous fountain, no redraw
 function sized(p) {
   const m = SCALE_SHEET[p.asset] ?? SCALE_SHEET[p.name] ?? (/^tree-/.test(p.asset) ? SCALE_SHEET.tree : 1);
-  return m === 1 ? p : {...p, scale: p.scale * m, resolution: (p.resolution ?? 1) * Math.max(1, m)};
+  return m === 1 ? p : {...p, scale: p.scale * m, resolution: (p.resolution ?? 1) * Math.max(1, m), grow: m};   // boss 4 Nov: grow scales a moved footprint too
 }
 
 function place(asset, point) {
@@ -89,13 +91,21 @@ export function deckY(x, y) {
 }
 
 // round 4: the east islet (3930, 3830), its jetty and stub path are gone from the ground art; drop them from the walkable world too
-export const trimWorld = w => ({...w, islets: w.islets.filter(a => a[0] !== 3930), walkways: w.walkways.filter(b => b.a[0] !== 3940)});
+// boss 4 Nov: the race lake is its drawn water (lake-race.svg), not the old oval; x/y/rx/ry are the outline's bounds
+const LAKE = {x: 4130, y: 1537, rx: 538, ry: 296, poly: shapes.lake};
+export const trimWorld = w => ({...w, islets: w.islets.filter(a => a[0] !== 3930), walkways: w.walkways.filter(b => b.a[0] !== 3940),
+  water: w.water.map(o => o.x === 4140 && o.y === 1520 ? LAKE : o)});
+// boss 4 Nov: what the client sim walks on. The coast is traced from the ground tiles' shoreline, inset 35 so a dry margin stays
+// (the old one sat 20-160 inside the sand); the south-west jetty gets a deck-wide step-on. Props were placed on the old coast,
+// so only the sim gets these. The socket server still walks on world.json.
+export const walkWorld = (world, props) => ({...world, coast: shapes.coast, obstacles: obstaclesFor(props, world),
+  walkways: [...world.walkways, {a: [1165, 3000], b: [1095, 3098], w: 120}, {a: [1092, 3060], b: [942, 3405], w: 110}]});   // boss 4 Nov verify: + the drawn deck's centre line (the old strip hugged the right rail)
 
 // Ground under a point, for the engine's one contact-shadow recipe (fix 4): sand areas from the ground art, else grass.
 const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 1;
 const SAND = [[2820, 2390, 562, 398], [4775, 2654, 478, 540], [4132, 1530, 682, 447], [1640, 2630, 470, 300]];   // plaza, beach, race-lake ring, pond bank
 export function groundAt(x, y, world) {
-  if (world.water.some(o => inEllipse(x, y, o.x, o.y, o.rx, o.ry))) return 'water';
+  if (world.water.some(o => inShape(x, y, o))) return 'water';
   return SAND.some(s => inEllipse(x, y, ...s)) || world.islets.some(a => !inEllipse(x, y, a[0], a[1], a[2] * .6, a[3] * .6) && inEllipse(x, y, ...a))
     || pathDist(x, y) < 64 ? 'sand' : 'grass';
 }
@@ -180,7 +190,7 @@ function consolidate(out, world, walkable) {
   const islet = (x, y) => world.islets.some(a => inEllipse(x, y, a[0], a[1], a[2] + 60, a[3] + 60));
   const jetty = (x, y, pad = 90) => world.walkways.some(b => segDist(x, y, b.a, b.b) < b.w / 2 + pad);
   const clear = (x, y, gap) => walkable(x, y) && pathDist(x, y) > gap && !islet(x, y) && !jetty(x, y);
-  const wet = (x, y, pad) => world.water.some(o => inEllipse(x, y, o.x, o.y, o.rx + pad, o.ry + pad));
+  const wet = (x, y, pad) => world.water.some(o => inShape(x, y, o, pad));
   const coast = world.coast, coastDist = (x, y) => Math.min(...coast.map((a, i) => segDist(x, y, a, coast[(i + 1) % coast.length])));
   const byId = id => out.find(p => String(p.id) === String(id));
   const roomy = (x, y, r, list) => list.every(p => Math.hypot(x - p.x, (y - p.y) * 1.3) > r + half(p));
@@ -385,7 +395,7 @@ export function decalsFor(world, props, walkable) {
   const SANDY = ['sand-speck-1', 'sand-speck-2', 'sand-speck-1', 'pebble-1', 'pebble-3'];
   for (let i = 1; i < 26000 && out.length < 1400; i++) {
     const x = 250 + halton(i, 2) * 5300, y = 400 + halton(i, 3) * 3600, d = pathDist(x, y);
-    if (d < 70 || !walkable(x, y) || world.water.some(o => inEllipse(x, y, o.x, o.y, o.rx + 45, o.ry + 45))) continue;
+    if (d < 70 || !walkable(x, y) || world.water.some(o => inShape(x, y, o, 45))) continue;
     if (inEllipse(x, y, RING.x, RING.y, RING.rx + 20, RING.ry + 20) || world.walkways.some(b => segDist(x, y, b.a, b.b) < b.w / 2 + 40)) continue;
     if (solid.some(p => Math.hypot(x - p.x, (y - p.y) * 1.8) < p.width * p.scale * .42 + 20)) continue;
     const c = coastDist(x, y), edge = d < 160 || c < 260, keep = halton(i, 5) < (edge ? .9 : .3);
@@ -405,13 +415,22 @@ export function decalsFor(world, props, walkable) {
 
 // boss 3 Nov: collision follows the props. Each original prop's world.json footprint moves with it; replanted plants get a trunk
 // footprint; dropped props lose theirs. The client sim uses this. The socket server (worker/) still walks on world.json's list.
+// boss 4 Nov: footprints fitted to the drawn art (walk-map overlay), by original prop id: the fountain basin, the plaza stall's
+// counter, the beach kiosk's counter, the museum down to its bottom step (so a Ducky reaches the door), the lighthouse plinth.
+// Plus scenery with no prop: the race lake's spring rocks and the two stone side walls of the museum steps. The sim pads every footprint by 16.
+const FOOTPRINTS = {0: {x: 2817, y: 2370, rx: 205, ry: 146}, 1: {poly: [[2420, 2050], [2700, 2050], [2700, 2098], [2420, 2098]]},
+  3: {poly: [[4396, 2968], [4684, 2968], [4684, 3016], [4396, 3016]]},
+  34: {poly: [[2631, 896], [3209, 896], [3209, 1124], [2631, 1124]]}, 46: {x: 4860, y: 2472, rx: 148, ry: 122}};
+const SCENERY = [{poly: [[4390, 1225], [4450, 1192], [4490, 1185], [4560, 1218], [4600, 1262], [4615, 1300], [4590, 1340], [4520, 1340], [4410, 1290]]},   // boss 4 Nov verify: the spring slabs + boulders traced, the oval let a Ducky walk on the stream
+  {poly: [[2817, 1380], [2800, 1625]]}, {poly: [[3023, 1380], [3037, 1625]]}];
 export function obstaclesFor(props, world) {
   const byProp = world.props.map(o => world.obstacles.find(b => b.x === o.x && o.y - b.y >= 0 && o.y - b.y < 30));
-  const used = new Set(byProp.filter(Boolean)), out = world.obstacles.filter(b => !used.has(b));   // footprints with no prop stay
+  const used = new Set(byProp.filter(Boolean)), out = [...world.obstacles.filter(b => !used.has(b) && !(b.x === 2820 && b.y === 2312)), ...SCENERY];   // footprints with no prop stay; boss 4 Nov: not the old fountain's (38 above the prop, it never matched)
   for (const p of props) {
     const i = typeof p.id === 'number' ? p.id : -1, src = byProp[i], orig = world.props[i];
-    if (p.footprint) out.push(p.footprint);   // round 4: benches, lamps, planters and the woods table carry their own
-    else if (src && !isPlant(p)) out.push({...src, x: src.x + p.x - orig.x, y: src.y + p.y - orig.y});
+    const m = p.grow || 1;
+    if (p.footprint || FOOTPRINTS[i]) out.push(p.footprint || FOOTPRINTS[i]);   // round 4: benches, lamps, planters and the woods table carry their own
+    else if (src && !isPlant(p)) out.push({...src, x: p.x + (src.x - orig.x) * m, y: p.y + (src.y - orig.y) * m, rx: src.rx * m, ry: src.ry * m});
     else if (isTree(p)) out.push({x: p.x, y: p.y - 9, rx: 31, ry: 22});
     else if (isBush(p)) out.push({x: p.x, y: p.y - 8, rx: half(p) * .55, ry: 22});
   }

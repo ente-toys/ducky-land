@@ -11,9 +11,9 @@ import {createSimulation} from './simulation.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
-import {createPlacements, decalsFor, deckY, groundAt, H, JETTIES, obstaclesFor, trimWorld} from './placements.js';
+import {createPlacements, decalsFor, deckY, groundAt, H, JETTIES, trimWorld, walkWorld} from './placements.js';
 const world = trimWorld(rawWorld);   // round 4: the east islet and its jetty are gone
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry, inShape} from '../../rive/web/island-geometry.mjs';
 import {PALETTE} from './palette.js';
 import {clamp, easeCamera, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from './camera.js';
 import {CHAT_DURATION} from './chat.js';
@@ -113,7 +113,7 @@ export class PixiIsland {
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
-      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable), local = {...world, obstacles: obstaclesFor(props, world)};
+      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable), local = walkWorld(world, props);
       globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));   // QA readback
       this.sim = createSimulation(local, 8612, {sleepingNpcs: true});
       this.room?.configure(this.sim.nav, local);
@@ -218,7 +218,9 @@ export class PixiIsland {
       for (let i = 0; i < 4; i++) {   // fix 9: 2-4 cream ripples per water feature
         const phase = i * 2.399 + index;
         const ripple = new Graphics().moveTo(-21, 0).quadraticCurveTo(0, -6, 21, 0).stroke({width: 2, color: PALETTE.cream, alpha: .6, cap: 'round'});   // boss 3 Nov fix 9: cream ripple marks, no rings
-        ripple.position.set(lake.x + Math.cos(phase) * lake.rx * (.25 + i / 8), lake.y + Math.sin(phase) * lake.ry * .7);
+        let k = 1;   // boss 4 Nov: on a traced lake, pull a ripple in until it sits on the drawn water
+        while (lake.poly && k > .3 && !inShape(lake.x + Math.cos(phase) * lake.rx * (.25 + i / 8) * k, lake.y + Math.sin(phase) * lake.ry * .7 * k, lake, -40)) k -= .1;
+        ripple.position.set(lake.x + Math.cos(phase) * lake.rx * (.25 + i / 8) * k, lake.y + Math.sin(phase) * lake.ry * .7 * k);
         this.water.addChild(ripple);
         this.ripples.push({sprite: ripple, phase,x:ripple.x,y:ripple.y});
       }
