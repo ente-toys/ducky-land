@@ -32,10 +32,20 @@ dependencies to measure the artwork.
 ## Multiplayer and deployment
 
 Guests can watch the live island, pan, and zoom. Use **Play with GitHub** to
-move and emote as a duck. The latest playing tab for an account controls that
+move and emote as a duck after starring [ente/ente](https://github.com/ente/ente).
+GitHub checks the star at sign-in and whenever a player joins or reconnects.
+Signed-in viewers can use **Unlock play** to open the repository, then
+**I’ve starred it — check again** to verify and join immediately. Sessions
+created before this requirement need one new sign-in. OAuth tokens stay in
+server-side session storage and are removed when the session expires or is revoked. The latest playing tab for an account controls that
 duck. Signed-in users can see GitHub usernames above the ducks. Signed-in
 players can press C or choose Chat to open a yellow text bubble under their username.
-It follows the duck while walking. Text appears live to other signed-in users,
+A live user count appears at the bottom left, including players and viewers
+(signed-in accounts count once across tabs). New players trigger a join toast
+at the bottom right; quick reconnects and tab takeovers do not repeat it.
+Guests see anonymous join notices.
+
+Chat follows the duck while walking. Text appears live to other signed-in users,
 disappears after five seconds, and has no history. Esc clears it immediately.
 
 Pushes to `main` trigger GitHub Actions to test and build the project, then

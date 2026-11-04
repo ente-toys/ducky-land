@@ -39,11 +39,18 @@ export class IslandRoom {
       digest TEXT PRIMARY KEY, account TEXT NOT NULL, login TEXT NOT NULL, expires INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS resumes (
       account TEXT PRIMARY KEY, pose TEXT NOT NULL, expires INTEGER NOT NULL);`);
+    if (!this.sql.exec('PRAGMA table_info(sessions)').toArray().some(column => column.name === 'can_play')) {
+      this.sql.exec('ALTER TABLE sessions ADD COLUMN can_play INTEGER NOT NULL DEFAULT 0');
+      this.sql.exec('DELETE FROM resumes');
+    }
+    if (!this.sql.exec('PRAGMA table_info(sessions)').toArray().some(column => column.name === 'github_token')) {
+      this.sql.exec('ALTER TABLE sessions ADD COLUMN github_token TEXT');
+    }
     for (const socket of ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
-      const actor = info.actor && {...info.actor, action:0, travel:0, path:[], until:0};
+      const actor = info.actor && this.session(info.digest)?.canPlay ? {...info.actor, action:0, travel:0, path:[], until:0} : null;
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       this.connections.set(socket, {...info, actor, login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
@@ -52,7 +59,7 @@ export class IslandRoom {
 
   session(digest, now = Date.now()) {
     if (!digest) return null;
-    return this.sql.exec('SELECT account, login, expires FROM sessions WHERE digest=? AND expires>?', digest, now).toArray()[0] ?? null;
+    return this.sql.exec('SELECT account, login, expires, can_play AS canPlay, github_token AS githubToken FROM sessions WHERE digest=? AND expires>?', digest, now).toArray()[0] ?? null;
   }
 
   prune(now) {
@@ -77,7 +84,20 @@ export class IslandRoom {
       return flow ? reply(flow) : reply({}, 404);
     }
     if (pathname === '/session/new') {
-      this.sql.exec('INSERT INTO sessions VALUES(?,?,?,?)', data.digest, data.account, data.login, now+SESSION_MS);
+      this.sql.exec('INSERT INTO sessions (digest,account,login,expires,can_play,github_token) VALUES(?,?,?,?,?,?)',
+        data.digest, data.account, data.login, now+SESSION_MS, data.canPlay === true ? 1 : 0, data.githubToken);
+      return reply({});
+    }
+    if (pathname === '/session/access') {
+      this.sql.exec('UPDATE sessions SET can_play=? WHERE digest=?', data.canPlay === true ? 1 : 0, data.digest);
+      if (!data.canPlay) {
+        const user = this.session(data.digest);
+        if (user) this.sql.exec('DELETE FROM resumes WHERE account=?',user.account);
+        for (const [socket,info] of this.connections) {
+          if (info.digest === data.digest && info.actor) this.demote(socket,info,'star-required');
+        }
+        this.broadcast();
+      }
       return reply({});
     }
     if (pathname === '/session/get') return reply(this.session(data.digest));
@@ -102,7 +122,7 @@ export class IslandRoom {
     const resume = user && this.sql.exec('SELECT pose FROM resumes WHERE account=? AND expires>?', user.account, now).toArray()[0];
     const active = [...this.connections.values()].filter(info => info.actor).length;
     const held = this.sql.exec('SELECT count(*) AS count FROM resumes WHERE expires>?', now).one().count;
-    const playing = !!(user && wantsPlayer && (previous || resume || active+held < PLAYER_LIMIT));
+    const playing = !!(user?.canPlay && wantsPlayer && (previous || resume || active+held < PLAYER_LIMIT));
     const spectators = this.connections.size-active;
     const [client, socket] = Object.values(new WebSocketPair());
     if (!playing && spectators >= SPECTATOR_LIMIT) {
@@ -125,7 +145,14 @@ export class IslandRoom {
     this.connections.set(socket, info);
     this.attach(socket, info);
     this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
-      reason:user && wantsPlayer && !playing ? 'players-full' : null});
+      reason:user && wantsPlayer && !user.canPlay ? 'star-required' : user && wantsPlayer && !playing ? 'players-full' : null});
+    if (playing && !previous && !resume) {
+      for (const [viewer,viewerInfo] of this.connections) {
+        if (viewer === socket || viewerInfo.account === user.account) continue;
+        this.send(viewer,{type:'joined',id:info.actor.id,
+          ...(viewerInfo.digest && viewerInfo.expires > now ? {login:user.login} : {})});
+      }
+    }
     this.broadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
     return new Response(null, {status:101, webSocket:client});
@@ -146,11 +173,13 @@ export class IslandRoom {
     const players = active.map(info => publicPose(info.actor));
     const namedPlayers = players.map((pose,index) => ({...pose, login:active[index].login}));
     const now = Date.now();
+    const online = new Set([...this.connections].map(([socket,info]) =>
+      info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       const visiblePlayers = info.digest && info.expires > now ? namedPlayers : players;
-      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, players:visiblePlayers, self:actor ? {
+      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, online, players:visiblePlayers, self:actor ? {
         ack:info.ack, path:actor.path, emoteLeft:Math.max(0,actor.until-now/1000),
       } : null});
     }
@@ -160,7 +189,7 @@ export class IslandRoom {
     const wasPlayer = !!info.actor;
     info.actor = null;
     info.input = ZERO;
-    if (reason !== 'taken-over') {
+    if (!['taken-over','star-required'].includes(reason)) {
       info.digest = null;
       info.account = null;
       info.expires = null;
@@ -294,8 +323,8 @@ export class IslandRoom {
         this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',
           info.account, JSON.stringify(publicPose(info.actor)), now+RESUME_MS);
       }
-      this.broadcast();
     }
+    this.broadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
   }
 

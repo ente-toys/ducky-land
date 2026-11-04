@@ -98,8 +98,13 @@ export async function callback({request,env}, fetchGitHub = fetch) {
     if (!user.ok) return failed('failed');
     const {id,login} = await user.json();
     if (!Number.isSafeInteger(id) || id <= 0 || typeof login !== 'string' || !/^[A-Za-z0-9-]{1,39}$/.test(login)) return failed('failed');
+    const starred = await fetchGitHub('https://api.github.com/user/starred/ente/ente',{
+      headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'User-Agent':'Ducky Land'},
+    });
+    if (![204,404].includes(starred.status)) return failed('star-check');
+    const canPlay = starred.status === 204;
     const session = randomToken();
-    const saved = await call(env,'/session/new',{digest:await digest(session),account:String(id),login});
+    const saved = await call(env,'/session/new',{digest:await digest(session),account:String(id),login,canPlay,githubToken:token});
     if (!saved.ok) return failed('failed');
     const previous = await digest(cookie(request,sessionCookie));
     if (previous) await call(env,'/session/revoke',{digest:previous});
@@ -115,7 +120,7 @@ export async function session({request,env}) {
   const result = await call(env,'/session/get',{digest:key});
   if (!result.ok) return json({error:'Session unavailable'},503);
   const user = await result.json();
-  return json({user:user ? {login:user.login} : null,signInAvailable:configured(env)},
+  return json({user:user ? {login:user.login,canPlay:!!user.canPlay} : null,signInAvailable:configured(env)},
     200, user ? {} : {'Set-Cookie':setCookie(sessionCookie,'',0)});
 }
 
@@ -126,7 +131,7 @@ export async function logout({request,env}) {
   return json({},200,{'Set-Cookie':setCookie(sessionCookie,'',0)});
 }
 
-export async function connect({request,env}) {
+export async function connect({request,env}, fetchGitHub = fetch) {
   const url = new URL(request.url);
   if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return json({},426);
   if (request.headers.get('Origin') !== url.origin) return json({},403);
@@ -134,5 +139,44 @@ export async function connect({request,env}) {
   const key = await digest(cookie(request,sessionCookie));
   if (key) headers.set('X-Session-Digest',key);
   const play = url.searchParams.get('play') === '1' ? '1' : '0';
+  if (key && play === '1') {
+    const check = await checkPlayAccess(env,key,fetchGitHub);
+    if (check.error && check.status !== 401) return json({error:check.error},check.status);
+  }
   return room(env).fetch(new Request('https://island.internal/room?play='+play,{headers}));
+}
+
+async function checkPlayAccess(env, key, fetchGitHub) {
+  const result = await call(env,'/session/get',{digest:key});
+  if (!result.ok) return {error:'Session unavailable. Please try again.',status:503};
+  const user = await result.json();
+  if (!user?.githubToken) {
+    if (user) await call(env,'/session/access',{digest:key,canPlay:false});
+    return {error:'Please sign in again to check your GitHub star.',status:401};
+  }
+  let starred;
+  try {
+    starred = await fetchGitHub('https://api.github.com/user/starred/ente/ente',{
+      headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+user.githubToken,'User-Agent':'Ducky Land'},
+    });
+  } catch {
+    return {error:'Could not check your GitHub star. Please try again.',status:503};
+  }
+  if (![204,404].includes(starred.status)) {
+    await call(env,'/session/access',{digest:key,canPlay:false});
+    return {error:starred.status === 401 ? 'Please sign in again to check your GitHub star.' :
+      'Could not check your GitHub star. Please try again.',status:starred.status === 401 ? 401 : 503};
+  }
+  const canPlay = starred.status === 204;
+  const saved = await call(env,'/session/access',{digest:key,canPlay});
+  if (!saved.ok) return {error:'Could not update play access. Please try again.',status:503};
+  return {canPlay};
+}
+
+export async function playAccess({request,env}, fetchGitHub = fetch) {
+  if (request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
+  const key = await digest(cookie(request,sessionCookie));
+  if (!key) return json({error:'Please sign in again to check your GitHub star.'},401);
+  const result = await checkPlayAccess(env,key,fetchGitHub);
+  return json(result,result.status ?? 200);
 }

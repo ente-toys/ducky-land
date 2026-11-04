@@ -47,6 +47,34 @@
   cursor: pointer;
 }
 .pixi-live button:disabled { opacity: .65; cursor: default; }
+.pixi-star-dialog {
+  box-sizing: border-box;
+  width: min(440px, calc(100vw - 32px));
+  padding: 24px;
+  color: #332b23;
+  background: #fff9df;
+  border: 2px solid #564537;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px #332b2340;
+  font: 16px/1.5 system-ui, sans-serif;
+}
+.pixi-star-dialog::backdrop { background: #332b2370; }
+.pixi-star-dialog h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.2; }
+.pixi-star-dialog p { margin: 0 0 20px; }
+.pixi-star-actions { display: grid; gap: 10px; }
+.pixi-star-actions :is(a, button) {
+  padding: 10px 12px;
+  color: inherit;
+  background: #ffda69;
+  border: 1px solid #564537;
+  border-radius: 10px;
+  font: 600 14px/1.4 system-ui, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pixi-star-actions button { background: transparent; }
+.pixi-star-actions :is(a, button):focus-visible { outline: 2px solid #564537; outline-offset: 3px; }
 @media (max-width: 480px) {
   .pixi-ente-logo { width: 60px; }
   .pixi-live { max-width: calc(100vw - 128px); }
@@ -121,4 +149,38 @@
   background: #efb942;
   border: 0;
   border-radius: 50%;
+}
+.pixi-online, .pixi-join-toast {
+  color: #332b23;
+  background: #fff9df;
+  border: 1px solid #564537;
+  border-radius: 12px;
+  box-shadow: 0 3px 0 #56453755;
+  font: 600 14px/1.4 system-ui, sans-serif;
+}
+.pixi-online {
+  position: fixed;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  left: max(16px, env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+}
+.pixi-online-dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: #409447; }
+.pixi-join-toasts {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 8px;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+}
+.pixi-join-toast { display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 16px; pointer-events: auto; }
+.pixi-join-toast span { flex: 1; overflow-wrap: anywhere; }
+.pixi-join-toast button { border: 0; border-radius: 6px; background: transparent; color: inherit; padding: 4px 8px; font: 20px/1 system-ui, sans-serif; cursor: pointer; }
+.pixi-join-toast button:focus-visible { outline: 2px solid #564537; }
+@media (max-width: 600px) {
+  .pixi-join-toasts { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 56px); }
 }

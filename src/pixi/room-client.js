@@ -14,9 +14,11 @@ function sample(track, now) {
 }
 
 export class RoomClient {
-  constructor(onStatus, onChat = () => {}) {
+  constructor(onStatus, onChat = () => {}, onPresence = () => {}, onJoin = () => {}) {
     this.onStatus = onStatus;
     this.onChat = onChat;
+    this.onPresence = onPresence;
+    this.onJoin = onJoin;
     this.tracks = new Map();
     this.reset();
   }
@@ -30,6 +32,7 @@ export class RoomClient {
     clearTimeout(this.chatTimer);
     this.lastChat = -Infinity;
     this.tracks.clear();
+    this.onPresence(null);
     this.id = null;
     this.player = null;
     this.seq = 0;
@@ -74,12 +77,13 @@ export class RoomClient {
       if (data === 'pong') { pendingPing = null; return; }
       const message = JSON.parse(data);
       if (message.type === 'snapshot') this.snapshot(message);
+      if (message.type === 'joined') this.onJoin(message);
       if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
         this.failures = 0;
         this.id = message.id;
         if (!this.id) this.player = null;
-        if (message.type === 'role' || message.reason === 'players-full') this.wantsPlay = false;
+        if (message.type === 'role' || ['players-full','star-required'].includes(message.reason)) this.wantsPlay = false;
         full = message.reason === 'spectators-full';
         this.onStatus(this.id ? 'playing' : message.reason ?? 'watching');
       }
@@ -99,10 +103,11 @@ export class RoomClient {
     };
   }
 
-  snapshot({epoch,tick,players,self}) {
+  snapshot({epoch,tick,players,self,online}) {
     if (epoch === this.epoch && tick <= this.tick) return;
     this.epoch = epoch;
     this.tick = tick;
+    if (Number.isSafeInteger(online) && online >= 0) this.onPresence(online);
     const now = nowSeconds();
     const tracks = new Map();
     for (const pose of players) {
