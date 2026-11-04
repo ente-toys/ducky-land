@@ -172,7 +172,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       view.garments=[];
       for(const part of view.parts){
         if(part.role==='foot'||part.role==='toe')part.joint.visible=!entries.some(e=>e.slot==='shoes');
-        if(part.role==='tuft')part.joint.visible=!entries.some(e=>e.slot==='cap'&&![12,13].includes(e.sourceNumber));
+        if(part.role==='tuft')part.joint.visible=!entries.some(e=>e.slot==='cap'&&![3,12,13].includes(e.sourceNumber));
       }
       for(const entry of entries)for(const frame of entry.frames[String(view.spec.angle)]){
         if(!frame.visible)continue;
@@ -185,8 +185,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
           const me=view.spec.morph.body,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y],ny=frame.rect[1]+Math.min(45,frame.rect[3]/2),band=me.filter(q=>Math.abs(q[1]-ny)<40).map(q=>q[0]);
           const cx=band.length?(Math.min(...band)+Math.max(...band))/2:frame.rect[0]+frame.rect[2]/2,k=frame.wrapScale||1.15;sprite.scale.x=k;sprite.x=cx+(frame.rect[0]-cx)*k-x;}
         // the body's ink line is redrawn over the garment where it crosses the outline, so the cut ends carry the same ink edge
-        let ink=null;if(mask){const cut=new Sprite(sprite.texture);cut.position.copyFrom(sprite.position);cut.scale.copyFrom(sprite.scale);ink=new Graphics();ink.mask=cut;node.addChild(cut,ink);}
-        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,ghosts:new Map(),mask,ink,spos:sprite.position.clone(),sscale:sprite.scale.clone()});
+        let ink=null,cut=null;if(mask){cut=new Sprite(sprite.texture);cut.position.copyFrom(sprite.position);cut.scale.copyFrom(sprite.scale);ink=new Graphics();ink.mask=cut;node.addChild(cut,ink);}
+        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,tex:sprite.texture,cut,ghosts:new Map(),mask,ink,spos:sprite.position.clone(),sscale:sprite.scale.clone()});
       }
     }
   }
@@ -251,32 +251,40 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       // boss 4 Nov: head and eye pieces glide to where their OWN frame sits in the next direction (the tuft wanders between
       // drawings and dragged hats off the head), and the two drawings cross-fade with a fixed stacking so the turn never pops
       const headish=frame.attachment==='head'||frame.attachment==='eyes',tf=headish&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.other.spec.angle):null;
-      for(const [k,ghost] of garment.ghosts)ghost.visible=!!tf&&k===glide.other.spec.angle;garment.sprite.alpha=1;
-      if(tf){const u=glide.lo?glide.w:1-glide.w,hm=view.spec.attachments,ho=glide.other.spec.attachments,hx=(ho.head[0]+ho.head[1]-hm.head[0]-hm.head[1])/2,hy=ho.headY-hm.headY;
+      // boss 4 Nov: an outfit with a real drawing at the in-between direction ('22.5', '-157.5'...) shows it, unsqueezed, for the middle
+      // of the turn (0.25 to 0.75 of the way), hard swaps both ends; the end drawings no longer squeeze toward the next view
+      const mid=(headish||frame.attachment==='neck')&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.mid):null,inMid=mid&&glide.w>=.25;
+      garment.sprite.texture=inMid?Assets.get(mid.url):garment.tex;
+      for(const [k,ghost] of garment.ghosts)ghost.visible=!!tf&&!mid&&k===glide.other.spec.angle;garment.sprite.alpha=1;
+      if(tf||mid&&headish){const u=glide.lo?glide.w:1-glide.w,hm=view.spec.attachments,ho=glide.other.spec.attachments,hx=(ho.head[0]+ho.head[1]-hm.head[0]-hm.head[1])/2,hy=ho.headY-hm.headY;
         node.x+=hx*glide.w;node.y+=hy*glide.w;   // the hat rides the head centre; each drawing keeps its own seat on its own head
         // boss 4 Nov: the hat's outline also grows or narrows toward the next drawing's size and seat, so at the halfway both
         // drawings fill exactly the same box and the swap only changes inner details, never the silhouette
-        if(frame.attachment==='head'){const w=glide.w,[rx,ry,rw,rh]=frame.rect,[tx,ty,tw,th]=tf.rect,[ax,ay]=frame.anchor;
+        if(frame.attachment==='head'&&!mid){const w=glide.w,[rx,ry,rw,rh]=frame.rect,[tx,ty,tw,th]=tf.rect,[ax,ay]=frame.anchor;
           garment.sprite.scale.set(1+(tw/rw-1)*w,1+(th/rh-1)*w);garment.sprite.position.set(rx-ax+((tx-hx)-rx)*w,ry-ay+((ty-hy)-ry)*w);}
-        if(tf.url!==frame.url){let ghost=garment.ghosts.get(glide.other.spec.angle);
+        if(inMid)garment.sprite.position.set(mid.rect[0]-hx/2-frame.anchor[0],mid.rect[1]-hy/2-frame.anchor[1]);   // drawn on the halfway head
+        if(tf&&!mid&&tf.url!==frame.url){let ghost=garment.ghosts.get(glide.other.spec.angle);
           if(!ghost){ghost=new Sprite(Assets.get(tf.url));ghost.position.set(tf.rect[0]-hx-frame.anchor[0],tf.rect[1]-hy-frame.anchor[1]);glide.lo?node.addChild(ghost):node.addChildAt(ghost,0);garment.ghosts.set(glide.other.spec.angle,ghost);}
           const top=smooth(.25,.6,u),bottom=1-smooth(.45,.8,u);ghost.alpha=glide.lo?top:bottom;garment.sprite.alpha=glide.lo?bottom:top;}}
       if(frame.attachment==='eyes'&&eyeRest){
         const fit=(span,s)=>s>1&&span>20?clamp(eyeSpan/span,.05,1.3):1,sx=fit(eyeRest.span,eyes.length);
         node.position.set(eyeNow.x,eyeNow.y);garment.sprite.position.set((frame.rect[0]-eyeRest.x)*sx,frame.rect[1]-eyeRest.y);garment.sprite.scale.x=sx;
-        const ghost=tf&&glide.other&&garment.ghosts.get(glide.other.spec.angle);
+        const ghost=tf&&!mid&&glide.other&&garment.ghosts.get(glide.other.spec.angle);
         if(ghost&&eyeOther){const gx=fit(eyeOther.span,glide.other.parts.filter(q=>q.role==='eye').length);ghost.position.set((tf.rect[0]-eyeOther.x)*gx,tf.rect[1]-eyeOther.y);ghost.scale.x=gx;
           // a short swap, the more side-on drawing owning the middle, so two half-faded pairs never stack on the face
           const side=a=>Math.abs(90-Math.abs(a)),otherWins=side(glide.other.spec.angle)<side(view.spec.angle),t=otherWins?glide.w:1-glide.w,win=smooth(.3,.42,t),lose=1-smooth(.38,.48,t);
           ghost.alpha=otherWins?win:lose;garment.sprite.alpha=otherWins?lose:win;}
+        if(inMid){const k=.5/glide.w;garment.sprite.position.set(mid.rect[0]-eyeRest.x-(eyeNow.x-eyeRest.x)*k,mid.rect[1]-eyeRest.y-(eyeNow.y-eyeRest.y)*k);garment.sprite.scale.x=1;}   // drawn on the halfway eyes
       }else if(frame.attachment==='eyes')garment.sprite.scale.x=1;
+      if(inMid&&frame.attachment==='neck'){const b=shift.body||{x:0,y:0},k=.5/glide.w;garment.sprite.scale.x=1;garment.sprite.position.set(mid.rect[0]-garment.baseX-b.x*k,mid.rect[1]-garment.baseY-b.y*k);}   // drawn on the halfway ghost, so no wrap stretch
+      if(garment.cut){garment.cut.texture=garment.sprite.texture;garment.cut.position.copyFrom(garment.sprite.position);garment.cut.scale.copyFrom(garment.sprite.scale);}
       // boss 4 Nov: a head or eye piece with nothing to turn into (the back views) tucks away with its eyes instead of popping at the halfway
-      if(headish&&glide.other&&!tf){const k=Math.max(0,1-glide.w*2);node.alpha=k;if(frame.attachment==='eyes'&&eyeRest){garment.sprite.scale.x*=k;garment.sprite.x*=k;}}
+      if(headish&&glide.other&&!tf&&!mid){const k=Math.max(0,1-glide.w*2);node.alpha=k;if(frame.attachment==='eyes'&&eyeRest){garment.sprite.scale.x*=k;garment.sprite.x*=k;}}
       // boss 4 Nov: held and worn pieces travel to where the SAME piece sits in the next drawing (no 140-unit snap at the halfway);
       // a piece with no drawing on the same layer there (a guitar from behind, a board going behind the body) fades out before the swap
       let lerp=null;if(!headish&&glide.other&&(frame.attachment==='body'||frame.attachment==='wing')){const on=a=>(garment.entry.frames[String(a)]||[]).filter(f=>f.visible&&f.layer===frame.layer),t=on(glide.other.spec.angle)[on(view.spec.angle).indexOf(frame)];
         if(t)lerp={x:(t.rect[0]+t.rect[2]/2-frame.rect[0]-frame.rect[2]/2)*glide.w,y:(t.rect[1]+t.rect[3]/2-frame.rect[1]-frame.rect[3]/2)*glide.w};else node.alpha=1-smooth(.05,.45,glide.w);}
-      const g=lerp?lerp:tf||(frame.attachment==='eyes'&&eyeRest)?{x:0,y:0}:(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
+      const g=lerp?lerp:tf||mid&&headish||(frame.attachment==='eyes'&&eyeRest)?{x:0,y:0}:(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
       node.x+=g.x;node.y+=g.y;   // boss 4 Nov: dresses glide with the body parts while turning
       if(frame.attachment==='head'||frame.attachment==='eyes'){
         node.x+=frame.attachment==='eyes'?look.x:look.x*.4;node.y+=p.headY;node.rotation=p.headTilt+turnLean*.6;
@@ -326,7 +334,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     // boss 4 Nov: below the first drawn angle the turn pair wraps (180 to -135), so -157.5 is no longer a side profile
     {const a=((degrees%360)+540)%360-180,i=a<byAngle[0].spec.angle?byAngle.length-1:byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
       const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
-      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0,lo:false}:{other,w:current===lo?u:1-u,lo:current===lo};}
+      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0,lo:false}:{other,w:current===lo?u:1-u,lo:current===lo,mid:String(((lo.spec.angle+span/2)%360+540)%360-180)};}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;
