@@ -179,7 +179,7 @@ export class PixiIsland {
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
       this.localDucks = this.room ? this.sim.ducks.slice(1) : this.sim.ducks;
-      const results = await Promise.allSettled(this.localDucks.map(d => createDuck({outfit: {}, seed: d.id + 21, isPlayer:d.player})));   // plain Ducky, no Drip outfits
+      const results = await Promise.allSettled(this.localDucks.map(d => createDuck({outfit: d.outfit, seed: d.id + 21, isPlayer:d.player})));   // boss 4 Nov: dresses back, as Ashwin had them
       this.rigs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
       this.rigs.forEach((rig, i) => {if (this.localDucks[i]?.player) rig.arrive?.();});   // boss 4 Nov: your Ducky drops in like the Rive arrival
       if (this.disposed) {this.rigs.forEach(r => r.dispose()); this.rigs = []; disposeDuckAssets().catch(() => {}); return;}
@@ -610,7 +610,7 @@ export class PixiIsland {
         entry?.nameplate?.remove();
         entry = {isPlayer, rig:null, emoteVersion};
         this.liveRigs.set(id, entry);
-        createDuck({outfit:{}, seed:parseInt(id.slice(0,8),16), isPlayer}).then(rig => {
+        createDuck({outfit:pose.outfit, seed:parseInt(id.slice(0,8),16), isPlayer}).then(rig => {
           if (this.disposed || this.liveRigs.get(id) !== entry) {
             rig.dispose();
             disposeDuckAssets().catch(() => {});

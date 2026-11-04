@@ -201,10 +201,11 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide+turnLean;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
     view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=1-clamp(-p.bob,0,35)*.01;
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
+    const shift={};   // how far each part glided this frame, so the outfit glides with it
     for(const part of view.parts){
       const joint=part.joint,side=part.side;joint.position.set(joint.rest.x,joint.rest.y);joint.rotation=0;joint.scale.set(1);
       if(glide.other&&part.role!=='shadow'){const twin=partMatch(view,glide.other).get(part);
-        if(twin){joint.x+=(twin.joint.rest.x-joint.rest.x)*glide.w;joint.y+=(twin.joint.rest.y-joint.rest.y)*glide.w;}
+        if(twin){const dx=(twin.joint.rest.x-joint.rest.x)*glide.w,dy=(twin.joint.rest.y-joint.rest.y)*glide.w;joint.x+=dx;joint.y+=dy;shift[part.role+(part.side<0?'L':'R')]=shift[part.role]={x:dx,y:dy};}
         else joint.scale.set(Math.max(0,1-glide.w*2));}
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
       if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;}
@@ -227,12 +228,14 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     for(const garment of view.garments){
       const {node,frame}=garment;
       node.position.set(garment.baseX,garment.baseY);node.rotation=0;
+      const g=(frame.attachment==='eyes'?shift.eye||shift.beak:frame.attachment==='head'?shift.tuft||shift.beak:frame.attachment==='foot'?shift['foot'+(frame.side<0?'L':'R')]||shift.foot:frame.attachment==='wing'?shift['wing'+(frame.wingSide<0?'L':'R')]||shift.wing:shift.body)||{x:0,y:0};
+      node.x+=g.x;node.y+=g.y;   // boss 4 Nov: dresses glide with the body parts while turning
       if(frame.attachment==='head'||frame.attachment==='eyes'){
-        node.y+=p.headY;node.rotation=p.headTilt;
+        node.x+=frame.attachment==='eyes'?look.x:look.x*.4;node.y+=p.headY;node.rotation=p.headTilt+turnLean*.6;
       }
       if(frame.attachment==='foot'){
         const lift=frame.side<0?p.footL:p.footR,step=frame.side<0?p.stepL:p.stepR;
-        node.y-=lift;node.x+=step*.55;node.rotation=-frame.side*lift*.005;
+        node.y-=lift;node.x+=step*fwdX;node.y+=step*fwdY;node.rotation=-frame.side*lift*.005;
       }
       if(frame.attachment==='wing'){
         node.y+=Math.abs(p.sway)*10;node.rotation=frame.wingSide<0?p.wingL:p.wingR;
