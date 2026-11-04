@@ -9,6 +9,7 @@ const NAP_POSES = [
   {name:'Side nap', url:'/pixi-duck/side-nap.svg', view:-90, hat:[-157,-227,-.24], shadow:264, z:[-152,-390]},
 ];
 const slotOrder=['acc','shades','cap','shoes'];
+const DROPPED=new Set(['cap-2','cap-9','cap-11','cap-12','cap-13','shades-12','acc-5','acc-6','acc-8','acc-10','acc-12']);   // boss 4 Nov: fish hat, aviator, Spartan, headphones, headset, feather mask, guitar, flask, skateboard, bag, sword
 let libraryPromise,liveDucks=0;
 const ownedURLs=new Set(),inFlight=new Set();
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -150,7 +151,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   current.root.visible=true;current.root.alpha=1;
   async function setOutfit(next){
     const request=++outfitVersion;
-    const entries=Object.entries(next).map(([slot,index])=>data.wardrobe.find(e=>e.slot===(slot==='accessory'?'acc':slot)&&(e.index===Number(index)||e.id===index))).filter(Boolean).sort((a,b)=>slotOrder.indexOf(a.slot)-slotOrder.indexOf(b.slot));
+    // boss 4 Nov: only the outfits that wrap the Ducky well stay; a dropped one is swapped for a kept one of the same kind
+    const keep=e=>!DROPPED.has(e.id),swap=(slot,index)=>{const all=data.wardrobe.filter(e=>e.slot===slot),hit=all.find(e=>e.index===Number(index)||e.id===index);if(!hit||keep(hit))return hit;const kept=all.filter(keep);return kept[hit.index%kept.length];};
+    const entries=Object.entries(next).map(([slot,index])=>swap(slot==='accessory'?'acc':slot,index)).filter(Boolean).sort((a,b)=>slotOrder.indexOf(a.slot)-slotOrder.indexOf(b.slot));
     const frames=entries.flatMap(entry=>Object.values(entry.frames).flat()).filter(frame=>frame.visible);
     await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));
     if(disposed||request!==outfitVersion)return;
@@ -183,7 +186,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
           const cx=band.length?(Math.min(...band)+Math.max(...band))/2:frame.rect[0]+frame.rect[2]/2,k=frame.wrapScale||1.15;sprite.scale.x=k;sprite.x=cx+(frame.rect[0]-cx)*k-x;}
         // the body's ink line is redrawn over the garment where it crosses the outline, so the cut ends carry the same ink edge
         let ink=null;if(mask){const cut=new Sprite(sprite.texture);cut.position.copyFrom(sprite.position);cut.scale.copyFrom(sprite.scale);ink=new Graphics();ink.mask=cut;node.addChild(cut,ink);}
-        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,ghosts:new Map(),mask,ink});
+        view.garments.push({node,frame,entry,baseX:x,baseY:y,sprite,ghosts:new Map(),mask,ink,spos:sprite.position.clone(),sscale:sprite.scale.clone()});
       }
     }
   }
@@ -244,13 +247,17 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const eyeSpan=!eyeRest?0:eyes.length>1?eyeNow.span:eyeOther&&eyeOther.span>20?eyeOther.span*glide.w:0;
     for(const garment of view.garments){
       const {node,frame}=garment;
-      node.position.set(garment.baseX,garment.baseY);node.rotation=0;node.alpha=1;
+      node.position.set(garment.baseX,garment.baseY);node.rotation=0;node.alpha=1;garment.sprite.position.copyFrom(garment.spos);garment.sprite.scale.copyFrom(garment.sscale);
       // boss 4 Nov: head and eye pieces glide to where their OWN frame sits in the next direction (the tuft wanders between
       // drawings and dragged hats off the head), and the two drawings cross-fade with a fixed stacking so the turn never pops
       const headish=frame.attachment==='head'||frame.attachment==='eyes',tf=headish&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.other.spec.angle):null;
       for(const [k,ghost] of garment.ghosts)ghost.visible=!!tf&&k===glide.other.spec.angle;garment.sprite.alpha=1;
       if(tf){const u=glide.lo?glide.w:1-glide.w,hm=view.spec.attachments,ho=glide.other.spec.attachments,hx=(ho.head[0]+ho.head[1]-hm.head[0]-hm.head[1])/2,hy=ho.headY-hm.headY;
         node.x+=hx*glide.w;node.y+=hy*glide.w;   // the hat rides the head centre; each drawing keeps its own seat on its own head
+        // boss 4 Nov: the hat's outline also grows or narrows toward the next drawing's size and seat, so at the halfway both
+        // drawings fill exactly the same box and the swap only changes inner details, never the silhouette
+        if(frame.attachment==='head'){const w=glide.w,[rx,ry,rw,rh]=frame.rect,[tx,ty,tw,th]=tf.rect,[ax,ay]=frame.anchor;
+          garment.sprite.scale.set(1+(tw/rw-1)*w,1+(th/rh-1)*w);garment.sprite.position.set(rx-ax+((tx-hx)-rx)*w,ry-ay+((ty-hy)-ry)*w);}
         if(tf.url!==frame.url){let ghost=garment.ghosts.get(glide.other.spec.angle);
           if(!ghost){ghost=new Sprite(Assets.get(tf.url));ghost.position.set(tf.rect[0]-hx-frame.anchor[0],tf.rect[1]-hy-frame.anchor[1]);glide.lo?node.addChild(ghost):node.addChildAt(ghost,0);garment.ghosts.set(glide.other.spec.angle,ghost);}
           const top=smooth(.25,.6,u),bottom=1-smooth(.45,.8,u);ghost.alpha=glide.lo?top:bottom;garment.sprite.alpha=glide.lo?bottom:top;}}
