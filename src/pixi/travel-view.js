@@ -1,5 +1,6 @@
 import {Assets, Container, Graphics, Sprite, Text} from 'pixi.js';
-import {HARBOR, destinationsFor, islandFor, ISLAND_SCALE, offshoreProgress} from './islands.js';
+import {destinationsFor, ISLAND_SCALE, offshoreProgress} from './islands.js';
+import {createHarbor} from './harbor.js';
 import art from './art-manifest.json';
 import shapes from './walk-shapes.json';
 
@@ -11,20 +12,9 @@ function label(text,x,y,size=32) {
   return node;
 }
 
-export async function createTravelView(objects,water,air) {
+export async function createTravelView(objects,water,air,decks) {
   const [texture,...tiles]=await Promise.all([Assets.load('/pixi-art/boat-sail.png'),...art.ground.tiles.map(tile=>Assets.load(tile.src))]);
-  const harbor=new Container({label:'Island harbor'});
-  harbor.zIndex=HARBOR.land.y-1;
-  const {x,y,width,height}=HARBOR.pier;
-  const pier=new Graphics().rect(x,y,width,height).fill(0xc88941).stroke({color:0x39472d,width:5});
-  for (let y=765;y<950;y+=25) pier.moveTo(1738,y).lineTo(1862,y).stroke({color:0x885931,width:3});
-  harbor.addChild(pier);
-  const flag=new Graphics(),flowers=new Graphics();
-  harbor.addChild(flag,flowers);
-  const sign=label('',1600,965,34);
-  sign.zIndex=5000;
-  objects.addChild(sign);
-  objects.addChild(harbor);
+  const harbor=createHarbor(decks,objects);   // boss 5 Nov: a real jetty, signpost and flag (harbor.js)
   const markers=new Container({label:'Distant islands'});
   water.addChild(markers);
   const clouds=new Container({label:'Offshore clouds'});
@@ -40,15 +30,7 @@ export async function createTravelView(objects,water,air) {
   const vessels=new Map();
   return {
     switchIsland(id) {
-      const island=islandFor(id);
-      sign.text=`${island.name}\nHarbor`;
-      flag.clear().moveTo(1910,945).lineTo(1910,790).stroke({color:0x885931,width:7})
-        .poly([1910,790,2010,810,1910,835]).fill(island.accent).stroke({color:0x39472d,width:3});
-      flowers.clear();
-      if (id !== 'home') for (const [x,y] of [[1640,1010],[1675,1030],[1950,1010],[1985,990]]) {
-        for (let i=0;i<5;i++) flowers.circle(x+Math.cos(i*Math.PI*.4)*10,y+Math.sin(i*Math.PI*.4)*10,8).fill(island.accent);
-        flowers.circle(x,y,5).fill(0xfff0c7);
-      }
+      harbor.switchIsland(id);
       for (const child of markers.removeChildren()) child.destroy({children:true});
       destinations=destinationsFor(id).map(destination=>{
         const root=new Container({label:destination.name}), mini=new Container();
@@ -78,6 +60,7 @@ export async function createTravelView(objects,water,air) {
     },
     update(boats,t,reduced,visible,player) {
       const progress=offshoreProgress(player);
+      harbor.update(boats,t,reduced);
       clouds.alpha=progress*.65;
       for (const cloud of cloudPuffs) {
         cloud.puff.position.set(cloud.x+(reduced?0:Math.sin(t*.08+cloud.x)*35),cloud.y);

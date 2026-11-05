@@ -18,7 +18,7 @@ function drawBoat() {
 }
 
 // islets: [[x, y, rx, ry], ...]; island: {x, y} centre, so boats sit on the islet's sea side, away from the jetty
-export function createMooredBoats(layer, islets, island, {coast = null, openSea = 5, sea = {x0: 300, x1: 2900, y0: 300, y1: 1500}} = {}, seed = Math.floor(Math.random() * 1e9)) {
+export function createMooredBoats(layer, islets, island, {coast = null, openSea = 5, sea = {x0: 300, x1: 2900, y0: 300, y1: 1500}, avoid = []} = {}, seed = Math.floor(Math.random() * 1e9)) {
   let s = seed >>> 0;
   const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
   const boats = [];
@@ -32,7 +32,7 @@ export function createMooredBoats(layer, islets, island, {coast = null, openSea 
     const mx = p[0] + (q[0] - p[0]) * t, my = p[1] + (q[1] - p[1]) * t;
     if (inside(mx + nx * 40, my + ny * 40)) {nx = -nx; ny = -ny;}
     const d = 95 + rnd() * 40, bx = mx + nx * d, by = my + ny * d;
-    if (inside(bx, by) || boats.some(o => Math.hypot(o.x - bx, o.y - by) < 320)) continue;
+    if (inside(bx, by) || boats.some(o => Math.hypot(o.x - bx, o.y - by) < 320) || avoid.some(a => Math.hypot(a.x - bx, a.y - by) < a.r)) continue;   // boss 5 Nov: avoid = the live harbor
     const b = drawBoat(); b.root.position.set(bx, by); b.root.scale.x = nx < 0 ? -1 : 1;
     layer.addChild(b.root); boats.push({...b, x: bx, y: by, phase: rnd() * 6.28}); placed++;
   }

@@ -8,8 +8,9 @@ try {
   const load = p => vite.ssrLoadModule(p);
   const world = (await load('/rive/web/world.json')).default;
   const {geometry} = await load('/rive/web/island-geometry.mjs');
-  const P = await load('/src/pixi/placements.js'), {sleepHalfWidths} = await load('/src/pixi/sleeper.js');
-  const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable), local = P.walkWorld(tw, props);
+  const P = await load('/src/pixi/placements.js'), {sleepHalfWidths} = await load('/src/pixi/sleeper.js'), {harborClear, harborWorld} = await load('/src/pixi/islands.js');
+  // boss 5 Nov: the server is the live game, so it walks the live harbor: the jetty deck, and the lawn at its foot cleared
+  const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable).filter(harborClear), local = harborWorld(P.walkWorld(tw, props));
   const beds = P.sleepSpots(local, props, geometry(local).walkable, sleepHalfWidths(.88 * .24 * 3));
   const walk = {...local, obstacles: [...local.obstacles, ...beds.map(P.sleeperFootprint)]};
   const out = Object.fromEntries(['width', 'height', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));

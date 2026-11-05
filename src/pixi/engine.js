@@ -4,7 +4,7 @@ import {createBeachSurf} from './surf.js';
 import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
-import {HARBOR, islandFor, near, SEA_BOUNDS, destinationsFor, offshoreProgress} from './islands.js';
+import {HARBOR, islandFor, near, SEA_BOUNDS, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
@@ -126,7 +126,7 @@ export class PixiIsland {
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
       const props = createPlacements(world, geometry({...world, obstacles: []}).walkable)
-        .filter(prop => !this.room || !near(prop,HARBOR.land,210)), local = walkWorld(world, props);
+        .filter(prop => !this.room || harborClear(prop)), local = this.room ? harborWorld(walkWorld(world, props)) : walkWorld(world, props);   // boss 5 Nov: live, the jetty deck is walkable (same as scripts/walk-world.mjs)
       globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));   // QA readback
       // boss 5 Nov: each sleeping NPC lies where its pose belongs (client only; the socket server never sees NPCs), and each
       // sleeper + its prop is a blocked footprint in the client walk rules, so routes go around it (world.json, worker/ untouched)
@@ -220,7 +220,7 @@ export class PixiIsland {
       if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
       if (this.room) {
-        this.travelView=await createTravelView(this.objects,this.water,this.air);
+        this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) return;
         this.switchIsland(this.room.islandId);
       }
@@ -241,7 +241,7 @@ export class PixiIsland {
     this.surf = createBeachSurf(this.water);   // boss 5 Nov: the original beach surf, not the simulated one
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;   // boss 4 Nov: no boats on the race lake
-    this.boats = createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast});   // boss 5 Nov: 1-5 boats at each jetty islet
+    this.boats = createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast, avoid: this.room ? [{x: HARBOR.pier.x + HARBOR.pier.width / 2, y: HARBOR.pier.y + HARBOR.pier.height / 2, r: 560}] : []});   // boss 5 Nov: 1-5 boats at each jetty islet
     globalThis.__duckyBoats = this.boats.count;
     rowingProp?.sprite?.destroy?.(); rowingProp?.shadow?.destroy?.();
     this.props = this.props.filter(prop => prop !== rowingProp);
@@ -312,7 +312,7 @@ export class PixiIsland {
   }
 
   focusHarbor() {
-    Object.assign(this.target,{x:HARBOR.land.x,y:760,zoom:.65});
+    Object.assign(this.target,{x:HARBOR.pier.x+HARBOR.pier.width/2,y:HARBOR.pier.y+HARBOR.pier.height/2,zoom:.65});   // boss 5 Nov: the whole jetty in view
     this.follow=false; this.fitMode=false;
     this.canvas?.focus();
   }

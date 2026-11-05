@@ -3,7 +3,7 @@ import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same w
 import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
-import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland} from '../src/pixi/islands.js';
+import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
@@ -72,7 +72,7 @@ export class IslandRoom {
   }
 
   parkBoat(boat,islandId) {
-    const spots=Array.from({length:9},(_,i) => ({x:1650+(i%3)*150,y:660-Math.floor(i/3)*120}));
+    const spots=HARBOR.moorings;   // boss 5 Nov: berths along the jetty
     const spot=spots.find(p => !this.boats.some(other => other !== boat && other.islandId === islandId && !other.occupant && near(other,p,70))) ?? spots[0];
     Object.assign(boat,{...spot,islandId,turn:0,occupant:null,departure:islandId});
     this.saveBoats();
@@ -336,12 +336,13 @@ export class IslandRoom {
         if (actor.mode !== 'walking' || typeof command.boatId !== 'string') break;
         info.boarding=null; actor.path=[]; info.input=ZERO;
         const boat = this.boats.find(boat => boat.id === command.boatId && boat.islandId === actor.islandId);
-        if (!boat || boat.occupant || !near(boat,HARBOR.water,400)) {
+        if (!boat || boat.occupant || !near(boat,HARBOR.water,600)) {   // boss 5 Nov: the outer berths sit ~520 off the dock point
           this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           break;
         }
         info.input=ZERO;
-        if (near(actor,HARBOR.land,45) || setWalkDestination(actor,nav,HARBOR.land.x,HARBOR.land.y)) info.boarding=boat.id;
+        const deck=boardingPoint(boat);   // boss 5 Nov: walk the jetty to the deck beside that boat
+        if (near(actor,deck,45) || setWalkDestination(actor,nav,deck.x,deck.y)) info.boarding=boat.id;
         break;
       }
       case 'disembark':
@@ -392,11 +393,12 @@ export class IslandRoom {
         }
       } else {
         walkStep(actor, nav, .05, now/1000, info.input);
-        if (info.boarding && near(actor,HARBOR.land,45)) {
-          const boat=this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
+        const boat=info.boarding && this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
+        const aboard=boat && near(actor,boardingPoint(boat),45);   // boss 5 Nov: step in from the deck beside the boat (the jetty end for the tip berths)
+        if (info.boarding && (aboard || !actor.path.length)) {
           info.boarding=null;
           actor.path=[];
-          if (!boat || boat.occupant) this.send(socket,{type:'travel-notice',text:'Boat taken.'});
+          if (!aboard || boat.occupant) this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           else {
             boat.occupant=actor.id; boat.departure=actor.islandId;
             Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false});

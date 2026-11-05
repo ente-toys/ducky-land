@@ -8,24 +8,49 @@ export const ISLANDS = [
   {id:'sunset', name:'Sunset Island', accent:0xffa14f},
 ];
 export const islandFor = id => ISLANDS.find(island => island.id === id);
-export const HARBOR = {land:{x:1800,y:930}, water:{x:1800,y:660}, pier:{x:1735,y:745,width:130,height:210}};
+// boss 5 Nov: the harbor is a real wooden jetty. Its foot is on the north lawn, its deck runs out over the water, Ducky walks it to
+// the boats moored along both sides. land = the deck end you board from and land on, water = where a boat docks, beside the tip.
+const FOOT={x:1726,y:830}, TIP={x:1640,y:400}, JETTY_W=104, AXIS=Math.hypot(TIP.x-FOOT.x,TIP.y-FOOT.y);
+const DIR={x:(TIP.x-FOOT.x)/AXIS,y:(TIP.y-FOOT.y)/AXIS}, along=(t,side=0) => ({x:FOOT.x+DIR.x*t-DIR.y*side,y:FOOT.y+DIR.y*t+DIR.x*side});
+export const JETTY={foot:FOOT, tip:TIP, width:JETTY_W, length:AXIS, angle:Math.atan2(DIR.x,-DIR.y), wetFrom:.14,
+  walkway:{a:[Math.round(along(-55).x),Math.round(along(-55).y)], b:[Math.round(along(AXIS-44).x),Math.round(along(AXIS-44).y)], w:JETTY_W}};
+const axisX=y => FOOT.x+(y-FOOT.y)*DIR.x/DIR.y;
+// nine berths (a whole fleet can end up at one island): two each side staggered so no sail hides another, bows to the deck,
+// three off the tip, then two anchored further out (no bollard, no rope)
+const berth=(y,side) => ({x:Math.round(axisX(y)+side),y});
+const MOORINGS=[berth(640,150),berth(570,-150),berth(490,150),berth(420,-150),{x:TIP.x-175,y:285},{x:TIP.x+175,y:300},{x:TIP.x,y:205},
+  berth(560,390),berth(560,-390)];
+export const HARBOR = {land:{x:JETTY.walkway.b[0],y:JETTY.walkway.b[1]}, water:{x:Math.round(along(AXIS+20,125).x),y:Math.round(along(AXIS+20,125).y)},
+  pier:{x:Math.min(FOOT.x,TIP.x)-JETTY_W/2,y:TIP.y,width:Math.abs(FOOT.x-TIP.x)+JETTY_W,height:FOOT.y-TIP.y}, moorings:MOORINGS};
+// the server and the live client walk the same harbor: the jetty deck is a walkway, and the lawn at its foot is cleared of props
+export const harborWorld = w => ({...w, walkways:[...w.walkways, JETTY.walkway]});
+export const harborClear = prop => Math.hypot(prop.x-FOOT.x-20,prop.y-FOOT.y-110) > 200;
+// boss 5 Nov: walk to the deck beside your boat, then step in
+export function boardingPoint(boat) {
+  const t=Math.max(AXIS*JETTY.wetFrom,Math.min(AXIS-44,(boat.x-FOOT.x)*DIR.x+(boat.y-FOOT.y)*DIR.y));
+  const side=Math.sign((boat.x-FOOT.x)*-DIR.y+(boat.y-FOOT.y)*DIR.x)*(t >= AXIS-45 ? 0 : 18), p=along(t,side);
+  return {x:Math.round(p.x),y:Math.round(p.y)};
+}
+const onJetty=(x,y,pad) => {
+  const t=Math.max(0,Math.min(AXIS,(x-FOOT.x)*DIR.x+(y-FOOT.y)*DIR.y)), p=along(t);
+  return Math.hypot(x-p.x,y-p.y) < JETTY_W/2+pad;
+};
 export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 380;
 export const SEA_BOUNDS = {x0:-1800,y0:-3000,x1:world.width+1800,y1:world.height+1800};
 export const ISLAND_SCALE = .13;
 export const SEA_ISLANDS = [{x:900,y:-1800}, {x:3500,y:-2000}];
 export const destinationsFor = id => ISLANDS.filter(island => island.id !== id).map((island,i) => ({...SEA_ISLANDS[i], destination:island.id, name:island.name, accent:island.accent, dock:{x:SEA_ISLANDS[i].x,y:SEA_ISLANDS[i].y+260}}));
-export const offshoreProgress = player => player ? Math.max(0,Math.min(1,(HARBOR.water.y-player.y-450)/850)) : 1;
+export const offshoreProgress = player => player ? Math.max(0,Math.min(1,(660-player.y-450)/850)) : 1;   // 660: the old harbor line, so the clouds stay put
 export const near = (a,b,radius) => Math.hypot(a.x-b.x,a.y-b.y) <= radius;
 
 export function createBoats() {
   return ISLANDS.flatMap(island => [0,1,2].map(slot => ({id:`${island.id}-${slot}`, islandId:island.id,
-    x:1650+slot*150, y:660, turn:Math.PI, occupant:null, departure:island.id})));
+    ...HARBOR.moorings[slot], turn:Math.PI, occupant:null, departure:island.id})));
 }
 
 function wet(x,y) {
-  const pier=HARBOR.pier;
-  if (x>=pier.x && x<=pier.x+pier.width && y>=pier.y && y<=pier.y+pier.height) return false;
+  if (onJetty(x,y,4)) return false;
   if (x < SEA_BOUNDS.x0 || y < SEA_BOUNDS.y0 || x > SEA_BOUNDS.x1 || y > SEA_BOUNDS.y1 ||
       inPoly(x,y,shapes.coast) || inPoly(x,y,world.coast)) return false;
   for (const island of SEA_ISLANDS) {
