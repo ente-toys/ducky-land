@@ -345,6 +345,8 @@ export class PixiIsland {
       } else if (movement.drag) {
         this.camera.x -= movement.dx / this.camera.zoom;
         this.camera.y -= movement.dy / (this.camera.zoom * TILT);
+        const now=performance.now(), gap=Math.max(8,now-(this.dragAt||now-16)); this.dragAt=now;   // flick speed, for the globe's spin-on
+        this.spin={x:(this.spin?.x||0)*.5+movement.dx/gap*.5, y:(this.spin?.y||0)*.5+movement.dy/gap*.5};
         this.gust = clamp(movement.dx * .005, -.5, .5);
       } else return;
       this.follow = false;
@@ -535,13 +537,17 @@ export class PixiIsland {
 
   constrain(camera) {
     const far=this.archipelago && camera.zoom<this.minZoom*.95;   // zoomed out over the archipelago: roam freely, the world wraps like a globe
-    if (far) return;
+    if (far) {   // on the globe: east-west wraps for ever, north-south stops short of the ice caps
+      const b=this.archipelago.bounds, Rw=(b.x1-b.x0)/(2*Math.PI), cy=(b.y0+b.y1)/2;
+      camera.y=clamp(camera.y,cy-1.05*Rw,cy+1.05*Rw);
+      return;
+    }
     const bounds=far?this.archipelago.bounds:this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
     camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
 
   // boss 5 Nov: zoom out past the island and the other 300 islands come into view (no button); the floor fits them all
-  birdZoom() {const b=this.archipelago.bounds; return Math.min(this.width/(b.x1-b.x0), this.height/(b.y1-b.y0));}
+  birdZoom() {const b=this.archipelago.bounds; return .43*this.height*2*Math.PI/(b.x1-b.x0);}   // the globe at .43 of the screen height
   zoomFloor() {return this.archipelago ? this.birdZoom() : this.minZoom*.8;}
 
   fit() {
@@ -619,6 +625,11 @@ export class PixiIsland {
       Object.assign(this.target, {x:player.x, y:player.y-90});
       if (player.mode === 'sailing') this.target.zoom=.56-offshoreProgress(player)*.24;   // boss 5 Nov: pulled back a little while sailing
     }
+    if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
+      const k=Math.exp(-dt*2.2), sx=this.spin.x*dt*1000/this.camera.zoom, sy=this.spin.y*dt*1000/(this.camera.zoom*TILT);
+      this.camera.x-=sx; this.camera.y-=sy; this.target.x-=sx; this.target.y-=sy; this.constrain(this.camera); this.constrain(this.target);
+      this.spin.x*=k; this.spin.y*=k; if (Math.hypot(this.spin.x,this.spin.y)<.01) this.spin=null;
+    } else if (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80) this.spin=null;   // held still: no flick
     easeCamera(this.camera, this.target, dt, reduced);
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
     if (this.birdEye) this.archipelago.build();
@@ -626,6 +637,9 @@ export class PixiIsland {
     if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
       const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));
       if (t > 0) this.archipelago.build();
+      if (t > .9 && !this.gestures.pointers.size && !this.spin && !reduced) {   // left alone on the globe it turns slowly (once a minute)
+        const b=this.archipelago.bounds, step=(t-.9)/.1*(b.x1-b.x0)/60*dt; this.camera.x+=step; this.target.x+=step;
+      }
       this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
     }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
