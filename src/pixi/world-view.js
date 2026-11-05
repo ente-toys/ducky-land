@@ -69,12 +69,15 @@ vec3 planet(vec2 uv) {
   space = mix(space, vec3(.17, .22, .44), step(d, 1.24 + wob * .6));
   float st = hash(floor(sp / 2.)), tw = .5 + .5 * sin(uTime * 1.7 + st * 40.);
   space += vec3(1., .95, .8) * step(.9975, st) * tw * step(1.6, d);
-  float glow = smoothstep(1. + 10. * onePx, 1., d) * step(1., d);
-  space = mix(space, vec3(.62, .86, 1.), glow * .8);       // a thin bright rim of air
+  float glow = pow(smoothstep(1. + 34. * onePx, 1., d), 2.2) * step(1., d);
+  space = mix(space, vec3(.5, .84, 1.), glow * .95);       // the glowing rim of air (boss ref)
   if (d >= 1.) return mix(ground(uCam + px / uZoom), space, ball);
   vec2 dir = d > 0. ? px / length(px) : vec2(0.);
   vec2 g = uCam + uSpin + dir * asin(d) * Rp / uZoom;     // near the middle: the flat view, unchanged
-  vec3 ocean = mix(uSea, vec3(.2, .52, .86), ball);       // open sea deepens to cartoon-Earth blue as it becomes a ball
+  vec2 m = g / uBounds.zw * 7.;                           // painted sea: big soft patches of lighter and deeper blue
+  float wash = noise(m) * .65 + noise(m * 2.3 + 5.) * .35;
+  vec3 paint = mix(vec3(.16, .45, .82), vec3(.3, .64, .93), smoothstep(.3, .75, wash));
+  vec3 ocean = mix(uSea, paint, ball);                    // open sea deepens to cartoon-Earth blue as it becomes a ball
   vec3 col = mix(ground(g), world((g - uBounds.xy) / uBounds.zw, ocean), ball);
   // flat cartoon light: one soft-edged shadow on the far side, a lighter cap on the lit side, a bright inner rim
   float z = sqrt(1. - d * d);
@@ -82,7 +85,7 @@ vec3 planet(vec2 uv) {
   float lit = dot(n, L);
   col = mix(col, col * vec3(.72, .8, .98), (1. - smoothstep(.12, .3, lit)) * ball);
   col = mix(col, col + vec3(.06, .07, .08), smoothstep(.8, .95, lit) * ball);
-  col = mix(col, vec3(.7, .9, 1.), smoothstep(.9, 1., d) * .55 * ball);
+  col = mix(col, vec3(.72, .92, 1.), pow(smoothstep(.82, 1., d), 1.6) * .75 * ball);   // bright inner rim
   return col;
 }
 void main() {
@@ -111,7 +114,7 @@ function buildWorldTexture(app, islands, bounds, islandTexture, worldSize) {
     s.anchor.set(.5);
     s.position.set((island.x - bounds.x0) * kx + ox, (island.y - bounds.y0) * ky + oy);
     s.width = worldSize.width * island.scale * kx; s.height = worldSize.height * island.scale * ky;
-    s.scale.x *= island.flip; s.rotation = island.rot;
+    s.scale.x *= island.flip; s.rotation = island.rot; s.tint = island.tint ?? 0xFFFFFF;
     box.addChild(s);
   }
   const rt = RenderTexture.create({width: W, height: H, addressMode: 'repeat', scaleMode: 'linear'});
@@ -120,16 +123,24 @@ function buildWorldTexture(app, islands, bounds, islandTexture, worldSize) {
   return rt;
 }
 
-// a cream cartoon cloud: a flat base, three or four puffs on top, a warm shade along the bottom
+// a cream cartoon cloud (boss ref): a long flat swoosh tapering to a tail, two or three puffs on its back,
+// a warm peach shade along the underside and a cream top
 function cloud(seed) {
   const g = new Graphics(), r = i => {const v = Math.sin(seed * 91.7 + i * 17.3) * 43758.5453; return v - Math.floor(v);};
-  const w = 1 + r(1) * .9, puffs = 3 + Math.floor(r(2) * 2);
-  g.roundRect(-w, -.12, w * 2, .3, .15).fill(0xF2DDB8);
+  const L = 1.3 + r(1) * 1.1, dir = r(9) < .5 ? -1 : 1, puffs = 2 + Math.floor(r(2) * 2);
+  const body = (lift, color) => {
+    g.moveTo(-L * dir, .1 - lift)
+      .bezierCurveTo(-L * .5 * dir, -.12 - lift, L * .4 * dir, -.2 - lift, L * .9 * dir, -.05 - lift)
+      .bezierCurveTo(L * 1.05 * dir, .05 - lift, L * .95 * dir, .2 - lift, L * .7 * dir, .22 - lift)
+      .bezierCurveTo(L * .2 * dir, .26 - lift, -L * .5 * dir, .2 - lift, -L * dir, .1 - lift).fill(color);
+  };
+  body(0, 0xF0CBA4);   // peach underside
   for (let i = 0; i < puffs; i++) {
-    const x = -w * .7 + (i + .5) / puffs * w * 1.4, pr = .25 + r(i + 3) * .25 + (i === 1 ? .12 : 0);
-    g.circle(x, -pr * .5, pr).fill(0xFFF6E3);
+    const x = (L * .5 - (i + .5) / puffs * L * .9) * dir, pr = .32 + r(i + 3) * .22 + (i === 0 ? .2 : 0);
+    g.circle(x, -pr * .6 + .04, pr).fill(0xF0CBA4);
+    g.circle(x - .05 * dir, -pr * .6 - .02, pr * .93).fill(0xFFF4DE);
   }
-  g.roundRect(-w, -.12, w * 2, .2, .1).fill(0xFFF6E3);
+  body(.06, 0xFFF4DE);   // cream top
   return g;
 }
 
@@ -170,7 +181,7 @@ export function createWorldView(app, scene) {
   const clouds = new Container({label: 'Globe clouds'});
   const CLOUDS = Array.from({length: 11}, (_, i) => {
     const c = cloud(i + 1); clouds.addChild(c);
-    return {c, a: i / 11 * 6.283 + Math.sin(i * 7.1) * .3, r: .55 + ((i * .37) % 1) * .65, s: .085 + ((i * .53) % 1) * .06};
+    return {c, a: i / 11 * 6.283 + Math.sin(i * 7.1) * .3, r: .45 + ((i * .37) % 1) * .65, s: .07 + ((i * .53) % 1) * .05};
   });
   const pin = makePin();
   app.stage.addChildAt(clouds, app.stage.getChildIndex(mesh) + 1);

@@ -13,14 +13,17 @@ export function archipelagoLayout(world, seed = 11) {
   const rnd = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
   const W = world.width, H = world.height, cx = W / 2, cy = H / 2;
   const out = [{index: 0, home: true, x: cx, y: cy, scale: 1, flip: 1, rot: 0}];
-  const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 1.2});
+  // each island gets a light land tint so the globe reads as many different places, not one island repeated
+  const TINTS = [0xFFFFFF, 0xFFFFFF, 0xFFE9B8, 0xE2F5B8, 0xFFD9C4, 0xF2E2FF, 0xD9F0FF, 0xFFF3A8];
+  const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 2.4, tint: TINTS[Math.floor(rnd() * TINTS.length)]});
   // boss 5 Nov: "the whole world should be filled with islands, make them bigger". Big islands scattered evenly but
   // naturally (dart throwing, biggest first) over a map that wraps both ways, so the globe is covered with no seams or rows.
   const COLS = 20, ROWS = 15, sx = W * 1.42, sy = H * 1.42, hc = 10, hr = 7;
   const x0 = cx - (hc + .5) * sx, y0 = cy - (hr + .5) * sy, SX = COLS * sx, SY = ROWS * sy;
   const wrapd = (v, p) => v - p * Math.round(v / p);
   const room = (x, y, s) => out.every(i => Math.hypot(wrapd(i.x - x, SX) / W, wrapd(i.y - y, SY) / H) > (i.scale + s) * .5 * 1.06);
-  const sizes = Array.from({length: ISLAND_COUNT - 1}, () => .62 + rnd() * .62).sort((p, q) => q - p);
+  // boss 5 Nov (option B): filled, but varied. A few big islands, a crowd of middling ones, lots of small ones.
+  const sizes = Array.from({length: ISLAND_COUNT - 1}, (_, i) => i < 16 ? 1.5 + rnd() * .7 : i < 100 ? .8 + rnd() * .45 : .38 + rnd() * .38).sort((p, q) => q - p);
   for (let k = 0, s = sizes[0]; k < sizes.length; s = sizes[++k]) {
     for (let t = 0; t < 4000; t++, s *= t % 400 ? 1 : .94) {
       const x = x0 + rnd() * SX, y = y0 + rnd() * SY;
@@ -81,7 +84,7 @@ export function createArchipelago(app, scene, layer, world) {
       for (const island of islands) if (!island.home) {
         const s = new Sprite(texture);
         s.anchor.set(.5); s.position.set(island.x, island.y);
-        s.width = world.width * island.scale; s.height = world.height * island.scale; s.scale.x *= island.flip; s.rotation = island.rot;
+        s.width = world.width * island.scale; s.height = world.height * island.scale; s.scale.x *= island.flip; s.rotation = island.rot; s.tint = island.tint;
         root.addChild(s);
       }
       // 30,000 Duckies: 100 tiny yellow dots per island, scattered over its land
