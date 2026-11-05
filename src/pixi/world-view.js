@@ -79,17 +79,11 @@ vec3 planet(vec2 uv) {
   vec3 r1 = vec3(v.x, cl * v.y + sl * v.z, -sl * v.y + cl * v.z);
   float lon = uLL.x + atan(r1.x, r1.z), lat = asin(clamp(r1.y, -1., 1.));
   vec2 gS = vec2(uSph.x + lon * uSph.z, uSph.y - lat * uSph.z);
+  gS.x = gA.x + (gS.x - gA.x) - uBounds.z * floor((gS.x - gA.x) / uBounds.z + .5);   // same wrap as gA: no seam where the map joins
   vec2 g = mix(gA, gS, ball);
-  vec2 m = g / uBounds.zw * 7.;                           // painted sea: big soft patches of lighter and deeper blue
-  float wash = noise(m) * .65 + noise(m * 2.3 + 5.) * .35;
-  vec3 paint = mix(vec3(.16, .45, .82), vec3(.3, .64, .93), smoothstep(.3, .75, wash));
+  vec3 paint = vec3(.2, .52, .86);                        // boss 5 Nov: one even sea colour (the painted patches made a seam)
   vec3 ocean = mix(uSea, paint, ball);                    // open sea deepens to cartoon-Earth blue as it becomes a ball
   vec3 col = mix(ground(g), world((g - uBounds.xy) / uBounds.zw, ocean), ball);
-  float edge = abs(lat) + (noise(vec2(lon * 6., lat > 0. ? 1. : 7.)) - .5) * .1;   // a wavy cartoon coastline of ice
-  float aa = 1.5 / max(Rp, 1.);
-  float ice = smoothstep(1.32 - aa, 1.32 + aa, edge), rimIce = ice - smoothstep(1.345 - aa, 1.345 + aa, edge);
-  col = mix(col, mix(vec3(.88, .95, 1.), vec3(.97, .99, 1.), smoothstep(1.36, 1.5, abs(lat))), ice * ball);
-  col = mix(col, vec3(.7, .85, .97), rimIce * .8 * ball);  // crisp ice caps hide the poles, a pale blue line at their edge
   // flat cartoon light: one soft-edged shadow on the far side, a lighter cap on the lit side, a bright inner rim
   float z = sqrt(1. - d * d);
   vec3 n = vec3(px.x / Rp, -px.y / Rp, z), L = normalize(vec3(-.5, .5, .72));
@@ -234,7 +228,8 @@ export function createWorldView(app, scene) {
         const vx = px / Rp, vy = -py / Rp, vz = Math.sqrt(Math.max(0, 1 - d * d));
         const r1y = cl * vy + sl * vz, r1z = -sl * vy + cl * vz;
         const sx = cx + (lon0 + Math.atan2(vx, r1z)) * Rw, sy = cy - Math.asin(Math.max(-1, Math.min(1, r1y))) * Rw;
-        return [ax + (sx - ax) * ball, ay + (sy - ay) * ball];
+        const sxw = ax + wrap(sx - ax, spanX);   // same wrap as the shader
+        return [ax + (sxw - ax) * ball, ay + (sy - ay) * ball];
       };
       this.globe = {w, h, Rp, Rw, ball, cl, sl};   // for grab-dragging (engine.js)
       // where a world point sits on screen: start from the sphere's answer, then a few Newton steps on the shader mapping
