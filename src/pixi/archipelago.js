@@ -1,7 +1,8 @@
 // boss 5 Nov: 300 home islands (30k stars = 300 islands), all the same island for now; themes come later.
 // One snapshot of the home island is reused for 299 copies laid out as a GTA-style world map,
 // and the bird's-eye view zooms the camera out far enough to see the whole archipelago.
-import {Container, Filter, GlProgram, Graphics, Rectangle, Sprite} from 'pixi.js';
+import {Container, Filter, GlProgram, Graphics, Rectangle, Sprite, Text} from 'pixi.js';
+import shapes from './walk-shapes.json' with {type: 'json'};
 
 export const ISLAND_COUNT = 300;
 const hash = i => {const s = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return s - Math.floor(s);};
@@ -18,7 +19,9 @@ export function archipelagoLayout(world, seed = 11) {
   const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 1.2});
   // landmasses: centre, radius (in island widths), how many islands
   const lands = [[0, 0, 4.2, 95], [-11, -7, 3, 50], [10, -7, 2.7, 40], [-9, 8, 2.4, 32], [9, 8, 2.1, 25]];
+  const landInfo = [];
   for (const [lx, ly, r, count] of lands) {
+    landInfo.push({x: cx + lx * W, y: cy + ly * H, r});
     const lobes = Array.from({length: 5}, () => ({a: rnd() * 6.28, k: 2 + Math.floor(rnd() * 4), m: .1 + rnd() * .15}));
     const edge = a => r * (1 + lobes.reduce((t, l) => t + Math.sin(a * l.k + l.a) * l.m, 0));
     let placed = 0;
@@ -44,7 +47,7 @@ export function archipelagoLayout(world, seed = 11) {
   const pad = 2 * W;
   const bounds = {x0: Math.min(...out.map(i => i.x - W * i.scale / 2)) - pad, y0: Math.min(...out.map(i => i.y - H * i.scale / 2)) - pad,
     x1: Math.max(...out.map(i => i.x + W * i.scale / 2)) + pad, y1: Math.max(...out.map(i => i.y + H * i.scale / 2)) + pad};
-  return {islands: out, bounds, rnd};
+  return {islands: out, bounds, rnd, lands: landInfo};
 }
 
 export function createArchipelago(app, scene, layer, world) {
@@ -53,6 +56,36 @@ export function createArchipelago(app, scene, layer, world) {
   const root = new Container({label: 'Archipelago'});
   layer.addChildAt(root, 0);   // under the home island's water and ground
   root.addChild(people);
+  // boss 5 Nov: zoomed far out the world reads like a school world atlas: every island a pastel 'country' with an ink
+  // border, pale shallows round the coasts, a faint grid, and names on the landmasses and oceans
+  const atlas = new Container({label: 'World atlas'}); atlas.visible = false;
+  const PASTEL = [0xF6C9A8, 0xF4E3A1, 0xC8E6A0, 0xA9D8C8, 0xF2B6C6, 0xD9C3EC, 0xFBD48C, 0xB9E2F2, 0xE8D3B0, 0xCFE8B5];
+  const coast = (island, grow = 1) => {
+    const c = Math.cos(island.rot), s = Math.sin(island.rot);
+    return shapes.coast.flatMap(([x, y]) => {
+      const ox = (x - world.width / 2) * island.scale * grow * island.flip, oy = (y - world.height / 2) * island.scale * grow;
+      return [island.x + ox * c - oy * s, island.y + ox * s + oy * c];
+    });
+  };
+  const grid = new Graphics(), shallows = new Graphics(), lands = new Graphics(), b = bounds;
+  for (let x = Math.ceil(b.x0 / 20000) * 20000; x < b.x1; x += 20000) grid.moveTo(x, b.y0).lineTo(x, b.y1);
+  for (let y = Math.ceil(b.y0 / 20000) * 20000; y < b.y1; y += 20000) grid.moveTo(b.x0, y).lineTo(b.x1, y);
+  grid.stroke({color: 0xFFFFFF, width: 260, alpha: .35});
+  for (const island of islands) shallows.poly(coast(island, 1.55)).fill({color: 0xBFEFF7, alpha: .7});
+  islands.forEach((island, i) => lands.poly(coast(island)).fill(island.home ? 0xFFD525 : PASTEL[Math.floor(hash(i * 1.7) * PASTEL.length)]).stroke({color: 0x39452F, width: 220, alpha: .8}));
+  atlas.addChild(grid, shallows, lands);
+  const label = (text, x, y, size, color, italic = false) => {
+    const t = new Text({text, style: {fontFamily: 'Georgia, serif', fontSize: 64, fontStyle: italic ? 'italic' : 'normal', fontWeight: italic ? '400' : '700', fill: color,
+      stroke: {color: 0xFFFFFF, width: italic ? 0 : 6}, letterSpacing: italic ? 2 : 6, align: 'center'}});
+    t.anchor.set(.5); t.position.set(x, y); t.scale.set(size / 64); atlas.addChild(t);
+  };
+  const NAMES = ['QUACKLAND', 'PUDDLE ISLES', 'FEATHERFIELD', 'WADDLE BAY', 'BREADCRUMB REACH'];
+  layout.lands.forEach((l, i) => label(NAMES[i], l.x, l.y - l.r * world.height * .3, i ? 2600 : 3600, 0x2E3826));
+  label('Big Quack Ocean', (b.x0 + b.x1) / 2, b.y0 + (b.y1 - b.y0) * .1, 3200, 0x1F6F8B, true);
+  label('Paddle Sea', b.x0 + (b.x1 - b.x0) * .14, (b.y0 + b.y1) / 2, 2600, 0x1F6F8B, true);
+  label('Bread Sea', b.x0 + (b.x1 - b.x0) * .86, (b.y0 + b.y1) / 2 + 6000, 2600, 0x1F6F8B, true);
+  label('Sleepy Strait', (b.x0 + b.x1) / 2, b.y1 - (b.y1 - b.y0) * .1, 2600, 0x1F6F8B, true);
+  root.addChild(atlas);
   let texture = null;
   return {
     bounds, count: islands.length,
@@ -76,10 +109,15 @@ export function createArchipelago(app, scene, layer, world) {
         const ox = Math.cos(a) * d * world.width * island.scale * .36, oy = Math.sin(a) * d * world.height * island.scale * .32;
         people.rect(island.x + ox * c - oy * sn - 90, island.y + ox * sn + oy * c - 90, 180, 180);
       }
-      people.fill(0xFFD525); root.addChild(people);   // on top of the islands
+      people.fill(0xE8A000); root.addChild(atlas); root.addChild(people);   // atlas over the island art, dots on top
     },
-    // the dots only show when zoomed far out (they would cover the islands up close)
-    update(zoom) {people.alpha = Math.max(0, Math.min(1, (.012 - zoom) / .008)); people.visible = people.alpha > 0;},
+    // the dots and the atlas only show when zoomed far out (they would cover the islands up close)
+    update(zoom) {
+      const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
+      people.alpha = far; people.visible = far > 0;
+      atlas.alpha = far; atlas.visible = far > 0;
+      for (const s of root.children) if (s !== people && s !== atlas) s.alpha = 1 - far * .92;
+    },
     destroy() {root.destroy({children: true}); texture?.destroy(true);},
   };
 }
