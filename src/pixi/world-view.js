@@ -29,12 +29,12 @@ uniform float uTilt;
 uniform float uPlanet;
 uniform float uTime;
 uniform float uAspect;
-uniform sampler2D uPlanetMap;
 uniform vec2 uCam;      // camera point, world units
 uniform float uZoom;    // flat-view zoom (screen px per world unit)
 uniform vec2 uRes;      // screen size, px
 uniform vec4 uBounds;   // world map x0, y0, width, height (world units)
 uniform float uR;       // planet radius as a share of the screen height
+uniform vec2 uSpin;     // world-units offset the globe has rolled by
 uniform vec3 uSea;
 float hash(vec2 p) {return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);}
 float noise(vec2 p) {
@@ -76,33 +76,28 @@ vec3 horizon(vec2 uv) {
   col = mix(col, skyLow, smoothstep(2.5, 14., dist) * .8 * uTilt);   // haze
   return col;
 }
-// the planet: orthographic globe, the island map wrapped round it and spinning slowly, like Google Earth
+// the planet: the same flat world bent onto a globe. With a huge radius it IS the flat view; as the radius shrinks the
+// edges curl away and space shows round it, so the pull-out into space is one continuous move. It rolls slowly (spin).
 vec3 planet(vec2 uv) {
-  vec2 p = (uv - .5) * vec2(uAspect, 1.);
-  float R = uR, r = length(p) / R;
-  vec2 cell = floor(uv * vec2(uAspect, 1.) * 200.);
+  vec2 px = (uv - .5) * uRes;
+  float Rp = uR * uRes.y, d = length(px) / Rp;
+  vec2 cell = floor(uv * uRes / 4.);
   float star = step(.9965, hash(cell)) * (.55 + .45 * sin(uTime * 2. + hash(cell + 7.) * 6.28));
   vec3 space = mix(vec3(.03, .06, .17), vec3(.08, .13, .32), uv.y) + star;
-  float halo = exp(-max(r - 1., 0.) * 6.) * step(1., r);
-  space = mix(space, vec3(.45, .8, 1.), halo * .75);
-  if (r >= 1.) return space;
-  vec3 n = vec3(p.x / R, -p.y / R, sqrt(1. - r * r));
-  float tiltAxis = .32, ca = cos(tiltAxis), sa = sin(tiltAxis);   // axis leaned toward us a little
-  n = vec3(n.x, n.y * ca - n.z * sa, n.y * sa + n.z * ca);
-  float lon = atan(n.x, n.z) + uTime * .06, lat = asin(clamp(n.y, -1., 1.));
-  vec4 pm = texture(uPlanetMap, fract(vec2(lon / 6.2831853 + .5, .5 - lat / 3.1415927)));
-  vec3 col = mix(uSea, pm.rgb / max(pm.a, .001), pm.a);
-  float cl = clouds(vec2(lon * 2.2, lat * 3.) + vec2(uTime * .03, 0.), .64);
-  col = mix(col, vec3(1.), cl * .75);
-  vec3 sn = vec3(p.x / R, -p.y / R, sqrt(1. - r * r));
-  float light = clamp(dot(sn, normalize(vec3(-.45, .5, .75))), 0., 1.);
-  col *= .5 + .6 * light;
-  col = mix(col, vec3(.6, .88, 1.), pow(1. - sn.z, 2.4) * .75);   // blue atmosphere at the rim
-  return col;
+  space = mix(space, vec3(.45, .8, 1.), exp(-max(d - 1., 0.) * 6.) * step(1., d) * .75);
+  if (d >= 1.) return space;
+  vec2 g = uCam + uSpin + (d > 0. ? px / length(px) : vec2(0.)) * asin(d) * Rp / uZoom;   // near the middle: the flat view, unchanged
+  vec3 col = ground(g);
+  float z = sqrt(1. - d * d);
+  vec3 n = vec3(px / Rp * vec2(1., -1.), z);
+  float light = clamp(dot(n, normalize(vec3(-.45, .5, .75))), 0., 1.);
+  float ball = smoothstep(4., 1., uR);                    // shading and rim only once it reads as a ball
+  col *= mix(1., .5 + .6 * light, ball);
+  col = mix(col, vec3(1.), clouds(g / uBounds.zw * 7. + vec2(uTime * .02, 0.), .66) * .7 * ball);
+  return mix(col, vec3(.6, .88, 1.), pow(1. - z, 2.4) * .75 * ball);   // blue atmosphere at the rim
 }
 void main() {
-  vec3 col = horizon(vUV);
-  if (uPlanet > 0.) col = mix(col, planet(vUV), uPlanet);
+  vec3 col = uPlanet > .5 ? planet(vUV) : horizon(vUV);
   finalColor = vec4(col, 1.);
 }`;
 
@@ -126,15 +121,15 @@ function buildWorldTexture(app, islands, bounds, islandTexture, worldSize, BIG =
 }
 
 export function createWorldView(app, scene) {
-  let rt = RenderTexture.create({width: 2, height: 2}), w = 0, h = 0, worldTex = null, planetTex = null;
+  let rt = RenderTexture.create({width: 2, height: 2}), w = 0, h = 0, worldTex = null;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
-    uScene: rt.source, uWorld: blank.source, uPlanetMap: blank.source, viewUniforms: {
+    uScene: rt.source, uWorld: blank.source, viewUniforms: {
       uTilt: {value: 0, type: 'f32'}, uPlanet: {value: 0, type: 'f32'}, uTime: {value: 0, type: 'f32'},
       uAspect: {value: 1, type: 'f32'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
       uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},
-      uBounds: {value: new Float32Array([0, 0, 1, 1]), type: 'vec4<f32>'},
+      uBounds: {value: new Float32Array([0, 0, 1, 1]), type: 'vec4<f32>'}, uSpin: {value: new Float32Array([0, 0]), type: 'vec2<f32>'},
       uSea: {value: new Float32Array([0x6E / 255, 0xC9 / 255, 0xDE / 255]), type: 'vec3<f32>'},
     },
   }});
@@ -151,17 +146,21 @@ export function createWorldView(app, scene) {
       if (!on) {scene.visible = true; return;}
       if (!worldTex && arch?.texture) {
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch.texture, worldSize, 1);     // true positions and sizes
-        planetTex = buildWorldTexture(app, arch.islands, arch.bounds, arch.texture, worldSize, 3.2, 2);  // the globe reads full: 4x the islands, drawn big
-        shader.resources.uWorld = worldTex.source; shader.resources.uPlanetMap = planetTex.source;
+        shader.resources.uWorld = worldTex.source;
       }
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); scene.visible = false;   // the real islands round the camera
-      const b = arch.bounds, planet = ease((t - .72) / .26);
-      u.uTilt = ease(t / .55); u.uPlanet = planet; u.uTime = time; u.uAspect = w / h; u.uZoom = cam.zoom;
-      u.uR = .43 + (1 - planet) * 1.3;                       // the globe shrinks away as you pull out to space
+      const b = arch.bounds;
+      // tilt up to the horizon, hold, then tip back to straight down as you climb; then the flat world curls into the globe
+      u.uTilt = ease(t / .3) * (1 - ease((t - .48) / .2));
+      const p = ease((t - .68) / .3);
+      u.uPlanet = t > .68 ? 1 : 0; u.uR = 8 * Math.pow(.43 / 8, p);   // radius 8 screens (flat) down to .43 (a ball in space)
+      const spin = ease((t - .85) / .15); this.roll = (this.roll || 0) + spin * .016 * (b.x1 - b.x0) / 60;
+      u.uSpin[0] = this.roll; u.uSpin[1] = 0;
+      u.uTime = time; u.uAspect = w / h; u.uZoom = cam.zoom;
       u.uCam[0] = cam.x; u.uCam[1] = cam.y; u.uRes[0] = w; u.uRes[1] = h;
       u.uBounds[0] = b.x0; u.uBounds[1] = b.y0; u.uBounds[2] = b.x1 - b.x0; u.uBounds[3] = b.y1 - b.y0;
     },
-    destroy() {mesh.destroy(); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); planetTex?.destroy(true); geometry.destroy();},
+    destroy() {mesh.destroy(); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }
