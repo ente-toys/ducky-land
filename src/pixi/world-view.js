@@ -1,7 +1,7 @@
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
 // with lighter shallow bands following every coast, a glowing rim, a pin on where you are, and the 30,000 Duckies
-// shown alive as ripples and arcs of activity. One world texture (every island at its true place on a wrapping map) feeds the globe.
+// shown alive as ripples and hearts. One world texture (every island at its true place on a wrapping map) feeds the globe.
 import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text} from 'pixi.js';
 import shapes from './walk-shapes.json' with {type: 'json'};
 import {PALETTE} from './palette.js';
@@ -152,8 +152,8 @@ export function createWorldView(app, scene) {
   const mesh = new Mesh({geometry, shader, label: 'World view'});
   mesh.visible = false;
   app.stage.addChildAt(mesh, app.stage.getChildIndex(scene) + 1);
-  // boss 5 Nov (ref: Kaspersky cybermap): the world is busy. Duckies doing things pop as sun-yellow ripples on islands
-  // (now and then a little coral heart floats up), and Duckies visiting friends fly as yellow arcs that land with a ripple.
+  // boss 5 Nov (ref: Kaspersky cybermap): the world is busy. Duckies doing things pop as sun-yellow ripples on islands,
+  // now and then a little coral heart floats up. No flying arcs (boss).
   const life = new Graphics({label: 'Ducky activity'});
   const pin = makePin();
   app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
@@ -164,8 +164,8 @@ export function createWorldView(app, scene) {
   const wrap = (v, p) => v - p * Math.round(v / p);
   let seed = 7;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const ripples = [], arcs = [];
-  let lastT = 0, rippleDue = 0, arcDue = 0;
+  const ripples = [];
+  let lastT = 0, rippleDue = 0;
   const heart = (g, x, y, s, color, alpha) => g.moveTo(x, y + s * .9).bezierCurveTo(x - s * 1.4, y - s * .2, x - s * .6, y - s * 1.3, x, y - s * .4)
     .bezierCurveTo(x + s * .6, y - s * 1.3, x + s * 1.4, y - s * .2, x, y + s * .9).fill({color, alpha});
   return {
@@ -202,7 +202,6 @@ export function createWorldView(app, scene) {
       if (busy > .01) {
         const pick = () => {const i = islands[Math.floor(rand() * islands.length)], a = rand() * 6.283, r = rand() * .25 * worldSize.width * i.scale; return {x: i.x + Math.cos(a) * r, y: i.y + Math.sin(a) * r * .7};};
         for (rippleDue -= dt; rippleDue < 0; rippleDue += .06) ripples.push({...pick(), at: time, heart: rand() < .18});
-        for (arcDue -= dt; arcDue < 0; arcDue += .2) arcs.push({a: pick(), b: pick(), at: time, dur: 1.1 + rand() * .7});
         const px = Math.max(1, Rp / 240);   // ripple size follows the globe
         for (let i = ripples.length - 1; i >= 0; i--) {
           const r = ripples[i], age = (time - r.at) / 1.6;
@@ -218,25 +217,7 @@ export function createWorldView(app, scene) {
           life.circle(p.x, p.y, 3 * px).fill({color: 0xFFD21F, alpha: (1 - age) * f}).stroke({color: 0xFFF6D8, width: 1.2 * px, alpha: (1 - age) * f});
           if (r.heart) heart(life, p.x, p.y - (8 + age * 30) * px, 6 * px, PALETTE.coral, ease((1 - age) * 3) * f);
         }
-        for (let i = arcs.length - 1; i >= 0; i--) {
-          const a = arcs[i], age = (time - a.at) / a.dur;
-          if (age >= 1) {arcs.splice(i, 1); ripples.push({...a.b, at: time, heart: false}); continue;}
-          const A = project(a.a.x, a.a.y), B = project(a.b.x, a.b.y);
-          if (A.face < .1 || B.face < .1) continue;
-          const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, ox = mx - w / 2, oy = my - h / 2, ol = Math.hypot(ox, oy) || 1;
-          const lift = Math.hypot(B.x - A.x, B.y - A.y) * .45, cx = mx + ox / ol * lift, cy = my + oy / ol * lift - lift * .3;
-          const at = s => ({x: (1 - s) * (1 - s) * A.x + 2 * (1 - s) * s * cx + s * s * B.x, y: (1 - s) * (1 - s) * A.y + 2 * (1 - s) * s * cy + s * s * B.y});
-          const head = ease(age * 1.15), tail = Math.max(0, head - .5);
-          const f = ease(Math.min(A.face, B.face) / .3) * ease((1 - age) * 4);
-          let q = at(tail);
-          for (let n = 1; n <= 14; n++) {
-            const s2 = tail + (head - tail) * n / 14, p2 = at(s2);
-            life.moveTo(q.x, q.y).lineTo(p2.x, p2.y).stroke({color: 0xFFD21F, width: 3.2 * px * (.3 + .7 * n / 14), alpha: f * n / 14, cap: 'round'});
-            q = p2;
-          }
-          life.circle(q.x, q.y, 4 * px).fill({color: 0xFFF6D8, alpha: f}).stroke({color: 0xFFD21F, width: 2 * px, alpha: f});
-        }
-      } else {ripples.length = 0; arcs.length = 0;}
+      } else ripples.length = 0;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
       if (me) {
         const p = project(me.x, me.y);
