@@ -242,8 +242,7 @@ export class RoomClient {
   board(boatId) { return this.send({type:'board',boatId}); }
 
   disembark() {
-    const destination=destinationsFor(this.islandId).find(island => this.player && near(this.player,island.dock,650));
-    return destination ? this.send({type:'destination',...destination.dock}) : this.send({type:'disembark'});
+    return this.send({type:'disembark'});   // boss 5 Nov: the server docks at the harbor or hops you onto the nearest shore
   }
 
   watch(islandId) {

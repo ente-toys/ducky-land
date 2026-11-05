@@ -4,7 +4,7 @@ import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
-import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint} from '../src/pixi/islands.js';
+import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, boatHome, boatSpot} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
@@ -82,22 +82,22 @@ export class IslandRoom {
     this.savedBoats=state;
   }
 
-  parkBoat(boat,islandId) {
-    const spots=HARBOR.moorings;   // boss 5 Nov: berths along the jetty
-    const spot=spots.find(p => !this.boats.some(other => other !== boat && other.islandId === islandId && !other.occupant && near(other,p,70))) ?? spots[0];
-    Object.assign(boat,{...spot,islandId,turn:0,occupant:null,departure:islandId});
+  // boss 5 Nov: a boat goes back to its own mooring spot on its own island (the harbor berth, islet or beach it came from)
+  parkBoat(boat) {
+    const islandId=boatHome(boat), spot=boatSpot(boat);
+    Object.assign(boat,{x:spot.x,y:spot.y,islandId,turn:spot.turn,occupant:null,departure:islandId});
     this.saveBoats();
   }
 
   releaseBoat(actorId) {
     const boat=this.boats.find(boat => boat.occupant === actorId);
-    if (boat) this.parkBoat(boat,boat.departure);
+    if (boat) this.parkBoat(boat);
   }
 
   reconcileBoats() {
     const retained=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
     for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
-    for (const boat of this.boats) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat,boat.departure);
+    for (const boat of this.boats) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
     this.saveBoats();
   }
 
@@ -396,21 +396,29 @@ export class IslandRoom {
         if (actor.mode !== 'walking' || typeof command.boatId !== 'string') break;
         info.boarding=null; actor.path=[]; info.input=ZERO;
         const boat = this.boats.find(boat => boat.id === command.boatId && boat.islandId === actor.islandId);
-        if (!boat || boat.occupant || !near(boat,HARBOR.water,600)) {   // boss 5 Nov: the outer berths sit ~520 off the dock point
+        if (!boat || boat.occupant) {   // boss 5 Nov: any boat, wherever it is moored
           this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           break;
         }
         info.input=ZERO;
-        const deck=boardingPoint(boat);   // boss 5 Nov: walk the jetty to the deck beside that boat
+        const deck=boardingPoint(boat,nav);   // the jetty deck beside a harbor boat, or the nearest sand for a beach or islet boat
         if (near(actor,deck,45) || setWalkDestination(actor,nav,deck.x,deck.y)) info.boarding=boat.id;
         break;
       }
       case 'disembark':
         if (actor.mode === 'sailing') {
-          if (!canDock(actor)) {this.send(socket,{type:'travel-notice',text:'Sail closer to the harbor to dock.'}); break;}
           info.input=ZERO;
-          setSailDestination(actor,HARBOR.water.x,HARBOR.water.y);
-          actor.docking=true;
+          if (canDock(actor)) {setSailDestination(actor,HARBOR.water.x,HARBOR.water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
+          // boss 5 Nov: anywhere else, hop out onto the nearest shore within reach (this island's or a neighbour's)
+          const spot=landingSpot(actor,nav);
+          if (!spot) {this.send(socket,{type:'travel-notice',text:'Sail closer to the shore to dock.'}); break;}
+          const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
+          if (spot.islandId !== actor.islandId) {actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
+          if (boat) {
+            if (boatHome(boat) === actor.islandId) {Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId,occupant:null,departure:actor.islandId}); this.saveBoats();}   // moored where you left it
+            else this.parkBoat(boat);   // landed on another island: the boat ferries home
+          }
+          Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
         }
         break;
       case 'emote':
@@ -446,7 +454,7 @@ export class IslandRoom {
           if (crossIsland(actor)) {info.input=ZERO; info.inputExpires=0;}
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
           if (actor.docking && near(actor,HARBOR.water,12)) {
-            this.parkBoat(boat,boat.id.slice(0,boat.id.lastIndexOf('-')));   // a ferry: once you step off it goes back to its own island, so no island runs out
+            this.parkBoat(boat);   // a ferry: once you step off it goes back to its own mooring, so no island runs out
             Object.assign(actor,{...HARBOR.land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
@@ -454,7 +462,7 @@ export class IslandRoom {
       } else {
         walkStep(actor, nav, .05, now/1000, info.input);
         const boat=info.boarding && this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
-        const aboard=boat && near(actor,boardingPoint(boat),45);   // boss 5 Nov: step in from the deck beside the boat (the jetty end for the tip berths)
+        const aboard=boat && near(actor,boardingPoint(boat,nav),45);   // boss 5 Nov: step in from the deck beside the boat (the jetty end for the tip berths)
         if (info.boarding && (aboard || !actor.path.length)) {
           info.boarding=null;
           actor.path=[];

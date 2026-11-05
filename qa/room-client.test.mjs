@@ -157,14 +157,13 @@ test('only spectators can request a different island',()=>{
   room.dispose();
 });
 
-test('the dock button approaches a nearby discovered island pier',()=>{
+test('the dock button asks the server to dock at the nearest shore',()=>{
   const {room,sent}=setup();
   const next=packet(1,'home','sailing');
   const target=destinationsFor('home')[0].dock;
-  Object.assign(next.players[0],{x:target.x,y:target.y-250});   // neighbour docks face north, so you arrive from the open water above
+  Object.assign(next.players[0],{x:target.x,y:target.y-250});
   room.snapshot(next);
   room.disembark();
-  assert.equal(sent.at(-1).type,'destination');
-  assert.deepEqual(room.player.sailTarget,target);
+  assert.equal(sent.at(-1).type,'disembark');   // boss 5 Nov: dock anywhere; the server picks the harbor or the nearest sand
   room.dispose();
 });

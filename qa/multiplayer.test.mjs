@@ -6,7 +6,7 @@ import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
-import {HARBOR,destinationsFor,canSail} from '../src/pixi/islands.js';
+import {HARBOR,destinationsFor,canSail,boatSpots} from '../src/pixi/islands.js';
 import {DUCK_RADIUS} from '../src/pixi/player-motion.js';
 
 const origin = 'https://island.example';
@@ -528,7 +528,7 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
   const clients=[a,b,watch];
   const setup=(client,pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:client.welcome.id,pose,steps})});
   try {
-    await eventually(() => a.snapshot?.boats?.length === 3);
+    await eventually(() => a.snapshot?.boats?.length === boatSpots().length);   // boss 5 Nov: harbor, islet and beach boats
     const boatId=a.snapshot.boats[0].id;
     a.send({type:'board',boatId});
     await setup(a,null,8);

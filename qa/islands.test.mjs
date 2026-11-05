@@ -1,17 +1,19 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {ISLANDS,HARBOR,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor} from '../src/pixi/islands.js';
+import {ISLANDS,HARBOR,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot} from '../src/pixi/islands.js';
 
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',x:1800,y:430,turn:0,path:[],action:0});
 
-test('300 island copies, three boats each, at least four reachable neighbours and safe harbor positions', () => {
+test('300 island copies, the same moored boats each, at least four reachable neighbours and safe harbor positions', () => {
   const boats=createBoats();
   assert.equal(ISLANDS.length,300);
   assert.equal(new Set(ISLANDS.map(island => island.id)).size,300);
-  assert.equal(new Set(boats.map(boat => boat.id)).size,900);
+  const per=boatSpots().length;
+  assert.ok(per>=8);
+  assert.equal(new Set(boats.map(boat => boat.id)).size,300*per);
   for (const island of ISLANDS) {
-    assert.equal(boats.filter(boat => boat.islandId===island.id).length,3);
+    assert.equal(boats.filter(boat => boat.islandId===island.id).length,per);
     assert.ok(destinationsFor(island.id).length>=4);
   }
   for (const position of [...boats.filter(boat => boat.islandId==='home'),...destinationsFor('home').map(island=>island.dock),HARBOR.water]) assert.ok(canSail(position.x,position.y));
@@ -101,4 +103,15 @@ test('clouds build offshore before destination islands are reached', () => {
     if (crossIsland(a)) break;
   }
   assert.equal(a.islandId,destination.destination);
+});
+
+test('any boat can be boarded from nearby sand, and you can land on any shore you sail close to', () => {
+  for (const boat of createBoats().filter(boat => boat.islandId==='home')) {
+    const deck=boardingPoint(boat);
+    assert.ok(Math.hypot(deck.x-boat.x,deck.y-boat.y)>40 && Math.hypot(deck.x-boat.x,deck.y-boat.y)<300,boat.id);
+  }
+  assert.ok(landingSpot({islandId:'home',...HARBOR.water}),'the harbor shore is in reach');
+  assert.equal(landingSpot({islandId:'home',x:-1500,y:-1500}),null,'open sea: nothing to land on');
+  const off=destinationsFor('home')[0].offset, there=landingSpot({islandId:'home',x:HARBOR.water.x+off.x,y:HARBOR.water.y+off.y});
+  assert.equal(there.islandId,destinationsFor('home')[0].destination,'a neighbour shore lands you on that island');
 });

@@ -6,7 +6,7 @@ import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
 import {createWorldView} from './world-view.js';
-import {HARBOR, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
+import {HARBOR, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Matrix} from 'pixi.js';
@@ -248,8 +248,8 @@ export class PixiIsland {
     this.surf = createBeachSurf(this.water);   // boss 5 Nov: the original beach surf, not the simulated one
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;   // boss 4 Nov: no boats on the race lake
-    this.boats = createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast, avoid: this.room ? [{x: HARBOR.pier.x + HARBOR.pier.width / 2, y: HARBOR.pier.y + HARBOR.pier.height / 2, r: 560}] : []});   // boss 5 Nov: 1-5 boats at each jetty islet
-    globalThis.__duckyBoats = this.boats.count;
+    this.boats = this.room ? null : createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast});   // boss 5 Nov: offline decoration only; live, every boat is a real one you can take (islands.js boatSpots)
+    globalThis.__duckyBoats = this.boats?.count ?? 0;
     rowingProp?.sprite?.destroy?.(); rowingProp?.shadow?.destroy?.();
     this.props = this.props.filter(prop => prop !== rowingProp);
     this.ripples = [];
@@ -384,12 +384,13 @@ export class PixiIsland {
     this.listen(window, 'keydown', event => {
       if (event.defaultPrevented || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
       const key = event.key.toLowerCase();
-      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' '].includes(key)) return;
+      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter'].includes(key)) return;
       event.preventDefault();
       this.audio.unlock();
       this.keys.add(key);
       if (event.repeat) return;
       if (key === ' ') this.jump();
+      if (key === 'enter') this.travelAction();   // boss 5 Nov: Enter takes the boat you are next to, or docks at the shore you are near
       if (key === 'q') this.triggerEmote(2);
       if (key === 'e') this.triggerEmote(3);
       if (/^[1-7]$/.test(key)) this.triggerEmote(key === '1' ? 2 : Number(key) + 2);
@@ -479,6 +480,25 @@ export class PixiIsland {
     const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap the harbor to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
     const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
     this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
+  }
+
+  // boss 5 Nov: "when I go near a boat, Take boat appears; near the shore while sailing, Dock appears". Shown by IslandTravel.jsx.
+  travelOptions() {
+    const me=this.player;
+    if (!this.room || !me) return {};
+    if (me.mode === 'sailing') return {dock: canDock(me) || Boolean(landingSpot(me, this.sim.nav))};
+    let best=null;
+    for (const boat of this.room.boatPoses()) {
+      if (boat.occupant) continue;
+      const deck=boardingPoint(boat, this.sim.nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
+      if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
+    }
+    return {take: best?.id ?? null};
+  }
+  travelAction() {
+    const options=this.travelOptions();
+    if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
+    else if (options.dock) this.room.disembark();
   }
 
   tap(point) {

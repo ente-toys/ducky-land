@@ -3,6 +3,8 @@ import shapes from './walk-shapes.json' with {type:'json'};
 import {inPoly, inShape} from '../../rive/web/island-geometry.mjs';
 
 import {WORLD_ISLANDS, neighboursOf, offsetOf} from './world-map.js';
+import {createNavigation} from './navigation.js';
+import walkWorld from '../../rive/web/walk-world.json' with {type:'json'};
 
 // boss 5 Nov: 300 islands, each an exact copy of home (world-map.js). You play on one; the nearest four are a sail away.
 export const ISLANDS = WORLD_ISLANDS.map(({id,name,accent}) => ({id,name,accent}));
@@ -25,7 +27,8 @@ export const HARBOR = {land:{x:JETTY.walkway.b[0],y:JETTY.walkway.b[1]}, water:{
 export const harborWorld = w => ({...w, walkways:[...w.walkways, JETTY.walkway]});
 export const harborClear = prop => Math.hypot(prop.x-FOOT.x-20,prop.y-FOOT.y-110) > 200;
 // boss 5 Nov: walk to the deck beside your boat, then step in
-export function boardingPoint(boat) {
+export function boardingPoint(boat,nav) {
+  if (!near(boat,HARBOR.water,600)) return shoreFor(boat.x,boat.y,nav ?? defaultNav()) ?? {x:Math.round(boat.x),y:Math.round(boat.y)};   // a beach or islet boat: step in from the nearest sand
   const t=Math.max(AXIS*JETTY.wetFrom,Math.min(AXIS-44,(boat.x-FOOT.x)*DIR.x+(boat.y-FOOT.y)*DIR.y));
   const side=Math.sign((boat.x-FOOT.x)*-DIR.y+(boat.y-FOOT.y)*DIR.x)*(t >= AXIS-45 ? 0 : 18), p=along(t,side);
   return {x:Math.round(p.x),y:Math.round(p.y)};
@@ -56,9 +59,53 @@ export const SEA_BOUNDS = seaBoundsFor('home');
 export const offshoreProgress = player => player ? Math.max(0,Math.min(1,(660-player.y-450)/850)) : 1;   // 660: the old harbor line, so the clouds stay put
 export const near = (a,b,radius) => Math.hypot(a.x-b.x,a.y-b.y) <= radius;
 
+// boss 5 Nov: "we can take boats from any place and dock any place". Every island has the same real boats: three at the
+// harbor jetty, one off each little jetty islet, and four moored off the north-west beach. Fixed spots, so every player
+// sees the same boats (they replace the decoration boats in live play).
+let SPOTS=null;
+export const boatSpots=() => SPOTS ??= (() => {
+  const spots=[0,1,2].map(i => ({...HARBOR.moorings[i],turn:Math.PI}));
+  const centre={x:2980,y:2005};
+  for (const [cx,cy,rx,ry] of world.islets) if (cx !== 3930) {   // the east islet is gone (trimWorld)
+    const a=Math.atan2(cy-centre.y,cx-centre.x);
+    spots.push({x:Math.round(cx+Math.cos(a)*(rx*1.25+70)),y:Math.round(cy+Math.sin(a)*(ry*1.25+55)),turn:Math.cos(a)<0?-Math.PI/2:Math.PI/2});
+  }
+  // four boats off the west and north-west beaches: walk out from the island's middle to the first open water, then a bit more
+  for (const deg of [150,175,200,225]) {
+    const a=deg*Math.PI/180;
+    for (let r=600;r<5000;r+=20) {
+      const x=centre.x+Math.cos(a)*r*1.3, y=centre.y+Math.sin(a)*r;
+      if (!landAt(x,y) && !landAt(x+Math.cos(a)*60,y+Math.sin(a)*60) && Math.hypot(x-HARBOR.water.x,y-HARBOR.water.y) > 700) {
+        const bx=Math.round(x+Math.cos(a)*85), by=Math.round(y+Math.sin(a)*85);
+        if (spots.every(o => Math.hypot(o.x-bx,o.y-by) > 300) && !defaultNav().walkable(bx,by) && canSail(bx,by) && shoreFor(bx,by,defaultNav(),200)) spots.push({x:bx,y:by,turn:-Math.PI/2});
+        break;
+      }
+    }
+  }
+  return spots;
+})();
 export function createBoats() {
-  return ISLANDS.flatMap(island => [0,1,2].map(slot => ({id:`${island.id}-${slot}`, islandId:island.id,
-    ...HARBOR.moorings[slot], turn:Math.PI, occupant:null, departure:island.id})));
+  return ISLANDS.flatMap(island => boatSpots().map((spot,slot) => ({id:`${island.id}-${slot}`, islandId:island.id,
+    x:spot.x, y:spot.y, turn:spot.turn, occupant:null, departure:island.id})));
+}
+export const boatHome = boat => boat.id.slice(0,boat.id.lastIndexOf('-'));
+export const boatSpot = boat => boatSpots()[Number(boat.id.slice(boat.id.lastIndexOf('-')+1))] ?? boatSpots()[0];
+
+// the walking map every island shares (the same file the room server walks on)
+let NAV=null;
+const defaultNav=() => NAV ??= createNavigation({...world, ...walkWorld});
+// where you step on and off a boat moored away from the harbor: the nearest land you can stand on
+const shoreFor=(x,y,nav,reach=280) => {const p=nav.nearest(x,y,reach); return p ? {x:Math.round(p[0]),y:Math.round(p[1])} : null;};
+// boss 5 Nov: when you sail close to any shore (this island's or a neighbour's) you can dock and hop out there
+export function landingSpot(actor,nav=defaultNav(),reach=420) {   // the walking map keeps Duckies a little back from the waterline
+  let best=null;
+  for (const o of [{x:0,y:0,id:actor.islandId},...destinationsFor(actor.islandId).map(d => ({...d.offset,id:d.destination}))]) {
+    const lx=actor.x-o.x, ly=actor.y-o.y;
+    if (lx < -reach || ly < -reach || lx > world.width+reach || ly > world.height+reach) continue;
+    const p=shoreFor(lx,ly,nav,reach);
+    if (p && (!best || Math.hypot(p.x-lx,p.y-ly) < best.d)) best={islandId:o.id,offset:{x:o.x,y:o.y},x:p.x,y:p.y,d:Math.hypot(p.x-lx,p.y-ly)};
+  }
+  return best;
 }
 
 // land on one island, in its own local coordinates (the home map)
