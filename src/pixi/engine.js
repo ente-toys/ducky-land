@@ -2,6 +2,7 @@ import {createWeather,windStrength} from './weather.js';
 import {createBird,birdPose,createCrow,crowPose} from './birds.js';
 import {createBeachSurf} from './surf.js';
 import {createRowboat} from './rowboat.js';
+import {createMooredBoats} from './sailboats.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
@@ -11,7 +12,11 @@ import {createSimulation} from './simulation.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
-import {createPlacements, decalsFor, deckY, groundAt, H, JETTIES, trimWorld, walkWorld} from './placements.js';
+import {createWater} from './water.js';
+import {createPlacements, decalsFor, deckY, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
+import {sleepHalfWidths} from './sleeper.js';
+import {createInterior} from './interior.js';
+const napWidths = sleepHalfWidths(.88 * .24 * 3);   // world half width per sleeping pose
 const world = trimWorld(rawWorld);   // round 4: the east islet and its jetty are gone
 import {geometry, inShape} from '../../rive/web/island-geometry.mjs';
 import {PALETTE} from './palette.js';
@@ -21,6 +26,7 @@ import {CHAT_DURATION} from './chat.js';
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
 const ZERO = {x:0,y:0};
+const MUSEUM_DOOR = {x0: 2850, x1: 2990, y: 1215, out: {x: 2920, y: 1340}};   // boss 5 Nov: the top of the museum steps; out = a few steps down
 const CHAT_LABEL_GAP = 4;
 // boss 3 Nov, fix 4: ONE contact shadow for every grounded prop: a flat unoutlined ellipse tucked under the base,
 // 12-18% opacity, tinted for the ground under it, nudged at most .15H toward the lower right. [pattern, width share, depth ratio]
@@ -79,6 +85,7 @@ export class PixiIsland {
     this.frameTimes = [];
     this.accumulator = 0;
     this.lastTap = -Infinity;
+    this.doorArmed = true;
     this.audio = createAudio();
   }
 
@@ -115,8 +122,15 @@ export class PixiIsland {
       // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
       const props = createPlacements(world, geometry({...world, obstacles: []}).walkable), local = walkWorld(world, props);
       globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));   // QA readback
-      this.sim = createSimulation(local, 8612, {sleepingNpcs: true});
-      this.room?.configure(this.sim.nav, local);
+      // boss 5 Nov: each sleeping NPC lies where its pose belongs (client only; the socket server never sees NPCs), and each
+      // sleeper + its prop is a blocked footprint in the client walk rules, so routes go around it (world.json, worker/ untouched)
+      const beds = sleepSpots(local, props, geometry(local).walkable, napWidths), walk = {...local, obstacles: [...local.obstacles, ...beds.map(sleeperFootprint)]};
+      this.sim = createSimulation(walk, 8612, {sleepingNpcs: true});
+      this.sim.ducks.slice(1).forEach((duck, i) => {const b = beds[i]; if (!b) return; duck.x = duck.previousX = b.x; duck.y = duck.previousY = b.y; duck.sleep = {pose: b.pose, flip: b.flip}; duck.footprint = sleeperFootprint(b);});
+      this.sim.ducks.splice(beds.length + 1);   // boss 5 Nov: no bed, no sleeper (never a random one left at its spawn)
+      globalThis.__duckySleepers = beds.map(b => ({pose: b.pose, flip: b.flip, x: Math.round(b.x), y: Math.round(b.y), tree: b.tree}));   // QA readback
+      globalThis.__duckySleepersDropped = beds.bad;
+      this.room?.configure(this.sim.nav, walk);
       this.resize(true);
       this.listen(this.canvas, 'webglcontextlost', event => {event.preventDefault(); cancelAnimationFrame(this.raf); this.audio.suspend(); this.onError();});
       const tiles = art.ground.tiles;
@@ -179,7 +193,7 @@ export class PixiIsland {
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
       this.localDucks = this.room ? this.sim.ducks.slice(1) : this.sim.ducks;
-      const results = await Promise.allSettled(this.localDucks.map(d => createDuck({outfit: d.outfit, seed: d.id + 21, isPlayer:d.player})));   // boss 4 Nov: dresses back, as Ashwin had them
+      const results = await Promise.allSettled(this.localDucks.map(d => createDuck({outfit: d.outfit, seed: d.id + 21, isPlayer:d.player, sleep: d.sleep})));   // boss 4 Nov: dresses back, as Ashwin had them
       this.rigs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
       this.rigs.forEach((rig, i) => {if (this.localDucks[i]?.player) rig.arrive?.();});   // boss 4 Nov: your Ducky drops in like the Rive arrival
       if (this.disposed) {this.rigs.forEach(r => r.dispose()); this.rigs = []; disposeDuckAssets().catch(() => {}); return;}
@@ -193,6 +207,11 @@ export class PixiIsland {
         rig.root.position.set(duck.x, duck.y);
         this.objects.addChild(rig.root);
       });
+      if (!this.room) {this.interior = await createInterior(); this.app.stage.addChild(this.interior.root); globalThis.__duckyInterior = () => this.interior.debug();}   // boss 5 Nov: the museum room (offline sim only for now)
+      // boss 4 Nov: water owns only decorative fields. Navigation and multiplayer keep their existing coordinates.
+      this.waterFX = await createWater({app: this.app, world, art, layer: this.water,
+        objects: this.objects, props: this.props, motion: this.motion});
+      if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
       this.bindInput();
       this.observer = new ResizeObserver(() => this.resize());
@@ -208,13 +227,15 @@ export class PixiIsland {
 
   createAmbient() {
     this.weather=createWeather(world,this.scene,this.air);
-    this.surf = createBeachSurf(this.water);
+    this.surf = this.waterFX?.active ? null : createBeachSurf(this.water);
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;   // boss 4 Nov: no boats on the race lake
+    this.boats = createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast});   // boss 5 Nov: 1-5 boats at each jetty islet
+    globalThis.__duckyBoats = this.boats.count;
     rowingProp?.sprite?.destroy?.(); rowingProp?.shadow?.destroy?.();
     this.props = this.props.filter(prop => prop !== rowingProp);
     this.ripples = [];
-    world.water.forEach((lake, index) => {
+    (this.waterFX?.active ? [] : world.water).forEach((lake, index) => {
       for (let i = 0; i < 4; i++) {   // fix 9: 2-4 cream ripples per water feature
         const phase = i * 2.399 + index;
         const ripple = new Graphics().moveTo(-21, 0).quadraticCurveTo(0, -6, 21, 0).stroke({width: 2, color: PALETTE.cream, alpha: .6, cap: 'round'});   // boss 3 Nov fix 9: cream ripple marks, no rings
@@ -225,7 +246,7 @@ export class PixiIsland {
         this.ripples.push({sprite: ripple, phase,x:ripple.x,y:ripple.y});
       }
     });
-    this.birds=[[2419,1928],[3185,1897],[3427,2126]].map(([x,y],phase)=>{const bird=createBird();this.air.addChild(bird.root);return {...bird,x,y,phase};});
+    this.birds=[[2419,1928],[3185,1897],[3427,2126],[1500,2600],[4200,1700],[3900,2900]].map(([x,y],phase)=>{const bird=createBird(phase);this.air.addChild(bird.root);return {...bird,x,y,phase};});
     this.crows = [   // boss 3 Nov: no black crows
     ].map(flight => {
       const crow = createCrow();
@@ -245,7 +266,7 @@ export class PixiIsland {
     this.droplets = [];
     // boss 3 Nov: the wishing-bowls fountain animates its own water (fountain.js); the old statue drops are off
     const fountain = this.props.find(p => p.asset === 'fountain-wishing');
-    this.fountainWater = fountain ? createFountainWater(fountain, this.objects) : null;
+    this.fountainWater = fountain ? createFountainWater(fountain, this.objects, this.waterFX) : null;
     for (let i = 0; i < 0; i++) {
       const drop = new Graphics().ellipse(0, 0, 2.5, 4).fill(PALETTE.cream);
       this.objects.addChild(drop);
@@ -329,6 +350,7 @@ export class PixiIsland {
     this.listen(document, 'visibilitychange', () => {
       this.stopInput();
       this.accumulator = 0;
+      this.waterFX?.pause();
       cancelAnimationFrame(this.raf);
       if (document.hidden) this.audio.suspend();
       else {this.audio.resume(); this.lastFrame = performance.now(); this.raf = requestAnimationFrame(time => this.tick(time));}
@@ -404,9 +426,15 @@ export class PixiIsland {
   }
 
   tap(point) {
-    if (!this.player) return;
+    if (this.interior?.active) {this.interior.tap(point); return;}   // boss 5 Nov: inside the museum a tap walks there
+    // boss 5 Nov: a tap on a sleeping Ducky only wobbles it: no walk, no emote, the player's Ducky does not react
     const p = screenToWorld(this.camera, point, this.width, this.height);
-    const hitRadius=Math.max(65,20/this.camera.zoom);
+    this.waterFX?.splash(p.x, p.y, .65, 24);   // a tap on water splashes it
+    const hitRadius=Math.max(65,20/this.camera.zoom), me = this.player;
+    const onMe = me && me.action !== 7 && Math.hypot(p.x - me.x, p.y - (me.y - 50)) < hitRadius;   // your own Ducky in front of a sleeper still wins
+    const napper = !onMe && this.rigs.find((rig, i) => this.localDucks[i]?.sleeping && rig.root.visible && rig.sleeper && (b => point.x > b.x - 8 && point.x < b.x + b.width + 8 && point.y > b.y - 8 && point.y < b.y + b.height + 8)(rig.sleeper.bounds()));
+    if (napper) {napper.sleeper.poke(); return;}
+    if (!this.player) return;
     const candidates = this.room ? [this.player, ...this.room.poses().filter(duck => !duck.player), ...this.localDucks] : this.localDucks;
     const hit = candidates.find(duck => {
       if (duck.action !== 7) return Math.hypot(p.x - duck.x, p.y - (duck.y - 50)) < hitRadius;
@@ -483,8 +511,9 @@ export class PixiIsland {
       x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')),
       y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')),
     };
+    const indoors = this.interior?.active;
     while (this.accumulator >= 1 / 60) {
-      this.sim.step(1 / 60, this.room ? ZERO : input);
+      this.sim.step(1 / 60, this.room || indoors ? ZERO : input);
       this.room?.step(1 / 60, input);
       this.accumulator -= 1 / 60;
     }
@@ -496,6 +525,18 @@ export class PixiIsland {
     }
     const t = this.sim.time;
     const reduced = this.motion.matches;
+    // boss 5 Nov: the museum door. Walk up the steps into it and the room takes over; walk out through its arch and you are back on the steps
+    if (this.interior && !this.room && player) {
+      const atDoor = player.x > MUSEUM_DOOR.x0 && player.x < MUSEUM_DOOR.x1 && player.y < MUSEUM_DOOR.y;
+      if (!indoors && atDoor && this.doorArmed) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.scene.visible = false;}
+      if (!atDoor && player.y > MUSEUM_DOOR.y + 60) this.doorArmed = true;
+      if (this.interior.active && this.interior.update(dt, input, this.width, this.height, t, reduced)) {
+        this.interior.leave(this.objects, .88 * .24 * 3); this.scene.visible = true;
+        Object.assign(player, {x: MUSEUM_DOOR.out.x, y: MUSEUM_DOOR.out.y, previousX: MUSEUM_DOOR.out.x, previousY: MUSEUM_DOOR.out.y, path: [], turn: 0, action: 0});
+        Object.assign(this.target, {x: player.x, y: player.y - 90}); Object.assign(this.camera, this.target, {zoom: this.camera.zoom}); this.follow = true;
+      }
+      if (this.interior.active) {this.app.render(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}
+    }
     if(player?.action===1&&!this.fitMode&&!this.gestures.pointers.size){
       const x=this.width/2+(player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(player.y-this.camera.y)*this.camera.zoom*TILT;
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
@@ -510,8 +551,10 @@ export class PixiIsland {
     const visible = (x,y,pad=350) => Math.abs(x-this.camera.x)<halfWidth+pad && Math.abs(y-this.camera.y)<halfHeight+pad;
     this.ocean.position.set(this.camera.x-halfWidth-256,this.camera.y-halfHeight-256);this.ocean.width=halfWidth*2+512;this.ocean.height=halfHeight*2+512;
     this.ocean.tilePosition.set(-this.ocean.x+(reduced?0:t*2),-this.ocean.y+(reduced?0:t*.7));
-    this.surf.update(t, reduced, visible);
+    this.waterFX?.update(dt, t, {x: this.camera.x-halfWidth, y: this.camera.y-halfHeight, width: halfWidth*2, height: halfHeight*2});
+    this.surf?.update(t, reduced, visible);
     this.rowboat?.update(t, reduced, visible);
+    this.boats?.update(t, reduced, visible);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
@@ -522,8 +565,10 @@ export class PixiIsland {
       prop.sprite.skew.x = !reduced && prop.wind ? Math.sin(t * 1.3 + i * .7) * (/flag|bunting|banner|umbrella/i.test(prop.asset||prop.name)?.018:.009)*breeze + this.gust * .035 : 0;
       prop.sprite.y = prop.y + (!reduced && prop.boat ? Math.sin(t * 1.5 + i) * 3 : 0);
       prop.sprite.rotation = !reduced && prop.boat ? Math.sin(t * 1.1 + i) * .008 : 0;
+      // boss 5 Nov: bank plants answer the same water field as floating pads.
+      if (/lily|reeds|cattails/i.test(prop.asset || prop.name)) this.waterFX?.lily(prop, {y: prop.y, rotation: 0});
     });
-    this.floating.forEach(item=>{const pose=floatingPose(item,t,reduced);item.sprite.position.set(pose.x,pose.y);item.sprite.rotation=pose.rotation;item.sprite.visible=visible(item.x,item.y,100);});
+    this.floating.forEach(item=>{const pose=floatingPose(item,t,reduced);item.sprite.position.set(pose.x,pose.y);item.sprite.rotation=pose.rotation;item.sprite.visible=visible(item.x,item.y,100);this.waterFX?.lily(item,pose,t);});
     const alpha = this.accumulator * 60;
     this.rigs.forEach((rig, i) => {
       const duck = this.localDucks[i];
@@ -533,11 +578,23 @@ export class PixiIsland {
       rig.root.zIndex = y;
       rig.root.visible = visible(x, y, 200);
       if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping});
+      if (duck.sleeping && duck.footprint && player && rig.sleeper) {   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once
+        const f = duck.footprint, ex = (player.x - f.x) / (f.rx + 26), ey = (player.y - f.y) / (f.ry + 26), near = ex * ex + ey * ey < 1;
+        const last = this.bumpFrom || player, mx = player.x - last.x, my = player.y - last.y, ml = Math.hypot(mx, my), tx = f.x - player.x, ty = f.y - player.y;
+        const into = !player.path?.length && ml > .05 && (mx * tx + my * ty) / (ml * (Math.hypot(tx, ty) || 1)) > .55;   // heading into it, not sliding past its side or skirting it on a route
+        if (near && into && !duck.bumped) {   // boss 5 Nov: the player's Ducky stumbles back off it, once per poke cooldown
+          duck.bumped = true;
+          if (rig.sleeper.poke()) this.playerRig()?.stumble?.({x: player.x - f.x, y: (player.y - f.y) * TILT});
+        }
+        if (!near) duck.bumped = false;
+      }
     });
+    if (player) this.bumpFrom = {x: player.x, y: player.y};
     const live = this.room?.poses(now / 1000) ?? [];
+    this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
-    this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>wing.rotation=(i?1:-1)*pose.flap);});
+    this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>{wing.rotation=(i?1:-1)*(pose.flap-.4)*.45;wing.scale.y=.75+.25*Math.cos(pose.flap*3);});});
     for (const crow of this.crows) {
       const pose = crowPose(crow,t,reduced);
       crow.root.position.set(pose.x,pose.y);
@@ -588,8 +645,19 @@ export class PixiIsland {
       }
       d.simulationTime = t.toFixed(2);
       d.reducedMotion = String(reduced);
+      d.waterSimulation = String(Boolean(this.waterFX?.active));
+      d.waterCpuMs = (this.waterFX?.stats.cpuMs || 0).toFixed(3);
+      d.waterCells = String(this.waterFX?.stats.cells || 0);
+      d.waterSteps = String(this.waterFX?.stats.steps || 0);
+      d.waterSplashes = String(this.waterFX?.stats.splashes || 0);
     }
     this.raf = requestAnimationFrame(time => this.tick(time));
+  }
+
+  playerRig() {
+    if (this.room) return [...this.liveRigs.values()].find(entry => entry.isPlayer)?.rig;
+    const i = this.localDucks?.findIndex(duck => duck.player) ?? -1;
+    return i >= 0 ? this.rigs[i] : null;
   }
 
   renderLiveDucks(poses, dt, time, reducedMotion, visible) {
@@ -668,6 +736,7 @@ export class PixiIsland {
     this.keys.clear();
     this.gestures.clear();
     this.audio.dispose();
+    this.waterFX?.dispose();
     this.liveRigs.forEach(entry => {
       entry.rig?.dispose();
       entry.nameplate?.remove();

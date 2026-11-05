@@ -64,3 +64,19 @@ export function createBeachSurf(layer) {
     },
   };
 }
+
+// boss 5 Nov: signed art-mask distance wraps surf around every coast and islet.
+// The crest eases onto sand, pauses at its turn, then recedes; sets vary along shore.
+export const COAST_SURF = `
+vec3 coastSurf(vec2 p, float d, float time, float calm) {
+  if (calm > .5) return vec3(0.);
+  float local = time * .13 + sin(p.x * .0017 + p.y * .0011) * .31 + sin(p.y * .004) * .12;
+  float age = fract(local);
+  float set = .5 + .5 * sin(floor(local) * 2.399 + p.x * .0006 + p.y * .0009);
+  float reach = 8. + 10. * set;
+  float front = age < .64 ? 105. - (105. + reach) * sin(age / .64 * 1.570796) : -reach + 37. * pow((age - .64) / .36, 2.);
+  float broken = sin(p.x * .075 + p.y * .061 + time * .24) + sin(p.y * .13 - p.x * .022);
+  float foam = float(abs(d - front) < (age < .64 ? 2.8 : 1.5) && broken > -.65 && age > .06 && age < .95);
+  float wet = float(d < 0. && d > -reach && age > .48) * (1. - smoothstep(.70, 1., age));
+  return vec3(foam, wet, front);
+}`;

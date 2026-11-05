@@ -1,0 +1,328 @@
+{
+ "standArea": 158679.1111111111,
+ "F": 0.75,
+ "poses": {
+  "nod": {
+   "W": 759,
+   "H": 966,
+   "layers": [
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/nod-duck.png",
+     "pivot": [
+      379,
+      961
+     ],
+     "box": [
+      4,
+      4,
+      755,
+      963
+     ]
+    }
+   ],
+   "area": 366451.55555555556,
+   "box": [
+    4,
+    4,
+    755,
+    963
+   ],
+   "k": 0.65
+  },
+  "leaf": {
+   "W": 916,
+   "H": 596,
+   "layers": [
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/leaf-duck.png",
+     "pivot": [
+      452,
+      510
+     ],
+     "box": [
+      53,
+      4,
+      851,
+      513
+     ]
+    },
+    {
+     "id": "prop",
+     "src": "/pixi-duck/sleep/leaf-prop.png",
+     "box": [
+      4,
+      143,
+      912,
+      592
+     ]
+    }
+   ],
+   "area": 82627.55555555555,
+   "box": [
+    4,
+    4,
+    912,
+    592
+   ],
+   "k": 0.95
+  },
+  "wing": {
+   "W": 907,
+   "H": 571,
+   "layers": [
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/wing-duck.png",
+     "pivot": [
+      453,
+      566
+     ],
+     "box": [
+      4,
+      4,
+      903,
+      567
+     ]
+    }
+   ],
+   "area": 250122.66666666666,
+   "box": [
+    4,
+    4,
+    903,
+    567
+   ],
+   "k": 0.78
+  },
+  "hammock": {
+   "W": 907,
+   "H": 604,
+   "layers": [
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/hammock-duck.png",
+     "pivot": [
+      458,
+      561
+     ],
+     "box": [
+      172,
+      4,
+      741,
+      563
+     ]
+    },
+    {
+     "id": "posts",
+     "src": "/pixi-duck/sleep/hammock-posts.png",
+     "box": [
+      4,
+      153,
+      903,
+      507
+     ]
+    },
+    {
+     "id": "cloth",
+     "src": "/pixi-duck/sleep/hammock-cloth.png",
+     "box": [
+      139,
+      268,
+      771,
+      600
+     ]
+    },
+    {
+     "id": "zz",
+     "src": "/pixi-duck/sleep/hammock-zz.png",
+     "pivot": [
+      376,
+      130
+     ],
+     "box": [
+      332,
+      37,
+      421,
+      131
+     ]
+    }
+   ],
+   "area": 137941.33333333334,
+   "box": [
+    4,
+    4,
+    903,
+    600
+   ],
+   "k": 0.92
+  },
+  "rock": {
+   "W": 765,
+   "H": 833,
+   "layers": [
+    {
+     "id": "prop",
+     "src": "/pixi-duck/sleep/rock-prop.png",
+     "box": [
+      501,
+      331,
+      761,
+      752
+     ]
+    },
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/rock-duck.png",
+     "pivot": [
+      320,
+      828
+     ],
+     "box": [
+      4,
+      4,
+      637,
+      829
+     ]
+    }
+   ],
+   "area": 260940.44444444447,
+   "box": [
+    4,
+    4,
+    761,
+    829
+   ],
+   "k": 0.72
+  },
+  "book": {
+   "W": 965,
+   "H": 891,
+   "layers": [
+    {
+     "id": "prop",
+     "src": "/pixi-duck/sleep/book-prop.png",
+     "box": [
+      4,
+      505,
+      905,
+      887
+     ]
+    },
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/book-duck.png",
+     "pivot": [
+      520,
+      625
+     ],
+     "box": [
+      79,
+      4,
+      961,
+      628
+     ]
+    }
+   ],
+   "area": 246005.33333333334,
+   "box": [
+    4,
+    4,
+    961,
+    887
+   ],
+   "k": 0.78
+  },
+  "chair": {
+   "W": 757,
+   "H": 846,
+   "layers": [
+    {
+     "id": "prop",
+     "src": "/pixi-duck/sleep/chair-prop.png",
+     "box": [
+      4,
+      4,
+      753,
+      843
+     ]
+    },
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/chair-duck.png",
+     "pivot": [
+      332,
+      612
+     ],
+     "box": [
+      104,
+      101,
+      564,
+      616
+     ]
+    },
+    {
+     "id": "zz",
+     "src": "/pixi-duck/sleep/chair-zz.png",
+     "pivot": [
+      202,
+      171
+     ],
+     "box": [
+      153,
+      69,
+      252,
+      172
+     ]
+    }
+   ],
+   "area": 114037.33333333333,
+   "box": [
+    4,
+    4,
+    753,
+    843
+   ],
+   "k": 1.15
+  },
+  "box": {
+   "W": 735,
+   "H": 703,
+   "layers": [
+    {
+     "id": "duck",
+     "src": "/pixi-duck/sleep/box-duck.png",
+     "pivot": [
+      355,
+      479
+     ],
+     "box": [
+      105,
+      4,
+      605,
+      481
+     ]
+    },
+    {
+     "id": "prop",
+     "src": "/pixi-duck/sleep/box-prop.png",
+     "box": [
+      4,
+      208,
+      731,
+      699
+     ]
+    }
+   ],
+   "area": 119303.11111111111,
+   "box": [
+    4,
+    4,
+    731,
+    699
+   ],
+   "k": 0.8
+  }
+ }
+}

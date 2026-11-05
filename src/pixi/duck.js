@@ -1,13 +1,9 @@
 import {createDuckFeedback} from './feedback.js';
 import { Assets, Container, Graphics, Sprite } from 'pixi.js';
+import {SLEEP_ASSETS, createSleeper} from './sleeper.js';
 
 export const duckAnimationNames=Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
-const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2;
-const NAP_POSES = [
-  {name:'Tucked rest', url:'/pixi-duck/tucked-rest.svg', view:0, hat:[0,-293,0], shadow:236, z:[132,-445]},
-  {name:'Head under wing', url:'/pixi-duck/head-under-wing.svg', view:90, hat:[62,-286,.12], shadow:245, z:[156,-438]},
-  {name:'Side nap', url:'/pixi-duck/side-nap.svg', view:-90, hat:[-157,-227,-.24], shadow:264, z:[-152,-390]},
-];
+const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2, STUMBLE=.35;
 const slotOrder=['acc','shades','cap','shoes'];
 const DROPPED=new Set(['cap-2','cap-9','cap-11','cap-12','cap-13','shades-12','acc-5','acc-6','acc-8','acc-10','acc-12']);   // boss 4 Nov: fish hat, aviator, Spartan, headphones, headset, feather mask, guitar, flask, skateboard, bag, sword
 let libraryPromise,liveDucks=0;
@@ -20,7 +16,7 @@ async function library(){
   if(!libraryPromise)libraryPromise=(async()=>{
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);
     const data=await response.json();
-    await Promise.all([...NAP_POSES.map(pose => loadTexture(pose.url)), ...data.views.flatMap(v=>v.parts.map(p=>loadTexture(p.url)))]);
+    await Promise.all([...SLEEP_ASSETS.map(loadTexture), ...data.views.flatMap(v=>v.parts.map(p=>loadTexture(p.url)))]);
     await Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}}));
     return data;
   })().catch(error=>{libraryPromise=undefined;throw error;});
@@ -109,36 +105,20 @@ function samplePose(action,t,walkPhase,reduced,speed=165){
  * `turn` is radians: 0 faces down/front, +PI/2 right, PI back, -PI/2 left.
  * `speed` is world units/second. World position/scale/rotation belong to the caller.
  */
-export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,isPlayer=false}={}){
+export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,isPlayer=false,sleep=null}={}){
   liveDucks++;
   let data;
   try{data=await library();}catch(error){liveDucks--;throw error;}
   const root=new Container({label:'Ducky'}),art=new Container({label:'Original SVG rig'});art.scale.set(SCALE);root.addChild(art);
   const feedback=createDuckFeedback(isPlayer);art.addChild(feedback.ring);
   const views=data.views.map(makeView);views.forEach(v=>art.addChild(v.root));art.addChild(feedback.bubble,feedback.sleep);
-  // Pick once so breathing, camera culling and wardrobe changes never reroll the pose.
-  const napPose = isPlayer ? NAP_POSES[2] : NAP_POSES[Math.floor(Math.random() * NAP_POSES.length)];
-  const nap = new Container({label:napPose.name});
-  const napDirection = napPose.view !== 0 && Math.abs(seed) % 2 !== 0 ? -1 : 1;
-  nap.scale.x = napDirection;
-  nap.visible = false;
-  const napShadow = new Graphics().ellipse(0, -4, napPose.shadow, 21).fill({color:0x232323, alpha:.16});
-  const napBody = new Container();
-  const napArt = new Sprite(Assets.get(napPose.url));
-  napArt.anchor.set(.5, 1);
-  const napHat = new Container();
-  const [hatX, hatY, hatAngle] = napPose.hat;
-  napHat.position.set(hatX, hatY);
-  napHat.rotation = hatAngle;
-  napHat.scale.set(.66);
-  napBody.addChild(napArt, napHat);
-  nap.addChild(napShadow, napBody);
-  art.addChildAt(nap, art.children.length - 2);
-  const napView = data.views.find(view => view.angle === napPose.view);
+  // boss 5 Nov: a sleeping Ducky is one of the 8 approved poses, picked once (placement or seed) so it never rerolls
+  const nap = createSleeper(sleep, seed);
+  art.addChildAt(nap.root, art.children.length - 2);
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
   // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
-  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,stumbleT=9,stumbleDir={x:-1,y:0},gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
   // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
   const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
   const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
@@ -158,15 +138,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));
     if(disposed||request!==outfitVersion)return;
     clothing={...next};
-    for (const child of napHat.removeChildren()) child.destroy();
-    const cap = entries.find(entry => entry.slot === 'cap');
-    if (cap) {
-      const frame = cap.frames[String(napView.angle)][0];
-      const sprite = new Sprite(Assets.get(frame.url));
-      const headCenter = (napView.attachments.head[0] + napView.attachments.head[1]) / 2;
-      sprite.position.set(frame.rect[0] - headCenter, frame.rect[1] - napView.attachments.headY);
-      napHat.addChild(sprite);
-    }
+    nap.setCap(entries.find(entry => entry.slot === 'cap'), data.views.find(view => view.angle === 0));
     for(const view of views){
       for(const garment of view.garments){garment.mask?.destroy();garment.node.destroy({children:true});}
       view.garments=[];
@@ -312,7 +284,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
     if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
-    landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
+    landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;stumbleT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
     actionTime+=dt;
     // boss 4 Nov: steps follow the distance walked (one step per 45 world units), and the waddle eases in over two steps and out on stopping
     const walking=currentAction===1,v=walking?Math.max(safe(speed),40):lastSpeed*gait;
@@ -338,24 +310,29 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;
-    nap.visible = sleeping;
-    if (sleeping) {
-      // Keep the belly planted as the back rises and falls.
-      napBody.scale.y = reducedMotion ? 1 : 1 + Math.sin(t * 1.5 + phase) * .025;
-    } else {
-      renderView(current,t);
-    }
+    nap.root.visible = sleeping;
+    if (sleeping) nap.update(t, reducedMotion);
+    else renderView(current,t);
     feedback.update(currentAction,actionTime+ (persistentSleep?phase:0),reducedMotion,persistentSleep);
-    if (sleeping) {
-      feedback.sleep.position.set(napDirection * napPose.z[0], napPose.z[1]);
-      feedback.bubble.y += 285;
-    }
+    if (sleeping) {feedback.sleep.visible = false; feedback.bubble.visible = false; feedback.bubble.emoteAction = 0;}   // boss 5 Nov: the pose's own z's, nothing doubles
     if(arriveT<1.1&&!reducedMotion){const f=arriveT*60;art.y=keyAt(DROP.y,f)*artHeight*SCALE;art.scale.set(SCALE*keyAt(DROP.sx,f),SCALE*keyAt(DROP.sy,f));}
     else{art.y=0;art.scale.set(SCALE);}
+    art.x=0;art.rotation=0;
+    // boss 5 Nov: walked into a sleeper, like stepping on a stone: a small hop back, two damped tilt swings, a squash on landing
+    if(stumbleT<STUMBLE&&!reducedMotion&&!sleeping){
+      const u=stumbleT/STUMBLE,back=u<.3?1-(1-u/.3)**3:1-(.5-.5*Math.cos(Math.PI*(u-.3)/.7)),hop=u<.5?Math.sin(Math.PI*u/.5):0;
+      const sq=u>.45&&u<.75?Math.sin(Math.PI*(u-.45)/.3):0,lean=Math.abs(stumbleDir.x)>.2?Math.sign(stumbleDir.x):1;
+      art.x=stumbleDir.x*12*back;art.y+=stumbleDir.y*12*back-7*hop;
+      art.rotation=lean*4.2*Math.PI/180*Math.exp(-2.2*u)*Math.sin(TAU*u);
+      art.scale.x*=1+.07*sq;art.scale.y*=1-.09*sq;
+    }
     root.duckDirection=degrees;
   }
   function dispose(){if(disposed)return;disposed=true;outfitVersion++;liveDucks--;root.removeFromParent();root.destroy({children:true});}
   update(0,{action:0});
   const arrive=()=>{arriveT=0;};
-  return {root,update,dispose,setOutfit,arrive,animationNames:duckAnimationNames};
+  // away: unit vector pointing away from what was hit, in rig units (x right, y down on screen)
+  const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};
+  const sleeper={poke:()=>nap.root.visible&&nap.poke(),bounds:()=>nap.root.getBounds()};   // boss 5 Nov: tap or bump wobbles a sleeper
+  return {root,update,dispose,setOutfit,arrive,stumble,sleeper,animationNames:duckAnimationNames};
 }
