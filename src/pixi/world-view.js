@@ -224,9 +224,9 @@ export function createWorldView(app, scene) {
           const f = ease(p.face / .3), sq = .45 + .55 * p.face;   // everything flattens toward the rim
           const fade = ease(age / .12) * (1 - ease((age - .35) / .65));
           const g = sprite(glows, glowTex);
-          g.position.set(p.x, p.y); g.scale.set((.25 + out(age) * .35) * px, (.25 + out(age) * .35) * px * sq); g.alpha = fade * .85 * f;
-          const k = out(age), rr = (4 + k * 22) * px;
-          rings.ellipse(p.x, p.y, rr, rr * sq).stroke({color: 0xFFF3C4, width: 1.4 * px, alpha: (1 - k) * .55 * f});
+          g.position.set(p.x, p.y); g.scale.set((.14 + out(age) * .18) * px, (.14 + out(age) * .18) * px * sq); g.alpha = fade * .85 * f;
+          const k = out(age), rr = (2.5 + k * 11) * px;
+          rings.ellipse(p.x, p.y, rr, rr * sq).stroke({color: 0xFFF3C4, width: 1.1 * px, alpha: (1 - k) * .55 * f});
           if (r.heart) {
             const hs = sprite(hearts, heartTex), hk = age * 1.4;
             hs.position.set(p.x + Math.sin(age * 9 + r.x) * 2 * px, p.y - (6 + out(hk) * 26) * px);
