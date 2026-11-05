@@ -542,6 +542,9 @@ export class PixiIsland {
       camera.y=clamp(camera.y,cy-1.05*Rw,cy+1.05*Rw);
       return;
     }
+    if (this.archipelago) {   // back from the globe: take the nearest wrap of home, so it never flies round the world (GPT review)
+      const b=this.archipelago.bounds, sx=b.x1-b.x0, hx=world.width/2; camera.x=hx+(camera.x-hx)-sx*Math.round((camera.x-hx)/sx);
+    }
     const bounds=far?this.archipelago.bounds:this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
     camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
@@ -626,10 +629,16 @@ export class PixiIsland {
       if (player.mode === 'sailing') this.target.zoom=.56-offshoreProgress(player)*.24;   // boss 5 Nov: pulled back a little while sailing
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
-      const k=Math.exp(-dt*2.2), sx=this.spin.x*dt*1000/this.camera.zoom, sy=this.spin.y*dt*1000/(this.camera.zoom*TILT);
-      this.camera.x-=sx; this.camera.y-=sy; this.target.x-=sx; this.target.y-=sy; this.constrain(this.camera); this.constrain(this.target);
+      const k=Math.exp(-dt/.45), sx=this.spin.x*dt*1000/this.camera.zoom, sy=this.spin.y*dt*1000/(this.camera.zoom*TILT);
+      const y0=this.camera.y; this.camera.x-=sx; this.camera.y-=sy; this.target.x-=sx; this.target.y-=sy; this.constrain(this.camera); this.constrain(this.target);
+      if (Math.abs(this.camera.y-(y0-sy))>1e-6) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
       this.spin.x*=k; this.spin.y*=k; if (Math.hypot(this.spin.x,this.spin.y)<.01) this.spin=null;
-    } else if (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80) this.spin=null;   // held still: no flick
+    } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;   // off the globe, or held still: no flick
+    if (this.birdEye && this.target.zoom > this.camera.zoom*1.002 && !this.gestures.pointers.size) {   // zooming in from the globe flies you home, like Google Earth
+      const b=this.archipelago.bounds, sx=b.x1-b.x0, home=player ?? {x:world.width/2, y:world.height/2};
+      const nx=home.x+sx*Math.round((this.camera.x-home.x)/sx), k=1-Math.exp(-dt*3);
+      for (const c of [this.camera,this.target]) {c.x+=(nx-c.x)*k; c.y+=(home.y-c.y)*k;}
+    }
     easeCamera(this.camera, this.target, dt, reduced);
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
     if (this.birdEye) this.archipelago.build();
@@ -637,10 +646,11 @@ export class PixiIsland {
     if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
       const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));
       if (t > 0) this.archipelago.build();
-      if (t > .9 && !this.gestures.pointers.size && !this.spin && !reduced) {   // left alone on the globe it turns slowly (once a minute)
-        const b=this.archipelago.bounds, step=(t-.9)/.1*(b.x1-b.x0)/60*dt; this.camera.x+=step; this.target.x+=step;
-      }
-      this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
+      // left alone on the globe for two seconds it starts to turn, easing up to about 1.5 degrees a second (GPT review)
+      if (this.gestures.pointers.size || this.spin) this.quietAt=performance.now();
+      const quiet=t > .9 && !reduced ? Math.min(1, Math.max(0, (performance.now()-(this.quietAt||0)-2000)/1500)) : 0;
+      if (quiet > 0) {const b=this.archipelago.bounds, step=quiet*(t-.9)/.1*(b.x1-b.x0)/240*dt; this.camera.x+=step; this.target.x+=step;}
+      this.globeT=t;
     }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
     this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);
@@ -725,6 +735,8 @@ export class PixiIsland {
     this.marker.visible = this.markerUntil > t;
     if (this.marker.visible) {const age=1.5-(this.markerUntil-t);this.marker.alpha=1-age/1.5;this.marker.scale.set(1+age*.9,1+age*8/9);}
     // boss 4 Nov: no walking sound (Ashwin found it annoying)
+    // the globe captures the scene only now, after this frame's camera and animations are set (GPT review: no frame lag)
+    this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
     this.app.render();
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {

@@ -61,7 +61,7 @@ vec3 ground(vec2 g) {
 vec3 planet(vec2 uv) {
   vec2 px = (uv - .5) * uRes;
   float Rp = uR * uRes.y, d = length(px) / Rp, onePx = 1. / Rp;
-  float ball = smoothstep(4., 1., uR);                     // space and shading only once it reads as a ball
+  float ball = 1. - smoothstep(1., 4., uR);                     // space and shading only once it reads as a ball
   // space: plain navy with fine twinkling stars (boss 5 Nov: the two rings round the globe removed)
   vec2 sp = uv * uRes + vec2(-uLL.x, uLL.y) * 90. * ball;   // stars drift a little as the globe turns
   vec3 space = vec3(.07, .09, .22);
@@ -71,7 +71,7 @@ vec3 planet(vec2 uv) {
   space = mix(space, vec3(.36, .68, 1.), air * .7);
   if (d >= 1.) return mix(ground(uCam + px / uZoom), space, ball);
   vec2 dir = d > 0. ? px / length(px) : vec2(0.);
-  vec2 gA = uCam + uSpin + dir * asin(d) * Rp / uZoom;    // up close: the flat view, gently bent
+  vec2 gA = uCam + uSpin + mix(px, dir * asin(d) * Rp, ball) / uZoom;   // up close exactly the flat view, bending as it becomes a ball
   // a real sphere: the screen point on the ball, tilted by the latitude facing us, turned by the longitude, read as a
   // longitude/latitude on the world map (which wraps exactly once round the ball)
   vec3 v = vec3(px.x / Rp, -px.y / Rp, sqrt(max(0., 1. - d * d)));
@@ -87,8 +87,8 @@ vec3 planet(vec2 uv) {
   vec3 col = mix(ground(g), world((g - uBounds.xy) / uBounds.zw, ocean), ball);
   float edge = abs(lat) + (noise(vec2(lon * 6., lat > 0. ? 1. : 7.)) - .5) * .1;   // a wavy cartoon coastline of ice
   float aa = 1.5 / max(Rp, 1.);
-  float ice = smoothstep(1.2 - aa, 1.2 + aa, edge), rimIce = smoothstep(1.2 - aa, 1.2 + aa, edge) - smoothstep(1.225 - aa, 1.225 + aa, edge);
-  col = mix(col, mix(vec3(.88, .95, 1.), vec3(.97, .99, 1.), smoothstep(1.25, 1.45, abs(lat))), ice * ball);
+  float ice = smoothstep(1.32 - aa, 1.32 + aa, edge), rimIce = ice - smoothstep(1.345 - aa, 1.345 + aa, edge);
+  col = mix(col, mix(vec3(.88, .95, 1.), vec3(.97, .99, 1.), smoothstep(1.36, 1.5, abs(lat))), ice * ball);
   col = mix(col, vec3(.7, .85, .97), rimIce * .8 * ball);  // crisp ice caps hide the poles, a pale blue line at their edge
   // flat cartoon light: one soft-edged shadow on the far side, a lighter cap on the lit side, a bright inner rim
   float z = sqrt(1. - d * d);
@@ -211,7 +211,8 @@ export function createWorldView(app, scene) {
         shader.resources.uWorld = worldTex.source;
       }
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
-      scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); scene.visible = false;   // the real islands round the camera
+      if (t < .97) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true});}   // the real islands round the camera (not needed once it is all globe)
+      scene.visible = false;
       const b = arch.bounds, spanX = b.x1 - b.x0, spanY = b.y1 - b.y0;
       // boss 5 Nov: "actual 3D rotation". The globe is a real sphere the world wraps round exactly once, a fixed size in
       // world units, so its radius on screen follows the zoom: huge (flat) up close, a ball in space at the floor zoom.
@@ -229,7 +230,7 @@ export function createWorldView(app, scene) {
       // as the shader, run backwards), and how much it faces us
       const cl = Math.cos(lat0), sl = Math.sin(lat0);
       const project = (x, y) => {
-        const dx = wrap(x - cam.x - this.roll, spanX), dy = wrap(y - cam.y, spanY);
+        const dx = wrap(x - cam.x - this.roll, spanX), dy = y - cam.y;   // latitude never wraps
         const len = Math.hypot(dx, dy), arc = Math.min(len * cam.zoom / Rp, Math.PI / 2);
         const k = len > 0 ? Math.sin(arc) * Rp / len : 0;
         const fx = dx * k, fy = dy * k, fFace = Math.cos(arc);
