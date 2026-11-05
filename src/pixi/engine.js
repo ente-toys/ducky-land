@@ -343,10 +343,16 @@ export class PixiIsland {
       if (movement.after.length > 1) {
         movePinch(this.camera, movement.before, movement.after, this.zoomFloor(), 1.8, this.width, this.height);
       } else if (movement.drag) {
-        this.camera.x -= movement.dx / this.camera.zoom;
-        this.camera.y -= movement.dy / (this.camera.zoom * TILT);
-        const now=performance.now(), gap=Math.max(8,now-(this.dragAt||now-16)); this.dragAt=now;   // flick speed, for the globe's spin-on
-        this.spin={x:(this.spin?.x||0)*.5+movement.dx/gap*.5, y:(this.spin?.y||0)*.5+movement.dy/gap*.5};
+        // on the globe the ball is grabbed: the spot under the finger stays under it (GPT review); flat, it pans as before
+        const at=movement.after[0], grab=this.birdEye && this.worldView?.grab({x:at.x-movement.dx, y:at.y-movement.dy}, at);
+        const mx=grab ? grab.dx : -movement.dx / this.camera.zoom, my=grab ? grab.dy : -movement.dy / (this.camera.zoom * TILT);
+        this.camera.x += mx; this.camera.y += my;
+        const now=performance.now(), gap=Math.max(8,now-(this.dragAt||now-16)); this.dragAt=now;   // flick speed (world units a ms), for the spin-on
+        this.spin={x:(this.spin?.x||0)*.5+mx/gap*.5, y:(this.spin?.y||0)*.5+my/gap*.5};
+        if (this.birdEye) {   // at most 120 degrees a second, however hard the flick (GPT review)
+          const b=this.archipelago.bounds, cap=(b.x1-b.x0)/(2*Math.PI)*2.09/1000, v=Math.hypot(this.spin.x,this.spin.y);
+          if (v>cap) {this.spin.x*=cap/v; this.spin.y*=cap/v;}
+        }
         this.gust = clamp(movement.dx * .005, -.5, .5);
       } else return;
       this.follow = false;
@@ -629,10 +635,10 @@ export class PixiIsland {
       if (player.mode === 'sailing') this.target.zoom=.56-offshoreProgress(player)*.24;   // boss 5 Nov: pulled back a little while sailing
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
-      const k=Math.exp(-dt/.45), sx=this.spin.x*dt*1000/this.camera.zoom, sy=this.spin.y*dt*1000/(this.camera.zoom*TILT);
-      const y0=this.camera.y; this.camera.x-=sx; this.camera.y-=sy; this.target.x-=sx; this.target.y-=sy; this.constrain(this.camera); this.constrain(this.target);
-      if (Math.abs(this.camera.y-(y0-sy))>1e-6) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
-      this.spin.x*=k; this.spin.y*=k; if (Math.hypot(this.spin.x,this.spin.y)<.01) this.spin=null;
+      const k=Math.exp(-dt/.45), sx=this.spin.x*dt*1000, sy=this.spin.y*dt*1000;
+      const y0=this.camera.y; this.camera.x+=sx; this.camera.y+=sy; this.target.x+=sx; this.target.y+=sy; this.constrain(this.camera); this.constrain(this.target);
+      if (Math.abs(this.camera.y-(y0+sy))>1e-6) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
+      this.spin.x*=k; this.spin.y*=k; if (Math.hypot(this.spin.x,this.spin.y)*this.camera.zoom<.01) this.spin=null;
     } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;   // off the globe, or held still: no flick
     if (this.birdEye && this.target.zoom > this.camera.zoom*1.002 && !this.gestures.pointers.size) {   // zooming in from the globe flies you home, like Google Earth
       const b=this.archipelago.bounds, sx=b.x1-b.x0, home=player ?? {x:world.width/2, y:world.height/2};

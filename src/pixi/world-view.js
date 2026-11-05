@@ -226,18 +226,34 @@ export function createWorldView(app, scene) {
       u.uTime = time; u.uZoom = cam.zoom;
       u.uCam[0] = cam.x; u.uCam[1] = cam.y; u.uRes[0] = w; u.uRes[1] = h;
       u.uBounds[0] = b.x0; u.uBounds[1] = b.y0; u.uBounds[2] = spanX; u.uBounds[3] = spanY;
-      // where a world point sits on screen right now: up close the flat bend, on the ball the real sphere (the same maths
-      // as the shader, run backwards), and how much it faces us
+      // the shader's own mapping, screen offset -> world point, so the pin and hearts sit exactly where the shader draws
       const cl = Math.cos(lat0), sl = Math.sin(lat0);
+      const gOf = (px, py) => {
+        const len = Math.hypot(px, py), d = Math.min(len / Rp, 1), as = len > 0 ? Math.asin(d) * Rp / len : 1;
+        const ax = cam.x + this.roll + (px + (px * as - px) * ball) / cam.zoom, ay = cam.y + (py + (py * as - py) * ball) / cam.zoom;
+        const vx = px / Rp, vy = -py / Rp, vz = Math.sqrt(Math.max(0, 1 - d * d));
+        const r1y = cl * vy + sl * vz, r1z = -sl * vy + cl * vz;
+        const sx = cx + (lon0 + Math.atan2(vx, r1z)) * Rw, sy = cy - Math.asin(Math.max(-1, Math.min(1, r1y))) * Rw;
+        return [ax + (sx - ax) * ball, ay + (sy - ay) * ball];
+      };
+      this.globe = {w, h, Rp, Rw, ball, cl, sl};   // for grab-dragging (engine.js)
+      // where a world point sits on screen: start from the sphere's answer, then a few Newton steps on the shader mapping
       const project = (x, y) => {
-        const dx = wrap(x - cam.x - this.roll, spanX), dy = y - cam.y;   // latitude never wraps
-        const len = Math.hypot(dx, dy), arc = Math.min(len * cam.zoom / Rp, Math.PI / 2);
-        const k = len > 0 ? Math.sin(arc) * Rp / len : 0;
-        const fx = dx * k, fy = dy * k, fFace = Math.cos(arc);
-        const lon = dx / Rw, lat = -(y - cy) / Rw;
+        const lon = wrap(x - cam.x - this.roll, spanX) / Rw, lat = -(y - cy) / Rw;
         const wx = Math.sin(lon) * Math.cos(lat), wy = Math.sin(lat), wz = Math.cos(lon) * Math.cos(lat);
         const vy = cl * wy - sl * wz, vz = sl * wy + cl * wz;
-        return {x: w / 2 + fx + (wx * Rp - fx) * ball, y: h / 2 + fy + (-vy * Rp - fy) * ball, face: fFace + (vz - fFace) * ball};
+        if (ball > .5 && vz < 0) return {x: 0, y: 0, face: -1};   // round the back of the ball
+        let px = wx * Rp * ball + (x - cam.x) * cam.zoom * (1 - ball), py = -vy * Rp * ball + (y - cam.y) * cam.zoom * (1 - ball);
+        for (let it = 0; it < 4; it++) {
+          const [gx, gy] = gOf(px, py), ex = wrap(x - gx, spanX), ey = y - gy;
+          if (Math.abs(ex) + Math.abs(ey) < .5) break;
+          const e = .5, [gx1, gy1] = gOf(px + e, py), [gx2, gy2] = gOf(px, py + e);
+          const a = (gx1 - gx) / e, b = (gx2 - gx) / e, c = (gy1 - gy) / e, dd = (gy2 - gy) / e, det = a * dd - b * c;
+          if (Math.abs(det) < 1e-12) break;
+          px += (dd * ex - b * ey) / det; py += (-c * ex + a * ey) / det;
+        }
+        const d = Math.hypot(px, py) / Rp;
+        return {x: w / 2 + px, y: h / 2 + py, face: ball > .5 ? Math.sqrt(Math.max(0, 1 - d * d)) : 1 - ball * d};
       };
       const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
       const busy = ease((ball - .25) / .4);
@@ -286,6 +302,19 @@ export function createWorldView(app, scene) {
         pin.body.y = -Math.abs(Math.sin(time * 3)) * 6;
         pin.scale.set(.8 + .2 * p.face);
       } else pin.visible = false;
+    },
+    // grab-drag on the ball: how far to move the camera so the spot under the finger stays under the finger
+    grab(from, to) {
+      const g = this.globe;
+      if (!g || g.ball < .3) return null;
+      const at = p => {
+        let px = p.x - g.w / 2, py = p.y - g.h / 2; const d = Math.hypot(px, py) / g.Rp;
+        if (d > .97) {px *= .97 / d; py *= .97 / d;}
+        const vx = px / g.Rp, vy = -py / g.Rp, vz = Math.sqrt(Math.max(0, 1 - (vx * vx + vy * vy)));
+        return {lon: Math.atan2(vx, -g.sl * vy + g.cl * vz), lat: Math.asin(Math.max(-1, Math.min(1, g.cl * vy + g.sl * vz)))};
+      };
+      const a = at(from), b = at(to);
+      return {dx: (a.lon - b.lon) * g.Rw, dy: -(a.lat - b.lat) * g.Rw};
     },
     destroy() {mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
