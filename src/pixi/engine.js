@@ -622,7 +622,7 @@ export class PixiIsland {
     this.surf?.update(t, reduced, visible);
     this.rowboat?.update(t, reduced, visible);
     this.boats?.update(t, reduced, visible);
-    this.travelView?.update(this.room.boatPoses(now/1000),t,reduced,visible,player);
+    this.travelView?.update(this.room.boatPoses(now/1000),t,reduced,visible,player,this.camera);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
