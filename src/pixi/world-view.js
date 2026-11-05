@@ -208,7 +208,7 @@ export function createWorldView(app, scene) {
       u.uCam[0] = cam.x; u.uCam[1] = cam.y; u.uRes[0] = w; u.uRes[1] = h;
       u.uBounds[0] = b.x0; u.uBounds[1] = b.y0; u.uBounds[2] = spanX; u.uBounds[3] = spanY;
       // clouds: only on the ball, a ring of them drifting round it, some over the rim like the ref
-      clouds.visible = ball > .01; clouds.alpha = ball;
+      clouds.visible = false;   // boss 5 Nov: no clouds on the globe
       for (const k of CLOUDS) {
         const a = k.a + time * .015;
         k.c.position.set(w / 2 + Math.cos(a) * k.r * Rp, h / 2 + Math.sin(a) * k.r * Rp * .9);
