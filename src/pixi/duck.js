@@ -138,7 +138,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));
     if(disposed||request!==outfitVersion)return;
     clothing={...next};
-    nap.setCap(entries.find(entry => entry.slot === 'cap'), data.views.find(view => view.angle === 0));
+    // sleeping Duckies stay bare for now; their outfits come later
     for(const view of views){
       for(const garment of view.garments){garment.mask?.destroy();garment.node.destroy({children:true});}
       view.garments=[];
