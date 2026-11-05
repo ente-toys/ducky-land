@@ -150,7 +150,7 @@
   border: 0;
   border-radius: 50%;
 }
-.pixi-online, .pixi-join-toast {
+.pixi-online, .pixi-join-toast, .pixi-friend-prompt {
   color: #332b23;
   background: #fff9df;
   border: 1px solid #564537;
@@ -168,7 +168,8 @@
   padding: 10px 14px;
 }
 .pixi-online-dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: #409447; }
-.pixi-join-toasts {
+.pixi-bottom-hud { display: contents; }
+.pixi-notifications {
   position: fixed;
   right: max(16px, env(safe-area-inset-right));
   bottom: max(16px, env(safe-area-inset-bottom));
@@ -177,13 +178,12 @@
   width: min(360px, calc(100vw - 32px));
   pointer-events: none;
 }
+.pixi-join-toasts { display: grid; gap: 8px; }
+.pixi-join-toasts:empty { display: none; }
 .pixi-join-toast { display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 16px; pointer-events: auto; }
 .pixi-join-toast span { flex: 1; overflow-wrap: anywhere; }
 .pixi-join-toast button { border: 0; border-radius: 6px; background: transparent; color: inherit; padding: 4px 8px; font: 20px/1 system-ui, sans-serif; cursor: pointer; }
 .pixi-join-toast button:focus-visible { outline: 2px solid #564537; }
-@media (max-width: 600px) {
-  .pixi-join-toasts { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 56px); }
-}
 .pixi-travel {
   position: fixed;
   top: max(88px, calc(env(safe-area-inset-top) + 72px));
@@ -217,7 +217,25 @@
 .pixi-travel-notice { position: fixed; left: 50%; transform: translateX(-50%); top: max(88px, calc(env(safe-area-inset-top) + 72px)); margin: 0; padding: 8px 14px; border: 1px solid #564537; border-radius: 999px; color: #332b23; background: #fff9dfed; box-shadow: 0 3px 0 #56453755; font: 14px/1.4 system-ui, sans-serif; z-index: 5; }
 .pixi-steering button { min-width: 44px; font-size: 22px; touch-action: none; }
 @media (max-width: 600px) {
-  .pixi-travel { top: auto; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 52px); width: min(270px, calc(100vw - 60px)); }
+  .pixi-bottom-hud { position: fixed; left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right)); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 52px); display: flex; flex-direction: column; gap: 8px; max-height: calc(100svh - 240px); overflow-y: auto; pointer-events: none; }
+  .pixi-travel { position: static; box-sizing: border-box; width: min(270px, 100%); pointer-events: auto; }
   .pixi-travel p { font-size: 12px; }
-  .pixi-join-toasts { top: 100px; bottom: auto; }
+  .pixi-notifications { position: static; align-self: flex-end; flex-shrink: 0; width: min(360px, 100%); }
 }
+.pixi-friend-prompt { padding: 16px; pointer-events: auto; }
+.pixi-friend-prompt p { margin: 0 0 12px; overflow-wrap: anywhere; }
+.pixi-friend-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.pixi-friend-actions button, .pixi-friends-dialog button { min-height: 44px; padding: 8px 13px; border: 1px solid #564537; border-radius: 10px; background: #ffda69; color: #332b23; font: 600 14px/1.35 system-ui, sans-serif; cursor: pointer; }
+.pixi-friend-actions button:last-child, .pixi-friends-list button { background: transparent; }
+.pixi-friend-actions button:disabled, .pixi-friends-dialog button:disabled { opacity: .65; cursor: default; }
+.pixi-friend-actions button:focus-visible, .pixi-friends-dialog button:focus-visible { outline: 3px solid #39472d; outline-offset: 2px; }
+.pixi-friends-dialog { box-sizing: border-box; width: min(440px, calc(100vw - 32px)); max-height: calc(100svh - 32px); padding: 24px; border: 2px solid #564537; border-radius: 20px; background: #fff9df; color: #332b23; box-shadow: 0 8px 32px #332b2340; font: 16px/1.5 system-ui, sans-serif; }
+.pixi-friends-dialog::backdrop { background: #332b2370; }
+.pixi-friends-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.pixi-friends-heading h2 { margin: 0; font-size: 24px; line-height: 1.2; }
+.pixi-friends-heading button { flex-shrink: 0; min-width: 44px; background: transparent; font-size: 24px; }
+.pixi-friends-list { list-style: none; margin: 16px 0 0; padding: 0; }
+.pixi-friends-list li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid #56453740; }
+.pixi-friends-list span { overflow-wrap: anywhere; min-width: 0; }
+.pixi-friends-list button { flex-shrink: 0; }
+.pixi-friends-empty { padding: 16px; border: 1px dashed #56453780; border-radius: 12px; }

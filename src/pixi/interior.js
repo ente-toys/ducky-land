@@ -4,6 +4,7 @@
 // The furniture is baked into the drawing; each piece is re-cut from the same texture as its own sprite so a Ducky behind it
 // is hidden by it, and each piece's foot rectangle blocks walking. All numbers are in the drawing's own pixels.
 import {Assets, Container, Graphics, Rectangle, Sprite, Texture} from 'pixi.js';
+import {startJump,jumpHeight} from './player-motion.js';
 
 const SRC = '/pixi-art/interiors/museum.svg', W = 1536, H = 1024;   // boss 5 Nov: the room is vector art in the island's line style, only the Mona Lisa hangs
 const FLOOR = {x: 768, y: 1100, rx: 1500, ry: 760};   // the floor inside the curved wall (wall base runs ~y 340 middle, ~y 420 at the sides)
@@ -100,7 +101,7 @@ export async function createInterior() {
     root,
     get active() {return root.visible;},
     enter(playerRig, width, height) {
-      rig = playerRig; Object.assign(me, {x: DOOR.x, y: DOOR.y, turn: Math.PI, path: {...ARRIVE}, hearted: false, heartT: 0, inside: false}); leaving = null;
+      rig = playerRig; Object.assign(me, {x: DOOR.x, y: DOOR.y, turn: Math.PI, path: {...ARRIVE}, hearted: false, heartT: 0, inside: false,jumpLeft:0}); leaving = null;
       if (rig) {rig.root.parent?.removeChild(rig.root); rig.root.scale.set(DUCK_SCALE); rig.root.zIndex = 0; room.addChild(rig.root);}
       ox = 0; oy = 0; layout(width, height); ox = room.x; oy = room.y;
       root.visible = true; fadeT = 1; fade.alpha = 1;
@@ -108,6 +109,7 @@ export async function createInterior() {
     // returns true on the frame the Ducky walks out through the arch
     update(dt, input, width, height, time, reduced) {
       if (!root.visible) return false;
+      me.jumpLeft = Math.max(0,(me.jumpLeft ?? 0)-dt);
       if (leaving) {fadeT = Math.min(1, fadeT + dt * 4); fade.alpha = fadeT; if (fadeT >= 1) {root.visible = false; return leaving();} return false;}
       fadeT = Math.max(0, fadeT - dt * 3); fade.alpha = fadeT;
       me.travel = 0;
@@ -126,12 +128,13 @@ export async function createInterior() {
         me.heartT += dt; const k = me.heartT / 1.6;
         heart.visible = true; heart.position.set(me.x, me.y - 150 - (reduced ? 0 : k * 40)); heart.scale.set(reduced ? 1.4 : 1 + Math.sin(Math.min(1, k * 4) * Math.PI / 2) * .5); heart.alpha = 1 - Math.max(0, k - .6) / .4;
       } else heart.visible = false;
-      if (rig) {rig.root.position.set(me.x, me.y); rig.root.zIndex = me.y; rig.update(dt, {action: me.action, speed: me.travel, turn: me.turn, time, reducedMotion: reduced});}
+      if (rig) {rig.root.position.set(me.x, me.y-jumpHeight(me.jumpLeft,reduced)); rig.root.zIndex = me.y; rig.update(dt, {action: me.action, speed: me.travel, turn: me.turn, time, reducedMotion: reduced});}
       eyesUpdate(dt, reduced);
       layout(width, height);
       if (me.y < 880) me.inside = true;   // the way out only counts once you have walked in
       return me.inside && EXIT(me.x, me.y) ? (leaving = () => true, false) : false;
     },
+    jump() {return startJump(me);},
     tap(point) {
       const x = (point.x - room.x) / scale, y = (point.y - room.y) / scale;
       me.path = {x, y: Math.min(y, H + 20)};

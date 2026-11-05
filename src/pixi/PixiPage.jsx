@@ -5,6 +5,7 @@ import IslandChat from './IslandChat.jsx';
 import IslandPresence from './IslandPresence.jsx';
 import StarDialog from './StarDialog.jsx';
 import IslandTravel from './IslandTravel.jsx';
+import IslandFriends from './IslandFriends.jsx';
 import './pixi.css';
 
 const notices = {
@@ -40,6 +41,8 @@ export default function PixiPage() {
   const [notice, setNotice] = useState('');
   const [signingOut, setSigningOut] = useState(false);
   const [starDialogOpen, setStarDialogOpen] = useState(true);
+  const [indoors,setIndoors] = useState(false);
+  const [notificationHost,setNotificationHost] = useState(null);
 
   useEffect(() => {setTravelNotice('');},[travel.islandId,travel.mode]);
 
@@ -66,6 +69,7 @@ export default function PixiPage() {
         island.current?.clearChat();
       }
       if (state === 'star-required') setStarDialogOpen(true);
+      if (['expired','signed-out'].includes(state)) setSession(previous => previous && {...previous,user:null});
       if (['expired','signed-out','star-required'].includes(state)) refresh();
     }, (id,text) => island.current?.showChat(id,text), setOnline, setLatestJoin, state => {
       setTravel(state);
@@ -74,7 +78,7 @@ export default function PixiPage() {
     const offline = import.meta.env.DEV && new URLSearchParams(location.search).has('offline');
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
-      onError:() => setError(true)});
+      onError:() => setError(true),onInteriorChange:setIndoors});
     island.current = game;
     game.mount(host.current);
     client.connect();
@@ -116,6 +120,8 @@ export default function PixiPage() {
     {!error && <aside className="pixi-live" aria-label="Live island">
       <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
       {status === 'playing' && <IslandChat key={travel.islandId} room={room} island={island} editor={chatEditor}/>}
+      {session?.user && <IslandFriends key={session.user.accountId} room={room} island={island}
+        status={status} indoors={indoors} notificationHost={notificationHost}/>}
       {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
       {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
       {retryPlay && <button onClick={() => room.current?.connect()}>
@@ -127,8 +133,12 @@ export default function PixiPage() {
           ? <a href="/auth/github/start">Play with GitHub</a>
           : <button disabled title="GitHub sign-in is unavailable">Play with GitHub</button>}
     </aside>}
-    {!error && <IslandTravel travel={travel} playing={status==='playing'} room={room} island={island} notice={travelNotice}/> }
-    {!error && <IslandPresence online={online} latestJoin={latestJoin}/>}
+    {!error && <div className="pixi-bottom-hud">
+      <IslandTravel travel={travel} playing={status==='playing'} room={room} island={island} notice={travelNotice}/>
+      <div className="pixi-notifications" ref={setNotificationHost}>
+        <IslandPresence online={online} latestJoin={latestJoin}/>
+      </div>
+    </div>}
     {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {
       setSession(previous => ({...previous,user:{...previous.user,canPlay:true}}));
       setStarDialogOpen(false);

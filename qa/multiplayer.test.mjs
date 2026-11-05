@@ -17,7 +17,7 @@ before(async () => {
   const root = fileURLToPath(new URL('../',import.meta.url));
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
     import {IslandRoom} from './worker/index.js';
-    import {start, callback, session, logout, connect, playAccess} from './server/pages-auth.js';
+    import {start, callback, session, logout, connect, playAccess, friends} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
       async fetch(request) {
         const path = new URL(request.url).pathname;
@@ -46,11 +46,16 @@ before(async () => {
         if (path === '/test/expire-resume') {this.sql.exec('UPDATE resumes SET expires=0'); await this.alarm();}
         if (path === '/test/expire-session') this.sql.exec('UPDATE sessions SET expires=0');
         if (path === '/test/legacy-session') this.sql.exec('UPDATE sessions SET can_play=0,github_token=NULL');
+        if (path === '/test/backfill-accounts') {
+          this.sql.exec('DELETE FROM accounts');
+          new IslandRoom(this.ctx);
+        }
         if (path.startsWith('/test/')) return new Response(null, {status:204});
         return super.fetch(request);
       }
     }
     const starredAccounts = new Set();
+    const renamedAccounts = new Map();
     const fakeGitHub = async (url, options) => {
       if (url.endsWith('/access_token')) {
         const {code,code_verifier} = Object.fromEntries(options.body);
@@ -62,15 +67,19 @@ before(async () => {
         const status = login === 'account-9000' && !starredAccounts.has(login) ? 404 : login === 'account-9001' ? 503 : 204;
         return new Response(null,{status});
       }
-      return Response.json({id:Number(login.slice(8)),login});
+      return Response.json({id:Number(login.slice(8)),login:renamedAccounts.get(login) ?? login});
     };
     export default {fetch(request,env) {
       const path = new URL(request.url).pathname;
       if (path === '/test/star') { starredAccounts.add('account-9000'); return new Response(null,{status:204}); }
       if (path === '/test/unstar') { starredAccounts.delete('account-9000'); return new Response(null,{status:204}); }
+      if (path === '/test/rename') {
+        renamedAccounts.set('account-9301','renamed-ducky');
+        return new Response(null,{status:204});
+      }
       if (path.startsWith('/test/')) return env.ISLAND.get(env.ISLAND.idFromName('main-island')).fetch(request);
       const handler = {'/auth/github/start':start,'/auth/github/callback':callback,'/api/session':session,
-        '/auth/logout':logout,'/api/room':connect,'/api/play-access':playAccess}[path];
+        '/auth/logout':logout,'/api/room':connect,'/api/play-access':playAccess,'/api/friends':friends}[path];
       return handler?.({request,env},fakeGitHub) ?? new Response(null,{status:404});
     }};
   `}, bundle:true, format:'esm', write:false});
@@ -126,7 +135,7 @@ test('OAuth state is bound to its cookie and consumed on success, cancellation a
     {headers:{Cookie:expired.cookie}})).headers.get('Location'),'/?auth=failed');
 
   const good = await signIn(1);
-  assert.deepEqual((await request('/api/session',{headers:{Cookie:good.session}}).then(r=>r.json())).user,{login:'account-1',canPlay:true});
+  assert.deepEqual((await request('/api/session',{headers:{Cookie:good.session}}).then(r=>r.json())).user,{accountId:'1',login:'account-1',canPlay:true});
   assert.equal((await request(good.path,{headers:{Cookie:good.flowCookie}})).headers.get('Location'),'/?auth=failed');
   const response = await request('/auth/logout',{method:'POST',headers:{Origin:'https://elsewhere.example',Cookie:good.session}});
   assert.equal(response.status,403);
@@ -164,6 +173,138 @@ async function eventually(predicate) {
   }
   assert.fail('Expected WebSocket message did not arrive');
 }
+
+const friendRequest = (session,method='GET',data,headers={}) => request('/api/friends',{
+  method,headers:{Cookie:session,Origin:origin,'Content-Type':'application/json',...headers},
+  ...(data === undefined ? {} : {body:JSON.stringify(data)}),
+});
+const position = (client,pose) => request('/test/travel',{
+  method:'POST',body:JSON.stringify({id:client.welcome.id,pose}),
+});
+
+test('friends are private, one-way, idempotent and persist across offline players, restart, rename and session expiry', async () => {
+  let owner = await signIn(9300);
+  const target = await signIn(9301);
+  const other = await signIn(9302);
+  const player = await socket(owner.session);
+  const peer = await socket(target.session);
+  const ownerTab = await socket(owner.session,false);
+  const viewer = await socket(other.session,false);
+  const guest = await socket();
+  const clients = [player,peer,ownerTab,viewer,guest];
+  try {
+    await position(player,{x:2000,y:2000});
+    await position(peer,{x:2180,y:2000});
+    await eventually(() => viewer.duck(peer.welcome.id)?.accountId === '9301');
+    assert.equal(guest.duck(peer.welcome.id)?.accountId,undefined);
+    const saved = await friendRequest(owner.session,'POST',{playerId:peer.welcome.id,owner_account_id:'9302'});
+    assert.equal(saved.status,200);
+    const {friend} = await saved.json();
+    assert.equal(friend.accountId,'9301');
+    assert.equal(friend.login,'account-9301');
+    assert.equal(typeof friend.createdAt,'number');
+    await eventually(() => ownerTab.messages.some(message => message.type === 'friends-changed'));
+    assert.equal(viewer.messages.some(message => message.type === 'friends-changed'),false);
+    assert.equal(peer.messages.some(message => message.type === 'friends-changed'),false);
+    assert.equal(guest.messages.some(message => message.type === 'friends-changed'),false);
+    assert.deepEqual(await friendRequest(target.session).then(r=>r.json()),{friends:[]});
+    assert.deepEqual(await friendRequest(other.session).then(r=>r.json()),{friends:[]});
+    const duplicate = await friendRequest(owner.session,'POST',{playerId:peer.welcome.id});
+    assert.deepEqual(await duplicate.json(),{friend});
+    await request('/test/restore');
+    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[friend]});
+    await request('/test/rename');
+    await signIn(9301);
+    const renamed = {...friend,login:'renamed-ducky'};
+    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
+    peer.close();
+    await eventually(() => !player.duck(peer.welcome.id));
+    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
+    await request('/auth/logout',{method:'POST',headers:{Cookie:owner.session,Origin:origin}});
+    assert.equal((await friendRequest(owner.session)).status,401);
+    owner = await signIn(9300);
+    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
+    await request('/test/expire-session');
+    assert.equal((await friendRequest(owner.session)).status,401);
+    owner = await signIn(9300);
+    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
+    assert.equal((await friendRequest(owner.session,'DELETE',{accountId:'9301'})).status,200);
+    assert.equal((await friendRequest(owner.session,'DELETE',{accountId:'9301'})).status,200);
+    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[]});
+  } finally {
+    clients.forEach(client=>client.close());
+    await request('/test/expire-resume');
+  }
+});
+
+test('live jumps are shared, preserve movement, land without more input, and reject spectator and sailing jumps', async () => {
+  const account=await signIn(9400);
+  const player=await socket(account.session), guest=await socket();
+  try {
+    const initial=await eventually(()=>guest.duck(player.welcome.id));
+    player.send({type:'jump',jumpLeft:999,x:-500,y:-500});
+    const airborne=await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft>0 && guest.duck(player.welcome.id));
+    assert.ok(airborne.jumpLeft<=.6);
+    assert.deepEqual([airborne.x,airborne.y],[initial.x,initial.y]);
+    player.send({type:'jump'});
+    player.send({type:'input',x:1,y:0});
+    await eventually(()=>{
+      const pose=guest.duck(player.welcome.id);
+      return pose.x>initial.x+5 && pose.jumpLeft>0 && pose.jumpLeft<airborne.jumpLeft;
+    });
+    player.send({type:'input',x:0,y:0,stop:true});
+    await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft===0);
+    guest.send({type:'jump',id:player.welcome.id});
+    await delay(100);
+    assert.equal(guest.duck(player.welcome.id).jumpLeft,0);
+    await position(player,{mode:'sailing',jumpLeft:0});
+    player.send({type:'jump'});
+    await delay(150);
+    assert.equal(guest.duck(player.welcome.id).jumpLeft,0);
+    await position(player,{mode:'walking'});
+    player.send({type:'jump'});
+    await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft>0);
+    await request('/test/restore');
+    await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft===0);
+  } finally {
+    player.close(); guest.close();
+    await request('/test/expire-resume');
+  }
+});
+
+test('friend writes require authentication, same origin, live players and authoritative proximity', async () => {
+  const owner = await signIn(9310), target = await signIn(9311), outsider = await signIn(9312);
+  const player = await socket(owner.session), peer = await socket(target.session);
+  const spectator = await socket(outsider.session,false);
+  try {
+    assert.equal((await request('/api/friends')).status,401);
+    assert.equal((await request('/api/friends',{method:'POST',headers:{Origin:origin},body:'{}'})).status,401);
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id},{Origin:'https://elsewhere.example'})).status,403);
+    assert.equal((await friendRequest(owner.session,'DELETE',{accountId:'9311'},{Origin:'https://elsewhere.example'})).status,403);
+    assert.equal((await friendRequest(owner.session,'POST',null)).status,400);
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:3})).status,400);
+    assert.equal((await friendRequest(owner.session,'DELETE',{accountId:{}})).status,400);
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:player.welcome.id})).status,400);
+    assert.equal((await friendRequest(outsider.session,'POST',{playerId:peer.welcome.id})).status,403);
+    await position(player,{x:2000,y:2000});
+    await position(peer,{x:2181,y:2000});
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id,x:2000,y:2000})).status,409);
+    await position(peer,{x:2000,y:2000,islandId:'blossom'});
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id})).status,409);
+    await position(peer,{x:2000,y:2000,islandId:'home',mode:'sailing'});
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id})).status,200);
+    assert.equal((await friendRequest(outsider.session,'DELETE',{accountId:'9311',owner_account_id:'9310'})).status,200);
+    assert.equal((await friendRequest(owner.session).then(r=>r.json())).friends.length,1);
+    peer.close();
+    await eventually(() => !player.duck(peer.welcome.id));
+    assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id})).status,409);
+    await request('/test/backfill-accounts');
+    assert.equal((await friendRequest(owner.session).then(r=>r.json())).friends[0].accountId,'9311');
+  } finally {
+    player.close(); peer.close(); spectator.close();
+    await request('/test/expire-resume');
+  }
+});
 
 test('join notifications respect name privacy and live counts include viewers without double-counting tabs', async () => {
   const observerAccount = await signIn(9200);
@@ -209,7 +350,7 @@ test('join notifications respect name privacy and live counts include viewers wi
 test('non-stargazers and unverified legacy sessions cannot play through the room endpoint', async () => {
   const nonStar = await signIn(9000);
   const result = await request('/api/session',{headers:{Cookie:nonStar.session}}).then(r=>r.json());
-  assert.deepEqual(result.user,{login:'account-9000',canPlay:false});
+  assert.deepEqual(result.user,{accountId:'9000',login:'account-9000',canPlay:false});
   const viewer = await socket(nonStar.session);
   try {
     assert.equal(viewer.welcome.id,null);
@@ -270,7 +411,7 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     await eventually(() => guest.snapshot?.players.length === 2);
     const spawn = guest.duck(id);
     assert.deepEqual([spawn.x,spawn.y],world.zones.plaza.spawn);
-    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','mode','outfit','travel','turn','x','y']);
+    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','jumpLeft','mode','outfit','travel','turn','x','y']);
     assert.equal((await eventually(() => b.duck(id)))?.login,'account-101');
     assert.equal(b.duck()?.login,'account-102');
     assert.equal(guest.snapshot.self,null);

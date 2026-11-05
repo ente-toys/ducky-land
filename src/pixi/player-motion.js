@@ -1,4 +1,17 @@
 export const WALK_SPEED = 245;
+export const JUMP_SECONDS = .6;
+
+export function startJump(actor) {
+  if (!actor || actor.mode === 'sailing' || actor.jumpLeft > 0) return false;
+  actor.jumpLeft = JUMP_SECONDS;
+  if (actor.action > 1) {actor.action = 0; actor.until = 0;}
+  return true;
+}
+
+export function jumpHeight(left = 0, reduced = false) {
+  const phase = Math.max(0, Math.min(1, left / JUMP_SECONDS));
+  return 4 * phase * (1 - phase) * (reduced ? 15 : 85);
+}
 export const DURATIONS = {2:1.3,3:6,4:1.5,5:1.55,6:1.55,7:2.3,8:1.5,9:1.75};
 // boss 5 Nov: walking feel. Speed ramps up in 0.1 s and down in 0.12 s; ducks keep a 22 px personal space.
 export const EASE_IN = .1, EASE_OUT = .12, DUCK_RADIUS = 22;
@@ -54,6 +67,7 @@ export function slideStep(nav, x, y, vx, vy) {
 
 // Used by both the server and local prediction, with time measured in seconds.
 export function walkStep(actor, nav, dt, now, input) {
+  actor.jumpLeft = Math.max(0, (actor.jumpLeft ?? 0) - dt);
   actor.previousX = actor.x;
   actor.previousY = actor.y;
   actor.travel = 0;
