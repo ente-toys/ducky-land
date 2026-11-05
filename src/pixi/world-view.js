@@ -228,10 +228,19 @@ export function createWorldView(app, scene) {
           const k = out(age), rr = (2.5 + k * 11) * px;
           rings.ellipse(p.x, p.y, rr, rr * sq).stroke({color: 0xFFF3C4, width: 1.1 * px, alpha: (1 - k) * .55 * f});
           if (r.heart) {
-            const hs = sprite(hearts, heartTex), hk = age * 1.4;
-            hs.position.set(p.x + Math.sin(age * 9 + r.x) * 2 * px, p.y - (6 + out(hk) * 26) * px);
-            hs.scale.set(pop(hk / .3) * .9 * px);
-            hs.alpha = (1 - ease((hk - .6) / .4)) * f;
+            // the pop: a damped spring from nothing up past full size and back, a little tilt that settles, a burst of
+            // four sparkles, then a slow rise that shrinks and fades away
+            const sec = (time - r.at), spring = 1 - Math.exp(-sec * 9) * Math.cos(sec * 22);
+            const hs = sprite(hearts, heartTex), lift = out((sec - .35) / 1.4), gone = ease((sec - 1.1) / .6);
+            hs.position.set(p.x + Math.sin(sec * 4 + r.x) * 1.5 * px * lift, p.y - (8 + lift * 22) * px);
+            hs.scale.set(Math.max(0, spring) * (1 - gone * .35) * .9 * px);
+            hs.rotation = Math.exp(-sec * 7) * Math.sin(sec * 18) * .35;
+            hs.alpha = (1 - gone) * f;
+            const burst = ease(sec / .06) * (1 - ease((sec - .1) / .35));
+            if (burst > .01) for (let n = 0; n < 4; n++) {
+              const a = n * 1.571 + .785, d = (7 + out(sec / .45) * 9) * px;
+              rings.circle(p.x + Math.cos(a) * d, p.y - 8 * px + Math.sin(a) * d, 1.6 * px).fill({color: 0xFF8FA6, alpha: burst * f});
+            }
           }
         }
       } else ripples.length = 0;
