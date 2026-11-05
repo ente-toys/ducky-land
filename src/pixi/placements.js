@@ -270,7 +270,7 @@ function consolidate(out, world, walkable) {
       const at = k => [ex - dx / len * (20 + k) + tx * s * 112, ey - dy / len * (20 + k) + ty * s * 112];
       const [x, y] = [0, 40, 80, -30, 120].map(at).find(([x, y]) => seats.every(b => Math.hypot(b.x - x, (b.y - y) * 1.3) > half(b) + 60)) || at(0);   // never against a bench
       const p = sized(place(asset, {id: `plaza-${kind}-${i}`, name: kind === 'lamp' ? 'Plaza lantern' : 'Plaza planter', x, y, zone: 'plaza'}));
-      p.footprint = {x, y: y - 6, rx: kind === 'lamp' ? 16 : 26, ry: 14};
+      p.footprint = kind === 'lamp' ? {x, y: y - 6, rx: 16, ry: 14} : {x, y: y - 20, rx: 46, ry: 34};   // boss 5 Nov: the pot is 80 wide and tall, so a Ducky stops beside or behind it, never inside it
       out.push(p);
     }
   });
