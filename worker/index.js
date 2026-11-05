@@ -3,6 +3,7 @@ import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same w
 import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
+import {FRIEND_RADIUS} from '../src/pixi/friends.js';
 import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
@@ -48,6 +49,13 @@ export class IslandRoom {
     if (!this.sql.exec('PRAGMA table_info(sessions)').toArray().some(column => column.name === 'github_token')) {
       this.sql.exec('ALTER TABLE sessions ADD COLUMN github_token TEXT');
     }
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS accounts (
+      account TEXT PRIMARY KEY, login TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS friends (
+      owner_account_id TEXT NOT NULL, friend_account_id TEXT NOT NULL, created_at INTEGER NOT NULL,
+      PRIMARY KEY (owner_account_id, friend_account_id), CHECK (owner_account_id <> friend_account_id));`);
+    this.sql.exec(`INSERT OR IGNORE INTO accounts (account,login)
+      SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
     this.boats = saved ? JSON.parse(saved.state) : createBoats();
@@ -107,6 +115,7 @@ export class IslandRoom {
     this.expire(now);
     if (pathname === '/room') return this.join(request, now);
     const data = await request.json();
+    if (pathname === '/friends') return this.friends(data, now);
     if (pathname === '/flow') {
       if (data.previous) this.sql.exec('DELETE FROM flows WHERE state=?', data.previous);
       if (this.sql.exec('SELECT count(*) AS count FROM flows').one().count >= 256) return reply({}, 429);
@@ -118,6 +127,12 @@ export class IslandRoom {
       return flow ? reply(flow) : reply({}, 404);
     }
     if (pathname === '/session/new') {
+      this.sql.exec('INSERT INTO accounts (account,login) VALUES(?,?) ON CONFLICT(account) DO UPDATE SET login=excluded.login',
+        data.account, data.login);
+      this.sql.exec('UPDATE sessions SET login=? WHERE account=?', data.login, data.account);
+      for (const [socket,info] of this.connections) {
+        if (info.account === data.account) {info.login=data.login; this.attach(socket,info);}
+      }
       this.sql.exec('INSERT INTO sessions (digest,account,login,expires,can_play,github_token) VALUES(?,?,?,?,?,?)',
         data.digest, data.account, data.login, now+SESSION_MS, data.canPlay === true ? 1 : 0, data.githubToken);
       return reply({});
@@ -147,6 +162,45 @@ export class IslandRoom {
       return reply({});
     }
     return reply({}, 404);
+  }
+
+  friends(data, now) {
+    const user = this.session(data.digest, now);
+    if (!user) return reply({error:'Please sign in again to manage friends.'}, 401);
+    if (data.method === 'GET') {
+      const friends = this.sql.exec(`SELECT a.account AS accountId,a.login,f.created_at AS createdAt
+        FROM friends f JOIN accounts a ON a.account=f.friend_account_id
+        WHERE f.owner_account_id=? ORDER BY f.created_at DESC,f.friend_account_id`, user.account).toArray();
+      return reply({friends});
+    }
+    let friend;
+    if (data.method === 'POST') {
+      if (typeof data.playerId !== 'string' || data.playerId.length > 64) return reply({error:'Invalid player.'},400);
+      const entries = [...this.connections.entries()].filter(([socket,info]) =>
+        socket.readyState === 1 && info.actor && info.expires > now);
+      const owner = entries.find(([,info]) => info.account === user.account)?.[1];
+      const target = entries.find(([,info]) => info.actor.id === data.playerId)?.[1];
+      if (!owner || !user.canPlay) return reply({error:'Join the island to add a friend.'},403);
+      if (!target) return reply({error:'That player has left the island.'},409);
+      if (target.account === user.account) return reply({error:'You cannot add yourself.'},400);
+      if (owner.actor.islandId !== target.actor.islandId || !near(owner.actor,target.actor,FRIEND_RADIUS)) {
+        return reply({error:'That player moved away. Walk closer and try again.'},409);
+      }
+      this.sql.exec(`INSERT INTO friends (owner_account_id,friend_account_id,created_at) VALUES(?,?,?)
+        ON CONFLICT(owner_account_id,friend_account_id) DO NOTHING`, user.account,target.account,now);
+      friend = this.sql.exec(`SELECT a.account AS accountId,a.login,f.created_at AS createdAt
+        FROM friends f JOIN accounts a ON a.account=f.friend_account_id
+        WHERE f.owner_account_id=? AND f.friend_account_id=?`,user.account,target.account).one();
+    } else if (data.method === 'DELETE') {
+      if (typeof data.accountId !== 'string' || !/^[1-9][0-9]*$/.test(data.accountId) || data.accountId.length > 32) {
+        return reply({error:'Invalid friend.'},400);
+      }
+      this.sql.exec('DELETE FROM friends WHERE owner_account_id=? AND friend_account_id=?',user.account,data.accountId);
+    } else return reply({error:'Method not allowed.'},405);
+    for (const [socket,info] of this.connections) {
+      if (info.account === user.account && info.digest && info.expires > now) this.send(socket,{type:'friends-changed'});
+    }
+    return reply(friend ? {friend} : {});
   }
 
   join(request, now) {
@@ -208,7 +262,7 @@ export class IslandRoom {
   broadcast() {
     const active = [...this.connections.values()].filter(info => info.actor);
     const players = active.map(info => publicPose(info.actor));
-    const namedPlayers = players.map((pose,index) => ({...pose, login:active[index].login}));
+    const namedPlayers = players.map((pose,index) => ({...pose, login:active[index].login, accountId:active[index].account}));
     const now = Date.now();
     const online = new Set([...this.connections].map(([socket,info]) =>
       info.account && info.expires > now ? info.account : socket)).size;

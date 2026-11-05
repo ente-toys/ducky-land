@@ -63,7 +63,8 @@ function release(src) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null} = {}) {
+  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null} = {}) {
+    this.onInteriorChange = onInteriorChange;
     this.room = room;
     this.islandId = 'home';
     this.travelMode = 'walking';
@@ -587,10 +588,10 @@ export class PixiIsland {
     // boss 5 Nov: the museum door. Walk up the steps into it and the room takes over; walk out through its arch and you are back on the steps
     if (this.interior && player && player.mode !== 'sailing') {
       const atDoor = player.x > MUSEUM_DOOR.x0 && player.x < MUSEUM_DOOR.x1 && player.y < MUSEUM_DOOR.y;
-      if (!indoors && atDoor && this.doorArmed && this.playerRig()) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.scene.visible = false; if (this.nameLayer) this.nameLayer.style.visibility = 'hidden';}
+      if (!indoors && atDoor && this.doorArmed && this.playerRig()) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.onInteriorChange(true); this.scene.visible = false; if (this.nameLayer) this.nameLayer.style.visibility = 'hidden';}
       if (!atDoor && player.y > MUSEUM_DOOR.y + 60) this.doorArmed = true;
       if (this.interior.active && this.interior.update(dt, input, this.width, this.height, t, reduced)) {
-        this.interior.leave(this.objects, .88 * .24 * 3); this.scene.visible = true;
+        this.interior.leave(this.objects, .88 * .24 * 3); this.onInteriorChange(false); this.scene.visible = true;
         if (this.nameLayer) this.nameLayer.style.visibility = '';
         if (this.room) this.room.destination(MUSEUM_DOOR.out.x, MUSEUM_DOOR.out.y);   // live: the server walks you back down the steps
         else Object.assign(player, {x: MUSEUM_DOOR.out.x, y: MUSEUM_DOOR.out.y, previousX: MUSEUM_DOOR.out.x, previousY: MUSEUM_DOOR.out.y, path: [], turn: 0, action: 0});

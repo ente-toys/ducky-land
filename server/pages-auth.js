@@ -120,7 +120,7 @@ export async function session({request,env}) {
   const result = await call(env,'/session/get',{digest:key});
   if (!result.ok) return json({error:'Session unavailable'},503);
   const user = await result.json();
-  return json({user:user ? {login:user.login,canPlay:!!user.canPlay} : null,signInAvailable:configured(env)},
+  return json({user:user ? {accountId:user.account,login:user.login,canPlay:!!user.canPlay} : null,signInAvailable:configured(env)},
     200, user ? {} : {'Set-Cookie':setCookie(sessionCookie,'',0)});
 }
 
@@ -129,6 +129,25 @@ export async function logout({request,env}) {
   const key = await digest(cookie(request,sessionCookie));
   if (key && !(await call(env,'/session/revoke',{digest:key})).ok) return json({},503);
   return json({},200,{'Set-Cookie':setCookie(sessionCookie,'',0)});
+}
+
+export async function friends({request,env}) {
+  if (!['GET','POST','DELETE'].includes(request.method)) return json({error:'Method not allowed.'},405);
+  if (request.method !== 'GET' && request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
+  const key = await digest(cookie(request,sessionCookie));
+  if (!key) return json({error:'Please sign in again to manage friends.'},401);
+  let data = {};
+  if (request.method !== 'GET') {
+    const body = await request.text();
+    if (body.length > 512) return json({error:'Invalid request.'},400);
+    try { data = JSON.parse(body); } catch { return json({error:'Invalid request.'},400); }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return json({error:'Invalid request.'},400);
+  }
+  try {
+    return await call(env,'/friends',{playerId:data.playerId,accountId:data.accountId,digest:key,method:request.method});
+  } catch {
+    return json({error:'Friends are unavailable. Please try again.'},503);
+  }
 }
 
 export async function connect({request,env}, fetchGitHub = fetch) {

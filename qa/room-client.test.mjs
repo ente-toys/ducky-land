@@ -17,6 +17,49 @@ const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandI
   self:{ack:0,path:[],emoteLeft:0},
 });
 
+test('nearby friends choose the closest live account, retain it, and respect saves, dismissals and reconnects',()=>{
+  const {room}=setup();
+  const candidates=[];
+  room.onNearby=player=>candidates.push(player);
+  const next=packet(1);
+  Object.assign(next.players[0],{accountId:'1',login:'self'});
+  next.players.push(
+    {...next.players[0],id:'far',accountId:'2',login:'far',x:1970},
+    {...next.players[0],id:'close',accountId:'3',login:'close',x:1900},
+    {...next.players[0],id:'npc',accountId:undefined,login:undefined,x:1801},
+    {...next.players[0],id:'other-island',accountId:'4',login:'other',islandId:'blossom',x:1801},
+  );
+  room.snapshot(next);
+  assert.equal(candidates.length,0,'friends must load before prompting');
+  room.setFriends([]);
+  assert.equal(candidates.at(-1).id,'close');
+  next.tick++;
+  next.players.find(player=>player.id==='far').x=1810;
+  room.snapshot(next);
+  assert.equal(candidates.length,1,'a nearer arrival does not replace the current prompt');
+  room.dismissFriend('3');
+  assert.equal(candidates.at(-1).id,'far');
+  room.setFriends([{accountId:'2'}]);
+  assert.equal(candidates.at(-1),null);
+  room.reset();
+  room.id='player';
+  next.tick++;
+  room.snapshot(next);
+  assert.equal(candidates.at(-1),null,'reconnecting keeps saved and dismissed accounts excluded');
+  room.clearFriends();
+  room.setFriends([]);
+  assert.equal(candidates.at(-1).id,'far');
+  next.tick++;
+  next.players=next.players.filter(player=>player.id!=='far');
+  room.snapshot(next);
+  assert.equal(candidates.at(-1).id,'close');
+  next.tick++;
+  next.players.find(player=>player.id==='close').x=1981;
+  room.snapshot(next);
+  assert.equal(candidates.at(-1),null);
+  room.dispose();
+});
+
 test('boarding and island changes clear prediction and boat interpolation without replaying old commands',()=>{
   const {room,events}=setup();
   room.snapshot(packet(1));

@@ -1,5 +1,6 @@
 import {DURATIONS, playEmote, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
+import {nearbyFriend} from './friends.js';
 import {islandFor, HARBOR, destinationsFor, near, canSail, canDock, setSailDestination, sailStep} from './islands.js';
 
 const ZERO = {x:0,y:0};
@@ -22,6 +23,10 @@ export class RoomClient {
     this.onJoin = onJoin;
     this.onTravel = onTravel;
     this.onNotice = onNotice;
+    this.onNearby = () => {};
+    this.onFriendsChanged = () => {};
+    this.friends = null;
+    this.dismissedFriends = new Set();
     this.islandId = 'home';
     this.mode = 'walking';
     this.boats = [];
@@ -44,6 +49,8 @@ export class RoomClient {
     this.onPresence(null);
     this.id = null;
     this.player = null;
+    this.friendPlayers = [];
+    this.updateNearby();
     this.seq = 0;
     this.tick = -1;
     this.pending = [];
@@ -87,13 +94,16 @@ export class RoomClient {
       if (data === 'pong') { pendingPing = null; return; }
       const message = JSON.parse(data);
       if (message.type === 'travel-notice') this.onNotice(message.text);
+      if (message.type === 'friends-changed') this.onFriendsChanged();
       if (message.type === 'snapshot') this.snapshot(message);
       if (message.type === 'joined') this.onJoin(message);
       if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
+        if (message.type === 'welcome') this.onFriendsChanged();
         this.failures = 0;
         this.id = message.id;
         if (!this.id) this.player = null;
+        this.updateNearby();
         if (message.type === 'role' || ['players-full','star-required'].includes(message.reason)) this.wantsPlay = false;
         full = message.reason === 'spectators-full';
         this.onStatus(this.id ? 'playing' : message.reason ?? 'watching');
@@ -159,10 +169,36 @@ export class RoomClient {
       }
     }
     this.tracks = tracks;
+    this.friendPlayers = players;
+    this.updateNearby();
     const available=boats.filter(boat => !boat.occupant).length;
     const travelKey=`${islandId}:${mode}:${available}`;
     if (changed || this.travelKey !== travelKey) this.onTravel({islandId,mode,available});
     this.travelKey=travelKey;
+  }
+
+  setFriends(friends) {
+    this.friends = friends === null ? null : new Set(friends.map(friend => friend.accountId));
+    this.updateNearby();
+  }
+
+  dismissFriend(accountId) {
+    if (accountId) this.dismissedFriends.add(accountId);
+    this.updateNearby();
+  }
+
+  clearFriends() {
+    this.friends = null;
+    this.dismissedFriends.clear();
+    this.updateNearby();
+  }
+
+  updateNearby() {
+    const self = this.id && this.friendPlayers.find(player => player.id === this.id);
+    const next = nearbyFriend(self,this.friendPlayers,this.friends,this.dismissedFriends,this.nearby);
+    const changed = next?.id !== this.nearby?.id || next?.login !== this.nearby?.login;
+    this.nearby = next;
+    if (changed) this.onNearby(next && {id:next.id,accountId:next.accountId,login:next.login});
   }
 
   predict(command, now) {
