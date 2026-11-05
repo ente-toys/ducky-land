@@ -1,7 +1,7 @@
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
-// with lighter shallow bands following every coast, cream cartoon clouds floating over it, layered navy rings in space,
-// and a pin on where you are. One world texture (every island at its true place on a wrapping map) feeds the globe.
+// with lighter shallow bands following every coast, a glowing rim, a pin on where you are, and the 30,000 Duckies
+// shown alive: ripples and arcs of activity and a counter. One world texture (every island at its true place on a wrapping map) feeds the globe.
 import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text} from 'pixi.js';
 import shapes from './walk-shapes.json' with {type: 'json'};
 import {PALETTE} from './palette.js';
@@ -119,27 +119,6 @@ function buildWorldTexture(app, islands, bounds, islandTexture, worldSize) {
   return rt;
 }
 
-// a cream cartoon cloud (boss ref): a long flat swoosh tapering to a tail, two or three puffs on its back,
-// a warm peach shade along the underside and a cream top
-function cloud(seed) {
-  const g = new Graphics(), r = i => {const v = Math.sin(seed * 91.7 + i * 17.3) * 43758.5453; return v - Math.floor(v);};
-  const L = 1.3 + r(1) * 1.1, dir = r(9) < .5 ? -1 : 1, puffs = 2 + Math.floor(r(2) * 2);
-  const body = (lift, color) => {
-    g.moveTo(-L * dir, .1 - lift)
-      .bezierCurveTo(-L * .5 * dir, -.12 - lift, L * .4 * dir, -.2 - lift, L * .9 * dir, -.05 - lift)
-      .bezierCurveTo(L * 1.05 * dir, .05 - lift, L * .95 * dir, .2 - lift, L * .7 * dir, .22 - lift)
-      .bezierCurveTo(L * .2 * dir, .26 - lift, -L * .5 * dir, .2 - lift, -L * dir, .1 - lift).fill(color);
-  };
-  body(0, 0xF0CBA4);   // peach underside
-  for (let i = 0; i < puffs; i++) {
-    const x = (L * .5 - (i + .5) / puffs * L * .9) * dir, pr = .32 + r(i + 3) * .22 + (i === 0 ? .2 : 0);
-    g.circle(x, -pr * .6 + .04, pr).fill(0xF0CBA4);
-    g.circle(x - .05 * dir, -pr * .6 - .02, pr * .93).fill(0xFFF4DE);
-  }
-  body(.06, 0xFFF4DE);   // cream top
-  return g;
-}
-
 // the 'you are here' pin: a sun-yellow drop with an ink outline and a cream dot, a 'You' tag above it
 function makePin() {
   const pin = new Container({label: 'You are here'});
@@ -173,25 +152,35 @@ export function createWorldView(app, scene) {
   const mesh = new Mesh({geometry, shader, label: 'World view'});
   mesh.visible = false;
   app.stage.addChildAt(mesh, app.stage.getChildIndex(scene) + 1);
-  // clouds float over the globe (screen space, sized by the globe), drifting slowly round it
-  const clouds = new Container({label: 'Globe clouds'});
-  const CLOUDS = Array.from({length: 11}, (_, i) => {
-    const c = cloud(i + 1); clouds.addChild(c);
-    return {c, a: i / 11 * 6.283 + Math.sin(i * 7.1) * .3, r: .45 + ((i * .37) % 1) * .65, s: .07 + ((i * .53) % 1) * .05};
-  });
+  // boss 5 Nov (ref: Kaspersky cybermap): the world is busy. Duckies doing things pop as sun-yellow ripples on islands
+  // (now and then a little coral heart floats up), and Duckies visiting friends fly as yellow arcs that land with a ripple.
+  const life = new Graphics({label: 'Ducky activity'});
   const pin = makePin();
-  app.stage.addChildAt(clouds, app.stage.getChildIndex(mesh) + 1);
-  app.stage.addChildAt(pin, app.stage.getChildIndex(clouds) + 1);
-  clouds.visible = pin.visible = false;
+  const count = new Container({label: '30,000 Duckies'});
+  const countText = new Text({text: '', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 17, fontWeight: '800', fill: PALETTE.ink}});
+  const countSub = new Text({text: 'across 300 islands', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '600', fill: PALETTE.ink}});
+  countText.anchor.set(0, .5); countSub.anchor.set(0, .5); countSub.alpha = .7;
+  const countBg = new Graphics(), dot = new Graphics().circle(0, 0, 5).fill(PALETTE.sun).stroke({color: PALETTE.ink, width: 2});
+  count.addChild(countBg, dot, countText, countSub);
+  app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
+  app.stage.addChildAt(pin, app.stage.getChildIndex(life) + 1);
+  app.stage.addChildAt(count, app.stage.getChildIndex(pin) + 1);
+  life.visible = pin.visible = count.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
   const wrap = (v, p) => v - p * Math.round(v / p);
+  let seed = 7;
+  const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+  const ripples = [], arcs = [];
+  let lastT = 0, rippleDue = 0, arcDue = 0, shownAt = -1;
+  const heart = (g, x, y, s, color, alpha) => g.moveTo(x, y + s * .9).bezierCurveTo(x - s * 1.4, y - s * .2, x - s * .6, y - s * 1.3, x, y - s * .4)
+    .bezierCurveTo(x + s * .6, y - s * 1.3, x + s * 1.4, y - s * .2, x, y + s * .9).fill({color, alpha});
   return {
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
       const on = t > .001;
       mesh.visible = on;
-      if (!on) {scene.visible = true; clouds.visible = pin.visible = false; return;}
+      if (!on) {scene.visible = true; life.visible = pin.visible = count.visible = false; return;}
       if (!worldTex && arch?.texture) {
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch.texture, worldSize);
         shader.resources.uWorld = worldTex.source;
@@ -207,26 +196,77 @@ export function createWorldView(app, scene) {
       u.uTime = time; u.uZoom = cam.zoom;
       u.uCam[0] = cam.x; u.uCam[1] = cam.y; u.uRes[0] = w; u.uRes[1] = h;
       u.uBounds[0] = b.x0; u.uBounds[1] = b.y0; u.uBounds[2] = spanX; u.uBounds[3] = spanY;
-      // clouds: only on the ball, a ring of them drifting round it, some over the rim like the ref
-      clouds.visible = false;   // boss 5 Nov: no clouds on the globe
-      for (const k of CLOUDS) {
-        const a = k.a + time * .015;
-        k.c.position.set(w / 2 + Math.cos(a) * k.r * Rp, h / 2 + Math.sin(a) * k.r * Rp * .9);
-        k.c.scale.set(k.s * Rp);
-      }
+      // where a world point sits on the globe right now (the same bend as the shader), and how much it faces us
+      const project = (x, y) => {
+        const dx = wrap(x - cam.x - this.roll, spanX), dy = wrap(y - cam.y, spanY);
+        const len = Math.hypot(dx, dy), arc = Math.min(len * cam.zoom / Rp, Math.PI / 2);
+        const k = len > 0 ? Math.sin(arc) * Rp / len : 0;
+        return {x: w / 2 + dx * k, y: h / 2 + dy * k, face: Math.cos(arc)};
+      };
+      const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
+      const busy = ease((ball - .25) / .4);
+      life.visible = busy > .01; life.alpha = busy; life.clear();
+      if (busy > .01) {
+        const pick = () => {const i = islands[Math.floor(rand() * islands.length)], a = rand() * 6.283, r = rand() * .25 * worldSize.width * i.scale; return {x: i.x + Math.cos(a) * r, y: i.y + Math.sin(a) * r * .7};};
+        for (rippleDue -= dt; rippleDue < 0; rippleDue += .06) ripples.push({...pick(), at: time, heart: rand() < .18});
+        for (arcDue -= dt; arcDue < 0; arcDue += .2) arcs.push({a: pick(), b: pick(), at: time, dur: 1.1 + rand() * .7});
+        const px = Math.max(1, Rp / 240);   // ripple size follows the globe
+        for (let i = ripples.length - 1; i >= 0; i--) {
+          const r = ripples[i], age = (time - r.at) / 1.6;
+          if (age >= 1) {ripples.splice(i, 1); continue;}
+          const p = project(r.x, r.y);
+          if (p.face < .08) continue;
+          const f = ease(p.face / .3), sq = .45 + .55 * p.face;   // rings flatten toward the rim
+          for (const lag of [0, .28]) {
+            const k = (age - lag) / (1 - lag);
+            if (k <= 0) continue;
+            life.ellipse(p.x, p.y, (3 + k * 24) * px, (3 + k * 24) * px * sq).stroke({color: lag ? 0xFFF6D8 : 0xFFD21F, width: 2.6 * px, alpha: (1 - k) * f});
+          }
+          life.circle(p.x, p.y, 3 * px).fill({color: 0xFFD21F, alpha: (1 - age) * f}).stroke({color: 0xFFF6D8, width: 1.2 * px, alpha: (1 - age) * f});
+          if (r.heart) heart(life, p.x, p.y - (8 + age * 30) * px, 6 * px, PALETTE.coral, ease((1 - age) * 3) * f);
+        }
+        for (let i = arcs.length - 1; i >= 0; i--) {
+          const a = arcs[i], age = (time - a.at) / a.dur;
+          if (age >= 1) {arcs.splice(i, 1); ripples.push({...a.b, at: time, heart: false}); continue;}
+          const A = project(a.a.x, a.a.y), B = project(a.b.x, a.b.y);
+          if (A.face < .1 || B.face < .1) continue;
+          const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, ox = mx - w / 2, oy = my - h / 2, ol = Math.hypot(ox, oy) || 1;
+          const lift = Math.hypot(B.x - A.x, B.y - A.y) * .45, cx = mx + ox / ol * lift, cy = my + oy / ol * lift - lift * .3;
+          const at = s => ({x: (1 - s) * (1 - s) * A.x + 2 * (1 - s) * s * cx + s * s * B.x, y: (1 - s) * (1 - s) * A.y + 2 * (1 - s) * s * cy + s * s * B.y});
+          const head = ease(age * 1.15), tail = Math.max(0, head - .5);
+          const f = ease(Math.min(A.face, B.face) / .3) * ease((1 - age) * 4);
+          let q = at(tail);
+          for (let n = 1; n <= 14; n++) {
+            const s2 = tail + (head - tail) * n / 14, p2 = at(s2);
+            life.moveTo(q.x, q.y).lineTo(p2.x, p2.y).stroke({color: 0xFFD21F, width: 3.2 * px * (.3 + .7 * n / 14), alpha: f * n / 14, cap: 'round'});
+            q = p2;
+          }
+          life.circle(q.x, q.y, 4 * px).fill({color: 0xFFF6D8, alpha: f}).stroke({color: 0xFFD21F, width: 2 * px, alpha: f});
+        }
+      } else {ripples.length = 0; arcs.length = 0;}
+      // 30,000 Duckies: a cream pill at the bottom, counting up as the globe arrives
+      count.visible = ball > .5;
+      if (count.visible) {
+        if (shownAt < 0) shownAt = time;
+        const n = Math.round(30000 * ease((time - shownAt) / 1.4));
+        countText.text = `${n.toLocaleString('en-US')} Duckies`;
+        countText.position.set(26, 0); countSub.position.set(26 + countText.width + 8, 1);
+        const pw = 26 + countText.width + 8 + countSub.width + 18;
+        countBg.clear().roundRect(0, -21, pw, 42, 21).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2.5});
+        dot.position.set(15, 0); dot.scale.set(1 + .25 * Math.abs(Math.sin(time * 4)));
+        count.position.set(Math.round((w - pw) / 2), h - 46);
+        count.alpha = ease((ball - .5) / .3);
+      } else shownAt = -1;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
       if (me) {
-        const dx = wrap(me.x - cam.x - this.roll, spanX), dy = wrap(me.y - cam.y, spanY);
-        const len = Math.hypot(dx, dy), arc = len * cam.zoom / Rp;
-        const face = Math.cos(Math.min(arc, Math.PI / 2));
-        const k = len > 0 ? Math.sin(Math.min(arc, Math.PI / 2)) * Rp / len : 0;
-        pin.position.set(w / 2 + dx * k, h / 2 + dy * k);
-        pin.alpha = ease((t - .12) / .15) * ease(face / .25);
+        const p = project(me.x, me.y);
+        pin.position.set(p.x, p.y);
+        pin.alpha = ease((t - .12) / .15) * ease(p.face / .25);
         pin.visible = pin.alpha > .01;
         pin.body.y = -Math.abs(Math.sin(time * 3)) * 6;
-        pin.scale.set(.8 + .2 * face);
+        pin.scale.set(.8 + .2 * p.face);
       } else pin.visible = false;
     },
-    destroy() {mesh.destroy(); clouds.destroy({children: true}); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {mesh.destroy(); life.destroy(); pin.destroy({children: true}); count.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }
