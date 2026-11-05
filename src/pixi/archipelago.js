@@ -18,7 +18,7 @@ export function archipelagoLayout(world, seed = 11) {
   const clear = (x, y, s, gap) => out.every(i => Math.hypot((i.x - x) / W, (i.y - y) / H) > (i.scale + s) * .5 * gap);
   const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 1.2});
   // landmasses: centre, radius (in island widths), how many islands
-  const lands = [[0, 0, 4.2, 95], [-11, -7, 3, 50], [10, -7, 2.7, 40], [-9, 8, 2.4, 32], [9, 8, 2.1, 25]];
+  const lands = [[0, 0, 7, 95], [-17, -11, 5, 50], [16, -11, 4.6, 40], [-15, 12, 4.2, 32], [15, 12, 3.7, 25]];
   const landInfo = [];
   for (const [lx, ly, r, count] of lands) {
     landInfo.push({x: cx + lx * W, y: cy + ly * H, r});
@@ -28,20 +28,20 @@ export function archipelagoLayout(world, seed = 11) {
     for (let t = 0; placed < count && t < 20000; t++) {
       const a = rnd() * 6.28, d = Math.sqrt(rnd()) * edge(a), s = .55 + rnd() * .5;
       const x = cx + (lx + Math.cos(a) * d) * W, y = cy + (ly + Math.sin(a) * d * .8) * H;
-      if (clear(x, y, s, .4)) {add(x, y, s); placed++;}   // packed tight: neighbours touch, so they read as one landmass
+      if (clear(x, y, s, 1.18)) {add(x, y, s); placed++;}   // boss 5 Nov: never touching, a strip of sea round every island
     }
   }
   // archipelago chains: small islands strung along gentle arcs between and around the landmasses
   for (let c = 0; c < 9 && out.length < 270; c++) {
-    let x = cx + (rnd() - .5) * 34 * W, y = cy + (rnd() - .5) * 30 * H, a = rnd() * 6.28;
+    let x = cx + (rnd() - .5) * 46 * W, y = cy + (rnd() - .5) * 40 * H, a = rnd() * 6.28;
     for (let k = 0; k < 7 && out.length < 270; k++) {
       a += (rnd() - .5) * .9; x += Math.cos(a) * W * 1.1; y += Math.sin(a) * H * 1.1;
-      const s = .3 + rnd() * .25; if (clear(x, y, s, .9)) add(x, y, s);
+      const s = .3 + rnd() * .25; if (clear(x, y, s, 1.25)) add(x, y, s);
     }
   }
   // lone islets in open sea fill the rest
   for (let t = 0; out.length < ISLAND_COUNT && t < 40000; t++) {
-    const x = cx + (rnd() - .5) * 40 * W, y = cy + (rnd() - .5) * 34 * H, s = .22 + rnd() * .25;
+    const x = cx + (rnd() - .5) * 54 * W, y = cy + (rnd() - .5) * 46 * H, s = .22 + rnd() * .25;
     if (clear(x, y, s, 1.6)) add(x, y, s);
   }
   const pad = 2 * W;
