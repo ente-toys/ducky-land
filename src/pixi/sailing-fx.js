@@ -95,19 +95,19 @@ export async function createSailingFX({water,objects}) {
       s.heading+=angleDiff(goal,s.heading)*(reduced?1:1-Math.exp(-dt*5));
       const sideways=Math.sin(s.heading);
       if (boat.occupant) {if (sideways>.2) s.faceGoal=1; else if (sideways<-.2) s.faceGoal=-1;}
-      s.face+=(s.faceGoal-s.face)*(reduced?1:1-Math.exp(-dt*7));
+      if (s.face!==s.faceGoal) {s.face=s.faceGoal; s.dipV-=60;}   // boss 5 Nov: the boat flips sides at once (a squeezed sliver read badly), with a small dip
       s.rate=lerp(s.rate,dt?(sideways-before)/dt:0,1-Math.exp(-dt*6));
-      s.squeeze=boat.occupant?.86+.14*Math.abs(sideways):1;   // bow pointing away north or south reads a touch narrower
+      s.squeeze=1;   // boss 5 Nov: no narrowing when heading north or south
       s.lean=reduced?0:lerp(s.lean,clamp(s.rate*.16+(moving?sideways*.05:0),-.2,.2),1-Math.exp(-dt*5));
       s.dipV+=(-110*s.dip-8*s.dipV)*dt; s.dip+=s.dipV*dt;
       s.rockV+=(-34*s.rock-1.9*s.rockV)*dt; s.rock+=s.rockV*dt;
       s.bob=reduced?0:Math.sin(now*1.5+s.phase)*2.6+(moving?Math.sin(now*4.2+s.phase)*1.2:0)+s.dip;
-      s.roll=reduced?0:Math.sin(now*1.1+s.phase*1.3)*.028+s.rock+s.lean*.35;
+      s.roll=reduced?0:Math.sin(now*1.1+s.phase*1.3)*.028+s.rock+s.lean*.25;
       const {root,sprite}=entry, base=Math.abs(sprite.scale.y);
       root.position.set(s.x,s.y+s.bob);
       root.rotation=s.roll;
       sprite.scale.x=base*(Math.sign(s.face)||1)*Math.max(.1,Math.abs(s.face))*s.squeeze;
-      sprite.skew.x=-s.lean;   // the sail (top of the sprite) leans, the hull at the anchor stays put
+      sprite.skew.x=0;   // boss 5 Nov: no skew, the sprite kept its shape; the heel is a small roll only
       // foam V: points dropped at the stern spread sideways and fade; the bow pushes small crescents ahead
       if (moving && !reduced) {
         const dx=Math.sin(s.heading), dy=Math.cos(s.heading), stern={x:s.x-dx*70,y:s.y-dy*24-4};
