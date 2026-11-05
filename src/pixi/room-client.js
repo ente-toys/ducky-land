@@ -1,5 +1,6 @@
 import {DURATIONS, playEmote, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
+import {islandFor, HARBOR, canDock, setSailDestination, sailStep} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -14,11 +15,17 @@ function sample(track, now) {
 }
 
 export class RoomClient {
-  constructor(onStatus, onChat = () => {}, onPresence = () => {}, onJoin = () => {}) {
+  constructor(onStatus, onChat = () => {}, onPresence = () => {}, onJoin = () => {}, onTravel = () => {}, onNotice = () => {}) {
     this.onStatus = onStatus;
     this.onChat = onChat;
     this.onPresence = onPresence;
     this.onJoin = onJoin;
+    this.onTravel = onTravel;
+    this.onNotice = onNotice;
+    this.islandId = 'home';
+    this.mode = 'walking';
+    this.boats = [];
+    this.boatTracks = new Map();
     this.tracks = new Map();
     this.reset();
   }
@@ -32,6 +39,8 @@ export class RoomClient {
     clearTimeout(this.chatTimer);
     this.lastChat = -Infinity;
     this.tracks.clear();
+    this.boatTracks.clear();
+    this.boats = [];
     this.onPresence(null);
     this.id = null;
     this.player = null;
@@ -60,6 +69,7 @@ export class RoomClient {
     let pendingPing = null;
     socket.onopen = () => {
       if (socket !== this.socket) return;
+      if (this.islandId !== 'home') socket.send(JSON.stringify({type:'watch',islandId:this.islandId}));
       this.heartbeat = setInterval(() => {
         if (document.hidden) { pendingPing = null; return; }
         if (pendingPing !== null) {
@@ -76,6 +86,7 @@ export class RoomClient {
       if (socket !== this.socket) return;
       if (data === 'pong') { pendingPing = null; return; }
       const message = JSON.parse(data);
+      if (message.type === 'travel-notice') this.onNotice(message.text);
       if (message.type === 'snapshot') this.snapshot(message);
       if (message.type === 'joined') this.onJoin(message);
       if (message.type === 'chat') this.onChat(message.id, message.text);
@@ -103,18 +114,38 @@ export class RoomClient {
     };
   }
 
-  snapshot({epoch,tick,players,self,online}) {
+  snapshot({epoch,tick,players,self,online,islandId='home',boats=[]}) {
     if (epoch === this.epoch && tick <= this.tick) return;
+    const own=players.find(pose => pose.id === this.id);
+    const mode=own?.mode ?? 'walking';
+    const changed=this.islandId !== islandId || this.mode !== mode || this.epoch !== epoch;
+    if (changed) {
+      this.pending=[];
+      this.input=ZERO;
+      this.offsetX=this.offsetY=0;
+      this.tracks.clear();
+      this.boatTracks.clear();
+      clearTimeout(this.chatTimer);
+    }
+    this.islandId=islandId;
+    this.mode=mode;
     this.epoch = epoch;
     this.tick = tick;
     if (Number.isSafeInteger(online) && online >= 0) this.onPresence(online);
     const now = nowSeconds();
+    const boatTracks=new Map();
+    for (const boat of boats) {
+      const last=this.boatTracks.get(boat.id);
+      boatTracks.set(boat.id,{from:last?sample(last,now):boat,to:boat,start:now});
+    }
+    this.boatTracks=boatTracks;
+    this.boats=boats;
     const tracks = new Map();
     for (const pose of players) {
       if (pose.id === this.id && self) {
-        const previous = this.player;
-        // boss 5 Nov: keep the predicted walking pace across snapshots so the ease-in does not restart every tick
-        this.player = {...pose, path:self.path, until:now+self.emoteLeft, pace:previous?.pace ?? 0, heading:previous?.heading ?? null};
+        const previous = changed ? null : this.player;
+        this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, docking:self.docking, until:now+self.emoteLeft,
+          pace:previous?.pace ?? 0, heading:previous?.heading ?? null};
         this.pending = this.pending.filter(command => command.seq > self.ack);
         for (const command of this.pending) this.predict(command, now);
         if (previous) {
@@ -128,17 +159,27 @@ export class RoomClient {
       }
     }
     this.tracks = tracks;
+    const available=boats.filter(boat => !boat.occupant).length;
+    const travelKey=`${islandId}:${mode}:${available}`;
+    if (changed || this.travelKey !== travelKey) this.onTravel({islandId,mode,available});
+    this.travelKey=travelKey;
   }
 
   predict(command, now) {
-    if (command.type === 'destination' && this.nav) return setWalkDestination(this.player, this.nav, command.x, command.y);
-    if (command.type === 'emote') playEmote(this.player, command.action, now);
+    if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;}
+    if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
+      ? setSailDestination(this.player,command.x,command.y) : setWalkDestination(this.player, this.nav, command.x, command.y);
+    if (command.type === 'disembark' && this.player.mode === 'sailing' && canDock(this.player)) {
+      setSailDestination(this.player,HARBOR.water.x,HARBOR.water.y); this.player.docking=true;
+    }
+    if (command.type === 'emote' && this.player.mode !== 'sailing') playEmote(this.player, command.action, now);
     return null;
   }
 
   send(command, now = nowSeconds()) {
     if (!this.player || this.socket?.readyState !== WebSocket.OPEN || this.pending.length >= 40) return false;
     command.seq = ++this.seq;
+    command.islandId = this.islandId;
     this.socket.send(JSON.stringify(command));
     this.pending.push(command);
     return this.predict(command, now) ?? true;
@@ -151,7 +192,25 @@ export class RoomClient {
   }
 
   emote(action) {
-    return Object.hasOwn(DURATIONS, action) && this.send({type:'emote',action});
+    return this.player?.mode !== 'sailing' && Object.hasOwn(DURATIONS, action) && this.send({type:'emote',action});
+  }
+
+  board(boatId) { return this.send({type:'board',boatId}); }
+
+  disembark() { return this.send({type:'disembark'}); }
+
+  watch(islandId) {
+    if (this.id || !islandFor(islandId) || this.socket?.readyState !== WebSocket.OPEN) return;
+    this.socket.send(JSON.stringify({type:'watch',islandId}));
+  }
+
+  boatPoses(now=nowSeconds()) {
+    return [...this.boatTracks.values()].map(track => {
+      const boat=sample(track,now);
+      return boat.occupant === this.id && this.player
+        ? {...boat,x:this.player.x+this.offsetX,y:this.player.y+this.offsetY,turn:this.player.turn,travel:this.player.travel}
+        : {...boat,travel:Math.hypot(track.to.x-track.from.x,track.to.y-track.from.y)*10};
+    });
   }
 
   chat(value) {
@@ -170,7 +229,7 @@ export class RoomClient {
   }
 
   stopInput() {
-    if (moving(this.input)) this.send({type:'input',...ZERO});
+    if (this.player) this.send({type:'input',...ZERO,stop:true});
     this.input = ZERO;
   }
 
@@ -183,7 +242,8 @@ export class RoomClient {
         this.lastInput = now;
       }
     }
-    walkStep(this.player, this.nav, dt, now, input);
+    if (this.player.mode === 'sailing') sailStep(this.player,dt,input);
+    else walkStep(this.player, this.nav, dt, now, input);
     const decay = Math.exp(-19 * dt);
     this.offsetX *= decay;
     this.offsetY *= decay;

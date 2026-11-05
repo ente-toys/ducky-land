@@ -3,6 +3,8 @@ import {createBird,birdPose,createCrow,crowPose} from './birds.js';
 import {createBeachSurf} from './surf.js';
 import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
+import {createTravelView} from './travel-view.js';
+import {HARBOR, islandFor, near} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
@@ -63,6 +65,9 @@ function release(src) {
 export class PixiIsland {
   constructor({onError = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null} = {}) {
     this.room = room;
+    this.islandId = 'home';
+    this.travelMode = 'walking';
+    this.touchInput = {x:0,y:0};
     this.chatLayer = chatLayer;
     this.chatEditor = chatEditor;
     this.nameLayer = nameLayer;
@@ -120,7 +125,8 @@ export class PixiIsland {
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
-      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable), local = walkWorld(world, props);
+      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable)
+        .filter(prop => !this.room || !near(prop,HARBOR.land,210)), local = walkWorld(world, props);
       globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));   // QA readback
       // boss 5 Nov: each sleeping NPC lies where its pose belongs (client only; the socket server never sees NPCs), and each
       // sleeper + its prop is a blocked footprint in the client walk rules, so routes go around it (world.json, worker/ untouched)
@@ -213,6 +219,11 @@ export class PixiIsland {
         objects: this.objects, props: this.props, motion: this.motion});
       if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
+      if (this.room) {
+        this.travelView=await createTravelView(this.objects,this.water);
+        if (this.disposed) return;
+        this.switchIsland(this.room.islandId);
+      }
       this.bindInput();
       this.observer = new ResizeObserver(() => this.resize());
       this.observer.observe(host);
@@ -277,6 +288,32 @@ export class PixiIsland {
     this.marker = new Graphics().ellipse(0, 0, 20, 9).stroke({width: 3, color: PALETTE.cream, alpha: .8});
     this.marker.visible = false;
     this.water.addChild(this.marker);
+  }
+
+  switchIsland(id) {
+    this.islandId=id;
+    this.stopInput();
+    this.clearChat();
+    this.markerUntil=0;
+    for (const entry of this.liveRigs.values()) {
+      entry.rig?.dispose(); entry.nameplate?.remove(); entry.seatMask?.destroy();
+    }
+    this.liveRigs.clear();
+    const accent=islandFor(id).accent;
+    for (const prop of this.props) if (/flower|flag|bunting/i.test(prop.asset || prop.name)) prop.sprite.tint=id==='home'?(prop.tint ?? 0xffffff):accent;
+    this.travelView?.switchIsland(id);
+    const player=this.player;
+    const focus=player ?? HARBOR.land;
+    Object.assign(this.target,{x:focus.x,y:focus.y-90,zoom:player?.mode === 'sailing' ? .65 : .6});
+    Object.assign(this.camera,this.target);
+    this.follow=Boolean(player);
+    this.fitMode=false;
+  }
+
+  focusHarbor() {
+    Object.assign(this.target,{x:HARBOR.land.x,y:760,zoom:.65});
+    this.follow=false; this.fitMode=false;
+    this.canvas?.focus();
   }
 
   listen(target, name, fn, options) {
@@ -359,6 +396,7 @@ export class PixiIsland {
 
   stopInput() {
     this.keys.clear();
+    this.touchInput={x:0,y:0};
     this.gestures.clear();
     this.room?.stopInput();
   }
@@ -420,7 +458,7 @@ export class PixiIsland {
 
   updateControlLabel() {
     const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home shows the island.';
-    const play = ' Click to walk. WASD or arrows move. Q quacks, E dances, 1 to 7 emote, F follows.';
+    const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap the harbor to dock.' : ' Click to walk. WASD or arrows move. Q quacks, E dances, 1 to 7 emote, F follows.';
     const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
     this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
   }
@@ -429,6 +467,15 @@ export class PixiIsland {
     if (this.interior?.active) {this.interior.tap(point); return;}   // boss 5 Nov: inside the museum a tap walks there
     // boss 5 Nov: a tap on a sleeping Ducky only wobbles it: no walk, no emote, the player's Ducky does not react
     const p = screenToWorld(this.camera, point, this.width, this.height);
+    if (this.room && this.player) {
+      if (this.player.mode === 'sailing') {
+        if (near(p,HARBOR.water,140) || near(p,HARBOR.land,120)) this.room.disembark();
+        else this.setDestination(p);
+        return;
+      }
+      const boat=this.room.boatPoses().find(boat => near(p,{x:boat.x,y:boat.y-45},100));
+      if (boat) {this.room.board(boat.id); this.follow=true; this.fitMode=false; return;}
+    }
     this.waterFX?.splash(p.x, p.y, .65, 24);   // a tap on water splashes it
     const hitRadius=Math.max(65,20/this.camera.zoom), me = this.player;
     const onMe = me && me.action !== 7 && Math.hypot(p.x - me.x, p.y - (me.y - 50)) < hitRadius;   // your own Ducky in front of a sleeper still wins
@@ -507,10 +554,16 @@ export class PixiIsland {
     this.lastFrame = now;
     this.frame++;
     this.accumulator += dt;
+    if (this.room && this.room.islandId !== this.islandId) this.switchIsland(this.room.islandId);
+    if (this.room && this.room.mode !== this.travelMode) {
+      this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
+      this.follow=Boolean(this.player); this.fitMode=false;
+    }
     const input = {
-      x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')),
-      y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')),
+      x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')) + this.touchInput.x,
+      y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')) + this.touchInput.y,
     };
+    input.x=Math.sign(input.x); input.y=Math.sign(input.y);
     const indoors = this.interior?.active;
     while (this.accumulator >= 1 / 60) {
       this.sim.step(1 / 60, this.room || indoors ? ZERO : input);
@@ -526,7 +579,7 @@ export class PixiIsland {
     const t = this.sim.time;
     const reduced = this.motion.matches;
     // boss 5 Nov: the museum door. Walk up the steps into it and the room takes over; walk out through its arch and you are back on the steps
-    if (this.interior && player) {
+    if (this.interior && player && player.mode !== 'sailing') {
       const atDoor = player.x > MUSEUM_DOOR.x0 && player.x < MUSEUM_DOOR.x1 && player.y < MUSEUM_DOOR.y;
       if (!indoors && atDoor && this.doorArmed && this.playerRig()) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.scene.visible = false; if (this.nameLayer) this.nameLayer.style.visibility = 'hidden';}
       if (!atDoor && player.y > MUSEUM_DOOR.y + 60) this.doorArmed = true;
@@ -557,6 +610,7 @@ export class PixiIsland {
     this.surf?.update(t, reduced, visible);
     this.rowboat?.update(t, reduced, visible);
     this.boats?.update(t, reduced, visible);
+    this.travelView?.update(this.room.boatPoses(now/1000),t,reduced,visible);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
@@ -634,6 +688,8 @@ export class PixiIsland {
       d.ducks = String(this.localDucks.length + live.length);
       d.livePlayers = String(live.length);
       d.sleepingDucks = String(this.sim.ducks.filter(duck => duck.sleeping && duck.action === 7).length);
+      d.island=this.islandId; d.travelMode=player?.mode ?? 'watching';
+      d.boats=String(this.room?.boats.length ?? 0);
       d.player = player ? `${player.x.toFixed(1)},${player.y.toFixed(1)}` : '';
       d.action = player ? String(player.action) : '';
       d.quackBubbles=String(this.sim.ducks.filter(duck=>duck.action===2).length);
@@ -668,6 +724,7 @@ export class PixiIsland {
       if (ids.has(id)) continue;
       entry.rig?.dispose();
       entry.nameplate?.remove();
+      entry.seatMask?.destroy();
       this.liveRigs.delete(id);
       this.removeChat(id);
     }
@@ -721,8 +778,18 @@ export class PixiIsland {
       entry.emoteVersion = emoteVersion;
       const rig = entry.rig;
       if (!rig) continue;
-      rig.root.position.set(x,deckY(x,y));
-      rig.root.zIndex = y;
+      const sailing=pose.mode==='sailing';
+      if (sailing && !entry.seatMask) {
+        entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
+      }
+      if (entry.seatMask) {
+        entry.seatMask.clear();
+        if (sailing) entry.seatMask.rect(x-110,y-150,220,126).fill(0xffffff);
+        rig.root.mask=sailing?entry.seatMask:null;
+      }
+      rig.root.scale.set(.88*.24*3*(sailing ? .8 : 1),.88*.24*3*(sailing ? .8 : 1)/TILT);
+      rig.root.position.set(x+(sailing?22:0),sailing?y-12:deckY(x,y));
+      rig.root.zIndex = y+(sailing?3:0);
       rig.root.visible = visible(x,y,200);
       if (rig.root.visible) rig.update(dt, {action, speed:travel, turn, time, reducedMotion, emoteVersion});
     }
@@ -742,6 +809,7 @@ export class PixiIsland {
     this.liveRigs.forEach(entry => {
       entry.rig?.dispose();
       entry.nameplate?.remove();
+      entry.seatMask?.destroy();
     });
     this.liveRigs.clear();
     this.rigs.forEach(rig => rig.dispose());

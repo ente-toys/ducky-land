@@ -6,6 +6,7 @@ import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
+import {HARBOR,EXITS,exitsFor,canSail} from '../src/pixi/islands.js';
 
 const origin = 'https://island.example';
 const nav = createNavigation(world);
@@ -17,10 +18,31 @@ before(async () => {
     import {IslandRoom} from './worker/index.js';
     import {start, callback, session, logout, connect, playAccess} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
-      fetch(request) {
+      async fetch(request) {
         const path = new URL(request.url).pathname;
+        if (path === '/test/travel') {
+          const {id,pose,steps=0}=await request.json();
+          const entry=[...this.connections].find(([,info]) => info.actor?.id === id);
+          if (entry && pose) {Object.assign(entry[1].actor,pose); this.attach(...entry);}
+          for (let i=0;i<steps;i++) this.step();
+          this.broadcast();
+          return Response.json(this.boats);
+        }
+        if (path === '/test/restore') {
+          for (const [socket,info] of this.connections) {
+            this.attach(socket,info);
+            info.actor=null;
+          }
+          if (this.timer) {clearInterval(this.timer); this.timer=null;}
+          const restored=new IslandRoom(this.ctx);
+          this.connections=restored.connections;
+          this.boats=restored.boats;
+          this.epoch=restored.epoch;
+          this.savedBoats=restored.savedBoats;
+          this.broadcast();
+        }
         if (path === '/test/expire-flow') this.sql.exec('UPDATE flows SET expires=0');
-        if (path === '/test/expire-resume') this.sql.exec('UPDATE resumes SET expires=0');
+        if (path === '/test/expire-resume') {this.sql.exec('UPDATE resumes SET expires=0'); await this.alarm();}
         if (path === '/test/expire-session') this.sql.exec('UPDATE sessions SET expires=0');
         if (path === '/test/legacy-session') this.sql.exec('UPDATE sessions SET can_play=0,github_token=NULL');
         if (path.startsWith('/test/')) return new Response(null, {status:204});
@@ -247,7 +269,7 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     await eventually(() => guest.snapshot?.players.length === 2);
     const spawn = guest.duck(id);
     assert.deepEqual([spawn.x,spawn.y],world.zones.plaza.spawn);
-    assert.deepEqual(Object.keys(spawn).sort(),['action','emoteVersion','id','outfit','travel','turn','x','y']);
+    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','mode','outfit','travel','turn','x','y']);
     assert.equal((await eventually(() => b.duck(id)))?.login,'account-101');
     assert.equal(b.duck()?.login,'account-102');
     assert.equal(guest.snapshot.self,null);
@@ -351,6 +373,97 @@ test('player chat reaches signed-in users only and is never replayed', async () 
     viewer.close();
     guest.close();
     latePlayer?.close();
+  }
+});
+
+test('boats board once, cross authoritatively, isolate islands and survive reconnect and restoration', async () => {
+  await request('/test/expire-session');
+  await request('/test/expire-resume');
+  const [first,second,watcher]=await Promise.all([signIn(9301),signIn(9302),signIn(9303)]);
+  const [a,b,watch]=await Promise.all([socket(first.session),socket(second.session),socket(watcher.session,false)]);
+  const clients=[a,b,watch];
+  const setup=(client,pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:client.welcome.id,pose,steps})});
+  try {
+    await eventually(() => a.snapshot?.boats?.length === 3);
+    const boatId=a.snapshot.boats[0].id;
+    a.send({type:'board',boatId});
+    await setup(a,null,8);
+    assert.equal(a.duck().mode,'walking');
+    a.send({type:'input',x:1,y:0});
+    await delay(50);
+    await setup(a,{...HARBOR.land,path:[]},2);
+    assert.equal(a.duck().mode,'walking','manual input cancels boarding');
+    a.send({type:'input',x:0,y:0});
+    await setup(b,{...HARBOR.land,path:[]});
+    a.send({type:'board',boatId});
+    b.send({type:'board',boatId});
+    await eventually(() => a.duck()?.mode==='sailing' || b.duck()?.mode==='sailing');
+    const captain=a.duck().mode==='sailing'?a:b, other=captain===a?b:a;
+    const captainCookie=captain===a?first.session:second.session;
+    await eventually(() => other.messages.some(message => message.type==='travel-notice' && message.text==='Boat taken.'));
+    assert.equal(captain.snapshot.boats.filter(boat => boat.occupant).length,1);
+    const before=captain.duck();
+    captain.send({type:'state',islandId:'sunset',x:1,y:1});
+    captain.send({type:'emote',action:3});
+    await delay(100);
+    assert.equal(captain.duck().mode,'sailing');
+    assert.equal(captain.duck().x,before.x);
+    captain.send({type:'destination',x:1800,y:1000});
+    await delay(100);
+    assert.equal(captain.duck().mode,'sailing');
+    assert.ok(canSail(captain.duck().x,captain.duck().y));
+    captain.send({type:'input',x:0,y:-1});
+    await eventually(() => captain.duck().y<before.y-20);
+    captain.send({type:'input',x:0,y:0});
+    const exit=exitsFor('home')[0];
+    await setup(captain,{x:exit.x,y:exit.y,exitLocked:false},1);
+    await eventually(() => captain.snapshot.islandId===exit.destination);
+    await eventually(() => !other.duck(captain.welcome.id));
+    assert.equal(captain.snapshot.players.length,1);
+    captain.send({type:'watch',islandId:'sunset'});
+    await delay(100);
+    assert.equal(captain.snapshot.islandId,exit.destination,'players cannot teleport with spectator commands');
+    watch.send({type:'watch',islandId:exit.destination});
+    await eventually(() => watch.snapshot.islandId===exit.destination);
+    assert.equal(watch.duck(captain.welcome.id)?.mode,'sailing');
+    captain.send({type:'chat',text:'Across the sea'});
+    await eventually(() => watch.messages.some(message => message.type==='chat' && message.text==='Across the sea'));
+    assert.equal(other.messages.some(message => message.type==='chat' && message.text==='Across the sea'),false);
+    const id=captain.welcome.id;
+    captain.close();
+    await eventually(() => !watch.duck(id));
+    const held=watch.snapshot.boats.find(boat => boat.id===boatId);
+    assert.equal(held.occupant,id);
+    const resumed=await socket(captainCookie);
+    clients.push(resumed);
+    await eventually(() => resumed.duck()?.mode==='sailing');
+    assert.equal(resumed.welcome.id,id);
+    assert.equal(resumed.snapshot.islandId,exit.destination);
+    assert.equal(resumed.duck().boatId,boatId);
+    await request('/test/restore');
+    await eventually(() => resumed.duck()?.mode==='sailing');
+    assert.equal(resumed.snapshot.boats.find(boat => boat.id===boatId).occupant,id);
+    await setup(resumed,{x:HARBOR.water.x,y:HARBOR.water.y,exitLocked:false});
+    resumed.send({type:'disembark'});
+    await eventually(() => resumed.duck()?.mode==='walking');
+    assert.deepEqual([resumed.duck().x,resumed.duck().y],[HARBOR.land.x,HARBOR.land.y]);
+    assert.equal(resumed.snapshot.boats.find(boat => boat.id===boatId).occupant,null);
+    resumed.send({type:'board',boatId});
+    await eventually(() => resumed.duck()?.mode==='sailing');
+    resumed.close();
+    await eventually(() => !watch.duck(id));
+    await request('/test/expire-resume');
+    watch.send({type:'watch',islandId:exit.destination});
+    await eventually(() => watch.snapshot.boats.find(boat => boat.id===boatId)?.occupant===null);
+    const fresh=await socket(captainCookie);
+    clients.push(fresh);
+    await eventually(() => fresh.duck());
+    assert.equal(fresh.snapshot.islandId,'home');
+    assert.equal(fresh.duck().mode,'walking');
+  } finally {
+    clients.forEach(client => client.close());
+    await request('/test/expire-session');
+    await request('/test/expire-resume');
   }
 });
 

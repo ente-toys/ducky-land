@@ -3,6 +3,7 @@ import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same w
 import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
+import {ISLANDS, islandFor, HARBOR, createBoats, near, canDock, setSailDestination, sailStep, crossIsland} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
@@ -23,8 +24,8 @@ function outfitFor(id) {
 }
 
 function publicPose(actor) {
-  const {id,x,y,turn,travel,action,emoteVersion,outfit} = actor;
-  return {id,x,y,turn,travel,action,emoteVersion,outfit};
+  const {id,x,y,turn,travel,action,emoteVersion,outfit,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
+  return {id,x,y,turn,travel,action,emoteVersion,outfit,islandId,mode,boatId,exitLocked};
 }
 
 export class IslandRoom {
@@ -47,15 +48,46 @@ export class IslandRoom {
     if (!this.sql.exec('PRAGMA table_info(sessions)').toArray().some(column => column.name === 'github_token')) {
       this.sql.exec('ALTER TABLE sessions ADD COLUMN github_token TEXT');
     }
+    this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
+    const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
+    this.boats = saved ? JSON.parse(saved.state) : createBoats();
+    this.savedBoats = saved?.state;
     for (const socket of ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
-      const actor = info.actor && this.session(info.digest)?.canPlay ? {...info.actor, action:0, travel:0, path:[], until:0} : null;
+      const actor = info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0} : null;
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       this.connections.set(socket, {...info, actor, login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
+    this.reconcileBoats();
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
+  }
+
+  saveBoats() {
+    const state=JSON.stringify(this.boats);
+    if (state === this.savedBoats) return;
+    this.sql.exec('INSERT OR REPLACE INTO boats VALUES(1,?)',state);
+    this.savedBoats=state;
+  }
+
+  parkBoat(boat,islandId) {
+    const spots=Array.from({length:9},(_,i) => ({x:1650+(i%3)*150,y:660-Math.floor(i/3)*120}));
+    const spot=spots.find(p => !this.boats.some(other => other !== boat && other.islandId === islandId && !other.occupant && near(other,p,70))) ?? spots[0];
+    Object.assign(boat,{...spot,islandId,turn:0,occupant:null,departure:islandId});
+    this.saveBoats();
+  }
+
+  releaseBoat(actorId) {
+    const boat=this.boats.find(boat => boat.occupant === actorId);
+    if (boat) this.parkBoat(boat,boat.departure);
+  }
+
+  reconcileBoats() {
+    const retained=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
+    for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
+    for (const boat of this.boats) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat,boat.departure);
+    this.saveBoats();
   }
 
   session(digest, now = Date.now()) {
@@ -65,6 +97,7 @@ export class IslandRoom {
 
   prune(now) {
     for (const table of ['flows','sessions','resumes']) this.sql.exec(`DELETE FROM ${table} WHERE expires<=?`, now);
+    this.reconcileBoats();
   }
 
   async fetch(request) {
@@ -97,6 +130,7 @@ export class IslandRoom {
         for (const [socket,info] of this.connections) {
           if (info.digest === data.digest && info.actor) this.demote(socket,info,'star-required');
         }
+        this.reconcileBoats();
         this.broadcast();
       }
       return reply({});
@@ -107,6 +141,7 @@ export class IslandRoom {
       for (const [socket, info] of this.connections) {
         if (info.digest === data.digest) this.demote(socket, info, 'signed-out');
       }
+      this.reconcileBoats();
       this.broadcast();
       await this.scheduleExpiry();
       return reply({});
@@ -138,7 +173,7 @@ export class IslandRoom {
       const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
       const [x,y] = world.zones.plaza.spawn;
       info.actor = {id:crypto.randomUUID(), x,y,turn:0,outfit:outfitFor(user.account),emoteVersion:0,
-        ...from, action:0,travel:0,until:0,path:[]};
+        islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[]};
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
     }
@@ -150,6 +185,7 @@ export class IslandRoom {
     if (playing && !previous && !resume) {
       for (const [viewer,viewerInfo] of this.connections) {
         if (viewer === socket || viewerInfo.account === user.account) continue;
+        if ((viewerInfo.actor?.islandId ?? viewerInfo.islandId ?? 'home') !== info.actor.islandId) continue;
         this.send(viewer,{type:'joined',id:info.actor.id,
           ...(viewerInfo.digest && viewerInfo.expires > now ? {login:user.login} : {})});
       }
@@ -160,8 +196,8 @@ export class IslandRoom {
   }
 
   attach(socket, info) {
-    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime} = info;
-    socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime});
+    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId} = info;
+    socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId});
   }
 
   send(socket, message) {
@@ -180,14 +216,17 @@ export class IslandRoom {
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       const visiblePlayers = info.digest && info.expires > now ? namedPlayers : players;
-      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, online, players:visiblePlayers, self:actor ? {
-        ack:info.ack, path:actor.path, emoteLeft:Math.max(0,actor.until-now/1000),
+      const islandId = actor?.islandId ?? info.islandId ?? 'home';
+      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, online, islandId, boats:this.boats.filter(boat => boat.islandId === islandId), players:visiblePlayers.filter(pose => pose.islandId === islandId), self:actor ? {
+        ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),
       } : null});
     }
   }
 
   demote(socket, info, reason) {
     const wasPlayer = !!info.actor;
+    if (info.actor && reason !== 'taken-over') this.releaseBoat(info.actor.id);
+    info.islandId = info.actor?.islandId ?? info.islandId ?? 'home';
     info.actor = null;
     info.input = ZERO;
     if (!['taken-over','star-required'].includes(reason)) {
@@ -230,6 +269,7 @@ export class IslandRoom {
     const now = Date.now();
     this.prune(now);
     this.expire(now);
+    this.broadcast();
     await this.scheduleExpiry();
   }
 
@@ -248,24 +288,35 @@ export class IslandRoom {
       socket.close(1008, 'Invalid or excessive commands');
       return;
     }
-    if (!info.actor) return; // Spectators have no gameplay authority.
     let command;
     try { command = JSON.parse(message); } catch { return; }
+    if (command?.type === 'watch' && !info.actor && islandFor(command.islandId)) {
+      info.islandId = command.islandId;
+      this.attach(socket,info);
+      this.broadcast();
+      return;
+    }
+    if (!info.actor) return;
     if (command?.type === 'chat') {
       const text = chatText(command.text);
       if (text === null || now - (info.lastChat ?? -Infinity) < 100) return;
       info.lastChat = now;
       const event = {type:'chat', id:info.actor.id, text};
       for (const [peer, viewer] of this.connections) {
-        if (viewer.digest && viewer.expires > now) this.send(peer, event);
+        if (viewer.digest && viewer.expires > now && (viewer.actor?.islandId ?? viewer.islandId ?? 'home') === info.actor.islandId) this.send(peer, event);
       }
       return;
     }
     if (!command || !Number.isSafeInteger(command.seq) || command.seq <= info.ack) return;
     const actor = info.actor;
+    if (command.islandId && command.islandId !== actor.islandId) {
+      info.ack=command.seq; this.attach(socket,info); this.broadcast(); return;
+    }
     switch (command.type) {
       case 'input':
         if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
+        if (command.x || command.y || command.stop === true) info.boarding = null;
+        if (command.stop === true) {actor.path=[];actor.sailTarget=null;actor.docking=false;}
         info.input = {x:command.x,y:command.y};
         info.inputExpires = now+350;
         break;
@@ -275,10 +326,34 @@ export class IslandRoom {
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;
-          setWalkDestination(actor, nav, command.x, command.y);
+          info.boarding = null;
+          if (actor.mode === 'sailing') setSailDestination(actor,command.x,command.y);
+          else setWalkDestination(actor, nav, command.x, command.y);
+        }
+        break;
+      case 'board': {
+        if (actor.mode !== 'walking' || typeof command.boatId !== 'string') break;
+        info.boarding=null; actor.path=[]; info.input=ZERO;
+        const boat = this.boats.find(boat => boat.id === command.boatId && boat.islandId === actor.islandId);
+        if (!boat || boat.occupant || !near(boat,HARBOR.water,400)) {
+          this.send(socket,{type:'travel-notice',text:'Boat taken.'});
+          break;
+        }
+        info.input=ZERO;
+        if (near(actor,HARBOR.land,45) || setWalkDestination(actor,nav,HARBOR.land.x,HARBOR.land.y)) info.boarding=boat.id;
+        break;
+      }
+      case 'disembark':
+        if (actor.mode === 'sailing') {
+          if (!canDock(actor)) {this.send(socket,{type:'travel-notice',text:'Sail closer to the harbor to dock.'}); break;}
+          info.input=ZERO;
+          setSailDestination(actor,HARBOR.water.x,HARBOR.water.y);
+          actor.docking=true;
         }
         break;
       case 'emote':
+        if (actor.mode === 'sailing') break;
+        info.boarding=null;
         if (!Number.isInteger(command.action) || !Object.hasOwn(DURATIONS, command.action)) return;
         if (now-info.lastEmote >= 300 || (command.action === 3 && actor.action === 2)) {
           info.lastEmote = now;
@@ -302,12 +377,41 @@ export class IslandRoom {
       const actor = info.actor;
       if (!actor) continue;
       if (now >= info.inputExpires) info.input = ZERO;
-      walkStep(actor, nav, .05, now/1000, info.input);
-      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.until > now/1000);
+      if (actor.mode === 'sailing') {
+        sailStep(actor,.05,info.input);
+        const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
+        if (boat) {
+          if (crossIsland(actor)) {info.input=ZERO; info.inputExpires=0;}
+          Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
+          if (actor.docking && near(actor,HARBOR.water,12)) {
+            this.parkBoat(boat,actor.islandId);
+            Object.assign(actor,{...HARBOR.land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
+            info.input=ZERO;
+          }
+        }
+      } else {
+        walkStep(actor, nav, .05, now/1000, info.input);
+        if (info.boarding && near(actor,HARBOR.land,45)) {
+          const boat=this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
+          info.boarding=null;
+          actor.path=[];
+          if (!boat || boat.occupant) this.send(socket,{type:'travel-notice',text:'Boat taken.'});
+          else {
+            boat.occupant=actor.id; boat.departure=actor.islandId;
+            Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false});
+            info.input=ZERO;
+          }
+        }
+      }
+      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || actor.until > now/1000);
       this.attach(socket, info);
     }
-    // boss 5 Nov: players ease apart instead of stacking (same helper as the offline sim)
-    if (separateActors([...this.connections.values()].map(info => info.actor).filter(Boolean), nav, .05)) active = true;
+    for (const island of ISLANDS) {
+      const walkers=[...this.connections.values()].map(info => info.actor).filter(actor => actor?.mode === 'walking' && actor.islandId === island.id);
+      if (separateActors(walkers,nav,.05)) active=true;
+    }
+    for (const [socket,info] of this.connections) this.attach(socket,info);
+    this.saveBoats();
     this.stepCount = (this.stepCount ?? 0)+1;
     if (!active || this.stepCount % 2 === 0) this.broadcast();
     if (!active) {
@@ -327,6 +431,7 @@ export class IslandRoom {
           info.account, JSON.stringify(publicPose(info.actor)), now+RESUME_MS);
       }
     }
+    if (info.actor && !this.session(info.digest)) this.releaseBoat(info.actor.id);
     this.broadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
   }
