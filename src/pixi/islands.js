@@ -107,6 +107,18 @@ export function landingSpot(actor,nav=defaultNav(),reach=420) {   // the walking
   }
   return best;
 }
+// boss 5 Nov ("dock fix"): the water right beside that sand, so the boat sails in before the Ducky hops out. Walk back from
+// the sand toward the boat to the first water the boat fits in AND can actually sail to (a narrow cove can have open water by
+// the beach that no route reaches); if there is none, the boat is already as close as it can get. Kept out of landingSpot
+// because the client asks landingSpot four times a second just to show the Dock button.
+export function landingApproach(actor,spot) {
+  const sx=spot.x+spot.offset.x, sy=spot.y+spot.offset.y, len=Math.hypot(actor.x-sx,actor.y-sy)||1;
+  for (let t=40;t<len-14;t+=10) {
+    const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};
+    if (canSail(p.x,p.y,actor.islandId) && sailRoute(actor.islandId,actor,p)) return p;
+  }
+  return {x:Math.round(actor.x),y:Math.round(actor.y)};
+}
 
 // land on one island, in its own local coordinates (the home map)
 function landAt(x,y) {

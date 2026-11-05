@@ -6,7 +6,7 @@ import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
-import {HARBOR,destinationsFor,canSail,boatSpots} from '../src/pixi/islands.js';
+import {HARBOR,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
 import {DUCK_RADIUS} from '../src/pixi/player-motion.js';
 
 const origin = 'https://island.example';
@@ -611,6 +611,54 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     assert.equal(fresh.duck().mode,'walking');
   } finally {
     clients.forEach(client => client.close());
+    await request('/test/expire-session');
+    await request('/test/expire-resume');
+  }
+});
+
+test('docking off a beach sails the boat in beside the sand before the Ducky hops out, and steering away cancels it', async () => {
+  // boss 5 Nov ("dock fix"): no hop from where the boat was; the boat sails up to the shore first
+  await request('/test/expire-session');
+  await request('/test/expire-resume');
+  const login=await signIn(9310), a=await socket(login.session);
+  const setup=(pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose,steps})});
+  const far={x:220,y:1960}, spot=landingSpot({islandId:'home',...far}); spot.approach=landingApproach({islandId:'home',...far},spot); const gap=p => Math.hypot(p.x-spot.approach.x,p.y-spot.approach.y);
+  try {
+    await eventually(() => a.snapshot?.boats?.length);
+    const boatId=a.snapshot.boats.find(boat => !boat.occupant && boat.id==='home-0').id, boat=() => a.snapshot.boats.find(b => b.id===boatId);
+    await setup({...HARBOR.land,path:[]});
+    a.send({type:'board',boatId});
+    await eventually(() => a.duck()?.mode==='sailing');
+    await setup({...far,sailTarget:null,sailRoute:null,docking:false},1);
+    assert.ok(gap(far)>200,'the boat starts well out from the shore');
+    a.send({type:'disembark'});
+    await eventually(() => a.duck()?.mode==='sailing' && Math.hypot(boat().x-far.x,boat().y-far.y)>40);   // sailing in, not teleported
+    assert.equal(boat().occupant,a.welcome.id);
+    let closest=Infinity;
+    await eventually(() => {const b=boat(); if (b.occupant) closest=Math.min(closest,gap(b)); return a.duck()?.mode==='walking';});
+    assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'hops out onto the sand');
+    assert.ok(gap(boat())<=14,'the boat is moored in the water beside the sand');
+    assert.equal(boat().occupant,null);
+    assert.ok(closest<=60,`the Ducky was still aboard within two ticks of the shore (${closest.toFixed(0)} px out)`);   // snapshots go out every other 50 ms step, 19 px of sailing each
+    // already beside the sand: board again and dock, it lands with no sail at all
+    a.send({type:'board',boatId});
+    await eventually(() => a.duck()?.mode==='sailing');
+    a.send({type:'disembark'});
+    await eventually(() => a.duck()?.mode==='walking');
+    // steering away mid-dock cancels it and the room goes quiet instead of waiting on a landing forever
+    a.send({type:'board',boatId});
+    await eventually(() => a.duck()?.mode==='sailing');
+    await setup({...far,sailTarget:null,sailRoute:null,docking:false},1);
+    a.send({type:'disembark'});
+    a.send({type:'input',x:1,y:0});
+    await delay(150);
+    a.send({type:'input',x:0,y:0});
+    await delay(600);
+    assert.equal(a.duck().mode,'sailing','steering cancelled the landing');
+    const still=a.duck(); await delay(300);
+    assert.deepEqual([a.duck().x,a.duck().y],[still.x,still.y],'and the boat has stopped');
+  } finally {
+    a.close();
     await request('/test/expire-session');
     await request('/test/expire-resume');
   }

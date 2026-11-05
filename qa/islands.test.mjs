@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {ISLANDS,HARBOR,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot} from '../src/pixi/islands.js';
+import {ISLANDS,HARBOR,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach} from '../src/pixi/islands.js';
 
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',x:1800,y:430,turn:0,path:[],action:0});
@@ -114,4 +114,27 @@ test('any boat can be boarded from nearby sand, and you can land on any shore yo
   assert.equal(landingSpot({islandId:'home',x:-1500,y:-1500}),null,'open sea: nothing to land on');
   const off=destinationsFor('home')[0].offset, there=landingSpot({islandId:'home',x:HARBOR.water.x+off.x,y:HARBOR.water.y+off.y});
   assert.equal(there.islandId,destinationsFor('home')[0].destination,'a neighbour shore lands you on that island');
+});
+
+test('docking off a beach sails in to the water beside the sand, and every approach is one the boat can reach', () => {
+  // boss 5 Nov ("dock fix"): the boat sails right up to the shore before the Ducky hops out
+  const boat={...sailor(),x:220,y:1960}, spot=landingSpot(boat); spot.approach=landingApproach(boat,spot); const sand={x:spot.x+spot.offset.x,y:spot.y+spot.offset.y};
+  assert.equal(canDock(boat),false,'a beach, not the harbor');
+  assert.ok(Math.hypot(spot.approach.x-boat.x,spot.approach.y-boat.y)>200,'the boat starts well out');
+  assert.ok(Math.hypot(spot.approach.x-sand.x,spot.approach.y-sand.y)<150,'the approach is the water right beside the sand');
+  assert.ok(setSailDestination(boat,spot.approach.x,spot.approach.y));
+  for (let k=0;boat.sailTarget && k<400;k++) sailStep(boat,.05,ZERO);
+  assert.ok(Math.hypot(boat.x-spot.approach.x,boat.y-spot.approach.y)<=14,'the boat arrives beside the shore');
+  // a narrow cove: the first open water by the sand has no route in, so the approach backs off to water the boat can reach
+  const cove={...sailor(),x:400,y:1240}, inlet=landingSpot(cove); inlet.approach=landingApproach(cove,inlet);
+  assert.ok(canSail(inlet.approach.x,inlet.approach.y),'the approach is open water');
+  assert.ok(setSailDestination({...cove},inlet.approach.x,inlet.approach.y) || Math.hypot(inlet.approach.x-cove.x,inlet.approach.y-cove.y)<=14,'and reachable');
+  // anywhere off a shore: either the boat is already beside the sand (it lands at once) or it has a route in
+  for (let x=-500;x<6500;x+=60) for (let y=-500;y<4800;y+=60) {
+    const here={...sailor(),x,y};
+    if (!canSail(x,y) || canDock(here)) continue;
+    const at=landingSpot(here);
+    if (at) at.approach=landingApproach(here,at);
+    if (at && Math.hypot(at.approach.x-x,at.approach.y-y)>14) assert.ok(setSailDestination({...here},at.approach.x,at.approach.y),`${x},${y} can sail to its approach`);
+  }
 });

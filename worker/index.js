@@ -4,7 +4,7 @@ import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
-import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, boatHome, boatSpot} from '../src/pixi/islands.js';
+import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, boatHome, boatSpot} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
@@ -375,7 +375,7 @@ export class IslandRoom {
         break;
       case 'input':
         if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
-        if (command.x || command.y || command.stop === true) info.boarding = null;
+        if (command.x || command.y || command.stop === true) {info.boarding = null; info.landing = null;}   // steering away cancels a dock
         if (command.stop === true) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
         info.input = {x:command.x,y:command.y};
         info.inputExpires = now+350;
@@ -388,6 +388,7 @@ export class IslandRoom {
           info.lastDestination = now;
           info.input = ZERO;
           info.boarding = null;
+          info.landing = null;   // a new course cancels a dock in progress
           if (actor.mode === 'sailing') setSailDestination(actor,command.x,command.y);
           else setWalkDestination(actor, nav, command.x, command.y);
         }
@@ -407,18 +408,16 @@ export class IslandRoom {
       }
       case 'disembark':
         if (actor.mode === 'sailing') {
-          info.input=ZERO;
+          info.input=ZERO; info.landing=null;
           if (canDock(actor)) {setSailDestination(actor,HARBOR.water.x,HARBOR.water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
           // boss 5 Nov: anywhere else, hop out onto the nearest shore within reach (this island's or a neighbour's)
           const spot=landingSpot(actor,nav);
           if (!spot) {this.send(socket,{type:'travel-notice',text:'Sail closer to the shore to dock.'}); break;}
-          const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
-          if (spot.islandId !== actor.islandId) {actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
-          if (boat) {
-            if (boatHome(boat) === actor.islandId) {Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId,occupant:null,departure:actor.islandId}); this.saveBoats();}   // moored where you left it
-            else this.parkBoat(boat);   // landed on another island: the boat ferries home
-          }
-          Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
+          // boss 5 Nov ("dock fix"): sail in to the water beside the sand first; the hop out happens when the boat arrives
+          spot.approach=landingApproach(actor,spot);
+          info.landing=spot;
+          // no open-water route to that water (or already there): hop out from where the boat is now instead of waiting forever
+          if (!near(actor,spot.approach,14) && !setSailDestination(actor,spot.approach.x,spot.approach.y)) info.landing={...spot,approach:{x:actor.x,y:actor.y}};
         }
         break;
       case 'emote':
@@ -450,16 +449,25 @@ export class IslandRoom {
       if (actor.mode === 'sailing') {
         sailStep(actor,.05,info.input);
         const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
+        if (!boat) info.landing=null;   // the boat is gone (released or restored): nothing to sail in
         if (boat) {
-          if (crossIsland(actor)) {info.input=ZERO; info.inputExpires=0;}
+          if (crossIsland(actor)) {info.input=ZERO; info.inputExpires=0; info.landing=null;}   // sailed into a neighbour's harbor: its jetty docking takes over
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
-          if (actor.docking && near(actor,HARBOR.water,12)) {
+          if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {   // reached the shore: hop out onto the sand
+            const spot=info.landing; info.landing=null;
+            if (spot.islandId !== actor.islandId) {actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
+            if (boatHome(boat) === actor.islandId) {Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId,occupant:null,departure:actor.islandId}); this.saveBoats();}   // moored where you left it
+            else this.parkBoat(boat);   // landed on another island: the boat ferries home
+            Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
+            info.input=ZERO;
+          } else if (actor.docking && near(actor,HARBOR.water,12)) {
             this.parkBoat(boat);   // a ferry: once you step off it goes back to its own mooring, so no island runs out
             Object.assign(actor,{...HARBOR.land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
         }
       } else {
+        info.landing=null;
         walkStep(actor, nav, .05, now/1000, info.input);
         const boat=info.boarding && this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
         const aboard=boat && near(actor,boardingPoint(boat,nav),45);   // boss 5 Nov: step in from the deck beside the boat (the jetty end for the tip berths)
@@ -474,7 +482,7 @@ export class IslandRoom {
           }
         }
       }
-      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || actor.jumpLeft > 0 || actor.until > now/1000);
+      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || info.landing || actor.jumpLeft > 0 || actor.until > now/1000);
       this.attach(socket, info);
     }
     for (const island of ISLANDS) {

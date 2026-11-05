@@ -1,5 +1,6 @@
 import {butterflyPose} from '../src/pixi/butterflies.js';
 import test from 'node:test';
+import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
@@ -177,7 +178,7 @@ test('corrected caps leave both eyes clear in every facing that shows a face', a
       if(!eyes.length)continue;
       const frame=entry.frames[String(view.angle)][0];
       const canvas=createCanvas(frame.rect[2],frame.rect[3]),context=canvas.getContext('2d');
-      context.drawImage(await loadImage(new URL(`../public${frame.url}`,import.meta.url)),0,0);
+      context.drawImage(await loadImage(fileURLToPath(new URL(`../public${frame.url}`,import.meta.url))),0,0);
       for(const eye of eyes){
         const x=Math.round(eye.pivot[0]-view.ground[0]-frame.rect[0]);
         const y=Math.round(eye.pivot[1]-view.ground[1]-frame.rect[1]);
@@ -220,7 +221,7 @@ test('rendered paths connect every district and mainland bridge approach', async
   const {createCanvas,loadImage}=await import('@napi-rs/canvas');
   const world=JSON.parse(readFileSync(new URL('../rive/web/world.json',import.meta.url)));
   const canvas=createCanvas(world.width/4,world.height/4),ctx=canvas.getContext('2d');
-  ctx.drawImage(await loadImage(new URL('../public/pixi-art/ground.svg',import.meta.url).pathname),0,0,canvas.width,canvas.height);
+  ctx.drawImage(await loadImage(fileURLToPath(new URL('../public/pixi-art/ground.svg',import.meta.url))),0,0,canvas.width,canvas.height);
   const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;
   const paved=index=>{const [r,g,b,a]=pixels.subarray(index*4,index*4+4);return a>200&&((r>210&&g>185&&b>110)||(r>130&&Math.abs(r-g)<25&&Math.abs(b-g)<25));};
   const indexAt=(x,y)=>Math.round(y/4)*canvas.width+Math.round(x/4);
