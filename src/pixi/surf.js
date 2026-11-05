@@ -1,21 +1,28 @@
 import {Graphics} from 'pixi.js';
 import {PALETTE} from './palette.js';
+import {SHORE, sampleRing} from './shore.js';
 
-// The southeastern stretch of the "Sandy coast" path in ground.svg.
-const shore = [
-  [[5180.5,1642.85], [5251.21,1839.50], [5411.65,2032.70], [5428.9,2232.8], .55, 1],
-  [[5428.9,2232.8], [5446.15,2432.90], [5365.08,2677.85], [5284,2843.45], 0, 1],
-  [[5284,2843.45], [5202.92,3009.05], [5116.68,3145.33], [4942.45,3226.4], 0, 1],
-  [[4942.45,3226.4], [4768.22,3307.47], [4442.20,3281.60], [4238.65,3329.9], 0, .66],
-].flatMap(([a,b,c,d,start,end], segment) =>
-  Array.from({length:17}, (_, i) => {
-    const t = start + (end - start) * i / 16, u = 1 - t;
-    const point = axis => u ** 3 * a[axis] + 3 * u*u*t*b[axis] + 3 * u*t*t*c[axis] + t ** 3 * d[axis];
-    const tangent = axis => u*u*(b[axis]-a[axis]) + 2*u*t*(c[axis]-b[axis]) + t*t*(d[axis]-c[axis]);
-    const dx = tangent(0), dy = tangent(1), length = Math.hypot(dx,dy);
-    return {x:point(0), y:point(1), nx:dy/length, ny:-dx/length, along:segment+i/16};
-  }),
-);
+// boss 5 Nov: the surf runs round the whole island and every jetty islet, on the real sand edge traced off the ground art
+// (shore-lines.json). The old SE-only line sat 0-7 off that edge on the east and drifted 40 into the sand along the south.
+// Each ring is cut into short runs: only runs near the camera are drawn, and each run gets its own small set offset.
+const RUN = 4;   // samples per run
+const inRing = (x, y, p) => {let c = false; for (let i = 0, j = p.length - 1; i < p.length; j = i++) if ((p[i][1] > y) !== (p[j][1] > y) && x < (p[j][0] - p[i][0]) * (y - p[i][1]) / (p[j][1] - p[i][1]) + p[i][0]) c = !c; return c;};
+const boxOf = p => [Math.min(...p.map(q => q[0])), Math.min(...p.map(q => q[1])), Math.max(...p.map(q => q[0])), Math.max(...p.map(q => q[1]))];
+const near = (a, b, pad) => a[0] - pad < b[2] && b[0] - pad < a[2] && a[1] - pad < b[3] && b[1] - pad < a[3];
+const runs = SHORE.flatMap((ring, r) => {
+  const perimeter = ring.reduce((s, p, i) => s + Math.hypot(ring[(i + 1) % ring.length][0] - p[0], ring[(i + 1) % ring.length][1] - p[1]), 0);
+  const pts = sampleRing(ring, Math.min(30, perimeter / 96)), out = [];   // an islet gets finer steps, so its far crest never facets
+  // Wave sets drift a little along the shore: a slow lead or lag, never more than a sixth of a cycle.
+  const set = p => .11 * Math.sin(p.along * .42 + r * 2.1) + .05 * Math.sin(p.along * 1.13 + r * .7);
+  for (let i = 0; i < pts.length; i += RUN) {
+    const run = Array.from({length: Math.min(RUN, pts.length - i) + 1}, (_, k) => pts[(i + k) % pts.length]);   // + the next run's first point, so runs join
+    const b = boxOf(run.map(p => [p.x, p.y]));
+    // A crest never paints over another shore's sand (the island's swell over an islet, or an islet's over the island).
+    const others = SHORE.filter((o, k) => k !== r && near(boxOf(o), b, 200)).map(o => ({ring: o, box: boxOf(o)}));
+    out.push({points: run.map(p => ({...p, set: set(p)})), set: set(run[RUN >> 1] || run[0]), box: b, start: r ? 125 : 175, others});   // islets start closer in
+  }
+  return out;
+});
 
 export function createBeachSurf(layer) {
   const waves = [0, 1/3, 2/3].map(phase => {
@@ -23,20 +30,24 @@ export function createBeachSurf(layer) {
     layer.addChild(crest);
     return {phase, crest};
   });
-  let lastTime = -1;
+  let lastTime = -1, lastView = '';
 
-  function trace(graphics, offset, age, foam) {
+  function trace(graphics, run, clock, cycle, foam) {
     let drawing = false;
-    for (const point of shore) {
+    const dry = (x, y) => run.others.some(o => x > o.box[0] && x < o.box[2] && y > o.box[1] && y < o.box[3] && inRing(x, y, o.ring));
+    for (const point of run.points) {
+      const age = Math.min(1, Math.max(0, clock + point.set - cycle));   // the run's own cycle, so a run never splits across a wrap
       // Break the fine foam into patches while the water underneath stays continuous.
-      if (foam && Math.sin(point.along * 21 + age * 4) < -.28) {
+      if (foam && Math.sin(point.along * 12 + age * 4) < -.45) {   // boss 5 Nov: longer patches, fewer dashes
         drawing = false;
         continue;
       }
+      const offset = run.start - (run.start + 16) * (1 - (1 - age) ** 1.45);
       const ripple = Math.sin(point.along * 10 - age * 3) * 5;
       const distance = offset + ripple + (foam ? 0 : 7);
       const x = point.x + point.nx * distance;
       const y = point.y + point.ny * distance;
+      if (dry(x, y)) {drawing = false; continue;}
       if (drawing) graphics.lineTo(x,y);
       else graphics.moveTo(x,y);
       drawing = true;
@@ -44,22 +55,30 @@ export function createBeachSurf(layer) {
   }
 
   return {
+    runs: runs.length,
     update(time, reduced, visible) {
-      const onScreen = visible(5050, 2670, 900);
-      for (const {crest} of waves) crest.visible = onScreen;
-      if (!onScreen) return;
-      const frame = reduced ? 0 : Math.floor(time * 30);
-      if (frame === lastTime) return;
-      lastTime = frame;
+      // Cull per run: drawn when its box, plus the 175 the crest starts out at sea, touches the view.
+      const shown = runs.filter(({box}) => visible((box[0] + box[2]) / 2, (box[1] + box[3]) / 2, Math.max(box[2] - box[0], box[3] - box[1]) / 2 + 220));
+      for (const {crest} of waves) crest.visible = shown.length > 0;
+      if (!shown.length) return;
+      const frame = reduced ? 0 : Math.floor(time * 30), view = shown.length + ':' + runs.indexOf(shown[0]);
+      if (frame === lastTime && view === lastView) return;
+      lastTime = frame; lastView = view;
       for (const {phase, crest} of waves) {
-        const age = ((reduced ? .9 : time) / 6 + phase) % 1;
-        const offset = 175 - 191 * (1 - (1 - age) ** 1.45);
-        const fade = Math.min(1, age * 6, (1 - age) * 8);
         crest.clear();
-        trace(crest, offset, age, false);
-        crest.stroke({color:PALETTE.cream, width:20 + 14 * age, alpha:.14 * fade, cap:'round', join:'round'});   // boss 3 Nov fix 9: a faint cream wash
-        trace(crest, offset, age, true);
-        crest.stroke({color:PALETTE.cream, width:5 + 4 * age, alpha:.9 * fade, cap:'round', join:'round'});   // the one broken foam band
+        const clock = (reduced ? .9 : time) / 6 + phase;
+        for (const run of shown) {
+          const cycle = Math.floor(clock + run.set), age = clock + run.set - cycle;
+          const fade = Math.min(1, age * 6, (1 - age) * 8);
+          if (fade <= .01) continue;
+          trace(crest, run, clock, cycle, false);
+          crest.stroke({color:PALETTE.cream, width:20 + 14 * age, alpha:.14 * fade, cap:'butt', join:'round'});   // boss 3 Nov fix 9: a faint cream wash (butt ends, so run joins never double up)
+          // boss 5 Nov: calm like the original: only the crest running in to the sand carries foam, so one broken band shows at a time
+          const foam = fade * Math.min(1, Math.max(0, (age - .55) * 8));
+          if (foam <= .01) continue;
+          trace(crest, run, clock, cycle, true);
+          crest.stroke({color:PALETTE.cream, width:5 + 4 * age, alpha:.9 * foam, cap:'round', join:'round'});   // the one broken foam band
+        }
       }
     },
   };
