@@ -227,7 +227,7 @@ export class PixiIsland {
 
   createAmbient() {
     this.weather=createWeather(world,this.scene,this.air);
-    this.surf = this.waterFX?.active ? null : createBeachSurf(this.water);
+    this.surf = createBeachSurf(this.water);   // boss 5 Nov: the original beach surf, not the simulated one
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;   // boss 4 Nov: no boats on the race lake
     this.boats = createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast});   // boss 5 Nov: 1-5 boats at each jetty islet

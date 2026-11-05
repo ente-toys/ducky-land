@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWaveField, createWater, maskGrid, shoreDistance, waveHeight, inlandLife, coastDistance} from '../src/pixi/water.js';
+import {createWaveField, createWater, maskGrid, shoreDistance, waveHeight, coastDistance, smoothDistance} from '../src/pixi/water.js';
 const energy = f => f.current.reduce((s, h, i) => s + h * h + (h - f.previous[i]) ** 2, 0);
 function field(cols = 65, rows = 49, wet = new Uint8Array(cols * rows).fill(1)) {
   return createWaveField({width: (cols - 1) * 5, height: (rows - 1) * 5, cols, rows, wet});
@@ -89,23 +89,6 @@ test('plant sampling interpolates space and time and stays still after reset', (
   assert.equal(waveHeight(f, -1, 120), 0); assert.equal(waveHeight(f, NaN, 0), 0);
   f.clear(); assert.equal(waveHeight(f, 160, 120), 0);
 });
-test('wind and occasional fish impacts stay wet, bounded and propagate through the field', () => {
-  const wet = new Uint8Array(65 * 49);
-  for (let y = 5; y < 44; y++) for (let x = 5; x < 60; x++) wet[y * 65 + x] = 1;
-  const f = field(65, 49, wet); let fish = 0, wind = 0;
-  for (let tick = 0; tick < 1800; tick++) {
-    inlandLife(f, tick / 60, tick, (x,y,s,r) => {
-      assert.equal(wet[Math.round(y / f.dy) * f.cols + Math.round(x / f.dx)], 1);
-      if (s === .24) fish++; else {wind++; assert.ok(Math.abs(s) <= .025);}
-      f.impulse(x,y,s,r);
-    });
-    f.step();
-  }
-  assert.equal(fish, 6); assert.equal(wind, 300);
-  assert.ok(energy(f) > 0); assert.ok(Math.max(...f.current.map(Math.abs)) < 1);
-  inlandLife(field(3,3,new Uint8Array(9)), 0, 97, () => assert.fail('dry body emitted'));
-});
-
 // boss 5 Nov: ocean run-up cannot bridge dry land into an inland pond.
 test('coast distances cover both shore sides, retain islets and keep remote inland water out of run-up', () => {
   const width = 101, height = 81, data = new Uint8Array(width * height * 4);
@@ -125,4 +108,41 @@ test('coast distances cover both shore sides, retain islets and keep remote inla
   assert.equal(read(50,40,2), 255, 'inland pond location is beyond maximum surf reach');
   assert.ok(read(6,32,2) > 0); assert.ok(read(4,32,1) > 0, 'islet retains its own shore');
   assert.ok(read(0,0,1) > read(14,40,1), 'shallow band follows the bank');
+});
+
+// boss 5 Nov: smoothing removes raster stairs without changing coverage or bridging inland water.
+test('smoothed signed coast distances retain coverage and a continuous, monotonic bank', () => {
+  const width = 81, height = 61, data = new Uint8Array(width * height * 4);
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    const i = (y * width + x) * 4; data[i] = x >= 30 ? 255 : 0; data[i + 3] = 255;
+  }
+  const mask = {width, height, data}; coastDistance(mask, width * 2, height * 2);
+  const coverage = data.filter((_, i) => i % 4 === 0);
+  smoothDistance(mask, width * 2, height * 2, true);
+  assert.deepEqual(data.filter((_, i) => i % 4 === 0), coverage);
+  const signed = (x,y) => data[(y * width + x) * 4 + 1] - data[(y * width + x) * 4 + 2];
+  for (let x = 15; x < 65; x++) {
+    assert.ok(signed(x + 1, 30) >= signed(x, 30));
+    assert.ok(signed(x + 1, 30) - signed(x, 30) <= 3, 'no abrupt distance steps');
+    assert.equal(signed(x, 20), signed(x, 40), 'even band parallel to a straight bank');
+  }
+  assert.ok(signed(24, 30) < 0); assert.ok(signed(36, 30) > 0);
+});
+test('inland depth ignores enclosed paint and remains one connected inset', () => {
+  const width = 81, height = 61, data = new Uint8Array(width * height * 4);
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    if (((x - 40) / 35) ** 2 + ((y - 30) / 25) ** 2 < 1) data[(y * width + x) * 4] = 255;
+  }
+  data[(30 * width + 40) * 4] = 0;
+  const mask = {width, height, data}, filled = maskGrid(mask, width, height);
+  for (let i = 0; i < filled.length; i++) if (filled[i]) data[i * 4] = 255;
+  shoreDistance(mask, width * 4, height * 4); smoothDistance(mask, width * 4, height * 4);
+  const depth = (x,y) => data[(y * width + x) * 4 + 1];
+  assert.ok(depth(40,30) > depth(40,15)); assert.ok(depth(40,15) > depth(40,7));
+  assert.equal(data[(30 * width + 40) * 4], 255);
+  for (let y = 10; y < 51; y++) {
+    const inset = Array.from({length:width}, (_,x) => depth(x,y) > 64 / 240 * 255);
+    const start = inset.indexOf(true), end = inset.lastIndexOf(true);
+    if (start >= 0) assert.ok(inset.slice(start,end + 1).every(Boolean));
+  }
 });

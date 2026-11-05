@@ -82,19 +82,6 @@ export function waveHeight(f, x, y, mix = 1) {
   const h = (x, y) => {const i = Math.min(y, f.rows - 1) * f.cols + Math.min(x, f.cols - 1); return f.previous[i] * (1 - mix) + f.current[i] * mix;};
   return (h(ix, iy) * (1 - u) + h(ix + 1, iy) * u) * (1 - v) + (h(ix, iy + 1) * (1 - u) + h(ix + 1, iy + 1) * u) * v;
 }
-// boss 5 Nov: bounded ambient sources run on simulation time, with no catch-up burst offscreen.
-export function inlandLife(field, time, tick, emit) {
-  const ids = field.indices; if (!ids.length) return;
-  if (tick % 18 === 0) for (let k = 0; k < 3; k++) {
-    const i = ids[(Math.floor(tick / 18) * 37 + k * 193) % ids.length];
-    emit(i % field.cols * field.dx, Math.floor(i / field.cols) * field.dy, Math.sin(time * .7 + k * 2) * .025, 28);
-  }
-  if (tick % 313 === 97) {
-    const i = ids[(Math.floor(tick / 313) * 997 + 271) % ids.length];
-    emit(i % field.cols * field.dx, Math.floor(i / field.cols) * field.dy, .24, 14);
-  }
-}
-
 const VERTEX = `
 #version 300 es
 precision highp sampler2D;
@@ -147,6 +134,7 @@ void main() {
   vLight = color; vHeight = h;
   gl_Position = vec4((uProjectionMatrix * uWorldTransformMatrix * uTransformMatrix * vec3(aPosition, 1.)).xy, 0., 1.);
 }`;
+const RINGS = 8;
 const FRAGMENT = `
 #version 300 es
 precision highp float;
@@ -165,6 +153,7 @@ uniform float uTime;
 uniform float uCalm;
 uniform float uSea;
 uniform float uInland;
+${Array.from({length: RINGS}, (_, i) => `uniform vec4 uRing${i};`).join('\n')}
 ${COAST_SURF}
 void main() {
   vec4 mask = texture(uMask, clamp(vUV, vec2(0.), vec2(1.)));
@@ -175,37 +164,38 @@ void main() {
   if (uSea > .5) {
     // boss 5 Nov: coast-wide flat surf, including a sand-only retreating wet band.
     vec2 p = uOrigin + vUV * uSize;
-    float d = mask.r > .5 ? mask.g * 240. : -mask.b * 240.;
+    float d = (mask.g - mask.b) * 240.;
     vec3 surf = coastSurf(p, d, uTime, uCalm);
-    color = d < 85. ? mix(uWater, uCream, .19) : uWater;
-    if (d < 0.) {color = vec3(.76, .65, .36); coverage = surf.y * .26 * mask.a;}
-    if (d > 0. && d < 140. && vHeight > .025 && vHeight < .042 && uCalm < .5) color = uCream;
-    if (surf.x > .5) {color = uCream; coverage = max(coverage, .88 * mask.a);}
+    float aa = max(fwidth(d), .65);
+    color = mix(mix(uWater, uCream, .16), uWater, smoothstep(76. - aa, 76. + aa, d));
+    if (d < 0.) {color = vec3(.76, .65, .36); coverage = surf.y * .20 * mask.a;}
+    color = mix(color, uCream, surf.x);
+    coverage = max(coverage, surf.x * .88 * mask.a);
     if (uCalm > .5 && d < 0.) coverage = 0.;
-
   }
-  // boss 5 Nov: inland water uses crisp flat marks, never interpolated lighting or ocean foam.
+  // boss 5 Nov: one inset shape and rim, four quiet glints, no reflection or caustic noise.
   if (uInland > .5) {
-    vec2 p = uOrigin + vUV * uSize;
-    vec3 hi = mix(uWater, vec3(1.), .38);
-    float depth = mask.g * 240.;
-    color = depth < 24. ? mix(uWater, vec3(1.), .18) : depth > 100. ? mix(uWater, vec3(.20,.48,.56), .24) : uWater;
-    // boss 5 Nov: broad broken caustic threads, coloured flat rather than shaded.
-    float weave = sin(p.x * .034 + sin(p.y * .023 + uTime * .18)) + sin(p.y * .041 - p.x * .012 - uTime * .23);
-    if (weave > 1.35 && weave < 1.52 && uCalm < .5) color = mix(color, hi, .48);
-    // Bridge and rooted reeds reflect as separated wavy strips below the drawing.
-    float bend = sin(p.y * .13 + uTime * 1.1) * 5. * (1. - uCalm);
-    float bridgeU = clamp((p.x - 1188.) / 904., 0., 1.);
-    float bridgeY = 2670. - 88. * 4. * bridgeU * (1. - bridgeU);
-    bool bridge = p.x > 1198. + bend && p.x < 2082. + bend && p.y > bridgeY && p.y < bridgeY + 52.;
-    bool reeds = (p.x > 3675. + bend && p.x < 3740. + bend && p.y > 1650. && p.y < 1690.) || (p.x > 4570. + bend && p.x < 4615. + bend && p.y > 1630. && p.y < 1665.);
-    if ((bridge || reeds) && mod(p.y + bend * .3, 13.) < 4.) color = bridge ? vec3(.36,.56,.51) : vec3(.36,.60,.42);
-    float lap = 3. + (sin(uTime * .8 + p.x * .013 + p.y * .009) + vHeight) * (1. - uCalm);
-    if (mask.g * 240. < lap) color = hi;
-    vec2 dash = mod(p + vec2(-uTime * 7., sin(uTime * .6 + p.x * .012) * 3. + vHeight * 8.), vec2(113., 79.));
-    bool glint = dash.x < 18. && abs(dash.y - 39.) < 1.4;
-    bool crest = vHeight > .025 && vHeight < .045;
-    if ((glint || crest) && uCalm < .5) color = hi;
+    vec2 p = vUV * uSize;
+    float depth = mask.g * 240., aa = max(fwidth(depth), .65);
+    color = mix(uWater, mix(uWater, vec3(.20,.48,.56), .18), smoothstep(64. - aa, 64. + aa, depth));
+    color = mix(color, mix(uWater, uCream, .22), 1. - smoothstep(11. - aa, 11. + aa, depth));
+    for (int i = 0; i < 4; i++) {
+      float k = float(i), phase = k * 2.4;
+      vec2 at = uSize * vec2(.28 + mod(k * .19, .49), .27 + mod(k * .23, .49));
+      at += vec2(sin(uTime * .19 + phase) * 12., sin(uTime * .24 + phase) * 2.);
+      vec2 q = p - at;
+      float dash = length(vec2(max(abs(q.x) - 10. - k * 2., 0.), q.y));
+      color = mix(color, uCream, (1. - smoothstep(.8, 1.8, dash)) * .72 * smoothstep(18., 26., depth));
+    }
+    // boss 5 Nov: only real contacts create thin expanding cream rings, clipped by the bank.
+    ${Array.from({length: RINGS}, (_, i) => `{
+      vec4 ring = uRing${i}; float age = uTime - ring.z;
+      float radius = 8. + age * 19.;
+      float line = abs(length((p - ring.xy) / vec2(1., .72)) - radius);
+      float fade = smoothstep(0., .18, age) * (1. - smoothstep(.5, 2.8, age));
+      float ink = (1. - smoothstep(.65, 1.5, line)) * fade * ring.w * (1. - uCalm);
+      color = mix(color, uCream, ink * smoothstep(2., 8., depth));
+    }`).join('\n')}
   }
   float alpha = coverage * (uInland > .5 ? 1. : mix(.46, 1., uSea));
   finalColor = vec4(color * alpha, alpha) * uColor;
@@ -331,12 +321,43 @@ export function coastDistance(mask, width, height) {
   shoreDistance(inverse, width, height);
   for (let i = 0; i < mask.data.length; i += 4) mask.data[i + 2] = mask.data[i] ? 0 : inverse.data[i + 1];
 }
+// boss 5 Nov: smooth the signed distance, never the land mask; contour bands stay clean at close zoom.
+export function smoothDistance(mask, worldWidth, worldHeight, sea = false) {
+  const {width, height, data} = mask, a = new Float32Array(width * height), b = new Float32Array(a.length);
+  const rx = Math.max(1, Math.round(10 * width / worldWidth)), ry = Math.max(1, Math.round(10 * height / worldHeight));
+  for (let i = 0; i < a.length; i++) a[i] = data[i * 4 + 1] - (sea ? data[i * 4 + 2] : 0);
+  for (let pass = 0; pass < 2; pass++) {
+    for (let y = 0; y < height; y++) {
+      let sum = 0; const row = y * width;
+      for (let x = -rx; x <= rx; x++) sum += a[row + clamp(x, 0, width - 1)];
+      for (let x = 0; x < width; x++) {
+        b[row + x] = sum / (rx * 2 + 1);
+        sum += a[row + clamp(x + rx + 1, 0, width - 1)] - a[row + clamp(x - rx, 0, width - 1)];
+      }
+    }
+    for (let x = 0; x < width; x++) {
+      let sum = 0;
+      for (let y = -ry; y <= ry; y++) sum += b[clamp(y, 0, height - 1) * width + x];
+      for (let y = 0; y < height; y++) {
+        a[y * width + x] = sum / (ry * 2 + 1);
+        sum += b[clamp(y + ry + 1, 0, height - 1) * width + x] - b[clamp(y - ry, 0, height - 1) * width + x];
+      }
+    }
+  }
+  for (let i = 0; i < a.length; i++) {data[i * 4 + 1] = Math.round(Math.max(0, a[i])); if (sea) data[i * 4 + 2] = Math.round(Math.max(0, -a[i]));}
+}
 function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zIndex}) {
   mask.sea = sea;
+  // boss 5 Nov: erase enclosed painted highlights before measuring depth, retaining the true outer bank.
+  if (id === 'pond' || id === 'cove') {
+    const filled = maskGrid(mask, mask.width, mask.height);
+    for (let i = 0; i < filled.length; i++) if (filled[i]) mask.data[i * 4] = 255;
+  }
   const field = createWaveField({...rect, cols, rows, wet: maskGrid(mask, cols, rows, shape), damping: sea ? .992 : .988, open: sea});
   const heights = source(field.pack(), cols, rows);
   if (sea) coastDistance(mask, rect.width, rect.height);
   else if (id === 'pond' || id === 'cove') shoreDistance(mask, rect.width, rect.height);
+  if (sea || id === 'pond' || id === 'cove') smoothDistance(mask, rect.width, rect.height, sea);
   const clip = source(mask.data, mask.width, mask.height);
   const geometry = waterGeometry(rect.width, rect.height, cols, rows, sea, field.wet);
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'island-height-water', preferredFragmentPrecision: 'highp'}), resources: {
@@ -345,13 +366,14 @@ function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zInde
       uSize: {value: new Float32Array([rect.width, rect.height]), type: 'vec2<f32>'},
       uOrigin: {value: new Float32Array([rect.x, rect.y]), type: 'vec2<f32>'},
       uWater: {value: rgb(PALETTE.water), type: 'vec3<f32>'}, uCream: {value: rgb(PALETTE.cream), type: 'vec3<f32>'}, uInk: {value: rgb(PALETTE.ink), type: 'vec3<f32>'},
+      ...Object.fromEntries(Array.from({length: RINGS}, (_, i) => [`uRing${i}`, {value: new Float32Array([0, 0, -100, 0]), type: 'vec4<f32>'}])),
       uInland: {value: Number(id === 'pond' || id === 'cove'), type: 'f32'},
       uMix: {value: 0, type: 'f32'}, uTime: {value: 0, type: 'f32'}, uCalm: {value: 0, type: 'f32'}, uSea: {value: Number(sea), type: 'f32'},
     },
   }});
   const mesh = new Mesh({geometry, shader, label: `Water - ${id}`}); mesh.position.set(rect.x, rect.y); if (zIndex !== undefined) mesh.zIndex = zIndex;
   parent.addChild(mesh);
-  return {id, rect, field, mesh, shader, heights, clip, geometry, sea, dirty: false, sources: [], tick: 0,
+  return {id, rect, field, mesh, shader, heights, clip, geometry, sea, dirty: false, sources: [], tick: 0, rings: 0, lastRing: -10,
     contains(x, y) {const u = (x - rect.x) / rect.width, v = (y - rect.y) / rect.height;
       return u >= 0 && u <= 1 && v >= 0 && v <= 1 && mask.data[(Math.round(v * (mask.height - 1)) * mask.width + Math.round(u * (mask.width - 1))) * 4] > 128;},
     uniforms: shader.resources.waterUniforms.uniforms,
@@ -368,10 +390,7 @@ export async function createWater({app, world, art, layer, objects, props, motio
   const stats = {cpuMs: 0, cells: 0, steps: 0, splashes: 0, droppedTime: 0}, samples = [];
   try {
     const pond = world.water[0], rect = {x: pond.x - pond.rx - 35, y: pond.y - pond.ry - 35, width: pond.rx * 2 + 70, height: pond.ry * 2 + 70};
-    const seaRect = {x: 0, y: 0, width: world.width, height: world.height};
-    const seaMask = await groundMask(art.ground.tiles, seaRect, .5, true);
-    // Render the sea above the painted shallow water, but clip out every land pixel and both inland pools.
-    const sea = makeBody({id: 'sea', rect: seaRect, cols: 241, rows: 183, mask: seaMask, parent: layer, sea: true}); bodies.push(sea);
+    const sea = null;   // boss 5 Nov: the beach goes back to the original surf (surf.js createBeachSurf); only the ponds and fountain are simulated
     bodies.push(makeBody({id: 'pond', rect, cols: 97, rows: 65, mask: await groundMask(art.ground.tiles, rect, 1.2), parent: layer}));
     const coveRect = {x: 3560, y: 1210, width: 1140, height: 650};
     bodies.push(makeBody({id: 'cove', rect: coveRect, cols: 121, rows: 73,
@@ -407,15 +426,10 @@ export async function createWater({app, world, art, layer, objects, props, motio
     } finally {compiled.forEach(s => gl.deleteShader(s));}
     stats.cells = bodies.reduce((sum, b) => sum + b.field.indices.length, 0);
     const pondBody = bodies.find(b => b.id === 'pond'), cove = bodies.find(b => b.id === 'cove');
-    // Small fixed wakes under the bridge posts and jetties, physically propagated by the same field as clicks.
-    for (const x of [pond.x - pond.rx * .82, pond.x + pond.rx * .82]) pondBody.sources.push({x, y: pond.y + 25, strength: .055, radius: 16, phase: x * .01});
     for (const b of world.walkways) for (const t of [.22, .72]) for (const side of [-1, 1]) {
       const dx = b.b[0] - b.a[0], dy = b.b[1] - b.a[1], len = Math.hypot(dx, dy);
-      sea.sources.push({x: b.a[0] + dx * t - dy / len * b.w * .52 * side, y: b.a[1] + dy * t + dx / len * b.w * .52 * side, strength: .06, radius: 36, phase: t + side});
+      sea?.sources.push({x: b.a[0] + dx * t - dy / len * b.w * .52 * side, y: b.a[1] + dy * t + dx / len * b.w * .52 * side, strength: .06, radius: 36, phase: t + side});
     }
-    cove.sources.push({x: 4498, y: 1362, strength: .2, radius: 22, phase: 0});
-    // Three pads painted into the spring cove, plus the two tiny landing posts, also displace the surface.
-    for (const [x, y] of [[3702, 1627], [3744, 1671], [4591, 1625], [3930, 1768], [4020, 1860]]) cove.sources.push({x, y, strength: .045, radius: 14, phase: x * .03});
     // boss 5 Nov: pads seed gentle rings into their own connected pond.
     for (const p of art.floating || []) if (/lily|pad/i.test(p.src || p.asset || '')) {
       for (const b of [pondBody, cove]) if (b.contains(p.x, p.y)) b.sources.push({x:p.x, y:p.y, strength:.065, radius:14, phase:p.x*.017});
@@ -424,7 +438,14 @@ export async function createWater({app, world, art, layer, objects, props, motio
 
     function splashBody(b, x, y, strength, radius) {
       if (!b.mesh.visible) return false;
-      const hit = b.field.impulse(x - b.rect.x, y - b.rect.y, strength, radius); b.dirty ||= hit; if (hit) stats.splashes++; return hit;
+      const hit = b.field.impulse(x - b.rect.x, y - b.rect.y, strength, radius); b.dirty ||= hit;
+      if (hit) {
+        stats.splashes++;
+        if (!b.sea && !b.fountain && time - b.lastRing > .65) {
+          b.uniforms[`uRing${b.rings++ % RINGS}`].set([x - b.rect.x, y - b.rect.y, time, strength < .1 ? .32 : .65]); b.lastRing = time;
+        }
+      }
+      return hit;
     }
     function nearest(b, x, y, radius) {
       const f = b.field, gx = (x - b.rect.x) / f.dx, gy = (y - b.rect.y) / f.dy;
@@ -451,7 +472,7 @@ export async function createWater({app, world, art, layer, objects, props, motio
         for (let y = y0; y <= y1 && !visible; y++) for (let x = x0; x <= x1; x++) if (f.wet[y * f.cols + x]) {visible = true; break;}
         b.mesh.visible = visible;
       }
-      if (calm !== reduced) {reduced = calm; accumulator = 0; bodies.forEach(b => {b.field.clear(); b.dirty = true;});}
+      if (calm !== reduced) {reduced = calm; accumulator = 0; bodies.forEach(b => {b.field.clear(); b.dirty = true; for (let i = 0; i < RINGS; i++) b.uniforms[`uRing${i}`].fill(0);});}
       if (!reduced) {
         accumulator += Math.min(Math.max(0, Number.isFinite(dt) ? dt : 0), .1);
         let count = 0;
@@ -460,7 +481,7 @@ export async function createWater({app, world, art, layer, objects, props, motio
           if (pulseTime >= .16) {
             pulseTime -= .16;
             for (const b of bodies) for (const s of b.sources) {
-              if (!b.sea && !b.fountain && Math.sin(time * 3.2 + s.phase) < .88) continue;
+              if (!b.sea && !b.fountain && Math.sin(time * .9 + s.phase) < .985) continue;
               splashBody(b, s.x, s.y, s.strength * (.8 + .2 * Math.sin(time * 2 + s.phase)), s.radius);
             }
           }
@@ -472,7 +493,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
           }
           // boss 5 Nov: invisible bodies do no solver work, upload or ambient catch-up.
           for (const b of bodies) if (b.mesh.visible) {
-            if (b.id === 'pond' || b.id === 'cove') inlandLife(b.field, b.tick * WATER_STEP, b.tick++, (x,y,s,r) => splashBody(b, x + b.rect.x, y + b.rect.y, s, r));
             b.field.step(); b.dirty = true;
           }
           accumulator -= WATER_STEP; count++; steps++;

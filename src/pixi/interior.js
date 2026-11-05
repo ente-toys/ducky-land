@@ -5,13 +5,14 @@
 // is hidden by it, and each piece's foot rectangle blocks walking. All numbers are in the drawing's own pixels.
 import {Assets, Container, Graphics, Rectangle, Sprite, Texture} from 'pixi.js';
 
-const SRC = '/pixi-art/interiors/museum.webp', W = 1536, H = 1024;
+const SRC = '/pixi-art/interiors/museum.svg', W = 1536, H = 1024;   // boss 5 Nov: the room is vector art in the island's line style, only the Mona Lisa hangs
 const FLOOR = {x: 768, y: 1100, rx: 1500, ry: 760};   // the floor inside the curved wall (wall base runs ~y 340 middle, ~y 420 at the sides)
 // [x0, y0, x1, y1] of each drawn piece; its bottom strip blocks walking
 const PIECES = [[272, 412, 438, 492], [1094, 412, 1260, 492], [116, 572, 288, 654], [212, 866, 388, 948], [1148, 866, 1322, 948],   // benches
   [462, 276, 578, 420], [942, 276, 1058, 420], [32, 784, 158, 958], [1362, 784, 1508, 958],   // potted plants
   [582, 336, 952, 466]];   // the Mona Lisa rope and posts
-const ARCH = [560, 788, 980, 872];   // boss 5 Nov: the arch's top band, always in front, so a Ducky walks UNDER it, never over it
+const PIECE_ART = ['bench-1', 'bench-2', 'bench-3', 'bench-4', 'bench-5', 'plant-1', 'plant-2', 'plant-3', 'plant-4', 'rope'].map(n => `/pixi-art/interiors/pieces/${n}.svg`);   // boss 5 Nov: each piece on its own transparent sheet, so only the piece itself hides a Ducky (no floor rectangle)
+const ARCH = [556, 786, 984, 1024];   // boss 5 Nov: the whole arch (band and both legs, open middle) stands in front, so a Ducky walks under and through it   // boss 5 Nov: the arch's top band, always in front, so a Ducky walks UNDER it, never over it
 const BLOCKS = [...PIECES.slice(0, 9).map(([x0, y0, x1, y1]) => [x0 - 6, y1 - 34, x1 + 6, y1 + 4]), [582, 400, 952, 505],   // the rope: you stop a step in front of it
  
   [560, 940, 652, 1024], [890, 940, 980, 1024]];   // the arch's two feet
@@ -20,29 +21,32 @@ const EXIT = (x, y) => y > 935 && x > 652 && x < 890;   // stepping into the arc
 const VIEW = {x: 770, y: 530, x0: 640, x1: 900, y0: 500, y1: 600};   // standing at the rope in front of the Mona Lisa Ducky
 const SPEED = 330, DUCK_SCALE = .62;
 // boss 5 Nov: the animated Mona Lisa Ducky (concepts/monalisa-svg/v1) hangs over the drawn one; the game draws its pupils and lids
-const MONA = {src: '/pixi-art/interiors/monalisa.svg', x: 767, top: 36, h: 248, wall: 0xFEDB91, cover: [634, 34, 268, 252],
-  eyes: [{cx: 252, cy: 317}, {cx: 341, cy: 325}], viewH: 760, viewW: 600};
+// the Mona Lisa Ducky (concepts/monalisa-svg/v1, frame removed) fills the room's gold frame; the game draws its pupils and lids
+const MONA = {src: '/pixi-art/interiors/monalisa.svg', slot: [673, 83, 188, 159], view: [78, 205, 444], eyes: [{cx: 252, cy: 317}, {cx: 341, cy: 325}], viewW: 600};
 
 const inside = (x, y) => ((x - FLOOR.x) / FLOOR.rx) ** 2 + ((y - FLOOR.y) / FLOOR.ry) ** 2 < 1 && y < H - 4 && x > 20 && x < W - 20;
 const walkable = (x, y) => inside(x, y) && !BLOCKS.some(([x0, y0, x1, y1]) => x > x0 && x < x1 && y > y0 && y < y1) || EXIT(x, y) && y < H + 40;
 
 export async function createInterior() {
-  const texture = await Assets.load(SRC);
+  const texture = await Assets.load({src: SRC, data: {resolution: 2}});
   const root = new Container({label: 'Museum interior', visible: false}), room = new Container({sortableChildren: true});
   root.addChild(room);
   room.addChild(new Sprite(texture));
-  for (const [x0, y0, x1, y1] of PIECES) {
-    const piece = new Sprite(new Texture({source: texture.source, frame: new Rectangle(x0, y0, x1 - x0, y1 - y0)}));
-    piece.position.set(x0, y0); piece.zIndex = y1 - 12; room.addChild(piece);
-  }
-  const arch = new Sprite(new Texture({source: texture.source, frame: new Rectangle(ARCH[0], ARCH[1], ARCH[2] - ARCH[0], ARCH[3] - ARCH[1])}));
-  arch.position.set(ARCH[0], ARCH[1]); arch.zIndex = 4000; room.addChild(arch);
+  const pieceTex = await Promise.all([...PIECE_ART, '/pixi-art/interiors/pieces/arch.svg'].map(src => Assets.load({src, data: {resolution: 2}})));
+  PIECES.forEach(([x0, y0, x1, y1], k) => {
+    const t = pieceTex[k], sc = t.width / W;
+    const piece = new Sprite(new Texture({source: t.source, frame: new Rectangle(x0 * sc, y0 * sc, (x1 - x0) * sc, (y1 - y0) * sc)}));
+    piece.position.set(x0, y0); piece.scale.set(1 / sc); piece.zIndex = y1 - 12; room.addChild(piece);
+  });
+  const at = pieceTex.at(-1), asc = at.width / W;
+  const arch = new Sprite(new Texture({source: at.source, frame: new Rectangle(ARCH[0] * asc, ARCH[1] * asc, (ARCH[2] - ARCH[0]) * asc, (ARCH[3] - ARCH[1]) * asc)}));
+  arch.position.set(ARCH[0], ARCH[1]); arch.scale.set(1 / asc); arch.zIndex = 4000; room.addChild(arch);
   const ground = new Graphics().rect(-4000, -4000, W + 8000, H + 8000).fill(0xFDE197); ground.zIndex = -1; room.addChild(ground);   // letterbox in floor colour
   const monaTex = await Assets.load({src: MONA.src, data: {resolution: 3}});
-  const ms = MONA.h / MONA.viewH, mx = MONA.x - MONA.viewW * ms / 2, my = MONA.top;
+  const [sx, sy, sw, sh] = MONA.slot, [vx, vy, vw] = MONA.view, ms = sw / vw, mx = sx - vx * ms, my = sy - vy * ms;
   const mona = new Container(); mona.zIndex = 1;   // over the room drawing, under every Ducky and piece
   room.addChild(mona);
-  mona.addChild(new Graphics().rect(...MONA.cover).fill(MONA.wall));   // hides the old painting behind it
+  const clip = new Graphics().rect(sx, sy, sw, sh).fill(0xffffff); mona.addChild(clip); mona.mask = clip;   // stays inside the frame
   const monaArt = new Sprite(monaTex); monaArt.position.set(mx, my); monaArt.scale.set(ms * MONA.viewW / monaTex.width); mona.addChild(monaArt);
   const eyes = MONA.eyes.map(e => {
     const x = mx + e.cx * ms, y = my + e.cy * ms, g = new Container();
