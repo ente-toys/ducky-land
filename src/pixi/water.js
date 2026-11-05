@@ -437,6 +437,7 @@ export async function createWater({app, world, art, layer, objects, props, motio
     const fall = new Graphics({label: 'Water - spring flow'}); layer.addChild(fall); roots.push(fall);
 
     function splashBody(b, x, y, strength, radius) {
+      if (!b) return false;   // boss 5 Nov: the sea body is off
       if (!b.mesh.visible) return false;
       const hit = b.field.impulse(x - b.rect.x, y - b.rect.y, strength, radius); b.dirty ||= hit;
       if (hit) {
