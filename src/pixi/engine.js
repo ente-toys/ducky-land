@@ -626,7 +626,7 @@ export class PixiIsland {
     if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
       const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));
       if (t > 0) this.archipelago.build();
-      this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size);
+      this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
     }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
     this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);

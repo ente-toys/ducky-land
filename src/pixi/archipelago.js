@@ -7,49 +7,30 @@ import shapes from './walk-shapes.json' with {type: 'json'};
 export const ISLAND_COUNT = 300;
 const hash = i => {const s = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return s - Math.floor(s);};
 
-// boss 5 Nov: a GTA-style world map (refs: GTA V/VI map shots). A few big landmasses made of islands packed edge to edge,
-// archipelago chains curling between them, lone islets in open sea; seeded so everyone sees the same world. Home sits in
-// the middle of the biggest landmass. 30,000 Duckies (100 per island) show as tiny yellow dots once you zoom out far.
+// The world map, seeded so everyone sees the same world, home in the middle. 30,000 Duckies (100 per island) show as tiny yellow dots once you zoom out far.
 export function archipelagoLayout(world, seed = 11) {
   let n = seed >>> 0;
   const rnd = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
   const W = world.width, H = world.height, cx = W / 2, cy = H / 2;
   const out = [{index: 0, home: true, x: cx, y: cy, scale: 1, flip: 1, rot: 0}];
-  const clear = (x, y, s, gap) => out.every(i => Math.hypot((i.x - x) / W, (i.y - y) / H) > (i.scale + s) * .5 * gap);
   const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 1.2});
-  // landmasses: centre, radius (in island widths), how many islands
-  const lands = [[0, 0, 7, 95], [-12, -9, 5, 50], [12, -9, 4.6, 40], [-12, 9, 4.2, 32], [12, 9, 3.7, 25]];   // boss 5 Nov: closer, so the globe never shows empty sea
-  const landInfo = [];
-  for (const [lx, ly, r, count] of lands) {
-    landInfo.push({x: cx + lx * W, y: cy + ly * H, r});
-    const lobes = Array.from({length: 5}, () => ({a: rnd() * 6.28, k: 2 + Math.floor(rnd() * 4), m: .1 + rnd() * .15}));
-    const edge = a => r * (1 + lobes.reduce((t, l) => t + Math.sin(a * l.k + l.a) * l.m, 0));
-    let placed = 0;
-    for (let t = 0; placed < count && t < 20000; t++) {
-      const a = rnd() * 6.28, d = Math.sqrt(rnd()) * edge(a), s = .55 + rnd() * .5;
-      const x = cx + (lx + Math.cos(a) * d) * W, y = cy + (ly + Math.sin(a) * d * .8) * H;
-      if (clear(x, y, s, 1.18)) {add(x, y, s); placed++;}   // boss 5 Nov: never touching, a strip of sea round every island
+  // boss 5 Nov: "the whole world should be filled with islands, make them bigger". Big islands scattered evenly but
+  // naturally (dart throwing, biggest first) over a map that wraps both ways, so the globe is covered with no seams or rows.
+  const COLS = 20, ROWS = 15, sx = W * 1.42, sy = H * 1.42, hc = 10, hr = 7;
+  const x0 = cx - (hc + .5) * sx, y0 = cy - (hr + .5) * sy, SX = COLS * sx, SY = ROWS * sy;
+  const wrapd = (v, p) => v - p * Math.round(v / p);
+  const room = (x, y, s) => out.every(i => Math.hypot(wrapd(i.x - x, SX) / W, wrapd(i.y - y, SY) / H) > (i.scale + s) * .5 * 1.06);
+  const sizes = Array.from({length: ISLAND_COUNT - 1}, () => .62 + rnd() * .62).sort((p, q) => q - p);
+  for (let k = 0, s = sizes[0]; k < sizes.length; s = sizes[++k]) {
+    for (let t = 0; t < 4000; t++, s *= t % 400 ? 1 : .94) {
+      const x = x0 + rnd() * SX, y = y0 + rnd() * SY;
+      if (room(x, y, s)) {add(x, y, s); break;}
     }
   }
-  // archipelago chains: small islands strung along gentle arcs between and around the landmasses
-  for (let c = 0; c < 9 && out.length < 270; c++) {
-    let x = cx + (rnd() - .5) * 30 * W, y = cy + (rnd() - .5) * 26 * H, a = rnd() * 6.28;
-    for (let k = 0; k < 7 && out.length < 270; k++) {
-      a += (rnd() - .5) * .9; x += Math.cos(a) * W * 1.1; y += Math.sin(a) * H * 1.1;
-      const s = .3 + rnd() * .25; if (clear(x, y, s, 1.25)) add(x, y, s);
-    }
-  }
-  // lone islets in open sea fill the rest
-  for (let t = 0; out.length < ISLAND_COUNT && t < 40000; t++) {
-    const x = cx + (rnd() - .5) * 32 * W, y = cy + (rnd() - .5) * 27 * H, s = .22 + rnd() * .25;
-    if (clear(x, y, s, 1.3)) add(x, y, s);
-  }
-  const pad = .5 * W;   // tight, so the world map repeats round the globe without big empty bands
-  const bounds = {x0: Math.min(...out.map(i => i.x - W * i.scale / 2)) - pad, y0: Math.min(...out.map(i => i.y - H * i.scale / 2)) - pad,
-    x1: Math.max(...out.map(i => i.x + W * i.scale / 2)) + pad, y1: Math.max(...out.map(i => i.y + H * i.scale / 2)) + pad};
+  const landInfo = [{x: cx, y: cy, r: 3}];
+  const bounds = {x0: cx - (hc + .5) * sx, y0: cy - (hr + .5) * sy, x1: cx + (COLS - hc - .5) * sx, y1: cy + (ROWS - hr - .5) * sy};
   return {islands: out, bounds, rnd, lands: landInfo};
 }
-
 export function createArchipelago(app, scene, layer, world) {
   const layout = archipelagoLayout(world), {islands, bounds} = layout;
   const people = new Graphics({label: '30,000 Duckies'});
@@ -94,7 +75,8 @@ export function createArchipelago(app, scene, layer, world) {
       if (texture) return;
       const keep = {x: scene.position.x, y: scene.position.y, sx: scene.scale.x, sy: scene.scale.y};
       scene.position.set(0, 0); scene.scale.set(1, 1); root.visible = false;
-      texture = app.renderer.generateTexture({target: scene, frame: new Rectangle(0, 0, world.width, world.height), resolution: .14});
+      texture = app.renderer.generateTexture({target: scene, frame: new Rectangle(0, 0, world.width, world.height), resolution: .4});   // sharp enough that the copies don't go blocky while zooming out
+      texture.source.scaleMode = 'linear';
       scene.position.set(keep.x, keep.y); scene.scale.set(keep.sx, keep.sy); root.visible = true;
       for (const island of islands) if (!island.home) {
         const s = new Sprite(texture);
