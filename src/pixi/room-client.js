@@ -113,7 +113,8 @@ export class RoomClient {
     for (const pose of players) {
       if (pose.id === this.id && self) {
         const previous = this.player;
-        this.player = {...pose, path:self.path, until:now+self.emoteLeft};
+        // boss 5 Nov: keep the predicted walking pace across snapshots so the ease-in does not restart every tick
+        this.player = {...pose, path:self.path, until:now+self.emoteLeft, pace:previous?.pace ?? 0, heading:previous?.heading ?? null};
         this.pending = this.pending.filter(command => command.seq > self.ack);
         for (const command of this.pending) this.predict(command, now);
         if (previous) {

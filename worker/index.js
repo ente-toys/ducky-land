@@ -1,7 +1,7 @@
 import world from '../rive/web/world.json';
 import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same walking map the game uses offline (scripts/walk-world.mjs)
 import {createNavigation} from '../src/pixi/navigation.js';
-import {DURATIONS, playEmote, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {DURATIONS, playEmote, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 
 const nav = createNavigation({...world, ...walkWorld});
@@ -306,6 +306,8 @@ export class IslandRoom {
       active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.until > now/1000);
       this.attach(socket, info);
     }
+    // boss 5 Nov: players ease apart instead of stacking (same helper as the offline sim)
+    if (separateActors([...this.connections.values()].map(info => info.actor).filter(Boolean), nav, .05)) active = true;
     this.stepCount = (this.stepCount ?? 0)+1;
     if (!active || this.stepCount % 2 === 0) this.broadcast();
     if (!active) {
