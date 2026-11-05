@@ -18,7 +18,7 @@ export function archipelagoLayout(world, seed = 11) {
   const clear = (x, y, s, gap) => out.every(i => Math.hypot((i.x - x) / W, (i.y - y) / H) > (i.scale + s) * .5 * gap);
   const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 1.2});
   // landmasses: centre, radius (in island widths), how many islands
-  const lands = [[0, 0, 7, 95], [-17, -11, 5, 50], [16, -11, 4.6, 40], [-15, 12, 4.2, 32], [15, 12, 3.7, 25]];
+  const lands = [[0, 0, 7, 95], [-12, -9, 5, 50], [12, -9, 4.6, 40], [-12, 9, 4.2, 32], [12, 9, 3.7, 25]];   // boss 5 Nov: closer, so the globe never shows empty sea
   const landInfo = [];
   for (const [lx, ly, r, count] of lands) {
     landInfo.push({x: cx + lx * W, y: cy + ly * H, r});
@@ -33,7 +33,7 @@ export function archipelagoLayout(world, seed = 11) {
   }
   // archipelago chains: small islands strung along gentle arcs between and around the landmasses
   for (let c = 0; c < 9 && out.length < 270; c++) {
-    let x = cx + (rnd() - .5) * 46 * W, y = cy + (rnd() - .5) * 40 * H, a = rnd() * 6.28;
+    let x = cx + (rnd() - .5) * 30 * W, y = cy + (rnd() - .5) * 26 * H, a = rnd() * 6.28;
     for (let k = 0; k < 7 && out.length < 270; k++) {
       a += (rnd() - .5) * .9; x += Math.cos(a) * W * 1.1; y += Math.sin(a) * H * 1.1;
       const s = .3 + rnd() * .25; if (clear(x, y, s, 1.25)) add(x, y, s);
@@ -41,10 +41,10 @@ export function archipelagoLayout(world, seed = 11) {
   }
   // lone islets in open sea fill the rest
   for (let t = 0; out.length < ISLAND_COUNT && t < 40000; t++) {
-    const x = cx + (rnd() - .5) * 54 * W, y = cy + (rnd() - .5) * 46 * H, s = .22 + rnd() * .25;
-    if (clear(x, y, s, 1.6)) add(x, y, s);
+    const x = cx + (rnd() - .5) * 32 * W, y = cy + (rnd() - .5) * 27 * H, s = .22 + rnd() * .25;
+    if (clear(x, y, s, 1.3)) add(x, y, s);
   }
-  const pad = 2 * W;
+  const pad = .5 * W;   // tight, so the world map repeats round the globe without big empty bands
   const bounds = {x0: Math.min(...out.map(i => i.x - W * i.scale / 2)) - pad, y0: Math.min(...out.map(i => i.y - H * i.scale / 2)) - pad,
     x1: Math.max(...out.map(i => i.x + W * i.scale / 2)) + pad, y1: Math.max(...out.map(i => i.y + H * i.scale / 2)) + pad};
   return {islands: out, bounds, rnd, lands: landInfo};

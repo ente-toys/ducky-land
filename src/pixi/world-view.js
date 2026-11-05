@@ -78,23 +78,48 @@ vec3 horizon(vec2 uv) {
 }
 // the planet: the same flat world bent onto a globe. With a huge radius it IS the flat view; as the radius shrinks the
 // edges curl away and space shows round it, so the pull-out into space is one continuous move. It rolls slowly (spin).
+float landAt(vec2 g) {return texture(uWorld, fract((g - uBounds.xy) / uBounds.zw)).a;}
+float cloudCover(vec2 q) {   // crisp cartoon clouds: hard-edged puffs, not fog
+  float n = noise(q) * .6 + noise(q * 2.1 + 3.7) * .3 + noise(q * 5.3) * .1;
+  return smoothstep(.66, .69, n);
+}
 vec3 planet(vec2 uv) {
   vec2 px = (uv - .5) * uRes;
   float Rp = uR * uRes.y, d = length(px) / Rp;
-  vec2 cell = floor(uv * uRes / 4.);
-  float star = step(.9965, hash(cell)) * (.55 + .45 * sin(uTime * 2. + hash(cell + 7.) * 6.28));
-  vec3 space = mix(vec3(.03, .06, .17), vec3(.08, .13, .32), uv.y) + star;
-  space = mix(space, vec3(.45, .8, 1.), exp(-max(d - 1., 0.) * 6.) * step(1., d) * .75);
-  if (d >= 1.) return space;
-  vec2 g = uCam + uSpin + (d > 0. ? px / length(px) : vec2(0.)) * asin(d) * Rp / uZoom;   // near the middle: the flat view, unchanged
+  float ball = smoothstep(4., 1., uR);                     // space, light and clouds only once it reads as a ball
+  // space: deep navy with a faint nebula and fine twinkling stars
+  vec2 sp = uv * uRes;
+  vec3 space = mix(vec3(.02, .04, .12), vec3(.06, .09, .24), uv.y);
+  space += vec3(.12, .08, .2) * smoothstep(.55, 1., noise(uv * 3. + 11.)) * .35;
+  float st = hash(floor(sp / 2.)), tw = .5 + .5 * sin(uTime * 1.7 + st * 40.);
+  space += vec3(.9, .95, 1.) * step(.9975, st) * tw + vec3(.6, .7, 1.) * step(.9992, hash(floor(sp / 3.) + 5.)) * .8;
+  float halo = exp(-max(d - 1., 0.) * 9.);                 // atmosphere glow hugging the rim
+  space = mix(space, vec3(.42, .78, 1.), halo * step(1., d) * .85 * ball);
+  if (d >= 1.) return mix(ground(uCam + px / uZoom), space, ball);
+  vec2 dir = d > 0. ? px / length(px) : vec2(0.);
+  vec2 g = uCam + uSpin + dir * asin(d) * Rp / uZoom;     // near the middle: the flat view, unchanged
   vec3 col = ground(g);
-  float z = sqrt(1. - d * d);
-  vec3 n = vec3(px / Rp * vec2(1., -1.), z);
-  float light = clamp(dot(n, normalize(vec3(-.45, .5, .75))), 0., 1.);
-  float ball = smoothstep(4., 1., uR);                    // shading and rim only once it reads as a ball
-  col *= mix(1., .5 + .6 * light, ball);
-  col = mix(col, vec3(1.), clouds(g / uBounds.zw * 7. + vec2(uTime * .02, 0.), .66) * .7 * ball);
-  return mix(col, vec3(.6, .88, 1.), pow(1. - z, 2.4) * .75 * ball);   // blue atmosphere at the rim
+  if (ball > 0.) {
+    float scale = uBounds.z / 260.;                        // ~ an island's width in world units
+    float land = landAt(g), near = 0.;
+    for (int i = 0; i < 8; i++) {float a = float(i) * .785; near = max(near, landAt(g + vec2(cos(a), sin(a)) * scale * 2.2));}
+    vec3 deep = vec3(.09, .36, .62), shallow = vec3(.52, .9, .93);
+    vec3 sea = mix(deep, shallow, smoothstep(0., 1., near) * .85);
+    col = mix(col, mix(sea, col, land), ball);             // rich sea with turquoise shallows round the islands
+    // light: sun from the upper left, soft terminator, ocean glint, cloud shadows
+    float z = sqrt(1. - d * d);
+    vec3 n = vec3(px.x / Rp, -px.y / Rp, z), L = normalize(vec3(-.55, .45, .7));
+    float diff = clamp(dot(n, L) * .75 + .35, 0., 1.);
+    vec2 cq = g / uBounds.zw * 11. + vec2(uTime * .015, 0.);
+    float cloud = cloudCover(cq), shade = cloudCover(cq + vec2(.06, -.05));
+    col *= mix(1., .78, shade * (1. - cloud) * ball);
+    float glint = pow(clamp(dot(reflect(-L, n), vec3(0., 0., 1.)), 0., 1.), 60.) * (1. - land);
+    col = col * mix(1., .35 + .75 * diff, ball) + glint * .55 * ball;
+    col = mix(col, vec3(1.) * (.55 + .5 * diff), cloud * .92 * ball);
+    float rim = pow(1. - z, 2.2);
+    col = mix(col, vec3(.55, .85, 1.), rim * .8 * ball);   // the atmosphere thickens at the edge
+  }
+  return col;
 }
 void main() {
   vec3 col = planet(vUV);   // boss 5 Nov: Google Earth style, straight down, the flat world curling into the globe
