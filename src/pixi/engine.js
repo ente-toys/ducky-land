@@ -5,6 +5,7 @@ import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
+import {createWorldView} from './world-view.js';
 import {HARBOR, islandFor, near, SEA_BOUNDS, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
@@ -221,6 +222,7 @@ export class PixiIsland {
       if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);   // boss 5 Nov: 300 islands, same island for now; zoom out to see them
+      this.worldView = createWorldView(this.app, this.scene);   // boss 5 Nov: tilted horizon, then the little planet
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) return;
@@ -620,6 +622,12 @@ export class PixiIsland {
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
     if (this.birdEye) this.archipelago.build();
     this.archipelago?.update(this.camera.zoom);
+    if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
+      const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));
+      if (t > .6 && !this.gestures.pointers.size) {const b = this.archipelago.bounds; this.target.x += ((b.x0 + b.x1) / 2 - this.target.x) * .08; this.target.y += ((b.y0 + b.y1) / 2 - this.target.y) * .08;}   // drift to the world's middle so the planet is centred
+      if (t > 0) this.archipelago.build();
+      this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world);
+    }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
     this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);
     this.scene.position.set(this.width / 2 - this.camera.x * this.camera.zoom, this.height / 2 - this.camera.y * this.camera.zoom * TILT);
@@ -826,7 +834,7 @@ export class PixiIsland {
     cancelAnimationFrame(this.raf);
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());
-    this.archipelago?.destroy();
+    this.archipelago?.destroy(); this.worldView?.destroy();
     this.clearChat();
     this.keys.clear();
     this.gestures.clear();

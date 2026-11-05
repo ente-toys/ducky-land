@@ -88,7 +88,7 @@ export function createArchipelago(app, scene, layer, world) {
   root.addChild(atlas);
   let texture = null;
   return {
-    bounds, count: islands.length,
+    bounds, islands, count: islands.length, get texture() {return texture;},
     // snapshot the home island as it is drawn now (ground, props, everything), once, at a small size
     build() {
       if (texture) return;
@@ -115,8 +115,7 @@ export function createArchipelago(app, scene, layer, world) {
     update(zoom) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
-      atlas.alpha = far; atlas.visible = far > 0;
-      for (const s of root.children) if (s !== people && s !== atlas) s.alpha = 1 - far * .92;
+      atlas.visible = false;   // boss 5 Nov: the atlas look was replaced by the tilted horizon + planet zoom (world-view.js)
     },
     destroy() {root.destroy({children: true}); texture?.destroy(true);},
   };
