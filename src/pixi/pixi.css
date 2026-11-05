@@ -213,7 +213,8 @@
 .pixi-travel button:disabled { opacity: .6; cursor: default; }
 .pixi-travel :is(button,select):focus-visible { outline: 3px solid #39472d; outline-offset: 2px; }
 .pixi-travel-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.pixi-steering { display: flex; gap: 8px; margin-top: 10px; touch-action: none; }
+.pixi-steering { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 52px); display: flex; gap: 8px; touch-action: none; z-index: 5; }
+.pixi-travel-notice { position: fixed; left: 50%; transform: translateX(-50%); top: max(88px, calc(env(safe-area-inset-top) + 72px)); margin: 0; padding: 8px 14px; border: 1px solid #564537; border-radius: 999px; color: #332b23; background: #fff9dfed; box-shadow: 0 3px 0 #56453755; font: 14px/1.4 system-ui, sans-serif; z-index: 5; }
 .pixi-steering button { min-width: 44px; font-size: 22px; touch-action: none; }
 @media (max-width: 600px) {
   .pixi-travel { top: auto; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 52px); width: min(270px, calc(100vw - 60px)); }
