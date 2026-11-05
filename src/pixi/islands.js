@@ -108,24 +108,65 @@ export function canDock(actor) {
 // boss 5 Nov: neighbours are full-size islands with their jetty on the north side, so a boat heading for one sails round
 // the coasts instead of stopping dead at the first beach: a coarse grid of open water, a shortest path across it, then the
 // corners pulled tight. The room server and the game run the same code, so both agree on the route.
-const CELL=250, GRIDS=new Map();
-const clearLine=(id,a,b) => {   // checked every 6px with a 10px margin either side, so a route never grazes a beach (review 5 Nov)
-  const len=Math.hypot(b.x-a.x,b.y-a.y), steps=Math.max(1,Math.ceil(len/6)), nx=len ? -(b.y-a.y)/len*10 : 0, ny=len ? (b.x-a.x)/len*10 : 0;
+// boss 5 Nov ("fix the freeze"): planning used to test hundreds of thousands of water points the first time a boat left an
+// island (about a second of a frozen room). Every island is the same map shifted, so the distance from any point to the
+// nearest land of the home island is worked out once, on a 25-unit grid; any island's sea is then a cheap lookup.
+const RES=25, PAD=700, FX0=-PAD, FY0=-PAD, FW=Math.ceil((world.width+2*PAD)/RES), FH=Math.ceil((world.height+2*PAD)/RES);
+let FIELD=null;
+function landDistance() {
+  if (FIELD) return FIELD;
+  const d=new Float32Array(FW*FH).fill(1e9);
+  const h=RES/2, subs=[[0,0],[-h,-h],[h,-h],[-h,h],[h,h]];   // the centre and four corners, so land smaller than a sample is still seen
+  for (let r=0;r<FH;r++) for (let c=0;c<FW;c++) {
+    const x=FX0+c*RES, y=FY0+r*RES;
+    if (subs.some(([u,v]) => landAt(x+u,y+v))) d[r*FW+c]=0;
+  }
+  const D=RES, DD=RES*Math.SQRT2;   // two-pass chamfer distance, in world units
+  for (let r=0;r<FH;r++) for (let c=0;c<FW;c++) {
+    const i=r*FW+c; let v=d[i];
+    if (c>0) v=Math.min(v,d[i-1]+D);
+    if (r>0) {v=Math.min(v,d[i-FW]+D); if (c>0) v=Math.min(v,d[i-FW-1]+DD); if (c<FW-1) v=Math.min(v,d[i-FW+1]+DD);}
+    d[i]=v;
+  }
+  for (let r=FH-1;r>=0;r--) for (let c=FW-1;c>=0;c--) {
+    const i=r*FW+c; let v=d[i];
+    if (c<FW-1) v=Math.min(v,d[i+1]+D);
+    if (r<FH-1) {v=Math.min(v,d[i+FW]+D); if (c<FW-1) v=Math.min(v,d[i+FW+1]+DD); if (c>0) v=Math.min(v,d[i+FW-1]+DD);}
+    d[i]=v;
+  }
+  return FIELD=d;
+}
+// how far (x,y) in this island's sea is from the nearest land of any island (capped at PAD; 0 outside the sea)
+function clearance(id,x,y) {
+  const b=seaBoundsFor(id);
+  if (x < b.x0 || y < b.y0 || x > b.x1 || y > b.y1) return 0;
+  const d=landDistance(); let best=PAD;
+  for (const o of [{x:0,y:0},...obstaclesFor(id)]) {
+    const c=Math.round((x-o.x-FX0)/RES), r=Math.round((y-o.y-FY0)/RES);
+    if (c<0 || r<0 || c>=FW || r>=FH) continue;
+    best=Math.min(best,d[r*FW+c]);
+  }
+  return Math.max(0,best-RES);   // a thin walkway or jetty can sit between samples: count it as one sample closer
+}
+const SAFE=BOAT_RADIUS+30;   // clear of every coast by the boat plus a margin bigger than the 25-unit grid's error
+const clearLine=(id,a,b) => {   // a route leg is open water all along (review 5 Nov: never graze a beach)
+  const len=Math.hypot(b.x-a.x,b.y-a.y), steps=Math.max(1,Math.ceil(len/6));
   for (let i=1;i<=steps;i++) {
-    const x=a.x+(b.x-a.x)*i/steps, y=a.y+(b.y-a.y)*i/steps;
-    if (!canSail(x,y,id) || (i<steps && (!canSail(x+nx,y+ny,id) || !canSail(x-nx,y-ny,id)))) return false;
+    const x=a.x+(b.x-a.x)*i/steps, y=a.y+(b.y-a.y)*i/steps, room=clearance(id,x,y);
+    if (room >= SAFE) {i+=Math.max(0,Math.floor((room*.85-SAFE)/6)); continue;}   // far from land: jump ahead (the chamfer field reads up to 8% long)
+    for (let k=0;k<3;k++) {   // close to a jetty or beach: the exact test the boat itself uses, every 2px so nothing slips between
+      const f=(i-k/3)/steps;
+      if (!canSail(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f,id)) return false;
+    }
   }
   return true;
 };
+const CELL=250, GRIDS=new Map();
 function gridFor(id) {
   if (!GRIDS.has(id)) {
     const b=seaBoundsFor(id), cols=Math.ceil((b.x1-b.x0)/CELL), rows=Math.ceil((b.y1-b.y0)/CELL), open=new Uint8Array(cols*rows);
-    // a cell is open only if its whole neighbourhood is water, so the straight line to any open neighbour is water too
-    const ring=[...Array(12)].map((_,k) => [Math.cos(k*Math.PI/6),Math.sin(k*Math.PI/6)]);
-    for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
-      const x=b.x0+(c+.5)*CELL, y=b.y0+(r+.5)*CELL;
-      open[r*cols+c]=canSail(x,y,id) && ring.every(([u,v]) => canSail(x+u*CELL*.4,y+v*CELL*.4,id) && canSail(x+u*CELL*.75,y+v*CELL*.75,id))?1:0;
-    }
+    // a cell is open only if open water reaches past its corners, so the straight line to any open neighbour is water too
+    for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) open[r*cols+c]=clearance(id,b.x0+(c+.5)*CELL,b.y0+(r+.5)*CELL)*.9 >= CELL*.71+SAFE ? 1 : 0;
     GRIDS.set(id,{b,cols,rows,open});
   }
   return GRIDS.get(id);

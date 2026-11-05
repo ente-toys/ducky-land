@@ -52,7 +52,7 @@ vec3 ground(vec2 g) {
   vec3 far = world((g - uBounds.xy) / uBounds.zw, uSea);
   if (suv.x < 0. || suv.x > 1. || suv.y < 0. || suv.y > 1.) return far;
   vec4 c = texture(uScene, suv);
-  vec3 nearCol = mix(far, c.rgb / max(c.a, .001), c.a);
+  vec3 nearCol = mix(uSea, c.rgb / max(c.a, .001), c.a);   // on screen the real scene (islands drawn live) over plain game water: no blocky map halos
   vec2 e = min(suv, 1. - suv);
   return mix(far, nearCol, smoothstep(0., .04, min(e.x, e.y)));   // soften the seam where the real scene ends
 }
@@ -256,7 +256,7 @@ export function createWorldView(app, scene) {
       if (busy > .01) {
         const pick = () => {const i = islands[Math.floor(rand() * islands.length)], a = rand() * 6.283, r = rand() * .25 * worldSize.width * i.scale; return {x: i.x + Math.cos(a) * r, y: i.y + Math.sin(a) * r * .7};};
         for (rippleDue -= dt; rippleDue < 0; rippleDue += .035) ripples.push({...pick(), at: time, heart: rand() < .7, dur: 2 + rand() * .8});   // boss 5 Nov: the hearts are the 30,000 stars, so lots of them
-        const px = Math.max(1, Rp / 240);   // sizes follow the globe
+        const px = Math.min(1.5, Math.max(1, Rp / 240));   // hearts and ripples stay a friendly size at every zoom   // sizes follow the globe
         for (const c of glows.children) c.visible = false;
         for (const c of hearts.children) c.visible = false;
         rings.clear();
