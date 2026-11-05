@@ -6,7 +6,8 @@ import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
-import {HARBOR,EXITS,exitsFor,canSail} from '../src/pixi/islands.js';
+import {HARBOR,destinationsFor,canSail} from '../src/pixi/islands.js';
+import {DUCK_RADIUS} from '../src/pixi/player-motion.js';
 
 const origin = 'https://island.example';
 const nav = createNavigation(world);
@@ -326,7 +327,9 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     clients.push(returned);
     const fresh = await eventually(() => returned.duck());
     assert.notEqual(fresh.id,id);
-    assert.deepEqual([fresh.x,fresh.y,fresh.outfit],[...world.zones.plaza.spawn,before.outfit]);
+    assert.ok(Math.hypot(fresh.x-world.zones.plaza.spawn[0],fresh.y-world.zones.plaza.spawn[1])<=DUCK_RADIUS*2);
+    assert.deepEqual(fresh.outfit,before.outfit);
+    assert.ok(nav.walkable(fresh.x,fresh.y));
 
     const logout = await request('/auth/logout',{method:'POST',headers:{Origin:origin,Cookie:one.session}});
     assert.match(logout.headers.get('Set-Cookie'),/Max-Age=0/);
@@ -415,8 +418,8 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     captain.send({type:'input',x:0,y:-1});
     await eventually(() => captain.duck().y<before.y-20);
     captain.send({type:'input',x:0,y:0});
-    const exit=exitsFor('home')[0];
-    await setup(captain,{x:exit.x,y:exit.y,exitLocked:false},1);
+    const exit=destinationsFor('home')[0];
+    await setup(captain,{...exit.dock,exitLocked:false},1);
     await eventually(() => captain.snapshot.islandId===exit.destination);
     await eventually(() => !other.duck(captain.welcome.id));
     assert.equal(captain.snapshot.players.length,1);
@@ -425,11 +428,13 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     assert.equal(captain.snapshot.islandId,exit.destination,'players cannot teleport with spectator commands');
     watch.send({type:'watch',islandId:exit.destination});
     await eventually(() => watch.snapshot.islandId===exit.destination);
-    assert.equal(watch.duck(captain.welcome.id)?.mode,'sailing');
+    assert.equal(watch.duck(captain.welcome.id)?.mode,'walking');
     captain.send({type:'chat',text:'Across the sea'});
     await eventually(() => watch.messages.some(message => message.type==='chat' && message.text==='Across the sea'));
     assert.equal(other.messages.some(message => message.type==='chat' && message.text==='Across the sea'),false);
     const id=captain.welcome.id;
+    captain.send({type:'board',boatId});
+    await eventually(() => captain.duck()?.mode==='sailing');
     captain.close();
     await eventually(() => !watch.duck(id));
     const held=watch.snapshot.boats.find(boat => boat.id===boatId);

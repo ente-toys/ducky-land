@@ -3,7 +3,7 @@ import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same w
 import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
-import {ISLANDS, islandFor, HARBOR, createBoats, near, canDock, setSailDestination, sailStep, crossIsland} from '../src/pixi/islands.js';
+import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
@@ -316,13 +316,14 @@ export class IslandRoom {
       case 'input':
         if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
         if (command.x || command.y || command.stop === true) info.boarding = null;
-        if (command.stop === true) {actor.path=[];actor.sailTarget=null;actor.docking=false;}
+        if (command.stop === true) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
         info.input = {x:command.x,y:command.y};
         info.inputExpires = now+350;
         break;
       case 'destination':
-        if (!Number.isFinite(command.x) || !Number.isFinite(command.y) ||
-            command.x < 0 || command.y < 0 || command.x >= world.width || command.y >= world.height) return;
+        if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
+        if (actor.mode === 'sailing' ? !canSail(command.x,command.y)
+          : command.x<0 || command.y<0 || command.x>=world.width || command.y>=world.height) return;
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;

@@ -8,6 +8,11 @@ const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
   export class TravelTestRoom extends IslandRoom {
     async fetch(request) {
       const path=new URL(request.url).pathname;
+      if (path === '/__test/session') {
+        const account=await request.text();
+        this.sql.exec('INSERT OR REPLACE INTO sessions (digest,account,login,expires,can_play,github_token) VALUES(?,?,?,?,1,?)',account,account,account,Date.now()+86400000,'local-fixture');
+        return new Response(null,{status:204});
+      }
       if (path === '/__test/state') return Response.json({boats:this.boats,players:[...this.connections.values()].map(info=>info.actor).filter(Boolean)});
       if (path === '/__test/pose') {
         const {account,pose,steps=0}=await request.json();
@@ -28,7 +33,7 @@ const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
     if (path.startsWith('/__test/')) return room.fetch(new Request('https://test.internal'+path,request));
     if (path === '/api/session') return Response.json({user:account?{login:account,canPlay:true}:null,signInAvailable:false});
     if (path === '/api/room') {
-      if (account) await room.fetch(new Request('https://test.internal/session/new',{method:'POST',body:JSON.stringify({digest:account,account,login:account,canPlay:true,githubToken:'local-fixture'})}));
+      if (account) await room.fetch(new Request('https://test.internal/__test/session',{method:'POST',body:account}));
       const headers=new Headers({Upgrade:'websocket'});
       if (account) headers.set('X-Session-Digest',account);
       return room.fetch(new Request('https://test.internal/room?play='+url.searchParams.get('play'),{headers}));

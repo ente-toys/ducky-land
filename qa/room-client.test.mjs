@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {RoomClient} from '../src/pixi/room-client.js';
+import {destinationsFor} from '../src/pixi/islands.js';
 
 function setup() {
   const events=[],sent=[];
@@ -67,5 +68,17 @@ test('only spectators can request a different island',()=>{
   assert.equal(sent.length,0);
   room.watch('blossom');
   assert.deepEqual(sent,[{type:'watch',islandId:'blossom'}]);
+  room.dispose();
+});
+
+test('the dock button approaches a nearby discovered island pier',()=>{
+  const {room,sent}=setup();
+  const next=packet(1,'home','sailing');
+  const target=destinationsFor('home')[0].dock;
+  Object.assign(next.players[0],{x:target.x,y:target.y+250});
+  room.snapshot(next);
+  room.disembark();
+  assert.equal(sent.at(-1).type,'destination');
+  assert.deepEqual(room.player.sailTarget,target);
   room.dispose();
 });

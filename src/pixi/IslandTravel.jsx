@@ -15,8 +15,8 @@ export default function IslandTravel({travel,playing,room,island,notice}) {
         {ISLANDS.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
       </select>
     </label>}
-    <p>{sailing ? 'WASD / arrows steer. Tap water to sail. Tap the harbor to dock.'
-      : playing ? 'Tap a boat to walk aboard. Sail toward a named sea marker to visit an island.'
+    <p>{sailing ? 'WASD / arrows or tap water to row north through the clouds. Approach a named island’s pier to dock.'
+      : playing ? 'Tap a boat to walk aboard, then row outward to discover other islands.'
       : 'Watch Duckies sail between three islands. Sign in to take a boat.'}</p>
     <div className="pixi-travel-actions">
       <button onClick={() => island.current?.focusHarbor()}>Find harbor</button>

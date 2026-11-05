@@ -11,21 +11,28 @@ export const islandFor = id => ISLANDS.find(island => island.id === id);
 export const HARBOR = {land:{x:1800,y:930}, water:{x:1800,y:660}, pier:{x:1735,y:745,width:130,height:210}};
 export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 380;
-export const EXITS = [{x:1000,y:300,radius:125}, {x:3100,y:220,radius:125}];
-export const exitsFor = id => ISLANDS.filter(island => island.id !== id).map((island,i) => ({...EXITS[i], destination:island.id, name:island.name}));
-export const arrivalFor = boatId => ({x:1710 + Number(boatId.at(-1)) * 90, y:430});
+export const SEA_BOUNDS = {x0:-1800,y0:-3000,x1:world.width+1800,y1:world.height+1800};
+export const ISLAND_SCALE = .13;
+export const SEA_ISLANDS = [{x:900,y:-1800}, {x:3500,y:-2000}];
+export const destinationsFor = id => ISLANDS.filter(island => island.id !== id).map((island,i) => ({...SEA_ISLANDS[i], destination:island.id, name:island.name, accent:island.accent, dock:{x:SEA_ISLANDS[i].x,y:SEA_ISLANDS[i].y+260}}));
+export const offshoreProgress = player => player ? Math.max(0,Math.min(1,(HARBOR.water.y-player.y-450)/850)) : 1;
 export const near = (a,b,radius) => Math.hypot(a.x-b.x,a.y-b.y) <= radius;
 
 export function createBoats() {
   return ISLANDS.flatMap(island => [0,1,2].map(slot => ({id:`${island.id}-${slot}`, islandId:island.id,
-    x:1650+slot*150, y:660, turn:0, occupant:null, departure:island.id})));
+    x:1650+slot*150, y:660, turn:Math.PI, occupant:null, departure:island.id})));
 }
 
 function wet(x,y) {
   const pier=HARBOR.pier;
   if (x>=pier.x && x<=pier.x+pier.width && y>=pier.y && y<=pier.y+pier.height) return false;
-  if (x < 60 || y < 60 || x > world.width-60 || y > world.height-60 ||
+  if (x < SEA_BOUNDS.x0 || y < SEA_BOUNDS.y0 || x > SEA_BOUNDS.x1 || y > SEA_BOUNDS.y1 ||
       inPoly(x,y,shapes.coast) || inPoly(x,y,world.coast)) return false;
+  for (const island of SEA_ISLANDS) {
+    const lx=(x-island.x)/ISLAND_SCALE+world.width/2, ly=(y-island.y)/ISLAND_SCALE+world.height/2;
+    if (inPoly(lx,ly,shapes.coast)) return false;
+    if (Math.abs(x-island.x)<55 && y>island.y+150 && y<island.y+205) return false;
+  }
   if (world.islets.some(([cx,cy,rx,ry]) => cx !== 3930 && inShape(x,y,{x:cx,y:cy,rx,ry}))) return false;
   return !world.walkways.filter(w => w.a[0] !== 3940).some(({a,b,w}) => {
     const dx=b[0]-a[0], dy=b[1]-a[1], t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));
@@ -81,13 +88,10 @@ export function sailStep(actor,dt,input) {
 }
 
 export function crossIsland(actor) {
-  const arrival=arrivalFor(actor.boatId);
-  if (actor.exitLocked) {
-    if (!near(actor,arrival,180)) actor.exitLocked=false;
-    return false;
-  }
-  const exit=exitsFor(actor.islandId).find(exit => near(actor,exit,exit.radius));
-  if (!exit) return false;
-  Object.assign(actor,{islandId:exit.destination,...arrival,turn:0,travel:0,path:[],sailTarget:null,docking:false,exitLocked:true});
+  if (actor.mode !== 'sailing') return false;
+  const destination=destinationsFor(actor.islandId).find(island =>
+    Math.abs(actor.x-island.dock.x)<=65 && Math.abs(actor.y-island.dock.y)<=50);
+  if (!destination) return false;
+  Object.assign(actor,{islandId:destination.destination,...HARBOR.water,turn:Math.PI,travel:0,path:[],sailTarget:null,docking:true,exitLocked:false});
   return true;
 }

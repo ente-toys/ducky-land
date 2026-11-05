@@ -1,6 +1,6 @@
 import {DURATIONS, playEmote, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
-import {islandFor, HARBOR, canDock, setSailDestination, sailStep} from './islands.js';
+import {islandFor, HARBOR, destinationsFor, near, canSail, canDock, setSailDestination, sailStep} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -166,7 +166,7 @@ export class RoomClient {
   }
 
   predict(command, now) {
-    if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;}
+    if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
     if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
       ? setSailDestination(this.player,command.x,command.y) : setWalkDestination(this.player, this.nav, command.x, command.y);
     if (command.type === 'disembark' && this.player.mode === 'sailing' && canDock(this.player)) {
@@ -186,7 +186,9 @@ export class RoomClient {
   }
 
   destination(x, y) {
-    if (!this.world || x < 0 || y < 0 || x >= this.world.width || y >= this.world.height) return null;
+    if (!this.world || !Number.isFinite(x) || !Number.isFinite(y)) return null;
+    if (this.player?.mode === 'sailing' && !canSail(x,y)) return null;
+    if (this.player?.mode !== 'sailing' && (x<0 || y<0 || x>=this.world.width || y>=this.world.height)) return null;
     const result = this.send({type:'destination',x,y});
     return Array.isArray(result) ? result : null;
   }
@@ -197,7 +199,10 @@ export class RoomClient {
 
   board(boatId) { return this.send({type:'board',boatId}); }
 
-  disembark() { return this.send({type:'disembark'}); }
+  disembark() {
+    const destination=destinationsFor(this.islandId).find(island => this.player && near(this.player,island.dock,650));
+    return destination ? this.send({type:'destination',...destination.dock}) : this.send({type:'disembark'});
+  }
 
   watch(islandId) {
     if (this.id || !islandFor(islandId) || this.socket?.readyState !== WebSocket.OPEN) return;

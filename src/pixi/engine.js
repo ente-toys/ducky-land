@@ -4,7 +4,7 @@ import {createBeachSurf} from './surf.js';
 import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
-import {HARBOR, islandFor, near} from './islands.js';
+import {HARBOR, islandFor, near, SEA_BOUNDS, destinationsFor, offshoreProgress} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
@@ -220,7 +220,7 @@ export class PixiIsland {
       if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
       if (this.room) {
-        this.travelView=await createTravelView(this.objects,this.water);
+        this.travelView=await createTravelView(this.objects,this.water,this.air);
         if (this.disposed) return;
         this.switchIsland(this.room.islandId);
       }
@@ -295,6 +295,7 @@ export class PixiIsland {
     this.stopInput();
     this.clearChat();
     this.markerUntil=0;
+    if (this.ready && !this.motion.matches) this.canvas.animate([{opacity:.45},{opacity:1}],{duration:450});
     for (const entry of this.liveRigs.values()) {
       entry.rig?.dispose(); entry.nameplate?.remove(); entry.seatMask?.destroy();
     }
@@ -469,7 +470,9 @@ export class PixiIsland {
     const p = screenToWorld(this.camera, point, this.width, this.height);
     if (this.room && this.player) {
       if (this.player.mode === 'sailing') {
-        if (near(p,HARBOR.water,140) || near(p,HARBOR.land,120)) this.room.disembark();
+        const destination=offshoreProgress(this.player)>.2 && destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<400 && Math.abs(p.y-island.y)<350);
+        if (destination) this.setDestination(destination.dock);
+        else if (near(p,HARBOR.water,140) || near(p,HARBOR.land,120)) this.room.disembark();
         else this.setDestination(p);
         return;
       }
@@ -525,7 +528,10 @@ export class PixiIsland {
     this.audio.unlock().then(() => this.audio.play(action === 2 ? 'quack' : 'pop', action === 2 ? .12 : .06));
   }
 
-  constrain(camera) {camera.x=clamp(camera.x,250,world.width-250);camera.y=clamp(camera.y,200,world.height-200);}
+  constrain(camera) {
+    const bounds=this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
+    camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
+  }
 
   fit() {
     this.follow = false;this.fitMode=true;
@@ -596,7 +602,10 @@ export class PixiIsland {
       const x=this.width/2+(player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(player.y-this.camera.y)*this.camera.zoom*TILT;
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
-    if (this.follow && player) Object.assign(this.target, {x:player.x, y:player.y-90});
+    if (this.follow && player) {
+      Object.assign(this.target, {x:player.x, y:player.y-90});
+      if (player.mode === 'sailing') this.target.zoom=.65-offshoreProgress(player)*.3;
+    }
     easeCamera(this.camera, this.target, dt, reduced);
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
     this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);
@@ -610,7 +619,7 @@ export class PixiIsland {
     this.surf?.update(t, reduced, visible);
     this.rowboat?.update(t, reduced, visible);
     this.boats?.update(t, reduced, visible);
-    this.travelView?.update(this.room.boatPoses(now/1000),t,reduced,visible);
+    this.travelView?.update(this.room.boatPoses(now/1000),t,reduced,visible,player);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
@@ -688,6 +697,7 @@ export class PixiIsland {
       d.ducks = String(this.localDucks.length + live.length);
       d.livePlayers = String(live.length);
       d.sleepingDucks = String(this.sim.ducks.filter(duck => duck.sleeping && duck.action === 7).length);
+      d.offshoreProgress=String(offshoreProgress(player));
       d.island=this.islandId; d.travelMode=player?.mode ?? 'watching';
       d.boats=String(this.room?.boats.length ?? 0);
       d.player = player ? `${player.x.toFixed(1)},${player.y.toFixed(1)}` : '';
