@@ -207,7 +207,7 @@ export class PixiIsland {
         rig.root.position.set(duck.x, duck.y);
         this.objects.addChild(rig.root);
       });
-      if (!this.room) {this.interior = await createInterior(); this.app.stage.addChild(this.interior.root); globalThis.__duckyInterior = () => this.interior.debug();}   // boss 5 Nov: the museum room (offline sim only for now)
+      this.interior = await createInterior(); this.app.stage.addChild(this.interior.root); globalThis.__duckyInterior = () => this.interior.debug();   // boss 5 Nov: the museum room, offline and live (the server keeps you parked at the door while you are inside)
       // boss 4 Nov: water owns only decorative fields. Navigation and multiplayer keep their existing coordinates.
       this.waterFX = await createWater({app: this.app, world, art, layer: this.water,
         objects: this.objects, props: this.props, motion: this.motion});
@@ -514,7 +514,7 @@ export class PixiIsland {
     const indoors = this.interior?.active;
     while (this.accumulator >= 1 / 60) {
       this.sim.step(1 / 60, this.room || indoors ? ZERO : input);
-      this.room?.step(1 / 60, input);
+      this.room?.step(1 / 60, indoors ? ZERO : input);
       this.accumulator -= 1 / 60;
     }
     const player = this.player;
@@ -526,13 +526,15 @@ export class PixiIsland {
     const t = this.sim.time;
     const reduced = this.motion.matches;
     // boss 5 Nov: the museum door. Walk up the steps into it and the room takes over; walk out through its arch and you are back on the steps
-    if (this.interior && !this.room && player) {
+    if (this.interior && player) {
       const atDoor = player.x > MUSEUM_DOOR.x0 && player.x < MUSEUM_DOOR.x1 && player.y < MUSEUM_DOOR.y;
-      if (!indoors && atDoor && this.doorArmed) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.scene.visible = false;}
+      if (!indoors && atDoor && this.doorArmed && this.playerRig()) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.scene.visible = false; if (this.nameLayer) this.nameLayer.style.visibility = 'hidden';}
       if (!atDoor && player.y > MUSEUM_DOOR.y + 60) this.doorArmed = true;
       if (this.interior.active && this.interior.update(dt, input, this.width, this.height, t, reduced)) {
         this.interior.leave(this.objects, .88 * .24 * 3); this.scene.visible = true;
-        Object.assign(player, {x: MUSEUM_DOOR.out.x, y: MUSEUM_DOOR.out.y, previousX: MUSEUM_DOOR.out.x, previousY: MUSEUM_DOOR.out.y, path: [], turn: 0, action: 0});
+        if (this.nameLayer) this.nameLayer.style.visibility = '';
+        if (this.room) this.room.destination(MUSEUM_DOOR.out.x, MUSEUM_DOOR.out.y);   // live: the server walks you back down the steps
+        else Object.assign(player, {x: MUSEUM_DOOR.out.x, y: MUSEUM_DOOR.out.y, previousX: MUSEUM_DOOR.out.x, previousY: MUSEUM_DOOR.out.y, path: [], turn: 0, action: 0});
         Object.assign(this.target, {x: player.x, y: player.y - 90}); Object.assign(this.camera, this.target, {zoom: this.camera.zoom}); this.follow = true;
       }
       if (this.interior.active) {this.app.render(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}

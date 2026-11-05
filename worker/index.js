@@ -1,9 +1,10 @@
 import world from '../rive/web/world.json';
+import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same walking map the game uses offline (scripts/walk-world.mjs)
 import {createNavigation} from '../src/pixi/navigation.js';
 import {DURATIONS, playEmote, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 
-const nav = createNavigation(world);
+const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
 const SPECTATOR_LIMIT = 64;
 const RESUME_MS = 15_000;
