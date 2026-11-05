@@ -31,7 +31,6 @@ export default function PixiPage() {
   const chatEditor = useRef(null);
   const nameLayer = useRef(null);
   const [online, setOnline] = useState(null);
-  const [birdEye, setBirdEye] = useState(false);   // boss 5 Nov: bird's-eye view of the 300 islands
   const [travel,setTravel] = useState({islandId:'home',mode:'walking',available:3});
   const [travelNotice,setTravelNotice] = useState('');
   const [latestJoin, setLatestJoin] = useState(null);
@@ -77,7 +76,6 @@ export default function PixiPage() {
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
       onError:() => setError(true)});
     island.current = game;
-    game.onBirdEye = setBirdEye;
     game.mount(host.current);
     client.connect();
     refresh();
@@ -131,7 +129,6 @@ export default function PixiPage() {
     </aside>}
     {!error && <IslandTravel travel={travel} playing={status==='playing'} room={room} island={island} notice={travelNotice}/> }
     {!error && <IslandPresence online={online} latestJoin={latestJoin}/>}
-    {!error && <button className="pixi-birdeye" aria-pressed={birdEye} onClick={() => island.current?.toggleBirdEye()}>{birdEye ? 'Back to island' : 'All 300 islands'} <kbd>B</kbd></button>}
     {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {
       setSession(previous => ({...previous,user:{...previous.user,canPlay:true}}));
       setStarDialogOpen(false);

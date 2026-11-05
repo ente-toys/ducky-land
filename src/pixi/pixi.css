@@ -221,6 +221,3 @@
   .pixi-travel p { font-size: 12px; }
   .pixi-join-toasts { top: 100px; bottom: auto; }
 }
-/* boss 5 Nov: bird's-eye toggle for the 300 islands, bottom right */
-.pixi-birdeye { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 5; padding: 8px 12px; border: 1px solid #564537; border-radius: 12px; color: #332b23; background: #ffda69; box-shadow: 0 3px 0 #56453755; font: 600 14px/1.2 system-ui, sans-serif; cursor: pointer; }
-.pixi-birdeye kbd { margin-left: 6px; padding: 0 5px; border: 1px solid #564537; border-radius: 4px; font: 12px system-ui, sans-serif; }
