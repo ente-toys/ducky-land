@@ -222,6 +222,7 @@ export class PixiIsland {
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air);
         if (this.disposed) return;
+        this.travelView.fx.waterSplash=(x,y)=>this.waterFX?.splash(x,y,.85,30);   // boss 5 Nov: a boarding Ducky rocks the real water too
         this.switchIsland(this.room.islandId);
       }
       this.bindInput();
@@ -305,7 +306,7 @@ export class PixiIsland {
     this.travelView?.switchIsland(id);
     const player=this.player;
     const focus=player ?? HARBOR.land;
-    Object.assign(this.target,{x:focus.x,y:focus.y-90,zoom:player?.mode === 'sailing' ? .65 : .6});
+    Object.assign(this.target,{x:focus.x,y:focus.y-90,zoom:player?.mode === 'sailing' ? .56 : .6});
     Object.assign(this.camera,this.target);
     this.follow=Boolean(player);
     this.fitMode=false;
@@ -564,12 +565,14 @@ export class PixiIsland {
     if (this.room && this.room.mode !== this.travelMode) {
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
       this.follow=Boolean(this.player); this.fitMode=false;
+      if (this.travelMode === 'walking' && this.player) this.target.zoom=.6;   // boss 5 Nov: back on land the camera comes back in
     }
     const input = {
       x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')) + this.touchInput.x,
       y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')) + this.touchInput.y,
     };
     input.x=Math.sign(input.x); input.y=Math.sign(input.y);
+    if (this.travelView?.fx.holding(this.room?.id)) input.x=input.y=0;   // boss 5 Nov: the hop in or out finishes before steering (at most 0.6 s)
     const indoors = this.interior?.active;
     while (this.accumulator >= 1 / 60) {
       this.sim.step(1 / 60, this.room || indoors ? ZERO : input);
@@ -604,7 +607,7 @@ export class PixiIsland {
     }
     if (this.follow && player) {
       Object.assign(this.target, {x:player.x, y:player.y-90});
-      if (player.mode === 'sailing') this.target.zoom=.65-offshoreProgress(player)*.3;
+      if (player.mode === 'sailing') this.target.zoom=.56-offshoreProgress(player)*.24;   // boss 5 Nov: pulled back a little while sailing
     }
     easeCamera(this.camera, this.target, dt, reduced);
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
@@ -788,20 +791,22 @@ export class PixiIsland {
       entry.emoteVersion = emoteVersion;
       const rig = entry.rig;
       if (!rig) continue;
-      const sailing=pose.mode==='sailing';
-      if (sailing && !entry.seatMask) {
+      // boss 5 Nov: sailing-fx.js says where a Ducky is drawn: hopping in, seated low in the hull, or hopping out onto the jetty
+      const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
+      if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
       }
       if (entry.seatMask) {
         entry.seatMask.clear();
-        if (sailing) entry.seatMask.rect(x-110,y-150,220,126).fill(0xffffff);
-        rig.root.mask=sailing?entry.seatMask:null;
+        if (look.mask) entry.seatMask.poly(look.mask).fill(0xffffff);
+        rig.root.mask=look.mask?entry.seatMask:null;
       }
-      rig.root.scale.set(.88*.24*3*(sailing ? .8 : 1),.88*.24*3*(sailing ? .8 : 1)/TILT);
-      rig.root.position.set(x+(sailing?22:0),sailing?y-12:deckY(x,y));
-      rig.root.zIndex = y+(sailing?3:0);
-      rig.root.visible = visible(x,y,200);
-      if (rig.root.visible) rig.update(dt, {action, speed:travel, turn, time, reducedMotion, emoteVersion});
+      rig.root.scale.set(look.scale*look.sx,look.scale*look.sy/TILT);
+      rig.root.position.set(look.x,look.deck?deckY(look.x,look.y):look.y);
+      rig.root.rotation=look.rotation; rig.root.alpha=look.alpha;
+      rig.root.zIndex = look.z ?? look.y;
+      rig.root.visible = visible(look.x,look.y,200);
+      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion});
     }
   }
 
