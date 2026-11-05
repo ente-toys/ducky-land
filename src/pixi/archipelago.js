@@ -1,30 +1,58 @@
 // boss 5 Nov: 300 home islands (30k stars = 300 islands), all the same island for now; themes come later.
-// One snapshot of the home island is reused for 299 copies laid out in the shape of our Ducky,
+// One snapshot of the home island is reused for 299 copies laid out as a GTA-style world map,
 // and the bird's-eye view zooms the camera out far enough to see the whole archipelago.
-import {Container, Filter, GlProgram, Rectangle, Sprite} from 'pixi.js';
-import map from './ducky-map.json' with {type: 'json'};
+import {Container, Filter, GlProgram, Graphics, Rectangle, Sprite} from 'pixi.js';
 
 export const ISLAND_COUNT = 300;
 const hash = i => {const s = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return s - Math.floor(s);};
 
-// boss 5 Nov: the 300 islands draw our exact Ducky (traced from the Figma Ducky, ducky-map.json). Small islands trace the
-// outline, eyes, beak, tuft, wing seams and feet; bigger ones fill the body. Home is the body island nearest the middle.
-export function archipelagoLayout(world) {
-  const W = world.width, H = world.height, PX = 420;   // world units per map pixel
-  const pts = map.points.map(([x, y, inner], i) => ({x: (x - map.center[0]) * PX, y: (y - map.center[1]) * PX, scale: inner ? .86 : .46, i}));
-  const inner = pts.filter(p => p.scale > .5), near = inner.reduce((a, p) => Math.hypot(p.x, p.y) < Math.hypot(a.x, a.y) ? p : a, inner[0]);
-  const out = [{index: 0, home: true, x: W / 2, y: H / 2, scale: 1, flip: 1}];
-  for (const p of pts) if (p !== near) out.push({index: out.length, home: false, x: W / 2 + p.x - near.x, y: H / 2 + p.y - near.y, scale: p.scale, flip: hash(p.i) < .5 ? -1 : 1});
-  const pad = 9000;
+// boss 5 Nov: a GTA-style world map (refs: GTA V/VI map shots). A few big landmasses made of islands packed edge to edge,
+// archipelago chains curling between them, lone islets in open sea; seeded so everyone sees the same world. Home sits in
+// the middle of the biggest landmass. 30,000 Duckies (100 per island) show as tiny yellow dots once you zoom out far.
+export function archipelagoLayout(world, seed = 11) {
+  let n = seed >>> 0;
+  const rnd = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
+  const W = world.width, H = world.height, cx = W / 2, cy = H / 2;
+  const out = [{index: 0, home: true, x: cx, y: cy, scale: 1, flip: 1, rot: 0}];
+  const clear = (x, y, s, gap) => out.every(i => Math.hypot((i.x - x) / W, (i.y - y) / H) > (i.scale + s) * .5 * gap);
+  const add = (x, y, s) => out.push({index: out.length, home: false, x, y, scale: s, flip: rnd() < .5 ? -1 : 1, rot: (rnd() - .5) * 1.2});
+  // landmasses: centre, radius (in island widths), how many islands
+  const lands = [[0, 0, 4.2, 95], [-11, -7, 3, 50], [10, -7, 2.7, 40], [-9, 8, 2.4, 32], [9, 8, 2.1, 25]];
+  for (const [lx, ly, r, count] of lands) {
+    const lobes = Array.from({length: 5}, () => ({a: rnd() * 6.28, k: 2 + Math.floor(rnd() * 4), m: .1 + rnd() * .15}));
+    const edge = a => r * (1 + lobes.reduce((t, l) => t + Math.sin(a * l.k + l.a) * l.m, 0));
+    let placed = 0;
+    for (let t = 0; placed < count && t < 20000; t++) {
+      const a = rnd() * 6.28, d = Math.sqrt(rnd()) * edge(a), s = .55 + rnd() * .5;
+      const x = cx + (lx + Math.cos(a) * d) * W, y = cy + (ly + Math.sin(a) * d * .8) * H;
+      if (clear(x, y, s, .4)) {add(x, y, s); placed++;}   // packed tight: neighbours touch, so they read as one landmass
+    }
+  }
+  // archipelago chains: small islands strung along gentle arcs between and around the landmasses
+  for (let c = 0; c < 9 && out.length < 270; c++) {
+    let x = cx + (rnd() - .5) * 34 * W, y = cy + (rnd() - .5) * 30 * H, a = rnd() * 6.28;
+    for (let k = 0; k < 7 && out.length < 270; k++) {
+      a += (rnd() - .5) * .9; x += Math.cos(a) * W * 1.1; y += Math.sin(a) * H * 1.1;
+      const s = .3 + rnd() * .25; if (clear(x, y, s, .9)) add(x, y, s);
+    }
+  }
+  // lone islets in open sea fill the rest
+  for (let t = 0; out.length < ISLAND_COUNT && t < 40000; t++) {
+    const x = cx + (rnd() - .5) * 40 * W, y = cy + (rnd() - .5) * 34 * H, s = .22 + rnd() * .25;
+    if (clear(x, y, s, 1.6)) add(x, y, s);
+  }
+  const pad = 2 * W;
   const bounds = {x0: Math.min(...out.map(i => i.x - W * i.scale / 2)) - pad, y0: Math.min(...out.map(i => i.y - H * i.scale / 2)) - pad,
     x1: Math.max(...out.map(i => i.x + W * i.scale / 2)) + pad, y1: Math.max(...out.map(i => i.y + H * i.scale / 2)) + pad};
-  return {islands: out, bounds};
+  return {islands: out, bounds, rnd};
 }
 
 export function createArchipelago(app, scene, layer, world) {
-  const {islands, bounds} = archipelagoLayout(world);
+  const layout = archipelagoLayout(world), {islands, bounds} = layout;
+  const people = new Graphics({label: '30,000 Duckies'});
   const root = new Container({label: 'Archipelago'});
   layer.addChildAt(root, 0);   // under the home island's water and ground
+  root.addChild(people);
   let texture = null;
   return {
     bounds, count: islands.length,
@@ -38,10 +66,20 @@ export function createArchipelago(app, scene, layer, world) {
       for (const island of islands) if (!island.home) {
         const s = new Sprite(texture);
         s.anchor.set(.5); s.position.set(island.x, island.y);
-        s.width = world.width * island.scale; s.height = world.height * island.scale; s.scale.x *= island.flip;
+        s.width = world.width * island.scale; s.height = world.height * island.scale; s.scale.x *= island.flip; s.rotation = island.rot;
         root.addChild(s);
       }
+      // 30,000 Duckies: 100 tiny yellow dots per island, scattered over its land
+      const r = layout.rnd;
+      for (const island of islands) for (let k = 0; k < 100; k++) {
+        const a = r() * 6.28, d = Math.sqrt(r()), c = Math.cos(island.rot), sn = Math.sin(island.rot);
+        const ox = Math.cos(a) * d * world.width * island.scale * .36, oy = Math.sin(a) * d * world.height * island.scale * .32;
+        people.rect(island.x + ox * c - oy * sn - 90, island.y + ox * sn + oy * c - 90, 180, 180);
+      }
+      people.fill(0xFFD525); root.addChild(people);   // on top of the islands
     },
+    // the dots only show when zoomed far out (they would cover the islands up close)
+    update(zoom) {people.alpha = Math.max(0, Math.min(1, (.012 - zoom) / .008)); people.visible = people.alpha > 0;},
     destroy() {root.destroy({children: true}); texture?.destroy(true);},
   };
 }
