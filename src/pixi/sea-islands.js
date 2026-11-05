@@ -21,6 +21,7 @@ export async function createSea(water, objects) {
   const signs = new Map();
   let boards = [], token = 0;
   return {
+    transient: () => boards.map(board => board.sprite),
     async switchIsland(destinations) {
       const mine = ++token;
       for (const board of boards) board.sprite.destroy();

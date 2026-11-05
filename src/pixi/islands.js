@@ -2,7 +2,7 @@ import world from '../../rive/web/world.json' with {type:'json'};
 import shapes from './walk-shapes.json' with {type:'json'};
 import {inPoly, inShape} from '../../rive/web/island-geometry.mjs';
 
-import {WORLD_ISLANDS, neighboursOf} from './world-map.js';
+import {WORLD_ISLANDS, neighboursOf, offsetOf} from './world-map.js';
 
 // boss 5 Nov: 300 islands, each an exact copy of home (world-map.js). You play on one; the nearest four are a sail away.
 export const ISLANDS = WORLD_ISLANDS.map(({id,name,accent}) => ({id,name,accent}));
@@ -72,10 +72,20 @@ function landAt(x,y) {
   });
 }
 
+// every island drawn inside this sea is solid land, not only the ones you can dock at (review 5 Nov)
+const OBSTACLES=new Map();
+const obstaclesFor=id => {
+  if (!OBSTACLES.has(id)) {
+    const b=seaBoundsFor(id);
+    OBSTACLES.set(id,WORLD_ISLANDS.filter(island => island.id!==id).map(island => offsetOf(id,island.id))
+      .filter(o => o.x+world.width+600 > b.x0 && o.x-600 < b.x1 && o.y+world.height+600 > b.y0 && o.y-600 < b.y1));
+  }
+  return OBSTACLES.get(id);
+};
 function wet(x,y,id) {
   const b=seaBoundsFor(id);
   if (x < b.x0 || y < b.y0 || x > b.x1 || y > b.y1 || landAt(x,y)) return false;
-  return !destinationsFor(id).some(({offset}) => landAt(x-offset.x,y-offset.y));   // the neighbours are real islands too
+  return !obstaclesFor(id).some(o => landAt(x-o.x,y-o.y));
 }
 
 export function canSail(x,y,id='home') {
@@ -99,15 +109,23 @@ export function canDock(actor) {
 // the coasts instead of stopping dead at the first beach: a coarse grid of open water, a shortest path across it, then the
 // corners pulled tight. The room server and the game run the same code, so both agree on the route.
 const CELL=250, GRIDS=new Map();
-const clearLine=(id,a,b) => {
-  const steps=Math.max(1,Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/40));
-  for (let i=1;i<=steps;i++) if (!canSail(a.x+(b.x-a.x)*i/steps,a.y+(b.y-a.y)*i/steps,id)) return false;
+const clearLine=(id,a,b) => {   // checked every 6px with a 10px margin either side, so a route never grazes a beach (review 5 Nov)
+  const len=Math.hypot(b.x-a.x,b.y-a.y), steps=Math.max(1,Math.ceil(len/6)), nx=len ? -(b.y-a.y)/len*10 : 0, ny=len ? (b.x-a.x)/len*10 : 0;
+  for (let i=1;i<=steps;i++) {
+    const x=a.x+(b.x-a.x)*i/steps, y=a.y+(b.y-a.y)*i/steps;
+    if (!canSail(x,y,id) || (i<steps && (!canSail(x+nx,y+ny,id) || !canSail(x-nx,y-ny,id)))) return false;
+  }
   return true;
 };
 function gridFor(id) {
   if (!GRIDS.has(id)) {
     const b=seaBoundsFor(id), cols=Math.ceil((b.x1-b.x0)/CELL), rows=Math.ceil((b.y1-b.y0)/CELL), open=new Uint8Array(cols*rows);
-    for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) open[r*cols+c]=canSail(b.x0+(c+.5)*CELL,b.y0+(r+.5)*CELL,id)?1:0;
+    // a cell is open only if its whole neighbourhood is water, so the straight line to any open neighbour is water too
+    const ring=[...Array(12)].map((_,k) => [Math.cos(k*Math.PI/6),Math.sin(k*Math.PI/6)]);
+    for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+      const x=b.x0+(c+.5)*CELL, y=b.y0+(r+.5)*CELL;
+      open[r*cols+c]=canSail(x,y,id) && ring.every(([u,v]) => canSail(x+u*CELL*.4,y+v*CELL*.4,id) && canSail(x+u*CELL*.75,y+v*CELL*.75,id))?1:0;
+    }
     GRIDS.set(id,{b,cols,rows,open});
   }
   return GRIDS.get(id);
@@ -137,10 +155,11 @@ export function sailRoute(id,from,to) {
   const cells=[];
   for (let i=goal;i!==start;i=prev[i]) cells.push(centre(i));
   cells.push(centre(start)); cells.reverse(); cells.push(to);
-  const route=[]; let at=from;   // pull the corners tight: skip every waypoint you can sail past in a straight line
+  const route=[]; let at=from;   // pull the corners tight: reach as far along the path as a straight line allows
   for (let k=0;k<cells.length;) {
-    let j=cells.length-1;
-    while (j>k && !clearLine(id,at,cells[j])) j--;
+    if (!clearLine(id,at,cells[k])) return null;   // never hand the boat a leg that crosses land
+    let j=k;
+    while (j+1<cells.length && clearLine(id,at,cells[j+1])) j++;
     route.push(cells[j]); at=cells[j]; k=j+1;
   }
   return route;

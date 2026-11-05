@@ -205,7 +205,7 @@ export function createWorldView(app, scene) {
         shader.resources.uWorld = worldTex.source;
       }
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
-      if (t < .97) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true});}   // the real islands round the camera (not needed once it is all globe)
+      if (t < .97) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)
       scene.visible = false;
       const b = arch.bounds, spanX = b.x1 - b.x0, spanY = b.y1 - b.y0;
       // boss 5 Nov: "actual 3D rotation". The globe is a real sphere the world wraps round exactly once, a fixed size in
@@ -255,7 +255,7 @@ export function createWorldView(app, scene) {
       life.visible = busy > .01; life.alpha = busy;
       if (busy > .01) {
         const pick = () => {const i = islands[Math.floor(rand() * islands.length)], a = rand() * 6.283, r = rand() * .25 * worldSize.width * i.scale; return {x: i.x + Math.cos(a) * r, y: i.y + Math.sin(a) * r * .7};};
-        for (rippleDue -= dt; rippleDue < 0; rippleDue += .09) ripples.push({...pick(), at: time, heart: rand() < .2, dur: 2 + rand() * .8});
+        for (rippleDue -= dt; rippleDue < 0; rippleDue += .035) ripples.push({...pick(), at: time, heart: rand() < .7, dur: 2 + rand() * .8});   // boss 5 Nov: the hearts are the 30,000 stars, so lots of them
         const px = Math.max(1, Rp / 240);   // sizes follow the globe
         for (const c of glows.children) c.visible = false;
         for (const c of hearts.children) c.visible = false;

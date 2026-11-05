@@ -104,6 +104,7 @@ export function createHarbor(decks, objects) {
     cloth.moveTo(14, top + 12).lineTo(14 + len * .55, top + 12 + hgt * .28 + (reduced ? 0 : Math.sin(t * 3.2 - 2) * 3)).stroke({color: cream, width: 2, alpha: .55, cap: 'round'});
   };
   return {
+    transient: () => [sign, flag, flowers],   // this island's own name and colours (kept out of the copies' snapshot)
     switchIsland(id) {
       const island = islandFor(id);
       accent = island.accent;

@@ -50,7 +50,10 @@ export class IslandRoom {
     }
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
-    this.boats = saved ? JSON.parse(saved.state) : createBoats();
+    // keep saved boats (position, occupant) that still exist, and add any the world now has that the save lacks (300 islands)
+    const fresh = createBoats(), known = new Set(fresh.map(boat => boat.id));
+    const kept = saved ? JSON.parse(saved.state).filter(boat => known.has(boat.id)) : [], have = new Set(kept.map(boat => boat.id));
+    this.boats = [...kept, ...fresh.filter(boat => !have.has(boat.id))];
     this.savedBoats = saved?.state;
     for (const socket of ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
@@ -386,7 +389,7 @@ export class IslandRoom {
           if (crossIsland(actor)) {info.input=ZERO; info.inputExpires=0;}
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
           if (actor.docking && near(actor,HARBOR.water,12)) {
-            this.parkBoat(boat,actor.islandId);
+            this.parkBoat(boat,boat.id.slice(0,boat.id.lastIndexOf('-')));   // a ferry: once you step off it goes back to its own island, so no island runs out
             Object.assign(actor,{...HARBOR.land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }

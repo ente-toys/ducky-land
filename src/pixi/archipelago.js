@@ -1,6 +1,7 @@
 // boss 5 Nov: 300 islands (30k stars = 300 islands), every one an exact copy of the home island (world-map.js); themes
 // come later. You stand on one island at a time: it is the real, playable scene, and the other 299 are drawn round it as
-// copies (one snapshot of the real island, reused) at their true places, so you can sail across to the next one.
+// copies at their true places, so you can sail across to the next one. The ones on screen up close are the live island
+// drawn again (engine.js renderLiveCopies); far away a snapshot of it stands in.
 // 30,000 Duckies (100 per island) show as tiny yellow dots once you zoom far out.
 import {Container, Graphics, Rectangle, Sprite} from 'pixi.js';
 import {MAP_BOUNDS, WORLD_ISLANDS, worldIsland} from './world-map.js';
@@ -15,6 +16,7 @@ export function createArchipelago(app, scene, layer, world) {
   layer.addChildAt(root, 0);   // under the real island's water and ground
   root.addChild(copies, people);
   let texture = null, current = 'home', islands = [], bounds = MAP_BOUNDS;
+  const sprites = new Map();
   // every island in the current island's local coordinates: the current one sits where the real scene is drawn
   const place = () => {
     const here = worldIsland(current);
@@ -25,8 +27,9 @@ export function createArchipelago(app, scene, layer, world) {
   const draw = () => {
     if (!texture) return;
     copies.removeChildren().forEach(child => child.destroy());
+    sprites.clear();
     for (const island of islands) if (!island.home) {
-      const s = new Sprite(texture);
+      const s = new Sprite(texture); sprites.set(island.id, s);
       s.anchor.set(.5); s.position.set(island.x, island.y);
       s.width = world.width; s.height = world.height; s.tint = island.tint;
       copies.addChild(s);
@@ -59,6 +62,9 @@ export function createArchipelago(app, scene, layer, world) {
       if (id === current || !worldIsland(id)) return;
       current = id; place(); draw();
     },
+    // the copies drawn live this frame (engine.js) hide their snapshot so it does not show through
+    showLive(ids) {for (const [id, s] of sprites) s.visible = !ids.has(id);},
+    root,
     // the dots only show when zoomed far out (they would cover the islands up close)
     update(zoom) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));

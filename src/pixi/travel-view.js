@@ -18,6 +18,7 @@ export async function createTravelView(objects,water,air,decks) {
   const vessels=new Map(), fx=await createSailingFX({water,objects});
   return {
     fx,
+    transient: () => [...[...vessels.values()].map(entry => entry.root), ...harbor.transient(), ...sea.transient()],
     switchIsland(id) {
       harbor.switchIsland(id);
       fx.reset();

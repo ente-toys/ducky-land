@@ -9,7 +9,7 @@ import {createWorldView} from './world-view.js';
 import {HARBOR, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
-import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
+import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Matrix} from 'pixi.js';
 import rawWorld from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
@@ -556,6 +556,50 @@ export class PixiIsland {
     camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
 
+  // The 299 other islands are copies of one snapshot of this island. Take it with every prop showing (not culled), in home
+  // colours, and without anything live or island-specific (Duckies, boats, the marker, this island's sign and flag).
+  // what belongs to this island and this moment only, never shown on a copy: players, boats, the marker, this island's
+  // sign, flag and neighbour boards (the sleeping and wandering local Duckies stay: they are part of every island)
+  transientForCopies() {
+    return [...this.rigs.filter((r,i) => this.localDucks[i]?.player).map(r => r.root), ...[...this.liveRigs.values()].map(e => e.rig?.root),
+      this.marker, ...(this.travelView?.transient() ?? [])].filter(o => o?.visible);
+  }
+  buildCopies() {
+    if (!this.archipelago || this.archipelago.texture) return;
+    const hide=this.transientForCopies();
+    hide.forEach(o => {o.visible=false;});
+    const props=this.props.map(p => ({p, v:p.sprite.visible, s:p.shadow?.visible, tint:p.sprite.tint}));
+    for (const {p} of props) {p.sprite.visible=true; if (p.shadow) p.shadow.visible=true; if (/flower|flag|bunting/i.test(p.asset || p.name)) p.sprite.tint=p.tint ?? 0xffffff;}
+    const floats=(this.floating ?? []).map(f => [f, f.sprite.visible]); floats.forEach(([f]) => {f.sprite.visible=true;});
+    this.archipelago.build();
+    hide.forEach(o => {o.visible=true;});
+    for (const {p,v,s,tint} of props) {p.sprite.visible=v; if (p.shadow) p.shadow.visible=s; p.sprite.tint=tint;}
+    floats.forEach(([f,v]) => {f.sprite.visible=v;});
+  }
+
+  // boss 5 Nov ("very pixelated, these should be live islands with sleeping Duckies"): the copies on screen up close are
+  // the live island drawn again at their offsets, sharp and moving; past a few on screen the snapshot stands in.
+  liveCopies() {
+    if (!this.archipelago?.texture || this.interior?.active) return [];
+    const z=this.camera.zoom, hw=this.width/(2*z)+world.width*.6, hh=this.height/(2*z*TILT)+world.height*.6;
+    const near=this.archipelago.islands.filter(i => !i.home && Math.abs(i.x-this.camera.x)<hw && Math.abs(i.y-this.camera.y)<hh);
+    return z > .06 && near.length <= 6 ? near : [];
+  }
+  renderLiveCopies(target, copies) {
+    if (!copies.length) return;
+    const hide=[this.archipelago.root, this.ocean, ...this.transientForCopies()].filter(o => o?.visible);
+    hide.forEach(o => {o.visible=false;});
+    const props=this.props.map(p => [p, p.sprite.visible, p.shadow?.visible]);
+    for (const [p] of props) {p.sprite.visible=true; if (p.shadow) p.shadow.visible=true;}   // un-cull: the copy shows the whole island
+    const sceneVisible=this.scene.visible; this.scene.visible=true;
+    const z=this.camera.zoom, cx=world.width/2, cy=world.height/2, sx=this.scene.scale.x, sy=this.scene.scale.y;
+    for (const island of copies) this.app.renderer.render({container:this.scene, target, clear:false,   // the camera's own transform, shifted to that island
+      transform:new Matrix(sx,0,0,sy,this.scene.position.x+(island.x-cx)*z,this.scene.position.y+(island.y-cy)*z*TILT)});
+    this.scene.visible=sceneVisible;
+    hide.forEach(o => {o.visible=true;});
+    for (const [p,v,sh] of props) {p.sprite.visible=v; if (p.shadow) p.shadow.visible=sh;}
+  }
+
   // boss 5 Nov: zoom out past the island and the other 300 islands come into view (no button); the floor fits them all
   birdZoom() {const b=this.archipelago.bounds; return .43*this.height*2*Math.PI/(b.x1-b.x0);}   // the globe at .43 of the screen height
   zoomFloor() {return this.archipelago ? this.birdZoom() : this.minZoom*.8;}
@@ -648,11 +692,11 @@ export class PixiIsland {
     }
     easeCamera(this.camera, this.target, dt, reduced);
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
-    if (this.birdEye || (this.ready && this.frame > 40)) this.archipelago.build();   // the neighbours are in sight from the harbor, so the copies exist from the start
+    if (this.birdEye || (this.ready && this.frame > 40)) this.buildCopies();   // the neighbours are in sight from the harbor, so the copies exist from the start
     this.archipelago?.update(this.camera.zoom);
     if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
       const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));
-      if (t > 0) this.archipelago.build();
+      if (t > 0) this.buildCopies();
       // left alone on the globe for two seconds it starts to turn, easing up to about 1.5 degrees a second (GPT review)
       if (this.gestures.pointers.size || this.spin) this.quietAt=performance.now();
       const quiet=t > .9 && !reduced ? Math.min(1, Math.max(0, (performance.now()-(this.quietAt||0)-2000)/1500)) : 0;
@@ -743,8 +787,11 @@ export class PixiIsland {
     if (this.marker.visible) {const age=1.5-(this.markerUntil-t);this.marker.alpha=1-age/1.5;this.marker.scale.set(1+age*.9,1+age*8/9);}
     // boss 4 Nov: no walking sound (Ashwin found it annoying)
     // the globe captures the scene only now, after this frame's camera and animations are set (GPT review: no frame lag)
+    const copies=this.liveCopies(); this.archipelago?.showLive(new Set(copies.map(i => i.id)));
+    if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies);
     this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
     this.app.render();
+    if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies);   // flat view: straight onto the screen, after the real island
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;
