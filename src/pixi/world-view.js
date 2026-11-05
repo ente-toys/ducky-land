@@ -60,15 +60,11 @@ vec3 planet(vec2 uv) {
   vec2 px = (uv - .5) * uRes;
   float Rp = uR * uRes.y, d = length(px) / Rp, onePx = 1. / Rp;
   float ball = smoothstep(4., 1., uR);                     // space and shading only once it reads as a ball
-  // space: navy, with wobbly flat rings of lighter navy round the globe and fine twinkling stars
+  // space: plain navy with fine twinkling stars (boss 5 Nov: the two rings round the globe removed)
   vec2 sp = uv * uRes;
-  float ang = atan(px.y, px.x);
-  float wob = (noise(vec2(ang * 3., uTime * .05)) - .5) * .12 + (noise(vec2(ang * 9., 4.)) - .5) * .05;
   vec3 space = vec3(.07, .09, .22);
-  space = mix(space, vec3(.12, .15, .33), step(d, 1.55 + wob));
-  space = mix(space, vec3(.17, .22, .44), step(d, 1.24 + wob * .6));
   float st = hash(floor(sp / 2.)), tw = .5 + .5 * sin(uTime * 1.7 + st * 40.);
-  space += vec3(1., .95, .8) * step(.9975, st) * tw * step(1.6, d);
+  space += vec3(1., .95, .8) * step(.9975, st) * tw * step(1.03, d);
   float glow = pow(smoothstep(1. + 34. * onePx, 1., d), 2.2) * step(1., d);
   space = mix(space, vec3(.5, .84, 1.), glow * .95);       // the glowing rim of air (boss ref)
   if (d >= 1.) return mix(ground(uCam + px / uZoom), space, ball);
