@@ -2,7 +2,7 @@
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
 // with lighter shallow bands following every coast, a glowing rim, a pin on where you are, and the 30,000 Duckies
 // shown alive as ripples and hearts. One world texture (every island at its true place on a wrapping map) feeds the globe.
-import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text} from 'pixi.js';
+import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text, Texture} from 'pixi.js';
 import shapes from './walk-shapes.json' with {type: 'json'};
 import {PALETTE} from './palette.js';
 
@@ -152,22 +152,32 @@ export function createWorldView(app, scene) {
   const mesh = new Mesh({geometry, shader, label: 'World view'});
   mesh.visible = false;
   app.stage.addChildAt(mesh, app.stage.getChildIndex(scene) + 1);
-  // boss 5 Nov (ref: Kaspersky cybermap): the world is busy. Duckies doing things pop as sun-yellow ripples on islands,
-  // now and then a little coral heart floats up. No flying arcs (boss).
-  const life = new Graphics({label: 'Ducky activity'});
+  // boss 5 Nov (ref: Kaspersky cybermap): the world is busy. A Ducky doing something shows as a soft warm glow that
+  // blooms and fades with one thin ring easing out; now and then a rounded heart pops up and drifts away.
+  const life = new Container({label: 'Ducky activity'}), rings = new Graphics();
+  const glowCanvas = document.createElement('canvas'); glowCanvas.width = glowCanvas.height = 64;
+  const gc = glowCanvas.getContext('2d'), grad = gc.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grad.addColorStop(0, 'rgba(255,240,190,1)'); grad.addColorStop(.35, 'rgba(255,214,90,.55)'); grad.addColorStop(1, 'rgba(255,214,90,0)');
+  gc.fillStyle = grad; gc.fillRect(0, 0, 64, 64);
+  const glowTex = Texture.from(glowCanvas);
+  const heartG = new Graphics().svg('<svg viewBox="0 0 24 24"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>');
+  const heartTex = app.renderer.generateTexture({target: heartG, resolution: 4}); heartG.destroy();
+  const glows = new Container(), hearts = new Container();
+  life.addChild(glows, rings, hearts);
+  const sprite = (pool, tex) => {const sp = pool.children.find(c => !c.visible) ?? pool.addChild(new Sprite(tex)); sp.anchor.set(.5); sp.visible = true; return sp;};
   const pin = makePin();
   app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
   app.stage.addChildAt(pin, app.stage.getChildIndex(life) + 1);
   life.visible = pin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
+  const out = x => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);   // ease-out: quick start, soft landing
+  const pop = x => {x = Math.max(0, Math.min(1, x)); const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2);};   // small overshoot
   const wrap = (v, p) => v - p * Math.round(v / p);
   let seed = 7;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const ripples = [];
   let lastT = 0, rippleDue = 0;
-  const heart = (g, x, y, s, color, alpha) => g.moveTo(x, y + s * .9).bezierCurveTo(x - s * 1.4, y - s * .2, x - s * .6, y - s * 1.3, x, y - s * .4)
-    .bezierCurveTo(x + s * .6, y - s * 1.3, x + s * 1.4, y - s * .2, x, y + s * .9).fill({color, alpha});
   return {
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
@@ -198,24 +208,31 @@ export function createWorldView(app, scene) {
       };
       const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
       const busy = ease((ball - .25) / .4);
-      life.visible = busy > .01; life.alpha = busy; life.clear();
+      life.visible = busy > .01; life.alpha = busy;
       if (busy > .01) {
         const pick = () => {const i = islands[Math.floor(rand() * islands.length)], a = rand() * 6.283, r = rand() * .25 * worldSize.width * i.scale; return {x: i.x + Math.cos(a) * r, y: i.y + Math.sin(a) * r * .7};};
-        for (rippleDue -= dt; rippleDue < 0; rippleDue += .06) ripples.push({...pick(), at: time, heart: rand() < .18});
-        const px = Math.max(1, Rp / 240);   // ripple size follows the globe
+        for (rippleDue -= dt; rippleDue < 0; rippleDue += .09) ripples.push({...pick(), at: time, heart: rand() < .2, dur: 2 + rand() * .8});
+        const px = Math.max(1, Rp / 240);   // sizes follow the globe
+        for (const c of glows.children) c.visible = false;
+        for (const c of hearts.children) c.visible = false;
+        rings.clear();
         for (let i = ripples.length - 1; i >= 0; i--) {
-          const r = ripples[i], age = (time - r.at) / 1.6;
+          const r = ripples[i], age = (time - r.at) / r.dur;
           if (age >= 1) {ripples.splice(i, 1); continue;}
           const p = project(r.x, r.y);
           if (p.face < .08) continue;
-          const f = ease(p.face / .3), sq = .45 + .55 * p.face;   // rings flatten toward the rim
-          for (const lag of [0, .28]) {
-            const k = (age - lag) / (1 - lag);
-            if (k <= 0) continue;
-            life.ellipse(p.x, p.y, (3 + k * 24) * px, (3 + k * 24) * px * sq).stroke({color: lag ? 0xFFF6D8 : 0xFFD21F, width: 2.6 * px, alpha: (1 - k) * f});
+          const f = ease(p.face / .3), sq = .45 + .55 * p.face;   // everything flattens toward the rim
+          const fade = ease(age / .12) * (1 - ease((age - .35) / .65));
+          const g = sprite(glows, glowTex);
+          g.position.set(p.x, p.y); g.scale.set((.25 + out(age) * .35) * px, (.25 + out(age) * .35) * px * sq); g.alpha = fade * .85 * f;
+          const k = out(age), rr = (4 + k * 22) * px;
+          rings.ellipse(p.x, p.y, rr, rr * sq).stroke({color: 0xFFF3C4, width: 1.4 * px, alpha: (1 - k) * .55 * f});
+          if (r.heart) {
+            const hs = sprite(hearts, heartTex), hk = age * 1.4;
+            hs.position.set(p.x + Math.sin(age * 9 + r.x) * 2 * px, p.y - (6 + out(hk) * 26) * px);
+            hs.scale.set(pop(hk / .3) * .9 * px);
+            hs.alpha = (1 - ease((hk - .6) / .4)) * f;
           }
-          life.circle(p.x, p.y, 3 * px).fill({color: 0xFFD21F, alpha: (1 - age) * f}).stroke({color: 0xFFF6D8, width: 1.2 * px, alpha: (1 - age) * f});
-          if (r.heart) heart(life, p.x, p.y - (8 + age * 30) * px, 6 * px, PALETTE.coral, ease((1 - age) * 3) * f);
         }
       } else ripples.length = 0;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
@@ -228,6 +245,6 @@ export function createWorldView(app, scene) {
         pin.scale.set(.8 + .2 * p.face);
       } else pin.visible = false;
     },
-    destroy() {mesh.destroy(); life.destroy(); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }
