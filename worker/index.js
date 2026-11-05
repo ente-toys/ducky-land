@@ -1,7 +1,7 @@
 import world from '../rive/web/world.json';
 import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same walking map the game uses offline (scripts/walk-world.mjs)
 import {createNavigation} from '../src/pixi/navigation.js';
-import {DURATIONS, playEmote, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
 import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland} from '../src/pixi/islands.js';
@@ -25,8 +25,8 @@ function outfitFor(id) {
 }
 
 function publicPose(actor) {
-  const {id,x,y,turn,travel,action,emoteVersion,outfit,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
-  return {id,x,y,turn,travel,action,emoteVersion,outfit,islandId,mode,boatId,exitLocked};
+  const {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft=0,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
+  return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked};
 }
 
 export class IslandRoom {
@@ -64,7 +64,7 @@ export class IslandRoom {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
-      const actor = info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0} : null;
+      const actor = info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null;
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       this.connections.set(socket, {...info, actor, login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
@@ -227,7 +227,7 @@ export class IslandRoom {
       const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
       const [x,y] = world.zones.plaza.spawn;
       info.actor = {id:crypto.randomUUID(), x,y,turn:0,outfit:outfitFor(user.account),emoteVersion:0,
-        islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[]};
+        islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[],jumpLeft:0};
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
     }
@@ -367,6 +367,9 @@ export class IslandRoom {
       info.ack=command.seq; this.attach(socket,info); this.broadcast(); return;
     }
     switch (command.type) {
+      case 'jump':
+        startJump(actor);
+        break;
       case 'input':
         if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
         if (command.x || command.y || command.stop === true) info.boarding = null;
@@ -453,12 +456,12 @@ export class IslandRoom {
           if (!boat || boat.occupant) this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           else {
             boat.occupant=actor.id; boat.departure=actor.islandId;
-            Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false});
+            Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false,jumpLeft:0});
             info.input=ZERO;
           }
         }
       }
-      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || actor.until > now/1000);
+      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || actor.jumpLeft > 0 || actor.until > now/1000);
       this.attach(socket, info);
     }
     for (const island of ISLANDS) {

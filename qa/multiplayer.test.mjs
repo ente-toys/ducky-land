@@ -237,6 +237,41 @@ test('friends are private, one-way, idempotent and persist across offline player
   }
 });
 
+test('live jumps are shared, preserve movement, land without more input, and reject spectator and sailing jumps', async () => {
+  const account=await signIn(9400);
+  const player=await socket(account.session), guest=await socket();
+  try {
+    const initial=await eventually(()=>guest.duck(player.welcome.id));
+    player.send({type:'jump',jumpLeft:999,x:-500,y:-500});
+    const airborne=await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft>0 && guest.duck(player.welcome.id));
+    assert.ok(airborne.jumpLeft<=.6);
+    assert.deepEqual([airborne.x,airborne.y],[initial.x,initial.y]);
+    player.send({type:'jump'});
+    player.send({type:'input',x:1,y:0});
+    await eventually(()=>{
+      const pose=guest.duck(player.welcome.id);
+      return pose.x>initial.x+5 && pose.jumpLeft>0 && pose.jumpLeft<airborne.jumpLeft;
+    });
+    player.send({type:'input',x:0,y:0,stop:true});
+    await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft===0);
+    guest.send({type:'jump',id:player.welcome.id});
+    await delay(100);
+    assert.equal(guest.duck(player.welcome.id).jumpLeft,0);
+    await position(player,{mode:'sailing',jumpLeft:0});
+    player.send({type:'jump'});
+    await delay(150);
+    assert.equal(guest.duck(player.welcome.id).jumpLeft,0);
+    await position(player,{mode:'walking'});
+    player.send({type:'jump'});
+    await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft>0);
+    await request('/test/restore');
+    await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft===0);
+  } finally {
+    player.close(); guest.close();
+    await request('/test/expire-resume');
+  }
+});
+
 test('friend writes require authentication, same origin, live players and authoritative proximity', async () => {
   const owner = await signIn(9310), target = await signIn(9311), outsider = await signIn(9312);
   const player = await socket(owner.session), peer = await socket(target.session);
@@ -376,7 +411,7 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     await eventually(() => guest.snapshot?.players.length === 2);
     const spawn = guest.duck(id);
     assert.deepEqual([spawn.x,spawn.y],world.zones.plaza.spawn);
-    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','mode','outfit','travel','turn','x','y']);
+    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','jumpLeft','mode','outfit','travel','turn','x','y']);
     assert.equal((await eventually(() => b.duck(id)))?.login,'account-101');
     assert.equal(b.duck()?.login,'account-102');
     assert.equal(guest.snapshot.self,null);

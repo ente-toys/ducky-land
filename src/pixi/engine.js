@@ -11,6 +11,7 @@ import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pi
 import rawWorld from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
+import {startJump,jumpHeight} from './player-motion.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
@@ -367,13 +368,14 @@ export class PixiIsland {
       this.follow = false;this.fitMode=false;this.constrain(this.target);
     }, {passive: false});
     this.listen(window, 'keydown', event => {
-      if (event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
+      if (event.defaultPrevented || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
       const key = event.key.toLowerCase();
-      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-'].includes(key)) return;
+      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' '].includes(key)) return;
       event.preventDefault();
       this.audio.unlock();
       this.keys.add(key);
       if (event.repeat) return;
+      if (key === ' ') this.jump();
       if (key === 'q') this.triggerEmote(2);
       if (key === 'e') this.triggerEmote(3);
       if (/^[1-7]$/.test(key)) this.triggerEmote(key === '1' ? 2 : Number(key) + 2);
@@ -443,7 +445,7 @@ export class PixiIsland {
     const {zoom,x,y} = this.camera;
     return {
       x:this.width / 2 + (pose.x - x) * zoom,
-      y:this.height / 2 + (pose.y - y - 165) * zoom - 8,
+      y:this.height / 2 + (pose.y - y - 165 - jumpHeight(pose.jumpLeft,this.motion.matches) * TILT) * zoom - 8,
     };
   }
 
@@ -460,7 +462,7 @@ export class PixiIsland {
 
   updateControlLabel() {
     const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home shows the island.';
-    const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap the harbor to dock.' : ' Click to walk. WASD or arrows move. Q quacks, E dances, 1 to 7 emote, F follows.';
+    const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap the harbor to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
     const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
     this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
   }
@@ -517,6 +519,11 @@ export class PixiIsland {
       this.audio.play('pop', .045);
     }
     return destination;
+  }
+
+  jump() {
+    if (this.interior?.active) return this.interior.jump();
+    return this.room ? this.room.jump() : startJump(this.sim?.player);
   }
 
   triggerEmote(action) {
@@ -640,7 +647,7 @@ export class PixiIsland {
       const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
-      rig.root.position.set(x, deckY(x, y));   // boss 3 Nov: Duckies walk up and over the arched bridges
+      rig.root.position.set(x, deckY(x, y) - jumpHeight(duck.jumpLeft,reduced));   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
       rig.root.visible = visible(x, y, 200);
       if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping});
@@ -703,6 +710,7 @@ export class PixiIsland {
       d.boats=String(this.room?.boats.length ?? 0);
       d.player = player ? `${player.x.toFixed(1)},${player.y.toFixed(1)}` : '';
       d.action = player ? String(player.action) : '';
+      d.jumpLeft = (player?.jumpLeft ?? 0).toFixed(3);
       d.quackBubbles=String(this.sim.ducks.filter(duck=>duck.action===2).length);
       d.playerRing=String(Boolean(player));d.muted=String(this.audio.muted);d.follow=String(this.follow);d.destinationMarker=String(this.marker.visible);d.birds=String(this.birds.length);
       d.camera = JSON.stringify(this.camera);
@@ -799,7 +807,7 @@ export class PixiIsland {
         rig.root.mask=sailing?entry.seatMask:null;
       }
       rig.root.scale.set(.88*.24*3*(sailing ? .8 : 1),.88*.24*3*(sailing ? .8 : 1)/TILT);
-      rig.root.position.set(x+(sailing?22:0),sailing?y-12:deckY(x,y));
+      rig.root.position.set(x+(sailing?22:0),sailing?y-12:deckY(x,y)-jumpHeight(pose.jumpLeft,reducedMotion));
       rig.root.zIndex = y+(sailing?3:0);
       rig.root.visible = visible(x,y,200);
       if (rig.root.visible) rig.update(dt, {action, speed:travel, turn, time, reducedMotion, emoteVersion});

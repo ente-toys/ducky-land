@@ -1,4 +1,4 @@
-import {DURATIONS, playEmote, setWalkDestination, walkStep} from './player-motion.js';
+import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
 import {islandFor, HARBOR, destinationsFor, near, canSail, canDock, setSailDestination, sailStep} from './islands.js';
@@ -11,7 +11,7 @@ function sample(track, now) {
   const {from,to,start} = track;
   const blend = Math.min(1, Math.max(0, (now-start) * 10));
   const turn = to.turn - from.turn;
-  return {...to, x:from.x+(to.x-from.x)*blend, y:from.y+(to.y-from.y)*blend,
+  return {...to, jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-(now-start)), x:from.x+(to.x-from.x)*blend, y:from.y+(to.y-from.y)*blend,
     turn:from.turn+Math.atan2(Math.sin(turn), Math.cos(turn))*blend};
 }
 
@@ -202,6 +202,7 @@ export class RoomClient {
   }
 
   predict(command, now) {
+    if (command.type === 'jump') return startJump(this.player);
     if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
     if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
       ? setSailDestination(this.player,command.x,command.y) : setWalkDestination(this.player, this.nav, command.x, command.y);
@@ -231,6 +232,11 @@ export class RoomClient {
 
   emote(action) {
     return this.player?.mode !== 'sailing' && Object.hasOwn(DURATIONS, action) && this.send({type:'emote',action});
+  }
+
+  jump() {
+    if (!this.player || this.player.mode === 'sailing' || this.player.jumpLeft > 0) return false;
+    return this.send({type:'jump'});
   }
 
   board(boatId) { return this.send({type:'board',boatId}); }

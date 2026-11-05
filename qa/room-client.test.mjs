@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {RoomClient} from '../src/pixi/room-client.js';
 import {destinationsFor} from '../src/pixi/islands.js';
+import {JUMP_SECONDS,jumpHeight,startJump,walkStep} from '../src/pixi/player-motion.js';
 
 function setup() {
   const events=[],sent=[];
@@ -15,6 +16,48 @@ const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandI
   players:[{id:'player',islandId,mode,x:1800,y:430,turn:0,action:0,emoteVersion:0,travel:0}],
   boats:[{id:'home-0',islandId,x:1800,y:430,turn:0,occupant:mode==='sailing'?'player':null}],
   self:{ack:0,path:[],emoteLeft:0},
+});
+
+test('jump prediction keeps walking, prevents repeated jumps, reconciles and lands remote ducks',()=>{
+  const {room,sent}=setup();
+  room.snapshot(packet(1));
+  room.destination(1900,430);
+  const path=room.player.path;
+  assert.equal(room.jump(),true);
+  assert.equal(room.player.jumpLeft,JUMP_SECONDS);
+  assert.equal(room.player.path,path);
+  const count=sent.length;
+  assert.equal(room.jump(),false);
+  assert.equal(sent.length,count);
+  room.step(.1,{x:1,y:0});
+  assert.ok(room.player.x>1800);
+  assert.ok(room.player.jumpLeft<JUMP_SECONDS);
+  const acknowledged=packet(2);
+  acknowledged.players[0].jumpLeft=.2;
+  acknowledged.players.push({...acknowledged.players[0],id:'remote',jumpLeft:.4});
+  acknowledged.self.ack=room.seq;
+  room.snapshot(acknowledged);
+  assert.equal(room.player.jumpLeft,.2);
+  assert.equal(room.poses(performance.now()/1000+.8).find(duck=>duck.id==='remote').jumpLeft,0);
+  room.snapshot(packet(3,'home','sailing'));
+  assert.equal(room.jump(),false);
+  room.reset();
+  assert.equal(room.jump(),false);
+  room.dispose();
+});
+
+test('jump arc lands exactly, respects reduced motion and keeps ground collision rules',()=>{
+  const actor={x:0,y:0,action:0,turn:0,path:[],until:0,travel:0};
+  assert.equal(startJump(actor),true);
+  assert.equal(jumpHeight(JUMP_SECONDS),0);
+  assert.equal(jumpHeight(0),0);
+  assert.equal(jumpHeight(JUMP_SECONDS/2),85);
+  assert.ok(jumpHeight(JUMP_SECONDS/2,true)<jumpHeight(JUMP_SECONDS/2));
+  for(let i=0;i<40;i++) walkStep(actor,{clearLine:()=>false,walkable:()=>false},.05,i*.05,{x:1,y:0});
+  assert.equal(actor.jumpLeft,0);
+  assert.deepEqual([actor.x,actor.y],[0,0]);
+  assert.equal(startJump(actor),true);
+  assert.equal(startJump({...actor,mode:'sailing',jumpLeft:0}),false);
 });
 
 test('nearby friends choose the closest live account, retain it, and respect saves, dismissals and reconnects',()=>{
