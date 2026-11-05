@@ -97,7 +97,7 @@ vec3 planet(vec2 uv) {
   return mix(col, vec3(.6, .88, 1.), pow(1. - z, 2.4) * .75 * ball);   // blue atmosphere at the rim
 }
 void main() {
-  vec3 col = uPlanet > .5 ? planet(vUV) : horizon(vUV);
+  vec3 col = planet(vUV);   // boss 5 Nov: Google Earth style, straight down, the flat world curling into the globe
   finalColor = vec4(col, 1.);
 }`;
 
@@ -140,7 +140,7 @@ export function createWorldView(app, scene) {
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
   return {
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. archipelago: islands, bounds and texture.
-    update(t, width, height, time, cam, arch, worldSize) {
+    update(t, width, height, time, cam, arch, worldSize, floorZoom, idle) {
       const on = t > .001;
       mesh.visible = on;
       if (!on) {scene.visible = true; return;}
@@ -151,11 +151,10 @@ export function createWorldView(app, scene) {
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); scene.visible = false;   // the real islands round the camera
       const b = arch.bounds;
-      // tilt up to the horizon, hold, then tip back to straight down as you climb; then the flat world curls into the globe
-      u.uTilt = ease(t / .3) * (1 - ease((t - .48) / .2));
-      const p = ease((t - .68) / .3);
-      u.uPlanet = t > .68 ? 1 : 0; u.uR = 8 * Math.pow(.43 / 8, p);   // radius 8 screens (flat) down to .43 (a ball in space)
-      const spin = ease((t - .85) / .15); this.roll = (this.roll || 0) + spin * .016 * (b.x1 - b.x0) / 60;
+      // the globe is a fixed size in world units, so its radius on screen follows the zoom exactly: huge (flat) up close,
+      // a ball in space at the floor zoom. One continuous move, like Google Earth.
+      u.uTilt = 0; u.uPlanet = 1; u.uR = .43 * cam.zoom / floorZoom;
+      this.roll = (this.roll || 0) + (idle ? ease((t - .9) / .1) * (b.x1 - b.x0) / 3600 : 0);   // turns slowly when left alone
       u.uSpin[0] = this.roll; u.uSpin[1] = 0;
       u.uTime = time; u.uAspect = w / h; u.uZoom = cam.zoom;
       u.uCam[0] = cam.x; u.uCam[1] = cam.y; u.uRes[0] = w; u.uRes[1] = h;

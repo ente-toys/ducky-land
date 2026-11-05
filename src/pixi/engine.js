@@ -534,7 +534,8 @@ export class PixiIsland {
   }
 
   constrain(camera) {
-    const far=this.archipelago && camera.zoom<this.minZoom*.95;   // zoomed out over the archipelago: roam the whole sea
+    const far=this.archipelago && camera.zoom<this.minZoom*.95;   // zoomed out over the archipelago: roam freely, the world wraps like a globe
+    if (far) return;
     const bounds=far?this.archipelago.bounds:this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
     camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
@@ -624,9 +625,8 @@ export class PixiIsland {
     this.archipelago?.update(this.camera.zoom);
     if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
       const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));
-      if (t > .6 && !this.gestures.pointers.size) {const b = this.archipelago.bounds; this.target.x += ((b.x0 + b.x1) / 2 - this.target.x) * .08; this.target.y += ((b.y0 + b.y1) / 2 - this.target.y) * .08;}   // drift to the world's middle so the planet is centred
       if (t > 0) this.archipelago.build();
-      this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world);
+      this.worldView.update(t, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size);
     }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
     this.scene.scale.set(this.camera.zoom, this.camera.zoom * TILT);
