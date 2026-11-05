@@ -1,31 +1,20 @@
 // boss 5 Nov: 300 home islands (30k stars = 300 islands), all the same island for now; themes come later.
-// One snapshot of the home island is reused for 299 copies scattered round it in the sea (GTA-style map),
+// One snapshot of the home island is reused for 299 copies laid out in the shape of our Ducky,
 // and the bird's-eye view zooms the camera out far enough to see the whole archipelago.
 import {Container, Filter, GlProgram, Rectangle, Sprite} from 'pixi.js';
+import map from './ducky-map.json' with {type: 'json'};
 
 export const ISLAND_COUNT = 300;
 const hash = i => {const s = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return s - Math.floor(s);};
 
-// boss 5 Nov: a GTA-style map, not a grid. 300 islands scattered at random (seeded, so everyone sees the same map) inside
-// a ragged landmass outline, in loose clusters and chains with open channels between, sizes varied, home in the middle.
-export function archipelagoLayout(world, seed = 7) {
-  let n = seed >>> 0;
-  const rnd = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const W = world.width, H = world.height, home = {index: 0, home: true, x: W / 2, y: H / 2, scale: 1, flip: 1};
-  const R = 70000, lobes = Array.from({length: 7}, () => ({a: rnd() * 6.28, k: 2 + Math.floor(rnd() * 5), m: .08 + rnd() * .14}));
-  const edge = ang => R * (1 + lobes.reduce((t, l) => t + Math.sin(ang * l.k + l.a) * l.m, 0));   // ragged outline
-  const hubs = Array.from({length: 18}, () => {const ang = rnd() * 6.28, d = Math.sqrt(rnd()) * .8; return {x: W / 2 + Math.cos(ang) * edge(ang) * d, y: H / 2 + Math.sin(ang) * edge(ang) * d * .72};});
-  const out = [home];
-  for (let tries = 0; out.length < ISLAND_COUNT && tries < 60000; tries++) {
-    const hub = hubs[Math.floor(rnd() * hubs.length)], spread = 9000 + rnd() * 16000, ang = rnd() * 6.28, d = Math.sqrt(rnd()) * spread;
-    const x = rnd() < .75 ? hub.x + Math.cos(ang) * d : W / 2 + (rnd() - .5) * 2 * R, y = rnd() < .75 ? hub.y + Math.sin(ang) * d * .8 : H / 2 + (rnd() - .5) * 1.44 * R;
-    const da = Math.atan2((y - H / 2) / .72, x - W / 2), dist = Math.hypot(x - W / 2, (y - H / 2) / .72);
-    if (dist > edge(da)) continue;
-    const scale = .45 + rnd() * rnd() * .9;   // mostly small, a few big
-    const room = i => (scale + i.scale) * W * .5 + 900;   // never overlapping, a channel between neighbours
-    if (out.some(i => Math.hypot(i.x - x, (i.y - y) * W / H) < room(i))) continue;
-    out.push({index: out.length, home: false, x, y, scale, flip: rnd() < .5 ? -1 : 1});
-  }
+// boss 5 Nov: the 300 islands draw our exact Ducky (traced from the Figma Ducky, ducky-map.json). Small islands trace the
+// outline, eyes, beak, tuft, wing seams and feet; bigger ones fill the body. Home is the body island nearest the middle.
+export function archipelagoLayout(world) {
+  const W = world.width, H = world.height, PX = 420;   // world units per map pixel
+  const pts = map.points.map(([x, y, inner], i) => ({x: (x - map.center[0]) * PX, y: (y - map.center[1]) * PX, scale: inner ? .86 : .46, i}));
+  const inner = pts.filter(p => p.scale > .5), near = inner.reduce((a, p) => Math.hypot(p.x, p.y) < Math.hypot(a.x, a.y) ? p : a, inner[0]);
+  const out = [{index: 0, home: true, x: W / 2, y: H / 2, scale: 1, flip: 1}];
+  for (const p of pts) if (p !== near) out.push({index: out.length, home: false, x: W / 2 + p.x - near.x, y: H / 2 + p.y - near.y, scale: p.scale, flip: hash(p.i) < .5 ? -1 : 1});
   const pad = 9000;
   const bounds = {x0: Math.min(...out.map(i => i.x - W * i.scale / 2)) - pad, y0: Math.min(...out.map(i => i.y - H * i.scale / 2)) - pad,
     x1: Math.max(...out.map(i => i.x + W * i.scale / 2)) + pad, y1: Math.max(...out.map(i => i.y + H * i.scale / 2)) + pad};
