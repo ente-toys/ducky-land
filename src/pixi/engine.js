@@ -4,6 +4,7 @@ import {createBeachSurf} from './surf.js';
 import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
+import {createArchipelago} from './archipelago.js';
 import {HARBOR, islandFor, near, SEA_BOUNDS, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
@@ -219,6 +220,7 @@ export class PixiIsland {
         objects: this.objects, props: this.props, motion: this.motion});
       if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
+      this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);   // boss 5 Nov: 300 islands, same island for now; B = bird's-eye view
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) return;
@@ -369,7 +371,7 @@ export class PixiIsland {
     this.listen(window, 'keydown', event => {
       if (event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
       const key = event.key.toLowerCase();
-      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-'].includes(key)) return;
+      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','b','home','0','+','=','-'].includes(key)) return;
       event.preventDefault();
       this.audio.unlock();
       this.keys.add(key);
@@ -378,6 +380,7 @@ export class PixiIsland {
       if (key === 'e') this.triggerEmote(3);
       if (/^[1-7]$/.test(key)) this.triggerEmote(key === '1' ? 2 : Number(key) + 2);
       if (key === 'm') this.audio.toggle();
+      if (key === 'b') this.toggleBirdEye();
       if (key === 'f' && this.player) {this.follow=true;this.fitMode=false;this.target.zoom=Math.max(.65,this.target.zoom);}
       if (key === 'home' || key === '0') this.fit();
       if (['+','=','-'].includes(key)) {
@@ -530,11 +533,28 @@ export class PixiIsland {
   }
 
   constrain(camera) {
-    const bounds=this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
+    const bounds=this.birdEye?this.archipelago.bounds:this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
     camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
 
+  // boss 5 Nov: bird's-eye view of all 300 islands; B (or the button) toggles it, Home/0 or B again comes back
+  birdZoom() {const b=this.archipelago.bounds; return fitZoom(this.width, this.height, b.x1-b.x0, b.y1-b.y0);}
+  toggleBirdEye(on=!this.birdEye) {
+    if (!this.archipelago || on === !!this.birdEye) return;
+    this.birdEye=on;
+    if (on) {
+      this.archipelago.build(); this.beforeBird={...this.target};
+      this.follow=false; this.fitMode=false; this.minZoom=this.birdZoom();
+      const b=this.archipelago.bounds; Object.assign(this.target,{x:(b.x0+b.x1)/2,y:(b.y0+b.y1)/2,zoom:this.minZoom});
+    } else {
+      this.minZoom=fitZoom(this.width, this.height, world.width, world.height);
+      Object.assign(this.target,this.beforeBird||{x:world.width/2,y:world.height/2,zoom:.6}); this.follow=!!this.player;
+    }
+    this.onBirdEye?.(on);
+  }
+
   fit() {
+    if (this.birdEye) {this.toggleBirdEye(false); return;}
     this.follow = false;this.fitMode=true;
     Object.assign(this.target, {x: world.width / 2, y: world.height / 2, zoom: this.minZoom});
   }
@@ -544,7 +564,7 @@ export class PixiIsland {
     this.width = Math.max(1, this.host.clientWidth);
     this.height = Math.max(1, this.host.clientHeight);
     this.app.renderer.resize(this.width, this.height);
-    this.minZoom = fitZoom(this.width, this.height, world.width, world.height);
+    this.minZoom = this.birdEye ? this.birdZoom() : fitZoom(this.width, this.height, world.width, world.height);
     if (initial) {
       this.camera.zoom = Math.min(this.width / 1500, this.height / 1000);   // closer in, like Cursor Camp
       const cam = new URLSearchParams(location.search).get('cam')?.split(',').map(Number);   // boss 3 Nov: ?cam=x,y,zoom for QA shots
@@ -601,7 +621,7 @@ export class PixiIsland {
       }
       if (this.interior.active) {this.app.render(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}
     }
-    if(player?.action===1&&!this.fitMode&&!this.gestures.pointers.size){
+    if(player?.action===1&&!this.fitMode&&!this.birdEye&&!this.gestures.pointers.size){
       const x=this.width/2+(player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(player.y-this.camera.y)*this.camera.zoom*TILT;
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
@@ -816,6 +836,7 @@ export class PixiIsland {
     cancelAnimationFrame(this.raf);
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());
+    this.archipelago?.destroy();
     this.clearChat();
     this.keys.clear();
     this.gestures.clear();
