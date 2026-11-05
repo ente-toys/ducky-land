@@ -21,12 +21,20 @@ export function archipelagoLayout(world, seed = 11) {
   const COLS = 20, ROWS = 15, sx = W * 1.42, sy = H * 1.42, hc = 10, hr = 7;
   const x0 = cx - (hc + .5) * sx, y0 = cy - (hr + .5) * sy, SX = COLS * sx, SY = ROWS * sy;
   const wrapd = (v, p) => v - p * Math.round(v / p);
-  const room = (x, y, s) => out.every(i => Math.hypot(wrapd(i.x - x, SX) / W, wrapd(i.y - y, SY) / H) > (i.scale + s) * .5 * 1.06);
+  // boss 5 Nov ("bad", islands pinched into a starburst at the pole): the globe wraps this map round a sphere, which
+  // squeezes everything toward the poles. Islands now live only between 55 degrees north and south, and are spaced by
+  // their real distance on the ball (east-west distances shrink by cos(latitude)), so none can stretch, pinch or overlap.
+  const Rw = SX / (2 * Math.PI), LAT = .96;
+  const latOf = y => -(y - cy) / Rw;
+  const room = (x, y, s) => out.every(i => {
+    const c = Math.cos((latOf(i.y) + latOf(y)) / 2);
+    return Math.hypot(wrapd(i.x - x, SX) * c / W, (i.y - y) / H) > (i.scale + s) * .5 * 1.06;
+  });
   // boss 5 Nov (option B): filled, but varied. A few big islands, a crowd of middling ones, lots of small ones.
   const sizes = Array.from({length: ISLAND_COUNT - 1}, (_, i) => i < 16 ? 1.5 + rnd() * .7 : i < 100 ? .8 + rnd() * .45 : .38 + rnd() * .38).sort((p, q) => q - p);
   for (let k = 0, s = sizes[0]; k < sizes.length; s = sizes[++k]) {
     for (let t = 0; t < 4000; t++, s *= t % 400 ? 1 : .94) {
-      const x = x0 + rnd() * SX, y = y0 + rnd() * SY;
+      const lat = Math.asin((rnd() * 2 - 1) * Math.sin(LAT - s * H * .5 / Rw)), x = x0 + rnd() * SX, y = cy - lat * Rw;   // even over the ball's area
       if (room(x, y, s)) {add(x, y, s); break;}
     }
   }
