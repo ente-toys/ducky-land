@@ -1,7 +1,7 @@
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
 // with lighter shallow bands following every coast, a glowing rim, a pin on where you are, and the 30,000 Duckies
-// shown alive: ripples and arcs of activity and a counter. One world texture (every island at its true place on a wrapping map) feeds the globe.
+// shown alive as ripples and arcs of activity. One world texture (every island at its true place on a wrapping map) feeds the globe.
 import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text} from 'pixi.js';
 import shapes from './walk-shapes.json' with {type: 'json'};
 import {PALETTE} from './palette.js';
@@ -156,23 +156,16 @@ export function createWorldView(app, scene) {
   // (now and then a little coral heart floats up), and Duckies visiting friends fly as yellow arcs that land with a ripple.
   const life = new Graphics({label: 'Ducky activity'});
   const pin = makePin();
-  const count = new Container({label: '30,000 Duckies'});
-  const countText = new Text({text: '', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 17, fontWeight: '800', fill: PALETTE.ink}});
-  const countSub = new Text({text: 'across 300 islands', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '600', fill: PALETTE.ink}});
-  countText.anchor.set(0, .5); countSub.anchor.set(0, .5); countSub.alpha = .7;
-  const countBg = new Graphics(), dot = new Graphics().circle(0, 0, 5).fill(PALETTE.sun).stroke({color: PALETTE.ink, width: 2});
-  count.addChild(countBg, dot, countText, countSub);
   app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
   app.stage.addChildAt(pin, app.stage.getChildIndex(life) + 1);
-  app.stage.addChildAt(count, app.stage.getChildIndex(pin) + 1);
-  life.visible = pin.visible = count.visible = false;
+  life.visible = pin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
   const wrap = (v, p) => v - p * Math.round(v / p);
   let seed = 7;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const ripples = [], arcs = [];
-  let lastT = 0, rippleDue = 0, arcDue = 0, shownAt = -1;
+  let lastT = 0, rippleDue = 0, arcDue = 0;
   const heart = (g, x, y, s, color, alpha) => g.moveTo(x, y + s * .9).bezierCurveTo(x - s * 1.4, y - s * .2, x - s * .6, y - s * 1.3, x, y - s * .4)
     .bezierCurveTo(x + s * .6, y - s * 1.3, x + s * 1.4, y - s * .2, x, y + s * .9).fill({color, alpha});
   return {
@@ -180,7 +173,7 @@ export function createWorldView(app, scene) {
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
       const on = t > .001;
       mesh.visible = on;
-      if (!on) {scene.visible = true; life.visible = pin.visible = count.visible = false; return;}
+      if (!on) {scene.visible = true; life.visible = pin.visible = false; return;}
       if (!worldTex && arch?.texture) {
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch.texture, worldSize);
         shader.resources.uWorld = worldTex.source;
@@ -244,19 +237,6 @@ export function createWorldView(app, scene) {
           life.circle(q.x, q.y, 4 * px).fill({color: 0xFFF6D8, alpha: f}).stroke({color: 0xFFD21F, width: 2 * px, alpha: f});
         }
       } else {ripples.length = 0; arcs.length = 0;}
-      // 30,000 Duckies: a cream pill at the bottom, counting up as the globe arrives
-      count.visible = ball > .5;
-      if (count.visible) {
-        if (shownAt < 0) shownAt = time;
-        const n = Math.round(30000 * ease((time - shownAt) / 1.4));
-        countText.text = `${n.toLocaleString('en-US')} Duckies`;
-        countText.position.set(26, 0); countSub.position.set(26 + countText.width + 8, 1);
-        const pw = 26 + countText.width + 8 + countSub.width + 18;
-        countBg.clear().roundRect(0, -21, pw, 42, 21).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2.5});
-        dot.position.set(15, 0); dot.scale.set(1 + .25 * Math.abs(Math.sin(time * 4)));
-        count.position.set(Math.round((w - pw) / 2), h - 46);
-        count.alpha = ease((ball - .5) / .3);
-      } else shownAt = -1;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
       if (me) {
         const p = project(me.x, me.y);
@@ -267,6 +247,6 @@ export function createWorldView(app, scene) {
         pin.scale.set(.8 + .2 * p.face);
       } else pin.visible = false;
     },
-    destroy() {mesh.destroy(); life.destroy(); pin.destroy({children: true}); count.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {mesh.destroy(); life.destroy(); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }
