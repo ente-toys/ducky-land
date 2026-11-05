@@ -1,7 +1,7 @@
 import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
-import {islandFor, HARBOR, destinationsFor, near, canSail, canDock, setSailDestination, sailStep} from './islands.js';
+import {islandFor, HARBOR, destinationsFor, near, canSail, canDock, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -57,6 +57,7 @@ export class RoomClient {
     this.input = ZERO;
     this.lastInput = -Infinity;
     this.offsetX = this.offsetY = 0;
+    this.prev = null; this.alpha = 1;
   }
 
   connect(play = true, reconnecting = false) {
@@ -161,8 +162,9 @@ export class RoomClient {
         if (previous) {
           this.offsetX += previous.x - this.player.x;
           this.offsetY += previous.y - this.player.y;
-          if (Math.hypot(this.offsetX,this.offsetY) > 90) this.offsetX = this.offsetY = 0;
-        }
+          if (this.prev) {this.prev.x -= previous.x - this.player.x; this.prev.y -= previous.y - this.player.y;}   // the in-between frame keeps its place too
+          if (Math.hypot(this.offsetX,this.offsetY) > 90) {this.offsetX = this.offsetY = 0; this.prev = null;}
+        } else this.prev = null;
       } else {
         const last = this.tracks.get(pose.id);
         tracks.set(pose.id, {from:last ? sample(last, now) : pose, to:pose, start:now});
@@ -254,7 +256,7 @@ export class RoomClient {
     return [...this.boatTracks.values()].map(track => {
       const boat=sample(track,now);
       return boat.occupant === this.id && this.player
-        ? {...boat,x:this.player.x+this.offsetX,y:this.player.y+this.offsetY,turn:this.player.turn,travel:this.player.travel}
+        ? {...boat,...this.view(),travel:this.player.travel}
         : {...boat,travel:Math.hypot(track.to.x-track.from.x,track.to.y-track.from.y)*10};
     });
   }
@@ -282,8 +284,9 @@ export class RoomClient {
   step(dt, input) {
     if (!this.player) return;
     const now = nowSeconds();
-    if (this.input.x !== input.x || this.input.y !== input.y || (moving(input) && now-this.lastInput >= .1)) {
-      if (this.send({type:'input',...input}, now)) {
+    this.prev = {x:this.player.x, y:this.player.y, turn:this.player.turn};   // boss 5 Nov ("blurry and shaky"): the frame draws between this and the new step
+    if (this.input.x !== input.x || this.input.y !== input.y || Boolean(this.input.run) !== Boolean(input.run) || (moving(input) && now-this.lastInput >= .1)) {
+      if (this.send({type:'input',x:input.x,y:input.y,...(input.run ? {run:true} : {})}, now)) {   // boss 6 Nov: Shift held = run (the server caps the speed)
         this.input = input;
         this.lastInput = now;
       }
@@ -295,10 +298,22 @@ export class RoomClient {
     this.offsetY *= decay;
   }
 
+  // The own Ducky steps at a fixed 60 Hz but the screen draws at 60-120 Hz: drawn as is, it moves on every other frame
+  // and stands still on the rest (boss 5 Nov, "very blurry and shaky" at sailing speed). The engine passes how far the
+  // frame is into the next step (0-1) and the own pose, its boat and the camera are drawn at that point.
+  setAlpha(alpha) { this.alpha = Math.max(0, Math.min(1, alpha)); }
+  view() {
+    const p = this.player;
+    if (!p) return null;
+    const q = this.prev, k = 1 - this.alpha;
+    if (!q || k <= 0) return {x:p.x+this.offsetX, y:p.y+this.offsetY, turn:p.turn};
+    const turn = p.turn - q.turn;
+    return {x:p.x+(q.x-p.x)*k+this.offsetX, y:p.y+(q.y-p.y)*k+this.offsetY, turn:p.turn-Math.atan2(Math.sin(turn), Math.cos(turn))*k};
+  }
+
   poses(now = nowSeconds()) {
     const poses = [...this.tracks.values()].map(track => sample(track, now));
-    if (this.player) poses.push({...this.player, x:this.player.x+this.offsetX,
-      y:this.player.y+this.offsetY, player:true});
+    if (this.player) poses.push({...this.player, ...this.view(), player:true});
     return poses;
   }
 
@@ -309,5 +324,36 @@ export class RoomClient {
     this.socket = null;
     socket?.close();
     this.reset();
+  }
+}
+
+// boss 6 Nov ("I took the boat already. Every island should have all the boats"): the ?offline mode keeps the same boats
+// the room server does (concepts/feel/boats-spec.md). Every island holds its ten moorings; a boat you take leaves a fresh
+// one at its mooring once you are MOORING_CLEAR away; the boat you step off ties back up beside its own empty mooring or is
+// dropped (the renderer drifts it off and fades it). Same helpers as worker/index.js, so offline and live never disagree.
+export class OfflineFleet {
+  constructor(boats = createBoats()) {
+    this.list = boats;
+    fillMoorings(this.list);
+  }
+  boats(islandId = 'home') { return this.list.filter(boat => boat.islandId === islandId); }
+  boatOf(actorId) { return this.list.find(boat => boat.occupant === actorId) ?? null; }
+  take(boatId, actorId) {
+    const boat = this.list.find(boat => boat.id === boatId);
+    if (!boat || boat.occupant || this.boatOf(actorId)) return null;
+    boat.occupant = actorId; boat.departure = boat.islandId;
+    return boat;
+  }
+  // the sailor's pose each step; returns whether the boat list changed (a mooring refilled)
+  sail(actorId, {x, y, turn, islandId}) {
+    const boat = this.boatOf(actorId);
+    if (!boat) return false;
+    Object.assign(boat, {x, y, turn: turn ?? boat.turn, islandId: islandId ?? boat.islandId});
+    return fillMoorings(this.list);
+  }
+  land(actorId) {
+    const boat = this.boatOf(actorId);
+    if (boat) retireBoat(this.list, boat);
+    return boat;
   }
 }

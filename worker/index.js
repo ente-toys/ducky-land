@@ -1,10 +1,10 @@
 import world from '../rive/web/world.json';
 import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same walking map the game uses offline (scripts/walk-world.mjs)
 import {createNavigation} from '../src/pixi/navigation.js';
-import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
-import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, boatHome, boatSpot} from '../src/pixi/islands.js';
+import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat} from '../src/pixi/islands.js';
 
 const nav = createNavigation({...world, ...walkWorld});
 const PLAYER_LIMIT = 16;
@@ -58,10 +58,9 @@ export class IslandRoom {
       SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
-    // keep saved boats (position, occupant) that still exist, and add any the world now has that the save lacks (300 islands)
-    const fresh = createBoats(), known = new Set(fresh.map(boat => boat.id));
-    const kept = saved ? JSON.parse(saved.state).filter(boat => known.has(boat.id)) : [], have = new Set(kept.map(boat => boat.id));
-    this.boats = [...kept, ...fresh.filter(boat => !have.has(boat.id))];
+    // keep saved boats (position, occupant), then fill every mooring on every island (300 islands, boss 6 Nov: all the boats)
+    this.boats = saved ? JSON.parse(saved.state) : createBoats();
+    fillMoorings(this.boats);
     this.savedBoats = saved?.state;
     for (const socket of ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
@@ -82,10 +81,10 @@ export class IslandRoom {
     this.savedBoats=state;
   }
 
-  // boss 5 Nov: a boat goes back to its own mooring spot on its own island (the harbor berth, islet or beach it came from)
+  // boss 6 Nov: the sailor stepped off. The boat ties back up if it is still beside its own empty mooring, otherwise it
+  // drifts off (the client fades it out); every mooring on every island keeps its boat either way (islands.js fillMoorings)
   parkBoat(boat) {
-    const islandId=boatHome(boat), spot=boatSpot(boat);
-    Object.assign(boat,{x:spot.x,y:spot.y,islandId,turn:spot.turn,occupant:null,departure:islandId});
+    retireBoat(this.boats,boat);
     this.saveBoats();
   }
 
@@ -97,7 +96,7 @@ export class IslandRoom {
   reconcileBoats() {
     const retained=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
     for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
-    for (const boat of this.boats) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
+    for (const boat of [...this.boats]) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
     this.saveBoats();
   }
 
@@ -231,6 +230,9 @@ export class IslandRoom {
       const [x,y] = world.zones.plaza.spawn;
       info.actor = {id:crypto.randomUUID(), x,y,turn:0,outfit:outfitFor(user.account),emoteVersion:0,
         islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[],jumpLeft:0};
+      // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
+      // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
+      if (info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
     }
@@ -375,9 +377,11 @@ export class IslandRoom {
         break;
       case 'input':
         if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
-        if (command.x || command.y || command.stop === true) {info.boarding = null; info.landing = null;}   // steering away cancels a dock
-        if (command.stop === true) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
-        info.input = {x:command.x,y:command.y};
+        if (command.x || command.y) {info.boarding = null; info.landing = null;}   // steering away cancels a dock
+        else if (command.stop === true) info.boarding = null;
+        // boss 5 Nov: a stop from the window losing focus must not strand a Ducky in a boat that is sailing in to land
+        if (command.stop === true && !info.landing) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
+        info.input = {x:command.x,y:command.y,run:command.run === true};   // boss 6 Nov: Shift runs; the speed itself is capped in walkStep
         info.inputExpires = now+350;
         break;
       case 'destination':
@@ -456,12 +460,11 @@ export class IslandRoom {
           if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {   // reached the shore: hop out onto the sand
             const spot=info.landing; info.landing=null;
             if (spot.islandId !== actor.islandId) {actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
-            if (boatHome(boat) === actor.islandId) {Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId,occupant:null,departure:actor.islandId}); this.saveBoats();}   // moored where you left it
-            else this.parkBoat(boat);   // landed on another island: the boat ferries home
+            this.parkBoat(boat);   // boss 6 Nov: the boat drifts off and fades; the moorings here stay full
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
           } else if (actor.docking && near(actor,HARBOR.water,12)) {
-            this.parkBoat(boat);   // a ferry: once you step off it goes back to its own mooring, so no island runs out
+            this.parkBoat(boat);   // boss 6 Nov: it ties back up beside its own empty mooring, or drifts off; no island runs out
             Object.assign(actor,{...HARBOR.land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
@@ -490,6 +493,7 @@ export class IslandRoom {
       if (separateActors(walkers,nav,.05)) active=true;
     }
     for (const [socket,info] of this.connections) this.attach(socket,info);
+    if (fillMoorings(this.boats)) active=true;   // boss 6 Nov: a sailor clear of the jetty leaves a fresh boat at the mooring
     this.saveBoats();
     this.stepCount = (this.stepCount ?? 0)+1;
     if (!active || this.stepCount % 2 === 0) this.broadcast();

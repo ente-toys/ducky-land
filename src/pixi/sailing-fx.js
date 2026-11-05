@@ -4,10 +4,12 @@
 import {Assets, Container, Graphics, Sprite} from 'pixi.js';
 import {HARBOR, boardingPoint} from './islands.js';
 import {PALETTE} from './palette.js';
+import {LEGACY_SEAT, loadBoatViews} from './boat-views.js';
 
 const PUFF='/pixi-art/detail/fx--puff-small.svg';
 export const DUCK_SCALE=.88*.24*3, SEAT_SCALE=.8;
-const SEAT={x:24,y:0};   // where the Ducky's feet sit in the hull, boat facing east (boat-sail.png, 170 wide)
+const SEAT=LEGACY_SEAT;   // boss 5 Nov: feet on the bench between the mast and the duck head; each boat view carries its own seat (boat-views.js)
+const FADE=.08;   // seconds the boat crossfades from one turntable view to the next (multi-view spin)
 const HOLD=.6;
 const WAKE=1.1;   // seconds a foam point lives: the V is about 400 units long at full sail   // the most a boarding or landing holds back the steering, in seconds
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), lerp=(a,b,u)=>a+(b-a)*u, smooth=u=>u*u*(3-2*u);
@@ -26,7 +28,7 @@ const onPier=(x,y)=>{const p=HARBOR.pier; return p && x>=p.x-10 && x<=p.x+p.widt
 const deckZ=(x,y)=>onPier(x,y)?Math.max(y,HARBOR.pier.y+HARBOR.pier.height)+1:y;
 
 export async function createSailingFX({water,objects}) {
-  await Assets.load(PUFF).catch(()=>null);
+  const [views]=await Promise.all([loadBoatViews(),Assets.load(PUFF).catch(()=>null)]);
   const wakes=new Graphics({label:'Boat wakes'}), rings=new Graphics({label:'Boarding rings'});
   water.addChild(wakes,rings);
   const boats=new Map(), ducks=new Map(), splashes=[], dust=[];
@@ -49,11 +51,11 @@ export async function createSailingFX({water,objects}) {
   }
   // the transform a boat is drawn with this frame: anchor position, roll, flip and the seat in world space
   function seatOf(s) {
-    const sx=SEAT.x*s.face*s.squeeze, sy=SEAT.y, c=Math.cos(s.roll), n=Math.sin(s.roll);
-    return {x:s.x+sx*c-sy*n,y:s.y+s.bob+sx*n+sy*c,roll:s.roll};
+    const sx=s.seat.x, sy=s.seat.y, c=Math.cos(s.roll), n=Math.sin(s.roll);
+    return {x:s.x+sx*c-sy*n,y:s.y+s.bob+sx*n+sy*c,roll:s.roll,heading:s.heading};
   }
   function maskOf(s) {
-    const c=Math.cos(s.roll), n=Math.sin(s.roll), points=[], k=Math.abs(s.face)*s.squeeze, ox=SEAT.x*s.face*s.squeeze;
+    const c=Math.cos(s.roll), n=Math.sin(s.roll), points=[], k=1, ox=s.seat.x;
     const add=(x,y)=>points.push(s.x+x*c-y*n,s.y+s.bob+x*n+y*c);
     add(ox-120,-320);
     for (let x=-110;x<=110;x+=10) add(ox+x,rim((ox+x)/Math.max(.2,k)));
@@ -64,14 +66,23 @@ export async function createSailingFX({water,objects}) {
   return Object.assign(fx,{
     standFor,
     reset() {ducks.clear(); boats.clear(); splashes.length=0; for (const d of dust.splice(0)) d.sprite.destroy();},
-    // boss 5 Nov: one boat sprite per frame. Smooth heading (no snapping), flip through a squeeze, heel into turns,
+    forget(id) {boats.delete(id);},   // boss 6 Nov: an id re-minted at its mooring starts fresh (no glide back from the old boat)
+    // boss 5 Nov: landing on a neighbour moves every coordinate by its offset; the hops, boats, wakes and rings move with it
+    shift(dx,dy) {
+      const at=p=>{if (p) {p.x+=dx; p.y+=dy;}};
+      for (const s of boats.values()) {at(s); s.trail.forEach(at); at(s.emit); at(s.bow); if (s.glide) {s.glide.fx+=dx; s.glide.fy+=dy;}}
+      for (const d of ducks.values()) {at(d); if (d.anim) {at(d.anim.from); at(d.anim.stand);} d.mask=null;}
+      splashes.forEach(at);
+      for (const d of dust) {at(d); d.sprite.x+=dx; d.sprite.y+=dy; d.sprite.zIndex+=dy;}
+    },
+    // boss 5 Nov: one boat sprite per frame. Smooth heading (no snapping), the turntable view nearest it, heel into turns,
     // bob and roll out of phase, the dip of a landing Ducky, the rock of an emptied boat, a foam V and bow ripples
     boat(entry,boat,reduced) {
       const now=clock();
       let s=boats.get(boat.id);
       if (!s) {
-        s={x:boat.x,y:boat.y,heading:boat.turn??Math.PI,face:1,faceGoal:1,squeeze:1,lean:0,rate:0,roll:0,bob:0,dip:0,dipV:0,rock:0,rockV:0,
-          phase:phaseOf(boat.id),trail:[],emit:null,occupant:boat.occupant,glide:null,seen:now,last:now};
+        s={x:boat.x,y:boat.y,heading:boat.turn??Math.PI,lean:0,rate:0,roll:0,bob:0,dip:0,dipV:0,rock:0,rockV:0,
+          phase:phaseOf(boat.id),trail:[],emit:null,occupant:boat.occupant,glide:null,seen:now,last:now,view:null,from:null,fade:0,seat:{...SEAT}};
         boats.set(boat.id,s);
       }
       const dt=clamp(now-s.last,0,.1); s.last=now; s.seen=now;
@@ -94,19 +105,41 @@ export async function createSailingFX({water,objects}) {
       const before=Math.sin(s.heading);
       s.heading+=angleDiff(goal,s.heading)*(reduced?1:1-Math.exp(-dt*5));
       const sideways=Math.sin(s.heading);
-      if (boat.occupant) {if (sideways>.2) s.faceGoal=1; else if (sideways<-.2) s.faceGoal=-1;}
-      if (s.face!==s.faceGoal) {s.face=s.faceGoal; s.dipV-=60;}   // boss 5 Nov: the boat flips sides at once (a squeezed sliver read badly), with a small dip
+      // boss 5 Nov: the boat turns through real angles. The turntable view nearest the heading is shown (with hysteresis),
+      // and a change of view crossfades in FADE seconds: the new view fades in over the old one, the seat slides between
+      const {root,sprite}=entry;
+      if (!entry.prev) {entry.prev=new Sprite(); entry.prev.visible=false; root.addChildAt(entry.prev,0);}
+      const want=views.pick(s.heading,s.view);
+      if (!s.view) {s.view=want.key; s.from=null; views.apply(sprite,want);}
+      else if (want.key!==s.view) {
+        const old=views.byKey.get(s.view);
+        views.apply(entry.prev,old); entry.prev.visible=true; entry.prev.alpha=1;
+        s.from={x:s.seat.x,y:s.seat.y}; s.was=s.view; s.view=want.key; s.fade=now; views.apply(sprite,want);
+      }
+      const u=s.from && !reduced ? clamp((now-s.fade)/FADE,0,1) : 1, m=smooth(u);
+      sprite.alpha=s.from ? m : 1;
+      if (u>=1) {s.from=null; entry.prev.visible=false;}
+      s.seat=s.from ? {x:lerp(s.from.x,want.seat.x,m),y:lerp(s.from.y,want.seat.y,m)} : {...want.seat};
+      // boss 6 Nov: bow toward the camera, the Ducky stands behind the duck head. That view's front cut-out (the head and
+      // the hull below the feet, boat-views.js) draws over the Ducky from its own layer, crossfading with the view
+      if (!entry.front) {
+        const front=entry.front=new Container({label:'Boat front'});
+        front.now=new Sprite(); front.was=new Sprite(); front.addChild(front.was,front.now); objects.addChild(front);
+        root.once('destroyed',()=>{front.destroy({children:true}); entry.front=null;});
+      }
+      const was=s.from && views.byKey.get(s.was);
+      for (const [layer,v,alpha] of [[entry.front.now,want,s.from?m:1],[entry.front.was,was,1-m]]) {
+        layer.visible=Boolean(v?.front) && alpha>0;
+        if (layer.visible) {views.apply(layer,v,1,v.front); layer.alpha=alpha;}
+      }
       s.rate=lerp(s.rate,dt?(sideways-before)/dt:0,1-Math.exp(-dt*6));
-      s.squeeze=1;   // boss 5 Nov: no narrowing when heading north or south
       s.lean=reduced?0:lerp(s.lean,clamp(s.rate*.16+(moving?sideways*.05:0),-.2,.2),1-Math.exp(-dt*5));
       s.dipV+=(-110*s.dip-8*s.dipV)*dt; s.dip+=s.dipV*dt;
       s.rockV+=(-34*s.rock-1.9*s.rockV)*dt; s.rock+=s.rockV*dt;
       s.bob=reduced?0:Math.sin(now*1.5+s.phase)*2.6+(moving?Math.sin(now*4.2+s.phase)*1.2:0)+s.dip;
       s.roll=reduced?0:Math.sin(now*1.1+s.phase*1.3)*.028+s.rock+s.lean*.25;
-      const {root,sprite}=entry, base=Math.abs(sprite.scale.y);
       root.position.set(s.x,s.y+s.bob);
       root.rotation=s.roll;
-      sprite.scale.x=base*(Math.sign(s.face)||1)*Math.max(.1,Math.abs(s.face))*s.squeeze;
       sprite.skew.x=0;   // boss 5 Nov: no skew, the sprite kept its shape; the heel is a small roll only
       // foam V: points dropped at the stern spread sideways and fade; the bow pushes small crescents ahead
       if (moving && !reduced) {
@@ -119,6 +152,16 @@ export async function createSailingFX({water,objects}) {
       } else s.bow=null;
       while (s.trail.length && now-s.trail[0].born>WAKE) s.trail.shift();
       return seatOf(s);
+    },
+    // per frame, after the travel view has placed and faded a boat (or one drifting away): its front cut-out follows it,
+    // one step above the seated Ducky (boat y+2, Ducky y+14, front y+16) so the Ducky's z never changes while it turns
+    front(entry) {
+      const front=entry.front;
+      if (!front) return;
+      const {root}=entry;
+      front.position.copyFrom(root.position); front.rotation=root.rotation; front.alpha=root.alpha;
+      front.visible=root.visible && !root.destroyed && (front.now.visible || front.was.visible);
+      front.zIndex=root.zIndex+14;
     },
     // per frame, after every boat: wakes, rings, dust; boats and Duckies not seen for a while are forgotten
     draw(reduced) {
@@ -193,7 +236,7 @@ export async function createSailingFX({water,objects}) {
       const seat=found?seatOf(found.s):{x:pose.x+SEAT.x,y:pose.y+SEAT.y,roll:0};
       const out={x:pose.x,y:pose.y,scale:sailing?DUCK_SCALE*SEAT_SCALE:DUCK_SCALE,sx:1,sy:1,rotation:0,alpha:1,mask:null,
         speed:pose.travel,turn:pose.turn,deck:!sailing};
-      const seated=()=>{Object.assign(out,{x:seat.x,y:seat.y,rotation:seat.roll*.8,mask:found?maskOf(found.s):null,deck:false});};
+      const seated=()=>{Object.assign(out,{x:seat.x,y:seat.y,rotation:seat.roll*.8,mask:null,deck:false,...(seat.heading!==undefined?{turn:seat.heading}:{})});};   // faces the way the boat heads   // boss 5 Nov: never cut by the hull
       if (sailing) seated();
       const a=d.anim;
       if (a && reduced) {   // reduced motion: no arcs, the Ducky fades out where it was and in where it is
@@ -247,7 +290,7 @@ export async function createSailingFX({water,objects}) {
             turn:Math.atan2(pose.x-stand.x,pose.y-stand.y)});
         } else d.anim=null;
       }
-      out.z=out.deck?deckZ(out.x,out.y):out.y+14;   // seated or hopping draws over its own hull (boat at y+2)
+      out.z=out.deck?deckZ(out.x,out.y):(found?found.s.y:out.y)+14;   // boss 5 Nov: seated or hopping draws in front of the whole boat, sail included (boat at y+2)
       if (sailing && !d.anim) d.mask=out.mask;
       d.x=out.x; d.y=out.y;
       return out;

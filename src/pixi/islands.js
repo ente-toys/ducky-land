@@ -84,22 +84,72 @@ export const boatSpots=() => SPOTS ??= (() => {
   }
   return spots;
 })();
+const mooredBoat=(islandId,slot,id=`${islandId}-${slot}`) => {
+  const spot=boatSpots()[slot];
+  return {id, islandId, x:spot.x, y:spot.y, turn:spot.turn, occupant:null, departure:islandId};
+};
 export function createBoats() {
-  return ISLANDS.flatMap(island => boatSpots().map((spot,slot) => ({id:`${island.id}-${slot}`, islandId:island.id,
-    x:spot.x, y:spot.y, turn:spot.turn, occupant:null, departure:island.id})));
+  return ISLANDS.flatMap(island => boatSpots().map((spot,slot) => mooredBoat(island.id,slot)));
 }
-export const boatHome = boat => boat.id.slice(0,boat.id.lastIndexOf('-'));
-export const boatSpot = boat => boatSpots()[Number(boat.id.slice(boat.id.lastIndexOf('-')+1))] ?? boatSpots()[0];
+// a refilled mooring's boat is "<island>-<slot>~<n>": the part before ~ still names its island and mooring
+const baseId = boat => boat.id.split('~')[0];
+export const boatHome = boat => baseId(boat).slice(0,baseId(boat).lastIndexOf('-'));
+export const boatSlot = boat => Number(baseId(boat).slice(baseId(boat).lastIndexOf('-')+1));
+export const boatSpot = boat => boatSpots()[boatSlot(boat)] ?? boatSpots()[0];
+
+// boss 6 Nov ("I took the boat already. Every island should have all the boats"): every mooring on every island always
+// holds a boat. A mooring counts as held by an empty boat sitting on it, or by a taken boat that has not yet sailed
+// MOORING_CLEAR away from it; once the sailor is clear a fresh boat (new id) appears there. An empty boat anywhere else
+// (one you landed in, or one left from an old save) is dropped, so the client fades it out: nothing piles up or strands.
+// Runs in place on the room's list; returns whether it changed.
+export const MOORING_CLEAR=300;
+let MINT=Date.now();
+const atMooring = (boat,spot) => boat.islandId === boatHome(boat) && boat.x === spot.x && boat.y === spot.y;
+export function fillMoorings(boats) {
+  const spots=boatSpots(), held=new Set(), ids=new Set(), keep=[];
+  const keyOf=boat => `${boatHome(boat)}|${boatSlot(boat)}`;
+  const valid=boat => typeof boat?.id === 'string' && islandFor(boatHome(boat)) && spots[boatSlot(boat)];
+  for (const boat of boats) {   // empty boats first, so a sailor passing a refilled mooring never pushes its boat out
+    if (!valid(boat) || boat.occupant || ids.has(boat.id) || !atMooring(boat,spots[boatSlot(boat)]) || held.has(keyOf(boat))) continue;
+    held.add(keyOf(boat)); ids.add(boat.id); keep.push(boat);
+  }
+  for (const boat of boats) {
+    if (!valid(boat) || !boat.occupant || ids.has(boat.id)) continue;
+    if (boat.islandId === boatHome(boat) && near(boat,spots[boatSlot(boat)],MOORING_CLEAR)) held.add(keyOf(boat));
+    ids.add(boat.id); keep.push(boat);
+  }
+  let changed=keep.length !== boats.length;
+  for (const island of ISLANDS) for (let slot=0;slot<spots.length;slot++) {
+    if (held.has(`${island.id}|${slot}`)) continue;
+    let id=`${island.id}-${slot}`;
+    while (ids.has(id)) id=`${island.id}-${slot}~${(MINT++).toString(36)}`;
+    ids.add(id); keep.push({...mooredBoat(island.id,slot,id),spawnedAt:Date.now()}); changed=true;   // spawnedAt: the client fades it in
+  }
+  if (changed) boats.splice(0,boats.length,...keep);
+  return changed;
+}
+// a sailor steps off (lands, docks or leaves the game): a boat still beside its own empty mooring ties back up there;
+// any other boat is dropped and fades out, and the moorings stay full
+export function retireBoat(boats,boat) {
+  const spot=boatSpot(boat), home=boatHome(boat);
+  boat.occupant=null;
+  if (boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
+    Object.assign(boat,{x:spot.x,y:spot.y,turn:spot.turn,departure:home});
+  fillMoorings(boats);
+}
 
 // the walking map every island shares (the same file the room server walks on)
 let NAV=null;
 const defaultNav=() => NAV ??= createNavigation({...world, ...walkWorld});
 // where you step on and off a boat moored away from the harbor: the nearest land you can stand on
 const shoreFor=(x,y,nav,reach=280) => {const p=nav.nearest(x,y,reach); return p ? {x:Math.round(p[0]),y:Math.round(p[1])} : null;};
-// boss 5 Nov: when you sail close to any shore (this island's or a neighbour's) you can dock and hop out there
+// boss 5 Nov: when you sail close to any shore you can dock and hop out there. Boss 6 Nov ("no Dock button at that beach"):
+// ANY island drawn in this sea counts, not only the five you can sail to by jetty (isle-250 sits right beside isle-176's
+// east beach, which is not one of its listed neighbours). The client asks this four times a second, so each island is
+// skipped on a cheap box test before the walking map is searched.
 export function landingSpot(actor,nav=defaultNav(),reach=420) {   // the walking map keeps Duckies a little back from the waterline
   let best=null;
-  for (const o of [{x:0,y:0,id:actor.islandId},...destinationsFor(actor.islandId).map(d => ({...d.offset,id:d.destination}))]) {
+  for (const o of [{x:0,y:0,id:actor.islandId},...obstaclesFor(actor.islandId)]) {
     const lx=actor.x-o.x, ly=actor.y-o.y;
     if (lx < -reach || ly < -reach || lx > world.width+reach || ly > world.height+reach) continue;
     const p=shoreFor(lx,ly,nav,reach);
@@ -136,11 +186,14 @@ const OBSTACLES=new Map();
 const obstaclesFor=id => {
   if (!OBSTACLES.has(id)) {
     const b=seaBoundsFor(id);
-    OBSTACLES.set(id,WORLD_ISLANDS.filter(island => island.id!==id).map(island => offsetOf(id,island.id))
+    OBSTACLES.set(id,WORLD_ISLANDS.filter(island => island.id!==id).map(island => ({...offsetOf(id,island.id),id:island.id}))
       .filter(o => o.x+world.width+600 > b.x0 && o.x-600 < b.x1 && o.y+world.height+600 > b.y0 && o.y-600 < b.y1));
   }
   return OBSTACLES.get(id);
 };
+// how far island `to` sits from island `from`, in from's local coordinates, when `to` is drawn in from's sea (a neighbour
+// or any other island near enough to sail up to); null for an island out of sight
+export const islandOffset=(from,to) => {const o=obstaclesFor(from).find(o => o.id===to); return o ? {x:o.x,y:o.y} : null;};
 function wet(x,y,id) {
   const b=seaBoundsFor(id);
   if (x < b.x0 || y < b.y0 || x > b.x1 || y > b.y1 || landAt(x,y)) return false;

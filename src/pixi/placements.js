@@ -4,6 +4,7 @@ import layout from './layout.json';
 import rawPaths from './paths.json';   // footpath centre lines, sampled from the painted curves in the ground tiles (boss 3 Nov: the old corner-only lines missed the bends by up to 85)
 import shapes from './walk-shapes.json';   // boss 4 Nov: the client's coast and race-lake outlines, traced from the art (walk-map overlay)
 import {inShape} from '../../rive/web/island-geometry.mjs';
+import {PLAZA_BENCHES, benchFootprint, benchAnchor, benchBox, benchFile} from './plaza-benches.js';
 const footpaths = rawPaths.filter(l => !(l[0][0] === 3940 && l[0][1] === 3260));   // round 4: the east jetty's stub path went with its islet
 const segDist = (x, y, a, b) => {const dx = b[0]-a[0], dy = b[1]-a[1], t = Math.max(0, Math.min(1, ((x-a[0])*dx + (y-a[1])*dy) / (dx*dx + dy*dy))); return Math.hypot(x-a[0]-t*dx, y-a[1]-t*dy);};
 const pathDist = (x, y) => Math.min(...footpaths.flatMap(l => l.slice(1).map((b, i) => segDist(x, y, l[i], b))));   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
@@ -168,7 +169,8 @@ const DROP = new Set(['4', '5', '6', '7', '8', '9', '10', '11', '12', '15', '20'
 // gone: the old lamps and planters (re-placed below), the bunting, a pond reed where a bench goes, the library picnic table that
 // stood on the path, the checkered finish arch (read as a flag), the croissant and donut lying on the grass, the stray table,
 // blanket and planter details.
-const STALLS = {1: [2560, 2112], 2: [1450, 1730]}, STALL_ZONE = {2: 'bread-forest', 3: 'lighthouse-beach'};
+const STALL_SHIFT = [-40, -110];   // boss 5 Nov: the plaza stall stepped out, up and a little left, clear of the paving rings
+const STALLS = {1: [2560 + STALL_SHIFT[0], 2112 + STALL_SHIFT[1]], 2: [1450, 1730]}, STALL_ZONE = {2: 'bread-forest', 3: 'lighthouse-beach'};
 const isTree = p => /^tree-/.test(p.asset), isBush = p => /^bush-/.test(p.asset), isPlant = p => !!PLANTS[p.asset];
 const SMALL = /^(flower-|rock-|mushroom|food|apple|baguette|croissant|cupcake|donut|egg|golden-bread|ice-cream|pear|seed-bag|bin-|planter-)/;
 const ANCHOR = /^(bench-|tree-|bush-|picnic-)|Pond bench|Forest picnic|Little library|Market stall/;
@@ -184,6 +186,20 @@ function bench(id, x, y, look, zone) {
     width: 818, height: 463, anchor: {x: .5, y: 451 / 463}, scale: side ? .28 : .18, resolution: side ? 1.4 : .9, seat: true,   // side art is drawn narrow: .28 makes its length match the front bench seen at .82
     footprint: side ? {x, y: y - 30, rx: 30, ry: 62} : {x, y: y - 10, rx: 70, ry: 24}};
 }
+
+// a curved plaza bench: its art is drawn in world units around the ring, so the sprite sits at scale 1 with its anchor on the
+// seat's middle (the depth point), and it blocks walking along its own arc
+function arcBench(b) {
+  const [x, y] = benchAnchor(b), box = benchBox(b);
+  return {id: `seat-plaza-${b.deg}`, name: 'Bench', asset: 'bench-arc', src: `/pixi-art/detail/${benchFile(b)}.svg`, x, y, zone: 'plaza',
+    width: box.w, height: box.h, anchor: {x: (x - box.x) / box.w, y: (y - box.y) / box.h}, scale: 1, resolution: 2, seat: true, footprint: benchFootprint(b)};
+}
+
+// the plaza's furniture before 5 Nov (stall, four straight benches, the entry lamps; planters never counted), kept only so the lawn's
+// replant (part d) lands every tree exactly where it always has. Not drawn, not walked: [name, x, y, drawn width, drawn height]
+const REPLANT_PLAZA = [['Market stall', 2560, 2112, 395, 326.25], ['Bench', 3006.14, 2076.62, 147.24, 83.34], ['Bench', 3221.04, 2306.14, 229.04, 129.64],
+  ['Bench', 2986.76, 2682.95, 147.24, 83.34], ['Bench', 2457.99, 2533.74, 229.04, 129.64], ['Plaza lantern', 2374.13, 2242.74, 48.73, 207.21],
+  ['Plaza lantern', 2962.39, 1971.06, 48.73, 207.21], ['Plaza lantern', 3195.17, 2579.29, 48.73, 207.21], ['Plaza lantern', 2483.28, 2678.6, 48.73, 207.21]].map(([name, x, y, width, height]) => ({name, x, y, width, height, scale: 1}));
 
 function consolidate(out, world, walkable) {
   out = out.filter(p => !DROP.has(String(p.id)));
@@ -233,11 +249,8 @@ function consolidate(out, world, walkable) {
   const seats = [], furniture = () => [...stalls, ...woods, ...seats, ...out.filter(p => /library|lighthouse|umbrella|fountain/i.test(p.name))];
   const seatOk = (x, y, gap = 118) => walkable(x, y) && !wet(x, y, 35) && pathDist(x, y) > gap && !islet(x, y) && !jetty(x, y)
     && roomy(x, y, H * .6, furniture().filter(p => !/fountain/i.test(p.name)));
-  const ringAt = deg => {const a = deg * Math.PI / 180; return [RING.x + Math.cos(a) * 410, RING.y + 6 + Math.sin(a) * 336];};
-  for (const deg of [-63, -12, 66, 152]) {
-    const spot = first([0, 4, -4, 8, -8, 12, -12, 16, -16].map(d => ringAt(deg + d)), (x, y) => seatOk(x, y, 112));
-    if (spot) seats.push(bench(`seat-plaza-${deg}`, spot[0], spot[1], facingOf(RING.x - spot[0], RING.y - spot[1]), 'plaza'));
-  }
+  // boss 5 Nov: three curved benches on the outer paving ring (plaza-benches.js), in place of the four straight ones
+  for (const b of PLAZA_BENCHES) seats.push(arcBench(b));
   const pond = world.water[0];
   for (const degs of [[-62, -48, -76, -118, -104, -132], [64, 50, 78, 116, 102, 130, 36, 144, 24, 156]]) {
     const spot = first(degs.flatMap(d => [45, 70, 95, 120].map(k => {const a = d * Math.PI / 180; return [pond.x + Math.cos(a) * (pond.rx + k), pond.y + Math.sin(a) * (pond.ry + k * .8)];})),
@@ -268,7 +281,10 @@ function consolidate(out, world, walkable) {
     for (const [asset, s, kind] of [[lampAsset, 1, 'lamp'], [planterAsset, -1, 'planter']]) {
       if (!asset) continue;
       const at = k => [ex - dx / len * (20 + k) + tx * s * 112, ey - dy / len * (20 + k) + ty * s * 112];
-      const [x, y] = [0, 40, 80, -30, 120].map(at).find(([x, y]) => seats.every(b => Math.hypot(b.x - x, (b.y - y) * 1.3) > half(b) + 60)) || at(0);   // never against a bench
+      const free = (x, y) => seats.every(b => b.footprint?.poly   // boss 5 Nov: a curved bench is tested along its whole arc, and never in the lamp's column
+        ? b.footprint.poly.every(([u, v]) => Math.hypot(u - x, (v - y) * 1.3) > 70 && !(Math.abs(u - x) < 40 && v < y && v > y - 230))
+        : Math.hypot(b.x - x, (b.y - y) * 1.3) > half(b) + 60);
+      const [x, y] = [0, 40, 80, -30, 120, -60, -90].map(at).find(([x, y]) => free(x, y)) || at(0);   // never against a bench
       const p = sized(place(asset, {id: `plaza-${kind}-${i}`, name: kind === 'lamp' ? 'Plaza lantern' : 'Plaza planter', x, y, zone: 'plaza'}));
       p.footprint = kind === 'lamp' ? {x, y: y - 6, rx: 16, ry: 14} : {x, y: y - 20, rx: 46, ry: 34};   // boss 5 Nov: the pot is 80 wide and tall, so a Ducky stops beside or behind it, never inside it
       out.push(p);
@@ -296,7 +312,10 @@ function consolidate(out, world, walkable) {
   // sand, an islet or a jetty; trunks 1H inside the coast (crowns never over the sea), 1.5H off buildings, 1H off every bridge
   // and jetty walkway measured from the CANOPY; no plant's base inside another plant's canopy box. Kinds never repeat a neighbour.
   const onLand = (x, y) => world.coast.length && walkable(x, y) && !islet(x, y);
-  const solid = out.filter(p => !SMALL.test(p.asset || '') && !/bridge|bunting|banner|reeds|boat|shell|Coast rock/i.test(p.asset || p.name));
+  // boss 5 Nov: the replant measures room against the plaza furniture AS IT STOOD before the curved benches and the stall
+  // move (REPLANT_PLAZA), so a plaza tweak never reshuffles every tree and sleeper on the island
+  const solid = [...out.filter(p => !SMALL.test(p.asset || '') && !/bridge|bunting|banner|reeds|boat|shell|Coast rock/i.test(p.asset || p.name)
+    && !((p.zone === 'plaza' && !/fountain/i.test(p.name)) || String(p.id) === '1')), ...REPLANT_PLAZA];
   const sandy = (x, y, pad) => SAND.some(([cx, cy, rx, ry]) => inEllipse(x, y, cx, cy, rx + pad, ry + pad * .7)) || wet(x, y, pad + 60);
   const building = /library|lighthouse|Market stall|fountain/i;
   const roomFor = (x, y, r, tall) => solid.every(p => Math.hypot(x - p.x, (y - p.y) * 1.6) > r + half(p) + (building.test(p.name) ? 1.5 * H : 50)
@@ -418,7 +437,7 @@ export function decalsFor(world, props, walkable) {
 // boss 4 Nov: footprints fitted to the drawn art (walk-map overlay), by original prop id: the fountain basin, the plaza stall's
 // counter, the beach kiosk's counter, the museum down to its bottom step (so a Ducky reaches the door), the lighthouse plinth.
 // Plus scenery with no prop: the race lake's spring rocks and the two stone side walls of the museum steps. The sim pads every footprint by 16.
-const FOOTPRINTS = {0: {x: 2817, y: 2370, rx: 205, ry: 146}, 1: {poly: [[2420, 2050], [2700, 2050], [2700, 2098], [2420, 2098]]},
+const FOOTPRINTS = {0: {x: 2817, y: 2370, rx: 205, ry: 146}, 1: {poly: [[2420, 2050], [2700, 2050], [2700, 2098], [2420, 2098]].map(([x, y]) => [x + STALL_SHIFT[0], y + STALL_SHIFT[1]])},
   3: {poly: [[4396, 2968], [4684, 2968], [4684, 3016], [4396, 3016]]},
   34: {poly: [[2631, 896], [3209, 896], [3209, 1124], [2631, 1124]]}, 46: {x: 4860, y: 2472, rx: 148, ry: 122}};
 const SCENERY = [{poly: [[4390, 1225], [4450, 1192], [4490, 1185], [4560, 1218], [4600, 1262], [4615, 1300], [4590, 1340], [4520, 1340], [4410, 1290]]},   // boss 4 Nov verify: the spring slabs + boulders traced, the oval let a Ducky walk on the stream

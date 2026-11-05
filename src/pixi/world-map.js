@@ -67,3 +67,17 @@ export function neighboursOf(id) {
     .sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y)));
   return NEIGHBOURS.get(id);
 }
+// boss 5 Nov ("I went to another island, but I am going under the island"): the live copy a point stands in (a point in
+// the current island's local coordinates; copies as archipelago.js places them, centre x/y). The copies are drawn after
+// the real island, so a boat, Ducky or name board out in a neighbour's waters is drawn again inside that copy's pass,
+// sorted among its jetty, sign and trees, instead of hidden under the whole copy. On the real island: none.
+export function copyHolding(x, y, copies, pad = 300) {
+  if (Math.abs(x - W / 2) < W / 2 && Math.abs(y - H / 2) < H / 2) return null;
+  let best = null, distance = Infinity;
+  for (const copy of copies) {
+    if (Math.abs(x - copy.x) >= W / 2 + pad || Math.abs(y - copy.y) >= H / 2 + pad) continue;
+    const d = Math.hypot((x - copy.x) / W, (y - copy.y) / H);
+    if (d < distance) {distance = d; best = copy;}
+  }
+  return best;
+}

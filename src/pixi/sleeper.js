@@ -58,7 +58,11 @@ export function createSleeper(sleep, seed = 0) {
   const P = 3.6 + (h % 8) * .07, off = (h % 8) * .61 + (h >> 4) % 97 * .37, dir = flip ? -1 : 1;
   const root = new Container({label: `Sleeping Ducky (${name})`}), [x0, , x1, y1] = pose.box;
   root.visible = false; root.scale.set(SLEEP_SIZE);
-  root.addChild(new Graphics().ellipse(0, -4, (x1 - x0) * pose.k * .38, 21).fill({color: INK, alpha: .16}));
+  // boss 5 Nov: the shadow is this pose's own shape squashed flat under it, plain black and very faint (was a dark oval)
+  const shade = new Container({label: 'Shadow'});
+  shade.pivot.set((x0 + x1) / 2, y1); shade.scale.set(pose.k * dir, pose.k * .3); shade.position.set(0, 3);
+  for (const layer of pose.layers) if (layer.id !== 'zz') {const s = new Sprite(Assets.get(layer.src)); s.scale.set(1 / data.F); s.tint = 0x000000; shade.addChild(s);}
+  shade.cacheAsTexture(true); shade.alpha = .07; root.addChild(shade);
   const bed = new Container();   // svg units, mirrored as one piece
   bed.pivot.set((x0 + x1) / 2, y1); bed.scale.set(pose.k * dir, pose.k); root.addChild(bed);
   const sprite = src => {const s = new Sprite(Assets.get(src)); s.scale.set(1 / data.F); return s;};

@@ -1,5 +1,5 @@
-import {Assets, Container, Graphics, Sprite, Text} from 'pixi.js';
-import {destinationsFor} from './islands.js';
+import {Container, Graphics, Sprite, Text} from 'pixi.js';
+import {destinationsFor, boatSpots} from './islands.js';
 import {createHarbor} from './harbor.js';
 import {createSailingFX} from './sailing-fx.js';
 import {createSea} from './sea-islands.js';
@@ -12,39 +12,96 @@ function label(text,x,y,size=32) {
   return node;
 }
 
+const BORN=.4, BOB_PX=10;   // boss 6 Nov: a refilled boat fades and bobs in over 0.4 s, no pop
+const HOP=.5, DRIFT=.9, DRIFT_PX=36;   // the boat you stepped off waits for your hop, then drifts 36 px as it fades
+const smooth=u => u*u*(3-2*u);
+const bobIn=k => k>=1 ? 0 : (1-k)**2*Math.cos(k*Math.PI*1.5);   // starts low, rises, dips once, rests
+const driftBy=(heading,d) => ({x:-Math.sin(heading)*d,y:-Math.cos(heading)*d*.45});   // astern, back out to sea from the shore it nosed into; flattened like the wake
+const atMooring=boat => boatSpots().some(spot => spot.x === boat.x && spot.y === boat.y);
+
 export async function createTravelView(objects,water,air,decks) {
-  const [texture,sea]=await Promise.all([Assets.load('/pixi-art/boat-sail.png'),createSea(water,objects,air)]);   // boss 5 Nov: the cloud bank and sea islands live in sea-islands.js
+  const [sea]=await Promise.all([createSea(water,objects,air)]);   // boss 5 Nov: the cloud bank and sea islands live in sea-islands.js
   const harbor=createHarbor(decks,objects);   // boss 5 Nov: a real jetty, signpost and flag (harbor.js)
-  const vessels=new Map(), fx=await createSailingFX({water,objects});
+  const vessels=new Map(), leaving=[], fx=await createSailingFX({water,objects});
+  let settled=false;   // boss 6 Nov: false until this island's boats are on screen, so only a refilled mooring fades in
   return {
     fx,
-    transient: () => [...[...vessels.values()].map(entry => entry.root), ...harbor.transient(), ...sea.transient()],
-    switchIsland(id) {
+    transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient(), ...sea.transient()],
+    switchIsland(id,shift) {   // shift: how far the old island's coordinates move to the new one's (a seamless landing)
       harbor.switchIsland(id);
-      fx.reset();
+      settled=false;
+      if (shift) {
+        fx.shift(shift.x,shift.y);
+        for (const entry of [...vessels.values(), ...leaving]) {
+          entry.root.x+=shift.x; entry.root.y+=shift.y; entry.x=(entry.x ?? 0)+shift.x; entry.y=(entry.y ?? 0)+shift.y;
+          if (entry.leaving) entry.root.zIndex+=shift.y;
+        }
+      } else {
+        fx.reset();
+        for (const entry of leaving.splice(0)) entry.root.destroy({children:true});
+      }
       sea.switchIsland(destinationsFor(id));
     },
     update(boats,t,reduced,visible,player,camera) {
       harbor.update(boats,t,reduced);
       sea.update(t,reduced,visible,player,camera);
-      const ids=new Set(boats.map(boat => boat.id));
+      // boss 6 Nov ("every island should have all the boats", concepts/feel/boats-spec.md). A boat missing from the
+      // snapshot (the one you stepped off, or a dropped stray) drifts on along its heading and fades; it waits for the
+      // hop out first if someone was aboard. A refilled mooring's new boat fades and bobs in (BORN). A whole island
+      // arriving at once (load, landing, reconnect) just appears.
+      const now=performance.now(), ids=new Set(boats.map(boat => boat.id));
+      // the same id back empty at its mooring far from where it was sailing (dropped and re-minted between two snapshots):
+      // that is a new boat, so the old sprite drifts off and the mooring's boat fades in instead of jumping across the sea
+      for (const boat of boats) {
+        const entry=vessels.get(boat.id);
+        if (entry?.occupied && !boat.occupant && Math.hypot(entry.x-boat.x,entry.y-boat.y) > 300) {ids.delete(boat.id); fx.forget(boat.id);}
+      }
       for (const [id,entry] of vessels) if (!ids.has(id)) {
-        entry.root.destroy({children:true}); vessels.delete(id);
+        vessels.delete(id);
+        if (reduced) {entry.root.destroy({children:true}); continue;}
+        entry.leaving=now; entry.wait=entry.occupied ? HOP : 0; entry.drift=0; entry.born=0; leaving.push(entry);
+      }
+      const fresh=boats.filter(boat => !vessels.has(boat.id));
+      const arriving=settled && !reduced && fresh.length <= 2;
+      for (const boat of fresh) {
+        // a boat id swapped under a boat that never moved (an empty boat re-minted on its spot): keep the sprite, no flicker
+        const i=boat.occupant ? -1 : leaving.findIndex(entry => !entry.occupied && now-entry.leaving < 400 &&
+          Math.hypot(entry.x-boat.x,entry.y-boat.y) < 12);
+        if (i >= 0) {
+          const [entry]=leaving.splice(i,1), back=driftBy(entry.heading,entry.drift);
+          entry.root.x-=back.x; entry.root.y-=back.y; entry.root.alpha=1; entry.leaving=0; entry.born=0;
+          entry.root.label=boat.id; vessels.set(boat.id,entry);
+          continue;
+        }
+        const root=new Container({label:boat.id}), sprite=new Sprite();   // texture, anchor and size: the turntable view (sailing-fx.js)
+        root.addChild(sprite); objects.addChild(root);
+        const born=arriving && !boat.occupant && atMooring(boat) ? now : 0;
+        if (born) root.alpha=0;   // never one frame at full strength before the fade starts
+        vessels.set(boat.id,{root,sprite,born});
+      }
+      for (let i=leaving.length-1;i>=0;i--) {
+        const entry=leaving[i], u=Math.max(0,(now-entry.leaving)/1000-entry.wait)/DRIFT;
+        if (u>=1) {entry.root.destroy({children:true}); leaving.splice(i,1); continue;}
+        const e=1-(1-u)**2, was=driftBy(entry.heading,entry.drift), to=driftBy(entry.heading,e*DRIFT_PX);
+        entry.root.x+=to.x-was.x; entry.root.y+=to.y-was.y; entry.drift=e*DRIFT_PX;   // relative, so a landing shift carries it
+        entry.root.alpha=1-smooth(u);
       }
       for (const boat of boats) {
-        let entry=vessels.get(boat.id);
-        if (!entry) {
-          const root=new Container({label:boat.id}), sprite=new Sprite(texture);
-          sprite.anchor.set(.5,.82);
-          sprite.width=170; sprite.height=170*texture.height/texture.width;
-          root.addChild(sprite); objects.addChild(root);
-          entry={root,sprite}; vessels.set(boat.id,entry);
-        }
+        const entry=vessels.get(boat.id);
         // boss 5 Nov: heading, heel, bob, dip, rock and the foam wake live in sailing-fx.js
         entry.root.zIndex=boat.y+2;
         entry.root.visible=visible(boat.x,boat.y,260);
         entry.seat=fx.boat(entry,boat,reduced);
+        entry.occupied=Boolean(boat.occupant); entry.heading=boat.turn ?? Math.PI; entry.x=boat.x; entry.y=boat.y;
+        if (entry.born) {
+          const k=Math.min(1,(now-entry.born)/1000/BORN);
+          entry.root.alpha=smooth(Math.min(1,k*1.4));   // the fade lands a little before the bob settles
+          entry.root.y+=BOB_PX*bobIn(k);   // rises into place with one small dip past the waterline, then rests
+          if (k>=1) {entry.born=0; entry.root.alpha=1;}
+        }
       }
+      if (boats.length) settled=true;
+      for (const entry of [...vessels.values(), ...leaving]) fx.front(entry);   // boss 6 Nov: the duck head drawn over the Ducky
       fx.draw(reduced);
     },
   };

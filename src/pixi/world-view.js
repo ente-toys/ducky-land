@@ -193,13 +193,14 @@ export function createWorldView(app, scene) {
   let seed = 7;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const ripples = [];
-  let lastT = 0, rippleDue = 0;
+  let lastT = 0, rippleDue = 0, hover = false, hoverK = 1;
   return {
+    pinIn: 0,   // 0..1, how far the 'You' pin has come in (engine.js fades the name tags out by the same amount)
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
       const on = t > .001;
       mesh.visible = on;
-      if (!on) {scene.visible = true; life.visible = pin.visible = false; return;}
+      if (!on) {scene.visible = true; life.visible = pin.visible = false; this.pinIn = 0; return;}
       if (!worldTex && arch?.texture) {
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch.texture, worldSize);
         shader.resources.uWorld = worldTex.source;
@@ -289,15 +290,25 @@ export function createWorldView(app, scene) {
         }
       } else ripples.length = 0;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
+      this.pinIn = ease((t - .12) / .15);
       if (me) {
         const p = project(me.x, me.y);
         pin.position.set(p.x, p.y);
-        pin.alpha = ease((t - .12) / .15) * ease(p.face / .25);
+        pin.alpha = this.pinIn * ease(p.face / .25);
         pin.visible = pin.alpha > .01;
         pin.body.y = -Math.abs(Math.sin(time * 3)) * 6;
-        pin.scale.set(.8 + .2 * p.face);
+        hoverK += ((hover && pin.visible ? 1.05 : 1) - hoverK) * (1 - Math.exp(-dt * 18));   // boss 6 Nov: a small lift on hover, never past 1.05
+        pin.scale.set((.8 + .2 * p.face) * hoverK);
       } else pin.visible = false;
     },
+    // boss 6 Nov: the 'You' pin is a button. Hit box covers the drop and the tag with room for a finger (at least 64 x 96 px).
+    pinAt(point) {
+      if (!pin.visible || pin.alpha < .35) return false;
+      const k = pin.scale.x, dx = point.x - pin.x, dy = point.y - pin.y;
+      return Math.abs(dx) < Math.max(32, 26 * k) && dy > -Math.max(90, 84 * k) && dy < 16;
+    },
+    hoverPin(on) {hover = on;},
+    pinPoint() {return pin.visible ? {x: pin.x, y: pin.y, alpha: pin.alpha, scale: pin.scale.x} : null;},   // QA readback
     // grab-drag on the ball: how far to move the camera so the spot under the finger stays under the finger
     grab(from, to) {
       const g = this.globe;

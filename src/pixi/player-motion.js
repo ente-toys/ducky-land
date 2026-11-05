@@ -1,4 +1,10 @@
 export const WALK_SPEED = 245;
+// boss 6 Nov: hold Shift with the arrow keys / WASD to run. The input only carries a yes/no run flag; the speed comes
+// from here on the server, so a client can never ask for more than RUN_SPEED. Taps, routes and sailing never run.
+export const RUN_FACTOR = 1.7, RUN_SPEED = WALK_SPEED * RUN_FACTOR;
+// boss 5 Nov: the museum door at the top of its steps (home island); out = a few steps down. Walking into it opens the room.
+export const MUSEUM_DOOR = {x0: 2850, x1: 2990, y: 1215, out: {x: 2920, y: 1340}};
+export const atMuseumDoor = (x, y) => x > MUSEUM_DOOR.x0 && x < MUSEUM_DOOR.x1 && y < MUSEUM_DOOR.y;
 export const JUMP_SECONDS = .6;
 
 export function startJump(actor) {
@@ -8,14 +14,42 @@ export function startJump(actor) {
   return true;
 }
 
+// boss 6 Nov ("the jump is just up and down"): the same 0.6 s (the server only counts jumpLeft down), split into a crouch,
+// the flight and a landing. Crouch 0.08 s: squash down and wide. Flight 0.38 s: a parabola (fast off the ground, hangs at
+// the top, falls faster: ease-out up, ease-in down), stretched tall on the way up, a little on the way down, leaning into
+// the way it is walking. Landing 0.14 s: squash flat, one small rebound, settle. The ground shadow shrinks and fades with
+// height. Every client draws it from jumpLeft and turn alone, so remote Duckies jump the same.
+export const JUMP_CROUCH = .08, JUMP_LAND = .14, JUMP_AIR = JUMP_SECONDS - JUMP_CROUCH - JUMP_LAND, JUMP_RISE = 85;
+const REST = Object.freeze({lift:0, sx:1, sy:1, rotation:0, shadow:0, shadowScale:1, phase:'ground'});
+const clamp01 = v => Math.max(0, Math.min(1, v));
+
+export function jumpPose(left = 0, reduced = false, {turn = 0, moving = false} = {}) {
+  if (!(left > 0)) return REST;
+  const t = JUMP_SECONDS - Math.min(left, JUMP_SECONDS), rise = reduced ? 15 : JUMP_RISE;
+  const lean = moving ? Math.max(-1, Math.min(1, Math.sin(turn) * 1.6)) : (Math.sin(turn) < 0 ? -.4 : .4);   // + leans right
+  if (t < JUMP_CROUCH) {
+    const k = 1 - (1 - t / JUMP_CROUCH) ** 2;
+    return reduced ? {...REST, phase:'crouch'} : {lift:0, sx:1 + .2 * k, sy:1 - .24 * k, rotation:-lean * .05 * k, shadow:.26 * k, shadowScale:1, phase:'crouch'};
+  }
+  if (t < JUMP_CROUCH + JUMP_AIR) {
+    const u = (t - JUMP_CROUCH) / JUMP_AIR, h = 4 * u * (1 - u), lift = h * rise;
+    if (reduced) return {...REST, lift, phase:'air'};
+    const up = u < .5 ? (1 - u / .5) ** 2 : 0, down = u > .5 ? ((u - .5) / .5) ** 2 : 0;
+    const pop = clamp01((t - JUMP_CROUCH) / .03);   // the crouch springs into the stretch over two frames, not one
+    const sy = 1 - .24 * (1 - pop) + (.26 * up + .1 * down) * pop, sx = 1 + .2 * (1 - pop) - (.16 * up + .06 * down) * pop;
+    return {lift, sx, sy, rotation:lean * (.05 + .13 * u) * Math.sin(Math.PI * u), shadow:.26 * (1 - .7 * h), shadowScale:1 - .45 * h, phase:'air'};
+  }
+  const v = clamp01((t - JUMP_CROUCH - JUMP_AIR) / JUMP_LAND), a = (1 - v) * Math.exp(-3 * v) * Math.cos(2.4 * Math.PI * v);
+  return reduced ? {...REST, phase:'land'} : {lift:0, sx:1 + .26 * a, sy:1 - .3 * a, rotation:0, shadow:.26 * (1 - v), shadowScale:1 + .08 * a, phase:'land'};
+}
+
 export function jumpHeight(left = 0, reduced = false) {
-  const phase = Math.max(0, Math.min(1, left / JUMP_SECONDS));
-  return 4 * phase * (1 - phase) * (reduced ? 15 : 85);
+  return jumpPose(left, reduced).lift;
 }
 export const DURATIONS = {2:1.3,3:6,4:1.5,5:1.55,6:1.55,7:2.3,8:1.5,9:1.75};
 // boss 5 Nov: walking feel. Speed ramps up in 0.1 s and down in 0.12 s; ducks keep a 22 px personal space.
 export const EASE_IN = .1, EASE_OUT = .12, DUCK_RADIUS = 22;
-const ACCEL = WALK_SPEED / EASE_IN, BRAKE = WALK_SPEED / EASE_OUT, CREEP = 30, SIDE = Math.PI / 18;
+const BRAKE = WALK_SPEED / EASE_OUT, CREEP = 30, SIDE = Math.PI / 18;
 
 export function setWalkDestination(actor, nav, x, y) {
   actor.path = nav.route(actor.x, actor.y, x, y);
@@ -87,10 +121,11 @@ export function walkStep(actor, nav, dt, now, input) {
     actor.action = 0;
     return;
   }
-  const before = actor.pace || 0;
+  const before = actor.pace || 0, top = manual && input.run === true ? RUN_SPEED : WALK_SPEED;
   let pace;
-  if (coast) pace = Math.max(0, before - BRAKE*dt);
-  else pace = Math.min(WALK_SPEED, before + ACCEL*dt);
+  if (coast) pace = Math.max(0, before - (before > WALK_SPEED ? RUN_SPEED/EASE_OUT : BRAKE)*dt);   // a run stops in the same 0.12 s
+  else if (before > top) pace = Math.max(top, before - (RUN_SPEED-WALK_SPEED)/EASE_OUT*dt);   // let go of Shift: ease back down to a walk in 0.12 s
+  else pace = Math.min(top, before + top/EASE_IN*dt);   // walk or run, top speed in the same 0.1 s ease
   if (next) {   // brake into the last point so arrival is soft and never overshoots
     let left = distance;
     for (let i = 1; i < actor.path.length; i++) left += Math.hypot(actor.path[i][0]-actor.path[i-1][0], actor.path[i][1]-actor.path[i-1][1]);

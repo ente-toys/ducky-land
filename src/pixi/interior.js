@@ -1,22 +1,28 @@
 // boss 5 Nov: the museum is a room you walk into. Walk up the museum steps to its door and the island fades to the domed
 // gallery (one drawn room, public/pixi-art/interiors/museum.webp, 1536x1024); walk out through the arch at the bottom and you
 // are back on the steps. Client only: the socket server never sees it (the player stays parked at the door meanwhile).
-// The furniture is baked into the drawing; each piece is re-cut from the same texture as its own sprite so a Ducky behind it
-// is hidden by it, and each piece's foot rectangle blocks walking. All numbers are in the drawing's own pixels.
+// Each piece of furniture is its own sprite (pieces/*.svg) so a Ducky behind it is hidden by it, and each piece's foot
+// blocks walking (a rectangle, or the arc of a curved bench). All numbers are in the drawing's own pixels.
 import {Assets, Container, Graphics, Rectangle, Sprite, Texture} from 'pixi.js';
-import {startJump,jumpHeight} from './player-motion.js';
+import {startJump,jumpPose} from './player-motion.js';
+import {MUSEUM_BENCHES, benchBox, benchAnchor, benchFootprint, benchFile} from './museum-benches.js';
 
 const SRC = '/pixi-art/interiors/museum.svg', W = 1536, H = 1024;   // boss 5 Nov: the room is vector art in the island's line style, only the Mona Lisa hangs
 const FLOOR = {x: 768, y: 1100, rx: 1500, ry: 760};   // the floor inside the curved wall (wall base runs ~y 340 middle, ~y 420 at the sides)
 // [x0, y0, x1, y1] of each drawn piece; its bottom strip blocks walking
-const PIECES = [[272, 412, 438, 492], [1094, 412, 1260, 492], [116, 572, 288, 654], [212, 866, 388, 948], [1148, 866, 1322, 948],   // benches
+// boss 5 Nov ("fix the chairs"): the benches are curved now, arcs of the floor's rings facing the Mona Lisa (museum-benches.js);
+// each blocks walking with its own arc-shaped footprint and sorts by the middle of its seat
+const BENCH_BOXES = MUSEUM_BENCHES.map(benchBox);
+const PIECES = [...BENCH_BOXES,
   [462, 276, 578, 420], [942, 276, 1058, 420], [32, 784, 158, 958], [1362, 784, 1508, 958],   // potted plants
   [582, 336, 952, 466]];   // the Mona Lisa rope and posts
-const PIECE_ART = ['bench-1', 'bench-2', 'bench-3', 'bench-4', 'bench-5', 'plant-1', 'plant-2', 'plant-3', 'plant-4', 'rope'].map(n => `/pixi-art/interiors/pieces/${n}.svg`);   // boss 5 Nov: each piece on its own transparent sheet, so only the piece itself hides a Ducky (no floor rectangle)
+const DEPTH = [...MUSEUM_BENCHES.map(b => benchAnchor(b)[1]), ...PIECES.slice(MUSEUM_BENCHES.length).map(p => p[3] - 12)];
+const PIECE_ART = [...MUSEUM_BENCHES.map(benchFile), 'plant-1', 'plant-2', 'plant-3', 'plant-4', 'rope'].map(n => `/pixi-art/interiors/pieces/${n}.svg`);   // boss 5 Nov: each piece on its own transparent sheet, so only the piece itself hides a Ducky (no floor rectangle)
 const ARCH = [556, 786, 984, 1024];   // boss 5 Nov: the whole arch (band and both legs, open middle) stands in front, so a Ducky walks under and through it   // boss 5 Nov: the arch's top band, always in front, so a Ducky walks UNDER it, never over it
-const BLOCKS = [...PIECES.slice(0, 9).map(([x0, y0, x1, y1]) => [x0 - 6, y1 - 34, x1 + 6, y1 + 4]), [582, 400, 952, 505],   // the rope: you stop a step in front of it
- 
+const BLOCKS = [...PIECES.slice(MUSEUM_BENCHES.length, -1).map(([x0, y0, x1, y1]) => [x0 - 6, y1 - 34, x1 + 6, y1 + 4]), [582, 400, 952, 505],   // the rope: you stop a step in front of it
   [560, 940, 652, 1024], [890, 940, 980, 1024]];   // the arch's two feet
+const BENCH_FEET = MUSEUM_BENCHES.map(benchFootprint);
+const inPoly = (x, y, poly) => {let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c;} return c;};
 const DOOR = {x: 770, y: 985}, ARRIVE = {x: 770, y: 700};   // you appear in the archway and walk in under it
 const EXIT = (x, y) => y > 935 && x > 652 && x < 890;   // stepping into the arch (its lower half is off screen on wide windows)
 const VIEW = {x: 770, y: 530, x0: 640, x1: 900, y0: 500, y1: 600};   // standing at the rope in front of the Mona Lisa Ducky
@@ -26,7 +32,7 @@ const SPEED = 330, DUCK_SCALE = .62;
 const MONA = {src: '/pixi-art/interiors/monalisa.svg', slot: [673, 83, 188, 159], view: [78, 205, 444], eyes: [{cx: 252, cy: 317}, {cx: 341, cy: 325}], viewW: 600};
 
 const inside = (x, y) => ((x - FLOOR.x) / FLOOR.rx) ** 2 + ((y - FLOOR.y) / FLOOR.ry) ** 2 < 1 && y < H - 4 && x > 20 && x < W - 20;
-const walkable = (x, y) => inside(x, y) && !BLOCKS.some(([x0, y0, x1, y1]) => x > x0 && x < x1 && y > y0 && y < y1) || EXIT(x, y) && y < H + 40;
+const walkable = (x, y) => inside(x, y) && !BLOCKS.some(([x0, y0, x1, y1]) => x > x0 && x < x1 && y > y0 && y < y1) && !BENCH_FEET.some(p => inPoly(x, y, p)) || EXIT(x, y) && y < H + 40;
 
 export async function createInterior() {
   const texture = await Assets.load({src: SRC, data: {resolution: 2}});
@@ -37,7 +43,7 @@ export async function createInterior() {
   PIECES.forEach(([x0, y0, x1, y1], k) => {
     const t = pieceTex[k], sc = t.width / W;
     const piece = new Sprite(new Texture({source: t.source, frame: new Rectangle(x0 * sc, y0 * sc, (x1 - x0) * sc, (y1 - y0) * sc)}));
-    piece.position.set(x0, y0); piece.scale.set(1 / sc); piece.zIndex = y1 - 12; room.addChild(piece);
+    piece.position.set(x0, y0); piece.scale.set(1 / sc); piece.zIndex = DEPTH[k]; room.addChild(piece);
   });
   const at = pieceTex.at(-1), asc = at.width / W;
   const arch = new Sprite(new Texture({source: at.source, frame: new Rectangle(ARCH[0] * asc, ARCH[1] * asc, (ARCH[2] - ARCH[0]) * asc, (ARCH[3] - ARCH[1]) * asc)}));
@@ -128,7 +134,10 @@ export async function createInterior() {
         me.heartT += dt; const k = me.heartT / 1.6;
         heart.visible = true; heart.position.set(me.x, me.y - 150 - (reduced ? 0 : k * 40)); heart.scale.set(reduced ? 1.4 : 1 + Math.sin(Math.min(1, k * 4) * Math.PI / 2) * .5); heart.alpha = 1 - Math.max(0, k - .6) / .4;
       } else heart.visible = false;
-      if (rig) {rig.root.position.set(me.x, me.y-jumpHeight(me.jumpLeft,reduced)); rig.root.zIndex = me.y; rig.update(dt, {action: me.action, speed: me.travel, turn: me.turn, time, reducedMotion: reduced});}
+      if (rig) {   // boss 6 Nov: the same jump as outside (crouch, stretch, lean, landing squash)
+        const hop = jumpPose(me.jumpLeft, reduced, {turn: me.turn, moving: me.travel > 20});
+        rig.root.position.set(me.x, me.y-hop.lift); rig.root.zIndex = me.y; rig.update(dt, {action: me.action, speed: me.travel, turn: me.turn, time, reducedMotion: reduced, jump: hop});
+      }
       eyesUpdate(dt, reduced);
       layout(width, height);
       if (me.y < 880) me.inside = true;   // the way out only counts once you have walked in

@@ -5,15 +5,17 @@ import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
+import {copyHolding} from './world-map.js';
 import {createWorldView} from './world-view.js';
-import {HARBOR, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock} from './islands.js';
+import {HARBOR, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Matrix} from 'pixi.js';
 import rawWorld from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
-import {startJump,jumpHeight} from './player-motion.js';
+import {startJump,jumpHeight,jumpPose,MUSEUM_DOOR,atMuseumDoor} from './player-motion.js';
+import {createDust} from './dust.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
@@ -31,7 +33,6 @@ import {CHAT_DURATION} from './chat.js';
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
 const ZERO = {x:0,y:0};
-const MUSEUM_DOOR = {x0: 2850, x1: 2990, y: 1215, out: {x: 2920, y: 1340}};   // boss 5 Nov: the top of the museum steps; out = a few steps down
 const CHAT_LABEL_GAP = 4;
 // boss 3 Nov, fix 4: ONE contact shadow for every grounded prop: a flat unoutlined ellipse tucked under the base,
 // 12-18% opacity, tinted for the ground under it, nudged at most .15H toward the lower right. [pattern, width share, depth ratio]
@@ -94,7 +95,7 @@ export class PixiIsland {
     this.frameTimes = [];
     this.accumulator = 0;
     this.lastTap = -Infinity;
-    this.doorArmed = true;
+    this.doorArmed = false;   // boss 6 Nov: armed only once your Ducky has been seen below the steps, so a game never opens inside the museum
     this.audio = createAudio();
   }
 
@@ -121,6 +122,7 @@ export class PixiIsland {
       this.ground = new Container();
       this.water = new Container();
       this.objects = new Container({sortableChildren: true});
+      this.dust = createDust(this.objects);   // boss 6 Nov: landing and running puffs
       this.air = new Container();
       this.floatLayer=new Container();
       this.contactShadows=new Container();
@@ -224,7 +226,7 @@ export class PixiIsland {
       if (this.disposed) {this.waterFX.dispose(); return;}
       this.createAmbient();
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);   // boss 5 Nov: 300 islands, same island for now; zoom out to see them
-      this.worldView = createWorldView(this.app, this.scene);   // boss 5 Nov: tilted horizon, then the little planet
+      this.worldView = createWorldView(this.app, this.scene); globalThis.__duckyPin = () => this.worldView?.pinPoint();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) return;
@@ -298,24 +300,32 @@ export class PixiIsland {
   }
 
   switchIsland(id) {
+    // boss 5 Nov ("the Ducky jumps to the ground and right there a FLASH comes, I want it seamless"): landing on (or sailing
+    // into) a neighbour makes it the real island, so its coordinates become the local ones. Nothing fades or restarts: the
+    // camera, your own Ducky, its hop and the boat it leaves are all moved by that island's offset and carry straight on.
+    const hop=this.ready ? islandOffset(this.islandId,id) : null;   // boss 6 Nov: any island drawn in this sea, not only the jetty neighbours
     this.islandId=id;
     this.archipelago?.setCurrent(id);   // the island you landed on becomes the real one, the rest are redrawn round it
     this.stopInput();
     this.clearChat();
     this.markerUntil=0;
-    if (this.ready && !this.motion.matches) this.canvas.animate([{opacity:.45},{opacity:1}],{duration:450});
-    for (const entry of this.liveRigs.values()) {
+    for (const [key, entry] of this.liveRigs) {
+      if (hop && entry.isPlayer) continue;   // your own Ducky stays as it is (no drop-in again)
       entry.rig?.dispose(); entry.nameplate?.remove(); entry.seatMask?.destroy();
+      this.liveRigs.delete(key);
     }
-    this.liveRigs.clear();
     const accent=islandFor(id).accent;
     for (const prop of this.props) if (/flower|flag|bunting/i.test(prop.asset || prop.name)) prop.sprite.tint=id==='home'?(prop.tint ?? 0xffffff):accent;
-    this.travelView?.switchIsland(id);
-    const player=this.player;
-    const focus=player ?? HARBOR.land;
-    Object.assign(this.target,{x:focus.x,y:focus.y-90,zoom:player?.mode === 'sailing' ? .56 : .6});
-    Object.assign(this.camera,this.target);
-    this.follow=Boolean(player);
+    this.travelView?.switchIsland(id, hop && {x:-hop.x, y:-hop.y});
+    if (hop) {
+      for (const c of [this.camera, this.target]) {c.x-=hop.x; c.y-=hop.y;}
+    } else {
+      const player=this.player;
+      const focus=player ?? HARBOR.land;
+      Object.assign(this.target,{x:focus.x,y:focus.y-90,zoom:this.target.zoom ?? .6});
+      Object.assign(this.camera,this.target);
+    }
+    this.follow=Boolean(this.player);
     this.fitMode=false;
   }
 
@@ -341,8 +351,13 @@ export class PixiIsland {
       this.gestures.down(event.pointerId, point(event));
     });
     this.listen(this.canvas, 'pointermove', event => {
+      if (!this.gestures.pointers.size && event.pointerType !== 'touch') {   // boss 6 Nov: the 'You' pin shows it is a button
+        const over=Boolean(this.globeT > 0 && this.worldView?.pinAt(point(event)));
+        if (over !== this.overPin) {this.overPin=over; this.canvas.style.cursor=over ? 'pointer' : ''; this.worldView?.hoverPin(over);}
+      }
       const movement = this.gestures.move(event.pointerId, point(event));
       if (!movement) return;
+      this.fly=null;
       if (movement.after.length > 1) {
         movePinch(this.camera, movement.before, movement.after, this.zoomFloor(), 1.8, this.width, this.height);
       } else if (movement.drag) {
@@ -377,14 +392,14 @@ export class PixiIsland {
       event.preventDefault();
       const p = point(event);
       const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? this.height : 1);
-      Object.assign(this.target, this.camera);
+      Object.assign(this.target, this.camera); this.fly=null;
       zoomAt(this.target, clamp(this.camera.zoom * Math.exp(-delta * .0018), this.zoomFloor(), 1.8), p.x, this.height / 2 + (p.y - this.height / 2) / TILT, this.width, this.height);   // tilt-aware wheel anchor
       this.follow = false;this.fitMode=false;this.constrain(this.target);
     }, {passive: false});
     this.listen(window, 'keydown', event => {
       if (event.defaultPrevented || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
       const key = event.key.toLowerCase();
-      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter'].includes(key)) return;
+      if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter','shift'].includes(key)) return;
       event.preventDefault();
       this.audio.unlock();
       this.keys.add(key);
@@ -396,9 +411,10 @@ export class PixiIsland {
       if (/^[1-7]$/.test(key)) this.triggerEmote(key === '1' ? 2 : Number(key) + 2);
       if (key === 'm') this.audio.toggle();
       if (key === 'f' && this.player) {this.follow=true;this.fitMode=false;this.target.zoom=Math.max(.65,this.target.zoom);}
-      if (key === 'home' || key === '0') this.fit();
+      if (key === 'home') {if (this.player) this.flyHome(); else this.fit();}   // boss 6 Nov: Home flies back to your Ducky, like tapping the 'You' pin
+      if (key === '0') this.fit();
       if (['+','=','-'].includes(key)) {
-        this.target.zoom = clamp(this.target.zoom * (key === '-' ? .8 : 1.25), this.zoomFloor(), 1.8);this.fitMode=false;this.follow=false;
+        this.fly=null; this.target.zoom = clamp(this.target.zoom * (key === '-' ? .8 : 1.25), this.zoomFloor(), 1.8);this.fitMode=false;this.follow=false;
       }
     });
     this.listen(window, 'keyup', event => this.keys.delete(event.key.toLowerCase()));
@@ -476,7 +492,7 @@ export class PixiIsland {
   }
 
   updateControlLabel() {
-    const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home shows the island.';
+    const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home flies back to your Ducky, 0 shows the island.';
     const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap the harbor to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
     const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
     this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
@@ -498,11 +514,12 @@ export class PixiIsland {
   travelAction() {
     const options=this.travelOptions();
     if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
-    else if (options.dock) this.room.disembark();
+    else if (options.dock) {this.keys.clear(); this.touchInput={x:0,y:0}; this.room.disembark();}   // a held arrow key would steer away and cancel the dock
   }
 
   tap(point) {
     if (this.interior?.active) {this.interior.tap(point); return;}   // boss 5 Nov: inside the museum a tap walks there
+    if (this.globeT > 0 && this.worldView?.pinAt(point)) {this.flyHome(); return;}   // boss 6 Nov: tap the 'You' pin, fly back to your Ducky
     // boss 5 Nov: a tap on a sleeping Ducky only wobbles it: no walk, no emote, the player's Ducky does not react
     const p = screenToWorld(this.camera, point, this.width, this.height);
     if (this.room && this.player) {
@@ -611,18 +628,40 @@ export class PixiIsland {
     if (!this.archipelago?.texture || this.interior?.active) return [];
     const z=this.camera.zoom, hw=this.width/(2*z)+world.width*.6, hh=this.height/(2*z*TILT)+world.height*.6;
     const near=this.archipelago.islands.filter(i => !i.home && Math.abs(i.x-this.camera.x)<hw && Math.abs(i.y-this.camera.y)<hh);
-    return z > .06 && near.length <= 6 ? near : [];
+    if (!(z > .06 && near.length <= 6)) return [];
+    // boss 5 Nov ("when the boat is moving the FPS is dropping"): each live copy draws the whole island again, so only the
+    // copies that reach the screen are drawn (with room for tall trees over their edge); the rest stay snapshots off screen
+    const sw=this.width/(2*z)+world.width/2+400, sh=this.height/(2*z*TILT)+world.height/2+400;
+    return near.filter(i => Math.abs(i.x-this.camera.x)<sw && Math.abs(i.y-this.camera.y)<sh);
   }
   renderLiveCopies(target, copies) {
     if (!copies.length) return;
-    const hide=[this.archipelago.root, this.ocean, ...this.transientForCopies()].filter(o => o?.visible);
+    const transient=this.transientForCopies();
+    const hide=[this.archipelago.root, this.ocean, ...transient].filter(o => o?.visible);
     hide.forEach(o => {o.visible=false;});
     const props=this.props.map(p => [p, p.sprite.visible, p.shadow?.visible]);
-    for (const [p] of props) {p.sprite.visible=true; if (p.shadow) p.shadow.visible=true;}   // un-cull: the copy shows the whole island
     const sceneVisible=this.scene.visible; this.scene.visible=true;
     const z=this.camera.zoom, cx=world.width/2, cy=world.height/2, sx=this.scene.scale.x, sy=this.scene.scale.y;
-    for (const island of copies) this.app.renderer.render({container:this.scene, target, clear:false,   // the camera's own transform, shifted to that island
-      transform:new Matrix(sx,0,0,sy,this.scene.position.x+(island.x-cx)*z,this.scene.position.y+(island.y-cy)*z*TILT)});
+    const hw=this.width/(2*z), hh=this.height/(2*z*TILT);
+    const cull=(dx, dy) => {   // the copy's props culled to the screen as seen through that copy (the real pass culls the same way)
+      for (const [p] of props) {
+        const pad=Math.max(p.width, p.height)*p.scale+350, on=Math.abs(p.x+dx-this.camera.x)<hw+pad && Math.abs(p.y+dy-this.camera.y)<hh+pad;
+        p.sprite.visible=on; if (p.shadow) p.shadow.visible=on;
+      }
+    };
+    // boss 5 Nov ("I went to another island, but I am going under the island"): a copy is drawn over the real island, so a
+    // boat, Ducky or name board out in a neighbour's waters went under that copy's jetty, sign and trees. Each one is drawn
+    // again inside its copy's pass, moved into that island's frame for the moment, so it sorts among the copy's own things.
+    const visitors=transient.map(o => ({o, copy:copyHolding(o.x, o.y, copies)})).filter(v => v.copy);
+    const shift=(o, dx, dy) => {o.x+=dx; o.y+=dy; o.zIndex+=dy; if (o.mask?.position) {o.mask.x+=dx; o.mask.y+=dy;}};   // a seated Ducky's hull mask moves with it
+    for (const island of copies) {
+      const dx=island.x-cx, dy=island.y-cy, mine=visitors.filter(v => v.copy === island).map(v => v.o);
+      for (const o of mine) {o.visible=true; shift(o, -dx, -dy);}
+      cull(dx, dy);
+      this.app.renderer.render({container:this.scene, target, clear:false,   // the camera's own transform, shifted to that island
+        transform:new Matrix(sx,0,0,sy,this.scene.position.x+dx*z,this.scene.position.y+dy*z*TILT)});
+      for (const o of mine) {shift(o, dx, dy); o.visible=false;}
+    }
     this.scene.visible=sceneVisible;
     hide.forEach(o => {o.visible=true;});
     for (const [p,v,sh] of props) {p.sprite.visible=v; if (p.shadow) p.shadow.visible=sh;}
@@ -632,8 +671,29 @@ export class PixiIsland {
   birdZoom() {const b=this.archipelago.bounds; return .43*this.height*2*Math.PI/(b.x1-b.x0);}   // the globe at .43 of the screen height
   zoomFloor() {return this.archipelago ? this.birdZoom() : this.minZoom*.8;}
 
+  // boss 6 Nov: from the globe (pin tap or Home) straight back to your Ducky in about 0.7 s. The camera itself travels, so the
+  // globe unwraps along the very path a scroll zoom takes; the turn lands a little before the zoom, then it follows you.
+  flyHome() {
+    const me=this.room?.view() ?? this.player;
+    if (!me) {this.fit(); return;}
+    if (this.archipelago) {const b=this.archipelago.bounds, sx=b.x1-b.x0; this.camera.x-=sx*Math.round((this.camera.x-me.x)/sx);}   // nearest wrap: never round the world
+    const zoom=Math.max(this.minZoom*1.05, Math.min(this.width/1500, this.height/1000));   // the normal play zoom (as on load)
+    this.spin=null; this.follow=false; this.fitMode=false;
+    this.fly={at:performance.now(), ms:this.motion.matches ? 0 : 700, x0:this.camera.x, y0:this.camera.y, z0:this.camera.zoom, zoom};
+    if (this.overPin) {this.overPin=false; this.canvas.style.cursor=''; this.worldView?.hoverPin(false);}
+  }
+  stepFly(now, player) {
+    const f=this.fly, s=f.ms ? Math.min(1, Math.max(0, (now-f.at)/f.ms)) : 1, me=this.room?.view() ?? player;
+    if (!me) {this.fly=null; return;}
+    const io=s < .5 ? 4*s*s*s : 1-Math.pow(-2*s+2, 3)/2, pos=1-Math.pow(1-Math.min(1, s/.8), 3);   // zoom: ease in-out (log scale); turn: ease-out, done by 80%
+    this.camera.zoom=Math.exp(Math.log(f.z0)+(Math.log(f.zoom)-Math.log(f.z0))*io);
+    this.camera.x=f.x0+(me.x-f.x0)*pos; this.camera.y=f.y0+(me.y-90-f.y0)*pos;
+    Object.assign(this.target, this.camera); this.quietAt=performance.now();
+    if (s >= 1) {this.fly=null; this.follow=true;}
+  }
+
   fit() {
-    this.follow = false;this.fitMode=true;
+    this.fly=null; this.follow = false;this.fitMode=true;
     Object.assign(this.target, {x: world.width / 2, y: world.height / 2, zoom: this.minZoom});
   }
 
@@ -663,13 +723,15 @@ export class PixiIsland {
     if (this.room && this.room.mode !== this.travelMode) {
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
       this.follow=Boolean(this.player); this.fitMode=false;
-      if (this.travelMode === 'walking' && this.player) this.target.zoom=.6;   // boss 5 Nov: back on land the camera comes back in
+      // boss 5 Nov: boarding and docking keep the zoom you chose (no camera jump), the camera only follows
     }
     const input = {
       x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')) + this.touchInput.x,
       y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')) + this.touchInput.y,
     };
     input.x=Math.sign(input.x); input.y=Math.sign(input.y);
+    // boss 6 Nov: Shift with the arrow keys / WASD runs (keyboard only; the server decides the speed, never on a boat)
+    if (this.keys.has('shift') && ['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].some(k => this.keys.has(k)) && (input.x || input.y)) input.run=true;
     if (this.travelView?.fx.holding(this.room?.id)) input.x=input.y=0;   // boss 5 Nov: the hop in or out finishes before steering (at most 0.6 s)
     const indoors = this.interior?.active;
     while (this.accumulator >= 1 / 60) {
@@ -677,6 +739,7 @@ export class PixiIsland {
       this.room?.step(1 / 60, indoors ? ZERO : input);
       this.accumulator -= 1 / 60;
     }
+    this.room?.setAlpha(this.accumulator * 60);   // boss 5 Nov ("blurry and shaky"): the own Ducky and boat draw between steps
     const player = this.player;
     if (Boolean(player) !== this.hadPlayer) {
       this.hadPlayer = Boolean(player);
@@ -687,7 +750,7 @@ export class PixiIsland {
     const reduced = this.motion.matches;
     // boss 5 Nov: the museum door. Walk up the steps into it and the room takes over; walk out through its arch and you are back on the steps
     if (this.interior && player && player.mode !== 'sailing') {
-      const atDoor = player.x > MUSEUM_DOOR.x0 && player.x < MUSEUM_DOOR.x1 && player.y < MUSEUM_DOOR.y;
+      const atDoor = atMuseumDoor(player.x, player.y);
       if (!indoors && atDoor && this.doorArmed && this.playerRig()) {this.doorArmed = false; this.sim.stopInput(); this.interior.enter(this.playerRig(), this.width, this.height); this.onInteriorChange(true); this.scene.visible = false; if (this.nameLayer) this.nameLayer.style.visibility = 'hidden';}
       if (!atDoor && player.y > MUSEUM_DOOR.y + 60) this.doorArmed = true;
       if (this.interior.active && this.interior.update(dt, input, this.width, this.height, t, reduced)) {
@@ -704,8 +767,8 @@ export class PixiIsland {
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
     if (this.follow && player) {
-      Object.assign(this.target, {x:player.x, y:player.y-90});
-      if (player.mode === 'sailing') this.target.zoom=.56-offshoreProgress(player)*.24;   // boss 5 Nov: pulled back a little while sailing
+      const shown=this.room?.view() ?? player;   // follow where the Ducky is drawn, not its last fixed step or uncorrected guess
+      Object.assign(this.target, {x:shown.x, y:shown.y-90});
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
       const k=Math.exp(-dt/.45), sx=this.spin.x*dt*1000, sy=this.spin.y*dt*1000;
@@ -713,7 +776,8 @@ export class PixiIsland {
       if (Math.abs(this.camera.y-(y0+sy))>1e-6) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
       this.spin.x*=k; this.spin.y*=k; if (Math.hypot(this.spin.x,this.spin.y)*this.camera.zoom<.01) this.spin=null;
     } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;   // off the globe, or held still: no flick
-    if (this.birdEye && this.target.zoom > this.camera.zoom*1.002 && !this.gestures.pointers.size) {   // zooming in from the globe flies you home, like Google Earth
+    if (this.fly) this.stepFly(now, player);
+    if (!this.fly && this.birdEye && this.target.zoom > this.camera.zoom*1.002 && !this.gestures.pointers.size) {   // zooming in from the globe flies you home, like Google Earth
       const b=this.archipelago.bounds, sx=b.x1-b.x0, home=player ?? {x:world.width/2, y:world.height/2};
       const nx=home.x+sx*Math.round((this.camera.x-home.x)/sx), k=1-Math.exp(-dt*3);
       for (const c of [this.camera,this.target]) {c.x+=(nx-c.x)*k; c.y+=(home.y-c.y)*k;}
@@ -758,15 +822,18 @@ export class PixiIsland {
       if (/lily|reeds|cattails/i.test(prop.asset || prop.name)) this.waterFX?.lily(prop, {y: prop.y, rotation: 0});
     });
     this.floating.forEach(item=>{const pose=floatingPose(item,t,reduced);item.sprite.position.set(pose.x,pose.y);item.sprite.rotation=pose.rotation;item.sprite.visible=visible(item.x,item.y,100);this.waterFX?.lily(item,pose,t);});
+    this.dust?.update(dt);
     const alpha = this.accumulator * 60;
     this.rigs.forEach((rig, i) => {
       const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
-      rig.root.position.set(x, deckY(x, y) - jumpHeight(duck.jumpLeft,reduced));   // boss 3 Nov: Duckies walk up and over the arched bridges
+      const hop = jumpPose(duck.jumpLeft, reduced, {turn: duck.turn, moving: duck.travel > 20});   // boss 6 Nov: crouch, stretch, lean, land
+      rig.root.position.set(x, deckY(x, y) - hop.lift);   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
       rig.root.visible = visible(x, y, 200);
-      if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping});
+      if (rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
+      if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x, y: deckY(x, y), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
       if (duck.sleeping && duck.footprint && player && rig.sleeper) {   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once
         const f = duck.footprint, ex = (player.x - f.x) / (f.rx + 26), ey = (player.y - f.y) / (f.ry + 26), near = ex * ex + ey * ey < 1;
         const last = this.bumpFrom || player, mx = player.x - last.x, my = player.y - last.y, ml = Math.hypot(mx, my), tx = f.x - player.x, ty = f.y - player.y;
@@ -818,6 +885,10 @@ export class PixiIsland {
     const copies=this.liveCopies(); this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies);
     this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, world, this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
+    if (this.nameLayer) {   // boss 6 Nov: the name tags fade out as the 'You' pin fades in, by the same zoom progress (no pop)
+      const tags=1-(this.worldView?.pinIn ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
+      if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
+    }
     this.app.render();
     if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies);   // flat view: straight onto the screen, after the real island
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
@@ -929,11 +1000,14 @@ export class PixiIsland {
         rig.root.mask=look.mask?entry.seatMask:null;
       }
       rig.root.scale.set(look.scale*look.sx,look.scale*look.sy/TILT);
-      rig.root.position.set(look.x,(look.deck?deckY(look.x,look.y):look.y)-(look.deck?jumpHeight(pose.jumpLeft,reducedMotion):0));   // Ashwin's space-to-jump, on our boarding/sailing look
+      const hop=look.deck ? jumpPose(pose.jumpLeft,reducedMotion,{turn:look.turn,moving:look.speed>20}) : null;   // boss 6 Nov: the jump's crouch, stretch, lean and landing
+      rig.root.position.set(look.x,(look.deck?deckY(look.x,look.y):look.y)-(hop?.lift ?? 0));   // Ashwin's space-to-jump, on our boarding/sailing look
       rig.root.rotation=look.rotation; rig.root.alpha=look.alpha;
+      rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');   // boss 5 Nov: your ring only on land, never on the boat or mid-hop
+      if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:look.x, y:deckY(look.x,look.y), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
       rig.root.visible = visible(look.x,look.y,200);
-      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion});
+      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion, jump:hop});
     }
   }
 

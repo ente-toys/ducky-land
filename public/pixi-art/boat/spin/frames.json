@@ -1,0 +1,271 @@
+{
+ "canvas": [
+  640,
+  560
+ ],
+ "anchor": [
+  0.5,
+  0.83036
+ ],
+ "drawWidth": 392.5,
+ "note": "Turntable frames from GPT sheets. Draw each PNG at width drawWidth game px (height = drawWidth*560/640) with anchor = waterline centre, same placement as views.json (anchor sits 28.9 game px above the hull's lowest point, like boat-e.svg). Every frame has the hull centre at x=320 and the hull's lowest point at y=512 in canvas px. deg = bow screen heading, 0 = south/toward camera, 90 = east, -180..180; frame n = 90 - 11.25*n. seat = bench top centre (Ducky feet) in game px from the anchor at drawWidth. Pick the frame with the nearest deg.",
+ "hullBottomY": 512,
+ "frames": [
+  {
+   "file": "spin/boat-00.svg",
+   "deg": 90.0,
+   "seat": [
+    42.9,
+    -59.5
+   ]
+  },
+  {
+   "file": "spin/boat-01.svg",
+   "deg": 78.75,
+   "seat": [
+    40.5,
+    -54.9
+   ]
+  },
+  {
+   "file": "spin/boat-02.svg",
+   "deg": 67.5,
+   "seat": [
+    38.1,
+    -50.3
+   ]
+  },
+  {
+   "file": "spin/boat-03.svg",
+   "deg": 56.25,
+   "seat": [
+    23.7,
+    -42.6
+   ]
+  },
+  {
+   "file": "spin/boat-04.svg",
+   "deg": 45.0,
+   "seat": [
+    9.3,
+    -35.0
+   ]
+  },
+  {
+   "file": "spin/boat-05.svg",
+   "deg": 33.75,
+   "seat": [
+    5.6,
+    -38.9
+   ]
+  },
+  {
+   "file": "spin/boat-06.svg",
+   "deg": 22.5,
+   "seat": [
+    1.9,
+    -42.9
+   ]
+  },
+  {
+   "file": "spin/boat-07.svg",
+   "deg": 11.25,
+   "seat": [
+    -0.2,
+    -42.9
+   ]
+  },
+  {
+   "file": "spin/boat-08.svg",
+   "deg": 0.0,
+   "seat": [
+    -2.3,
+    -42.9
+   ]
+  },
+  {
+   "file": "spin/boat-09.svg",
+   "deg": -11.25,
+   "seat": [
+    -3.5,
+    -41.4
+   ]
+  },
+  {
+   "file": "spin/boat-10.svg",
+   "deg": -22.5,
+   "seat": [
+    -4.7,
+    -39.9
+   ]
+  },
+  {
+   "file": "spin/boat-11.svg",
+   "deg": -33.75,
+   "seat": [
+    -18.2,
+    -43.8
+   ]
+  },
+  {
+   "file": "spin/boat-12.svg",
+   "deg": -45.0,
+   "seat": [
+    -31.8,
+    -47.8
+   ]
+  },
+  {
+   "file": "spin/boat-13.svg",
+   "deg": -56.25,
+   "seat": [
+    -39.7,
+    -50.9
+   ]
+  },
+  {
+   "file": "spin/boat-14.svg",
+   "deg": -67.5,
+   "seat": [
+    -47.6,
+    -54.0
+   ]
+  },
+  {
+   "file": "spin/boat-15.svg",
+   "deg": -78.75,
+   "seat": [
+    -47.9,
+    -54.0
+   ]
+  },
+  {
+   "file": "spin/boat-16.svg",
+   "deg": -90.0,
+   "seat": [
+    -48.3,
+    -54.0
+   ]
+  },
+  {
+   "file": "spin/boat-17.svg",
+   "deg": -101.25,
+   "seat": [
+    -47.1,
+    -59.2
+   ]
+  },
+  {
+   "file": "spin/boat-18.svg",
+   "deg": -112.5,
+   "seat": [
+    -46.0,
+    -64.4
+   ]
+  },
+  {
+   "file": "spin/boat-19.svg",
+   "deg": -123.75,
+   "seat": [
+    -43.1,
+    -70.5
+   ]
+  },
+  {
+   "file": "spin/boat-20.svg",
+   "deg": -135.0,
+   "seat": [
+    -40.2,
+    -76.7
+   ]
+  },
+  {
+   "file": "spin/boat-21.svg",
+   "deg": -146.25,
+   "seat": [
+    -38.0,
+    -80.0
+   ]
+  },
+  {
+   "file": "spin/boat-22.svg",
+   "deg": -157.5,
+   "seat": [
+    -35.9,
+    -83.4
+   ]
+  },
+  {
+   "file": "spin/boat-23.svg",
+   "deg": -168.75,
+   "seat": [
+    -29.1,
+    -86.0
+   ]
+  },
+  {
+   "file": "spin/boat-24.svg",
+   "deg": 180.0,
+   "seat": [
+    -22.3,
+    -88.7
+   ]
+  },
+  {
+   "file": "spin/boat-25.svg",
+   "deg": 168.75,
+   "seat": [
+    -17.2,
+    -90.1
+   ]
+  },
+  {
+   "file": "spin/boat-26.svg",
+   "deg": 157.5,
+   "seat": [
+    38.9,
+    -76.7
+   ]
+  },
+  {
+   "file": "spin/boat-27.svg",
+   "deg": 146.25,
+   "seat": [
+    41.4,
+    -76.7
+   ]
+  },
+  {
+   "file": "spin/boat-28.svg",
+   "deg": 135.0,
+   "seat": [
+    43.9,
+    -76.7
+   ]
+  },
+  {
+   "file": "spin/boat-29.svg",
+   "deg": 123.75,
+   "seat": [
+    43.0,
+    -71.4
+   ]
+  },
+  {
+   "file": "spin/boat-30.svg",
+   "deg": 112.5,
+   "seat": [
+    42.0,
+    -66.2
+   ]
+  },
+  {
+   "file": "spin/boat-31.svg",
+   "deg": 101.25,
+   "seat": [
+    42.4,
+    -62.9
+   ]
+  }
+ ]
+}

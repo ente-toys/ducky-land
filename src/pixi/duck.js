@@ -110,6 +110,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   let data;
   try{data=await library();}catch(error){liveDucks--;throw error;}
   const root=new Container({label:'Ducky'}),art=new Container({label:'Original SVG rig'});art.scale.set(SCALE);root.addChild(art);
+  // boss 6 Nov: a soft ground shadow that shows only during a jump; it stays on the ground, shrinking and fading as the Ducky rises
+  const jumpShadow=new Graphics({label:'Jump shadow'}).ellipse(0,0,74,19).fill({color:0x39472D});jumpShadow.visible=false;root.addChildAt(jumpShadow,0);
   const feedback=createDuckFeedback(isPlayer);art.addChild(feedback.ring);
   const views=data.views.map(makeView);views.forEach(v=>art.addChild(v.root));art.addChild(feedback.bubble,feedback.sleep);
   // boss 5 Nov: a sleeping Ducky is one of the 8 approved poses, picked once (placement or seed) so it never rerolls
@@ -279,7 +281,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.expressions.clear();if(currentAction===5)for(const eye of eyes){const {x,y}=eye.joint;view.expressions.moveTo(x-14,y).quadraticCurveTo(x,y-17,x+14,y).stroke({color:0x232323,width:5,cap:'round'});}
     view.brows.clear();if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
-  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false}={}){
+  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
@@ -318,6 +320,10 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     if(arriveT<1.1&&!reducedMotion){const f=arriveT*60;art.y=keyAt(DROP.y,f)*artHeight*SCALE;art.scale.set(SCALE*keyAt(DROP.sx,f),SCALE*keyAt(DROP.sy,f));}
     else{art.y=0;art.scale.set(SCALE);}
     art.x=0;art.rotation=0;
+    // boss 6 Nov: the jump's squash, stretch and lean (player-motion.js jumpPose), scaled about the feet; the caller lifts the root
+    jumpShadow.visible=Boolean(jump&&jump.shadow>0&&!sleeping);
+    if(jump&&!sleeping){art.scale.x*=jump.sx;art.scale.y*=jump.sy;art.rotation+=jump.rotation;
+      if(jumpShadow.visible){jumpShadow.y=jump.lift/(Math.abs(root.scale.y)||1);jumpShadow.scale.set(jump.shadowScale);jumpShadow.alpha=jump.shadow;}}
     // boss 5 Nov: walked into a sleeper, like stepping on a stone: a small hop back, two damped tilt swings, a squash on landing
     if(stumbleT<STUMBLE&&!reducedMotion&&!sleeping){
       const u=stumbleT/STUMBLE,back=u<.3?1-(1-u/.3)**3:1-(.5-.5*Math.cos(Math.PI*(u-.3)/.7)),hop=u<.5?Math.sin(Math.PI*u/.5):0;
@@ -334,5 +340,6 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   // away: unit vector pointing away from what was hit, in rig units (x right, y down on screen)
   const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};
   const sleeper={poke:()=>nap.root.visible&&nap.poke(),bounds:()=>nap.root.getBounds()};   // boss 5 Nov: tap or bump wobbles a sleeper
-  return {root,update,dispose,setOutfit,arrive,stumble,sleeper,animationNames:duckAnimationNames};
+  const showRing=on=>{feedback.ring.visible=Boolean(isPlayer&&on);};   // boss 5 Nov: no red ring on the deck while sailing or hopping
+  return {root,update,dispose,setOutfit,arrive,stumble,sleeper,showRing,animationNames:duckAnimationNames};
 }

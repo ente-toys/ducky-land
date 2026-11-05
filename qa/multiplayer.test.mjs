@@ -7,7 +7,7 @@ import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
 import {HARBOR,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
-import {DUCK_RADIUS} from '../src/pixi/player-motion.js';
+import {DUCK_RADIUS, RUN_SPEED, WALK_SPEED, MUSEUM_DOOR, atMuseumDoor} from '../src/pixi/player-motion.js';
 
 const origin = 'https://island.example';
 const nav = createNavigation(world);
@@ -266,6 +266,70 @@ test('live jumps are shared, preserve movement, land without more input, and rej
     await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft>0);
     await request('/test/restore');
     await eventually(()=>guest.duck(player.welcome.id)?.jumpLeft===0);
+  } finally {
+    player.close(); guest.close();
+    await request('/test/expire-resume');
+  }
+});
+
+test('running is a server-capped flag: Shift runs at most 1.7x walk, others see it, junk flags walk and boats ignore it (boss 6 Nov)', async () => {
+  const account=await signIn(9410);
+  const player=await socket(account.session), guest=await socket();
+  const timed=async input => {   // holds a direction for ~0.6 s and returns the speed the guest saw in the steady middle
+    const start=await eventually(()=>guest.duck(player.welcome.id));
+    const samples=[];
+    const t0=Date.now();
+    while (Date.now()-t0 < 650) {player.send({type:'input',...input}); await delay(90); const d=guest.duck(player.welcome.id); samples.push([Date.now(),d.x,d.y,d.travel]);}
+    player.send({type:'input',x:0,y:0,stop:true});
+    await eventually(()=>guest.duck(player.welcome.id)?.travel===0);
+    return {start, samples, top:Math.max(...samples.map(s=>s[3]))};
+  };
+  try {
+    const lane=(()=>{for (let y=600;y<world.height;y+=40) for (let x=400;x<world.width-700;x+=40) {   // a straight 520 px run with room either side
+      let ok=true; for (let d=0;d<=520 && ok;d+=10) ok=nav.walkable(x+d,y) && nav.walkable(x+d,y-40) && nav.walkable(x+d,y+40);
+      if (ok) return [x+260,y];}})();
+    const [ox,oy]=lane;
+    await position(player,{x:ox-260,y:oy,mode:'walking',path:[]});
+    const walk=await timed({x:1,y:0});
+    assert.ok(walk.top<=WALK_SPEED+1, `walk ${walk.top}`);
+    await position(player,{x:ox-260,y:oy,mode:'walking',path:[]});
+    const run=await timed({x:1,y:0,run:true,speed:99999,travel:99999});
+    assert.ok(run.top>WALK_SPEED*1.4, `run seen by others ${run.top}`);
+    assert.ok(run.top<=RUN_SPEED+1, `run capped ${run.top}`);
+    const span=run.samples.at(-1)[0]-run.samples[0][0], moved=run.samples.at(-1)[1]-run.samples[0][1];
+    assert.ok(moved<=RUN_SPEED*(span/1000+.15), `moved ${moved} in ${span} ms`);
+    await position(player,{x:ox-260,y:oy,mode:'walking',path:[]});
+    const junk=await timed({x:1,y:0,run:'yes'});
+    assert.ok(junk.top<=WALK_SPEED+1, `junk flag ${junk.top}`);
+  } finally {
+    player.close(); guest.close();
+    await request('/test/expire-resume');
+  }
+});
+
+test('a game never opens inside the museum: a Ducky held at its door comes back on the plaza (boss 6 Nov)', async () => {
+  const account=await signIn(9420);
+  const guest=await socket();
+  let player=await socket(account.session);
+  try {
+    const door={x:(MUSEUM_DOOR.x0+MUSEUM_DOOR.x1)/2,y:MUSEUM_DOOR.y-20};
+    assert.ok(atMuseumDoor(door.x,door.y));
+    await position(player,{...door,mode:'walking',path:[]});
+    await eventually(()=>guest.duck(player.welcome.id)?.y===door.y);
+    player.close();
+    await eventually(()=>!guest.duck(player.welcome.id));
+    player=await socket(account.session);   // reload: the resume would have put it straight back at the door
+    const back=await eventually(()=>guest.duck(player.welcome.id));
+    assert.ok(!atMuseumDoor(back.x,back.y));
+    assert.ok(Math.hypot(back.x-world.zones.plaza.spawn[0],back.y-world.zones.plaza.spawn[1])<=DUCK_RADIUS*2,`spawned at ${back.x},${back.y}`);
+    const away={x:MUSEUM_DOOR.out.x,y:MUSEUM_DOOR.out.y};   // anywhere else outside is still resumed as it was
+    await position(player,{...away,mode:'walking',path:[]});
+    await eventually(()=>guest.duck(player.welcome.id)?.y===away.y);
+    player.close();
+    await eventually(()=>!guest.duck(player.welcome.id));
+    player=await socket(account.session);
+    const kept=await eventually(()=>guest.duck(player.welcome.id));
+    assert.deepEqual([kept.x,kept.y],[away.x,away.y]);
   } finally {
     player.close(); guest.close();
     await request('/test/expire-resume');
@@ -625,29 +689,43 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
   const far={x:220,y:1960}, spot=landingSpot({islandId:'home',...far}); spot.approach=landingApproach({islandId:'home',...far},spot); const gap=p => Math.hypot(p.x-spot.approach.x,p.y-spot.approach.y);
   try {
     await eventually(() => a.snapshot?.boats?.length);
-    const boatId=a.snapshot.boats.find(boat => !boat.occupant && boat.id==='home-0').id, boat=() => a.snapshot.boats.find(b => b.id===boatId);
-    await setup({...HARBOR.land,path:[]});
-    a.send({type:'board',boatId});
-    await eventually(() => a.duck()?.mode==='sailing');
+    // boss 6 Nov: a landed boat drifts off and the harbor berth always has a boat, so each run boards that berth's boat
+    let boatId=null;
+    const boat=() => a.snapshot.boats.find(b => b.id===boatId);
+    const boardHarbor=async () => {
+      await setup({...HARBOR.land,mode:'walking',path:[]});
+      await eventually(() => a.snapshot.boats.some(b => !b.occupant && b.id.split('~')[0]==='home-0' && b.x===boatSpots()[0].x));
+      boatId=a.snapshot.boats.find(b => !b.occupant && b.id.split('~')[0]==='home-0' && b.x===boatSpots()[0].x).id;
+      a.send({type:'board',boatId});
+      await eventually(() => a.duck()?.mode==='sailing');
+    };
+    await boardHarbor();
     await setup({...far,sailTarget:null,sailRoute:null,docking:false},1);
     assert.ok(gap(far)>200,'the boat starts well out from the shore');
     a.send({type:'disembark'});
     await eventually(() => a.duck()?.mode==='sailing' && Math.hypot(boat().x-far.x,boat().y-far.y)>40);   // sailing in, not teleported
     assert.equal(boat().occupant,a.welcome.id);
     let closest=Infinity;
-    await eventually(() => {const b=boat(); if (b.occupant) closest=Math.min(closest,gap(b)); return a.duck()?.mode==='walking';});
+    await eventually(() => {const b=boat(); if (b?.occupant) closest=Math.min(closest,gap(b)); return a.duck()?.mode==='walking';});
     assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'hops out onto the sand');
-    assert.ok(gap(boat())<=14,'the boat is moored in the water beside the sand');
-    assert.equal(boat().occupant,null);
+    await eventually(() => !boat(),'the boat you landed in drifts off (the client fades it out)');
+    assert.equal(a.snapshot.boats.filter(b => !b.occupant).length,boatSpots().length,'and every mooring still has its boat');
     assert.ok(closest<=60,`the Ducky was still aboard within two ticks of the shore (${closest.toFixed(0)} px out)`);   // snapshots go out every other 50 ms step, 19 px of sailing each
-    // already beside the sand: board again and dock, it lands with no sail at all
-    a.send({type:'board',boatId});
-    await eventually(() => a.duck()?.mode==='sailing');
+    // already beside the sand: dock and it lands with no sail at all
+    await boardHarbor();
+    await setup({...spot.approach,sailTarget:null,sailRoute:null,docking:false},1);
     a.send({type:'disembark'});
     await eventually(() => a.duck()?.mode==='walking');
+    // the window losing focus (a stop with no steering) mid-dock must not strand the Ducky in the boat
+    await boardHarbor();
+    await setup({...far,sailTarget:null,sailRoute:null,docking:false},1);
+    a.send({type:'disembark'});
+    await delay(100);
+    a.send({type:'input',x:0,y:0,stop:true});
+    await eventually(() => a.duck()?.mode==='walking');
+    assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'still hops out onto the sand');
     // steering away mid-dock cancels it and the room goes quiet instead of waiting on a landing forever
-    a.send({type:'board',boatId});
-    await eventually(() => a.duck()?.mode==='sailing');
+    await boardHarbor();
     await setup({...far,sailTarget:null,sailRoute:null,docking:false},1);
     a.send({type:'disembark'});
     a.send({type:'input',x:1,y:0});
@@ -657,6 +735,88 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
     assert.equal(a.duck().mode,'sailing','steering cancelled the landing');
     const still=a.duck(); await delay(300);
     assert.deepEqual([a.duck().x,a.duck().y],[still.x,still.y],'and the boat has stopped');
+  } finally {
+    a.close();
+    await request('/test/expire-session');
+    await request('/test/expire-resume');
+  }
+});
+
+test('every island always shows all its moored boats: a taken boat is replaced, and docking elsewhere leaves that island full (boss 6 Nov)', async () => {
+  // boss 6 Nov: "I took the boat already. Every island should have all the boats."
+  await request('/test/expire-session');
+  await request('/test/expire-resume');
+  const [first,second]=await Promise.all([signIn(9330),signIn(9331)]);
+  const [a,b]=await Promise.all([socket(first.session),socket(second.session)]);
+  const setup=(client,pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:client.welcome.id,pose,steps})});
+  const per=boatSpots().length, spot=boatSpots()[0], away={x:220,y:1960};
+  const mooredAt=(snapshot,slot) => snapshot.boats.find(boat => !boat.occupant && boat.x===boatSpots()[slot].x && boat.y===boatSpots()[slot].y);
+  const allMoored=snapshot => boatSpots().every((_,slot) => mooredAt(snapshot,slot));
+  try {
+    await eventually(() => a.snapshot?.boats?.length && b.snapshot?.boats?.length);
+    assert.ok(allMoored(a.snapshot),'home starts with every mooring full');
+    // A takes the harbor boat and sails clear of the jetty: a fresh boat appears at that berth
+    const taken=mooredAt(a.snapshot,0).id;
+    await setup(a,{...HARBOR.land,path:[]});
+    a.send({type:'board',boatId:taken});
+    await eventually(() => a.duck()?.mode==='sailing');
+    assert.equal(a.duck().boatId,taken);
+    await setup(a,{...away,sailTarget:null,sailRoute:null,docking:false},1);
+    await eventually(() => mooredAt(b.snapshot,0) && mooredAt(b.snapshot,0).id!==taken);
+    assert.ok(allMoored(b.snapshot),'after taking a boat its mooring is full again');
+    assert.equal(b.snapshot.boats.length,per+1,'the moored boats plus the one A is sailing');
+    // B takes a boat from the very same mooring right after
+    const refill=mooredAt(b.snapshot,0).id;
+    await setup(b,{...HARBOR.land,path:[]});
+    b.send({type:'board',boatId:refill});
+    await eventually(() => b.duck()?.mode==='sailing');
+    assert.equal(b.duck().boatId,refill);
+    await setup(b,{x:away.x,y:away.y+200,sailTarget:null,sailRoute:null,docking:false},1);
+    await eventually(() => allMoored(b.snapshot) && b.snapshot.boats.length===per+2);
+    // A crosses to a neighbour and docks at its jetty: every one of its moorings has a boat, islets and beaches included
+    const exit=destinationsFor('home')[0];
+    await setup(a,{...exit.dock,exitLocked:false},1);
+    await eventually(() => a.snapshot.islandId===exit.destination);
+    await setup(a,{x:HARBOR.water.x,y:HARBOR.water.y,exitLocked:false});
+    a.send({type:'disembark'});
+    await eventually(() => a.duck()?.mode==='walking');
+    await eventually(() => !a.snapshot.boats.some(boat => boat.id===taken),'the boat A arrived in drifts off');
+    assert.ok(allMoored(a.snapshot),`all ${per} of ${exit.destination}'s moorings are full`);
+    assert.equal(a.snapshot.boats.length,per,'and nothing piled up at the jetty');
+    // the count never dropped on any island, in any snapshot either player saw
+    for (const message of [...a.messages,...b.messages].filter(message => message.type==='snapshot')) assert.ok(message.boats.length>=per,`${message.islandId} showed ${message.boats.length} boats`);
+  } finally {
+    a.close();
+    b.close();
+    await request('/test/expire-session');
+    await request('/test/expire-resume');
+  }
+});
+
+test('docking beside an island that is not a jetty neighbour lands you on that island', async () => {
+  // boss 6 Nov: off isle-250, beside isle-176's beach, there was no Dock button; now the server lands you on isle-176's sand
+  await request('/test/expire-session');
+  await request('/test/expire-resume');
+  const login=await signIn(9320), a=await socket(login.session);
+  const setup=(pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose,steps})});
+  const off={islandId:'isle-250',x:9437.2,y:-8174.4}, spot=landingSpot(off);
+  const walkWorld=(await import('../rive/web/walk-world.json',{with:{type:'json'}})).default, walkNav=createNavigation({...world,...walkWorld});
+  try {
+    assert.ok(!destinationsFor('isle-250').some(d => d.destination==='isle-176'),'isle-176 is not a jetty neighbour');
+    assert.equal(spot?.islandId,'isle-176');
+    await eventually(() => a.snapshot?.boats?.length);
+    const boatId=a.snapshot.boats.find(boat => !boat.occupant && boat.id==='home-1').id;
+    await setup({...HARBOR.land,path:[]});
+    a.send({type:'board',boatId});
+    await eventually(() => a.duck()?.mode==='sailing');
+    await setup({...off,sailTarget:null,sailRoute:null,docking:false},1);
+    await eventually(() => a.snapshot?.islandId==='isle-250');
+    a.send({type:'disembark'});
+    await eventually(() => a.duck()?.mode==='walking');
+    assert.equal(a.snapshot.islandId,'isle-176','the room moves you to isle-176');
+    assert.equal(a.duck().islandId,'isle-176');
+    assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'standing on isle-176\'s sand');
+    assert.ok(walkNav.walkable(a.duck().x,a.duck().y),'on walkable ground (the walking map the room uses)');
   } finally {
     a.close();
     await request('/test/expire-session');

@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createNavigation} from '../src/pixi/navigation.js';
-import {DUCK_RADIUS, EASE_IN, EASE_OUT, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 const world = {...read('../rive/web/world.json'), ...read('../rive/web/walk-world.json')};
@@ -110,6 +110,28 @@ test('speed eases in over 0.1 s and out over 0.12 s on the keyboard, and keeps a
     const stop = released.findIndex(([v]) => v === 0);
     assert.ok(stop > 0 && stop*dt <= EASE_OUT+dt+1e-9, `stopped after ${stop*dt}`);
     assert.ok(released.slice(stop).every(([v, action]) => v === 0 && action === 0));
+  }
+});
+
+test('Shift runs at 1.7x with the same ease, never faster, eases back to a walk and never runs a route (boss 6 Nov)', () => {
+  assert.ok(Math.abs(RUN_SPEED/WALK_SPEED-1.7) < 1e-9);
+  const [x, y] = [OPEN[0]-200, OPEN[1]];
+  for (const dt of TICKS) {
+    const a = duck(x, y), travel = [];
+    for (let t = 0; t < .6; t += dt) { walkStep(a, nav, dt, t, {x:1, y:0, run:true}); travel.push(a.travel); }
+    assert.ok(travel[0] < RUN_SPEED*.7, 'eased in');
+    assert.ok(Math.abs(travel[Math.ceil(EASE_IN/dt)+1]-RUN_SPEED) < 1e-6, 'full run right after the same 0.1 s ease-in');
+    assert.ok(travel.every(v => v <= RUN_SPEED+1e-6), 'never above the run speed');
+    const walk = [];
+    for (let t = .6; t < 1; t += dt) { walkStep(a, nav, dt, t, {x:1, y:0}); walk.push(a.travel); }
+    assert.ok(walk[0] < RUN_SPEED && walk[0] > WALK_SPEED, 'let go of Shift: slows down, no snap');
+    assert.ok(Math.abs(walk.at(-1)-WALK_SPEED) < 1e-6, 'back to a walk');
+    const b = duck(x, y);
+    for (let t = 0; t < .5; t += dt) walkStep(b, nav, dt, t, {x:1, y:0, run:'yes'});
+    assert.ok(b.travel <= WALK_SPEED+1e-6, 'only a real true runs');
+    const c = duck(x, y);
+    setWalkDestination(c, nav, x+400, y);
+    for (let t = 0; t < .5; t += dt) {walkStep(c, nav, dt, t, {x:0, y:0, run:true}); assert.ok(c.travel <= WALK_SPEED+1e-6, 'a route never runs');}
   }
 });
 
