@@ -1,28 +1,36 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {ISLANDS,HARBOR,SEA_BOUNDS,SEA_ISLANDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor} from '../src/pixi/islands.js';
+import {ISLANDS,HARBOR,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor} from '../src/pixi/islands.js';
 
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',x:1800,y:430,turn:0,path:[],action:0});
 
-test('three islands have nine unique boats, reachable offshore docks and safe harbor positions', () => {
+test('300 island copies, three boats each, at least four reachable neighbours and safe harbor positions', () => {
   const boats=createBoats();
-  assert.equal(new Set(boats.map(boat => boat.id)).size,9);
+  assert.equal(ISLANDS.length,300);
+  assert.equal(new Set(ISLANDS.map(island => island.id)).size,300);
+  assert.equal(new Set(boats.map(boat => boat.id)).size,900);
   for (const island of ISLANDS) {
     assert.equal(boats.filter(boat => boat.islandId===island.id).length,3);
-    assert.equal(destinationsFor(island.id).length,2);
+    assert.ok(destinationsFor(island.id).length>=4);
   }
-  for (const position of [...boats,...destinationsFor('home').map(island=>island.dock),HARBOR.water]) assert.ok(canSail(position.x,position.y));
+  for (const position of [...boats.filter(boat => boat.islandId==='home'),...destinationsFor('home').map(island=>island.dock),HARBOR.water]) assert.ok(canSail(position.x,position.y));
   assert.equal(canSail(HARBOR.land.x,HARBOR.land.y),false);
   assert.equal(canSail(4140,1520),false);
   assert.equal(canSail(1640,2630),false);
   assert.equal(canSail(0,0),true);
   assert.equal(canSail(SEA_BOUNDS.x0-1,0),false);
-  for (const island of SEA_ISLANDS) assert.equal(canSail(island.x,island.y),false);
+  for (const island of destinationsFor('home')) assert.equal(canSail(island.x,island.y),false,'a neighbour is real land');
   assert.equal(canSail(NaN,200),false);
   assert.equal(canDock(sailor()),true);
   assert.equal(canDock({...sailor(),x:500,y:300}),false);
   assert.equal(canSail(HARBOR.pier.x+65,HARBOR.pier.y),false);
+});
+
+test('every island can be reached from home by boat', () => {
+  const seen=new Set(['home']), queue=['home'];
+  while (queue.length) for (const next of destinationsFor(queue.shift())) if (!seen.has(next.destination)) {seen.add(next.destination); queue.push(next.destination);}
+  assert.equal(seen.size,300);
 });
 
 test('sailing normalizes diagonal speed and cannot tunnel into shore or cross the bounds', () => {
@@ -52,8 +60,8 @@ test('tap sailing stops at the target, blocked destinations are rejected and man
   assert.equal(a.sailTarget,null);
 });
 
-test('all six voyages dock at the named island and do not bounce back', () => {
-  for (const island of ISLANDS) for (const destination of destinationsFor(island.id)) {
+test('voyages dock at the named island and do not bounce back', () => {
+  for (const island of ISLANDS.slice(0,40)) for (const destination of destinationsFor(island.id)) {
     const a={...sailor(island.id),...destination.dock};
     assert.equal(crossIsland(a),true);
     assert.equal(a.islandId,destination.destination);
@@ -70,6 +78,16 @@ test('all six voyages dock at the named island and do not bounce back', () => {
   }
 });
 
+test('a tapped neighbour is reached by sailing round the coasts', () => {
+  for (const destination of destinationsFor('home')) {
+    const a={...sailor(),...HARBOR.water};
+    assert.deepEqual(setSailDestination(a,destination.dock.x,destination.dock.y),[destination.dock.x,destination.dock.y]);
+    for (let i=0;i<3000 && a.sailTarget;i++) {assert.ok(canSail(a.x,a.y)); sailStep(a,.05,ZERO);}
+    assert.equal(crossIsland(a),true);
+    assert.equal(a.islandId,destination.destination);
+  }
+});
+
 test('clouds build offshore before destination islands are reached', () => {
   assert.equal(offshoreProgress(HARBOR.water),0);
   assert.ok(offshoreProgress({y:-200})>0);
@@ -78,7 +96,7 @@ test('clouds build offshore before destination islands are reached', () => {
   const destination=destinationsFor(a.islandId)[0];
   assert.ok(Math.hypot(a.x-destination.dock.x,a.y-destination.dock.y)>1800);
   assert.deepEqual(setSailDestination(a,destination.dock.x,destination.dock.y),[destination.dock.x,destination.dock.y]);
-  for (let i=0;i<200;i++) {
+  for (let i=0;i<3000;i++) {
     sailStep(a,.05,ZERO);
     if (crossIsland(a)) break;
   }

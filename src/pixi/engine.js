@@ -6,7 +6,7 @@ import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
 import {createWorldView} from './world-view.js';
-import {HARBOR, islandFor, near, SEA_BOUNDS, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
+import {HARBOR, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld} from './islands.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite} from 'pixi.js';
@@ -297,6 +297,7 @@ export class PixiIsland {
 
   switchIsland(id) {
     this.islandId=id;
+    this.archipelago?.setCurrent(id);   // the island you landed on becomes the real one, the rest are redrawn round it
     this.stopInput();
     this.clearChat();
     this.markerUntil=0;
@@ -483,7 +484,7 @@ export class PixiIsland {
     const p = screenToWorld(this.camera, point, this.width, this.height);
     if (this.room && this.player) {
       if (this.player.mode === 'sailing') {
-        const destination=offshoreProgress(this.player)>.2 && destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<400 && Math.abs(p.y-island.y)<350);
+        const destination=destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<world.width*.42 && Math.abs(p.y-island.y)<world.height*.4);   // tap a neighbour island: sail to its jetty
         if (destination) this.setDestination(destination.dock);
         else if (near(p,HARBOR.water,140) || near(p,HARBOR.land,120)) this.room.disembark();
         else this.setDestination(p);
@@ -551,7 +552,7 @@ export class PixiIsland {
     if (this.archipelago) {   // back from the globe: take the nearest wrap of home, so it never flies round the world (GPT review)
       const b=this.archipelago.bounds, sx=b.x1-b.x0, hx=world.width/2; camera.x=hx+(camera.x-hx)-sx*Math.round((camera.x-hx)/sx);
     }
-    const bounds=far?this.archipelago.bounds:this.room?SEA_BOUNDS:{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
+    const bounds=far?this.archipelago.bounds:this.room?seaBoundsFor(this.islandId):{x0:250,y0:200,x1:world.width-250,y1:world.height-200};
     camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
 
@@ -647,7 +648,7 @@ export class PixiIsland {
     }
     easeCamera(this.camera, this.target, dt, reduced);
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
-    if (this.birdEye) this.archipelago.build();
+    if (this.birdEye || (this.ready && this.frame > 40)) this.archipelago.build();   // the neighbours are in sight from the harbor, so the copies exist from the start
     this.archipelago?.update(this.camera.zoom);
     if (this.worldView) {   // 0 at the island, 1 fully zoomed out (log scale between the island fit and the whole world)
       const top = this.minZoom * .95, t = this.camera.zoom >= top ? 0 : Math.min(1, Math.log(top / this.camera.zoom) / Math.log(top / this.birdZoom()));

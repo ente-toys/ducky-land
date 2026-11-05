@@ -75,7 +75,7 @@ test('the dock button approaches a nearby discovered island pier',()=>{
   const {room,sent}=setup();
   const next=packet(1,'home','sailing');
   const target=destinationsFor('home')[0].dock;
-  Object.assign(next.players[0],{x:target.x,y:target.y+250});
+  Object.assign(next.players[0],{x:target.x,y:target.y-250});   // neighbour docks face north, so you arrive from the open water above
   room.snapshot(next);
   room.disembark();
   assert.equal(sent.at(-1).type,'destination');

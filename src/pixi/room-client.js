@@ -187,7 +187,7 @@ export class RoomClient {
 
   destination(x, y) {
     if (!this.world || !Number.isFinite(x) || !Number.isFinite(y)) return null;
-    if (this.player?.mode === 'sailing' && !canSail(x,y)) return null;
+    if (this.player?.mode === 'sailing' && !canSail(x,y,this.islandId)) return null;
     if (this.player?.mode !== 'sailing' && (x<0 || y<0 || x>=this.world.width || y>=this.world.height)) return null;
     const result = this.send({type:'destination',x,y});
     return Array.isArray(result) ? result : null;

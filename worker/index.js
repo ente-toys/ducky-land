@@ -322,7 +322,7 @@ export class IslandRoom {
         break;
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
-        if (actor.mode === 'sailing' ? !canSail(command.x,command.y)
+        if (actor.mode === 'sailing' ? !canSail(command.x,command.y,actor.islandId)
           : command.x<0 || command.y<0 || command.x>=world.width || command.y>=world.height) return;
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
