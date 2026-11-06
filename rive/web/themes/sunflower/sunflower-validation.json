@@ -1,0 +1,57 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "dropped": [],
+  "landArea": 20462862.5,
+  "homeRatio": 1.8451634355275022,
+  "zones": 15,
+  "stairs": 4,
+  "arches": 2,
+  "reachablePercent": 99.98006180839398,
+  "props": 440,
+  "flats": 460,
+  "svgFiles": 130,
+  "rasterFiles": 0,
+  "benchGaps": [
+    {
+      "id": "ten-plaza-bench-northwest",
+      "pathEdge": 291.9960147155133
+    },
+    {
+      "id": "ten-plaza-bench-northeast",
+      "pathEdge": 160.42925987916266
+    },
+    {
+      "id": "ten-plaza-bench-east",
+      "pathEdge": 74.4098038818758
+    },
+    {
+      "id": "ten-plaza-bench-south",
+      "pathEdge": 28.18958035876753
+    },
+    {
+      "id": "ten-plaza-bench-west",
+      "pathEdge": 32.433428384814675
+    },
+    {
+      "id": "ten-plaza-bench-southwest",
+      "pathEdge": 123.37529200857074
+    },
+    {
+      "id": "ten-activity-1-bench-0",
+      "pathEdge": 636.592679870229
+    },
+    {
+      "id": "close-activity-2-bench-0",
+      "pathEdge": 296.5470557859542
+    },
+    {
+      "id": "close-activity-3-bench-0",
+      "pathEdge": 319.7961822237223
+    }
+  ],
+  "lockedCentreUnchanged": true,
+  "sleepCoordinatesUnchanged": true,
+  "newPropsOffPathsAndOpenAreas": true,
+  "newProps": 12
+}

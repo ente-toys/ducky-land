@@ -4,6 +4,10 @@ import layout from './layout.json';
 import rawPaths from './paths.json';   // footpath centre lines, sampled from the painted curves in the ground tiles (boss 3 Nov: the old corner-only lines missed the bends by up to 85)
 import shapes from './walk-shapes.json';   // boss 4 Nov: the client's coast and race-lake outlines, traced from the art (walk-map overlay)
 import {inShape} from '../../rive/web/island-geometry.mjs';
+import {SLEEP_SPOTS as BASE_SLEEP_SPOTS, resolveSleepSpots, sleeperFootprint} from './sleep-spots.js';
+import homeSleepExtra from '../../rive/web/home-sleep-extra.json';
+import homeExtraProps from '../../rive/web/home-extra-props.json';
+const SLEEP_SPOTS = Object.fromEntries(Object.entries(BASE_SLEEP_SPOTS).map(([pose, spots]) => [pose, [...spots, ...(homeSleepExtra[pose] ?? [])]]));
 import {PLAZA_BENCHES, benchFootprint, benchAnchor, benchBox, benchFile} from './plaza-benches.js';
 const footpaths = rawPaths.filter(l => !(l[0][0] === 3940 && l[0][1] === 3260));   // round 4: the east jetty's stub path went with its islet
 const segDist = (x, y, a, b) => {const dx = b[0]-a[0], dy = b[1]-a[1], t = Math.max(0, Math.min(1, ((x-a[0])*dx + (y-a[1])*dy) / (dx*dx + dy*dy))); return Math.hypot(x-a[0]-t*dx, y-a[1]-t*dy);};
@@ -79,8 +83,9 @@ const ARCHES = [
   {a: [5034.08, 1638.41], b: [5469.9, 1681.99], r: 70, w: 84},
 ];
 // Where to draw a Ducky's feet: on a deck it rides up the arch, lift = R * 4t(1-t); off a bridge it is the plain world y.
-export function deckY(x, y) {
-  for (const {a, b, r, w, squash} of ARCHES) {
+// boss 6 Nov: a themed island passes its own arches (world.json `arches`, the same {a, b, r, w} format)
+export function deckY(x, y, arches = ARCHES) {
+  for (const {a, b, r, w, squash} of arches) {
     const dx = b[0] - a[0], dy = b[1] - a[1], len2 = dx * dx + dy * dy, t = ((x - a[0]) * dx + (y - a[1]) * dy) / len2;
     if (t <= 0 || t >= 1) continue;
     const side = ((x - a[0]) * dy - (y - a[1]) * dx) / Math.sqrt(len2);
@@ -145,7 +150,7 @@ export function createPlacements(world, walkable) {
     if (pathDist(x, y) < 100 || Math.hypot(x - 2820, y - 2350) < 360) return;   // off the paths, clear of the fountain
     props.push(place(asset, {id: `detail-${i}`, name: asset.name, x, y, zone}));
   });
-  return consolidate(applyLayout(props).map(sized), world, walkable);
+  return [...consolidate(applyLayout(props).map(sized), world, walkable), ...homeExtraProps.props.map(p => ({...p, anchor: {...p.anchor}}))];
 }
 
 function applyLayout(props) {
@@ -456,50 +461,11 @@ export function obstaclesFor(props, world) {
   return out;
 }
 
-// boss 5 Nov: where the 28 sleeping Duckies lie, hand-picked off the island art (no random field any more). nod leans on a
-// real tree trunk (sits just in front of its base); leaf, hammock and rock in the gardens; book by the library and the stalls;
-// chair on the beach sand facing the sea; wing and box on quiet lawn. [x, y, flip]; nod is [tree id, side nudge, flip].
-// Each spot is checked on load: never on a bridge, jetty, stair, water, path centre or a prop, the same pose >= 900 apart.
-const SLEEP_SPOTS = {
-  nod: [['tree-0', 0, false], ['tree-19', 0, true], ['tree-1', 0, false], ['tree-20', 0, true]],
-  hammock: [[900, 1640, false], [3920, 1120, true]],
-  rock: [[2150, 1130, false], [1200, 1420, true], [3950, 3260, false]],   // the island has no loose garden rocks: each sits by a bush
-  leaf: [[1820, 1500, false], [4790, 1420, true], [1480, 3110, false], [3560, 2480, true]],
-  book: [[2660, 1290, false], [1380, 1850, true], [4320, 3230, false], [2230, 2400, true]],   // library, west stall, ice-cream stall, plaza stall
-  chair: [[5150, 2875, true], [4575, 2225, true]],   // the deck chair faces left: flipped to face the sea east (beach is ~900 wide)
-  wing: [[700, 2250, true], [3080, 3260, false], [3350, 1375, true], [4980, 1850, false], [2300, 2750, true]],
-  box: [[780, 2600, false], [2000, 3150, true], [3350, 850, false], [4375, 2000, true]],
-};
+// boss 5 Nov: where the 28 sleeping Duckies lie on home (sleep-spots.js holds the spots and the checks, shared with every
+// themed island since boss 6 Nov). Home's own no-go places: its footpaths, the plaza paving ring and the museum stair.
+export {SLEEP_SPOTS, sleeperFootprint};
 export function sleepSpots(world, props, walkable, sizes) {
-  const coast = world.coast, coastDist = (x, y) => Math.min(...coast.map((a, i) => segDist(x, y, a, coast[(i + 1) % coast.length])));
-  const islet = (x, y) => world.islets.some(a => inEllipse(x, y, a[0], a[1], a[2] + 60, a[3] + 60));
-  const deck = (x, y) => world.walkways.some(b => segDist(x, y, b.a, b.b) < b.w / 2 + 90) || world.bridges.some(b => Math.abs(x - b.x) < b.w / 2 + 80 && Math.abs(y - b.y) < b.h / 2 + 80);
-  const STEPS = (x, y) => x > 2780 && x < 3060 && y > 1340 && y < 1660;   // the museum stair
-  const solid = props.filter(p => !/lily|bunting|banner|boat/i.test(p.asset || p.name || '')), building = /library|lighthouse|Market stall/i;
-  const out = [], bad = [];
-  const why = (x, y, pose, r, tree) => {
-    if (tree) return null;   // a nod leans on its trunk on purpose
-    if (!walkable(x, y) || !walkable(x - r * .8, y) || !walkable(x + r * .8, y)) return 'not ground';
-    if (islet(x, y) || deck(x, y) || STEPS(x, y)) return 'deck/bridge/stair';
-    if (pathDist(x, y) < 60 + r * .35) return 'path';
-    if (inEllipse(x, y, RING.x, RING.y, RING.rx + 60, RING.ry + 50)) return 'plaza';
-    if (coastDist(x, y) < r * .6 + 30) return 'water';
-    const hit = solid.find(p => Math.hypot(x - p.x, (y - p.y) * 1.6) < half(p) * (building.test(p.name) ? .35 : .8) + r + 12
-      || (p.y > y - 20 && p.y - y < p.height * p.scale * .9 && Math.abs(x - p.x) < half(p) + r * .6));
-    return hit ? `prop ${hit.id}` : null;
-  };
-  for (const [pose, list] of Object.entries(SLEEP_SPOTS)) for (const spot of list) {
-    const r = sizes[pose], tree = pose === 'nod' && props.find(p => p.id === spot[0]);
-    const [x, y, flip] = tree ? [tree.x + spot[1], tree.y + 14, spot[2]] : spot;   // in front of the trunk base: its back on the bark
-    const near = out.find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
-    const reason = (pose === 'nod' && !tree ? 'no tree' : why(x, y, pose, r, tree)) || (near && `near ${near.pose}`);
-    if (reason) {bad.push({pose, x, y, reason}); continue;}
-    out.push({x, y, pose, r, flip, tree: tree ? tree.id : undefined});
-  }
-  if (bad.length) console.warn('sleep spots dropped', bad);
-  out.bad = bad;
-  return out;
+  const steps = (x, y) => x > 2780 && x < 3060 && y > 1340 && y < 1660;   // the museum stair
+  return resolveSleepSpots(world, props, walkable, sizes, {spots: SLEEP_SPOTS, home: true, pathDist, steps,
+    avoid: [{x: RING.x, y: RING.y, rx: RING.rx + 60, ry: RING.ry + 50, name: 'plaza'}]});
 }
-// boss 5 Nov: a sleeper (Ducky + its prop) is solid ground for the client walk rules, like a prop. The ellipse spans the drawn
-// art's width at SLEEP_SIZE (r = half width) and a shallow ground depth; the sim pads it by 16 like every footprint.
-export const sleeperFootprint = bed => ({x: bed.x, y: bed.y - 6, rx: bed.r * .9, ry: Math.min(34, Math.max(22, bed.r * .42)), sleeper: true});

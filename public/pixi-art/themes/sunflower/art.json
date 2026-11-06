@@ -1,0 +1,10597 @@
+{
+ "width": 8000,
+ "height": 5600,
+ "sea": "#6EC9DE",
+ "ground": {
+  "tiles": [
+   {
+    "src": "ground-r0-c0.svg",
+    "x": 0,
+    "y": 0,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r0-c1.svg",
+    "x": 1334,
+    "y": 0,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r0-c2.svg",
+    "x": 2668,
+    "y": 0,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r0-c3.svg",
+    "x": 4002,
+    "y": 0,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r0-c4.svg",
+    "x": 5336,
+    "y": 0,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r0-c5.svg",
+    "x": 6670,
+    "y": 0,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r1-c0.svg",
+    "x": 0,
+    "y": 1400,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r1-c1.svg",
+    "x": 1334,
+    "y": 1400,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r1-c2.svg",
+    "x": 2668,
+    "y": 1400,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r1-c3.svg",
+    "x": 4002,
+    "y": 1400,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r1-c4.svg",
+    "x": 5336,
+    "y": 1400,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r1-c5.svg",
+    "x": 6670,
+    "y": 1400,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r2-c0.svg",
+    "x": 0,
+    "y": 2800,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r2-c1.svg",
+    "x": 1334,
+    "y": 2800,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r2-c2.svg",
+    "x": 2668,
+    "y": 2800,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r2-c3.svg",
+    "x": 4002,
+    "y": 2800,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r2-c4.svg",
+    "x": 5336,
+    "y": 2800,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r2-c5.svg",
+    "x": 6670,
+    "y": 2800,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r3-c0.svg",
+    "x": 0,
+    "y": 4200,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r3-c1.svg",
+    "x": 1334,
+    "y": 4200,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r3-c2.svg",
+    "x": 2668,
+    "y": 4200,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r3-c3.svg",
+    "x": 4002,
+    "y": 4200,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r3-c4.svg",
+    "x": 5336,
+    "y": 4200,
+    "width": 1334,
+    "height": 1400
+   },
+   {
+    "src": "ground-r3-c5.svg",
+    "x": 6670,
+    "y": 4200,
+    "width": 1334,
+    "height": 1400
+   }
+  ]
+ },
+ "decks": [
+  {
+   "src": "jetty-sw.svg",
+   "x": 1374.1,
+   "y": 4292.4,
+   "width": 225.3,
+   "height": 703.1
+  },
+  {
+   "src": "jetty-w.svg",
+   "x": 340,
+   "y": 2494.3,
+   "width": 410,
+   "height": 230
+  },
+  {
+   "src": "jetty-e.svg",
+   "x": 7000,
+   "y": 1739.5,
+   "width": 600,
+   "height": 230
+  },
+  {
+   "src": "jetty-s.svg",
+   "x": 3538,
+   "y": 4373.3,
+   "width": 184,
+   "height": 552.3
+  },
+  {
+   "src": "bridge-nw.svg",
+   "x": 1261.5,
+   "y": 1053.7,
+   "width": 490.3,
+   "height": 665.8
+  },
+  {
+   "src": "bridge-se.svg",
+   "x": 5103.5,
+   "y": 3873.2,
+   "width": 407.4,
+   "height": 726.5
+  },
+  {
+   "id": "centre-back",
+   "src": "centre/back.svg",
+   "width": 1502.8,
+   "height": 1170,
+   "x": 3128.6,
+   "y": 2031.95,
+   "topLeft": true
+  }
+ ],
+ "flats": [
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1607,
+   "y": 1830,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1498,
+   "y": 1492,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 7268,
+   "y": 845,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 4072,
+   "y": 1096,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5223,
+   "y": 3283,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 2060,
+   "y": 3896,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5112,
+   "y": 2170,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1923,
+   "y": 3943,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2088,
+   "y": 3112,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 6443,
+   "y": 3613,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6353,
+   "y": 4874,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 800,
+   "y": 3718,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 1349,
+   "y": 1061,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6587,
+   "y": 3066,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1680,
+   "y": 3923,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 6200,
+   "y": 2083,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6105,
+   "y": 955,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2382,
+   "y": 2508,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1561,
+   "y": 2779,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 3635,
+   "y": 1500,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6616,
+   "y": 3281,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 2996,
+   "y": 3116,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 7423,
+   "y": 584,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5905,
+   "y": 3395,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2472,
+   "y": 4157,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 1493,
+   "y": 762,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2146,
+   "y": 2063,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5892,
+   "y": 4786,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 7240,
+   "y": 769,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 1067,
+   "y": 1263,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2997,
+   "y": 4059,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 2734,
+   "y": 1247,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 5795,
+   "y": 3364,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1906,
+   "y": 3254,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 905,
+   "y": 1030,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 6150,
+   "y": 4533,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2750,
+   "y": 4497,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 3334,
+   "y": 3611,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1117,
+   "y": 3300,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 7391,
+   "y": 687,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 4199,
+   "y": 4369,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5090,
+   "y": 3247,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 4862,
+   "y": 998,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 7058,
+   "y": 2140,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 694,
+   "y": 3522,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 5007,
+   "y": 2310,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2099,
+   "y": 2189,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2265,
+   "y": 1655,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 6638,
+   "y": 2764,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 5870,
+   "y": 4903,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1635,
+   "y": 3629,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5960,
+   "y": 4420,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 3539,
+   "y": 1080,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2960,
+   "y": 3950,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 1138,
+   "y": 2018,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6029,
+   "y": 3660,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5376,
+   "y": 3843,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2715,
+   "y": 4547,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 4202,
+   "y": 4364,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 810,
+   "y": 2812,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 7143,
+   "y": 1678,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5511,
+   "y": 2298,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 3178,
+   "y": 1134,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6110,
+   "y": 4639,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 5343,
+   "y": 3850,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5133,
+   "y": 832,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 5347,
+   "y": 1947,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2895,
+   "y": 2988,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 4896,
+   "y": 3913,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2366,
+   "y": 3520,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4892,
+   "y": 2973,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 968,
+   "y": 3978,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4185,
+   "y": 4241,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1572,
+   "y": 3530,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6275,
+   "y": 4620,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 3030,
+   "y": 4477,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1581,
+   "y": 1605,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2617,
+   "y": 3532,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1554,
+   "y": 3616,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5110,
+   "y": 3347,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1909,
+   "y": 3102,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 6899,
+   "y": 1624,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1146,
+   "y": 3410,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2533,
+   "y": 4090,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5757,
+   "y": 4975,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6160,
+   "y": 2078,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1412,
+   "y": 3327,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5778,
+   "y": 2205,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 6026,
+   "y": 930,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 963,
+   "y": 2290,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6256,
+   "y": 3570,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 792,
+   "y": 3615,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 3972,
+   "y": 4405,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 893,
+   "y": 3620,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 5721,
+   "y": 4383,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6202,
+   "y": 4516,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5055,
+   "y": 4800,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5436,
+   "y": 3540,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1930,
+   "y": 1378,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 4964,
+   "y": 654,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 1617,
+   "y": 4073,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 1212,
+   "y": 871,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 3399,
+   "y": 3516,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 1439,
+   "y": 1176,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2131,
+   "y": 3156,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5522,
+   "y": 1877,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 6372,
+   "y": 1137,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 2538,
+   "y": 3497,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2934,
+   "y": 3946,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4578,
+   "y": 3973,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5084,
+   "y": 659,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5715,
+   "y": 954,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 4087,
+   "y": 881,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1576,
+   "y": 1694,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 3769,
+   "y": 1194,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1246,
+   "y": 676,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2107,
+   "y": 3944,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 4859,
+   "y": 939,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1097,
+   "y": 3139,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1018,
+   "y": 2007,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 4818,
+   "y": 3671,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1095,
+   "y": 3987,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 7062,
+   "y": 2358,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 4073,
+   "y": 1209,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2040,
+   "y": 1978,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6026,
+   "y": 2676,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 4715,
+   "y": 718,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5991,
+   "y": 858,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2316,
+   "y": 3680,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 5701,
+   "y": 4331,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2265,
+   "y": 4359,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6625,
+   "y": 3123,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 859,
+   "y": 3539,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5268,
+   "y": 4844,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1116,
+   "y": 3486,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5132,
+   "y": 4667,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 6171,
+   "y": 2389,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1526,
+   "y": 2984,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 6395,
+   "y": 3331,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2017,
+   "y": 3368,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1792,
+   "y": 1698,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 6298,
+   "y": 1186,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6457,
+   "y": 911,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5153,
+   "y": 781,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5292,
+   "y": 4825,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 7312,
+   "y": 692,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1571,
+   "y": 3273,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1517,
+   "y": 3182,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 6801,
+   "y": 1946,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1639,
+   "y": 3889,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2407,
+   "y": 4607,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 1265,
+   "y": 1646,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 3266,
+   "y": 4230,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 4332,
+   "y": 3962,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 1739,
+   "y": 3817,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 5907,
+   "y": 2276,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6124,
+   "y": 2066,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1509,
+   "y": 3877,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 6446,
+   "y": 3558,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6352,
+   "y": 1134,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 3188,
+   "y": 4630,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 4114,
+   "y": 996,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 3880,
+   "y": 1805,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 4208,
+   "y": 1505,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1966,
+   "y": 4364,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 1133,
+   "y": 952,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 6113,
+   "y": 4936,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 2264,
+   "y": 3436,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1863,
+   "y": 3878,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 1911,
+   "y": 3970,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5719,
+   "y": 4875,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 2986,
+   "y": 1192,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 1253,
+   "y": 1146,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1086,
+   "y": 2009,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6237,
+   "y": 1027,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2260,
+   "y": 2249,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5459,
+   "y": 4861,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6756,
+   "y": 2474,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2001,
+   "y": 3171,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6176,
+   "y": 4991,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6679,
+   "y": 2698,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2980,
+   "y": 4557,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 4944,
+   "y": 3742,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6514,
+   "y": 1217,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 3797,
+   "y": 1090,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6250,
+   "y": 3399,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 818,
+   "y": 3035,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 4078,
+   "y": 921,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 4383,
+   "y": 4279,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5119,
+   "y": 3311,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1361,
+   "y": 3475,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 1111,
+   "y": 2863,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5598,
+   "y": 4412,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4525,
+   "y": 1996,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1032,
+   "y": 958,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 4767,
+   "y": 3468,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6060,
+   "y": 4708,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 723,
+   "y": 3620,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 891,
+   "y": 3328,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5067,
+   "y": 4799,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2800,
+   "y": 4040,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 4125,
+   "y": 4068,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2323,
+   "y": 3784,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 3234,
+   "y": 2028,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6546,
+   "y": 3433,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 4676,
+   "y": 3686,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 1021,
+   "y": 774,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 1016,
+   "y": 844,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 6450,
+   "y": 1035,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1286,
+   "y": 1590,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 2070,
+   "y": 1334,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6731,
+   "y": 1658,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 1163,
+   "y": 977,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6850,
+   "y": 2423,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 983,
+   "y": 2119,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2014,
+   "y": 3292,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 927,
+   "y": 2451,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5129,
+   "y": 2120,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 6165,
+   "y": 4661,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 734,
+   "y": 3467,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4725,
+   "y": 3480,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 6358,
+   "y": 1853,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 7056,
+   "y": 2311,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 7118,
+   "y": 1518,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4472,
+   "y": 4038,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 1469,
+   "y": 1553,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2748,
+   "y": 3959,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1677,
+   "y": 3172,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5697,
+   "y": 4966,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 1001,
+   "y": 3960,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 1322,
+   "y": 1568,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 7216,
+   "y": 1329,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2275,
+   "y": 2217,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 5230,
+   "y": 769,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 2796,
+   "y": 4742,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 7185,
+   "y": 1397,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1443,
+   "y": 3931,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5853,
+   "y": 1023,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 6634,
+   "y": 955,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1051,
+   "y": 3157,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2988,
+   "y": 3730,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6163,
+   "y": 3677,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1326,
+   "y": 3378,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 5422,
+   "y": 4959,
+   "width": 33,
+   "height": 15,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6435,
+   "y": 3469,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 6608,
+   "y": 3188,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6073,
+   "y": 4353,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2357,
+   "y": 3762,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 7269,
+   "y": 1122,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5719,
+   "y": 4530,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 1094,
+   "y": 1187,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1492,
+   "y": 3264,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5745,
+   "y": 4361,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1166,
+   "y": 3175,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 6186,
+   "y": 3345,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 4569,
+   "y": 931,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 673,
+   "y": 2831,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5326,
+   "y": 3309,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2678,
+   "y": 3534,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5256,
+   "y": 3719,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5907,
+   "y": 1905,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 4089,
+   "y": 1134,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 3727,
+   "y": 1352,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5515,
+   "y": 4507,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 998,
+   "y": 2241,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 7046,
+   "y": 2388,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 5869,
+   "y": 837,
+   "width": 33,
+   "height": 21,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5112,
+   "y": 2024,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 7224,
+   "y": 665,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 5388,
+   "y": 1907,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6315,
+   "y": 1218,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 3035,
+   "y": 4606,
+   "width": 51,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 1325,
+   "y": 1642,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6178,
+   "y": 2015,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 4083,
+   "y": 4245,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6464,
+   "y": 1932,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 6423,
+   "y": 3628,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2905,
+   "y": 4120,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2789,
+   "y": 4406,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6202,
+   "y": 3448,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 5080,
+   "y": 2211,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 2180,
+   "y": 3772,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 2915,
+   "y": 4385,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 5906,
+   "y": 4447,
+   "width": 24,
+   "height": 12,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 3088,
+   "y": 3311,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 5622,
+   "y": 1886,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 2092,
+   "y": 1402,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 752,
+   "y": 3197,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1790,
+   "y": 1790,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 2036,
+   "y": 4569,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 4948,
+   "y": 786,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4419,
+   "y": 4156,
+   "width": 51,
+   "height": 33,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1295,
+   "y": 3095,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 2161,
+   "y": 1624,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5537,
+   "y": 940,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 6352,
+   "y": 4766,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/sand-speck-2.svg",
+   "x": 2739,
+   "y": 1230,
+   "width": 33,
+   "height": 15,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2851,
+   "y": 4022,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2670,
+   "y": 3404,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1855,
+   "y": 1906,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 3420,
+   "y": 4366,
+   "width": 33,
+   "height": 24,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 3795,
+   "y": 1353,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 3995,
+   "y": 1517,
+   "width": 84,
+   "height": 36,
+   "flip": true
+  },
+  {
+   "src": "decals/sand-speck-1.svg",
+   "x": 3240,
+   "y": 1139,
+   "width": 24,
+   "height": 12,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 5976,
+   "y": 2662,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6922,
+   "y": 2309,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 1600,
+   "y": 3486,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-3.svg",
+   "x": 3059,
+   "y": 4421,
+   "width": 33,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-3.svg",
+   "x": 4355,
+   "y": 3479,
+   "width": 84,
+   "height": 36,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-1.svg",
+   "x": 3042,
+   "y": 4625,
+   "width": 33,
+   "height": 21,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6027,
+   "y": 1950,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 2283,
+   "y": 3286,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 6234,
+   "y": 1176,
+   "width": 39,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2677,
+   "y": 1453,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/pebble-2.svg",
+   "x": 5722,
+   "y": 4454,
+   "width": 51,
+   "height": 24,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4897,
+   "y": 3751,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 7316,
+   "y": 603,
+   "width": 66,
+   "height": 39,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 7068,
+   "y": 1354,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-2.svg",
+   "x": 920,
+   "y": 2913,
+   "width": 39,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 4073,
+   "y": 1116,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "decals/grass-tuft-2.svg",
+   "x": 4417,
+   "y": 1093,
+   "width": 51,
+   "height": 33,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 1601,
+   "y": 3457,
+   "width": 30,
+   "height": 27,
+   "flip": true
+  },
+  {
+   "src": "decals/flower-dot-1.svg",
+   "x": 3395,
+   "y": 3565,
+   "width": 30,
+   "height": 27,
+   "flip": false
+  },
+  {
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5127,
+   "y": 1991,
+   "width": 66,
+   "height": 39,
+   "flip": true
+  },
+  {
+   "src": "reuse/beach--starfish-orange.svg",
+   "x": 6620,
+   "y": 3552,
+   "width": 50,
+   "height": 48,
+   "flip": false
+  },
+  {
+   "src": "reuse/beach--starfish-orange.svg",
+   "x": 5670,
+   "y": 3829.5,
+   "width": 50,
+   "height": 48,
+   "flip": false
+  },
+  {
+   "src": "reuse/beach--shell-scallop.svg",
+   "x": 6120,
+   "y": 3751.8,
+   "width": 50,
+   "height": 40,
+   "flip": true
+  },
+  {
+   "src": "reuse/lily-pad-flower.svg",
+   "x": 1430,
+   "y": 2197.8,
+   "width": 91,
+   "height": 44,
+   "flip": false
+  },
+  {
+   "src": "reuse/lily-pad-small.svg",
+   "x": 1700,
+   "y": 2297.7,
+   "width": 57,
+   "height": 29,
+   "flip": false
+  },
+  {
+   "src": "reuse/lily-pad-small.svg",
+   "x": 1620,
+   "y": 2153.4,
+   "width": 57,
+   "height": 29,
+   "flip": false
+  },
+  {
+   "id": "close-plaza-courses",
+   "src": "detail/close-plaza-courses.svg",
+   "x": 2738,
+   "y": 1930,
+   "width": 2284,
+   "height": 1360,
+   "topLeft": true
+  },
+  {
+   "id": "centre-decal-floor",
+   "src": "centre/decal-floor.svg",
+   "width": 1151.8,
+   "height": 885.3,
+   "x": 3304.1,
+   "y": 2267.25,
+   "topLeft": true
+  },
+  {
+   "id": "close-sunflower-rosette",
+   "src": "detail/close-sunflower-inlay.svg",
+   "x": 3300,
+   "y": 2265,
+   "width": 1160,
+   "height": 890,
+   "topLeft": true
+  },
+  {
+   "id": "ten-lawn-detail-0",
+   "src": "decals/flower-dot-1.svg",
+   "x": 1322.43,
+   "y": 3068.86,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-1",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 840.03,
+   "y": 3075.56,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-2",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1176.33,
+   "y": 3064.66,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-3",
+   "src": "decals/flower-dot-3.svg",
+   "x": 1281.43,
+   "y": 2791.3,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-4",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 766.94,
+   "y": 3067.93,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-5",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1211.18,
+   "y": 2716.16,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-6",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1282.18,
+   "y": 2963.95,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-7",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1333.65,
+   "y": 3045.09,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-8",
+   "src": "decals/flower-dot-1.svg",
+   "x": 948.98,
+   "y": 3063.09,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-9",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1168.61,
+   "y": 2819.18,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-10",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1317.29,
+   "y": 3078.64,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-11",
+   "src": "decals/flower-dot-3.svg",
+   "x": 1069.11,
+   "y": 2715.07,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-12",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1176.49,
+   "y": 2937.59,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-13",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1382.95,
+   "y": 2790.39,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-14",
+   "src": "decals/flower-dot-2.svg",
+   "x": 1477.93,
+   "y": 2783.54,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-15",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1341.45,
+   "y": 3277.19,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-16",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1449.64,
+   "y": 2913.87,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-17",
+   "src": "decals/flower-dot-1.svg",
+   "x": 1392.64,
+   "y": 3170.7,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-18",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1321.37,
+   "y": 2866.1,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-19",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1162.56,
+   "y": 2887.16,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-20",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 757.36,
+   "y": 2969.06,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-21",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1343.88,
+   "y": 2730.29,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-22",
+   "src": "decals/flower-dot-3.svg",
+   "x": 759.51,
+   "y": 3035.95,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-23",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1189.23,
+   "y": 2799.99,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-24",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 1324.28,
+   "y": 3112.27,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-25",
+   "src": "decals/flower-dot-2.svg",
+   "x": 1389.19,
+   "y": 3233.22,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-26",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1230.33,
+   "y": 2736.49,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-27",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 840.44,
+   "y": 3074.26,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-28",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 992.56,
+   "y": 2922.59,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-29",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 899.45,
+   "y": 2821.53,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-30",
+   "src": "decals/flower-dot-1.svg",
+   "x": 1323.88,
+   "y": 3076.21,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-31",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 952.94,
+   "y": 2957.79,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-32",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 1429.38,
+   "y": 3226.45,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-33",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 1067.41,
+   "y": 3010.26,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-34",
+   "src": "decals/flower-dot-1.svg",
+   "x": 5612.9,
+   "y": 1920.88,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-35",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5284.74,
+   "y": 2057.86,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-36",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5572.46,
+   "y": 2070.84,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-37",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5995.72,
+   "y": 2167.63,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-38",
+   "src": "decals/flower-dot-3.svg",
+   "x": 5912.9,
+   "y": 2167.01,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-39",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5300.77,
+   "y": 2070.52,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-40",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5974.32,
+   "y": 2129.42,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-41",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5504.87,
+   "y": 2006.9,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-42",
+   "src": "decals/flower-dot-2.svg",
+   "x": 5268.67,
+   "y": 2043.55,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-43",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5778.75,
+   "y": 1896.44,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-44",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6012.95,
+   "y": 2152.02,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-45",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5460.55,
+   "y": 2191.42,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-46",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6104.49,
+   "y": 2033.12,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-47",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5862.57,
+   "y": 1928.13,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-48",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5768.54,
+   "y": 2281.06,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-49",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5592.14,
+   "y": 1838.75,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-50",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5445.25,
+   "y": 2204.55,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-51",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5521.16,
+   "y": 2033.77,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-52",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5844.05,
+   "y": 2042.12,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-53",
+   "src": "decals/flower-dot-2.svg",
+   "x": 5847.04,
+   "y": 2136.86,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-54",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 6085.93,
+   "y": 1975.02,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-55",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5970.11,
+   "y": 2259.53,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-56",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5623.26,
+   "y": 2180.66,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-57",
+   "src": "decals/flower-dot-1.svg",
+   "x": 5699.02,
+   "y": 2108.62,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-58",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5267.46,
+   "y": 2186.01,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-59",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5799.4,
+   "y": 2149.77,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-60",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5657.78,
+   "y": 2280.6,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-61",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6046.62,
+   "y": 1877.2,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-62",
+   "src": "decals/flower-dot-3.svg",
+   "x": 5794.23,
+   "y": 2183.97,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-63",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5823.95,
+   "y": 2112.31,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-64",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5365.42,
+   "y": 1914.02,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-65",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5199,
+   "y": 2076.67,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-66",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 6163.02,
+   "y": 2128.67,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-67",
+   "src": "decals/flower-dot-2.svg",
+   "x": 5861.52,
+   "y": 2087.94,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-68",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 6171.53,
+   "y": 2028.69,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-69",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5549.88,
+   "y": 1957.83,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-70",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 6056.16,
+   "y": 2188.29,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-71",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5302.18,
+   "y": 2023.87,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-72",
+   "src": "decals/flower-dot-1.svg",
+   "x": 5782.41,
+   "y": 1919.36,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-73",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5848.87,
+   "y": 1948.15,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-74",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 5422.66,
+   "y": 2262.17,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-75",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5785.52,
+   "y": 1979.05,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-76",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 5915.38,
+   "y": 1972.77,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-77",
+   "src": "decals/flower-dot-3.svg",
+   "x": 6178.44,
+   "y": 2057.55,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-78",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 5800.48,
+   "y": 1822.61,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-79",
+   "src": "decals/flower-dot-1.svg",
+   "x": 2613.77,
+   "y": 4593.45,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-80",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2400.98,
+   "y": 4191.9,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-81",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2043.59,
+   "y": 4279.39,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-82",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2269.95,
+   "y": 4513.31,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-83",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2492.75,
+   "y": 4348.93,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-84",
+   "src": "decals/flower-dot-3.svg",
+   "x": 2030.77,
+   "y": 4401.21,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-85",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2336.86,
+   "y": 4400.72,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-86",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2055.27,
+   "y": 4356.73,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-87",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2657.32,
+   "y": 4253.5,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-88",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2414.42,
+   "y": 4233.11,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-89",
+   "src": "decals/flower-dot-2.svg",
+   "x": 2417.76,
+   "y": 4444.18,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-90",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2283.19,
+   "y": 4534.43,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-91",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2704.67,
+   "y": 4369.02,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-92",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2178.13,
+   "y": 4261.04,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-93",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2106.81,
+   "y": 4312.66,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-94",
+   "src": "decals/flower-dot-1.svg",
+   "x": 2717.14,
+   "y": 4281.21,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-95",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2337.65,
+   "y": 4403.21,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-96",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2100.77,
+   "y": 4531.46,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-97",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2035.37,
+   "y": 4337.05,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-98",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2104.42,
+   "y": 4291.87,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-99",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2240.76,
+   "y": 4244.01,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-100",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2461.84,
+   "y": 4350.27,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-101",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2096.91,
+   "y": 4420.32,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-102",
+   "src": "decals/flower-dot-2.svg",
+   "x": 2800.28,
+   "y": 4533.01,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-103",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2560.68,
+   "y": 4212.86,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-104",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2378.72,
+   "y": 4593.44,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-105",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2043.77,
+   "y": 4395.79,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-106",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2287.17,
+   "y": 4212.27,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-107",
+   "src": "decals/flower-dot-1.svg",
+   "x": 2640.22,
+   "y": 4494.98,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-108",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2337.43,
+   "y": 4541.35,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-109",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2284.72,
+   "y": 4318.81,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-110",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2174.12,
+   "y": 4490.98,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-111",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2459.55,
+   "y": 4605.53,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-112",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2415.54,
+   "y": 4518.32,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-113",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2335.25,
+   "y": 4671.65,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-114",
+   "src": "decals/flower-dot-2.svg",
+   "x": 2755.67,
+   "y": 4382.05,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-115",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2541.83,
+   "y": 4298.51,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-116",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2308.06,
+   "y": 4687.3,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-117",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2745.79,
+   "y": 4332.78,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-118",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2113.09,
+   "y": 4491.13,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-119",
+   "src": "decals/flower-dot-1.svg",
+   "x": 2811.18,
+   "y": 4304.14,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "ten-lawn-detail-120",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2138.67,
+   "y": 4388.63,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-121",
+   "src": "decals/grass-tuft-3.svg",
+   "x": 2236.04,
+   "y": 4557.86,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-122",
+   "src": "decals/grass-tuft-1.svg",
+   "x": 2466.79,
+   "y": 4262.4,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-123",
+   "src": "decals/grass-tuft-2.svg",
+   "x": 2658.87,
+   "y": 4455.85,
+   "width": 30,
+   "height": 22
+  },
+  {
+   "id": "ten-lawn-detail-124",
+   "src": "decals/flower-dot-3.svg",
+   "x": 2167.83,
+   "y": 4449.65,
+   "width": 25,
+   "height": 18
+  },
+  {
+   "id": "close-market-inlays",
+   "src": "detail/close-market-inlays.svg",
+   "x": 4960,
+   "y": 2700,
+   "width": 1600,
+   "height": 360,
+   "topLeft": true
+  },
+  {
+   "id": "close-farm-inlays",
+   "src": "detail/close-farm-inlays.svg",
+   "x": 3990,
+   "y": 1570,
+   "width": 670,
+   "height": 390,
+   "topLeft": true
+  }
+ ],
+ "props": [
+  {
+   "id": "red-barn-1",
+   "name": "Red barn",
+   "src": "detail/barn.svg",
+   "x": 4870,
+   "y": 1309.8,
+   "width": 442,
+   "height": 453,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 1.236,
+   "flip": false
+  },
+  {
+   "id": "windmill-2",
+   "name": "Windmill",
+   "src": "detail/windmill.svg",
+   "x": 5820,
+   "y": 1376.4,
+   "width": 360,
+   "height": 531,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 1.384,
+   "flip": false
+  },
+  {
+   "id": "hay-bale-3",
+   "name": "Hay bale",
+   "src": "detail/hay-round.svg",
+   "x": 5280,
+   "y": 1398.6,
+   "width": 460,
+   "height": 399,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.376,
+   "flip": false
+  },
+  {
+   "id": "hay-stack-4",
+   "name": "Hay stack",
+   "src": "detail/hay-stack.svg",
+   "x": 5480,
+   "y": 1454.1,
+   "width": 473,
+   "height": 413,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.4,
+   "flip": true
+  },
+  {
+   "id": "seed-barrel-5",
+   "name": "Seed barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": 4410,
+   "y": 1354.2,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.367,
+   "flip": false
+  },
+  {
+   "id": "seed-cart-6",
+   "name": "Seed cart",
+   "src": "detail/seed-cart.svg",
+   "x": 4645,
+   "y": 1454.1,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.381,
+   "flip": false
+  },
+  {
+   "id": "hay-bale-7",
+   "name": "Hay bale",
+   "src": "detail/hay-round.svg",
+   "x": 6145,
+   "y": 1454.1,
+   "width": 460,
+   "height": 399,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.351,
+   "flip": true
+  },
+  {
+   "id": "fence-8",
+   "name": "Fence",
+   "src": "detail/fence.svg",
+   "x": 6290,
+   "y": 1459.6,
+   "width": 495,
+   "height": 291,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.95
+   },
+   "scale": 0.37,
+   "flip": false
+  },
+  {
+   "id": "fence-9",
+   "name": "Fence",
+   "src": "detail/fence.svg",
+   "x": 5982.5,
+   "y": 1712.2,
+   "width": 495,
+   "height": 291,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.95
+   },
+   "scale": 0.37,
+   "flip": false
+  },
+  {
+   "id": "fence-10",
+   "name": "Fence",
+   "src": "detail/fence.svg",
+   "x": 5807.5,
+   "y": 1739.9,
+   "width": 495,
+   "height": 291,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.95
+   },
+   "scale": 0.37,
+   "flip": false
+  },
+  {
+   "id": "stall-honey",
+   "name": "Honey stall",
+   "src": "detail/stall-honey.svg",
+   "x": 5940,
+   "y": 2810,
+   "width": 467,
+   "height": 419,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.788,
+   "flip": false
+  },
+  {
+   "id": "stall-flowers",
+   "name": "Flower stall",
+   "src": "detail/stall-flowers.svg",
+   "x": 6330,
+   "y": 2810,
+   "width": 467,
+   "height": 419,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.788,
+   "flip": false
+  },
+  {
+   "id": "seed-barrel-13",
+   "name": "Seed barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": 6630,
+   "y": 2790,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.367,
+   "flip": true
+  },
+  {
+   "id": "seed-cart-14",
+   "name": "Seed cart",
+   "src": "detail/seed-cart.svg",
+   "x": 6250,
+   "y": 2010,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.436,
+   "flip": false
+  },
+  {
+   "id": "sunflower-planter-15",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 4890,
+   "y": 2740,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.404,
+   "flip": false
+  },
+  {
+   "id": "sunflower-banner-16",
+   "name": "Sunflower banner",
+   "src": "detail/banner.svg",
+   "x": 3052.7,
+   "y": 2207.4,
+   "width": 282,
+   "height": 470,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.98
+   },
+   "scale": 0.596,
+   "flip": false
+  },
+  {
+   "id": "sunflower-banner-17",
+   "name": "Sunflower banner",
+   "src": "detail/banner.svg",
+   "x": 4707.3,
+   "y": 2207.4,
+   "width": 282,
+   "height": 470,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.98
+   },
+   "scale": 0.596,
+   "flip": true
+  },
+  {
+   "id": "sunflower-banner-18",
+   "name": "Sunflower banner",
+   "src": "detail/banner.svg",
+   "x": 2944.7,
+   "y": 2920.5,
+   "width": 282,
+   "height": 470,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.98
+   },
+   "scale": 0.596,
+   "flip": false
+  },
+  {
+   "id": "sunflower-banner-19",
+   "name": "Sunflower banner",
+   "src": "detail/banner.svg",
+   "x": 4858.8,
+   "y": 2872.2,
+   "width": 282,
+   "height": 470,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.98
+   },
+   "scale": 0.596,
+   "flip": true
+  },
+  {
+   "id": "lamp-20",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 2908.8,
+   "y": 2322,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-21",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 4875.8,
+   "y": 2351.8,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-22",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 3419.3,
+   "y": 2036.6,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-23",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 4340.7,
+   "y": 2036.6,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-24",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 3440,
+   "y": 3240,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-25",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 4320,
+   "y": 3240,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-26",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 2827.1,
+   "y": 2771.8,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "lamp-27",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 4953.4,
+   "y": 2718.1,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "sunflower-planter-28",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 3694.2,
+   "y": 3216.1,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "sunflower-planter-29",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 4010.4,
+   "y": 3220.9,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "sunflower-planter-30",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 3991.8,
+   "y": 1994.9,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "bench-38",
+   "name": "Bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 2010,
+   "y": 2175.6,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.18,
+   "flip": false
+  },
+  {
+   "id": "pond-reeds-39",
+   "name": "Pond reeds",
+   "src": "reuse/cattails.svg",
+   "x": 1190,
+   "y": 2142.3,
+   "width": 442,
+   "height": 791,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.984
+   },
+   "scale": 0.144,
+   "flip": false
+  },
+  {
+   "id": "pond-reeds-40",
+   "name": "Pond reeds",
+   "src": "reuse/reeds.svg",
+   "x": 1930,
+   "y": 2109,
+   "width": 418,
+   "height": 718,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.984
+   },
+   "scale": 0.144,
+   "flip": false
+  },
+  {
+   "id": "pond-reeds-41",
+   "name": "Pond reeds",
+   "src": "reuse/reeds.svg",
+   "x": 1350,
+   "y": 2386.5,
+   "width": 418,
+   "height": 718,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.984
+   },
+   "scale": 0.144,
+   "flip": false
+  },
+  {
+   "id": "picnic-42",
+   "name": "Picnic",
+   "src": "detail/picnic.svg",
+   "x": 1300,
+   "y": 3685.2,
+   "width": 517,
+   "height": 337,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.475,
+   "flip": false
+  },
+  {
+   "id": "garden-arch-43",
+   "name": "Garden arch",
+   "src": "detail/arch.svg",
+   "x": 1850,
+   "y": 3418.8,
+   "width": 472,
+   "height": 461,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.716,
+   "flip": false
+  },
+  {
+   "id": "bench-44",
+   "name": "Bench",
+   "src": "reuse/street--bench-wood-back.svg",
+   "x": 1180,
+   "y": 3420,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.18,
+   "flip": false
+  },
+  {
+   "id": "stump-45",
+   "name": "Stump",
+   "src": "reuse/nature--stump.svg",
+   "x": 1770,
+   "y": 3829.5,
+   "width": 376,
+   "height": 356,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.24,
+   "flip": false
+  },
+  {
+   "id": "stump-46",
+   "name": "Stump",
+   "src": "reuse/nature--stump.svg",
+   "x": 1880,
+   "y": 3885,
+   "width": 376,
+   "height": 356,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.2,
+   "flip": false
+  },
+  {
+   "id": "sunflower-banner-47",
+   "name": "Sunflower banner",
+   "src": "detail/banner.svg",
+   "x": 690,
+   "y": 2900,
+   "width": 282,
+   "height": 470,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.553,
+   "flip": false
+  },
+  {
+   "id": "fence-48",
+   "name": "Fence",
+   "src": "detail/fence.svg",
+   "x": 1125,
+   "y": 3929.4,
+   "width": 495,
+   "height": 291,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.95
+   },
+   "scale": 0.37,
+   "flip": false
+  },
+  {
+   "id": "beach-umbrella-49",
+   "name": "Beach umbrella",
+   "src": "reuse/umbrella-garden.svg",
+   "x": 5950,
+   "y": 3396.6,
+   "width": 1592,
+   "height": 1693,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.187,
+   "flip": false
+  },
+  {
+   "id": "sandcastle-50",
+   "name": "Sandcastle",
+   "src": "reuse/sandcastle-turrets.svg",
+   "x": 5795,
+   "y": 3552,
+   "width": 1152,
+   "height": 1113,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.13,
+   "flip": false
+  },
+  {
+   "id": "coast-rock-51",
+   "name": "Coast rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6550,
+   "y": 3185.7,
+   "width": 600,
+   "height": 373,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.156,
+   "flip": false
+  },
+  {
+   "id": "coast-rock-52",
+   "name": "Coast rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6680,
+   "y": 3274.5,
+   "width": 600,
+   "height": 373,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.12,
+   "flip": false
+  },
+  {
+   "id": "coast-rock-53",
+   "name": "Coast rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6470,
+   "y": 3685.2,
+   "width": 600,
+   "height": 373,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.132,
+   "flip": false
+  },
+  {
+   "id": "sunflower-arch-54",
+   "name": "Sunflower arch",
+   "src": "detail/arch.svg",
+   "x": 1280,
+   "y": 777,
+   "width": 472,
+   "height": 461,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.716,
+   "flip": false
+  },
+  {
+   "id": "bench-55",
+   "name": "Bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 1300,
+   "y": 1087.8,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.18,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-56",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 1580,
+   "y": 987.9,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.559,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-57",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 1000,
+   "y": 1087.8,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.501,
+   "flip": true
+  },
+  {
+   "id": "sunflower-arch-58",
+   "name": "Sunflower arch",
+   "src": "detail/arch.svg",
+   "x": 5760,
+   "y": 4539.9,
+   "width": 472,
+   "height": 461,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.716,
+   "flip": false
+  },
+  {
+   "id": "picnic-table-59",
+   "name": "Picnic table",
+   "src": "reuse/picnic-table.svg",
+   "x": 5850,
+   "y": 4861.8,
+   "width": 1614,
+   "height": 653,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.144,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-60",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 5170,
+   "y": 4750.8,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.539,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-61",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 6200,
+   "y": 4728.6,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.539,
+   "flip": true
+  },
+  {
+   "id": "sunflower-planter-62",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 5570,
+   "y": 4950.6,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.342,
+   "flip": false
+  },
+  {
+   "id": "tree-63",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 920,
+   "y": 921.3,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-64",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 6080,
+   "y": 4495.5,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-66",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 6820,
+   "y": 1665,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-nod-1",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 1120,
+   "y": 1831.5,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-73",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 3180,
+   "y": 1209.9,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-nod-3",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 3940,
+   "y": 1110,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-77",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 6510,
+   "y": 1032.3,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-78",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 6310,
+   "y": 1898.1,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-83",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 4630,
+   "y": 3441,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-86",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 2210,
+   "y": 3796.2,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-88",
+   "name": "Tree",
+   "src": "reuse/tree-2.svg",
+   "x": 4470,
+   "y": 4129.2,
+   "width": 180,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-nod-2",
+   "name": "Tree",
+   "src": "reuse/tree-5.svg",
+   "x": 5270,
+   "y": 3307.8,
+   "width": 150,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-90",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 1083.95,
+   "y": 681.93,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-91",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 6357.36,
+   "y": 4692.48,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-92",
+   "name": "Tree",
+   "src": "reuse/tree-5.svg",
+   "x": 3220,
+   "y": 3574.2,
+   "width": 150,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-95",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 6620,
+   "y": 2886,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-97",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 4020,
+   "y": 4273.5,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-98",
+   "name": "Tree",
+   "src": "reuse/tree-2.svg",
+   "x": 7000,
+   "y": 1609.5,
+   "width": 180,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "bush-99",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 1320,
+   "y": 1942.5,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-101",
+   "name": "Bush",
+   "src": "reuse/bush-3.svg",
+   "x": 3620,
+   "y": 1287.6,
+   "width": 116,
+   "height": 104,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-102",
+   "name": "Bush",
+   "src": "reuse/bush-4.svg",
+   "x": 5020,
+   "y": 888,
+   "width": 140,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-104",
+   "name": "Bush",
+   "src": "reuse/bush-6.svg",
+   "x": 6850,
+   "y": 2553,
+   "width": 120,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-105",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 5120,
+   "y": 3108,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-106",
+   "name": "Bush",
+   "src": "reuse/bush-2.svg",
+   "x": 1920,
+   "y": 3885,
+   "width": 168,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-111",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 6520,
+   "y": 3108,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-117",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 3620,
+   "y": 3330,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "flowers-119",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1420,
+   "y": 1998,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-122",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 3770,
+   "y": 1309.8,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-123",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 5170,
+   "y": 943.5,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-124",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 5870,
+   "y": 999,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-126",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 5570,
+   "y": 3219,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-129",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 1620,
+   "y": 3330,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-131",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 3420,
+   "y": 3385.5,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-135",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 1370,
+   "y": 710.4,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-136",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 6070,
+   "y": 4551,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-141",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 1820,
+   "y": 3219,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.462,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-145",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 5120,
+   "y": 1831.5,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.52,
+   "flip": false
+  },
+  {
+   "id": "sunflowers-146",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 5920,
+   "y": 1776,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.578,
+   "flip": true
+  },
+  {
+   "id": "sunflowers-148",
+   "name": "Sunflowers",
+   "src": "detail/sunflower-tall.svg",
+   "x": 1720,
+   "y": 1887,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.52,
+   "flip": true
+  },
+  {
+   "id": "tree-106",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 2251.5,
+   "y": 3553,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-107",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 727.1,
+   "y": 3205.4,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-108",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 1598.2,
+   "y": 3900.6,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-109",
+   "name": "Tree",
+   "src": "reuse/tree-2.svg",
+   "x": 5409.2,
+   "y": 829.9,
+   "width": 180,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-110",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 6443.6,
+   "y": 2181.8,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-111",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 3068.2,
+   "y": 4325.5,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-112",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 1625.4,
+   "y": 2819.1,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-113",
+   "name": "Tree",
+   "src": "reuse/tree-5.svg",
+   "x": 2061,
+   "y": 1428.6,
+   "width": 150,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-114",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 1516.6,
+   "y": 3591.6,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-nod-4",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 3313.1,
+   "y": 4402.7,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-116",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 1353.2,
+   "y": 4080.9,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-117",
+   "name": "Tree",
+   "src": "reuse/tree-2.svg",
+   "x": 4225.1,
+   "y": 1010.2,
+   "width": 180,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-118",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 5422.8,
+   "y": 2632.4,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-119",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 4932.8,
+   "y": 2014.4,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-120",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 6892.7,
+   "y": 2362,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-121",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 1557.4,
+   "y": 4158.1,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-122",
+   "name": "Tree",
+   "src": "reuse/tree-2.svg",
+   "x": 4388.4,
+   "y": 855.7,
+   "width": 180,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-123",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 2619,
+   "y": 3656,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "tree-124",
+   "name": "Tree",
+   "src": "reuse/tree-1.svg",
+   "x": 5177.8,
+   "y": 2323.4,
+   "width": 260,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-125",
+   "name": "Tree",
+   "src": "reuse/tree-2.svg",
+   "x": 7246.6,
+   "y": 611,
+   "width": 180,
+   "height": 360,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": true
+  },
+  {
+   "id": "tree-126",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 3129.4,
+   "y": 4145.2,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "flip": false
+  },
+  {
+   "id": "bush-127",
+   "name": "Bush",
+   "src": "reuse/bush-3.svg",
+   "x": 6789.7,
+   "y": 837.3,
+   "width": 116,
+   "height": 104,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-128",
+   "name": "Bush",
+   "src": "reuse/bush-6.svg",
+   "x": 6130.1,
+   "y": 995,
+   "width": 120,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-130",
+   "name": "Bush",
+   "src": "reuse/bush-6.svg",
+   "x": 6111,
+   "y": 2391.6,
+   "width": 120,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-131",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2239.6,
+   "y": 3330.2,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-132",
+   "name": "Bush",
+   "src": "reuse/bush-4.svg",
+   "x": 2612.4,
+   "y": 4118.6,
+   "width": 140,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-134",
+   "name": "Bush",
+   "src": "reuse/bush-5.svg",
+   "x": 4247,
+   "y": 4156.2,
+   "width": 170,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-135",
+   "name": "Bush",
+   "src": "reuse/bush-5.svg",
+   "x": 3501.4,
+   "y": 1498.1,
+   "width": 170,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-136",
+   "name": "Bush",
+   "src": "reuse/bush-2.svg",
+   "x": 2937.4,
+   "y": 4584.2,
+   "width": 168,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-137",
+   "name": "Bush",
+   "src": "reuse/bush-4.svg",
+   "x": 2249.1,
+   "y": 2181.4,
+   "width": 140,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-138",
+   "name": "Bush",
+   "src": "reuse/bush-5.svg",
+   "x": 3941.1,
+   "y": 1777.4,
+   "width": 170,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-139",
+   "name": "Bush",
+   "src": "reuse/bush-2.svg",
+   "x": 2994.7,
+   "y": 1439.5,
+   "width": 168,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-141",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2220.5,
+   "y": 1627.2,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "bush-144",
+   "name": "Bush",
+   "src": "reuse/bush-6.svg",
+   "x": 5454.6,
+   "y": 4653.3,
+   "width": 120,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "bush-146",
+   "name": "Bush",
+   "src": "reuse/bush-5.svg",
+   "x": 4106.8,
+   "y": 1507.1,
+   "width": 170,
+   "height": 110,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": false
+  },
+  {
+   "id": "flowers-147",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 5248,
+   "y": 4542.7,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-148",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 4746.3,
+   "y": 807.4,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-149",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 3631.3,
+   "y": 3489.1,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-150",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 1122.6,
+   "y": 903.2,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-151",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 1289.9,
+   "y": 3899.6,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-155",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 1970,
+   "y": 3147.1,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-156",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 5036.2,
+   "y": 3242.9,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-157",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 6708.6,
+   "y": 2668.2,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-158",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 1468.3,
+   "y": 1710.5,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-159",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 5983.9,
+   "y": 4788.9,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-161",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6162.3,
+   "y": 4898.4,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-162",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 4545.6,
+   "y": 889.5,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-163",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 2092.6,
+   "y": 3571.2,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-164",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 6273.8,
+   "y": 985.3,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-165",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 1535.2,
+   "y": 3762.8,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-166",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1813.9,
+   "y": 1767.1,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-167",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 1992.3,
+   "y": 1876.6,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-168",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 6452.2,
+   "y": 2642.8,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-169",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6229.2,
+   "y": 2259.7,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-170",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 6284.9,
+   "y": 4572,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-171",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 5170,
+   "y": 2656.5,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-172",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 5727.5,
+   "y": 4763.5,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-173",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 1390.2,
+   "y": 3436.4,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-174",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2783.9,
+   "y": 4106.8,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-175",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 5571.4,
+   "y": 850.4,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-176",
+   "name": "Flowers",
+   "src": "reuse/flower-3.svg",
+   "x": 2059.2,
+   "y": 3928.9,
+   "width": 44,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "flowers-177",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 944.2,
+   "y": 2013.4,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-178",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2285.1,
+   "y": 1760,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.489,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-179",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2356.7,
+   "y": 1701.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.518,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-180",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2431,
+   "y": 1648.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.502,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-181",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2516.3,
+   "y": 1596,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.529,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-182",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2595.3,
+   "y": 1554.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.479,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-183",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2674.9,
+   "y": 1511.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.516,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-184",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2388.6,
+   "y": 1870.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.512,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-185",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2466.9,
+   "y": 1808.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.52,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-186",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2550.7,
+   "y": 1752.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.474,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-187",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2642.1,
+   "y": 1703.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.519,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-188",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2730.5,
+   "y": 1653.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.471,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-189",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2821.9,
+   "y": 1606.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.474,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-190",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2917.8,
+   "y": 1571.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.493,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-191",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3015.5,
+   "y": 1541.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.503,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-192",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3124.7,
+   "y": 1521.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.487,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-193",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3220.9,
+   "y": 1504.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.527,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-194",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3321,
+   "y": 1486.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.484,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-195",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2479.1,
+   "y": 1986.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-196",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2560.8,
+   "y": 1924.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.527,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-197",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2650.9,
+   "y": 1866.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.511,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-198",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2748.3,
+   "y": 1816.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.522,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-199",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2837.4,
+   "y": 1766.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.476,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-200",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2931.6,
+   "y": 1723.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.483,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-201",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3035.6,
+   "y": 1689.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-202",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3135.5,
+   "y": 1666.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.472,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-203",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3246.4,
+   "y": 1647.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.485,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-204",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3348.7,
+   "y": 1634,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.521,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-205",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3455.6,
+   "y": 1627,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.475,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-206",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3559.8,
+   "y": 1615.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.52,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-207",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2562.1,
+   "y": 2112.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.502,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-208",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2650.8,
+   "y": 2042,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.502,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-209",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2741.4,
+   "y": 1990.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.486,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-210",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2824.4,
+   "y": 1941,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.502,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-211",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2920.3,
+   "y": 1892.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.519,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-212",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3023.5,
+   "y": 1859.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.519,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-213",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3115.3,
+   "y": 1826.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.491,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-214",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3214.6,
+   "y": 1803.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.486,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-215",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3328.7,
+   "y": 1790.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.526,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-216",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3432.1,
+   "y": 1779.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.483,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-217",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3526.5,
+   "y": 1768.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.507,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-218",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2660.8,
+   "y": 2229.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.509,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-219",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2738.9,
+   "y": 2164.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.525,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-220",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2839.6,
+   "y": 2104.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.481,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-221",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2931.9,
+   "y": 2056.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.528,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-222",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3033.3,
+   "y": 2014.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.513,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-223",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3134.3,
+   "y": 1973.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.524,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-224",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3241.7,
+   "y": 1955.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.529,
+   "flip": true
+  },
+  {
+   "id": "scarecrow-225",
+   "name": "Scarecrow",
+   "src": "detail/scarecrow.svg",
+   "x": 2893.4,
+   "y": 1750.2,
+   "width": 476,
+   "height": 518,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.521,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-226",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2127.3,
+   "y": 2570.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.478,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-227",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2238.4,
+   "y": 2591,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.502,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-228",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2334.7,
+   "y": 2617.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.52,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-229",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2433.5,
+   "y": 2643.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.484,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-230",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2532.5,
+   "y": 2680.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.478,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-231",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2630.6,
+   "y": 2722.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.505,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-232",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1931.9,
+   "y": 2689.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.5,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-233",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2034.4,
+   "y": 2700.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.496,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-234",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2129.4,
+   "y": 2725.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.48,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-235",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2238.8,
+   "y": 2744.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-236",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2336.3,
+   "y": 2772.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.476,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-237",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2430.1,
+   "y": 2801.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.516,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-238",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2529.4,
+   "y": 2843.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.525,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-239",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2623.5,
+   "y": 2884.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.501,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-240",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2712.7,
+   "y": 2932.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.499,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-241",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2804.3,
+   "y": 2987.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.527,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-242",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1906.5,
+   "y": 2837.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.52,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-243",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2008.7,
+   "y": 2853,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.474,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-244",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2115.6,
+   "y": 2874.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.517,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-245",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2223.3,
+   "y": 2898,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.51,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-246",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2337,
+   "y": 2929.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.483,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-247",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2433.5,
+   "y": 2964.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.529,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-248",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2530.6,
+   "y": 3007.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.501,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-249",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2628.1,
+   "y": 3057,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.513,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-250",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2726.6,
+   "y": 3113.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.471,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-251",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2816.3,
+   "y": 3177.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.474,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-252",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2902.4,
+   "y": 3250.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.476,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-253",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2975.4,
+   "y": 3321,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.486,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-254",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1877.8,
+   "y": 2984.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.519,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-255",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1983.5,
+   "y": 3004.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.504,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-256",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2091.7,
+   "y": 3017.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.511,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-257",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2199.5,
+   "y": 3048.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.508,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-258",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2305.4,
+   "y": 3080.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.474,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-259",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2412.8,
+   "y": 3117,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.503,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-260",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2510.9,
+   "y": 3162.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.502,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-261",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2605.7,
+   "y": 3216.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.473,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-262",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2700.4,
+   "y": 3278.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.516,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-263",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2788.8,
+   "y": 3347,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.491,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-264",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2868.9,
+   "y": 3418.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.514,
+   "flip": true
+  },
+  {
+   "id": "scarecrow-265",
+   "name": "Scarecrow",
+   "src": "detail/scarecrow.svg",
+   "x": 2390.1,
+   "y": 2953,
+   "width": 476,
+   "height": 518,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.521,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-266",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3244.2,
+   "y": 3828.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.526,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-267",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3343,
+   "y": 3784.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.5,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-268",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3427.1,
+   "y": 3738,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.511,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-269",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3514.1,
+   "y": 3690.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.512,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-270",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3602.4,
+   "y": 3636,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.473,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-271",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3686.3,
+   "y": 3589.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.485,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-272",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3775.5,
+   "y": 3542.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.522,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-273",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3867.9,
+   "y": 3491.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.488,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-274",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3956.7,
+   "y": 3448,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.486,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-275",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4057.1,
+   "y": 3404.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.485,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-276",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4139.8,
+   "y": 3358,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-277",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3379.8,
+   "y": 3933,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.482,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-278",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3472.6,
+   "y": 3880.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.475,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-279",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3569.2,
+   "y": 3823,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.488,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-280",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3671.8,
+   "y": 3771.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.515,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-281",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3769.9,
+   "y": 3720.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.493,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-282",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3871,
+   "y": 3662.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.513,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-283",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3958.5,
+   "y": 3617.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.524,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-284",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4066,
+   "y": 3567.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.478,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-285",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4162.7,
+   "y": 3518.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.518,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-286",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4263.1,
+   "y": 3470.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.511,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-287",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3501.9,
+   "y": 4033.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.478,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-288",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3589.1,
+   "y": 3991.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.504,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-289",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3683.1,
+   "y": 3939.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.499,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-290",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3772.8,
+   "y": 3890,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.5,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-291",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3859.4,
+   "y": 3835.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.514,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-292",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3941.9,
+   "y": 3789.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.514,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-293",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4039.9,
+   "y": 3749.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.5,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-294",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4127.4,
+   "y": 3702.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.516,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-295",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4220.1,
+   "y": 3652.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.479,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-296",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4312,
+   "y": 3609.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.504,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-297",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3620.6,
+   "y": 4141.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.51,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-298",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3717.8,
+   "y": 4090.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.501,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-299",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3805.2,
+   "y": 4037.1,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.524,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-300",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3901.3,
+   "y": 3992.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.471,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-301",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3990.6,
+   "y": 3943.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.497,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-302",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4075.6,
+   "y": 3896.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.483,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-303",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4167.4,
+   "y": 3846.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.527,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-304",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4268.5,
+   "y": 3800.5,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.523,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-305",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4354.4,
+   "y": 3757.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.499,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-306",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3079.1,
+   "y": 4371,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.497,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-307",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3177.4,
+   "y": 4334.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.489,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-308",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3272.4,
+   "y": 4302.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.52,
+   "flip": false
+  },
+  {
+   "id": "scarecrow-309",
+   "name": "Scarecrow",
+   "src": "detail/scarecrow.svg",
+   "x": 3832.4,
+   "y": 3858.4,
+   "width": 476,
+   "height": 518,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.521,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-310",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6451.3,
+   "y": 1375.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.524,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-311",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6524.8,
+   "y": 1316.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.53,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-312",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6602.8,
+   "y": 1256.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.487,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-313",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6673.5,
+   "y": 1195.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.487,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-314",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6745.3,
+   "y": 1121.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.501,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-315",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6815.3,
+   "y": 1056.8,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.523,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-316",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6885.4,
+   "y": 984.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.526,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-317",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6949.4,
+   "y": 902.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.514,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-318",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7009.9,
+   "y": 829.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.487,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-319",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6438.1,
+   "y": 1561.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.498,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-320",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6517.9,
+   "y": 1506.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.529,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-321",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6608.6,
+   "y": 1442.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.503,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-322",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6687.1,
+   "y": 1377.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.482,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-323",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6770.9,
+   "y": 1308.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.524,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-324",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6846.2,
+   "y": 1234.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.482,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-325",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6918.8,
+   "y": 1158.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.484,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-326",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6993.9,
+   "y": 1087.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.515,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-327",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7059.9,
+   "y": 1003.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.493,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-328",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7120.3,
+   "y": 917.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.528,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-329",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6563.6,
+   "y": 1658.2,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.522,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-330",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6648.8,
+   "y": 1594.7,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.494,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-331",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6743.5,
+   "y": 1537,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.522,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-332",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6815.5,
+   "y": 1468.9,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.524,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-333",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6901.1,
+   "y": 1391.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.493,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-334",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 6979.9,
+   "y": 1323.3,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.528,
+   "flip": false
+  },
+  {
+   "id": "sunflower-row-335",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7045,
+   "y": 1240.6,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.501,
+   "flip": true
+  },
+  {
+   "id": "sunflower-row-336",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7127,
+   "y": 1166.4,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.509,
+   "flip": true
+  },
+  {
+   "id": "scarecrow-337",
+   "name": "Scarecrow",
+   "src": "detail/scarecrow.svg",
+   "x": 6748.8,
+   "y": 1336.7,
+   "width": 476,
+   "height": 518,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.521,
+   "flip": true
+  },
+  {
+   "id": "centre-front-01",
+   "src": "centre/front-01.svg",
+   "width": 129.35,
+   "height": 116.35,
+   "name": "Centre front-01",
+   "x": 4505.625,
+   "y": 2716.53,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9620111731843575
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2716.53,
+   "centrePiece": "front-01"
+  },
+  {
+   "id": "centre-front-02",
+   "src": "centre/front-02.svg",
+   "width": 137.8,
+   "height": 120.25,
+   "name": "Centre front-02",
+   "x": 4497.5,
+   "y": 2819.36,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9643243243243242
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2819.36,
+   "centrePiece": "front-02"
+  },
+  {
+   "id": "centre-front-03",
+   "src": "centre/front-03.svg",
+   "width": 144.3,
+   "height": 130.65,
+   "name": "Centre front-03",
+   "x": 4461.1,
+   "y": 2910.75,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9701492537313433
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2910.75,
+   "centrePiece": "front-03"
+  },
+  {
+   "id": "centre-front-04",
+   "src": "centre/front-04.svg",
+   "width": 144.95,
+   "height": 125.45,
+   "name": "Centre front-04",
+   "x": 4404.875,
+   "y": 2987.32,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9678756476683935
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2987.32,
+   "centrePiece": "front-04"
+  },
+  {
+   "id": "centre-front-05",
+   "src": "centre/front-05.svg",
+   "width": 141.05,
+   "height": 116.35,
+   "name": "Centre front-05",
+   "x": 4335.325,
+   "y": 3048.42,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9653631284916199
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3048.42,
+   "centrePiece": "front-05"
+  },
+  {
+   "id": "centre-front-06",
+   "src": "centre/front-06.svg",
+   "width": 133.25,
+   "height": 105.95,
+   "name": "Centre front-06",
+   "x": 4257.325,
+   "y": 3095.22,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9619631901840489
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3095.22,
+   "centrePiece": "front-06"
+  },
+  {
+   "id": "centre-front-07",
+   "src": "centre/front-07.svg",
+   "width": 124.8,
+   "height": 96.2,
+   "name": "Centre front-07",
+   "x": 4175.75,
+   "y": 3129.28,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9540540540540544
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3129.28,
+   "centrePiece": "front-07"
+  },
+  {
+   "id": "centre-front-08",
+   "src": "centre/front-08.svg",
+   "width": 115.05,
+   "height": 85.8,
+   "name": "Centre front-08",
+   "x": 4092.225,
+   "y": 3152.355,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9522727272727276
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3152.355,
+   "centrePiece": "front-08"
+  },
+  {
+   "id": "centre-front-09",
+   "src": "centre/front-09.svg",
+   "width": 105.3,
+   "height": 77.35,
+   "name": "Centre front-09",
+   "x": 4008.05,
+   "y": 3165.615,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9420168067226893
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3165.615,
+   "centrePiece": "front-09"
+  },
+  {
+   "id": "centre-front-10",
+   "src": "centre/front-10.svg",
+   "width": 34.45,
+   "height": 66.3,
+   "name": "Centre front-10",
+   "x": 3955.075,
+   "y": 3167.89,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9372549019607845
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3167.89,
+   "centrePiece": "front-10"
+  },
+  {
+   "id": "centre-front-11",
+   "src": "centre/front-11.svg",
+   "width": 34.45,
+   "height": 66.3,
+   "name": "Centre front-11",
+   "x": 3804.925,
+   "y": 3167.89,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9372549019607845
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3167.89,
+   "centrePiece": "front-11"
+  },
+  {
+   "id": "centre-front-12",
+   "src": "centre/front-12.svg",
+   "width": 105.3,
+   "height": 77.35,
+   "name": "Centre front-12",
+   "x": 3751.95,
+   "y": 3165.615,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9420168067226893
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3165.615,
+   "centrePiece": "front-12"
+  },
+  {
+   "id": "centre-front-13",
+   "src": "centre/front-13.svg",
+   "width": 115.05,
+   "height": 85.8,
+   "name": "Centre front-13",
+   "x": 3667.775,
+   "y": 3152.355,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9522727272727276
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3152.355,
+   "centrePiece": "front-13"
+  },
+  {
+   "id": "centre-front-14",
+   "src": "centre/front-14.svg",
+   "width": 124.8,
+   "height": 96.2,
+   "name": "Centre front-14",
+   "x": 3584.25,
+   "y": 3129.28,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9540540540540544
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3129.28,
+   "centrePiece": "front-14"
+  },
+  {
+   "id": "centre-front-15",
+   "src": "centre/front-15.svg",
+   "width": 133.25,
+   "height": 105.95,
+   "name": "Centre front-15",
+   "x": 3502.675,
+   "y": 3095.22,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9619631901840489
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3095.22,
+   "centrePiece": "front-15"
+  },
+  {
+   "id": "centre-front-16",
+   "src": "centre/front-16.svg",
+   "width": 141.05,
+   "height": 116.35,
+   "name": "Centre front-16",
+   "x": 3424.675,
+   "y": 3048.42,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9653631284916199
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 3048.42,
+   "centrePiece": "front-16"
+  },
+  {
+   "id": "centre-front-17",
+   "src": "centre/front-17.svg",
+   "width": 144.95,
+   "height": 125.45,
+   "name": "Centre front-17",
+   "x": 3355.125,
+   "y": 2987.32,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9678756476683935
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2987.32,
+   "centrePiece": "front-17"
+  },
+  {
+   "id": "centre-front-18",
+   "src": "centre/front-18.svg",
+   "width": 144.3,
+   "height": 130.65,
+   "name": "Centre front-18",
+   "x": 3298.9,
+   "y": 2910.75,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9701492537313433
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2910.75,
+   "centrePiece": "front-18"
+  },
+  {
+   "id": "centre-front-19",
+   "src": "centre/front-19.svg",
+   "width": 137.8,
+   "height": 120.25,
+   "name": "Centre front-19",
+   "x": 3262.5,
+   "y": 2819.36,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9643243243243242
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2819.36,
+   "centrePiece": "front-19"
+  },
+  {
+   "id": "centre-front-20",
+   "src": "centre/front-20.svg",
+   "width": 129.35,
+   "height": 116.35,
+   "name": "Centre front-20",
+   "x": 3254.375,
+   "y": 2716.53,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9620111731843575
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2716.53,
+   "centrePiece": "front-20"
+  },
+  {
+   "id": "centre-clock",
+   "src": "centre/clock.svg",
+   "width": 266.63,
+   "height": 468,
+   "name": "Centre clock",
+   "x": 3880,
+   "y": 2780.62,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9972222222222222
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2780.62,
+   "centrePiece": "clock"
+  },
+  {
+   "id": "centre-clock-hand-hour",
+   "src": "centre/clock-hand-hour.svg",
+   "width": 15.6,
+   "height": 52,
+   "name": "Centre clock-hand-hour",
+   "x": 3879.61,
+   "y": 2780.63,
+   "anchor": {
+    "x": 0.5,
+    "y": 7.0664423076923075
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2780.62,
+   "centrePiece": "clock-hand-hour"
+  },
+  {
+   "id": "centre-clock-hand-minute",
+   "src": "centre/clock-hand-minute.svg",
+   "width": 14.3,
+   "height": 72.15,
+   "name": "Centre clock-hand-minute",
+   "x": 3879.61,
+   "y": 2780.63,
+   "anchor": {
+    "x": 0.5,
+    "y": 5.327165627165627
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2780.62,
+   "centrePiece": "clock-hand-minute"
+  },
+  {
+   "id": "ten-plaza-bench-northwest",
+   "name": "Curved wood bench",
+   "src": "detail/ten-plaza-bench-northwest.svg",
+   "x": 3239.71,
+   "y": 2138.21,
+   "width": 243,
+   "height": 171,
+   "scale": 1,
+   "anchor": {
+    "x": 0.49675747185726393,
+    "y": 0.6269824336501874
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-plaza-bench-northeast",
+   "name": "Curved wood bench",
+   "src": "detail/ten-plaza-bench-northeast.svg",
+   "x": 4184.07,
+   "y": 2037.78,
+   "width": 235,
+   "height": 123,
+   "scale": 1,
+   "anchor": {
+    "x": 0.4939003102623246,
+    "y": 0.6811047336274112
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-plaza-bench-east",
+   "name": "Curved wood bench",
+   "src": "detail/ten-plaza-bench-east.svg",
+   "x": 4752.22,
+   "y": 2283.46,
+   "width": 173,
+   "height": 179,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5099271136603504,
+    "y": 0.6338469504273601
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-plaza-bench-south",
+   "name": "Curved wood bench",
+   "src": "detail/ten-plaza-bench-south.svg",
+   "x": 4184.07,
+   "y": 3179.22,
+   "width": 165,
+   "height": 111,
+   "scale": 1,
+   "anchor": {
+    "x": 0.4913125631008866,
+    "y": 0.7137307906651209
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-plaza-bench-west",
+   "name": "Curved wood bench",
+   "src": "detail/ten-plaza-bench-west.svg",
+   "x": 2847.75,
+   "y": 2681.23,
+   "width": 80,
+   "height": 144,
+   "scale": 1,
+   "anchor": {
+    "x": 0.4969000286628102,
+    "y": 0.6543875526303017
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-plaza-bench-southwest",
+   "name": "Curved wood bench",
+   "src": "detail/ten-plaza-bench-southwest.svg",
+   "x": 3071.77,
+   "y": 2984.08,
+   "width": 188,
+   "height": 173,
+   "scale": 1,
+   "anchor": {
+    "x": 0.49344787279122515,
+    "y": 0.6362968590477229
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-activity-1-bench-0",
+   "name": "Curved wood bench",
+   "src": "detail/ten-activity-1-bench-0.svg",
+   "x": 950.94,
+   "y": 3362.11,
+   "width": 221,
+   "height": 154,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5065199191698683,
+    "y": 0.6760558824550642
+   },
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "ten-underplant-0",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 785,
+   "y": 996.3,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-1",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 5945,
+   "y": 4570.5,
+   "width": 130,
+   "height": 100,
+   "scale": 0.6789999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-2",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6720,
+   "y": 1683,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-3",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6685,
+   "y": 1740,
+   "width": 600,
+   "height": 373,
+   "scale": 0.09809999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-4",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 985,
+   "y": 1906.5,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-5",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 3805,
+   "y": 1185,
+   "width": 600,
+   "height": 373,
+   "scale": 0.09809999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-6",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6375,
+   "y": 1107.3,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-7",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6210,
+   "y": 1916.1,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-8",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4725,
+   "y": 3476,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7629999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-9",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2110,
+   "y": 3814.2,
+   "width": 130,
+   "height": 100,
+   "scale": 0.595,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-10",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2075,
+   "y": 3871.2,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-11",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 4370,
+   "y": 4147.2,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-12",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 4565,
+   "y": 4164.2,
+   "width": 48,
+   "height": 36,
+   "scale": 1.455,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-13",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4335,
+   "y": 4204.2,
+   "width": 130,
+   "height": 100,
+   "scale": 0.6789999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-14",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 1178.95,
+   "y": 716.93,
+   "width": 600,
+   "height": 373,
+   "scale": 0.0765,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-15",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 948.95,
+   "y": 756.93,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-16",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 3315,
+   "y": 3609.2,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7629999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-17",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6715,
+   "y": 2921,
+   "width": 600,
+   "height": 373,
+   "scale": 0.0765,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-18",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 3920,
+   "y": 4291.5,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-19",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 4115,
+   "y": 4308.5,
+   "width": 48,
+   "height": 36,
+   "scale": 1.455,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-20",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 3885,
+   "y": 4348.5,
+   "width": 130,
+   "height": 100,
+   "scale": 0.6789999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-21",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6900,
+   "y": 1627.5,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-22",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6865,
+   "y": 1684.5,
+   "width": 600,
+   "height": 373,
+   "scale": 0.09809999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-23",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2116.5,
+   "y": 3628,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-24",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 627.1,
+   "y": 3223.4,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-25",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 592.1,
+   "y": 3280.4,
+   "width": 130,
+   "height": 100,
+   "scale": 0.6789999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-26",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1498.2,
+   "y": 3918.6,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-27",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 1693.2,
+   "y": 3935.6,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7629999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-28",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 1463.2,
+   "y": 3975.6,
+   "width": 600,
+   "height": 373,
+   "scale": 0.09809999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-29",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 6343.6,
+   "y": 2199.8,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-30",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6538.6,
+   "y": 2216.8,
+   "width": 48,
+   "height": 36,
+   "scale": 1.455,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-31",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2968.2,
+   "y": 4343.5,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-32",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 1720.4,
+   "y": 2854.1,
+   "width": 600,
+   "height": 373,
+   "scale": 0.0765,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-33",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1416.6,
+   "y": 3609.6,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-34",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 1611.6,
+   "y": 3626.6,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7629999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-35",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 3178.1,
+   "y": 4477.7,
+   "width": 48,
+   "height": 36,
+   "scale": 1.275,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-36",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 1253.2,
+   "y": 4098.9,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-37",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1448.2,
+   "y": 4115.9,
+   "width": 48,
+   "height": 36,
+   "scale": 1.455,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-38",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 4125.1,
+   "y": 1028.2,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-39",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4320.1,
+   "y": 1045.2,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7629999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-40",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 4090.1,
+   "y": 1085.2,
+   "width": 600,
+   "height": 373,
+   "scale": 0.09809999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-41",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 4832.8,
+   "y": 2032.4,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-42",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 5027.8,
+   "y": 2049.4,
+   "width": 48,
+   "height": 36,
+   "scale": 1.455,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-43",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4797.8,
+   "y": 2089.4,
+   "width": 130,
+   "height": 100,
+   "scale": 0.6789999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-44",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 6987.7,
+   "y": 2397,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7629999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-45",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 4288.4,
+   "y": 873.7,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-46",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4253.4,
+   "y": 930.7,
+   "width": 130,
+   "height": 100,
+   "scale": 0.6789999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-47",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 7146.6,
+   "y": 629,
+   "width": 600,
+   "height": 373,
+   "scale": 0.08729999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-48",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 7341.6,
+   "y": 646,
+   "width": 48,
+   "height": 36,
+   "scale": 1.455,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-49",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 3029.4,
+   "y": 4163.2,
+   "width": 48,
+   "height": 36,
+   "scale": 1.6349999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-50",
+   "name": "Garden rock",
+   "src": "reuse/rock-boulder.svg",
+   "x": 2994.4,
+   "y": 4220.2,
+   "width": 600,
+   "height": 373,
+   "scale": 0.09809999999999998,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-51",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1642.88,
+   "y": 3170.01,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-52",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 1580.23,
+   "y": 3239.7,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-53",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1497.07,
+   "y": 3297.62,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-54",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 1397.65,
+   "y": 3340.8,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-55",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 848.96,
+   "y": 3289.61,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-56",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 768.7,
+   "y": 3229.66,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-57",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 709.52,
+   "y": 3158.46,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-58",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 725.28,
+   "y": 2838.64,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-59",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 791.32,
+   "y": 2770.54,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-60",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 1524.6,
+   "y": 2738.75,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-61",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 1688.66,
+   "y": 2952.9,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-62",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6243.77,
+   "y": 2203.7,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-63",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6072.48,
+   "y": 2310.34,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-64",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 5955.68,
+   "y": 2346.42,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-65",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 5216.83,
+   "y": 2253.55,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-66",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 5147.3,
+   "y": 2194.05,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-67",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 5165.82,
+   "y": 1926.81,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-68",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 5243.4,
+   "y": 1869.9,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-69",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2853.54,
+   "y": 4634.53,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-70",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2765.54,
+   "y": 4686.1,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-71",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2694.22,
+   "y": 4145.75,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-72",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2794.68,
+   "y": 4188.48,
+   "width": 130,
+   "height": 100,
+   "scale": 0.5599999999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-73",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 2876.44,
+   "y": 4243.59,
+   "width": 48,
+   "height": 36,
+   "scale": 1.2000000000000002,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-74",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 4930,
+   "y": 2790,
+   "width": 48,
+   "height": 36,
+   "scale": 1.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-75",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4885,
+   "y": 3040,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-76",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 6635,
+   "y": 2730,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-77",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 6635,
+   "y": 3040,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-78",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 6680,
+   "y": 3100,
+   "width": 48,
+   "height": 36,
+   "scale": 1.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-79",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 3960,
+   "y": 1660,
+   "width": 48,
+   "height": 36,
+   "scale": 1.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "ten-underplant-80",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4735,
+   "y": 1600,
+   "width": 130,
+   "height": 100,
+   "scale": 0.7,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": false
+  },
+  {
+   "id": "ten-underplant-81",
+   "name": "Flowers",
+   "src": "reuse/flower-1.svg",
+   "x": 4780,
+   "y": 1660,
+   "width": 48,
+   "height": 36,
+   "scale": 1.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "flip": true
+  },
+  {
+   "id": "close-rim-planter-2",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 3561.31,
+   "y": 1999.54,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "close-rim-planter-3",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 4863.74,
+   "y": 2249.38,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "close-rim-planter-7",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 3753.52,
+   "y": 3311.52,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "close-activity-2-bench-0",
+   "name": "Curved wood bench",
+   "src": "detail/close-activity-2-bench-0.svg",
+   "x": 5553.25,
+   "y": 1696.48,
+   "width": 196,
+   "height": 107,
+   "anchor": {
+    "x": 0.5166017436222783,
+    "y": 0.724141072539528
+   },
+   "scale": 1,
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "close-activity-3-bench-0",
+   "name": "Curved wood bench",
+   "src": "detail/close-activity-3-bench-0.svg",
+   "x": 3042.71,
+   "y": 4482.31,
+   "width": 79,
+   "height": 167,
+   "anchor": {
+    "x": 0.49003701682297013,
+    "y": 0.630576838685224
+   },
+   "scale": 1,
+   "shadow": false,
+   "wind": false
+  },
+  {
+   "id": "close-activity-1-lamp-0",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 1774.04,
+   "y": 3127.76,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "close-activity-1-planter-1",
+   "name": "Sunflower planter",
+   "src": "detail/planter.svg",
+   "x": 745.13,
+   "y": 3331.73,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.373,
+   "flip": false
+  },
+  {
+   "id": "close-activity-1-lamp-2",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 647.39,
+   "y": 2782.5,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "close-activity-2-lamp-0",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 6198.51,
+   "y": 2349.31,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "close-activity-2-lamp-2",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 5700,
+   "y": 1675,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "close-activity-3-lamp-0",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 2958.35,
+   "y": 4668.03,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  },
+  {
+   "id": "close-activity-3-lamp-2",
+   "name": "Lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": 1785,
+   "y": 4430,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.113,
+   "flip": false
+  }
+ ]
+}

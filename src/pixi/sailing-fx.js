@@ -24,8 +24,11 @@ export function standFor(boat) {   // boss 5 Nov: the jetty deck beside that boa
 }
 
 // a Ducky (or its dust) on the jetty deck draws over the deck, which lies flat and sorts by its far (land) end
-const onPier=(x,y)=>{const p=HARBOR.pier; return p && x>=p.x-10 && x<=p.x+p.width+10 && y>=p.y-30 && y<=p.y+p.height;};
-const deckZ=(x,y)=>onPier(x,y)?Math.max(y,HARBOR.pier.y+HARBOR.pier.height)+1:y;
+// boss 6 Nov: the pier of the island you are on (engine.js setSailingHarbor on every island switch)
+let PIER=HARBOR.pier;
+export const setSailingHarbor=harbor => {PIER=harbor.pier;};
+const onPier=(x,y)=>{const p=PIER; return p && x>=p.x-10 && x<=p.x+p.width+10 && y>=p.y-30 && y<=p.y+p.height;};
+const deckZ=(x,y)=>onPier(x,y)?Math.max(y,PIER.y+PIER.height)+1:y;
 
 export async function createSailingFX({water,objects}) {
   const [views]=await Promise.all([loadBoatViews(),Assets.load(PUFF).catch(()=>null)]);

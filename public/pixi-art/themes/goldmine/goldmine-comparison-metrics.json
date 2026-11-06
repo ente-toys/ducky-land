@@ -1,0 +1,14 @@
+{
+  "home": "concepts/themes/home-bigger-before-island.png",
+  "homePixels": [
+    1600,
+    1100
+  ],
+  "goldminePixels": [
+    2000,
+    1500
+  ],
+  "worldUnitsToPixels": 0.25,
+  "homeResized": false,
+  "render": "Static assets, not an in-game screenshot"
+}

@@ -1,0 +1,15 @@
+{
+  "theme": "pink",
+  "landArea": 19981872.5,
+  "homeRatio": 1.801791929666366,
+  "sleepers": 40,
+  "sleeperDrops": [],
+  "reachablePercent": 99.9978009895547,
+  "spawn": {
+    "x": 4000,
+    "y": 3224.62
+  },
+  "stairs": 1,
+  "arches": 2,
+  "errors": []
+}

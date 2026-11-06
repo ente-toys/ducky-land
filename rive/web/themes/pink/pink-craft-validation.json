@@ -1,0 +1,235 @@
+{
+ "benches": 12,
+ "rings": [
+  {
+   "id": "pink-arc-plaza-55",
+   "deg": 55,
+   "span": 19,
+   "ring": {
+    "id": "plaza",
+    "x": 4000,
+    "y": 2833.66,
+    "rx": 760,
+    "ry": 542,
+    "angles": [
+     160,
+     25,
+     55,
+     125,
+     -155,
+     -25
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-plaza-125",
+   "deg": 125,
+   "span": 19,
+   "ring": {
+    "id": "plaza",
+    "x": 4000,
+    "y": 2833.66,
+    "rx": 760,
+    "ry": 542,
+    "angles": [
+     160,
+     25,
+     55,
+     125,
+     -155,
+     -25
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-cafe-70",
+   "deg": 70,
+   "span": 22,
+   "ring": {
+    "id": "cafe",
+    "x": 2197.7,
+    "y": 3337.36,
+    "rx": 580,
+    "ry": 354,
+    "angles": [
+     70,
+     140,
+     30,
+     -25
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-cafe-30",
+   "deg": 30,
+   "span": 22,
+   "ring": {
+    "id": "cafe",
+    "x": 2197.7,
+    "y": 3337.36,
+    "rx": 580,
+    "ry": 354,
+    "angles": [
+     70,
+     140,
+     30,
+     -25
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-festival-45",
+   "deg": 45,
+   "span": 22,
+   "ring": {
+    "id": "festival",
+    "x": 3150,
+    "y": 3730,
+    "rx": 416,
+    "ry": 248,
+    "angles": [
+     45,
+     130,
+     -35
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-festival-130",
+   "deg": 130,
+   "span": 22,
+   "ring": {
+    "id": "festival",
+    "x": 3150,
+    "y": 3730,
+    "rx": 416,
+    "ry": 248,
+    "angles": [
+     45,
+     130,
+     -35
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-pond-65",
+   "deg": 65,
+   "span": 22,
+   "ring": {
+    "id": "pond",
+    "x": 5654.35,
+    "y": 1877.36,
+    "rx": 725,
+    "ry": 430,
+    "angles": [
+     65,
+     115,
+     30
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-pond-30",
+   "deg": 30,
+   "span": 22,
+   "ring": {
+    "id": "pond",
+    "x": 5654.35,
+    "y": 1877.36,
+    "rx": 725,
+    "ry": 430,
+    "angles": [
+     65,
+     115,
+     30
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-picnic--130",
+   "deg": -130,
+   "span": 22,
+   "ring": {
+    "id": "picnic",
+    "x": 2580,
+    "y": 1030,
+    "rx": 635,
+    "ry": 286,
+    "angles": [
+     -130,
+     140,
+     -45
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-picnic-140",
+   "deg": 140,
+   "span": 22,
+   "ring": {
+    "id": "picnic",
+    "x": 2580,
+    "y": 1030,
+    "rx": 635,
+    "ry": 286,
+    "angles": [
+     -130,
+     140,
+     -45
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-meadow--145",
+   "deg": -145,
+   "span": 22,
+   "ring": {
+    "id": "meadow",
+    "x": 5420,
+    "y": 1000,
+    "rx": 595,
+    "ry": 296,
+    "angles": [
+     -145,
+     -45,
+     35
+    ]
+   }
+  },
+  {
+   "id": "pink-arc-meadow--45",
+   "deg": -45,
+   "span": 22,
+   "ring": {
+    "id": "meadow",
+    "x": 5420,
+    "y": 1000,
+    "rx": 595,
+    "ry": 296,
+    "angles": [
+     -145,
+     -45,
+     35
+    ]
+   }
+  }
+ ],
+ "trees": 43,
+ "newTrees": 2,
+ "movedTrees": [
+  "tree-cherry-97",
+  "tree-3-98",
+  "tree-3-107",
+  "tree-1-108",
+  "tree-1-109",
+  "tree-1-111",
+  "tree-cherry-113",
+  "tree-1-116",
+  "tree-4-121",
+  "tree-cherry-125"
+ ],
+ "props": 366,
+ "flats": 1089,
+ "flowerbeds": 22,
+ "sleepers": 40
+}

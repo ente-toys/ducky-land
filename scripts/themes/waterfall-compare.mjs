@@ -1,0 +1,10 @@
+import sharp from 'sharp';
+import {copyFileSync} from 'node:fs';
+const dir='../concepts/themes/work/waterfall/';
+const w=2200,h=1600;
+const home=await sharp('../concepts/themes/home-bigger-before-island.png').png().toBuffer();
+const fall=await sharp(dir+'waterfall-preview.png').png().toBuffer();
+const fm=await sharp(fall).metadata();
+const labels=Buffer.from(`<svg width="4400" height="70"><rect width="4400" height="70" fill="#FFF0C7"/><g font-family="sans-serif" font-size="28" fill="#39472D"><text x="30" y="45">HOME reference, original pixels</text><text x="2230" y="45">WATERFALL static render, same 0.265 pixels/world-unit overview</text></g></svg>`);
+await sharp({create:{width:w*2,height:h+70,channels:4,background:'#6EC9DE'}}).composite([{input:home,left:300,top:320},{input:fall,left:w+Math.round((w-fm.width)/2),top:70+Math.round((h-fm.height)/2)},{input:labels,left:0,top:0}]).png().toFile(dir+'waterfall-vs-home.png');
+if(process.env.ROUND)copyFileSync(dir+'waterfall-vs-home.png',dir+`waterfall-round-${process.env.ROUND}-vs-home.png`);

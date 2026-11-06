@@ -41,10 +41,11 @@ const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
     return env.ASSETS.fetch(request);
   }};
 `},bundle:true,format:'esm',write:false});
+// DUCKY_PORT / DUCKY_ASSETS: a second fixture on another port with its own build (never 8890's dist)
 const mf=new Miniflare(convertV4MiniflareOptions({
-  host:'127.0.0.1',port:8890,modules:[{type:'ESModule',path:'index.js',contents:bundle.text}],
+  host:'127.0.0.1',port:Number(process.env.DUCKY_PORT)||8890,modules:[{type:'ESModule',path:'index.js',contents:bundle.text}],
   compatibilityDate:'2026-11-02',
-  assets:{directory:root+'dist',binding:'ASSETS',run_worker_first:true,routerConfig:{has_user_worker:true}},
+  assets:{directory:process.env.DUCKY_ASSETS||root+'dist',binding:'ASSETS',run_worker_first:true,routerConfig:{has_user_worker:true}},
   durableObjects:{ISLAND:{className:'TravelTestRoom',useSQLite:true}},
 }));
 console.log('Local travel test fixture:',String(await mf.ready));

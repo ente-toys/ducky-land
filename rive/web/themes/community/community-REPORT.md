@@ -1,0 +1,1 @@
+The current report is [public/pixi-art/themes/community/community-REPORT.md](../../../../public/pixi-art/themes/community/community-REPORT.md), job `ten-community`, 6 November 2026. It supersedes the earlier polish report. PNG evidence is under `concepts/themes/work/community/`.

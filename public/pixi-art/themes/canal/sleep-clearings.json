@@ -1,0 +1,103 @@
+[
+  {
+    "pose": "leaf",
+    "x": 5920,
+    "y": 4020,
+    "removed": [
+      "canal-polish-0153",
+      "canal-polish-0415",
+      "canal-polish-0418"
+    ]
+  },
+  {
+    "pose": "leaf",
+    "x": 6880,
+    "y": 3340,
+    "removed": [
+      "canal-107",
+      "canal-131",
+      "canal-polish-0373",
+      "canal-polish-0374"
+    ]
+  },
+  {
+    "pose": "leaf",
+    "x": 5680,
+    "y": 2300,
+    "removed": [
+      "canal-polish-0305",
+      "canal-polish-0408"
+    ]
+  },
+  {
+    "pose": "leaf",
+    "x": 2200,
+    "y": 4620,
+    "removed": [
+      "canal-106",
+      "canal-polish-0385"
+    ]
+  },
+  {
+    "pose": "leaf",
+    "x": 1360,
+    "y": 2140,
+    "removed": [
+      "canal-115",
+      "canal-129",
+      "canal-polish-0261"
+    ]
+  },
+  {
+    "pose": "book",
+    "x": 5840,
+    "y": 2060,
+    "removed": [
+      "canal-polish-0162",
+      "canal-polish-0304",
+      "canal-polish-0306"
+    ]
+  },
+  {
+    "pose": "book",
+    "x": 2720,
+    "y": 1060,
+    "removed": [
+      "canal-polish-0429",
+      "canal-polish-0430",
+      "canal-polish-0454"
+    ]
+  },
+  {
+    "pose": "book",
+    "x": 2120,
+    "y": 4100,
+    "removed": [
+      "canal-polish-0426",
+      "canal-polish-0428"
+    ]
+  },
+  {
+    "pose": "chair",
+    "x": 3960,
+    "y": 940,
+    "removed": [
+      "canal-100",
+      "canal-101",
+      "canal-polish-0249",
+      "canal-polish-0324",
+      "canal-polish-0370",
+      "canal-polish-0371"
+    ]
+  },
+  {
+    "pose": "wing",
+    "x": 6200,
+    "y": 4620,
+    "removed": [
+      "canal-polish-0275",
+      "canal-polish-0354",
+      "canal-polish-0488"
+    ]
+  }
+]

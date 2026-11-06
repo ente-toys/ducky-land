@@ -1,0 +1,12 @@
+{
+  "port": 5264,
+  "previewHTTP": 200,
+  "browserVerified": false,
+  "reason": "Chromium headless launch denied by macOS sandbox: bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer: Permission denied (1100)",
+  "fallback": "Static SVG asset renders at 0.25 overview and 0.65 close-up scale",
+  "sharedSuite": {
+    "tests": 128,
+    "passed": 125,
+    "failed": 3
+  }
+}

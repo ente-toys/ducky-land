@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="818" height="463" viewBox="0 0 818 463" data-detail="1">
+<title>Wooden bench, sitter faces north</title>
+<g stroke-linecap="round" stroke-linejoin="round">
+<rect x="97" y="337" width="47" height="114" rx="9" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<rect x="673" y="337" width="47" height="114" rx="9" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<rect x="110" y="280" width="24" height="70" rx="5" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<rect x="678" y="280" width="24" height="70" rx="5" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<path d="M35 24 L783 24 Q798 24 798 39 L798 210 Q798 225 783 225 L35 225 Q20 225 20 210 L20 39 Q20 24 35 24 Z" fill="#C88941"/>
+<path d="M690 24 L783 24 Q798 24 798 39 L798 210 Q798 225 783 225 L35 225 Q20 225 20 210 L20 213 L690 213 Z" fill="#885931"/>
+<path d="M35 24 L783 24 Q798 24 798 39 L798 210 Q798 225 783 225 L35 225 Q20 225 20 210 L20 39 Q20 24 35 24 Z" fill="none" stroke="#39472D" stroke-width="12.3"/>
+<path d="M22 91 L796 91 M22 158 L796 158" fill="none" stroke="#39472D" stroke-width="6.2"/>
+<path d="M169 57 Q230 46 298 58 M443 126 Q508 116 574 128" fill="none" stroke="#885931" stroke-width="6.2"/>
+<path d="M48 211 L770 211 L770 292 Q770 308 754 308 L64 308 Q48 308 48 292 Z" fill="#C88941"/>
+<path d="M650 211 L770 211 L770 292 Q770 308 754 308 L64 308 Q48 308 48 292 L650 292 Z" fill="#885931"/>
+<path d="M48 211 L770 211 L770 292 Q770 308 754 308 L64 308 Q48 308 48 292 Z" fill="none" stroke="#39472D" stroke-width="12.3"/>
+<path d="M68 175 L750 175 Q770 175 770 195 L770 211 Q770 225 754 225 L64 225 Q48 225 48 211 L48 195 Q48 175 68 175 Z" fill="#C88941"/>
+<path d="M650 175 L750 175 Q770 175 770 195 L770 211 Q770 225 754 225 L650 225 Z" fill="#885931"/>
+<path d="M68 175 L750 175 Q770 175 770 195 L770 211 Q770 225 754 225 L64 225 Q48 225 48 211 L48 195 Q48 175 68 175 Z" fill="none" stroke="#39472D" stroke-width="12.3"/>
+<path d="M188 260 Q251 249 310 260" fill="none" stroke="#885931" stroke-width="6.2"/>
+</g>
+</svg>

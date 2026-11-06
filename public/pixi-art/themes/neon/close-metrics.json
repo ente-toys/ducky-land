@@ -1,0 +1,76 @@
+{
+ "round": 3,
+ "addedProps": [
+  {
+   "id": "neon-close-0",
+   "src": "neon-lamp.svg",
+   "x": 4580.5,
+   "y": 2570
+  },
+  {
+   "id": "neon-close-1",
+   "src": "close-flower-pot.svg",
+   "x": 3351.9,
+   "y": 1806
+  },
+  {
+   "id": "neon-close-2",
+   "src": "close-flower-pot.svg",
+   "x": 3671.2,
+   "y": 1723.8
+  },
+  {
+   "id": "neon-close-3",
+   "src": "neon-lamp.svg",
+   "x": 4336.1,
+   "y": 1806
+  },
+  {
+   "id": "neon-close-4",
+   "src": "neon-lamp.svg",
+   "x": 2752.2,
+   "y": 3107.7
+  },
+  {
+   "id": "neon-close-5",
+   "src": "close-flower-pot.svg",
+   "x": 5807.9,
+   "y": 1993.8
+  },
+  {
+   "id": "neon-close-6",
+   "src": "close-flower-pot.svg",
+   "x": 5502.3,
+   "y": 1681.5
+  },
+  {
+   "id": "neon-close-7",
+   "src": "close-flower-pot.svg",
+   "x": 4446.1,
+   "y": 2519.4
+  },
+  {
+   "id": "neon-close-8",
+   "src": "close-flower-pot.svg",
+   "x": 4316.4,
+   "y": 2605.1
+  },
+  {
+   "id": "neon-close-9",
+   "src": "close-flower-pot.svg",
+   "x": 3371.6,
+   "y": 2605.1
+  },
+  {
+   "id": "neon-close-10",
+   "src": "close-flower-pot.svg",
+   "x": 3241.9,
+   "y": 2519.4
+  }
+ ],
+ "junctionDetails": 456,
+ "props": 474,
+ "decals": 2652,
+ "patternedActivityRims": 4,
+ "lockedCentreUnchanged": true
+}

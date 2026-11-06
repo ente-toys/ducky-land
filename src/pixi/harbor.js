@@ -6,7 +6,8 @@
 // Returns {root, ties} where ties[i] is the rope point on the bollard for moorings[i].
 import {Container, Graphics, Text} from 'pixi.js';
 import {PALETTE} from './palette.js';
-import {HARBOR, JETTY, islandFor, near} from './islands.js';
+import {islandFor, near} from './islands.js';
+import {mapFor, mapOf} from './island-maps.js';
 
 const {ink, wood, darkWood, cream, sandShade} = PALETTE;
 
@@ -56,6 +57,7 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
   }
   // a bollard on the deck edge beside each berth; tip berths tie to the tip corners
   const ties = moorings.map(m => {
+    if (!m) return null;   // not moored along this jetty
     const along = (m.x - x) * d.x + (m.y - y) * d.y, lateral = (m.x - x) * n.x + (m.y - y) * n.y;
     if (Math.abs(lateral) > hw + 260 * s) return null;   // anchored out: no rope
     const tip = along > length - 30 * s, side = Math.sign(lateral || 1) * (hw - 10 * s);
@@ -71,9 +73,26 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
 
 // The home harbor: the jetty (flat, under the Duckies), a signpost with the island's name and the island's flag on a pole at its
 // foot (standing, sorted with the Duckies), and mooring ropes from each berthed boat to its bollard.
+// boss 6 Nov: every island map has its own jetty (island-maps.js); each is drawn once, the first time it is needed, and the
+// engine shows the one of the map on screen (show), so a themed island and its copies get their own.
 export function createHarbor(decks, objects) {
-  const jetty = drawJetty(decks, {x: JETTY.foot.x, y: JETTY.foot.y, length: JETTY.length, angle: JETTY.angle, width: JETTY.width,
-    wetFrom: JETTY.wetFrom, moorings: HARBOR.moorings});
+  const jetties = new Map();
+  const jettyFor = mapId => {
+    if (!jetties.has(mapId)) {
+      const {JETTY, HARBOR} = mapFor(mapId);
+      // a bollard and rope only for a boat moored along the jetty (a theme lists its beach boats as moorings too)
+      const alongside = m => {const t = (m.x - JETTY.foot.x) * JETTY.dir.x + (m.y - JETTY.foot.y) * JETTY.dir.y, p = JETTY.along(Math.max(0, Math.min(JETTY.length, t)));
+        return t > 0 && t < JETTY.length + 60 && Math.hypot(m.x - p.x, m.y - p.y) < 260;};
+      const built = drawJetty(decks, {x: JETTY.foot.x, y: JETTY.foot.y, length: JETTY.length, angle: JETTY.angle, width: JETTY.width,
+        wetFrom: JETTY.wetFrom, moorings: HARBOR.moorings.map(m => alongside(m) ? m : null)});
+      built.root.label = `Jetty ${mapId}`; built.root.visible = false;
+      jetties.set(mapId, built);
+    }
+    return jetties.get(mapId);
+  };
+  let current = mapFor('home'), jetty = jettyFor('home');
+  jetty.root.visible = true;
+  const JETTY = () => current.JETTY;
   const ropes = new Graphics({label: 'Mooring ropes'});
   decks.addChild(ropes);
   const flowers = new Graphics({label: 'Harbor flowers'});
@@ -83,12 +102,14 @@ export function createHarbor(decks, objects) {
     fontFamily: 'system-ui, sans-serif', fontSize: 23, fontWeight: '800', fill: ink, letterSpacing: .3}});
   name.anchor.set(.5); name.position.set(0, -104); name.resolution = 3;   // crisp when zoomed in
   sign.addChild(board, name);
-  sign.position.set(JETTY.foot.x + 100, JETTY.foot.y + 44); sign.zIndex = sign.y;
+  const placeSign = () => {sign.position.set(JETTY().foot.x + 100, JETTY().foot.y + 44); sign.zIndex = sign.y;};
+  placeSign();
   objects.addChild(sign);
   // the accent flag, left of the foot
   const flag = new Container({label: 'Harbor flag'}), pole = new Graphics(), cloth = new Graphics();
   flag.addChild(pole, cloth);
-  flag.position.set(JETTY.foot.x - 104, JETTY.foot.y + 46); flag.zIndex = flag.y;
+  const placeFlag = () => {flag.position.set(JETTY().foot.x - 104, JETTY().foot.y + 46); flag.zIndex = flag.y;};
+  placeFlag();
   pole.ellipse(0, 0, 22, 7).fill({color: ink, alpha: .16})
     .roundRect(-13, -12, 26, 14, 4).fill(darkWood).stroke({color: ink, width: 2.6})
     .rect(-4.5, -178, 9, 168).fill(wood).stroke({color: ink, width: 2.6})
@@ -105,8 +126,11 @@ export function createHarbor(decks, objects) {
   };
   return {
     transient: () => [sign, flag, flowers],   // this island's own name and colours (kept out of the copies' snapshot)
+    // the jetty of one map only (the engine draws one island's art at a time: the real one, then each copy)
+    show(mapId) {jettyFor(mapId); for (const [id, j] of jetties) j.root.visible = id === mapId;},
     switchIsland(id) {
       const island = islandFor(id);
+      current = mapOf(id); jetty = jettyFor(current.id); this.show(current.id); placeSign(); placeFlag();
       accent = island.accent;
       name.text = island.name;
       const w = Math.max(150, name.width + 40), top = -128, h = 46;
@@ -120,7 +144,7 @@ export function createHarbor(decks, objects) {
         .poly([70, -70, -18, -70, -18, -78, -44, -60, -18, -42, -18, -50, 70, -50]).fill(sandShade).stroke({color: ink, width: 2.6, join: 'round'});
       flowers.clear();
       if (id !== 'home') for (const [fx, fy] of [[-150, 70], [-118, 92], [150, 100], [184, 80], [60, 120]]) {
-        const cx = JETTY.foot.x + fx, cy = JETTY.foot.y + fy;
+        const cx = JETTY().foot.x + fx, cy = JETTY().foot.y + fy;
         for (let i = 0; i < 5; i++) flowers.circle(cx + Math.cos(i * Math.PI * .4) * 9, cy + Math.sin(i * Math.PI * .4) * 9, 7.5).fill(island.accent).stroke({color: ink, width: 1.4});
         flowers.circle(cx, cy, 4.5).fill(cream);
       }
@@ -131,7 +155,7 @@ export function createHarbor(decks, objects) {
       ropes.clear();
       for (const boat of boats) {
         if (boat.occupant) continue;
-        const i = HARBOR.moorings.findIndex(m => near(boat, m, 30));
+        const i = current.HARBOR.moorings.findIndex(m => near(boat, m, 30));
         if (i < 0 || !jetty.ties[i]) continue;
         const tie = jetty.ties[i], bob = reduced ? 0 : Math.sin(t * 1.4) * 2, side = Math.sign(tie.x - boat.x) || 1;
         const end = {x: boat.x + side * 62, y: boat.y - 26 + bob}, mid = {x: (tie.x + end.x) / 2, y: (tie.y + end.y) / 2 + 16 + (reduced ? 0 : Math.sin(t * 1.1 + i) * 2)};

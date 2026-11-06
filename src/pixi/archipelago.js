@@ -5,33 +5,41 @@
 // 30,000 Duckies (100 per island) show as tiny yellow dots once you zoom far out.
 import {Container, Graphics, Rectangle, Sprite} from 'pixi.js';
 import {MAP_BOUNDS, WORLD_ISLANDS, worldIsland} from './world-map.js';
+import {artOf, mapFor, mapOf} from './island-maps.js';
 
 export const ISLAND_COUNT = WORLD_ISLANDS.length;
 
 export function createArchipelago(app, scene, layer, world) {
-  const cx = world.width / 2, cy = world.height / 2, SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0;
+  // boss 6 Nov: every island is drawn by its own map (its theme's art, or home's until that theme is delivered), placed by
+  // its centre, so maps of any size line up. cx, cy: the centre of the current island's map in its local coordinates.
+  let cx = world.width / 2, cy = world.height / 2;
+  const SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0;
   const wrap = v => v - SX * Math.round(v / SX);
   const root = new Container({label: 'Archipelago'}), copies = new Container({label: 'Island copies'});
   const people = new Graphics({label: '30,000 Duckies'});
   layer.addChildAt(root, 0);   // under the real island's water and ground
   root.addChild(copies, people);
-  let texture = null, current = 'home', islands = [], bounds = MAP_BOUNDS;
+  let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
+  const textures = new Map();   // map id -> snapshot of that map's art
+  const textureOf = id => textures.get(artOf(id)) ?? textures.get('home');
+  const sizeOf = id => mapFor(textures.has(artOf(id)) ? artOf(id) : 'home');
   const sprites = new Map();
   // every island in the current island's local coordinates: the current one sits where the real scene is drawn
   const place = () => {
-    const here = worldIsland(current);
+    const here = worldIsland(current), m = mapOf(current);
+    cx = m.width / 2; cy = m.height / 2;
     islands = WORLD_ISLANDS.map(island => ({...island, x: cx + wrap(island.x - here.x), y: cy + island.y - here.y,
-      scale: 1, flip: 1, rot: 0, home: island.id === current}));
+      scale: 1, flip: 1, rot: 0, home: island.id === current, map: artOf(island.id), width: mapOf(island.id).width, height: mapOf(island.id).height}));
     bounds = {x0: MAP_BOUNDS.x0 - (here.x - cx), x1: MAP_BOUNDS.x1 - (here.x - cx), y0: MAP_BOUNDS.y0 - (here.y - cy), y1: MAP_BOUNDS.y1 - (here.y - cy)};
   };
   const draw = () => {
-    if (!texture) return;
+    if (!textures.has('home')) return;
     copies.removeChildren().forEach(child => child.destroy());
     sprites.clear();
     for (const island of islands) if (!island.home) {
-      const s = new Sprite(texture); sprites.set(island.id, s);
+      const s = new Sprite(textureOf(island.id)), size = sizeOf(island.id); sprites.set(island.id, s);
       s.anchor.set(.5); s.position.set(island.x, island.y);
-      s.width = world.width; s.height = world.height; s.tint = island.tint;
+      s.width = size.width; s.height = size.height; s.tint = island.map === 'home' ? island.tint : 0xFFFFFF;
       copies.addChild(s);
     }
     // 30,000 Duckies: 100 tiny yellow dots per island, scattered over its land
@@ -40,22 +48,25 @@ export function createArchipelago(app, scene, layer, world) {
     people.clear();
     for (const island of islands) for (let k = 0; k < 100; k++) {
       const a = r() * 6.28, d = Math.sqrt(r());
-      people.rect(island.x + Math.cos(a) * d * world.width * .36 - 90, island.y + Math.sin(a) * d * world.height * .32 - 90, 180, 180);
+      people.rect(island.x + Math.cos(a) * d * island.width * .36 - 90, island.y + Math.sin(a) * d * island.height * .32 - 90, 180, 180);   // each island's own size
     }
     people.fill(0xE8A000);
   };
   place();
   return {
-    get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return texture;},
-    // snapshot the real island as it is drawn now (ground, props, everything), once, sharp enough not to go blocky
-    build() {
-      if (texture) return;
-      const keep = {x: scene.position.x, y: scene.position.y, sx: scene.scale.x, sy: scene.scale.y};
+    get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return textures.get('home') ?? null;},
+    get version() {return version;}, has: mapId => textures.has(mapId), textureOf, sizeOf,
+    // snapshot the real island as it is drawn now (ground, props, everything), once per map, sharp enough not to go blocky.
+    // The engine shows that map's art (and only it) in the scene before calling this.
+    build(mapId = 'home') {
+      if (textures.has(mapId)) return;
+      const m = mapFor(mapId), keep = {x: scene.position.x, y: scene.position.y, sx: scene.scale.x, sy: scene.scale.y};
       scene.position.set(0, 0); scene.scale.set(1, 1); root.visible = false;
-      texture = app.renderer.generateTexture({target: scene, frame: new Rectangle(0, 0, world.width, world.height), resolution: .4});
+      const texture = app.renderer.generateTexture({target: scene, frame: new Rectangle(0, 0, m.width, m.height), resolution: .4});
       texture.source.scaleMode = 'linear';
       scene.position.set(keep.x, keep.y); scene.scale.set(keep.sx, keep.sy); root.visible = true;
-      draw();
+      textures.set(mapId, texture); version++;
+      place(); draw();
     },
     // arrived on another island by boat: it becomes the real scene, everything else is redrawn round it
     setCurrent(id) {
@@ -70,6 +81,6 @@ export function createArchipelago(app, scene, layer, world) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
     },
-    destroy() {root.destroy({children: true}); texture?.destroy(true);},
+    destroy() {root.destroy({children: true}); for (const t of textures.values()) t.destroy(true);},
   };
 }

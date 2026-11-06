@@ -9,7 +9,12 @@ const RUN = 4;   // samples per run
 const inRing = (x, y, p) => {let c = false; for (let i = 0, j = p.length - 1; i < p.length; j = i++) if ((p[i][1] > y) !== (p[j][1] > y) && x < (p[j][0] - p[i][0]) * (y - p[i][1]) / (p[j][1] - p[i][1]) + p[i][0]) c = !c; return c;};
 const boxOf = p => [Math.min(...p.map(q => q[0])), Math.min(...p.map(q => q[1])), Math.max(...p.map(q => q[0])), Math.max(...p.map(q => q[1]))];
 const near = (a, b, pad) => a[0] - pad < b[2] && b[0] - pad < a[2] && a[1] - pad < b[3] && b[1] - pad < a[3];
-const runs = SHORE.flatMap((ring, r) => {
+// boss 6 Nov: any island's shore, so a themed island gets the same surf. rings: closed [x,y] outlines (the coast first, then
+// islets), any winding (each is turned clockwise on screen so the normal points out to sea).
+export const clockwise = ring => {let a = 0; for (let i = 0; i < ring.length; i++) {const p = ring[i], q = ring[(i + 1) % ring.length]; a += p[0] * q[1] - q[0] * p[1];} return a >= 0 ? ring : [...ring].reverse();};
+export const isletRing = ([cx, cy, rx, ry], n = 28) => Array.from({length: n}, (_, i) => [cx + Math.cos(i / n * 2 * Math.PI) * rx, cy + Math.sin(i / n * 2 * Math.PI) * ry]);
+export const shoreOf = world => [...(world.coastRings ?? [world.coast]), ...(world.islets ?? []).map(a => isletRing(a))].map(clockwise);
+export const surfRuns = (SHORE) => SHORE.flatMap((ring, r) => {
   const perimeter = ring.reduce((s, p, i) => s + Math.hypot(ring[(i + 1) % ring.length][0] - p[0], ring[(i + 1) % ring.length][1] - p[1]), 0);
   const pts = sampleRing(ring, Math.min(30, perimeter / 96)), out = [];   // an islet gets finer steps, so its far crest never facets
   // Wave sets drift a little along the shore: a slow lead or lag, never more than a sixth of a cycle.
@@ -23,13 +28,16 @@ const runs = SHORE.flatMap((ring, r) => {
   }
   return out;
 });
+const HOME_RUNS = surfRuns(SHORE);
 
-export function createBeachSurf(layer) {
+export function createBeachSurf(layer, rings = null) {
+  const runs = rings ? surfRuns(rings) : HOME_RUNS;
   const waves = [0, 1/3, 2/3].map(phase => {
     const crest = new Graphics({label:'Beach surf'});
     layer.addChild(crest);
     return {phase, crest};
   });
+  const crests = waves.map(w => w.crest);
   let lastTime = -1, lastView = '';
 
   function trace(graphics, run, clock, cycle, foam) {
@@ -55,7 +63,7 @@ export function createBeachSurf(layer) {
   }
 
   return {
-    runs: runs.length,
+    runs: runs.length, crests,
     update(time, reduced, visible) {
       // Cull per run: drawn when its box, plus the 175 the crest starts out at sea, touches the view.
       const shown = runs.filter(({box}) => visible((box[0] + box[2]) / 2, (box[1] + box[3]) / 2, Math.max(box[2] - box[0], box[3] - box[1]) / 2 + 220));

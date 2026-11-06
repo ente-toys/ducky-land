@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1214" height="412" viewBox="0 0 1214 412" data-detail="1">
+<title>Angled picnic cloth</title>
+<g stroke-linecap="round" stroke-linejoin="round">
+<path d="M78.429 27.33 L1181.414 186.809 L1135.571 400 L32.586 240.522 Z" fill="#FFF0C7"/>
+<path d="M232.847 49.657 L359.69 67.997 L313.847 281.189 L187.004 262.849 Z" fill="#6EC9DE"/>
+<path d="M574.772 99.096 L701.616 117.436 L655.772 330.627 L528.929 312.287 Z" fill="#6EC9DE"/>
+<path d="M916.698 148.534 L1043.541 166.874 L997.698 380.065 L870.854 361.725 Z" fill="#6EC9DE"/>
+<path d="M1150.157 332.166 L1052.847 388.039 L1085.926 333.371 Z" fill="#E4C567" stroke="#39472D" stroke-width="4.63"/>
+<path d="M78.429 27.33 L1181.414 186.809 L1135.571 400 L32.586 240.522 Z" fill="none" stroke="#39472D" stroke-width="9.26"/>
+<ellipse cx="419.034" cy="188.686" rx="95.2" ry="78.064" fill="#C88941" stroke="#39472D" stroke-width="9.26"/>
+<path d="M485.674 143.942 Q514.234 231.526 419.034 266.75 Q366.674 266.75 340.97 231.526 Q468.538 255.326 485.674 143.942 Z" fill="#885931"/>
+<path d="M395.234 150.606 Q374.29 188.686 395.234 222.006 M442.834 150.606 Q421.89 188.686 442.834 222.006" fill="none" stroke="#885931" stroke-width="4.63"/>
+<ellipse cx="792.215" cy="251.436" rx="58.8" ry="48.216" fill="#4AA539" stroke="#39472D" stroke-width="9.26"/>
+<path d="M792.215 203.22 Q815.735 177.936 825.731 183.816" fill="none" stroke="#885931" stroke-width="4.63"/>
+</g>
+</svg>

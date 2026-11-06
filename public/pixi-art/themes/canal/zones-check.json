@@ -1,0 +1,38 @@
+[
+  {
+    "zone": "activity-1",
+    "area": 476128,
+    "onLand": 1.0,
+    "propBases": []
+  },
+  {
+    "zone": "activity-2",
+    "area": 431903,
+    "onLand": 1.0,
+    "propBases": []
+  },
+  {
+    "zone": "activity-3",
+    "area": 376386,
+    "onLand": 1.0,
+    "propBases": []
+  },
+  {
+    "zone": "stalls-1",
+    "area": 357000,
+    "onLand": 1.0,
+    "propBases": []
+  },
+  {
+    "zone": "stalls-2",
+    "area": 331200,
+    "onLand": 1.0,
+    "propBases": []
+  },
+  {
+    "zone": "stalls-3",
+    "area": 161500,
+    "onLand": 1.0,
+    "propBases": []
+  }
+]

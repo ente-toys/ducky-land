@@ -1,0 +1,14 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "unchangedSleepSpots": true,
+  "unchangedLockedCentre": true,
+  "unchangedCoastPathsZonesArches": true,
+  "rasterFiles": 0,
+  "svgReferences": 1586,
+  "matchingWorldWalkObstacles": 221,
+  "props": 393,
+  "trees": 43,
+  "benches": 12,
+  "flowerbeds": 22
+}

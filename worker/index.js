@@ -1,13 +1,16 @@
-import world from '../rive/web/world.json';
-import walkWorld from '../rive/web/walk-world.json';   // boss 5 Nov: the same walking map the game uses offline (scripts/walk-world.mjs)
-import {createNavigation} from '../src/pixi/navigation.js';
+// boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
+// (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
+import {mapOf} from '../src/pixi/island-maps.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
-import {ISLANDS, islandFor, HARBOR, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat} from '../src/pixi/islands.js';
+import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat} from '../src/pixi/islands.js';
 
-const nav = createNavigation({...world, ...walkWorld});
-const PLAYER_LIMIT = 16;
+// boss 6 Nov ("room for 100 Duckies on every island, and stalls"): ONE room (this Durable Object) runs all 300 islands, so
+// the old 16 was a cap on the whole world. Now each island holds up to ISLAND_LIMIT players, and the room as a whole up to
+// PLAYER_LIMIT (scripts/load-room.mjs: 100 walking on one themed island cost ~5-8 ms of each 50 ms tick, see qa/load.test.mjs).
+export const ISLAND_LIMIT = 100;
+export const PLAYER_LIMIT = 200;
 const SPECTATOR_LIMIT = 64;
 const RESUME_MS = 15_000;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
@@ -28,6 +31,21 @@ function publicPose(actor) {
   const {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft=0,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
   return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked};
 }
+// boss 6 Nov (100 Duckies on one island): what goes on the wire each tick. The same pose, with positions to a hundredth of a
+// unit and angles to a thousandth (a full double is ~18 digits), so a 100-Ducky snapshot is far smaller. Saved poses keep
+// full precision (publicPose).
+const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
+function wirePose(actor) {
+  const pose = publicPose(actor);
+  pose.x = r2(pose.x); pose.y = r2(pose.y); pose.turn = r3(pose.turn); pose.travel = r2(pose.travel); pose.jumpLeft = r3(pose.jumpLeft);
+  return pose;
+}
+// how many players stand (or sail) on each island right now
+const islandCounts = connections => {
+  const counts = new Map();
+  for (const info of connections.values()) if (info.actor) counts.set(info.actor.islandId, (counts.get(info.actor.islandId) ?? 0) + 1);
+  return counts;
+};
 
 export class IslandRoom {
   constructor(ctx) {
@@ -73,6 +91,8 @@ export class IslandRoom {
     this.reconcileBoats();
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
+
+  navFor(islandId='home') { return mapOf(islandId).nav(); }
 
   saveBoats() {
     const state=JSON.stringify(this.boats);
@@ -214,7 +234,13 @@ export class IslandRoom {
     const resume = user && this.sql.exec('SELECT pose FROM resumes WHERE account=? AND expires>?', user.account, now).toArray()[0];
     const active = [...this.connections.values()].filter(info => info.actor).length;
     const held = this.sql.exec('SELECT count(*) AS count FROM resumes WHERE expires>?', now).one().count;
-    const playing = !!(user?.canPlay && wantsPlayer && (previous || resume || active+held < PLAYER_LIMIT));
+    const counts = islandCounts(this.connections);
+    for (const row of this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray()) {
+      const pose = JSON.parse(row.pose), islandId = pose.islandId ?? 'home';
+      counts.set(islandId, (counts.get(islandId) ?? 0) + 1);
+    }
+    const playing = !!(user?.canPlay && wantsPlayer && (previous || resume ||
+      (active+held < PLAYER_LIMIT && (counts.get('home') ?? 0) < ISLAND_LIMIT)));
     const spectators = this.connections.size-active;
     const [client, socket] = Object.values(new WebSocketPair());
     if (!playing && spectators >= SPECTATOR_LIMIT) {
@@ -227,12 +253,12 @@ export class IslandRoom {
       input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
       const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
-      const [x,y] = world.zones.plaza.spawn;
+      const [x,y] = mapOf('home').world.zones.plaza.spawn;
       info.actor = {id:crypto.randomUUID(), x,y,turn:0,outfit:outfitFor(user.account),emoteVersion:0,
         islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[],jumpLeft:0};
       // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
-      if (info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
+      if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
     }
@@ -264,22 +290,42 @@ export class IslandRoom {
     try { socket.send(JSON.stringify(message)); } catch { socket.close(1011, 'Connection lost'); }
   }
 
+  // boss 6 Nov (100 Duckies on one island): each island's players and boats are turned into text ONCE per tick (once for
+  // signed-in viewers, once for guests); a viewer's message is that shared text plus its own few fields. The message is the
+  // same JSON as before, field for field.
   broadcast() {
-    const active = [...this.connections.values()].filter(info => info.actor);
-    const players = active.map(info => publicPose(info.actor));
-    const namedPlayers = players.map((pose,index) => ({...pose, login:active[index].login, accountId:active[index].account}));
     const now = Date.now();
     const online = new Set([...this.connections].map(([socket,info]) =>
       info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
+    const groups = new Map();
+    for (const info of this.connections.values()) {
+      if (!info.actor) continue;
+      const islandId = info.actor.islandId, pose = wirePose(info.actor);
+      if (!groups.has(islandId)) groups.set(islandId, {guests:[], named:[]});
+      const group = groups.get(islandId);
+      group.guests.push(pose); group.named.push({...pose, login:info.login, accountId:info.account});
+    }
+    const shared = new Map(), empty = {guests:[], named:[]};
+    const text = (islandId, named) => {
+      const key = `${named ? 1 : 0}|${islandId}`;
+      if (!shared.has(key)) {
+        const group = groups.get(islandId) ?? empty;
+        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId))},"players":${JSON.stringify(named ? group.named : group.guests)},"self":`);
+      }
+      return shared.get(key);
+    };
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
-      const visiblePlayers = info.digest && info.expires > now ? namedPlayers : players;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
-      this.send(socket, {type:'snapshot', epoch:this.epoch, tick, online, islandId, boats:this.boats.filter(boat => boat.islandId === islandId), players:visiblePlayers.filter(pose => pose.islandId === islandId), self:actor ? {
-        ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),
-      } : null});
+      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000)}) : 'null';
+      this.sendText(socket, text(islandId, !!(info.digest && info.expires > now)) + self + '}');
     }
+  }
+
+  sendText(socket, text) {
+    if (socket.readyState !== 1) return;
+    try { socket.send(text); } catch { socket.close(1011, 'Connection lost'); }
   }
 
   demote(socket, info, reason) {
@@ -387,14 +433,14 @@ export class IslandRoom {
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
         if (actor.mode === 'sailing' ? !canSail(command.x,command.y,actor.islandId)
-          : command.x<0 || command.y<0 || command.x>=world.width || command.y>=world.height) return;
+          : command.x<0 || command.y<0 || command.x>=mapOf(actor.islandId).width || command.y>=mapOf(actor.islandId).height) return;
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;
           info.boarding = null;
           info.landing = null;   // a new course cancels a dock in progress
           if (actor.mode === 'sailing') setSailDestination(actor,command.x,command.y);
-          else setWalkDestination(actor, nav, command.x, command.y);
+          else setWalkDestination(actor, this.navFor(actor.islandId), command.x, command.y);
         }
         break;
       case 'board': {
@@ -406,17 +452,18 @@ export class IslandRoom {
           break;
         }
         info.input=ZERO;
-        const deck=boardingPoint(boat,nav);   // the jetty deck beside a harbor boat, or the nearest sand for a beach or islet boat
+        const nav=this.navFor(actor.islandId), deck=boardingPoint(boat,nav);   // the jetty deck beside a harbor boat, or the nearest sand for a beach or islet boat
         if (near(actor,deck,45) || setWalkDestination(actor,nav,deck.x,deck.y)) info.boarding=boat.id;
         break;
       }
       case 'disembark':
         if (actor.mode === 'sailing') {
           info.input=ZERO; info.landing=null;
-          if (canDock(actor)) {setSailDestination(actor,HARBOR.water.x,HARBOR.water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
+          if (canDock(actor)) {const {water}=harborOf(actor.islandId); setSailDestination(actor,water.x,water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
           // boss 5 Nov: anywhere else, hop out onto the nearest shore within reach (this island's or a neighbour's)
-          const spot=landingSpot(actor,nav);
+          const spot=landingSpot(actor,this.navFor(actor.islandId));
           if (!spot) {this.send(socket,{type:'travel-notice',text:'Sail closer to the shore to dock.'}); break;}
+          if (spot.islandId !== actor.islandId && (islandCounts(this.connections).get(spot.islandId) ?? 0) >= ISLAND_LIMIT) {this.send(socket,{type:'travel-notice',text:`That island is full (${ISLAND_LIMIT} Duckies). Try another one.`}); break;}
           // boss 5 Nov ("dock fix"): sail in to the water beside the sand first; the hop out happens when the boat arrives
           spot.approach=landingApproach(actor,spot);
           info.landing=spot;
@@ -446,6 +493,11 @@ export class IslandRoom {
     const now = Date.now();
     let active = false;
     this.expire(now);
+    const counts = islandCounts(this.connections), roomOn = id => (counts.get(id) ?? 0) < ISLAND_LIMIT;
+    const full = (socket, info) => {   // told once a minute at most, so a boat waiting at a full harbor does not spam
+      if (now-(info.fullNotice ?? -Infinity) < 60_000) return;
+      info.fullNotice = now; this.send(socket,{type:'travel-notice',text:`That island is full (${ISLAND_LIMIT} Duckies). Try another one.`});
+    };
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       if (!actor) continue;
@@ -455,22 +507,28 @@ export class IslandRoom {
         const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
         if (!boat) info.landing=null;   // the boat is gone (released or restored): nothing to sail in
         if (boat) {
-          if (crossIsland(actor)) {info.input=ZERO; info.inputExpires=0; info.landing=null;}   // sailed into a neighbour's harbor: its jetty docking takes over
+          const from=actor.islandId;
+          if (crossIsland(actor,roomOn)) {info.input=ZERO; info.inputExpires=0; info.landing=null; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}   // sailed into a neighbour's harbor: its jetty docking takes over
+          else if (destinationsFor(actor.islandId).some(d => !roomOn(d.destination) && Math.abs(actor.x-d.dock.x)<=65 && Math.abs(actor.y-d.dock.y)<=50)) full(socket,info);   // waiting at a full island's harbor mouth
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
           if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {   // reached the shore: hop out onto the sand
             const spot=info.landing; info.landing=null;
-            if (spot.islandId !== actor.islandId) {actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
+            if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
+            else {
+            if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
             this.parkBoat(boat);   // boss 6 Nov: the boat drifts off and fades; the moorings here stay full
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
-          } else if (actor.docking && near(actor,HARBOR.water,12)) {
+            }
+          } else if (actor.docking && near(actor,harborOf(actor.islandId).water,12)) {
             this.parkBoat(boat);   // boss 6 Nov: it ties back up beside its own empty mooring, or drifts off; no island runs out
-            Object.assign(actor,{...HARBOR.land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
+            Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
         }
       } else {
         info.landing=null;
+        const nav=this.navFor(actor.islandId);
         walkStep(actor, nav, .05, now/1000, info.input);
         const boat=info.boarding && this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
         const aboard=boat && near(actor,boardingPoint(boat,nav),45);   // boss 5 Nov: step in from the deck beside the boat (the jetty end for the tip berths)
@@ -486,15 +544,23 @@ export class IslandRoom {
         }
       }
       active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || info.landing || actor.jumpLeft > 0 || actor.until > now/1000);
-      this.attach(socket, info);
     }
-    for (const island of ISLANDS) {
-      const walkers=[...this.connections.values()].map(info => info.actor).filter(actor => actor?.mode === 'walking' && actor.islandId === island.id);
-      if (separateActors(walkers,nav,.05)) active=true;
+    const walking = new Map();   // boss 6 Nov: each island's walkers, gathered in one pass (was 300 passes over every player)
+    for (const info of this.connections.values()) {
+      const actor = info.actor;
+      if (actor?.mode !== 'walking') continue;
+      if (!walking.has(actor.islandId)) walking.set(actor.islandId, []);
+      walking.get(actor.islandId).push(actor);
     }
-    for (const [socket,info] of this.connections) this.attach(socket,info);
-    if (fillMoorings(this.boats)) active=true;   // boss 6 Nov: a sailor clear of the jetty leaves a fresh boat at the mooring
-    this.saveBoats();
+    for (const [islandId, walkers] of walking) if (walkers.length > 1 && separateActors(walkers,this.navFor(islandId),.05)) active=true;
+    for (const [socket,info] of this.connections) if (info.actor) this.attach(socket,info);
+    // a sailor clear of the jetty leaves a fresh boat at the mooring (boss 6 Nov); with nobody sailing no boat moves, so the
+    // 1,800 boats are only re-checked and re-saved while someone is aboard
+    if (this.boats.some(boat => boat.occupant) || this.boatsDirty) {
+      this.boatsDirty = false;
+      if (fillMoorings(this.boats)) active=true;
+      this.saveBoats();
+    }
     this.stepCount = (this.stepCount ?? 0)+1;
     if (!active || this.stepCount % 2 === 0) this.broadcast();
     if (!active) {

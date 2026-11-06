@@ -1,0 +1,9 @@
+{
+  "nod": [["grow-tree-1", 0, false], ["grow-tree-2", 0, true]],
+  "hammock": [[3050, 470, false]],
+  "rock": [[4250, 520, true], [420, 2480, false]],
+  "leaf": [[450, 1700, true], [4150, 3480, false]],
+  "book": [[3600, 550, false]],
+  "wing": [[330, 1400, false], [2720, 300, true]],
+  "box": [[700, 1000, false], [4950, 780, true]]
+}

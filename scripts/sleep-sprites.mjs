@@ -1,8 +1,9 @@
-// boss 5 Nov: the 8 approved sleeping Duckies, flat vector (sleeping-variants/svg), rasterised per group for Pixi.
-// Run: node scripts/sleep-sprites.mjs  -> public/pixi-duck/sleep/<pose>-<group>.png + src/pixi/sleep-poses.json
+// The 8 approved sleeping Duckies, split into SVG layers for Pixi.
+// Run: node scripts/sleep-sprites.mjs -> public/pixi-duck/sleep/<pose>-<group>.svg + src/pixi/sleep-poses.json
+// Rasterise in memory only to measure the existing boxes. SVG texture dimensions
+// match the former PNGs, so F, pivots, pose scale and ground contact stay identical.
 import sharp from 'sharp';
 import {readFileSync, writeFileSync} from 'node:fs';
-import {fileURLToPath} from 'node:url';
 const SRC = new URL('../../sleeping-variants/svg/', import.meta.url), OUT = new URL('../public/pixi-duck/sleep/', import.meta.url);
 const POSES = ['nod', 'leaf', 'wing', 'hammock', 'rock', 'book', 'chair', 'box'], F = .75;   // texture px per svg unit
 // rig units per svg unit: the body's yellow area matched to a standing Ducky's, checked against head and tuft widths
@@ -18,7 +19,7 @@ async function raster(svg, file) {
     x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
     if (yellow(data[i], data[i + 1], data[i + 2])) area++;
   }
-  if (file) await img.png({compressionLevel: 9, palette: false}).toFile(fileURLToPath(new URL(file, OUT)));
+  if (file) writeFileSync(new URL(file, OUT), svg.replace(/<svg\b[^>]*>/, tag => tag.replace(/\bwidth="[^"]*"/, `width="${info.width}"`).replace(/\bheight="[^"]*"/, `height="${info.height}"`)));
   return {area: area / F / F, box: [x0 / F, y0 / F, (x1 + 1) / F, (y1 + 1) / F]};
 }
 const only = (s, keep, clip = '') => s.replace(/<g id="(duck|prop|zz)"[^>]*>.*?<\/g>/gs, m => m.startsWith(`<g id="${keep}"`) ? (clip ? `<g clip-path="url(#${clip})">${m}</g>` : m) : '');
@@ -37,10 +38,10 @@ for (const name of POSES) {
     for (const [label, ranges] of parts) {
       let svg = only(s, id, ranges ? 'cut' : '');
       if (ranges) svg = svg.replace('</defs>', `<clipPath id="cut" clipPathUnits="userSpaceOnUse">${ranges.map(([a, b]) => `<rect x="${a}" y="-200" width="${b - a}" height="${H + 400}"/>`).join('')}</clipPath></defs>`);
-      const r = await raster(svg, `${name}-${label}.png`);
+      const r = await raster(svg, `${name}-${label}.svg`);
       if (label === 'duck') pose.area = r.area;
       if (label !== 'zz') box = [Math.min(box[0], r.box[0]), Math.min(box[1], r.box[1]), Math.max(box[2], r.box[2]), Math.max(box[3], r.box[3])];
-      pose.layers.push({id: label, src: `/pixi-duck/sleep/${name}-${label}.png`, ...(pivot.length ? {pivot} : {}), box: r.box.map(Math.round)});
+      pose.layers.push({id: label, src: `/pixi-duck/sleep/${name}-${label}.svg`, ...(pivot.length ? {pivot} : {}), box: r.box.map(Math.round)});
     }
   }
   pose.box = box.map(Math.round);
@@ -49,5 +50,5 @@ for (const name of POSES) {
   console.log(name, pose.k, pose.box);
 }
 const z = readFileSync(new URL('z-symbol.svg', SRC), 'utf8');
-await sharp(Buffer.from(z), {density: 72 * 2}).png().toFile(fileURLToPath(new URL('z.png', OUT)));   // 200 x 210
+writeFileSync(new URL('z.svg', OUT), z.replace(/\bwidth="[^"]*"/, 'width="200"').replace(/\bheight="[^"]*"/, 'height="210"'));   // same 200 x 210 texture
 writeFileSync(new URL('../src/pixi/sleep-poses.json', import.meta.url), JSON.stringify(out, null, 1) + '\n');

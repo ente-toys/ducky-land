@@ -112,7 +112,7 @@ export default function PixiPage() {
   const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
   return <main className="pixi-page">
     <div className="pixi-host" ref={host}/>
-    <img className="pixi-ente-logo" src="/ente-wordmark-white.png" alt="Ente" width="844" height="264"/>
+    <img className="pixi-ente-logo" src="/ente-wordmark-white.svg" alt="Ente" width="844" height="264"/>
     <div className="pixi-chat-layer">
       <div ref={nameLayer}/>
       <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>

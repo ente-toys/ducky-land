@@ -1,4 +1,4 @@
-// boss 5 Nov: the 8 approved sleeping Duckies (sleeping-variants/svg, rasterised by scripts/sleep-sprites.mjs) with the
+// boss 5 Nov: the 8 approved sleeping Duckies (sleeping-variants/svg, split by scripts/sleep-sprites.mjs) with the
 // review page's motion (sleeping-variants/sleep-preview/template.html), same timings and amplitudes. The Ducky is ONE rigid
 // piece: it breathes from its bottom contact point and bobs with a tiny whole-figure tilt; head and body never move apart.
 import {Assets, Container, Graphics, Sprite} from 'pixi.js';
@@ -17,9 +17,10 @@ const MOTION = {
   chair: {tilt: .5, ownZ: true},
   box: {tilt: .3, zAnchor: [250, 100], zDir: -1, cap: [377, 92, 0, 408]},
 };   // cap: head-top centre x, y, angle, head width (svg units); only nod, rock and box keep their cap
-export const SLEEP_SIZE = .81;   // boss 5 Nov: sleepers 10% smaller, then 10% more (.9 x .9); the only size knob, do not stack another
+import {SLEEP_SIZE} from './sleep-spots.js';   // boss 5 Nov: sleepers 10% smaller, then 10% more (.9 x .9); the only size knob, do not stack another
+export {SLEEP_SIZE};
 const POKE = .6, POKE_COOL = .8;   // boss 5 Nov: a poke wobbles .6 s; spam taps do not stack
-const Z_SRC = '/pixi-duck/sleep/z.png', Z_H = 105, Z_SIZES = [.72, .86, 1], STAND_HEAD = 285, INK = 0x232323;
+const Z_SRC = '/pixi-duck/sleep/z.svg', Z_H = 105, Z_SIZES = [.72, .86, 1], STAND_HEAD = 285, INK = 0x232323;
 export const SLEEP_ASSETS = [Z_SRC, ...Object.values(data.poses).flatMap(p => p.layers.map(l => l.src))];
 const TAU = Math.PI * 2, DEG = Math.PI / 180;
 const clamp01 = x => Math.min(1, Math.max(0, x)), io = x => .5 - .5 * Math.cos(Math.PI * clamp01(x)), outCubic = x => 1 - (1 - clamp01(x)) ** 3;

@@ -1,0 +1,9 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "geometryAndZonesUnchanged": true,
+  "lockedCentrePiecesAndScaleUnchanged": true,
+  "plantersWithMatchingCollision": 5,
+  "activityAndStallInteriorsClear": true,
+  "pathsUnchangedAndClear": true
+}

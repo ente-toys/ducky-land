@@ -1,0 +1,15 @@
+{
+  "theme": "sunflower",
+  "landArea": 20462862.5,
+  "homeRatio": 1.8451634355275022,
+  "sleepers": 40,
+  "sleeperDrops": [],
+  "reachablePercent": 99.98770864573859,
+  "spawn": {
+    "x": 3880,
+    "y": 2950.855
+  },
+  "stairs": 4,
+  "arches": 2,
+  "errors": []
+}

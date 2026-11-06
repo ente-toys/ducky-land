@@ -1,0 +1,43 @@
+--- a/src/pixi/island-maps.js
++++ b/src/pixi/island-maps.js
+@@ -14,7 +14,7 @@
+ import {createNavigation} from './navigation.js';
+ import {TEST_THEMES, WORLD_ISLANDS, worldIsland} from './world-map.js';
+ 
+-export const THEME_IDS = ['home', 'sunflower', 'pink', 'library'];
++export const THEME_IDS = ['home', 'sunflower', 'pink', 'library', 'community'];
+ // For testing (boss 6 Nov): the three islands nearest home (as first laid out) get the first three themes. Data, not code:
+ // world-map.js sets island.theme (a world layout that sets it itself wins), and spaces every island by its own map size.
+ export {TEST_THEMES};
+--- a/src/pixi/world-map.js
++++ b/src/pixi/world-map.js
+@@ -52,6 +52,9 @@
+   if (isle251) Object.assign(isle251, {name: 'Pagepond'});
+   // the themes go to the three islands nearest home as first laid out (fixed before any island is moved for a bigger map)
+   byDistance.slice(0, TEST_THEMES.length).forEach((island, i) => {island.theme ??= TEST_THEMES[i];});
++  // THEME_OF entry: ['isle-250', 'community'], nearest unthemed home jetty neighbour.
++  const communityIsland = out.find(island => island.id === 'isle-250');
++  if (communityIsland) Object.assign(communityIsland, {theme: 'community', name: 'Community Island'});
+   for (const island of out) Object.assign(island, sizeOf(island.theme));
+   spread(out, {SX, latOf, wrapd, y0: bounds.y0, y1: bounds.y1});
+   return {islands: out, bounds, Rw, SX, wrapd};
+--- a/src/pixi/engine.js
++++ b/src/pixi/engine.js
+@@ -731,6 +731,9 @@
+       for (const p of art.props) (p.deck ? this.decks : this.objects).addChild(p.sprite);
+       this.buildMapAmbience(mapId, art);
+       this.arts.set(mapId, art);
++      if (mapId === 'community') import(/* @vite-ignore */ '/pixi-art/themes/community/centre/animate.js')
++        .then(({updateCommunityCentre}) => {if (!this.disposed) art.updateCentre = updateCommunityCentre;})
++        .catch(error => console.warn('community fire animation did not load', error));
+       this.makeSleepers(mapId).catch(error => console.warn(`theme ${mapId}: sleepers did not load`, error));
+       this.showArt(this.artShown);
+       globalThis.__duckyThemeArt = [...this.arts.values()].filter(a => a.ready).map(a => a.id);   // QA readback
+@@ -984,6 +987,7 @@
+       if (prop.shadow) prop.shadow.visible = prop.sprite.visible;
+       if (prop.sprite.visible) prop.sprite.skew.x = !reduced && prop.wind ? Math.sin(t * 1.3 + i * .7) * .009 * breeze + this.gust * .035 : 0;
+     });
++    for (const art of this.arts.values()) if (art.ready) art.updateCentre?.(art, t, reduced);
+     if (homeShown) this.props.forEach((prop, i) => {
+       prop.sprite.visible = visible(prop.x, prop.y, Math.max(prop.width, prop.height) * prop.scale);
+       if(prop.shadow)prop.shadow.visible=prop.sprite.visible;

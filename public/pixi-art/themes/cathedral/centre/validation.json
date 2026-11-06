@@ -1,0 +1,23 @@
+{
+  "theme": "cathedral",
+  "pieces": 45,
+  "svgBytes": 435333,
+  "crowdPlaced": 100,
+  "spawnValid": true,
+  "allFootprintsValid": true,
+  "allPieceDimensionsMatch": true,
+  "noRasterOrGradientInSVG": true,
+  "freeArea": 2411535,
+  "capacity": {
+    "floorArea": 2646040,
+    "duckies": 539,
+    "perDuckyArea": 4902,
+    "note": "geometric standing capacity; walkable minus all blocked footprints"
+  },
+  "connectivity": {
+    "theme": "cathedral",
+    "mainWalkArea": 2465747,
+    "mainWalkFraction": 0.999994,
+    "bridgeEnds": []
+  }
+}

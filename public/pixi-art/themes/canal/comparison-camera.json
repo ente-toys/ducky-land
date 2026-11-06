@@ -1,0 +1,18 @@
+{
+  "zoom": 0.25,
+  "homeCamera": [
+    2900,
+    2100,
+    0.25
+  ],
+  "homeOriginalPixels": [
+    1600,
+    1100
+  ],
+  "canalPixels": [
+    2000,
+    1500
+  ],
+  "homeResized": false,
+  "round": "ten-final"
+}

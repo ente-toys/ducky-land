@@ -1,0 +1,871 @@
+{
+  "theme": "goldmine",
+  "name": "Golden egg mine plaza",
+  "concept": "concepts/themes/next-centres/goldmine-centre-1.png",
+  "origin": "plaza centre on the walking surface",
+  "depthRatio": 0.7659574468085106,
+  "pieces": [
+    {
+      "id": "decal-paving",
+      "file": "decal-paving.svg",
+      "layer": "decal",
+      "x": -1155,
+      "y": -885.851,
+      "width": 2310,
+      "height": 1789.702,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1155,
+        -885.851
+      ]
+    },
+    {
+      "id": "back-cliff",
+      "file": "back-cliff.svg",
+      "layer": "back",
+      "x": -1500,
+      "y": -1490,
+      "width": 3000,
+      "height": 900,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1500,
+        -1490
+      ],
+      "sortY": -1040
+    },
+    {
+      "id": "mine-landmark",
+      "file": "mine-landmark.svg",
+      "layer": "sorted",
+      "x": -670,
+      "y": -1335,
+      "width": 1339.8,
+      "height": 656.7,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -670,
+        -1335
+      ],
+      "provenance": "Clean hand-authored SVG interpretation of locked concept 1: cracked golden egg, twin timber towers, mine portal, crane and ore cart.",
+      "sortY": -679
+    },
+    {
+      "id": "bench-0",
+      "file": "bench-0.svg",
+      "layer": "sorted",
+      "x": -974,
+      "y": -560,
+      "width": 258,
+      "height": 161,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -974,
+        -560
+      ],
+      "sortY": -407
+    },
+    {
+      "id": "bench-1",
+      "file": "bench-1.svg",
+      "layer": "sorted",
+      "x": 716,
+      "y": -560,
+      "width": 258,
+      "height": 161,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        716,
+        -560
+      ],
+      "sortY": -407
+    },
+    {
+      "id": "bench-2",
+      "file": "bench-2.svg",
+      "layer": "sorted",
+      "x": -1004,
+      "y": 370,
+      "width": 258,
+      "height": 161,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1004,
+        370
+      ],
+      "sortY": 523
+    },
+    {
+      "id": "bench-3",
+      "file": "bench-3.svg",
+      "layer": "sorted",
+      "x": 746,
+      "y": 370,
+      "width": 258,
+      "height": 161,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        746,
+        370
+      ],
+      "sortY": 523
+    },
+    {
+      "id": "bench-4",
+      "file": "bench-4.svg",
+      "layer": "sorted",
+      "x": -129,
+      "y": 705,
+      "width": 258,
+      "height": 161,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -129,
+        705
+      ],
+      "sortY": 858
+    },
+    {
+      "id": "lantern-0",
+      "file": "lantern-0.svg",
+      "layer": "sorted",
+      "x": -1040,
+      "y": -529,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1040,
+        -529
+      ],
+      "sortY": -271
+    },
+    {
+      "id": "lantern-1",
+      "file": "lantern-1.svg",
+      "layer": "sorted",
+      "x": 970,
+      "y": -529,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        970,
+        -529
+      ],
+      "sortY": -271
+    },
+    {
+      "id": "lantern-2",
+      "file": "lantern-2.svg",
+      "layer": "sorted",
+      "x": -725,
+      "y": -879,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -725,
+        -879
+      ],
+      "sortY": -621
+    },
+    {
+      "id": "lantern-3",
+      "file": "lantern-3.svg",
+      "layer": "sorted",
+      "x": 655,
+      "y": -879,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        655,
+        -879
+      ],
+      "sortY": -621
+    },
+    {
+      "id": "lantern-4",
+      "file": "lantern-4.svg",
+      "layer": "sorted",
+      "x": -1085,
+      "y": 151,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1085,
+        151
+      ],
+      "sortY": 409
+    },
+    {
+      "id": "lantern-5",
+      "file": "lantern-5.svg",
+      "layer": "sorted",
+      "x": 1015,
+      "y": 151,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        1015,
+        151
+      ],
+      "sortY": 409
+    },
+    {
+      "id": "lantern-6",
+      "file": "lantern-6.svg",
+      "layer": "sorted",
+      "x": -370,
+      "y": 571,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -370,
+        571
+      ],
+      "sortY": 829
+    },
+    {
+      "id": "lantern-7",
+      "file": "lantern-7.svg",
+      "layer": "sorted",
+      "x": 300,
+      "y": 571,
+      "width": 70,
+      "height": 265,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        300,
+        571
+      ],
+      "sortY": 829
+    },
+    {
+      "id": "flowers-0",
+      "file": "flowers-0.svg",
+      "layer": "sorted",
+      "x": -1089,
+      "y": -665,
+      "width": 138,
+      "height": 140,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1089,
+        -665
+      ],
+      "sortY": -532
+    },
+    {
+      "id": "flowers-1",
+      "file": "flowers-1.svg",
+      "layer": "sorted",
+      "x": 951,
+      "y": -665,
+      "width": 138,
+      "height": 140,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        951,
+        -665
+      ],
+      "sortY": -532
+    },
+    {
+      "id": "flowers-2",
+      "file": "flowers-2.svg",
+      "layer": "sorted",
+      "x": -369,
+      "y": 345,
+      "width": 138,
+      "height": 140,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -369,
+        345
+      ],
+      "sortY": 478
+    },
+    {
+      "id": "flowers-3",
+      "file": "flowers-3.svg",
+      "layer": "sorted",
+      "x": 231,
+      "y": 345,
+      "width": 138,
+      "height": 140,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        231,
+        345
+      ],
+      "sortY": 478
+    },
+    {
+      "id": "bank-tree-0",
+      "file": "bank-tree-0.svg",
+      "layer": "sorted",
+      "x": -1318.5,
+      "y": -1229,
+      "width": 217,
+      "height": 424,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1318.5,
+        -1229
+      ],
+      "sortY": -810
+    },
+    {
+      "id": "bank-tree-1",
+      "file": "bank-tree-1.svg",
+      "layer": "sorted",
+      "x": 1101.5,
+      "y": -1229,
+      "width": 217,
+      "height": 424,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        1101.5,
+        -1229
+      ],
+      "sortY": -810
+    },
+    {
+      "id": "bank-fern-0",
+      "file": "bank-fern-0.svg",
+      "layer": "sorted",
+      "x": -1240,
+      "y": -1040,
+      "width": 340,
+      "height": 230,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1240,
+        -1040
+      ],
+      "sortY": -838
+    },
+    {
+      "id": "bank-fern-1",
+      "file": "bank-fern-1.svg",
+      "layer": "sorted",
+      "x": 900,
+      "y": -1040,
+      "width": 340,
+      "height": 230,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        900,
+        -1040
+      ],
+      "sortY": -838
+    },
+    {
+      "id": "bank-fern-2",
+      "file": "bank-fern-2.svg",
+      "layer": "sorted",
+      "x": -1490,
+      "y": -720,
+      "width": 340,
+      "height": 230,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1490,
+        -720
+      ],
+      "sortY": -518
+    },
+    {
+      "id": "bank-fern-3",
+      "file": "bank-fern-3.svg",
+      "layer": "sorted",
+      "x": 1150,
+      "y": -720,
+      "width": 340,
+      "height": 230,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        1150,
+        -720
+      ],
+      "sortY": -518
+    },
+    {
+      "id": "cliff-middle-left",
+      "file": "cliff-middle-left.svg",
+      "layer": "sorted",
+      "x": -1490,
+      "y": -1170,
+      "width": 990,
+      "height": 365,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1490,
+        -1170
+      ],
+      "sortY": -810
+    },
+    {
+      "id": "cliff-middle-right",
+      "file": "cliff-middle-right.svg",
+      "layer": "sorted",
+      "x": 710,
+      "y": -1130,
+      "width": 790,
+      "height": 360,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        710,
+        -1130
+      ],
+      "sortY": -790
+    },
+    {
+      "id": "cliff-front-left",
+      "file": "cliff-front-left.svg",
+      "layer": "sorted",
+      "x": -1450,
+      "y": -885,
+      "width": 660,
+      "height": 280,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -1450,
+        -885
+      ],
+      "sortY": -620
+    },
+    {
+      "id": "cliff-front-right",
+      "file": "cliff-front-right.svg",
+      "layer": "sorted",
+      "x": 1000,
+      "y": -880,
+      "width": 420,
+      "height": 280,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        1000,
+        -880
+      ],
+      "sortY": -620
+    }
+  ],
+  "outerEdge": {
+    "x": 0,
+    "y": 0,
+    "rx": 1150,
+    "ry": 880.8510638297872
+  },
+  "walkable": [
+    {
+      "ellipse": {
+        "x": 0,
+        "y": 0,
+        "rx": 1128,
+        "ry": 864
+      }
+    }
+  ],
+  "blocked": [
+    {
+      "name": "quarry ledges",
+      "poly": [
+        [
+          -1500,
+          -1400
+        ],
+        [
+          1500,
+          -1400
+        ],
+        [
+          1500,
+          -630
+        ],
+        [
+          700,
+          -630
+        ],
+        [
+          700,
+          -780
+        ],
+        [
+          -700,
+          -780
+        ],
+        [
+          -700,
+          -630
+        ],
+        [
+          -1500,
+          -630
+        ]
+      ]
+    },
+    {
+      "name": "mine facade and tracks",
+      "poly": [
+        [
+          -670,
+          -830
+        ],
+        [
+          670,
+          -830
+        ],
+        [
+          670,
+          -680
+        ],
+        [
+          -670,
+          -680
+        ]
+      ]
+    },
+    {
+      "name": "bench-0",
+      "ellipse": {
+        "x": -845,
+        "y": -465,
+        "rx": 124,
+        "ry": 52
+      }
+    },
+    {
+      "name": "bench-1",
+      "ellipse": {
+        "x": 845,
+        "y": -465,
+        "rx": 124,
+        "ry": 52
+      }
+    },
+    {
+      "name": "bench-2",
+      "ellipse": {
+        "x": -875,
+        "y": 465,
+        "rx": 124,
+        "ry": 52
+      }
+    },
+    {
+      "name": "bench-3",
+      "ellipse": {
+        "x": 875,
+        "y": 465,
+        "rx": 124,
+        "ry": 52
+      }
+    },
+    {
+      "name": "bench-4",
+      "ellipse": {
+        "x": 0,
+        "y": 800,
+        "rx": 124,
+        "ry": 52
+      }
+    },
+    {
+      "name": "lantern-0",
+      "ellipse": {
+        "x": -1005,
+        "y": -280,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-1",
+      "ellipse": {
+        "x": 1005,
+        "y": -280,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-2",
+      "ellipse": {
+        "x": -690,
+        "y": -630,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-3",
+      "ellipse": {
+        "x": 690,
+        "y": -630,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-4",
+      "ellipse": {
+        "x": -1050,
+        "y": 400,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-5",
+      "ellipse": {
+        "x": 1050,
+        "y": 400,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-6",
+      "ellipse": {
+        "x": -335,
+        "y": 820,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "lantern-7",
+      "ellipse": {
+        "x": 335,
+        "y": 820,
+        "rx": 22,
+        "ry": 14
+      }
+    },
+    {
+      "name": "flowers-0",
+      "ellipse": {
+        "x": -1020,
+        "y": -550,
+        "rx": 65,
+        "ry": 33
+      }
+    },
+    {
+      "name": "flowers-1",
+      "ellipse": {
+        "x": 1020,
+        "y": -550,
+        "rx": 65,
+        "ry": 33
+      }
+    },
+    {
+      "name": "flowers-2",
+      "ellipse": {
+        "x": -300,
+        "y": 478,
+        "rx": 65,
+        "ry": 33
+      }
+    },
+    {
+      "name": "flowers-3",
+      "ellipse": {
+        "x": 300,
+        "y": 478,
+        "rx": 65,
+        "ry": 33
+      }
+    },
+    {
+      "name": "bank-tree-0",
+      "ellipse": {
+        "x": -1210,
+        "y": -810,
+        "rx": 34,
+        "ry": 26
+      }
+    },
+    {
+      "name": "bank-tree-1",
+      "ellipse": {
+        "x": 1210,
+        "y": -810,
+        "rx": 34,
+        "ry": 26
+      }
+    },
+    {
+      "name": "bank-fern-0",
+      "ellipse": {
+        "x": -1070,
+        "y": -850,
+        "rx": 75,
+        "ry": 30
+      }
+    },
+    {
+      "name": "bank-fern-1",
+      "ellipse": {
+        "x": 1070,
+        "y": -850,
+        "rx": 75,
+        "ry": 30
+      }
+    },
+    {
+      "name": "bank-fern-2",
+      "ellipse": {
+        "x": -1320,
+        "y": -530,
+        "rx": 75,
+        "ry": 30
+      }
+    },
+    {
+      "name": "bank-fern-3",
+      "ellipse": {
+        "x": 1320,
+        "y": -530,
+        "rx": 75,
+        "ry": 30
+      }
+    }
+  ],
+  "stairs": [],
+  "spawn": [
+    0,
+    420
+  ],
+  "water": [],
+  "door": {
+    "point": [
+      0,
+      -650
+    ],
+    "facing": "south",
+    "note": "Mine doorway approach, the landmark stays solid until a separate interior is provided."
+  },
+  "capacity": {
+    "floorArea": 2585194,
+    "duckies": 527,
+    "note": "Conservative paving capacity, excludes perimeter clearance and solid furnishings."
+  },
+  "integration": {
+    "coordinates": "Centre-local. Translate every x/y, at, sortY and footprint by the island placement origin.",
+    "layers": "decal/back below characters; sorted/front/anim interleave by sortY. Preserve piece array order for ties.",
+    "animationModule": null,
+    "sharedCodeChanged": false
+  },
+  "placement": {
+    "plaza": [
+      4100,
+      2910
+    ],
+    "scale": 0.82,
+    "landmarkScale": 1.34,
+    "landmarkYOffset": 556,
+    "threshold": [
+      4100,
+      2909.22
+    ],
+    "note": "Mine fills the north half of the plaza and faces its paved south yard."
+  }
+}

@@ -1,0 +1,498 @@
+{
+  "theme": "community",
+  "name": "Community campfire circle",
+  "concept": "concepts/themes/community-centre/community-centre-3.png",
+  "origin": "campfire plaza centre on the ground",
+  "placement": [
+    4000,
+    2640
+  ],
+  "depthRatio": 0.765957,
+  "pieces": [
+    {
+      "id": "decal-paving",
+      "file": "decal-paving.svg",
+      "layer": "decal",
+      "x": -900,
+      "y": -720,
+      "width": 1800,
+      "height": 1440,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "at": [
+        -900,
+        -720
+      ]
+    },
+    {
+      "id": "campfire",
+      "file": "fire-base.svg",
+      "layer": "sorted",
+      "width": 219.696,
+      "height": 194.9802,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        0,
+        13
+      ],
+      "x": -109.848,
+      "y": -180.030398,
+      "sortY": 13,
+      "flip": false
+    },
+    {
+      "id": "log-west",
+      "file": "log-west.svg",
+      "layer": "sorted",
+      "width": 210.9145,
+      "height": 82.4993,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        -279,
+        31
+      ],
+      "x": -384.45725,
+      "y": -50.674307,
+      "sortY": 31,
+      "flip": false
+    },
+    {
+      "id": "log-east",
+      "file": "log-east.svg",
+      "layer": "sorted",
+      "width": 210.9145,
+      "height": 82.4993,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        279,
+        31
+      ],
+      "x": 173.54275,
+      "y": -50.674307,
+      "sortY": 31,
+      "flip": true
+    },
+    {
+      "id": "log-south",
+      "file": "log-south.svg",
+      "layer": "front",
+      "width": 210.9145,
+      "height": 82.4993,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        0,
+        264
+      ],
+      "x": -105.45725,
+      "y": 182.325693,
+      "sortY": 264,
+      "flip": false
+    },
+    {
+      "id": "notice-board",
+      "file": "notice-board.svg",
+      "layer": "sorted",
+      "width": 490.336,
+      "height": 419.9895,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        0,
+        -502
+      ],
+      "x": -245.168,
+      "y": -917.7896049999999,
+      "sortY": -502,
+      "flip": false
+    },
+    {
+      "id": "board-planter-w",
+      "file": "board-planter-w.svg",
+      "layer": "sorted",
+      "width": 155.56019999999998,
+      "height": 125.01289999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        -279,
+        -521
+      ],
+      "x": -356.7801,
+      "y": -644.7627709999999,
+      "sortY": -521,
+      "flip": false
+    },
+    {
+      "id": "board-planter-e",
+      "file": "board-planter-e.svg",
+      "layer": "sorted",
+      "width": 155.56019999999998,
+      "height": 125.01289999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        279,
+        -521
+      ],
+      "x": 201.2199,
+      "y": -644.7627709999999,
+      "sortY": -521,
+      "flip": true
+    },
+    {
+      "id": "lamp-typing-7",
+      "file": "lamp-typing-7.svg",
+      "layer": "sorted",
+      "width": 108.6166,
+      "height": 229.97,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        -607,
+        -327
+      ],
+      "x": -661.3083,
+      "y": -554.6703,
+      "sortY": -327,
+      "flip": false
+    },
+    {
+      "id": "lamp-typing-8",
+      "file": "lamp-typing-8.svg",
+      "layer": "sorted",
+      "width": 108.6166,
+      "height": 229.97,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        607,
+        -327
+      ],
+      "x": 552.6917,
+      "y": -554.6703,
+      "sortY": -327,
+      "flip": false
+    },
+    {
+      "id": "lamp-typing-9",
+      "file": "lamp-typing-9.svg",
+      "layer": "sorted",
+      "width": 108.6166,
+      "height": 229.97,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        -705,
+        276
+      ],
+      "x": -759.3083,
+      "y": 48.3297,
+      "sortY": 276,
+      "flip": false
+    },
+    {
+      "id": "lamp-typing-10",
+      "file": "lamp-typing-10.svg",
+      "layer": "sorted",
+      "width": 108.6166,
+      "height": 229.97,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "at": [
+        705,
+        276
+      ],
+      "x": 650.6917,
+      "y": 48.3297,
+      "sortY": 276,
+      "flip": false
+    },
+    {
+      "id": "lights-back",
+      "file": "lights-back.svg",
+      "layer": "sorted",
+      "width": 704,
+      "height": 245,
+      "anchor": {
+        "x": 0.0574,
+        "y": 0.9407
+      },
+      "at": [
+        -312,
+        -214
+      ],
+      "x": -352.4096,
+      "y": -444.4715,
+      "sortY": -214,
+      "flip": false
+    },
+    {
+      "id": "lights-west",
+      "file": "lights-west.svg",
+      "layer": "front",
+      "width": 220,
+      "height": 597,
+      "anchor": {
+        "x": 0.1818,
+        "y": 0.9751
+      },
+      "at": [
+        -451,
+        138
+      ],
+      "x": -490.996,
+      "y": -444.13469999999995,
+      "sortY": 138,
+      "flip": false
+    },
+    {
+      "id": "lights-east",
+      "file": "lights-east.svg",
+      "layer": "front",
+      "width": 220,
+      "height": 597,
+      "anchor": {
+        "x": 0.8182,
+        "y": 0.9751
+      },
+      "at": [
+        451,
+        138
+      ],
+      "x": 270.996,
+      "y": -444.13469999999995,
+      "sortY": 138,
+      "flip": false
+    },
+    {
+      "id": "campfire-flame",
+      "file": "fire-flame.svg",
+      "layer": "anim",
+      "width": 219.696,
+      "height": 194.9802,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.555
+      },
+      "at": [
+        0,
+        -71.81638699999985
+      ],
+      "x": -109.848,
+      "y": -180.03039799999988,
+      "sortY": 13.1,
+      "animate": {
+        "kind": "fire",
+        "amplitude": 0.045,
+        "module": "animate.js"
+      }
+    }
+  ],
+  "outerEdge": {
+    "x": 0,
+    "y": 0,
+    "rx": 820,
+    "ry": 628
+  },
+  "walkable": [
+    {
+      "ellipse": {
+        "x": 0,
+        "y": 0,
+        "rx": 800,
+        "ry": 608
+      }
+    }
+  ],
+  "blocked": [
+    {
+      "ellipse": {
+        "x": 0,
+        "y": -27,
+        "rx": 97,
+        "ry": 44
+      }
+    },
+    {
+      "ellipse": {
+        "x": -279,
+        "y": 17,
+        "rx": 97,
+        "ry": 20
+      }
+    },
+    {
+      "ellipse": {
+        "x": 279,
+        "y": 17,
+        "rx": 97,
+        "ry": 20
+      }
+    },
+    {
+      "ellipse": {
+        "x": 0,
+        "y": 250,
+        "rx": 97,
+        "ry": 20
+      }
+    },
+    {
+      "poly": [
+        [
+          -221,
+          -562
+        ],
+        [
+          221,
+          -562
+        ],
+        [
+          221,
+          -506
+        ],
+        [
+          -221,
+          -506
+        ]
+      ]
+    },
+    {
+      "ellipse": {
+        "x": -279,
+        "y": -533,
+        "rx": 56,
+        "ry": 24
+      }
+    },
+    {
+      "ellipse": {
+        "x": 279,
+        "y": -533,
+        "rx": 56,
+        "ry": 24
+      }
+    },
+    {
+      "ellipse": {
+        "x": -607,
+        "y": -333,
+        "rx": 15,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": 607,
+        "y": -333,
+        "rx": 15,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": -705,
+        "y": 270,
+        "rx": 15,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": 705,
+        "y": 270,
+        "rx": 15,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": -312,
+        "y": -218,
+        "rx": 16,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": -451,
+        "y": 134,
+        "rx": 16,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": 451,
+        "y": 134,
+        "rx": 16,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": -720,
+        "y": -686,
+        "rx": 15,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": 720,
+        "y": -686,
+        "rx": 15,
+        "ry": 12
+      }
+    },
+    {
+      "ellipse": {
+        "x": 613,
+        "y": -604,
+        "rx": 70,
+        "ry": 24
+      }
+    },
+    {
+      "ellipse": {
+        "x": 312,
+        "y": -218,
+        "rx": 16,
+        "ry": 12
+      }
+    }
+  ],
+  "spawn": [
+    0,
+    330
+  ],
+  "stairs": []
+}

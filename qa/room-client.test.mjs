@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {RoomClient,OfflineFleet} from '../src/pixi/room-client.js';
-import {destinationsFor,boatSpots,boatHome,boatSlot,MOORING_CLEAR} from '../src/pixi/islands.js';
+import {mapOf} from '../src/pixi/island-maps.js';
+import {ISLANDS} from '../src/pixi/islands.js';
+const PLAIN=ISLANDS.find(island => island.id!=='home' && mapOf(island.id).home).id;
+import {destinationsFor,harborOf,boatSpots,boatHome,boatSlot,MOORING_CLEAR} from '../src/pixi/islands.js';
 import {JUMP_SECONDS,JUMP_CROUCH,JUMP_AIR,JUMP_LAND,JUMP_RISE,jumpHeight,jumpPose,startJump,walkStep} from '../src/pixi/player-motion.js';
 
 function setup() {
@@ -166,11 +169,12 @@ test('boarding and island changes clear prediction and boat interpolation withou
 });
 
 test('sailing prediction uses bounded motion and sends the authoritative island with commands',()=>{
+  // an island on the home map (boss 6 Nov: the nearest three are themed, with their own coasts)
   const {room,sent}=setup();
-  room.snapshot(packet(1,'sunset','sailing'));
+  room.snapshot(packet(1,PLAIN,'sailing'));
   room.step(.05,{x:0,y:1});
   assert.equal(room.player.y,449);
-  assert.equal(sent.at(-1).islandId,'sunset');
+  assert.equal(sent.at(-1).islandId,PLAIN);
   room.disembark();
   assert.equal(room.player.docking,true);
   room.step(.05,{x:1,y:0});
@@ -178,7 +182,7 @@ test('sailing prediction uses bounded motion and sends the authoritative island 
   assert.equal(room.player.sailTarget,null);
   room.destination(1800,550);
   room.stopInput();
-  const next=packet(2,'sunset','sailing');
+  const next=packet(2,PLAIN,'sailing');
   next.self.sailTarget={x:1800,y:550};
   room.snapshot(next);
   assert.equal(room.player.sailTarget,null,'unacknowledged stop survives reconciliation');
@@ -209,10 +213,10 @@ test('the dock button asks the server to dock at the nearest shore',()=>{
 });
 
 // boss 6 Nov ("I took the boat already. Every island should have all the boats"): concepts/feel/boats-spec.md
-const moored=(fleet,islandId)=>fleet.boats(islandId).filter(boat=>!boat.occupant && boatSpots().some(spot=>spot.x===boat.x && spot.y===boat.y));
-test('offline: every island starts with its ten moored boats',()=>{
+const moored=(fleet,islandId)=>fleet.boats(islandId).filter(boat=>!boat.occupant && boatSpots(islandId).some(spot=>spot.x===boat.x && spot.y===boat.y));   // that island's own map's moorings
+test('offline: every island starts with all its moored boats',()=>{
   const fleet=new OfflineFleet();
-  for (const id of ['home',...destinationsFor('home').map(d=>d.id)]) assert.equal(moored(fleet,id).length,10,id);
+  for (const id of ['home',...destinationsFor('home').map(d=>d.destination)]) assert.equal(moored(fleet,id).length,boatSpots(id).length,id);
   assert.equal(new Set(fleet.list.map(boat=>boat.id)).size,fleet.list.length,'ids are never shared');
 });
 
@@ -232,15 +236,16 @@ test('offline: a taken boat refills its mooring once the sailor is clear, and on
 });
 
 test('offline: crossing to another island refills home, and the boat you arrive in leaves',()=>{
-  const fleet=new OfflineFleet(), away=destinationsFor('home')[0];
+  const fleet=new OfflineFleet(), away=destinationsFor('home')[0], there=away.destination, per=boatSpots(there).length;
   fleet.take('home-0','me');
-  assert.equal(fleet.sail('me',{x:away.dock.x,y:away.dock.y,turn:0,islandId:away.id}),true);
+  const water=harborOf(there).water;   // docked beside that island's own jetty, in its own coordinates
+  assert.equal(fleet.sail('me',{x:water.x,y:water.y,turn:0,islandId:there}),true);
   assert.equal(moored(fleet,'home').length,10,'the jetty you left is full again');
-  assert.equal(moored(fleet,away.id).length,10,'the island you reach already has all its boats');
+  assert.equal(moored(fleet,there).length,per,'the island you reach already has all its boats');
   const boat=fleet.land('me');
   assert.equal(boat.id,'home-0');
   assert.equal(fleet.list.includes(boat),false,'it drifts off: no pile-up, no stranded boat');
-  assert.equal(fleet.boats(away.id).length,10);
+  assert.equal(fleet.boats(there).length,per);
   assert.equal(fleet.boats('home').length,10);
 });
 

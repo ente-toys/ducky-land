@@ -1,0 +1,42 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "trees": 62,
+  "props": 374,
+  "groundDetails": 3130,
+  "openAreas": {
+    "activity-1": {
+      "free": 149,
+      "total": 149
+    },
+    "activity-2": {
+      "free": 149,
+      "total": 149
+    },
+    "activity-3": {
+      "free": 149,
+      "total": 149
+    },
+    "stalls-1": {
+      "free": 149,
+      "total": 149
+    },
+    "stalls-2": {
+      "free": 149,
+      "total": 149
+    },
+    "stalls-3": {
+      "free": 149,
+      "total": 149
+    }
+  },
+  "walkableCells": 21020,
+  "reachableCells": 20998,
+  "reachablePercent": 99.895337773549,
+  "coastChecks": 18816,
+  "problems": [],
+  "checkerNotes": [],
+  "arcBenches": 14,
+  "svgSources": 117,
+  "rasterAssets": 0
+}

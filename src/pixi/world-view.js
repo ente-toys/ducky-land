@@ -99,7 +99,8 @@ void main() {
 
 // The world texture: every island at its true place on a map that wraps both ways, each sitting in two flat bands of
 // lighter water that follow its coast (the cartoon-Earth shallows), drawn under the island art itself.
-function buildWorldTexture(app, islands, bounds, islandTexture, worldSize) {
+// boss 6 Nov: each island in its own map's art and coast (a themed island once its art has loaded, home's until then)
+function buildWorldTexture(app, islands, bounds, arch, worldSize) {
   const W = 4096, H = 2048, span = {x: bounds.x1 - bounds.x0, y: bounds.y1 - bounds.y0};
   const kx = W / span.x, ky = H / span.y;
   const box = new Container(), bands = new Graphics();
@@ -110,8 +111,9 @@ function buildWorldTexture(app, islands, bounds, islandTexture, worldSize) {
   const widen = island => 1 / Math.max(.3, Math.cos((island.y - cyW) / Rw));
   const coast = (island, grow, ox, oy) => {
     const c = Math.cos(island.rot), s = Math.sin(island.rot), wd = widen(island);
-    return shapes.coast.flatMap(([x, y]) => {
-      const dx = (x - worldSize.width / 2) * island.scale * grow * island.flip, dy = (y - worldSize.height / 2) * island.scale * grow;
+    const m = arch.sizeOf ? arch.sizeOf(island.id) : null, size = m ?? worldSize, line = m && !m.home ? m.walk.coast : shapes.coast;
+    return line.flatMap(([x, y]) => {
+      const dx = (x - size.width / 2) * island.scale * grow * island.flip, dy = (y - size.height / 2) * island.scale * grow;
       return [(island.x - bounds.x0 + (dx * c - dy * s) * wd) * kx + ox, (island.y - bounds.y0 + dx * s + dy * c) * ky + oy];
     });
   };
@@ -119,11 +121,11 @@ function buildWorldTexture(app, islands, bounds, islandTexture, worldSize) {
   for (const ox of [-W, 0, W]) for (const oy of [-H, 0, H]) copies.push([ox, oy]);
   for (const grow of [1.42, 1.2]) for (const island of islands) for (const [ox, oy] of copies) bands.poly(coast(island, grow, ox, oy)).fill({color: 0xFFFFFF, alpha: .16});   // a light tint over whatever the sea is
   for (const island of islands) for (const [ox, oy] of copies) {
-    const s = new Sprite(islandTexture);
+    const s = new Sprite(arch.textureOf ? arch.textureOf(island.id) : arch.texture), size = arch.sizeOf ? arch.sizeOf(island.id) : worldSize;
     s.anchor.set(.5);
     s.position.set((island.x - bounds.x0) * kx + ox, (island.y - bounds.y0) * ky + oy);
-    s.width = worldSize.width * island.scale * kx; s.height = worldSize.height * island.scale * ky;
-    s.scale.x *= island.flip; s.rotation = island.rot; s.tint = island.tint ?? 0xFFFFFF;
+    s.width = size.width * island.scale * kx; s.height = size.height * island.scale * ky;
+    s.scale.x *= island.flip; s.rotation = island.rot; s.tint = island.map && island.map !== 'home' ? 0xFFFFFF : island.tint ?? 0xFFFFFF;
     const holder = new Container(); holder.addChild(s); holder.scale.x = widen(island);   // widen in map space, after the turn
     holder.position.set(s.x, s.y); s.position.set(0, 0);
     box.addChild(holder);
@@ -153,7 +155,7 @@ function makePin() {
 }
 
 export function createWorldView(app, scene) {
-  let rt = RenderTexture.create({width: 2, height: 2}), w = 0, h = 0, worldTex = null;
+  let rt = RenderTexture.create({width: 2, height: 2}), w = 0, h = 0, worldTex = null, worldVersion = -1;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
@@ -201,9 +203,11 @@ export function createWorldView(app, scene) {
       const on = t > .001;
       mesh.visible = on;
       if (!on) {scene.visible = true; life.visible = pin.visible = false; this.pinIn = 0; return;}
-      if (!worldTex && arch?.texture) {
-        worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch.texture, worldSize);
+      if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {   // rebuilt when a themed island's snapshot arrives
+        const old = worldTex; worldVersion = arch.version;
+        worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize);
         shader.resources.uWorld = worldTex.source;
+        if (old) setTimeout(() => old.destroy(true), 0);   // unbound first, then freed (no 'destroyed while bound' warning)
       }
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       if (t < .97) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)

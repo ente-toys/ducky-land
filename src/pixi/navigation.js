@@ -6,6 +6,10 @@ const CELL=32,COLS=Math.ceil(world.width/CELL),ROWS=Math.ceil(world.height/CELL)
 const grid=new Uint8Array(COLS*ROWS);
 for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)grid[y*COLS+x]=walkable((x+.5)*CELL,(y+.5)*CELL)?1:0;
 function point(id){return [(id%COLS+.5)*CELL,(Math.floor(id/COLS)+.5)*CELL];}
+// boss 6 Nov (100 Duckies clicking about one big island): whether the straight step between two neighbouring cells is clear,
+// worked out once per step and kept (0 not yet known, 1 clear, 2 blocked), so a busy island's routes stop re-testing it
+const STEP=new Uint8Array(COLS*ROWS*9);
+function stepClear(cur,dx,dy,n){const k=cur*9+(dy+1)*3+(dx+1);if(!STEP[k])STEP[k]=clearLine(point(cur),point(n))?1:2;return STEP[k]===1;}
 function cell(x,y){return Math.floor(y/CELL)*COLS+Math.floor(x/CELL);}
 function nearest(x,y,radius=150){
  if(walkable(x,y))return [x,y];
@@ -29,7 +33,7 @@ function search(sx,sy,target){
  cost[start]=0;push(start,heuristic(start));let found=false;
  while(heap.length){let cur=pop();if(closed[cur])continue;closed[cur]=1;if(cur===end){found=true;break;}
  const x=cur%COLS,y=Math.floor(cur/COLS);
- for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;let xx=x+dx,yy=y+dy,n=yy*COLS+xx;if(xx<0||yy<0||xx>=COLS||yy>=ROWS||!grid[n]||closed[n])continue;if(dx&&dy&&(!grid[y*COLS+xx]||!grid[yy*COLS+x]))continue;const nc=cost[cur]+(dx&&dy?Math.SQRT2:1);if(!clearLine(point(cur),point(n)))continue;if(nc<cost[n]){cost[n]=nc;parent[n]=cur;push(n,nc+heuristic(n));}}}
+ for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;let xx=x+dx,yy=y+dy,n=yy*COLS+xx;if(xx<0||yy<0||xx>=COLS||yy>=ROWS||!grid[n]||closed[n])continue;if(dx&&dy&&(!grid[y*COLS+xx]||!grid[yy*COLS+x]))continue;const nc=cost[cur]+(dx&&dy?Math.SQRT2:1);if(!stepClear(cur,dx,dy,n))continue;if(nc<cost[n]){cost[n]=nc;parent[n]=cur;push(n,nc+heuristic(n));}}}
  if(!found)return [];
  const raw=[];for(let n=end;n!==start;n=parent[n])raw.push(point(n));raw.reverse();raw.push(target);
  let out=[],anchor=[sx,sy];for(let i=0;i<raw.length;){let j=i;while(j+1<raw.length&&clearLine(anchor,raw[j+1]))j++;out.push(raw[j]);anchor=raw[j];i=j+1;}return rounded(out,sx,sy);

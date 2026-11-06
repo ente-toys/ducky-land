@@ -17,7 +17,7 @@ const HOP=.5, DRIFT=.9, DRIFT_PX=36;   // the boat you stepped off waits for you
 const smooth=u => u*u*(3-2*u);
 const bobIn=k => k>=1 ? 0 : (1-k)**2*Math.cos(k*Math.PI*1.5);   // starts low, rises, dips once, rests
 const driftBy=(heading,d) => ({x:-Math.sin(heading)*d,y:-Math.cos(heading)*d*.45});   // astern, back out to sea from the shore it nosed into; flattened like the wake
-const atMooring=boat => boatSpots().some(spot => spot.x === boat.x && spot.y === boat.y);
+const atMooring=boat => boatSpots(boat.islandId).some(spot => spot.x === boat.x && spot.y === boat.y);   // that island's own map's spots
 
 export async function createTravelView(objects,water,air,decks) {
   const [sea]=await Promise.all([createSea(water,objects,air)]);   // boss 5 Nov: the cloud bank and sea islands live in sea-islands.js
@@ -27,6 +27,7 @@ export async function createTravelView(objects,water,air,decks) {
   return {
     fx,
     transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient(), ...sea.transient()],
+    showJetty: mapId => harbor.show(mapId),
     switchIsland(id,shift) {   // shift: how far the old island's coordinates move to the new one's (a seamless landing)
       harbor.switchIsland(id);
       settled=false;

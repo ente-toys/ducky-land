@@ -8,7 +8,7 @@
    "layers": [
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/nod-duck.png",
+     "src": "/pixi-duck/sleep/nod-duck.svg",
      "pivot": [
       379,
       961
@@ -36,7 +36,7 @@
    "layers": [
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/leaf-duck.png",
+     "src": "/pixi-duck/sleep/leaf-duck.svg",
      "pivot": [
       452,
       510
@@ -50,7 +50,7 @@
     },
     {
      "id": "prop",
-     "src": "/pixi-duck/sleep/leaf-prop.png",
+     "src": "/pixi-duck/sleep/leaf-prop.svg",
      "box": [
       4,
       143,
@@ -74,7 +74,7 @@
    "layers": [
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/wing-duck.png",
+     "src": "/pixi-duck/sleep/wing-duck.svg",
      "pivot": [
       453,
       566
@@ -102,7 +102,7 @@
    "layers": [
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/hammock-duck.png",
+     "src": "/pixi-duck/sleep/hammock-duck.svg",
      "pivot": [
       458,
       561
@@ -116,7 +116,7 @@
     },
     {
      "id": "posts",
-     "src": "/pixi-duck/sleep/hammock-posts.png",
+     "src": "/pixi-duck/sleep/hammock-posts.svg",
      "box": [
       4,
       153,
@@ -126,7 +126,7 @@
     },
     {
      "id": "cloth",
-     "src": "/pixi-duck/sleep/hammock-cloth.png",
+     "src": "/pixi-duck/sleep/hammock-cloth.svg",
      "box": [
       139,
       268,
@@ -136,7 +136,7 @@
     },
     {
      "id": "zz",
-     "src": "/pixi-duck/sleep/hammock-zz.png",
+     "src": "/pixi-duck/sleep/hammock-zz.svg",
      "pivot": [
       376,
       130
@@ -164,7 +164,7 @@
    "layers": [
     {
      "id": "prop",
-     "src": "/pixi-duck/sleep/rock-prop.png",
+     "src": "/pixi-duck/sleep/rock-prop.svg",
      "box": [
       501,
       331,
@@ -174,7 +174,7 @@
     },
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/rock-duck.png",
+     "src": "/pixi-duck/sleep/rock-duck.svg",
      "pivot": [
       320,
       828
@@ -202,7 +202,7 @@
    "layers": [
     {
      "id": "prop",
-     "src": "/pixi-duck/sleep/book-prop.png",
+     "src": "/pixi-duck/sleep/book-prop.svg",
      "box": [
       4,
       505,
@@ -212,7 +212,7 @@
     },
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/book-duck.png",
+     "src": "/pixi-duck/sleep/book-duck.svg",
      "pivot": [
       520,
       625
@@ -240,7 +240,7 @@
    "layers": [
     {
      "id": "prop",
-     "src": "/pixi-duck/sleep/chair-prop.png",
+     "src": "/pixi-duck/sleep/chair-prop.svg",
      "box": [
       4,
       4,
@@ -250,7 +250,7 @@
     },
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/chair-duck.png",
+     "src": "/pixi-duck/sleep/chair-duck.svg",
      "pivot": [
       332,
       612
@@ -264,7 +264,7 @@
     },
     {
      "id": "zz",
-     "src": "/pixi-duck/sleep/chair-zz.png",
+     "src": "/pixi-duck/sleep/chair-zz.svg",
      "pivot": [
       202,
       171
@@ -292,7 +292,7 @@
    "layers": [
     {
      "id": "duck",
-     "src": "/pixi-duck/sleep/box-duck.png",
+     "src": "/pixi-duck/sleep/box-duck.svg",
      "pivot": [
       355,
       479
@@ -306,7 +306,7 @@
     },
     {
      "id": "prop",
-     "src": "/pixi-duck/sleep/box-prop.png",
+     "src": "/pixi-duck/sleep/box-prop.svg",
      "box": [
       4,
       208,

@@ -1,0 +1,28 @@
+{
+  "ready": true,
+  "area": 20499388.04,
+  "homeRatio": 1.8484569918845806,
+  "map": [
+    7800,
+    5800
+  ],
+  "props": 749,
+  "trees": 62,
+  "bigTrees": 60,
+  "protectedLayoutUnchanged": true,
+  "sleepers": 40,
+  "crowdPositions": 100,
+  "zones": [
+    "plaza",
+    "centre",
+    "activity-1",
+    "activity-2",
+    "activity-3",
+    "stalls-1",
+    "stalls-2",
+    "stalls-3"
+  ],
+  "problems": [],
+  "failures": [],
+  "sleepNotes": []
+}

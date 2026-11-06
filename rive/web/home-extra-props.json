@@ -1,0 +1,241 @@
+{
+ "note": "boss 6 Nov: the trees, bushes and flowers on the land added round home (north, west, north-east). Same plant art and scale sheet as home (plant() + sized()), appended after consolidate() so no existing prop moves.",
+ "props": [
+  {
+   "id": "grow-tree-1",
+   "name": "Tree",
+   "x": 340,
+   "y": 1100,
+   "zone": "grown",
+   "asset": "tree-5",
+   "src": "/pixi-art/plants/tree-5.svg",
+   "width": 150,
+   "height": 380,
+   "resolution": 5.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.2017,
+   "grow": 1.1,
+   "tint": 16055020
+  },
+  {
+   "id": "grow-tree-2",
+   "name": "Tree",
+   "x": 300,
+   "y": 2150,
+   "zone": "grown",
+   "asset": "tree-3",
+   "src": "/pixi-art/plants/tree-3.svg",
+   "width": 300,
+   "height": 380,
+   "resolution": 5.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1385,
+   "grow": 1.1,
+   "tint": 16777215,
+   "flip": true
+  },
+  {
+   "id": "grow-bush-1",
+   "name": "Bush",
+   "x": 255,
+   "y": 1690,
+   "zone": "grown",
+   "asset": "bush-5",
+   "src": "/pixi-art/plants/bush-5.svg",
+   "width": 170,
+   "height": 110,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3
+  },
+  {
+   "id": "grow-bush-2",
+   "name": "Bush",
+   "x": 275,
+   "y": 2470,
+   "zone": "grown",
+   "asset": "bush-6",
+   "src": "/pixi-art/plants/bush-6.svg",
+   "width": 120,
+   "height": 96,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  },
+  {
+   "id": "grow-bush-3",
+   "name": "Bush",
+   "x": 550,
+   "y": 975,
+   "zone": "grown",
+   "asset": "bush-2",
+   "src": "/pixi-art/plants/bush-2.svg",
+   "width": 168,
+   "height": 110,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.235,
+   "flip": true
+  },
+  {
+   "id": "grow-flower-1",
+   "name": "Flowers",
+   "x": 930,
+   "y": 820,
+   "zone": "grown",
+   "asset": "flower-3",
+   "src": "/pixi-art/plants/flower-3.svg",
+   "width": 44,
+   "height": 36,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6
+  },
+  {
+   "id": "grow-flower-2",
+   "name": "Flowers",
+   "x": 2880,
+   "y": 250,
+   "zone": "grown",
+   "asset": "flower-1",
+   "src": "/pixi-art/plants/flower-1.svg",
+   "width": 48,
+   "height": 36,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6
+  },
+  {
+   "id": "grow-tree-3",
+   "name": "Tree",
+   "x": 3270,
+   "y": 470,
+   "zone": "grown",
+   "asset": "tree-2",
+   "src": "/pixi-art/plants/tree-2.svg",
+   "width": 180,
+   "height": 360,
+   "resolution": 5.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "grow": 1.1,
+   "tint": 16055020
+  },
+  {
+   "id": "grow-tree-4",
+   "name": "Tree",
+   "x": 3800,
+   "y": 545,
+   "zone": "grown",
+   "asset": "tree-4",
+   "src": "/pixi-art/plants/tree-4.svg",
+   "width": 200,
+   "height": 280,
+   "resolution": 5.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.265,
+   "grow": 1.1,
+   "tint": 16777215,
+   "flip": true
+  },
+  {
+   "id": "grow-bush-4",
+   "name": "Bush",
+   "x": 4095,
+   "y": 500,
+   "zone": "grown",
+   "asset": "bush-4",
+   "src": "/pixi-art/plants/bush-4.svg",
+   "width": 140,
+   "height": 100,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3
+  },
+  {
+   "id": "grow-flower-3",
+   "name": "Flowers",
+   "x": 4420,
+   "y": 560,
+   "zone": "grown",
+   "asset": "flower-2",
+   "src": "/pixi-art/plants/flower-2.svg",
+   "width": 48,
+   "height": 36,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.6
+  },
+  {
+   "id": "grow-tree-5",
+   "name": "Tree",
+   "x": 4760,
+   "y": 650,
+   "zone": "grown",
+   "asset": "tree-1",
+   "src": "/pixi-art/plants/tree-1.svg",
+   "width": 260,
+   "height": 360,
+   "resolution": 5.5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.2017,
+   "grow": 1.1,
+   "tint": 16775146
+  },
+  {
+   "id": "grow-bush-5",
+   "name": "Bush",
+   "x": 4300,
+   "y": 3475,
+   "zone": "grown",
+   "asset": "bush-3",
+   "src": "/pixi-art/plants/bush-3.svg",
+   "width": 116,
+   "height": 104,
+   "resolution": 5,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.3,
+   "flip": true
+  }
+ ]
+}

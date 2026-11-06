@@ -18,13 +18,27 @@ export function createWeather(world,scene,air){
     shadow.visible=false;   // round 4: no cloud shadows on the ground
     shadeLayer.addChild(shadow);return {x,y,sprite,shadow,speed:8+i*.8,phase:i*1.7};
   });
-  const gusts=Object.entries(world.zones).map(([name,zone],i)=>{
-    const sprite=new Graphics({label:'Wind ribbon'}).moveTo(-88,0).bezierCurveTo(-30,-16,6,17,65,0).bezierCurveTo(97,-10,96,-34,77,-32).bezierCurveTo(60,-30,66,-15,80,-19)
-      .moveTo(-60,17).quadraticCurveTo(-4,30,35,14).stroke({color:PALETTE.cream,width:1.8,cap:'round'});
-    air.addChild(sprite);return {sprite,x:zone.x+(name==='plaza'?-470:0),y:zone.y+180,phase:i*.137};
-  });
-  return {update(time,reduced,visible){
-    for(const cloud of clouds){const pose=cloudPose(cloud,time,world.width,reduced);const fade=Math.min(1,(pose.x+500)/350,(world.width+500-pose.x)/350);cloud.sprite.alpha=.2*fade;cloud.shadow.alpha=0;cloud.sprite.position.set(pose.x,pose.y);cloud.shadow.position.set(pose.x+70,pose.y+100);cloud.sprite.visible=visible(pose.x,pose.y,350);cloud.shadow.visible=false;}
-    for(const gust of gusts){const age=(time*.075+gust.phase)%1,x=gust.x+(age-.5)*360,y=gust.y+Math.sin(time*.35+gust.phase)*18;gust.sprite.position.set(x,y);gust.sprite.alpha=Math.sin(age*Math.PI)*.24;gust.sprite.visible=!reduced&&visible(x,y,200);}
+  const ribbon=()=>{const sprite=new Graphics({label:'Wind ribbon'}).moveTo(-88,0).bezierCurveTo(-30,-16,6,17,65,0).bezierCurveTo(97,-10,96,-34,77,-32).bezierCurveTo(60,-30,66,-15,80,-19)
+      .moveTo(-60,17).quadraticCurveTo(-4,30,35,14).stroke({color:PALETTE.cream,width:1.8,cap:'round'});air.addChild(sprite);return sprite;};
+  const zonesOf=w=>Object.entries(w.zones??{}).filter(([,z])=>Number.isFinite(z?.x)&&Number.isFinite(z?.y));
+  let gusts=zonesOf(world).map(([name,zone],i)=>({sprite:ribbon(),x:zone.x+(name==='plaza'?-470:0),y:zone.y+180,phase:i*.137}));
+  let width=world.width;
+  const home={width:world.width,height:world.height,clouds:clouds.map(c=>c.y),gusts:gusts.map(g=>[g.x,g.y])};
+  return {
+  // boss 6 Nov: a themed island has its own size and places: the clouds drift over ITS north and south sea, and the wind
+  // ribbons blow over its own zones. Home is restored exactly (setMap(null)).
+  setMap(map){
+    const w=map?.world ?? world, h=map?.height ?? world.height;
+    width=map?.width ?? world.width;
+    clouds.forEach((c,i)=>{const y=home.clouds[i];c.y=!map||map.home?y:y<home.height/2?y:h-(home.height-y);});
+    const zones=!map||map.home?null:zonesOf(w);
+    if(!zones){gusts.forEach((g,i)=>{if(home.gusts[i]){[g.x,g.y]=home.gusts[i];g.off=false;}else{g.off=true;g.sprite.visible=false;}});return;}
+    while(gusts.length<zones.length)gusts.push({sprite:ribbon(),x:0,y:0,phase:gusts.length*.137});
+    gusts.slice(zones.length).forEach(g=>{g.sprite.visible=false;g.off=true;});
+    zones.forEach(([name,z],i)=>Object.assign(gusts[i],{x:z.x+(name==='plaza'?-470:0),y:z.y+180,off:false}));
+  },
+  update(time,reduced,visible){
+    for(const cloud of clouds){const pose=cloudPose(cloud,time,width,reduced);const fade=Math.min(1,(pose.x+500)/350,(width+500-pose.x)/350);cloud.sprite.alpha=.2*fade;cloud.shadow.alpha=0;cloud.sprite.position.set(pose.x,pose.y);cloud.shadow.position.set(pose.x+70,pose.y+100);cloud.sprite.visible=visible(pose.x,pose.y,350);cloud.shadow.visible=false;}
+    for(const gust of gusts){if(gust.off){gust.sprite.visible=false;continue;}const age=(time*.075+gust.phase)%1,x=gust.x+(age-.5)*360,y=gust.y+Math.sin(time*.35+gust.phase)*18;gust.sprite.position.set(x,y);gust.sprite.alpha=Math.sin(age*Math.PI)*.24;gust.sprite.visible=!reduced&&visible(x,y,200);}
   }};
 }

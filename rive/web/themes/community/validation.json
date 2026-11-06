@@ -1,0 +1,15 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "landArea": 20757553,
+  "ratioToOriginalHome": 1.8717360685302074,
+  "width": 8000,
+  "height": 5800,
+  "props": 544,
+  "activities": 3,
+  "stallRows": 2,
+  "crowdPositions": 102,
+  "boats": 8,
+  "nearestUnthemed": null,
+  "problems": []
+}

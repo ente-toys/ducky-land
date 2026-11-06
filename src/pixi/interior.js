@@ -1,5 +1,5 @@
 // boss 5 Nov: the museum is a room you walk into. Walk up the museum steps to its door and the island fades to the domed
-// gallery (one drawn room, public/pixi-art/interiors/museum.webp, 1536x1024); walk out through the arch at the bottom and you
+// gallery (one drawn room, public/pixi-art/interiors/museum.svg, 1536x1024); walk out through the arch at the bottom and you
 // are back on the steps. Client only: the socket server never sees it (the player stays parked at the door meanwhile).
 // Each piece of furniture is its own sprite (pieces/*.svg) so a Ducky behind it is hidden by it, and each piece's foot
 // blocks walking (a rectangle, or the arc of a curved bench). All numbers are in the drawing's own pixels.

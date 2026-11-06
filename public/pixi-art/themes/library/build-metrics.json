@@ -1,0 +1,31 @@
+{
+ "landArea": 26757373.200000044,
+ "homeArea": 11094500,
+ "map": [
+  8000,
+  5600
+ ],
+ "landmasses": 2,
+ "canalBridges": 2,
+ "jetties": 4,
+ "sleepers": 40,
+ "counts": {
+  "nod": 6,
+  "hammock": 4,
+  "rock": 4,
+  "leaf": 6,
+  "book": 6,
+  "chair": 3,
+  "wing": 6,
+  "box": 5
+ },
+ "props": 374,
+ "trees": 62,
+ "paths": {
+  "main": 240,
+  "minor": 190
+ },
+ "activityAreas": 3,
+ "stallRows": 3,
+ "ratioToHome": 2.411769182928482
+}

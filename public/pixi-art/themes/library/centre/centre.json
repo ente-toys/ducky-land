@@ -1,0 +1,539 @@
+{
+ "theme": "library",
+ "name": "Globe fountain plaza",
+ "concept": "concepts/themes/centre-variations/library-centre-2.png",
+ "origin": "pool centre on the ground",
+ "depthRatio": 0.765957,
+ "pieces": [
+  {
+   "id": "decal-paving",
+   "file": "decal-paving.svg",
+   "layer": "decal",
+   "x": -1170,
+   "y": -901,
+   "width": 2340,
+   "height": 1802,
+   "anchor": {
+    "x": 0,
+    "y": 0
+   },
+   "at": [
+    -1170,
+    -901
+   ]
+  },
+  {
+   "id": "decal-compass",
+   "file": "decal-compass.svg",
+   "layer": "decal",
+   "x": -995,
+   "y": -826,
+   "width": 1990,
+   "height": 1652,
+   "anchor": {
+    "x": 0,
+    "y": 0
+   },
+   "at": [
+    -995,
+    -826
+   ],
+   "note": "draw above decal-paving"
+  },
+  {
+   "id": "back",
+   "file": "back.svg",
+   "layer": "back",
+   "x": -543,
+   "y": -460,
+   "width": 1089,
+   "height": 797,
+   "anchor": {
+    "x": 0,
+    "y": 0
+   },
+   "at": [
+    -543,
+    -460
+   ],
+   "note": "behind every Ducky; the globe and jets sort above it"
+  },
+  {
+   "id": "front-01",
+   "file": "front-01.svg",
+   "layer": "front",
+   "x": 283,
+   "y": -6,
+   "width": 260,
+   "height": 330,
+   "anchor": {
+    "x": 0,
+    "y": 0
+   },
+   "at": [
+    283,
+    -6
+   ],
+   "sortY": 317.8,
+   "note": "front rim; sort by sortY so the globe base sits behind it"
+  },
+  {
+   "id": "front-02",
+   "file": "front-02.svg",
+   "layer": "front",
+   "x": -258,
+   "y": 226,
+   "width": 598,
+   "height": 194,
+   "anchor": {
+    "x": 0,
+    "y": 0
+   },
+   "at": [
+    -258,
+    226
+   ],
+   "sortY": 413.6,
+   "note": "front rim; sort by sortY so the globe base sits behind it"
+  },
+  {
+   "id": "front-03",
+   "file": "front-03.svg",
+   "layer": "front",
+   "x": -546,
+   "y": -84,
+   "width": 331,
+   "height": 451,
+   "anchor": {
+    "x": 0,
+    "y": 0
+   },
+   "at": [
+    -546,
+    -84
+   ],
+   "sortY": 360.7,
+   "note": "front rim; sort by sortY so the globe base sits behind it"
+  },
+  {
+   "id": "globe",
+   "file": "globe.svg",
+   "layer": "sorted",
+   "x": -232.8,
+   "y": -573.6,
+   "width": 465.7,
+   "height": 680.0,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9985
+   },
+   "at": [
+    0,
+    105.4
+   ],
+   "sortY": 105.4,
+   "note": "base front edge; base centre sits on the water at the pool centre"
+  },
+  {
+   "id": "jet-back-right",
+   "file": "jet-back.svg",
+   "layer": "anim",
+   "flip": false,
+   "width": 200,
+   "height": 226,
+   "anchor": {
+    "x": 0.0953,
+    "y": 0.9149
+   },
+   "at": [
+    106.1,
+    -97.2
+   ],
+   "landing": [
+    254.6,
+    -211.0
+   ],
+   "x": 87.0,
+   "y": -304.0,
+   "sortY": -56,
+   "animate": {
+    "kind": "jet",
+    "note": "scale about the anchor 0.92-1.0 and slide the dash offset; back jets draw behind the globe, front jets in front"
+   }
+  },
+  {
+   "id": "jet-back-left",
+   "file": "jet-back.svg",
+   "layer": "anim",
+   "flip": true,
+   "width": 200,
+   "height": 226,
+   "anchor": {
+    "x": 0.0953,
+    "y": 0.9149
+   },
+   "at": [
+    -106.1,
+    -97.2
+   ],
+   "landing": [
+    -254.6,
+    -211.0
+   ],
+   "x": -287.0,
+   "y": -304.0,
+   "sortY": -56,
+   "animate": {
+    "kind": "jet",
+    "note": "scale about the anchor 0.92-1.0 and slide the dash offset; back jets draw behind the globe, front jets in front"
+   }
+  },
+  {
+   "id": "jet-front-right",
+   "file": "jet-front.svg",
+   "layer": "anim",
+   "flip": false,
+   "width": 200,
+   "height": 234,
+   "anchor": {
+    "x": 0.0953,
+    "y": 0.3942
+   },
+   "at": [
+    106.1,
+    65.2
+   ],
+   "landing": [
+    254.6,
+    179.0
+   ],
+   "x": 87.0,
+   "y": -27.0,
+   "sortY": 179.0,
+   "animate": {
+    "kind": "jet",
+    "note": "scale about the anchor 0.92-1.0 and slide the dash offset; back jets draw behind the globe, front jets in front"
+   }
+  },
+  {
+   "id": "jet-front-left",
+   "file": "jet-front.svg",
+   "layer": "anim",
+   "flip": true,
+   "width": 200,
+   "height": 234,
+   "anchor": {
+    "x": 0.0953,
+    "y": 0.3942
+   },
+   "at": [
+    -106.1,
+    65.2
+   ],
+   "landing": [
+    -254.6,
+    179.0
+   ],
+   "x": -287.0,
+   "y": -27.0,
+   "sortY": 179.0,
+   "animate": {
+    "kind": "jet",
+    "note": "scale about the anchor 0.92-1.0 and slide the dash offset; back jets draw behind the globe, front jets in front"
+   }
+  }
+ ],
+ "outerEdge": {
+  "x": 0,
+  "y": 0,
+  "rx": 1150,
+  "ry": 880.9
+ },
+ "walkable": [
+  {
+   "ellipse": {
+    "x": 0,
+    "y": 0,
+    "rx": 1130,
+    "ry": 865.5
+   }
+  }
+ ],
+ "blocked": [
+  {
+   "name": "fountain pool",
+   "ellipse": {
+    "x": 0,
+    "y": -20.0,
+    "rx": 550,
+    "ry": 421.3
+   }
+  }
+ ],
+ "stairs": [],
+ "spawn": [
+  0,
+  616.6
+ ],
+ "capacity": {
+  "floorArea": 2327217,
+  "duckies": 474,
+  "note": "at 4902 units per Ducky"
+ },
+ "bookstore": {
+  "name": "Round bookstore tower",
+  "concept": "concepts/themes/library-base/library-two-isles-3.png",
+  "origin": "centre of the tower base on the ground",
+  "folder": "bookstore/",
+  "pieces": [
+   {
+    "id": "bookstore-decal-forecourt",
+    "file": "bookstore/decal-forecourt.svg",
+    "layer": "decal",
+    "x": -1100,
+    "y": -848,
+    "width": 2200,
+    "height": 1696,
+    "anchor": {
+     "x": 0,
+     "y": 0
+    },
+    "at": [
+     -1100,
+     -848
+    ]
+   },
+   {
+    "id": "bookstore-tower",
+    "file": "bookstore/tower.svg",
+    "layer": "sorted",
+    "width": 688.7,
+    "height": 950.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.9968
+    },
+    "at": [
+     0,
+     255.1
+    ],
+    "x": -344.4,
+    "y": -691.9,
+    "sortY": 255.1,
+    "note": "landmark, sorted by its base front edge"
+   },
+   {
+    "id": "bookstore-stall-1",
+    "file": "bookstore/stall-red.svg",
+    "layer": "sorted",
+    "flip": false,
+    "width": 251.7,
+    "height": 330.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.997
+    },
+    "at": [
+     -811.9,
+     -226.3
+    ],
+    "x": -937.7,
+    "y": -555.3,
+    "sortY": -226.3
+   },
+   {
+    "id": "bookstore-stall-2",
+    "file": "bookstore/stall-green.svg",
+    "layer": "sorted",
+    "flip": false,
+    "width": 262.8,
+    "height": 330.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.997
+    },
+    "at": [
+     -432.0,
+     -573.1
+    ],
+    "x": -563.4,
+    "y": -902.1,
+    "sortY": -573.1
+   },
+   {
+    "id": "bookstore-stall-3",
+    "file": "bookstore/stall-blue.svg",
+    "layer": "sorted",
+    "flip": true,
+    "width": 246.6,
+    "height": 330.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.997
+    },
+    "at": [
+     432.0,
+     -573.1
+    ],
+    "x": 308.7,
+    "y": -902.1,
+    "sortY": -573.1
+   },
+   {
+    "id": "bookstore-stall-4",
+    "file": "bookstore/stall-yellow.svg",
+    "layer": "sorted",
+    "flip": true,
+    "width": 242.8,
+    "height": 330.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.997
+    },
+    "at": [
+     811.9,
+     -226.3
+    ],
+    "x": 690.5,
+    "y": -555.3,
+    "sortY": -226.3
+   },
+   {
+    "id": "bookstore-stall-5",
+    "file": "bookstore/stall-red.svg",
+    "layer": "sorted",
+    "flip": true,
+    "width": 251.7,
+    "height": 330.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.997
+    },
+    "at": [
+     783.0,
+     279.7
+    ],
+    "x": 657.2,
+    "y": -49.3,
+    "sortY": 279.7
+   },
+   {
+    "id": "bookstore-stall-6",
+    "file": "bookstore/stall-blue.svg",
+    "layer": "sorted",
+    "flip": false,
+    "width": 246.6,
+    "height": 330.0,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.997
+    },
+    "at": [
+     -783.0,
+     279.7
+    ],
+    "x": -906.3,
+    "y": -49.3,
+    "sortY": 279.7
+   }
+  ],
+  "door": {
+   "point": [
+    0,
+    295.1
+   ],
+   "facing": "south",
+   "note": "stand here to enter; the door is the yellow arch at the front of the base"
+  },
+  "outerEdge": {
+   "x": 0,
+   "y": 0,
+   "rx": 1080,
+   "ry": 827.2
+  },
+  "walkable": [
+   {
+    "ellipse": {
+     "x": 0,
+     "y": 0,
+     "rx": 1060,
+     "ry": 811.9
+    }
+   }
+  ],
+  "blocked": [
+   {
+    "name": "bookstore tower",
+    "ellipse": {
+     "x": 0,
+     "y": 0,
+     "rx": 343.0,
+     "ry": 262.7
+    }
+   },
+   {
+    "name": "bookstore-stall-1",
+    "ellipse": {
+     "x": -811.9,
+     "y": -266.3,
+     "rx": 115,
+     "ry": 60
+    }
+   },
+   {
+    "name": "bookstore-stall-2",
+    "ellipse": {
+     "x": -432.0,
+     "y": -613.1,
+     "rx": 115,
+     "ry": 60
+    }
+   },
+   {
+    "name": "bookstore-stall-3",
+    "ellipse": {
+     "x": 432.0,
+     "y": -613.1,
+     "rx": 115,
+     "ry": 60
+    }
+   },
+   {
+    "name": "bookstore-stall-4",
+    "ellipse": {
+     "x": 811.9,
+     "y": -266.3,
+     "rx": 115,
+     "ry": 60
+    }
+   },
+   {
+    "name": "bookstore-stall-5",
+    "ellipse": {
+     "x": 783.0,
+     "y": 239.7,
+     "rx": 115,
+     "ry": 60
+    }
+   },
+   {
+    "name": "bookstore-stall-6",
+    "ellipse": {
+     "x": -783.0,
+     "y": 239.7,
+     "rx": 115,
+     "ry": 60
+    }
+   }
+  ],
+  "capacity": {
+   "area": 2290273,
+   "duckies": 467
+  },
+  "size": {
+   "towerWidth": 688.7,
+   "towerHeight": 950.0,
+   "note": "Grand Reading Hall is 1342 x 892 as placed, the museum-size landmark"
+  }
+ }
+}

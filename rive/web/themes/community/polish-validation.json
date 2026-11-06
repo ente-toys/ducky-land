@@ -1,0 +1,15 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "sleepersUnchanged": true,
+  "originalLandmarksRetained": true,
+  "geometryUnchanged": true,
+  "trees": 69,
+  "props": 544,
+  "flats": 1581,
+  "groundTiles": 20,
+  "openAreaProblems": [],
+  "pondDockWalkable": true,
+  "pondWaterBlocked": true,
+  "fireAndStageSolid": true
+}

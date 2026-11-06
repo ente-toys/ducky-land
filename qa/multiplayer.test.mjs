@@ -1,3 +1,6 @@
+import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
+import {mapOf} from '../src/pixi/island-maps.js';
+import {originOffset} from '../src/pixi/islands.js';
 import assert from 'node:assert/strict';
 import test, {after, before} from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
@@ -6,7 +9,7 @@ import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
-import {HARBOR,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
+import {HARBOR,harborOf,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
 import {DUCK_RADIUS, RUN_SPEED, WALK_SPEED, MUSEUM_DOOR, atMuseumDoor} from '../src/pixi/player-motion.js';
 
 const origin = 'https://island.example';
@@ -640,7 +643,7 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     const id=captain.welcome.id;
     assert.equal(captain.snapshot.boats.some(boat => boat.id===boatId),false,'the ferry went back to its own island');
     const localBoat=captain.snapshot.boats.find(boat => !boat.occupant).id;   // this island's own boats
-    await setup(captain,{...HARBOR.land,path:[]},2);
+    await setup(captain,{...harborOf(exit.destination).land,path:[]},2);   // that island's own jetty (it may be themed)
     captain.send({type:'board',boatId:localBoat});
     await eventually(() => captain.duck()?.mode==='sailing');
     captain.close();
@@ -656,10 +659,11 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     await request('/test/restore');
     await eventually(() => resumed.duck()?.mode==='sailing');
     assert.equal(resumed.snapshot.boats.find(boat => boat.id===localBoat).occupant,id);
-    await setup(resumed,{x:HARBOR.water.x,y:HARBOR.water.y,exitLocked:false});
+    const there=harborOf(exit.destination);
+    await setup(resumed,{x:there.water.x,y:there.water.y,exitLocked:false});
     resumed.send({type:'disembark'});
     await eventually(() => resumed.duck()?.mode==='walking');
-    assert.deepEqual([resumed.duck().x,resumed.duck().y],[HARBOR.land.x,HARBOR.land.y]);
+    assert.deepEqual([resumed.duck().x,resumed.duck().y],[there.land.x,there.land.y]);
     assert.equal(resumed.snapshot.boats.find(boat => boat.id===localBoat).occupant,null);
     resumed.send({type:'board',boatId:localBoat});
     await eventually(() => resumed.duck()?.mode==='sailing');
@@ -686,7 +690,7 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
   await request('/test/expire-resume');
   const login=await signIn(9310), a=await socket(login.session);
   const setup=(pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose,steps})});
-  const far={x:220,y:1960}, spot=landingSpot({islandId:'home',...far}); spot.approach=landingApproach({islandId:'home',...far},spot); const gap=p => Math.hypot(p.x-spot.approach.x,p.y-spot.approach.y);
+  const far={x:-120,y:1960}, spot=landingSpot({islandId:'home',...far}); spot.approach=landingApproach({islandId:'home',...far},spot); const gap=p => Math.hypot(p.x-spot.approach.x,p.y-spot.approach.y);
   try {
     await eventually(() => a.snapshot?.boats?.length);
     // boss 6 Nov: a landed boat drifts off and the harbor berth always has a boat, so each run boards that berth's boat
@@ -749,9 +753,10 @@ test('every island always shows all its moored boats: a taken boat is replaced, 
   const [first,second]=await Promise.all([signIn(9330),signIn(9331)]);
   const [a,b]=await Promise.all([socket(first.session),socket(second.session)]);
   const setup=(client,pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:client.welcome.id,pose,steps})});
-  const per=boatSpots().length, spot=boatSpots()[0], away={x:220,y:1960};
-  const mooredAt=(snapshot,slot) => snapshot.boats.find(boat => !boat.occupant && boat.x===boatSpots()[slot].x && boat.y===boatSpots()[slot].y);
-  const allMoored=snapshot => boatSpots().every((_,slot) => mooredAt(snapshot,slot));
+  const per=boatSpots().length, spot=boatSpots()[0], away={x:-120,y:1960};
+  // each island's own map's moorings (boss 6 Nov: a themed island has its own)
+  const mooredAt=(snapshot,slot) => snapshot.boats.find(boat => !boat.occupant && boat.x===boatSpots(snapshot.islandId)[slot].x && boat.y===boatSpots(snapshot.islandId)[slot].y);
+  const allMoored=snapshot => boatSpots(snapshot.islandId).every((_,slot) => mooredAt(snapshot,slot));
   try {
     await eventually(() => a.snapshot?.boats?.length && b.snapshot?.boats?.length);
     assert.ok(allMoored(a.snapshot),'home starts with every mooring full');
@@ -777,14 +782,15 @@ test('every island always shows all its moored boats: a taken boat is replaced, 
     const exit=destinationsFor('home')[0];
     await setup(a,{...exit.dock,exitLocked:false},1);
     await eventually(() => a.snapshot.islandId===exit.destination);
-    await setup(a,{x:HARBOR.water.x,y:HARBOR.water.y,exitLocked:false});
+    const there=harborOf(exit.destination), perThere=boatSpots(exit.destination).length;
+    await setup(a,{x:there.water.x,y:there.water.y,exitLocked:false});
     a.send({type:'disembark'});
     await eventually(() => a.duck()?.mode==='walking');
     await eventually(() => !a.snapshot.boats.some(boat => boat.id===taken),'the boat A arrived in drifts off');
-    assert.ok(allMoored(a.snapshot),`all ${per} of ${exit.destination}'s moorings are full`);
-    assert.equal(a.snapshot.boats.length,per,'and nothing piled up at the jetty');
+    assert.ok(allMoored(a.snapshot),`all ${perThere} of ${exit.destination}'s moorings are full`);
+    assert.equal(a.snapshot.boats.length,perThere,'and nothing piled up at the jetty');
     // the count never dropped on any island, in any snapshot either player saw
-    for (const message of [...a.messages,...b.messages].filter(message => message.type==='snapshot')) assert.ok(message.boats.length>=per,`${message.islandId} showed ${message.boats.length} boats`);
+    for (const message of [...a.messages,...b.messages].filter(message => message.type==='snapshot')) assert.ok(message.boats.length>=boatSpots(message.islandId).length,`${message.islandId} showed ${message.boats.length} boats`);
   } finally {
     a.close();
     b.close();
@@ -799,10 +805,10 @@ test('docking beside an island that is not a jetty neighbour lands you on that i
   await request('/test/expire-resume');
   const login=await signIn(9320), a=await socket(login.session);
   const setup=(pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose,steps})});
-  const off={islandId:'isle-250',x:9437.2,y:-8174.4}, spot=landingSpot(off);
-  const walkWorld=(await import('../rive/web/walk-world.json',{with:{type:'json'}})).default, walkNav=createNavigation({...world,...walkWorld});
+  const off=nonNeighbourLanding(), spot=landingSpot(off);
+  const walkNav=mapOf('isle-176').nav();
   try {
-    assert.ok(!destinationsFor('isle-250').some(d => d.destination==='isle-176'),'isle-176 is not a jetty neighbour');
+    assert.ok(!destinationsFor(off.islandId).some(d => d.destination==='isle-176'),'isle-176 is not a jetty neighbour');
     assert.equal(spot?.islandId,'isle-176');
     await eventually(() => a.snapshot?.boats?.length);
     const boatId=a.snapshot.boats.find(boat => !boat.occupant && boat.id==='home-1').id;
@@ -810,7 +816,7 @@ test('docking beside an island that is not a jetty neighbour lands you on that i
     a.send({type:'board',boatId});
     await eventually(() => a.duck()?.mode==='sailing');
     await setup({...off,sailTarget:null,sailRoute:null,docking:false},1);
-    await eventually(() => a.snapshot?.islandId==='isle-250');
+    await eventually(() => a.snapshot?.islandId===off.islandId);
     a.send({type:'disembark'});
     await eventually(() => a.duck()?.mode==='walking');
     assert.equal(a.snapshot.islandId,'isle-176','the room moves you to isle-176');
@@ -830,12 +836,14 @@ test('player and spectator caps still allow watching and an explicit retry', asy
   const players = [];
   const spectators = [];
   try {
-    for (let i=0;i<16;i++) players.push(await socket((await signIn(i+1000)).session));
-    const {session} = await signIn(1100);
+    // boss 6 Nov: an island holds up to ISLAND_LIMIT (100) Duckies; a new one starts on home, so the 101st watches instead
+    const {ISLAND_LIMIT} = await import('../worker/index.js');
+    for (let i=0;i<ISLAND_LIMIT;i++) players.push(await socket((await signIn(i+1000)).session));
+    const {session} = await signIn(1000+ISLAND_LIMIT+50);
     const extra = await socket(session);
     spectators.push(extra);
     assert.equal(extra.welcome.reason,'players-full');
-    await eventually(() => extra.snapshot?.players.length === 16);
+    await eventually(() => extra.snapshot?.players.length === ISLAND_LIMIT);
     for (let i=1;i<64;i++) spectators.push(await socket());
     const overflow = await socket();
     assert.equal(overflow.welcome.reason,'spectators-full');

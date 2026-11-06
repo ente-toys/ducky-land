@@ -1,5 +1,5 @@
 // boss 5 Nov: the sailboat turns through real angles. Views of the same boat seen from the game's 3/4 camera (now a
-// 32-frame spin in public/pixi-art/boat/spin/, traced to SVG on 6 Nov with the PNGs kept beside them; any count works) are listed in public/pixi-art/boat/views.json; the view nearest the boat's heading is
+// 32-frame spin in public/pixi-art/boat/spin/, traced to SVG on 6 Nov, originals archived outside public/; any count works) are listed in public/pixi-art/boat/views.json; the view nearest the boat's heading is
 // drawn, with hysteresis so it never flickers at a sector border. Without the manifest the old single side view is used,
 // mirrored for westward headings, exactly as before.
 // Headings follow the game: atan2(dx, dy), so 0 = south (toward the camera), PI/2 = east, -PI/2 = west, PI = north.

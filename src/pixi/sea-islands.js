@@ -30,7 +30,8 @@ export async function createSea(water, objects) {
         if (!signs.has(destination.name)) signs.set(destination.name, signTexture(destination.name));
         const sprite = new Sprite(await signs.get(destination.name));
         sprite.anchor.set(129 / 258, 120 / 129);   // prop-82's post foot
-        const x = HARBOR.land.x + destination.offset.x + SIGN.dx, y = HARBOR.land.y + destination.offset.y + SIGN.dy;
+        const land = destination.land ?? {x: HARBOR.land.x + destination.offset.x, y: HARBOR.land.y + destination.offset.y};   // that island's own jetty
+        const x = land.x + SIGN.dx, y = land.y + SIGN.dy;
         sprite.position.set(x, y); sprite.zIndex = y; sprite.visible = false;
         return {sprite, x, y, id: destination.destination, revealAt: revealed.has(destination.destination) ? -1 : null};
       }));

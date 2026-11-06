@@ -1,0 +1,520 @@
+{
+  "ready": true,
+  "sleepers": 40,
+  "standingCapacity": 100,
+  "minimumSpacing": 145,
+  "reservedZones": [
+    "activity-1",
+    "activity-2",
+    "activity-3",
+    "stalls-1",
+    "stalls-2",
+    "stalls-3"
+  ],
+  "crowd": [
+    {
+      "x": 1380,
+      "y": 3060,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1530,
+      "y": 3060,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1080,
+      "y": 3210,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1380,
+      "y": 3210,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1530,
+      "y": 3210,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1680,
+      "y": 3210,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1230,
+      "y": 3360,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1380,
+      "y": 3360,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1530,
+      "y": 3360,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1230,
+      "y": 3510,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1380,
+      "y": 3510,
+      "zone": "activity-1"
+    },
+    {
+      "x": 1530,
+      "y": 3510,
+      "zone": "activity-1"
+    },
+    {
+      "x": 4780,
+      "y": 960,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4930,
+      "y": 960,
+      "zone": "activity-2"
+    },
+    {
+      "x": 5080,
+      "y": 960,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4480,
+      "y": 1110,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4630,
+      "y": 1110,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4780,
+      "y": 1110,
+      "zone": "activity-2"
+    },
+    {
+      "x": 5080,
+      "y": 1110,
+      "zone": "activity-2"
+    },
+    {
+      "x": 5230,
+      "y": 1110,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4630,
+      "y": 1260,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4780,
+      "y": 1260,
+      "zone": "activity-2"
+    },
+    {
+      "x": 4930,
+      "y": 1260,
+      "zone": "activity-2"
+    },
+    {
+      "x": 5080,
+      "y": 1260,
+      "zone": "activity-2"
+    },
+    {
+      "x": 6340,
+      "y": 3590,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6490,
+      "y": 3590,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6640,
+      "y": 3590,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6190,
+      "y": 3740,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6490,
+      "y": 3740,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6640,
+      "y": 3740,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6790,
+      "y": 3740,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6340,
+      "y": 3890,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6490,
+      "y": 3890,
+      "zone": "activity-3"
+    },
+    {
+      "x": 6640,
+      "y": 3890,
+      "zone": "activity-3"
+    },
+    {
+      "x": 3650,
+      "y": 2890,
+      "zone": "centre"
+    },
+    {
+      "x": 3800,
+      "y": 2890,
+      "zone": "centre"
+    },
+    {
+      "x": 4250,
+      "y": 2890,
+      "zone": "centre"
+    },
+    {
+      "x": 4400,
+      "y": 2890,
+      "zone": "centre"
+    },
+    {
+      "x": 4700,
+      "y": 2890,
+      "zone": "centre"
+    },
+    {
+      "x": 3350,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 3500,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 3800,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 3950,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 4100,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 4550,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 4700,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 5000,
+      "y": 3040,
+      "zone": "centre"
+    },
+    {
+      "x": 2900,
+      "y": 3190,
+      "zone": "centre"
+    },
+    {
+      "x": 3350,
+      "y": 3190,
+      "zone": "centre"
+    },
+    {
+      "x": 4550,
+      "y": 3190,
+      "zone": "centre"
+    },
+    {
+      "x": 2900,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 3200,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 3350,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 3500,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 3650,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 4400,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 4550,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 4700,
+      "y": 3340,
+      "zone": "centre"
+    },
+    {
+      "x": 2900,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 3350,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 3500,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 3650,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 4250,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 4400,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 4550,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 4700,
+      "y": 3490,
+      "zone": "centre"
+    },
+    {
+      "x": 3500,
+      "y": 3640,
+      "zone": "centre"
+    },
+    {
+      "x": 3950,
+      "y": 3640,
+      "zone": "centre"
+    },
+    {
+      "x": 4550,
+      "y": 3640,
+      "zone": "centre"
+    },
+    {
+      "x": 3350,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 3500,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 3650,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 3800,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 3950,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 4100,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 4250,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 4400,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 4550,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 4700,
+      "y": 3790,
+      "zone": "centre"
+    },
+    {
+      "x": 3350,
+      "y": 3940,
+      "zone": "centre"
+    },
+    {
+      "x": 1690,
+      "y": 1780,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 1840,
+      "y": 1780,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 2140,
+      "y": 1780,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 2290,
+      "y": 1780,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 1690,
+      "y": 1930,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 1840,
+      "y": 1930,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 2140,
+      "y": 1930,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 2290,
+      "y": 1930,
+      "zone": "stalls-1"
+    },
+    {
+      "x": 5910,
+      "y": 2250,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 6060,
+      "y": 2250,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 6360,
+      "y": 2250,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 6510,
+      "y": 2250,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 5910,
+      "y": 2400,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 6060,
+      "y": 2400,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 6360,
+      "y": 2400,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 6510,
+      "y": 2400,
+      "zone": "stalls-2"
+    },
+    {
+      "x": 2360,
+      "y": 4820,
+      "zone": "stalls-3"
+    },
+    {
+      "x": 2510,
+      "y": 4820,
+      "zone": "stalls-3"
+    },
+    {
+      "x": 2660,
+      "y": 4820,
+      "zone": "stalls-3"
+    },
+    {
+      "x": 2810,
+      "y": 4820,
+      "zone": "stalls-3"
+    }
+  ],
+  "limitations": [
+    "Spatial and navigation checks only; no 100-client server load test.",
+    "Vite serves port 5292. Headless Chromium is blocked by macOS sandbox permissions; runtime visuals remain unverified."
+  ]
+}

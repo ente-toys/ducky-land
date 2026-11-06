@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ducky Land assets</title>
+<style>
+:root{--bg:#f6f8f2;--card:#fff;--ink:#232323;--mute:#6b7466;--line:#e3e8dc;--accent:#08C225}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,sans-serif}
+header{position:sticky;top:0;background:var(--bg);padding:16px 20px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;flex-wrap:wrap;z-index:2}
+h1{font-size:18px;margin:0 12px 0 0}
+input{padding:8px 12px;border:1px solid var(--line);border-radius:8px;min-width:220px;font:inherit}
+button{padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font:inherit;cursor:pointer}
+button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+main{padding:20px}
+h2{font-size:14px;color:var(--mute);margin:28px 0 12px;text-transform:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.card .img{aspect-ratio:1;display:grid;place-items:center;background:repeating-conic-gradient(#f1f3ee 0 25%,#fff 0 50%) 0 0/16px 16px;border-radius:8px}
+.card img{max-width:90%;max-height:90%}
+.card span{font-size:12px;color:var(--mute);word-break:break-all}
+#count{color:var(--mute)}
+</style></head><body>
+<header><h1>Ducky Land assets</h1><input id="q" placeholder="Search assets"><div id="tabs"></div><span id="count"></span></header>
+<main id="m"></main>
+<script>
+fetch('asset-list.json').then(r=>r.json()).then(groups=>{
+ const m=document.getElementById('m'),q=document.getElementById('q'),tabs=document.getElementById('tabs'),count=document.getElementById('count');let only=null;
+ const names=Object.keys(groups);
+ for(const n of [null,...names]){const b=document.createElement('button');b.textContent=n??'All';b.onclick=()=>{only=n;[...tabs.children].forEach(x=>x.classList.toggle('on',x===b));draw();};if(!n)b.classList.add('on');tabs.append(b);}
+ function draw(){m.innerHTML='';let total=0;const term=q.value.toLowerCase();
+  for(const n of names){if(only&&n!==only)continue;const list=groups[n].filter(p=>p.toLowerCase().includes(term));if(!list.length)continue;total+=list.length;
+   const h=document.createElement('h2');h.textContent=n+' · '+list.length;m.append(h);const g=document.createElement('div');g.className='grid';
+   for(const p of list){const c=document.createElement('a');c.className='card';c.href=p;c.target='_blank';c.innerHTML=`<div class="img"><img loading="lazy" src="${p}" alt=""></div><span>${p.split('/').pop().replace('.svg','')}</span>`;g.append(c);}
+   m.append(g);}
+  count.textContent=total+' assets';}
+ q.oninput=draw;draw();
+});
+</script></body></html>

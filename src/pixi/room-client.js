@@ -1,7 +1,8 @@
 import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
-import {islandFor, HARBOR, destinationsFor, near, canSail, canDock, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat} from './islands.js';
+import {mapOf} from './island-maps.js';
+import {islandFor, harborOf, destinationsFor, near, canSail, canDock, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -39,6 +40,10 @@ export class RoomClient {
     this.nav = nav;
     this.world = world;
   }
+  // boss 6 Nov: the walking map of the island you are on. Home keeps the engine's own (with its sleepers); a themed island
+  // walks its theme's map, the same one the room server walks (island-maps.js)
+  navHere() { const map = mapOf(this.islandId); return map.home ? this.nav : map.nav(); }
+  worldHere() { const map = mapOf(this.islandId); return map.home ? this.world : map.walk; }
 
   reset() {
     clearTimeout(this.chatTimer);
@@ -207,9 +212,9 @@ export class RoomClient {
     if (command.type === 'jump') return startJump(this.player);
     if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
     if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
-      ? setSailDestination(this.player,command.x,command.y) : setWalkDestination(this.player, this.nav, command.x, command.y);
+      ? setSailDestination(this.player,command.x,command.y) : setWalkDestination(this.player, this.navHere(), command.x, command.y);
     if (command.type === 'disembark' && this.player.mode === 'sailing' && canDock(this.player)) {
-      setSailDestination(this.player,HARBOR.water.x,HARBOR.water.y); this.player.docking=true;
+      const {water} = harborOf(this.islandId); setSailDestination(this.player,water.x,water.y); this.player.docking=true;
     }
     if (command.type === 'emote' && this.player.mode !== 'sailing') playEmote(this.player, command.action, now);
     return null;
@@ -227,7 +232,7 @@ export class RoomClient {
   destination(x, y) {
     if (!this.world || !Number.isFinite(x) || !Number.isFinite(y)) return null;
     if (this.player?.mode === 'sailing' && !canSail(x,y,this.islandId)) return null;
-    if (this.player?.mode !== 'sailing' && (x<0 || y<0 || x>=this.world.width || y>=this.world.height)) return null;
+    if (this.player?.mode !== 'sailing' && (x<0 || y<0 || x>=this.worldHere().width || y>=this.worldHere().height)) return null;
     const result = this.send({type:'destination',x,y});
     return Array.isArray(result) ? result : null;
   }
@@ -292,7 +297,7 @@ export class RoomClient {
       }
     }
     if (this.player.mode === 'sailing') sailStep(this.player,dt,input);
-    else walkStep(this.player, this.nav, dt, now, input);
+    else walkStep(this.player, this.navHere(), dt, now, input);
     const decay = Math.exp(-19 * dt);
     this.offsetX *= decay;
     this.offsetY *= decay;
