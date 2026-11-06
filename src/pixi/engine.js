@@ -792,6 +792,16 @@ export class PixiIsland {
     // switched off; its snapshot came out empty (the globe and the far copies showed only its shallows). Draw it switched on.
     const sceneVisible=this.scene.visible; this.scene.visible=true;
     this.archipelago.build(mapId);
+    const radarHidden = new Set([
+      ...props.filter(({p}) => !/museum|library|lighthouse|fountain|barn|windmill|tower/i.test(p.name || p.asset || '')).map(({p}) => p.sprite),
+      ...props.map(({p}) => p.shadow), ...this.rigs.map(rig => rig.root),
+      ...naps.map(([root]) => root), ...floats.map(([item]) => item.sprite), this.flats,
+      mapId === 'home' ? this.floatLayer : null,
+      this.arts?.get(mapId)?.shadows, this.arts?.get(mapId)?.floatLayer,
+    ].filter(object => object?.visible));
+    radarHidden.forEach(object => {object.visible = false;});
+    try {this.archipelago.buildRadar(mapId);}
+    finally {radarHidden.forEach(object => {object.visible = true;});}
     this.scene.visible=sceneVisible;
     hide.forEach(o => {o.visible=true;});
     for (const {p,v,s,tint} of props) {p.sprite.visible=v; if (p.shadow) p.shadow.visible=s; p.sprite.tint=tint;}

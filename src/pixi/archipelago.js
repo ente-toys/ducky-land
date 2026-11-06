@@ -21,6 +21,7 @@ export function createArchipelago(app, scene, layer, world) {
   root.addChild(copies, people);
   let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
   const thumbnails = new Map();
+  const radarTextures = new Map();
   const textures = new Map();   // map id -> snapshot of that map's art
   const textureOf = id => textures.get(artOf(id)) ?? textures.get('home');
   const sizeOf = id => mapFor(textures.has(artOf(id)) ? artOf(id) : 'home');
@@ -57,10 +58,10 @@ export function createArchipelago(app, scene, layer, world) {
   return {
     get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return textures.get('home') ?? null;},
     get version() {return version;}, has: mapId => textures.has(mapId), textureOf, sizeOf,
-    // Reuse the world's rendered artwork, including props and delivered themes.
+    // Reuse the real island terrain and major landmarks, including delivered themes.
     // Read back a small image once per texture/tint, never once per movement tick.
     thumbnailOf(id) {
-      const texture = textureOf(id);
+      const texture = radarTextures.get(artOf(id)) ?? radarTextures.get('home');
       if (!texture) return null;
       const island = islands.find(item => item.id === id);
       const tint = island.map === 'home' ? island.tint : 0xFFFFFF;
@@ -90,6 +91,21 @@ export function createArchipelago(app, scene, layer, world) {
       textures.set(mapId, texture); version++;
       place(); draw();
     },
+    // The radar keeps the real terrain and major landmarks, without the world's
+    // small props and animated characters. Capture it separately from world copies.
+    buildRadar(mapId) {
+      if (radarTextures.has(mapId)) return;
+      const m = mapFor(mapId), keep = {x: scene.x, y: scene.y, sx: scene.scale.x, sy: scene.scale.y, visible: root.visible};
+      scene.position.set(0, 0); scene.scale.set(1, 1); root.visible = false;
+      try {
+        const texture = app.renderer.generateTexture({target: scene,
+          frame: new Rectangle(0, 0, m.width, m.height), resolution: .12});
+        texture.source.scaleMode = 'linear';
+        radarTextures.set(mapId, texture);
+      } finally {
+        scene.position.set(keep.x, keep.y); scene.scale.set(keep.sx, keep.sy); root.visible = keep.visible;
+      }
+    },
     // arrived on another island by boat: it becomes the real scene, everything else is redrawn round it
     setCurrent(id) {
       if (id === current || !worldIsland(id)) return;
@@ -103,6 +119,6 @@ export function createArchipelago(app, scene, layer, world) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
     },
-    destroy() {thumbnails.clear(); root.destroy({children: true}); for (const t of textures.values()) t.destroy(true);},
+    destroy() {thumbnails.clear(); root.destroy({children: true}); for (const t of textures.values()) t.destroy(true); for (const t of radarTextures.values()) t.destroy(true);},
   };
 }
