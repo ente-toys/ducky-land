@@ -6,6 +6,7 @@ import IslandPresence from './IslandPresence.jsx';
 import StarDialog from './StarDialog.jsx';
 import IslandTravel from './IslandTravel.jsx';
 import IslandFriends from './IslandFriends.jsx';
+import WorldMap from './WorldMap.jsx';
 import './pixi.css';
 
 const notices = {
@@ -143,6 +144,7 @@ export default function PixiPage() {
         <IslandPresence online={online} latestJoin={latestJoin}/>
       </div>
     </div>}
+    {!error && <WorldMap island={island}/>}
     {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {
       setSession(previous => ({...previous,user:{...previous.user,canPlay:true}}));
       setStarDialogOpen(false);
