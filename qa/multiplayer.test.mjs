@@ -2,7 +2,7 @@ import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {originOffset} from '../src/pixi/islands.js';
 import assert from 'node:assert/strict';
-import test, {after, before} from 'node:test';
+import test, {after, before, beforeEach} from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
@@ -22,6 +22,12 @@ before(async () => {
     import {IslandRoom} from './worker/index.js';
     import {start, callback, session, logout, connect, playAccess, friends} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
+      // Movement/privacy fixtures share Home deliberately. World arrival randomness
+      // and capacity across themes are exercised without this override in world.test.
+      newArrival(counts) {
+        if ((counts.get('home') ?? 0)>=100) return null;
+        return {islandId:'home',x:2820,y:2640};
+      }
       async fetch(request) {
         const path = new URL(request.url).pathname;
         if (path === '/test/travel') {
@@ -43,7 +49,12 @@ before(async () => {
           this.boats=restored.boats;
           this.epoch=restored.epoch;
           this.savedBoats=restored.savedBoats;
+          this.sleepers=restored.sleepers; this.sleepNav=restored.sleepNav; this.savedPlayers=restored.savedPlayers;
           this.broadcast();
+        }
+        if (path === '/test/reset-sleepers') {
+          this.sql.exec('DELETE FROM player_states');
+          this.savedPlayers.clear(); this.sleepers.clear(); this.sleepNav.clear(); this.reconcileBoats();
         }
         if (path === '/test/expire-flow') this.sql.exec('UPDATE flows SET expires=0');
         if (path === '/test/expire-resume') {this.sql.exec('UPDATE resumes SET expires=0'); await this.alarm();}
@@ -96,6 +107,7 @@ before(async () => {
 });
 
 after(async () => { await mf?.dispose(); });
+beforeEach(async () => { await request('/test/reset-sleepers'); });
 
 const request = (path, options) => mf.dispatchFetch(origin+path,{redirect:'manual',...options});
 const cookiePart = value => value.split(';',1)[0];
@@ -310,7 +322,7 @@ test('running is a server-capped flag: Shift runs at most 1.7x walk, others see 
   }
 });
 
-test('a game never opens inside the museum: a Ducky held at its door comes back on the plaza (boss 6 Nov)', async () => {
+test('returning players keep their saved museum-door and outside positions (world rule, 6 Nov)', async () => {
   const account=await signIn(9420);
   const guest=await socket();
   let player=await socket(account.session);
@@ -323,8 +335,7 @@ test('a game never opens inside the museum: a Ducky held at its door comes back 
     await eventually(()=>!guest.duck(player.welcome.id));
     player=await socket(account.session);   // reload: the resume would have put it straight back at the door
     const back=await eventually(()=>guest.duck(player.welcome.id));
-    assert.ok(!atMuseumDoor(back.x,back.y));
-    assert.ok(Math.hypot(back.x-world.zones.plaza.spawn[0],back.y-world.zones.plaza.spawn[1])<=DUCK_RADIUS*2,`spawned at ${back.x},${back.y}`);
+    assert.deepEqual([back.x,back.y],[door.x,door.y]);
     const away={x:MUSEUM_DOOR.out.x,y:MUSEUM_DOOR.out.y};   // anywhere else outside is still resumed as it was
     await position(player,{...away,mode:'walking',path:[]});
     await eventually(()=>guest.duck(player.welcome.id)?.y===away.y);
@@ -534,8 +545,8 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     const returned = await socket(one.session);
     clients.push(returned);
     const fresh = await eventually(() => returned.duck());
-    assert.notEqual(fresh.id,id);
-    assert.ok(Math.hypot(fresh.x-world.zones.plaza.spawn[0],fresh.y-world.zones.plaza.spawn[1])<=DUCK_RADIUS*2);
+    assert.equal(fresh.id,id);
+    assert.deepEqual([fresh.x,fresh.y],[before.x,before.y]);
     assert.deepEqual(fresh.outfit,before.outfit);
     assert.ok(nav.walkable(fresh.x,fresh.y));
 
@@ -671,12 +682,12 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     await eventually(() => !watch.duck(id));
     await request('/test/expire-resume');
     watch.send({type:'watch',islandId:exit.destination});
-    await eventually(() => watch.snapshot.boats.find(boat => boat.id===localBoat)?.occupant===null);
+    await eventually(() => watch.snapshot.boats.find(boat => boat.id===localBoat)?.occupant===id);
     const fresh=await socket(captainCookie);
     clients.push(fresh);
     await eventually(() => fresh.duck());
-    assert.equal(fresh.snapshot.islandId,'home');
-    assert.equal(fresh.duck().mode,'walking');
+    assert.equal(fresh.snapshot.islandId,exit.destination);
+    assert.equal(fresh.duck().mode,'sailing');
   } finally {
     clients.forEach(client => client.close());
     await request('/test/expire-session');

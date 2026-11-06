@@ -1,3 +1,4 @@
+import {navigationWithSleepers} from './player-presence.js';
 import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from './player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
@@ -42,13 +43,14 @@ export class RoomClient {
   }
   // boss 6 Nov: the walking map of the island you are on. Home keeps the engine's own (with its sleepers); a themed island
   // walks its theme's map, the same one the room server walks (island-maps.js)
-  navHere() { const map = mapOf(this.islandId); return map.home ? this.nav : map.nav(); }
+  navHere() { const map = mapOf(this.islandId); return this.sleepNav ?? (map.home ? this.nav : map.nav()); }
   worldHere() { const map = mapOf(this.islandId); return map.home ? this.world : map.walk; }
 
   reset() {
     clearTimeout(this.chatTimer);
     this.lastChat = -Infinity;
     this.tracks.clear();
+    this.sleepKey=null;this.sleepNav=null;
     this.boatTracks.clear();
     this.boats = [];
     this.onPresence(null);
@@ -130,7 +132,7 @@ export class RoomClient {
     };
   }
 
-  snapshot({epoch,tick,players,self,online,islandId='home',boats=[]}) {
+  snapshot({epoch,tick,players,self,online,islandId='home',boats=[],sleepers=[]}) {
     if (epoch === this.epoch && tick <= this.tick) return;
     const own=players.find(pose => pose.id === this.id);
     const mode=own?.mode ?? 'walking';
@@ -148,6 +150,11 @@ export class RoomClient {
     this.epoch = epoch;
     this.tick = tick;
     if (Number.isSafeInteger(online) && online >= 0) this.onPresence(online);
+    const sleepKey=JSON.stringify([islandId,sleepers.map(p=>[p.id,p.x,p.y,p.mode])]);
+    if (sleepKey !== this.sleepKey) {
+      this.sleepKey=sleepKey;
+      this.sleepNav=sleepers.length ? navigationWithSleepers(mapOf(islandId),sleepers) : null;
+    }
     const now = nowSeconds();
     const boatTracks=new Map();
     for (const boat of boats) {
@@ -157,7 +164,7 @@ export class RoomClient {
     this.boatTracks=boatTracks;
     this.boats=boats;
     const tracks = new Map();
-    for (const pose of players) {
+    for (const pose of [...players,...sleepers]) {
       if (pose.id === this.id && self) {
         const previous = changed ? null : this.player;
         this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, docking:self.docking, until:now+self.emoteLeft,
@@ -172,7 +179,7 @@ export class RoomClient {
         } else this.prev = null;
       } else {
         const last = this.tracks.get(pose.id);
-        tracks.set(pose.id, {from:last ? sample(last, now) : pose, to:pose, start:now});
+        tracks.set(pose.id, {from:last && !pose.sleeping && !last.to.sleeping ? sample(last, now) : pose, to:pose, start:now});
       }
     }
     this.tracks = tracks;

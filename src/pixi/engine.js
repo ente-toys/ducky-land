@@ -1133,18 +1133,18 @@ export class PixiIsland {
       const editing = isPlayer && this.chatEditor?.current;
       if (editing) this.positionChatEditor(pose);
       let entry = this.liveRigs.get(id);
-      if (!entry || entry.isPlayer !== isPlayer) {
+      if (!entry || entry.isPlayer !== isPlayer || entry.sleeping !== !!pose.sleeping) {
         entry?.rig?.dispose();
         entry?.nameplate?.remove();
-        entry = {isPlayer, rig:null, emoteVersion};
+        entry = {isPlayer, sleeping:!!pose.sleeping, rig:null, emoteVersion};
         this.liveRigs.set(id, entry);
-        createDuck({outfit:pose.outfit, seed:parseInt(id.slice(0,8),16), isPlayer}).then(rig => {
+        createDuck({outfit:pose.outfit, seed:parseInt(id.slice(0,8),16), isPlayer, sleep:pose.sleep}).then(rig => {
           if (this.disposed || this.liveRigs.get(id) !== entry) {
             rig.dispose();
             disposeDuckAssets().catch(() => {});
             return;
           }
-          rig.arrive?.();   // boss 4 Nov: a joining Ducky drops in
+          if (!pose.sleeping) rig.arrive?.();   // boss 4 Nov: a joining Ducky drops in
           entry.rig = rig;
           rig.root.scale.set(.88 * .24 * 3);
           rig.root.visible = false;
@@ -1195,7 +1195,7 @@ export class PixiIsland {
       if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:look.x, y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
       rig.root.visible = visible(look.x,look.y,200);
-      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion, jump:hop});
+      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion, persistentSleep:pose.sleeping, jump:hop});
     }
   }
 

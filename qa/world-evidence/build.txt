@@ -1,0 +1,175 @@
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 1029 modules transformed.
+
+(!) outDir /tmp/ducky-world-build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../../../../../tmp/ducky-world-build/index.html                                       1.20 kB │ gzip:   0.47 kB
+../../../../../tmp/ducky-world-build/assets/sand-edge-bank-D_4BZKoO.svg               4.11 kB │ gzip:   1.95 kB
+../../../../../tmp/ducky-world-build/assets/puff-trail-BL4Efsng.svg                   4.24 kB │ gzip:   2.09 kB
+../../../../../tmp/ducky-world-build/assets/puff-wide-B6XFAYph.svg                    4.25 kB │ gzip:   2.06 kB
+../../../../../tmp/ducky-world-build/assets/sand-edge-cove-BsfNIHBT.svg               4.26 kB │ gzip:   1.99 kB
+../../../../../tmp/ducky-world-build/assets/lily-pad-small-B_IVP-h0.svg               4.44 kB │ gzip:   2.10 kB
+../../../../../tmp/ducky-world-build/assets/compass-BS6ycllO.svg                      4.60 kB │ gzip:   1.81 kB
+../../../../../tmp/ducky-world-build/assets/step-Qh8UnYEB.wav                         4.60 kB
+../../../../../tmp/ducky-world-build/assets/fountain-bowl-BHfK1HN4.svg                4.60 kB │ gzip:   1.87 kB
+../../../../../tmp/ducky-world-build/assets/sign-park-CXrXCQiX.svg                    4.63 kB │ gzip:   1.91 kB
+../../../../../tmp/ducky-world-build/assets/quack-CmnoRJQT.svg                        4.65 kB │ gzip:   1.98 kB
+../../../../../tmp/ducky-world-build/assets/flower-tulip-CQjy03zL.svg                 4.71 kB │ gzip:   2.21 kB
+../../../../../tmp/ducky-world-build/assets/log-D0-jSpJp.svg                          4.75 kB │ gzip:   2.02 kB
+../../../../../tmp/ducky-world-build/assets/sign-bakery-BZanNYVM.svg                  4.76 kB │ gzip:   2.03 kB
+../../../../../tmp/ducky-world-build/assets/lily-pad-large-j_B4KGnl.svg               4.77 kB │ gzip:   2.25 kB
+../../../../../tmp/ducky-world-build/assets/mushroom-purple-Cx7tWhqA.svg              4.78 kB │ gzip:   2.04 kB
+../../../../../tmp/ducky-world-build/assets/starfish-orange-IMbZ6BXk.svg              4.95 kB │ gzip:   2.22 kB
+../../../../../tmp/ducky-world-build/assets/starfish-pink-CU90CXK9.svg                4.99 kB │ gzip:   2.28 kB
+../../../../../tmp/ducky-world-build/assets/pear-DwCs_RHz.svg                         5.06 kB │ gzip:   2.40 kB
+../../../../../tmp/ducky-world-build/assets/bin-recycling-dC0Sgu1D.svg                5.12 kB │ gzip:   2.10 kB
+../../../../../tmp/ducky-world-build/assets/map-DINfi5mW.svg                          5.25 kB │ gzip:   2.28 kB
+../../../../../tmp/ducky-world-build/assets/sign-welcome-R0GKz8Vk.svg                 5.27 kB │ gzip:   2.21 kB
+../../../../../tmp/ducky-world-build/assets/apple-Dwn7MuT4.svg                        5.42 kB │ gzip:   2.55 kB
+../../../../../tmp/ducky-world-build/assets/spade-DvjJs1dd.svg                        5.46 kB │ gzip:   2.38 kB
+../../../../../tmp/ducky-world-build/assets/bubble-thought-CE_fy23m.svg               5.47 kB │ gzip:   2.27 kB
+../../../../../tmp/ducky-world-build/assets/bucket-BCNZNEvb.svg                       5.50 kB │ gzip:   2.27 kB
+../../../../../tmp/ducky-world-build/assets/loaf-sERbAlaq.svg                         5.55 kB │ gzip:   2.26 kB
+../../../../../tmp/ducky-world-build/assets/bread-DqnIOIo1.svg                        5.55 kB │ gzip:   2.26 kB
+../../../../../tmp/ducky-world-build/assets/golden-bread-rnhS8Kmg.svg                 5.56 kB │ gzip:   2.27 kB
+../../../../../tmp/ducky-world-build/assets/bubble-quack-DPukw7na.svg                 5.58 kB │ gzip:   2.35 kB
+../../../../../tmp/ducky-world-build/assets/buoy-red-CArAY3eH.svg                     5.63 kB │ gzip:   2.30 kB
+../../../../../tmp/ducky-world-build/assets/buoy-channel-CWeZh0G8.svg                 5.64 kB │ gzip:   2.31 kB
+../../../../../tmp/ducky-world-build/assets/mushroom-red-30YJGRWF.svg                 5.73 kB │ gzip:   2.45 kB
+../../../../../tmp/ducky-world-build/assets/baguette-DNx8OxQp.svg                     5.81 kB │ gzip:   2.35 kB
+../../../../../tmp/ducky-world-build/assets/mute-Cvm6LcJO.svg                         5.90 kB │ gzip:   2.41 kB
+../../../../../tmp/ducky-world-build/assets/shell-conch-BMoyfoq-.svg                  5.97 kB │ gzip:   2.88 kB
+../../../../../tmp/ducky-world-build/assets/fountain-base-Bo_wlPGL.svg                6.01 kB │ gzip:   2.41 kB
+../../../../../tmp/ducky-world-build/assets/croissant-D2KFqVHc.svg                    6.48 kB │ gzip:   2.34 kB
+../../../../../tmp/ducky-world-build/assets/splash-wide-B3FtcpOL.svg                  6.50 kB │ gzip:   2.69 kB
+../../../../../tmp/ducky-world-build/assets/bollard-BI-Z_p_b.svg                      6.59 kB │ gzip:   2.73 kB
+../../../../../tmp/ducky-world-build/assets/splash-small-DTfIEhEZ.svg                 6.73 kB │ gzip:   2.79 kB
+../../../../../tmp/ducky-world-build/assets/splash-crown-8wbJJWIx.svg                 6.84 kB │ gzip:   2.82 kB
+../../../../../tmp/ducky-world-build/assets/float-ring-B0hkeL4S.svg                   6.93 kB │ gzip:   2.77 kB
+../../../../../tmp/ducky-world-build/assets/ice-cream-swirl-DfYwzLFo.svg              6.96 kB │ gzip:   2.91 kB
+../../../../../tmp/ducky-world-build/assets/donut-QUvN4KaD.svg                        7.12 kB │ gzip:   3.08 kB
+../../../../../tmp/ducky-world-build/assets/cupcake-Dm8Zonqb.svg                      7.23 kB │ gzip:   3.12 kB
+../../../../../tmp/ducky-world-build/assets/bridge-arch-DQU4Pxqz.svg                  7.27 kB │ gzip:   2.62 kB
+../../../../../tmp/ducky-world-build/assets/beach-ball-lUTpmJjw.svg                   7.31 kB │ gzip:   2.35 kB
+../../../../../tmp/ducky-world-build/assets/seed-bag-DB3IJJzp.svg                     7.33 kB │ gzip:   3.04 kB
+../../../../../tmp/ducky-world-build/assets/cherries-Bjnc5noD.svg                     7.64 kB │ gzip:   3.23 kB
+../../../../../tmp/ducky-world-build/assets/pop-D_huOcXU.wav                          7.72 kB
+../../../../../tmp/ducky-world-build/assets/ice-cream-double-D3YThVn8.svg             7.78 kB │ gzip:   3.11 kB
+../../../../../tmp/ducky-world-build/assets/cycle-rack-oE3Bs72M.svg                   7.87 kB │ gzip:   2.77 kB
+../../../../../tmp/ducky-world-build/assets/trophy-DFF7gxQ0.svg                       7.87 kB │ gzip:   3.17 kB
+../../../../../tmp/ducky-world-build/assets/reeds-D8KDJQ8h.svg                        7.88 kB │ gzip:   3.29 kB
+../../../../../tmp/ducky-world-build/assets/fountain-jet-DhUgGXkL.svg                 7.89 kB │ gzip:   3.17 kB
+../../../../../tmp/ducky-world-build/assets/float-duck-CLiJgSKB.svg                   8.40 kB │ gzip:   3.53 kB
+../../../../../tmp/ducky-world-build/assets/bush-round-CWgQiYO6.svg                   8.63 kB │ gzip:   3.76 kB
+../../../../../tmp/ducky-world-build/assets/bush-wide-Bv53_2sU.svg                    8.74 kB │ gzip:   3.72 kB
+../../../../../tmp/ducky-world-build/assets/flock-DDk7QCxo.svg                        8.85 kB │ gzip:   2.78 kB
+../../../../../tmp/ducky-world-build/assets/tree-pine-DPEGU0Yd.svg                    9.17 kB │ gzip:   3.82 kB
+../../../../../tmp/ducky-world-build/assets/settings-CXdPHYlM.svg                     9.17 kB │ gzip:   3.92 kB
+../../../../../tmp/ducky-world-build/assets/home-C-Gz4orE.svg                         9.18 kB │ gzip:   3.62 kB
+../../../../../tmp/ducky-world-build/assets/lamp-gooseneck-B48tGO32.svg               9.35 kB │ gzip:   3.89 kB
+../../../../../tmp/ducky-world-build/assets/grass-B78AWmXa.svg                        9.45 kB │ gzip:   3.75 kB
+../../../../../tmp/ducky-world-build/assets/path-stepping-DEmgS1vh.svg                9.51 kB │ gzip:   3.87 kB
+../../../../../tmp/ducky-world-build/assets/bin-litter-CgnQxsqn.svg                   9.57 kB │ gzip:   3.46 kB
+../../../../../tmp/ducky-world-build/assets/umbrella-cafe-DIUWcOPK.svg                9.66 kB │ gzip:   3.81 kB
+../../../../../tmp/ducky-world-build/assets/umbrella-garden-PNoU4Pv_.svg              9.66 kB │ gzip:   3.81 kB
+../../../../../tmp/ducky-world-build/assets/camera-QHDvuxh5.svg                       9.88 kB │ gzip:   4.02 kB
+../../../../../tmp/ducky-world-build/assets/sun-DxP-D_Lg.svg                          9.95 kB │ gzip:   3.16 kB
+../../../../../tmp/ducky-world-build/assets/pretzel-CGqYAUDr.svg                     10.10 kB │ gzip:   4.75 kB
+../../../../../tmp/ducky-world-build/assets/shell-cowrie-Ub6NlWzh.svg                10.19 kB │ gzip:   3.56 kB
+../../../../../tmp/ducky-world-build/assets/towel-sun-Ceg5LliS.svg                   10.21 kB │ gzip:   3.08 kB
+../../../../../tmp/ducky-world-build/assets/planter-leaf-QBiJ3VfT.svg                10.30 kB │ gzip:   4.36 kB
+../../../../../tmp/ducky-world-build/assets/flower-daisy-CNuWO-3x.svg                10.32 kB │ gzip:   4.25 kB
+../../../../../tmp/ducky-world-build/assets/shell-scallop-6XVw2tip.svg               10.34 kB │ gzip:   4.58 kB
+../../../../../tmp/ducky-world-build/assets/flag-delhi-BTmic-x-.svg                  10.42 kB │ gzip:   4.29 kB
+../../../../../tmp/ducky-world-build/assets/flower-pink-CeZ3LRSS.svg                 10.47 kB │ gzip:   4.35 kB
+../../../../../tmp/ducky-world-build/assets/towel-striped-Dtb8V-QU.svg               10.62 kB │ gzip:   3.28 kB
+../../../../../tmp/ducky-world-build/assets/flower-poppy-DI_JJJUk.svg                10.81 kB │ gzip:   4.48 kB
+../../../../../tmp/ducky-world-build/assets/tree-round-D0bKwByy.svg                  10.81 kB │ gzip:   4.90 kB
+../../../../../tmp/ducky-world-build/assets/flower-sunflower-BUalxV47.svg            10.98 kB │ gzip:   4.58 kB
+../../../../../tmp/ducky-world-build/assets/question-BDYfGY0i.svg                    11.30 kB │ gzip:   4.93 kB
+../../../../../tmp/ducky-world-build/assets/picnic-basket-BuuVeJrb.svg               11.71 kB │ gzip:   4.32 kB
+../../../../../tmp/ducky-world-build/assets/fence-rail-BqgGmCBO.svg                  11.73 kB │ gzip:   3.86 kB
+../../../../../tmp/ducky-world-build/assets/hydrant-DhfcfpCz.svg                     11.98 kB │ gzip:   4.10 kB
+../../../../../tmp/ducky-world-build/assets/pond-CPJqVd3W.svg                        12.13 kB │ gzip:   5.46 kB
+../../../../../tmp/ducky-world-build/assets/lamp-lantern-BxHo0l7D.svg                12.17 kB │ gzip:   4.95 kB
+../../../../../tmp/ducky-world-build/assets/signpost-three-way-XSwjwjsI.svg          12.64 kB │ gzip:   4.92 kB
+../../../../../tmp/ducky-world-build/assets/bridge-deck-C29QQO3A.svg                 12.71 kB │ gzip:   3.48 kB
+../../../../../tmp/ducky-world-build/assets/flag-london-qibO8kGd.svg                 12.90 kB │ gzip:   5.19 kB
+../../../../../tmp/ducky-world-build/assets/lily-pad-flower-BDDf7mVL.svg             13.17 kB │ gzip:   5.52 kB
+../../../../../tmp/ducky-world-build/assets/mushroom-cluster-D8C1f3xp.svg            13.17 kB │ gzip:   5.05 kB
+../../../../../tmp/ducky-world-build/assets/rowboat-XgPvcwFs.svg                     13.29 kB │ gzip:   5.05 kB
+../../../../../tmp/ducky-world-build/assets/mailbox-BgElHqGN.svg                     13.50 kB │ gzip:   5.40 kB
+../../../../../tmp/ducky-world-build/assets/fence-picket-BFHVdjzy.svg                13.57 kB │ gzip:   3.92 kB
+../../../../../tmp/ducky-world-build/assets/flag-mumbai-DhU3badF.svg                 13.60 kB │ gzip:   5.30 kB
+../../../../../tmp/ducky-world-build/assets/sailboat-g-MpOUc3.svg                    13.62 kB │ gzip:   5.12 kB
+../../../../../tmp/ducky-world-build/assets/flag-kochi-D0l7D3Mc.svg                  13.82 kB │ gzip:   5.95 kB
+../../../../../tmp/ducky-world-build/assets/bush-berry-B_pFYUcD.svg                  13.91 kB │ gzip:   5.44 kB
+../../../../../tmp/ducky-world-build/assets/sandcastle-small-kK1Tdroc.svg            14.09 kB │ gzip:   4.57 kB
+../../../../../tmp/ducky-world-build/assets/flag-bengaluru-BFwnAZTX.svg              14.23 kB │ gzip:   6.00 kB
+../../../../../tmp/ducky-world-build/assets/cattails-B3euJI_9.svg                    14.30 kB │ gzip:   5.86 kB
+../../../../../tmp/ducky-world-build/assets/dock-piece-BoU2nUKE.svg                  14.42 kB │ gzip:   4.24 kB
+../../../../../tmp/ducky-world-build/assets/picnic-blanket-Co0GasSk.svg              14.45 kB │ gzip:   6.02 kB
+../../../../../tmp/ducky-world-build/assets/flag-chennai-BZLWp8AG.svg                14.64 kB │ gzip:   5.99 kB
+../../../../../tmp/ducky-world-build/assets/bunting-LZqTBNUw.svg                     15.50 kB │ gzip:   5.51 kB
+../../../../../tmp/ducky-world-build/assets/quack-W4a6UPFe.wav                       15.88 kB
+../../../../../tmp/ducky-world-build/assets/flag-hyderabad-PJ9MJseI.svg              16.43 kB │ gzip:   6.26 kB
+../../../../../tmp/ducky-world-build/assets/tree-palm-DNUPOo3W.svg                   17.04 kB │ gzip:   7.18 kB
+../../../../../tmp/ducky-world-build/assets/splash-a79-BgWq.wav                      17.80 kB
+../../../../../tmp/ducky-world-build/assets/flag-pune-DAgPNmwO.svg                   18.64 kB │ gzip:   6.41 kB
+../../../../../tmp/ducky-world-build/assets/bridge-rail-DQtiaXNi.svg                 18.72 kB │ gzip:   5.48 kB
+../../../../../tmp/ducky-world-build/assets/gazebo-CPvm6TdZ.svg                      19.65 kB │ gzip:   5.82 kB
+../../../../../tmp/ducky-world-build/assets/picnic-table-DNegsYHZ.svg                19.70 kB │ gzip:   6.72 kB
+../../../../../tmp/ducky-world-build/assets/tree-banyan-DilJGhoC.svg                 19.89 kB │ gzip:   7.92 kB
+../../../../../tmp/ducky-world-build/assets/bench-park-CQ7NSwlT.svg                  20.95 kB │ gzip:   7.35 kB
+../../../../../tmp/ducky-world-build/assets/tree-oak-DkauAGCC.svg                    21.87 kB │ gzip:   9.46 kB
+../../../../../tmp/ducky-world-build/assets/kiosk-4GSEAnsL.svg                       22.52 kB │ gzip:   8.30 kB
+../../../../../tmp/ducky-world-build/assets/fence-gate-CTciRm0K.svg                  23.03 kB │ gzip:   7.43 kB
+../../../../../tmp/ducky-world-build/assets/bench-wood-DqCmEMcc.svg                  23.45 kB │ gzip:   7.94 kB
+../../../../../tmp/ducky-world-build/assets/tree-willow-CpyJ_xem.svg                 24.45 kB │ gzip:  10.57 kB
+../../../../../tmp/ducky-world-build/assets/tree-coconut-palm-D-Vt6vYx.svg           24.45 kB │ gzip:   9.83 kB
+../../../../../tmp/ducky-world-build/assets/cottage-WWf0dPoh.svg                     27.19 kB │ gzip:   9.40 kB
+../../../../../tmp/ducky-world-build/assets/cobble-large-D0xcvW7b.svg                27.70 kB │ gzip:   4.64 kB
+../../../../../tmp/ducky-world-build/assets/sandcastle-turrets-20DUT3VB.svg          28.64 kB │ gzip:   8.97 kB
+../../../../../tmp/ducky-world-build/assets/flower-cluster-Dcqgy4so.svg              32.31 kB │ gzip:  12.47 kB
+../../../../../tmp/ducky-world-build/assets/bush-flowering-C21tupWE.svg              33.93 kB │ gzip:  13.32 kB
+../../../../../tmp/ducky-world-build/assets/planter-flowers-JwnmXKbU.svg             36.66 kB │ gzip:  14.39 kB
+../../../../../tmp/ducky-world-build/assets/pond-house-DwpHQIIS.svg                  37.98 kB │ gzip:  12.87 kB
+../../../../../tmp/ducky-world-build/assets/townhouse-GuAo6K3R.svg                   38.71 kB │ gzip:  13.21 kB
+../../../../../tmp/ducky-world-build/assets/lighthouse-duck-BeQYeKGA.svg             39.56 kB │ gzip:  14.19 kB
+../../../../../tmp/ducky-world-build/assets/tree-baguette-NOUuK-Sn.svg               45.73 kB │ gzip:  19.96 kB
+../../../../../tmp/ducky-world-build/assets/stall-bread-DgWWbZ01.svg                 47.67 kB │ gzip:  15.95 kB
+../../../../../tmp/ducky-world-build/assets/tree-croissant-f37RqvJO.svg              48.28 kB │ gzip:  20.98 kB
+../../../../../tmp/ducky-world-build/assets/library-JN2kheId.svg                     50.28 kB │ gzip:  16.44 kB
+../../../../../tmp/ducky-world-build/assets/cafe-BzJAeLMK.svg                        50.31 kB │ gzip:  16.76 kB
+../../../../../tmp/ducky-world-build/assets/bakery-hkvM1WNe.svg                      52.81 kB │ gzip:  17.40 kB
+../../../../../tmp/ducky-world-build/assets/path-brick-BbqzQi3o.svg                  55.03 kB │ gzip:  13.00 kB
+../../../../../tmp/ducky-world-build/assets/stall-ice-cream-GWnlf9xf.svg             55.38 kB │ gzip:  15.96 kB
+../../../../../tmp/ducky-world-build/assets/tree-blossom-Bn6l9Sdn.svg                55.90 kB │ gzip:  22.24 kB
+../../../../../tmp/ducky-world-build/assets/cobble-kJmJv082.svg                      63.72 kB │ gzip:  14.79 kB
+../../../../../tmp/ducky-world-build/assets/stall-flower-DdUs-Rt5.svg                71.10 kB │ gzip:  20.87 kB
+../../../../../tmp/ducky-world-build/assets/stall-fruit-CWzw48z6.svg                 83.28 kB │ gzip:  27.17 kB
+../../../../../tmp/ducky-world-build/assets/index-BzGt3YCw.css                        9.40 kB │ gzip:   2.23 kB
+../../../../../tmp/ducky-world-build/assets/webworkerAll-BOkVJCk8.js                  0.05 kB │ gzip:   0.06 kB
+../../../../../tmp/ducky-world-build/assets/getTextureBatchBindGroup-CckcnH94.js      0.34 kB │ gzip:   0.26 kB
+../../../../../tmp/ducky-world-build/assets/Cache-fEtFvAzf.js                         1.10 kB │ gzip:   0.55 kB
+../../../../../tmp/ducky-world-build/assets/canvasUtils-BlnLdLY1.js                   6.01 kB │ gzip:   2.04 kB
+../../../../../tmp/ducky-world-build/assets/getTexelRangeRects-DthKGQ7g.js           11.35 kB │ gzip:   2.99 kB
+../../../../../tmp/ducky-world-build/assets/init-CtAm4RWg.js                         14.84 kB │ gzip:   4.59 kB
+../../../../../tmp/ducky-world-build/assets/GCManagedHash-B_jK_A5g.js                19.32 kB │ gzip:   6.28 kB
+../../../../../tmp/ducky-world-build/assets/Filter-OkrPcSWo.js                       41.95 kB │ gzip:  12.01 kB
+../../../../../tmp/ducky-world-build/assets/browserAll-C6MZHQPm.js                   43.50 kB │ gzip:  11.24 kB
+../../../../../tmp/ducky-world-build/assets/RenderTargetSystem-Cl2iQU21.js           58.80 kB │ gzip:  16.47 kB
+../../../../../tmp/ducky-world-build/assets/GraphicsContext-Bh-6kARE.js              61.67 kB │ gzip:  20.62 kB
+../../../../../tmp/ducky-world-build/assets/CanvasPool-BZ0sA3Gt.js                   71.20 kB │ gzip:  23.30 kB
+../../../../../tmp/ducky-world-build/assets/index-BVYz-kIx.js                     2,497.89 kB │ gzip: 664.89 kB
+
+✓ built in 3.18s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

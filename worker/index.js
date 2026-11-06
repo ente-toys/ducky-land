@@ -1,7 +1,8 @@
 // boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
 // (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
+import {randomDrop, sleepPose, navigationWithSleepers} from '../src/pixi/player-presence.js';
 import {mapOf} from '../src/pixi/island-maps.js';
-import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
+import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
 import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat} from '../src/pixi/islands.js';
@@ -12,7 +13,7 @@ import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDoc
 export const ISLAND_LIMIT = 100;
 export const PLAYER_LIMIT = 200;
 const SPECTATOR_LIMIT = 64;
-const RESUME_MS = 15_000;
+
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
 const ZERO = {x:0,y:0};
@@ -52,6 +53,9 @@ export class IslandRoom {
     this.ctx = ctx;
     this.sql = ctx.storage.sql;
     this.connections = new Map();
+    this.sleepers = new Map();
+    this.sleepNav = new Map();
+    this.savedPlayers = new Map();
     this.tickCount = 0;
     this.epoch = crypto.randomUUID();
     this.sql.exec(`CREATE TABLE IF NOT EXISTS flows (
@@ -88,11 +92,41 @@ export class IslandRoom {
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       this.connections.set(socket, {...info, actor, login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS player_states (
+      account TEXT PRIMARY KEY, pose TEXT NOT NULL);
+      INSERT OR IGNORE INTO player_states (account,pose) SELECT account,pose FROM resumes;`);
+    for (const row of this.sql.exec('SELECT account,pose FROM player_states').toArray()) {
+      this.savedPlayers.set(row.account,row.pose);
+      this.sleepers.set(row.account,JSON.parse(row.pose));
+    }
+    for (const info of this.connections.values()) if (info.actor) {
+      this.sleepers.delete(info.account);
+      this.savePlayer(info);
+    }
     this.reconcileBoats();
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
 
-  navFor(islandId='home') { return mapOf(islandId).nav(); }
+  savePlayer(info) {
+    if (!info.account || !info.actor) return;
+    const pose=JSON.stringify(publicPose(info.actor));
+    if (this.savedPlayers.get(info.account) === pose) return;
+    this.sql.exec('INSERT OR REPLACE INTO player_states (account,pose) VALUES(?,?)',info.account,pose);
+    this.savedPlayers.set(info.account,pose);
+  }
+
+  sleepPlayer(info) {
+    if (!info.actor || !info.account) return;
+    this.savePlayer(info);
+    this.sleepers.set(info.account,publicPose(info.actor));
+    this.sleepNav.delete(info.actor.islandId);
+  }
+
+  navFor(islandId='home') {
+    if (!this.sleepNav.has(islandId)) this.sleepNav.set(islandId,navigationWithSleepers(mapOf(islandId),
+      [...this.sleepers.values()].filter(p=>p.islandId===islandId)));
+    return this.sleepNav.get(islandId);
+  }
 
   saveBoats() {
     const state=JSON.stringify(this.boats);
@@ -115,7 +149,7 @@ export class IslandRoom {
 
   reconcileBoats() {
     const retained=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
-    for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
+    for (const pose of this.sleepers.values()) if (pose.mode === 'sailing') retained.add(pose.id);
     for (const boat of [...this.boats]) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
     this.saveBoats();
   }
@@ -225,22 +259,24 @@ export class IslandRoom {
     return reply(friend ? {friend} : {});
   }
 
+  newArrival(counts) {
+    return randomDrop({counts,limit:ISLAND_LIMIT,
+      occupied:[...this.sleepers.values(), ...[...this.connections.values()].flatMap(i=>i.actor?[i.actor]:[])]});
+  }
+
   join(request, now) {
     if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return reply({}, 426);
     const digest = request.headers.get('X-Session-Digest');
     const user = this.session(digest, now);
     const wantsPlayer = new URL(request.url).searchParams.get('play') === '1';
     const previous = user && [...this.connections].find(([,info]) => info.actor && info.account === user.account);
-    const resume = user && this.sql.exec('SELECT pose FROM resumes WHERE account=? AND expires>?', user.account, now).toArray()[0];
+    const saved = user && this.savedPlayers.get(user.account);
+    const from = previous?.[1].actor ?? (saved ? JSON.parse(saved) : null);
     const active = [...this.connections.values()].filter(info => info.actor).length;
-    const held = this.sql.exec('SELECT count(*) AS count FROM resumes WHERE expires>?', now).one().count;
     const counts = islandCounts(this.connections);
-    for (const row of this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray()) {
-      const pose = JSON.parse(row.pose), islandId = pose.islandId ?? 'home';
-      counts.set(islandId, (counts.get(islandId) ?? 0) + 1);
-    }
-    const playing = !!(user?.canPlay && wantsPlayer && (previous || resume ||
-      (active+held < PLAYER_LIMIT && (counts.get('home') ?? 0) < ISLAND_LIMIT)));
+    const drop = user?.canPlay && wantsPlayer && !from && active < PLAYER_LIMIT ? this.newArrival(counts) : null;
+    const room = previous || (active < PLAYER_LIMIT && (from ? (counts.get(from.islandId) ?? 0)<ISLAND_LIMIT : !!drop));
+    const playing = !!(user?.canPlay && wantsPlayer && room);
     const spectators = this.connections.size-active;
     const [client, socket] = Object.values(new WebSocketPair());
     if (!playing && spectators >= SPECTATOR_LIMIT) {
@@ -250,15 +286,18 @@ export class IslandRoom {
       return new Response(null,{status:101,webSocket:client});
     }
     const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login,
-      input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
+      input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity, islandId:from?.islandId ?? 'home'};
     if (playing) {
-      const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
-      const [x,y] = mapOf('home').world.zones.plaza.spawn;
-      info.actor = {id:crypto.randomUUID(), x,y,turn:0,outfit:outfitFor(user.account),emoteVersion:0,
-        islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[],jumpLeft:0};
-      // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
-      // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
-      if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
+      info.actor = {id:crypto.randomUUID(),turn:0,outfit:outfitFor(user.account),emoteVersion:0,
+        mode:'walking',boatId:null,...(from ?? drop), action:0,travel:0,until:0,path:[],jumpLeft:0};
+      this.sleepers.delete(user.account);
+      this.sleepNav.delete(info.actor.islandId);
+      // Only a changed map can invalidate a saved location. A normal wake keeps
+      // full-precision coordinates, including museum and jetty positions.
+      if (info.actor.mode === 'walking' && !mapOf(info.actor.islandId).nav().walkable(info.actor.x,info.actor.y)) {
+        const map=mapOf(info.actor.islandId), point=this.navFor(info.actor.islandId).nearest(info.actor.x,info.actor.y,1000);
+        Object.assign(info.actor,point ? {x:point[0],y:point[1]} : map.spawn);
+      }
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
     }
@@ -267,7 +306,7 @@ export class IslandRoom {
     this.attach(socket, info);
     this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
       reason:user && wantsPlayer && !user.canPlay ? 'star-required' : user && wantsPlayer && !playing ? 'players-full' : null});
-    if (playing && !previous && !resume) {
+    if (playing && !previous && !saved) {
       for (const [viewer,viewerInfo] of this.connections) {
         if (viewer === socket || viewerInfo.account === user.account) continue;
         if ((viewerInfo.actor?.islandId ?? viewerInfo.islandId ?? 'home') !== info.actor.islandId) continue;
@@ -282,6 +321,7 @@ export class IslandRoom {
 
   attach(socket, info) {
     const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId} = info;
+    this.savePlayer(info);
     socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId});
   }
 
@@ -306,12 +346,17 @@ export class IslandRoom {
       const group = groups.get(islandId);
       group.guests.push(pose); group.named.push({...pose, login:info.login, accountId:info.account});
     }
+    const sleeping = new Map();
+    for (const pose of this.sleepers.values()) {
+      if (!sleeping.has(pose.islandId)) sleeping.set(pose.islandId,[]);
+      sleeping.get(pose.islandId).push(sleepPose(pose));
+    }
     const shared = new Map(), empty = {guests:[], named:[]};
     const text = (islandId, named) => {
       const key = `${named ? 1 : 0}|${islandId}`;
       if (!shared.has(key)) {
         const group = groups.get(islandId) ?? empty;
-        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId))},"players":${JSON.stringify(named ? group.named : group.guests)},"self":`);
+        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId))},"players":${JSON.stringify(named ? group.named : group.guests)},"sleepers":${JSON.stringify(sleeping.get(islandId) ?? [])},"self":`);
       }
       return shared.get(key);
     };
@@ -330,7 +375,7 @@ export class IslandRoom {
 
   demote(socket, info, reason) {
     const wasPlayer = !!info.actor;
-    if (info.actor && reason !== 'taken-over') this.releaseBoat(info.actor.id);
+    if (info.actor && reason !== 'taken-over') this.sleepPlayer(info);
     info.islandId = info.actor?.islandId ?? info.islandId ?? 'home';
     info.actor = null;
     info.input = ZERO;
@@ -348,6 +393,9 @@ export class IslandRoom {
       return;
     }
     this.attach(socket, info);
+    // Publish the sleeping pose before telling this socket it became a viewer.
+    // Clients handling the role event must already have authoritative presence.
+    if (wasPlayer) this.broadcast();
     this.send(socket, {type:'role', reason, id:null});
   }
 
@@ -573,14 +621,7 @@ export class IslandRoom {
     const info = this.connections.get(socket);
     if (!info) return;
     this.connections.delete(socket);
-    if (info.actor) {
-      const now = Date.now();
-      if (this.session(info.digest,now)) {
-        this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',
-          info.account, JSON.stringify(publicPose(info.actor)), now+RESUME_MS);
-      }
-    }
-    if (info.actor && !this.session(info.digest)) this.releaseBoat(info.actor.id);
+    this.sleepPlayer(info);
     this.broadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
   }
