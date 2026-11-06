@@ -68,6 +68,7 @@ export async function createSailingFX({water,objects}) {
 
   return Object.assign(fx,{
     standFor,
+    dispose() {this.reset(); wakes.destroy(); rings.destroy();},
     reset() {ducks.clear(); boats.clear(); splashes.length=0; for (const d of dust.splice(0)) d.sprite.destroy();},
     forget(id) {boats.delete(id);},   // boss 6 Nov: an id re-minted at its mooring starts fresh (no glide back from the old boat)
     // boss 5 Nov: landing on a neighbour moves every coordinate by its offset; the hops, boats, wakes and rings move with it

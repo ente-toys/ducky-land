@@ -20,9 +20,12 @@ async function fromManifest() {
   const entries = Object.entries(m.views || {});
   if (!entries.length) throw new Error('empty boat views');
   const views = await Promise.all(entries.map(async ([key, v]) => {
-    const texture = await Assets.load(art(DIR + v.file, v.resolution ?? m.resolution ?? 1.5));   // manifest resolution (1.25 for the SVG spin)
+    const resolution = v.resolution ?? m.resolution ?? 1.5;
+    const [texture, front] = await Promise.all([
+      Assets.load(art(DIR + v.file, resolution)),
+      v.front ? Assets.load(art(DIR + v.front, resolution)).catch(() => null) : null,
+    ]);   // the hull and foreground cut-out are independent requests
     // boss 6 Nov: bow-toward-camera views carry a front cut-out (duck head + the hull below the feet), drawn over the Ducky
-    const front = v.front ? await Assets.load(art(DIR + v.front, v.resolution ?? m.resolution ?? 1.5)).catch(() => null) : null;
     const deg = v.deg ?? v.heading ?? SECTOR[key];
     const anchor = v.anchor ?? m.anchor ?? [.5, .82];
     const [sx, sy] = v.seat ?? m.seat ?? [LEGACY_SEAT.x, LEGACY_SEAT.y];

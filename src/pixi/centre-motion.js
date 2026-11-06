@@ -31,12 +31,10 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
     .map(p=>({piece:p.centrePiece,sprite:p.sprite,flip:p.flip}));
   let fire=null,water=null;
   if(art.id==='community') {
-    const url='/pixi-art/themes/community/centre/animate.js';
-    fire=(await import(/* @vite-ignore */ url)).updateCommunityCentre;
+    fire=(await import('./centre-motion/community.js')).updateCommunityCentre;
   }
   if(art.id==='fair') {
-    const url='/pixi-art/themes/fair/centre/water.js';
-    water=(await import(/* @vite-ignore */ url)).createFairWater({Graphics,Container},art.props,objects);
+    water=(await import('./centre-motion/fair.js')).createFairWater({Graphics,Container},art.props,objects);
     water.root.themeArt=art.id;art.groups.push(water.root);
   }
   art.updateCentre=(t,reduced)=>{animatePieces(records,t,reduced);fire?.(art,t,reduced);water?.update(t,reduced,art.ground.visible);};

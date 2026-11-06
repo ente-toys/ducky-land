@@ -9,8 +9,8 @@ export function zoomAt(camera, nextZoom, x, y, width, height) {
   camera.y += dy / camera.zoom - dy / nextZoom;
   camera.zoom = nextZoom;
 }
-export function easeCamera(current, target, dt, reducedMotion = false) {
-  const alpha = reducedMotion ? 1 : 1 - Math.exp(-14 * dt);
+export function easeCamera(current, target, dt, reducedMotion = false, rate = 14) {
+  const alpha = reducedMotion ? 1 : 1 - Math.exp(-rate * dt);
   // Interpolate inverse scale and translation together to preserve the zoom anchor.
   const inverse = (1 / current.zoom) + (1 / target.zoom - 1 / current.zoom) * alpha;
   current.zoom = 1 / inverse;

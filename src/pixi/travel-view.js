@@ -23,9 +23,18 @@ export async function createTravelView(objects,water,air,decks) {
   const [sea]=await Promise.all([createSea(water,objects,air)]);   // boss 5 Nov: the cloud bank and sea islands live in sea-islands.js
   const harbor=createHarbor(decks,objects);   // boss 5 Nov: a real jetty, signpost and flag (harbor.js)
   const vessels=new Map(), leaving=[], fx=await createSailingFX({water,objects});
+  const destroyVessel=entry => {entry.front?.destroy({children:true}); entry.root.destroy({children:true});};
+  let disposed=false;
   let settled=false;   // boss 6 Nov: false until this island's boats are on screen, so only a refilled mooring fades in
   return {
     fx,
+    dispose() {
+      if (disposed) return;
+      disposed=true;
+      sea.dispose(); harbor.dispose(); fx.dispose();
+      for (const entry of [...vessels.values(), ...leaving]) destroyVessel(entry);
+      vessels.clear(); leaving.length=0;
+    },
     transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient(), ...sea.transient()],
     showJetty: mapId => harbor.show(mapId),
     switchIsland(id,shift) {   // shift: how far the old island's coordinates move to the new one's (a seamless landing)
@@ -39,7 +48,7 @@ export async function createTravelView(objects,water,air,decks) {
         }
       } else {
         fx.reset();
-        for (const entry of leaving.splice(0)) entry.root.destroy({children:true});
+        for (const entry of leaving.splice(0)) destroyVessel(entry);
       }
       sea.switchIsland(destinationsFor(id));
     },
@@ -59,7 +68,7 @@ export async function createTravelView(objects,water,air,decks) {
       }
       for (const [id,entry] of vessels) if (!ids.has(id)) {
         vessels.delete(id);
-        if (reduced) {entry.root.destroy({children:true}); continue;}
+        if (reduced) {destroyVessel(entry); continue;}
         entry.leaving=now; entry.wait=entry.occupied ? HOP : 0; entry.drift=0; entry.born=0; leaving.push(entry);
       }
       const fresh=boats.filter(boat => !vessels.has(boat.id));
@@ -82,7 +91,7 @@ export async function createTravelView(objects,water,air,decks) {
       }
       for (let i=leaving.length-1;i>=0;i--) {
         const entry=leaving[i], u=Math.max(0,(now-entry.leaving)/1000-entry.wait)/DRIFT;
-        if (u>=1) {entry.root.destroy({children:true}); leaving.splice(i,1); continue;}
+        if (u>=1) {destroyVessel(entry); leaving.splice(i,1); continue;}
         const e=1-(1-u)**2, was=driftBy(entry.heading,entry.drift), to=driftBy(entry.heading,e*DRIFT_PX);
         entry.root.x+=to.x-was.x; entry.root.y+=to.y-was.y; entry.drift=e*DRIFT_PX;   // relative, so a landing shift carries it
         entry.root.alpha=1-smooth(u);

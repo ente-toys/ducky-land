@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,existsSync,readdirSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {waterPoint,waterFrame,createFairWater} from '../../public/pixi-art/themes/fair/centre/water.js';
+import {waterPoint,waterFrame,createFairWater} from '../../src/pixi/centre-motion/fair.js';
 import {Graphics,Container,Texture} from 'pixi.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
 const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/',json=p=>JSON.parse(readFileSync(p,'utf8'));

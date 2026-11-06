@@ -8,11 +8,14 @@ const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
 export async function loadThemeArt(map, {acquire, release}) {
-  const response = await fetch(map.art, {cache: 'no-cache'});
-  if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
-  const manifest = await response.json();
-  const centreResponse = await fetch(map.art.replace('art.json', 'centre/centre.json'));
-  const centre = centreResponse.ok ? await centreResponse.json() : {pieces: []};
+  const [manifest, centre] = await Promise.all([
+    fetch(map.art).then(response => {
+      if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
+      return response.json();
+    }),
+    fetch(map.art.replace('art.json', 'centre/centre.json'))
+      .then(response => response.ok ? response.json() : {pieces: []}),
+  ]);
   const base = map.art.slice(0, map.art.lastIndexOf('/') + 1);
   const url = src => /^(\/|https?:|data:)/.test(src) ? src : base + src;
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [], props = manifest.props ?? [];
@@ -21,7 +24,20 @@ export async function loadThemeArt(map, {acquire, release}) {
     ...flats.map(f => ({...f, resolution: f.resolution ?? 2})), ...props.map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
-  const textures = await Promise.all(entries.map((e, i) => acquire(sources[i], e.resolution)));
+  // Repeated flowers, tiles and props share one lease per theme, at the highest
+  // requested resolution. Fair alone places over 1,900 sprites from 108 sources.
+  const resolutions = new Map();
+  entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, entry.resolution)));
+  const uniqueSources = [...resolutions.keys()];
+  const loaded = await Promise.allSettled(uniqueSources.map(src => acquire(src, resolutions.get(src))));
+  const failed = loaded.find(result => result.status === 'rejected');
+  if (failed) {
+    uniqueSources.forEach(src => release(src));
+    throw failed.reason;
+  }
+  const bySource = new Map(uniqueSources.map((src, i) => [src, loaded[i].value]));
+  const textures = sources.map(src => bySource.get(src));
+  let destroyed = false;
   const ground = new Container({label: `Theme ${map.id} - ground`}), deckLayer = new Container({label: `Theme ${map.id} - decks`});
   const shadows = new Container({label: `Theme ${map.id} - shadows`});
   let k = 0;
@@ -66,9 +82,11 @@ export async function loadThemeArt(map, {acquire, release}) {
     id: map.id, map, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     groups: [ground, deckLayer, shadows, floatLayer],
     destroy() {
+      if (destroyed) return;
+      destroyed = true;
       for (const c of [ground, deckLayer, shadows, floatLayer]) c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
-      sources.forEach(src => release(src));
+      uniqueSources.forEach(src => release(src));
     },
   };
 }

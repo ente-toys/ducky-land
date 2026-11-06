@@ -4,7 +4,8 @@ import {HOME_MAP, mapOf, mapsVersion, FIELD_RES, FIELD_PAD} from './island-maps.
 // boss 5 Nov: 300 islands. You play on one; the nearest four are a sail away. boss 6 Nov: an island plays on its theme's own
 // map (island-maps.js), in that map's local coordinates; a theme not delivered yet plays the home map.
 export const ISLANDS = WORLD_ISLANDS.map(({id,name,accent}) => ({id,name,accent}));
-export const islandFor = id => ISLANDS.find(island => island.id === id);
+const ISLAND_BY_ID = new Map(ISLANDS.map(island => [island.id,island]));
+export const islandFor = id => ISLAND_BY_ID.get(id);
 // boss 5 Nov: the harbor is a real wooden jetty. Its foot is on the lawn, its deck runs out over the water, Ducky walks it to
 // the boats moored along both sides. land = the deck end you board from and land on, water = where a boat docks, beside the tip.
 // JETTY and HARBOR are the home island's; harborOf(islandId) and jettyOf(islandId) give any island's own.
@@ -28,9 +29,9 @@ export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 380;
 // the sea you can sail: round this island and its four neighbours (each island in its own map, placed by its centre)
 const MARGIN=1800;
-const DEST=new Map(), BOUNDS=new Map(), OBSTACLES=new Map(), GRIDS=new Map();
+const DEST=new Map(), BOUNDS=new Map(), OBSTACLES=new Map(), GRIDS=new Map(), CLEARANCE_MAPS=new Map();
 let SEEN=-1;
-const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,OBSTACLES,GRIDS]) cache.clear();}};   // a theme arrived: re-plan the seas
+const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,OBSTACLES,GRIDS,CLEARANCE_MAPS]) cache.clear();}};   // a theme arrived: re-plan the seas
 // where island `to`'s local (0,0) sits in island `from`'s local coordinates. The world map places island CENTRES, so two
 // maps of different sizes still line up round their middles (boss 6 Nov: every theme has its own size and coast).
 export function originOffset(from,to) {
@@ -74,9 +75,20 @@ export function createBoats() {
   return ISLANDS.flatMap(island => boatSpots(island.id).map((spot,slot) => mooredBoat(island.id,slot)));
 }
 // a refilled mooring's boat is "<island>-<slot>~<n>": the part before ~ still names its island and mooring
-const baseId = boat => boat.id.split('~')[0];
-export const boatHome = boat => baseId(boat).slice(0,baseId(boat).lastIndexOf('-'));
-export const boatSlot = boat => Number(baseId(boat).slice(baseId(boat).lastIndexOf('-')+1));
+// IDs stay stable while a boat moves. Parse once rather than splitting every boat ID repeatedly on each room tick.
+const MOORING_IDS = new WeakMap();
+function mooringOf(boat) {
+  let entry=MOORING_IDS.get(boat);
+  if (!entry || entry.id !== boat.id) {
+    const base=boat.id.split('~')[0], dash=base.lastIndexOf('-');
+    entry={id:boat.id,home:base.slice(0,dash),slot:Number(base.slice(dash+1))};
+    entry.key=`${entry.home}|${entry.slot}`;
+    MOORING_IDS.set(boat,entry);
+  }
+  return entry;
+}
+export const boatHome = boat => mooringOf(boat).home;
+export const boatSlot = boat => mooringOf(boat).slot;
 export const boatSpot = boat => boatSpots(boatHome(boat))[boatSlot(boat)] ?? boatSpots(boatHome(boat))[0];
 
 // boss 6 Nov ("I took the boat already. Every island should have all the boats"): every mooring on every island always
@@ -92,7 +104,7 @@ export function fillMoorings(boats) {
   // island's map no longer has is dropped and fades out)
   const SPOTS=new Map(), spotsOf=id => {if (!SPOTS.has(id)) SPOTS.set(id,boatSpots(id)); return SPOTS.get(id);};
   const held=new Set(), ids=new Set(), keep=[];
-  const keyOf=boat => `${boatHome(boat)}|${boatSlot(boat)}`;
+  const keyOf=boat => mooringOf(boat).key;
   const valid=boat => typeof boat?.id === 'string' && islandFor(boatHome(boat)) && spotsOf(boatHome(boat))[boatSlot(boat)];
   const spotOf=boat => spotsOf(boatHome(boat))[boatSlot(boat)];
   for (const boat of boats) {   // empty boats first, so a sailor passing a refilled mooring never pushes its boat out
@@ -204,9 +216,13 @@ function clearance(id,x,y) {
   const b=seaBoundsFor(id);
   if (x < b.x0 || y < b.y0 || x > b.x1 || y > b.y1) return 0;
   let best=PAD;
-  for (const o of [{x:0,y:0,map:mapOf(id)},...obstaclesFor(id)]) {
-    const {d,FW,FH,X0,Y0}=o.map.field(), c=Math.round((x-o.x-X0)/RES), r=Math.round((y-o.y-Y0)/RES);
-    if (c<0 || r<0 || c>=FW || r>=FH) continue;
+  // Route planning asks this thousands of times. Reuse the candidate list and reject distant maps before building a field.
+  if (!CLEARANCE_MAPS.has(id)) CLEARANCE_MAPS.set(id,[{x:0,y:0,map:mapOf(id)},...obstaclesFor(id)].map(o => ({...o,
+    cols:Math.ceil((o.map.width+2*PAD)/RES),rows:Math.ceil((o.map.height+2*PAD)/RES)})));
+  for (const o of CLEARANCE_MAPS.get(id)) {
+    const c=Math.round((x-o.x+PAD)/RES), r=Math.round((y-o.y+PAD)/RES);
+    if (c<0 || r<0 || c>=o.cols || r>=o.rows) continue;
+    const {d,FW}=o.map.field();
     best=Math.min(best,d[r*FW+c]);
   }
   return Math.max(0,best-RES);   // a thin walkway or jetty can sit between samples: count it as one sample closer

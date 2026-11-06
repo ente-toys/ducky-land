@@ -1,3 +1,5 @@
+import {islandArrow} from './explore-camera.js';
+import {visibleWrapOffsets} from './world-texture-layout.js';
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
 // with lighter shallow bands following every coast, a glowing rim, a pin on where you are, and the 30,000 Duckies
@@ -54,14 +56,15 @@ vec3 ground(vec2 g) {
   vec4 c = texture(uScene, suv);
   vec3 nearCol = mix(uSea, c.rgb / max(c.a, .001), c.a);   // on screen the real scene (islands drawn live) over plain game water: no blocky map halos
   vec2 e = min(suv, 1. - suv);
-  return mix(far, nearCol, smoothstep(0., .04, min(e.x, e.y)));   // soften the seam where the real scene ends
+  return mix(far, nearCol, max(smoothstep(.02, .045, uZoom), smoothstep(0., .04, min(e.x, e.y))));   // soften the seam where the real scene ends
 }
 // the planet: the same flat world bent onto a globe. With a huge radius it IS the flat view; as the radius shrinks the
 // edges curl away and space shows round it, so the pull-out into space is one continuous move.
 vec3 planet(vec2 uv) {
   vec2 px = (uv - .5) * uRes;
   float Rp = uR * uRes.y, d = length(px) / Rp, onePx = 1. / Rp;
-  float ball = 1. - smoothstep(1., 4., uR);                     // space and shading only once it reads as a ball
+  float detail = smoothstep(.02, .045, uZoom);
+  float ball = (1. - smoothstep(1., 4., uR)) * (1. - detail);                     // space and shading only once it reads as a ball
   // space: plain navy with fine twinkling stars (boss 5 Nov: the two rings round the globe removed)
   vec2 sp = uv * uRes + vec2(-uLL.x, uLL.y) * 90. * ball;   // stars drift a little as the globe turns
   vec3 space = vec3(.07, .09, .22);
@@ -83,7 +86,9 @@ vec3 planet(vec2 uv) {
   vec2 g = mix(gA, gS, ball);
   vec3 paint = vec3(.2, .52, .86);                        // boss 5 Nov: one even sea colour (the painted patches made a seam)
   vec3 ocean = mix(uSea, paint, ball);                    // open sea deepens to cartoon-Earth blue as it becomes a ball
-  vec3 col = mix(ground(g), world((g - uBounds.xy) / uBounds.zw, ocean), ball);
+  // The atlas is an overview: stop magnifying it as islands become large enough
+  // for live vector artwork, even while the horizon is still slightly curved.
+  vec3 col = mix(ground(g), world((g - uBounds.xy) / uBounds.zw, ocean), ball * (1. - detail));
   // flat cartoon light: one soft-edged shadow on the far side, a lighter cap on the lit side, a bright inner rim
   float z = sqrt(1. - d * d);
   vec3 n = vec3(px.x / Rp, -px.y / Rp, z), L = normalize(vec3(-.5, .5, .72));
@@ -117,10 +122,16 @@ function buildWorldTexture(app, islands, bounds, arch, worldSize) {
       return [(island.x - bounds.x0 + (dx * c - dy * s) * wd) * kx + ox, (island.y - bounds.y0 + dx * s + dy * c) * ky + oy];
     });
   };
-  const copies = [];
-  for (const ox of [-W, 0, W]) for (const oy of [-H, 0, H]) copies.push([ox, oy]);
-  for (const grow of [1.42, 1.2]) for (const island of islands) for (const [ox, oy] of copies) bands.poly(coast(island, grow, ox, oy)).fill({color: 0xFFFFFF, alpha: .16});   // a light tint over whatever the sea is
-  for (const island of islands) for (const [ox, oy] of copies) {
+  const layouts = islands.map(island => {
+    const size = arch.sizeOf ? arch.sizeOf(island.id) : worldSize;
+    const c = Math.abs(Math.cos(island.rot)), s = Math.abs(Math.sin(island.rot));
+    // Include the outermost shallow band as well as the island artwork in the bounds.
+    const rx = (size.width * c + size.height * s) * island.scale * 1.42 * widen(island) * kx / 2;
+    const ry = (size.width * s + size.height * c) * island.scale * 1.42 * ky / 2;
+    return {island, offsets: visibleWrapOffsets((island.x - bounds.x0) * kx, (island.y - bounds.y0) * ky, rx, ry, W, H)};
+  });
+  for (const grow of [1.42, 1.2]) for (const {island, offsets} of layouts) for (const [ox, oy] of offsets) bands.poly(coast(island, grow, ox, oy)).fill({color: 0xFFFFFF, alpha: .16});   // a light tint over whatever the sea is
+  for (const {island, offsets} of layouts) for (const [ox, oy] of offsets) {
     const s = new Sprite(arch.textureOf ? arch.textureOf(island.id) : arch.texture), size = arch.sizeOf ? arch.sizeOf(island.id) : worldSize;
     s.anchor.set(.5);
     s.position.set((island.x - bounds.x0) * kx + ox, (island.y - bounds.y0) * ky + oy);
@@ -139,23 +150,18 @@ function buildWorldTexture(app, islands, bounds, arch, worldSize) {
 // the 'you are here' pin: a sun-yellow drop with an ink outline and a cream dot, a 'You' tag above it
 function makePin() {
   const pin = new Container({label: 'You are here'});
-  const shadow = new Graphics().ellipse(0, 0, 9, 3.5).fill({color: 0x000000, alpha: .25});
-  const drop = new Graphics()
-    .moveTo(0, 0).bezierCurveTo(-4, -10, -15, -18, -15, -30).arc(0, -30, 15, Math.PI, 0).bezierCurveTo(15, -18, 4, -10, 0, 0)
-    .fill(PALETTE.sun).stroke({color: PALETTE.ink, width: 3, join: 'round'});
-  drop.circle(0, -30, 6).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
-  const tag = new Text({text: 'You', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '700', fill: PALETTE.ink}});
+  const arrow=new Graphics().poly([-18,-9,3,-9,3,-18,23,0,3,18,3,9,-18,9]).fill(PALETTE.sun).stroke({color:PALETTE.ink,width:3,join:'round'});
+  const tag=new Text({text:'Your island',style:{fontFamily:'ui-rounded, system-ui, sans-serif',fontSize:13,fontWeight:'700',fill:PALETTE.ink}});
   tag.anchor.set(.5);
-  const tagBg = new Graphics().roundRect(-20, -11, 40, 22, 11).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
-  const label = new Container(); label.addChild(tagBg, tag); label.position.set(0, -64);
-  const body = new Container(); body.addChild(drop, label);
-  pin.addChild(shadow, body);
-  pin.body = body;
+  const label=new Container();
+  label.addChild(new Graphics().roundRect(-49,-12,98,24,12).fill(PALETTE.cream).stroke({color:PALETTE.ink,width:2}),tag);
+  label.y=38;
+  pin.addChild(arrow,label);pin.body=arrow;
   return pin;
 }
 
 export function createWorldView(app, scene) {
-  let rt = RenderTexture.create({width: 2, height: 2}), w = 0, h = 0, worldTex = null, worldVersion = -1;
+  let rt = RenderTexture.create({width: 2, height: 2, resolution: Math.min(app.renderer.resolution, 2)}), w = 0, h = 0, worldTex = null, worldVersion = -1;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
@@ -202,7 +208,16 @@ export function createWorldView(app, scene) {
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
       const on = t > .001;
       mesh.visible = on;
-      if (!on) {scene.visible = true; life.visible = pin.visible = false; this.pinIn = 0; return;}
+      if (!on) {
+        scene.visible = true; life.visible = false; this.pinIn = 0; this.worldAt=null;
+        const here=arch?.islands.find(i=>i.home);
+        if(here) {
+          const target={x:width/2+(here.x-cam.x)*cam.zoom,y:height/2+(here.y-cam.y)*cam.zoom,face:1};
+          pin.visible=target.x<0||target.x>width||target.y<0||target.y>height;
+          const guide=islandArrow(target,width,height);pin.position.set(guide.x,guide.y);pin.body.rotation=guide.angle;pin.alpha=1;pin.scale.set(1);
+        } else pin.visible=false;
+        return;
+      }
       if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {   // rebuilt when a themed island's snapshot arrives
         const old = worldTex; worldVersion = arch.version;
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize);
@@ -217,7 +232,7 @@ export function createWorldView(app, scene) {
       // world units, so its radius on screen follows the zoom: huge (flat) up close, a ball in space at the floor zoom.
       // Panning the camera turns the ball: east-west is longitude, north-south tilts it (stopped short of the poles).
       const Rw = spanX / (2 * Math.PI), cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;   // the world wraps once round the ball
-      const R = Rw * cam.zoom / h, Rp = R * h, ball = ease((4 - R) / 3);
+      const R = Rw * cam.zoom / h, Rp = R * h, ball = ease((4 - R) / 3) * (1 - ease((cam.zoom - .02) / .025));
       this.roll = 0;   // the idle turn moves the camera itself (engine.js), so nothing is ever offset from where it really is
       const lon0 = (cam.x + this.roll - cx) / Rw, lat0 = -(cam.y - cy) / Rw;
       u.uLL[0] = lon0; u.uLL[1] = lat0; u.uSph[0] = cx; u.uSph[1] = cy; u.uSph[2] = Rw;
@@ -236,7 +251,8 @@ export function createWorldView(app, scene) {
         const sxw = ax + wrap(sx - ax, spanX);   // same wrap as the shader
         return [ax + (sxw - ax) * ball, ay + (sy - ay) * ball];
       };
-      this.globe = {w, h, Rp, Rw, ball, cl, sl};   // for grab-dragging (engine.js)
+      this.worldAt=point=>gOf(point.x-w/2,point.y-h/2);
+      this.globe = {w, h, Rp, Rw, ball, cl, sl, lat0, cameraY: cam.y};   // for grab-dragging (engine.js)
       // where a world point sits on screen: start from the sphere's answer, then a few Newton steps on the shader mapping
       const project = (x, y) => {
         const lon = wrap(x - cam.x - this.roll, spanX) / Rw, lat = -(y - cy) / Rw;
@@ -295,36 +311,39 @@ export function createWorldView(app, scene) {
       } else ripples.length = 0;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
       this.pinIn = ease((t - .12) / .15);
-      if (me) {
-        const p = project(me.x, me.y);
-        pin.position.set(p.x, p.y);
-        pin.alpha = this.pinIn * ease(p.face / .25);
-        pin.visible = pin.alpha > .01;
-        pin.body.y = -Math.abs(Math.sin(time * 3)) * 6;
-        hoverK += ((hover && pin.visible ? 1.05 : 1) - hoverK) * (1 - Math.exp(-dt * 18));   // boss 6 Nov: a small lift on hover, never past 1.05
-        pin.scale.set((.8 + .2 * p.face) * hoverK);
-      } else pin.visible = false;
+      const here=arch.islands.find(i=>i.home);
+      if (here) {
+        const p=project(here.x,here.y);
+        const lon=wrap(here.x-cam.x,spanX)/Rw,lat=-(here.y-cy)/Rw;
+        // A point behind the globe still has a useful direction on its tangent plane.
+        const direction={x:w/2+Math.sin(lon)*Rp,y:h/2-(cl*Math.sin(lat)-sl*Math.cos(lat)*Math.cos(lon))*Rp};
+        const guide=islandArrow(p,w,h,direction);
+        pin.position.set(guide.x,guide.y);pin.body.rotation=guide.angle;
+        pin.visible=true;pin.alpha=1;pin.scale.set(1);
+      } else pin.visible=false;
     },
     // boss 6 Nov: the 'You' pin is a button. Hit box covers the drop and the tag with room for a finger (at least 64 x 96 px).
-    pinAt(point) {
-      if (!pin.visible || pin.alpha < .35) return false;
-      const k = pin.scale.x, dx = point.x - pin.x, dy = point.y - pin.y;
-      return Math.abs(dx) < Math.max(32, 26 * k) && dy > -Math.max(90, 84 * k) && dy < 16;
-    },
+    renderGuide() {if(pin.visible) app.renderer.render({container:pin,clear:false});},
+    pinAt() {return false;},
     hoverPin(on) {hover = on;},
     pinPoint() {return pin.visible ? {x: pin.x, y: pin.y, alpha: pin.alpha, scale: pin.scale.x} : null;},   // QA readback
     // grab-drag on the ball: how far to move the camera so the spot under the finger stays under the finger
-    grab(from, to) {
+    grab(from, to, camera) {
       const g = this.globe;
       if (!g || g.ball < .3) return null;
+      // Multiple input events can arrive before the next rendered frame. Use
+      // the accumulated target latitude rather than the previous frame's tilt.
+      const lat=camera ? g.lat0-(camera.y-g.cameraY)/g.Rw : g.lat0;
+      const cl=Math.cos(lat), sl=Math.sin(lat);
       const at = p => {
         let px = p.x - g.w / 2, py = p.y - g.h / 2; const d = Math.hypot(px, py) / g.Rp;
         if (d > .97) {px *= .97 / d; py *= .97 / d;}
         const vx = px / g.Rp, vy = -py / g.Rp, vz = Math.sqrt(Math.max(0, 1 - (vx * vx + vy * vy)));
-        return {lon: Math.atan2(vx, -g.sl * vy + g.cl * vz), lat: Math.asin(Math.max(-1, Math.min(1, g.cl * vy + g.sl * vz)))};
+        return {lon: Math.atan2(vx, -sl * vy + cl * vz), lat: Math.asin(Math.max(-1, Math.min(1, cl * vy + sl * vz)))};
       };
       const a = at(from), b = at(to);
-      return {dx: (a.lon - b.lon) * g.Rw, dy: -(a.lat - b.lat) * g.Rw};
+      const delta=a.lon-b.lon;
+      return {dx: Math.atan2(Math.sin(delta),Math.cos(delta)) * g.Rw, dy: -(a.lat - b.lat) * g.Rw};
     },
     destroy() {mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };

@@ -16,8 +16,13 @@ async function library(){
   if(!libraryPromise)libraryPromise=(async()=>{
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);
     const data=await response.json();
-    await Promise.all([...SLEEP_ASSETS.map(loadTexture), ...data.views.flatMap(v=>v.parts.map(p=>loadTexture(p.url)))]);
-    await Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}}));
+    const sources=new Set([...SLEEP_ASSETS,...data.views.flatMap(v=>v.parts.map(p=>p.url))]);
+    // SVG geometry and raster textures are independent: do not wait for every
+    // image to decode before starting the body-outline requests.
+    await Promise.all([
+      Promise.all([...sources].map(loadTexture)),
+      Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}})),
+    ]);
     return data;
   })().catch(error=>{libraryPromise=undefined;throw error;});
   return libraryPromise;

@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
-import {waterFrame} from '../../public/pixi-art/themes/fair/centre/water.js';
+import {waterFrame} from '../../src/pixi/centre-motion/fair.js';
 const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/fair/centre/';mkdirSync(OUT,{recursive:true});
 const D='public/pixi-art/themes/fair/centre/',data=JSON.parse(readFileSync(D+'centre.json','utf8'));
 const W=1500,H=1100,ox=750,oy=570;

@@ -35,11 +35,15 @@ const inside = (x, y) => ((x - FLOOR.x) / FLOOR.rx) ** 2 + ((y - FLOOR.y) / FLOO
 const walkable = (x, y) => inside(x, y) && !BLOCKS.some(([x0, y0, x1, y1]) => x > x0 && x < x1 && y > y0 && y < y1) && !BENCH_FEET.some(p => inPoly(x, y, p)) || EXIT(x, y) && y < H + 40;
 
 export async function createInterior() {
-  const texture = await Assets.load({src: SRC, data: {resolution: 2}});
+  // Fetch and rasterize the independent room, furniture and painting together.
+  const [texture, pieceTex, monaTex] = await Promise.all([
+    Assets.load({src: SRC, data: {resolution: 2}}),
+    Promise.all([...PIECE_ART, '/pixi-art/interiors/pieces/arch.svg'].map(src => Assets.load({src, data: {resolution: 2}}))),
+    Assets.load({src: MONA.src, data: {resolution: 3}}),
+  ]);
   const root = new Container({label: 'Museum interior', visible: false}), room = new Container({sortableChildren: true});
   root.addChild(room);
   room.addChild(new Sprite(texture));
-  const pieceTex = await Promise.all([...PIECE_ART, '/pixi-art/interiors/pieces/arch.svg'].map(src => Assets.load({src, data: {resolution: 2}})));
   PIECES.forEach(([x0, y0, x1, y1], k) => {
     const t = pieceTex[k], sc = t.width / W;
     const piece = new Sprite(new Texture({source: t.source, frame: new Rectangle(x0 * sc, y0 * sc, (x1 - x0) * sc, (y1 - y0) * sc)}));
@@ -49,7 +53,6 @@ export async function createInterior() {
   const arch = new Sprite(new Texture({source: at.source, frame: new Rectangle(ARCH[0] * asc, ARCH[1] * asc, (ARCH[2] - ARCH[0]) * asc, (ARCH[3] - ARCH[1]) * asc)}));
   arch.position.set(ARCH[0], ARCH[1]); arch.scale.set(1 / asc); arch.zIndex = 4000; room.addChild(arch);
   const ground = new Graphics().rect(-4000, -4000, W + 8000, H + 8000).fill(0xFDE197); ground.zIndex = -1; room.addChild(ground);   // letterbox in floor colour
-  const monaTex = await Assets.load({src: MONA.src, data: {resolution: 3}});
   const [sx, sy, sw, sh] = MONA.slot, [vx, vy, vw] = MONA.view, ms = sw / vw, mx = sx - vx * ms, my = sy - vy * ms;
   const mona = new Container(); mona.zIndex = 1;   // over the room drawing, under every Ducky and piece
   room.addChild(mona);

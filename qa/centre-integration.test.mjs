@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Sprite,Texture,Container,Graphics} from 'pixi.js';
-import {animatePieces} from '../src/pixi/centre-motion.js';
+import {animatePieces,attachCentreMotion} from '../src/pixi/centre-motion.js';
 import {loadThemeArt} from '../src/pixi/theme-art.js';
 import {mapFor,readyThemes,THEME_OF} from '../src/pixi/island-maps.js';
 import {neighboursOf} from '../src/pixi/world-map.js';
 import {canSail} from '../src/pixi/islands.js';
-import {createFairWater} from '../public/pixi-art/themes/fair/centre/water.js';
-import {updateCommunityCentre} from '../public/pixi-art/themes/community/centre/animate.js';
+import {createFairWater} from '../src/pixi/centre-motion/fair.js';
+import {updateCommunityCentre} from '../src/pixi/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
 test('all ten theme manifests load, release textures and resolve their authored animation pieces', async()=>{
@@ -23,7 +23,11 @@ test('all ten theme manifests load, release textures and resolve their authored 
    const records=art.props.filter(p=>p.centrePiece?.animate);
    assert.equal(records.length,animated[theme]??0,theme+' animated layers');
    assert.ok(art.props.every(p=>!p.centrePiece||!p.wind),theme+' centre layers have no wind');
-   art.destroy();assert.equal(released,acquired,theme+' releases all texture references');
+   const objects=new Container();
+   await attachCentreMotion(art,{Graphics,Container},objects);
+   art.updateCentre(.3,false);art.updateCentre(1,true);
+   art.destroy();assert.equal(objects.children.length,0,theme+' removes motion objects');
+   objects.destroy();assert.equal(released,acquired,theme+' releases all texture references');
   }
  } finally {globalThis.fetch=original;}
 });
