@@ -331,3 +331,6 @@
 @media (max-width: 600px) {
   .pixi-page:has(.pixi-world-map--expanded) .pixi-online { top: max(72px, calc(env(safe-area-inset-top) + 64px)); bottom: auto; }
 }
+.pixi-world-map svg { overflow: hidden; }
+.pixi-nearby-island { transition: transform 80ms linear; }
+@media (prefers-reduced-motion: reduce) { .pixi-nearby-island { transition: none; } }
