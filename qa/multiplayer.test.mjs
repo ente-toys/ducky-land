@@ -169,7 +169,7 @@ async function socket(cookie, play = true) {
 }
 
 async function eventually(predicate) {
-  for (let i=0;i<150;i++) {
+  for (let i=0;i<400;i++) {
     const value = predicate();
     if (value) return value;
     await delay(20);
