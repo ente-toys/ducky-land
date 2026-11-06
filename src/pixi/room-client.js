@@ -58,6 +58,8 @@ export class RoomClient {
     this.updateNearby();
     this.seq = 0;
     this.tick = -1;
+    this.snapshotPlayers = new Map();
+    this.snapshotBoats = new Map();
     this.pending = [];
     this.input = ZERO;
     this.lastInput = -Infinity;
@@ -101,11 +103,24 @@ export class RoomClient {
       const message = JSON.parse(data);
       if (message.type === 'travel-notice') this.onNotice(message.text);
       if (message.type === 'friends-changed') this.onFriendsChanged();
+      if (message.type === 'delta') {
+        if (message.epoch !== this.epoch || message.baseTick !== this.tick || message.islandId !== this.islandId) {
+          this.connect(this.wantsPlay, true);
+          return;
+        }
+        const merge = (target, patch) => {
+          for (const id of patch.removed) target.delete(id);
+          for (const value of patch.changed) target.set(value.id, {...target.get(value.id), ...value});
+        };
+        merge(this.snapshotPlayers, message.players);
+        merge(this.snapshotBoats, message.boats);
+        this.snapshot({...message, players: [...this.snapshotPlayers.values()], boats: [...this.snapshotBoats.values()]});
+      }
       if (message.type === 'snapshot') this.snapshot(message);
       if (message.type === 'joined') this.onJoin(message);
       if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
-        if (message.type === 'welcome') this.onFriendsChanged();
+        if (message.type === 'welcome') {this.onFriendsChanged(); socket.send(JSON.stringify({type: 'updates'}));}
         this.failures = 0;
         this.id = message.id;
         if (!this.id) this.player = null;
@@ -132,6 +147,8 @@ export class RoomClient {
 
   snapshot({epoch,tick,players,self,online,islandId='home',boats=[]}) {
     if (epoch === this.epoch && tick <= this.tick) return;
+    this.snapshotPlayers = new Map(players.map(p => [p.id, p]));
+    this.snapshotBoats = new Map(boats.map(b => [b.id, b]));
     const own=players.find(pose => pose.id === this.id);
     const mode=own?.mode ?? 'walking';
     const changed=this.islandId !== islandId || this.mode !== mode || this.epoch !== epoch;

@@ -77,9 +77,12 @@ export class IslandRoom {
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
     // keep saved boats (position, occupant), then fill every mooring on every island (300 islands, boss 6 Nov: all the boats)
-    this.boats = saved ? JSON.parse(saved.state) : createBoats();
+    this.sql.exec('CREATE TABLE IF NOT EXISTS boat_states (id TEXT PRIMARY KEY, state TEXT NOT NULL)');
+    const rows = this.sql.exec('SELECT id,state FROM boat_states').toArray();
+    this.boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : createBoats();
+    this.savedBoatRows = new Map(saved ? [] : rows.map(row => [row.id, row.state]));
     fillMoorings(this.boats);
-    this.savedBoats = saved?.state;
+    this.legacyBoats = Boolean(saved);
     for (const socket of ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
@@ -95,10 +98,18 @@ export class IslandRoom {
   navFor(islandId='home') { return mapOf(islandId).nav(); }
 
   saveBoats() {
-    const state=JSON.stringify(this.boats);
-    if (state === this.savedBoats) return;
-    this.sql.exec('INSERT OR REPLACE INTO boats VALUES(1,?)',state);
-    this.savedBoats=state;
+    const next = new Map(this.boats.map(boat => [String(boat.id), JSON.stringify(boat)]));
+    const save = () => {
+      for (const [id, state] of next) if (this.savedBoatRows.get(id) !== state) {
+        this.sql.exec('INSERT OR REPLACE INTO boat_states VALUES(?,?)', id, state);
+      }
+      for (const id of this.savedBoatRows.keys()) if (!next.has(id)) this.sql.exec('DELETE FROM boat_states WHERE id=?', id);
+      if (this.legacyBoats) this.sql.exec('DELETE FROM boats WHERE id=1');
+    };
+    if (this.ctx.storage.transactionSync) this.ctx.storage.transactionSync(save);
+    else save();
+    this.savedBoatRows = next;
+    this.legacyBoats = false;
   }
 
   // boss 6 Nov: the sailor stepped off. The boat ties back up if it is still beside its own empty mooring, otherwise it
@@ -281,8 +292,8 @@ export class IslandRoom {
   }
 
   attach(socket, info) {
-    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId} = info;
-    socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId});
+    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas} = info;
+    socket.serializeAttachment({actor:actor ? publicPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas});
   }
 
   send(socket, message) {
@@ -290,9 +301,9 @@ export class IslandRoom {
     try { socket.send(JSON.stringify(message)); } catch { socket.close(1011, 'Connection lost'); }
   }
 
-  // boss 6 Nov (100 Duckies on one island): each island's players and boats are turned into text ONCE per tick (once for
-  // signed-in viewers, once for guests); a viewer's message is that shared text plus its own few fields. The message is the
-  // same JSON as before, field for field.
+  // Share full snapshots and movement patches between viewers with the same
+  // island and name visibility. Full snapshots also serve legacy clients and
+  // periodically renew the baseline for clients that opt into deltas.
   broadcast() {
     const now = Date.now();
     const online = new Set([...this.connections].map(([socket,info]) =>
@@ -319,7 +330,39 @@ export class IslandRoom {
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
       const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000)}) : 'null';
-      this.sendText(socket, text(islandId, !!(info.digest && info.expires > now)) + self + '}');
+      const named = !!(info.digest && info.expires > now);
+      const full = text(islandId, named) + self + '}';
+      if (!info.deltas) {this.sendText(socket, full); continue;}
+      this.snapshotGroups ??= new Map();
+      const key = `${named ? 1 : 0}|${islandId}`;
+      let group = this.snapshotGroups.get(key);
+      if (group?.tick !== tick) {
+        const snapshot = JSON.parse(full);
+        group = {tick, players: new Map(snapshot.players.map(p => [p.id, p])), boats: new Map(snapshot.boats.map(b => [b.id, b])), patches: new WeakMap()};
+        this.snapshotGroups.set(key, group);
+      }
+      const base = info.snapshotBase;
+      if (!base || base.key !== key || tick - base.fullTick >= 50) {
+        this.sendText(socket, full);
+        info.snapshotBase = {key, group, fullTick: tick};
+        continue;
+      }
+      let patch = group.patches.get(base.group);
+      if (!patch) {
+        const diff = (before, after) => ({
+          changed: [...after].flatMap(([id, value]) => {
+            const old = before.get(id);
+            if (!old) return [value];
+            const fields = Object.fromEntries(Object.entries(value).filter(([field, v]) => JSON.stringify(v) !== JSON.stringify(old[field])));
+            return Object.keys(fields).length ? [{id, ...fields}] : [];
+          }),
+          removed: [...before.keys()].filter(id => !after.has(id)),
+        });
+        patch = {players: diff(base.group.players, group.players), boats: diff(base.group.boats, group.boats)};
+        group.patches.set(base.group, patch);
+      }
+      this.sendText(socket, JSON.stringify({type: 'delta', epoch: this.epoch, tick, baseTick: base.group.tick, islandId, online, ...patch, self: JSON.parse(self)}));
+      info.snapshotBase = {key, group, fullTick: base.fullTick};
     }
   }
 
@@ -395,6 +438,13 @@ export class IslandRoom {
     }
     let command;
     try { command = JSON.parse(message); } catch { return; }
+    if (command?.type === 'updates') {
+      info.deltas = true;
+      info.snapshotBase = null;
+      this.attach(socket, info);
+      this.broadcast();
+      return;
+    }
     if (command?.type === 'watch' && !info.actor && islandFor(command.islandId)) {
       info.islandId = command.islandId;
       this.attach(socket,info);

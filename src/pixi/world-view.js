@@ -104,22 +104,35 @@ void main() {
 // The world texture: every island at its true place on a map that wraps both ways, each sitting in two flat bands of
 // lighter water that follow its coast (the cartoon-Earth shallows), drawn under the island art itself.
 // boss 6 Nov: each island in its own map's art and coast (a themed island once its art has loaded, home's until then)
-function buildWorldTexture(app, islands, bounds, arch, worldSize) {
+function buildWorldTexture(app, islands, bounds, arch, worldSize, shoreTextures) {
   const W = 4096, H = 2048, span = {x: bounds.x1 - bounds.x0, y: bounds.y1 - bounds.y0};
   const kx = W / span.x, ky = H / span.y;
-  const box = new Container(), bands = new Graphics();
-  box.addChild(bands);
+  const box = new Container();
   // the map wraps a sphere (longitude across, latitude down), which squeezes things toward the poles; each island is
   // drawn wider by the same amount so it looks its true shape on the ball
   const cyW = (bounds.y0 + bounds.y1) / 2, Rw = span.x / (2 * Math.PI);
   const widen = island => 1 / Math.max(.3, Math.cos((island.y - cyW) / Rw));
-  const coast = (island, grow, ox, oy) => {
-    const c = Math.cos(island.rot), s = Math.sin(island.rot), wd = widen(island);
-    const m = arch.sizeOf ? arch.sizeOf(island.id) : null, size = m ?? worldSize, line = m && !m.home ? m.walk.coast : shapes.coast;
-    return line.flatMap(([x, y]) => {
-      const dx = (x - size.width / 2) * island.scale * grow * island.flip, dy = (y - size.height / 2) * island.scale * grow;
-      return [(island.x - bounds.x0 + (dx * c - dy * s) * wd) * kx + ox, (island.y - bounds.y0 + dx * s + dy * c) * ky + oy];
-    });
+  const shoreline = size => {
+    if (shoreTextures.has(size)) return shoreTextures.get(size);
+    const canvas = document.createElement('canvas');
+    const resolution = 256 / Math.max(size.width, size.height);
+    canvas.width = Math.ceil(size.width * 1.42 * resolution);
+    canvas.height = Math.ceil(size.height * 1.42 * resolution);
+    const context = canvas.getContext('2d');
+    context.fillStyle = 'rgba(255,255,255,.16)';
+    const line = !size.home && size.walk ? size.walk.coast : shapes.coast;
+    for (const grow of [1.42, 1.2]) {
+      context.beginPath();
+      line.forEach(([x, y], index) => {
+        const px = canvas.width / 2 + (x - size.width / 2) * grow * resolution;
+        const py = canvas.height / 2 + (y - size.height / 2) * grow * resolution;
+        if (index) context.lineTo(px, py); else context.moveTo(px, py);
+      });
+      context.closePath(); context.fill();
+    }
+    const texture = Texture.from(canvas);
+    shoreTextures.set(size, texture);
+    return texture;
   };
   const layouts = islands.map(island => {
     const size = arch.sizeOf ? arch.sizeOf(island.id) : worldSize;
@@ -129,7 +142,18 @@ function buildWorldTexture(app, islands, bounds, arch, worldSize) {
     const ry = (size.width * s + size.height * c) * island.scale * 1.42 * ky / 2;
     return {island, offsets: visibleWrapOffsets((island.x - bounds.x0) * kx, (island.y - bounds.y0) * ky, rx, ry, W, H)};
   });
-  for (const grow of [1.42, 1.2]) for (const {island, offsets} of layouts) for (const [ox, oy] of offsets) bands.poly(coast(island, grow, ox, oy)).fill({color: 0xFFFFFF, alpha: .16});   // a light tint over whatever the sea is
+  for (const {island, offsets} of layouts) for (const [ox, oy] of offsets) {
+    const size = arch.sizeOf ? arch.sizeOf(island.id) : worldSize;
+    const band = new Sprite(shoreline(size));
+    band.anchor.set(.5);
+    band.position.set((island.x - bounds.x0) * kx + ox, (island.y - bounds.y0) * ky + oy);
+    band.width = size.width * 1.42 * island.scale * kx;
+    band.height = size.height * 1.42 * island.scale * ky;
+    band.scale.x *= island.flip; band.rotation = island.rot;
+    const holder = new Container(); holder.addChild(band); holder.scale.x = widen(island);
+    holder.position.copyFrom(band.position); band.position.set(0, 0);
+    box.addChild(holder);
+  }
   for (const {island, offsets} of layouts) for (const [ox, oy] of offsets) {
     const s = new Sprite(arch.textureOf ? arch.textureOf(island.id) : arch.texture), size = arch.sizeOf ? arch.sizeOf(island.id) : worldSize;
     s.anchor.set(.5);
@@ -165,7 +189,8 @@ function makePin() {
 }
 
 export function createWorldView(app, scene) {
-  let rt = RenderTexture.create({width: 2, height: 2, resolution: Math.min(app.renderer.resolution, 2)}), w = 0, h = 0, worldTex = null, worldVersion = -1;
+  const shoreTextures = new Map();
+  let rt = RenderTexture.create({width: 2, height: 2, resolution: 1}), w = 0, h = 0, worldTex = null, worldVersion = -1;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
@@ -207,18 +232,25 @@ export function createWorldView(app, scene) {
   const ripples = [];
   let lastT = 0, rippleDue = 0, hover = false, hoverK = 1;
   return {
+    // Compile and warm the globe pipeline while the loading screen is present.
+    // Its first visible frame can then use the same shader and GPU buffers.
+    prepare() {
+      mesh.visible = true; mesh.scale.set(2);
+      try {app.renderer.render({container: mesh, clear: false});}
+      finally {mesh.visible = false;}
+    },
     pinIn: 0,   // 0..1, how far the 'You' pin has come in (engine.js fades the name tags out by the same amount)
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
       const on = t > .001;
       mesh.visible = on;
-      if (!on) {scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;}
       if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {   // rebuilt when a themed island's snapshot arrives
         const old = worldTex; worldVersion = arch.version;
-        worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize);
+        worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize, shoreTextures);
         shader.resources.uWorld = worldTex.source;
         if (old) setTimeout(() => old.destroy(true), 0);   // unbound first, then freed (no 'destroyed while bound' warning)
       }
+      if (!on) {scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;}
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       if (t < .97) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)
       scene.visible = false;
@@ -342,6 +374,6 @@ export function createWorldView(app, scene) {
       const delta=a.lon-b.lon;
       return {dx: Math.atan2(Math.sin(delta),Math.cos(delta)) * g.Rw, dy: -(a.lat - b.lat) * g.Rw};
     },
-    destroy() {mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }

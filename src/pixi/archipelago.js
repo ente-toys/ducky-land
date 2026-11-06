@@ -16,7 +16,8 @@ export function createArchipelago(app, scene, layer, world) {
   const SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0;
   const wrap = v => v - SX * Math.round(v / SX);
   const root = new Container({label: 'Archipelago'}), copies = new Container({label: 'Island copies'});
-  const people = new Graphics({label: '30,000 Duckies'});
+  const people = new Container({label: '30,000 Duckies'});
+  const peopleTextures = new Map();
   layer.addChildAt(root, 0);   // under the real island's water and ground
   root.addChild(copies, people);
   let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
@@ -44,15 +45,31 @@ export function createArchipelago(app, scene, layer, world) {
       s.width = size.width; s.height = size.height; s.tint = island.map === 'home' ? island.tint : 0xFFFFFF;
       copies.addChild(s);
     }
-    // 30,000 Duckies: 100 tiny yellow dots per island, scattered over its land
-    let n = 7;
-    const r = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
-    people.clear();
-    for (const island of islands) for (let k = 0; k < 100; k++) {
-      const a = r() * 6.28, d = Math.sqrt(r());
-      people.rect(island.x + Math.cos(a) * d * island.width * .36 - 90, island.y + Math.sin(a) * d * island.height * .32 - 90, 180, 180);   // each island's own size
+    // Share a small raster of 100 dots instead of uploading 30,000 rectangles.
+    people.removeChildren().forEach(child => child.destroy());
+    for (const island of islands) {
+      const key = `${island.width}x${island.height}`;
+      let texture = peopleTextures.get(key);
+      if (!texture) {
+        const dots = new Graphics();
+        let seed = 7;
+        const random = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+        for (let k = 0; k < 100; k++) {
+          const angle = random() * 6.28, radius = Math.sqrt(random());
+          dots.rect(island.width / 2 + Math.cos(angle) * radius * island.width * .36 - 90,
+            island.height / 2 + Math.sin(angle) * radius * island.height * .32 - 90, 180, 180);
+        }
+        dots.fill(0xE8A000);
+        texture = app.renderer.generateTexture({target: dots,
+          frame: new Rectangle(0, 0, island.width, island.height), resolution: 512 / Math.max(island.width, island.height)});
+        dots.destroy();
+        peopleTextures.set(key, texture);
+      }
+      const sprite = new Sprite(texture);
+      sprite.anchor.set(.5); sprite.position.set(island.x, island.y);
+      sprite.width = island.width; sprite.height = island.height;
+      people.addChild(sprite);
     }
-    people.fill(0xE8A000);
   };
   place();
   return {
@@ -85,7 +102,7 @@ export function createArchipelago(app, scene, layer, world) {
       if (textures.has(mapId)) return;
       const m = mapFor(mapId), keep = {x: scene.position.x, y: scene.position.y, sx: scene.scale.x, sy: scene.scale.y};
       scene.position.set(0, 0); scene.scale.set(1, 1); root.visible = false;
-      const texture = app.renderer.generateTexture({target: scene, frame: new Rectangle(0, 0, m.width, m.height), resolution: .4});
+      const texture = app.renderer.generateTexture({target: scene, frame: new Rectangle(0, 0, m.width, m.height), resolution: Math.min(.4, 1024 / Math.max(m.width, m.height))});
       texture.source.scaleMode = 'linear';
       scene.position.set(keep.x, keep.y); scene.scale.set(keep.sx, keep.sy); root.visible = true;
       textures.set(mapId, texture); version++;
@@ -119,6 +136,6 @@ export function createArchipelago(app, scene, layer, world) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
     },
-    destroy() {thumbnails.clear(); root.destroy({children: true}); for (const t of textures.values()) t.destroy(true); for (const t of radarTextures.values()) t.destroy(true);},
+    destroy() {for (const texture of peopleTextures.values()) texture.destroy(true); peopleTextures.clear(); thumbnails.clear(); root.destroy({children: true}); for (const t of textures.values()) t.destroy(true); for (const t of radarTextures.values()) t.destroy(true);},
   };
 }

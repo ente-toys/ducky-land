@@ -110,7 +110,39 @@ function samplePose(action,t,walkPhase,reduced,speed=165){
  * `turn` is radians: 0 faces down/front, +PI/2 right, PI back, -PI/2 left.
  * `speed` is world units/second. World position/scale/rotation belong to the caller.
  */
+// Permanent NPCs never need the standing rig or its wardrobe.
+async function createSleepingDuck(sleep, seed) {
+  liveDucks++;
+  try {
+    await Promise.all(SLEEP_ASSETS.map(loadTexture));
+    const root = new Container({label: 'Ducky'});
+    const art = new Container({label: 'Sleeping rig'});
+    art.scale.set(SCALE);
+    root.addChild(art);
+    const nap = createSleeper(sleep, seed);
+    nap.root.visible = true;
+    art.addChild(nap.root);
+    nap.update(0, false);
+    let disposed = false;
+    return {
+      root,
+      update(dt, {time = 0, reducedMotion = false} = {}) {if (!disposed) nap.update(time, reducedMotion);},
+      sleeper: {poke: () => nap.poke(), bounds: () => nap.root.getBounds()},
+      setOutfit: async () => {},
+      animationNames: duckAnimationNames,
+      dispose() {
+        if (disposed) return;
+        disposed = true;
+        liveDucks--;
+        root.removeFromParent();
+        root.destroy({children: true});
+      },
+    };
+  } catch (error) {liveDucks--; throw error;}
+}
+
 export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,isPlayer=false,sleep=null}={}){
+  if (sleep) return createSleepingDuck(sleep, seed);
   liveDucks++;
   let data;
   try{data=await library();}catch(error){liveDucks--;throw error;}
@@ -118,7 +150,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   // boss 6 Nov: a soft ground shadow that shows only during a jump; it stays on the ground, shrinking and fading as the Ducky rises
   const jumpShadow=new Graphics({label:'Jump shadow'}).ellipse(0,0,74,19).fill({color:0x39472D});jumpShadow.visible=false;root.addChildAt(jumpShadow,0);
   const feedback=createDuckFeedback(isPlayer);art.addChild(feedback.ring);
-  const views=data.views.map(makeView);views.forEach(v=>art.addChild(v.root));art.addChild(feedback.bubble,feedback.sleep);
+  const views=data.views.map(makeView);art.addChild(views.find(v=>v.spec.angle===0).root);art.addChild(feedback.bubble,feedback.sleep);
   // boss 5 Nov: a sleeping Ducky is one of the 8 approved poses, picked once (placement or seed) so it never rerolls
   const nap = createSleeper(sleep, seed);
   art.addChildAt(nap.root, art.children.length - 2);
@@ -147,6 +179,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     clothing={...next};
     // sleeping Duckies stay bare for now; their outfits come later
     for(const view of views){
+      view.morphWeight = undefined;
       for(const garment of view.garments){garment.mask?.destroy();garment.node.destroy({children:true});}
       view.garments=[];
       for(const part of view.parts){
@@ -169,7 +202,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       }
     }
   }
-  try{await setOutfit(outfit);}catch(error){root.destroy({children:true});liveDucks--;throw error;}
+  try{await setOutfit(outfit);}catch(error){dispose();throw error;}
 
   // boss 4 Nov: turning like the Rive rig: between two drawn directions the eyes, beak, wings, tail, tuft and feet glide
   // to where the next direction has them, and the body outline swaps at the halfway point, so a turn has many frames
@@ -209,8 +242,13 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       if(part.role==='tail')joint.rotation=p.tail;
       if(part.role==='toe')joint.visible=!clothing.shoes&&currentAction!==1;
     }
-    if(view.morph){
-      const me=view.spec.morph,other=glide.other?.spec.morph,w=other?glide.w:0,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y];
+    // Body geometry depends on the turn, while walking animates its container.
+    // Subpixel turn steps avoid rebuilding and triangulating an identical outline.
+    const morphWeight = Math.round(glide.w * 128) / 128;
+    if(view.morph && (view.morphWeight !== morphWeight || view.morphOther !== glide.other)){
+      view.morphWeight = morphWeight;
+      view.morphOther = glide.other;
+      const me=view.spec.morph,other=glide.other?.spec.morph,w=other?morphWeight:0,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y];
       const mix=(a,b,k)=>a.map((p,i)=>[p[0]+((b?b[i][0]:p[0])-p[0])*k-ox,p[1]+((b?b[i][1]:p[1])-p[1])*k-oy]);
       const shrink=(a,k)=>{const cx=a.reduce((s,p)=>s+p[0],0)/a.length,cy=a.reduce((s,p)=>s+p[1],0)/a.length;return a.map(p=>[cx+(p[0]-cx)*k-ox,cy+(p[1]-cy)*k-oy]);};
       const g=view.morph;g.clear();
@@ -277,14 +315,22 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       }
       if(garment.ink&&garment.outline){const j=view.bodyPart.joint,c=Math.cos(-node.rotation),s=Math.sin(-node.rotation),o=garment.outline,pts=[];
         for(let i=0;i<o.length;i+=2){const dx=o[i]+j.x-node.x,dy=o[i+1]+j.y-node.y;pts.push(dx*c-dy*s,dx*s+dy*c);}
-        garment.ink.clear().poly(pts).stroke({color:INK,width:16,join:'round'});}
+        const previous = garment.inkPoints;
+        if (!previous || pts.some((point, i) => Math.abs(point - previous[i]) > .25)) {
+          garment.ink.clear().poly(pts).stroke({color:INK,width:16,join:'round'});
+          garment.inkPoints = pts;
+        }}
       if(frame.attachment==='grip')node.visible=Math.max(Math.abs(p.wingL),Math.abs(p.wingR))<.3;
     }
     // boss 4 Nov: no see-through outfits while turning: each outfit shows only its own drawing, solid, switching at the halfway point
     // with the body; a piece the next direction does not have shrinks away instead of fading
     for(const g of view.garments){for(const gh of g.ghosts.values())gh.visible=false;g.sprite.alpha=1;if(g.node.alpha<1){g.node.scale.set(Math.max(0,g.node.alpha));g.node.alpha=1;}else g.node.scale.set(1);}
-    view.expressions.clear();if(currentAction===5)for(const eye of eyes){const {x,y}=eye.joint;view.expressions.moveTo(x-14,y).quadraticCurveTo(x,y-17,x+14,y).stroke({color:0x232323,width:5,cap:'round'});}
-    view.brows.clear();if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
+    if (currentAction===5 || view.laughing) view.expressions.clear();
+    view.laughing=currentAction===5;
+    if(currentAction===5)for(const eye of eyes){const {x,y}=eye.joint;view.expressions.moveTo(x-14,y).quadraticCurveTo(x,y-17,x+14,y).stroke({color:0x232323,width:5,cap:'round'});}
+    if (p.angry>.02&&face || view.angry) view.brows.clear();
+    view.angry=p.angry>.02&&face;
+    if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
   function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
@@ -309,7 +355,12 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const ls=1-Math.exp(-dt/.09);look.x+=(lookGoal.x-look.x)*ls;look.y+=(lookGoal.y-look.y)*ls;
     turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.24));   // boss 4 Nov: unhurried turn so the parts are seen moving
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
-    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){current.root.visible=false;current=target;}
+    if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){
+      current.root.visible=false;
+      current.root.removeFromParent();
+      current=target;
+      art.addChildAt(current.root,1);
+    }
     // boss 4 Nov: below the first drawn angle the turn pair wraps (180 to -135), so -157.5 is no longer a side profile
     {const a=((degrees%360)+540)%360-180,i=a<byAngle[0].spec.angle?byAngle.length-1:byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
       const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
@@ -339,7 +390,15 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     }
     root.duckDirection=degrees;
   }
-  function dispose(){if(disposed)return;disposed=true;outfitVersion++;liveDucks--;root.removeFromParent();root.destroy({children:true});}
+  function dispose(){
+    if(disposed)return;
+    disposed=true;
+    outfitVersion++;
+    liveDucks--;
+    for(const view of views)if(!view.root.parent)view.root.destroy({children:true});
+    root.removeFromParent();
+    root.destroy({children:true});
+  }
   update(0,{action:sleep ? 7 : 0,persistentSleep:Boolean(sleep)});
   const arrive=()=>{arriveT=0;};
   // away: unit vector pointing away from what was hit, in rig units (x right, y down on screen)

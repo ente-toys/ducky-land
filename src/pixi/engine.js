@@ -20,7 +20,7 @@ import {loadThemeArt} from './theme-art.js';
 import {setSailingHarbor} from './sailing-fx.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
-import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Matrix} from 'pixi.js';
+import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Matrix, Texture} from 'pixi.js';
 import rawWorld from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
@@ -172,9 +172,21 @@ export class PixiIsland {
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS];
       const entries = [...tiles, ...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];   // boss 3 Nov: arched jetties right after the tiles
-      const sources = entries.map(p => p.src);
-      this.loaded.push(...sources);
-      const textures = await Promise.all(entries.map(p => acquire(p.src, p.resolution)));
+      // Keep collision data complete, but prioritize artwork around the initial camera.
+      const halfWidth = this.width / (2 * this.camera.zoom) + 600;
+      const halfHeight = this.height / (2 * this.camera.zoom * TILT) + 600;
+      const deferred = [];
+      const textures = await Promise.all(entries.map(entry => {
+        const pad = Math.max(entry.width || 0, entry.height || 0) * (entry.scale || 1);
+        if (!Number.isFinite(entry.x) || (Math.abs(entry.x - this.camera.x) < halfWidth + pad && Math.abs(entry.y - this.camera.y) < halfHeight + pad)) {
+          this.loaded.push(entry.src);
+          return acquire(entry.src, entry.resolution);
+        }
+        const placeholder = new Texture({source: Texture.EMPTY.source});
+        deferred.push({entry, placeholder});
+        return placeholder;
+      }));
+      this.sceneryPending = deferred.length > 0;
       if (this.disposed) return;
       this.ocean=new TilingSprite({texture:textures[tiles.length + decks.length + props.length + art.floating.length],width:world.width,height:world.height});this.scene.addChildAt(this.ocean,0);
       tiles.forEach((tile, i) => {
@@ -252,7 +264,7 @@ export class PixiIsland {
       this.artShown = 'home';
       if (new URLSearchParams(location.search).has('qa')) globalThis.__duckyEngine = this;   // QA readback (headless checks only)
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);   // boss 5 Nov: 300 islands, same island for now; zoom out to see them
-      this.worldView = createWorldView(this.app, this.scene); globalThis.__duckyPin = () => this.worldView?.pinPoint();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
+      this.worldView = createWorldView(this.app, this.scene); this.worldView.prepare(); globalThis.__duckyPin = () => this.worldView?.pinPoint();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) {this.travelView.dispose(); return;}
@@ -266,9 +278,41 @@ export class PixiIsland {
       this.canvas.dataset.state = 'ready';
       this.lastFrame = performance.now();
       this.raf = requestAnimationFrame(time => this.tick(time));
+      this.loadScenery(deferred);
     } catch (error) {
       if (!this.disposed) {console.error('Pixi island:', error); this.onError(error); this.dispose();}
     }
+  }
+
+  async loadScenery(deferred) {
+    // Bound decode work while the player can already move. Prioritize the camera
+    // again between loads in case it moved away from the initial spawn.
+    const remaining = [...deferred];
+    const worker = async () => {
+      while (remaining.length && !this.disposed) {
+        remaining.sort((a, b) => Math.hypot(a.entry.x - this.camera.x, a.entry.y - this.camera.y) - Math.hypot(b.entry.x - this.camera.x, b.entry.y - this.camera.y));
+        const {entry, placeholder} = remaining.shift();
+        try {
+          this.loaded.push(entry.src);
+          const texture = await acquire(entry.src, entry.resolution);
+          if (this.disposed) continue;
+          const replace = node => {
+            if (node.texture === placeholder) {
+              const width = node.width, height = node.height;
+              node.texture = texture;
+              node.width = width; node.height = height;
+            }
+            for (const child of node.children ?? []) replace(child);
+          };
+          replace(this.scene);
+        } catch (error) {
+          if (!this.disposed) this.onError(error);
+        } finally {placeholder.destroy();}
+      }
+    };
+    await Promise.all(Array.from({length: 4}, worker));
+    for (const {placeholder} of remaining) placeholder.destroy();
+    this.sceneryPending = false;
   }
 
   createAmbient() {
@@ -705,6 +749,11 @@ export class PixiIsland {
     art.groups.push(...extra);
     for (const o of extra) o.visible=false;
     art.ambience={surf, ripples, leaves, floats: art.floating ?? []};
+    const destroy = art.destroy.bind(art);
+    art.destroy = () => {
+      for (const object of extra) if (!object.destroyed) object.destroy({children: true});
+      destroy();
+    };
   }
   // boss 6 Nov ("the same sleeping Duckies as home"): a themed map's 28 sleepers lie at its own beds (island-maps.js resolves
   // them from its world.json sleepSpots; the room server walks round the same footprints). Made once, when its art loads.
@@ -770,7 +819,7 @@ export class PixiIsland {
       this.marker, ...(this.travelView?.transient() ?? [])].filter(o => o?.visible);
   }
   buildCopies() {
-    if (!this.archipelago || this.snapshotFrame===this.frame) return;
+    if (!this.archipelago || this.sceneryPending || this.snapshotFrame===this.frame) return;
     if (!this.archipelago.has('home')) {this.snapshotFrame=this.frame;this.captureArt('home');return;}
     // Snapshotting a newly loaded theme can rasterize thousands of objects.
     // Keep it out of active gestures, then capture at most one theme per frame.
@@ -814,11 +863,21 @@ export class PixiIsland {
   // the live island drawn again at their offsets, sharp and moving; past a few on screen the snapshot stands in.
   // boss 6 Nov: each copy is drawn with its own map's art; a themed copy whose art is still loading stays a snapshot.
   liveCopies() {
-    if (!this.archipelago?.texture || this.interior?.active) return [];
+    if (!this.archipelago?.texture || this.interior?.active || this.globeT > 0 || Math.abs(Math.log(this.camera.zoom / this.target.zoom)) > .015) return [];
     const z=this.camera.zoom, hw=this.width/(2*z), hh=this.height/(2*z*TILT);   // boss 6 Nov: each island by its own size
     const near=this.archipelago.islands.filter(i => !i.home && Math.abs(i.x-this.camera.x)<hw+(i.width ?? world.width)*.6 && Math.abs(i.y-this.camera.y)<hh+(i.height ?? world.height)*.6);
-    for (const i of near) this.ensureArt(i.map);   // lazy-load the themes coming into view
-    return detailedIslands(near,this.camera,this.width,this.height,TILT).filter(i=>this.artReady(i.map));
+    const detailed = detailedIslands(near, this.camera, this.width, this.height, TILT);
+    const retained = new Set(['home', this.artShown]);
+    for (const island of detailed) if (retained.size < 4) retained.add(island.map);
+    for (const id of retained) this.ensureArt(id);
+    for (const [id, art] of this.arts) {
+      if (retained.has(id) || !art.ready || !this.archipelago.has(id)) continue;
+      for (const {rig} of this.mapSleepers.get(id) ?? []) rig.dispose();
+      this.mapSleepers.delete(id);
+      art.destroy();
+      this.arts.delete(id);
+    }
+    return detailed.filter(i => retained.has(i.map) && this.artReady(i.map));
   }
   renderLiveCopies(target, copies) {
     if (!copies.length) return;
