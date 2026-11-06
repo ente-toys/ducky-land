@@ -20,10 +20,12 @@ before(async () => {
   const root = fileURLToPath(new URL('../',import.meta.url));
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
     import {IslandRoom} from './worker/index.js';
+    import {createBoats} from './src/pixi/islands.js';
     import {start, callback, session, logout, connect, playAccess, friends} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
       async fetch(request) {
         const path = new URL(request.url).pathname;
+        if (path === '/test/reset-boats') {this.boats=createBoats();this.saveBoats();return new Response(null,{status:204});}
         if (path === '/test/travel') {
           const {id,pose,steps=0}=await request.json();
           const entry=[...this.connections].find(([,info]) => info.actor?.id === id);
@@ -590,6 +592,7 @@ test('player chat reaches signed-in users only and is never replayed', async () 
 test('boats board once, cross authoritatively, isolate islands and survive reconnect and restoration', async () => {
   await request('/test/expire-session');
   await request('/test/expire-resume');
+  await request('/test/reset-boats');
   const [first,second,watcher]=await Promise.all([signIn(9301),signIn(9302),signIn(9303)]);
   const [a,b,watch]=await Promise.all([socket(first.session),socket(second.session),socket(watcher.session,false)]);
   const clients=[a,b,watch];
@@ -641,8 +644,14 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     await eventually(() => watch.messages.some(message => message.type==='chat' && message.text==='Across the sea'));
     assert.equal(other.messages.some(message => message.type==='chat' && message.text==='Across the sea'),false);
     const id=captain.welcome.id;
-    assert.equal(captain.snapshot.boats.some(boat => boat.id===boatId),false,'the ferry went back to its own island');
-    const localBoat=captain.snapshot.boats.find(boat => !boat.occupant).id;   // this island's own boats
+    const parked=await eventually(()=>captain.snapshot.boats.find(boat=>boat.id===boatId && !boat.occupant));
+    assert.equal(parked.islandId,exit.destination);
+    assert.deepEqual([parked.x,parked.y],[harborOf(exit.destination).water.x,harborOf(exit.destination).water.y]);
+    await eventually(()=>watch.snapshot.boats.some(boat=>boat.id===boatId && !boat.occupant));
+    await request('/test/restore');
+    await eventually(()=>captain.snapshot.boats.some(boat=>boat.id===boatId && boat.parked));
+    assert.deepEqual(captain.snapshot.boats.find(boat=>boat.id===boatId),parked,'arrival survives worker restoration');
+    const localBoat=boatId;   // Reboard the same boat that brought you here.
     await setup(captain,{...harborOf(exit.destination).land,path:[]},2);   // that island's own jetty (it may be themed)
     captain.send({type:'board',boatId:localBoat});
     await eventually(() => captain.duck()?.mode==='sailing');
@@ -688,12 +697,13 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
   // boss 5 Nov ("dock fix"): no hop from where the boat was; the boat sails up to the shore first
   await request('/test/expire-session');
   await request('/test/expire-resume');
+  await request('/test/reset-boats');
   const login=await signIn(9310), a=await socket(login.session);
   const setup=(pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose,steps})});
   const far={x:-120,y:1960}, spot=landingSpot({islandId:'home',...far}); spot.approach=landingApproach({islandId:'home',...far},spot); const gap=p => Math.hypot(p.x-spot.approach.x,p.y-spot.approach.y);
   try {
     await eventually(() => a.snapshot?.boats?.length);
-    // boss 6 Nov: a landed boat drifts off and the harbor berth always has a boat, so each run boards that berth's boat
+    // Each run uses a fresh harbor boat; previous arrivals remain parked beside the beach.
     let boatId=null;
     const boat=() => a.snapshot.boats.find(b => b.id===boatId);
     const boardHarbor=async () => {
@@ -712,8 +722,12 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
     let closest=Infinity;
     await eventually(() => {const b=boat(); if (b?.occupant) closest=Math.min(closest,gap(b)); return a.duck()?.mode==='walking';});
     assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'hops out onto the sand');
-    await eventually(() => !boat(),'the boat you landed in drifts off (the client fades it out)');
-    assert.equal(a.snapshot.boats.filter(b => !b.occupant).length,boatSpots().length,'and every mooring still has its boat');
+    const parked=await eventually(()=>boat()?.parked && !boat().occupant && {...boat()});
+    assert.equal(parked.islandId,'home');
+    assert.equal(a.snapshot.boats.filter(b => !b.occupant).length,boatSpots().length+1,'every mooring and the parked boat remain');
+    await request('/test/restore');
+    await eventually(()=>boat()?.parked);
+    assert.deepEqual([boat().x,boat().y],[parked.x,parked.y],'worker restoration preserves the beach landing');
     assert.ok(closest<=60,`the Ducky was still aboard within two ticks of the shore (${closest.toFixed(0)} px out)`);   // snapshots go out every other 50 ms step, 19 px of sailing each
     // already beside the sand: dock and it lands with no sail at all
     await boardHarbor();
@@ -750,6 +764,7 @@ test('every island always shows all its moored boats: a taken boat is replaced, 
   // boss 6 Nov: "I took the boat already. Every island should have all the boats."
   await request('/test/expire-session');
   await request('/test/expire-resume');
+  await request('/test/reset-boats');
   const [first,second]=await Promise.all([signIn(9330),signIn(9331)]);
   const [a,b]=await Promise.all([socket(first.session),socket(second.session)]);
   const setup=(client,pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:client.welcome.id,pose,steps})});
@@ -786,9 +801,11 @@ test('every island always shows all its moored boats: a taken boat is replaced, 
     await setup(a,{x:there.water.x,y:there.water.y,exitLocked:false});
     a.send({type:'disembark'});
     await eventually(() => a.duck()?.mode==='walking');
-    await eventually(() => !a.snapshot.boats.some(boat => boat.id===taken),'the boat A arrived in drifts off');
+    const parked=await eventually(()=>a.snapshot.boats.find(boat=>boat.id===taken && !boat.occupant));
+    assert.equal(parked.islandId,exit.destination);
+    assert.deepEqual([parked.x,parked.y],[there.water.x,there.water.y]);
     assert.ok(allMoored(a.snapshot),`all ${perThere} of ${exit.destination}'s moorings are full`);
-    assert.equal(a.snapshot.boats.length,perThere,'and nothing piled up at the jetty');
+    assert.equal(a.snapshot.boats.length,perThere+1,'the parked arrival stays alongside the existing moorings');
     // the count never dropped on any island, in any snapshot either player saw
     for (const message of [...a.messages,...b.messages].filter(message => message.type==='snapshot')) assert.ok(message.boats.length>=boatSpots(message.islandId).length,`${message.islandId} showed ${message.boats.length} boats`);
   } finally {
@@ -803,6 +820,7 @@ test('docking beside an island that is not a jetty neighbour lands you on that i
   // boss 6 Nov: off isle-250, beside isle-176's beach, there was no Dock button; now the server lands you on isle-176's sand
   await request('/test/expire-session');
   await request('/test/expire-resume');
+  await request('/test/reset-boats');
   const login=await signIn(9320), a=await socket(login.session);
   const setup=(pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose,steps})});
   const off=nonNeighbourLanding(), spot=landingSpot(off);
@@ -823,6 +841,12 @@ test('docking beside an island that is not a jetty neighbour lands you on that i
     assert.equal(a.duck().islandId,'isle-176');
     assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'standing on isle-176\'s sand');
     assert.ok(walkNav.walkable(a.duck().x,a.duck().y),'on walkable ground (the walking map the room uses)');
+    const parked=await eventually(()=>a.snapshot.boats.find(boat=>boat.id===boatId && !boat.occupant));
+    assert.equal(parked.islandId,spot.islandId);
+    assert.ok(canSail(parked.x,parked.y,spot.islandId),'boat stays in destination-local water, not the departure coordinate frame');
+    assert.ok(Math.hypot(parked.x-spot.x,parked.y-spot.y)<300,'the boat stays beside the landing');
+    a.send({type:'board',boatId});
+    await eventually(()=>a.duck()?.mode==='sailing' && a.duck().boatId===boatId);
   } finally {
     a.close();
     await request('/test/expire-session');

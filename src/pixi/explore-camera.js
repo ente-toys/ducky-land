@@ -10,13 +10,3 @@ export function zoomToWorldPoint(camera, nextZoom, point) {
   camera.y+=(point.y-camera.y)*fraction;
   camera.zoom=nextZoom;
 }
-
-export function islandArrow(target, width, height, direction=target) {
-  const cx=width/2,cy=height/2;
-  const visible=target.face>0 && target.x>70 && target.x<width-70 && target.y>110 && target.y<height-75;
-  if(visible) return {x:target.x-45,y:target.y,angle:0};
-  let dx=direction.x-cx,dy=direction.y-cy;
-  if(Math.hypot(dx,dy)<1e-6) dx=1;
-  const scale=Math.min((width/2-70)/Math.max(1e-6,Math.abs(dx)),(height/2-110)/Math.max(1e-6,Math.abs(dy)));
-  return {x:cx+dx*scale,y:cy+dy*scale,angle:Math.atan2(dy,dx)};
-}

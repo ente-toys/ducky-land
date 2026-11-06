@@ -94,7 +94,7 @@ export const boatSpot = boat => boatSpots(boatHome(boat))[boatSlot(boat)] ?? boa
 // boss 6 Nov ("I took the boat already. Every island should have all the boats"): every mooring on every island always
 // holds a boat. A mooring counts as held by an empty boat sitting on it, or by a taken boat that has not yet sailed
 // MOORING_CLEAR away from it; once the sailor is clear a fresh boat (new id) appears there. An empty boat anywhere else
-// (one you landed in, or one left from an old save) is dropped, so the client fades it out: nothing piles up or strands.
+// without a parked marker is an obsolete save entry. Explicitly parked arrivals stay where their sailor left them.
 // Runs in place on the room's list; returns whether it changed.
 export const MOORING_CLEAR=300;
 let MINT=Date.now();
@@ -112,8 +112,9 @@ export function fillMoorings(boats) {
     held.add(keyOf(boat)); ids.add(boat.id); keep.push(boat);
   }
   for (const boat of boats) {
-    if (!valid(boat) || !boat.occupant || ids.has(boat.id)) continue;
-    if (boat.islandId === boatHome(boat) && near(boat,spotOf(boat),MOORING_CLEAR)) held.add(keyOf(boat));
+    if (!valid(boat) || ids.has(boat.id) || (!boat.occupant && boat.parked !== true)) continue;
+    if (!islandFor(boat.islandId) || !Number.isFinite(boat.x) || !Number.isFinite(boat.y)) continue;
+    if (boat.occupant && boat.islandId === boatHome(boat) && near(boat,spotOf(boat),MOORING_CLEAR)) held.add(keyOf(boat));
     ids.add(boat.id); keep.push(boat);
   }
   let changed=keep.length !== boats.length;
@@ -127,12 +128,12 @@ export function fillMoorings(boats) {
   return changed;
 }
 // a sailor steps off (lands, docks or leaves the game): a boat still beside its own empty mooring ties back up there;
-// any other boat is dropped and fades out, and the moorings stay full
+// any other boat parks at its arrival position, and the original moorings stay full
 export function retireBoat(boats,boat) {
   const spot=boatSpot(boat), home=boatHome(boat);
-  boat.occupant=null;
+  boat.occupant=null; boat.parked=true;
   if (boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
-    Object.assign(boat,{x:spot.x,y:spot.y,turn:spot.turn,departure:home});
+    Object.assign(boat,{x:spot.x,y:spot.y,turn:spot.turn,departure:home,parked:false});
   fillMoorings(boats);
 }
 

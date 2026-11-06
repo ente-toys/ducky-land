@@ -1,4 +1,3 @@
-import {islandArrow} from './explore-camera.js';
 import {visibleWrapOffsets} from './world-texture-layout.js';
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
@@ -150,13 +149,18 @@ function buildWorldTexture(app, islands, bounds, arch, worldSize) {
 // the 'you are here' pin: a sun-yellow drop with an ink outline and a cream dot, a 'You' tag above it
 function makePin() {
   const pin = new Container({label: 'You are here'});
-  const arrow=new Graphics().poly([-18,-9,3,-9,3,-18,23,0,3,18,3,9,-18,9]).fill(PALETTE.sun).stroke({color:PALETTE.ink,width:3,join:'round'});
-  const tag=new Text({text:'Your island',style:{fontFamily:'ui-rounded, system-ui, sans-serif',fontSize:13,fontWeight:'700',fill:PALETTE.ink}});
+  const shadow = new Graphics().ellipse(0, 0, 9, 3.5).fill({color: 0x000000, alpha: .25});
+  const drop = new Graphics()
+    .moveTo(0, 0).bezierCurveTo(-4, -10, -15, -18, -15, -30).arc(0, -30, 15, Math.PI, 0).bezierCurveTo(15, -18, 4, -10, 0, 0)
+    .fill(PALETTE.sun).stroke({color: PALETTE.ink, width: 3, join: 'round'});
+  drop.circle(0, -30, 6).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
+  const tag = new Text({text: 'You', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '700', fill: PALETTE.ink}});
   tag.anchor.set(.5);
-  const label=new Container();
-  label.addChild(new Graphics().roundRect(-49,-12,98,24,12).fill(PALETTE.cream).stroke({color:PALETTE.ink,width:2}),tag);
-  label.y=38;
-  pin.addChild(arrow,label);pin.body=arrow;
+  const tagBg = new Graphics().roundRect(-20, -11, 40, 22, 11).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
+  const label = new Container(); label.addChild(tagBg, tag); label.position.set(0, -64);
+  const body = new Container(); body.addChild(drop, label);
+  pin.addChild(shadow, body);
+  pin.body = body;
   return pin;
 }
 
@@ -208,16 +212,7 @@ export function createWorldView(app, scene) {
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
       const on = t > .001;
       mesh.visible = on;
-      if (!on) {
-        scene.visible = true; life.visible = false; this.pinIn = 0; this.worldAt=null;
-        const here=me && arch?.islands.find(i=>i.home);
-        if(here) {
-          const target={x:width/2+(here.x-cam.x)*cam.zoom,y:height/2+(here.y-cam.y)*cam.zoom,face:1};
-          pin.visible=target.x<0||target.x>width||target.y<0||target.y>height;
-          const guide=islandArrow(target,width,height);pin.position.set(guide.x,guide.y);pin.body.rotation=guide.angle;pin.alpha=1;pin.scale.set(1);
-        } else pin.visible=false;
-        return;
-      }
+      if (!on) {scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;}
       if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {   // rebuilt when a themed island's snapshot arrives
         const old = worldTex; worldVersion = arch.version;
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize);
@@ -311,20 +306,22 @@ export function createWorldView(app, scene) {
       } else ripples.length = 0;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
       this.pinIn = me ? ease((t - .12) / .15) : 0;
-      const here=me && arch.islands.find(i=>i.home);
-      if (here) {
-        const p=project(here.x,here.y);
-        const lon=wrap(here.x-cam.x,spanX)/Rw,lat=-(here.y-cy)/Rw;
-        // A point behind the globe still has a useful direction on its tangent plane.
-        const direction={x:w/2+Math.sin(lon)*Rp,y:h/2-(cl*Math.sin(lat)-sl*Math.cos(lat)*Math.cos(lon))*Rp};
-        const guide=islandArrow(p,w,h,direction);
-        pin.position.set(guide.x,guide.y);pin.body.rotation=guide.angle;
-        pin.visible=true;pin.alpha=1;pin.scale.set(1);
-      } else pin.visible=false;
+      if (me) {
+        const p = project(me.x, me.y);
+        pin.position.set(p.x, p.y);
+        pin.alpha = this.pinIn * ease(p.face / .25);
+        pin.visible = pin.alpha > .01;
+        pin.body.y = -Math.abs(Math.sin(time * 3)) * 6;
+        hoverK += ((hover && pin.visible ? 1.05 : 1) - hoverK) * (1 - Math.exp(-dt * 18));   // boss 6 Nov: a small lift on hover, never past 1.05
+        pin.scale.set((.8 + .2 * p.face) * hoverK);
+      } else pin.visible = false;
     },
     // boss 6 Nov: the 'You' pin is a button. Hit box covers the drop and the tag with room for a finger (at least 64 x 96 px).
-    renderGuide() {if(pin.visible) app.renderer.render({container:pin,clear:false});},
-    pinAt() {return false;},
+    pinAt(point) {
+      if (!pin.visible || pin.alpha < .35) return false;
+      const k = pin.scale.x, dx = point.x - pin.x, dy = point.y - pin.y;
+      return Math.abs(dx) < Math.max(32, 26 * k) && dy > -Math.max(90, 84 * k) && dy < 16;
+    },
     hoverPin(on) {hover = on;},
     pinPoint() {return pin.visible ? {x: pin.x, y: pin.y, alpha: pin.alpha, scale: pin.scale.x} : null;},   // QA readback
     // grab-drag on the ball: how far to move the camera so the spot under the finger stays under the finger

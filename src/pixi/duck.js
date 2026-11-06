@@ -340,7 +340,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     root.duckDirection=degrees;
   }
   function dispose(){if(disposed)return;disposed=true;outfitVersion++;liveDucks--;root.removeFromParent();root.destroy({children:true});}
-  update(0,{action:0});
+  update(0,{action:sleep ? 7 : 0,persistentSleep:Boolean(sleep)});
   const arrive=()=>{arriveT=0;};
   // away: unit vector pointing away from what was hit, in rig units (x right, y down on screen)
   const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};

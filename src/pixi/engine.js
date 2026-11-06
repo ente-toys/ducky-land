@@ -752,8 +752,9 @@ export class PixiIsland {
       await attachCentreMotion(art, {Graphics, Container}, this.objects);
       if (this.disposed) {art.destroy(); return;}
       this.buildMapAmbience(mapId, art);
+      await this.makeSleepers(mapId);
+      if (this.disposed) {art.destroy();return;}
       this.arts.set(mapId, art);
-      this.makeSleepers(mapId).catch(error => console.warn(`theme ${mapId}: sleepers did not load`, error));
       this.showArt(this.artShown);
       globalThis.__duckyThemeArt = [...this.arts.values()].filter(a => a.ready).map(a => a.id);   // QA readback
     }).catch(error => {console.warn(`theme ${mapId}: art did not load`, error); this.arts.set(mapId, {id: mapId, ready: false, failed: true});});
@@ -1118,7 +1119,7 @@ export class PixiIsland {
       if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
     }
     this.app.render();
-    if (!(this.globeT > 0)) {this.renderLiveCopies(undefined, copies);this.worldView?.renderGuide();}   // flat view: straight onto the screen, after the real island
+    if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies);   // flat view: straight onto the screen, after the real island
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;

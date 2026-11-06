@@ -102,7 +102,7 @@ export class IslandRoom {
   }
 
   // boss 6 Nov: the sailor stepped off. The boat ties back up if it is still beside its own empty mooring, otherwise it
-  // drifts off (the client fades it out); every mooring on every island keeps its boat either way (islands.js fillMoorings)
+  // stays parked at its landing position; the original moorings stay full (islands.js fillMoorings)
   parkBoat(boat) {
     retireBoat(this.boats,boat);
     this.saveBoats();
@@ -516,12 +516,13 @@ export class IslandRoom {
             if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
             else {
             if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
-            this.parkBoat(boat);   // boss 6 Nov: the boat drifts off and fades; the moorings here stay full
+            Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
+            this.parkBoat(boat);   // Keep the boat in the arrival island's coordinate frame, beside the landing.
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
             }
           } else if (actor.docking && near(actor,harborOf(actor.islandId).water,12)) {
-            this.parkBoat(boat);   // boss 6 Nov: it ties back up beside its own empty mooring, or drifts off; no island runs out
+            this.parkBoat(boat);   // Keep the arrival boat beside the jetty, available to board again.
             Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }

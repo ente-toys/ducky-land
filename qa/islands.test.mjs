@@ -211,7 +211,7 @@ test('after taking a boat and sailing clear of the jetty its mooring holds a fre
   assert.ok(mooredAt(boats,'home').every(Boolean));
 });
 
-test('docking at another island leaves its moorings full; the boat you arrived in drifts off and nothing piles up', () => {
+test('docking at another island keeps the arrival boat and leaves both islands moorings full', () => {
   const boats=createBoats(), per=boatSpots().length, there=destinationsFor('home')[0].destination, perThere=boatSpots(there).length;
   const total=ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0);   // boss 6 Nov: a themed island has its own moorings
   const boat=boats.find(boat => boat.id==='home-3');
@@ -223,17 +223,20 @@ test('docking at another island leaves its moorings full; the boat you arrived i
   Object.assign(boat,{islandId:there,x:2400,y:300}); check();   // crosses into the neighbour's waters
   assert.equal(countOn(boats,there),perThere+1,'the neighbour shows its own boats plus yours');
   retireBoat(boats,boat); check();   // hops out on the neighbour's shore
-  assert.equal(boats.includes(boat),false,'the boat you arrived in is gone (it fades out)');
+  assert.ok(boats.includes(boat),'the arrival boat remains parked');
+  assert.deepEqual([boat.islandId,boat.x,boat.y,boat.occupant,boat.parked],[there,2400,300,null,true]);
+  const restored=JSON.parse(JSON.stringify(boats));fillMoorings(restored);
+  assert.deepEqual(restored.find(b=>b.id===boat.id),boat,'parked boat survives reconciliation after reload');
   assert.ok(mooredAt(boats,there).every(Boolean),`all ${perThere} of ${there}'s moorings are full`);
   assert.ok(mooredAt(boats,'home').every(Boolean),'and home is full too');
-  assert.equal(boats.length,total,'nothing piled up anywhere');
+  assert.equal(boats.length,total+1,'the fleet includes the parked arrival and all original moorings');
   const fewest=Math.min(...ISLANDS.map(island => boatSpots(island.id).length));
   assert.ok(lowest>=fewest,`no island ever showed fewer than its own boats (lowest ${lowest})`);
   // stepping straight back off beside your own empty mooring ties the same boat back up
   const quick=boats.find(boat => boat.id==='home-0');
   quick.occupant='duck'; quick.x+=30; retireBoat(boats,quick);
   assert.ok(boats.includes(quick) && quick.x===boatSpots()[0].x && mooredAt(boats,'home')[0]);
-  assert.equal(boats.length,total);
+  assert.equal(boats.length,total+1);
 });
 
 test('every island has its full mooring list, even from an old save that only knew a few islands or left boats stranded', () => {

@@ -335,7 +335,7 @@ export class RoomClient {
 // boss 6 Nov ("I took the boat already. Every island should have all the boats"): the ?offline mode keeps the same boats
 // the room server does (concepts/feel/boats-spec.md). Every island holds its ten moorings; a boat you take leaves a fresh
 // one at its mooring once you are MOORING_CLEAR away; the boat you step off ties back up beside its own empty mooring or is
-// dropped (the renderer drifts it off and fades it). Same helpers as worker/index.js, so offline and live never disagree.
+// parked at the landing point. Same helpers as worker/index.js, so offline and live never disagree.
 export class OfflineFleet {
   constructor(boats = createBoats()) {
     this.list = boats;

@@ -235,7 +235,7 @@ test('offline: a taken boat refills its mooring once the sailor is clear, and on
   assert.ok(fleet.take(fresh.id,'friend'),'the next sailor takes the refill');
 });
 
-test('offline: crossing to another island refills home, and the boat you arrive in leaves',()=>{
+test('offline: crossing to another island refills home and keeps the boat where you landed',()=>{
   const fleet=new OfflineFleet(), away=destinationsFor('home')[0], there=away.destination, per=boatSpots(there).length;
   fleet.take('home-0','me');
   const water=harborOf(there).water;   // docked beside that island's own jetty, in its own coordinates
@@ -244,8 +244,10 @@ test('offline: crossing to another island refills home, and the boat you arrive 
   assert.equal(moored(fleet,there).length,per,'the island you reach already has all its boats');
   const boat=fleet.land('me');
   assert.equal(boat.id,'home-0');
-  assert.equal(fleet.list.includes(boat),false,'it drifts off: no pile-up, no stranded boat');
-  assert.equal(fleet.boats(there).length,per);
+  assert.ok(fleet.list.includes(boat));
+  assert.deepEqual([boat.x,boat.y,boat.occupant],[water.x,water.y,null]);
+  assert.equal(fleet.boats(there).length,per+1);
+  assert.ok(fleet.take(boat.id,'friend'),'another sailor can take the parked arrival boat');
   assert.equal(fleet.boats('home').length,10);
 });
 
