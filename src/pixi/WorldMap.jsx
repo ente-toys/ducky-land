@@ -17,7 +17,6 @@ function outline(id) {
 }
 
 export default function WorldMap({island}) {
-  const [expanded, setExpanded] = useState(false);
   const [frame, setFrame] = useState({islands: [], playing: false});
   useEffect(() => {
     function update() {
@@ -37,12 +36,7 @@ export default function WorldMap({island}) {
     return () => clearInterval(timer);
   }, [island]);
 
-  return <aside className={`pixi-world-map${expanded ? ' pixi-world-map--expanded' : ''}`} aria-label="Nearby islands">
-    <button type="button" className="pixi-world-map-heading" aria-expanded={expanded}
-      aria-controls="pixi-world-map-view" onClick={() => setExpanded(value => !value)}>
-      <span>Nearby islands</span><span aria-hidden="true">{expanded ? '↙' : '↗'}</span>
-      <span className="pixi-world-map-sr">{expanded ? 'Shrink map' : 'Expand map'}</span>
-    </button>
+  return <aside className="pixi-world-map" aria-label="Nearby islands">
     <svg id="pixi-world-map-view" viewBox={`0 0 ${width} ${height}`} role="img"
       aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. Yellow dot: you' : 'the current view. White ring: view centre'}.`}>
       <g fill="#8cba54" stroke="#f9e2a0" strokeWidth="8">
@@ -54,6 +48,5 @@ export default function WorldMap({island}) {
       <circle cx={width / 2} cy={height / 2} r="17" fill={frame.playing ? '#ffda69' : 'none'}
         stroke={frame.playing ? '#564537' : '#fff9df'} strokeWidth="7"><title>{frame.playing ? 'Your duck' : 'View centre'}</title></circle>
     </svg>
-    <div className="pixi-world-map-key">{frame.playing ? '🟡 You' : '◯ View'}</div>
   </aside>;
 }

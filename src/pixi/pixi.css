@@ -293,8 +293,7 @@
   .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 240px); max-height: calc(100svh - 340px); }
 }
 
-.pixi-page { --world-map-width: 220px; --world-map-height: 202px; }
-.pixi-page:has(.pixi-world-map--expanded) { --world-map-width: 400px; --world-map-height: 310px; }
+.pixi-page { --world-map-width: 220px; --world-map-height: 134px; }
 .pixi-world-map {
   position: fixed;
   z-index: 4;
@@ -310,26 +309,16 @@
   box-shadow: 0 3px 0 #56453755;
   font: 12px/1.3 system-ui, sans-serif;
 }
-.pixi-world-map-heading { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 36px; padding: 6px 12px; border: 0; color: inherit; background: transparent; font: 700 13px/1.3 system-ui, sans-serif; cursor: pointer; }
-.pixi-world-map-heading:hover { background: #ffedb4; }
-.pixi-world-map-heading:focus-visible { outline: 3px solid #564537; outline-offset: -3px; }
 .pixi-world-map svg { display: block; width: 100%; background: #4d9fc1; }
-.pixi-world-map-key { display: flex; justify-content: center; gap: 12px; padding: 5px 8px; }
-.pixi-world-map-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .pixi-notifications { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
 @media (max-width: 900px) {
   .pixi-page--guest .pixi-guest-play { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
 }
 @media (max-width: 600px) {
-  .pixi-page { --world-map-width: 148px; --world-map-height: 156px; }
-  .pixi-page:has(.pixi-world-map--expanded) { --world-map-width: 320px; --world-map-height: 262px; }
-  .pixi-world-map-heading { min-height: 44px; }
+  .pixi-page { --world-map-width: 148px; --world-map-height: 96px; }
   .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
   .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height) + 180px); }
   .pixi-notifications { bottom: auto; }
-}
-@media (max-width: 600px) {
-  .pixi-page:has(.pixi-world-map--expanded) .pixi-online { top: max(72px, calc(env(safe-area-inset-top) + 64px)); bottom: auto; }
 }
 .pixi-world-map svg { overflow: hidden; }
 .pixi-nearby-island { transition: transform 80ms linear; }
