@@ -20,6 +20,7 @@ export function createArchipelago(app, scene, layer, world) {
   layer.addChildAt(root, 0);   // under the real island's water and ground
   root.addChild(copies, people);
   let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
+  const thumbnails = new Map();
   const textures = new Map();   // map id -> snapshot of that map's art
   const textureOf = id => textures.get(artOf(id)) ?? textures.get('home');
   const sizeOf = id => mapFor(textures.has(artOf(id)) ? artOf(id) : 'home');
@@ -56,6 +57,27 @@ export function createArchipelago(app, scene, layer, world) {
   return {
     get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return textures.get('home') ?? null;},
     get version() {return version;}, has: mapId => textures.has(mapId), textureOf, sizeOf,
+    // Reuse the world's rendered artwork, including props and delivered themes.
+    // Read back a small image once per texture/tint, never once per movement tick.
+    thumbnailOf(id) {
+      const texture = textureOf(id);
+      if (!texture) return null;
+      const island = islands.find(item => item.id === id);
+      const tint = island.map === 'home' ? island.tint : 0xFFFFFF;
+      let variants = thumbnails.get(texture);
+      if (!variants) {variants = new Map(); thumbnails.set(texture, variants);}
+      if (!variants.has(tint)) {
+        const size = sizeOf(id), sprite = new Sprite(texture);
+        sprite.width = size.width; sprite.height = size.height; sprite.tint = tint;
+        try {
+          const canvas = app.renderer.extract.canvas({target: sprite,
+            frame: new Rectangle(0, 0, size.width, size.height),
+            resolution: Math.min(1, 768 / Math.max(size.width, size.height)), clearColor: 0x00000000});
+          variants.set(tint, {src: canvas.toDataURL('image/png'), width: size.width, height: size.height});
+        } finally {sprite.destroy();}
+      }
+      return variants.get(tint);
+    },
     // snapshot the real island as it is drawn now (ground, props, everything), once per map, sharp enough not to go blocky.
     // The engine shows that map's art (and only it) in the scene before calling this.
     build(mapId = 'home') {
@@ -81,6 +103,6 @@ export function createArchipelago(app, scene, layer, world) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
     },
-    destroy() {root.destroy({children: true}); for (const t of textures.values()) t.destroy(true);},
+    destroy() {thumbnails.clear(); root.destroy({children: true}); for (const t of textures.values()) t.destroy(true);},
   };
 }
