@@ -10,6 +10,11 @@ npm run dev
 
 Open the local URL printed by Vite. The island is at `/`. Players spawn at the plaza.
 
+Vite proxies `/api` HTTP and WebSocket requests to the production server at
+`https://ducky-land.pages.dev`, so the local app watches the real live island.
+GitHub sign-in opens the production site; its secure session stays on that host.
+Local previews remain guests. Use the production site to sign in and play.
+
 Click or tap to walk, or use WASD or the arrow keys. Drag to pan, scroll or pinch
 to zoom, press F to follow your duck, and press Home or 0 for the island overview.
 Q or 1 quacks, E dances, 2–7 trigger other emotes, and M toggles sound. Tap your

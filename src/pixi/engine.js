@@ -1,3 +1,4 @@
+import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from './zoom-motion.js';
 import {detailedIslands} from './island-detail.js';
 import {constrainExploreCamera, zoomToWorldPoint} from './explore-camera.js';
@@ -1016,7 +1017,10 @@ export class PixiIsland {
     if (homeShown && flatVisible) this.surf?.update(t, reduced, visible);
     if (flatVisible) this.rowboat?.update(t, reduced, visible);
     if (homeShown && flatVisible) this.boats?.update(t, reduced, visible);
-    this.travelView?.update(this.room.boatPoses(now/1000),t,reduced,visible,player,this.camera);
+    const boatPoses=boatsForView(this.room,now/1000,()=>
+      this.room && import.meta.env.DEV && this.archipelago && this.globeT<.97
+        ? previewMoorings(this.archipelago.islands,this.camera,this.width,this.height,TILT) : []);
+    this.travelView?.update(boatPoses,t,reduced,visible,player,this.camera);
     this.weather.update(t,reduced,visible);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
@@ -1108,7 +1112,7 @@ export class PixiIsland {
     // the globe captures the scene only now, after this frame's camera and animations are set (GPT review: no frame lag)
     const copies=this.liveCopies(); this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies);
-    this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player ?? {x: world.width / 2, y: world.height / 2});   // pin: the player, or home when offline
+    this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player);   // Guests have no player island to point toward.
     if (this.nameLayer) {   // boss 6 Nov: the name tags fade out as the 'You' pin fades in, by the same zoom progress (no pop)
       const tags=1-(this.worldView?.pinIn ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
       if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
@@ -1124,7 +1128,7 @@ export class PixiIsland {
       d.map = this.artShown;
       d.offshoreProgress=String(offshoreProgress(player));
       d.island=this.islandId; d.travelMode=player?.mode ?? 'watching';
-      d.boats=String(this.room?.boats.length ?? 0);
+      d.boats=String(this.room?.tick>=0 ? this.room.boats.length : boatPoses.length);
       d.player = player ? `${player.x.toFixed(1)},${player.y.toFixed(1)}` : '';
       d.action = player ? String(player.action) : '';
       d.jumpLeft = (player?.jumpLeft ?? 0).toFixed(3);

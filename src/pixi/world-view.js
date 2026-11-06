@@ -210,7 +210,7 @@ export function createWorldView(app, scene) {
       mesh.visible = on;
       if (!on) {
         scene.visible = true; life.visible = false; this.pinIn = 0; this.worldAt=null;
-        const here=arch?.islands.find(i=>i.home);
+        const here=me && arch?.islands.find(i=>i.home);
         if(here) {
           const target={x:width/2+(here.x-cam.x)*cam.zoom,y:height/2+(here.y-cam.y)*cam.zoom,face:1};
           pin.visible=target.x<0||target.x>width||target.y<0||target.y>height;
@@ -310,8 +310,8 @@ export function createWorldView(app, scene) {
         }
       } else ripples.length = 0;
       // the pin: the player's world point projected onto the globe the same way the shader bends the map
-      this.pinIn = ease((t - .12) / .15);
-      const here=arch.islands.find(i=>i.home);
+      this.pinIn = me ? ease((t - .12) / .15) : 0;
+      const here=me && arch.islands.find(i=>i.home);
       if (here) {
         const p=project(here.x,here.y);
         const lon=wrap(here.x-cam.x,spanX)/Rw,lat=-(here.y-cy)/Rw;

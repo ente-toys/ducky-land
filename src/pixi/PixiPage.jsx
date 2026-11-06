@@ -107,10 +107,11 @@ export default function PixiPage() {
     }
   }
 
+  const guest = session && !session.user && status !== 'playing';
   const retryLive = status === 'spectators-full';
   const starRequired = session?.user && !session.user.canPlay;
   const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
-  return <main className="pixi-page">
+  return <main className={`pixi-page${guest ? ' pixi-page--guest' : ''}`}>
     <div className="pixi-host" ref={host}/>
     <img className="pixi-ente-logo" src="/ente-wordmark-white.svg" alt="Ente" width="844" height="264"/>
     <div className="pixi-chat-layer">
@@ -127,11 +128,14 @@ export default function PixiPage() {
       {retryPlay && <button onClick={() => room.current?.connect()}>
         {status === 'taken-over' ? 'Take control' : 'Join island'}
       </button>}
-      {session?.user || status === 'playing'
-        ? <button onClick={logout} disabled={signingOut}>Sign out</button>
-        : session?.signInAvailable
-          ? <a href="/auth/github/start">Play with GitHub</a>
-          : <button disabled title="GitHub sign-in is unavailable">Play with GitHub</button>}
+      {(session?.user || status === 'playing') && <button onClick={logout} disabled={signingOut}>Sign out</button>}
+    </aside>}
+    {!error && guest && <aside className="pixi-guest-play" aria-labelledby="pixi-guest-heading">
+      <h2 id="pixi-guest-heading">Your duck is waiting</h2>
+      <p>Sign in to walk, quack, and explore.</p>
+      {session.signInAvailable
+        ? <a href="/auth/github/start">Play with GitHub <span aria-hidden="true">→</span></a>
+        : <><button disabled>Play with GitHub</button><small>Sign-in is unavailable right now.</small></>}
     </aside>}
     {!error && <div className="pixi-bottom-hud">
       <IslandTravel travel={travel} playing={status==='playing'} room={room} island={island} notice={travelNotice}/>
