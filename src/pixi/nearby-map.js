@@ -1,8 +1,8 @@
 import {WORLD_ISLANDS, WORLD_GEO, worldIsland} from './world-map.js';
 import {mapOf} from './island-maps.js';
 
-export const NEARBY_MAP_WIDTH = 16000;
-export const NEARBY_MAP_HEIGHT = 9000;
+export const NEARBY_MAP_WIDTH = 8000;
+export const NEARBY_MAP_HEIGHT = 4500;
 
 // Coordinates stay relative to the duck, including across the longitude seam
 // and when landing changes the player's island-local coordinate frame.
