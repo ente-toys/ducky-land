@@ -794,7 +794,9 @@ export class PixiIsland {
     const map=mapFor(mapId);
     if (!map.art) return;
     this.arts.set(mapId, {id: mapId, ready: false});
+    let pendingArt;
     loadThemeArt(map, {acquire, release}).then(async art => {
+      pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
       this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows);
       for (const p of art.props) (p.deck ? this.decks : this.objects).addChild(p.sprite);
@@ -806,7 +808,14 @@ export class PixiIsland {
       this.arts.set(mapId, art);
       this.showArt(this.artShown);
       globalThis.__duckyThemeArt = [...this.arts.values()].filter(a => a.ready).map(a => a.id);   // QA readback
-    }).catch(error => {console.warn(`theme ${mapId}: art did not load`, error); this.arts.set(mapId, {id: mapId, ready: false, failed: true});});
+    }).catch(error => {
+      pendingArt?.destroy();
+      for (const {rig} of this.mapSleepers.get(mapId) ?? []) rig.dispose();
+      this.mapSleepers.delete(mapId);
+      if (this.disposed) return;
+      console.warn(`theme ${mapId}: art did not load`, error);
+      this.arts.set(mapId, {id: mapId, ready: false, failed: true});
+    });
   }
   artReady(mapId) {return mapId === 'home' || Boolean(this.arts?.get(mapId)?.ready);}
 

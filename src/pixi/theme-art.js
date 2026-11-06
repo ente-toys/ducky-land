@@ -78,6 +78,7 @@ export async function loadThemeArt(map, {acquire, release}) {
     floatLayer.addChild(sprite);
     return {...item, phase: item.phase ?? i * 1.7, sprite};
   });
+  for (const group of [ground, deckLayer, shadows, floatLayer]) group.visible = false;
   return {
     id: map.id, map, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     groups: [ground, deckLayer, shadows, floatLayer],

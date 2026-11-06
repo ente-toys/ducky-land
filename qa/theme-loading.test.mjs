@@ -24,6 +24,7 @@ test('theme art shares source leases at the highest resolution and releases them
   });
   assert.deepEqual(acquired, [['/themes/test/shared.svg', 2], ['/themes/test/other.svg', 2]]);
   assert.equal(art.ground.children[0].texture, art.props[0].sprite.texture);
+  assert.ok(art.groups.every(group => !group.visible), 'theme layers stay hidden while the caller asynchronously prepares animation and sleepers');
   art.destroy(); art.destroy();
   assert.deepEqual(released, acquired.map(([src]) => src));
 });

@@ -45,57 +45,63 @@ async function setup(api) {
   }};
 }
 
-test('friend UI retries saves, waits for confirmation, lists offline friends and suppresses removed or dismissed prompts', async()=>{
-  let friends=[],failSave=true,releaseSave;
+test('friend UI sends requests, shows pending state and requires acceptance before listing a friend', async()=>{
+  let friends=[],incoming=[],outgoing=[],failSave=true,releaseSave;
+  const state=()=>({friends,incoming,outgoing});
+  const person={accountId:'2',login:'prag-design',createdAt:1};
   const api=async (url,options={})=>{
     assert.equal(url,'/api/friends');
     if (options.method==='POST') {
       assert.deepEqual(JSON.parse(options.body),{playerId:'peer'});
       if (failSave) return Response.json({error:'That player moved away.'},{status:409});
       await new Promise(resolve=>{releaseSave=resolve;});
-      const friend={accountId:'2',login:'prag-design',createdAt:1};
-      friends=[friend];
-      return Response.json({friend});
+      outgoing=[person];
     }
-    if (options.method==='DELETE') {friends=[];return Response.json({});}
-    return Response.json({friends});
+    if (options.method==='PATCH') {
+      const {action}=JSON.parse(options.body);
+      if(action==='cancel') outgoing=[];
+      if(action==='accept') {incoming=[];friends=[person];}
+      if(action==='decline') incoming=[];
+    }
+    if (options.method==='DELETE') friends=[];
+    return Response.json(state());
   };
   const ui=await setup(api);
   try {
-    assert.match(document.querySelector('.pixi-friend-prompt').textContent,/Add @prag-design as a friend/);
-    await ui.click('Add friend');
+    assert.match(document.querySelector('.pixi-friend-prompt').textContent,/Send @prag-design a friend request/);
+    await ui.click('Send request');
     assert.match(document.querySelector('[role="alert"]').textContent,/moved away/);
-    failSave=false;
-    await ui.click('Add friend');
-    assert.equal([...document.querySelectorAll('button')].find(button=>button.textContent==='Adding…').disabled,true);
-    assert.doesNotMatch(document.body.textContent,/added to friends/);
+    failSave=false; await ui.click('Send request');
+    assert.equal([...document.querySelectorAll('button')].find(button=>button.textContent==='Sending…').disabled,true);
+    assert.deepEqual(friends,[]);
     await act(async()=>releaseSave());
-    assert.match(document.body.textContent,/@prag-design added to friends/);
-    assert.equal(document.body.textContent.includes('as a friend?'),false);
+    assert.match(document.body.textContent,/Friend request sent/);
+    assert.equal(document.body.textContent.includes('a friend request?'),false);
     await ui.click('Friends');
     assert.equal(document.querySelector('dialog').open,true);
     assert.equal(ui.stopped,1);
+    assert.match(document.querySelector('[aria-label="Sent requests"]').textContent,/@prag-design/);
+    assert.match(document.querySelector('.pixi-friends-empty').textContent,/No friends yet/);
+    await ui.click('Cancel');
+    assert.equal(document.querySelector('[aria-label="Sent requests"]'),null);
+    await ui.click('×');
     assert.equal(document.querySelector('.pixi-friend-prompt'),null);
-    assert.match(document.querySelector('li').textContent,/@prag-design/);
+    incoming=[person];
+    await act(async()=>ui.room.onFriendsChanged());
+    assert.match(document.querySelector('.pixi-friend-prompt').textContent,/sent you a friend request/);
+    await ui.click('Friends (1)');
+    assert.match(document.querySelector('[aria-label="Friend requests"]').textContent,/@prag-design/);
+    await ui.click('Accept');
+    assert.equal(document.querySelector('[aria-label="Friend requests"]'),null);
+    assert.match(document.querySelector('.pixi-friends-list').textContent,/@prag-design/);
     await ui.click('Remove');
     assert.match(document.querySelector('.pixi-friends-empty').textContent,/No friends yet/);
     await ui.click('×');
-    assert.equal(document.querySelector('.pixi-friend-prompt'),null,'removing suppresses the nearby prompt');
-    await act(async()=>{
-      ui.room.dismissedFriends.clear(); ui.room.updateNearby();
-    });
-    await ui.render({indoors:true});
-    assert.equal(document.querySelector('.pixi-friend-prompt'),null);
-    await ui.render({status:'reconnecting'});
-    assert.equal(document.querySelector('.pixi-friend-prompt'),null);
-    await ui.render({status:'watching'});
-    assert.equal(document.querySelector('.pixi-friend-prompt'),null);
-    await ui.render();
-    await ui.click('Dismiss');
-    assert.equal(document.querySelector('.pixi-friend-prompt'),null);
+    incoming=[person];await act(async()=>ui.room.onFriendsChanged());
+    await ui.click('Decline');
+    assert.equal(incoming.length,0);
     friends=[{accountId:'3',login:'offline-friend',createdAt:2}];
-    await act(async()=>ui.room.onFriendsChanged());
-    await ui.click('Friends');
+    await act(async()=>ui.room.onFriendsChanged());await ui.click('Friends');
     assert.match(document.querySelector('li').textContent,/@offline-friend/);
   } finally {await ui.close();}
 });

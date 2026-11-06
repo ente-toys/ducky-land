@@ -35,6 +35,7 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
   }
   if(art.id==='fair') {
     water=(await import('./centre-motion/fair.js')).createFairWater({Graphics,Container},art.props,objects);
+    water.root.visible=false;
     water.root.themeArt=art.id;art.groups.push(water.root);
   }
   art.updateCentre=(t,reduced)=>{animatePieces(records,t,reduced);fire?.(art,t,reduced);water?.update(t,reduced,art.ground.visible);};

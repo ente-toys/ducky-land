@@ -187,59 +187,77 @@ const position = (client,pose) => request('/test/travel',{
   method:'POST',body:JSON.stringify({id:client.welcome.id,pose}),
 });
 
-test('friends are private, one-way, idempotent and persist across offline players, restart, rename and session expiry', async () => {
+test('friend requests require recipient approval and mutual friendships persist across restart, rename and expiry', async () => {
   let owner = await signIn(9300);
-  const target = await signIn(9301);
-  const other = await signIn(9302);
-  const player = await socket(owner.session);
-  const peer = await socket(target.session);
-  const ownerTab = await socket(owner.session,false);
-  const viewer = await socket(other.session,false);
-  const guest = await socket();
+  const target = await signIn(9301), other = await signIn(9302);
+  const player = await socket(owner.session), peer = await socket(target.session);
+  const ownerTab = await socket(owner.session,false), viewer = await socket(other.session,false), guest = await socket();
   const clients = [player,peer,ownerTab,viewer,guest];
+  const state = session => friendRequest(session).then(response => response.json());
   try {
-    await position(player,{x:2000,y:2000});
-    await position(peer,{x:2180,y:2000});
-    await eventually(() => viewer.duck(peer.welcome.id)?.accountId === '9301');
-    assert.equal(guest.duck(peer.welcome.id)?.accountId,undefined);
-    const saved = await friendRequest(owner.session,'POST',{playerId:peer.welcome.id,owner_account_id:'9302'});
-    assert.equal(saved.status,200);
-    const {friend} = await saved.json();
-    assert.equal(friend.accountId,'9301');
-    assert.equal(friend.login,'account-9301');
-    assert.equal(typeof friend.createdAt,'number');
-    await eventually(() => ownerTab.messages.some(message => message.type === 'friends-changed'));
-    assert.equal(viewer.messages.some(message => message.type === 'friends-changed'),false);
-    assert.equal(peer.messages.some(message => message.type === 'friends-changed'),false);
-    assert.equal(guest.messages.some(message => message.type === 'friends-changed'),false);
-    assert.deepEqual(await friendRequest(target.session).then(r=>r.json()),{friends:[]});
-    assert.deepEqual(await friendRequest(other.session).then(r=>r.json()),{friends:[]});
-    const duplicate = await friendRequest(owner.session,'POST',{playerId:peer.welcome.id});
-    assert.deepEqual(await duplicate.json(),{friend});
+    await position(player,{x:2000,y:2000}); await position(peer,{x:2180,y:2000});
+    const sent = await friendRequest(owner.session,'POST',{playerId:peer.welcome.id,owner_account_id:'9302'}).then(r=>r.json());
+    assert.deepEqual(sent.friends,[]);
+    assert.equal(sent.outgoing[0].accountId,'9301');
+    assert.equal((await state(target.session)).incoming[0].accountId,'9300');
+    assert.deepEqual(await state(other.session),{friends:[],incoming:[],outgoing:[]});
+    await eventually(() => ownerTab.messages.some(m => m.type === 'friends-changed'));
+    await eventually(() => peer.messages.some(m => m.type === 'friends-changed'));
+    assert.equal(viewer.messages.some(m => m.type === 'friends-changed'),false);
+    assert.equal(guest.messages.some(m => m.type === 'friends-changed'),false);
+    assert.deepEqual(await friendRequest(owner.session,'POST',{playerId:peer.welcome.id}).then(r=>r.json()),sent);
+    assert.equal((await friendRequest(owner.session,'PATCH',{accountId:'9301',action:'accept'})).status,409);
+    assert.equal((await friendRequest(other.session,'PATCH',{accountId:'9300',action:'accept'})).status,409);
+    player.close();
+    await eventually(() => !peer.duck(player.welcome.id));
+    const accepted = await friendRequest(target.session,'PATCH',{accountId:'9300',action:'accept'}).then(r=>r.json());
+    assert.equal(accepted.friends[0].accountId,'9300');
+    const friend = (await state(owner.session)).friends[0];
+    assert.equal(friend.accountId,'9301'); assert.equal(friend.login,'account-9301');
+    assert.deepEqual((await state(owner.session)).outgoing,[]);
     await request('/test/restore');
-    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[friend]});
-    await request('/test/rename');
-    await signIn(9301);
+    assert.deepEqual(await state(owner.session),{friends:[friend],incoming:[],outgoing:[]});
+    await request('/test/rename'); await signIn(9301);
     const renamed = {...friend,login:'renamed-ducky'};
-    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
-    peer.close();
-    await eventually(() => !player.duck(peer.welcome.id));
-    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
-    await request('/auth/logout',{method:'POST',headers:{Cookie:owner.session,Origin:origin}});
+    assert.deepEqual((await state(owner.session)).friends,[renamed]);
+    peer.close(); await request('/auth/logout',{method:'POST',headers:{Cookie:owner.session,Origin:origin}});
     assert.equal((await friendRequest(owner.session)).status,401);
     owner = await signIn(9300);
-    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
+    assert.deepEqual((await state(owner.session)).friends,[renamed]);
     await request('/test/expire-session');
     assert.equal((await friendRequest(owner.session)).status,401);
     owner = await signIn(9300);
-    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[renamed]});
+    assert.deepEqual((await state(owner.session)).friends,[renamed]);
     assert.equal((await friendRequest(owner.session,'DELETE',{accountId:'9301'})).status,200);
     assert.equal((await friendRequest(owner.session,'DELETE',{accountId:'9301'})).status,200);
-    assert.deepEqual(await friendRequest(owner.session).then(r=>r.json()),{friends:[]});
-  } finally {
-    clients.forEach(client=>client.close());
-    await request('/test/expire-resume');
-  }
+    assert.deepEqual(await state(owner.session),{friends:[],incoming:[],outgoing:[]});
+    const renewedTarget = await signIn(9301);
+    assert.deepEqual((await state(renewedTarget.session)).friends,[]);
+  } finally {clients.forEach(client=>client.close()); await request('/test/expire-resume');}
+});
+
+test('friend requests can be cancelled or declined, and reciprocal requests approve both directions', async () => {
+  const a = await signIn(9330), b = await signIn(9331);
+  const player = await socket(a.session), peer = await socket(b.session);
+  const state = session => friendRequest(session).then(response => response.json());
+  const send = () => friendRequest(a.session,'POST',{playerId:peer.welcome.id});
+  try {
+    await position(player,{x:2000,y:2000}); await position(peer,{x:2100,y:2000});
+    await send();
+    await friendRequest(b.session,'PATCH',{accountId:'9330',action:'cancel'});
+    assert.equal((await state(b.session)).incoming.length,1,'the recipient cannot cancel the sender’s outgoing request');
+    await friendRequest(a.session,'PATCH',{accountId:'9331',action:'cancel'});
+    assert.deepEqual((await state(b.session)).incoming,[]);
+    assert.equal((await friendRequest(b.session,'PATCH',{accountId:'9330',action:'accept'})).status,409);
+    await send();
+    await friendRequest(b.session,'PATCH',{accountId:'9330',action:'decline'});
+    assert.deepEqual((await state(a.session)).outgoing,[]);
+    await send();
+    await friendRequest(b.session,'POST',{playerId:player.welcome.id});
+    assert.equal((await state(a.session)).friends[0].accountId,'9331');
+    assert.equal((await state(b.session)).friends[0].accountId,'9330');
+    assert.deepEqual((await state(b.session)).incoming,[]);
+  } finally {player.close(); peer.close(); await request('/test/expire-resume');}
 });
 
 test('live jumps are shared, preserve movement, land without more input, and reject spectator and sailing jumps', async () => {
@@ -350,6 +368,7 @@ test('friend writes require authentication, same origin, live players and author
     assert.equal((await request('/api/friends',{method:'POST',headers:{Origin:origin},body:'{}'})).status,401);
     assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id},{Origin:'https://elsewhere.example'})).status,403);
     assert.equal((await friendRequest(owner.session,'DELETE',{accountId:'9311'},{Origin:'https://elsewhere.example'})).status,403);
+    assert.equal((await friendRequest(owner.session,'PATCH',{accountId:'9311',action:'accept'},{Origin:'https://elsewhere.example'})).status,403);
     assert.equal((await friendRequest(owner.session,'POST',null)).status,400);
     assert.equal((await friendRequest(owner.session,'POST',{playerId:3})).status,400);
     assert.equal((await friendRequest(owner.session,'DELETE',{accountId:{}})).status,400);
@@ -363,12 +382,12 @@ test('friend writes require authentication, same origin, live players and author
     await position(peer,{x:2000,y:2000,islandId:'home',mode:'sailing'});
     assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id})).status,200);
     assert.equal((await friendRequest(outsider.session,'DELETE',{accountId:'9311',owner_account_id:'9310'})).status,200);
-    assert.equal((await friendRequest(owner.session).then(r=>r.json())).friends.length,1);
+    assert.equal((await friendRequest(owner.session).then(r=>r.json())).outgoing.length,1);
     peer.close();
     await eventually(() => !player.duck(peer.welcome.id));
     assert.equal((await friendRequest(owner.session,'POST',{playerId:peer.welcome.id})).status,409);
     await request('/test/backfill-accounts');
-    assert.equal((await friendRequest(owner.session).then(r=>r.json())).friends[0].accountId,'9311');
+    assert.equal((await friendRequest(owner.session).then(r=>r.json())).outgoing[0].accountId,'9311');
   } finally {
     player.close(); peer.close(); spectator.close();
     await request('/test/expire-resume');

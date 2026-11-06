@@ -74,6 +74,7 @@ export class IslandRoom {
       PRIMARY KEY (owner_account_id, friend_account_id), CHECK (owner_account_id <> friend_account_id));`);
     this.sql.exec(`INSERT OR IGNORE INTO accounts (account,login)
       SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
+    this.migrateFriends();
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
     // keep saved boats (position, occupant), then fill every mooring on every island (300 islands, boss 6 Nov: all the boats)
@@ -197,43 +198,86 @@ export class IslandRoom {
     return reply({}, 404);
   }
 
+  migrateFriends() {
+    if (this.sql.exec('PRAGMA table_info(friend_requests)').toArray().length) return;
+    const migrate = () => {
+      this.sql.exec(`CREATE TABLE friend_requests (
+        sender_account_id TEXT NOT NULL, receiver_account_id TEXT NOT NULL, created_at INTEGER NOT NULL,
+        PRIMARY KEY (sender_account_id,receiver_account_id), CHECK (sender_account_id <> receiver_account_id));
+        INSERT INTO friend_requests SELECT f.owner_account_id,f.friend_account_id,f.created_at FROM friends f
+        WHERE NOT EXISTS (SELECT 1 FROM friends reverse WHERE reverse.owner_account_id=f.friend_account_id AND reverse.friend_account_id=f.owner_account_id);
+        DELETE FROM friends WHERE NOT EXISTS (SELECT 1 FROM friends reverse WHERE reverse.owner_account_id=friends.friend_account_id AND reverse.friend_account_id=friends.owner_account_id);`);
+    };
+    if (this.ctx.storage.transactionSync) this.ctx.storage.transactionSync(migrate);
+    else migrate();
+  }
+
+  friendState(account) {
+    const friends = this.sql.exec(`SELECT a.account AS accountId,a.login,f.created_at AS createdAt
+      FROM friends f JOIN accounts a ON a.account=f.friend_account_id
+      WHERE f.owner_account_id=? ORDER BY f.created_at DESC,f.friend_account_id`, account).toArray();
+    const incoming = this.sql.exec(`SELECT a.account AS accountId,a.login,r.created_at AS createdAt
+      FROM friend_requests r JOIN accounts a ON a.account=r.sender_account_id
+      WHERE r.receiver_account_id=? ORDER BY r.created_at,r.sender_account_id`, account).toArray();
+    const outgoing = this.sql.exec(`SELECT a.account AS accountId,a.login,r.created_at AS createdAt
+      FROM friend_requests r JOIN accounts a ON a.account=r.receiver_account_id
+      WHERE r.sender_account_id=? ORDER BY r.created_at,r.receiver_account_id`, account).toArray();
+    return {friends,incoming,outgoing};
+  }
+
   friends(data, now) {
     const user = this.session(data.digest, now);
     if (!user) return reply({error:'Please sign in again to manage friends.'}, 401);
-    if (data.method === 'GET') {
-      const friends = this.sql.exec(`SELECT a.account AS accountId,a.login,f.created_at AS createdAt
-        FROM friends f JOIN accounts a ON a.account=f.friend_account_id
-        WHERE f.owner_account_id=? ORDER BY f.created_at DESC,f.friend_account_id`, user.account).toArray();
-      return reply({friends});
-    }
-    let friend;
+    if (data.method === 'GET') return reply(this.friendState(user.account));
+    let account;
     if (data.method === 'POST') {
       if (typeof data.playerId !== 'string' || data.playerId.length > 64) return reply({error:'Invalid player.'},400);
       const entries = [...this.connections.entries()].filter(([socket,info]) =>
         socket.readyState === 1 && info.actor && info.expires > now);
       const owner = entries.find(([,info]) => info.account === user.account)?.[1];
       const target = entries.find(([,info]) => info.actor.id === data.playerId)?.[1];
-      if (!owner || !user.canPlay) return reply({error:'Join the island to add a friend.'},403);
+      if (!owner || !user.canPlay) return reply({error:'Join the island to send a friend request.'},403);
       if (!target) return reply({error:'That player has left the island.'},409);
       if (target.account === user.account) return reply({error:'You cannot add yourself.'},400);
       if (owner.actor.islandId !== target.actor.islandId || !near(owner.actor,target.actor,FRIEND_RADIUS)) {
         return reply({error:'That player moved away. Walk closer and try again.'},409);
       }
-      this.sql.exec(`INSERT INTO friends (owner_account_id,friend_account_id,created_at) VALUES(?,?,?)
-        ON CONFLICT(owner_account_id,friend_account_id) DO NOTHING`, user.account,target.account,now);
-      friend = this.sql.exec(`SELECT a.account AS accountId,a.login,f.created_at AS createdAt
-        FROM friends f JOIN accounts a ON a.account=f.friend_account_id
-        WHERE f.owner_account_id=? AND f.friend_account_id=?`,user.account,target.account).one();
-    } else if (data.method === 'DELETE') {
-      if (typeof data.accountId !== 'string' || !/^[1-9][0-9]*$/.test(data.accountId) || data.accountId.length > 32) {
+      account = target.account;
+    } else if (data.method === 'PATCH' || data.method === 'DELETE') {
+      if (typeof data.accountId !== 'string' || !/^[1-9][0-9]*$/.test(data.accountId) || data.accountId.length > 32 || data.accountId === user.account) {
         return reply({error:'Invalid friend.'},400);
       }
-      this.sql.exec('DELETE FROM friends WHERE owner_account_id=? AND friend_account_id=?',user.account,data.accountId);
+      if (data.method === 'PATCH' && !['accept','decline','cancel'].includes(data.action)) return reply({error:'Invalid action.'},400);
+      account = data.accountId;
     } else return reply({error:'Method not allowed.'},405);
-    for (const [socket,info] of this.connections) {
-      if (info.account === user.account && info.digest && info.expires > now) this.send(socket,{type:'friends-changed'});
+
+    const accepted = this.sql.exec('SELECT 1 FROM friends WHERE owner_account_id=? AND friend_account_id=?',user.account,account).toArray().length > 0;
+    const incoming = this.sql.exec('SELECT 1 FROM friend_requests WHERE sender_account_id=? AND receiver_account_id=?',account,user.account).toArray().length > 0;
+    if (data.method === 'PATCH' && data.action === 'accept' && !incoming && !accepted) {
+      return reply({error:'That friend request is no longer available.'},409);
     }
-    return reply(friend ? {friend} : {});
+    const mutate = () => {
+      // Sending a reciprocal request also expresses consent from both people.
+      if ((data.method === 'PATCH' && data.action === 'accept') || (data.method === 'POST' && incoming)) {
+        this.sql.exec(`INSERT OR IGNORE INTO friends VALUES(?,?,?),(?,?,?)`,user.account,account,now,account,user.account,now);
+        this.sql.exec('DELETE FROM friend_requests WHERE (sender_account_id=? AND receiver_account_id=?) OR (sender_account_id=? AND receiver_account_id=?)',user.account,account,account,user.account);
+      } else if (data.method === 'POST' && !accepted) {
+        this.sql.exec('INSERT OR IGNORE INTO friend_requests VALUES(?,?,?)',user.account,account,now);
+      } else if (data.method === 'PATCH') {
+        const sender = data.action === 'cancel' ? user.account : account;
+        const receiver = data.action === 'cancel' ? account : user.account;
+        this.sql.exec('DELETE FROM friend_requests WHERE sender_account_id=? AND receiver_account_id=?',sender,receiver);
+      } else if (data.method === 'DELETE') {
+        this.sql.exec('DELETE FROM friends WHERE (owner_account_id=? AND friend_account_id=?) OR (owner_account_id=? AND friend_account_id=?)',user.account,account,account,user.account);
+        this.sql.exec('DELETE FROM friend_requests WHERE (sender_account_id=? AND receiver_account_id=?) OR (sender_account_id=? AND receiver_account_id=?)',user.account,account,account,user.account);
+      }
+    };
+    if (this.ctx.storage.transactionSync) this.ctx.storage.transactionSync(mutate);
+    else mutate();
+    for (const [socket,info] of this.connections) {
+      if ((info.account === user.account || info.account === account) && info.digest && info.expires > now) this.send(socket,{type:'friends-changed'});
+    }
+    return reply(this.friendState(user.account));
   }
 
   join(request, now) {
