@@ -49,7 +49,7 @@ function OutfitPreview({outfit, onBusy, onError}) {
     onBusy(true);
     async function mount() {
       try {
-        await app.init({width:360, height:300, backgroundAlpha:0, antialias:true,
+        await app.init({width:360, height:360, backgroundAlpha:0, antialias:true,
           resolution:Math.min(devicePixelRatio || 1,2), autoDensity:true, preference:'webgl'});
         initialized = true;
         if (disposed) {app.destroy({removeView:true,releaseGlobalResources:false},{children:true}); return;}
@@ -58,8 +58,8 @@ function OutfitPreview({outfit, onBusy, onError}) {
         host.current.appendChild(app.canvas);
         duck = await createDuck({outfit:initial.current});
         if (disposed) {duck.dispose(); return;}
-        duck.root.scale.set(.78);
-        duck.root.position.set(180,253);
+        duck.root.scale.set(.95);
+        duck.root.position.set(180,320);
         app.stage.addChild(duck.root);
         rig.current = duck;
         const reduced = matchMedia('(prefers-reduced-motion: reduce)');
