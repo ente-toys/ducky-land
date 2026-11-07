@@ -2,6 +2,7 @@ import {butterflyPose} from '../src/pixi/butterflies.js';
 import test from 'node:test';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
+import {OUTFIT_OPTIONS} from '../src/pixi/outfits.js';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {floatingPose} from '../src/pixi/floating.js';
@@ -119,11 +120,8 @@ test('all 34 wearables cover eight measured directions without missing or clippe
     assert.equal(svg.querySelector('parsererror'), null, frame.url);
     for (const match of text.matchAll(/url\(#([^\)]+)\)/g)) assert.ok(svg.getElementById(match[1]), frame.url);
   };
-  // items the game drops (DROPPED in src/pixi/duck.js) never show, so their art is not held to the shown-item checks
-  const dropped = new Set(JSON.parse(readFileSync(new URL('../src/pixi/duck.js', import.meta.url), 'utf8').match(/const DROPPED=new Set\((\[[^\]]*\])\)/)[1].replace(/'/g, '"')));
-  assert.ok(dropped.size > 0, 'DROPPED set found in duck.js');
   for (const entry of manifest.wardrobe) {
-    if (dropped.has(entry.id)) continue;
+    if (!OUTFIT_OPTIONS[entry.slot]?.includes(entry.index)) continue;
     for (const angle of drawn) assert.ok(entry.frames[angle], `${entry.id} ${angle}`);
     for (const key of Object.keys(entry.frames)) {
       if (drawn.includes(key)) continue;

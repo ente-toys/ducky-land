@@ -5,6 +5,7 @@ import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, wal
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
 import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat} from '../src/pixi/islands.js';
+import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
 
 // boss 6 Nov ("room for 100 Duckies on every island, and stalls"): ONE room (this Durable Object) runs all 300 islands, so
 // the old 16 was a cap on the whole world. Now each island holds up to ISLAND_LIMIT players, and the room as a whole up to
@@ -19,12 +20,6 @@ const ZERO = {x:0,y:0};
 
 function reply(data, status = 200) {
   return Response.json(data, {status, headers:{'Cache-Control':'no-store'}});
-}
-
-function outfitFor(id) {
-  let seed = 2166136261;
-  for (const digit of id) seed = Math.imul(seed ^ digit.charCodeAt(0), 16777619) >>> 0;
-  return {cap:1+seed%13, shades:(seed>>>4)%4, acc:(seed>>>8)%9, shoes:1+(seed>>>12)%10};
 }
 
 function publicPose(actor) {
@@ -75,6 +70,7 @@ export class IslandRoom {
     this.sql.exec(`INSERT OR IGNORE INTO accounts (account,login)
       SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
     this.migrateFriends();
+    this.sql.exec('CREATE TABLE IF NOT EXISTS outfits (account TEXT PRIMARY KEY, outfit TEXT NOT NULL)');
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
     // keep saved boats (position, occupant), then fill every mooring on every island (300 islands, boss 6 Nov: all the boats)
@@ -150,6 +146,7 @@ export class IslandRoom {
     if (pathname === '/room') return this.join(request, now);
     const data = await request.json();
     if (pathname === '/friends') return this.friends(data, now);
+    if (pathname === '/outfit') return this.saveOutfit(data, now);
     if (pathname === '/flow') {
       if (data.previous) this.sql.exec('DELETE FROM flows WHERE state=?', data.previous);
       if (this.sql.exec('SELECT count(*) AS count FROM flows').one().count >= 256) return reply({}, 429);
@@ -223,6 +220,23 @@ export class IslandRoom {
       FROM friend_requests r JOIN accounts a ON a.account=r.receiver_account_id
       WHERE r.sender_account_id=? ORDER BY r.created_at,r.receiver_account_id`, account).toArray();
     return {friends,incoming,outgoing};
+  }
+
+  saveOutfit(data, now) {
+    const user = this.session(data.digest, now);
+    if (!user) return reply({error:'Please sign in again to save your outfit.'},401);
+    if (!user.canPlay) return reply({error:'Unlock play to save your outfit.'},403);
+    if (!validOutfit(data.outfit)) return reply({error:'Invalid outfit. Randomize and try again.'},400);
+    const outfit = data.outfit;
+    this.sql.exec('INSERT INTO outfits (account,outfit) VALUES(?,?) ON CONFLICT(account) DO UPDATE SET outfit=excluded.outfit',
+      user.account, JSON.stringify(outfit));
+    for (const [socket,info] of this.connections) {
+      if (info.account !== user.account || !info.actor) continue;
+      info.actor.outfit = outfit;
+      this.attach(socket,info);
+    }
+    this.broadcast();
+    return reply({outfit});
   }
 
   friends(data, now) {
@@ -309,8 +323,11 @@ export class IslandRoom {
     if (playing) {
       const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
-      info.actor = {id:crypto.randomUUID(), x,y,turn:0,outfit:outfitFor(user.account),emoteVersion:0,
-        islandId:'home',mode:'walking',boatId:null,...from, action:0,travel:0,until:0,path:[],jumpLeft:0};
+      const savedOutfit = this.sql.exec('SELECT outfit FROM outfits WHERE account=?',user.account).toArray()[0];
+      const outfit = savedOutfit ? JSON.parse(savedOutfit.outfit) : validOutfit(from?.outfit) ? from.outfit : randomOutfit();
+      if (!savedOutfit) this.sql.exec('INSERT INTO outfits (account,outfit) VALUES(?,?)',user.account,JSON.stringify(outfit));
+      info.actor = {id:crypto.randomUUID(), x,y,turn:0,emoteVersion:0,
+        islandId:'home',mode:'walking',boatId:null,...from,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});

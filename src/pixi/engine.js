@@ -39,6 +39,7 @@ import {geometry, inShape} from '../../rive/web/island-geometry.mjs';
 import {PALETTE} from './palette.js';
 import {clamp, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from './camera.js';
 import {CHAT_DURATION} from './chat.js';
+import {sameOutfit} from './outfits.js';
 
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
@@ -121,7 +122,7 @@ export class PixiIsland {
         resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true,
         antialias: true, background: '#6EC9DE', preference: 'webgl', autoStart: false,
         sharedTicker: false});
-      if (this.disposed) { this.app.destroy(true, {children: true}); return; }
+      if (this.disposed) { this.app.destroy({removeView:true,releaseGlobalResources:false}, {children: true}); return; }
       this.initialized = true;
       this.canvas = this.app.canvas;
       this.canvas.tabIndex = 0;
@@ -528,6 +529,7 @@ export class PixiIsland {
     this.touchInput={x:0,y:0};
     this.gestures.clear();
     this.room?.stopInput();
+    this.sim?.stopInput();
   }
 
   showChat(id, text) {
@@ -1238,6 +1240,13 @@ export class PixiIsland {
     return i >= 0 ? this.rigs[i] : null;
   }
 
+  async setPlayerOutfit(outfit) {
+    const player = this.player;
+    if (!player) throw new Error('Your duck is still arriving. Please try again.');
+    await this.playerRig()?.setOutfit(outfit);
+    player.outfit = {...outfit};
+  }
+
   renderLiveDucks(poses, dt, time, reducedMotion, visible) {
     const ids = new Set(poses.map(pose => pose.id));
     for (const [id, entry] of this.liveRigs) {
@@ -1267,6 +1276,7 @@ export class PixiIsland {
           }
           rig.arrive?.();   // boss 4 Nov: a joining Ducky drops in
           entry.rig = rig;
+          entry.outfit = {...pose.outfit};
           rig.root.scale.set(.88 * .24 * 3);
           rig.root.visible = false;
           this.objects.addChild(rig.root);
@@ -1298,6 +1308,12 @@ export class PixiIsland {
       entry.emoteVersion = emoteVersion;
       const rig = entry.rig;
       if (!rig) continue;
+      if (!sameOutfit(entry.outfit,pose.outfit) && !entry.outfitLoading) {
+        entry.outfitLoading = true;
+        rig.setOutfit(pose.outfit).then(() => {entry.outfit = {...pose.outfit};})
+          .catch(error => console.error('Could not update an outfit',error))
+          .finally(() => {entry.outfitLoading = false;});
+      }
       // boss 5 Nov: sailing-fx.js says where a Ducky is drawn: hopping in, seated low in the hull, or hopping out onto the jetty
       const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
       if (look.mask && !entry.seatMask) {
@@ -1345,7 +1361,7 @@ export class PixiIsland {
     this.rigs.forEach(rig => rig.dispose());
     this.rigs = [];
     disposeDuckAssets().catch(() => {});
-    if (this.initialized) this.app.destroy(true, {children: true});
+    if (this.initialized) this.app.destroy({removeView:true,releaseGlobalResources:false}, {children: true});
     this.loaded.forEach(release);
     this.loaded = [];
   }

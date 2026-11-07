@@ -131,6 +131,23 @@ export async function logout({request,env}) {
   return json({},200,{'Set-Cookie':setCookie(sessionCookie,'',0)});
 }
 
+export async function outfit({request,env}) {
+  if (request.method !== 'POST') return json({error:'Method not allowed.'},405);
+  if (request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
+  const key = await digest(cookie(request,sessionCookie));
+  if (!key) return json({error:'Please sign in again to save your outfit.'},401);
+  const body = await request.text();
+  if (body.length > 512) return json({error:'Invalid request.'},400);
+  let data;
+  try { data = JSON.parse(body); } catch { return json({error:'Invalid request.'},400); }
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return json({error:'Invalid request.'},400);
+  try {
+    return await call(env,'/outfit',{digest:key,outfit:data.outfit});
+  } catch {
+    return json({error:'Could not save your outfit. Please try again.'},503);
+  }
+}
+
 export async function friends({request,env}) {
   if (!['GET','POST','PATCH','DELETE'].includes(request.method)) return json({error:'Method not allowed.'},405);
   if (request.method !== 'GET' && request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);

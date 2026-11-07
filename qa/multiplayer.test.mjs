@@ -11,6 +11,7 @@ import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
 import {HARBOR,harborOf,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
 import {DUCK_RADIUS, RUN_SPEED, WALK_SPEED, MUSEUM_DOOR, atMuseumDoor} from '../src/pixi/player-motion.js';
+import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
 
 const origin = 'https://island.example';
 const nav = createNavigation(world);
@@ -21,7 +22,7 @@ before(async () => {
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
     import {IslandRoom} from './worker/index.js';
     import {createBoats} from './src/pixi/islands.js';
-    import {start, callback, session, logout, connect, playAccess, friends} from './server/pages-auth.js';
+    import {start, callback, session, logout, connect, playAccess, friends, outfit} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
       async fetch(request) {
         const path = new URL(request.url).pathname;
@@ -82,9 +83,13 @@ before(async () => {
         renamedAccounts.set('account-9301','renamed-ducky');
         return new Response(null,{status:204});
       }
+      if (path === '/test/rename-outfit') {
+        renamedAccounts.set('account-9400','renamed-outfit-ducky');
+        return new Response(null,{status:204});
+      }
       if (path.startsWith('/test/')) return env.ISLAND.get(env.ISLAND.idFromName('main-island')).fetch(request);
       const handler = {'/auth/github/start':start,'/auth/github/callback':callback,'/api/session':session,
-        '/auth/logout':logout,'/api/room':connect,'/api/play-access':playAccess,'/api/friends':friends}[path];
+        '/auth/logout':logout,'/api/room':connect,'/api/play-access':playAccess,'/api/friends':friends,'/api/outfit':outfit}[path];
       return handler?.({request,env},fakeGitHub) ?? new Response(null,{status:404});
     }};
   `}, bundle:true, format:'esm', write:false});
@@ -185,6 +190,87 @@ const friendRequest = (session,method='GET',data,headers={}) => request('/api/fr
 });
 const position = (client,pose) => request('/test/travel',{
   method:'POST',body:JSON.stringify({id:client.welcome.id,pose}),
+});
+
+test('first-join random outfits persist by GitHub ID before any customization', async () => {
+  const clients = [];
+  try {
+    for (const account of [9410,9411]) {
+      const original = await signIn(account);
+      const player = await socket(original.session);
+      clients.push(player);
+      await eventually(() => player.duck());
+      const initial = player.duck().outfit;
+      assert.ok(validOutfit(initial));
+      await request('/auth/logout',{method:'POST',headers:{Origin:origin,Cookie:original.session}});
+      const returning = await socket((await signIn(account)).session);
+      clients.push(returning);
+      await eventually(() => returning.duck());
+      assert.deepEqual(returning.duck().outfit,initial);
+    }
+  } finally {
+    clients.forEach(client => client.close());
+    await request('/test/expire-session');
+    await request('/test/expire-resume');
+  }
+});
+
+test('randomized outfits isolate GitHub IDs and persist across reconnects, logout, username changes and room restore', async () => {
+  const owner = await signIn(9400), other = await signIn(9401), locked = await signIn(9000);
+  const player = await socket(owner.session), viewer = await socket(other.session);
+  const saved = randomOutfit(), otherSaved = randomOutfit(saved);
+  const save = (session,outfit,headers={}) => request('/api/outfit',{
+    method:'POST',headers:{Cookie:session,Origin:origin,...headers},body:JSON.stringify({outfit,account:'9401'}),
+  });
+  const clients = [player,viewer];
+  try {
+    await eventually(() => viewer.duck() && viewer.duck(player.welcome.id));
+    const othersOutfit = viewer.duck().outfit;
+    assert.equal((await request('/api/outfit',{method:'GET'})).status,405);
+    assert.equal((await save('',saved)).status,401);
+    assert.equal((await save(owner.session,saved,{Origin:'https://elsewhere.example'})).status,403);
+    assert.equal((await save(locked.session,saved)).status,403);
+    for (const invalid of [null,[],{}, {...saved,cap:2}, {...saved,shades:3}, {...saved,acc:2},
+      {...saved,shoes:11}, {...saved,cap:'3'}, {...saved,extra:1}]) {
+      assert.equal((await save(owner.session,invalid)).status,400);
+    }
+    assert.equal((await request('/api/outfit',{method:'POST',headers:{Origin:origin,Cookie:owner.session},body:'{'})).status,400);
+    const response = await save(owner.session,saved);
+    assert.equal(response.status,200);
+    assert.deepEqual(await response.json(),{outfit:saved});
+    await eventually(() => JSON.stringify(viewer.duck(player.welcome.id)?.outfit) === JSON.stringify(saved));
+    assert.deepEqual(viewer.duck().outfit,othersOutfit);
+    assert.equal((await save(other.session,otherSaved)).status,200);
+    await eventually(() => JSON.stringify(player.duck(viewer.welcome.id)?.outfit) === JSON.stringify(otherSaved));
+    assert.deepEqual(player.duck().outfit,saved);
+    await request('/test/restore');
+    assert.deepEqual(player.duck().outfit,saved);
+    player.close();
+    await eventually(() => !viewer.duck(player.welcome.id));
+    const resumed = await socket(owner.session);
+    clients.push(resumed);
+    await eventually(() => resumed.duck());
+    assert.deepEqual(resumed.duck().outfit,saved);
+    await request('/auth/logout',{method:'POST',headers:{Origin:origin,Cookie:owner.session}});
+    assert.equal((await save(owner.session,saved)).status,401);
+    await request('/test/rename-outfit');
+    const nextLogin = await signIn(9400);
+    assert.equal((await request('/api/session',{headers:{Cookie:nextLogin.session}}).then(r => r.json())).user.login,'renamed-outfit-ducky');
+    const fresh = await socket(nextLogin.session);
+    clients.push(fresh);
+    await eventually(() => fresh.duck());
+    assert.deepEqual(fresh.duck().outfit,saved);
+    await request('/auth/logout',{method:'POST',headers:{Origin:origin,Cookie:other.session}});
+    const otherReturning = await socket((await signIn(9401)).session);
+    clients.push(otherReturning);
+    await eventually(() => otherReturning.duck());
+    assert.deepEqual(otherReturning.duck().outfit,otherSaved);
+    assert.equal((await save(nextLogin.session,{cap:0,shades:0,acc:0,shoes:0})).status,200);
+  } finally {
+    clients.forEach(client => client.close());
+    await request('/test/expire-session');
+    await request('/test/expire-resume');
+  }
 });
 
 test('friend requests require recipient approval and mutual friendships persist across restart, rename and expiry', async () => {

@@ -1,11 +1,11 @@
 import {createDuckFeedback} from './feedback.js';
 import { Assets, Container, Graphics, Sprite } from 'pixi.js';
 import {SLEEP_ASSETS, createSleeper} from './sleeper.js';
+import {OUTFIT_OPTIONS} from './outfits.js';
 
 export const duckAnimationNames=Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
 const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2, STUMBLE=.35;
 const slotOrder=['acc','shades','cap','shoes'];
-const DROPPED=new Set(['cap-2','cap-9','cap-11','cap-12','cap-13','shades-12','acc-5','acc-6','acc-8','acc-10','acc-12']);   // boss 4 Nov: fish hat, aviator, Spartan, headphones, headset, feather mask, guitar, flask, skateboard, bag, sword
 let libraryPromise,liveDucks=0;
 const ownedURLs=new Set(),inFlight=new Set();
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -171,7 +171,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   async function setOutfit(next){
     const request=++outfitVersion;
     // boss 4 Nov: only the outfits that wrap the Ducky well stay; a dropped one is swapped for a kept one of the same kind
-    const keep=e=>!DROPPED.has(e.id),swap=(slot,index)=>{const all=data.wardrobe.filter(e=>e.slot===slot),hit=all.find(e=>e.index===Number(index)||e.id===index);if(!hit||keep(hit))return hit;const kept=all.filter(keep);return kept[hit.index%kept.length];};
+    const keep=e=>OUTFIT_OPTIONS[e.slot]?.includes(e.index),swap=(slot,index)=>{const all=data.wardrobe.filter(e=>e.slot===slot),hit=all.find(e=>e.index===Number(index)||e.id===index);if(!hit||keep(hit))return hit;const kept=all.filter(keep);return kept[hit.index%kept.length];};
     const entries=Object.entries(next).map(([slot,index])=>swap(slot==='accessory'?'acc':slot,index)).filter(Boolean).sort((a,b)=>slotOrder.indexOf(a.slot)-slotOrder.indexOf(b.slot));
     const frames=entries.flatMap(entry=>Object.values(entry.frames).flat()).filter(frame=>frame.visible);
     await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));

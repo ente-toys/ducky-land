@@ -7,6 +7,7 @@ import StarDialog from './StarDialog.jsx';
 import IslandTravel from './IslandTravel.jsx';
 import IslandFriends from './IslandFriends.jsx';
 import WorldMap from './WorldMap.jsx';
+import IslandOutfit from './IslandOutfit.jsx';
 import './pixi.css';
 
 const notices = {
@@ -44,6 +45,7 @@ export default function PixiPage() {
   const [starDialogOpen, setStarDialogOpen] = useState(true);
   const [indoors,setIndoors] = useState(false);
   const [notificationHost,setNotificationHost] = useState(null);
+  const offline = import.meta.env.DEV && new URLSearchParams(location.search).has('offline');
 
   useEffect(() => {setTravelNotice('');},[travel.islandId,travel.mode]);
 
@@ -76,7 +78,6 @@ export default function PixiPage() {
       setTravel(state);
     }, setTravelNotice);
     // dev only: ?offline plays the island locally with no room server (for design review); absent = unchanged
-    const offline = import.meta.env.DEV && new URLSearchParams(location.search).has('offline');
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
       onError:() => setError(true),onInteriorChange:setIndoors});
@@ -122,6 +123,7 @@ export default function PixiPage() {
     {!error && <aside className="pixi-live" aria-label="Live island">
       <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
       {status === 'playing' && <IslandChat key={travel.islandId} room={room} island={island} editor={chatEditor}/>}
+      {(status === 'playing' || offline) && <IslandOutfit key={session?.user?.accountId ?? 'local'} island={island} offline={offline}/>}
       {session?.user && <IslandFriends key={session.user.accountId} room={room} island={island}
         status={status} indoors={indoors} notificationHost={notificationHost}/>}
       {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}

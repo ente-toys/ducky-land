@@ -326,3 +326,36 @@
 
 .pixi-friends-dialog h3 { margin: 20px 0 8px; font-size: 18px; }
 .pixi-friends-list li { flex-wrap: wrap; }
+
+.pixi-outfit-dialog {
+  width: min(360px, calc(100vw - 24px));
+  max-height: calc(100svh - 24px);
+  overflow-y: auto;
+  padding: 20px;
+  color: #332b23;
+  background: #fff9df;
+  border: 2px solid #564537;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px #332b2333;
+  font: 15px/1.45 system-ui, sans-serif;
+}
+.pixi-outfit-dialog::backdrop { background: #243d3b85; }
+.pixi-outfit-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pixi-outfit-dialog button { min-height: 46px; color: inherit; border: 1.5px solid #564537; border-radius: 13px; font: 700 15px/1.3 system-ui, sans-serif; cursor: pointer; }
+.pixi-outfit-dialog button:focus-visible { outline: 3px solid #367969; outline-offset: 3px; }
+.pixi-outfit-dialog button:disabled { opacity: .5; cursor: default; }
+.pixi-outfit-dialog .pixi-outfit-close { min-width: 44px; min-height: 44px; border: 0; background: transparent; font-size: 28px; }
+.pixi-outfit-dialog h2 { margin: 0; font-size: 22px; line-height: 1.2; }
+.pixi-outfit-dialog p { margin: 0; }
+.pixi-outfit-stage { position: relative; isolation: isolate; margin: 16px 0; overflow: hidden; border-radius: 12px; background: #f0eedc; }
+.pixi-outfit-preview { position: relative; z-index: 1; width: 100%; aspect-ratio: 360 / 300; }
+.pixi-outfit-preview canvas { display: block; width: 100%; height: 100%; }
+.pixi-outfit-shadow { position: absolute; z-index: 0; bottom: 11%; left: 29%; width: 42%; height: 8%; border-radius: 50%; background: #7b9c7b30; }
+.pixi-outfit-status { position: absolute; z-index: 2; bottom: 10px; left: 0; right: 0; text-align: center; color: #75604b; font-size: 13px; }
+.pixi-outfit-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pixi-outfit-random { background: transparent; }
+.pixi-outfit-dialog .pixi-outfit-save { background: #355f4c; color: #fff9df; }
+.pixi-outfit-dialog .pixi-outfit-error { margin-top: 8px; color: #9c3424; font-size: 13px; }
+@media (max-width: 480px) {
+  .pixi-outfit-dialog { padding: 18px; }
+}

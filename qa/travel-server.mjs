@@ -32,13 +32,18 @@ const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
     const room=env.ISLAND.get(env.ISLAND.idFromName('main-island'));
     if (path === '/__test/login') return new Response(null,{status:302,headers:{Location:'/', 'Set-Cookie':'test_user='+ (url.searchParams.get('account') || 'traveler') +'; Path=/; HttpOnly; SameSite=Lax'}});
     if (path.startsWith('/__test/')) return room.fetch(new Request('https://test.internal'+path,request));
-    if (path === '/api/session') return Response.json({user:account?{login:account,canPlay:true}:null,signInAvailable:false});
+    if (path === '/api/session') return Response.json({user:account?{accountId:account,login:account,canPlay:true}:null,signInAvailable:false});
     if (path === '/api/friends') {
       if (!account) return Response.json({error:'Please sign in.'},{status:401});
       if (request.method !== 'GET' && request.headers.get('Origin') !== url.origin) return new Response(null,{status:403});
       await room.fetch(new Request('https://test.internal/__test/session',{method:'POST',body:account}));
       const data = request.method === 'GET' ? {} : await request.json();
       return room.fetch(new Request('https://test.internal/friends',{method:'POST',body:JSON.stringify({...data,digest:account,method:request.method})}));
+    }
+    if (path === '/api/outfit') {
+      if (request.method !== 'POST' || request.headers.get('Origin') !== url.origin) return new Response(null,{status:403});
+      const data=await request.json();
+      return room.fetch(new Request('https://test.internal/outfit',{method:'POST',body:JSON.stringify({digest:account,outfit:data.outfit})}));
     }
     if (path === '/api/room') {
       if (account) await room.fetch(new Request('https://test.internal/__test/session',{method:'POST',body:account}));
