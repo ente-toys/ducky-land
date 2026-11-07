@@ -1,8 +1,42 @@
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {Application} from 'pixi.js';
-import {createDuck} from './duck.js';
-import {randomOutfit, sameOutfit} from './outfits.js';
+import {createDuck, getDuckWardrobe} from './duck.js';
+import {OUTFIT_OPTIONS, randomOutfit, sameOutfit} from './outfits.js';
+
+const outfitRows = {cap:'Hats', shades:'Glasses', acc:'Accessories', shoes:'Shoes'};
+
+export function OutfitItems({wardrobe, outfit, disabled, onChange}) {
+  const rows = useRef(null);
+  useEffect(() => {
+    for (const row of rows.current.querySelectorAll('.pixi-outfit-items')) {
+      const selected = row.querySelector('[aria-pressed="true"]');
+      if (!selected) continue;
+      if (selected.offsetLeft < row.scrollLeft) row.scrollLeft = selected.offsetLeft;
+      else if (selected.offsetLeft + selected.offsetWidth > row.scrollLeft + row.clientWidth) {
+        row.scrollLeft = selected.offsetLeft + selected.offsetWidth - row.clientWidth;
+      }
+    }
+  }, [wardrobe,outfit]);
+  return <div className="pixi-outfit-rows" ref={rows}>
+    {Object.entries(outfitRows).map(([slot,label]) => {
+      const items = wardrobe.filter(item => item.slot === slot && OUTFIT_OPTIONS[slot].includes(item.index));
+      const selected = items.find(item => item.index === outfit[slot]);
+      return <fieldset className="pixi-outfit-row" key={slot} disabled={disabled}>
+        <legend>{label}</legend>
+        <span className="pixi-outfit-selected">{selected?.name ?? 'None'}</span>
+        <div className="pixi-outfit-items">
+          {[{index:0,name:'None'}, ...items].map(item => <button type="button" key={item.index}
+            className="pixi-outfit-item" title={item.name} aria-label={item.name}
+            aria-pressed={outfit[slot] === item.index} onClick={() => onChange({...outfit,[slot]:item.index})}>
+            {item.index === 0 ? 'None' : item.frames['0'].filter(frame => frame.visible).map(frame =>
+              <img key={frame.url} src={frame.url} alt="" width="44" height="38" draggable="false"/>)}
+          </button>)}
+        </div>
+      </fieldset>;
+    })}
+  </div>;
+}
 
 function OutfitPreview({outfit, onBusy, onError}) {
   const host = useRef(null);
@@ -20,6 +54,7 @@ function OutfitPreview({outfit, onBusy, onError}) {
         initialized = true;
         if (disposed) {app.destroy({removeView:true,releaseGlobalResources:false},{children:true}); return;}
         app.canvas.setAttribute('aria-hidden','true');
+        Object.assign(app.canvas.style,{width:'100%',height:'100%'});
         host.current.appendChild(app.canvas);
         duck = await createDuck({outfit:initial.current});
         if (disposed) {duck.dispose(); return;}
@@ -71,6 +106,8 @@ function OutfitEditor({initial, island, offline, onClose}) {
   const [previewError,setPreviewError] = useState('');
   const [saveError,setSaveError] = useState('');
   const [saving,setSaving] = useState(false);
+  const [wardrobe,setWardrobe] = useState(null);
+  const [wardrobeError,setWardrobeError] = useState('');
   const changed = !sameOutfit(initial,draft);
 
   useEffect(() => {
@@ -79,6 +116,11 @@ function OutfitEditor({initial, island, offline, onClose}) {
     const element = dialog.current;
     island.current?.stopInput();
     element.showModal();
+    getDuckWardrobe().then(items => {
+      if (!controller.signal.aborted) setWardrobe(items);
+    }).catch(() => {
+      if (!controller.signal.aborted) setWardrobeError('Could not load items. Close and try again.');
+    });
     return () => {controller.abort(); element.close();};
   }, [island]);
 
@@ -114,10 +156,16 @@ function OutfitEditor({initial, island, offline, onClose}) {
       <h2 id="outfit-title">Change outfit</h2>
       <button className="pixi-outfit-close" type="button" aria-label="Close outfit editor" disabled={saving} onClick={onClose}>×</button>
     </div>
-    <div className="pixi-outfit-stage">
-      <OutfitPreview outfit={draft} onBusy={setBusy} onError={setPreviewError}/>
-      <span className="pixi-outfit-shadow" aria-hidden="true"/>
-      {busy && <p className="pixi-outfit-status" role="status">Loading outfit…</p>}
+    <div className="pixi-outfit-content">
+      <div className="pixi-outfit-stage">
+        <OutfitPreview outfit={draft} onBusy={setBusy} onError={setPreviewError}/>
+        <span className="pixi-outfit-shadow" aria-hidden="true"/>
+        {busy && <p className="pixi-outfit-status" role="status">Loading outfit…</p>}
+      </div>
+      {wardrobe ? <OutfitItems wardrobe={wardrobe} outfit={draft} disabled={busy || saving} onChange={next => {
+        setSaveError('');
+        setDraft(next);
+      }}/> : <p role="status">{wardrobeError || 'Loading items…'}</p>}
     </div>
     {(previewError || saveError) && <p className="pixi-outfit-error" role="alert">{previewError || saveError}</p>}
     <div className="pixi-outfit-actions">
