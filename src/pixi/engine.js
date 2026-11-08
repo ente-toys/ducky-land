@@ -2,6 +2,7 @@ import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraM
 import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
+import {globeBall,uprightFade,northUpRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from './globe-look.js';
 import {unplaceRigid,flatRigid} from './rigid.js';
 import {mapPoint,localPoint,spherePoint} from './sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
@@ -447,7 +448,7 @@ export class PixiIsland {
       this.audio.unlock();
       this.canvas.setPointerCapture(event.pointerId);
       this.spin=null; this.dragAt=performance.now(); this.quietAt=this.dragAt;
-      if(!this.gestures.pointers.size) {Object.assign(this.target,this.camera);this.zoomMotion.velocity=0;}
+      if(!this.gestures.pointers.size) {Object.assign(this.target,this.camera);this.zoomMotion.velocity=0;this.globeAim=null;}   // a press stops a turning ball where it is
       this.zoomAnchor=null;
       this.gestures.down(event.pointerId, point(event));
     });
@@ -460,25 +461,26 @@ export class PixiIsland {
       if (!movement) return;
       this.fly=null;
       if (movement.after.length > 1) {
-        this.spin=null;
+        this.spin=null; this.globeAim=null;
         movePinch(this.target, movement.before, movement.after, this.zoomFloor(), 1.8, this.width, this.height);
       } else if (movement.drag) {
         // on the globe the ball is grabbed: the spot under the finger stays under it (GPT review); flat, it pans as before
-        const at=movement.after[0], grab=this.birdEye && this.worldView?.grab({x:at.x-movement.dx, y:at.y-movement.dy}, at, this.target);
-        const mx=grab ? grab.dx : -movement.dx / this.camera.zoom, my=grab ? grab.dy : -movement.dy / (this.camera.zoom * TILT);
-        // Accumulate globe input in the target; render frames ease toward it,
-        // including frames between pointer samples. Flat-map panning stays direct.
-        const destination=this.birdEye ? this.target : this.camera;
-        destination.x += mx; destination.y += my;
-        if(grab){
-          // Rebase both spring endpoints together at the chart seam.
-          const old={x:destination.x,y:destination.y};canonicalCamera(this.islandId,destination);
-          this.camera.x+=destination.x-old.x;this.camera.y+=destination.y-old.y;
+        // boss 8 Nov: on the ball the drag spins a north-up globe (globe-look.js): the aim is the view centre on the
+        // sphere, render frames turn toward it along the sphere, and the spin is kept in longitude/latitude
+        const at=movement.after[0], grab=this.birdEye && this.worldView?.grab({x:at.x-movement.dx, y:at.y-movement.dy}, at, this.target, this.globeAim);
+        let mx, my;
+        if (grab) {
+          this.globeAim=grab.aim; Object.assign(this.target, localPoint(this.islandId, grab.aim));
+          mx=grab.dlon; my=grab.dlat;
+        } else {
+          mx=-movement.dx / this.camera.zoom; my=-movement.dy / (this.camera.zoom * TILT);
+          const destination=this.birdEye ? this.target : this.camera;   // flat-map panning stays direct
+          destination.x += mx; destination.y += my;
         }
         const now=performance.now(), gap=now-this.dragAt; this.dragAt=now;
-        this.spin=sampleGlobeSpin(this.spin,mx,my,gap);
-        if (this.birdEye) {   // at most 120 degrees a second, however hard the flick (GPT review)
-          const b=this.archipelago.bounds, cap=(b.x1-b.x0)/(2*Math.PI)*2.09/1000, v=Math.hypot(this.spin.x,this.spin.y);
+        this.spin=grab ? {...sampleGlobeSpin(this.spin?.globe ? this.spin : null,mx,my,gap),globe:true} : sampleGlobeSpin(this.spin?.globe ? null : this.spin,mx,my,gap);
+        if (grab) {   // at most 120 degrees a second, however hard the flick (GPT review)
+          const cap=2.09/1000, lat=lookOf(this.islandId,this.target).lat, v=Math.hypot(this.spin.x*Math.cos(lat),this.spin.y);
           if (v>cap) {this.spin.x*=cap/v; this.spin.y*=cap/v;}
         }
         this.gust = clamp(movement.dx * .005, -.5, .5);
@@ -504,7 +506,7 @@ export class PixiIsland {
       event.preventDefault();
       const p = point(event);
       const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? this.height : 1);
-      this.fly=null; this.spin=null; this.quietAt=performance.now();
+      this.fly=null; this.spin=null; this.globeAim=null; this.quietAt=performance.now();
       const next=clamp(this.target.zoom * Math.exp(-delta * .0018), this.zoomFloor(), 1.8);
       const stamp=performance.now();
       if(!this.zoomAnchor || stamp-this.zoomAnchor.at>180 || Math.hypot(p.x-this.zoomAnchor.x,p.y-this.zoomAnchor.y)>4) {
@@ -1110,16 +1112,32 @@ export class PixiIsland {
       Object.assign(this.target, {x:shown.x, y:shown.y-90});
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
-      const coast=coastGlobeSpin(this.spin,dt), sx=coast.dx, sy=coast.dy;
+      const coast=coastGlobeSpin(this.spin,dt);
       this.spin.x=coast.x; this.spin.y=coast.y;
-      const y0=this.camera.y; this.camera.x+=sx; this.camera.y+=sy; this.target.x+=sx; this.target.y+=sy; this.constrain(this.camera); this.constrain(this.target);
-      const before={x:this.camera.x,y:this.camera.y};canonicalCamera(this.islandId,this.camera);
-      this.target.x+=this.camera.x-before.x;this.target.y+=this.camera.y-before.y;
-      if (Math.abs(this.camera.y-(y0+sy))>1e-6) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
-      if (Math.hypot(this.spin.x,this.spin.y)*this.camera.zoom<.0001) this.spin=null;
+      if (this.spin.globe) {   // a flung north-up ball: keep turning in longitude/latitude
+        const look=this.globeAim ? lonLat(this.globeAim) : lookOf(this.islandId,this.target), lat=look.lat+coast.dy;
+        if (Math.abs(lat)>LAT_MAX) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
+        this.globeAim=centreOf(look.lon+coast.dx,lat); Object.assign(this.target, localPoint(this.islandId,this.globeAim));
+        if (Math.hypot(this.spin.x,this.spin.y)<1e-7) this.spin=null;
+      } else {
+        const sx=coast.dx, sy=coast.dy;
+        this.camera.x+=sx; this.camera.y+=sy; this.target.x+=sx; this.target.y+=sy; this.constrain(this.camera); this.constrain(this.target);
+        const before={x:this.camera.x,y:this.camera.y};canonicalCamera(this.islandId,this.camera);
+        this.target.x+=this.camera.x-before.x;this.target.y+=this.camera.y-before.y;
+        if (Math.hypot(this.spin.x,this.spin.y)*this.camera.zoom<.0001) this.spin=null;
+      }
     } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;   // off the globe, or held still: no flick
     if (this.fly) this.stepFly(now, player);
     easeZoomCamera(this.camera, this.target, this.zoomMotion, dt, reduced, this.birdEye && (this.gestures.pointers.size || this.spin) ? 30 : 14);
+    if (this.globeAim) {   // the ball turns toward its aim along the sphere, never across the island chart
+      if (!this.birdEye) this.globeAim=null;
+      else {
+        const c=spherePoint(this.islandId,this.camera),a=this.globeAim,k=reduced ? 1 : 1-Math.exp(-30*dt),w=Math.acos(Math.max(-1,Math.min(1,c[0]*a[0]+c[1]*a[1]+c[2]*a[2])));
+        const p=w<1e-9 ? a : c.map((v,i)=>(Math.sin((1-k)*w)*v+Math.sin(k*w)*a[i])/Math.sin(w));
+        Object.assign(this.camera,localPoint(this.islandId,p)); Object.assign(this.target,localPoint(this.islandId,a));
+        if (w<1e-7 && !this.spin && !this.gestures.pointers.size) this.globeAim=null;
+      }
+    }
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
     if (this.birdEye || (this.ready && this.frame > 40)) this.buildCopies();   // the neighbours are in sight from the harbor, so the copies exist from the start
     this.archipelago?.update(this.camera.zoom);
@@ -1129,10 +1147,15 @@ export class PixiIsland {
       // left alone on the globe for two seconds it starts to turn, easing up to about 1.5 degrees a second (GPT review)
       if (this.gestures.pointers.size || this.spin) this.quietAt=performance.now();
       const quiet=t > .9 && !reduced ? Math.min(1, Math.max(0, (performance.now()-(this.quietAt||0)-2000)/1500)) : 0;
-      if (quiet > 0) {const b=this.archipelago.bounds, step=quiet*(t-.9)/.1*(b.x1-b.x0)/240*dt; turnLongitude(this.islandId,this.camera,step/WORLD_GEO.Rw); turnLongitude(this.islandId,this.target,step/WORLD_GEO.Rw);}
+      if (quiet > 0) {this.globeAim=null; const b=this.archipelago.bounds, step=quiet*(t-.9)/.1*(b.x1-b.x0)/240*dt; turnLongitude(this.islandId,this.camera,step/WORLD_GEO.Rw); turnLongitude(this.islandId,this.target,step/WORLD_GEO.Rw);}
       this.globeT=t;
     }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
+    if(!this.landingView){   // boss 8 Nov: the ball is seen north-up; the turn fades out as it flattens into the island
+      const ball=this.globeT>.001 ? globeBall(this.globeT,this.camera.zoom,this.height) : 0,fade=uprightFade(ball);
+      if(fade>0)this.camera.basis=rollBasis(fade*northUpRoll(this.islandId,spherePoint(this.islandId,this.camera)));
+      else delete this.camera.basis;
+    }
     if(this.landingView){
       const progress=(now-this.landingView.at)/600;
       this.camera.basis=easeLandingBasis(this.landingView.basis,progress);

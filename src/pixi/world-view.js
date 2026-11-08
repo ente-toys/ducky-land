@@ -4,6 +4,7 @@ import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from './world-map.js';
 import {dot,expMap} from './sphere.js';
 import {flatRigid} from './rigid.js';
 import {globeScreen} from './globe-screen.js';
+import {globeDrag,lonLat,centreOf,globeBall} from './globe-look.js';
 import {mapOf} from './island-maps.js';
 import {ISLETS} from './islets.js';
 
@@ -265,7 +266,7 @@ export function createWorldView(app, scene, isletView) {
       if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)
       scene.visible = false;
       const id=arch.current,m=mapOf(id),anchor=worldIsland(id),view=viewFrame(id,cam);
-      const Rw=WORLD_GEO.Rw,R=Rw*cam.zoom/h,Rp=Rw*cam.zoom,ball=ease(t)*ease((4-R)/3);
+      const Rw=WORLD_GEO.Rw,R=Rw*cam.zoom/h,Rp=Rw*cam.zoom,ball=globeBall(t,cam.zoom,h);
       u.uBall=ball;
       // The mask is a white disc: only draw it while it is actually masking, or it shows as a white ball mid-zoom.
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
@@ -389,19 +390,15 @@ export function createWorldView(app, scene, isletView) {
     hoverPin(on) {hover = on;},
     pinPoint() {return pin.visible ? {x: pin.x, y: pin.y, alpha: pin.alpha, scale: pin.scale.x} : null;},   // QA readback
     // grab-drag on the ball: how far to move the camera so the spot under the finger stays under the finger
-    grab(from, to, camera) {
+    grab(from, to, camera, aim) {
       const g = this.globe;
       if (!g || g.ball < .3) return null;
-      const view=camera?viewFrame(g.id,camera):g.view;
-      // the inverse of the globe lens (globe-screen.js), so the spot under the finger is the spot that was drawn there
-      const q=g.basis,det=q.a*q.d-q.b*q.c,max=.97*horizonRatio(g.ball);
-      const at=p=>{
-        const sx=p.x-g.w/2,sy=p.y-g.h/2;let x=(q.d*sx-q.c*sy)/det/g.Rp,y=-(-q.b*sx+q.a*sy)/det/g.Rp;const d=Math.hypot(x,y);
-        if(d>max){x*=max/d;y*=max/d;}
-        const r=Math.min(d,max),a=lensAngle(r,g.ball),s=r>1e-9?Math.sin(a)/r:1,z=Math.cos(a);
-        return view.center.map((v,k)=>v*z+(view.east[k]*x+view.north[k]*y)*s);
-      };
-      const a=localPoint(g.id,at(from)),b=localPoint(g.id,at(to));return {dx:a.x-b.x,dy:a.y-b.y};
+      // boss 8 Nov: a north-up ball spun about the pole and the screen's horizontal axis (globe-look.js); the grabbed spot
+      // stays under the cursor and the view never rolls
+      const centre=aim??spherePoint(g.id,camera),o=p=>({x:p.x-g.w/2,y:p.y-g.h/2});
+      const before=lonLat(centre),next=globeDrag(g.id,centre,o(from),o(to),g.ball,g.Rp);
+      let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));
+      return {aim:centreOf(next.lon,next.lat),dlon,dlat:next.lat-before.lat};
     },
     destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
