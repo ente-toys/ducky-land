@@ -17,6 +17,8 @@ const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
 export const globeWeight=(ball,far=0)=>smooth(ball/(.25-.23*far));
 export const farFromAnchor=(view,anchor)=>smooth((Math.acos(Math.max(-1,Math.min(1,dot(view.center,anchor.center))))-.45)/.5);
 export const ease=smooth;
+// boss 8 Nov: how far islands are painted ON the sphere (1) rather than laid down as rigid stickers (0)
+export const paintWeight=ball=>smooth((ball-.1)/.5);
 
 // state: {id, cam:{x,y,zoom}, ball, w, h, basis}
 export function globeScreen({id,cam,ball,w,h,basis}){

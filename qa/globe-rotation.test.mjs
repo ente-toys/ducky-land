@@ -99,3 +99,11 @@ test('at ball 0 the stickers keep the exact flat placement; between, they blend 
  assert.equal(globeWeight(0),0);assert.equal(globeWeight(0,1),0);assert.equal(globeWeight(.25),1);
  assert.equal(globeScreen({id,cam:{...localPoint(id,spherePoint(id,{x:mapOf(id).cx,y:mapOf(id).cy})),zoom},ball:.1,w:W,h:H}).weight,globeWeight(.1),'at Home the morph is the shader\'s own');
 });
+
+test('islands are rigid stickers at the flat end and painted on the ball from ball .6 (boss 8 Nov, "not a 3D globe")',async()=>{
+ const {paintWeight}=await import('../src/pixi/globe-screen.js');
+ assert.equal(paintWeight(0),0);assert.equal(paintWeight(.1),0);assert.equal(paintWeight(.6),1);assert.equal(paintWeight(1),1);
+ const code=(await import('node:fs')).readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
+ assert.match(code,/vec2 chartQ\(vec3 c,vec3 e,vec3 n,vec3 p\)/,'each island is looked up through its own sphere chart');
+ assert.match(code,/return mix\(stickQ\(S,X\),b,k\);/,'blended in coordinates, never colours');
+});

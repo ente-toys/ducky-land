@@ -3,7 +3,7 @@ import {spherePoint,localPoint,viewFrame} from './sphere-coordinates.js';
 import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from './world-map.js';
 import {dot,expMap} from './sphere.js';
 import {flatRigid} from './rigid.js';
-import {globeScreen} from './globe-screen.js';
+import {globeScreen,paintWeight} from './globe-screen.js';
 import {globeDrag,lonLat,centreOf,globeBall} from './globe-look.js';
 import {mapOf} from './island-maps.js';
 import {ISLETS} from './islets.js';
@@ -46,6 +46,19 @@ uniform vec4 uIslFlat[13];
 uniform vec4 uIslInfo[13];
 uniform vec4 uIt[22];
 uniform vec4 uItInfo[22];
+// boss 8 Nov ("it's not a 3D globe"): on the ball every island and islet is PAINTED ON THE SPHERE through its own chart (the
+// inverse azimuthal lookup about its own centre), so it curves, foreshortens toward the rim and turns with the ball. On the
+// way down to an island it blends into its rigid sticker by uPaint (0 rigid .. 1 on the sphere), in coordinates, never
+// colours. uIslC/E/N: each island's own sphere frame; uIslAux.x: 1 when the sticker is valid (else sphere only).
+uniform vec3 uIslC[13];
+uniform vec3 uIslE[13];
+uniform vec3 uIslN[13];
+uniform vec4 uIslAux[13];
+uniform vec3 uItC[22];
+uniform vec3 uItE[22];
+uniform vec3 uItN[22];
+uniform vec4 uItAux[22];
+uniform float uPaint;
 uniform float uTime;
 uniform vec2 uCam;
 uniform float uZoom;
@@ -87,10 +100,22 @@ bool land(vec2 g,int skip){
  return false;
 }
 vec3 over(vec3 under,vec4 c){return mix(under,c.rgb/max(c.a,.001),c.a);}
-vec3 islands(vec2 X,vec3 sea,vec3 under){
+vec2 chartQ(vec3 c,vec3 e,vec3 n,vec3 p){
+ float z=dot(p,c);if(z<0.)return vec2(1e6);
+ float x=dot(p,e),y=dot(p,n),s=length(vec2(x,y));
+ return s>1e-9?vec2(x,-y)*(atan(s,z)*uSph.z/s):vec2(0.);
+}
+vec2 stickQ(vec4 S,vec2 X){vec2 d=X-S.xy;return vec2(S.z*d.x+S.w*d.y,-S.w*d.x+S.z*d.y);}
+// island/islet-local position at screen pixel X (sphere point P): the sticker's, the sphere's, or a blend of the two
+vec2 placeQ(vec4 S,vec3 c,vec3 e,vec3 n,float k,vec2 X,vec3 P){
+ vec2 b=chartQ(c,e,n,P);if(k>.9999)return b;
+ return mix(stickQ(S,X),b,k);
+}
+vec3 islands(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 sea,vec3 under){
  for(int i=0;i<13;i++){
   vec4 info=uIslInfo[i];if(info.z<.5)continue;
-  vec2 d=X-uIsl[i].xy;vec2 q=vec2(uIsl[i].z*d.x+uIsl[i].w*d.y,-uIsl[i].w*d.x+uIsl[i].z*d.y);
+  float k=uIslAux[i].x>.5?uPaint:1.;
+  vec2 q=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X,P0);
   vec2 uv=q/info.xy+.5;
   if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
   if(info.z>1.5){
@@ -101,22 +126,25 @@ vec3 islands(vec2 X,vec3 sea,vec3 under){
    vec4 c=textureLod(uScene,sceneUV(g),0.);
    if(c.a>.001)return over(under,c);
   }else{
-   // Mip level from the sticker's true footprint, biased sharp (x.6): smooth far away, crisp as soon as it is near size.
-   vec2 dx=vec2(uIsl[i].z,-uIsl[i].w)/info.xy*(.6*1022./4096.),dy=vec2(uIsl[i].w,uIsl[i].z)/info.xy*(.6*1022./4096.);
+   // Mip level from the true footprint one pixel across and down, biased sharp (x.6).
+   vec2 qx=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(0.,1.),P2);
+   vec2 dx=(qx-q)/info.xy*(.6*1022./4096.),dy=(qy-q)/info.xy*(.6*1022./4096.);
    vec4 c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
    if(c.a>.001)return over(under,c);
   }
  }
  return under;
 }
-vec3 islets(vec2 X,vec3 under){
+vec3 islets(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
  for(int i=0;i<22;i++){
   vec4 info=uItInfo[i];if(info.y<.5)continue;
-  vec2 d=X-uIt[i].xy;vec2 q=vec2(uIt[i].z*d.x+uIt[i].w*d.y,-uIt[i].w*d.x+uIt[i].z*d.y);
+  float k=uItAux[i].x>.5?uPaint:1.;
+  vec2 q=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X,P0);
   vec2 uv=q/info.x+.5;
   if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
-  int k=int(info.z+.5);vec2 cell=vec2(float(k%4),float(k/4)),scale=.6*508./512./vec2(4.,3.);
-  vec4 c=textureGrad(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),vec2(uIt[i].z,-uIt[i].w)/info.x*scale,vec2(uIt[i].w,uIt[i].z)/info.x*scale);
+  vec2 qx=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(0.,1.),P2);
+  int c4=int(info.z+.5);vec2 cell=vec2(float(c4%4),float(c4/4)),scale=.6*508./512./vec2(4.,3.);
+  vec4 c=textureGrad(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),(qx-q)/info.x*scale,(qy-q)/info.x*scale);
   if(c.a>.001)return over(under,c);
  }
  return under;
@@ -128,6 +156,18 @@ vec3 sea(vec3 p,vec3 ocean){
  vec2 g=local(p),suv=sceneUV(g);
  if(length(g-uSph.xy)>uSph.z*1.25||any(lessThan(suv,vec2(0.)))||any(greaterThan(suv,vec2(1.)))||land(g,-1))return ocean;
  return over(ocean,textureLod(uScene,suv,0.));
+}
+// The sphere point drawn at screen uv (the lens, morphing from the flat chart near ball 0).
+vec3 surfaceAt(vec2 uv){
+ vec2 px=chartDelta((uv-.5)*uRes);float Rp=uR*uRes.y,d=length(px)/Rp,ball=uBall;
+ float theta=min(1.57079632679,d);
+ if(ball>.999999)theta=asin(min(d,1.));
+ else for(int it=0;it<7;it++)theta=clamp(theta-((1.-ball)*theta+ball*sin(theta)-d)/max(.00001,1.-ball+ball*cos(theta)),0.,1.57079632679);
+ vec2 dir=d>0.?px/length(px):vec2(0.);
+ vec3 p=uFocus*cos(theta)+(uViewEast*dir.x-uViewNorth*dir.y)*sin(theta);
+ // Near the flat end retain the exact local chart, then morph coordinates,
+ // never colours. No antipodal log-map interpolation on the sphere's limb.
+ return normalize(mix(surface(uCam+px/uZoom),p,smoothstep(0.,.25,ball)));
 }
 vec3 planet(vec2 uv){
  vec2 px=chartDelta((uv-.5)*uRes);float Rp=uR*uRes.y,d=length(px)/Rp;
@@ -141,20 +181,13 @@ vec3 planet(vec2 uv){
  float air=exp(-max(edge-1.,0.)*Rp*horizon/7.)*step(1.,edge);
  space=mix(space,vec3(.36,.68,1.),air*.7);
  if(edge>=1.)return space;
- float theta=min(1.57079632679,d);
- if(ball>.999999)theta=asin(min(d,1.));
- else for(int it=0;it<7;it++)theta=clamp(theta-((1.-ball)*theta+ball*sin(theta)-d)/max(.00001,1.-ball+ball*cos(theta)),0.,1.57079632679);
  vec2 dir=d>0.?px/length(px):vec2(0.);
- vec3 p=uFocus*cos(theta)+(uViewEast*dir.x-uViewNorth*dir.y)*sin(theta);
- // Near the flat end retain the exact local chart, then morph coordinates,
- // never colours. No antipodal log-map interpolation on the sphere's limb.
- vec3 flatPoint=surface(uCam+px/uZoom);
- p=normalize(mix(flatPoint,p,smoothstep(0.,.25,ball)));
+ vec3 p=surfaceAt(uv),p1=surfaceAt(uv+vec2(1./uRes.x,0.)),p2=surfaceAt(uv+vec2(0.,1./uRes.y));
  vec3 v=vec3(dir.x*edge,-dir.y*edge,sqrt(max(0.,1.-edge*edge)));
  vec3 ocean=mix(uSea,vec3(.2,.52,.86),ball);
  vec3 col=sea(p,ocean);
- col=islets(sp,col);
- col=islands(sp,ocean,col);
+ col=islets(sp,p,p1,p2,col);
+ col=islands(sp,p,p1,p2,ocean,col);
  float lit=dot(v,normalize(vec3(-.5,.5,.72)));
  col=mix(col,col*vec3(.72,.8,.98),(1.-smoothstep(.12,.3,lit))*ball);
  col=mix(col,col+vec3(.06,.07,.08),smoothstep(.8,.95,lit)*ball);
@@ -211,6 +244,10 @@ export function createWorldView(app, scene, isletView) {
       uIslInfo:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
       uIt:{value:new Float32Array(22*4),type:'vec4<f32>',size:22},
       uItInfo:{value:new Float32Array(22*4),type:'vec4<f32>',size:22},
+      ...Object.fromEntries(['uIslC','uIslE','uIslN'].map(n=>[n,{value:new Float32Array(13*3),type:'vec3<f32>',size:13}])),
+      ...Object.fromEntries(['uItC','uItE','uItN'].map(n=>[n,{value:new Float32Array(22*3),type:'vec3<f32>',size:22}])),
+      uIslAux:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},uItAux:{value:new Float32Array(22*4),type:'vec4<f32>',size:22},
+      uPaint:{value:0,type:'f32'},
     },
   }});
   const mesh = new Mesh({geometry, shader, label: 'World view'});
@@ -297,13 +334,18 @@ export function createWorldView(app, scene, isletView) {
         return {x:s.x,y:s.y,face:ball>.5?vz:1};
       };
       const isl=u.uIsl,flat=u.uIslFlat,info=u.uIslInfo,it=u.uIt,itInfo=u.uItInfo;
+      // boss 8 Nov ("it's not a 3D globe"): rigid sticker on the way down, painted on the sphere by ball .6 (paintWeight)
+      const paint=paintWeight(ball);u.uPaint=paint;
+      const facing=(c,r)=>paint>0&&dot(c,view.center)>-Math.sin(r/Rw);   // any part still on the front: it wraps round the rim
       const stickers=[];
       WORLD_ISLANDS.forEach((island,k)=>{
-        const mi=mapOf(island.id),S=(x,y)=>spherePoint(island.id,{x:mi.cx+x,y:mi.cy+y}),st=stickerOf(S,ball>=.25?4:16);
-        if(!st||(ball>.5&&st.depth<=0))return;
+        const mi=mapOf(island.id),S=(x,y)=>spherePoint(island.id,{x:mi.cx+x,y:mi.cy+y});
+        let st=stickerOf(S,ball>=.25?4:16);
+        if(st&&ball>.5&&st.depth<=0)st=null;
+        if(!st&&!facing(island.center,Math.hypot(mi.width,mi.height)/2))return;
         // the live scene only if every on-screen part of this sticker was rendered into it this frame
         const F=flatRigid(id,island.id);let mode=worldTex?1:0;
-        if(live){
+        if(live&&st){
           let inside=true;
           for(let gy=0;gy<=8&&inside;gy++)for(let gx=0;gx<=8;gx++){
             const qx=(gx/8-.5)*mi.width,qy=(gy/8-.5)*mi.height,X=st.x+st.scale*(st.cos*qx-st.sin*qy),Y=st.y+st.scale*(st.sin*qx+st.cos*qy);
@@ -314,23 +356,39 @@ export function createWorldView(app, scene, isletView) {
           if(inside)mode=2;
         }
         if(!mode)return;
-        stickers.push({kind:'island',id:island.id,k,st,F,mi,mode});
+        stickers.push({kind:'island',id:island.id,k,st,F,mi,mode,frame:island,S,depth:dot(island.center,view.center)});
       });
-      stickers.sort((p,q)=>q.st.depth-p.st.depth);
+      stickers.sort((p,q)=>q.depth-p.depth);
       info.fill(0);
-      stickers.forEach(({st,F,mi,k,mode},n)=>{
-        isl.set([st.x,st.y,st.cos/st.scale,st.sin/st.scale],n*4);flat.set([F.x,F.y,F.a,F.b],n*4);info.set([mi.width,mi.height,mode,k],n*4);
+      const frames=(C,E,N,A,f,st,n)=>{C.set(f.center,n*3);E.set(f.east,n*3);N.set(f.north,n*3);A.set([st?1:0,0,0,0],n*4);};
+      stickers.forEach(({st,F,mi,k,mode,frame},n)=>{
+        isl.set(st?[st.x,st.y,st.cos/st.scale,st.sin/st.scale]:[0,0,0,0],n*4);flat.set([F.x,F.y,F.a,F.b],n*4);info.set([mi.width,mi.height,mode,k],n*4);
+        frames(u.uIslC,u.uIslE,u.uIslN,u.uIslAux,frame,st,n);
       });
       const islets=[];itInfo.fill(0);
       ISLETS.forEach((islet,k)=>{
-        const st=stickerOf((x,y)=>expMap(islet,x,y,Rw),ball>=.25?2:16);
-        if(!st||(ball>.5&&st.depth<=0))return;
-        islets.push({kind:'islet',id:`islet-${k}`,k,st,islet});
+        const S=(x,y)=>expMap(islet,x,y,Rw);let st=stickerOf(S,ball>=.25?2:16);
+        if(st&&ball>.5&&st.depth<=0)st=null;
+        if(!st&&!facing(islet.center,islet.width*.71))return;
+        islets.push({kind:'islet',id:`islet-${k}`,k,st,islet,S,depth:dot(islet.center,view.center)});
       });
-      islets.sort((p,q)=>q.st.depth-p.st.depth).forEach(({st,islet},n)=>{it.set([st.x,st.y,st.cos/st.scale,st.sin/st.scale],n*4);itInfo.set([islet.width,1,islet.artIndex,0],n*4);});
+      islets.sort((p,q)=>q.depth-p.depth).forEach(({st,islet},n)=>{
+        it.set(st?[st.x,st.y,st.cos/st.scale,st.sin/st.scale]:[0,0,0,0],n*4);itInfo.set([islet.width,1,islet.artIndex,0],n*4);
+        frames(u.uItC,u.uItE,u.uItN,u.uItAux,islet,st,n);
+      });
       u.uLive=live?1:0;
-      // QA readback: the matrices actually drawn (local units -> screen pixels), for the shear sweep.
-      this.stickers=[...stickers,...islets].map(({kind,id,st,mode,islet})=>({kind,id,mode:mode===2?'live':kind==='islet'?'islet-atlas':'atlas',width:islet?.width,a:st.cos*st.scale,b:st.sin*st.scale,c:-st.sin*st.scale,d:st.cos*st.scale,x:st.x,y:st.y}));
+      // QA readback: the matrix actually drawn at each centre (local units -> screen pixels): the inverse of the blended
+      // screen->local map, i.e. the rigid sticker at paint 0 and the true sphere projection's Jacobian at paint 1.
+      const drawn=({st,S})=>{
+        const C=G.screenOf(S(0,0)),e=2,xp=G.screenOf(S(e,0)),xm=G.screenOf(S(-e,0)),yp=G.screenOf(S(0,e)),ym=G.screenOf(S(0,-e));
+        const J=C&&xp&&xm&&yp&&ym?[(xp.x-xm.x)/(2*e),(xp.y-xm.y)/(2*e),(yp.x-ym.x)/(2*e),(yp.y-ym.y)/(2*e)]:null;
+        const inv=m=>{const d=m[0]*m[3]-m[1]*m[2];return [m[3]/d,-m[1]/d,-m[2]/d,m[0]/d];};
+        const A=st?[st.cos*st.scale,st.sin*st.scale,-st.sin*st.scale,st.cos*st.scale]:null,k=st?paint:1;
+        const M=!J?A:!A?J:inv(inv(A).map((v,i)=>v*(1-k)+inv(J)[i]*k));
+        const at=k>=1||!st?C:{x:st.x,y:st.y};
+        return M&&at?{a:M[0],b:M[1],c:M[2],d:M[3],x:at.x,y:at.y,onBall:k}:null;
+      };
+      this.stickers=[...stickers,...islets].map(s=>{const m=drawn(s);return m&&{kind:s.kind,id:s.id,mode:s.mode===2?'live':s.kind==='islet'?'islet-atlas':'atlas',width:s.islet?.width,...m};}).filter(Boolean);
       const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
       const busy = ease((ball - .25) / .4);
       life.visible = busy > .01; life.alpha = busy;
