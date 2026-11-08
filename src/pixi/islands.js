@@ -27,6 +27,8 @@ export const harborWorld = (w, id='home') => ({...w, walkways:[...w.walkways, je
 export const harborClear = prop => Math.hypot(prop.x-1726-20,prop.y-830-110) > 200;
 // boss 5 Nov: walk to the deck beside your boat, then step in
 export function boardingPoint(boat,nav) {
+  const dock=isletWalks(boat.islandId ?? 'home').find(w=>near(boat,w.water,150));
+  if(dock)return {...dock.land};   // return along the drawn jetty, even when a radial sand search misses its narrow deck
   const map=mapOf(boat.islandId ?? 'home'), {HARBOR:harbor,JETTY:jetty}=map, {foot,dir,length,along}=jetty;
   if (!near(boat,harbor.water,600)) return shoreFor(boat.x,boat.y,nav ?? navOf(boat.islandId ?? 'home')) ?? {x:Math.round(boat.x),y:Math.round(boat.y)};   // a beach or islet boat: step in from the nearest sand
   const t=Math.max(length*jetty.wetFrom,Math.min(length-44,(boat.x-foot.x)*dir.x+(boat.y-foot.y)*dir.y));

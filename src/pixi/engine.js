@@ -277,7 +277,7 @@ export class PixiIsland {
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
       await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
       if(this.disposed)return;
-      this.isletView=await createIsletView(this.app,this.scene,src=>{this.loaded.push(src);return acquire(src);});
+      this.isletView=await createIsletView(this.app,this.scene);   // boss 8 Nov: hand-drawn vector islets, globe atlas baked from them
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
       this.worldView = createWorldView(this.app, this.scene, this.isletView); this.worldView.prepare(); globalThis.__duckyPin = () => this.worldView?.pinPoint();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet

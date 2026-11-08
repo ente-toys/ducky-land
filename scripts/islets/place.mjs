@@ -1,4 +1,4 @@
-import {writeFileSync} from 'node:fs';
+import {writeFileSync,readFileSync} from 'node:fs';
 import {WORLD_ISLANDS,WORLD_GEO,neighboursOf} from '../../src/pixi/world-map.js';
 import {sphereShores} from '../../src/pixi/sphere-shores.js';
 import {sphereFrame,arcDistance,angle,expMap} from '../../src/pixi/sphere.js';
@@ -33,5 +33,11 @@ for(let round=0;round<2;round++)for(const [artIndex,art]of ART.entries()){
  }
  if(!accepted)throw Error(`No safe placement for ${art}/${round}`);
 }
+// boss 8 Nov (hand-drawn islets): the spots above stay exactly where the seed put them. Each islet is then drawn at the width
+// its art was made for (public/pixi-art/islets/<art>.meta.json designWidth), so its ink and props match the Home centre, and
+// islets.js stands it upright in its home island's view, so no roll is kept.
+for(const p of placements){p.width=JSON.parse(readFileSync(`public/pixi-art/islets/${p.art}.meta.json`,'utf8')).designWidth;delete p.rotation;}
+// The new 1024-wide volcano needs 9 more units than the old 1015-wide drawing.
+placements.find(p=>p.id==='sea-10-2').lon+=.004;
 writeFileSync('src/pixi/islets-data.json',JSON.stringify({seed:SEED,placements},null,2)+'\n');
 console.log(`Placed ${placements.length} islets with seed ${SEED}`);

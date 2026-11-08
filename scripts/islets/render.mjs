@@ -16,9 +16,7 @@ async function atlas(names,size,rows,input){
  for(let i=0;i<data.length;i+=4){const a=data[i+3]/255;data[i]=Math.round(data[i]*a);data[i+1]=Math.round(data[i+1]*a);data[i+2]=Math.round(data[i+2]*a);}return data;
 }
 writeFileSync(`${tmp}/atlas.rgba`,await atlas(WORLD_ISLANDS.map(i=>i.theme??'home'),1024,4,n=>`public/pixi-art/globe/${n}.png`));
-{const data=await sharp('public/pixi-art/islets/atlas.webp').ensureAlpha().raw().toBuffer();   // the game's own islet atlas (scripts/islets/atlas.mjs)
- for(let i=0;i<data.length;i+=4){const a=data[i+3]/255;data[i]=Math.round(data[i]*a);data[i+1]=Math.round(data[i+1]*a);data[i+2]=Math.round(data[i+2]*a);}
- writeFileSync(`${tmp}/islets.rgba`,data);void ISLET_ART;}
+writeFileSync(`${tmp}/islets.rgba`,await atlas(ISLET_ART,512,3,n=>`public/pixi-art/islets/${n}.svg`));
 writeFileSync(`${tmp}/scene.rgba`,Buffer.alloc(16));
 const W=1440,H=1000,R=WORLD_GEO.Rw,m=mapOf('home'),anchor=WORLD_ISLANDS[0],proof=[];
 for(const [name,lon,lat,zoom,ball]of [

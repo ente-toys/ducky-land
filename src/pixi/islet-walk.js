@@ -11,14 +11,16 @@ const fresh=()=>{if(SEEN!==mapsVersion()){SEEN=mapsVersion();BY_HOME.clear();COM
 const chart=(id,i,p)=>{const q=localPoint(id,isletPoint(i,p));return [q.x,q.y];};
 function walkOf(i){
  const id=i.home,coast=i.coast.map(p=>chart(id,i,p)),lakes=i.lakes.map(r=>({poly:r.map(p=>chart(id,i,p))}));
+ // the props drawn standing on it (horse, trunks, igloo, gravestone...) from its meta.json: walked round, never through
+ const props=i.blocked.map(r=>({poly:r.map(p=>chart(id,i,p))}));
  const at=p=>{const [x,y]=chart(id,i,p);return {x:Math.round(x),y:Math.round(y)};};
  const foot=at(i.jetty.foot),tip=at(i.jetty.tip);
  const walkway={a:[foot.x,foot.y],b:[tip.x,tip.y],w:i.jetty.width};
  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
  for(const [x,y]of [...coast,walkway.a,walkway.b]){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
  const box={x0:Math.floor(x0)-64,y0:Math.floor(y0)-64,x1:Math.ceil(x1)+64,y1:Math.ceil(y1)+64};
- const world={origin:{x:box.x0,y:box.y0},width:box.x1-box.x0,height:box.y1-box.y0,coast,walkways:[walkway],islets:[],bridges:[],water:lakes,obstacles:[]};
- return {islet:i,id,box,world,walkway,land:at(i.jetty.land),water:at(i.jetty.water),foot,tip,nav:createNavigation(world)};
+ const world={origin:{x:box.x0,y:box.y0},width:box.x1-box.x0,height:box.y1-box.y0,coast,walkways:[walkway],islets:[],bridges:[],water:lakes,obstacles:props};
+ return {islet:i,id,box,world,walkway,land:at(i.jetty.land),water:at(i.jetty.water),foot,tip,nav:createNavigation(world,{cellSize:8})};
 }
 // the islets that walk in island `id`'s chart
 export function isletWalks(id){
