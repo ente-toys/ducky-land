@@ -20,16 +20,17 @@ test('Home communities keep C coast, map coordinates, working harbour and both p
  assert.ok(canSail(E.harborWater.x,E.harborWater.y,'home'));for(const p of [[6050,1778],[5956,1756],[6150,1856],[5789,1700]])assert.equal(canSail(...p,'home'),false,'the old bay is land');
  const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2.05,`land ratio ${ratio}`);   // 8 Nov: +the filled-in old harbour inlet (2.017)
 });
-test('five Home communities have distinct homes, meaningful workplaces and reachable front gates',()=>{
- const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);const types=new Set();let homes=0;
- for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=5);assert.ok(c.workplaces.length>=2);
+test('five Home communities have distinct homes, meaningful workplaces and reachable front doors',()=>{
+ // boss 8 Nov: each hamlet is GPT's blueprint copied object by object (scripts/home-10/hamlets-apply.mjs): three or four homes each
+ const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);let homes=0;
+ for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=3,c.id);assert.ok(c.workplaces.length>=2,c.id);
   for(const id of c.workplaces){const p=E.props.find(p=>p.id===id);assert.equal(p.zone,c.id);assert.equal(p.communityRole,'workplace');}
-  for(const id of c.homes){const p=E.props.find(p=>p.id===id);types.add(p.asset);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
-   assert.ok(!nav.walkable(p.footprint.x,p.footprint.y),'house base is solid');const door=[p.x,p.y+145];assert.ok(nav.walkable(...door),`${c.name} front gate`);
-   assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...door).at(-1),door,`${c.name} doorstep route`);
+  for(const id of c.homes){const p=E.props.find(p=>p.id===id);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
+   assert.ok(!nav.walkable(p.footprint.x,p.footprint.y),'house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
+   assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...door).at(-1),door,`${c.name} ${id} doorstep route`);
   }
  }
- assert.equal(homes,28);assert.equal(types.size,5);
+ assert.ok(homes>=15);
 });
 test('Home keeps clear commons and joins every shared green to the original heart',()=>{
  const nav=HOME_MAP.nav();for(const p of E.openSpaces)for(let x=-p.radius;x<=p.radius;x+=38)for(let y=-p.radius;y<=p.radius;y+=38)if(x*x+y*y<=p.radius*p.radius)assert.ok(nav.walkable(p.point[0]+x,p.point[1]+y),`${p.id}: ${x},${y}`);

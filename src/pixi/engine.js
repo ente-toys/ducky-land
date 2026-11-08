@@ -238,7 +238,7 @@ export class PixiIsland {
         sprite.position.set(prop.x, prop.y);
         sprite.width = prop.width * prop.scale;
         sprite.height = prop.height * prop.scale;
-        sprite.zIndex = prop.y;
+        sprite.zIndex = prop.z ?? prop.y;   // boss 8 Nov: a hamlet object keeps GPT's draw order where it overlaps
         sprite.standing = true;
         if (prop.flip) sprite.scale.x *= -1;   // round 4: plants flip and tint so a spread-out lawn does not look stamped
         if (prop.tint) sprite.tint = prop.tint;

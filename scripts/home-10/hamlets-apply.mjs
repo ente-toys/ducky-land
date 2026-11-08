@@ -78,14 +78,28 @@ export function applyHamlets(E, P) {
       else if (WORK.test(o.file)) p.communityRole = 'workplace';
       placed.push(p);
     });
+    // draw order follows the layout: a later-drawn object that overlaps an earlier one with a lower base still draws over it
+    for (let i = 0; i < placed.length; i++) {
+      const p = placed[i]; p.z = p.y;
+      for (let j = 0; j < i; j++) {
+        const q = placed[j];
+        if (q.order < p.order && q.z >= p.z && Math.abs(q.x - p.x) < (q.width + p.width) / 2 && p.y > q.y - q.height && q.y > p.y - p.height) p.z = r1(q.z + .5);
+      }
+    }
     E.props.push(...placed);
     E.hamletDecals = [...(E.hamletDecals ?? []).filter(d => d.hamlet !== h), ...decals];
     E.hamletFrames = {...(E.hamletFrames ?? {}), [h]: [rect[0][0], rect[0][1], rect[1][0], rect[1][1]]};
     if (com) {
       com.homes = placed.filter(p => p.communityRole === 'home').map(p => p.id);
       com.workplaces = placed.filter(p => p.communityRole === 'workplace').map(p => p.id);
-      const cx = square.reduce((s, q) => s + q[0], 0) / square.length, cy = square.reduce((s, q) => s + q[1], 0) / square.length;
-      const c = cfg.place ?? [Math.round(cx), Math.round(cy)]; com.center = c; com.green = [c[0], c[1], 300, 140];
+      // the hamlet's place: the open spot on its square or lane farthest from every footprint and the frame edge
+      const fps = E.props.filter(p => p.footprint).map(p => p.footprint);
+      let c = cfg.place, best = -1;
+      if (!c) for (let px = 0; px <= 1536; px += 16) for (let py = 0; py <= 1024; py += 16) {
+        const [x, y] = W([px, py]); if (!(inRings(x, y, sqR) || inRings(x, y, laneR)) || onWater(x, y, 60)) continue;
+        const d = Math.min(...fps.map(f => Math.hypot(x - f.x, (y - f.y) * 1.5) - f.rx), px * k, (1536 - px) * k, py * k, (1024 - py) * k);
+        if (d > best) {best = d; c = [Math.round(x), Math.round(y)];}
+      } com.center = c; com.green = [c[0], c[1], 300, 140];
       const pl = E.places.find(q => q.id === h); if (pl) pl.point = c;
     }
     report[h] = {cleared: before - E.props.length + placed.length, placed: placed.length, decals: decals.length, dropped};

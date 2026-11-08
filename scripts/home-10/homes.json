@@ -1244,7 +1244,9 @@
     ],
     "k": 1.34
    },
-   "skip": [],
+   "skip": [
+    "square-paving.svg"
+   ],
    "nudge": {},
    "drop": [],
    "connect": [
@@ -1317,7 +1319,9 @@
    },
    "skip": [],
    "nudge": {},
-   "drop": [],
+   "drop": [
+    "oak-southwest"
+   ],
    "connect": []
   },
   "petalpatch": {
@@ -1338,7 +1342,10 @@
    "connect": [],
    "roads": [
     "makers-square"
-   ]
+   ],
+   "doors": {
+    "domed-pottery-shop": 126
+   }
   },
   "reedwhistle": {
    "map": {

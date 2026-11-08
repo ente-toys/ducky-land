@@ -23,7 +23,7 @@ test('Home rivers block walking between crossings and the new crossing decks rem
  for(const c of E.crossings){const p=at([c.x,c.y]);assert.ok(wet(p));assert.ok(n.walkable(...p));assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p).at(-1),p);}
 });
 test('Home households vary within every neighbourhood and all six useful commons are accessible',()=>{
- for(const c of E.communities){const homes=E.props.filter(p=>c.homes.includes(p.id));assert.equal(new Set(homes.map(p=>p.src)).size,homes.length);assert.ok(new Set(homes.map(p=>p.houseVariant.roof)).size>=5);assert.ok(new Set(homes.map(p=>p.houseVariant.feature)).size>=3);}
+ for(const c of E.communities){const homes=E.props.filter(p=>c.homes.includes(p.id));assert.equal(new Set(homes.map(p=>p.src)).size,homes.length,c.id);}   // boss 8 Nov: every blueprint house is its own drawing
  const n=HOME_MAP.nav();assert.equal(E.commons.length,6);
  for(const c of E.commons){assert.ok(n.walkable(...c.point),c.id);assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...c.point).at(-1),c.point,c.id);}
 });
