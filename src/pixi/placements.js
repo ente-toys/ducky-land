@@ -490,3 +490,5 @@ export function homeDecals(props) {
 }
 
 export const HOME_DECKS = expansion.decks ?? [];
+// home 10 (ground lane): the expanded lawns' tufts, pebbles, small flowers and path stones, the centre's own decal art
+export const HOME_GROUND_DECALS = expansion.groundDecals ?? [];
