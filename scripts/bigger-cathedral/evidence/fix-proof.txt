@@ -1,1 +1,0 @@
-Saved fixed overview, six crops at 0.8 px/unit, and path reference comparison.

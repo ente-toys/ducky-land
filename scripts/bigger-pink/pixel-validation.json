@@ -1,9 +1,0 @@
-{
-  "scale": 0.25,
-  "protectedPixels": 1306490,
-  "changed": 0,
-  "originalProps": 393,
-  "originalFlats": 1166,
-  "originalSleepers": 40,
-  "note": "Protected opaque dry-ground and islet pixels. Original SVG, placements, centre, sleepers and collision records preserved; former offshore foam decoration omitted from derivative ground. Static art proof excludes live players, water animation and runtime shadows."
-}

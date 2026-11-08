@@ -1,9 +1,0 @@
-{
-  "protectedPixels": 817744,
-  "changed": 0,
-  "maxDelta": 0,
-  "overTwo": 0,
-  "examples": [],
-  "mooringExclusion": "Refitted boats are excluded from both preservation renders. All original static art and sleepers remain included.",
-  "comparison": "Production SVG assembly at 0.2 px/unit, original coast inset 20 world units. No restored pixels."
-}
