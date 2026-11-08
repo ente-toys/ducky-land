@@ -6,7 +6,7 @@ import {mapOf} from '../src/pixi/island-maps.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
-import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat} from '../src/pixi/islands.js';
+import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/pixi/islands.js';
 import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
 
 // boss 6 Nov ("room for 100 Duckies on every island, and stalls"): ONE room (this Durable Object) runs all 300 islands, so
@@ -94,7 +94,7 @@ export class IslandRoom {
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
 
-  navFor(islandId='home') { return mapOf(islandId).nav(); }
+  navFor(islandId='home') { return navOf(islandId); }   // the island's ground plus its sea islets (boss 8 Nov: dock at any islet)
 
   saveBoats() {
     const next = new Map(this.boats.map(boat => [String(boat.id), JSON.stringify(boat)]));
@@ -548,7 +548,7 @@ export class IslandRoom {
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
         if (actor.mode === 'sailing' ? !canSail(command.x,command.y,actor.islandId)
-          : command.x<mapOf(actor.islandId).origin.x || command.y<mapOf(actor.islandId).origin.y || command.x>=mapOf(actor.islandId).origin.x+mapOf(actor.islandId).width || command.y>=mapOf(actor.islandId).origin.y+mapOf(actor.islandId).height) return;
+          : !canWalkTo(actor.islandId,command.x,command.y)) return;   // the island map, or one of its sea islets
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;

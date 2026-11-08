@@ -2,8 +2,9 @@
   {
     "name": "odyssey",
     "source": "odyssey-sunk.png",
-    "size": 640,
-    "removedPixels": 677569,
+    "size": 1024,
+    "layers": 3035,
+    "bytes": 2306084,
     "bounds": [
       68,
       134,
@@ -14,8 +15,9 @@
   {
     "name": "tree-and-rowboat",
     "source": "tree-and-rowboat.png",
-    "size": 640,
-    "removedPixels": 689506,
+    "size": 1024,
+    "layers": 2072,
+    "bytes": 1424185,
     "bounds": [
       123,
       108,
@@ -26,8 +28,9 @@
   {
     "name": "broken-shipwreck",
     "source": "broken-shipwreck.png",
-    "size": 640,
-    "removedPixels": 770817,
+    "size": 1024,
+    "layers": 2270,
+    "bytes": 1543488,
     "bounds": [
       49,
       287,
@@ -38,8 +41,9 @@
   {
     "name": "04-small-mountain",
     "source": "04-small-mountain.png",
-    "size": 640,
-    "removedPixels": 834625,
+    "size": 1024,
+    "layers": 628,
+    "bytes": 665525,
     "bounds": [
       164,
       253,
@@ -50,8 +54,9 @@
   {
     "name": "05-lighthouse-rock",
     "source": "05-lighthouse-rock.png",
-    "size": 640,
-    "removedPixels": 845315,
+    "size": 1024,
+    "layers": 578,
+    "bytes": 915153,
     "bounds": [
       206,
       156,
@@ -62,8 +67,9 @@
   {
     "name": "06-palm-treasure",
     "source": "06-palm-treasure.png",
-    "size": 640,
-    "removedPixels": 795680,
+    "size": 1024,
+    "layers": 1853,
+    "bytes": 1464107,
     "bounds": [
       181,
       192,
@@ -74,8 +80,9 @@
   {
     "name": "07-pink-blossom",
     "source": "07-pink-blossom.png",
-    "size": 640,
-    "removedPixels": 704220,
+    "size": 1024,
+    "layers": 2310,
+    "bytes": 1698263,
     "bounds": [
       149,
       145,
@@ -86,8 +93,9 @@
   {
     "name": "08-snow-igloo",
     "source": "08-snow-igloo.png",
-    "size": 640,
-    "removedPixels": 715856,
+    "size": 1024,
+    "layers": 1551,
+    "bytes": 1884831,
     "bounds": [
       86,
       230,
@@ -98,8 +106,9 @@
   {
     "name": "09-spooky-purple",
     "source": "09-spooky-purple.png",
-    "size": 640,
-    "removedPixels": 799388,
+    "size": 1024,
+    "layers": 829,
+    "bytes": 893881,
     "bounds": [
       136,
       165,
@@ -110,8 +119,9 @@
   {
     "name": "11-volcano",
     "source": "11-volcano.png",
-    "size": 640,
-    "removedPixels": 659293,
+    "size": 1024,
+    "layers": 1050,
+    "bytes": 919142,
     "bounds": [
       45,
       56,
@@ -122,8 +132,9 @@
   {
     "name": "12-coral-atoll",
     "source": "12-coral-atoll.png",
-    "size": 640,
-    "removedPixels": 588110,
+    "size": 1024,
+    "layers": 2388,
+    "bytes": 2286304,
     "bounds": [
       22,
       124,

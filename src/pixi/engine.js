@@ -22,6 +22,7 @@ import {createArchipelago} from './archipelago.js';
 import {copyHolding} from './sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
+import {isletWalks} from './islet-walk.js';
 import {ambientOf, artOf, mapFor, mapOf} from './island-maps.js';   // boss 6 Nov: themed islands, each with its own map and art
 import {loadThemeArt} from './theme-art.js';
 import {setSailingHarbor} from './sailing-fx.js';
@@ -620,11 +621,12 @@ export class PixiIsland {
   travelOptions() {
     const me=this.player;
     if (!this.room || !me) return {};
-    if (me.mode === 'sailing') return {dock: canDock(me) || Boolean(landingSpot(me, this.sim.nav))};
+    const nav=this.room.navHere?.() ?? this.sim.nav;   // boss 8 Nov: the island's ground plus its sea islets
+    if (me.mode === 'sailing') return {dock: canDock(me) || Boolean(landingSpot(me, nav))};
     let best=null;
     for (const boat of this.room.boatPoses()) {
       if (boat.occupant) continue;
-      const deck=boardingPoint(boat, this.sim.nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
+      const deck=boardingPoint(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
       if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
     }
     return {take: best?.id ?? null};
@@ -644,8 +646,10 @@ export class PixiIsland {
       if (this.player.mode === 'sailing') {
         const destination=destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<mapFor(island.map).width*.42 && Math.abs(p.y-island.y)<mapFor(island.map).height*.4);   // tap a neighbour island: sail to its jetty
         const harbor=harborOf(this.islandId);
+        const islet=isletWalks(this.islandId).find(w => w.nav.walkable(p.x,p.y) || near(p,w.land,160));   // boss 8 Nov: tap an islet to dock at its jetty
         if (destination) this.setDestination(destination.dock);
-        else if (near(p,harbor.water,140) || near(p,harbor.land,120)) this.room.disembark();
+        else if (near(p,harbor.water,140) || near(p,harbor.land,120) || (islet && landingSpot(this.player, this.room.navHere())?.islet === islet.islet.id)) this.room.disembark();
+        else if (islet) this.setDestination(islet.water);
         else this.setDestination(p);
         return;
       }

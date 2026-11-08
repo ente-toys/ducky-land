@@ -2,7 +2,7 @@ import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from './p
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
 import {mapOf} from './island-maps.js';
-import {islandFor, harborOf, destinationsFor, near, canSail, canDock, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat} from './islands.js';
+import {islandFor, harborOf, destinationsFor, near, canSail, canDock, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -42,7 +42,7 @@ export class RoomClient {
   }
   // boss 6 Nov: the walking map of the island you are on. Home keeps the engine's own (with its sleepers); a themed island
   // walks its theme's map, the same one the room server walks (island-maps.js)
-  navHere() { const map = mapOf(this.islandId); return map.home ? this.nav : map.nav(); }
+  navHere() { const map = mapOf(this.islandId); return navOf(this.islandId, map.home ? this.nav : map.nav()); }   // boss 8 Nov: plus its sea islets
   worldHere() { const map = mapOf(this.islandId); return map.home ? this.world : map.walk; }
 
   reset() {
@@ -249,7 +249,8 @@ export class RoomClient {
   destination(x, y) {
     if (!this.world || !Number.isFinite(x) || !Number.isFinite(y)) return null;
     if (this.player?.mode === 'sailing' && !canSail(x,y,this.islandId)) return null;
-    if (this.player?.mode !== 'sailing' && (x<(this.worldHere().origin?.x ?? 0) || y<(this.worldHere().origin?.y ?? 0) || x>=(this.worldHere().origin?.x ?? 0)+this.worldHere().width || y>=(this.worldHere().origin?.y ?? 0)+this.worldHere().height)) return null;
+    const w = this.worldHere(), o = w.origin ?? {x:0,y:0};
+    if (this.player?.mode !== 'sailing' && !canWalkTo(this.islandId, x, y) && (x<o.x || y<o.y || x>=o.x+w.width || y>=o.y+w.height)) return null;
     const result = this.send({type:'destination',x,y});
     return Array.isArray(result) ? result : null;
   }
