@@ -13,5 +13,5 @@
 <path d="M4680,40 C4680,-62 4840,-112 5000,-112 C5160,-112 5322,-62 5322,40 C5322,142 5160,192 5000,192 C4840,192 4680,142 4680,40Z" fill="#fde48c"/>
 <g fill="#a27b40" stroke="#39472d" stroke-width="4"><path d="M5880,330 L6420,300 L6440,560 L5900,600Z"/></g>
 <g fill="none" stroke="#c88941" stroke-width="6" stroke-linecap="round"><path d="M5905,380 L6420,350 M5910,430 L6425,400 M5915,480 L6430,450 M5920,530 L6435,500"/></g>
-<g fill="#e4c567" stroke="#39472d" stroke-width="3"><ellipse cx="4860" cy="400" rx="8" ry="5"/><ellipse cx="5520" cy="120" rx="7" ry="4"/><ellipse cx="6100" cy="150" rx="9" ry="5"/><ellipse cx="5380" cy="420" rx="7" ry="4"/><ellipse cx="4790" cy="-40" rx="6" ry="4"/></g>
+<g fill="#e4c567" stroke="#39472d" stroke-width="3"><ellipse cx="4850" cy="420" rx="8" ry="5"/><ellipse cx="5520" cy="120" rx="7" ry="4"/><ellipse cx="6100" cy="150" rx="9" ry="5"/><ellipse cx="5380" cy="420" rx="7" ry="4"/><ellipse cx="4790" cy="-40" rx="6" ry="4"/></g>
 </svg>
