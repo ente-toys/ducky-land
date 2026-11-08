@@ -75,15 +75,14 @@ function plant(kind, point) {
 // SVGs drawn in WORLD coordinates (place at the viewBox origin, scale 1). The pond bridge stays prop-16. All six sit in the
 // ground layer, under the Duckies. A, B and R are the arch ends and its rise (world-restyle/jobs/bridges/NOTES.md).
 export const JETTIES = [
-  [2, 870.0355, 2996.0389, 337.9679, 475.3502],   // round 4b viewBox. boss 8 Nov: jetties 1 and 3 read as straight plank boards; the ground
-  // lane draws them as arched bridges now (home-expansion.json decks river-crossing-5 and -6), on the same arches below
+  [2, 870.0355, 2996.0389, 337.9679, 475.3502],   // round 4b viewBox. boss 8 Nov: jetties 1 and 3 and their round pads are gone; the
+  // ground lane draws those crossings as diagonal arched bridges (home-expansion.json decks and arches river-crossing-5 and -6)
   [5, 5004.9592, 1492.5089, 494.0617, 277.2587],   // round 4: jetty 4 and its islet are gone, so the piers stop reading as a row
 ].map(([n, x, y, width, height]) => ({src: `/pixi-art/bridge-jetty-${n}.svg`, x, y, width, height, resolution: 1.5}));
 const ARCHES = [
   {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},   // pond: the deck top is drawn 72 deep for 112 of walkway
   // round 4: every jetty humps R = 70 (was 40-44), so a Ducky visibly climbs it
-  {a: [3320, 3319], b: [3320, 3770], r: 70, w: 115}, {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
-  {a: [2320.86, 3264.02], b: [2288.93, 3859.97], r: 70, w: 84},
+  {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
   {a: [5034.08, 1638.41], b: [5469.9, 1681.99], r: 70, w: 84},
   ...(expansion.arches ?? []),
 ];
@@ -104,7 +103,9 @@ export function deckY(x, y, arches = ARCHES) {
 // round 4: the east islet (3930, 3830), its jetty and stub path are gone from the ground art; drop them from the walkable world too
 // boss 4 Nov: the race lake is its drawn water (lake-race.svg), not the old oval; x/y/rx/ry are the outline's bounds
 const LAKE = {x: 4130, y: 1537, rx: 538, ry: 296, poly: shapes.lake};
-export const trimWorld = w => ({...w, islets: w.islets.filter(a => a[0] !== 3930), walkways: w.walkways.filter(b => b.a[0] !== 3940),
+// boss 8 Nov (planks): the two old jetty walkways (x 3320 and 2320) and their round pads are gone too; arched bridges cross there now
+const OLD_JETTY = new Set([3940, 3320, 2320]), OLD_PAD = new Set([3930, 3340, 2290]);
+export const trimWorld = w => ({...w, islets: w.islets.filter(a => !OLD_PAD.has(a[0])), walkways: w.walkways.filter(b => !OLD_JETTY.has(b.a[0])),
   water: w.water.map(o => o.x === 4140 && o.y === 1520 ? LAKE : o)});
 // boss 4 Nov: what the client sim walks on. The coast is traced from the ground tiles' shoreline, inset 35 so a dry margin stays
 // (the old one sat 20-160 inside the sand); the south-west jetty gets a deck-wide step-on. Props were placed on the old coast,

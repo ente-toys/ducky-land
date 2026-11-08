@@ -59,6 +59,10 @@ for (const s of S?.riverWater.set ?? []) if (!riverWater.some(w => w.id === s.id
 // fork one body of water, its outer edge curving from the canal's north bank into Clover Run's east bank, wide enough to sail
 const FORK = {id: 'fork-canal-clover', x: 3700, y: 3620, rx: 1, ry: 1, poly: [[3680, 3556], [3728, 3566], [3766, 3598], [3788, 3648], [3790, 3700], [3784, 3748], [3776, 3786], [3740, 3770], [3690, 3730], [3628, 3705], [3622, 3640]]};   // boss 8 Nov: east bank set back to x 3790 so a boat fits past the round island
 if (!riverWater.some(w => w.id === FORK.id)) riverWater.push(FORK);
+// boss 8 Nov (planks): with the east pad gone, the canal's south bank and Clover Run's west bank met in a sharp water spike at
+// 3570,3840. This hand-drawn patch rounds that corner into one bank.
+const CORNER = {id: 'corner-canal-clover', x: 3580, y: 3790, rx: 1, ry: 1, poly: [[3520, 3770], [3560, 3772], [3600, 3760], [3615, 3800], [3632, 3840], [3640, 3858], [3610, 3864], [3578, 3856], [3550, 3830], [3530, 3805]]};
+const ci = riverWater.findIndex(w => w.id === CORNER.id); if (ci >= 0) riverWater[ci] = CORNER; else riverWater.push(CORNER);
 const onLand = (x, y) => inPoly(x, y, coast);
 const seaSegs = coast.map((a, i) => [a, coast[(i + 1) % coast.length]]);
 const seaCells = new Map();
@@ -144,6 +148,17 @@ for (let i = 1; i < 260000; i++) {
   decal(kit[Math.floor(pick * kit.length)], x, y, i);
 }
 
+// ---------- the centre's two jetty pads (boss 8 Nov, planks) ----------
+// The round sand pads under the old jetties are drawn into two of the centre's own ground tiles. Their islet groups are cut out
+// of those tiles (idempotent: a tile without them is left as it is); the arched bridges below replace the jetties.
+const endOfGroup = (svg, k) => {let depth = 0; const re = /<g\b[^>]*>|<\/g>/g; re.lastIndex = k; for (let m; (m = re.exec(svg));) {if (m[0][1] === '/') depth--; else if (!m[0].endsWith('/>')) depth++; if (!depth) return re.lastIndex;} return -1;};
+for (const name of ['ground-r2-c1.svg', 'ground-r2-c2.svg']) {
+  const f = `public/pixi-art/home-expansion/${name}`, svg = readFileSync(f, 'utf8'), i = svg.indexOf('<g data-name="Islet sand"');
+  if (i < 0) continue;
+  let e = i; while (svg.startsWith('<g data-name="Islet', e)) {e = endOfGroup(svg, e); while (/\s/.test(svg[e])) e++;}
+  writeFileSync(f, svg.slice(0, i) + svg.slice(e));
+}
+
 // ---------- the ground tiles ----------
 // Flat lawn, the coast's foam and sand like the centre, rivers with sandy banks, and the lanes painted from `roads` as the
 // centre paints its own: wide cream with a darker lower edge and a soft darker grass rim. No soft blobs, no seams.
@@ -196,20 +211,23 @@ const tiles = E.tiles.map(t => {
 // ---------- the river crossings: ONE arched footbridge per crossing, in the centre's bridge colours (boss 8 Nov) ----------
 // Hand-picked: a and b are the deck's two landings (on dry bank, past the water), r the hump, w the walk width. The deck lies
 // flat across its river along the path, rising r at mid-span; a near-vertical bridge also leans its hump sideways (the high
-// oblique view), so it reads as an arch and never as a plank board. 5 and 6 replace the centre's two straight jetty pieces
-// (placements.js JETTIES 1 and 3), whose walk arches stay in placements.js ARCHES.
+// oblique view), so it reads as an arch and never as a plank board.
+// boss 8 Nov (planks): 5 and 6 replace the centre's two straight jetty pieces and their round sand pads (placements.js JETTIES 1
+// and 3, islets 3340,3770 and 2290,3840). Each now runs on the diagonal like the west jetty's arch, from the end of its centre
+// path stub on the north bank to a south lane that homes.json bends to meet it (heart-makers, heart-reed).
 const BRIDGES = [
   {id: 'river-crossing-1', river: 'clover-run', a: [2950, 5497], b: [3245, 5497], r: 48, w: 100},     // quay-pier lane, water x 3026-3169
   {id: 'river-crossing-2', river: 'clover-run', a: [3729, 4478], b: [3487, 4350], r: 44, w: 100},     // village loop, water 3674,4449 - 3540,4378
   {id: 'river-crossing-3', river: 'mill-stream', a: [5350, 1420], b: [5600, 1420], r: 48, w: 100},    // village loop, water x 5409-5537
   {id: 'river-crossing-4', river: 'mill-stream', a: [5733, 1805], b: [5772, 2070], r: 48, w: 100},    // village loop by Millrill Pond, water y 1867-2010
-  {id: 'river-crossing-5', river: 'old-shore-canal', a: [3320, 3319], b: [3320, 3770], r: 70, w: 115, centre: true},   // was jetty 1, water y 3402-3734
-  {id: 'river-crossing-6', river: 'old-shore-canal', a: [2320.86, 3264.02], b: [2288.93, 3859.97], r: 70, w: 84, centre: true},   // was jetty 3, water y 3449-3748
+  {id: 'river-crossing-5', river: 'old-shore-canal', a: [3320, 3345], b: [3060, 3780], r: 70, w: 100},   // centre stub to heart-reed, water 70-400 along the deck
+  {id: 'river-crossing-6', river: 'old-shore-canal', a: [2322, 3345], b: [1980, 3800], r: 70, w: 100},   // centre stub to heart-makers, water 120-440 along
 ];
 function archBridge({a, b, r}) {
   const L = Math.hypot(b[0] - a[0], b[1] - a[1]), u = [(b[0] - a[0]) / L, (b[1] - a[1]) / L];
   let n = [-u[1], u[0]]; if (n[1] < 0 || (n[1] === 0 && n[0] < 0)) n = [-n[0], -n[1]];   // +n faces the camera (south, else east)
-  const shear = .9 * Math.abs(u[1]), wd = Math.abs(u[1]) > .6 ? 84 : 72, th = 16, post = 30, N = Math.max(12, Math.round(L / 13));
+  const shear = .9 * Math.abs(u[1]) * (u[0] * u[1] < 0 ? -1 : 1),   // the hump leans across the deck, never along it (a deck running NE-SW leans west)
+     wd = Math.abs(u[1]) > .6 ? 84 : 72, th = 16, post = 30, N = Math.max(12, Math.round(L / 13));
   const vis = n[0] * shear - n[1] < 0 ? 1 : -1;   // the side whose edge the camera sees (south, or on a steep bridge the side the hump leans from)
   const z = t => r * 4 * t * (1 - t), at = (t, side, h = 0) => {const x = a[0] + u[0] * L * t + n[0] * side * wd / 2, y = a[1] + u[1] * L * t + n[1] * side * wd / 2, zz = z(t) + h; return [x + shear * z(t), y - zz];};   // posts and rails stand straight up; only the hump leans
   const ts = Array.from({length: N + 1}, (_, i) => i / N), P = pts => pts.map(p => p.map(r3).join(',')).join('L');
@@ -251,8 +269,15 @@ const walkwaysOut = walkways.filter(v => !oldArches.some(q => sameSeg(v, q)) && 
 const riverMouths = [[2930, 5450, 3195, 5980], [3400, 5480, 4920, 6060]];
 const SAILABLE = ['clover-run', 'old-shore-canal', 'fork-canal-clover', 'quay-tidal-inlet'];
 const boatWater = [...riverWater.filter(w => SAILABLE.includes(w.id)).map(w => w.poly), E.water.poly];
-const riverBridges = (E.riverBridges ?? []).filter(v => !String(v.id).startsWith('river-crossing-')).concat(own.map(({id, a, b, w}) => ({id,
-  x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, w: Math.abs(b[0] - a[0]) + w * .9, h: Math.abs(b[1] - a[1]) + w * .9})));
+// a deck that runs on the diagonal is walked as a chain of small boxes along it (one box over its whole span would open a square
+// of river to walkers); the middle box keeps the bridge's own id
+const diagonal = ({a, b}) => Math.abs(b[0] - a[0]) > 150 && Math.abs(b[1] - a[1]) > 150;
+const deckBoxes = ({id, a, b, w}) => {
+  if (!diagonal({a, b})) return [{id, x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, w: Math.abs(b[0] - a[0]) + w * .9, h: Math.abs(b[1] - a[1]) + w * .9}];
+  const n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 30), mid = n / 2;
+  return Array.from({length: n + 1}, (_, i) => ({id: i === mid ? id : `${id}-${i}`, x: r3(a[0] + (b[0] - a[0]) * i / n), y: r3(a[1] + (b[1] - a[1]) * i / n), w: w * .9, h: w * .9}));
+};
+const riverBridges = (E.riverBridges ?? []).filter(v => !String(v.id).startsWith('river-crossing-')).concat(own.flatMap(deckBoxes));
 const crossings = own.map(({id, river, a, b}) => ({id, river, x: (a[0] + b[0]) / 2 * .18 + 278, y: (a[1] + b[1]) / 2 * .18 + 204}));   // the plan frame (world * .18 + 278, 204), as the tests read it
 
 // ---------- write back only the owned keys ----------

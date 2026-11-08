@@ -17,6 +17,15 @@ for (const a of P.addProps) {
   if (a.scale && p.footprint) {const k = a.scale / p.scale; p.footprint.rx *= k; p.footprint.ry *= k; p.footprint.y = p.y - (p.y - p.footprint.y) * k;}
   Object.assign(p, {id: a.id, zone: a.zone, scale: a.scale ?? p.scale}); moveTo(p, a.x, a.y);
   const i = E.props.findIndex(q => q.id === a.id); if (i >= 0) E.props[i] = p; else E.props.push(p);}
+// boss 8 Nov (trees by hand): the groves are literal entries in homes.json addTrees, drawn with the centre's plant art at its
+// sizes (placements.js PLANTS). A tree-* asset gets the centre's solid trunk (placements.js obstaclesFor).
+const PLANT_SIZE = {'tree-1': [260, 360], 'tree-2': [180, 360], 'tree-3': [300, 380], 'tree-4': [200, 280], 'tree-5': [150, 380]};
+E.props = E.props.filter(p => !String(p.id).startsWith('grove-'));
+for (const t of P.addTrees ?? []) {
+  const [width, height] = PLANT_SIZE[t.kind];
+  E.props.push({id: t.id, name: 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, x: t.x, y: t.y, width, height, scale: t.scale,
+    anchor: {x: .5, y: 1}, resolution: 1.5, zone: 'groves', flip: t.flip, tint: t.tint});
+}
 const dead = new Set(P.removeObstacles.map(o => o.join(',')));
 E.obstacles = E.obstacles.filter(o => !dead.has([o.x, o.y, o.rx, o.ry].join(',')) && !String(o.id ?? '').startsWith('homes-')).concat(P.addObstacles);
 E.decks = E.decks.filter(d => !String(d.id ?? '').startsWith('homes-')).concat(P.addDecks);
