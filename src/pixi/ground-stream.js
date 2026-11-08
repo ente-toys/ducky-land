@@ -36,7 +36,8 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         if(reserved-need.bytes+bytes>budget){release(need.src);reserved-=need.bytes;failures.add(need.src);return;}
         reserved+=bytes-need.bytes;peak=Math.max(peak,reserved);
         resident.set(tile,{...need,bytes});tile.sprite.texture=texture;
-        tile.sprite.width=tile.width;tile.sprite.height=tile.height;tile.sprite.visible=true;
+        tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);   // home 10: a few units of overlap hide the seam between tiles
+tile.sprite.visible=true;
       }).catch(()=>{release(need.src);reserved-=need.bytes;failures.add(need.src);})
         .finally(()=>{pending.delete(tile);pump();});
     }
