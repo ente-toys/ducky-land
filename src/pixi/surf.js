@@ -33,7 +33,8 @@ export const surfRuns = (SHORE) => SHORE.flatMap((ring, r) => {
 });
 const HOME_RUNS = surfRuns(SHORE);
 
-export function createBeachSurf(layer, rings = null) {
+// calm: [x0, y0, x1, y1] boxes where no surf runs (boss 8 Nov: Home's open river mouths, where the river meets the sea)
+export function createBeachSurf(layer, rings = null, calm = []) {
   const runs = rings ? surfRuns(rings) : HOME_RUNS;
   const waves = [0, 1/3, 2/3].map(phase => {
     const crest = new Graphics({label:'Beach surf'});
@@ -58,7 +59,7 @@ export function createBeachSurf(layer, rings = null) {
       const distance = offset + ripple + (foam ? 0 : 7);
       const x = point.x + point.nx * distance;
       const y = point.y + point.ny * distance;
-      if (dry(x, y)) {drawing = false; continue;}
+      if (dry(x, y) || calm.some(b => x > b[0] && x < b[2] && y > b[1] && y < b[3])) {drawing = false; continue;}
       if (drawing) graphics.lineTo(x,y);
       else graphics.moveTo(x,y);
       drawing = true;

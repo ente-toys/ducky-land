@@ -37,7 +37,7 @@ import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
 import {createWater} from './water.js';
-import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_GROUND_DECALS, HOME_ORIGIN, decalsFor, deckY, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
+import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_MOUTHS, HOME_GROUND_DECALS, HOME_ORIGIN, decalsFor, deckY, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
 import {sleepHalfWidths} from './sleeper.js';
 import {createInterior} from './interior.js';
 const napWidths = sleepHalfWidths(.88 * .24 * 3);   // world half width per sleeping pose
@@ -149,7 +149,8 @@ export class PixiIsland {
       this.decks=new Container();   // boss 3 Nov: the arched bridges, over the water and its lily pads, under every Ducky
       this.upright=trackUpright([[this.objects], [this.air], [this.decks, true]], TILT);
       this.cleanups.push(() => this.upright.destroy());
-      this.scene.addChild(this.ground, this.water, this.floatLayer, this.decks, this.contactShadows, this.objects, this.air);
+      this.overDecks=new Container({label: 'Bridges over boats'});   // boss 8 Nov: a river bridge drawn over a boat passing under it
+      this.scene.addChild(this.ground, this.water, this.floatLayer, this.decks, this.contactShadows, this.objects, this.overDecks, this.air);
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
@@ -220,6 +221,12 @@ export class PixiIsland {
         sprite.width = jetty.width;
         sprite.height = jetty.height;
         this.homeDecks.addChild(sprite);
+        if (/river-crossing-|bridge-jetty-/.test(jetty.src)) {
+          const over = new Sprite(textures[tiles.length + i]);
+          over.position.set(jetty.x, jetty.y); over.width = jetty.width; over.height = jetty.height; over.visible = false;
+          this.overDecks.addChild(over);
+          (this.bridgeOver ??= []).push({sprite: over, x0: jetty.x - 20, x1: jetty.x + jetty.width + 20, y0: jetty.y, y1: jetty.y + jetty.height + 40});
+        }
       });
       this.floating=art.floating.map((item,i)=>{
         const sprite=new Sprite(textures[base+props.length+i]);
@@ -332,7 +339,7 @@ export class PixiIsland {
 
   createAmbient() {
     this.weather=createWeather(world,this.scene,this.air);
-    this.surf = createBeachSurf(this.water, shoreOf(world));   // boss 5 Nov: the original beach surf, not the simulated one
+    this.surf = createBeachSurf(this.water, shoreOf(world), HOME_MOUTHS);   // boss 5 Nov: the original beach surf, not the simulated one
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;   // boss 4 Nov: no boats on the race lake
     this.boats = this.room ? null : createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast});   // boss 5 Nov: offline decoration only; live, every boat is a real one you can take (islands.js boatSpots)
@@ -1295,7 +1302,7 @@ export class PixiIsland {
   }
 
   renderLiveDucks(poses, dt, time, reducedMotion, visible) {
-    const ids = new Set(poses.map(pose => pose.id));
+    const ids = new Set(poses.map(pose => pose.id)), sailers = [];
     for (const [id, entry] of this.liveRigs) {
       if (ids.has(id)) continue;
       entry.rig?.dispose();
@@ -1380,7 +1387,14 @@ export class PixiIsland {
       rig.root.zIndex = look.z ?? look.y;
       rig.root.visible = visible(look.x,look.y,200);
       if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      if (pose.mode === 'sailing') sailers.push(look);
     }
+    this.updateBridgeOver(sailers);
+  }
+  // boss 8 Nov (sailable rivers): a boat passes UNDER an arched bridge. Each river bridge has a copy above the Duckies, shown
+  // only while a boat is beneath it, so the deck is drawn over the hull; Duckies on foot walk over the ground-layer original.
+  updateBridgeOver(sailers) {
+    for (const b of this.bridgeOver ?? []) b.sprite.visible = this.artShown === 'home' && sailers.some(p => p.x > b.x0 && p.x < b.x1 && p.y > b.y0 && p.y < b.y1);
   }
 
   dispose() {

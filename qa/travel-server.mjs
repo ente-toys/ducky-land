@@ -18,7 +18,10 @@ const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
       if (path === '/__test/pose') {
         const {account,pose,steps=0}=await request.json();
         const entry=[...this.connections].find(([,info])=>info.account===account && info.actor);
-        if (entry) {Object.assign(entry[1].actor,pose); this.attach(...entry);}
+        if (entry) {Object.assign(entry[1].actor,pose); this.attach(...entry);
+          // a sailing pose takes its boat along (boss 8 Nov: shots of a boat in Home's rivers)
+          const boat=pose.mode==='sailing'&&this.boats.find(b=>b.id===pose.boatId);
+          if(boat){boat.occupant=entry[1].actor.id;Object.assign(boat,{x:pose.x,y:pose.y,turn:pose.turn??boat.turn,islandId:entry[1].actor.islandId});this.boatsDirty=true;this.saveBoats();}}
         for (let i=0;i<Math.min(steps,1000);i++) this.step();
         this.broadcast();
         return new Response(null,{status:204});

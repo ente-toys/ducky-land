@@ -309,11 +309,11 @@ export function sailRoute(id,from,to) {
     }
     return -1;
   };
-  const connect=p=>{
+  const connect=(p,step=60,limit=60)=>{
     const direct=nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
     // A narrow curved harbour mouth can fit a boat but not a full ocean
     // cell. Search just that endpoint at boat scale, then join the ocean graph.
-    const step=60,limit=60,side=limit*2+1,total=side*side,start=limit*side+limit;
+    const side=limit*2+1,total=side*side,start=limit*side+limit;
     const prev=new Int32Array(total).fill(-1),queue=[start];prev[start]=start;
     const point=i=>({x:p.x+(i%side-limit)*step,y:p.y+(Math.floor(i/side)-limit)*step});
     for(let k=0;k<queue.length;k++){
@@ -329,7 +329,10 @@ export function sailRoute(id,from,to) {
     }
     return null;
   };
-  const entrance=connect(from),exit=connect(to);if(!entrance||!exit)return null;
+  // boss 8 Nov (sailable rivers): a river is only a little wider than the boat, so a 60-unit lattice can miss its channel;
+  // try a 20-unit one over the same reach before giving up
+  const reach=p=>connect(p)??connect(p,20,180);
+  const entrance=reach(from),exit=entrance&&reach(to);if(!entrance||!exit)return null;
   const start=entrance.index,goal=exit.index;
   const prev=new Int32Array(cols*rows).fill(-1), queue=[start]; prev[start]=start;
   for (let q=0;q<queue.length && prev[goal]<0;q++) {

@@ -61,11 +61,14 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
     coastTests??=(world.boatCoast?[world.boatCoast]:[...new Set([walking.coast,world.coast])]).map(poly=>({poly,index:coastIndex(poly)}));
     return coastTests.some(({poly,index})=>{const side=index(x,y);return side===1||side===2&&inPoly(x,y,poly);});
   };
+  // boss 8 Nov (sailable rivers): home's rivers that reach the sea are water for boats, though they lie inside the coast
+  const boatWater=(world.boatWater??[]).map(poly=>({poly,x0:Math.min(...poly.map(p=>p[0])),x1:Math.max(...poly.map(p=>p[0])),y0:Math.min(...poly.map(p=>p[1])),y1:Math.max(...poly.map(p=>p[1]))}));
+  const riverAt=(x,y)=>boatWater.some(w=>x>w.x0&&x<w.x1&&y>w.y0&&y<w.y1&&inPoly(x,y,w.poly));
   const solidDecks=walkways.filter(w=>!w.boatPassUnder).map(({a,b,w})=>({a,b,w,dx:b[0]-a[0],dy:b[1]-a[1],l2:(b[0]-a[0])**2+(b[1]-a[1])**2,x0:Math.min(a[0],b[0])-w/2,x1:Math.max(a[0],b[0])+w/2,y0:Math.min(a[1],b[1])-w/2,y1:Math.max(a[1],b[1])+w/2}));
   function landAt(x, y) {
     if (x < (world.origin?.x ?? 0) - 600 || y < (world.origin?.y ?? 0) - 600 || x > (world.origin?.x ?? 0) + W + 600 || y > (world.origin?.y ?? 0) + H + 600) return false;   // nowhere near this island
     // Expanded canal maps can supply dry-bank contours, keeping painted waterways open to boats.
-    if (onJetty(x, y, 4) || coastContains(x,y)) return true;
+    if (onJetty(x, y, 4) || coastContains(x,y) && !riverAt(x,y)) return true;
     if (islets.some(([cx, cy, rx, ry]) => inShape(x, y, {x: cx, y: cy, rx, ry}))) return true;
     return solidDecks.some(({a,w,dx,dy,l2,x0,x1,y0,y1})=>{
       if(x<x0||x>x1||y<y0||y>y1)return false;
@@ -153,7 +156,7 @@ function landDistance(landAt, W, H, origin = {x:0,y:0}) {
 const MAPS = new Map();
 let VERSION = 0;
 export const mapsVersion = () => VERSION;
-MAPS.set('home', makeMap('home', {world: trimHome(homeWorld), walk: homeWalk, harbor: {jetty: HOME_JETTY, boats: expansion.boats, water: expansion.harborWater}, art: null, centre: {x: 2980, y: 2005}, addJetty: false}));
+MAPS.set('home', makeMap('home', {world: {...trimHome(homeWorld), boatWater: expansion.boatWater ?? []}, walk: homeWalk, harbor: {jetty: HOME_JETTY, boats: expansion.boats, water: expansion.harborWater}, art: null, centre: {x: 2980, y: 2005}, addJetty: false}));
 // a theme's files: {world, walk?, harbor, art (url of its art.json), sea?}. A broken set is skipped (that theme plays home).
 export function registerMap(theme, data) {
   if (!theme || theme === 'home') throw Error('home is fixed');
