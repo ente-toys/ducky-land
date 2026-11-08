@@ -1,5 +1,5 @@
 import {overviewPatch} from './sphere-mesh.js';
-import {copyTransform} from './sphere-coordinates.js';
+import {flatRigid} from './rigid.js';
 // boss 5 Nov: 300 islands (30k stars = 300 islands), every one an exact copy of the home island (world-map.js); themes
 // come later. You stand on one island at a time: it is the real, playable scene, and the other 299 are drawn round it as
 // copies at their true places, so you can sail across to the next one. The ones on screen up close are the live island
@@ -10,6 +10,8 @@ import {MAP_BOUNDS, WORLD_ISLANDS, worldIsland} from './world-map.js';
 import {artOf, mapFor, mapOf} from './island-maps.js';
 
 export const ISLAND_COUNT = WORLD_ISLANDS.length;
+// boss 8 Nov: each copy's centre and its RIGID turn in the current island's chart (rigid.js), as overviewPatch draws it
+const placement=(from,to)=>{const r=flatRigid(from,to);return {a:r.a,b:r.b,c:r.c,d:r.d,x:r.x,y:r.y};};
 
 export function createArchipelago(app, scene, layer, world) {
   // boss 6 Nov: every island is drawn by its own map (its theme's art, or home's until that theme is delivered), placed by
@@ -35,7 +37,7 @@ export function createArchipelago(app, scene, layer, world) {
   const place = () => {
     const here = worldIsland(current), m = mapOf(current);
     cx = m.cx; cy = m.cy;
-    islands = WORLD_ISLANDS.map(island => ({...island, ...copyTransform(current,island.id), from:current,
+    islands = WORLD_ISLANDS.map(island => ({...island, ...placement(current,island.id), from:current,
       scale: 1, flip: 1, rot: 0, home: island.id === current, map: artOf(island.id), localCentre:{x:mapOf(island.id).cx,y:mapOf(island.id).cy}, width: mapOf(island.id).width, height: mapOf(island.id).height}));
     bounds = {x0:cx-SX/2,x1:cx+SX/2,y0:cy-SX/2,y1:cy+SX/2};
   };

@@ -2,6 +2,7 @@ import {horizonRatio,pixelChart} from './sphere-projection.js';
 import {spherePoint,localPoint,viewFrame} from './sphere-coordinates.js';
 import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from './world-map.js';
 import {dot,expMap} from './sphere.js';
+import {polar,flatRigid} from './rigid.js';
 import {mapOf} from './island-maps.js';
 import {ISLETS} from './islets.js';
 
@@ -33,17 +34,23 @@ out vec4 finalColor;
 uniform sampler2D uScene;
 uniform sampler2D uWorld;
 uniform sampler2D uIslets;
-uniform vec3 uIsletCenters[22];
-uniform vec3 uIsletEasts[22];
-uniform vec3 uIsletNorths[22];
-uniform vec4 uIsletSizes[22];
+// boss 8 Nov ("I don't want any skew"): every island and islet is a rigid sticker. The CPU projects its centre and
+// takes the nearest rotation and a uniform scale of the projection there (rigid.js), then hands each sticker over as
+// screen centre + inverse rotation/scale. The shader never pushes art through a sphere chart, so nothing shears.
+// uIsl: screen centre xy, cos/s, sin/s.  uIslFlat: where the sticker sits in this island's flat chart (the live scene
+// render): centre xy, cos, sin.  uIslInfo: map width, height, mode (0 hidden, 1 atlas, 2 live scene), atlas cell.
+uniform vec4 uIsl[13];
+uniform vec4 uIslFlat[13];
+uniform vec4 uIslInfo[13];
+uniform vec4 uIt[22];
+uniform vec4 uItInfo[22];
 uniform float uTime;
 uniform vec2 uCam;
 uniform float uZoom;
 uniform vec2 uRes;
 uniform float uR;
 uniform float uBall;
-uniform float uDetail;
+uniform float uLive;
 uniform vec4 uBasis;
 uniform vec3 uSea;
 uniform vec3 uAnchor;
@@ -53,10 +60,6 @@ uniform vec3 uFocus;
 uniform vec3 uViewEast;
 uniform vec3 uViewNorth;
 uniform vec3 uSph;
-uniform vec3 uCenters[13];
-uniform vec3 uEasts[13];
-uniform vec3 uNorths[13];
-uniform vec4 uSizes[13];
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 vec3 surface(vec2 g){
  vec2 q=g-uSph.xy;float d=length(q),a=d/uSph.z;
@@ -66,45 +69,63 @@ vec2 local(vec3 p){
  vec2 en=vec2(dot(p,uEast),-dot(p,uNorth));float s=length(en);
  return uSph.xy+en*(s>.000001?atan(s,dot(p,uAnchor))*uSph.z/s:uSph.z);
 }
-vec3 world(vec3 p,vec3 sea){
- // One inverse azimuthal lookup per patch. No latitude texture or polar repeats.
- for(int i=0;i<13;i++){
-  float co=dot(p,uCenters[i]);
-  if(co<uSizes[i].z)continue;
-  vec2 en=vec2(dot(p,uEasts[i]),-dot(p,uNorths[i]));float s=length(en);
-  vec2 q=en*(s>.000001?atan(s,co)*uSph.z/s:uSph.z);
-  vec2 uv=q/uSizes[i].xy+.5;
-  if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
-  vec2 cell=vec2(float(i%4),float(i/4));
-  vec4 c=texture(uWorld,(cell+(vec2(1.)+uv*1022.)/1024.)/4.);
-  if(c.a>.001)return mix(sea,c.rgb/max(c.a,.001),c.a);
- }
- return sea;
-}
 vec2 screenDelta(vec2 p){return mat2(uBasis.x,uBasis.y,uBasis.z,uBasis.w)*p;}
-vec3 islets(vec3 p,vec3 sea){
- for(int i=0;i<22;i++){
-  float co=dot(p,uIsletCenters[i]);if(co<uIsletSizes[i].z)continue;
-  vec2 en=vec2(dot(p,uIsletEasts[i]),-dot(p,uIsletNorths[i]));float s=length(en);
-  vec2 uv=en*(s>.000001?atan(s,co)*uSph.z/s:uSph.z)/uIsletSizes[i].x+.5;
-  if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
-  int k=int(uIsletSizes[i].w+.5);vec2 cell=vec2(float(k%4),float(k/4));
-  vec4 c=texture(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.));
-  if(c.a>.001)return mix(sea,c.rgb/max(c.a,.001),c.a);
- }
- return sea;
-}
 vec2 chartDelta(vec2 p){return inverse(mat2(uBasis.x,uBasis.y,uBasis.z,uBasis.w))*p;}
-vec3 ground(vec2 g,vec3 sea){
- vec2 suv=(screenDelta((g-uCam)*uZoom)+uRes*.5)/uRes;
- // One source per pixel. Never cross-fade two differently projected islands.
- // Only the close, locally well-conditioned chart may sample the live scene.
- if(uZoom>.065 && length(g-uSph.xy)<uSph.z*1.25 &&
-    all(greaterThanEqual(suv,vec2(0.))) && all(lessThanEqual(suv,vec2(1.)))){
-  vec4 c=texture(uScene,suv);
-  return mix(sea,c.rgb/max(c.a,.001),c.a);
+vec2 sceneUV(vec2 g){return (screenDelta((g-uCam)*uZoom)+uRes*.5)/uRes;}
+vec2 cellUV(int i,vec2 uv){vec2 cell=vec2(float(i%4),float(i/4));return (cell+(vec2(1.)+uv*1022.)/1024.)/4.;}
+// Is flat-chart point g on some island's land (other than skip)? Its true art's alpha, laid down rigidly.
+bool land(vec2 g,int skip){
+ for(int i=0;i<13;i++){
+  if(i==skip||uIslInfo[i].z<.5)continue;
+  vec2 d=g-uIslFlat[i].xy,q=vec2(uIslFlat[i].z*d.x+uIslFlat[i].w*d.y,-uIslFlat[i].w*d.x+uIslFlat[i].z*d.y);
+  vec2 uv=q/uIslInfo[i].xy+.5;
+  if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
+  if(textureLod(uWorld,cellUV(int(uIslInfo[i].w+.5),uv),0.).a>.02)return true;
  }
- return world(surface(g),sea);
+ return false;
+}
+vec3 over(vec3 under,vec4 c){return mix(under,c.rgb/max(c.a,.001),c.a);}
+vec3 islands(vec2 X,vec3 sea,vec3 under){
+ for(int i=0;i<13;i++){
+  vec4 info=uIslInfo[i];if(info.z<.5)continue;
+  vec2 d=X-uIsl[i].xy;vec2 q=vec2(uIsl[i].z*d.x+uIsl[i].w*d.y,-uIsl[i].w*d.x+uIsl[i].z*d.y);
+  vec2 uv=q/info.xy+.5;
+  if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
+  if(info.z>1.5){
+   // The live scene, read through the same rigid placement it was drawn with. Only where this island's own art (a little
+   // grown, via a coarse mip) has land: another island's land seen in this rectangle is that island's business.
+   if(textureLod(uWorld,cellUV(int(info.w+.5),uv),3.).a<.01)continue;
+   vec4 f=uIslFlat[i];vec2 g=f.xy+vec2(f.z*q.x-f.w*q.y,f.w*q.x+f.z*q.y);
+   vec4 c=textureLod(uScene,sceneUV(g),0.);
+   if(c.a>.001)return over(under,c);
+  }else{
+   // Mip level from the sticker's true footprint, biased sharp (x.6): smooth far away, crisp as soon as it is near size.
+   vec2 dx=vec2(uIsl[i].z,-uIsl[i].w)/info.xy*(.6*1022./4096.),dy=vec2(uIsl[i].w,uIsl[i].z)/info.xy*(.6*1022./4096.);
+   vec4 c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
+   if(c.a>.001)return over(under,c);
+  }
+ }
+ return under;
+}
+vec3 islets(vec2 X,vec3 under){
+ for(int i=0;i<22;i++){
+  vec4 info=uItInfo[i];if(info.y<.5)continue;
+  vec2 d=X-uIt[i].xy;vec2 q=vec2(uIt[i].z*d.x+uIt[i].w*d.y,-uIt[i].w*d.x+uIt[i].z*d.y);
+  vec2 uv=q/info.x+.5;
+  if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
+  int k=int(info.z+.5);vec2 cell=vec2(float(k%4),float(k/4)),scale=.6*508./512./vec2(4.,3.);
+  vec4 c=textureGrad(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),vec2(uIt[i].z,-uIt[i].w)/info.x*scale,vec2(uIt[i].w,uIt[i].z)/info.x*scale);
+  if(c.a>.001)return over(under,c);
+ }
+ return under;
+}
+// Open sea. Close in, the live scene's water (boats, wakes) still shows, read through the sphere chart; anything that
+// lands on an island there is skipped, because the island itself comes only from its rigid sticker.
+vec3 sea(vec3 p,vec3 ocean){
+ if(uLive<.5)return ocean;
+ vec2 g=local(p),suv=sceneUV(g);
+ if(length(g-uSph.xy)>uSph.z*1.25||any(lessThan(suv,vec2(0.)))||any(greaterThan(suv,vec2(1.)))||land(g,-1))return ocean;
+ return over(ocean,textureLod(uScene,suv,0.));
 }
 vec3 planet(vec2 uv){
  vec2 px=chartDelta((uv-.5)*uRes);float Rp=uR*uRes.y,d=length(px)/Rp;
@@ -129,8 +150,9 @@ vec3 planet(vec2 uv){
  p=normalize(mix(flatPoint,p,smoothstep(0.,.25,ball)));
  vec3 v=vec3(dir.x*edge,-dir.y*edge,sqrt(max(0.,1.-edge*edge)));
  vec3 ocean=mix(uSea,vec3(.2,.52,.86),ball);
- vec3 col=uZoom>.065?ground(local(p),ocean):world(p,ocean);
- col=islets(p,col);
+ vec3 col=sea(p,ocean);
+ col=islets(sp,col);
+ col=islands(sp,ocean,col);
  float lit=dot(v,normalize(vec3(-.5,.5,.72)));
  col=mix(col,col*vec3(.72,.8,.98),(1.-smoothstep(.12,.3,lit))*ball);
  col=mix(col,col+vec3(.06,.07,.08),smoothstep(.8,.95,lit)*ball);
@@ -146,8 +168,8 @@ function buildWorldTexture(app,islands,bounds,arch){
  WORLD_ISLANDS.forEach((island,k)=>{
   const s=new Sprite(arch.textureOf(island.id));s.position.set(k%4*1024+1,Math.floor(k/4)*1024+1);s.width=s.height=1022;box.addChild(s);
  });
- const rt=RenderTexture.create({width:4096,height:4096,scaleMode:'linear'});
- app.renderer.render({container:box,target:rt,clear:true});box.destroy({children:true});return rt;
+ const rt=RenderTexture.create({width:4096,height:4096,scaleMode:'linear',autoGenerateMipmaps:true});
+ app.renderer.render({container:box,target:rt,clear:true});box.destroy({children:true});rt.source.updateMipmaps();return rt;
 }
 
 // the 'you are here' pin: a sun-yellow drop with an ink outline and a cream dot, a 'You' tag above it
@@ -175,20 +197,18 @@ export function createWorldView(app, scene, isletView) {
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
     uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, viewUniforms: {
-      uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uDetail:{value:1,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
+      uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
       uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},
 
       uSea: {value: new Float32Array([0x6E / 255, 0xC9 / 255, 0xDE / 255]), type: 'vec3<f32>'},
       uSph: {value: new Float32Array([0, 0, 1]), type: 'vec3<f32>'},
       ...Object.fromEntries(['uAnchor','uEast','uNorth','uFocus','uViewEast','uViewNorth'].map(n=>[n,{value:new Float32Array([0,0,1]),type:'vec3<f32>'}])),
-      uCenters:{value:new Float32Array(WORLD_ISLANDS.flatMap(i=>i.center)),type:'vec3<f32>',size:13},
-      uEasts:{value:new Float32Array(WORLD_ISLANDS.flatMap(i=>i.east)),type:'vec3<f32>',size:13},
-      uNorths:{value:new Float32Array(WORLD_ISLANDS.flatMap(i=>i.north)),type:'vec3<f32>',size:13},
-      uSizes:{value:new Float32Array(WORLD_ISLANDS.flatMap(i=>[i.width,i.height,Math.cos(Math.hypot(i.width,i.height)/2/WORLD_GEO.Rw),0])),type:'vec4<f32>',size:13},
-      uIsletCenters:{value:new Float32Array(ISLETS.flatMap(i=>i.center)),type:'vec3<f32>',size:22},
-      uIsletEasts:{value:new Float32Array(ISLETS.flatMap(i=>i.east)),type:'vec3<f32>',size:22},
-      uIsletNorths:{value:new Float32Array(ISLETS.flatMap(i=>i.north)),type:'vec3<f32>',size:22},
-      uIsletSizes:{value:new Float32Array(ISLETS.flatMap(i=>[i.width,i.width,i.cap,i.artIndex])),type:'vec4<f32>',size:22},
+      uLive:{value:0,type:'f32'},
+      uIsl:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
+      uIslFlat:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
+      uIslInfo:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
+      uIt:{value:new Float32Array(22*4),type:'vec4<f32>',size:22},
+      uItInfo:{value:new Float32Array(22*4),type:'vec4<f32>',size:22},
     },
   }});
   const mesh = new Mesh({geometry, shader, label: 'World view'});
@@ -240,11 +260,12 @@ export function createWorldView(app, scene, isletView) {
       }
       if (!on) {scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;}
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
-      if (t < .97 && cam.zoom > .065) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)
+      const live=t < .97 && cam.zoom > .065;
+      if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)
       scene.visible = false;
       const id=arch.current,m=mapOf(id),anchor=worldIsland(id),view=viewFrame(id,cam);
       const Rw=WORLD_GEO.Rw,R=Rw*cam.zoom/h,Rp=Rw*cam.zoom,ball=ease(t)*ease((4-R)/3);
-      u.uBall=ball;u.uDetail=1-ease(t/.7);
+      u.uBall=ball;
       // The mask is a white disc: only draw it while it is actually masking, or it shows as a white ball mid-zoom.
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
       life.mask=pin.mask=masking?sphereMask:null;
@@ -262,7 +283,7 @@ export function createWorldView(app, scene, isletView) {
         const px=(basis.d*x-basis.c*y)/det,py=(-basis.b*x+basis.a*y)/det;
         return Math.hypot(px,py)>horizon?null:gOf(px,py);
       };
-      this.debug={ball,horizon,atlasSize:4096,source:cam.zoom>.065?'live':'atlas',colourBlends:0};
+      this.debug={ball,horizon,atlasSize:4096,source:live?'live':'atlas',colourBlends:0};
       this.globe={w,h,Rp,Rw,ball,view,id,camera:{x:cam.x,y:cam.y}};
       const project=(x,y)=>{
         const p=spherePoint(id,{x,y}),vz=dot(p,view.center);
@@ -276,6 +297,75 @@ export function createWorldView(app, scene, isletView) {
         if(Math.hypot(px,py)>=horizon)return {x:0,y:0,face:-1};
         return {x:w/2+basis.a*px+basis.c*py,y:h/2+basis.b*px+basis.d*py,face:ball>.5?vz:1};
       };
+      // boss 8 Nov: rigid stickers. Screen pixel of any sphere point, exactly as the fragment shader draws it.
+      const screenOf=p=>{
+        let px,py;
+        if(ball>=.25){   // past a quarter the lens is analytic: r = (1-ball)*angle + ball*sin(angle)
+          const e=dot(p,view.east),n=dot(p,view.north),s=Math.hypot(e,n),a=Math.atan2(s,dot(p,view.center));
+          if(a>=Math.PI/2)return null;
+          const r=((1-ball)*a+ball*Math.sin(a))*Rp/(s||1);px=e*r;py=-n*r;
+        }else{
+          const g=localPoint(id,p),vz=dot(p,view.center);if(vz<=-.2)return null;
+          px=(g.x-cam.x)*cam.zoom;py=(g.y-cam.y)*cam.zoom;
+          if(ball>1e-6){px=dot(p,view.east)*Rp*ball+px*(1-ball);py=-dot(p,view.north)*Rp*ball+py*(1-ball);
+            for(let it=0;it<8;it++){
+              const [gx,gy]=gOf(px,py),ex=g.x-gx,ey=g.y-gy;if(!(Math.abs(ex)+Math.abs(ey)>.001))break;
+              const e=.25,[gx1,gy1]=gOf(px+e,py),[gx2,gy2]=gOf(px,py+e),a=(gx1-gx)/e,b=(gx2-gx)/e,c=(gy1-gy)/e,d=(gy2-gy)/e,det=a*d-b*c;
+              if(!(Math.abs(det)>1e-14))break;px+=(d*ex-b*ey)/det;py+=(-c*ex+a*ey)/det;
+            }}
+          if(!Number.isFinite(px+py))return null;
+        }
+        if(Math.hypot(px,py)>=horizon)return null;
+        return {x:w/2+basis.a*px+basis.c*py,y:h/2+basis.b*px+basis.d*py};
+      };
+      // Centre from the projection, the nearest rotation of its Jacobian, one uniform scale: the camera zoom at the flat
+      // end (true size, matching the live scene), the area-preserving sqrt|det J| as the ball closes, shrinking to nothing
+      // at the horizon instead of popping.
+      const stickerOf=(S,step)=>{
+        const c=S(0,0),C=screenOf(c);if(!C)return null;
+        const xp=screenOf(S(step,0)),xm=screenOf(S(-step,0)),yp=screenOf(S(0,step)),ym=screenOf(S(0,-step));
+        if(!xp||!xm||!yp||!ym)return null;
+        const q=polar((xp.x-xm.x)/(2*step),(xp.y-xm.y)/(2*step),(yp.x-ym.x)/(2*step),(yp.y-ym.y)/(2*step));
+        const a=Math.acos(Math.max(-1,Math.min(1,dot(c,view.center)))),limb=ball>.5?1:ease((Math.PI/2-a)/.12);
+        const scale=(cam.zoom*(1-ball)+q.scale*ball)*(ball>.5?1:limb);
+        if(!(scale>1e-6))return null;
+        return {x:C.x,y:C.y,cos:q.cos,sin:q.sin,scale,depth:dot(c,view.center)};
+      };
+      const isl=u.uIsl,flat=u.uIslFlat,info=u.uIslInfo,it=u.uIt,itInfo=u.uItInfo;
+      const stickers=[];
+      WORLD_ISLANDS.forEach((island,k)=>{
+        const mi=mapOf(island.id),S=(x,y)=>spherePoint(island.id,{x:mi.cx+x,y:mi.cy+y}),st=stickerOf(S,ball>=.25?4:16);
+        if(!st||(ball>.5&&st.depth<=0))return;
+        // the live scene only if every on-screen part of this sticker was rendered into it this frame
+        const F=flatRigid(id,island.id);let mode=worldTex?1:0;
+        if(live){
+          let inside=true;
+          for(let gy=0;gy<=8&&inside;gy++)for(let gx=0;gx<=8;gx++){
+            const qx=(gx/8-.5)*mi.width,qy=(gy/8-.5)*mi.height,X=st.x+st.scale*(st.cos*qx-st.sin*qy),Y=st.y+st.scale*(st.sin*qx+st.cos*qy);
+            if(X<-2||Y<-2||X>w+2||Y>h+2)continue;
+            const fx=F.x+F.a*qx+F.c*qy-cam.x,fy=F.y+F.b*qx+F.d*qy-cam.y,sx=(basis.a*fx+basis.c*fy)*cam.zoom/w+.5,sy=(basis.b*fx+basis.d*fy)*cam.zoom/h+.5;
+            if(sx<-.001||sy<-.001||sx>1.001||sy>1.001){inside=false;break;}
+          }
+          if(inside)mode=2;
+        }
+        if(!mode)return;
+        stickers.push({kind:'island',id:island.id,k,st,F,mi,mode});
+      });
+      stickers.sort((p,q)=>q.st.depth-p.st.depth);
+      info.fill(0);
+      stickers.forEach(({st,F,mi,k,mode},n)=>{
+        isl.set([st.x,st.y,st.cos/st.scale,st.sin/st.scale],n*4);flat.set([F.x,F.y,F.a,F.b],n*4);info.set([mi.width,mi.height,mode,k],n*4);
+      });
+      const islets=[];itInfo.fill(0);
+      ISLETS.forEach((islet,k)=>{
+        const st=stickerOf((x,y)=>expMap(islet,x,y,Rw),ball>=.25?2:16);
+        if(!st||(ball>.5&&st.depth<=0))return;
+        islets.push({kind:'islet',id:`islet-${k}`,k,st,islet});
+      });
+      islets.sort((p,q)=>q.st.depth-p.st.depth).forEach(({st,islet},n)=>{it.set([st.x,st.y,st.cos/st.scale,st.sin/st.scale],n*4);itInfo.set([islet.width,1,islet.artIndex,0],n*4);});
+      u.uLive=live?1:0;
+      // QA readback: the matrices actually drawn (local units -> screen pixels), for the shear sweep.
+      this.stickers=[...stickers,...islets].map(({kind,id,st,mode,islet})=>({kind,id,mode:mode===2?'live':kind==='islet'?'islet-atlas':'atlas',width:islet?.width,a:st.cos*st.scale,b:st.sin*st.scale,c:-st.sin*st.scale,d:st.cos*st.scale,x:st.x,y:st.y}));
       const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
       const busy = ease((ball - .25) / .4);
       life.visible = busy > .01; life.alpha = busy;

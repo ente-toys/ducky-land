@@ -95,7 +95,7 @@ await page.evaluate(focus=>{const e=globalThis.__duckyEngine;e.follow=false;e.sp
 // Reproduce the boss's middle zoom with real wheel events, centred on Bog.
 for(let k=0;k<2;k++){await page.mouse.move(CX,CY);await page.mouse.wheel(0,-150);await sleep(650);}
 await page.evaluate(()=>{globalThis.__duckyEngine.quietAt=Infinity;});await sleep(400);
-const midState=await page.evaluate(()=>{const e=globalThis.__duckyEngine;return {camera:{x:e.camera.x,y:e.camera.y,zoom:e.camera.zoom},islandId:e.islandId,ball:e.worldView.debug.ball,render:e.worldView.debug};});
+const midState=await page.evaluate(()=>{const e=globalThis.__duckyEngine;return {camera:{x:e.camera.x,y:e.camera.y,zoom:e.camera.zoom},islandId:e.islandId,ball:e.worldView.debug.ball,render:e.worldView.debug,stickers:e.worldView.stickers};});
 const midShot=await shot('mid-zoom-bog'),midPNG=PNG.sync.read(fs.readFileSync(midShot.file));
 midZoom.push({shot:midShot.file,...midState,...midZoomQuality(midPNG,midState,images),frames:await frameStats()});
 // Restore the full globe for the six off-sphere ghost checks.
