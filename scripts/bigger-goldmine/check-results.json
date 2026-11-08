@@ -1,0 +1,417 @@
+[
+  {
+    "label": "Theme ready, 40 original sleepers",
+    "pass": true,
+    "data": []
+  },
+  {
+    "label": "All 371 original prop records preserved",
+    "pass": true
+  },
+  {
+    "label": "Original sleeper coordinates unchanged",
+    "pass": true
+  },
+  {
+    "label": "Picklepick Row reached from the heart",
+    "pass": true,
+    "data": {
+      "x": -420,
+      "y": 2350,
+      "route": 47
+    }
+  },
+  {
+    "label": "Gilded Quill Quarter reached from the heart",
+    "pass": true,
+    "data": {
+      "x": 3850,
+      "y": -380,
+      "route": 37
+    }
+  },
+  {
+    "label": "Pebblepan Bend reached from the heart",
+    "pass": true,
+    "data": {
+      "x": 8850,
+      "y": 2900,
+      "route": 53
+    }
+  },
+  {
+    "label": "Cratebill Quay reached from the heart",
+    "pass": true,
+    "data": {
+      "x": 6150,
+      "y": 5880,
+      "route": 19
+    }
+  },
+  {
+    "label": "miner home door community-0",
+    "pass": true,
+    "data": {
+      "x": -1100,
+      "y": 1975
+    }
+  },
+  {
+    "label": "miner home door community-7",
+    "pass": true,
+    "data": {
+      "x": -40,
+      "y": 1285
+    }
+  },
+  {
+    "label": "miner home door community-14",
+    "pass": true,
+    "data": {
+      "x": -40,
+      "y": 1915
+    }
+  },
+  {
+    "label": "miner home door community-21",
+    "pass": true,
+    "data": {
+      "x": 300,
+      "y": 2565
+    }
+  },
+  {
+    "label": "miner home door community-28",
+    "pass": true,
+    "data": {
+      "x": -1120,
+      "y": 2575
+    }
+  },
+  {
+    "label": "miner home door community-35",
+    "pass": true,
+    "data": {
+      "x": -1030,
+      "y": 3175
+    }
+  },
+  {
+    "label": "miner home door community-42",
+    "pass": true,
+    "data": {
+      "x": -40,
+      "y": 3215
+    }
+  },
+  {
+    "label": "assayer home door community-49",
+    "pass": true,
+    "data": {
+      "x": 2670,
+      "y": -485
+    }
+  },
+  {
+    "label": "assayer home door community-55",
+    "pass": true,
+    "data": {
+      "x": 3140,
+      "y": -665
+    }
+  },
+  {
+    "label": "assayer home door community-61",
+    "pass": true,
+    "data": {
+      "x": 3580,
+      "y": -625
+    }
+  },
+  {
+    "label": "assayer home door community-67",
+    "pass": true,
+    "data": {
+      "x": 4320,
+      "y": -615
+    }
+  },
+  {
+    "label": "assayer home door community-73",
+    "pass": true,
+    "data": {
+      "x": 4800,
+      "y": -495
+    }
+  },
+  {
+    "label": "assayer home door community-79",
+    "pass": true,
+    "data": {
+      "x": 5110,
+      "y": 25
+    }
+  },
+  {
+    "label": "panner home door community-85",
+    "pass": true,
+    "data": {
+      "x": 9140,
+      "y": 1785
+    }
+  },
+  {
+    "label": "panner home door community-92",
+    "pass": true,
+    "data": {
+      "x": 8680,
+      "y": 2375
+    }
+  },
+  {
+    "label": "panner home door community-99",
+    "pass": true,
+    "data": {
+      "x": 9230,
+      "y": 2355
+    }
+  },
+  {
+    "label": "panner home door community-106",
+    "pass": true,
+    "data": {
+      "x": 9270,
+      "y": 2865
+    }
+  },
+  {
+    "label": "panner home door community-113",
+    "pass": true,
+    "data": {
+      "x": 9190,
+      "y": 3515
+    }
+  },
+  {
+    "label": "panner home door community-120",
+    "pass": true,
+    "data": {
+      "x": 9130,
+      "y": 3975
+    }
+  },
+  {
+    "label": "crew home door community-127",
+    "pass": true,
+    "data": {
+      "x": 5290,
+      "y": 6165
+    }
+  },
+  {
+    "label": "crew home door community-134",
+    "pass": true,
+    "data": {
+      "x": 5780,
+      "y": 6455
+    }
+  },
+  {
+    "label": "crew home door community-141",
+    "pass": true,
+    "data": {
+      "x": 6320,
+      "y": 6435
+    }
+  },
+  {
+    "label": "crew home door community-148",
+    "pass": true,
+    "data": {
+      "x": 6820,
+      "y": 6305
+    }
+  },
+  {
+    "label": "crew home door community-155",
+    "pass": true,
+    "data": {
+      "x": 7060,
+      "y": 5705
+    }
+  },
+  {
+    "label": "crew home door community-162",
+    "pass": true,
+    "data": {
+      "x": 6490,
+      "y": 5735
+    }
+  },
+  {
+    "label": "Picklepick tool forge door community-169",
+    "pass": true,
+    "data": {
+      "x": -190,
+      "y": 3575
+    }
+  },
+  {
+    "label": "Gilded Quill assay office door community-170",
+    "pass": true,
+    "data": {
+      "x": 3860,
+      "y": -865
+    }
+  },
+  {
+    "label": "Cratebill cooperage door community-171",
+    "pass": true,
+    "data": {
+      "x": 7330,
+      "y": 6105
+    }
+  },
+  {
+    "label": "Boat 0 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 2930,
+      "y": 5020,
+      "turn": 0
+    }
+  },
+  {
+    "label": "Boat 1 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 3250,
+      "y": 5260,
+      "turn": 0
+    }
+  },
+  {
+    "label": "Boat 2 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 2930,
+      "y": 5380,
+      "turn": 0
+    }
+  },
+  {
+    "label": "Boat 3 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": -1660,
+      "y": 2420,
+      "turn": -1.5707963267948966
+    }
+  },
+  {
+    "label": "Boat 4 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": -1700,
+      "y": 2780,
+      "turn": -1.5707963267948966
+    }
+  },
+  {
+    "label": "Boat 5 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 9620,
+      "y": 2700,
+      "turn": 1.5707963267948966
+    }
+  },
+  {
+    "label": "Boat 6 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 9590,
+      "y": 3080,
+      "turn": 1.5707963267948966
+    }
+  },
+  {
+    "label": "Boat 7 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 6120,
+      "y": 6930,
+      "turn": 3.141592653589793
+    }
+  },
+  {
+    "label": "Boat 8 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 6500,
+      "y": 6870,
+      "turn": 3.141592653589793
+    }
+  },
+  {
+    "label": "Boat 9 sea and boarding shore",
+    "pass": true,
+    "data": {
+      "x": 7100,
+      "y": 6700,
+      "turn": 3.141592653589793
+    }
+  },
+  {
+    "label": "Ground tiles <=1536 raster pixels",
+    "pass": true
+  },
+  {
+    "label": "Real water under harbor-preview.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under jetty-w.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under jetty-e.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under jetty-se.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under bridge-west.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under bridge-east.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under bridge-pond.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under community/river-bridge-0.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under community/river-bridge-1.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under community/river-bridge-2.svg",
+    "pass": true
+  },
+  {
+    "label": "Real water under community/river-bridge-3.svg",
+    "pass": true
+  },
+  {
+    "label": "River blocks walking",
+    "pass": true
+  }
+]

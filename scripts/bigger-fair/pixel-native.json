@@ -1,0 +1,7 @@
+{
+ "pixels": 20345783,
+ "changed": 0,
+ "maxDelta": 0,
+ "examples": [],
+ "note": "Native 1 pixel per world unit, all original tile coordinates. Original opaque pixels inside original coast. No post-render restoration."
+}

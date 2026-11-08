@@ -1,0 +1,9 @@
+{
+ "pixels": 20345783,
+ "changed": 0,
+ "maxDelta": 0,
+ "examples": [],
+ "note": "Native 1 pixel per world unit, all original tile coordinates. Original opaque pixels inside original coast. No post-render restoration.",
+ "scale": 1,
+ "source": "pixels.mjs native per-tile verification; supersedes the WIP 0.2-scale tile-rounding comparison"
+}

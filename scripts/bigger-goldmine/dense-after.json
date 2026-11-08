@@ -1,0 +1,28 @@
+{
+  "method": "Union of rendered new-road polygons, clipped to added dry land (coast minus original island/islets minus visible rivers). Excludes original paths and bridge decks. Includes district courts and house lanes.",
+  "newDryLandArea": 47551879.539650664,
+  "roadArea": 6518122.455701824,
+  "roadPercent": 13.707391839825705,
+  "houses": 25,
+  "communityProps": 368,
+  "mainRoadWidth": 195,
+  "laneWidth": 96,
+  "greens": [
+    {
+      "name": "Picklepick lantern green",
+      "area": 250432
+    },
+    {
+      "name": "Gilded Quill reading green",
+      "area": 251141
+    },
+    {
+      "name": "Pebblepan pump green",
+      "area": 172622
+    },
+    {
+      "name": "Cratebill sailors green",
+      "area": 215946
+    }
+  ]
+}

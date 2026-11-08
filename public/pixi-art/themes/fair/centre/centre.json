@@ -15,16 +15,16 @@
       "file": "floor.svg",
       "layer": "decal",
       "x": -685,
-      "y": -410,
+      "y": -530,
       "width": 1370,
-      "height": 825,
+      "height": 1065,
       "anchor": {
         "x": 0,
         "y": 0
       },
       "at": [
         -685,
-        -410
+        -530
       ]
     },
     {

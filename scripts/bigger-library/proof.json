@@ -1,0 +1,28 @@
+{
+  "pixelComparison": {
+    "framing": "same 1540x1144 at .11 pixels/unit",
+    "mask": "original coastline interiors, 35 world units inside antialiased shore",
+    "checked": 311449,
+    "changed": 0,
+    "examples": []
+  },
+  "landArea": {
+    "before": 26757373.200000044,
+    "after": 92985198.31906253
+  },
+  "groundTextures": {
+    "beforeRGBA_MB": 179.2,
+    "afterRGBA_MB": 324.8,
+    "beforeSVG_MB": 3.975282,
+    "afterSVG_MB": 11.054458,
+    "tiles": 104,
+    "outerResolution": 0.5,
+    "originalResolution": 1
+  },
+  "preserved": {
+    "props": 374,
+    "flats": 3134,
+    "sleepers": 40
+  },
+  "note": "Direct production-art render comparison. No pixels patched after rendering. Static proof excludes live moving actors, procedural water and runtime shadow overlays."
+}

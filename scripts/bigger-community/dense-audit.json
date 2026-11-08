@@ -1,0 +1,26 @@
+{
+  "houseAndFenceFootprintsChecked": 66,
+  "wetFootprints": [],
+  "neighbourhoods": [
+    {
+      "id": "storynest",
+      "beforeMeanNearestHome": 659.2834118622732,
+      "afterMeanNearestHome": 517.773503591744
+    },
+    {
+      "id": "patchwing",
+      "beforeMeanNearestHome": 638.1046344406768,
+      "afterMeanNearestHome": 495.6675731629147
+    },
+    {
+      "id": "sproutshare",
+      "beforeMeanNearestHome": 700.9514811659977,
+      "afterMeanNearestHome": 530.9945147938149
+    },
+    {
+      "id": "lanternloaf",
+      "beforeMeanNearestHome": 684.7671826291133,
+      "afterMeanNearestHome": 514.2502415129205
+    }
+  ]
+}

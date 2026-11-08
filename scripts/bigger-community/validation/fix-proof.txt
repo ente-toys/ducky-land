@@ -1,0 +1,7 @@
+Rendered fixed-bridge
+Rendered fixed-stream
+Rendered fixed-junction
+Rendered fixed-lane
+Rendered fixed-community
+Rendered fixed-common
+{ protectedPixels: 817744, changed: 0, maxDelta: 0, examples: [] }

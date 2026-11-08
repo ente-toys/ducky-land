@@ -1,0 +1,272 @@
+{
+  "communities": [
+    {
+      "id": "simmerwick",
+      "name": "Simmerwick Lane",
+      "who": "Noodle makers and lantern stitchers",
+      "x": -650,
+      "y": 2200,
+      "spawn": [
+        -510,
+        2380
+      ],
+      "house": "lantern-house",
+      "homes": [
+        [
+          -1250,
+          1550
+        ],
+        [
+          -720,
+          1510
+        ],
+        [
+          -170,
+          1560
+        ],
+        [
+          -1250,
+          2200
+        ],
+        [
+          -1230,
+          2850
+        ],
+        [
+          -710,
+          3140
+        ],
+        [
+          -160,
+          3130
+        ]
+      ],
+      "workplaces": [
+        [
+          "shop-noodle.svg",
+          -80,
+          2140
+        ],
+        [
+          "noodle-kiosk.svg",
+          -200,
+          3560
+        ],
+        [
+          "shop-boba.svg",
+          80,
+          2730
+        ]
+      ],
+      "square": [
+        -570,
+        2300,
+        400,
+        240
+      ]
+    },
+    {
+      "id": "ticklewick",
+      "name": "Ticklewick Works",
+      "who": "Clock menders, arcade builders and their families",
+      "x": 3650,
+      "y": -440,
+      "spawn": [
+        3750,
+        -100
+      ],
+      "house": "clock-house",
+      "homes": [
+        [
+          3100,
+          -680
+        ],
+        [
+          3600,
+          -710
+        ],
+        [
+          4130,
+          -670
+        ],
+        [
+          2590,
+          -140
+        ],
+        [
+          4700,
+          -120
+        ],
+        [
+          3090,
+          140
+        ],
+        [
+          4210,
+          140
+        ]
+      ],
+      "workplaces": [
+        [
+          "shop-arcade.svg",
+          2140,
+          -320
+        ],
+        [
+          "shop-star.svg",
+          5050,
+          210
+        ],
+        [
+          "bigger/star-dome.svg",
+          4950,
+          -390
+        ]
+      ],
+      "square": [
+        3650,
+        -60,
+        470,
+        210
+      ]
+    },
+    {
+      "id": "purrlumi",
+      "name": "Purrlumi Pages",
+      "who": "Bookbinders, illustrators and tea-growing families",
+      "x": 8280,
+      "y": 2400,
+      "spawn": [
+        8310,
+        2600
+      ],
+      "house": "book-house",
+      "homes": [
+        [
+          7910,
+          1900
+        ],
+        [
+          8440,
+          1880
+        ],
+        [
+          8940,
+          1900
+        ],
+        [
+          9010,
+          2570
+        ],
+        [
+          8580,
+          3330
+        ],
+        [
+          8050,
+          3330
+        ],
+        [
+          7780,
+          2510
+        ]
+      ],
+      "workplaces": [
+        [
+          "shop-cat.svg",
+          7560,
+          3050
+        ],
+        [
+          "shop-star.svg",
+          8590,
+          2910
+        ],
+        [
+          "shop-boba.svg",
+          9080,
+          3240
+        ]
+      ],
+      "square": [
+        8300,
+        2550,
+        410,
+        230
+      ]
+    },
+    {
+      "id": "moonwake",
+      "name": "Moonwake Quay",
+      "who": "Boat repairers, night-market cooks and harbour families",
+      "x": 3850,
+      "y": 5570,
+      "spawn": [
+        3900,
+        5750
+      ],
+      "house": "quay-house",
+      "homes": [
+        [
+          3410,
+          5260
+        ],
+        [
+          3900,
+          5220
+        ],
+        [
+          4420,
+          5260
+        ],
+        [
+          2880,
+          5580
+        ],
+        [
+          4940,
+          5590
+        ],
+        [
+          3400,
+          6160
+        ],
+        [
+          4440,
+          6160
+        ]
+      ],
+      "workplaces": [
+        [
+          "shop-noodle.svg",
+          2550,
+          5930
+        ],
+        [
+          "shop-cupcake.svg",
+          2630,
+          6390
+        ],
+        [
+          "bigger/tram.svg",
+          5390,
+          6150
+        ]
+      ],
+      "square": [
+        3900,
+        5710,
+        470,
+        220
+      ]
+    }
+  ],
+  "junction": [
+    -510,
+    2380
+  ],
+  "lane": [
+    3000,
+    -390
+  ]
+}

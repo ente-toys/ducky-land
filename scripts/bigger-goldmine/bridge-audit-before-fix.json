@@ -1,0 +1,68 @@
+[
+  {
+    "src": "harbor-preview.svg",
+    "waterUnderDeck": false,
+    "wetSamples": 4,
+    "sampleCount": 9
+  },
+  {
+    "src": "jetty-w.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "jetty-e.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "jetty-se.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "bridge-west.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "bridge-east.svg",
+    "waterUnderDeck": false,
+    "wetSamples": 6,
+    "sampleCount": 9
+  },
+  {
+    "src": "bridge-pond.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "community/river-bridge-0.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "community/river-bridge-1.svg",
+    "waterUnderDeck": false,
+    "wetSamples": 8,
+    "sampleCount": 9
+  },
+  {
+    "src": "community/river-bridge-2.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  },
+  {
+    "src": "community/river-bridge-3.svg",
+    "waterUnderDeck": true,
+    "wetSamples": 9,
+    "sampleCount": 9
+  }
+]

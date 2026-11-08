@@ -1,148 +1,840 @@
 {
-  "width": 7800,
-  "height": 5800,
+  "width": 14000,
+  "height": 10800,
   "sea": "#6EC9DE",
   "ground": {
     "tiles": [
       {
-        "src": "ground-r0-c0.svg",
+        "src": "community/outer-0-0.svg",
+        "x": -3000,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-1.svg",
+        "x": -1600,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-2.svg",
+        "x": -200,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-3.svg",
+        "x": 1200,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-4.svg",
+        "x": 2600,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-5.svg",
+        "x": 4000,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-6.svg",
+        "x": 5400,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-7.svg",
+        "x": 6800,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-8.svg",
+        "x": 8200,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-0-9.svg",
+        "x": 9600,
+        "y": -2400,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-0.svg",
+        "x": -3000,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-1.svg",
+        "x": -1600,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-2.svg",
+        "x": -200,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-3.svg",
+        "x": 1200,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-4.svg",
+        "x": 2600,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-5.svg",
+        "x": 4000,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-6.svg",
+        "x": 5400,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-7.svg",
+        "x": 6800,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-8.svg",
+        "x": 8200,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-1-9.svg",
+        "x": 9600,
+        "y": -1050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-0.svg",
+        "x": -3000,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-1.svg",
+        "x": -1600,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-2.svg",
+        "x": -200,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-3.svg",
+        "x": 1200,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-4.svg",
+        "x": 2600,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-5.svg",
+        "x": 4000,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-6.svg",
+        "x": 5400,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-7.svg",
+        "x": 6800,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-8.svg",
+        "x": 8200,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-2-9.svg",
+        "x": 9600,
+        "y": 300,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-0.svg",
+        "x": -3000,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-1.svg",
+        "x": -1600,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-2.svg",
+        "x": -200,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-3.svg",
+        "x": 1200,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-4.svg",
+        "x": 2600,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-5.svg",
+        "x": 4000,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-6.svg",
+        "x": 5400,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-7.svg",
+        "x": 6800,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-8.svg",
+        "x": 8200,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-3-9.svg",
+        "x": 9600,
+        "y": 1650,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-0.svg",
+        "x": -3000,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-1.svg",
+        "x": -1600,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-2.svg",
+        "x": -200,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-3.svg",
+        "x": 1200,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-4.svg",
+        "x": 2600,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-5.svg",
+        "x": 4000,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-6.svg",
+        "x": 5400,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-7.svg",
+        "x": 6800,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-8.svg",
+        "x": 8200,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-4-9.svg",
+        "x": 9600,
+        "y": 3000,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-0.svg",
+        "x": -3000,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-1.svg",
+        "x": -1600,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-2.svg",
+        "x": -200,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-3.svg",
+        "x": 1200,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-4.svg",
+        "x": 2600,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-5.svg",
+        "x": 4000,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-6.svg",
+        "x": 5400,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-7.svg",
+        "x": 6800,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-8.svg",
+        "x": 8200,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-5-9.svg",
+        "x": 9600,
+        "y": 4350,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-0.svg",
+        "x": -3000,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-1.svg",
+        "x": -1600,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-2.svg",
+        "x": -200,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-3.svg",
+        "x": 1200,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-4.svg",
+        "x": 2600,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-5.svg",
+        "x": 4000,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-6.svg",
+        "x": 5400,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-7.svg",
+        "x": 6800,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-8.svg",
+        "x": 8200,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-6-9.svg",
+        "x": 9600,
+        "y": 5700,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-0.svg",
+        "x": -3000,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-1.svg",
+        "x": -1600,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-2.svg",
+        "x": -200,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-3.svg",
+        "x": 1200,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-4.svg",
+        "x": 2600,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-5.svg",
+        "x": 4000,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-6.svg",
+        "x": 5400,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-7.svg",
+        "x": 6800,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-8.svg",
+        "x": 8200,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/outer-7-9.svg",
+        "x": 9600,
+        "y": 7050,
+        "width": 1400,
+        "height": 1350,
+        "resolution": 0.6
+      },
+      {
+        "src": "community/original-0-0.svg",
         "x": 0,
         "y": 0,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r0-c1.svg",
-        "x": 1560,
+        "src": "community/original-0-1.svg",
+        "x": 1300,
         "y": 0,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r0-c2.svg",
-        "x": 3120,
+        "src": "community/original-0-2.svg",
+        "x": 2600,
         "y": 0,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r0-c3.svg",
-        "x": 4680,
+        "src": "community/original-0-3.svg",
+        "x": 3900,
         "y": 0,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r0-c4.svg",
-        "x": 6240,
+        "src": "community/original-0-4.svg",
+        "x": 5200,
         "y": 0,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r1-c0.svg",
+        "src": "community/original-0-5.svg",
+        "x": 6500,
+        "y": 0,
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
+      },
+      {
+        "src": "community/original-1-0.svg",
         "x": 0,
         "y": 1450,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r1-c1.svg",
-        "x": 1560,
+        "src": "community/original-1-1.svg",
+        "x": 1300,
         "y": 1450,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r1-c2.svg",
-        "x": 3120,
+        "src": "community/original-1-2.svg",
+        "x": 2600,
         "y": 1450,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r1-c3.svg",
-        "x": 4680,
+        "src": "community/original-1-3.svg",
+        "x": 3900,
         "y": 1450,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r1-c4.svg",
-        "x": 6240,
+        "src": "community/original-1-4.svg",
+        "x": 5200,
         "y": 1450,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r2-c0.svg",
+        "src": "community/original-1-5.svg",
+        "x": 6500,
+        "y": 1450,
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
+      },
+      {
+        "src": "community/original-2-0.svg",
         "x": 0,
         "y": 2900,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r2-c1.svg",
-        "x": 1560,
+        "src": "community/original-2-1.svg",
+        "x": 1300,
         "y": 2900,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r2-c2.svg",
-        "x": 3120,
+        "src": "community/original-2-2.svg",
+        "x": 2600,
         "y": 2900,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r2-c3.svg",
-        "x": 4680,
+        "src": "community/original-2-3.svg",
+        "x": 3900,
         "y": 2900,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r2-c4.svg",
-        "x": 6240,
+        "src": "community/original-2-4.svg",
+        "x": 5200,
         "y": 2900,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r3-c0.svg",
+        "src": "community/original-2-5.svg",
+        "x": 6500,
+        "y": 2900,
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
+      },
+      {
+        "src": "community/original-3-0.svg",
         "x": 0,
         "y": 4350,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r3-c1.svg",
-        "x": 1560,
+        "src": "community/original-3-1.svg",
+        "x": 1300,
         "y": 4350,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r3-c2.svg",
-        "x": 3120,
+        "src": "community/original-3-2.svg",
+        "x": 2600,
         "y": 4350,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r3-c3.svg",
-        "x": 4680,
+        "src": "community/original-3-3.svg",
+        "x": 3900,
         "y": 4350,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       },
       {
-        "src": "ground-r3-c4.svg",
-        "x": 6240,
+        "src": "community/original-3-4.svg",
+        "x": 5200,
         "y": 4350,
-        "width": 1560,
-        "height": 1450
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
+      },
+      {
+        "src": "community/original-3-5.svg",
+        "x": 6500,
+        "y": 4350,
+        "width": 1300,
+        "height": 1450,
+        "resolution": 1
       }
     ]
   },
@@ -202,6 +894,62 @@
       "y": 1502.1081591088655,
       "width": 345.1833043766637,
       "height": 605.783681782269
+    },
+    {
+      "src": "community/arched-stream-bridge.svg",
+      "x": 2100,
+      "y": -970,
+      "width": 420,
+      "height": 245
+    },
+    {
+      "src": "community/arched-stream-bridge.svg",
+      "x": 9020,
+      "y": 1505,
+      "width": 420,
+      "height": 245
+    },
+    {
+      "src": "community/arched-stream-bridge.svg",
+      "x": 3825,
+      "y": 6560,
+      "width": 850,
+      "height": 245
+    },
+    {
+      "src": "community/arched-stream-bridge.svg",
+      "x": 1980,
+      "y": 490,
+      "width": 420,
+      "height": 245
+    },
+    {
+      "src": "community/canal-deck-end.svg",
+      "x": 245,
+      "y": 2775,
+      "width": 65,
+      "height": 150
+    },
+    {
+      "src": "community/canal-deck-end.svg",
+      "x": 7490,
+      "y": 2775,
+      "width": 65,
+      "height": 150
+    },
+    {
+      "src": "community/arched-reed-crossing.svg",
+      "x": 9447.5,
+      "y": 2290,
+      "width": 245,
+      "height": 420
+    },
+    {
+      "src": "community/old-north-canal-pier.svg",
+      "x": 2125,
+      "y": 650,
+      "width": 150,
+      "height": 700
     }
   ],
   "flats": [
@@ -528,7 +1276,7 @@
       "id": "integrated-centre-decal-paving",
       "src": "centre/decal-paving.svg",
       "width": 1108.8,
-      "height": 859.05696,
+      "height": 890.2569599999999,
       "scale": 1,
       "shadow": false,
       "wind": false,
@@ -539,7 +1287,7 @@
         "x": -1155,
         "y": -885.851,
         "width": 2310,
-        "height": 1789.702,
+        "height": 1854.702,
         "anchor": {
           "x": 0,
           "y": 0
@@ -9856,7 +10604,7 @@
         "id": "flow-3",
         "file": "flow-3.svg",
         "layer": "anim",
-        "x": -38.0,
+        "x": -38,
         "y": -1427,
         "width": 49.4,
         "height": 125,
@@ -9865,7 +10613,7 @@
           "y": 0
         },
         "at": [
-          -38.0,
+          -38,
           -1427
         ],
         "animate": {
@@ -10041,14 +10789,14 @@
           "period": 2.1,
           "phase": 0,
           "pivot": [
-            0.0,
+            0,
             -980
           ]
         },
         "sortY": -970
       },
       "name": "Centre impact-ripple-0",
-      "x": 3900.0,
+      "x": 3900,
       "y": 3334.4001000000003,
       "sortY": 3334.4001000000003,
       "anchor": {
@@ -10086,14 +10834,14 @@
           "period": 2.1,
           "phase": 0.3333333333333333,
           "pivot": [
-            0.0,
+            0,
             -980
           ]
         },
         "sortY": -970
       },
       "name": "Centre impact-ripple-1",
-      "x": 3900.0,
+      "x": 3900,
       "y": 3334.40011,
       "sortY": 3334.40011,
       "anchor": {
@@ -10131,14 +10879,14 @@
           "period": 2.1,
           "phase": 0.6666666666666666,
           "pivot": [
-            0.0,
+            0,
             -980
           ]
         },
         "sortY": -970
       },
       "name": "Centre impact-ripple-2",
-      "x": 3900.0,
+      "x": 3900,
       "y": 3334.4001200000002,
       "sortY": 3334.4001200000002,
       "anchor": {
@@ -10161,7 +10909,7 @@
         "layer": "anim",
         "x": -478.79999999999995,
         "y": -1045,
-        "width": 969.0,
+        "width": 969,
         "height": 83,
         "anchor": {
           "x": 0,
@@ -13848,6 +14596,5095 @@
       },
       "shadow": false,
       "wind": false
+    },
+    {
+      "id": "community-fern-a",
+      "name": "fern-a",
+      "src": "community/fern-a.svg",
+      "x": -1540,
+      "y": 2310,
+      "width": 340,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-a-yard",
+      "name": "fern-a-yard",
+      "src": "community/fern-a-yard.svg",
+      "x": -1570,
+      "y": 2442,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-b",
+      "name": "fern-b",
+      "src": "community/fern-b.svg",
+      "x": -960,
+      "y": 1610,
+      "width": 445,
+      "height": 365,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-b-yard",
+      "name": "fern-b-yard",
+      "src": "community/fern-b-yard.svg",
+      "x": -935,
+      "y": 1742,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-c",
+      "name": "fern-c",
+      "src": "community/fern-c.svg",
+      "x": -360,
+      "y": 2450,
+      "width": 325,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-c-yard",
+      "name": "fern-c-yard",
+      "src": "community/fern-c-yard.svg",
+      "x": -390,
+      "y": 2582,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-d",
+      "name": "fern-d",
+      "src": "community/fern-d.svg",
+      "x": -1580,
+      "y": 3110,
+      "width": 460,
+      "height": 355,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-d-yard",
+      "name": "fern-d-yard",
+      "src": "community/fern-d-yard.svg",
+      "x": -1555,
+      "y": 3242,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-e",
+      "name": "fern-e",
+      "src": "community/fern-e.svg",
+      "x": -450,
+      "y": 3210,
+      "width": 350,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-e-yard",
+      "name": "fern-e-yard",
+      "src": "community/fern-e-yard.svg",
+      "x": -480,
+      "y": 3342,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-mill-a",
+      "name": "mill-a",
+      "src": "community/mill-a.svg",
+      "x": 2810,
+      "y": -1250,
+      "width": 340,
+      "height": 340,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-a-yard",
+      "name": "mill-a-yard",
+      "src": "community/mill-a-yard.svg",
+      "x": 2780,
+      "y": -1118,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-b",
+      "name": "mill-b",
+      "src": "community/mill-b.svg",
+      "x": 3400,
+      "y": -1130,
+      "width": 445,
+      "height": 375,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-b-yard",
+      "name": "mill-b-yard",
+      "src": "community/mill-b-yard.svg",
+      "x": 3425,
+      "y": -998,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-c",
+      "name": "mill-c",
+      "src": "community/mill-c.svg",
+      "x": 3890,
+      "y": -560,
+      "width": 325,
+      "height": 340,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-c-yard",
+      "name": "mill-c-yard",
+      "src": "community/mill-c-yard.svg",
+      "x": 3860,
+      "y": -428,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-d",
+      "name": "mill-d",
+      "src": "community/mill-d.svg",
+      "x": 3540,
+      "y": 170,
+      "width": 460,
+      "height": 365,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-d-yard",
+      "name": "mill-d-yard",
+      "src": "community/mill-d-yard.svg",
+      "x": 3565,
+      "y": 302,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-e",
+      "name": "mill-e",
+      "src": "community/mill-e.svg",
+      "x": 2890,
+      "y": 180,
+      "width": 350,
+      "height": 340,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-e-yard",
+      "name": "mill-e-yard",
+      "src": "community/mill-e-yard.svg",
+      "x": 2860,
+      "y": 312,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-reed-a",
+      "name": "reed-a",
+      "src": "community/reed-a.svg",
+      "x": 8090,
+      "y": 2200,
+      "width": 340,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-a-yard",
+      "name": "reed-a-yard",
+      "src": "community/reed-a-yard.svg",
+      "x": 8060,
+      "y": 2332,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-b",
+      "name": "reed-b",
+      "src": "community/reed-b.svg",
+      "x": 8560,
+      "y": 1760,
+      "width": 445,
+      "height": 365,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-b-yard",
+      "name": "reed-b-yard",
+      "src": "community/reed-b-yard.svg",
+      "x": 8585,
+      "y": 1892,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-c",
+      "name": "reed-c",
+      "src": "community/reed-c.svg",
+      "x": 9140,
+      "y": 2630,
+      "width": 325,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-c-yard",
+      "name": "reed-c-yard",
+      "src": "community/reed-c-yard.svg",
+      "x": 9110,
+      "y": 2762,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-d",
+      "name": "reed-d",
+      "src": "community/reed-d.svg",
+      "x": 8070,
+      "y": 2960,
+      "width": 460,
+      "height": 355,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-d-yard",
+      "name": "reed-d-yard",
+      "src": "community/reed-d-yard.svg",
+      "x": 8095,
+      "y": 3092,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-e",
+      "name": "reed-e",
+      "src": "community/reed-e.svg",
+      "x": 9160,
+      "y": 3130,
+      "width": 350,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-e-yard",
+      "name": "reed-e-yard",
+      "src": "community/reed-e-yard.svg",
+      "x": 9130,
+      "y": 3262,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-fish-a",
+      "name": "fish-a",
+      "src": "community/fish-a.svg",
+      "x": 3040,
+      "y": 5780,
+      "width": 340,
+      "height": 310,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-a-yard",
+      "name": "fish-a-yard",
+      "src": "community/fish-a-yard.svg",
+      "x": 3010,
+      "y": 5912,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-b",
+      "name": "fish-b",
+      "src": "community/fish-b.svg",
+      "x": 3560,
+      "y": 5520,
+      "width": 445,
+      "height": 345,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-b-yard",
+      "name": "fish-b-yard",
+      "src": "community/fish-b-yard.svg",
+      "x": 3585,
+      "y": 5652,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-c",
+      "name": "fish-c",
+      "src": "community/fish-c.svg",
+      "x": 4670,
+      "y": 5740,
+      "width": 325,
+      "height": 310,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-c-yard",
+      "name": "fish-c-yard",
+      "src": "community/fish-c-yard.svg",
+      "x": 4640,
+      "y": 5872,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-d",
+      "name": "fish-d",
+      "src": "community/fish-d.svg",
+      "x": 4990,
+      "y": 6220,
+      "width": 460,
+      "height": 335,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-d-yard",
+      "name": "fish-d-yard",
+      "src": "community/fish-d-yard.svg",
+      "x": 5015,
+      "y": 6352,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-e",
+      "name": "fish-e",
+      "src": "community/fish-e.svg",
+      "x": 3280,
+      "y": 6470,
+      "width": 350,
+      "height": 310,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-e-yard",
+      "name": "fish-e-yard",
+      "src": "community/fish-e-yard.svg",
+      "x": 3250,
+      "y": 6602,
+      "width": 500,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fern-a-fern",
+      "name": "fern-a-fern",
+      "src": "detail/fern-fan.svg",
+      "x": -1755,
+      "y": 2360,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-a-bush",
+      "name": "fern-a-bush",
+      "src": "reuse/bush-1.svg",
+      "x": -1310,
+      "y": 2375,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-a-flowers",
+      "name": "fern-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": -1700,
+      "y": 2402,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-a-pot",
+      "name": "fern-a-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -1385,
+      "y": 2341,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-b-fern",
+      "name": "fern-b-fern",
+      "src": "detail/fern-fan.svg",
+      "x": -1175,
+      "y": 1660,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-b-bush",
+      "name": "fern-b-bush",
+      "src": "reuse/bush-2.svg",
+      "x": -730,
+      "y": 1675,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-b-flowers",
+      "name": "fern-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": -1120,
+      "y": 1702,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-b-pot",
+      "name": "fern-b-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -805,
+      "y": 1641,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-c-fern",
+      "name": "fern-c-fern",
+      "src": "detail/fern-fan.svg",
+      "x": -575,
+      "y": 2500,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-c-bush",
+      "name": "fern-c-bush",
+      "src": "reuse/bush-3.svg",
+      "x": -130,
+      "y": 2515,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-c-flowers",
+      "name": "fern-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": -520,
+      "y": 2542,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-c-pot",
+      "name": "fern-c-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -205,
+      "y": 2481,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-d-fern",
+      "name": "fern-d-fern",
+      "src": "detail/fern-fan.svg",
+      "x": -1795,
+      "y": 3160,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-d-bush",
+      "name": "fern-d-bush",
+      "src": "reuse/bush-1.svg",
+      "x": -1350,
+      "y": 3175,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-d-flowers",
+      "name": "fern-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": -1740,
+      "y": 3202,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-d-pot",
+      "name": "fern-d-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -1425,
+      "y": 3141,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-e-fern",
+      "name": "fern-e-fern",
+      "src": "detail/fern-fan.svg",
+      "x": -665,
+      "y": 3260,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-e-bush",
+      "name": "fern-e-bush",
+      "src": "reuse/bush-2.svg",
+      "x": -220,
+      "y": 3275,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-e-flowers",
+      "name": "fern-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": -610,
+      "y": 3302,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-fern-e-pot",
+      "name": "fern-e-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -295,
+      "y": 3241,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-mill-a-fern",
+      "name": "mill-a-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 2595,
+      "y": -1200,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-a-bush",
+      "name": "mill-a-bush",
+      "src": "reuse/bush-1.svg",
+      "x": 3040,
+      "y": -1185,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-a-flowers",
+      "name": "mill-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 2650,
+      "y": -1158,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-a-pot",
+      "name": "mill-a-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 2965,
+      "y": -1219,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-b-fern",
+      "name": "mill-b-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 3185,
+      "y": -1080,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-b-bush",
+      "name": "mill-b-bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3630,
+      "y": -1065,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-b-flowers",
+      "name": "mill-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3240,
+      "y": -1038,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-b-pot",
+      "name": "mill-b-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 3555,
+      "y": -1099,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-c-fern",
+      "name": "mill-c-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 3675,
+      "y": -510,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-c-bush",
+      "name": "mill-c-bush",
+      "src": "reuse/bush-3.svg",
+      "x": 4120,
+      "y": -495,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-c-flowers",
+      "name": "mill-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 3730,
+      "y": -468,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-c-pot",
+      "name": "mill-c-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 4045,
+      "y": -529,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-d-fern",
+      "name": "mill-d-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 3325,
+      "y": 220,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-d-bush",
+      "name": "mill-d-bush",
+      "src": "reuse/bush-1.svg",
+      "x": 3770,
+      "y": 235,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-d-flowers",
+      "name": "mill-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 3380,
+      "y": 262,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-d-pot",
+      "name": "mill-d-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 3695,
+      "y": 201,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-e-fern",
+      "name": "mill-e-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 2675,
+      "y": 230,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-e-bush",
+      "name": "mill-e-bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3120,
+      "y": 245,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-e-flowers",
+      "name": "mill-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 2730,
+      "y": 272,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-mill-e-pot",
+      "name": "mill-e-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 3045,
+      "y": 211,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-reed-a-fern",
+      "name": "reed-a-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 7875,
+      "y": 2250,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-a-bush",
+      "name": "reed-a-bush",
+      "src": "reuse/bush-1.svg",
+      "x": 8320,
+      "y": 2265,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-a-flowers",
+      "name": "reed-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 7930,
+      "y": 2292,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-a-pot",
+      "name": "reed-a-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 8245,
+      "y": 2231,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-b-fern",
+      "name": "reed-b-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 8345,
+      "y": 1810,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-b-bush",
+      "name": "reed-b-bush",
+      "src": "reuse/bush-2.svg",
+      "x": 8790,
+      "y": 1825,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-b-flowers",
+      "name": "reed-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 8400,
+      "y": 1852,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-b-pot",
+      "name": "reed-b-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 8715,
+      "y": 1791,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-c-fern",
+      "name": "reed-c-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 8925,
+      "y": 2680,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-c-bush",
+      "name": "reed-c-bush",
+      "src": "reuse/bush-3.svg",
+      "x": 9370,
+      "y": 2695,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-c-flowers",
+      "name": "reed-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 8980,
+      "y": 2722,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-c-pot",
+      "name": "reed-c-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 9295,
+      "y": 2661,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-d-fern",
+      "name": "reed-d-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 7855,
+      "y": 3010,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-d-bush",
+      "name": "reed-d-bush",
+      "src": "reuse/bush-1.svg",
+      "x": 8300,
+      "y": 3025,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-d-flowers",
+      "name": "reed-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 7910,
+      "y": 3052,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-d-pot",
+      "name": "reed-d-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 8225,
+      "y": 2991,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-e-fern",
+      "name": "reed-e-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 8945,
+      "y": 3180,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-e-bush",
+      "name": "reed-e-bush",
+      "src": "reuse/bush-2.svg",
+      "x": 9390,
+      "y": 3195,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-e-flowers",
+      "name": "reed-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 9000,
+      "y": 3222,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-reed-e-pot",
+      "name": "reed-e-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 9315,
+      "y": 3161,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-fish-a-fern",
+      "name": "fish-a-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 2825,
+      "y": 5830,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-a-bush",
+      "name": "fish-a-bush",
+      "src": "reuse/bush-1.svg",
+      "x": 3270,
+      "y": 5845,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-a-flowers",
+      "name": "fish-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 2880,
+      "y": 5872,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-a-pot",
+      "name": "fish-a-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 3195,
+      "y": 5811,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-b-fern",
+      "name": "fish-b-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 3345,
+      "y": 5570,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-b-bush",
+      "name": "fish-b-bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3790,
+      "y": 5585,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-b-flowers",
+      "name": "fish-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3400,
+      "y": 5612,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-b-pot",
+      "name": "fish-b-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 3715,
+      "y": 5551,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-c-fern",
+      "name": "fish-c-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 4455,
+      "y": 5790,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-c-bush",
+      "name": "fish-c-bush",
+      "src": "reuse/bush-3.svg",
+      "x": 4900,
+      "y": 5805,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-c-flowers",
+      "name": "fish-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 4510,
+      "y": 5832,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-c-pot",
+      "name": "fish-c-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 4825,
+      "y": 5771,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-d-fern",
+      "name": "fish-d-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 4775,
+      "y": 6270,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-d-bush",
+      "name": "fish-d-bush",
+      "src": "reuse/bush-1.svg",
+      "x": 5220,
+      "y": 6285,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-d-flowers",
+      "name": "fish-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 4830,
+      "y": 6312,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-d-pot",
+      "name": "fish-d-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 5145,
+      "y": 6251,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-e-fern",
+      "name": "fish-e-fern",
+      "src": "detail/fern-fan.svg",
+      "x": 3065,
+      "y": 6520,
+      "width": 140,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-e-bush",
+      "name": "fish-e-bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3510,
+      "y": 6535,
+      "width": 155,
+      "height": 102,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-e-flowers",
+      "name": "fish-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3120,
+      "y": 6562,
+      "width": 80,
+      "height": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fish-e-pot",
+      "name": "fish-e-pot",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": 3435,
+      "y": 6501,
+      "width": 63,
+      "height": 94,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-fern-nursery",
+      "name": "fern-nursery",
+      "src": "community/fern-nursery.svg",
+      "x": -1020,
+      "y": 2140,
+      "width": 590,
+      "height": 390,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-mistmill-workshop",
+      "name": "mistmill-workshop",
+      "src": "community/mistmill-workshop.svg",
+      "x": 2640,
+      "y": -600,
+      "width": 650,
+      "height": 510,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false,
+      "flip": true
+    },
+    {
+      "id": "community-reed-weavery",
+      "name": "reed-weavery",
+      "src": "community/reed-weavery.svg",
+      "x": 8720,
+      "y": 2220,
+      "width": 620,
+      "height": 405,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-ripplehook-market",
+      "name": "ripplehook-market",
+      "src": "community/ripplehook-market.svg",
+      "x": 4140,
+      "y": 5890,
+      "width": 650,
+      "height": 355,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-0",
+      "name": "kit-0",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": -1990,
+      "y": 1620,
+      "width": 310,
+      "height": 393,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-1",
+      "name": "kit-1",
+      "src": "reuse/nature--tree-round.svg",
+      "x": -300,
+      "y": 1240,
+      "width": 280,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-2",
+      "name": "kit-2",
+      "src": "reuse/tree-3.svg",
+      "x": -1900,
+      "y": 3030,
+      "width": 280,
+      "height": 365,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-3",
+      "name": "kit-3",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": -190,
+      "y": 3470,
+      "width": 290,
+      "height": 367,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-4",
+      "name": "kit-4",
+      "src": "reuse/street--bench-wood.svg",
+      "x": -1190,
+      "y": 2840,
+      "width": 210,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-5",
+      "name": "kit-5",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -670,
+      "y": 2680,
+      "width": 85,
+      "height": 125,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-6",
+      "name": "kit-6",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": -450,
+      "y": 2480,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-7",
+      "name": "kit-7",
+      "src": "community/community-wayfinding.svg",
+      "x": -360,
+      "y": 2760,
+      "width": 115,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-kit-8",
+      "name": "kit-8",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 1080,
+      "y": -820,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-9",
+      "name": "kit-9",
+      "src": "reuse/tree-4.svg",
+      "x": 4410,
+      "y": -550,
+      "width": 255,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-10",
+      "name": "kit-10",
+      "src": "reuse/nature--tree-oak.svg",
+      "x": 3590,
+      "y": 460,
+      "width": 290,
+      "height": 360,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-11",
+      "name": "kit-11",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 3170,
+      "y": -230,
+      "width": 215,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-12",
+      "name": "kit-12",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 3020,
+      "y": -620,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-13",
+      "name": "kit-13",
+      "src": "community/community-wayfinding.svg",
+      "x": 2190,
+      "y": 180,
+      "width": 115,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-14",
+      "name": "kit-14",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 2950,
+      "y": -670,
+      "width": 85,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-15",
+      "name": "kit-15",
+      "src": "reuse/nature--stump.svg",
+      "x": 1640,
+      "y": -150,
+      "width": 90,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-kit-16",
+      "name": "kit-16",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 7790,
+      "y": 1440,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-17",
+      "name": "kit-17",
+      "src": "reuse/tree-2.svg",
+      "x": 9830,
+      "y": 1850,
+      "width": 250,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-18",
+      "name": "kit-18",
+      "src": "reuse/nature--tree-round.svg",
+      "x": 9750,
+      "y": 3030,
+      "width": 280,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-19",
+      "name": "kit-19",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 8870,
+      "y": 3020,
+      "width": 210,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-20",
+      "name": "kit-20",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 8430,
+      "y": 2720,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-21",
+      "name": "kit-21",
+      "src": "community/community-wayfinding.svg",
+      "x": 7840,
+      "y": 3280,
+      "width": 115,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-22",
+      "name": "kit-22",
+      "src": "reuse/nature--reeds.svg",
+      "x": 9500,
+      "y": 2300,
+      "width": 150,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-23",
+      "name": "kit-23",
+      "src": "reuse/nature--cattails.svg",
+      "x": 9400,
+      "y": 2140,
+      "width": 130,
+      "height": 150,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-24",
+      "name": "kit-24",
+      "src": "reuse/nature--reeds.svg",
+      "x": 9290,
+      "y": 1300,
+      "width": 150,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-kit-25",
+      "name": "kit-25",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 2440,
+      "y": 5670,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-26",
+      "name": "kit-26",
+      "src": "reuse/tree-4.svg",
+      "x": 5550,
+      "y": 5990,
+      "width": 260,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-27",
+      "name": "kit-27",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 2840,
+      "y": 6840,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-28",
+      "name": "kit-28",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 3700,
+      "y": 6410,
+      "width": 210,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-29",
+      "name": "kit-29",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 4640,
+      "y": 6390,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-30",
+      "name": "kit-30",
+      "src": "community/community-wayfinding.svg",
+      "x": 3870,
+      "y": 5520,
+      "width": 115,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-31",
+      "name": "kit-31",
+      "src": "reuse/nature--reeds.svg",
+      "x": 3960,
+      "y": 6650,
+      "width": 150,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-32",
+      "name": "kit-32",
+      "src": "reuse/nature--cattails.svg",
+      "x": 4630,
+      "y": 6980,
+      "width": 130,
+      "height": 150,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-33",
+      "name": "kit-33",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 4440,
+      "y": 5950,
+      "width": 90,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-kit-34",
+      "name": "kit-34",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": -700,
+      "y": 200,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-35",
+      "name": "kit-35",
+      "src": "reuse/tree-3.svg",
+      "x": -1100,
+      "y": 4230,
+      "width": 280,
+      "height": 360,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-36",
+      "name": "kit-36",
+      "src": "reuse/tree-4.svg",
+      "x": 900,
+      "y": 5650,
+      "width": 260,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-37",
+      "name": "kit-37",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 6620,
+      "y": 5640,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-38",
+      "name": "kit-38",
+      "src": "reuse/tree-2.svg",
+      "x": 8370,
+      "y": 4450,
+      "width": 260,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-39",
+      "name": "kit-39",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 6400,
+      "y": -230,
+      "width": 300,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-40",
+      "name": "kit-40",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 6700,
+      "y": 50,
+      "width": 210,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-kit-41",
+      "name": "kit-41",
+      "src": "reuse/street--bench-wood.svg",
+      "x": -900,
+      "y": 4380,
+      "width": 210,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-workyard-0",
+      "name": "workyard-0",
+      "src": "community/workyard.svg",
+      "x": -950,
+      "y": 3130,
+      "width": 500,
+      "height": 220,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-workyard-1",
+      "name": "workyard-1",
+      "src": "community/workyard.svg",
+      "x": 3210,
+      "y": -430,
+      "width": 500,
+      "height": 220,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-workyard-2",
+      "name": "workyard-2",
+      "src": "community/workyard.svg",
+      "x": 8730,
+      "y": 2640,
+      "width": 500,
+      "height": 220,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-workyard-3",
+      "name": "workyard-3",
+      "src": "community/workyard.svg",
+      "x": 5310,
+      "y": 6170,
+      "width": 500,
+      "height": 220,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-0",
+      "name": "common-orchard-0",
+      "src": "community/orchard-tree.svg",
+      "x": -650,
+      "y": 620,
+      "width": 310,
+      "height": 385,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-1",
+      "name": "common-orchard-1",
+      "src": "community/orchard-tree.svg",
+      "x": -120,
+      "y": 430,
+      "width": 300,
+      "height": 370,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-2",
+      "name": "common-orchard-2",
+      "src": "community/orchard-tree.svg",
+      "x": 420,
+      "y": 630,
+      "width": 320,
+      "height": 395,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-3",
+      "name": "common-orchard-3",
+      "src": "community/orchard-tree.svg",
+      "x": -470,
+      "y": 1070,
+      "width": 300,
+      "height": 370,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-4",
+      "name": "common-orchard-4",
+      "src": "community/orchard-tree.svg",
+      "x": 210,
+      "y": 1120,
+      "width": 310,
+      "height": 390,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-5",
+      "name": "common-orchard-5",
+      "src": "community/orchard-hive.svg",
+      "x": 550,
+      "y": 990,
+      "width": 160,
+      "height": 170,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-6",
+      "name": "common-orchard-6",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": -100,
+      "y": 860,
+      "width": 105,
+      "height": 100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-orchard-7",
+      "name": "common-orchard-7",
+      "src": "reuse/street--bench-wood.svg",
+      "x": -530,
+      "y": 1370,
+      "width": 230,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-orchard",
+      "wind": false
+    },
+    {
+      "id": "community-common-field-8",
+      "name": "common-field-8",
+      "src": "reuse/nature--tree-round.svg",
+      "x": 4120,
+      "y": -170,
+      "width": 320,
+      "height": 385,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-field",
+      "wind": false
+    },
+    {
+      "id": "community-common-field-9",
+      "name": "common-field-9",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 5570,
+      "y": 380,
+      "width": 330,
+      "height": 410,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-field",
+      "wind": false
+    },
+    {
+      "id": "community-common-field-10",
+      "name": "common-field-10",
+      "src": "community/orchard-hive.svg",
+      "x": 5240,
+      "y": 440,
+      "width": 145,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-field",
+      "wind": false
+    },
+    {
+      "id": "community-common-field-11",
+      "name": "common-field-11",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 4320,
+      "y": 440,
+      "width": 105,
+      "height": 100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-field",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-12",
+      "name": "common-spring-12",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 6240,
+      "y": 700,
+      "width": 360,
+      "height": 450,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-13",
+      "name": "common-spring-13",
+      "src": "reuse/nature--tree-round.svg",
+      "x": 7370,
+      "y": 1130,
+      "width": 340,
+      "height": 420,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-14",
+      "name": "common-spring-14",
+      "src": "reuse/nature--tree-oak.svg",
+      "x": 7150,
+      "y": 570,
+      "width": 340,
+      "height": 415,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-15",
+      "name": "common-spring-15",
+      "src": "reuse/nature--reeds.svg",
+      "x": 6520,
+      "y": 1050,
+      "width": 160,
+      "height": 185,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-16",
+      "name": "common-spring-16",
+      "src": "reuse/nature--cattails.svg",
+      "x": 7080,
+      "y": 1190,
+      "width": 150,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-17",
+      "name": "common-spring-17",
+      "src": "reuse/nature--rock-round.svg",
+      "x": 6400,
+      "y": 1100,
+      "width": 130,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-spring-18",
+      "name": "common-spring-18",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 6820,
+      "y": 1380,
+      "width": 230,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-spring",
+      "wind": false
+    },
+    {
+      "id": "community-common-reed-green-19",
+      "name": "common-reed-green-19",
+      "src": "community/drying-rack.svg",
+      "x": 7950,
+      "y": 3750,
+      "width": 360,
+      "height": 210,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-reed-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-reed-green-20",
+      "name": "common-reed-green-20",
+      "src": "community/drying-rack.svg",
+      "x": 8170,
+      "y": 4120,
+      "width": 300,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-reed-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-reed-green-21",
+      "name": "common-reed-green-21",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 7540,
+      "y": 3820,
+      "width": 345,
+      "height": 430,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-reed-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-reed-green-22",
+      "name": "common-reed-green-22",
+      "src": "reuse/nature--tree-round.svg",
+      "x": 7910,
+      "y": 4440,
+      "width": 320,
+      "height": 400,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-reed-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-reed-green-23",
+      "name": "common-reed-green-23",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 7720,
+      "y": 4210,
+      "width": 110,
+      "height": 100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-reed-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-reed-green-24",
+      "name": "common-reed-green-24",
+      "src": "reuse/nature--log.svg",
+      "x": 8270,
+      "y": 3770,
+      "width": 160,
+      "height": 100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-reed-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-lookout-25",
+      "name": "common-lookout-25",
+      "src": "community/picnic-table.svg",
+      "x": 6820,
+      "y": 5250,
+      "width": 370,
+      "height": 240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-lookout",
+      "wind": false
+    },
+    {
+      "id": "community-common-lookout-26",
+      "name": "common-lookout-26",
+      "src": "reuse/street--picnic-blanket.svg",
+      "x": 6040,
+      "y": 5230,
+      "width": 300,
+      "height": 175,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-lookout",
+      "wind": false
+    },
+    {
+      "id": "community-common-lookout-27",
+      "name": "common-lookout-27",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 7000,
+      "y": 5200,
+      "width": 350,
+      "height": 440,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-lookout",
+      "wind": false
+    },
+    {
+      "id": "community-common-lookout-28",
+      "name": "common-lookout-28",
+      "src": "reuse/nature--tree-oak.svg",
+      "x": 7180,
+      "y": 4750,
+      "width": 335,
+      "height": 415,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-lookout",
+      "wind": false
+    },
+    {
+      "id": "community-common-lookout-29",
+      "name": "common-lookout-29",
+      "src": "reuse/nature--tree-round.svg",
+      "x": 6660,
+      "y": 5450,
+      "width": 310,
+      "height": 390,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-lookout",
+      "wind": false
+    },
+    {
+      "id": "community-common-lookout-30",
+      "name": "common-lookout-30",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 6260,
+      "y": 5360,
+      "width": 105,
+      "height": 100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-lookout",
+      "wind": false
+    },
+    {
+      "id": "community-common-picnic-31",
+      "name": "common-picnic-31",
+      "src": "community/picnic-table.svg",
+      "x": 1320,
+      "y": 5320,
+      "width": 370,
+      "height": 240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-picnic",
+      "wind": false
+    },
+    {
+      "id": "community-common-picnic-32",
+      "name": "common-picnic-32",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": 850,
+      "y": 5330,
+      "width": 350,
+      "height": 440,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-picnic",
+      "wind": false
+    },
+    {
+      "id": "community-common-picnic-33",
+      "name": "common-picnic-33",
+      "src": "reuse/nature--tree-oak.svg",
+      "x": 1810,
+      "y": 5430,
+      "width": 335,
+      "height": 415,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-picnic",
+      "wind": false
+    },
+    {
+      "id": "community-common-picnic-34",
+      "name": "common-picnic-34",
+      "src": "reuse/nature--tree-round.svg",
+      "x": 1340,
+      "y": 5890,
+      "width": 310,
+      "height": 390,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-picnic",
+      "wind": false
+    },
+    {
+      "id": "community-common-picnic-35",
+      "name": "common-picnic-35",
+      "src": "reuse/street--picnic-blanket.svg",
+      "x": 1570,
+      "y": 5660,
+      "width": 300,
+      "height": 175,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-picnic",
+      "wind": false
+    },
+    {
+      "id": "community-common-picnic-36",
+      "name": "common-picnic-36",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 1520,
+      "y": 5580,
+      "width": 105,
+      "height": 100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-picnic",
+      "wind": false
+    },
+    {
+      "id": "community-common-fern-garden-37",
+      "name": "common-fern-garden-37",
+      "src": "reuse/nature--tree-willow.svg",
+      "x": -1170,
+      "y": 3950,
+      "width": 340,
+      "height": 430,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-fern-garden",
+      "wind": false
+    },
+    {
+      "id": "community-common-fern-garden-38",
+      "name": "common-fern-garden-38",
+      "src": "reuse/nature--tree-round.svg",
+      "x": -130,
+      "y": 4380,
+      "width": 310,
+      "height": 390,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-fern-garden",
+      "wind": false
+    },
+    {
+      "id": "community-common-fern-garden-39",
+      "name": "common-fern-garden-39",
+      "src": "reuse/street--bench-wood.svg",
+      "x": -700,
+      "y": 4530,
+      "width": 230,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-fern-garden",
+      "wind": false
+    },
+    {
+      "id": "community-common-fern-garden-40",
+      "name": "common-fern-garden-40",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -340,
+      "y": 3840,
+      "width": 110,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-fern-garden",
+      "wind": false
+    },
+    {
+      "id": "community-common-nursery-green-41",
+      "name": "common-nursery-green-41",
+      "src": "community/picnic-table.svg",
+      "x": -1050,
+      "y": 2440,
+      "width": 330,
+      "height": 210,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-nursery-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-nursery-green-42",
+      "name": "common-nursery-green-42",
+      "src": "detail/fern-fan.svg",
+      "x": -1370,
+      "y": 2210,
+      "width": 190,
+      "height": 130,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-nursery-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-nursery-green-43",
+      "name": "common-nursery-green-43",
+      "src": "detail/fern-fan.svg",
+      "x": -1390,
+      "y": 2380,
+      "width": 160,
+      "height": 110,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-nursery-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-nursery-green-44",
+      "name": "common-nursery-green-44",
+      "src": "detail/fern-fan.svg",
+      "x": -610,
+      "y": 2170,
+      "width": 180,
+      "height": 120,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-nursery-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-nursery-green-45",
+      "name": "common-nursery-green-45",
+      "src": "reuse/street--planter-flowers.svg",
+      "x": -680,
+      "y": 2440,
+      "width": 115,
+      "height": 150,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "common-nursery-green",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-0",
+      "name": "common-border-0",
+      "src": "reuse/bush-1.svg",
+      "x": -810,
+      "y": 800,
+      "width": 170,
+      "height": 110.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-0",
+      "name": "common-flower-0",
+      "src": "reuse/flower-1.svg",
+      "x": -755,
+      "y": 834,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-1",
+      "name": "common-border-1",
+      "src": "reuse/bush-2.svg",
+      "x": 490,
+      "y": 1180,
+      "width": 190,
+      "height": 123.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-1",
+      "name": "common-flower-1",
+      "src": "reuse/flower-2.svg",
+      "x": 545,
+      "y": 1214,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-2",
+      "name": "common-border-2",
+      "src": "reuse/bush-3.svg",
+      "x": -300,
+      "y": 250,
+      "width": 150,
+      "height": 97.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-2",
+      "name": "common-flower-2",
+      "src": "reuse/flower-3.svg",
+      "x": -245,
+      "y": 284,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-3",
+      "name": "common-border-3",
+      "src": "reuse/bush-4.svg",
+      "x": 4050,
+      "y": 380,
+      "width": 180,
+      "height": 117,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-3",
+      "name": "common-flower-3",
+      "src": "reuse/flower-1.svg",
+      "x": 4105,
+      "y": 414,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-4",
+      "name": "common-border-4",
+      "src": "reuse/bush-1.svg",
+      "x": 5410,
+      "y": -200,
+      "width": 170,
+      "height": 110.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-4",
+      "name": "common-flower-4",
+      "src": "reuse/flower-2.svg",
+      "x": 5465,
+      "y": -166,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-5",
+      "name": "common-border-5",
+      "src": "reuse/bush-2.svg",
+      "x": 6180,
+      "y": 1100,
+      "width": 180,
+      "height": 117,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-5",
+      "name": "common-flower-5",
+      "src": "reuse/flower-3.svg",
+      "x": 6235,
+      "y": 1134,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-6",
+      "name": "common-border-6",
+      "src": "reuse/bush-3.svg",
+      "x": 7380,
+      "y": 1360,
+      "width": 190,
+      "height": 123.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-6",
+      "name": "common-flower-6",
+      "src": "reuse/flower-1.svg",
+      "x": 7435,
+      "y": 1394,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-7",
+      "name": "common-border-7",
+      "src": "reuse/bush-4.svg",
+      "x": 7190,
+      "y": 560,
+      "width": 155,
+      "height": 100.75,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-7",
+      "name": "common-flower-7",
+      "src": "reuse/flower-2.svg",
+      "x": 7245,
+      "y": 594,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-8",
+      "name": "common-border-8",
+      "src": "reuse/bush-1.svg",
+      "x": 7670,
+      "y": 4440,
+      "width": 180,
+      "height": 117,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-8",
+      "name": "common-flower-8",
+      "src": "reuse/flower-3.svg",
+      "x": 7725,
+      "y": 4474,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-9",
+      "name": "common-border-9",
+      "src": "reuse/bush-2.svg",
+      "x": 8230,
+      "y": 3910,
+      "width": 150,
+      "height": 97.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-9",
+      "name": "common-flower-9",
+      "src": "reuse/flower-1.svg",
+      "x": 8285,
+      "y": 3944,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-10",
+      "name": "common-border-10",
+      "src": "reuse/bush-3.svg",
+      "x": 5830,
+      "y": 5160,
+      "width": 185,
+      "height": 120.25,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-10",
+      "name": "common-flower-10",
+      "src": "reuse/flower-2.svg",
+      "x": 5885,
+      "y": 5194,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-11",
+      "name": "common-border-11",
+      "src": "reuse/bush-4.svg",
+      "x": 6990,
+      "y": 4770,
+      "width": 170,
+      "height": 110.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-11",
+      "name": "common-flower-11",
+      "src": "reuse/flower-3.svg",
+      "x": 7045,
+      "y": 4804,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-12",
+      "name": "common-border-12",
+      "src": "reuse/bush-1.svg",
+      "x": 1600,
+      "y": 5160,
+      "width": 190,
+      "height": 123.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-12",
+      "name": "common-flower-12",
+      "src": "reuse/flower-1.svg",
+      "x": 1655,
+      "y": 5194,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-13",
+      "name": "common-border-13",
+      "src": "reuse/bush-2.svg",
+      "x": 810,
+      "y": 5590,
+      "width": 170,
+      "height": 110.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-13",
+      "name": "common-flower-13",
+      "src": "reuse/flower-2.svg",
+      "x": 865,
+      "y": 5624,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-14",
+      "name": "common-border-14",
+      "src": "reuse/bush-3.svg",
+      "x": -1080,
+      "y": 4320,
+      "width": 175,
+      "height": 113.75,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-14",
+      "name": "common-flower-14",
+      "src": "reuse/flower-3.svg",
+      "x": -1025,
+      "y": 4354,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-border-15",
+      "name": "common-border-15",
+      "src": "reuse/bush-4.svg",
+      "x": -330,
+      "y": 3630,
+      "width": 160,
+      "height": 104,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-common-flower-15",
+      "name": "common-flower-15",
+      "src": "reuse/flower-1.svg",
+      "x": -275,
+      "y": 3664,
+      "width": 95,
+      "height": 70,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "commons",
+      "wind": false
+    },
+    {
+      "id": "community-pond-lily-0",
+      "name": "pond-lily-0",
+      "src": "reuse/nature--lily-pad-flower.svg",
+      "x": 6610,
+      "y": 950,
+      "width": 95,
+      "height": 48,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "spring-pond",
+      "wind": false
+    },
+    {
+      "id": "community-pond-lily-1",
+      "name": "pond-lily-1",
+      "src": "reuse/nature--lily-pad-flower.svg",
+      "x": 6930,
+      "y": 820,
+      "width": 95,
+      "height": 48,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "spring-pond",
+      "wind": false
+    },
+    {
+      "id": "community-pond-lily-2",
+      "name": "pond-lily-2",
+      "src": "reuse/nature--lily-pad-flower.svg",
+      "x": 7000,
+      "y": 1020,
+      "width": 95,
+      "height": 48,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "spring-pond",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-pump",
+      "name": "dense-fern-pump",
+      "src": "community/shared-pump.svg",
+      "x": -1120,
+      "y": 2740,
+      "width": 140,
+      "height": 175,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-bench",
+      "name": "dense-fern-bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": -835,
+      "y": 2820,
+      "width": 205,
+      "height": 140,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-lamp",
+      "name": "dense-fern-lamp",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": -1265,
+      "y": 2815,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-pump",
+      "name": "dense-mill-pump",
+      "src": "community/shared-pump.svg",
+      "x": 3320,
+      "y": -410,
+      "width": 140,
+      "height": 175,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-bench",
+      "name": "dense-mill-bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 3605,
+      "y": -330,
+      "width": 205,
+      "height": 140,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-lamp",
+      "name": "dense-mill-lamp",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 3175,
+      "y": -335,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-pump",
+      "name": "dense-reed-pump",
+      "src": "community/shared-pump.svg",
+      "x": 8450,
+      "y": 2740,
+      "width": 140,
+      "height": 175,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-bench",
+      "name": "dense-reed-bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 8735,
+      "y": 2820,
+      "width": 205,
+      "height": 140,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-lamp",
+      "name": "dense-reed-lamp",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 8305,
+      "y": 2815,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-pump",
+      "name": "dense-fish-pump",
+      "src": "community/shared-pump.svg",
+      "x": 3660,
+      "y": 6190,
+      "width": 140,
+      "height": 175,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-bench",
+      "name": "dense-fish-bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 3945,
+      "y": 6270,
+      "width": 205,
+      "height": 140,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-lamp",
+      "name": "dense-fish-lamp",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 3515,
+      "y": 6265,
+      "width": 55,
+      "height": 230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-0",
+      "name": "dense-fence-0",
+      "src": "community/shared-garden-fence.svg",
+      "x": -1160,
+      "y": 3290,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-1",
+      "name": "dense-fence-1",
+      "src": "community/shared-garden-fence.svg",
+      "x": -680,
+      "y": 3340,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-2",
+      "name": "dense-fence-2",
+      "src": "community/shared-garden-fence.svg",
+      "x": 3150,
+      "y": -980,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-3",
+      "name": "dense-fence-3",
+      "src": "community/shared-garden-fence.svg",
+      "x": 3300,
+      "y": 325,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-4",
+      "name": "dense-fence-4",
+      "src": "community/shared-garden-fence.svg",
+      "x": 8340,
+      "y": 2410,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-5",
+      "name": "dense-fence-5",
+      "src": "community/shared-garden-fence.svg",
+      "x": 8900,
+      "y": 3260,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-6",
+      "name": "dense-fence-6",
+      "src": "community/shared-garden-fence.svg",
+      "x": 3290,
+      "y": 5970,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fence-7",
+      "name": "dense-fence-7",
+      "src": "community/shared-garden-fence.svg",
+      "x": 4710,
+      "y": 6030,
+      "width": 480,
+      "height": 145,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-laundry-0",
+      "name": "dense-laundry-0",
+      "src": "community/shared-washing-line.svg",
+      "x": -1180,
+      "y": 2980,
+      "width": 390,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-laundry-1",
+      "name": "dense-laundry-1",
+      "src": "community/shared-washing-line.svg",
+      "x": 3500,
+      "y": -840,
+      "width": 390,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-laundry-2",
+      "name": "dense-laundry-2",
+      "src": "community/shared-washing-line.svg",
+      "x": 8440,
+      "y": 3120,
+      "width": 390,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-laundry-3",
+      "name": "dense-laundry-3",
+      "src": "community/shared-washing-line.svg",
+      "x": 3550,
+      "y": 6600,
+      "width": 390,
+      "height": 155,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-a-hedge",
+      "name": "dense-fern-a-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": -1785,
+      "y": 2422,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-a-flowers",
+      "name": "dense-fern-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": -1305,
+      "y": 2445,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-b-hedge",
+      "name": "dense-fern-b-hedge",
+      "src": "reuse/bush-2.svg",
+      "x": -1205,
+      "y": 1722,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-b-flowers",
+      "name": "dense-fern-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": -725,
+      "y": 1745,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-c-hedge",
+      "name": "dense-fern-c-hedge",
+      "src": "reuse/bush-3.svg",
+      "x": -605,
+      "y": 2562,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-c-flowers",
+      "name": "dense-fern-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": -125,
+      "y": 2585,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-d-hedge",
+      "name": "dense-fern-d-hedge",
+      "src": "reuse/bush-4.svg",
+      "x": -1825,
+      "y": 3222,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-d-flowers",
+      "name": "dense-fern-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": -1345,
+      "y": 3245,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-e-hedge",
+      "name": "dense-fern-e-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": -695,
+      "y": 3322,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fern-e-flowers",
+      "name": "dense-fern-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": -215,
+      "y": 3345,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fern",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-a-hedge",
+      "name": "dense-mill-a-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": 2565,
+      "y": -1138,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-a-flowers",
+      "name": "dense-mill-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 3045,
+      "y": -1115,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-b-hedge",
+      "name": "dense-mill-b-hedge",
+      "src": "reuse/bush-2.svg",
+      "x": 3155,
+      "y": -1018,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-b-flowers",
+      "name": "dense-mill-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3635,
+      "y": -995,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-c-hedge",
+      "name": "dense-mill-c-hedge",
+      "src": "reuse/bush-3.svg",
+      "x": 3645,
+      "y": -448,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-c-flowers",
+      "name": "dense-mill-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 4125,
+      "y": -425,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-d-hedge",
+      "name": "dense-mill-d-hedge",
+      "src": "reuse/bush-4.svg",
+      "x": 3295,
+      "y": 282,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-d-flowers",
+      "name": "dense-mill-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 3775,
+      "y": 305,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-e-hedge",
+      "name": "dense-mill-e-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": 2645,
+      "y": 292,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-e-flowers",
+      "name": "dense-mill-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3125,
+      "y": 315,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-a-hedge",
+      "name": "dense-reed-a-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": 7845,
+      "y": 2312,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-a-flowers",
+      "name": "dense-reed-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 8325,
+      "y": 2335,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-b-hedge",
+      "name": "dense-reed-b-hedge",
+      "src": "reuse/bush-2.svg",
+      "x": 8315,
+      "y": 1872,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-b-flowers",
+      "name": "dense-reed-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 8795,
+      "y": 1895,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-c-hedge",
+      "name": "dense-reed-c-hedge",
+      "src": "reuse/bush-3.svg",
+      "x": 8895,
+      "y": 2742,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-c-flowers",
+      "name": "dense-reed-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 9375,
+      "y": 2765,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-d-hedge",
+      "name": "dense-reed-d-hedge",
+      "src": "reuse/bush-4.svg",
+      "x": 7825,
+      "y": 3072,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-d-flowers",
+      "name": "dense-reed-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 8305,
+      "y": 3095,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-e-hedge",
+      "name": "dense-reed-e-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": 8915,
+      "y": 3242,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-reed-e-flowers",
+      "name": "dense-reed-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 9395,
+      "y": 3265,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "reed",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-a-hedge",
+      "name": "dense-fish-a-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": 2795,
+      "y": 5892,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-a-flowers",
+      "name": "dense-fish-a-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 3275,
+      "y": 5915,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-b-hedge",
+      "name": "dense-fish-b-hedge",
+      "src": "reuse/bush-2.svg",
+      "x": 3315,
+      "y": 5632,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-b-flowers",
+      "name": "dense-fish-b-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3795,
+      "y": 5655,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-c-hedge",
+      "name": "dense-fish-c-hedge",
+      "src": "reuse/bush-3.svg",
+      "x": 4425,
+      "y": 5852,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-c-flowers",
+      "name": "dense-fish-c-flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 4905,
+      "y": 5875,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-d-hedge",
+      "name": "dense-fish-d-hedge",
+      "src": "reuse/bush-4.svg",
+      "x": 4745,
+      "y": 6332,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-d-flowers",
+      "name": "dense-fish-d-flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 5225,
+      "y": 6355,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-e-hedge",
+      "name": "dense-fish-e-hedge",
+      "src": "reuse/bush-1.svg",
+      "x": 3035,
+      "y": 6582,
+      "width": 135,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-fish-e-flowers",
+      "name": "dense-fish-e-flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 3515,
+      "y": 6605,
+      "width": 95,
+      "height": 65,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "fish",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-orchard-0",
+      "name": "dense-mill-orchard-0",
+      "src": "community/orchard-tree.svg",
+      "x": 1350,
+      "y": -1080,
+      "width": 310,
+      "height": 375,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-orchard-1",
+      "name": "dense-mill-orchard-1",
+      "src": "community/orchard-tree.svg",
+      "x": 1850,
+      "y": -1010,
+      "width": 285,
+      "height": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
+    },
+    {
+      "id": "community-dense-mill-orchard-2",
+      "name": "dense-mill-orchard-2",
+      "src": "community/orchard-tree.svg",
+      "x": 1750,
+      "y": -500,
+      "width": 300,
+      "height": 365,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "community": "mill",
+      "wind": false
     }
   ],
   "floating": [
@@ -14127,5 +19964,9 @@
       },
       "phase": 39.1
     }
-  ]
+  ],
+  "origin": {
+    "x": -3000,
+    "y": -2400
+  }
 }

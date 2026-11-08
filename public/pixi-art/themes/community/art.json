@@ -1,150 +1,346 @@
 {
-  "width": 8000,
-  "height": 5800,
+  "width": 12800,
+  "height": 9600,
   "sea": "#6EC9DE",
   "theme": "community",
   "name": "Community Island",
   "ground": {
     "tiles": [
       {
-        "src": "ground-r0-c0.svg",
-        "x": 0,
-        "y": 0,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200--1600.svg",
+        "x": -1600,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r0-c1.svg",
-        "x": 1600,
-        "y": 0,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200--200.svg",
+        "x": -200,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r0-c2.svg",
-        "x": 3200,
-        "y": 0,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200-1200.svg",
+        "x": 1200,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r0-c3.svg",
-        "x": 4800,
-        "y": 0,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200-2600.svg",
+        "x": 2600,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r0-c4.svg",
-        "x": 6400,
-        "y": 0,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200-4000.svg",
+        "x": 4000,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r1-c0.svg",
-        "x": 0,
-        "y": 1450,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200-5400.svg",
+        "x": 5400,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r1-c1.svg",
-        "x": 1600,
-        "y": 1450,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200-6800.svg",
+        "x": 6800,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r1-c2.svg",
-        "x": 3200,
-        "y": 1450,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground--1200-8200.svg",
+        "x": 8200,
+        "y": -1200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r1-c3.svg",
-        "x": 4800,
-        "y": 1450,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200--1600.svg",
+        "x": -1600,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r1-c4.svg",
-        "x": 6400,
-        "y": 1450,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200--200.svg",
+        "x": -200,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r2-c0.svg",
-        "x": 0,
-        "y": 2900,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200-1200.svg",
+        "x": 1200,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r2-c1.svg",
-        "x": 1600,
-        "y": 2900,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200-2600.svg",
+        "x": 2600,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r2-c2.svg",
-        "x": 3200,
-        "y": 2900,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200-4000.svg",
+        "x": 4000,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r2-c3.svg",
-        "x": 4800,
-        "y": 2900,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200-5400.svg",
+        "x": 5400,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r2-c4.svg",
-        "x": 6400,
-        "y": 2900,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200-6800.svg",
+        "x": 6800,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r3-c0.svg",
-        "x": 0,
-        "y": 4350,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-200-8200.svg",
+        "x": 8200,
+        "y": 200,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r3-c1.svg",
-        "x": 1600,
-        "y": 4350,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-1600--1600.svg",
+        "x": -1600,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r3-c2.svg",
-        "x": 3200,
-        "y": 4350,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-1600--200.svg",
+        "x": -200,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r3-c3.svg",
-        "x": 4800,
-        "y": 4350,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-1600-1200.svg",
+        "x": 1200,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
       },
       {
-        "src": "ground-r3-c4.svg",
-        "x": 6400,
-        "y": 4350,
-        "width": 1600,
-        "height": 1450
+        "src": "expansion/ground-1600-2600.svg",
+        "x": 2600,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-1600-4000.svg",
+        "x": 4000,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-1600-5400.svg",
+        "x": 5400,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-1600-6800.svg",
+        "x": 6800,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-1600-8200.svg",
+        "x": 8200,
+        "y": 1600,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000--1600.svg",
+        "x": -1600,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000--200.svg",
+        "x": -200,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000-1200.svg",
+        "x": 1200,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000-2600.svg",
+        "x": 2600,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000-4000.svg",
+        "x": 4000,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000-5400.svg",
+        "x": 5400,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000-6800.svg",
+        "x": 6800,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-3000-8200.svg",
+        "x": 8200,
+        "y": 3000,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400--1600.svg",
+        "x": -1600,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400--200.svg",
+        "x": -200,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400-1200.svg",
+        "x": 1200,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400-2600.svg",
+        "x": 2600,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400-4000.svg",
+        "x": 4000,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400-5400.svg",
+        "x": 5400,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400-6800.svg",
+        "x": 6800,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-4400-8200.svg",
+        "x": 8200,
+        "y": 4400,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800--1600.svg",
+        "x": -1600,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800--200.svg",
+        "x": -200,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800-1200.svg",
+        "x": 1200,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800-2600.svg",
+        "x": 2600,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800-4000.svg",
+        "x": 4000,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800-5400.svg",
+        "x": 5400,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800-6800.svg",
+        "x": 6800,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
+      },
+      {
+        "src": "expansion/ground-5800-8200.svg",
+        "x": 8200,
+        "y": 5800,
+        "width": 1400,
+        "height": 1400
       }
     ]
   },
@@ -190,6 +386,62 @@
       "y": 1590,
       "width": 180,
       "height": 180
+    },
+    {
+      "src": "expansion/jetty.svg",
+      "x": 3910,
+      "y": 6605,
+      "width": 180,
+      "height": 650
+    },
+    {
+      "x": 3840,
+      "y": 270,
+      "width": 320,
+      "height": 410,
+      "src": "expansion/review-bridge-0.svg"
+    },
+    {
+      "x": 610,
+      "y": 2720,
+      "width": 360,
+      "height": 200,
+      "src": "expansion/review-bridge-1.svg"
+    },
+    {
+      "x": 3515,
+      "y": 4890,
+      "width": 250,
+      "height": 440,
+      "src": "expansion/review-bridge-2.svg"
+    },
+    {
+      "x": -585,
+      "y": 3070,
+      "width": 230,
+      "height": 430,
+      "src": "expansion/review-bridge-3.svg"
+    },
+    {
+      "x": -1230,
+      "y": 3165,
+      "width": 220,
+      "height": 430,
+      "src": "expansion/review-bridge-4.svg"
+    },
+    {
+      "x": 8250,
+      "y": 3330,
+      "width": 260,
+      "height": 450,
+      "src": "expansion/review-bridge-5.svg"
+    },
+    {
+      "x": 8970,
+      "y": 3530,
+      "width": 230,
+      "height": 460,
+      "src": "expansion/review-bridge-6.svg"
     }
   ],
   "flats": [
@@ -21553,6 +21805,4229 @@
       "flip": false,
       "zone": "rim",
       "sortY": 2538
+    },
+    {
+      "id": "community-home-story-0-0",
+      "name": "home-story-0",
+      "src": "expansion/home-story-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": -30,
+      "y": 170,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-1",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": -30,
+      "y": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-2",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -255,
+      "y": 240,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 240
+    },
+    {
+      "id": "community-storynest-3",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 200,
+      "y": 210,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 210
+    },
+    {
+      "id": "community-home-story-1-4",
+      "name": "home-story-1",
+      "src": "expansion/home-story-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 490,
+      "y": 130,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-5",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 490,
+      "y": 290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-6",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 265,
+      "y": 200,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 200
+    },
+    {
+      "id": "community-storynest-7",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 720,
+      "y": 170,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 170
+    },
+    {
+      "id": "community-home-story-2-8",
+      "name": "home-story-2",
+      "src": "expansion/home-story-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 1030,
+      "y": 190,
+      "scale": 1.03,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-9",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 1030,
+      "y": 350,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-10",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 805,
+      "y": 260,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 260
+    },
+    {
+      "id": "community-storynest-11",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1260,
+      "y": 230,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 230
+    },
+    {
+      "id": "community-home-story-0-12",
+      "name": "home-story-0",
+      "src": "expansion/home-story-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": -20,
+      "y": 1040,
+      "scale": 0.91,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-13",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": -20,
+      "y": 1200,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-14",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -245,
+      "y": 1110,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 1110
+    },
+    {
+      "id": "community-storynest-15",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 210,
+      "y": 1080,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1080
+    },
+    {
+      "id": "community-home-story-1-16",
+      "name": "home-story-1",
+      "src": "expansion/home-story-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 450,
+      "y": 1160,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-17",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 450,
+      "y": 1320,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-18",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 225,
+      "y": 1230,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 1230
+    },
+    {
+      "id": "community-storynest-19",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 680,
+      "y": 1200,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1200
+    },
+    {
+      "id": "community-home-story-2-20",
+      "name": "home-story-2",
+      "src": "expansion/home-story-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 940,
+      "y": 910,
+      "scale": 0.96,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-21",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 940,
+      "y": 1070,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-22",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 715,
+      "y": 980,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 980
+    },
+    {
+      "id": "community-storynest-23",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1170,
+      "y": 950,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 950
+    },
+    {
+      "id": "community-washing-line-24",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": -380,
+      "y": 850,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-home-maker-0-25",
+      "name": "home-maker-0",
+      "src": "expansion/home-maker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7510,
+      "y": 760,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-26",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7510,
+      "y": 920,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-27",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7285,
+      "y": 830,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 830
+    },
+    {
+      "id": "community-patchwing-28",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7740,
+      "y": 800,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 800
+    },
+    {
+      "id": "community-home-maker-1-29",
+      "name": "home-maker-1",
+      "src": "expansion/home-maker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7970,
+      "y": 710,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-30",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7970,
+      "y": 870,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-31",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7745,
+      "y": 780,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 780
+    },
+    {
+      "id": "community-patchwing-32",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8200,
+      "y": 750,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 750
+    },
+    {
+      "id": "community-home-maker-2-33",
+      "name": "home-maker-2",
+      "src": "expansion/home-maker-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8480,
+      "y": 790,
+      "scale": 1.03,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-34",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8480,
+      "y": 950,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-35",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 8255,
+      "y": 860,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 860
+    },
+    {
+      "id": "community-patchwing-36",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8710,
+      "y": 830,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 830
+    },
+    {
+      "id": "community-home-maker-0-37",
+      "name": "home-maker-0",
+      "src": "expansion/home-maker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7600,
+      "y": 1680,
+      "scale": 0.91,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-38",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7600,
+      "y": 1840,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-39",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7375,
+      "y": 1750,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1750
+    },
+    {
+      "id": "community-patchwing-40",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7830,
+      "y": 1720,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1720
+    },
+    {
+      "id": "community-home-maker-1-41",
+      "name": "home-maker-1",
+      "src": "expansion/home-maker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8110,
+      "y": 1700,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-42",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8110,
+      "y": 1860,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-43",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7885,
+      "y": 1770,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1770
+    },
+    {
+      "id": "community-patchwing-44",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8340,
+      "y": 1740,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1740
+    },
+    {
+      "id": "community-home-maker-2-45",
+      "name": "home-maker-2",
+      "src": "expansion/home-maker-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8620,
+      "y": 1740,
+      "scale": 0.96,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-46",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8620,
+      "y": 1900,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-47",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 8395,
+      "y": 1810,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1810
+    },
+    {
+      "id": "community-patchwing-48",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8850,
+      "y": 1780,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1780
+    },
+    {
+      "id": "community-washing-line-49",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": 8970,
+      "y": 1970,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-home-grower-0-50",
+      "name": "home-grower-0",
+      "src": "expansion/home-grower-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 250,
+      "y": 4920,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-51",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 250,
+      "y": 5080,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-52",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 25,
+      "y": 4990,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 4990
+    },
+    {
+      "id": "community-sproutshare-53",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 480,
+      "y": 4960,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4960
+    },
+    {
+      "id": "community-home-grower-1-54",
+      "name": "home-grower-1",
+      "src": "expansion/home-grower-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 770,
+      "y": 4890,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-55",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 770,
+      "y": 5050,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-56",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 545,
+      "y": 4960,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 4960
+    },
+    {
+      "id": "community-sproutshare-57",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1000,
+      "y": 4930,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4930
+    },
+    {
+      "id": "community-home-grower-2-58",
+      "name": "home-grower-2",
+      "src": "expansion/home-grower-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 1280,
+      "y": 4970,
+      "scale": 1.03,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-59",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 1280,
+      "y": 5130,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-60",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 1055,
+      "y": 5040,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5040
+    },
+    {
+      "id": "community-sproutshare-61",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1510,
+      "y": 5010,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5010
+    },
+    {
+      "id": "community-home-grower-0-62",
+      "name": "home-grower-0",
+      "src": "expansion/home-grower-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 420,
+      "y": 5810,
+      "scale": 0.91,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-63",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 420,
+      "y": 5970,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-64",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 195,
+      "y": 5880,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5880
+    },
+    {
+      "id": "community-sproutshare-65",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 650,
+      "y": 5850,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5850
+    },
+    {
+      "id": "community-home-grower-1-66",
+      "name": "home-grower-1",
+      "src": "expansion/home-grower-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 970,
+      "y": 5780,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-67",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 970,
+      "y": 5940,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-68",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 745,
+      "y": 5850,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5850
+    },
+    {
+      "id": "community-sproutshare-69",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1200,
+      "y": 5820,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5820
+    },
+    {
+      "id": "community-washing-line-70",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": -240,
+      "y": 5700,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-home-baker-0-71",
+      "name": "home-baker-0",
+      "src": "expansion/home-baker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7000,
+      "y": 4900,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-72",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7000,
+      "y": 5060,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-73",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 6775,
+      "y": 4970,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 4970
+    },
+    {
+      "id": "community-lanternloaf-74",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7230,
+      "y": 4940,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4940
+    },
+    {
+      "id": "community-home-baker-1-75",
+      "name": "home-baker-1",
+      "src": "expansion/home-baker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7500,
+      "y": 4860,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-76",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7500,
+      "y": 5020,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-77",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7275,
+      "y": 4930,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 4930
+    },
+    {
+      "id": "community-lanternloaf-78",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7730,
+      "y": 4900,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4900
+    },
+    {
+      "id": "community-home-baker-2-79",
+      "name": "home-baker-2",
+      "src": "expansion/home-baker-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8000,
+      "y": 4940,
+      "scale": 1.03,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-80",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8000,
+      "y": 5100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-81",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7775,
+      "y": 5010,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5010
+    },
+    {
+      "id": "community-lanternloaf-82",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8230,
+      "y": 4980,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4980
+    },
+    {
+      "id": "community-home-baker-0-83",
+      "name": "home-baker-0",
+      "src": "expansion/home-baker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7150,
+      "y": 5800,
+      "scale": 0.91,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-84",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7150,
+      "y": 5960,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-85",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 6925,
+      "y": 5870,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5870
+    },
+    {
+      "id": "community-lanternloaf-86",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7380,
+      "y": 5840,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5840
+    },
+    {
+      "id": "community-home-baker-1-87",
+      "name": "home-baker-1",
+      "src": "expansion/home-baker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7680,
+      "y": 5770,
+      "scale": 1.12,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-88",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7680,
+      "y": 5930,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-89",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7455,
+      "y": 5840,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5840
+    },
+    {
+      "id": "community-lanternloaf-90",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7910,
+      "y": 5810,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5810
+    },
+    {
+      "id": "community-washing-line-91",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": 8150,
+      "y": 6050,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-storynest-92",
+      "name": "Round pavilion",
+      "src": "detail/pavilion.svg",
+      "x": 1400,
+      "y": 540,
+      "width": 561,
+      "height": 680,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 540
+    },
+    {
+      "id": "community-storynest-93",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 220,
+      "y": 570,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 570
+    },
+    {
+      "id": "community-storynest-94",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 1010,
+      "y": 620,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 620
+    },
+    {
+      "id": "community-storynest-95",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": -440,
+      "y": 450,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 450
+    },
+    {
+      "id": "community-storynest-96",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 1590,
+      "y": 780,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 780
+    },
+    {
+      "id": "community-storynest-97",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -520,
+      "y": 560,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 560
+    },
+    {
+      "id": "community-storynest-98",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 1740,
+      "y": 450,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 450
+    },
+    {
+      "id": "community-storynest-99",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -450,
+      "y": 1060,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1060
+    },
+    {
+      "id": "community-storynest-100",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 1780,
+      "y": 720,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 720
+    },
+    {
+      "id": "community-storynest-101",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 520,
+      "y": 590,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.32,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 590
+    },
+    {
+      "id": "community-storynest-102",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 740,
+      "y": 580,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.2,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 580
+    },
+    {
+      "id": "community-storynest-103",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 650,
+      "y": -250,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.95,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": -250
+    },
+    {
+      "id": "community-storynest-104",
+      "name": "Flower rim planter",
+      "src": "detail/community-rim-planter.svg",
+      "x": 1190,
+      "y": 570,
+      "width": 534,
+      "height": 795,
+      "scale": 0.175,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 570
+    },
+    {
+      "id": "community-storynest-105",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 1050,
+      "y": 1460,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1460
+    },
+    {
+      "id": "community-book-exchange-106",
+      "name": "book-exchange",
+      "src": "expansion/book-exchange.svg",
+      "width": 190,
+      "height": 255,
+      "x": 580,
+      "y": 240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-binding-desk-107",
+      "name": "binding-desk",
+      "src": "expansion/binding-desk.svg",
+      "width": 390,
+      "height": 235,
+      "x": 1450,
+      "y": 790,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-patchwing-108",
+      "name": "Lavender stall",
+      "src": "detail/lavender-stall.svg",
+      "x": 7450,
+      "y": 2390,
+      "width": 656,
+      "height": 593,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.51,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2390
+    },
+    {
+      "id": "community-patchwing-109",
+      "name": "Game table",
+      "src": "detail/game-table.svg",
+      "x": 7920,
+      "y": 1460,
+      "width": 670,
+      "height": 432,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.38,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1460
+    },
+    {
+      "id": "community-patchwing-110",
+      "name": "Hangout canopy",
+      "src": "detail/canopy-sofa.svg",
+      "x": 8150,
+      "y": 2200,
+      "width": 643,
+      "height": 616,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.487,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2200
+    },
+    {
+      "id": "community-patchwing-111",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 7610,
+      "y": 2170,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing",
+      "flip": false,
+      "sortY": 2170
+    },
+    {
+      "id": "community-patchwing-112",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 7650,
+      "y": 2250,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing",
+      "flip": false,
+      "sortY": 2250
+    },
+    {
+      "id": "community-patchwing-113",
+      "name": "Cocoa supplies",
+      "src": "detail/community-barrel.svg",
+      "x": 8450,
+      "y": 2180,
+      "width": 72,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing",
+      "flip": false,
+      "sortY": 2180
+    },
+    {
+      "id": "community-patchwing-114",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 7120,
+      "y": 1250,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1250
+    },
+    {
+      "id": "community-patchwing-115",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 8930,
+      "y": 2130,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2130
+    },
+    {
+      "id": "community-patchwing-116",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 6950,
+      "y": 520,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 520
+    },
+    {
+      "id": "community-patchwing-117",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8890,
+      "y": 1080,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1080
+    },
+    {
+      "id": "community-patchwing-118",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8970,
+      "y": 2420,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2420
+    },
+    {
+      "id": "community-patchwing-119",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 7510,
+      "y": 2780,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 2780
+    },
+    {
+      "id": "community-patchwing-120",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 8480,
+      "y": 1330,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1330
+    },
+    {
+      "id": "community-patchwing-121",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 7960,
+      "y": 140,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.95,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 140
+    },
+    {
+      "id": "community-patchwing-122",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7230,
+      "y": 2570,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 2570
+    },
+    {
+      "id": "community-patchwing-123",
+      "name": "Flower rim planter",
+      "src": "detail/community-rim-planter.svg",
+      "x": 8360,
+      "y": 2240,
+      "width": 534,
+      "height": 795,
+      "scale": 0.175,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2240
+    },
+    {
+      "id": "community-patchwing-124",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 7430,
+      "y": 2590,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2590
+    },
+    {
+      "id": "community-craft-table-125",
+      "name": "craft-table",
+      "src": "expansion/craft-table.svg",
+      "width": 360,
+      "height": 190,
+      "x": 7810,
+      "y": 2240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-craft-table-126",
+      "name": "craft-table",
+      "src": "expansion/craft-table.svg",
+      "width": 360,
+      "height": 190,
+      "x": 8170,
+      "y": 2520,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-sproutshare-127",
+      "name": "Lavender stall",
+      "src": "detail/lavender-stall.svg",
+      "x": -170,
+      "y": 5390,
+      "width": 656,
+      "height": 593,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.51,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5390
+    },
+    {
+      "id": "community-sproutshare-128",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 380,
+      "y": 5380,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5380
+    },
+    {
+      "id": "community-sproutshare-129",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 1280,
+      "y": 5390,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5390
+    },
+    {
+      "id": "community-sproutshare-130",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": -250,
+      "y": 4780,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4780
+    },
+    {
+      "id": "community-sproutshare-131",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 1840,
+      "y": 5680,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5680
+    },
+    {
+      "id": "community-sproutshare-132",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -450,
+      "y": 4620,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4620
+    },
+    {
+      "id": "community-sproutshare-133",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 2210,
+      "y": 5350,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5350
+    },
+    {
+      "id": "community-sproutshare-134",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 1900,
+      "y": 6000,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 6000
+    },
+    {
+      "id": "community-sproutshare-135",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 380,
+      "y": 5780,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5780
+    },
+    {
+      "id": "community-sproutshare-136",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": -40,
+      "y": 5460,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare",
+      "flip": false,
+      "sortY": 5460
+    },
+    {
+      "id": "community-sproutshare-137",
+      "name": "Cocoa supplies",
+      "src": "detail/community-barrel.svg",
+      "x": -300,
+      "y": 5520,
+      "width": 72,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare",
+      "flip": false,
+      "sortY": 5520
+    },
+    {
+      "id": "community-sproutshare-138",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 1750,
+      "y": 5540,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5540
+    },
+    {
+      "id": "community-sproutshare-139",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 760,
+      "y": 4520,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.8,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4520
+    },
+    {
+      "id": "community-sproutshare-140",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 2030,
+      "y": 6410,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 6410
+    },
+    {
+      "id": "community-seed-shed-141",
+      "name": "seed-shed",
+      "src": "expansion/seed-shed.svg",
+      "width": 380,
+      "height": 335,
+      "x": 2040,
+      "y": 5520,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-1-142",
+      "name": "raised-bed-1",
+      "src": "expansion/raised-bed-1.svg",
+      "width": 270,
+      "height": 140,
+      "x": 1810,
+      "y": 5830,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-2-143",
+      "name": "raised-bed-2",
+      "src": "expansion/raised-bed-2.svg",
+      "width": 270,
+      "height": 140,
+      "x": 2150,
+      "y": 5830,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-3-144",
+      "name": "raised-bed-3",
+      "src": "expansion/raised-bed-3.svg",
+      "width": 270,
+      "height": 140,
+      "x": 1810,
+      "y": 6090,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-4-145",
+      "name": "raised-bed-4",
+      "src": "expansion/raised-bed-4.svg",
+      "width": 270,
+      "height": 140,
+      "x": 2150,
+      "y": 6090,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-lanternloaf-146",
+      "name": "Cocoa cart",
+      "src": "detail/cocoa-cart.svg",
+      "x": 6400,
+      "y": 5700,
+      "width": 683,
+      "height": 668,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.45,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5700
+    },
+    {
+      "id": "community-lanternloaf-147",
+      "name": "Lavender stall",
+      "src": "detail/lavender-stall.svg",
+      "x": 8190,
+      "y": 5500,
+      "width": 656,
+      "height": 593,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.51,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5500
+    },
+    {
+      "id": "community-lanternloaf-148",
+      "name": "Hangout canopy",
+      "src": "detail/canopy-sofa.svg",
+      "x": 7350,
+      "y": 5290,
+      "width": 643,
+      "height": 616,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.487,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5290
+    },
+    {
+      "id": "community-lanternloaf-149",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 6970,
+      "y": 5330,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5330
+    },
+    {
+      "id": "community-lanternloaf-150",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 7790,
+      "y": 5340,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5340
+    },
+    {
+      "id": "community-lanternloaf-151",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 7310,
+      "y": 5450,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.32,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5450
+    },
+    {
+      "id": "community-lanternloaf-152",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 8330,
+      "y": 5530,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf",
+      "flip": false,
+      "sortY": 5530
+    },
+    {
+      "id": "community-lanternloaf-153",
+      "name": "Cocoa supplies",
+      "src": "detail/community-barrel.svg",
+      "x": 8320,
+      "y": 5450,
+      "width": 72,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf",
+      "flip": false,
+      "sortY": 5450
+    },
+    {
+      "id": "community-lanternloaf-154",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 6470,
+      "y": 5400,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5400
+    },
+    {
+      "id": "community-lanternloaf-155",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 8270,
+      "y": 5760,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5760
+    },
+    {
+      "id": "community-lanternloaf-156",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 6220,
+      "y": 5480,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5480
+    },
+    {
+      "id": "community-lanternloaf-157",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8420,
+      "y": 4880,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 4880
+    },
+    {
+      "id": "community-lanternloaf-158",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8030,
+      "y": 5860,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5860
+    },
+    {
+      "id": "community-lanternloaf-159",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 6480,
+      "y": 5720,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5720
+    },
+    {
+      "id": "community-lanternloaf-160",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 7390,
+      "y": 4510,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.95,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4510
+    },
+    {
+      "id": "community-lanternloaf-161",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 6780,
+      "y": 5950,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5950
+    },
+    {
+      "id": "community-lanternloaf-162",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7780,
+      "y": 5990,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5990
+    },
+    {
+      "id": "community-lanternloaf-163",
+      "name": "Flower rim planter",
+      "src": "detail/community-rim-planter.svg",
+      "x": 7500,
+      "y": 5400,
+      "width": 534,
+      "height": 795,
+      "scale": 0.175,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5400
+    },
+    {
+      "id": "community-lanternloaf-164",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 6280,
+      "y": 5780,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5780
+    },
+    {
+      "id": "community-bakehouse-165",
+      "name": "bakehouse",
+      "src": "expansion/bakehouse.svg",
+      "width": 520,
+      "height": 480,
+      "x": 8530,
+      "y": 5340,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-commons-166",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 2280,
+      "y": -250,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -250
+    },
+    {
+      "id": "community-commons-167",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 2500,
+      "y": -420,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -420
+    },
+    {
+      "id": "community-commons-168",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 2860,
+      "y": -250,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -250
+    },
+    {
+      "id": "community-commons-169",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 5180,
+      "y": -390,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -390
+    },
+    {
+      "id": "community-commons-170",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 5440,
+      "y": -480,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -480
+    },
+    {
+      "id": "community-commons-171",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 5840,
+      "y": -300,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -300
+    },
+    {
+      "id": "community-commons-172",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 3900,
+      "y": -350,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -350
+    },
+    {
+      "id": "community-commons-173",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 4400,
+      "y": -350,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -350
+    },
+    {
+      "id": "community-commons-174",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 3650,
+      "y": -320,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -320
+    },
+    {
+      "id": "community-commons-175",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 4050,
+      "y": 200,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 200
+    },
+    {
+      "id": "community-commons-176",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -530,
+      "y": 2120,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 2120
+    },
+    {
+      "id": "community-commons-177",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": -780,
+      "y": 2520,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2520
+    },
+    {
+      "id": "community-commons-178",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -450,
+      "y": 3100,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3100
+    },
+    {
+      "id": "community-commons-179",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": -650,
+      "y": 2900,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2900
+    },
+    {
+      "id": "community-commons-180",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -380,
+      "y": 3900,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3900
+    },
+    {
+      "id": "community-commons-181",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": -680,
+      "y": 4150,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4150
+    },
+    {
+      "id": "community-commons-182",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8330,
+      "y": 3410,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3410
+    },
+    {
+      "id": "community-commons-183",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8610,
+      "y": 3670,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3670
+    },
+    {
+      "id": "community-commons-184",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8380,
+      "y": 4110,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4110
+    },
+    {
+      "id": "community-commons-185",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 8520,
+      "y": 3910,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3910
+    },
+    {
+      "id": "community-commons-186",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 2910,
+      "y": 5640,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5640
+    },
+    {
+      "id": "community-commons-187",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 3220,
+      "y": 5840,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5840
+    },
+    {
+      "id": "community-commons-188",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 5010,
+      "y": 5740,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5740
+    },
+    {
+      "id": "community-commons-189",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 5310,
+      "y": 5890,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5890
+    },
+    {
+      "id": "community-commons-190",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 4280,
+      "y": 6100,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 6100
+    },
+    {
+      "id": "community-commons-191",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 3860,
+      "y": 6390,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 6390
+    },
+    {
+      "id": "community-commons-192",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 4160,
+      "y": 6390,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 6390
+    },
+    {
+      "id": "community-commons-193",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 3690,
+      "y": 6370,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 6370
+    },
+    {
+      "id": "community-commons-194",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 4310,
+      "y": 6370,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 6370
+    },
+    {
+      "id": "community-commons-195",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 4100,
+      "y": 5880,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5880
+    },
+    {
+      "id": "review-orchard-196",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3200,
+      "y": -260,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-197",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3560,
+      "y": -410,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-198",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3900,
+      "y": -280,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-199",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 4610,
+      "y": -280,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-200",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 4850,
+      "y": -390,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-201",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": -160,
+      "y": 2050,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-202",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": -460,
+      "y": 2290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-203",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 90,
+      "y": 2400,
+      "scale": 0.88,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-204",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 2700,
+      "y": 5310,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-205",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3020,
+      "y": 5410,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-206",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3260,
+      "y": 5380,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-207",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 3460,
+      "y": -120,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -120
+    },
+    {
+      "id": "review-208",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 4410,
+      "y": -420,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.38,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -420
+    },
+    {
+      "id": "review-209",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 4230,
+      "y": -380,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.22,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -380
+    },
+    {
+      "id": "review-210",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 4720,
+      "y": -70,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": -70
+    },
+    {
+      "id": "review-211",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 3100,
+      "y": -20,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -20
+    },
+    {
+      "id": "review-212",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": -400,
+      "y": 2530,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2530
+    },
+    {
+      "id": "review-213",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -250,
+      "y": 2410,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2410
+    },
+    {
+      "id": "review-214",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 90,
+      "y": 2220,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2220
+    },
+    {
+      "id": "review-215",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": -500,
+      "y": 1940,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.26,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 1940
+    },
+    {
+      "id": "review-216",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 250,
+      "y": 2580,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 2580
+    },
+    {
+      "id": "review-217",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 2850,
+      "y": 5600,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.42,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5600
+    },
+    {
+      "id": "review-218",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 3080,
+      "y": 5630,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.24,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5630
+    },
+    {
+      "id": "review-219",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 2660,
+      "y": 5540,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": 5540
+    },
+    {
+      "id": "review-220",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 3300,
+      "y": 5600,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5600
+    },
+    {
+      "id": "review-221",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 3130,
+      "y": 5830,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5830
+    },
+    {
+      "id": "review-222",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 4950,
+      "y": 5110,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.65,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5110
+    },
+    {
+      "id": "review-223",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 5790,
+      "y": 5290,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.62,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5290
+    },
+    {
+      "id": "review-224",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 5340,
+      "y": 5470,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5470
+    },
+    {
+      "id": "review-225",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 5700,
+      "y": 5500,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.36,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5500
+    },
+    {
+      "id": "review-226",
+      "name": "Pond reeds",
+      "src": "detail/pond-reeds.svg",
+      "x": 5140,
+      "y": 5330,
+      "width": 90,
+      "height": 105,
+      "scale": 0.4,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": 5330
+    },
+    {
+      "id": "review-227",
+      "name": "Pond reeds",
+      "src": "detail/pond-reeds.svg",
+      "x": 5530,
+      "y": 5150,
+      "width": 90,
+      "height": 105,
+      "scale": 0.36,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": 5150
+    },
+    {
+      "id": "review-228",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8850,
+      "y": 4270,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.62,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4270
+    },
+    {
+      "id": "review-229",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 9160,
+      "y": 4620,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.65,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4620
+    },
+    {
+      "id": "review-230",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 8780,
+      "y": 4510,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.36,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4510
+    },
+    {
+      "id": "review-231",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 8590,
+      "y": 4500,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.22,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4500
+    },
+    {
+      "id": "review-232",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 8650,
+      "y": 4700,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4700
+    },
+    {
+      "id": "review-233",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 9040,
+      "y": 4740,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4740
+    },
+    {
+      "id": "review-234",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": -610,
+      "y": 3090,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3090
+    },
+    {
+      "id": "review-235",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -700,
+      "y": 3160,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3160
+    },
+    {
+      "id": "review-236",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 8580,
+      "y": 3380,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3380
+    },
+    {
+      "id": "review-237",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 8660,
+      "y": 3450,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3450
+    },
+    {
+      "id": "dense-storynest well",
+      "name": "storynest well",
+      "src": "expansion/shared-well.svg",
+      "x": 790,
+      "y": 530,
+      "width": 174,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "dense-patchwing well",
+      "name": "patchwing well",
+      "src": "expansion/shared-well.svg",
+      "x": 8200,
+      "y": 1190,
+      "width": 174,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "dense-sproutshare well",
+      "name": "sproutshare well",
+      "src": "expansion/shared-well.svg",
+      "x": 1040,
+      "y": 5350,
+      "width": 174,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "dense-lanternloaf well",
+      "name": "lanternloaf well",
+      "src": "expansion/shared-well.svg",
+      "x": 7990,
+      "y": 5380,
+      "width": 174,
+      "height": 180,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "dense-storynest orchard -180",
+      "name": "storynest orchard -180",
+      "src": "expansion/orchard-tree.svg",
+      "x": -180,
+      "y": 0,
+      "width": 310,
+      "height": 440,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "dense-storynest orchard 220",
+      "name": "storynest orchard 220",
+      "src": "expansion/orchard-tree.svg",
+      "x": 220,
+      "y": -310,
+      "width": 310,
+      "height": 440,
+      "scale": 0.95,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "dense-storynest orchard 660",
+      "name": "storynest orchard 660",
+      "src": "expansion/orchard-tree.svg",
+      "x": 660,
+      "y": -290,
+      "width": 310,
+      "height": 440,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "dense-storynest orchard 1110",
+      "name": "storynest orchard 1110",
+      "src": "expansion/orchard-tree.svg",
+      "x": 1110,
+      "y": -210,
+      "width": 310,
+      "height": 440,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "dense-patchwing orchard 9060",
+      "name": "patchwing orchard 9060",
+      "src": "expansion/orchard-tree.svg",
+      "x": 9060,
+      "y": 1030,
+      "width": 310,
+      "height": 440,
+      "scale": 0.86,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "dense-patchwing orchard 9160",
+      "name": "patchwing orchard 9160",
+      "src": "expansion/orchard-tree.svg",
+      "x": 9160,
+      "y": 1480,
+      "width": 310,
+      "height": 440,
+      "scale": 0.95,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "dense-patchwing orchard 9180",
+      "name": "patchwing orchard 9180",
+      "src": "expansion/orchard-tree.svg",
+      "x": 9180,
+      "y": 1880,
+      "width": 310,
+      "height": 440,
+      "scale": 0.86,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "dense-sproutshare orchard 350",
+      "name": "sproutshare orchard 350",
+      "src": "expansion/orchard-tree.svg",
+      "x": 350,
+      "y": 6330,
+      "width": 310,
+      "height": 440,
+      "scale": 0.86,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "dense-sproutshare orchard 760",
+      "name": "sproutshare orchard 760",
+      "src": "expansion/orchard-tree.svg",
+      "x": 760,
+      "y": 6470,
+      "width": 310,
+      "height": 440,
+      "scale": 0.95,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "dense-sproutshare orchard 1190",
+      "name": "sproutshare orchard 1190",
+      "src": "expansion/orchard-tree.svg",
+      "x": 1190,
+      "y": 6410,
+      "width": 310,
+      "height": 440,
+      "scale": 0.86,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "dense-sproutshare orchard 1610",
+      "name": "sproutshare orchard 1610",
+      "src": "expansion/orchard-tree.svg",
+      "x": 1610,
+      "y": 6500,
+      "width": 310,
+      "height": 440,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "dense-lanternloaf orchard 6820",
+      "name": "lanternloaf orchard 6820",
+      "src": "expansion/orchard-tree.svg",
+      "x": 6820,
+      "y": 6380,
+      "width": 310,
+      "height": 440,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "dense-lanternloaf orchard 7240",
+      "name": "lanternloaf orchard 7240",
+      "src": "expansion/orchard-tree.svg",
+      "x": 7240,
+      "y": 6460,
+      "width": 310,
+      "height": 440,
+      "scale": 0.95,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "dense-lanternloaf orchard 7690",
+      "name": "lanternloaf orchard 7690",
+      "src": "expansion/orchard-tree.svg",
+      "x": 7690,
+      "y": 6360,
+      "width": 310,
+      "height": 440,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "dense-story herbs",
+      "name": "story herbs",
+      "src": "expansion/raised-bed-1.svg",
+      "x": -360,
+      "y": 1400,
+      "width": 270,
+      "height": 140,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "dense-maker dye plants",
+      "name": "maker dye plants",
+      "src": "expansion/raised-bed-1.svg",
+      "x": 8740,
+      "y": 2630,
+      "width": 270,
+      "height": 140,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "dense-bakery herbs",
+      "name": "bakery herbs",
+      "src": "expansion/raised-bed-1.svg",
+      "x": 6530,
+      "y": 6120,
+      "width": 270,
+      "height": 140,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
     }
   ],
   "paletteVersion": 3,
@@ -21561,5 +26036,9 @@
     "x": 4000,
     "y": 2640,
     "scale": 1
+  },
+  "origin": {
+    "x": -2400,
+    "y": -2000
   }
 }

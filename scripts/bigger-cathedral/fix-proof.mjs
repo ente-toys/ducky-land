@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import sharp from 'sharp';
+import {A,OUT,svg} from './design.mjs';
+import {render} from './render.mjs';
+const read=p=>JSON.parse(fs.readFileSync(p)),D='rive/web/themes/cathedral/';
+const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
+fs.mkdirSync(OUT+'/cathedral-fixed-crops',{recursive:true});
+await sharp(await render(art,{x:-2200,y:-2400,k:.12,width:1536,height:1248,world,walk,harbor})).toFile(OUT+'/cathedral-fixed.png');
+const crops=[['bridge-river',1425,1590,1400,1000],['road-junction',5200,340,1400,1000],['community',3800,-380,2000,1600],['lane',8000,1650,1400,1000],['olive-brook',1920,30,1400,1000],['tessera-brook',6800,5300,1400,1000]];
+for(const [name,x,y,width,height]of crops)await sharp(await render(art,{x:x-width/1.6,y:y-height/1.6,k:.8,width,height,world,walk,harbor})).toFile(OUT+'/cathedral-fixed-crops/'+name+'.png');
+const ref=await sharp(OUT+'/../cursor-camp-paths-ref.jpg').resize(700,500,{fit:'contain',background:'#F7EAC2'}).png().toBuffer();
+const junction=await sharp(OUT+'/cathedral-fixed-crops/road-junction.png').resize(700,500).png().toBuffer();
+const lane=await sharp(OUT+'/cathedral-fixed-crops/lane.png').resize(700,500).png().toBuffer();
+await sharp({create:{width:2100,height:550,channels:4,background:'#F7EAC2'}}).composite([{input:ref,left:0,top:50},{input:junction,left:700,top:50},{input:lane,left:1400,top:50},{input:Buffer.from(svg(2100,50,'<g font-family="Georgia" font-size="23" fill="#515332" text-anchor="middle"><text x="350" y="32">CURSOR CAMP REFERENCE</text><text x="1050" y="32">FIXED JUNCTION</text><text x="1750" y="32">FIXED TESSERA LANE</text></g>')),left:0,top:0}]).png().toFile(OUT+'/cathedral-fixed-paths-vs-reference.png');
+console.log('Saved fixed overview, six crops at 0.8 px/unit, and path reference comparison.');

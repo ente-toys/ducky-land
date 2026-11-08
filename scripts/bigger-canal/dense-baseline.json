@@ -1,0 +1,178 @@
+{
+  "sourceCommit": "004b1b3f",
+  "preserved": {
+    "rive/web/themes/canal/world.json": {
+      "width": "e1b9c8731585bef2f9226397155c207bddc584d1664772da3c66d9d07b0b042e",
+      "height": "8597f1e3043654da36e26467d59c6c6bbc9c44d498cc15ab2f91fc84440bbc35",
+      "origin": "413f7ab258238fbb51ebea6d1ee7457125e67680224c77d6ea6d174b1d04e581",
+      "coast": "fd936360d55589219bd5c8924de09680ddb30e59470cf0bd2ee6ff4ba33eb265",
+      "boatCoast": "1618611d439e91a63d8680bd4ea4bd7d4c4798a1916e282ee3be51d7cfcc0b6f",
+      "coastRings": "e0999ac57b4e8f423074e735aa866a227fda736861fc67dca66f552a66d42d87",
+      "water": "dcb90abf31ea111c47a237b2800aa5ef22f64168ca38e634805d6887d9ec4894",
+      "bridges": "87e7e608ccbbcb67141a64e46027dc8f244ef0f14c04a8c38889e94a87d01a42",
+      "walkways": "9dbdee8ed1819692f6956fa855b69e3ca222adeb59ac8c09cb63836dac96db9a",
+      "centrePlacement": "cae021a4930c3ce23d84b6459af94878fbd62cd44cd64ba30644979d6a508c79",
+      "sleepSpots": "34b00214ae49883286e873108d7c59858f84a078bcc5d10dcf55d557e98bd605",
+      "zones": "8b95e4867c3f1db8232b70e8faaeec887ace32f35c41f0c35cc2b07f958fde04"
+    },
+    "rive/web/themes/canal/walk-world.json": {
+      "width": "e1b9c8731585bef2f9226397155c207bddc584d1664772da3c66d9d07b0b042e",
+      "height": "8597f1e3043654da36e26467d59c6c6bbc9c44d498cc15ab2f91fc84440bbc35",
+      "origin": "413f7ab258238fbb51ebea6d1ee7457125e67680224c77d6ea6d174b1d04e581",
+      "coast": "fd936360d55589219bd5c8924de09680ddb30e59470cf0bd2ee6ff4ba33eb265",
+      "boatCoast": "1618611d439e91a63d8680bd4ea4bd7d4c4798a1916e282ee3be51d7cfcc0b6f",
+      "coastRings": "e0999ac57b4e8f423074e735aa866a227fda736861fc67dca66f552a66d42d87",
+      "water": "dcb90abf31ea111c47a237b2800aa5ef22f64168ca38e634805d6887d9ec4894",
+      "bridges": "87e7e608ccbbcb67141a64e46027dc8f244ef0f14c04a8c38889e94a87d01a42",
+      "walkways": "24d41782b71f98c4e07b8250dd3f99b87c2f65c82f204ac3db4b066b03782299"
+    },
+    "rive/web/themes/canal/harbor.json": {
+      "jetty": "48b86537af6cec4f9916c8afdbe9686c85c01a84a77fe15ef9ac5dc2b7cfaa80",
+      "spawn": "71201e8d9d4b992e7384f7062d4088d3b0d46d4d891e53bb2b4411985f15b431",
+      "water": "bd538d7533edca41c548632d8ce58f560c21dfbb0b0835051721344f851ad071",
+      "boats": "e0692fee4ce9f3f8f2f6f77cc9bf993504314a556bce45b8bb88d35baf84a13f"
+    }
+  },
+  "homes": [
+    {
+      "id": "comm-skipper-home",
+      "x": -1250,
+      "y": 950
+    },
+    {
+      "id": "comm-sailmaker-home",
+      "x": -450,
+      "y": 1150
+    },
+    {
+      "id": "comm-keel-home",
+      "x": -150,
+      "y": 1030
+    },
+    {
+      "id": "comm-ropemaker-home",
+      "x": 100,
+      "y": 1640
+    },
+    {
+      "id": "comm-tiller-home",
+      "x": -1100,
+      "y": 1860
+    },
+    {
+      "id": "comm-primrose-home",
+      "x": 3000,
+      "y": -850
+    },
+    {
+      "id": "comm-marigold-home",
+      "x": 3550,
+      "y": -1200
+    },
+    {
+      "id": "comm-violet-home",
+      "x": 4200,
+      "y": -1070
+    },
+    {
+      "id": "comm-daisy-home",
+      "x": 4800,
+      "y": -750
+    },
+    {
+      "id": "comm-blossom-home",
+      "x": 3200,
+      "y": -290
+    },
+    {
+      "id": "comm-cowrie-home",
+      "x": 8400,
+      "y": 1620
+    },
+    {
+      "id": "comm-pearl-home",
+      "x": 8950,
+      "y": 1260
+    },
+    {
+      "id": "comm-scallop-home",
+      "x": 9500,
+      "y": 1700
+    },
+    {
+      "id": "comm-conch-home",
+      "x": 9650,
+      "y": 2480
+    },
+    {
+      "id": "comm-button-home",
+      "x": 8300,
+      "y": 2600
+    },
+    {
+      "id": "comm-rush-home",
+      "x": 1050,
+      "y": 5800
+    },
+    {
+      "id": "comm-willow-home",
+      "x": 1600,
+      "y": 5660
+    },
+    {
+      "id": "comm-osier-home",
+      "x": 2200,
+      "y": 5750
+    },
+    {
+      "id": "comm-basket-home",
+      "x": 2870,
+      "y": 6190
+    },
+    {
+      "id": "comm-wren-home",
+      "x": 1200,
+      "y": 6630
+    },
+    {
+      "id": "comm-quay-a",
+      "x": -1450,
+      "y": 1550
+    },
+    {
+      "id": "comm-quay-b",
+      "x": -150,
+      "y": 250
+    },
+    {
+      "id": "comm-petal-a",
+      "x": 2600,
+      "y": -550
+    },
+    {
+      "id": "comm-petal-b",
+      "x": 5100,
+      "y": -1150
+    },
+    {
+      "id": "comm-pearl-a",
+      "x": 8050,
+      "y": 2250
+    },
+    {
+      "id": "comm-pearl-b",
+      "x": 9200,
+      "y": 1200
+    },
+    {
+      "id": "comm-reed-a",
+      "x": 700,
+      "y": 6400
+    },
+    {
+      "id": "comm-reed-b",
+      "x": 3400,
+      "y": 6100
+    }
+  ]
+}

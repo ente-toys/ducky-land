@@ -1,0 +1,6 @@
+{
+  "checked": 1241414,
+  "different": 4133,
+  "maxDelta": 11,
+  "method": "Actual production tile assembly vs untouched original at 0.25 px/unit, opaque dry interior with 20-unit coast inset. Ground comparison only; prop records are separately deep-equal tested."
+}

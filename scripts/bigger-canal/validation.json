@@ -1,0 +1,688 @@
+{
+  "passed": true,
+  "fails": [],
+  "checks": [
+    {
+      "name": "zone plaza",
+      "point": [
+        4000,
+        3685.5
+      ],
+      "pass": true,
+      "route": 1
+    },
+    {
+      "name": "zone centre",
+      "point": [
+        4000,
+        3685.5
+      ],
+      "pass": true,
+      "route": 1
+    },
+    {
+      "name": "zone market",
+      "point": [
+        4000,
+        3010
+      ],
+      "pass": true,
+      "route": 16
+    },
+    {
+      "name": "zone harbor",
+      "point": [
+        1650,
+        1680
+      ],
+      "pass": true,
+      "route": 24
+    },
+    {
+      "name": "zone beach",
+      "point": [
+        6590,
+        4380
+      ],
+      "pass": true,
+      "route": 28
+    },
+    {
+      "name": "zone activity-1",
+      "point": [
+        1450,
+        3300
+      ],
+      "pass": true,
+      "route": 13
+    },
+    {
+      "name": "zone activity-2",
+      "point": [
+        4900,
+        1140
+      ],
+      "pass": true,
+      "route": 31
+    },
+    {
+      "name": "zone activity-3",
+      "point": [
+        6500,
+        3800
+      ],
+      "pass": true,
+      "route": 27
+    },
+    {
+      "name": "zone stalls-1",
+      "point": [
+        2140,
+        1990
+      ],
+      "pass": true,
+      "route": 34
+    },
+    {
+      "name": "zone stalls-2",
+      "point": [
+        6310,
+        2470
+      ],
+      "pass": true,
+      "route": 23
+    },
+    {
+      "name": "zone stalls-3",
+      "point": [
+        2725,
+        4870
+      ],
+      "pass": true,
+      "route": 37
+    },
+    {
+      "name": "zone community-bobbin",
+      "point": [
+        -450,
+        2050
+      ],
+      "pass": true,
+      "route": 28
+    },
+    {
+      "name": "zone community-petal",
+      "point": [
+        4100,
+        -180
+      ],
+      "pass": true,
+      "route": 16
+    },
+    {
+      "name": "zone community-shell",
+      "point": [
+        9200,
+        2750
+      ],
+      "pass": true,
+      "route": 32
+    },
+    {
+      "name": "zone community-reed",
+      "point": [
+        2100,
+        6730
+      ],
+      "pass": true,
+      "route": 38
+    },
+    {
+      "name": "original deck 0",
+      "point": [
+        2600,
+        3200
+      ],
+      "pass": true,
+      "route": 7
+    },
+    {
+      "name": "original deck 1",
+      "point": [
+        6140,
+        3200
+      ],
+      "pass": true,
+      "route": 17
+    },
+    {
+      "name": "original deck 2",
+      "point": [
+        4000,
+        2220
+      ],
+      "pass": true,
+      "route": 16
+    },
+    {
+      "name": "original deck 3",
+      "point": [
+        1080,
+        1100
+      ],
+      "pass": true,
+      "route": 29
+    },
+    {
+      "name": "original deck 4",
+      "point": [
+        7740,
+        2830
+      ],
+      "pass": true,
+      "route": 27
+    },
+    {
+      "name": "original deck 5",
+      "point": [
+        2440,
+        5530
+      ],
+      "pass": true,
+      "route": 52
+    },
+    {
+      "name": "original deck 6",
+      "point": [
+        5050,
+        4300
+      ],
+      "pass": true,
+      "route": 6
+    },
+    {
+      "name": "original deck 7",
+      "point": [
+        3362.5,
+        2844
+      ],
+      "pass": true,
+      "route": 6
+    },
+    {
+      "name": "original deck 8",
+      "point": [
+        3362.5,
+        3796
+      ],
+      "pass": true,
+      "route": 1
+    },
+    {
+      "name": "original deck 9",
+      "point": [
+        5062.5,
+        2844
+      ],
+      "pass": true,
+      "route": 11
+    },
+    {
+      "name": "original deck 10",
+      "point": [
+        5062.5,
+        3796
+      ],
+      "pass": true,
+      "route": 1
+    },
+    {
+      "name": "original deck 11",
+      "point": [
+        700,
+        3300
+      ],
+      "pass": true,
+      "route": 18
+    },
+    {
+      "name": "original deck 12",
+      "point": [
+        4150,
+        760
+      ],
+      "pass": true,
+      "route": 21
+    },
+    {
+      "name": "original deck 13",
+      "point": [
+        8150,
+        3600
+      ],
+      "pass": true,
+      "route": 27
+    },
+    {
+      "name": "original deck 14",
+      "point": [
+        5400,
+        5700
+      ],
+      "pass": true,
+      "route": 38
+    },
+    {
+      "name": "original deck 15",
+      "point": [
+        4700,
+        6900
+      ],
+      "pass": true,
+      "route": 43
+    },
+    {
+      "name": "original deck 16",
+      "point": [
+        -800,
+        850
+      ],
+      "pass": true,
+      "route": 33
+    },
+    {
+      "name": "original deck 17",
+      "point": [
+        8800,
+        3600
+      ],
+      "pass": true,
+      "route": 27
+    },
+    {
+      "name": "harbor",
+      "point": [
+        -2406,
+        2400
+      ],
+      "pass": true,
+      "route": 24
+    },
+    {
+      "name": "frontage comm-skipper-home",
+      "point": [
+        -1050,
+        1400
+      ],
+      "pass": true,
+      "route": 29
+    },
+    {
+      "name": "frontage comm-sailmaker-home",
+      "point": [
+        -500,
+        1600
+      ],
+      "pass": true,
+      "route": 28
+    },
+    {
+      "name": "frontage comm-keel-home",
+      "point": [
+        -80,
+        1570
+      ],
+      "pass": true,
+      "route": 29
+    },
+    {
+      "name": "frontage comm-ropemaker-home",
+      "point": [
+        20,
+        1910
+      ],
+      "pass": true,
+      "route": 19
+    },
+    {
+      "name": "frontage comm-tiller-home",
+      "point": [
+        -950,
+        1920
+      ],
+      "pass": true,
+      "route": 28
+    },
+    {
+      "name": "frontage comm-primrose-home",
+      "point": [
+        3250,
+        -500
+      ],
+      "pass": true,
+      "route": 22
+    },
+    {
+      "name": "frontage comm-marigold-home",
+      "point": [
+        3650,
+        -680
+      ],
+      "pass": true,
+      "route": 32
+    },
+    {
+      "name": "frontage comm-violet-home",
+      "point": [
+        4100,
+        -740
+      ],
+      "pass": true,
+      "route": 21
+    },
+    {
+      "name": "frontage comm-daisy-home",
+      "point": [
+        4540,
+        -500
+      ],
+      "pass": true,
+      "route": 21
+    },
+    {
+      "name": "frontage comm-blossom-home",
+      "point": [
+        3500,
+        -70
+      ],
+      "pass": true,
+      "route": 26
+    },
+    {
+      "name": "frontage comm-cowrie-home",
+      "point": [
+        8550,
+        1890
+      ],
+      "pass": true,
+      "route": 48
+    },
+    {
+      "name": "frontage comm-pearl-home",
+      "point": [
+        8950,
+        1720
+      ],
+      "pass": true,
+      "route": 48
+    },
+    {
+      "name": "frontage comm-scallop-home",
+      "point": [
+        9420,
+        1880
+      ],
+      "pass": true,
+      "route": 48
+    },
+    {
+      "name": "frontage comm-conch-home",
+      "point": [
+        9580,
+        2320
+      ],
+      "pass": true,
+      "route": 37
+    },
+    {
+      "name": "frontage comm-button-home",
+      "point": [
+        8650,
+        2600
+      ],
+      "pass": true,
+      "route": 32
+    },
+    {
+      "name": "frontage comm-rush-home",
+      "point": [
+        1250,
+        6150
+      ],
+      "pass": true,
+      "route": 27
+    },
+    {
+      "name": "frontage comm-willow-home",
+      "point": [
+        1700,
+        6050
+      ],
+      "pass": true,
+      "route": 32
+    },
+    {
+      "name": "frontage comm-osier-home",
+      "point": [
+        2160,
+        6110
+      ],
+      "pass": true,
+      "route": 42
+    },
+    {
+      "name": "frontage comm-basket-home",
+      "point": [
+        2750,
+        6470
+      ],
+      "pass": true,
+      "route": 59
+    },
+    {
+      "name": "frontage comm-wren-home",
+      "point": [
+        1350,
+        6630
+      ],
+      "pass": true,
+      "route": 37
+    },
+    {
+      "name": "frontage comm-bobbin-corner-home",
+      "point": [
+        -1050,
+        2360
+      ],
+      "pass": true,
+      "route": 28
+    },
+    {
+      "name": "frontage comm-button-sail-home",
+      "point": [
+        -230,
+        2480
+      ],
+      "pass": true,
+      "route": 14
+    },
+    {
+      "name": "frontage comm-rose-window-home",
+      "point": [
+        3930,
+        -330
+      ],
+      "pass": true,
+      "route": 21
+    },
+    {
+      "name": "frontage comm-seedkeeper-home",
+      "point": [
+        4850,
+        -80
+      ],
+      "pass": true,
+      "route": 29
+    },
+    {
+      "name": "frontage comm-shellwright-home",
+      "point": [
+        9000,
+        2500
+      ],
+      "pass": true,
+      "route": 37
+    },
+    {
+      "name": "frontage comm-tide-window-home",
+      "point": [
+        9650,
+        2770
+      ],
+      "pass": true,
+      "route": 42
+    },
+    {
+      "name": "frontage comm-reed-corner-home",
+      "point": [
+        1750,
+        6670
+      ],
+      "pass": true,
+      "route": 42
+    },
+    {
+      "name": "frontage comm-basketmakers-home",
+      "point": [
+        2690,
+        6880
+      ],
+      "pass": true,
+      "route": 48
+    },
+    {
+      "name": "frontage comm-quay-a",
+      "point": [
+        -1380,
+        1680
+      ],
+      "pass": true,
+      "route": 33
+    },
+    {
+      "name": "frontage comm-quay-b",
+      "point": [
+        -350,
+        1160
+      ],
+      "pass": true,
+      "route": 38
+    },
+    {
+      "name": "frontage comm-petal-a",
+      "point": [
+        2950,
+        -230
+      ],
+      "pass": true,
+      "route": 26
+    },
+    {
+      "name": "frontage comm-petal-b",
+      "point": [
+        4650,
+        -960
+      ],
+      "pass": true,
+      "route": 22
+    },
+    {
+      "name": "frontage comm-pearl-a",
+      "point": [
+        8250,
+        2390
+      ],
+      "pass": true,
+      "route": 32
+    },
+    {
+      "name": "frontage comm-pearl-b",
+      "point": [
+        9250,
+        1530
+      ],
+      "pass": true,
+      "route": 53
+    },
+    {
+      "name": "frontage comm-reed-a",
+      "point": [
+        950,
+        6560
+      ],
+      "pass": true,
+      "route": 32
+    },
+    {
+      "name": "frontage comm-reed-b",
+      "point": [
+        2950,
+        6060
+      ],
+      "pass": true,
+      "route": 54
+    },
+    {
+      "name": "frontage comm-sail-loft",
+      "point": [
+        -800,
+        2730
+      ],
+      "pass": true,
+      "route": 18
+    },
+    {
+      "name": "frontage comm-hull-shed",
+      "point": [
+        -1500,
+        2200
+      ],
+      "pass": true,
+      "route": 19
+    },
+    {
+      "name": "frontage comm-potting-house",
+      "point": [
+        5140,
+        -450
+      ],
+      "pass": true,
+      "route": 28
+    },
+    {
+      "name": "frontage comm-shell-counting-house",
+      "point": [
+        8750,
+        2300
+      ],
+      "pass": true,
+      "route": 38
+    },
+    {
+      "name": "frontage comm-weavers-hall",
+      "point": [
+        2450,
+        6600
+      ],
+      "pass": true,
+      "route": 59
+    }
+  ],
+  "originalSamples": 32107,
+  "changedOriginalWalk": 0,
+  "originalProps": 501,
+  "sleepers": 40,
+  "landRatio": 3.6519673777029937,
+  "walkableArea": 67751600,
+  "reachedArea": 67747200
+}

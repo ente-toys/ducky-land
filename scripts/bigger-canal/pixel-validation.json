@@ -1,0 +1,21 @@
+{
+  "renderer": "Static production SVG assembly, top-down at runtime coordinates; no players or dynamic GPU effects",
+  "overview": {
+    "cx": 4000,
+    "cy": 3000,
+    "k": 0.105,
+    "W": 1500,
+    "H": 1200
+  },
+  "groundCrops": {
+    "pixelsPerUnit": 0.8,
+    "width": 1500,
+    "height": 1100
+  },
+  "preservation": {
+    "mask": "Original dry interior eroded 12 units, excluding shore antialiasing",
+    "comparedPixels": 213411,
+    "changedPixels": 0,
+    "maxChannelDelta": 0
+  }
+}

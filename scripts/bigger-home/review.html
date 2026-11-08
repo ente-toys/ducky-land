@@ -1,0 +1,5 @@
+<!doctype html><html><head><meta charset="UTF-8"><title>Home expansion review</title><style>html,body,#game{margin:0;width:100%;height:100%;overflow:hidden;background:#6ec9de}</style></head><body><div id="game"></div><script type="module">
+import {PixiIsland} from '/src/pixi/engine.js';
+window.game=new PixiIsland({onError:()=>{window.reviewError=true;}});await game.mount(document.getElementById('game'));
+window.reviewCamera=(x,y,zoom)=>{game.follow=false;game.fitMode=false;game.fly=null;Object.assign(game.camera,{x,y,zoom});Object.assign(game.target,game.camera);};window.reviewReady=true;
+</script></body></html>

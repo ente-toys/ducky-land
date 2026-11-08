@@ -9739,5 +9739,5670 @@
   "flip": false,
   "shadow": false,
   "zone": "centre"
+ },
+ {
+  "id": "fair-community-0",
+  "name": "bobbin cottage 0",
+  "src": "bigger/bobbin-cottage-0.svg",
+  "x": -1370,
+  "y": 1410,
+  "width": 490,
+  "height": 495,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -1370,
+   "y": 1357,
+   "rx": 181.3,
+   "ry": 53
+  },
+  "community": "bobbinbell",
+  "role": "home",
+  "homeType": "bobbin-cottage",
+  "variant": 0,
+  "footprints": [
+   {
+    "x": -1370,
+    "y": 1357,
+    "rx": 181.3,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-1",
+  "name": "bobbin cottage 1",
+  "src": "bigger/bobbin-cottage-1.svg",
+  "x": -860,
+  "y": 1110,
+  "width": 580,
+  "height": 475,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -860,
+   "y": 1057,
+   "rx": 214.6,
+   "ry": 53
+  },
+  "community": "bobbinbell",
+  "role": "home",
+  "homeType": "bobbin-cottage",
+  "variant": 1,
+  "footprints": [
+   {
+    "x": -860,
+    "y": 1057,
+    "rx": 214.6,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-2",
+  "name": "bobbin cottage 2",
+  "src": "bigger/bobbin-cottage-2.svg",
+  "x": -310,
+  "y": 1400,
+  "width": 450,
+  "height": 535,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -310,
+   "y": 1347,
+   "rx": 166.5,
+   "ry": 53
+  },
+  "community": "bobbinbell",
+  "role": "home",
+  "homeType": "bobbin-cottage",
+  "variant": 2,
+  "footprints": [
+   {
+    "x": -310,
+    "y": 1347,
+    "rx": 166.5,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-3",
+  "name": "bobbin cottage 3",
+  "src": "bigger/bobbin-cottage-3.svg",
+  "x": -1310,
+  "y": 2050,
+  "width": 560,
+  "height": 510,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -1310,
+   "y": 1997,
+   "rx": 207.2,
+   "ry": 53
+  },
+  "community": "bobbinbell",
+  "role": "home",
+  "homeType": "bobbin-cottage",
+  "variant": 3,
+  "footprints": [
+   {
+    "x": -1310,
+    "y": 1997,
+    "rx": 207.2,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-4",
+  "name": "bobbin cottage 4",
+  "src": "bigger/bobbin-cottage-4.svg",
+  "x": -270,
+  "y": 2140,
+  "width": 510,
+  "height": 465,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -270,
+   "y": 2087,
+   "rx": 188.7,
+   "ry": 53
+  },
+  "community": "bobbinbell",
+  "role": "home",
+  "homeType": "bobbin-cottage",
+  "variant": 4,
+  "footprints": [
+   {
+    "x": -270,
+    "y": 2087,
+    "rx": 188.7,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-5",
+  "name": "sewing table",
+  "src": "bigger/sewing-table.svg",
+  "x": -250,
+  "y": 2670,
+  "width": 390,
+  "height": 260,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -250,
+   "y": 2633,
+   "rx": 155,
+   "ry": 37
+  },
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -250,
+    "y": 2633,
+    "rx": 155,
+    "ry": 37
+   }
+  ]
+ },
+ {
+  "id": "fair-community-6",
+  "name": "sewing table",
+  "src": "bigger/sewing-table.svg",
+  "x": -100,
+  "y": 2430,
+  "width": 330,
+  "height": 220,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -100,
+   "y": 2397,
+   "rx": 133,
+   "ry": 33
+  },
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -100,
+    "y": 2397,
+    "rx": 133,
+    "ry": 33
+   }
+  ]
+ },
+ {
+  "id": "fair-community-7",
+  "name": "washing line",
+  "src": "bigger/washing-line.svg",
+  "x": -1020,
+  "y": 2140,
+  "width": 390,
+  "height": 168,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1202,
+    "y": 2130,
+    "rx": 10,
+    "ry": 10
+   },
+   {
+    "x": -838,
+    "y": 2130,
+    "rx": 10,
+    "ry": 10
+   }
+  ]
+ },
+ {
+  "id": "fair-community-8",
+  "name": "Egg stall",
+  "src": "stall-pink.svg",
+  "x": -1190,
+  "y": 2800,
+  "width": 304,
+  "height": 348,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9828
+  },
+  "scale": 0.95,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1190,
+    "y": 2759.568,
+    "rx": 121.296,
+    "ry": 49.096000000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-9",
+  "name": "Ribbon arch",
+  "src": "ribbon-arch.svg",
+  "x": -360,
+  "y": 3100,
+  "width": 524,
+  "height": 500,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.988
+  },
+  "scale": 0.84,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -522.8592,
+    "y": 3088,
+    "rx": 35.2128,
+    "ry": 18
+   },
+   {
+    "x": -197.1408,
+    "y": 3088,
+    "rx": 35.2128,
+    "ry": 18
+   }
+  ]
+ },
+ {
+  "id": "fair-community-10",
+  "name": "neighbour sign",
+  "src": "bigger/neighbour-sign.svg",
+  "x": -340,
+  "y": 1750,
+  "width": 145,
+  "height": 175,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -340,
+   "y": 1738,
+   "rx": 20,
+   "ry": 12
+  },
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -340,
+    "y": 1738,
+    "rx": 20,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-11",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -1500,
+  "y": 1570,
+  "width": 160,
+  "height": 41.904761904761905,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1500,
+    "y": 1560,
+    "rx": 76.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-12",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -1240,
+  "y": 1570,
+  "width": 160,
+  "height": 41.904761904761905,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1240,
+    "y": 1560,
+    "rx": 76.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-13",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -995,
+  "y": 1250,
+  "width": 170,
+  "height": 44.523809523809526,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -995,
+    "y": 1240,
+    "rx": 81.6,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-14",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -725,
+  "y": 1250,
+  "width": 170,
+  "height": 44.523809523809526,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -725,
+    "y": 1240,
+    "rx": 81.6,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-15",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -415,
+  "y": 1530,
+  "width": 110,
+  "height": 28.80952380952381,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -415,
+    "y": 1520,
+    "rx": 52.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-16",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -205,
+  "y": 1530,
+  "width": 110,
+  "height": 28.80952380952381,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -205,
+    "y": 1520,
+    "rx": 52.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-17",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -1490,
+  "y": 2220,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1490,
+    "y": 2210,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-18",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -1290,
+  "y": 2220,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1290,
+    "y": 2210,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-19",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -377.5,
+  "y": 2260,
+  "width": 115,
+  "height": 30.11904761904762,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -377.5,
+    "y": 2250,
+    "rx": 55.199999999999996,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-20",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": -162.5,
+  "y": 2260,
+  "width": 115,
+  "height": 30.11904761904762,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -162.5,
+    "y": 2250,
+    "rx": 55.199999999999996,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-21",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": -1550,
+  "y": 1520,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1550,
+    "y": 1490.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-22",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": -1120,
+  "y": 1180,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1120,
+    "y": 1150.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-23",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": -620,
+  "y": 1200,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -620,
+    "y": 1170.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-24",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": -70,
+  "y": 1520,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -70,
+    "y": 1490.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-25",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": -1500,
+  "y": 2200,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1500,
+    "y": 2170.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-26",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": -60,
+  "y": 2260,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -60,
+    "y": 2230.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-27",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": -1720,
+  "y": 1850,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1720,
+    "y": 1841,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-28",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": -80,
+  "y": 2550,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -80,
+    "y": 2541,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-29",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": -1790,
+  "y": 3020,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1790,
+    "y": 3011,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-30",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": -590,
+  "y": 3100,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -590,
+    "y": 3091,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-31",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": -1780,
+  "y": 1740,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1780,
+    "y": 1726,
+    "rx": 60.48,
+    "ry": 27.5
+   }
+  ]
+ },
+ {
+  "id": "fair-community-32",
+  "name": "bench park",
+  "src": "reuse/street--bench-park.svg",
+  "x": -1050,
+  "y": 1760,
+  "width": 818,
+  "height": 493,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9757
+  },
+  "scale": 0.25,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1050,
+    "y": 1731.37,
+    "rx": 85.89,
+    "ry": 34.765
+   }
+  ]
+ },
+ {
+  "id": "fair-community-33",
+  "name": "Fair lamp",
+  "src": "fair-lamp.svg",
+  "x": -1100,
+  "y": 1560,
+  "width": 192,
+  "height": 508,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9882000000000001
+  },
+  "scale": 0.5,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1100,
+    "y": 1552,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-34",
+  "name": "Balloons",
+  "src": "balloons.svg",
+  "x": -1300,
+  "y": 2820,
+  "width": 324,
+  "height": 488,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9877
+  },
+  "scale": 0.6,
+  "flip": false,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1300,
+    "y": 2812,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-35",
+  "name": "shared well",
+  "src": "bigger/shared-well.svg",
+  "x": -460,
+  "y": 1610,
+  "width": 180,
+  "height": 185,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -460,
+   "y": 1585,
+   "rx": 65,
+   "ry": 25
+  },
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -460,
+    "y": 1585,
+    "rx": 65,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-36",
+  "name": "garden cart",
+  "src": "bigger/garden-cart.svg",
+  "x": -1770,
+  "y": 2770,
+  "width": 240,
+  "height": 170,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -1770,
+   "y": 2745,
+   "rx": 85,
+   "ry": 25
+  },
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1770,
+    "y": 2745,
+    "rx": 85,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-37",
+  "name": "balloon caravan 0",
+  "src": "bigger/balloon-caravan-0.svg",
+  "x": 3510,
+  "y": -590,
+  "width": 490,
+  "height": 495,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3510,
+   "y": -643,
+   "rx": 181.3,
+   "ry": 53
+  },
+  "community": "cloudpop",
+  "role": "home",
+  "homeType": "balloon-caravan",
+  "variant": 0,
+  "footprints": [
+   {
+    "x": 3510,
+    "y": -643,
+    "rx": 181.3,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-38",
+  "name": "balloon caravan 1",
+  "src": "bigger/balloon-caravan-1.svg",
+  "x": 4030,
+  "y": -650,
+  "width": 580,
+  "height": 475,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 4030,
+   "y": -703,
+   "rx": 214.6,
+   "ry": 53
+  },
+  "community": "cloudpop",
+  "role": "home",
+  "homeType": "balloon-caravan",
+  "variant": 1,
+  "footprints": [
+   {
+    "x": 4030,
+    "y": -703,
+    "rx": 214.6,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-39",
+  "name": "balloon caravan 2",
+  "src": "bigger/balloon-caravan-2.svg",
+  "x": 4550,
+  "y": -560,
+  "width": 450,
+  "height": 535,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 4550,
+   "y": -613,
+   "rx": 166.5,
+   "ry": 53
+  },
+  "community": "cloudpop",
+  "role": "home",
+  "homeType": "balloon-caravan",
+  "variant": 2,
+  "footprints": [
+   {
+    "x": 4550,
+    "y": -613,
+    "rx": 166.5,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-40",
+  "name": "balloon caravan 3",
+  "src": "bigger/balloon-caravan-3.svg",
+  "x": 3030,
+  "y": -550,
+  "width": 560,
+  "height": 510,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3030,
+   "y": -603,
+   "rx": 207.2,
+   "ry": 53
+  },
+  "community": "cloudpop",
+  "role": "home",
+  "homeType": "balloon-caravan",
+  "variant": 3,
+  "footprints": [
+   {
+    "x": 3030,
+    "y": -603,
+    "rx": 207.2,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-41",
+  "name": "balloon caravan 4",
+  "src": "bigger/balloon-caravan-4.svg",
+  "x": 5110,
+  "y": -500,
+  "width": 510,
+  "height": 465,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 5110,
+   "y": -553,
+   "rx": 188.7,
+   "ry": 53
+  },
+  "community": "cloudpop",
+  "role": "home",
+  "homeType": "balloon-caravan",
+  "variant": 4,
+  "footprints": [
+   {
+    "x": 5110,
+    "y": -553,
+    "rx": 188.7,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-42",
+  "name": "balloon caravan 5",
+  "src": "bigger/balloon-caravan-5.svg",
+  "x": 4510,
+  "y": 210,
+  "width": 545,
+  "height": 525,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 4510,
+   "y": 157,
+   "rx": 201.65,
+   "ry": 53
+  },
+  "community": "cloudpop",
+  "role": "home",
+  "homeType": "balloon-caravan",
+  "variant": 5,
+  "footprints": [
+   {
+    "x": 4510,
+    "y": 157,
+    "rx": 201.65,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-43",
+  "name": "balloon workbench",
+  "src": "bigger/balloon-workbench.svg",
+  "x": 5650,
+  "y": 60,
+  "width": 440,
+  "height": 400,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 5650,
+   "y": 15,
+   "rx": 165,
+   "ry": 45
+  },
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5650,
+    "y": 15,
+    "rx": 165,
+    "ry": 45
+   }
+  ]
+ },
+ {
+  "id": "fair-community-44",
+  "name": "balloon workbench",
+  "src": "bigger/balloon-workbench.svg",
+  "x": 5460,
+  "y": 360,
+  "width": 350,
+  "height": 318,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 5460,
+   "y": 325,
+   "rx": 135,
+   "ry": 35
+  },
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5460,
+    "y": 325,
+    "rx": 135,
+    "ry": 35
+   }
+  ]
+ },
+ {
+  "id": "fair-community-45",
+  "name": "balloon",
+  "src": "bigger/balloon.svg",
+  "x": 6250,
+  "y": -90,
+  "width": 405,
+  "height": 585,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 6250,
+   "y": -128,
+   "rx": 126,
+   "ry": 38
+  },
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 6250,
+    "y": -128,
+    "rx": 126,
+    "ry": 38
+   }
+  ]
+ },
+ {
+  "id": "fair-community-46",
+  "name": "Ticket booth",
+  "src": "ticket-booth.svg",
+  "x": 6600,
+  "y": 200,
+  "width": 268,
+  "height": 400,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.985
+  },
+  "scale": 0.9,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 6600,
+    "y": 166.232,
+    "rx": 101.304,
+    "ry": 41.004000000000005
+   }
+  ]
+ },
+ {
+  "id": "fair-community-47",
+  "name": "Balloons",
+  "src": "balloons.svg",
+  "x": 5910,
+  "y": 360,
+  "width": 324,
+  "height": 488,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9877
+  },
+  "scale": 0.7,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5910,
+    "y": 352,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-48",
+  "name": "washing line",
+  "src": "bigger/washing-line.svg",
+  "x": 4700,
+  "y": 330,
+  "width": 350,
+  "height": 151,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4537,
+    "y": 320,
+    "rx": 10,
+    "ry": 10
+   },
+   {
+    "x": 4863,
+    "y": 320,
+    "rx": 10,
+    "ry": 10
+   }
+  ]
+ },
+ {
+  "id": "fair-community-49",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 3360,
+  "y": -470,
+  "width": 160,
+  "height": 41.904761904761905,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3360,
+    "y": -480,
+    "rx": 76.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-50",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 3620,
+  "y": -470,
+  "width": 160,
+  "height": 41.904761904761905,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3620,
+    "y": -480,
+    "rx": 76.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-51",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 3920,
+  "y": -510,
+  "width": 160,
+  "height": 41.904761904761905,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3920,
+    "y": -520,
+    "rx": 76.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-52",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 4180,
+  "y": -510,
+  "width": 160,
+  "height": 41.904761904761905,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4180,
+    "y": -520,
+    "rx": 76.8,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-53",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 4415,
+  "y": -440,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4415,
+    "y": -450,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-54",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 4665,
+  "y": -440,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4665,
+    "y": -450,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-55",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 2787.5,
+  "y": -430,
+  "width": 125,
+  "height": 32.73809523809524,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2787.5,
+    "y": -440,
+    "rx": 60,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-56",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 3012.5,
+  "y": -430,
+  "width": 125,
+  "height": 32.73809523809524,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3012.5,
+    "y": -440,
+    "rx": 60,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-57",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 5130,
+  "y": -350,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5130,
+    "y": -360,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-58",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 5330,
+  "y": -350,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5330,
+    "y": -360,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-59",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 3280,
+  "y": -490,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3280,
+    "y": -519.8816,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-60",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 3780,
+  "y": -500,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3780,
+    "y": -529.8816,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-61",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4280,
+  "y": -440,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4280,
+    "y": -469.8816,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-62",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4780,
+  "y": -460,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4780,
+    "y": -489.8816,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-63",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 2880,
+  "y": -380,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2880,
+    "y": -409.8816,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-64",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 5360,
+  "y": -310,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5360,
+    "y": -339.8816,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-65",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4680,
+  "y": 300,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4680,
+    "y": 270.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-66",
+  "name": "neighbour sign",
+  "src": "bigger/neighbour-sign.svg",
+  "x": 3900,
+  "y": -70,
+  "width": 145,
+  "height": 175,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3900,
+   "y": -82,
+   "rx": 20,
+   "ry": 12
+  },
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3900,
+    "y": -82,
+    "rx": 20,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-67",
+  "name": "bench park",
+  "src": "reuse/street--bench-park.svg",
+  "x": 4210,
+  "y": 70,
+  "width": 818,
+  "height": 493,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9757
+  },
+  "scale": 0.25,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4210,
+    "y": 41.37,
+    "rx": 85.89,
+    "ry": 34.765
+   }
+  ]
+ },
+ {
+  "id": "fair-community-68",
+  "name": "Fair lamp",
+  "src": "fair-lamp.svg",
+  "x": 3700,
+  "y": -60,
+  "width": 192,
+  "height": 508,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9882000000000001
+  },
+  "scale": 0.5,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3700,
+    "y": -68,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-69",
+  "name": "shared well",
+  "src": "bigger/shared-well.svg",
+  "x": 4070,
+  "y": 150,
+  "width": 180,
+  "height": 185,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 4070,
+   "y": 125,
+   "rx": 65,
+   "ry": 25
+  },
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 4070,
+    "y": 125,
+    "rx": 65,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-70",
+  "name": "garden cart",
+  "src": "bigger/garden-cart.svg",
+  "x": 5580,
+  "y": -300,
+  "width": 240,
+  "height": 170,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 5580,
+   "y": -325,
+   "rx": 85,
+   "ry": 25
+  },
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5580,
+    "y": -325,
+    "rx": 85,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-71",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 2820,
+  "y": -500,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2820,
+    "y": -509,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-72",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 3170,
+  "y": 240,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 3170,
+    "y": 231,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-73",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": 5600,
+  "y": 450,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 5600,
+    "y": 441,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-74",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 7870,
+  "y": 720,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 7870,
+    "y": 711,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-75",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": 7030,
+  "y": 430,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 7030,
+    "y": 416,
+    "rx": 60.48,
+    "ry": 27.5
+   }
+  ]
+ },
+ {
+  "id": "fair-community-76",
+  "name": "Wish flag",
+  "src": "wish-flag.svg",
+  "x": 6350,
+  "y": 370,
+  "width": 264,
+  "height": 514,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9883
+  },
+  "scale": 0.6,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 6350,
+    "y": 362,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-77",
+  "name": "Flowers",
+  "src": "reuse/flower-2.svg",
+  "x": 3970,
+  "y": 90,
+  "width": 48,
+  "height": 36,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 2,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": []
+ },
+ {
+  "id": "fair-community-78",
+  "name": "Flowers",
+  "src": "reuse/flower-3.svg",
+  "x": 4780,
+  "y": 300,
+  "width": 44,
+  "height": 36,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 2,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": []
+ },
+ {
+  "id": "fair-community-79",
+  "name": "parade home 0",
+  "src": "bigger/parade-home-0.svg",
+  "x": 7470,
+  "y": 2960,
+  "width": 490,
+  "height": 495,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7470,
+   "y": 2907,
+   "rx": 181.3,
+   "ry": 53
+  },
+  "community": "waddleshow",
+  "role": "home",
+  "homeType": "parade-home",
+  "variant": 0,
+  "footprints": [
+   {
+    "x": 7470,
+    "y": 2907,
+    "rx": 181.3,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-80",
+  "name": "parade home 1",
+  "src": "bigger/parade-home-1.svg",
+  "x": 8000,
+  "y": 2820,
+  "width": 580,
+  "height": 475,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 8000,
+   "y": 2767,
+   "rx": 214.6,
+   "ry": 53
+  },
+  "community": "waddleshow",
+  "role": "home",
+  "homeType": "parade-home",
+  "variant": 1,
+  "footprints": [
+   {
+    "x": 8000,
+    "y": 2767,
+    "rx": 214.6,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-81",
+  "name": "parade home 2",
+  "src": "bigger/parade-home-2.svg",
+  "x": 8670,
+  "y": 3010,
+  "width": 450,
+  "height": 535,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 8670,
+   "y": 2957,
+   "rx": 166.5,
+   "ry": 53
+  },
+  "community": "waddleshow",
+  "role": "home",
+  "homeType": "parade-home",
+  "variant": 2,
+  "footprints": [
+   {
+    "x": 8670,
+    "y": 2957,
+    "rx": 166.5,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-82",
+  "name": "parade home 3",
+  "src": "bigger/parade-home-3.svg",
+  "x": 7470,
+  "y": 3650,
+  "width": 560,
+  "height": 510,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7470,
+   "y": 3597,
+   "rx": 207.2,
+   "ry": 53
+  },
+  "community": "waddleshow",
+  "role": "home",
+  "homeType": "parade-home",
+  "variant": 3,
+  "footprints": [
+   {
+    "x": 7470,
+    "y": 3597,
+    "rx": 207.2,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-83",
+  "name": "parade home 4",
+  "src": "bigger/parade-home-4.svg",
+  "x": 8510,
+  "y": 3690,
+  "width": 510,
+  "height": 465,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 8510,
+   "y": 3637,
+   "rx": 188.7,
+   "ry": 53
+  },
+  "community": "waddleshow",
+  "role": "home",
+  "homeType": "parade-home",
+  "variant": 4,
+  "footprints": [
+   {
+    "x": 8510,
+    "y": 3637,
+    "rx": 188.7,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-84",
+  "name": "prop rack",
+  "src": "bigger/prop-rack.svg",
+  "x": 7490,
+  "y": 2260,
+  "width": 520,
+  "height": 340,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7490,
+   "y": 2225,
+   "rx": 215,
+   "ry": 35
+  },
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7490,
+    "y": 2225,
+    "rx": 215,
+    "ry": 35
+   }
+  ]
+ },
+ {
+  "id": "fair-community-85",
+  "name": "Goose parade float",
+  "src": "goose-float.svg",
+  "x": 8210,
+  "y": 2390,
+  "width": 432,
+  "height": 528,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9886
+  },
+  "scale": 1.05,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8210,
+    "y": 2348,
+    "rx": 190.512,
+    "ry": 51.00000000000001
+   }
+  ]
+ },
+ {
+  "id": "fair-community-86",
+  "name": "bandstand",
+  "src": "bigger/bandstand.svg",
+  "x": 7490,
+  "y": 4270,
+  "width": 660,
+  "height": 547,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7490,
+   "y": 4198,
+   "rx": 245,
+   "ry": 72
+  },
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7490,
+    "y": 4198,
+    "rx": 245,
+    "ry": 72
+   }
+  ]
+ },
+ {
+  "id": "fair-community-87",
+  "name": "prop rack",
+  "src": "bigger/prop-rack.svg",
+  "x": 8450,
+  "y": 4240,
+  "width": 390,
+  "height": 255,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 8450,
+   "y": 4210,
+   "rx": 165,
+   "ry": 30
+  },
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8450,
+    "y": 4210,
+    "rx": 165,
+    "ry": 30
+   }
+  ]
+ },
+ {
+  "id": "fair-community-88",
+  "name": "Cupcake stall",
+  "src": "stall-blue.svg",
+  "x": 7290,
+  "y": 3220,
+  "width": 304,
+  "height": 348,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9828
+  },
+  "scale": 0.95,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7290,
+    "y": 3179.568,
+    "rx": 121.296,
+    "ry": 49.096000000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-89",
+  "name": "Bunting",
+  "src": "bunting.svg",
+  "x": 8580,
+  "y": 3330,
+  "width": 536,
+  "height": 332,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9819
+  },
+  "scale": 0.85,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8411.428,
+    "y": 3318,
+    "rx": 36.448,
+    "ry": 18
+   },
+   {
+    "x": 8748.572,
+    "y": 3318,
+    "rx": 36.448,
+    "ry": 18
+   }
+  ]
+ },
+ {
+  "id": "fair-community-90",
+  "name": "Balloons",
+  "src": "balloons.svg",
+  "x": 8580,
+  "y": 3240,
+  "width": 324,
+  "height": 488,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9877
+  },
+  "scale": 0.65,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8580,
+    "y": 3232,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-91",
+  "name": "washing line",
+  "src": "bigger/washing-line.svg",
+  "x": 8670,
+  "y": 3950,
+  "width": 365,
+  "height": 157,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8500,
+    "y": 3940,
+    "rx": 10,
+    "ry": 10
+   },
+   {
+    "x": 8840,
+    "y": 3940,
+    "rx": 10,
+    "ry": 10
+   }
+  ]
+ },
+ {
+  "id": "fair-community-92",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 7325,
+  "y": 3070,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7325,
+    "y": 3060,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-93",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 7575,
+  "y": 3070,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7575,
+    "y": 3060,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-94",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 7852.5,
+  "y": 2960,
+  "width": 115,
+  "height": 30.11904761904762,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7852.5,
+    "y": 2950,
+    "rx": 55.199999999999996,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-95",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 8067.5,
+  "y": 2960,
+  "width": 115,
+  "height": 30.11904761904762,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8067.5,
+    "y": 2950,
+    "rx": 55.199999999999996,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-96",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 8570,
+  "y": 3200,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8570,
+    "y": 3190,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-97",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 8770,
+  "y": 3200,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8770,
+    "y": 3190,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-98",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 7205,
+  "y": 3790,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7205,
+    "y": 3780,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-99",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 7455,
+  "y": 3790,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7455,
+    "y": 3780,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-100",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 8480,
+  "y": 3820,
+  "width": 120,
+  "height": 31.428571428571427,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8480,
+    "y": 3810,
+    "rx": 57.599999999999994,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-101",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 8700,
+  "y": 3820,
+  "width": 120,
+  "height": 31.428571428571427,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8700,
+    "y": 3810,
+    "rx": 57.599999999999994,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-102",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 7240,
+  "y": 3060,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7240,
+    "y": 3030.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-103",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 7690,
+  "y": 3010,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7690,
+    "y": 2980.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-104",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 8430,
+  "y": 3150,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8430,
+    "y": 3120.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-105",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 8860,
+  "y": 3240,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8860,
+    "y": 3210.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-106",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 7250,
+  "y": 3770,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7250,
+    "y": 3740.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-107",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 8720,
+  "y": 3800,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8720,
+    "y": 3770.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-108",
+  "name": "neighbour sign",
+  "src": "bigger/neighbour-sign.svg",
+  "x": 7990,
+  "y": 3530,
+  "width": 145,
+  "height": 175,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7990,
+   "y": 3518,
+   "rx": 20,
+   "ry": 12
+  },
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7990,
+    "y": 3518,
+    "rx": 20,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-109",
+  "name": "bench park",
+  "src": "reuse/street--bench-park.svg",
+  "x": 7790,
+  "y": 3520,
+  "width": 818,
+  "height": 493,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9757
+  },
+  "scale": 0.25,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7790,
+    "y": 3491.37,
+    "rx": 85.89,
+    "ry": 34.765
+   }
+  ]
+ },
+ {
+  "id": "fair-community-110",
+  "name": "Fair lamp",
+  "src": "fair-lamp.svg",
+  "x": 8520,
+  "y": 3440,
+  "width": 192,
+  "height": 508,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9882000000000001
+  },
+  "scale": 0.5,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8520,
+    "y": 3432,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-111",
+  "name": "shared well",
+  "src": "bigger/shared-well.svg",
+  "x": 7750,
+  "y": 3110,
+  "width": 180,
+  "height": 185,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7750,
+   "y": 3085,
+   "rx": 65,
+   "ry": 25
+  },
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7750,
+    "y": 3085,
+    "rx": 65,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-112",
+  "name": "garden cart",
+  "src": "bigger/garden-cart.svg",
+  "x": 7350,
+  "y": 3960,
+  "width": 240,
+  "height": 170,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 7350,
+   "y": 3935,
+   "rx": 85,
+   "ry": 25
+  },
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7350,
+    "y": 3935,
+    "rx": 85,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-113",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 7240,
+  "y": 2680,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7240,
+    "y": 2671,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-114",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 8810,
+  "y": 2980,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8810,
+    "y": 2971,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-115",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": 8680,
+  "y": 4100,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8680,
+    "y": 4091,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-116",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 6790,
+  "y": 4750,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 6790,
+    "y": 4741,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-117",
+  "name": "Bush",
+  "src": "reuse/bush-3.svg",
+  "x": 8310,
+  "y": 5020,
+  "width": 116,
+  "height": 104,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8310,
+    "y": 5006,
+    "rx": 45.936,
+    "ry": 28.6
+   }
+  ]
+ },
+ {
+  "id": "fair-community-118",
+  "name": "sugar cottage 0",
+  "src": "bigger/sugar-cottage-0.svg",
+  "x": 1660,
+  "y": 4870,
+  "width": 490,
+  "height": 495,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 1660,
+   "y": 4817,
+   "rx": 181.3,
+   "ry": 53
+  },
+  "community": "sugarspoon",
+  "role": "home",
+  "homeType": "sugar-cottage",
+  "variant": 0,
+  "footprints": [
+   {
+    "x": 1660,
+    "y": 4817,
+    "rx": 181.3,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-119",
+  "name": "sugar cottage 1",
+  "src": "bigger/sugar-cottage-1.svg",
+  "x": 2220,
+  "y": 4770,
+  "width": 580,
+  "height": 475,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2220,
+   "y": 4717,
+   "rx": 214.6,
+   "ry": 53
+  },
+  "community": "sugarspoon",
+  "role": "home",
+  "homeType": "sugar-cottage",
+  "variant": 1,
+  "footprints": [
+   {
+    "x": 2220,
+    "y": 4717,
+    "rx": 214.6,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-120",
+  "name": "sugar cottage 2",
+  "src": "bigger/sugar-cottage-2.svg",
+  "x": 2800,
+  "y": 4850,
+  "width": 450,
+  "height": 535,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2800,
+   "y": 4797,
+   "rx": 166.5,
+   "ry": 53
+  },
+  "community": "sugarspoon",
+  "role": "home",
+  "homeType": "sugar-cottage",
+  "variant": 2,
+  "footprints": [
+   {
+    "x": 2800,
+    "y": 4797,
+    "rx": 166.5,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-121",
+  "name": "sugar cottage 3",
+  "src": "bigger/sugar-cottage-3.svg",
+  "x": 1260,
+  "y": 5260,
+  "width": 560,
+  "height": 510,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 1260,
+   "y": 5207,
+   "rx": 207.2,
+   "ry": 53
+  },
+  "community": "sugarspoon",
+  "role": "home",
+  "homeType": "sugar-cottage",
+  "variant": 3,
+  "footprints": [
+   {
+    "x": 1260,
+    "y": 5207,
+    "rx": 207.2,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-122",
+  "name": "sugar cottage 4",
+  "src": "bigger/sugar-cottage-4.svg",
+  "x": 3250,
+  "y": 5120,
+  "width": 510,
+  "height": 465,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3250,
+   "y": 5067,
+   "rx": 188.7,
+   "ry": 53
+  },
+  "community": "sugarspoon",
+  "role": "home",
+  "homeType": "sugar-cottage",
+  "variant": 4,
+  "footprints": [
+   {
+    "x": 3250,
+    "y": 5067,
+    "rx": 188.7,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-123",
+  "name": "sugar cottage 5",
+  "src": "bigger/sugar-cottage-5.svg",
+  "x": 2930,
+  "y": 5720,
+  "width": 545,
+  "height": 525,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2930,
+   "y": 5667,
+   "rx": 201.65,
+   "ry": 53
+  },
+  "community": "sugarspoon",
+  "role": "home",
+  "homeType": "sugar-cottage",
+  "variant": 5,
+  "footprints": [
+   {
+    "x": 2930,
+    "y": 5667,
+    "rx": 201.65,
+    "ry": 53
+   }
+  ]
+ },
+ {
+  "id": "fair-community-124",
+  "name": "bread oven",
+  "src": "bigger/bread-oven.svg",
+  "x": 3820,
+  "y": 4930,
+  "width": 450,
+  "height": 390,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3820,
+   "y": 4880,
+   "rx": 175,
+   "ry": 50
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3820,
+    "y": 4880,
+    "rx": 175,
+    "ry": 50
+   }
+  ]
+ },
+ {
+  "id": "fair-community-125",
+  "name": "bread cart",
+  "src": "bigger/bread-cart.svg",
+  "x": 3720,
+  "y": 5370,
+  "width": 350,
+  "height": 290,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3720,
+   "y": 5336,
+   "rx": 137,
+   "ry": 34
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3720,
+    "y": 5336,
+    "rx": 137,
+    "ry": 34
+   }
+  ]
+ },
+ {
+  "id": "fair-community-126",
+  "name": "bread cart",
+  "src": "bigger/bread-cart.svg",
+  "x": 4220,
+  "y": 5400,
+  "width": 315,
+  "height": 261,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 4220,
+   "y": 5368,
+   "rx": 125,
+   "ry": 32
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 4220,
+    "y": 5368,
+    "rx": 125,
+    "ry": 32
+   }
+  ]
+ },
+ {
+  "id": "fair-community-127",
+  "name": "flour crates",
+  "src": "bigger/flour-crates.svg",
+  "x": 3650,
+  "y": 5580,
+  "width": 250,
+  "height": 187,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3650,
+   "y": 5550,
+   "rx": 105,
+   "ry": 30
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3650,
+    "y": 5550,
+    "rx": 105,
+    "ry": 30
+   }
+  ]
+ },
+ {
+  "id": "fair-community-128",
+  "name": "flour crates",
+  "src": "bigger/flour-crates.svg",
+  "x": 500,
+  "y": 5620,
+  "width": 280,
+  "height": 210,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 500,
+   "y": 5588,
+   "rx": 120,
+   "ry": 32
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 500,
+    "y": 5588,
+    "rx": 120,
+    "ry": 32
+   }
+  ]
+ },
+ {
+  "id": "fair-community-129",
+  "name": "flour crates",
+  "src": "bigger/flour-crates.svg",
+  "x": 1200,
+  "y": 5550,
+  "width": 235,
+  "height": 176,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 1200,
+   "y": 5521,
+   "rx": 100,
+   "ry": 29
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1200,
+    "y": 5521,
+    "rx": 100,
+    "ry": 29
+   }
+  ]
+ },
+ {
+  "id": "fair-community-130",
+  "name": "tea table",
+  "src": "bigger/tea-table.svg",
+  "x": 2040,
+  "y": 5470,
+  "width": 260,
+  "height": 217,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2040,
+   "y": 5443,
+   "rx": 90,
+   "ry": 27
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2040,
+    "y": 5443,
+    "rx": 90,
+    "ry": 27
+   }
+  ]
+ },
+ {
+  "id": "fair-community-131",
+  "name": "tea table",
+  "src": "bigger/tea-table.svg",
+  "x": 2560,
+  "y": 5620,
+  "width": 260,
+  "height": 217,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2560,
+   "y": 5593,
+   "rx": 90,
+   "ry": 27
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2560,
+    "y": 5593,
+    "rx": 90,
+    "ry": 27
+   }
+  ]
+ },
+ {
+  "id": "fair-community-132",
+  "name": "Egg stall",
+  "src": "stall-pink.svg",
+  "x": -700,
+  "y": 4900,
+  "width": 304,
+  "height": 348,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9828
+  },
+  "scale": 0.9,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": -700,
+    "y": 4861.696,
+    "rx": 114.912,
+    "ry": 46.51200000000001
+   }
+  ]
+ },
+ {
+  "id": "fair-community-133",
+  "name": "Cupcake stall",
+  "src": "stall-blue.svg",
+  "x": 270,
+  "y": 5200,
+  "width": 304,
+  "height": 348,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9828
+  },
+  "scale": 0.9,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 270,
+    "y": 5161.696,
+    "rx": 114.912,
+    "ry": 46.51200000000001
+   }
+  ]
+ },
+ {
+  "id": "fair-community-134",
+  "name": "Bunting",
+  "src": "bunting.svg",
+  "x": 2400,
+  "y": 5070,
+  "width": 536,
+  "height": 332,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9819
+  },
+  "scale": 0.85,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2231.428,
+    "y": 5058,
+    "rx": 36.448,
+    "ry": 18
+   },
+   {
+    "x": 2568.572,
+    "y": 5058,
+    "rx": 36.448,
+    "ry": 18
+   }
+  ]
+ },
+ {
+  "id": "fair-community-135",
+  "name": "washing line",
+  "src": "bigger/washing-line.svg",
+  "x": 3160,
+  "y": 5700,
+  "width": 390,
+  "height": 168,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2978,
+    "y": 5690,
+    "rx": 10,
+    "ry": 10
+   },
+   {
+    "x": 3342,
+    "y": 5690,
+    "rx": 10,
+    "ry": 10
+   }
+  ]
+ },
+ {
+  "id": "fair-community-136",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 1482.5,
+  "y": 4990,
+  "width": 155,
+  "height": 40.595238095238095,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1482.5,
+    "y": 4980,
+    "rx": 74.39999999999999,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-137",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 1737.5,
+  "y": 4990,
+  "width": 155,
+  "height": 40.595238095238095,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1737.5,
+    "y": 4980,
+    "rx": 74.39999999999999,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-138",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 2065,
+  "y": 4890,
+  "width": 170,
+  "height": 44.523809523809526,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2065,
+    "y": 4880,
+    "rx": 81.6,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-139",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 2335,
+  "y": 4890,
+  "width": 170,
+  "height": 44.523809523809526,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2335,
+    "y": 4880,
+    "rx": 81.6,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-140",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 2715,
+  "y": 4970,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2715,
+    "y": 4960,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-141",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 2965,
+  "y": 4970,
+  "width": 150,
+  "height": 39.285714285714285,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2965,
+    "y": 4960,
+    "rx": 72,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-142",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 1160,
+  "y": 5330,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1160,
+    "y": 5320,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-143",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 1360,
+  "y": 5330,
+  "width": 100,
+  "height": 26.19047619047619,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1360,
+    "y": 5320,
+    "rx": 48,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-144",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 3142.5,
+  "y": 5240,
+  "width": 115,
+  "height": 30.11904761904762,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3142.5,
+    "y": 5230,
+    "rx": 55.199999999999996,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-145",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 3357.5,
+  "y": 5240,
+  "width": 115,
+  "height": 30.11904761904762,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3357.5,
+    "y": 5230,
+    "rx": 55.199999999999996,
+    "ry": 9
+   }
+  ]
+ },
+ {
+  "id": "fair-community-146",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 1440,
+  "y": 4990,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1440,
+    "y": 4960.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-147",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 1930,
+  "y": 4980,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1930,
+    "y": 4950.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-148",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 2510,
+  "y": 4970,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2510,
+    "y": 4940.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-149",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 3030,
+  "y": 4960,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3030,
+    "y": 4930.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-150",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 700,
+  "y": 5510,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 700,
+    "y": 5480.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-151",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 3440,
+  "y": 5520,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3440,
+    "y": 5490.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-152",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 2790,
+  "y": 5830,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2790,
+    "y": 5800.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-153",
+  "name": "neighbour sign",
+  "src": "bigger/neighbour-sign.svg",
+  "x": 2700,
+  "y": 5750,
+  "width": 145,
+  "height": 175,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2700,
+   "y": 5738,
+   "rx": 20,
+   "ry": 12
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2700,
+    "y": 5738,
+    "rx": 20,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-154",
+  "name": "Fair lamp",
+  "src": "fair-lamp.svg",
+  "x": 1870,
+  "y": 5270,
+  "width": 192,
+  "height": 508,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9882000000000001
+  },
+  "scale": 0.5,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 1870,
+    "y": 5262,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-155",
+  "name": "Fair lamp",
+  "src": "fair-lamp.svg",
+  "x": 3090,
+  "y": 5480,
+  "width": 192,
+  "height": 508,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9882000000000001
+  },
+  "scale": 0.5,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3090,
+    "y": 5472,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-156",
+  "name": "shared well",
+  "src": "bigger/shared-well.svg",
+  "x": 2670,
+  "y": 5230,
+  "width": 180,
+  "height": 185,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 2670,
+   "y": 5205,
+   "rx": 65,
+   "ry": 25
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 2670,
+    "y": 5205,
+    "rx": 65,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-157",
+  "name": "garden cart",
+  "src": "bigger/garden-cart.svg",
+  "x": 3930,
+  "y": 5640,
+  "width": 240,
+  "height": 170,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 3930,
+   "y": 5615,
+   "rx": 85,
+   "ry": 25
+  },
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 3930,
+    "y": 5615,
+    "rx": 85,
+    "ry": 25
+   }
+  ]
+ },
+ {
+  "id": "fair-community-158",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": -950,
+  "y": 4530,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": -950,
+    "y": 4521,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-159",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": -700,
+  "y": 5410,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": -700,
+    "y": 5401,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-160",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 770,
+  "y": 5060,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 770,
+    "y": 5051,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-161",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 4620,
+  "y": 5560,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 4620,
+    "y": 5551,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-162",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 5780,
+  "y": 5120,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 5780,
+    "y": 5111,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-163",
+  "name": "Bush",
+  "src": "reuse/bush-3.svg",
+  "x": 5700,
+  "y": 5730,
+  "width": 116,
+  "height": 104,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 5700,
+    "y": 5716,
+    "rx": 45.936,
+    "ry": 28.6
+   }
+  ]
+ },
+ {
+  "id": "fair-community-164",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 900,
+  "y": 50,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 900,
+    "y": 41,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-165",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 1240,
+  "y": -30,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 1240,
+    "y": -39,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-166",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 1520,
+  "y": 110,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 1520,
+    "y": 101,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-167",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": 1120,
+  "y": 300,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.9,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 1120,
+    "y": 291,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-168",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": -970,
+  "y": 3650,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.2,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -970,
+    "y": 3641,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-169",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": -550,
+  "y": 3550,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -550,
+    "y": 3541,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-170",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": -1160,
+  "y": 3940,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -1160,
+    "y": 3931,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-171",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": 6000,
+  "y": 4520,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 6000,
+    "y": 4511,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-172",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 6370,
+  "y": 4560,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 6370,
+    "y": 4551,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-173",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 6610,
+  "y": 4770,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 6610,
+    "y": 4761,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-174",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 7420,
+  "y": 690,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.15,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7420,
+    "y": 681,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-175",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 7760,
+  "y": 800,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7760,
+    "y": 791,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-176",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 7640,
+  "y": 1120,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7640,
+    "y": 1111,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-177",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 3990,
+  "y": 4630,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 3990,
+    "y": 4621,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-178",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 4480,
+  "y": 4510,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4480,
+    "y": 4501,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-179",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 4790,
+  "y": 4650,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4790,
+    "y": 4641,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-180",
+  "name": "bench park",
+  "src": "reuse/street--bench-park.svg",
+  "x": 1430,
+  "y": 300,
+  "width": 818,
+  "height": 493,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9757
+  },
+  "scale": 0.25,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 1430,
+    "y": 271.37,
+    "rx": 85.89,
+    "ry": 34.765
+   }
+  ]
+ },
+ {
+  "id": "fair-community-181",
+  "name": "bench park",
+  "src": "reuse/street--bench-park.svg",
+  "x": -730,
+  "y": 4090,
+  "width": 818,
+  "height": 493,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9757
+  },
+  "scale": 0.25,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -730,
+    "y": 4061.37,
+    "rx": 85.89,
+    "ry": 34.765
+   }
+  ]
+ },
+ {
+  "id": "fair-community-182",
+  "name": "tea table",
+  "src": "bigger/tea-table.svg",
+  "x": -540,
+  "y": 4020,
+  "width": 260,
+  "height": 217,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": -540,
+   "y": 3993,
+   "rx": 90,
+   "ry": 27
+  },
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -540,
+    "y": 3993,
+    "rx": 90,
+    "ry": 27
+   }
+  ]
+ },
+ {
+  "id": "fair-community-183",
+  "name": "tea table",
+  "src": "bigger/tea-table.svg",
+  "x": 6260,
+  "y": 4820,
+  "width": 260,
+  "height": 217,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 6260,
+   "y": 4793,
+   "rx": 90,
+   "ry": 27
+  },
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 6260,
+    "y": 4793,
+    "rx": 90,
+    "ry": 27
+   }
+  ]
+ },
+ {
+  "id": "fair-community-184",
+  "name": "garden fence",
+  "src": "bigger/garden-fence.svg",
+  "x": 4090,
+  "y": 4810,
+  "width": 340,
+  "height": 89,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": null,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4090,
+    "y": 4790,
+    "rx": 162,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-185",
+  "name": "flour crates",
+  "src": "bigger/flour-crates.svg",
+  "x": 4500,
+  "y": 4780,
+  "width": 190,
+  "height": 143,
+  "scale": 1,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "shadow": false,
+  "footprint": {
+   "x": 4500,
+   "y": 4758,
+   "rx": 77,
+   "ry": 22
+  },
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4500,
+    "y": 4758,
+    "rx": 77,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-186",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 3940,
+  "y": 4450,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 3940,
+    "y": 4420.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-187",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4120,
+  "y": 4490,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4120,
+    "y": 4460.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-188",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4310,
+  "y": 4450,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4310,
+    "y": 4420.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-189",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4510,
+  "y": 4380,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4510,
+    "y": 4350.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-190",
+  "name": "Tulip planter",
+  "src": "tulip-planter.svg",
+  "x": 4700,
+  "y": 4430,
+  "width": 464,
+  "height": 324,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9815
+  },
+  "scale": 0.46,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 4700,
+    "y": 4400.1184,
+    "rx": 89.64479999999999,
+    "ry": 36.284800000000004
+   }
+  ]
+ },
+ {
+  "id": "fair-community-191",
+  "name": "Balloons",
+  "src": "balloons.svg",
+  "x": 7560,
+  "y": 1190,
+  "width": 324,
+  "height": 488,
+  "anchor": {
+   "x": 0.5,
+   "y": 0.9877
+  },
+  "scale": 0.5,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7560,
+    "y": 1182,
+    "rx": 18,
+    "ry": 12
+   }
+  ]
+ },
+ {
+  "id": "fair-community-192",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": -1750,
+  "y": 2470,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.85,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1750,
+    "y": 2461,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-193",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": -1100,
+  "y": 2480,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.8,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1100,
+    "y": 2471,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-194",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": -1210,
+  "y": 2430,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": true,
+  "community": "bobbinbell",
+  "footprints": [
+   {
+    "x": -1210,
+    "y": 2416,
+    "rx": 57.455999999999996,
+    "ry": 26.125
+   }
+  ]
+ },
+ {
+  "id": "fair-community-195",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 1710,
+  "y": -220,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 1710,
+    "y": -229,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-196",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 2150,
+  "y": -220,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.05,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2150,
+    "y": -229,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-197",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 2550,
+  "y": -260,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.95,
+  "flip": false,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2550,
+    "y": -269,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-198",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": 2020,
+  "y": -720,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 0.9,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2020,
+    "y": -729,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-199",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": 2520,
+  "y": -100,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "cloudpop",
+  "footprints": [
+   {
+    "x": 2520,
+    "y": -114,
+    "rx": 60.48,
+    "ry": 27.5
+   }
+  ]
+ },
+ {
+  "id": "fair-community-200",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 8190,
+  "y": 4670,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8190,
+    "y": 4661,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-201",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 8470,
+  "y": 4900,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8470,
+    "y": 4891,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-202",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 7650,
+  "y": 4770,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 7650,
+    "y": 4761,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-203",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": 8440,
+  "y": 5050,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "waddleshow",
+  "footprints": [
+   {
+    "x": 8440,
+    "y": 5036,
+    "rx": 60.48,
+    "ry": 27.5
+   }
+  ]
+ },
+ {
+  "id": "fair-community-204",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 4870,
+  "y": 5220,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 4870,
+    "y": 5211,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-205",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 5320,
+  "y": 5260,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 5320,
+    "y": 5251,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-206",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 5020,
+  "y": 4770,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 5020,
+    "y": 4761,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-207",
+  "name": "Bush",
+  "src": "reuse/bush-3.svg",
+  "x": 5470,
+  "y": 5310,
+  "width": 116,
+  "height": 104,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": false,
+  "community": "sugarspoon",
+  "footprints": [
+   {
+    "x": 5470,
+    "y": 5296,
+    "rx": 41.76,
+    "ry": 26
+   }
+  ]
+ },
+ {
+  "id": "fair-community-208",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": 7600,
+  "y": 650,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.15,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7600,
+    "y": 641,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-209",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": 7470,
+  "y": 1050,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7470,
+    "y": 1041,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-210",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": 7420,
+  "y": 1180,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 7420,
+    "y": 1166,
+    "rx": 60.48,
+    "ry": 27.5
+   }
+  ]
+ },
+ {
+  "id": "fair-community-211",
+  "name": "Tree",
+  "src": "reuse/tree-1.svg",
+  "x": 5900,
+  "y": 4680,
+  "width": 260,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.15,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 5900,
+    "y": 4671,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-212",
+  "name": "Tree",
+  "src": "reuse/tree-2.svg",
+  "x": 6210,
+  "y": 4800,
+  "width": 180,
+  "height": 360,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 6210,
+    "y": 4791,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-213",
+  "name": "Bush",
+  "src": "reuse/bush-3.svg",
+  "x": 6080,
+  "y": 4930,
+  "width": 116,
+  "height": 104,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": false,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": 6080,
+    "y": 4916,
+    "rx": 41.76,
+    "ry": 26
+   }
+  ]
+ },
+ {
+  "id": "fair-community-214",
+  "name": "Tree",
+  "src": "reuse/tree-3.svg",
+  "x": -930,
+  "y": 3630,
+  "width": 300,
+  "height": 380,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -930,
+    "y": 3621,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-215",
+  "name": "Tree",
+  "src": "reuse/tree-4.svg",
+  "x": -590,
+  "y": 3830,
+  "width": 200,
+  "height": 280,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1.1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -590,
+    "y": 3821,
+    "rx": 31,
+    "ry": 22
+   }
+  ]
+ },
+ {
+  "id": "fair-community-216",
+  "name": "Bush",
+  "src": "reuse/bush-2.svg",
+  "x": -690,
+  "y": 3970,
+  "width": 168,
+  "height": 110,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "scale": 1,
+  "flip": true,
+  "community": "commons",
+  "footprints": [
+   {
+    "x": -690,
+    "y": 3956,
+    "rx": 60.48,
+    "ry": 27.5
+   }
+  ]
  }
 ]

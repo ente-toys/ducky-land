@@ -1,0 +1,479 @@
+{
+  "renderer": "Static production SVG assembly; no live players, GPU water animation or runtime contact shadows",
+  "overview": "canal-fixed.png",
+  "crops": {
+    "pixelsPerWorldUnit": 0.8,
+    "width": 1500,
+    "height": 1100
+  },
+  "originalPreservation": {
+    "mask": "Original dry interior eroded 12 units, excluding shore antialiasing",
+    "comparedPixels": 213411,
+    "changedPixels": 0,
+    "maxChannelDelta": 0
+  },
+  "bridgeAudit": {
+    "structures": 19,
+    "sprites": 27,
+    "overWater": 14,
+    "preservationConflicts": 5,
+    "bridges": [
+      {
+        "name": "West heart bridge",
+        "src": "bridge-west.svg",
+        "axis": [
+          [
+            1860,
+            3200
+          ],
+          [
+            2600,
+            3200
+          ]
+        ],
+        "waterSamples": 69,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          2244.8,
+          3200
+        ],
+        "pieces": [
+          "bridge-west.svg"
+        ]
+      },
+      {
+        "name": "East heart bridge",
+        "src": "bridge-east.svg",
+        "axis": [
+          [
+            5400,
+            3200
+          ],
+          [
+            6140,
+            3200
+          ]
+        ],
+        "waterSamples": 69,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          5755.2,
+          3200
+        ],
+        "pieces": [
+          "bridge-east.svg"
+        ]
+      },
+      {
+        "name": "North heart bridge",
+        "src": "bridge-north.svg",
+        "axis": [
+          [
+            4000,
+            1660
+          ],
+          [
+            4000,
+            2220
+          ]
+        ],
+        "waterSamples": 61,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          4000,
+          1951.2
+        ],
+        "pieces": [
+          "bridge-north.svg"
+        ]
+      },
+      {
+        "name": "East fishing jetty",
+        "src": "jetty-east.svg",
+        "axis": [
+          [
+            7240,
+            2830
+          ],
+          [
+            7740,
+            2830
+          ]
+        ],
+        "waterSamples": 50,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          7620,
+          2830
+        ],
+        "pieces": [
+          "jetty-east.svg"
+        ]
+      },
+      {
+        "name": "Southwest fishing jetty",
+        "src": "jetty-southwest.svg",
+        "axis": [
+          [
+            2600,
+            5010
+          ],
+          [
+            2440,
+            5530
+          ]
+        ],
+        "waterSamples": 77,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          2500.8,
+          5332.4
+        ],
+        "pieces": [
+          "jetty-southwest.svg"
+        ]
+      },
+      {
+        "name": "Basin fishing jetty",
+        "src": "jetty-basin.svg",
+        "axis": [
+          [
+            4800,
+            3950
+          ],
+          [
+            5050,
+            4300
+          ]
+        ],
+        "waterSamples": 66,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          4970,
+          4188
+        ],
+        "pieces": [
+          "jetty-basin.svg"
+        ]
+      },
+      {
+        "name": "west-bank-bridge",
+        "src": "communities/west-bank-bridge.svg",
+        "axis": [
+          [
+            -15,
+            3300
+          ],
+          [
+            700,
+            3300
+          ]
+        ],
+        "waterSamples": 79,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          328.2,
+          3300
+        ],
+        "pieces": [
+          "communities/west-bank-bridge.svg"
+        ]
+      },
+      {
+        "name": "north-bank-bridge",
+        "src": "communities/north-bank-bridge.svg",
+        "axis": [
+          [
+            4150,
+            90
+          ],
+          [
+            4150,
+            760
+          ]
+        ],
+        "waterSamples": 84,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          4150,
+          418.3
+        ],
+        "pieces": [
+          "communities/north-bank-bridge.svg"
+        ]
+      },
+      {
+        "name": "east-bank-bridge",
+        "src": "communities/east-bank-bridge.svg",
+        "axis": [
+          [
+            7400,
+            3600
+          ],
+          [
+            8150,
+            3600
+          ]
+        ],
+        "waterSamples": 83,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          7715,
+          3600
+        ],
+        "pieces": [
+          "communities/east-bank-bridge.svg"
+        ]
+      },
+      {
+        "name": "south-bank-bridge",
+        "src": "communities/south-bank-bridge.svg",
+        "axis": [
+          [
+            5400,
+            5020
+          ],
+          [
+            5400,
+            5700
+          ]
+        ],
+        "waterSamples": 86,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          5400,
+          5360
+        ],
+        "pieces": [
+          "communities/south-bank-bridge.svg"
+        ]
+      },
+      {
+        "name": "reed-mouth-bridge",
+        "src": "communities/reed-mouth-bridge.svg",
+        "axis": [
+          [
+            3770,
+            6900
+          ],
+          [
+            4700,
+            6900
+          ]
+        ],
+        "waterSamples": 80,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          4216.4,
+          6900
+        ],
+        "pieces": [
+          "communities/reed-mouth-bridge.svg"
+        ]
+      },
+      {
+        "name": "quay-stream-bridge",
+        "src": "communities/quay-stream-bridge.svg",
+        "axis": [
+          [
+            -800,
+            300
+          ],
+          [
+            -800,
+            850
+          ]
+        ],
+        "waterSamples": 56,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          -800,
+          569.5
+        ],
+        "pieces": [
+          "communities/quay-stream-bridge.svg"
+        ]
+      },
+      {
+        "name": "pearl-stream-bridge",
+        "src": "communities/pearl-stream-bridge.svg",
+        "axis": [
+          [
+            8150,
+            3600
+          ],
+          [
+            8800,
+            3600
+          ]
+        ],
+        "waterSamples": 44,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          8481.5,
+          3600
+        ],
+        "pieces": [
+          "communities/pearl-stream-bridge.svg"
+        ]
+      },
+      {
+        "name": "Outer quay jetty",
+        "src": "communities/outer-quay-jetty.svg",
+        "axis": [
+          [
+            -2190,
+            2400
+          ],
+          [
+            -2450,
+            2400
+          ]
+        ],
+        "waterSamples": 101,
+        "samples": 101,
+        "before": "over water",
+        "after": "over water",
+        "waterPoint": [
+          -2320,
+          2400
+        ],
+        "pieces": [
+          "communities/outer-quay-jetty.svg"
+        ]
+      },
+      {
+        "name": "Northwest centre bridge",
+        "src": "centre/bridge-north-west-deck.svg",
+        "axis": [
+          [
+            2937.5,
+            2844
+          ],
+          [
+            3362.5,
+            2844
+          ]
+        ],
+        "waterSamples": 0,
+        "samples": 101,
+        "before": "dry paving in original centre",
+        "after": "preserved original, awaiting conflict decision",
+        "waterPoint": null,
+        "pieces": [
+          "integrated-centre-bridge-north-west-deck",
+          "integrated-centre-bridge-north-west-back",
+          "integrated-centre-bridge-north-west-front"
+        ]
+      },
+      {
+        "name": "Southwest centre bridge",
+        "src": "centre/bridge-south-west-deck.svg",
+        "axis": [
+          [
+            2937.5,
+            3796
+          ],
+          [
+            3362.5,
+            3796
+          ]
+        ],
+        "waterSamples": 0,
+        "samples": 101,
+        "before": "dry paving in original centre",
+        "after": "preserved original, awaiting conflict decision",
+        "waterPoint": null,
+        "pieces": [
+          "integrated-centre-bridge-south-west-deck",
+          "integrated-centre-bridge-south-west-back",
+          "integrated-centre-bridge-south-west-front"
+        ]
+      },
+      {
+        "name": "Northeast centre bridge",
+        "src": "centre/bridge-north-east-deck.svg",
+        "axis": [
+          [
+            4637.5,
+            2844
+          ],
+          [
+            5062.5,
+            2844
+          ]
+        ],
+        "waterSamples": 0,
+        "samples": 101,
+        "before": "dry paving in original centre",
+        "after": "preserved original, awaiting conflict decision",
+        "waterPoint": null,
+        "pieces": [
+          "integrated-centre-bridge-north-east-deck",
+          "integrated-centre-bridge-north-east-back",
+          "integrated-centre-bridge-north-east-front"
+        ]
+      },
+      {
+        "name": "Southeast centre bridge",
+        "src": "centre/bridge-south-east-deck.svg",
+        "axis": [
+          [
+            4637.5,
+            3796
+          ],
+          [
+            5062.5,
+            3796
+          ]
+        ],
+        "waterSamples": 0,
+        "samples": 101,
+        "before": "dry paving in original centre",
+        "after": "preserved original, awaiting conflict decision",
+        "waterPoint": null,
+        "pieces": [
+          "integrated-centre-bridge-south-east-deck",
+          "integrated-centre-bridge-south-east-back",
+          "integrated-centre-bridge-south-east-front"
+        ]
+      },
+      {
+        "name": "Centre ring boardwalk",
+        "src": "centre/back-boardwalk.svg",
+        "before": "dry paving in original centre",
+        "after": "preserved original, awaiting conflict decision",
+        "pieces": [
+          "integrated-centre-back-boardwalk"
+        ],
+        "note": "Raised timber ring around the original fountain plaza, visibly over paving. No claim of water below it."
+      }
+    ]
+  }
+}

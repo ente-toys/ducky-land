@@ -1,0 +1,976 @@
+{
+ "bounds": {
+  "width": 12000,
+  "height": 8400,
+  "origin": {
+   "x": -2000,
+   "y": -1400
+  }
+ },
+ "places": [
+  {
+   "id": "pollenpatch",
+   "name": "Pollenpatch Row",
+   "who": "Seed growers and beekeeping families",
+   "x": 1740,
+   "y": 440,
+   "point": [
+    1780,
+    600
+   ],
+   "kind": "grower",
+   "colour": "#E7BD61",
+   "roof": "#789044",
+   "homes": [
+    [
+     1030,
+     270
+    ],
+    [
+     1540,
+     160
+    ],
+    [
+     2050,
+     140
+    ],
+    [
+     2560,
+     260
+    ]
+   ],
+   "work": "Seed nursery, cold frames, apiary and honey stall",
+   "green": [
+    1760,
+    530,
+    820,
+    300
+   ],
+   "lane": [
+    [
+     1780,
+     600
+    ],
+    [
+     1300,
+     650
+    ],
+    [
+     1020,
+     660
+    ]
+   ]
+  },
+  {
+   "id": "hayhello",
+   "name": "Hayhello Hamlet",
+   "who": "Sunflower harvesters and seed sorters",
+   "x": 6700,
+   "y": 130,
+   "point": [
+    6750,
+    450
+   ],
+   "kind": "harvester",
+   "colour": "#E9C87D",
+   "roof": "#BE633F",
+   "homes": [
+    [
+     5630,
+     180
+    ],
+    [
+     6140,
+     30
+    ],
+    [
+     6650,
+     0
+    ],
+    [
+     7160,
+     60
+    ]
+   ],
+   "work": "Cooperative barn, harvest carts, drying yard and crop beds",
+   "green": [
+    6610,
+    270,
+    870,
+    350
+   ],
+   "lane": [
+    [
+     6750,
+     450
+    ],
+    [
+     7180,
+     390
+    ],
+    [
+     7450,
+     320
+    ]
+   ]
+  },
+  {
+   "id": "whirlyseed",
+   "name": "Whirlyseed Close",
+   "who": "Millers, bakers and kitchen gardeners",
+   "x": 8430,
+   "y": 2920,
+   "point": [
+    8470,
+    3070
+   ],
+   "kind": "miller",
+   "colour": "#F4DE9A",
+   "roof": "#CC8F44",
+   "homes": [
+    [
+     8170,
+     2730
+    ],
+    [
+     8680,
+     2720
+    ],
+    [
+     9190,
+     2780
+    ],
+    [
+     8390,
+     3420
+    ],
+    [
+     8900,
+     3450
+    ]
+   ],
+   "work": "Windmill, grain store, bread oven and vegetable allotments",
+   "green": [
+    8560,
+    3160,
+    570,
+    580
+   ],
+   "lane": [
+    [
+     8470,
+     3070
+    ],
+    [
+     8930,
+     3120
+    ],
+    [
+     9180,
+     3110
+    ]
+   ]
+  },
+  {
+   "id": "petalpost",
+   "name": "Petalpost Village",
+   "who": "Florists, bouquet makers and their families",
+   "x": 3860,
+   "y": 5730,
+   "point": [
+    3850,
+    5920
+   ],
+   "kind": "florist",
+   "colour": "#F1D083",
+   "roof": "#CA725A",
+   "homes": [
+    [
+     2970,
+     5510
+    ],
+    [
+     3480,
+     5390
+    ],
+    [
+     3990,
+     5520
+    ],
+    [
+     3410,
+     6100
+    ],
+    [
+     3920,
+     6170
+    ]
+   ],
+   "work": "Flower exchange, bouquet benches, communal packing room and growing plots",
+   "green": [
+    3720,
+    5870,
+    1080,
+    340
+   ],
+   "lane": [
+    [
+     3850,
+     5920
+    ],
+    [
+     4220,
+     6240
+    ],
+    [
+     4100,
+     6470
+    ],
+    [
+     3440,
+     6490
+    ]
+   ]
+  },
+  {
+   "id": "seedwake",
+   "name": "Seedwake Wharf",
+   "who": "Seed-boat crews, net menders and dock gardeners",
+   "x": -580,
+   "y": 3200,
+   "point": [
+    -570,
+    3470
+   ],
+   "kind": "boatfolk",
+   "colour": "#D4AD69",
+   "roof": "#6F9865",
+   "homes": [
+    [
+     -880,
+     2770
+    ],
+    [
+     -370,
+     2790
+    ],
+    [
+     -1130,
+     3330
+    ],
+    [
+     -710,
+     3780
+    ],
+    [
+     -200,
+     3750
+    ]
+   ],
+   "work": "Seed landing, packing shed, sail repair table and produce-loading court",
+   "green": [
+    -630,
+    3260,
+    580,
+    670
+   ],
+   "lane": [
+    [
+     -570,
+     3470
+    ],
+    [
+     -980,
+     3580
+    ],
+    [
+     -1220,
+     3600
+    ]
+   ]
+  }
+ ],
+ "communities": [
+  {
+   "id": "pollenpatch",
+   "name": "Pollenpatch Row",
+   "who": "Seed growers and beekeeping families",
+   "x": 1740,
+   "y": 440,
+   "point": [
+    1780,
+    600
+   ],
+   "kind": "grower",
+   "colour": "#E7BD61",
+   "roof": "#789044",
+   "homes": [
+    {
+     "id": "pollenpatch-home-1",
+     "community": "pollenpatch",
+     "kind": "grower",
+     "x": 1030,
+     "y": 270,
+     "colour": "#E7BD61",
+     "roof": "#789044",
+     "address": 1,
+     "sx": 1.2,
+     "sy": 1.15
+    },
+    {
+     "id": "pollenpatch-home-2",
+     "community": "pollenpatch",
+     "kind": "grower",
+     "x": 1540,
+     "y": 160,
+     "colour": "#E7BD61",
+     "roof": "#789044",
+     "address": 2,
+     "sx": 0.96,
+     "sy": 0.96
+    },
+    {
+     "id": "pollenpatch-home-3",
+     "community": "pollenpatch",
+     "kind": "grower",
+     "x": 2050,
+     "y": 140,
+     "colour": "#E7BD61",
+     "roof": "#789044",
+     "address": 3,
+     "sx": 1.24,
+     "sy": 1.18
+    },
+    {
+     "id": "pollenpatch-home-4",
+     "community": "pollenpatch",
+     "kind": "grower",
+     "x": 2560,
+     "y": 260,
+     "colour": "#E7BD61",
+     "roof": "#789044",
+     "address": 4,
+     "sx": 1.08,
+     "sy": 1.07
+    }
+   ],
+   "work": "Seed nursery, cold frames, apiary and honey stall",
+   "green": [
+    1760,
+    530,
+    820,
+    300
+   ],
+   "lane": [
+    [
+     1780,
+     600
+    ],
+    [
+     1300,
+     650
+    ],
+    [
+     1020,
+     660
+    ]
+   ]
+  },
+  {
+   "id": "hayhello",
+   "name": "Hayhello Hamlet",
+   "who": "Sunflower harvesters and seed sorters",
+   "x": 6700,
+   "y": 130,
+   "point": [
+    6750,
+    450
+   ],
+   "kind": "harvester",
+   "colour": "#E9C87D",
+   "roof": "#BE633F",
+   "homes": [
+    {
+     "id": "hayhello-home-1",
+     "community": "hayhello",
+     "kind": "harvester",
+     "x": 5630,
+     "y": 180,
+     "colour": "#E9C87D",
+     "roof": "#BE633F",
+     "address": 1,
+     "sx": 1.2,
+     "sy": 1.15
+    },
+    {
+     "id": "hayhello-home-2",
+     "community": "hayhello",
+     "kind": "harvester",
+     "x": 6140,
+     "y": 30,
+     "colour": "#E9C87D",
+     "roof": "#BE633F",
+     "address": 2,
+     "sx": 0.96,
+     "sy": 0.96
+    },
+    {
+     "id": "hayhello-home-3",
+     "community": "hayhello",
+     "kind": "harvester",
+     "x": 6650,
+     "y": 0,
+     "colour": "#E9C87D",
+     "roof": "#BE633F",
+     "address": 3,
+     "sx": 1.24,
+     "sy": 1.18
+    },
+    {
+     "id": "hayhello-home-4",
+     "community": "hayhello",
+     "kind": "harvester",
+     "x": 7160,
+     "y": 60,
+     "colour": "#E9C87D",
+     "roof": "#BE633F",
+     "address": 4,
+     "sx": 1.08,
+     "sy": 1.07
+    }
+   ],
+   "work": "Cooperative barn, harvest carts, drying yard and crop beds",
+   "green": [
+    6610,
+    270,
+    870,
+    350
+   ],
+   "lane": [
+    [
+     6750,
+     450
+    ],
+    [
+     7180,
+     390
+    ],
+    [
+     7450,
+     320
+    ]
+   ]
+  },
+  {
+   "id": "whirlyseed",
+   "name": "Whirlyseed Close",
+   "who": "Millers, bakers and kitchen gardeners",
+   "x": 8430,
+   "y": 2920,
+   "point": [
+    8470,
+    3070
+   ],
+   "kind": "miller",
+   "colour": "#F4DE9A",
+   "roof": "#CC8F44",
+   "homes": [
+    {
+     "id": "whirlyseed-home-1",
+     "community": "whirlyseed",
+     "kind": "miller",
+     "x": 8170,
+     "y": 2730,
+     "colour": "#F4DE9A",
+     "roof": "#CC8F44",
+     "address": 1,
+     "sx": 1.2,
+     "sy": 1.15
+    },
+    {
+     "id": "whirlyseed-home-2",
+     "community": "whirlyseed",
+     "kind": "miller",
+     "x": 8680,
+     "y": 2720,
+     "colour": "#F4DE9A",
+     "roof": "#CC8F44",
+     "address": 2,
+     "sx": 0.96,
+     "sy": 0.96
+    },
+    {
+     "id": "whirlyseed-home-3",
+     "community": "whirlyseed",
+     "kind": "miller",
+     "x": 9190,
+     "y": 2780,
+     "colour": "#F4DE9A",
+     "roof": "#CC8F44",
+     "address": 3,
+     "sx": 1.24,
+     "sy": 1.18
+    },
+    {
+     "id": "whirlyseed-home-4",
+     "community": "whirlyseed",
+     "kind": "miller",
+     "x": 8390,
+     "y": 3420,
+     "colour": "#F4DE9A",
+     "roof": "#CC8F44",
+     "address": 4,
+     "sx": 1.08,
+     "sy": 1.07
+    },
+    {
+     "id": "whirlyseed-home-5",
+     "community": "whirlyseed",
+     "kind": "miller",
+     "x": 8900,
+     "y": 3450,
+     "colour": "#F4DE9A",
+     "roof": "#CC8F44",
+     "address": 5,
+     "sx": 1.14,
+     "sy": 1.02
+    }
+   ],
+   "work": "Windmill, grain store, bread oven and vegetable allotments",
+   "green": [
+    8560,
+    3160,
+    570,
+    580
+   ],
+   "lane": [
+    [
+     8470,
+     3070
+    ],
+    [
+     8930,
+     3120
+    ],
+    [
+     9180,
+     3110
+    ]
+   ]
+  },
+  {
+   "id": "petalpost",
+   "name": "Petalpost Village",
+   "who": "Florists, bouquet makers and their families",
+   "x": 3860,
+   "y": 5730,
+   "point": [
+    3850,
+    5920
+   ],
+   "kind": "florist",
+   "colour": "#F1D083",
+   "roof": "#CA725A",
+   "homes": [
+    {
+     "id": "petalpost-home-1",
+     "community": "petalpost",
+     "kind": "florist",
+     "x": 2970,
+     "y": 5510,
+     "colour": "#F1D083",
+     "roof": "#CA725A",
+     "address": 1,
+     "sx": 1.2,
+     "sy": 1.15
+    },
+    {
+     "id": "petalpost-home-2",
+     "community": "petalpost",
+     "kind": "florist",
+     "x": 3480,
+     "y": 5390,
+     "colour": "#F1D083",
+     "roof": "#CA725A",
+     "address": 2,
+     "sx": 0.96,
+     "sy": 0.96
+    },
+    {
+     "id": "petalpost-home-3",
+     "community": "petalpost",
+     "kind": "florist",
+     "x": 3990,
+     "y": 5520,
+     "colour": "#F1D083",
+     "roof": "#CA725A",
+     "address": 3,
+     "sx": 1.24,
+     "sy": 1.18
+    },
+    {
+     "id": "petalpost-home-4",
+     "community": "petalpost",
+     "kind": "florist",
+     "x": 3410,
+     "y": 6100,
+     "colour": "#F1D083",
+     "roof": "#CA725A",
+     "address": 4,
+     "sx": 1.08,
+     "sy": 1.07
+    },
+    {
+     "id": "petalpost-home-5",
+     "community": "petalpost",
+     "kind": "florist",
+     "x": 3920,
+     "y": 6170,
+     "colour": "#F1D083",
+     "roof": "#CA725A",
+     "address": 5,
+     "sx": 1.14,
+     "sy": 1.02
+    }
+   ],
+   "work": "Flower exchange, bouquet benches, communal packing room and growing plots",
+   "green": [
+    3720,
+    5870,
+    1080,
+    340
+   ],
+   "lane": [
+    [
+     3850,
+     5920
+    ],
+    [
+     4220,
+     6240
+    ],
+    [
+     4100,
+     6470
+    ],
+    [
+     3440,
+     6490
+    ]
+   ]
+  },
+  {
+   "id": "seedwake",
+   "name": "Seedwake Wharf",
+   "who": "Seed-boat crews, net menders and dock gardeners",
+   "x": -580,
+   "y": 3200,
+   "point": [
+    -570,
+    3470
+   ],
+   "kind": "boatfolk",
+   "colour": "#D4AD69",
+   "roof": "#6F9865",
+   "homes": [
+    {
+     "id": "seedwake-home-1",
+     "community": "seedwake",
+     "kind": "boatfolk",
+     "x": -880,
+     "y": 2770,
+     "colour": "#D4AD69",
+     "roof": "#6F9865",
+     "address": 1,
+     "sx": 1.2,
+     "sy": 1.15
+    },
+    {
+     "id": "seedwake-home-2",
+     "community": "seedwake",
+     "kind": "boatfolk",
+     "x": -370,
+     "y": 2790,
+     "colour": "#D4AD69",
+     "roof": "#6F9865",
+     "address": 2,
+     "sx": 0.96,
+     "sy": 0.96
+    },
+    {
+     "id": "seedwake-home-3",
+     "community": "seedwake",
+     "kind": "boatfolk",
+     "x": -1130,
+     "y": 3330,
+     "colour": "#D4AD69",
+     "roof": "#6F9865",
+     "address": 3,
+     "sx": 1.24,
+     "sy": 1.18
+    },
+    {
+     "id": "seedwake-home-4",
+     "community": "seedwake",
+     "kind": "boatfolk",
+     "x": -710,
+     "y": 3780,
+     "colour": "#D4AD69",
+     "roof": "#6F9865",
+     "address": 4,
+     "sx": 1.08,
+     "sy": 1.07
+    },
+    {
+     "id": "seedwake-home-5",
+     "community": "seedwake",
+     "kind": "boatfolk",
+     "x": -200,
+     "y": 3750,
+     "colour": "#D4AD69",
+     "roof": "#6F9865",
+     "address": 5,
+     "sx": 1.14,
+     "sy": 1.02
+    }
+   ],
+   "work": "Seed landing, packing shed, sail repair table and produce-loading court",
+   "green": [
+    -630,
+    3260,
+    580,
+    670
+   ],
+   "lane": [
+    [
+     -570,
+     3470
+    ],
+    [
+     -980,
+     3580
+    ],
+    [
+     -1220,
+     3600
+    ]
+   ]
+  }
+ ],
+ "lanes": [
+  [
+   [
+    1780,
+    600
+   ],
+   [
+    3300,
+    100
+   ],
+   [
+    5300,
+    200
+   ],
+   [
+    6750,
+    450
+   ],
+   [
+    7750,
+    -80
+   ],
+   [
+    8420,
+    1000
+   ],
+   [
+    8470,
+    3070
+   ],
+   [
+    8120,
+    4420
+   ],
+   [
+    6540,
+    5400
+   ],
+   [
+    5160,
+    6000
+   ],
+   [
+    3850,
+    5920
+   ],
+   [
+    1850,
+    5610
+   ],
+   [
+    100,
+    4580
+   ],
+   [
+    -570,
+    3470
+   ],
+   [
+    -550,
+    1700
+   ],
+   [
+    1780,
+    600
+   ]
+  ],
+  [
+   [
+    1780,
+    600
+   ],
+   [
+    1700,
+    800
+   ],
+   [
+    1600,
+    1000
+   ]
+  ],
+  [
+   [
+    3300,
+    100
+   ],
+   [
+    3300,
+    700
+   ],
+   [
+    3180,
+    1250
+   ]
+  ],
+  [
+   [
+    6750,
+    450
+   ],
+   [
+    6750,
+    700
+   ],
+   [
+    6500,
+    950
+   ]
+  ],
+  [
+   [
+    8470,
+    3070
+   ],
+   [
+    7900,
+    2850
+   ],
+   [
+    6880,
+    2450
+   ]
+  ],
+  [
+   [
+    3850,
+    5920
+   ],
+   [
+    4300,
+    5200
+   ],
+   [
+    4470,
+    4140
+   ]
+  ],
+  [
+   [
+    1850,
+    5610
+   ],
+   [
+    1800,
+    5100
+   ],
+   [
+    2250,
+    4650
+   ]
+  ],
+  [
+   [
+    -570,
+    3470
+   ],
+   [
+    -100,
+    3700
+   ],
+   [
+    600,
+    3500
+   ]
+  ],
+  [
+   [
+    8470,
+    3070
+   ],
+   [
+    8930,
+    3120
+   ],
+   [
+    9180,
+    3110
+   ]
+  ],
+  [
+   [
+    3850,
+    5920
+   ],
+   [
+    4220,
+    6240
+   ],
+   [
+    4100,
+    6470
+   ],
+   [
+    3440,
+    6490
+   ]
+  ],
+  [
+   [
+    -570,
+    3470
+   ],
+   [
+    -980,
+    3580
+   ],
+   [
+    -1220,
+    3600
+   ]
+  ]
+ ],
+ "newProps": 216,
+ "newObstacles": 241,
+ "oldProps": 440,
+ "originalTiles": 24
+}

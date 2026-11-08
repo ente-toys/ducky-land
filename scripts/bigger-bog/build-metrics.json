@@ -1,0 +1,12 @@
+{
+  "landAreaBefore": 27291239.39265,
+  "landAreaAfter": 88531721.48798105,
+  "landRatio": 3.243961192609822,
+  "groundTextureMiBBefore": 89.7216796875,
+  "groundTextureMiBAfter": 178.9466552734375,
+  "groundTiles": 93,
+  "maxTileUnits": 2000,
+  "maxTilePixels": 1400,
+  "originalPropsPreserved": true,
+  "originalSleepSpotsPreserved": true
+}

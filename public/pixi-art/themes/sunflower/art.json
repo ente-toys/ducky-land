@@ -1,172 +1,556 @@
 {
- "width": 8000,
- "height": 5600,
+ "width": 12000,
+ "height": 8400,
  "sea": "#6EC9DE",
  "ground": {
   "tiles": [
    {
-    "src": "ground-r0-c0.svg",
+    "src": "bigger/ground-0-0.svg",
+    "x": -2000,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-1.svg",
+    "x": -500,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-2.svg",
+    "x": 1000,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-3.svg",
+    "x": 2500,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-4.svg",
+    "x": 4000,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-5.svg",
+    "x": 5500,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-6.svg",
+    "x": 7000,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-0-7.svg",
+    "x": 8500,
+    "y": -1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-0.svg",
+    "x": -2000,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-1.svg",
+    "x": -500,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-2.svg",
+    "x": 1000,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-3.svg",
+    "x": 2500,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-4.svg",
+    "x": 4000,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-5.svg",
+    "x": 5500,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-6.svg",
+    "x": 7000,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-1-7.svg",
+    "x": 8500,
+    "y": 0,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-0.svg",
+    "x": -2000,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-1.svg",
+    "x": -500,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-2.svg",
+    "x": 1000,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-3.svg",
+    "x": 2500,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-4.svg",
+    "x": 4000,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-5.svg",
+    "x": 5500,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-6.svg",
+    "x": 7000,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-2-7.svg",
+    "x": 8500,
+    "y": 1400,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-0.svg",
+    "x": -2000,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-1.svg",
+    "x": -500,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-2.svg",
+    "x": 1000,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-3.svg",
+    "x": 2500,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-4.svg",
+    "x": 4000,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-5.svg",
+    "x": 5500,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-6.svg",
+    "x": 7000,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-3-7.svg",
+    "x": 8500,
+    "y": 2800,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-0.svg",
+    "x": -2000,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-1.svg",
+    "x": -500,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-2.svg",
+    "x": 1000,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-3.svg",
+    "x": 2500,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-4.svg",
+    "x": 4000,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-5.svg",
+    "x": 5500,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-6.svg",
+    "x": 7000,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-4-7.svg",
+    "x": 8500,
+    "y": 4200,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-0.svg",
+    "x": -2000,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-1.svg",
+    "x": -500,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-2.svg",
+    "x": 1000,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-3.svg",
+    "x": 2500,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-4.svg",
+    "x": 4000,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-5.svg",
+    "x": 5500,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-6.svg",
+    "x": 7000,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/ground-5-7.svg",
+    "x": 8500,
+    "y": 5600,
+    "width": 1500,
+    "height": 1400,
+    "resolution": 1
+   },
+   {
+    "src": "bigger/original-ground-0.svg",
     "x": 0,
     "y": 0,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r0-c1.svg",
+    "src": "bigger/original-ground-1.svg",
     "x": 1334,
     "y": 0,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r0-c2.svg",
+    "src": "bigger/original-ground-2.svg",
     "x": 2668,
     "y": 0,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r0-c3.svg",
+    "src": "bigger/original-ground-3.svg",
     "x": 4002,
     "y": 0,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r0-c4.svg",
+    "src": "bigger/original-ground-4.svg",
     "x": 5336,
     "y": 0,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r0-c5.svg",
+    "src": "bigger/original-ground-5.svg",
     "x": 6670,
     "y": 0,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r1-c0.svg",
+    "src": "bigger/original-ground-6.svg",
     "x": 0,
     "y": 1400,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r1-c1.svg",
+    "src": "bigger/original-ground-7.svg",
     "x": 1334,
     "y": 1400,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r1-c2.svg",
+    "src": "bigger/original-ground-8.svg",
     "x": 2668,
     "y": 1400,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r1-c3.svg",
+    "src": "bigger/original-ground-9.svg",
     "x": 4002,
     "y": 1400,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r1-c4.svg",
+    "src": "bigger/original-ground-10.svg",
     "x": 5336,
     "y": 1400,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r1-c5.svg",
+    "src": "bigger/original-ground-11.svg",
     "x": 6670,
     "y": 1400,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r2-c0.svg",
+    "src": "bigger/original-ground-12.svg",
     "x": 0,
     "y": 2800,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r2-c1.svg",
+    "src": "bigger/original-ground-13.svg",
     "x": 1334,
     "y": 2800,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r2-c2.svg",
+    "src": "bigger/original-ground-14.svg",
     "x": 2668,
     "y": 2800,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r2-c3.svg",
+    "src": "bigger/original-ground-15.svg",
     "x": 4002,
     "y": 2800,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r2-c4.svg",
+    "src": "bigger/original-ground-16.svg",
     "x": 5336,
     "y": 2800,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r2-c5.svg",
+    "src": "bigger/original-ground-17.svg",
     "x": 6670,
     "y": 2800,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r3-c0.svg",
+    "src": "bigger/original-ground-18.svg",
     "x": 0,
     "y": 4200,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r3-c1.svg",
+    "src": "bigger/original-ground-19.svg",
     "x": 1334,
     "y": 4200,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r3-c2.svg",
+    "src": "bigger/original-ground-20.svg",
     "x": 2668,
     "y": 4200,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r3-c3.svg",
+    "src": "bigger/original-ground-21.svg",
     "x": 4002,
     "y": 4200,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r3-c4.svg",
+    "src": "bigger/original-ground-22.svg",
     "x": 5336,
     "y": 4200,
     "width": 1334,
     "height": 1400
    },
    {
-    "src": "ground-r3-c5.svg",
+    "src": "bigger/original-ground-23.svg",
     "x": 6670,
     "y": 4200,
     "width": 1334,
@@ -225,6 +609,69 @@
    "x": 3128.6,
    "y": 2031.95,
    "topLeft": true
+  },
+  {
+   "src": "bigger/river-crossing-1.svg",
+   "x": 3982,
+   "y": -58,
+   "width": 535,
+   "height": 315
+  },
+  {
+   "src": "bigger/river-crossing-2.svg",
+   "x": -414,
+   "y": 1198,
+   "width": 496,
+   "height": 413
+  },
+  {
+   "src": "bigger/river-crossing-3.svg",
+   "x": 3093,
+   "y": 700,
+   "width": 312,
+   "height": 527
+  },
+  {
+   "src": "bigger/river-crossing-4.svg",
+   "x": 6592,
+   "y": 335,
+   "width": 283,
+   "height": 538
+  },
+  {
+   "src": "bigger/river-crossing-5.svg",
+   "x": 6904,
+   "y": 2384,
+   "width": 510,
+   "height": 351
+  },
+  {
+   "src": "bigger/river-crossing-6.svg",
+   "x": 4297,
+   "y": 4141,
+   "width": 281,
+   "height": 543
+  },
+  {
+   "src": "bigger/river-crossing-7.svg",
+   "x": 1892,
+   "y": 4528,
+   "width": 479,
+   "height": 444
+  },
+  {
+   "src": "bigger/river-crossing-8.svg",
+   "x": 221,
+   "y": 3376,
+   "width": 503,
+   "height": 340
+  },
+  {
+   "src": "bigger/landing-pier.svg",
+   "x": -2080,
+   "y": 2915,
+   "width": 780,
+   "height": 170
   }
  ],
  "flats": [
@@ -10592,6 +11039,3411 @@
    },
    "scale": 0.113,
    "flip": false
+  },
+  {
+   "id": "bigger-pollenpatch-0",
+   "name": "honey",
+   "src": "detail/stall-honey.svg",
+   "x": 2690,
+   "y": -120,
+   "width": 467,
+   "height": 419,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.84,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-pollenpatch-1",
+   "name": "cart",
+   "src": "detail/seed-cart.svg",
+   "x": 2270,
+   "y": 470,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.4,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-pollenpatch-2",
+   "name": "barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": 2260,
+   "y": 280,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.36800000000000005,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-pollenpatch-3",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 450,
+   "y": 400,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-4",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 3140,
+   "y": 180,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.05,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-5",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 1850,
+   "y": 700,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.19,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-pollenpatch-6",
+   "name": "Sunflower",
+   "src": "detail/sunflower-tall.svg",
+   "x": 1940,
+   "y": 490,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.55,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-7",
+   "name": "barn",
+   "src": "detail/barn.svg",
+   "x": 7870,
+   "y": 590,
+   "width": 442,
+   "height": 453,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 1.18,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-8",
+   "name": "hay",
+   "src": "detail/hay-round.svg",
+   "x": 8170,
+   "y": 780,
+   "width": 460,
+   "height": 399,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.528,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-9",
+   "name": "haystack",
+   "src": "detail/hay-stack.svg",
+   "x": 7660,
+   "y": 800,
+   "width": 473,
+   "height": 413,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.44,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-10",
+   "name": "cart",
+   "src": "detail/seed-cart.svg",
+   "x": 7800,
+   "y": 630,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.46,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-11",
+   "name": "barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": 8010,
+   "y": 770,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.391,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-12",
+   "name": "barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": 8130,
+   "y": 770,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.34500000000000003,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-13",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 5280,
+   "y": -150,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.2,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-14",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 7550,
+   "y": 70,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-15",
+   "name": "fence",
+   "src": "detail/fence.svg",
+   "x": 7730,
+   "y": 1020,
+   "width": 495,
+   "height": 291,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.95
+   },
+   "scale": 0.481,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-16",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 6420,
+   "y": 530,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.2,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-hayhello-17",
+   "name": "Sunflower",
+   "src": "detail/sunflower-tall.svg",
+   "x": 8250,
+   "y": 800,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.55,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-whirlyseed-18",
+   "name": "windmill",
+   "src": "detail/windmill.svg",
+   "x": 8510,
+   "y": 1710,
+   "width": 360,
+   "height": 531,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 1.22,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-whirlyseed-19",
+   "name": "cart",
+   "src": "detail/seed-cart.svg",
+   "x": 9000,
+   "y": 2090,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.43,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-whirlyseed-20",
+   "name": "barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": 8230,
+   "y": 1930,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.391,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-whirlyseed-21",
+   "name": "hay",
+   "src": "detail/hay-round.svg",
+   "x": 8810,
+   "y": 1940,
+   "width": 460,
+   "height": 399,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.45599999999999996,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-whirlyseed-22",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 8600,
+   "y": 1500,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-whirlyseed-23",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 8520,
+   "y": 3030,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.2,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-whirlyseed-24",
+   "name": "Sunflower",
+   "src": "detail/sunflower-tall.svg",
+   "x": 7930,
+   "y": 2250,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.55,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-whirlyseed-25",
+   "name": "table",
+   "src": "reuse/picnic-table.svg",
+   "x": 8760,
+   "y": 3050,
+   "width": 1614,
+   "height": 653,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.18,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-whirlyseed-26",
+   "name": "planter",
+   "src": "detail/planter.svg",
+   "x": 8700,
+   "y": 3200,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.405,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-27",
+   "name": "flowers",
+   "src": "detail/stall-flowers.svg",
+   "x": 5060,
+   "y": 5520,
+   "width": 467,
+   "height": 419,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.85,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-28",
+   "name": "honey",
+   "src": "detail/stall-honey.svg",
+   "x": 5500,
+   "y": 5500,
+   "width": 467,
+   "height": 419,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.85,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-29",
+   "name": "cart",
+   "src": "detail/seed-cart.svg",
+   "x": 5900,
+   "y": 5780,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.43,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-30",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 2550,
+   "y": 5590,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-31",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 6050,
+   "y": 5700,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.2,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-32",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 4020,
+   "y": 5820,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.19,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-33",
+   "name": "planter",
+   "src": "detail/planter.svg",
+   "x": 4890,
+   "y": 5760,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.45,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-34",
+   "name": "planter",
+   "src": "detail/planter.svg",
+   "x": 5250,
+   "y": 5730,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.45,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-35",
+   "name": "planter",
+   "src": "detail/planter.svg",
+   "x": 5660,
+   "y": 5770,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.45,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-petalpost-36",
+   "name": "Sunflower",
+   "src": "detail/sunflower-tall.svg",
+   "x": 4560,
+   "y": 6150,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.6,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-37",
+   "name": "Sunflower",
+   "src": "detail/sunflower-tall.svg",
+   "x": 6020,
+   "y": 6080,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.55,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-38",
+   "name": "table",
+   "src": "reuse/picnic-table.svg",
+   "x": 3620,
+   "y": 5790,
+   "width": 1614,
+   "height": 653,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.18,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-39",
+   "name": "flowers",
+   "src": "detail/stall-flowers.svg",
+   "x": -60,
+   "y": 2380,
+   "width": 467,
+   "height": 419,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.85,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-40",
+   "name": "cart",
+   "src": "detail/seed-cart.svg",
+   "x": -70,
+   "y": 3070,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.4,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-41",
+   "name": "barrel",
+   "src": "detail/barrel-seeds.svg",
+   "x": -370,
+   "y": 3210,
+   "width": 499,
+   "height": 409,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.391,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-42",
+   "name": "haystack",
+   "src": "detail/hay-stack.svg",
+   "x": -290,
+   "y": 3340,
+   "width": 473,
+   "height": 413,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.396,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-43",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": -1120,
+   "y": 2600,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-seedwake-44",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": -980,
+   "y": 3660,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.19,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-45",
+   "name": "Sunflower",
+   "src": "detail/sunflower-tall.svg",
+   "x": 100,
+   "y": 3610,
+   "width": 394,
+   "height": 519,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.55,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-seedwake-46",
+   "name": "planter",
+   "src": "detail/planter.svg",
+   "x": -840,
+   "y": 3290,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.4275,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seedwake-47",
+   "name": "lamp",
+   "src": "reuse/lamp-lantern.svg",
+   "x": -550,
+   "y": 3700,
+   "width": 432,
+   "height": 1837,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.993
+   },
+   "scale": 0.26,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "pollenpatch-home-1",
+   "name": "Pollenpatch Row cottage 1",
+   "src": "bigger/pollenpatch-home-1.svg",
+   "x": 1030,
+   "y": 270,
+   "width": 432,
+   "height": 358.79999999999995,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "pollenpatch-home-2",
+   "name": "Pollenpatch Row cottage 2",
+   "src": "bigger/pollenpatch-home-2.svg",
+   "x": 1540,
+   "y": 160,
+   "width": 345.59999999999997,
+   "height": 299.52,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "pollenpatch-home-3",
+   "name": "Pollenpatch Row cottage 3",
+   "src": "bigger/pollenpatch-home-3.svg",
+   "x": 2050,
+   "y": 140,
+   "width": 446.4,
+   "height": 368.15999999999997,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "pollenpatch-home-4",
+   "name": "Pollenpatch Row cottage 4",
+   "src": "bigger/pollenpatch-home-4.svg",
+   "x": 2560,
+   "y": 260,
+   "width": 388.8,
+   "height": 333.84000000000003,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "hayhello-home-1",
+   "name": "Hayhello Hamlet cottage 1",
+   "src": "bigger/hayhello-home-1.svg",
+   "x": 5630,
+   "y": 180,
+   "width": 432,
+   "height": 358.79999999999995,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "hayhello-home-2",
+   "name": "Hayhello Hamlet cottage 2",
+   "src": "bigger/hayhello-home-2.svg",
+   "x": 6140,
+   "y": 30,
+   "width": 345.59999999999997,
+   "height": 299.52,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "hayhello-home-3",
+   "name": "Hayhello Hamlet cottage 3",
+   "src": "bigger/hayhello-home-3.svg",
+   "x": 6650,
+   "y": 0,
+   "width": 446.4,
+   "height": 368.15999999999997,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "hayhello-home-4",
+   "name": "Hayhello Hamlet cottage 4",
+   "src": "bigger/hayhello-home-4.svg",
+   "x": 7160,
+   "y": 60,
+   "width": 388.8,
+   "height": 333.84000000000003,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "whirlyseed-home-1",
+   "name": "Whirlyseed Close cottage 1",
+   "src": "bigger/whirlyseed-home-1.svg",
+   "x": 8170,
+   "y": 2730,
+   "width": 432,
+   "height": 358.79999999999995,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "whirlyseed-home-2",
+   "name": "Whirlyseed Close cottage 2",
+   "src": "bigger/whirlyseed-home-2.svg",
+   "x": 8680,
+   "y": 2720,
+   "width": 345.59999999999997,
+   "height": 299.52,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "whirlyseed-home-3",
+   "name": "Whirlyseed Close cottage 3",
+   "src": "bigger/whirlyseed-home-3.svg",
+   "x": 9190,
+   "y": 2780,
+   "width": 446.4,
+   "height": 368.15999999999997,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "whirlyseed-home-4",
+   "name": "Whirlyseed Close cottage 4",
+   "src": "bigger/whirlyseed-home-4.svg",
+   "x": 8390,
+   "y": 3420,
+   "width": 388.8,
+   "height": 333.84000000000003,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "whirlyseed-home-5",
+   "name": "Whirlyseed Close cottage 5",
+   "src": "bigger/whirlyseed-home-5.svg",
+   "x": 8900,
+   "y": 3450,
+   "width": 410.4,
+   "height": 318.24,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "petalpost-home-1",
+   "name": "Petalpost Village cottage 1",
+   "src": "bigger/petalpost-home-1.svg",
+   "x": 2970,
+   "y": 5510,
+   "width": 432,
+   "height": 358.79999999999995,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "petalpost-home-2",
+   "name": "Petalpost Village cottage 2",
+   "src": "bigger/petalpost-home-2.svg",
+   "x": 3480,
+   "y": 5390,
+   "width": 345.59999999999997,
+   "height": 299.52,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "petalpost-home-3",
+   "name": "Petalpost Village cottage 3",
+   "src": "bigger/petalpost-home-3.svg",
+   "x": 3990,
+   "y": 5520,
+   "width": 446.4,
+   "height": 368.15999999999997,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "petalpost-home-4",
+   "name": "Petalpost Village cottage 4",
+   "src": "bigger/petalpost-home-4.svg",
+   "x": 3410,
+   "y": 6100,
+   "width": 388.8,
+   "height": 333.84000000000003,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "petalpost-home-5",
+   "name": "Petalpost Village cottage 5",
+   "src": "bigger/petalpost-home-5.svg",
+   "x": 3920,
+   "y": 6170,
+   "width": 410.4,
+   "height": 318.24,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "seedwake-home-1",
+   "name": "Seedwake Wharf cottage 1",
+   "src": "bigger/seedwake-home-1.svg",
+   "x": -880,
+   "y": 2770,
+   "width": 432,
+   "height": 358.79999999999995,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "seedwake-home-2",
+   "name": "Seedwake Wharf cottage 2",
+   "src": "bigger/seedwake-home-2.svg",
+   "x": -370,
+   "y": 2790,
+   "width": 345.59999999999997,
+   "height": 299.52,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "seedwake-home-3",
+   "name": "Seedwake Wharf cottage 3",
+   "src": "bigger/seedwake-home-3.svg",
+   "x": -1130,
+   "y": 3330,
+   "width": 446.4,
+   "height": 368.15999999999997,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "seedwake-home-4",
+   "name": "Seedwake Wharf cottage 4",
+   "src": "bigger/seedwake-home-4.svg",
+   "x": -710,
+   "y": 3780,
+   "width": 388.8,
+   "height": 333.84000000000003,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "seedwake-home-5",
+   "name": "Seedwake Wharf cottage 5",
+   "src": "bigger/seedwake-home-5.svg",
+   "x": -200,
+   "y": 3750,
+   "width": 410.4,
+   "height": 318.24,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-pump-pollenpatch",
+   "name": "Shared well at pollenpatch",
+   "src": "bigger/pump-pollenpatch.svg",
+   "x": 1710,
+   "y": 470,
+   "width": 148,
+   "height": 130,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-pump-hayhello",
+   "name": "Shared well at hayhello",
+   "src": "bigger/pump-hayhello.svg",
+   "x": 6410,
+   "y": 330,
+   "width": 148,
+   "height": 130,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-pump-whirlyseed",
+   "name": "Shared well at whirlyseed",
+   "src": "bigger/pump-whirlyseed.svg",
+   "x": 8930,
+   "y": 3090,
+   "width": 148,
+   "height": 130,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-pump-petalpost",
+   "name": "Shared well at petalpost",
+   "src": "bigger/pump-petalpost.svg",
+   "x": 3810,
+   "y": 5820,
+   "width": 148,
+   "height": 130,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-pump-seedwake",
+   "name": "Shared well at seedwake",
+   "src": "bigger/pump-seedwake.svg",
+   "x": -780,
+   "y": 3220,
+   "width": 148,
+   "height": 130,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-hive-1",
+   "name": "Pollenpatch apiary",
+   "src": "bigger/hive-1.svg",
+   "x": 2950,
+   "y": 70,
+   "width": 140,
+   "height": 145,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-hive-2",
+   "name": "Pollenpatch apiary",
+   "src": "bigger/hive-2.svg",
+   "x": 3120,
+   "y": 100,
+   "width": 140,
+   "height": 145,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-hive-3",
+   "name": "Pollenpatch apiary",
+   "src": "bigger/hive-3.svg",
+   "x": 3280,
+   "y": 90,
+   "width": 140,
+   "height": 145,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-coldframe-1",
+   "name": "Pollenpatch seedling frame",
+   "src": "bigger/coldframe-1.svg",
+   "x": 350,
+   "y": 700,
+   "width": 270,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-coldframe-2",
+   "name": "Pollenpatch seedling frame",
+   "src": "bigger/coldframe-2.svg",
+   "x": 530,
+   "y": 540,
+   "width": 270,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-seed-store",
+   "name": "SEED LIBRARY",
+   "src": "bigger/seed-store.svg",
+   "x": 3550,
+   "y": 190,
+   "width": 420,
+   "height": 350,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-harvest-store",
+   "name": "HARVEST CO-OP",
+   "src": "bigger/harvest-store.svg",
+   "x": 5310,
+   "y": -80,
+   "width": 420,
+   "height": 350,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-bakery",
+   "name": "SUNCRUMB BAKERY",
+   "src": "bigger/bakery.svg",
+   "x": 8990,
+   "y": 2360,
+   "width": 420,
+   "height": 350,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-flower-room",
+   "name": "PETAL PACKING",
+   "src": "bigger/flower-room.svg",
+   "x": 5370,
+   "y": 5930,
+   "width": 420,
+   "height": 350,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-sail-loft",
+   "name": "SEEDWAKE LOFT",
+   "src": "bigger/sail-loft.svg",
+   "x": -770,
+   "y": 2050,
+   "width": 420,
+   "height": 350,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-bread-oven",
+   "name": "Whirlyseed shared oven",
+   "src": "bigger/bread-oven.svg",
+   "x": 8000,
+   "y": 3180,
+   "width": 230,
+   "height": 240,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-honey-table",
+   "name": "honey communal workbench",
+   "src": "bigger/honey-table.svg",
+   "x": 2310,
+   "y": 730,
+   "width": 240,
+   "height": 170,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-hay-table",
+   "name": "seeds communal workbench",
+   "src": "bigger/hay-table.svg",
+   "x": 6550,
+   "y": 570,
+   "width": 240,
+   "height": 170,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-bread-table",
+   "name": "bread communal workbench",
+   "src": "bigger/bread-table.svg",
+   "x": 9180,
+   "y": 3220,
+   "width": 240,
+   "height": 170,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-bouquet-table",
+   "name": "flowers communal workbench",
+   "src": "bigger/bouquet-table.svg",
+   "x": 4260,
+   "y": 6160,
+   "width": 240,
+   "height": 170,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-net-table",
+   "name": "nets communal workbench",
+   "src": "bigger/net-table.svg",
+   "x": -940,
+   "y": 3550,
+   "width": 240,
+   "height": 170,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-pollenpatch-row-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2230,
+   "y": 910,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-row-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 2230,
+   "y": 1000,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-row-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7600,
+   "y": 980,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-row-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7600,
+   "y": 1070,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-row-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7600,
+   "y": 1160,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-row-3",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7600,
+   "y": 1250,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-whirlyseed-row-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7880,
+   "y": 2110,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-whirlyseed-row-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7880,
+   "y": 2200,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-whirlyseed-row-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7880,
+   "y": 2290,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-row-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4600,
+   "y": 6400,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-row-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4600,
+   "y": 6490,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.49,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-plot-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3580,
+   "y": 400,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-plot-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3875,
+   "y": 400,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-plot-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3580,
+   "y": 500,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollenpatch-plot-3",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 3875,
+   "y": 500,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-plot-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7980,
+   "y": 1370,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-plot-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 8275,
+   "y": 1370,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-plot-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7980,
+   "y": 1470,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hayhello-plot-3",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 8275,
+   "y": 1470,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-plot-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5530,
+   "y": 6180,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-plot-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5825,
+   "y": 6180,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-plot-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5530,
+   "y": 6280,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petalpost-plot-3",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5825,
+   "y": 6280,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.47,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-orchard-1",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 4500,
+   "y": -330,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.05,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-orchard-2",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 4810,
+   "y": -390,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.12,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-orchard-3",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 5120,
+   "y": -310,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-orchard-table",
+   "name": "table",
+   "src": "reuse/picnic-table.svg",
+   "x": 4750,
+   "y": -100,
+   "width": 1614,
+   "height": 653,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.23,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-orchard-cart",
+   "name": "cart",
+   "src": "detail/seed-cart.svg",
+   "x": 5300,
+   "y": -230,
+   "width": 537,
+   "height": 459,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.33,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-clover-tree",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 960,
+   "y": 5200,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-clover-tree-2",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 1460,
+   "y": 5150,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-clover-table",
+   "name": "table",
+   "src": "reuse/picnic-table.svg",
+   "x": 1250,
+   "y": 5480,
+   "width": 1614,
+   "height": 653,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.25,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-clover-planter",
+   "name": "planter",
+   "src": "detail/planter.svg",
+   "x": 1540,
+   "y": 5490,
+   "width": 514,
+   "height": 322,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.4,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seed-meadow-tree",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 6800,
+   "y": 4820,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-seed-meadow-tree-2",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 7350,
+   "y": 4740,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.05,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-seed-meadow-table",
+   "name": "table",
+   "src": "reuse/picnic-table.svg",
+   "x": 7100,
+   "y": 5110,
+   "width": 1614,
+   "height": 653,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.97
+   },
+   "scale": 0.25,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-seed-meadow-bench",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 7480,
+   "y": 5070,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.18,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-west-grove-1",
+   "name": "tree4",
+   "src": "reuse/tree-4.svg",
+   "x": -330,
+   "y": 4450,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.1,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-west-grove-2",
+   "name": "tree3",
+   "src": "reuse/tree-3.svg",
+   "x": -20,
+   "y": 4580,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.05,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-west-grove-bench",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": -250,
+   "y": 4700,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.18,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-pond-bench",
+   "name": "bench",
+   "src": "reuse/street--bench-wood.svg",
+   "x": 350,
+   "y": 1770,
+   "width": 818,
+   "height": 463,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "scale": 0.18,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-pond-reeds-1",
+   "name": "pond-reeds-1",
+   "src": "reuse/reeds.svg",
+   "x": 150,
+   "y": 1580,
+   "width": 418,
+   "height": 718,
+   "scale": 0.1875,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1
+  },
+  {
+   "id": "bigger-pond-reeds-2",
+   "name": "pond-reeds-2",
+   "src": "reuse/reeds.svg",
+   "x": 440,
+   "y": 1530,
+   "width": 418,
+   "height": 718,
+   "scale": 0.1575,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1
+  },
+  {
+   "id": "bigger-brook-reeds",
+   "name": "brook-reeds",
+   "src": "reuse/reeds.svg",
+   "x": 4140,
+   "y": 480,
+   "width": 418,
+   "height": 718,
+   "scale": 0.1725,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1
+  },
+  {
+   "id": "bigger-canal-reeds",
+   "name": "canal-reeds",
+   "src": "reuse/cattails.svg",
+   "x": 3670,
+   "y": 4740,
+   "width": 442,
+   "height": 791,
+   "scale": 0.15,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1
+  },
+  {
+   "id": "bigger-pond-lily",
+   "name": "pond-lily",
+   "src": "reuse/lily-pad-flower.svg",
+   "x": 280,
+   "y": 1490,
+   "width": 632,
+   "height": 308,
+   "scale": 0.105,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1
+  },
+  {
+   "id": "bigger-pond-rock",
+   "name": "pond-rock",
+   "src": "reuse/rock-round.svg",
+   "x": 60,
+   "y": 1640,
+   "width": 387,
+   "height": 249,
+   "scale": 0.09,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "resolution": 1
+  },
+  {
+   "id": "bigger-clover-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1390,
+   "y": 5280,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-clover-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1390,
+   "y": 5360,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-clover-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 1390,
+   "y": 5440,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-seed-meadow-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7090,
+   "y": 4770,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-seed-meadow-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7090,
+   "y": 4850,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-seed-meadow-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 7090,
+   "y": 4930,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollen-garden-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 820,
+   "y": 530,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollen-garden-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 820,
+   "y": 610,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-pollen-garden-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 820,
+   "y": 690,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hay-croft-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5870,
+   "y": 410,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hay-croft-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5870,
+   "y": 490,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-hay-croft-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 5870,
+   "y": 570,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-miller-garden-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 8700,
+   "y": 3950,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-miller-garden-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 8700,
+   "y": 4030,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-miller-garden-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 8700,
+   "y": 4110,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petal-cuttings-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4530,
+   "y": 5690,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petal-cuttings-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4530,
+   "y": 5770,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-petal-cuttings-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": 4530,
+   "y": 5850,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-wharf-kitchen-bed-0",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": -1100,
+   "y": 4030,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-wharf-kitchen-bed-1",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": -1100,
+   "y": 4110,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-wharf-kitchen-bed-2",
+   "name": "Sunflower row",
+   "src": "detail/field-row-short.svg",
+   "x": -1100,
+   "y": 4190,
+   "width": 597,
+   "height": 252,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9
+   },
+   "scale": 0.42,
+   "flip": true,
+   "wind": true
+  },
+  {
+   "id": "bigger-corner-flower-0",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 500,
+   "y": 1250,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-0",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 430,
+   "y": 1220,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-1",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 2690,
+   "y": 640,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-1",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2620,
+   "y": 610,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-2",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 3370,
+   "y": 340,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-2",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 3300,
+   "y": 310,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-3",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 5960,
+   "y": 420,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-3",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 5890,
+   "y": 390,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-4",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 8050,
+   "y": 1080,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-4",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 7980,
+   "y": 1050,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-5",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 7800,
+   "y": 1340,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-5",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 7730,
+   "y": 1310,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-6",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 8240,
+   "y": 2470,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-6",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 8170,
+   "y": 2440,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-7",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 8710,
+   "y": 3680,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-7",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 8640,
+   "y": 3650,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-8",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 8020,
+   "y": 4100,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-8",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 7950,
+   "y": 4070,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-9",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 2850,
+   "y": 5900,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-9",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 2780,
+   "y": 5870,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-10",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 4320,
+   "y": 6400,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-10",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4250,
+   "y": 6370,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-11",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": 4780,
+   "y": 6150,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-11",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": 4710,
+   "y": 6120,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-12",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": -960,
+   "y": 3850,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-12",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": -1030,
+   "y": 3820,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-13",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": -280,
+   "y": 2920,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-13",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": -350,
+   "y": 2890,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-flower-14",
+   "name": "Flowers",
+   "src": "reuse/flower-2.svg",
+   "x": -480,
+   "y": 4400,
+   "width": 48,
+   "height": 36,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 2.3,
+   "flip": false,
+   "wind": false
+  },
+  {
+   "id": "bigger-corner-bush-14",
+   "name": "Bush",
+   "src": "reuse/bush-1.svg",
+   "x": -550,
+   "y": 4370,
+   "width": 130,
+   "height": 100,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 0.85,
+   "flip": true,
+   "wind": false
+  },
+  {
+   "id": "bigger-shelter-0",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": -500,
+   "y": 850,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-1",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": -800,
+   "y": 1420,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-2",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": -1150,
+   "y": 2450,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-3",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": -100,
+   "y": 1200,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-4",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 400,
+   "y": 1770,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-5",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 3070,
+   "y": -200,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-6",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 4050,
+   "y": -350,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-7",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 4480,
+   "y": -340,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-8",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 4980,
+   "y": -250,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-9",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 5340,
+   "y": -100,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-10",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 8110,
+   "y": 820,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-11",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 8700,
+   "y": 1210,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-12",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 9300,
+   "y": 2420,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-13",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 9090,
+   "y": 3950,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-14",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 7700,
+   "y": 5140,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-15",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 6800,
+   "y": 5640,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-16",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 6390,
+   "y": 5830,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-17",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 4050,
+   "y": 6430,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-18",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 2760,
+   "y": 6240,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-19",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": 2620,
+   "y": 5850,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-20",
+   "name": "Tree",
+   "src": "reuse/tree-3.svg",
+   "x": 370,
+   "y": 4830,
+   "width": 300,
+   "height": 380,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-shelter-21",
+   "name": "Tree",
+   "src": "reuse/tree-4.svg",
+   "x": -120,
+   "y": 4330,
+   "width": 200,
+   "height": 280,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1.15,
+   "flip": false,
+   "wind": true
+  },
+  {
+   "id": "bigger-sign-pollenpatch",
+   "name": "Pollenpatch Row sign",
+   "src": "bigger/sign-pollenpatch.svg",
+   "x": 2070,
+   "y": 740,
+   "width": 140,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-sign-hayhello",
+   "name": "Hayhello Hamlet sign",
+   "src": "bigger/sign-hayhello.svg",
+   "x": 7040,
+   "y": 340,
+   "width": 140,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-sign-whirlyseed",
+   "name": "Whirlyseed Close sign",
+   "src": "bigger/sign-whirlyseed.svg",
+   "x": 8760,
+   "y": 3210,
+   "width": 140,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-sign-petalpost",
+   "name": "Petalpost Village sign",
+   "src": "bigger/sign-petalpost.svg",
+   "x": 4140,
+   "y": 6060,
+   "width": 140,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
+  },
+  {
+   "id": "bigger-sign-seedwake",
+   "name": "Seedwake Wharf sign",
+   "src": "bigger/sign-seedwake.svg",
+   "x": -1280,
+   "y": 3070,
+   "width": 140,
+   "height": 150,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "resolution": 1.5
   }
- ]
+ ],
+ "origin": {
+  "x": -2000,
+  "y": -1400
+ }
 }

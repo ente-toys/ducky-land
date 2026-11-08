@@ -1,0 +1,5 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Waddlewish Fair expansion</title><style>html,body,#game{margin:0;width:100%;height:100%;overflow:hidden;background:#82cfd1}</style></head><body><div id="game"></div><script type="module">
+import {PixiIsland} from '/src/pixi/engine.js';
+window.game=new PixiIsland({onError:()=>{window.reviewError=true}});await game.mount(document.querySelector('#game'));game.switchIsland('isle-170');
+window.reviewCamera=(x,y,zoom)=>{game.follow=false;game.fitMode=false;game.fly=null;Object.assign(game.camera,{x,y,zoom});Object.assign(game.target,game.camera)};window.reviewCamera(3500,2300,.13);window.reviewReady=true;
+</script></body></html>

@@ -1,0 +1,180 @@
+{
+  "steppingStones": [
+    {
+      "x": -500,
+      "y": 2340,
+      "walkable": true
+    },
+    {
+      "x": -485,
+      "y": 2394,
+      "walkable": true
+    },
+    {
+      "x": -510,
+      "y": 2448,
+      "walkable": true
+    },
+    {
+      "x": -490,
+      "y": 2502,
+      "walkable": true
+    },
+    {
+      "x": -505,
+      "y": 2556,
+      "walkable": true
+    },
+    {
+      "x": -485,
+      "y": 2610,
+      "walkable": true
+    },
+    {
+      "x": -500,
+      "y": 2664,
+      "walkable": true
+    },
+    {
+      "x": -490,
+      "y": 2718,
+      "walkable": true
+    }
+  ],
+  "originalPixelPreservation": {
+    "checked": 319518,
+    "changed": 0
+  },
+  "originalDryLand": {
+    "checked": 67070,
+    "lost": 0
+  },
+  "channels": [
+    {
+      "id": "quillbrook",
+      "name": "Quillbrook"
+    },
+    {
+      "id": "inkwater",
+      "name": "Inkwater Run"
+    },
+    {
+      "id": "paperboat-cut",
+      "name": "Paperboat Cut"
+    }
+  ],
+  "bridgeAudit": [
+    {
+      "src": "canal-bridge-north.svg",
+      "x": 4010.715602500001,
+      "y": 2255.19143525,
+      "beforeWater": true,
+      "afterWater": true
+    },
+    {
+      "src": "canal-bridge-south.svg",
+      "x": 3943.1335925000008,
+      "y": 4049.1914352500003,
+      "beforeWater": true,
+      "afterWater": true
+    },
+    {
+      "src": "jetty-west.svg",
+      "x": 767.5764574999996,
+      "y": 1029.9170550000001,
+      "beforeWater": false,
+      "afterWater": true
+    },
+    {
+      "src": "jetty-east.svg",
+      "x": 7181.2235425,
+      "y": 1014.317055,
+      "beforeWater": false,
+      "afterWater": true
+    },
+    {
+      "src": "jetty-south.svg",
+      "x": 6748.9982,
+      "y": 5037.337036000001,
+      "beforeWater": false,
+      "afterWater": true
+    },
+    {
+      "src": "pond-reading-dock.svg",
+      "x": 4692,
+      "y": 3300,
+      "beforeWater": true,
+      "afterWater": true
+    },
+    {
+      "src": "harbor jetty",
+      "x": 6600,
+      "y": 7350,
+      "beforeWater": true,
+      "afterWater": true
+    }
+  ],
+  "newCrossings": [
+    {
+      "id": "north-west-coast-link-quillbrook-40",
+      "x": 3093.2953958569624,
+      "y": 396.18789323481474,
+      "water": true
+    },
+    {
+      "id": "north-east-coast-link-inkwater-41",
+      "x": 4749.525518265339,
+      "y": 390.1495068434975,
+      "water": true
+    },
+    {
+      "id": "west-spine-quillbrook-18",
+      "x": 2784.4129133068895,
+      "y": 389.4846648210053,
+      "water": true
+    },
+    {
+      "id": "west-spine-quillbrook-239",
+      "x": -1131.8293511304478,
+      "y": 2539.2580276016865,
+      "water": true
+    },
+    {
+      "id": "west-north-heart-quillbrook-65",
+      "x": 197.01957958153503,
+      "y": 2266.270929738909,
+      "water": true
+    },
+    {
+      "id": "east-spine-inkwater-260",
+      "x": 9152.076974111847,
+      "y": 2909.9843711161166,
+      "water": true
+    },
+    {
+      "id": "east-spine-paperboat-cut-557",
+      "x": 4778.685511578343,
+      "y": 5352.119169021674,
+      "water": true
+    },
+    {
+      "id": "east-north-heart-inkwater-61",
+      "x": 7679.5589381733225,
+      "y": 2270.632741587504,
+      "water": true
+    },
+    {
+      "id": "west-coast-quillbrook-322",
+      "x": -2024.845815647201,
+      "y": 2521.8204757979693,
+      "water": true
+    },
+    {
+      "id": "east-coast-inkwater-318",
+      "x": 10026.631056241433,
+      "y": 2840.280613247853,
+      "water": true
+    }
+  ],
+  "textureRGBA_MB": 324.7999999999997
+}

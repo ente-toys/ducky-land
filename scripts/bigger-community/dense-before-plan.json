@@ -1,0 +1,10662 @@
+{
+  "origin": {
+    "x": -2400,
+    "y": -2000
+  },
+  "width": 12800,
+  "height": 9600,
+  "factor": 1.75,
+  "props": [
+    {
+      "id": "community-home-story-0-0",
+      "name": "home-story-0",
+      "src": "expansion/home-story-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": -80,
+      "y": 60,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-1",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": -80,
+      "y": 220,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-2",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -305,
+      "y": 130,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 130
+    },
+    {
+      "id": "community-storynest-3",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 150,
+      "y": 100,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 100
+    },
+    {
+      "id": "community-home-story-1-4",
+      "name": "home-story-1",
+      "src": "expansion/home-story-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 540,
+      "y": -40,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-5",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 540,
+      "y": 120,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-6",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 315,
+      "y": 30,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 30
+    },
+    {
+      "id": "community-storynest-7",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 770,
+      "y": 0,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 0
+    },
+    {
+      "id": "community-home-story-2-8",
+      "name": "home-story-2",
+      "src": "expansion/home-story-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 1160,
+      "y": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-9",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 1160,
+      "y": 240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-10",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 935,
+      "y": 150,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 150
+    },
+    {
+      "id": "community-storynest-11",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1390,
+      "y": 120,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 120
+    },
+    {
+      "id": "community-home-story-0-12",
+      "name": "home-story-0",
+      "src": "expansion/home-story-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": -120,
+      "y": 950,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-13",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": -120,
+      "y": 1110,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-14",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -345,
+      "y": 1020,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 1020
+    },
+    {
+      "id": "community-storynest-15",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 110,
+      "y": 990,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 990
+    },
+    {
+      "id": "community-home-story-1-16",
+      "name": "home-story-1",
+      "src": "expansion/home-story-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 560,
+      "y": 1050,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-17",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 560,
+      "y": 1210,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-18",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 335,
+      "y": 1120,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 1120
+    },
+    {
+      "id": "community-storynest-19",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 790,
+      "y": 1090,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1090
+    },
+    {
+      "id": "community-home-story-2-20",
+      "name": "home-story-2",
+      "src": "expansion/home-story-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 1250,
+      "y": 980,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-garden-front-21",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 1250,
+      "y": 1140,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-storynest-22",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 1025,
+      "y": 1050,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 1050
+    },
+    {
+      "id": "community-storynest-23",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1480,
+      "y": 1020,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1020
+    },
+    {
+      "id": "community-washing-line-24",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": 215,
+      "y": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-home-maker-0-25",
+      "name": "home-maker-0",
+      "src": "expansion/home-maker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7310,
+      "y": 590,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-26",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7310,
+      "y": 750,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-27",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7085,
+      "y": 660,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 660
+    },
+    {
+      "id": "community-patchwing-28",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7540,
+      "y": 630,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 630
+    },
+    {
+      "id": "community-home-maker-1-29",
+      "name": "home-maker-1",
+      "src": "expansion/home-maker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7950,
+      "y": 490,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-30",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7950,
+      "y": 650,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-31",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7725,
+      "y": 560,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 560
+    },
+    {
+      "id": "community-patchwing-32",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8180,
+      "y": 530,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 530
+    },
+    {
+      "id": "community-home-maker-2-33",
+      "name": "home-maker-2",
+      "src": "expansion/home-maker-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8580,
+      "y": 670,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-34",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8580,
+      "y": 830,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-35",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 8355,
+      "y": 740,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 740
+    },
+    {
+      "id": "community-patchwing-36",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8810,
+      "y": 710,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 710
+    },
+    {
+      "id": "community-home-maker-0-37",
+      "name": "home-maker-0",
+      "src": "expansion/home-maker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7420,
+      "y": 1640,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-38",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7420,
+      "y": 1800,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-39",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7195,
+      "y": 1710,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1710
+    },
+    {
+      "id": "community-patchwing-40",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7650,
+      "y": 1680,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1680
+    },
+    {
+      "id": "community-home-maker-1-41",
+      "name": "home-maker-1",
+      "src": "expansion/home-maker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8050,
+      "y": 1740,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-42",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8050,
+      "y": 1900,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-43",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7825,
+      "y": 1810,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1810
+    },
+    {
+      "id": "community-patchwing-44",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8280,
+      "y": 1780,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1780
+    },
+    {
+      "id": "community-home-maker-2-45",
+      "name": "home-maker-2",
+      "src": "expansion/home-maker-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8670,
+      "y": 1740,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-garden-front-46",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8670,
+      "y": 1900,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-patchwing-47",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 8445,
+      "y": 1810,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1810
+    },
+    {
+      "id": "community-patchwing-48",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8900,
+      "y": 1780,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1780
+    },
+    {
+      "id": "community-washing-line-49",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": 7605,
+      "y": 910,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-home-grower-0-50",
+      "name": "home-grower-0",
+      "src": "expansion/home-grower-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 100,
+      "y": 4780,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-51",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 100,
+      "y": 4940,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-52",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -125,
+      "y": 4850,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 4850
+    },
+    {
+      "id": "community-sproutshare-53",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 330,
+      "y": 4820,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4820
+    },
+    {
+      "id": "community-home-grower-1-54",
+      "name": "home-grower-1",
+      "src": "expansion/home-grower-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 740,
+      "y": 4810,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-55",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 740,
+      "y": 4970,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-56",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 515,
+      "y": 4880,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 4880
+    },
+    {
+      "id": "community-sproutshare-57",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 970,
+      "y": 4850,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4850
+    },
+    {
+      "id": "community-home-grower-2-58",
+      "name": "home-grower-2",
+      "src": "expansion/home-grower-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 1450,
+      "y": 5400,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-59",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 1450,
+      "y": 5560,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-60",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 1225,
+      "y": 5470,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5470
+    },
+    {
+      "id": "community-sproutshare-61",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1680,
+      "y": 5440,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5440
+    },
+    {
+      "id": "community-home-grower-0-62",
+      "name": "home-grower-0",
+      "src": "expansion/home-grower-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 650,
+      "y": 5630,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-63",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 650,
+      "y": 5790,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-64",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 425,
+      "y": 5700,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5700
+    },
+    {
+      "id": "community-sproutshare-65",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 880,
+      "y": 5670,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5670
+    },
+    {
+      "id": "community-home-grower-1-66",
+      "name": "home-grower-1",
+      "src": "expansion/home-grower-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 1650,
+      "y": 6070,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-garden-front-67",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 1650,
+      "y": 6230,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-sproutshare-68",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 1425,
+      "y": 6140,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 6140
+    },
+    {
+      "id": "community-sproutshare-69",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 1880,
+      "y": 6110,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 6110
+    },
+    {
+      "id": "community-washing-line-70",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": 395,
+      "y": 5100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-home-baker-0-71",
+      "name": "home-baker-0",
+      "src": "expansion/home-baker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 6880,
+      "y": 5270,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-72",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 6880,
+      "y": 5430,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-73",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 6655,
+      "y": 5340,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5340
+    },
+    {
+      "id": "community-lanternloaf-74",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7110,
+      "y": 5310,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5310
+    },
+    {
+      "id": "community-home-baker-1-75",
+      "name": "home-baker-1",
+      "src": "expansion/home-baker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7380,
+      "y": 4800,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-76",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7380,
+      "y": 4960,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-77",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7155,
+      "y": 4870,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 4870
+    },
+    {
+      "id": "community-lanternloaf-78",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7610,
+      "y": 4840,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4840
+    },
+    {
+      "id": "community-home-baker-2-79",
+      "name": "home-baker-2",
+      "src": "expansion/home-baker-2.svg",
+      "width": 430,
+      "height": 390,
+      "x": 8030,
+      "y": 4820,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-80",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 8030,
+      "y": 4980,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-81",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7805,
+      "y": 4890,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 4890
+    },
+    {
+      "id": "community-lanternloaf-82",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 8260,
+      "y": 4860,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4860
+    },
+    {
+      "id": "community-home-baker-0-83",
+      "name": "home-baker-0",
+      "src": "expansion/home-baker-0.svg",
+      "width": 430,
+      "height": 390,
+      "x": 6900,
+      "y": 5940,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-84",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 6900,
+      "y": 6100,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-85",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 6675,
+      "y": 6010,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 6010
+    },
+    {
+      "id": "community-lanternloaf-86",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7130,
+      "y": 5980,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5980
+    },
+    {
+      "id": "community-home-baker-1-87",
+      "name": "home-baker-1",
+      "src": "expansion/home-baker-1.svg",
+      "width": 430,
+      "height": 390,
+      "x": 7600,
+      "y": 5590,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-garden-front-88",
+      "name": "garden-front",
+      "src": "expansion/garden-front.svg",
+      "width": 540,
+      "height": 130,
+      "x": 7600,
+      "y": 5750,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-lanternloaf-89",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7375,
+      "y": 5660,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5660
+    },
+    {
+      "id": "community-lanternloaf-90",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": 7830,
+      "y": 5630,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.23,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5630
+    },
+    {
+      "id": "community-washing-line-91",
+      "name": "washing-line",
+      "src": "expansion/washing-line.svg",
+      "width": 460,
+      "height": 180,
+      "x": 7175,
+      "y": 5590,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-storynest-92",
+      "name": "Round pavilion",
+      "src": "detail/pavilion.svg",
+      "x": 1400,
+      "y": 540,
+      "width": 561,
+      "height": 680,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 540
+    },
+    {
+      "id": "community-storynest-93",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 220,
+      "y": 570,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 570
+    },
+    {
+      "id": "community-storynest-94",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 1010,
+      "y": 620,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 620
+    },
+    {
+      "id": "community-storynest-95",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": -440,
+      "y": 450,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 450
+    },
+    {
+      "id": "community-storynest-96",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 1590,
+      "y": 780,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 780
+    },
+    {
+      "id": "community-storynest-97",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -520,
+      "y": 560,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 560
+    },
+    {
+      "id": "community-storynest-98",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 1740,
+      "y": 450,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 450
+    },
+    {
+      "id": "community-storynest-99",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -450,
+      "y": 1060,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1060
+    },
+    {
+      "id": "community-storynest-100",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 1780,
+      "y": 720,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "storynest",
+      "sortY": 720
+    },
+    {
+      "id": "community-storynest-101",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 520,
+      "y": 590,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.32,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 590
+    },
+    {
+      "id": "community-storynest-102",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 740,
+      "y": 580,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.2,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 580
+    },
+    {
+      "id": "community-storynest-103",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 650,
+      "y": -250,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.95,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": -250
+    },
+    {
+      "id": "community-storynest-104",
+      "name": "Flower rim planter",
+      "src": "detail/community-rim-planter.svg",
+      "x": 1190,
+      "y": 570,
+      "width": 534,
+      "height": 795,
+      "scale": 0.175,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 570
+    },
+    {
+      "id": "community-storynest-105",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 1050,
+      "y": 1460,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "storynest",
+      "sortY": 1460
+    },
+    {
+      "id": "community-book-exchange-106",
+      "name": "book-exchange",
+      "src": "expansion/book-exchange.svg",
+      "width": 190,
+      "height": 255,
+      "x": 580,
+      "y": 240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-binding-desk-107",
+      "name": "binding-desk",
+      "src": "expansion/binding-desk.svg",
+      "width": 390,
+      "height": 235,
+      "x": 1010,
+      "y": 810,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "storynest"
+    },
+    {
+      "id": "community-patchwing-108",
+      "name": "Lavender stall",
+      "src": "detail/lavender-stall.svg",
+      "x": 7450,
+      "y": 2390,
+      "width": 656,
+      "height": 593,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.51,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2390
+    },
+    {
+      "id": "community-patchwing-109",
+      "name": "Game table",
+      "src": "detail/game-table.svg",
+      "x": 7920,
+      "y": 1460,
+      "width": 670,
+      "height": 432,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.38,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1460
+    },
+    {
+      "id": "community-patchwing-110",
+      "name": "Hangout canopy",
+      "src": "detail/canopy-sofa.svg",
+      "x": 8150,
+      "y": 2200,
+      "width": 643,
+      "height": 616,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.487,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2200
+    },
+    {
+      "id": "community-patchwing-111",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 7610,
+      "y": 2170,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing",
+      "flip": false,
+      "sortY": 2170
+    },
+    {
+      "id": "community-patchwing-112",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 7650,
+      "y": 2250,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing",
+      "flip": false,
+      "sortY": 2250
+    },
+    {
+      "id": "community-patchwing-113",
+      "name": "Cocoa supplies",
+      "src": "detail/community-barrel.svg",
+      "x": 8450,
+      "y": 2180,
+      "width": 72,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing",
+      "flip": false,
+      "sortY": 2180
+    },
+    {
+      "id": "community-patchwing-114",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 7120,
+      "y": 1250,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 1250
+    },
+    {
+      "id": "community-patchwing-115",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 8930,
+      "y": 2130,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2130
+    },
+    {
+      "id": "community-patchwing-116",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 6950,
+      "y": 520,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 520
+    },
+    {
+      "id": "community-patchwing-117",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8890,
+      "y": 1080,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1080
+    },
+    {
+      "id": "community-patchwing-118",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8970,
+      "y": 2420,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2420
+    },
+    {
+      "id": "community-patchwing-119",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 7510,
+      "y": 2780,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 2780
+    },
+    {
+      "id": "community-patchwing-120",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 8480,
+      "y": 1330,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 1330
+    },
+    {
+      "id": "community-patchwing-121",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 7960,
+      "y": 140,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.95,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 140
+    },
+    {
+      "id": "community-patchwing-122",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7230,
+      "y": 2570,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "patchwing",
+      "sortY": 2570
+    },
+    {
+      "id": "community-patchwing-123",
+      "name": "Flower rim planter",
+      "src": "detail/community-rim-planter.svg",
+      "x": 8360,
+      "y": 2240,
+      "width": 534,
+      "height": 795,
+      "scale": 0.175,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2240
+    },
+    {
+      "id": "community-patchwing-124",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 7430,
+      "y": 2590,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "patchwing",
+      "sortY": 2590
+    },
+    {
+      "id": "community-craft-table-125",
+      "name": "craft-table",
+      "src": "expansion/craft-table.svg",
+      "width": 360,
+      "height": 190,
+      "x": 7810,
+      "y": 2240,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-craft-table-126",
+      "name": "craft-table",
+      "src": "expansion/craft-table.svg",
+      "width": 360,
+      "height": 190,
+      "x": 8170,
+      "y": 2520,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "patchwing"
+    },
+    {
+      "id": "community-sproutshare-127",
+      "name": "Lavender stall",
+      "src": "detail/lavender-stall.svg",
+      "x": -170,
+      "y": 5390,
+      "width": 656,
+      "height": 593,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.51,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5390
+    },
+    {
+      "id": "community-sproutshare-128",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 380,
+      "y": 5380,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5380
+    },
+    {
+      "id": "community-sproutshare-129",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 1280,
+      "y": 5390,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5390
+    },
+    {
+      "id": "community-sproutshare-130",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": -250,
+      "y": 4780,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4780
+    },
+    {
+      "id": "community-sproutshare-131",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 1840,
+      "y": 5680,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 5680
+    },
+    {
+      "id": "community-sproutshare-132",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -450,
+      "y": 4620,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4620
+    },
+    {
+      "id": "community-sproutshare-133",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 2210,
+      "y": 5350,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5350
+    },
+    {
+      "id": "community-sproutshare-134",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 1900,
+      "y": 6000,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 6000
+    },
+    {
+      "id": "community-sproutshare-135",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 380,
+      "y": 5780,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5780
+    },
+    {
+      "id": "community-sproutshare-136",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": -40,
+      "y": 5460,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare",
+      "flip": false,
+      "sortY": 5460
+    },
+    {
+      "id": "community-sproutshare-137",
+      "name": "Cocoa supplies",
+      "src": "detail/community-barrel.svg",
+      "x": -300,
+      "y": 5520,
+      "width": 72,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare",
+      "flip": false,
+      "sortY": 5520
+    },
+    {
+      "id": "community-sproutshare-138",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 1750,
+      "y": 5540,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "sproutshare",
+      "sortY": 5540
+    },
+    {
+      "id": "community-sproutshare-139",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 760,
+      "y": 4520,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.8,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 4520
+    },
+    {
+      "id": "community-sproutshare-140",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 2030,
+      "y": 6410,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "sproutshare",
+      "sortY": 6410
+    },
+    {
+      "id": "community-seed-shed-141",
+      "name": "seed-shed",
+      "src": "expansion/seed-shed.svg",
+      "width": 380,
+      "height": 335,
+      "x": 2040,
+      "y": 5520,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-1-142",
+      "name": "raised-bed-1",
+      "src": "expansion/raised-bed-1.svg",
+      "width": 270,
+      "height": 140,
+      "x": 710,
+      "y": 5270,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-2-143",
+      "name": "raised-bed-2",
+      "src": "expansion/raised-bed-2.svg",
+      "width": 270,
+      "height": 140,
+      "x": 1070,
+      "y": 5270,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-3-144",
+      "name": "raised-bed-3",
+      "src": "expansion/raised-bed-3.svg",
+      "width": 270,
+      "height": 140,
+      "x": 2110,
+      "y": 5860,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-raised-bed-4-145",
+      "name": "raised-bed-4",
+      "src": "expansion/raised-bed-4.svg",
+      "width": 270,
+      "height": 140,
+      "x": 2470,
+      "y": 5860,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "sproutshare"
+    },
+    {
+      "id": "community-lanternloaf-146",
+      "name": "Cocoa cart",
+      "src": "detail/cocoa-cart.svg",
+      "x": 6400,
+      "y": 5700,
+      "width": 683,
+      "height": 668,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.45,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5700
+    },
+    {
+      "id": "community-lanternloaf-147",
+      "name": "Lavender stall",
+      "src": "detail/lavender-stall.svg",
+      "x": 8190,
+      "y": 5500,
+      "width": 656,
+      "height": 593,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.51,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5500
+    },
+    {
+      "id": "community-lanternloaf-148",
+      "name": "Hangout canopy",
+      "src": "detail/canopy-sofa.svg",
+      "x": 7350,
+      "y": 5290,
+      "width": 643,
+      "height": 616,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.487,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5290
+    },
+    {
+      "id": "community-lanternloaf-149",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 6970,
+      "y": 5330,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5330
+    },
+    {
+      "id": "community-lanternloaf-150",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 7790,
+      "y": 5340,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5340
+    },
+    {
+      "id": "community-lanternloaf-151",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 7310,
+      "y": 5450,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.32,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5450
+    },
+    {
+      "id": "community-lanternloaf-152",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 8330,
+      "y": 5530,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf",
+      "flip": false,
+      "sortY": 5530
+    },
+    {
+      "id": "community-lanternloaf-153",
+      "name": "Cocoa supplies",
+      "src": "detail/community-barrel.svg",
+      "x": 8320,
+      "y": 5450,
+      "width": 72,
+      "height": 90,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf",
+      "flip": false,
+      "sortY": 5450
+    },
+    {
+      "id": "community-lanternloaf-154",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 6470,
+      "y": 5400,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5400
+    },
+    {
+      "id": "community-lanternloaf-155",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 8270,
+      "y": 5760,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5760
+    },
+    {
+      "id": "community-lanternloaf-156",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 6220,
+      "y": 5480,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5480
+    },
+    {
+      "id": "community-lanternloaf-157",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8420,
+      "y": 4880,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 4880
+    },
+    {
+      "id": "community-lanternloaf-158",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8030,
+      "y": 5860,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5860
+    },
+    {
+      "id": "community-lanternloaf-159",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 6480,
+      "y": 5720,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5720
+    },
+    {
+      "id": "community-lanternloaf-160",
+      "name": "String lights",
+      "src": "detail/lights-span.svg",
+      "x": 7390,
+      "y": 4510,
+      "width": 713,
+      "height": 374,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.95,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 4510
+    },
+    {
+      "id": "community-lanternloaf-161",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 6780,
+      "y": 5950,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5950
+    },
+    {
+      "id": "community-lanternloaf-162",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 7780,
+      "y": 5990,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "lanternloaf",
+      "sortY": 5990
+    },
+    {
+      "id": "community-lanternloaf-163",
+      "name": "Flower rim planter",
+      "src": "detail/community-rim-planter.svg",
+      "x": 7500,
+      "y": 5400,
+      "width": 534,
+      "height": 795,
+      "scale": 0.175,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5400
+    },
+    {
+      "id": "community-lanternloaf-164",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 6280,
+      "y": 5780,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "lanternloaf",
+      "sortY": 5780
+    },
+    {
+      "id": "community-bakehouse-165",
+      "name": "bakehouse",
+      "src": "expansion/bakehouse.svg",
+      "width": 520,
+      "height": 480,
+      "x": 8530,
+      "y": 5340,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "lanternloaf"
+    },
+    {
+      "id": "community-commons-166",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 2280,
+      "y": -250,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -250
+    },
+    {
+      "id": "community-commons-167",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 2500,
+      "y": -420,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -420
+    },
+    {
+      "id": "community-commons-168",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 2860,
+      "y": -250,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -250
+    },
+    {
+      "id": "community-commons-169",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 5180,
+      "y": -390,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -390
+    },
+    {
+      "id": "community-commons-170",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 5440,
+      "y": -480,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -480
+    },
+    {
+      "id": "community-commons-171",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 5840,
+      "y": -300,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -300
+    },
+    {
+      "id": "community-commons-172",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 3900,
+      "y": -350,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -350
+    },
+    {
+      "id": "community-commons-173",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 4400,
+      "y": -350,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -350
+    },
+    {
+      "id": "community-commons-174",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 3650,
+      "y": -320,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -320
+    },
+    {
+      "id": "community-commons-175",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 4050,
+      "y": 200,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 200
+    },
+    {
+      "id": "community-commons-176",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -530,
+      "y": 2120,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 2120
+    },
+    {
+      "id": "community-commons-177",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": -780,
+      "y": 2520,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2520
+    },
+    {
+      "id": "community-commons-178",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -450,
+      "y": 3100,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3100
+    },
+    {
+      "id": "community-commons-179",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": -650,
+      "y": 2900,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2900
+    },
+    {
+      "id": "community-commons-180",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": -380,
+      "y": 3900,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3900
+    },
+    {
+      "id": "community-commons-181",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": -680,
+      "y": 4150,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4150
+    },
+    {
+      "id": "community-commons-182",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8330,
+      "y": 3410,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3410
+    },
+    {
+      "id": "community-commons-183",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8610,
+      "y": 3670,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3670
+    },
+    {
+      "id": "community-commons-184",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 8380,
+      "y": 4110,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4110
+    },
+    {
+      "id": "community-commons-185",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 8520,
+      "y": 3910,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3910
+    },
+    {
+      "id": "community-commons-186",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 2910,
+      "y": 5640,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5640
+    },
+    {
+      "id": "community-commons-187",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 3220,
+      "y": 5840,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5840
+    },
+    {
+      "id": "community-commons-188",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 5010,
+      "y": 5740,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.72,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5740
+    },
+    {
+      "id": "community-commons-189",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 5310,
+      "y": 5890,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.69,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5890
+    },
+    {
+      "id": "community-commons-190",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 4280,
+      "y": 6100,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 6100
+    },
+    {
+      "id": "community-commons-191",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 3860,
+      "y": 6390,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 6390
+    },
+    {
+      "id": "community-commons-192",
+      "name": "Typing lamp",
+      "src": "detail/lamp-typing.svg",
+      "x": 4160,
+      "y": 6390,
+      "width": 307,
+      "height": 650,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.354,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 6390
+    },
+    {
+      "id": "community-commons-193",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 3690,
+      "y": 6370,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 6370
+    },
+    {
+      "id": "community-commons-194",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 4310,
+      "y": 6370,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.16,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 6370
+    },
+    {
+      "id": "community-commons-195",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 4100,
+      "y": 5880,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5880
+    },
+    {
+      "id": "review-orchard-196",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3200,
+      "y": -260,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-197",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3560,
+      "y": -410,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-198",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3900,
+      "y": -280,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-199",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 4610,
+      "y": -280,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-200",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 4850,
+      "y": -390,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-201",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": -160,
+      "y": 2050,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-202",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": -460,
+      "y": 2290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-203",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 90,
+      "y": 2400,
+      "scale": 0.88,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-204",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 2700,
+      "y": 5310,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-205",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3020,
+      "y": 5410,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-orchard-206",
+      "name": "Shared fruit tree",
+      "src": "expansion/orchard-tree.svg",
+      "width": 310,
+      "height": 440,
+      "x": 3260,
+      "y": 5380,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons"
+    },
+    {
+      "id": "review-207",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 3460,
+      "y": -120,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": -120
+    },
+    {
+      "id": "review-208",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 4410,
+      "y": -420,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.38,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -420
+    },
+    {
+      "id": "review-209",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 4230,
+      "y": -380,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.22,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -380
+    },
+    {
+      "id": "review-210",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 4720,
+      "y": -70,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": -70
+    },
+    {
+      "id": "review-211",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 3100,
+      "y": -20,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": -20
+    },
+    {
+      "id": "review-212",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": -400,
+      "y": 2530,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2530
+    },
+    {
+      "id": "review-213",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -250,
+      "y": 2410,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2410
+    },
+    {
+      "id": "review-214",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 90,
+      "y": 2220,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 2220
+    },
+    {
+      "id": "review-215",
+      "name": "Lavender bush",
+      "src": "detail/bush-lavender.svg",
+      "x": -500,
+      "y": 1940,
+      "width": 606,
+      "height": 487,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.26,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 1940
+    },
+    {
+      "id": "review-216",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 250,
+      "y": 2580,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 2580
+    },
+    {
+      "id": "review-217",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 2850,
+      "y": 5600,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.42,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5600
+    },
+    {
+      "id": "review-218",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 3080,
+      "y": 5630,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.24,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5630
+    },
+    {
+      "id": "review-219",
+      "name": "Cocoa supplies",
+      "src": "detail/community-crate.svg",
+      "x": 2660,
+      "y": 5540,
+      "width": 90,
+      "height": 82,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": 5540
+    },
+    {
+      "id": "review-220",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 3300,
+      "y": 5600,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5600
+    },
+    {
+      "id": "review-221",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 3130,
+      "y": 5830,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5830
+    },
+    {
+      "id": "review-222",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 4950,
+      "y": 5110,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.65,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5110
+    },
+    {
+      "id": "review-223",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 5790,
+      "y": 5290,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.62,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5290
+    },
+    {
+      "id": "review-224",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 5340,
+      "y": 5470,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 5470
+    },
+    {
+      "id": "review-225",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 5700,
+      "y": 5500,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.36,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 5500
+    },
+    {
+      "id": "review-226",
+      "name": "Pond reeds",
+      "src": "detail/pond-reeds.svg",
+      "x": 5140,
+      "y": 5330,
+      "width": 90,
+      "height": 105,
+      "scale": 0.4,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": 5330
+    },
+    {
+      "id": "review-227",
+      "name": "Pond reeds",
+      "src": "detail/pond-reeds.svg",
+      "x": 5530,
+      "y": 5150,
+      "width": 90,
+      "height": 105,
+      "scale": 0.36,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "zone": "commons",
+      "flip": false,
+      "sortY": 5150
+    },
+    {
+      "id": "review-228",
+      "name": "Lilac tree",
+      "src": "detail/tree-lilac.svg",
+      "x": 8850,
+      "y": 4270,
+      "width": 607,
+      "height": 648,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.62,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4270
+    },
+    {
+      "id": "review-229",
+      "name": "Wisteria tree",
+      "src": "detail/tree-wisteria.svg",
+      "x": 9160,
+      "y": 4620,
+      "width": 605,
+      "height": 654,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.65,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4620
+    },
+    {
+      "id": "review-230",
+      "name": "Picnic blanket",
+      "src": "detail/picnic-blanket.svg",
+      "x": 8780,
+      "y": 4510,
+      "width": 667,
+      "height": 473,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.36,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4510
+    },
+    {
+      "id": "review-231",
+      "name": "Floor cushions",
+      "src": "detail/cushions.svg",
+      "x": 8590,
+      "y": 4500,
+      "width": 662,
+      "height": 404,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.22,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 4500
+    },
+    {
+      "id": "review-232",
+      "name": "Bench",
+      "src": "detail/bench-lavender.svg",
+      "x": 8650,
+      "y": 4700,
+      "width": 614,
+      "height": 448,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.3,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4700
+    },
+    {
+      "id": "review-233",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 9040,
+      "y": 4740,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 4740
+    },
+    {
+      "id": "review-234",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": -610,
+      "y": 3090,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3090
+    },
+    {
+      "id": "review-235",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": -700,
+      "y": 3160,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3160
+    },
+    {
+      "id": "review-236",
+      "name": "Signpost",
+      "src": "detail/signpost.svg",
+      "x": 8580,
+      "y": 3380,
+      "width": 461,
+      "height": 647,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.35,
+      "flip": false,
+      "zone": "commons",
+      "sortY": 3380
+    },
+    {
+      "id": "review-237",
+      "name": "Flowers",
+      "src": "detail/flowers-purple.svg",
+      "x": 8660,
+      "y": 3450,
+      "width": 581,
+      "height": 364,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.99
+      },
+      "scale": 0.18,
+      "flip": true,
+      "zone": "commons",
+      "sortY": 3450
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "community-home-story-0-0",
+      "x": -80,
+      "y": -50,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-story-0-0-fence-1",
+      "poly": [
+        [
+          -347,
+          168
+        ],
+        [
+          -163,
+          168
+        ],
+        [
+          -163,
+          203
+        ],
+        [
+          -347,
+          203
+        ]
+      ]
+    },
+    {
+      "id": "community-home-story-0-0-fence1",
+      "poly": [
+        [
+          3,
+          168
+        ],
+        [
+          187,
+          168
+        ],
+        [
+          187,
+          203
+        ],
+        [
+          3,
+          203
+        ]
+      ]
+    },
+    {
+      "id": "community-storynest-3",
+      "x": 150,
+      "y": 92.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-story-1-4",
+      "x": 540,
+      "y": -150,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-story-1-4-fence-1",
+      "poly": [
+        [
+          273,
+          68
+        ],
+        [
+          457,
+          68
+        ],
+        [
+          457,
+          103
+        ],
+        [
+          273,
+          103
+        ]
+      ]
+    },
+    {
+      "id": "community-home-story-1-4-fence1",
+      "poly": [
+        [
+          623,
+          68
+        ],
+        [
+          807,
+          68
+        ],
+        [
+          807,
+          103
+        ],
+        [
+          623,
+          103
+        ]
+      ]
+    },
+    {
+      "id": "community-storynest-7",
+      "x": 770,
+      "y": -7.840700000000001,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-story-2-8",
+      "x": 1160,
+      "y": -30,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-story-2-8-fence-1",
+      "poly": [
+        [
+          893,
+          188
+        ],
+        [
+          1077,
+          188
+        ],
+        [
+          1077,
+          223
+        ],
+        [
+          893,
+          223
+        ]
+      ]
+    },
+    {
+      "id": "community-home-story-2-8-fence1",
+      "poly": [
+        [
+          1243,
+          188
+        ],
+        [
+          1427,
+          188
+        ],
+        [
+          1427,
+          223
+        ],
+        [
+          1243,
+          223
+        ]
+      ]
+    },
+    {
+      "id": "community-storynest-11",
+      "x": 1390,
+      "y": 112.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-story-0-12",
+      "x": -120,
+      "y": 840,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-story-0-12-fence-1",
+      "poly": [
+        [
+          -387,
+          1058
+        ],
+        [
+          -203,
+          1058
+        ],
+        [
+          -203,
+          1093
+        ],
+        [
+          -387,
+          1093
+        ]
+      ]
+    },
+    {
+      "id": "community-home-story-0-12-fence1",
+      "poly": [
+        [
+          -37,
+          1058
+        ],
+        [
+          147,
+          1058
+        ],
+        [
+          147,
+          1093
+        ],
+        [
+          -37,
+          1093
+        ]
+      ]
+    },
+    {
+      "id": "community-storynest-15",
+      "x": 110,
+      "y": 982.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-story-1-16",
+      "x": 560,
+      "y": 940,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-story-1-16-fence-1",
+      "poly": [
+        [
+          293,
+          1158
+        ],
+        [
+          477,
+          1158
+        ],
+        [
+          477,
+          1193
+        ],
+        [
+          293,
+          1193
+        ]
+      ]
+    },
+    {
+      "id": "community-home-story-1-16-fence1",
+      "poly": [
+        [
+          643,
+          1158
+        ],
+        [
+          827,
+          1158
+        ],
+        [
+          827,
+          1193
+        ],
+        [
+          643,
+          1193
+        ]
+      ]
+    },
+    {
+      "id": "community-storynest-19",
+      "x": 790,
+      "y": 1082.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-story-2-20",
+      "x": 1250,
+      "y": 870,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-story-2-20-fence-1",
+      "poly": [
+        [
+          983,
+          1088
+        ],
+        [
+          1167,
+          1088
+        ],
+        [
+          1167,
+          1123
+        ],
+        [
+          983,
+          1123
+        ]
+      ]
+    },
+    {
+      "id": "community-home-story-2-20-fence1",
+      "poly": [
+        [
+          1333,
+          1088
+        ],
+        [
+          1517,
+          1088
+        ],
+        [
+          1517,
+          1123
+        ],
+        [
+          1333,
+          1123
+        ]
+      ]
+    },
+    {
+      "id": "community-storynest-23",
+      "x": 1480,
+      "y": 1012.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "wash-left-storynest",
+      "x": 0,
+      "y": 370,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "wash-right-storynest",
+      "x": 430,
+      "y": 370,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "community-home-maker-0-25",
+      "x": 7310,
+      "y": 480,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-maker-0-25-fence-1",
+      "poly": [
+        [
+          7043,
+          698
+        ],
+        [
+          7227,
+          698
+        ],
+        [
+          7227,
+          733
+        ],
+        [
+          7043,
+          733
+        ]
+      ]
+    },
+    {
+      "id": "community-home-maker-0-25-fence1",
+      "poly": [
+        [
+          7393,
+          698
+        ],
+        [
+          7577,
+          698
+        ],
+        [
+          7577,
+          733
+        ],
+        [
+          7393,
+          733
+        ]
+      ]
+    },
+    {
+      "id": "community-patchwing-28",
+      "x": 7540,
+      "y": 622.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-maker-1-29",
+      "x": 7950,
+      "y": 380,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-maker-1-29-fence-1",
+      "poly": [
+        [
+          7683,
+          598
+        ],
+        [
+          7867,
+          598
+        ],
+        [
+          7867,
+          633
+        ],
+        [
+          7683,
+          633
+        ]
+      ]
+    },
+    {
+      "id": "community-home-maker-1-29-fence1",
+      "poly": [
+        [
+          8033,
+          598
+        ],
+        [
+          8217,
+          598
+        ],
+        [
+          8217,
+          633
+        ],
+        [
+          8033,
+          633
+        ]
+      ]
+    },
+    {
+      "id": "community-patchwing-32",
+      "x": 8180,
+      "y": 522.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-maker-2-33",
+      "x": 8580,
+      "y": 560,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-maker-2-33-fence-1",
+      "poly": [
+        [
+          8313,
+          778
+        ],
+        [
+          8497,
+          778
+        ],
+        [
+          8497,
+          813
+        ],
+        [
+          8313,
+          813
+        ]
+      ]
+    },
+    {
+      "id": "community-home-maker-2-33-fence1",
+      "poly": [
+        [
+          8663,
+          778
+        ],
+        [
+          8847,
+          778
+        ],
+        [
+          8847,
+          813
+        ],
+        [
+          8663,
+          813
+        ]
+      ]
+    },
+    {
+      "id": "community-patchwing-36",
+      "x": 8810,
+      "y": 702.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-maker-0-37",
+      "x": 7420,
+      "y": 1530,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-maker-0-37-fence-1",
+      "poly": [
+        [
+          7153,
+          1748
+        ],
+        [
+          7337,
+          1748
+        ],
+        [
+          7337,
+          1783
+        ],
+        [
+          7153,
+          1783
+        ]
+      ]
+    },
+    {
+      "id": "community-home-maker-0-37-fence1",
+      "poly": [
+        [
+          7503,
+          1748
+        ],
+        [
+          7687,
+          1748
+        ],
+        [
+          7687,
+          1783
+        ],
+        [
+          7503,
+          1783
+        ]
+      ]
+    },
+    {
+      "id": "community-patchwing-40",
+      "x": 7650,
+      "y": 1672.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-maker-1-41",
+      "x": 8050,
+      "y": 1630,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-maker-1-41-fence-1",
+      "poly": [
+        [
+          7783,
+          1848
+        ],
+        [
+          7967,
+          1848
+        ],
+        [
+          7967,
+          1883
+        ],
+        [
+          7783,
+          1883
+        ]
+      ]
+    },
+    {
+      "id": "community-home-maker-1-41-fence1",
+      "poly": [
+        [
+          8133,
+          1848
+        ],
+        [
+          8317,
+          1848
+        ],
+        [
+          8317,
+          1883
+        ],
+        [
+          8133,
+          1883
+        ]
+      ]
+    },
+    {
+      "id": "community-patchwing-44",
+      "x": 8280,
+      "y": 1772.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-maker-2-45",
+      "x": 8670,
+      "y": 1630,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-maker-2-45-fence-1",
+      "poly": [
+        [
+          8403,
+          1848
+        ],
+        [
+          8587,
+          1848
+        ],
+        [
+          8587,
+          1883
+        ],
+        [
+          8403,
+          1883
+        ]
+      ]
+    },
+    {
+      "id": "community-home-maker-2-45-fence1",
+      "poly": [
+        [
+          8753,
+          1848
+        ],
+        [
+          8937,
+          1848
+        ],
+        [
+          8937,
+          1883
+        ],
+        [
+          8753,
+          1883
+        ]
+      ]
+    },
+    {
+      "id": "community-patchwing-48",
+      "x": 8900,
+      "y": 1772.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "wash-left-patchwing",
+      "x": 7390,
+      "y": 900,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "wash-right-patchwing",
+      "x": 7820,
+      "y": 900,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "community-home-grower-0-50",
+      "x": 100,
+      "y": 4670,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-grower-0-50-fence-1",
+      "poly": [
+        [
+          -167,
+          4888
+        ],
+        [
+          17,
+          4888
+        ],
+        [
+          17,
+          4923
+        ],
+        [
+          -167,
+          4923
+        ]
+      ]
+    },
+    {
+      "id": "community-home-grower-0-50-fence1",
+      "poly": [
+        [
+          183,
+          4888
+        ],
+        [
+          367,
+          4888
+        ],
+        [
+          367,
+          4923
+        ],
+        [
+          183,
+          4923
+        ]
+      ]
+    },
+    {
+      "id": "community-sproutshare-53",
+      "x": 330,
+      "y": 4812.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-grower-1-54",
+      "x": 740,
+      "y": 4700,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-grower-1-54-fence-1",
+      "poly": [
+        [
+          473,
+          4918
+        ],
+        [
+          657,
+          4918
+        ],
+        [
+          657,
+          4953
+        ],
+        [
+          473,
+          4953
+        ]
+      ]
+    },
+    {
+      "id": "community-home-grower-1-54-fence1",
+      "poly": [
+        [
+          823,
+          4918
+        ],
+        [
+          1007,
+          4918
+        ],
+        [
+          1007,
+          4953
+        ],
+        [
+          823,
+          4953
+        ]
+      ]
+    },
+    {
+      "id": "community-sproutshare-57",
+      "x": 970,
+      "y": 4842.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-grower-2-58",
+      "x": 1450,
+      "y": 5290,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-grower-2-58-fence-1",
+      "poly": [
+        [
+          1183,
+          5508
+        ],
+        [
+          1367,
+          5508
+        ],
+        [
+          1367,
+          5543
+        ],
+        [
+          1183,
+          5543
+        ]
+      ]
+    },
+    {
+      "id": "community-home-grower-2-58-fence1",
+      "poly": [
+        [
+          1533,
+          5508
+        ],
+        [
+          1717,
+          5508
+        ],
+        [
+          1717,
+          5543
+        ],
+        [
+          1533,
+          5543
+        ]
+      ]
+    },
+    {
+      "id": "community-sproutshare-61",
+      "x": 1680,
+      "y": 5432.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-grower-0-62",
+      "x": 650,
+      "y": 5520,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-grower-0-62-fence-1",
+      "poly": [
+        [
+          383,
+          5738
+        ],
+        [
+          567,
+          5738
+        ],
+        [
+          567,
+          5773
+        ],
+        [
+          383,
+          5773
+        ]
+      ]
+    },
+    {
+      "id": "community-home-grower-0-62-fence1",
+      "poly": [
+        [
+          733,
+          5738
+        ],
+        [
+          917,
+          5738
+        ],
+        [
+          917,
+          5773
+        ],
+        [
+          733,
+          5773
+        ]
+      ]
+    },
+    {
+      "id": "community-sproutshare-65",
+      "x": 880,
+      "y": 5662.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-grower-1-66",
+      "x": 1650,
+      "y": 5960,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-grower-1-66-fence-1",
+      "poly": [
+        [
+          1383,
+          6178
+        ],
+        [
+          1567,
+          6178
+        ],
+        [
+          1567,
+          6213
+        ],
+        [
+          1383,
+          6213
+        ]
+      ]
+    },
+    {
+      "id": "community-home-grower-1-66-fence1",
+      "poly": [
+        [
+          1733,
+          6178
+        ],
+        [
+          1917,
+          6178
+        ],
+        [
+          1917,
+          6213
+        ],
+        [
+          1733,
+          6213
+        ]
+      ]
+    },
+    {
+      "id": "community-sproutshare-69",
+      "x": 1880,
+      "y": 6102.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "wash-left-sproutshare",
+      "x": 180,
+      "y": 5090,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "wash-right-sproutshare",
+      "x": 610,
+      "y": 5090,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "community-home-baker-0-71",
+      "x": 6880,
+      "y": 5160,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-baker-0-71-fence-1",
+      "poly": [
+        [
+          6613,
+          5378
+        ],
+        [
+          6797,
+          5378
+        ],
+        [
+          6797,
+          5413
+        ],
+        [
+          6613,
+          5413
+        ]
+      ]
+    },
+    {
+      "id": "community-home-baker-0-71-fence1",
+      "poly": [
+        [
+          6963,
+          5378
+        ],
+        [
+          7147,
+          5378
+        ],
+        [
+          7147,
+          5413
+        ],
+        [
+          6963,
+          5413
+        ]
+      ]
+    },
+    {
+      "id": "community-lanternloaf-74",
+      "x": 7110,
+      "y": 5302.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-baker-1-75",
+      "x": 7380,
+      "y": 4690,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-baker-1-75-fence-1",
+      "poly": [
+        [
+          7113,
+          4908
+        ],
+        [
+          7297,
+          4908
+        ],
+        [
+          7297,
+          4943
+        ],
+        [
+          7113,
+          4943
+        ]
+      ]
+    },
+    {
+      "id": "community-home-baker-1-75-fence1",
+      "poly": [
+        [
+          7463,
+          4908
+        ],
+        [
+          7647,
+          4908
+        ],
+        [
+          7647,
+          4943
+        ],
+        [
+          7463,
+          4943
+        ]
+      ]
+    },
+    {
+      "id": "community-lanternloaf-78",
+      "x": 7610,
+      "y": 4832.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-baker-2-79",
+      "x": 8030,
+      "y": 4710,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-baker-2-79-fence-1",
+      "poly": [
+        [
+          7763,
+          4928
+        ],
+        [
+          7947,
+          4928
+        ],
+        [
+          7947,
+          4963
+        ],
+        [
+          7763,
+          4963
+        ]
+      ]
+    },
+    {
+      "id": "community-home-baker-2-79-fence1",
+      "poly": [
+        [
+          8113,
+          4928
+        ],
+        [
+          8297,
+          4928
+        ],
+        [
+          8297,
+          4963
+        ],
+        [
+          8113,
+          4963
+        ]
+      ]
+    },
+    {
+      "id": "community-lanternloaf-82",
+      "x": 8260,
+      "y": 4852.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-baker-0-83",
+      "x": 6900,
+      "y": 5830,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-baker-0-83-fence-1",
+      "poly": [
+        [
+          6633,
+          6048
+        ],
+        [
+          6817,
+          6048
+        ],
+        [
+          6817,
+          6083
+        ],
+        [
+          6633,
+          6083
+        ]
+      ]
+    },
+    {
+      "id": "community-home-baker-0-83-fence1",
+      "poly": [
+        [
+          6983,
+          6048
+        ],
+        [
+          7167,
+          6048
+        ],
+        [
+          7167,
+          6083
+        ],
+        [
+          6983,
+          6083
+        ]
+      ]
+    },
+    {
+      "id": "community-lanternloaf-86",
+      "x": 7130,
+      "y": 5972.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "community-home-baker-1-87",
+      "x": 7600,
+      "y": 5480,
+      "rx": 164,
+      "ry": 66
+    },
+    {
+      "id": "community-home-baker-1-87-fence-1",
+      "poly": [
+        [
+          7333,
+          5698
+        ],
+        [
+          7517,
+          5698
+        ],
+        [
+          7517,
+          5733
+        ],
+        [
+          7333,
+          5733
+        ]
+      ]
+    },
+    {
+      "id": "community-home-baker-1-87-fence1",
+      "poly": [
+        [
+          7683,
+          5698
+        ],
+        [
+          7867,
+          5698
+        ],
+        [
+          7867,
+          5733
+        ],
+        [
+          7683,
+          5733
+        ]
+      ]
+    },
+    {
+      "id": "community-lanternloaf-90",
+      "x": 7830,
+      "y": 5622.1593,
+      "rx": 52.9644,
+      "ry": 12.321100000000001
+    },
+    {
+      "id": "wash-left-lanternloaf",
+      "x": 6960,
+      "y": 5580,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "wash-right-lanternloaf",
+      "x": 7390,
+      "y": 5580,
+      "rx": 9,
+      "ry": 10
+    },
+    {
+      "id": "community-storynest-92",
+      "x": 1400,
+      "y": 510,
+      "rx": 147.0942,
+      "ry": 51.612
+    },
+    {
+      "id": "community-storynest-93",
+      "x": 220,
+      "y": 560.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-storynest-94",
+      "x": 1010,
+      "y": 610.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-storynest-95",
+      "x": -440,
+      "y": 433.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-storynest-96",
+      "x": 1590,
+      "y": 763.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-storynest-97",
+      "x": -520,
+      "y": 545,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-storynest-98",
+      "x": 1740,
+      "y": 435,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-storynest-99",
+      "x": -450,
+      "y": 1045,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-storynest-100",
+      "x": 1780,
+      "y": 705,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-storynest-104",
+      "x": 1190,
+      "y": 560.26125,
+      "rx": 35.510999999999996,
+      "ry": 15.30375
+    },
+    {
+      "id": "community-storynest-105",
+      "x": 1050,
+      "y": 1444.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "community-book-exchange-106",
+      "x": 580,
+      "y": 220,
+      "rx": 78,
+      "ry": 25
+    },
+    {
+      "id": "community-binding-desk-107",
+      "x": 1010,
+      "y": 790,
+      "rx": 165,
+      "ry": 30
+    },
+    {
+      "id": "community-patchwing-108",
+      "x": 7450,
+      "y": 2368.8299,
+      "rx": 127.1328,
+      "ry": 33.2673
+    },
+    {
+      "id": "community-patchwing-109",
+      "x": 7920,
+      "y": 1448.5088,
+      "rx": 96.748,
+      "ry": 18.0576
+    },
+    {
+      "id": "community-patchwing-110",
+      "x": 8150,
+      "y": 2179.00056,
+      "rx": 118.99358000000001,
+      "ry": 32.999120000000005
+    },
+    {
+      "id": "community-patchwing-111",
+      "x": 7610,
+      "y": 2164.26,
+      "rx": 34.2,
+      "ry": 9.02
+    },
+    {
+      "id": "community-patchwing-112",
+      "x": 7650,
+      "y": 2244.26,
+      "rx": 34.2,
+      "ry": 9.02
+    },
+    {
+      "id": "community-patchwing-113",
+      "x": 8450,
+      "y": 2173.7,
+      "rx": 27.36,
+      "ry": 9.9
+    },
+    {
+      "id": "community-patchwing-114",
+      "x": 7120,
+      "y": 1233.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-patchwing-115",
+      "x": 8930,
+      "y": 2113.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-patchwing-116",
+      "x": 6950,
+      "y": 505,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-patchwing-117",
+      "x": 8890,
+      "y": 1065,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-patchwing-118",
+      "x": 8970,
+      "y": 2405,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-patchwing-119",
+      "x": 7510,
+      "y": 2765,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-patchwing-120",
+      "x": 8480,
+      "y": 1320.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-patchwing-123",
+      "x": 8360,
+      "y": 2230.26125,
+      "rx": 35.510999999999996,
+      "ry": 15.30375
+    },
+    {
+      "id": "community-patchwing-124",
+      "x": 7430,
+      "y": 2574.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "community-craft-table-125",
+      "x": 7810,
+      "y": 2220,
+      "rx": 155,
+      "ry": 30
+    },
+    {
+      "id": "community-craft-table-126",
+      "x": 8170,
+      "y": 2500,
+      "rx": 155,
+      "ry": 30
+    },
+    {
+      "id": "community-sproutshare-127",
+      "x": -170,
+      "y": 5368.8299,
+      "rx": 127.1328,
+      "ry": 33.2673
+    },
+    {
+      "id": "community-sproutshare-128",
+      "x": 380,
+      "y": 5370.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-sproutshare-129",
+      "x": 1280,
+      "y": 5380.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-sproutshare-130",
+      "x": -250,
+      "y": 4763.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-sproutshare-131",
+      "x": 1840,
+      "y": 5663.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-sproutshare-132",
+      "x": -450,
+      "y": 4605,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-sproutshare-133",
+      "x": 2210,
+      "y": 5335,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-sproutshare-134",
+      "x": 1900,
+      "y": 5985,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-sproutshare-135",
+      "x": 380,
+      "y": 5765,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-sproutshare-136",
+      "x": -40,
+      "y": 5454.26,
+      "rx": 34.2,
+      "ry": 9.02
+    },
+    {
+      "id": "community-sproutshare-137",
+      "x": -300,
+      "y": 5513.7,
+      "rx": 27.36,
+      "ry": 9.9
+    },
+    {
+      "id": "community-sproutshare-140",
+      "x": 2030,
+      "y": 6394.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "community-seed-shed-141",
+      "x": 2040,
+      "y": 5500,
+      "rx": 145,
+      "ry": 30
+    },
+    {
+      "id": "community-raised-bed-1-142",
+      "x": 710,
+      "y": 5250,
+      "rx": 115,
+      "ry": 26
+    },
+    {
+      "id": "community-raised-bed-2-143",
+      "x": 1070,
+      "y": 5250,
+      "rx": 115,
+      "ry": 26
+    },
+    {
+      "id": "community-raised-bed-3-144",
+      "x": 2110,
+      "y": 5840,
+      "rx": 115,
+      "ry": 26
+    },
+    {
+      "id": "community-raised-bed-4-145",
+      "x": 2470,
+      "y": 5840,
+      "rx": 115,
+      "ry": 26
+    },
+    {
+      "id": "community-lanternloaf-146",
+      "x": 6400,
+      "y": 5678.958,
+      "rx": 116.793,
+      "ry": 33.066
+    },
+    {
+      "id": "community-lanternloaf-147",
+      "x": 8190,
+      "y": 5478.8299,
+      "rx": 127.1328,
+      "ry": 33.2673
+    },
+    {
+      "id": "community-lanternloaf-148",
+      "x": 7350,
+      "y": 5269.00056,
+      "rx": 118.99358000000001,
+      "ry": 32.999120000000005
+    },
+    {
+      "id": "community-lanternloaf-149",
+      "x": 6970,
+      "y": 5320.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-lanternloaf-150",
+      "x": 7790,
+      "y": 5330.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-lanternloaf-152",
+      "x": 8330,
+      "y": 5524.26,
+      "rx": 34.2,
+      "ry": 9.02
+    },
+    {
+      "id": "community-lanternloaf-153",
+      "x": 8320,
+      "y": 5443.7,
+      "rx": 27.36,
+      "ry": 9.9
+    },
+    {
+      "id": "community-lanternloaf-154",
+      "x": 6470,
+      "y": 5383.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-lanternloaf-155",
+      "x": 8270,
+      "y": 5743.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-lanternloaf-156",
+      "x": 6220,
+      "y": 5465,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-lanternloaf-157",
+      "x": 8420,
+      "y": 4865,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-lanternloaf-158",
+      "x": 8030,
+      "y": 5845,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-lanternloaf-159",
+      "x": 6480,
+      "y": 5705,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-lanternloaf-163",
+      "x": 7500,
+      "y": 5390.26125,
+      "rx": 35.510999999999996,
+      "ry": 15.30375
+    },
+    {
+      "id": "community-lanternloaf-164",
+      "x": 6280,
+      "y": 5764.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "community-bakehouse-165",
+      "x": 8530,
+      "y": 5230,
+      "rx": 205,
+      "ry": 65
+    },
+    {
+      "id": "community-commons-166",
+      "x": 2280,
+      "y": -265,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-167",
+      "x": 2500,
+      "y": -435,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-168",
+      "x": 2860,
+      "y": -265,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-169",
+      "x": 5180,
+      "y": -405,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-170",
+      "x": 5440,
+      "y": -495,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-171",
+      "x": 5840,
+      "y": -315,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-172",
+      "x": 3900,
+      "y": -359.408,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-commons-173",
+      "x": 4400,
+      "y": -359.408,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-commons-175",
+      "x": 4050,
+      "y": 184.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "community-commons-176",
+      "x": -530,
+      "y": 2105,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-177",
+      "x": -780,
+      "y": 2505,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-178",
+      "x": -450,
+      "y": 3085,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-179",
+      "x": -650,
+      "y": 2890.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-commons-180",
+      "x": -380,
+      "y": 3885,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-181",
+      "x": -680,
+      "y": 4135,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-182",
+      "x": 8330,
+      "y": 3395,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-183",
+      "x": 8610,
+      "y": 3655,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-184",
+      "x": 8380,
+      "y": 4095,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-185",
+      "x": 8520,
+      "y": 3900.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-commons-186",
+      "x": 2910,
+      "y": 5625,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-187",
+      "x": 3220,
+      "y": 5825,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-188",
+      "x": 5010,
+      "y": 5725,
+      "rx": 52.27199999999999,
+      "ry": 51.7968
+    },
+    {
+      "id": "community-commons-189",
+      "x": 5310,
+      "y": 5875,
+      "rx": 50.2596,
+      "ry": 49.18319999999999
+    },
+    {
+      "id": "community-commons-190",
+      "x": 4280,
+      "y": 6090.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "community-commons-191",
+      "x": 3860,
+      "y": 6373.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-commons-192",
+      "x": 4160,
+      "y": 6373.893,
+      "rx": 41.29764,
+      "ry": 21.7356
+    },
+    {
+      "id": "community-commons-195",
+      "x": 4100,
+      "y": 5864.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "review-orchard-196",
+      "x": 3200,
+      "y": -270,
+      "rx": 21.25,
+      "ry": 15.299999999999999
+    },
+    {
+      "id": "review-orchard-197",
+      "x": 3560,
+      "y": -420,
+      "rx": 25,
+      "ry": 18
+    },
+    {
+      "id": "review-orchard-198",
+      "x": 3900,
+      "y": -290,
+      "rx": 22.5,
+      "ry": 16.2
+    },
+    {
+      "id": "review-orchard-199",
+      "x": 4610,
+      "y": -290,
+      "rx": 25,
+      "ry": 18
+    },
+    {
+      "id": "review-orchard-200",
+      "x": 4850,
+      "y": -400,
+      "rx": 21.25,
+      "ry": 15.299999999999999
+    },
+    {
+      "id": "review-orchard-201",
+      "x": -160,
+      "y": 2040,
+      "rx": 22.5,
+      "ry": 16.2
+    },
+    {
+      "id": "review-orchard-202",
+      "x": -460,
+      "y": 2280,
+      "rx": 25,
+      "ry": 18
+    },
+    {
+      "id": "review-orchard-203",
+      "x": 90,
+      "y": 2390,
+      "rx": 22,
+      "ry": 15.84
+    },
+    {
+      "id": "review-orchard-204",
+      "x": 2700,
+      "y": 5300,
+      "rx": 22.5,
+      "ry": 16.2
+    },
+    {
+      "id": "review-orchard-205",
+      "x": 3020,
+      "y": 5400,
+      "rx": 25,
+      "ry": 18
+    },
+    {
+      "id": "review-orchard-206",
+      "x": 3260,
+      "y": 5370,
+      "rx": 21.25,
+      "ry": 15.299999999999999
+    },
+    {
+      "id": "review-207",
+      "x": 3460,
+      "y": -129.40800000000002,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "review-210",
+      "x": 4720,
+      "y": -75.74,
+      "rx": 34.2,
+      "ry": 9.02
+    },
+    {
+      "id": "review-211",
+      "x": 3100,
+      "y": -35.8515,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "review-212",
+      "x": -400,
+      "y": 2520.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "review-215",
+      "x": -500,
+      "y": 1931.1366,
+      "rx": 59.8728,
+      "ry": 13.9282
+    },
+    {
+      "id": "review-216",
+      "x": 250,
+      "y": 2564.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "review-219",
+      "x": 2660,
+      "y": 5534.26,
+      "rx": 34.2,
+      "ry": 9.02
+    },
+    {
+      "id": "review-220",
+      "x": 3300,
+      "y": 5590.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "review-222",
+      "x": 4950,
+      "y": 5080.243,
+      "rx": 47.19,
+      "ry": 46.761
+    },
+    {
+      "id": "review-223",
+      "x": 5790,
+      "y": 5261.8768,
+      "rx": 45.160799999999995,
+      "ry": 44.193599999999996
+    },
+    {
+      "id": "review-224",
+      "x": 5340,
+      "y": 5460.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "review-228",
+      "x": 8850,
+      "y": 4241.8768,
+      "rx": 45.160799999999995,
+      "ry": 44.193599999999996
+    },
+    {
+      "id": "review-229",
+      "x": 9160,
+      "y": 4590.243,
+      "rx": 47.19,
+      "ry": 46.761
+    },
+    {
+      "id": "review-232",
+      "x": 8650,
+      "y": 4690.592,
+      "rx": 79.20599999999999,
+      "ry": 14.784
+    },
+    {
+      "id": "review-234",
+      "x": -610,
+      "y": 3074.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    },
+    {
+      "id": "review-236",
+      "x": 8580,
+      "y": 3364.1485,
+      "rx": 61.312999999999995,
+      "ry": 24.909499999999998
+    }
+  ],
+  "places": [
+    {
+      "id": "storynest",
+      "name": "Storynest Row",
+      "residents": "Storytellers, bookbinders and the campfire hosts",
+      "x": 590,
+      "y": 500,
+      "point": [
+        600,
+        540
+      ],
+      "rx": 1100,
+      "ry": 800,
+      "type": "story",
+      "homes": [
+        [
+          -80,
+          60
+        ],
+        [
+          540,
+          -40
+        ],
+        [
+          1160,
+          80
+        ],
+        [
+          -120,
+          950
+        ],
+        [
+          560,
+          1050
+        ],
+        [
+          1250,
+          980
+        ]
+      ],
+      "lane": [
+        [
+          -250,
+          380
+        ],
+        [
+          500,
+          370
+        ],
+        [
+          1180,
+          410
+        ],
+        [
+          1510,
+          740
+        ],
+        [
+          1060,
+          1120
+        ],
+        [
+          500,
+          1320
+        ],
+        [
+          -300,
+          1230
+        ],
+        [
+          -250,
+          380
+        ]
+      ],
+      "work": "Book exchange, binding desk and a reading pavilion"
+    },
+    {
+      "id": "patchwing",
+      "name": "Patchwing Yard",
+      "residents": "Menders, lantern makers and board-game builders",
+      "x": 7970,
+      "y": 1200,
+      "point": [
+        8010,
+        1200
+      ],
+      "rx": 1100,
+      "ry": 950,
+      "type": "maker",
+      "homes": [
+        [
+          7310,
+          590
+        ],
+        [
+          7950,
+          490
+        ],
+        [
+          8580,
+          670
+        ],
+        [
+          7420,
+          1640
+        ],
+        [
+          8050,
+          1740
+        ],
+        [
+          8670,
+          1740
+        ]
+      ],
+      "lane": [
+        [
+          7180,
+          950
+        ],
+        [
+          7880,
+          890
+        ],
+        [
+          8660,
+          1030
+        ],
+        [
+          8930,
+          1400
+        ],
+        [
+          8710,
+          2050
+        ],
+        [
+          7990,
+          2120
+        ],
+        [
+          7330,
+          1980
+        ],
+        [
+          7180,
+          950
+        ]
+      ],
+      "work": "Shared craft tables, repair stalls and a drying yard"
+    },
+    {
+      "id": "sproutshare",
+      "name": "Sproutshare Co-op",
+      "residents": "Volunteer growers who feed the campfire kitchens",
+      "x": 900,
+      "y": 5240,
+      "point": [
+        920,
+        5280
+      ],
+      "rx": 1100,
+      "ry": 770,
+      "type": "grower",
+      "homes": [
+        [
+          100,
+          4780
+        ],
+        [
+          740,
+          4810
+        ],
+        [
+          1450,
+          5400
+        ],
+        [
+          650,
+          5630
+        ],
+        [
+          1650,
+          6070
+        ]
+      ],
+      "lane": [
+        [
+          -200,
+          5040
+        ],
+        [
+          650,
+          5120
+        ],
+        [
+          1550,
+          5190
+        ],
+        [
+          1810,
+          5530
+        ],
+        [
+          1480,
+          6000
+        ],
+        [
+          650,
+          5890
+        ],
+        [
+          250,
+          5520
+        ],
+        [
+          -200,
+          5040
+        ]
+      ],
+      "work": "Four vegetable beds, seed stall, tool shed and the harvest green"
+    },
+    {
+      "id": "lanternloaf",
+      "name": "Lanternloaf Lane",
+      "residents": "Bakers, cocoa cooks and the evening lantern keepers",
+      "x": 7350,
+      "y": 5260,
+      "point": [
+        7550,
+        5280
+      ],
+      "rx": 1100,
+      "ry": 750,
+      "type": "baker",
+      "homes": [
+        [
+          6880,
+          5270
+        ],
+        [
+          7380,
+          4800
+        ],
+        [
+          8030,
+          4820
+        ],
+        [
+          6900,
+          5940
+        ],
+        [
+          7600,
+          5590
+        ]
+      ],
+      "lane": [
+        [
+          6420,
+          5140
+        ],
+        [
+          7140,
+          5090
+        ],
+        [
+          7940,
+          5140
+        ],
+        [
+          8300,
+          5390
+        ],
+        [
+          7770,
+          5840
+        ],
+        [
+          6950,
+          5910
+        ],
+        [
+          6520,
+          5570
+        ],
+        [
+          6420,
+          5140
+        ]
+      ],
+      "work": "Neighbourhood bakehouse, cocoa cart, cooling benches and a supper square"
+    }
+  ],
+  "loop": [
+    [
+      -500,
+      2800
+    ],
+    [
+      -250,
+      1650
+    ],
+    [
+      700,
+      1400
+    ],
+    [
+      2300,
+      100
+    ],
+    [
+      4000,
+      50
+    ],
+    [
+      5800,
+      100
+    ],
+    [
+      7000,
+      900
+    ],
+    [
+      8030,
+      1200
+    ],
+    [
+      8430,
+      2950
+    ],
+    [
+      8100,
+      4140
+    ],
+    [
+      7350,
+      5280
+    ],
+    [
+      5600,
+      5570
+    ],
+    [
+      4000,
+      6140
+    ],
+    [
+      2700,
+      5600
+    ],
+    [
+      920,
+      5280
+    ],
+    [
+      -250,
+      4100
+    ],
+    [
+      -500,
+      2800
+    ]
+  ],
+  "links": [
+    [
+      [
+        700,
+        1400
+      ],
+      [
+        942,
+        1325
+      ],
+      [
+        1333,
+        1516
+      ],
+      [
+        1450,
+        1780
+      ]
+    ],
+    [
+      [
+        4000,
+        50
+      ],
+      [
+        4000,
+        650
+      ],
+      [
+        4000,
+        1700
+      ]
+    ],
+    [
+      [
+        7000,
+        900
+      ],
+      [
+        6980,
+        1290
+      ],
+      [
+        6632,
+        1551
+      ],
+      [
+        6696,
+        1553
+      ]
+    ],
+    [
+      [
+        8430,
+        2950
+      ],
+      [
+        7600,
+        3110
+      ],
+      [
+        7029,
+        3117
+      ]
+    ],
+    [
+      [
+        7350,
+        5280
+      ],
+      [
+        6500,
+        4840
+      ],
+      [
+        6332,
+        4616
+      ]
+    ],
+    [
+      [
+        4000,
+        6140
+      ],
+      [
+        3640,
+        5280
+      ],
+      [
+        3640,
+        4890
+      ]
+    ],
+    [
+      [
+        920,
+        5280
+      ],
+      [
+        1662,
+        4627
+      ],
+      [
+        1938,
+        4099
+      ]
+    ],
+    [
+      [
+        -500,
+        2800
+      ],
+      [
+        900,
+        2820
+      ],
+      [
+        1820,
+        2820
+      ]
+    ],
+    [
+      [
+        4000,
+        6140
+      ],
+      [
+        4000,
+        6460
+      ]
+    ],
+    [
+      [
+        600,
+        540
+      ],
+      [
+        700,
+        1400
+      ]
+    ],
+    [
+      [
+        8010,
+        1200
+      ],
+      [
+        8430,
+        2950
+      ]
+    ],
+    [
+      [
+        920,
+        5280
+      ],
+      [
+        650,
+        5890
+      ]
+    ],
+    [
+      [
+        7350,
+        5280
+      ],
+      [
+        6950,
+        5910
+      ]
+    ]
+  ],
+  "coast": [
+    [
+      -1400.0,
+      2600.0
+    ],
+    [
+      -1389.8,
+      2420.9
+    ],
+    [
+      -1378.4,
+      2235.2
+    ],
+    [
+      -1364.6,
+      2045.3
+    ],
+    [
+      -1347.2,
+      1853.6
+    ],
+    [
+      -1325.0,
+      1662.5
+    ],
+    [
+      -1296.8,
+      1474.4
+    ],
+    [
+      -1261.4,
+      1291.7
+    ],
+    [
+      -1217.6,
+      1116.8
+    ],
+    [
+      -1164.2,
+      952.1
+    ],
+    [
+      -1100.0,
+      800.0
+    ],
+    [
+      -1025.1,
+      659.4
+    ],
+    [
+      -940.8,
+      527.2
+    ],
+    [
+      -847.7,
+      402.8
+    ],
+    [
+      -746.4,
+      285.6
+    ],
+    [
+      -637.5,
+      175.0
+    ],
+    [
+      -521.6,
+      70.4
+    ],
+    [
+      -399.3,
+      -28.8
+    ],
+    [
+      -271.2,
+      -123.2
+    ],
+    [
+      -137.9,
+      -213.4
+    ],
+    [
+      0.0,
+      -300.0
+    ],
+    [
+      143.0,
+      -382.05
+    ],
+    [
+      292.0,
+      -458.4
+    ],
+    [
+      447.0,
+      -529.35
+    ],
+    [
+      608.0,
+      -595.2
+    ],
+    [
+      775.0,
+      -656.25
+    ],
+    [
+      948.0,
+      -712.8
+    ],
+    [
+      1127.0,
+      -765.15
+    ],
+    [
+      1312.0,
+      -813.6
+    ],
+    [
+      1503.0,
+      -858.45
+    ],
+    [
+      1700.0,
+      -900.0
+    ],
+    [
+      1904.8,
+      -938.23
+    ],
+    [
+      2118.4,
+      -972.8
+    ],
+    [
+      2339.6,
+      -1003.57
+    ],
+    [
+      2567.2,
+      -1030.4
+    ],
+    [
+      2800.0,
+      -1053.12
+    ],
+    [
+      3036.8,
+      -1071.6
+    ],
+    [
+      3276.4,
+      -1085.67
+    ],
+    [
+      3517.6,
+      -1095.2
+    ],
+    [
+      3759.2,
+      -1100.03
+    ],
+    [
+      4000.0,
+      -1100.0
+    ],
+    [
+      4245.05,
+      -1095.48
+    ],
+    [
+      4498.4,
+      -1086.8
+    ],
+    [
+      4757.35,
+      -1073.82
+    ],
+    [
+      5019.2,
+      -1056.4
+    ],
+    [
+      5281.25,
+      -1034.38
+    ],
+    [
+      5540.8,
+      -1007.6
+    ],
+    [
+      5795.15,
+      -975.92
+    ],
+    [
+      6041.6,
+      -939.2
+    ],
+    [
+      6277.45,
+      -897.28
+    ],
+    [
+      6500.0,
+      -850.0
+    ],
+    [
+      6712.18,
+      -798.85
+    ],
+    [
+      6918.4,
+      -744.8
+    ],
+    [
+      7118.22,
+      -686.95
+    ],
+    [
+      7311.2,
+      -624.4
+    ],
+    [
+      7496.88,
+      -556.25
+    ],
+    [
+      7674.8,
+      -481.6
+    ],
+    [
+      7844.52,
+      -399.55
+    ],
+    [
+      8005.6,
+      -309.2
+    ],
+    [
+      8157.58,
+      -209.65
+    ],
+    [
+      8300.0,
+      -100.0
+    ],
+    [
+      8432.58,
+      21.7
+    ],
+    [
+      8555.6,
+      155.6
+    ],
+    [
+      8669.52,
+      299.9
+    ],
+    [
+      8774.8,
+      452.8
+    ],
+    [
+      8871.88,
+      612.5
+    ],
+    [
+      8961.2,
+      777.2
+    ],
+    [
+      9043.22,
+      945.1
+    ],
+    [
+      9118.4,
+      1114.4
+    ],
+    [
+      9187.17,
+      1283.3
+    ],
+    [
+      9250.0,
+      1450.0
+    ],
+    [
+      9305.15,
+      1617.58
+    ],
+    [
+      9351.2,
+      1789.6
+    ],
+    [
+      9389.05,
+      1965.02
+    ],
+    [
+      9419.6,
+      2142.8
+    ],
+    [
+      9443.75,
+      2321.88
+    ],
+    [
+      9462.4,
+      2501.2
+    ],
+    [
+      9476.45,
+      2679.72
+    ],
+    [
+      9486.8,
+      2856.4
+    ],
+    [
+      9494.35,
+      3030.18
+    ],
+    [
+      9500.0,
+      3200.0
+    ],
+    [
+      9504.35,
+      3367.88
+    ],
+    [
+      9506.8,
+      3536.0
+    ],
+    [
+      9506.45,
+      3703.62
+    ],
+    [
+      9502.4,
+      3870.0
+    ],
+    [
+      9493.75,
+      4034.38
+    ],
+    [
+      9479.6,
+      4196.0
+    ],
+    [
+      9459.05,
+      4354.12
+    ],
+    [
+      9431.2,
+      4508.0
+    ],
+    [
+      9395.15,
+      4656.88
+    ],
+    [
+      9350.0,
+      4800.0
+    ],
+    [
+      9297.18,
+      4938.63
+    ],
+    [
+      9238.4,
+      5074.24
+    ],
+    [
+      9173.22,
+      5206.41
+    ],
+    [
+      9101.2,
+      5334.72
+    ],
+    [
+      9021.88,
+      5458.75
+    ],
+    [
+      8934.8,
+      5578.08
+    ],
+    [
+      8839.52,
+      5692.29
+    ],
+    [
+      8735.6,
+      5800.96
+    ],
+    [
+      8622.58,
+      5903.67
+    ],
+    [
+      8500.0,
+      6000.0
+    ],
+    [
+      8366.68,
+      6090.21
+    ],
+    [
+      8222.4,
+      6174.88
+    ],
+    [
+      8068.22,
+      6254.07
+    ],
+    [
+      7905.2,
+      6327.84
+    ],
+    [
+      7734.38,
+      6396.25
+    ],
+    [
+      7556.8,
+      6459.36
+    ],
+    [
+      7373.52,
+      6517.23
+    ],
+    [
+      7185.6,
+      6569.92
+    ],
+    [
+      6994.08,
+      6617.49
+    ],
+    [
+      6800.0,
+      6660.0
+    ],
+    [
+      6599.35,
+      6695.24
+    ],
+    [
+      6388.8,
+      6721.92
+    ],
+    [
+      6170.45,
+      6741.48
+    ],
+    [
+      5946.4,
+      6755.36
+    ],
+    [
+      5718.75,
+      6765.0
+    ],
+    [
+      5489.6,
+      6771.84
+    ],
+    [
+      5261.05,
+      6777.32
+    ],
+    [
+      5035.2,
+      6782.88
+    ],
+    [
+      4814.15,
+      6789.96
+    ],
+    [
+      4600.0,
+      6800.0
+    ],
+    [
+      4391.45,
+      6813.87
+    ],
+    [
+      4185.6,
+      6830.56
+    ],
+    [
+      3982.15,
+      6848.69
+    ],
+    [
+      3780.8,
+      6866.88
+    ],
+    [
+      3581.25,
+      6883.75
+    ],
+    [
+      3383.2,
+      6897.92
+    ],
+    [
+      3186.35,
+      6908.01
+    ],
+    [
+      2990.4,
+      6912.64
+    ],
+    [
+      2795.05,
+      6910.43
+    ],
+    [
+      2600.0,
+      6900.0
+    ],
+    [
+      2403.25,
+      6882.05
+    ],
+    [
+      2204.0,
+      6858.4
+    ],
+    [
+      2003.75,
+      6829.35
+    ],
+    [
+      1804.0,
+      6795.2
+    ],
+    [
+      1606.25,
+      6756.25
+    ],
+    [
+      1412.0,
+      6712.8
+    ],
+    [
+      1222.75,
+      6665.15
+    ],
+    [
+      1040.0,
+      6613.6
+    ],
+    [
+      865.25,
+      6558.45
+    ],
+    [
+      700.0,
+      6500.0
+    ],
+    [
+      543.0,
+      6438.9
+    ],
+    [
+      392.0,
+      6375.2
+    ],
+    [
+      247.0,
+      6308.3
+    ],
+    [
+      108.0,
+      6237.6
+    ],
+    [
+      -25.0,
+      6162.5
+    ],
+    [
+      -152.0,
+      6082.4
+    ],
+    [
+      -273.0,
+      5996.7
+    ],
+    [
+      -388.0,
+      5904.8
+    ],
+    [
+      -497.0,
+      5806.1
+    ],
+    [
+      -600.0,
+      5700.0
+    ],
+    [
+      -697.0,
+      5585.65
+    ],
+    [
+      -788.0,
+      5463.2
+    ],
+    [
+      -873.0,
+      5333.55
+    ],
+    [
+      -952.0,
+      5197.6
+    ],
+    [
+      -1025.0,
+      5056.25
+    ],
+    [
+      -1092.0,
+      4910.4
+    ],
+    [
+      -1153.0,
+      4760.95
+    ],
+    [
+      -1208.0,
+      4608.8
+    ],
+    [
+      -1257.0,
+      4454.85
+    ],
+    [
+      -1300.0,
+      4300.0
+    ],
+    [
+      -1336.1,
+      4142.6
+    ],
+    [
+      -1364.8,
+      3980.8
+    ],
+    [
+      -1386.7,
+      3815.2
+    ],
+    [
+      -1402.4,
+      3646.4
+    ],
+    [
+      -1412.5,
+      3475.0
+    ],
+    [
+      -1417.6,
+      3301.6
+    ],
+    [
+      -1418.3,
+      3126.8
+    ],
+    [
+      -1415.2,
+      2951.2
+    ],
+    [
+      -1408.9,
+      2775.4
+    ]
+  ],
+  "markerBasins": [
+    {
+      "x": 700,
+      "y": 894,
+      "rx": 108,
+      "ry": 54
+    },
+    {
+      "x": 7350,
+      "y": 814,
+      "rx": 108,
+      "ry": 54
+    },
+    {
+      "x": 520,
+      "y": 3494,
+      "rx": 108,
+      "ry": 54
+    },
+    {
+      "x": 7550,
+      "y": 4294,
+      "rx": 108,
+      "ry": 54
+    },
+    {
+      "x": 2600,
+      "y": 5244,
+      "rx": 108,
+      "ry": 54
+    },
+    {
+      "x": 5400,
+      "y": 5294,
+      "rx": 108,
+      "ry": 54
+    },
+    {
+      "x": 6900,
+      "y": 5144,
+      "rx": 108,
+      "ry": 54
+    }
+  ],
+  "harbor": {
+    "jetty": {
+      "foot": [
+        4000,
+        6640
+      ],
+      "tip": [
+        4000,
+        7240
+      ],
+      "width": 120
+    },
+    "spawn": [
+      4000,
+      2970
+    ],
+    "boats": [
+      {
+        "x": 3830,
+        "y": 7140,
+        "turn": 3.14159
+      },
+      {
+        "x": 4170,
+        "y": 7140,
+        "turn": 3.14159
+      },
+      {
+        "x": 3830,
+        "y": 7300,
+        "turn": 3.14159
+      },
+      {
+        "x": 4170,
+        "y": 7300,
+        "turn": 3.14159
+      }
+    ]
+  },
+  "communities": [
+    {
+      "id": "storynest",
+      "name": "Storynest Row",
+      "residents": "Storytellers, bookbinders and the campfire hosts",
+      "x": 590,
+      "y": 500,
+      "point": [
+        600,
+        540
+      ],
+      "rx": 1100,
+      "ry": 800,
+      "type": "story",
+      "homes": [
+        [
+          -80,
+          60
+        ],
+        [
+          540,
+          -40
+        ],
+        [
+          1160,
+          80
+        ],
+        [
+          -120,
+          950
+        ],
+        [
+          560,
+          1050
+        ],
+        [
+          1250,
+          980
+        ]
+      ],
+      "lane": [
+        [
+          -250,
+          380
+        ],
+        [
+          500,
+          370
+        ],
+        [
+          1180,
+          410
+        ],
+        [
+          1510,
+          740
+        ],
+        [
+          1060,
+          1120
+        ],
+        [
+          500,
+          1320
+        ],
+        [
+          -300,
+          1230
+        ],
+        [
+          -250,
+          380
+        ]
+      ],
+      "work": "Book exchange, binding desk and a reading pavilion"
+    },
+    {
+      "id": "patchwing",
+      "name": "Patchwing Yard",
+      "residents": "Menders, lantern makers and board-game builders",
+      "x": 7970,
+      "y": 1200,
+      "point": [
+        8010,
+        1200
+      ],
+      "rx": 1100,
+      "ry": 950,
+      "type": "maker",
+      "homes": [
+        [
+          7310,
+          590
+        ],
+        [
+          7950,
+          490
+        ],
+        [
+          8580,
+          670
+        ],
+        [
+          7420,
+          1640
+        ],
+        [
+          8050,
+          1740
+        ],
+        [
+          8670,
+          1740
+        ]
+      ],
+      "lane": [
+        [
+          7180,
+          950
+        ],
+        [
+          7880,
+          890
+        ],
+        [
+          8660,
+          1030
+        ],
+        [
+          8930,
+          1400
+        ],
+        [
+          8710,
+          2050
+        ],
+        [
+          7990,
+          2120
+        ],
+        [
+          7330,
+          1980
+        ],
+        [
+          7180,
+          950
+        ]
+      ],
+      "work": "Shared craft tables, repair stalls and a drying yard"
+    },
+    {
+      "id": "sproutshare",
+      "name": "Sproutshare Co-op",
+      "residents": "Volunteer growers who feed the campfire kitchens",
+      "x": 900,
+      "y": 5240,
+      "point": [
+        920,
+        5280
+      ],
+      "rx": 1100,
+      "ry": 770,
+      "type": "grower",
+      "homes": [
+        [
+          100,
+          4780
+        ],
+        [
+          740,
+          4810
+        ],
+        [
+          1450,
+          5400
+        ],
+        [
+          650,
+          5630
+        ],
+        [
+          1650,
+          6070
+        ]
+      ],
+      "lane": [
+        [
+          -200,
+          5040
+        ],
+        [
+          650,
+          5120
+        ],
+        [
+          1550,
+          5190
+        ],
+        [
+          1810,
+          5530
+        ],
+        [
+          1480,
+          6000
+        ],
+        [
+          650,
+          5890
+        ],
+        [
+          250,
+          5520
+        ],
+        [
+          -200,
+          5040
+        ]
+      ],
+      "work": "Four vegetable beds, seed stall, tool shed and the harvest green"
+    },
+    {
+      "id": "lanternloaf",
+      "name": "Lanternloaf Lane",
+      "residents": "Bakers, cocoa cooks and the evening lantern keepers",
+      "x": 7350,
+      "y": 5260,
+      "point": [
+        7550,
+        5280
+      ],
+      "rx": 1100,
+      "ry": 750,
+      "type": "baker",
+      "homes": [
+        [
+          6880,
+          5270
+        ],
+        [
+          7380,
+          4800
+        ],
+        [
+          8030,
+          4820
+        ],
+        [
+          6900,
+          5940
+        ],
+        [
+          7600,
+          5590
+        ]
+      ],
+      "lane": [
+        [
+          6420,
+          5140
+        ],
+        [
+          7140,
+          5090
+        ],
+        [
+          7940,
+          5140
+        ],
+        [
+          8300,
+          5390
+        ],
+        [
+          7770,
+          5840
+        ],
+        [
+          6950,
+          5910
+        ],
+        [
+          6520,
+          5570
+        ],
+        [
+          6420,
+          5140
+        ]
+      ],
+      "work": "Neighbourhood bakehouse, cocoa cart, cooling benches and a supper square"
+    }
+  ],
+  "homes": [
+    {
+      "id": "community-home-story-0-0",
+      "community": "storynest",
+      "type": "story",
+      "x": -80,
+      "y": 60,
+      "door": [
+        -80,
+        82
+      ]
+    },
+    {
+      "id": "community-home-story-1-4",
+      "community": "storynest",
+      "type": "story",
+      "x": 540,
+      "y": -40,
+      "door": [
+        540,
+        -18
+      ]
+    },
+    {
+      "id": "community-home-story-2-8",
+      "community": "storynest",
+      "type": "story",
+      "x": 1160,
+      "y": 80,
+      "door": [
+        1160,
+        102
+      ]
+    },
+    {
+      "id": "community-home-story-0-12",
+      "community": "storynest",
+      "type": "story",
+      "x": -120,
+      "y": 950,
+      "door": [
+        -120,
+        972
+      ]
+    },
+    {
+      "id": "community-home-story-1-16",
+      "community": "storynest",
+      "type": "story",
+      "x": 560,
+      "y": 1050,
+      "door": [
+        560,
+        1072
+      ]
+    },
+    {
+      "id": "community-home-story-2-20",
+      "community": "storynest",
+      "type": "story",
+      "x": 1250,
+      "y": 980,
+      "door": [
+        1250,
+        1002
+      ]
+    },
+    {
+      "id": "community-home-maker-0-25",
+      "community": "patchwing",
+      "type": "maker",
+      "x": 7310,
+      "y": 590,
+      "door": [
+        7310,
+        612
+      ]
+    },
+    {
+      "id": "community-home-maker-1-29",
+      "community": "patchwing",
+      "type": "maker",
+      "x": 7950,
+      "y": 490,
+      "door": [
+        7950,
+        512
+      ]
+    },
+    {
+      "id": "community-home-maker-2-33",
+      "community": "patchwing",
+      "type": "maker",
+      "x": 8580,
+      "y": 670,
+      "door": [
+        8580,
+        692
+      ]
+    },
+    {
+      "id": "community-home-maker-0-37",
+      "community": "patchwing",
+      "type": "maker",
+      "x": 7420,
+      "y": 1640,
+      "door": [
+        7420,
+        1662
+      ]
+    },
+    {
+      "id": "community-home-maker-1-41",
+      "community": "patchwing",
+      "type": "maker",
+      "x": 8050,
+      "y": 1740,
+      "door": [
+        8050,
+        1762
+      ]
+    },
+    {
+      "id": "community-home-maker-2-45",
+      "community": "patchwing",
+      "type": "maker",
+      "x": 8670,
+      "y": 1740,
+      "door": [
+        8670,
+        1762
+      ]
+    },
+    {
+      "id": "community-home-grower-0-50",
+      "community": "sproutshare",
+      "type": "grower",
+      "x": 100,
+      "y": 4780,
+      "door": [
+        100,
+        4802
+      ]
+    },
+    {
+      "id": "community-home-grower-1-54",
+      "community": "sproutshare",
+      "type": "grower",
+      "x": 740,
+      "y": 4810,
+      "door": [
+        740,
+        4832
+      ]
+    },
+    {
+      "id": "community-home-grower-2-58",
+      "community": "sproutshare",
+      "type": "grower",
+      "x": 1450,
+      "y": 5400,
+      "door": [
+        1450,
+        5422
+      ]
+    },
+    {
+      "id": "community-home-grower-0-62",
+      "community": "sproutshare",
+      "type": "grower",
+      "x": 650,
+      "y": 5630,
+      "door": [
+        650,
+        5652
+      ]
+    },
+    {
+      "id": "community-home-grower-1-66",
+      "community": "sproutshare",
+      "type": "grower",
+      "x": 1650,
+      "y": 6070,
+      "door": [
+        1650,
+        6092
+      ]
+    },
+    {
+      "id": "community-home-baker-0-71",
+      "community": "lanternloaf",
+      "type": "baker",
+      "x": 6880,
+      "y": 5270,
+      "door": [
+        6880,
+        5292
+      ]
+    },
+    {
+      "id": "community-home-baker-1-75",
+      "community": "lanternloaf",
+      "type": "baker",
+      "x": 7380,
+      "y": 4800,
+      "door": [
+        7380,
+        4822
+      ]
+    },
+    {
+      "id": "community-home-baker-2-79",
+      "community": "lanternloaf",
+      "type": "baker",
+      "x": 8030,
+      "y": 4820,
+      "door": [
+        8030,
+        4842
+      ]
+    },
+    {
+      "id": "community-home-baker-0-83",
+      "community": "lanternloaf",
+      "type": "baker",
+      "x": 6900,
+      "y": 5940,
+      "door": [
+        6900,
+        5962
+      ]
+    },
+    {
+      "id": "community-home-baker-1-87",
+      "community": "lanternloaf",
+      "type": "baker",
+      "x": 7600,
+      "y": 5590,
+      "door": [
+        7600,
+        5612
+      ]
+    }
+  ],
+  "lanes": [
+    [
+      [
+        -250,
+        380
+      ],
+      [
+        500,
+        370
+      ],
+      [
+        1180,
+        410
+      ],
+      [
+        1510,
+        740
+      ],
+      [
+        1060,
+        1120
+      ],
+      [
+        500,
+        1320
+      ],
+      [
+        -300,
+        1230
+      ],
+      [
+        -250,
+        380
+      ]
+    ],
+    [
+      [
+        7180,
+        950
+      ],
+      [
+        7880,
+        890
+      ],
+      [
+        8660,
+        1030
+      ],
+      [
+        8930,
+        1400
+      ],
+      [
+        8710,
+        2050
+      ],
+      [
+        7990,
+        2120
+      ],
+      [
+        7330,
+        1980
+      ],
+      [
+        7180,
+        950
+      ]
+    ],
+    [
+      [
+        -200,
+        5040
+      ],
+      [
+        650,
+        5120
+      ],
+      [
+        1550,
+        5190
+      ],
+      [
+        1810,
+        5530
+      ],
+      [
+        1480,
+        6000
+      ],
+      [
+        650,
+        5890
+      ],
+      [
+        250,
+        5520
+      ],
+      [
+        -200,
+        5040
+      ]
+    ],
+    [
+      [
+        6420,
+        5140
+      ],
+      [
+        7140,
+        5090
+      ],
+      [
+        7940,
+        5140
+      ],
+      [
+        8300,
+        5390
+      ],
+      [
+        7770,
+        5840
+      ],
+      [
+        6950,
+        5910
+      ],
+      [
+        6520,
+        5570
+      ],
+      [
+        6420,
+        5140
+      ]
+    ]
+  ],
+  "workStops": [
+    {
+      "community": "storynest",
+      "name": "Bookbinding desk",
+      "point": [
+        1010,
+        855
+      ]
+    },
+    {
+      "community": "patchwing",
+      "name": "Craft tables",
+      "point": [
+        7800,
+        2300
+      ]
+    },
+    {
+      "community": "sproutshare",
+      "name": "Seed shed",
+      "point": [
+        2040,
+        5570
+      ]
+    },
+    {
+      "community": "lanternloaf",
+      "name": "Bakehouse porch",
+      "point": [
+        8530,
+        5380
+      ]
+    }
+  ],
+  "reviewCommons": [
+    {
+      "name": "Bookmark Orchard",
+      "point": [
+        3460,
+        -10
+      ]
+    },
+    {
+      "name": "Butterfly Rest",
+      "point": [
+        -200,
+        2630
+      ]
+    },
+    {
+      "name": "Harvest Picnic Meadow",
+      "point": [
+        2890,
+        5760
+      ]
+    },
+    {
+      "name": "Lilywatch Pond",
+      "point": [
+        5350,
+        5510
+      ]
+    },
+    {
+      "name": "Riverbend Picnic",
+      "point": [
+        8800,
+        4700
+      ]
+    }
+  ],
+  "reviewDecks": [
+    {
+      "name": "North welcome bridge",
+      "x": 3840,
+      "y": 270,
+      "width": 320,
+      "height": 410,
+      "axis": "y",
+      "src": "expansion/review-bridge-0.svg"
+    },
+    {
+      "name": "West welcome bridge",
+      "x": 610,
+      "y": 2720,
+      "width": 360,
+      "height": 200,
+      "axis": "x",
+      "src": "expansion/review-bridge-1.svg"
+    },
+    {
+      "name": "South kitchen bridge",
+      "x": 3515,
+      "y": 4890,
+      "width": 250,
+      "height": 440,
+      "axis": "y",
+      "src": "expansion/review-bridge-2.svg"
+    },
+    {
+      "name": "Willow stream inner bridge",
+      "x": -585,
+      "y": 3070,
+      "width": 230,
+      "height": 430,
+      "axis": "y",
+      "src": "expansion/review-bridge-3.svg"
+    },
+    {
+      "name": "Willow stream coast bridge",
+      "x": -1230,
+      "y": 3165,
+      "width": 220,
+      "height": 430,
+      "axis": "y",
+      "src": "expansion/review-bridge-4.svg"
+    },
+    {
+      "name": "Lantern stream inner bridge",
+      "x": 8250,
+      "y": 3330,
+      "width": 260,
+      "height": 450,
+      "axis": "y",
+      "src": "expansion/review-bridge-5.svg"
+    },
+    {
+      "name": "Lantern stream coast bridge",
+      "x": 8970,
+      "y": 3530,
+      "width": 230,
+      "height": 460,
+      "axis": "y",
+      "src": "expansion/review-bridge-6.svg"
+    }
+  ],
+  "reviewWater": [
+    {
+      "id": "community-review-water-0",
+      "poly": [
+        [
+          3836.14,
+          414.13
+        ],
+        [
+          3426.27,
+          428.33
+        ],
+        [
+          3253.27,
+          437.33
+        ],
+        [
+          3088.0,
+          447.46
+        ],
+        [
+          2921.18,
+          460.36
+        ],
+        [
+          2762.3,
+          477.33
+        ],
+        [
+          2606.64,
+          499.24
+        ],
+        [
+          2459.31,
+          527.18
+        ],
+        [
+          2316.94,
+          560.07
+        ],
+        [
+          2179.94,
+          598.77
+        ],
+        [
+          2051.19,
+          642.28
+        ],
+        [
+          1939.19,
+          685.28
+        ],
+        [
+          1824.77,
+          732.85
+        ],
+        [
+          1712.33,
+          784.55
+        ],
+        [
+          1607.06,
+          835.57
+        ],
+        [
+          1501.16,
+          891.58
+        ],
+        [
+          1398.27,
+          951.54
+        ],
+        [
+          1297.72,
+          1016.43
+        ],
+        [
+          1201.72,
+          1085.26
+        ],
+        [
+          1185.17,
+          1098.31
+        ],
+        [
+          1106.17,
+          1166.31
+        ],
+        [
+          1088.02,
+          1183.64
+        ],
+        [
+          1018.02,
+          1257.64
+        ],
+        [
+          1000.0,
+          1279.0
+        ],
+        [
+          940.0,
+          1359.0
+        ],
+        [
+          924.37,
+          1382.55
+        ],
+        [
+          875.37,
+          1466.55
+        ],
+        [
+          862.6,
+          1491.67
+        ],
+        [
+          823.6,
+          1580.67
+        ],
+        [
+          815.32,
+          1602.29
+        ],
+        [
+          785.32,
+          1693.29
+        ],
+        [
+          779.45,
+          1714.17
+        ],
+        [
+          757.45,
+          1808.17
+        ],
+        [
+          737.75,
+          1917.28
+        ],
+        [
+          709.97,
+          2130.03
+        ],
+        [
+          696.2,
+          2246.82
+        ],
+        [
+          683.64,
+          2374.34
+        ],
+        [
+          671.36,
+          2544.66
+        ],
+        [
+          662.36,
+          2709.66
+        ],
+        [
+          657.2,
+          2838.21
+        ],
+        [
+          657.87,
+          2900.0
+        ],
+        [
+          902.91,
+          2900.0
+        ],
+        [
+          902.0,
+          2848.0
+        ],
+        [
+          907.0,
+          2723.0
+        ],
+        [
+          916.0,
+          2558.0
+        ],
+        [
+          928.0,
+          2392.0
+        ],
+        [
+          940.0,
+          2271.0
+        ],
+        [
+          953.0,
+          2161.0
+        ],
+        [
+          979.0,
+          1960.0
+        ],
+        [
+          996.0,
+          1864.0
+        ],
+        [
+          1018.0,
+          1770.0
+        ],
+        [
+          1048.0,
+          1679.0
+        ],
+        [
+          1087.0,
+          1590.0
+        ],
+        [
+          1136.0,
+          1506.0
+        ],
+        [
+          1196.0,
+          1426.0
+        ],
+        [
+          1266.0,
+          1352.0
+        ],
+        [
+          1345.0,
+          1284.0
+        ],
+        [
+          1431.0,
+          1222.0
+        ],
+        [
+          1522.0,
+          1163.0
+        ],
+        [
+          1616.0,
+          1108.0
+        ],
+        [
+          1714.0,
+          1056.0
+        ],
+        [
+          1815.0,
+          1007.0
+        ],
+        [
+          1919.0,
+          959.0
+        ],
+        [
+          2027.0,
+          914.0
+        ],
+        [
+          2139.0,
+          871.0
+        ],
+        [
+          2258.0,
+          831.0
+        ],
+        [
+          2383.0,
+          796.0
+        ],
+        [
+          2514.0,
+          766.0
+        ],
+        [
+          2652.0,
+          740.0
+        ],
+        [
+          2796.0,
+          720.0
+        ],
+        [
+          2947.0,
+          704.0
+        ],
+        [
+          3103.0,
+          692.0
+        ],
+        [
+          3266.0,
+          682.0
+        ],
+        [
+          3439.0,
+          673.0
+        ],
+        [
+          3844.0,
+          659.0
+        ],
+        [
+          4000.0,
+          655.49
+        ],
+        [
+          4000.0,
+          410.43
+        ],
+        [
+          3836.14,
+          414.13
+        ]
+      ]
+    },
+    {
+      "id": "community-review-water-1",
+      "poly": [
+        [
+          7328.6,
+          2078.39
+        ],
+        [
+          7294.69,
+          1966.36
+        ],
+        [
+          7257.82,
+          1859.87
+        ],
+        [
+          7221.82,
+          1768.87
+        ],
+        [
+          7183.23,
+          1675.95
+        ],
+        [
+          7136.67,
+          1578.56
+        ],
+        [
+          7084.29,
+          1483.24
+        ],
+        [
+          7024.17,
+          1388.64
+        ],
+        [
+          7010.3,
+          1369.19
+        ],
+        [
+          6939.74,
+          1280.69
+        ],
+        [
+          6873.74,
+          1207.69
+        ],
+        [
+          6856.56,
+          1190.5
+        ],
+        [
+          6770.05,
+          1112.69
+        ],
+        [
+          6677.18,
+          1039.07
+        ],
+        [
+          6582.09,
+          973.02
+        ],
+        [
+          6482.31,
+          910.14
+        ],
+        [
+          6384.69,
+          854.57
+        ],
+        [
+          6285.1,
+          800.67
+        ],
+        [
+          6181.84,
+          747.01
+        ],
+        [
+          6073.06,
+          693.82
+        ],
+        [
+          5959.8,
+          642.67
+        ],
+        [
+          5838.26,
+          592.58
+        ],
+        [
+          5719.26,
+          549.58
+        ],
+        [
+          5565.51,
+          502.61
+        ],
+        [
+          5419.15,
+          468.2
+        ],
+        [
+          5260.19,
+          438.87
+        ],
+        [
+          5095.32,
+          418.69
+        ],
+        [
+          4925.64,
+          406.15
+        ],
+        [
+          4755.64,
+          400.15
+        ],
+        [
+          4564.19,
+          399.03
+        ],
+        [
+          4369.43,
+          402.06
+        ],
+        [
+          4000.0,
+          410.43
+        ],
+        [
+          4000.0,
+          655.49
+        ],
+        [
+          4375.0,
+          647.0
+        ],
+        [
+          4568.0,
+          644.0
+        ],
+        [
+          4747.0,
+          645.0
+        ],
+        [
+          4917.0,
+          651.0
+        ],
+        [
+          5077.0,
+          663.0
+        ],
+        [
+          5230.0,
+          682.0
+        ],
+        [
+          5374.0,
+          709.0
+        ],
+        [
+          5509.0,
+          741.0
+        ],
+        [
+          5636.0,
+          780.0
+        ],
+        [
+          5755.0,
+          823.0
+        ],
+        [
+          5866.0,
+          869.0
+        ],
+        [
+          5972.0,
+          917.0
+        ],
+        [
+          6074.0,
+          967.0
+        ],
+        [
+          6172.0,
+          1018.0
+        ],
+        [
+          6268.0,
+          1070.0
+        ],
+        [
+          6361.0,
+          1123.0
+        ],
+        [
+          6451.0,
+          1180.0
+        ],
+        [
+          6537.0,
+          1240.0
+        ],
+        [
+          6617.0,
+          1304.0
+        ],
+        [
+          6692.0,
+          1372.0
+        ],
+        [
+          6758.0,
+          1445.0
+        ],
+        [
+          6818.0,
+          1521.0
+        ],
+        [
+          6870.0,
+          1602.0
+        ],
+        [
+          6916.0,
+          1685.0
+        ],
+        [
+          6957.0,
+          1770.0
+        ],
+        [
+          6994.0,
+          1859.0
+        ],
+        [
+          7030.0,
+          1950.0
+        ],
+        [
+          7063.0,
+          2046.0
+        ],
+        [
+          7094.0,
+          2149.0
+        ],
+        [
+          7122.0,
+          2260.0
+        ],
+        [
+          7145.0,
+          2386.0
+        ],
+        [
+          7160.0,
+          2558.0
+        ],
+        [
+          7166.0,
+          2729.0
+        ],
+        [
+          7161.0,
+          2858.0
+        ],
+        [
+          7154.9,
+          2900.0
+        ],
+        [
+          7402.47,
+          2900.0
+        ],
+        [
+          7405.82,
+          2867.49
+        ],
+        [
+          7410.85,
+          2720.41
+        ],
+        [
+          7404.07,
+          2536.71
+        ],
+        [
+          7389.07,
+          2364.71
+        ],
+        [
+          7386.02,
+          2342.0
+        ],
+        [
+          7363.02,
+          2216.0
+        ],
+        [
+          7328.6,
+          2078.39
+        ]
+      ]
+    },
+    {
+      "id": "community-review-water-2",
+      "poly": [
+        [
+          658.58,
+          2939.96
+        ],
+        [
+          511.28,
+          3000.32
+        ],
+        [
+          455.13,
+          3021.59
+        ],
+        [
+          398.75,
+          3041.31
+        ],
+        [
+          344.22,
+          3058.22
+        ],
+        [
+          309.12,
+          3067.62
+        ],
+        [
+          272.5,
+          3076.32
+        ],
+        [
+          214.8,
+          3088.38
+        ],
+        [
+          112.94,
+          3106.48
+        ],
+        [
+          -144.28,
+          3147.59
+        ],
+        [
+          -501.5,
+          3212.9
+        ],
+        [
+          -644.6,
+          3237.87
+        ],
+        [
+          -784.29,
+          3259.89
+        ],
+        [
+          -1134.23,
+          3311.13
+        ],
+        [
+          -1311.35,
+          3340.62
+        ],
+        [
+          -1553.85,
+          3383.22
+        ],
+        [
+          -1570.32,
+          3389.54
+        ],
+        [
+          -1585.24,
+          3398.95
+        ],
+        [
+          -1598.04,
+          3411.09
+        ],
+        [
+          -1608.23,
+          3425.5
+        ],
+        [
+          -1615.41,
+          3441.61
+        ],
+        [
+          -1619.3,
+          3458.82
+        ],
+        [
+          -1619.77,
+          3476.46
+        ],
+        [
+          -1616.78,
+          3493.85
+        ],
+        [
+          -1610.46,
+          3510.32
+        ],
+        [
+          -1601.05,
+          3525.24
+        ],
+        [
+          -1588.91,
+          3538.04
+        ],
+        [
+          -1581.96,
+          3543.49
+        ],
+        [
+          -1566.62,
+          3552.21
+        ],
+        [
+          -1558.39,
+          3555.41
+        ],
+        [
+          -1541.18,
+          3559.3
+        ],
+        [
+          -1523.54,
+          3559.77
+        ],
+        [
+          -1105.88,
+          3488.89
+        ],
+        [
+          -676.18,
+          3425.4
+        ],
+        [
+          -490.59,
+          3393.82
+        ],
+        [
+          -113.65,
+          3324.97
+        ],
+        [
+          185.5,
+          3276.77
+        ],
+        [
+          249.62,
+          3264.98
+        ],
+        [
+          311.57,
+          3252.03
+        ],
+        [
+          392.89,
+          3231.52
+        ],
+        [
+          475.57,
+          3205.35
+        ],
+        [
+          557.38,
+          3175.49
+        ],
+        [
+          675.58,
+          3127.95
+        ],
+        [
+          692.14,
+          3216.87
+        ],
+        [
+          698.73,
+          3243.71
+        ],
+        [
+          728.73,
+          3341.71
+        ],
+        [
+          737.43,
+          3365.62
+        ],
+        [
+          776.43,
+          3457.62
+        ],
+        [
+          786.44,
+          3478.45
+        ],
+        [
+          833.44,
+          3565.45
+        ],
+        [
+          844.38,
+          3583.75
+        ],
+        [
+          898.38,
+          3665.75
+        ],
+        [
+          966.6,
+          3756.8
+        ],
+        [
+          1038.45,
+          3841.82
+        ],
+        [
+          1112.64,
+          3921.9
+        ],
+        [
+          1190.01,
+          3998.48
+        ],
+        [
+          1273.78,
+          4073.71
+        ],
+        [
+          1363.95,
+          4146.31
+        ],
+        [
+          1461.26,
+          4215.83
+        ],
+        [
+          1569.9,
+          4282.45
+        ],
+        [
+          1612.01,
+          4278.59
+        ],
+        [
+          1649.48,
+          4277.1
+        ],
+        [
+          1687.02,
+          4277.4
+        ],
+        [
+          1724.43,
+          4279.48
+        ],
+        [
+          1761.5,
+          4283.34
+        ],
+        [
+          1798.02,
+          4288.95
+        ],
+        [
+          1833.81,
+          4296.29
+        ],
+        [
+          1868.67,
+          4305.31
+        ],
+        [
+          1913.38,
+          4319.87
+        ],
+        [
+          1934.85,
+          4328.2
+        ],
+        [
+          1965.81,
+          4341.94
+        ],
+        [
+          2004.5,
+          4362.49
+        ],
+        [
+          2039.89,
+          4385.39
+        ],
+        [
+          2071.64,
+          4410.42
+        ],
+        [
+          2099.44,
+          4437.35
+        ],
+        [
+          2123.03,
+          4465.91
+        ],
+        [
+          2133.18,
+          4480.71
+        ],
+        [
+          2144.44,
+          4500.06
+        ],
+        [
+          2222.18,
+          4518.88
+        ],
+        [
+          2352.18,
+          4545.88
+        ],
+        [
+          2489.74,
+          4571.78
+        ],
+        [
+          2622.44,
+          4595.39
+        ],
+        [
+          2732.26,
+          4619.33
+        ],
+        [
+          2793.1,
+          4642.88
+        ],
+        [
+          2838.61,
+          4686.32
+        ],
+        [
+          2925.51,
+          4852.41
+        ],
+        [
+          3047.51,
+          5073.41
+        ],
+        [
+          3066.3,
+          5102.39
+        ],
+        [
+          3088.97,
+          5128.45
+        ],
+        [
+          3115.09,
+          5151.07
+        ],
+        [
+          3144.12,
+          5169.78
+        ],
+        [
+          3175.5,
+          5184.22
+        ],
+        [
+          3387.5,
+          5264.22
+        ],
+        [
+          3419.31,
+          5273.82
+        ],
+        [
+          3452.12,
+          5279.02
+        ],
+        [
+          3485.33,
+          5279.74
+        ],
+        [
+          3518.33,
+          5275.96
+        ],
+        [
+          3550.52,
+          5267.74
+        ],
+        [
+          3581.3,
+          5255.25
+        ],
+        [
+          3854.3,
+          5122.25
+        ],
+        [
+          4000.0,
+          5045.82
+        ],
+        [
+          4000.0,
+          4769.06
+        ],
+        [
+          3747.0,
+          4902.0
+        ],
+        [
+          3474.0,
+          5035.0
+        ],
+        [
+          3262.0,
+          4955.0
+        ],
+        [
+          3140.0,
+          4734.0
+        ],
+        [
+          3037.0,
+          4537.0
+        ],
+        [
+          2927.0,
+          4432.0
+        ],
+        [
+          2803.0,
+          4384.0
+        ],
+        [
+          2670.0,
+          4355.0
+        ],
+        [
+          2535.0,
+          4331.0
+        ],
+        [
+          2402.0,
+          4306.0
+        ],
+        [
+          2272.0,
+          4279.0
+        ],
+        [
+          2145.0,
+          4248.0
+        ],
+        [
+          2023.0,
+          4213.0
+        ],
+        [
+          1907.0,
+          4172.0
+        ],
+        [
+          1798.0,
+          4125.0
+        ],
+        [
+          1697.0,
+          4073.0
+        ],
+        [
+          1603.0,
+          4016.0
+        ],
+        [
+          1517.0,
+          3955.0
+        ],
+        [
+          1437.0,
+          3891.0
+        ],
+        [
+          1362.0,
+          3824.0
+        ],
+        [
+          1292.0,
+          3755.0
+        ],
+        [
+          1225.0,
+          3683.0
+        ],
+        [
+          1162.0,
+          3609.0
+        ],
+        [
+          1103.0,
+          3531.0
+        ],
+        [
+          1049.0,
+          3449.0
+        ],
+        [
+          1002.0,
+          3362.0
+        ],
+        [
+          963.0,
+          3270.0
+        ],
+        [
+          933.0,
+          3172.0
+        ],
+        [
+          914.0,
+          3070.0
+        ],
+        [
+          904.0,
+          2962.0
+        ],
+        [
+          902.91,
+          2900.0
+        ],
+        [
+          657.87,
+          2900.0
+        ],
+        [
+          658.58,
+          2939.96
+        ]
+      ]
+    },
+    {
+      "id": "community-review-water-3",
+      "poly": [
+        [
+          4470.33,
+          4799.2
+        ],
+        [
+          4631.48,
+          4751.66
+        ],
+        [
+          4787.41,
+          4727.74
+        ],
+        [
+          4955.73,
+          4707.08
+        ],
+        [
+          5109.73,
+          4683.08
+        ],
+        [
+          5260.24,
+          4656.15
+        ],
+        [
+          5412.01,
+          4624.51
+        ],
+        [
+          5548.72,
+          4592.36
+        ],
+        [
+          5681.79,
+          4558.28
+        ],
+        [
+          5805.79,
+          4524.28
+        ],
+        [
+          5837.93,
+          4514.24
+        ],
+        [
+          5851.81,
+          4484.83
+        ],
+        [
+          5870.97,
+          4454.91
+        ],
+        [
+          5894.56,
+          4426.35
+        ],
+        [
+          5922.36,
+          4399.42
+        ],
+        [
+          5954.11,
+          4374.39
+        ],
+        [
+          5989.5,
+          4351.49
+        ],
+        [
+          6028.19,
+          4330.94
+        ],
+        [
+          6069.81,
+          4312.95
+        ],
+        [
+          6102.7,
+          4301.24
+        ],
+        [
+          6148.45,
+          4288.11
+        ],
+        [
+          6195.98,
+          4277.95
+        ],
+        [
+          6232.5,
+          4272.34
+        ],
+        [
+          6282.01,
+          4267.59
+        ],
+        [
+          6319.48,
+          4266.1
+        ],
+        [
+          6369.52,
+          4266.89
+        ],
+        [
+          6410.9,
+          4270.0
+        ],
+        [
+          6523.26,
+          4195.28
+        ],
+        [
+          6617.85,
+          4121.92
+        ],
+        [
+          6701.68,
+          4047.77
+        ],
+        [
+          6778.26,
+          3973.07
+        ],
+        [
+          6844.26,
+          3903.07
+        ],
+        [
+          6913.38,
+          3826.33
+        ],
+        [
+          6981.05,
+          3748.84
+        ],
+        [
+          7045.04,
+          3671.14
+        ],
+        [
+          7106.04,
+          3594.14
+        ],
+        [
+          7178.4,
+          3493.0
+        ],
+        [
+          7233.4,
+          3407.0
+        ],
+        [
+          7257.94,
+          3361.75
+        ],
+        [
+          7268.91,
+          3372.75
+        ],
+        [
+          7276.33,
+          3378.39
+        ],
+        [
+          7292.66,
+          3387.35
+        ],
+        [
+          7301.4,
+          3390.59
+        ],
+        [
+          7575.44,
+          3447.4
+        ],
+        [
+          7711.82,
+          3477.09
+        ],
+        [
+          7866.72,
+          3513.81
+        ],
+        [
+          8053.81,
+          3560.75
+        ],
+        [
+          8251.91,
+          3613.19
+        ],
+        [
+          8406.04,
+          3656.32
+        ],
+        [
+          8513.89,
+          3689.07
+        ],
+        [
+          8798.49,
+          3778.25
+        ],
+        [
+          8942.1,
+          3820.01
+        ],
+        [
+          9026.84,
+          3842.13
+        ],
+        [
+          9084.52,
+          3855.75
+        ],
+        [
+          9237.69,
+          3887.75
+        ],
+        [
+          9390.15,
+          3916.02
+        ],
+        [
+          9662.61,
+          3963.39
+        ],
+        [
+          9671.85,
+          3964.65
+        ],
+        [
+          9690.47,
+          3964.42
+        ],
+        [
+          9708.69,
+          3960.57
+        ],
+        [
+          9725.8,
+          3953.23
+        ],
+        [
+          9733.74,
+          3948.34
+        ],
+        [
+          9747.99,
+          3936.35
+        ],
+        [
+          9759.63,
+          3921.81
+        ],
+        [
+          9768.21,
+          3905.28
+        ],
+        [
+          9773.39,
+          3887.39
+        ],
+        [
+          9774.99,
+          3868.84
+        ],
+        [
+          9772.94,
+          3850.33
+        ],
+        [
+          9770.57,
+          3841.31
+        ],
+        [
+          9763.23,
+          3824.2
+        ],
+        [
+          9752.69,
+          3808.84
+        ],
+        [
+          9739.36,
+          3795.83
+        ],
+        [
+          9731.81,
+          3790.37
+        ],
+        [
+          9715.28,
+          3781.79
+        ],
+        [
+          9706.46,
+          3778.76
+        ],
+        [
+          9666.51,
+          3770.96
+        ],
+        [
+          9452.31,
+          3734.05
+        ],
+        [
+          9304.08,
+          3707.05
+        ],
+        [
+          9184.28,
+          3683.08
+        ],
+        [
+          9072.7,
+          3657.75
+        ],
+        [
+          8992.66,
+          3636.86
+        ],
+        [
+          8882.06,
+          3605.01
+        ],
+        [
+          8542.5,
+          3499.03
+        ],
+        [
+          8432.75,
+          3466.22
+        ],
+        [
+          8276.26,
+          3422.94
+        ],
+        [
+          8125.77,
+          3383.1
+        ],
+        [
+          7911.73,
+          3329.22
+        ],
+        [
+          7730.66,
+          3286.59
+        ],
+        [
+          7591.95,
+          3256.72
+        ],
+        [
+          7349.58,
+          3207.04
+        ],
+        [
+          7329.65,
+          3205.06
+        ],
+        [
+          7342.48,
+          3172.99
+        ],
+        [
+          7351.47,
+          3146.09
+        ],
+        [
+          7380.47,
+          3039.09
+        ],
+        [
+          7386.45,
+          3010.23
+        ],
+        [
+          7402.47,
+          2900.0
+        ],
+        [
+          7154.9,
+          2900.0
+        ],
+        [
+          7144.0,
+          2975.0
+        ],
+        [
+          7115.0,
+          3082.0
+        ],
+        [
+          7075.0,
+          3182.0
+        ],
+        [
+          7027.0,
+          3275.0
+        ],
+        [
+          6972.0,
+          3361.0
+        ],
+        [
+          6914.0,
+          3442.0
+        ],
+        [
+          6853.0,
+          3519.0
+        ],
+        [
+          6792.0,
+          3593.0
+        ],
+        [
+          6729.0,
+          3665.0
+        ],
+        [
+          6666.0,
+          3735.0
+        ],
+        [
+          6600.0,
+          3805.0
+        ],
+        [
+          6531.0,
+          3872.0
+        ],
+        [
+          6456.0,
+          3938.0
+        ],
+        [
+          6374.0,
+          4001.0
+        ],
+        [
+          6285.0,
+          4060.0
+        ],
+        [
+          6189.0,
+          4114.0
+        ],
+        [
+          6085.0,
+          4164.0
+        ],
+        [
+          5976.0,
+          4209.0
+        ],
+        [
+          5860.0,
+          4250.0
+        ],
+        [
+          5741.0,
+          4288.0
+        ],
+        [
+          5617.0,
+          4322.0
+        ],
+        [
+          5488.0,
+          4355.0
+        ],
+        [
+          5356.0,
+          4386.0
+        ],
+        [
+          5217.0,
+          4415.0
+        ],
+        [
+          5072.0,
+          4441.0
+        ],
+        [
+          4918.0,
+          4465.0
+        ],
+        [
+          4754.0,
+          4485.0
+        ],
+        [
+          4578.0,
+          4512.0
+        ],
+        [
+          4378.0,
+          4571.0
+        ],
+        [
+          4000.0,
+          4769.06
+        ],
+        [
+          4000.0,
+          5045.82
+        ],
+        [
+          4470.33,
+          4799.2
+        ]
+      ]
+    },
+    {
+      "id": "community-review-water-4",
+      "poly": [
+        [
+          5598.12,
+          5181.64
+        ],
+        [
+          5593.93,
+          5167.13
+        ],
+        [
+          5587.38,
+          5152.95
+        ],
+        [
+          5580.97,
+          5142.6
+        ],
+        [
+          5570.48,
+          5129.29
+        ],
+        [
+          5557.87,
+          5116.66
+        ],
+        [
+          5543.25,
+          5104.84
+        ],
+        [
+          5526.78,
+          5093.93
+        ],
+        [
+          5508.6,
+          5084.05
+        ],
+        [
+          5488.89,
+          5075.28
+        ],
+        [
+          5467.85,
+          5067.71
+        ],
+        [
+          5428.42,
+          5057.57
+        ],
+        [
+          5404.78,
+          5053.64
+        ],
+        [
+          5380.6,
+          5051.13
+        ],
+        [
+          5356.14,
+          5050.05
+        ],
+        [
+          5331.61,
+          5050.41
+        ],
+        [
+          5307.26,
+          5052.21
+        ],
+        [
+          5283.32,
+          5055.43
+        ],
+        [
+          5260.03,
+          5060.05
+        ],
+        [
+          5237.6,
+          5066.02
+        ],
+        [
+          5201.08,
+          5079.52
+        ],
+        [
+          5182.11,
+          5088.86
+        ],
+        [
+          5164.76,
+          5099.27
+        ],
+        [
+          5152.91,
+          5107.72
+        ],
+        [
+          5138.79,
+          5119.75
+        ],
+        [
+          5126.69,
+          5132.56
+        ],
+        [
+          5116.75,
+          5146.02
+        ],
+        [
+          5109.06,
+          5159.99
+        ],
+        [
+          5103.68,
+          5174.36
+        ],
+        [
+          5100.68,
+          5188.97
+        ],
+        [
+          5100.08,
+          5203.68
+        ],
+        [
+          5101.88,
+          5218.36
+        ],
+        [
+          5107.49,
+          5236.45
+        ],
+        [
+          5114.61,
+          5250.53
+        ],
+        [
+          5124.0,
+          5264.13
+        ],
+        [
+          5135.57,
+          5277.12
+        ],
+        [
+          5149.2,
+          5289.35
+        ],
+        [
+          5164.76,
+          5300.73
+        ],
+        [
+          5182.11,
+          5311.14
+        ],
+        [
+          5201.08,
+          5320.48
+        ],
+        [
+          5226.78,
+          5330.51
+        ],
+        [
+          5248.69,
+          5337.13
+        ],
+        [
+          5271.58,
+          5342.43
+        ],
+        [
+          5295.22,
+          5346.36
+        ],
+        [
+          5319.4,
+          5348.87
+        ],
+        [
+          5343.86,
+          5349.95
+        ],
+        [
+          5368.39,
+          5349.59
+        ],
+        [
+          5392.74,
+          5347.79
+        ],
+        [
+          5416.68,
+          5344.57
+        ],
+        [
+          5439.97,
+          5339.95
+        ],
+        [
+          5462.4,
+          5333.98
+        ],
+        [
+          5483.75,
+          5326.73
+        ],
+        [
+          5503.81,
+          5318.25
+        ],
+        [
+          5526.78,
+          5306.07
+        ],
+        [
+          5543.25,
+          5295.16
+        ],
+        [
+          5557.87,
+          5283.34
+        ],
+        [
+          5570.48,
+          5270.71
+        ],
+        [
+          5580.97,
+          5257.4
+        ],
+        [
+          5589.24,
+          5243.54
+        ],
+        [
+          5595.2,
+          5229.26
+        ],
+        [
+          5598.8,
+          5214.7
+        ],
+        [
+          5600.0,
+          5200.0
+        ],
+        [
+          5598.12,
+          5181.64
+        ]
+      ]
+    }
+  ],
+  "reviewBridges": [
+    {
+      "x": 1938.0,
+      "y": 4099.0,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1924.8,
+      "y": 4122.4,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1911.6,
+      "y": 4145.8,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1898.4,
+      "y": 4169.2,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1885.2,
+      "y": 4192.6,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1872.0,
+      "y": 4216.0,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1858.8,
+      "y": 4239.4,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1845.6,
+      "y": 4262.8,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1832.4,
+      "y": 4286.2,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1819.2,
+      "y": 4309.6,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1806.0,
+      "y": 4333.0,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1792.8,
+      "y": 4356.4,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1779.6,
+      "y": 4379.8,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1766.4,
+      "y": 4403.2,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1753.2,
+      "y": 4426.6,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1740.0,
+      "y": 4450.0,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6056.0,
+      "y": 4088.0,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6069.2,
+      "y": 4111.466666666666,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6082.4,
+      "y": 4134.933333333333,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6095.6,
+      "y": 4158.4,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6108.8,
+      "y": 4181.866666666667,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6122.0,
+      "y": 4205.333333333333,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6135.2,
+      "y": 4228.8,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6148.4,
+      "y": 4252.266666666666,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6161.6,
+      "y": 4275.733333333334,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6174.8,
+      "y": 4299.2,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6188.0,
+      "y": 4322.666666666667,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6201.2,
+      "y": 4346.133333333333,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6214.4,
+      "y": 4369.6,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6227.6,
+      "y": 4393.066666666667,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6240.8,
+      "y": 4416.533333333334,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 6254.0,
+      "y": 4440.0,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "x": 1333.0,
+      "y": 1516.0,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1307.9285714285713,
+      "y": 1503.7857142857142,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1282.857142857143,
+      "y": 1491.5714285714287,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1257.7857142857142,
+      "y": 1479.357142857143,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1232.7142857142858,
+      "y": 1467.142857142857,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1207.642857142857,
+      "y": 1454.9285714285713,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1182.5714285714287,
+      "y": 1442.7142857142858,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1157.5,
+      "y": 1430.5,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1132.4285714285716,
+      "y": 1418.2857142857142,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1107.357142857143,
+      "y": 1406.0714285714287,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1082.2857142857142,
+      "y": 1393.857142857143,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1057.2142857142858,
+      "y": 1381.642857142857,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1032.142857142857,
+      "y": 1369.4285714285716,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 1007.0714285714286,
+      "y": 1357.2142857142858,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 982.0,
+      "y": 1345.0,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6632.0,
+      "y": 1551.0,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6654.357142857143,
+      "y": 1534.2142857142858,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6676.714285714285,
+      "y": 1517.4285714285713,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6699.071428571428,
+      "y": 1500.642857142857,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6721.428571428572,
+      "y": 1483.857142857143,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6743.785714285715,
+      "y": 1467.0714285714287,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6766.142857142857,
+      "y": 1450.2857142857142,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6788.5,
+      "y": 1433.5,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6810.857142857143,
+      "y": 1416.7142857142858,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6833.214285714285,
+      "y": 1399.9285714285713,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6855.571428571428,
+      "y": 1383.142857142857,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6877.928571428572,
+      "y": 1366.357142857143,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6900.285714285715,
+      "y": 1349.5714285714287,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6922.642857142857,
+      "y": 1332.7857142857142,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6945.0,
+      "y": 1316.0,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6935.0,
+      "y": 3103.0,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6962.266666666666,
+      "y": 3105.733333333333,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 6989.533333333334,
+      "y": 3108.4666666666667,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7016.8,
+      "y": 3111.2,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7044.066666666667,
+      "y": 3113.9333333333334,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7071.333333333333,
+      "y": 3116.6666666666665,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7098.6,
+      "y": 3119.4,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7125.866666666667,
+      "y": 3122.133333333333,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7153.133333333333,
+      "y": 3124.866666666667,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7180.4,
+      "y": 3127.6,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7207.666666666667,
+      "y": 3130.3333333333335,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7234.933333333333,
+      "y": 3133.0666666666666,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7262.2,
+      "y": 3135.8,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7289.466666666667,
+      "y": 3138.5333333333333,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7316.733333333334,
+      "y": 3141.266666666667,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 7344.0,
+      "y": 3144.0,
+      "w": 116,
+      "h": 116
+    },
+    {
+      "x": 4000.0,
+      "y": 475.0,
+      "w": 290,
+      "h": 405
+    },
+    {
+      "x": 790.0,
+      "y": 2820.0,
+      "w": 330,
+      "h": 195
+    },
+    {
+      "x": 3640.0,
+      "y": 5110.0,
+      "w": 220,
+      "h": 435
+    },
+    {
+      "x": -470.0,
+      "y": 3285.0,
+      "w": 200,
+      "h": 425
+    },
+    {
+      "x": -1120.0,
+      "y": 3380.0,
+      "w": 190,
+      "h": 425
+    },
+    {
+      "x": 8380.0,
+      "y": 3555.0,
+      "w": 230,
+      "h": 445
+    },
+    {
+      "x": 9085.0,
+      "y": 3760.0,
+      "w": 200,
+      "h": 455
+    }
+  ],
+  "reviewRivers": [
+    {
+      "name": "Willow Brook",
+      "centerline": [
+        [
+          750,
+          3000
+        ],
+        [
+          350,
+          3150
+        ],
+        [
+          -150,
+          3240
+        ],
+        [
+          -650,
+          3330
+        ],
+        [
+          -1120,
+          3400
+        ],
+        [
+          -1530,
+          3470
+        ]
+      ],
+      "width": 180
+    },
+    {
+      "name": "Lantern Run",
+      "centerline": [
+        [
+          7330,
+          3300
+        ],
+        [
+          7800,
+          3400
+        ],
+        [
+          8380,
+          3550
+        ],
+        [
+          9050,
+          3750
+        ],
+        [
+          9680,
+          3870
+        ]
+      ],
+      "width": 190
+    }
+  ]
+}

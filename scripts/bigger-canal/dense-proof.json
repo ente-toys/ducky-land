@@ -1,0 +1,89 @@
+{
+  "renderer": "Static production SVGs at production positions, without players, dynamic GPU water or runtime contact shadows",
+  "overview": "canal-dense.png",
+  "crops": {
+    "pixelsPerWorldUnit": 0.8,
+    "width": 1900,
+    "height": 1500,
+    "names": [
+      "bobbinboat",
+      "petalpost",
+      "pearlbutton",
+      "reedwhistle",
+      "lane",
+      "road-junction"
+    ]
+  },
+  "preservedFieldsVerified": true,
+  "originalPixels": {
+    "sampled": 213411,
+    "changed": 0
+  },
+  "roads": {
+    "method": "Union of variable-width road polygons with 12.5-unit bank allowance, square paving and 45-unit worn common approaches, clipped to new dry land outside the preserved heart mask. Homes and gardens are not subtracted.",
+    "newLandArea": 53057492.30976185,
+    "roadAreaBefore": 10689134.076013774,
+    "roadAreaAfter": 9031758.204711119,
+    "roadPercentBefore": 20.146323564649737,
+    "roadPercentAfter": 17.022587784551966,
+    "roadReductionPercent": 15.505239802555915,
+    "mainWidth": 185,
+    "laneWidths": [
+      78,
+      86,
+      88
+    ],
+    "originalMainWidths": [
+      240,
+      210,
+      240,
+      240,
+      210
+    ],
+    "homesBefore": 28,
+    "homesAfter": 36,
+    "communities": 4
+  },
+  "density": {
+    "bobbin": {
+      "before": {
+        "homes": 7,
+        "medianNearestHome": 468
+      },
+      "after": {
+        "homes": 9,
+        "medianNearestHome": 433
+      }
+    },
+    "petal": {
+      "before": {
+        "homes": 7,
+        "medianNearestHome": 500
+      },
+      "after": {
+        "homes": 9,
+        "medianNearestHome": 444
+      }
+    },
+    "shell": {
+      "before": {
+        "homes": 7,
+        "medianNearestHome": 430
+      },
+      "after": {
+        "homes": 9,
+        "medianNearestHome": 389
+      }
+    },
+    "reed": {
+      "before": {
+        "homes": 7,
+        "medianNearestHome": 550
+      },
+      "after": {
+        "homes": 9,
+        "medianNearestHome": 414
+      }
+    }
+  }
+}

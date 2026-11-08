@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="95" viewBox="-44 -91 72 95" data-detail="1">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-2 -1.11 Q-16.8 -25 -24 -65" fill="none" stroke="#4AA539" stroke-width="2.22"/>
+    <path d="M0 -1.11 Q-4.2 -25 -6 -53" fill="none" stroke="#4AA539" stroke-width="2.22"/>
+    <path d="M2 -1.11 Q11.2 -25 16 -40" fill="none" stroke="#4AA539" stroke-width="2.22"/>
+    <path d="M-1 -1.11 C-14 -11 -31 -24 -38 -33 C-34 -16 -21 -3 -1 -1.11 Z" fill="#4AA539" stroke="#39472D" stroke-width="2.22"/>
+    <path d="M1 -1.11 C3 -19 10 -33 18 -38 C19 -25 14 -11 1 -1.11 Z" fill="#4AA539" stroke="#39472D" stroke-width="2.22"/>
+    <path d="M-5 -4 Q-22 -15 -31 -25" fill="none" stroke="#2B7A37" stroke-width="1.11"/>
+    <path d="M-24 -83 C-19.8 -83 -19.8 -63 -24 -63 C-28.2 -63 -28.2 -83 -24 -83 Z" fill="#C88941"/>
+    <path d="M-24 -83 C-19.8 -83 -19.8 -63 -24 -63 Q-19.8 -72.5 -24 -83 Z" fill="#885931"/>
+    <path d="M-24 -83 C-19.8 -83 -19.8 -63 -24 -63 C-28.2 -63 -28.2 -83 -24 -83 Z" fill="none" stroke="#39472D" stroke-width="2.22"/>
+    <path d="M-6 -71 C-1.5 -71 -1.5 -51 -6 -51 C-10.5 -51 -10.5 -71 -6 -71 Z" fill="#C88941"/>
+    <path d="M-6 -71 C-1.5 -71 -1.5 -51 -6 -51 Q-1.5 -60.5 -6 -71 Z" fill="#885931"/>
+    <path d="M-6 -71 C-1.5 -71 -1.5 -51 -6 -51 C-10.5 -51 -10.5 -71 -6 -71 Z" fill="none" stroke="#39472D" stroke-width="2.22"/>
+    <path d="M16 -58 C20.3 -58 20.3 -38 16 -38 C11.7 -38 11.7 -58 16 -58 Z" fill="#C88941"/>
+    <path d="M16 -58 C20.3 -58 20.3 -38 16 -38 Q20.3 -47.5 16 -58 Z" fill="#885931"/>
+    <path d="M16 -58 C20.3 -58 20.3 -38 16 -38 C11.7 -38 11.7 -58 16 -58 Z" fill="none" stroke="#39472D" stroke-width="2.22"/>
+  </g>
+</svg>

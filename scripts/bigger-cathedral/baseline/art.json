@@ -1,0 +1,7014 @@
+{
+  "floating": [
+    {
+      "src": "reuse/nature--lily-pad-flower.svg",
+      "x": 1600,
+      "y": 3250,
+      "width": 123.1136,
+      "height": 59.998400000000004,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "src": "reuse/nature--lily-pad-flower.svg",
+      "x": 1950,
+      "y": 3450,
+      "width": 123.1136,
+      "height": 59.998400000000004,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "src": "reuse/nature--lily-pad-flower.svg",
+      "x": 1950,
+      "y": 3220,
+      "width": 123.1136,
+      "height": 59.998400000000004,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    }
+  ],
+  "width": 8000,
+  "height": 6000,
+  "sea": "#6EC9DE",
+  "ground": {
+    "tiles": [
+      {
+        "src": "ground-r0-c0.svg",
+        "x": 0,
+        "y": 0,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r0-c1.svg",
+        "x": 1600,
+        "y": 0,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r0-c2.svg",
+        "x": 3200,
+        "y": 0,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r0-c3.svg",
+        "x": 4800,
+        "y": 0,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r0-c4.svg",
+        "x": 6400,
+        "y": 0,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r1-c0.svg",
+        "x": 0,
+        "y": 1500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r1-c1.svg",
+        "x": 1600,
+        "y": 1500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r1-c2.svg",
+        "x": 3200,
+        "y": 1500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r1-c3.svg",
+        "x": 4800,
+        "y": 1500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r1-c4.svg",
+        "x": 6400,
+        "y": 1500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r2-c0.svg",
+        "x": 0,
+        "y": 3000,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r2-c1.svg",
+        "x": 1600,
+        "y": 3000,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r2-c2.svg",
+        "x": 3200,
+        "y": 3000,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r2-c3.svg",
+        "x": 4800,
+        "y": 3000,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r2-c4.svg",
+        "x": 6400,
+        "y": 3000,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r3-c0.svg",
+        "x": 0,
+        "y": 4500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r3-c1.svg",
+        "x": 1600,
+        "y": 4500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r3-c2.svg",
+        "x": 3200,
+        "y": 4500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r3-c3.svg",
+        "x": 4800,
+        "y": 4500,
+        "width": 1600,
+        "height": 1500
+      },
+      {
+        "src": "ground-r3-c4.svg",
+        "x": 6400,
+        "y": 4500,
+        "width": 1600,
+        "height": 1500
+      }
+    ]
+  },
+  "decks": [
+    {
+      "src": "deck-jetty-1.svg",
+      "x": 235,
+      "y": 3165,
+      "width": 1070,
+      "height": 330
+    },
+    {
+      "src": "deck-jetty-2.svg",
+      "x": 6715,
+      "y": 2985,
+      "width": 1040,
+      "height": 330
+    },
+    {
+      "src": "deck-jetty-3.svg",
+      "x": 3935,
+      "y": 4765,
+      "width": 330,
+      "height": 1030
+    },
+    {
+      "src": "deck-arch-0.svg",
+      "x": 990,
+      "y": 1115,
+      "width": 870,
+      "height": 865
+    },
+    {
+      "src": "deck-arch-1.svg",
+      "x": 5730,
+      "y": 4020,
+      "width": 980,
+      "height": 1100
+    },
+    {
+      "src": "deck-arch-2.svg",
+      "x": 1575,
+      "y": 2670,
+      "width": 390,
+      "height": 1205
+    },
+    {
+      "src": "deck-pond-dock.svg",
+      "x": 1150,
+      "y": 3130,
+      "width": 500,
+      "height": 280
+    }
+  ],
+  "flats": [
+    {
+      "src": "centre/decal-paving.svg",
+      "x": 3150.48,
+      "y": 2037.58,
+      "width": 1899.04,
+      "height": 1351.24,
+      "topLeft": true
+    },
+    {
+      "src": "centre/decal-border.svg",
+      "x": 3150.48,
+      "y": 2037.58,
+      "width": 1899.04,
+      "height": 1351.24,
+      "topLeft": true
+    },
+    {
+      "src": "detail/piazza-mosaic.svg",
+      "x": 3010,
+      "y": 1830,
+      "width": 2180,
+      "height": 1700,
+      "topLeft": true
+    },
+    {
+      "src": "detail/rose-inlay.svg",
+      "x": 3450,
+      "y": 2160,
+      "width": 1300,
+      "height": 1040,
+      "topLeft": true
+    },
+    {
+      "src": "reuse/street--picnic-blanket.svg",
+      "x": 2450,
+      "y": 1350,
+      "width": 210,
+      "height": 130
+    },
+    {
+      "src": "reuse/street--picnic-blanket.svg",
+      "x": 1440,
+      "y": 2570,
+      "width": 210,
+      "height": 130
+    },
+    {
+      "src": "reuse/street--picnic-blanket.svg",
+      "x": 5200,
+      "y": 4390,
+      "width": 210,
+      "height": 130
+    },
+    {
+      "src": "reuse/beach--towel-striped.svg",
+      "x": 6660,
+      "y": 3560,
+      "width": 180,
+      "height": 130,
+      "flip": false
+    },
+    {
+      "src": "reuse/beach--towel-striped.svg",
+      "x": 6740,
+      "y": 3820,
+      "width": 180,
+      "height": 130,
+      "flip": true
+    },
+    {
+      "src": "reuse/beach--towel-striped.svg",
+      "x": 6260,
+      "y": 4440,
+      "width": 180,
+      "height": 130,
+      "flip": false
+    }
+  ],
+  "props": [
+    {
+      "id": "cathedral-hall",
+      "name": "Cathedral hall",
+      "src": "detail/cathedral.svg",
+      "x": 3990,
+      "y": 1640,
+      "width": 579,
+      "height": 677,
+      "scale": 1.6544,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "campanile",
+      "name": "Bell tower",
+      "src": "detail/bell-tower.svg",
+      "x": 4800,
+      "y": 1570,
+      "width": 192,
+      "height": 645,
+      "scale": 1.8295,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-2",
+      "name": "Arcade",
+      "src": "detail/arcade.svg",
+      "x": 2870,
+      "y": 1740,
+      "width": 594,
+      "height": 293,
+      "scale": 1.5050999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-3",
+      "name": "Arcade",
+      "src": "detail/arcade.svg",
+      "x": 5450,
+      "y": 1680,
+      "width": 594,
+      "height": 293,
+      "scale": 1.5050999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-4",
+      "name": "Arcade",
+      "src": "detail/arcade.svg",
+      "x": 4840,
+      "y": 3650,
+      "width": 594,
+      "height": 293,
+      "scale": 1.8396,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cloister-cloister-back-01",
+      "name": "Olive cloister cloister-back-01",
+      "src": "centre/cloister-back-01.svg",
+      "x": 3399.48,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-02",
+      "name": "Olive cloister cloister-back-02",
+      "src": "centre/cloister-back-02.svg",
+      "x": 3574.61,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-03",
+      "name": "Olive cloister cloister-back-03",
+      "src": "centre/cloister-back-03.svg",
+      "x": 3749.7400000000002,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-04",
+      "name": "Olive cloister cloister-back-04",
+      "src": "centre/cloister-back-04.svg",
+      "x": 3924.8700000000003,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-05",
+      "name": "Olive cloister cloister-back-05",
+      "src": "centre/cloister-back-05.svg",
+      "x": 4100,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-06",
+      "name": "Olive cloister cloister-back-06",
+      "src": "centre/cloister-back-06.svg",
+      "x": 4275.129999999999,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-07",
+      "name": "Olive cloister cloister-back-07",
+      "src": "centre/cloister-back-07.svg",
+      "x": 4450.259999999999,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-08",
+      "name": "Olive cloister cloister-back-08",
+      "src": "centre/cloister-back-08.svg",
+      "x": 4625.389999999999,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-back-09",
+      "name": "Olive cloister cloister-back-09",
+      "src": "centre/cloister-back-09.svg",
+      "x": 4800.5199999999995,
+      "y": 2172.04,
+      "width": 215.79999999999998,
+      "height": 264.77,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9811912225705328
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-west-1",
+      "name": "Olive cloister cloister-west-1",
+      "src": "centre/cloister-west-1.svg",
+      "x": 3295.315,
+      "y": 2376.2200000000003,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921875000000008
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-west-0",
+      "name": "Olive cloister rose-planter-west-0",
+      "src": "centre/rose-planter-west-0.svg",
+      "x": 3310.67,
+      "y": 2382.86,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115734
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-west-2",
+      "name": "Olive cloister cloister-west-2",
+      "src": "centre/cloister-west-2.svg",
+      "x": 3267.9249999999997,
+      "y": 2577.08,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921874999999998
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-west-1",
+      "name": "Olive cloister rose-planter-west-1",
+      "src": "centre/rose-planter-west-1.svg",
+      "x": 3283.2799999999997,
+      "y": 2583.72,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115689
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-west-3",
+      "name": "Olive cloister cloister-west-3",
+      "src": "centre/cloister-west-3.svg",
+      "x": 3240.535,
+      "y": 2777.94,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921874999999998
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-west-2",
+      "name": "Olive cloister rose-planter-west-2",
+      "src": "centre/rose-planter-west-2.svg",
+      "x": 3255.89,
+      "y": 2784.58,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115689
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-west-4",
+      "name": "Olive cloister cloister-west-4",
+      "src": "centre/cloister-west-4.svg",
+      "x": 3213.145,
+      "y": 2978.8,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921875000000008
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-west-3",
+      "name": "Olive cloister rose-planter-west-3",
+      "src": "centre/rose-planter-west-3.svg",
+      "x": 3228.5,
+      "y": 2985.44,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115689
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-east-1",
+      "name": "Olive cloister cloister-east-1",
+      "src": "centre/cloister-east-1.svg",
+      "x": 4904.685,
+      "y": 2376.2200000000003,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921875000000008
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-east-0",
+      "name": "Olive cloister rose-planter-east-0",
+      "src": "centre/rose-planter-east-0.svg",
+      "x": 4889.33,
+      "y": 2382.86,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115734
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-east-2",
+      "name": "Olive cloister cloister-east-2",
+      "src": "centre/cloister-east-2.svg",
+      "x": 4932.075,
+      "y": 2577.08,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921874999999998
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-east-1",
+      "name": "Olive cloister rose-planter-east-1",
+      "src": "centre/rose-planter-east-1.svg",
+      "x": 4916.72,
+      "y": 2583.72,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115689
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-east-3",
+      "name": "Olive cloister cloister-east-3",
+      "src": "centre/cloister-east-3.svg",
+      "x": 4959.465,
+      "y": 2777.94,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921874999999998
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-east-2",
+      "name": "Olive cloister rose-planter-east-2",
+      "src": "centre/rose-planter-east-2.svg",
+      "x": 4944.11,
+      "y": 2784.58,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115689
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-cloister-east-4",
+      "name": "Olive cloister cloister-east-4",
+      "src": "centre/cloister-east-4.svg",
+      "x": 4986.8550000000005,
+      "y": 2978.8,
+      "width": 283.03,
+      "height": 424.96,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9921875000000008
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-rose-planter-east-3",
+      "name": "Olive cloister rose-planter-east-3",
+      "src": "centre/rose-planter-east-3.svg",
+      "x": 4971.5,
+      "y": 2985.44,
+      "width": 106.24,
+      "height": 100.42999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8429752066115689
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-roof-roses-1",
+      "name": "Olive cloister roof-roses-1",
+      "src": "centre/roof-roses-1.svg",
+      "x": 3589.55,
+      "y": 2173.7,
+      "width": 182.6,
+      "height": 71.38,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 3.244186046511624
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-roof-roses-2",
+      "name": "Olive cloister roof-roses-2",
+      "src": "centre/roof-roses-2.svg",
+      "x": 4100,
+      "y": 2173.7,
+      "width": 182.6,
+      "height": 71.38,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 3.244186046511624
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-roof-roses-3",
+      "name": "Olive cloister roof-roses-3",
+      "src": "centre/roof-roses-3.svg",
+      "x": 4610.45,
+      "y": 2173.7,
+      "width": 182.6,
+      "height": 71.38,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 3.244186046511624
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-olive-well",
+      "name": "Olive cloister olive-well",
+      "src": "centre/olive-well.svg",
+      "x": 4099.9585,
+      "y": 2821.1,
+      "width": 424.213,
+      "height": 415,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-bench-1",
+      "name": "Olive cloister bench-1",
+      "src": "centre/bench-1.svg",
+      "x": 3415.25,
+      "y": 2435.15,
+      "width": 162.67999999999998,
+      "height": 93.78999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9026548672566406
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-bench-2",
+      "name": "Olive cloister bench-2",
+      "src": "centre/bench-2.svg",
+      "x": 4784.75,
+      "y": 2435.15,
+      "width": 162.67999999999998,
+      "height": 93.78999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9026548672566406
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-bench-3",
+      "name": "Olive cloister bench-3",
+      "src": "centre/bench-3.svg",
+      "x": 3485.8,
+      "y": 3248.55,
+      "width": 162.67999999999998,
+      "height": 93.78999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9026548672566406
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-bench-4",
+      "name": "Olive cloister bench-4",
+      "src": "centre/bench-4.svg",
+      "x": 4714.2,
+      "y": 3248.55,
+      "width": 162.67999999999998,
+      "height": 93.78999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9026548672566406
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-lamp-1",
+      "name": "Olive cloister lamp-1",
+      "src": "centre/lamp-1.svg",
+      "x": 3444.2999999999997,
+      "y": 2258.36,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-lamp-2",
+      "name": "Olive cloister lamp-2",
+      "src": "centre/lamp-2.svg",
+      "x": 4755.7,
+      "y": 2258.36,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-lamp-3",
+      "name": "Olive cloister lamp-3",
+      "src": "centre/lamp-3.svg",
+      "x": 3303.2,
+      "y": 2789.56,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-lamp-4",
+      "name": "Olive cloister lamp-4",
+      "src": "centre/lamp-4.svg",
+      "x": 4896.799999999999,
+      "y": 2789.56,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-lamp-5",
+      "name": "Olive cloister lamp-5",
+      "src": "centre/lamp-5.svg",
+      "x": 3311.5,
+      "y": 3258.51,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-lamp-6",
+      "name": "Olive cloister lamp-6",
+      "src": "centre/lamp-6.svg",
+      "x": 4888.5,
+      "y": 3258.51,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-flower-pot-1",
+      "name": "Olive cloister flower-pot-1",
+      "src": "centre/flower-pot-1.svg",
+      "x": 3593.7,
+      "y": 3281.75,
+      "width": 106.24,
+      "height": 102.08999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8292682926829255
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-flower-pot-2",
+      "name": "Olive cloister flower-pot-2",
+      "src": "centre/flower-pot-2.svg",
+      "x": 4606.3,
+      "y": 3281.75,
+      "width": 106.24,
+      "height": 102.08999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8292682926829255
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-flower-pot-3",
+      "name": "Olive cloister flower-pot-3",
+      "src": "centre/flower-pot-3.svg",
+      "x": 3394.5,
+      "y": 2271.64,
+      "width": 106.24,
+      "height": 102.08999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8292682926829255
+      },
+      "shadow": false
+    },
+    {
+      "id": "cloister-flower-pot-4",
+      "name": "Olive cloister flower-pot-4",
+      "src": "centre/flower-pot-4.svg",
+      "x": 4805.5,
+      "y": 2271.64,
+      "width": 106.24,
+      "height": 102.08999999999999,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8292682926829255
+      },
+      "shadow": false
+    },
+    {
+      "id": "arc-cloister--142",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-cloister--142.svg",
+      "x": 3650.8,
+      "y": 2411.2,
+      "width": 187,
+      "height": 217,
+      "scale": 1,
+      "anchor": {
+        "x": 0.4750474355303128,
+        "y": 0.6045616896005124
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-cloister--38",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-cloister--38.svg",
+      "x": 4549.2,
+      "y": 2411.2,
+      "width": 187,
+      "height": 217,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5249525644696872,
+        "y": 0.6045616896005124
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-cloister-42",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-cloister-42.svg",
+      "x": 4523.6,
+      "y": 2972.2,
+      "width": 197,
+      "height": 211,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5207743681325626,
+        "y": 0.6215914945422016
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-cloister-138",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-cloister-138.svg",
+      "x": 3676.4,
+      "y": 2972.2,
+      "width": 197,
+      "height": 211,
+      "scale": 1,
+      "anchor": {
+        "x": 0.4792256318674374,
+        "y": 0.6215914945422039
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-52",
+      "name": "Cottage cafe",
+      "src": "detail/cottage.svg",
+      "x": 1830,
+      "y": 1550,
+      "width": 590,
+      "height": 588,
+      "scale": 0.6293,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-53",
+      "name": "Cottage cafe",
+      "src": "detail/cottage.svg",
+      "x": 5596.4,
+      "y": 4259.3,
+      "width": 590,
+      "height": 588,
+      "scale": 0.6293,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-54",
+      "name": "Cottage cafe",
+      "src": "detail/cottage.svg",
+      "x": 3291.1,
+      "y": 4113.7,
+      "width": 590,
+      "height": 588,
+      "scale": 0.6293,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-55",
+      "name": "Cottage cafe",
+      "src": "detail/cottage.svg",
+      "x": 920,
+      "y": 1260,
+      "width": 590,
+      "height": 588,
+      "scale": 0.6293,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-56",
+      "name": "Cottage cafe",
+      "src": "detail/cottage.svg",
+      "x": 6690,
+      "y": 5100,
+      "width": 590,
+      "height": 588,
+      "scale": 0.6293,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-57",
+      "name": "Garden pergola",
+      "src": "detail/pergola.svg",
+      "x": 2383.3,
+      "y": 3595.8,
+      "width": 602,
+      "height": 557,
+      "scale": 0.5745,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-58",
+      "name": "Garden pergola",
+      "src": "detail/pergola.svg",
+      "x": 5770,
+      "y": 1530,
+      "width": 602,
+      "height": 557,
+      "scale": 0.5745,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-59",
+      "name": "Garden pergola",
+      "src": "detail/pergola.svg",
+      "x": 5330.5,
+      "y": 4369.8,
+      "width": 602,
+      "height": 557,
+      "scale": 0.5745,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza--155",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza--155.svg",
+      "x": 3084.9,
+      "y": 2315.5,
+      "width": 159,
+      "height": 241,
+      "scale": 1,
+      "anchor": {
+        "x": 0.47758036804372417,
+        "y": 0.599542632352516
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-61",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 3244.9,
+      "y": 2339.1,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza--65",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza--65.svg",
+      "x": 4573.3,
+      "y": 1898.3,
+      "width": 247,
+      "height": 174,
+      "scale": 1,
+      "anchor": {
+        "x": 0.49932167267037925,
+        "y": 0.6224442448147841
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-63",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 4733.3,
+      "y": 1926,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza--25",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza--25.svg",
+      "x": 5115.1,
+      "y": 2315.5,
+      "width": 159,
+      "height": 241,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5224196319562758,
+        "y": 0.599542632352516
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-65",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5275.1,
+      "y": 2339.1,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza-25",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza-25.svg",
+      "x": 5115.1,
+      "y": 3044.5,
+      "width": 159,
+      "height": 241,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5224196319562758,
+        "y": 0.5996274921288117
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-67",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5275.1,
+      "y": 3060.9,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza-65",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza-65.svg",
+      "x": 4573.3,
+      "y": 3461.7,
+      "width": 247,
+      "height": 174,
+      "scale": 1,
+      "anchor": {
+        "x": 0.49932167267037925,
+        "y": 0.6534178241507331
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-69",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 4733.3,
+      "y": 3474,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza-115",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza-115.svg",
+      "x": 3626.7,
+      "y": 3461.7,
+      "width": 247,
+      "height": 174,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5006783273296226,
+        "y": 0.6534178241507331
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-71",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 3786.7,
+      "y": 3474,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-piazza-155",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-piazza-155.svg",
+      "x": 3084.9,
+      "y": 3044.5,
+      "width": 159,
+      "height": 241,
+      "scale": 1,
+      "anchor": {
+        "x": 0.47758036804372417,
+        "y": 0.5996274921288117
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-73",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 3244.9,
+      "y": 3060.9,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2144,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-74",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 2093.9,
+      "y": 2660.6,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-75",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 2180,
+      "y": 2630,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-76",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 1337.8,
+      "y": 2707.1,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-77",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 1631.7,
+      "y": 2948.8,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-78",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 2530,
+      "y": 3500,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-79",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 2690,
+      "y": 3500,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-80",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 3150,
+      "y": 3730,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-81",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 3310,
+      "y": 3730,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-82",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 2890,
+      "y": 4550,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-83",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 2990,
+      "y": 4550,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-84",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 4470,
+      "y": 4580,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-85",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 4630,
+      "y": 4580,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-86",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 5500,
+      "y": 3390,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-87",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5660,
+      "y": 3390,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-88",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 6440,
+      "y": 2420,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-89",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 6480,
+      "y": 2420,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-90",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 6607.3,
+      "y": 3887.3,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-91",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 6630,
+      "y": 3860,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-92",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 5731.1,
+      "y": 4353.7,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-93",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5818.6,
+      "y": 4378.6,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-94",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 2000,
+      "y": 1720,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-95",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 2160,
+      "y": 1720,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-96",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 3530,
+      "y": 1810,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-97",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 3690,
+      "y": 1810,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-98",
+      "name": "Stone bench",
+      "src": "detail/stone-bench.svg",
+      "x": 4570,
+      "y": 1810,
+      "width": 603,
+      "height": 423,
+      "scale": 0.2837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-99",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 4730,
+      "y": 1810,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2047,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-100",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 3430,
+      "y": 1670,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-101",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 4530,
+      "y": 1670,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-102",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 2472.3,
+      "y": 1746.6,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-103",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5810,
+      "y": 1700,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-104",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 4350,
+      "y": 3690,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-105",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5390,
+      "y": 3610,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-106",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 1380,
+      "y": 3650,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-107",
+      "name": "Terracotta pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 6540,
+      "y": 3310,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-108",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 3260,
+      "y": 2220,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-109",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 4950,
+      "y": 2210,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-110",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 3170,
+      "y": 3160,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-111",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 5050,
+      "y": 3200,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-112",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 2880,
+      "y": 3630,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-113",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 5598.3,
+      "y": 3731.2,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-114",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 6122.9,
+      "y": 3984.2,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-115",
+      "name": "Lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 1510,
+      "y": 3820,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1252,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-rim-0-extra-0",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-0-extra-0.svg",
+      "x": 2552.5,
+      "y": 2600.9,
+      "width": 245,
+      "height": 182,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5040816326530613,
+        "y": 0.6589982798749449
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-0-extra-1",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-0-extra-1.svg",
+      "x": 2865,
+      "y": 2200,
+      "width": 76,
+      "height": 246,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5657894736842105,
+        "y": 0.5975609756097561
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-2-extra-0",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-2-extra-0.svg",
+      "x": 5712.5,
+      "y": 2484,
+      "width": 262,
+      "height": 187,
+      "scale": 1,
+      "anchor": {
+        "x": 0.49427480916030536,
+        "y": 0.598714099080638
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-2-extra-1",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-2-extra-1.svg",
+      "x": 6634.6,
+      "y": 2664,
+      "width": 186,
+      "height": 242,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5406835890026663,
+        "y": 0.5951463790446844
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-3-extra-0",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-3-extra-0.svg",
+      "x": 5227.5,
+      "y": 4115.4,
+      "width": 238,
+      "height": 115,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5021008403361344,
+        "y": 0.725569335009277
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-3-extra-1",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-3-extra-1.svg",
+      "x": 4492.5,
+      "y": 4115.4,
+      "width": 238,
+      "height": 115,
+      "scale": 1,
+      "anchor": {
+        "x": 0.49789915966386555,
+        "y": 0.725569335009277
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-4-extra-0",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-4-extra-0.svg",
+      "x": 4360.5,
+      "y": 4396.3,
+      "width": 168,
+      "height": 131,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5270708908811262,
+        "y": 0.6816055158827855
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-5-extra-0",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-5-extra-0.svg",
+      "x": 6177.5,
+      "y": 1755.7,
+      "width": 190,
+      "height": 114,
+      "scale": 1,
+      "anchor": {
+        "x": 0.49736842105263157,
+        "y": 0.6990970729923667
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-5-extra-1",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-5-extra-1.svg",
+      "x": 5622.5,
+      "y": 2144.3,
+      "width": 190,
+      "height": 114,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5026315789473684,
+        "y": 0.7219555585865828
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "olive-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 2300,
+      "y": 1240,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-1",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 2640,
+      "y": 1070,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-2",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 3320,
+      "y": 960,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-3",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 5340,
+      "y": 1180,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-4",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 5920,
+      "y": 1370,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-5",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 6500,
+      "y": 1920,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-6",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 1570,
+      "y": 2350,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-7",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 2770,
+      "y": 2370,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-8",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 2060,
+      "y": 2880,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-9",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 1711.9,
+      "y": 3828.7,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-10",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 1813.3,
+      "y": 4412.2,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-12",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 4778,
+      "y": 4457.7,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-13",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 5408.9,
+      "y": 4228.9,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-14",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 6713,
+      "y": 3803.5,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-15",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 6810,
+      "y": 2690,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-16",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 5550,
+      "y": 3360,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-17",
+      "name": "Olive tree",
+      "src": "detail/olive-tree.svg",
+      "x": 650,
+      "y": 1240,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1151,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "olive-18",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 6500,
+      "y": 5110,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3420999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-0-3",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 6711.4,
+      "y": 3539.4,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2149,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-1-2",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 3524.4,
+      "y": 4032,
+      "width": 180,
+      "height": 360,
+      "scale": 1.3922999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-2-0",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 6170.9,
+      "y": 3642.7,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1044,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-3-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 2356.9,
+      "y": 1485.6,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1904000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-4-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 1325.2,
+      "y": 2472.9,
+      "width": 180,
+      "height": 360,
+      "scale": 1.3771,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-5-2",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 5004.1,
+      "y": 4285.8,
+      "width": 180,
+      "height": 360,
+      "scale": 1.3195999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-6-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 2693.6,
+      "y": 3071.1,
+      "width": 180,
+      "height": 360,
+      "scale": 1.3805999999999998,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-7-4",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 944.2,
+      "y": 1014.5,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3391,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-8-3",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 5536.9,
+      "y": 2317.4,
+      "width": 476,
+      "height": 417,
+      "scale": 1.0567,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-9-2",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 4946.6,
+      "y": 1089.6,
+      "width": 180,
+      "height": 360,
+      "scale": 1.4029,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-10-2",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 4107.1,
+      "y": 866.5,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1933,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-11-3",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 6821.7,
+      "y": 4924.2,
+      "width": 476,
+      "height": 417,
+      "scale": 1.0917999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-12-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 5488.5,
+      "y": 1387.8,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3143,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-13-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 2606.1,
+      "y": 1371,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1682000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-14-4",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 963.7,
+      "y": 1485.8,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1311,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-15-2",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 6659.9,
+      "y": 2223.1,
+      "width": 476,
+      "height": 417,
+      "scale": 1.1282999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-16-4",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 1231,
+      "y": 1107.5,
+      "width": 180,
+      "height": 360,
+      "scale": 1.384,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-17-0",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 3751.9,
+      "y": 1002,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1977,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-18-2",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 4621.6,
+      "y": 914.4,
+      "width": 180,
+      "height": 360,
+      "scale": 1.2734,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-19-3",
+      "name": "Olive grove tree",
+      "src": "detail/olive-tree.svg",
+      "x": 3824.5,
+      "y": 3698.5,
+      "width": 476,
+      "height": 417,
+      "scale": 1.0929,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-20-2",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 2900.9,
+      "y": 2050.9,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2975999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": true
+    },
+    {
+      "id": "grove-21-3",
+      "name": "Garden tree",
+      "src": "reuse/tree-2.svg",
+      "x": 6267.7,
+      "y": 5006,
+      "width": 180,
+      "height": 360,
+      "scale": 1.3657000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-22-3",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 6887.9,
+      "y": 3447.4,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3376,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-23-3",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 5136.8,
+      "y": 1228.8,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2182,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-24-3",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 2097.2,
+      "y": 1274.2,
+      "width": 150,
+      "height": 380,
+      "scale": 1.3179,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-25-2",
+      "name": "Garden tree",
+      "src": "reuse/tree-5.svg",
+      "x": 3612.3,
+      "y": 809.2,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1947,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-poplar-283",
+      "name": "Grove poplar tree",
+      "src": "reuse/tree-5.svg",
+      "x": 3722.2,
+      "y": 4120.2,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2597,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-poplar-3709",
+      "name": "Grove poplar tree",
+      "src": "reuse/tree-5.svg",
+      "x": 3314.3,
+      "y": 3936.4,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2045,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-poplar-9953",
+      "name": "Grove poplar tree",
+      "src": "reuse/tree-5.svg",
+      "x": 6660.4,
+      "y": 5259.7,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1956,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-poplar-10762",
+      "name": "Grove poplar tree",
+      "src": "reuse/tree-5.svg",
+      "x": 6901.9,
+      "y": 5267.1,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2107,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "grove-poplar-18681",
+      "name": "Grove poplar tree",
+      "src": "reuse/tree-5.svg",
+      "x": 1534.6,
+      "y": 3686.6,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2807,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-174",
+      "name": "Rim flowering bush",
+      "src": "reuse/bush-2.svg",
+      "x": 1989.3,
+      "y": 4447.1,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "arc-rim-1-10",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-1-10.svg",
+      "x": 1859.9,
+      "y": 3922.4,
+      "width": 150,
+      "height": 243,
+      "scale": 1,
+      "anchor": {
+        "x": 0.4461933167633212,
+        "y": 0.6025046569540675
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "arc-rim-3-5",
+      "name": "Curved olivewood bench",
+      "src": "detail/arc-rim-3-5.svg",
+      "x": 4732.4,
+      "y": 4145,
+      "width": 273,
+      "height": 93,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5105076535340901,
+        "y": 0.7955899695959282
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "cathedral-177",
+      "name": "Rim lantern",
+      "src": "reuse/street--lamp-lantern.svg",
+      "x": 4492.5,
+      "y": 3640.2,
+      "width": 432,
+      "height": 1837,
+      "scale": 0.1361,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-178",
+      "name": "Rim flowering bush",
+      "src": "reuse/bush-2.svg",
+      "x": 6421.5,
+      "y": 2042.3,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-179",
+      "name": "Rim flowering bush",
+      "src": "reuse/bush-2.svg",
+      "x": 5474.8,
+      "y": 2123.6,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-180",
+      "name": "Rim flower pot",
+      "src": "detail/terracotta-pot.svg",
+      "x": 5345,
+      "y": 1950,
+      "width": 536,
+      "height": 513,
+      "scale": 0.2827,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-181",
+      "name": "Rim flowering bush",
+      "src": "reuse/bush-2.svg",
+      "x": 6325.2,
+      "y": 1776.4,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-182",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2798,
+      "y": 2200,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-183",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2791.8,
+      "y": 2262.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-184",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2773.2,
+      "y": 2323.2,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-185",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2742.7,
+      "y": 2381.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-186",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2701,
+      "y": 2435.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-187",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2649,
+      "y": 2484.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-188",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2587.9,
+      "y": 2526.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-189",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2519,
+      "y": 2562,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-190",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2443.9,
+      "y": 2589.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-191",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2364.2,
+      "y": 2607.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-192",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2281.7,
+      "y": 2616.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-193",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2198.3,
+      "y": 2616.8,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-194",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2115.8,
+      "y": 2607.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-195",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 1779,
+      "y": 2435.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-196",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 1737.3,
+      "y": 2381.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-197",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 1706.8,
+      "y": 2323.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-198",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 1688.2,
+      "y": 2262.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-199",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 1831,
+      "y": 1915.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-200",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 1892.1,
+      "y": 1873.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-201",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 1961,
+      "y": 1838,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-202",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2036.1,
+      "y": 1810.9,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-203",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2115.8,
+      "y": 1792.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-204",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2198.3,
+      "y": 1783.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-205",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2281.7,
+      "y": 1783.2,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-206",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2364.2,
+      "y": 1792.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-207",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2443.9,
+      "y": 1810.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-208",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2701,
+      "y": 1964.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-209",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2742.7,
+      "y": 2018.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-210",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2773.2,
+      "y": 2076.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-211",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2791.8,
+      "y": 2137.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-212",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 3238,
+      "y": 4100,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-213",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3230.4,
+      "y": 4171.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-214",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2982.7,
+      "y": 4473.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-215",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2899,
+      "y": 4514,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-216",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2807.7,
+      "y": 4545,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-217",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2710.9,
+      "y": 4566,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-218",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2063,
+      "y": 4425.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-219",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 1999.8,
+      "y": 4369.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-220",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 1949.1,
+      "y": 4307.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-221",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 1912.1,
+      "y": 3959.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-222",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 1949.1,
+      "y": 3892.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-223",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2312.3,
+      "y": 3655,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-224",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2409.1,
+      "y": 3634,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-225",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2509.3,
+      "y": 3623.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-226",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2610.7,
+      "y": 3623.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-227",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2710.9,
+      "y": 3634,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-228",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 2807.7,
+      "y": 3655,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-229",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 2899,
+      "y": 3686,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-230",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 2982.7,
+      "y": 3726.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-231",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3057,
+      "y": 3774.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-232",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 3120.2,
+      "y": 3830.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-233",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 3170.9,
+      "y": 3892.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-234",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3207.9,
+      "y": 3959.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-235",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 3230.4,
+      "y": 4028.8,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-236",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6658,
+      "y": 2910,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-237",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6495.7,
+      "y": 3214.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-238",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6095.4,
+      "y": 3356.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-239",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6004.6,
+      "y": 3356.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-240",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5914.7,
+      "y": 3346.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-241",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5827.9,
+      "y": 3327,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-242",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5746,
+      "y": 3298,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-243",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5670.9,
+      "y": 3260.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-244",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5604.3,
+      "y": 3214.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-245",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5547.6,
+      "y": 3162.4,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-246",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5502.2,
+      "y": 3104.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-247",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5469,
+      "y": 3042.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-248",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5448.8,
+      "y": 2976.8,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-249",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5442,
+      "y": 2910,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-250",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5604.3,
+      "y": 2605.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-251",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5670.9,
+      "y": 2559.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-252",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5746,
+      "y": 2522,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-253",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5827.9,
+      "y": 2493,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-254",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5914.7,
+      "y": 2473.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-255",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6004.6,
+      "y": 2463.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-256",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6095.4,
+      "y": 2463.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-257",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6429.1,
+      "y": 2559.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-258",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6495.7,
+      "y": 2605.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-259",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6552.4,
+      "y": 2657.6,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-260",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6597.8,
+      "y": 2715.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-261",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6631,
+      "y": 2777.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-262",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6651.2,
+      "y": 2843.2,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-263",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5461.8,
+      "y": 4003.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-264",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5411.9,
+      "y": 4034.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-265",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5349.7,
+      "y": 4061.9,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-266",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5276.5,
+      "y": 4086.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-267",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5194,
+      "y": 4106.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-268",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5104,
+      "y": 4121.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-269",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5008.6,
+      "y": 4132,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-270",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4909.9,
+      "y": 4137.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-271",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4810.1,
+      "y": 4137.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-272",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4711.4,
+      "y": 4132,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-273",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4616,
+      "y": 4121.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-274",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4526,
+      "y": 4106.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-275",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4443.5,
+      "y": 4086.1,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-276",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4370.3,
+      "y": 4061.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-277",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4308.1,
+      "y": 4034.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-278",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4258.2,
+      "y": 4003.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-279",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4221.7,
+      "y": 3970.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-280",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4199.5,
+      "y": 3935.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-281",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4258.2,
+      "y": 3796.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-282",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4308.1,
+      "y": 3765.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-283",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4370.3,
+      "y": 3738.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-284",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4443.5,
+      "y": 3713.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-285",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4526,
+      "y": 3693.9,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-286",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4616,
+      "y": 3678.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-287",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4711.4,
+      "y": 3668,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-288",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4810.1,
+      "y": 3662.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-289",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4909.9,
+      "y": 3662.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-290",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4388,
+      "y": 4510,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-291",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4380.9,
+      "y": 4542.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-292",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4359.7,
+      "y": 4574.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-293",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4324.8,
+      "y": 4604.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-294",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4277.1,
+      "y": 4632.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-295",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3282.3,
+      "y": 4658.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-296",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 3222.9,
+      "y": 4632.8,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-297",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 3175.2,
+      "y": 4604.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-298",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3140.3,
+      "y": 4574.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-299",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 3119.1,
+      "y": 4542.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-300",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3431,
+      "y": 4321.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-301",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 3516.9,
+      "y": 4307.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-302",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 3608,
+      "y": 4297.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-303",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 3702.3,
+      "y": 4292.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-304",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 3797.7,
+      "y": 4292.6,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-305",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4217.7,
+      "y": 4361.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-306",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4277.1,
+      "y": 4387.2,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-307",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 4324.8,
+      "y": 4415.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-308",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 4359.7,
+      "y": 4445.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-309",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 4380.9,
+      "y": 4477.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-310",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6388,
+      "y": 1950,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-311",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6382.5,
+      "y": 1981,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-312",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6366.3,
+      "y": 2011.3,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-313",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6339.7,
+      "y": 2040.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-314",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6303.2,
+      "y": 2067.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-315",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6257.7,
+      "y": 2091.5,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-316",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5936.5,
+      "y": 2157.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-317",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5863.5,
+      "y": 2157.4,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-318",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5791.4,
+      "y": 2152.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-319",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5721.7,
+      "y": 2143.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-320",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5656,
+      "y": 2130.1,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-321",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5595.7,
+      "y": 2112.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-322",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5542.3,
+      "y": 2091.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-323",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5496.8,
+      "y": 2067.2,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-324",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5460.3,
+      "y": 2040.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-325",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5433.7,
+      "y": 2011.3,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-326",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5417.5,
+      "y": 1981,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-327",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 5412,
+      "y": 1950,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-328",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5417.5,
+      "y": 1919,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-329",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5433.7,
+      "y": 1888.7,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-330",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 5863.5,
+      "y": 1742.6,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-331",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 5936.5,
+      "y": 1742.6,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-332",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6008.6,
+      "y": 1747.2,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-333",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6078.3,
+      "y": 1756.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-334",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6144,
+      "y": 1769.9,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-335",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6204.3,
+      "y": 1787.4,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-336",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6257.7,
+      "y": 1808.5,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-337",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6303.2,
+      "y": 1832.8,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-338",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-1.svg",
+      "x": 6339.7,
+      "y": 1859.8,
+      "width": 48,
+      "height": 36,
+      "scale": 1.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-339",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-2.svg",
+      "x": 6366.3,
+      "y": 1888.7,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5278,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-340",
+      "name": "Daisy flower border",
+      "src": "reuse/flower-3.svg",
+      "x": 6382.5,
+      "y": 1919,
+      "width": 44,
+      "height": 36,
+      "scale": 1.7778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-341",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 2190,
+      "y": 1275,
+      "width": 130,
+      "height": 100,
+      "scale": 1.0432000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-342",
+      "name": "Grove flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 2405,
+      "y": 1310,
+      "width": 48,
+      "height": 36,
+      "scale": 2.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-343",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 2530,
+      "y": 1105,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9809,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-344",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 2745,
+      "y": 1140,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8369,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-345",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 3210,
+      "y": 995,
+      "width": 116,
+      "height": 104,
+      "scale": 0.9454,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-346",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 3425,
+      "y": 1030,
+      "width": 116,
+      "height": 104,
+      "scale": 0.9485,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-347",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 5230,
+      "y": 1215,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9156,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-348",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 5445,
+      "y": 1250,
+      "width": 130,
+      "height": 100,
+      "scale": 1.1369,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-349",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 5810,
+      "y": 1405,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8152,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-350",
+      "name": "Grove flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 6025,
+      "y": 1440,
+      "width": 48,
+      "height": 36,
+      "scale": 2.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-351",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 1460,
+      "y": 2385,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9997,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-352",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 2875,
+      "y": 2440,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8662000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-353",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 1950,
+      "y": 2915,
+      "width": 116,
+      "height": 104,
+      "scale": 0.9037999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-354",
+      "name": "Grove flowers",
+      "src": "reuse/flower-3.svg",
+      "x": 2165,
+      "y": 2950,
+      "width": 44,
+      "height": 36,
+      "scale": 2.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-355",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 1918.3,
+      "y": 4482.2,
+      "width": 168,
+      "height": 110,
+      "scale": 1.0028,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-356",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 4668,
+      "y": 4492.7,
+      "width": 116,
+      "height": 104,
+      "scale": 1.0937000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-357",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 6915,
+      "y": 2760,
+      "width": 116,
+      "height": 104,
+      "scale": 1.083,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-358",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 540,
+      "y": 1275,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8653,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-359",
+      "name": "Grove flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 755,
+      "y": 1310,
+      "width": 48,
+      "height": 36,
+      "scale": 2.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-360",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 6390,
+      "y": 5145,
+      "width": 116,
+      "height": 104,
+      "scale": 1.0176,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-361",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 6605,
+      "y": 5180,
+      "width": 116,
+      "height": 104,
+      "scale": 0.8189,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-362",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 6816.4,
+      "y": 3609.4,
+      "width": 130,
+      "height": 100,
+      "scale": 1.0308,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-363",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3629.4,
+      "y": 4102,
+      "width": 168,
+      "height": 110,
+      "scale": 1.0285,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-364",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 6060.9,
+      "y": 3677.7,
+      "width": 116,
+      "height": 104,
+      "scale": 0.9716,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-365",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 2461.9,
+      "y": 1555.6,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9124,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-366",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 1430.2,
+      "y": 2542.9,
+      "width": 168,
+      "height": 110,
+      "scale": 1.0001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-367",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 4894.1,
+      "y": 4320.8,
+      "width": 116,
+      "height": 104,
+      "scale": 0.8847,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-368",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 5109.1,
+      "y": 4355.8,
+      "width": 116,
+      "height": 104,
+      "scale": 1.0025,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-369",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 2583.6,
+      "y": 3106.1,
+      "width": 130,
+      "height": 100,
+      "scale": 0.8857,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-370",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 834.2,
+      "y": 1049.5,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9887999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-371",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 1049.2,
+      "y": 1084.5,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9479,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-372",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 5426.9,
+      "y": 2352.4,
+      "width": 116,
+      "height": 104,
+      "scale": 1.0235,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-373",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 5641.9,
+      "y": 2387.4,
+      "width": 116,
+      "height": 104,
+      "scale": 0.9667,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-374",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 4836.6,
+      "y": 1124.6,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9148999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-375",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 5051.6,
+      "y": 1159.6,
+      "width": 130,
+      "height": 100,
+      "scale": 1.1340999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-376",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3997.1000000000004,
+      "y": 901.5,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9164,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-377",
+      "name": "Grove flowers",
+      "src": "reuse/flower-2.svg",
+      "x": 4212.1,
+      "y": 936.5,
+      "width": 48,
+      "height": 36,
+      "scale": 2.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-378",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 6711.7,
+      "y": 4959.2,
+      "width": 116,
+      "height": 104,
+      "scale": 1.105,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-379",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 6926.7,
+      "y": 4994.2,
+      "width": 116,
+      "height": 104,
+      "scale": 0.8927999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-380",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 5378.5,
+      "y": 1422.8,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9425,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-381",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 5593.5,
+      "y": 1457.8,
+      "width": 130,
+      "height": 100,
+      "scale": 0.8583,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-382",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 2496.1,
+      "y": 1406,
+      "width": 168,
+      "height": 110,
+      "scale": 1.0055,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-383",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 2711.1,
+      "y": 1441,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9863,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-384",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 853.7,
+      "y": 1520.8,
+      "width": 116,
+      "height": 104,
+      "scale": 0.896,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-385",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 1121,
+      "y": 1142.5,
+      "width": 168,
+      "height": 110,
+      "scale": 1.0189,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-386",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 3641.9,
+      "y": 1037,
+      "width": 116,
+      "height": 104,
+      "scale": 0.9556,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-387",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 3856.9,
+      "y": 1072,
+      "width": 116,
+      "height": 104,
+      "scale": 1.014,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-388",
+      "name": "Grove flowers",
+      "src": "reuse/flower-1.svg",
+      "x": 4726.6,
+      "y": 984.4,
+      "width": 48,
+      "height": 36,
+      "scale": 2.2778,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-389",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3714.5,
+      "y": 3733.5,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8007000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-390",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 6372.7,
+      "y": 5076,
+      "width": 130,
+      "height": 100,
+      "scale": 1.1091,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-391",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 6777.9,
+      "y": 3482.4,
+      "width": 168,
+      "height": 110,
+      "scale": 0.9686,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-392",
+      "name": "Garden bush",
+      "src": "reuse/bush-3.svg",
+      "x": 5241.8,
+      "y": 1298.8,
+      "width": 116,
+      "height": 104,
+      "scale": 0.8757,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-393",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3502.3,
+      "y": 844.2,
+      "width": 168,
+      "height": 110,
+      "scale": 0.7767000000000001,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-394",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 3717.3,
+      "y": 879.2,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8219,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-395",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 3419.3,
+      "y": 4006.4,
+      "width": 130,
+      "height": 100,
+      "scale": 1.1129,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-396",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 6550.4,
+      "y": 5294.7,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8623999999999999,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-397",
+      "name": "Garden bush",
+      "src": "reuse/bush-2.svg",
+      "x": 6765.4,
+      "y": 5329.7,
+      "width": 168,
+      "height": 110,
+      "scale": 0.8121,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-398",
+      "name": "Garden bush",
+      "src": "reuse/bush-1.svg",
+      "x": 1424.6,
+      "y": 3721.6,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9161,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-399",
+      "name": "Picnic basket",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 2550,
+      "y": 1380,
+      "width": 634,
+      "height": 565,
+      "scale": 0.177,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-400",
+      "name": "Picnic basket",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 1540,
+      "y": 2600,
+      "width": 634,
+      "height": 565,
+      "scale": 0.177,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-401",
+      "name": "Picnic basket",
+      "src": "reuse/street--picnic-basket.svg",
+      "x": 5300,
+      "y": 4420,
+      "width": 634,
+      "height": 565,
+      "scale": 0.177,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-402",
+      "name": "Wayfinding sign",
+      "src": "reuse/street--signpost-three-way.svg",
+      "x": 2828.3,
+      "y": 2878.3,
+      "width": 834,
+      "height": 1333,
+      "scale": 0.1425,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-403",
+      "name": "Wayfinding sign",
+      "src": "reuse/street--signpost-three-way.svg",
+      "x": 4440,
+      "y": 4370,
+      "width": 834,
+      "height": 1333,
+      "scale": 0.1425,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-404",
+      "name": "Cafe umbrella",
+      "src": "reuse/street--umbrella-cafe.svg",
+      "x": 6580,
+      "y": 3540,
+      "width": 1592,
+      "height": 1693,
+      "scale": 0.1477,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-405",
+      "name": "Cafe umbrella",
+      "src": "reuse/street--umbrella-cafe.svg",
+      "x": 6580,
+      "y": 3800,
+      "width": 1592,
+      "height": 1693,
+      "scale": 0.1477,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-406",
+      "name": "Cafe umbrella",
+      "src": "reuse/street--umbrella-cafe.svg",
+      "x": 6200,
+      "y": 4270.3,
+      "width": 1592,
+      "height": 1693,
+      "scale": 0.1477,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-407",
+      "name": "Sandcastle",
+      "src": "reuse/beach--sandcastle-small.svg",
+      "x": 6680,
+      "y": 3650,
+      "width": 804,
+      "height": 553,
+      "scale": 0.2532,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-408",
+      "name": "Beach ball",
+      "src": "reuse/beach--beach-ball.svg",
+      "x": 6276.1,
+      "y": 3799.4,
+      "width": 394,
+      "height": 393,
+      "scale": 0.2036,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-412",
+      "name": "Pond reeds",
+      "src": "reuse/nature--reeds.svg",
+      "x": 1510,
+      "y": 3080,
+      "width": 418,
+      "height": 718,
+      "scale": 0.2019,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-413",
+      "name": "Pond reeds",
+      "src": "reuse/nature--reeds.svg",
+      "x": 1930,
+      "y": 3639.7,
+      "width": 418,
+      "height": 718,
+      "scale": 0.2019,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-414",
+      "name": "Pond rim rock",
+      "src": "reuse/nature--rock-round.svg",
+      "x": 1534,
+      "y": 3607.9,
+      "width": 387,
+      "height": 249,
+      "scale": 0.3092,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-415",
+      "name": "Pond rim rock",
+      "src": "reuse/nature--rock-flat.svg",
+      "x": 1078.5,
+      "y": 2949.1,
+      "width": 741,
+      "height": 275,
+      "scale": 0.28,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-416",
+      "name": "Pond rim rock",
+      "src": "reuse/nature--rock-round.svg",
+      "x": 1534,
+      "y": 3012.1,
+      "width": 387,
+      "height": 249,
+      "scale": 0.3574,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-417",
+      "name": "Pond rim rock",
+      "src": "reuse/nature--rock-round.svg",
+      "x": 2006,
+      "y": 3012.1,
+      "width": 387,
+      "height": 249,
+      "scale": 0.3092,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-418",
+      "name": "Pond cattails",
+      "src": "reuse/nature--cattails.svg",
+      "x": 2124.6,
+      "y": 3097,
+      "width": 442,
+      "height": 791,
+      "scale": 0.1517,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-419",
+      "name": "Supply crates",
+      "src": "reuse/supply-crates.svg",
+      "x": 1980,
+      "y": 1570,
+      "width": 160,
+      "height": 130,
+      "scale": 0.7692,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-420",
+      "name": "Olive barrel",
+      "src": "reuse/barrel-seeds.svg",
+      "x": 2110,
+      "y": 1590,
+      "width": 499,
+      "height": 409,
+      "scale": 0.2689,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-421",
+      "name": "Supply crates",
+      "src": "reuse/supply-crates.svg",
+      "x": 4343.4,
+      "y": 4977.7,
+      "width": 160,
+      "height": 130,
+      "scale": 0.7692,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-422",
+      "name": "Olive barrel",
+      "src": "reuse/barrel-seeds.svg",
+      "x": 4520.7,
+      "y": 4950.7,
+      "width": 499,
+      "height": 409,
+      "scale": 0.2689,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-423",
+      "name": "Supply crates",
+      "src": "reuse/supply-crates.svg",
+      "x": 6628.3,
+      "y": 3268.3,
+      "width": 160,
+      "height": 130,
+      "scale": 0.7692,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "cathedral-424",
+      "name": "Olive barrel",
+      "src": "reuse/barrel-seeds.svg",
+      "x": 6737.8,
+      "y": 3299.2,
+      "width": 499,
+      "height": 409,
+      "scale": 0.2689,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "flip": false
+    },
+    {
+      "id": "close-activity-1-0",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 2768,
+      "y": 2462.9,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "name": "Potted olive tree",
+      "src": "detail/olive-pot.svg",
+      "width": 140,
+      "height": 193,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.94
+      },
+      "id": "close-activity-1-1",
+      "x": 2768,
+      "y": 1937.1,
+      "wind": false
+    },
+    {
+      "id": "close-activity-1-2",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 2363.9,
+      "y": 2664.1,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-activity-1-4",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 1605,
+      "y": 2200,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-activity-2-0",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 2707.3,
+      "y": 3577.1,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "name": "Potted olive tree",
+      "src": "detail/olive-pot.svg",
+      "width": 140,
+      "height": 193,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.94
+      },
+      "id": "close-activity-2-1",
+      "x": 3187.8,
+      "y": 3803.8,
+      "wind": false
+    },
+    {
+      "id": "close-activity-2-2",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 2058.8,
+      "y": 4533,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "name": "Potted olive tree",
+      "src": "detail/olive-pot.svg",
+      "width": 140,
+      "height": 193,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.94
+      },
+      "id": "close-activity-2-3",
+      "x": 1765.7,
+      "y": 3928.5,
+      "wind": false
+    },
+    {
+      "id": "close-activity-2-4",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 1869.9,
+      "y": 3771.7,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-activity-3-0",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 6430.6,
+      "y": 2491.6,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-activity-3-2",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 5520.5,
+      "y": 3229.2,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-activity-3-4",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 6117.1,
+      "y": 3410.7,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "name": "Potted olive tree",
+      "src": "detail/olive-pot.svg",
+      "width": 140,
+      "height": 193,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.94
+      },
+      "id": "close-activity-3-5",
+      "x": 6720.3,
+      "y": 2645.6,
+      "wind": false
+    },
+    {
+      "id": "close-stalls-1-0",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 5517,
+      "y": 4038.2,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-stalls-1-2",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 4643.7,
+      "y": 3619.5,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-stalls-1-4",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 4933,
+      "y": 4191.7,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "name": "Potted olive tree",
+      "src": "detail/olive-pot.svg",
+      "width": 140,
+      "height": 193,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.94
+      },
+      "id": "close-stalls-1-5",
+      "x": 5158.5,
+      "y": 4195.7,
+      "wind": false
+    },
+    {
+      "id": "close-stalls-2-0",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 4344.5,
+      "y": 4661.8,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-stalls-3-0",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 5655.1,
+      "y": 2246.5,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "name": "Potted olive tree",
+      "src": "detail/olive-pot.svg",
+      "width": 140,
+      "height": 193,
+      "scale": 0.85,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.94
+      },
+      "id": "close-stalls-3-1",
+      "x": 6201.7,
+      "y": 1667,
+      "wind": false
+    },
+    {
+      "id": "close-piazza-18",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 4252.7,
+      "y": 1787.7,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    },
+    {
+      "id": "close-piazza-21",
+      "name": "Courtyard lantern",
+      "src": "centre/lamp-1.svg",
+      "x": 5028.2,
+      "y": 2132.1,
+      "width": 46.48,
+      "height": 191.73,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9913419913419923
+      },
+      "shadow": false,
+      "wind": false
+    }
+  ]
+}

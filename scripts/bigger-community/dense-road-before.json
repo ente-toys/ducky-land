@@ -1,0 +1,10 @@
+{
+  "newDryLandArea": 48131086.45816361,
+  "roadArea": 17431871.74955412,
+  "roadPercent": 36.217490674568936,
+  "roadAndBankPercent": 39.61744160538304,
+  "mainWidth": 335,
+  "links": 13,
+  "lanes": 4,
+  "coastLoop": true
+}

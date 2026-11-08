@@ -1,0 +1,387 @@
+{
+ "communities": [
+  {
+   "id": "bobbinbell",
+   "name": "Bobbinbell Green",
+   "x": -800,
+   "y": 1550,
+   "point": [
+    -750,
+    1740
+   ],
+   "floor": [
+    320,
+    215
+   ],
+   "kind": "garden",
+   "people": "Costume makers and ribbon stitchers",
+   "homes": 5,
+   "work": "Open sewing yard, ribbon market and washing green"
+  },
+  {
+   "id": "cloudpop",
+   "name": "Cloudpop Mews",
+   "x": 4100,
+   "y": -430,
+   "point": [
+    3950,
+    -240
+   ],
+   "floor": [
+    380,
+    180
+   ],
+   "kind": "garden",
+   "people": "Balloon riggers and wish couriers",
+   "homes": 6,
+   "work": "Balloon repair benches, tether garden and ticket dispatch"
+  },
+  {
+   "id": "waddleshow",
+   "name": "Waddleshow Yard",
+   "x": 8030,
+   "y": 3110,
+   "point": [
+    7860,
+    3250
+   ],
+   "floor": [
+    340,
+    240
+   ],
+   "kind": "paved",
+   "people": "Parade puppeteers, musicians and float builders",
+   "homes": 5,
+   "work": "Goose-float workshop, prop yard and rehearsal stage"
+  },
+  {
+   "id": "sugarspoon",
+   "name": "Sugarspoon Harbour",
+   "x": 2450,
+   "y": 5150,
+   "point": [
+    2420,
+    5330
+   ],
+   "floor": [
+    420,
+    200
+   ],
+   "kind": "paved",
+   "people": "Bakers and harbour delivery families",
+   "homes": 6,
+   "work": "Communal bread oven, morning market, flour store and delivery jetty"
+  }
+ ],
+ "homes": [
+  {
+   "community": "bobbinbell",
+   "x": -1370,
+   "y": 1410,
+   "door": [
+    -1370,
+    1444
+   ],
+   "variant": "bobbin-cottage-0",
+   "dimensions": [
+    490,
+    495
+   ]
+  },
+  {
+   "community": "bobbinbell",
+   "x": -860,
+   "y": 1110,
+   "door": [
+    -860,
+    1144
+   ],
+   "variant": "bobbin-cottage-1",
+   "dimensions": [
+    580,
+    475
+   ]
+  },
+  {
+   "community": "bobbinbell",
+   "x": -310,
+   "y": 1400,
+   "door": [
+    -310,
+    1434
+   ],
+   "variant": "bobbin-cottage-2",
+   "dimensions": [
+    450,
+    535
+   ]
+  },
+  {
+   "community": "bobbinbell",
+   "x": -1310,
+   "y": 2050,
+   "door": [
+    -1310,
+    2084
+   ],
+   "variant": "bobbin-cottage-3",
+   "dimensions": [
+    560,
+    510
+   ]
+  },
+  {
+   "community": "bobbinbell",
+   "x": -270,
+   "y": 2140,
+   "door": [
+    -270,
+    2174
+   ],
+   "variant": "bobbin-cottage-4",
+   "dimensions": [
+    510,
+    465
+   ]
+  },
+  {
+   "community": "cloudpop",
+   "x": 3510,
+   "y": -590,
+   "door": [
+    3510,
+    -556
+   ],
+   "variant": "balloon-caravan-0",
+   "dimensions": [
+    490,
+    495
+   ]
+  },
+  {
+   "community": "cloudpop",
+   "x": 4030,
+   "y": -650,
+   "door": [
+    4030,
+    -616
+   ],
+   "variant": "balloon-caravan-1",
+   "dimensions": [
+    580,
+    475
+   ]
+  },
+  {
+   "community": "cloudpop",
+   "x": 4550,
+   "y": -560,
+   "door": [
+    4550,
+    -526
+   ],
+   "variant": "balloon-caravan-2",
+   "dimensions": [
+    450,
+    535
+   ]
+  },
+  {
+   "community": "cloudpop",
+   "x": 3030,
+   "y": -550,
+   "door": [
+    3030,
+    -516
+   ],
+   "variant": "balloon-caravan-3",
+   "dimensions": [
+    560,
+    510
+   ]
+  },
+  {
+   "community": "cloudpop",
+   "x": 5110,
+   "y": -500,
+   "door": [
+    5110,
+    -466
+   ],
+   "variant": "balloon-caravan-4",
+   "dimensions": [
+    510,
+    465
+   ]
+  },
+  {
+   "community": "cloudpop",
+   "x": 4510,
+   "y": 210,
+   "door": [
+    4510,
+    244
+   ],
+   "variant": "balloon-caravan-5",
+   "dimensions": [
+    545,
+    525
+   ]
+  },
+  {
+   "community": "waddleshow",
+   "x": 7470,
+   "y": 2960,
+   "door": [
+    7470,
+    2994
+   ],
+   "variant": "parade-home-0",
+   "dimensions": [
+    490,
+    495
+   ]
+  },
+  {
+   "community": "waddleshow",
+   "x": 8000,
+   "y": 2820,
+   "door": [
+    8000,
+    2854
+   ],
+   "variant": "parade-home-1",
+   "dimensions": [
+    580,
+    475
+   ]
+  },
+  {
+   "community": "waddleshow",
+   "x": 8670,
+   "y": 3010,
+   "door": [
+    8670,
+    3044
+   ],
+   "variant": "parade-home-2",
+   "dimensions": [
+    450,
+    535
+   ]
+  },
+  {
+   "community": "waddleshow",
+   "x": 7470,
+   "y": 3650,
+   "door": [
+    7470,
+    3684
+   ],
+   "variant": "parade-home-3",
+   "dimensions": [
+    560,
+    510
+   ]
+  },
+  {
+   "community": "waddleshow",
+   "x": 8510,
+   "y": 3690,
+   "door": [
+    8510,
+    3724
+   ],
+   "variant": "parade-home-4",
+   "dimensions": [
+    510,
+    465
+   ]
+  },
+  {
+   "community": "sugarspoon",
+   "x": 1660,
+   "y": 4870,
+   "door": [
+    1660,
+    4904
+   ],
+   "variant": "sugar-cottage-0",
+   "dimensions": [
+    490,
+    495
+   ]
+  },
+  {
+   "community": "sugarspoon",
+   "x": 2220,
+   "y": 4770,
+   "door": [
+    2220,
+    4804
+   ],
+   "variant": "sugar-cottage-1",
+   "dimensions": [
+    580,
+    475
+   ]
+  },
+  {
+   "community": "sugarspoon",
+   "x": 2800,
+   "y": 4850,
+   "door": [
+    2800,
+    4884
+   ],
+   "variant": "sugar-cottage-2",
+   "dimensions": [
+    450,
+    535
+   ]
+  },
+  {
+   "community": "sugarspoon",
+   "x": 1260,
+   "y": 5260,
+   "door": [
+    1260,
+    5294
+   ],
+   "variant": "sugar-cottage-3",
+   "dimensions": [
+    560,
+    510
+   ]
+  },
+  {
+   "community": "sugarspoon",
+   "x": 3250,
+   "y": 5120,
+   "door": [
+    3250,
+    5154
+   ],
+   "variant": "sugar-cottage-4",
+   "dimensions": [
+    510,
+    465
+   ]
+  },
+  {
+   "community": "sugarspoon",
+   "x": 2930,
+   "y": 5720,
+   "door": [
+    2930,
+    5754
+   ],
+   "variant": "sugar-cottage-5",
+   "dimensions": [
+    545,
+    525
+   ]
+  }
+ ],
+ "designBeforeBuild": true
+}

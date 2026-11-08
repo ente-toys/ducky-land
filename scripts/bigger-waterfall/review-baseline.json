@@ -1,0 +1,72 @@
+[
+  {
+    "id": "jetty-1.svg",
+    "beforeWet": 3
+  },
+  {
+    "id": "jetty-2.svg",
+    "beforeWet": 3
+  },
+  {
+    "id": "jetty-3.svg",
+    "beforeWet": 3
+  },
+  {
+    "id": "bridge-west.svg",
+    "beforeWet": 2
+  },
+  {
+    "id": "bridge-east.svg",
+    "beforeWet": 2
+  },
+  {
+    "id": "stepping-stones.svg",
+    "beforeWet": 3
+  },
+  {
+    "id": "waterfall-river-bridge-1.svg",
+    "beforeWet": 0
+  },
+  {
+    "id": "waterfall-river-bridge-2.svg",
+    "beforeWet": 2
+  },
+  {
+    "id": "community/arched-stream-bridge.svg@-970",
+    "beforeWet": 2
+  },
+  {
+    "id": "community/arched-stream-bridge.svg@1505",
+    "beforeWet": 2
+  },
+  {
+    "id": "community/arched-stream-bridge.svg@6560",
+    "beforeWet": 2
+  },
+  {
+    "id": "community/arched-stream-bridge.svg@490",
+    "beforeWet": 2
+  },
+  {
+    "id": "community/canal-deck-end.svg@west",
+    "beforeWet": 1,
+    "beforeCentreWet": false
+  },
+  {
+    "id": "community/canal-deck-end.svg@east",
+    "beforeWet": 1,
+    "beforeCentreWet": false
+  },
+  {
+    "id": "community/arched-reed-crossing.svg",
+    "beforeWet": 2
+  },
+  {
+    "id": "community/old-north-canal-pier.svg",
+    "beforeWet": 3
+  },
+  {
+    "id": "runtime-harbor",
+    "beforeWet": 2
+  }
+]

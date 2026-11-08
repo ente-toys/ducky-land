@@ -1,0 +1,12 @@
+✔ community expansion keeps every original prop, decal, deck, sleeper and collision record (2.869791ms)
+✔ community new places, complete promenade and coast loop connect to the unchanged campfire (108.041583ms)
+✔ community outer harbour floats, boards and returns to the campfire with GPU-safe ground (16.03225ms)
+✔ four community neighbourhoods have accessible homes, workplace greens and complete residential loops (182.768834ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 516.184

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="70 200 105 160" stroke-linecap="round" stroke-linejoin="round">
+<title>Leaning broadleaf tree</title>
+<desc>Five uneven, notched leaf masses with a lower-right shade and one upper-left highlight. A leaning wood trunk forks into two visible branches. No ground shadow. Bottom-centre ground anchor (130, 360). Ducky height 130.</desc>
+<g id="trunk">
+<path fill="#C88941" d="M111 359 C124 346 122 327 118 305 L109 261 C106 246 91 236 78 220 L85 213 C99 223 111 232 122 241 C132 221 145 211 157 205 L165 213 C148 231 139 248 136 266 L139 310 C139 333 141 350 153 359 Q131 357 111 359 Z"/>
+<path fill="#885931" d="M128 252 C140 230 149 220 165 213 L157 205 C145 211 132 221 122 241 L130 312 C132 337 131 348 137 358 L153 359 C141 350 139 333 139 310 L136 266 Z"/>
+<path fill="none" stroke="#39472D" stroke-width="1.93" d="M111 359 C124 346 122 327 118 305 L109 261 C106 246 91 236 78 220 L85 213 C99 223 111 232 122 241 C132 221 145 211 157 205 L165 213 C148 231 139 248 136 266 L139 310 C139 333 141 350 153 359 Q131 357 111 359 Z"/>
+<path fill="none" stroke="#885931" stroke-width="0.97" d="M119 275 Q121 286 121 296"/>
+<path fill="none" stroke="#885931" stroke-width="0.97" d="M131 323 Q128 336 132 343"/>
+</g></svg>

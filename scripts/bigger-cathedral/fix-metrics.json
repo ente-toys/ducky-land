@@ -1,0 +1,27 @@
+{
+  "waterPolygons": 79,
+  "waterArea": 6277413.671143622,
+  "newCrossings": [
+    "north-main-1",
+    "west-main-0",
+    "west-main-1",
+    "east-main-0",
+    "east-main-1",
+    "south-main-1",
+    "north-west-0",
+    "south-west-0",
+    "south-west-1",
+    "south-east-0"
+  ],
+  "retainedDecks": 8,
+  "commons": [
+    "bell-herbs",
+    "north-picnic",
+    "olive-nursery",
+    "potters-garden",
+    "bakers-wheat",
+    "harbour-allotments"
+  ],
+  "homes": 20,
+  "variantsPerCommunity": 5
+}

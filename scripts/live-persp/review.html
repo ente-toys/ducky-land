@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>Ducky Land centre perspective review</title><style>html,body,#game{margin:0;width:100%;height:100%;overflow:hidden;background:#6EC9DE}</style></head><body><div id="game"></div><script type="module">
+import {PixiIsland} from '/src/pixi/engine.js';
+import {THEME_OF} from '/src/pixi/island-maps.js';
+const views={pink:[4000,2500,.7],waterfall:[3900,3620,.7],fair:[3570,2737.5,.7],home:[2900,1450,.7]};
+const requested=new URLSearchParams(location.search).get('theme')??'pink';
+const theme=Object.hasOwn(views,requested)?requested:'pink';
+const game=new PixiIsland({onError:e=>{window.reviewError=String(e);console.error(e);}});
+window.reviewGame=game;
+await game.mount(document.querySelector('#game'));
+if(theme!=='home')game.switchIsland([...THEME_OF].find(([,t])=>t===theme)[0]);
+game.fly=null;game.follow=false;game.fitMode=false;
+const [x,y,zoom]=views[theme];Object.assign(game.camera,{x,y,zoom});Object.assign(game.target,game.camera);
+window.reviewReady=true;
+</script></body></html>

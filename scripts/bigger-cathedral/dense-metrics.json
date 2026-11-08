@@ -1,0 +1,15 @@
+{
+  "method": "Raster union at 4 world units/pixel. Sandy roads plus dark bank lip and community squares, clipped to dry extension. Excludes original island and water. Road numerator excludes the coastal beach; dry extension denominator includes that beach. Area is not the sum of overlapping road ribbons.",
+  "newDryLandArea": 38134000,
+  "before": {
+    "roadArea": 9398688,
+    "roadAreaPercent": 24.64647820842293,
+    "roadLength": 55374.42854396421
+  },
+  "after": {
+    "roadArea": 6960000,
+    "roadAreaPercent": 18.251429170818692,
+    "roadLength": 48339.63263755807
+  },
+  "reductionPercent": 25.947110915906556
+}

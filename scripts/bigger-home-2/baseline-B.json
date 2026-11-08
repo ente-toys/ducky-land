@@ -1,0 +1,4215 @@
+{
+  "origin": {
+    "x": -1322.2222222222222,
+    "y": -911.1111111111112
+  },
+  "width": 8400,
+  "height": 6000,
+  "tiles": [
+    {
+      "src": "/pixi-art/home-expansion/ground-0-0.svg",
+      "x": -1322.2222222222222,
+      "y": -911.1111111111112,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-0-1.svg",
+      "x": 77.77777777777783,
+      "y": -911.1111111111112,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-0-2.svg",
+      "x": 1477.7777777777778,
+      "y": -911.1111111111112,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-0-3.svg",
+      "x": 2877.777777777778,
+      "y": -911.1111111111112,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-0-4.svg",
+      "x": 4277.777777777777,
+      "y": -911.1111111111112,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-0-5.svg",
+      "x": 5677.777777777777,
+      "y": -911.1111111111112,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-1-0.svg",
+      "x": -1322.2222222222222,
+      "y": 588.8888888888888,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-1-1.svg",
+      "x": 77.77777777777783,
+      "y": 588.8888888888888,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-1-2.svg",
+      "x": 1477.7777777777778,
+      "y": 588.8888888888888,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-1-3.svg",
+      "x": 2877.777777777778,
+      "y": 588.8888888888888,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-1-4.svg",
+      "x": 4277.777777777777,
+      "y": 588.8888888888888,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-1-5.svg",
+      "x": 5677.777777777777,
+      "y": 588.8888888888888,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-2-0.svg",
+      "x": -1322.2222222222222,
+      "y": 2088.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-2-1.svg",
+      "x": 77.77777777777783,
+      "y": 2088.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-2-2.svg",
+      "x": 1477.7777777777778,
+      "y": 2088.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-2-3.svg",
+      "x": 2877.777777777778,
+      "y": 2088.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-2-4.svg",
+      "x": 4277.777777777777,
+      "y": 2088.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-2-5.svg",
+      "x": 5677.777777777777,
+      "y": 2088.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-3-0.svg",
+      "x": -1322.2222222222222,
+      "y": 3588.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-3-1.svg",
+      "x": 77.77777777777783,
+      "y": 3588.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-3-2.svg",
+      "x": 1477.7777777777778,
+      "y": 3588.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-3-3.svg",
+      "x": 2877.777777777778,
+      "y": 3588.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-3-4.svg",
+      "x": 4277.777777777777,
+      "y": 3588.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    },
+    {
+      "src": "/pixi-art/home-expansion/ground-3-5.svg",
+      "x": 5677.777777777777,
+      "y": 3588.8888888888887,
+      "width": 1400,
+      "height": 1500,
+      "resolution": 1
+    }
+  ],
+  "props": [
+    {
+      "id": "bigger-0",
+      "name": "cottage",
+      "asset": "cottage",
+      "src": "/pixi-art/home-expansion/cottage.svg",
+      "x": -261.11111111111114,
+      "y": 461.11111111111114,
+      "scale": 1,
+      "width": 510,
+      "height": 520,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "village",
+      "footprint": {
+        "x": -261.11111111111114,
+        "y": 393.11111111111114,
+        "rx": 167,
+        "ry": 70
+      }
+    },
+    {
+      "id": "bigger-1",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -416.6666666666667,
+      "y": 483.33333333333337,
+      "scale": 0.15,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -416.6666666666667,
+        "y": 479.33333333333337,
+        "rx": 80,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-2",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -100,
+      "y": 511.11111111111114,
+      "scale": 0.13,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -100,
+        "y": 507.11111111111114,
+        "rx": 70,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-3",
+      "name": "flower-2",
+      "asset": "flower-2",
+      "src": "/pixi-art/plants/flower-2.svg",
+      "x": -477.77777777777777,
+      "y": 466.6666666666667,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-4",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": -44.44444444444444,
+      "y": 477.77777777777777,
+      "width": 130,
+      "height": 100,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-5",
+      "name": "cottage",
+      "asset": "cottage",
+      "src": "/pixi-art/home-expansion/cottage.svg",
+      "x": -238.88888888888889,
+      "y": 1172.2222222222222,
+      "scale": 1,
+      "width": 510,
+      "height": 520,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "village",
+      "footprint": {
+        "x": -238.88888888888889,
+        "y": 1104.2222222222222,
+        "rx": 167,
+        "ry": 70
+      }
+    },
+    {
+      "id": "bigger-6",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -394.44444444444446,
+      "y": 1194.4444444444446,
+      "scale": 0.15,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -394.44444444444446,
+        "y": 1190.4444444444446,
+        "rx": 80,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-7",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -77.77777777777779,
+      "y": 1222.2222222222222,
+      "scale": 0.13,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -77.77777777777779,
+        "y": 1218.2222222222222,
+        "rx": 70,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-8",
+      "name": "flower-2",
+      "asset": "flower-2",
+      "src": "/pixi-art/plants/flower-2.svg",
+      "x": -455.5555555555556,
+      "y": 1177.7777777777778,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-9",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": -22.22222222222222,
+      "y": 1188.888888888889,
+      "width": 130,
+      "height": 100,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-10",
+      "name": "cottage",
+      "asset": "cottage",
+      "src": "/pixi-art/home-expansion/cottage.svg",
+      "x": -116.66666666666667,
+      "y": 1833.3333333333335,
+      "scale": 1,
+      "width": 510,
+      "height": 520,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "village",
+      "footprint": {
+        "x": -116.66666666666667,
+        "y": 1765.3333333333335,
+        "rx": 167,
+        "ry": 70
+      }
+    },
+    {
+      "id": "bigger-11",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -272.22222222222223,
+      "y": 1855.5555555555557,
+      "scale": 0.15,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -272.22222222222223,
+        "y": 1851.5555555555557,
+        "rx": 80,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-12",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": 44.44444444444444,
+      "y": 1883.3333333333335,
+      "scale": 0.13,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": 44.44444444444444,
+        "y": 1879.3333333333335,
+        "rx": 70,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-13",
+      "name": "flower-2",
+      "asset": "flower-2",
+      "src": "/pixi-art/plants/flower-2.svg",
+      "x": -333.33333333333337,
+      "y": 1838.888888888889,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-14",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 100,
+      "y": 1850,
+      "width": 130,
+      "height": 100,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-15",
+      "name": "cottage",
+      "asset": "cottage",
+      "src": "/pixi-art/home-expansion/cottage.svg",
+      "x": -427.77777777777777,
+      "y": 2400,
+      "scale": 1,
+      "width": 510,
+      "height": 520,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "village",
+      "footprint": {
+        "x": -427.77777777777777,
+        "y": 2332,
+        "rx": 167,
+        "ry": 70
+      }
+    },
+    {
+      "id": "bigger-16",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -583.3333333333334,
+      "y": 2422.222222222222,
+      "scale": 0.15,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -583.3333333333334,
+        "y": 2418.222222222222,
+        "rx": 80,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-17",
+      "name": "fence-picket",
+      "asset": "fence-picket",
+      "src": "/pixi-art/detail/street--fence-picket.svg",
+      "x": -266.6666666666667,
+      "y": 2450,
+      "scale": 0.13,
+      "width": 1234,
+      "height": 662,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9818731117824774
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": -266.6666666666667,
+        "y": 2446,
+        "rx": 70,
+        "ry": 14
+      }
+    },
+    {
+      "id": "bigger-18",
+      "name": "flower-2",
+      "asset": "flower-2",
+      "src": "/pixi-art/plants/flower-2.svg",
+      "x": -644.4444444444445,
+      "y": 2405.5555555555557,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-19",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": -211.11111111111111,
+      "y": 2416.666666666667,
+      "width": 130,
+      "height": 100,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-20",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 133.33333333333334,
+      "y": 177.77777777777777,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-21",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": -683.3333333333334,
+      "y": 694.4444444444445,
+      "width": 200,
+      "height": 280,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-22",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": -622.2222222222223,
+      "y": 1550,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-23",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 188.88888888888889,
+      "y": 3144.4444444444443,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-24",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": -377.77777777777777,
+      "y": 3477.777777777778,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "village"
+    },
+    {
+      "id": "bigger-25",
+      "name": "bench-wood",
+      "asset": "bench-wood",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
+      "x": 11.11111111111111,
+      "y": 3316.666666666667,
+      "scale": 0.18,
+      "width": 818,
+      "height": 463,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9740820734341252
+      },
+      "resolution": 1,
+      "zone": "village",
+      "footprint": {
+        "x": 11.11111111111111,
+        "y": 3306.666666666667,
+        "rx": 70,
+        "ry": 24
+      }
+    },
+    {
+      "id": "bigger-26",
+      "name": "gazebo",
+      "asset": "gazebo",
+      "src": "/pixi-art/home-expansion/gazebo.svg",
+      "x": 2683.3333333333335,
+      "y": -111.11111111111111,
+      "scale": 1,
+      "width": 450,
+      "height": 500,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-27",
+      "name": "bench-wood",
+      "asset": "bench-wood",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
+      "x": 2444.4444444444443,
+      "y": 55.55555555555556,
+      "scale": 0.18,
+      "width": 818,
+      "height": 463,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9740820734341252
+      },
+      "resolution": 1,
+      "zone": "garden",
+      "footprint": {
+        "x": 2444.4444444444443,
+        "y": 45.55555555555556,
+        "rx": 70,
+        "ry": 24
+      }
+    },
+    {
+      "id": "bigger-28",
+      "name": "bench-wood",
+      "asset": "bench-wood",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
+      "x": 2938.888888888889,
+      "y": 72.22222222222223,
+      "scale": 0.18,
+      "width": 818,
+      "height": 463,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9740820734341252
+      },
+      "resolution": 1,
+      "zone": "garden",
+      "footprint": {
+        "x": 2938.888888888889,
+        "y": 62.22222222222223,
+        "rx": 70,
+        "ry": 24
+      }
+    },
+    {
+      "id": "bigger-29",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 1677.7777777777778,
+      "y": -72.22222222222223,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-30",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 2211.1111111111113,
+      "y": -250,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-31",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 3238.888888888889,
+      "y": -488.8888888888889,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-32",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4005.5555555555557,
+      "y": -233.33333333333334,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-33",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2061.1111111111113,
+      "y": -133.33333333333334,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-34",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2122.222222222222,
+      "y": -177.77777777777777,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-35",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2194.4444444444443,
+      "y": -200,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-36",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2272.222222222222,
+      "y": -216.66666666666669,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-37",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2027.7777777777778,
+      "y": -72.22222222222223,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-38",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2050,
+      "y": -5.555555555555555,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-39",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2127.777777777778,
+      "y": 33.333333333333336,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-40",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 2233.3333333333335,
+      "y": 38.88888888888889,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-41",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3027.777777777778,
+      "y": -194.44444444444446,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-42",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3111.1111111111113,
+      "y": -183.33333333333334,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-43",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3188.888888888889,
+      "y": -144.44444444444446,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-44",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3250,
+      "y": -77.77777777777779,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-45",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3261.1111111111113,
+      "y": -11.11111111111111,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-46",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3177.777777777778,
+      "y": 38.88888888888889,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "garden"
+    },
+    {
+      "id": "bigger-pergola",
+      "name": "pergola",
+      "asset": "pergola",
+      "src": "/pixi-art/home-expansion/pergola.svg",
+      "x": 3550,
+      "y": -100,
+      "width": 390,
+      "height": 310,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "pergola",
+      "footprint": {
+        "poly": [
+          [
+            3394.4444444444443,
+            -120
+          ],
+          [
+            3416.666666666667,
+            -120
+          ],
+          [
+            3416.666666666667,
+            -100
+          ],
+          [
+            3394.4444444444443,
+            -100
+          ]
+        ]
+      }
+    },
+    {
+      "id": "bigger-48",
+      "name": "stall-fruit",
+      "asset": "stall-fruit",
+      "src": "/pixi-art/detail/buildings--stall-fruit.svg",
+      "x": 5488.888888888889,
+      "y": 216.66666666666669,
+      "scale": 0.22,
+      "width": 1732,
+      "height": 1545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9922330097087378
+      },
+      "resolution": 1,
+      "zone": "market",
+      "footprint": {
+        "x": 5488.888888888889,
+        "y": 204.66666666666669,
+        "rx": 148,
+        "ry": 38
+      }
+    },
+    {
+      "id": "bigger-49",
+      "name": "stall-bread",
+      "asset": "stall-bread",
+      "src": "/pixi-art/detail/buildings--stall-bread.svg",
+      "x": 5211.111111111111,
+      "y": 527.7777777777778,
+      "scale": 0.22,
+      "width": 1732,
+      "height": 1545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9922330097087378
+      },
+      "resolution": 1,
+      "zone": "market",
+      "footprint": {
+        "x": 5211.111111111111,
+        "y": 515.7777777777778,
+        "rx": 148,
+        "ry": 38
+      }
+    },
+    {
+      "id": "bigger-50",
+      "name": "stall-flower",
+      "asset": "stall-flower",
+      "src": "/pixi-art/detail/buildings--stall-flower.svg",
+      "x": 5794.444444444444,
+      "y": 550,
+      "scale": 0.22,
+      "width": 1732,
+      "height": 1545,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9922330097087378
+      },
+      "resolution": 1,
+      "zone": "market",
+      "footprint": {
+        "x": 5794.444444444444,
+        "y": 538,
+        "rx": 148,
+        "ry": 38
+      }
+    },
+    {
+      "id": "bigger-51",
+      "name": "lamp-lantern",
+      "asset": "lamp-lantern",
+      "src": "/pixi-art/detail/street--lamp-lantern.svg",
+      "x": 4950,
+      "y": 455.5555555555556,
+      "scale": 0.113,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9934676102340773
+      },
+      "resolution": 1,
+      "zone": "market",
+      "footprint": {
+        "x": 4950,
+        "y": 450.5555555555556,
+        "rx": 13,
+        "ry": 13
+      }
+    },
+    {
+      "id": "bigger-52",
+      "name": "lamp-lantern",
+      "asset": "lamp-lantern",
+      "src": "/pixi-art/detail/street--lamp-lantern.svg",
+      "x": 6022.222222222223,
+      "y": 633.3333333333334,
+      "scale": 0.113,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9934676102340773
+      },
+      "resolution": 1,
+      "zone": "market",
+      "footprint": {
+        "x": 6022.222222222223,
+        "y": 628.3333333333334,
+        "rx": 13,
+        "ry": 13
+      }
+    },
+    {
+      "id": "bigger-53",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4911.111111111111,
+      "y": 133.33333333333334,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-54",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 5872.222222222223,
+      "y": -144.44444444444446,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-55",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6094.444444444444,
+      "y": 200,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-56",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6250,
+      "y": 877.7777777777778,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-57",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 5233.333333333334,
+      "y": 877.7777777777778,
+      "width": 130,
+      "height": 100,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-58",
+      "name": "bush-2",
+      "asset": "bush-2",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 5511.111111111111,
+      "y": 1250,
+      "width": 168,
+      "height": 110,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-59",
+      "name": "bunting",
+      "asset": "bunting",
+      "src": "/pixi-art/detail/street--bunting.svg",
+      "x": 5461.111111111111,
+      "y": 300,
+      "scale": 0.31,
+      "width": 2432,
+      "height": 462,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.974025974025974
+      },
+      "resolution": 1,
+      "zone": "market"
+    },
+    {
+      "id": "bigger-60",
+      "name": "lily-pad-flower",
+      "asset": "lily-pad-flower",
+      "src": "/pixi-art/detail/nature--lily-pad-flower.svg",
+      "x": 38.88888888888889,
+      "y": 3622.222222222222,
+      "scale": 0.22,
+      "width": 632,
+      "height": 308,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.961038961038961
+      },
+      "resolution": 1,
+      "zone": "new-pond"
+    },
+    {
+      "id": "bigger-61",
+      "name": "lily-pad-flower",
+      "asset": "lily-pad-flower",
+      "src": "/pixi-art/detail/nature--lily-pad-flower.svg",
+      "x": 694.4444444444445,
+      "y": 3572.222222222222,
+      "scale": 0.2,
+      "width": 632,
+      "height": 308,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.961038961038961
+      },
+      "resolution": 1,
+      "zone": "new-pond"
+    },
+    {
+      "id": "bigger-62",
+      "name": "lily-pad-flower",
+      "asset": "lily-pad-flower",
+      "src": "/pixi-art/detail/nature--lily-pad-flower.svg",
+      "x": 555.5555555555555,
+      "y": 3683.3333333333335,
+      "scale": 0.13,
+      "width": 632,
+      "height": 308,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.961038961038961
+      },
+      "resolution": 1,
+      "zone": "new-pond"
+    },
+    {
+      "id": "bigger-64",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": -577.7777777777778,
+      "y": 3422.222222222222,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "new-pond"
+    },
+    {
+      "id": "bigger-65",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 622.2222222222223,
+      "y": 4022.222222222222,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "new-pond"
+    },
+    {
+      "id": "bigger-66",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": -155.55555555555557,
+      "y": 4033.3333333333335,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "new-pond"
+    },
+    {
+      "id": "bigger-67",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 3994.444444444445,
+      "y": 4261.111111111111,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-68",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4383.333333333334,
+      "y": 4283.333333333334,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-69",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 3350,
+      "y": 4422.222222222223,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-70",
+      "name": "picnic-table",
+      "asset": "picnic-table",
+      "src": "/pixi-art/detail/street--picnic-table.svg",
+      "x": 3750,
+      "y": 4355.555555555556,
+      "scale": 0.22,
+      "width": 1614,
+      "height": 653,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9816232771822359
+      },
+      "resolution": 1,
+      "zone": "picnic",
+      "footprint": {
+        "x": 3750,
+        "y": 4341.555555555556,
+        "rx": 118,
+        "ry": 43
+      }
+    },
+    {
+      "id": "bigger-71",
+      "name": "picnic-blanket",
+      "asset": "picnic-blanket",
+      "src": "/pixi-art/home-expansion/blanket-red.svg",
+      "x": 3683.3333333333335,
+      "y": 4655.555555555556,
+      "scale": 1,
+      "width": 370,
+      "height": 220,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-72",
+      "name": "picnic-blanket",
+      "asset": "picnic-blanket",
+      "src": "/pixi-art/home-expansion/blanket-blue.svg",
+      "x": 4194.444444444444,
+      "y": 4572.222222222223,
+      "scale": 1,
+      "width": 370,
+      "height": 220,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-73",
+      "name": "picnic-basket",
+      "asset": "picnic-basket",
+      "src": "/pixi-art/detail/street--picnic-basket.svg",
+      "x": 3738.888888888889,
+      "y": 4544.444444444444,
+      "scale": 0.12,
+      "width": 634,
+      "height": 565,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9787610619469026
+      },
+      "resolution": 1,
+      "zone": "picnic",
+      "footprint": {
+        "x": 3738.888888888889,
+        "y": 4544.444444444444,
+        "rx": 29,
+        "ry": 17
+      }
+    },
+    {
+      "id": "bigger-74",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3222.222222222222,
+      "y": 4655.555555555556,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-75",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 4644.444444444444,
+      "y": 4466.666666666667,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-76",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 4461.111111111111,
+      "y": 4555.555555555556,
+      "width": 48,
+      "height": 36,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "picnic"
+    },
+    {
+      "id": "bigger-77",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 5694.444444444444,
+      "y": 1361.111111111111,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 5694.444444444444,
+        "y": 1361.111111111111,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-78",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 5805.555555555556,
+      "y": 1283.3333333333335,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 5805.555555555556,
+        "y": 1283.3333333333335,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-79",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 5944.444444444444,
+      "y": 1233.3333333333335,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 5944.444444444444,
+        "y": 1233.3333333333335,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-80",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 6122.222222222223,
+      "y": 1194.4444444444446,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 6122.222222222223,
+        "y": 1194.4444444444446,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-81",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 6316.666666666667,
+      "y": 1150,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 6316.666666666667,
+        "y": 1150,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-82",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 6444.444444444444,
+      "y": 1116.6666666666667,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 6444.444444444444,
+        "y": 1116.6666666666667,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-83",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 5883.333333333334,
+      "y": 2277.777777777778,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 5883.333333333334,
+        "y": 2277.777777777778,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-84",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 6038.888888888889,
+      "y": 2316.666666666667,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 6038.888888888889,
+        "y": 2316.666666666667,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-85",
+      "name": "rock-round",
+      "asset": "rock-round",
+      "src": "/pixi-art/detail/nature--rock-round.svg",
+      "x": 6200,
+      "y": 2294.4444444444443,
+      "scale": 0.18,
+      "width": 387,
+      "height": 249,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9518072289156626
+      },
+      "resolution": 1,
+      "zone": "swan-cove",
+      "footprint": {
+        "x": 6200,
+        "y": 2294.4444444444443,
+        "rx": 35,
+        "ry": 20
+      }
+    },
+    {
+      "id": "bigger-86",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6638.888888888889,
+      "y": 2388.888888888889,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "swan-cove"
+    },
+    {
+      "id": "bigger-87",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 5438.888888888889,
+      "y": 1411.111111111111,
+      "width": 200,
+      "height": 280,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "swan-cove"
+    },
+    {
+      "id": "bigger-88",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 6205.555555555556,
+      "y": 2527.777777777778,
+      "width": 130,
+      "height": 100,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 3,
+      "zone": "swan-cove"
+    },
+    {
+      "id": "bigger-swan-one",
+      "name": "swan-one",
+      "asset": "swan-one",
+      "src": "/pixi-art/home-expansion/swan-one.svg",
+      "x": 6050,
+      "y": 1694.4444444444446,
+      "width": 255,
+      "height": 275,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "swan-one"
+    },
+    {
+      "id": "bigger-swan-two",
+      "name": "swan-two",
+      "asset": "swan-two",
+      "src": "/pixi-art/home-expansion/swan-two.svg",
+      "x": 6344.444444444444,
+      "y": 1811.111111111111,
+      "width": 255,
+      "height": 275,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 2,
+      "zone": "swan-two"
+    }
+  ],
+  "coast": [
+    [
+      205.55555555555557,
+      -211.11111111111111
+    ],
+    [
+      246.74479166666669,
+      -194.83506944444446
+    ],
+    [
+      294.7916666666667,
+      -169.09722222222223
+    ],
+    [
+      338.4982638888889,
+      -135.19965277777777
+    ],
+    [
+      366.6666666666667,
+      -94.44444444444444
+    ],
+    [
+      374.69618055555554,
+      -44.314236111111114
+    ],
+    [
+      369.09722222222223,
+      14.930555555555555
+    ],
+    [
+      355.3385416666667,
+      77.82118055555556
+    ],
+    [
+      338.8888888888889,
+      138.88888888888889
+    ],
+    [
+      314.53993055555554,
+      199.17534722222223
+    ],
+    [
+      281.59722222222223,
+      260.7638888888889
+    ],
+    [
+      252.30034722222223,
+      319.7482638888889
+    ],
+    [
+      238.88888888888889,
+      372.22222222222223
+    ],
+    [
+      244.31423611111111,
+      417.92534722222223
+    ],
+    [
+      262.15277777777777,
+      458.6805555555556
+    ],
+    [
+      290.58159722222223,
+      493.70659722222223
+    ],
+    [
+      327.77777777777777,
+      522.2222222222223
+    ],
+    [
+      375.6510416666667,
+      546.0503472222223
+    ],
+    [
+      434.375,
+      564.9305555555555
+    ],
+    [
+      499.52256944444446,
+      574.9565972222223
+    ],
+    [
+      566.6666666666667,
+      572.2222222222223
+    ],
+    [
+      637.6736111111111,
+      552.5607638888889
+    ],
+    [
+      713.8888888888889,
+      519.0972222222223
+    ],
+    [
+      790.1041666666667,
+      478.86284722222223
+    ],
+    [
+      861.1111111111112,
+      438.8888888888889
+    ],
+    [
+      929.1666666666667,
+      400.08680555555554
+    ],
+    [
+      995.8333333333334,
+      359.02777777777777
+    ],
+    [
+      1054.861111111111,
+      316.2326388888889
+    ],
+    [
+      1100,
+      272.22222222222223
+    ],
+    [
+      1127.9947916666667,
+      225.78125
+    ],
+    [
+      1142.7083333333335,
+      177.08333333333334
+    ],
+    [
+      1148.5677083333335,
+      128.73263888888889
+    ],
+    [
+      1150,
+      83.33333333333334
+    ],
+    [
+      1142.013888888889,
+      41.84027777777778
+    ],
+    [
+      1124.3055555555557,
+      2.7777777777777777
+    ],
+    [
+      1108.3333333333335,
+      -34.895833333333336
+    ],
+    [
+      1105.5555555555557,
+      -72.22222222222223
+    ],
+    [
+      1118.142361111111,
+      -111.84895833333334
+    ],
+    [
+      1140.2777777777778,
+      -152.43055555555557
+    ],
+    [
+      1171.4409722222222,
+      -189.01909722222223
+    ],
+    [
+      1211.111111111111,
+      -216.66666666666669
+    ],
+    [
+      1260.8940972222222,
+      -232.72569444444446
+    ],
+    [
+      1320.486111111111,
+      -240.2777777777778
+    ],
+    [
+      1386.501736111111,
+      -242.96875
+    ],
+    [
+      1455.5555555555557,
+      -244.44444444444446
+    ],
+    [
+      1529.9479166666667,
+      -242.578125
+    ],
+    [
+      1610.4166666666667,
+      -236.45833333333334
+    ],
+    [
+      1691.232638888889,
+      -231.55381944444446
+    ],
+    [
+      1766.6666666666667,
+      -233.33333333333334
+    ],
+    [
+      1835.2430555555557,
+      -244.66145833333334
+    ],
+    [
+      1900,
+      -262.15277777777777
+    ],
+    [
+      1961.9791666666667,
+      -281.9010416666667
+    ],
+    [
+      2022.2222222222224,
+      -300
+    ],
+    [
+      2081.1631944444443,
+      -312.54340277777777
+    ],
+    [
+      2138.1944444444443,
+      -322.56944444444446
+    ],
+    [
+      2192.795138888889,
+      -336.5885416666667
+    ],
+    [
+      2244.4444444444443,
+      -361.11111111111114
+    ],
+    [
+      2291.1024305555557,
+      -402.5607638888889
+    ],
+    [
+      2333.6805555555557,
+      -455.90277777777777
+    ],
+    [
+      2376.0850694444443,
+      -510.46006944444446
+    ],
+    [
+      2422.222222222222,
+      -555.5555555555555
+    ],
+    [
+      2473.784722222222,
+      -589.9305555555555
+    ],
+    [
+      2528.472222222222,
+      -618.75
+    ],
+    [
+      2584.201388888889,
+      -640.9722222222223
+    ],
+    [
+      2638.888888888889,
+      -655.5555555555555
+    ],
+    [
+      2691.666666666667,
+      -661.2847222222223
+    ],
+    [
+      2743.75,
+      -659.0277777777778
+    ],
+    [
+      2796.1805555555557,
+      -650.8680555555555
+    ],
+    [
+      2850,
+      -638.8888888888889
+    ],
+    [
+      2904.340277777778,
+      -620.703125
+    ],
+    [
+      2959.027777777778,
+      -596.1805555555555
+    ],
+    [
+      3016.1458333333335,
+      -570.7899305555555
+    ],
+    [
+      3077.777777777778,
+      -550
+    ],
+    [
+      3145.703125,
+      -536.4149305555555
+    ],
+    [
+      3218.402777777778,
+      -526.7361111111111
+    ],
+    [
+      3293.012152777778,
+      -517.578125
+    ],
+    [
+      3366.666666666667,
+      -505.5555555555556
+    ],
+    [
+      3440.190972222222,
+      -490.4947916666667
+    ],
+    [
+      3514.5833333333335,
+      -473.95833333333337
+    ],
+    [
+      3587.2395833333335,
+      -455.1649305555556
+    ],
+    [
+      3655.5555555555557,
+      -433.33333333333337
+    ],
+    [
+      3718.185763888889,
+      -406.77083333333337
+    ],
+    [
+      3776.7361111111113,
+      -376.3888888888889
+    ],
+    [
+      3833.029513888889,
+      -345.3125
+    ],
+    [
+      3888.888888888889,
+      -316.6666666666667
+    ],
+    [
+      3945.0086805555557,
+      -293.31597222222223
+    ],
+    [
+      4000.347222222222,
+      -272.9166666666667
+    ],
+    [
+      4054.123263888889,
+      -250.78125
+    ],
+    [
+      4105.555555555556,
+      -222.22222222222223
+    ],
+    [
+      4152.430555555556,
+      -182.68229166666669
+    ],
+    [
+      4195.833333333334,
+      -135.76388888888889
+    ],
+    [
+      4239.930555555556,
+      -89.01909722222223
+    ],
+    [
+      4288.888888888889,
+      -50
+    ],
+    [
+      4344.965277777778,
+      -19.18402777777778
+    ],
+    [
+      4405.555555555556,
+      6.944444444444445
+    ],
+    [
+      4467.534722222223,
+      26.822916666666668
+    ],
+    [
+      4527.777777777778,
+      38.88888888888889
+    ],
+    [
+      4585.373263888889,
+      43.01215277777778
+    ],
+    [
+      4642.013888888889,
+      39.93055555555556
+    ],
+    [
+      4698.480902777778,
+      29.383680555555557
+    ],
+    [
+      4755.555555555556,
+      11.11111111111111
+    ],
+    [
+      4814.149305555556,
+      -17.664930555555557
+    ],
+    [
+      4873.611111111111,
+      -55.90277777777778
+    ],
+    [
+      4932.378472222223,
+      -98.13368055555556
+    ],
+    [
+      4988.888888888889,
+      -138.88888888888889
+    ],
+    [
+      5041.840277777778,
+      -180.12152777777777
+    ],
+    [
+      5092.361111111111,
+      -223.61111111111111
+    ],
+    [
+      5142.534722222223,
+      -263.62847222222223
+    ],
+    [
+      5194.444444444444,
+      -294.44444444444446
+    ],
+    [
+      5247.65625,
+      -314.7135416666667
+    ],
+    [
+      5301.388888888889,
+      -327.43055555555554
+    ],
+    [
+      5357.204861111111,
+      -333.37673611111114
+    ],
+    [
+      5416.666666666667,
+      -333.33333333333337
+    ],
+    [
+      5480.946180555556,
+      -325.73784722222223
+    ],
+    [
+      5548.958333333334,
+      -310.7638888888889
+    ],
+    [
+      5618.880208333334,
+      -291.796875
+    ],
+    [
+      5688.888888888889,
+      -272.22222222222223
+    ],
+    [
+      5760.243055555556,
+      -252.86458333333334
+    ],
+    [
+      5833.333333333334,
+      -231.94444444444446
+    ],
+    [
+      5905.034722222223,
+      -208.94097222222223
+    ],
+    [
+      5972.222222222223,
+      -183.33333333333334
+    ],
+    [
+      6034.375,
+      -155.29513888888889
+    ],
+    [
+      6093.055555555556,
+      -125
+    ],
+    [
+      6148.263888888889,
+      -91.92708333333334
+    ],
+    [
+      6200,
+      -55.55555555555556
+    ],
+    [
+      6248.394097222223,
+      -13.585069444444445
+    ],
+    [
+      6293.402777777778,
+      32.986111111111114
+    ],
+    [
+      6334.765625,
+      79.73090277777779
+    ],
+    [
+      6372.222222222223,
+      122.22222222222223
+    ],
+    [
+      6407.03125,
+      157.63888888888889
+    ],
+    [
+      6438.888888888889,
+      188.88888888888889
+    ],
+    [
+      6465.190972222223,
+      220.13888888888889
+    ],
+    [
+      6483.333333333334,
+      255.55555555555557
+    ],
+    [
+      6491.710069444444,
+      296.22395833333337
+    ],
+    [
+      6492.013888888889,
+      339.93055555555554
+    ],
+    [
+      6486.588541666667,
+      385.89409722222223
+    ],
+    [
+      6477.777777777778,
+      433.33333333333337
+    ],
+    [
+      6461.154513888889,
+      484.5920138888889
+    ],
+    [
+      6437.152777777778,
+      539.2361111111111
+    ],
+    [
+      6415.407986111111,
+      592.3177083333334
+    ],
+    [
+      6405.555555555556,
+      638.8888888888889
+    ],
+    [
+      6410.633680555556,
+      677.9947916666667
+    ],
+    [
+      6425.347222222223,
+      712.1527777777778
+    ],
+    [
+      6446.831597222223,
+      741.6232638888889
+    ],
+    [
+      6472.222222222223,
+      766.6666666666667
+    ],
+    [
+      6505.598958333334,
+      784.2013888888889
+    ],
+    [
+      6546.875,
+      795.1388888888889
+    ],
+    [
+      6586.935763888889,
+      805.7291666666667
+    ],
+    [
+      6616.666666666667,
+      822.2222222222223
+    ],
+    [
+      6635.590277777778,
+      847.0920138888889
+    ],
+    [
+      6647.916666666667,
+      876.7361111111112
+    ],
+    [
+      6651.5625,
+      908.2899305555555
+    ],
+    [
+      6644.444444444444,
+      938.8888888888889
+    ],
+    [
+      6624.001736111111,
+      969.6180555555555
+    ],
+    [
+      6592.013888888889,
+      1001.3888888888889
+    ],
+    [
+      6552.907986111111,
+      1031.076388888889
+    ],
+    [
+      6511.111111111111,
+      1055.5555555555557
+    ],
+    [
+      6466.319444444444,
+      1072.873263888889
+    ],
+    [
+      6416.666666666667,
+      1085.0694444444446
+    ],
+    [
+      6364.236111111111,
+      1095.0086805555557
+    ],
+    [
+      6311.111111111111,
+      1105.5555555555557
+    ],
+    [
+      6257.118055555556,
+      1116.1458333333335
+    ],
+    [
+      6201.388888888889,
+      1125.6944444444446
+    ],
+    [
+      6144.965277777778,
+      1136.2847222222222
+    ],
+    [
+      6088.888888888889,
+      1150
+    ],
+    [
+      6032.03125,
+      1166.6666666666667
+    ],
+    [
+      5974.305555555556,
+      1185.4166666666667
+    ],
+    [
+      5918.315972222223,
+      1207.2916666666667
+    ],
+    [
+      5866.666666666667,
+      1233.3333333333335
+    ],
+    [
+      5820.182291666667,
+      1263.7152777777778
+    ],
+    [
+      5777.430555555556,
+      1297.9166666666667
+    ],
+    [
+      5737.630208333334,
+      1335.9375
+    ],
+    [
+      5700,
+      1377.7777777777778
+    ],
+    [
+      5661.284722222223,
+      1424.8697916666667
+    ],
+    [
+      5622.916666666667,
+      1476.736111111111
+    ],
+    [
+      5591.145833333334,
+      1530.5121527777778
+    ],
+    [
+      5572.222222222223,
+      1583.3333333333335
+    ],
+    [
+      5567.447916666667,
+      1635.8940972222222
+    ],
+    [
+      5573.611111111111,
+      1689.236111111111
+    ],
+    [
+      5590.190972222223,
+      1741.015625
+    ],
+    [
+      5616.666666666667,
+      1788.888888888889
+    ],
+    [
+      5655.295138888889,
+      1833.767361111111
+    ],
+    [
+      5705.555555555556,
+      1876.388888888889
+    ],
+    [
+      5762.760416666667,
+      1914.1493055555557
+    ],
+    [
+      5822.222222222223,
+      1944.4444444444446
+    ],
+    [
+      5885.243055555556,
+      1967.1006944444446
+    ],
+    [
+      5953.472222222223,
+      1983.3333333333335
+    ],
+    [
+      6022.743055555556,
+      1992.6215277777778
+    ],
+    [
+      6088.888888888889,
+      1994.4444444444446
+    ],
+    [
+      6151.866319444444,
+      1983.2465277777778
+    ],
+    [
+      6213.541666666667,
+      1961.111111111111
+    ],
+    [
+      6272.612847222223,
+      1938.9756944444446
+    ],
+    [
+      6327.777777777778,
+      1927.7777777777778
+    ],
+    [
+      6377.517361111111,
+      1930.5121527777778
+    ],
+    [
+      6422.916666666667,
+      1941.3194444444446
+    ],
+    [
+      6466.579861111111,
+      1957.8559027777778
+    ],
+    [
+      6511.111111111111,
+      1977.7777777777778
+    ],
+    [
+      6558.637152777778,
+      2001.2152777777778
+    ],
+    [
+      6607.291666666667,
+      2029.1666666666667
+    ],
+    [
+      6653.689236111111,
+      2060.590277777778
+    ],
+    [
+      6694.444444444444,
+      2094.4444444444443
+    ],
+    [
+      6731.076388888889,
+      2130.815972222222
+    ],
+    [
+      6764.583333333334,
+      2170.138888888889
+    ],
+    [
+      6790.798611111111,
+      2211.8923611111113
+    ],
+    [
+      6805.555555555556,
+      2255.5555555555557
+    ],
+    [
+      6806.857638888889,
+      2303.385416666667
+    ],
+    [
+      6797.222222222223,
+      2354.8611111111113
+    ],
+    [
+      6779.253472222223,
+      2405.295138888889
+    ],
+    [
+      6755.555555555556,
+      2450
+    ],
+    [
+      6725.130208333334,
+      2488.324652777778
+    ],
+    [
+      6687.152777777778,
+      2522.5694444444443
+    ],
+    [
+      6644.487847222223,
+      2552.4739583333335
+    ],
+    [
+      6600,
+      2577.777777777778
+    ],
+    [
+      6554.036458333334,
+      2598.5677083333335
+    ],
+    [
+      6505.208333333334,
+      2614.9305555555557
+    ],
+    [
+      6453.776041666667,
+      2626.605902777778
+    ],
+    [
+      6400,
+      2633.3333333333335
+    ],
+    [
+      6342.491319444444,
+      2631.9444444444443
+    ],
+    [
+      6281.597222222223,
+      2623.6111111111113
+    ],
+    [
+      6220.182291666667,
+      2614.5833333333335
+    ],
+    [
+      6161.111111111111,
+      2611.1111111111113
+    ],
+    [
+      6104.991319444444,
+      2613.1944444444443
+    ],
+    [
+      6050.347222222223,
+      2618.0555555555557
+    ],
+    [
+      5996.918402777778,
+      2627.777777777778
+    ],
+    [
+      5944.444444444444,
+      2644.4444444444443
+    ],
+    [
+      5891.710069444444,
+      2668.5329861111113
+    ],
+    [
+      5839.236111111111,
+      2698.9583333333335
+    ],
+    [
+      5789.366319444444,
+      2735.4600694444443
+    ],
+    [
+      5744.444444444444,
+      2777.777777777778
+    ],
+    [
+      5703.428819444444,
+      2828.342013888889
+    ],
+    [
+      5665.625,
+      2886.4583333333335
+    ],
+    [
+      5633.897569444444,
+      2947.1788194444443
+    ],
+    [
+      5611.111111111111,
+      3005.5555555555557
+    ],
+    [
+      5599.826388888889,
+      3062.065972222222
+    ],
+    [
+      5597.916666666667,
+      3118.75
+    ],
+    [
+      5601.215277777778,
+      3173.003472222222
+    ],
+    [
+      5605.555555555556,
+      3222.222222222222
+    ],
+    [
+      5613.758680555556,
+      3264.670138888889
+    ],
+    [
+      5626.736111111111,
+      3302.0833333333335
+    ],
+    [
+      5637.456597222223,
+      3337.065972222222
+    ],
+    [
+      5638.888888888889,
+      3372.222222222222
+    ],
+    [
+      5629.861111111111,
+      3408.637152777778
+    ],
+    [
+      5613.888888888889,
+      3444.791666666667
+    ],
+    [
+      5590.972222222223,
+      3479.3836805555557
+    ],
+    [
+      5561.111111111111,
+      3511.1111111111113
+    ],
+    [
+      5520.920138888889,
+      3538.0642361111113
+    ],
+    [
+      5471.527777777778,
+      3561.4583333333335
+    ],
+    [
+      5419.704861111111,
+      3584.678819444445
+    ],
+    [
+      5372.222222222223,
+      3611.1111111111113
+    ],
+    [
+      5330.338541666667,
+      3641.1892361111113
+    ],
+    [
+      5290.625,
+      3673.263888888889
+    ],
+    [
+      5252.821180555556,
+      3707.5954861111113
+    ],
+    [
+      5216.666666666667,
+      3744.444444444445
+    ],
+    [
+      5181.597222222223,
+      3785.026041666667
+    ],
+    [
+      5147.916666666667,
+      3828.819444444445
+    ],
+    [
+      5116.666666666667,
+      3873.480902777778
+    ],
+    [
+      5088.888888888889,
+      3916.666666666667
+    ],
+    [
+      5064.105902777778,
+      3956.4236111111113
+    ],
+    [
+      5042.013888888889,
+      3994.444444444445
+    ],
+    [
+      5023.914930555556,
+      4033.854166666667
+    ],
+    [
+      5011.111111111111,
+      4077.777777777778
+    ],
+    [
+      5003.819444444444,
+      4129.600694444444
+    ],
+    [
+      5001.388888888889,
+      4186.805555555556
+    ],
+    [
+      5003.819444444444,
+      4243.663194444444
+    ],
+    [
+      5011.111111111111,
+      4294.444444444444
+    ],
+    [
+      5028.211805555556,
+      4336.892361111111
+    ],
+    [
+      5053.472222222223,
+      4374.305555555556
+    ],
+    [
+      5076.996527777778,
+      4409.288194444444
+    ],
+    [
+      5088.888888888889,
+      4444.444444444444
+    ],
+    [
+      5087.760416666667,
+      4480.859375
+    ],
+    [
+      5078.472222222223,
+      4517.013888888889
+    ],
+    [
+      5060.503472222223,
+      4551.605902777778
+    ],
+    [
+      5033.333333333334,
+      4583.333333333334
+    ],
+    [
+      4995.052083333334,
+      4612.760416666667
+    ],
+    [
+      4946.527777777778,
+      4640.277777777778
+    ],
+    [
+      4891.40625,
+      4664.322916666667
+    ],
+    [
+      4833.333333333334,
+      4683.333333333334
+    ],
+    [
+      4769.661458333334,
+      4694.835069444444
+    ],
+    [
+      4699.652777777778,
+      4700.347222222223
+    ],
+    [
+      4629.817708333334,
+      4704.296875
+    ],
+    [
+      4566.666666666667,
+      4711.111111111111
+    ],
+    [
+      4513.498263888889,
+      4720.746527777778
+    ],
+    [
+      4466.319444444444,
+      4731.25
+    ],
+    [
+      4420.703125,
+      4744.184027777778
+    ],
+    [
+      4372.222222222223,
+      4761.111111111111
+    ],
+    [
+      4319.878472222223,
+      4784.505208333334
+    ],
+    [
+      4265.972222222223,
+      4812.847222222223
+    ],
+    [
+      4211.024305555556,
+      4841.710069444444
+    ],
+    [
+      4155.555555555556,
+      4866.666666666667
+    ],
+    [
+      4099.262152777778,
+      4887.890625
+    ],
+    [
+      4042.013888888889,
+      4907.291666666667
+    ],
+    [
+      3984.592013888889,
+      4923.046875
+    ],
+    [
+      3927.777777777778,
+      4933.333333333334
+    ],
+    [
+      3871.701388888889,
+      4937.586805555556
+    ],
+    [
+      3815.972222222222,
+      4936.805555555556
+    ],
+    [
+      3760.590277777778,
+      4931.510416666667
+    ],
+    [
+      3705.5555555555557,
+      4922.222222222223
+    ],
+    [
+      3650.737847222222,
+      4907.986111111111
+    ],
+    [
+      3596.1805555555557,
+      4888.888888888889
+    ],
+    [
+      3542.144097222222,
+      4867.013888888889
+    ],
+    [
+      3488.888888888889,
+      4844.444444444444
+    ],
+    [
+      3437.109375,
+      4819.184027777778
+    ],
+    [
+      3386.4583333333335,
+      4790.972222222223
+    ],
+    [
+      3335.6336805555557,
+      4764.496527777778
+    ],
+    [
+      3283.3333333333335,
+      4744.444444444444
+    ],
+    [
+      3229.2100694444443,
+      4731.857638888889
+    ],
+    [
+      3173.9583333333335,
+      4724.305555555556
+    ],
+    [
+      3117.838541666667,
+      4721.267361111111
+    ],
+    [
+      3061.1111111111113,
+      4722.222222222223
+    ],
+    [
+      3003.168402777778,
+      4727.734375
+    ],
+    [
+      2944.097222222222,
+      4737.847222222223
+    ],
+    [
+      2885.199652777778,
+      4751.258680555556
+    ],
+    [
+      2827.777777777778,
+      4766.666666666667
+    ],
+    [
+      2772.9600694444443,
+      4786.067708333334
+    ],
+    [
+      2719.791666666667,
+      4809.375
+    ],
+    [
+      2666.449652777778,
+      4832.161458333334
+    ],
+    [
+      2611.1111111111113,
+      4850
+    ],
+    [
+      2552.690972222222,
+      4862.152777777778
+    ],
+    [
+      2492.3611111111113,
+      4870.833333333334
+    ],
+    [
+      2431.684027777778,
+      4876.041666666667
+    ],
+    [
+      2372.222222222222,
+      4877.777777777778
+    ],
+    [
+      2314.2361111111113,
+      4876.432291666667
+    ],
+    [
+      2256.9444444444443,
+      4871.875
+    ],
+    [
+      2200.347222222222,
+      4863.324652777778
+    ],
+    [
+      2144.4444444444443,
+      4850
+    ],
+    [
+      2089.105902777778,
+      4830.859375
+    ],
+    [
+      2034.375,
+      4806.597222222223
+    ],
+    [
+      1980.5121527777778,
+      4779.036458333334
+    ],
+    [
+      1927.7777777777778,
+      4750
+    ],
+    [
+      1877.126736111111,
+      4717.057291666667
+    ],
+    [
+      1828.125,
+      4680.208333333334
+    ],
+    [
+      1778.9496527777778,
+      4644.921875
+    ],
+    [
+      1727.7777777777778,
+      4616.666666666667
+    ],
+    [
+      1673.9149305555557,
+      4596.875
+    ],
+    [
+      1618.4027777777778,
+      4582.638888888889
+    ],
+    [
+      1562.0225694444446,
+      4572.916666666667
+    ],
+    [
+      1505.5555555555557,
+      4566.666666666667
+    ],
+    [
+      1449.392361111111,
+      4563.975694444444
+    ],
+    [
+      1393.0555555555557,
+      4565.277777777778
+    ],
+    [
+      1336.0243055555557,
+      4570.052083333334
+    ],
+    [
+      1277.7777777777778,
+      4577.777777777778
+    ],
+    [
+      1217.578125,
+      4591.493055555556
+    ],
+    [
+      1155.9027777777778,
+      4610.416666666667
+    ],
+    [
+      1094.0538194444446,
+      4628.298611111111
+    ],
+    [
+      1033.3333333333335,
+      4638.888888888889
+    ],
+    [
+      973.4375,
+      4641.015625
+    ],
+    [
+      913.8888888888889,
+      4637.847222222223
+    ],
+    [
+      855.7291666666667,
+      4629.644097222223
+    ],
+    [
+      800,
+      4616.666666666667
+    ],
+    [
+      745.5729166666667,
+      4598.307291666667
+    ],
+    [
+      692.3611111111111,
+      4574.652777777778
+    ],
+    [
+      642.96875,
+      4547.005208333334
+    ],
+    [
+      600,
+      4516.666666666667
+    ],
+    [
+      566.2326388888889,
+      4481.901041666667
+    ],
+    [
+      539.5833333333334,
+      4442.708333333334
+    ],
+    [
+      515.3645833333334,
+      4402.994791666667
+    ],
+    [
+      488.8888888888889,
+      4366.666666666667
+    ],
+    [
+      461.328125,
+      4332.942708333334
+    ],
+    [
+      434.375,
+      4300.347222222223
+    ],
+    [
+      404.1232638888889,
+      4271.744791666667
+    ],
+    [
+      366.6666666666667,
+      4250
+    ],
+    [
+      319.27083333333337,
+      4237.803819444444
+    ],
+    [
+      264.58333333333337,
+      4232.986111111111
+    ],
+    [
+      206.77083333333334,
+      4231.119791666667
+    ],
+    [
+      150,
+      4227.777777777778
+    ],
+    [
+      93.66319444444444,
+      4223.394097222223
+    ],
+    [
+      36.111111111111114,
+      4219.791666666667
+    ],
+    [
+      -20.052083333333336,
+      4214.626736111111
+    ],
+    [
+      -72.22222222222223,
+      4205.555555555556
+    ],
+    [
+      -120.35590277777779,
+      4192.1875
+    ],
+    [
+      -165.625,
+      4175.694444444444
+    ],
+    [
+      -207.24826388888889,
+      4156.076388888889
+    ],
+    [
+      -244.44444444444446,
+      4133.333333333334
+    ],
+    [
+      -277.2135416666667,
+      4107.074652777778
+    ],
+    [
+      -305.90277777777777,
+      4077.4305555555557
+    ],
+    [
+      -330.25173611111114,
+      4045.182291666667
+    ],
+    [
+      -350,
+      4011.1111111111113
+    ],
+    [
+      -361.84895833333337,
+      3973.784722222222
+    ],
+    [
+      -367.0138888888889,
+      3933.3333333333335
+    ],
+    [
+      -372.00520833333337,
+      3892.881944444445
+    ],
+    [
+      -383.33333333333337,
+      3855.5555555555557
+    ],
+    [
+      -402.34375,
+      3821.09375
+    ],
+    [
+      -425.69444444444446,
+      3788.194444444445
+    ],
+    [
+      -452.86458333333337,
+      3758.420138888889
+    ],
+    [
+      -483.33333333333337,
+      3733.3333333333335
+    ],
+    [
+      -519.4878472222223,
+      3715.928819444445
+    ],
+    [
+      -560.7638888888889,
+      3704.513888888889
+    ],
+    [
+      -602.2135416666667,
+      3693.619791666667
+    ],
+    [
+      -638.8888888888889,
+      3677.777777777778
+    ],
+    [
+      -670.4861111111111,
+      3656.3368055555557
+    ],
+    [
+      -699.3055555555555,
+      3631.944444444445
+    ],
+    [
+      -724.3055555555555,
+      3604.0798611111113
+    ],
+    [
+      -744.4444444444445,
+      3572.222222222222
+    ],
+    [
+      -760.3298611111111,
+      3534.8524305555557
+    ],
+    [
+      -772.2222222222223,
+      3492.7083333333335
+    ],
+    [
+      -778.5590277777778,
+      3448.654513888889
+    ],
+    [
+      -777.7777777777778,
+      3405.5555555555557
+    ],
+    [
+      -769.2274305555555,
+      3362.9774305555557
+    ],
+    [
+      -753.8194444444445,
+      3319.791666666667
+    ],
+    [
+      -732.3350694444445,
+      3277.8211805555557
+    ],
+    [
+      -705.5555555555555,
+      3238.888888888889
+    ],
+    [
+      -670.3559027777778,
+      3203.559027777778
+    ],
+    [
+      -627.4305555555555,
+      3170.8333333333335
+    ],
+    [
+      -583.2899305555555,
+      3140.190972222222
+    ],
+    [
+      -544.4444444444445,
+      3111.1111111111113
+    ],
+    [
+      -511.5885416666667,
+      3085.0694444444443
+    ],
+    [
+      -481.59722222222223,
+      3061.8055555555557
+    ],
+    [
+      -455.25173611111114,
+      3038.1944444444443
+    ],
+    [
+      -433.33333333333337,
+      3011.1111111111113
+    ],
+    [
+      -414.53993055555554,
+      2978.6024305555557
+    ],
+    [
+      -398.95833333333337,
+      2942.7083333333335
+    ],
+    [
+      -389.453125,
+      2906.293402777778
+    ],
+    [
+      -388.8888888888889,
+      2872.222222222222
+    ],
+    [
+      -398.52430555555554,
+      2840.3211805555557
+    ],
+    [
+      -416.6666666666667,
+      2809.375
+    ],
+    [
+      -441.75347222222223,
+      2780.685763888889
+    ],
+    [
+      -472.22222222222223,
+      2755.5555555555557
+    ],
+    [
+      -509.6354166666667,
+      2735.894097222222
+    ],
+    [
+      -554.1666666666667,
+      2720.4861111111113
+    ],
+    [
+      -602.1701388888889,
+      2705.9461805555557
+    ],
+    [
+      -650,
+      2688.888888888889
+    ],
+    [
+      -699.6527777777778,
+      2668.75
+    ],
+    [
+      -752.0833333333334,
+      2647.222222222222
+    ],
+    [
+      -802.0833333333334,
+      2624.3055555555557
+    ],
+    [
+      -844.4444444444445,
+      2600
+    ],
+    [
+      -877.7777777777778,
+      2575.347222222222
+    ],
+    [
+      -904.8611111111112,
+      2550
+    ],
+    [
+      -926.7361111111112,
+      2521.875
+    ],
+    [
+      -944.4444444444445,
+      2488.888888888889
+    ],
+    [
+      -959.2013888888889,
+      2449.262152777778
+    ],
+    [
+      -970.1388888888889,
+      2404.513888888889
+    ],
+    [
+      -975.1736111111112,
+      2357.5086805555557
+    ],
+    [
+      -972.2222222222223,
+      2311.1111111111113
+    ],
+    [
+      -957.03125,
+      2265.0173611111113
+    ],
+    [
+      -931.9444444444445,
+      2218.0555555555557
+    ],
+    [
+      -904.7743055555555,
+      2171.7881944444443
+    ],
+    [
+      -883.3333333333334,
+      2127.777777777778
+    ],
+    [
+      -866.9704861111112,
+      2085.112847222222
+    ],
+    [
+      -852.4305555555555,
+      2043.4027777777778
+    ],
+    [
+      -843.6197916666667,
+      2004.9913194444446
+    ],
+    [
+      -844.4444444444445,
+      1972.2222222222224
+    ],
+    [
+      -858.2899305555555,
+      1948.0902777777778
+    ],
+    [
+      -882.2916666666667,
+      1930.5555555555557
+    ],
+    [
+      -910.9809027777778,
+      1914.4097222222224
+    ],
+    [
+      -938.8888888888889,
+      1894.4444444444446
+    ],
+    [
+      -967.8385416666667,
+      1869.7916666666667
+    ],
+    [
+      -999.6527777777778,
+      1843.0555555555557
+    ],
+    [
+      -1028.8628472222222,
+      1814.236111111111
+    ],
+    [
+      -1050,
+      1783.3333333333335
+    ],
+    [
+      -1062.0225694444446,
+      1749.6961805555557
+    ],
+    [
+      -1067.7083333333335,
+      1713.5416666666667
+    ],
+    [
+      -1067.3177083333335,
+      1676.171875
+    ],
+    [
+      -1061.111111111111,
+      1638.888888888889
+    ],
+    [
+      -1047.6996527777778,
+      1601.2586805555557
+    ],
+    [
+      -1027.4305555555557,
+      1562.8472222222222
+    ],
+    [
+      -1003.1684027777778,
+      1524.9565972222222
+    ],
+    [
+      -977.7777777777778,
+      1488.888888888889
+    ],
+    [
+      -950.0434027777778,
+      1456.032986111111
+    ],
+    [
+      -919.0972222222223,
+      1425.3472222222222
+    ],
+    [
+      -888.3246527777778,
+      1394.4878472222222
+    ],
+    [
+      -861.1111111111112,
+      1361.111111111111
+    ],
+    [
+      -837.3697916666667,
+      1324.6961805555557
+    ],
+    [
+      -815.625,
+      1286.4583333333335
+    ],
+    [
+      -797.1788194444445,
+      1246.657986111111
+    ],
+    [
+      -783.3333333333334,
+      1205.5555555555557
+    ],
+    [
+      -774.0451388888889,
+      1162.0225694444446
+    ],
+    [
+      -768.75,
+      1116.3194444444446
+    ],
+    [
+      -767.96875,
+      1070.7899305555557
+    ],
+    [
+      -772.2222222222223,
+      1027.7777777777778
+    ],
+    [
+      -783.8107638888889,
+      989.1059027777778
+    ],
+    [
+      -801.7361111111111,
+      953.125
+    ],
+    [
+      -821.5711805555555,
+      916.9704861111112
+    ],
+    [
+      -838.8888888888889,
+      877.7777777777778
+    ],
+    [
+      -854.2534722222223,
+      834.2881944444445
+    ],
+    [
+      -869.4444444444445,
+      788.1944444444445
+    ],
+    [
+      -881.8576388888889,
+      741.0590277777778
+    ],
+    [
+      -888.8888888888889,
+      694.4444444444445
+    ],
+    [
+      -890.8854166666667,
+      648.2204861111111
+    ],
+    [
+      -888.8888888888889,
+      601.7361111111111
+    ],
+    [
+      -881.3368055555555,
+      555.7725694444445
+    ],
+    [
+      -866.6666666666667,
+      511.11111111111114
+    ],
+    [
+      -843.8368055555555,
+      468.27256944444446
+    ],
+    [
+      -813.8888888888889,
+      426.73611111111114
+    ],
+    [
+      -778.3854166666667,
+      385.72048611111114
+    ],
+    [
+      -738.8888888888889,
+      344.44444444444446
+    ],
+    [
+      -694.4878472222223,
+      302.25694444444446
+    ],
+    [
+      -644.7916666666667,
+      259.72222222222223
+    ],
+    [
+      -592.1440972222223,
+      217.88194444444446
+    ],
+    [
+      -538.8888888888889,
+      177.77777777777777
+    ],
+    [
+      -485.15625,
+      139.71354166666669
+    ],
+    [
+      -429.86111111111114,
+      103.125
+    ],
+    [
+      -373.52430555555554,
+      67.75173611111111
+    ],
+    [
+      -316.6666666666667,
+      33.333333333333336
+    ],
+    [
+      -257.8125,
+      -0.6944444444444444
+    ],
+    [
+      -197.22222222222223,
+      -34.02777777777778
+    ],
+    [
+      -138.02083333333334,
+      -65.625
+    ],
+    [
+      -83.33333333333334,
+      -94.44444444444444
+    ],
+    [
+      -33.42013888888889,
+      -120.83333333333334
+    ],
+    [
+      13.194444444444445,
+      -145.13888888888889
+    ],
+    [
+      55.989583333333336,
+      -166.31944444444446
+    ],
+    [
+      94.44444444444444,
+      -183.33333333333334
+    ],
+    [
+      125.73784722222223,
+      -197.96006944444446
+    ],
+    [
+      151.04166666666669,
+      -210.06944444444446
+    ],
+    [
+      175.82465277777777,
+      -215.75520833333334
+    ]
+  ],
+  "water": {
+    "x": 366.6666666666667,
+    "y": 3588.888888888889,
+    "rx": 550,
+    "ry": 285,
+    "poly": [
+      [
+        -166.66666666666669,
+        3533.3333333333335
+      ],
+      [
+        -83.33333333333334,
+        3411.1111111111113
+      ],
+      [
+        105.55555555555556,
+        3350
+      ],
+      [
+        255.55555555555557,
+        3350
+      ],
+      [
+        394.44444444444446,
+        3377.777777777778
+      ],
+      [
+        533.3333333333334,
+        3311.1111111111113
+      ],
+      [
+        705.5555555555555,
+        3327.777777777778
+      ],
+      [
+        827.7777777777778,
+        3400
+      ],
+      [
+        905.5555555555555,
+        3533.3333333333335
+      ],
+      [
+        888.8888888888889,
+        3672.222222222222
+      ],
+      [
+        800,
+        3777.777777777778
+      ],
+      [
+        650,
+        3844.444444444445
+      ],
+      [
+        483.33333333333337,
+        3861.1111111111113
+      ],
+      [
+        316.6666666666667,
+        3833.3333333333335
+      ],
+      [
+        150,
+        3866.666666666667
+      ],
+      [
+        11.11111111111111,
+        3816.666666666667
+      ],
+      [
+        -127.77777777777779,
+        3711.1111111111113
+      ]
+    ]
+  },
+  "jetty": {
+    "foot": [
+      5522.222222222223,
+      1727.7777777777778
+    ],
+    "tip": [
+      6033.333333333334,
+      1888.888888888889
+    ],
+    "width": 104
+  },
+  "boats": [
+    {
+      "x": 5956,
+      "y": 1756,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 6150,
+      "y": 1856,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 5789,
+      "y": 1700,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 6706,
+      "y": 1911,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 6872,
+      "y": 2656,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": -1156,
+      "y": 2200,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": -961,
+      "y": 3422,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 94,
+      "y": 4422,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 4622,
+      "y": 4950,
+      "turn": 1.5707963267948966
+    },
+    {
+      "x": 5261,
+      "y": 4200,
+      "turn": 1.5707963267948966
+    }
+  ],
+  "places": [
+    {
+      "id": "village",
+      "point": [
+        27.77777777777778,
+        1338.888888888889
+      ]
+    },
+    {
+      "id": "garden",
+      "point": [
+        2744.4444444444443,
+        144.44444444444446
+      ]
+    },
+    {
+      "id": "market",
+      "point": [
+        5477.777777777778,
+        650
+      ]
+    },
+    {
+      "id": "new-pond",
+      "point": [
+        355.55555555555554,
+        4033.3333333333335
+      ]
+    },
+    {
+      "id": "picnic",
+      "point": [
+        3833.3333333333335,
+        4483.333333333334
+      ]
+    },
+    {
+      "id": "swan-cove",
+      "point": [
+        5561.111111111111,
+        1972.2222222222224
+      ]
+    }
+  ],
+  "paths": [
+    "M 312 342 C 249 323 238 299 260 283 C 282 259 271 241 251 237",
+    "M 312 342 C 280 377 286 417 252 449 C 220 484 233 518 229 552 C 222 589 252 610 279 619 C 301 625 296 658 307 684 C 320 714 359 729 406 746",
+    "M 305 347 C 385 366 422 331 474 319 C 520 310 541 279 582 265 C 631 245 685 245 737 231 C 791 211 817 223 861 239 C 916 258 960 252 1014 232 C 1062 216 1091 253 1154 266",
+    "M 762 176 C 741 194 751 215 766 229",
+    "M 1158 269 C 1201 259 1237 254 1261 275 C 1290 307 1261 336 1247 358 C 1214 410 1220 468 1238 504",
+    "M 1217 348 C 1197 395 1192 455 1207 523 C 1225 578 1261 610 1265 660 C 1272 714 1250 756 1229 791 C 1204 831 1154 842 1113 859",
+    "M 1238 503 C 1270 525 1309 539 1339 538",
+    "M 461 769 C 419 781 374 775 350 801 C 328 823 334 871 347 897 C 360 921 401 939 443 941 C 495 945 525 918 578 924 C 642 933 688 938 744 929 C 793 920 787 876 778 839",
+    "M 340 896 C 295 910 267 892 254 865 C 240 838 244 815 267 804",
+    "M 845 839 C 873 865 866 907 828 928 C 793 950 756 969 745 999 C 735 1023 760 1039 794 1042",
+    "M 788 1041 C 849 1058 896 1048 928 1027 C 961 1008 967 972 960 955",
+    "M 445 748 C 506 778 549 802 607 813 C 663 823 723 833 773 839",
+    "M 877 845 C 943 878 1002 898 1053 881 C 1082 870 1092 837 1113 808"
+  ],
+  "decks": [
+    {
+      "src": "/pixi-art/home-expansion/pond-jetty.svg",
+      "x": 261.11111111111114,
+      "y": 3624.444444444445,
+      "width": 200,
+      "height": 320,
+      "resolution": 2
+    }
+  ],
+  "walkways": [
+    {
+      "a": [
+        361.11111111111114,
+        3964.444444444445
+      ],
+      "b": [
+        351.11111111111114,
+        3669.444444444445
+      ],
+      "w": 142
+    }
+  ],
+  "harborWater": {
+    "x": 6050,
+    "y": 1777.7777777777778
+  },
+  "obstacles": [
+    {
+      "x": 2522.222222222222,
+      "y": -150,
+      "rx": 14,
+      "ry": 13
+    },
+    {
+      "x": 2588.888888888889,
+      "y": -111.11111111111111,
+      "rx": 14,
+      "ry": 13
+    },
+    {
+      "x": 2783.3333333333335,
+      "y": -111.11111111111111,
+      "rx": 14,
+      "ry": 13
+    },
+    {
+      "x": 2850,
+      "y": -150,
+      "rx": 14,
+      "ry": 13
+    },
+    {
+      "x": 3694.444444444445,
+      "y": -111.11111111111111,
+      "rx": 14,
+      "ry": 13
+    }
+  ]
+}

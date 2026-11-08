@@ -1,0 +1,11 @@
+{
+ "overview": "/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/fair-dense.png",
+ "crops": [
+  "/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/fair-dense-crops/bobbinbell.png",
+  "/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/fair-dense-crops/cloudpop.png",
+  "/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/fair-dense-crops/waddleshow.png",
+  "/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/fair-dense-crops/sugarspoon.png"
+ ],
+ "cropPixelsPerWorldUnit": 0.7,
+ "note": "Headless assembly of production SVGs, current manifests, static sleepers and boats. Live players, animation and procedural runtime overlays excluded."
+}

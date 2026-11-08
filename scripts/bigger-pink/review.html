@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>Rosybutton Bay, bigger Pink</title><style>html,body,#game{margin:0;width:100%;height:100%;overflow:hidden;background:#6ec9de}</style></head><body><div id="game"></div><script type="module">
+import {PixiIsland} from '/src/pixi/engine.js';
+import {THEME_OF} from '/src/pixi/island-maps.js';
+const game=new PixiIsland({onError:e=>{window.reviewError=String(e);console.error(e);}});
+window.reviewGame=game;
+await game.mount(document.querySelector('#game'));
+game.switchIsland([...THEME_OF].find(([,theme])=>theme==='pink')[0]);
+game.fly=null;game.follow=false;game.fitMode=false;
+const params=new URLSearchParams(location.search);
+Object.assign(game.camera,{x:Number(params.get('x')??4000),y:Number(params.get('y')??3000),zoom:Number(params.get('zoom')??.12)});Object.assign(game.target,game.camera);
+window.reviewReady=true;
+</script></body></html>

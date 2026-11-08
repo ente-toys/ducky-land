@@ -1,0 +1,150 @@
+{
+  "before": [
+    {
+      "id": "kettle-crossing",
+      "kind": "river bridge",
+      "center": [
+        2335,
+        -15
+      ],
+      "water": [
+        "kettlebrook"
+      ],
+      "wetDeckSamples": 189,
+      "totalDeckSamples": 253,
+      "endsOnBanks": true
+    },
+    {
+      "id": "reed-crossing",
+      "kind": "river bridge",
+      "center": [
+        5215,
+        5880
+      ],
+      "water": [
+        "reedrun"
+      ],
+      "wetDeckSamples": 187,
+      "totalDeckSamples": 264,
+      "endsOnBanks": true
+    },
+    {
+      "id": "north-coast-crossing",
+      "kind": "river bridge",
+      "center": [
+        4000,
+        -645
+      ],
+      "water": [
+        "kettlebrook"
+      ],
+      "wetDeckSamples": 147,
+      "totalDeckSamples": 231,
+      "endsOnBanks": false
+    },
+    {
+      "id": "south-coast-crossing",
+      "kind": "river bridge",
+      "center": [
+        4864,
+        6978
+      ],
+      "water": [
+        "reedrun"
+      ],
+      "wetDeckSamples": 157,
+      "totalDeckSamples": 276,
+      "endsOnBanks": true
+    },
+    {
+      "id": "reedwhistle-sea-pier",
+      "kind": "sea pier",
+      "center": [
+        9148,
+        6150
+      ],
+      "water": [
+        "sea"
+      ],
+      "landApproach": true,
+      "outerDeckInSea": true
+    }
+  ],
+  "after": [
+    {
+      "id": "kettle-crossing",
+      "kind": "river bridge",
+      "center": [
+        2335,
+        -15
+      ],
+      "water": [
+        "kettlebrook"
+      ],
+      "wetDeckSamples": 189,
+      "totalDeckSamples": 253,
+      "endsOnBanks": true
+    },
+    {
+      "id": "reed-crossing",
+      "kind": "river bridge",
+      "center": [
+        5215,
+        5880
+      ],
+      "water": [
+        "reedrun"
+      ],
+      "wetDeckSamples": 187,
+      "totalDeckSamples": 264,
+      "endsOnBanks": true
+    },
+    {
+      "id": "north-coast-crossing",
+      "kind": "river bridge",
+      "center": [
+        4000,
+        -825
+      ],
+      "water": [
+        "kettlebrook"
+      ],
+      "wetDeckSamples": 114,
+      "totalDeckSamples": 231,
+      "endsOnBanks": true
+    },
+    {
+      "id": "south-coast-crossing",
+      "kind": "river bridge",
+      "center": [
+        4864,
+        6978
+      ],
+      "water": [
+        "reedrun"
+      ],
+      "wetDeckSamples": 157,
+      "totalDeckSamples": 276,
+      "endsOnBanks": true
+    },
+    {
+      "id": "reedwhistle-sea-pier",
+      "kind": "sea pier",
+      "center": [
+        9148,
+        6150
+      ],
+      "water": [
+        "sea"
+      ],
+      "landApproach": true,
+      "outerDeckInSea": true
+    }
+  ],
+  "excludedDeck": {
+    "id": "boxing-raised-canvas",
+    "reason": "Raised boxing stage. It is neither a bridge nor a jetty and belongs on dry land."
+  },
+  "oldCoastCrossings": 0,
+  "riverCount": 2
+}

@@ -1,0 +1,71 @@
+{
+ "baseline": "85119e0c",
+ "originalGround": {
+  "pixels": 20345783,
+  "changed": 0,
+  "maxDelta": 0,
+  "examples": [],
+  "note": "Native 1 pixel per world unit, all original tile coordinates. Original opaque pixels inside original coast. No post-render restoration."
+ },
+ "before": [
+  {
+   "community": "bobbinbell",
+   "homes": 5,
+   "meanNearestHomeDistance": 714,
+   "spanX": 1390,
+   "spanY": 1700
+  },
+  {
+   "community": "cloudpop",
+   "homes": 6,
+   "meanNearestHomeDistance": 821,
+   "spanX": 4700,
+   "spanY": 410
+  },
+  {
+   "community": "waddleshow",
+   "homes": 5,
+   "meanNearestHomeDistance": 960,
+   "spanX": 1530,
+   "spanY": 3730
+  },
+  {
+   "community": "sugarspoon",
+   "homes": 6,
+   "meanNearestHomeDistance": 981,
+   "spanX": 5700,
+   "spanY": 540
+  }
+ ],
+ "after": [
+  {
+   "community": "bobbinbell",
+   "homes": 5,
+   "meanNearestHomeDistance": 638,
+   "spanX": 1100,
+   "spanY": 1030
+  },
+  {
+   "community": "cloudpop",
+   "homes": 6,
+   "meanNearestHomeDistance": 558,
+   "spanX": 2080,
+   "spanY": 860
+  },
+  {
+   "community": "waddleshow",
+   "homes": 5,
+   "meanNearestHomeDistance": 636,
+   "spanX": 1200,
+   "spanY": 870
+  },
+  {
+   "community": "sugarspoon",
+   "homes": 6,
+   "meanNearestHomeDistance": 569,
+   "spanX": 1990,
+   "spanY": 950
+  }
+ ],
+ "waterBridgesCoastHarborOriginalArtUnchanged": true
+}

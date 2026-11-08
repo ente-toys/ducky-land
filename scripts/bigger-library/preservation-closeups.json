@@ -1,0 +1,30 @@
+[
+  {
+    "id": "north-shore",
+    "crop": {
+      "x": 5000,
+      "y": 850,
+      "k": 0.8,
+      "w": 1400,
+      "h": 1000
+    },
+    "insetWorldUnits": 12,
+    "checked": 811133,
+    "changed": 0,
+    "maxChannelChange": 0
+  },
+  {
+    "id": "west-shore",
+    "crop": {
+      "x": 950,
+      "y": 2600,
+      "k": 0.8,
+      "w": 1400,
+      "h": 1000
+    },
+    "insetWorldUnits": 12,
+    "checked": 1010243,
+    "changed": 0,
+    "maxChannelChange": 0
+  }
+]

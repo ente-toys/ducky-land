@@ -1,0 +1,221 @@
+{
+ "bridges": [
+  {
+   "id": "restored-deck-0",
+   "source": "islet-bridge-1.svg",
+   "centre": [
+    2454,
+    4048.75
+   ],
+   "before": "dry expanded land",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "restored-deck-1",
+   "source": "islet-bridge-2.svg",
+   "centre": [
+    4650,
+    4034.35
+   ],
+   "before": "dry expanded land",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "restored-deck-2",
+   "source": "jetty-northwest.svg",
+   "centre": [
+    496.45,
+    1058.3
+   ],
+   "before": "dry expanded land",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "restored-deck-3",
+   "source": "jetty-northeast.svg",
+   "centre": [
+    6859.25,
+    1238.3
+   ],
+   "before": "dry expanded land",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "restored-deck-4",
+   "source": "jetty-southeast.svg",
+   "centre": [
+    6360,
+    3831.6
+   ],
+   "before": "dry expanded land",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "west-heart",
+   "source": "bigger/crossing-west-heart.svg",
+   "centre": [
+    370,
+    2830
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "northwest-heart",
+   "source": "bigger/crossing-northwest-heart.svg",
+   "centre": [
+    520,
+    780
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "north-heart",
+   "source": "bigger/crossing-north-heart.svg",
+   "centre": [
+    3560,
+    370
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "northeast-heart",
+   "source": "bigger/crossing-northeast-heart.svg",
+   "centre": [
+    6560,
+    665
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "east-heart",
+   "source": "bigger/crossing-east-heart.svg",
+   "centre": [
+    6900,
+    2590
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "southeast-heart",
+   "source": "bigger/crossing-southeast-heart.svg",
+   "centre": [
+    6460,
+    3730
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "south-heart",
+   "source": "bigger/crossing-south-heart.svg",
+   "centre": [
+    3570,
+    4070
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "southwest-heart",
+   "source": "bigger/crossing-southwest-heart.svg",
+   "centre": [
+    820,
+    3780
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "ribbon-coast",
+   "source": "bigger/crossing-ribbon-coast.svg",
+   "centre": [
+    -1550,
+    3340
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "wishwater-lane",
+   "source": "bigger/crossing-wishwater-lane.svg",
+   "centre": [
+    7780,
+    1930
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  },
+  {
+   "id": "wishwater-coast",
+   "source": "bigger/crossing-wishwater-coast.svg",
+   "centre": [
+    8500,
+    1700
+   ],
+   "before": "new crossing",
+   "afterWater": true,
+   "walkable": true,
+   "reachable": true
+  }
+ ],
+ "harbor": {
+  "before": "sea-facing jetty, retained",
+  "after": "sea-facing jetty, retained",
+  "foot": [
+   1005,
+   5650
+  ],
+  "tip": [
+   1005,
+   6170
+  ],
+  "tipAtSea": true
+ },
+ "inlandCrossings": 16,
+ "originalDryGround": {
+  "pixels": 20345783,
+  "changed": 0,
+  "maxDelta": 0,
+  "examples": [],
+  "note": "Native 1 pixel per world unit, all original tile coordinates. Original opaque pixels inside original coast. No post-render restoration."
+ },
+ "ready": true,
+ "sleepers": 40,
+ "newProps": 217,
+ "groundMiB": 288.52272033691406
+}

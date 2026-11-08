@@ -1,150 +1,842 @@
 {
- "width": 8000,
- "height": 5800,
+ "width": 13200,
+ "height": 9800,
  "sea": "#6EC9DE",
  "theme": "pink",
  "name": "Pink Dollhouse Town",
  "ground": {
   "tiles": [
    {
-    "src": "ground-r0-c0.svg",
-    "x": 0,
-    "y": 0,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c0.svg",
+    "x": -2602,
+    "y": -1902,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r0-c1.svg",
-    "x": 1600,
-    "y": 0,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c1.svg",
+    "x": -1302,
+    "y": -1902,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r0-c2.svg",
-    "x": 3200,
-    "y": 0,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c2.svg",
+    "x": -2,
+    "y": -1902,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r0-c3.svg",
-    "x": 4800,
-    "y": 0,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c3.svg",
+    "x": 1331,
+    "y": -1902,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r0-c4.svg",
-    "x": 6400,
-    "y": 0,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c4.svg",
+    "x": 2664,
+    "y": -1902,
+    "width": 1338,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r1-c0.svg",
-    "x": 0,
-    "y": 1450,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c5.svg",
+    "x": 3998,
+    "y": -1902,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r1-c1.svg",
-    "x": 1600,
-    "y": 1450,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c6.svg",
+    "x": 5331,
+    "y": -1902,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r1-c2.svg",
-    "x": 3200,
-    "y": 1450,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c7.svg",
+    "x": 6664,
+    "y": -1902,
+    "width": 1338,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r1-c3.svg",
-    "x": 4800,
-    "y": 1450,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c8.svg",
+    "x": 7998,
+    "y": -1902,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r1-c4.svg",
-    "x": 6400,
-    "y": 1450,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r0-c9.svg",
+    "x": 9298,
+    "y": -1902,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r2-c0.svg",
-    "x": 0,
-    "y": 2900,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c0.svg",
+    "x": -2602,
+    "y": -952,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r2-c1.svg",
-    "x": 1600,
-    "y": 2900,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c1.svg",
+    "x": -1302,
+    "y": -952,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r2-c2.svg",
-    "x": 3200,
-    "y": 2900,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c2.svg",
+    "x": -2,
+    "y": -952,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r2-c3.svg",
-    "x": 4800,
-    "y": 2900,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c3.svg",
+    "x": 1331,
+    "y": -952,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r2-c4.svg",
-    "x": 6400,
-    "y": 2900,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c4.svg",
+    "x": 2664,
+    "y": -952,
+    "width": 1338,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r3-c0.svg",
-    "x": 0,
-    "y": 4350,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c5.svg",
+    "x": 3998,
+    "y": -952,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r3-c1.svg",
-    "x": 1600,
-    "y": 4350,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c6.svg",
+    "x": 5331,
+    "y": -952,
+    "width": 1337,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r3-c2.svg",
-    "x": 3200,
-    "y": 4350,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c7.svg",
+    "x": 6664,
+    "y": -952,
+    "width": 1338,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r3-c3.svg",
-    "x": 4800,
-    "y": 4350,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c8.svg",
+    "x": 7998,
+    "y": -952,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
    },
    {
-    "src": "ground-r3-c4.svg",
-    "x": 6400,
-    "y": 4350,
-    "width": 1600,
-    "height": 1450
+    "src": "expansion/tiles/r1-c9.svg",
+    "x": 9298,
+    "y": -952,
+    "width": 1304,
+    "height": 954,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c0.svg",
+    "x": -2602,
+    "y": -2,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c1.svg",
+    "x": -1302,
+    "y": -2,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c2.svg",
+    "x": -2,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c3.svg",
+    "x": 1331,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c4.svg",
+    "x": 2664,
+    "y": -2,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c5.svg",
+    "x": 3998,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c6.svg",
+    "x": 5331,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c7.svg",
+    "x": 6664,
+    "y": -2,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c8.svg",
+    "x": 7998,
+    "y": -2,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r2-c9.svg",
+    "x": 9298,
+    "y": -2,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c0.svg",
+    "x": -2602,
+    "y": 1448,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c1.svg",
+    "x": -1302,
+    "y": 1448,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c2.svg",
+    "x": -2,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c3.svg",
+    "x": 1331,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c4.svg",
+    "x": 2664,
+    "y": 1448,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c5.svg",
+    "x": 3998,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c6.svg",
+    "x": 5331,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c7.svg",
+    "x": 6664,
+    "y": 1448,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c8.svg",
+    "x": 7998,
+    "y": 1448,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r3-c9.svg",
+    "x": 9298,
+    "y": 1448,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c0.svg",
+    "x": -2602,
+    "y": 2898,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c1.svg",
+    "x": -1302,
+    "y": 2898,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c2.svg",
+    "x": -2,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c3.svg",
+    "x": 1331,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c4.svg",
+    "x": 2664,
+    "y": 2898,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c5.svg",
+    "x": 3998,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c6.svg",
+    "x": 5331,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c7.svg",
+    "x": 6664,
+    "y": 2898,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c8.svg",
+    "x": 7998,
+    "y": 2898,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r4-c9.svg",
+    "x": 9298,
+    "y": 2898,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c0.svg",
+    "x": -2602,
+    "y": 4348,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c1.svg",
+    "x": -1302,
+    "y": 4348,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c2.svg",
+    "x": -2,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c3.svg",
+    "x": 1331,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c4.svg",
+    "x": 2664,
+    "y": 4348,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c5.svg",
+    "x": 3998,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c6.svg",
+    "x": 5331,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c7.svg",
+    "x": 6664,
+    "y": 4348,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c8.svg",
+    "x": 7998,
+    "y": 4348,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r5-c9.svg",
+    "x": 9298,
+    "y": 4348,
+    "width": 1304,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c0.svg",
+    "x": -2602,
+    "y": 5798,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c1.svg",
+    "x": -1302,
+    "y": 5798,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c2.svg",
+    "x": -2,
+    "y": 5798,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c3.svg",
+    "x": 1331,
+    "y": 5798,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c4.svg",
+    "x": 2664,
+    "y": 5798,
+    "width": 1338,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c5.svg",
+    "x": 3998,
+    "y": 5798,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c6.svg",
+    "x": 5331,
+    "y": 5798,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c7.svg",
+    "x": 6664,
+    "y": 5798,
+    "width": 1338,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c8.svg",
+    "x": 7998,
+    "y": 5798,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r6-c9.svg",
+    "x": 9298,
+    "y": 5798,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c0.svg",
+    "x": -2602,
+    "y": 6848,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c1.svg",
+    "x": -1302,
+    "y": 6848,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c2.svg",
+    "x": -2,
+    "y": 6848,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c3.svg",
+    "x": 1331,
+    "y": 6848,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c4.svg",
+    "x": 2664,
+    "y": 6848,
+    "width": 1338,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c5.svg",
+    "x": 3998,
+    "y": 6848,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c6.svg",
+    "x": 5331,
+    "y": 6848,
+    "width": 1337,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c7.svg",
+    "x": 6664,
+    "y": 6848,
+    "width": 1338,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c8.svg",
+    "x": 7998,
+    "y": 6848,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/r7-c9.svg",
+    "x": 9298,
+    "y": 6848,
+    "width": 1304,
+    "height": 1054,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r2-c2.svg",
+    "x": -2,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r2-c3.svg",
+    "x": 1331,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r2-c4.svg",
+    "x": 2664,
+    "y": -2,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r2-c5.svg",
+    "x": 3998,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r2-c6.svg",
+    "x": 5331,
+    "y": -2,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r2-c7.svg",
+    "x": 6664,
+    "y": -2,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r3-c2.svg",
+    "x": -2,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r3-c3.svg",
+    "x": 1331,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r3-c4.svg",
+    "x": 2664,
+    "y": 1448,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r3-c5.svg",
+    "x": 3998,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r3-c6.svg",
+    "x": 5331,
+    "y": 1448,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r3-c7.svg",
+    "x": 6664,
+    "y": 1448,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r4-c2.svg",
+    "x": -2,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r4-c3.svg",
+    "x": 1331,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r4-c4.svg",
+    "x": 2664,
+    "y": 2898,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r4-c5.svg",
+    "x": 3998,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r4-c6.svg",
+    "x": 5331,
+    "y": 2898,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r4-c7.svg",
+    "x": 6664,
+    "y": 2898,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r5-c2.svg",
+    "x": -2,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r5-c3.svg",
+    "x": 1331,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r5-c4.svg",
+    "x": 2664,
+    "y": 4348,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r5-c5.svg",
+    "x": 3998,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r5-c6.svg",
+    "x": 5331,
+    "y": 4348,
+    "width": 1337,
+    "height": 1454,
+    "resolution": 1
+   },
+   {
+    "src": "expansion/tiles/original-r5-c7.svg",
+    "x": 6664,
+    "y": 4348,
+    "width": 1338,
+    "height": 1454,
+    "resolution": 1
    }
   ]
  },
@@ -194,11 +886,95 @@
   {
    "id": "centre-back",
    "src": "centre/back.svg",
-   "width": 823.2,
-   "height": 861,
-   "x": 3588.4,
-   "y": 2200.6,
+   "width": 859.1999999999999,
+   "height": 846,
+   "x": 3570.4,
+   "y": 2194,
    "topLeft": true
+  },
+  {
+   "src": "expansion/river-crossing-01.svg",
+   "x": 7351.137943173022,
+   "y": 3449.296403755779,
+   "width": 634.0536087157816,
+   "height": 574.6457447926214
+  },
+  {
+   "src": "expansion/river-crossing-02.svg",
+   "x": 1328.8602555326556,
+   "y": 4494.627583947891,
+   "width": 682.354040491321,
+   "height": 585.4006789729992
+  },
+  {
+   "src": "expansion/river-crossing-03.svg",
+   "x": 5876.27836081555,
+   "y": 334.36525020318993,
+   "width": 392.5661761023457,
+   "height": 579.0872827137821
+  },
+  {
+   "src": "expansion/river-crossing-04.svg",
+   "x": 7354.152212910432,
+   "y": 2331.8574758143736,
+   "width": 611.6687399334551,
+   "height": 383.90963963192735
+  },
+  {
+   "src": "expansion/river-crossing-05.svg",
+   "x": 3854.9999999999995,
+   "y": 4992.165018258977,
+   "width": 290.0000000000018,
+   "height": 625.2084456493303
+  },
+  {
+   "src": "expansion/river-crossing-06.svg",
+   "x": 1310.8634859937313,
+   "y": 4215.754372212128,
+   "width": 559.9173140632242,
+   "height": 465.57744396302587
+  },
+  {
+   "src": "expansion/river-crossing-07.svg",
+   "x": 2120.078588804131,
+   "y": 274.01747510367863,
+   "width": 302.8597000303289,
+   "height": 588.6038999559262
+  },
+  {
+   "src": "expansion/river-crossing-08.svg",
+   "x": 945.8712803057615,
+   "y": 659.2884755506635,
+   "width": 730.0481548535777,
+   "height": 300.34424855381667
+  },
+  {
+   "src": "expansion/river-crossing-09.svg",
+   "x": 5167.923779016108,
+   "y": 281.43633351611203,
+   "width": 515.0305340559626,
+   "height": 543.2079313014144
+  },
+  {
+   "src": "expansion/river-crossing-10.svg",
+   "x": 8048.144466009705,
+   "y": 3880.6982139192273,
+   "width": 534.7652652119841,
+   "height": 482.72839548730326
+  },
+  {
+   "src": "expansion/river-crossing-11.svg",
+   "x": 1104.3926276788056,
+   "y": 5011.261089740545,
+   "width": 538.6042219437782,
+   "height": 427.8948202776919
+  },
+  {
+   "src": "expansion/marina-jetty.svg",
+   "x": 9520,
+   "y": 2760,
+   "width": 760,
+   "height": 180
   }
  ],
  "flats": [
@@ -8337,15 +9113,6 @@
    "flip": false
   },
   {
-   "id": "centre-decal-plaza",
-   "src": "centre/decal-plaza.svg",
-   "width": 1207.2,
-   "height": 933.6,
-   "x": 3396.4,
-   "y": 2537.2,
-   "topLeft": true
-  },
-  {
    "id": "pink-shore-9",
    "src": "/pixi-art/decals/pebble-3.svg",
    "x": 4360.9,
@@ -9559,6 +10326,15 @@
    "y": 967.34,
    "width": 38,
    "height": 25
+  },
+  {
+   "id": "centre-decal-plaza",
+   "src": "centre/decal-plaza.svg",
+   "width": 1207.2,
+   "height": 933.5999999999999,
+   "x": 3396.4,
+   "y": 2537.2,
+   "topLeft": true
   }
  ],
  "props": [
@@ -13883,204 +14659,6 @@
    "zone": "islets"
   },
   {
-   "id": "centre-front-01",
-   "src": "centre/front-01.svg",
-   "width": 108.6,
-   "height": 193.2,
-   "name": "Centre front-01",
-   "x": 4357.3,
-   "y": 2709.46,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.9785714285714286
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2709.46,
-   "centrePiece": "front-01"
-  },
-  {
-   "id": "centre-front-02",
-   "src": "centre/front-02.svg",
-   "width": 174.6,
-   "height": 110.4,
-   "name": "Centre front-02",
-   "x": 4237.9,
-   "y": 2803.78,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.9635869565217392
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2803.78,
-   "centrePiece": "front-02"
-  },
-  {
-   "id": "centre-front-03",
-   "src": "centre/front-03.svg",
-   "width": 61.8,
-   "height": 20.4,
-   "name": "Centre front-03",
-   "x": 4134.7,
-   "y": 2803.84,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.8058823529411758
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2803.84,
-   "centrePiece": "front-03"
-  },
-  {
-   "id": "centre-front-04",
-   "src": "centre/front-04.svg",
-   "width": 61.8,
-   "height": 20.4,
-   "name": "Centre front-04",
-   "x": 3865.3,
-   "y": 2803.84,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.8058823529411758
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2803.84,
-   "centrePiece": "front-04"
-  },
-  {
-   "id": "centre-front-05",
-   "src": "centre/front-05.svg",
-   "width": 174.6,
-   "height": 110.4,
-   "name": "Centre front-05",
-   "x": 3762.1,
-   "y": 2803.78,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.9635869565217392
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2803.78,
-   "centrePiece": "front-05"
-  },
-  {
-   "id": "centre-front-06",
-   "src": "centre/front-06.svg",
-   "width": 108.6,
-   "height": 193.2,
-   "name": "Centre front-06",
-   "x": 3642.7,
-   "y": 2709.46,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.9785714285714286
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2709.46,
-   "centrePiece": "front-06"
-  },
-  {
-   "id": "centre-music-box",
-   "src": "centre/music-box.svg",
-   "width": 290.46,
-   "height": 372,
-   "name": "Centre music-box",
-   "x": 3999.97,
-   "y": 2572,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.9967741935483871
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2572,
-   "centrePiece": "music-box"
-  },
-  {
-   "id": "centre-dancer",
-   "src": "centre/dancer.svg",
-   "width": 76.74,
-   "height": 150,
-   "name": "Centre dancer",
-   "x": 4000.03,
-   "y": 2572.01,
-   "anchor": {
-    "x": 0.5,
-    "y": 1.8500666666666665
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2572,
-   "centrePiece": "dancer"
-  },
-  {
-   "id": "centre-wind-key",
-   "src": "centre/wind-key.svg",
-   "width": 77.28,
-   "height": 93,
-   "name": "Centre wind-key",
-   "x": 4173.34,
-   "y": 2572.01,
-   "anchor": {
-    "x": 0.5,
-    "y": 1.3710752688172043
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2572,
-   "centrePiece": "wind-key"
-  },
-  {
-   "id": "centre-balustrade-left",
-   "src": "centre/balustrade-left.svg",
-   "width": 233.7,
-   "height": 534.42,
-   "name": "Centre balustrade-left",
-   "x": 3716.77,
-   "y": 2932.24,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.7564836645335129
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2932.24,
-   "centrePiece": "balustrade-left"
-  },
-  {
-   "id": "centre-balustrade-right",
-   "src": "centre/balustrade-right.svg",
-   "width": 233.7,
-   "height": 534.42,
-   "name": "Centre balustrade-right",
-   "x": 4283.23,
-   "y": 2932.24,
-   "anchor": {
-    "x": 0.5,
-    "y": 0.7564836645335129
-   },
-   "scale": 1,
-   "flip": false,
-   "shadow": false,
-   "sortY": 2932.24,
-   "centrePiece": "balustrade-right"
-  },
-  {
    "id": "pink-arc-plaza-55",
    "name": "Curved timber bench",
    "src": "detail/pink-arc-plaza-55.svg",
@@ -15808,6 +16386,7046 @@
    "y": 700.75,
    "zone": "meadow",
    "shadow": false
+  },
+  {
+   "id": "centre-front-05",
+   "src": "centre/front-05.svg",
+   "width": 249.6,
+   "height": 436.8,
+   "name": "Centre front-05",
+   "x": 3695.2,
+   "y": 2830,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.7445054945054945
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2830,
+   "centrePiece": "front-05"
+  },
+  {
+   "id": "centre-front-02",
+   "src": "centre/front-02.svg",
+   "width": 249.6,
+   "height": 436.8,
+   "name": "Centre front-02",
+   "x": 4304.8,
+   "y": 2830,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.7445054945054945
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2830,
+   "centrePiece": "front-02"
+  },
+  {
+   "id": "centre-music-box",
+   "src": "centre/music-box.svg",
+   "width": 355.2,
+   "height": 634.8,
+   "name": "Centre music-box",
+   "x": 4000,
+   "y": 2620,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9111531190926276
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2620,
+   "centrePiece": "music-box"
+  },
+  {
+   "id": "centre-dancer",
+   "src": "centre/dancer.svg",
+   "width": 76.74,
+   "height": 150,
+   "name": "Centre dancer",
+   "x": 4000.03,
+   "y": 2620.01,
+   "anchor": {
+    "x": 0.5,
+    "y": 2.1700666666666666
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2620,
+   "centrePiece": "dancer"
+  },
+  {
+   "id": "centre-wind-key",
+   "src": "centre/wind-key.svg",
+   "width": 90,
+   "height": 84,
+   "name": "Centre wind-key",
+   "x": 4202.8,
+   "y": 2620.01,
+   "anchor": {
+    "x": 0.5,
+    "y": 2.128690476190476
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2620,
+   "centrePiece": "wind-key"
+  },
+  {
+   "id": "centre-balustrade-left",
+   "src": "centre/balustrade-left.svg",
+   "width": 45.6,
+   "height": 379.2,
+   "name": "Centre balustrade-left",
+   "x": 3802.6,
+   "y": 2916.4,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.6930379746835443
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2916.4,
+   "centrePiece": "balustrade-left"
+  },
+  {
+   "id": "centre-balustrade-right",
+   "src": "centre/balustrade-right.svg",
+   "width": 45.6,
+   "height": 379.2,
+   "name": "Centre balustrade-right",
+   "x": 4197.4,
+   "y": 2916.4,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.6930379746835443
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2916.4,
+   "centrePiece": "balustrade-right"
+  },
+  {
+   "id": "centre-terrace-lamp-0",
+   "src": "centre/terrace-heart-lamp.svg",
+   "width": 45.6,
+   "height": 138,
+   "name": "Centre terrace-lamp-0",
+   "x": 3667.6,
+   "y": 2377,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9217391304347826
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2377,
+   "centrePiece": "terrace-lamp-0"
+  },
+  {
+   "id": "centre-terrace-lamp-1",
+   "src": "centre/terrace-heart-lamp.svg",
+   "width": 45.6,
+   "height": 138,
+   "name": "Centre terrace-lamp-1",
+   "x": 4332.4,
+   "y": 2377,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9217391304347826
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2377,
+   "centrePiece": "terrace-lamp-1"
+  },
+  {
+   "id": "centre-terrace-lamp-2",
+   "src": "centre/terrace-heart-lamp.svg",
+   "width": 45.6,
+   "height": 138,
+   "name": "Centre terrace-lamp-2",
+   "x": 3667.6,
+   "y": 2671,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9217391304347826
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2671,
+   "centrePiece": "terrace-lamp-2"
+  },
+  {
+   "id": "centre-terrace-lamp-3",
+   "src": "centre/terrace-heart-lamp.svg",
+   "width": 45.6,
+   "height": 138,
+   "name": "Centre terrace-lamp-3",
+   "x": 4332.4,
+   "y": 2671,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9217391304347826
+   },
+   "scale": 1,
+   "flip": false,
+   "shadow": false,
+   "sortY": 2671,
+   "centrePiece": "terrace-lamp-3"
+  },
+  {
+   "id": "community-pink-0",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-01.svg",
+   "x": -200,
+   "y": 40,
+   "width": 553.5,
+   "height": 682.4399999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.678744,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-1",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -200,
+   "y": 70,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-2",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -350,
+   "y": 135,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-3",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -55,
+   "y": 125,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-4",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -350,
+   "y": 220,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-5",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -47,
+   "y": 220,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-6",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": -20,
+   "y": -20,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-7",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-02.svg",
+   "x": 330,
+   "y": -15,
+   "width": 709.4640000000002,
+   "height": 689.9904,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.709596,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-8",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 330,
+   "y": 15,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-9",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 180,
+   "y": 80,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-10",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 475,
+   "y": 70,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-11",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 180,
+   "y": 165,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-12",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 483,
+   "y": 165,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-13",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 530,
+   "y": 15,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-14",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-03.svg",
+   "x": 880,
+   "y": -10,
+   "width": 578.1,
+   "height": 769.5600000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.69417,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "dormer"
+  },
+  {
+   "id": "community-pink-15",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 880,
+   "y": 20,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-16",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 730,
+   "y": 85,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-17",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1025,
+   "y": 75,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-18",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 730,
+   "y": 170,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-19",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 1033,
+   "y": 170,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-20",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 1060,
+   "y": -70,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-21",
+   "name": "Lilac dollhouse",
+   "src": "expansion/house-04.svg",
+   "x": 1430,
+   "y": 50,
+   "width": 630.72,
+   "height": 639.35,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6722490000000001,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "porch"
+  },
+  {
+   "id": "community-pink-22",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 1430,
+   "y": 80,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-23",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 1280,
+   "y": 145,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-24",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1575,
+   "y": 135,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-25",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 1280,
+   "y": 230,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-26",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 1583,
+   "y": 230,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-27",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 1610,
+   "y": -10,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-28",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-05.svg",
+   "x": 1970,
+   "y": 120,
+   "width": 528.9,
+   "height": 740.52,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.69417,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-29",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 1970,
+   "y": 150,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-30",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 1820,
+   "y": 215,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-31",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2115,
+   "y": 205,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-32",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 1820,
+   "y": 300,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-33",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 2123,
+   "y": 300,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-34",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 2170,
+   "y": 150,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-35",
+   "name": "Rose cottage",
+   "src": "expansion/house-06.svg",
+   "x": 50,
+   "y": 980,
+   "width": 609,
+   "height": 537.5400000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5882,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-36",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 50,
+   "y": 1010,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-37",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -100,
+   "y": 1075,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-38",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 195,
+   "y": 1065,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-39",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -100,
+   "y": 1160,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-40",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 203,
+   "y": 1160,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-41",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 230,
+   "y": 920,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-42",
+   "name": "Rose cottage",
+   "src": "expansion/house-07.svg",
+   "x": 570,
+   "y": 1000,
+   "width": 548.1,
+   "height": 543.3199999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5882,
+   "flip": false,
+   "zone": "ribbonwick",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-43",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 570,
+   "y": 1030,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-44",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 420,
+   "y": 1095,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-45",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 715,
+   "y": 1085,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-46",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 420,
+   "y": 1180,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-47",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 723,
+   "y": 1180,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-48",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": 780,
+   "y": 1020,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-49",
+   "name": "ribbon-worktable",
+   "src": "expansion/ribbon-worktable.svg",
+   "x": 550,
+   "y": 500,
+   "width": 250,
+   "height": 180,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-50",
+   "name": "ribbon-worktable",
+   "src": "expansion/ribbon-worktable.svg",
+   "x": 940,
+   "y": 630,
+   "width": 250,
+   "height": 180,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-51",
+   "name": "ribbon-worktable",
+   "src": "expansion/ribbon-worktable.svg",
+   "x": 1810,
+   "y": 390,
+   "width": 250,
+   "height": 180,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-52",
+   "name": "Candy floss cart",
+   "src": "detail/candy-cart.svg",
+   "x": 1050,
+   "y": 850,
+   "width": 551,
+   "height": 709,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.41534,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-53",
+   "name": "Pink car",
+   "src": "detail/pink-car.svg",
+   "x": 1850,
+   "y": 350,
+   "width": 643,
+   "height": 468,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.33651000000000003,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-54",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 80,
+   "y": 610,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-55",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": -60,
+   "y": 570,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.29745000000000005,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-56",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 1250,
+   "y": 570,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-57",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 1110,
+   "y": 530,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.29745000000000005,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-58",
+   "name": "ribbon-sign",
+   "src": "expansion/ribbon-sign.svg",
+   "x": 550,
+   "y": 850,
+   "width": 170,
+   "height": 166,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "ribbonwick",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-59",
+   "name": "Lilac dollhouse",
+   "src": "expansion/house-08.svg",
+   "x": 5500,
+   "y": -50,
+   "width": 601.52,
+   "height": 592.24,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6954300000000001,
+   "flip": false,
+   "zone": "melody",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-60",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 5500,
+   "y": -20,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-61",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 5350,
+   "y": 45,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-62",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5645,
+   "y": 35,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-63",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 5350,
+   "y": 130,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-64",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 5653,
+   "y": 130,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-65",
+   "name": "music-rack",
+   "src": "expansion/music-rack.svg",
+   "x": 5720,
+   "y": -30,
+   "width": 150,
+   "height": 132,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-66",
+   "name": "Lilac dollhouse",
+   "src": "expansion/house-09.svg",
+   "x": 6020,
+   "y": -150,
+   "width": 548.9599999999999,
+   "height": 713.38,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6722490000000001,
+   "flip": false,
+   "zone": "melody",
+   "household": true,
+   "variant": "dormer"
+  },
+  {
+   "id": "community-pink-67",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 6020,
+   "y": -120,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-68",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 5870,
+   "y": -55,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-69",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 6165,
+   "y": -65,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-70",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 5870,
+   "y": 30,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-71",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 6173,
+   "y": 30,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-72",
+   "name": "music-rack",
+   "src": "expansion/music-rack.svg",
+   "x": 6240,
+   "y": -130,
+   "width": 150,
+   "height": 132,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-73",
+   "name": "Lilac dollhouse",
+   "src": "expansion/house-10.svg",
+   "x": 6550,
+   "y": -90,
+   "width": 706.4064000000001,
+   "height": 690.498,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.703157,
+   "flip": false,
+   "zone": "melody",
+   "household": true,
+   "variant": "porch"
+  },
+  {
+   "id": "community-pink-74",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 6550,
+   "y": -60,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-75",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 6400,
+   "y": 5,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-76",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 6695,
+   "y": -5,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-77",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 6400,
+   "y": 90,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-78",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 6703,
+   "y": 90,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-79",
+   "name": "music-rack",
+   "src": "expansion/music-rack.svg",
+   "x": 6770,
+   "y": -70,
+   "width": 150,
+   "height": 132,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-80",
+   "name": "Lilac dollhouse",
+   "src": "expansion/house-11.svg",
+   "x": 7060,
+   "y": 70,
+   "width": 502.24,
+   "height": 686.46,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.679976,
+   "flip": false,
+   "zone": "melody",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-81",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 7060,
+   "y": 100,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-82",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 6910,
+   "y": 165,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-83",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7205,
+   "y": 155,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-84",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 6910,
+   "y": 250,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-85",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 7213,
+   "y": 250,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-86",
+   "name": "music-rack",
+   "src": "expansion/music-rack.svg",
+   "x": 7280,
+   "y": 90,
+   "width": 150,
+   "height": 132,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-87",
+   "name": "Lilac dollhouse",
+   "src": "expansion/house-12.svg",
+   "x": 7340,
+   "y": 660,
+   "width": 584,
+   "height": 625.89,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.656795,
+   "flip": false,
+   "zone": "melody",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-88",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 7340,
+   "y": 690,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-89",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 7190,
+   "y": 755,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-90",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7485,
+   "y": 745,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-91",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 7190,
+   "y": 840,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-92",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 7493,
+   "y": 840,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-93",
+   "name": "music-rack",
+   "src": "expansion/music-rack.svg",
+   "x": 7560,
+   "y": 680,
+   "width": 150,
+   "height": 132,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-94",
+   "name": "ribbon-stage",
+   "src": "expansion/ribbon-stage.svg",
+   "x": 6200,
+   "y": 380,
+   "width": 650,
+   "height": 420,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-95",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 5800,
+   "y": 400,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-96",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 5680,
+   "y": 370,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.29745000000000005,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-97",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 6700,
+   "y": 400,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-98",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 6580,
+   "y": 370,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.29745000000000005,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-99",
+   "name": "Picnic blanket",
+   "src": "detail/picnic-blanket.svg",
+   "x": 6860,
+   "y": 600,
+   "width": 634,
+   "height": 495,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3636,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-100",
+   "name": "music-rack",
+   "src": "expansion/music-rack.svg",
+   "x": 5530,
+   "y": 360,
+   "width": 205,
+   "height": 180,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "melody",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-101",
+   "name": "Rose cottage",
+   "src": "expansion/house-13.svg",
+   "x": 8240,
+   "y": 1560,
+   "width": 548.1,
+   "height": 543.3199999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.60896,
+   "flip": false,
+   "zone": "quay",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-102",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 8240,
+   "y": 1590,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-103",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 8090,
+   "y": 1655,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-104",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8385,
+   "y": 1645,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-105",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8090,
+   "y": 1740,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-106",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8393,
+   "y": 1740,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-107",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 8440,
+   "y": 1590,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-108",
+   "name": "Rose cottage",
+   "src": "expansion/house-14.svg",
+   "x": 8760,
+   "y": 1590,
+   "width": 702.5424,
+   "height": 549.3312,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6228,
+   "flip": false,
+   "zone": "quay",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-109",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 8760,
+   "y": 1620,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-110",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 8610,
+   "y": 1685,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-111",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8905,
+   "y": 1675,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-112",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8610,
+   "y": 1770,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-113",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8913,
+   "y": 1770,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-114",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 8960,
+   "y": 1620,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-115",
+   "name": "Rose cottage",
+   "src": "expansion/house-15.svg",
+   "x": 9290,
+   "y": 1820,
+   "width": 572.4599999999999,
+   "height": 612.6800000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.60896,
+   "flip": false,
+   "zone": "quay",
+   "household": true,
+   "variant": "dormer"
+  },
+  {
+   "id": "community-pink-116",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 9290,
+   "y": 1850,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-117",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 9140,
+   "y": 1915,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-118",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9435,
+   "y": 1905,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-119",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 9140,
+   "y": 2000,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-120",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 9443,
+   "y": 2000,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-121",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 9490,
+   "y": 1850,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-122",
+   "name": "Rose cottage",
+   "src": "expansion/house-16.svg",
+   "x": 9250,
+   "y": 2400,
+   "width": 657.72,
+   "height": 549.1,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6020399999999999,
+   "flip": false,
+   "zone": "quay",
+   "household": true,
+   "variant": "porch"
+  },
+  {
+   "id": "community-pink-123",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 9250,
+   "y": 2430,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-124",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 9100,
+   "y": 2495,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-125",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9395,
+   "y": 2485,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-126",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 9100,
+   "y": 2580,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-127",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 9403,
+   "y": 2580,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-128",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 9450,
+   "y": 2430,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-129",
+   "name": "Rose cottage",
+   "src": "expansion/house-17.svg",
+   "x": 8780,
+   "y": 2790,
+   "width": 523.74,
+   "height": 589.5600000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6228,
+   "flip": false,
+   "zone": "quay",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-130",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 8780,
+   "y": 2820,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-131",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 8630,
+   "y": 2885,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-132",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8925,
+   "y": 2875,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-133",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8630,
+   "y": 2970,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-134",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8933,
+   "y": 2970,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-135",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 8980,
+   "y": 2820,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-136",
+   "name": "Rose cottage",
+   "src": "expansion/house-18.svg",
+   "x": 8250,
+   "y": 2760,
+   "width": 609,
+   "height": 537.5400000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5882,
+   "flip": false,
+   "zone": "quay",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-137",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 8250,
+   "y": 2790,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-138",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 8100,
+   "y": 2855,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-139",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8395,
+   "y": 2845,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-140",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8100,
+   "y": 2940,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-141",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 8403,
+   "y": 2940,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-142",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 8450,
+   "y": 2790,
+   "width": 130,
+   "height": 96,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-143",
+   "name": "Teacup cafe",
+   "src": "detail/teacup-cafe.svg",
+   "x": 8410,
+   "y": 820,
+   "width": 630,
+   "height": 616,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.74774,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-144",
+   "name": "tea-table",
+   "src": "expansion/tea-table.svg",
+   "x": 8120,
+   "y": 1100,
+   "width": 170,
+   "height": 148,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-145",
+   "name": "tea-table",
+   "src": "expansion/tea-table.svg",
+   "x": 8580,
+   "y": 1140,
+   "width": 170,
+   "height": 148,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-146",
+   "name": "tea-table",
+   "src": "expansion/tea-table.svg",
+   "x": 8890,
+   "y": 970,
+   "width": 170,
+   "height": 148,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-147",
+   "name": "Pink parasol",
+   "src": "detail/parasol.svg",
+   "x": 8380,
+   "y": 1230,
+   "width": 478,
+   "height": 549,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.43312399999999995,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-148",
+   "name": "ribbon-worktable",
+   "src": "expansion/ribbon-worktable.svg",
+   "x": 8950,
+   "y": 2130,
+   "width": 250,
+   "height": 180,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-149",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 9270,
+   "y": 2700,
+   "width": 170,
+   "height": 125,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-150",
+   "name": "parcel-stack",
+   "src": "expansion/parcel-stack.svg",
+   "x": 9460,
+   "y": 2830,
+   "width": 170,
+   "height": 125,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-151",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 8260,
+   "y": 2230,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-152",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 8140,
+   "y": 2200,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.29745000000000005,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-153",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 8870,
+   "y": 2450,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-154",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 8750,
+   "y": 2420,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.29745000000000005,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-155",
+   "name": "ribbon-sign",
+   "src": "expansion/ribbon-sign.svg",
+   "x": 9500,
+   "y": 2840,
+   "width": 170,
+   "height": 166,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "quay",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-156",
+   "name": "Rose cottage",
+   "src": "expansion/house-19.svg",
+   "x": -1160,
+   "y": 2160,
+   "width": 548.1,
+   "height": 543.3199999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5882,
+   "flip": false,
+   "zone": "petalpatch",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-157",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -1160,
+   "y": 2190,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-158",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -1310,
+   "y": 2255,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-159",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1015,
+   "y": 2245,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-160",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -1310,
+   "y": 2340,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-161",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -1007,
+   "y": 2340,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-162",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": -950,
+   "y": 2180,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-163",
+   "name": "Rose cottage",
+   "src": "expansion/house-20.svg",
+   "x": -630,
+   "y": 2110,
+   "width": 702.5424,
+   "height": 549.3312,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.60896,
+   "flip": false,
+   "zone": "petalpatch",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-164",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -630,
+   "y": 2140,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-165",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -780,
+   "y": 2205,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-166",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -485,
+   "y": 2195,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-167",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -780,
+   "y": 2290,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-168",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -477,
+   "y": 2290,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-169",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": -420,
+   "y": 2130,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-170",
+   "name": "Rose cottage",
+   "src": "expansion/house-21.svg",
+   "x": -100,
+   "y": 2190,
+   "width": 572.4599999999999,
+   "height": 612.6800000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.59512,
+   "flip": false,
+   "zone": "petalpatch",
+   "household": true,
+   "variant": "dormer"
+  },
+  {
+   "id": "community-pink-171",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -100,
+   "y": 2220,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-172",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -250,
+   "y": 2285,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-173",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 45,
+   "y": 2275,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-174",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -250,
+   "y": 2370,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-175",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 53,
+   "y": 2370,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-176",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": 110,
+   "y": 2210,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-177",
+   "name": "Rose cottage",
+   "src": "expansion/house-22.svg",
+   "x": -1130,
+   "y": 3180,
+   "width": 657.72,
+   "height": 549.1,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5882,
+   "flip": false,
+   "zone": "petalpatch",
+   "household": true,
+   "variant": "porch"
+  },
+  {
+   "id": "community-pink-178",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -1130,
+   "y": 3210,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-179",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -1280,
+   "y": 3275,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-180",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -985,
+   "y": 3265,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-181",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -1280,
+   "y": 3360,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-182",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -977,
+   "y": 3360,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-183",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": -920,
+   "y": 3200,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-184",
+   "name": "Rose cottage",
+   "src": "expansion/house-23.svg",
+   "x": -600,
+   "y": 3250,
+   "width": 523.74,
+   "height": 589.5600000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.59512,
+   "flip": false,
+   "zone": "petalpatch",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-185",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -600,
+   "y": 3280,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-186",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -750,
+   "y": 3345,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-187",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -455,
+   "y": 3335,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-188",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -750,
+   "y": 3430,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-189",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -447,
+   "y": 3430,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-190",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": -390,
+   "y": 3270,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-191",
+   "name": "Rose cottage",
+   "src": "expansion/house-24.svg",
+   "x": -60,
+   "y": 3200,
+   "width": 609,
+   "height": 537.5400000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5674399999999999,
+   "flip": false,
+   "zone": "petalpatch",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-192",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": -60,
+   "y": 3230,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-193",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": -210,
+   "y": 3295,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-194",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 85,
+   "y": 3285,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-195",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": -210,
+   "y": 3380,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-196",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 93,
+   "y": 3380,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-197",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": 150,
+   "y": 3220,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-198",
+   "name": "rose-glasshouse",
+   "src": "expansion/rose-glasshouse.svg",
+   "x": -700,
+   "y": 2670,
+   "width": 670,
+   "height": 620,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-199",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": -1190,
+   "y": 2780,
+   "width": 260,
+   "height": 174,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-200",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": -290,
+   "y": 2880,
+   "width": 260,
+   "height": 174,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "petalpatch",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-201",
+   "name": "Slide tower",
+   "src": "detail/play-tower.svg",
+   "x": 200,
+   "y": 2720,
+   "width": 659,
+   "height": 691,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.48624,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-202",
+   "name": "Picnic blanket",
+   "src": "detail/picnic-blanket.svg",
+   "x": 30,
+   "y": 2950,
+   "width": 634,
+   "height": 495,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.31815,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-203",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": -580,
+   "y": 2960,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-204",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": -700,
+   "y": 2950,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.280925,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-205",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-25.svg",
+   "x": 3170,
+   "y": 5680,
+   "width": 553.5,
+   "height": 682.4399999999999,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.601614,
+   "flip": false,
+   "zone": "tutu",
+   "household": true,
+   "variant": "scallop"
+  },
+  {
+   "id": "community-pink-206",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 3170,
+   "y": 5710,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-207",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 3020,
+   "y": 5775,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-208",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 3315,
+   "y": 5765,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-209",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 3020,
+   "y": 5860,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-210",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 3323,
+   "y": 5860,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-211",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 3350,
+   "y": 5620,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-212",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-26.svg",
+   "x": 3690,
+   "y": 5710,
+   "width": 633.45,
+   "height": 638.88,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.632466,
+   "flip": false,
+   "zone": "tutu",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-213",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 3690,
+   "y": 5740,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-214",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 3540,
+   "y": 5805,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-215",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 3835,
+   "y": 5795,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-216",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 3540,
+   "y": 5890,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-217",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 3843,
+   "y": 5890,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-218",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 3870,
+   "y": 5650,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-219",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-27.svg",
+   "x": 4250,
+   "y": 5750,
+   "width": 578.1,
+   "height": 769.5600000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.624753,
+   "flip": false,
+   "zone": "tutu",
+   "household": true,
+   "variant": "dormer"
+  },
+  {
+   "id": "community-pink-220",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 4250,
+   "y": 5780,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-221",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 4100,
+   "y": 5845,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-222",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4395,
+   "y": 5835,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-223",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 4100,
+   "y": 5930,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-224",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 4403,
+   "y": 5930,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-225",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 4430,
+   "y": 5690,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-226",
+   "name": "Pink dollhouse",
+   "src": "expansion/house-28.svg",
+   "x": 4780,
+   "y": 5600,
+   "width": 743.9040000000001,
+   "height": 744.876,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.61704,
+   "flip": false,
+   "zone": "tutu",
+   "household": true,
+   "variant": "porch"
+  },
+  {
+   "id": "community-pink-227",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 4780,
+   "y": 5630,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-228",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 4630,
+   "y": 5695,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-229",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4925,
+   "y": 5685,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-230",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 4630,
+   "y": 5780,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-231",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 4933,
+   "y": 5780,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-232",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 4960,
+   "y": 5540,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-233",
+   "name": "Rose cottage",
+   "src": "expansion/house-29.svg",
+   "x": 5290,
+   "y": 5380,
+   "width": 523.74,
+   "height": 589.5600000000001,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5674399999999999,
+   "flip": false,
+   "zone": "tutu",
+   "household": true,
+   "variant": "awning"
+  },
+  {
+   "id": "community-pink-234",
+   "name": "doorstep",
+   "src": "expansion/doorstep.svg",
+   "x": 5290,
+   "y": 5410,
+   "width": 130,
+   "height": 44,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-235",
+   "name": "Heart mailbox",
+   "src": "detail/mailbox.svg",
+   "x": 5140,
+   "y": 5475,
+   "width": 359,
+   "height": 597,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15008,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-236",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5435,
+   "y": 5465,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.13892,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-237",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 5140,
+   "y": 5560,
+   "width": 220,
+   "height": 60,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-238",
+   "name": "garden-fence",
+   "src": "expansion/garden-fence.svg",
+   "x": 5443,
+   "y": 5560,
+   "width": 190,
+   "height": 53,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-239",
+   "name": "washing-line",
+   "src": "expansion/washing-line.svg",
+   "x": 5470,
+   "y": 5320,
+   "width": 240,
+   "height": 107,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-240",
+   "name": "ribbon-stage",
+   "src": "expansion/ribbon-stage.svg",
+   "x": 4000,
+   "y": 6200,
+   "width": 650,
+   "height": 420,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-241",
+   "name": "ribbon-worktable",
+   "src": "expansion/ribbon-worktable.svg",
+   "x": 4520,
+   "y": 6100,
+   "width": 250,
+   "height": 180,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "tutu",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-242",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 3520,
+   "y": 6150,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-243",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 3400,
+   "y": 6130,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.280925,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-244",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 4400,
+   "y": 6410,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-245",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 4280,
+   "y": 6390,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.280925,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-246",
+   "name": "Candy floss cart",
+   "src": "detail/candy-cart.svg",
+   "x": 4890,
+   "y": 5800,
+   "width": 551,
+   "height": 709,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.39348,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-247",
+   "name": "Pink parasol",
+   "src": "detail/parasol.svg",
+   "x": 3820,
+   "y": 6470,
+   "width": 478,
+   "height": 549,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.47538,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-248",
+   "name": "Picnic blanket",
+   "src": "detail/picnic-blanket.svg",
+   "x": 4120,
+   "y": 6510,
+   "width": 634,
+   "height": 495,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.31815,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-249",
+   "name": "Sandcastle",
+   "src": "detail/sandcastle-pink.svg",
+   "x": 3980,
+   "y": 6710,
+   "width": 570,
+   "height": 526,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.193885,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-250",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -930,
+   "y": 180,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-251",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -900,
+   "y": 700,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-252",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2450,
+   "y": -50,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-253",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2600,
+   "y": 360,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-254",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 1500,
+   "y": -500,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-255",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -100,
+   "y": -500,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-256",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 620,
+   "y": 1100,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-257",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2720,
+   "y": 450,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-258",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 4900,
+   "y": -190,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-259",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 5100,
+   "y": 470,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-260",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 5500,
+   "y": -580,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-261",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 6840,
+   "y": -480,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-262",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 7670,
+   "y": 280,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-263",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 7340,
+   "y": 980,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-264",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 7000,
+   "y": 790,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-265",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 7700,
+   "y": 830,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-266",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 9120,
+   "y": 1000,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-267",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 9480,
+   "y": 1510,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-268",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 9630,
+   "y": 2090,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-269",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 9500,
+   "y": 3040,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-270",
+   "name": "Pink willow tree",
+   "src": "detail/tree-willow.svg",
+   "x": 7990,
+   "y": 3260,
+   "width": 503,
+   "height": 550,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.9091,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-271",
+   "name": "Pink willow tree",
+   "src": "detail/tree-willow.svg",
+   "x": 8580,
+   "y": 3280,
+   "width": 503,
+   "height": 550,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.790917,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-272",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -1520,
+   "y": 2010,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-273",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -1560,
+   "y": 2860,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-274",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -1220,
+   "y": 3480,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-275",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -600,
+   "y": 3660,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-276",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 300,
+   "y": 3430,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-277",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 340,
+   "y": 2210,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-278",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2820,
+   "y": 5510,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-279",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 3020,
+   "y": 5930,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-280",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 3530,
+   "y": 6500,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-281",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 4800,
+   "y": 6150,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-282",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 5100,
+   "y": 5830,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-283",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 5500,
+   "y": 5400,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.7978,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-284",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -690,
+   "y": 1060,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-285",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -760,
+   "y": 1090,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-286",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -625,
+   "y": 1082,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-287",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 1020,
+   "y": 740,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-288",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 950,
+   "y": 770,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-289",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1085,
+   "y": 762,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-290",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 1390,
+   "y": 400,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-291",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1320,
+   "y": 430,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-292",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1455,
+   "y": 422,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-293",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 2040,
+   "y": 270,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-294",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1970,
+   "y": 300,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-295",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2105,
+   "y": 292,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-296",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 2630,
+   "y": 210,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-297",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2560,
+   "y": 240,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-298",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2695,
+   "y": 232,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "community-pink-299",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 5290,
+   "y": 330,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-300",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5220,
+   "y": 360,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-301",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5355,
+   "y": 352,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-302",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 5590,
+   "y": 350,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-303",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5520,
+   "y": 380,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-304",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5655,
+   "y": 372,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-305",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 6790,
+   "y": 600,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-306",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 6720,
+   "y": 630,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-307",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 6855,
+   "y": 622,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-308",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 7180,
+   "y": 700,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-309",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7110,
+   "y": 730,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-310",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7245,
+   "y": 722,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "melody"
+  },
+  {
+   "id": "community-pink-311",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 7890,
+   "y": 1570,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-312",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7820,
+   "y": 1600,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-313",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7955,
+   "y": 1592,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-314",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 9500,
+   "y": 2010,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-315",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9430,
+   "y": 2040,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-316",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9565,
+   "y": 2032,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-317",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 8020,
+   "y": 2490,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-318",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7950,
+   "y": 2520,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-319",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8085,
+   "y": 2512,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-320",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 8610,
+   "y": 3130,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-321",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8540,
+   "y": 3160,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-322",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8675,
+   "y": 3152,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-323",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 9330,
+   "y": 3090,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-324",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9260,
+   "y": 3120,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-325",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9395,
+   "y": 3112,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "quay"
+  },
+  {
+   "id": "community-pink-326",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -1470,
+   "y": 2550,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-327",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1540,
+   "y": 2580,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-328",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1405,
+   "y": 2572,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-329",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -1500,
+   "y": 3160,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-330",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1570,
+   "y": 3190,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-331",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1435,
+   "y": 3182,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-332",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -1000,
+   "y": 3520,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-333",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1070,
+   "y": 3550,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-334",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -935,
+   "y": 3542,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-335",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -190,
+   "y": 3480,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-336",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -260,
+   "y": 3510,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-337",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -125,
+   "y": 3502,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-338",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 350,
+   "y": 3020,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-339",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 280,
+   "y": 3050,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-340",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 415,
+   "y": 3042,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "community-pink-341",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 2920,
+   "y": 5790,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-342",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2850,
+   "y": 5820,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-343",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2985,
+   "y": 5812,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-344",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 3360,
+   "y": 5920,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-345",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 3290,
+   "y": 5950,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-346",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 3425,
+   "y": 5942,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-347",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 4620,
+   "y": 5940,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-348",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4550,
+   "y": 5970,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-349",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4685,
+   "y": 5962,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-350",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 5070,
+   "y": 5550,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-351",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5000,
+   "y": 5580,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-352",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 5135,
+   "y": 5572,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-353",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 4460,
+   "y": 6620,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.22278499999999998,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-354",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4390,
+   "y": 6650,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.15855,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-355",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4525,
+   "y": 6642,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": true,
+   "zone": "tutu"
+  },
+  {
+   "id": "community-pink-356",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 1100,
+   "y": 4440,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-357",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 980,
+   "y": 4405,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.280925,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-358",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 840,
+   "y": 4360,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.71802,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-359",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1250,
+   "y": 4470,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.151,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-360",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 6900,
+   "y": 4590,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-361",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 6780,
+   "y": 4555,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.280925,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-362",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 6640,
+   "y": 4510,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.71802,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-363",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7050,
+   "y": 4620,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.151,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-364",
+   "name": "Bow bench",
+   "src": "detail/bow-bench.svg",
+   "x": 2370,
+   "y": -200,
+   "width": 474,
+   "height": 449,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.3118,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-365",
+   "name": "Heart lamp",
+   "src": "detail/lamp-heart.svg",
+   "x": 2250,
+   "y": -235,
+   "width": 250,
+   "height": 696,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.280925,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-366",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2110,
+   "y": -280,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.71802,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-367",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2520,
+   "y": -170,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.151,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-368",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2880,
+   "y": -90,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.622284,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-369",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 3260,
+   "y": -260,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.71802,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-370",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 3560,
+   "y": -40,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5744159999999999,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-371",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 3030,
+   "y": 220,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.526548,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-372",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 430,
+   "y": 3530,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.63824,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-373",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 810,
+   "y": 3700,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.71802,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-374",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 1640,
+   "y": 3960,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.5744159999999999,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-375",
+   "name": "Pink willow tree",
+   "src": "detail/tree-willow.svg",
+   "x": 7290,
+   "y": 3400,
+   "width": 503,
+   "height": 550,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.772735,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-376",
+   "name": "Pink willow tree",
+   "src": "detail/tree-willow.svg",
+   "x": 7900,
+   "y": 3630,
+   "width": 503,
+   "height": 550,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.63637,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-377",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 6740,
+   "y": 4400,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.606328,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-378",
+   "name": "Picnic blanket",
+   "src": "detail/picnic-blanket.svg",
+   "x": 600,
+   "y": 3910,
+   "width": 634,
+   "height": 495,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.39390000000000003,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-379",
+   "name": "tea-table",
+   "src": "expansion/tea-table.svg",
+   "x": 850,
+   "y": 4120,
+   "width": 170,
+   "height": 148,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "commons",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-380",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 2770,
+   "y": 120,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1963,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-381",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 3330,
+   "y": 170,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1963,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-382",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 970,
+   "y": 3510,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1963,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-383",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 1260,
+   "y": 3750,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1963,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-384",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 7470,
+   "y": 3640,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1963,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-385",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 8080,
+   "y": 3860,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1963,
+   "flip": false,
+   "zone": "commons"
+  },
+  {
+   "id": "community-pink-386",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": 390,
+   "y": 3340,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "commons",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-387",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": 590,
+   "y": 3480,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "commons",
+   "shadow": false
+  },
+  {
+   "id": "community-pink-388",
+   "name": "potting-bench",
+   "src": "expansion/potting-bench.svg",
+   "x": 490,
+   "y": 3670,
+   "width": 185,
+   "height": 124,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "scale": 1,
+   "zone": "commons",
+   "shadow": false
+  },
+  {
+   "id": "dense-pink-389",
+   "src": "expansion/shared-well.svg",
+   "x": 1160,
+   "y": 470,
+   "zone": "ribbonwick",
+   "width": 155,
+   "height": 164,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "shadow": false
+  },
+  {
+   "id": "dense-pink-390",
+   "src": "expansion/shared-well.svg",
+   "x": -320,
+   "y": 3050,
+   "zone": "petalpatch",
+   "width": 145,
+   "height": 153,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "shadow": false
+  },
+  {
+   "id": "dense-pink-391",
+   "src": "expansion/washing-line.svg",
+   "x": 6650,
+   "y": 10,
+   "zone": "melody",
+   "width": 240,
+   "height": 107,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "shadow": false
+  },
+  {
+   "id": "dense-pink-392",
+   "src": "expansion/washing-line.svg",
+   "x": 8870,
+   "y": 1610,
+   "zone": "quay",
+   "width": 240,
+   "height": 107,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "shadow": false
+  },
+  {
+   "id": "dense-pink-393",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -50,
+   "y": 340,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-394",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 490,
+   "y": 310,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-395",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 1040,
+   "y": 330,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-396",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 1600,
+   "y": 380,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-397",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -610,
+   "y": -240,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.829712,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-398",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -80,
+   "y": -510,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6861079999999999,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-399",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 480,
+   "y": -540,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.829712,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-400",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 1010,
+   "y": -560,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6541959999999999,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-401",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 1690,
+   "y": -480,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.694086,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-402",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -260,
+   "y": 650,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": false,
+   "zone": "ribbonwick"
+  },
+  {
+   "id": "dense-pink-403",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 5700,
+   "y": -560,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.725998,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "dense-pink-404",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 6210,
+   "y": -600,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.8137559999999999,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "dense-pink-405",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 6730,
+   "y": -510,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6781299999999999,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "dense-pink-406",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 5700,
+   "y": 260,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "dense-pink-407",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 6250,
+   "y": 200,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "dense-pink-408",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 6800,
+   "y": 290,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18347,
+   "flip": false,
+   "zone": "melody"
+  },
+  {
+   "id": "dense-pink-409",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 8410,
+   "y": 1830,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "dense-pink-410",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 8950,
+   "y": 1850,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "dense-pink-411",
+   "name": "Pink willow tree",
+   "src": "detail/tree-willow.svg",
+   "x": 9400,
+   "y": 1300,
+   "width": 503,
+   "height": 550,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.745462,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "dense-pink-412",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 9060,
+   "y": 2790,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18875,
+   "flip": false,
+   "zone": "quay"
+  },
+  {
+   "id": "dense-pink-413",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -925,
+   "y": 2410,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "dense-pink-414",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": -385,
+   "y": 2390,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "dense-pink-415",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -1550,
+   "y": 2410,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6781299999999999,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "dense-pink-416",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": -1550,
+   "y": 3100,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.6541959999999999,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "dense-pink-417",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": -1400,
+   "y": 2970,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.18875,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "dense-pink-418",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 150,
+   "y": 3080,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1661,
+   "flip": false,
+   "zone": "petalpatch"
+  },
+  {
+   "id": "dense-pink-419",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 3250,
+   "y": 5990,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "dense-pink-420",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 3800,
+   "y": 5970,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "dense-pink-421",
+   "name": "Heart hedge bush",
+   "src": "detail/heart-hedge.svg",
+   "x": 4350,
+   "y": 5940,
+   "width": 597,
+   "height": 515,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.17036500000000002,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "dense-pink-422",
+   "name": "Cherry tree",
+   "src": "detail/tree-cherry.svg",
+   "x": 2850,
+   "y": 6200,
+   "width": 481,
+   "height": 539,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.670152,
+   "flip": false,
+   "zone": "tutu"
+  },
+  {
+   "id": "dense-pink-423",
+   "name": "Tulip flowers",
+   "src": "detail/flowers-pink.svg",
+   "x": 4650,
+   "y": 6380,
+   "width": 567,
+   "height": 505,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.99
+   },
+   "scale": 0.1812,
+   "flip": false,
+   "zone": "tutu"
   }
- ]
+ ],
+ "origin": {
+  "x": -2600,
+  "y": -1900
+ }
 }

@@ -1,0 +1,117 @@
+{
+  "scale": 1,
+  "compared": 20463356,
+  "changed": 0,
+  "maxChannelDelta": 0,
+  "chunks": [
+    {
+      "x": 0,
+      "y": 0,
+      "compared": 334783,
+      "changed": 0
+    },
+    {
+      "x": 1600,
+      "y": 0,
+      "compared": 618023,
+      "changed": 0
+    },
+    {
+      "x": 3200,
+      "y": 0,
+      "compared": 1129626,
+      "changed": 0
+    },
+    {
+      "x": 4800,
+      "y": 0,
+      "compared": 447411,
+      "changed": 0
+    },
+    {
+      "x": 0,
+      "y": 1500,
+      "compared": 367686,
+      "changed": 0
+    },
+    {
+      "x": 1600,
+      "y": 1500,
+      "compared": 2341675,
+      "changed": 0
+    },
+    {
+      "x": 3200,
+      "y": 1500,
+      "compared": 2400000,
+      "changed": 0
+    },
+    {
+      "x": 4800,
+      "y": 1500,
+      "compared": 2374628,
+      "changed": 0
+    },
+    {
+      "x": 6400,
+      "y": 1500,
+      "compared": 459920,
+      "changed": 0
+    },
+    {
+      "x": 0,
+      "y": 3000,
+      "compared": 633536,
+      "changed": 0
+    },
+    {
+      "x": 1600,
+      "y": 3000,
+      "compared": 2374855,
+      "changed": 0
+    },
+    {
+      "x": 3200,
+      "y": 3000,
+      "compared": 2400000,
+      "changed": 0
+    },
+    {
+      "x": 4800,
+      "y": 3000,
+      "compared": 2326857,
+      "changed": 0
+    },
+    {
+      "x": 6400,
+      "y": 3000,
+      "compared": 481434,
+      "changed": 0
+    },
+    {
+      "x": 1600,
+      "y": 4500,
+      "compared": 358915,
+      "changed": 0
+    },
+    {
+      "x": 3200,
+      "y": 4500,
+      "compared": 767543,
+      "changed": 0
+    },
+    {
+      "x": 4800,
+      "y": 4500,
+      "compared": 343880,
+      "changed": 0
+    },
+    {
+      "x": 6400,
+      "y": 4500,
+      "compared": 302584,
+      "changed": 0
+    }
+  ],
+  "mask": "Original coast inset 0.6 percent, original islets inset 15 units; native texture pixels. No post-render restoration. Every original prop and flat is included in both independent renders."
+}

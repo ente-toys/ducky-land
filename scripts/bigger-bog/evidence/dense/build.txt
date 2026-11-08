@@ -1,0 +1,37 @@
+Authored Bog plan: 4 neighbourhoods, 137 new props.
+{
+  "method": "10-world-unit pixel centres; union of sandy road ribbons, squares and conservative 26-unit banks; new dry land only; excludes beach, original heart and water",
+  "before": {
+    "newDryLandArea": 59907299.999999985,
+    "roadAndBankArea": 23610899.999999996,
+    "percent": 39.41239214586536
+  },
+  "after": {
+    "newDryLandArea": 59907299.999999985,
+    "roadAndBankArea": 9226299.999999998,
+    "percent": 15.40096115164596
+  },
+  "homes": [
+    {
+      "id": "croakettle",
+      "meanDistanceBefore": 876.5129926016122,
+      "meanDistanceAfter": 697.086779060132
+    },
+    {
+      "id": "wickwaddle",
+      "meanDistanceBefore": 1036.4318253485842,
+      "meanDistanceAfter": 762.2064814198087
+    },
+    {
+      "id": "sporebutton",
+      "meanDistanceBefore": 892.9277350024722,
+      "meanDistanceAfter": 739.3561410459048
+    },
+    {
+      "id": "reedwhistle",
+      "meanDistanceBefore": 894.9954939888595,
+      "meanDistanceAfter": 766.2167430892308
+    }
+  ]
+}
+Dense Bog built; whole island and four production-asset crops saved.
