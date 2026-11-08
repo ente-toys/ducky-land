@@ -30,7 +30,7 @@ export const FIELD_RES = 25, FIELD_PAD = 700;
 // The home island's harbor: a real wooden jetty, its foot on the north lawn, the deck out over the water (boss 5 Nov).
 const HOME_JETTY = expansion.jetty;
 // round 4: the east islet (3930, 3830), its jetty and stub path are gone from the ground art
-const trimHome = w => ({...w, islets: w.islets.filter(a => ![3930, 3340, 2290].includes(a[0])), walkways: w.walkways.filter(b => ![3940, 3320, 2320].includes(b.a[0]))});   // boss 8 Nov: the centre jetties' pads and walkways are gone (placements.js trimWorld)
+const trimHome = w => ({...w, islets: w.islets.filter(a => ![3930, 3340, 2290, 5450].includes(a[0])), walkways: w.walkways.filter(b => ![3940, 3320, 2320, 5050].includes(b.a[0]))});   // + jetty 5 and its islet (boss 8 Nov)   // boss 8 Nov: the centre jetties' pads and walkways are gone (placements.js trimWorld)
 
 export function makeMap(id, {world, walk = null, harbor, art = null, sea = null, centre = null, addJetty = true, sleepers = null}) {
   world = fixThemeWorld(id, world);

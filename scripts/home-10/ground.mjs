@@ -101,8 +101,6 @@ const open = E.openSpaces ?? [], places = [...(E.places ?? []), ...(E.commons ??
 
 const half = p => (p.width ?? 0) * (p.scale ?? 1) / 2;
 const placed = E.props;   // every prop stays exactly as the other lanes left it
-// the orchard apple art, outlined in the one ink (art only; no tree is placed by this script)
-writeFileSync('public/pixi-art/plants/tree-apple.svg', readFileSync('public/pixi-art/home-expansion-c/apple-tree-1589.svg', 'utf8').replace(/#8b4b32/gi, INK).replace(/#885931/gi, INK));
 const xs = coast.map(p => p[0]), ys = coast.map(p => p[1]);
 const [X0, X1, Y0, Y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
 
@@ -152,7 +150,7 @@ for (let i = 1; i < 260000; i++) {
 // The round sand pads under the old jetties are drawn into two of the centre's own ground tiles. Their islet groups are cut out
 // of those tiles (idempotent: a tile without them is left as it is); the arched bridges below replace the jetties.
 const endOfGroup = (svg, k) => {let depth = 0; const re = /<g\b[^>]*>|<\/g>/g; re.lastIndex = k; for (let m; (m = re.exec(svg));) {if (m[0][1] === '/') depth--; else if (!m[0].endsWith('/>')) depth++; if (!depth) return re.lastIndex;} return -1;};
-for (const name of ['ground-r2-c1.svg', 'ground-r2-c2.svg']) {
+for (const name of ['ground-r2-c1.svg', 'ground-r2-c2.svg', 'ground-r1-c3.svg']) {   // r1-c3: jetty 5's islet in the mill stream (boss 8 Nov)
   const f = `public/pixi-art/home-expansion/${name}`, svg = readFileSync(f, 'utf8'), i = svg.indexOf('<g data-name="Islet sand"');
   if (i < 0) continue;
   let e = i; while (svg.startsWith('<g data-name="Islet', e)) {e = endOfGroup(svg, e); while (/\s/.test(svg[e])) e++;}
@@ -222,38 +220,42 @@ const BRIDGES = [
   {id: 'river-crossing-4', river: 'mill-stream', a: [5733, 1805], b: [5772, 2070], r: 48, w: 100},    // village loop by Millrill Pond, water y 1867-2010
   {id: 'river-crossing-5', river: 'old-shore-canal', a: [3320, 3345], b: [3060, 3780], r: 70, w: 100},   // centre stub to heart-reed, water 70-400 along the deck
   {id: 'river-crossing-6', river: 'old-shore-canal', a: [2322, 3345], b: [1980, 3800], r: 70, w: 100},   // centre stub to heart-makers, water 120-440 along
+  {id: 'river-crossing-7', river: 'mill-stream', a: [5150, 1650], b: [5450, 1690], r: 30, w: 100},   // boss 8 Nov: replaces centre jetty 5 and its islet, west path to east path
 ];
-function archBridge({a, b, r}) {
-  const L = Math.hypot(b[0] - a[0], b[1] - a[1]), u = [(b[0] - a[0]) / L, (b[1] - a[1]) / L];
-  let n = [-u[1], u[0]]; if (n[1] < 0 || (n[1] === 0 && n[0] < 0)) n = [-n[0], -n[1]];   // +n faces the camera (south, else east)
-  const shear = .9 * Math.abs(u[1]) * (u[0] * u[1] < 0 ? -1 : 1),   // the hump leans across the deck, never along it (a deck running NE-SW leans west)
-     wd = Math.abs(u[1]) > .6 ? 84 : 72, th = 16, post = 30, N = Math.max(12, Math.round(L / 13));
-  const vis = n[0] * shear - n[1] < 0 ? 1 : -1;   // the side whose edge the camera sees (south, or on a steep bridge the side the hump leans from)
-  const z = t => r * 4 * t * (1 - t), at = (t, side, h = 0) => {const x = a[0] + u[0] * L * t + n[0] * side * wd / 2, y = a[1] + u[1] * L * t + n[1] * side * wd / 2, zz = z(t) + h; return [x + shear * z(t), y - zz];};   // posts and rails stand straight up; only the hump leans
-  const ts = Array.from({length: N + 1}, (_, i) => i / N), P = pts => pts.map(p => p.map(r3).join(',')).join('L');
-  const far = ts.map(t => at(t, -vis)), near = ts.map(t => at(t, vis)), nearLow = ts.map(t => at(t, vis, -th));
-  const ink = (d, wid, col) => `<path d="${d}" fill="none" stroke="${INK}" stroke-width="${wid + 4}"/><path d="${d}" fill="none" stroke="${col}" stroke-width="${wid}"/>`;
-  const rail = edge => {let o = ''; const tops = ts.map((t, i) => [edge[i][0], edge[i][1] - post]);
-    for (let i = 0; i <= N; i += Math.max(1, Math.round(N / 6))) o += ink(`M${edge[i].map(r3)}L${tops[i].map(r3)}`, 6, '#885931');
-    o += ink(`M${P(tops)}`, 7, '#c88941'); return o;};
-  let s = '';
-  // the deck's shade on the water, straight below it
-  const sh = ts.map(t => [a[0] + u[0] * L * t, a[1] + u[1] * L * t, 4 * t * (1 - t) * wd / 2]), shL = sh.map(p => [p[0] - n[0] * p[2], p[1] - n[1] * p[2] + 10]), shR = sh.map(p => [p[0] + n[0] * p[2], p[1] + n[1] * p[2] + 10]);   // tapered to the landings, so it lies on the water
-  s += `<path d="M${P(shL.slice(2, -2))}L${P([...shR.slice(2, -2)].reverse())}Z" fill="${INK}" fill-opacity=".14"/>`;
-  s += rail(far);   // the far rail, behind the deck
-  s += `<path d="M${P(near)}L${P([...nearLow].reverse())}Z" fill="#885931" stroke="${INK}" stroke-width="4"/>`;   // the edge the camera sees
-  s += `<path d="M${P(far)}L${P([...near].reverse())}Z" fill="#c88941" stroke="${INK}" stroke-width="4"/>`;   // the deck
-  for (let i = 1; i < N; i++) s += `<path d="M${far[i].map(r3)}L${near[i].map(r3)}" stroke="${INK}" stroke-width="1.6" stroke-opacity=".55"/>`;   // planks
-  s += `<path d="M${P(far.slice(0, Math.ceil(N / 2)).map(p => [p[0], p[1] + 6]))}" fill="none" stroke="#e5ae63" stroke-width="4" opacity=".7"/>`;   // the light on the rising half
-  s += rail(near);   // the near rail, over the deck
-  const all = [...far, ...near, ...nearLow, ...shL, ...shR].flatMap(p => [p, [p[0], p[1] - post]]);
-  const xs = all.map(p => p[0]), ys = all.map(p => p[1]), box = [Math.min(...xs) - 12, Math.min(...ys) - 12, Math.max(...xs) - Math.min(...xs) + 24, Math.max(...ys) - Math.min(...ys) + 24];
-  return {box, svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${r3(box[2])}" height="${r3(box[3])}" viewBox="${box.map(r3).join(' ')}" stroke-linecap="round" stroke-linejoin="round">${s}</svg>`};
+// boss 8 Nov ("bridge is bad"): the code-drawn hump looked like a bent sheet. Each crossing now carries GPT's hand-drawn
+// footbridge (public/pixi-art/home-expansion-c/bridges/bridge-<dir>.svg, 1 unit = 1 world unit, near bank at the bottom),
+// picked by the crossing's direction and fitted so its two end sills land on the crossing's landings a and b. The fit keeps
+// posts upright (x' = sx x, y' = c x + d y): a straight crossing only scales, a diagonal one also turns its planks across the
+// deck the way the ground (depth .62) would show them. Walkways and arches below are unchanged.
+const BRIDGE_ART = 'public/pixi-art/home-expansion-c/bridges', DEPTH = .62;
+const BRIDGE_SILLS = {ns: [[120, 312], [120, 53]], ew: [[32, 168], [448, 168]], ne: [[90, 296], [395, 104]], nw: [[395, 296], [85, 104]]};   // [near, far] sill centres
+const PLANK = {ne: [1, DEPTH], nw: [1, -DEPTH]};   // the svg's plank direction on a diagonal bridge
+function archBridge({a, b}) {
+  const [near, far] = a[1] >= b[1] ? [a, b] : [b, a], X = far[0] - near[0], Y = far[1] - near[1];
+  const dir = Math.abs(Y) < Math.abs(X) * .25 ? 'ew' : Math.abs(X) < Math.abs(Y) * .25 ? 'ns' : X > 0 ? 'ne' : 'nw';
+  const src = readFileSync(`${BRIDGE_ART}/bridge-${dir}.svg`, 'utf8'), [W, H] = src.match(/viewBox="0 0 (\d+) (\d+)"/).slice(1).map(Number);
+  let [n0, f0] = BRIDGE_SILLS[dir];
+  if (dir === 'ew' && X < 0) [n0, f0] = [f0, n0];
+  const As = [f0[0] - n0[0], f0[1] - n0[1]];
+  let sx, c, d;
+  if (dir === 'ns') {sx = d = Math.abs(Y) / Math.abs(As[1]); c = 0;}
+  else if (dir === 'ew') {sx = X / As[0]; d = 1; c = Y / As[0];}   // a gentle slope along the deck; posts stay upright
+  else {   // diagonal: map the sill line onto the crossing and the planks onto the ground perpendicular
+    sx = X / As[0];
+    const g = [X, Y / DEPTH], q = [g[1], -g[0]].map(v => v * Math.sign(g[1] || 1)), qs = [q[0], q[1] * DEPTH], p = PLANK[dir];
+    const lam = sx * p[0] / qs[0], r1v = lam * qs[1], det = p[0] * As[1] - p[1] * As[0];
+    c = (r1v * As[1] - p[1] * Y) / det; d = (p[0] * Y - As[0] * r1v) / det;
+  }
+  const e = near[0] - sx * n0[0], f = near[1] - c * n0[0] - d * n0[1];
+  const T = ([x, y]) => [sx * x + e, c * x + d * y + f], cs = [[0, 0], [W, 0], [0, H], [W, H]].map(T);
+  const xs = cs.map(q => q[0]), ys = cs.map(q => q[1]), box = [Math.min(...xs), Math.min(...ys), Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)];
+  const inner = src.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+  return {box, dir, crown: Math.round(24 * d), svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${r3(box[2])}" height="${r3(box[3])}" viewBox="${box.map(r3).join(' ')}"><g transform="matrix(${[sx, c, 0, d, e, f].map(v => Math.round(v * 1e4) / 1e4).join(' ')})">${inner}</g></svg>`};
 }
 const POND_OVERLAYS = new Set(['shore-millrill-pond', 'shore-millhead-pond']);   // painted here with the rivers now (shore.json decks note)
 const newDecks = E.decks.filter(d => !String(d.id ?? '').startsWith('river-crossing-') && !POND_OVERLAYS.has(d.id));
 for (const br of BRIDGES) {
-  const {box, svg} = archBridge(br);
+  const {box, svg, crown} = archBridge(br); br.r = crown;   // a Ducky rises as high as the drawn deck's crown
   writeFileSync(`${ART}/${br.id}.svg`, svg);
   newDecks.push({id: br.id, src: `${WEB}/${br.id}.svg`, x: r3(box[0]), y: r3(box[1]), width: r3(box[2]), height: r3(box[3]), resolution: 1.5});
 }

@@ -60,7 +60,7 @@ const FOOTPRINT = [[/bench-wood-(left|right)/, .1, 2.4], [/fountain/, .25, .82],
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds/i;
 function contactShadow(prop) {
   const name = prop.asset || prop.name, [, share, depth] = FOOTPRINT.find(([re]) => re.test(name)) || [, .38, .3];
-  const rx = Math.max(8, Math.min(300, prop.width * prop.scale * share)), ry = rx * depth;
+  const [rx, ry] = prop.shadowSize ?? (r => [r, r * depth])(Math.max(8, Math.min(300, prop.width * prop.scale * share)));   // boss 8 Nov: a hamlet building's shadow is sized to its footprint
   const [color, alpha] = SHADOW_TINT[/boat/i.test(name) ? 'water' : groundAt(prop.x, prop.y, world)];
   const nudge = Math.min(1, rx / 80) * .15 * H / Math.hypot(2, 1);   // up to .15H along (2, 1)
   return new Graphics().ellipse(nudge * 2, nudge, rx, ry).fill({color, alpha});

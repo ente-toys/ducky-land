@@ -1756,8 +1756,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 611.1111111111111,
-      "y": 222.22222222222223,
+      "x": 611,
+      "y": 582,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -1768,8 +1768,8 @@
       "resolution": 1.25,
       "zone": "commons",
       "footprint": {
-        "x": 611.1111111111111,
-        "y": 212.22222222222223,
+        "x": 611,
+        "y": 572,
         "rx": 70,
         "ry": 24
       }
@@ -1777,45 +1777,22 @@
     {
       "id": "bigger-community-515",
       "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 4944.444444444444,
-      "y": 422.22222222222223,
+      "asset": "bench-wood-left",
+      "src": "/pixi-art/detail/street--bench-wood-left.svg",
+      "x": 5190,
+      "y": 540,
       "width": 818,
       "height": 463,
-      "scale": 0.18,
+      "scale": 0.28,
       "anchor": {
         "x": 0.5,
         "y": 0.9740820734341252
       },
-      "resolution": 1.25,
+      "resolution": 1.4,
       "zone": "commons",
       "footprint": {
-        "x": 4944.444444444444,
-        "y": 412.22222222222223,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-516",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 6938.88888888889,
-      "y": 3027.777777777778,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 6938.88888888889,
-        "y": 3017.777777777778,
+        "x": 5190,
+        "y": 530,
         "rx": 70,
         "ry": 24
       }
@@ -1823,10 +1800,10 @@
     {
       "id": "bigger-community-517",
       "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 2672.222222222222,
-      "y": 5011.111111111111,
+      "asset": "bench-wood-back",
+      "src": "/pixi-art/detail/street--bench-wood-back.svg",
+      "x": 2702,
+      "y": 4481,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -1837,8 +1814,8 @@
       "resolution": 1.25,
       "zone": "commons",
       "footprint": {
-        "x": 2672.222222222222,
-        "y": 5001.111111111111,
+        "x": 2702,
+        "y": 4471,
         "rx": 70,
         "ry": 24
       }
@@ -1846,10 +1823,10 @@
     {
       "id": "bigger-community-518",
       "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 1261.111111111111,
-      "y": 4916.666666666667,
+      "asset": "bench-wood-back",
+      "src": "/pixi-art/detail/street--bench-wood-back.svg",
+      "x": 1121,
+      "y": 4197,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -1860,40 +1837,17 @@
       "resolution": 1.25,
       "zone": "commons",
       "footprint": {
-        "x": 1261.111111111111,
-        "y": 4906.666666666667,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-519",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -1716.6666666666667,
-      "y": 2855.5555555555557,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": -1716.6666666666667,
-        "y": 2845.5555555555557,
+        "x": 1121,
+        "y": 4187,
         "rx": 70,
         "ry": 24
       }
     },
     {
       "id": "bigger-community-520",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
       "x": -1188.888888888889,
       "y": 1288.888888888889,
       "width": 300,
@@ -1903,112 +1857,122 @@
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": -1188.888888888889,
         "y": 1279.888888888889,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": false,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-522",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
       "x": -394.44444444444446,
       "y": 1361.111111111111,
-      "width": 300,
-      "height": 380,
-      "scale": 1,
+      "width": 260,
+      "height": 360,
+      "scale": 1.05,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": -394.44444444444446,
         "y": 1352.111111111111,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": true,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-523",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
       "x": -1111.111111111111,
       "y": 1783.3333333333335,
-      "width": 300,
+      "width": 150,
       "height": 380,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": -1111.111111111111,
         "y": 1774.3333333333335,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": false,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-524",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
       "x": -372.22222222222223,
       "y": 1827.7777777777778,
-      "width": 300,
-      "height": 380,
-      "scale": 1,
+      "width": 200,
+      "height": 280,
+      "scale": 1.3,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": -372.22222222222223,
         "y": 1818.7777777777778,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": false,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-525",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
       "x": 594.4444444444445,
       "y": -394.44444444444446,
-      "width": 300,
-      "height": 380,
-      "scale": 1,
+      "width": 260,
+      "height": 360,
+      "scale": 1.05,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": 594.4444444444445,
         "y": -403.44444444444446,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": false,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-526",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
       "x": 933.3333333333334,
       "y": -577.7777777777778,
       "width": 300,
@@ -2018,37 +1982,41 @@
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": 933.3333333333334,
         "y": -586.7777777777778,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": true,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-527",
-      "name": "apple-tree-1589",
-      "asset": "apple-tree-1589",
-      "src": "/pixi-art/home-expansion-c/apple-tree-1589.svg",
+      "name": "Tree",
+      "asset": "tree-2",
+      "src": "/pixi-art/plants/tree-2.svg",
       "x": 1227.7777777777778,
       "y": -350,
-      "width": 300,
-      "height": 380,
-      "scale": 1,
+      "width": 180,
+      "height": 360,
+      "scale": 1.05,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "resolution": 1.25,
+      "resolution": 1.5,
       "zone": "commons",
       "footprint": {
         "x": 1227.7777777777778,
         "y": -359,
         "rx": 31,
         "ry": 22
-      }
+      },
+      "flip": false,
+      "tint": 16777215
     },
     {
       "id": "bigger-community-528",
@@ -2078,8 +2046,8 @@
       "name": "picnic-table",
       "asset": "picnic-table",
       "src": "/pixi-art/detail/street--picnic-table.svg",
-      "x": -822.2222222222223,
-      "y": 1561.111111111111,
+      "x": -782,
+      "y": 1881,
       "width": 1614,
       "height": 653,
       "scale": 0.17,
@@ -2090,8 +2058,8 @@
       "resolution": 1.25,
       "zone": "commons",
       "footprint": {
-        "x": -822.2222222222223,
-        "y": 1547.111111111111,
+        "x": -782,
+        "y": 1867,
         "rx": 85,
         "ry": 31
       }
@@ -2101,8 +2069,8 @@
       "name": "picnic-table",
       "asset": "picnic-table",
       "src": "/pixi-art/detail/street--picnic-table.svg",
-      "x": 6405.555555555556,
-      "y": 2972.222222222222,
+      "x": 6206,
+      "y": 3460,
       "width": 1614,
       "height": 653,
       "scale": 0.17,
@@ -2113,8 +2081,8 @@
       "resolution": 1.25,
       "zone": "commons",
       "footprint": {
-        "x": 6405.555555555556,
-        "y": 2958.222222222222,
+        "x": 6206,
+        "y": 3446,
         "rx": 85,
         "ry": 31
       }
@@ -2280,35 +2248,12 @@
       }
     },
     {
-      "id": "bigger-community-542",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 950,
-      "y": -255.55555555555557,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 950,
-        "y": -265.55555555555554,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-543",
       "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -988.8888888888889,
-      "y": 1444.4444444444446,
+      "asset": "bench-wood-back",
+      "src": "/pixi-art/detail/street--bench-wood-back.svg",
+      "x": -939,
+      "y": 1374,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -2319,31 +2264,8 @@
       "resolution": 1.25,
       "zone": "commons",
       "footprint": {
-        "x": -988.8888888888889,
-        "y": 1434.4444444444446,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-544",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 6238.888888888889,
-      "y": 3127.777777777778,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 6238.888888888889,
-        "y": 3117.777777777778,
+        "x": -939,
+        "y": 1364,
         "rx": 70,
         "ry": 24
       }
@@ -3969,7 +3891,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1268,
         "y": 16.1,
@@ -3994,7 +3915,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1312.2,
         "y": -30.8,
@@ -4019,7 +3939,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1072.3,
         "y": -22.7,
@@ -4044,7 +3963,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -430.5,
         "y": -195.6,
@@ -4069,7 +3987,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -524.3,
         "y": 49.6,
@@ -4094,7 +4011,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -68.7,
         "y": 77.8,
@@ -4119,7 +4035,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -261.6,
         "y": 81.8,
@@ -4144,7 +4059,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -383.6,
         "y": 16.1,
@@ -4169,7 +4083,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1660.6,
         "y": 248,
@@ -4194,7 +4107,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1473,
         "y": 115.3,
@@ -4219,7 +4131,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -202.7,
         "y": 160.9,
@@ -4244,7 +4155,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": 9,
         "y": 185,
@@ -4252,56 +4162,6 @@
         "ry": 14
       },
       "z": 195
-    },
-    {
-      "id": "hamlet-butterbill-reader",
-      "name": "duck-reading",
-      "asset": "duck-reading",
-      "src": "/pixi-art/home-hamlets/butterbill/duck-reading.svg",
-      "x": -1176.9,
-      "y": 82.4,
-      "width": 121.9,
-      "height": 103.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "noShadow": true,
-      "footprint": {
-        "x": -1176.9,
-        "y": 72.7,
-        "rx": 36.6,
-        "ry": 14.6
-      },
-      "z": 82.4
-    },
-    {
-      "id": "hamlet-butterbill-hammock",
-      "name": "hammock-sleeper",
-      "asset": "hammock-sleeper",
-      "src": "/pixi-art/home-hamlets/butterbill/hammock-sleeper.svg",
-      "x": -100.8,
-      "y": 162.8,
-      "width": 242.5,
-      "height": 117.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "noShadow": true,
-      "footprint": {
-        "x": -100.8,
-        "y": 150.8,
-        "rx": 72.8,
-        "ry": 24
-      },
-      "z": 162.8
     },
     {
       "id": "hamlet-butterbill-north-flower-bush",
@@ -4319,7 +4179,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1025.4,
         "y": 93.9,
@@ -4344,7 +4203,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        141.8,
+        40.5
+      ],
       "footprint": {
         "x": -786.9,
         "y": 203.4,
@@ -4424,7 +4286,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1549.4,
         "y": 298.9,
@@ -4449,7 +4310,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        141.8,
+        40.5
+      ],
       "footprint": {
         "x": -387.6,
         "y": 387,
@@ -4529,7 +4393,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        208.2,
+        59.5
+      ],
       "footprint": {
         "x": -1231.8,
         "y": 422.5,
@@ -4555,7 +4422,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        67,
+        19.1
+      ],
       "footprint": {
         "x": -1370.5,
         "y": 282.3,
@@ -4600,7 +4470,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1601.6,
         "y": 486.5,
@@ -4625,7 +4494,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -52.6,
         "y": 560.2,
@@ -4650,7 +4518,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        46.9,
+        13.4
+      ],
       "footprint": {
         "x": -1477.7,
         "y": 551.6,
@@ -4676,7 +4547,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1412.7,
         "y": 526.2,
@@ -4726,7 +4596,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -911.5,
         "y": 390.9,
@@ -4751,7 +4620,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -634.2,
         "y": 407,
@@ -4801,7 +4669,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1245.2,
         "y": 564.9,
@@ -4851,7 +4718,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1140.7,
         "y": 581,
@@ -4926,7 +4792,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -894.8,
         "y": 579.6,
@@ -4951,7 +4816,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -693.8,
         "y": 579.6,
@@ -4976,7 +4840,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -977.2,
         "y": 681.7,
@@ -5001,7 +4864,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -615.4,
         "y": 681.7,
@@ -5076,7 +4938,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        153.6,
+        43.9
+      ],
       "footprint": {
         "x": -310.5,
         "y": 710,
@@ -5106,7 +4971,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1678,
         "y": 692.8,
@@ -5131,7 +4995,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1554.7,
         "y": 688.9,
@@ -5156,7 +5019,10 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
+      "shadowSize": [
+        72.6,
+        20.7
+      ],
       "footprint": {
         "x": -1347,
         "y": 760.5,
@@ -5182,7 +5048,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -1057.6,
         "y": 893.8,
@@ -5207,7 +5072,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -17.8,
         "y": 698.3,
@@ -5232,7 +5096,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -510.9,
         "y": 769.8,
@@ -5257,7 +5120,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -565.8,
         "y": 879.1,
@@ -5282,7 +5144,6 @@
       },
       "resolution": 1.5,
       "zone": "butterbill",
-      "noShadow": true,
       "footprint": {
         "x": -592.6,
         "y": 1037.2,
@@ -5307,7 +5168,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 10,
       "footprint": {
         "x": 2381.5,
@@ -5333,7 +5193,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 11,
       "footprint": {
         "x": 2208.7,
@@ -5359,7 +5218,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 12,
       "footprint": {
         "x": 2685.7,
@@ -5385,7 +5243,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 13,
       "footprint": {
         "x": 3335.6,
@@ -5411,7 +5268,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 14,
       "footprint": {
         "x": 3525.9,
@@ -5437,7 +5293,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 18,
       "footprint": {
         "x": 2687,
@@ -5463,7 +5318,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 19,
       "footprint": {
         "x": 3099.8,
@@ -5489,7 +5343,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 20,
       "footprint": {
         "x": 3138.6,
@@ -5515,8 +5368,11 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 30,
+      "shadowSize": [
+        168.8,
+        48.2
+      ],
       "footprint": {
         "x": 2898.8,
         "y": -830.8,
@@ -5529,32 +5385,6 @@
         -716.5
       ],
       "z": -756.5
-    },
-    {
-      "id": "hamlet-lanternleaf-reader",
-      "name": "duck-reading",
-      "asset": "duck-reading",
-      "src": "/pixi-art/home-hamlets/lanternleaf/duck-reading.svg",
-      "x": 2538.3,
-      "y": -842.3,
-      "width": 120.6,
-      "height": 121.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "noShadow": true,
-      "order": 31,
-      "footprint": {
-        "x": 2538.3,
-        "y": -851.9,
-        "rx": 36.2,
-        "ry": 14.5
-      },
-      "z": -842.3
     },
     {
       "id": "hamlet-lanternleaf-birch-west",
@@ -5572,7 +5402,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 32,
       "footprint": {
         "x": 1999.6,
@@ -5598,7 +5427,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 33,
       "footprint": {
         "x": 3749.7,
@@ -5624,7 +5452,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 35,
       "footprint": {
         "x": 2072,
@@ -5650,8 +5477,11 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 40,
+      "shadowSize": [
+        165.5,
+        47.3
+      ],
       "footprint": {
         "x": 2263.6,
         "y": -559,
@@ -5681,8 +5511,11 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 41,
+      "shadowSize": [
+        149.7,
+        42.8
+      ],
       "footprint": {
         "x": 3452.2,
         "y": -552.4,
@@ -5712,7 +5545,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 44,
       "footprint": {
         "x": 2658.9,
@@ -5738,7 +5570,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 45,
       "footprint": {
         "x": 3095.7,
@@ -5764,7 +5595,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 48,
       "footprint": {
         "x": 2593.2,
@@ -5790,7 +5620,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 49,
       "footprint": {
         "x": 3141.3,
@@ -5816,8 +5645,11 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 50,
+      "shadowSize": [
+        132.8,
+        37.9
+      ],
       "footprint": {
         "x": 2872,
         "y": -391.3,
@@ -5843,8 +5675,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 51,
+      "noShadow": true,
       "footprint": {
         "x": 2724.6,
         "y": -360.1,
@@ -5869,8 +5701,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 52,
+      "noShadow": true,
       "footprint": {
         "x": 3011.3,
         "y": -360.1,
@@ -5895,7 +5727,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 53,
       "footprint": {
         "x": 2487.4,
@@ -5921,7 +5752,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 54,
       "footprint": {
         "x": 3252.5,
@@ -5947,7 +5777,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 55,
       "footprint": {
         "x": 1978.2,
@@ -5973,7 +5802,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 56,
       "footprint": {
         "x": 3646.5,
@@ -5999,7 +5827,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 57,
       "footprint": {
         "x": 3836.8,
@@ -6008,32 +5835,6 @@
         "ry": 14
       },
       "z": -275.4
-    },
-    {
-      "id": "hamlet-lanternleaf-hammock",
-      "name": "duck-hammock",
-      "asset": "duck-hammock",
-      "src": "/pixi-art/home-hamlets/lanternleaf/duck-hammock.svg",
-      "x": 3736.3,
-      "y": -302.2,
-      "width": 187.6,
-      "height": 121.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "noShadow": true,
-      "order": 58,
-      "footprint": {
-        "x": 3736.3,
-        "y": -314.2,
-        "rx": 56.3,
-        "ry": 22.5
-      },
-      "z": -274.9
     },
     {
       "id": "hamlet-lanternleaf-garden-bed",
@@ -6051,8 +5852,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 62,
+      "noShadow": true,
       "footprint": {
         "x": 3437.4,
         "y": -138.8,
@@ -6078,8 +5879,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 63,
+      "noShadow": true,
       "footprint": {
         "x": 3437.4,
         "y": -164.2,
@@ -6104,8 +5905,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 64,
+      "noShadow": true,
       "footprint": {
         "x": 3468.3,
         "y": -215.4,
@@ -6130,8 +5931,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 65,
+      "noShadow": true,
       "footprint": {
         "x": 3350.3,
         "y": -177.2,
@@ -6156,8 +5957,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 66,
+      "noShadow": true,
       "footprint": {
         "x": 3418.7,
         "y": -159.8,
@@ -6182,8 +5983,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 67,
+      "noShadow": true,
       "footprint": {
         "x": 3521.9,
         "y": -152,
@@ -6208,8 +6009,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 68,
+      "noShadow": true,
       "footprint": {
         "x": 3437.4,
         "y": -87.8,
@@ -6234,7 +6035,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 69,
       "footprint": {
         "x": 3634.4,
@@ -6260,8 +6060,11 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 71,
+      "shadowSize": [
+        137.3,
+        39.2
+      ],
       "footprint": {
         "x": 2238.1,
         "y": -154.3,
@@ -6287,8 +6090,8 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 72,
+      "noShadow": true,
       "footprint": {
         "x": 2403,
         "y": -189.7,
@@ -6313,7 +6116,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 73,
       "footprint": {
         "x": 2428.4,
@@ -6339,7 +6141,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 74,
       "footprint": {
         "x": 2716.5,
@@ -6365,7 +6166,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 75,
       "footprint": {
         "x": 3044.8,
@@ -6391,7 +6191,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 76,
       "footprint": {
         "x": 2700.4,
@@ -6417,7 +6216,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 77,
       "footprint": {
         "x": 3042.1,
@@ -6443,7 +6241,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 80,
       "footprint": {
         "x": 2608,
@@ -6469,7 +6266,6 @@
       },
       "resolution": 1.5,
       "zone": "lanternleaf",
-      "noShadow": true,
       "order": 81,
       "footprint": {
         "x": 3173.5,
@@ -6495,8 +6291,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 5406,
         "y": -797,
@@ -6521,8 +6317,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 4725.3,
         "y": -605.3,
@@ -6547,8 +6343,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 4817.8,
         "y": -482.3,
@@ -6573,8 +6369,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 4367.5,
         "y": -253.7,
@@ -6599,8 +6395,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 5147.4,
         "y": 143.6,
@@ -6625,8 +6421,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 5712.9,
         "y": 45.9,
@@ -6651,8 +6447,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 4699.8,
         "y": 341.3,
@@ -6677,8 +6473,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 12,
+      "noShadow": true,
       "footprint": {
         "x": 5939.3,
         "y": 393.9,
@@ -6703,8 +6499,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 20,
+      "noShadow": true,
       "footprint": {
         "x": 4964.5,
         "y": -822.9,
@@ -6729,8 +6525,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 21,
+      "noShadow": true,
       "footprint": {
         "x": 4596.7,
         "y": -648.7,
@@ -6755,8 +6551,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 22,
+      "noShadow": true,
       "footprint": {
         "x": 5333,
         "y": -672.8,
@@ -6781,8 +6577,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 23,
+      "noShadow": true,
       "footprint": {
         "x": 4703.2,
         "y": -706.3,
@@ -6807,8 +6603,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 24,
+      "noShadow": true,
       "footprint": {
         "x": 4953.8,
         "y": -711.2,
@@ -6833,8 +6629,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 25,
+      "noShadow": true,
       "footprint": {
         "x": 5191,
         "y": -710,
@@ -6859,8 +6655,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 26,
+      "noShadow": true,
       "footprint": {
         "x": 4786.9,
         "y": -632.6,
@@ -6885,7 +6681,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 30,
       "footprint": {
         "x": 4324.6,
@@ -6911,7 +6706,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 31,
       "footprint": {
         "x": 4460,
@@ -6937,7 +6731,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 32,
       "footprint": {
         "x": 5532,
@@ -6963,7 +6756,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 33,
       "footprint": {
         "x": 4177.2,
@@ -6989,7 +6781,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 34,
       "footprint": {
         "x": 5684.7,
@@ -7015,8 +6806,11 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 35,
+      "shadowSize": [
+        101.3,
+        28.9
+      ],
       "footprint": {
         "x": 5766.5,
         "y": -547.8,
@@ -7042,7 +6836,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 36,
       "footprint": {
         "x": 5852.2,
@@ -7068,8 +6861,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 37,
+      "noShadow": true,
       "footprint": {
         "x": 5606.4,
         "y": -487.9,
@@ -7094,8 +6887,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 38,
+      "noShadow": true,
       "footprint": {
         "x": 5898.5,
         "y": -463.8,
@@ -7120,7 +6913,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 40,
       "footprint": {
         "x": 5438.2,
@@ -7146,8 +6938,11 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 41,
+      "shadowSize": [
+        61.9,
+        17.7
+      ],
       "footprint": {
         "x": 5360.5,
         "y": -438.2,
@@ -7173,7 +6968,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 42,
       "footprint": {
         "x": 4671.7,
@@ -7199,7 +6993,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 43,
       "footprint": {
         "x": 4821.8,
@@ -7225,8 +7018,11 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 44,
+      "shadowSize": [
+        197,
+        56.3
+      ],
       "footprint": {
         "x": 5087.1,
         "y": -414.8,
@@ -7252,7 +7048,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 45,
       "footprint": {
         "x": 5250.6,
@@ -7278,7 +7073,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 46,
       "footprint": {
         "x": 5317.6,
@@ -7304,7 +7098,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 47,
       "footprint": {
         "x": 4590,
@@ -7330,7 +7123,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 48,
       "footprint": {
         "x": 4084.8,
@@ -7356,8 +7148,11 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 49,
+      "shadowSize": [
+        172.2,
+        49.2
+      ],
       "footprint": {
         "x": 4417.1,
         "y": -365,
@@ -7387,7 +7182,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 50,
       "footprint": {
         "x": 4537.7,
@@ -7413,8 +7207,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 51,
+      "noShadow": true,
       "footprint": {
         "x": 4614.1,
         "y": -337.6,
@@ -7439,7 +7233,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 54,
       "footprint": {
         "x": 5854.9,
@@ -7465,7 +7258,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 55,
       "footprint": {
         "x": 4923.6,
@@ -7491,7 +7283,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 56,
       "footprint": {
         "x": 5113.2,
@@ -7517,7 +7308,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 57,
       "footprint": {
         "x": 4982.6,
@@ -7543,8 +7333,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 58,
+      "noShadow": true,
       "footprint": {
         "x": 5112.6,
         "y": -111.7,
@@ -7569,7 +7359,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 59,
       "footprint": {
         "x": 4726.6,
@@ -7595,7 +7384,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 61,
       "footprint": {
         "x": 4137,
@@ -7621,7 +7409,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 62,
       "footprint": {
         "x": 4261.7,
@@ -7647,7 +7434,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 63,
       "footprint": {
         "x": 5388.6,
@@ -7673,7 +7459,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 64,
       "footprint": {
         "x": 5777.2,
@@ -7699,8 +7484,11 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 65,
+      "shadowSize": [
+        164.9,
+        47.1
+      ],
       "footprint": {
         "x": 5595.6,
         "y": -37,
@@ -7730,7 +7518,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 66,
       "footprint": {
         "x": 5763.8,
@@ -7756,8 +7543,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 67,
+      "noShadow": true,
       "footprint": {
         "x": 5707.5,
         "y": -0.4,
@@ -7782,7 +7569,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 68,
       "footprint": {
         "x": 5935.3,
@@ -7808,8 +7594,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 69,
+      "noShadow": true,
       "footprint": {
         "x": 5038.9,
         "y": 41.4,
@@ -7834,7 +7620,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 70,
       "footprint": {
         "x": 4301.9,
@@ -7860,8 +7645,11 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 71,
+      "shadowSize": [
+        168.8,
+        48.2
+      ],
       "footprint": {
         "x": 4498.8,
         "y": 79.6,
@@ -7891,7 +7679,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 72,
       "footprint": {
         "x": 4623.5,
@@ -7900,32 +7687,6 @@
         "ry": 12.2
       },
       "z": 154.4
-    },
-    {
-      "id": "hamlet-clovercrust-reader",
-      "name": "sleepy-reader",
-      "asset": "sleepy-reader",
-      "src": "/pixi-art/home-hamlets/clovercrust/sleepy-reader.svg",
-      "x": 4607.4,
-      "y": 74.8,
-      "width": 65.7,
-      "height": 64.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "noShadow": true,
-      "order": 73,
-      "footprint": {
-        "x": 4607.4,
-        "y": 69.6,
-        "rx": 19.7,
-        "ry": 8
-      },
-      "z": 154.9
     },
     {
       "id": "hamlet-clovercrust-blue-cottage-pink-pot",
@@ -7943,8 +7704,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 74,
+      "noShadow": true,
       "footprint": {
         "x": 4708.6,
         "y": 96.8,
@@ -7969,8 +7730,8 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 75,
+      "noShadow": true,
       "footprint": {
         "x": 4410.4,
         "y": 142,
@@ -7995,7 +7756,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 76,
       "footprint": {
         "x": 4316.6,
@@ -8021,7 +7781,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 77,
       "footprint": {
         "x": 4845.9,
@@ -8047,7 +7806,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 78,
       "footprint": {
         "x": 5226.5,
@@ -8073,7 +7831,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 83,
       "footprint": {
         "x": 4533.7,
@@ -8099,7 +7856,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 84,
       "footprint": {
         "x": 4796.3,
@@ -8125,7 +7881,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 85,
       "footprint": {
         "x": 5211.7,
@@ -8151,7 +7906,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 86,
       "footprint": {
         "x": 5444.9,
@@ -8177,7 +7931,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 87,
       "footprint": {
         "x": 5313.6,
@@ -8203,7 +7956,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 88,
       "footprint": {
         "x": 5860.3,
@@ -8229,7 +7981,6 @@
       },
       "resolution": 1.5,
       "zone": "clovercrust",
-      "noShadow": true,
       "order": 89,
       "footprint": {
         "x": 5691.4,
@@ -8255,7 +8006,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 10,
       "footprint": {
         "x": -1559.6,
@@ -8281,7 +8031,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 11,
       "footprint": {
         "x": -1851.7,
@@ -8307,7 +8056,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 12,
       "footprint": {
         "x": -629.6,
@@ -8333,7 +8081,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 14,
       "footprint": {
         "x": -329.4,
@@ -8359,7 +8106,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 15,
       "footprint": {
         "x": -179.4,
@@ -8385,7 +8131,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 16,
       "footprint": {
         "x": -470.1,
@@ -8411,7 +8156,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 18,
       "footprint": {
         "x": -1893.2,
@@ -8437,7 +8181,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 19,
       "footprint": {
         "x": -1290.2,
@@ -8463,7 +8206,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 21,
       "footprint": {
         "x": -1802.1,
@@ -8489,7 +8231,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 22,
       "footprint": {
         "x": -1322.4,
@@ -8515,8 +8256,11 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 30,
+      "shadowSize": [
+        236.4,
+        67.5
+      ],
       "footprint": {
         "x": -1031.6,
         "y": 3382.4,
@@ -8546,8 +8290,11 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 31,
+      "shadowSize": [
+        220.6,
+        63
+      ],
       "footprint": {
         "x": -1570.3,
         "y": 3732.2,
@@ -8577,8 +8324,11 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 32,
+      "shadowSize": [
+        213.9,
+        61.1
+      ],
       "footprint": {
         "x": -389.7,
         "y": 3592.8,
@@ -8608,8 +8358,8 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 33,
+      "noShadow": true,
       "footprint": {
         "x": -1645.3,
         "y": 3826.8,
@@ -8634,7 +8384,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 34,
       "footprint": {
         "x": -1800.8,
@@ -8660,8 +8409,11 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 40,
+      "shadowSize": [
+        75.4,
+        21.5
+      ],
       "footprint": {
         "x": -955.2,
         "y": 3789.6,
@@ -8687,8 +8439,11 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 41,
+      "shadowSize": [
+        56.1,
+        16
+      ],
       "footprint": {
         "x": -783.7,
         "y": 3822.9,
@@ -8714,7 +8469,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 42,
       "footprint": {
         "x": -1081.2,
@@ -8740,8 +8494,8 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 43,
+      "noShadow": true,
       "footprint": {
         "x": -1038.3,
         "y": 3865.2,
@@ -8766,7 +8520,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 44,
       "footprint": {
         "x": -641.7,
@@ -8792,7 +8545,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 45,
       "footprint": {
         "x": -537.1,
@@ -8818,7 +8570,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 46,
       "footprint": {
         "x": -104.3,
@@ -8844,7 +8595,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 50,
       "footprint": {
         "x": -1551.5,
@@ -8853,32 +8603,6 @@
         "ry": 22
       },
       "z": 4009.1
-    },
-    {
-      "id": "hamlet-petalpatch-reading-duck",
-      "name": "duck-reading-book",
-      "asset": "duck-reading-book",
-      "src": "/pixi-art/home-hamlets/petalpatch/duck-reading-book.svg",
-      "x": -1424.2,
-      "y": 4025.2,
-      "width": 144.7,
-      "height": 128.6,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "noShadow": true,
-      "order": 51,
-      "footprint": {
-        "x": -1424.2,
-        "y": 4013.6,
-        "rx": 43.4,
-        "ry": 17.4
-      },
-      "z": 4025.2
     },
     {
       "id": "hamlet-petalpatch-lamp-west",
@@ -8896,7 +8620,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 52,
       "footprint": {
         "x": -1195.1,
@@ -8922,7 +8645,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 53,
       "footprint": {
         "x": -840,
@@ -8948,7 +8670,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 54,
       "footprint": {
         "x": -585.4,
@@ -8974,7 +8695,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 54,
       "footprint": {
         "x": -1867.8,
@@ -9000,7 +8720,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 55,
       "footprint": {
         "x": -1806.1,
@@ -9026,7 +8745,6 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 56,
       "footprint": {
         "x": -294.6,
@@ -9052,8 +8770,8 @@
       },
       "resolution": 1.5,
       "zone": "petalpatch",
-      "noShadow": true,
       "order": 60,
+      "noShadow": true,
       "footprint": {
         "x": -1366.6,
         "y": 3345.3,
@@ -9078,8 +8796,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 1,
+      "noShadow": true,
       "footprint": {
         "x": 3861.8,
         "y": 5109.8,
@@ -9104,8 +8822,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 1,
+      "noShadow": true,
       "footprint": {
         "x": 4064.2,
         "y": 5230.4,
@@ -9130,8 +8848,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 1,
+      "noShadow": true,
       "footprint": {
         "x": 4353.6,
         "y": 5235.8,
@@ -9156,8 +8874,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 1,
+      "noShadow": true,
       "footprint": {
         "x": 4045.4,
         "y": 5317.5,
@@ -9182,8 +8900,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 1,
+      "noShadow": true,
       "footprint": {
         "x": 3710.4,
         "y": 5422,
@@ -9208,8 +8926,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 3,
+      "noShadow": true,
       "footprint": {
         "x": 3498.7,
         "y": 5459.7,
@@ -9234,8 +8952,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 3,
+      "noShadow": true,
       "footprint": {
         "x": 4951.3,
         "y": 5439.8,
@@ -9260,8 +8978,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 4,
+      "noShadow": true,
       "footprint": {
         "x": 4357.6,
         "y": 5392.6,
@@ -9286,8 +9004,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 5,
+      "noShadow": true,
       "footprint": {
         "x": 4556,
         "y": 5427.2,
@@ -9312,8 +9030,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 5,
+      "noShadow": true,
       "footprint": {
         "x": 4819.9,
         "y": 5443.6,
@@ -9338,8 +9056,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 5,
+      "noShadow": true,
       "footprint": {
         "x": 3191.8,
         "y": 4598.3,
@@ -9364,8 +9082,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 5,
+      "noShadow": true,
       "footprint": {
         "x": 4829.3,
         "y": 4580.6,
@@ -9373,58 +9091,6 @@
         "ry": 8
       },
       "z": 4585.1
-    },
-    {
-      "id": "hamlet-reedwhistle-top-west-oak",
-      "name": "tree-oak-round",
-      "asset": "tree-oak-round",
-      "src": "/pixi-art/home-hamlets/reedwhistle/tree-oak-round.svg",
-      "x": 3567,
-      "y": 4652.1,
-      "width": 225.1,
-      "height": 281.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "noShadow": true,
-      "order": 10,
-      "footprint": {
-        "x": 3567,
-        "y": 4642.1,
-        "rx": 20.3,
-        "ry": 14
-      },
-      "z": 4652.1
-    },
-    {
-      "id": "hamlet-reedwhistle-north-birch",
-      "name": "tree-birch",
-      "asset": "tree-birch",
-      "src": "/pixi-art/home-hamlets/reedwhistle/tree-birch.svg",
-      "x": 3786.8,
-      "y": 4641.4,
-      "width": 158.1,
-      "height": 298.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "noShadow": true,
-      "order": 30,
-      "footprint": {
-        "x": 3786.8,
-        "y": 4631.4,
-        "rx": 14.2,
-        "ry": 14
-      },
-      "z": 4641.4
     },
     {
       "id": "hamlet-reedwhistle-north-shrub",
@@ -9442,7 +9108,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 31,
       "footprint": {
         "x": 3648.8,
@@ -9451,32 +9116,6 @@
         "ry": 16.7
       },
       "z": 4670.8
-    },
-    {
-      "id": "hamlet-reedwhistle-bench-east",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/reedwhistle/bench.svg",
-      "x": 4988.8,
-      "y": 4820.9,
-      "width": 117.9,
-      "height": 70.5,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "noShadow": true,
-      "order": 40,
-      "footprint": {
-        "x": 4988.8,
-        "y": 4811.5,
-        "rx": 35.4,
-        "ry": 14.2
-      },
-      "z": 4820.9
     },
     {
       "id": "hamlet-reedwhistle-cottage-fishers",
@@ -9494,8 +9133,11 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 60,
+      "shadowSize": [
+        145.2,
+        41.5
+      ],
       "footprint": {
         "x": 4148.6,
         "y": 4893.9,
@@ -9525,7 +9167,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 65,
       "footprint": {
         "x": 4383.1,
@@ -9551,8 +9192,11 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 80,
+      "shadowSize": [
+        163.2,
+        46.6
+      ],
       "footprint": {
         "x": 3654.1,
         "y": 5005.8,
@@ -9582,8 +9226,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 81,
+      "noShadow": true,
       "footprint": {
         "x": 3891.3,
         "y": 5024.4,
@@ -9608,8 +9252,11 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 82,
+      "shadowSize": [
+        166.6,
+        47.6
+      ],
       "footprint": {
         "x": 4684.6,
         "y": 5007.4,
@@ -9639,7 +9286,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 83,
       "footprint": {
         "x": 5098.7,
@@ -9648,32 +9294,6 @@
         "ry": 14
       },
       "z": 5107.7
-    },
-    {
-      "id": "hamlet-reedwhistle-reader",
-      "name": "duck-reading",
-      "asset": "duck-reading",
-      "src": "/pixi-art/home-hamlets/reedwhistle/duck-reading.svg",
-      "x": 4893.6,
-      "y": 5079.5,
-      "width": 91.1,
-      "height": 84.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "noShadow": true,
-      "order": 90,
-      "footprint": {
-        "x": 4893.6,
-        "y": 5072.3,
-        "rx": 27.3,
-        "ry": 10.9
-      },
-      "z": 5081.4
     },
     {
       "id": "hamlet-reedwhistle-boat-on-cradle",
@@ -9691,8 +9311,11 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 100,
+      "shadowSize": [
+        103.8,
+        29.7
+      ],
       "footprint": {
         "x": 4154,
         "y": 5174.7,
@@ -9718,7 +9341,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 101,
       "footprint": {
         "x": 5062.5,
@@ -9744,7 +9366,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 102,
       "footprint": {
         "x": 4979.4,
@@ -9770,8 +9391,11 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 110,
+      "shadowSize": [
+        101.3,
+        28.9
+      ],
       "footprint": {
         "x": 3777.4,
         "y": 5276.6,
@@ -9780,26 +9404,6 @@
       },
       "communityRole": "workplace",
       "z": 5288.6
-    },
-    {
-      "id": "hamlet-reedwhistle-chimney-smoke",
-      "name": "chimney-smoke",
-      "asset": "chimney-smoke",
-      "src": "/pixi-art/home-hamlets/reedwhistle/chimney-smoke.svg",
-      "x": 3497.4,
-      "y": 5134.5,
-      "width": 97.8,
-      "height": 87.1,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "noShadow": true,
-      "order": 111,
-      "z": 5134.5
     },
     {
       "id": "hamlet-reedwhistle-smokehouse",
@@ -9817,7 +9421,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 112,
       "communityRole": "workplace",
       "z": 5431.1
@@ -9838,7 +9441,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 113,
       "footprint": {
         "x": 3698.4,
@@ -9864,7 +9466,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 114,
       "footprint": {
         "x": 3782.8,
@@ -9890,7 +9491,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 115,
       "footprint": {
         "x": 3881.9,
@@ -9916,7 +9516,6 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 116,
       "footprint": {
         "x": 3832.4,
@@ -9942,8 +9541,11 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 120,
+      "shadowSize": [
+        101.3,
+        28.9
+      ],
       "footprint": {
         "x": 4673.9,
         "y": 5435.1,
@@ -9969,8 +9571,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 124,
+      "noShadow": true,
       "footprint": {
         "x": 4752.9,
         "y": 5490.5,
@@ -9995,8 +9597,8 @@
       },
       "resolution": 1.5,
       "zone": "reedwhistle",
-      "noShadow": true,
       "order": 125,
+      "noShadow": true,
       "footprint": {
         "x": 4825.3,
         "y": 5490.1,
@@ -11708,8 +11310,8 @@
     {
       "id": "reedwhistle",
       "point": [
-        4023,
-        4636
+        3937,
+        4679
       ]
     },
     {
@@ -11787,55 +11389,64 @@
     {
       "id": "river-crossing-1",
       "src": "/pixi-art/home-expansion-g/river-crossing-1.svg",
-      "x": 2938,
-      "y": 5371.1,
-      "width": 319,
-      "height": 189.9,
+      "x": 2927.3,
+      "y": 5329,
+      "width": 340.4,
+      "height": 240,
       "resolution": 1.5
     },
     {
       "id": "river-crossing-2",
       "src": "/pixi-art/home-expansion-g/river-crossing-2.svg",
-      "x": 3458.2,
-      "y": 4272.9,
-      "width": 299.7,
-      "height": 264.9,
+      "x": 3420.6,
+      "y": 4237.3,
+      "width": 374.7,
+      "height": 313.8,
       "resolution": 1.5
     },
     {
       "id": "river-crossing-3",
       "src": "/pixi-art/home-expansion-g/river-crossing-3.svg",
-      "x": 5338,
-      "y": 1294.1,
-      "width": 274,
-      "height": 189.9,
+      "x": 5330.8,
+      "y": 1252,
+      "width": 288.5,
+      "height": 240,
       "resolution": 1.5
     },
     {
       "id": "river-crossing-4",
       "src": "/pixi-art/home-expansion-g/river-crossing-4.svg",
-      "x": 5679.4,
-      "y": 1756.9,
-      "width": 171.6,
-      "height": 347.2,
+      "x": 5649.2,
+      "y": 1750.8,
+      "width": 245.6,
+      "height": 347.9,
       "resolution": 1.5
     },
     {
       "id": "river-crossing-5",
       "src": "/pixi-art/home-expansion-g/river-crossing-5.svg",
-      "x": 3011.9,
-      "y": 3281.5,
-      "width": 356.1,
-      "height": 548.1,
+      "x": 2983.3,
+      "y": 3158.2,
+      "width": 409.2,
+      "height": 746.7,
       "resolution": 1.5
     },
     {
       "id": "river-crossing-6",
       "src": "/pixi-art/home-expansion-g/river-crossing-6.svg",
-      "x": 1934.4,
-      "y": 3277.8,
-      "width": 433.1,
-      "height": 575.5,
+      "x": 1879.1,
+      "y": 3144.8,
+      "width": 538.2,
+      "height": 785.6,
+      "resolution": 1.5
+    },
+    {
+      "id": "river-crossing-7",
+      "src": "/pixi-art/home-expansion-g/river-crossing-7.svg",
+      "x": 5126.9,
+      "y": 1478.9,
+      "width": 346.2,
+      "height": 286.2,
       "resolution": 1.5
     }
   ],
@@ -11941,6 +11552,18 @@
       "b": [
         1980,
         3800
+      ],
+      "w": 100,
+      "boatPassUnder": true
+    },
+    {
+      "a": [
+        5150,
+        1650
+      ],
+      "b": [
+        5450,
+        1690
       ],
       "w": 100,
       "boatPassUnder": true
@@ -12081,12 +11704,12 @@
         "hamlet-reedwhistle-cottage-harbour"
       ],
       "center": [
-        4023,
-        4636
+        3937,
+        4679
       ],
       "green": [
-        4023,
-        4636,
+        3937,
+        4679,
         300,
         140
       ],
@@ -14871,6 +14494,13 @@
       "y": 3800,
       "w": 90,
       "h": 90
+    },
+    {
+      "id": "river-crossing-7",
+      "x": 5300,
+      "y": 1670,
+      "w": 390,
+      "h": 130
     }
   ],
   "crossings": [
@@ -14909,6 +14539,12 @@
       "river": "old-shore-canal",
       "x": 665.1800000000001,
       "y": 847.05
+    },
+    {
+      "id": "river-crossing-7",
+      "river": "mill-stream",
+      "x": 1232,
+      "y": 504.59999999999997
     }
   ],
   "arches": [
@@ -14922,7 +14558,7 @@
         5497
       ],
       "w": 100,
-      "r": 48
+      "r": 24
     },
     {
       "a": [
@@ -14934,7 +14570,7 @@
         4350
       ],
       "w": 100,
-      "r": 44
+      "r": 19
     },
     {
       "a": [
@@ -14946,7 +14582,7 @@
         1420
       ],
       "w": 100,
-      "r": 48
+      "r": 24
     },
     {
       "a": [
@@ -14958,7 +14594,7 @@
         2070
       ],
       "w": 100,
-      "r": 48
+      "r": 25
     },
     {
       "a": [
@@ -14970,7 +14606,7 @@
         3780
       ],
       "w": 100,
-      "r": 70
+      "r": 31
     },
     {
       "a": [
@@ -14982,7 +14618,19 @@
         3800
       ],
       "w": 100,
-      "r": 70
+      "r": 35
+    },
+    {
+      "a": [
+        5150,
+        1650
+      ],
+      "b": [
+        5450,
+        1690
+      ],
+      "w": 100,
+      "r": 24
     }
   ],
   "roads": [
@@ -22971,14 +22619,6 @@
       "flip": false
     },
     {
-      "src": "/pixi-art/decals/grass-tuft-2.svg",
-      "x": 571.1,
-      "y": 592.1,
-      "width": 51,
-      "height": 33,
-      "flip": true
-    },
-    {
       "src": "/pixi-art/decals/pebble-2.svg",
       "x": 670.6,
       "y": 665.8,
@@ -26803,6 +26443,14 @@
       "flip": true
     },
     {
+      "src": "/pixi-art/decals/flower-dot-2.svg",
+      "x": -1148.9,
+      "y": 1323.1,
+      "width": 39,
+      "height": 27,
+      "flip": true
+    },
+    {
       "src": "/pixi-art/decals/grass-tuft-1.svg",
       "x": 3865.6,
       "y": 3780.8,
@@ -28963,6 +28611,14 @@
       "flip": true
     },
     {
+      "src": "/pixi-art/decals/flower-dot-2.svg",
+      "x": 6218.6,
+      "y": 3104.2,
+      "width": 39,
+      "height": 27,
+      "flip": true
+    },
+    {
       "src": "/pixi-art/decals/pebble-2.svg",
       "x": 7472.3,
       "y": 3468.3,
@@ -29336,14 +28992,6 @@
       "y": 691.5,
       "width": 66,
       "height": 39,
-      "flip": true
-    },
-    {
-      "src": "/pixi-art/decals/flower-dot-2.svg",
-      "x": 6281.1,
-      "y": 3149.2,
-      "width": 39,
-      "height": 27,
       "flip": true
     },
     {
@@ -29816,6 +29464,14 @@
       "y": 529.7,
       "width": 33,
       "height": 24,
+      "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/grass-tuft-1.svg",
+      "x": 1276.4,
+      "y": 4898.9,
+      "width": 66,
+      "height": 39,
       "flip": false
     },
     {
@@ -30883,6 +30539,14 @@
       "flip": false
     },
     {
+      "src": "/pixi-art/decals/grass-tuft-1.svg",
+      "x": -454.7,
+      "y": 1387.5,
+      "width": 66,
+      "height": 39,
+      "flip": false
+    },
+    {
       "src": "/pixi-art/decals/pebble-1.svg",
       "x": -2100.1,
       "y": 1751.6,
@@ -31097,6 +30761,14 @@
       "width": 84,
       "height": 36,
       "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/pebble-1.svg",
+      "x": -1013,
+      "y": 1428,
+      "width": 33,
+      "height": 21,
+      "flip": true
     },
     {
       "src": "/pixi-art/decals/flower-dot-3.svg",
@@ -32371,6 +32043,14 @@
       "flip": false
     },
     {
+      "src": "/pixi-art/decals/flower-dot-2.svg",
+      "x": -1099.3,
+      "y": 1742.6,
+      "width": 39,
+      "height": 27,
+      "flip": true
+    },
+    {
       "src": "/pixi-art/decals/pebble-1.svg",
       "x": 5168.9,
       "y": -1261.2,
@@ -33067,6 +32747,14 @@
       "flip": true
     },
     {
+      "src": "/pixi-art/decals/flower-dot-2.svg",
+      "x": -1238.8,
+      "y": 1284.1,
+      "width": 39,
+      "height": 27,
+      "flip": false
+    },
+    {
       "src": "/pixi-art/decals/pebble-1.svg",
       "x": -220.3,
       "y": 4965.6,
@@ -33304,14 +32992,6 @@
       "y": 4366.6,
       "width": 39,
       "height": 27,
-      "flip": false
-    },
-    {
-      "src": "/pixi-art/decals/grass-tuft-2.svg",
-      "x": -1165.4,
-      "y": 1706.7,
-      "width": 51,
-      "height": 33,
       "flip": false
     },
     {
@@ -34044,14 +33724,6 @@
     },
     {
       "src": "/pixi-art/decals/pebble-1.svg",
-      "x": 6147,
-      "y": 3080.3,
-      "width": 33,
-      "height": 21,
-      "flip": false
-    },
-    {
-      "src": "/pixi-art/decals/pebble-1.svg",
       "x": 819.1,
       "y": 4263.6,
       "width": 33,
@@ -34208,6 +33880,14 @@
       "y": -1184.4,
       "width": 39,
       "height": 27,
+      "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/flower-dot-3.svg",
+      "x": -845.9,
+      "y": 1546.3,
+      "width": 33,
+      "height": 24,
       "flip": false
     },
     {
@@ -35731,14 +35411,6 @@
       "flip": false
     },
     {
-      "src": "/pixi-art/decals/flower-dot-3.svg",
-      "x": 1286.5,
-      "y": 4879.9,
-      "width": 33,
-      "height": 24,
-      "flip": false
-    },
-    {
       "src": "/pixi-art/decals/grass-tuft-1.svg",
       "x": 1129.8,
       "y": -460.2,
@@ -36275,6 +35947,14 @@
       "flip": false
     },
     {
+      "src": "/pixi-art/decals/flower-dot-3.svg",
+      "x": 520.1,
+      "y": 600.6,
+      "width": 33,
+      "height": 24,
+      "flip": true
+    },
+    {
       "src": "/pixi-art/decals/pebble-1.svg",
       "x": 7415,
       "y": 1237.8,
@@ -36393,6 +36073,14 @@
       "width": 51,
       "height": 33,
       "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/flower-dot-1.svg",
+      "x": 6182.8,
+      "y": 3031.3,
+      "width": 30,
+      "height": 27,
+      "flip": true
     },
     {
       "src": "/pixi-art/decals/pebble-3.svg",
@@ -36939,20 +36627,20 @@
       "flip": true
     },
     {
+      "src": "/pixi-art/decals/grass-tuft-1.svg",
+      "x": 6091,
+      "y": 3064.3,
+      "width": 66,
+      "height": 39,
+      "flip": true
+    },
+    {
       "src": "/pixi-art/decals/flower-dot-3.svg",
       "x": 6482.8,
       "y": 637,
       "width": 33,
       "height": 24,
       "flip": false
-    },
-    {
-      "src": "/pixi-art/decals/grass-tuft-3.svg",
-      "x": -1078.2,
-      "y": 1678.7,
-      "width": 84,
-      "height": 36,
-      "flip": true
     },
     {
       "src": "/pixi-art/decals/grass-tuft-1.svg",
@@ -37225,14 +36913,6 @@
       "width": 84,
       "height": 36,
       "flip": true
-    },
-    {
-      "src": "/pixi-art/decals/grass-tuft-3.svg",
-      "x": -982.2,
-      "y": 1401.5,
-      "width": 84,
-      "height": 36,
-      "flip": false
     },
     {
       "src": "/pixi-art/decals/flower-dot-1.svg",
@@ -37937,22 +37617,6 @@
       "width": 66,
       "height": 39,
       "flip": true
-    },
-    {
-      "src": "/pixi-art/decals/grass-tuft-2.svg",
-      "x": 1092.3,
-      "y": 4186.7,
-      "width": 51,
-      "height": 33,
-      "flip": false
-    },
-    {
-      "src": "/pixi-art/decals/pebble-3.svg",
-      "x": 6185.1,
-      "y": 3003.4,
-      "width": 42,
-      "height": 27,
-      "flip": false
     },
     {
       "src": "/pixi-art/decals/grass-tuft-3.svg",
@@ -39027,6 +38691,14 @@
       "flip": true
     },
     {
+      "src": "/pixi-art/decals/grass-tuft-2.svg",
+      "x": 6301.7,
+      "y": 3127.9,
+      "width": 51,
+      "height": 33,
+      "flip": true
+    },
+    {
       "src": "/pixi-art/decals/flower-dot-3.svg",
       "x": 6576,
       "y": 336.4,
@@ -39219,14 +38891,6 @@
       "flip": false
     },
     {
-      "src": "/pixi-art/decals/flower-dot-2.svg",
-      "x": 2737,
-      "y": 4483.5,
-      "width": 39,
-      "height": 27,
-      "flip": false
-    },
-    {
       "src": "/pixi-art/decals/flower-dot-3.svg",
       "x": 2825.1,
       "y": 4736.4,
@@ -39395,14 +39059,6 @@
       "flip": false
     },
     {
-      "src": "/pixi-art/decals/pebble-3.svg",
-      "x": -1120.6,
-      "y": 1325.7,
-      "width": 42,
-      "height": 27,
-      "flip": true
-    },
-    {
       "src": "/pixi-art/decals/grass-tuft-1.svg",
       "x": 7057.3,
       "y": 447.3,
@@ -39518,6 +39174,14 @@
       "src": "/pixi-art/decals/grass-tuft-3.svg",
       "x": -156.5,
       "y": 2280.2,
+      "width": 84,
+      "height": 36,
+      "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/grass-tuft-3.svg",
+      "x": -1067.4,
+      "y": 1646.4,
       "width": 84,
       "height": 36,
       "flip": false
@@ -40107,14 +39771,6 @@
       "flip": true
     },
     {
-      "src": "/pixi-art/decals/grass-tuft-2.svg",
-      "x": 6335.9,
-      "y": 3084.9,
-      "width": 51,
-      "height": 33,
-      "flip": true
-    },
-    {
       "src": "/pixi-art/decals/pebble-1.svg",
       "x": 5599,
       "y": 3939,
@@ -40240,14 +39896,6 @@
       "y": -80.2,
       "width": 30,
       "height": 27,
-      "flip": false
-    },
-    {
-      "src": "/pixi-art/decals/grass-tuft-2.svg",
-      "x": 6038.9,
-      "y": 3086.9,
-      "width": 51,
-      "height": 33,
       "flip": false
     },
     {

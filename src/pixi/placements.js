@@ -77,13 +77,13 @@ function plant(kind, point) {
 export const JETTIES = [
   [2, 870.0355, 2996.0389, 337.9679, 475.3502],   // round 4b viewBox. boss 8 Nov: jetties 1 and 3 and their round pads are gone; the
   // ground lane draws those crossings as diagonal arched bridges (home-expansion.json decks and arches river-crossing-5 and -6)
-  [5, 5004.9592, 1492.5089, 494.0617, 277.2587],   // round 4: jetty 4 and its islet are gone, so the piers stop reading as a row
+  // boss 8 Nov (bridges): jetty 5 ran onto a dead-end sand islet in the mill stream; it and the islet are gone, and the ground
+  // lane's river-crossing-7 (a GPT footbridge) now spans from the west path to the east path
 ].map(([n, x, y, width, height]) => ({src: `/pixi-art/bridge-jetty-${n}.svg`, x, y, width, height, resolution: 1.5}));
 const ARCHES = [
   {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},   // pond: the deck top is drawn 72 deep for 112 of walkway
   // round 4: every jetty humps R = 70 (was 40-44), so a Ducky visibly climbs it
   {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
-  {a: [5034.08, 1638.41], b: [5469.9, 1681.99], r: 70, w: 84},
   ...(expansion.arches ?? []),
 ];
 // Where to draw a Ducky's feet: on a deck it rides up the arch, lift = R * 4t(1-t); off a bridge it is the plain world y.
@@ -104,9 +104,12 @@ export function deckY(x, y, arches = ARCHES) {
 // boss 4 Nov: the race lake is its drawn water (lake-race.svg), not the old oval; x/y/rx/ry are the outline's bounds
 const LAKE = {x: 4130, y: 1537, rx: 538, ry: 296, poly: shapes.lake};
 // boss 8 Nov (planks): the two old jetty walkways (x 3320 and 2320) and their round pads are gone too; arched bridges cross there now
-const OLD_JETTY = new Set([3940, 3320, 2320]), OLD_PAD = new Set([3930, 3340, 2290]);
-export const trimWorld = w => ({...w, islets: w.islets.filter(a => !OLD_PAD.has(a[0])), walkways: w.walkways.filter(b => !OLD_JETTY.has(b.a[0])),
+const OLD_JETTY = new Set([3940, 3320, 2320, 5050]), OLD_PAD = new Set([3930, 3340, 2290, 5450]);   // boss 8 Nov: + jetty 5 and its islet
+const trimWith = (w, jetty, pad) => ({...w, islets: w.islets.filter(a => !pad.has(a[0])), walkways: w.walkways.filter(b => !jetty.has(b.a[0])),
   water: w.water.map(o => o.x === 4140 && o.y === 1520 ? LAKE : o)});
+export const trimWorld = w => trimWith(w, OLD_JETTY, OLD_PAD);
+// the centre's props were placed while jetty 5 and its islet stood; placing still sees them, so no centre prop or sleeper moves
+const placeWorld = w => trimWith(w, new Set([3940, 3320, 2320]), new Set([3930, 3340, 2290]));
 // boss 4 Nov: what the client sim walks on. The coast is traced from the ground tiles' shoreline, inset 35 so a dry margin stays
 // (the old one sat 20-160 inside the sand); the south-west jetty gets a deck-wide step-on. Props were placed on the old coast,
 // so only the sim gets these. The socket server still walks on world.json.
@@ -484,11 +487,11 @@ export function sleepSpots(world, props, walkable, sizes) {
 export const HOME_ORIGIN = expansion.origin;
 export const HOME_TILES = [...expansion.tiles, ...original.ground.tiles.map(t=>({...t,src:t.src.replace('/pixi-art/','/pixi-art/home-expansion/')}))];
 export function createPlacements() {
-  const base=trimWorld(homeOriginalWorld);
+  const base=placeWorld(homeOriginalWorld);
   return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable), ...expansion.props];
 }
 export function homeDecals(props) {
-  const base=trimWorld(homeOriginalWorld), old=geometry({...base,obstacles:[]}).walkable;
+  const base=placeWorld(homeOriginalWorld), old=geometry({...base,obstacles:[]}).walkable;
   const originalProps=props.filter(p=>!String(p.id).startsWith('bigger-'));
   const grown={...base,coast:shapes.coast};
   return [...decalsFor(base,originalProps,old), ...decalsFor(grown,originalProps,geometry({...grown,obstacles:[]}).walkable).filter(d=>!old(d.x,d.y))];

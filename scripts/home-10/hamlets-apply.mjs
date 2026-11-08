@@ -10,6 +10,7 @@ const HOME = /^(house|cottage)-(?!flowerbed)/;
 const WORK = /^(bakery|bread-oven|bread-cart|garden-shed|bandstand|harvest-barn|barn|windmill|grain-silo|kiln|pottery-drying-rack|smokehouse|lighthouse|fishing-net-rack|rowing-boat-cradle|drying-fish-rack|bread-rack|seed-stall|vegetable-bed)/;
 const BUILDING = /^(house|cottage-(?!flowerbed)|bakery|harvest-barn|barn|windmill|grain-silo|smokehouse|lighthouse|garden-shed|bandstand|bread-oven|kiln)/;
 const TREE = /^(tree|oak|birch)/;
+const FLAT = /^(grass|pebble|path-stone|sand|flower|wild|tulip|mushroom|rock-flat|reeds|fence|vegetable-fence|vegetable-bed|crop|wheat-bed|cabbage-bed|seedling-bed|square-flowerbed|cottage-flowerbed|flower-island|oven-smoke|chimney-smoke|square-paving|shoreline)/;
 const NOSOLID = /smoke|^duck-sailboat|^square-paving/;
 const r1 = v => Math.round(v * 10) / 10;
 const svgBox = src => {const s = readFileSync('public' + src, 'utf8'), vb = s.match(/viewBox="([^"]+)"/)[1].trim().split(/[\s,]+/).map(Number); return vb;};
@@ -72,7 +73,11 @@ export function applyHamlets(E, P) {
         : fp && kept.find(q => Math.hypot(q.footprint.x - fp.x, (q.footprint.y - fp.y) * 2) < q.footprint.rx + fp.rx * .8) ? 'prop' : null;
       if (bad && !n) {dropped.push(`${o.id}:${bad}`); return;}
       const p = {id: `hamlet-${h}-${o.id}`, name, asset: name, src, x: r1(x), y: r1(y), width: r1(w), height: r1(hgt), scale: 1, anchor: {x: .5, y: 1},
-        resolution: 1.5, zone: h, noShadow: true, order: o.drawOrder};
+        resolution: 1.5, zone: h, order: o.drawOrder};
+      // boss 8 Nov ("base has to have shadow"): buildings, workplaces, trees and the larger props get the engine's one soft
+      // contact shadow, sized to the footprint; flat beds, fences, flowers, pebbles and the small bits stay without
+      if (FLAT.test(name) || (w < 60 && !/lamp/.test(name))) p.noShadow = true;
+      else if (fp && (BUILDING.test(name) || WORK.test(name))) p.shadowSize = [r1(fp.rx * 1.05), r1(Math.min(70, fp.rx * .3))];
       if (fp) p.footprint = {x: r1(fp.x), y: r1(fp.y), rx: r1(fp.rx), ry: r1(fp.ry)};
       if (HOME.test(o.file)) {p.communityRole = 'home'; p.door = [r1(x + (cfg.doors?.[o.id] ?? 0)), r1(y + 40)];}
       else if (WORK.test(o.file)) p.communityRole = 'workplace';
