@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470" height="431" viewBox="0 0 300 275">
+<title>Buttercream Rose Cottage</title>
+<desc>Hand-drawn rose cottage. Ink matched at game scale to the original pink dollhouse. Front gable, deep pitched roof, right wall and raised stone plinth.</desc>
+<defs>
+  <g id="leaf" stroke="#39472d" stroke-width="1.4" stroke-linejoin="round">
+    <path d="M0 0Q-13 1-14-10Q-3-13 0 0Q2-13 12-12Q17-2 0 0Z" fill="#60b244"/>
+  </g>
+  <g id="rose" stroke="#39472d" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-9 1Q-13-5-7-8Q-7-14 0-11Q6-14 9-8Q16-7 12 0Q15 7 7 9Q3 15-3 10Q-11 12-10 5Z" fill="#ff91c0"/>
+    <path d="M-5-5Q4-10 7-3Q11 4 3 7Q-5 9-6 2Q-7-5 0-5Q6-5 4 1Q1 5-2 1" fill="none" stroke="#c8508a" stroke-width="1.2"/>
+    <path d="M-7-5Q-8-1-6 1M4-8Q8-7 9-4" fill="none" stroke="#ffc0dc" stroke-width="1.8"/>
+  </g>
+  <g id="flower" stroke="#39472d" stroke-width="1.1" stroke-linejoin="round">
+    <path d="M0-3C-8-12-11-3-6 1C-13 6-5 12-1 6C3 15 10 7 5 3C15 0 7-8 3-4C4-12-5-11 0-3Z" fill="#fff4d8"/>
+    <circle cx="1" cy="2" r="2.6" fill="#f3c85c"/>
+  </g>
+</defs>
+<g stroke="#39472d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Chimney has its own top and shaded right face. -->
+  <path d="M65 44L86 43L95 36L95 95L85 105L65 99Z" fill="#fff5db"/>
+  <path d="M86 44L95 37L95 95L86 102Z" fill="#e5d6b1" stroke="none"/>
+  <path d="M86 46L86 96M66 68L85 68L94 61" fill="none" stroke-width="1.7"/>
+  <path d="M61 35L85 35L98 28L73 28Z" fill="#fff4d8"/>
+  <path d="M61 35L85 35L98 28L98 41L86 48L62 48Z" fill="#fff4d8"/>
+  <path d="M86 36L86 47M67 52L67 61" fill="none" stroke="#fffdf2" stroke-width="3"/>
+  <!-- A continuous three-dimensional base: top, front and right face. -->
+  <path d="M29 238L65 211L276 217L239 245L29 245Z" fill="#fff4d8"/>
+  <path d="M29 240L239 244L276 219L276 231L240 256L30 251Z" fill="#e4cfa8"/>
+  <path d="M30 240L239 244L239 256L30 251Z" fill="#fff4d8"/>
+  <!-- Right wall recedes by the same angle as the roof. -->
+  <path d="M237 136L272 110L272 217L237 244Z" fill="#e8d3ad"/>
+  <path d="M241 145L267 125L267 216L241 236Z" fill="#efddbb" stroke="none"/>
+  <path d="M33 131Q133 128 238 136L238 244Q134 246 33 239Z" fill="#fff4d8"/>
+  <path d="M34 140L237 144L237 154L34 150Z" fill="#ead7b6" stroke="none"/>
+  <path d="M39 162L55 162M98 163L116 164M179 164L225 164M37 198L51 198M100 198L114 199M182 199L227 199M39 227L111 228M183 230L225 230" fill="none" stroke="#dccaa8" stroke-width="1.1"/>
+  <path d="M40 158L40 230M229 158L229 231" fill="none" stroke="#fffdf2" stroke-width="3.3"/>
+  <!-- Far eave and full pitched roof plane. -->
+  <path d="M130 60L166 30Q169 27 173 30L282 108Q285 111 281 116L244 147L130 66Z" fill="#ffda8a"/>
+  <path d="M245 136L281 107L282 117L245 149L233 142Z" fill="#e8b55f"/>
+  <g transform="matrix(.9167 .6583 .6727 -.5455 132 60)" fill="none" stroke="#e8b55f" stroke-width="1.8">
+    <path d="M18 1Q30 9 18 18Q30 27 18 36Q30 45 18 54M40 1Q52 9 40 18Q52 27 40 36Q52 45 40 54M62 1Q74 9 62 18Q74 27 62 36Q74 45 62 54M84 1Q96 9 84 18Q96 27 84 36Q96 45 84 54M106 1Q118 9 106 18Q118 27 106 36Q118 45 106 54"/>
+  </g>
+  <path d="M168 34Q214 65 260 99" fill="none" stroke="#ffe8b4" stroke-width="3.4"/>
+  <path d="M140 61L170 37" fill="none" stroke="#fff4d8" stroke-width="2.7"/>
+  <path d="M27 131L131 58L241 135L240 145L26 142Z" fill="#fff4d8"/>
+  <path d="M43 132L131 72L220 134Z" fill="#ffe6de" stroke-width="1.8"/>
+  <path d="M55 125L131 76L208 129" fill="none" stroke="#ffc7d4" stroke-width="4"/>
+  <path d="M42 139L224 140" fill="none" stroke="#e8d3ad" stroke-width="2.4"/>
+  <!-- Rounded, slightly irregular bargeboards, as on the original dollhouse. -->
+  <path d="M21 130L126 54Q130 51 134 54L248 134Q251 138 247 143Q243 147 239 144L131 68L31 141Q25 145 21 140Q18 136 21 130Z" fill="#fff4d8"/>
+  <path d="M25 131L128 57M137 59L241 133" fill="none" stroke="#fffdf2" stroke-width="2.7"/>
+  <!-- Circular attic window with a thick cream surround and inset glass. -->
+  <path d="M151 105C151 118 143 125 131 125C118 125 111 117 111 105C111 92 120 85 131 85C143 85 151 94 151 105Z" fill="#fff4d8" stroke-width="2"/>
+  <path d="M145 105C145 114 139 119 131 119C122 119 117 114 117 105C117 97 122 91 131 91C139 91 145 97 145 105Z" fill="#8bcddd" stroke-width="1.5"/>
+  <path d="M120 99Q124 92 128 94" fill="none" stroke="#dff5ed" stroke-width="3"/>
+  <path d="M131 92L131 118M118 105L144 105" fill="none" stroke="#fff4d8" stroke-width="3.5"/>
+  <path d="M54 133L64 127L75 127L68 133ZM164 92L175 100L171 104L160 96Z" fill="#fffdf2" stroke="none"/>
+  <path d="M37 217L44 214L45 219L38 223ZM210 238L218 235L223 239L215 243Z" fill="#fffdf2" stroke="none"/>
+  <!-- Right-hand window follows the receding side wall, including its sill. -->
+  <path d="M249 166L249 149Q249 139 257 134Q266 130 266 141L266 180L249 193Z" fill="#fff4d8" stroke-width="1.9"/>
+  <path d="M253 164L253 150Q253 143 258 140Q262 138 262 145L262 178L253 185Z" fill="#89d2dc" stroke-width="1.3"/>
+  <path d="M258 142L258 181M253 164L262 157" fill="none" stroke="#fff4d8" stroke-width="3"/>
+  <path d="M247 193L267 178L267 184L247 199Z" fill="#fff4d8" stroke-width="1.6"/>
+  <!-- Front windows. -->
+  <path d="M54 196L54 174C54 149 94 149 94 174L94 197Z" fill="#fff4d8" stroke-width="2.2"/>
+  <path d="M60 191L60 174C60 157 88 157 88 174L88 192Z" fill="#89d2dc" stroke-width="1.6"/>
+  <path d="M74 160L74 192M60 177L88 177" fill="none" stroke="#fff4d8" stroke-width="3.5"/>
+  <path d="M64 168L68 163" fill="none" stroke="#e3f5ed" stroke-width="2.8"/>
+  <path d="M183 198L183 175C183 150 223 150 223 175L223 199Z" fill="#fff4d8" stroke-width="2.2"/>
+  <path d="M189 193L189 175C189 158 217 158 217 175L217 194Z" fill="#89d2dc" stroke-width="1.6"/>
+  <path d="M203 161L203 194M189 178L217 178" fill="none" stroke="#fff4d8" stroke-width="3.5"/>
+  <path d="M193 170L197 165" fill="none" stroke="#e3f5ed" stroke-width="2.8"/>
+  <!-- Arched door, jamb shadow and inset timber. -->
+  <path d="M111 243L111 191C111 156 177 156 177 191L177 245Z" fill="#fff4d8"/>
+  <path d="M119 243L119 191C119 167 169 167 169 191L169 244Z" fill="#e4cfa8" stroke-width="1.6"/>
+  <path d="M124 243L124 192C124 171 168 171 168 192L168 244Z" fill="#f4d68a" stroke-width="2"/>
+  <path d="M134 182L134 238M146 177L146 239M158 183L158 239" fill="none" stroke="#c87591" stroke-width="1.1"/>
+  <path d="M127 193L127 234" fill="none" stroke="#ffe8b4" stroke-width="2.4"/>
+  <circle cx="160" cy="221" r="4.2" fill="#e7b64d" stroke-width="1.6"/>
+  <!-- Hanging lanterns. -->
+  <path d="M103 161L103 171M184 160L184 171" fill="none" stroke-width="1.8"/>
+  <path d="M97 175L103 169L109 175L107 190L99 190Z" fill="#d8a34c" stroke-width="1.6"/>
+  <path d="M100 177L106 177L105 186L101 186Z" fill="#ffe5a0" stroke="none"/>
+  <path d="M178 175L184 169L190 175L188 190L180 190Z" fill="#d8a34c" stroke-width="1.6"/>
+  <path d="M181 177L187 177L186 186L182 186Z" fill="#ffe5a0" stroke="none"/>
+  <!-- Window boxes have a visible top rim and rounded shaded bottom. -->
+  <path d="M51 198Q73 194 98 199L94 209Q73 213 55 208Z" fill="#e4bd86" stroke-width="1.8"/>
+  <path d="M51 198Q73 202 98 199" fill="none" stroke="#fff4d8" stroke-width="2.3"/>
+  <path d="M180 200Q202 196 226 201L223 211Q202 215 183 210Z" fill="#e4bd86" stroke-width="1.8"/>
+  <path d="M180 200Q202 204 226 201" fill="none" stroke="#fff4d8" stroke-width="2.3"/>
+  <g fill="#60b244" stroke-width="1.3">
+    <path d="M54 198Q49 190 57 188Q60 179 67 186Q76 177 80 186Q88 181 91 189Q101 191 95 200Z"/>
+    <path d="M183 200Q178 192 186 190Q189 181 196 188Q205 179 209 188Q217 183 220 191Q230 193 224 202Z"/>
+  </g>
+  <use href="#flower" transform="translate(60 192) scale(.68)"/>
+  <use href="#flower" transform="translate(73 190) scale(.68)"/>
+  <use href="#flower" transform="translate(87 194) scale(.68)"/>
+  <use href="#flower" transform="translate(189 194) scale(.68)"/>
+  <use href="#flower" transform="translate(202 192) scale(.68)"/>
+  <use href="#flower" transform="translate(216 196) scale(.68)"/>
+  <!-- Wreath and its small ribbon keep the existing rose-cottage identity. -->
+  <path d="M157 203C157 216 151 223 144 223C135 223 130 216 130 204C130 193 135 186 144 186C152 186 157 193 157 203Z" fill="#62ac49" stroke-width="1.7"/>
+  <ellipse cx="144" cy="204" rx="6.5" ry="11" fill="#f4d68a" stroke-width="1.2"/>
+  <use href="#rose" transform="translate(135 194) scale(.43)"/>
+  <use href="#rose" transform="translate(151 192) scale(.43)"/>
+  <use href="#rose" transform="translate(155 208) scale(.43)"/>
+  <use href="#rose" transform="translate(133 212) scale(.43)"/>
+  <path d="M143 220Q132 212 133 223Q136 228 143 223Q151 230 154 222Q155 216 145 220Z" fill="#f17eb0" stroke-width="1.4"/>
+  <path d="M141 224L138 232L145 228L150 233L148 224" fill="#f17eb0" stroke-width="1.2"/>
+  <!-- Two shallow treads show the top surfaces and the risers. -->
+  <path d="M112 239L174 240L181 247L106 247Z" fill="#fff4d8" stroke-width="2"/>
+  <path d="M106 247L181 247L181 253L106 253Z" fill="#dcc5a0" stroke-width="2"/>
+  <path d="M106 253L181 253L187 259L100 259Z" fill="#fff4d8" stroke-width="2"/>
+  <path d="M100 259L187 259L187 265L100 265Z" fill="#e4cfa8" stroke-width="2"/>
+  <path d="M103 259L184 259" fill="none" stroke="#fffdf2" stroke-width="2"/>
+  <path d="M101 235L111 235L111 260L101 260Z" fill="#fff4d8" stroke-width="2"/>
+  <circle cx="106" cy="234" r="7.4" fill="#fff4d8" stroke-width="2"/>
+  <path d="M177 236L187 236L187 261L177 261Z" fill="#fff4d8" stroke-width="2"/>
+  <circle cx="182" cy="235" r="7.4" fill="#fff4d8" stroke-width="2"/>
+  <!-- Rose climbers are individually composed along the two corners. -->
+  <path d="M34 239Q16 225 28 207Q38 194 26 180Q20 167 33 148M238 243Q251 228 241 215Q230 198 242 182Q252 169 239 149" fill="none" stroke="#39472d" stroke-width="3"/>
+  <path d="M34 238Q20 223 31 209M240 238Q248 225 240 216" fill="none" stroke="#60b244" stroke-width="1.6"/>
+  <use href="#leaf" transform="translate(31 233) rotate(-16) scale(.8)"/>
+  <use href="#rose" transform="translate(27 229) scale(.84)"/>
+  <use href="#leaf" transform="translate(25 212) rotate(17) scale(.8)"/>
+  <use href="#rose" transform="translate(22 207) scale(.8)"/>
+  <use href="#leaf" transform="translate(31 190) rotate(-25) scale(.75)"/>
+  <use href="#rose" transform="translate(30 183) scale(.8)"/>
+  <use href="#leaf" transform="translate(29 167) scale(.73)"/>
+  <use href="#rose" transform="translate(33 157) scale(.75)"/>
+  <use href="#leaf" transform="translate(243 235) rotate(18) scale(.8)"/>
+  <use href="#rose" transform="translate(244 232) scale(.84)"/>
+  <use href="#leaf" transform="translate(247 215) rotate(-14) scale(.8)"/>
+  <use href="#rose" transform="translate(247 209) scale(.8)"/>
+  <use href="#leaf" transform="translate(242 192) rotate(26) scale(.75)"/>
+  <use href="#rose" transform="translate(240 185) scale(.8)"/>
+  <use href="#leaf" transform="translate(243 166) scale(.73)"/>
+  <use href="#rose" transform="translate(239 157) scale(.75)"/>
+</g>
+</svg>

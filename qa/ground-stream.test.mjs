@@ -30,15 +30,16 @@ test('the ground pool decodes only visible tiles, releases far textures, and res
  pool.update([]);assert.equal(pool.stats().reservedBytes,0);
  pool.destroy();
 });
-test('all live islands share the byte limit, and pending decodes count against it',async()=>{
- const completions=[],released=[];
- const pool=createGroundPool({makeSprite:sprite,budget:80000,concurrency:2,acquire:src=>new Promise(r=>completions.push(()=>r({source:{pixelWidth:100,pixelHeight:100}}))),release:src=>released.push(src)});
+test('all live islands share the byte limit: an over-budget view steps down in sharpness and still draws every tile',async()=>{
+ const completions=[],released=[],sizes=[];
+ const pool=createGroundPool({makeSprite:sprite,budget:80000,concurrency:2,acquire:(src,resolution)=>new Promise(r=>completions.push(()=>{sizes.push(resolution);r({source:{pixelWidth:100*resolution,pixelHeight:100*resolution}});})),release:src=>released.push(src)});
  const streams=Array.from({length:13},()=>pool.create([tile()],container));
  pool.update(streams.map(s=>view(s)));
- assert.equal(completions.length,2);assert.equal(pool.stats().reservedBytes,80000);
- completions.splice(0).forEach(f=>f());await flush();
- assert.equal(pool.stats().residentTiles,2);assert.equal(pool.stats().pendingTiles,0);
- pool.update([]);assert.equal(pool.stats().reservedBytes,0);assert.equal(released.length,2);
+ assert.equal(completions.length,2);assert.ok(pool.stats().reservedBytes<=80000);
+ while(completions.length){completions.splice(0).forEach(f=>f());await flush();}
+ assert.equal(pool.stats().residentTiles,13);assert.equal(pool.stats().pendingTiles,0);assert.ok(pool.stats().reservedBytes<=80000);
+ assert.ok(sizes.every(r=>r<1));
+ pool.update([]);assert.equal(pool.stats().reservedBytes,0);assert.equal(released.length,13);
  pool.destroy();
 });
 test('a decode completed after eviction or disposal releases its lease without touching a destroyed sprite',async()=>{

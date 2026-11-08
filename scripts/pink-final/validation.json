@@ -1,0 +1,27 @@
+{
+  "head": "7c2a28ec",
+  "committed": false,
+  "tests": {
+    "total": 299,
+    "passed": 299,
+    "failed": 0
+  },
+  "buildPassed": true,
+  "serverPort": 8818,
+  "buildingsSwapped": 19,
+  "validatedSVGs": 34,
+  "skipped": [],
+  "allSuppliedSVGsCopiedExactly": true,
+  "suppliedSVGs": 34,
+  "floorUnionPieces": 52,
+  "joinCloseups": 50,
+  "remainingOverlaps": 0,
+  "walkAccessIssues": 0,
+  "proofs": {
+    "buildings": "scripts/pink-final/renders/buildings-vs-og.png",
+    "joins": "scripts/pink-final/renders/joins/index.png",
+    "kind": "Production SVG composites"
+  },
+  "requestedConceptOutputUpdated": false,
+  "outputBlocker": "The requested concepts folder is outside the writable workspace."
+}

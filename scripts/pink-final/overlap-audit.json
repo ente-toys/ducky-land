@@ -1,0 +1,613 @@
+{
+  "lockedBaselineContacts": [
+    {
+      "id": "lamp-heart-3",
+      "path": 5
+    },
+    {
+      "id": "lamp-heart-4",
+      "path": 10
+    },
+    {
+      "pose": "nod",
+      "x": 3166,
+      "y": 2811,
+      "tree": "nod-tree-4"
+    }
+  ],
+  "remainingOverlapCount": 0,
+  "forbiddenHamletPlantProps": 0,
+  "checked": {
+    "props": 645,
+    "bridges": 4,
+    "pathEnds": 58,
+    "sleepers": 40
+  },
+  "remaining": {
+    "propVsPath": [],
+    "propVsBridge": [],
+    "bridgeVsBridge": [],
+    "bridgeWithoutWater": [],
+    "sleeperVsTrunk": [],
+    "sleeperVsPath": [],
+    "sleeperVsBridge": [],
+    "pathEnds": [],
+    "gardenVsPath": [],
+    "gardenVsBridge": []
+  },
+  "pathEnds": [
+    {
+      "path": 0,
+      "end": "start",
+      "point": [
+        4000,
+        2359
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 0,
+      "end": "end",
+      "point": [
+        4000,
+        1877
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 1,
+      "end": "start",
+      "point": [
+        4000,
+        1337
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 1,
+      "end": "end",
+      "point": [
+        4000,
+        1337
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 2,
+      "end": "start",
+      "point": [
+        3354,
+        2607
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 2,
+      "end": "end",
+      "point": [
+        1043,
+        1275
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 3,
+      "end": "start",
+      "point": [
+        3381,
+        1658
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 3,
+      "end": "end",
+      "point": [
+        2991,
+        2126
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 4,
+      "end": "start",
+      "point": [
+        3422,
+        1337
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 4,
+      "end": "end",
+      "point": [
+        3060,
+        1050
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 5,
+      "end": "start",
+      "point": [
+        3354,
+        3016
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 5,
+      "end": "end",
+      "point": [
+        1124,
+        2736
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 6,
+      "end": "start",
+      "point": [
+        1956,
+        1834
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 6,
+      "end": "end",
+      "point": [
+        2063,
+        3148
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 7,
+      "end": "start",
+      "point": [
+        4672,
+        2710
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 7,
+      "end": "end",
+      "point": [
+        6865,
+        2778
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 8,
+      "end": "start",
+      "point": [
+        5076,
+        2556
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 8,
+      "end": "end",
+      "point": [
+        6362,
+        894
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 9,
+      "end": "start",
+      "point": [
+        4578,
+        1396
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 9,
+      "end": "end",
+      "point": [
+        4930,
+        1120
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 10,
+      "end": "start",
+      "point": [
+        4646,
+        3045
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 10,
+      "end": "end",
+      "point": [
+        5412,
+        3250
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 11,
+      "end": "start",
+      "point": [
+        4000,
+        3381
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 11,
+      "end": "end",
+      "point": [
+        4000,
+        3907
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 12,
+      "end": "start",
+      "point": [
+        3005,
+        3206
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 12,
+      "end": "end",
+      "point": [
+        2827,
+        3713
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 13,
+      "end": "start",
+      "point": [
+        5420,
+        3400
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 13,
+      "end": "end",
+      "point": [
+        5567,
+        3935
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 14,
+      "end": "start",
+      "point": [
+        -350,
+        650
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 14,
+      "end": "end",
+      "point": [
+        -350,
+        650
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 15,
+      "end": "start",
+      "point": [
+        8650,
+        2300
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 15,
+      "end": "end",
+      "point": [
+        9600,
+        2850
+      ],
+      "goal": "jetty"
+    },
+    {
+      "path": 16,
+      "end": "start",
+      "point": [
+        1043,
+        1275
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 16,
+      "end": "end",
+      "point": [
+        608,
+        624
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 17,
+      "end": "start",
+      "point": [
+        1124,
+        2736
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 17,
+      "end": "end",
+      "point": [
+        -314,
+        2700
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 18,
+      "end": "start",
+      "point": [
+        6865,
+        2778
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 18,
+      "end": "end",
+      "point": [
+        8650,
+        2300
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 19,
+      "end": "start",
+      "point": [
+        6362,
+        894
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 19,
+      "end": "end",
+      "point": [
+        7100,
+        850
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 20,
+      "end": "start",
+      "point": [
+        3060,
+        1050
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 20,
+      "end": "end",
+      "point": [
+        2600,
+        350
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 21,
+      "end": "start",
+      "point": [
+        4930,
+        1120
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 21,
+      "end": "end",
+      "point": [
+        5750,
+        500
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 22,
+      "end": "start",
+      "point": [
+        4000,
+        3907
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 22,
+      "end": "end",
+      "point": [
+        2600,
+        5370
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 23,
+      "end": "start",
+      "point": [
+        6250,
+        500
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 23,
+      "end": "end",
+      "point": [
+        6362,
+        894
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 24,
+      "end": "start",
+      "point": [
+        5412,
+        3250
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 24,
+      "end": "end",
+      "point": [
+        5420,
+        3400
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 25,
+      "end": "start",
+      "point": [
+        5567,
+        3935
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 25,
+      "end": "end",
+      "point": [
+        5740,
+        4150
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 26,
+      "end": "start",
+      "point": [
+        6922,
+        4434
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 26,
+      "end": "end",
+      "point": [
+        7170,
+        4100
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 27,
+      "end": "start",
+      "point": [
+        3003,
+        5839
+      ],
+      "goal": "plaza or hamlet"
+    },
+    {
+      "path": 27,
+      "end": "end",
+      "point": [
+        2600,
+        5370
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 28,
+      "end": "start",
+      "point": [
+        8200,
+        3250
+      ],
+      "goal": "connected path"
+    },
+    {
+      "path": 28,
+      "end": "end",
+      "point": [
+        7170,
+        4100
+      ],
+      "goal": "connected path"
+    }
+  ],
+  "bridges": [
+    {
+      "id": "rosewater-promenade",
+      "a": [
+        1440,
+        4590
+      ],
+      "b": [
+        1850,
+        4900
+      ],
+      "water": true
+    },
+    {
+      "id": "willow-lane",
+      "a": [
+        7440,
+        2650
+      ],
+      "b": [
+        7840,
+        2430
+      ],
+      "water": true
+    },
+    {
+      "id": "willow-promenade",
+      "a": [
+        7470,
+        3860
+      ],
+      "b": [
+        7870,
+        3550
+      ],
+      "water": true
+    },
+    {
+      "id": "willow-shore",
+      "a": [
+        8160,
+        4330
+      ],
+      "b": [
+        8560,
+        3930
+      ],
+      "water": true
+    }
+  ],
+  "coastMatches": true
+}

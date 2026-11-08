@@ -94,26 +94,50 @@
    "sortY": -640
   },
   {
-   "id": "dancer",
-   "file": "dancer.svg",
+   "id": "dancer-stand",
+   "file": "dancer-stand.svg",
    "layer": "anim",
    "parent": "music-box",
    "drawAbove": "music-box",
    "width": 127.9,
-   "height": 250,
+   "height": 66.15720524017468,
    "anchor": {
-    "x": 0.5,
-    "y": 0.96
+    "x": 0,
+    "y": 0
    },
    "at": [
-    0.1,
-    -942.5
+    -63.9,
+    -998.6572052401747
+   ],
+   "x": -63.9,
+   "y": -998.6572052401747
+  },
+  {
+   "id": "dancer",
+   "file": "dancer-figure.svg",
+   "layer": "anim",
+   "parent": "music-box",
+   "drawAbove": "dancer-stand",
+   "width": 127.9,
+   "height": 183.84279475982532,
+   "anchor": {
+    "x": 0.4931740614334471,
+    "y": 1
+   },
+   "at": [
+    -0.8230375426621137,
+    -998.6572052401747
    ],
    "x": -63.9,
    "y": -1182.5,
    "animate": {
     "kind": "spin",
-    "note": "turn on the spot: scaleX cos(t) with a flip at the back, plus a 4px bob; 2.5 s a turn"
+    "period": 2.2,
+    "pivot": [
+     -0.8230375426621137,
+     -998.6572052401747
+    ],
+    "note": "60\u2013100% width with a hidden mirror at the narrowest point; gentle 2.5px rise, static turntable and pin"
    }
   },
   {

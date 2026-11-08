@@ -1,0 +1,563 @@
+{
+ "buildings": [
+  {
+   "id": "hamlet-chirrup-cottage-east",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/cottage-east.svg",
+   "width": 460,
+   "oldWidth": 450.8,
+   "height": 386.4,
+   "base": [
+    6842.2,
+    -78.0
+   ],
+   "footprintScale": 1.0204081632653061,
+   "door": [
+    6842.2,
+    -29.02
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-chirrup-cottage-north",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/cottage-north.svg",
+   "width": 480,
+   "oldWidth": 499.8,
+   "height": 403.2,
+   "base": [
+    6255.6,
+    -201.2
+   ],
+   "footprintScale": 0.9603841536614646,
+   "door": [
+    6255.6,
+    -155.102
+   ],
+   "shadowWidth": 172.79999999999998
+  },
+  {
+   "id": "hamlet-chirrup-cottage-west",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/cottage-west.svg",
+   "width": 460,
+   "oldWidth": 495.6,
+   "height": 386.4,
+   "base": [
+    5657.8,
+    -73.8
+   ],
+   "footprintScale": 0.9281678773204196,
+   "door": [
+    5657.8,
+    -29.248
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-chirrup-dovecote-workplace",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/dovecote-workplace.svg",
+   "width": 340,
+   "oldWidth": 322.0,
+   "height": 487.826,
+   "base": [
+    5641.62,
+    399.8
+   ],
+   "footprintScale": 1.0559006211180124,
+   "door": null,
+   "shadowWidth": 122.39999999999999
+  },
+  {
+   "id": "hamlet-petalpatch-buttercream-rose-cottage",
+   "hamlet": "petalpatch",
+   "src": "hamlets/petalpatch/buttercream-rose-cottage.svg",
+   "width": 470,
+   "oldWidth": 449.5,
+   "height": 430.833,
+   "base": [
+    -5.2,
+    2461.3
+   ],
+   "footprintScale": 1.0456062291434927,
+   "door": [
+    -5.2,
+    2511.489
+   ],
+   "shadowWidth": 169.2
+  },
+  {
+   "id": "hamlet-petalpatch-lilac-rose-cottage",
+   "hamlet": "petalpatch",
+   "src": "hamlets/petalpatch/lilac-rose-cottage.svg",
+   "width": 475,
+   "oldWidth": 454.15,
+   "height": 435.417,
+   "base": [
+    -1294.8,
+    2442.7
+   ],
+   "footprintScale": 1.0459099416492348,
+   "door": [
+    -1294.8,
+    2492.904
+   ],
+   "shadowWidth": 171.0
+  },
+  {
+   "id": "hamlet-petalpatch-pink-rose-cottage",
+   "hamlet": "petalpatch",
+   "src": "hamlets/petalpatch/pink-rose-cottage.svg",
+   "width": 475,
+   "oldWidth": 454.15,
+   "height": 435.417,
+   "base": [
+    -657.75,
+    2352.8
+   ],
+   "footprintScale": 1.0459099416492348,
+   "door": [
+    -657.75,
+    2403.004
+   ],
+   "shadowWidth": 171.0
+  },
+  {
+   "id": "hamlet-ribbonwick-house-cream-bow",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/house-cream-bow.svg",
+   "width": 460,
+   "oldWidth": 432.9,
+   "height": 644.0,
+   "base": [
+    1327.9,
+    -92.15
+   ],
+   "footprintScale": 1.0626010626010627,
+   "door": [
+    1327.9,
+    -41.145
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-ribbonwick-house-lilac-bow",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/house-lilac-bow.svg",
+   "width": 460,
+   "oldWidth": 432.9,
+   "height": 644.0,
+   "base": [
+    -19.55,
+    -92.15
+   ],
+   "footprintScale": 1.0626010626010627,
+   "door": [
+    -19.55,
+    -41.145
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-ribbonwick-house-rose-bow",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/house-rose-bow.svg",
+   "width": 460,
+   "oldWidth": 432.9,
+   "height": 644.0,
+   "base": [
+    662.95,
+    -312.5
+   ],
+   "footprintScale": 1.0626010626010627,
+   "door": [
+    662.95,
+    -261.495
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-ribbonwick-ribbon-workshop",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/ribbon-workshop.svg",
+   "width": 510,
+   "oldWidth": 565.5,
+   "height": 527.586,
+   "base": [
+    1616.5,
+    358.3
+   ],
+   "footprintScale": 0.9018567639257294,
+   "door": null,
+   "shadowWidth": 183.6
+  },
+  {
+   "id": "hamlet-teacup-house-cream-curl",
+   "hamlet": "teacup",
+   "src": "hamlets/teacup/house-cream-curl.svg",
+   "width": 440,
+   "oldWidth": 453.6,
+   "height": 527.341,
+   "base": [
+    7397.2,
+    4734.96
+   ],
+   "footprintScale": 0.9700176366843033,
+   "door": [
+    7397.2,
+    4781.521
+   ],
+   "shadowWidth": 158.4
+  },
+  {
+   "id": "hamlet-teacup-house-lavender-heart",
+   "hamlet": "teacup",
+   "src": "hamlets/teacup/house-lavender-heart.svg",
+   "width": 430,
+   "oldWidth": 431.76,
+   "height": 541.732,
+   "base": [
+    5992.72,
+    4729.92
+   ],
+   "footprintScale": 0.9959236612933111,
+   "door": [
+    5992.72,
+    4777.724
+   ],
+   "shadowWidth": 154.79999999999998
+  },
+  {
+   "id": "hamlet-teacup-house-rose-bow",
+   "hamlet": "teacup",
+   "src": "hamlets/teacup/house-rose-bow.svg",
+   "width": 460,
+   "oldWidth": 504.0,
+   "height": 488.656,
+   "base": [
+    6634.6,
+    4440.06
+   ],
+   "footprintScale": 0.9126984126984127,
+   "door": [
+    6634.6,
+    4483.87
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-teacup-workplace-teacup-cafe",
+   "hamlet": "teacup",
+   "src": "hamlets/teacup/workplace-teacup-cafe.svg",
+   "width": 510,
+   "oldWidth": 588.0,
+   "height": 440.057,
+   "base": [
+    6708.4,
+    4943.28
+   ],
+   "footprintScale": 0.8673469387755102,
+   "door": null,
+   "shadowWidth": 183.6
+  },
+  {
+   "id": "hamlet-tutu-tides-cottage-buttercream",
+   "hamlet": "tutu-tides",
+   "src": "hamlets/tutu-tides/cottage-buttercream.svg",
+   "width": 460,
+   "oldWidth": 462.0,
+   "height": 420.97,
+   "base": [
+    4552.6,
+    6408.8
+   ],
+   "footprintScale": 0.9956709956709957,
+   "door": [
+    4552.6,
+    6456.592
+   ],
+   "shadowWidth": 165.6
+  },
+  {
+   "id": "hamlet-tutu-tides-cottage-heart",
+   "hamlet": "tutu-tides",
+   "src": "hamlets/tutu-tides/cottage-heart.svg",
+   "width": 450,
+   "oldWidth": 448.0,
+   "height": 455.625,
+   "base": [
+    3536.76,
+    5747.19
+   ],
+   "footprintScale": 1.0044642857142858,
+   "door": [
+    3536.76,
+    5795.404
+   ],
+   "shadowWidth": 162.0
+  },
+  {
+   "id": "hamlet-tutu-tides-cottage-lilac",
+   "hamlet": "tutu-tides",
+   "src": "hamlets/tutu-tides/cottage-lilac.svg",
+   "width": 450,
+   "oldWidth": 448.0,
+   "height": 492.188,
+   "base": [
+    4962.75,
+    5978.13
+   ],
+   "footprintScale": 1.0044642857142858,
+   "door": [
+    4962.75,
+    6026.344
+   ],
+   "shadowWidth": 162.0
+  },
+  {
+   "id": "hamlet-tutu-tides-tutu-tailor-workshop",
+   "hamlet": "tutu-tides",
+   "src": "hamlets/tutu-tides/tutu-tailor-workshop.svg",
+   "width": 520,
+   "oldWidth": 644.0,
+   "height": 412.609,
+   "base": [
+    4048.6,
+    5778.8
+   ],
+   "footprintScale": 0.8074534161490683,
+   "door": null,
+   "shadowWidth": 187.2
+  }
+ ],
+ "supportingPieces": [
+  {
+   "id": "hamlet-chirrup-birdhouse-dovecote",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/birdhouse-dovecote.svg",
+   "width": 94,
+   "oldWidth": 84.0,
+   "height": 139.657,
+   "base": [
+    5803.4,
+    228.6
+   ],
+   "footprintScale": 1.119047619047619,
+   "door": null,
+   "shadowWidth": 33.839999999999996
+  },
+  {
+   "id": "hamlet-chirrup-birdhouse-east",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/birdhouse-east.svg",
+   "width": 94,
+   "oldWidth": 85.4,
+   "height": 139.657,
+   "base": [
+    7064.8,
+    -191.4
+   ],
+   "footprintScale": 1.100702576112412,
+   "door": null,
+   "shadowWidth": 33.839999999999996
+  },
+  {
+   "id": "hamlet-chirrup-birdhouse-north",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/birdhouse-north.svg",
+   "width": 94,
+   "oldWidth": 82.6,
+   "height": 139.657,
+   "base": [
+    6504.8,
+    -321.6
+   ],
+   "footprintScale": 1.1380145278450364,
+   "door": null,
+   "shadowWidth": 33.839999999999996
+  },
+  {
+   "id": "hamlet-chirrup-birdhouse-west",
+   "hamlet": "chirrup",
+   "src": "hamlets/chirrup/birdhouse-west.svg",
+   "width": 98,
+   "oldWidth": 89.6,
+   "height": 145.6,
+   "base": [
+    5879.0,
+    -211.0
+   ],
+   "footprintScale": 1.09375,
+   "door": null,
+   "shadowWidth": 35.28
+  },
+  {
+   "id": "hamlet-ribbonwick-flower-between-houses",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/flower-between-houses.svg",
+   "width": 126,
+   "oldWidth": 136.5,
+   "height": 108.0,
+   "base": [
+    1031.5,
+    -380.75
+   ],
+   "footprintScale": 0.9230769230769231,
+   "door": null,
+   "shadowWidth": 45.36
+  },
+  {
+   "id": "hamlet-ribbonwick-flower-east-house",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/flower-east-house.svg",
+   "width": 122,
+   "oldWidth": 132.6,
+   "height": 107.647,
+   "base": [
+    926.2,
+    -532.85
+   ],
+   "footprintScale": 0.9200603318250378,
+   "door": null,
+   "shadowWidth": 43.92
+  },
+  {
+   "id": "hamlet-ribbonwick-flower-house-west",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/flower-house-west.svg",
+   "width": 117,
+   "oldWidth": 126.75,
+   "height": 108.0,
+   "base": [
+    -276.95,
+    -306.65
+   ],
+   "footprintScale": 0.9230769230769231,
+   "door": null,
+   "shadowWidth": 42.12
+  },
+  {
+   "id": "hamlet-ribbonwick-flower-workshop-back",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/flower-workshop-back.svg",
+   "width": 99,
+   "oldWidth": 107.25,
+   "height": 108.0,
+   "base": [
+    1873.9,
+    1.45
+   ],
+   "footprintScale": 0.9230769230769231,
+   "door": null,
+   "shadowWidth": 35.64
+  },
+  {
+   "id": "hamlet-ribbonwick-flower-workshop-south",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/flower-workshop-south.svg",
+   "width": 119,
+   "oldWidth": 128.7,
+   "height": 108.182,
+   "base": [
+    1301.07,
+    471.87
+   ],
+   "footprintScale": 0.9246309246309247,
+   "door": null,
+   "shadowWidth": 42.839999999999996
+  },
+  {
+   "id": "hamlet-ribbonwick-tulip-pot-shop",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/tulip-pot-shop.svg",
+   "width": 110,
+   "oldWidth": 109.2,
+   "height": 150.806,
+   "base": [
+    1359.1,
+    338.8
+   ],
+   "footprintScale": 1.0073260073260073,
+   "door": null,
+   "shadowWidth": 39.6
+  },
+  {
+   "id": "hamlet-ribbonwick-workshop-apron",
+   "hamlet": "ribbonwick",
+   "src": "hamlets/ribbonwick/workshop-apron.svg",
+   "width": 520,
+   "oldWidth": 750.75,
+   "height": 243.117,
+   "base": [
+    1676.95,
+    561.1
+   ],
+   "footprintScale": 0.6926406926406926,
+   "door": null,
+   "shadowWidth": 187.2
+  },
+  {
+   "id": "hamlet-teacup-cafe-roses-east",
+   "hamlet": "teacup",
+   "src": "hamlets/teacup/cafe-roses-east.svg",
+   "width": 108,
+   "oldWidth": 127.68,
+   "height": 128.4,
+   "base": [
+    6778.96,
+    4931.52
+   ],
+   "footprintScale": 0.8458646616541353,
+   "door": null,
+   "shadowWidth": 38.879999999999995
+  },
+  {
+   "id": "hamlet-teacup-cafe-roses-west",
+   "hamlet": "teacup",
+   "src": "hamlets/teacup/cafe-roses-west.svg",
+   "width": 108,
+   "oldWidth": 127.68,
+   "height": 128.4,
+   "base": [
+    6510.16,
+    4931.52
+   ],
+   "footprintScale": 0.8458646616541353,
+   "door": null,
+   "shadowWidth": 38.879999999999995
+  },
+  {
+   "id": "hamlet-tutu-tides-workshop-flowerpot-left",
+   "hamlet": "tutu-tides",
+   "src": "hamlets/tutu-tides/workshop-flowerpot-left.svg",
+   "width": 108,
+   "oldWidth": 120.4,
+   "height": 113.023,
+   "base": [
+    3716.8,
+    5766.2
+   ],
+   "footprintScale": 0.8970099667774086,
+   "door": null,
+   "shadowWidth": 38.879999999999995
+  },
+  {
+   "id": "hamlet-tutu-tides-workshop-flowerpot-right",
+   "hamlet": "tutu-tides",
+   "src": "hamlets/tutu-tides/workshop-flowerpot-right.svg",
+   "width": 108,
+   "oldWidth": 120.4,
+   "height": 120.558,
+   "base": [
+    4384.6,
+    5755.0
+   ],
+   "footprintScale": 0.8970099667774086,
+   "door": null,
+   "shadowWidth": 38.879999999999995
+  }
+ ],
+ "skipped": [],
+ "validatedSVGs": 34
+}

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1337" height="1454" viewBox="3998 2898 1337 1454"><defs><clipPath id="locked-centre"><ellipse cx="4000" cy="2850" rx="930" ry="760"/></clipPath></defs><g clip-path="url(#locked-centre)"><defs><path id="pink-coast" d="M3930 -160 C3730 -650 3430 -900 2800 -902 C2100 -902 1460 -1040 820 -949 C50 -880 -750 -660 -1248 -13 C-1540 360 -1640 800 -1663 1224 C-1800 1640 -1960 2070 -1902 2491 C-1840 3100 -1520 3540 -885 3959 C-180 4450 650 4980 1473 5510 C2240 5980 3070 6470 3670 6790 C3850 6880 3980 6980 4100 6950 C4230 6920 4380 6770 4630 6620 C5380 6150 6200 5690 6940 5282 C7750 4820 8490 4330 9136 3664 C9620 3170 9960 2650 9964 2183 C10000 1740 9820 1410 9785 1193 C9750 650 9530 230 9196 1 C8550 -560 7800 -970 6814 -990 C6050 -1010 5460 -850 4900 -850 C4440 -850 4240 -560 4070 -160 C4020 -40 3980 -40 3930 -160 Z"/></defs>
+<defs><g id="lanes" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M-350 650 C200 650 600 700 1100 610 S2200 310 2600 350 S3500 600 4000 560 S5200 420 5750 500 S6700 620 7100 850 S8100 1430 8360 1780 S8780 2130 8650 2300 S8420 2870 8200 3250 S7500 3850 7170 4100 S6280 4600 5950 4870 S5200 5450 4840 5690 S4230 6130 4000 6100 S2990 5590 2600 5370 S1660 4730 1280 4510 S-30 4000 -450 3690 S-1630 3070 -1640 2820 S-1610 1950 -1450 1660 S-720 770 -350 650 Z"/>
+<path d="M-200 310 C300 230 1350 310 1950 380 C2110 420 2210 490 2272 568"/>
+<path d="M700 650 C690 850 520 1050 570 1240 C440 1330 180 1210 50 1220"/>
+<path d="M1100 610 C1220 680 1360 870 1200 1300"/>
+<path d="M5500 215 C6060 100 6600 150 7060 350 C7250 490 7270 740 7340 880 C7240 940 7150 920 7100 850"/>
+<path d="M5425 553 C5460 500 5510 410 5540 430 C5620 440 5680 490 5750 500"/>
+<path d="M6100 540 C6060 690 5880 880 5420 1000"/>
+<path d="M8240 1790 C8660 1850 9050 1940 9290 2070 C9320 2250 9380 2500 9250 2640 S8900 3000 8780 3020 S8390 2970 8250 2990 C8180 3060 8170 3160 8200 3250"/>
+<path d="M8500 2240 C8160 2370 7550 2580 7000 2700"/>
+<path d="M8410 1010 C8540 1290 8580 1530 8360 1780"/>
+<path d="M-1610 2420 C-1130 2360 -460 2320 -100 2420 C-50 2610 -460 2780 -650 2820"/>
+<path d="M-1130 3410 C-670 3540 -130 3340 150 3540"/>
+<path d="M-650 2700 C-200 2770 300 2880 900 2780"/>
+<path d="M3170 5920 C3560 6000 4000 6050 4250 5990 S4990 5780 5290 5620 C5110 5560 5010 5650 4840 5690"/>
+<path d="M4000 6110 C4000 5690 3980 5390 4000 4900"/>
+<path d="M1400 4580 C1670 4430 1920 4230 2300 4290"/>
+<path d="M8650 2300 C9010 2430 9270 2650 9600 2850"/>
+<!-- Connections continue the original footpaths across the filled old coast. -->
+<path d="M1043 1275 C870 1190 760 1260 570 1240 M1124 2736 C1060 2760 1000 2780 900 2780 M6865 2778 C6920 2780 6970 2730 7000 2700 M6362 894 C6580 720 6860 760 7100 850 M3060 1050 C2930 840 2760 560 2600 350 M4930 1120 C5160 890 5500 630 5750 500 M2181 4410 C2040 4400 1930 4350 1800 4340 M5826 4424 C5880 4570 5940 4710 5950 4870 M4000 3907 C4020 4230 3990 4560 4000 4900"/>
+<!-- Coastal garden walk, joined to the existing promenade. -->
+<path d="M5950 4870 C6100 5110 5980 5310 5820 5510 M1280 4510 C1050 4750 920 4920 1120 5080 C1440 5340 1810 5490 2169 5555 M8200 3250 C8460 3510 8650 3700 8500 3900 C8280 4210 8000 4300 7700 4460"/>
+</g></defs>
+<use href="#lanes" stroke="#4AA539" stroke-width="194" stroke-opacity=".35"/>
+<use href="#lanes" stroke="#39472D" stroke-width="178" stroke-opacity=".6"/>
+<use href="#lanes" stroke="#E6C59D" stroke-width="174"/>
+<use href="#lanes" stroke="#FBE6C8" stroke-width="160"/>
+<g fill="#FDE48C" stroke="#39472D" stroke-width="2.22">
+<ellipse cx="940" cy="1250" rx="13" ry="7"/><ellipse cx="1020" cy="2755" rx="10" ry="6"/><ellipse cx="6920" cy="2740" rx="12" ry="7"/><ellipse cx="6800" cy="780" rx="13" ry="7"/><ellipse cx="2900" cy="790" rx="11" ry="6"/><ellipse cx="5270" cy="830" rx="13" ry="7"/><ellipse cx="4005" cy="4450" rx="13" ry="7"/><ellipse cx="3980" cy="4810" rx="10" ry="6"/><ellipse cx="5880" cy="4670" rx="12" ry="7"/><ellipse cx="2020" cy="4330" rx="13" ry="7"/><ellipse cx="3100" cy="5650" rx="11" ry="7"/><ellipse cx="6500" cy="4480" rx="13" ry="7"/><ellipse cx="8860" cy="2410" rx="10" ry="6"/><ellipse cx="9250" cy="2650" rx="13" ry="7"/><ellipse cx="-1170" cy="2470" rx="12" ry="6"/><ellipse cx="-720" cy="3480" rx="11" ry="7"/><ellipse cx="200" cy="3910" rx="13" ry="7"/><ellipse cx="500" cy="650" rx="11" ry="6"/><ellipse cx="2480" cy="360" rx="13" ry="7"/>
+</g>
+
+<defs>
+<path id="rosewater" d="M760 3080 C770 3400 900 3610 1180 3900 S1690 4430 1650 4800 C1640 5060 1380 5210 1160 5400"/>
+<path id="willow" d="M7440 2280 C7620 2460 7860 2710 7760 2920 S7490 3260 7550 3460 C7590 3700 7750 3880 7950 3990 S8400 4140 8640 4270"/>
+<path id="rosewater-pond" d="M520 3040 C520 2950 620 2900 730 2915 C840 2910 930 2960 920 3040 C930 3120 820 3175 710 3165 C590 3170 510 3120 520 3040 Z"/>
+<path id="willow-pond" d="M7200 2250 C7200 2180 7300 2130 7400 2140 C7510 2140 7590 2190 7580 2260 C7580 2330 7500 2380 7390 2375 C7280 2375 7190 2320 7200 2250 Z"/>
+<clipPath id="brook-land"><use href="#pink-coast"/></clipPath>
+<clipPath id="beach-land"><use href="#pink-coast"/></clipPath>
+</defs>
+<!-- The old bathing beach is a meadow. The new beach opens onto the southeast sea. -->
+<g clip-path="url(#beach-land)"><path d="M5150 6280 C5240 5980 5590 5620 5860 5380 C6290 5000 6880 4540 7330 4510 C7640 4490 7820 4700 8000 4600 C7420 5110 6620 5600 5950 5980 C5590 6190 5320 6340 5150 6280 Z" fill="#F9D3DC" stroke="#E9A9BC" stroke-width="14" stroke-linejoin="round"/><path d="M5150 6280 C5240 5980 5590 5620 5860 5380 C6290 5000 6880 4540 7330 4510 C7640 4490 7820 4700 8000 4600" fill="none" stroke="#39472D" stroke-opacity=".6" stroke-width="2.22"/></g>
+<!-- Banks stop well inside the sea. The water itself continues across the sand and shallow ring. -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#brook-land)">
+<g stroke="#39472D" stroke-opacity=".6" stroke-width="158.4"><use href="#rosewater"/><use href="#willow"/></g>
+<g stroke="#E9A9BC" stroke-width="156"><use href="#rosewater"/><use href="#willow"/></g>
+<g stroke="#F9D3DC" stroke-width="142"><use href="#rosewater"/><use href="#willow"/></g>
+</g>
+<g fill="none" stroke="#6EC9DE" stroke-width="124" stroke-linecap="round"><use href="#rosewater"/><use href="#willow"/></g>
+<!-- Spring water sits on top of the brook heads, so there is no closed bank across the join. -->
+<g fill="#F9D3DC" stroke="#E9A9BC" stroke-width="24"><use href="#rosewater-pond"/><use href="#willow-pond"/></g>
+<g fill="#6EC9DE" stroke="#39472D" stroke-width="2.22" stroke-opacity=".6"><use href="#rosewater-pond"/><use href="#willow-pond"/></g>
+<path d="M730 3090 C740 3130 750 3170 770 3210 M7400 2270 C7440 2310 7480 2360 7510 2400" fill="none" stroke="#6EC9DE" stroke-width="120"/>
+<g fill="none" stroke="#FFF0C7" stroke-width="2.4" stroke-linecap="round"><path d="M550 3030 C570 2970 620 2950 680 2950 M7230 2250 C7240 2200 7300 2175 7350 2175 M850 3500 Q867 3494 885 3500 M1450 4250 Q1465 4244 1480 4250 M1605 4930 Q1620 4924 1635 4930 M7640 2590 Q7655 2584 7670 2590 M7580 3370 Q7595 3364 7610 3370 M8020 4020 Q8035 4014 8050 4020"/></g>
+<!-- A few beach pebbles and shells, the centre's small outlined marks. -->
+<g fill="#FDE48C" stroke="#39472D" stroke-width="2"><ellipse cx="6060" cy="5460" rx="14" ry="8"/><ellipse cx="6200" cy="5320" rx="11" ry="7"/><ellipse cx="6600" cy="5120" rx="16" ry="8"/><ellipse cx="6920" cy="4950" rx="11" ry="7"/><path d="M5760 5740 Q5770 5725 5780 5740 Q5770 5750 5760 5740 Z M6390 5300 Q6400 5285 6410 5300 Q6400 5310 6390 5300 Z" fill="#FFF0C7"/></g>
+
+</g></svg>

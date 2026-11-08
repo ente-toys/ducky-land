@@ -1,0 +1,1620 @@
+{
+ "layout": {
+  "name": "Ribbonwick Row",
+  "canvas": {
+   "width": 1536,
+   "height": 1024
+  },
+  "anchor": "bottom-centre",
+  "coordinates": "Blueprint pixels. Place each viewBox with its bottom centre at x,y; preserve aspect ratio at width. drawOrder ascends back to front.",
+  "palette": {
+   "outline": "#39472d",
+   "lawn": "#a1cb46",
+   "paths": "#ffebc5",
+   "pathShadow": "#f6d5aa",
+   "pink": "#f69bc5"
+  },
+  "square": [
+   [
+    727,
+    392
+   ],
+   [
+    832,
+    402
+   ],
+   [
+    932,
+    427
+   ],
+   [
+    1019,
+    472
+   ],
+   [
+    1074,
+    529
+   ],
+   [
+    1090,
+    594
+   ],
+   [
+    1078,
+    654
+   ],
+   [
+    1039,
+    714
+   ],
+   [
+    966,
+    767
+   ],
+   [
+    878,
+    804
+   ],
+   [
+    793,
+    821
+   ],
+   [
+    703,
+    825
+   ],
+   [
+    611,
+    808
+   ],
+   [
+    520,
+    778
+   ],
+   [
+    440,
+    733
+   ],
+   [
+    386,
+    675
+   ],
+   [
+    365,
+    601
+   ],
+   [
+    383,
+    533
+   ],
+   [
+    435,
+    476
+   ],
+   [
+    517,
+    430
+   ],
+   [
+    622,
+    401
+   ]
+  ],
+  "lane": [
+   [
+    651,
+    811
+   ],
+   [
+    683,
+    835
+   ],
+   [
+    710,
+    867
+   ],
+   [
+    716,
+    895
+   ],
+   [
+    705,
+    928
+   ],
+   [
+    677,
+    962
+   ],
+   [
+    614,
+    1024
+   ],
+   [
+    760,
+    1024
+   ],
+   [
+    803,
+    973
+   ],
+   [
+    830,
+    930
+   ],
+   [
+    836,
+    894
+   ],
+   [
+    824,
+    861
+   ],
+   [
+    793,
+    821
+   ]
+  ],
+  "pathPolygons": [
+   [
+    [
+     727,
+     392
+    ],
+    [
+     832,
+     402
+    ],
+    [
+     932,
+     427
+    ],
+    [
+     1019,
+     472
+    ],
+    [
+     1074,
+     529
+    ],
+    [
+     1090,
+     594
+    ],
+    [
+     1078,
+     654
+    ],
+    [
+     1039,
+     714
+    ],
+    [
+     966,
+     767
+    ],
+    [
+     878,
+     804
+    ],
+    [
+     793,
+     821
+    ],
+    [
+     703,
+     825
+    ],
+    [
+     611,
+     808
+    ],
+    [
+     520,
+     778
+    ],
+    [
+     440,
+     733
+    ],
+    [
+     386,
+     675
+    ],
+    [
+     365,
+     601
+    ],
+    [
+     383,
+     533
+    ],
+    [
+     435,
+     476
+    ],
+    [
+     517,
+     430
+    ],
+    [
+     622,
+     401
+    ]
+   ],
+   [
+    [
+     651,
+     811
+    ],
+    [
+     683,
+     835
+    ],
+    [
+     710,
+     867
+    ],
+    [
+     716,
+     895
+    ],
+    [
+     705,
+     928
+    ],
+    [
+     677,
+     962
+    ],
+    [
+     614,
+     1024
+    ],
+    [
+     760,
+     1024
+    ],
+    [
+     803,
+     973
+    ],
+    [
+     830,
+     930
+    ],
+    [
+     836,
+     894
+    ],
+    [
+     824,
+     861
+    ],
+    [
+     793,
+     821
+    ]
+   ],
+   [
+    [
+     1102,
+     691
+    ],
+    [
+     1131,
+     661
+    ],
+    [
+     1190,
+     652
+    ],
+    [
+     1262,
+     650
+    ],
+    [
+     1342,
+     675
+    ],
+    [
+     1418,
+     704
+    ],
+    [
+     1453,
+     741
+    ],
+    [
+     1436,
+     781
+    ],
+    [
+     1363,
+     804
+    ],
+    [
+     1268,
+     810
+    ],
+    [
+     1180,
+     795
+    ],
+    [
+     1100,
+     767
+    ]
+   ]
+  ],
+  "paths": [
+   {
+    "id": "ribbon-square",
+    "polygon": [
+     [
+      727,
+      392
+     ],
+     [
+      832,
+      402
+     ],
+     [
+      932,
+      427
+     ],
+     [
+      1019,
+      472
+     ],
+     [
+      1074,
+      529
+     ],
+     [
+      1090,
+      594
+     ],
+     [
+      1078,
+      654
+     ],
+     [
+      1039,
+      714
+     ],
+     [
+      966,
+      767
+     ],
+     [
+      878,
+      804
+     ],
+     [
+      793,
+      821
+     ],
+     [
+      703,
+      825
+     ],
+     [
+      611,
+      808
+     ],
+     [
+      520,
+      778
+     ],
+     [
+      440,
+      733
+     ],
+     [
+      386,
+      675
+     ],
+     [
+      365,
+      601
+     ],
+     [
+      383,
+      533
+     ],
+     [
+      435,
+      476
+     ],
+     [
+      517,
+      430
+     ],
+     [
+      622,
+      401
+     ]
+    ]
+   },
+   {
+    "id": "south-lane",
+    "polygon": [
+     [
+      651,
+      811
+     ],
+     [
+      683,
+      835
+     ],
+     [
+      710,
+      867
+     ],
+     [
+      716,
+      895
+     ],
+     [
+      705,
+      928
+     ],
+     [
+      677,
+      962
+     ],
+     [
+      614,
+      1024
+     ],
+     [
+      760,
+      1024
+     ],
+     [
+      803,
+      973
+     ],
+     [
+      830,
+      930
+     ],
+     [
+      836,
+      894
+     ],
+     [
+      824,
+      861
+     ],
+     [
+      793,
+      821
+     ]
+    ]
+   }
+  ],
+  "sleepers": [
+   {
+    "x": 313,
+    "y": 797,
+    "pose": "sleeping"
+   },
+   {
+    "x": 1354,
+    "y": 342,
+    "pose": "sleeping"
+   }
+  ],
+  "boats": [],
+  "objects": [
+   {
+    "id": "house-lilac-bow",
+    "file": "house-lilac-bow.svg",
+    "x": 399,
+    "y": 475,
+    "width": 222,
+    "drawOrder": 475
+   },
+   {
+    "id": "house-rose-bow",
+    "file": "house-rose-bow.svg",
+    "x": 749,
+    "y": 362,
+    "width": 222,
+    "drawOrder": 362
+   },
+   {
+    "id": "house-cream-bow",
+    "file": "house-cream-bow.svg",
+    "x": 1090,
+    "y": 475,
+    "width": 222,
+    "drawOrder": 475
+   },
+   {
+    "id": "ribbon-square-and-lane",
+    "file": "ribbon-square-and-lane.svg",
+    "x": 768,
+    "y": 1024,
+    "width": 1536,
+    "drawOrder": 0
+   },
+   {
+    "id": "northeast-beach",
+    "file": "northeast-beach.svg",
+    "x": 768,
+    "y": 330,
+    "width": 1536,
+    "drawOrder": -1
+   },
+   {
+    "id": "tree-green-northwest",
+    "file": "tree-green-northwest.svg",
+    "x": 87,
+    "y": 133,
+    "width": 206,
+    "drawOrder": 133
+   },
+   {
+    "id": "tree-green-west-back",
+    "file": "tree-green-west-back.svg",
+    "x": 61,
+    "y": 359,
+    "width": 180,
+    "drawOrder": 359
+   },
+   {
+    "id": "tree-green-west",
+    "file": "tree-green-west.svg",
+    "x": 65,
+    "y": 484,
+    "width": 259,
+    "drawOrder": 484
+   },
+   {
+    "id": "tree-green-west-small",
+    "file": "tree-green-west-small.svg",
+    "x": 150,
+    "y": 484,
+    "width": 128,
+    "drawOrder": 484
+   },
+   {
+    "id": "tree-green-southwest-back",
+    "file": "tree-green-southwest-back.svg",
+    "x": 54,
+    "y": 725,
+    "width": 215,
+    "drawOrder": 725
+   },
+   {
+    "id": "tree-green-southwest",
+    "file": "tree-green-southwest.svg",
+    "x": 64,
+    "y": 850,
+    "width": 272,
+    "drawOrder": 850
+   },
+   {
+    "id": "tree-green-east",
+    "file": "tree-green-east.svg",
+    "x": 1514,
+    "y": 585,
+    "width": 205,
+    "drawOrder": 585
+   },
+   {
+    "id": "tree-green-southeast-back",
+    "file": "tree-green-southeast-back.svg",
+    "x": 1498,
+    "y": 928,
+    "width": 224,
+    "drawOrder": 928
+   },
+   {
+    "id": "tree-green-southeast",
+    "file": "tree-green-southeast.svg",
+    "x": 1451,
+    "y": 1035,
+    "width": 277,
+    "drawOrder": 1035
+   },
+   {
+    "id": "tree-blossom-left-back",
+    "file": "tree-blossom-left-back.svg",
+    "x": 403,
+    "y": 259,
+    "width": 226,
+    "drawOrder": 259
+   },
+   {
+    "id": "tree-blossom-left",
+    "file": "tree-blossom-left.svg",
+    "x": 282,
+    "y": 332,
+    "width": 172,
+    "drawOrder": 332
+   },
+   {
+    "id": "tree-blossom-centre-back",
+    "file": "tree-blossom-centre-back.svg",
+    "x": 570,
+    "y": 235,
+    "width": 271,
+    "drawOrder": 235
+   },
+   {
+    "id": "tree-blossom-east-back",
+    "file": "tree-blossom-east-back.svg",
+    "x": 962,
+    "y": 249,
+    "width": 234,
+    "drawOrder": 249
+   },
+   {
+    "id": "tree-blossom-east",
+    "file": "tree-blossom-east.svg",
+    "x": 1133,
+    "y": 310,
+    "width": 300,
+    "drawOrder": 310
+   },
+   {
+    "id": "tree-blossom-bottom-left",
+    "file": "tree-blossom-bottom-left.svg",
+    "x": 156,
+    "y": 1125,
+    "width": 270,
+    "drawOrder": 1125
+   },
+   {
+    "id": "tree-blossom-bottom",
+    "file": "tree-blossom-bottom.svg",
+    "x": 288,
+    "y": 1140,
+    "width": 171,
+    "drawOrder": 1140
+   },
+   {
+    "id": "heart-lamp-nw",
+    "file": "heart-lamp-nw.svg",
+    "x": 588,
+    "y": 475,
+    "width": 55,
+    "drawOrder": 475
+   },
+   {
+    "id": "heart-lamp-ne",
+    "file": "heart-lamp-ne.svg",
+    "x": 897,
+    "y": 475,
+    "width": 55,
+    "drawOrder": 475
+   },
+   {
+    "id": "heart-lamp-west",
+    "file": "heart-lamp-west.svg",
+    "x": 417,
+    "y": 669,
+    "width": 55,
+    "drawOrder": 669
+   },
+   {
+    "id": "heart-lamp-east",
+    "file": "heart-lamp-east.svg",
+    "x": 1046,
+    "y": 669,
+    "width": 55,
+    "drawOrder": 669
+   },
+   {
+    "id": "heart-lamp-sw",
+    "file": "heart-lamp-sw.svg",
+    "x": 616,
+    "y": 814,
+    "width": 55,
+    "drawOrder": 814
+   },
+   {
+    "id": "heart-lamp-se",
+    "file": "heart-lamp-se.svg",
+    "x": 865,
+    "y": 814,
+    "width": 55,
+    "drawOrder": 814
+   },
+   {
+    "id": "ribbon-maypole",
+    "file": "ribbon-maypole.svg",
+    "x": 746,
+    "y": 638,
+    "width": 340,
+    "drawOrder": 637
+   },
+   {
+    "id": "ribbon-post-nw",
+    "file": "ribbon-post-nw.svg",
+    "x": 620,
+    "y": 586,
+    "width": 46,
+    "drawOrder": 586
+   },
+   {
+    "id": "ribbon-post-ne",
+    "file": "ribbon-post-ne.svg",
+    "x": 870,
+    "y": 586,
+    "width": 46,
+    "drawOrder": 586
+   },
+   {
+    "id": "ribbon-post-sw",
+    "file": "ribbon-post-sw.svg",
+    "x": 636,
+    "y": 660,
+    "width": 46,
+    "drawOrder": 660
+   },
+   {
+    "id": "ribbon-post-se",
+    "file": "ribbon-post-se.svg",
+    "x": 854,
+    "y": 660,
+    "width": 46,
+    "drawOrder": 660
+   },
+   {
+    "id": "bench-west",
+    "file": "bench-west.svg",
+    "x": 535,
+    "y": 776,
+    "width": 105,
+    "drawOrder": 776
+   },
+   {
+    "id": "bench-east",
+    "file": "bench-east.svg",
+    "x": 950,
+    "y": 772,
+    "width": 105,
+    "drawOrder": 772
+   },
+   {
+    "id": "tulip-pot-nw",
+    "file": "tulip-pot-nw.svg",
+    "x": 523,
+    "y": 479,
+    "width": 56,
+    "drawOrder": 479
+   },
+   {
+    "id": "tulip-pot-ne",
+    "file": "tulip-pot-ne.svg",
+    "x": 963,
+    "y": 479,
+    "width": 56,
+    "drawOrder": 479
+   },
+   {
+    "id": "tulip-pot-sw",
+    "file": "tulip-pot-sw.svg",
+    "x": 465,
+    "y": 725,
+    "width": 56,
+    "drawOrder": 725
+   },
+   {
+    "id": "tulip-pot-se",
+    "file": "tulip-pot-se.svg",
+    "x": 1014,
+    "y": 725,
+    "width": 56,
+    "drawOrder": 725
+   },
+   {
+    "id": "tulip-pot-shop",
+    "file": "tulip-pot-shop.svg",
+    "x": 1106,
+    "y": 696,
+    "width": 56,
+    "drawOrder": 696
+   },
+   {
+    "id": "sleeping-cushion",
+    "file": "sleeping-cushion.svg",
+    "x": 312,
+    "y": 832,
+    "width": 124,
+    "drawOrder": 832
+   },
+   {
+    "id": "workshop-apron",
+    "file": "workshop-apron.svg",
+    "x": 1269,
+    "y": 810,
+    "width": 385,
+    "drawOrder": 1
+   },
+   {
+    "id": "ribbon-workshop",
+    "file": "ribbon-workshop.svg",
+    "x": 1238,
+    "y": 706,
+    "width": 290,
+    "drawOrder": 706
+   },
+   {
+    "id": "ribbon-drying-line",
+    "file": "ribbon-drying-line.svg",
+    "x": 1423,
+    "y": 674,
+    "width": 140,
+    "drawOrder": 672
+   },
+   {
+    "id": "ribbon-stock-rack",
+    "file": "ribbon-stock-rack.svg",
+    "x": 1384,
+    "y": 747,
+    "width": 105,
+    "drawOrder": 747
+   },
+   {
+    "id": "ribbon-cutting-table",
+    "file": "ribbon-cutting-table.svg",
+    "x": 1244,
+    "y": 774,
+    "width": 164,
+    "drawOrder": 774
+   },
+   {
+    "id": "flower-tulips-nw",
+    "file": "flower-tulips-nw.svg",
+    "x": 245,
+    "y": 107,
+    "width": 82,
+    "drawOrder": 107
+   },
+   {
+    "id": "flower-house-west",
+    "file": "flower-house-west.svg",
+    "x": 267,
+    "y": 365,
+    "width": 65,
+    "drawOrder": 365
+   },
+   {
+    "id": "flower-back-centre",
+    "file": "flower-back-centre.svg",
+    "x": 629,
+    "y": 239,
+    "width": 63,
+    "drawOrder": 239
+   },
+   {
+    "id": "flower-east-house",
+    "file": "flower-east-house.svg",
+    "x": 884,
+    "y": 249,
+    "width": 68,
+    "drawOrder": 249
+   },
+   {
+    "id": "flower-between-houses",
+    "file": "flower-between-houses.svg",
+    "x": 938,
+    "y": 327,
+    "width": 70,
+    "drawOrder": 327
+   },
+   {
+    "id": "flower-square-left",
+    "file": "flower-square-left.svg",
+    "x": 569,
+    "y": 354,
+    "width": 65,
+    "drawOrder": 354
+   },
+   {
+    "id": "flower-square-east",
+    "file": "flower-square-east.svg",
+    "x": 1232,
+    "y": 392,
+    "width": 65,
+    "drawOrder": 392
+   },
+   {
+    "id": "flower-sleeper-east",
+    "file": "flower-sleeper-east.svg",
+    "x": 1424,
+    "y": 376,
+    "width": 73,
+    "drawOrder": 376
+   },
+   {
+    "id": "flower-workshop-back",
+    "file": "flower-workshop-back.svg",
+    "x": 1370,
+    "y": 523,
+    "width": 55,
+    "drawOrder": 523
+   },
+   {
+    "id": "flower-west-lawn",
+    "file": "flower-west-lawn.svg",
+    "x": 237,
+    "y": 625,
+    "width": 63,
+    "drawOrder": 625
+   },
+   {
+    "id": "flower-lower-left",
+    "file": "flower-lower-left.svg",
+    "x": 480,
+    "y": 906,
+    "width": 77,
+    "drawOrder": 906
+   },
+   {
+    "id": "flower-lower-middle",
+    "file": "flower-lower-middle.svg",
+    "x": 875,
+    "y": 1024,
+    "width": 74,
+    "drawOrder": 1024
+   },
+   {
+    "id": "flower-lower-right",
+    "file": "flower-lower-right.svg",
+    "x": 996,
+    "y": 850,
+    "width": 68,
+    "drawOrder": 850
+   },
+   {
+    "id": "flower-workshop-south",
+    "file": "flower-workshop-south.svg",
+    "x": 1098,
+    "y": 786,
+    "width": 66,
+    "drawOrder": 786
+   },
+   {
+    "id": "flower-rack-south",
+    "file": "flower-rack-south.svg",
+    "x": 1356,
+    "y": 806,
+    "width": 90,
+    "drawOrder": 806
+   },
+   {
+    "id": "flower-wild-west",
+    "file": "flower-wild-west.svg",
+    "x": 249,
+    "y": 755,
+    "width": 47,
+    "drawOrder": 755
+   },
+   {
+    "id": "flower-wild-southwest",
+    "file": "flower-wild-southwest.svg",
+    "x": 216,
+    "y": 789,
+    "width": 40,
+    "drawOrder": 789
+   },
+   {
+    "id": "bluebells-west",
+    "file": "bluebells-west.svg",
+    "x": 42,
+    "y": 934,
+    "width": 48,
+    "drawOrder": 934
+   },
+   {
+    "id": "bluebells-east",
+    "file": "bluebells-east.svg",
+    "x": 1253,
+    "y": 877,
+    "width": 53,
+    "drawOrder": 877
+   },
+   {
+    "id": "flower-shrub-west",
+    "file": "flower-shrub-west.svg",
+    "x": 262,
+    "y": 935,
+    "width": 123,
+    "drawOrder": 935
+   },
+   {
+    "id": "flower-shrub-east",
+    "file": "flower-shrub-east.svg",
+    "x": 1110,
+    "y": 977,
+    "width": 148,
+    "drawOrder": 977
+   },
+   {
+    "id": "flower-shrub-southeast",
+    "file": "flower-shrub-southeast.svg",
+    "x": 1193,
+    "y": 1003,
+    "width": 111,
+    "drawOrder": 1003
+   },
+   {
+    "id": "grass-01",
+    "file": "grass-01.svg",
+    "x": 155,
+    "y": 121,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-02",
+    "file": "grass-02.svg",
+    "x": 326,
+    "y": 45,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-03",
+    "file": "grass-03.svg",
+    "x": 542,
+    "y": 277,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-04",
+    "file": "grass-04.svg",
+    "x": 878,
+    "y": 34,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-05",
+    "file": "grass-05.svg",
+    "x": 1048,
+    "y": 44,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-06",
+    "file": "grass-06.svg",
+    "x": 1192,
+    "y": 52,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-07",
+    "file": "grass-07.svg",
+    "x": 1344,
+    "y": 267,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-08",
+    "file": "grass-08.svg",
+    "x": 1268,
+    "y": 299,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-09",
+    "file": "grass-09.svg",
+    "x": 1376,
+    "y": 437,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-10",
+    "file": "grass-10.svg",
+    "x": 965,
+    "y": 372,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-11",
+    "file": "grass-11.svg",
+    "x": 207,
+    "y": 387,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-12",
+    "file": "grass-12.svg",
+    "x": 16,
+    "y": 441,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-13",
+    "file": "grass-13.svg",
+    "x": 253,
+    "y": 521,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-14",
+    "file": "grass-14.svg",
+    "x": 123,
+    "y": 550,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-15",
+    "file": "grass-15.svg",
+    "x": 297,
+    "y": 667,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-16",
+    "file": "grass-16.svg",
+    "x": 179,
+    "y": 865,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-17",
+    "file": "grass-17.svg",
+    "x": 427,
+    "y": 820,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-18",
+    "file": "grass-18.svg",
+    "x": 382,
+    "y": 956,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-19",
+    "file": "grass-19.svg",
+    "x": 441,
+    "y": 912,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-20",
+    "file": "grass-20.svg",
+    "x": 575,
+    "y": 970,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-21",
+    "file": "grass-21.svg",
+    "x": 585,
+    "y": 870,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-22",
+    "file": "grass-22.svg",
+    "x": 957,
+    "y": 1011,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-23",
+    "file": "grass-23.svg",
+    "x": 982,
+    "y": 937,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-24",
+    "file": "grass-24.svg",
+    "x": 1131,
+    "y": 842,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-25",
+    "file": "grass-25.svg",
+    "x": 1213,
+    "y": 895,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-26",
+    "file": "grass-26.svg",
+    "x": 1282,
+    "y": 963,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-27",
+    "file": "grass-27.svg",
+    "x": 1470,
+    "y": 748,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-28",
+    "file": "grass-28.svg",
+    "x": 1377,
+    "y": 776,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "grass-29",
+    "file": "grass-29.svg",
+    "x": 840,
+    "y": 951,
+    "width": 32,
+    "drawOrder": 3
+   },
+   {
+    "id": "pebble-01",
+    "file": "pebble-01.svg",
+    "x": 113,
+    "y": 163,
+    "width": 28,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-02",
+    "file": "pebble-02.svg",
+    "x": 194,
+    "y": 159,
+    "width": 26,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-03",
+    "file": "pebble-03.svg",
+    "x": 613,
+    "y": 279,
+    "width": 21,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-04",
+    "file": "pebble-04.svg",
+    "x": 895,
+    "y": 306,
+    "width": 29,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-05",
+    "file": "pebble-05.svg",
+    "x": 1271,
+    "y": 353,
+    "width": 25,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-06",
+    "file": "pebble-06.svg",
+    "x": 1322,
+    "y": 399,
+    "width": 28,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-07",
+    "file": "pebble-07.svg",
+    "x": 263,
+    "y": 441,
+    "width": 23,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-08",
+    "file": "pebble-08.svg",
+    "x": 338,
+    "y": 513,
+    "width": 32,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-09",
+    "file": "pebble-09.svg",
+    "x": 346,
+    "y": 691,
+    "width": 32,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-10",
+    "file": "pebble-10.svg",
+    "x": 181,
+    "y": 798,
+    "width": 21,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-11",
+    "file": "pebble-11.svg",
+    "x": 369,
+    "y": 861,
+    "width": 31,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-12",
+    "file": "pebble-12.svg",
+    "x": 392,
+    "y": 862,
+    "width": 20,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-13",
+    "file": "pebble-13.svg",
+    "x": 689,
+    "y": 906,
+    "width": 33,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-14",
+    "file": "pebble-14.svg",
+    "x": 700,
+    "y": 920,
+    "width": 21,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-15",
+    "file": "pebble-15.svg",
+    "x": 623,
+    "y": 992,
+    "width": 28,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-16",
+    "file": "pebble-16.svg",
+    "x": 848,
+    "y": 872,
+    "width": 20,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-17",
+    "file": "pebble-17.svg",
+    "x": 875,
+    "y": 891,
+    "width": 24,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-18",
+    "file": "pebble-18.svg",
+    "x": 1062,
+    "y": 838,
+    "width": 28,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-19",
+    "file": "pebble-19.svg",
+    "x": 1048,
+    "y": 856,
+    "width": 22,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-20",
+    "file": "pebble-20.svg",
+    "x": 1512,
+    "y": 699,
+    "width": 32,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-21",
+    "file": "pebble-21.svg",
+    "x": 1253,
+    "y": 1008,
+    "width": 20,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-22",
+    "file": "pebble-22.svg",
+    "x": 1317,
+    "y": 1005,
+    "width": 22,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-23",
+    "file": "pebble-23.svg",
+    "x": 1375,
+    "y": 1011,
+    "width": 28,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-24",
+    "file": "pebble-24.svg",
+    "x": 1110,
+    "y": 508,
+    "width": 23,
+    "drawOrder": 2
+   },
+   {
+    "id": "pebble-25",
+    "file": "pebble-25.svg",
+    "x": 1087,
+    "y": 498,
+    "width": 30,
+    "drawOrder": 2
+   }
+  ]
+ },
+ "map": {
+  "at": [
+   700,
+   -20
+  ],
+  "bp": [
+   768,
+   512
+  ],
+  "k": 1.95
+ },
+ "communityId": "ribbonwick",
+ "pathJoins": [
+  {
+   "id": "ribbonwick-to-main-loop",
+   "fromBlueprint": [
+    726,
+    1024
+   ],
+   "fromWorld": [
+    618.1,
+    978.4
+   ],
+   "toWorld": [
+    608.22,
+    623.57
+   ],
+   "existingWorldPathIndex": 16,
+   "connectorWorldPoints": [
+    [
+     618.1,
+     978.4
+    ],
+    [
+     608.22,
+     623.57
+    ]
+   ],
+   "width": 160,
+   "style": "Original centre cream #FBE6C8, no green rim, ruts or dotted stones. Copy centre edge treatment. Lane/square polygons from incoming layout, not a rectangular ground PNG.",
+   "note": "South blueprint lane crosses the retained main loop at this projected point. Trim connector to this point; do not extend it down into original centre houses."
+  }
+ ],
+ "removedIds": [
+  "community-pink-0",
+  "community-pink-1",
+  "community-pink-10",
+  "community-pink-11",
+  "community-pink-12",
+  "community-pink-13",
+  "community-pink-14",
+  "community-pink-15",
+  "community-pink-16",
+  "community-pink-17",
+  "community-pink-18",
+  "community-pink-19",
+  "community-pink-2",
+  "community-pink-20",
+  "community-pink-21",
+  "community-pink-22",
+  "community-pink-23",
+  "community-pink-24",
+  "community-pink-25",
+  "community-pink-250",
+  "community-pink-251",
+  "community-pink-252",
+  "community-pink-253",
+  "community-pink-254",
+  "community-pink-255",
+  "community-pink-256",
+  "community-pink-257",
+  "community-pink-26",
+  "community-pink-27",
+  "community-pink-28",
+  "community-pink-284",
+  "community-pink-285",
+  "community-pink-286",
+  "community-pink-287",
+  "community-pink-288",
+  "community-pink-289",
+  "community-pink-29",
+  "community-pink-290",
+  "community-pink-291",
+  "community-pink-292",
+  "community-pink-293",
+  "community-pink-294",
+  "community-pink-295",
+  "community-pink-296",
+  "community-pink-297",
+  "community-pink-298",
+  "community-pink-3",
+  "community-pink-30",
+  "community-pink-31",
+  "community-pink-32",
+  "community-pink-33",
+  "community-pink-34",
+  "community-pink-35",
+  "community-pink-36",
+  "community-pink-366",
+  "community-pink-37",
+  "community-pink-38",
+  "community-pink-39",
+  "community-pink-4",
+  "community-pink-40",
+  "community-pink-41",
+  "community-pink-42",
+  "community-pink-43",
+  "community-pink-44",
+  "community-pink-45",
+  "community-pink-46",
+  "community-pink-47",
+  "community-pink-48",
+  "community-pink-49",
+  "community-pink-5",
+  "community-pink-50",
+  "community-pink-51",
+  "community-pink-52",
+  "community-pink-53",
+  "community-pink-54",
+  "community-pink-55",
+  "community-pink-56",
+  "community-pink-57",
+  "community-pink-58",
+  "community-pink-6",
+  "community-pink-7",
+  "community-pink-8",
+  "community-pink-9",
+  "dense-pink-389",
+  "dense-pink-393",
+  "dense-pink-394",
+  "dense-pink-395",
+  "dense-pink-396",
+  "dense-pink-397",
+  "dense-pink-398",
+  "dense-pink-399",
+  "dense-pink-400",
+  "dense-pink-401",
+  "dense-pink-402"
+ ]
+}

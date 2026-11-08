@@ -1,0 +1,11 @@
+import {writeFileSync} from 'node:fs';
+import {mapFor} from '../../src/pixi/island-maps.js';
+import {auditPink} from './audit.mjs';
+const map=mapFor('pink'),nav=map.nav(),audit=auditPink(),remaining=[];
+const routeTo=(point,radius=150)=>{const target=nav.nearest(...point,radius);return {target,reached:Boolean(target&&(Math.hypot(target[0]-map.spawn.x,target[1]-map.spawn.y)<1||nav.route(map.spawn.x,map.spawn.y,...target).length))};};
+const bridges=audit.bridges.map(b=>{const ends=[b.a,b.b].map(p=>({point:p,...routeTo(p,85)}));const mid=b.a.map((v,k)=>(v+b.b[k])/2),crossing=routeTo(mid,70);if(ends.some(e=>!e.reached)||!crossing.reached)remaining.push({type:'bridge-access',id:b.id,ends,crossing});return {...b,ends,crossing};});
+const pathEnds=audit.pathEnds.map(e=>{const route=routeTo(e.point,180);if(!route.reached)remaining.push({type:'path-end-access',...e});return {...e,...route};});
+const sleepers=map.sleepers.map(b=>{const approach=routeTo([b.x,b.y+95],180),rx=b.r*.9+90;const left=nav.nearest(b.x-rx,b.y,180),right=nav.nearest(b.x+rx,b.y,180),around=left&&right?nav.route(...left,...right):[];if(!approach.reached||!around.length)remaining.push({type:'sleeper-access',pose:b.pose,x:b.x,y:b.y});return {pose:b.pose,x:b.x,y:b.y,approach,walkAround:Boolean(around.length)};});
+const report={remainingOverlapCount:audit.remainingOverlapCount,remainingWalkIssues:remaining.length,forbiddenHamletPlantProps:audit.forbiddenHamletPlantProps,checked:{bridges:bridges.length,pathEnds:pathEnds.length,sleepers:sleepers.length},remaining,bridges,pathEnds,sleepers};
+writeFileSync('scripts/pink-final/walk-audit.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({overlaps:report.remainingOverlapCount,walkIssues:remaining.length,forbiddenPlants:report.forbiddenHamletPlantProps,checked:report.checked,remaining},null,2));
+if(remaining.length||audit.remainingOverlapCount||audit.forbiddenHamletPlantProps)process.exitCode=1;
