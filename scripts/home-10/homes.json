@@ -1,6 +1,6 @@
 {
  "lane": "homes",
- "note": "Hand-authored. Every x/y below was chosen by eye on the plan and the game shots. Ids are bigger-community-<n> unless they start with homes-.",
+ "note": "Hand-authored. Every x/y below was chosen by eye on the plan and the game shots. Ids are bigger-community-<n> unless they start with homes-. boss 8 Nov: only our duck sailboats on Home, so the two rowboats (392, 393) and the boat-mender hull (385) are removed. boss 8 Nov bridges: nothing grows on or floats beside a bridge, so the flowers, bush, lamp and reeds that sat on the three expansion crossings (446, 447, 457-460, 485-488, 511, 571, 573) are removed. boss 8 Nov water: the lamp (235) that stood in the old west pond is removed.",
  "removeProps": [
   1,
   11,
@@ -164,7 +164,24 @@
   521,
   529,
   530,
-  421
+  421,
+  385,
+  392,
+  393,
+  485,
+  486,
+  487,
+  511,
+  571,
+  457,
+  458,
+  459,
+  460,
+  446,
+  447,
+  488,
+  573,
+  235
  ],
  "moveProps": {
   "butterbill": {
@@ -763,7 +780,12 @@
     340,
     190
    ],
-   "residents": "Fishing families, boat menders and the dock keepers on the south quay"
+   "residents": "Fishing families, boat menders and the dock keepers on the south quay",
+   "workplaces": [
+    "bigger-community-386",
+    "bigger-community-387",
+    "bigger-community-388"
+   ]
   }
  },
  "places": {
@@ -1211,28 +1233,28 @@
      1177.7777777777778
     ],
     [
-     5467.852387763598,
-     1389.7417697282758
+     5330,
+     1405
     ],
     [
-     5467.777777777778,
-     1472.2222222222222
+     5470,
+     1420
     ],
     [
-     5588.888888888889,
-     1477.7777777777778
+     5615,
+     1440
     ],
     [
      5650,
      1644.4444444444446
     ],
     [
-     5740,
-     1860
+     5733,
+     1805
     ],
     [
-     5770,
-     2060
+     5772,
+     2070
     ],
     [
      5733.333333333334,
@@ -1352,7 +1374,7 @@
     ]
    ],
    "width": 127.77777777777779,
-   "note": "boss 8 Nov: the shore lane filled the old inlet; the loop now passes west of Millrill Pond (pond poly x 5900-6303, y 1748-2005) instead of under it"
+   "note": "boss 8 Nov: the shore lane filled the old inlet; the loop now passes west of Millrill Pond (pond poly x 5900-6303, y 1748-2005) instead of under it; boss 8 Nov bridges: it crosses Millrill twice, each straight over one arched bridge (river-crossing-3 at y 1420, river-crossing-4 at x 5733-5772), never along the water"
   }
  ],
  "removeObstacles_note": "The fence-gate (64x12) and washing-line (8x10) blockers of the removed garden kit, and the four old gazebo/pergola posts, listed exactly as they are in the base file.",

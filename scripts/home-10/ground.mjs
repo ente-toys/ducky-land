@@ -55,6 +55,10 @@ if (S && !coast.some(p => same(p, S.coast.points[0]))) {
 }
 const riverWater = (E.riverWater ?? []).map(w => (S?.riverWater.set ?? []).find(s => s.id === w.id) ?? w);
 for (const s of S?.riverWater.set ?? []) if (!riverWater.some(w => w.id === s.id)) riverWater.push(s);
+// boss 8 Nov: the canal's square end cut a sand notch into the fork where Clover Run leaves it; this hand-drawn patch makes the
+// fork one body of water, its outer edge curving from the canal's north bank into Clover Run's east bank
+const FORK = {id: 'fork-canal-clover', x: 3700, y: 3620, rx: 1, ry: 1, poly: [[3680, 3560], [3712, 3572], [3722, 3610], [3718, 3650], [3708, 3675], [3660, 3690], [3640, 3640]]};
+if (!riverWater.some(w => w.id === FORK.id)) riverWater.push(FORK);
 const onLand = (x, y) => inPoly(x, y, coast);
 const seaSegs = coast.map((a, i) => [a, coast[(i + 1) % coast.length]]);
 const seaCells = new Map();
@@ -97,12 +101,15 @@ const [X0, X1, Y0, Y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Mat
 // ---------- ground detail decals: the centre's own tufts, flowers and pebbles, by the centre's rule ----------
 const H = 130, CELL = .6 * H, DECALS = {'grass-tuft-1': [44, 26], 'grass-tuft-2': [34, 22], 'grass-tuft-3': [56, 24], 'flower-dot-1': [20, 18], 'flower-dot-2': [26, 18],
   'flower-dot-3': [22, 16], 'pebble-1': [22, 14], 'pebble-2': [34, 16], 'pebble-3': [28, 18], 'sand-speck-1': [16, 8], 'sand-speck-2': [22, 10], 'edge-stone-1': [30, 18]};
-const GRASS_KIT = ['grass-tuft-1', 'grass-tuft-2', 'grass-tuft-3', 'grass-tuft-1', 'grass-tuft-2', 'flower-dot-1', 'flower-dot-2', 'flower-dot-3', 'grass-tuft-3', 'pebble-2'];
+const EDGE_KIT = ['grass-tuft-1', 'grass-tuft-3', 'flower-dot-2', 'grass-tuft-2', 'pebble-1', 'flower-dot-1', 'grass-tuft-3', 'pebble-3', 'flower-dot-3', 'pebble-2', 'grass-tuft-1', 'flower-dot-2'];
+const LAWN_KIT = ['grass-tuft-2', 'flower-dot-1', 'grass-tuft-1', 'flower-dot-3', 'pebble-1', 'grass-tuft-3', 'flower-dot-2'];
 const decals = [], dgrid = new Map(), dk = (x, y) => `${Math.floor(x / CELL)},${Math.floor(y / CELL)}`;
 const near = (x, y, d) => {const gx = Math.floor(x / CELL), gy = Math.floor(y / CELL); for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (const q of dgrid.get(`${gx + a},${gy + b}`) ?? []) if (Math.hypot(q[0] - x, q[1] - y) < d) return true; return false;};
 const solidAll = placed;
 const pgrid = new Map(); for (const p of solidAll) if (Number.isFinite(p.x) && !/flower/.test(p.asset ?? '')) {const k = `${Math.floor(p.x / 400)},${Math.floor(p.y / 400)}`; (pgrid.get(k) ?? pgrid.set(k, []).get(k)).push(p);}
 const nearProp = (x, y) => {const gx = Math.floor(x / 400), gy = Math.floor(y / 400); for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (const p of pgrid.get(`${gx + a},${gy + b}`) ?? []) if (Math.hypot(x - p.x, (y - p.y) * 1.8) < half(p) * .42 + 20 && !(p.asset ?? '').startsWith('tree') || (p.asset ?? '').startsWith('tree') && Math.hypot(x - p.x, (y - p.y) * 1.8) < 40) return true; return false;};
+const trees = placed.filter(p => Number.isFinite(p.x) && /^(tree|apple-tree)/.test(p.asset ?? ''));
+const nearTree = (x, y) => trees.some(t => Math.abs(t.x - x) < 230 && Math.abs(t.y - y) < 170);
 function decal(kind, x, y, i) {const [w, h] = DECALS[kind]; decals.push({src: `/pixi-art/decals/${kind}.svg`, x: r3(x), y: r3(y), width: w * 1.5, height: h * 1.5, flip: halton(i, 11) > .5}); (dgrid.get(dk(x, y)) ?? dgrid.set(dk(x, y), []).get(dk(x, y))).push([x, y]);}
 // a) path-edge stones and the odd pebble on the path, like the centre's lanes
 let si = 0;
@@ -126,9 +133,10 @@ for (let i = 1; i < 260000; i++) {
   const c = coastDist(x, y); if (c < 40) continue;
   const wd = waterDist(x, y); if (wd < 30) continue;
   if (inDeck(x, y, 10) || onWalkway(x, y, 30)) continue;
-  const edge = rd < 110 || c < 260 || wd < 160, keep = halton(i, 5) < (edge ? .9 : .42);
-  if (!keep || near(x, y, CELL) || nearProp(x, y)) continue;
-  const sand = c < 95, pick = halton(i, 7), kit = sand ? ['sand-speck-1', 'sand-speck-2', 'sand-speck-1', 'pebble-1', 'pebble-3'] : GRASS_KIT;
+  // boss 8 Nov: the centre's lawn is plain green with SPARSE tufts; detail gathers at path edges, water, the shore and tree clumps
+  const edge = rd < 110 || c < 260 || wd < 160 || nearTree(x, y), keep = halton(i, 5) < (edge ? .85 : .035);
+  if (!keep || near(x, y, edge ? CELL : CELL * 2) || nearProp(x, y)) continue;
+  const sand = c < 95, pick = halton(i, 7), kit = sand ? ['sand-speck-1', 'sand-speck-2', 'sand-speck-1', 'pebble-1', 'pebble-3'] : edge ? EDGE_KIT : LAWN_KIT;
   decal(kit[Math.floor(pick * kit.length)], x, y, i);
 }
 
@@ -142,19 +150,26 @@ for (const d of landPaths) g += `<path d="${d}" fill="none" stroke="${SAND_DARK}
 for (const d of landPaths) g += `<path d="${d}" fill="none" stroke="${SAND}" stroke-width="92" stroke-linejoin="round"/>`;
 for (const d of landPaths) g += `<path d="${d}" fill="${GRASS}"/>`;
 for (const d of landPaths) g += `<path d="${d}" fill="none" stroke="#7da52b" stroke-width="5" stroke-opacity=".55"/>`;
-const roadD = roads.map(r => ({d: curve(r.points), W: r.W}));
+const roadD = roads.map(r => ({d: curve(r.points), W: r.W, lane: String(r.id ?? '').startsWith('homes-')}));
 g += `<g fill="none" stroke-linecap="round" stroke-linejoin="round">`;
-for (const {d, W} of roadD) g += `<path d="${d}" stroke="#80a82c" stroke-width="${W + 22}" stroke-opacity=".5"/>`;
+for (const {d, W, lane} of roadD) if (lane) g += `<path d="${d}" stroke="#80a82c" stroke-width="${W + 22}" stroke-opacity=".5"/>`;   // boss 8 Nov: the main paths carry no green rim, like the centre's
 for (const {d, W} of roadD) g += `<path d="${d}" stroke="${SAND_DARK}" stroke-width="${W + 6}" transform="translate(0 4)"/>`;
 for (const {d, W} of roadD) g += `<path d="${d}" stroke="${SAND}" stroke-width="${W}"/>`;
 g += `</g>`;
-// water: sand bank, a dark bank line, the water, a pale inner edge and a few ripples
-const wpaths = waters.map(w => poly(w));
-g += `<defs><clipPath id="land">${landPaths.map(d => `<path d="${d}"/>`).join('')}</clipPath></defs><g clip-path="url(#land)">`;   // rivers stop at the shore, never painted over the sea
+// water: every river and pond is ONE body (boss 8 Nov). All banks are painted first, then every water fill over them, so where two
+// bodies meet the water of one covers the other's bank and no stripe runs across the join. Shapes are smooth curves, never facets.
+const wpaths = waters.map(w => curve(w, true));
+g += `<defs><clipPath id="land">${landPaths.map(d => `<path d="${d}"/>`).join('')}</clipPath>`;
+wpaths.forEach((d, i) => {g += `<mask id="wm${i}" maskUnits="userSpaceOnUse" x="${X0 - 400}" y="${Y0 - 400}" width="${X1 - X0 + 800}" height="${Y1 - Y0 + 800}"><rect x="${X0 - 400}" y="${Y0 - 400}" width="${X1 - X0 + 800}" height="${Y1 - Y0 + 800}" fill="#fff"/>${wpaths.filter((_, j) => j !== i).map(o => `<path d="${o}" fill="#000"/>`).join('')}</mask>`;});
+g += `</defs><g clip-path="url(#land)">`;   // rivers stop at the shore, never painted over the sea
 for (const d of wpaths) g += `<path d="${d}" fill="none" stroke="${SAND}" stroke-width="58" stroke-linejoin="round"/>`;
-for (const d of wpaths) g += `<path d="${d}" fill="${WATER}" stroke="${SAND_DARK}" stroke-width="10" stroke-linejoin="round"/>`;
-for (const d of wpaths) g += `<path d="${d}" fill="none" stroke="#8fd7e6" stroke-width="5" stroke-linejoin="round" transform="translate(0 6)" clip-path="none"/>`;
+for (const d of wpaths) g += `<path d="${d}" fill="none" stroke="${SAND_DARK}" stroke-width="10" stroke-linejoin="round"/>`;
+for (const d of wpaths) g += `<path d="${d}" fill="${WATER}"/>`;
+wpaths.forEach((d, i) => {g += `<path d="${d}" fill="none" stroke="#8fd7e6" stroke-width="5" stroke-linejoin="round" transform="translate(0 6)" mask="url(#wm${i})"/>`;});   // the pale inner edge, never across another body
 for (const r of E.rivers ?? []) {const a = sample(r.points, 40); for (let i = 3; i < a.length - 3; i += 6) {const [x, y] = a[i]; g += `<path d="M${r3(x - 22)} ${r3(y)}q22 -10 44 0" fill="none" stroke="#c4ece9" stroke-width="5" stroke-linecap="round"/>`;}}
+// the two Millrill ponds: a few ripples and lily pads, placed by hand
+for (const [x, y] of [[6040, 1850], [6170, 1820], [6120, 1960], [6200, 960], [6300, 1040]]) g += `<path d="M${x - 22} ${y}q22 -10 44 0" fill="none" stroke="#c4ece9" stroke-width="5" stroke-linecap="round"/>`;
+for (const [x, y, k] of [[6235, 1900, 1], [6262, 1868, .7], [5990, 1990, .8], [6330, 990, 1], [6150, 1060, .8]]) g += `<g transform="translate(${x} ${y}) scale(${k})"><path d="M0 0L13 -6A17 11 0 1 0 15 3Z" fill="#8cc63f" stroke="${INK}" stroke-width="3"/></g>`;
 g += '</g>';
 const tiles = E.tiles.map(t => {
   const name = `ground-${Math.round((t.y - E.origin.y) / t.height)}-${Math.round((t.x - E.origin.x) / t.width)}.svg`;
@@ -162,63 +177,63 @@ const tiles = E.tiles.map(t => {
   return {...t, src: `${WEB}/${name}`, bleed: 3};
 });
 
-// ---------- the three river crossings: humpback footbridges like the centre's pond bridge ----------
-function bridgeSVG(c, wk, r) {
-  const horiz = Math.abs(wk.b[0] - wk.a[0]) > Math.abs(wk.b[1] - wk.a[1]), w = wk.w, k = t => 4 * t * (1 - t);
-  const [xa, xb] = [Math.min(wk.a[0], wk.b[0]), Math.max(wk.a[0], wk.b[0])], [ya, yb] = [Math.min(wk.a[1], wk.b[1]), Math.max(wk.a[1], wk.b[1])];
-  const cx = (xa + xb) / 2, cy = (ya + yb) / 2, post = 30, ink = (d, wid, col, extra = '') => `<path d="${d}" fill="none" stroke="${INK}" stroke-width="${wid + 4}" ${extra}/><path d="${d}" fill="none" stroke="${col}" stroke-width="${wid}" ${extra}/>`;
-  let s = '', box;
-  if (horiz) {
-    box = [xa - 70, cy - w / 2 - r - post - 30, xb - xa + 140, w + r + post + 120];
-    const N = 24, top = [], bot = [];
-    for (let i = 0; i <= N; i++) {const t = i / N, x = xa + (xb - xa) * t; top.push([x, cy - w / 2 - r * k(t)]); bot.push([x, cy + w / 2 - r * k(t)]);}
-    const fas = bot.map(([x, y]) => [x, y + 26]);
-    s += `<ellipse cx="${cx}" cy="${cy + w / 2 + 24}" rx="${(xb - xa) * .5}" ry="22" fill="#4fa9c4" opacity=".55"/>`;
-    s += `<path d="M${xa + 30},${cy + w / 2 + 26} ${fas.slice(2, -2).map(p => p.map(r3).join(',')).join(' ')} L${xb - 30},${cy + w / 2 + 26}Z" fill="#3f8ea6" stroke="${INK}" stroke-width="3"/>`;   // the arch's shade over the water
-    for (const x of [xa - 46, xb + 4]) s += `<path d="M${x},${cy - w / 2 - 8}h42v${w + 40}h-42Z" fill="#e9ddb0" stroke="${INK}" stroke-width="4"/><path d="M${x},${cy}h42 M${x + 21},${cy - w / 2 - 8}v${w / 2 + 8} M${x + 12},${cy}v${w / 2 + 32}" stroke="#c9b98a" stroke-width="3"/>`;
-    s += `<path d="${'M' + [...bot, ...[...fas].reverse()].map(p => p.map(r3).join(',')).join('L')}Z" fill="#b5773a" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
-    s += `<path d="${'M' + [...top, ...[...bot].reverse()].map(p => p.map(r3).join(',')).join('L')}Z" fill="#e5ae63" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
-    for (let i = 1; i < N * 2; i++) {const t = i / (N * 2), x = xa + (xb - xa) * t, l = r * k(t); s += `<path d="M${r3(x)},${r3(cy - w / 2 - l + 3)}V${r3(cy + w / 2 - l - 3)}" stroke="#c88941" stroke-width="3"/>`;}
-    s += `<path d="${'M' + top.slice(0, 13).map(p => p.map(r3).join(',')).join('L')}" fill="none" stroke="#f3c983" stroke-width="5" opacity=".7" transform="translate(0 6)"/>`;
-    for (const edge of [top, bot]) {
-      const rail = edge.map(([x, y]) => [x, y - post]);
-      for (let i = 0; i <= N; i += 4) s += ink(`M${r3(edge[i][0])},${r3(edge[i][1] + 2)}V${r3(rail[i][1])}`, 7, '#885931', 'stroke-linecap="round"');
-      s += ink('M' + rail.map(p => p.map(r3).join(',')).join('L'), 7, '#c88941', 'stroke-linecap="round" stroke-linejoin="round"');
-    }
-  } else {
-    box = [cx - w / 2 - 50, ya - r - post - 60, w + 100, yb - ya + r + post + 130];
-    const N = 24, s0 = t => ya + (yb - ya) * t - r * k(t), L = cx - w / 2, R = cx + w / 2;
-    s += `<path d="M${L - 10},${ya + 40}H${R + 26}V${yb - 30}H${L - 10}Z" fill="#4fa9c4" opacity=".5"/>`;
-    for (const y of [ya - 40, yb - 6]) s += `<path d="M${L - 12},${y}h${w + 24}v46h-${w + 24}Z" fill="#e9ddb0" stroke="${INK}" stroke-width="4"/><path d="M${cx},${y}v46 M${L - 12},${y + 23}h${w + 24}" stroke="#c9b98a" stroke-width="3"/>`;
-    const left = [], right = [];
-    for (let i = 0; i <= N; i++) {const t = i / N; left.push([L, s0(t)]); right.push([R, s0(t)]);}
-    s += `<path d="M${R},${s0(0)}${right.map(p => `L${p[0] + 12},${r3(p[1] + 14)}`).join('')}L${R},${yb}Z" fill="#b5773a" stroke="${INK}" stroke-width="4"/>`;   // the east face of the arch
-    s += `<path d="${'M' + [...left, ...[...right].reverse()].map(p => p.map(r3).join(',')).join('L')}Z" fill="#e5ae63" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
-    s += `<path d="M${L},${s0(0)}${left.slice(0, 13).map(p => `L${p[0]},${r3(p[1])}`).join('')}L${R},${r3(s0(.5))}L${R},${s0(0)}Z" fill="#d39a55"/>`;   // far ramp faces away: a shade darker
-    for (let i = 1; i < N * 1.5; i++) {const y = s0(i / (N * 1.5)); s += `<path d="M${L + 3},${r3(y)}H${R - 3}" stroke="#c88941" stroke-width="3"/>`;}
-    for (const x of [L, R]) {
-      const pts = left.map(([, y]) => [x, y]);
-      for (let i = 0; i <= N; i += 4) s += ink(`M${x},${r3(pts[i][1])}v-${post}`, 7, '#885931', 'stroke-linecap="round"');
-      s += ink('M' + pts.map(([px, py]) => `${px},${r3(py - post)}`).join('L'), 7, '#c88941', 'stroke-linecap="round" stroke-linejoin="round"');
-    }
-  }
+// ---------- the river crossings: ONE arched footbridge per crossing, in the centre's bridge colours (boss 8 Nov) ----------
+// Hand-picked: a and b are the deck's two landings (on dry bank, past the water), r the hump, w the walk width. The deck lies
+// flat across its river along the path, rising r at mid-span; a near-vertical bridge also leans its hump sideways (the high
+// oblique view), so it reads as an arch and never as a plank board. 5 and 6 replace the centre's two straight jetty pieces
+// (placements.js JETTIES 1 and 3), whose walk arches stay in placements.js ARCHES.
+const BRIDGES = [
+  {id: 'river-crossing-1', river: 'clover-run', a: [2950, 5497], b: [3245, 5497], r: 48, w: 100},     // quay-pier lane, water x 3026-3169
+  {id: 'river-crossing-2', river: 'clover-run', a: [3729, 4478], b: [3487, 4350], r: 44, w: 100},     // village loop, water 3674,4449 - 3540,4378
+  {id: 'river-crossing-3', river: 'mill-stream', a: [5350, 1420], b: [5600, 1420], r: 48, w: 100},    // village loop, water x 5409-5537
+  {id: 'river-crossing-4', river: 'mill-stream', a: [5733, 1805], b: [5772, 2070], r: 48, w: 100},    // village loop by Millrill Pond, water y 1867-2010
+  {id: 'river-crossing-5', river: 'old-shore-canal', a: [3320, 3319], b: [3320, 3770], r: 70, w: 115, centre: true},   // was jetty 1, water y 3402-3734
+  {id: 'river-crossing-6', river: 'old-shore-canal', a: [2320.86, 3264.02], b: [2288.93, 3859.97], r: 70, w: 84, centre: true},   // was jetty 3, water y 3449-3748
+];
+function archBridge({a, b, r}) {
+  const L = Math.hypot(b[0] - a[0], b[1] - a[1]), u = [(b[0] - a[0]) / L, (b[1] - a[1]) / L];
+  let n = [-u[1], u[0]]; if (n[1] < 0 || (n[1] === 0 && n[0] < 0)) n = [-n[0], -n[1]];   // +n faces the camera (south, else east)
+  const shear = .9 * Math.abs(u[1]), wd = Math.abs(u[1]) > .6 ? 84 : 72, th = 16, post = 30, N = Math.max(12, Math.round(L / 13));
+  const vis = n[0] * shear - n[1] < 0 ? 1 : -1;   // the side whose edge the camera sees (south, or on a steep bridge the side the hump leans from)
+  const z = t => r * 4 * t * (1 - t), at = (t, side, h = 0) => {const x = a[0] + u[0] * L * t + n[0] * side * wd / 2, y = a[1] + u[1] * L * t + n[1] * side * wd / 2, zz = z(t) + h; return [x + shear * z(t), y - zz];};   // posts and rails stand straight up; only the hump leans
+  const ts = Array.from({length: N + 1}, (_, i) => i / N), P = pts => pts.map(p => p.map(r3).join(',')).join('L');
+  const far = ts.map(t => at(t, -vis)), near = ts.map(t => at(t, vis)), nearLow = ts.map(t => at(t, vis, -th));
+  const ink = (d, wid, col) => `<path d="${d}" fill="none" stroke="${INK}" stroke-width="${wid + 4}"/><path d="${d}" fill="none" stroke="${col}" stroke-width="${wid}"/>`;
+  const rail = edge => {let o = ''; const tops = ts.map((t, i) => [edge[i][0], edge[i][1] - post]);
+    for (let i = 0; i <= N; i += Math.max(1, Math.round(N / 6))) o += ink(`M${edge[i].map(r3)}L${tops[i].map(r3)}`, 6, '#885931');
+    o += ink(`M${P(tops)}`, 7, '#c88941'); return o;};
+  let s = '';
+  // the deck's shade on the water, straight below it
+  const sh = ts.map(t => [a[0] + u[0] * L * t, a[1] + u[1] * L * t, 4 * t * (1 - t) * wd / 2]), shL = sh.map(p => [p[0] - n[0] * p[2], p[1] - n[1] * p[2] + 10]), shR = sh.map(p => [p[0] + n[0] * p[2], p[1] + n[1] * p[2] + 10]);   // tapered to the landings, so it lies on the water
+  s += `<path d="M${P(shL.slice(2, -2))}L${P([...shR.slice(2, -2)].reverse())}Z" fill="${INK}" fill-opacity=".14"/>`;
+  s += rail(far);   // the far rail, behind the deck
+  s += `<path d="M${P(near)}L${P([...nearLow].reverse())}Z" fill="#885931" stroke="${INK}" stroke-width="4"/>`;   // the edge the camera sees
+  s += `<path d="M${P(far)}L${P([...near].reverse())}Z" fill="#c88941" stroke="${INK}" stroke-width="4"/>`;   // the deck
+  for (let i = 1; i < N; i++) s += `<path d="M${far[i].map(r3)}L${near[i].map(r3)}" stroke="${INK}" stroke-width="1.6" stroke-opacity=".55"/>`;   // planks
+  s += `<path d="M${P(far.slice(0, Math.ceil(N / 2)).map(p => [p[0], p[1] + 6]))}" fill="none" stroke="#e5ae63" stroke-width="4" opacity=".7"/>`;   // the light on the rising half
+  s += rail(near);   // the near rail, over the deck
+  const all = [...far, ...near, ...nearLow, ...shL, ...shR].flatMap(p => [p, [p[0], p[1] - post]]);
+  const xs = all.map(p => p[0]), ys = all.map(p => p[1]), box = [Math.min(...xs) - 12, Math.min(...ys) - 12, Math.max(...xs) - Math.min(...xs) + 24, Math.max(...ys) - Math.min(...ys) + 24];
   return {box, svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${r3(box[2])}" height="${r3(box[3])}" viewBox="${box.map(r3).join(' ')}" stroke-linecap="round" stroke-linejoin="round">${s}</svg>`};
 }
-const newDecks = E.decks.map(d => {
-  if (!String(d.id ?? '').startsWith('river-crossing-')) return d;
-  const c = (E.crossings ?? []).find(c => c.id === d.id), wk = walkways.find(v => Math.abs((v.a[0] + v.b[0]) / 2 - (d.x + d.width / 2)) < 2 && Math.abs((v.a[1] + v.b[1]) / 2 - (d.y + d.height / 2)) < 2)
-    ?? (E.arches ?? []).find(v => Math.abs((v.a[0] + v.b[0]) / 2 - (d.x + d.width / 2)) < 40);
-  const arch = (E.arches ?? []).find(v => wk && Math.abs(v.a[0] - wk.a[0]) < 1 && Math.abs(v.a[1] - wk.a[1]) < 1);
-  if (!wk) return d;
-  const {box, svg} = bridgeSVG(c, wk, arch?.r ?? 48);
-  writeFileSync(`${ART}/${d.id}.svg`, svg);
-  return {id: d.id, src: `${WEB}/${d.id}.svg`, x: r3(box[0]), y: r3(box[1]), width: r3(box[2]), height: r3(box[3]), resolution: 1.5};
-});
-
-// ---------- write back only the owned keys ----------
+const POND_OVERLAYS = new Set(['shore-millrill-pond', 'shore-millhead-pond']);   // painted here with the rivers now (shore.json decks note)
+const newDecks = E.decks.filter(d => !String(d.id ?? '').startsWith('river-crossing-') && !POND_OVERLAYS.has(d.id));
+for (const br of BRIDGES) {
+  const {box, svg} = archBridge(br);
+  writeFileSync(`${ART}/${br.id}.svg`, svg);
+  newDecks.push({id: br.id, src: `${WEB}/${br.id}.svg`, x: r3(box[0]), y: r3(box[1]), width: r3(box[2]), height: r3(box[3]), resolution: 1.5});
+}
+// the walk data for the expansion's own bridges: arches (Duckies rise over them), walkways and the water cut-outs
+const own = BRIDGES.filter(br => !br.centre), sameSeg = (v, q) => Math.hypot(v.a[0] - q.a[0], v.a[1] - q.a[1]) < 2 && Math.hypot(v.b[0] - q.b[0], v.b[1] - q.b[1]) < 2;
+const oldArches = E.arches ?? [];
+const arches = own.map(({a, b, r, w}) => ({a, b, w, r}));
+const walkwaysOut = walkways.filter(v => !oldArches.some(q => sameSeg(v, q)) && !arches.some(q => sameSeg(v, q))).concat(arches.map(({a, b, w}) => ({a, b, w})));
+const riverBridges = (E.riverBridges ?? []).filter(v => !String(v.id).startsWith('river-crossing-')).concat(own.map(({id, a, b, w}) => ({id,
+  x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, w: Math.abs(b[0] - a[0]) + w * .9, h: Math.abs(b[1] - a[1]) + w * .9})));
+const crossings = own.map(({id, river, a, b}) => ({id, river, x: (a[0] + b[0]) / 2 * .18 + 278, y: (a[1] + b[1]) / 2 * .18 + 204}));   // the plan frame (world * .18 + 278, 204), as the tests read it
 
 // ---------- write back only the owned keys ----------
 const {sleepers: _drop, ...keep} = E;   // the scripted sleepers are gone (boss 8 Nov)
-writeFileSync(FILE, JSON.stringify({...keep, tiles, decks: newDecks, groundDecals: decals}, null, 2) + '\n');
+writeFileSync(FILE, JSON.stringify({...keep, riverWater, tiles, decks: newDecks, arches, walkways: walkwaysOut, riverBridges, crossings, groundDecals: decals}, null, 2) + '\n');
 execFileSync('node', ['scripts/walk-world.mjs'], {stdio: 'inherit'});
 console.log(JSON.stringify({decals: decals.length, tiles: tiles.length, shore: Boolean(S), coastPoints: coast.length}));

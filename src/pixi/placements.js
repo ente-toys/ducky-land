@@ -75,13 +75,14 @@ function plant(kind, point) {
 // SVGs drawn in WORLD coordinates (place at the viewBox origin, scale 1). The pond bridge stays prop-16. All six sit in the
 // ground layer, under the Duckies. A, B and R are the arch ends and its rise (world-restyle/jobs/bridges/NOTES.md).
 export const JETTIES = [
-  [1, 3222.39, 3276.877, 229.2164, 476.233], [2, 870.0355, 2996.0389, 337.9679, 475.3502], [3, 2208.9189, 3220.4091, 209.3931, 665.9182],   // round 4b viewBoxes
+  [2, 870.0355, 2996.0389, 337.9679, 475.3502],   // round 4b viewBox. boss 8 Nov: jetties 1 and 3 read as straight plank boards; the ground
+  // lane draws them as arched bridges now (home-expansion.json decks river-crossing-5 and -6), on the same arches below
   [5, 5004.9592, 1492.5089, 494.0617, 277.2587],   // round 4: jetty 4 and its islet are gone, so the piers stop reading as a row
 ].map(([n, x, y, width, height]) => ({src: `/pixi-art/bridge-jetty-${n}.svg`, x, y, width, height, resolution: 1.5}));
 const ARCHES = [
   {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},   // pond: the deck top is drawn 72 deep for 112 of walkway
   // round 4: every jetty humps R = 70 (was 40-44), so a Ducky visibly climbs it
-  {a: [3320, 3319], b: [3320, 3730], r: 70, w: 115}, {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
+  {a: [3320, 3319], b: [3320, 3770], r: 70, w: 115}, {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
   {a: [2320.86, 3264.02], b: [2288.93, 3859.97], r: 70, w: 84},
   {a: [5034.08, 1638.41], b: [5469.9, 1681.99], r: 70, w: 84},
   ...(expansion.arches ?? []),
