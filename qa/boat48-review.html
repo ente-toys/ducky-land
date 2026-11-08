@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>48-view boat check</title>
+<style>body{margin:0;background:#c4e2f5;font:14px system-ui}canvas{display:block}#status{position:fixed;top:8px;left:8px}</style><div id="status">Loading boat artwork</div>
+<script type="module">
+import {Application,Container,Sprite,Graphics} from 'pixi.js';
+import {createDuck} from '/src/pixi/duck.js';
+import {loadBoatViews} from '/src/pixi/boat-views.js';
+import {DUCK_SCALE,SEAT_SCALE} from '/src/pixi/sailing-fx.js';
+const app=new Application();await app.init({width:440,height:400,resolution:1,background:0xc4e2f5,antialias:true});document.body.append(app.canvas);app.stop();
+const bank=await loadBoatViews(), boat=new Sprite(),front=new Sprite(), duck=await createDuck({outfit:{},seed:0});
+const root=new Container();root.position.set(220,340);app.stage.addChild(root);root.addChild(boat,duck.root,front);
+window.setFrame=async n=>{
+ const v=bank.views[n];bank.apply(boat,v);duck.root.scale.set(DUCK_SCALE*SEAT_SCALE);duck.root.position.set(v.seat.x,v.seat.y);
+ for(let k=0;k<45;k++)duck.update(.1,{turn:v.angle,time:0,reducedMotion:true,action:0,speed:0});
+ front.visible=Boolean(v.front);if(v.front)bank.apply(front,v,1,v.front);
+ app.render();return app.canvas.toDataURL('image/png');
+};
+await window.setFrame(0);window.ready=true;
+if(new URLSearchParams(location.search).has('export')){
+ for(let n=0;n<48;n++){const data=await window.setFrame(n);await fetch(`http://127.0.0.1:8909/frame/${n}`,{method:'POST',body:data});document.querySelector('#status').textContent=`Saved ${n+1} of 48 rider frames`;}
+}
+let n=0;setInterval(()=>{window.setFrame(n);document.querySelector('#status').textContent=`48-view boat spin, frame ${n}`;n=(n+1)%48;},120);
+</script></html>

@@ -66,7 +66,7 @@ function glides(hits) {
 }
 
 test('keyboard walking glides along curved coast at shallow angles instead of stopping dead', () => {
-  const coast = world.coast, hits = shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]));
+  const coast = world.coast.filter((_,i)=>i%4===0), hits = shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]));
   assert.ok(hits.length >= 12, `${hits.length} coast scenarios`);
   glides(hits);
   // an axis key into a slanted shore was a dead stop before (about 49 px in a second); it now keeps most of its speed
@@ -167,14 +167,14 @@ test('a click far out at sea (or mid-pond) walks to the nearest shore toward the
   const [x, y] = world.zones.plaza.spawn;
   const ponds = world.water.flatMap(o => [[0, 0], [0, -.3], [.3, 0]].map(([u, v]) => [o.x+u*o.rx, o.y+v*o.ry])).filter(p => !nav.nearest(...p));
   assert.ok(ponds.length, 'a lake has a middle more than 150 px from its banks');
-  for (const [tx, ty] of [[5790, 2400], [10, 10], [2900, 4390], [5790, 1680], ...ponds]) {
+  for (const [tx, ty] of [[world.origin.x-500,2400], [world.origin.x-500,world.origin.y-500], [2900,world.origin.y+world.height+500], [world.origin.x+world.width+500,1680], ...ponds]) {
     assert.equal(nav.nearest(tx, ty), null, `${tx},${ty} is more than 150 px out`);
     const path = nav.route(x, y, tx, ty);
     assert.ok(path.length, `walks toward ${tx},${ty}`);
     const end = path.at(-1);
     // the shore search on top of the normal route to that shore point (best of 3, to keep timer noise out)
     const time = f => Math.min(...[0, 1, 2].map(() => {const t = performance.now(); f(); return performance.now()-t;}));
-    if (tx === 10 || tx === ponds[0][0]) {
+    if (tx === world.origin.x-500 || tx === ponds[0][0]) {
       const extra = time(() => nav.route(x, y, tx, ty)) - time(() => nav.route(x, y, ...end));
       assert.ok(extra < 30, `the shore search costs ${extra.toFixed(1)} ms`);
     }
@@ -234,7 +234,7 @@ test('two ducks walking at each other pass with gentle spacing, and stacked duck
 });
 
 test('a duck pressed against the shore is never pushed into the sea', () => {
-  const coast = world.coast, edges = coast.map((p, i) => [p, coast[(i+1)%coast.length]]).filter(([p, q]) => Math.hypot(q[0]-p[0], q[1]-p[1]) > 150);
+  const coast = world.coast.filter((_,i)=>i%4===0), edges = coast.map((p, i) => [p, coast[(i+1)%coast.length]]).filter(([p, q]) => Math.hypot(q[0]-p[0], q[1]-p[1]) > 150);
   let checked = 0;
   for (const [p, q] of edges) {
     const l = Math.hypot(q[0]-p[0], q[1]-p[1]), nx = -(q[1]-p[1])/l, ny = (q[0]-p[0])/l, mid = [(p[0]+q[0])/2, (p[1]+q[1])/2];

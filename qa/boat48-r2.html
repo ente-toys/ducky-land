@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Boat R2 motion proof</title>
+<style>body{margin:0;background:#c4e2f5;font:14px system-ui}canvas{display:block}#status{position:fixed;top:8px;left:8px}</style><div id="status">Boat proof, roll and bob on</div>
+<script type="module">
+import {Application,Container,Sprite} from 'pixi.js';
+import {createDuck} from '/src/pixi/duck.js';
+import {loadBoatViews} from '/src/pixi/boat-views.js';
+import {createSailingFX} from '/src/pixi/sailing-fx.js';
+const app=new Application();await app.init({width:480,height:440,resolution:1,background:0xc4e2f5,backgroundAlpha:0,antialias:true,preference:'webgl'});document.body.append(app.canvas);app.stop();
+const water=new Container(),objects=new Container({sortableChildren:true});app.stage.addChild(water,objects);
+const bank=await loadBoatViews(),duck=await createDuck({outfit:{},seed:0});objects.addChild(duck.root);
+let now=1000;performance.now=()=>now;
+const fx=await createSailingFX({water,objects}),root=new Container(),sprite=new Sprite();root.addChild(sprite);objects.addChild(root);const entry={root,sprite};
+const boat={id:'fix6',x:240,y:355,turn:bank.views[0].angle,occupant:'rider',travel:0};
+function draw(dt=1/60,{layer='all',transparent=false}={}){
+ const pin=fx.boat(entry,boat,false);root.zIndex=357;
+ const look=fx.duck({id:'rider',x:240,y:355,mode:'sailing',boatId:'fix6',turn:boat.turn,travel:0},false);
+ duck.root.position.set(look.x,look.y);duck.root.scale.set(look.scale);duck.root.rotation=look.rotation;duck.root.zIndex=look.z;
+ duck.update(dt,{turn:look.turn,time:now/1000,reducedMotion:false,action:0,speed:0,sailing:true});
+ fx.front(entry);fx.draw(false);
+ root.visible=layer==='all'||layer==='boat';duck.root.visible=layer==='all'||layer==='duck';entry.front.visible=layer==='all'||layer==='front';water.visible=layer==='all';
+ app.renderer.background.alpha=transparent?0:1;
+ app.render();
+ window.proof={pin:[pin.x,pin.y],roll:root.rotation,bob:pin.y-(355-50),target:boat.turn,views:[...entry.layers].filter(([k,l])=>l.boat.visible).map(([key,l])=>({key,weight:l.boat.alpha,pin:Object.values(bank.byKey.get(key).seat).map(Number),blend:l.front.blendMode})),rider:[look.x,look.y],z:[root.zIndex,duck.root.zIndex,entry.front.zIndex],filters:root.filters?.length||0,frontFilters:entry.front.filters?.length||0};
+ return app.canvas.toDataURL('image/png');
+}
+function checkCoverage(){
+ const fronts=[...entry.layers.values()].map(l=>l.front).filter(l=>l.visible&&l.alpha>0);
+ const weights=fronts.map(l=>l.alpha);
+ const read=()=>{const c=document.createElement('canvas');c.width=480;c.height=440;const ctx=c.getContext('2d');ctx.drawImage(app.canvas,0,0);return ctx.getImageData(0,0,480,440).data;};
+ draw(0,{layer:'front',transparent:true});const combined=read();const masks=[];
+ for(const front of fronts){for(const f of fronts)f.visible=f===front;front.alpha=1;app.render();masks.push(read());}
+ fronts.forEach((f,i)=>{f.visible=true;f.alpha=weights[i];});
+ let common=0,leaks=0,minAlpha=255,rigCommon=0,rigMinAlpha=255;
+ for(let i=3;i<combined.length;i+=4)if(masks.every(mask=>mask[i]===255)){
+  common++;minAlpha=Math.min(minAlpha,combined[i]);if(combined[i]<254)leaks++;
+  if(Math.floor(i/4/480)<270){rigCommon++;rigMinAlpha=Math.min(rigMinAlpha,combined[i]);}
+ }
+ draw(0);return {commonPixels:common,leakedPixels:leaks,minAlpha,rigCommonPixels:rigCommon,rigMinAlpha,weights};
+}
+window.setFrame=async(n,options={})=>{
+ fx.forget('fix6');boat.turn=bank.views[n].angle;
+ // A settled angle, but the production roll and bob remain enabled.
+ for(let k=0;k<60;k++){now+=16.6666667;draw();}
+ return draw(0,options);
+};
+window.step=async(heading,dt=1/60,options={})=>{boat.turn=heading;now+=dt*1000;return draw(dt,options);};
+window.snapshot=(options={})=>draw(0,options);
+window.ready=true;await window.setFrame(0);
+const params=new URLSearchParams(location.search);
+const status=document.querySelector('#status');
+const save=(file,data)=>fetch('/__boat-proof',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({file,data})});
+if(params.has('export')){
+ try{
+ const proofs=[];
+ for(let n=0;n<48;n++){
+  await save(`frame-${String(n).padStart(2,'0')}.png`,await window.setFrame(n));proofs.push(window.proof);
+  status.textContent=`Saving settled view ${n+1}/48`;
+ }
+ await save('runtime.json',JSON.stringify(proofs));
+ await window.setFrame(0);
+ const motion=[];let rear36=false,rear37=false;
+ for(let n=0;n<480;n++){
+  const slow=n<360,k=slow?n:n-360,heading=slow?Math.PI/2-k*Math.PI*2/360:Math.PI/2-k*Math.PI*2/120;
+  const data=await window.step(heading,slow?1/30:1/60),p=window.proof;
+  motion.push(p);
+  if(n%2===0)await save(`motion-${String(n).padStart(3,'0')}.png`,data);
+  if(!rear36&&p.views.some(v=>v.key==='f31')){
+   rear36=true;await save('rear-mid-36.png',data);await save('rear-front-36.png',window.snapshot({layer:'front',transparent:true}));await save('rear-coverage-36.json',JSON.stringify(checkCoverage()));
+  }
+  if(!rear37&&p.views.some(v=>v.key==='f38')){
+   rear37=true;await save('rear-mid-37.png',data);await save('rear-front-37.png',window.snapshot({layer:'front',transparent:true}));await save('rear-coverage-37.json',JSON.stringify(checkCoverage()));
+  }
+  status.textContent=`Saving ${slow?'slow':'fast'} spin ${k}`;
+ }
+ const settling=[];for(let k=0;k<60;k++){const data=await window.step(Math.PI/2,1/60);settling.push(window.proof);await save(`settle-${String(k).padStart(2,'0')}.png`,data);}
+ await save('settling.json',JSON.stringify(settling));
+ await save('motion.json',JSON.stringify(motion));
+ await save('done.json',JSON.stringify({saved:true}));
+ status.textContent='Saved all 48 views, slow spin and fast 360. Roll and bob ON.';
+ }catch(error){status.textContent='ERROR: '+error.stack;await save('error.json',JSON.stringify({error:error.stack}));}
+}else if(params.has('view'))await window.setFrame(Number(params.get('view')));
+else if(!params.has('capture')){let t=0;setInterval(()=>{t+=1/60;window.step(Math.PI/2-t*.7);},1000/60);}
+</script></html>

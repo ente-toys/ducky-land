@@ -1,3 +1,4 @@
+import {mapPoint} from '../src/pixi/sphere-coordinates.js';
 import homeExtra from '../rive/web/home-sleep-extra.json' with {type:'json'};
 import {THEMED_ISLANDS} from '../src/pixi/world-map.js';
 // boss 6 Nov: "Every island has to be BIGGER and SPACIOUS, with room for 100 Duckies to walk around, and stalls. The same
@@ -8,7 +9,8 @@ import assert from 'node:assert/strict';
 import homeWorld from '../rive/web/world.json' with {type: 'json'};
 import {geometry} from '../rive/web/island-geometry.mjs';
 import {HOME_MAP, ambientOf, makeMap, mapFor, mapOf, readyThemes, THEME_OF} from '../src/pixi/island-maps.js';
-import {GAP, WORLD_GEO, WORLD_ISLANDS, clearOf, copyHolding, layoutWorld, offsetOf, sizeOfTheme} from '../src/pixi/world-map.js';
+import {WORLD_GEO, WORLD_ISLANDS, layoutWorld, offsetOf, sizeOfTheme} from '../src/pixi/world-map.js';
+import {BOAT_CHANNEL, coastGaps, copyHolding} from '../src/pixi/sphere-shores.js';
 import {SLEEP_COUNTS, SLEEP_SPOTS, SLEEP_TOTAL, resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, sleeperFootprint} from '../src/pixi/sleep-spots.js';
 import {canSail, destinationsFor, harborOf, islandOffset, originOffset, seaBoundsFor} from '../src/pixi/islands.js';
 import {clockwise, shoreOf, surfRuns} from '../src/pixi/surf.js';
@@ -106,7 +108,7 @@ test('b) surf: every themed coast and islet gets the beach surf, each ring turne
   assert.deepEqual(clockwise([[0, 0], [0, 10], [10, 10], [10, 0]]), [[10, 0], [10, 10], [0, 10], [0, 0]]);
   for (const id of themedIslands()) {
     const map = mapOf(id), rings = shoreOf(map.world), runs = surfRuns(rings);
-    assert.equal(rings.length, (map.world.coastRings?.length ?? 1) + (map.world.islets ?? []).length);
+    assert.equal(rings.length, (map.world.coastRings?.length ?? 1) + (map.world.surfIslets ?? map.world.islets ?? []).length);
     assert.ok(runs.length > 20, `${map.id}: ${runs.length} surf runs`);
     // the crest starts out at sea: 120 out along each normal is never this island's land
     const out = runs.flatMap(r => r.points).filter((p, i) => i % 7 === 0).filter(p => map.landAt(p.x + p.nx * 120, p.y + p.ny * 120));
@@ -128,18 +130,14 @@ test('b) bridges, islets, decks and harbors work from each map\'s own data', () 
 });
 
 // ---------- c) bigger maps on the globe ----------
-test('c) every island is spaced by its own size: no two maps crowd each other, home never moves', () => {
-  for (let i = 0; i < WORLD_ISLANDS.length; i++) for (let j = i + 1; j < WORLD_ISLANDS.length; j++) {
-    const a = WORLD_ISLANDS[i], b = WORLD_ISLANDS[j];
-    assert.ok(clearOf(a, b, WORLD_GEO) > GAP, `${a.id} (${a.width}x${a.height}) and ${b.id} (${b.width}x${b.height})`);
-  }
+test('c) every island keeps a boat channel between its real coasts (not its map rectangle), home never moves', () => {
+  for (const {a, b, gap} of coastGaps()) assert.ok(gap >= BOAT_CHANNEL, `${a}/${b}: ${Math.round(gap)} between coasts`);
   for (const id of themedIslands()) assert.deepEqual(sizeOfTheme(mapOf(id).id), {width: mapOf(id).width, height: mapOf(id).height});
   // at the 8000 x 6000 limit every theme still fits, home stays put, the same three islands are themed, few islands move
   const plain = layoutWorld(() => ({width: homeWorld.width, height: homeWorld.height})), big = layoutWorld(t => t ? {width: 8000, height: 6000} : {width: homeWorld.width, height: homeWorld.height});
   assert.deepEqual(big.islands.filter(i => i.theme).map(i => i.id).sort(), THEMED_ISLANDS.map(([id])=>id).sort());
   assert.deepEqual([big.islands[0].x, big.islands[0].y], [plain.islands[0].x, plain.islands[0].y]);
-  const geo = {SX: big.SX, wrapd: big.wrapd, latOf: y => -(y - homeWorld.height / 2) / big.Rw};
-  for (let i = 0; i < big.islands.length; i++) for (let j = i + 1; j < big.islands.length; j++) assert.ok(clearOf(big.islands[i], big.islands[j], geo) > GAP);
+  for (const {a, b, gap} of coastGaps(big.islands, big.Rw)) assert.ok(gap >= BOAT_CHANNEL, `${a}/${b} at 8000 x 6000`);
   assert.deepEqual(big.islands, layoutWorld(t => t ? {width:8000,height:6000} : {width:homeWorld.width,height:homeWorld.height}).islands);
 });
 
@@ -148,17 +146,18 @@ test('c) in every themed island\'s sea: the neighbours fit the camera and sailin
     const b = seaBoundsFor(id), here = mapOf(id);
     for (const d of destinationsFor(id)) {
       const m = mapOf(d.destination);
-      assert.ok(d.offset.x >= b.x0 && d.offset.y >= b.y0 && d.offset.x + m.width <= b.x1 && d.offset.y + m.height <= b.y1, `${id}: ${d.destination}'s whole map is inside the sea bounds`);
+      assert.ok(d.offset.x + m.origin.x >= b.x0 && d.offset.y + m.origin.y >= b.y0 && d.offset.x + m.origin.x + m.width <= b.x1 && d.offset.y + m.origin.y + m.height <= b.y1, `${id}: ${d.destination}'s whole map is inside the sea bounds`);
       assert.ok(canSail(d.dock.x, d.dock.y, id), `${id}: ${d.destination}'s dock is open water`);
     }
-    const all = [{id, x: 0, y: 0, map: here}, ...WORLD_ISLANDS.filter(i => i.id !== id && islandOffset(id, i.id)).map(i => ({id: i.id, ...islandOffset(id, i.id), map: mapOf(i.id)}))];
-    for (const a of all) for (const c of all) {
-      if (a === c || Math.abs(a.x - c.x) > (a.map.width + c.map.width) || Math.abs(a.y - c.y) > (a.map.height + c.map.height)) continue;
-      const hit = a.map.walk.coast.filter((p, k) => k % 3 === 0).find(([x, y]) => c.map.landAt(x + a.x - c.x, y + a.y - c.y));
-      assert.equal(hit, undefined, `${id}'s sea: ${a.id}'s coast runs into ${c.id}`);
+    // Shore separation uses full sphere geometry, not translated map boxes.
+    for(const other of WORLD_ISLANDS.filter(i=>i.id!==id)){
+      const m=mapOf(other.id);
+      for(const [x,y]of m.walk.coast.filter((_,k)=>k%3===0)){
+        const p=mapPoint(other.id,id,{x,y});assert.equal(here.landAt(p.x,p.y),false,`${id}/${other.id}: coasts never overlap`);
+      }
     }
     // a copy of a bigger neighbour holds what is in its waters, by its own size
-    const copies = WORLD_ISLANDS.filter(i => i.id !== id).map(i => ({id: i.id, x: here.width / 2 + offsetOf(id, i.id).x, y: here.height / 2 + offsetOf(id, i.id).y, width: mapOf(i.id).width, height: mapOf(i.id).height}));
+    const copies = WORLD_ISLANDS.filter(i => i.id !== id).map(i => ({from:id,id: i.id, x: here.cx + offsetOf(id, i.id).x, y: here.cy + offsetOf(id, i.id).y, width: mapOf(i.id).width, height: mapOf(i.id).height}));
     for (const d of destinationsFor(id)) assert.equal(copyHolding(d.dock.x, d.dock.y, copies, 300, here)?.id, d.destination, `${id}: at ${d.destination}'s jetty`);
     assert.equal(copyHolding(here.spawn.x, here.spawn.y, copies, 300, here), null);
   }

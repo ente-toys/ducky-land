@@ -8,7 +8,7 @@ test('exploring another island stays there at every zoom level',()=>{
     assert.equal(camera.x,32000);assert.equal(camera.y,16000);
   }
   const camera={x:400000,y:100000,zoom:1};constrainExploreCamera(camera,bounds);
-  assert.equal(camera.x,400000);assert.ok(camera.y<40000);
+  assert.equal(camera.x,400000);assert.equal(camera.y,100000);
 });
 test('zoom follows the chosen world point and preserves the flat cursor anchor',()=>{
   const camera={x:30000,y:-10000,zoom:.1}, point={x:32000,y:-9000};

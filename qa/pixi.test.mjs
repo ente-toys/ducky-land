@@ -98,7 +98,7 @@ test('original island art has complete placements, valid clipped SVGs and GPU-sa
     assert.ok(tile.width <= 1536 && tile.height <= 1536);
     area += tile.width * tile.height;
   }
-  assert.equal(area, world.width * world.height);
+  assert.equal(area, art.world.width * art.world.height);
 });
 
 test('all 34 wearables cover eight measured directions without missing or clipped artwork', () => {
@@ -217,7 +217,7 @@ test('butterflies flutter near their planters and settle under reduced motion',(
 
 test('rendered paths connect every district and mainland bridge approach', async()=>{
   const {createCanvas,loadImage}=await import('@napi-rs/canvas');
-  const world=JSON.parse(readFileSync(new URL('../rive/web/world.json',import.meta.url)));
+  const world=JSON.parse(readFileSync(new URL('../src/pixi/home-original-world.json',import.meta.url)));
   const canvas=createCanvas(world.width/4,world.height/4),ctx=canvas.getContext('2d');
   ctx.drawImage(await loadImage(fileURLToPath(new URL('../public/pixi-art/ground.svg',import.meta.url))),0,0,canvas.width,canvas.height);
   const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;

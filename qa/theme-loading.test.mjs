@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {Texture} from 'pixi.js';
+import {createGroundPool} from '../src/pixi/ground-stream.js';
 import {loadThemeArt} from '../src/pixi/theme-art.js';
 
-const map = {id: 'test', art: '/themes/test/art.json'};
+const map = {id: 'test', art: '/themes/test/art.json',origin:{x:0,y:0},width:100,height:100};
 const manifest = {
   ground: {tiles: [{src: 'shared.svg', x: 0, y: 0, width: 100, height: 100, resolution: 1}]},
   props: [{src: 'shared.svg', x: 50, y: 50, width: 20, height: 40, resolution: 2, shadow: false}],
@@ -18,15 +19,18 @@ const mockFetch = t => {
 test('theme art shares source leases at the highest resolution and releases them once', async t => {
   mockFetch(t);
   const acquired = [], released = [];
+  const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
+  t.after(()=>groundPool.destroy());
   const art = await loadThemeArt(map, {
+    groundPool,
     acquire: async (src, resolution) => {acquired.push([src, resolution]); return Texture.EMPTY;},
     release: src => released.push(src),
   });
-  assert.deepEqual(acquired, [['/themes/test/shared.svg', 2], ['/themes/test/other.svg', 2]]);
-  assert.equal(art.ground.children[0].texture, art.props[0].sprite.texture);
+  assert.deepEqual(acquired.sort(), [['/themes/test/shared.svg', 2], ['/themes/test/other.svg', 2],['/pixi-art/globe/test-ground.png',1]].sort());
+  assert.equal(groundPool.stats().residentTiles,0,'ground is not decoded until visible');
   assert.ok(art.groups.every(group => !group.visible), 'theme layers stay hidden while the caller asynchronously prepares animation and sleepers');
   art.destroy(); art.destroy();
-  assert.deepEqual(released, acquired.map(([src]) => src));
+  assert.deepEqual(released.sort(), acquired.map(([src]) => src).sort());
 });
 
 test('a failed texture releases every lease after pending textures settle', async t => {
@@ -42,5 +46,5 @@ test('a failed texture releases every lease after pending textures settle', asyn
   assert.equal(released.length, 0);
   finish();
   await assert.rejects(loading, /broken texture/);
-  assert.deepEqual(released, ['/themes/test/shared.svg', '/themes/test/other.svg']);
+  assert.deepEqual(released.sort(), ['/themes/test/shared.svg', '/themes/test/other.svg'].sort());
 });

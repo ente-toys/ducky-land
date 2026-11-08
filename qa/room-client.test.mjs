@@ -3,7 +3,8 @@ import test from 'node:test';
 import {RoomClient,OfflineFleet} from '../src/pixi/room-client.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {ISLANDS} from '../src/pixi/islands.js';
-const PLAIN=ISLANDS.find(island => island.id!=='home' && mapOf(island.id).home).id;
+// Home is the sole Home-map island after the duplicate islands were removed.
+const PLAIN=ISLANDS.find(island => island.id!=='home' && mapOf(island.id).home)?.id ?? 'home';
 import {destinationsFor,harborOf,boatSpots,boatHome,boatSlot,MOORING_CLEAR} from '../src/pixi/islands.js';
 import {JUMP_SECONDS,JUMP_CROUCH,JUMP_AIR,JUMP_LAND,JUMP_RISE,jumpHeight,jumpPose,startJump,walkStep} from '../src/pixi/player-motion.js';
 
@@ -16,8 +17,8 @@ function setup() {
   return {room,events,sent};
 }
 const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandId,online:2,
-  players:[{id:'player',islandId,mode,x:1800,y:430,turn:0,action:0,emoteVersion:0,travel:0}],
-  boats:[{id:'home-0',islandId,x:1800,y:430,turn:0,occupant:mode==='sailing'?'player':null}],
+  players:[{id:'player',islandId,mode,x:mode==='sailing'?6500:1800,y:mode==='sailing'?1600:430,turn:0,action:0,emoteVersion:0,travel:0}],
+  boats:[{id:'home-0',islandId,x:mode==='sailing'?6500:1800,y:mode==='sailing'?1600:430,turn:0,occupant:mode==='sailing'?'player':null}],
   self:{ack:0,path:[],emoteLeft:0},
 });
 
@@ -156,8 +157,8 @@ test('boarding and island changes clear prediction and boat interpolation withou
   assert.equal(room.pending.length,0);
   assert.equal(room.offsetX,0);
   assert.equal(room.emote(3),false);
-  room.destination(1900,430);
-  assert.deepEqual(room.player.sailTarget,{x:1900,y:430});
+  room.destination(6500,1700);
+  assert.deepEqual(room.player.sailTarget,{x:6500,y:1700});
   room.snapshot(packet(3,'blossom','sailing'));
   assert.equal(room.pending.length,0);
   assert.equal(room.player.sailTarget,null);
@@ -173,17 +174,17 @@ test('sailing prediction uses bounded motion and sends the authoritative island 
   const {room,sent}=setup();
   room.snapshot(packet(1,PLAIN,'sailing'));
   room.step(.05,{x:0,y:1});
-  assert.equal(room.player.y,449);
+  assert.equal(room.player.y,1619);
   assert.equal(sent.at(-1).islandId,PLAIN);
   room.disembark();
   assert.equal(room.player.docking,true);
   room.step(.05,{x:1,y:0});
   assert.equal(room.player.docking,false);
   assert.equal(room.player.sailTarget,null);
-  room.destination(1800,550);
+  room.destination(6500,1700);
   room.stopInput();
   const next=packet(2,PLAIN,'sailing');
-  next.self.sailTarget={x:1800,y:550};
+  next.self.sailTarget={x:6500,y:1700};
   room.snapshot(next);
   assert.equal(room.player.sailTarget,null,'unacknowledged stop survives reconciliation');
   room.dispose();

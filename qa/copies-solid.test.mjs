@@ -1,3 +1,4 @@
+import {mapPoint} from '../src/pixi/sphere-coordinates.js';
 // boss 6 Nov ("I am sailing on top of land"): what is DRAWN round you and what is SOLID must be the same islands at the same
 // offsets. archipelago.js draws every other island centred at cx + wrap(dx), cy + dy (round the current island's centre); the
 // sea (islands.js canSail, the room server's rule too) blocks every island inside the sea bounds. This walks every island
@@ -14,14 +15,14 @@ import walkWorld from '../rive/web/walk-world.json' with {type: 'json'};
 let mapOf = null;
 try {({mapOf} = await import('../src/pixi/island-maps.js'));} catch {/* single-map tree */}
 const homeNav = createNavigation({...world, ...walkWorld});
-const sizeAndNav = id => mapOf ? {width: mapOf(id).width, height: mapOf(id).height, nav: mapOf(id).nav()} : {width: world.width, height: world.height, nav: homeNav};
+const sizeAndNav = id => mapOf ? {width: mapOf(id).width, height: mapOf(id).height, cx:mapOf(id).cx, cy:mapOf(id).cy, origin:mapOf(id).origin, nav: mapOf(id).nav()} : {width: world.width, height: world.height, nav: homeNav};
 const SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0, wrap = v => v - SX * Math.round(v / SX);
 
 function drawnCopies(current) {   // archipelago.js place(): the same maths, island by island
-  const here = worldIsland(current), me = sizeAndNav(current), cx = me.width / 2, cy = me.height / 2;
+  const here = worldIsland(current), me = sizeAndNav(current), cx = me.cx, cy = me.cy;
   return WORLD_ISLANDS.filter(island => island.id !== current).map(island => {
-    const m = sizeAndNav(island.id), x = cx + wrap(island.x - here.x), y = cy + island.y - here.y;
-    return {id: island.id, ox: x - m.width / 2, oy: y - m.height / 2, ...m};   // the copy's map origin (renderLiveCopies)
+    const m = sizeAndNav(island.id),p=mapPoint(island.id,current,{x:m.cx,y:m.cy}),x=p.x,y=p.y;
+    return {id: island.id, ox: x - m.cx, oy: y - m.cy, ...m};   // the copy's map origin (renderLiveCopies)
   });
 }
 
@@ -31,10 +32,15 @@ for (const current of [...new Set(CURRENT)]) test(`every island drawn round ${cu
   let checked = 0;
   for (const copy of drawnCopies(current)) {
     if (copy.ox + copy.width < b.x0 || copy.ox > b.x1 || copy.oy + copy.height < b.y0 || copy.oy > b.y1) continue;   // outside the sea: never reachable
-    for (let x = 100; x < copy.width; x += 200) for (let y = 100; y < copy.height; y += 200) {
+    for (let x = copy.origin.x+100; x < copy.origin.x+copy.width; x += 200) for (let y = copy.origin.y+100; y < copy.origin.y+copy.height; y += 200) {
       if (!copy.nav.walkable(x, y)) continue;
+      // Raised Canal decks intentionally carry walkers above sailable water.
+      // Ground beside and beyond those explicit crossings must still block boats.
+      const raised=mapOf?.(copy.id).world.walkways?.some(w=>{if(!w.boatPassUnder)return false;const dx=w.b[0]-w.a[0],dy=w.b[1]-w.a[1],t=Math.max(0,Math.min(1,((x-w.a[0])*dx+(y-w.a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-w.a[0]-t*dx,y-w.a[1]-t*dy)<w.w/2;});
+      if(raised)continue;
       checked++;
-      assert.equal(canSail(copy.ox + x, copy.oy + y, current), false, `${copy.id} ground at its local ${x},${y} (${Math.round(copy.ox + x)},${Math.round(copy.oy + y)} round ${current}) is sailable`);
+      const at=mapPoint(copy.id,current,{x,y});
+      assert.equal(canSail(at.x,at.y,current), false, `${copy.id} ground at its local ${x},${y} (${Math.round(copy.ox + x)},${Math.round(copy.oy + y)} round ${current}) is sailable`);
     }
   }
   assert.ok(checked > 1000, `checked ${checked} ground points`);

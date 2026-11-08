@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Pinned boat depth check</title>
+<style>body{margin:0;background:#c4e2f5;font:14px system-ui}canvas{display:block}#status{position:fixed;top:8px;left:8px}</style><div id="status">Loading</div>
+<script type="module">
+import {Application,Container,Sprite} from 'pixi.js';
+import {createDuck} from '/src/pixi/duck.js';
+import {loadBoatViews} from '/src/pixi/boat-views.js';
+import {createSailingFX} from '/src/pixi/sailing-fx.js';
+const app=new Application();await app.init({width:480,height:440,resolution:1,background:0xc4e2f5,antialias:true});document.body.append(app.canvas);app.stop();
+const water=new Container(),objects=new Container({sortableChildren:true});app.stage.addChild(water,objects);
+const bank=await loadBoatViews(),duck=await createDuck({outfit:{},seed:0});objects.addChild(duck.root);
+const fx=await createSailingFX({water,objects});const root=new Container(),sprite=new Sprite();root.addChild(sprite);objects.addChild(root);const entry={root,sprite};
+window.setFrame=async (n,{layer='all',reduced=false}={})=>{
+ const v=bank.views[n];fx.forget('review');const boat={id:'review',x:240,y:355,turn:v.angle,occupant:'rider',travel:0};
+ fx.boat(entry,boat,true);root.zIndex=357;
+ const look=fx.duck({id:'rider',x:240,y:355,mode:'sailing',boatId:'review',turn:v.angle,travel:0},true);
+ duck.root.position.set(look.x,look.y);duck.root.scale.set(look.scale);duck.root.rotation=look.rotation;duck.root.zIndex=look.z;
+ for(let k=0;k<60;k++)duck.update(.1,{turn:look.turn,time:0,reducedMotion:reduced,action:0,speed:0,sailing:true});
+ fx.front(entry);root.visible=layer==='all'||layer==='boat';duck.root.visible=layer==='all'||layer==='duck';entry.front.visible=layer==='all'||layer==='front';
+ app.render();window.proof={frame:n,seat:v.seat,pin:[look.x,look.y],pivot:[root.pivot.x,root.pivot.y],z:[root.zIndex,duck.root.zIndex,entry.front.zIndex],mask:look.mask};
+ return app.canvas.toDataURL('image/png');
+};
+await window.setFrame(0);window.ready=true;
+if(!new URLSearchParams(location.search).has('capture')){let n=0;setInterval(()=>{window.setFrame(n);document.querySelector('#status').textContent=`Pinned Ducky, view ${n}`;n=(n+1)%48;},110);}
+</script></html>

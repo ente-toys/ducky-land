@@ -7,7 +7,7 @@ import {createIslandBrain,CROWD_ACTION} from '../rive/web/crowd.js';
 import {world} from '../server-world.mjs';
 import {sample} from '../rive/web/interpolation.js';
 
-async function client(name,city=0){const socket=new WebSocket(`ws://127.0.0.1:8810/room?name=${name}&city=${city}&cap=8&shades=1&acc=7&shoes=2`,{origin:'http://127.0.0.1:8800'}),messages=[];let welcome;
+async function client(name,city=0){const socket=new WebSocket(`ws://127.0.0.1:${Number(process.env.DUCKY_WS_PORT)||8810}/room?name=${name}&city=${city}&cap=8&shades=1&acc=7&shoes=2`,{origin:'http://127.0.0.1:8800'}),messages=[];let welcome;
  socket.on('message',bytes=>{const m=JSON.parse(bytes);messages.push(m);if(m.type==='welcome')welcome=m;});
  for(let i=0;i<200&&!welcome;i++)await delay(10);assert.ok(welcome,'Socket welcome');
  return{socket,messages,welcome,send:m=>socket.send(JSON.stringify(m)),get snapshot(){return messages.findLast(m=>m.type==='snapshot');}};
@@ -22,7 +22,7 @@ test('two actual socket clients share identity, motion, turns, emotes, totals an
   const total=a.snapshot.quacks.Kochi;a.send({type:'emote',action:'quack',seq:1});a.send({type:'emote',action:'quack',seq:1});await delay(160);
   assert.equal(b.snapshot.quacks.Kochi,total+1);assert.equal(b.snapshot.players.find(p=>p.id===a.welcome.id).action,2);
   b.send({type:'emote',action:'heart',seq:1});await delay(140);assert.equal(a.snapshot.players.find(p=>p.id===b.welcome.id).action,4);
-  const before={...a.snapshot.players.find(p=>p.id===a.welcome.id)};a.send({type:'state',seq:++seq,x:10,y:10,facing:1,turn:0,action:1});await delay(150);seen=b.snapshot.players.find(p=>p.id===a.welcome.id);assert.equal(seen.x,before.x);assert.equal(seen.y,before.y);
+  const before={...a.snapshot.players.find(p=>p.id===a.welcome.id)};a.send({type:'state',seq:++seq,x:-2000,y:-2000,facing:1,turn:0,action:1});await delay(150);seen=b.snapshot.players.find(p=>p.id===a.welcome.id);assert.equal(seen.x,before.x);assert.equal(seen.y,before.y);
   assert.ok(a.snapshot.bots.some(d=>String(d.id).startsWith('social-')));assert.ok(a.snapshot.bots.every(d=>Number.isFinite(d.x)&&Number.isFinite(d.y)&&Number.isInteger(d.action)));
   b.socket.close();await delay(200);assert.equal(a.snapshot.players.length,1);
  }finally{a.socket.close();b.socket.close();}

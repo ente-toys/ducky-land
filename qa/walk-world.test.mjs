@@ -5,11 +5,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import {createServer} from 'vite';
 
 test('rive/web/walk-world.json matches a fresh build from the current placements and sleepers', async () => {
   const root = fileURLToPath(new URL('../', import.meta.url));
-  const vite = await createServer({root, server:{middlewareMode:true, hmr:false, watch:null}, appType:'custom', logLevel:'error'});
+  const vite = await createServer({root, configLoader:'native', cacheDir:join(tmpdir(),'ducky-live-vite-qa'), server:{middlewareMode:true, hmr:false, watch:null}, appType:'custom', logLevel:'error'});
   try {
     const load = p => vite.ssrLoadModule(p);
     const world = (await load('/rive/web/world.json')).default;
@@ -23,7 +25,7 @@ test('rive/web/walk-world.json matches a fresh build from the current placements
     const residents = createSimulation(local, 8612, {sleepingNpcs:true,npcCount:beds.length});
     assert.equal(residents.ducks.filter(d=>d.sleeping).length,40, 'Home allocates 40 actual NPCs');
     const walk = {...local, obstacles: [...local.obstacles, ...beds.map(P.sleeperFootprint)]};
-    const fresh = Object.fromEntries(['width', 'height', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
+    const fresh = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
     const saved = JSON.parse(readFileSync(new URL('../rive/web/walk-world.json', import.meta.url)));
     // through JSON, as the script writes it, so -0 and undefined compare the way the file stores them
     const built = JSON.parse(JSON.stringify(fresh));

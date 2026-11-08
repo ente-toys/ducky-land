@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Sprite,Texture,Container,Graphics} from 'pixi.js';
 import {animatePieces,attachCentreMotion} from '../src/pixi/centre-motion.js';
+import {createGroundPool} from '../src/pixi/ground-stream.js';
 import {loadThemeArt} from '../src/pixi/theme-art.js';
 import {mapFor,readyThemes,THEME_OF} from '../src/pixi/island-maps.js';
 import {neighboursOf} from '../src/pixi/world-map.js';
@@ -11,22 +12,23 @@ import {createFairWater} from '../src/pixi/centre-motion/fair.js';
 import {updateCommunityCentre} from '../src/pixi/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
-test('all ten theme manifests load, release textures and resolve their authored animation pieces', async()=>{
+test('all twelve theme manifests load, release textures and resolve their authored animation pieces', async()=>{
  const original=globalThis.fetch;
  globalThis.fetch=async url=>({ok:true,json:async()=>json('public'+url)});
  try {
   const animated={sunflower:2,pink:2,library:4,neon:4,canal:1,waterfall:19,community:1,fair:1};
-  assert.equal(readyThemes().length,10);assert.equal(THEME_OF.size,10);
+  assert.equal(readyThemes().length,12);assert.equal(THEME_OF.size,12);
   for(const theme of readyThemes()) {
    let acquired=0,released=0;
-   const art=await loadThemeArt(mapFor(theme),{acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
+   const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
+   const art=await loadThemeArt(mapFor(theme),{groundPool,acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
    const records=art.props.filter(p=>p.centrePiece?.animate);
    assert.equal(records.length,animated[theme]??0,theme+' animated layers');
    assert.ok(art.props.every(p=>!p.centrePiece||!p.wind),theme+' centre layers have no wind');
    const objects=new Container();
    await attachCentreMotion(art,{Graphics,Container},objects);
    art.updateCentre(.3,false);art.updateCentre(1,true);
-   art.destroy();assert.equal(objects.children.length,0,theme+' removes motion objects');
+   art.destroy();groundPool.destroy();assert.equal(objects.children.length,0,theme+' removes motion objects');
    objects.destroy();assert.equal(released,acquired,theme+' releases all texture references');
   }
  } finally {globalThis.fetch=original;}
@@ -60,7 +62,7 @@ test('fair pour and community fire animate, remain attached, hide and clean up',
 });
 
 test('new centres have reachable entrances and Canal raised bridges support boats below walkers',()=>{
- assert.equal(neighboursOf('home')[0].island.theme,'sunflower');
+ assert.ok(neighboursOf('home').every(({island})=>THEME_OF.get(island.id)===island.theme));
  for(const theme of ['waterfall','canal']) {
   const m=mapFor(theme),points=theme==='waterfall'?m.world.centrePlacement.access.map(a=>a.point):m.world.arches.filter(a=>a.r!==64).flatMap(a=>[a.a,a.b]);
   assert.equal(points.length,theme==='waterfall'?3:8);

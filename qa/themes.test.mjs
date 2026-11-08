@@ -1,3 +1,4 @@
+import {mapPoint} from '../src/pixi/sphere-coordinates.js';
 // boss 6 Nov: the first themed islands (Sunflower, Pink dollhouse, Library), each on its own map (src/pixi/island-maps.js).
 // The registry, each theme's own moorings, landing on a themed island, sailing round one, and maps of a different size.
 import assert from 'node:assert/strict';
@@ -13,8 +14,9 @@ const themedIslands = () => [...THEME_OF].filter(([, theme]) => readyThemes().in
 
 test('registry: home is today\'s map, the three islands nearest home carry the three themes, unknown themes fall back to home', () => {
   assert.equal(mapFor('home'), HOME_MAP);
-  assert.equal(HOME_MAP.width, 5800); assert.equal(HOME_MAP.height, 4400);
-  assert.deepEqual([HOME_MAP.JETTY.foot.x, HOME_MAP.JETTY.foot.y, HOME_MAP.JETTY.tip.x, HOME_MAP.JETTY.tip.y], [1726, 830, 1640, 400]);
+  assert.equal(HOME_MAP.width, 11000); assert.equal(HOME_MAP.height, 8250);
+  assert.ok(HOME_MAP.nav().walkable(HOME_MAP.JETTY.foot.x,HOME_MAP.JETTY.foot.y));
+  assert.ok(canSail(HOME_MAP.HARBOR.water.x,HOME_MAP.HARBOR.water.y));
   assert.equal(mapFor('no-such-theme'), HOME_MAP);
   assert.equal(mapOf('home'), HOME_MAP);
   for (const [id,theme] of [['blossom','sunflower'],['sunset','pink'],['isle-251','library'],['isle-250','community']]) assert.equal(THEME_OF.get(id),theme);
@@ -102,9 +104,9 @@ test('sailing round a themed island: never on its land, coast to coast in its ow
     const m = mapOf(id), b = seaBoundsFor(id);
     // two points of open sea on opposite sides of the island, just off its coast
     const off = (x, y) => {for (let r = 0; r < 1500; r += 25) for (const [dx, dy] of [[0, -r], [0, r], [-r, 0], [r, 0]]) if (canSail(x + dx, y + dy, id)) return {x: x + dx, y: y + dy}; return null;};
-    const west = off(-250, m.height / 2), east = off(m.width + 250, m.height / 2);
+    const west = off(m.origin.x - 250, m.cy), east = off(m.origin.x + m.width + 250, m.cy);
     assert.ok(west && east, `${id}: sea on both sides`);
-    for (const [from, to] of [[west, east], [{x: m.width / 2, y: -250}, {x: m.width / 2, y: m.height + 250}]]) {
+    for (const [from, to] of [[west, east], [{x: m.cx, y: m.origin.y - 250}, {x: m.cx, y: m.origin.y + m.height + 250}]]) {
       const a = {islandId: id, mode: 'sailing', ...(canSail(from.x, from.y, id) ? from : off(from.x, from.y)), path: []}, goal = canSail(to.x, to.y, id) ? to : off(to.x, to.y);
       assert.ok(setSailDestination(a, goal.x, goal.y), `${id}: a route round the island`);
       for (let i = 0; i < 8000 && a.sailTarget; i++) {
@@ -128,14 +130,16 @@ test('maps of another size: a small themed island lines up round its centre, sai
     assert.equal(m.width, W);
     // drawn and solid at the same place: the island's centre sits where the world map puts it
     const o = originOffset('home', id), c = offsetOf('home', id);
-    assert.deepEqual({x: o.x + W / 2, y: o.y + H / 2}, {x: c.x + HOME_MAP.width / 2, y: c.y + HOME_MAP.height / 2});
+    assert.ok(Math.hypot(o.x + W / 2 - c.x - HOME_MAP.cx, o.y + H / 2 - c.y - HOME_MAP.cy) < 1e-6);
     assert.deepEqual(islandOffset('home', id), o);
     assert.equal(canSail(o.x + cx, o.y + cy, 'home'), false, 'its middle is land, seen from home');
     assert.equal(canSail(o.x + cx + 1300, o.y + cy, 'home'), true, 'beside it is sea');
     // and back: home seen from the small island
     const back = originOffset(id, 'home');
-    assert.deepEqual({x: Math.round(back.x), y: Math.round(back.y)}, {x: Math.round(-o.x), y: Math.round(-o.y)});
-    assert.equal(canSail(back.x + 2820, back.y + 2400, id), false, 'home\'s plaza is land, seen from it');
+    const homeCentre=mapPoint('home',id,{x:HOME_MAP.cx,y:HOME_MAP.cy});
+    const roundTrip=mapPoint(id,'home',homeCentre);assert.ok(Math.hypot(roundTrip.x-HOME_MAP.cx,roundTrip.y-HOME_MAP.cy)<1e-8);
+    const plaza=mapPoint('home',id,{x:2820,y:2400});
+    assert.equal(canSail(plaza.x,plaza.y,id), false, 'home\'s plaza is land, seen from it');
     // its own jetty berths first (no boats listed: three along the jetty), then boats off its own beaches
     assert.ok(boatSpots(id).length >= 3);
     for (const s of boatSpots(id).slice(0, 3)) assert.ok(Math.abs(s.x - cx) <= 160 && s.y > cy + 560, `berth ${s.x},${s.y} beside the south jetty`);
@@ -143,7 +147,7 @@ test('maps of another size: a small themed island lines up round its centre, sai
     const boats = createBoats();
     assert.equal(boats.filter(b => b.islandId === id).length, boatSpots(id).length);
     // dock at its jetty from home
-    const dock = destinationsFor('home').find(d => d.destination === id)?.dock ?? {x: m.HARBOR.water.x + o.x, y: m.HARBOR.water.y + o.y};
+    const dock = destinationsFor('home').find(d => d.destination === id)?.dock ?? mapPoint(id,'home',m.HARBOR.water);
     assert.ok(canSail(dock.x, dock.y, 'home'));
     const a = {islandId: 'home', mode: 'sailing', ...dock, path: []};
     if (destinationsFor('home').some(d => d.destination === id)) {assert.ok(crossIsland(a)); assert.equal(a.islandId, id); assert.deepEqual({x: a.x, y: a.y}, m.HARBOR.water);}
