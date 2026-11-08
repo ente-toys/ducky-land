@@ -1,0 +1,134 @@
+[
+  {
+    "name": "odyssey",
+    "source": "odyssey-sunk.png",
+    "size": 640,
+    "removedPixels": 677569,
+    "bounds": [
+      68,
+      134,
+      949,
+      842
+    ]
+  },
+  {
+    "name": "tree-and-rowboat",
+    "source": "tree-and-rowboat.png",
+    "size": 640,
+    "removedPixels": 689506,
+    "bounds": [
+      123,
+      108,
+      888,
+      884
+    ]
+  },
+  {
+    "name": "broken-shipwreck",
+    "source": "broken-shipwreck.png",
+    "size": 640,
+    "removedPixels": 770817,
+    "bounds": [
+      49,
+      287,
+      970,
+      777
+    ]
+  },
+  {
+    "name": "04-small-mountain",
+    "source": "04-small-mountain.png",
+    "size": 640,
+    "removedPixels": 834625,
+    "bounds": [
+      164,
+      253,
+      827,
+      746
+    ]
+  },
+  {
+    "name": "05-lighthouse-rock",
+    "source": "05-lighthouse-rock.png",
+    "size": 640,
+    "removedPixels": 845315,
+    "bounds": [
+      206,
+      156,
+      767,
+      820
+    ]
+  },
+  {
+    "name": "06-palm-treasure",
+    "source": "06-palm-treasure.png",
+    "size": 640,
+    "removedPixels": 795680,
+    "bounds": [
+      181,
+      192,
+      807,
+      827
+    ]
+  },
+  {
+    "name": "07-pink-blossom",
+    "source": "07-pink-blossom.png",
+    "size": 640,
+    "removedPixels": 704220,
+    "bounds": [
+      149,
+      145,
+      863,
+      872
+    ]
+  },
+  {
+    "name": "08-snow-igloo",
+    "source": "08-snow-igloo.png",
+    "size": 640,
+    "removedPixels": 715856,
+    "bounds": [
+      86,
+      230,
+      923,
+      809
+    ]
+  },
+  {
+    "name": "09-spooky-purple",
+    "source": "09-spooky-purple.png",
+    "size": 640,
+    "removedPixels": 799388,
+    "bounds": [
+      136,
+      165,
+      879,
+      819
+    ]
+  },
+  {
+    "name": "11-volcano",
+    "source": "11-volcano.png",
+    "size": 640,
+    "removedPixels": 659293,
+    "bounds": [
+      45,
+      56,
+      974,
+      902
+    ]
+  },
+  {
+    "name": "12-coral-atoll",
+    "source": "12-coral-atoll.png",
+    "size": 640,
+    "removedPixels": 588110,
+    "bounds": [
+      22,
+      124,
+      1001,
+      852
+    ]
+  }
+]
