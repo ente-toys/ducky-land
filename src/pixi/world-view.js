@@ -1,8 +1,9 @@
-import {horizonRatio,pixelChart} from './sphere-projection.js';
+import {horizonRatio,pixelChart,lensAngle} from './sphere-projection.js';
 import {spherePoint,localPoint,viewFrame} from './sphere-coordinates.js';
 import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from './world-map.js';
 import {dot,expMap} from './sphere.js';
-import {polar,flatRigid} from './rigid.js';
+import {flatRigid} from './rigid.js';
+import {globeScreen} from './globe-screen.js';
 import {mapOf} from './island-maps.js';
 import {ISLETS} from './islets.js';
 
@@ -284,52 +285,15 @@ export function createWorldView(app, scene, isletView) {
         return Math.hypot(px,py)>horizon?null:gOf(px,py);
       };
       this.debug={ball,horizon,atlasSize:4096,source:live?'live':'atlas',colourBlends:0};
-      this.globe={w,h,Rp,Rw,ball,view,id,camera:{x:cam.x,y:cam.y}};
+      this.globe={w,h,Rp,Rw,ball,view,id,basis,camera:{x:cam.x,y:cam.y}};
+      // boss 8 Nov: rigid stickers placed by the sphere (globe-screen.js). Islands, islets, glows and the pin all use the
+      // one projection, so they stay put on the ball while it turns.
+      const G=globeScreen({id,cam,ball,w,h,basis}),stickerOf=G.sticker;
       const project=(x,y)=>{
         const p=spherePoint(id,{x,y}),vz=dot(p,view.center);
         if(ball>.5&&vz<=0)return {x:0,y:0,face:-1};
-        let px=dot(p,view.east)*Rp*ball+(x-cam.x)*cam.zoom*(1-ball),py=-dot(p,view.north)*Rp*ball+(y-cam.y)*cam.zoom*(1-ball);
-        if(ball<.999)for(let it=0;it<4;it++){
-          const [gx,gy]=gOf(px,py),ex=x-gx,ey=y-gy;if(Math.abs(ex)+Math.abs(ey)<.5)break;
-          const e=.5,[gx1,gy1]=gOf(px+e,py),[gx2,gy2]=gOf(px,py+e),a=(gx1-gx)/e,b=(gx2-gx)/e,c=(gy1-gy)/e,d=(gy2-gy)/e,det=a*d-b*c;
-          if(Math.abs(det)<1e-12)break;px+=(d*ex-b*ey)/det;py+=(-c*ex+a*ey)/det;
-        }
-        if(Math.hypot(px,py)>=horizon)return {x:0,y:0,face:-1};
-        return {x:w/2+basis.a*px+basis.c*py,y:h/2+basis.b*px+basis.d*py,face:ball>.5?vz:1};
-      };
-      // boss 8 Nov: rigid stickers. Screen pixel of any sphere point, exactly as the fragment shader draws it.
-      const screenOf=p=>{
-        let px,py;
-        if(ball>=.25){   // past a quarter the lens is analytic: r = (1-ball)*angle + ball*sin(angle)
-          const e=dot(p,view.east),n=dot(p,view.north),s=Math.hypot(e,n),a=Math.atan2(s,dot(p,view.center));
-          if(a>=Math.PI/2)return null;
-          const r=((1-ball)*a+ball*Math.sin(a))*Rp/(s||1);px=e*r;py=-n*r;
-        }else{
-          const g=localPoint(id,p),vz=dot(p,view.center);if(vz<=-.2)return null;
-          px=(g.x-cam.x)*cam.zoom;py=(g.y-cam.y)*cam.zoom;
-          if(ball>1e-6){px=dot(p,view.east)*Rp*ball+px*(1-ball);py=-dot(p,view.north)*Rp*ball+py*(1-ball);
-            for(let it=0;it<8;it++){
-              const [gx,gy]=gOf(px,py),ex=g.x-gx,ey=g.y-gy;if(!(Math.abs(ex)+Math.abs(ey)>.001))break;
-              const e=.25,[gx1,gy1]=gOf(px+e,py),[gx2,gy2]=gOf(px,py+e),a=(gx1-gx)/e,b=(gx2-gx)/e,c=(gy1-gy)/e,d=(gy2-gy)/e,det=a*d-b*c;
-              if(!(Math.abs(det)>1e-14))break;px+=(d*ex-b*ey)/det;py+=(-c*ex+a*ey)/det;
-            }}
-          if(!Number.isFinite(px+py))return null;
-        }
-        if(Math.hypot(px,py)>=horizon)return null;
-        return {x:w/2+basis.a*px+basis.c*py,y:h/2+basis.b*px+basis.d*py};
-      };
-      // Centre from the projection, the nearest rotation of its Jacobian, one uniform scale: the camera zoom at the flat
-      // end (true size, matching the live scene), the area-preserving sqrt|det J| as the ball closes, shrinking to nothing
-      // at the horizon instead of popping.
-      const stickerOf=(S,step)=>{
-        const c=S(0,0),C=screenOf(c);if(!C)return null;
-        const xp=screenOf(S(step,0)),xm=screenOf(S(-step,0)),yp=screenOf(S(0,step)),ym=screenOf(S(0,-step));
-        if(!xp||!xm||!yp||!ym)return null;
-        const q=polar((xp.x-xm.x)/(2*step),(xp.y-xm.y)/(2*step),(yp.x-ym.x)/(2*step),(yp.y-ym.y)/(2*step));
-        const a=Math.acos(Math.max(-1,Math.min(1,dot(c,view.center)))),limb=ball>.5?1:ease((Math.PI/2-a)/.12);
-        const scale=(cam.zoom*(1-ball)+q.scale*ball)*(ball>.5?1:limb);
-        if(!(scale>1e-6))return null;
-        return {x:C.x,y:C.y,cos:q.cos,sin:q.sin,scale,depth:dot(c,view.center)};
+        const s=G.screenOf(p);if(!s)return {x:0,y:0,face:-1};
+        return {x:s.x,y:s.y,face:ball>.5?vz:1};
       };
       const isl=u.uIsl,flat=u.uIslFlat,info=u.uIslInfo,it=u.uIt,itInfo=u.uItInfo;
       const stickers=[];
@@ -429,9 +393,13 @@ export function createWorldView(app, scene, isletView) {
       const g = this.globe;
       if (!g || g.ball < .3) return null;
       const view=camera?viewFrame(g.id,camera):g.view;
+      // the inverse of the globe lens (globe-screen.js), so the spot under the finger is the spot that was drawn there
+      const q=g.basis,det=q.a*q.d-q.b*q.c,max=.97*horizonRatio(g.ball);
       const at=p=>{
-        let x=(p.x-g.w/2)/g.Rp,y=-(p.y-g.h/2)/g.Rp;const d=Math.hypot(x,y);if(d>.97){x*=.97/d;y*=.97/d;}
-        const z=Math.sqrt(Math.max(0,1-x*x-y*y));return view.center.map((v,k)=>v*z+view.east[k]*x+view.north[k]*y);
+        const sx=p.x-g.w/2,sy=p.y-g.h/2;let x=(q.d*sx-q.c*sy)/det/g.Rp,y=-(-q.b*sx+q.a*sy)/det/g.Rp;const d=Math.hypot(x,y);
+        if(d>max){x*=max/d;y*=max/d;}
+        const r=Math.min(d,max),a=lensAngle(r,g.ball),s=r>1e-9?Math.sin(a)/r:1,z=Math.cos(a);
+        return view.center.map((v,k)=>v*z+(view.east[k]*x+view.north[k]*y)*s);
       };
       const a=localPoint(g.id,at(from)),b=localPoint(g.id,at(to));return {dx:a.x-b.x,dy:a.y-b.y};
     },
