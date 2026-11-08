@@ -4,6 +4,7 @@ import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {dot,logMap} from '../src/pixi/sphere.js';
 import {spherePixel,horizonRatio} from '../src/pixi/sphere-projection.js';
+import {paintWeight} from '../src/pixi/globe-screen.js';
 const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
 const mix=(a,b,t)=>a.map((v,k)=>v+(b[k]-v)*t);
 const median=a=>a.sort((a,b)=>a-b)[a.length>>1]??null;
@@ -15,35 +16,39 @@ function bilinear(image,u,v){
  return mix(mix(at(x0,y0),at(x0+1,y0),fx),mix(at(x0,y0+1),at(x0+1,y0+1),fx),fy);
 }
 export function atlasReference(x,y,state,images,width,height){
- const {camera,islandId,ball}=state,px=x-width/2,py=y-height/2;
+ const {camera,islandId,ball}=state,dx=x-width/2,dy=y-height/2;
+ const basis=camera.basis??{a:1,b:0,c:0,d:1},det=basis.a*basis.d-basis.b*basis.c;
+ const px=(basis.d*dx-basis.c*dy)/det,py=(-basis.b*dx+basis.a*dy)/det;
  const p=spherePixel(islandId,camera,px,py,ball);if(!p)return null;
  const Rp=WORLD_GEO.Rw*camera.zoom,edge=Math.hypot(px,py)/(Rp*horizonRatio(ball));if(edge>.86)return null;
  const len=Math.hypot(px,py),v=[len?px/len*edge:0,len?-py/len*edge:0,Math.sqrt(1-edge*edge)];
  const lit=dot(v,light)/ln,shade=(1-smooth(.12,.3,lit))*ball,highlight=smooth(.8,.95,lit)*ball,rim=smooth(.94,1,edge)**2*.45*ball;
  const lighting=c=>mix(c.map((c,k)=>c*(1-shade+shade*[.72,.8,.98][k])+[.06,.07,.08][k]*highlight),[.55,.82,1],rim).map(c=>Math.max(0,Math.min(255,c*255)));
  const sea=lighting(mix([110/255,201/255,222/255],[.2,.52,.86],ball));
- if(state.stickers){
-  // boss 8 Nov: islands are rigid stickers. Read each through the matrix the page drew it with (front first).
-  for(const st of state.stickers){
-   const det=st.a*st.d-st.b*st.c,dx=x-st.x,dy=y-st.y,qx=(st.d*dx-st.c*dy)/det,qy=(-st.b*dx+st.a*dy)/det;
-   const size=st.kind==='island'?mapOf(st.id):{width:st.width,height:st.width},u=.5+qx/size.width,v=.5+qy/size.height;
-   if(u<=0||v<=0||u>=1||v>=1)continue;
-   if(st.kind!=='island'||st.mode==='live')return null;
-   const island=WORLD_ISLANDS.find(i=>i.id===st.id),image=images.get(island.theme??'home');if(!image)return null;
-   const c=bilinear(image,u,v);if(c[3]<1)continue;if(c[3]<254)return null;
-   return {colour:lighting(c.slice(0,3).map(c=>c/255)),sea};
-  }
-  return null;
- }
+ let best=null;
  for(const i of WORLD_ISLANDS){
-  const m=mapOf(i.id);if(dot(p,i.center)<Math.cos(Math.hypot(m.width,m.height)/2/WORLD_GEO.Rw))continue;
-  const q=logMap(i,p,WORLD_GEO.Rw),u=.5+q.x/m.width,v=.5+q.y/m.height;
+  const st=state.stickers?.find(s=>s.kind==='island'&&s.id===i.id);
+  if(state.stickers&&!st)continue;
+  if(dot(p,i.center)<0)continue;
+  const m=mapOf(i.id),sphere=logMap(i,p,WORLD_GEO.Rw),k=st?.onBall??paintWeight(ball);
+  // A centre Jacobian only describes an infinitesimal neighbourhood. Painting
+  // uses the inverse sphere chart at EVERY pixel, blended with the rigid map.
+  let q=sphere;
+  if(st&&k<1){
+   const r=st.rigid??st,det=r.a*r.d-r.b*r.c,dx=x-r.x,dy=y-r.y;
+   q={x:(r.d*dx-r.c*dy)/det*(1-k)+sphere.x*k,y:(-r.b*dx+r.a*dy)/det*(1-k)+sphere.y*k};
+  }
+  const u=.5+q.x/m.width,v=.5+q.y/m.height;
   if(u<=0||v<=0||u>=1||v>=1)continue;
   const image=images.get(i.theme??'home');if(!image)continue;
-  const c=bilinear(image,u,v);if(c[3]<254)continue;
-  return {colour:lighting(c.slice(0,3).map(c=>c/255)),sea};
+  const c=bilinear(image,u,v),distance=q.x*q.x+q.y*q.y;if(c[3]<=.255)continue;
+  const opaque=c[3]>127.5,bestOpaque=best?.c[3]>127.5;
+  if(!best||(opaque&&!bestOpaque)||(opaque===bestOpaque&&distance<best.distance))best={c,distance,live:st?.mode==='live'};
  }
- return null;
+ // Only test truly opaque interior colours; preserve the original strict
+ // opacity/colour thresholds and skip the live scene's animated content.
+ if(!best||best.live||best.c[3]<254)return null;
+ return {colour:lighting(best.c.slice(0,3).map(c=>c/255)),sea};
 }
 export function midZoomQuality(png,state,images){
  const {width,height,data}=png,errors=[],opacity=[],sharp=[],blurred=[];

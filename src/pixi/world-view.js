@@ -36,9 +36,7 @@ out vec4 finalColor;
 uniform sampler2D uScene;
 uniform sampler2D uWorld;
 uniform sampler2D uIslets;
-// boss 8 Nov ("I don't want any skew"): every island and islet is a rigid sticker. The CPU projects its centre and
-// takes the nearest rotation and a uniform scale of the projection there (rigid.js), then hands each sticker over as
-// screen centre + inverse rotation/scale. The shader never pushes art through a sphere chart, so nothing shears.
+// Rigid placements at the flat end, blended into each island's sphere chart below.
 // uIsl: screen centre xy, cos/s, sin/s.  uIslFlat: where the sticker sits in this island's flat chart (the live scene
 // render): centre xy, cos, sin.  uIslInfo: map width, height, mode (0 hidden, 1 atlas, 2 live scene), atlas cell.
 uniform vec4 uIsl[13];
@@ -111,31 +109,43 @@ vec2 placeQ(vec4 S,vec3 c,vec3 e,vec3 n,float k,vec2 X,vec3 P){
  vec2 b=chartQ(c,e,n,P);if(k>.9999)return b;
  return mix(stickQ(S,X),b,k);
 }
-vec3 islands(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 sea,vec3 under){
+// Transparent padding never owns a pixel. Among opaque pieces of art, choose the
+// closest local centre; retain a soft fringe only when no opaque coast covers it.
+bool owns(float alpha,float distance,float bestAlpha,float bestDistance){
+ if(alpha<=.001)return false;
+ bool opaque=alpha>.5,bestOpaque=bestAlpha>.5;
+ if(opaque!=bestOpaque)return opaque;
+ return bestAlpha==0.||distance<bestDistance;
+}
+vec3 islands(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
+ vec4 best=vec4(0.);float bestAlpha=0.,bestDistance=1e30;
  for(int i=0;i<13;i++){
   vec4 info=uIslInfo[i];if(info.z<.5)continue;
   float k=uIslAux[i].x>.5?uPaint:1.;
   vec2 q=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X,P0);
   vec2 uv=q/info.xy+.5;
   if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
+  float alpha=textureLod(uWorld,cellUV(int(info.w+.5),uv),0.).a,distance=dot(q,q);
+  if(!owns(alpha,distance,bestAlpha,bestDistance))continue;
+  vec4 c;
   if(info.z>1.5){
-   // The live scene, read through the same rigid placement it was drawn with. Only where this island's own art (a little
-   // grown, via a coarse mip) has land: another island's land seen in this rectangle is that island's business.
-   if(textureLod(uWorld,cellUV(int(info.w+.5),uv),3.).a<.01)continue;
+   // The scene includes sea and other islands. Its rectangle/alpha cannot be a
+   // coverage mask: ownership always comes from this island's own atlas art.
    vec4 f=uIslFlat[i];vec2 g=f.xy+vec2(f.z*q.x-f.w*q.y,f.w*q.x+f.z*q.y);
-   vec4 c=textureLod(uScene,sceneUV(g),0.);
-   if(c.a>.001)return over(under,c);
+   c=textureLod(uScene,sceneUV(g),0.);
   }else{
    // Mip level from the true footprint one pixel across and down, biased sharp (x.6).
    vec2 qx=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(0.,1.),P2);
    vec2 dx=(qx-q)/info.xy*(.6*1022./4096.),dy=(qy-q)/info.xy*(.6*1022./4096.);
-   vec4 c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
-   if(c.a>.001)return over(under,c);
+   c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
   }
+  if(c.a<=.001)continue;
+  best=c;bestAlpha=alpha;bestDistance=distance;
  }
- return under;
+ return over(under,best);
 }
 vec3 islets(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
+ vec4 best=vec4(0.);float bestAlpha=0.,bestDistance=1e30;
  for(int i=0;i<22;i++){
   vec4 info=uItInfo[i];if(info.y<.5)continue;
   float k=uItAux[i].x>.5?uPaint:1.;
@@ -144,10 +154,13 @@ vec3 islets(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
   if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
   vec2 qx=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(0.,1.),P2);
   int c4=int(info.z+.5);vec2 cell=vec2(float(c4%4),float(c4/4)),scale=.6*508./512./vec2(4.,3.);
+  float alpha=textureLod(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),0.).a,distance=dot(q,q);
+  if(!owns(alpha,distance,bestAlpha,bestDistance))continue;
   vec4 c=textureGrad(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),(qx-q)/info.x*scale,(qy-q)/info.x*scale);
-  if(c.a>.001)return over(under,c);
+  if(c.a<=.001)continue;
+  best=c;bestAlpha=alpha;bestDistance=distance;
  }
- return under;
+ return over(under,best);
 }
 // Open sea. Close in, the live scene's water (boats, wakes) still shows, read through the sphere chart; anything that
 // lands on an island there is skipped, because the island itself comes only from its rigid sticker.
@@ -187,7 +200,7 @@ vec3 planet(vec2 uv){
  vec3 ocean=mix(uSea,vec3(.2,.52,.86),ball);
  vec3 col=sea(p,ocean);
  col=islets(sp,p,p1,p2,col);
- col=islands(sp,p,p1,p2,ocean,col);
+ col=islands(sp,p,p1,p2,col);
  float lit=dot(v,normalize(vec3(-.5,.5,.72)));
  col=mix(col,col*vec3(.72,.8,.98),(1.-smoothstep(.12,.3,lit))*ball);
  col=mix(col,col+vec3(.06,.07,.08),smoothstep(.8,.95,lit)*ball);
@@ -345,7 +358,9 @@ export function createWorldView(app, scene, isletView) {
         if(!st&&!facing(island.center,Math.hypot(mi.width,mi.height)/2))return;
         // the live scene only if every on-screen part of this sticker was rendered into it this frame
         const F=flatRigid(id,island.id);let mode=worldTex?1:0;
-        if(live&&st){
+        // Once painted, every island (including the anchor) uses the same atlas
+        // colour path. The live framebuffer also contains sea and neighbours.
+        if(live&&st&&paint===0){
           let inside=true;
           for(let gy=0;gy<=8&&inside;gy++)for(let gx=0;gx<=8;gx++){
             const qx=(gx/8-.5)*mi.width,qy=(gy/8-.5)*mi.height,X=st.x+st.scale*(st.cos*qx-st.sin*qy),Y=st.y+st.scale*(st.sin*qx+st.cos*qy);
@@ -388,7 +403,8 @@ export function createWorldView(app, scene, isletView) {
         const at=k>=1||!st?C:{x:st.x,y:st.y};
         return M&&at?{a:M[0],b:M[1],c:M[2],d:M[3],x:at.x,y:at.y,onBall:k}:null;
       };
-      this.stickers=[...stickers,...islets].map(s=>{const m=drawn(s);return m&&{kind:s.kind,id:s.id,mode:s.mode===2?'live':s.kind==='islet'?'islet-atlas':'atlas',width:s.islet?.width,...m};}).filter(Boolean);
+      this.stickers=[...stickers,...islets].map(s=>{const m=drawn(s),r=s.st;return m&&{kind:s.kind,id:s.id,mode:s.mode===2?'live':s.kind==='islet'?'islet-atlas':'atlas',width:s.islet?.width,...m,
+        rigid:r?{x:r.x,y:r.y,a:r.cos*r.scale,b:r.sin*r.scale,c:-r.sin*r.scale,d:r.cos*r.scale}:null};}).filter(Boolean);
       const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
       const busy = ease((ball - .25) / .4);
       life.visible = busy > .01; life.alpha = busy;
