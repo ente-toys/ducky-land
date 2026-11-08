@@ -1,0 +1,14 @@
+<svg width="148" height="293" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 218">
+<title>Cream grain silo with coral domed roof</title>
+<g stroke="#39472d" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+<ellipse fill="#7eae35" stroke="none" cx="55" cy="207" rx="53" ry="11"/>
+<path fill="#ffe6a0" d="M12 56H98V198Q96 215 56 216Q17 214 12 201Z"/>
+<path fill="#eccc7b" stroke="none" d="M78 60H98V199Q95 211 77 213Z"/>
+<path fill="#fff0b2" stroke="none" d="M20 61H36V209L23 205Z"/>
+<path fill="none" d="M12 86Q51 102 98 87M12 119Q54 137 98 121M12 151Q55 169 98 154M12 184Q53 202 98 186"/>
+<path fill="#ef8457" d="M1 60Q3 30 25 13L49 4L65 5Q102 18 109 60Q65 77 1 60Z"/>
+<path fill="#db704a" stroke="none" d="M65 5Q102 18 109 60L91 65Q90 27 65 5Z"/>
+<path fill="none" stroke-width="1" d="M44 11Q22 29 18 64M50 11Q41 28 42 68M60 11Q73 30 75 67M66 11Q92 28 95 64"/>
+<path fill="#fff0b5" d="M41 7Q43 1 53 1Q64 1 67 7L65 13Q52 19 40 12Z"/>
+<path fill="#fff0b5" d="M1 60Q50 76 109 60V66Q56 82 1 66Z"/>
+</g></svg>

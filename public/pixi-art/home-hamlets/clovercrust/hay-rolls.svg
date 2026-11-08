@@ -1,0 +1,19 @@
+<svg width="177" height="156" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 116">
+<title>Three stacked golden hay rolls</title>
+<g stroke="#39472d" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+<ellipse fill="#d6b653" stroke="none" cx="66" cy="110" rx="65" ry="6"/>
+<path fill="#f8d354" d="M76 59Q90 40 111 49Q130 55 131 79Q132 99 118 104L94 112L72 96Z"/>
+<path fill="#e9b93b" stroke="none" d="M83 91L121 83Q131 79 130 86Q128 101 118 104L94 112L79 103Z"/>
+<ellipse fill="#ffdb5c" cx="99" cy="83" rx="22" ry="28"/>
+<path fill="none" stroke="#d8a72b" stroke-width="2" d="M104 65Q87 61 86 80Q86 98 100 100Q115 100 113 81Q112 71 103 73Q97 74 98 83Q99 88 104 85"/>
+<path fill="#f8d354" d="M40 7Q51-1 63 4L91 16Q112 26 102 47Q95 63 77 59L48 48Q23 40 31 18Z"/>
+<path fill="#edbd3d" stroke="none" d="M30 29Q31 44 48 48L77 59Q92 62 100 50L68 37Z"/>
+<ellipse fill="#ffdc60" cx="78" cy="34" rx="23" ry="26" transform="rotate(-20 78 34)"/>
+<path fill="none" stroke="#d8a72b" stroke-width="2" d="M84 17Q66 12 64 32Q63 48 77 51Q92 53 93 36Q94 26 85 25Q75 23 75 33Q75 41 82 38Q85 36 82 32"/>
+<path fill="none" stroke="#d8a72b" stroke-width="1" d="M43 10Q35 24 42 40M53 7Q43 23 51 45"/>
+<path fill="#f8d354" d="M14 50Q30 41 43 47L71 61Q90 77 79 98Q69 115 49 110L20 101Q2 95 2 77Q1 60 14 50Z"/>
+<path fill="#edbd3d" stroke="none" d="M3 84Q5 96 20 101L49 110Q69 115 79 98L47 84Z"/>
+<ellipse fill="#ffdc60" cx="53" cy="82" rx="27" ry="29" transform="rotate(-16 53 82)"/>
+<path fill="none" stroke="#d8a72b" stroke-width="2" d="M60 62Q40 57 37 78Q35 98 51 102Q69 106 70 85Q72 72 61 72Q49 69 48 81Q46 92 55 91Q62 89 58 82"/>
+<path fill="none" stroke="#d8a72b" stroke-width="1" d="M14 53Q6 70 15 91M25 49Q15 67 25 98"/>
+</g></svg>

@@ -42,13 +42,18 @@ export function applyHamlets(E, P) {
     if (!existsSync(file)) {report[h] = {cleared: before - E.props.length, placed: 0}; if (com) {com.homes = []; com.workplaces = [];} continue;}
     const L = JSON.parse(readFileSync(file));
     // 2. the square and the lane, painted by ground.mjs as the centre's paths
-    const square = L.square.map(W), lane = L.lane.map(W);
-    E.roads.push({id: `hamlet-${h}-square`, kind: 'lane', poly: square, width: 0}, {id: `hamlet-${h}-lane`, kind: 'lane', poly: lane, width: 0});
-    for (const c of cfg.connect ?? []) E.roads.push({kind: 'lane', width: 80, ...c, id: `hamlet-${h}-${c.id}`});
+    // a plain ring, or GeoJSON (Polygon / MultiPolygon with holes): kept as a flat list of rings, painted even-odd
+    const rings = g => Array.isArray(g) ? [g] : g.type === 'Polygon' ? g.coordinates : g.coordinates.flat();
+    const sqR = rings(L.square).map(r => r.map(W)), laneR = rings(L.lane).map(r => r.map(W));
+    const inRings = (x, y, R) => R.filter(r => inPoly(x, y, r)).length % 2 === 1;
+    const square = sqR[0], lane = laneR.flat();
+    E.roads.push({id: `hamlet-${h}-square`, kind: 'lane', rings: sqR, width: 0}, {id: `hamlet-${h}-lane`, kind: 'lane', rings: laneR, width: 0});
+    for (const c of cfg.connect ?? []) if (c.bp) c.points = c.bp.map(q => W(q).map(Math.round));   // drawn in blueprint pixels
+    for (const c of cfg.connect ?? []) E.roads.push({kind: 'lane', width: 80, ...Object.fromEntries(Object.entries(c).filter(([k]) => k !== 'bp')), id: `hamlet-${h}-${c.id}`});
     const lines = E.roads.filter(r => r.points && !String(r.id).startsWith(`hamlet-${h}-`)).map(r => ({p: r.points, w: Math.max(r.width ?? 56, r.kind === 'main' ? 128 : 104)}));
     const conn = (cfg.connect ?? []).map(c => ({p: c.points, w: c.width ?? 80}));
     const onWater = (x, y, pad) => !inPoly(x, y, E.coast) || water.some(w => inPoly(x, y, w)) || water.some(w => {for (let i = 0; i < w.length; i++) if (segDist(x, y, w[i], w[(i + 1) % w.length]) < pad) return true; return false;});
-    const onRoad = (x, y, pad) => [...lines, ...conn].some(l => lineDist(x, y, l.p) < l.w / 2 + pad) || inPoly(x, y, lane);
+    const onRoad = (x, y, pad) => [...lines, ...conn].some(l => lineDist(x, y, l.p) < l.w / 2 + pad) || inRings(x, y, laneR);
     const kept = E.props.filter(p => p.footprint && inRect(p));
     // 3. the objects, back to front
     const objs = [...L.objects].sort((a, b) => a.drawOrder - b.drawOrder), decals = [], placed = [], dropped = [];

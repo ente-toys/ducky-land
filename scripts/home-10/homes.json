@@ -1,6 +1,6 @@
 {
  "lane": "homes",
- "note": "Hand-authored. Every x/y below was chosen by eye on the plan and the game shots. Ids are bigger-community-<n> unless they start with homes-.",
+ "note": "Hand-authored. Every x/y below was chosen by eye on the plan and the game shots. Ids are bigger-community-<n> unless they start with homes-. boss 8 Nov: only our duck sailboats on Home, so the two rowboats (392, 393) and the boat-mender hull (385) are removed. boss 8 Nov bridges: nothing grows on or floats beside a bridge, so the flowers, bush, lamp and reeds that sat on the three expansion crossings (446, 447, 457-460, 485-488, 511, 571, 573) are removed. boss 8 Nov water: the lamp (235) that stood in the old west pond is removed.",
  "removeProps": [
   1,
   11,
@@ -164,7 +164,24 @@
   521,
   529,
   530,
-  421
+  421,
+  385,
+  392,
+  393,
+  485,
+  486,
+  487,
+  511,
+  571,
+  457,
+  458,
+  459,
+  460,
+  446,
+  447,
+  488,
+  573,
+  235
  ],
  "moveProps": {
   "verges": {
@@ -232,7 +249,12 @@
     340,
     190
    ],
-   "residents": "Fishing families, boat menders and the dock keepers on the south quay"
+   "residents": "Fishing families, boat menders and the dock keepers on the south quay",
+   "workplaces": [
+    "bigger-community-386",
+    "bigger-community-387",
+    "bigger-community-388"
+   ]
   }
  },
  "places": {
@@ -283,16 +305,8 @@
    "width": 72,
    "points": [
     [
-     4310,
-     5010
-    ],
-    [
-     4060,
-     5345
-    ],
-    [
-     3711,
-     5267
+     3640,
+     5370
     ],
     [
      3422,
@@ -345,20 +359,16 @@
      350
     ],
     [
-     2433.3333333333335,
-     233.33333333333334
+     2480,
+     300
     ],
     [
-     2622.222222222222,
-     233.33333333333334
+     2700,
+     340
     ],
     [
-     2772.222222222222,
-     144.44444444444446
-    ],
-    [
-     2883.3333333333335,
-     222.22222222222223
+     2950,
+     360
     ],
     [
      3838.888888888889,
@@ -377,28 +387,28 @@
      1177.7777777777778
     ],
     [
-     5467.852387763598,
-     1389.7417697282758
+     5330,
+     1405
     ],
     [
-     5467.777777777778,
-     1472.2222222222222
+     5470,
+     1420
     ],
     [
-     5588.888888888889,
-     1477.7777777777778
+     5615,
+     1440
     ],
     [
      5650,
      1644.4444444444446
     ],
     [
-     5740,
-     1860
+     5733,
+     1805
     ],
     [
-     5770,
-     2060
+     5772,
+     2070
     ],
     [
      5733.333333333334,
@@ -461,32 +471,32 @@
      4038.888888888889
     ],
     [
-     405.55555555555554,
-     4083.3333333333335
+     404,
+     4083
     ],
     [
-     88.88888888888889,
-     4100
+     -265,
+     4036
     ],
     [
-     -83.33333333333334,
-     3961.1111111111113
+     -399,
+     3902
     ],
     [
-     -283.33333333333337,
-     3872.222222222222
+     -439,
+     3768
     ],
     [
-     -577.7777777777778,
-     3783.3333333333335
+     -667,
+     3661
     ],
     [
-     -577.7777777777778,
-     3650
+     -761,
+     3527
     ],
     [
-     -327.77777777777777,
-     3438.888888888889
+     -734,
+     3366
     ],
     [
      -355.55555555555554,
@@ -518,7 +528,7 @@
     ]
    ],
    "width": 127.77777777777779,
-   "note": "boss 8 Nov: the shore lane filled the old inlet; the loop now passes west of Millrill Pond (pond poly x 5900-6303, y 1748-2005) instead of under it"
+   "note": "boss 8 Nov: the shore lane filled the old inlet; the loop now passes west of Millrill Pond (pond poly x 5900-6303, y 1748-2005) instead of under it; boss 8 Nov bridges: it crosses Millrill twice, each straight over one arched bridge (river-crossing-3 at y 1420, river-crossing-4 at x 5733-5772), never along the water; boss 8 Nov hamlets: it passes south of Lanternleaf green instead of through it; boss 8 Nov hamlets: through Petalpatch it runs down the gap between the cottage and the studio and across the yard"
   }
  ],
  "removeObstacles_note": "The fence-gate (64x12) and washing-line (8x10) blockers of the removed garden kit, and the four old gazebo/pergola posts, listed exactly as they are in the base file.",
@@ -1225,7 +1235,7 @@
   "butterbill": {
    "map": {
     "at": [
-     -200,
+     -803,
      400
     ],
     "bp": [
@@ -1237,13 +1247,35 @@
    "skip": [],
    "nudge": {},
    "drop": [],
-   "connect": []
+   "connect": [
+    {
+     "id": "to-loop",
+     "bp": [
+      [
+       400,
+       1000
+      ],
+      [
+       560,
+       1110
+      ],
+      [
+       900,
+       1170
+      ],
+      [
+       1310,
+       1160
+      ]
+     ]
+    }
+   ]
   },
   "lanternleaf": {
    "map": {
     "at": [
      2880,
-     -120
+     -455
     ],
     "bp": [
      768,
@@ -1254,13 +1286,28 @@
    "skip": [],
    "nudge": {},
    "drop": [],
-   "connect": []
+   "connect": [
+    {
+     "id": "to-loop",
+     "width": 110,
+     "bp": [
+      [
+       790,
+       1010
+      ],
+      [
+       790,
+       1100
+      ]
+     ]
+    }
+   ]
   },
   "clovercrust": {
    "map": {
     "at": [
      5000,
-     40
+     -228
     ],
     "bp": [
      768,
@@ -1279,26 +1326,37 @@
      768,
      512
     ],
-    "k": 1.34
+    "k": 1.34,
+    "at": [
+     -978,
+     3650
+    ]
    },
    "skip": [],
    "nudge": {},
    "drop": [],
-   "connect": []
+   "connect": [],
+   "roads": [
+    "makers-square"
+   ]
   },
   "reedwhistle": {
    "map": {
     "at": [
-     4310,
-     5010
+     4095,
+     5440
     ],
     "bp": [
-     768,
-     512
+     758,
+     760
     ],
     "k": 1.34
    },
-   "skip": [],
+   "skip": [
+    "shoreline-water.svg",
+    "jetty.svg",
+    "duck-sailboat.svg"
+   ],
    "nudge": {},
    "drop": [],
    "connect": []

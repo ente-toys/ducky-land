@@ -1,0 +1,10 @@
+<svg width="275" height="145" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205 108"><title>Five neat rows of young vegetables</title>
+<defs><g id="s" stroke="#39472d" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path fill="none" d="M10 16L11 8"/><path fill="#70b244" d="M10 12Q0 12 1 3Q9 2 10 12ZM11 11Q12 1 21 1Q23 10 11 11Z"/></g></defs>
+<path fill="#a7793b" stroke="#39472d" stroke-width="1.1" d="M36 1L204 5L173 107L1 101Z"/>
+<path fill="#b68a47" d="M39 6L197 9L169 101L8 96Z"/>
+<use href="#s" x="41" y="2"/><use href="#s" x="77" y="2"/><use href="#s" x="112" y="3"/><use href="#s" x="147" y="3"/><use href="#s" x="181" y="4"/>
+<use href="#s" x="35" y="22"/><use href="#s" x="70" y="23"/><use href="#s" x="106" y="23"/><use href="#s" x="141" y="24"/><use href="#s" x="175" y="24"/>
+<use href="#s" x="28" y="42"/><use href="#s" x="64" y="43"/><use href="#s" x="99" y="43"/><use href="#s" x="134" y="44"/><use href="#s" x="168" y="44"/>
+<use href="#s" x="21" y="62"/><use href="#s" x="57" y="63"/><use href="#s" x="92" y="63"/><use href="#s" x="127" y="64"/><use href="#s" x="161" y="65"/>
+<use href="#s" x="14" y="82"/><use href="#s" x="50" y="83"/><use href="#s" x="85" y="84"/><use href="#s" x="120" y="85"/><use href="#s" x="154" y="85"/>
+</svg>

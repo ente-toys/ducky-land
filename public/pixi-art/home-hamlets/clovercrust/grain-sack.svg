@@ -1,0 +1,9 @@
+<svg width="54" height="66" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 49">
+<title>Tied cream grain sack</title>
+<g stroke="#39472d" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
+<ellipse fill="#d4b354" stroke="none" cx="20" cy="46" rx="19" ry="3"/>
+<path fill="#ffe39a" d="M9 6L14 4L18 9L22 3L27 5L25 13Q34 25 36 35Q39 46 21 47Q2 47 3 37Q4 25 14 14Z"/>
+<path fill="#edc87c" stroke="none" d="M25 14Q34 25 36 35Q39 46 21 47L14 46Q32 43 29 33Q28 23 22 15Z"/>
+<path fill="#bd9553" d="M12 12Q18 15 27 11L28 15Q19 18 12 15Z"/>
+<path fill="none" stroke-width=".8" d="M16 18Q11 26 10 32M24 19L27 24M17 7L18 12M23 7L21 13"/>
+</g></svg>

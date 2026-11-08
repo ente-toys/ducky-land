@@ -13,7 +13,7 @@ const pl = pts => pts.map(p => toPx(p).map(v => v.toFixed(1)).join(',')).join(' 
 let g = '';
 g += `<polygon points="${pl(E.coast)}" fill="none" stroke="#000" stroke-width="4"/>`;
 for (const w of E.riverWater ?? []) g += `<polygon points="${pl(w.poly)}" fill="#29f" fill-opacity=".35" stroke="#06f" stroke-width="3"/>`;
-for (const r of E.roads) g += r.poly ? `<polygon points="${pl(r.poly)}" fill="#f00" fill-opacity=".25" stroke="#f00"/>` : `<polyline points="${pl(r.points)}" fill="none" stroke="${r.kind === 'main' ? '#f00' : '#f80'}" stroke-opacity=".55" stroke-width="${r.width / M.k}" stroke-linecap="round"/>`;
+for (const r of E.roads) g += r.rings ? r.rings.map(q => `<polygon points="${pl(q)}" fill="#f00" fill-opacity=".15" stroke="#f00"/>`).join("") : `<polyline points="${pl(r.points)}" fill="none" stroke="${r.kind === 'main' ? '#f00' : '#f80'}" stroke-opacity=".55" stroke-width="${r.width / M.k}" stroke-linecap="round"/>`;
 for (const p of E.props) if (p.zone !== h) {const [x, y] = toPx([p.x, p.y]); g += `<circle cx="${x}" cy="${y}" r="5" fill="#f0f"/>`;}
 for (const p of E.props) if (p.zone === h && p.footprint) {const [x, y] = toPx([p.footprint.x, p.footprint.y]); g += `<ellipse cx="${x}" cy="${y}" rx="${p.footprint.rx / M.k}" ry="${p.footprint.ry / M.k}" fill="none" stroke="#0f0" stroke-width="2"/>`;}
 for (const w of E.walkways ?? []) g += `<polyline points="${pl([w.a, w.b])}" stroke="#a50" stroke-opacity=".6" stroke-width="${w.w / M.k}"/>`;

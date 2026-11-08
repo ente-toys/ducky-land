@@ -30,17 +30,15 @@
     "set": [
       {"id": "millhead-pond", "x": 6243, "y": 1003, "rx": 1, "ry": 1,
        "poly": [[6085, 1000], [6110, 925], [6170, 890], [6250, 884], [6330, 890], [6385, 935], [6392, 992], [6370, 1060], [6320, 1105], [6250, 1122], [6170, 1128], [6110, 1100], [6095, 1060]]},
-      {"id": "shore-millrill-pond", "x": 6100, "y": 1880, "rx": 1, "ry": 1,
-       "poly": [[5900, 1900], [5935, 1830], [6000, 1785], [6092, 1760], [6185, 1748], [6262, 1768], [6303, 1825], [6300, 1890], [6236, 1938], [6150, 1958], [6078, 1962], [6000, 1980], [5935, 2003], [5900, 2005]]}
+      {"id": "shore-millrill-pond", "x": 6100, "y": 1900, "rx": 1, "ry": 1,
+       "why": "boss 8 Nov: a soft round pond the river flows into as one body (the west lip overlaps Millrill's mouth at 5870-5915, y 1915-2012); the ground lane paints it as a smooth curve, banks only on the outer edge",
+       "poly": [[5870, 1915], [5915, 1850], [5985, 1795], [6080, 1768], [6180, 1772], [6262, 1805], [6308, 1862], [6305, 1930], [6258, 1988], [6175, 2025], [6075, 2035], [5985, 2028], [5915, 2015], [5870, 2012]]}
     ]
   },
 
   "decks": {
-    "why": "The two ponds are drawn as flat overlays (hand-drawn SVG in world coordinates), so they sit over whatever grass the ground lane paints.",
-    "set": [
-      {"id": "shore-millrill-pond", "src": "/pixi-art/home-10/shore-millrill-pond.svg", "x": 5780, "y": 1680, "width": 580, "height": 400, "resolution": 1},
-      {"id": "shore-millhead-pond", "src": "/pixi-art/home-10/shore-millhead-pond.svg", "x": 6000, "y": 840, "width": 440, "height": 340, "resolution": 1}
-    ]
+    "why": "boss 8 Nov: the two pond overlays are gone (their own sand rims cut a seam across the river mouth). The ground lane paints both ponds with the rivers as one body of water, and drops these two deck ids: shore-millrill-pond, shore-millhead-pond.",
+    "set": []
   },
 
   "walkWorld": {

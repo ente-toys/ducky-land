@@ -231,7 +231,7 @@ export class PixiIsland {
         const name=prop.asset||prop.name;
         let shadow;
         // boss 3 Nov, fix 4: the redrawn plants carry no baked shadow, so plants get the one engine shadow too
-        if(!NO_SHADOW.test(name)){shadow=contactShadow(prop);shadow.position.set(prop.x,prop.y);this.homeShadows.addChild(shadow);}
+        if(!NO_SHADOW.test(name)&&!prop.noShadow){shadow=contactShadow(prop);shadow.position.set(prop.x,prop.y);this.homeShadows.addChild(shadow);}
 
         const sprite = new Sprite(textures[base + i]);
         sprite.anchor.set(prop.anchor.x, prop.anchor.y);

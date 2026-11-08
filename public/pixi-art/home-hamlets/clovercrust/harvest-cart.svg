@@ -1,0 +1,27 @@
+<svg width="200" height="187" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 149 139">
+<title>Wooden harvest cart with grain sacks and wheat</title>
+<g stroke="#39472d" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+<path fill="#d7b956" stroke="none" d="M12 126Q61 118 139 129L140 136L26 139Z"/>
+<path fill="none" d="M31 64L33 15M35 53L43 22M25 53L21 25M42 61L53 29M52 65L60 35"/>
+<path fill="#f6cf5c" d="M32 25Q23 19 28 11L33 17Q28 2 33 1Q40 5 36 18L41 12Q47 22 35 29L35 37Q25 34 26 25L32 29ZM20 38Q9 34 12 26L20 30Q12 19 16 17Q23 19 24 33L28 29Q33 36 25 43L25 49Q17 48 16 40ZM44 40Q39 30 45 24L47 31Q48 20 53 20Q58 27 50 37L57 33Q61 42 48 46L45 54Q37 52 38 44ZM55 51Q53 42 59 38L60 44Q64 35 68 38Q70 45 62 51L69 49Q71 58 60 59L57 65Z"/>
+<path fill="#ffe29a" d="M40 69Q32 54 41 41L48 31L45 22L49 20L54 26L58 20L62 22L60 31Q80 45 76 67Q60 80 40 69Z"/>
+<path fill="#e3bc70" stroke="none" d="M59 31Q80 45 76 67L65 72Q69 53 56 35Z"/>
+<path fill="#ffe29a" d="M63 73Q58 57 67 47L77 38L73 30L77 28L82 34L86 29L90 31L88 39Q103 53 102 69L88 80Z"/>
+<path fill="#e3bc70" stroke="none" d="M87 40Q103 53 102 69L88 80L85 75Q94 54 83 42Z"/>
+<path fill="none" stroke-width=".8" d="M47 31Q54 34 60 31M77 39Q83 42 88 39"/>
+<path fill="#c48b3e" d="M25 95L139 125L145 119L31 87ZM50 91L132 111L137 104L54 83Z"/>
+<path fill="#edbc64" d="M4 48L67 65L117 52L112 91L63 116L9 96Z"/>
+<path fill="#d39a46" d="M67 65L117 52L112 91L63 116Z"/>
+<path fill="#dca64f" d="M9 71L65 88L114 69L113 77L65 96L9 80Z"/>
+<path fill="#c18a3c" d="M11 88L64 105L112 84L112 91L63 116L9 96Z"/>
+<path fill="#f4cc7b" d="M1 46L10 44L69 59L111 48L120 52L67 68Z"/>
+<path fill="none" stroke-width=".8" d="M17 54L19 97M32 58L34 101M48 62L49 106M81 64L78 103M98 60L95 96M68 69L64 109"/>
+<path fill="#e3ac53" d="M21 95L16 114L23 117L30 97Z"/>
+<ellipse fill="#ba7e34" cx="27" cy="105" rx="23" ry="24"/>
+<ellipse fill="#edbc64" cx="27" cy="105" rx="18" ry="19"/>
+<ellipse fill="#855e2c" cx="27" cy="105" rx="14" ry="15"/>
+<path fill="none" stroke="#39472d" stroke-width="2.4" d="M27 89V121M12 105H42M16 94L38 116M17 116L37 94"/>
+<path fill="none" stroke="#e4af57" stroke-width="1.3" d="M27 89V121M12 105H42M16 94L38 116M17 116L37 94"/>
+<circle fill="#e9b363" cx="27" cy="105" r="4.5"/>
+<path fill="#d29743" d="M58 104L63 116L68 112L66 102Z"/>
+</g></svg>

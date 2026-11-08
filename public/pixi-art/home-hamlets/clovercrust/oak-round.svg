@@ -1,0 +1,9 @@
+<svg width="175" height="214" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 135">
+<title>Small round orchard tree</title>
+<g stroke="#39472d" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+<ellipse fill="#7eaf33" stroke="none" cx="57" cy="128" rx="40" ry="7"/>
+<path fill="#c5994c" d="M49 81L57 86L65 79L70 84L60 95V116Q61 124 65 129Q56 133 46 129Q50 120 50 112V99L40 87L44 83L52 90Z"/>
+<path fill="#47a731" d="M14 77Q3 75 6 64Q-1 56 7 48Q2 37 14 33Q12 22 24 20Q25 8 38 12Q46 0 57 7Q68 0 76 10Q90 7 92 20Q105 23 101 35Q114 41 106 53Q112 65 100 71Q99 85 86 83Q77 94 65 87Q52 97 42 88Q28 92 24 82Q17 86 14 77Z"/>
+<path fill="#368f2d" stroke="none" d="M7 63Q16 72 24 64Q30 76 41 71Q48 84 59 76Q70 84 78 73Q89 78 94 66Q103 70 106 58Q108 67 100 71Q99 85 86 83Q77 94 65 87Q52 97 42 88Q28 92 24 82Q17 86 14 77Z"/>
+<path fill="#75ba38" stroke="none" d="M25 23Q26 14 36 19Q43 7 52 15Q63 8 70 19Q80 14 84 25L75 25L69 22L60 25L53 20L44 25L37 22L31 27Z"/>
+</g></svg>

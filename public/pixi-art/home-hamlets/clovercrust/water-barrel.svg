@@ -1,0 +1,12 @@
+<svg width="61" height="80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 59">
+<title>Oak water barrel with iron hoops</title>
+<g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+<ellipse fill="#7eaf33" stroke="none" cx="23" cy="55" rx="22" ry="4"/>
+<path fill="#c88e42" d="M6 8Q0 29 8 50Q22 61 37 50Q45 29 38 8Z"/>
+<path fill="#ae7837" stroke="none" d="M30 10L38 8Q45 29 37 50Q31 56 24 56Q35 33 30 10Z"/>
+<path fill="none" stroke-width=".8" d="M13 13Q8 33 14 53M22 14V56M31 13Q36 33 29 54"/>
+<path fill="#d7b56c" d="M4 18Q22 27 40 18L41 23Q22 32 3 23ZM4 39Q23 48 40 38L39 43Q22 53 5 44Z"/>
+<ellipse fill="#e4b464" cx="22" cy="9" rx="17" ry="8"/>
+<ellipse fill="#a87838" cx="22" cy="9" rx="13" ry="5"/>
+<path fill="none" stroke-width=".7" d="M13 7L31 12M20 4L29 8"/>
+</g></svg>
