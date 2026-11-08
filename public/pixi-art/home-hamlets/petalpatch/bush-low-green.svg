@@ -1,0 +1,5 @@
+<svg width="98" height="61" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 62">
+ <title>Small low scalloped shrub</title>
+ <ellipse cx="50" cy="54" rx="45" ry="7" fill="#79a82f"/>
+ <g stroke="#39472d" stroke-width="1.5" stroke-linejoin="round"><path fill="#318738" d="M8 43Q-2 37 8 28Q3 17 17 16Q21 4 33 11Q42-1 54 9Q67 1 76 15Q91 13 92 27Q105 34 94 43Q98 55 82 55Q70 65 58 55Q46 66 35 55Q19 61 15 51Q4 54 8 43Z"/><path fill="#4fa538" stroke="none" d="M13 35Q5 28 19 24Q18 13 31 19Q37 6 49 18Q62 7 68 23Q83 18 83 32Q99 37 83 44Q84 55 70 48Q60 59 49 47Q34 60 28 46Q13 51 15 41Z"/><path fill="#7bb938" stroke="none" d="M25 25Q20 18 32 19Q37 10 45 18Q54 11 60 21Q61 29 53 25Q42 21 37 29Q30 25 25 30Z"/></g>
+</svg>

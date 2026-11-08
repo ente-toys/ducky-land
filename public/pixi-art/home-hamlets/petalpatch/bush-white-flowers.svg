@@ -1,0 +1,7 @@
+<svg width="188" height="125" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 134 89">
+ <title>Low green shrub with tiny white flowers</title>
+ <defs><g id="flower" fill="#fff7ce"><path d="M0-2Q-5-7-5-2Q-10 0-5 3Q-5 8 0 5Q4 9 5 3Q10 1 5-2Q5-7 0-2Z"/><circle r="1.6" fill="#f4cf4a"/></g></defs>
+ <ellipse cx="68" cy="78" rx="61" ry="10" fill="#7baa30"/>
+ <g stroke="#39472d" stroke-width="1.7" stroke-linejoin="round"><path fill="#2e8437" d="M9 59Q-2 51 10 39Q6 25 22 24Q23 9 39 15Q48-1 61 8Q77-3 88 12Q106 8 110 25Q125 24 127 41Q141 49 129 60Q133 75 115 77Q103 88 89 79Q73 91 58 79Q45 89 34 79Q15 83 13 69Q2 70 9 59Z"/><path fill="#4aa337" stroke="none" d="M13 50Q5 42 19 37Q15 24 30 25Q29 11 44 21Q51 6 65 16Q79 6 86 23Q102 16 104 32Q119 30 119 44Q134 49 119 58Q121 72 104 68Q92 81 80 69Q66 82 52 69Q37 80 31 67Q13 71 16 59Q7 60 13 50Z"/><path fill="#75b739" stroke="none" d="M23 31Q19 22 32 23Q35 12 46 20Q55 10 63 21Q68 30 59 29Q48 24 43 34Q33 27 30 38Z"/></g>
+ <use xlink:href="#flower" x="47" y="32"/><use xlink:href="#flower" x="68" y="45"/><use xlink:href="#flower" x="45" y="55"/><use xlink:href="#flower" x="78" y="59"/><use xlink:href="#flower" x="28" y="50"/><use xlink:href="#flower" x="60" y="19"/>
+</svg>

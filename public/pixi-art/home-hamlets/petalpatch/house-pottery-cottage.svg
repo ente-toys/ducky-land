@@ -1,0 +1,55 @@
+<svg width="563" height="424" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 420 316">
+ <title>Petalpatch pottery cottage</title>
+ <defs>
+  <g id="pinkflower" stroke="#39472d" stroke-width="1.15"><path fill="#ed8fc5" d="M-2-3C-8-11-13-5-10 0C-17 5-9 12-4 8C-2 16 7 13 7 7C15 8 16-2 9-4C9-11 0-12-2-3Z"/><circle r="2.6" fill="#f7d65f"/></g>
+  <g id="daisy" stroke="#39472d" stroke-width="1"><path fill="#fff9dc" d="M-2-3C-7-11-12-6-9-1C-16 1-12 9-7 7C-7 15 2 14 3 8C10 12 15 4 9 0C14-6 7-12 3-6C2-12-4-11-2-3Z"/><circle r="2.8" fill="#f0c954"/></g>
+  <g id="leaf" stroke="#39472d" stroke-width="1.1" fill="#4d9f35"><path d="M0 0Q-17-21-23-10Q-20 0 0 0Q14-21 23-11Q21-1 0 0Z"/></g>
+ </defs>
+ <g stroke="#39472d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path fill="#efa3a8" d="M301 83L300 15Q322 8 344 15L346 90Z"/>
+  <path fill="#dc868f" stroke="none" d="M301 23Q321 29 344 22L345 34Q323 37 301 32Z"/>
+  <path fill="#ffe8ac" d="M299 7Q301 1 322 1Q343 0 346 7L347 22Q325 31 299 23Z"/>
+  <path fill="#705138" d="M306 8Q324 3 340 8Q327 12 306 10Z" stroke-width="1.1"/>
+  <path fill="#efadb3" d="M15 152L399 143L397 287L15 287Z"/>
+  <path fill="#f6bfc1" stroke="none" d="M27 161L180 128L292 146L292 281L27 281Z"/>
+  <path fill="#e89ba4" stroke="none" d="M15 160L26 159L27 280L15 287ZM290 147L302 151L301 283L290 283Z"/>
+  <path fill="#ffe8b0" d="M14 158L25 157L25 282L14 282ZM387 153L398 151L397 282L386 282Z" stroke-width="1.2"/>
+  <path fill="#c58dca" d="M2 152Q25 111 43 94Q56 81 93 78Q125 76 154 49Q182 17 215 16Q254 12 285 44Q310 69 340 76Q373 81 388 92Q403 108 416 144L410 158Q365 172 328 149Q300 131 287 111Q266 82 230 80Q193 77 170 104Q152 129 112 146Q65 166 8 170Z"/>
+  <path fill="#b776b6" d="M2 152Q67 154 112 132Q146 115 167 93Q195 62 231 66Q272 66 298 104Q329 146 368 145Q391 149 416 144L410 158Q365 172 328 149Q300 131 287 111Q266 82 230 80Q193 77 170 104Q152 129 112 146Q65 166 8 170Z"/>
+  <path fill="#d49fd6" stroke="none" d="M23 138Q51 96 88 93Q131 89 162 60Q192 26 223 26Q246 25 263 35Q229 14 201 27Q171 39 156 57Q126 88 91 90Q50 91 23 138Z"/>
+  <path fill="none" stroke-width="1.25" d="M62 89L50 145M135 67L124 111M175 35L171 68M223 28L227 62M267 34L274 60M330 76L333 124M381 91L390 141"/>
+  <path fill="#ffe9b1" d="M141 165Q148 118 178 96Q202 77 232 80Q271 83 293 113Q307 135 310 165Q232 170 143 168Z"/>
+  <path fill="#f7d38e" stroke="none" d="M147 158Q160 100 212 91Q264 81 295 138Q281 97 249 88Q183 68 155 131Z"/>
+  <path fill="#71c0d4" d="M155 155Q160 123 182 107Q203 94 231 95Q259 98 276 117Q289 131 294 155Z"/>
+  <path fill="#5aaac1" stroke="none" d="M155 155L293 155L284 135L160 135Z"/>
+  <path fill="none" stroke="#39472d" stroke-width="6" d="M166 125H282M184 107V154M211 98V155M240 98V155M267 109V154"/>
+  <path fill="#ffe6a7" stroke="none" d="M166 123H282V127H166ZM182 107H186V154H182ZM209 98H213V155H209ZM238 98H242V155H238ZM265 109H269V154H265Z"/>
+  <path fill="#ffe7a8" d="M31 175L137 156L137 241L31 241Z"/>
+  <path fill="#73bfd1" d="M39 181L128 165L128 232L39 232Z"/>
+  <path fill="#56a7bc" stroke="none" d="M40 214H127V231H40Z"/>
+  <path fill="none" stroke-width="6" d="M39 196L128 192M39 216H128M65 178V232M94 172V232"/>
+  <path fill="#ffe6a7" stroke="none" d="M39 194L128 190V194L39 198ZM39 214H128V218H39ZM63 178H67V232H63ZM92 172H96V232H92Z"/>
+  <path fill="#ffe7a8" d="M311 174L386 174L386 241L311 241Z"/>
+  <path fill="#70bbcd" d="M318 181H379V234H318Z"/>
+  <path fill="none" stroke-width="6" d="M318 197H379M318 217H379M339 181V234M360 181V234"/>
+  <path fill="#ffe6a7" stroke="none" d="M318 195H379V199H318ZM318 215H379V219H318ZM337 181H341V234H337ZM358 181H362V234H358Z"/>
+  <path fill="#fff0b8" d="M177 282V219Q178 173 218 173Q261 173 265 219V282Z"/>
+  <path fill="#d69a45" d="M190 282V219Q190 189 218 187Q247 188 251 219V282Z"/>
+  <path fill="#c58a39" stroke="none" d="M222 188Q248 192 251 219V282H222Z"/>
+  <path fill="none" stroke-width="1.15" d="M210 190V281M230 192V281"/>
+  <ellipse cx="240" cy="242" rx="4" ry="5" fill="#a5692f" stroke="none"/>
+  <path fill="#ffe8a8" d="M179 282H264L267 298H176Z"/>
+  <path fill="#f6d58a" d="M176 298H267V313H176Z"/>
+  <path fill="#fff0be" stroke="none" d="M178 300H265V304H178Z"/>
+  <g fill="#8b6741"><path d="M158 184V179Q162 175 164 180V184Z"/><path d="M278 184V179Q282 175 284 180V184Z"/></g>
+  <g fill="#fff4cb"><path d="M151 192H170L168 211Q161 219 153 211Z"/><path d="M271 192H290L288 211Q281 219 273 211Z"/></g>
+  <g fill="#9c7448"><path d="M149 192Q160 178 172 192Q163 197 149 192Z"/><path d="M269 192Q280 178 292 192Q283 197 269 192Z"/></g>
+  <path fill="#d9a84d" d="M12 285H159V304Q88 308 12 304ZM285 285H404V304Q345 309 285 304Z"/>
+  <path fill="#efc16b" stroke="none" d="M15 297H157V302H15ZM288 298H401V302H288Z"/>
+  <path fill="#469e35" d="M4 283Q-1 274 12 269Q7 260 24 259Q25 247 38 252Q49 239 60 251Q72 243 82 252Q96 238 104 252Q117 247 125 260Q140 250 147 266Q165 264 166 278Q172 290 154 292Q141 299 127 290Q110 300 97 290Q82 301 69 291Q51 300 41 289Q19 298 16 288Q7 291 4 283Z"/>
+  <path fill="#53a538" d="M281 281Q280 270 291 270Q294 255 306 262Q309 249 323 256Q332 247 343 257Q354 248 367 259Q380 252 387 267Q405 263 409 275Q421 285 405 291Q393 297 379 288Q362 300 349 289Q334 299 322 289Q303 300 298 289Q284 293 281 281Z"/>
+  <g stroke-width="1.1" fill="#72b741"><path d="M36 282Q37 260 30 252M54 282Q64 260 61 250M81 281Q84 256 92 249M112 284Q113 264 123 256M305 282Q305 265 310 257M329 283Q328 268 338 260M355 284Q364 265 361 255M383 283Q381 267 388 262"/></g>
+  <use xlink:href="#pinkflower" x="32" y="270"/><use xlink:href="#pinkflower" x="51" y="259"/><use xlink:href="#pinkflower" x="66" y="271"/><use xlink:href="#pinkflower" x="80" y="258"/><use xlink:href="#pinkflower" x="88" y="278"/><use xlink:href="#pinkflower" x="109" y="264"/><use xlink:href="#pinkflower" x="126" y="251"/><use xlink:href="#pinkflower" x="138" y="270"/>
+  <use xlink:href="#daisy" x="303" y="276"/><use xlink:href="#daisy" x="315" y="260"/><use xlink:href="#daisy" x="334" y="275"/><use xlink:href="#daisy" x="347" y="259"/><use xlink:href="#daisy" x="366" y="267"/><use xlink:href="#daisy" x="387" y="261"/><use xlink:href="#daisy" x="388" y="280"/>
+ </g>
+</svg>

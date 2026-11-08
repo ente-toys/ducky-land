@@ -1,0 +1,20 @@
+<svg width="145" height="129" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 96">
+ <title>Sleepy yellow duck curled over an open book</title>
+ <g stroke="#39472d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="54" cy="84" rx="51" ry="10" fill="#79a72e" stroke="none"/>
+  <path fill="#4b8d97" d="M4 65L40 59L94 59L105 83L60 88L23 95Z"/>
+  <path fill="#efd18a" d="M5 61L40 57L60 68L91 57L104 80L60 86L24 91Z"/>
+  <path fill="#fff3c9" d="M7 58Q27 50 46 58L60 67Q75 53 91 55L100 76Q80 72 60 83Q42 70 24 84Z"/>
+  <path fill="#e4bf77" stroke="none" d="M44 58L60 67V83L47 73Z"/>
+  <path fill="none" stroke-width="1" d="M15 63Q36 57 49 68M19 69Q38 63 51 73M70 67Q79 62 91 62M67 73Q82 67 95 68M60 68V83"/>
+  <path fill="#eaa62c" d="M22 54Q10 48 15 39L21 42Q17 31 24 30L30 41Z"/>
+  <path fill="#ffd32f" d="M20 42Q18 22 33 15Q34 5 39 7L38 13Q47 6 48 10L45 14Q63 9 77 20Q89 28 86 44Q83 57 68 59Q59 68 45 62Q26 67 20 54Q14 51 20 42Z"/>
+  <path fill="#efb923" stroke="none" d="M23 47Q29 58 44 57Q57 64 68 55Q83 54 86 40Q87 54 72 59Q61 69 45 62Q24 67 20 54Q16 49 23 47Z"/>
+  <path fill="#f5c22b" d="M42 40Q36 41 36 48Q37 57 49 57Q58 56 58 49"/>
+  <path fill="#f6a62b" d="M76 44Q84 37 91 43L91 48Q83 54 75 49Z"/>
+  <path fill="#ffbd35" d="M76 43Q83 39 90 43Q84 47 76 46Z" stroke-width="1.1"/>
+  <path fill="none" d="M63 37Q65 43 70 38M78 32Q82 36 85 31"/>
+  <path fill="#fff8d3" stroke="none" d="M30 22Q34 17 37 19Q37 22 31 25Z"/>
+  <circle cx="81" cy="3" r="3.1" fill="#fff6c8" stroke-width="1"/><circle cx="89" cy="15" r="2.2" fill="#fff6c8" stroke-width="1"/>
+ </g>
+</svg>

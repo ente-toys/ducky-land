@@ -1,6 +1,7 @@
 // Applies the hand-written homes patch (homes.json) to src/pixi/home-expansion.json. Places nothing itself. Idempotent.
 // Run from the repo root: node <this> <path-to-homes.json>
 import {readFileSync, writeFileSync} from 'node:fs';
+import {applyHamlets} from './hamlets-apply.mjs';
 const FILE = 'src/pixi/home-expansion.json';
 const P = JSON.parse(readFileSync(process.argv[2]));
 const E = JSON.parse(readFileSync(FILE));
@@ -24,5 +25,7 @@ for (const p of E.places) if (P.places[p.id]) p.point = P.places[p.id];
 const goneRoads = new Set(P.removeRoads), set = new Map(P.setRoads.map(r => [r.id, r]));
 E.roads = E.roads.filter(r => !goneRoads.has(r.id)).map(r => set.get(r.id) ?? r);   // a reset road keeps its draw order
 E.roads = E.roads.concat(P.setRoads.filter(r => !E.roads.includes(r)));
+const hamlets = applyHamlets(E, P);   // boss 8 Nov: the five hamlets from GPT's blueprints
+for (const [h, r] of Object.entries(hamlets)) console.log(h, JSON.stringify(r));
 writeFileSync(FILE, JSON.stringify(E, null, 2));
 console.log(`homes patch: ${E.props.length} props, ${E.obstacles.length} obstacles, ${E.decks.length} decks, ${E.roads.length} roads`);

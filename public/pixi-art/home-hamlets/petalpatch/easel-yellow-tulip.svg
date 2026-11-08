@@ -1,0 +1,15 @@
+<svg width="113" height="199" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 148">
+ <title>Wooden easel with yellow tulip painting</title>
+ <g stroke="#39472d" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+  <path fill="#bb8640" d="M49 81L80 132L73 135L43 90Z"/>
+  <path fill="#d4a154" d="M22 88L2 139Q7 144 13 142L35 91ZM51 91L49 145Q54 147 62 145L62 92Z"/>
+  <path fill="#d29e50" d="M48 4Q54 1 61 6L55 31L43 30Z"/>
+  <path fill="#fff0bd" d="M27 26L77 32L61 106L10 97Z"/>
+  <path fill="#f7df9e" stroke="none" d="M13 91L61 100V104L12 96Z"/>
+  <path fill="#dda95b" d="M10 90L65 99L63 109L7 100Z"/>
+  <g stroke="none"><path fill="#6aad34" d="M36 84L41 59L44 59L39 84Z"/><path fill="#6aaf35" d="M38 83Q21 83 24 69Q35 70 38 83ZM40 80Q46 67 57 69Q55 80 40 80Z"/>
+   <path fill="#ffd02d" d="M41 65Q28 64 29 50Q30 38 36 45Q40 31 45 44Q54 33 56 44Q62 38 60 49Q58 65 45 66Z"/>
+   <path fill="#f8b422" d="M44 65Q56 57 56 44Q62 38 60 49Q58 65 45 66Z"/>
+  </g>
+ </g>
+</svg>

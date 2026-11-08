@@ -1,0 +1,20 @@
+<svg width="179" height="207" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 133 154">
+ <title>Three shelf rack of cream bowls and pots</title>
+ <g stroke="#39472d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path fill="#b78741" d="M9 13H124V24H9ZM9 57H124V68H9ZM9 107H124V118H9ZM10 140H123V148H10Z"/>
+  <path fill="#e3b467" d="M10 11H123V18H10ZM10 55H123V62H10ZM10 104H123V112H10ZM10 136H123V143H10Z"/>
+  <path fill="#9d6e32" stroke="none" d="M12 24H121V29H12ZM12 68H121V73H12ZM12 118H121V124H12Z"/>
+  <g fill="#ffe8ad"><path d="M24 14Q25 38 45 35Q63 34 66 14Z"/><path d="M73 15Q75 37 94 35Q110 35 113 14Z"/></g>
+  <g fill="#fff0c5" stroke-width="1.2"><ellipse cx="45" cy="14" rx="21" ry="5"/><ellipse cx="93" cy="14" rx="20" ry="5"/></g>
+  <g fill="#ffecbc" stroke-width="1.4">
+   <path d="M28 88Q21 81 26 73L33 65V61Q26 55 39 54Q52 55 45 61V65Q54 73 52 80Q53 91 28 88Z"/>
+   <path d="M62 90Q55 86 58 78L62 73V69Q56 65 66 65Q77 65 72 69V73Q81 83 75 89Q71 92 62 90Z"/>
+   <path d="M88 89Q81 83 85 74L93 62V58Q87 53 100 52Q113 52 107 58V62Q120 77 116 84Q112 94 88 89Z"/>
+  </g>
+  <g fill="#fff4d0" stroke-width="1.1"><ellipse cx="39" cy="58" rx="7" ry="2.2"/><ellipse cx="66" cy="68" rx="5" ry="1.7"/><ellipse cx="100" cy="56" rx="7" ry="2.2"/></g>
+  <g fill="#ffe5a6"><path d="M25 114Q26 135 45 134Q64 134 67 114Z"/><path d="M72 114Q75 136 94 134Q111 134 113 114Z"/></g>
+  <g fill="#fff0c5" stroke-width="1.2"><ellipse cx="46" cy="114" rx="21" ry="5"/><ellipse cx="93" cy="114" rx="20" ry="5"/></g>
+  <g fill="#e3b368"><path d="M2 10Q1 6 7 7Q12 6 12 10V149Q7 153 2 150Z"/><path d="M120 10Q119 6 125 7Q130 6 130 10V150Q125 153 120 150Z"/></g>
+  <path fill="none" stroke-width="1" d="M6 29V55M6 74V103M124 29V55M124 74V103"/>
+ </g>
+</svg>

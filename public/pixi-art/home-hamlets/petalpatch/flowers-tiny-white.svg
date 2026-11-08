@@ -1,0 +1,6 @@
+<svg width="58" height="61" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 42 44">
+ <title>Small white meadow daisies</title>
+ <defs><g id="f" stroke="#39472d" stroke-width=".65"><path fill="#fff9dc" d="M-1-2Q-5-8-6-2Q-12 0-6 4Q-7 10-1 7Q4 12 5 5Q12 6 8 0Q12-6 5-5Q2-11-1-2Z"/><circle r="2" fill="#f6d34c" stroke="none"/></g></defs>
+ <g fill="#66ae39" stroke="#39472d" stroke-width=".9"><path d="M20 42L17 13M20 42L31 23M17 40L9 28"/><path d="M18 37Q9 39 6 33Q13 30 18 37ZM22 41Q25 29 33 30Q34 38 22 41Z"/></g>
+ <use xlink:href="#f" x="16" y="12"/><use xlink:href="#f" x="31" y="24"/><use xlink:href="#f" x="10" y="29"/>
+</svg>

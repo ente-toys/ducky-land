@@ -1,0 +1,14 @@
+<svg width="291" height="124" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 217 92">
+ <title>Curved cottage border of daisies and lavender</title>
+ <defs>
+  <g id="daisy" stroke="#39472d" stroke-width=".95"><path fill="#fff9dc" d="M-2-3C-7-11-12-6-9-1C-16 1-12 9-7 7C-7 15 2 14 3 8C10 12 15 4 9 0C14-6 7-12 3-6C2-12-4-11-2-3Z"/><circle r="3" fill="#edc84a"/></g>
+  <g id="lavender" stroke="#39472d" stroke-width="1.1"><path fill="none" d="M0 69V14"/><path fill="#bf81cb" d="M0 62Q-13 58-6 51Q-15 45-7 40Q-15 33-5 29Q-11 20-3 18Q-7 10-1 3Q5 7 3 16Q11 17 5 26Q16 30 7 38Q15 42 7 49Q15 55 5 61Z"/></g>
+ </defs>
+ <g stroke="#39472d" stroke-width="1.6" stroke-linejoin="round"><path fill="#d5a34c" d="M3 66Q95 78 213 60L214 78Q126 96 5 85Z"/><path fill="#efbd68" stroke="none" d="M7 78Q104 89 211 72V77Q112 96 6 84Z"/>
+  <path fill="#3f9437" d="M3 65Q-3 54 10 49Q4 39 18 37Q18 24 31 31Q39 22 49 32Q59 24 67 34Q78 27 88 35Q98 26 108 34Q119 22 128 32Q140 24 149 34Q162 23 170 35Q184 28 188 41Q204 34 208 48Q222 51 211 64Q215 75 201 75Q187 86 172 76Q158 88 143 77Q128 90 113 78Q96 91 82 79Q65 92 52 79Q37 88 24 77Q9 81 9 72Q0 73 3 65Z"/>
+  <g fill="#6aae3c" stroke-width="1"><path d="M36 72Q24 64 23 51Q36 50 39 67Q41 53 53 52Q53 65 43 73M83 76Q69 67 73 55Q84 56 87 70Q89 55 101 57Q99 71 89 76M126 76Q112 66 116 55Q128 55 129 70Q133 55 143 55Q143 70 133 77M175 73Q162 65 164 52Q178 53 179 66Q184 51 195 52Q194 67 182 73"/></g>
+ </g>
+ <use xlink:href="#lavender" x="17" y="0"/><use xlink:href="#lavender" x="37" y="5"/><use xlink:href="#lavender" x="180" y="4"/><use xlink:href="#lavender" x="199" y="9"/>
+ <g fill="none" stroke="#39472d" stroke-width="1.1"><path d="M70 74L68 42M94 77L95 35M116 76L121 43M141 75L143 38M154 72L158 51"/></g>
+ <use xlink:href="#daisy" x="69" y="41"/><use xlink:href="#daisy" x="60" y="57"/><use xlink:href="#daisy" x="81" y="54"/><use xlink:href="#daisy" x="95" y="34"/><use xlink:href="#daisy" x="99" y="55"/><use xlink:href="#daisy" x="120" y="44"/><use xlink:href="#daisy" x="131" y="60"/><use xlink:href="#daisy" x="143" y="38"/><use xlink:href="#daisy" x="157" y="53"/>
+</svg>

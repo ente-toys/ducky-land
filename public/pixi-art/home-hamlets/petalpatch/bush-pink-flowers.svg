@@ -1,0 +1,7 @@
+<svg width="184" height="125" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 137 93">
+ <title>Pink flowering shrub beside the reading duck</title>
+ <defs><g id="bloom" stroke="#39472d" stroke-width="1.05"><path fill="#f39aca" d="M-2-4Q-10-13-12-4Q-19-3-12 4Q-15 14-5 10Q0 19 5 9Q15 13 13 4Q22-1 12-6Q11-15 4-8Q1-15-2-4Z"/><circle r="3" fill="#f9d86b"/></g></defs>
+ <ellipse cx="67" cy="82" rx="62" ry="10" fill="#78a62e"/>
+ <g stroke="#39472d" stroke-width="1.6" stroke-linejoin="round"><path fill="#2f8738" d="M13 72Q-1 65 8 54Q-1 42 13 33Q9 19 26 19Q31 6 43 13Q54 0 68 10Q84-1 94 15Q110 9 114 25Q129 25 127 42Q143 51 129 63Q135 78 118 81Q105 94 91 82Q77 96 62 83Q47 95 36 81Q18 88 13 72Z"/><path fill="#51a439" stroke="none" d="M16 61Q7 53 21 46Q16 35 29 31Q27 18 42 23Q46 10 59 20Q71 9 82 23Q95 17 100 33Q116 29 116 44Q131 49 117 59Q123 73 106 70Q93 84 82 72Q68 86 54 73Q41 86 33 72Q17 78 17 67Z"/><path fill="#67b23d" stroke="none" d="M24 56Q28 40 39 44Q47 30 57 41Q71 33 77 46Q92 44 89 57Q103 62 91 70Q80 77 71 65Q60 78 49 65Q36 75 31 64Z"/></g>
+ <use xlink:href="#bloom" x="27" y="42"/><use xlink:href="#bloom" x="57" y="24"/><use xlink:href="#bloom" x="84" y="14"/><use xlink:href="#bloom" x="97" y="38"/><use xlink:href="#bloom" x="116" y="34"/><use xlink:href="#bloom" x="56" y="58"/><use xlink:href="#bloom" x="85" y="69"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg width="231" height="214" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 159">
+<g stroke="#39472d" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+<ellipse fill="#7bb135" stroke="none" cx="83" cy="145" rx="80" ry="14"/>
+<!-- The tall wooden frame leans slightly, like the cart in the blueprint. -->
+<path fill="#aa7133" d="m30 39 7 1-9 67-7-1ZM121 45l7 2-5 64-7-1Z"/>
+<path fill="#deb166" d="m34 46 3 0-8 59-4 1ZM122 49l3 0-5 59-3-1Z" stroke="none"/>
+<path fill="#a36c2f" d="m117 104 44 1 4 8-47 1Z"/>
+<path fill="#d39a4e" d="m121 102 42 3 2 6-45-1Z"/>
+<!-- Striped, gently bowed canopy. -->
+<path fill="#fff0bd" d="m8 32 27-25q8-8 18-5l66 17q11 3 20 15l-6 12q-6 9-18 1-7 11-20 2-9 10-21 0-9 10-21 0-10 8-19-3-10 7-18-3Q3 48 8 32Z"/>
+<path fill="#ffd04a" d="m23 19 13-12 15-5-30 38-13-1 0-7ZM49 4l16 4-30 39-14-7ZM80 12l15 4-28 36-14-3ZM110 20q9 2 15 7l-22 28-15-4ZM136 34l3 0-6 12q-5 7-12 3l7-15Z" stroke="none"/>
+<path d="M8 32 35 7q8-8 18-5l66 17q11 3 20 15l-6 12q-6 9-18 1-7 11-20 2-9 10-21 0-9 10-21 0-10 8-19-3-10 7-18-3Q3 48 8 32Z" fill="none"/>
+<path fill="#bf833b" d="M7 106 29 88l102 12-11 35-111-9Z"/>
+<path fill="#e4ac5d" d="M8 110 118 120l15-22 5 5-15 30-116-9Z"/>
+<path fill="#d89a4b" d="M9 124 122 134l-7 15-100-11Z"/>
+<path fill="#edbe73" d="m9 106 105 10 14-18 7 3-15 23L6 114Z"/>
+<path d="m14 132 98 10M20 118l87 8" fill="none" stroke-width=".8"/>
+<!-- Basket of round loaves. -->
+<path fill="#c8954b" d="M16 84q23-9 48 4l-7 19q-21 5-37-5Z"/>
+<path fill="#f0c579" d="M15 83q1-11 24-10 24 1 25 14-4 10-28 8-22-2-21-12Z"/>
+<path fill="#ffe1a1" d="M20 82q-2-18 11-18 11 1 13 18-10 9-24 0ZM37 85q-2-20 11-23 13-1 14 20-11 9-25 3Z"/>
+<path fill="#ffda86" d="M18 84q0-15 9-15 11 2 13 18-10 9-22-3Z"/>
+<path d="m25 73 6 4m12-8 5 7m-27 5 7 3" fill="none" stroke-width=".85"/>
+<path d="M21 96v6m6-4v7m7-6v8m7-7v7m7-7v7m7-8v6" fill="none" stroke-width=".65"/>
+<!-- Long baguettes and a little roll bin. -->
+<path fill="#ecb74d" d="M69 99q3-28 14-28 10 1 3 30ZM89 102q0-35 11-35 12 2 5 35Z"/>
+<path fill="#ffd16a" d="M62 101q-1-20 11-20 12 1 13 22ZM83 103q-1-19 11-19 12 2 12 21Z"/>
+<path d="m77 78 6 3m-7 3 6 3m14-11 6 3m-6 4 6 3m-33 1 5 5m20-2 5 5" fill="none" stroke-width="1"/>
+<path fill="#e4ab58" d="M61 105 108 109l5-14 6 1-6 19-54-5Z"/>
+<!-- Solid wood wheels, with recessed hubs. -->
+<circle fill="#9b682e" cx="32" cy="142" r="14"/><circle fill="#c89449" cx="32" cy="142" r="10"/><circle fill="#edc578" cx="32" cy="142" r="4"/>
+<circle fill="#9b682e" cx="104" cy="146" r="13"/><circle fill="#c89449" cx="104" cy="146" r="9"/><circle fill="#edc578" cx="104" cy="146" r="3.5"/>
+</g></svg>

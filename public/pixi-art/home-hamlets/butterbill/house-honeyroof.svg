@@ -1,0 +1,48 @@
+<svg width="338" height="370" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 276">
+<g stroke="#39472d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+<!-- East cottage, with the two tiny dormers and a visible side wall. -->
+<path fill="#f4d08a" d="M186 104 243 74V225L184 273Z"/>
+<path fill="#eac276" d="M222 108 242 87V224L222 241Z" stroke="none"/>
+<path fill="#ffe7a5" d="M11 84 188 122V273L11 231Z"/>
+<path fill="#fff1ba" d="M20 95 30 97V234L20 232ZM172 128 183 130V265L172 262Z" stroke="none"/>
+<path fill="#f2d083" d="M11 211 187 250V273L11 232Z"/>
+<path fill="#faca3b" d="M4 78 48 4Q51 0 58 3L202 43 248 102Q252 110 245 113L188 144Q185 147 176 144L7 92Q0 89 4 78Z"/>
+<path fill="#eeb12f" d="m202 43 46 59q5 8-3 11l-57 31-11-17Z"/>
+<path fill="#ffdb67" d="M6 83 178 134 188 126 242 101 246 109 187 143 10 92Z"/>
+<path d="M42 15 190 57M31 34 190 80M19 56 180 104" fill="none" stroke-width=".8" opacity=".4"/>
+<path fill="#edbf6d" d="m165 30 23 6V64L165 58Z"/>
+<path fill="#fff1ba" d="m166 24 25-12 12 5v11l-23 12-14-5Z"/>
+<path fill="#f8df9b" d="m180 40 23-12v24l-23 12Z"/>
+<path fill="#fff2bc" d="m166 24 14 5 23-12-13-5Z"/>
+<!-- Left dormer. -->
+<path fill="#ffe6a1" d="M50 58 75 75V106L47 98V68Z"/>
+<path fill="#e5bf71" d="m75 75 18-12-2 26-16 17Z"/>
+<path fill="#ffce4d" d="m47 63 28-29 20 31-18 13-19-26Z"/>
+<path fill="#fff2ba" d="m47 63 11-11 19 26-5 3-16-20-9 9Z"/>
+<path fill="#6ec8d4" d="m55 64 15 5V90L55 86Z"/>
+<path fill="#fff4c8" stroke="none" d="M61.2 66h1.6v22h-1.6ZM55 75.2l15 4v1.6l-15-4Z"/>
+<!-- Right dormer. -->
+<path fill="#ffe9ae" d="m126 87 26 17v28l-29-8V96Z"/>
+<path fill="#e7c378" d="m152 104 18-14-2 27-16 15Z"/>
+<path fill="#ffcc49" d="m121 92 29-27 22 30-19 13-22-27Z"/>
+<path fill="#fff2bc" d="m121 92 10-11 22 27-5 3-18-21-9 8Z"/>
+<path fill="#66bfd2" d="m132 93 14 4v23l-14-5Z"/>
+<path fill="#fff2c5" stroke="none" d="M138.2 96h1.6v21h-1.6ZM132 103.2l14 4v1.6l-14-4Z"/>
+<!-- Window recesses, right side has two narrow windows. -->
+<path fill="#f6c775" d="m29 118 32 9v40l-32-8ZM135 153l31 8v40l-31-8Z"/>
+<path fill="#68c4d1" d="m34 124 22 6v29l-22-6ZM140 159l21 6v29l-21-6Z"/>
+<path fill="#fff1b9" stroke="none" d="M44.2 127h1.6v28h-1.6ZM34 137.2l22 6v1.6l-22-6ZM149.2 162h1.6v29h-1.6ZM140 173.2l21 6v1.6l-21-6Z"/>
+<path fill="#fae2a3" d="m202 157 14-11v43l-14 11ZM222 141l13-10v44l-13 11Z"/>
+<path fill="#66bed1" d="m205 158 8-6v35l-8 7ZM225 143l7-6v35l-7 7Z"/>
+<path fill="#fff3c6" stroke="none" d="M208.4 155h1.2v36h-1.2ZM205 172.4l8-6v1.2l-8 6ZM228.4 140h1.2v36h-1.2ZM225 156.4l7-6v1.2l-7 6Z"/>
+<path fill="#f7d080" d="M76 243V182Q76 154 98 157 120 160 120 190V253Z"/>
+<path fill="#fff0b8" d="M80 244V183Q80 161 98 164 115 167 115 190V251L109 250V190Q109 173 98 171 86 169 86 185V246Z"/>
+<path fill="#e78641" d="M86 246V186Q86 169 98 171 110 174 110 191V251Z"/>
+<path fill="#f49a51" d="M87 186Q88 172 98 173V247L87 245Z" stroke="none"/>
+<ellipse fill="#d6a34b" cx="92" cy="204" rx="1.8" ry="3.3"/>
+<path fill="#fff0b5" d="m74 238 48 12v11l-48-11ZM68 249l60 14v10l-60-14Z"/>
+<!-- Flower boxes. -->
+<path fill="#ad7b39" d="m23 167 44 10-2 10-39-9ZM130 200l45 10-3 10-39-10Z"/>
+<path fill="#4b9b34" d="M22 167q-5-9 5-10-1-9 9-6 5-8 10 1 9-5 11 5 10-1 11 9l-2 13ZM130 201q-6-9 4-11-1-8 9-7 6-7 11 2 9-3 10 7 12-1 11 10l-4 11Z"/>
+<g fill="#ffd34e" stroke-width=".65"><path d="M28 160q-7-6 1-8 0-7 6-2 7-3 5 4 7 5-1 7-1 8-7 3ZM45 164q-7-6 0-8 2-8 6-2 8-2 6 5 5 7-3 6-5 7-8 1ZM139 194q-7-5 0-7 1-8 6-2 7-3 6 4 7 6-1 7-4 8-7 1ZM155 199q-7-6 0-8 1-7 6-2 8-2 6 5 6 6-2 7-5 7-8 0Z"/></g>
+</g></svg>

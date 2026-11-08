@@ -1,0 +1,16 @@
+<svg width="122" height="104" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91 77">
+<g stroke="#39472d" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+<!-- A sleeping reader curled on an open blue-bound book. -->
+<path fill="#4f9ca5" d="m2 53 31-10 20 7 24-4 12 13-31 8-33 8Z"/>
+<path fill="#fff2c3" d="m5 49 29-8 20 10 22-8 10 13-31 10-29 4Z"/>
+<path fill="#e5c47f" d="m6 53 21 13 28-5 29-9 2 5-31 10-28 5-21-15Z"/>
+<path d="m54 51 2 14M12 52l15 10 20-5m-28-8 10 7 13-3m20 7 14-5m-14-1 11-4" fill="none" stroke-width=".7"/>
+<path fill="#f6c337" d="M17 30q1-14 15-17 13-3 22 9 15 0 20 13l7-5q2 11-8 17-8 10-24 7-10 6-20 0-13 1-17-10-4-8 5-14Z"/>
+<path fill="#ffd64c" d="M16 29q1-12 13-15 14-4 22 9 4 13-7 20-13 9-26-1-6-5-2-13Z" stroke="none"/>
+<path fill="#e9ad2b" d="M43 44q7 5 16-1 5-4 6-8 4 11-5 17-10 4-17-1Z" stroke="none"/>
+<path fill="#ffd44b" d="M25 15q-9-7-2-10 5-1 7 6 2-9 7-6 4 4-3 9Z"/>
+<path d="M22 31q3 4 7 0m9-1q4 4 7-1M39 46q4-1 5-5" fill="none"/>
+<path fill="#eea33d" d="M27 35q6-4 13-1-3 7-10 5Z" stroke-width=".8"/>
+</g>
+<path fill="#fff3bc" d="m49 4 8-2 1 2-4 6 6-2 1 2-9 3-1-2 4-7-6 2Zm11-2 5-1v2l-3 4 4-1v2l-6 2-1-2 3-4-2 1Z"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg width="180" height="252" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 134 188">
+ <title>Petalpatch terracotta pottery kiln</title>
+ <g stroke="#39472d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <path fill="#e5bb68" stroke="none" d="M2 179Q62 163 131 177L129 185H8Z"/>
+  <path fill="#ef9e68" d="M3 151V112Q3 64 46 53H87Q126 68 129 112V155Z"/>
+  <path fill="#df8554" stroke="none" d="M85 56Q123 71 129 112V155L103 163V111Q103 75 85 56Z"/>
+  <path fill="#f5b47c" d="M17 89Q29 63 48 58Q65 49 88 59Q109 70 116 89Q70 103 17 89Z" stroke-width="1.3"/>
+  <path fill="none" stroke-width="1.05" d="M5 112Q67 132 128 111M4 137Q63 154 129 137M11 92Q68 111 122 92M37 69L29 94M65 56L63 99M94 63L101 96M19 100L16 115M49 104L45 121M83 105L86 121M111 99L117 115M30 121L27 141M65 124V146M100 121L105 143M15 141L15 155M43 146L43 164M89 146L91 163M118 141L119 157"/>
+  <path fill="#f8da8e" d="M44 59L44 16L84 16V59Q65 65 44 59Z"/>
+  <path fill="#ec9862" d="M47 57L47 17L82 17V57Q66 62 47 57Z" stroke-width="1.1"/>
+  <path fill="#d68050" stroke="none" d="M72 22H82V57L72 60Z"/>
+  <path fill="#f4ad73" d="M42 9Q43 2 64 2Q85 1 87 9V22Q66 30 42 21Z"/>
+  <path fill="#77503a" d="M49 11Q62 5 80 10Q69 15 49 13Z" stroke-width="1.1"/>
+  <path fill="#f6d38a" d="M43 160V137Q43 105 69 102Q99 103 101 137V161L88 164V139Q86 119 70 119Q55 122 55 140V164Z"/>
+  <path fill="#9d5c36" d="M55 164V140Q55 121 70 119Q86 121 88 139V164Z"/>
+  <path fill="#bd622e" stroke="none" d="M58 157Q55 145 65 140Q72 133 74 129Q85 140 87 153V165H58Z"/>
+  <path fill="#f6a624" stroke="none" d="M59 164Q56 153 67 145Q67 151 73 153Q77 149 77 144Q86 152 85 164Z"/>
+  <path fill="#ffd54b" stroke="none" d="M65 164Q64 156 71 151Q70 157 76 158Q81 159 80 164Z"/>
+  <path fill="#ffe5a5" d="M3 151Q25 159 55 159L55 183Q25 183 3 174ZM55 159H89L89 183Q72 185 55 183ZM89 159Q109 158 129 151V174Q111 181 89 183Z"/>
+  <path fill="#edcc82" stroke="none" d="M4 166Q26 174 54 174V182Q26 182 4 173ZM90 174Q111 172 128 164V173Q111 180 90 182Z"/>
+  <path fill="none" stroke-width="1" d="M28 158V180M112 156V179"/>
+ </g>
+</svg>

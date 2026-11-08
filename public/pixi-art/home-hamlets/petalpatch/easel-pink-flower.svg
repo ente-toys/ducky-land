@@ -1,0 +1,16 @@
+<svg width="108" height="195" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 145">
+ <title>Wooden easel with pink flower painting</title>
+ <g stroke="#39472d" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+  <path fill="#b9823d" d="M49 75L74 127L68 131L41 86Z"/>
+  <path fill="#d4a355" d="M17 86L6 135Q10 139 16 136L34 88ZM47 85L52 141Q57 144 64 141L58 85Z"/>
+  <path fill="#cf9a4d" d="M43 3Q49 2 54 5L50 33L38 32Z"/>
+  <path fill="#fff1bf" d="M25 24L76 32L60 104L10 96Z"/>
+  <path fill="#f9df9d" stroke="none" d="M14 91L60 98L59 102L12 95Z"/>
+  <path fill="#d9a85a" d="M10 87L65 96L63 106L7 98Z"/>
+  <g stroke="none"><path fill="#6aae37" d="M35 83L38 62L40 62L38 84Z"/><path fill="#6caf39" d="M37 82Q21 83 23 70Q35 70 37 82ZM39 79Q40 66 52 67Q52 79 39 79Z"/>
+   <path fill="#f297bd" d="M37 57Q23 60 26 50Q27 44 34 46Q29 35 38 34Q46 34 44 45Q54 36 58 44Q61 51 50 55Q60 59 53 66Q46 70 42 61Q36 73 30 66Q25 60 37 57Z"/>
+   <path fill="#ed7da9" d="M42 53Q51 41 56 43Q61 51 50 55Q60 59 53 66Q46 70 42 61Z"/>
+   <circle cx="41" cy="54" r="5" fill="#f8d859"/>
+  </g>
+ </g>
+</svg>

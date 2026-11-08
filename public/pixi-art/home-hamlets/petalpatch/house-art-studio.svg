@@ -1,0 +1,54 @@
+<svg width="510" height="374" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 380 279">
+ <title>Sloping pink roof art studio</title>
+ <defs>
+  <g id="bloom" stroke="#39472d" stroke-width="1"><path fill="#f09bc5" d="M-2-4Q-10-13-12-4Q-19-3-12 4Q-15 14-5 10Q0 19 5 9Q15 13 13 4Q22-1 12-6Q11-15 4-8Q1-15-2-4Z"/><circle r="3" fill="#f9d86b"/></g>
+  <g id="tulip" stroke="#39472d" stroke-width="1.15"><path fill="#ffce36" d="M0 0Q-13-2-13-15Q-13-23-7-17Q-3-30 1-19Q10-29 11-17Q16-23 16-16Q16-3 4 0Z"/><path fill="#f4aa24" stroke="none" d="M0-2Q9-10 10-19Q16-23 16-16Q16-3 4 0Z"/></g>
+  <g id="daisy" stroke="#39472d" stroke-width=".8"><path fill="#fff8dc" d="M-2-3Q-9-10-9-2Q-16 0-9 5Q-11 13-4 9Q1 16 4 8Q12 12 10 3Q17-1 9-4Q8-12 2-7Q-3-13-2-3Z"/><circle r="2.5" fill="#f4cb50"/></g>
+ </defs>
+ <g stroke="#39472d" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+  <path fill="#ebabb4" d="M24 126L115 61L345 132V252L90 253L24 234Z"/>
+  <path fill="#f7bec4" stroke="none" d="M35 130L91 91V245L35 233ZM97 130L335 151V247H97Z"/>
+  <path fill="#df929e" stroke="none" d="M24 133L35 126V233L24 234ZM89 100L98 106V247H89Z"/>
+  <path fill="#ee9ea9" d="M2 130Q1 124 9 115L93 47L104 64L21 139Q12 145 2 130Z"/>
+  <path fill="#ffdf9e" d="M91 48L105 52L105 246H91Z"/>
+  <path fill="#f6abb4" d="M82 2Q74 2 74 12L73 23Q77 28 92 33L352 145Q365 151 374 142L378 131Q373 113 363 105L96 4Z"/>
+  <path fill="#df8b9b" d="M73 23Q77 28 92 33L352 145Q365 151 374 142L378 131Q368 138 355 132L85 20Q76 16 74 12Z"/>
+  <path fill="none" stroke-width="1.15" d="M89 6L364 113"/>
+  <path fill="#efabb1" d="M272 76V32L315 30L316 87Z"/>
+  <path fill="#d98b98" stroke="none" d="M273 38L315 37V48L273 49Z"/>
+  <path fill="#ffedba" d="M271 24Q278 17 295 18Q312 17 318 23V43Q294 50 271 43Z"/>
+  <path fill="#78583b" d="M278 27Q294 22 311 27Q300 31 278 30Z" stroke-width="1.1"/>
+  <path fill="#ffebb1" d="M93 47L338 144V222L165 213V134L93 123Z"/>
+  <path fill="#74bed0" d="M105 56L326 143L326 152L105 113Z"/>
+  <path fill="#57a8bc" stroke="none" d="M105 99L326 143V152L105 113Z"/>
+  <path fill="none" stroke-width="6" d="M105 84L326 141M140 70V121M177 85V127M217 101V134M257 117V140M296 132V147"/>
+  <path fill="#ffe7ac" stroke="none" d="M105 82L326 139V143L105 86ZM138 70H142V121H138ZM175 85H179V127H175ZM215 101H219V134H215ZM255 117H259V140H255ZM294 132H298V147H294Z"/>
+  <path fill="#74bfd0" d="M177 139L326 151V204L177 198Z"/>
+  <path fill="#57acbd" stroke="none" d="M177 184L326 188V204L177 198Z"/>
+  <path fill="none" stroke-width="6" d="M218 143V200M261 146V202"/>
+  <path fill="#ffe7ac" stroke="none" d="M216 143H220V200H216ZM259 146H263V202H259Z"/>
+  <path fill="#fff0c2" stroke-width="1.2" d="M207 198Q201 189 206 182L213 178L210 165Q207 156 211 155Q216 155 216 165L217 178L224 180Q229 186 227 200ZM237 201Q231 195 233 185L238 177V173Q232 168 242 168Q254 168 248 173V178Q256 190 252 202Z"/>
+  <path fill="none" stroke-width="1" d="M238 173Q243 175 248 173"/>
+  <g fill="#d29b4b" stroke-width="1.15"><path d="M210 182L198 161L201 159L215 181ZM216 180L218 154L221 154L220 182ZM220 181L228 159L231 160L223 182ZM286 170L291 156L300 157L298 171Z"/></g>
+  <g fill="#e7b25b" stroke-width="1"><path d="M200 159Q195 158 197 150Q203 152 202 160Z"/><path d="M218 155Q216 149 220 147Q225 150 221 156Z"/><path d="M229 160Q228 152 234 150Q235 157 231 161Z"/></g>
+  <path fill="#ffedbd" d="M273 168L317 170L310 203L269 202Z" stroke-width="1.4"/>
+  <path fill="#ffe9ae" d="M78 245V186Q78 135 113 134Q151 135 155 181V250L141 247V181Q139 149 115 148Q92 149 92 184V247Z"/>
+  <path fill="#d69b48" d="M92 247V184Q92 151 115 148Q140 148 141 181V250Z"/>
+  <path fill="#c48a3d" stroke="none" d="M117 149Q141 151 141 181V250L117 248Z"/>
+  <path fill="none" stroke-width="1.1" d="M106 151V247M126 154V249"/>
+  <ellipse fill="#a06a30" stroke="none" cx="132" cy="202" rx="3.8" ry="4.5"/>
+  <path fill="#ffeab3" d="M84 239L149 246L151 263L79 255Z"/>
+  <path fill="#f2ce80" stroke="none" d="M81 249L149 257V262L79 254Z"/>
+  <path fill="#fff4c9" d="M54 155L73 157L71 175Q63 181 56 174Z"/>
+  <path fill="#9b7344" d="M52 155Q64 143 75 157Q67 161 52 155Z"/>
+  <path fill="#a47a48" d="M61 147V143Q64 138 67 144V148Z"/>
+  <path fill="#dda950" d="M178 247L347 252V271Q262 274 177 269Z"/>
+  <path fill="#4b9f35" d="M171 247Q168 238 181 234Q178 221 192 224Q197 211 208 220Q218 208 229 220Q240 211 250 223Q260 216 271 229Q279 217 290 229Q301 220 312 229Q326 221 332 236Q347 228 351 243Q360 253 347 259Q331 265 319 256Q305 264 290 256Q277 266 261 256Q248 265 235 256Q218 267 204 255Q188 264 182 255Q174 258 171 247Z"/>
+  <g fill="#64ae39" stroke-width="1.1"><path d="M185 251Q183 236 176 234Q191 230 194 248Q198 227 207 226Q210 242 197 253M213 254Q211 234 204 230Q221 228 222 250Q226 231 234 233Q235 246 224 254M239 254Q238 237 231 233Q245 230 248 251Q253 233 262 235Q262 249 251 255M282 254Q278 236 286 230M307 255Q307 239 314 232M328 255Q333 244 328 235"/></g>
+  <use xlink:href="#tulip" x="188" y="236"/><use xlink:href="#tulip" x="207" y="230"/><use xlink:href="#tulip" x="227" y="236"/><use xlink:href="#tulip" x="246" y="231"/>
+  <use xlink:href="#bloom" x="279" y="245"/><use xlink:href="#bloom" x="295" y="231"/><use xlink:href="#bloom" x="315" y="243"/><use xlink:href="#bloom" x="333" y="248"/>
+  <path fill="#d7a54e" d="M13 232L73 245L73 258Q42 257 12 244Z"/>
+  <path fill="#53a537" d="M4 226Q1 215 13 212Q9 202 22 200Q20 189 35 192Q44 184 52 196Q64 191 70 207Q81 208 77 218Q89 229 76 239Q64 248 53 237Q41 246 29 234Q14 240 14 232Q4 235 4 226Z"/>
+  <use xlink:href="#daisy" x="21" y="220"/><use xlink:href="#daisy" x="40" y="204"/><use xlink:href="#daisy" x="52" y="222"/><use xlink:href="#daisy" x="65" y="209"/><use xlink:href="#daisy" x="65" y="230"/>
+ </g>
+</svg>

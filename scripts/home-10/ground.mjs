@@ -69,7 +69,10 @@ const inCentre = (x, y, pad = 0) => inPoly(x, y, centre) || (pad > 0 && polyDist
 const waters = [...riverWater.map(w => w.poly), E.water?.poly].filter(Boolean);
 const waterDist = (x, y) => {let d = Infinity; for (const w of waters) {if (inPoly(x, y, w)) return -1; d = Math.min(d, polyDist(x, y, w));} return d;};
 const roadWidth = r => Math.max(r.width ?? 56, r.kind === 'main' ? 128 : 104);
-const roads = (E.roads ?? []).map(r => ({...r, line: sample(r.points, 24), W: roadWidth(r)}));
+const roads = (E.roads ?? []).filter(r => r.points).map(r => ({...r, line: sample(r.points, 24), W: roadWidth(r)}));
+// boss 8 Nov: a hamlet's square and lane are polygons off GPT's blueprint, painted in the same cream as every lane
+const polyRoads = (E.roads ?? []).filter(r => r.poly), frames = Object.values(E.hamletFrames ?? {});
+const inFrame = (x, y) => frames.some(f => x > f[0] && x < f[2] && y > f[1] && y < f[3]);
 // spatial hash of road samples for fast distance
 const GRID = 200, roadCells = new Map();
 for (const r of roads) for (let i = 0; i < r.line.length - 1; i++) {
@@ -79,6 +82,7 @@ for (const r of roads) for (let i = 0; i < r.line.length - 1; i++) {
 function roadEdgeDist(x, y) {   // distance from the painted path's edge (negative on the path)
   let d = Infinity; const gx = Math.floor(x / GRID), gy = Math.floor(y / GRID);
   for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) for (const [a, b, W] of roadCells.get(`${gx + i},${gy + j}`) ?? []) d = Math.min(d, segDist(x, y, a, b) - W / 2);
+  for (const r of polyRoads) if (inPoly(x, y, r.poly)) return -1; else if (Math.abs(x - r.poly[0][0]) < 3000) d = Math.min(d, polyDist(x, y, r.poly));
   return d;
 }
 const decks = (E.decks ?? []).filter(d => Number.isFinite(d.x));
@@ -121,7 +125,7 @@ for (const r of roads) {
 // b) grass detail on every lawn (the centre's decalsFor rule: one per ~cell, denser along paths and the shore)
 for (let i = 1; i < 260000; i++) {
   const x = X0 + halton(i, 2) * (X1 - X0), y = Y0 + halton(i, 3) * (Y1 - Y0);
-  if (!onLand(x, y) || inCentre(x, y, 40)) continue;
+  if (!onLand(x, y) || inCentre(x, y, 40) || inFrame(x, y)) continue;   // a hamlet carries GPT's own tufts and pebbles
   const rd = roadEdgeDist(x, y); if (rd < 8) continue;
   const c = coastDist(x, y); if (c < 40) continue;
   const wd = waterDist(x, y); if (wd < 30) continue;
@@ -142,11 +146,14 @@ for (const d of landPaths) g += `<path d="${d}" fill="none" stroke="${SAND_DARK}
 for (const d of landPaths) g += `<path d="${d}" fill="none" stroke="${SAND}" stroke-width="92" stroke-linejoin="round"/>`;
 for (const d of landPaths) g += `<path d="${d}" fill="${GRASS}"/>`;
 for (const d of landPaths) g += `<path d="${d}" fill="none" stroke="#7da52b" stroke-width="5" stroke-opacity=".55"/>`;
-const roadD = roads.map(r => ({d: curve(r.points), W: r.W}));
+const roadD = roads.map(r => ({d: curve(r.points), W: r.W})), polyD = polyRoads.map(r => curve(r.poly.filter((_, i) => i % 2 === 0 || r.poly.length < 40), true));
 g += `<g fill="none" stroke-linecap="round" stroke-linejoin="round">`;
 for (const {d, W} of roadD) g += `<path d="${d}" stroke="#80a82c" stroke-width="${W + 22}" stroke-opacity=".5"/>`;
+for (const d of polyD) g += `<path d="${d}" fill="#80a82c" fill-opacity=".5" stroke="#80a82c" stroke-width="22" stroke-opacity=".5"/>`;
 for (const {d, W} of roadD) g += `<path d="${d}" stroke="${SAND_DARK}" stroke-width="${W + 6}" transform="translate(0 4)"/>`;
+for (const d of polyD) g += `<path d="${d}" fill="${SAND_DARK}" stroke="${SAND_DARK}" stroke-width="6" transform="translate(0 4)"/>`;
 for (const {d, W} of roadD) g += `<path d="${d}" stroke="${SAND}" stroke-width="${W}"/>`;
+for (const d of polyD) g += `<path d="${d}" fill="${SAND}" stroke="none"/>`;
 g += `</g>`;
 // water: sand bank, a dark bank line, the water, a pale inner edge and a few ripples
 const wpaths = waters.map(w => poly(w));
@@ -219,6 +226,6 @@ const newDecks = E.decks.map(d => {
 
 // ---------- write back only the owned keys ----------
 const {sleepers: _drop, ...keep} = E;   // the scripted sleepers are gone (boss 8 Nov)
-writeFileSync(FILE, JSON.stringify({...keep, tiles, decks: newDecks, groundDecals: decals}, null, 2) + '\n');
+writeFileSync(FILE, JSON.stringify({...keep, tiles, decks: newDecks, groundDecals: [...decals, ...(E.hamletDecals ?? []).map(({hamlet, ...d}) => d)]}, null, 2) + '\n');
 execFileSync('node', ['scripts/walk-world.mjs'], {stdio: 'inherit'});
 console.log(JSON.stringify({decals: decals.length, tiles: tiles.length, shore: Boolean(S), coastPoints: coast.length}));

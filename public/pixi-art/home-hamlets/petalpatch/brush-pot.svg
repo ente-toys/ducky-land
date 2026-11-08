@@ -1,0 +1,11 @@
+<svg width="72" height="124" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 53 92">
+ <title>Pot of long handled pottery brushes</title>
+ <g stroke="#39472d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="#d3a65e"><path d="M18 59L8 26L11 25L22 59ZM26 57L24 20L27 20L30 58ZM33 58L38 15L41 15L37 59ZM13 60L2 38L5 36L18 60Z"/></g>
+  <g fill="#e5b96b"><path d="M8 27Q2 23 4 15Q12 19 11 25Z"/><path d="M24 20Q19 13 24 7Q29 13 27 20Z"/><path d="M38 15Q34 9 41 2Q47 12 41 16Z"/><path d="M2 38Q-1 33 2 28Q9 31 5 37Z"/></g>
+  <path fill="#c78d43" d="M7 55Q23 49 43 54L46 79Q43 91 23 90Q5 89 4 78Z"/>
+  <path fill="#b57d37" stroke="none" d="M34 55L43 54L46 79Q43 90 24 90L21 85Q36 84 36 75Z"/>
+  <ellipse cx="25" cy="55" rx="18" ry="5" fill="#e9bd73"/>
+  <path fill="#705132" d="M13 55Q24 51 37 55Q27 59 13 55Z" stroke-width="1"/>
+ </g>
+</svg>

@@ -1,0 +1,1789 @@
+{
+ "name": "Lanternleaf bandstand green",
+ "canvas": {
+  "width": 1536,
+  "height": 1024,
+  "background": "#8DC63F"
+ },
+ "coordinates": "Image 1 pixels; x,y are bottom-centre of the complete SVG viewBox; width preserves its aspect ratio; drawOrder increases toward the viewer.",
+ "anchor": "bottom-centre",
+ "outline": "#39472d",
+ "pathFill": "#F6DE95",
+ "square": {
+  "type": "Polygon",
+  "coordinates": [
+   [
+    [
+     782,
+     321
+    ],
+    [
+     847,
+     325
+    ],
+    [
+     909,
+     338
+    ],
+    [
+     962,
+     360
+    ],
+    [
+     1009,
+     391
+    ],
+    [
+     1047,
+     432
+    ],
+    [
+     1077,
+     478
+    ],
+    [
+     1092,
+     526
+    ],
+    [
+     1088,
+     574
+    ],
+    [
+     1065,
+     618
+    ],
+    [
+     1028,
+     659
+    ],
+    [
+     975,
+     695
+    ],
+    [
+     914,
+     721
+    ],
+    [
+     849,
+     738
+    ],
+    [
+     782,
+     744
+    ],
+    [
+     709,
+     739
+    ],
+    [
+     639,
+     724
+    ],
+    [
+     574,
+     699
+    ],
+    [
+     515,
+     663
+    ],
+    [
+     468,
+     621
+    ],
+    [
+     436,
+     577
+    ],
+    [
+     421,
+     531
+    ],
+    [
+     425,
+     484
+    ],
+    [
+     444,
+     439
+    ],
+    [
+     479,
+     400
+    ],
+    [
+     524,
+     370
+    ],
+    [
+     582,
+     346
+    ],
+    [
+     647,
+     331
+    ],
+    [
+     713,
+     323
+    ],
+    [
+     782,
+     321
+    ]
+   ],
+   [
+    [
+     782,
+     361
+    ],
+    [
+     718,
+     362
+    ],
+    [
+     659,
+     370
+    ],
+    [
+     603,
+     387
+    ],
+    [
+     558,
+     413
+    ],
+    [
+     519,
+     445
+    ],
+    [
+     492,
+     482
+    ],
+    [
+     478,
+     524
+    ],
+    [
+     483,
+     566
+    ],
+    [
+     505,
+     604
+    ],
+    [
+     540,
+     635
+    ],
+    [
+     587,
+     660
+    ],
+    [
+     644,
+     678
+    ],
+    [
+     706,
+     690
+    ],
+    [
+     772,
+     696
+    ],
+    [
+     839,
+     690
+    ],
+    [
+     899,
+     675
+    ],
+    [
+     953,
+     652
+    ],
+    [
+     998,
+     622
+    ],
+    [
+     1026,
+     586
+    ],
+    [
+     1042,
+     547
+    ],
+    [
+     1041,
+     506
+    ],
+    [
+     1024,
+     465
+    ],
+    [
+     997,
+     431
+    ],
+    [
+     955,
+     402
+    ],
+    [
+     904,
+     381
+    ],
+    [
+     847,
+     367
+    ],
+    [
+     782,
+     361
+    ]
+   ]
+  ]
+ },
+ "lane": {
+  "type": "MultiPolygon",
+  "coordinates": [
+   [
+    [
+     [
+      762,
+      278
+     ],
+     [
+      803,
+      278
+     ],
+     [
+      803,
+      308
+     ],
+     [
+      805,
+      319
+     ],
+     [
+      816,
+      329
+     ],
+     [
+      811,
+      346
+     ],
+     [
+      751,
+      344
+     ],
+     [
+      748,
+      328
+     ],
+     [
+      757,
+      316
+     ],
+     [
+      760,
+      301
+     ],
+     [
+      762,
+      278
+     ]
+    ]
+   ],
+   [
+    [
+     [
+      349,
+      474
+     ],
+     [
+      387,
+      469
+     ],
+     [
+      392,
+      488
+     ],
+     [
+      400,
+      500
+     ],
+     [
+      415,
+      509
+     ],
+     [
+      439,
+      518
+     ],
+     [
+      453,
+      534
+     ],
+     [
+      455,
+      558
+     ],
+     [
+      441,
+      579
+     ],
+     [
+      425,
+      577
+     ],
+     [
+      420,
+      555
+     ],
+     [
+      411,
+      543
+     ],
+     [
+      394,
+      539
+     ],
+     [
+      378,
+      531
+     ],
+     [
+      364,
+      519
+     ],
+     [
+      355,
+      504
+     ],
+     [
+      349,
+      489
+     ],
+     [
+      349,
+      474
+     ]
+    ]
+   ],
+   [
+    [
+     [
+      1169,
+      473
+     ],
+     [
+      1216,
+      482
+     ],
+     [
+      1204,
+      504
+     ],
+     [
+      1190,
+      523
+     ],
+     [
+      1172,
+      536
+     ],
+     [
+      1149,
+      544
+     ],
+     [
+      1120,
+      547
+     ],
+     [
+      1090,
+      553
+     ],
+     [
+      1071,
+      565
+     ],
+     [
+      1060,
+      550
+     ],
+     [
+      1063,
+      527
+     ],
+     [
+      1081,
+      516
+     ],
+     [
+      1105,
+      512
+     ],
+     [
+      1130,
+      511
+     ],
+     [
+      1149,
+      504
+     ],
+     [
+      1160,
+      490
+     ],
+     [
+      1169,
+      473
+     ]
+    ]
+   ],
+   [
+    [
+     [
+      298,
+      771
+     ],
+     [
+      313,
+      766
+     ],
+     [
+      328,
+      776
+     ],
+     [
+      347,
+      783
+     ],
+     [
+      369,
+      786
+     ],
+     [
+      393,
+      783
+     ],
+     [
+      417,
+      775
+     ],
+     [
+      442,
+      761
+     ],
+     [
+      466,
+      743
+     ],
+     [
+      486,
+      722
+     ],
+     [
+      506,
+      702
+     ],
+     [
+      530,
+      682
+     ],
+     [
+      558,
+      700
+     ],
+     [
+      546,
+      718
+     ],
+     [
+      528,
+      739
+     ],
+     [
+      509,
+      762
+     ],
+     [
+      486,
+      782
+     ],
+     [
+      458,
+      799
+     ],
+     [
+      428,
+      811
+     ],
+     [
+      400,
+      817
+     ],
+     [
+      375,
+      818
+     ],
+     [
+      350,
+      814
+     ],
+     [
+      328,
+      804
+     ],
+     [
+      310,
+      790
+     ],
+     [
+      298,
+      777
+     ],
+     [
+      298,
+      771
+     ]
+    ]
+   ],
+   [
+    [
+     [
+      969,
+      695
+     ],
+     [
+      986,
+      707
+     ],
+     [
+      1001,
+      725
+     ],
+     [
+      1023,
+      742
+     ],
+     [
+      1049,
+      757
+     ],
+     [
+      1076,
+      767
+     ],
+     [
+      1096,
+      766
+     ],
+     [
+      1105,
+      776
+     ],
+     [
+      1099,
+      786
+     ],
+     [
+      1088,
+      791
+     ],
+     [
+      1074,
+      791
+     ],
+     [
+      1052,
+      785
+     ],
+     [
+      1028,
+      775
+     ],
+     [
+      1006,
+      760
+     ],
+     [
+      987,
+      743
+     ],
+     [
+      971,
+      726
+     ],
+     [
+      956,
+      716
+     ],
+     [
+      969,
+      695
+     ]
+    ]
+   ],
+   [
+    [
+     [
+      692,
+      728
+     ],
+     [
+      713,
+      735
+     ],
+     [
+      733,
+      742
+     ],
+     [
+      752,
+      748
+     ],
+     [
+      789,
+      747
+     ],
+     [
+      811,
+      735
+     ],
+     [
+      837,
+      736
+     ],
+     [
+      827,
+      758
+     ],
+     [
+      821,
+      782
+     ],
+     [
+      821,
+      809
+     ],
+     [
+      825,
+      837
+     ],
+     [
+      833,
+      869
+     ],
+     [
+      843,
+      903
+     ],
+     [
+      851,
+      939
+     ],
+     [
+      856,
+      978
+     ],
+     [
+      858,
+      1024
+     ],
+     [
+      663,
+      1024
+     ],
+     [
+      661,
+      1000
+     ],
+     [
+      664,
+      977
+     ],
+     [
+      670,
+      951
+     ],
+     [
+      679,
+      920
+     ],
+     [
+      689,
+      891
+     ],
+     [
+      701,
+      860
+     ],
+     [
+      709,
+      833
+     ],
+     [
+      714,
+      808
+     ],
+     [
+      713,
+      786
+     ],
+     [
+      708,
+      765
+     ],
+     [
+      700,
+      749
+     ],
+     [
+      692,
+      738
+     ],
+     [
+      692,
+      728
+     ]
+    ]
+   ]
+  ]
+ },
+ "objects": [
+  {
+   "id": "oak-northwest",
+   "file": "tree-oak-tall.svg",
+   "x": 396,
+   "y": 222,
+   "width": 184,
+   "drawOrder": 10
+  },
+  {
+   "id": "birch-northwest",
+   "file": "tree-birch.svg",
+   "x": 267,
+   "y": 238,
+   "width": 154,
+   "drawOrder": 11
+  },
+  {
+   "id": "oak-north",
+   "file": "tree-oak-small.svg",
+   "x": 623,
+   "y": 164,
+   "width": 142,
+   "drawOrder": 12
+  },
+  {
+   "id": "oak-northeast",
+   "file": "tree-oak-tall.svg",
+   "x": 1108,
+   "y": 242,
+   "width": 184,
+   "drawOrder": 13
+  },
+  {
+   "id": "birch-northeast",
+   "file": "tree-birch-slender.svg",
+   "x": 1250,
+   "y": 250,
+   "width": 120,
+   "drawOrder": 14
+  },
+  {
+   "id": "bush-red-house-left",
+   "file": "bush-white.svg",
+   "x": 624,
+   "y": 259,
+   "width": 85,
+   "drawOrder": 18
+  },
+  {
+   "id": "bush-red-house-right",
+   "file": "bush-white.svg",
+   "x": 932,
+   "y": 268,
+   "width": 82,
+   "drawOrder": 19
+  },
+  {
+   "id": "little-oak-behind-house",
+   "file": "tree-oak-small.svg",
+   "x": 961,
+   "y": 232,
+   "width": 91,
+   "drawOrder": 20
+  },
+  {
+   "id": "rose-roof-cottage",
+   "file": "house-rose.svg",
+   "x": 782,
+   "y": 287,
+   "width": 300,
+   "drawOrder": 30
+  },
+  {
+   "id": "reader",
+   "file": "duck-reading.svg",
+   "x": 513,
+   "y": 223,
+   "width": 90,
+   "drawOrder": 31
+  },
+  {
+   "id": "birch-west",
+   "file": "tree-birch-slender.svg",
+   "x": 111,
+   "y": 409,
+   "width": 120,
+   "drawOrder": 32
+  },
+  {
+   "id": "oak-east",
+   "file": "tree-oak-tall.svg",
+   "x": 1417,
+   "y": 412,
+   "width": 204,
+   "drawOrder": 33
+  },
+  {
+   "id": "bush-blue-house-left",
+   "file": "bush-green.svg",
+   "x": 165,
+   "y": 466,
+   "width": 87,
+   "drawOrder": 35
+  },
+  {
+   "id": "blue-roof-cottage",
+   "file": "house-blue.svg",
+   "x": 308,
+   "y": 489,
+   "width": 294,
+   "drawOrder": 40
+  },
+  {
+   "id": "yellow-roof-cottage",
+   "file": "house-yellow.svg",
+   "x": 1195,
+   "y": 490,
+   "width": 266,
+   "drawOrder": 41
+  },
+  {
+   "id": "flowers-blue-house",
+   "file": "flowers-pink.svg",
+   "x": 455,
+   "y": 449,
+   "width": 48,
+   "drawOrder": 42
+  },
+  {
+   "id": "flowers-yellow-house",
+   "file": "flowers-pink.svg",
+   "x": 1062,
+   "y": 448,
+   "width": 48,
+   "drawOrder": 43
+  },
+  {
+   "id": "lamp-northwest",
+   "file": "lamp.svg",
+   "x": 603,
+   "y": 379,
+   "width": 30,
+   "drawOrder": 44
+  },
+  {
+   "id": "lamp-northeast",
+   "file": "lamp.svg",
+   "x": 929,
+   "y": 380,
+   "width": 30,
+   "drawOrder": 45
+  },
+  {
+   "id": "pink-on-green-northwest",
+   "file": "flowers-pink.svg",
+   "x": 594,
+   "y": 452,
+   "width": 32,
+   "drawOrder": 46
+  },
+  {
+   "id": "pink-on-green-northeast",
+   "file": "flowers-pink.svg",
+   "x": 914,
+   "y": 492,
+   "width": 36,
+   "drawOrder": 47
+  },
+  {
+   "id": "bench-west",
+   "file": "bench.svg",
+   "x": 554,
+   "y": 564,
+   "width": 80,
+   "drawOrder": 48
+  },
+  {
+   "id": "bench-east",
+   "file": "bench.svg",
+   "x": 963,
+   "y": 564,
+   "width": 80,
+   "flipX": true,
+   "drawOrder": 49
+  },
+  {
+   "id": "bandstand",
+   "file": "bandstand.svg",
+   "x": 762,
+   "y": 606,
+   "width": 236,
+   "drawOrder": 50
+  },
+  {
+   "id": "bandstand-pot-left",
+   "file": "flower-pot.svg",
+   "x": 652,
+   "y": 588,
+   "width": 65,
+   "drawOrder": 51
+  },
+  {
+   "id": "bandstand-pot-right",
+   "file": "flower-pot.svg",
+   "x": 866,
+   "y": 588,
+   "width": 65,
+   "drawOrder": 52
+  },
+  {
+   "id": "lamp-west",
+   "file": "lamp.svg",
+   "x": 475,
+   "y": 611,
+   "width": 30,
+   "drawOrder": 53
+  },
+  {
+   "id": "lamp-east",
+   "file": "lamp.svg",
+   "x": 1046,
+   "y": 614,
+   "width": 30,
+   "drawOrder": 54
+  },
+  {
+   "id": "oak-southwest",
+   "file": "tree-oak-tall.svg",
+   "x": 95,
+   "y": 691,
+   "width": 192,
+   "drawOrder": 55
+  },
+  {
+   "id": "hammock-tree",
+   "file": "tree-oak-tall.svg",
+   "x": 1340,
+   "y": 625,
+   "width": 139,
+   "drawOrder": 56
+  },
+  {
+   "id": "hammock-birch",
+   "file": "tree-birch-slender.svg",
+   "x": 1482,
+   "y": 646,
+   "width": 120,
+   "drawOrder": 57
+  },
+  {
+   "id": "hammock",
+   "file": "duck-hammock.svg",
+   "x": 1407,
+   "y": 626,
+   "width": 140,
+   "drawOrder": 58
+  },
+  {
+   "id": "daisies-green-left",
+   "file": "flowers-daisy.svg",
+   "x": 600,
+   "y": 635,
+   "width": 40,
+   "drawOrder": 60
+  },
+  {
+   "id": "daisies-green-right",
+   "file": "flowers-daisy.svg",
+   "x": 929,
+   "y": 623,
+   "width": 40,
+   "drawOrder": 61
+  },
+  {
+   "id": "garden-bed",
+   "file": "vegetable-bed.svg",
+   "x": 1184,
+   "y": 784,
+   "width": 300,
+   "drawOrder": 62
+  },
+  {
+   "id": "garden-rear-fence",
+   "file": "vegetable-fence-back.svg",
+   "x": 1184,
+   "y": 735,
+   "width": 300,
+   "drawOrder": 63
+  },
+  {
+   "id": "tomatoes",
+   "file": "crop-tomato-trellis.svg",
+   "x": 1207,
+   "y": 707,
+   "width": 135,
+   "drawOrder": 64
+  },
+  {
+   "id": "cabbage-left",
+   "file": "crop-cabbage-row.svg",
+   "x": 1119,
+   "y": 727,
+   "width": 64,
+   "drawOrder": 65
+  },
+  {
+   "id": "cabbage-right",
+   "file": "crop-cabbage-row.svg",
+   "x": 1170,
+   "y": 740,
+   "width": 64,
+   "drawOrder": 66
+  },
+  {
+   "id": "carrots",
+   "file": "crop-carrot-row.svg",
+   "x": 1247,
+   "y": 750,
+   "width": 99,
+   "drawOrder": 67
+  },
+  {
+   "id": "garden-front-fence",
+   "file": "vegetable-fence-front.svg",
+   "x": 1184,
+   "y": 792,
+   "width": 300,
+   "drawOrder": 68
+  },
+  {
+   "id": "bush-below-garden",
+   "file": "bush-white.svg",
+   "x": 1331,
+   "y": 799,
+   "width": 91,
+   "drawOrder": 69
+  },
+  {
+   "id": "shed-back-flowers",
+   "file": "flowers-pink.svg",
+   "x": 181,
+   "y": 753,
+   "width": 50,
+   "drawOrder": 70
+  },
+  {
+   "id": "garden-shed",
+   "file": "garden-shed.svg",
+   "x": 289,
+   "y": 784,
+   "width": 244,
+   "drawOrder": 71
+  },
+  {
+   "id": "shed-daisy-pot",
+   "file": "flower-pot-daisy.svg",
+   "x": 412,
+   "y": 714,
+   "width": 50,
+   "drawOrder": 72
+  },
+  {
+   "id": "shed-pots",
+   "file": "terracotta-pots.svg",
+   "x": 431,
+   "y": 760,
+   "width": 78,
+   "drawOrder": 73
+  },
+  {
+   "id": "lamp-southwest",
+   "file": "lamp.svg",
+   "x": 646,
+   "y": 750,
+   "width": 30,
+   "drawOrder": 74
+  },
+  {
+   "id": "lamp-southeast",
+   "file": "lamp.svg",
+   "x": 891,
+   "y": 750,
+   "width": 30,
+   "drawOrder": 75
+  },
+  {
+   "id": "bush-bottom-left",
+   "file": "bush-white.svg",
+   "x": 634,
+   "y": 840,
+   "width": 115,
+   "drawOrder": 76
+  },
+  {
+   "id": "bush-bottom-right",
+   "file": "bush-white.svg",
+   "x": 889,
+   "y": 835,
+   "width": 109,
+   "drawOrder": 77
+  },
+  {
+   "id": "flowers-bottom-left",
+   "file": "flowers-pink.svg",
+   "x": 662,
+   "y": 915,
+   "width": 50,
+   "drawOrder": 78
+  },
+  {
+   "id": "flowers-bottom-right",
+   "file": "flowers-pink.svg",
+   "x": 870,
+   "y": 913,
+   "width": 50,
+   "drawOrder": 79
+  },
+  {
+   "id": "oak-bottom-left",
+   "file": "tree-oak-wide.svg",
+   "x": 565,
+   "y": 994,
+   "width": 184,
+   "drawOrder": 80
+  },
+  {
+   "id": "oak-bottom-right",
+   "file": "tree-oak-wide.svg",
+   "x": 987,
+   "y": 997,
+   "width": 204,
+   "drawOrder": 81
+  },
+  {
+   "id": "tuft01",
+   "file": "grass-tuft.svg",
+   "x": 135,
+   "y": 87,
+   "width": 28,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft02",
+   "file": "grass-tuft.svg",
+   "x": 77,
+   "y": 160,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft03",
+   "file": "grass-tuft.svg",
+   "x": 199,
+   "y": 214,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft04",
+   "file": "grass-tuft.svg",
+   "x": 531,
+   "y": 80,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft05",
+   "file": "grass-tuft.svg",
+   "x": 680,
+   "y": 34,
+   "width": 29,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft06",
+   "file": "grass-tuft.svg",
+   "x": 947,
+   "y": 46,
+   "width": 28,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft07",
+   "file": "grass-tuft.svg",
+   "x": 1001,
+   "y": 88,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft08",
+   "file": "grass-tuft.svg",
+   "x": 948,
+   "y": 137,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft09",
+   "file": "grass-tuft.svg",
+   "x": 1422,
+   "y": 104,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft10",
+   "file": "grass-tuft.svg",
+   "x": 451,
+   "y": 270,
+   "width": 28,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft11",
+   "file": "grass-tuft.svg",
+   "x": 538,
+   "y": 287,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft12",
+   "file": "grass-tuft.svg",
+   "x": 715,
+   "y": 314,
+   "width": 28,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft13",
+   "file": "grass-tuft.svg",
+   "x": 856,
+   "y": 319,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft14",
+   "file": "grass-tuft.svg",
+   "x": 1007,
+   "y": 242,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft15",
+   "file": "grass-tuft.svg",
+   "x": 1058,
+   "y": 288,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft16",
+   "file": "grass-tuft.svg",
+   "x": 1341,
+   "y": 172,
+   "width": 29,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft17",
+   "file": "grass-tuft.svg",
+   "x": 965,
+   "y": 288,
+   "width": 21,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft18",
+   "file": "grass-tuft.svg",
+   "x": 1018,
+   "y": 376,
+   "width": 27,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft19",
+   "file": "grass-tuft.svg",
+   "x": 492,
+   "y": 375,
+   "width": 29,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft20",
+   "file": "grass-tuft.svg",
+   "x": 64,
+   "y": 338,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft21",
+   "file": "grass-tuft.svg",
+   "x": 79,
+   "y": 452,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft22",
+   "file": "grass-tuft.svg",
+   "x": 259,
+   "y": 546,
+   "width": 27,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft23",
+   "file": "grass-tuft.svg",
+   "x": 346,
+   "y": 538,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft24",
+   "file": "grass-tuft.svg",
+   "x": 419,
+   "y": 490,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft25",
+   "file": "grass-tuft.svg",
+   "x": 220,
+   "y": 578,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft26",
+   "file": "grass-tuft.svg",
+   "x": 407,
+   "y": 607,
+   "width": 29,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft27",
+   "file": "grass-tuft.svg",
+   "x": 532,
+   "y": 474,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft28",
+   "file": "grass-tuft.svg",
+   "x": 618,
+   "y": 502,
+   "width": 30,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft29",
+   "file": "grass-tuft.svg",
+   "x": 653,
+   "y": 404,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft30",
+   "file": "grass-tuft.svg",
+   "x": 844,
+   "y": 399,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft31",
+   "file": "grass-tuft.svg",
+   "x": 935,
+   "y": 433,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft32",
+   "file": "grass-tuft.svg",
+   "x": 974,
+   "y": 467,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft33",
+   "file": "grass-tuft.svg",
+   "x": 1123,
+   "y": 485,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft34",
+   "file": "grass-tuft.svg",
+   "x": 1242,
+   "y": 531,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft35",
+   "file": "grass-tuft.svg",
+   "x": 1275,
+   "y": 568,
+   "width": 23,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft36",
+   "file": "grass-tuft.svg",
+   "x": 1192,
+   "y": 576,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft37",
+   "file": "grass-tuft.svg",
+   "x": 1114,
+   "y": 629,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft38",
+   "file": "grass-tuft.svg",
+   "x": 968,
+   "y": 633,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft39",
+   "file": "grass-tuft.svg",
+   "x": 828,
+   "y": 666,
+   "width": 28,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft40",
+   "file": "grass-tuft.svg",
+   "x": 723,
+   "y": 679,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft41",
+   "file": "grass-tuft.svg",
+   "x": 688,
+   "y": 638,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft42",
+   "file": "grass-tuft.svg",
+   "x": 562,
+   "y": 610,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft43",
+   "file": "grass-tuft.svg",
+   "x": 465,
+   "y": 680,
+   "width": 23,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft44",
+   "file": "grass-tuft.svg",
+   "x": 499,
+   "y": 731,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft45",
+   "file": "grass-tuft.svg",
+   "x": 544,
+   "y": 793,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft46",
+   "file": "grass-tuft.svg",
+   "x": 594,
+   "y": 750,
+   "width": 24,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft47",
+   "file": "grass-tuft.svg",
+   "x": 1012,
+   "y": 725,
+   "width": 23,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft48",
+   "file": "grass-tuft.svg",
+   "x": 1078,
+   "y": 665,
+   "width": 23,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft49",
+   "file": "grass-tuft.svg",
+   "x": 1396,
+   "y": 680,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft50",
+   "file": "grass-tuft.svg",
+   "x": 1460,
+   "y": 777,
+   "width": 27,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft51",
+   "file": "grass-tuft.svg",
+   "x": 969,
+   "y": 788,
+   "width": 29,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft52",
+   "file": "grass-tuft.svg",
+   "x": 380,
+   "y": 868,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft53",
+   "file": "grass-tuft.svg",
+   "x": 308,
+   "y": 916,
+   "width": 30,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft54",
+   "file": "grass-tuft.svg",
+   "x": 209,
+   "y": 842,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft55",
+   "file": "grass-tuft.svg",
+   "x": 288,
+   "y": 817,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft56",
+   "file": "grass-tuft.svg",
+   "x": 125,
+   "y": 729,
+   "width": 26,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft57",
+   "file": "grass-tuft.svg",
+   "x": 76,
+   "y": 756,
+   "width": 23,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft58",
+   "file": "grass-tuft.svg",
+   "x": 1257,
+   "y": 897,
+   "width": 25,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft59",
+   "file": "grass-tuft.svg",
+   "x": 970,
+   "y": 782,
+   "width": 27,
+   "drawOrder": 1
+  },
+  {
+   "id": "tuft60",
+   "file": "grass-tuft.svg",
+   "x": 1134,
+   "y": 760,
+   "width": 22,
+   "drawOrder": 1
+  },
+  {
+   "id": "pebbles-southwest",
+   "file": "pebble-pair.svg",
+   "x": 135,
+   "y": 813,
+   "width": 37,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-west",
+   "file": "pebble.svg",
+   "x": 209,
+   "y": 519,
+   "width": 22,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-house-west",
+   "file": "pebble.svg",
+   "x": 285,
+   "y": 488,
+   "width": 13,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-northwest",
+   "file": "pebble.svg",
+   "x": 507,
+   "y": 316,
+   "width": 23,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-northeast",
+   "file": "pebble.svg",
+   "x": 1016,
+   "y": 332,
+   "width": 24,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-east",
+   "file": "pebble.svg",
+   "x": 1133,
+   "y": 587,
+   "width": 20,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebbles-green-south",
+   "file": "pebble-pair.svg",
+   "x": 899,
+   "y": 655,
+   "width": 31,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebbles-green-south-two",
+   "file": "pebble.svg",
+   "x": 889,
+   "y": 674,
+   "width": 23,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-southwest",
+   "file": "pebble.svg",
+   "x": 431,
+   "y": 903,
+   "width": 25,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebbles-south-centre",
+   "file": "pebble-pair.svg",
+   "x": 863,
+   "y": 871,
+   "width": 35,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-southeast-one",
+   "file": "pebble.svg",
+   "x": 1142,
+   "y": 853,
+   "width": 21,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-southeast-two",
+   "file": "pebble.svg",
+   "x": 1177,
+   "y": 870,
+   "width": 23,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-garden-east",
+   "file": "pebble.svg",
+   "x": 1472,
+   "y": 698,
+   "width": 20,
+   "drawOrder": 2
+  },
+  {
+   "id": "pebble-garden-east-two",
+   "file": "pebble.svg",
+   "x": 1437,
+   "y": 717,
+   "width": 23,
+   "drawOrder": 2
+  }
+ ]
+}

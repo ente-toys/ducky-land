@@ -1,0 +1,17 @@
+<svg width="149" height="212" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111 158">
+<g stroke="#39472d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+<path fill="#ab7734" d="m8 44 9-4v109l-9 7ZM88 18l9-3v111l-9 5Z"/>
+<path fill="#d39b51" d="m12 48 5-2v104l-5 3ZM92 23l5-3v106l-5 3Z" stroke="none"/>
+<path fill="#aa7432" d="m8 47 85-34 11 10-87 38Z"/>
+<path fill="#d9a15a" d="m3 42 82-36 20 13-88 37Z"/>
+<path fill="#efc17d" d="m3 42 6-3 19 12-11 5ZM17 36l8-4 19 12-9 4ZM35 28l8-3 19 11-10 5ZM54 20l8-4 18 13-9 4ZM73 12l12-6 20 13-16 7Z" stroke-width=".7"/>
+<path fill="#b4823d" d="m16 92 74-27 9 9-82 31ZM16 132l75-27v11l-74 29Z"/>
+<!-- Baskets behind the wheat sign. -->
+<path fill="#c5944a" d="m25 87 53-18 5 21-54 20Z"/>
+<path fill="#f9c35a" d="M32 89q-6-10 1-18 8-5 15 6l5 12ZM49 79q-6-10 2-17 8-4 13 7l5 15ZM66 75q-4-11 3-17 9-4 12 8l4 14Z"/>
+<path fill="#ffd77e" d="M26 88q0-13 10-15 11-1 13 12-6 11-23 3ZM46 81q0-13 11-15 11-1 12 13-7 10-23 2Z"/>
+<path d="m36 77 3 5m17-12 4 5m15-13 3 5" fill="none" stroke-width=".9"/>
+<path fill="#ffedb6" d="M36 86q0-8 13-12l14-3q14-2 14 11v35q-1 10-14 15l-12 4q-15 5-15-8Z"/>
+<path d="M57 91v28m0-8q-12 0-11-8 10 1 11 8Zm0-9q-10-1-9-8 8 1 9 8Zm0 13q11-6 10-13-9 4-10 13Zm0-10q10-5 8-11-7 4-8 11Zm0-9q-4-7 1-11 4 5-1 11Z" fill="#e3ad49" stroke-width=".85"/>
+<path fill="#bd8841" d="m5 154 13-5 3 5-12 4Z"/>
+</g></svg>
