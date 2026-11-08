@@ -9,7 +9,7 @@
   640,
   560
  ],
- "note": "32-angle spin from GPT, traced to SVG (spin/boat-NN.svg, PNGs kept beside them; frame n = 90 - 11.25*n deg). Each PNG drawn at width game px with anchor = waterline centre. deg = bow screen heading, 0 = south/toward camera, 90 = east, -180..180; nearest deg is shown with 4 deg hysteresis. seat = Ducky feet offset in game px from the anchor. front (bow-toward-camera views) = the same frame clipped to the duck head and the hull below the feet, drawn above the Ducky (build-front.py). The previous 9-view Illustrator set is kept in views-turntable.json.",
+ "note": "48 opaque 7.5-degree views. Seat-pinned roll, per-view hull and rear-rig depth. Clean cuts avoid dissolving mismatched illustrated contours.",
  "views": {
   "f00": {
    "file": "spin/boat-00.svg",
@@ -17,266 +17,432 @@
    "seat": [
     42.9,
     -59.5
-   ]
+   ],
+   "front": "spin/front/boat-00.svg"
   },
   "f01": {
    "file": "spin/boat-01.svg",
-   "deg": 78.75,
+   "deg": 82.5,
    "seat": [
-    40.5,
-    -54.9
-   ]
+    41.3,
+    -56.4
+   ],
+   "front": "spin/front/boat-01.svg"
   },
   "f02": {
    "file": "spin/boat-02.svg",
+   "deg": 75.0,
+   "seat": [
+    39.7,
+    -53.4
+   ],
+   "front": "spin/front/boat-02.svg"
+  },
+  "f03": {
+   "file": "spin/boat-03.svg",
    "deg": 67.5,
    "seat": [
     38.1,
     -50.3
-   ]
-  },
-  "f03": {
-   "file": "spin/boat-03.svg",
-   "deg": 56.25,
-   "seat": [
-    27,
-    -44
    ],
    "front": "spin/front/boat-03.svg"
   },
   "f04": {
    "file": "spin/boat-04.svg",
-   "deg": 45.0,
+   "deg": 60.0,
    "seat": [
-    20,
-    -40
+    32.1,
+    -46.9
    ],
    "front": "spin/front/boat-04.svg"
   },
   "f05": {
    "file": "spin/boat-05.svg",
-   "deg": 33.75,
+   "deg": 52.5,
    "seat": [
-    14,
-    -36
+    26.0,
+    -43.4
    ],
    "front": "spin/front/boat-05.svg"
   },
   "f06": {
    "file": "spin/boat-06.svg",
-   "deg": 22.5,
+   "deg": 45.0,
    "seat": [
-    7,
-    -34
+    20,
+    -40
    ],
    "front": "spin/front/boat-06.svg"
   },
   "f07": {
    "file": "spin/boat-07.svg",
-   "deg": 11.25,
+   "deg": 37.5,
    "seat": [
-    3,
-    -33
+    15.7,
+    -38.0
    ],
    "front": "spin/front/boat-07.svg"
   },
   "f08": {
    "file": "spin/boat-08.svg",
-   "deg": 0.0,
+   "deg": 30.0,
    "seat": [
-    0,
-    -33
+    11.3,
+    -36.0
    ],
    "front": "spin/front/boat-08.svg"
   },
   "f09": {
    "file": "spin/boat-09.svg",
-   "deg": -11.25,
+   "deg": 22.5,
    "seat": [
-    -4,
+    7,
     -34
    ],
    "front": "spin/front/boat-09.svg"
   },
   "f10": {
    "file": "spin/boat-10.svg",
-   "deg": -22.5,
+   "deg": 15.0,
    "seat": [
-    -12,
-    -37
+    4.7,
+    -33.7
    ],
    "front": "spin/front/boat-10.svg"
   },
   "f11": {
    "file": "spin/boat-11.svg",
-   "deg": -33.75,
+   "deg": 7.5,
    "seat": [
-    -22,
-    -41
+    2.3,
+    -33.3
    ],
    "front": "spin/front/boat-11.svg"
   },
   "f12": {
    "file": "spin/boat-12.svg",
-   "deg": -45.0,
+   "deg": 0.0,
    "seat": [
-    -30,
-    -45
+    0,
+    -33
    ],
    "front": "spin/front/boat-12.svg"
   },
   "f13": {
    "file": "spin/boat-13.svg",
-   "deg": -56.25,
+   "deg": -7.5,
    "seat": [
-    -37,
-    -49
+    -4.0,
+    -34.3
    ],
    "front": "spin/front/boat-13.svg"
   },
   "f14": {
    "file": "spin/boat-14.svg",
+   "deg": -15.0,
+   "seat": [
+    -8.0,
+    -35.7
+   ],
+   "front": "spin/front/boat-14.svg"
+  },
+  "f15": {
+   "file": "spin/boat-15.svg",
+   "deg": -22.5,
+   "seat": [
+    -12,
+    -37
+   ],
+   "front": "spin/front/boat-15.svg"
+  },
+  "f16": {
+   "file": "spin/boat-16.svg",
+   "deg": -30.0,
+   "seat": [
+    -18.0,
+    -39.7
+   ],
+   "front": "spin/front/boat-16.svg"
+  },
+  "f17": {
+   "file": "spin/boat-17.svg",
+   "deg": -37.5,
+   "seat": [
+    -24.0,
+    -42.3
+   ],
+   "front": "spin/front/boat-17.svg"
+  },
+  "f18": {
+   "file": "spin/boat-18.svg",
+   "deg": -45.0,
+   "seat": [
+    -30,
+    -45
+   ],
+   "front": "spin/front/boat-18.svg"
+  },
+  "f19": {
+   "file": "spin/boat-19.svg",
+   "deg": -52.5,
+   "seat": [
+    -35.9,
+    -48.0
+   ],
+   "front": "spin/front/boat-19.svg"
+  },
+  "f20": {
+   "file": "spin/boat-20.svg",
+   "deg": -60.0,
+   "seat": [
+    -41.7,
+    -51.0
+   ],
+   "front": "spin/front/boat-20.svg"
+  },
+  "f21": {
+   "file": "spin/boat-21.svg",
    "deg": -67.5,
    "seat": [
     -47.6,
     -54.0
-   ]
+   ],
+   "front": "spin/front/boat-21.svg"
   },
-  "f15": {
-   "file": "spin/boat-15.svg",
-   "deg": -78.75,
+  "f22": {
+   "file": "spin/boat-22.svg",
+   "deg": -75.0,
    "seat": [
-    -47.9,
+    -47.8,
     -54.0
-   ]
+   ],
+   "front": "spin/front/boat-22.svg"
   },
-  "f16": {
-   "file": "spin/boat-16.svg",
+  "f23": {
+   "file": "spin/boat-23.svg",
+   "deg": -82.5,
+   "seat": [
+    -48.1,
+    -54.0
+   ],
+   "front": "spin/front/boat-23.svg"
+  },
+  "f24": {
+   "file": "spin/boat-24.svg",
    "deg": -90.0,
    "seat": [
     -48.3,
     -54.0
-   ]
+   ],
+   "front": "spin/front/boat-24.svg"
   },
-  "f17": {
-   "file": "spin/boat-17.svg",
-   "deg": -101.25,
+  "f25": {
+   "file": "spin/boat-25.svg",
+   "deg": -97.5,
    "seat": [
-    -47.1,
-    -59.2
-   ]
+    -47.5,
+    -57.5
+   ],
+   "front": "spin/front/boat-25.svg"
   },
-  "f18": {
-   "file": "spin/boat-18.svg",
+  "f26": {
+   "file": "spin/boat-26.svg",
+   "deg": -105.0,
+   "seat": [
+    -46.8,
+    -60.9
+   ],
+   "front": "spin/front/boat-26.svg"
+  },
+  "f27": {
+   "file": "spin/boat-27.svg",
    "deg": -112.5,
    "seat": [
     -46.0,
     -64.4
-   ]
-  },
-  "f19": {
-   "file": "spin/boat-19.svg",
-   "deg": -123.75,
-   "seat": [
-    -43.1,
-    -70.5
-   ]
-  },
-  "f20": {
-   "file": "spin/boat-20.svg",
-   "deg": -135.0,
-   "seat": [
-    -40.2,
-    -76.7
-   ]
-  },
-  "f21": {
-   "file": "spin/boat-21.svg",
-   "deg": -146.25,
-   "seat": [
-    -30,
-    -60
-   ]
-  },
-  "f22": {
-   "file": "spin/boat-22.svg",
-   "deg": -157.5,
-   "seat": [
-    -18,
-    -48
-   ]
-  },
-  "f23": {
-   "file": "spin/boat-23.svg",
-   "deg": -168.75,
-   "seat": [
-    -8,
-    -40
-   ]
-  },
-  "f24": {
-   "file": "spin/boat-24.svg",
-   "deg": 180.0,
-   "seat": [
-    0,
-    -38
-   ]
-  },
-  "f25": {
-   "file": "spin/boat-25.svg",
-   "deg": 168.75,
-   "seat": [
-    6,
-    -40
-   ]
-  },
-  "f26": {
-   "file": "spin/boat-26.svg",
-   "deg": 157.5,
-   "seat": [
-    16,
-    -48
-   ]
-  },
-  "f27": {
-   "file": "spin/boat-27.svg",
-   "deg": 146.25,
-   "seat": [
-    30,
-    -60
-   ]
+   ],
+   "front": "spin/front/boat-27.svg"
   },
   "f28": {
    "file": "spin/boat-28.svg",
-   "deg": 135.0,
+   "deg": -120.0,
    "seat": [
-    43.9,
-    -76.7
-   ]
+    -42.0,
+    -58.9
+   ],
+   "front": "spin/front/boat-28.svg"
   },
   "f29": {
    "file": "spin/boat-29.svg",
-   "deg": 123.75,
+   "deg": -127.5,
    "seat": [
-    43.0,
-    -71.4
-   ]
+    -38.0,
+    -53.5
+   ],
+   "front": "spin/front/boat-29.svg"
   },
   "f30": {
    "file": "spin/boat-30.svg",
-   "deg": 112.5,
+   "deg": -135.0,
    "seat": [
-    42.0,
-    -66.2
-   ]
+    -34.0,
+    -48.0
+   ],
+   "front": "spin/front/boat-30.svg"
   },
   "f31": {
    "file": "spin/boat-31.svg",
-   "deg": 101.25,
+   "deg": -142.5,
    "seat": [
-    42.4,
-    -62.9
-   ]
+    -28.0,
+    -40.3
+   ],
+   "front": "spin/front/boat-31.svg"
+  },
+  "f32": {
+   "file": "spin/boat-32.svg",
+   "deg": -150.0,
+   "seat": [
+    -22,
+    -30
+   ],
+   "front": "spin/front/boat-32.svg"
+  },
+  "f33": {
+   "file": "spin/boat-33.svg",
+   "deg": -157.5,
+   "seat": [
+    -16.144,
+    -29.7
+   ],
+   "front": "spin/front/boat-33.svg"
+  },
+  "f34": {
+   "file": "spin/boat-34.svg",
+   "deg": -165.0,
+   "seat": [
+    -10.289,
+    -29.4
+   ],
+   "front": "spin/front/boat-34.svg"
+  },
+  "f35": {
+   "file": "spin/boat-35.svg",
+   "deg": -172.5,
+   "seat": [
+    -4.433,
+    -29.1
+   ],
+   "front": "spin/front/boat-35.svg"
+  },
+  "f36": {
+   "file": "spin/boat-36.svg",
+   "deg": -180.0,
+   "seat": [
+    1.422,
+    -28.8
+   ],
+   "front": "spin/front/boat-36.svg"
+  },
+  "f37": {
+   "file": "spin/boat-37.svg",
+   "deg": -187.5,
+   "seat": [
+    7.278,
+    -28.5
+   ],
+   "front": "spin/front/boat-37.svg"
+  },
+  "f38": {
+   "file": "spin/boat-38.svg",
+   "deg": -195.0,
+   "seat": [
+    13.133,
+    -28.2
+   ],
+   "front": "spin/front/boat-38.svg"
+  },
+  "f39": {
+   "file": "spin/boat-39.svg",
+   "deg": -202.5,
+   "seat": [
+    18.989,
+    -27.9
+   ],
+   "front": "spin/front/boat-39.svg"
+  },
+  "f40": {
+   "file": "spin/boat-40.svg",
+   "deg": -210.0,
+   "seat": [
+    24.844,
+    -27.6
+   ],
+   "front": "spin/front/boat-40.svg"
+  },
+  "f41": {
+   "file": "spin/boat-41.svg",
+   "deg": -217.5,
+   "seat": [
+    30.7,
+    -27.3
+   ],
+   "front": "spin/front/boat-41.svg"
+  },
+  "f42": {
+   "file": "spin/boat-42.svg",
+   "deg": -225.0,
+   "seat": [
+    37.0,
+    -32.0
+   ],
+   "front": "spin/front/boat-42.svg"
+  },
+  "f43": {
+   "file": "spin/boat-43.svg",
+   "deg": -232.5,
+   "seat": [
+    38.7,
+    -40.0
+   ],
+   "front": "spin/front/boat-43.svg"
+  },
+  "f44": {
+   "file": "spin/boat-44.svg",
+   "deg": -240.0,
+   "seat": [
+    40.3,
+    -48.0
+   ],
+   "front": "spin/front/boat-44.svg"
+  },
+  "f45": {
+   "file": "spin/boat-45.svg",
+   "deg": -247.5,
+   "seat": [
+    42.0,
+    -56.0
+   ],
+   "front": "spin/front/boat-45.svg"
+  },
+  "f46": {
+   "file": "spin/boat-46.svg",
+   "deg": -255.0,
+   "seat": [
+    42.3,
+    -57.2
+   ],
+   "front": "spin/front/boat-46.svg"
+  },
+  "f47": {
+   "file": "spin/boat-47.svg",
+   "deg": -262.5,
+   "seat": [
+    42.6,
+    -58.3
+   ],
+   "front": "spin/front/boat-47.svg"
   }
- }
+ },
+ "transition": "cut"
 }

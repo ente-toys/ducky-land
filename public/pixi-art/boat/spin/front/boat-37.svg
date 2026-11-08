@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560"><defs><clipPath id="front" clipPathUnits="userSpaceOnUse"><path d="M0 423.530H640V560H0Z"/><path transform="translate(0.000000,560.000000) scale(0.100000,-0.100000)" d="M3077 4646 c-61 -22 -104 -62 -123 -112 -18 -47 -17 -53 12 -144 6 -19 -248 -145 -325 -161 -70 -15 -160 -4 -239 28 -98 39 -118 19 -82 -80 74 -206 192 -307 358 -307 67 1 120 15 257 73 33 13 73 28 89 31 l28 7 -5 -328 c-4 -258 -10 -379 -30 -569 -45 -411 -87 -1059 -87 -1326 0 -111 3 -140 16 -152 19 -20 43 -20 71 -1 19 13 21 13 26 -5 3 -10 20 -28 38 -40 45 -28 131 -24 177 9 27 19 32 29 32 64 0 30 6 48 20 60 29 24 26 71 -7 101 l-26 24 6 140 c18 361 4 2017 -18 2287 l-6 70 44 32 c106 74 97 211 -18 278 -56 33 -150 43 -208 21z"/></clipPath></defs><g clip-path="url(#front)"><g stroke="#403414" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M206 357 C207 435 231 498 310 509 C389 523 436 470 440 361Z" fill="#a8692a"/>
+      <path d="M209 382 C246 427 391 444 437 384 L432 422 C397 484 262 492 219 425Z" fill="#fff1cc"/>
+      <ellipse cx="322" cy="354" rx="116" ry="85" fill="#e9af60"/>
+      <path d="M320.0105121053059 304 Q327.0105121053059 289 321.0105121053059 273
+      C311.0105121053059 235 357.0105121053059 226 357.0105121053059 258
+      Q359.0105121053059 272 349.0105121053059 285 L354.0105121053059 304Z" fill="#fff1cc"/>
+      <ellipse cx="345.0105121053059" cy="258" rx="3" ry="4" fill="#403414" stroke="none"/>
+      <ellipse cx="322" cy="351" rx="94" ry="65" fill="#a8692a"/>
+      <path d="M235 350L410 350M246 379L401 379M268 404L374 404M274 300L255 403M312 291L305 415M352 294L360 410M384 310L397 381" fill="none" stroke="#936028" stroke-width="4"/>
+      <path d="M245 329Q244 314 257 312L386 312Q400 315 400 334L399 350Q396 359 389 358L249 355Q239 352 245 329Z" fill="#cb8b42" stroke-width="6"/>
+      <path d="M247 327Q245 317 258 315L383 315Q395 317 396 330L394 338L246 337Z" fill="#e9af60" stroke-width="5"/>
+    </g><path data-part="flag" data-width="-82.000" d="M316 124
+      C292.22 117 275.0 156 234 136
+      Q247.12 180 283.2 166
+      Q305.34 154 316 160Z"
+      fill="#ff7e32" stroke="#403414" stroke-width="7" stroke-linejoin="round"/>
+    <path data-part="sail" d="M320 142
+      C309.662 200 299.090 294 296.505 389
+      Q296.505 399 298.620 397 L320 376Z"
+      fill="#fff1cc" stroke="#403414" stroke-width="7" stroke-linejoin="round"/><path data-part="mast" data-top="112" data-foot="400" d="M310 122
+      Q307 244 309 385 L308 399 Q316 406 325 399 L324 385 Q328 237 322 122Z"
+      fill="#cb8b42" stroke="#403414" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M319 135Q323 255 318 380" fill="none" stroke="#e9af60" stroke-width="4"/>
+      <ellipse cx="316" cy="386" rx="14" ry="6" fill="#e9af60" stroke="#403414" stroke-width="6"/>
+      <ellipse cx="316" cy="112" rx="18" ry="14" fill="#cb8b42" stroke="#403414" stroke-width="7"/></g></svg>
