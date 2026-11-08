@@ -5,14 +5,15 @@ export const coast=Array.from({length:180},(_,i)=>{const a=i*Math.PI/90,r=1+.022
 import {communities} from './communities.mjs';
 export const places=communities;
 export const lanes=[
- [[1780,600],[3300,100],[5300,200],[6750,450],[7750,-80],[8420,1000],[8470,3070],[8120,4420],[6540,5400],[5160,6000],[3850,5920],[1850,5610],[100,4580],[-570,3470],[-550,1700],[1780,600]],
- [[1780,600],[1700,800],[1600,1000]],[[3300,100],[3300,700],[3180,1250]],
- [[6750,450],[6750,700],[6500,950]],[[8470,3070],[7900,2850],[6880,2450]],
- [[3850,5920],[4300,5200],[4470,4140]],[[1850,5610],[1800,5100],[2250,4650]],
- [[-570,3470],[-100,3700],[600,3500]],
- // Only three short residential branches. Northern homes front the main road;
- // their former parallel lanes are gardens again.
- ...communities.filter(c=>['whirlyseed','petalpost','seedwake'].includes(c.id)).map(c=>c.lane),
+ // boss 8 Nov: the loop runs through the five GPT hamlets' squares (hamlets.json): in at one opening, out at another,
+ // never under a house; inside a square it lies under the paving. Bridges and the branch ends at them are unchanged.
+ [[1780,600],[2300,650],[2600,830],[3000,880],[3300,790],[3300,100],[4700,100],[5300,90],[6150,60],[6550,180],[6750,450],[7750,-80],[8420,1000],[8440,2650],[8420,3260],[8226,3700],[8226,4120],[8120,4420],[6540,5400],[5800,5500],[5350,5600],[4900,5480],[4000,5500],[3600,5575],[3000,5620],[1850,5610],[100,4580],[300,3950],[250,3560],[-100,3460],[-220,3200],[-120,3060],[150,3040],[210,2800],[150,2300],[-550,1700],[1780,600]],
+ [[1780,600],[1600,760],[1450,900]],[[3300,100],[3300,700],[3180,1250]],
+ [[6750,450],[6750,700],[6500,950]],[[8440,2650],[7900,2850],[6880,2450]],
+ [[4450,5350],[4360,5150],[4470,4140]],[[1850,5610],[1800,5100],[2250,4650]],
+ [[-60,3420],[200,3540],[600,3500]],
+ // the old residential branches went with the old cottages; a hamlet's own lane is part of its paving
+ ...communities.filter(c=>c.lane).map(c=>c.lane),
 ];
 export const roadWidths=lanes.map((_,i)=>i===0?210:i<8?150:105);
 export const kit=[

@@ -62,9 +62,17 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.png`,1);}
   catch(error){groundStream.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.png`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
   const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
+  // boss 8 Nov (sailable rivers, as home's engine.js bridgeOver): a deck marked overBoats is a river bridge a boat passes under. A copy
+  // above the Duckies is shown only while a boat is beneath it, so the deck is drawn over the hull.
+  const overLayer = new Container({label: `Theme ${map.id} - bridges over boats`}), bridgeOver = [];
   for (const deck of decks) {
     if(tiled(deck,1.5,deckLayer,{x:0,y:0}))continue;
-    const s = new Sprite(textures[k++]); s.position.set(deck.x, deck.y); s.width = deck.width; s.height = deck.height; deckLayer.addChild(s);
+    const texture = textures[k++], s = new Sprite(texture); s.position.set(deck.x, deck.y); s.width = deck.width; s.height = deck.height; deckLayer.addChild(s);
+    if (deck.overBoats) {
+      const over = new Sprite(texture); over.position.set(deck.x, deck.y); over.width = deck.width; over.height = deck.height; over.visible = false;
+      overLayer.addChild(over);
+      bridgeOver.push({sprite: over, x0: deck.x - 20, x1: deck.x + deck.width + 20, y0: deck.y, y1: deck.y + deck.height + 40});
+    }
   }
   for (const flat of flats) {
     if(tiled(flat,2,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
@@ -80,10 +88,10 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
     sprite.width = prop.width * scale; sprite.height = prop.height * scale;
     if (prop.flip) sprite.scale.x *= -1;
     if (prop.tint) sprite.tint = prop.tint;
-    sprite.zIndex = prop.y; sprite.standing = true; sprite.visible = false; sprite.themeArt = map.id;
+    sprite.zIndex = prop.z ?? prop.y; sprite.standing = true;   // boss 8 Nov: a hamlet object keeps GPT's draw order where it overlaps sprite.visible = false; sprite.themeArt = map.id;
     let shadow = null;
     if (!NO_SHADOW.test(name) && prop.shadow !== false) {
-      const rx = Math.max(8, Math.min(300, prop.width * scale * .36)), ry = rx * .3;
+      const [rx, ry] = prop.shadowSize ?? (r => [r, r * .3])(Math.max(8, Math.min(300, prop.width * scale * .36)));   // boss 8 Nov: a hamlet building's base shadow fits its footprint
       shadow = new Graphics().ellipse(rx * .06, ry * .1, rx, ry).fill({color: 0x3c5a2a, alpha: .15});
       shadow.position.set(prop.x, prop.y); shadows.addChild(shadow);
     }
@@ -98,16 +106,17 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
     floatLayer.addChild(sprite);
     return {...item, phase: item.phase ?? i * 1.7, sprite};
   });
-  for (const group of [ground, deckLayer, shadows, floatLayer]) group.visible = false;
+  for (const group of [ground, deckLayer, shadows, floatLayer, overLayer]) group.visible = false;
   return {
     id: map.id, map, groundStream, groundStreams, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
-    groups: [ground, deckLayer, shadows, floatLayer],
+    overLayer, bridgeOver,
+    groups: [ground, deckLayer, shadows, floatLayer, overLayer],
     destroy() {
       if (destroyed) return;
       destroyed = true;
       groundStreams.forEach(s=>s.destroy());
       release(`/pixi-art/globe/${map.id}-ground.png`);
-      for (const c of [ground, deckLayer, shadows, floatLayer]) c.destroy({children: true});
+      for (const c of [ground, deckLayer, shadows, floatLayer, overLayer]) c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
     },

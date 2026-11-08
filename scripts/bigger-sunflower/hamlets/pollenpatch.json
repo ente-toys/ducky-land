@@ -1,0 +1,1329 @@
+{
+  "name": "Pollenpatch",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "coordinateSystem": "Image 1 pixels. x,y are the bottom centre of each tight SVG viewBox. Place at left=x-width/2 and top=y-height. Width and height are in image pixels. Draw in ascending drawOrder.",
+  "outline": "#39472d",
+  "objects": [
+    {
+      "id": "grass-967-37",
+      "file": "grass-tuft.svg",
+      "x": 966.333,
+      "y": 35.667,
+      "width": 56,
+      "height": 30.667,
+      "drawOrder": 0
+    },
+    {
+      "id": "grass-1187-48",
+      "file": "grass-tuft.svg",
+      "x": 1186.578,
+      "y": 47.155,
+      "width": 35.467,
+      "height": 19.422,
+      "drawOrder": 1
+    },
+    {
+      "id": "daisies-north",
+      "file": "white-meadow-flowers.svg",
+      "x": 1113.361,
+      "y": 80.361,
+      "width": 53.279,
+      "height": 38.525,
+      "drawOrder": 2
+    },
+    {
+      "id": "tree-northeast-back",
+      "file": "tree-broad-round.svg",
+      "x": 1332.1,
+      "y": 112.3,
+      "width": 167.4,
+      "height": 194.4,
+      "drawOrder": 3
+    },
+    {
+      "id": "rock-north",
+      "file": "mossy-rock-cluster.svg",
+      "x": 322,
+      "y": 132,
+      "width": 51,
+      "height": 29,
+      "drawOrder": 4
+    },
+    {
+      "id": "grass-874-137",
+      "file": "grass-tuft.svg",
+      "x": 873.756,
+      "y": 136.511,
+      "width": 20.533,
+      "height": 11.244,
+      "drawOrder": 5
+    },
+    {
+      "id": "tree-northeast-front",
+      "file": "tree-broad-round.svg",
+      "x": 1412.98,
+      "y": 154.94,
+      "width": 189.72,
+      "height": 220.32,
+      "drawOrder": 6
+    },
+    {
+      "id": "grass-674-159",
+      "file": "grass-tuft.svg",
+      "x": 673.5,
+      "y": 158,
+      "width": 42,
+      "height": 23,
+      "drawOrder": 7
+    },
+    {
+      "id": "apiary-fence-run",
+      "file": "apiary-fence-run.svg",
+      "x": 1227,
+      "y": 159,
+      "width": 196,
+      "height": 57,
+      "drawOrder": 8
+    },
+    {
+      "id": "grass-859-170",
+      "file": "grass-tuft.svg",
+      "x": 858.578,
+      "y": 169.155,
+      "width": 35.467,
+      "height": 19.422,
+      "drawOrder": 9
+    },
+    {
+      "id": "tree-north-right",
+      "file": "tree-broad-round.svg",
+      "x": 794.985,
+      "y": 172.955,
+      "width": 188.79,
+      "height": 219.24,
+      "drawOrder": 10
+    },
+    {
+      "id": "grass-333-178",
+      "file": "grass-tuft.svg",
+      "x": 332.7,
+      "y": 177.4,
+      "width": 25.2,
+      "height": 13.8,
+      "drawOrder": 11
+    },
+    {
+      "id": "tree-northwest-back",
+      "file": "tree-broad-round.svg",
+      "x": 578,
+      "y": 184,
+      "width": 186,
+      "height": 216,
+      "drawOrder": 12
+    },
+    {
+      "id": "grass-798-187",
+      "file": "grass-tuft.svg",
+      "x": 797.556,
+      "y": 186.111,
+      "width": 37.333,
+      "height": 20.444,
+      "drawOrder": 13
+    },
+    {
+      "id": "tree-north-centre",
+      "file": "tree-broad-round.svg",
+      "x": 696.915,
+      "y": 192.745,
+      "width": 201.81,
+      "height": 234.36,
+      "drawOrder": 14
+    },
+    {
+      "id": "grass-1131-198",
+      "file": "grass-tuft.svg",
+      "x": 1130.622,
+      "y": 197.245,
+      "width": 31.733,
+      "height": 17.378,
+      "drawOrder": 15
+    },
+    {
+      "id": "grass-375-212",
+      "file": "grass-tuft.svg",
+      "x": 374.633,
+      "y": 211.267,
+      "width": 30.8,
+      "height": 16.867,
+      "drawOrder": 16
+    },
+    {
+      "id": "beehive-ivory",
+      "file": "beehive-ivory.svg",
+      "x": 1190,
+      "y": 258,
+      "width": 75,
+      "height": 122,
+      "drawOrder": 17
+    },
+    {
+      "id": "beehive-sage",
+      "file": "beehive-sage.svg",
+      "x": 1271,
+      "y": 258,
+      "width": 75,
+      "height": 122,
+      "drawOrder": 18
+    },
+    {
+      "id": "beehive-gold",
+      "file": "beehive-gold.svg",
+      "x": 1352,
+      "y": 258,
+      "width": 75,
+      "height": 122,
+      "drawOrder": 19
+    },
+    {
+      "id": "honey-stall-small-planter",
+      "file": "honey-stall-small-planter.svg",
+      "x": 1104.5,
+      "y": 270,
+      "width": 74,
+      "height": 68,
+      "drawOrder": 20
+    },
+    {
+      "id": "tree-by-north-cottage",
+      "file": "tree-broad-round.svg",
+      "x": 488.98,
+      "y": 269.94,
+      "width": 189.72,
+      "height": 220.32,
+      "drawOrder": 21
+    },
+    {
+      "id": "honey-market-stall",
+      "file": "honey-market-stall.svg",
+      "x": 994,
+      "y": 276,
+      "width": 214,
+      "height": 207,
+      "drawOrder": 22
+    },
+    {
+      "id": "honey-stall-flower-bed",
+      "file": "honey-stall-flower-bed.svg",
+      "x": 855.5,
+      "y": 277,
+      "width": 104,
+      "height": 98,
+      "drawOrder": 23
+    },
+    {
+      "id": "daisies-west",
+      "file": "white-meadow-flowers.svg",
+      "x": 269.295,
+      "y": 278.296,
+      "width": 55.41,
+      "height": 40.066,
+      "drawOrder": 24
+    },
+    {
+      "id": "grass-766-280",
+      "file": "grass-tuft.svg",
+      "x": 765.678,
+      "y": 279.355,
+      "width": 27.067,
+      "height": 14.822,
+      "drawOrder": 25
+    },
+    {
+      "id": "tree-right-sapling",
+      "file": "tree-small-round.svg",
+      "x": 1463,
+      "y": 326,
+      "width": 129,
+      "height": 178,
+      "drawOrder": 26
+    },
+    {
+      "id": "grass-760-344",
+      "file": "grass-tuft.svg",
+      "x": 759.611,
+      "y": 343.222,
+      "width": 32.667,
+      "height": 17.889,
+      "drawOrder": 27
+    },
+    {
+      "id": "seedling-coldframe-1",
+      "file": "seedling-coldframe-1.svg",
+      "x": 1166,
+      "y": 370,
+      "width": 114,
+      "height": 93,
+      "drawOrder": 28
+    },
+    {
+      "id": "seedling-coldframe-2",
+      "file": "seedling-coldframe-2.svg",
+      "x": 1267,
+      "y": 370,
+      "width": 114,
+      "height": 93,
+      "drawOrder": 29
+    },
+    {
+      "id": "seedling-coldframe-3",
+      "file": "seedling-coldframe-3.svg",
+      "x": 1365,
+      "y": 370,
+      "width": 114,
+      "height": 93,
+      "drawOrder": 30
+    },
+    {
+      "id": "sunflower-bed-northwest",
+      "file": "sunflower-bed-northwest.svg",
+      "x": 418,
+      "y": 374,
+      "width": 178,
+      "height": 138,
+      "drawOrder": 31
+    },
+    {
+      "id": "potting-workbench",
+      "file": "potting-workbench.svg",
+      "x": 921.5,
+      "y": 381,
+      "width": 162,
+      "height": 103,
+      "drawOrder": 32
+    },
+    {
+      "id": "grass-1490-380",
+      "file": "grass-tuft.svg",
+      "x": 1489.656,
+      "y": 379.311,
+      "width": 28.933,
+      "height": 15.844,
+      "drawOrder": 33
+    },
+    {
+      "id": "golden-watering-can",
+      "file": "golden-watering-can.svg",
+      "x": 1065.677,
+      "y": 388.678,
+      "width": 67.355,
+      "height": 62.71,
+      "drawOrder": 34
+    },
+    {
+      "id": "grass-1426-392",
+      "file": "grass-tuft.svg",
+      "x": 1425.678,
+      "y": 391.355,
+      "width": 27.067,
+      "height": 14.822,
+      "drawOrder": 35
+    },
+    {
+      "id": "seedling-tray",
+      "file": "seedling-tray.svg",
+      "x": 911,
+      "y": 393,
+      "width": 79,
+      "height": 39,
+      "drawOrder": 36
+    },
+    {
+      "id": "sunflower-seed-sack",
+      "file": "sunflower-seed-sack.svg",
+      "x": 989.293,
+      "y": 391.724,
+      "width": 62.586,
+      "height": 81.931,
+      "drawOrder": 37
+    },
+    {
+      "id": "shrub-north-square",
+      "file": "shrub-round.svg",
+      "x": 785.612,
+      "y": 404.223,
+      "width": 76.117,
+      "height": 58.252,
+      "drawOrder": 38
+    },
+    {
+      "id": "cottage-north-sage",
+      "file": "cottage-north-sage.svg",
+      "x": 615,
+      "y": 392,
+      "width": 228,
+      "height": 220,
+      "drawOrder": 39
+    },
+    {
+      "id": "grass-412-413",
+      "file": "grass-tuft.svg",
+      "x": 411.567,
+      "y": 412.133,
+      "width": 36.4,
+      "height": 19.933,
+      "drawOrder": 40
+    },
+    {
+      "id": "doorstep-marigold-pot",
+      "file": "doorstep-marigold-pot.svg",
+      "x": 554.691,
+      "y": 412.254,
+      "width": 41.891,
+      "height": 42.764,
+      "drawOrder": 41
+    },
+    {
+      "id": "grass-808-439",
+      "file": "grass-tuft.svg",
+      "x": 807.733,
+      "y": 438.467,
+      "width": 22.4,
+      "height": 12.267,
+      "drawOrder": 42
+    },
+    {
+      "id": "grass-520-446",
+      "file": "grass-tuft.svg",
+      "x": 519.633,
+      "y": 445.267,
+      "width": 30.8,
+      "height": 16.867,
+      "drawOrder": 43
+    },
+    {
+      "id": "grass-699-451",
+      "file": "grass-tuft.svg",
+      "x": 698.611,
+      "y": 450.222,
+      "width": 32.667,
+      "height": 17.889,
+      "drawOrder": 44
+    },
+    {
+      "id": "grass-435-486",
+      "file": "grass-tuft.svg",
+      "x": 434.622,
+      "y": 485.245,
+      "width": 31.733,
+      "height": 17.378,
+      "drawOrder": 45
+    },
+    {
+      "id": "grass-815-507",
+      "file": "grass-tuft.svg",
+      "x": 814.678,
+      "y": 506.355,
+      "width": 27.067,
+      "height": 14.822,
+      "drawOrder": 46
+    },
+    {
+      "id": "lantern-northeast",
+      "file": "path-lantern.svg",
+      "x": 739,
+      "y": 509,
+      "width": 30,
+      "height": 115,
+      "drawOrder": 47
+    },
+    {
+      "id": "lantern-northwest",
+      "file": "path-lantern.svg",
+      "x": 480,
+      "y": 512,
+      "width": 30,
+      "height": 115,
+      "drawOrder": 48
+    },
+    {
+      "id": "tree-west-back",
+      "file": "tree-broad-round.svg",
+      "x": 183.935,
+      "y": 554.805,
+      "width": 198.09,
+      "height": 230.04,
+      "drawOrder": 49
+    },
+    {
+      "id": "grass-71-579",
+      "file": "grass-tuft.svg",
+      "x": 70.6,
+      "y": 578.2,
+      "width": 33.6,
+      "height": 18.4,
+      "drawOrder": 50
+    },
+    {
+      "id": "tree-west-front",
+      "file": "tree-broad-round.svg",
+      "x": 107.985,
+      "y": 583.955,
+      "width": 188.79,
+      "height": 219.24,
+      "drawOrder": 51
+    },
+    {
+      "id": "grass-84-625",
+      "file": "grass-tuft.svg",
+      "x": 83.7,
+      "y": 624.4,
+      "width": 25.2,
+      "height": 13.8,
+      "drawOrder": 52
+    },
+    {
+      "id": "grass-1475-632",
+      "file": "grass-tuft.svg",
+      "x": 1474.533,
+      "y": 631.067,
+      "width": 39.2,
+      "height": 21.467,
+      "drawOrder": 53
+    },
+    {
+      "id": "square-sunflower-planter",
+      "file": "square-sunflower-planter.svg",
+      "x": 613,
+      "y": 631,
+      "width": 175,
+      "height": 141,
+      "drawOrder": 54
+    },
+    {
+      "id": "sunflower-bed-east",
+      "file": "sunflower-bed-east.svg",
+      "x": 1141,
+      "y": 638,
+      "width": 128,
+      "height": 119,
+      "drawOrder": 55
+    },
+    {
+      "id": "cottage-west-marigold",
+      "file": "cottage-west-marigold.svg",
+      "x": 304,
+      "y": 626,
+      "width": 228,
+      "height": 215,
+      "drawOrder": 56
+    },
+    {
+      "id": "cottage-east-honey",
+      "file": "cottage-east-honey.svg",
+      "x": 952,
+      "y": 627,
+      "width": 252,
+      "height": 216,
+      "drawOrder": 57
+    },
+    {
+      "id": "doorstep-sunflower-pot",
+      "file": "doorstep-sunflower-pot.svg",
+      "x": 848.235,
+      "y": 642.353,
+      "width": 52.059,
+      "height": 50.294,
+      "drawOrder": 58
+    },
+    {
+      "id": "tree-east-back",
+      "file": "tree-wide-crown.svg",
+      "x": 1406.659,
+      "y": 649.423,
+      "width": 204.797,
+      "height": 258.455,
+      "drawOrder": 59
+    },
+    {
+      "id": "grass-1385-655",
+      "file": "grass-tuft.svg",
+      "x": 1384.611,
+      "y": 654.222,
+      "width": 32.667,
+      "height": 17.889,
+      "drawOrder": 60
+    },
+    {
+      "id": "shrub-west-cottage",
+      "file": "shrub-round.svg",
+      "x": 179.51,
+      "y": 664.02,
+      "width": 96.097,
+      "height": 73.544,
+      "drawOrder": 61
+    },
+    {
+      "id": "grass-968-665",
+      "file": "grass-tuft.svg",
+      "x": 967.611,
+      "y": 664.222,
+      "width": 32.667,
+      "height": 17.889,
+      "drawOrder": 62
+    },
+    {
+      "id": "mossy-rock-cluster",
+      "file": "mossy-rock-cluster.svg",
+      "x": 1367,
+      "y": 682,
+      "width": 51,
+      "height": 29,
+      "drawOrder": 63
+    },
+    {
+      "id": "tree-east-front",
+      "file": "tree-wide-crown.svg",
+      "x": 1286.506,
+      "y": 680.016,
+      "width": 228.069,
+      "height": 287.825,
+      "drawOrder": 64
+    },
+    {
+      "id": "grass-1173-688",
+      "file": "grass-tuft.svg",
+      "x": 1172.656,
+      "y": 687.311,
+      "width": 28.933,
+      "height": 15.844,
+      "drawOrder": 65
+    },
+    {
+      "id": "lantern-southeast",
+      "file": "path-lantern.svg",
+      "x": 772,
+      "y": 716,
+      "width": 30,
+      "height": 115,
+      "drawOrder": 66
+    },
+    {
+      "id": "lantern-southwest",
+      "file": "path-lantern.svg",
+      "x": 459,
+      "y": 719,
+      "width": 30,
+      "height": 115,
+      "drawOrder": 67
+    },
+    {
+      "id": "grass-988-725",
+      "file": "grass-tuft.svg",
+      "x": 987.522,
+      "y": 724.045,
+      "width": 40.133,
+      "height": 21.978,
+      "drawOrder": 68
+    },
+    {
+      "id": "shrub-east-lane",
+      "file": "shrub-round.svg",
+      "x": 1068.451,
+      "y": 733.903,
+      "width": 107.515,
+      "height": 82.282,
+      "drawOrder": 69
+    },
+    {
+      "id": "grass-349-737",
+      "file": "grass-tuft.svg",
+      "x": 348.644,
+      "y": 736.289,
+      "width": 29.867,
+      "height": 16.356,
+      "drawOrder": 70
+    },
+    {
+      "id": "grass-1334-741",
+      "file": "grass-tuft.svg",
+      "x": 1333.689,
+      "y": 740.378,
+      "width": 26.133,
+      "height": 14.311,
+      "drawOrder": 71
+    },
+    {
+      "id": "coral-meadow-flowers",
+      "file": "coral-meadow-flowers.svg",
+      "x": 1187.5,
+      "y": 761,
+      "width": 51,
+      "height": 47,
+      "drawOrder": 72
+    },
+    {
+      "id": "grass-755-770",
+      "file": "grass-tuft.svg",
+      "x": 754.7,
+      "y": 769.4,
+      "width": 25.2,
+      "height": 13.8,
+      "drawOrder": 73
+    },
+    {
+      "id": "daisies-southwest",
+      "file": "white-meadow-flowers.svg",
+      "x": 376.23,
+      "y": 781.23,
+      "width": 57.541,
+      "height": 41.607,
+      "drawOrder": 74
+    },
+    {
+      "id": "grass-1084-802",
+      "file": "grass-tuft.svg",
+      "x": 1083.511,
+      "y": 801.022,
+      "width": 41.067,
+      "height": 22.489,
+      "drawOrder": 75
+    },
+    {
+      "id": "grass-991-886",
+      "file": "grass-tuft.svg",
+      "x": 990.589,
+      "y": 885.178,
+      "width": 34.533,
+      "height": 18.911,
+      "drawOrder": 76
+    },
+    {
+      "id": "cottage-south-sage",
+      "file": "cottage-south-sage.svg",
+      "x": 592,
+      "y": 919,
+      "width": 258,
+      "height": 238,
+      "drawOrder": 77
+    },
+    {
+      "id": "sunflower-barrel",
+      "file": "sunflower-barrel.svg",
+      "x": 439.5,
+      "y": 935,
+      "width": 102,
+      "height": 112,
+      "drawOrder": 78
+    },
+    {
+      "id": "tree-southwest-back",
+      "file": "tree-tall-crown.svg",
+      "x": 65.541,
+      "y": 950.108,
+      "width": 201.405,
+      "height": 277.297,
+      "drawOrder": 79
+    },
+    {
+      "id": "grass-998-970",
+      "file": "grass-tuft.svg",
+      "x": 997.511,
+      "y": 969.022,
+      "width": 41.067,
+      "height": 22.489,
+      "drawOrder": 80
+    },
+    {
+      "id": "grass-503-979",
+      "file": "grass-tuft.svg",
+      "x": 502.522,
+      "y": 978.045,
+      "width": 40.133,
+      "height": 21.978,
+      "drawOrder": 81
+    },
+    {
+      "id": "grass-616-990",
+      "file": "grass-tuft.svg",
+      "x": 615.522,
+      "y": 989.045,
+      "width": 40.133,
+      "height": 21.978,
+      "drawOrder": 82
+    },
+    {
+      "id": "grass-98-993",
+      "file": "grass-tuft.svg",
+      "x": 97.556,
+      "y": 992.111,
+      "width": 37.333,
+      "height": 20.444,
+      "drawOrder": 83
+    },
+    {
+      "id": "grass-440-1011",
+      "file": "grass-tuft.svg",
+      "x": 439.711,
+      "y": 1010.422,
+      "width": 24.267,
+      "height": 13.289,
+      "drawOrder": 84
+    },
+    {
+      "id": "tree-southwest-front",
+      "file": "tree-wide-crown.svg",
+      "x": 205.305,
+      "y": 1022.48,
+      "width": 258.789,
+      "height": 326.593,
+      "drawOrder": 85
+    },
+    {
+      "id": "shrub-bottom-edge",
+      "file": "shrub-round.svg",
+      "x": 347.403,
+      "y": 1026.805,
+      "width": 117.029,
+      "height": 89.563,
+      "drawOrder": 86
+    },
+    {
+      "id": "shrub-bottom-right",
+      "file": "shrub-round.svg",
+      "x": 739.529,
+      "y": 1028.059,
+      "width": 92.291,
+      "height": 70.631,
+      "drawOrder": 87
+    },
+    {
+      "id": "tree-south-edge",
+      "file": "tree-broad-round.svg",
+      "x": 857.9,
+      "y": 1026.7,
+      "width": 204.6,
+      "height": 237.6,
+      "drawOrder": 88
+    },
+    {
+      "id": "sunflower-field-southeast",
+      "file": "sunflower-field-southeast.svg",
+      "x": 1378.5,
+      "y": 1075,
+      "width": 393,
+      "height": 292,
+      "drawOrder": 89
+    }
+  ],
+  "square": [
+    [
+      592,
+      386
+    ],
+    [
+      640,
+      386
+    ],
+    [
+      641,
+      428
+    ],
+    [
+      654,
+      450
+    ],
+    [
+      701,
+      465
+    ],
+    [
+      742,
+      463
+    ],
+    [
+      768,
+      475
+    ],
+    [
+      780,
+      494
+    ],
+    [
+      778,
+      518
+    ],
+    [
+      767,
+      541
+    ],
+    [
+      770,
+      567
+    ],
+    [
+      791,
+      584
+    ],
+    [
+      828,
+      591
+    ],
+    [
+      864,
+      591
+    ],
+    [
+      883,
+      608
+    ],
+    [
+      892,
+      641
+    ],
+    [
+      882,
+      668
+    ],
+    [
+      855,
+      695
+    ],
+    [
+      817,
+      713
+    ],
+    [
+      773,
+      721
+    ],
+    [
+      730,
+      718
+    ],
+    [
+      699,
+      707
+    ],
+    [
+      667,
+      713
+    ],
+    [
+      644,
+      727
+    ],
+    [
+      609,
+      737
+    ],
+    [
+      560,
+      735
+    ],
+    [
+      506,
+      728
+    ],
+    [
+      457,
+      721
+    ],
+    [
+      418,
+      708
+    ],
+    [
+      383,
+      687
+    ],
+    [
+      354,
+      662
+    ],
+    [
+      342,
+      637
+    ],
+    [
+      345,
+      609
+    ],
+    [
+      356,
+      590
+    ],
+    [
+      383,
+      578
+    ],
+    [
+      411,
+      578
+    ],
+    [
+      443,
+      569
+    ],
+    [
+      447,
+      547
+    ],
+    [
+      432,
+      527
+    ],
+    [
+      427,
+      504
+    ],
+    [
+      434,
+      483
+    ],
+    [
+      452,
+      469
+    ],
+    [
+      479,
+      463
+    ],
+    [
+      527,
+      465
+    ],
+    [
+      567,
+      462
+    ],
+    [
+      584,
+      451
+    ],
+    [
+      591,
+      428
+    ]
+  ],
+  "lane": [
+    [
+      835,
+      644
+    ],
+    [
+      883,
+      647
+    ],
+    [
+      885,
+      679
+    ],
+    [
+      905,
+      708
+    ],
+    [
+      937,
+      736
+    ],
+    [
+      973,
+      762
+    ],
+    [
+      1008,
+      785
+    ],
+    [
+      1051,
+      804
+    ],
+    [
+      1090,
+      815
+    ],
+    [
+      1120,
+      817
+    ],
+    [
+      1151,
+      812
+    ],
+    [
+      1193,
+      796
+    ],
+    [
+      1250,
+      775
+    ],
+    [
+      1311,
+      754
+    ],
+    [
+      1361,
+      739
+    ],
+    [
+      1415,
+      725
+    ],
+    [
+      1471,
+      713
+    ],
+    [
+      1536,
+      705
+    ],
+    [
+      1536,
+      769
+    ],
+    [
+      1476,
+      779
+    ],
+    [
+      1414,
+      794
+    ],
+    [
+      1350,
+      812
+    ],
+    [
+      1288,
+      837
+    ],
+    [
+      1237,
+      862
+    ],
+    [
+      1194,
+      893
+    ],
+    [
+      1165,
+      926
+    ],
+    [
+      1138,
+      965
+    ],
+    [
+      1113,
+      1024
+    ],
+    [
+      1029,
+      1024
+    ],
+    [
+      1049,
+      981
+    ],
+    [
+      1064,
+      943
+    ],
+    [
+      1066,
+      916
+    ],
+    [
+      1053,
+      894
+    ],
+    [
+      1027,
+      877
+    ],
+    [
+      990,
+      861
+    ],
+    [
+      950,
+      841
+    ],
+    [
+      913,
+      818
+    ],
+    [
+      882,
+      792
+    ],
+    [
+      855,
+      763
+    ],
+    [
+      825,
+      739
+    ],
+    [
+      794,
+      720
+    ],
+    [
+      768,
+      708
+    ],
+    [
+      800,
+      676
+    ]
+  ],
+  "nursery": [
+    [
+      816,
+      275
+    ],
+    [
+      869,
+      260
+    ],
+    [
+      931,
+      258
+    ],
+    [
+      991,
+      260
+    ],
+    [
+      1043,
+      259
+    ],
+    [
+      1104,
+      251
+    ],
+    [
+      1160,
+      247
+    ],
+    [
+      1221,
+      249
+    ],
+    [
+      1286,
+      247
+    ],
+    [
+      1350,
+      244
+    ],
+    [
+      1394,
+      251
+    ],
+    [
+      1430,
+      271
+    ],
+    [
+      1449,
+      294
+    ],
+    [
+      1457,
+      324
+    ],
+    [
+      1451,
+      354
+    ],
+    [
+      1435,
+      376
+    ],
+    [
+      1402,
+      389
+    ],
+    [
+      1353,
+      394
+    ],
+    [
+      1291,
+      391
+    ],
+    [
+      1230,
+      389
+    ],
+    [
+      1174,
+      393
+    ],
+    [
+      1119,
+      403
+    ],
+    [
+      1063,
+      413
+    ],
+    [
+      1007,
+      421
+    ],
+    [
+      952,
+      422
+    ],
+    [
+      907,
+      416
+    ],
+    [
+      863,
+      406
+    ],
+    [
+      828,
+      394
+    ],
+    [
+      804,
+      379
+    ],
+    [
+      789,
+      356
+    ],
+    [
+      784,
+      329
+    ],
+    [
+      789,
+      304
+    ],
+    [
+      802,
+      285
+    ]
+  ],
+  "sleepers": [
+    {
+      "x": 709,
+      "y": 650
+    },
+    {
+      "x": 1010,
+      "y": 742
+    }
+  ]
+}

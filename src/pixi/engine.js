@@ -770,7 +770,7 @@ export class PixiIsland {
   // A themed island's own surf, pond ripples, falling leaves and floating pads, built once when its art loads and shown with it
   buildMapAmbience(mapId, art) {
     const map=mapFor(mapId), extra=[];
-    const surf=createBeachSurf(this.water, shoreOf(map.world)); extra.push(...surf.crests);
+    const surf=createBeachSurf(this.water, shoreOf(map.world), map.world.riverMouths ?? []); extra.push(...surf.crests);   // boss 8 Nov: calm water in its open river mouths
     const ripples=[];
     (map.world.water ?? []).forEach((lake, index) => {
       for (let i=0;i<4;i++) {   // 2-4 cream ripple marks per pond, pulled in until they sit on the water (as home's)
@@ -842,7 +842,7 @@ export class PixiIsland {
     loadThemeArt(map, {acquire, release, groundPool:this.groundPool}).then(async art => {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
-      this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows);
+      this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows); this.overDecks.addChild(art.overLayer);
       for (const p of art.props) (p.deck ? this.decks : this.objects).addChild(p.sprite);
       await attachCentreMotion(art, {Graphics, Container}, this.objects);
       if (this.disposed) {art.destroy(); return;}
@@ -1447,6 +1447,8 @@ export class PixiIsland {
   // only while a boat is beneath it, so the deck is drawn over the hull; Duckies on foot walk over the ground-layer original.
   updateBridgeOver(sailers) {
     for (const b of this.bridgeOver ?? []) b.sprite.visible = this.artShown === 'home' && sailers.some(p => p.x > b.x0 && p.x < b.x1 && p.y > b.y0 && p.y < b.y1);
+    // a themed island's river bridges (theme-art.js overBoats decks: Sunbob's ring river), in that island's own coordinates
+    for (const [id, art] of this.arts ?? []) for (const b of art.bridgeOver ?? []) b.sprite.visible = id === this.artShown && sailers.some(p => p.x > b.x0 && p.x < b.x1 && p.y > b.y0 && p.y < b.y1);
   }
 
   dispose() {

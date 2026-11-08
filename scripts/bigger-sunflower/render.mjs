@@ -12,7 +12,7 @@ export async function render(art,file,camera={x:-2000,y:-1400,k:.14,w:1680,h:117
  const left=Math.max(0,-x),top=Math.max(0,-y),width=Math.min(w-left,W-Math.max(0,x)),height=Math.min(h-top,H-Math.max(0,y));
  if(left||top||width!==w||height!==h)buf=await sharp(buf).extract({left,top,width,height}).png().toBuffer();parts.push({input:buf,left:Math.max(0,x),top:Math.max(0,y)});
  }
- for(const p of art.ground.tiles)await add(p,'ground');for(const p of art.flats)await add(p,'flat');for(const p of art.decks)await add(p,'deck');for(const p of art.props.slice().sort((a,b)=>a.y-b.y))await add(p,'prop');
+ for(const p of art.ground.tiles)await add(p,'ground');for(const p of art.flats)await add(p,'flat');for(const p of art.decks)await add(p,'deck');for(const p of art.props.slice().sort((a,b)=>(a.z??a.y)-(b.z??b.y)))await add(p,'prop');
  await sharp({create:{width:W,height:H,channels:4,background:transparent?'#00000000':art.sea}}).composite(parts).png().toFile(file);
 }
 if(process.argv[2]==='now'){const a=JSON.parse(readFileSync('scripts/bigger-sunflower/baseline/art.json'));await render(a,OUT+'/sunflower-now.png');console.log('Original island captured')}

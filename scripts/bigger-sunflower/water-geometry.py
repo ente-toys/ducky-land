@@ -14,8 +14,10 @@ canal=Polygon(old['coast']).buffer(205,quad_segs=5).difference(dry.buffer(26,qua
 # A broad bend beneath the long old southwest harbour deck.
 canal=unary_union([canal,Point(1487,4615).buffer(145,quad_segs=24)]).difference(dry.buffer(26))
 # Fixed drawn courses, not generated scenery. Pond/stream -> sea; canal -> sea.
-courses=[{'id':'millseed','name':'Millseed Brook','points':[[4210,1000],[4240,590],[4320,340],[4250,100],[4200,-160],[4300,-450],[4220,-800],[4160,-1160]],'width':130},
- {'id':'willowcup','name':'Willowcup Run','points':[[300,1510],[0,1500],[-350,1300],[-700,1280],[-1100,1400],[-1500,1500],[-1850,1550]],'width':116}]
+# boss 8 Nov (boats in the centre): both brooks are 180 wide, Willowcup Run now leaves the ring canal (1090,1470) instead of
+# starting at the pool, as wide as the ring canal, so a boat sails them from the sea.
+courses=[{'id':'millseed','name':'Millseed Brook','points':[[4210,1000],[4240,590],[4320,340],[4250,100],[4200,-160],[4300,-450],[4220,-800],[4160,-1160]],'width':180},
+ {'id':'willowcup','name':'Willowcup Run','points':[[1090,1470],[700,1450],[300,1510],[0,1500],[-350,1300],[-700,1280],[-1100,1400],[-1500,1500],[-1850,1550]],'width':180}]
 # Densified Catmull-Rom matches the road material's authored centreline.
 def sampled(p):
  out=[]
@@ -62,16 +64,27 @@ for i,p in enumerate(design['lanes']):
   if any(Point(z['mid']).distance(m)<220 for z in bridges):continue
   width=250 if i==0 else 200 if i<8 else 170
   bridges.append({'id':f'river-crossing-{len(bridges)+1}','road':i,'a':a,'b':b,'w':width,'mid':list(m.coords[0])})
+# boss 8 Nov: the crossings are fixed now (boats-data.mjs draws an arched bridge at each); the hamlets' rerouted loop road runs
+# close along the north canal bank, which would otherwise read as a new crossing. Keep the committed list.
+_prev=Path('scripts/bigger-sunflower/water-geometry.json')
+if _prev.exists(): bridges=json.loads(_prev.read_text())['bridges']
 # Old original jetties are now canal crossings. Bypass water only in their decks.
 oldCrossings=[dict(id=f'original-{i+1}',**b) for i,b in enumerate(old['walkways'])]
 coverage=[]
 for d in oldCrossings:
  mid=LineString([d['a'],d['b']]).interpolate(.5,normalized=True)
  coverage.append({'id':d['id'],'mid':list(mid.coords[0]),'water':wet.covers(mid)})
+# boss 8 Nov (boats in the centre): the same water for boats, in boxes that overlap by 8, so a boat never meets a seam between two
+# boxes (water above is cut edge to edge, and a point on a shared edge can fall outside both)
+boatWater=[]
+for x in range(-2000,10000,600):
+ for y in range(-1400,7000,600):
+  for p in polygons(wet.intersection(box(x-8,y-8,x+608,y+608))):
+   if p.area>1:boatWater.append(ring(p.exterior))
 def path(p):
  s='M'+'L'.join(f'{x:.2f} {y:.2f}' for x,y in p.exterior.coords)+'Z'
  for h in p.interiors:s+='M'+'L'.join(f'{x:.2f} {y:.2f}' for x,y in h.coords)+'Z'
  return s
-out={'water':water,'path':' '.join(path(p) for p in polygons(wet)),'originalClipPath':' '.join(path(p) for p in polygons(dry.buffer(32))),'bridges':bridges,'originalCrossings':oldCrossings,'courses':courses,'coverage':coverage}
+out={'water':water,'boatWater':boatWater,'path':' '.join(path(p) for p in polygons(wet)),'originalClipPath':' '.join(path(p) for p in polygons(dry.buffer(32))),'bridges':bridges,'originalCrossings':oldCrossings,'courses':courses,'coverage':coverage}
 Path('scripts/bigger-sunflower/water-geometry.json').write_text(json.dumps(out,separators=(',',':'))+'\n')
 print(json.dumps({'waterPolygons':len(water),'crossings':bridges,'oldDeckWater':coverage},indent=2))

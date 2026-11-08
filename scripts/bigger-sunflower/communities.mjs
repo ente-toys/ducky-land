@@ -1,4 +1,5 @@
 // Fixed neighbourhood layouts. Each tuple is an authored address, never a scatter rule.
+import {config as hamlets, mapper} from './hamlets.mjs';
 export const communities=[
  {id:'pollenpatch',name:'Pollenpatch Row',who:'Seed growers and beekeeping families',x:1740,y:440,point:[1780,600],kind:'grower',colour:'#E7BD61',roof:'#789044',homes:[[1030,270],[1540,160],[2050,140],[2560,260]],work:'Seed nursery, cold frames, apiary and honey stall',green:[1760,530,820,300],lane:[[1780,600],[1300,650],[1020,660]]},
  {id:'hayhello',name:'Hayhello Hamlet',who:'Sunflower harvesters and seed sorters',x:6700,y:130,point:[6750,450],kind:'harvester',colour:'#E9C87D',roof:'#BE633F',homes:[[5630,180],[6140,30],[6650,0],[7160,60]],work:'Cooperative barn, harvest carts, drying yard and crop beds',green:[6610,270,870,350],lane:[[6750,450],[7180,390],[7450,320]]},
@@ -6,6 +7,11 @@ export const communities=[
  {id:'petalpost',name:'Petalpost Village',who:'Florists, bouquet makers and their families',x:3860,y:5730,point:[3850,5920],kind:'florist',colour:'#F1D083',roof:'#CA725A',homes:[[2970,5510],[3480,5390],[3990,5520],[3410,6100],[3920,6170]],work:'Flower exchange, bouquet benches, communal packing room and growing plots',green:[3720,5870,1080,340],lane:[[3850,5920],[4220,6240],[4100,6470],[3440,6490]]},
  {id:'seedwake',name:'Seedwake Wharf',who:'Seed-boat crews, net menders and dock gardeners',x:-580,y:3200,point:[-570,3470],kind:'boatfolk',colour:'#D4AD69',roof:'#6F9865',homes:[[-880,2770],[-370,2790],[-1130,3330],[-710,3780],[-200,3750]],work:'Seed landing, packing shed, sail repair table and produce-loading court',green:[-630,3260,580,670],lane:[[-570,3470],[-980,3580],[-1220,3600]]},
 ];
+// boss 8 Nov: every community is now its GPT hamlet (hamlets.json, placed by hamlets-apply.mjs). The cottages and yards
+// below are no longer built; each community's point is an open spot on its hamlet square and its lane is the road branch
+// that joins the hamlet lane to the outer road.
+for(const c of communities){const H=hamlets[c.id];if(!H)continue;const W=mapper(c.id);
+ c.hamlet=true;c.homes=[];c.point=W(H.place).map(Math.round);[c.x,c.y]=c.point;c.green=[...c.point,700,320];c.lane=H.lane??null;}
 export const houses=communities.flatMap(c=>c.homes.map(([x,y],i)=>({id:`${c.id}-home-${i+1}`,community:c.id,kind:c.kind,x,y,colour:c.colour,roof:c.roof,address:i+1,sx:[1.2,.96,1.24,1.08,1.14][i],sy:[1.15,.96,1.18,1.07,1.02][i]})));
 const ink='#685B36',cream='#FFF0C7',timber='#CB904B';
 const flower=(x,y)=>`<path d="M${x} ${y+22}v-25m0 18q-18 -18 -21 -5m21 1q17 -18 22 -7" stroke="#528337" fill="none"/><g fill="#F8CC35"><ellipse cx="${x}" cy="${y-4}" rx="18" ry="9"/><ellipse cx="${x}" cy="${y-4}" rx="9" ry="18"/></g><circle cx="${x}" cy="${y-4}" r="8" fill="#975E2D"/>`;

@@ -5,6 +5,7 @@ import {render,OUT,A} from './render.mjs';
 import {communities,houses,homeSVG,yardSVG} from './communities.mjs';
 import {roadArt} from './roads.mjs';
 import {waterways,waterArt,crossingArt,crossingCollision} from './water.mjs';
+import {applyHamlets,hamletGroundArt,hamletMask} from './hamlets-apply.mjs';
 const read=p=>JSON.parse(readFileSync(p)),save=(p,x)=>writeFileSync(p,JSON.stringify(x,null,1)+'\n');
 const old=read('scripts/bigger-sunflower/baseline/art.json'),world=read('scripts/bigger-sunflower/baseline/world.json'),walk=read('scripts/bigger-sunflower/baseline/walk-world.json'),art=structuredClone(old),D='rive/web/themes/sunflower/';
 mkdirSync(A+'bigger',{recursive:true});
@@ -23,6 +24,8 @@ for(const [x,y,w,h] of [[4600,-420,870,290],[1260,5300,860,340],[7080,4860,950,4
 // rather than a broad sand slab. Household gardens meet along the short lanes.
 for(const c of communities){const[x,y,w,h]=c.green;ground+=`<path d="M${x-w*.5} ${y}q${w*.1} ${-h*.6} ${w*.5} ${-h*.48}t${w*.5} ${h*.48}q${-w*.1} ${h*.6} ${-w*.5} ${h*.48}t${-w*.5} ${-h*.48}Z" fill="#B8C963" stroke="#7C9C3D" stroke-width="5"/><path d="M${x-w*.5} ${y}q${w*.1} ${-h*.6} ${w*.5} ${-h*.48}t${w*.5} ${h*.48}q${-w*.1} ${h*.6} ${-w*.5} ${h*.48}t${-w*.5} ${-h*.48}Z" fill="url(#grass)"/>`;}
 ground+=roadArt(lanes,communities,houses);
+// boss 8 Nov: the GPT hamlets' squares and lanes, in the centre's path style, over the road ends that join them
+ground+=`<defs>${hamletMask(shape)}</defs>${hamletGroundArt()}`;
 for(const h of houses){const body=yardSVG(h).replace(/^.*?<svg[^>]*>/s,'').replace('</svg>','');ground+=`<g transform="translate(${h.x-255} ${h.y-145})">${body}</g>`;}
 ground+=waterArt();
 ground+='</g></g></g>';
@@ -89,6 +92,8 @@ for(const [i,[x,y,kind]]of [[-500,850,'tree3'],[-800,1420,'tree4'],[-1150,2450,'
 for(const [i,c]of communities.entries()){
  const [x,cy]=c.point,y=cy-(c.id==='hayhello'?250:0);custom('sign-'+c.id,c.name+' sign',x+(c.id==='seedwake'?-710:290),y+(c.id==='seedwake'?-400:140),140,150,`<path d="M70 62V143" stroke="#92703F" stroke-width="12"/><path d="M9 23Q70 12 131 23L126 86Q70 93 14 84Z" fill="#D9B36B"/><path d="M17 30L123 29" stroke="#F7DFA0"/><text x="70" y="51" font-family="sans-serif" font-size="12" text-anchor="middle" fill="#655331" stroke="none">${c.name.split(' ')[0]}</text><path d="M35 69H102m-8 -7l9 7 -9 7" fill="none"/>`,[15,10]);
 }
+// boss 8 Nov: the five communities are GPT's hamlets (hamlets.json); their old cottages, kit and workshops are cleared
+const hamletReport=applyHamlets({newProps,obstacles,world});
 const extensionTiles=[];
 for(let row=0;row<6;row++)for(let col=0;col<8;col++){const x=bounds.origin.x+col*1500,y=bounds.origin.y+row*1400,src=`bigger/ground-${row}-${col}.svg`;writeFileSync(A+src,`<svg xmlns="http://www.w3.org/2000/svg" width="750" height="700" viewBox="${x} ${y} 1500 1400">${ground}</svg>`);extensionTiles.push({src,x,y,width:1500,height:1400,resolution:1});}
 // Keep original SVGs untouched. Derivatives omit only exterior water rings and foam.
@@ -115,13 +120,13 @@ if(!process.argv.includes('--build')){
 
  for(const p of places)world.zones['bigger-'+p.id]={...p,spawn:p.point};
  world.paths.push(...lanes);world.pathWidths.push(...roadWidths);
- const harbor=read('scripts/bigger-sunflower/baseline/harbor.json');harbor.jetty={foot:[-1320,3000],tip:[-2040,3000],width:130};harbor.water={x:-2100,y:3130};
- harbor.boats=[{x:-2100,y:2800,turn:Math.PI/2},{x:-2100,y:3300,turn:Math.PI/2},{x:-1750,y:2800,turn:Math.PI/2}];
+ const harbor=read('scripts/bigger-sunflower/baseline/harbor.json');harbor.jetty={foot:[-1340,3480],tip:[-2040,3480],width:130};   // boss 8 Nov: south of the Seedwake seed shed, touching no buildingharbor.water={x:-2100,y:3130};
+ harbor.boats=[{x:-2120,y:3240,turn:Math.PI/2},{x:-2100,y:3680,turn:Math.PI/2},{x:-1760,y:3260,turn:Math.PI/2}];   // boss 8 Nov: moored at the moved pier
  // Other moorings are chosen along the new coast normals. These are boat positions, never scenery.
  for(const i of [8,30,57,83,104,134,157]){const p=coast[i],dx=p[0]-4000,dy=p[1]-2800,len=Math.hypot(dx,dy);harbor.boats.push({x:Math.round(p[0]+dx/len*110),y:Math.round(p[1]+dy/len*110),turn:Math.atan2(dx,-dy)})}
  // A new drawn pier matches the interactive harbour; the original decorative piers remain in place.
  writeFileSync(A+'bigger/landing-pier.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="780" height="170" viewBox="0 0 780 170"><path d="M10 22H770V148H10Z" fill="#C98F4D" stroke="#6D5535" stroke-width="4"/>${Array.from({length:39},(_,i)=>`<path d="M${20+i*19} 24V147" stroke="#9B6C37" stroke-width="2"/>`).join('')}<path d="M10 32H770M10 137H770" stroke="#E1B268" stroke-width="6"/><path d="M18 12V160M752 12V160" stroke="#6D5535" stroke-width="13"/></svg>`);
- art.decks.push({src:'bigger/landing-pier.svg',x:-2080,y:2915,width:780,height:170});
+ art.decks.push({src:'bigger/landing-pier.svg',x:-2080,y:3395,width:780,height:170});
  save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);save(D+'harbor.json',harbor);
- save(D+'bigger-sunflower.json',{bounds,places,communities:communities.map(c=>({...c,homes:houses.filter(h=>h.community===c.id)})),lanes,newProps:newProps.length,newObstacles:obstacles.length,oldProps:old.props.length,originalTiles:old.ground.tiles.length});console.log('Built five working communities',newProps.length,'new props');
+ save(D+'bigger-sunflower.json',{bounds,places,communities:communities.map(c=>({...c,homes:houses.filter(h=>h.community===c.id),hamlet:hamletReport[c.id]})),lanes,newProps:newProps.length,newObstacles:obstacles.length,oldProps:old.props.length,originalTiles:old.ground.tiles.length});console.log('Built five working communities',newProps.length,'new props');
 }

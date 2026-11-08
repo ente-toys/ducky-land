@@ -1,0 +1,307 @@
+{
+ "pollenpatch": {
+  "map": {
+   "at": [
+    1930,
+    380
+   ],
+   "bp": [
+    610,
+    578
+   ],
+   "k": 1.9
+  },
+  "place": [
+   592,
+   488
+  ],
+  "lane": null,
+  "skip": [],
+  "drop": [],
+  "nudge": {},
+  "remove": [
+   "bigger-pollenpatch-*",
+   "bigger-pump-pollenpatch",
+   "bigger-hive-*",
+   "bigger-coldframe-*",
+   "bigger-seed-store",
+   "bigger-honey-table",
+   "bigger-pollen-garden-bed-*",
+   "bigger-sign-pollenpatch"
+  ],
+  "sleepers": [
+   {
+    "pose": "leaf",
+    "replaces": [
+     1463,
+     1619
+    ],
+    "nudge": [
+     40,
+     0
+    ]
+   },
+   {
+    "pose": "box",
+    "replaces": [
+     3467,
+     1198
+    ],
+    "flip": true,
+    "nudge": [
+     -15,
+     37
+    ]
+   }
+  ]
+ },
+ "hayhello": {
+  "map": {
+   "at": [
+    5400,
+    150
+   ],
+   "bp": [
+    748,
+    620
+   ],
+   "k": 1.9
+  },
+  "place": [
+   704,
+   600
+  ],
+  "lane": null,
+  "skip": [],
+  "drop": [
+   "acorn-lamp-1"
+  ],
+  "nudge": {
+   "cottage-thatch-1": [
+    -60,
+    40
+   ]
+  },
+  "remove": [
+   "bigger-hayhello-*",
+   "bigger-pump-hayhello",
+   "bigger-harvest-store",
+   "bigger-hay-table",
+   "bigger-hay-croft-bed-*",
+   "bigger-sign-hayhello"
+  ],
+  "sleepers": [
+   {
+    "pose": "book",
+    "replaces": [
+     6850,
+     2678
+    ],
+    "nudge": [
+     14,
+     14
+    ],
+    "flip": true
+   },
+   {
+    "pose": "wing",
+    "replaces": [
+     6298,
+     1220
+    ],
+    "nudge": [
+     -54,
+     129
+    ]
+   }
+  ]
+ },
+ "whirlyseed": {
+  "map": {
+   "at": [
+    8070,
+    3470
+   ],
+   "bp": [
+    716,
+    528
+   ],
+   "k": 1.9
+  },
+  "place": [
+   720,
+   576
+  ],
+  "lane": null,
+  "skip": [],
+  "drop": [],
+  "nudge": {
+   "green-dormer-home": [
+    -90,
+    0
+   ],
+   "southeast-honey-home": [
+    90,
+    0
+   ],
+   "whirlyseed-windmill": [
+    60,
+    0
+   ]
+  },
+  "remove": [
+   "bigger-whirlyseed-*",
+   "bigger-pump-whirlyseed",
+   "bigger-bakery",
+   "bigger-bread-oven",
+   "bigger-bread-table",
+   "bigger-miller-garden-bed-*",
+   "bigger-sign-whirlyseed"
+  ],
+  "sleepers": [
+   {
+    "pose": "rock",
+    "replaces": [
+     6580,
+     3380
+    ]
+   },
+   {
+    "pose": "leaf",
+    "replaces": [
+     7231,
+     758
+    ],
+    "flip": true,
+    "nudge": [
+     -31,
+     -74
+    ]
+   }
+  ]
+ },
+ "petalpost": {
+  "map": {
+   "at": [
+    4450,
+    5370
+   ],
+   "bp": [
+    767,
+    435
+   ],
+   "k": 1.9
+  },
+  "place": [
+   520,
+   512
+  ],
+  "lane": null,
+  "skip": [],
+  "drop": [],
+  "nudge": {},
+  "remove": [
+   "bigger-petalpost-*",
+   "bigger-pump-petalpost",
+   "bigger-flower-room",
+   "bigger-bouquet-table",
+   "bigger-petal-cuttings-bed-*",
+   "bigger-sign-petalpost"
+  ],
+  "sleepers": [
+   {
+    "pose": "book",
+    "replaces": [
+     1080,
+     3760
+    ],
+    "nudge": [
+     -14,
+     14
+    ]
+   },
+   {
+    "pose": "box",
+    "replaces": [
+     1906,
+     1450
+    ],
+    "flip": true,
+    "nudge": [
+     -15,
+     -37
+    ]
+   }
+  ]
+ },
+ "seedwake": {
+  "map": {
+   "at": [
+    -560,
+    3150
+   ],
+   "bp": [
+    766,
+    524
+   ],
+   "k": 1.6
+  },
+  "place": [
+   784,
+   664
+  ],
+  "lane": null,
+  "skip": [
+   "timber-fishing-dock.svg",
+   "mooring-posts-rope.svg"
+  ],
+  "drop": [],
+  "nudge": {
+   "seed-shed": [
+    60,
+    0
+   ],
+   "red-porch": [
+    -100,
+    40
+   ],
+   "bonnet": [
+    -40,
+    0
+   ],
+   "timber-cabin": [
+    -30,
+    0
+   ],
+   "stone-cottage": [
+    30,
+    0
+   ]
+  },
+  "remove": [
+   "bigger-seedwake-*",
+   "bigger-pump-seedwake",
+   "bigger-sail-loft",
+   "bigger-net-table",
+   "bigger-wharf-kitchen-bed-*",
+   "bigger-sign-seedwake"
+  ],
+  "sleepers": [
+   {
+    "pose": "rock",
+    "replaces": [
+     3760,
+     4300
+    ],
+    "flip": true
+   },
+   {
+    "pose": "wing",
+    "replaces": [
+     4287,
+     3983
+    ]
+   }
+  ]
+ }
+}

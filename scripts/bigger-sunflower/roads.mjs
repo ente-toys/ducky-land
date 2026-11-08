@@ -45,7 +45,7 @@ export function roadArt(lanes, communities, homes) {
  }
  // Shared courts have irregular outlines and widen the lane, rather than
  // repeating circular attraction pads around the old centre.
- for(const c of communities){const [x,y,w,h]=c.green;
+ for(const c of communities){if(c.hamlet)continue;const [x,y,w,h]=c.green;
   // A small worn patch beside the shared green, leaving grass for gathering.
   paths.push(`M${x-w*.27} ${y-h*.12}Q${x-w*.18} ${y-h*.32} ${x+w*.03} ${y-h*.26}Q${x+w*.3} ${y-h*.2} ${x+w*.27} ${y+h*.08}Q${x+w*.16} ${y+h*.3} ${x-w*.08} ${y+h*.25}Q${x-w*.31} ${y+h*.16} ${x-w*.27} ${y-h*.12}Z`);
  }

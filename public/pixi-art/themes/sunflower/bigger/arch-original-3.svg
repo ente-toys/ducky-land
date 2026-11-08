@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="240" viewBox="7098 1664 300 240"><g transform="matrix(0.625 0 0 1 7098 1664)">
+  <title>Honeywood footbridge, east-west</title>
+  <desc>Hand-drawn 420 by 120 world-unit bridge. High three-quarter camera, ground depth 0.62, 24-unit crown. Near bank is at the bottom. Transparent background.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Paired little end sills, on the banks rather than in the water. -->
+    <path fill="#e4c567" d="M20 125 L41 121 L42 209 L36 215 L20 212 Z M438 121 L460 125 L460 212 L444 215 L438 209 Z"/>
+    <path fill="#c88941" d="M20 205 L36 208 L42 203 L42 212 L36 218 L20 215 Z M438 203 L444 208 L460 205 L460 215 L444 218 L438 212 Z"/>
+    <!-- Far handrail: six upright posts, two curved horizontal rails. -->
+    <g fill="#c88941">
+      <path d="M27 98 L33 98 L33 140 L27 140 Z M111 83 L117 83 L117 125 L111 125 Z M195 75 L201 75 L201 117 L195 117 Z M279 75 L285 75 L285 117 L279 117 Z M363 83 L369 83 L369 125 L363 125 Z M447 98 L453 98 L453 140 L447 140 Z"/>
+      <path d="M30 125 Q240 77 450 125 L450 129 Q240 81 30 129 Z"/>
+      <path d="M28 98 Q240 50 452 98 L452 102 Q240 54 28 102 Z"/>
+    </g>
+    <!-- The two deck edges have the same arch and stay 74.4 units apart. -->
+    <path fill="#885931" d="M30 132 Q240 84 450 132 L450 214 Q240 166 30 214 Z"/>
+    <path fill="#c88941" d="M30 132 Q240 84 450 132 L450 206.4 Q240 158.4 30 206.4 Z"/>
+    <!-- Transverse boards. The crown belongs to the deck, never to its width. -->
+    <path fill="none" stroke-width=".85" d="M58 126 L58 200.4 M86 120.9 L86 195.3 M114 116.6 L114 191 M142 113.2 L142 187.6 M170 110.7 L170 185.1 M198 109 L198 183.4 M226 108.1 L226 182.5 M254 108.1 L254 182.5 M282 109 L282 183.4 M310 110.7 L310 185.1 M338 113.2 L338 187.6 M366 116.6 L366 191 M394 120.9 L394 195.3 M422 126 L422 200.4"/>
+    <!-- A few short, quiet grain marks, just as sparse as the pond bridge. -->
+    <path fill="none" stroke-width=".65" d="M71 145 L71 162 M126 151 L126 165 M212 127 L212 140 M266 153 L266 168 M353 135 L353 148 M407 159 L407 176"/>
+    <!-- Visible near fascia and its narrow upper lip. -->
+    <path fill="#885931" d="M30 206.4 Q240 158.4 450 206.4 L450 214.4 Q240 166.4 30 214.4 Z"/>
+    <path fill="#c88941" d="M30 202.4 Q240 154.4 450 202.4 L450 206.4 Q240 158.4 30 206.4 Z"/>
+    <g fill="#c88941">
+      <path d="M27 172.4 L33 172.4 L33 214.4 L27 214.4 Z M111 157 L117 157 L117 199 L111 199 Z M195 149.4 L201 149.4 L201 191.4 L195 191.4 Z M279 149.4 L285 149.4 L285 191.4 L279 191.4 Z M363 157 L369 157 L369 199 L363 199 Z M447 172.4 L453 172.4 L453 214.4 L447 214.4 Z"/>
+      <path d="M30 199.4 Q240 151.4 450 199.4 L450 203.4 Q240 155.4 30 203.4 Z"/>
+      <path d="M28 172.4 Q240 124.4 452 172.4 L452 176.4 Q240 128.4 28 176.4 Z"/>
+    </g>
+    <!-- End-grain lines and modest fixing pins. -->
+    <path fill="none" stroke-width=".65" d="M30 178 L30 191 M114 163 L114 175 M198 155 L198 167 M282 155 L282 167 M366 163 L366 175 M450 178 L450 191"/>
+    <path fill="none" stroke-width="1.5" d="M30 175 L30 175.4 M114 160 L114 160.4 M198 152 L198 152.4 M282 152 L282 152.4 M366 160 L366 160.4 M450 175 L450 175.4"/>
+  </g>
+</g></svg>
