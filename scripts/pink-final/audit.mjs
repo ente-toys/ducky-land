@@ -44,11 +44,11 @@ export function auditPink(){
  // The boss explicitly locked the original centre, including its intentional lamp/path
  // contacts and the original nod pose beside its own tree. Verify exact baseline data
  // before classifying these separately from newly introduced overlaps.
- const baseline=JSON.parse(execFileSync('git',['show','7c2a28ec:public/pixi-art/themes/pink/art.json'],{encoding:'utf8'}));
+ const baseline=JSON.parse(readFileSync('scripts/pink-final/baseline/art.json','utf8'));
  const protectedIds=new Set(read('scripts/pink-final/centre-lock-report.json').protectedProps);
  const lockedBaselineContacts=[];
  remaining.propVsPath=remaining.propVsPath.filter(hit=>{const p=art.props.find(p=>p.id===hit.id),old=baseline.props.find(p=>p.id===hit.id);if(protectedIds.has(hit.id)&&JSON.stringify(p)===JSON.stringify(old)){lockedBaselineContacts.push(hit);return false;}return true;});
- const oldLine=execFileSync('git',['show','7c2a28ec:rive/web/themes/index.js'],{encoding:'utf8'}).split('\n').find(l=>l.startsWith('  pink:')),oldBeds=JSON.parse(oldLine.match(/sleepers: (\[.*\])/)[1]);
+ const oldLine=readFileSync('scripts/pink-final/baseline/pink-index-line.js','utf8').split('\n').find(l=>l.startsWith('  pink:')),oldBeds=JSON.parse(oldLine.match(/sleepers: (\[.*\])/)[1]);
  remaining.sleeperVsTrunk=remaining.sleeperVsTrunk.filter(hit=>{if(inCentre(hit.x,hit.y)&&oldBeds.some(b=>b.x===hit.x&&b.y===hit.y&&b.pose===hit.pose&&b.tree===hit.tree)){lockedBaselineContacts.push(hit);return false;}return true;});
  const count=Object.values(remaining).reduce((s,a)=>s+a.length,0);
  return {lockedBaselineContacts,remainingOverlapCount:count,forbiddenHamletPlantProps:forbidden.length,checked:{props:art.props.length,bridges:bridges.length,pathEnds:endAudit.length,sleepers:beds.length},remaining,pathEnds:endAudit,bridges:bridges.map(c=>({id:c.id,a:c.a,b:c.b,water:true})),coastMatches:JSON.stringify(world.coast)===JSON.stringify(walk.coast)};
