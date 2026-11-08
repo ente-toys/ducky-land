@@ -90,7 +90,7 @@
 <path d="M568 388 Q578 369 597 378 L608 401 Q590 414 565 403 Z" fill="#E9C48E" stroke="#39472d" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="north-shell" id="north-shell-21"/>
 <path d="M569 387 L588 390 L597 378 M588 390 L592 407" fill="none" stroke="#CFA46E" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="north-shell" id="north-shell-22"/>
 
-<ellipse cx="716" cy="453" rx="110" ry="23" fill="#39472d" opacity=".16"/>
+<ellipse data-piece="clam" cx="716" cy="453" rx="110" ry="23" fill="#39472d" opacity=".16"/>
 <g id="clam" stroke="#39472d" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="clam">
 <g transform="translate(605 227) scale(.54)">
 <path d="M136.5 315.25Q116.5 275.25 61.5 240.25Q-13.5 182.25 46.5 146.25Q26.5 80.25 98.5 84.25Q112.5 15.25 172.5 50.25Q218.5 -17.75 261.5 50.25Q326.5 21.25 346.5 87.25Q416.5 93.25 376.5 160.25Q429.5 190.25 346.5 251.25Q305.5 287.25 276.5 315.25H136.5Z" fill="#FFB4A8" stroke-width="4.11"/>
@@ -136,7 +136,7 @@
 <use ns1:href="#kit-shell" transform="translate(308 673) rotate(-18) scale(.065)"/>
 <use ns1:href="#kit-shell" transform="translate(652 356) rotate(14) scale(.057)" data-piece="clam" id="clam-46"/>
 
-<ellipse cx="738" cy="581" rx="27" ry="8" fill="#39472d" opacity=".14"/>
+<ellipse data-piece="shell-bucket" cx="738" cy="581" rx="27" ry="8" fill="#39472d" opacity=".14"/>
 <g stroke="#39472d" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="shell-bucket" id="shell-bucket-48">
 <path d="M719 553 Q720 531 734 530 Q749 529 750 552" fill="none" stroke="#885931" stroke-width="3"/>
 <path d="M716 548 L752 548 L747 576 Q734 584 722 575 Z" fill="#6EC9DE"/>

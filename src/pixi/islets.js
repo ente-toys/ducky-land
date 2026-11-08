@@ -1,4 +1,6 @@
 import data from './islets-data.json' with {type:'json'};
+import {ISLET_SCALE} from './islet-scale.js';
+export {ISLET_SCALE};
 import odyssey from '../../public/pixi-art/islets/odyssey.meta.json' with {type:'json'};
 import treeAndRowboat from '../../public/pixi-art/islets/tree-and-rowboat.meta.json' with {type:'json'};
 import brokenShipwreck from '../../public/pixi-art/islets/broken-shipwreck.meta.json' with {type:'json'};
@@ -30,7 +32,7 @@ function upright(i,home){
  for(let k=0;k<4;k++){const f=sphereFrame(i.lon,i.lat,roll),r=isletPlacement(home,f);roll+=Math.atan2(r.sin,r.cos);}
  return sphereFrame(i.lon,i.lat,roll);
 }
-function layout(i){
+export function layoutIslet(i){
  const centre=sphereFrame(i.lon,i.lat).center;
  const near=WORLD_ISLANDS.reduce((a,b)=>angle(centre,a.center)<angle(centre,b.center)?a:b);
  const frame=upright(i,near.id),m=ISLET_META[i.art],k=i.width/ISLET_VIEWBOX;
@@ -46,11 +48,11 @@ function layout(i){
  // Where the boat ties up. Off an east or west jetty it waits past the tip; off a south (or north) jetty it lies alongside
  // the tip on the side away from the island's middle, because a boat stands up on screen and would cover the deck and the Ducky stepping off it.
  const out=(tip[0]-c[0])*-dir[1]+(tip[1]-c[1])*dir[0],side=out>=0?[-dir[1],dir[0]]:[dir[1],-dir[0]],across=Math.abs(dir[1])>Math.abs(dir[0]);
- const water=across?[tip[0]-dir[0]*40+side[0]*(m.jetty.width*k/2+BOAT_ROOM-12),tip[1]-dir[1]*40+side[1]*(m.jetty.width*k/2+BOAT_ROOM-12)]:at(BOAT_ROOM);
- const jetty={foot,tip,land:at(-26),water,dir,width:m.jetty.width*k};
+ const water=across?[tip[0]-dir[0]*40*ISLET_SCALE+side[0]*(m.jetty.width*k/2+(BOAT_ROOM-12)*ISLET_SCALE),tip[1]-dir[1]*40*ISLET_SCALE+side[1]*(m.jetty.width*k/2+(BOAT_ROOM-12)*ISLET_SCALE)]:at(BOAT_ROOM*ISLET_SCALE);
+ const jetty={foot,tip,land:at(-26*ISLET_SCALE),water,dir,width:m.jetty.width*k};
  return {...i,...frame,radius,home:near.id,coast,lakes,blocked,jetty,landCentre:c,collisionCenter:expMap(frame,c[0],c[1],WORLD_GEO.Rw),cap:Math.cos(i.width*.71/WORLD_GEO.Rw)};
 }
-export const ISLETS=data.placements.map(layout);
+export const ISLETS=data.placements.map(layoutIslet);
 // Shared by authoritative room simulation, boat route planning and client prediction.
 // Chord distance is a conservative lower bound on geodesic distance.
 export function isletClearance(p,limit=Infinity,id=null){
@@ -66,18 +68,22 @@ export function isletClearance(p,limit=Infinity,id=null){
    if(x*x+y*y+z*z>=((best+i.radius)/WORLD_GEO.Rw)**2)continue;
    q=logMap(i,p,WORLD_GEO.Rw);
   }
-  // The broad circle only culls distant islets. The actual sand boundary leaves
-  // water open at short jetties and around long, narrow islets.
-  for(const ring of [i.coast,...i.blocked]){
-   if(inPoly(q.x,q.y,ring))return 0;
-   for(let k=0,j=ring.length-1;k<ring.length;j=k++){
-    const a=ring[j],b=ring[k],dx=b[0]-a[0],dy=b[1]-a[1];
-    const t=Math.max(0,Math.min(1,((q.x-a[0])*dx+(q.y-a[1])*dy)/(dx*dx+dy*dy||1)));
-    best=Math.min(best,Math.hypot(q.x-a[0]-dx*t,q.y-a[1]-dy*t));
-   }
-  }
+  best=isletLocalClearance(i,q,best);
  }
  return Math.max(0,best);
 }
 // a point of islet i's own tangent frame on the sphere
 export const isletPoint=(i,[x,y])=>expMap(i,x,y,WORLD_GEO.Rw);
+
+export function isletLocalClearance(i,q,limit=Infinity){
+ let best=limit;
+ for(const ring of [i.coast,...i.blocked]){
+  if(inPoly(q.x,q.y,ring))return 0;
+  for(let k=0,j=ring.length-1;k<ring.length;j=k++){
+   const a=ring[j],b=ring[k],dx=b[0]-a[0],dy=b[1]-a[1];
+   const t=Math.max(0,Math.min(1,((q.x-a[0])*dx+(q.y-a[1])*dy)/(dx*dx+dy*dy||1)));
+   best=Math.min(best,Math.hypot(q.x-a[0]-dx*t,q.y-a[1]-dy*t));
+  }
+ }
+ return best;
+}

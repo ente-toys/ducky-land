@@ -34,9 +34,9 @@
       <path fill="none" stroke="#B9A2E2" stroke-width="2.4" d="M320 544 C334 536 352 536 366 542 M372 554 L386 554"/>
     </g>
     <g id="shadows" fill="#39472D" fill-opacity=".18">
-      <ellipse cx="432" cy="492" rx="82" ry="13"/>
-      <ellipse cx="628" cy="472" rx="46" ry="8"/>
-      <ellipse cx="712" cy="522" rx="30" ry="6"/>
+      <ellipse data-piece="twisted-tree" cx="432" cy="492" rx="82" ry="13"/>
+      <ellipse data-piece="gravestone" cx="628" cy="472" rx="46" ry="8"/>
+      <ellipse data-piece="small-gravestone" cx="712" cy="522" rx="30" ry="6"/>
     </g>
     <g id="mushroom-back" data-piece="back-mushroom">
       <path fill="#F4FAFF" stroke="#39472D" stroke-width="2" d="M346 500 L346 488 L354 488 L354 500 Z"/>

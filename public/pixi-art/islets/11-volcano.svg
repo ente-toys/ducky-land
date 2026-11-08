@@ -37,7 +37,7 @@
 <path d="M297 731 Q332 714 339 685 Q345 653 317 629 Q290 602 296 574 Q305 548 337 536 L351 556 Q325 564 324 581 Q322 597 342 615 Q377 649 368 686 Q362 723 331 749 Z" fill="#FDE48C"/>
 <path d="M308 728 Q334 710 343 685 M300 580 Q300 562 323 552" fill="none" stroke="#E4C567" stroke-width="3"/>
 
-<path d="M390 646 Q525 625 692 644 Q762 658 745 683 Q677 708 505 692 Q414 685 390 671 Z" fill="#39472d" opacity=".15"/>
+<path data-piece="volcano" d="M390 646 Q525 625 692 644 Q762 658 745 683 Q677 708 505 692 Q414 685 390 671 Z" fill="#39472d" opacity=".15"/>
 
 <g stroke="#39472d" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="volcano" id="volcano-13">
 <path d="M324 643 Q342 601 355 569 Q364 528 392 496 Q409 452 426 410 Q441 361 445 324 Q469 307 509 307 Q552 306 579 324 Q587 363 611 403 Q630 443 646 483 Q676 508 679 543 Q701 584 713 632 Q703 662 648 677 Q582 692 500 680 Q433 689 376 670 Q342 665 324 643 Z" fill="#9A7B66"/>
@@ -73,9 +73,9 @@
 <path d="M359 674 L381 678 L393 668 M381 678 L386 701" fill="none" stroke="#76604F" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="mossy-boulder" id="mossy-boulder-18"/>
 <path d="M360 672 Q372 658 389 668 L388 677 Q379 673 374 680 Q365 678 360 681 Z" fill="#83AF2A" data-piece="mossy-boulder" id="mossy-boulder-19"/>
 
-<ellipse cx="266" cy="567" rx="54" ry="15" fill="#39472d" opacity=".12"/>
+<ellipse data-piece="west-bush" cx="266" cy="567" rx="54" ry="15" fill="#39472d" opacity=".12"/>
 <use ns1:href="#kit-bush" transform="translate(220 499) scale(.72)" data-piece="west-bush" id="west-bush-21"/>
-<ellipse cx="750" cy="564" rx="39" ry="12" fill="#39472d" opacity=".12"/>
+<ellipse data-piece="east-bush" cx="750" cy="564" rx="39" ry="12" fill="#39472d" opacity=".12"/>
 <use ns1:href="#kit-bush" transform="translate(713 510) scale(.56)" data-piece="east-bush" id="east-bush-23"/>
 
 <path d="M249 601 L297 594 L319 617 L267 626 Z" fill="#39472d" opacity=".14"/>
@@ -93,7 +93,7 @@
 <path d="M279 608 L287 603 L295 608" fill="none" stroke="#4AA539"/>
 </g>
 
-<ellipse cx="393" cy="745" rx="20" ry="7" fill="#39472d" opacity=".13"/>
+<ellipse data-piece="trail-sign" cx="393" cy="745" rx="20" ry="7" fill="#39472d" opacity=".13"/>
 <g stroke="#39472d" stroke-width="2.22" vector-effect="non-scaling-stroke" data-piece="trail-sign" id="trail-sign-27">
 <path d="M386 701 L394 701 L394 742 L386 744 Z" fill="#C88941"/>
 <path d="M365 683 L408 681 L413 706 L367 710 Z" fill="#C88941"/>

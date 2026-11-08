@@ -66,7 +66,7 @@
 <path fill="#c88941" d="M574 584Q574 552 566 531L574 533Q585 554 584 582Z" data-piece="ribs" id="ribs-27-4"/>
 <path fill="#e3ac63" d="M477 549L580 555L581 562L480 556Z" data-piece="ribs" id="ribs-27-5"/>
 <!-- Short flattened shadows, no long cast shadows. -->
-<g fill="#c9b864" stroke="none"><path d="M278 575Q380 565 474 594Q473 607 415 607Q326 604 278 585Z " data-piece="west-rock" id="west-rock-27-6-0"/><path d="M590 581Q700 564 795 569Q795 584 724 595Q650 605 591 593Z" data-piece="east-rock" id="east-rock-27-6-1"/></g>
+<g fill="#c9b864" stroke="none"><path d="M278 575Q380 565 474 594Q473 607 415 607Q326 604 278 585Z " id="bow-ground-shadow"/><path d="M590 581Q700 564 795 569Q795 584 724 595Q650 605 591 593Z" id="stern-ground-shadow"/></g>
 <!-- Broken mast behind the bow. -->
 <path fill="#c88941" d="M394 491L380 352L386 334L390 352L398 324L402 349L412 337L408 359L421 489Z" data-piece="fallen-spar" id="fallen-spar-27-7"/>
 <path fill="#885931" stroke="none" d="M398 348L402 349L412 337L408 359L421 489L410 490Z" data-piece="fallen-spar" id="fallen-spar-27-8"/>

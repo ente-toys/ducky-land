@@ -1,7 +1,7 @@
 import {placeRigid,unplaceRigid,flatRigid} from './rigid.js';
 import {placeIslet,unplaceIslet} from './islet-placement.js';
 import {dot} from './sphere.js';
-import {isletClearance,ISLETS} from './islets.js';
+import {isletClearance,isletLocalClearance,ISLETS} from './islets.js';
 import {walkNav,isletWalks,inWalkArea} from './islet-walk.js';
 import {worldIsland} from './world-map.js';
 import {WORLD_GEO} from './world-map.js';
@@ -174,7 +174,10 @@ export function landingSpot(actor,nav=null,reach=420) {   // the walking map kee
   // boss 8 Nov ("I should be able to dock here"): a sea islet in reach offers its jetty. Its walking ground is charted on
   // its nearest island (islet.home), so landing there moves you onto that island, far out in its sea.
   for (const i of ISLETS) {
-    const q=unplaceIslet(actor.islandId,i,actor),d=Math.hypot(q.x-i.landCentre[0],q.y-i.landCentre[1])-i.radius;
+    const q=unplaceIslet(actor.islandId,i,actor),water=i.jetty.water,c=i.landCentre;
+    const cap=Math.max(i.radius,Math.hypot(water[0]-c[0],water[1]-c[1]));
+    if(Math.hypot(q.x-c[0],q.y-c[1])-cap>reach)continue;
+    const d=Math.min(isletLocalClearance(i,q,reach+1),Math.hypot(q.x-water[0],q.y-water[1]));
     if (d > reach || (best && d >= best.d)) continue;
     const walk=isletWalks(i.home).find(w => w.islet === i), at=placeIslet(actor.islandId,i,i.jetty.land);
     best={islandId:i.home,islet:i.id,offset:{x:at.x-walk.land.x,y:at.y-walk.land.y},x:walk.land.x,y:walk.land.y,d:Math.max(0,d)};

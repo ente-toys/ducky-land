@@ -73,6 +73,8 @@ test('production islet props sort with Duckies by their foot, preserve the compl
   for(const v of view.views){
    const i=v.i,k=i.width/1024,p=placeIslet(i.home,i,[0,0]),camera={...p,zoom:1/k};
    view.update(i.home,camera,1024,1024,false);
+   // Compare this drawing alone; enlarged neighbours can enter the viewport.
+   for(const other of view.views)if(other!==v){other.root.visible=false;for(const p of other.props)p.sprite.visible=false;}
    for(const {piece,sprite}of v.props){
     assert.equal(sprite.parent,objects,'same sorted layer as Duckies and boats');
     assert.ok(Math.abs(sprite.zIndex-sprite.y)<1e-9,'depth comes from transformed foot');
@@ -100,10 +102,10 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     const oak=v.props.find(p=>p.piece.id==='oak');
     duck.visible=true;duck.position.set(oak.sprite.x,oak.sprite.y-1);duck.zIndex=duck.y;
     renderer.render({container:scene,clear:true});
-    const behind=output.getContext('2d').getImageData(503,500,1,1).data;
+    const behind=output.getContext('2d').getImageData(503,Math.floor(oak.piece.foot[1]-35/k),1,1).data;
     assert.notDeepEqual([...behind.slice(0,3)],[255,0,0],'oak pixels cover the Ducky behind its trunk');
     duck.y=oak.sprite.y+1;duck.zIndex=duck.y;renderer.render({container:scene,clear:true});
-    const front=output.getContext('2d').getImageData(503,500,1,1).data;
+    const front=output.getContext('2d').getImageData(503,Math.floor(oak.piece.foot[1]-35/k),1,1).data;
     assert.deepEqual([...front.slice(0,3)],[255,0,0],'Ducky in front covers the oak');duck.visible=false;
    }
    view.update(i.home,camera,1024,1024,true);
