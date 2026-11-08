@@ -27,7 +27,7 @@ export function auditPink(){
  const hamletPolys=[];
  for(const h of ['ribbonwick','chirrup','petalpatch']){const t=read('scripts/pink-hamlets/hamlets/'+h+'.json'),m=t.map;for(const p of t.layout.paths??[])hamletPolys.push(p.polygon.map(q=>q.map((v,k)=>m.at[k]+(v-m.bp[k])*m.k)));}
  const shoreMaps=read('scripts/pink-hamlets-b/placement.json');
- for(const h of ['teacup','tutu-tides']){const t=read('../concepts/themes/work/pink-fix/svg/'+h+'/layout.json'),m=shoreMaps[h].map;for(const p of t.paths)hamletPolys.push(p.polygon.map(q=>q.map((v,k)=>m.at[k]+(v-m.bp[k])*m.k)));}
+ for(const h of ['teacup','tutu-tides']){const t=read('scripts/pink-hamlets-b/'+h+'-layout.json'),m=shoreMaps[h].map;for(const p of t.paths)hamletPolys.push(p.polygon.map(q=>q.map((v,k)=>m.at[k]+(v-m.bp[k])*m.k)));}
  const courts=art.flats.filter(f=>/close-(plaza|cafe|festival|court)|hamlets.*(court|square)/.test(f.src));
  const inCourt=(x,y)=>hamletPolys.some(p=>inPoly(x,y,p)||p.some((a,i)=>dist([x,y],a,p[(i+1)%p.length])<90))||world.paths.filter(p=>JSON.stringify(p[0])===JSON.stringify(p.at(-1))).some(p=>inPoly(x,y,p))||courts.some(f=>{const x0=f.x-(f.topLeft?0:f.width/2),y0=f.y-(f.topLeft?0:f.height);return x>=x0-110&&x<=x0+f.width+110&&y>=y0-110&&y<=y0+f.height+110;})||Object.values(world.zones).some(z=>Math.hypot(x-(z.spawn?.[0]??z.x),y-(z.spawn?.[1]??z.y))<320);
  const endAudit=[];
