@@ -40,7 +40,8 @@ export function makeMap(id, {world, walk = null, harbor, art = null, sea = null,
   const JETTY_W = harbor.jetty.width ?? 104, AXIS = Math.hypot(TIP.x - FOOT.x, TIP.y - FOOT.y);
   const DIR = {x: (TIP.x - FOOT.x) / AXIS, y: (TIP.y - FOOT.y) / AXIS};
   const along = (t, side = 0) => ({x: FOOT.x + DIR.x * t - DIR.y * side, y: FOOT.y + DIR.y * t + DIR.x * side});
-  const JETTY = {foot: FOOT, tip: TIP, width: JETTY_W, length: AXIS, angle: Math.atan2(DIR.x, -DIR.y), wetFrom: .14, dir: DIR, along,
+  // art: the island art already draws this jetty's deck (home: the south fishing dock, 8 Nov), so harbor.js adds bollards only
+  const JETTY = {foot: FOOT, tip: TIP, width: JETTY_W, length: AXIS, angle: Math.atan2(DIR.x, -DIR.y), wetFrom: .14, dir: DIR, along, art: harbor.jetty.art ?? null,
     walkway: {a: [Math.round(along(-55).x), Math.round(along(-55).y)], b: [Math.round(along(AXIS - 44).x), Math.round(along(AXIS - 44).y)], w: JETTY_W}};
   let moorings;
   if (id === 'home') moorings = expansion.boats.map(({x,y})=>({x,y}));

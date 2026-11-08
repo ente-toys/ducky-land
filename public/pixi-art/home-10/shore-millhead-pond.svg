@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="6000 840 440 340" width="440" height="340" stroke-linecap="round" stroke-linejoin="round">
+<!-- The millpond at the head of Millrill (was an angular six-point cut). Drawn by hand in world coordinates, centre style. -->
+<path d="M6064 1006 C6072 926 6150 868 6250 864 C6350 860 6420 920 6418 996 C6416 1070 6350 1136 6250 1152 C6170 1166 6098 1128 6074 1076 Z" fill="#E4C567"/>
+<path d="M6064 1000 C6072 920 6150 862 6250 858 C6350 854 6420 914 6418 990 C6416 1064 6350 1130 6250 1146 C6170 1160 6098 1122 6074 1070 Z" fill="#FDE48C"/>
+<path d="M6085 1004 C6095 939 6160 892 6250 888 C6338 886 6392 934 6392 996 C6390 1059 6335 1114 6250 1126 C6175 1136 6115 1109 6095 1064 Z" fill="#E4C567"/>
+<path d="M6085 1000 C6095 935 6160 888 6250 884 C6338 882 6392 930 6392 992 C6390 1055 6335 1110 6250 1122 C6175 1132 6115 1105 6095 1060 Z" fill="#6EC9DE"/>
+<path d="M6020 1024 L6110 1000 L6110 1135 L6020 1156 Z" fill="#6EC9DE"/>
+<path d="M6250 1122 C6335 1110 6390 1055 6392 992 C6392 960 6378 934 6352 914 C6368 950 6366 1000 6340 1040 C6318 1076 6284 1100 6236 1118 Z" fill="#39472d" fill-opacity=".15"/>
+<path d="M6180 960 Q6198 952 6218 960 M6270 1040 Q6288 1033 6308 1040 M6150 1060 Q6166 1054 6184 1060" fill="none" stroke="#FFF0C7" stroke-width="4"/>
+<path d="M6290 960 L6304 953 A17 11 0 1 0 6305 966 Z" fill="#4AA539" stroke="#39472d" stroke-width="2.22"/>
+<path d="M6318 984 L6328 979 A11 7 0 1 0 6329 988 Z" fill="#4AA539" stroke="#39472d" stroke-width="2.22"/>
+<circle cx="6298" cy="955" r="4" fill="#FFF0C7" stroke="#39472d" stroke-width="1.5"/>
+<g fill="none" stroke="#32733C" stroke-width="4">
+<path d="M6370 908 Q6366 880 6374 858 M6380 912 Q6386 886 6394 870 M6360 910 Q6350 892 6340 886"/>
+<path d="M6140 1136 Q6134 1110 6142 1090 M6150 1140 Q6156 1116 6164 1100"/>
+</g>
+<g fill="#885931" stroke="#39472d" stroke-width="2">
+<ellipse cx="6374" cy="862" rx="4.5" ry="11"/><ellipse cx="6394" cy="874" rx="4.5" ry="10"/><ellipse cx="6142" cy="1094" rx="4.5" ry="10"/>
+</g>
+</svg>

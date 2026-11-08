@@ -6,13 +6,19 @@ import B from '../scripts/bigger-home-2/baseline-B.json' with {type:'json'};
 import {HOME_MAP} from '../src/pixi/island-maps.js';
 import {canSail,originOffset} from '../src/pixi/islands.js';
 import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
+import S from '../scripts/home-10/shore.json' with {type:'json'};
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
 test('Home communities keep C coast, map coordinates, working harbour and both piers',()=>{
- assert.deepEqual(E.coast,C.coast);assert.deepEqual(E.origin,C.origin);
+ // 8 Nov (shore lane): the old north-east harbour inlet is land; C's coast with that stretch replaced by the new east beach
+ const near=(p,q)=>Math.round(p[0])===q[0]&&Math.round(p[1])===q[1],i=C.coast.findIndex(p=>near(p,S.coast.after)),j=C.coast.findIndex(p=>near(p,S.coast.before));
+ assert.deepEqual(E.coast,[...C.coast.slice(0,i+1),...S.coast.points,...C.coast.slice(j)]);assert.deepEqual(E.origin,C.origin);
  assert.equal(E.width,C.width);assert.equal(E.height,C.height);
  assert.deepEqual(E.decks.slice(0,C.decks.length),C.decks);assert.deepEqual(E.walkways.slice(0,C.walkways.length),C.walkways);
- assert.deepEqual(E.jetty,C.jetty);assert.deepEqual(E.harborWater,C.harborWater);assert.deepEqual(E.boats,C.boats);
- const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2,`land ratio ${ratio}`);
+ // the harbour is the south fishing dock now: its jetty, docking water and the three jetty boats; the other boats are C's
+ assert.deepEqual(E.jetty,S.harbour.jetty);assert.deepEqual(E.harborWater,S.harbour.harborWater);assert.deepEqual(E.boats,[...S.harbour.boats012,...C.boats.slice(3)]);
+ for(const b of E.boats.slice(0,3))assert.ok(canSail(b.x,b.y,'home'),`jetty boat ${b.x},${b.y} afloat`);
+ assert.ok(canSail(E.harborWater.x,E.harborWater.y,'home'));for(const p of [[6050,1778],[5956,1756],[6150,1856],[5789,1700]])assert.equal(canSail(...p,'home'),false,'the old bay is land');
+ const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2.05,`land ratio ${ratio}`);   // 8 Nov: +the filled-in old harbour inlet (2.017)
 });
 test('five Home communities have distinct homes, meaningful workplaces and reachable front gates',()=>{
  const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);const types=new Set();let homes=0;

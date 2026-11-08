@@ -46,27 +46,27 @@ test('every island can be reached from home by boat', () => {
 });
 
 test('sailing normalizes diagonal speed and cannot tunnel into shore or cross the bounds', () => {
-  const a={...sailor(),x:6500,y:1600},b={...sailor(),x:6500,y:1600};
+  const a={...sailor(),x:2165,y:-1917},b={...sailor(),x:2165,y:-1917};
   sailStep(a,.05,{x:1,y:0}); sailStep(b,.05,{x:1,y:1});
-  assert.ok(Math.abs(Math.hypot(a.x-6500,a.y-1600)-Math.hypot(b.x-6500,b.y-1600))<1e-9);
-  const c={...sailor(),x:6500,y:1600};
+  assert.ok(Math.abs(Math.hypot(a.x-2165,a.y+1917)-Math.hypot(b.x-2165,b.y+1917))<1e-9);
+  const c={...sailor(),x:2165,y:-1917};
   sailStep(c,10,{x:0,y:1});
-  assert.ok(c.y<2200);
+  assert.ok(c.y<-1317);   // the north shore at -1617 (8 Nov: the old north-east bay is land now)
   assert.ok(canSail(c.x,c.y));
-  assert.ok(c.y>1600);
+  assert.ok(c.y>-1917);
   sailStep(c,30,{x:0,y:-1});
   assert.ok(canSail(c.x,c.y));
   assert.ok(c.y>=SEA_BOUNDS.y0+46);
 });
 
 test('tap sailing stops at the target, blocked destinations are rejected and manual steering cancels docking', () => {
-  const a={...sailor(),x:6500,y:1600};
+  const a={...sailor(),x:2165,y:-1917};
   assert.equal(setSailDestination(a,2820,2640),null);
-  assert.deepEqual(setSailDestination(a,6500,1700),[6500,1700]);
+  assert.deepEqual(setSailDestination(a,2165,-1817),[2165,-1817]);
   for (let i=0;i<20;i++) sailStep(a,.05,ZERO);
-  assert.ok(Math.abs(a.y-1700)<1e-6);
+  assert.ok(Math.abs(a.y+1817)<1e-6);
   assert.equal(a.sailTarget,null);
-  a.docking=true; a.sailTarget={x:6500,y:1700};
+  a.docking=true; a.sailTarget={x:2165,y:-1817};
   sailStep(a,.05,{x:1,y:0});
   assert.equal(a.docking,false);
   assert.equal(a.sailTarget,null);
@@ -176,7 +176,7 @@ test('docking off a beach sails in to the water beside the sand, and every appro
   for (let k=0;boat.sailTarget && k<400;k++) sailStep(boat,.05,ZERO);
   assert.ok(Math.hypot(boat.x-spot.approach.x,boat.y-spot.approach.y)<=14,'the boat arrives beside the shore');
   // a narrow cove: the first open water by the sand has no route in, so the approach backs off to water the boat can reach
-  const cove={...sailor(),x:6500,y:1600}, inlet=landingSpot(cove); inlet.approach=landingApproach(cove,inlet);
+  const cove={...sailor(),x:2165,y:-1917}, inlet=landingSpot(cove); inlet.approach=landingApproach(cove,inlet);
   assert.ok(canSail(inlet.approach.x,inlet.approach.y),'the approach is open water');
   assert.ok(setSailDestination({...cove},inlet.approach.x,inlet.approach.y) || Math.hypot(inlet.approach.x-cove.x,inlet.approach.y-cove.y)<=14,'and reachable');
   // anywhere off a shore: either the boat is already beside the sand (it lands at once) or it has a route in

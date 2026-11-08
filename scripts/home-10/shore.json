@@ -1,0 +1,58 @@
+{
+  "lane": "shore",
+  "note": "Hand-written entries only (boss rule 8 Nov: by hand, no generators). Every coordinate below was chosen by eye against the renders in concepts/themes/work/home-fix/shore/. Applied by scripts/home-10/shore.mjs, which only copies these entries in.",
+
+  "harbour": {
+    "why": "Home's harbour moves from the old north-east bay to the big fishing dock on the south coast. The jetty runs down the dock's south stem (fishing-deck.svg art: stem x 3960-4230, y 5626-5921); the art already draws the deck, so the code draws only bollards.",
+    "jetty": {"foot": [4095, 5640], "tip": [4100, 5912], "width": 262, "art": "fishing-deck"},
+    "harborWater": {"x": 3960, "y": 6100},
+    "boats012": [
+      {"x": 3830, "y": 5905, "turn": 1.5707963267948966},
+      {"x": 4385, "y": 5850, "turn": 1.5707963267948966},
+      {"x": 4290, "y": 6040, "turn": 1.5707963267948966}
+    ]
+  },
+
+  "coast": {
+    "why": "The old harbour inlet (north shore y 1150-1290, south shore y 1990-2010, open to the sea east of x 7400) is filled in as land. Points strictly between the two anchors are replaced by this new east beach: a shallow natural cove, x 7492-7625.",
+    "after": [7584, 1130],
+    "before": [7605, 2436],
+    "points": [
+      [7548, 1160], [7518, 1196], [7500, 1238], [7492, 1284], [7494, 1332], [7505, 1382],
+      [7522, 1432], [7543, 1482], [7565, 1534], [7586, 1588], [7604, 1644], [7617, 1702],
+      [7624, 1762], [7625, 1822], [7620, 1882], [7610, 1940], [7597, 1996], [7584, 2052],
+      [7574, 2108], [7569, 2164], [7569, 2220], [7573, 2276], [7581, 2330], [7592, 2384]
+    ]
+  },
+
+  "riverWater": {
+    "why": "Millrill (mill-stream) used to run out into the old bay and stop in a square cut at 5900,2020; it now ends in Millrill Pond, on the filled land. Its head at the mill was an angular six-point shape; now a rounded millpond.",
+    "set": [
+      {"id": "millhead-pond", "x": 6243, "y": 1003, "rx": 1, "ry": 1,
+       "poly": [[6085, 1000], [6110, 925], [6170, 890], [6250, 884], [6330, 890], [6385, 935], [6392, 992], [6370, 1060], [6320, 1105], [6250, 1122], [6170, 1128], [6110, 1100], [6095, 1060]]},
+      {"id": "shore-millrill-pond", "x": 6100, "y": 1880, "rx": 1, "ry": 1,
+       "poly": [[5900, 1900], [5935, 1830], [6000, 1785], [6092, 1760], [6185, 1748], [6262, 1768], [6303, 1825], [6300, 1890], [6236, 1938], [6150, 1958], [6078, 1962], [6000, 1980], [5935, 2003], [5900, 2005]]}
+    ]
+  },
+
+  "decks": {
+    "why": "The two ponds are drawn as flat overlays (hand-drawn SVG in world coordinates), so they sit over whatever grass the ground lane paints.",
+    "set": [
+      {"id": "shore-millrill-pond", "src": "/pixi-art/home-10/shore-millrill-pond.svg", "x": 5780, "y": 1680, "width": 580, "height": 400, "resolution": 1},
+      {"id": "shore-millhead-pond", "src": "/pixi-art/home-10/shore-millhead-pond.svg", "x": 6000, "y": 840, "width": 440, "height": 340, "resolution": 1}
+    ]
+  },
+
+  "walkWorld": {
+    "why": "rive/web/walk-world.json (the room server's walking map) carries the old jetty deck and the old coast; swap in the new jetty deck (JETTY.walkway of the new jetty) and the same coast.",
+    "oldJettyWalkway": {"a": [5470, 1711], "b": [5991, 1876], "w": 104},
+    "newJettyWalkway": {"a": [4094, 5585], "b": [4099, 5868], "w": 262}
+  },
+
+  "islets": {
+    "why": "The decorative islet sea-9-1 sat 836 from the sailing corridor between Home's new harbour and isle-251's (needs 1704 for its 1484 width). Moved by hand about 2900 south-south-west, out at sea (Home local ~4500, 10500: 2144 from every coast, 2137 from every harbour corridor).",
+    "set": [{"id": "sea-9-1", "lon": 0.1670, "lat": -0.7113}]
+  },
+
+  "removedIds": []
+}

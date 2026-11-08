@@ -17,8 +17,8 @@ function setup() {
   return {room,events,sent};
 }
 const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandId,online:2,
-  players:[{id:'player',islandId,mode,x:mode==='sailing'?6500:1800,y:mode==='sailing'?1600:430,turn:0,action:0,emoteVersion:0,travel:0}],
-  boats:[{id:'home-0',islandId,x:mode==='sailing'?6500:1800,y:mode==='sailing'?1600:430,turn:0,occupant:mode==='sailing'?'player':null}],
+  players:[{id:'player',islandId,mode,x:mode==='sailing'?3960:1800,y:mode==='sailing'?6400:430,turn:0,action:0,emoteVersion:0,travel:0}],
+  boats:[{id:'home-0',islandId,x:mode==='sailing'?3960:1800,y:mode==='sailing'?6400:430,turn:0,occupant:mode==='sailing'?'player':null}],
   self:{ack:0,path:[],emoteLeft:0},
 });
 
@@ -157,8 +157,8 @@ test('boarding and island changes clear prediction and boat interpolation withou
   assert.equal(room.pending.length,0);
   assert.equal(room.offsetX,0);
   assert.equal(room.emote(3),false);
-  room.destination(6500,1700);
-  assert.deepEqual(room.player.sailTarget,{x:6500,y:1700});
+  room.destination(3960,6500);
+  assert.deepEqual(room.player.sailTarget,{x:3960,y:6500});
   room.snapshot(packet(3,'blossom','sailing'));
   assert.equal(room.pending.length,0);
   assert.equal(room.player.sailTarget,null);
@@ -174,17 +174,17 @@ test('sailing prediction uses bounded motion and sends the authoritative island 
   const {room,sent}=setup();
   room.snapshot(packet(1,PLAIN,'sailing'));
   room.step(.05,{x:0,y:1});
-  assert.equal(room.player.y,1619);
+  assert.equal(room.player.y,6419);
   assert.equal(sent.at(-1).islandId,PLAIN);
   room.disembark();
   assert.equal(room.player.docking,true);
   room.step(.05,{x:1,y:0});
   assert.equal(room.player.docking,false);
   assert.equal(room.player.sailTarget,null);
-  room.destination(6500,1700);
+  room.destination(3960,6500);
   room.stopInput();
   const next=packet(2,PLAIN,'sailing');
-  next.self.sailTarget={x:6500,y:1700};
+  next.self.sailTarget={x:3960,y:6500};
   room.snapshot(next);
   assert.equal(room.player.sailTarget,null,'unacknowledged stop survives reconciliation');
   room.dispose();

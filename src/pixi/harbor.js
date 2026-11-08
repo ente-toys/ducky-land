@@ -11,13 +11,14 @@ import {mapFor, mapOf} from './island-maps.js';
 
 const {ink, wood, darkWood, cream, sandShade} = PALETTE;
 
-export function drawJetty(container, {x, y, length, angle = 0, width = 104, scale = 1, wetFrom = .3, railTo = .42, moorings = []}) {
+export function drawJetty(container, {x, y, length, angle = 0, width = 104, scale = 1, wetFrom = .3, railTo = .42, moorings = [], art = null}) {
   const s = scale, d = {x: Math.sin(angle), y: -Math.cos(angle)}, n = {x: -d.y, y: d.x}, hw = width / 2;
   const at = (t, side = 0) => ({x: x + d.x * t + n.x * side, y: y + d.y * t + n.y * side});
   const root = new Container({label: 'Jetty'}), g = new Graphics();
   root.addChild(g);
   const corners = [at(0, -hw), at(length, -hw), at(length, hw), at(0, hw)], flat = pts => pts.flatMap(p => [p.x, p.y]);
   const wet0 = length * wetFrom, outline = {color: ink, width: 2.22 * s};
+  if (!art) {   // art: the island art already draws this deck (home's south fishing dock), so only its bollards are added below
   // its shadow on the water
   g.poly(flat([at(wet0, -hw), at(length, -hw), at(length, hw), at(wet0, hw)].map(p => ({x: p.x + 7 * s, y: p.y + 16 * s})))).fill({color: ink, alpha: .14});
   // pilings: only the water run, both edges and the tip; the deck hides their tops
@@ -55,6 +56,7 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
     g.poly(flat(tops), false).stroke({color: wood, width: 4.4 * s, cap: 'round', join: 'round'});
     for (const p of tops) g.roundRect(p.x - 6.5 * s, p.y - 5.5 * s, 13 * s, 5 * s, 1.7 * s).fill(darkWood).stroke(outline);
   }
+  }
   // a bollard on the deck edge beside each berth; tip berths tie to the tip corners
   const ties = moorings.map(m => {
     if (!m) return null;   // not moored along this jetty
@@ -84,7 +86,7 @@ export function createHarbor(decks, objects) {
       const alongside = m => {const t = (m.x - JETTY.foot.x) * JETTY.dir.x + (m.y - JETTY.foot.y) * JETTY.dir.y, p = JETTY.along(Math.max(0, Math.min(JETTY.length, t)));
         return t > 0 && t < JETTY.length + 60 && Math.hypot(m.x - p.x, m.y - p.y) < 260;};
       const built = drawJetty(decks, {x: JETTY.foot.x, y: JETTY.foot.y, length: JETTY.length, angle: JETTY.angle, width: JETTY.width,
-        wetFrom: JETTY.wetFrom, moorings: HARBOR.moorings.map(m => alongside(m) ? m : null)});
+        wetFrom: JETTY.wetFrom, art: JETTY.art, moorings: HARBOR.moorings.map(m => alongside(m) ? m : null)});
       built.root.label = `Jetty ${mapId}`; built.root.visible = false;
       jetties.set(mapId, built);
     }
