@@ -22,7 +22,9 @@ function transformOf(text){
  return m;
 }
 const color=v=>v&&v!=='none'?v:null;
-function draw(ctx,el,style,matrix,refs,stack=new Set()){
+function draw(ctx,el,style,matrix,refs,stack=new Set(),target=null,active=true){
+ const piece=el.getAttribute('data-piece');
+ if(target!==null&&piece){if(target!==piece)return;active=true;}
  const tag=el.tagName.toLowerCase();
  if(tag==='title'||tag==='desc'||tag==='defs'||tag==='metadata')return;
  const s={...style};
@@ -33,9 +35,10 @@ function draw(ctx,el,style,matrix,refs,stack=new Set()){
  if(tag==='use'){
   const href=el.getAttribute('href')||el.getAttributeNS('http://www.w3.org/1999/xlink','href')||el.getAttribute('xlink:href'),ref=refs.get(href?.slice(1));
   if(!href?.startsWith('#')||!ref||stack.has(ref))throw Error(`svg-context: invalid reference ${href}`);
-  draw(ctx,ref,s,m.clone().append(new Matrix(1,0,0,1,num(el,'x'),num(el,'y'))),refs,new Set([...stack,ref]));return;
+  draw(ctx,ref,s,m.clone().append(new Matrix(1,0,0,1,num(el,'x'),num(el,'y'))),refs,new Set([...stack,ref]),target,active);return;
  }
- if(tag==='g'||tag==='svg'){const kids=el.childNodes;for(let n=0;n<kids.length;n++)if(kids[n].nodeType===1)draw(ctx,kids[n],s,m,refs,stack);return;}
+ if(tag==='g'||tag==='svg'){const kids=el.childNodes;for(let n=0;n<kids.length;n++)if(kids[n].nodeType===1)draw(ctx,kids[n],s,m,refs,stack,target,active);return;}
+ if(!active)return;
  const fill=color(s.fill),stroke=color(s.stroke);
  if(!fill&&!stroke)return;
  const scale=Math.sqrt(Math.abs(m.a*m.d-m.b*m.c));   // geometry is transformed point by point, so the pen is scaled here
@@ -53,11 +56,36 @@ function draw(ctx,el,style,matrix,refs,stack=new Set()){
  if(stroke)ctx.stroke({color:stroke,alpha:s.opacity*parseFloat(s['stroke-opacity']),width:parseFloat(s['stroke-width'])*scale,cap:s['stroke-linecap'],join:s['stroke-linejoin'],miterLimit:parseFloat(s['stroke-miterlimit'])});
 }
 // text: an SVG document. Returns a GraphicsContext in viewBox units.
-export function svgContext(text,parse=t=>new DOMParser().parseFromString(t,'image/svg+xml')){
+export function svgContext(text,parse=t=>new DOMParser().parseFromString(t,'image/svg+xml'),target=null){
  const root=parse(text).documentElement,ctx=new GraphicsContext();
  const refs=new Map();
  for(const el of Array.from(root.getElementsByTagName('*'))){const id=el.getAttribute('id');if(id)refs.set(id,el);}
- draw(ctx,root,ROOT,new Matrix(),refs);
+ draw(ctx,root,ROOT,new Matrix(),refs,new Set(),target,target===null||target==='ground');
  ctx.setTransform(new Matrix());
  return ctx;
+}
+
+// Each selected document retains ancestor styles, transforms and shared definitions.
+// Used for source-art equivalence checks as well as independent SVG exports.
+export function svgLayerDocuments(text,parse=t=>new DOMParser().parseFromString(t,'image/svg+xml'),serialize=n=>new XMLSerializer().serializeToString(n)){
+ const root=parse(text).documentElement;
+ const ids=[...new Set(Array.from(root.getElementsByTagName('*')).map(e=>e.getAttribute('data-piece')).filter(Boolean))];
+ const select=target=>{
+  function prune(el,active){
+   const piece=el.getAttribute('data-piece');if(piece){if(piece!==target)return null;active=true;}
+   if(el.tagName==='defs')return el.cloneNode(true);
+   const kids=Array.from(el.childNodes).filter(n=>n.nodeType===1);
+   if(!kids.length)return active?el.cloneNode(true):null;
+   const clone=el.cloneNode(false);
+   for(const child of kids){const n=prune(child,active);if(n)clone.appendChild(n);}
+   return clone;
+  }
+  return serialize(prune(root,target==='ground'));
+ };
+ return {ground:select('ground'),pieces:new Map(ids.map(id=>[id,select(id)]))};
+}
+export function svgLayerContexts(text,parse){
+ const root=(parse??(t=>new DOMParser().parseFromString(t,'image/svg+xml')))(text).documentElement;
+ const ids=[...new Set(Array.from(root.getElementsByTagName('*')).map(e=>e.getAttribute('data-piece')).filter(Boolean))];
+ return {full:svgContext(text,parse),ground:svgContext(text,parse,'ground'),pieces:new Map(ids.map(id=>[id,svgContext(text,parse,id)]))};
 }

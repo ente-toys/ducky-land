@@ -280,7 +280,7 @@ export class PixiIsland {
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
       await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
       if(this.disposed)return;
-      this.isletView=await createIsletView(this.app,this.scene);   // boss 8 Nov: hand-drawn vector islets, globe atlas baked from them
+      this.isletView=await createIsletView(this.app,this.scene,this.objects);   // boss 8 Nov: hand-drawn vector islets, globe atlas baked from them
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
       this.worldView = createWorldView(this.app, this.scene, this.isletView); this.worldView.prepare(); globalThis.__duckyPin = () => this.worldView?.pinPoint(); globalThis.__duckyRigid = () => this.rigidReadback();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
@@ -890,7 +890,7 @@ export class PixiIsland {
   }
   captureArt(mapId) {
     if (!this.archipelago || this.archipelago.has(mapId) || !this.artReady(mapId)) return;
-    const hide=[...this.transientForCopies(),this.isletView?.layer].filter(o=>o?.visible);
+    const hide=[...this.transientForCopies(),...(this.isletView?.transient()??[])].filter(o=>o?.visible);
     hide.forEach(o => {o.visible=false;});
     this.showArt(mapId);
     const props=this.artProps(mapId).map(p => ({p, v:p.sprite.visible, s:p.shadow?.visible, tint:p.sprite.tint}));
@@ -948,7 +948,7 @@ export class PixiIsland {
     if (!copies.length) return;
     this.livePatches??=createLivePatches(this.app.renderer);
     const transient=this.transientForCopies();
-    const hide=[this.archipelago.root, this.ocean, this.isletView?.layer, ...transient].filter(o => o?.visible);
+    const hide=[this.archipelago.root, this.ocean, ...(this.isletView?.transient()??[]), ...transient].filter(o => o?.visible);
     hide.forEach(o => {o.visible=false;});
     const sets=[...new Set([this.artShown, ...copies.map(i => i.map)])];
     const props=sets.flatMap(id => this.artProps(id)).map(p => [p, p.sprite.visible, p.shadow?.visible]);

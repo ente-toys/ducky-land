@@ -4,7 +4,8 @@
 // one's <art>.meta.json beside it in one shape: the jetty foot and tip, the walkable land, its holes and its blocked
 // footprints, all in the 1024 viewBox. No art is generated or traced here.
 // Usage: node scripts/islets/import-hand.mjs [artists' folder]
-import {readFileSync,writeFileSync,copyFileSync} from 'node:fs';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {applyDepth} from './apply-depth.mjs';
 const ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','05-lighthouse-rock','06-palm-treasure','07-pink-blossom','08-snow-igloo','09-spooky-purple','11-volcano','12-coral-atoll'];
 const FROM=process.argv[2]||'../concepts/themes/work/islets-hand',TO='public/pixi-art/islets';
 // The width each was drawn for, so all eleven meet the Home centre's line weight (about 2 world units) and duck scale: the
@@ -27,7 +28,8 @@ for(const art of ART){
   jetty:{foot:m.jetty.foot,tip:m.jetty.tip,width:m.jetty.width},
   land:m.land??m.walkable,holes:m.holes??[],blocked:[...footprints(m.blocked,art),...(ADD_BLOCKED[art]??[])],
   ...(m.steps?{steps:m.steps}:{}),note:m.note??m.notes??m.walkableNote};
- writeFileSync(`${TO}/${art}.meta.json`,JSON.stringify(out)+'\n');
- copyFileSync(`${FROM}/${art}.svg`,`${TO}/${art}.svg`);
+ const layered=applyDepth(readFileSync(`${FROM}/${art}.svg`,'utf8'),out);
+ writeFileSync(`${TO}/${art}.meta.json`,JSON.stringify(layered.meta)+'\n');
+ writeFileSync(`${TO}/${art}.svg`,layered.svg);
  console.log(art,out.designWidth,'blocked:',out.blocked.map(b=>b.what).join(', ')||'none');
 }
