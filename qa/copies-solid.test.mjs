@@ -36,8 +36,10 @@ for (const current of [...new Set(CURRENT)]) test(`every island drawn round ${cu
       if (!copy.nav.walkable(x, y)) continue;
       // Raised Canal decks intentionally carry walkers above sailable water.
       // Ground beside and beyond those explicit crossings must still block boats.
-      const raised=mapOf?.(copy.id).world.walkways?.some(w=>{if(!w.boatPassUnder)return false;const dx=w.b[0]-w.a[0],dy=w.b[1]-w.a[1],t=Math.max(0,Math.min(1,((x-w.a[0])*dx+(y-w.a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-w.a[0]-t*dx,y-w.a[1]-t*dy)<w.w/2;});
-      if(raised)continue;
+      const own=mapOf?.(copy.id),raised=[...(own?.world.walkways??[]),...(own?.walk?.walkways??[])].some(w=>{if(!w.boatPassUnder)return false;const dx=w.b[0]-w.a[0],dy=w.b[1]-w.a[1],t=Math.max(0,Math.min(1,((x-w.a[0])*dx+(y-w.a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-w.a[0]-t*dx,y-w.a[1]-t*dy)<w.w/2;});
+      // boss 8 Nov (sailable rivers): home's bridges (the walk map's bridge cut-outs over water) carry walkers over boats too
+      const overBridge=(own?.home?own.walk.bridges??[]:[]).some(b=>((x-b.x)/(b.w/2))**2+((y-b.y)/(b.h/2))**2<1);
+      if(raised||overBridge)continue;
       checked++;
       const at=mapPoint(copy.id,current,{x,y});
       assert.equal(canSail(at.x,at.y,current), false, `${copy.id} ground at its local ${x},${y} (${Math.round(copy.ox + x)},${Math.round(copy.oy + y)} round ${current}) is sailable`);

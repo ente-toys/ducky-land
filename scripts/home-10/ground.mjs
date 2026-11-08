@@ -56,8 +56,8 @@ if (S && !coast.some(p => same(p, S.coast.points[0]))) {
 const riverWater = (E.riverWater ?? []).map(w => (S?.riverWater.set ?? []).find(s => s.id === w.id) ?? w);
 for (const s of S?.riverWater.set ?? []) if (!riverWater.some(w => w.id === s.id)) riverWater.push(s);
 // boss 8 Nov: the canal's square end cut a sand notch into the fork where Clover Run leaves it; this hand-drawn patch makes the
-// fork one body of water, its outer edge curving from the canal's north bank into Clover Run's east bank
-const FORK = {id: 'fork-canal-clover', x: 3700, y: 3620, rx: 1, ry: 1, poly: [[3680, 3560], [3712, 3572], [3722, 3610], [3718, 3650], [3708, 3675], [3660, 3690], [3640, 3640]]};
+// fork one body of water, its outer edge curving from the canal's north bank into Clover Run's east bank, wide enough to sail
+const FORK = {id: 'fork-canal-clover', x: 3700, y: 3620, rx: 1, ry: 1, poly: [[3680, 3556], [3728, 3566], [3766, 3598], [3788, 3648], [3790, 3700], [3784, 3748], [3776, 3786], [3740, 3770], [3690, 3730], [3628, 3705], [3622, 3640]]};   // boss 8 Nov: east bank set back to x 3790 so a boat fits past the round island
 if (!riverWater.some(w => w.id === FORK.id)) riverWater.push(FORK);
 const onLand = (x, y) => inPoly(x, y, coast);
 const seaSegs = coast.map((a, i) => [a, coast[(i + 1) % coast.length]]);
@@ -167,10 +167,20 @@ g += `</g>`;
 const wpaths = waters.map(w => curve(w, true));
 g += `<defs><clipPath id="land">${landPaths.map(d => `<path d="${d}"/>`).join('')}</clipPath>`;
 wpaths.forEach((d, i) => {g += `<mask id="wm${i}" maskUnits="userSpaceOnUse" x="${X0 - 400}" y="${Y0 - 400}" width="${X1 - X0 + 800}" height="${Y1 - Y0 + 800}"><rect x="${X0 - 400}" y="${Y0 - 400}" width="${X1 - X0 + 800}" height="${Y1 - Y0 + 800}" fill="#fff"/>${wpaths.filter((_, j) => j !== i).map(o => `<path d="${o}" fill="#000"/>`).join('')}</mask>`;});
-g += `</defs><g clip-path="url(#land)">`;   // rivers stop at the shore, never painted over the sea
+// boss 8 Nov (sailable rivers): where a river reaches the coast its water runs on through the beach into the sea, a real
+// mouth. These hand-drawn boxes widen the water's clip past the beach and its foam (coast here: y 5609-5638 at Clover Run,
+// y 5650-5760 along the quay); only river water is painted inside them, so the beach still meets each bank.
+const MOUTHS = [
+  [[2930, 5560], [3185, 5560], [3195, 5770], [2925, 5770]],                                              // Clover Run, south-west of Reedwhistle Quay
+  [[3420, 5600], [4900, 5560], [4900, 5900], [4233, 6000], [3480, 5860]],                                   // the quay's tidal inlet, under the fishing deck
+];
+g += `<clipPath id="wet">${landPaths.map(d => `<path d="${d}"/>`).join('')}${MOUTHS.map(m => `<path d="${poly(m)}"/>`).join('')}</clipPath>`;
+g += `</defs><g clip-path="url(#land)">`;   // banks stop at the shore, never painted over the sea
 for (const d of wpaths) g += `<path d="${d}" fill="none" stroke="${SAND}" stroke-width="58" stroke-linejoin="round"/>`;
 for (const d of wpaths) g += `<path d="${d}" fill="none" stroke="${SAND_DARK}" stroke-width="10" stroke-linejoin="round"/>`;
+g += `</g><g clip-path="url(#wet)">`;   // the water itself also runs out through the river mouths
 for (const d of wpaths) g += `<path d="${d}" fill="${WATER}"/>`;
+g += `</g><g clip-path="url(#land)">`;   // the pale inner edge stays on the land side, so it never draws lines out across a mouth
 wpaths.forEach((d, i) => {g += `<path d="${d}" fill="none" stroke="#8fd7e6" stroke-width="5" stroke-linejoin="round" transform="translate(0 6)" mask="url(#wm${i})"/>`;});   // the pale inner edge, never across another body
 for (const r of E.rivers ?? []) {const a = sample(r.points, 40); for (let i = 3; i < a.length - 3; i += 6) {const [x, y] = a[i]; g += `<path d="M${r3(x - 22)} ${r3(y)}q22 -10 44 0" fill="none" stroke="#c4ece9" stroke-width="5" stroke-linecap="round"/>`;}}
 // the two Millrill ponds: a few ripples and lily pads, placed by hand
@@ -233,13 +243,20 @@ for (const br of BRIDGES) {
 const own = BRIDGES.filter(br => !br.centre), sameSeg = (v, q) => Math.hypot(v.a[0] - q.a[0], v.a[1] - q.a[1]) < 2 && Math.hypot(v.b[0] - q.b[0], v.b[1] - q.b[1]) < 2;
 const oldArches = E.arches ?? [];
 const arches = own.map(({a, b, r, w}) => ({a, b, w, r}));
-const walkwaysOut = walkways.filter(v => !oldArches.some(q => sameSeg(v, q)) && !arches.some(q => sameSeg(v, q))).concat(arches.map(({a, b, w}) => ({a, b, w})));
+const walkwaysOut = walkways.filter(v => !oldArches.some(q => sameSeg(v, q)) && !arches.some(q => sameSeg(v, q))).concat(arches.map(({a, b, w}) => ({a, b, w, boatPassUnder: true})));
+// boss 8 Nov (sailable rivers): the water a boat may sail on inside the coast. Only the waters joined to the sea through a
+// mouth: Clover Run, the old shore canal, their fork, the west pond and the quay inlet. Millrill and its two ponds never reach
+// the sea, so they stay closed (and the old bay stays land).
+// the river mouths' calm water: no surf runs in across them (surf.js), from each mouth box out to sea
+const riverMouths = [[2930, 5450, 3195, 5980], [3400, 5480, 4920, 6060]];
+const SAILABLE = ['clover-run', 'old-shore-canal', 'fork-canal-clover', 'quay-tidal-inlet'];
+const boatWater = [...riverWater.filter(w => SAILABLE.includes(w.id)).map(w => w.poly), E.water.poly];
 const riverBridges = (E.riverBridges ?? []).filter(v => !String(v.id).startsWith('river-crossing-')).concat(own.map(({id, a, b, w}) => ({id,
   x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, w: Math.abs(b[0] - a[0]) + w * .9, h: Math.abs(b[1] - a[1]) + w * .9})));
 const crossings = own.map(({id, river, a, b}) => ({id, river, x: (a[0] + b[0]) / 2 * .18 + 278, y: (a[1] + b[1]) / 2 * .18 + 204}));   // the plan frame (world * .18 + 278, 204), as the tests read it
 
 // ---------- write back only the owned keys ----------
 const {sleepers: _drop, ...keep} = E;   // the scripted sleepers are gone (boss 8 Nov)
-writeFileSync(FILE, JSON.stringify({...keep, riverWater, tiles, decks: newDecks, arches, walkways: walkwaysOut, riverBridges, crossings, groundDecals: [...decals, ...(E.hamletDecals ?? []).map(({hamlet, ...d}) => d)]}, null, 2) + '\n');
+writeFileSync(FILE, JSON.stringify({...keep, riverWater, boatWater, riverMouths, tiles, decks: newDecks, arches, walkways: walkwaysOut, riverBridges, crossings, groundDecals: [...decals, ...(E.hamletDecals ?? []).map(({hamlet, ...d}) => d)]}, null, 2) + '\n');
 execFileSync('node', ['scripts/walk-world.mjs'], {stdio: 'inherit'});
 console.log(JSON.stringify({decals: decals.length, tiles: tiles.length, shore: Boolean(S), coastPoints: coast.length}));

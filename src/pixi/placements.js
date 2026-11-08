@@ -109,9 +109,12 @@ export const trimWorld = w => ({...w, islets: w.islets.filter(a => a[0] !== 3930
 // boss 4 Nov: what the client sim walks on. The coast is traced from the ground tiles' shoreline, inset 35 so a dry margin stays
 // (the old one sat 20-160 inside the sand); the south-west jetty gets a deck-wide step-on. Props were placed on the old coast,
 // so only the sim gets these. The socket server still walks on world.json.
+// boss 8 Nov (sailable rivers): every arched bridge's walkway lets a boat pass under it (island-maps.js solidDecks)
+const archMid = ARCHES.map(({a, b}) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
+const underArch = w => archMid.some(([x, y]) => Math.hypot((w.a[0] + w.b[0]) / 2 - x, (w.a[1] + w.b[1]) / 2 - y) < 60) ? {...w, boatPassUnder: true} : w;
 export const walkWorld = (world, props) => ({...world, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
   water: [...world.water, ...(expansion.riverWater ?? [])], bridges: [...world.bridges, ...(expansion.riverBridges ?? [])],
-  walkways: [...world.walkways, ...(expansion.walkways ?? []), {a: [1165, 3000], b: [1095, 3098], w: 120}, {a: [1092, 3060], b: [942, 3405], w: 110}]});   // boss 4 Nov verify: + the drawn deck's centre line (the old strip hugged the right rail)
+  walkways: [...world.walkways.map(underArch), ...(expansion.walkways ?? []).map(underArch), {a: [1165, 3000], b: [1095, 3098], w: 120, boatPassUnder: true}, {a: [1092, 3060], b: [942, 3405], w: 110, boatPassUnder: true}]});   // boss 4 Nov verify: + the drawn deck's centre line (the old strip hugged the right rail)
 
 // Ground under a point, for the engine's one contact-shadow recipe (fix 4): sand areas from the ground art, else grass.
 const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 1;
@@ -491,5 +494,6 @@ export function homeDecals(props) {
 }
 
 export const HOME_DECKS = expansion.decks ?? [];
+export const HOME_MOUTHS = expansion.riverMouths ?? [];   // boss 8 Nov: the open river mouths, calm water with no surf
 // home 10 (ground lane): the expanded lawns' tufts, pebbles, small flowers and path stones, the centre's own decal art
 export const HOME_GROUND_DECALS = expansion.groundDecals ?? [];
