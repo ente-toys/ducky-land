@@ -31,7 +31,7 @@ const {createDuck}=await import('../../src/pixi/duck.js'),{createSailingFX}=awai
 const renderer=new CanvasRenderer(),W=1440,H=1000,output=canvas(W,H);
 await renderer.init({canvas:output,width:W,height:H,resolution:1,background:0x6ec9de,antialias:true,manageImports:false,eventFeatures:{move:false,globalMove:false,click:false,wheel:false}});
 const scene=new Container(),water=new Container(),objects=new Container({sortableChildren:true});scene.addChild(water);
-const isletView=await createIsletView({renderer},scene,Assets.load);scene.addChild(objects);
+const isletView=await createIsletView({renderer},scene,objects);scene.addChild(objects);
 const duck=await createDuck({outfit:{},seed:0}),fx=await createSailingFX({water,objects}),root=new Container(),sprite=new Sprite();root.addChild(sprite);objects.addChild(root,duck.root);const entry={root,sprite};
 const out='../concepts/themes/world-map/islets',proof=[];
 for(const [n,i]of [ISLETS[0],ISLETS.find(i=>i.art==='07-pink-blossom')].entries()){

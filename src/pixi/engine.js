@@ -1,8 +1,10 @@
-import {landingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from './sphere-camera.js';
-import {WORLD_GEO} from './world-map.js';
+import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from './sphere-camera.js';
+import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
-import {mapPoint,localPoint,spherePoint} from './sphere-coordinates.js';
+import {globeBall,uprightFade,northUpRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from './globe-look.js';
+import {unplaceRigid,flatRigid} from './rigid.js';
+import {localPoint,spherePoint} from './sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from './zoom-motion.js';
 import {artResolution} from './art-resolution.js';
@@ -22,6 +24,8 @@ import {createArchipelago} from './archipelago.js';
 import {copyHolding} from './sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
+import {isletWalks} from './islet-walk.js';
+import {reframeIslet,isletLandingFrame} from './islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from './island-maps.js';   // boss 6 Nov: themed islands, each with its own map and art
 import {loadThemeArt} from './theme-art.js';
 import {setSailingHarbor} from './sailing-fx.js';
@@ -283,10 +287,10 @@ export class PixiIsland {
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
       await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
       if(this.disposed)return;
-      this.isletView=await createIsletView(this.app,this.scene,src=>{this.loaded.push(src);return acquire(src);});
+      this.isletView=await createIsletView(this.app,this.scene,this.objects);   // boss 8 Nov: hand-drawn vector islets, globe atlas baked from them
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
-      this.worldView = createWorldView(this.app, this.scene, this.isletView); this.worldView.prepare(); globalThis.__duckyPin = () => this.worldView?.pinPoint();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
+      this.worldView = createWorldView(this.app, this.scene, this.isletView); this.worldView.prepare(); globalThis.__duckyPin = () => this.worldView?.pinPoint(); globalThis.__duckyRigid = () => this.rigidReadback();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) {this.travelView.dispose(); return;}
@@ -396,6 +400,8 @@ export class PixiIsland {
     // into) a neighbour makes it the real island, so its coordinates become the local ones. Nothing fades or restarts: the
     // camera, your own Ducky, its hop and the boat it leaves are all moved by that island's offset and carry straight on.
     const previousIsland=this.islandId;
+    const landed=this.player?.mode==='walking'?isletWalks(id).find(w=>near(this.player,w.land,100))?.islet:null;
+    const reframe=p=>landed?reframeIslet(previousIsland,id,landed,p):unplaceRigid(previousIsland,id,p);
     const hop=this.ready ? islandOffset(this.islandId,id) : null;   // boss 6 Nov: any island drawn in this sea, not only the jetty neighbours
     this.islandId=id;
     this.archipelago?.setCurrent(id);   // the island you landed on becomes the real one, the rest are redrawn round it
@@ -415,10 +421,12 @@ export class PixiIsland {
     }
     const accent=islandFor(id).accent;
     for (const prop of this.props) if (/flower|flag|bunting/i.test(prop.asset || prop.name)) prop.sprite.tint=id==='home'?(prop.tint ?? 0xffffff):accent;
-    this.travelView?.switchIsland(id, hop && (p=>mapPoint(previousIsland,id,p)));
+    this.travelView?.switchIsland(id, hop && reframe);   // boss 8 Nov: the same rigid frame the island was drawn in
     if (hop) {
-      for (const c of [this.camera, this.target]) Object.assign(c,mapPoint(previousIsland,id,c));
-      this.landingView={at:performance.now(),basis:landingBasis(previousIsland,id,this.camera,this.camera.basis)};
+      // boss 8 Nov (rigid islands): the island was on screen as a rigid sticker; move the view through that same placement
+      // so it stays exactly where it was, then ease the leftover turn away.
+      for (const c of [this.camera, this.target]) Object.assign(c,reframe(c));
+      this.landingView={at:performance.now(),basis:rigidLandingBasis(previousIsland,id,this.camera.basis,landed?isletLandingFrame(previousIsland,id,landed):undefined)};
       this.camera.basis=easeLandingBasis(this.landingView.basis,0);
     } else {
       const player=this.player;
@@ -451,7 +459,7 @@ export class PixiIsland {
       this.audio.unlock();
       this.canvas.setPointerCapture(event.pointerId);
       this.spin=null; this.dragAt=performance.now(); this.quietAt=this.dragAt;
-      if(!this.gestures.pointers.size) {Object.assign(this.target,this.camera);this.zoomMotion.velocity=0;}
+      if(!this.gestures.pointers.size) {Object.assign(this.target,this.camera);this.zoomMotion.velocity=0;this.globeAim=null;}   // a press stops a turning ball where it is
       this.zoomAnchor=null;
       this.gestures.down(event.pointerId, point(event));
     });
@@ -464,25 +472,26 @@ export class PixiIsland {
       if (!movement) return;
       this.fly=null;
       if (movement.after.length > 1) {
-        this.spin=null;
+        this.spin=null; this.globeAim=null;
         movePinch(this.target, movement.before, movement.after, this.zoomFloor(), 1.8, this.width, this.height);
       } else if (movement.drag) {
         // on the globe the ball is grabbed: the spot under the finger stays under it (GPT review); flat, it pans as before
-        const at=movement.after[0], grab=this.birdEye && this.worldView?.grab({x:at.x-movement.dx, y:at.y-movement.dy}, at, this.target);
-        const mx=grab ? grab.dx : -movement.dx / this.camera.zoom, my=grab ? grab.dy : -movement.dy / (this.camera.zoom * TILT);
-        // Accumulate globe input in the target; render frames ease toward it,
-        // including frames between pointer samples. Flat-map panning stays direct.
-        const destination=this.birdEye ? this.target : this.camera;
-        destination.x += mx; destination.y += my;
-        if(grab){
-          // Rebase both spring endpoints together at the chart seam.
-          const old={x:destination.x,y:destination.y};canonicalCamera(this.islandId,destination);
-          this.camera.x+=destination.x-old.x;this.camera.y+=destination.y-old.y;
+        // boss 8 Nov: on the ball the drag spins a north-up globe (globe-look.js): the aim is the view centre on the
+        // sphere, render frames turn toward it along the sphere, and the spin is kept in longitude/latitude
+        const at=movement.after[0], grab=this.birdEye && this.worldView?.grab({x:at.x-movement.dx, y:at.y-movement.dy}, at, this.target, this.globeAim);
+        let mx, my;
+        if (grab) {
+          this.globeAim=grab.aim; Object.assign(this.target, localPoint(this.islandId, grab.aim));
+          mx=grab.dlon; my=grab.dlat;
+        } else {
+          mx=-movement.dx / this.camera.zoom; my=-movement.dy / (this.camera.zoom * TILT);
+          const destination=this.birdEye ? this.target : this.camera;   // flat-map panning stays direct
+          destination.x += mx; destination.y += my;
         }
         const now=performance.now(), gap=now-this.dragAt; this.dragAt=now;
-        this.spin=sampleGlobeSpin(this.spin,mx,my,gap);
-        if (this.birdEye) {   // at most 120 degrees a second, however hard the flick (GPT review)
-          const b=this.archipelago.bounds, cap=(b.x1-b.x0)/(2*Math.PI)*2.09/1000, v=Math.hypot(this.spin.x,this.spin.y);
+        this.spin=grab ? {...sampleGlobeSpin(this.spin?.globe ? this.spin : null,mx,my,gap),globe:true} : sampleGlobeSpin(this.spin?.globe ? null : this.spin,mx,my,gap);
+        if (grab) {   // at most 120 degrees a second, however hard the flick (GPT review)
+          const cap=2.09/1000, lat=lookOf(this.islandId,this.target).lat, v=Math.hypot(this.spin.x*Math.cos(lat),this.spin.y);
           if (v>cap) {this.spin.x*=cap/v; this.spin.y*=cap/v;}
         }
         this.gust = clamp(movement.dx * .005, -.5, .5);
@@ -508,7 +517,7 @@ export class PixiIsland {
       event.preventDefault();
       const p = point(event);
       const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? this.height : 1);
-      this.fly=null; this.spin=null; this.quietAt=performance.now();
+      this.fly=null; this.spin=null; this.globeAim=null; this.quietAt=performance.now();
       const next=clamp(this.target.zoom * Math.exp(-delta * .0018), this.zoomFloor(), 1.8);
       const stamp=performance.now();
       if(!this.zoomAnchor || stamp-this.zoomAnchor.at>180 || Math.hypot(p.x-this.zoomAnchor.x,p.y-this.zoomAnchor.y)>4) {
@@ -627,11 +636,12 @@ export class PixiIsland {
   travelOptions() {
     const me=this.player;
     if (!this.room || !me) return {};
-    if (me.mode === 'sailing') return {dock: canDock(me) || Boolean(landingSpot(me, this.sim.nav))};
+    const nav=this.room.navHere?.() ?? this.sim.nav;   // boss 8 Nov: the island's ground plus its sea islets
+    if (me.mode === 'sailing') return {dock: canDock(me) || Boolean(landingSpot(me, nav))};
     let best=null;
     for (const boat of this.room.boatPoses()) {
       if (boat.occupant) continue;
-      const deck=boardingPoint(boat, this.sim.nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
+      const deck=boardingPoint(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
       if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
     }
     return {take: best?.id ?? null};
@@ -651,8 +661,10 @@ export class PixiIsland {
       if (this.player.mode === 'sailing') {
         const destination=destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<mapFor(island.map).width*.42 && Math.abs(p.y-island.y)<mapFor(island.map).height*.4);   // tap a neighbour island: sail to its jetty
         const harbor=harborOf(this.islandId);
+        const islet=isletWalks(this.islandId).find(w => w.nav.walkable(p.x,p.y) || near(p,w.land,160));   // boss 8 Nov: tap an islet to dock at its jetty
         if (destination) this.setDestination(destination.dock);
-        else if (near(p,harbor.water,140) || near(p,harbor.land,120)) this.room.disembark();
+        else if (near(p,harbor.water,140) || near(p,harbor.land,120) || (islet && landingSpot(this.player, this.room.navHere())?.islet === islet.islet.id)) this.room.disembark();
+        else if (islet) this.setDestination(islet.water);
         else this.setDestination(p);
         return;
       }
@@ -885,7 +897,7 @@ export class PixiIsland {
   }
   captureArt(mapId) {
     if (!this.archipelago || this.archipelago.has(mapId) || !this.artReady(mapId)) return;
-    const hide=[...this.transientForCopies(),this.isletView?.layer].filter(o=>o?.visible);
+    const hide=[...this.transientForCopies(),...(this.isletView?.transient()??[])].filter(o=>o?.visible);
     hide.forEach(o => {o.visible=false;});
     this.showArt(mapId);
     const props=this.artProps(mapId).map(p => ({p, v:p.sprite.visible, s:p.shadow?.visible, tint:p.sprite.tint}));
@@ -931,12 +943,19 @@ export class PixiIsland {
     return detailed.filter(i=>retained.has(i.map)&&this.artReady(i.map));
   }
 
-  renderLiveCopies(target, copies) {
+  // A boat, Ducky or name board out in a neighbour's waters is drawn only inside that copy's pass (rigid copies no longer
+  // line up with the chart point it stands on, so drawing it in both passes showed it twice).
+  copyVisitors(copies) {
+    if (!copies.length) return [];
+    return this.transientForCopies().map(o => ({o, copy:copyHolding(o.x, o.y, copies, 300, this.mapHere())})).filter(v => v.copy);
+  }
+
+  renderLiveCopies(target, copies, visitors=[]) {
     this.livePatches?.retain(new Set(copies.map(i=>i.id)));
     if (!copies.length) return;
     this.livePatches??=createLivePatches(this.app.renderer);
     const transient=this.transientForCopies();
-    const hide=[this.archipelago.root, this.ocean, this.isletView?.layer, ...transient].filter(o => o?.visible);
+    const hide=[this.archipelago.root, this.ocean, ...(this.isletView?.transient()??[]), ...transient].filter(o => o?.visible);
     hide.forEach(o => {o.visible=false;});
     const sets=[...new Set([this.artShown, ...copies.map(i => i.map)])];
     const props=sets.flatMap(id => this.artProps(id)).map(p => [p, p.sprite.visible, p.shadow?.visible]);
@@ -947,7 +966,7 @@ export class PixiIsland {
     const z=this.camera.zoom;
     const span=cameraSpan(this.camera,this.width,this.height),hw=span.width/(2*z), hh=span.height/(2*z*TILT);
     const cull=(mapId,id)=>{
-      const camera=mapPoint(this.islandId,id,this.camera);
+      const camera=unplaceRigid(this.islandId,id,this.camera);
       const on=(x,y,pad)=>Math.abs(x-camera.x)<hw+pad*2&&Math.abs(y-camera.y)<hh+pad*2;
       for(const p of this.artProps(mapId)){p.sprite.visible=on(p.x,p.y,Math.max(p.width,p.height)*p.scale+350);if(p.shadow)p.shadow.visible=p.sprite.visible;}
       if(mapId==='home'){for(const [root]of sleepers)root.visible=on(root.x,root.y,200);for(const [sprite]of floats)sprite.visible=on(sprite.x,sprite.y,100);}
@@ -956,12 +975,11 @@ export class PixiIsland {
     // boss 5 Nov ("I went to another island, but I am going under the island"): a copy is drawn over the real island, so a
     // boat, Ducky or name board out in a neighbour's waters went under that copy's jetty, sign and trees. Each one is drawn
     // again inside its copy's pass, moved into that island's frame for the moment, so it sorts among the copy's own things.
-    const visitors=transient.map(o => ({o, copy:copyHolding(o.x, o.y, copies, 300, this.mapHere())})).filter(v => v.copy);
     const shift=(o, dx, dy) => {o.x+=dx; o.y+=dy; o.zIndex+=dy; if (o.mask?.position) {o.mask.x+=dx; o.mask.y+=dy;}};   // a seated Ducky's hull mask moves with it
     for (const island of copies) {
       const mine=visitors.filter(v => v.copy === island).map(v => v.o);   // the copy's map origin
       const saved=mine.map(o=>({o,x:o.x,y:o.y,z:o.zIndex}));
-      for(const {o}of saved){const p=mapPoint(this.islandId,island.id,o);o.visible=true;shift(o,p.x-o.x,p.y-o.y);}
+      for(const {o}of saved){const p=unplaceRigid(this.islandId,island.id,o);o.visible=true;shift(o,p.x-o.x,p.y-o.y);}
       this.showArt(island.map);cull(island.map,island.id);
       this.livePatches.draw(this.islandId,island.id,this.scene,this.camera,this.width,this.height,TILT,target);
       for(const {o,x,y,z}of saved){shift(o,x-o.x,y-o.y);o.zIndex=z;o.visible=false;}
@@ -974,6 +992,16 @@ export class PixiIsland {
     for (const [root,v] of sleepers) root.visible=v;
     for (const [sprite,v] of floats) sprite.visible=v;
     for (const [root,v] of naps) root.visible=v;
+  }
+
+  // QA readback (boss 8 Nov, no skew): the matrix every island and islet is drawn with right now, local units -> screen px.
+  rigidReadback() {
+    if (this.globeT > .001) return this.worldView?.stickers ?? [];
+    const m=cameraMatrix(this.camera,this.width,this.height,TILT),out=[];
+    const push=(kind,id,r,scale=1)=>out.push({kind,id,a:(m.a*r.a+m.c*r.b)*scale,b:(m.b*r.a+m.d*r.b)*scale,c:(m.a*r.c+m.c*r.d)*scale,d:(m.b*r.c+m.d*r.d)*scale,x:m.a*r.x+m.c*r.y+m.tx,y:m.b*r.x+m.d*r.y+m.ty});
+    for (const island of WORLD_ISLANDS) push('island',island.id,flatRigid(this.islandId,island.id));
+    (this.isletView?.placed ?? []).forEach((r,k) => {if (this.isletView.layer.children[k]?.visible) push('islet',`islet-${k}`,{a:r.cos,b:r.sin,c:-r.sin,d:r.cos,x:r.x,y:r.y});});
+    return out;
   }
 
   // boss 5 Nov: zoom out past the island and the other 300 islands come into view (no button); the floor fits them all
@@ -1098,16 +1126,32 @@ export class PixiIsland {
       Object.assign(this.target, {x:shown.x, y:shown.y-90});
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
-      const coast=coastGlobeSpin(this.spin,dt), sx=coast.dx, sy=coast.dy;
+      const coast=coastGlobeSpin(this.spin,dt);
       this.spin.x=coast.x; this.spin.y=coast.y;
-      const y0=this.camera.y; this.camera.x+=sx; this.camera.y+=sy; this.target.x+=sx; this.target.y+=sy; this.constrain(this.camera); this.constrain(this.target);
-      const before={x:this.camera.x,y:this.camera.y};canonicalCamera(this.islandId,this.camera);
-      this.target.x+=this.camera.x-before.x;this.target.y+=this.camera.y-before.y;
-      if (Math.abs(this.camera.y-(y0+sy))>1e-6) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
-      if (Math.hypot(this.spin.x,this.spin.y)*this.camera.zoom<.0001) this.spin=null;
+      if (this.spin.globe) {   // a flung north-up ball: keep turning in longitude/latitude
+        const look=this.globeAim ? lonLat(this.globeAim) : lookOf(this.islandId,this.target), lat=look.lat+coast.dy;
+        if (Math.abs(lat)>LAT_MAX) this.spin.y=0;   // hit the latitude limit: stop tilting, keep turning
+        this.globeAim=centreOf(look.lon+coast.dx,lat); Object.assign(this.target, localPoint(this.islandId,this.globeAim));
+        if (Math.hypot(this.spin.x,this.spin.y)<1e-7) this.spin=null;
+      } else {
+        const sx=coast.dx, sy=coast.dy;
+        this.camera.x+=sx; this.camera.y+=sy; this.target.x+=sx; this.target.y+=sy; this.constrain(this.camera); this.constrain(this.target);
+        const before={x:this.camera.x,y:this.camera.y};canonicalCamera(this.islandId,this.camera);
+        this.target.x+=this.camera.x-before.x;this.target.y+=this.camera.y-before.y;
+        if (Math.hypot(this.spin.x,this.spin.y)*this.camera.zoom<.0001) this.spin=null;
+      }
     } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;   // off the globe, or held still: no flick
     if (this.fly) this.stepFly(now, player);
     easeZoomCamera(this.camera, this.target, this.zoomMotion, dt, reduced, this.birdEye && (this.gestures.pointers.size || this.spin) ? 30 : 14);
+    if (this.globeAim) {   // the ball turns toward its aim along the sphere, never across the island chart
+      if (!this.birdEye) this.globeAim=null;
+      else {
+        const c=spherePoint(this.islandId,this.camera),a=this.globeAim,k=reduced ? 1 : 1-Math.exp(-30*dt),w=Math.acos(Math.max(-1,Math.min(1,c[0]*a[0]+c[1]*a[1]+c[2]*a[2])));
+        const p=w<1e-9 ? a : c.map((v,i)=>(Math.sin((1-k)*w)*v+Math.sin(k*w)*a[i])/Math.sin(w));
+        Object.assign(this.camera,localPoint(this.islandId,p)); Object.assign(this.target,localPoint(this.islandId,a));
+        if (w<1e-7 && !this.spin && !this.gestures.pointers.size) this.globeAim=null;
+      }
+    }
     this.birdEye=!!this.archipelago && this.camera.zoom<this.minZoom*.95;   // zoomed out past the island: the archipelago shows
     if (this.birdEye || (this.ready && this.frame > 40)) this.buildCopies();   // the neighbours are in sight from the harbor, so the copies exist from the start
     this.archipelago?.update(this.camera.zoom);
@@ -1117,10 +1161,15 @@ export class PixiIsland {
       // left alone on the globe for two seconds it starts to turn, easing up to about 1.5 degrees a second (GPT review)
       if (this.gestures.pointers.size || this.spin) this.quietAt=performance.now();
       const quiet=t > .9 && !reduced ? Math.min(1, Math.max(0, (performance.now()-(this.quietAt||0)-2000)/1500)) : 0;
-      if (quiet > 0) {const b=this.archipelago.bounds, step=quiet*(t-.9)/.1*(b.x1-b.x0)/240*dt; turnLongitude(this.islandId,this.camera,step/WORLD_GEO.Rw); turnLongitude(this.islandId,this.target,step/WORLD_GEO.Rw);}
+      if (quiet > 0) {this.globeAim=null; const b=this.archipelago.bounds, step=quiet*(t-.9)/.1*(b.x1-b.x0)/240*dt; turnLongitude(this.islandId,this.camera,step/WORLD_GEO.Rw); turnLongitude(this.islandId,this.target,step/WORLD_GEO.Rw);}
       this.globeT=t;
     }
     // Cursor Camp tilt: the whole scene is squashed vertically; anything standing up is scaled back upright once.
+    if(!this.landingView){   // boss 8 Nov: the ball is seen north-up; the turn fades out as it flattens into the island
+      const ball=this.globeT>.001 ? globeBall(this.globeT,this.camera.zoom,this.height) : 0,fade=uprightFade(ball);
+      if(fade>0)this.camera.basis=rollBasis(fade*northUpRoll(this.islandId,spherePoint(this.islandId,this.camera)));
+      else delete this.camera.basis;
+    }
     if(this.landingView){
       const progress=(now-this.landingView.at)/600;
       this.camera.basis=easeLandingBasis(this.landingView.basis,progress);
@@ -1240,12 +1289,14 @@ export class PixiIsland {
       for(const stream of streams)views.push({stream,camera:this.camera,width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       for(const island of copies) {
         const m=mapFor(island.map),streams=island.map==='home'?[this.homeGroundStream]:this.arts.get(island.map)?.groundStreams??[];
-        for(const stream of streams)views.push({stream,camera:{...this.camera,...mapPoint(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
+        for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }
     this.groundPool?.update(views,Math.min(devicePixelRatio||1,2));
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
-    if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies);
+    const visitors=this.copyVisitors(copies);
+    for (const {o} of visitors) o.visible=false;
+    if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies, visitors);
     this.isletView?.update(this.islandId,this.camera,this.viewSpan.width,this.viewSpan.height,(this.globeT||0)>.001);
     this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player);   // Guests have no player island to point toward.
     if (this.nameLayer) {   // boss 6 Nov: the name tags fade out as the 'You' pin fades in, by the same zoom progress (no pop)
@@ -1253,7 +1304,8 @@ export class PixiIsland {
       if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
     }
     this.app.render();
-    if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies);   // flat view: straight onto the screen, after the real island
+    if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies, visitors);   // flat view: straight onto the screen, after the real island
+    for (const {o} of visitors) o.visible=true;
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;

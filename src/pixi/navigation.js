@@ -1,9 +1,9 @@
 import {geometry} from '../../rive/web/island-geometry.mjs';
-export function createNavigation(world){
+export function createNavigation(world,{cellSize=32}={}){
 const {walkable}=geometry(world);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const X0=world.origin?.x ?? 0,Y0=world.origin?.y ?? 0;
-const CELL=32,COLS=Math.ceil(world.width/CELL),ROWS=Math.ceil(world.height/CELL);
+const CELL=cellSize,COLS=Math.ceil(world.width/CELL),ROWS=Math.ceil(world.height/CELL);
 const grid=new Uint8Array(COLS*ROWS);
 for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)grid[y*COLS+x]=walkable(X0+(x+.5)*CELL,Y0+(y+.5)*CELL)?1:0;
 function point(id){return [X0+(id%COLS+.5)*CELL,Y0+(Math.floor(id/COLS)+.5)*CELL];}

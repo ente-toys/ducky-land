@@ -1,4 +1,5 @@
 import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {placeRigid} from '../src/pixi/rigid.js';
 // boss 6 Nov ("I am sailing on top of land"): what is DRAWN round you and what is SOLID must be the same islands at the same
 // offsets. archipelago.js draws every other island centred at cx + wrap(dx), cy + dy (round the current island's centre); the
 // sea (islands.js canSail, the room server's rule too) blocks every island inside the sea bounds. This walks every island
@@ -41,7 +42,7 @@ for (const current of [...new Set(CURRENT)]) test(`every island drawn round ${cu
       const overBridge=(own?.home?own.walk.bridges??[]:[]).some(b=>((x-b.x)/(b.w/2))**2+((y-b.y)/(b.h/2))**2<1);
       if(raised||overBridge)continue;
       checked++;
-      const at=mapPoint(copy.id,current,{x,y});
+      const at=placeRigid(current,copy.id,{x,y});   // boss 8 Nov: where the rigid copy draws that ground
       assert.equal(canSail(at.x,at.y,current), false, `${copy.id} ground at its local ${x},${y} (${Math.round(copy.ox + x)},${Math.round(copy.oy + y)} round ${current}) is sailable`);
     }
   }

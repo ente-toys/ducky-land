@@ -1,38 +1,78 @@
-import {Container,Sprite,RenderTexture,Matrix} from 'pixi.js';
-import {ISLETS,ISLET_ART} from './islets.js';
-import {expMap,dot} from './sphere.js';
+import {Container,Graphics,Matrix,RenderTexture} from 'pixi.js';
+import {ISLETS,ISLET_ART,ISLET_META,ISLET_VIEWBOX} from './islets.js';
+import {dot} from './sphere.js';
 import {localPoint,viewFrame} from './sphere-coordinates.js';
-import {WORLD_GEO} from './world-map.js';
+import {svgLayerContexts} from './svg-context.js';
+import {isletPlacement,placeIslet} from './islet-placement.js';
+export {isletPlacement};
 
-// One small static atlas for the sphere shader and the same cut-outs for sailing.
-// The globe samples these exactly once, after the existing live/overview lookup.
-export async function createIsletView(app,scene,acquire){
- const textures=await Promise.all(ISLET_ART.map(name=>acquire(`/pixi-art/islets/${name}.webp`)));
- const box=new Container(),cell=512;
- for(const [k,texture]of textures.entries()){
-  const sprite=new Sprite(texture);sprite.position.set(k%4*cell+2,Math.floor(k/4)*cell+2);sprite.width=sprite.height=cell-4;box.addChild(sprite);
- }
- const atlas=RenderTexture.create({width:cell*4,height:cell*3,resolution:1});
- app.renderer.render({container:box,target:atlas,clear:true});box.destroy({children:true});
- const layer=new Container({label:'Decorative sea islets'});scene.addChild(layer);
- // Caller positions this above the ocean and below boats. No activity or landing
- // geometry is attached to this layer, so the eleven decorations stay unlandable.
- const sprites=ISLETS.map(i=>{const s=new Sprite(textures[i.artIndex]);s.anchor.set(.5);layer.addChild(s);return s;});
- let from=null;
- return {atlas,layer,
+// boss 8 Nov ("the perspective of the islets is bad", "wtf is that docking port, not even our design quality"): every islet
+// is hand-drawn SVG (public/pixi-art/islets/<art>.svg) with its wooden jetty drawn in the art, in the Home centre's style.
+// Close up it is drawn as real Pixi geometry, so it stays sharp at any zoom. The globe shader samples a small atlas that is
+// rendered at start-up from the very same geometry, so no raster islet art ships at all.
+export {ISLET_VIEWBOX};
+export const ATLAS_CELL=512;   // world-view.js samples 4x3 cells of 512, each islet drawn 2px inside its cell
+const svgOf=art=>`/pixi-art/islets/${art}.svg`;
+const contexts=new Map();   // art -> full, ground and tall-piece contexts, shared by both placements
+export function loadIsletArt(art){
+ if(!contexts.has(art))contexts.set(art,fetch(svgOf(art)).then(r=>{if(!r.ok)throw Error(`${art}: ${r.status}`);return r.text();}).then(svgLayerContexts).catch(error=>{contexts.delete(art);throw error;}));
+ return contexts.get(art);
+}
+// the 11 islets into one 2048x1536 atlas for the globe, straight from their vector art
+function bakeAtlas(renderer,arts){
+ const atlas=RenderTexture.create({width:4*ATLAS_CELL,height:3*ATLAS_CELL,antialias:true,autoGenerateMipmaps:true,label:'Islet globe atlas'});
+ const sheet=new Container(),k=(ATLAS_CELL-4)/ISLET_VIEWBOX;
+ arts.forEach(({full},n)=>{const g=new Graphics(full);g.scale.set(k);g.position.set(n%4*ATLAS_CELL+2,Math.floor(n/4)*ATLAS_CELL+2);sheet.addChild(g);});
+ renderer.render({container:sheet,target:atlas,clear:true,clearColor:[0,0,0,0]});
+ sheet.destroy({children:true});atlas.source.updateMipmaps();
+ return atlas;
+}
+export async function createIsletView(app,scene,objects){
+ if(!objects?.sortableChildren)throw Error('Islet props need the shared depth-sorted object layer');
+ const started=performance.now();
+ const arts=await Promise.all(ISLET_ART.map(loadIsletArt));
+ const loadMs=Math.round(performance.now()-started);   // QA readback: fetch + parse of all eleven
+ const atlas=bakeAtlas(app.renderer,arts);
+ const layer=new Container({label:'Sea islet ground'});
+ if(objects.parent===scene)scene.addChildAt(layer,scene.getChildIndex(objects));else scene.addChild(layer);
+ // Caller positions this above the ocean and below boats.
+ const views=ISLETS.map(i=>{
+  const root=new Container({label:`Islet ${i.id}`}),art=new Graphics({context:arts[i.artIndex].ground,label:`Islet art ${i.art}`}),k=i.width/ISLET_VIEWBOX;
+  art.scale.set(k);art.position.set(-i.width/2,-i.width/2);root.addChild(art);root.visible=false;layer.addChild(root);
+  const props=ISLET_META[i.art].tallPieces.map(piece=>{
+   const context=arts[i.artIndex].pieces.get(piece.id);
+   if(!context)throw Error(`${i.art}: missing tall piece ${piece.id}`);
+   const sprite=new Container({label:`${i.id}/${piece.id}`}),visual=new Graphics(context);
+   // Keep the exact original artwork offsets; only the depth anchor moves.
+   visual.scale.set(k);visual.position.set(-piece.foot[0]*k,-piece.foot[1]*k);
+   sprite.addChild(visual);sprite.upright=true;sprite.visible=false;objects.addChild(sprite);
+   return {piece,sprite,visual};
+  });
+  return {i,root,art,props,loadMs};
+ });
+ let from=null,placed=[];
+ return {atlas,layer,views,
+  transient(){return [layer,...views.flatMap(v=>v.props.map(p=>p.sprite))];},
+  get placed(){return placed;},
   update(id,camera,width,height,onGlobe){
-   layer.visible=!onGlobe;if(onGlobe)return;
+   layer.visible=!onGlobe;
+   if(onGlobe){for(const v of views)for(const p of v.props)p.sprite.visible=false;return;}
    if(from!==id){
     from=id;
-    ISLETS.forEach((i,k)=>{const s=sprites[k],p=localPoint(id,i.center),x=localPoint(id,expMap(i,1,0,WORLD_GEO.Rw)),y=localPoint(id,expMap(i,0,1,WORLD_GEO.Rw)),scale=i.width/s.texture.width;
-     // The tiny flat sprite uses this point's sphere-chart derivative, including
-     // its authored roll. It is never positioned by longitude or island offsets.
-     s.setFromMatrix(new Matrix((x.x-p.x)*scale,(x.y-p.y)*scale,(y.x-p.x)*scale,(y.y-p.y)*scale,p.x,p.y));
+    placed=views.map(({i,root,props})=>{const r=isletPlacement(id,i);
+     const k=i.width/ISLET_VIEWBOX;
+     for(const {piece,sprite}of props){const p=placeIslet(id,i,[(piece.foot[0]-512)*k,(piece.foot[1]-512)*k]);
+      sprite.setFromMatrix(new Matrix(r.cos,r.sin,-r.sin,r.cos,p.x,p.y));sprite.zIndex=p.y;
+     }
+     root.setFromMatrix(new Matrix(r.cos,r.sin,-r.sin,r.cos,r.x,r.y));return r;
     });
    }
    const view=viewFrame(id,camera),hw=width/(2*camera.zoom),hh=height/(2*camera.zoom);
-   ISLETS.forEach((i,k)=>{const p=localPoint(id,i.center);sprites[k].visible=dot(view.center,i.center)>.1&&Math.abs(p.x-camera.x)<hw+i.width&&Math.abs(p.y-camera.y)<hh+i.width;});
+   for(const v of views){const {i}=v,p=localPoint(id,i.center);
+    v.root.visible=dot(view.center,i.center)>.1&&Math.abs(p.x-camera.x)<hw+i.width&&Math.abs(p.y-camera.y)<hh+i.width;
+    for(const prop of v.props)prop.sprite.visible=v.root.visible;
+   }
   },
-  destroy(){layer.destroy({children:true});atlas.destroy(true);},
+  destroy(){for(const v of views)for(const p of v.props)p.sprite.destroy({children:true});layer.destroy({children:true});atlas.destroy(true);},
  };
 }

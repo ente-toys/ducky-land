@@ -1,0 +1,90 @@
+[
+  {
+    "art": "odyssey",
+    "file": "odyssey-before.png",
+    "width": 4800,
+    "scale": 3,
+    "props": 4,
+    "shadows": 0
+  },
+  {
+    "art": "tree-and-rowboat",
+    "file": "tree-and-rowboat-before.png",
+    "width": 4800,
+    "scale": 3,
+    "props": 4,
+    "shadows": 0
+  },
+  {
+    "art": "broken-shipwreck",
+    "file": "broken-shipwreck-before.png",
+    "width": 4800,
+    "scale": 3,
+    "props": 8,
+    "shadows": 0
+  },
+  {
+    "art": "04-small-mountain",
+    "file": "04-small-mountain-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 10,
+    "shadows": 0
+  },
+  {
+    "art": "05-lighthouse-rock",
+    "file": "05-lighthouse-rock-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 4,
+    "shadows": 0
+  },
+  {
+    "art": "06-palm-treasure",
+    "file": "06-palm-treasure-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 5,
+    "shadows": 0
+  },
+  {
+    "art": "07-pink-blossom",
+    "file": "07-pink-blossom-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 5,
+    "shadows": 0
+  },
+  {
+    "art": "08-snow-igloo",
+    "file": "08-snow-igloo-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 6,
+    "shadows": 0
+  },
+  {
+    "art": "09-spooky-purple",
+    "file": "09-spooky-purple-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 7,
+    "shadows": 0
+  },
+  {
+    "art": "11-volcano",
+    "file": "11-volcano-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 9,
+    "shadows": 0
+  },
+  {
+    "art": "12-coral-atoll",
+    "file": "12-coral-atoll-before.png",
+    "width": 3072,
+    "scale": 3,
+    "props": 17,
+    "shadows": 0
+  }
+]

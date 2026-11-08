@@ -1,6 +1,8 @@
-import {mapPoint,spherePoint,localPoint} from './sphere-coordinates.js';
+import {placeRigid,unplaceRigid,flatRigid} from './rigid.js';
+import {placeIslet,unplaceIslet} from './islet-placement.js';
 import {dot} from './sphere.js';
-import {isletClearance} from './islets.js';
+import {isletClearance,isletLocalClearance,ISLETS} from './islets.js';
+import {walkNav,isletWalks,inWalkArea} from './islet-walk.js';
 import {worldIsland} from './world-map.js';
 import {WORLD_GEO} from './world-map.js';
 import {WORLD_ISLANDS, neighboursOf, offsetOf} from './world-map.js';
@@ -18,14 +20,18 @@ export const JETTY = HOME_MAP.JETTY;
 export const HARBOR = HOME_MAP.HARBOR;
 export const harborOf = id => mapOf(id).HARBOR;
 export const jettyOf = id => mapOf(id).JETTY;
-export const navOf = id => mapOf(id).nav();
+// the walking map of island id: its own ground plus the sea islets charted on it (islet-walk.js)
+export const navOf = (id, base = mapOf(id).nav()) => walkNav(id, base);
+export const canWalkTo = (id, x, y) => inWalkArea(mapOf(id), id, x, y);
 // the server and the live client walk the same harbor: the jetty deck is a walkway, and the lawn at its foot is cleared of props
 export const harborWorld = (w, id='home') => ({...w, walkways:[...w.walkways, jettyOf(id).walkway]});
 export const harborClear = prop => Math.hypot(prop.x-1726-20,prop.y-830-110) > 200;
 // boss 5 Nov: walk to the deck beside your boat, then step in
 export function boardingPoint(boat,nav) {
+  const dock=isletWalks(boat.islandId ?? 'home').find(w=>near(boat,w.water,150));
+  if(dock)return {...dock.land};   // return along the drawn jetty, even when a radial sand search misses its narrow deck
   const map=mapOf(boat.islandId ?? 'home'), {HARBOR:harbor,JETTY:jetty}=map, {foot,dir,length,along}=jetty;
-  if (!near(boat,harbor.water,600)) return shoreFor(boat.x,boat.y,nav ?? map.nav()) ?? {x:Math.round(boat.x),y:Math.round(boat.y)};   // a beach or islet boat: step in from the nearest sand
+  if (!near(boat,harbor.water,600)) return shoreFor(boat.x,boat.y,nav ?? navOf(boat.islandId ?? 'home')) ?? {x:Math.round(boat.x),y:Math.round(boat.y)};   // a beach or islet boat: step in from the nearest sand
   const t=Math.max(length*jetty.wetFrom,Math.min(length-44,(boat.x-foot.x)*dir.x+(boat.y-foot.y)*dir.y));
   const side=Math.sign((boat.x-foot.x)*-dir.y+(boat.y-foot.y)*dir.x)*(t >= length-45 ? 0 : 18), p=along(t,side);
   return {x:Math.round(p.x),y:Math.round(p.y)};
@@ -51,7 +57,7 @@ export const destinationsFor = id => {
     DEST.set(id,neighboursOf(id).map(({island,x,y}) => {
       const B=mapOf(island.id), o=originOffset(id,island.id);
       return {x:A.cx+x, y:A.cy+y, offset:o, destination:island.id, name:island.name, accent:island.accent, map:B.id,
-        dock:mapPoint(island.id,id,B.HARBOR.water), land:mapPoint(island.id,id,B.HARBOR.land)};
+        dock:placeRigid(id,island.id,B.HARBOR.water), land:placeRigid(id,island.id,B.HARBOR.land)};
     }));
   }
   return DEST.get(id);
@@ -156,15 +162,25 @@ const shoreFor=(x,y,nav,reach=280) => {const p=nav.nearest(x,y,reach); return p 
 // `nav` (the caller's own walking map, e.g. the client's with its sleepers) stands in for a home-map island you are on.
 export function landingSpot(actor,nav=null,reach=420) {   // the walking map keeps Duckies a little back from the waterline
   let best=null;
-  const surface=spherePoint(actor.islandId,actor);
   for (const island of WORLD_ISLANDS) {
-    const map=mapOf(island.id),p=localPoint(island.id,surface),lx=p.x,ly=p.y;
+    const map=mapOf(island.id),p=unplaceRigid(actor.islandId,island.id,actor),lx=p.x,ly=p.y;
     if (lx < map.origin.x-reach || ly < map.origin.y-reach || lx > map.origin.x+map.width+reach || ly > map.origin.y+map.height+reach) continue;
-    const shore=shoreFor(lx,ly,island.id===actor.islandId && nav && map.home ? nav : map.nav(),reach);
+    const shore=shoreFor(lx,ly,island.id===actor.islandId && nav && map.home ? nav : map.nav(),reach);   // the island itself (its islets below)
     if(shore && (!best||Math.hypot(shore.x-lx,shore.y-ly)<best.d)){
-      const at=mapPoint(island.id,actor.islandId,shore);
+      const at=placeRigid(actor.islandId,island.id,shore);
       best={islandId:island.id,offset:{x:at.x-shore.x,y:at.y-shore.y},...shore,d:Math.hypot(shore.x-lx,shore.y-ly)};
     }
+  }
+  // boss 8 Nov ("I should be able to dock here"): a sea islet in reach offers its jetty. Its walking ground is charted on
+  // its nearest island (islet.home), so landing there moves you onto that island, far out in its sea.
+  for (const i of ISLETS) {
+    const q=unplaceIslet(actor.islandId,i,actor),water=i.jetty.water,c=i.landCentre;
+    const cap=Math.max(i.radius,Math.hypot(water[0]-c[0],water[1]-c[1]));
+    if(Math.hypot(q.x-c[0],q.y-c[1])-cap>reach)continue;
+    const d=Math.min(isletLocalClearance(i,q,reach+1),Math.hypot(q.x-water[0],q.y-water[1]));
+    if (d > reach || (best && d >= best.d)) continue;
+    const walk=isletWalks(i.home).find(w => w.islet === i), at=placeIslet(actor.islandId,i,i.jetty.land);
+    best={islandId:i.home,islet:i.id,offset:{x:at.x-walk.land.x,y:at.y-walk.land.y},x:walk.land.x,y:walk.land.y,d:Math.max(0,d)};
   }
   return best;
 }
@@ -173,7 +189,13 @@ export function landingSpot(actor,nav=null,reach=420) {   // the walking map kee
 // the beach that no route reaches); if there is none, the boat is already as close as it can get. Kept out of landingSpot
 // because the client asks landingSpot four times a second just to show the Dock button.
 export function landingApproach(actor,spot) {
-  const at=mapPoint(spot.islandId,actor.islandId,spot),sx=at.x,sy=at.y, len=Math.hypot(actor.x-sx,actor.y-sy)||1;
+  if (spot.islet) {
+    const i=ISLETS.find(i=>i.id===spot.islet),p=placeIslet(actor.islandId,i,i.jetty.water);
+    const q={x:Math.round(p.x),y:Math.round(p.y)};
+    if (near(actor,q,14) || (canSail(q.x,q.y,actor.islandId) && sailRoute(actor.islandId,actor,q))) return q;
+  }
+  const at=spot.islet?placeIslet(actor.islandId,ISLETS.find(i=>i.id===spot.islet),ISLETS.find(i=>i.id===spot.islet).jetty.land):placeRigid(actor.islandId,spot.islandId,spot);
+  const sx=at.x,sy=at.y,len=Math.hypot(actor.x-sx,actor.y-sy)||1;
   for (let t=40;t<len-14;t+=10) {
     const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};
     if (canSail(p.x,p.y,actor.islandId) && sailRoute(actor.islandId,actor,p)) return p;
@@ -201,11 +223,13 @@ function candidates(id,x,y,pad=0){
  const k=d>1e-10?Math.sin(a)/d:1/WORLD_GEO.Rw,co=Math.cos(a),p=sphereScratch,out=candidateScratch;out.length=0;
  for(let j=0;j<3;j++)p[j]=frame.center[j]*co+(frame.east[j]*dx-frame.north[j]*dy)*k;
  let caps=CAP.get(pad);
- if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);return {island,map:m,cos:Math.cos((Math.hypot(m.width,m.height)/2+pad)/WORLD_GEO.Rw)};});CAP.set(pad,caps);}
+ if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);const reach=Math.hypot(m.width,m.height)/2+pad;return {island,map:m,reach,cos:Math.cos(reach/WORLD_GEO.Rw)};});CAP.set(pad,caps);}
  for(const c of caps){
-  if(dot(p,c.island.center)<c.cos)continue;
-  if(c.island.id===id){out.push({map:c.map,x,y});continue;}
-  out.push({map:c.map,...localPoint(c.island.id,p)});
+  if(c.island.id===id){if(dot(p,c.island.center)>=c.cos)out.push({map:c.map,x,y});continue;}
+  // the neighbour's coast in its rigid frame: the art as drawn, centred where the sphere puts it, turned, true size
+  const F=flatRigid(id,c.island.id),ox=x-F.x,oy=y-F.y;
+  if(ox*ox+oy*oy>c.reach*c.reach)continue;
+  out.push({map:c.map,x:F.cx+F.a*ox+F.b*oy,y:F.cy+F.c*ox+F.d*oy});
  }
  return out;
 }
@@ -219,7 +243,7 @@ export function canSail(x,y,id='home',radius=BOAT_RADIUS){
   if(p.map.landAt(p.x,p.y))return false;
   for(let k=0;k<16;k++){const a=k*Math.PI/8;if(p.map.landAt(p.x+Math.cos(a)*radius,p.y+Math.sin(a)*radius))return false;}
  }
- if(isletClearance(sphereScratch,radius)<radius)return false;
+ if(isletClearance({x,y},radius,id)<radius)return false;
  return true;
 }
 
@@ -253,7 +277,7 @@ function clearance(id,x,y) {
   // The source chart is distance-expanding, so its straight-line steps travel
   // no farther on the sphere. Keep physical shore clearance independent of
   // distance from this chart's centre, including on the far side of a pole.
-  return Math.max(0,Math.min(best-RES,isletClearance(sphereScratch,PAD)));
+  return Math.max(0,Math.min(best-RES,isletClearance({x,y},PAD,id)));
 
 }
 const SAFE=BOAT_RADIUS+30;   // clear of every coast by the boat plus a margin bigger than the 25-unit grid's error
