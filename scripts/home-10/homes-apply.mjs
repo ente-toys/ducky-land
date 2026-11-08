@@ -21,7 +21,8 @@ E.obstacles = E.obstacles.filter(o => !dead.has([o.x, o.y, o.rx, o.ry].join(',')
 E.decks = E.decks.filter(d => !String(d.id ?? '').startsWith('homes-')).concat(P.addDecks);
 for (const c of E.communities) Object.assign(c, P.communities[c.id] ?? {});
 for (const p of E.places) if (P.places[p.id]) p.point = P.places[p.id];
-const drop = new Set([...P.removeRoads, ...P.setRoads.map(r => r.id)]);
-E.roads = E.roads.filter(r => !drop.has(r.id)).concat(P.setRoads);
+const goneRoads = new Set(P.removeRoads), set = new Map(P.setRoads.map(r => [r.id, r]));
+E.roads = E.roads.filter(r => !goneRoads.has(r.id)).map(r => set.get(r.id) ?? r);   // a reset road keeps its draw order
+E.roads = E.roads.concat(P.setRoads.filter(r => !E.roads.includes(r)));
 writeFileSync(FILE, JSON.stringify(E, null, 2));
 console.log(`homes patch: ${E.props.length} props, ${E.obstacles.length} obstacles, ${E.decks.length} decks, ${E.roads.length} roads`);
