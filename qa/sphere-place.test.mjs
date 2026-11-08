@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {WORLD_ISLANDS,WORLD_GEO,worldIsland,SPHERE_CIRCUMFERENCE} from '../src/pixi/world-map.js';
 import {sphereFrame,expMap,logMap,dot,angle,cross,transport,arcDistance} from '../src/pixi/sphere.js';
 import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
+import {placeRigid} from '../src/pixi/rigid.js';
 import {sphereShores,sphereShoreGap,coastGaps,BOAT_CHANNEL} from '../src/pixi/sphere-shores.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {canSail,landingSpot,landingApproach,sailRoute,sailStep,SAIL_SPEED,destinationsFor,crossIsland} from '../src/pixi/islands.js';
@@ -62,7 +63,7 @@ test('island shape is independent of latitude, with no polar wedge or anisotropi
 test('sailing to Iceland docks on its own jetty and beach from both hemispheres',()=>{
  const ice='isle-55',m=mapOf(ice);
  for(const from of ['home','isle-56','isle-170','isle-230']){
-  const target=mapPoint(ice,from,m.HARBOR.water);
+  const target=placeRigid(from,ice,m.HARBOR.water);   // the jetty as drawn (rigid frame)
   assert.ok(canSail(target.x,target.y,from));
   const spot=landingSpot({islandId:from,...target});assert.equal(spot?.islandId,ice);
   const approach=landingApproach({islandId:from,...target},spot);assert.ok(canSail(approach.x,approach.y,from));

@@ -1,4 +1,4 @@
-import {mapOf} from './island-maps.js';
+import {mapOf,mapsVersion} from './island-maps.js';
 import {mapPoint} from './sphere-coordinates.js';
 // boss 8 Nov: "I don't want any skew. If you zoom, it has to seamlessly zoom to the island or islets."
 // Every island and islet is a RIGID sticker: its own flat art, only turned and uniformly scaled. The sphere decides where
@@ -17,8 +17,9 @@ export function shearOf({a,b,c,d}){
 }
 // Where island `to` is drawn in island `from`'s flat chart: its centre exactly where the sphere puts it, its art at true
 // size (scale 1), turned by the chart's rotation at that centre. a..d map `to`-local offsets from its map centre.
-const cache=new Map();
+const cache=new Map();let cacheVersion=-1;
 export function flatRigid(from,to){
+ if(cacheVersion!==mapsVersion()){cacheVersion=mapsVersion();cache.clear();}   // a theme arrived: its map centre moved
  const key=from+'>'+to;let r=cache.get(key);
  if(!r){
   const m=mapOf(to);

@@ -1,4 +1,6 @@
-import {mapPoint,spherePoint,localPoint} from './sphere-coordinates.js';
+import {placeRigid,unplaceRigid,flatRigid} from './rigid.js';
+// boss 8 Nov (rigid islands): a neighbour is DRAWN as its own flat art laid down rigidly (rigid.js), so gameplay uses that
+// same rigid frame: its jetty, beaches and coast are exactly where you see them, never where the warped sphere chart says.
 import {dot} from './sphere.js';
 import {isletClearance} from './islets.js';
 import {worldIsland} from './world-map.js';
@@ -51,7 +53,7 @@ export const destinationsFor = id => {
     DEST.set(id,neighboursOf(id).map(({island,x,y}) => {
       const B=mapOf(island.id), o=originOffset(id,island.id);
       return {x:A.cx+x, y:A.cy+y, offset:o, destination:island.id, name:island.name, accent:island.accent, map:B.id,
-        dock:mapPoint(island.id,id,B.HARBOR.water), land:mapPoint(island.id,id,B.HARBOR.land)};
+        dock:placeRigid(id,island.id,B.HARBOR.water), land:placeRigid(id,island.id,B.HARBOR.land)};
     }));
   }
   return DEST.get(id);
@@ -156,13 +158,12 @@ const shoreFor=(x,y,nav,reach=280) => {const p=nav.nearest(x,y,reach); return p 
 // `nav` (the caller's own walking map, e.g. the client's with its sleepers) stands in for a home-map island you are on.
 export function landingSpot(actor,nav=null,reach=420) {   // the walking map keeps Duckies a little back from the waterline
   let best=null;
-  const surface=spherePoint(actor.islandId,actor);
   for (const island of WORLD_ISLANDS) {
-    const map=mapOf(island.id),p=localPoint(island.id,surface),lx=p.x,ly=p.y;
+    const map=mapOf(island.id),p=unplaceRigid(actor.islandId,island.id,actor),lx=p.x,ly=p.y;
     if (lx < map.origin.x-reach || ly < map.origin.y-reach || lx > map.origin.x+map.width+reach || ly > map.origin.y+map.height+reach) continue;
     const shore=shoreFor(lx,ly,island.id===actor.islandId && nav && map.home ? nav : map.nav(),reach);
     if(shore && (!best||Math.hypot(shore.x-lx,shore.y-ly)<best.d)){
-      const at=mapPoint(island.id,actor.islandId,shore);
+      const at=placeRigid(actor.islandId,island.id,shore);
       best={islandId:island.id,offset:{x:at.x-shore.x,y:at.y-shore.y},...shore,d:Math.hypot(shore.x-lx,shore.y-ly)};
     }
   }
@@ -173,7 +174,7 @@ export function landingSpot(actor,nav=null,reach=420) {   // the walking map kee
 // the beach that no route reaches); if there is none, the boat is already as close as it can get. Kept out of landingSpot
 // because the client asks landingSpot four times a second just to show the Dock button.
 export function landingApproach(actor,spot) {
-  const at=mapPoint(spot.islandId,actor.islandId,spot),sx=at.x,sy=at.y, len=Math.hypot(actor.x-sx,actor.y-sy)||1;
+  const at=placeRigid(actor.islandId,spot.islandId,spot),sx=at.x,sy=at.y, len=Math.hypot(actor.x-sx,actor.y-sy)||1;
   for (let t=40;t<len-14;t+=10) {
     const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};
     if (canSail(p.x,p.y,actor.islandId) && sailRoute(actor.islandId,actor,p)) return p;
@@ -201,11 +202,13 @@ function candidates(id,x,y,pad=0){
  const k=d>1e-10?Math.sin(a)/d:1/WORLD_GEO.Rw,co=Math.cos(a),p=sphereScratch,out=candidateScratch;out.length=0;
  for(let j=0;j<3;j++)p[j]=frame.center[j]*co+(frame.east[j]*dx-frame.north[j]*dy)*k;
  let caps=CAP.get(pad);
- if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);return {island,map:m,cos:Math.cos((Math.hypot(m.width,m.height)/2+pad)/WORLD_GEO.Rw)};});CAP.set(pad,caps);}
+ if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);const reach=Math.hypot(m.width,m.height)/2+pad;return {island,map:m,reach,cos:Math.cos(reach/WORLD_GEO.Rw)};});CAP.set(pad,caps);}
  for(const c of caps){
-  if(dot(p,c.island.center)<c.cos)continue;
-  if(c.island.id===id){out.push({map:c.map,x,y});continue;}
-  out.push({map:c.map,...localPoint(c.island.id,p)});
+  if(c.island.id===id){if(dot(p,c.island.center)>=c.cos)out.push({map:c.map,x,y});continue;}
+  // the neighbour's coast in its rigid frame: the art as drawn, centred where the sphere puts it, turned, true size
+  const F=flatRigid(id,c.island.id),ox=x-F.x,oy=y-F.y;
+  if(ox*ox+oy*oy>c.reach*c.reach)continue;
+  out.push({map:c.map,x:F.cx+F.a*ox+F.b*oy,y:F.cy+F.c*ox+F.d*oy});
  }
  return out;
 }

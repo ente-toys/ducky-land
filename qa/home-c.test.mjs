@@ -1,4 +1,4 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {placeRigid} from '../src/pixi/rigid.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import E from '../src/pixi/home-expansion.json' with {type:'json'};
 import C from '../scripts/bigger-home/communities/baseline-C.json' with {type:'json'};
@@ -34,7 +34,7 @@ test('Home keeps clear commons and joins every shared green to the original hear
 });
 test('Home fishing pier is walkable above water and solid for sailors in every coordinate frame',()=>{
  const walkway=E.walkways[C.walkways.length-2],p=[walkway.b[0],walkway.b[1]-20];assert.ok(HOME_MAP.nav().walkable(...p));assert.ok(HOME_MAP.landAt(...p));assert.equal(canSail(...p,'home'),false);
- for(const other of WORLD_ISLANDS.filter(i=>i.id!=='home')){const at=mapPoint('home',other.id,{x:p[0],y:p[1]});assert.equal(canSail(at.x,at.y,other.id),false,other.id);}
+ for(const other of WORLD_ISLANDS.filter(i=>i.id!=='home')){const at=placeRigid(other.id,'home',{x:p[0],y:p[1]});assert.equal(canSail(at.x,at.y,other.id),false,other.id);}
 });
 test('Home community ground stays GPU-safe with no texture allocation growth over C',()=>{
  const bytes=t=>Math.ceil(t.width*(t.resolution??1))*Math.ceil(t.height*(t.resolution??1))*4;

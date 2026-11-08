@@ -4,7 +4,7 @@ import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
 import {globeBall,uprightFade,northUpRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from './globe-look.js';
 import {unplaceRigid,flatRigid} from './rigid.js';
-import {mapPoint,localPoint,spherePoint} from './sphere-coordinates.js';
+import {localPoint,spherePoint} from './sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from './zoom-motion.js';
 import {artResolution} from './art-resolution.js';
@@ -410,7 +410,7 @@ export class PixiIsland {
     }
     const accent=islandFor(id).accent;
     for (const prop of this.props) if (/flower|flag|bunting/i.test(prop.asset || prop.name)) prop.sprite.tint=id==='home'?(prop.tint ?? 0xffffff):accent;
-    this.travelView?.switchIsland(id, hop && (p=>mapPoint(previousIsland,id,p)));
+    this.travelView?.switchIsland(id, hop && (p=>unplaceRigid(previousIsland,id,p)));   // boss 8 Nov: the same rigid frame the island was drawn in
     if (hop) {
       // boss 8 Nov (rigid islands): the island was on screen as a rigid sticker; move the view through that same placement
       // so it stays exactly where it was, then ease the leftover turn away.
@@ -965,7 +965,7 @@ export class PixiIsland {
     for (const island of copies) {
       const mine=visitors.filter(v => v.copy === island).map(v => v.o);   // the copy's map origin
       const saved=mine.map(o=>({o,x:o.x,y:o.y,z:o.zIndex}));
-      for(const {o}of saved){const p=mapPoint(this.islandId,island.id,o);o.visible=true;shift(o,p.x-o.x,p.y-o.y);}
+      for(const {o}of saved){const p=unplaceRigid(this.islandId,island.id,o);o.visible=true;shift(o,p.x-o.x,p.y-o.y);}
       this.showArt(island.map);cull(island.map,island.id);
       this.livePatches.draw(this.islandId,island.id,this.scene,this.camera,this.width,this.height,TILT,target);
       for(const {o,x,y,z}of saved){shift(o,x-o.x,y-o.y);o.zIndex=z;o.visible=false;}
