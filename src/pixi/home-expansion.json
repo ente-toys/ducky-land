@@ -397,8 +397,8 @@
       "name": "townhouse",
       "asset": "townhouse",
       "src": "/pixi-art/home-communities/townhouse-butterbill-1.svg",
-      "x": -933.3333333333334,
-      "y": -383.33333333333337,
+      "x": -1120,
+      "y": 400,
       "width": 610,
       "height": 610,
       "scale": 0.93,
@@ -409,8 +409,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -933.3333333333334,
-        "y": -425.1833333333334,
+        "x": -1120,
+        "y": 358.15,
         "rx": 226.92000000000002,
         "ry": 44.64
       },
@@ -425,52 +425,12 @@
       }
     },
     {
-      "id": "bigger-community-1",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -933.3333333333334,
-      "y": -283.33333333333337,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-2",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -694.4444444444445,
-      "y": -300,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -694.4444444444445,
-        "y": -304,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
       "id": "bigger-community-3",
       "name": "herb-box",
       "asset": "herb-box",
       "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -1177.7777777777778,
-      "y": -411.11111111111114,
+      "x": -1790,
+      "y": 60,
       "width": 260,
       "height": 125,
       "scale": 0.8,
@@ -481,8 +441,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -1177.7777777777778,
-        "y": -423.11111111111114,
+        "x": -1790,
+        "y": 48,
         "rx": 95,
         "ry": 25
       }
@@ -556,52 +516,12 @@
       "zone": "butterbill"
     },
     {
-      "id": "bigger-community-8",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -1288.888888888889,
-      "y": -366.6666666666667,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-9",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -666.6666666666667,
-      "y": -244.44444444444446,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -666.6666666666667,
-        "y": -254.44444444444446,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-10",
       "name": "townhouse",
       "asset": "townhouse",
       "src": "/pixi-art/home-communities/townhouse-butterbill-2.svg",
-      "x": -266.6666666666667,
-      "y": -422.22222222222223,
+      "x": -1560,
+      "y": 20,
       "width": 610,
       "height": 610,
       "scale": 1.08,
@@ -612,8 +532,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -266.6666666666667,
-        "y": -470.82222222222225,
+        "x": -1560,
+        "y": -28.600000000000023,
         "rx": 263.52000000000004,
         "ry": 51.84
       },
@@ -625,69 +545,6 @@
         "heightScale": 1.06,
         "feature": "shutters-and-wide-porch",
         "householdScale": 1.08
-      }
-    },
-    {
-      "id": "bigger-community-11",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -266.6666666666667,
-      "y": -322.22222222222223,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-12",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -27.77777777777778,
-      "y": -338.8888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -27.77777777777778,
-        "y": -342.8888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-13",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -511.11111111111114,
-      "y": -450,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -511.11111111111114,
-        "y": -462,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -759,29 +616,12 @@
       "zone": "butterbill"
     },
     {
-      "id": "bigger-community-18",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 88.88888888888889,
-      "y": -405.55555555555554,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
       "id": "bigger-community-19",
       "name": "townhouse",
       "asset": "townhouse",
       "src": "/pixi-art/home-communities/townhouse-butterbill-3.svg",
-      "x": 355.55555555555554,
-      "y": 194.44444444444446,
+      "x": -860,
+      "y": 1010,
       "width": 610,
       "height": 610,
       "scale": 0.83,
@@ -792,8 +632,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": 355.55555555555554,
-        "y": 157.09444444444446,
+        "x": -860.0000000000001,
+        "y": 972.65,
         "rx": 202.51999999999998,
         "ry": 39.839999999999996
       },
@@ -805,69 +645,6 @@
         "heightScale": 1,
         "feature": "garden-bay",
         "householdScale": 0.83
-      }
-    },
-    {
-      "id": "bigger-community-20",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 355.55555555555554,
-      "y": 294.44444444444446,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-21",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 594.4444444444445,
-      "y": 277.77777777777777,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": 594.4444444444445,
-        "y": 273.77777777777777,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-22",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 111.11111111111111,
-      "y": 166.66666666666669,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": 111.11111111111111,
-        "y": 154.66666666666669,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -939,29 +716,12 @@
       "zone": "butterbill"
     },
     {
-      "id": "bigger-community-27",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 0,
-      "y": 211.11111111111111,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
       "id": "bigger-community-28",
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 622.2222222222223,
-      "y": 333.33333333333337,
+      "x": 1010,
+      "y": 600,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -972,8 +732,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": 622.2222222222223,
-        "y": 323.33333333333337,
+        "x": 1010,
+        "y": 590,
         "rx": 70,
         "ry": 24
       }
@@ -983,8 +743,8 @@
       "name": "townhouse",
       "asset": "townhouse",
       "src": "/pixi-art/home-communities/townhouse-butterbill-4.svg",
-      "x": -866.6666666666667,
-      "y": 755.5555555555555,
+      "x": -200,
+      "y": 990,
       "width": 610,
       "height": 610,
       "scale": 1.04,
@@ -995,8 +755,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -866.6666666666667,
-        "y": 708.7555555555556,
+        "x": -200,
+        "y": 943.2,
         "rx": 253.76000000000002,
         "ry": 49.92
       },
@@ -1008,69 +768,6 @@
         "heightScale": 0.94,
         "feature": "dormer",
         "householdScale": 1.04
-      }
-    },
-    {
-      "id": "bigger-community-30",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -866.6666666666667,
-      "y": 855.5555555555555,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-31",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -627.7777777777778,
-      "y": 838.8888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -627.7777777777778,
-        "y": 834.8888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-32",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -1111.111111111111,
-      "y": 727.7777777777778,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -1111.111111111111,
-        "y": 715.7777777777778,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -1142,29 +839,12 @@
       "zone": "butterbill"
     },
     {
-      "id": "bigger-community-37",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -511.11111111111114,
-      "y": 772.2222222222223,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
       "id": "bigger-community-38",
       "name": "townhouse",
       "asset": "townhouse",
       "src": "/pixi-art/home-communities/townhouse-butterbill-5.svg",
-      "x": -172.22222222222223,
-      "y": 766.6666666666667,
+      "x": 740,
+      "y": 580,
       "width": 610,
       "height": 610,
       "scale": 0.89,
@@ -1175,8 +855,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -172.22222222222223,
-        "y": 726.6166666666668,
+        "x": 740,
+        "y": 539.95,
         "rx": 217.16,
         "ry": 42.72
       },
@@ -1188,69 +868,6 @@
         "heightScale": 1.02,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.89
-      }
-    },
-    {
-      "id": "bigger-community-39",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -172.22222222222223,
-      "y": 866.6666666666667,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-40",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 66.66666666666667,
-      "y": 850,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": 66.66666666666667,
-        "y": 846,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-41",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -416.6666666666667,
-      "y": 738.8888888888889,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -416.6666666666667,
-        "y": 726.8888888888889,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -1322,52 +939,12 @@
       "zone": "butterbill"
     },
     {
-      "id": "bigger-community-46",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -527.7777777777778,
-      "y": 783.3333333333334,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-47",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 94.44444444444444,
-      "y": 905.5555555555555,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": 94.44444444444444,
-        "y": 895.5555555555555,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-48",
       "name": "sign-butterbill",
       "asset": "sign-butterbill",
       "src": "/pixi-art/home-communities/sign-butterbill.svg",
-      "x": -972.2222222222223,
-      "y": 638.8888888888889,
+      "x": -1000,
+      "y": 580,
       "width": 440,
       "height": 210,
       "scale": 1,
@@ -1378,8 +955,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -972.2222222222223,
-        "y": 634.8888888888889,
+        "x": -1000,
+        "y": 576,
         "rx": 12,
         "ry": 12
       }
@@ -1389,8 +966,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -750,
-      "y": 427.77777777777777,
+      "x": -620,
+      "y": 470,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -1401,8 +978,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -750,
-        "y": 417.77777777777777,
+        "x": -620,
+        "y": 460,
         "rx": 70,
         "ry": 24
       }
@@ -1412,8 +989,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -22.22222222222222,
-      "y": 455.5555555555556,
+      "x": 40,
+      "y": 560,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -1424,8 +1001,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -22.22222222222222,
-        "y": 445.5555555555556,
+        "x": 40,
+        "y": 550,
         "rx": 70,
         "ry": 24
       }
@@ -1435,8 +1012,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": -955.5555555555555,
-      "y": 427.77777777777777,
+      "x": -660,
+      "y": 330,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -1447,8 +1024,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -955.5555555555555,
-        "y": 422.77777777777777,
+        "x": -660,
+        "y": 325,
         "rx": 13,
         "ry": 13
       }
@@ -1458,8 +1035,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 194.44444444444446,
-      "y": 355.55555555555554,
+      "x": 250,
+      "y": 540,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -1470,8 +1047,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": 194.44444444444446,
-        "y": 350.55555555555554,
+        "x": 250,
+        "y": 535,
         "rx": 13,
         "ry": 13
       }
@@ -1481,8 +1058,8 @@
       "name": "planter-flowers",
       "asset": "planter-flowers",
       "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": -811.1111111111111,
-      "y": 211.11111111111111,
+      "x": -560,
+      "y": 300,
       "width": 534,
       "height": 795,
       "scale": 0.13,
@@ -1493,8 +1070,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -811.1111111111111,
-        "y": 203.11111111111111,
+        "x": -560,
+        "y": 292,
         "rx": 38,
         "ry": 19
       }
@@ -1504,8 +1081,8 @@
       "name": "planter-flowers",
       "asset": "planter-flowers",
       "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 55.55555555555556,
-      "y": 283.33333333333337,
+      "x": -410,
+      "y": 1050,
       "width": 534,
       "height": 795,
       "scale": 0.13,
@@ -1516,8 +1093,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": 55.55555555555556,
-        "y": 275.33333333333337,
+        "x": -410,
+        "y": 1042,
         "rx": 38,
         "ry": 19
       }
@@ -1527,8 +1104,8 @@
       "name": "cottage",
       "asset": "cottage",
       "src": "/pixi-art/home-communities/cottage-lanternleaf-1.svg",
-      "x": 2027.7777777777778,
-      "y": -422.22222222222223,
+      "x": 2080,
+      "y": -170,
       "width": 540,
       "height": 510,
       "scale": 1.04,
@@ -1539,8 +1116,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2027.7777777777778,
-        "y": -469.02222222222224,
+        "x": 2080,
+        "y": -216.8,
         "rx": 224.64000000000001,
         "ry": 49.92
       },
@@ -1552,69 +1129,6 @@
         "heightScale": 0.9,
         "feature": "dormer",
         "householdScale": 1.04
-      }
-    },
-    {
-      "id": "bigger-community-56",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 2027.7777777777778,
-      "y": -322.22222222222223,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-57",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 2266.666666666667,
-      "y": -338.8888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 2266.666666666667,
-        "y": -342.8888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-58",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 1783.3333333333335,
-      "y": -450,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 1783.3333333333335,
-        "y": -462,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -1686,52 +1200,12 @@
       "zone": "lanternleaf"
     },
     {
-      "id": "bigger-community-63",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 1672.2222222222222,
-      "y": -405.55555555555554,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-64",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 2294.4444444444443,
-      "y": -283.33333333333337,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 2294.4444444444443,
-        "y": -293.33333333333337,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-65",
       "name": "cottage",
       "asset": "cottage",
       "src": "/pixi-art/home-communities/cottage-lanternleaf-2.svg",
-      "x": 2600,
-      "y": -544.4444444444445,
+      "x": 2560,
+      "y": -370,
       "width": 540,
       "height": 510,
       "scale": 0.9,
@@ -1742,8 +1216,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2600,
-        "y": -584.9444444444445,
+        "x": 2560,
+        "y": -410.5,
         "rx": 194.4,
         "ry": 43.2
       },
@@ -1755,69 +1229,6 @@
         "heightScale": 1.06,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.9
-      }
-    },
-    {
-      "id": "bigger-community-66",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 2600,
-      "y": -444.44444444444446,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-67",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 2838.888888888889,
-      "y": -461.11111111111114,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 2838.888888888889,
-        "y": -465.11111111111114,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-68",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 2355.5555555555557,
-      "y": -572.2222222222223,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 2355.5555555555557,
-        "y": -584.2222222222223,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -1889,29 +1300,12 @@
       "zone": "lanternleaf"
     },
     {
-      "id": "bigger-community-73",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 2955.5555555555557,
-      "y": -527.7777777777778,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
       "id": "bigger-community-74",
       "name": "cottage",
       "asset": "cottage",
       "src": "/pixi-art/home-communities/cottage-lanternleaf-3.svg",
-      "x": 3188.888888888889,
-      "y": -544.4444444444445,
+      "x": 3170,
+      "y": -390,
       "width": 540,
       "height": 510,
       "scale": 1.09,
@@ -1922,8 +1316,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3188.888888888889,
-        "y": -593.4944444444444,
+        "x": 3170,
+        "y": -439.04999999999995,
         "rx": 235.44000000000003,
         "ry": 52.32000000000001
       },
@@ -1935,69 +1329,6 @@
         "heightScale": 1,
         "feature": "garden-bay",
         "householdScale": 1.09
-      }
-    },
-    {
-      "id": "bigger-community-75",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 3188.888888888889,
-      "y": -444.44444444444446,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-76",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 3427.777777777778,
-      "y": -461.11111111111114,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 3427.777777777778,
-        "y": -465.11111111111114,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-77",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 2944.4444444444443,
-      "y": -572.2222222222223,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 2944.4444444444443,
-        "y": -584.2222222222223,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -2069,52 +1400,12 @@
       "zone": "lanternleaf"
     },
     {
-      "id": "bigger-community-82",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 2833.3333333333335,
-      "y": -527.7777777777778,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-83",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 3455.5555555555557,
-      "y": -405.55555555555554,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 3455.5555555555557,
-        "y": -415.55555555555554,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-84",
       "name": "cottage",
       "asset": "cottage",
       "src": "/pixi-art/home-communities/cottage-lanternleaf-4.svg",
-      "x": 3788.888888888889,
-      "y": -255.55555555555557,
+      "x": 3560,
+      "y": -80,
       "width": 540,
       "height": 510,
       "scale": 0.87,
@@ -2125,8 +1416,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3788.888888888889,
-        "y": -294.7055555555556,
+        "x": 3560,
+        "y": -119.15,
         "rx": 187.92,
         "ry": 41.76
       },
@@ -2138,69 +1429,6 @@
         "heightScale": 0.94,
         "feature": "dormer",
         "householdScale": 0.87
-      }
-    },
-    {
-      "id": "bigger-community-85",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 3788.888888888889,
-      "y": -155.55555555555557,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-86",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 4027.777777777778,
-      "y": -172.22222222222223,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 4027.777777777778,
-        "y": -176.22222222222223,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-87",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 3544.444444444445,
-      "y": -283.33333333333337,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 3544.444444444445,
-        "y": -295.33333333333337,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -2272,29 +1500,12 @@
       "zone": "lanternleaf"
     },
     {
-      "id": "bigger-community-92",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 4144.444444444444,
-      "y": -238.88888888888889,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
       "id": "bigger-community-93",
       "name": "cottage",
       "asset": "cottage",
       "src": "/pixi-art/home-communities/cottage-lanternleaf-5.svg",
-      "x": 3800,
-      "y": 255.55555555555557,
+      "x": 3900,
+      "y": 260,
       "width": 540,
       "height": 510,
       "scale": 0.95,
@@ -2305,8 +1516,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3800,
-        "y": 212.80555555555557,
+        "x": 3900,
+        "y": 217.25,
         "rx": 205.2,
         "ry": 45.599999999999994
       },
@@ -2318,69 +1529,6 @@
         "heightScale": 1.02,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.95
-      }
-    },
-    {
-      "id": "bigger-community-94",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 3800,
-      "y": 355.55555555555554,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-95",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 4038.888888888889,
-      "y": 338.8888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 4038.888888888889,
-        "y": 334.8888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-96",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 3555.5555555555557,
-      "y": 227.7777777777778,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 3555.5555555555557,
-        "y": 215.7777777777778,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -2452,46 +1600,6 @@
       "zone": "lanternleaf"
     },
     {
-      "id": "bigger-community-101",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 3444.444444444445,
-      "y": 272.22222222222223,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-102",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 4066.666666666667,
-      "y": 394.44444444444446,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 4066.666666666667,
-        "y": 384.44444444444446,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-103",
       "name": "cottage",
       "asset": "cottage",
@@ -2521,69 +1629,6 @@
         "heightScale": 0.86,
         "feature": "garden-bay",
         "householdScale": 0.93
-      }
-    },
-    {
-      "id": "bigger-community-104",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 1811.111111111111,
-      "y": 383.33333333333337,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
-      "id": "bigger-community-105",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 2050,
-      "y": 366.6666666666667,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 2050,
-        "y": 362.6666666666667,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-106",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 1566.6666666666667,
-      "y": 255.55555555555557,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 1566.6666666666667,
-        "y": 243.55555555555557,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -2655,29 +1700,12 @@
       "zone": "lanternleaf"
     },
     {
-      "id": "bigger-community-111",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 2166.666666666667,
-      "y": 300,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf"
-    },
-    {
       "id": "bigger-community-112",
       "name": "sign-lanternleaf",
       "asset": "sign-lanternleaf",
       "src": "/pixi-art/home-communities/sign-lanternleaf.svg",
-      "x": 2300,
-      "y": 383.33333333333337,
+      "x": 2500,
+      "y": 200,
       "width": 440,
       "height": 210,
       "scale": 1,
@@ -2688,8 +1716,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2300,
-        "y": 379.33333333333337,
+        "x": 2500,
+        "y": 196,
         "rx": 12,
         "ry": 12
       }
@@ -2699,8 +1727,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 2522.222222222222,
-      "y": 172.22222222222223,
+      "x": 2620,
+      "y": -20,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -2711,8 +1739,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2522.222222222222,
-        "y": 162.22222222222223,
+        "x": 2620,
+        "y": -30,
         "rx": 70,
         "ry": 24
       }
@@ -2722,8 +1750,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 3250,
-      "y": 200,
+      "x": 3140,
+      "y": -10,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -2734,8 +1762,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3250,
-        "y": 190,
+        "x": 3140,
+        "y": -20,
         "rx": 70,
         "ry": 24
       }
@@ -2745,8 +1773,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 2316.666666666667,
-      "y": 172.22222222222223,
+      "x": 2470,
+      "y": -200,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -2757,8 +1785,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2316.666666666667,
-        "y": 167.22222222222223,
+        "x": 2470,
+        "y": -205,
         "rx": 13,
         "ry": 13
       }
@@ -2768,8 +1796,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 3466.666666666667,
-      "y": 100,
+      "x": 3290,
+      "y": -180,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -2780,8 +1808,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3466.666666666667,
-        "y": 95,
+        "x": 3290,
+        "y": -185,
         "rx": 13,
         "ry": 13
       }
@@ -2791,8 +1819,8 @@
       "name": "planter-flowers",
       "asset": "planter-flowers",
       "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 2461.1111111111113,
-      "y": -44.44444444444444,
+      "x": 2680,
+      "y": 70,
       "width": 534,
       "height": 795,
       "scale": 0.13,
@@ -2803,8 +1831,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2461.1111111111113,
-        "y": -52.44444444444444,
+        "x": 2680,
+        "y": 62,
         "rx": 38,
         "ry": 19
       }
@@ -2814,8 +1842,8 @@
       "name": "planter-flowers",
       "asset": "planter-flowers",
       "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 3327.777777777778,
-      "y": 27.77777777777778,
+      "x": 3160,
+      "y": 60,
       "width": 534,
       "height": 795,
       "scale": 0.13,
@@ -2826,8 +1854,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3327.777777777778,
-        "y": 19.77777777777778,
+        "x": 3160,
+        "y": 52,
         "rx": 38,
         "ry": 19
       }
@@ -2837,8 +1865,8 @@
       "name": "farmhouse",
       "asset": "farmhouse",
       "src": "/pixi-art/home-communities/farmhouse-clovercrust-1.svg",
-      "x": 5316.666666666667,
-      "y": -116.66666666666667,
+      "x": 4720,
+      "y": -160,
       "width": 640,
       "height": 470,
       "scale": 0.9,
@@ -2849,8 +1877,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5316.666666666667,
-        "y": -157.16666666666669,
+        "x": 4720,
+        "y": -200.5,
         "rx": 230.4,
         "ry": 43.2
       },
@@ -2862,69 +1890,6 @@
         "heightScale": 0.9,
         "feature": "dormer",
         "householdScale": 0.9
-      }
-    },
-    {
-      "id": "bigger-community-120",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 5316.666666666667,
-      "y": -16.666666666666668,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-121",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 5555.555555555556,
-      "y": -33.333333333333336,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5555.555555555556,
-        "y": -37.333333333333336,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-122",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 5072.222222222223,
-      "y": -144.44444444444446,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5072.222222222223,
-        "y": -156.44444444444446,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -2996,52 +1961,12 @@
       "zone": "clovercrust"
     },
     {
-      "id": "bigger-community-127",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 4961.111111111111,
-      "y": -100,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-128",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5583.333333333334,
-      "y": 22.22222222222222,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5583.333333333334,
-        "y": 12.222222222222221,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-129",
       "name": "farmhouse",
       "asset": "farmhouse",
       "src": "/pixi-art/home-communities/farmhouse-clovercrust-2.svg",
-      "x": 6111.111111111111,
-      "y": -88.88888888888889,
+      "x": 5290,
+      "y": -200,
       "width": 640,
       "height": 470,
       "scale": 1.08,
@@ -3052,8 +1977,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 6111.111111111111,
-        "y": -137.48888888888888,
+        "x": 5290,
+        "y": -248.6,
         "rx": 276.48,
         "ry": 51.84
       },
@@ -3065,69 +1990,6 @@
         "heightScale": 1.06,
         "feature": "shutters-and-wide-porch",
         "householdScale": 1.08
-      }
-    },
-    {
-      "id": "bigger-community-130",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 6111.111111111111,
-      "y": 11.11111111111111,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-131",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 6350,
-      "y": -5.555555555555555,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6350,
-        "y": -9.555555555555555,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-132",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 5866.666666666667,
-      "y": -116.66666666666667,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5866.666666666667,
-        "y": -128.66666666666669,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -3199,29 +2061,12 @@
       "zone": "clovercrust"
     },
     {
-      "id": "bigger-community-137",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 6466.666666666667,
-      "y": -72.22222222222223,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
       "id": "bigger-community-138",
       "name": "farmhouse",
       "asset": "farmhouse",
       "src": "/pixi-art/home-communities/farmhouse-clovercrust-3.svg",
-      "x": 6788.888888888889,
-      "y": 122.22222222222223,
+      "x": 5860,
+      "y": 60,
       "width": 640,
       "height": 470,
       "scale": 0.86,
@@ -3232,8 +2077,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 6788.888888888889,
-        "y": 83.52222222222223,
+        "x": 5860,
+        "y": 21.299999999999997,
         "rx": 220.16,
         "ry": 41.28
       },
@@ -3245,69 +2090,6 @@
         "heightScale": 1,
         "feature": "garden-bay",
         "householdScale": 0.86
-      }
-    },
-    {
-      "id": "bigger-community-139",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 6788.888888888889,
-      "y": 222.22222222222223,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-140",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 7027.777777777778,
-      "y": 205.55555555555557,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 7027.777777777778,
-        "y": 201.55555555555557,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-141",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 6544.444444444444,
-      "y": 94.44444444444444,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6544.444444444444,
-        "y": 82.44444444444444,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -3379,52 +2161,12 @@
       "zone": "clovercrust"
     },
     {
-      "id": "bigger-community-146",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 6433.333333333334,
-      "y": 138.88888888888889,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-147",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 7055.555555555556,
-      "y": 261.11111111111114,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 7055.555555555556,
-        "y": 251.11111111111114,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-148",
       "name": "farmhouse",
       "asset": "farmhouse",
       "src": "/pixi-art/home-communities/farmhouse-clovercrust-4.svg",
-      "x": 6711.111111111111,
-      "y": 827.7777777777778,
+      "x": 4580,
+      "y": 420,
       "width": 640,
       "height": 470,
       "scale": 1.02,
@@ -3435,8 +2177,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 6711.111111111111,
-        "y": 781.8777777777779,
+        "x": 4580,
+        "y": 374.1,
         "rx": 261.12,
         "ry": 48.96
       },
@@ -3448,69 +2190,6 @@
         "heightScale": 0.94,
         "feature": "dormer",
         "householdScale": 1.02
-      }
-    },
-    {
-      "id": "bigger-community-149",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 6711.111111111111,
-      "y": 927.7777777777778,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-150",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 6950,
-      "y": 911.1111111111112,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6950,
-        "y": 907.1111111111112,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-151",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 6466.666666666667,
-      "y": 800,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6466.666666666667,
-        "y": 788,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -3582,29 +2261,12 @@
       "zone": "clovercrust"
     },
     {
-      "id": "bigger-community-156",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 7066.666666666667,
-      "y": 844.4444444444445,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
       "id": "bigger-community-157",
       "name": "farmhouse",
       "asset": "farmhouse",
       "src": "/pixi-art/home-communities/farmhouse-clovercrust-5.svg",
-      "x": 5744.444444444444,
-      "y": 855.5555555555555,
+      "x": 5600,
+      "y": 470,
       "width": 640,
       "height": 470,
       "scale": 0.95,
@@ -3615,8 +2277,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5744.444444444444,
-        "y": 812.8055555555555,
+        "x": 5600,
+        "y": 427.25,
         "rx": 243.2,
         "ry": 45.599999999999994
       },
@@ -3628,69 +2290,6 @@
         "heightScale": 1.02,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.95
-      }
-    },
-    {
-      "id": "bigger-community-158",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 5744.444444444444,
-      "y": 955.5555555555555,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-159",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 5983.333333333334,
-      "y": 938.8888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5983.333333333334,
-        "y": 934.8888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-160",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 5500,
-      "y": 827.7777777777778,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5500,
-        "y": 815.7777777777778,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -3762,52 +2361,12 @@
       "zone": "clovercrust"
     },
     {
-      "id": "bigger-community-165",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 5388.888888888889,
-      "y": 872.2222222222223,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "bigger-community-166",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 6011.111111111111,
-      "y": 994.4444444444445,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6011.111111111111,
-        "y": 984.4444444444445,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-167",
       "name": "sign-clovercrust",
       "asset": "sign-clovercrust",
       "src": "/pixi-art/home-communities/sign-clovercrust.svg",
-      "x": 5600,
-      "y": 955.5555555555555,
+      "x": 5060,
+      "y": 580,
       "width": 440,
       "height": 210,
       "scale": 1,
@@ -3818,8 +2377,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5600,
-        "y": 951.5555555555555,
+        "x": 5060,
+        "y": 576,
         "rx": 12,
         "ry": 12
       }
@@ -3829,8 +2388,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5822.222222222223,
-      "y": 744.4444444444445,
+      "x": 5000,
+      "y": -40,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -3841,31 +2400,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5822.222222222223,
-        "y": 734.4444444444445,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-169",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 6550,
-      "y": 772.2222222222223,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6550,
-        "y": 762.2222222222223,
+        "x": 5000,
+        "y": -50,
         "rx": 70,
         "ry": 24
       }
@@ -3875,8 +2411,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 5616.666666666667,
-      "y": 744.4444444444445,
+      "x": 4680,
+      "y": 80,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -3887,8 +2423,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5616.666666666667,
-        "y": 739.4444444444445,
+        "x": 4680,
+        "y": 75,
         "rx": 13,
         "ry": 13
       }
@@ -3898,8 +2434,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 6766.666666666667,
-      "y": 672.2222222222223,
+      "x": 5320,
+      "y": 90,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -3910,56 +2446,10 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 6766.666666666667,
-        "y": 667.2222222222223,
+        "x": 5320,
+        "y": 85,
         "rx": 13,
         "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-172",
-      "name": "planter-flowers",
-      "asset": "planter-flowers",
-      "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 5761.111111111111,
-      "y": 527.7777777777778,
-      "width": 534,
-      "height": 795,
-      "scale": 0.13,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9849056603773585
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 5761.111111111111,
-        "y": 519.7777777777778,
-        "rx": 38,
-        "ry": 19
-      }
-    },
-    {
-      "id": "bigger-community-173",
-      "name": "planter-flowers",
-      "asset": "planter-flowers",
-      "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 6627.777777777778,
-      "y": 600,
-      "width": 534,
-      "height": 795,
-      "scale": 0.13,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9849056603773585
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6627.777777777778,
-        "y": 592,
-        "rx": 38,
-        "ry": 19
       }
     },
     {
@@ -3967,8 +2457,8 @@
       "name": "studio",
       "asset": "studio",
       "src": "/pixi-art/home-communities/studio-petalpatch-1.svg",
-      "x": -672.2222222222223,
-      "y": 3038.888888888889,
+      "x": -1600,
+      "y": 3600,
       "width": 590,
       "height": 490,
       "scale": 0.87,
@@ -3979,8 +2469,8 @@
       "resolution": 1.25,
       "zone": "petalpatch",
       "footprint": {
-        "x": -672.2222222222223,
-        "y": 2999.738888888889,
+        "x": -1600,
+        "y": 3560.85,
         "rx": 205.32,
         "ry": 41.76
       },
@@ -3992,69 +2482,6 @@
         "heightScale": 0.9,
         "feature": "dormer",
         "householdScale": 0.87
-      }
-    },
-    {
-      "id": "bigger-community-175",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -672.2222222222223,
-      "y": 3138.888888888889,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-176",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -433.33333333333337,
-      "y": 3122.222222222222,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -433.33333333333337,
-        "y": 3118.222222222222,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-177",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -916.6666666666667,
-      "y": 3011.1111111111113,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -916.6666666666667,
-        "y": 2999.1111111111113,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -4126,52 +2553,12 @@
       "zone": "petalpatch"
     },
     {
-      "id": "bigger-community-182",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -1027.7777777777778,
-      "y": 3055.5555555555557,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-183",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -405.55555555555554,
-      "y": 3177.777777777778,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -405.55555555555554,
-        "y": 3167.777777777778,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-184",
       "name": "studio",
       "asset": "studio",
       "src": "/pixi-art/home-communities/studio-petalpatch-2.svg",
-      "x": -1227.7777777777778,
-      "y": 3416.666666666667,
+      "x": -1080,
+      "y": 3480,
       "width": 590,
       "height": 490,
       "scale": 0.97,
@@ -4182,8 +2569,8 @@
       "resolution": 1.25,
       "zone": "petalpatch",
       "footprint": {
-        "x": -1227.7777777777778,
-        "y": 3373.016666666667,
+        "x": -1080,
+        "y": 3436.35,
         "rx": 228.92,
         "ry": 46.56
       },
@@ -4195,69 +2582,6 @@
         "heightScale": 1.06,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.97
-      }
-    },
-    {
-      "id": "bigger-community-185",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -1227.7777777777778,
-      "y": 3516.666666666667,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-186",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -988.8888888888889,
-      "y": 3500,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -988.8888888888889,
-        "y": 3496,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-187",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -1472.2222222222222,
-      "y": 3388.888888888889,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -1472.2222222222222,
-        "y": 3376.888888888889,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -4329,23 +2653,6 @@
       "zone": "petalpatch"
     },
     {
-      "id": "bigger-community-192",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -872.2222222222223,
-      "y": 3433.3333333333335,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
       "id": "bigger-community-193",
       "name": "studio",
       "asset": "studio",
@@ -4375,69 +2682,6 @@
         "heightScale": 1,
         "feature": "garden-bay",
         "householdScale": 1.05
-      }
-    },
-    {
-      "id": "bigger-community-194",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -66.66666666666667,
-      "y": 3144.4444444444443,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-195",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 172.22222222222223,
-      "y": 3127.777777777778,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": 172.22222222222223,
-        "y": 3123.777777777778,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-196",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -311.11111111111114,
-      "y": 3016.666666666667,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -311.11111111111114,
-        "y": 3004.666666666667,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -4509,52 +2753,12 @@
       "zone": "petalpatch"
     },
     {
-      "id": "bigger-community-201",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -422.22222222222223,
-      "y": 3061.1111111111113,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-202",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 200,
-      "y": 3183.3333333333335,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": 200,
-        "y": 3173.3333333333335,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-203",
       "name": "studio",
       "asset": "studio",
       "src": "/pixi-art/home-communities/studio-petalpatch-4.svg",
-      "x": -927.7777777777778,
-      "y": 4266.666666666667,
+      "x": -1080,
+      "y": 4230,
       "width": 590,
       "height": 490,
       "scale": 0.86,
@@ -4565,8 +2769,8 @@
       "resolution": 1.25,
       "zone": "petalpatch",
       "footprint": {
-        "x": -927.7777777777778,
-        "y": 4227.966666666667,
+        "x": -1080,
+        "y": 4191.3,
         "rx": 202.96,
         "ry": 41.28
       },
@@ -4578,69 +2782,6 @@
         "heightScale": 0.94,
         "feature": "dormer",
         "householdScale": 0.86
-      }
-    },
-    {
-      "id": "bigger-community-204",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -927.7777777777778,
-      "y": 4366.666666666667,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-205",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -688.8888888888889,
-      "y": 4350,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -688.8888888888889,
-        "y": 4346,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-206",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -1172.2222222222222,
-      "y": 4238.888888888889,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -1172.2222222222222,
-        "y": 4226.888888888889,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -4712,23 +2853,6 @@
       "zone": "petalpatch"
     },
     {
-      "id": "bigger-community-211",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -572.2222222222223,
-      "y": 4283.333333333334,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
       "id": "bigger-community-212",
       "name": "studio",
       "asset": "studio",
@@ -4758,69 +2882,6 @@
         "heightScale": 1.02,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.93
-      }
-    },
-    {
-      "id": "bigger-community-213",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": -516.6666666666667,
-      "y": 4805.555555555556,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-214",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": -277.77777777777777,
-      "y": 4788.888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -277.77777777777777,
-        "y": 4784.888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-215",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": -761.1111111111111,
-      "y": 4677.777777777778,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -761.1111111111111,
-        "y": 4665.777777777778,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -4892,52 +2953,12 @@
       "zone": "petalpatch"
     },
     {
-      "id": "bigger-community-220",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": -872.2222222222223,
-      "y": 4722.222222222223,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-221",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": -250,
-      "y": 4844.444444444444,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": -250,
-        "y": 4834.444444444444,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-222",
       "name": "studio",
       "asset": "studio",
       "src": "/pixi-art/home-communities/studio-petalpatch-6.svg",
-      "x": 294.44444444444446,
-      "y": 4605.555555555556,
+      "x": -1720,
+      "y": 4300,
       "width": 590,
       "height": 490,
       "scale": 0.83,
@@ -4948,8 +2969,8 @@
       "resolution": 1.25,
       "zone": "petalpatch",
       "footprint": {
-        "x": 294.44444444444446,
-        "y": 4568.205555555555,
+        "x": -1720,
+        "y": 4262.65,
         "rx": 195.88,
         "ry": 39.839999999999996
       },
@@ -4961,69 +2982,6 @@
         "heightScale": 0.86,
         "feature": "garden-bay",
         "householdScale": 0.83
-      }
-    },
-    {
-      "id": "bigger-community-223",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 294.44444444444446,
-      "y": 4705.555555555556,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-224",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 533.3333333333334,
-      "y": 4688.888888888889,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": 533.3333333333334,
-        "y": 4684.888888888889,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-225",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 50,
-      "y": 4577.777777777778,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch",
-      "footprint": {
-        "x": 50,
-        "y": 4565.777777777778,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -5095,29 +3053,12 @@
       "zone": "petalpatch"
     },
     {
-      "id": "bigger-community-230",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 650,
-      "y": 4622.222222222223,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "petalpatch"
-    },
-    {
       "id": "bigger-community-231",
       "name": "sign-petalpatch",
       "asset": "sign-petalpatch",
       "src": "/pixi-art/home-communities/sign-petalpatch.svg",
-      "x": -1161.111111111111,
-      "y": 4066.666666666667,
+      "x": -1260,
+      "y": 3890,
       "width": 440,
       "height": 210,
       "scale": 1,
@@ -5128,8 +3069,8 @@
       "resolution": 1.25,
       "zone": "petalpatch",
       "footprint": {
-        "x": -1161.111111111111,
-        "y": 4062.666666666667,
+        "x": -1260,
+        "y": 3886,
         "rx": 12,
         "ry": 12
       }
@@ -5231,8 +3172,8 @@
       "name": "planter-flowers",
       "asset": "planter-flowers",
       "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": -1000,
-      "y": 3638.888888888889,
+      "x": -1350,
+      "y": 3660,
       "width": 534,
       "height": 795,
       "scale": 0.13,
@@ -5243,8 +3184,8 @@
       "resolution": 1.25,
       "zone": "petalpatch",
       "footprint": {
-        "x": -1000,
-        "y": 3630.888888888889,
+        "x": -1350,
+        "y": 3652,
         "rx": 38,
         "ry": 19
       }
@@ -5277,8 +3218,8 @@
       "name": "fisher-cottage",
       "asset": "fisher-cottage",
       "src": "/pixi-art/home-communities/fisher-cottage-reedwhistle-1.svg",
-      "x": 4788.888888888889,
-      "y": 4322.222222222223,
+      "x": 3640,
+      "y": 5240,
       "width": 570,
       "height": 470,
       "scale": 0.87,
@@ -5289,8 +3230,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 4788.888888888889,
-        "y": 4283.072222222223,
+        "x": 3640,
+        "y": 5200.85,
         "rx": 198.35999999999999,
         "ry": 41.76
       },
@@ -5302,69 +3243,6 @@
         "heightScale": 0.9,
         "feature": "dormer",
         "householdScale": 0.87
-      }
-    },
-    {
-      "id": "bigger-community-239",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 4788.888888888889,
-      "y": 4422.222222222223,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-240",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 5027.777777777778,
-      "y": 4405.555555555556,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5027.777777777778,
-        "y": 4401.555555555556,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-241",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 4544.444444444444,
-      "y": 4294.444444444444,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 4544.444444444444,
-        "y": 4282.444444444444,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -5436,52 +3314,12 @@
       "zone": "reedwhistle"
     },
     {
-      "id": "bigger-community-246",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 4433.333333333334,
-      "y": 4338.888888888889,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-247",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5055.555555555556,
-      "y": 4461.111111111111,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5055.555555555556,
-        "y": 4451.111111111111,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-248",
       "name": "fisher-cottage",
       "asset": "fisher-cottage",
       "src": "/pixi-art/home-communities/fisher-cottage-reedwhistle-2.svg",
-      "x": 5427.777777777778,
-      "y": 4066.666666666667,
+      "x": 4110,
+      "y": 4790,
       "width": 570,
       "height": 470,
       "scale": 1.07,
@@ -5492,8 +3330,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 5427.777777777778,
-        "y": 4018.516666666667,
+        "x": 4110,
+        "y": 4741.85,
         "rx": 243.96,
         "ry": 51.36
       },
@@ -5505,69 +3343,6 @@
         "heightScale": 1.06,
         "feature": "shutters-and-wide-porch",
         "householdScale": 1.07
-      }
-    },
-    {
-      "id": "bigger-community-249",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 5427.777777777778,
-      "y": 4166.666666666667,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-250",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 5666.666666666667,
-      "y": 4150,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5666.666666666667,
-        "y": 4146,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-251",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 5183.333333333334,
-      "y": 4038.888888888889,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5183.333333333334,
-        "y": 4026.888888888889,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -5639,29 +3414,12 @@
       "zone": "reedwhistle"
     },
     {
-      "id": "bigger-community-256",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 5783.333333333334,
-      "y": 4083.3333333333335,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
       "id": "bigger-community-257",
       "name": "fisher-cottage",
       "asset": "fisher-cottage",
       "src": "/pixi-art/home-communities/fisher-cottage-reedwhistle-3.svg",
-      "x": 6216.666666666667,
-      "y": 4272.222222222223,
+      "x": 4640,
+      "y": 4900,
       "width": 570,
       "height": 470,
       "scale": 0.89,
@@ -5672,8 +3430,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 6216.666666666667,
-        "y": 4232.172222222222,
+        "x": 4640,
+        "y": 4859.95,
         "rx": 202.92000000000002,
         "ry": 42.72
       },
@@ -5685,69 +3443,6 @@
         "heightScale": 1,
         "feature": "garden-bay",
         "householdScale": 0.89
-      }
-    },
-    {
-      "id": "bigger-community-258",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 6216.666666666667,
-      "y": 4372.222222222223,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-259",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 6455.555555555556,
-      "y": 4355.555555555556,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 6455.555555555556,
-        "y": 4351.555555555556,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-260",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 5972.222222222223,
-      "y": 4244.444444444444,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5972.222222222223,
-        "y": 4232.444444444444,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -5819,52 +3514,12 @@
       "zone": "reedwhistle"
     },
     {
-      "id": "bigger-community-265",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 5861.111111111111,
-      "y": 4288.888888888889,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-266",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 6483.333333333334,
-      "y": 4411.111111111111,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 6483.333333333334,
-        "y": 4401.111111111111,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-267",
       "name": "fisher-cottage",
       "asset": "fisher-cottage",
       "src": "/pixi-art/home-communities/fisher-cottage-reedwhistle-4.svg",
-      "x": 4938.888888888889,
-      "y": 5111.111111111111,
+      "x": 4880,
+      "y": 5210,
       "width": 570,
       "height": 470,
       "scale": 0.95,
@@ -5875,8 +3530,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 4938.888888888889,
-        "y": 5068.361111111111,
+        "x": 4880,
+        "y": 5167.25,
         "rx": 216.6,
         "ry": 45.599999999999994
       },
@@ -5888,69 +3543,6 @@
         "heightScale": 0.94,
         "feature": "dormer",
         "householdScale": 0.95
-      }
-    },
-    {
-      "id": "bigger-community-268",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 4938.888888888889,
-      "y": 5211.111111111111,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-269",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 5177.777777777778,
-      "y": 5194.444444444444,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5177.777777777778,
-        "y": 5190.444444444444,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-270",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 4694.444444444444,
-      "y": 5083.333333333334,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 4694.444444444444,
-        "y": 5071.333333333334,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -6022,29 +3614,12 @@
       "zone": "reedwhistle"
     },
     {
-      "id": "bigger-community-275",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 5294.444444444444,
-      "y": 5127.777777777778,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
       "id": "bigger-community-276",
       "name": "fisher-cottage",
       "asset": "fisher-cottage",
       "src": "/pixi-art/home-communities/fisher-cottage-reedwhistle-5.svg",
-      "x": 5622.222222222223,
-      "y": 5111.111111111111,
+      "x": 5180,
+      "y": 4930,
       "width": 570,
       "height": 470,
       "scale": 0.86,
@@ -6055,8 +3630,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 5622.222222222223,
-        "y": 5072.4111111111115,
+        "x": 5180,
+        "y": 4891.3,
         "rx": 196.07999999999998,
         "ry": 41.28
       },
@@ -6068,69 +3643,6 @@
         "heightScale": 1.02,
         "feature": "shutters-and-wide-porch",
         "householdScale": 0.86
-      }
-    },
-    {
-      "id": "bigger-community-277",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 5622.222222222223,
-      "y": 5211.111111111111,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-278",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 5861.111111111111,
-      "y": 5194.444444444444,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5861.111111111111,
-        "y": 5190.444444444444,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-279",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 5377.777777777778,
-      "y": 5083.333333333334,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5377.777777777778,
-        "y": 5071.333333333334,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -6202,52 +3714,12 @@
       "zone": "reedwhistle"
     },
     {
-      "id": "bigger-community-284",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 5266.666666666667,
-      "y": 5127.777777777778,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-285",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5888.888888888889,
-      "y": 5250,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5888.888888888889,
-        "y": 5240,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-286",
       "name": "fisher-cottage",
       "asset": "fisher-cottage",
       "src": "/pixi-art/home-communities/fisher-cottage-reedwhistle-6.svg",
-      "x": 6077.777777777778,
-      "y": 4811.111111111111,
+      "x": 3620,
+      "y": 4820,
       "width": 570,
       "height": 470,
       "scale": 0.91,
@@ -6258,8 +3730,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 6077.777777777778,
-        "y": 4770.1611111111115,
+        "x": 3620,
+        "y": 4779.05,
         "rx": 207.48000000000002,
         "ry": 43.68
       },
@@ -6271,69 +3743,6 @@
         "heightScale": 0.86,
         "feature": "garden-bay",
         "householdScale": 0.91
-      }
-    },
-    {
-      "id": "bigger-community-287",
-      "name": "garden-gate",
-      "asset": "garden-gate",
-      "src": "/pixi-art/home-communities/garden-gate.svg",
-      "x": 6077.777777777778,
-      "y": 4911.111111111111,
-      "width": 390,
-      "height": 120,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
-      "id": "bigger-community-288",
-      "name": "mailbox",
-      "asset": "mailbox",
-      "src": "/pixi-art/home-communities/mailbox.svg",
-      "x": 6316.666666666667,
-      "y": 4894.444444444444,
-      "width": 105,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 6316.666666666667,
-        "y": 4890.444444444444,
-        "rx": 20,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-289",
-      "name": "herb-box",
-      "asset": "herb-box",
-      "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 6372.222222222223,
-      "y": 4688.888888888889,
-      "width": 260,
-      "height": 125,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 6372.222222222223,
-        "y": 4676.888888888889,
-        "rx": 95,
-        "ry": 25
       }
     },
     {
@@ -6405,29 +3814,12 @@
       "zone": "reedwhistle"
     },
     {
-      "id": "bigger-community-294",
-      "name": "washing-line",
-      "asset": "washing-line",
-      "src": "/pixi-art/home-communities/washing-line.svg",
-      "x": 6433.333333333334,
-      "y": 4827.777777777778,
-      "width": 450,
-      "height": 230,
-      "scale": 0.65,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle"
-    },
-    {
       "id": "bigger-community-295",
       "name": "sign-reedwhistle",
       "asset": "sign-reedwhistle",
       "src": "/pixi-art/home-communities/sign-reedwhistle.svg",
-      "x": 4838.888888888889,
-      "y": 4994.444444444444,
+      "x": 4180,
+      "y": 5250,
       "width": 440,
       "height": 210,
       "scale": 1,
@@ -6438,8 +3830,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 4838.888888888889,
-        "y": 4990.444444444444,
+        "x": 4180,
+        "y": 5246,
         "rx": 12,
         "ry": 12
       }
@@ -6449,8 +3841,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5061.111111111111,
-      "y": 4783.333333333334,
+      "x": 4000,
+      "y": 5120,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -6461,8 +3853,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 5061.111111111111,
-        "y": 4773.333333333334,
+        "x": 4000,
+        "y": 5110,
         "rx": 70,
         "ry": 24
       }
@@ -6472,8 +3864,8 @@
       "name": "bench-wood",
       "asset": "bench-wood",
       "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5788.888888888889,
-      "y": 4811.111111111111,
+      "x": 4600,
+      "y": 5150,
       "width": 818,
       "height": 463,
       "scale": 0.18,
@@ -6484,8 +3876,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 5788.888888888889,
-        "y": 4801.111111111111,
+        "x": 4600,
+        "y": 5140,
         "rx": 70,
         "ry": 24
       }
@@ -6495,8 +3887,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 4855.555555555556,
-      "y": 4783.333333333334,
+      "x": 3990,
+      "y": 5000,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -6507,8 +3899,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 4855.555555555556,
-        "y": 4778.333333333334,
+        "x": 3990,
+        "y": 4995,
         "rx": 13,
         "ry": 13
       }
@@ -6518,8 +3910,8 @@
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
       "src": "/pixi-art/detail/street--lamp-lantern.svg",
-      "x": 6005.555555555556,
-      "y": 4711.111111111111,
+      "x": 4620,
+      "y": 5190,
       "width": 432,
       "height": 1837,
       "scale": 0.113,
@@ -6530,56 +3922,10 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 6005.555555555556,
-        "y": 4706.111111111111,
+        "x": 4620,
+        "y": 5185,
         "rx": 13,
         "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-300",
-      "name": "planter-flowers",
-      "asset": "planter-flowers",
-      "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 5000,
-      "y": 4566.666666666667,
-      "width": 534,
-      "height": 795,
-      "scale": 0.13,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9849056603773585
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5000,
-        "y": 4558.666666666667,
-        "rx": 38,
-        "ry": 19
-      }
-    },
-    {
-      "id": "bigger-community-301",
-      "name": "planter-flowers",
-      "asset": "planter-flowers",
-      "src": "/pixi-art/detail/street--planter-flowers.svg",
-      "x": 5866.666666666667,
-      "y": 4638.888888888889,
-      "width": 534,
-      "height": 795,
-      "scale": 0.13,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9849056603773585
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5866.666666666667,
-        "y": 4630.888888888889,
-        "rx": 38,
-        "ry": 19
       }
     },
     {
@@ -6587,8 +3933,8 @@
       "name": "bakery",
       "asset": "bakery",
       "src": "/pixi-art/detail/buildings--bakery.svg",
-      "x": -977.7777777777778,
-      "y": -61.111111111111114,
+      "x": -500,
+      "y": 215,
       "width": 2156,
       "height": 1811,
       "scale": 0.27,
@@ -6599,8 +3945,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -977.7777777777778,
-        "y": -103.1111111111111,
+        "x": -500,
+        "y": 173,
         "rx": 188,
         "ry": 64
       },
@@ -6611,8 +3957,8 @@
       "name": "cafe",
       "asset": "cafe",
       "src": "/pixi-art/detail/buildings--cafe.svg",
-      "x": 0,
-      "y": -55.55555555555556,
+      "x": 130,
+      "y": 235,
       "width": 2156,
       "height": 1759,
       "scale": 0.27,
@@ -6623,8 +3969,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": 0,
-        "y": -95.55555555555556,
+        "x": 130,
+        "y": 195,
         "rx": 177,
         "ry": 62
       },
@@ -6635,8 +3981,8 @@
       "name": "umbrella-cafe",
       "asset": "umbrella-cafe",
       "src": "/pixi-art/detail/street--umbrella-cafe.svg",
-      "x": -733.3333333333334,
-      "y": 288.8888888888889,
+      "x": -30,
+      "y": 400,
       "width": 1592,
       "height": 1693,
       "scale": 0.17,
@@ -6647,8 +3993,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -733.3333333333334,
-        "y": 276.8888888888889,
+        "x": -30,
+        "y": 388,
         "rx": 14,
         "ry": 13
       }
@@ -6658,8 +4004,8 @@
       "name": "picnic-table",
       "asset": "picnic-table",
       "src": "/pixi-art/detail/street--picnic-table.svg",
-      "x": -733.3333333333334,
-      "y": 355.55555555555554,
+      "x": -30,
+      "y": 412,
       "width": 1614,
       "height": 653,
       "scale": 0.14,
@@ -6670,8 +4016,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -733.3333333333334,
-        "y": 341.55555555555554,
+        "x": -30,
+        "y": 398,
         "rx": 75,
         "ry": 30
       }
@@ -6681,8 +4027,8 @@
       "name": "umbrella-cafe",
       "asset": "umbrella-cafe",
       "src": "/pixi-art/detail/street--umbrella-cafe.svg",
-      "x": -261.11111111111114,
-      "y": 494.44444444444446,
+      "x": 200,
+      "y": 450,
       "width": 1592,
       "height": 1693,
       "scale": 0.17,
@@ -6693,8 +4039,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -261.11111111111114,
-        "y": 482.44444444444446,
+        "x": 200,
+        "y": 438,
         "rx": 14,
         "ry": 13
       }
@@ -6704,8 +4050,8 @@
       "name": "picnic-table",
       "asset": "picnic-table",
       "src": "/pixi-art/detail/street--picnic-table.svg",
-      "x": -261.11111111111114,
-      "y": 561.1111111111111,
+      "x": 200,
+      "y": 462,
       "width": 1614,
       "height": 653,
       "scale": 0.14,
@@ -6716,54 +4062,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -261.11111111111114,
-        "y": 547.1111111111111,
-        "rx": 75,
-        "ry": 30
-      }
-    },
-    {
-      "id": "bigger-community-308",
-      "name": "umbrella-cafe",
-      "asset": "umbrella-cafe",
-      "src": "/pixi-art/detail/street--umbrella-cafe.svg",
-      "x": -633.3333333333334,
-      "y": 583.3333333333334,
-      "width": 1592,
-      "height": 1693,
-      "scale": 0.17,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9929119905493208
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -633.3333333333334,
-        "y": 571.3333333333334,
-        "rx": 14,
-        "ry": 13
-      }
-    },
-    {
-      "id": "bigger-community-309",
-      "name": "picnic-table",
-      "asset": "picnic-table",
-      "src": "/pixi-art/detail/street--picnic-table.svg",
-      "x": -633.3333333333334,
-      "y": 650,
-      "width": 1614,
-      "height": 653,
-      "scale": 0.14,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9816232771822359
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -633.3333333333334,
-        "y": 636,
+        "x": 200,
+        "y": 448,
         "rx": 75,
         "ry": 30
       }
@@ -6773,8 +4073,8 @@
       "name": "sign-bakery",
       "asset": "sign-bakery",
       "src": "/pixi-art/detail/street--sign-bakery.svg",
-      "x": -927.7777777777778,
-      "y": 111.11111111111111,
+      "x": -700,
+      "y": 560,
       "width": 872,
       "height": 1152,
       "scale": 0.13,
@@ -6785,8 +4085,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -927.7777777777778,
-        "y": 103.11111111111111,
+        "x": -700,
+        "y": 552,
         "rx": 30,
         "ry": 15
       }
@@ -6796,8 +4096,8 @@
       "name": "cycle-rack",
       "asset": "cycle-rack",
       "src": "/pixi-art/detail/street--cycle-rack.svg",
-      "x": 311.11111111111114,
-      "y": 377.77777777777777,
+      "x": -1390,
+      "y": 560,
       "width": 1234,
       "height": 532,
       "scale": 0.18,
@@ -6808,8 +4108,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": 311.11111111111114,
-        "y": 372.77777777777777,
+        "x": -1390,
+        "y": 555,
         "rx": 69,
         "ry": 19
       }
@@ -6819,8 +4119,8 @@
       "name": "bin-recycling",
       "asset": "bin-recycling",
       "src": "/pixi-art/detail/street--bin-recycling.svg",
-      "x": -994.4444444444445,
-      "y": 416.6666666666667,
+      "x": -235,
+      "y": 270,
       "width": 437,
       "height": 617,
       "scale": 0.12,
@@ -6831,8 +4131,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -994.4444444444445,
-        "y": 408.6666666666667,
+        "x": -235,
+        "y": 262,
         "rx": 25,
         "ry": 20
       }
@@ -6842,8 +4142,8 @@
       "name": "flour-sacks",
       "asset": "flour-sacks",
       "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": -838.8888888888889,
-      "y": -38.88888888888889,
+      "x": -830,
+      "y": 250,
       "width": 230,
       "height": 170,
       "scale": 1,
@@ -6854,8 +4154,8 @@
       "resolution": 1.25,
       "zone": "butterbill",
       "footprint": {
-        "x": -838.8888888888889,
-        "y": -48.88888888888889,
+        "x": -830,
+        "y": 240.00000000000003,
         "rx": 83,
         "ry": 26
       }
@@ -6865,8 +4165,8 @@
       "name": "gazebo",
       "asset": "gazebo",
       "src": "/pixi-art/home-expansion/gazebo.svg",
-      "x": 2844.4444444444443,
-      "y": -188.88888888888889,
+      "x": 2880,
+      "y": -60,
       "width": 450,
       "height": 500,
       "scale": 1,
@@ -6883,8 +4183,8 @@
       "name": "pergola",
       "asset": "pergola",
       "src": "/pixi-art/home-expansion/pergola.svg",
-      "x": 3472.222222222222,
-      "y": -88.88888888888889,
+      "x": 3380,
+      "y": -10,
       "width": 390,
       "height": 310,
       "scale": 1,
@@ -6901,8 +4201,8 @@
       "name": "garden-workbench",
       "asset": "garden-workbench",
       "src": "/pixi-art/home-expansion-c/garden-workbench.svg",
-      "x": 1500,
-      "y": -61.11111111111112,
+      "x": 1680,
+      "y": -120,
       "width": 330,
       "height": 250,
       "scale": 1,
@@ -6913,8 +4213,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 1500,
-        "y": -71.11111111111111,
+        "x": 1680,
+        "y": -130,
         "rx": 130,
         "ry": 33
       },
@@ -6925,8 +4225,8 @@
       "name": "garden-wheelbarrow",
       "asset": "garden-wheelbarrow",
       "src": "/pixi-art/home-expansion-c/garden-wheelbarrow.svg",
-      "x": 1583.3333333333335,
-      "y": 238.8888888888889,
+      "x": 1760,
+      "y": -10,
       "width": 300,
       "height": 200,
       "scale": 1,
@@ -6937,8 +4237,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 1583.3333333333335,
-        "y": 228.8888888888889,
+        "x": 1760,
+        "y": -20,
         "rx": 97,
         "ry": 34
       }
@@ -6948,8 +4248,8 @@
       "name": "garden-water-butt",
       "asset": "garden-water-butt",
       "src": "/pixi-art/home-expansion-c/garden-water-butt.svg",
-      "x": 3605.5555555555557,
-      "y": 100,
+      "x": 2290,
+      "y": -370,
       "width": 150,
       "height": 200,
       "scale": 1,
@@ -6960,33 +4260,10 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3605.5555555555557,
-        "y": 90,
+        "x": 2290,
+        "y": -380,
         "rx": 53,
         "ry": 25
-      }
-    },
-    {
-      "id": "bigger-community-319",
-      "name": "sandbox",
-      "asset": "sandbox",
-      "src": "/pixi-art/home-expansion-c/sandbox.svg",
-      "x": 3138.888888888889,
-      "y": 200,
-      "width": 340,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "lanternleaf",
-      "footprint": {
-        "x": 3138.888888888889,
-        "y": 178,
-        "rx": 130,
-        "ry": 45
       }
     },
     {
@@ -6994,8 +4271,8 @@
       "name": "herb-box",
       "asset": "herb-box",
       "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 2555.5555555555557,
-      "y": -5.555555555555555,
+      "x": 2330,
+      "y": -110,
       "width": 260,
       "height": 125,
       "scale": 0.8,
@@ -7006,8 +4283,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2555.5555555555557,
-        "y": -17.555555555555557,
+        "x": 2330,
+        "y": -122,
         "rx": 95,
         "ry": 25
       }
@@ -7068,8 +4345,8 @@
       "name": "herb-box",
       "asset": "herb-box",
       "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 2683.3333333333335,
-      "y": 77.77777777777779,
+      "x": 2790,
+      "y": -330,
       "width": 260,
       "height": 125,
       "scale": 0.8,
@@ -7080,8 +4357,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2683.3333333333335,
-        "y": 65.77777777777779,
+        "x": 2790,
+        "y": -342,
         "rx": 95,
         "ry": 25
       }
@@ -7142,8 +4419,8 @@
       "name": "herb-box",
       "asset": "herb-box",
       "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 3172.222222222222,
-      "y": 50,
+      "x": 3390,
+      "y": -350,
       "width": 260,
       "height": 125,
       "scale": 0.8,
@@ -7154,8 +4431,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3172.222222222222,
-        "y": 38,
+        "x": 3390,
+        "y": -362,
         "rx": 95,
         "ry": 25
       }
@@ -7216,8 +4493,8 @@
       "name": "herb-box",
       "asset": "herb-box",
       "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 3283.3333333333335,
-      "y": -16.666666666666668,
+      "x": 4160,
+      "y": 300,
       "width": 260,
       "height": 125,
       "scale": 0.8,
@@ -7228,8 +4505,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3283.3333333333335,
-        "y": -28.666666666666668,
+        "x": 4160,
+        "y": 288,
         "rx": 95,
         "ry": 25
       }
@@ -7290,8 +4567,8 @@
       "name": "herb-box",
       "asset": "herb-box",
       "src": "/pixi-art/home-communities/herb-box.svg",
-      "x": 3372.222222222222,
-      "y": 77.77777777777779,
+      "x": 1570,
+      "y": 300,
       "width": 260,
       "height": 125,
       "scale": 0.8,
@@ -7302,8 +4579,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3372.222222222222,
-        "y": 65.77777777777779,
+        "x": 1570,
+        "y": 288,
         "rx": 95,
         "ry": 25
       }
@@ -7364,8 +4641,8 @@
       "name": "windmill",
       "asset": "windmill",
       "src": "/pixi-art/home-expansion-c/windmill.svg",
-      "x": 5877.777777777777,
-      "y": -444.44444444444446,
+      "x": 6300,
+      "y": -250,
       "width": 510,
       "height": 650,
       "scale": 1,
@@ -7376,8 +4653,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5877.777777777777,
-        "y": -472.44444444444446,
+        "x": 6300,
+        "y": -278,
         "rx": 105,
         "ry": 55
       },
@@ -7388,8 +4665,8 @@
       "name": "stall-fruit",
       "asset": "stall-fruit",
       "src": "/pixi-art/detail/buildings--stall-fruit.svg",
-      "x": 5416.666666666667,
-      "y": 305.55555555555554,
+      "x": 4830,
+      "y": 175,
       "width": 1732,
       "height": 1545,
       "scale": 0.22,
@@ -7400,8 +4677,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5416.666666666667,
-        "y": 293.55555555555554,
+        "x": 4830,
+        "y": 163,
         "rx": 148,
         "ry": 38
       },
@@ -7412,8 +4689,8 @@
       "name": "stall-bread",
       "asset": "stall-bread",
       "src": "/pixi-art/detail/buildings--stall-bread.svg",
-      "x": 6038.88888888889,
-      "y": 338.8888888888889,
+      "x": 5210,
+      "y": 160,
       "width": 1732,
       "height": 1545,
       "scale": 0.22,
@@ -7424,8 +4701,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 6038.88888888889,
-        "y": 326.8888888888889,
+        "x": 5210,
+        "y": 148,
         "rx": 148,
         "ry": 38
       },
@@ -7436,8 +4713,8 @@
       "name": "glasshouse",
       "asset": "glasshouse",
       "src": "/pixi-art/home-expansion-c/glasshouse.svg",
-      "x": 7050,
-      "y": 33.33333333333333,
+      "x": 6480,
+      "y": 230,
       "width": 430,
       "height": 340,
       "scale": 1,
@@ -7448,8 +4725,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 7050,
-        "y": -3.6666666666666714,
+        "x": 6480,
+        "y": 193,
         "rx": 180,
         "ry": 68
       },
@@ -7460,8 +4737,8 @@
       "name": "raised-bed-1179",
       "asset": "raised-bed-1179",
       "src": "/pixi-art/home-expansion-c/raised-bed-1179.svg",
-      "x": 4705.555555555556,
-      "y": 5.555555555555557,
+      "x": 6020,
+      "y": 420,
       "width": 300,
       "height": 115,
       "scale": 1,
@@ -7472,8 +4749,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 4705.555555555556,
-        "y": -9.444444444444443,
+        "x": 6020,
+        "y": 405,
         "rx": 115,
         "ry": 28
       },
@@ -7484,8 +4761,8 @@
       "name": "raised-bed-1208",
       "asset": "raised-bed-1208",
       "src": "/pixi-art/home-expansion-c/raised-bed-1208.svg",
-      "x": 4866.666666666667,
-      "y": 172.22222222222223,
+      "x": 6280,
+      "y": 470,
       "width": 300,
       "height": 115,
       "scale": 1,
@@ -7496,8 +4773,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 4866.666666666667,
-        "y": 157.22222222222223,
+        "x": 6280,
+        "y": 455,
         "rx": 115,
         "ry": 28
       },
@@ -7508,8 +4785,8 @@
       "name": "raised-bed-1254",
       "asset": "raised-bed-1254",
       "src": "/pixi-art/home-expansion-c/raised-bed-1254.svg",
-      "x": 5044.444444444444,
-      "y": 100,
+      "x": 6160,
+      "y": 620,
       "width": 300,
       "height": 115,
       "scale": 1,
@@ -7520,8 +4797,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 5044.444444444444,
-        "y": 85,
+        "x": 6160,
+        "y": 605,
         "rx": 115,
         "ry": 28
       },
@@ -7647,8 +4924,8 @@
       "name": "flour-sacks",
       "asset": "flour-sacks",
       "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 6138.888888888889,
-      "y": -344.44444444444446,
+      "x": 6040,
+      "y": -210,
       "width": 230,
       "height": 170,
       "scale": 1,
@@ -7659,8 +4936,8 @@
       "resolution": 1.25,
       "zone": "clovercrust",
       "footprint": {
-        "x": 6138.888888888889,
-        "y": -354.44444444444446,
+        "x": 6040,
+        "y": -220,
         "rx": 83,
         "ry": 26
       }
@@ -7693,8 +4970,8 @@
       "name": "bunting",
       "asset": "bunting",
       "src": "/pixi-art/detail/street--bunting.svg",
-      "x": 5800,
-      "y": 372.22222222222223,
+      "x": 5010,
+      "y": -80,
       "width": 2432,
       "height": 462,
       "scale": 0.31,
@@ -8296,8 +5573,8 @@
       "name": "boat-mender",
       "asset": "boat-mender",
       "src": "/pixi-art/home-communities/boat-mender.svg",
-      "x": 6605.555555555556,
-      "y": 4538.88888888889,
+      "x": 4310,
+      "y": 5200,
       "width": 650,
       "height": 410,
       "scale": 1,
@@ -8308,8 +5585,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 6605.555555555556,
-        "y": 4504.88888888889,
+        "x": 4310,
+        "y": 5166,
         "rx": 225,
         "ry": 60
       },
@@ -8320,8 +5597,8 @@
       "name": "net-rack",
       "asset": "net-rack",
       "src": "/pixi-art/home-communities/net-rack.svg",
-      "x": 4566.666666666667,
-      "y": 4577.777777777778,
+      "x": 4560,
+      "y": 5470,
       "width": 400,
       "height": 300,
       "scale": 1,
@@ -8332,8 +5609,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 4566.666666666667,
-        "y": 4567.777777777778,
+        "x": 4560,
+        "y": 5460,
         "rx": 14,
         "ry": 12
       },
@@ -8344,8 +5621,8 @@
       "name": "lighthouse-point",
       "asset": "lighthouse-point",
       "src": "/pixi-art/home-expansion-c/lighthouse-point.svg",
-      "x": 6755.555555555556,
-      "y": 4055.5555555555557,
+      "x": 5420,
+      "y": 5420,
       "width": 340,
       "height": 640,
       "scale": 1,
@@ -8356,8 +5633,8 @@
       "resolution": 1.25,
       "zone": "reedwhistle",
       "footprint": {
-        "x": 6755.555555555556,
-        "y": 4022.5555555555557,
+        "x": 5420,
+        "y": 5387,
         "rx": 101,
         "ry": 52
       },
@@ -11754,8 +9031,8 @@
       "name": "shared-well",
       "asset": "shared-well",
       "src": "/pixi-art/home-communities/shared-well.svg",
-      "x": 2972.222222222222,
-      "y": 166.66666666666669,
+      "x": 2470,
+      "y": 40,
       "width": 330,
       "height": 300,
       "scale": 0.72,
@@ -11766,8 +9043,8 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 2972.222222222222,
-        "y": 151.66666666666669,
+        "x": 2470,
+        "y": 25,
         "rx": 85,
         "ry": 29
       }
@@ -11777,8 +9054,8 @@
       "name": "bucket",
       "asset": "bucket",
       "src": "/pixi-art/detail/beach--bucket.svg",
-      "x": 3100,
-      "y": 138.88888888888889,
+      "x": 2540,
+      "y": 50,
       "width": 492,
       "height": 603,
       "scale": 0.1,
@@ -11789,33 +9066,10 @@
       "resolution": 1.25,
       "zone": "lanternleaf",
       "footprint": {
-        "x": 3100,
-        "y": 132.88888888888889,
+        "x": 2540,
+        "y": 44,
         "rx": 17,
         "ry": 14
-      }
-    },
-    {
-      "id": "bigger-community-577",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 194.44444444444446,
-      "y": 500,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "butterbill",
-      "footprint": {
-        "x": 194.44444444444446,
-        "y": 490,
-        "rx": 70,
-        "ry": 24
       }
     },
     {
@@ -11868,29 +9122,6 @@
       },
       "resolution": 1.25,
       "zone": "butterbill"
-    },
-    {
-      "id": "bigger-community-581",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 6250,
-      "y": 688.8888888888889,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "clovercrust",
-      "footprint": {
-        "x": 6250,
-        "y": 678.8888888888889,
-        "rx": 70,
-        "ry": 24
-      }
     },
     {
       "id": "bigger-community-582",
@@ -12016,29 +9247,6 @@
       },
       "resolution": 1.25,
       "zone": "petalpatch"
-    },
-    {
-      "id": "bigger-community-589",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 5850,
-      "y": 4883.333333333334,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "reedwhistle",
-      "footprint": {
-        "x": 5850,
-        "y": 4873.333333333334,
-        "rx": 70,
-        "ry": 24
-      }
     },
     {
       "id": "bigger-community-590",
@@ -13241,6 +10449,213 @@
       },
       "resolution": 1.25,
       "zone": "reedwhistle"
+    },
+    {
+      "id": "homes-bb-stall",
+      "name": "stall-bread",
+      "asset": "stall-bread",
+      "src": "/pixi-art/detail/buildings--stall-bread.svg",
+      "x": -330,
+      "y": 520,
+      "width": 1732,
+      "height": 1545,
+      "scale": 0.2,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9922330097087378
+      },
+      "resolution": 1.25,
+      "zone": "butterbill",
+      "footprint": {
+        "x": -330,
+        "y": 509.0909090909091,
+        "rx": 134.54545454545456,
+        "ry": 34.54545454545455
+      }
+    },
+    {
+      "id": "homes-bb-sacks",
+      "name": "flour-sacks",
+      "asset": "flour-sacks",
+      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
+      "x": -1140,
+      "y": 1030,
+      "width": 230,
+      "height": 170,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "butterbill",
+      "footprint": {
+        "x": -1140,
+        "y": 1020,
+        "rx": 83,
+        "ry": 26
+      }
+    },
+    {
+      "id": "homes-cc-barrow",
+      "name": "garden-wheelbarrow",
+      "asset": "garden-wheelbarrow",
+      "src": "/pixi-art/home-expansion-c/garden-wheelbarrow.svg",
+      "x": 4400,
+      "y": -110,
+      "width": 300,
+      "height": 200,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "clovercrust",
+      "footprint": {
+        "x": 4400,
+        "y": -120,
+        "rx": 97,
+        "ry": 34
+      }
+    },
+    {
+      "id": "homes-cc-butt",
+      "name": "garden-water-butt",
+      "asset": "garden-water-butt",
+      "src": "/pixi-art/home-expansion-c/garden-water-butt.svg",
+      "x": 5640,
+      "y": -170,
+      "width": 150,
+      "height": 200,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "clovercrust",
+      "footprint": {
+        "x": 5640,
+        "y": -180,
+        "rx": 53,
+        "ry": 25
+      }
+    },
+    {
+      "id": "homes-cc-bed",
+      "name": "raised-bed-1179",
+      "asset": "raised-bed-1179",
+      "src": "/pixi-art/home-expansion-c/raised-bed-1179.svg",
+      "x": 4240,
+      "y": 380,
+      "width": 300,
+      "height": 115,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "clovercrust",
+      "footprint": {
+        "x": 4240,
+        "y": 365,
+        "rx": 115,
+        "ry": 28
+      }
+    },
+    {
+      "id": "homes-cc-sacks",
+      "name": "flour-sacks",
+      "asset": "flour-sacks",
+      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
+      "x": 5900,
+      "y": 500,
+      "width": 230,
+      "height": 170,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "clovercrust",
+      "footprint": {
+        "x": 5900,
+        "y": 490,
+        "rx": 83,
+        "ry": 26
+      }
+    },
+    {
+      "id": "homes-pp-pottery",
+      "name": "pottery-bench",
+      "asset": "pottery-bench",
+      "src": "/pixi-art/home-communities/pottery-bench.svg",
+      "x": -780,
+      "y": 3520,
+      "width": 410,
+      "height": 300,
+      "scale": 0.8,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "petalpatch",
+      "footprint": {
+        "x": -780,
+        "y": 3504,
+        "rx": 124,
+        "ry": 31.200000000000003
+      }
+    },
+    {
+      "id": "homes-pp-easel",
+      "name": "easel",
+      "asset": "easel",
+      "src": "/pixi-art/home-communities/easel.svg",
+      "x": -1380,
+      "y": 4330,
+      "width": 220,
+      "height": 300,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "petalpatch",
+      "footprint": {
+        "x": -1380,
+        "y": 4322,
+        "rx": 60,
+        "ry": 28
+      }
+    },
+    {
+      "id": "homes-rw-net",
+      "name": "net-rack",
+      "asset": "net-rack",
+      "src": "/pixi-art/home-communities/net-rack.svg",
+      "x": 3540,
+      "y": 5470,
+      "width": 400,
+      "height": 300,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "reedwhistle",
+      "footprint": {
+        "x": 3540,
+        "y": 5460,
+        "rx": 14,
+        "ry": 12
+      }
     }
   ],
   "coast": [
@@ -15212,22 +12627,22 @@
     {
       "id": "butterbill",
       "point": [
-        -388.8888888888889,
-        222.22222222222223
+        -200,
+        400
       ]
     },
     {
       "id": "lanternleaf",
       "point": [
-        2883.3333333333335,
-        -33.333333333333336
+        2880,
+        -120
       ]
     },
     {
       "id": "clovercrust",
       "point": [
-        6183.333333333334,
-        538.8888888888889
+        5000,
+        40
       ]
     },
     {
@@ -15240,8 +12655,8 @@
     {
       "id": "reedwhistle",
       "point": [
-        5422.222222222223,
-        4577.777777777778
+        4310,
+        5010
       ]
     },
     {
@@ -15342,6 +12757,51 @@
       "width": 183.33333333333334,
       "height": 333.33333333333337,
       "resolution": 1.2
+    },
+    {
+      "id": "homes-bb-lanes",
+      "src": "/pixi-art/home-communities/lanes-butterbill.svg",
+      "x": -1900,
+      "y": -200,
+      "width": 2800,
+      "height": 1500,
+      "resolution": 0.5
+    },
+    {
+      "id": "homes-ll-lanes",
+      "src": "/pixi-art/home-communities/lanes-lanternleaf.svg",
+      "x": 1500,
+      "y": -700,
+      "width": 2900,
+      "height": 1100,
+      "resolution": 0.5
+    },
+    {
+      "id": "homes-cc-lanes",
+      "src": "/pixi-art/home-communities/lanes-clovercrust.svg",
+      "x": 4100,
+      "y": -500,
+      "width": 2600,
+      "height": 1200,
+      "resolution": 0.5
+    },
+    {
+      "id": "homes-pp-lanes",
+      "src": "/pixi-art/home-communities/lanes-petalpatch.svg",
+      "x": -1900,
+      "y": 3500,
+      "width": 1200,
+      "height": 1050,
+      "resolution": 0.5
+    },
+    {
+      "id": "homes-rw-lanes",
+      "src": "/pixi-art/home-communities/lanes-reedwhistle.svg",
+      "x": 3300,
+      "y": 4550,
+      "width": 1800,
+      "height": 850,
+      "resolution": 0.5
     }
   ],
   "walkways": [
@@ -15418,698 +12878,30 @@
   },
   "obstacles": [
     {
-      "x": -1051.3333333333335,
-      "y": -295.33333333333337,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -815.3333333333334,
-      "y": -295.33333333333337,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -1421.888888888889,
-      "y": -376.6666666666667,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -1155.888888888889,
-      "y": -376.6666666666667,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -384.6666666666667,
-      "y": -334.22222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -148.66666666666669,
-      "y": -334.22222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -44.111111111111114,
-      "y": -415.55555555555554,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 221.88888888888889,
-      "y": -415.55555555555554,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 237.55555555555554,
-      "y": 282.44444444444446,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 473.55555555555554,
-      "y": 282.44444444444446,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -133,
-      "y": 201.11111111111111,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 133,
-      "y": 201.11111111111111,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -984.6666666666667,
-      "y": 843.5555555555555,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -748.6666666666667,
-      "y": 843.5555555555555,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -644.1111111111111,
-      "y": 762.2222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -378.11111111111114,
-      "y": 762.2222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -290.22222222222223,
-      "y": 854.6666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -54.22222222222223,
-      "y": 854.6666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -660.7777777777778,
-      "y": 773.3333333333334,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -394.7777777777778,
-      "y": 773.3333333333334,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 1909.7777777777778,
-      "y": -334.22222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 2145.777777777778,
-      "y": -334.22222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 1539.2222222222222,
-      "y": -415.55555555555554,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 1805.2222222222222,
-      "y": -415.55555555555554,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 2482,
-      "y": -456.44444444444446,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 2718,
-      "y": -456.44444444444446,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 2822.5555555555557,
-      "y": -537.7777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 3088.5555555555557,
-      "y": -537.7777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 3070.888888888889,
-      "y": -456.44444444444446,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 3306.888888888889,
-      "y": -456.44444444444446,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 2700.3333333333335,
-      "y": -537.7777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 2966.3333333333335,
-      "y": -537.7777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 3670.888888888889,
-      "y": -167.55555555555557,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 3906.888888888889,
-      "y": -167.55555555555557,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 4011.4444444444443,
-      "y": -248.88888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 4277.444444444444,
-      "y": -248.88888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 3682,
-      "y": 343.55555555555554,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 3918,
-      "y": 343.55555555555554,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 3311.444444444445,
-      "y": 262.22222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 3577.444444444445,
-      "y": 262.22222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 1693.111111111111,
-      "y": 371.33333333333337,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 1929.111111111111,
-      "y": 371.33333333333337,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 2033.666666666667,
-      "y": 290,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 2299.666666666667,
-      "y": 290,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5198.666666666667,
-      "y": -28.666666666666668,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5434.666666666667,
-      "y": -28.666666666666668,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 4828.111111111111,
-      "y": -110,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5094.111111111111,
-      "y": -110,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5993.111111111111,
-      "y": -0.8888888888888893,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6229.111111111111,
-      "y": -0.8888888888888893,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6333.666666666667,
-      "y": -82.22222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 6599.666666666667,
-      "y": -82.22222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 6670.888888888889,
-      "y": 210.22222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6906.888888888889,
-      "y": 210.22222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6300.333333333334,
-      "y": 128.88888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 6566.333333333334,
-      "y": 128.88888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 6593.111111111111,
-      "y": 915.7777777777778,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6829.111111111111,
-      "y": 915.7777777777778,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6933.666666666667,
-      "y": 834.4444444444445,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 7199.666666666667,
-      "y": 834.4444444444445,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5626.444444444444,
-      "y": 943.5555555555555,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5862.444444444444,
-      "y": 943.5555555555555,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5255.888888888889,
-      "y": 862.2222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5521.888888888889,
-      "y": 862.2222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -790.2222222222223,
-      "y": 3126.888888888889,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -554.2222222222223,
-      "y": 3126.888888888889,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -1160.7777777777778,
-      "y": 3045.5555555555557,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -894.7777777777778,
-      "y": 3045.5555555555557,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -1345.7777777777778,
-      "y": 3504.666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -1109.7777777777778,
-      "y": 3504.666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -1005.2222222222223,
-      "y": 3423.3333333333335,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -739.2222222222223,
-      "y": 3423.3333333333335,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -184.66666666666669,
-      "y": 3132.4444444444443,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 51.33333333333333,
-      "y": 3132.4444444444443,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -555.2222222222222,
-      "y": 3051.1111111111113,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -289.22222222222223,
-      "y": 3051.1111111111113,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -1045.7777777777778,
-      "y": 4354.666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -809.7777777777778,
-      "y": 4354.666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -705.2222222222223,
-      "y": 4273.333333333334,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -439.2222222222223,
-      "y": 4273.333333333334,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -634.6666666666667,
-      "y": 4793.555555555556,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -398.66666666666674,
-      "y": 4793.555555555556,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": -1005.2222222222223,
-      "y": 4712.222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": -739.2222222222223,
-      "y": 4712.222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 176.44444444444446,
-      "y": 4693.555555555556,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 412.44444444444446,
-      "y": 4693.555555555556,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 517,
-      "y": 4612.222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 783,
-      "y": 4612.222222222223,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 4670.888888888889,
-      "y": 4410.222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 4906.888888888889,
-      "y": 4410.222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 4300.333333333334,
-      "y": 4328.888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 4566.333333333334,
-      "y": 4328.888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5309.777777777778,
-      "y": 4154.666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5545.777777777778,
-      "y": 4154.666666666667,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5650.333333333334,
-      "y": 4073.3333333333335,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5916.333333333334,
-      "y": 4073.3333333333335,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 6098.666666666667,
-      "y": 4360.222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6334.666666666667,
-      "y": 4360.222222222223,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5728.111111111111,
-      "y": 4278.888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5994.111111111111,
-      "y": 4278.888888888889,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 4820.888888888889,
-      "y": 5199.111111111111,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5056.888888888889,
-      "y": 5199.111111111111,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5161.444444444444,
-      "y": 5117.777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5427.444444444444,
-      "y": 5117.777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5504.222222222223,
-      "y": 5199.111111111111,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5740.222222222223,
-      "y": 5199.111111111111,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 5133.666666666667,
-      "y": 5117.777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5399.666666666667,
-      "y": 5117.777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 5959.777777777778,
-      "y": 4899.111111111111,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6195.777777777778,
-      "y": 4899.111111111111,
-      "rx": 64,
-      "ry": 12
-    },
-    {
-      "x": 6300.333333333334,
-      "y": 4817.777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 6566.333333333334,
-      "y": 4817.777777777778,
-      "rx": 8,
-      "ry": 10
-    },
-    {
-      "x": 2683.3333333333335,
-      "y": -227.7777777777778,
+      "id": "homes-ll-gazebo-w",
+      "x": 2719,
+      "y": -99,
       "rx": 13,
       "ry": 13
     },
     {
-      "x": 3005.5555555555557,
-      "y": -227.7777777777778,
+      "id": "homes-ll-gazebo-e",
+      "x": 3041,
+      "y": -99,
       "rx": 13,
       "ry": 13
     },
     {
-      "x": 3316.666666666667,
-      "y": -94.44444444444444,
+      "id": "homes-ll-pergola-w",
+      "x": 3228,
+      "y": -15,
       "rx": 13,
       "ry": 13
     },
     {
-      "x": 3622.222222222222,
-      "y": -94.44444444444444,
+      "id": "homes-ll-pergola-e",
+      "x": 3532,
+      "y": -15,
       "rx": 13,
       "ry": 13
     }
@@ -16146,14 +12938,14 @@
         "bigger-community-38"
       ],
       "center": [
-        -388.8888888888889,
-        222.22222222222223
+        -200,
+        400
       ],
       "green": [
-        -388.8888888888889,
-        344.44444444444446,
-        575.8888888888889,
-        260.6666666666667
+        -200,
+        400,
+        430,
+        155
       ],
       "workplaces": [
         "bigger-community-302",
@@ -16173,14 +12965,14 @@
         "bigger-community-103"
       ],
       "center": [
-        2883.3333333333335,
-        -33.333333333333336
+        2880,
+        -120
       ],
       "green": [
-        2844.4444444444443,
-        5.555555555555555,
-        485.1666666666667,
-        260.6666666666667
+        2880,
+        -120,
+        430,
+        165
       ],
       "workplaces": [
         "bigger-community-314",
@@ -16191,7 +12983,7 @@
     {
       "id": "clovercrust",
       "name": "Clovercrust Acres",
-      "residents": "Millers, orchard growers and market farmers",
+      "residents": "Millers, field growers and market farmers beside the Seedshare beds",
       "homes": [
         "bigger-community-119",
         "bigger-community-129",
@@ -16200,14 +12992,14 @@
         "bigger-community-157"
       ],
       "center": [
-        6183.333333333334,
-        538.8888888888889
+        5000,
+        40
       ],
       "green": [
-        6122.222222222223,
-        438.8888888888889,
-        497,
-        241.7777777777778
+        5000,
+        40,
+        320,
+        150
       ],
       "workplaces": [
         "bigger-community-340",
@@ -16251,7 +13043,7 @@
     {
       "id": "reedwhistle",
       "name": "Reedwhistle Quay",
-      "residents": "Fishing families, boat menders and lighthouse keepers",
+      "residents": "Fishing families, boat menders and the dock keepers on the south quay",
       "homes": [
         "bigger-community-238",
         "bigger-community-248",
@@ -16261,14 +13053,14 @@
         "bigger-community-286"
       ],
       "center": [
-        5422.222222222223,
-        4577.777777777778
+        4310,
+        5010
       ],
       "green": [
-        5422.222222222223,
-        4633.333333333334,
-        571.9444444444445,
-        234.22222222222226
+        4310,
+        5010,
+        340,
+        190
       ],
       "workplaces": [
         "bigger-community-385",
@@ -18863,310 +15655,6 @@
       "width": 127.77777777777779
     },
     {
-      "id": "bakery-square",
-      "kind": "lane",
-      "points": [
-        [
-          138.88888888888889,
-          655.5555555555555
-        ],
-        [
-          -83.33333333333334,
-          483.33333333333337
-        ],
-        [
-          -388.8888888888889,
-          344.44444444444446
-        ]
-      ],
-      "width": 83.33333333333334
-    },
-    {
-      "id": "bakery-doors",
-      "kind": "lane",
-      "points": [
-        [
-          -933.3333333333334,
-          -283.33333333333337
-        ],
-        [
-          -561.1111111111111,
-          -183.33333333333334
-        ],
-        [
-          -477.77777777777777,
-          72.22222222222223
-        ],
-        [
-          -388.8888888888889,
-          344.44444444444446
-        ],
-        [
-          -527.7777777777778,
-          622.2222222222223
-        ],
-        [
-          -600,
-          861.1111111111112
-        ],
-        [
-          -866.6666666666667,
-          861.1111111111112
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "bakery-north",
-      "kind": "lane",
-      "points": [
-        [
-          -266.6666666666667,
-          -322.22222222222223
-        ],
-        [
-          205.55555555555557,
-          -244.44444444444446
-        ],
-        [
-          627.7777777777778,
-          0
-        ],
-        [
-          638.8888888888889,
-          333.33333333333337
-        ],
-        [
-          355.55555555555554,
-          300
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "bakery-south",
-      "kind": "lane",
-      "points": [
-        [
-          -172.22222222222223,
-          866.6666666666667
-        ],
-        [
-          116.66666666666667,
-          872.2222222222223
-        ],
-        [
-          144.44444444444446,
-          600
-        ],
-        [
-          -83.33333333333334,
-          483.33333333333337
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "garden-west",
-      "kind": "lane",
-      "points": [
-        [
-          1811.111111111111,
-          383.33333333333337
-        ],
-        [
-          2066.666666666667,
-          461.11111111111114
-        ],
-        [
-          2338.888888888889,
-          233.33333333333334
-        ],
-        [
-          2283.3333333333335,
-          138.88888888888889
-        ],
-        [
-          2066.666666666667,
-          -100
-        ],
-        [
-          2027.7777777777778,
-          -322.22222222222223
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "garden-north",
-      "kind": "lane",
-      "points": [
-        [
-          2883.3333333333335,
-          222.22222222222223
-        ],
-        [
-          2883.3333333333335,
-          -50
-        ],
-        [
-          2600,
-          -422.22222222222223
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "garden-east",
-      "kind": "lane",
-      "points": [
-        [
-          2883.3333333333335,
-          -50
-        ],
-        [
-          3188.888888888889,
-          -422.22222222222223
-        ]
-      ],
-      "width": 50
-    },
-    {
-      "id": "garden-porches",
-      "kind": "lane",
-      "points": [
-        [
-          3838.888888888889,
-          500
-        ],
-        [
-          3800,
-          377.77777777777777
-        ],
-        [
-          3538.888888888889,
-          188.88888888888889
-        ],
-        [
-          3788.888888888889,
-          -133.33333333333334
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "farm-square",
-      "kind": "lane",
-      "points": [
-        [
-          4638.888888888889,
-          533.3333333333334
-        ],
-        [
-          4805.555555555556,
-          500
-        ],
-        [
-          5411.111111111111,
-          583.3333333333334
-        ],
-        [
-          6183.333333333334,
-          538.8888888888889
-        ],
-        [
-          6400,
-          594.4444444444445
-        ],
-        [
-          6888.88888888889,
-          661.1111111111111
-        ],
-        [
-          7050,
-          861.1111111111112
-        ],
-        [
-          7050,
-          988.8888888888889
-        ],
-        [
-          6711.111111111111,
-          938.8888888888889
-        ]
-      ],
-      "width": 83.33333333333334
-    },
-    {
-      "id": "farm-north",
-      "kind": "lane",
-      "points": [
-        [
-          5316.666666666667,
-          -16.666666666666668
-        ],
-        [
-          5572.222222222223,
-          183.33333333333334
-        ],
-        [
-          5788.888888888889,
-          238.88888888888889
-        ],
-        [
-          5844.444444444444,
-          455.5555555555556
-        ],
-        [
-          6183.333333333334,
-          538.8888888888889
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "farm-east",
-      "kind": "lane",
-      "points": [
-        [
-          6111.111111111111,
-          33.333333333333336
-        ],
-        [
-          6405.555555555556,
-          255.55555555555557
-        ],
-        [
-          6788.888888888889,
-          244.44444444444446
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "farm-south",
-      "kind": "lane",
-      "points": [
-        [
-          5744.444444444444,
-          955.5555555555555
-        ],
-        [
-          6255.555555555556,
-          955.5555555555555
-        ],
-        [
-          6400,
-          727.7777777777778
-        ],
-        [
-          6183.333333333334,
-          538.8888888888889
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
       "id": "makers-square",
       "kind": "lane",
       "points": [
@@ -19188,189 +15676,6 @@
         ]
       ],
       "width": 77.77777777777779
-    },
-    {
-      "id": "makers-north",
-      "kind": "lane",
-      "points": [
-        [
-          -672.2222222222223,
-          3161.1111111111113
-        ],
-        [
-          -577.7777777777778,
-          3350
-        ],
-        [
-          -577.7777777777778,
-          3650
-        ],
-        [
-          -1227.7777777777778,
-          3538.888888888889
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "makers-east",
-      "kind": "lane",
-      "points": [
-        [
-          -577.7777777777778,
-          3350
-        ],
-        [
-          -238.88888888888889,
-          3305.5555555555557
-        ],
-        [
-          -66.66666666666667,
-          3166.666666666667
-        ]
-      ],
-      "width": 50
-    },
-    {
-      "id": "makers-south",
-      "kind": "lane",
-      "points": [
-        [
-          -516.6666666666667,
-          4827.777777777778
-        ],
-        [
-          -361.11111111111114,
-          4566.666666666667
-        ],
-        [
-          -5.555555555555555,
-          4083.3333333333335
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "makers-south-east",
-      "kind": "lane",
-      "points": [
-        [
-          -361.11111111111114,
-          4566.666666666667
-        ],
-        [
-          -27.77777777777778,
-          4755.555555555556
-        ],
-        [
-          294.44444444444446,
-          4727.777777777778
-        ]
-      ],
-      "width": 50
-    },
-    {
-      "id": "fishing-west",
-      "kind": "lane",
-      "points": [
-        [
-          4788.888888888889,
-          4444.444444444444
-        ],
-        [
-          5072.222222222223,
-          4538.888888888889
-        ],
-        [
-          5422.222222222223,
-          4577.777777777778
-        ],
-        [
-          5427.777777777778,
-          4188.888888888889
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "fishing-east",
-      "kind": "lane",
-      "points": [
-        [
-          5422.222222222223,
-          4577.777777777778
-        ],
-        [
-          5761.111111111111,
-          4650
-        ],
-        [
-          5961.111111111111,
-          4633.333333333334
-        ],
-        [
-          6216.666666666667,
-          4394.444444444444
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "fishing-porches",
-      "kind": "lane",
-      "points": [
-        [
-          4938.888888888889,
-          5233.333333333334
-        ],
-        [
-          5111.111111111111,
-          4988.888888888889
-        ],
-        [
-          5422.222222222223,
-          4577.777777777778
-        ]
-      ],
-      "width": 55.55555555555556
-    },
-    {
-      "id": "fishing-south",
-      "kind": "lane",
-      "points": [
-        [
-          5111.111111111111,
-          4988.888888888889
-        ],
-        [
-          5327.777777777778,
-          5261.111111111111
-        ],
-        [
-          5622.222222222223,
-          5233.333333333334
-        ]
-      ],
-      "width": 50
-    },
-    {
-      "id": "fishing-east-porch",
-      "kind": "lane",
-      "points": [
-        [
-          5761.111111111111,
-          4650
-        ],
-        [
-          5744.444444444444,
-          4916.666666666667
-        ],
-        [
-          6077.777777777778,
-          4916.666666666667
-        ]
-      ],
-      "width": 50
     },
     {
       "id": "heart-west",
@@ -19453,53 +15758,6 @@
       "width": 100
     },
     {
-      "id": "quay-pier",
-      "kind": "lane",
-      "points": [
-        [
-          5422.222222222223,
-          4577.777777777778
-        ],
-        [
-          4933.333333333334,
-          4844.444444444444
-        ],
-        [
-          4333.333333333334,
-          5033.333333333334
-        ],
-        [
-          4066.666666666667,
-          5322.222222222223
-        ],
-        [
-          3711.1111111111113,
-          5266.666666666667
-        ],
-        [
-          3422.222222222222,
-          5294.444444444444
-        ],
-        [
-          3311.1111111111113,
-          5461.111111111111
-        ],
-        [
-          3093.882367429609,
-          5496.932453736682
-        ],
-        [
-          2677.777777777778,
-          5438.888888888889
-        ],
-        [
-          2338.888888888889,
-          5333.333333333334
-        ]
-      ],
-      "width": 72.22222222222223
-    },
-    {
       "id": "west-orchard",
       "kind": "lane",
       "points": [
@@ -19555,6 +15813,306 @@
         ]
       ],
       "width": 50
+    },
+    {
+      "id": "quay-pier",
+      "kind": "lane",
+      "width": 72,
+      "points": [
+        [
+          4310,
+          5010
+        ],
+        [
+          4060,
+          5345
+        ],
+        [
+          3711,
+          5267
+        ],
+        [
+          3422,
+          5294
+        ],
+        [
+          3311,
+          5461
+        ],
+        [
+          3094,
+          5497
+        ],
+        [
+          2678,
+          5439
+        ],
+        [
+          2339,
+          5333
+        ]
+      ]
+    },
+    {
+      "id": "homes-bb-square",
+      "kind": "lane",
+      "width": 100,
+      "points": [
+        [
+          139,
+          656
+        ],
+        [
+          -200,
+          400
+        ],
+        [
+          -620,
+          440
+        ]
+      ]
+    },
+    {
+      "id": "homes-bb-west",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          -620,
+          440
+        ],
+        [
+          -1050,
+          520
+        ],
+        [
+          -1220,
+          480
+        ],
+        [
+          -1500,
+          300
+        ],
+        [
+          -1560,
+          175
+        ]
+      ]
+    },
+    {
+      "id": "homes-bb-south",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          -420,
+          550
+        ],
+        [
+          -530,
+          850
+        ],
+        [
+          -540,
+          1150
+        ],
+        [
+          -1120,
+          1150
+        ],
+        [
+          -540,
+          1150
+        ],
+        [
+          130,
+          1120
+        ]
+      ]
+    },
+    {
+      "id": "homes-ll-green",
+      "kind": "lane",
+      "width": 100,
+      "points": [
+        [
+          2880,
+          200
+        ],
+        [
+          2880,
+          -120
+        ],
+        [
+          2460,
+          -90
+        ],
+        [
+          2080,
+          -25
+        ]
+      ]
+    },
+    {
+      "id": "homes-ll-east",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          3300,
+          -100
+        ],
+        [
+          3450,
+          0
+        ],
+        [
+          3560,
+          70
+        ]
+      ]
+    },
+    {
+      "id": "homes-cc-square",
+      "kind": "lane",
+      "width": 100,
+      "points": [
+        [
+          4780,
+          650
+        ],
+        [
+          4900,
+          180
+        ],
+        [
+          5000,
+          40
+        ],
+        [
+          5310,
+          60
+        ],
+        [
+          5860,
+          205
+        ],
+        [
+          6280,
+          -200
+        ]
+      ]
+    },
+    {
+      "id": "homes-cc-south",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          5260,
+          170
+        ],
+        [
+          5420,
+          560
+        ],
+        [
+          5600,
+          615
+        ]
+      ]
+    },
+    {
+      "id": "homes-pp-yard",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          -820,
+          3720
+        ],
+        [
+          -1150,
+          3720
+        ],
+        [
+          -1600,
+          3750
+        ]
+      ]
+    },
+    {
+      "id": "homes-pp-south",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          -1150,
+          3860
+        ],
+        [
+          -1080,
+          4380
+        ],
+        [
+          -1720,
+          4448
+        ]
+      ]
+    },
+    {
+      "id": "homes-rw-yard",
+      "kind": "lane",
+      "width": 100,
+      "points": [
+        [
+          4300,
+          4660
+        ],
+        [
+          4310,
+          5010
+        ],
+        [
+          3570,
+          4965
+        ]
+      ]
+    },
+    {
+      "id": "homes-rw-quay",
+      "kind": "lane",
+      "width": 70,
+      "points": [
+        [
+          3975,
+          5060
+        ],
+        [
+          3650,
+          5345
+        ],
+        [
+          3975,
+          5060
+        ],
+        [
+          4310,
+          5010
+        ],
+        [
+          4880,
+          5350
+        ],
+        [
+          4650,
+          5020
+        ],
+        [
+          5180,
+          5075
+        ]
+      ]
     }
   ]
 }
