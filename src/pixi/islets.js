@@ -12,7 +12,7 @@ import volcano from '../../public/pixi-art/islets/11-volcano.meta.json' with {ty
 import coralAtoll from '../../public/pixi-art/islets/12-coral-atoll.meta.json' with {type:'json'};
 import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {sphereFrame,expMap,logMap,angle} from './sphere.js';
-import {localPoint} from './sphere-coordinates.js';
+import {isletPlacement,placeIslet,unplaceIslet} from './islet-placement.js';
 import {inPoly} from '../../rive/web/island-geometry.mjs';
 export const ISLET_SEED=data.seed;
 export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','05-lighthouse-rock','06-palm-treasure','07-pink-blossom','08-snow-igloo','09-spooky-purple','11-volcano','12-coral-atoll'];
@@ -27,8 +27,7 @@ const BOAT_ROOM=46+26;   // the boat's radius plus a little water between hull a
 // frame is rolled until its east runs straight across the screen of its home island, the view you sail and walk it in.
 function upright(i,home){
  let roll=0;
- const p=localPoint(home,sphereFrame(i.lon,i.lat).center);
- for(let k=0;k<4;k++){const f=sphereFrame(i.lon,i.lat,roll),q=localPoint(home,expMap(f,100,0,WORLD_GEO.Rw));roll+=Math.atan2(q.y-p.y,q.x-p.x);}
+ for(let k=0;k<4;k++){const f=sphereFrame(i.lon,i.lat,roll),r=isletPlacement(home,f);roll+=Math.atan2(r.sin,r.cos);}
  return sphereFrame(i.lon,i.lat,roll);
 }
 function layout(i){
@@ -54,12 +53,19 @@ function layout(i){
 export const ISLETS=data.placements.map(layout);
 // Shared by authoritative room simulation, boat route planning and client prediction.
 // Chord distance is a conservative lower bound on geodesic distance.
-export function isletClearance(p,limit=Infinity){
+export function isletClearance(p,limit=Infinity,id=null){
  let best=limit;
  for(const i of ISLETS){
-  const c=i.collisionCenter,x=p[0]-c[0],y=p[1]-c[1],z=p[2]-c[2],squared=x*x+y*y+z*z;
-  if(squared>=((best+i.radius)/WORLD_GEO.Rw)**2)continue;
-  const q=logMap(i,p,WORLD_GEO.Rw);
+  let q;
+  if(id!==null){
+   const c=placeIslet(id,i,i.landCentre);
+   if(Math.hypot(p.x-c.x,p.y-c.y)>=best+i.radius)continue;
+   q=unplaceIslet(id,i,p);
+  }else{
+   const c=i.collisionCenter,x=p[0]-c[0],y=p[1]-c[1],z=p[2]-c[2];
+   if(x*x+y*y+z*z>=((best+i.radius)/WORLD_GEO.Rw)**2)continue;
+   q=logMap(i,p,WORLD_GEO.Rw);
+  }
   // The broad circle only culls distant islets. The actual sand boundary leaves
   // water open at short jetties and around long, narrow islets.
   for(const ring of [i.coast,...i.blocked]){

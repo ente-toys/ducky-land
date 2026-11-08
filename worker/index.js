@@ -1,4 +1,6 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {unplaceRigid} from '../src/pixi/rigid.js';
+import {reframeIslet} from '../src/pixi/islet-placement.js';
+import {ISLETS} from '../src/pixi/islets.js';
 import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 // boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
 // (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
@@ -630,7 +632,7 @@ export class IslandRoom {
             const spot=info.landing; info.landing=null;
             if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
             else {
-            if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,mapPoint(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
+            if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,spot.islet?reframeIslet(actor.islandId,spot.islandId,ISLETS.find(i=>i.id===spot.islet),actor):unplaceRigid(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
             Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
             this.parkBoat(boat);   // Keep the boat in the arrival island's coordinate frame, beside the landing.
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});

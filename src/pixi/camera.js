@@ -34,8 +34,12 @@ export class Gestures {
     const pointer = this.pointers.get(id);
     if (!pointer) return null;
     const before = [...this.pointers.values()].map(p => ({x: p.x, y: p.y}));
-    const dx = point.x - pointer.x, dy = point.y - pointer.y;
+    const was = pointer.consumed;
     if (Math.hypot(point.x - pointer.start.x, point.y - pointer.start.y) > 6) pointer.consumed = true;
+    // the first drag step counts from the press, so the few pixels of tap slop are not lost (boss 8 Nov: the grabbed spot
+    // on the globe stays exactly under the cursor)
+    const from = pointer.consumed && !was && this.pointers.size === 1 ? pointer.start : pointer;
+    const dx = point.x - from.x, dy = point.y - from.y;
     Object.assign(pointer, point);
     return {before, after: [...this.pointers.values()], dx, dy, drag: pointer.consumed};
   }

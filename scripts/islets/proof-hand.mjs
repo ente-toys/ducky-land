@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import {ISLETS,ISLET_ART,isletPoint} from '../../src/pixi/islets.js';
 import {isletWalk} from '../../src/pixi/islet-walk.js';
 import {localPoint} from '../../src/pixi/sphere-coordinates.js';
+import {placeIslet} from '../../src/pixi/islet-placement.js';
 import {boardingPoint,navOf} from '../../src/pixi/islands.js';
 const RUNTIME='/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE ?? `${RUNTIME}/playwright/index.mjs`);
@@ -57,7 +58,7 @@ try{
    await page.evaluate(id=>globalThis.__duckyEngine.room.board(id),boat.id);
    if(!await until(async()=>(await me()).mode==='sailing',30000))throw Error('could not board');
    // sail to open water off this islet's jetty (the far side of the world is a pose; the last stretch is real sailing)
-   const off=localPoint(i.home,isletPoint(i,[i.jetty.tip[0]+i.jetty.dir[0]*260,i.jetty.tip[1]+i.jetty.dir[1]*260]));
+   const off=placeIslet(i.home,i,[i.jetty.tip[0]+i.jetty.dir[0]*260,i.jetty.tip[1]+i.jetty.dir[1]*260]);
    await pose({islandId:i.home,x:Math.round(off.x),y:Math.round(off.y),mode:'sailing',sailTarget:null,sailRoute:null,path:[]},4);
    if(!await until(async()=>{const m=await me();return m.islandId===i.home&&Math.hypot(m.x-off.x,m.y-off.y)<40;},30000))throw Error('did not arrive off the islet');
    row.dockButton=await page.evaluate(()=>globalThis.__duckyEngine.travelOptions().dock);
@@ -66,13 +67,13 @@ try{
    const m=await me();row.ashore={x:Math.round(m.x),y:Math.round(m.y)};row.onJettyEnd=Math.hypot(m.x-w.land.x,m.y-w.land.y)<4;
    s=await state();const b=s.boats.find(b=>b.id===boat.id);row.boat={x:Math.round(b.x),y:Math.round(b.y),atJettyTip:Math.hypot(b.x-w.water.x,b.y-w.water.y)<16};
    // max zoom, framed on the jetty and the land behind it
-   const mid=localPoint(i.home,isletPoint(i,[(i.landCentre[0]*.5+i.jetty.tip[0]*.5),(i.landCentre[1]*.5+i.jetty.tip[1]*.5)]));
+   const mid=placeIslet(i.home,i,[(i.landCentre[0]*.5+i.jetty.tip[0]*.5),(i.landCentre[1]*.5+i.jetty.tip[1]*.5)]);
    await page.evaluate(([x,y])=>{const e=globalThis.__duckyEngine;e.follow=false;e.fitMode=false;e.fly=null;Object.assign(e.target,{x,y,zoom:1.8});Object.assign(e.camera,{x,y,zoom:1.8});e.quietAt=Infinity;},[mid.x,mid.y]);
    await sleep(2200);
    row.vector=await page.evaluate(id=>{const v=globalThis.__duckyEngine.isletView.views.find(v=>v.i.id===id);return {visible:v.root.visible,geometry:v.art.context.instructions.length};},i.id);
    row.max=`${OUT}/${i.id}-${i.art}-docked-max-zoom.png`;fs.writeFileSync(row.max,await page.screenshot());
    // and the whole islet, for context
-   const c=localPoint(i.home,isletPoint(i,i.landCentre));
+   const c=placeIslet(i.home,i,i.landCentre);
    await page.evaluate(([x,y,z])=>{const e=globalThis.__duckyEngine;Object.assign(e.target,{x,y,zoom:z});Object.assign(e.camera,{x,y,zoom:z});},[c.x,c.y,Math.min(1.8,900/i.width)]);
    await sleep(1500);
    row.whole=`${OUT}/${i.id}-${i.art}-docked-whole.png`;fs.writeFileSync(row.whole,await page.screenshot());

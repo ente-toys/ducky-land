@@ -1,14 +1,14 @@
 // boss 8 Nov ("I should be able to dock here"): walking on the 22 sea islets. Each islet walks in the chart of its nearest
 // real island (islet.home), so a Ducky ashore on an islet is simply on that island, far out in its sea. Pure data: the room
 // server, the live client and the tests share it.
-import {ISLETS,isletPoint} from './islets.js';
-import {localPoint} from './sphere-coordinates.js';
+import {ISLETS} from './islets.js';
+import {placeIslet} from './islet-placement.js';
 import {createNavigation} from './navigation.js';
 import {mapsVersion} from './island-maps.js';
 
 let SEEN=-1;const BY_HOME=new Map(),COMPOSITE=new Map();
 const fresh=()=>{if(SEEN!==mapsVersion()){SEEN=mapsVersion();BY_HOME.clear();COMPOSITE.clear();}};
-const chart=(id,i,p)=>{const q=localPoint(id,isletPoint(i,p));return [q.x,q.y];};
+const chart=(id,i,p)=>{const q=placeIslet(id,i,p);return [q.x,q.y];};
 function walkOf(i){
  const id=i.home,coast=i.coast.map(p=>chart(id,i,p)),lakes=i.lakes.map(r=>({poly:r.map(p=>chart(id,i,p))}));
  // the props drawn standing on it (horse, trunks, igloo, gravestone...) from its meta.json: walked round, never through

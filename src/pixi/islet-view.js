@@ -1,9 +1,10 @@
 import {Container,Graphics,Matrix,RenderTexture} from 'pixi.js';
 import {ISLETS,ISLET_ART,ISLET_VIEWBOX} from './islets.js';
-import {expMap,dot} from './sphere.js';
+import {dot} from './sphere.js';
 import {localPoint,viewFrame} from './sphere-coordinates.js';
-import {WORLD_GEO} from './world-map.js';
 import {svgContext} from './svg-context.js';
+import {isletPlacement} from './islet-placement.js';
+export {isletPlacement};
 
 // boss 8 Nov ("the perspective of the islets is bad", "wtf is that docking port, not even our design quality"): every islet
 // is hand-drawn SVG (public/pixi-art/islets/<art>.svg) with its wooden jetty drawn in the art, in the Home centre's style.
@@ -19,11 +20,11 @@ export function loadIsletArt(art){
 }
 // the 11 islets into one 2048x1536 atlas for the globe, straight from their vector art
 function bakeAtlas(renderer,arts){
- const atlas=RenderTexture.create({width:4*ATLAS_CELL,height:3*ATLAS_CELL,antialias:true,label:'Islet globe atlas'});
+ const atlas=RenderTexture.create({width:4*ATLAS_CELL,height:3*ATLAS_CELL,antialias:true,autoGenerateMipmaps:true,label:'Islet globe atlas'});
  const sheet=new Container(),k=(ATLAS_CELL-4)/ISLET_VIEWBOX;
  arts.forEach((context,n)=>{const g=new Graphics(context);g.scale.set(k);g.position.set(n%4*ATLAS_CELL+2,Math.floor(n/4)*ATLAS_CELL+2);sheet.addChild(g);});
  renderer.render({container:sheet,target:atlas,clear:true,clearColor:[0,0,0,0]});
- sheet.destroy({children:true});
+ sheet.destroy({children:true});atlas.source.updateMipmaps();
  return atlas;
 }
 export async function createIsletView(app,scene){
@@ -38,17 +39,16 @@ export async function createIsletView(app,scene){
   art.scale.set(k);art.position.set(-i.width/2,-i.width/2);root.addChild(art);root.visible=false;layer.addChild(root);
   return {i,root,art,loadMs};
  });
- let from=null;
+ let from=null,placed=[];
  return {atlas,layer,views,
+  get placed(){return placed;},
   update(id,camera,width,height,onGlobe){
    layer.visible=!onGlobe;if(onGlobe)return;
    if(from!==id){
     from=id;
-    for(const {i,root}of views){const p=localPoint(id,i.center),x=localPoint(id,expMap(i,1,0,WORLD_GEO.Rw)),y=localPoint(id,expMap(i,0,1,WORLD_GEO.Rw));
-     // The small flat islet uses this point's sphere-chart derivative. islets.js rolls its frame so that, in its home
-     // island's view, this comes out upright: the art is never turned against our camera.
-     root.setFromMatrix(new Matrix(x.x-p.x,x.y-p.y,y.x-p.x,y.y-p.y,p.x,p.y));
-    }
+    placed=views.map(({i,root})=>{const r=isletPlacement(id,i);
+     root.setFromMatrix(new Matrix(r.cos,r.sin,-r.sin,r.cos,r.x,r.y));return r;
+    });
    }
    const view=viewFrame(id,camera),hw=width/(2*camera.zoom),hh=height/(2*camera.zoom);
    for(const v of views){const {i}=v,p=localPoint(id,i.center);

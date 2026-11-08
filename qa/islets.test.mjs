@@ -3,12 +3,13 @@ import assert from 'node:assert/strict';
 import {ISLETS,ISLET_ART,ISLET_SEED} from '../src/pixi/islets.js';
 import {WORLD_ISLANDS,WORLD_GEO,neighboursOf} from '../src/pixi/world-map.js';
 import {sphereShores} from '../src/pixi/sphere-shores.js';
-import {angle,arcDistance,expMap,transport} from '../src/pixi/sphere.js';
+import {angle,arcDistance} from '../src/pixi/sphere.js';
 import {localPoint,spherePoint} from '../src/pixi/sphere-coordinates.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {canSail,landingSpot,landingApproach,sailRoute,sailStep,setSailDestination,boardingPoint,navOf,BOAT_RADIUS,ISLANDS,seaBoundsFor} from '../src/pixi/islands.js';
-import {isletPoint} from '../src/pixi/islets.js';
+import {placeIslet,reframeIslet,isletLandingFrame} from '../src/pixi/islet-placement.js';
 import {isletWalk} from '../src/pixi/islet-walk.js';
+import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/pixi/sphere-camera.js';
 import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
 import {readFileSync,readdirSync} from 'node:fs';
 import {DOMParser as XMLDOMParser} from '@xmldom/xmldom';
@@ -81,26 +82,26 @@ test('the islet SVGs build into Pixi geometry, transforms and inherited styles i
 });
 test('boat collision agrees in different island charts and covers every islet\'s walkable land',()=>{
  for(const i of ISLETS)for(const island of WORLD_ISLANDS){
-  const p=localPoint(island.id,i.collisionCenter);
+  const p=placeIslet(island.id,i,i.landCentre);
   assert.equal(canSail(p.x,p.y,island.id),false,`${i.id}/${island.id}`);
-  const frame=transport(i,i.collisionCenter),out=localPoint(island.id,expMap(frame,i.radius+BOAT_RADIUS+80,0,WORLD_GEO.Rw));
+  const out=placeIslet(island.id,i,[i.landCentre[0]+i.radius+BOAT_RADIUS+80,i.landCentre[1]]);
   const b=seaBoundsFor(island.id);
   if(out.x>=b.x0&&out.x<=b.x1&&out.y>=b.y0&&out.y<=b.y1)assert.equal(canSail(out.x,out.y,island.id),true);
  }
  for(const i of ISLETS){
-  for(const q of i.coast){const p=localPoint(i.home,isletPoint(i,q));assert.equal(canSail(p.x,p.y,i.home),false,`${i.id} land is solid to boats`);}
+  for(const q of i.coast){const p=placeIslet(i.home,i,q);assert.equal(canSail(p.x,p.y,i.home),false,`${i.id} land is solid to boats`);}
   const w=isletWalk(i.id);
   assert.ok(navOf(i.home).walkable(w.land.x,w.land.y),`${i.id} jetty end is walkable`);
   assert.ok(canSail(w.water.x,w.water.y,i.home),`${i.id} dock water is open`);
   assert.ok(Math.hypot(w.water.x-w.tip.x,w.water.y-w.tip.y)<150,`${i.id} the boat ties up beside the jetty tip`);
   // the drawn jetty faces open sea: straight out from its tip there is no land and no other islet for the docking reach
-  for(let t=0;t<=420;t+=50){const q=isletPoint(i,[i.jetty.tip[0]+i.jetty.dir[0]*(t+72),i.jetty.tip[1]+i.jetty.dir[1]*(t+72)]),l=localPoint(i.home,q);
+  for(let t=0;t<=420;t+=50){const l=placeIslet(i.home,i,[i.jetty.tip[0]+i.jetty.dir[0]*(t+72),i.jetty.tip[1]+i.jetty.dir[1]*(t+72)]);
    assert.ok(canSail(l.x,l.y,i.home),`${i.id} open sea ${t} out from its jetty`);}
   // upright in the view you sail and walk it in: its art is never turned against our camera
-  const p=localPoint(i.home,i.center),e=localPoint(i.home,isletPoint(i,[100,0]));
+  const p=placeIslet(i.home,i,[0,0]),e=placeIslet(i.home,i,[100,0]);
   assert.ok(Math.abs(Math.atan2(e.y-p.y,e.x-p.x))<.01,`${i.id} stands upright on ${i.home}`);
   // its props stand on the ground: walked round, never through
-  for(const b of i.blocked){const cx=b.reduce((s,q)=>s+q[0],0)/b.length,cy=b.reduce((s,q)=>s+q[1],0)/b.length,q=localPoint(i.home,isletPoint(i,[cx,cy]));
+  for(const b of i.blocked){const cx=b.reduce((s,q)=>s+q[0],0)/b.length,cy=b.reduce((s,q)=>s+q[1],0)/b.length,q=placeIslet(i.home,i,[cx,cy]);
    assert.equal(navOf(i.home).walkable(q.x,q.y),false,`${i.id} prop footprint is solid`);}
  }
 });
@@ -109,7 +110,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
  for(const i of ISLETS){
   const w=isletWalk(i.id),nav=navOf(i.home),id=i.home;
   // approach from open sea, from the side away from the jetty, so the boat must sail round the islet
-  const frame=transport(i,i.collisionCenter),start=localPoint(id,expMap(frame,-i.jetty.dir[0]*(i.radius+380),-i.jetty.dir[1]*(i.radius+380),WORLD_GEO.Rw));
+  const start=placeIslet(id,i,[i.landCentre[0]-i.jetty.dir[0]*(i.radius+380),i.landCentre[1]-i.jetty.dir[1]*(i.radius+380)]);
   assert.ok(canSail(start.x,start.y,id),`${i.id} start at sea`);
   const actor={...start,islandId:id,mode:'sailing',turn:0,path:[]};
   const spot=landingSpot(actor,nav);
@@ -125,7 +126,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   const boat={id:`${id}-0`,islandId:id,x:approach.x,y:approach.y,turn:0};
   assert.ok(nav.walkable(actor.x,actor.y));
   // walk to the far side of the land and back
-  const aim=localPoint(id,isletPoint(i,i.landCentre)),near=nav.nearest(aim.x,aim.y,300),goal={x:near[0],y:near[1]};
+  const aim=placeIslet(id,i,i.landCentre),near=nav.nearest(aim.x,aim.y,300),goal={x:near[0],y:near[1]};
   assert.ok(setWalkDestination(actor,nav,goal.x,goal.y),`${i.id} can walk inland`);
   let walked=0;
   for(let k=0;k<1200&&actor.path.length;k++){const x=actor.x,y=actor.y;walkStep(actor,nav,.05,k*.05,{x:0,y:0});walked+=Math.hypot(actor.x-x,actor.y-y);assert.ok(nav.walkable(actor.x,actor.y),`${i.id} stays on land`);}
@@ -139,7 +140,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   for(let k=0;k<1200&&actor.path.length;k++)walkStep(actor,nav,.05,k*.05,{x:0,y:0});
   assert.ok(Math.hypot(actor.x-deck.x,actor.y-deck.y)<45,`${i.id} reached the boat`);
   Object.assign(actor,{x:boat.x,y:boat.y,mode:'sailing',sailTarget:null,sailRoute:null});
-  const away=localPoint(id,expMap(frame,i.jetty.dir[0]*(i.radius+900),i.jetty.dir[1]*(i.radius+900),WORLD_GEO.Rw));
+  const away=placeIslet(id,i,[i.landCentre[0]+i.jetty.dir[0]*(i.radius+900),i.landCentre[1]+i.jetty.dir[1]*(i.radius+900)]);
   const d=Math.hypot(away.x-actor.x,away.y-actor.y);
   for(let k=0;k<40;k++){sailStep(actor,.05,{x:(away.x-actor.x)/d,y:(away.y-actor.y)/d});assert.ok(canSail(actor.x,actor.y,id));}
   assert.ok(Math.hypot(actor.x-boat.x,actor.y-boat.y)>500,`${i.id} sailed off`);
@@ -148,7 +149,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
 test('room server: Dock at an islet lands you on it, you walk, take the boat back and sail off',async()=>{
  const i=ISLETS.find(i=>i.home==='home')??ISLETS[0],id=i.home,w=isletWalk(i.id);
  const room=await makeRoom();
- const frame=transport(i,i.collisionCenter),start=localPoint(id,expMap(frame,i.jetty.dir[0]*(i.radius+300),i.jetty.dir[1]*(i.radius+300),WORLD_GEO.Rw));
+ const start=placeIslet(id,i,[i.landCentre[0]+i.jetty.dir[0]*(i.radius+300),i.landCentre[1]+i.jetty.dir[1]*(i.radius+300)]);
  const {actor,socket}=addPlayer(room,4242,{islandId:id,x:start.x,y:start.y,mode:'sailing'});
  const boat=room.boats.find(b=>b.islandId===id&&!b.occupant);
  Object.assign(boat,{x:actor.x,y:actor.y,occupant:actor.id});actor.boatId=boat.id;
@@ -159,7 +160,7 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
   assert.equal(actor.islandId,id);
   assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,'on the jetty end');
   assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<16,'the boat waits beside the jetty');
-  const inland=localPoint(id,isletPoint(i,i.landCentre)),to=navOf(id).nearest(inland.x,inland.y,300);
+  const inland=placeIslet(id,i,i.landCentre),to=navOf(id).nearest(inland.x,inland.y,300);
   const info=room.connections.get(socket);info.lastDestination=-Infinity;
   room.webSocketMessage(socket,JSON.stringify({type:'destination',seq:2,x:to[0],y:to[1]}));
   assert.ok(actor.path.length,'a click on the islet walks there');
@@ -175,11 +176,49 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
  }finally{clearInterval(room.timer);}
 });
 test('route planner steers round an islet and manual sailing stops at its land',()=>{
- const i=ISLETS[0],frame=transport(i,i.collisionCenter),id=WORLD_ISLANDS.reduce((a,b)=>angle(i.center,a.center)<angle(i.center,b.center)?a:b).id;
- const a=localPoint(id,expMap(frame,-1500,0,WORLD_GEO.Rw)),b=localPoint(id,expMap(frame,1500,0,WORLD_GEO.Rw));
+ const i=ISLETS[0],id=WORLD_ISLANDS.reduce((a,b)=>angle(i.center,a.center)<angle(i.center,b.center)?a:b).id;
+ const a=placeIslet(id,i,[i.landCentre[0]-1500,i.landCentre[1]]),b=placeIslet(id,i,[i.landCentre[0]+1500,i.landCentre[1]]);
  const route=sailRoute(id,a,b);assert.ok(route?.length>1,'direct line crosses solid islet');
  let last=a;for(const to of route){const steps=Math.ceil(Math.hypot(to.x-last.x,to.y-last.y)/12);for(let k=0;k<=steps;k++){const p={x:last.x+(to.x-last.x)*k/steps,y:last.y+(to.y-last.y)*k/steps};assert.ok(canSail(p.x,p.y,id));}last=to;}
- const actor={...a,islandId:id,mode:'sailing'},p=localPoint(id,i.collisionCenter),d=Math.hypot(p.x-a.x,p.y-a.y);
+ const actor={...a,islandId:id,mode:'sailing'},p=placeIslet(id,i,i.landCentre),d=Math.hypot(p.x-a.x,p.y-a.y);
  for(let k=0;k<300;k++)sailStep(actor,.02,{x:(p.x-a.x)/d,y:(p.y-a.y)/d});
  assert.ok(canSail(actor.x,actor.y,id));assert.ok(Math.hypot(actor.x-p.x,actor.y-p.y)>BOAT_RADIUS);
+});
+
+test('room server: docking from another rigid chart keeps every islet boat at its drawn jetty',async()=>{
+ const room=await makeRoom();
+ try{
+  for(const [k,i]of ISLETS.entries()){
+   const from=WORLD_ISLANDS.filter(a=>a.id!==i.home).sort((a,b)=>angle(i.center,a.center)-angle(i.center,b.center))[0].id;
+   const water=placeIslet(from,i,i.jetty.water),w=isletWalk(i.id);
+   assert.ok(canSail(water.x,water.y,from),`${i.id} water in ${from}`);
+   const {actor,socket}=addPlayer(room,6000+k,{islandId:from,...water,mode:'sailing'});
+   const boat=room.boats.find(b=>b.islandId===from&&!b.occupant);
+   Object.assign(boat,{...water,occupant:actor.id});actor.boatId=boat.id;
+   const spot=landingSpot(actor);assert.equal(spot?.islet,i.id);
+   const drawn=placeIslet(from,i,i.jetty.land);
+   assert.ok(Math.hypot(spot.x+spot.offset.x-drawn.x,spot.y+spot.offset.y-drawn.y)<1e-6);
+   room.webSocketMessage(socket,JSON.stringify({type:'disembark',seq:1}));
+   for(let n=0;n<10&&actor.mode==='sailing';n++)room.step();
+   assert.equal(actor.mode,'walking',`${i.id} docked from ${from}`);
+   assert.equal(actor.islandId,i.home);
+   assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,`${i.id} on the deck end`);
+   assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<2,`${i.id} boat stays at the drawn tip after changing chart`);
+  }
+ }finally{clearInterval(room.timer);}
+});
+
+test('an islet landing keeps its drawn art fixed on screen across rigid charts',()=>{
+ const screen=(m,p)=>[m.a*p.x+m.c*p.y+m.tx,m.b*p.x+m.d*p.y+m.ty];
+ for(const i of ISLETS){
+  const from=WORLD_ISLANDS.find(a=>a.id!==i.home).id,to=i.home;
+  const camera={...placeIslet(from,i,i.jetty.water),zoom:1.8};
+  const before=cameraMatrix(camera,1440,900),after={...reframeIslet(from,to,i,camera),zoom:camera.zoom};
+  after.basis=easeLandingBasis(rigidLandingBasis(from,to,undefined,isletLandingFrame(from,to,i)),0);
+  const matrix=cameraMatrix(after,1440,900);
+  for(const q of [i.jetty.foot,i.jetty.tip,...i.coast]){
+   const a=screen(before,placeIslet(from,i,q)),b=screen(matrix,placeIslet(to,i,q));
+   assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6,`${i.id}: no jump at its landing`);
+  }
+ }
 });

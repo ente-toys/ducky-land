@@ -22,6 +22,19 @@ export function atlasReference(x,y,state,images,width,height){
  const lit=dot(v,light)/ln,shade=(1-smooth(.12,.3,lit))*ball,highlight=smooth(.8,.95,lit)*ball,rim=smooth(.94,1,edge)**2*.45*ball;
  const lighting=c=>mix(c.map((c,k)=>c*(1-shade+shade*[.72,.8,.98][k])+[.06,.07,.08][k]*highlight),[.55,.82,1],rim).map(c=>Math.max(0,Math.min(255,c*255)));
  const sea=lighting(mix([110/255,201/255,222/255],[.2,.52,.86],ball));
+ if(state.stickers){
+  // boss 8 Nov: islands are rigid stickers. Read each through the matrix the page drew it with (front first).
+  for(const st of state.stickers){
+   const det=st.a*st.d-st.b*st.c,dx=x-st.x,dy=y-st.y,qx=(st.d*dx-st.c*dy)/det,qy=(-st.b*dx+st.a*dy)/det;
+   const size=st.kind==='island'?mapOf(st.id):{width:st.width,height:st.width},u=.5+qx/size.width,v=.5+qy/size.height;
+   if(u<=0||v<=0||u>=1||v>=1)continue;
+   if(st.kind!=='island'||st.mode==='live')return null;
+   const island=WORLD_ISLANDS.find(i=>i.id===st.id),image=images.get(island.theme??'home');if(!image)return null;
+   const c=bilinear(image,u,v);if(c[3]<1)continue;if(c[3]<254)return null;
+   return {colour:lighting(c.slice(0,3).map(c=>c/255)),sea};
+  }
+  return null;
+ }
  for(const i of WORLD_ISLANDS){
   const m=mapOf(i.id);if(dot(p,i.center)<Math.cos(Math.hypot(m.width,m.height)/2/WORLD_GEO.Rw))continue;
   const q=logMap(i,p,WORLD_GEO.Rw),u=.5+q.x/m.width,v=.5+q.y/m.height;
