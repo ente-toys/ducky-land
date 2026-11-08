@@ -1,18 +1,17 @@
-// boss 5 Nov: "make the other islands real, just copies of ours; we are only on one, and take a boat to go to another".
-// The world map: 300 stable island identities. Finished themes surround Home;
-// the remaining islands use its map. Pure data shared by client, server and tests.
-// Coordinates here are 'map' coordinates; each island plays in its own local coordinates (the home map), and
+import {sphereFrame, logMap} from './sphere.js';
+// Home and the 12 delivered themes, with stable save identities.
+// Pure placement data shared by the live client, room worker and tests.
+// Coordinates here are 'map' coordinates; each island plays in its own local coordinates, and
 // offsetOf(a, b) turns one island's local coordinates into the other's.
 import world from '../../rive/web/world.json' with {type: 'json'};
 import READY from '../../rive/web/themes/index.js';   // the delivered themes, for their map sizes (boss 6 Nov: themed islands are bigger)
 
-export const ISLAND_COUNT = 300;
-const W = world.width, H = world.height;
-// Append a theme here when it is finished. This is the only finish-order list.
-export const FINISHED_THEMES = ['sunflower', 'pink', 'library', 'community', 'fair', 'neon', 'cathedral', 'canal', 'waterfall', 'goldmine'];
+const W = 5800, H = 4400; // stable world layout, independent of Home's expanding bounds
+// The delivered roster, in finish order. Exactly Home plus these twelve themes.
+export const FINISHED_THEMES = ['sunflower', 'pink', 'library', 'community', 'fair', 'neon', 'cathedral', 'canal', 'waterfall', 'goldmine', 'bog', 'snow'];
 export const TEST_THEMES = FINISHED_THEMES.slice(0, 3);
 // Existing save identities and display metadata, not placement or finish order.
-// Future themes need only FINISHED_THEMES; this table preserves the first ten IDs.
+// Changes to the roster need an explicit save identity here and an angular anchor below.
 export const THEMED_ISLANDS = [
   ['blossom', 'sunflower', 'Sunbob Fields', 0xf2c53d],
   ['sunset', 'pink', 'Rosybutton Bay', 0xf29bb7],
@@ -24,109 +23,42 @@ export const THEMED_ISLANDS = [
   ['isle-56', 'canal', 'Puddlelace', 0x6ec9de],
   ['isle-93', 'waterfall', 'Ribbonfall Cove', 0x7fd6c8],
   ['isle-163', 'goldmine', 'Nuggetnook', 0xd9b578],
+  ['isle-249', 'bog', 'Booquack Bog', 0xb98cf0],
+  ['isle-55', 'snow', 'Iceland', 0x9fd4ff],
 ];
-export const sizeOfTheme = theme => {const w = theme && theme !== 'home' ? READY?.[theme]?.world : null; return w?.width > 0 && w?.height > 0 ? {width: w.width, height: w.height} : {width: W, height: H};};
-const PREFIX = ['Puddle', 'Breadcrumb', 'Feather', 'Waddle', 'Quack', 'Sunny', 'Clover', 'Pebble', 'Maple', 'Honey',
-  'Bubble', 'Drizzle', 'Biscuit', 'Tulip', 'Mango', 'Coconut', 'Lily', 'Ripple', 'Willow', 'Marsh'];
-const SUFFIX = ['Isle', 'Island', 'Cay', 'Key', 'Atoll', 'Bay', 'Reef', 'Rock', 'Point', 'Haven', 'Shoal', 'Holm', 'Shore', 'Lagoon', 'Cove'];
-const ACCENTS = [0xf29bb7, 0xffa14f, 0x9fd4ff, 0xb98cf0, 0x8fdc8a, 0xffd36e, 0xff8a7a, 0x7fd6c8];
-const TINTS = [0xFFFFFF, 0xFFFFFF, 0xFFE9B8, 0xE2F5B8, 0xFFD9C4, 0xF2E2FF, 0xD9F0FF, 0xFFF3A8];
+export const sizeOfTheme = theme => {const w = theme && theme !== 'home' ? READY?.[theme]?.world : null; return w?.width > 0 && w?.height > 0 ? {width: w.width, height: w.height} : theme === 'home' || !theme ? {width:world.width,height:world.height} : {width:W,height:H};};
+export const ISLAND_COUNT = 1 + FINISHED_THEMES.length;
 
-// the world laid out with each island's map size given by sizeOf(theme) (the delivered themes by default)
-export function layoutWorld(sizeOf = sizeOfTheme, seed = 11, finished = FINISHED_THEMES) {
-  let n = seed >>> 0;
-  const rnd = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const cx = W / 2, cy = H / 2;
-  // the map: wide enough that 300 full-size islands fit with open sea between them
-  const COLS = 20, ROWS = 15, sx = W * 2, sy = H * 2, hc = 10, hr = 7;
-  const x0 = cx - (hc + .5) * sx, SX = COLS * sx, SY = ROWS * sy;
-  const bounds = {x0, y0: cy - (hr + .5) * sy, x1: x0 + SX, y1: cy - (hr + .5) * sy + SY};
-  const Rw = SX / (2 * Math.PI), LAT = .96;   // the map wraps once round a ball of this radius; islands stay within ~55 deg
-  const latOf = y => -(y - cy) / Rw;
-  const wrapd = (v, p) => v - p * Math.round(v / p);
-  const out = [{index: 0, id: 'home', name: 'Home Island', x: cx, y: cy, accent: 0xffda69, tint: 0xFFFFFF}];
-  // spaced by their real distance on the ball (east-west shrinks by cos(latitude)) so no two copies ever touch, on the
-  // globe or in the sea you sail across
-  const room = (x, y) => out.every(i => {
-    const c = Math.cos((latOf(i.y) + latOf(y)) / 2);
-    return Math.hypot(wrapd(i.x - x, SX) * c / W, (i.y - y) / H) > 1.02;
-  });
-  for (let t = 0; out.length < ISLAND_COUNT && t < 200000; t++) {
-    const lat = Math.asin((rnd() * 2 - 1) * Math.sin(LAT - H * .5 / Rw)), x = x0 + rnd() * SX, y = cy - lat * Rw;   // even over the ball's area
-    if (room(x, y)) out.push({index: out.length, x, y});
-  }
-  const names = PREFIX.flatMap(p => SUFFIX.map(s => `${p} ${s}`)).sort(() => rnd() - .5);
-  for (const island of out.slice(1)) Object.assign(island, {
-    id: `isle-${island.index}`, name: names[island.index], accent: ACCENTS[Math.floor(rnd() * ACCENTS.length)], tint: TINTS[Math.floor(rnd() * TINTS.length)]});
-  // Ashwin's two islands keep their names: the two nearest neighbours of home
-  const byDistance = out.slice(1).sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy));
-  Object.assign(byDistance[0], {id: 'blossom', name: 'Sunbob Fields', accent: 0xf2c53d});
-  Object.assign(byDistance[1], {id: 'sunset', name: 'Rosybutton Bay', accent: 0xf29bb7});
-  const isle251 = out.find(island => island.id === 'isle-251');   // themed islands carry their theme's name
-  if (isle251) Object.assign(isle251, {name: 'Pagepond'});
-  // Stable local island identities, ordered slots around Home. Reserve enough space for
-  // any delivered map, then keep these centres fixed while the outer copies spread.
-  const maxW = Math.max(8000, ...finished.map(t => sizeOf(t).width));
-  const maxH = Math.max(6000, ...finished.map(t => sizeOf(t).height));
-  const slots = [];
-  for (let row=-10; row<=10; row++) for (let col=-10; col<=10; col++) {
-    if (!row && !col) continue;
-    slots.push({x: col * maxW * 1.15, y: row * maxH * 1.15});
-  }
-  slots.sort((a,b) => Math.hypot(a.x,a.y)-Math.hypot(b.x,b.y) || a.y-b.y || a.x-b.x);
-  const claimed = new Set(['home']);
-  finished.forEach((theme,k) => {
-    const meta = THEMED_ISLANDS.find(row => row[1] === theme);
-    const island = (meta && out.find(i => i.id === meta[0])) || byDistance.find(i => !claimed.has(i.id) && !THEMED_ISLANDS.some(row => row[0] === i.id));
-    claimed.add(island.id);
-    const slot=slots[k], scale=1+k*.002;
-    Object.assign(island, {theme, name:meta?.[2] ?? READY[theme]?.world?.name ?? theme, accent:meta?.[3] ?? island.accent,
-      x:cx+slot.x*scale, y:cy+slot.y*scale});
-  });
-  for (const island of out) Object.assign(island, sizeOf(island.theme));
-  const radius = Math.max(...out.filter(i=>i.theme).map(i=>Math.hypot(i.x-cx,i.y-cy))) + 1200;
-  const outside = i => {
-    if (i.id==='home' || i.theme) return;
-    const dx=wrapd(i.x-cx,SX), dy=i.y-cy, r=Math.hypot(dx,dy);
-    if (r<radius) {i.x=cx+dx/r*radius; i.y=cy+dy/r*radius;}
-  };
-  out.forEach(outside);
-  spread(out, {SX, latOf, wrapd, y0: bounds.y0, y1: bounds.y1, outside});
-  return {islands: out, bounds, Rw, SX, wrapd};
-}
-
-// boss 6 Nov ("every island BIGGER and spacious"): a themed map may be up to 8000 x 6000, so two islands are spaced by their
-// own two sizes: their centres stay at least 1.02 of the average of their sizes apart (the same rule the layout uses for two
-// home-size islands, so with no bigger map nothing moves). Where a bigger map crowds a neighbour, the pair is pushed apart
-// along the line between them: Home and finished themes stay fixed. Deterministic, so the
-// game and the room server lay out the same world.
-export const GAP = 1.02;
-export const clearOf = (a, b, {SX, latOf, wrapd}) => {
-  const c = Math.cos((latOf(a.y) + latOf(b.y)) / 2);
-  return Math.max(Math.abs(wrapd(b.x - a.x, SX)) * c / ((a.width + b.width) / 2), Math.abs(b.y - a.y) / ((a.height + b.height) / 2));
-};
-function spread(out, geo) {
-  const {SX, wrapd, y0, y1} = geo, mobility = i => i.id === 'home' || i.theme ? 0 : 1;
-  for (let pass = 0; pass < 400; pass++) {
-    let moved = false;
-    for (let i = 0; i < out.length; i++) for (let j = i + 1; j < out.length; j++) {
-      const a = out[i], b = out[j];
-      if (Math.abs(wrapd(b.x - a.x, SX)) > (a.width + b.width) * 1.2 || Math.abs(b.y - a.y) > (a.height + b.height) * .6) continue;   // far apart: skip cheaply
-      const d = clearOf(a, b, geo);
-      if (d > GAP) continue;
-      const ma = mobility(a), mb = mobility(b), total = ma + mb;
-      if (!total) continue;
-      let dx = wrapd(b.x - a.x, SX), dy = b.y - a.y;
-      if (!dx && !dy) dx = 1;
-      const k = (GAP * 1.01 / Math.max(d, 1e-6)) - 1;   // stretch the gap to just past the rule
-      a.x -= dx * k * ma / total; a.y -= dy * k * ma / total;
-      b.x += dx * k * mb / total; b.y += dy * k * mb / total;
-      for (const o of [a, b]) o.y = Math.max(y0 + o.height / 2, Math.min(y1 - o.height / 2, o.y));
-      moved = true;
-    }
-    out.forEach(geo.outside ?? (() => {}));
-    if (!moved) break;
-  }
+// Deliberate groups with unequal gaps, an isolated polar ice cap and southern sea.
+// Angles only author the unit vectors. Every island uses its OWN tangent frame.
+// boss 8 Nov 15:25 picked layout C "real little planet": cold band under the Iceland cap, warm belt round Home, Bog alone in the far south.
+// Order = FINISHED_THEMES: sunflower, pink, library, community, fair, neon, cathedral, canal, waterfall, goldmine, bog, snow.
+const ANCHORS = [
+  [55.7, 25.7], [-74.1, -5.7], [66, -34], [-107.4, 36.9], [154.3, -32.5], [-122.8, -28.6],
+  [-31.8, -35.3], [-173.6, 23.7], [-17.5, 42.6], [119.5, 19.1], [0, -90], [0, 90],
+];   // boss 8 Nov 17:05: spread to shrink the biggest empty sea patch (17.4 -> 14.2 deg); Iceland N pole, fight club S pole
+// After moving an anchor or changing the globe size: coastGaps() (sphere-shores.js) must keep BOAT_CHANNEL between every
+// pair of real coasts, jetties included, then re-place the islets with `node scripts/islets/place.mjs`.
+const RAD=Math.PI/180;
+export const SPHERE_CIRCUMFERENCE=74000;   // spacing is checked on the real coasts: coastGaps() in sphere-shores.js
+const BASE_SIZES=new Map(['home',...FINISHED_THEMES].map(t=>[t,sizeOfTheme(t)]));
+export function layoutWorld(sizeOf=sizeOfTheme,seed=11,finished=FINISHED_THEMES){
+ const out=[{index:0,id:'home',name:'Home Island',accent:0xffda69,tint:0xffffff,lon:0,lat:0,...sizeOf('home')}];
+ for(const theme of finished){
+  const k=FINISHED_THEMES.indexOf(theme),meta=THEMED_ISLANDS.find(row=>row[1]===theme);
+  if(!meta||k<0)throw Error(`No stable island identity for ${theme}`);
+  const [lon,lat]=ANCHORS[k];out.push({index:k+1,id:meta[0],theme,name:meta[2],accent:meta[3],tint:0xffffff,lon:lon*RAD,lat:lat*RAD,...sizeOf(theme)});
+ }
+ // Maps bigger than their delivered size grow the whole globe by the same factor, so every coast keeps its angular
+ // footprint and every channel only widens. Delivered sizes give scale 1.
+ let scale=1;
+ for(const i of out){
+  if(!(i.width>0&&i.height>0&&Number.isFinite(i.width+i.height)))throw Error(`Invalid map bounds for ${i.id}`);
+  const base=BASE_SIZES.get(i.theme??'home');scale=Math.max(scale,i.width/base.width,i.height/base.height);
+ }
+ const Rw=SPHERE_CIRCUMFERENCE/(2*Math.PI)*scale,SX=2*Math.PI*Rw,wrapd=(v,p)=>v-p*Math.round(v/p);
+ const islands=out.map(i=>({...i,...sphereFrame(i.lon,i.lat),x:W/2+i.lon*Rw,y:H/2-i.lat*Rw}));
+ return {islands,Rw,SX,wrapd,bounds:{x0:W/2-SX/2,x1:W/2+SX/2,y0:H/2-Math.PI*Rw/2,y1:H/2+Math.PI*Rw/2}};
 }
 
 const MAP = layoutWorld();
@@ -138,7 +70,7 @@ export const worldIsland = id => byId.get(id);
 // how far island b sits from island a, in a's local coordinates (east-west takes the short way round the globe)
 export function offsetOf(a, b) {
   const A = byId.get(a), B = byId.get(b);
-  return {x: MAP.wrapd(B.x - A.x, MAP.SX), y: B.y - A.y};
+  return logMap(A,B.center,MAP.Rw);
 }
 // the islands you can sail to from this one: its four nearest, plus any island that counts this one among its four
 // nearest, so every route also runs back the other way and the whole world is one connected sea
@@ -152,19 +84,4 @@ export function neighboursOf(id) {
     .sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y)));
   return NEIGHBOURS.get(id);
 }
-// boss 5 Nov ("I went to another island, but I am going under the island"): the live copy a point stands in (a point in
-// the current island's local coordinates; copies as archipelago.js places them, centre x/y). The copies are drawn after
-// the real island, so a boat, Ducky or name board out in a neighbour's waters is drawn again inside that copy's pass,
-// sorted among its jetty, sign and trees, instead of hidden under the whole copy. On the real island: none.
-// boss 6 Nov: each map has its own size (here = the real island's map, a copy's own width/height when it carries them).
-export function copyHolding(x, y, copies, pad = 300, here = {width: W, height: H}) {
-  if (Math.abs(x - here.width / 2) < here.width / 2 && Math.abs(y - here.height / 2) < here.height / 2) return null;
-  let best = null, distance = Infinity;
-  for (const copy of copies) {
-    const cw = copy.width ?? W, ch = copy.height ?? H;
-    if (Math.abs(x - copy.x) >= cw / 2 + pad || Math.abs(y - copy.y) >= ch / 2 + pad) continue;
-    const d = Math.hypot((x - copy.x) / cw, (y - copy.y) / ch);
-    if (d < distance) {distance = d; best = copy;}
-  }
-  return best;
-}
+// copyHolding (which neighbour's copy a boat out at sea is drawn in) lives in sphere-shores.js, beside the real coasts.

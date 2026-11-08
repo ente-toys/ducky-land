@@ -14,7 +14,7 @@ import {geometry} from '../rive/web/island-geometry.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const DATA = theme => join(root, 'rive/web/themes', theme), ART = theme => join(root, 'public/pixi-art/themes', theme);
 const INDEX = join(root, 'rive/web/themes/index.js');
-const MAX = {width: 8000, height: 6000};   // boss 6 Nov: themed islands are BIGGER and spacious (world-map.js spaces every island by its own size)
+const MAX = {width: 16000, height: 12000};   // boss 8 Nov: every island grows ~3x round its original (origin may go negative)   // boss 6 Nov: themed islands are BIGGER and spacious (world-map.js spaces every island by its own size)
 const args = new Set(process.argv.slice(2));
 
 const json = file => JSON.parse(readFileSync(file, 'utf8'));
@@ -31,7 +31,7 @@ export function checkTheme(theme) {
   const art = need(join(artDir, 'art.json')) ? read(join(artDir, 'art.json')) : null;
   if (world) {
     for (const key of ['width', 'height']) if (!(world[key] > 0)) problems.push(`world.json: ${key} missing`);
-    if (world.width > MAX.width || world.height > MAX.height) problems.push(`world.json: ${world.width}x${world.height} is bigger than the 8000x6000 limit`);
+    if (world.width > MAX.width || world.height > MAX.height) problems.push(`world.json: ${world.width}x${world.height} is bigger than the 16000x12000 limit`);
     if (!Array.isArray(world.coast) || world.coast.length < 3 || !world.coast.every(pt)) problems.push('world.json: coast must be a list of [x,y] (3+)');
     for (const key of ['water', 'bridges', 'obstacles', 'islets', 'walkways']) if (!Array.isArray(world[key])) problems.push(`world.json: ${key} must be a list (may be [])`);
     if (!pt(world.zones?.plaza?.spawn) && !pt(harbor?.spawn)) problems.push('world.json: zones.plaza.spawn missing');
@@ -66,7 +66,8 @@ export function checkTheme(theme) {
       const spots = map.boatSpots();
       if (spots.length < 3) problems.push(`only ${spots.length} boat spots`);
       for (const [i, s] of spots.entries()) if (!wet(s.x, s.y)) problems.push(`boat spot ${i} (${s.x},${s.y}) is not open sea`);
-      const edge = world.coast.some(([x, y]) => x < 300 || y < 300 || x > world.width - 300 || y > world.height - 300);
+      const ox = world.origin?.x ?? 0, oy = world.origin?.y ?? 0;
+      const edge = world.coast.some(([x, y]) => x < ox + 300 || y < oy + 300 || x > ox + world.width - 300 || y > oy + world.height - 300);
       if (edge) problems.push('the coast comes within 300 of the map edge (leave sea round the island)');
     } catch (e) {problems.push(`map: ${e.message}`);}
   }

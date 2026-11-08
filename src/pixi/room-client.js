@@ -249,7 +249,7 @@ export class RoomClient {
   destination(x, y) {
     if (!this.world || !Number.isFinite(x) || !Number.isFinite(y)) return null;
     if (this.player?.mode === 'sailing' && !canSail(x,y,this.islandId)) return null;
-    if (this.player?.mode !== 'sailing' && (x<0 || y<0 || x>=this.worldHere().width || y>=this.worldHere().height)) return null;
+    if (this.player?.mode !== 'sailing' && (x<(this.worldHere().origin?.x ?? 0) || y<(this.worldHere().origin?.y ?? 0) || x>=(this.worldHere().origin?.x ?? 0)+this.worldHere().width || y>=(this.worldHere().origin?.y ?? 0)+this.worldHere().height)) return null;
     const result = this.send({type:'destination',x,y});
     return Array.isArray(result) ? result : null;
   }

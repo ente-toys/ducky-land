@@ -216,7 +216,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     }
     (view.match||=new Map()).set(other,map);return map;
   }
-  let glide={other:null,w:0,lo:false};
+  let glide={other:null,w:0,lo:false}, sailing=false;
   const smooth=(a,b,x)=>{const k=clamp((x-a)/(b-a),0,1);return k*k*(3-2*k);};
   function twinFrame(entry,frame,angle,otherAngle){
     const i=(entry.frames[String(angle)]||[]).indexOf(frame),theirs=entry.frames[String(otherAngle)]||[],t=theirs[i];
@@ -245,9 +245,10 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     // Body geometry depends on the turn, while walking animates its container.
     // Subpixel turn steps avoid rebuilding and triangulating an identical outline.
     const morphWeight = Math.round(glide.w * 128) / 128;
-    if(view.morph && (view.morphWeight !== morphWeight || view.morphOther !== glide.other)){
+    if(view.morph && (view.morphWeight !== morphWeight || view.morphOther !== glide.other || view.morphSailing !== sailing)){
       view.morphWeight = morphWeight;
       view.morphOther = glide.other;
+      view.morphSailing = sailing;
       const me=view.spec.morph,other=glide.other?.spec.morph,w=other?morphWeight:0,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y];
       const mix=(a,b,k)=>a.map((p,i)=>[p[0]+((b?b[i][0]:p[0])-p[0])*k-ox,p[1]+((b?b[i][1]:p[1])-p[1])*k-oy]);
       const shrink=(a,k)=>{const cx=a.reduce((s,p)=>s+p[0],0)/a.length,cy=a.reduce((s,p)=>s+p[1],0)/a.length;return a.map(p=>[cx+(p[0]-cx)*k-ox,cy+(p[1]-cy)*k-oy]);};
@@ -255,7 +256,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       const outline=mix(me.body,other?.body,w).flat();g.poly(outline).fill(BODY).stroke({color:INK,width:9,join:'round'});
       for(const garment of view.garments)if(garment.mask){garment.mask.clear().poly(outline).fill(0xffffff);garment.outline=outline;}
       if(me.belly)g.poly((other&&!other.belly?shrink(me.belly,Math.max(0,1-w*2)):mix(me.belly,other?.belly,w)).flat()).fill(BELLY);
-      if(me.shine)g.poly((other&&!other.shine?shrink(me.shine,Math.max(0,1-w*2)):mix(me.shine,other?.shine,w)).flat()).fill(0xFFFFFF);
+      // The white body highlight reads as a cut-out fringe against the cream sail.
+      if(me.shine&&!sailing)g.poly((other&&!other.shine?shrink(me.shine,Math.max(0,1-w*2)):mix(me.shine,other?.shine,w)).flat()).fill(0xFFFFFF);
     }
     const eyes=view.parts.filter(part=>part.role==='eye');
     // boss 4 Nov: eye pieces sit on the glided eyes: centred on their midpoint and squeezed by the eye spacing, so 3/4 turns never hang off the head
@@ -332,8 +334,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.angry=p.angry>.02&&face;
     if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
-  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null}={}){
+  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
+    sailing=isSailing;
     const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
     if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}

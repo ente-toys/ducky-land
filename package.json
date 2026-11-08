@@ -7,7 +7,8 @@
     "test": "node --test qa/*.test.mjs",
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "globe:assets": "node scripts/globe-perf/refresh.mjs"
   },
   "dependencies": {
     "@rive-app/webgl2-advanced": "^2.46.0",

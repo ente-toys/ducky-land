@@ -131,7 +131,7 @@ const heartbeat = setInterval(() => {
   }
 }, 5000);
 realtime.on('error', error => { console.error(error.message); process.exit(1); });
-realtime.listen(Number(process.env.DUCKY_WS_PORT)||8810, HOST, () => console.log('Realtime: ws://127.0.0.1:8810/room'));
+realtime.listen(Number(process.env.DUCKY_WS_PORT)||8810, HOST, () => console.log(`Realtime: ws://127.0.0.1:${Number(process.env.DUCKY_WS_PORT)||8810}/room`));
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => {
   clearInterval(loop); clearInterval(heartbeat);
   for (const p of players.values()) p.ws.terminate();

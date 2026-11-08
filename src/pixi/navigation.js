@@ -2,15 +2,16 @@ import {geometry} from '../../rive/web/island-geometry.mjs';
 export function createNavigation(world){
 const {walkable}=geometry(world);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const X0=world.origin?.x ?? 0,Y0=world.origin?.y ?? 0;
 const CELL=32,COLS=Math.ceil(world.width/CELL),ROWS=Math.ceil(world.height/CELL);
 const grid=new Uint8Array(COLS*ROWS);
-for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)grid[y*COLS+x]=walkable((x+.5)*CELL,(y+.5)*CELL)?1:0;
-function point(id){return [(id%COLS+.5)*CELL,(Math.floor(id/COLS)+.5)*CELL];}
+for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)grid[y*COLS+x]=walkable(X0+(x+.5)*CELL,Y0+(y+.5)*CELL)?1:0;
+function point(id){return [X0+(id%COLS+.5)*CELL,Y0+(Math.floor(id/COLS)+.5)*CELL];}
 // boss 6 Nov (100 Duckies clicking about one big island): whether the straight step between two neighbouring cells is clear,
 // worked out once per step and kept (0 not yet known, 1 clear, 2 blocked), so a busy island's routes stop re-testing it
 const STEP=new Uint8Array(COLS*ROWS*9);
 function stepClear(cur,dx,dy,n){const k=cur*9+(dy+1)*3+(dx+1);if(!STEP[k])STEP[k]=clearLine(point(cur),point(n))?1:2;return STEP[k]===1;}
-function cell(x,y){return Math.floor(y/CELL)*COLS+Math.floor(x/CELL);}
+function cell(x,y){return Math.floor((y-Y0)/CELL)*COLS+Math.floor((x-X0)/CELL);}
 function nearest(x,y,radius=150){
  if(walkable(x,y))return [x,y];
  for(let r=16;r<=radius;r+=16)for(let a=0;a<24;a++){let xx=x+Math.cos(a*Math.PI/12)*r,yy=y+Math.sin(a*Math.PI/12)*r;if(walkable(xx,yy))return [xx,yy];}
@@ -24,7 +25,7 @@ function route(sx,sy,tx,ty){
  const edge=reachToward(sx,sy,tx,ty);return edge?[edge]:[];   // that shore is cut off: walk as far as the straight line allows
 }
 function search(sx,sy,target){
- function nearCell(x,y){const c=cell(x,y);if(grid[c])return c;for(let r=1;r<6;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){let xx=Math.floor(x/CELL)+dx,yy=Math.floor(y/CELL)+dy,id=yy*COLS+xx;if(xx>=0&&xx<COLS&&yy>=0&&yy<ROWS&&grid[id]&&clearLine([x,y],point(id)))return id;}return -1;}
+ function nearCell(x,y){const c=cell(x,y);if(grid[c])return c;for(let r=1;r<6;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){let xx=Math.floor((x-X0)/CELL)+dx,yy=Math.floor((y-Y0)/CELL)+dy,id=yy*COLS+xx;if(xx>=0&&xx<COLS&&yy>=0&&yy<ROWS&&grid[id]&&clearLine([x,y],point(id)))return id;}return -1;}
  const start=nearCell(sx,sy),end=nearCell(...target);if(start<0||end<0)return [];
  const cost=new Float32Array(grid.length).fill(Infinity),parent=new Int32Array(grid.length).fill(-1),closed=new Uint8Array(grid.length),heap=[];
  const heuristic=id=>{const a=point(id),b=point(end);return Math.hypot(a[0]-b[0],a[1]-b[1])/CELL;};
@@ -35,7 +36,15 @@ function search(sx,sy,target){
  const x=cur%COLS,y=Math.floor(cur/COLS);
  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;let xx=x+dx,yy=y+dy,n=yy*COLS+xx;if(xx<0||yy<0||xx>=COLS||yy>=ROWS||!grid[n]||closed[n])continue;if(dx&&dy&&(!grid[y*COLS+xx]||!grid[yy*COLS+x]))continue;const nc=cost[cur]+(dx&&dy?Math.SQRT2:1);if(!stepClear(cur,dx,dy,n))continue;if(nc<cost[n]){cost[n]=nc;parent[n]=cur;push(n,nc+heuristic(n));}}}
  if(!found)return [];
- const raw=[];for(let n=end;n!==start;n=parent[n])raw.push(point(n));raw.reverse();raw.push(target);
+ const cells=[];for(let n=end;n!==start;n=parent[n])cells.push(point(n));cells.reverse();cells.push(target);
+ // A* produces one point per 32-unit cell. Keep the ends of straight runs
+ // before pulling corners tight, avoiding repeated checks of the same prefix.
+ const raw=[];
+ for(const p of cells){
+  while(raw.length>1){const a=raw.at(-2),b=raw.at(-1),dx=b[0]-a[0],dy=b[1]-a[1],ex=p[0]-b[0],ey=p[1]-b[1];
+   if(dx*ey!==dy*ex||dx*ex+dy*ey<=0)break;raw.pop();}
+  raw.push(p);
+ }
  let out=[],anchor=[sx,sy];for(let i=0;i<raw.length;){let j=i;while(j+1<raw.length&&clearLine(anchor,raw[j+1]))j++;out.push(raw[j]);anchor=raw[j];i=j+1;}return rounded(out,sx,sy);
 }
 // boss 5 Nov: a click on open sea walks to the shore toward the click. March back from the click toward the duck (16 px steps,

@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {worldIsland} from './world-map.js';
-import {nearbyMapFrame, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
+import {nearbyMapFrame, nearbyHeading, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
 
 const width = 1000;
 const scale = width / NEARBY_MAP_WIDTH;
@@ -18,7 +18,7 @@ export default function WorldMap({island}) {
       let heading = previous?.heading ?? 0;
       if (player && previous?.islandId === engine.islandId) {
         const dx = player.x - previous.x, dy = player.y - previous.y;
-        if (Math.hypot(dx, dy) > 1) heading = Math.atan2(dx, -dy) * 180 / Math.PI;
+        if (Math.hypot(dx, dy) > 1) heading = nearbyHeading(engine.islandId,player,dx,dy);
       }
       movement.current = player ? {x: player.x, y: player.y, islandId: engine.islandId, heading} : null;
       const islands = nearbyMapFrame(engine.islandId, engine.player ?? engine.camera).map(item => ({
@@ -26,7 +26,7 @@ export default function WorldMap({island}) {
       }));
       setFrame(previous => previous.playing === playing && previous.heading === heading && islands.every((item, index) => {
         const old = previous.islands[index];
-        return old?.id === item.id && old.art === item.art && old.x === item.x && old.y === item.y;
+        return old?.id === item.id && old.art === item.art && old.x === item.x && old.y === item.y && Math.abs(old.bearing-item.bearing)<.1;
       }) ? previous : {islands, playing, heading});
     }
     update();
@@ -42,7 +42,7 @@ export default function WorldMap({island}) {
           style={{transform: `translate(${width / 2 + item.x}px, ${height / 2 + item.y}px)`}}>
           <title>{worldIsland(item.id).name}</title>
           {item.art && <image href={item.art.src} x={-item.art.width * scale / 2} y={-item.art.height * scale / 2}
-            width={item.art.width * scale} height={item.art.height * scale}/>}
+            width={item.art.width * scale} height={item.art.height * scale} transform={`rotate(${item.bearing})`}/>}
         </g>)}
       </g>
       {frame.playing

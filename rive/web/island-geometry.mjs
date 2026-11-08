@@ -27,7 +27,7 @@ function shapeIndex(list,pad,CELL=256){
 // boss 6 Nov (100 Duckies on a big island): which side of the coast each 64-unit cell is on. A cell no coast edge comes near
 // is wholly inside or wholly outside, so only cells the coastline crosses still need the full point-in-polygon test. Exact:
 // every edge is sampled every 16 units and each sample marks its cell and the eight round it.
-function coastIndex(coast,CELL=64){
+export function coastIndex(coast,CELL=64){
  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
  for(const [px,py] of coast){if(px<x0)x0=px;if(px>x1)x1=px;if(py<y0)y0=py;if(py>y1)y1=py;}
  x0-=CELL;y0-=CELL;const cols=Math.ceil((x1+CELL-x0)/CELL)+1,rows=Math.ceil((y1+CELL-y0)/CELL)+1,cls=new Uint8Array(cols*rows);
@@ -39,7 +39,7 @@ function coastIndex(coast,CELL=64){
 }
 export function geometry(world){
  const ellipse=(x,y,o,pad=0)=>((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;
- let waterNear=null,solidNear=null,coastAt=null;
+ let waterNear=null,solidNear=null,bridgeNear=null,coastAt=null;
  function walkable(x,y){if(!Number.isFinite(x)||!Number.isFinite(y))return false;
   coastAt??=coastIndex(world.coast);
   const side=coastAt(x,y);
@@ -48,7 +48,10 @@ export function geometry(world){
    const isle=world.islets.some(a=>((x-a[0])/(a[2]-20))**2+((y-a[1])/(a[3]-20))**2<1);
    if(!board&&!isle)return false;
   }
-  const bridge=world.bridges.some(b=>Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
+  // Community maps can have hundreds of crossing rectangles. Index their exact
+  // walking bounds too, so every route sample only checks nearby bridges.
+  bridgeNear??=shapeIndex(world.bridges.map(b=>({...b,rx:Math.max(0,b.w/2-8),ry:Math.max(0,b.h/2-12)})),0);
+  const bridge=bridgeNear(x,y).some(b=>Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
   waterNear??=shapeIndex(world.water,20);solidNear??=shapeIndex(world.obstacles,16);
   return (bridge||!waterNear(x,y).some(o=>inShape(x,y,o,20)))&&!solidNear(x,y).some(o=>inShape(x,y,o,16));
  }

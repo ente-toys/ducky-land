@@ -6,9 +6,10 @@ export {fitZoom, zoomAt, easeCamera, clamp} from '../../rive/web/island-camera.m
 export const TILT = Math.min(1, Math.max(.4, Number(new URLSearchParams(globalThis.location?.search).get('tilt')) || 1));   // boss 3 Nov: top-down (A); ?tilt= still compares angles   // ?tilt= to compare angles
 
 export function screenToWorld(camera, point, width, height) {
+  const b=camera.basis??{a:1,b:0,c:0,d:1},det=b.a*b.d-b.b*b.c,x=point.x-width/2,y=point.y-height/2;
   return {
-    x: camera.x + (point.x - width / 2) / camera.zoom,
-    y: camera.y + (point.y - height / 2) / (camera.zoom * TILT),
+    x: camera.x + (b.d*x-b.c*y)/det/camera.zoom,
+    y: camera.y + (-b.b*x+b.a*y)/det/(camera.zoom*TILT),
   };
 }
 

@@ -41,10 +41,12 @@ export async function createTravelView(objects,water,air,decks) {
       harbor.switchIsland(id);
       settled=false;
       if (shift) {
-        fx.shift(shift.x,shift.y);
+        fx.shift(shift.x,shift.y,typeof shift==='function'?shift:null);
         for (const entry of [...vessels.values(), ...leaving]) {
-          entry.root.x+=shift.x; entry.root.y+=shift.y; entry.x=(entry.x ?? 0)+shift.x; entry.y=(entry.y ?? 0)+shift.y;
-          if (entry.leaving) entry.root.zIndex+=shift.y;
+          const at=typeof shift==='function'?shift(entry.root):{x:entry.root.x+shift.x,y:entry.root.y+shift.y};
+          const dy=at.y-entry.root.y;entry.root.position.set(at.x,at.y);
+          const p=typeof shift==='function'?shift({x:entry.x??0,y:entry.y??0}):{x:(entry.x??0)+shift.x,y:(entry.y??0)+shift.y};entry.x=p.x;entry.y=p.y;
+          if(entry.leaving)entry.root.zIndex+=dy;
         }
       } else {
         fx.reset();

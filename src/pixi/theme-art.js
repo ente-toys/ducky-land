@@ -2,12 +2,14 @@
 // its copy comes near (engine.js ensureArt), so start-up stays as fast as before. Builds, in the island map's own local
 // coordinates: the ground (tiles + flats), the decks Duckies walk over, the contact shadows, and the standing props (sorted
 // with the Duckies by y). Everything starts hidden; the engine shows one island's art at a time (showArt).
+import largeArtTiles from './large-art-tiles.json' with {type:'json'};
+import {artResolution} from './art-resolution.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
 
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release}) {
+export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -20,16 +22,23 @@ export async function loadThemeArt(map, {acquire, release}) {
   const url = src => /^(\/|https?:|data:)/.test(src) ? src : base + src;
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [], props = manifest.props ?? [];
   const floating = manifest.floating ?? [];   // boss 6 Nov: lily pads and other floating things that bob on the water, like home's
-  const entries = [...tiles.map(t => ({...t, resolution: t.resolution ?? 1})), ...decks.map(d => ({...d, resolution: d.resolution ?? 1.5})),
-    ...flats.map(f => ({...f, resolution: f.resolution ?? 2})), ...props.map(p => ({...p, resolution: p.resolution ?? 2})),
+  const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
+  const entries = [...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
+    ...flats.filter(p=>!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
   // Repeated flowers, tiles and props share one lease per theme, at the highest
   // requested resolution. Fair alone places over 1,900 sprites from 108 sources.
   const resolutions = new Map();
-  entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, entry.resolution)));
+  entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
   const uniqueSources = [...resolutions.keys()];
-  const loaded = await Promise.allSettled(uniqueSources.map(src => acquire(src, resolutions.get(src))));
+  const loaded=new Array(uniqueSources.length);let cursor=0;
+  await Promise.all(Array.from({length:4},async()=>{
+    while(cursor<uniqueSources.length){const i=cursor++,src=uniqueSources[i];
+      try{loaded[i]={status:'fulfilled',value:await acquire(src,resolutions.get(src))};}
+      catch(reason){loaded[i]={status:'rejected',reason};}
+    }
+  }));
   const failed = loaded.find(result => result.status === 'rejected');
   if (failed) {
     uniqueSources.forEach(src => release(src));
@@ -41,13 +50,24 @@ export async function loadThemeArt(map, {acquire, release}) {
   const ground = new Container({label: `Theme ${map.id} - ground`}), deckLayer = new Container({label: `Theme ${map.id} - decks`});
   const shadows = new Container({label: `Theme ${map.id} - shadows`});
   let k = 0;
-  for (const tile of tiles) {
-    const s = new Sprite(textures[k++]); s.position.set(tile.x, tile.y); s.width = tile.width; s.height = tile.height; ground.addChild(s);
-  }
+  const groundStream=groundPool.create(tiles,ground,url),groundStreams=[groundStream];
+  const tiled=(p,native,layer,anchor)=>{
+    const set=tileSet(p,native);if(!set)return false;
+    const container=new Container();layer.addChild(container);
+    const x=p.x-p.width*anchor.x,y=p.y-p.height*anchor.y;
+    groundStreams.push(groundPool.create(set.map(t=>({...t,x:x+(p.flip?p.width-t.x-t.width:t.x),y:t.y+y,flip:p.flip})),container));
+    return true;
+  };
+  let terrain;
+  try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.png`,1);}
+  catch(error){groundStream.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.png`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
+  const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
   for (const deck of decks) {
+    if(tiled(deck,1.5,deckLayer,{x:0,y:0}))continue;
     const s = new Sprite(textures[k++]); s.position.set(deck.x, deck.y); s.width = deck.width; s.height = deck.height; deckLayer.addChild(s);
   }
   for (const flat of flats) {
+    if(tiled(flat,2,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
     const s = new Sprite(textures[k++]); s.position.set(flat.x, flat.y);
     if (!flat.topLeft) s.anchor.set(.5, 1);   // decals sit on their base point, like home's
     s.width = flat.width; s.height = flat.height; if (flat.flip) s.scale.x *= -1;
@@ -80,11 +100,13 @@ export async function loadThemeArt(map, {acquire, release}) {
   });
   for (const group of [ground, deckLayer, shadows, floatLayer]) group.visible = false;
   return {
-    id: map.id, map, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
+    id: map.id, map, groundStream, groundStreams, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     groups: [ground, deckLayer, shadows, floatLayer],
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      groundStreams.forEach(s=>s.destroy());
+      release(`/pixi-art/globe/${map.id}-ground.png`);
       for (const c of [ground, deckLayer, shadows, floatLayer]) c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));

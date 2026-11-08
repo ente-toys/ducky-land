@@ -1,3 +1,5 @@
+import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 // boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
 // (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
 import {mapOf} from '../src/pixi/island-maps.js';
@@ -330,6 +332,8 @@ export class IslandRoom {
         islandId:'home',mode:'walking',boatId:null,...from,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
+      // boss 8 Nov: the copies of Home were removed; a Ducky saved on one of them (or at sea near one) starts at Home
+      if (!WORLD_ISLANDS.some(island => island.id === info.actor.islandId)) Object.assign(info.actor,{islandId:'home',mode:'walking',boatId:null,x,y,turn:0});
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
@@ -544,7 +548,7 @@ export class IslandRoom {
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
         if (actor.mode === 'sailing' ? !canSail(command.x,command.y,actor.islandId)
-          : command.x<0 || command.y<0 || command.x>=mapOf(actor.islandId).width || command.y>=mapOf(actor.islandId).height) return;
+          : command.x<mapOf(actor.islandId).origin.x || command.y<mapOf(actor.islandId).origin.y || command.x>=mapOf(actor.islandId).origin.x+mapOf(actor.islandId).width || command.y>=mapOf(actor.islandId).origin.y+mapOf(actor.islandId).height) return;
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;
@@ -626,7 +630,7 @@ export class IslandRoom {
             const spot=info.landing; info.landing=null;
             if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
             else {
-            if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); actor.islandId=spot.islandId; actor.x-=spot.offset.x; actor.y-=spot.offset.y; info.islandId=spot.islandId;}
+            if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,mapPoint(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
             Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
             this.parkBoat(boat);   // Keep the boat in the arrival island's coordinate frame, beside the landing.
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});

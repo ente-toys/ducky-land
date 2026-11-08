@@ -28,6 +28,20 @@ motion quiets the animation, and hidden tabs pause simulation and audio.
 build locally. `npm test` runs the test suite and expects the WebSocket fixture
 server on port 8810. Start it separately with `npm start`.
 
+To join the latest committed island branches and verify the complete game, run
+`scripts/merge-islands.sh`. It merges Home (`live-boat`), the twelve `big-*`
+island branches, `big-limits`, and `spread-islands`, then starts its own test
+fixture on port 19300, runs the full suite, and builds with Vite's native config
+loader. Choose another free fixture port with `DUCKY_WS_PORT=19301` if needed.
+Start with a clean working tree. An unfamiliar merge conflict stops the command
+for review; resolve and commit it, then rerun. The command never pushes.
+
+The sandbox integration may arrive as resolved working files plus
+`../concepts/themes/codex-builds/integrate.bundle`. On its original `int-big`
+base, the same command imports that bundle after verifying every prepared file
+matches. This records the existing integration without changing working files,
+then continues with newer island commits. Save any additional edits first.
+
 The renderer lives in `src/pixi/`. Its SVG artwork lives in `public/pixi-art/`
 and `public/pixi-duck/`. To regenerate it from the original vector sources,
 run `python3 scripts/extract-pixi-art.py` and

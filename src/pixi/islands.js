@@ -1,3 +1,8 @@
+import {mapPoint,spherePoint,localPoint} from './sphere-coordinates.js';
+import {dot} from './sphere.js';
+import {isletClearance} from './islets.js';
+import {worldIsland} from './world-map.js';
+import {WORLD_GEO} from './world-map.js';
 import {WORLD_ISLANDS, neighboursOf, offsetOf} from './world-map.js';
 import {HOME_MAP, mapOf, mapsVersion, FIELD_RES, FIELD_PAD} from './island-maps.js';
 
@@ -16,7 +21,7 @@ export const jettyOf = id => mapOf(id).JETTY;
 export const navOf = id => mapOf(id).nav();
 // the server and the live client walk the same harbor: the jetty deck is a walkway, and the lawn at its foot is cleared of props
 export const harborWorld = (w, id='home') => ({...w, walkways:[...w.walkways, jettyOf(id).walkway]});
-export const harborClear = prop => Math.hypot(prop.x-JETTY.foot.x-20,prop.y-JETTY.foot.y-110) > 200;
+export const harborClear = prop => Math.hypot(prop.x-1726-20,prop.y-830-110) > 200;
 // boss 5 Nov: walk to the deck beside your boat, then step in
 export function boardingPoint(boat,nav) {
   const map=mapOf(boat.islandId ?? 'home'), {HARBOR:harbor,JETTY:jetty}=map, {foot,dir,length,along}=jetty;
@@ -29,14 +34,15 @@ export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 380;
 // the sea you can sail: round this island and its four neighbours (each island in its own map, placed by its centre)
 const MARGIN=1800;
-const DEST=new Map(), BOUNDS=new Map(), OBSTACLES=new Map(), GRIDS=new Map(), CLEARANCE_MAPS=new Map();
+const DEST=new Map(), BOUNDS=new Map(), OBSTACLES=new Map(), GRIDS=new Map(),CAP=new Map();
+const sphereScratch=[0,0,0],candidateScratch=[];
 let SEEN=-1;
-const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,OBSTACLES,GRIDS,CLEARANCE_MAPS]) cache.clear();}};   // a theme arrived: re-plan the seas
+const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,OBSTACLES,GRIDS,CAP]) cache.clear();}};   // a theme arrived: re-plan the seas
 // where island `to`'s local (0,0) sits in island `from`'s local coordinates. The world map places island CENTRES, so two
 // maps of different sizes still line up round their middles (boss 6 Nov: every theme has its own size and coast).
 export function originOffset(from,to) {
   const c=offsetOf(from,to), A=mapOf(from), B=mapOf(to);
-  return {x:c.x+A.width/2-B.width/2, y:c.y+A.height/2-B.height/2};
+  return {x:c.x+A.cx-B.cx, y:c.y+A.cy-B.cy};
 }
 export const destinationsFor = id => {
   fresh();
@@ -44,8 +50,8 @@ export const destinationsFor = id => {
     const A=mapOf(id);
     DEST.set(id,neighboursOf(id).map(({island,x,y}) => {
       const B=mapOf(island.id), o=originOffset(id,island.id);
-      return {x:A.width/2+x, y:A.height/2+y, offset:o, destination:island.id, name:island.name, accent:island.accent, map:B.id,
-        dock:{x:B.HARBOR.water.x+o.x,y:B.HARBOR.water.y+o.y}, land:{x:B.HARBOR.land.x+o.x,y:B.HARBOR.land.y+o.y}};
+      return {x:A.cx+x, y:A.cy+y, offset:o, destination:island.id, name:island.name, accent:island.accent, map:B.id,
+        dock:mapPoint(island.id,id,B.HARBOR.water), land:mapPoint(island.id,id,B.HARBOR.land)};
     }));
   }
   return DEST.get(id);
@@ -53,9 +59,13 @@ export const destinationsFor = id => {
 export function seaBoundsFor(id='home') {
   fresh();
   if (!BOUNDS.has(id)) {
-    const A=mapOf(id), boxes=[{x:0,y:0,w:A.width,h:A.height},...destinationsFor(id).map(d => {const B=mapOf(d.destination); return {...d.offset,w:B.width,h:B.height};})];
-    BOUNDS.set(id,{x0:Math.min(...boxes.map(o => o.x))-MARGIN, y0:Math.min(...boxes.map(o => o.y))-MARGIN-1200,
-      x1:Math.max(...boxes.map(o => o.x+o.w))+MARGIN, y1:Math.max(...boxes.map(o => o.y+o.h))+MARGIN});
+    // All thirteen real shores are sail-able, even without a listed jetty link.
+    // Respect negative map origins and retain room outside the largest map.
+    const boxes=WORLD_ISLANDS.map(island => {const B=mapOf(island.id),o=originOffset(id,island.id);
+      return {x:o.x+B.origin.x,y:o.y+B.origin.y,w:B.width,h:B.height};});
+    const margin=Math.max(MARGIN,...boxes.map(o=>Math.max(o.w,o.h)/2));
+    BOUNDS.set(id,{x0:Math.min(...boxes.map(o=>o.x))-margin,y0:Math.min(...boxes.map(o=>o.y))-margin-1200,
+      x1:Math.max(...boxes.map(o=>o.x+o.w))+margin,y1:Math.max(...boxes.map(o=>o.y+o.h))+margin});
   }
   return BOUNDS.get(id);
 }
@@ -146,11 +156,15 @@ const shoreFor=(x,y,nav,reach=280) => {const p=nav.nearest(x,y,reach); return p 
 // `nav` (the caller's own walking map, e.g. the client's with its sleepers) stands in for a home-map island you are on.
 export function landingSpot(actor,nav=null,reach=420) {   // the walking map keeps Duckies a little back from the waterline
   let best=null;
-  for (const o of [{x:0,y:0,id:actor.islandId,self:true},...obstaclesFor(actor.islandId)]) {
-    const map=mapOf(o.id), lx=actor.x-o.x, ly=actor.y-o.y;
-    if (lx < -reach || ly < -reach || lx > map.width+reach || ly > map.height+reach) continue;
-    const p=shoreFor(lx,ly,o.self && nav && map.home ? nav : map.nav(),reach);
-    if (p && (!best || Math.hypot(p.x-lx,p.y-ly) < best.d)) best={islandId:o.id,offset:{x:o.x,y:o.y},x:p.x,y:p.y,d:Math.hypot(p.x-lx,p.y-ly)};
+  const surface=spherePoint(actor.islandId,actor);
+  for (const island of WORLD_ISLANDS) {
+    const map=mapOf(island.id),p=localPoint(island.id,surface),lx=p.x,ly=p.y;
+    if (lx < map.origin.x-reach || ly < map.origin.y-reach || lx > map.origin.x+map.width+reach || ly > map.origin.y+map.height+reach) continue;
+    const shore=shoreFor(lx,ly,island.id===actor.islandId && nav && map.home ? nav : map.nav(),reach);
+    if(shore && (!best||Math.hypot(shore.x-lx,shore.y-ly)<best.d)){
+      const at=mapPoint(island.id,actor.islandId,shore);
+      best={islandId:island.id,offset:{x:at.x-shore.x,y:at.y-shore.y},...shore,d:Math.hypot(shore.x-lx,shore.y-ly)};
+    }
   }
   return best;
 }
@@ -159,7 +173,7 @@ export function landingSpot(actor,nav=null,reach=420) {   // the walking map kee
 // the beach that no route reaches); if there is none, the boat is already as close as it can get. Kept out of landingSpot
 // because the client asks landingSpot four times a second just to show the Dock button.
 export function landingApproach(actor,spot) {
-  const sx=spot.x+spot.offset.x, sy=spot.y+spot.offset.y, len=Math.hypot(actor.x-sx,actor.y-sy)||1;
+  const at=mapPoint(spot.islandId,actor.islandId,spot),sx=at.x,sy=at.y, len=Math.hypot(actor.x-sx,actor.y-sy)||1;
   for (let t=40;t<len-14;t+=10) {
     const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};
     if (canSail(p.x,p.y,actor.islandId) && sailRoute(actor.islandId,actor,p)) return p;
@@ -174,26 +188,39 @@ const obstaclesFor=id => {
   if (!OBSTACLES.has(id)) {
     const b=seaBoundsFor(id);
     OBSTACLES.set(id,WORLD_ISLANDS.filter(island => island.id!==id).map(island => ({...originOffset(id,island.id),id:island.id,map:mapOf(island.id)}))
-      .filter(o => o.x+o.map.width+600 > b.x0 && o.x-600 < b.x1 && o.y+o.map.height+600 > b.y0 && o.y-600 < b.y1));
+      .filter(o => o.x+o.map.origin.x+o.map.width+600 > b.x0 && o.x+o.map.origin.x-600 < b.x1 && o.y+o.map.origin.y+o.map.height+600 > b.y0 && o.y+o.map.origin.y-600 < b.y1));
   }
   return OBSTACLES.get(id);
 };
 // how far island `to` sits from island `from` (to's local origin, in from's local coordinates), when `to` is drawn in from's
 // sea (a neighbour or any other island near enough to sail up to); null for an island out of sight
 export const islandOffset=(from,to) => {const o=obstaclesFor(from).find(o => o.id===to); return o ? {x:o.x,y:o.y} : null;};
-function wet(x,y,id) {
-  const b=seaBoundsFor(id);
-  if (x < b.x0 || y < b.y0 || x > b.x1 || y > b.y1 || mapOf(id).landAt(x,y)) return false;
-  return !obstaclesFor(id).some(o => o.map.landAt(x-o.x,y-o.y));
+function candidates(id,x,y,pad=0){
+ fresh();
+ const frame=worldIsland(id),map=mapOf(id),dx=x-map.cx,dy=y-map.cy,d=Math.hypot(dx,dy),a=d/WORLD_GEO.Rw;
+ const k=d>1e-10?Math.sin(a)/d:1/WORLD_GEO.Rw,co=Math.cos(a),p=sphereScratch,out=candidateScratch;out.length=0;
+ for(let j=0;j<3;j++)p[j]=frame.center[j]*co+(frame.east[j]*dx-frame.north[j]*dy)*k;
+ let caps=CAP.get(pad);
+ if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);return {island,map:m,cos:Math.cos((Math.hypot(m.width,m.height)/2+pad)/WORLD_GEO.Rw)};});CAP.set(pad,caps);}
+ for(const c of caps){
+  if(dot(p,c.island.center)<c.cos)continue;
+  if(c.island.id===id){out.push({map:c.map,x,y});continue;}
+  out.push({map:c.map,...localPoint(c.island.id,p)});
+ }
+ return out;
 }
-
-export function canSail(x,y,id='home') {
-  if (!Number.isFinite(x) || !Number.isFinite(y) || !wet(x,y,id)) return false;
-  for (let i=0;i<16;i++) {
-    const angle=i*Math.PI/8;
-    if (!wet(x+Math.cos(angle)*BOAT_RADIUS,y+Math.sin(angle)*BOAT_RADIUS,id)) return false;
-  }
-  return true;
+export function canSail(x,y,id='home',radius=BOAT_RADIUS){
+ if(!Number.isFinite(x+y))return false;
+ const b=seaBoundsFor(id);if(x<b.x0||y<b.y0||x>b.x1||y>b.y1)return false;
+ // The boat's clearance circle belongs to the candidate island's local map.
+ // Planning tapers its clearance margin near endpoints. Round the cap up so
+ // those fractional radii share a bounded set of conservative cached caps.
+ for(const p of candidates(id,x,y,Math.ceil(radius))){
+  if(p.map.landAt(p.x,p.y))return false;
+  for(let k=0;k<16;k++){const a=k*Math.PI/8;if(p.map.landAt(p.x+Math.cos(a)*radius,p.y+Math.sin(a)*radius))return false;}
+ }
+ if(isletClearance(sphereScratch,radius)<radius)return false;
+ return true;
 }
 
 export function canDock(actor) {
@@ -217,16 +244,17 @@ function clearance(id,x,y) {
   const b=seaBoundsFor(id);
   if (x < b.x0 || y < b.y0 || x > b.x1 || y > b.y1) return 0;
   let best=PAD;
-  // Route planning asks this thousands of times. Reuse the candidate list and reject distant maps before building a field.
-  if (!CLEARANCE_MAPS.has(id)) CLEARANCE_MAPS.set(id,[{x:0,y:0,map:mapOf(id)},...obstaclesFor(id)].map(o => ({...o,
-    cols:Math.ceil((o.map.width+2*PAD)/RES),rows:Math.ceil((o.map.height+2*PAD)/RES)})));
-  for (const o of CLEARANCE_MAPS.get(id)) {
-    const c=Math.round((x-o.x+PAD)/RES), r=Math.round((y-o.y+PAD)/RES);
-    if (c<0 || r<0 || c>=o.cols || r>=o.rows) continue;
-    const {d,FW}=o.map.field();
-    best=Math.min(best,d[r*FW+c]);
+  for(const p of candidates(id,x,y,PAD)){
+    const c=Math.round((p.x-p.map.origin.x+PAD)/RES),r=Math.round((p.y-p.map.origin.y+PAD)/RES);
+    const cols=Math.ceil((p.map.width+2*PAD)/RES),rows=Math.ceil((p.map.height+2*PAD)/RES);
+    if(c<0||r<0||c>=cols||r>=rows)continue;
+    const {d,FW}=p.map.field();best=Math.min(best,d[r*FW+c]);
   }
-  return Math.max(0,best-RES);   // a thin walkway or jetty can sit between samples: count it as one sample closer
+  // The source chart is distance-expanding, so its straight-line steps travel
+  // no farther on the sphere. Keep physical shore clearance independent of
+  // distance from this chart's centre, including on the far side of a pole.
+  return Math.max(0,Math.min(best-RES,isletClearance(sphereScratch,PAD)));
+
 }
 const SAFE=BOAT_RADIUS+30;   // clear of every coast by the boat plus a margin bigger than the 25-unit grid's error
 const clearLine=(id,a,b) => {   // a route leg is open water all along (review 5 Nov: never graze a beach)
@@ -236,19 +264,37 @@ const clearLine=(id,a,b) => {   // a route leg is open water all along (review 5
     if (room >= SAFE) {i+=Math.max(0,Math.floor((room*.85-SAFE)/6)); continue;}   // far from land: jump ahead (the chamfer field reads up to 8% long)
     for (let k=0;k<3;k++) {   // close to a jetty or beach: the exact test the boat itself uses, every 2px so nothing slips between
       const f=(i-k/3)/steps;
-      if (!canSail(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f,id)) return false;
+      const x=a.x+(b.x-a.x)*f,y=a.y+(b.y-a.y)*f;
+      // Leave room between samples: a tangent shore hit can be shorter than
+      // 2px and otherwise stop a sailor at a different simulation timestep.
+      // Taper at the endpoints so any legal boarding/docking point stays valid.
+      const margin=Math.min(4,len*f,len*(1-f));
+      if (!canSail(x,y,id) || margin>0 && !canSail(x,y,id,BOAT_RADIUS+margin)) return false;
     }
   }
   return true;
 };
-const CELL=250;
+// Resolve the 600-unit boat channels even after the distance field's error,
+// boat margin and full-cell corner clearance. A 250-unit grid can close a
+// real channel and discard the sea behind it as a disconnected component.
+const CELL=125;
 function gridFor(id) {
   fresh();
   if (!GRIDS.has(id)) {
     const b=seaBoundsFor(id), cols=Math.ceil((b.x1-b.x0)/CELL), rows=Math.ceil((b.y1-b.y0)/CELL), open=new Uint8Array(cols*rows);
     // a cell is open only if open water reaches past its corners, so the straight line to any open neighbour is water too
     for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) open[r*cols+c]=clearance(id,b.x0+(c+.5)*CELL,b.y0+(r+.5)*CELL)*.9 >= CELL*.71+SAFE ? 1 : 0;
-    GRIDS.set(id,{b,cols,rows,open});
+    const labels=new Int32Array(open.length);let label=0,largest=[];
+    for(let start=0;start<open.length;start++)if(open[start]&&!labels[start]){
+      const queue=[start];labels[start]=++label;
+      for(let k=0;k<queue.length;k++){
+        const i=queue[k],r=Math.floor(i/cols),c=i%cols;
+        for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0]]){const nr=r+dr,nc=c+dc,j=nr*cols+nc;if(nr>=0&&nc>=0&&nr<rows&&nc<cols&&open[j]&&!labels[j]){labels[j]=label;queue.push(j);}}
+      }
+      if(queue.length>largest.length)largest=queue;
+    }
+    const ocean=new Uint8Array(open.length);for(const k of largest)ocean[k]=1;
+    GRIDS.set(id,{b,cols,rows,open:ocean});
   }
   return GRIDS.get(id);
 }
@@ -257,14 +303,34 @@ export function sailRoute(id,from,to) {
   const {b,cols,rows,open}=gridFor(id), centre=i => ({x:b.x0+(i%cols+.5)*CELL,y:b.y0+(Math.floor(i/cols)+.5)*CELL});
   const nearestOpen=p => {   // the closest open cell you can sail to in a straight line
     const c0=Math.floor((p.x-b.x0)/CELL), r0=Math.floor((p.y-b.y0)/CELL);
-    for (let d=0;d<4;d++) for (let r=r0-d;r<=r0+d;r++) for (let c=c0-d;c<=c0+d;c++) {
+    for (let d=0;d<14;d++) for (let r=r0-d;r<=r0+d;r++) for (let c=c0-d;c<=c0+d;c++) {
       if (r<0||c<0||r>=rows||c>=cols||!open[r*cols+c]) continue;
       if (clearLine(id,p,centre(r*cols+c))) return r*cols+c;
     }
     return -1;
   };
-  const start=nearestOpen(from), goal=nearestOpen(to);
-  if (start<0 || goal<0) return null;
+  const connect=p=>{
+    const direct=nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
+    // A narrow curved harbour mouth can fit a boat but not a full ocean
+    // cell. Search just that endpoint at boat scale, then join the ocean graph.
+    const step=60,limit=60,side=limit*2+1,total=side*side,start=limit*side+limit;
+    const prev=new Int32Array(total).fill(-1),queue=[start];prev[start]=start;
+    const point=i=>({x:p.x+(i%side-limit)*step,y:p.y+(Math.floor(i/side)-limit)*step});
+    for(let k=0;k<queue.length;k++){
+      const i=queue[k],at=point(i),c=Math.floor((at.x-b.x0)/CELL),r=Math.floor((at.y-b.y0)/CELL),cell=r*cols+c;
+      if(c>=0&&r>=0&&c<cols&&r<rows&&open[cell]&&clearLine(id,at,centre(cell))){
+        const points=[centre(cell)];for(let j=i;j!==start;j=prev[j])points.push(point(j));points.reverse();return {index:cell,points};
+      }
+      const row=Math.floor(i/side),col=i%side;
+      for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1],[1,-1],[-1,-1]]){
+        const nr=row+dr,nc=col+dc,j=nr*side+nc;if(nr<0||nc<0||nr>=side||nc>=side||prev[j]>=0)continue;
+        const q=point(j);if(canSail(q.x,q.y,id)&&clearLine(id,at,q)){prev[j]=i;queue.push(j);}
+      }
+    }
+    return null;
+  };
+  const entrance=connect(from),exit=connect(to);if(!entrance||!exit)return null;
+  const start=entrance.index,goal=exit.index;
   const prev=new Int32Array(cols*rows).fill(-1), queue=[start]; prev[start]=start;
   for (let q=0;q<queue.length && prev[goal]<0;q++) {
     const i=queue[q], c=i%cols, r=Math.floor(i/cols);
@@ -273,15 +339,19 @@ export function sailRoute(id,from,to) {
       if ((dr||dc) && nr>=0 && nc>=0 && nr<rows && nc<cols && open[n] && prev[n]<0 && (!dr||!dc||open[r*cols+nc]&&open[nr*cols+c])) {prev[n]=i; queue.push(n);}
     }
   }
-  if (prev[goal]<0) return null;
+  if(prev[goal]<0)return null;
   const cells=[];
   for (let i=goal;i!==start;i=prev[i]) cells.push(centre(i));
-  cells.push(centre(start)); cells.reverse(); cells.push(to);
+  cells.push(centre(start));cells.reverse();cells.unshift(...entrance.points.slice(0,-1));cells.push(...exit.points.slice(0,-1).reverse(),to);
   const route=[]; let at=from;   // pull the corners tight: reach as far along the path as a straight line allows
   for (let k=0;k<cells.length;) {
-    if (!clearLine(id,at,cells[k])) return null;   // never hand the boat a leg that crosses land
-    let j=k;
-    while (j+1<cells.length && clearLine(id,at,cells[j+1])) j++;
+    if(!clearLine(id,at,cells[k]))return null;   // never hand the boat a leg that crosses land
+    // Visibility checks sample complete shore geometry. Probe exponentially,
+    // then bisect the first blocked interval instead of rechecking every cell.
+    let j=k,step=1,blocked=cells.length;
+    while(j+step<cells.length){const next=j+step;if(!clearLine(id,at,cells[next])){blocked=next;break;}j=next;step*=2;}
+    let lo=j+1,hi=Math.min(cells.length-1,blocked-1);
+    while(lo<=hi){const mid=(lo+hi)>>1;if(clearLine(id,at,cells[mid])){j=mid;lo=mid+1;}else hi=mid-1;}
     route.push(cells[j]); at=cells[j]; k=j+1;
   }
   return route;
@@ -325,7 +395,8 @@ export function sailStep(actor,dt,input) {
 export function crossIsland(actor,allow=() => true) {
   if (actor.mode !== 'sailing') return false;
   const destination=destinationsFor(actor.islandId).find(island =>
-    Math.abs(actor.x-island.dock.x)<=65 && Math.abs(actor.y-island.dock.y)<=50);
+    Math.abs(actor.x-island.dock.x)<=65 && Math.abs(actor.y-island.dock.y)<=50 &&
+    (!actor.sailTarget || (Math.abs(actor.sailTarget.x-island.dock.x)<=65 && Math.abs(actor.sailTarget.y-island.dock.y)<=50)));
   if (!destination || !allow(destination.destination)) return false;
   Object.assign(actor,{islandId:destination.destination,...harborOf(destination.destination).water,turn:Math.PI,travel:0,path:[],sailTarget:null,sailRoute:null,docking:true,exitLocked:false});
   return true;

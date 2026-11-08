@@ -1,0 +1,54 @@
+{
+  "home": {
+    "src": "/pixi-art/globe/home.png",
+    "sha256": "a16eb735d2f15dc7e9e6933a6552c3bb4acf72f6f5a905abd9998c8cab6a726a"
+  },
+  "sunflower": {
+    "src": "/pixi-art/globe/sunflower.png",
+    "sha256": "f881053e91e127aabea9a4e2d9030582f8a47ce5861b23b672789edd89e565f8"
+  },
+  "pink": {
+    "src": "/pixi-art/globe/pink.png",
+    "sha256": "3ad9cd3674890ffbc9655a32653a2b24d85fb97fae78a270ed4b009820d47f7d"
+  },
+  "library": {
+    "src": "/pixi-art/globe/library.png",
+    "sha256": "92d29b89455e31610847d131beccfe81da5e902479a4ba6e1e6174c7b14e295d"
+  },
+  "community": {
+    "src": "/pixi-art/globe/community.png",
+    "sha256": "506b162e8a81a2ab3f1ac7aa0ff411ded2b6af29add51a3a3e3153169f419449"
+  },
+  "fair": {
+    "src": "/pixi-art/globe/fair.png",
+    "sha256": "574728090049afcc6fbad3f09deec8d567238d32c22de9c46c265d74dde8fc99"
+  },
+  "neon": {
+    "src": "/pixi-art/globe/neon.png",
+    "sha256": "c42e66fe582abb0edd123a1544632fdc94121249169d932063ce7678752e2113"
+  },
+  "cathedral": {
+    "src": "/pixi-art/globe/cathedral.png",
+    "sha256": "aae8546b5359321177bf7edd4543f4f56ccaad9d072a7f85eb207c32fba56a5c"
+  },
+  "canal": {
+    "src": "/pixi-art/globe/canal.png",
+    "sha256": "fe9ee766de60e0802a66cb8c1e5ab6f3c02898a4e82ac171abde161e02bbc7f7"
+  },
+  "waterfall": {
+    "src": "/pixi-art/globe/waterfall.png",
+    "sha256": "49485ae755891c4c980647521ab071d23a30baf73f76a286b42b7300b3c2c7ef"
+  },
+  "goldmine": {
+    "src": "/pixi-art/globe/goldmine.png",
+    "sha256": "406d43ed289584d05d93dca36103beb98f4112e9da6176d542b63c1841f31d0d"
+  },
+  "bog": {
+    "src": "/pixi-art/globe/bog.png",
+    "sha256": "02ba93e6d87c853fa5eef3b1d221f980661ae89a3f8e4bc82055f90dd03d5931"
+  },
+  "snow": {
+    "src": "/pixi-art/globe/snow.png",
+    "sha256": "79d3b2b30c03e60b821ece2dd183a7a75f6c132cb8dadd7d0de7845bf05716ac"
+  }
+}

@@ -1,3 +1,6 @@
+import homeOriginalWorld from './home-original-world.json';
+import expansion from './home-expansion.json';
+import {geometry} from '../../rive/web/island-geometry.mjs';
 import library from '../../assets/manifest.json';
 import original from './art-manifest.json';
 import layout from './layout.json';
@@ -81,6 +84,7 @@ const ARCHES = [
   {a: [3320, 3319], b: [3320, 3730], r: 70, w: 115}, {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
   {a: [2320.86, 3264.02], b: [2288.93, 3859.97], r: 70, w: 84},
   {a: [5034.08, 1638.41], b: [5469.9, 1681.99], r: 70, w: 84},
+  ...(expansion.arches ?? []),
 ];
 // Where to draw a Ducky's feet: on a deck it rides up the arch, lift = R * 4t(1-t); off a bridge it is the plain world y.
 // boss 6 Nov: a themed island passes its own arches (world.json `arches`, the same {a, b, r, w} format)
@@ -104,8 +108,9 @@ export const trimWorld = w => ({...w, islets: w.islets.filter(a => a[0] !== 3930
 // boss 4 Nov: what the client sim walks on. The coast is traced from the ground tiles' shoreline, inset 35 so a dry margin stays
 // (the old one sat 20-160 inside the sand); the south-west jetty gets a deck-wide step-on. Props were placed on the old coast,
 // so only the sim gets these. The socket server still walks on world.json.
-export const walkWorld = (world, props) => ({...world, coast: shapes.coast, obstacles: obstaclesFor(props, world),
-  walkways: [...world.walkways, {a: [1165, 3000], b: [1095, 3098], w: 120}, {a: [1092, 3060], b: [942, 3405], w: 110}]});   // boss 4 Nov verify: + the drawn deck's centre line (the old strip hugged the right rail)
+export const walkWorld = (world, props) => ({...world, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
+  water: [...world.water, ...(expansion.riverWater ?? [])], bridges: [...world.bridges, ...(expansion.riverBridges ?? [])],
+  walkways: [...world.walkways, ...(expansion.walkways ?? []), {a: [1165, 3000], b: [1095, 3098], w: 120}, {a: [1092, 3060], b: [942, 3405], w: 110}]});   // boss 4 Nov verify: + the drawn deck's centre line (the old strip hugged the right rail)
 
 // Ground under a point, for the engine's one contact-shadow recipe (fix 4): sand areas from the ground art, else grass.
 const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 1;
@@ -116,7 +121,7 @@ export function groundAt(x, y, world) {
     || pathDist(x, y) < 64 ? 'sand' : 'grass';
 }
 
-export function createPlacements(world, walkable) {
+function createOriginalPlacements(world, walkable) {
   // Boss 2 + 3 Nov: no place-name signs, cities or flags on the island.
   const props = original.props.filter(prop => !prop.name.startsWith('Wayfinding')).map(prop => {
     if (prop.zone === 'lighthouse-beach') return prop;   // keeps its own art; the scale sheet still applies below
@@ -469,3 +474,19 @@ export function sleepSpots(world, props, walkable, sizes) {
   return resolveSleepSpots(world, props, walkable, sizes, {spots: SLEEP_SPOTS, home: true, pathDist, steps,
     avoid: [{x: RING.x, y: RING.y, rx: RING.rx + 60, ry: RING.ry + 50, name: 'plaza'}]});
 }
+
+// Home grows around its original coordinate frame. Keep the original composition's inputs frozen.
+export const HOME_ORIGIN = expansion.origin;
+export const HOME_TILES = [...expansion.tiles, ...original.ground.tiles.map(t=>({...t,src:t.src.replace('/pixi-art/','/pixi-art/home-expansion/')}))];
+export function createPlacements() {
+  const base=trimWorld(homeOriginalWorld);
+  return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable), ...expansion.props];
+}
+export function homeDecals(props) {
+  const base=trimWorld(homeOriginalWorld), old=geometry({...base,obstacles:[]}).walkable;
+  const originalProps=props.filter(p=>!String(p.id).startsWith('bigger-'));
+  const grown={...base,coast:shapes.coast};
+  return [...decalsFor(base,originalProps,old), ...decalsFor(grown,originalProps,geometry({...grown,obstacles:[]}).walkable).filter(d=>!old(d.x,d.y))];
+}
+
+export const HOME_DECKS = expansion.decks ?? [];
