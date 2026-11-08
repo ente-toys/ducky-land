@@ -17,20 +17,23 @@ for (const a of P.addProps) {
   if (a.scale && p.footprint) {const k = a.scale / p.scale; p.footprint.rx *= k; p.footprint.ry *= k; p.footprint.y = p.y - (p.y - p.footprint.y) * k;}
   Object.assign(p, {id: a.id, zone: a.zone, scale: a.scale ?? p.scale}); moveTo(p, a.x, a.y);
   const i = E.props.findIndex(q => q.id === a.id); if (i >= 0) E.props[i] = p; else E.props.push(p);}
+// boss 8 Nov: the old flat plank pier into the south-west pond (pond-jetty.svg) led nowhere and is not the centre's style; it goes, with its walkway
+E.decks = (E.decks ?? []).filter(d => !String(d.src).endsWith('/pond-jetty.svg'));
+E.walkways = (E.walkways ?? []).filter(w => !(Math.abs(w.a[0] - 361.1) < 1 && Math.abs(w.a[1] - 3964.4) < 1));
 // boss 8 Nov (trees by hand): the groves are literal entries in homes.json addTrees, drawn with the centre's plant art at its
 // sizes (placements.js PLANTS). A tree-* asset gets the centre's solid trunk (placements.js obstaclesFor).
-const PLANT_SIZE = {'tree-1': [260, 360], 'tree-2': [180, 360], 'tree-3': [300, 380], 'tree-4': [200, 280], 'tree-5': [150, 380]};
+const PLANT_SIZE = {'tree-1': [260, 360], 'tree-2': [180, 360], 'tree-3': [300, 380], 'tree-4': [200, 280], 'tree-5': [150, 380], 'bush-2': [168, 110], 'bush-4': [140, 100]};
 E.props = E.props.filter(p => !String(p.id).startsWith('grove-'));
 for (const t of P.addTrees ?? []) {
   const [width, height] = PLANT_SIZE[t.kind];
-  E.props.push({id: t.id, name: 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, x: t.x, y: t.y, width, height, scale: t.scale,
+  E.props.push({id: t.id, name: t.kind.startsWith('bush') ? 'Bush' : 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, x: t.x, y: t.y, width, height, scale: t.scale,
     anchor: {x: .5, y: 1}, resolution: 1.5, zone: 'groves', flip: t.flip, tint: t.tint});
 }
 // boss 8 Nov (apple trees): the old expansion apple art is swapped for the centre's plant art at the same spot, by hand
 for (const t of P.swapTrees ?? []) {
   const p = byId.get(id(t.id)); if (!p || !E.props.includes(p)) throw Error(`swapTrees: missing ${t.id}`);
   const [width, height] = PLANT_SIZE[t.kind];
-  Object.assign(p, {name: 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, width, height, scale: t.scale, anchor: {x: .5, y: 1}, resolution: 1.5, flip: t.flip ?? false, tint: t.tint ?? 0xffffff});
+  Object.assign(p, {name: t.kind.startsWith('bush') ? 'Bush' : 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, width, height, scale: t.scale, anchor: {x: .5, y: 1}, resolution: 1.5, flip: t.flip ?? false, tint: t.tint ?? 0xffffff});
 }
 // boss 8 Nov (benches): each expansion bench sits beside a path facing it, placed by hand; look picks the centre's facing art
 const BENCH_ART = {front: 'street--bench-wood', back: 'street--bench-wood-back', left: 'street--bench-wood-left', right: 'street--bench-wood-right'};

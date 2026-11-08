@@ -13,7 +13,9 @@ test('Home communities keep C coast, map coordinates, working harbour and both p
  const near=(p,q)=>Math.round(p[0])===q[0]&&Math.round(p[1])===q[1],i=C.coast.findIndex(p=>near(p,S.coast.after)),j=C.coast.findIndex(p=>near(p,S.coast.before));
  assert.deepEqual(E.coast,[...C.coast.slice(0,i+1),...S.coast.points,...C.coast.slice(j)]);assert.deepEqual(E.origin,C.origin);
  assert.equal(E.width,C.width);assert.equal(E.height,C.height);
- assert.deepEqual(E.decks.slice(0,C.decks.length),C.decks);assert.deepEqual(E.walkways.slice(0,C.walkways.length),C.walkways);
+ // boss 8 Nov: C's flat plank pier into the south-west pond is gone, with its walkway
+ const pier=C.decks.filter(d=>!d.src.endsWith('/pond-jetty.svg')),pierWalks=C.walkways.slice(1);
+ assert.ok(!E.decks.some(d=>d.src.endsWith('/pond-jetty.svg')));assert.deepEqual(E.decks.slice(0,pier.length),pier);assert.deepEqual(E.walkways.slice(0,pierWalks.length),pierWalks);
  // the harbour is the south fishing dock now: its jetty, docking water and the three jetty boats; the other boats are C's
  assert.deepEqual(E.jetty,S.harbour.jetty);assert.deepEqual(E.harborWater,S.harbour.harborWater);assert.deepEqual(E.boats,[...S.harbour.boats012,...C.boats.slice(3)]);
  for(const b of E.boats.slice(0,3))assert.ok(canSail(b.x,b.y,'home'),`jetty boat ${b.x},${b.y} afloat`);

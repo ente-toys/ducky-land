@@ -2679,6 +2679,44 @@
       "zone": "river-banks"
     },
     {
+      "id": "spur-cover-1",
+      "name": "Bush",
+      "asset": "bush-2",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 4850,
+      "y": 1712,
+      "width": 168,
+      "height": 110,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16777215
+    },
+    {
+      "id": "spur-cover-2",
+      "name": "Bush",
+      "asset": "bush-4",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 4905,
+      "y": 1640,
+      "width": 140,
+      "height": 100,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": true,
+      "tint": 16777215
+    },
+    {
       "id": "grove-w1-1",
       "name": "Tree",
       "asset": "tree-3",
@@ -11371,14 +11409,6 @@
   ],
   "decks": [
     {
-      "src": "/pixi-art/home-expansion/pond-jetty.svg",
-      "x": 261.11111111111114,
-      "y": 3624.444444444445,
-      "width": 200,
-      "height": 320,
-      "resolution": 2
-    },
-    {
       "src": "/pixi-art/home-expansion-c/fishing-deck.svg",
       "x": 3355.444444444445,
       "y": 5335.777777777779,
@@ -11451,17 +11481,6 @@
     }
   ],
   "walkways": [
-    {
-      "a": [
-        361.11111111111114,
-        3964.444444444445
-      ],
-      "b": [
-        351.11111111111114,
-        3669.444444444445
-      ],
-      "w": 142
-    },
     {
       "a": [
         4070.666666666667,
@@ -15003,6 +15022,25 @@
         ]
       ],
       "width": 50
+    },
+    {
+      "id": "crossing-7-east",
+      "kind": "lane",
+      "width": 104,
+      "points": [
+        [
+          5440,
+          1690
+        ],
+        [
+          5560,
+          1694
+        ],
+        [
+          5668,
+          1690
+        ]
+      ]
     },
     {
       "id": "hamlet-butterbill-square",
@@ -23571,6 +23609,22 @@
       "flip": false
     },
     {
+      "src": "/pixi-art/decals/pebble-1.svg",
+      "x": 5482.7,
+      "y": 1715.7,
+      "width": 33,
+      "height": 21,
+      "flip": true
+    },
+    {
+      "src": "/pixi-art/decals/edge-stone-1.svg",
+      "x": 5541.1,
+      "y": 1768.9,
+      "width": 45,
+      "height": 27,
+      "flip": false
+    },
+    {
       "src": "/pixi-art/decals/edge-stone-1.svg",
       "x": -1092.3,
       "y": 1105.2,
@@ -24043,6 +24097,14 @@
       "flip": true
     },
     {
+      "src": "/pixi-art/decals/grass-tuft-3.svg",
+      "x": 442.7,
+      "y": 3945.9,
+      "width": 84,
+      "height": 36,
+      "flip": false
+    },
+    {
       "src": "/pixi-art/decals/flower-dot-1.svg",
       "x": 3576.7,
       "y": -1424.5,
@@ -24136,14 +24198,6 @@
       "y": 972.5,
       "width": 51,
       "height": 33,
-      "flip": false
-    },
-    {
-      "src": "/pixi-art/decals/flower-dot-3.svg",
-      "x": 5535.5,
-      "y": 1791.7,
-      "width": 33,
-      "height": 24,
       "flip": false
     },
     {
@@ -25273,6 +25327,14 @@
       "width": 51,
       "height": 24,
       "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/flower-dot-2.svg",
+      "x": 310.4,
+      "y": 3919,
+      "width": 39,
+      "height": 27,
+      "flip": true
     },
     {
       "src": "/pixi-art/decals/grass-tuft-3.svg",
@@ -32451,14 +32513,6 @@
       "flip": true
     },
     {
-      "src": "/pixi-art/decals/grass-tuft-3.svg",
-      "x": 5570.4,
-      "y": 1644.8,
-      "width": 84,
-      "height": 36,
-      "flip": false
-    },
-    {
       "src": "/pixi-art/decals/pebble-2.svg",
       "x": 242.5,
       "y": 5235.3,
@@ -35563,14 +35617,6 @@
       "flip": true
     },
     {
-      "src": "/pixi-art/decals/flower-dot-1.svg",
-      "x": 5424.4,
-      "y": 1691.8,
-      "width": 30,
-      "height": 27,
-      "flip": true
-    },
-    {
       "src": "/pixi-art/decals/grass-tuft-1.svg",
       "x": 6991.5,
       "y": 599.5,
@@ -36952,6 +36998,14 @@
       "y": -1025.8,
       "width": 24,
       "height": 12,
+      "flip": true
+    },
+    {
+      "src": "/pixi-art/decals/flower-dot-2.svg",
+      "x": 388.9,
+      "y": 4010.9,
+      "width": 39,
+      "height": 27,
       "flip": true
     },
     {
@@ -38627,14 +38681,6 @@
       "flip": false
     },
     {
-      "src": "/pixi-art/decals/pebble-2.svg",
-      "x": 5504.8,
-      "y": 1707.4,
-      "width": 51,
-      "height": 24,
-      "flip": true
-    },
-    {
       "src": "/pixi-art/decals/flower-dot-2.svg",
       "x": -1781.9,
       "y": 2344.6,
@@ -39424,14 +39470,6 @@
       "y": 639.2,
       "width": 66,
       "height": 39,
-      "flip": true
-    },
-    {
-      "src": "/pixi-art/decals/grass-tuft-2.svg",
-      "x": 473.6,
-      "y": 3929.6,
-      "width": 51,
-      "height": 33,
       "flip": true
     },
     {
@@ -40499,14 +40537,6 @@
       "flip": true
     },
     {
-      "src": "/pixi-art/decals/pebble-3.svg",
-      "x": 5599.2,
-      "y": 1725.1,
-      "width": 42,
-      "height": 27,
-      "flip": true
-    },
-    {
       "src": "/pixi-art/decals/flower-dot-3.svg",
       "x": 525.9,
       "y": 319.3,
@@ -41176,6 +41206,14 @@
       "y": 3862.6,
       "width": 84,
       "height": 36,
+      "flip": false
+    },
+    {
+      "src": "/pixi-art/decals/grass-tuft-2.svg",
+      "x": 394.1,
+      "y": 3883.9,
+      "width": 51,
+      "height": 33,
       "flip": false
     },
     {

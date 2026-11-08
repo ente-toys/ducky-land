@@ -7,7 +7,7 @@
 // exactly as the other lanes and int-big have it. Reads at run time and never writes: coast, riverWater, rivers, roads, decks
 // (other than river-crossing-*), walkways, props. The shore lane's new coast (the old harbour inlet filled in as land, a new
 // east beach at x 7492-7625) and its Millrill ponds are read from shore.json and painted even before shore.mjs has run.
-import {readFileSync, writeFileSync, mkdirSync, existsSync} from 'node:fs';
+import {readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {inPoly} from '../../rive/web/island-geometry.mjs';
 const FILE = 'src/pixi/home-expansion.json', ART = 'public/pixi-art/home-expansion-g', WEB = '/pixi-art/home-expansion-g';
@@ -150,12 +150,16 @@ for (let i = 1; i < 260000; i++) {
 // The round sand pads under the old jetties are drawn into two of the centre's own ground tiles. Their islet groups are cut out
 // of those tiles (idempotent: a tile without them is left as it is); the arched bridges below replace the jetties.
 const endOfGroup = (svg, k) => {let depth = 0; const re = /<g\b[^>]*>|<\/g>/g; re.lastIndex = k; for (let m; (m = re.exec(svg));) {if (m[0][1] === '/') depth--; else if (!m[0].endsWith('/>')) depth++; if (!depth) return re.lastIndex;} return -1;};
-for (const name of ['ground-r2-c1.svg', 'ground-r2-c2.svg', 'ground-r1-c3.svg']) {   // r1-c3: jetty 5's islet in the mill stream (boss 8 Nov)
-  const f = `public/pixi-art/home-expansion/${name}`, svg = readFileSync(f, 'utf8'), i = svg.indexOf('<g data-name="Islet sand"');
+for (const name of ['ground-r2-c1.svg', 'ground-r2-c2.svg', 'ground-r1-c3.svg']) for (const dir of ['home-expansion/', '']) {   // the game draws the root copies (art-manifest)   // r1-c3: jetty 5's islet in the mill stream (boss 8 Nov)
+  const f = `public/pixi-art/${dir}${name}`, svg = readFileSync(f, 'utf8'), i = svg.indexOf('<g data-name="Islet sand"');
   if (i < 0) continue;
   let e = i; while (svg.startsWith('<g data-name="Islet', e)) {e = endOfGroup(svg, e); while (/\s/.test(svg[e])) e++;}
   writeFileSync(f, svg.slice(0, i) + svg.slice(e));
 }
+
+// boss 8 Nov: jetty 5's west approach (M4740 1640 L5050 1640) led nowhere once crossing 7 replaced the jetty; cut from every footpath layer
+for (const dir of ['public/pixi-art/home-expansion', 'public/pixi-art']) for (const n of readdirSync(dir).filter(n => /^ground-r\d-c\d\.svg$/.test(n))) {
+  const f = `${dir}/${n}`; writeFileSync(f, readFileSync(f, 'utf8').replaceAll('M4740 1640 L5050 1640 ', '').replaceAll('M4740 1640 L5050 1640', ''));}
 
 // ---------- the ground tiles ----------
 // Flat lawn, the coast's foam and sand like the centre, rivers with sandy banks, and the lanes painted from `roads` as the
