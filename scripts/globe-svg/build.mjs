@@ -133,7 +133,7 @@ for(const theme of selected?[id]:ids){
   quality={tolerance:+(.3+level*.1).toFixed(2),minArea:+(.18+level*.18).toFixed(2),paletteDistance:Math.min(65,38+level*5),quantum:level<5?.5:1};
   const terrainText=markup(terrain,quality),symbols=defs.map(({name,size,records})=>`<symbol id="${name}" viewBox="0 0 ${num(size.w)} ${num(size.h)}" preserveAspectRatio="none">${markup(records,quality)}</symbol>`);
   const wrap=(groundOnly)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${symbols.slice(0,groundOnly?groundDefsCount:symbols.length).join('')}</defs>${terrainText}${(groundOnly?groundPaint:paint).join('')}</svg>\n`;
-  ground=wrap(true);globe=wrap(false);
+  ground=dropSeaBox(wrap(true),W,H);globe=dropSeaBox(wrap(false),W,H);   // boss 9 Nov ('why blue box'): no full-canvas sea shape
   if(Buffer.byteLength(globe)<600000&&Buffer.byteLength(ground)<600000)break;
  }
  if(Buffer.byteLength(globe)>=600000||Buffer.byteLength(ground)>=600000)throw Error(`${theme} cannot fit the 600 KB vector budget`);
@@ -143,5 +143,14 @@ for(const theme of selected?[id]:ids){
  }
  manifest[theme]={src:`/pixi-art/globe/${theme}.svg`,sha256:createHash('sha256').update(globe).digest('hex'),width:W,height:H,bytes:Buffer.byteLength(globe),groundBytes:Buffer.byteLength(ground),quality,worldPaths:map.world.paths?.length??0,walkways:map.world.walkways?.length??0,flats:art.flats?.length??0,decks:art.decks?.length??0,bridgeDetails:bridgeDetails.length};
  console.log(`${theme}: globe ${manifest[theme].bytes} B, ground ${manifest[theme].groundBytes} B (${W}x${H})`);
+}
+
+function dropSeaBox(svg,W,H){
+ const [head,body]=svg.split('</defs>');
+ return head+'</defs>'+body.replace(/<path fill="(#[0-9a-f]{6})"[^>]* d="([^"]+)"\/>/gi,(all,fill,d)=>{
+  if(!/^#(?:6ec9de|6fc9de|7fd3d6|86cbcd|97dce5|a6e3de)$/i.test(fill))return all;
+  const n=d.match(/-?\d+\.?\d*/g)?.map(Number)??[],xs=n.filter((_,i)=>i%2===0),ys=n.filter((_,i)=>i%2===1);
+  return xs.length&&Math.min(...xs)<=W*.05&&Math.max(...xs)>=W*.95&&Math.min(...ys)<=H*.05&&Math.max(...ys)>=H*.95?'':all;
+ });
 }
 fs.writeFileSync(`${OUT}/manifest.json`,JSON.stringify(manifest,null,2)+'\n');

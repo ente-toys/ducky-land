@@ -58,11 +58,11 @@
   },
   "library": {
     "src": "/pixi-art/globe/library.svg",
-    "sha256": "a5d6d8571d8ed4e71dbae48ea094bfd44dfca3e24913892edf633e9919c1a4c5",
+    "sha256": "f16440931c6ed777aae9f94a47f329e51857526377e31b818e427c8bd1f86379",
     "width": 1024,
     "height": 761,
-    "bytes": 593219,
-    "groundBytes": 346573,
+    "bytes": 592527,
+    "groundBytes": 345881,
     "quality": {
       "tolerance": 0.8,
       "minArea": 1.08,
@@ -96,11 +96,11 @@
   },
   "fair": {
     "src": "/pixi-art/globe/fair.svg",
-    "sha256": "43ba78d7d1c9abb2f20f78dd8c9eceeb73badbfff0092d1d4e1c11326cec811a",
+    "sha256": "9c8ab3a4a9f12be6b3625e88c4295f05483b599c0e7b063aba52e9e8d5857cb9",
     "width": 1024,
     "height": 700,
-    "bytes": 463030,
-    "groundBytes": 238607,
+    "bytes": 462804,
+    "groundBytes": 238381,
     "quality": {
       "tolerance": 0.3,
       "minArea": 0.18,
