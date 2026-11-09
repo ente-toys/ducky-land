@@ -8,13 +8,17 @@ import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import legacy from './legacy-raster-art.json' with {type:'json'};
 const root=new URL('../public/pixi-art/',import.meta.url);
 
-test('Pixi art rejects new rasters, with frozen legacy exceptions in exactly three theme folders',()=>{
- // These existing Library, Goldmine and Bog assets must
+test('Pixi art rejects new rasters, with frozen legacy exceptions in exactly two active theme folders',()=>{
+ // These existing Library and Bog assets must
  // be redrawn. Exact path+content hashes prevent adding rasters inside them.
- assert.deepEqual([...legacy.folders].sort(),['themes/library/','themes/goldmine/','themes/bog/'].sort());
- const violations=[];
+ assert.deepEqual([...legacy.folders].sort(),['themes/library/','themes/bog/'].sort());
+ const violations=[],activeThemes=new Set(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean));
  function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){
-  const file=path.join(dir,entry.name);if(entry.isDirectory()){scan(file);continue;}
+  const file=path.join(dir,entry.name);if(entry.isDirectory()){
+   // Retired theme art stays on disk, outside the active world raster guard.
+   if(path.relative(fileURLToPath(root),dir)==='themes'&&entry.name==='goldmine'&&!activeThemes.has(entry.name))continue;
+   scan(file);continue;
+  }
   const bytes=fs.readFileSync(file),rel=path.relative(fileURLToPath(root),file);
   if(/\.(?:png|jpe?g|webp)$/i.test(entry.name)||/<(?:[\w.-]+:)?image\b|data:\s*image/i.test(bytes.toString())){
    const frozen=legacy.folders.some(folder=>rel.startsWith(folder))&&legacy.files[rel]===createHash('sha256').update(bytes).digest('hex');

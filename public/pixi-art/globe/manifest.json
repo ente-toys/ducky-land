@@ -132,25 +132,6 @@
     "decks": 18,
     "bridgeDetails": 0
   },
-  "goldmine": {
-    "src": "/pixi-art/globe/goldmine.svg",
-    "sha256": "3d1fb138150461cc72a5c609f241e64d7f71a9df69de2c4369e0c3510cb84400",
-    "width": 1024,
-    "height": 805,
-    "bytes": 383161,
-    "groundBytes": 225193,
-    "quality": {
-      "tolerance": 0.3,
-      "minArea": 0.18,
-      "paletteDistance": 38,
-      "quantum": 0.5
-    },
-    "worldPaths": 17,
-    "walkways": 11,
-    "flats": 2,
-    "decks": 10,
-    "bridgeDetails": 0
-  },
   "bog": {
     "src": "/pixi-art/globe/bog.svg",
     "sha256": "4f763d0956b8ed1ad0cc927b44cbb828f994af46a63ed3f15fb2a0bf5aac5cea",

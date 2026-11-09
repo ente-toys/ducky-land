@@ -5,17 +5,17 @@ import {mapOf,themeOfIsland} from '../src/pixi/island-maps.js';
 import {destinationsFor,canSail,sailRoute,crossIsland,SAIL_SPEED,seaBoundsFor,originOffset,BOAT_RADIUS} from '../src/pixi/islands.js';
 const RAD=Math.PI/180;
 function checkLayout(m){
- assert.equal(m.islands.length,10);assert.equal(new Set(m.islands.map(i=>i.id)).size,10);
+ assert.equal(m.islands.length,9);assert.equal(new Set(m.islands.map(i=>i.id)).size,9);
  const ice=m.islands.find(i=>i.theme==='snow');assert.deepEqual(ice.center,[0,1,0]);
  const longs=m.islands.filter(i=>i!==ice).map(i=>i.lon).sort((a,b)=>a-b);
  const gaps=longs.map((x,k)=>(longs[(k+1)%longs.length]-x+2*Math.PI)%(2*Math.PI));
  assert.ok(Math.max(...gaps)-Math.min(...gaps)>20*RAD,'unequal gaps');   // boss 8 Nov: islands cluster, open ocean between groups is fine
- assert.ok(new Set(m.islands.map(i=>i.lat)).size>=10,'varied heights, no rows');
+ assert.ok(new Set(m.islands.map(i=>i.lat)).size===9,'varied heights, no rows');
  for(const i of m.islands){assert.ok(Math.abs(Math.hypot(...i.center)-1)<1e-12);}
  assert.deepEqual([m.islands[0].x,m.islands[0].y],[2900,2200]);
 }
-test('10 unique sphere patches, clustered unevenly, with Iceland exactly on the North Pole',()=>{
- assert.equal(ISLAND_COUNT,10);checkLayout(layoutWorld());
+test('9 unique sphere patches, clustered unevenly, with Iceland exactly on the North Pole',()=>{
+ assert.equal(ISLAND_COUNT,9);checkLayout(layoutWorld());
  assert.deepEqual(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean),FINISHED_THEMES);
  for(const [id,theme] of THEMED_ISLANDS){assert.equal(themeOfIsland(id),theme);assert.equal(mapOf(id).id,theme);}
  for(const island of WORLD_ISLANDS){
@@ -51,5 +51,5 @@ test('every island has real boat routes to its neighbours in one connected sea',
    if(!seen.has(b.id)){seen.add(b.id);todo.push(b.id);}
   }
  }
- assert.equal(seen.size,10);
+ assert.equal(seen.size,9);
 });

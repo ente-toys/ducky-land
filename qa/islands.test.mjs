@@ -14,10 +14,10 @@ import walkWorld from '../rive/web/walk-world.json' with {type:'json'};
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',...HARBOR.water,turn:0,path:[],action:0});
 
-test('Home and the nine themed islands (copies removed 8 Nov), the same moored boats each, at least four reachable neighbours and safe harbor positions', () => {
+test('Home and the eight themed islands (copies removed 8 Nov), the same moored boats each, at least four reachable neighbours and safe harbor positions', () => {
   const boats=createBoats();
-  assert.equal(ISLANDS.length,10);
-  assert.equal(new Set(ISLANDS.map(island => island.id)).size,10);
+  assert.equal(ISLANDS.length,9);
+  assert.equal(new Set(ISLANDS.map(island => island.id)).size,9);
   const per=boatSpots().length;
   assert.ok(per>=8);
   assert.equal(new Set(boats.map(boat => boat.id)).size,ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0));

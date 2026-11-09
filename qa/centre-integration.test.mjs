@@ -10,12 +10,12 @@ import {createFairWater} from '../src/pixi/centre-motion/fair.js';
 import {updateCommunityCentre} from '../src/pixi/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
-test('all nine theme manifests load, release textures and resolve their authored animation pieces', async()=>{
+test('all eight theme manifests load, release textures and resolve their authored animation pieces', async()=>{
  const original=globalThis.fetch;
  globalThis.fetch=async url=>({ok:true,json:async()=>json('public'+url)});
  try {
   const animated={sunflower:2,pink:2,library:4,community:1,fair:0};
-  assert.equal(readyThemes().length,9);assert.equal(THEME_OF.size,9);
+  assert.equal(readyThemes().length,8);assert.equal(THEME_OF.size,8);
   for(const theme of readyThemes()) {
    let acquired=0,released=0;
    const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});

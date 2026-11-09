@@ -60,7 +60,7 @@ test('a turned ball keeps the islands in one rigid layout: unprojected centres g
    assert.ok(angle(back[i.id],i.center)<2e-4,`${i.id} sits where the sphere says`);
   }
   const ids=Object.keys(back),byId=new Map(WORLD_ISLANDS.map(i=>[i.id,i]));
-  assert.ok(ids.length>=4);
+  assert.equal(ids.length,WORLD_ISLANDS.filter(i=>dot(i.center,view.center)>0).length,'all front-facing island centres participate');
   for(const a of ids)for(const b of ids)if(a<b)
    assert.ok(Math.abs(angle(back[a],back[b])-angle(byId.get(a).center,byId.get(b).center))<3e-4,`${a}-${b} angle kept`);
  }

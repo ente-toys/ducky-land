@@ -21,7 +21,7 @@ import {fileURLToPath} from 'node:url';
 const inRing=(x,y,p)=>{let inside=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if((p[i][1]>y)!==(p[j][1]>y)&&x<(p[j][0]-p[i][0])*(y-p[i][1])/(p[j][1]-p[i][1])+p[i][0])inside=!inside;return inside;};
 // Every authored scene is three times its original world size; no SVG coordinates are rewritten.
 test('11 stable islets use each of the eleven approved artworks once, without adding islands',()=>{
- assert.equal(ISLET_SEED,831511);assert.equal(ISLETS.length,11);assert.equal(ISLANDS.length,10);
+ assert.equal(ISLET_SEED,831511);assert.equal(ISLETS.length,11);assert.equal(ISLANDS.length,9);
  assert.equal(new Set(ISLETS.map(i=>i.id)).size,11);
  for(const art of ISLET_ART)assert.equal(ISLETS.filter(i=>i.art===art).length,1);
  for(const i of ISLETS){assert.equal(i.width,ISLET_META[i.art].designWidth*ISLET_SCALE,`${i.id} is drawn at its art's own scale`);assert.ok(i.width>=3072&&i.width<=4800);assert.ok(Math.abs(i.lat)<72*Math.PI/180);if(Math.abs(i.lat)>60*Math.PI/180)assert.equal(i.art,'08-snow-igloo');}
