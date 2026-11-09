@@ -1,5 +1,5 @@
 import {sphereFrame, logMap} from './sphere.js';
-// Home and the 12 delivered themes, with stable save identities.
+// Home and the nine delivered themes, with stable save identities.
 // Pure placement data shared by the live client, room worker and tests.
 // Coordinates here are 'map' coordinates; each island plays in its own local coordinates, and
 // offsetOf(a, b) turns one island's local coordinates into the other's.
@@ -7,8 +7,8 @@ import world from '../../rive/web/world.json' with {type: 'json'};
 import READY from '../../rive/web/themes/index.js';   // the delivered themes, for their map sizes (boss 6 Nov: themed islands are bigger)
 
 const W = 5800, H = 4400; // stable world layout, independent of Home's expanding bounds
-// The delivered roster, in finish order. Exactly Home plus these twelve themes.
-export const FINISHED_THEMES = ['sunflower', 'pink', 'library', 'community', 'fair', 'neon', 'cathedral', 'canal', 'waterfall', 'goldmine', 'bog', 'snow'];
+// The delivered roster, in finish order. Exactly Home plus these nine themes.
+export const FINISHED_THEMES = ['sunflower', 'pink', 'library', 'community', 'fair', 'cathedral', 'goldmine', 'bog', 'snow'];
 export const TEST_THEMES = FINISHED_THEMES.slice(0, 3);
 // Existing save identities and display metadata, not placement or finish order.
 // Changes to the roster need an explicit save identity here and an angular anchor below.
@@ -18,10 +18,7 @@ export const THEMED_ISLANDS = [
   ['isle-251', 'library', 'Pagepond', 0xd9b578],
   ['isle-250', 'community', 'Campfire Commons', 0xb98cf0],
   ['isle-170', 'fair', 'Waddlewish Fair', 0xf29bb7],
-  ['isle-230', 'neon', 'Tickytown', 0xf29bb7],
   ['isle-176', 'cathedral', 'Bellovo Piazza', 0xd9b578],
-  ['isle-56', 'canal', 'Puddlelace', 0x6ec9de],
-  ['isle-93', 'waterfall', 'Ribbonfall Cove', 0x7fd6c8],
   ['isle-163', 'goldmine', 'Nuggetnook', 0xd9b578],
   ['isle-249', 'bog', 'Booquack Bog', 0xb98cf0],
   ['isle-55', 'snow', 'Iceland', 0x9fd4ff],
@@ -32,10 +29,10 @@ export const ISLAND_COUNT = 1 + FINISHED_THEMES.length;
 // Deliberate groups with unequal gaps, an isolated polar ice cap and southern sea.
 // Angles only author the unit vectors. Every island uses its OWN tangent frame.
 // boss 8 Nov 15:25 picked layout C "real little planet": cold band under the Iceland cap, warm belt round Home, Bog alone in the far south.
-// Order = FINISHED_THEMES: sunflower, pink, library, community, fair, neon, cathedral, canal, waterfall, goldmine, bog, snow.
+// Order = FINISHED_THEMES: sunflower, pink, library, community, fair, cathedral, goldmine, bog, snow.
 const ANCHORS = [
-  [55.7, 25.7], [-74.1, -5.7], [66, -34], [-107.4, 36.9], [154.3, -32.5], [-122.8, -28.6],
-  [-31.8, -35.3], [-173.6, 23.7], [-17.5, 42.6], [119.5, 19.1], [0, -90], [0, 90],
+  [55.7, 25.7], [-74.1, -5.7], [66, -34], [-107.4, 36.9], [154.3, -32.5],
+  [-31.8, -35.3], [119.5, 19.1], [0, -90], [0, 90],
 ];   // boss 8 Nov 17:05: spread to shrink the biggest empty sea patch (17.4 -> 14.2 deg); Iceland N pole, fight club S pole
 // After moving an anchor or changing the globe size: coastGaps() (sphere-shores.js) must keep BOAT_CHANNEL between every
 // pair of real coasts, jetties included, then re-place the islets with `node scripts/islets/place.mjs`.

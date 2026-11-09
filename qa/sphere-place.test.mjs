@@ -62,7 +62,7 @@ test('island shape is independent of latitude, with no polar wedge or anisotropi
 });
 test('sailing to Iceland docks on its own jetty and beach from both hemispheres',()=>{
  const ice='isle-55',m=mapOf(ice);
- for(const from of ['home','isle-56','isle-170','isle-230']){
+ for(const from of ['home','isle-176','isle-170','isle-163']){
   const target=placeRigid(from,ice,m.HARBOR.water);   // the jetty as drawn (rigid frame)
   assert.ok(canSail(target.x,target.y,from));
   const spot=landingSpot({islandId:from,...target});assert.equal(spot?.islandId,ice);

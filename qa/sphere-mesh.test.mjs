@@ -50,7 +50,7 @@ test('islets are rigid stickers centred on the sphere',()=>{
  }
 });
 test('sailing onto a rigid copy keeps that island exactly where it was on screen',()=>{
- const from='home',to='isle-93',m=mapOf(to),prior={a:1,b:0,c:0,d:1};
+ const from='home',to='isle-251',m=mapOf(to),prior={a:1,b:0,c:0,d:1};
  const camera={...placeRigid(from,to,{x:m.cx+2000,y:m.cy+3000}),zoom:.4};
  const before=cameraMatrix(camera,1440,900),after={...unplaceRigid(from,to,camera),zoom:.4};
  after.basis=easeLandingBasis(rigidLandingBasis(from,to,prior),0);

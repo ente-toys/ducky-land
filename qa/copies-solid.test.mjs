@@ -27,7 +27,7 @@ function drawnCopies(current) {   // archipelago.js place(): the same maths, isl
   });
 }
 
-const CURRENT = ['home', ...neighboursOf('home').map(n => n.island.id), 'isle-93', 'isle-250'];
+const CURRENT = ['home', ...neighboursOf('home').map(n => n.island.id), 'isle-251', 'isle-250'];
 for (const current of [...new Set(CURRENT)]) test(`every island drawn round ${current} is solid where it has ground`, () => {
   const b = seaBoundsFor(current);
   let checked = 0;

@@ -6,18 +6,16 @@ import {animatePieces,attachCentreMotion} from '../src/pixi/centre-motion.js';
 import {createGroundPool} from '../src/pixi/ground-stream.js';
 import {loadThemeArt} from '../src/pixi/theme-art.js';
 import {mapFor,readyThemes,THEME_OF} from '../src/pixi/island-maps.js';
-import {neighboursOf} from '../src/pixi/world-map.js';
-import {canSail} from '../src/pixi/islands.js';
 import {createFairWater} from '../src/pixi/centre-motion/fair.js';
 import {updateCommunityCentre} from '../src/pixi/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
-test('all twelve theme manifests load, release textures and resolve their authored animation pieces', async()=>{
+test('all nine theme manifests load, release textures and resolve their authored animation pieces', async()=>{
  const original=globalThis.fetch;
  globalThis.fetch=async url=>({ok:true,json:async()=>json('public'+url)});
  try {
-  const animated={sunflower:2,pink:2,library:4,neon:4,canal:1,waterfall:19,community:1,fair:0};
-  assert.equal(readyThemes().length,12);assert.equal(THEME_OF.size,12);
+  const animated={sunflower:2,pink:2,library:4,community:1,fair:0};
+  assert.equal(readyThemes().length,9);assert.equal(THEME_OF.size,9);
   for(const theme of readyThemes()) {
    let acquired=0,released=0;
    const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
@@ -59,15 +57,4 @@ test('fair pour and community fire animate, remain attached, hide and clean up',
  updateCommunityCentre(art,1,true);assert.equal(props[1].sprite.y,props[0].sprite.y+(props[1].anchor.y-props[0].anchor.y)*props[0].sprite.height);
  const still=props[1].sprite.scale.y;updateCommunityCentre(art,99,true);assert.equal(props[1].sprite.scale.y,still);
  for(const p of props)p.sprite.destroy();fallback.sprite.destroy();objects.destroy();
-});
-
-test('new centres have reachable entrances and Canal raised bridges support boats below walkers',()=>{
- assert.ok(neighboursOf('home').every(({island})=>THEME_OF.get(island.id)===island.theme));
- for(const theme of ['waterfall','canal']) {
-  const m=mapFor(theme),points=theme==='waterfall'?m.world.centrePlacement.access.map(a=>a.point):m.world.arches.filter(a=>a.r!==64).flatMap(a=>[a.a,a.b]);
-  assert.equal(points.length,theme==='waterfall'?3:8);
-  for(const p of points){assert.ok(m.nav().walkable(...p),theme+' entry walkable');assert.ok(m.nav().route(m.spawn.x,m.spawn.y,...p).length,theme+' entry connected');}
- }
- const m=mapFor('canal'),bridges=m.world.walkways.filter(w=>w.boatPassUnder);assert.equal(bridges.length,3);
- for(const w of bridges){const p=[(w.a[0]+w.b[0])/2,(w.a[1]+w.b[1])/2];assert.ok(m.nav().walkable(...p));assert.ok(canSail(...p,'isle-56'));}
 });

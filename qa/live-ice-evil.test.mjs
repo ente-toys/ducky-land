@@ -6,9 +6,9 @@ import {mapFor,themeOfIsland} from '../src/pixi/island-maps.js';
 import {WORLD_ISLANDS,FINISHED_THEMES,layoutWorld} from '../src/pixi/world-map.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
 
-test('adding two live themes preserves Home and all ten delivered island identities',()=>{
-  const before=layoutWorld(undefined,11,FINISHED_THEMES.slice(0,10)).islands;
-  assert.equal(WORLD_ISLANDS.length,13);
+test('adding two live themes preserves Home and all seven earlier island identities',()=>{
+  const before=layoutWorld(undefined,11,FINISHED_THEMES.slice(0,7)).islands;
+  assert.equal(WORLD_ISLANDS.length,10);
   for(const old of before) {
     const now=WORLD_ISLANDS.find(i=>i.id===old.id);
     assert.deepEqual([now.id,now.theme,now.width,now.height],[old.id,old.theme,old.width,old.height]);

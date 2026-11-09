@@ -113,25 +113,6 @@
     "decks": 11,
     "bridgeDetails": 1
   },
-  "neon": {
-    "src": "/pixi-art/globe/neon.svg",
-    "sha256": "b9129e9d54f7b8989df83c09236ebd8bf956a1961c1831833f6954300e22f1cc",
-    "width": 1024,
-    "height": 772,
-    "bytes": 581094,
-    "groundBytes": 403195,
-    "quality": {
-      "tolerance": 0.7,
-      "minArea": 0.9,
-      "paletteDistance": 58,
-      "quantum": 0.5
-    },
-    "worldPaths": 54,
-    "walkways": 7,
-    "flats": 2652,
-    "decks": 13,
-    "bridgeDetails": 0
-  },
   "cathedral": {
     "src": "/pixi-art/globe/cathedral.svg",
     "sha256": "87f0dbc87727f31562374e783e24946907a4763996b82d270efef31e789994c2",
@@ -150,44 +131,6 @@
     "flats": 30,
     "decks": 18,
     "bridgeDetails": 0
-  },
-  "canal": {
-    "src": "/pixi-art/globe/canal.svg",
-    "sha256": "038a7ca5b12b1ea5257438333865d8adccc9b0b46eba44a529197b4995e85ea6",
-    "width": 1024,
-    "height": 805,
-    "bytes": 584324,
-    "groundBytes": 364394,
-    "quality": {
-      "tolerance": 0.4,
-      "minArea": 0.36,
-      "paletteDistance": 43,
-      "quantum": 0.5
-    },
-    "worldPaths": 19,
-    "walkways": 18,
-    "flats": 2007,
-    "decks": 14,
-    "bridgeDetails": 8
-  },
-  "waterfall": {
-    "src": "/pixi-art/globe/waterfall.svg",
-    "sha256": "ef3dc7d242a0a3b50ae9120fe6b4582a69436e8744f8426fa6873be2ad2042be",
-    "width": 1024,
-    "height": 790,
-    "bytes": 526878,
-    "groundBytes": 302176,
-    "quality": {
-      "tolerance": 0.3,
-      "minArea": 0.18,
-      "paletteDistance": 38,
-      "quantum": 0.5
-    },
-    "worldPaths": 16,
-    "walkways": 9,
-    "flats": 16,
-    "decks": 16,
-    "bridgeDetails": 18
   },
   "goldmine": {
     "src": "/pixi-art/globe/goldmine.svg",

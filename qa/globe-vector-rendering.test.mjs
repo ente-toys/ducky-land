@@ -21,14 +21,6 @@ async function outputPatch(theme,cx,cy,ground){const {data,info}=await sharp(`pu
 const average=p=>[0,1,2,3].map(c=>p.reduce((sum,v)=>sum+(c<3?v[c]*v[3]/255:v[c]),0)/p.length);
 async function compare(theme,x,y,ground){const [source,output]=await Promise.all([sourcePatch(theme,x,y,{props:!ground}),outputPatch(theme,x,y,ground)]),a=average(source),b=average(output);assert.ok(a.every((v,i)=>Math.abs(v-b[i])<85),`${theme} ${x},${y}: source ${a.map(Math.round)} -> compiled ${b.map(Math.round)}`);}
 
-test('Canal water stays open when original SVG tile viewports share geometry',async()=>{
- await compare('canal',500,550,true);
- await compare('canal',470,580,true);
-});
-test('Neon grass pattern bases remain green in both terrain and globe art',async()=>{
- await compare('neon',100,300,true);
- await compare('neon',900,300,false);
-});
 test('Fair paving keeps its source tile order above older grass backgrounds',async()=>{
  await compare('fair',700,350,true);
  await compare('fair',550,450,true);

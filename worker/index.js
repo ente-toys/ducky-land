@@ -1,7 +1,6 @@
 import {unplaceRigid} from '../src/pixi/rigid.js';
 import {reframeIslet} from '../src/pixi/islet-placement.js';
 import {ISLETS} from '../src/pixi/islets.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 // boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
 // (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
 import {mapOf} from '../src/pixi/island-maps.js';
@@ -38,6 +37,15 @@ function wirePose(actor) {
   const pose = publicPose(actor);
   pose.x = r2(pose.x); pose.y = r2(pose.y); pose.turn = r3(pose.turn); pose.travel = r2(pose.travel); pose.jumpLeft = r3(pose.jumpLeft);
   return pose;
+}
+// Removed island saves and hibernated sockets return to the Home plaza.
+function recoverIsland(actor) {
+  if (actor && !islandFor(actor.islandId)) {
+    const [x,y] = mapOf('home').world.zones.plaza.spawn;
+    Object.assign(actor,{islandId:'home',mode:'walking',boatId:null,x,y,turn:0,path:[],
+      sailTarget:null,sailRoute:null,docking:false,exitLocked:false,heading:null,pace:0});
+  }
+  return actor;
 }
 // how many players stand (or sail) on each island right now
 const islandCounts = connections => {
@@ -88,9 +96,9 @@ export class IslandRoom {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
-      const actor = info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null;
+      const actor = recoverIsland(info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null);
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
-      this.connections.set(socket, {...info, actor, login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
+      this.connections.set(socket, {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
     this.reconcileBoats();
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
@@ -334,8 +342,8 @@ export class IslandRoom {
         islandId:'home',mode:'walking',boatId:null,...from,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
-      // boss 8 Nov: the copies of Home were removed; a Ducky saved on one of them (or at sea near one) starts at Home
-      if (!WORLD_ISLANDS.some(island => island.id === info.actor.islandId)) Object.assign(info.actor,{islandId:'home',mode:'walking',boatId:null,x,y,turn:0});
+      // Retired islands cannot retain a saved walking or sailing session.
+      recoverIsland(info.actor);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');

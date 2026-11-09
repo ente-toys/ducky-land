@@ -10,7 +10,7 @@ import {dot} from '../src/pixi/sphere.js';
 
 const R=WORLD_GEO.Rw;
 test('landing preserves nearby landmarks through large turns and never collapses during its settle',()=>{
- for(const from of ['isle-170','isle-250','isle-56','home']){
+ for(const from of ['isle-170','isle-250','isle-176','home']){
   const to='isle-55',m=mapOf(to),at={...m.HARBOR.water,zoom:.7},old=mapPoint(to,from,at);
   const start=landingBasis(from,to,at),basis=easeLandingBasis(start,0),matrix=cameraMatrix({...at,basis},1440,900);
   for(const [x,y]of [[0,0],[20,0],[0,20],[-20,-20]]){

@@ -5,7 +5,7 @@ import {mapOf,themeOfIsland} from '../src/pixi/island-maps.js';
 import {destinationsFor,canSail,sailRoute,crossIsland,SAIL_SPEED,seaBoundsFor,originOffset,BOAT_RADIUS} from '../src/pixi/islands.js';
 const RAD=Math.PI/180;
 function checkLayout(m){
- assert.equal(m.islands.length,13);assert.equal(new Set(m.islands.map(i=>i.id)).size,13);
+ assert.equal(m.islands.length,10);assert.equal(new Set(m.islands.map(i=>i.id)).size,10);
  const ice=m.islands.find(i=>i.theme==='snow');assert.deepEqual(ice.center,[0,1,0]);
  const longs=m.islands.filter(i=>i!==ice).map(i=>i.lon).sort((a,b)=>a-b);
  const gaps=longs.map((x,k)=>(longs[(k+1)%longs.length]-x+2*Math.PI)%(2*Math.PI));
@@ -14,8 +14,8 @@ function checkLayout(m){
  for(const i of m.islands){assert.ok(Math.abs(Math.hypot(...i.center)-1)<1e-12);}
  assert.deepEqual([m.islands[0].x,m.islands[0].y],[2900,2200]);
 }
-test('13 unique sphere patches, clustered unevenly, with Iceland exactly on the North Pole',()=>{
- assert.equal(ISLAND_COUNT,13);checkLayout(layoutWorld());
+test('10 unique sphere patches, clustered unevenly, with Iceland exactly on the North Pole',()=>{
+ assert.equal(ISLAND_COUNT,10);checkLayout(layoutWorld());
  assert.deepEqual(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean),FINISHED_THEMES);
  for(const [id,theme] of THEMED_ISLANDS){assert.equal(themeOfIsland(id),theme);assert.equal(mapOf(id).id,theme);}
  for(const island of WORLD_ISLANDS){
@@ -39,12 +39,11 @@ test('bounds scale deterministically for three-times-larger themes, growing Home
   assert.deepEqual(a.islands.map(i=>[i.id,i.theme]),WORLD_ISLANDS.map(i=>[i.id,i.theme]));
  }
 });
-test('every island has real boat routes to its neighbours, including across the date line',()=>{
- const seen=new Set(['home']),todo=['home'];let wraps=0;
- while(todo.length){const id=todo.shift(),a=WORLD_ISLANDS.find(i=>i.id===id);
+test('every island has real boat routes to its neighbours in one connected sea',()=>{
+ const seen=new Set(['home']),todo=['home'];
+ while(todo.length){const id=todo.shift();
   for(const d of destinationsFor(id)){
    const b=WORLD_ISLANDS.find(i=>i.id===d.destination);
-   if(Math.abs(b.x-a.x)>layoutWorld().SX/2)wraps++;
    assert.ok(canSail(d.dock.x,d.dock.y,id),`${id}/${b.id} dock is water`);
    const route=sailRoute(id,mapOf(id).HARBOR.water,d.dock);assert.ok(route?.length,`${id}/${b.id} has an open sailing route`);
    const actor={islandId:id,mode:'sailing',...d.dock};assert.equal(crossIsland(actor),true);assert.equal(actor.islandId,b.id);
@@ -52,5 +51,5 @@ test('every island has real boat routes to its neighbours, including across the 
    if(!seen.has(b.id)){seen.add(b.id);todo.push(b.id);}
   }
  }
- assert.equal(seen.size,13);assert.ok(wraps>0,'date-line sailing exercised');
+ assert.equal(seen.size,10);
 });
