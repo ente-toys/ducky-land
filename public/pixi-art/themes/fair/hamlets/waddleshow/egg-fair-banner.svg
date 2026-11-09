@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="74" height="167" viewBox="0 0 74 167">
+<title>egg fair banner</title>
+<g stroke="#39472d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="36" cy="159" rx="17" ry="6" fill="#C59A50" /><rect x="24" y="150" width="24" height="10" rx="3" fill="#F8CF61"/><rect x="32" y="34" width="7" height="119" rx="2" fill="#F8CF61"/><rect x="6" y="33" width="60" height="7" rx="3" fill="#F8CF61"/><ellipse cx="5" cy="36" rx="6" ry="6" fill="#FFF6D5" /><ellipse cx="67" cy="36" rx="6" ry="6" fill="#FFF6D5" /><path d="M17 41H56V116L36 104L17 116Z" fill="#F5A4A5" /><path d="M23 45H50V100L36 91L23 100Z" fill="#FFE29A" /><ellipse cx="36" cy="72" rx="11" ry="15" fill="#FFF6D5" /><path d="M26 72L32 76L37 68L42 76L47 71" fill="none" stroke="#E7BA48"/><path d="M27 27Q22 16 30 6Q36 -3 42 6Q51 17 44 27Z" fill="#F8CF61" /><path d="M27 15L34 19L40 11L46 15M30 25H44" fill="none" stroke="#FFF6D5" stroke-width="3"/>
+</g>
+</svg>

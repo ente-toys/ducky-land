@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="54" height="141" viewBox="0 0 54 141">
+<title>fair lamp</title>
+<g stroke="#39472d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="27" cy="133" rx="17" ry="6" fill="#D3AB53" /><rect x="18" y="125" width="18" height="9" rx="3" fill="#F8CF61"/><rect x="24" y="54" width="6" height="74" rx="2" fill="#E5BE64"/><path d="M13 31Q10 58 27 62Q44 58 41 31Z" fill="#FFF6D5" /><path d="M16 33Q19 51 24 53V34M37 33Q35 52 30 54V34" fill="none" /><ellipse cx="27" cy="31" rx="23" ry="6" fill="#F8CF61" /><path d="M6 27Q10 19 20 19L23 12H32L35 20Q44 20 48 27Z" fill="#F8CF61" /><ellipse cx="27" cy="12" rx="8" ry="9" fill="#FFE28A" /><path d="M10 62Q27 72 44 62L39 68H15Z" fill="#F8CF61" />
+</g>
+</svg>

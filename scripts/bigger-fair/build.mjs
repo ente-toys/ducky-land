@@ -48,3 +48,6 @@ const paths=read(S+'original-paths.json');paths.push(...plan.paths.map(p=>p.line
 write(A+'art.json',art);write(D+'world.json',world);write(D+'walk-world.json',walk);write(D+'placements.json',[...placements,...plan.newProps]);write(D+'paths.json',paths);write(D+'harbor.json',harbor);
 write(S+'expansion.json',{...plan,newProps:plan.newProps,harbor,groundBeforeBytes:read(S+'original-art.json').ground.tiles.reduce((s,t)=>s+t.width*t.height*4,0),groundAfterBytes:art.ground.tiles.reduce((s,t)=>s+t.width*t.height*4*(t.resolution??1)**2,0)});
 console.log('Built Fair:',plan.newProps.length,'new props and',obstacles.length,'visible matching footprints.');
+
+// Apply the four approved outer hamlets after regenerating base Fair assets.
+await import('./hamlets-apply.mjs');

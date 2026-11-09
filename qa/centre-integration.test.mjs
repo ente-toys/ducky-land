@@ -16,7 +16,7 @@ test('all twelve theme manifests load, release textures and resolve their author
  const original=globalThis.fetch;
  globalThis.fetch=async url=>({ok:true,json:async()=>json('public'+url)});
  try {
-  const animated={sunflower:2,pink:2,library:4,neon:4,canal:1,waterfall:19,community:1,fair:1};
+  const animated={sunflower:2,pink:2,library:4,neon:4,canal:1,waterfall:19,community:1,fair:0};
   assert.equal(readyThemes().length,12);assert.equal(THEME_OF.size,12);
   for(const theme of readyThemes()) {
    let acquired=0,released=0;

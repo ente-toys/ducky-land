@@ -66,7 +66,7 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
   if(art.id==='community') {
     fire=(await import('./centre-motion/community.js')).updateCommunityCentre;
   }
-  if(art.id==='fair') {
+  if(art.id==='fair' && art.props.some(p=>p.id==='fair-centre-water')) {
     water=(await import('./centre-motion/fair.js')).createFairWater({Graphics,Container},art.props,objects);
     water.root.visible=false;
     water.root.themeArt=art.id;art.groups.push(water.root);

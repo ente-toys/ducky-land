@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="112" height="82" viewBox="0 0 112 82">
+<title>fence curve right</title>
+<g stroke="#39472d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(110 0) scale(-1 1)"><path d="M11 24Q50 47 96 47V61Q47 61 11 37Z" fill="#FFF6D5" /><path d="M9 15Q16 7 23 15V41L9 38Z" fill="#FFF0BD" /><path d="M29 29Q36 21 43 29V55L29 52Z" fill="#FFF0BD" /><path d="M49 38Q56 30 63 38V64L49 61Z" fill="#FFF0BD" /><path d="M70 42Q77 34 84 42V68L70 65Z" fill="#FFF0BD" /><path d="M91 38Q98 30 105 38V64L91 61Z" fill="#FFF0BD" /><rect x="1" y="4" width="15" height="49" rx="3" fill="#FFF6D5"/><ellipse cx="8" cy="6" rx="10" ry="10" fill="#FFF6D5" /><rect x="91" y="37" width="16" height="42" rx="3" fill="#FFF6D5"/><ellipse cx="99" cy="38" rx="10" ry="10" fill="#FFF6D5" /></g>
+</g>
+</svg>

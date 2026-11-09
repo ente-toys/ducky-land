@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="224" height="224" viewBox="0 0 224 224">
+<title>Pastel balloon kiosk</title><desc>Hand drawn flat art, bottom centre base, no cast shadow.</desc>
+<g transform="translate(12 0)" stroke="#39472d" stroke-width="2.7" stroke-linejoin="round" stroke-linecap="round">
+<!-- Strings gather at a tied ribbon beside the kiosk. -->
+<path d="M158 45L159 163M184 62L159 163M139 73L159 163M193 90L159 163M162 94L159 163" fill="none"/>
+<ellipse cx="161" cy="29" rx="20" ry="26" fill="#F88FA5"/>
+<ellipse cx="185" cy="44" rx="18" ry="23" fill="#FFE38A"/>
+<ellipse cx="140" cy="57" rx="19" ry="23" fill="#83D7E6"/>
+<ellipse cx="190" cy="77" rx="18" ry="23" fill="#D7ACDA"/>
+<path d="M187 100l-2 5h7l-1-5" fill="#D7ACDA"/>
+<ellipse cx="161" cy="82" rx="19" ry="24" fill="#F88FA5"/>
+<path d="M158 106l-2 5h8l-1-5" fill="#F88FA5"/>
+<g fill="#FFF3BC" stroke="none"><ellipse cx="153" cy="17" rx="4" ry="6" transform="rotate(35 153 17)"/><ellipse cx="179" cy="34" rx="4" ry="6" transform="rotate(35 179 34)"/><ellipse cx="133" cy="47" rx="4" ry="6" transform="rotate(35 133 47)"/><ellipse cx="184" cy="67" rx="3" ry="5" transform="rotate(35 184 67)"/><ellipse cx="155" cy="72" rx="4" ry="6" transform="rotate(35 155 72)"/></g>
+<path d="M159 163C139 144 139 173 158 167C173 148 181 173 162 168L170 185L160 178L154 188L154 168" fill="#F88FA5"/>
+<!-- Rounded cream counter with a pink lower band. -->
+<path d="M42 181H158V204C158 228 42 228 42 204Z" fill="#FFF3BC"/>
+<path d="M42 201C65 217 136 217 158 201V212C132 227 66 227 42 212Z" fill="#F88FA5"/>
+<ellipse cx="100" cy="181" rx="62" ry="19" fill="#FFF3BC"/>
+<path d="M40 179C63 195 137 195 160 179" fill="none" stroke="#D6AE62"/>
+<rect x="46" y="112" width="8" height="67" rx="3" fill="#FFF3BC"/>
+<rect x="146" y="112" width="8" height="67" rx="3" fill="#FFF3BC"/>
+<path d="M56 173Q100 191 144 173" fill="none"/>
+<!-- Three little display balloons stand on the counter. -->
+<g fill="#F88FA5"><ellipse cx="76" cy="158" rx="10" ry="12"/><path d="M74 170l2 4 2-4"/></g>
+<g fill="#FFE38A"><ellipse cx="100" cy="158" rx="10" ry="12"/><path d="M98 170l2 4 2-4"/></g>
+<g fill="#83D7E6"><ellipse cx="124" cy="158" rx="10" ry="12"/><path d="M122 170l2 4 2-4"/></g>
+<path d="M76 174v12M100 174v13M124 174v12" fill="none" stroke-width="1.5"/>
+<!-- Alternating radial canopy panels. -->
+<path d="M28 109Q24 102 37 95L100 62L163 95Q176 102 172 109V118Q168 137 151 126Q136 141 118 129Q100 143 82 129Q64 141 49 126Q30 136 28 118Z" fill="#FFF3BC"/>
+<path d="M100 62L37 95Q24 102 28 109Q36 115 49 117Z" fill="#F88FA5"/>
+<path d="M100 62L82 121Q100 124 118 121Z" fill="#F88FA5"/>
+<path d="M100 62L151 117Q165 115 172 109Q176 102 163 95Z" fill="#F88FA5"/>
+<path d="M28 109Q100 137 172 109M49 117V126M82 121V129M118 121V129M151 117V126" fill="none"/>
+<circle cx="100" cy="61" r="9" fill="#FFD95B"/>
+</g></svg>

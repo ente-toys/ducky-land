@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="322" height="511.969" viewBox="3399 95.193 322 511.969"><g transform="matrix(1.3417 0 0 1.5058 3399 95.1931)">
+  <title>Honeywood arched footbridge, north-south</title>
+  <desc>Gentle high overhead view. Original landing sills and 120-unit walking corridor preserved. The bowed deck swells at the raised crown, with closely spaced sunlit crest planks, curved paired rails and shaded arch cheeks. Transparent background.</desc>
+  <!-- A small, hard-edged cast shadow lies on the water under the crown. -->
+  <path fill="#39472d" opacity=".22" d="M55 148 Q120 130 185 148 L197 208 Q120 227 44 208 Z"/>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Unchanged bank sills, including their exact original landing coordinates. -->
+    <path fill="#e4c567" d="M59 47 L67 42 L173 42 L181 47 L181 64 L59 64 Z M51 305 L59 300 L181 300 L189 305 L189 325 L51 325 Z"/>
+    <path fill="#c88941" d="M59 59 L181 59 L181 66 L59 66 Z M51 318 L189 318 L189 327 L51 327 Z"/>
+    <!-- Arch cheeks: deep at the crown, tapering onto both banks. -->
+    <path fill="#885931" d="M66 50 C64 81 54 110 54 149 C54 197 59 262 60 310 L60 319 C53 264 45 212 46 170 C46 120 60 78 66 50 Z"/>
+    <path fill="#885931" d="M174 50 C176 81 186 110 186 149 C186 197 181 262 180 310 L180 319 C187 264 195 212 194 170 C194 120 180 78 174 50 Z"/>
+    <path fill="none" stroke="#c88941" stroke-width="2.1" d="M59 82 C47 132 47 178 52 212 M181 82 C193 132 193 178 188 212"/>
+    <!-- The original end-to-end footprint, with the elevated middle presented forward. -->
+    <path fill="#c88941" d="M66 50 L174 50 C174 86 180 112 180 149 C180 197 180 262 180 310 L60 310 C60 262 60 197 60 149 C60 112 66 86 66 50 Z"/>
+    <!-- Flat light bands describe the convex crown, without gradients. -->
+    <path fill="#d79a4c" stroke="none" d="M62 99 Q120 111 178 99 L180 119 Q120 133 60 119 Z"/>
+    <path fill="#e4b35e" stroke="none" d="M60 119 Q120 133 180 119 L180 151 Q120 170 60 151 Z"/>
+    <path fill="#d99e4e" stroke="none" d="M60 151 Q120 170 180 151 L180 176 Q120 197 60 176 Z"/>
+    <path fill="#bc7c38" stroke="none" d="M60 250 Q120 267 180 250 L180 310 L60 310 Z"/>
+    <!-- Board spacing compresses over the crown and opens on the near descent. -->
+    <path fill="none" stroke-width=".9" d="M65.5 62 Q120 64 174.5 62 M64.5 77 Q120 82 175.5 77 M63 90 Q120 99 177 90 M62 101 Q120 113 178 101 M61 111 Q120 125 179 111 M60 120 Q120 136 180 120 M60 129 Q120 146 180 129 M60 139 Q120 157 180 139 M60 151 Q120 170 180 151 M60 165 Q120 186 180 165 M60 181 Q120 203 180 181 M60 200 Q120 223 180 200 M60 223 Q120 244 180 223 M60 249 Q120 268 180 249 M60 278 Q120 290 180 278"/>
+    <path fill="none" stroke-width=".65" d="M83 72 L104 73 M139 94 L158 92 M77 117 L91 120 M130 142 L149 141 M83 174 L100 177 M137 208 L160 204 M77 240 L99 244 M132 277 L155 274 M78 301 L103 302"/>
+    <path fill="#885931" d="M60 310 L180 310 L180 319 L60 319 Z"/>
+    <path fill="#c88941" d="M59 306 L181 306 L181 311 L59 311 Z"/>
+    <!-- Six pairs of posts follow the same lifted longitudinal profile. -->
+    <g fill="#c88941">
+      <path d="M62.8 16 H69.2 V57 H62.8 Z M55 59 H61 V103 H55 Z M50 100 H56 V145 H50 Z M51 143 H57 V189 H51 Z M54 203 H60 V249 H54 Z M56.8 276 H63.2 V317 H56.8 Z"/>
+      <path d="M170.8 16 H177.2 V57 H170.8 Z M179 59 H185 V103 H179 Z M184 100 H190 V145 H184 Z M183 143 H189 V189 H183 Z M180 203 H186 V249 H180 Z M176.8 276 H183.2 V317 H176.8 Z"/>
+    </g>
+    <!-- Continuous curved rail ribbons, bowed strongly at the lifted crown. -->
+    <path fill="#c88941" d="M64.5 16 C59 50 49 79 49.5 112 C49.5 157 54.5 219 58.5 276 L62 276 C58 219 53 157 53 112 C52.5 79 62.5 50 68 16 Z"/>
+    <path fill="#c88941" d="M172 16 C177.5 50 187.5 79 187 112 C187 157 182 219 178 276 L181.5 276 C185.5 219 190.5 157 190.5 112 C191 79 181 50 175.5 16 Z"/>
+    <path fill="#c88941" d="M64 41 C58.5 75 49 104 50 137 C50 182 55 244 59 301 L62 301 C58 244 53 182 53 137 C52 104 61.5 75 67 41 Z"/>
+    <path fill="#c88941" d="M173 41 C178.5 75 188 104 187 137 C187 182 182 244 178 301 L181 301 C185 244 190 182 190 137 C191 104 181.5 75 176 41 Z"/>
+    <!-- Thin sun-facing rail edges and restrained end-grain marks. -->
+    <path fill="none" stroke="#e4c567" stroke-width="1" d="M66 18 C60.5 52 50.5 81 51 112 C51 157 56 219 60 274 M174 18 C179.5 52 189.5 81 189 112 C189 157 184 219 180 274"/>
+    <path fill="none" stroke-width=".65" d="M59.5 284 V297 M180.5 284 V297 M56.5 211 V224 M183.5 211 V224 M53.5 151 V164 M186.5 151 V164"/>
+    <path fill="none" stroke-width="1.5" d="M59.5 280 V280.4 M180.5 280 V280.4 M56.5 207 V207.4 M183.5 207 V207.4"/>
+  </g>
+</g></svg>
