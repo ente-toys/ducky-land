@@ -1,0 +1,1691 @@
+{
+  "overlaps": 0,
+  "walkIssues": 0,
+  "checked": {
+    "props": 1786,
+    "routeSamples": 17892,
+    "bridges": 19,
+    "pathEnds": 176,
+    "sleepers": 250,
+    "boats": 3
+  },
+  "issues": [],
+  "pathEnds": [
+    {
+      "path": "west-north-lane",
+      "end": "start",
+      "point": [
+        2792.1389327596967,
+        1777.4335224988101
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-north-lane",
+      "end": "end",
+      "point": [
+        2620.996894379985,
+        -339.5015528100076
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-spine",
+      "end": "start",
+      "point": [
+        2620.996894379985,
+        -339.5015528100076
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-spine",
+      "end": "end",
+      "point": [
+        3036,
+        4568.23
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-spine",
+      "end": "start",
+      "point": [
+        4923.2256559755015,
+        1247.3117009638033
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-spine",
+      "end": "end",
+      "point": [
+        6600,
+        6750
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-north-heart",
+      "end": "start",
+      "point": [
+        -1050,
+        3400
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-north-heart",
+      "end": "end",
+      "point": [
+        760,
+        2740
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-south-heart",
+      "end": "start",
+      "point": [
+        -950,
+        4020
+      ],
+      "reached": true
+    },
+    {
+      "path": "west-south-heart",
+      "end": "end",
+      "point": [
+        1140.3773265751533,
+        4429.863600935748
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-north-heart",
+      "end": "start",
+      "point": [
+        8500,
+        2070
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-north-heart",
+      "end": "end",
+      "point": [
+        7245.538042131351,
+        2500
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-south-heart",
+      "end": "start",
+      "point": [
+        9000,
+        4400
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-south-heart",
+      "end": "end",
+      "point": [
+        6951.9828212535085,
+        4253.544359929655
+      ],
+      "reached": true
+    },
+    {
+      "path": "harbour",
+      "end": "start",
+      "point": [
+        6600,
+        6750
+      ],
+      "reached": true
+    },
+    {
+      "path": "harbour",
+      "end": "end",
+      "point": [
+        6602.131407928778,
+        6813.9644987492375
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-south-return",
+      "end": "start",
+      "point": [
+        5593.778692603421,
+        6678.75762686701
+      ],
+      "reached": true
+    },
+    {
+      "path": "east-south-return",
+      "end": "end",
+      "point": [
+        4932.536889806728,
+        4929.65855933957
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-0",
+      "end": "start",
+      "point": [
+        -907.0656566580712,
+        -117.78989948094147
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-0",
+      "end": "end",
+      "point": [
+        -724.7545491932166,
+        -1046.1150067045955
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-1",
+      "end": "start",
+      "point": [
+        -1489.4241944355567,
+        168.6631550997229
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-1",
+      "end": "end",
+      "point": [
+        -1980.796969466602,
+        151.65097211828024
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-2",
+      "end": "start",
+      "point": [
+        -73.72712055429116,
+        277.78357373069093
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-2",
+      "end": "end",
+      "point": [
+        1087.457766832827,
+        -146.33910816717315
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-3",
+      "end": "start",
+      "point": [
+        -729.0625,
+        1221.5
+      ],
+      "reached": true
+    },
+    {
+      "path": "quillwick-entrance-3",
+      "end": "end",
+      "point": [
+        -1063.1378796095453,
+        1856.2432212581339
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-0",
+      "end": "start",
+      "point": [
+        7958.106700101164,
+        640.3706821048177
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-0",
+      "end": "end",
+      "point": [
+        7045.119999999999,
+        -372.55999999999955
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-1",
+      "end": "start",
+      "point": [
+        8274.096072160772,
+        1206.348061754281
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-1",
+      "end": "end",
+      "point": [
+        8318.963042855086,
+        2005.9110175316264
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-2",
+      "end": "start",
+      "point": [
+        8728.879619383462,
+        1389.8724895223786
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-2",
+      "end": "end",
+      "point": [
+        8500,
+        2070
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-3",
+      "end": "start",
+      "point": [
+        9125.948178631854,
+        659.3762317311289
+      ],
+      "reached": true
+    },
+    {
+      "path": "inkleaf-entrance-3",
+      "end": "end",
+      "point": [
+        9670.40657220013,
+        147.53394349474723
+      ],
+      "reached": true
+    },
+    {
+      "path": "bedtime-entrance-0",
+      "end": "start",
+      "point": [
+        -1053.9981111859001,
+        5176.403856997895
+      ],
+      "reached": true
+    },
+    {
+      "path": "bedtime-entrance-0",
+      "end": "end",
+      "point": [
+        -1435.1136768021984,
+        6014.801434368191
+      ],
+      "reached": true
+    },
+    {
+      "path": "bedtime-entrance-1",
+      "end": "start",
+      "point": [
+        -334.3276809584144,
+        5182.630177626393
+      ],
+      "reached": true
+    },
+    {
+      "path": "bedtime-entrance-1",
+      "end": "end",
+      "point": [
+        -102.95000000000005,
+        6030
+      ],
+      "reached": true
+    },
+    {
+      "path": "bedtime-entrance-2",
+      "end": "start",
+      "point": [
+        -1249.5156502349942,
+        5073.052041259341
+      ],
+      "reached": true
+    },
+    {
+      "path": "bedtime-entrance-2",
+      "end": "end",
+      "point": [
+        -1535.8481012658224,
+        5597.164556962025
+      ],
+      "reached": true
+    },
+    {
+      "path": "paperboat-entrance-0",
+      "end": "start",
+      "point": [
+        7794.75,
+        6328.625
+      ],
+      "reached": true
+    },
+    {
+      "path": "paperboat-entrance-0",
+      "end": "end",
+      "point": [
+        7480.399571841894,
+        5768.742208022418
+      ],
+      "reached": true
+    },
+    {
+      "path": "paperboat-entrance-1",
+      "end": "start",
+      "point": [
+        9092.923862867878,
+        6247.0479050664435
+      ],
+      "reached": true
+    },
+    {
+      "path": "paperboat-entrance-1",
+      "end": "end",
+      "point": [
+        8492.588641440183,
+        5004.7265625
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-0",
+      "end": "start",
+      "point": [
+        899.5139817909663,
+        1001.8686556337335
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-0",
+      "end": "end",
+      "point": [
+        1596,
+        2332
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-1",
+      "end": "start",
+      "point": [
+        597.6,
+        2826
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-1",
+      "end": "end",
+      "point": [
+        1476,
+        2696
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-2",
+      "end": "start",
+      "point": [
+        2412,
+        3450
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-2",
+      "end": "end",
+      "point": [
+        5148,
+        3658
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-3",
+      "end": "start",
+      "point": [
+        924.9446646847193,
+        4678.6583175585365
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-3",
+      "end": "end",
+      "point": [
+        3420,
+        4022
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-4",
+      "end": "start",
+      "point": [
+        3635.5907649562682,
+        2207.412711873699
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-4",
+      "end": "end",
+      "point": [
+        4812,
+        2176
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-5",
+      "end": "start",
+      "point": [
+        3611.727176637512,
+        2205.608474582466
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-5",
+      "end": "end",
+      "point": [
+        3324,
+        2280
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-6",
+      "end": "start",
+      "point": [
+        6996,
+        980
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-6",
+      "end": "end",
+      "point": [
+        6924,
+        1812
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-7",
+      "end": "start",
+      "point": [
+        5868,
+        2670
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-7",
+      "end": "end",
+      "point": [
+        6034.885440524681,
+        3299.498587642389
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-8",
+      "end": "start",
+      "point": [
+        6972,
+        2228
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-8",
+      "end": "end",
+      "point": [
+        6972.376984709888,
+        3707.236329037858
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-9",
+      "end": "start",
+      "point": [
+        5292,
+        4256
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-9",
+      "end": "end",
+      "point": [
+        6732,
+        4646
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-10",
+      "end": "start",
+      "point": [
+        4692,
+        3398
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-10",
+      "end": "end",
+      "point": [
+        5148,
+        3658
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-11",
+      "end": "start",
+      "point": [
+        1380.8746510555982,
+        3046.457593481118
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-11",
+      "end": "end",
+      "point": [
+        1212,
+        4568
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-12",
+      "end": "start",
+      "point": [
+        5148,
+        3658
+      ],
+      "reached": true
+    },
+    {
+      "path": "centre-12",
+      "end": "end",
+      "point": [
+        5292,
+        4256
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-coral-book-cottage-door",
+      "end": "start",
+      "point": [
+        16.8125,
+        167.625
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-coral-book-cottage-door",
+      "end": "end",
+      "point": [
+        -157.9684654523487,
+        214.96924551878334
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-blue-book-cottage-door",
+      "end": "start",
+      "point": [
+        -1476.625,
+        175.375
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-blue-book-cottage-door",
+      "end": "end",
+      "point": [
+        -1457.864917751809,
+        175.64117206546177
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-ink-and-quill-shop-door",
+      "end": "start",
+      "point": [
+        -1313.202008863881,
+        854.0455470605744
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-ink-and-quill-shop-door",
+      "end": "end",
+      "point": [
+        -1276.0264049243237,
+        791.1723625852775
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-green-book-cottage-door",
+      "end": "start",
+      "point": [
+        -62.94128629843195,
+        809.2983549497297
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-quillwick-green-book-cottage-door",
+      "end": "end",
+      "point": [
+        -154.58275274733353,
+        811.7177419970038
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-sage-book-door",
+      "end": "start",
+      "point": [
+        8041.4,
+        844.6875
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-sage-book-door",
+      "end": "end",
+      "point": [
+        8129.574771937072,
+        837.9976575441854
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-lavender-book-door",
+      "end": "start",
+      "point": [
+        9276.55139846628,
+        911.9304794979683
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-lavender-book-door",
+      "end": "end",
+      "point": [
+        9211.601538884934,
+        812.3311696417358
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-blue-book-door",
+      "end": "start",
+      "point": [
+        8326.824021660255,
+        1357.35570543755
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-blue-book-door",
+      "end": "end",
+      "point": [
+        8280.590092950426,
+        1201.4827341081377
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-coral-book-door",
+      "end": "start",
+      "point": [
+        9032.094244515696,
+        1196.7078590279477
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-inkleaf-cottage-coral-book-door",
+      "end": "end",
+      "point": [
+        8976.828105354653,
+        1156.5847209776566
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-blue-door",
+      "end": "start",
+      "point": [
+        -1466.2475658297278,
+        4325.023772608923
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-blue-door",
+      "end": "end",
+      "point": [
+        -1187.5700668532716,
+        4769.808197417779
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-lavender-door",
+      "end": "start",
+      "point": [
+        170.22451643264745,
+        4471.74
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-lavender-door",
+      "end": "end",
+      "point": [
+        97.38993333368138,
+        4349.742856203507
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-sage-door",
+      "end": "start",
+      "point": [
+        -1563.196543023572,
+        5340.694983265704
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-sage-door",
+      "end": "end",
+      "point": [
+        -1238.1214823582925,
+        4980.601450119076
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-coral-door",
+      "end": "start",
+      "point": [
+        -74.52027220849908,
+        5006.67751165314
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-cottage-coral-door",
+      "end": "end",
+      "point": [
+        -163.2088116691275,
+        5043.778577083933
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-moon-book-hall-door",
+      "end": "start",
+      "point": [
+        -676.575,
+        4498
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-bedtime-moon-book-hall-door",
+      "end": "end",
+      "point": [
+        -679.1310472549429,
+        4577.265766147322
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-coral-door",
+      "end": "start",
+      "point": [
+        8387.906948061729,
+        6074.182394415008
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-coral-door",
+      "end": "end",
+      "point": [
+        8389.753217754918,
+        6139.156168264309
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-green-door",
+      "end": "start",
+      "point": [
+        9046.664938395512,
+        5837.5288678644965
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-green-door",
+      "end": "end",
+      "point": [
+        8889.874538790584,
+        6211.696363024618
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-blue-door",
+      "end": "start",
+      "point": [
+        7501.446784783382,
+        5769.429284213999
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-blue-door",
+      "end": "end",
+      "point": [
+        7994.7362433281605,
+        6245.43492950853
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-lilac-door",
+      "end": "start",
+      "point": [
+        9143.06158862179,
+        6233.256296885177
+      ],
+      "reached": true
+    },
+    {
+      "path": "hamlet-paperboat-cottage-lilac-door",
+      "end": "end",
+      "point": [
+        9096.37025648656,
+        6342.69
+      ],
+      "reached": true
+    },
+    {
+      "path": "paperboat-jetty-approach",
+      "end": "start",
+      "point": [
+        8503.25,
+        6784
+      ],
+      "reached": true
+    },
+    {
+      "path": "paperboat-jetty-approach",
+      "end": "end",
+      "point": [
+        8503.25,
+        6492.04
+      ],
+      "reached": true
+    },
+    {
+      "path": "pagepond-stargazing-lane",
+      "end": "start",
+      "point": [
+        9190,
+        3530
+      ],
+      "reached": true
+    },
+    {
+      "path": "pagepond-stargazing-lane",
+      "end": "end",
+      "point": [
+        9670,
+        3370
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-0-a",
+      "end": "start",
+      "point": [
+        3144,
+        142.84166604547147
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-0-a",
+      "end": "end",
+      "point": [
+        3144,
+        42.84166604547147
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-0-b",
+      "end": "start",
+      "point": [
+        3144,
+        551.6652595550485
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-0-b",
+      "end": "end",
+      "point": [
+        3144,
+        651.6652595550485
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-1-a",
+      "end": "start",
+      "point": [
+        -1110,
+        2334.4695366795363
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-1-a",
+      "end": "end",
+      "point": [
+        -1110,
+        2234.4695366795363
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-1-b",
+      "end": "start",
+      "point": [
+        -1110,
+        2743.6047808764943
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-1-b",
+      "end": "end",
+      "point": [
+        -1110,
+        2843.6047808764943
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-2-a",
+      "end": "start",
+      "point": [
+        4760,
+        265.8456621743037
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-2-a",
+      "end": "end",
+      "point": [
+        4760,
+        165.8456621743037
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-2-b",
+      "end": "start",
+      "point": [
+        4760,
+        743.8617542503863
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-2-b",
+      "end": "end",
+      "point": [
+        4748.493453041229,
+        832.9962579002307
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-3-a",
+      "end": "start",
+      "point": [
+        9140,
+        2704.391050583658
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-3-a",
+      "end": "end",
+      "point": [
+        9140,
+        2604.391050583658
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-3-b",
+      "end": "start",
+      "point": [
+        9140,
+        3114.738255372946
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-3-b",
+      "end": "end",
+      "point": [
+        9140,
+        3214.738255372946
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-4-a",
+      "end": "start",
+      "point": [
+        6442.239811545432,
+        6632.451561616847
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-4-a",
+      "end": "end",
+      "point": [
+        6527.24802157684,
+        6685.116580626205
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-4-b",
+      "end": "start",
+      "point": [
+        5993.430339771886,
+        6354.401249137613
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-4-b",
+      "end": "end",
+      "point": [
+        5927.945486475029,
+        6322.599667479984
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-5-a",
+      "end": "start",
+      "point": [
+        4836,
+        4992.9680697050935
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-5-a",
+      "end": "end",
+      "point": [
+        4836,
+        4892.9680697050935
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-5-b",
+      "end": "start",
+      "point": [
+        4836,
+        5551.664242424243
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-5-b",
+      "end": "end",
+      "point": [
+        4836,
+        5651.664242424243
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-6-a",
+      "end": "start",
+      "point": [
+        123.31747398297068,
+        2740
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-6-a",
+      "end": "end",
+      "point": [
+        23.317473982970654,
+        2740
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-6-b",
+      "end": "start",
+      "point": [
+        529.8994859359846,
+        2740
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-6-b",
+      "end": "end",
+      "point": [
+        629.8994859359846,
+        2740
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-7-a",
+      "end": "start",
+      "point": [
+        7326.1767329545455,
+        2200
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-7-a",
+      "end": "end",
+      "point": [
+        7286.178452803136,
+        2200.3709244253664
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-7-b",
+      "end": "start",
+      "point": [
+        7782.71796875,
+        2200
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-7-b",
+      "end": "end",
+      "point": [
+        7869.449578691166,
+        2226.8168043622295
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-8-a",
+      "end": "start",
+      "point": [
+        3036,
+        4908.34
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-8-a",
+      "end": "end",
+      "point": [
+        3036,
+        4808.34
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-8-b",
+      "end": "start",
+      "point": [
+        3036,
+        5331.730562980964
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-8-b",
+      "end": "end",
+      "point": [
+        3036,
+        5431.730562980964
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-9-a",
+      "end": "start",
+      "point": [
+        6689.744555712271,
+        5770
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-9-a",
+      "end": "end",
+      "point": [
+        6589.744555712271,
+        5770
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-9-b",
+      "end": "start",
+      "point": [
+        7176.6293536804305,
+        5770
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-9-b",
+      "end": "end",
+      "point": [
+        7276.6293536804305,
+        5770
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-10-a",
+      "end": "start",
+      "point": [
+        334.9790123762373,
+        4700
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-10-a",
+      "end": "end",
+      "point": [
+        234.97901237623728,
+        4700
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-10-b",
+      "end": "start",
+      "point": [
+        841.0976682692304,
+        4700
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-10-b",
+      "end": "end",
+      "point": [
+        941.0976682692304,
+        4700
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-11-a",
+      "end": "start",
+      "point": [
+        7330.609331786543,
+        4250
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-11-a",
+      "end": "end",
+      "point": [
+        7230.609331786543,
+        4250
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-11-b",
+      "end": "start",
+      "point": [
+        7773.936623296159,
+        4250
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-bridge-11-b",
+      "end": "end",
+      "point": [
+        7873.936623296159,
+        4250
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-0-a",
+      "end": "start",
+      "point": [
+        3606.108956852792,
+        2235.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-0-a",
+      "end": "end",
+      "point": [
+        3506.108956852792,
+        2235.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-0-b",
+      "end": "start",
+      "point": [
+        4343.201665797317,
+        2235.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-0-b",
+      "end": "end",
+      "point": [
+        4443.201665797317,
+        2235.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-1-a",
+      "end": "start",
+      "point": [
+        3610.438104651163,
+        4029.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-1-a",
+      "end": "end",
+      "point": [
+        3510.438104651163,
+        4029.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-1-b",
+      "end": "start",
+      "point": [
+        4277.809023431295,
+        4029.7745
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-canal-1-b",
+      "end": "end",
+      "point": [
+        4375.175636029679,
+        4019.2960524348814
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-west-a",
+      "end": "start",
+      "point": [
+        489.69984966303787,
+        1017.3899999999999
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-west-a",
+      "end": "end",
+      "point": [
+        -27.179090780696768,
+        827.2166520717021
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-west-b",
+      "end": "start",
+      "point": [
+        966.9924013452915,
+        1017.3899999999999
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-west-b",
+      "end": "end",
+      "point": [
+        1060.8098307838388,
+        1031.7379352171092
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-east-a",
+      "end": "start",
+      "point": [
+        7018.232093023256,
+        1001.79
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-east-a",
+      "end": "end",
+      "point": [
+        6940.138137546357,
+        1010.7770951889632
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-east-b",
+      "end": "start",
+      "point": [
+        7427.082368159204,
+        1001.79
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-east-b",
+      "end": "end",
+      "point": [
+        8002.871382817898,
+        855.4367166242494
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-south-a",
+      "end": "start",
+      "point": [
+        6932,
+        4687.520060790273
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-south-a",
+      "end": "end",
+      "point": [
+        6770.550260562142,
+        4635.328664067187
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-south-b",
+      "end": "start",
+      "point": [
+        6932,
+        5128.246076332324
+      ],
+      "reached": true
+    },
+    {
+      "path": "honeywood-pagepond-south-b",
+      "end": "end",
+      "point": [
+        7214.3504473783,
+        5504.1104473783
+      ],
+      "reached": true
+    }
+  ],
+  "bridges": [
+    {
+      "id": "bridge-0",
+      "bad": 0
+    },
+    {
+      "id": "bridge-1",
+      "bad": 0
+    },
+    {
+      "id": "bridge-2",
+      "bad": 0
+    },
+    {
+      "id": "bridge-3",
+      "bad": 0
+    },
+    {
+      "id": "bridge-4",
+      "bad": 0
+    },
+    {
+      "id": "bridge-5",
+      "bad": 0
+    },
+    {
+      "id": "bridge-6",
+      "bad": 0
+    },
+    {
+      "id": "bridge-7",
+      "bad": 0
+    },
+    {
+      "id": "bridge-8",
+      "bad": 0
+    },
+    {
+      "id": "bridge-9",
+      "bad": 0
+    },
+    {
+      "id": "bridge-10",
+      "bad": 0
+    },
+    {
+      "id": "bridge-11",
+      "bad": 0
+    },
+    {
+      "id": "pagepond-canal-0",
+      "bad": 0
+    },
+    {
+      "id": "pagepond-canal-1",
+      "bad": 0
+    },
+    {
+      "id": "pagepond-west",
+      "bad": 0
+    },
+    {
+      "id": "pagepond-east",
+      "bad": 0
+    },
+    {
+      "id": "pagepond-south",
+      "bad": 0
+    },
+    {
+      "id": 17,
+      "bad": 0
+    },
+    {
+      "id": "hamlet-paperboat-south-jetty",
+      "bad": 0
+    }
+  ],
+  "boats": [
+    {
+      "id": "hamlet-paperboat-paperboat-mid",
+      "water": true
+    },
+    {
+      "id": "hamlet-paperboat-paperboat-east",
+      "water": true
+    },
+    {
+      "id": "hamlet-paperboat-paperboat-west",
+      "water": true
+    }
+  ]
+}

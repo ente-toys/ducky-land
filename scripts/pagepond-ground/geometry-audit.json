@@ -1,0 +1,1068 @@
+{
+  "issues": [],
+  "fullLaneRadius": true,
+  "routeWidths": [
+    104,
+    128
+  ],
+  "routes": 88,
+  "ends": [
+    {
+      "id": "west-north-lane",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-north-lane",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-spine",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-spine",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-spine",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-spine",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-north-heart",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-north-heart",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-south-heart",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "west-south-heart",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-north-heart",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-north-heart",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-south-heart",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-south-heart",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "harbour",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "harbour",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-south-return",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "east-south-return",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-0",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-0",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-1",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-1",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-2",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-2",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-3",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "quillwick-entrance-3",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-0",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-0",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-1",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-1",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-2",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-2",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-3",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "inkleaf-entrance-3",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "bedtime-entrance-0",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "bedtime-entrance-0",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "bedtime-entrance-1",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "bedtime-entrance-1",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "bedtime-entrance-2",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "bedtime-entrance-2",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "paperboat-entrance-0",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "paperboat-entrance-0",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "paperboat-entrance-1",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "paperboat-entrance-1",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-0",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-0",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-1",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-1",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-2",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-2",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-3",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-3",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-4",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-4",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-5",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-5",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-6",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-6",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-7",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-7",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-8",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-8",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-9",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-9",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-10",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-10",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-11",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-11",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-12",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "centre-12",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-quillwick-coral-book-cottage-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-quillwick-coral-book-cottage-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-quillwick-blue-book-cottage-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-quillwick-blue-book-cottage-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-quillwick-ink-and-quill-shop-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-quillwick-ink-and-quill-shop-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-quillwick-green-book-cottage-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-quillwick-green-book-cottage-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-sage-book-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-sage-book-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-lavender-book-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-lavender-book-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-blue-book-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-blue-book-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-coral-book-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-inkleaf-cottage-coral-book-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-bedtime-cottage-blue-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-bedtime-cottage-blue-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-bedtime-cottage-lavender-door",
+      "end": "start",
+      "gap": 82.86,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-bedtime-cottage-lavender-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-bedtime-cottage-sage-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-bedtime-cottage-sage-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-bedtime-cottage-coral-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-bedtime-cottage-coral-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-bedtime-moon-book-hall-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-bedtime-moon-book-hall-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-paperboat-cottage-coral-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-paperboat-cottage-coral-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-paperboat-cottage-green-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-paperboat-cottage-green-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-paperboat-cottage-blue-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-paperboat-cottage-blue-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "hamlet-paperboat-cottage-lilac-door",
+      "end": "start",
+      "gap": 0,
+      "doorway": true
+    },
+    {
+      "id": "hamlet-paperboat-cottage-lilac-door",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "paperboat-jetty-approach",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "paperboat-jetty-approach",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "pagepond-stargazing-lane",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "pagepond-stargazing-lane",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-0-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-0-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-0-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-0-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-1-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-1-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-1-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-1-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-2-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-2-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-2-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-2-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-3-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-3-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-3-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-3-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-4-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-4-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-4-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-4-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-5-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-5-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-5-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-5-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-6-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-6-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-6-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-6-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-7-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-7-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-7-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-7-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-8-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-8-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-8-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-8-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-9-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-9-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-9-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-9-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-10-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-10-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-10-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-10-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-11-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-11-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-11-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-bridge-11-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-0-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-0-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-0-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-0-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-1-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-1-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-1-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-canal-1-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-west-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-west-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-west-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-west-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-east-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-east-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-east-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-east-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-south-a",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-south-a",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-south-b",
+      "end": "start",
+      "gap": 0,
+      "doorway": false
+    },
+    {
+      "id": "honeywood-pagepond-south-b",
+      "end": "end",
+      "gap": 0,
+      "doorway": false
+    }
+  ],
+  "unservedEnds": 0
+}

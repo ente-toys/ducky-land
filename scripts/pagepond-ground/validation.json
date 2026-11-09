@@ -1,0 +1,38 @@
+{
+  "island": "isle-251 / Pagepond / library",
+  "scope": "A: ground, bridges, banks, Inkleaf structures",
+  "build": "PASS: npx vite build --configLoader native",
+  "nonSocketSuite": {
+    "passed": 375,
+    "failed": 0,
+    "excluded": [
+      "qa/network.test.mjs",
+      "qa/multiplayer.test.mjs"
+    ]
+  },
+  "focusedAfterFinalEdits": {
+    "passed": 17,
+    "failed": 0
+  },
+  "walk": {
+    "props": 1452,
+    "routeSamples": 17799,
+    "bridges": 19,
+    "pathEnds": 106,
+    "sleepers": 40,
+    "boats": 3
+  },
+  "walkIssues": 0,
+  "fullWidthOverlaps": 0,
+  "unservedEnds": 0,
+  "repeatBuild": {
+    "files": 785,
+    "changed": [],
+    "identical": true
+  },
+  "boatActors": "PASS: both complete moat round trips and south river round trip; all river crossings pass under",
+  "protectedPropsAndSleepSpots": "unchanged",
+  "plantingKitesHillShadows": "unchanged",
+  "visualCheck": "production-source assembly renders, whole plus eight closeups; no live browser acceptance claimed",
+  "committed": false
+}

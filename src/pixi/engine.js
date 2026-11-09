@@ -1,4 +1,4 @@
-import {homePropRotation} from './home-motion.js';
+import {homePropY, homePropRotation} from './home-motion.js';
 import {createHomeKites, KITE_ASSETS} from './home-kites.js';
 import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from './sphere-camera.js';
 import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
@@ -1224,6 +1224,10 @@ export class PixiIsland {
       prop.sprite.visible = visible(prop.x, prop.y, Math.max(prop.width, prop.height) * prop.scale);
       if (prop.shadow) prop.shadow.visible = prop.sprite.visible;
       if (prop.sprite.visible) prop.sprite.skew.x = !reduced && prop.wind ? Math.sin(t * 1.3 + i * .7) * .009 * breeze + this.gust * .035 : 0;
+      if (prop.boat) {
+        prop.sprite.y = homePropY(prop,t,reduced,i);
+        prop.sprite.rotation = homePropRotation(prop,t,reduced,i);
+      }
     });
     for (const art of this.arts.values()) if (art.ready) art.updateCentre?.(t, reduced);
     if (homeShown) this.props.forEach((prop, i) => {
@@ -1231,7 +1235,7 @@ export class PixiIsland {
       if(prop.shadow)prop.shadow.visible=prop.sprite.visible;
       if (!prop.sprite.visible) return;
       prop.sprite.skew.x = !reduced && prop.wind ? Math.sin(t * 1.3 + i * .7) * (/flag|bunting|banner|umbrella/i.test(prop.asset||prop.name)?.018:.009)*breeze + this.gust * .035 : 0;
-      prop.sprite.y = prop.y + (!reduced && prop.boat ? Math.sin(t * 1.5 + i) * 3 : 0);
+      prop.sprite.y = homePropY(prop,t,reduced,i);
       prop.sprite.rotation = homePropRotation(prop,t,reduced,i);
       // boss 5 Nov: bank plants answer the same water field as floating pads.
       if (/lily|reeds|cattails/i.test(prop.asset || prop.name)) this.waterFX?.lily(prop, {y: prop.y, rotation: 0});

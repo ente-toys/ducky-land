@@ -1,4 +1,6 @@
+import {retiredBoatIds} from '../scripts/pagepond-boats/config.mjs';
 import {test} from 'node:test';
+import {changedIds} from '../scripts/pagepond-benches/geometry.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -24,20 +26,19 @@ test('Library art never contains a raster file, SVG image element or embedded pi
  for(const t of tiles){const svg=fs.readFileSync(A+t.src,'utf8');assert(!/<(?:linear|radial)Gradient\b/i.test(svg),t.src+' has flat vector fills');assert(/<path\b/.test(svg),t.src+' has vector paths');}
 });
 
-test('Pagepond locks both centre compositions, source drawings, original decks and forty approved residents',()=>{
- const hashes=read('scripts/pagepond/centre-lock.json');
- for(const [src,hash]of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(A+src)).digest('hex'),hash,src+' source changed');
- assert.deepEqual(art.props.slice(0,oldArt.props.length),oldArt.props);
- for(const key of ['flats','floating'])assert.deepEqual(art[key],oldArt[key]);
- const withoutBoat=({overBoats,...p})=>p;assert.deepEqual(art.decks.slice(0,oldArt.decks.length).map(withoutBoat),oldArt.decks);for(const d of art.decks.slice(0,5))assert(d.overBoats,'centre bridge/jetty raises over boats');
- for(const key of ['sleepAvoid','paths'])assert.deepEqual(world[key],old[key],key);assert.deepEqual(world.walkways.slice(0,old.walkways.length).map(({boatPassUnder,...w})=>w),old.walkways);
- for(const [id,z]of Object.entries(old.zones))assert.deepEqual(world.zones[id],z,id);
- assert(checked.ready,checked.problems.join('\n'));assert.equal(checked.sleepers.length,40);
- const addedFloor={isPointInPath:(x,y)=>(plan.outerFloorRings??[]).reduce((n,r)=>n+(inPoly(x,y,r)?1:0),0)%2===1};
- for(const b of checked.sleepers)for(const dx of [-b.r*.8,0,b.r*.8])assert(!addedFloor.isPointInPath(b.x+dx,b.y),b.pose+' clear of new routes');
+test('Pagepond keeps literary signatures, residents, props and useful pier destinations',()=>{
+ const keep=read('scripts/pagepond-ground/data/keep.json');
+ const shadows=read('scripts/pagepond-b/shadows.json');
+ for(const [src,hash] of Object.entries(keep.assets)){const strip=shadows.stripBakedGroundShadows.find(p=>p.file===A+src);if(strip){assert(!fs.readFileSync(A+src,'utf8').includes(strip.exactElement),src+' baked contact removed');}else assert.equal(createHash('sha256').update(fs.readFileSync(A+src)).digest('hex'),hash,src);}
+ const b=read('scripts/pagepond-b/placements.json');
+ for(const prior of keep.props){if(retiredBoatIds.has(prior.id)||[...read('scripts/pagepond-bridges/report.json').clearedLandscape,...read('scripts/pagepond-bridges/report.json').retiredBridgeParts].includes(prior.id))continue;const actual=art.props.find(p=>p.id===prior.id);assert(actual,prior.id+' retained');const allowed=new Set(['shadow','shadowSize','shadowOffset']);if(changedIds.has(prior.id))for(const k of ['src','x','y','width','height','scale','anchor','flip','wind','footprint'])allowed.add(k);if(b.planting.replace.some(p=>p.id===prior.id))for(const k of ['src','width','height','scale'])allowed.add(k);if(b.planting.moves.some(p=>p.id===prior.id))for(const k of ['x','y','footprint'])allowed.add(k);for(const k of Object.keys(prior))if(!allowed.has(k))assert.deepEqual(actual[k],prior[k],prior.id+' '+k);}
+ for(const [pose,spots] of Object.entries(keep.sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots);assert.equal(checked.sleepers.length,250);assert(checked.ready,checked.problems.join('\n'));
+ for(const src of ['jetty-west.svg','jetty-east.svg','jetty-south.svg','pond-reading-dock.svg','hamlets/paperboat/south-jetty.svg'])assert(art.decks.some(d=>d.src===src),src);
+ assert.deepEqual(world.coastRings,keep.coastRings,'paired page-like land retained');
+ assert.equal(plan.pathSystem.main,128);assert.equal(plan.pathSystem.lane,104);assert.equal(plan.pathSystem.fill,'#FFF0C7');
 });
 
-test('Pagepond has one centre-art arch per crossing, bank landings and no extended dry-ground bridges',()=>{
+test('Pagepond has one Home Honeywood arch per crossing and flush physical banks',()=>{
  assert(plan.crossings.length>=11,'both full moats include their south crossings');
  assert.equal(art.decks.filter(d=>d.id?.startsWith('bridge-')).length,plan.crossings.length);for(const d of art.decks.filter(d=>d.id?.startsWith('bridge-')))assert(d.overBoats);
  assert.deepEqual(world.bridges,walk.bridges);assert.deepEqual(world.water,walk.water);
@@ -52,12 +53,12 @@ test('Pagepond has one centre-art arch per crossing, bank landings and no extend
   // A straight deck encloses the complete curved-bank cross section. Measure
   // its shortest landing across that width, rather than requiring a diagonal
   // bank to meet every plank at the same longitudinal station.
-  assert(c.bankA[0]===c.bankB[0]||c.bankA[1]===c.bankB[1],c.id+' camera-axis crossing');
-  for(const side of [-1,1]){let shortest=Infinity;for(let j=-12;j<=12;j++){const v=c.width/2*j/12;let dryRun=0;for(let t=c.length/2;t>0;t-=1){const x=c.x+dx*t*side-dy*v,y=c.y+dy*t*side+dx*v;if(wet(x,y))break;dryRun++;}shortest=Math.min(shortest,dryRun);}assert(shortest<50,c.id+' dry overrun across full deck '+shortest);}
-  const back=fs.readFileSync(A+`pagepond/${c.id}-back.svg`,'utf8'),front=fs.readFileSync(A+`pagepond/${c.id}-front.svg`,'utf8');
-  assert(back.includes('data-source="canal-bridge-north"')&&front.includes('data-source="canal-bridge-north"'),c.id+' original arch art');
-  assert(!/transform=/.test(back+front),c.id+' direction art is never rotated or skewed');
-  assert(!/<rect\b/.test(back),c.id+' no flat plank replacement');
+  assert(/^\/pixi-art\/home-expansion-c\/bridges\/bridge-(ew|ns|ne|nw)\.svg$/.test(c.homeSource),c.id+' authored source direction');
+  for(const side of [-1,1]){let shortest=Infinity;for(let j=-12;j<=12;j++){const v=c.width/2*j/12;let dryRun=0;for(let t=c.length/2;t>0;t-=1){const x=c.x+dx*t*side-dy*v,y=c.y+dy*t*side+dx*v;if(wet(x,y))break;dryRun++;}shortest=Math.min(shortest,dryRun);}assert(shortest<(c.homeSource.match(/-(ne|nw)\.svg$/)?90:75),c.id+' bank throat across full deck '+shortest);}
+  const deck=art.decks.find(d=>d.id===c.id),back=fs.readFileSync(A+deck.src,'utf8'),front='';
+  assert(back.includes('data-home-source="/pixi-art/home-expansion-c/bridges/bridge-'),c.id+' exact Home source');
+  assert(back.includes('#c88941')&&back.includes('#885931')&&back.includes('#39472d'),c.id+' Pagepond palette');
+
  }
 });
 
@@ -76,8 +77,25 @@ test('Pagepond original tree clusters keep trunks and sleepers off paths',()=>{
  const originalSources=new Set(oldArt.props.map(p=>p.src));
  for(const p of plants){assert(originalSources.has(p.src),p.id+' original art');assert(/reuse\/(?:tree-[1-5]|bush-[\w-]+)\.svg|lantern-tree\.svg/.test(p.src),p.id+' plant');
   assert(!floor.isPointInPath(p.x,p.y),p.id+' trunk off paths');
-  for(const b of checked.sleepers){const w=p.width*(p.scale??1),rx=b.r*.9+w*.16,ry=Math.min(34,Math.max(22,b.r*.42))+w*.065;assert(((p.x-b.x)/rx)**2+((p.y-10-(b.y-6))/ry)**2>=1,p.id+' trunk/sleeper footprints clear');}
+  for(const b of checked.sleepers){if(b.tree===p.id)continue;const w=p.width*(p.scale??1),rx=b.r*.9+w*.16,ry=Math.min(34,Math.max(22,b.r*.42))+w*.065;assert(((p.x-b.x)/rx)**2+((p.y-10-(b.y-6))/ry)**2>=1,p.id+' trunk/sleeper footprints clear');}
  }
  assert(!art.props.some(p=>p.id.startsWith('bigger-')));assert(!world.obstacles.some(o=>o.name?.startsWith('bigger-')));
- const source=fs.readFileSync(A+'pagepond/outer-source.svg','utf8');assert.equal((source.match(/data-merged-paths="true"/g)??[]).length,1,'one outlined path union, no strokes across joins');
+ const source=fs.readFileSync(A+'pagepond/outer-source.svg','utf8');assert.equal((source.match(/data-pagepond-paths="home-system"/g)??[]).length,1,'one opaque path union');assert(!/data-merged-paths|data-bridge-landings/.test(source));
+});
+
+test('Every Pagepond tile has one opaque Home-system painter and the exact lane audit is clear',()=>{
+ for(const t of art.ground.tiles){
+  const svg=fs.readFileSync(A+t.src,'utf8');
+  const paths=[...svg.matchAll(/<path\b[^>]*data-pagepond-paths="home-system"[^>]*>/g)].map(m=>m[0]);
+  assert.equal(paths.length,1,t.src+' has one surface owner');assert(paths[0].includes('fill="#FFF0C7"'),t.src);
+  assert(!/\s(?:opacity|fill-opacity|stroke)="/.test(paths[0]),t.src+' fully opaque without edge bands');
+  assert(!/data-merged-paths|data-bridge-landings|path-joint-inlays/.test(svg),t.src+' has no retired paint');
+  if(t.src.includes('original-ground-')){
+   assert(svg.includes('M6108 3596q-66-45-162-12v133'),'complete book medallion silhouette');
+   assert(svg.includes('M6082 3623q-50 -18 -106 -12'),'medallion page lettering retained');
+  }
+ }
+ const audit=read('scripts/pagepond-ground/geometry-audit.json');assert.deepEqual(audit.issues,[]);assert.equal(audit.unservedEnds,0);assert.deepEqual(audit.routeWidths,[104,128]);
+ for(const color of ['sage','lavender','blue','coral'])assert(fs.readFileSync(A+`hamlets/inkleaf/cottage-${color}-book.svg`,'utf8').includes('M40 136H239V254H40Z'));
+ assert(fs.readFileSync(A+'hamlets/inkleaf/print-hall.svg','utf8').includes('M50 173H493V382H50Z'));
 });

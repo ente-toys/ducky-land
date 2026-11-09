@@ -60,9 +60,10 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
       dancer.height*=cut;dancer.anchor={x:s.anchor.x,y:anchorY};
     }
   }
-  const records=art.props.filter(p=>p.centrePiece?.animate && !['pour','fire'].includes(p.centrePiece.animate.kind))
+  const records=art.props.filter(p=>p.centrePiece?.animate && !['pour','fire'].includes(p.centrePiece.animate.kind)
+    && !(art.id==='library' && p.centrePiece.animate.kind==='jet'))
     .map(p=>({piece:p.centrePiece,sprite:p.sprite,flip:p.flip}));
-  let fire=null,water=null;
+  let fire=null,water=null,pond=null;
   if(art.id==='community') {
     fire=(await import('./centre-motion/community.js')).updateCommunityCentre;
   }
@@ -71,7 +72,14 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
     water.root.visible=false;
     water.root.themeArt=art.id;art.groups.push(water.root);
   }
-  art.updateCentre=(t,reduced)=>{animatePieces(records,t,reduced);fire?.(art,t,reduced);water?.update(t,reduced,art.ground.visible);};
+  if(art.id==='library') {
+    pond=(await import('./centre-motion/library.js')).createLibraryFountain(art,objects);
+    for(const root of pond?.roots??[]) {
+      root.visible=false;
+      if(root.parent===objects)art.groups.push(root);
+    }
+  }
+  art.updateCentre=(t,reduced)=>{animatePieces(records,t,reduced);fire?.(art,t,reduced);water?.update(t,reduced,art.ground.visible);pond?.update(t,reduced,art.ground.visible);};
   const destroy=art.destroy.bind(art);
-  art.destroy=()=>{water?.destroy();destroy();textureViews.forEach(t=>t.destroy(false));};
+  art.destroy=()=>{water?.destroy();pond?.destroy();destroy();textureViews.forEach(t=>t.destroy(false));};
 }

@@ -1,2 +1,2 @@
-// Current Pagepond: approved hamlets, open navigable moats and furnished meadows.
-import '../pagepond-rework/build.mjs';
+// Current Pagepond build: immutable route sources, one shared ground painter.
+import '../pagepond-ground/build.mjs';

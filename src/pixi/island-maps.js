@@ -86,7 +86,7 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
     {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false}) : [])).map(bed => fixThemeBed(id, bed)).map(({x, y, pose, r, flip, tree}) => ({x, y, pose, r, flip: Boolean(flip), tree}));
   const walkMap = beds.length ? {...baseWalk, obstacles: [...(baseWalk.obstacles ?? []), ...beds.map(sleeperFootprint)]} : baseWalk;
   let NAV = null;
-  const nav = () => NAV ??= createNavigation(walkMap);
+  const nav = () => NAV ??= createNavigation(walkMap, {cellSize: walking.navigationCellSize ?? 32});
   const shoreFor = (x, y, reach = 280) => {const p = nav().nearest(x, y, reach); return p ? {x: Math.round(p[0]), y: Math.round(p[1])} : null;};
   const localWet = (x, y) => !landAt(x, y) && Array.from({length: 16}, (_, i) => i * Math.PI / 8).every(a => !landAt(x + Math.cos(a) * BOAT_RADIUS, y + Math.sin(a) * BOAT_RADIUS));
   // Every island has the same real boats (boss 5 Nov): three at the harbor jetty, one off each islet, and a few moored off

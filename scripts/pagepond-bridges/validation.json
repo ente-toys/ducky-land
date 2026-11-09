@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-09T17:50:29.760Z",
+  "bridges": 17,
+  "landings": 34,
+  "source": "public/pixi-art/home-expansion-c/bridges/bridge-{ew,ns,ne,nw}.svg",
+  "nonSocket": {
+    "files": 96,
+    "tests": 398,
+    "passed": 398,
+    "failed": 0,
+    "excluded": [
+      "qa/network.test.mjs",
+      "qa/multiplayer.test.mjs"
+    ]
+  },
+  "finalFocused": {
+    "tests": 18,
+    "passed": 18,
+    "includes": "SVG transforms, rigid posts, cross-deck width, river alignment, retired rail layers, 34 full-width path landings, preserved assets and bench contacts"
+  },
+  "productionBuild": "PASS: npm run build -- --configLoader native",
+  "walk": {
+    "props": 1786,
+    "routeSamples": 17892,
+    "bridges": 19,
+    "pathEnds": 176,
+    "sleepers": 250,
+    "boats": 3,
+    "overlaps": 0,
+    "walkIssues": 0,
+    "issues": []
+  },
+  "sailing": {
+    "underpasses": 17,
+    "bothDirections": true,
+    "actor": "production sailing simulation from harbour"
+  },
+  "retiredRailParts": [
+    "canal-bridge-north-rail",
+    "canal-bridge-south-rail"
+  ],
+  "clearedLandingLandscape": 21,
+  "published": false
+}
