@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="316" height="261" viewBox="0 0 316 261"><g stroke="#39472d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="158" cy="247" rx="128" ry="10" fill="#bc9b57" opacity=".2" stroke="none"/><path d="M42 106H274V238H42Z" fill="#d5a565"/><path d="M54 113H262V214H54Z" fill="#835f39"/><path d="M43 92V240M273 92V240" fill="none" stroke="#b98646" stroke-width="10"/><path d="M26 103L48 24H268L290 103Q279 118 268 107Q253 120 238 108Q222 121 207 108Q191 121 176 108Q159 121 144 108Q128 121 113 108Q97 121 82 108Q66 121 51 108Q35 119 26 103Z" fill="#fff0c7"/><path d="M65 24H94L82 107H51Z M124 24H153L144 108H113Z M183 24H212L207 108H176Z M242 24H268L290 103Q279 118 268 107H238Z" fill="#72bdcb" stroke="none"/><path d="M26 103L48 24H268L290 103" fill="none"/><path d="M32 193H284V235H32Z" fill="#f5d784"/><path d="M32 235H284V245H32Z" fill="#b67e45"/><path d="M77 219L66 195H88Z M122 219L111 195H133Z" fill="#d6a25d"/><path d="M65 193q-4-16 12-16q17 0 12 16Z" fill="#fff0c7"/><path d="M110 193q-4-16 12-16q17 0 12 16Z" fill="#ec8e65"/><path d="M206 179H256V222H206Z" fill="#fff0c7"/><path d="M211 187H251M211 198H244M211 209H248" fill="none" stroke="#c79955"/><path d="M161 189v-30h29v30" fill="#9cd4cf"/><g id="p2-kiosk-joinery" stroke="#39472d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M54 119H262V132Q168 145 54 132Z" fill="#735333" stroke="none"/>
+  <path d="M56 136V184M259 136V184" fill="none" stroke="#b99258" stroke-width="4"/>
+  <path d="M42 222H194V229H42Z M42 236H273V244H42Z" fill="#c69a59" stroke="none"/>
+  <path d="M45 232H271M155 203V233M199 224V234M246 226V234" fill="none" stroke="#af854c"/>
+  <path d="M34 197H282V203H34Z" fill="#fff0c7" stroke="none"/>
+  <path d="M180 189V175H191V189M196 189V169H207V189M212 189V176H223V189" fill="#ead49c"/>
+  <path d="M179 176H192M195 170H208M211 177H224" fill="none" stroke="#d09a5b" stroke-width="3"/>
+  <path d="M160 166H169V190H160Z" fill="#9dd3cb"/><path d="M163 168V185" fill="none" stroke="#dbf0d4" stroke-width="2"/>
+  <path d="M64 240H86M224 240H248" fill="none" stroke="#f0c77d"/>
+</g></g></svg>

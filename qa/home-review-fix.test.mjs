@@ -12,7 +12,7 @@ test('Home former shoreline jetties cross real water and retain walking access',
   assert.ok(wet(p),'painted water has a matching water collision shape');
   assert.ok(n.walkable(...p),'duck can stand on the deck over water');
   // boss 8 Nov (sailable rivers): a boat passes under the arched bridges on the sea-joined canal; Millrill and the fishing deck stay closed
-  assert.equal(canSail(...p,'home'),p[0]<5000&&p[1]<5000,'boats pass under the canal bridges only');
+  assert.equal(canSail(...p,'home'),p[1]<5000,'boats pass under the canal bridges only');
   assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p).at(-1),p,'deck is reachable from Home');
  }
 });
@@ -21,7 +21,7 @@ test('Home rivers block walking between crossings and the new crossing decks rem
  for(const [i,p] of [[570,831],[940,950],[1290,421],[1400,383]].map(at).entries()){
   assert.ok(wet(p));assert.equal(n.walkable(...p),false);
   if(i===0)assert.ok(canSail(...p,'home'),'the canal joins the sea: boats sail it');
-  if(i>=2)assert.equal(canSail(...p,'home'),false,'Millrill never reaches the sea');
+  if(i>=2)assert.equal(canSail(...p,'home'),true,'Millrill now joins the sea through its eastern mouth');
  }
  for(const c of E.crossings){const p=at([c.x,c.y]);assert.ok(wet(p));assert.ok(n.walkable(...p));assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p).at(-1),p);}
 });

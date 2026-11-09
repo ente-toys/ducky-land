@@ -1,0 +1,145 @@
+[
+  {
+    "id": "home-kite-1",
+    "x": 859,
+    "y": 227,
+    "colour": "red",
+    "height": 239,
+    "lean": 103,
+    "size": 0.84,
+    "phase": 0,
+    "period": 9.43
+  },
+  {
+    "id": "home-kite-2",
+    "x": 1584,
+    "y": -139,
+    "colour": "mint",
+    "height": 283,
+    "lean": 77,
+    "size": 0.89,
+    "phase": 2.399,
+    "period": 7.58
+  },
+  {
+    "id": "home-kite-3",
+    "x": -299,
+    "y": -322,
+    "colour": "yellow",
+    "height": 302,
+    "lean": 112,
+    "size": 0.95,
+    "phase": 4.798,
+    "period": 9.4
+  },
+  {
+    "id": "home-kite-4",
+    "x": 3486,
+    "y": -1369,
+    "colour": "purple",
+    "height": 234,
+    "lean": 89,
+    "size": 0.96,
+    "phase": 7.197,
+    "period": 10.41
+  },
+  {
+    "id": "home-kite-5",
+    "x": 5047,
+    "y": -1084,
+    "colour": "blue",
+    "height": 272,
+    "lean": 103,
+    "size": 0.93,
+    "phase": 9.596,
+    "period": 7.25
+  },
+  {
+    "id": "home-kite-6",
+    "x": 6620,
+    "y": 40,
+    "colour": "orange",
+    "height": 245,
+    "lean": 76,
+    "size": 0.93,
+    "phase": 11.995,
+    "period": 7.83
+  },
+  {
+    "id": "home-kite-7",
+    "x": 5977,
+    "y": 766,
+    "colour": "red",
+    "height": 299,
+    "lean": 76,
+    "size": 0.92,
+    "phase": 14.394,
+    "period": 9.83
+  },
+  {
+    "id": "home-kite-8",
+    "x": 6385,
+    "y": 1567,
+    "colour": "mint",
+    "height": 273,
+    "lean": 80,
+    "size": 1.01,
+    "phase": 16.793,
+    "period": 8.82
+  },
+  {
+    "id": "home-kite-9",
+    "x": 5726,
+    "y": 3929,
+    "colour": "yellow",
+    "height": 285,
+    "lean": 110,
+    "size": 0.91,
+    "phase": 19.192,
+    "period": 10.12
+  },
+  {
+    "id": "home-kite-10",
+    "x": 4986,
+    "y": 4138,
+    "colour": "purple",
+    "height": 241,
+    "lean": 104,
+    "size": 0.97,
+    "phase": 21.591,
+    "period": 9.43
+  },
+  {
+    "id": "home-kite-11",
+    "x": 1839,
+    "y": 4843,
+    "colour": "blue",
+    "height": 294,
+    "lean": 113,
+    "size": 0.99,
+    "phase": 23.99,
+    "period": 7.66
+  },
+  {
+    "id": "home-kite-12",
+    "x": 233,
+    "y": 4560,
+    "colour": "orange",
+    "height": 244,
+    "lean": 90,
+    "size": 0.98,
+    "phase": 26.389,
+    "period": 10.34
+  },
+  {
+    "id": "home-kite-13",
+    "x": -133,
+    "y": 2327,
+    "colour": "red",
+    "height": 243,
+    "lean": 88,
+    "size": 0.94,
+    "phase": 28.788,
+    "period": 9.02
+  }
+]

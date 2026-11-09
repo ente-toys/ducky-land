@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="230" viewBox="0 -115 360 230" data-anchor-x="0" data-anchor-y="0.5">
+  <title>Slow-sweep lighthouse beam</title>
+  <desc>Flat translucent light with rounded far edge. Pivot 0,0 at the lamp socket; place at lighthouse local 187,72. Rotate around the left-centre pivot. Draw behind the lighthouse.</desc>
+  <path fill="#fff0a1" fill-opacity="0.18" d="M0-12L330-109Q357-115 360-86V86Q357 115 330 109L0 12Z"/>
+  <path fill="#ffe67d" fill-opacity="0.16" d="M0-10L316-89Q341-94 344-69V69Q341 94 316 89L0 10Z"/>
+  <path fill="#fff8bd" fill-opacity="0.13" d="M0-7L300-60Q322-64 326-44V44Q322 64 300 60L0 7Z"/>
+</svg>

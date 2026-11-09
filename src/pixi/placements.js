@@ -1,3 +1,4 @@
+import homeRoutes from './home-routes.json';
 import homeOriginalWorld from './home-original-world.json';
 import expansion from './home-expansion.json';
 import {geometry} from '../../rive/web/island-geometry.mjs';
@@ -9,11 +10,14 @@ import shapes from './walk-shapes.json';   // boss 4 Nov: the client's coast and
 import {inShape} from '../../rive/web/island-geometry.mjs';
 import {SLEEP_SPOTS as BASE_SLEEP_SPOTS, resolveSleepSpots, sleeperFootprint} from './sleep-spots.js';
 import homeSleepExtra from '../../rive/web/home-sleep-extra.json';
+import homeSleepOuter from '../../rive/web/home-sleep-outer.json';
+import homeSleepMore from '../../rive/web/home-sleep-more.json';
 import homeExtraProps from '../../rive/web/home-extra-props.json';
 const SLEEP_SPOTS = Object.fromEntries(Object.entries(BASE_SLEEP_SPOTS).map(([pose, spots]) => [pose, [...spots, ...(homeSleepExtra[pose] ?? [])]]));
 import {PLAZA_BENCHES, benchFootprint, benchAnchor, benchBox, benchFile} from './plaza-benches.js';
 const footpaths = rawPaths.filter(l => !(l[0][0] === 3940 && l[0][1] === 3260));   // round 4: the east jetty's stub path went with its islet
 const segDist = (x, y, a, b) => {const dx = b[0]-a[0], dy = b[1]-a[1], t = Math.max(0, Math.min(1, ((x-a[0])*dx + (y-a[1])*dy) / (dx*dx + dy*dy))); return Math.hypot(x-a[0]-t*dx, y-a[1]-t*dy);};
+const reviewPathClear = (x,y,pad=0) => !homeRoutes.some(r => r.samples.slice(1).some((b,i)=>segDist(x,y,r.samples[i],b)<r.width/2+pad));
 const pathDist = (x, y) => Math.min(...footpaths.flatMap(l => l.slice(1).map((b, i) => segDist(x, y, l[i], b))));   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
 
 const urls = import.meta.glob('../../assets/**/*.svg', {eager: true, query: '?url', import: 'default'});
@@ -74,13 +78,13 @@ function plant(kind, point) {
 // boss 3 Nov (a): every bridge is an arch. The five jetties were planks baked into the ground tiles; they are now their own
 // SVGs drawn in WORLD coordinates (place at the viewBox origin, scale 1). The pond bridge stays prop-16. All six sit in the
 // ground layer, under the Duckies. A, B and R are the arch ends and its rise (world-restyle/jobs/bridges/NOTES.md).
-export const JETTIES = [
+export const JETTIES = expansion.homeArches ? [] : [
   [2, 870.0355, 2996.0389, 337.9679, 475.3502],   // round 4b viewBox. boss 8 Nov: jetties 1 and 3 and their round pads are gone; the
   // ground lane draws those crossings as diagonal arched bridges (home-expansion.json decks and arches river-crossing-5 and -6)
   // boss 8 Nov (bridges): jetty 5 ran onto a dead-end sand islet in the mill stream; it and the islet are gone, and the ground
   // lane's river-crossing-7 (a GPT footbridge) now spans from the west path to the east path
 ].map(([n, x, y, width, height]) => ({src: `/pixi-art/bridge-jetty-${n}.svg`, x, y, width, height, resolution: 1.5}));
-const ARCHES = [
+const ARCHES = expansion.homeArches ?? [
   {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},   // pond: the deck top is drawn 72 deep for 112 of walkway
   // round 4: every jetty humps R = 70 (was 40-44), so a Ducky visibly climbs it
   {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
@@ -128,7 +132,7 @@ const SAND = [[2820, 2390, 562, 398], [4775, 2654, 478, 540], [4132, 1530, 682, 
 export function groundAt(x, y, world) {
   if (world.water.some(o => inShape(x, y, o))) return 'water';
   return SAND.some(s => inEllipse(x, y, ...s)) || world.islets.some(a => !inEllipse(x, y, a[0], a[1], a[2] * .6, a[3] * .6) && inEllipse(x, y, ...a))
-    || pathDist(x, y) < 64 ? 'sand' : 'grass';
+    || !reviewPathClear(x,y) ? 'sand' : 'grass';
 }
 
 function createOriginalPlacements(world, walkable) {
@@ -481,8 +485,20 @@ export function obstaclesFor(props, world) {
 export {SLEEP_SPOTS, sleeperFootprint};
 export function sleepSpots(world, props, walkable, sizes) {
   const steps = (x, y) => x > 2780 && x < 3060 && y > 1340 && y < 1660;   // the museum stair
-  return resolveSleepSpots(world, props, walkable, sizes, {spots: SLEEP_SPOTS, home: true, pathDist, steps,
+  const beds = resolveSleepSpots(world, props, walkable, sizes, {spots: SLEEP_SPOTS, home: true, pathDist, steps,
     avoid: [{x: RING.x, y: RING.y, rx: RING.rx + 60, ry: RING.ry + 50, name: 'plaza'}]});
+  // Keep the original forty in their exact order (and animation seeds). New residents are
+  // checked against them and the polished routes' painted edges, including hamlet courts.
+  const outer = resolveSleepSpots(world, props, walkable, sizes, {spots: homeSleepOuter, home: true, occupied: beds,
+    pathDist: (x,y) => Math.min(...homeRoutes.map(r => Math.min(...r.samples.slice(1).map((b,i) => segDist(x,y,r.samples[i],b))) - r.width/2)),
+    steps: (x,y) => expansion.roads.some(r => r.rings && inShape(x,y,{poly:r.rings[0]}))});
+  // Boss 18:50: append twenty more, preserving all eighty residents' animation seeds.
+  const more = resolveSleepSpots(world, props, walkable, sizes, {spots: homeSleepMore, home: true, occupied: [...beds,...outer],
+    pathDist: (x,y) => Math.min(...homeRoutes.map(r => Math.min(...r.samples.slice(1).map((b,i) => segDist(x,y,r.samples[i],b))) - r.width/2)),
+    steps: (x,y) => expansion.roads.some(r => r.rings && inShape(x,y,{poly:r.rings[0]}))});
+  const all = [...beds, ...outer, ...more];
+  all.bad = [...beds.bad, ...outer.bad, ...more.bad];
+  return all;
 }
 
 // Home grows around its original coordinate frame. Keep the original composition's inputs frozen.
@@ -490,16 +506,16 @@ export const HOME_ORIGIN = expansion.origin;
 export const HOME_TILES = [...expansion.tiles, ...original.ground.tiles.map(t=>({...t,src:t.src.replace('/pixi-art/','/pixi-art/home-expansion/')}))];
 export function createPlacements() {
   const base=placeWorld(homeOriginalWorld);
-  return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable), ...expansion.props];
+  return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable).filter(p=>!(expansion.homeArches && p.id === 16)), ...expansion.props].map(p=>{const edit=expansion.reviewProps?.[p.id];if(!edit)return p;const q={...p,...edit};if(p.footprint&&!edit.footprint&&(edit.x!==undefined||edit.y!==undefined)){const dx=q.x-p.x,dy=q.y-p.y;q.footprint=p.footprint.poly?{poly:p.footprint.poly.map(([x,y])=>[x+dx,y+dy])}:{...p.footprint,x:p.footprint.x+dx,y:p.footprint.y+dy};}return q;});
 }
 export function homeDecals(props) {
   const base=placeWorld(homeOriginalWorld), old=geometry({...base,obstacles:[]}).walkable;
   const originalProps=props.filter(p=>!String(p.id).startsWith('bigger-'));
   const grown={...base,coast:shapes.coast};
-  return [...decalsFor(base,originalProps,old), ...decalsFor(grown,originalProps,geometry({...grown,obstacles:[]}).walkable).filter(d=>!old(d.x,d.y))];
+  return [...decalsFor(base,originalProps,old), ...decalsFor(grown,originalProps,geometry({...grown,obstacles:[]}).walkable).filter(d=>!old(d.x,d.y))].filter(d => !/grass|flower/.test(d.src) || reviewPathClear(d.x,d.y,8)).filter(d=>!(expansion.riverWater??[]).some(w=>inShape(d.x,d.y,w)));
 }
 
 export const HOME_DECKS = expansion.decks ?? [];
 export const HOME_MOUTHS = expansion.riverMouths ?? [];   // boss 8 Nov: the open river mouths, calm water with no surf
 // home 10 (ground lane): the expanded lawns' tufts, pebbles, small flowers and path stones, the centre's own decal art
-export const HOME_GROUND_DECALS = expansion.groundDecals ?? [];
+export const HOME_GROUND_DECALS = (expansion.groundDecals ?? []).filter(d=> !/grass|flower/.test(d.src) || reviewPathClear(d.x,d.y,8));

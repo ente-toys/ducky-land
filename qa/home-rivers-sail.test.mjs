@@ -35,8 +35,17 @@ test('a boat sails from Home\'s harbour up Clover Run and the canal, under the a
   sail(actor, harbour);
 });
 
-test('Home\'s rivers stay closed to walkers, and Millrill (no mouth) stays closed to boats', () => {
+test('Home\'s rivers stay closed to walkers, and Millrill opens to boats', () => {
   const n = HOME_MAP.nav();
   for (const [x, y] of [[3094, 5300], [3500, 3540], [1622, 3483]]) assert.equal(n.walkable(x, y), false, `${x},${y} is water`);
-  for (const [x, y] of [[5470, 1420], [6150, 1880]]) assert.equal(canSail(x, y, 'home'), false, `${x},${y} has no way to the sea`);
+  for (const [x, y] of [[5470, 1420], [6150, 1880]]) assert.equal(canSail(x, y, 'home'), true, `${x},${y} joins the new eastern mouth`);
+});
+
+// Boss item 12: physically sail all the way into the pond/river network and back.
+test('a harbour boat reaches Lily Pond, the race lake and Millrill Pond', () => {
+ const harbour=harborOf('home').water;
+ for(const to of [{x:1640,y:2630},{x:4130,y:1537},{x:6150,y:1900}]) {
+  const actor={islandId:'home',mode:'sailing',...harbour,turn:0};
+  sail(actor,to);sail(actor,harbour);
+ }
 });

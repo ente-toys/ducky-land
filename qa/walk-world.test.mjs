@@ -8,10 +8,11 @@ import {fileURLToPath} from 'node:url';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createServer} from 'vite';
+import {HOME_SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
 
 test('rive/web/walk-world.json matches a fresh build from the current placements and sleepers', async () => {
   const root = fileURLToPath(new URL('../', import.meta.url));
-  const vite = await createServer({root, configLoader:'native', cacheDir:join(tmpdir(),'ducky-live-vite-qa'), server:{middlewareMode:true, hmr:false, watch:null}, appType:'custom', logLevel:'error'});
+  const vite = await createServer({root, configLoader:'native', cacheDir:join(tmpdir(),'ducky-live-vite-qa'), server:{middlewareMode:true, hmr:false, ws:false, watch:null}, appType:'custom', logLevel:'error'});
   try {
     const load = p => vite.ssrLoadModule(p);
     const world = (await load('/rive/web/world.json')).default;
@@ -19,11 +20,11 @@ test('rive/web/walk-world.json matches a fresh build from the current placements
     const P = await load('/src/pixi/placements.js'), {sleepHalfWidths} = await load('/src/pixi/sleeper.js'), {harborClear, harborWorld} = await load('/src/pixi/islands.js');
     const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable).filter(harborClear), local = harborWorld(P.walkWorld(tw, props));
     const beds = P.sleepSpots(local, props, geometry(local).walkable, sleepHalfWidths(.88 * .24 * 3));
-    assert.equal(beds.length, 40, 'Home resolves all 40 residents');
+    assert.equal(beds.length, HOME_SLEEP_TOTAL, 'Home resolves all 100 residents');
     assert.equal(beds.bad.length, 0, 'no Home bed is silently dropped');
     const {createSimulation} = await load('/src/pixi/simulation.js');
     const residents = createSimulation(local, 8612, {sleepingNpcs:true,npcCount:beds.length});
-    assert.equal(residents.ducks.filter(d=>d.sleeping).length,40, 'Home allocates 40 actual NPCs');
+    assert.equal(residents.ducks.filter(d=>d.sleeping).length,HOME_SLEEP_TOTAL, 'Home allocates 100 actual NPCs');
     const walk = {...local, obstacles: [...local.obstacles, ...beds.map(P.sleeperFootprint)]};
     const fresh = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
     const saved = JSON.parse(readFileSync(new URL('../rive/web/walk-world.json', import.meta.url)));

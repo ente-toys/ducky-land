@@ -3,7 +3,9 @@
 // Run after any change to placements or sleepers:  node scripts/walk-world.mjs
 import {createServer} from 'vite';
 import {writeFileSync} from 'node:fs';
-const vite = await createServer({configLoader:'native',cacheDir:'/private/tmp/ducky-bigger-walk-vite',optimizeDeps:{noDiscovery:true},server: {middlewareMode: true}, appType: 'custom', logLevel: 'error'});
+import assert from 'node:assert/strict';
+import {HOME_SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
+const vite = await createServer({configLoader:'native',cacheDir:'/private/tmp/ducky-bigger-walk-vite',optimizeDeps:{noDiscovery:true},server: {middlewareMode: true, hmr:false, ws:false, watch:null}, appType: 'custom', logLevel: 'error'});
 try {
   const load = p => vite.ssrLoadModule(p);
   const world = (await load('/rive/web/world.json')).default;
@@ -12,6 +14,8 @@ try {
   // boss 5 Nov: the server is the live game, so it walks the live harbor: the jetty deck, and the lawn at its foot cleared
   const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable).filter(harborClear), local = harborWorld(P.walkWorld(tw, props));
   const beds = P.sleepSpots(local, props, geometry(local).walkable, sleepHalfWidths(.88 * .24 * 3));
+  assert.equal(beds.length, HOME_SLEEP_TOTAL, 'all approved Home sleepers must resolve before writing the server map');
+  assert.deepEqual(beds.bad, [], 'no Home sleep spot may be silently dropped');
   const walk = {...local, obstacles: [...local.obstacles, ...beds.map(P.sleeperFootprint)]};
   const out = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
   writeFileSync('rive/web/walk-world.json', JSON.stringify(out));

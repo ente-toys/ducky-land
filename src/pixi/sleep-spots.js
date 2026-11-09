@@ -26,6 +26,7 @@ export const SLEEP_SPOTS = {
 };
 export const SLEEP_COUNTS = Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([pose, list]) => [pose, list.length]));
 export const SLEEP_TOTAL = 40; // approved residents per island, with all eight poses
+export const HOME_SLEEP_TOTAL = 100; // boss 18:50: Home adds sixty outer residents, preserving the original forty
 export const BASE_SLEEP_TOTAL = Object.values(SLEEP_COUNTS).reduce((a, b) => a + b, 0);
 
 const segDist = (x, y, a, b) => {const dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / (dx * dx + dy * dy || 1))); return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy);};
@@ -39,9 +40,9 @@ const HOME_DECOR = /lily|bunting|banner|boat/i, HOME_BUILDING = /library|lightho
 /**
  * Resolve an island's sleep spots against its walking map and props. Returns the beds that pass ({x, y, pose, r, flip, tree})
  * with `.bad` = the dropped ones and why. opts (home passes its own): spots, avoid [{x,y,rx,ry,name?}], pathDist(x,y),
- * steps(x,y), home (home's prop rules).
+ * steps(x,y), home (home's prop rules), occupied (already resolved beds to keep clear of).
  */
-export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidths(), {spots, avoid = [], pathDist = null, steps = () => false, home = false, warn = true} = {}) {
+export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidths(), {spots, avoid = [], pathDist = null, steps = () => false, home = false, warn = true, occupied = []} = {}) {
   const coast = world.coast, coastDist = (x, y) => Math.min(...coast.map((a, i) => segDist(x, y, a, coast[(i + 1) % coast.length])));
   const islet = (x, y) => (world.islets ?? []).some(a => inEllipse(x, y, a[0], a[1], a[2] + 60, a[3] + 60));
   const deck = (x, y) => (world.walkways ?? []).some(b => segDist(x, y, b.a, b.b) < b.w / 2 + 90) || (world.bridges ?? []).some(b => Math.abs(x - b.x) < b.w / 2 + 80 && Math.abs(y - b.y) < b.h / 2 + 80);
@@ -65,7 +66,7 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
     const r = sizes[pose], tree = pose === 'nod' && props.find(p => p.id === spot?.[0]);
     const [x, y, flip] = tree ? [tree.x + (spot[1] ?? 0), tree.y + 14, spot[2]] : Array.isArray(spot) ? spot : [NaN, NaN];   // in front of the trunk base: its back on the bark
     let reason = !(pose in SLEEP_COUNTS) ? 'unknown pose' : pose === 'nod' && !tree ? `no tree ${spot?.[0]}` : !Number.isFinite(x) || !Number.isFinite(y) ? 'bad point' : why(x, y, pose, r, tree);
-    const near = !reason && out.find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
+    const near = !reason && [...occupied, ...out].find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
     reason ||= near && `near ${near.pose}`;
     if (reason) {bad.push({pose, x, y, reason}); continue;}
     out.push({x, y, pose, r, flip: Boolean(flip), tree: tree ? tree.id : undefined});

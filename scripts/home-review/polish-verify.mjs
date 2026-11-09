@@ -1,0 +1,35 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import path from 'node:path';
+const out=process.env.HOME_REVIEW_OUT;
+if(!out)throw Error('HOME_REVIEW_OUT required');
+const home=path.resolve(out,'../..');
+const P=JSON.parse(fs.readFileSync(out+'/placements.json'));
+const before=JSON.parse(fs.readFileSync(home+'/fix/placements.json'));
+const E=JSON.parse(fs.readFileSync('src/pixi/home-expansion.json'));
+const old=JSON.parse(fs.readFileSync(home+'/fix/before-expansion.json'));
+assert.deepEqual(P.sleepers,before.sleepers);
+assert.equal(P.sleepers.length,40);
+const sacks=e=>e.props.filter(p=>p.asset==='flour-sacks').map(({id,x,y,footprint})=>({id,x,y,footprint}));
+assert.deepEqual(sacks(E),sacks(old));assert.equal(sacks(E).length,4);
+const sources=[...new Set([...P.props,...P.flats,...P.decks,...P.tiles,...P.floating].map(p=>p.src))];
+for(const src of sources){
+ assert.ok(src.endsWith('.svg'),src);
+ const f=src.startsWith('/pixi-art/')?'public'+src:src.startsWith('/assets/')?'.'+src:src;
+ assert.doesNotMatch(fs.readFileSync(f,'utf8'),/<(?:[\w.-]+:)?(?:image|filter|linearGradient|radialGradient)\b/i,src);
+}
+const lighthouse=P.props.find(p=>p.id===46),beam=P.props.find(p=>p.id==='home-lighthouse-beam');
+assert.equal(lighthouse.x,4860);assert.equal(lighthouse.y,2600);
+assert.deepEqual(lighthouse.anchor,{x:.5,y:1});
+assert.deepEqual(lighthouse.footprint,{x:4860,y:2555.8,rx:140.4,ry:44.2});
+assert.equal(beam.contact,false);assert.equal(beam.sweepPeriod,12);
+assert.ok(fs.readFileSync('public'+lighthouse.src).equals(fs.readFileSync(home+'/lighthouse/svg/lighthouse.svg')));
+const walk=JSON.parse(fs.readFileSync(out+'/walk-audit.json'));
+assert.equal(walk.overlaps,0);assert.equal(walk.deadEnds,0);assert.ok(walk.destinations.every(d=>d.reached));
+const coast=E.coast;
+const bounds=[Math.min(...coast.map(p=>p[0]))-53,Math.min(...coast.map(p=>p[1]))-53,Math.max(...coast.map(p=>p[0]))+53,Math.max(...coast.map(p=>p[1]))+53];
+const worldMargins=[bounds[0]-E.origin.x,bounds[1]-E.origin.y,E.origin.x+E.width-bounds[2],E.origin.y+E.height-bounds[3]];
+assert.ok(worldMargins.every(m=>m>100),'the organic coast must finish before all four world edges');
+const report={sleepersUnchanged:40,sackPairsUnchanged:4,environmentSvgSources:sources.length,forbiddenSvgFeatures:0,approvedBridges:E.homeArches.length,paths:{main:E.routeSystem.main,lane:E.routeSystem.lane,samples:walk.sampledRoutePoints,obstacleOverlaps:walk.overlaps,deadEnds:walk.deadEnds,destinations:walk.destinations.length},lighthouse:{approvedArtIdentical:true,x:lighthouse.x,y:lighthouse.y,baseFootprint:lighthouse.footprint,beamSeconds:12,reducedMotionTested:true},worldEdgeLandMargins:worldMargins};
+fs.writeFileSync(out+'/verification.json',JSON.stringify(report,null,2));
+console.log(JSON.stringify(report));

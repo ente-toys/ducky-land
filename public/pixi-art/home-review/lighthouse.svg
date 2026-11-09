@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="469" viewBox="0 0 270 469" data-anchor-x="0.5" data-anchor-y="1">
+  <title>Sleepy Ducky lighthouse</title>
+  <desc>Hand-drawn tower C with top B. Bottom-centre ground anchor 135,469. Lamp beam socket 187,72. Original flat vector artwork; environment ink 39472d.</desc>
+  <g stroke="#39472d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Stone footing, deliberately a shallow ellipse in the island camera. -->
+    <g id="stone-plinth">
+      <path fill="#bdbba5" d="M31 430C31 413 78 399 135 399S239 413 239 430L243 438C243 455 195 468 135 468S27 455 27 438Z"/>
+      <ellipse fill="#e5dec5" cx="135" cy="430" rx="104" ry="31"/>
+      <path fill="#aaa992" stroke="none" d="M219 411Q238 419 239 430L243 438Q241 450 219 458L211 449Q230 441 229 430Z"/>
+      <path fill="none" stroke-width="1.15" d="M56 450L53 459M91 458L89 465M135 461V468M178 458L181 465M214 450L219 458"/>
+    </g>
+    <!-- One uninterrupted silhouette keeps the tower readable at game scale. -->
+    <g id="tower">
+      <path fill="#fff0c7" d="M77 235Q135 218 193 235L226 410C231 432 191 449 135 449S39 432 44 410Z"/>
+      <path fill="#e4c77f" stroke="none" d="M174 240L195 245L226 410Q231 432 195 442L182 376L170 298Z"/>
+      <path fill="#fff7db" stroke="none" d="M83 247L95 250L65 409Q62 422 86 432Q57 426 58 411Z"/>
+      <!-- Coral and meadow-green wraparound bands, each with a single flat side. -->
+      <path fill="#ffb38c" d="M65 300Q135 327 205 300L210 326C198 345 72 345 60 326Z"/>
+      <path fill="#e99c78" stroke="none" d="M184 307Q195 305 205 300L210 326Q208 333 189 337Z"/>
+      <path fill="#a5dba2" d="M53 365Q135 398 217 365L223 394C205 420 65 420 47 394Z"/>
+      <path fill="#83bc86" stroke="none" d="M196 373Q208 370 217 365L223 394Q218 402 202 407Z"/>
+      <path fill="none" d="M77 235Q135 218 193 235L226 410C231 432 191 449 135 449S39 432 44 410Z"/>
+    </g>
+    <g id="portholes">
+      <circle fill="#fff7d8" cx="135" cy="282" r="16"/>
+      <circle fill="#6ec9de" cx="135" cy="282" r="10.5" stroke-width="1.45"/>
+      <path fill="#a5e2ec" stroke="none" d="M126 281A9.5 9.5 0 0 1 140 274L127 286Z"/>
+      <circle fill="#fff7d8" cx="135" cy="351" r="16"/>
+      <circle fill="#6ec9de" cx="135" cy="351" r="10.5" stroke-width="1.45"/>
+      <path fill="#a5e2ec" stroke="none" d="M126 350A9.5 9.5 0 0 1 140 343L127 355Z"/>
+    </g>
+    <g id="arched-door">
+      <path fill="#ffb38c" d="M96 439V407C96 355 174 355 174 407V439Q169 443 161 442V408C161 373 109 373 109 408V442Q101 443 96 439Z"/>
+      <path fill="#ca914d" d="M109 442V408C109 373 161 373 161 408V442Q135 449 109 442Z"/>
+      <path fill="#ae773c" stroke="none" d="M149 389Q161 395 161 408V442L150 444Z"/>
+      <path fill="none" stroke-width="1.05" d="M121 390V445M135 386V446M149 390V444"/>
+      <circle fill="#fff0c7" cx="151" cy="420" r="4.4" stroke-width="1.4"/>
+      <path fill="#eee6ca" d="M108 442Q135 447 162 442L168 449Q135 457 102 449Z" stroke-width="1.4"/>
+    </g>
+    <g id="gallery-deck">
+      <path fill="#83bc86" d="M48 219V231C48 248 87 261 135 261S222 248 222 231V219Z"/>
+      <ellipse fill="#b8e5af" cx="135" cy="219" rx="87" ry="26"/>
+      <path fill="none" stroke-width="1.2" d="M49 225C62 242 102 250 135 250S208 242 221 225"/>
+    </g>
+    <!-- Rear rail, before the glass house. -->
+    <g id="gallery-rear-rail" fill="#fff0c7" stroke-width="1.4">
+      <path d="M57 194Q135 143 213 194V201Q135 153 57 201Z"/>
+      <path d="M76 183V208Q80 211 84 208V179Z"/>
+      <path d="M186 179V208Q190 211 194 208V183Z"/>
+    </g>
+    <g id="lamp-room">
+      <path fill="#6ec9de" d="M77 143Q135 127 193 143V207Q135 231 77 207Z"/>
+      <path fill="#51a5b8" stroke="none" d="M77 145L91 150V212L77 207ZM177 150L193 145V207L177 213Z"/>
+      <path fill="#afe3ee" stroke="none" d="M85 149L103 154L130 216L113 216ZM161 153L180 149L147 217L133 220Z"/>
+      <path fill="#8bd3e2" stroke="none" d="M80 197Q135 176 190 197V207Q135 228 80 207Z"/>
+      <g id="interior-lamp" stroke-width="1.3">
+        <path fill="#c5924b" d="M124 212V200Q135 194 146 200V212Q135 215 124 212Z"/>
+        <ellipse fill="#ffed9b" cx="135" cy="200" rx="11" ry="4"/>
+        <path fill="#f5d76d" d="M130 198V188H140V198Q135 201 130 198Z"/>
+        <path fill="#ffe67d" d="M135 156C112 156 116 188 135 189C154 188 158 156 135 156Z"/>
+        <path fill="#fff7bc" stroke="none" d="M127 160C121 166 122 177 126 180C124 169 129 163 133 160Z"/>
+      </g>
+      <path fill="#fff0c7" d="M76 140Q135 159 194 140V147Q135 167 76 147Z"/>
+      <path fill="#fff0c7" d="M76 204Q135 227 194 204V211Q135 235 76 211Z"/>
+      <g fill="#fff0c7" stroke-width="1.3">
+        <path d="M76 145L81 147V206L76 204Z"/>
+        <path d="M99 152L104 153V218L99 217Z"/>
+        <path d="M166 153L171 152V217L166 218Z"/>
+        <path d="M189 147L194 145V204L189 206Z"/>
+      </g>
+    </g>
+    <g id="gallery-front-rail" fill="#fff0c7" stroke-width="1.45">
+      <path d="M57 208C83 230 187 230 213 208V214C187 237 83 237 57 214Z"/>
+      <path d="M57 193C83 215 187 215 213 193V199C187 222 83 222 57 199Z"/>
+      <path d="M53 190Q57 186 61 190V217Q57 221 53 217Z"/>
+      <path d="M73 208Q77 204 81 208V232Q77 236 73 232Z"/>
+      <path d="M108 217Q112 213 116 217V241Q112 245 108 241Z"/>
+      <path d="M154 217Q158 213 162 217V241Q158 245 154 241Z"/>
+      <path d="M189 208Q193 204 197 208V232Q193 236 189 232Z"/>
+      <path d="M209 190Q213 186 217 190V217Q213 221 209 217Z"/>
+      <circle cx="57" cy="190" r="5.4"/><circle cx="77" cy="208" r="5.4"/>
+      <circle cx="112" cy="217" r="5.4"/><circle cx="158" cy="217" r="5.4"/>
+      <circle cx="193" cy="208" r="5.4"/><circle cx="213" cy="190" r="5.4"/>
+    </g>
+    <g id="lavender-roof">
+      <path fill="#aa87bc" d="M68 131V138C68 153 98 163 135 163S202 153 202 138V131Z"/>
+      <ellipse fill="#caa6dd" cx="135" cy="131" rx="67" ry="22"/>
+      <path fill="#e1c2eb" stroke="none" d="M74 131C78 144 110 150 139 149Q178 149 195 137C180 144 158 146 135 145S88 140 74 131Z"/>
+    </g>
+    <!-- Ducky is redrawn from the real pear-shaped Ducky, with the double tuft,
+         pale belly, small arched bill and flat orange feet. No generic rubber duck. -->
+    <g id="sleepy-ducky" stroke-width="2.15">
+      <path id="tail" fill="#ffd525" d="M84 113Q68 114 68 103Q69 97 76 99Z"/>
+      <path id="far-wing" fill="#ffd525" d="M182 79C195 75 200 80 198 89C196 100 188 108 183 102Q177 97 182 79Z"/>
+      <path id="ducky-body" fill="#ffd525" d="M82 73C79 63 78 54 82 43C86 31 98 24 109 25C124 24 138 33 141 46Q145 57 142 72C143 80 152 92 151 106C151 122 136 132 112 133C87 133 74 122 75 108C75 94 80 85 82 73Z"/>
+      <path id="belly" fill="#ffe161" stroke="none" d="M101 92C119 85 141 95 143 109Q146 125 124 131Q101 136 90 124C83 113 89 99 101 92Z"/>
+      <path id="head-highlight" fill="#fff" stroke="none" d="M117 28Q137 31 141 48L141 57C138 44 133 34 117 28Z"/>
+      <!-- Nightcap falls to the left. The two-lobed Ducky tuft sits over its cuff. -->
+      <path id="nightcap" fill="#c6a0df" d="M85 49L67 63Q62 36 77 20C91 5 113 11 121 23Q99 26 85 49Z"/>
+      <path fill="#aa87bc" stroke="none" d="M68 60Q65 39 76 27Q71 41 77 50Z"/>
+      <path id="cap-cuff" fill="#fff0c7" d="M82 54C75 50 80 39 88 32C98 23 108 20 119 23L121 29C106 28 88 41 86 53Q85 56 82 54Z"/>
+      <path id="cap-pom" fill="#fff0c7" d="M62 59Q58 58 57 62Q52 63 54 68Q51 72 56 75Q57 80 62 78Q66 81 70 76Q75 75 73 70Q76 65 71 63Q69 58 65 60Z"/>
+      <path id="ducky-tuft" fill="#ffd525" d="M102 33C103 24 108 15 113 18Q118 21 116 27C123 19 136 21 136 29Q135 41 116 42"/>
+      <path fill="#fff" stroke="none" d="M106 26Q110 17 113 20L115 23Q110 21 106 26ZM123 26Q133 22 134 29Q130 25 123 27Z"/>
+      <path id="sleeping-eyes" fill="none" stroke-width="2.5" d="M99 57Q104 62 110 56M122 54Q127 59 132 53"/>
+      <path id="ducky-beak" fill="#ee7945" d="M112 65Q121 58 129 63Q138 68 131 70Q120 73 112 70Q108 68 112 65Z" stroke-width="1.9"/>
+      <path id="left-foot" fill="#ee7945" d="M89 117Q79 117 82 125C85 135 104 140 110 133Q115 126 102 120Q95 117 89 117Z"/>
+      <path id="right-foot" fill="#ee7945" d="M125 121Q137 112 143 118C150 125 134 138 123 136Q114 133 125 121Z"/>
+    </g>
+    <g id="big-lamp" stroke-width="1.9">
+      <path fill="#d9bc64" d="M139 118V126Q163 138 190 126V118Z"/>
+      <ellipse fill="#fff0a1" cx="164.5" cy="118" rx="25.5" ry="8"/>
+      <path fill="#e8cc71" d="M143 104V116Q164 127 186 116V104Z"/>
+      <ellipse fill="#fff0a1" cx="164.5" cy="104" rx="21.5" ry="7"/>
+      <path fill="#ffe67d" d="M164 37C143 37 132 52 132 73C132 94 143 106 164 107C186 107 197 94 197 73C197 53 187 37 164 37Z"/>
+      <path fill="#fff4a0" stroke="none" d="M163 41C147 42 139 55 139 73C139 91 148 101 164 102Q183 101 189 88C179 96 180 50 163 41Z"/>
+      <path fill="#fff8bd" stroke="none" d="M161 45C150 51 147 62 147 76C147 89 153 96 164 98C175 97 180 89 180 76C180 62 173 50 167 46Z"/>
+      <path fill="none" stroke="#39472d" stroke-width="1.1" d="M156 39C139 62 140 88 153 104M173 39C189 62 188 88 176 104"/>
+      <path fill="#fffce0" stroke="none" d="M144 53Q140 57 140 65Q141 69 143 65L148 53Q147 50 144 53Z"/>
+      <path fill="#e8cc71" d="M139 37Q140 26 155 24H174Q188 26 190 37Z"/>
+      <path fill="#fff0a1" d="M137 36Q164 26 192 36V43Q164 35 137 43Z"/>
+      <path fill="#ffe67d" d="M164 11C153 11 152 28 164 29C177 28 176 11 164 11Z"/>
+      <path fill="#fff9d6" stroke="none" d="M160 15Q156 18 158 21Q162 23 164 16Z"/>
+      <g fill="#fff6bd" stroke="#39472d" stroke-width="0.9">
+        <circle cx="149" cy="113" r="2.6"/><circle cx="164" cy="117" r="2.6"/><circle cx="179" cy="113" r="2.6"/>
+        <circle cx="146" cy="123" r="2.6"/><circle cx="164" cy="127" r="2.6"/><circle cx="184" cy="123" r="2.6"/>
+      </g>
+    </g>
+    <!-- This front wing crosses the lantern; the far wing wraps its right edge. -->
+    <g id="lamp-hug" fill="#ffd525" stroke-width="2.15">
+      <path d="M98 81C110 85 121 83 135 86C146 88 147 98 138 103C126 111 105 102 96 96"/>
+      <path d="M191 79C197 75 202 81 200 89C199 97 194 102 189 100C184 97 185 85 191 79Z"/>
+    </g>
+  </g>
+</svg>

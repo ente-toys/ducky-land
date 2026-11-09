@@ -19,7 +19,8 @@ test('Home communities keep C coast, map coordinates, working harbour and both p
  // the harbour is the south fishing dock now: its jetty, docking water and the three jetty boats; the other boats are C's
  assert.deepEqual(E.jetty,S.harbour.jetty);assert.deepEqual(E.harborWater,S.harbour.harborWater);assert.deepEqual(E.boats,[...S.harbour.boats012,...C.boats.slice(3)]);
  for(const b of E.boats.slice(0,3))assert.ok(canSail(b.x,b.y,'home'),`jetty boat ${b.x},${b.y} afloat`);
- assert.ok(canSail(E.harborWater.x,E.harborWater.y,'home'));for(const p of [[6050,1778],[5956,1756],[6150,1856],[5789,1700]])assert.equal(canSail(...p,'home'),false,'the old bay is land');
+ assert.ok(canSail(E.harborWater.x,E.harborWater.y,'home'));for(const p of [[6050,1778],[5956,1756],[5789,1700]])assert.equal(canSail(...p,'home'),false,'the old bay is land');
+ assert.ok(canSail(6150,1856,'home'),'Millrill Pond now joins the sea');
  const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2.05,`land ratio ${ratio}`);   // 8 Nov: +the filled-in old harbour inlet (2.017)
 });
 test('five Home communities have distinct homes, meaningful workplaces and reachable front doors',()=>{

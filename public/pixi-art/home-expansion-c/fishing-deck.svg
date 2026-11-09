@@ -22,7 +22,7 @@
       <path d="M-4-23L6-24" fill="none" stroke="#c7d0a2"/>
     </g>
   </defs>
-  <g stroke="#39472d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<g id="home-quay-contact" fill="#39472d" opacity=".13"><path d="M49 291L596 275L598 285L49 301Z M875 263L1387 237L1387 247L875 273Z M615 600L890 589V603L615 614Z"/></g>  <g stroke="#39472d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <!-- End grain and the visible skirt follow the original collision silhouette. -->
     <path d="M30 50L1350 30L1390 259L873 284L877 575L612 594L596 296L49 312Z" fill="#aa793c"/>
     <path d="M49 289L596 273L612 570L877 551L877 575L612 594L596 296L49 312Z" fill="#ad7c3c"/>

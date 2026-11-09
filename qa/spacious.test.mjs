@@ -1,5 +1,7 @@
+import homeMore from '../rive/web/home-sleep-more.json' with {type:'json'};
 import {mapPoint} from '../src/pixi/sphere-coordinates.js';
 import homeExtra from '../rive/web/home-sleep-extra.json' with {type:'json'};
+import homeOuter from '../rive/web/home-sleep-outer.json' with {type:'json'};
 import {THEMED_ISLANDS} from '../src/pixi/world-map.js';
 // boss 6 Nov: "Every island has to be BIGGER and SPACIOUS, with room for 100 Duckies to walk around, and stalls. The same
 // sleeping Duckies as home, and every home feature (bridges and the rest) must work on these islands."
@@ -11,7 +13,7 @@ import {geometry} from '../rive/web/island-geometry.mjs';
 import {HOME_MAP, ambientOf, makeMap, mapFor, mapOf, readyThemes, THEME_OF} from '../src/pixi/island-maps.js';
 import {WORLD_GEO, WORLD_ISLANDS, layoutWorld, offsetOf, sizeOfTheme} from '../src/pixi/world-map.js';
 import {BOAT_CHANNEL, coastGaps, copyHolding} from '../src/pixi/sphere-shores.js';
-import {SLEEP_COUNTS, SLEEP_SPOTS, SLEEP_TOTAL, resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, sleeperFootprint} from '../src/pixi/sleep-spots.js';
+import {SLEEP_COUNTS, SLEEP_SPOTS, SLEEP_TOTAL, HOME_SLEEP_TOTAL, resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, sleeperFootprint} from '../src/pixi/sleep-spots.js';
 import {canSail, destinationsFor, harborOf, islandOffset, originOffset, seaBoundsFor} from '../src/pixi/islands.js';
 import {clockwise, shoreOf, surfRuns} from '../src/pixi/surf.js';
 import {setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
@@ -23,10 +25,12 @@ const area = ring => ring.reduce((a, p, i) => {const q = ring[(i + 1) % ring.len
 const sizes = sleepHalfWidths();
 
 // ---------- a) sleepers ----------
-test('a) sleepers: home preserves its 28 beds plus 12 additions; every theme has its approved bed count and all eight poses', () => {
+test('a) sleepers: Home keeps its forty beds plus forty outer residents; every theme keeps its own approved count', () => {
   assert.equal(SLEEP_TOTAL, 40);
   assert.deepEqual(SLEEP_COUNTS, {nod: 4, hammock: 2, rock: 3, leaf: 4, book: 4, chair: 2, wing: 5, box: 4});
   assert.deepEqual(sleepShapeProblems(Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([p,s])=>[p,[...s,...(homeExtra[p]??[])]]))), []);
+  assert.equal(HOME_SLEEP_TOTAL, 100);
+  assert.deepEqual(sleepShapeProblems(Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([p,s])=>[p,[...s,...(homeExtra[p]??[]),...(homeOuter[p]??[]),...(homeMore[p]??[])]])), HOME_SLEEP_TOTAL), []);
   assert.deepEqual(HOME_MAP.sleepers, [], 'home\'s sleepers stay in its own walk-world.json, placed by the engine as before');
   for (const theme of readyThemes()) {
     const map = mapFor(theme);

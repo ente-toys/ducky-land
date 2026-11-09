@@ -28,8 +28,8 @@ test('Home and the eight themed islands (copies removed 8 Nov), the same moored 
   }
   for (const position of [...boats.filter(boat => boat.islandId==='home'),...destinationsFor('home').map(island=>island.dock),HARBOR.water]) assert.ok(canSail(position.x,position.y));
   assert.equal(canSail(HARBOR.land.x,HARBOR.land.y),false);
-  assert.equal(canSail(4140,1520),false);
-  assert.equal(canSail(1640,2630),false);
+  assert.equal(canSail(4140,1520),true);
+  assert.equal(canSail(1640,2630),true);
   assert.equal(canSail(-1600,-1200),true);
   assert.equal(canSail(SEA_BOUNDS.x0-1,0),false);
   for (const island of destinationsFor('home')) {const m=mapOf(island.destination),at=mapPoint(island.destination,'home',m.spawn); assert.equal(canSail(at.x,at.y),false,'a neighbour spawn is real land');}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="76" viewBox="-120 -38 240 76" data-anchor-x="0.5" data-anchor-y="0.5">
+  <title>Lighthouse contact shadow</title>
+  <desc>Single flat contact shadow. Ground pivot 0,0. Centre under the stone footing, lighthouse local 135,435. Draw below the lighthouse.</desc>
+  <path fill="#39472d" fill-opacity="0.17" d="M-114-1C-114-22-62-33 0-33C65-33 115-19 115 2C115 23 62 35 0 35C-64 35-114 22-114-1Z"/>
+</svg>
