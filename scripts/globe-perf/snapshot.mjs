@@ -10,6 +10,10 @@ const root=process.cwd();
 const placementSource=readFileSync(root+'/src/pixi/placements.js','utf8').replace(/const urls = import\.meta\.glob[^;]+;/,"const urls = Object.fromEntries(library.assets.map(a=>['../../'+a.file,'/'+a.file]));");
 const bundle=await build({stdin:{contents:placementSource,resolveDir:root+'/src/pixi',sourcefile:'placements.js',loader:'js'},bundle:true,platform:'node',format:'esm',write:false});
 const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+export function homeLayers(){
+ const world=P.trimWorld(mapOf('home').world),props=P.createPlacements(world,geometry({...world,obstacles:[]}).walkable);
+ return {tiles:P.HOME_TILES,flats:[{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...P.homeDecals(props)],decks:[...P.HOME_DECKS,...P.JETTIES,{src:'/pixi-art/library-steps.svg',x:2780,y:1370,width:280,height:260}],props};
+}
 export async function snapshot(island,{groundOnly=false}={}){
   const m=mapOf(island.id),K=1024/Math.max(m.width,m.height),W=Math.round(m.width*K),H=Math.round(m.height*K),layers=[];
   const source=s=>s.startsWith('/pixi-art/')?root+'/public'+s:s.startsWith('/assets/')?root+s:path.isAbsolute(s)?s:root+'/'+s;

@@ -59,8 +59,8 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
     return true;
   };
   let terrain;
-  try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.png`,1);}
-  catch(error){groundStream.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.png`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
+  try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
+  catch(error){groundStream.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
   const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
   // boss 8 Nov (sailable rivers, as home's engine.js bridgeOver): a deck marked overBoats is a river bridge a boat passes under. A copy
   // above the Duckies is shown only while a boat is beneath it, so the deck is drawn over the hull.
@@ -115,7 +115,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
       if (destroyed) return;
       destroyed = true;
       groundStreams.forEach(s=>s.destroy());
-      release(`/pixi-art/globe/${map.id}-ground.png`);
+      release(`/pixi-art/globe/${map.id}-ground.svg`);
       for (const c of [ground, deckLayer, shadows, floatLayer, overLayer]) c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));

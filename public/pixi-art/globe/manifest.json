@@ -1,54 +1,249 @@
 {
   "home": {
-    "src": "/pixi-art/globe/home.png",
-    "sha256": "a16eb735d2f15dc7e9e6933a6552c3bb4acf72f6f5a905abd9998c8cab6a726a"
+    "src": "/pixi-art/globe/home.svg",
+    "sha256": "0f3b9b926d5af6eb7e944d56268ee1d04044b804a695b9f9baf1d3cea3d30292",
+    "width": 1024,
+    "height": 768,
+    "bytes": 366706,
+    "groundBytes": 170291,
+    "quality": {
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
+    },
+    "worldPaths": 0,
+    "walkways": 1,
+    "flats": 813,
+    "decks": 10,
+    "bridgeDetails": 1
   },
   "sunflower": {
-    "src": "/pixi-art/globe/sunflower.png",
-    "sha256": "1c134ae9393feb1f90a3c1e40a8fa31d59b195f9cdf159bd770eb60cab0dea53"
+    "src": "/pixi-art/globe/sunflower.svg",
+    "sha256": "714297f6ccde4d2b7e83200f8dff547765b741ec725a0e8e947d5d60d4a37e23",
+    "width": 1024,
+    "height": 717,
+    "bytes": 598627,
+    "groundBytes": 277850,
+    "quality": {
+      "tolerance": 0.7,
+      "minArea": 0.9,
+      "paletteDistance": 58,
+      "quantum": 0.5
+    },
+    "worldPaths": 20,
+    "walkways": 18,
+    "flats": 456,
+    "decks": 18,
+    "bridgeDetails": 0
   },
   "pink": {
-    "src": "/pixi-art/globe/pink.png",
-    "sha256": "3ad9cd3674890ffbc9655a32653a2b24d85fb97fae78a270ed4b009820d47f7d"
+    "src": "/pixi-art/globe/pink.svg",
+    "sha256": "f9188f6743a117aa120976432c9cff3cb5ee53ed8eab287177c56d06b36c5fa6",
+    "width": 1024,
+    "height": 760,
+    "bytes": 553339,
+    "groundBytes": 290689,
+    "quality": {
+      "tolerance": 0.5,
+      "minArea": 0.54,
+      "paletteDistance": 48,
+      "quantum": 0.5
+    },
+    "worldPaths": 29,
+    "walkways": 5,
+    "flats": 1325,
+    "decks": 7,
+    "bridgeDetails": 0
   },
   "library": {
-    "src": "/pixi-art/globe/library.png",
-    "sha256": "92d29b89455e31610847d131beccfe81da5e902479a4ba6e1e6174c7b14e295d"
+    "src": "/pixi-art/globe/library.svg",
+    "sha256": "a5d6d8571d8ed4e71dbae48ea094bfd44dfca3e24913892edf633e9919c1a4c5",
+    "width": 1024,
+    "height": 761,
+    "bytes": 593219,
+    "groundBytes": 346573,
+    "quality": {
+      "tolerance": 0.8,
+      "minArea": 1.08,
+      "paletteDistance": 63,
+      "quantum": 1
+    },
+    "worldPaths": 13,
+    "walkways": 19,
+    "flats": 3134,
+    "decks": 19,
+    "bridgeDetails": 16
   },
   "community": {
-    "src": "/pixi-art/globe/community.png",
-    "sha256": "506b162e8a81a2ab3f1ac7aa0ff411ded2b6af29add51a3a3e3153169f419449"
+    "src": "/pixi-art/globe/community.svg",
+    "sha256": "af920eab6422d1b172cd13bd75d345f9768004f1f75783de1c44805c66518b1c",
+    "width": 1024,
+    "height": 768,
+    "bytes": 560407,
+    "groundBytes": 349303,
+    "quality": {
+      "tolerance": 0.5,
+      "minArea": 0.54,
+      "paletteDistance": 48,
+      "quantum": 0.5
+    },
+    "worldPaths": 37,
+    "walkways": 6,
+    "flats": 1581,
+    "decks": 14,
+    "bridgeDetails": 0
   },
   "fair": {
-    "src": "/pixi-art/globe/fair.png",
-    "sha256": "574728090049afcc6fbad3f09deec8d567238d32c22de9c46c265d74dde8fc99"
+    "src": "/pixi-art/globe/fair.svg",
+    "sha256": "43ba78d7d1c9abb2f20f78dd8c9eceeb73badbfff0092d1d4e1c11326cec811a",
+    "width": 1024,
+    "height": 700,
+    "bytes": 463030,
+    "groundBytes": 238607,
+    "quality": {
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
+    },
+    "worldPaths": 23,
+    "walkways": 12,
+    "flats": 0,
+    "decks": 11,
+    "bridgeDetails": 1
   },
   "neon": {
-    "src": "/pixi-art/globe/neon.png",
-    "sha256": "c42e66fe582abb0edd123a1544632fdc94121249169d932063ce7678752e2113"
+    "src": "/pixi-art/globe/neon.svg",
+    "sha256": "b9129e9d54f7b8989df83c09236ebd8bf956a1961c1831833f6954300e22f1cc",
+    "width": 1024,
+    "height": 772,
+    "bytes": 581094,
+    "groundBytes": 403195,
+    "quality": {
+      "tolerance": 0.7,
+      "minArea": 0.9,
+      "paletteDistance": 58,
+      "quantum": 0.5
+    },
+    "worldPaths": 54,
+    "walkways": 7,
+    "flats": 2652,
+    "decks": 13,
+    "bridgeDetails": 0
   },
   "cathedral": {
-    "src": "/pixi-art/globe/cathedral.png",
-    "sha256": "aae8546b5359321177bf7edd4543f4f56ccaad9d072a7f85eb207c32fba56a5c"
+    "src": "/pixi-art/globe/cathedral.svg",
+    "sha256": "87f0dbc87727f31562374e783e24946907a4763996b82d270efef31e789994c2",
+    "width": 1024,
+    "height": 832,
+    "bytes": 468233,
+    "groundBytes": 324712,
+    "quality": {
+      "tolerance": 0.8,
+      "minArea": 1.08,
+      "paletteDistance": 63,
+      "quantum": 1
+    },
+    "worldPaths": 26,
+    "walkways": 7,
+    "flats": 30,
+    "decks": 18,
+    "bridgeDetails": 0
   },
   "canal": {
-    "src": "/pixi-art/globe/canal.png",
-    "sha256": "fe9ee766de60e0802a66cb8c1e5ab6f3c02898a4e82ac171abde161e02bbc7f7"
+    "src": "/pixi-art/globe/canal.svg",
+    "sha256": "038a7ca5b12b1ea5257438333865d8adccc9b0b46eba44a529197b4995e85ea6",
+    "width": 1024,
+    "height": 805,
+    "bytes": 584324,
+    "groundBytes": 364394,
+    "quality": {
+      "tolerance": 0.4,
+      "minArea": 0.36,
+      "paletteDistance": 43,
+      "quantum": 0.5
+    },
+    "worldPaths": 19,
+    "walkways": 18,
+    "flats": 2007,
+    "decks": 14,
+    "bridgeDetails": 8
   },
   "waterfall": {
-    "src": "/pixi-art/globe/waterfall.png",
-    "sha256": "49485ae755891c4c980647521ab071d23a30baf73f76a286b42b7300b3c2c7ef"
+    "src": "/pixi-art/globe/waterfall.svg",
+    "sha256": "ef3dc7d242a0a3b50ae9120fe6b4582a69436e8744f8426fa6873be2ad2042be",
+    "width": 1024,
+    "height": 790,
+    "bytes": 526878,
+    "groundBytes": 302176,
+    "quality": {
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
+    },
+    "worldPaths": 16,
+    "walkways": 9,
+    "flats": 16,
+    "decks": 16,
+    "bridgeDetails": 18
   },
   "goldmine": {
-    "src": "/pixi-art/globe/goldmine.png",
-    "sha256": "406d43ed289584d05d93dca36103beb98f4112e9da6176d542b63c1841f31d0d"
+    "src": "/pixi-art/globe/goldmine.svg",
+    "sha256": "3d1fb138150461cc72a5c609f241e64d7f71a9df69de2c4369e0c3510cb84400",
+    "width": 1024,
+    "height": 805,
+    "bytes": 383161,
+    "groundBytes": 225193,
+    "quality": {
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
+    },
+    "worldPaths": 17,
+    "walkways": 11,
+    "flats": 2,
+    "decks": 10,
+    "bridgeDetails": 0
   },
   "bog": {
-    "src": "/pixi-art/globe/bog.png",
-    "sha256": "02ba93e6d87c853fa5eef3b1d221f980661ae89a3f8e4bc82055f90dd03d5931"
+    "src": "/pixi-art/globe/bog.svg",
+    "sha256": "4f763d0956b8ed1ad0cc927b44cbb828f994af46a63ed3f15fb2a0bf5aac5cea",
+    "width": 1024,
+    "height": 768,
+    "bytes": 306468,
+    "groundBytes": 239122,
+    "quality": {
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
+    },
+    "worldPaths": 31,
+    "walkways": 0,
+    "flats": 0,
+    "decks": 6,
+    "bridgeDetails": 0
   },
   "snow": {
-    "src": "/pixi-art/globe/snow.png",
-    "sha256": "79d3b2b30c03e60b821ece2dd183a7a75f6c132cb8dadd7d0de7845bf05716ac"
+    "src": "/pixi-art/globe/snow.svg",
+    "sha256": "38f80c27397f7cbe241363862d1890485be4b32778faab1eed6d066194155215",
+    "width": 1024,
+    "height": 832,
+    "bytes": 189336,
+    "groundBytes": 110500,
+    "quality": {
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
+    },
+    "worldPaths": 17,
+    "walkways": 0,
+    "flats": 49,
+    "decks": 6,
+    "bridgeDetails": 0
   }
 }

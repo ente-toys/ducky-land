@@ -12,3 +12,6 @@ incoming/**/evidence/*.mp4
 # Cloudflare development state and secrets
 .wrangler/
 .dev.vars*
+
+# Local SVG review sheets and measurements, never game assets.
+review/globe-svg/

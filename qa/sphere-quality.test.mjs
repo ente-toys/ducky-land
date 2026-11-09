@@ -10,7 +10,7 @@ import test from 'node:test';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 test('mid-zoom quality check accepts sharp opaque land and rejects transparency and blur',async()=>{
-const images=new Map();for(const i of WORLD_ISLANDS){const theme=i.theme??'home',img=await loadImage(fileURLToPath(new URL('../public/pixi-art/globe/'+theme+'.png',import.meta.url))),c=createCanvas(img.width,img.height),x=c.getContext('2d');x.drawImage(img,0,0);images.set(theme,x.getImageData(0,0,img.width,img.height));}
+const images=new Map();for(const i of WORLD_ISLANDS){const theme=i.theme??'home',img=await loadImage(fileURLToPath(new URL('../public/pixi-art/globe/'+theme+'.svg',import.meta.url))),c=createCanvas(img.width,img.height),x=c.getContext('2d');x.drawImage(img,0,0);images.set(theme,x.getImageData(0,0,img.width,img.height));}
 const m=mapOf('isle-249'),point=mapPoint('isle-249','home',{x:m.cx,y:m.cy});
 const state={islandId:'home',camera:{...point,zoom:.025},ball:.7},width=512,height=384;
 const outputs={};for(const type of ['sharp','washed','blurred']){

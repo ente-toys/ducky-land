@@ -22,7 +22,7 @@ for(const island of WORLD_ISLANDS){
   const streamed=p.kind==='ground'||(id==='home'&&/ground/.test(p.src))||tiled[id]?.[[p.originalSrc,p.width,p.height,p.resolution].join('|')];
   if(!streamed){const r=artResolution(p,p.resolution);after.set(p.src,Math.max(after.get(p.src)??0,Math.ceil(size[0]*r)*Math.ceil(size[1]*r)*4));}
  }
- const preview=await sharp(`public/pixi-art/globe/${id}.png`).metadata();previewBytes+=preview.width*preview.height*4;
+ const preview=await sharp(`public/pixi-art/globe/${id}.svg`).metadata();previewBytes+=preview.width*preview.height*4;
  const peopleK=512/Math.max(map.width,map.height);peopleBytes+=Math.ceil(map.width*peopleK)*Math.ceil(map.height*peopleK)*4;
  result.maps[id]={beforeFullArtMiB:[...before.values()].reduce((a,b)=>a+b,0)/1048576,afterNonStreamedMiB:[...after.values()].reduce((a,b)=>a+b,0)/1048576};
 }

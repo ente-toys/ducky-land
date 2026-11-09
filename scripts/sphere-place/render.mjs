@@ -10,7 +10,7 @@ import {sphereFrame} from '../../src/pixi/sphere.js';
 const out='../concepts/themes/world-map/sphere',tmp='/private/tmp/ducky-sphere';mkdirSync(out,{recursive:true});mkdirSync(tmp,{recursive:true});
 execFileSync('clang',['-Wno-deprecated-declarations','-Wno-incompatible-pointer-types','scripts/sphere-place/offscreen.m','-framework','Foundation','-framework','OpenGL','-o',`${tmp}/offscreen`]);
 const source=readFileSync('src/pixi/world-view.js','utf8'),frag=source.match(/const FRAGMENT = `([\s\S]*?)`;/)[1];writeFileSync(`${tmp}/fragment.glsl`,frag);
-const layers=await Promise.all(WORLD_ISLANDS.map(async(i,k)=>({input:await sharp(`public/pixi-art/globe/${i.theme??'home'}.png`).resize(510,510,{fit:'fill'}).toBuffer(),left:k%4*512+1,top:Math.floor(k/4)*512+1})));
+const layers=await Promise.all(WORLD_ISLANDS.map(async(i,k)=>({input:await sharp(`public/pixi-art/globe/${i.theme??'home'}.svg`).resize(510,510,{fit:'fill'}).toBuffer(),left:k%4*512+1,top:Math.floor(k/4)*512+1})));
 writeFileSync(`${tmp}/atlas.rgba`,await sharp({create:{width:2048,height:2048,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(layers).raw().toBuffer());
 writeFileSync(`${tmp}/scene.rgba`,Buffer.alloc(16));
 const W=1400,H=1000,R=WORLD_GEO.Rw,evidence=[];
@@ -21,7 +21,7 @@ for(const [name,lon,lat,id,zoom]of [
  const m=mapOf(id),anchor=WORLD_ISLANDS.find(i=>i.id===id),focus=sphereFrame(lon*Math.PI/180,lat*Math.PI/180).center,cam=localPoint(id,focus),view=viewFrame(id,cam);
  let scene={path:`${tmp}/scene.rgba`,width:2,height:2};
  if(name.startsWith('mid')){
-  const preview=`public/pixi-art/globe/${anchor.theme??'home'}.png`,width=Math.round(m.width*zoom),height=Math.round(m.height*zoom);
+  const preview=`public/pixi-art/globe/${anchor.theme??'home'}.svg`,width=Math.round(m.width*zoom),height=Math.round(m.height*zoom);
   writeFileSync(`${tmp}/${name}-scene.rgba`,await sharp({create:{width:W,height:H,channels:4,background:{r:110,g:201,b:222,alpha:1}}}).composite([{input:await sharp(preview).resize(width,height,{fit:'fill'}).toBuffer(),left:Math.round(W/2-width/2),top:Math.round(H/2-height/2)}]).raw().toBuffer());
   scene={path:`${tmp}/${name}-scene.rgba`,width:W,height:H};
  }

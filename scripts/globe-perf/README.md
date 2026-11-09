@@ -1,8 +1,9 @@
 This pass uses the live globe projection and the same island artwork.
 
 - `npm run globe:assets` refreshes source sizes, cropped decoration SVGs, and
-  the thirteen 1024px previews plus terrain-only fallbacks. Run after changing
+  the thirteen SVG previews plus terrain-only SVG fallbacks (1024px native overview size). Run after changing
   island art, placement, map bounds, or manifests, before building.
+- `node scripts/globe-svg/build.mjs [home|theme|island-id]` rebuilds all previews, or just one island after its art changes.
 - `npx vite --config scripts/globe-perf/vite.config.mjs --configLoader native --port 5317`
   starts a local review server with a writable temporary dependency cache.
 - `node scripts/globe-perf/benchmark.mjs before` / `after` launches headless

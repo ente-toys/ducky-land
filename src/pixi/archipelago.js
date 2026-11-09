@@ -79,10 +79,10 @@ export function createArchipelago(app, scene, layer, world) {
   place();
   return {
     async loadPreviews(acquire) {
-      // Small authored rasters, never the source maps. Publish all thirteen in
+      // Small vector previews, never the source maps. Publish all thirteen in
       // one revision so the globe atlas is built once rather than thirteen times.
       const loaded=await Promise.all(WORLD_ISLANDS.map(async island=>{
-        const id=artOf(island.id),texture=await acquire(`/pixi-art/globe/${id}.png`);
+        const id=artOf(island.id),texture=await acquire(`/pixi-art/globe/${id}.svg`);
         return [id,texture];
       }));
       if(destroyed)return;

@@ -26,7 +26,7 @@ test('theme art shares source leases at the highest resolution and releases them
     acquire: async (src, resolution) => {acquired.push([src, resolution]); return Texture.EMPTY;},
     release: src => released.push(src),
   });
-  assert.deepEqual(acquired.sort(), [['/themes/test/shared.svg', 2], ['/themes/test/other.svg', 2],['/pixi-art/globe/test-ground.png',1]].sort());
+  assert.deepEqual(acquired.sort(), [['/themes/test/shared.svg', 2], ['/themes/test/other.svg', 2],['/pixi-art/globe/test-ground.svg',1]].sort());
   assert.equal(groundPool.stats().residentTiles,0,'ground is not decoded until visible');
   assert.ok(art.groups.every(group => !group.visible), 'theme layers stay hidden while the caller asynchronously prepares animation and sleepers');
   art.destroy(); art.destroy();

@@ -207,8 +207,8 @@ export class PixiIsland {
       if (this.disposed) return;
       this.ocean=new TilingSprite({texture:textures[tiles.length + decks.length + props.length + art.floating.length],width:world.width,height:world.height});this.ocean.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);this.scene.addChildAt(this.ocean,0);
       this.homeGroundStream=this.groundPool.create(tiles,this.homeGround);
-      this.loaded.push('/pixi-art/globe/home-ground.png');
-      const terrain=await acquire('/pixi-art/globe/home-ground.png');
+      this.loaded.push('/pixi-art/globe/home-ground.svg');
+      const terrain=await acquire('/pixi-art/globe/home-ground.svg');
       if(this.disposed)return;
       const fallback=new Sprite(terrain);fallback.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);fallback.width=world.width;fallback.height=world.height;this.homeGround.addChildAt(fallback,0);
       const base = tiles.length + decks.length, flatBase = base + props.length + art.floating.length + 1;

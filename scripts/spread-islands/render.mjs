@@ -11,7 +11,7 @@ before.Rw ??= before.radius;
 before.SX ??= before.bounds.x1-before.bounds.x0;
 {
  const textures=new Map();
- for(const island of WORLD_ISLANDS){textures.set(island.id,readFileSync(`${root}/public/pixi-art/globe/${island.theme??'home'}.png`));console.log('Assembled '+island.id);}
+ for(const island of WORLD_ISLANDS){textures.set(island.id,readFileSync(`${root}/public/pixi-art/globe/${island.theme??'home'}.svg`));console.log('Assembled '+island.id);}
  const smooth=(a,b,v)=>{const x=Math.max(0,Math.min(1,(v-a)/(b-a)));return x*x*(3-2*x)};
  for(const [tag,m]of [['before',before],['after',layoutWorld()]]){
   const W=4096,H=2048,kx=W/m.SX,ky=H/(m.bounds.y1-m.bounds.y0),layers=[];

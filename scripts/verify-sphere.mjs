@@ -4,7 +4,9 @@
 //   url defaults to http://boss.localhost:8890 (logs in via /__test/login?account=boss)
 //   PLAYWRIGHT_MODULE overrides where Playwright is loaded from (it is not in this repo's node_modules).
 import fs from 'node:fs';
+import sharp from 'sharp';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {createRequire} from 'node:module';
 import {midZoomQuality} from './sphere-quality.mjs';
 import {mapPoint} from '../src/pixi/sphere-coordinates.js';
@@ -89,7 +91,7 @@ const globe=await frameStats();
 
 const midZoom=[];
 const images=new Map();
-for(const theme of ['home','sunflower','pink','library','community','fair','neon','cathedral','canal','waterfall','goldmine','bog','snow'])images.set(theme,PNG.sync.read(fs.readFileSync(new URL(`../public/pixi-art/globe/${theme}.png`,import.meta.url))));
+for(const theme of ['home','sunflower','pink','library','community','fair','neon','cathedral','canal','waterfall','goldmine','bog','snow'])images.set(theme,PNG.sync.read(await sharp(fileURLToPath(new URL(`../public/pixi-art/globe/${theme}.svg`,import.meta.url))).png().toBuffer()));
 const bog=mapOf('isle-249'),focus=mapPoint('isle-249','home',{x:bog.cx,y:bog.cy});
 await page.evaluate(focus=>{const e=globalThis.__duckyEngine;e.follow=false;e.spin=null;e.fly=null;Object.assign(e.camera,focus,{zoom:e.birdZoom()});Object.assign(e.target,e.camera);},focus);
 // Reproduce the boss's middle zoom with real wheel events, centred on Bog.
