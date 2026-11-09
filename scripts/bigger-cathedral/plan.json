@@ -100,138 +100,104 @@
       "id": "bellpeep",
       "name": "Bellpeep Row",
       "x": 3800,
-      "y": -380,
+      "y": -620,
       "people": "Bell founders and the cathedral's bell keepers",
       "kind": "bell",
       "homes": [
         [
-          3150,
-          -600
+          3273,
+          -636
         ],
         [
-          3560,
-          -850
+          4326,
+          -636
         ],
         [
-          4000,
-          -850
-        ],
-        [
-          4430,
-          -600
-        ],
-        [
-          2980,
-          -80
+          3798,
+          -160
         ]
       ],
       "work": [
-        3750,
-        150
+        3800,
+        -917
       ]
     },
     {
       "id": "olivello",
       "name": "Olivello Hamlet",
-      "x": 50,
-      "y": 2230,
+      "x": -300,
+      "y": 2460,
       "people": "Olive growers, gardeners and oil pressers",
       "kind": "olive",
       "homes": [
         [
-          -490,
-          1850
+          -818,
+          2302.5
         ],
         [
-          -60,
-          1600
+          253,
+          2447.5
         ],
         [
-          350,
-          1600
-        ],
-        [
-          650,
-          2520
-        ],
-        [
-          60,
-          2910
+          -892,
+          2804.5
         ]
       ],
       "work": [
-        [
-          -480,
-          2500
-        ]
+        -272,
+        2260
       ]
     },
     {
       "id": "tessera",
       "name": "Tessera Quay",
-      "x": 8140,
-      "y": 2320,
+      "x": 8400,
+      "y": 2550,
       "people": "Mosaic setters and potters who care for the piazza",
       "kind": "mosaic",
       "homes": [
         [
-          7540,
-          2380
+          7891,
+          2335.5
         ],
         [
-          7950,
-          1640
+          7892,
+          2810.5
         ],
         [
-          8320,
-          1660
-        ],
-        [
-          8750,
-          1840
-        ],
-        [
-          8810,
-          2470
+          8891,
+          2812.5
         ]
       ],
       "work": [
-        7570,
-        2790
+        8450,
+        2249
       ]
     },
     {
       "id": "crumbbell",
       "name": "Crumbbell Harbour",
-      "x": 4400,
-      "y": 6140,
+      "x": 4220,
+      "y": 6620,
       "people": "Bakers, fishers and the harbour's boat menders",
       "kind": "harbour",
       "homes": [
         [
-          3480,
-          6140
+          3753,
+          6630
         ],
         [
-          3470,
-          5590
+          4693,
+          6631
         ],
         [
-          4520,
-          5660
-        ],
-        [
-          4940,
-          5840
-        ],
-        [
-          5240,
-          6470
+          4215,
+          7031
         ]
       ],
       "work": [
-        3900,
-        6600
+        4225,
+        6452
       ]
     }
   ],

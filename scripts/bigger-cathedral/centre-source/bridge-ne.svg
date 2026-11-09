@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="350" viewBox="0 0 480 350">
+  <title>Honeywood footbridge, northeast</title>
+  <desc>Hand-drawn solid bridge, 420 by 120 world units. The path rises northeast from the near bank at lower left. A 45-degree ground rotation is projected with 0.62 depth, and a 24-unit vertical crown. Cross-planks remain straight; both rails share one arch.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+    <!-- End sills follow the width of the bridge. -->
+    <path fill="#e4c567" d="M342 78 L437 136 L447 130 L352 72 Z M45 263 L140 321 L130 328 L35 270 Z"/>
+    <path fill="#c88941" d="M437 136 L447 130 L447 137 L437 143 Z M35 270 L130 328 L130 335 L35 277 Z M130 328 L140 321 L140 328 L130 335 Z"/>
+    <!-- Back rail, drawn behind the deck. -->
+    <g fill="#c88941">
+      <path d="M46 232 L52 232 L52 273 L46 273 Z M105 180 L111 180 L111 221 L105 221 Z M165 135 L171 135 L171 176 L165 176 Z M224 99 L230 99 L230 140 L224 140 Z M283 70 L289 70 L289 111 L283 111 Z M343 48 L349 48 L349 89 L343 89 Z"/>
+      <path d="M49 257 Q198 117 346 73 L346 77 Q198 121 49 261 Z"/>
+      <path d="M47 232 Q198 92 348 48 L348 52 Q198 96 47 236 Z"/>
+    </g>
+    <!-- Constant-width top surface. These are two congruent arch curves. -->
+    <path fill="#885931" d="M49 266 Q198 126 346 82 L431 134 L431 143 Q282 187 134 327 L49 275 Z"/>
+    <path fill="#c88941" d="M49 266 Q198 126 346 82 L431 134 Q282 178 134 318 Z"/>
+    <path fill="none" stroke-width=".85" d="M69 248 L154 300 M89 230 L174 282 M108 214 L193 266 M128 198 L213 250 M148 183 L233 235 M168 169 L253 221 M188 156 L273 208 M207 144 L292 196 M227 133 L312 185 M247 122 L332 174 M267 112 L352 164 M286 104 L371 156 M306 95 L391 147 M326 88 L411 140"/>
+    <path fill="none" stroke-width=".65" d="M92 271 L110 282 M128 243 L142 252 M185 210 L200 219 M231 176 L246 185 M293 151 L308 160 M348 123 L366 134"/>
+    <!-- Exposed near side has a shallow timber fascia, not a curved sheet. -->
+    <path fill="#885931" d="M134 318 Q282 178 431 134 L431 143 Q282 187 134 327 Z"/>
+    <path fill="#c88941" d="M134 314 Q282 174 431 130 L431 134 Q282 178 134 318 Z"/>
+    <path fill="#885931" d="M49 266 L134 318 L134 327 L49 275 Z"/>
+    <path fill="none" stroke-width=".75" d="M69 278 L69 285 M91 292 L91 299 M112 305 L112 312"/>
+    <!-- Near rail is exactly one deck-width from the back rail. -->
+    <g fill="#c88941">
+      <path d="M131 284 L137 284 L137 325 L131 325 Z M190 232 L196 232 L196 273 L190 273 Z M250 187 L256 187 L256 228 L250 228 Z M309 151 L315 151 L315 192 L309 192 Z M368 122 L374 122 L374 163 L368 163 Z M428 100 L434 100 L434 141 L428 141 Z"/>
+      <path d="M134 309 Q282 169 431 125 L431 129 Q282 173 134 313 Z"/>
+      <path d="M132 284 Q282 144 433 100 L433 104 Q282 148 132 288 Z"/>
+    </g>
+    <path fill="none" stroke-width=".65" d="M134 290 L134 302 M193 239 L193 251 M253 194 L253 206 M312 158 L312 170 M371 129 L371 141 M431 107 L431 119"/>
+    <path fill="none" stroke-width="1.5" d="M134 287 L134 287.4 M193 235 L193 235.4 M253 190 L253 190.4 M312 154 L312 154.4 M371 125 L371 125.4 M431 103 L431 103.4"/>
+  </g>
+</svg>
