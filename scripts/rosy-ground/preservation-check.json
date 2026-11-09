@@ -1,0 +1,8 @@
+{
+  "sleepSpots": true,
+  "sleepAvoid": true,
+  "centrePlacement": true,
+  "obstacles": true,
+  "allPropsUnchanged": true,
+  "centreSourceHashesUnchanged": true
+}

@@ -1,0 +1,564 @@
+{
+ "unserved": [],
+ "crossings": [],
+ "ends": [
+  {
+   "route": "centre-1",
+   "point": [
+    4000.0,
+    1337.2
+   ],
+   "destination": "centre-4",
+   "gap": 0
+  },
+  {
+   "route": "centre-1",
+   "point": [
+    4000.0,
+    1337.2
+   ],
+   "destination": "centre-4",
+   "gap": 0
+  },
+  {
+   "route": "centre-2",
+   "point": [
+    3345.733,
+    2516.371
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "centre-2",
+   "point": [
+    1043.2,
+    1275.3
+   ],
+   "destination": "ribbonwick-centre",
+   "gap": 0
+  },
+  {
+   "route": "centre-4",
+   "point": [
+    3421.7,
+    1337.2
+   ],
+   "destination": "centre-1",
+   "gap": 0
+  },
+  {
+   "route": "centre-4",
+   "point": [
+    3060.0,
+    1050.0
+   ],
+   "destination": "northwest-centre",
+   "gap": 0
+  },
+  {
+   "route": "centre-5",
+   "point": [
+    3490.706,
+    2932.55
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "centre-5",
+   "point": [
+    1124.0,
+    2736.2
+   ],
+   "destination": "petalpatch-centre",
+   "gap": 0
+  },
+  {
+   "route": "centre-6",
+   "point": [
+    1956.0,
+    1834.0
+   ],
+   "destination": "centre-2",
+   "gap": 0
+  },
+  {
+   "route": "centre-6",
+   "point": [
+    1646,
+    3191
+   ],
+   "destination": "centre-5",
+   "gap": 0
+  },
+  {
+   "route": "centre-7",
+   "point": [
+    4665.628,
+    2674.861
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "centre-7",
+   "point": [
+    6865.4,
+    2778.3
+   ],
+   "destination": "willow-centre",
+   "gap": 0
+  },
+  {
+   "route": "centre-8",
+   "point": [
+    5076.0,
+    2556.3
+   ],
+   "destination": "centre-7",
+   "gap": 0
+  },
+  {
+   "route": "centre-8",
+   "point": [
+    6361.9,
+    894.4
+   ],
+   "destination": "chirrup-east",
+   "gap": 0
+  },
+  {
+   "route": "centre-9",
+   "point": [
+    4578.4,
+    1395.6
+   ],
+   "destination": "centre-1",
+   "gap": 0
+  },
+  {
+   "route": "centre-9",
+   "point": [
+    4930.0,
+    1120.0
+   ],
+   "destination": "northeast-centre",
+   "gap": 0
+  },
+  {
+   "route": "centre-10",
+   "point": [
+    4493.618,
+    2945.256
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "centre-10",
+   "point": [
+    5412.2,
+    3249.8
+   ],
+   "destination": "market-garden-link",
+   "gap": 0
+  },
+  {
+   "route": "centre-11",
+   "point": [
+    4000.0,
+    3101.026
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "centre-11",
+   "point": [
+    4000.0,
+    3906.8
+   ],
+   "destination": "plaza-south-to-tutu",
+   "gap": 0
+  },
+  {
+   "route": "centre-12",
+   "point": [
+    3005.0,
+    3206.0
+   ],
+   "destination": "centre-5",
+   "gap": 0
+  },
+  {
+   "route": "centre-12",
+   "point": [
+    3166.0,
+    3689.0
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "centre-13",
+   "point": [
+    5420.0,
+    3400.0
+   ],
+   "destination": "market-garden-link",
+   "gap": 0
+  },
+  {
+   "route": "centre-13",
+   "point": [
+    5567.2,
+    3934.8
+   ],
+   "destination": "south-east-garden",
+   "gap": 0
+  },
+  {
+   "route": "promenade",
+   "point": [
+    -350.0,
+    650.0
+   ],
+   "destination": "chirrup-east",
+   "gap": 0
+  },
+  {
+   "route": "promenade",
+   "point": [
+    -350.0,
+    650.0
+   ],
+   "destination": "chirrup-east",
+   "gap": 0
+  },
+  {
+   "route": "marina",
+   "point": [
+    8650.0,
+    2300.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "marina",
+   "point": [
+    9600.0,
+    2850.0
+   ],
+   "destination": "authored marina deck",
+   "gap": 0
+  },
+  {
+   "route": "ribbonwick-centre",
+   "point": [
+    1043.0,
+    1275.0
+   ],
+   "destination": "centre-2",
+   "gap": 0
+  },
+  {
+   "route": "ribbonwick-centre",
+   "point": [
+    608.0,
+    624.0
+   ],
+   "destination": "hamlet-ribbonwick-paths-0-0-39",
+   "gap": 0
+  },
+  {
+   "route": "petalpatch-centre",
+   "point": [
+    1124.0,
+    2736.0
+   ],
+   "destination": "centre-5",
+   "gap": 0
+  },
+  {
+   "route": "petalpatch-centre",
+   "point": [
+    900,
+    2780
+   ],
+   "destination": "hamlet-petalpatch-paths-0-0-49",
+   "gap": 0
+  },
+  {
+   "route": "willow-centre",
+   "point": [
+    6865.0,
+    2778.0
+   ],
+   "destination": "centre-7",
+   "gap": 0
+  },
+  {
+   "route": "willow-centre",
+   "point": [
+    8550,
+    2580
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "chirrup-east",
+   "point": [
+    6362.0,
+    894.0
+   ],
+   "destination": "chirrup-south",
+   "gap": 0
+  },
+  {
+   "route": "chirrup-east",
+   "point": [
+    6904,
+    761
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "northwest-centre",
+   "point": [
+    3060.0,
+    1050.0
+   ],
+   "destination": "centre-4",
+   "gap": 0
+  },
+  {
+   "route": "northwest-centre",
+   "point": [
+    2600.0,
+    350.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "northeast-centre",
+   "point": [
+    4930.0,
+    1120.0
+   ],
+   "destination": "centre-9",
+   "gap": 0
+  },
+  {
+   "route": "northeast-centre",
+   "point": [
+    5750.0,
+    500.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "plaza-south-to-tutu",
+   "point": [
+    4000.0,
+    3907.0
+   ],
+   "destination": "centre-11",
+   "gap": 0
+  },
+  {
+   "route": "plaza-south-to-tutu",
+   "point": [
+    2600.0,
+    5370.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "chirrup-south",
+   "point": [
+    6250.0,
+    500.0
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "chirrup-south",
+   "point": [
+    6362.0,
+    894.0
+   ],
+   "destination": "chirrup-east",
+   "gap": 0
+  },
+  {
+   "route": "market-garden-link",
+   "point": [
+    5412.0,
+    3250.0
+   ],
+   "destination": "centre-10",
+   "gap": 0
+  },
+  {
+   "route": "market-garden-link",
+   "point": [
+    5420.0,
+    3400.0
+   ],
+   "destination": "centre-13",
+   "gap": 0
+  },
+  {
+   "route": "south-east-garden",
+   "point": [
+    5567.0,
+    3935.0
+   ],
+   "destination": "centre-13",
+   "gap": 0
+  },
+  {
+   "route": "south-east-garden",
+   "point": [
+    5740.0,
+    4150.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "teacup-arrival",
+   "point": [
+    6922.0,
+    4434.0
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "teacup-arrival",
+   "point": [
+    7170.0,
+    4100.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "willow-coastal",
+   "point": [
+    8200.0,
+    3250.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "willow-coastal",
+   "point": [
+    7170.0,
+    4100.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-ribbonwick-paths-0-0-39",
+   "point": [
+    618.1,
+    978.4
+   ],
+   "destination": "ribbonwick-centre",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-ribbonwick-paths-0-0-39",
+   "point": [
+    608.22,
+    623.57
+   ],
+   "destination": "ribbonwick-centre",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-chirrup-paths-0-0-43",
+   "point": [
+    6250.0,
+    666.8
+   ],
+   "destination": "chirrup-south",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-chirrup-paths-0-0-43",
+   "point": [
+    6259.08,
+    631.98
+   ],
+   "destination": "chirrup-south",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-petalpatch-paths-0-0-48",
+   "point": [
+    -693.4,
+    3434.7
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-petalpatch-paths-0-0-48",
+   "point": [
+    -450.0,
+    3690.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-petalpatch-paths-0-0-49",
+   "point": [
+    -313.65,
+    2700.0
+   ],
+   "destination": "destination court",
+   "gap": 0
+  },
+  {
+   "route": "hamlet-petalpatch-paths-0-0-49",
+   "point": [
+    900.0,
+    2780.0
+   ],
+   "destination": "petalpatch-centre",
+   "gap": 0
+  },
+  {
+   "route": "rosy-b-stargazing-lane",
+   "point": [
+    8360.0,
+    1780.0
+   ],
+   "destination": "promenade",
+   "gap": 0
+  },
+  {
+   "route": "rosy-b-stargazing-lane",
+   "point": [
+    8130,
+    915
+   ],
+   "destination": "stargazing south landing",
+   "gap": 0
+  }
+ ]
+}

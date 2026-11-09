@@ -11,7 +11,7 @@ const pieces=input.pieces.map(s=>({...s,path:shape(s)}));let all=new Path2D(),ro
 for(const s of pieces){all=all.op(s.path,PathOp.Union);if(s.stroke)roads=roads.op(s.path,PathOp.Union);}
 const coastD=readFileSync('scripts/pink-fix/art/coast.svg','utf8').match(/ d="([^"]+)"/)[1];all=all.op(new Path2D(coastD),PathOp.Intersect).simplify();
 const d=all.toSVGString();if(!d||/nan|infinity/i.test(d))throw Error('Invalid merged floor geometry');
-const body=`<defs><clipPath id="outside-locked-centre"><path clip-rule="evenodd" d="M-3000 -2200H11000V8200H-3000Z M4930 2850A930 760 0 1 0 3070 2850A930 760 0 1 0 4930 2850Z"/></clipPath></defs><g clip-path="url(#outside-locked-centre)" data-floor-union="true" fill-rule="evenodd"><path d="${d}" fill="#FBE6C8" stroke="#39472d" stroke-width="18" stroke-opacity=".6" stroke-linejoin="round"/><path d="${d}" fill="#FBE6C8" stroke="#E6C59D" stroke-width="14" stroke-linejoin="round"/></g>`;
+const body=`<defs><clipPath id="outside-locked-centre"><path clip-rule="evenodd" d="M-3000 -2200H11000V8200H-3000Z M4930 2850A930 760 0 1 0 3070 2850A930 760 0 1 0 4930 2850Z"/></clipPath></defs><g clip-path="url(#outside-locked-centre)" data-floor-union="true" fill-rule="evenodd"><path d="${d}" fill="#FBE6C8"/></g>`;
 const root=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2600 -1900 13200 9800">${body}</svg>`;
 mkdirSync(A+'expansion/merged',{recursive:true});writeFileSync(A+'expansion/merged/unified-paths.svg',root);
 // Keep decorative paving only inside its own inset and outside the merged travel corridors.

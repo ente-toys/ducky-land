@@ -1,0 +1,19 @@
+{
+ "routes": 31,
+ "widths": [
+  104,
+  128
+ ],
+ "waterComponents": 2,
+ "waterBounds": [
+  519.1335023296572,
+  1557.3614768473572,
+  9160.999185260083,
+  5806.25123274098
+ ],
+ "pathArea": 12224071.242148202,
+ "noInternalOutlines": true,
+ "retainedPalette": [
+  "#FBE6C8"
+ ]
+}

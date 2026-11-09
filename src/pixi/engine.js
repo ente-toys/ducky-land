@@ -762,6 +762,7 @@ export class PixiIsland {
       if (!art.ready) continue;
       const on=id === mapId;
       for (const g of art.groups) g.visible=on;
+      for (const e of art.kites?.entries ?? []) e.root.visible=on && this.globeT < .97;
       if (!on) for (const p of this.artProps(id)) {p.sprite.visible=false; if (p.shadow) p.shadow.visible=false;}
     }
     if (mapId !== 'home') {for (const r of this.sleeperRigs()) r.root.visible=false; for (const f of this.floating ?? []) f.sprite.visible=false;}
@@ -855,6 +856,11 @@ export class PixiIsland {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
       this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows); this.overDecks.addChild(art.overLayer);
+      if (art.kiteLayer) {
+        this.objects.addChild(art.kiteLayer);
+        // Each stake retains its world depth and gets the same upright correction as Home.
+        for (const {root} of art.kites.entries) {this.objects.addChild(root); art.groups.push(root);}
+      }
       for (const p of art.props) (p.deck ? this.decks : this.objects).addChild(p.sprite);
       await attachCentreMotion(art, {Graphics, Container}, this.objects);
       if (this.disposed) {art.destroy(); return;}
@@ -1201,6 +1207,7 @@ export class PixiIsland {
     const flatVisible = !(this.globeT >= .97);   // a full globe samples snapshots, not the animated island scene
     const homeShown=this.artShown === 'home';   // boss 6 Nov: on a themed island the home art (and its water, surf, leaves) rests
     this.homeKites?.update(t, reduced, visible, homeShown && flatVisible);
+    for (const [id, art] of this.arts ?? []) if (art.ready) art.kites?.update(t, reduced, visible, id === this.artShown && flatVisible);
     this.plantReactions?.begin(this.artShown,t,reduced,flatVisible);
     if (homeShown && flatVisible) this.waterFX?.update(dt, t, {x: this.camera.x-halfWidth, y: this.camera.y-halfHeight, width: halfWidth*2, height: halfHeight*2});
     if (homeShown && flatVisible) this.surf?.update(t, reduced, visible);

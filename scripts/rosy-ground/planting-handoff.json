@@ -1,0 +1,44 @@
+[
+ {
+  "id": "pond-willow",
+  "src": "detail/tree-willow.svg",
+  "x": 6344,
+  "y": 1837
+ },
+ {
+  "id": "tree-cherry-101",
+  "src": "detail/tree-cherry.svg",
+  "x": 6655,
+  "y": 1933
+ },
+ {
+  "id": "tree-1-112",
+  "src": "/pixi-art/plants/tree-1.svg",
+  "x": 7045,
+  "y": 2174
+ },
+ {
+  "id": "tree-4-121",
+  "src": "/pixi-art/plants/tree-4.svg",
+  "x": 6912.9,
+  "y": 1974.6
+ },
+ {
+  "id": "pink-craft-43",
+  "src": "/pixi-art/plants/bush-1.svg",
+  "x": 7186.8,
+  "y": 2202
+ },
+ {
+  "id": "pink-craft-50",
+  "src": "/pixi-art/plants/bush-1.svg",
+  "x": 6783.9,
+  "y": 2002.6
+ },
+ {
+  "id": "pink-grove-rock-14",
+  "src": "/pixi-art/detail/nature--rock-round.svg",
+  "x": 6464.6,
+  "y": 1973
+ }
+]

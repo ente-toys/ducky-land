@@ -1,6 +1,6 @@
 import {Container, Graphics, Sprite} from 'pixi.js';
-import sites from './home-kites.json';
-export {default as HOME_KITES} from './home-kites.json';
+import sites from './home-kites.json' with {type:'json'};
+export {default as HOME_KITES} from './home-kites.json' with {type:'json'};
 export const KITE_COLOURS = ['red', 'yellow', 'blue', 'purple', 'mint', 'orange'];
 const DIR = '/pixi-art/home-kites/';
 export const KITE_ASSETS = [DIR + 'stake.svg', ...KITE_COLOURS.flatMap(c => ['body', 'tail-a', 'tail-b'].map(p => `${DIR}${c}-${p}.svg`))];
@@ -16,8 +16,8 @@ export function kitePose(site, seconds, reduced, pose) {
   return pose;
 }
 
-export function createHomeKites(parent, textures) {
-  const entries = sites.map(site => {
+export function createHomeKites(parent, textures, siteList = sites) {
+  const entries = siteList.map(site => {
     const root = new Container({label: site.id, eventMode: 'none'});
     root.position.set(site.x, site.y); root.zIndex = site.y; root.standing = true;
     // The path is drawn once. Independent x/y scaling keeps its endpoints exactly at the stake and knot.

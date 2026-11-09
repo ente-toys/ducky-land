@@ -1,0 +1,16 @@
+{
+  "before": 26,
+  "after": 1,
+  "colour": "#FBE6C8",
+  "gaps": 6,
+  "laneSamples": 7446,
+  "errors": [],
+  "nonSocketTests": {
+    "passed": 374,
+    "failed": 0
+  },
+  "protectedArtUnchanged": true,
+  "routeEnds": 62,
+  "hamletDestinations": 5,
+  "pathArtworkRebuildIdempotent": true
+}

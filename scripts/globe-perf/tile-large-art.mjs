@@ -5,8 +5,10 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import sizes from '../../src/pixi/art-source-sizes.json' with {type:'json'};
 import {WORLD_ISLANDS} from '../../src/pixi/world-map.js';
-const out='public/pixi-art/globe/tiles';mkdirSync(out,{recursive:true});const index={};
-for(const {theme} of WORLD_ISLANDS.filter(i=>i.theme)){
+const selected=process.argv[2];
+if(selected&&!WORLD_ISLANDS.some(i=>i.theme===selected))throw Error('Unknown theme '+selected);
+const out='public/pixi-art/globe/tiles';mkdirSync(out,{recursive:true});const index=selected?JSON.parse(readFileSync('src/pixi/large-art-tiles.json')):{};
+for(const {theme} of WORLD_ISLANDS.filter(i=>i.theme&&(!selected||i.theme===selected))){
  const base=`/pixi-art/themes/${theme}/`,art=JSON.parse(readFileSync(`public${base}art.json`)),records={};
  for(const category of ['decks','flats'])for(const p of art[category]??[]){
   const src=p.src.startsWith('/')?p.src:base+p.src,[iw,ih]=sizes[src],r=p.resolution??(category==='decks'?1.5:2);

@@ -6,6 +6,8 @@ import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from './art-resolution.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
 
+import {KITE_ASSETS, createHomeKites} from './home-kites.js';
+
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
@@ -31,6 +33,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   // requested resolution. Fair alone places over 1,900 sprites from 108 sources.
   const resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
+  if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(src, 2);
   const uniqueSources = [...resolutions.keys()];
   const loaded=new Array(uniqueSources.length);let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
@@ -88,12 +91,12 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
     sprite.width = prop.width * scale; sprite.height = prop.height * scale;
     if (prop.flip) sprite.scale.x *= -1;
     if (prop.tint) sprite.tint = prop.tint;
-    sprite.zIndex = prop.z ?? prop.y; sprite.standing = true;   // boss 8 Nov: a hamlet object keeps GPT's draw order where it overlaps sprite.visible = false; sprite.themeArt = map.id;
+    sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true;   // boss 8 Nov: a hamlet object keeps GPT's draw order where it overlaps sprite.visible = false; sprite.themeArt = map.id;
     let shadow = null;
     if (!NO_SHADOW.test(name) && prop.shadow !== false) {
       const [rx, ry] = prop.shadowSize ?? (r => [r, r * .3])(Math.max(8, Math.min(300, prop.width * scale * .36)));   // boss 8 Nov: a hamlet building's base shadow fits its footprint
       shadow = new Graphics().ellipse(rx * .06, ry * .1, rx, ry).fill({color: 0x3c5a2a, alpha: .15});
-      shadow.position.set(prop.x, prop.y); shadows.addChild(shadow);
+      shadow.position.set(prop.x + (prop.shadowOffset?.[0] ?? 0), prop.y + (prop.shadowOffset?.[1] ?? 0)); shadows.addChild(shadow);
     }
     const centrePiece = typeof prop.centrePiece === 'object' ? prop.centrePiece : centre.pieces.find(p => prop.id?.endsWith(p.id) && prop.src.includes('centre/'));
     return {...prop, centrePiece, id: prop.id ?? `${map.id}-${i}`, name, scale, sprite, shadow, deck: prop.deck ?? /bridge|deck/i.test(name), wind: prop.wind ?? (!prop.src.includes('centre/') && WIND.test(name))};
@@ -106,17 +109,20 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
     floatLayer.addChild(sprite);
     return {...item, phase: item.phase ?? i * 1.7, sprite};
   });
-  for (const group of [ground, deckLayer, shadows, floatLayer, overLayer]) group.visible = false;
+  const kiteLayer = manifest.kites?.length ? new Container({label: `Theme ${map.id} - kites`}) : null;
+  const kites = kiteLayer ? createHomeKites(kiteLayer, Object.fromEntries(KITE_ASSETS.map(src => [src, bySource.get(src)])), manifest.kites) : null;
+  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : [])];
+  for (const group of groups) group.visible = false;
   return {
     id: map.id, map, groundStream, groundStreams, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
-    overLayer, bridgeOver,
-    groups: [ground, deckLayer, shadows, floatLayer, overLayer],
+    overLayer, bridgeOver, kiteLayer, kites,
+    groups,
     destroy() {
       if (destroyed) return;
       destroyed = true;
       groundStreams.forEach(s=>s.destroy());
       release(`/pixi-art/globe/${map.id}-ground.svg`);
-      for (const c of [ground, deckLayer, shadows, floatLayer, overLayer]) c.destroy({children: true});
+      for (const c of groups) c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
     },

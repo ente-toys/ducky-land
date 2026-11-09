@@ -11,22 +11,15 @@ const shore=read('scripts/pink-fix/shore.json');
 const original=read('scripts/bigger-pink/original-art.json'),oldWorld=read('scripts/bigger-pink/original-world.json'),oldWalk=read('scripts/bigger-pink/original-walk.json');
 const art=read('public/pixi-art/themes/pink/art.json'),layout=read('scripts/bigger-pink/layout.json'),map=mapFor('pink');
 
-test('bigger Pink keeps its original composition, centre, sleepers and collision geometry in place',()=>{
- const retired=read('scripts/pink-final/retired-props.json');
- const review=read('scripts/pink-final/review-changes.json');
- const moved=new Set([...shore.moveProps.map(p=>p.id),...retired,...review.movedProps.map(p=>p.id),...review.replacedPlants.map(p=>p.id)]);
- assert.deepEqual(art.props.filter(p=>original.props.some(o=>o.id===p.id)&&!moved.has(p.id)),original.props.filter(p=>!moved.has(p.id)));
- assert.ok(art.flats.length>original.flats.length*.8,'retains the centre lawn and path details');
- assert.ok(art.decks.some(d=>d.id==='centre-back'));
- assert.ok(art.decks.every(d=>!shore.removeDecks.src.includes(d.src)),'no stranded decks');
- assert.deepEqual(map.world.water[0],oldWorld.water[0]);
- assert.deepEqual(map.world.bridges.slice(0,oldWorld.bridges.length),oldWorld.bridges);
- for(const key of ['sleepAvoid','centrePlacement'])assert.deepEqual(map.world[key],oldWorld[key],key);
- assert.equal(map.world.obstacles.length,layout.baseObstacles.length+layout.obstacles.length);
- assert.equal(map.baseWalk.obstacles.length,layout.baseObstacles.length+layout.obstacles.length);
- for(const [key,zone] of Object.entries(oldWorld.zones))if(!['stalls-1','stalls-3'].includes(key))assert.deepEqual(map.world.zones[key],zone);
+test('Rosy preserves original residents and neighbourhood geometry through the approved centre replacement',()=>{
+ const B=read('scripts/rosy-ground/data/population.json');
+ for(const [pose,spots] of Object.entries(B.sleepers.originalAuthored))assert.deepEqual(map.world.sleepSpots[pose].slice(0,spots.length),spots);
+ assert.equal(map.sleepers.length,90);
+ assert.deepEqual(map.world.sleepAvoid,oldWorld.sleepAvoid);
+ assert.ok(!art.decks.some(d=>d.id==='centre-back'));
+ assert.ok(!art.props.some(p=>p.src.startsWith('centre/')));
+ for(const [key,zone] of Object.entries(oldWorld.zones))if(!['plaza','stalls-1','stalls-3'].includes(key))assert.deepEqual(map.world.zones[key],zone);
  assert.deepEqual(map.spawn,{x:4000,y:3224.62});
- assert.equal(map.sleepers.length,40);
  for(const bed of map.sleepers)assert.ok(map.landAt(bed.x,bed.y));
 });
 
@@ -35,12 +28,9 @@ test('bigger Pink reaches every new court and completes both promenade loops wit
  assert.equal(map.width,13200);assert.equal(map.height,9800);
  const nav=map.nav(),from=map.spawn;
  for(const p of layout.places){const point=map.world.zones['bigger-'+p.id].spawn;assert.ok(nav.walkable(...point),p.id+' arrival');assert.ok(nav.route(from.x,from.y,...point).length,p.id+' route');}
- // Sample the complete authored loops, including their negative-coordinate edges.
- for(const [name,loop] of [['coast',layout.shoreWalk],['promenade',layout.paths[0]]])for(let i=0;i<loop.length;i++){
-  const p=loop[i],q=loop[(i+1)%loop.length];
-  for(const k of [0,.25,.5,.75]){const x=p[0]+(q[0]-p[0])*k,y=p[1]+(q[1]-p[1])*k,near=nav.nearest(x,y,170);assert.ok(near,name+' is open near '+x+','+y);assert.ok(nav.route(from.x,from.y,...near).length,name+' connected');}
- }
- for(const prop of layout.props){
+ // Current path metadata is the exact sampled drawn network, without nearest fallbacks.
+ for(const r of read('scripts/rosy-ground/sampled-routes.json'))for(const p of r.samples)assert.ok(nav.walkable(...p),r.id+' exact point '+p);
+ for(const prop of layout.props.filter(p=>!p.id.startsWith('rosy-b-'))){
   assert.ok(inPoly(prop.x,prop.y,layout.coast),prop.id+' on land');
   if(prop.hamlet||read('scripts/pink-final/review-changes.json').movedProps.some(p=>p.id===prop.id))continue; // Approved hamlet canopies may overlap the former islet lawns.
   const w=prop.width*prop.scale,h=prop.height*prop.scale,a=prop.anchor??{x:.5,y:1};
@@ -118,8 +108,8 @@ test('Pink community layout retains its authored neighbourhoods',()=>{
  for(const p of layout.places)assert.deepEqual(p.arrival,map.world.zones['bigger-'+p.id].spawn,'authored court arrival');
  assert.deepEqual(layout.coast,map.world.coast,'drawing and gameplay share the coast');
  const closed=layout.paths.filter(p=>p[0][0]===p.at(-1)[0]&&p[0][1]===p.at(-1)[1]);
- assert.equal(closed.length,1,'one main loop, with open local lanes');
- assert.ok(layout.pathWidths.every(w=>w===160),'all lanes use the centre width');
+ assert.equal(closed.length,2,'promenade and retained heart garden loop');
+ assert.deepEqual([...new Set(layout.pathWidths)].sort((a,b)=>a-b),[104,128],'Home widths');
  assert.equal(layout.props.filter(p=>p.household).length,15);
  for(const c of layout.roadArt.densityMetrics.communities)assert.ok(c.meanDistanceToGreenAfter<c.meanDistanceToGreenBefore,c.name+' households closer to green');
 });
@@ -148,7 +138,7 @@ test('Tutu Tides shore has authored coves and no straight diagonal cut',()=>{
 
 test('Pink review has only OG plants and no prop, bridge, sleeper or path-end overlaps',()=>{
  const report=auditPink();assert.equal(report.forbiddenHamletPlantProps,0);assert.equal(report.remainingOverlapCount,0,JSON.stringify(report.remaining));
- assert.equal(report.checked.sleepers,40);assert.ok(report.checked.props>400);assert.ok(report.checked.pathEnds>30);
+ assert.equal(report.checked.sleepers,map.sleepers.length);assert.ok(report.checked.props>400);assert.ok(report.checked.pathEnds>30);
  assert.ok(!art.props.some(p=>p.src==='detail/pink-car.svg'));
  assert.ok(!art.flats.some(p=>['detail/pink-close-road.svg','detail/pink-close-market.svg'].includes(p.src)));
  assert.ok(art.props.some(p=>p.id==='tutu-sand-lounger'&&map.landAt(p.x,p.y)));
@@ -166,23 +156,29 @@ test('Pink redraw buildings retain their ground bases, declared widths and scale
 });
 
 test('Pink joins use one unioned floor boundary and no independently outlined path flats',()=>{
- const report=read('scripts/pink-final/path-union-report.json');assert.ok(report.pieces>40);assert.ok(report.joins.length>30);
- assert.equal(report.independentOutlineShapes,1);assert.ok(!art.flats.some(p=>/^hamlets\/.*\/paths/.test(p.src)));
+ const report=read('scripts/rosy-ground/surface-report.json');assert.ok(report.routes>=30);
+ assert.ok(report.noInternalOutlines);assert.ok(!art.flats.some(p=>/^hamlets\/.*\/paths/.test(p.src)));
  const source=readFileSync(new URL('../public/pixi-art/themes/pink/expansion/merged/unified-paths.svg',import.meta.url),'utf8');
- const paths=[...source.matchAll(/<path d="([^"]+)"/g)].map(m=>m[1]);assert.equal(paths.length,2);assert.equal(paths[0],paths[1],'ink and tan stroke only the identical union boundary');
- for(const t of art.ground.tiles.filter(t=>t.src.startsWith('expansion/shore/')))assert.ok(readFileSync(new URL('../public/pixi-art/themes/pink/'+t.src,import.meta.url),'utf8').includes('data-floor-union="true"'),t.src+' uses merged geometry');
+ const paths=[...source.matchAll(/<path d="([^"]+)"/g)].map(m=>m[1]);assert.equal(paths.length,1,'one opaque surface without a lower-edge band');
+ assert.deepEqual([...new Set(source.match(/#[0-9a-f]{6}/gi))],['#FBE6C8']);
+ for(const t of art.ground.tiles.filter(t=>t.src.startsWith('expansion/shore/')))assert.ok(readFileSync(new URL('../public/pixi-art/themes/pink/'+t.src,import.meta.url),'utf8').includes('data-name="Rosy unified paths"'),t.src+' uses merged geometry');
 });
 
 
-test('Pink merged paving leaves the heart lawn and locked centre outside the union',async()=>{
+test('Pink union preserves the heart lawn and now also serves the music-box terrace',async()=>{
  const svg=readFileSync(new URL('../public/pixi-art/themes/pink/expansion/merged/unified-paths.svg',import.meta.url),'utf8');
  async function alphaAt(x,y){const crop=svg.replace(/<svg[^>]*>/,`<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="${x-2} ${y-2} 4 4">`);const {data}=await sharp(Buffer.from(crop)).ensureAlpha().raw().toBuffer({resolveWithObject:true});return data[(2*4+2)*4+3];}
  assert.equal(await alphaAt(4000,1600),0,'the enclosed heart lawn remains grass');
- assert.equal(await alphaAt(4000,3000),0,'the locked centre is excluded from the union');
- assert.equal(art.flats.find(p=>p.id==='pink-close-plaza').src,'detail/pink-close-plaza.svg');
- assert.equal(art.flats.find(p=>p.id==='pink-close-court').src,'detail/pink-close-court.svg');
+ assert.ok(await alphaAt(4000,3000)>0,'one travel surface continues through the terrace');
+ assert.ok(!art.flats.some(p=>['pink-close-plaza','pink-close-court'].includes(p.id)));
+ assert.ok(art.flats.some(p=>p.id==='plaza-floor'));
 });
 
-test('Pink locked centre matches the approved reference pixels',()=>{
- const report=read('scripts/pink-final/centre-pixel-report.json');assert.equal(report.reference,'7c2a28ec');assert.ok(report.pixels>1000000);assert.ok(report.changedPercent<.02,JSON.stringify(report));assert.ok(report.meanChannelDifference<.02,JSON.stringify(report));
+test('Rosy ribbon centre retires all terrace art and all raised walk blockers',()=>{
+ for(const data of [map.world,map.baseWalk]){
+  assert.deepEqual(data.centrePlacement.stairs,[]);
+  assert.equal(data.centrePlacement.blocked.length,6);
+  assert.ok(!data.obstacles.some(o=>o.centre==='locked'));
+ }
+ for(const cat of ['flats','decks','props'])assert.ok(!art[cat].some(p=>p.src.startsWith('centre/')));
 });

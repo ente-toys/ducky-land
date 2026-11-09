@@ -1,0 +1,48 @@
+{
+  "scope": "ROSYBUTTON Part A, sunset / pink",
+  "committed": false,
+  "build": {
+    "passed": true,
+    "command": "npm run build -- --configLoader native",
+    "reasonForNativeLoader": "node_modules is a read-only shared symlink; bundled config tries to write its .vite-temp there"
+  },
+  "nonSocketTests": {
+    "passed": 369,
+    "failed": 0,
+    "excluded": [
+      "qa/network.test.mjs",
+      "qa/multiplayer.test.mjs"
+    ],
+    "command": "node --test --test-concurrency=2 <qa/*.test.mjs except network.test.mjs and multiplayer.test.mjs>"
+  },
+  "walkAudit": {
+    "command": "node scripts/pink-final/walk-audit.mjs",
+    "checked": {
+      "props": 645,
+      "routeSamples": 5219,
+      "bridges": 4,
+      "pathEnds": 60,
+      "destinations": 5,
+      "sleepers": 40
+    },
+    "issues": []
+  },
+  "rebuild": {
+    "command": "node scripts/bigger-pink/build.mjs",
+    "files": 192,
+    "changed": [],
+    "idempotent": true
+  },
+  "preservation": {
+    "sleepSpots": true,
+    "sleepAvoid": true,
+    "centrePlacement": true,
+    "obstacles": true,
+    "allPropsUnchanged": true,
+    "centreSourceHashesUnchanged": true
+  },
+  "svgSourcesChecked": 180,
+  "forbiddenSvgFeatures": 0,
+  "plantingHandoff": "planting-handoff.json: seven unchanged bases along the new outflow; planting owner must move them to banks",
+  "teamFeed": "attempted, filesystem sandbox rejected feed.md write"
+}

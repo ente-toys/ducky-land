@@ -1,0 +1,262 @@
+{
+ "landmarks": {
+  "flats": [
+   {
+    "id": "pink-close-plaza",
+    "src": "detail/pink-close-plaza.svg",
+    "x": 3241,
+    "y": 2289.66,
+    "width": 1518,
+    "height": 1088,
+    "topLeft": true
+   },
+   {
+    "id": "pink-close-court",
+    "src": "detail/pink-close-court.svg",
+    "x": 3438,
+    "y": 2573.2200000000003,
+    "width": 1124,
+    "height": 861.56,
+    "topLeft": true
+   },
+   {
+    "id": "centre-decal-plaza",
+    "src": "centre/decal-plaza.svg",
+    "width": 1207.2,
+    "height": 933.5999999999999,
+    "x": 3396.4,
+    "y": 2537.2,
+    "topLeft": true
+   }
+  ],
+  "decks": [
+   {
+    "id": "centre-back",
+    "src": "centre/back.svg",
+    "width": 859.1999999999999,
+    "height": 846,
+    "x": 3570.4,
+    "y": 2194,
+    "topLeft": true
+   }
+  ],
+  "props": [
+   {
+    "id": "centre-front-05",
+    "src": "centre/front-05.svg",
+    "width": 249.6,
+    "height": 436.8,
+    "name": "Centre front-05",
+    "x": 3695.2,
+    "y": 2830,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.7445054945054945
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2830,
+    "centrePiece": "front-05"
+   },
+   {
+    "id": "centre-front-02",
+    "src": "centre/front-02.svg",
+    "width": 249.6,
+    "height": 436.8,
+    "name": "Centre front-02",
+    "x": 4304.8,
+    "y": 2830,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.7445054945054945
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2830,
+    "centrePiece": "front-02"
+   },
+   {
+    "id": "centre-music-box",
+    "src": "centre/music-box.svg",
+    "width": 355.2,
+    "height": 634.8,
+    "name": "Centre music-box",
+    "x": 4000,
+    "y": 2620,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.9111531190926276
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2620,
+    "centrePiece": "music-box"
+   },
+   {
+    "id": "centre-dancer",
+    "src": "centre/dancer.svg",
+    "width": 76.74,
+    "height": 150,
+    "name": "Centre dancer",
+    "x": 4000.03,
+    "y": 2620.01,
+    "anchor": {
+     "x": 0.5,
+     "y": 2.1700666666666666
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2620,
+    "centrePiece": "dancer"
+   },
+   {
+    "id": "centre-wind-key",
+    "src": "centre/wind-key.svg",
+    "width": 90,
+    "height": 84,
+    "name": "Centre wind-key",
+    "x": 4202.8,
+    "y": 2620.01,
+    "anchor": {
+     "x": 0.5,
+     "y": 2.128690476190476
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2620,
+    "centrePiece": "wind-key"
+   },
+   {
+    "id": "centre-balustrade-left",
+    "src": "centre/balustrade-left.svg",
+    "width": 45.6,
+    "height": 379.2,
+    "name": "Centre balustrade-left",
+    "x": 3802.6,
+    "y": 2916.4,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.6930379746835443
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2916.4,
+    "centrePiece": "balustrade-left"
+   },
+   {
+    "id": "centre-balustrade-right",
+    "src": "centre/balustrade-right.svg",
+    "width": 45.6,
+    "height": 379.2,
+    "name": "Centre balustrade-right",
+    "x": 4197.4,
+    "y": 2916.4,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.6930379746835443
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2916.4,
+    "centrePiece": "balustrade-right"
+   },
+   {
+    "id": "centre-terrace-lamp-0",
+    "src": "centre/terrace-heart-lamp.svg",
+    "width": 45.6,
+    "height": 138,
+    "name": "Centre terrace-lamp-0",
+    "x": 3667.6,
+    "y": 2377,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.9217391304347826
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2377,
+    "centrePiece": "terrace-lamp-0"
+   },
+   {
+    "id": "centre-terrace-lamp-1",
+    "src": "centre/terrace-heart-lamp.svg",
+    "width": 45.6,
+    "height": 138,
+    "name": "Centre terrace-lamp-1",
+    "x": 4332.4,
+    "y": 2377,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.9217391304347826
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2377,
+    "centrePiece": "terrace-lamp-1"
+   },
+   {
+    "id": "centre-terrace-lamp-2",
+    "src": "centre/terrace-heart-lamp.svg",
+    "width": 45.6,
+    "height": 138,
+    "name": "Centre terrace-lamp-2",
+    "x": 3667.6,
+    "y": 2671,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.9217391304347826
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2671,
+    "centrePiece": "terrace-lamp-2"
+   },
+   {
+    "id": "centre-terrace-lamp-3",
+    "src": "centre/terrace-heart-lamp.svg",
+    "width": 45.6,
+    "height": 138,
+    "name": "Centre terrace-lamp-3",
+    "x": 4332.4,
+    "y": 2671,
+    "anchor": {
+     "x": 0.5,
+     "y": 0.9217391304347826
+    },
+    "scale": 1,
+    "flip": false,
+    "shadow": false,
+    "sortY": 2671,
+    "centrePiece": "terrace-lamp-3"
+   }
+  ]
+ },
+ "sourceHashes": {
+  "centre/back.svg": "5acab9a8f3b74e7eb030fc53d8d5e37b4bc5e18e289f9a7f001754e0c681c219",
+  "centre/balustrade-left.svg": "58897fd78fdef048e7bb85133b7f6f4073bf537c0dac3733bdff1ebf95ba244c",
+  "centre/balustrade-right.svg": "82e323359c063f303888cb63ea0f02d8f77115fb3ffc39279267655b7c7540d5",
+  "centre/dancer-figure.svg": "0930fbadd3a11025d6b41552d0835119b1f88ebf454dca0b193c3a8628206917",
+  "centre/dancer-stand.svg": "457517e973f0fbd57ef001a0bcf896fb584214e98795e9f796aad1927932c73a",
+  "centre/dancer.svg": "32cb69582d85eb323ba622616267b37aa8e33d1e73462c215cfbf2e6d95252bc",
+  "centre/decal-plaza.svg": "e9420bffaa3aa741dd03a280193ff00731667774adb6edfbf0affe7e0421e869",
+  "centre/front-01.svg": "e93594ad65712c0ac411e9dacaee7a8a39c940973f67f64a71cf4d79133f8f1e",
+  "centre/front-02.svg": "99e75cc57e71d1d3320b0e65e935d2e192a827f7c38c75dd9338f143131795e7",
+  "centre/front-03.svg": "025a69d2f12f7d2322a3c6e45d9a2e69147357cc2ebf91aebbcf2ff900d73304",
+  "centre/front-04.svg": "bfcd8095d46d8d405a38dc1ed72ea2cc0e3d0b1ef1de0a8fdd38f3e49d560597",
+  "centre/front-05.svg": "2a3b52f59418a7d282d65fae8410aa77860f5c4a94fd07d51eaf9671f8120f3a",
+  "centre/front-06.svg": "3101490d828145c003364057288a93582e7a2fd9805daa51f03acb7915fbf562",
+  "centre/music-box.svg": "71907fc403c06d806267341050e93bf1fe6d12660a7b43fec11d56f68787bb25",
+  "centre/terrace-heart-lamp.svg": "dbc2f3f679f31b326201dfcf908f2af60be36e9e3389196c7705c41c353d279f",
+  "centre/wind-key.svg": "215db1ea9a457bef94bb0c2f8273f3da18335314e3f1824fb9f2f837de7afbd5"
+ }
+}
