@@ -122,9 +122,11 @@ export default function PixiPage() {
     </div>
     {!error && <aside className="pixi-live" aria-label="Live island">
       <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
-      {status === 'playing' && <IslandChat key={travel.islandId} room={room} island={island} editor={chatEditor}/>}
-      {(status === 'playing' || offline) && <IslandOutfit key={session?.user?.accountId ?? 'local'} island={island} offline={offline}/>}
-      {session?.user && <IslandFriends key={session.user.accountId} room={room} island={island}
+      {/* Keys share this sibling list: scope each ID to its toolbar item so
+          reconnects and island changes unmount the correct UI and effects. */}
+      {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
+      {(status === 'playing' || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
+      {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}
         status={status} indoors={indoors} notificationHost={notificationHost}/>}
       {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
       {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}

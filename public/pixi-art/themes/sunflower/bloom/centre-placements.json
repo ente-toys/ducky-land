@@ -1,0 +1,3769 @@
+{
+  "version": 1,
+  "concept": "../../centre/A-sunflower-bloom.png",
+  "coordinateSpace": "absolute world units; world ground is already camera-projected; do not flatten again",
+  "plaza": {
+    "x": 3880,
+    "y": 2608.5,
+    "rx": 1140,
+    "ry": 666,
+    "spawn": [
+      3880,
+      2950.855
+    ]
+  },
+  "palette": {
+    "ink": "#39472d",
+    "petal": "#f5cf48",
+    "cream": "#fff0b4",
+    "seed": "#9c7451",
+    "grass": "#a6ba62"
+  },
+  "assetBase": "/pixi-art/themes/sunflower/",
+  "groundTiles": [
+    {
+      "src": "plaza-curved-fields.svg",
+      "x": 2220,
+      "y": 1618.5,
+      "width": 3320,
+      "height": 1980,
+      "order": 0
+    },
+    {
+      "src": "plaza-path-joins.svg",
+      "x": 2220,
+      "y": 1618.5,
+      "width": 3320,
+      "height": 1980,
+      "order": 1
+    },
+    {
+      "src": "plaza-bloom-ground.svg",
+      "x": 2740,
+      "y": 1942.5,
+      "width": 2280,
+      "height": 1332,
+      "order": 2
+    }
+  ],
+  "props": [
+    {
+      "id": "bloom-lamp-0",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 3398.85,
+      "y": 2023.81,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-0",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 4028.67,
+      "y": 1954.69,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": false
+    },
+    {
+      "id": "bloom-planter-0",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 3067.46,
+      "y": 1143.3400000000001,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-lamp-1",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 5015.31,
+      "y": 2453.6800000000003,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-1",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 4548.33,
+      "y": 1993.39,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": true
+    },
+    {
+      "id": "bloom-planter-1",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 5176.280000000001,
+      "y": 1521.42,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-lamp-2",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 4642.3,
+      "y": 3037.54,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-2",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 5084.55,
+      "y": 2385.2400000000002,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": false
+    },
+    {
+      "id": "bloom-planter-2",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 5434.26,
+      "y": 3157.04,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-lamp-3",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 4980.139999999999,
+      "y": 2483.26,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-3",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 4893.91,
+      "y": 2939.9,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": true
+    },
+    {
+      "id": "bloom-planter-3",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 5406.86,
+      "y": 3321.77,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-lamp-4",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 4265.08,
+      "y": 4286.41,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-4",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 5133.26,
+      "y": 3507.13,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": false
+    },
+    {
+      "id": "bloom-planter-4",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 4195.18,
+      "y": 4319.67,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-lamp-5",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 3111.05,
+      "y": 2955.31,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-5",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 3668.67,
+      "y": 3248.31,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": true
+    },
+    {
+      "id": "bloom-planter-5",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 3846.76,
+      "y": 4398.99,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-lamp-6",
+      "name": "Bloom lamp",
+      "src": "reuse/lamp-lantern.svg",
+      "x": 1922.08,
+      "y": 1468.1999999999998,
+      "width": 432,
+      "height": 1837,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.993
+      },
+      "scale": 0.113,
+      "flip": false
+    },
+    {
+      "id": "bloom-banner-6",
+      "name": "Bloom banner",
+      "src": "detail/banner.svg",
+      "x": 2757.39,
+      "y": 2466.25,
+      "width": 282,
+      "height": 470,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.98
+      },
+      "scale": 0.37,
+      "flip": false
+    },
+    {
+      "id": "bloom-planter-6",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 2090,
+      "y": 1381.0699999999997,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-bench-0",
+      "name": "Bloom bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 4232.28,
+      "y": 1975.1,
+      "width": 818,
+      "height": 463,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9740820734341252
+      },
+      "scale": 0.18,
+      "flip": false
+    },
+    {
+      "id": "bloom-planter-10",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 4112.28,
+      "y": 1990.1,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-bench-1",
+      "name": "Bloom bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 2957.72,
+      "y": 2999.96,
+      "width": 818,
+      "height": 463,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9740820734341252
+      },
+      "scale": 0.18,
+      "flip": true
+    },
+    {
+      "id": "bloom-planter-11",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 3251.83,
+      "y": 4560.4400000000005,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-bench-2",
+      "name": "Bloom bench",
+      "src": "reuse/street--bench-wood.svg",
+      "x": 2957.72,
+      "y": 2217.04,
+      "width": 818,
+      "height": 463,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9740820734341252
+      },
+      "scale": 0.18,
+      "flip": false
+    },
+    {
+      "id": "bloom-planter-12",
+      "name": "Bloom planter",
+      "src": "detail/planter.svg",
+      "x": 1910.4299999999998,
+      "y": 1983.57,
+      "width": 514,
+      "height": 322,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.29,
+      "flip": false
+    },
+    {
+      "id": "bloom-scarecrow-0",
+      "name": "Bloom scarecrow",
+      "src": "detail/scarecrow.svg",
+      "x": 2976.27,
+      "y": 2272.93,
+      "width": 476,
+      "height": 518,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.4,
+      "flip": false
+    },
+    {
+      "id": "bloom-scarecrow-1",
+      "name": "Bloom scarecrow",
+      "src": "detail/scarecrow.svg",
+      "x": 4641.05,
+      "y": 2180.73,
+      "width": 476,
+      "height": 518,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.4,
+      "flip": true
+    },
+    {
+      "id": "bloom-scarecrow-2",
+      "name": "Bloom scarecrow",
+      "src": "detail/scarecrow.svg",
+      "x": 5173.59,
+      "y": 3560.68,
+      "width": 476,
+      "height": 518,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.4,
+      "flip": false
+    },
+    {
+      "id": "bloom-scarecrow-3",
+      "name": "Bloom scarecrow",
+      "src": "detail/scarecrow.svg",
+      "x": 2725,
+      "y": 2400.98,
+      "width": 476,
+      "height": 518,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.97
+      },
+      "scale": 0.4,
+      "flip": true
+    },
+    {
+      "id": "centre-clock",
+      "src": "centre/clock.svg",
+      "width": 266.63,
+      "height": 468,
+      "name": "Centre clock",
+      "x": 3880,
+      "y": 2608.5,
+      "anchor": {
+        "x": 0.4987760097919224,
+        "y": 0.9107391910739195
+      },
+      "scale": 1,
+      "flip": false,
+      "shadow": true,
+      "sortY": 2608.5,
+      "centrePiece": "clock",
+      "shadowSize": [
+        94,
+        42
+      ]
+    },
+    {
+      "id": "centre-clock-hand-hour",
+      "src": "centre/clock-hand-hour.svg",
+      "width": 15.6,
+      "height": 52,
+      "name": "Centre clock-hand-hour",
+      "x": 3880,
+      "y": 2608.5,
+      "anchor": {
+        "x": 0.5040799673602648,
+        "y": 6.287902719665271
+      },
+      "scale": 1,
+      "flip": false,
+      "shadow": false,
+      "sortY": 2608.5,
+      "centrePiece": "clock-hand-hour"
+    },
+    {
+      "id": "centre-clock-hand-minute",
+      "src": "centre/clock-hand-minute.svg",
+      "width": 14.3,
+      "height": 72.15,
+      "name": "Centre clock-hand-minute",
+      "x": 3880,
+      "y": 2608.5,
+      "anchor": {
+        "x": 0.5044508734839253,
+        "y": 4.766056014173168
+      },
+      "scale": 1,
+      "flip": false,
+      "shadow": false,
+      "sortY": 2608.5,
+      "centrePiece": "clock-hand-minute"
+    }
+  ],
+  "pathJoins": [
+    {
+      "id": "bloom-join-path-0",
+      "existingPathIndex": 0,
+      "gapAngleDegrees": -108,
+      "width": 104,
+      "points": [
+        [
+          3737.85,
+          2352.92
+        ],
+        [
+          3645.15,
+          2186.23
+        ],
+        [
+          3527.72,
+          1975.1
+        ],
+        [
+          3751,
+          1898
+        ]
+      ],
+      "resumeOriginalAtIndex": 3,
+      "originalPathHead": [
+        [
+          3810,
+          2065
+        ],
+        [
+          3785,
+          1996
+        ],
+        [
+          3751,
+          1898
+        ]
+      ],
+      "replacementPath": [
+        [
+          3737.85,
+          2352.92
+        ],
+        [
+          3645.15,
+          2186.23
+        ],
+        [
+          3527.72,
+          1975.1
+        ],
+        [
+          3751,
+          1898
+        ],
+        [
+          3730,
+          1795
+        ],
+        [
+          3740,
+          1705
+        ],
+        [
+          3774,
+          1615
+        ],
+        [
+          3822,
+          1533
+        ],
+        [
+          3881,
+          1468
+        ],
+        [
+          3953,
+          1420
+        ],
+        [
+          4035,
+          1386
+        ],
+        [
+          4120,
+          1365
+        ],
+        [
+          4217,
+          1365
+        ],
+        [
+          4320,
+          1380
+        ],
+        [
+          4402,
+          1396
+        ],
+        [
+          4420,
+          1399
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    },
+    {
+      "id": "bloom-join-path-1",
+      "existingPathIndex": 1,
+      "gapAngleDegrees": -36,
+      "width": 104,
+      "points": [
+        [
+          4252.15,
+          2450.54
+        ],
+        [
+          4494.85,
+          2347.52
+        ],
+        [
+          4802.28,
+          2217.04
+        ],
+        [
+          4662,
+          1985
+        ]
+      ],
+      "resumeOriginalAtIndex": 3,
+      "originalPathHead": [
+        [
+          4540,
+          2153
+        ],
+        [
+          4590,
+          2084
+        ],
+        [
+          4662,
+          1985
+        ]
+      ],
+      "replacementPath": [
+        [
+          4252.15,
+          2450.54
+        ],
+        [
+          4494.85,
+          2347.52
+        ],
+        [
+          4802.28,
+          2217.04
+        ],
+        [
+          4662,
+          1985
+        ],
+        [
+          4743,
+          1890
+        ],
+        [
+          4830,
+          1821
+        ],
+        [
+          4934,
+          1764
+        ],
+        [
+          5028,
+          1719
+        ],
+        [
+          5070,
+          1698
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    },
+    {
+      "id": "bloom-join-path-2",
+      "existingPathIndex": 2,
+      "gapAngleDegrees": 0,
+      "width": 104,
+      "points": [
+        [
+          4340,
+          2608.5
+        ],
+        [
+          4640,
+          2608.5
+        ],
+        [
+          5020,
+          2608.5
+        ],
+        [
+          5177,
+          2478
+        ]
+      ],
+      "resumeOriginalAtIndex": 4,
+      "originalPathHead": [
+        [
+          4840,
+          2542
+        ],
+        [
+          4924,
+          2524
+        ],
+        [
+          5045,
+          2498
+        ],
+        [
+          5177,
+          2478
+        ]
+      ],
+      "replacementPath": [
+        [
+          4340,
+          2608.5
+        ],
+        [
+          4640,
+          2608.5
+        ],
+        [
+          5020,
+          2608.5
+        ],
+        [
+          5177,
+          2478
+        ],
+        [
+          5306,
+          2476
+        ],
+        [
+          5441,
+          2486
+        ],
+        [
+          5579,
+          2500
+        ],
+        [
+          5715,
+          2512
+        ],
+        [
+          5850,
+          2527
+        ],
+        [
+          5985,
+          2540
+        ],
+        [
+          6120,
+          2542
+        ],
+        [
+          6260,
+          2534
+        ],
+        [
+          6401,
+          2518
+        ],
+        [
+          6531,
+          2482
+        ],
+        [
+          6640,
+          2415
+        ],
+        [
+          6732,
+          2318
+        ],
+        [
+          6815,
+          2210
+        ],
+        [
+          6899,
+          2109
+        ],
+        [
+          6989,
+          2002
+        ],
+        [
+          7072,
+          1902
+        ],
+        [
+          7130,
+          1832
+        ],
+        [
+          7130,
+          1832
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    },
+    {
+      "id": "bloom-join-path-3",
+      "existingPathIndex": 3,
+      "gapAngleDegrees": 36,
+      "width": 104,
+      "points": [
+        [
+          4252.15,
+          2766.46
+        ],
+        [
+          4494.85,
+          2869.48
+        ],
+        [
+          4802.28,
+          2999.96
+        ],
+        [
+          4693,
+          3143
+        ]
+      ],
+      "resumeOriginalAtIndex": 2,
+      "originalPathHead": [
+        [
+          4640,
+          3086
+        ],
+        [
+          4693,
+          3143
+        ]
+      ],
+      "replacementPath": [
+        [
+          4252.15,
+          2766.46
+        ],
+        [
+          4494.85,
+          2869.48
+        ],
+        [
+          4802.28,
+          2999.96
+        ],
+        [
+          4693,
+          3143
+        ],
+        [
+          4768,
+          3224
+        ],
+        [
+          4847,
+          3313
+        ],
+        [
+          4914,
+          3394
+        ],
+        [
+          4980,
+          3473
+        ],
+        [
+          5042,
+          3561
+        ],
+        [
+          5098,
+          3671
+        ],
+        [
+          5152,
+          3822
+        ],
+        [
+          5198,
+          3976
+        ],
+        [
+          5230,
+          4085
+        ],
+        [
+          5230,
+          4085
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    },
+    {
+      "id": "bloom-join-path-8",
+      "existingPathIndex": 8,
+      "gapAngleDegrees": 72,
+      "width": 104,
+      "points": [
+        [
+          4022.15,
+          2864.08
+        ],
+        [
+          4114.85,
+          3030.77
+        ],
+        [
+          4232.28,
+          3241.9
+        ],
+        [
+          4394,
+          3289
+        ]
+      ],
+      "resumeOriginalAtIndex": 2,
+      "originalPathHead": [
+        [
+          4370,
+          3208
+        ],
+        [
+          4394,
+          3289
+        ]
+      ],
+      "replacementPath": [
+        [
+          4022.15,
+          2864.08
+        ],
+        [
+          4114.85,
+          3030.77
+        ],
+        [
+          4232.28,
+          3241.9
+        ],
+        [
+          4394,
+          3289
+        ],
+        [
+          4429,
+          3406
+        ],
+        [
+          4467,
+          3527
+        ],
+        [
+          4504,
+          3632
+        ],
+        [
+          4538,
+          3734
+        ],
+        [
+          4581,
+          3829
+        ],
+        [
+          4643,
+          3911
+        ],
+        [
+          4728,
+          3983
+        ],
+        [
+          4824,
+          4043
+        ],
+        [
+          4920,
+          4085
+        ],
+        [
+          5022,
+          4099
+        ],
+        [
+          5128,
+          4094
+        ],
+        [
+          5212,
+          4086
+        ],
+        [
+          5230,
+          4085
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    },
+    {
+      "id": "bloom-join-path-7",
+      "existingPathIndex": 7,
+      "gapAngleDegrees": 108,
+      "width": 104,
+      "points": [
+        [
+          3737.85,
+          2864.08
+        ],
+        [
+          3645.15,
+          3030.77
+        ],
+        [
+          3527.72,
+          3241.9
+        ],
+        [
+          3285,
+          3241
+        ]
+      ],
+      "resumeOriginalAtIndex": 2,
+      "originalPathHead": [
+        [
+          3330,
+          3175
+        ],
+        [
+          3285,
+          3241
+        ]
+      ],
+      "replacementPath": [
+        [
+          3737.85,
+          2864.08
+        ],
+        [
+          3645.15,
+          3030.77
+        ],
+        [
+          3527.72,
+          3241.9
+        ],
+        [
+          3285,
+          3241
+        ],
+        [
+          3221,
+          3337
+        ],
+        [
+          3146,
+          3435
+        ],
+        [
+          3067,
+          3516
+        ],
+        [
+          2982,
+          3591
+        ],
+        [
+          2888,
+          3662
+        ],
+        [
+          2784,
+          3729
+        ],
+        [
+          2667,
+          3790
+        ],
+        [
+          2543,
+          3848
+        ],
+        [
+          2420,
+          3907
+        ],
+        [
+          2300,
+          3971
+        ],
+        [
+          2180,
+          4036
+        ],
+        [
+          2060,
+          4099
+        ],
+        [
+          1936,
+          4154
+        ],
+        [
+          1802,
+          4205
+        ],
+        [
+          1682,
+          4253
+        ],
+        [
+          1596,
+          4301
+        ],
+        [
+          1546,
+          4355
+        ],
+        [
+          1518,
+          4405
+        ],
+        [
+          1500,
+          4440
+        ],
+        [
+          1500,
+          4440
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    },
+    {
+      "id": "bloom-join-path-4",
+      "existingPathIndex": 4,
+      "gapAngleDegrees": 180,
+      "width": 104,
+      "points": [
+        [
+          3420,
+          2608.5
+        ],
+        [
+          3120,
+          2608.5
+        ],
+        [
+          2740,
+          2608.5
+        ],
+        [
+          2570,
+          2406
+        ]
+      ],
+      "resumeOriginalAtIndex": 4,
+      "originalPathHead": [
+        [
+          2910,
+          2509
+        ],
+        [
+          2824,
+          2481
+        ],
+        [
+          2701,
+          2442
+        ],
+        [
+          2570,
+          2406
+        ]
+      ],
+      "replacementPath": [
+        [
+          3420,
+          2608.5
+        ],
+        [
+          3120,
+          2608.5
+        ],
+        [
+          2740,
+          2608.5
+        ],
+        [
+          2570,
+          2406
+        ],
+        [
+          2452,
+          2383
+        ],
+        [
+          2332,
+          2364
+        ],
+        [
+          2215,
+          2357
+        ],
+        [
+          2105,
+          2374
+        ],
+        [
+          2009,
+          2424
+        ],
+        [
+          1914,
+          2486
+        ],
+        [
+          1800,
+          2531
+        ],
+        [
+          1652,
+          2545
+        ],
+        [
+          1485,
+          2544
+        ],
+        [
+          1326,
+          2541
+        ],
+        [
+          1197,
+          2546
+        ],
+        [
+          1087,
+          2552
+        ],
+        [
+          986,
+          2559
+        ],
+        [
+          886,
+          2566
+        ],
+        [
+          778,
+          2574
+        ],
+        [
+          679,
+          2581
+        ],
+        [
+          610,
+          2586
+        ],
+        [
+          610,
+          2586
+        ]
+      ],
+      "merge": "Use replacementPath in world.paths[existingPathIndex]. Only the plaza-side tip changes. Inner end intentionally overlaps seed court."
+    }
+  ],
+  "walkBlockers": [
+    {
+      "name": "bloom-lamp-0",
+      "x": 3398.85,
+      "y": 2019.81,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-0",
+      "x": 4028.67,
+      "y": 1950.69,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-0",
+      "x": 3067.46,
+      "y": 1139.3400000000001,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-lamp-1",
+      "x": 5015.31,
+      "y": 2449.6800000000003,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-1",
+      "x": 4548.33,
+      "y": 1989.39,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-1",
+      "x": 5176.280000000001,
+      "y": 1517.42,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-lamp-2",
+      "x": 4642.3,
+      "y": 3033.54,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-2",
+      "x": 5084.55,
+      "y": 2381.2400000000002,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-2",
+      "x": 5434.26,
+      "y": 3153.04,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-lamp-3",
+      "x": 4980.139999999999,
+      "y": 2479.26,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-3",
+      "x": 4893.91,
+      "y": 2935.9,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-3",
+      "x": 5406.86,
+      "y": 3317.77,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-lamp-4",
+      "x": 4265.08,
+      "y": 4282.41,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-4",
+      "x": 5133.26,
+      "y": 3503.13,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-4",
+      "x": 4195.18,
+      "y": 4315.67,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-lamp-5",
+      "x": 3111.05,
+      "y": 2951.31,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-5",
+      "x": 3668.67,
+      "y": 3244.31,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-5",
+      "x": 3846.76,
+      "y": 4394.99,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-lamp-6",
+      "x": 1922.08,
+      "y": 1464.1999999999998,
+      "rx": 18,
+      "ry": 13
+    },
+    {
+      "name": "bloom-banner-6",
+      "x": 2757.39,
+      "y": 2462.25,
+      "rx": 14,
+      "ry": 10
+    },
+    {
+      "name": "bloom-planter-6",
+      "x": 1262.08,
+      "y": 298.1099999999997,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-bench-0",
+      "x": 4232.28,
+      "y": 1971.1,
+      "rx": 69,
+      "ry": 22
+    },
+    {
+      "name": "bloom-planter-10",
+      "x": 4112.28,
+      "y": 1986.1,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-bench-1",
+      "x": 2957.72,
+      "y": 2995.96,
+      "rx": 69,
+      "ry": 22
+    },
+    {
+      "name": "bloom-planter-11",
+      "x": 3251.83,
+      "y": 4556.4400000000005,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-bench-2",
+      "x": 2957.72,
+      "y": 2213.04,
+      "rx": 69,
+      "ry": 22
+    },
+    {
+      "name": "bloom-planter-12",
+      "x": 1910.4299999999998,
+      "y": 1979.57,
+      "rx": 65,
+      "ry": 25
+    },
+    {
+      "name": "bloom-scarecrow-0",
+      "x": 2976.27,
+      "y": 2268.93,
+      "rx": 17,
+      "ry": 12
+    },
+    {
+      "name": "bloom-scarecrow-1",
+      "x": 4641.05,
+      "y": 2176.73,
+      "rx": 17,
+      "ry": 12
+    },
+    {
+      "name": "bloom-scarecrow-2",
+      "x": 5173.59,
+      "y": 3556.68,
+      "rx": 17,
+      "ry": 12
+    },
+    {
+      "name": "bloom-scarecrow-3",
+      "x": 2725,
+      "y": 2396.98,
+      "rx": 17,
+      "ry": 12
+    },
+    {
+      "x": 3880,
+      "y": 2608.5,
+      "rx": 101.4,
+      "ry": 77.675,
+      "name": "clock planter",
+      "centre": "locked"
+    }
+  ],
+  "retirePropIds": [
+    "sunflower-planter-15",
+    "sunflower-banner-16",
+    "sunflower-banner-17",
+    "sunflower-banner-18",
+    "sunflower-banner-19",
+    "lamp-20",
+    "lamp-21",
+    "lamp-22",
+    "lamp-23",
+    "lamp-24",
+    "lamp-25",
+    "lamp-26",
+    "lamp-27",
+    "sunflower-planter-28",
+    "sunflower-planter-29",
+    "sunflower-planter-30",
+    "centre-front-01",
+    "centre-front-02",
+    "centre-front-03",
+    "centre-front-04",
+    "centre-front-05",
+    "centre-front-06",
+    "centre-front-07",
+    "centre-front-08",
+    "centre-front-09",
+    "centre-front-10",
+    "centre-front-11",
+    "centre-front-12",
+    "centre-front-13",
+    "centre-front-14",
+    "centre-front-15",
+    "centre-front-16",
+    "centre-front-17",
+    "centre-front-18",
+    "centre-front-19",
+    "centre-front-20",
+    "ten-plaza-bench-northwest",
+    "ten-plaza-bench-northeast",
+    "ten-plaza-bench-east",
+    "ten-plaza-bench-south",
+    "ten-plaza-bench-west",
+    "ten-plaza-bench-southwest",
+    "ten-underplant-74",
+    "close-rim-planter-2",
+    "close-rim-planter-3",
+    "close-rim-planter-7",
+    "centre-field-2-2",
+    "centre-field-2-5",
+    "centre-field-2-6",
+    "centre-field-2-7",
+    "centre-field-2-10",
+    "centre-field-2-11",
+    "centre-field-2-19",
+    "centre-field-2-20",
+    "centre-field-2-21",
+    "centre-field-2-29",
+    "centre-field-2-30",
+    "centre-field-2-39",
+    "centre-field-2-40",
+    "centre-field-2-41",
+    "centre-field-2-50",
+    "centre-field-2-51",
+    "centre-field-2-60",
+    "centre-field-2-61",
+    "centre-field-2-69",
+    "centre-field-2-70",
+    "centre-field-2-80",
+    "centre-field-2-81",
+    "centre-field-2-82",
+    "centre-field-2-91",
+    "centre-field-2-92",
+    "centre-field-2-93",
+    "centre-field-2-103",
+    "centre-field-2-104",
+    "centre-field-2-105",
+    "centre-field-2-115",
+    "centre-field-2-116",
+    "centre-field-2-128",
+    "centre-field-4-1",
+    "centre-field-4-2",
+    "centre-field-4-3",
+    "centre-field-4-4",
+    "centre-field-4-5",
+    "centre-field-4-6",
+    "centre-field-4-7",
+    "centre-field-4-8",
+    "centre-field-4-9",
+    "centre-field-4-10",
+    "centre-field-4-11",
+    "centre-field-4-12",
+    "centre-field-4-13",
+    "centre-field-4-14",
+    "centre-field-4-15",
+    "centre-field-4-16",
+    "centre-field-4-17",
+    "centre-field-4-18",
+    "centre-field-4-19",
+    "centre-field-4-20",
+    "centre-field-4-21",
+    "centre-field-5-1",
+    "centre-field-5-2",
+    "centre-field-scarecrow-7",
+    "centre-field-7-1",
+    "centre-field-7-2",
+    "centre-field-7-4",
+    "centre-field-7-5",
+    "centre-field-7-6",
+    "centre-field-7-8",
+    "centre-field-7-9",
+    "centre-field-7-11",
+    "centre-field-7-12",
+    "centre-field-7-13",
+    "centre-field-7-15",
+    "centre-field-7-16",
+    "centre-field-7-17",
+    "centre-field-7-18",
+    "centre-field-7-19",
+    "centre-field-7-20",
+    "centre-field-7-21",
+    "centre-field-7-22",
+    "centre-field-7-23",
+    "centre-field-7-24",
+    "centre-field-7-25",
+    "centre-field-7-26",
+    "centre-field-7-27",
+    "centre-field-7-28",
+    "centre-field-7-29",
+    "centre-field-scarecrow-10",
+    "centre-field-10-7",
+    "centre-field-10-12",
+    "centre-field-10-13",
+    "centre-field-10-16",
+    "centre-field-10-17",
+    "centre-field-10-18",
+    "centre-field-10-19",
+    "centre-field-10-20",
+    "centre-field-10-21",
+    "centre-field-10-22",
+    "centre-field-10-23",
+    "centre-field-10-24",
+    "centre-field-11-22",
+    "centre-field-11-29",
+    "centre-field-11-30",
+    "centre-field-11-37",
+    "centre-field-11-38",
+    "centre-field-11-45",
+    "centre-field-11-46",
+    "centre-field-11-47",
+    "centre-field-11-55",
+    "centre-field-11-56",
+    "centre-field-11-63",
+    "centre-field-11-64",
+    "centre-field-11-65",
+    "centre-field-11-72",
+    "centre-field-11-73",
+    "centre-field-12-30",
+    "centre-field-12-31",
+    "centre-field-12-35",
+    "centre-field-12-36",
+    "centre-field-12-37",
+    "centre-field-12-41",
+    "centre-field-12-42",
+    "centre-field-12-43",
+    "centre-field-12-47",
+    "centre-field-12-48",
+    "centre-field-12-49",
+    "centre-field-12-50",
+    "centre-field-12-52",
+    "centre-field-12-53",
+    "centre-field-12-54",
+    "centre-field-12-56",
+    "centre-field-12-57",
+    "centre-field-12-58",
+    "centre-field-12-59",
+    "centre-field-12-60",
+    "centre-field-12-61",
+    "centre-field-12-62",
+    "centre-field-12-63",
+    "centre-field-12-64",
+    "centre-field-12-65",
+    "centre-field-12-66",
+    "centre-field-12-67"
+  ],
+  "retireObstacleRecords": [
+    {
+      "x": 4890,
+      "y": 2728,
+      "rx": 95,
+      "ry": 26
+    },
+    {
+      "x": 3022.7,
+      "y": 2199.4,
+      "rx": 24,
+      "ry": 16
+    },
+    {
+      "x": 4677.3,
+      "y": 2199.4,
+      "rx": 24,
+      "ry": 16
+    },
+    {
+      "x": 2914.7,
+      "y": 2912.5,
+      "rx": 24,
+      "ry": 16
+    },
+    {
+      "x": 4828.8,
+      "y": 2864.2,
+      "rx": 24,
+      "ry": 16
+    },
+    {
+      "x": 2908.8,
+      "y": 2316,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 4875.8,
+      "y": 2345.8,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 3419.3,
+      "y": 2030.6,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 4340.7,
+      "y": 2030.6,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 3440,
+      "y": 3234,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 4320,
+      "y": 3234,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 2827.1,
+      "y": 2765.8,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 4953.4,
+      "y": 2712.1,
+      "rx": 18,
+      "ry": 12
+    },
+    {
+      "x": 3694.2,
+      "y": 3204.1,
+      "rx": 88,
+      "ry": 24
+    },
+    {
+      "x": 4010.4,
+      "y": 3208.9,
+      "rx": 88,
+      "ry": 24
+    },
+    {
+      "x": 3991.8,
+      "y": 1982.9,
+      "rx": 88,
+      "ry": 24
+    },
+    {
+      "poly": [
+        [
+          3341.995,
+          2561.18
+        ],
+        [
+          3374.105,
+          2505.41
+        ],
+        [
+          3417.265,
+          2452.37
+        ],
+        [
+          3469.785,
+          2404.53
+        ],
+        [
+          3530.69,
+          2362.93
+        ],
+        [
+          3598.745,
+          2328.415
+        ],
+        [
+          3672.455,
+          2301.635
+        ],
+        [
+          3750.455,
+          2283.175
+        ],
+        [
+          3818.25,
+          2274.335
+        ],
+        [
+          3818.25,
+          2082.91
+        ],
+        [
+          3743.175,
+          2091.295
+        ],
+        [
+          3667.06,
+          2106.57
+        ],
+        [
+          3611.81,
+          2122.365
+        ],
+        [
+          3541.22,
+          2148.95
+        ],
+        [
+          3491.105,
+          2172.87
+        ],
+        [
+          3428.77,
+          2209.66
+        ],
+        [
+          3372.415,
+          2251.65
+        ],
+        [
+          3334.39,
+          2286.23
+        ],
+        [
+          3280.05,
+          2349.02
+        ],
+        [
+          3237.93,
+          2417.01
+        ],
+        [
+          3208.875,
+          2488.965
+        ],
+        [
+          3193.795,
+          2561.18
+        ]
+      ],
+      "name": "step rings",
+      "centre": "locked"
+    },
+    {
+      "poly": [
+        [
+          3941.75,
+          2274.335
+        ],
+        [
+          4009.545,
+          2283.175
+        ],
+        [
+          4087.545,
+          2301.635
+        ],
+        [
+          4161.255,
+          2328.415
+        ],
+        [
+          4229.31,
+          2362.93
+        ],
+        [
+          4290.215,
+          2404.53
+        ],
+        [
+          4342.735,
+          2452.37
+        ],
+        [
+          4385.895,
+          2505.41
+        ],
+        [
+          4418.005,
+          2561.18
+        ],
+        [
+          4566.205,
+          2561.18
+        ],
+        [
+          4551.125,
+          2488.965
+        ],
+        [
+          4528.96,
+          2431.18
+        ],
+        [
+          4498.28,
+          2375.67
+        ],
+        [
+          4459.605,
+          2323.15
+        ],
+        [
+          4413.39,
+          2274.4
+        ],
+        [
+          4360.22,
+          2230.07
+        ],
+        [
+          4300.745,
+          2190.55
+        ],
+        [
+          4235.81,
+          2156.555
+        ],
+        [
+          4166.195,
+          2128.475
+        ],
+        [
+          4092.94,
+          2106.57
+        ],
+        [
+          4016.825,
+          2091.295
+        ],
+        [
+          3941.75,
+          2082.91
+        ]
+      ],
+      "name": "step rings",
+      "centre": "locked"
+    },
+    {
+      "poly": [
+        [
+          3213.62,
+          2776.46
+        ],
+        [
+          3245.34,
+          2847.765
+        ],
+        [
+          3289.995,
+          2914.845
+        ],
+        [
+          3346.61,
+          2976.4
+        ],
+        [
+          3385.87,
+          3010.135
+        ],
+        [
+          3428.77,
+          3041.14
+        ],
+        [
+          3474.985,
+          3069.285
+        ],
+        [
+          3524.19,
+          3094.245
+        ],
+        [
+          3611.81,
+          3128.435
+        ],
+        [
+          3704.825,
+          3152.68
+        ],
+        [
+          3818.25,
+          3167.89
+        ],
+        [
+          3818.25,
+          3111.665
+        ],
+        [
+          3718.865,
+          3096.455
+        ],
+        [
+          3657.31,
+          3079.685
+        ],
+        [
+          3613.045,
+          3063.565
+        ],
+        [
+          3570.73,
+          3044.65
+        ],
+        [
+          3517.885,
+          3015.27
+        ],
+        [
+          3447.685,
+          2963.01
+        ],
+        [
+          3390.16,
+          2902.365
+        ],
+        [
+          3353.11,
+          2846.66
+        ],
+        [
+          3326.785,
+          2787.51
+        ],
+        [
+          3311.38,
+          2723.42
+        ],
+        [
+          3199.255,
+          2723.42
+        ]
+      ],
+      "name": "step rings",
+      "centre": "locked"
+    },
+    {
+      "poly": [
+        [
+          4055.175,
+          3152.68
+        ],
+        [
+          4148.19,
+          3128.435
+        ],
+        [
+          4235.81,
+          3094.245
+        ],
+        [
+          4316.15,
+          3050.825
+        ],
+        [
+          4387.585,
+          2999.15
+        ],
+        [
+          4448.75,
+          2940.195
+        ],
+        [
+          4498.28,
+          2875.13
+        ],
+        [
+          4535.265,
+          2805.385
+        ],
+        [
+          4551.125,
+          2761.835
+        ],
+        [
+          4560.745,
+          2723.42
+        ],
+        [
+          4448.62,
+          2723.42
+        ],
+        [
+          4440.625,
+          2763.135
+        ],
+        [
+          4428.86,
+          2799.535
+        ],
+        [
+          4413,
+          2835.025
+        ],
+        [
+          4385.895,
+          2880.59
+        ],
+        [
+          4361.195,
+          2912.96
+        ],
+        [
+          4322.78,
+          2953.455
+        ],
+        [
+          4278.645,
+          2990.31
+        ],
+        [
+          4242.115,
+          3015.27
+        ],
+        [
+          4175.36,
+          3051.28
+        ],
+        [
+          4102.69,
+          3079.685
+        ],
+        [
+          4025.405,
+          3099.835
+        ],
+        [
+          3941.75,
+          3111.665
+        ],
+        [
+          3941.75,
+          3167.89
+        ]
+      ],
+      "name": "step rings",
+      "centre": "locked"
+    },
+    {
+      "poly": [
+        [
+          3161.58,
+          2196.24
+        ],
+        [
+          3168.93,
+          2192.06
+        ],
+        [
+          3176.36,
+          2187.93
+        ],
+        [
+          3183.85,
+          2183.84
+        ],
+        [
+          3191.42,
+          2179.79
+        ],
+        [
+          3199.07,
+          2175.79
+        ],
+        [
+          3206.78,
+          2171.84
+        ],
+        [
+          3214.56,
+          2167.93
+        ],
+        [
+          3222.41,
+          2164.06
+        ],
+        [
+          3230.33,
+          2160.24
+        ],
+        [
+          3238.32,
+          2156.47
+        ],
+        [
+          3246.37,
+          2152.74
+        ],
+        [
+          3254.49,
+          2149.07
+        ],
+        [
+          3262.67,
+          2145.44
+        ],
+        [
+          3270.92,
+          2141.85
+        ],
+        [
+          3279.23,
+          2138.32
+        ],
+        [
+          3287.6,
+          2134.83
+        ],
+        [
+          3296.04,
+          2131.4
+        ],
+        [
+          3304.53,
+          2128.01
+        ],
+        [
+          3313.09,
+          2124.67
+        ],
+        [
+          3321.7,
+          2121.39
+        ],
+        [
+          3330.37,
+          2118.15
+        ],
+        [
+          3339.1,
+          2114.96
+        ],
+        [
+          3347.88,
+          2111.83
+        ],
+        [
+          3356.72,
+          2108.75
+        ],
+        [
+          3329.94,
+          2083.17
+        ],
+        [
+          3320.65,
+          2086.41
+        ],
+        [
+          3311.41,
+          2089.7
+        ],
+        [
+          3302.24,
+          2093.05
+        ],
+        [
+          3293.12,
+          2096.46
+        ],
+        [
+          3284.07,
+          2099.91
+        ],
+        [
+          3275.08,
+          2103.42
+        ],
+        [
+          3266.15,
+          2106.98
+        ],
+        [
+          3257.28,
+          2110.59
+        ],
+        [
+          3248.48,
+          2114.25
+        ],
+        [
+          3239.75,
+          2117.97
+        ],
+        [
+          3231.08,
+          2121.74
+        ],
+        [
+          3222.47,
+          2125.55
+        ],
+        [
+          3213.94,
+          2129.42
+        ],
+        [
+          3205.47,
+          2133.34
+        ],
+        [
+          3197.08,
+          2137.3
+        ],
+        [
+          3188.75,
+          2141.31
+        ],
+        [
+          3180.5,
+          2145.38
+        ],
+        [
+          3172.32,
+          2149.49
+        ],
+        [
+          3164.21,
+          2153.65
+        ],
+        [
+          3156.18,
+          2157.85
+        ],
+        [
+          3148.22,
+          2162.1
+        ],
+        [
+          3140.34,
+          2166.4
+        ],
+        [
+          3132.54,
+          2170.75
+        ],
+        [
+          3124.81,
+          2175.14
+        ]
+      ],
+      "name": "ten-plaza-bench-northwest"
+    },
+    {
+      "poly": [
+        [
+          4073.86,
+          2036.18
+        ],
+        [
+          4082.56,
+          2037.18
+        ],
+        [
+          4091.24,
+          2038.21
+        ],
+        [
+          4099.9,
+          2039.29
+        ],
+        [
+          4108.55,
+          2040.41
+        ],
+        [
+          4117.18,
+          2041.58
+        ],
+        [
+          4125.79,
+          2042.79
+        ],
+        [
+          4134.39,
+          2044.04
+        ],
+        [
+          4142.96,
+          2045.34
+        ],
+        [
+          4151.51,
+          2046.68
+        ],
+        [
+          4160.05,
+          2048.06
+        ],
+        [
+          4168.56,
+          2049.48
+        ],
+        [
+          4177.05,
+          2050.95
+        ],
+        [
+          4185.52,
+          2052.46
+        ],
+        [
+          4193.96,
+          2054.01
+        ],
+        [
+          4202.38,
+          2055.6
+        ],
+        [
+          4210.78,
+          2057.24
+        ],
+        [
+          4219.15,
+          2058.91
+        ],
+        [
+          4227.49,
+          2060.63
+        ],
+        [
+          4235.81,
+          2062.39
+        ],
+        [
+          4244.1,
+          2064.2
+        ],
+        [
+          4252.37,
+          2066.04
+        ],
+        [
+          4260.6,
+          2067.92
+        ],
+        [
+          4268.81,
+          2069.85
+        ],
+        [
+          4276.98,
+          2071.82
+        ],
+        [
+          4297.3,
+          2044.35
+        ],
+        [
+          4288.71,
+          2042.28
+        ],
+        [
+          4280.08,
+          2040.26
+        ],
+        [
+          4271.42,
+          2038.28
+        ],
+        [
+          4262.74,
+          2036.34
+        ],
+        [
+          4254.02,
+          2034.44
+        ],
+        [
+          4245.28,
+          2032.59
+        ],
+        [
+          4236.51,
+          2030.78
+        ],
+        [
+          4227.71,
+          2029.02
+        ],
+        [
+          4218.88,
+          2027.3
+        ],
+        [
+          4210.03,
+          2025.63
+        ],
+        [
+          4201.15,
+          2024
+        ],
+        [
+          4192.25,
+          2022.41
+        ],
+        [
+          4183.33,
+          2020.87
+        ],
+        [
+          4174.38,
+          2019.37
+        ],
+        [
+          4165.41,
+          2017.92
+        ],
+        [
+          4156.42,
+          2016.51
+        ],
+        [
+          4147.41,
+          2015.15
+        ],
+        [
+          4138.37,
+          2013.84
+        ],
+        [
+          4129.32,
+          2012.56
+        ],
+        [
+          4120.25,
+          2011.34
+        ],
+        [
+          4111.16,
+          2010.16
+        ],
+        [
+          4102.05,
+          2009.02
+        ],
+        [
+          4092.92,
+          2007.93
+        ],
+        [
+          4083.78,
+          2006.89
+        ]
+      ],
+      "name": "ten-plaza-bench-northeast"
+    },
+    {
+      "poly": [
+        [
+          4669.58,
+          2241.59
+        ],
+        [
+          4675.13,
+          2245.56
+        ],
+        [
+          4680.62,
+          2249.55
+        ],
+        [
+          4686.05,
+          2253.57
+        ],
+        [
+          4691.41,
+          2257.62
+        ],
+        [
+          4696.72,
+          2261.7
+        ],
+        [
+          4701.96,
+          2265.8
+        ],
+        [
+          4707.14,
+          2269.93
+        ],
+        [
+          4712.26,
+          2274.09
+        ],
+        [
+          4717.31,
+          2278.27
+        ],
+        [
+          4722.3,
+          2282.47
+        ],
+        [
+          4727.23,
+          2286.7
+        ],
+        [
+          4732.09,
+          2290.96
+        ],
+        [
+          4736.89,
+          2295.24
+        ],
+        [
+          4741.62,
+          2299.54
+        ],
+        [
+          4746.28,
+          2303.87
+        ],
+        [
+          4750.88,
+          2308.22
+        ],
+        [
+          4755.42,
+          2312.59
+        ],
+        [
+          4759.88,
+          2316.99
+        ],
+        [
+          4764.28,
+          2321.4
+        ],
+        [
+          4768.61,
+          2325.84
+        ],
+        [
+          4772.88,
+          2330.3
+        ],
+        [
+          4777.07,
+          2334.78
+        ],
+        [
+          4781.2,
+          2339.29
+        ],
+        [
+          4785.26,
+          2343.81
+        ],
+        [
+          4831.59,
+          2330.26
+        ],
+        [
+          4827.33,
+          2325.51
+        ],
+        [
+          4822.99,
+          2320.78
+        ],
+        [
+          4818.58,
+          2316.06
+        ],
+        [
+          4814.09,
+          2311.38
+        ],
+        [
+          4809.54,
+          2306.71
+        ],
+        [
+          4804.92,
+          2302.07
+        ],
+        [
+          4800.22,
+          2297.45
+        ],
+        [
+          4795.45,
+          2292.85
+        ],
+        [
+          4790.62,
+          2288.28
+        ],
+        [
+          4785.72,
+          2283.73
+        ],
+        [
+          4780.74,
+          2279.21
+        ],
+        [
+          4775.7,
+          2274.71
+        ],
+        [
+          4770.59,
+          2270.23
+        ],
+        [
+          4765.41,
+          2265.79
+        ],
+        [
+          4760.17,
+          2261.37
+        ],
+        [
+          4754.85,
+          2256.97
+        ],
+        [
+          4749.48,
+          2252.61
+        ],
+        [
+          4744.03,
+          2248.26
+        ],
+        [
+          4738.52,
+          2243.95
+        ],
+        [
+          4732.94,
+          2239.67
+        ],
+        [
+          4727.3,
+          2235.41
+        ],
+        [
+          4721.6,
+          2231.18
+        ],
+        [
+          4715.83,
+          2226.98
+        ],
+        [
+          4709.99,
+          2222.81
+        ]
+      ],
+      "name": "ten-plaza-bench-east"
+    },
+    {
+      "poly": [
+        [
+          4244.1,
+          3152.8
+        ],
+        [
+          4238.58,
+          3154.01
+        ],
+        [
+          4233.04,
+          3155.2
+        ],
+        [
+          4227.49,
+          3156.37
+        ],
+        [
+          4221.93,
+          3157.52
+        ],
+        [
+          4216.36,
+          3158.65
+        ],
+        [
+          4210.78,
+          3159.76
+        ],
+        [
+          4205.18,
+          3160.86
+        ],
+        [
+          4199.58,
+          3161.94
+        ],
+        [
+          4193.96,
+          3162.99
+        ],
+        [
+          4188.33,
+          3164.03
+        ],
+        [
+          4182.7,
+          3165.05
+        ],
+        [
+          4177.05,
+          3166.05
+        ],
+        [
+          4171.39,
+          3167.04
+        ],
+        [
+          4165.72,
+          3168
+        ],
+        [
+          4160.05,
+          3168.94
+        ],
+        [
+          4154.36,
+          3169.87
+        ],
+        [
+          4148.67,
+          3170.78
+        ],
+        [
+          4142.96,
+          3171.66
+        ],
+        [
+          4137.25,
+          3172.53
+        ],
+        [
+          4131.52,
+          3173.38
+        ],
+        [
+          4125.79,
+          3174.21
+        ],
+        [
+          4120.05,
+          3175.02
+        ],
+        [
+          4114.31,
+          3175.81
+        ],
+        [
+          4108.55,
+          3176.59
+        ],
+        [
+          4120.25,
+          3205.66
+        ],
+        [
+          4126.3,
+          3204.85
+        ],
+        [
+          4132.34,
+          3204.02
+        ],
+        [
+          4138.37,
+          3203.16
+        ],
+        [
+          4144.4,
+          3202.29
+        ],
+        [
+          4150.41,
+          3201.4
+        ],
+        [
+          4156.42,
+          3200.49
+        ],
+        [
+          4162.42,
+          3199.55
+        ],
+        [
+          4168.4,
+          3198.6
+        ],
+        [
+          4174.38,
+          3197.63
+        ],
+        [
+          4180.35,
+          3196.63
+        ],
+        [
+          4186.31,
+          3195.62
+        ],
+        [
+          4192.25,
+          3194.59
+        ],
+        [
+          4198.19,
+          3193.54
+        ],
+        [
+          4204.12,
+          3192.47
+        ],
+        [
+          4210.03,
+          3191.37
+        ],
+        [
+          4215.93,
+          3190.26
+        ],
+        [
+          4221.83,
+          3189.13
+        ],
+        [
+          4227.71,
+          3187.98
+        ],
+        [
+          4233.58,
+          3186.81
+        ],
+        [
+          4239.43,
+          3185.62
+        ],
+        [
+          4245.28,
+          3184.41
+        ],
+        [
+          4251.11,
+          3183.18
+        ],
+        [
+          4256.93,
+          3181.93
+        ],
+        [
+          4262.74,
+          3180.66
+        ]
+      ],
+      "name": "ten-plaza-bench-south"
+    },
+    {
+      "poly": [
+        [
+          2882.67,
+          2719.75
+        ],
+        [
+          2881.56,
+          2716.42
+        ],
+        [
+          2880.48,
+          2713.08
+        ],
+        [
+          2879.44,
+          2709.74
+        ],
+        [
+          2878.43,
+          2706.4
+        ],
+        [
+          2877.45,
+          2703.05
+        ],
+        [
+          2876.51,
+          2699.71
+        ],
+        [
+          2875.6,
+          2696.35
+        ],
+        [
+          2874.73,
+          2693
+        ],
+        [
+          2873.89,
+          2689.64
+        ],
+        [
+          2873.08,
+          2686.28
+        ],
+        [
+          2872.31,
+          2682.92
+        ],
+        [
+          2871.57,
+          2679.55
+        ],
+        [
+          2870.87,
+          2676.19
+        ],
+        [
+          2870.2,
+          2672.82
+        ],
+        [
+          2869.57,
+          2669.44
+        ],
+        [
+          2868.97,
+          2666.07
+        ],
+        [
+          2868.4,
+          2662.69
+        ],
+        [
+          2867.87,
+          2659.31
+        ],
+        [
+          2867.37,
+          2655.93
+        ],
+        [
+          2866.9,
+          2652.55
+        ],
+        [
+          2866.47,
+          2649.17
+        ],
+        [
+          2866.08,
+          2645.79
+        ],
+        [
+          2865.72,
+          2642.4
+        ],
+        [
+          2865.39,
+          2639.01
+        ],
+        [
+          2813.46,
+          2640.58
+        ],
+        [
+          2813.81,
+          2644.14
+        ],
+        [
+          2814.19,
+          2647.69
+        ],
+        [
+          2814.6,
+          2651.25
+        ],
+        [
+          2815.05,
+          2654.81
+        ],
+        [
+          2815.54,
+          2658.36
+        ],
+        [
+          2816.06,
+          2661.92
+        ],
+        [
+          2816.62,
+          2665.47
+        ],
+        [
+          2817.22,
+          2669.02
+        ],
+        [
+          2817.85,
+          2672.56
+        ],
+        [
+          2818.52,
+          2676.11
+        ],
+        [
+          2819.22,
+          2679.65
+        ],
+        [
+          2819.96,
+          2683.19
+        ],
+        [
+          2820.74,
+          2686.73
+        ],
+        [
+          2821.55,
+          2690.26
+        ],
+        [
+          2822.39,
+          2693.79
+        ],
+        [
+          2823.28,
+          2697.32
+        ],
+        [
+          2824.19,
+          2700.85
+        ],
+        [
+          2825.15,
+          2704.37
+        ],
+        [
+          2826.14,
+          2707.89
+        ],
+        [
+          2827.16,
+          2711.41
+        ],
+        [
+          2828.23,
+          2714.92
+        ],
+        [
+          2829.32,
+          2718.43
+        ],
+        [
+          2830.45,
+          2721.94
+        ],
+        [
+          2831.62,
+          2725.44
+        ]
+      ],
+      "name": "ten-plaza-bench-west"
+    },
+    {
+      "poly": [
+        [
+          3161.58,
+          3020.76
+        ],
+        [
+          3155.34,
+          3017.15
+        ],
+        [
+          3149.15,
+          3013.51
+        ],
+        [
+          3143.02,
+          3009.83
+        ],
+        [
+          3136.94,
+          3006.12
+        ],
+        [
+          3130.93,
+          3002.39
+        ],
+        [
+          3124.96,
+          2998.62
+        ],
+        [
+          3119.06,
+          2994.83
+        ],
+        [
+          3113.22,
+          2991
+        ],
+        [
+          3107.43,
+          2987.15
+        ],
+        [
+          3101.7,
+          2983.26
+        ],
+        [
+          3096.03,
+          2979.35
+        ],
+        [
+          3090.42,
+          2975.41
+        ],
+        [
+          3084.87,
+          2971.44
+        ],
+        [
+          3079.38,
+          2967.45
+        ],
+        [
+          3073.95,
+          2963.43
+        ],
+        [
+          3068.59,
+          2959.38
+        ],
+        [
+          3063.28,
+          2955.3
+        ],
+        [
+          3058.04,
+          2951.2
+        ],
+        [
+          3052.86,
+          2947.07
+        ],
+        [
+          3047.74,
+          2942.91
+        ],
+        [
+          3042.69,
+          2938.73
+        ],
+        [
+          3037.7,
+          2934.53
+        ],
+        [
+          3032.77,
+          2930.3
+        ],
+        [
+          3027.91,
+          2926.04
+        ],
+        [
+          2984.3,
+          2942.29
+        ],
+        [
+          2989.41,
+          2946.77
+        ],
+        [
+          2994.59,
+          2951.21
+        ],
+        [
+          2999.83,
+          2955.63
+        ],
+        [
+          3005.15,
+          2960.03
+        ],
+        [
+          3010.52,
+          2964.39
+        ],
+        [
+          3015.97,
+          2968.74
+        ],
+        [
+          3021.48,
+          2973.05
+        ],
+        [
+          3027.06,
+          2977.33
+        ],
+        [
+          3032.7,
+          2981.59
+        ],
+        [
+          3038.4,
+          2985.82
+        ],
+        [
+          3044.17,
+          2990.02
+        ],
+        [
+          3050.01,
+          2994.19
+        ],
+        [
+          3055.9,
+          2998.33
+        ],
+        [
+          3061.86,
+          3002.44
+        ],
+        [
+          3067.89,
+          3006.53
+        ],
+        [
+          3073.97,
+          3010.58
+        ],
+        [
+          3080.12,
+          3014.6
+        ],
+        [
+          3086.32,
+          3018.59
+        ],
+        [
+          3092.59,
+          3022.55
+        ],
+        [
+          3098.91,
+          3026.48
+        ],
+        [
+          3105.3,
+          3030.37
+        ],
+        [
+          3111.75,
+          3034.23
+        ],
+        [
+          3118.25,
+          3038.07
+        ],
+        [
+          3124.81,
+          3041.86
+        ]
+      ],
+      "name": "ten-plaza-bench-southwest"
+    },
+    {
+      "name": "close-rim-planter-2",
+      "x": 3561.31,
+      "y": 1992.54,
+      "rx": 49,
+      "ry": 24
+    },
+    {
+      "name": "close-rim-planter-3",
+      "x": 4863.74,
+      "y": 2242.38,
+      "rx": 49,
+      "ry": 24
+    },
+    {
+      "name": "close-rim-planter-7",
+      "x": 3753.52,
+      "y": 3304.52,
+      "rx": 49,
+      "ry": 24
+    }
+  ],
+  "retireObstacles": {
+    "centre": "locked",
+    "namePrefixes": [
+      "ten-plaza-bench-"
+    ],
+    "note": "Remove old step rings and old plaza benches, then add walkBlockers. Keep new clock planter blocker."
+  },
+  "centrePlacementReplacement": {
+    "source": "centre-placements.json",
+    "origin": [
+      3880,
+      2608.5
+    ],
+    "stairs": [],
+    "walkable": [
+      {
+        "x": 3880,
+        "y": 2608.5,
+        "rx": 1140,
+        "ry": 666
+      }
+    ],
+    "blocked": [
+      {
+        "name": "bloom-lamp-0",
+        "x": 3398.85,
+        "y": 2019.81,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-0",
+        "x": 4028.67,
+        "y": 1950.69,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-0",
+        "x": 3067.46,
+        "y": 1139.3400000000001,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-lamp-1",
+        "x": 5015.31,
+        "y": 2449.6800000000003,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-1",
+        "x": 4548.33,
+        "y": 1989.39,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-1",
+        "x": 5176.280000000001,
+        "y": 1517.42,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-lamp-2",
+        "x": 4642.3,
+        "y": 3033.54,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-2",
+        "x": 5084.55,
+        "y": 2381.2400000000002,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-2",
+        "x": 5434.26,
+        "y": 3153.04,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-lamp-3",
+        "x": 4980.139999999999,
+        "y": 2479.26,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-3",
+        "x": 4893.91,
+        "y": 2935.9,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-3",
+        "x": 5406.86,
+        "y": 3317.77,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-lamp-4",
+        "x": 4265.08,
+        "y": 4282.41,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-4",
+        "x": 5133.26,
+        "y": 3503.13,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-4",
+        "x": 4195.18,
+        "y": 4315.67,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-lamp-5",
+        "x": 3111.05,
+        "y": 2951.31,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-5",
+        "x": 3668.67,
+        "y": 3244.31,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-5",
+        "x": 3846.76,
+        "y": 4394.99,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-lamp-6",
+        "x": 1922.08,
+        "y": 1464.1999999999998,
+        "rx": 18,
+        "ry": 13
+      },
+      {
+        "name": "bloom-banner-6",
+        "x": 2757.39,
+        "y": 2462.25,
+        "rx": 14,
+        "ry": 10
+      },
+      {
+        "name": "bloom-planter-6",
+        "x": 1262.08,
+        "y": 298.1099999999997,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-bench-0",
+        "x": 4232.28,
+        "y": 1971.1,
+        "rx": 69,
+        "ry": 22
+      },
+      {
+        "name": "bloom-planter-10",
+        "x": 4112.28,
+        "y": 1986.1,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-bench-1",
+        "x": 2957.72,
+        "y": 2995.96,
+        "rx": 69,
+        "ry": 22
+      },
+      {
+        "name": "bloom-planter-11",
+        "x": 3251.83,
+        "y": 4556.4400000000005,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-bench-2",
+        "x": 2957.72,
+        "y": 2213.04,
+        "rx": 69,
+        "ry": 22
+      },
+      {
+        "name": "bloom-planter-12",
+        "x": 1910.4299999999998,
+        "y": 1979.57,
+        "rx": 65,
+        "ry": 25
+      },
+      {
+        "name": "bloom-scarecrow-0",
+        "x": 2976.27,
+        "y": 2268.93,
+        "rx": 17,
+        "ry": 12
+      },
+      {
+        "name": "bloom-scarecrow-1",
+        "x": 4641.05,
+        "y": 2176.73,
+        "rx": 17,
+        "ry": 12
+      },
+      {
+        "name": "bloom-scarecrow-2",
+        "x": 5173.59,
+        "y": 3556.68,
+        "rx": 17,
+        "ry": 12
+      },
+      {
+        "name": "bloom-scarecrow-3",
+        "x": 2725,
+        "y": 2396.98,
+        "rx": 17,
+        "ry": 12
+      },
+      {
+        "x": 3880,
+        "y": 2608.5,
+        "rx": 101.4,
+        "ry": 77.675,
+        "name": "clock planter",
+        "centre": "locked"
+      }
+    ]
+  },
+  "integrationNotes": [
+    "Copy only the 3 new plaza SVGs to the theme asset directory; prop src paths reuse EXISTING theme assets. reuse/ copies are reference copies and byte-identical.",
+    "Retire old centre/back.svg, centre/decal-floor.svg and centre/front-*.svg placements using retirePropIds. Keep the 3 clock records anchored to the stone base centre, including their rebased hand anchors.",
+    "Ground tile draw order fields, path joins, bloom. Tiles are overlays, not replacement island terrain. All tile positions use top-left anchors.",
+    "Remove old centre step-ring collision from world.obstacles AND centrePlacement.blocked. Replace centrePlacement with centrePlacementReplacement; remove centrePlacement.stairs.",
+    "Keep all paving walkable; block only prop bases and the existing clock planter. Field flowers are decorative, with no blanket collision wall.",
+    "Seven joins reference current world path indexes. If the path worker reorders paths, match their stored first/second points before applying.",
+    "check.png is a composed SVG preview against approved concept, not an in-game screenshot."
+  ]
+}

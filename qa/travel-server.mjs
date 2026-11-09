@@ -1,9 +1,12 @@
-import {build} from 'esbuild';
+import {createTravelCompiler} from './travel-compiler.mjs';
 import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
 import {fileURLToPath} from 'node:url';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
-const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
+let mf, bundle;
+// The art is read from dist on demand, while the room's walking maps are bundled.
+// Rebuild BOTH sides after map edits, otherwise fresh plaza art meets old walls.
+const compiler=await createTravelCompiler({stdin:{resolveDir:root,contents:`
   import {IslandRoom} from './worker/index.js';
   export class TravelTestRoom extends IslandRoom {
     async fetch(request) {
@@ -56,13 +59,22 @@ const {outputFiles:[bundle]}=await build({stdin:{resolveDir:root,contents:`
     }
     return env.ASSETS.fetch(request);
   }};
-`},bundle:true,format:'esm',write:false});
+`}},async source=>{
+  bundle=source;
+  if(mf){
+    await mf.setOptions(options(bundle));
+    console.log('Local travel room rebuilt, walking maps refreshed');
+  }
+});
+await compiler.rebuild();
 // DUCKY_PORT / DUCKY_ASSETS: a second fixture on another port with its own build (never 8890's dist)
-const mf=new Miniflare(convertV4MiniflareOptions({
-  host:'127.0.0.1',port:Number(process.env.DUCKY_PORT)||8890,modules:[{type:'ESModule',path:'index.js',contents:bundle.text}],
+function options(source) { return convertV4MiniflareOptions({
+  host:'127.0.0.1',port:Number(process.env.DUCKY_PORT)||8890,modules:[{type:'ESModule',path:'index.js',contents:source}],
   compatibilityDate:'2026-11-02',
   assets:{directory:process.env.DUCKY_ASSETS||root+'dist',binding:'ASSETS',run_worker_first:true,routerConfig:{has_user_worker:true}},
   durableObjects:{ISLAND:{className:'TravelTestRoom',useSQLite:true}},
-}));
+}); }
+mf=new Miniflare(options(bundle));
 console.log('Local travel test fixture:',String(await mf.ready));
-for (const signal of ['SIGINT','SIGTERM']) process.on(signal,async()=>{await mf.dispose();process.exit();});
+await compiler.watch();
+for (const signal of ['SIGINT','SIGTERM']) process.on(signal,async()=>{await compiler.dispose();await mf.dispose();process.exit();});

@@ -26,6 +26,7 @@ export const SLEEP_SPOTS = {
 };
 export const SLEEP_COUNTS = Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([pose, list]) => [pose, list.length]));
 export const SLEEP_TOTAL = 40; // approved residents per island, with all eight poses
+export const SUNBOB_SLEEP_TOTAL = 90; // integrated SUNBOB resident count, world.sleepTotal drives its registry
 export const HOME_SLEEP_TOTAL = 100; // boss 18:50: Home adds sixty outer residents, preserving the original forty
 export const BASE_SLEEP_TOTAL = Object.values(SLEEP_COUNTS).reduce((a, b) => a + b, 0);
 

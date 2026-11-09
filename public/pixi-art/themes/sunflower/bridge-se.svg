@@ -1,63 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="5103.5 3873.2 407.4 726.5" width="407.4" height="726.5" stroke-linejoin="round" stroke-linecap="round">
-<title>Sunflower island bridge-se, humped footbridge</title>
-<path d="M 5270.3 4007.2 L 5476.8 4435.0 L 5376.0 4483.6 L 5169.5 4055.8 Z" fill="#2E7F93" fill-opacity=".26"/>
-<path d="M 5153.5 4041.8 L 5161.1 4048.6 L 5168.8 4056.0 L 5176.4 4064.1 L 5184.1 4072.9 L 5191.7 4082.4 L 5199.4 4092.7 L 5207.0 4103.6 L 5214.7 4115.2 L 5222.3 4127.6 L 5229.9 4140.6 L 5237.6 4154.3 L 5245.2 4168.8 L 5252.9 4183.9 L 5260.5 4199.8 L 5268.2 4216.3 L 5275.8 4233.5 L 5283.5 4251.5 L 5291.1 4270.2 L 5298.8 4289.5 L 5306.4 4309.6 L 5314.1 4330.3 L 5321.7 4351.8 L 5329.4 4374.0 L 5337.0 4396.8 L 5344.7 4420.4 L 5352.3 4444.7 L 5360.0 4469.6 L 5360.0 4477.6 L 5352.3 4461.8 L 5344.7 4446.0 L 5337.0 4430.1 L 5329.4 4414.3 L 5321.7 4398.4 L 5314.1 4382.6 L 5306.4 4366.7 L 5298.8 4350.9 L 5291.1 4335.0 L 5283.5 4319.2 L 5275.8 4303.4 L 5268.2 4287.5 L 5260.5 4271.7 L 5252.9 4255.8 L 5245.2 4240.0 L 5237.6 4224.1 L 5229.9 4208.3 L 5222.3 4192.4 L 5214.7 4176.6 L 5207.0 4160.8 L 5199.4 4144.9 L 5191.7 4129.1 L 5184.1 4113.2 L 5176.4 4097.4 L 5168.8 4081.5 L 5161.1 4065.7 L 5153.5 4049.8 Z" fill="#3F8FA0" fill-opacity=".55"/>
-<path d="M 5153.5 4021.8 L 5161.1 4028.6 L 5168.8 4036.0 L 5176.4 4044.1 L 5184.1 4052.9 L 5191.7 4062.4 L 5199.4 4072.7 L 5207.0 4083.6 L 5214.7 4095.2 L 5222.3 4107.6 L 5229.9 4120.6 L 5237.6 4134.3 L 5245.2 4148.8 L 5252.9 4163.9 L 5260.5 4179.8 L 5268.2 4196.3 L 5275.8 4213.5 L 5283.5 4231.5 L 5291.1 4250.2 L 5298.8 4269.5 L 5306.4 4289.6 L 5314.1 4310.3 L 5321.7 4331.8 L 5329.4 4354.0 L 5337.0 4376.8 L 5344.7 4400.4 L 5352.3 4424.7 L 5360.0 4449.6 L 5360.0 4469.6 L 5352.3 4444.7 L 5344.7 4420.4 L 5337.0 4396.8 L 5329.4 4374.0 L 5321.7 4351.8 L 5314.1 4330.3 L 5306.4 4309.6 L 5298.8 4289.5 L 5291.1 4270.2 L 5283.5 4251.5 L 5275.8 4233.5 L 5268.2 4216.3 L 5260.5 4199.8 L 5252.9 4183.9 L 5245.2 4168.8 L 5237.6 4154.3 L 5229.9 4140.6 L 5222.3 4127.6 L 5214.7 4115.2 L 5207.0 4103.6 L 5199.4 4092.7 L 5191.7 4082.4 L 5184.1 4072.9 L 5176.4 4064.1 L 5168.8 4056.0 L 5161.1 4048.6 L 5153.5 4041.8 Z" fill="#8B5A2E" stroke="#39472D" stroke-width="3"/>
-<path d="M 5254.3 3973.2 L 5262.0 3979.9 L 5269.6 3987.3 L 5277.3 3995.4 L 5284.9 4004.2 L 5292.6 4013.8 L 5300.2 4024.0 L 5307.9 4034.9 L 5315.5 4046.5 L 5323.2 4058.9 L 5330.8 4071.9 L 5338.5 4085.6 L 5346.1 4100.1 L 5353.8 4115.2 L 5361.4 4131.1 L 5369.1 4147.6 L 5376.7 4164.9 L 5384.4 4182.8 L 5392.0 4201.5 L 5399.6 4220.8 L 5407.3 4240.9 L 5414.9 4261.6 L 5422.6 4283.1 L 5430.2 4305.3 L 5437.9 4328.1 L 5445.5 4351.7 L 5453.2 4376.0 L 5460.8 4401.0 L 5360.0 4449.6 L 5352.3 4424.7 L 5344.7 4400.4 L 5337.0 4376.8 L 5329.4 4354.0 L 5321.7 4331.8 L 5314.1 4310.3 L 5306.4 4289.6 L 5298.8 4269.5 L 5291.1 4250.2 L 5283.5 4231.5 L 5275.8 4213.5 L 5268.2 4196.3 L 5260.5 4179.8 L 5252.9 4163.9 L 5245.2 4148.8 L 5237.6 4134.3 L 5229.9 4120.6 L 5222.3 4107.6 L 5214.7 4095.2 L 5207.0 4083.6 L 5199.4 4072.7 L 5191.7 4062.4 L 5184.1 4052.9 L 5176.4 4044.1 L 5168.8 4036.0 L 5161.1 4028.6 L 5153.5 4021.8 Z" fill="#C8893F" stroke="#39472D" stroke-width="3"/>
-<path d="M 5260.3 3983.4 L 5166.6 4028.6" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5269.9 3993.0 L 5176.2 4038.2" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5279.4 4003.7 L 5185.8 4048.9" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5289.0 4015.5 L 5195.3 4060.7" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5298.5 4028.4 L 5204.9 4073.6" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5308.1 4042.4 L 5214.5 4087.6" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5317.7 4057.5 L 5224.0 4102.7" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5327.2 4073.7 L 5233.6 4118.9" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5336.8 4091.0 L 5243.1 4136.2" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5346.4 4109.4 L 5252.7 4154.6" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5355.9 4128.9 L 5262.3 4174.1" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5365.5 4149.4 L 5271.8 4194.7" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5375.1 4171.1 L 5281.4 4216.3" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5384.6 4193.9 L 5291.0 4239.1" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5394.2 4217.8 L 5300.5 4263.0" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5403.7 4242.8 L 5310.1 4288.0" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5413.3 4268.8 L 5319.7 4314.1" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5422.9 4296.0 L 5329.2 4341.2" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5432.4 4324.3 L 5338.8 4369.5" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5442.0 4353.7 L 5348.3 4398.9" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5451.6 4384.1 L 5357.9 4429.3" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>
-<path d="M 5248.0 3976.2 L 5255.7 3982.9 L 5263.3 3990.3 L 5271.0 3998.4 L 5278.6 4007.3 L 5286.3 4016.8 L 5293.9 4027.0 L 5301.6 4037.9 L 5309.2 4049.6 L 5316.9 4061.9 L 5324.5 4074.9 L 5332.2 4088.7 L 5339.8 4103.1 L 5347.5 4118.3 L 5355.1 4134.1 L 5362.8 4150.7 L 5370.4 4167.9 L 5378.0 4185.9 L 5385.7 4204.5 L 5393.3 4223.9 L 5401.0 4243.9 L 5408.6 4264.7 L 5416.3 4286.1 L 5423.9 4308.3 L 5431.6 4331.2 L 5439.2 4354.8 L 5446.9 4379.0 L 5454.5 4404.0" fill="none" stroke="#E9B46A" stroke-width="5" stroke-opacity=".8"/>
-<ellipse cx="5256.9" cy="3999.4" rx="16" ry="9" fill="#FFF0C7" stroke="#39472D" stroke-width="2.4"/>
-<ellipse cx="5156.1" cy="4048.1" rx="16" ry="9" fill="#FFF0C7" stroke="#39472D" stroke-width="2.4"/>
-<ellipse cx="5458.2" cy="4416.4" rx="16" ry="9" fill="#FFF0C7" stroke="#39472D" stroke-width="2.4"/>
-<ellipse cx="5357.4" cy="4465.0" rx="16" ry="9" fill="#FFF0C7" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5249.0" y="3943.1" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5281.4" y="3978.7" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5313.8" y="4026.9" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5346.2" y="4087.7" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5378.6" y="4161.1" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5411.0" y="4247.0" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5443.3" y="4345.6" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<path d="M 5255.0 3945.1 L 5263.5 3953.1 L 5271.9 3962.1 L 5280.4 3971.8 L 5288.8 3982.5 L 5297.3 3994.0 L 5305.7 4006.4 L 5314.2 4019.6 L 5322.6 4033.7 L 5331.1 4048.6 L 5339.5 4064.4 L 5348.0 4081.0 L 5356.4 4098.5 L 5364.9 4116.9 L 5373.3 4136.1 L 5381.8 4156.2 L 5390.2 4177.1 L 5398.6 4198.9 L 5407.1 4221.5 L 5415.5 4245.0 L 5424.0 4269.4 L 5432.4 4294.6 L 5440.9 4320.7 L 5449.3 4347.6" fill="none" stroke="#39472D" stroke-width="10"/><path d="M 5255.0 3945.1 L 5263.5 3953.1 L 5271.9 3962.1 L 5280.4 3971.8 L 5288.8 3982.5 L 5297.3 3994.0 L 5305.7 4006.4 L 5314.2 4019.6 L 5322.6 4033.7 L 5331.1 4048.6 L 5339.5 4064.4 L 5348.0 4081.0 L 5356.4 4098.5 L 5364.9 4116.9 L 5373.3 4136.1 L 5381.8 4156.2 L 5390.2 4177.1 L 5398.6 4198.9 L 5407.1 4221.5 L 5415.5 4245.0 L 5424.0 4269.4 L 5432.4 4294.6 L 5440.9 4320.7 L 5449.3 4347.6" fill="none" stroke="#C8893F" stroke-width="5"/>
-<rect x="5247.0" y="3939.1" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5279.4" y="3974.7" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5311.8" y="4022.9" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5344.2" y="4083.7" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5376.6" y="4157.1" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5409.0" y="4243.0" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5441.3" y="4341.6" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5159.0" y="3986.5" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5191.3" y="4022.1" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5223.7" y="4070.3" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5256.1" y="4131.1" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5288.5" y="4204.5" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5320.9" y="4290.5" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<rect x="5353.3" y="4389.1" width="12" height="40" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.4"/>
-<path d="M 5165.0 3988.5 L 5173.4 3996.6 L 5181.9 4005.5 L 5190.3 4015.3 L 5198.8 4026.0 L 5207.2 4037.5 L 5215.7 4049.8 L 5224.1 4063.0 L 5232.5 4077.1 L 5241.0 4092.1 L 5249.4 4107.8 L 5257.9 4124.5 L 5266.3 4142.0 L 5274.8 4160.4 L 5283.2 4179.6 L 5291.7 4199.6 L 5300.1 4220.6 L 5308.6 4242.4 L 5317.0 4265.0 L 5325.5 4288.5 L 5333.9 4312.9 L 5342.4 4338.1 L 5350.8 4364.2 L 5359.3 4391.1" fill="none" stroke="#39472D" stroke-width="10"/><path d="M 5165.0 3988.5 L 5173.4 3996.6 L 5181.9 4005.5 L 5190.3 4015.3 L 5198.8 4026.0 L 5207.2 4037.5 L 5215.7 4049.8 L 5224.1 4063.0 L 5232.5 4077.1 L 5241.0 4092.1 L 5249.4 4107.8 L 5257.9 4124.5 L 5266.3 4142.0 L 5274.8 4160.4 L 5283.2 4179.6 L 5291.7 4199.6 L 5300.1 4220.6 L 5308.6 4242.4 L 5317.0 4265.0 L 5325.5 4288.5 L 5333.9 4312.9 L 5342.4 4338.1 L 5350.8 4364.2 L 5359.3 4391.1" fill="none" stroke="#C8893F" stroke-width="5"/>
-<rect x="5157.0" y="3982.5" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5189.3" y="4018.1" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5221.7" y="4066.3" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5254.1" y="4127.1" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5286.5" y="4200.5" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5318.9" y="4286.5" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-<rect x="5351.3" y="4385.1" width="16" height="8" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2"/>
-</svg>
+<svg data-home-source="/pixi-art/home-expansion-c/bridges/bridge-nw.svg" xmlns="http://www.w3.org/2000/svg" width="683.4423788813556" height="735.7829785451204" viewBox="4979.321357336609 3810.6004272681575 683.4423788813556 735.7829785451204"><g transform="matrix(1.0103 0.5647 -0.5557 1.3163 5175.817 3812.6004)">
+  <title>Honeywood footbridge, northwest</title>
+  <desc>Hand-drawn solid bridge, 420 by 120 world units. The path rises northwest from the near bank at lower right. A 45-degree ground rotation is projected with 0.62 depth, and a 24-unit vertical crown. Cross-planks remain straight; both rails share one arch.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"><!-- Back rail, drawn behind the deck. -->
+    <g fill="#c88941">
+      <path d="M428 232 L434 232 L434 273 L428 273 Z M369 180 L375 180 L375 221 L369 221 Z M309 135 L315 135 L315 176 L309 176 Z M250 99 L256 99 L256 140 L250 140 Z M191 70 L197 70 L197 111 L191 111 Z M131 48 L137 48 L137 89 L131 89 Z"/>
+      <path d="M431 257 Q282 117 134 73 L134 77 Q282 121 431 261 Z"/>
+      <path d="M433 232 Q282 92 132 48 L132 52 Q282 96 433 236 Z"/>
+    </g>
+    <path fill="#885931" d="M431 266 Q282 126 134 82 L49 134 L49 143 Q198 187 346 327 L431 275 Z"/>
+    <path fill="#c88941" d="M431 266 Q282 126 134 82 L49 134 Q198 178 346 318 Z"/>
+    <path fill="none" stroke-width=".85" d="M411 248 L326 300 M391 230 L306 282 M372 214 L287 266 M352 198 L267 250 M332 183 L247 235 M312 169 L227 221 M292 156 L207 208 M273 144 L188 196 M253 133 L168 185 M233 122 L148 174 M213 112 L128 164 M194 104 L109 156 M174 95 L89 147 M154 88 L69 140"/>
+    <path fill="none" stroke-width=".65" d="M388 271 L370 282 M352 243 L338 252 M295 210 L280 219 M249 176 L234 185 M187 151 L172 160 M132 123 L114 134"/>
+    <path fill="#885931" d="M346 318 Q198 178 49 134 L49 143 Q198 187 346 327 Z"/>
+    <path fill="#c88941" d="M346 314 Q198 174 49 130 L49 134 Q198 178 346 318 Z"/>
+    <path fill="#885931" d="M431 266 L346 318 L346 327 L431 275 Z"/>
+    <path fill="none" stroke-width=".75" d="M411 278 L411 285 M389 292 L389 299 M368 305 L368 312"/>
+    <!-- Matching near rail. Every post is upright in screen space. -->
+    <g fill="#c88941">
+      <path d="M343 284 L349 284 L349 325 L343 325 Z M284 232 L290 232 L290 273 L284 273 Z M224 187 L230 187 L230 228 L224 228 Z M165 151 L171 151 L171 192 L165 192 Z M106 122 L112 122 L112 163 L106 163 Z M46 100 L52 100 L52 141 L46 141 Z"/>
+      <path d="M346 309 Q198 169 49 125 L49 129 Q198 173 346 313 Z"/>
+      <path d="M348 284 Q198 144 47 100 L47 104 Q198 148 348 288 Z"/>
+    </g>
+    <path fill="none" stroke-width=".65" d="M346 290 L346 302 M287 239 L287 251 M227 194 L227 206 M168 158 L168 170 M109 129 L109 141 M49 107 L49 119"/>
+    <path fill="none" stroke-width="1.5" d="M346 287 L346 287.4 M287 235 L287 235.4 M227 190 L227 190.4 M168 154 L168 154.4 M109 125 L109 125.4 M49 103 L49 103.4"/>
+  </g>
+</g></svg>

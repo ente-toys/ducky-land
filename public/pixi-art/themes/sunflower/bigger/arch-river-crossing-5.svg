@@ -1,10 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="374.71" height="412.195" viewBox="6971.645 2331.801 374.71 412.195"><g transform="matrix(0.7806 -0.2287 0 0.8641 6971.6452 2441.5784)">
+<svg data-home-source="/pixi-art/home-expansion-c/bridges/bridge-nw.svg" xmlns="http://www.w3.org/2000/svg" width="379.7351270129084" height="403.8641523536785" viewBox="6968.646069642258 2336.442900496434 379.7351270129084 403.8641523536785"><g transform="matrix(0.7686 -0.2169 0.0195 0.845 6970.6461 2442.5567)">
   <title>Honeywood footbridge, northwest</title>
   <desc>Hand-drawn solid bridge, 420 by 120 world units. The path rises northwest from the near bank at lower right. A 45-degree ground rotation is projected with 0.62 depth, and a 24-unit vertical crown. Cross-planks remain straight; both rails share one arch.</desc>
-  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
-    <path fill="#e4c567" d="M138 78 L43 136 L33 130 L128 72 Z M435 263 L340 321 L350 328 L445 270 Z"/>
-    <path fill="#c88941" d="M43 136 L33 130 L33 137 L43 143 Z M445 270 L350 328 L350 335 L445 277 Z M350 328 L340 321 L340 328 L350 335 Z"/>
-    <!-- Back rail, drawn behind the deck. -->
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"><!-- Back rail, drawn behind the deck. -->
     <g fill="#c88941">
       <path d="M428 232 L434 232 L434 273 L428 273 Z M369 180 L375 180 L375 221 L369 221 Z M309 135 L315 135 L315 176 L309 176 Z M250 99 L256 99 L256 140 L250 140 Z M191 70 L197 70 L197 111 L191 111 Z M131 48 L137 48 L137 89 L131 89 Z"/>
       <path d="M431 257 Q282 117 134 73 L134 77 Q282 121 431 261 Z"/>
