@@ -108,7 +108,7 @@ test('b) surf: every themed coast and islet gets the beach surf, each ring turne
   assert.deepEqual(clockwise([[0, 0], [0, 10], [10, 10], [10, 0]]), [[10, 0], [10, 10], [0, 10], [0, 0]]);
   for (const id of themedIslands()) {
     const map = mapOf(id), rings = shoreOf(map.world), runs = surfRuns(rings);
-    assert.equal(rings.length, (map.world.coastRings?.length ?? 1) + (map.world.surfIslets ?? map.world.islets ?? []).length);
+    assert.equal(rings.length, (map.world.shoreRings?.length ?? map.world.coastRings?.length ?? 1) + (map.world.surfIslets ?? map.world.islets ?? []).length);
     assert.ok(runs.length > 20, `${map.id}: ${runs.length} surf runs`);
     // the crest starts out at sea: 120 out along each normal is never this island's land
     const out = runs.flatMap(r => r.points).filter((p, i) => i % 7 === 0).filter(p => map.landAt(p.x + p.nx * 120, p.y + p.ny * 120));

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import {render} from '../pagepond/render.mjs';
+import {sites} from './design.mjs';
+import {checkTheme} from '../theme-index.mjs';
+const out=process.env.PAGEPOND_RENDER_OUT??'../concepts/themes/work/pagepond-check/final';
+const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/library/art.json')),harbor=JSON.parse(fs.readFileSync('rive/web/themes/library/harbor.json'));
+const checked=checkTheme('library');
+fs.mkdirSync(out,{recursive:true});
+await render(art,[-3000,-2200,14000,10400],.25,out+'/whole.png',{beds:checked.sleepers,boats:harbor.boats});
+for(const [h,s] of Object.entries(sites))await render(art,[s.at[0]-260,s.at[1]-220,1536*s.k+520,1024*s.k+510],.85,out+'/'+h+'.png',{beds:checked.sleepers});
+fs.writeFileSync(out+'/views.json',JSON.stringify({whole:[-3000,-2200,14000,10400],sites},null,2)+'\n');

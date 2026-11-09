@@ -47,7 +47,7 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
   const deck = (x, y) => (world.walkways ?? []).some(b => segDist(x, y, b.a, b.b) < b.w / 2 + 90) || (world.bridges ?? []).some(b => Math.abs(x - b.x) < b.w / 2 + 80 && Math.abs(y - b.y) < b.h / 2 + 80);
   const lines = world.paths ?? [];
   const onPath = pathDist ?? ((x, y) => lines.length ? Math.min(...lines.flatMap(l => l.slice(1).map((b, i) => segDist(x, y, l[i], b)))) : Infinity);
-  const solid = props.filter(p => !(home ? HOME_DECOR : THEME_DECOR).test(p.asset || p.name || '') && Number.isFinite(p.x) && p.width > 0), building = home ? HOME_BUILDING : THEME_BUILDING;
+  const solid = props.filter(p => p.contact !== false && !(home ? HOME_DECOR : THEME_DECOR).test(p.asset || p.name || '') && Number.isFinite(p.x) && p.width > 0), building = home ? HOME_BUILDING : THEME_BUILDING;
   const out = [], bad = [];
   const why = (x, y, pose, r, tree) => {
     if (tree) return null;   // a nod leans on its trunk on purpose

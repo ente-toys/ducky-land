@@ -88,6 +88,8 @@ const ARCHES = [
 ];
 // Where to draw a Ducky's feet: on a deck it rides up the arch, lift = R * 4t(1-t); off a bridge it is the plain world y.
 // boss 6 Nov: a themed island passes its own arches (world.json `arches`, the same {a, b, r, w} format)
+export {deckX} from './bridge-projection.mjs';
+
 export function deckY(x, y, arches = ARCHES) {
   for (const {a, b, r, w, squash} of arches) {
     const dx = b[0] - a[0], dy = b[1] - a[1], len2 = dx * dx + dy * dy, t = ((x - a[0]) * dx + (y - a[1]) * dy) / len2;

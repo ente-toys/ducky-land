@@ -13,7 +13,7 @@ const near = (a, b, pad) => a[0] - pad < b[2] && b[0] - pad < a[2] && a[1] - pad
 // islets), any winding (each is turned clockwise on screen so the normal points out to sea).
 export const clockwise = ring => {let a = 0; for (let i = 0; i < ring.length; i++) {const p = ring[i], q = ring[(i + 1) % ring.length]; a += p[0] * q[1] - q[0] * p[1];} return a >= 0 ? ring : [...ring].reverse();};
 export const isletRing = ([cx, cy, rx, ry], n = 28) => Array.from({length: n}, (_, i) => [cx + Math.cos(i / n * 2 * Math.PI) * rx, cy + Math.sin(i / n * 2 * Math.PI) * ry]);
-export const shoreOf = world => [...(world.coastRings ?? [world.coast]), ...(world.surfIslets ?? world.islets ?? []).map(a => isletRing(a))].map(clockwise);
+export const shoreOf = world => [...(world.shoreRings ?? world.coastRings ?? [world.coast]), ...(world.surfIslets ?? world.islets ?? []).map(a => isletRing(a))].map(clockwise);
 export const surfRuns = (SHORE) => SHORE.flatMap((ring, r) => {
   const perimeter = ring.reduce((s, p, i) => s + Math.hypot(ring[(i + 1) % ring.length][0] - p[0], ring[(i + 1) % ring.length][1] - p[1]), 0);
   const pts = sampleRing(ring, Math.min(30, perimeter / 96)), out = [];   // an islet gets finer steps, so its far crest never facets

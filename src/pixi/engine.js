@@ -41,7 +41,7 @@ import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
 import {createWater} from './water.js';
-import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_MOUTHS, HOME_GROUND_DECALS, HOME_ORIGIN, decalsFor, deckY, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
+import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_MOUTHS, HOME_GROUND_DECALS, HOME_ORIGIN, decalsFor, deckY, deckX, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
 import {sleepHalfWidths} from './sleeper.js';
 import {createInterior} from './interior.js';
 const napWidths = sleepHalfWidths(.88 * .24 * 3);   // world half width per sleeping pose
@@ -1220,11 +1220,11 @@ export class PixiIsland {
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
       const hop = jumpPose(duck.jumpLeft, reduced, {turn: duck.turn, moving: duck.travel > 20});   // boss 6 Nov: crouch, stretch, lean, land
-      rig.root.position.set(x, deckY(x, y, this.arches) - hop.lift);   // boss 3 Nov: Duckies walk up and over the arched bridges
+      rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift);   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
       rig.root.visible = (homeShown || duck.player) && visible(x, y, 200);   // the sleepers lie on the home map's spots
       if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
-      if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x, y: deckY(x, y, this.arches), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
+      if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x:deckX(x,y,this.arches), y: deckY(x, y, this.arches), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
       if (homeShown) this.bumpSleeper(duck, rig, player);   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once
     });
     if (!homeShown) {   // boss 6 Nov: a themed island's own sleepers (and its surf, pond ripples, leaves and floating pads)
@@ -1432,10 +1432,10 @@ export class PixiIsland {
       }
       rig.root.scale.set(look.scale*look.sx,look.scale*look.sy/TILT);
       const hop=look.deck ? jumpPose(pose.jumpLeft,reducedMotion,{turn:look.turn,moving:look.speed>20}) : null;   // boss 6 Nov: the jump's crouch, stretch, lean and landing
-      rig.root.position.set(look.x,(look.deck?deckY(look.x,look.y,this.arches):look.y)-(hop?.lift ?? 0));   // Ashwin's space-to-jump, on our boarding/sailing look
+      rig.root.position.set(look.deck&&pose.mode!=='sailing'?deckX(look.x,look.y,this.arches):look.x,(look.deck?deckY(look.x,look.y,this.arches):look.y)-(hop?.lift ?? 0));   // Ashwin's space-to-jump, on our boarding/sailing look
       rig.root.rotation=look.rotation; rig.root.alpha=look.alpha;
       rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');   // boss 5 Nov: your ring only on land, never on the boat or mid-hop
-      if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:look.x, y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
+      if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:deckX(look.x,look.y,this.arches), y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
       rig.root.visible = visible(look.x,look.y,200);
       if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});

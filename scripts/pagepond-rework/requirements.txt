@@ -1,0 +1,2 @@
+Shapely>=2.0,<3
+fonttools>=4.0,<5

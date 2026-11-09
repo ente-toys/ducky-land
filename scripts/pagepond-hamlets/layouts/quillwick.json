@@ -1,0 +1,9029 @@
+{
+  "name": "Quillwick",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "anchor": "bottom-centre",
+  "coordinates": "Blueprint pixels. Place every SVG viewBox bottom centre at x,y, preserving its width and height. drawOrder ascends back to front. Footprints are absolute blueprint polygons.",
+  "blueprint": "../../gpt/quillwick.png",
+  "palette": {
+    "outline": "#39472d",
+    "lawn": "#96c43b",
+    "paths": "#ffe8a6"
+  },
+  "square": [
+    [
+      513,
+      347
+    ],
+    [
+      591,
+      330
+    ],
+    [
+      673,
+      331
+    ],
+    [
+      766,
+      347
+    ],
+    [
+      859,
+      332
+    ],
+    [
+      964,
+      343
+    ],
+    [
+      1049,
+      377
+    ],
+    [
+      1114,
+      433
+    ],
+    [
+      1151,
+      497
+    ],
+    [
+      1172,
+      568
+    ],
+    [
+      1191,
+      646
+    ],
+    [
+      1186,
+      733
+    ],
+    [
+      1160,
+      810
+    ],
+    [
+      1119,
+      859
+    ],
+    [
+      1033,
+      895
+    ],
+    [
+      949,
+      918
+    ],
+    [
+      855,
+      931
+    ],
+    [
+      811,
+      962
+    ],
+    [
+      807,
+      1024
+    ],
+    [
+      728,
+      1024
+    ],
+    [
+      725,
+      963
+    ],
+    [
+      671,
+      935
+    ],
+    [
+      572,
+      917
+    ],
+    [
+      478,
+      883
+    ],
+    [
+      426,
+      838
+    ],
+    [
+      400,
+      777
+    ],
+    [
+      385,
+      701
+    ],
+    [
+      355,
+      641
+    ],
+    [
+      323,
+      569
+    ],
+    [
+      304,
+      504
+    ],
+    [
+      307,
+      448
+    ],
+    [
+      340,
+      397
+    ],
+    [
+      413,
+      366
+    ]
+  ],
+  "lane": [
+    [
+      650,
+      0
+    ],
+    [
+      766,
+      0
+    ],
+    [
+      796,
+      38
+    ],
+    [
+      791,
+      74
+    ],
+    [
+      772,
+      110
+    ],
+    [
+      740,
+      145
+    ],
+    [
+      704,
+      157
+    ],
+    [
+      673,
+      130
+    ],
+    [
+      709,
+      84
+    ],
+    [
+      722,
+      53
+    ],
+    [
+      710,
+      29
+    ]
+  ],
+  "paths": [
+    {
+      "id": "writing-square",
+      "polygon": [
+        [
+          513,
+          347
+        ],
+        [
+          591,
+          330
+        ],
+        [
+          673,
+          331
+        ],
+        [
+          766,
+          347
+        ],
+        [
+          859,
+          332
+        ],
+        [
+          964,
+          343
+        ],
+        [
+          1049,
+          377
+        ],
+        [
+          1114,
+          433
+        ],
+        [
+          1151,
+          497
+        ],
+        [
+          1172,
+          568
+        ],
+        [
+          1191,
+          646
+        ],
+        [
+          1186,
+          733
+        ],
+        [
+          1160,
+          810
+        ],
+        [
+          1119,
+          859
+        ],
+        [
+          1033,
+          895
+        ],
+        [
+          949,
+          918
+        ],
+        [
+          855,
+          931
+        ],
+        [
+          811,
+          962
+        ],
+        [
+          807,
+          1024
+        ],
+        [
+          728,
+          1024
+        ],
+        [
+          725,
+          963
+        ],
+        [
+          671,
+          935
+        ],
+        [
+          572,
+          917
+        ],
+        [
+          478,
+          883
+        ],
+        [
+          426,
+          838
+        ],
+        [
+          400,
+          777
+        ],
+        [
+          385,
+          701
+        ],
+        [
+          355,
+          641
+        ],
+        [
+          323,
+          569
+        ],
+        [
+          304,
+          504
+        ],
+        [
+          307,
+          448
+        ],
+        [
+          340,
+          397
+        ],
+        [
+          413,
+          366
+        ]
+      ],
+      "d": "M513 347C594 319 676 331 766 347 862 321 962 331 1049 377S1134 444 1151 497 1175 577 1191 646 1186 762 1160 810 1119 872 1033 895 895 919 855 931 809 954 807 1024H728C728 962 721 951 671 935 573 922 488 897 448 862 404 823 399 755 385 701S343 610 323 569 302 495 307 448 340 390 413 366Z"
+    },
+    {
+      "id": "north-lane",
+      "polygon": [
+        [
+          650,
+          0
+        ],
+        [
+          766,
+          0
+        ],
+        [
+          796,
+          38
+        ],
+        [
+          791,
+          74
+        ],
+        [
+          772,
+          110
+        ],
+        [
+          740,
+          145
+        ],
+        [
+          704,
+          157
+        ],
+        [
+          673,
+          130
+        ],
+        [
+          709,
+          84
+        ],
+        [
+          722,
+          53
+        ],
+        [
+          710,
+          29
+        ]
+      ],
+      "d": "M650 0H766C813 40 802 74 772 110L704 157 673 130C699 94 727 65 722 47S688 10 650 0Z"
+    },
+    {
+      "id": "west-lane",
+      "polygon": [
+        [
+          0,
+          427
+        ],
+        [
+          58,
+          426
+        ],
+        [
+          112,
+          440
+        ],
+        [
+          164,
+          465
+        ],
+        [
+          216,
+          484
+        ],
+        [
+          271,
+          483
+        ],
+        [
+          323,
+          455
+        ],
+        [
+          352,
+          495
+        ],
+        [
+          302,
+          524
+        ],
+        [
+          260,
+          541
+        ],
+        [
+          214,
+          540
+        ],
+        [
+          158,
+          525
+        ],
+        [
+          101,
+          496
+        ],
+        [
+          50,
+          479
+        ],
+        [
+          0,
+          482
+        ]
+      ],
+      "d": "M0 427C81 415 108 440 164 465S264 496 323 455L352 495C305 530 267 551 214 540S109 502 68 487 23 478 0 482Z"
+    },
+    {
+      "id": "east-lane",
+      "polygon": [
+        [
+          1124,
+          456
+        ],
+        [
+          1178,
+          477
+        ],
+        [
+          1235,
+          479
+        ],
+        [
+          1291,
+          465
+        ],
+        [
+          1357,
+          440
+        ],
+        [
+          1425,
+          423
+        ],
+        [
+          1490,
+          422
+        ],
+        [
+          1536,
+          431
+        ],
+        [
+          1536,
+          482
+        ],
+        [
+          1482,
+          477
+        ],
+        [
+          1437,
+          486
+        ],
+        [
+          1370,
+          509
+        ],
+        [
+          1300,
+          532
+        ],
+        [
+          1242,
+          540
+        ],
+        [
+          1178,
+          533
+        ],
+        [
+          1132,
+          511
+        ]
+      ],
+      "d": "M1124 456C1176 486 1230 490 1291 465S1439 408 1536 431V482C1468 463 1423 487 1370 509S1242 557 1178 533L1132 511Z"
+    },
+    {
+      "id": "south-lane",
+      "polygon": [
+        [
+          666,
+          916
+        ],
+        [
+          726,
+          938
+        ],
+        [
+          748,
+          965
+        ],
+        [
+          747,
+          1024
+        ],
+        [
+          816,
+          1024
+        ],
+        [
+          815,
+          966
+        ],
+        [
+          838,
+          939
+        ],
+        [
+          881,
+          921
+        ],
+        [
+          864,
+          895
+        ],
+        [
+          705,
+          893
+        ]
+      ],
+      "d": "M666 916C724 933 750 943 747 1024H816C813 965 807 947 881 921L864 895 705 893Z"
+    }
+  ],
+  "sleepers": [
+    {
+      "id": "west-reading-lawn",
+      "x": 269,
+      "y": 879,
+      "pose": "sleeping"
+    },
+    {
+      "id": "east-reading-lawn",
+      "x": 1284,
+      "y": 883,
+      "pose": "sleeping"
+    },
+    {
+      "id": "arbor-rest",
+      "x": 785,
+      "y": 858,
+      "pose": "sleeping"
+    }
+  ],
+  "trees": [
+    {
+      "id": "northwest-oak",
+      "x": 102,
+      "y": 267,
+      "width": 208,
+      "height": 198,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 267
+    },
+    {
+      "id": "northwest-high",
+      "x": 259,
+      "y": 155,
+      "width": 198,
+      "height": 206,
+      "asset": "themes/library/reuse/tree-3.svg",
+      "drawOrder": 155
+    },
+    {
+      "id": "northwest-back",
+      "x": 361,
+      "y": 112,
+      "width": 150,
+      "height": 181,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 112
+    },
+    {
+      "id": "northwest-small",
+      "x": 475,
+      "y": 76,
+      "width": 105,
+      "height": 110,
+      "asset": "themes/library/reuse/tree-2.svg",
+      "drawOrder": 76
+    },
+    {
+      "id": "north-east-high",
+      "x": 1171,
+      "y": 146,
+      "width": 224,
+      "height": 225,
+      "asset": "themes/library/reuse/tree-3.svg",
+      "drawOrder": 146
+    },
+    {
+      "id": "north-east-oak",
+      "x": 1434,
+      "y": 250,
+      "width": 229,
+      "height": 231,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 250
+    },
+    {
+      "id": "east-small",
+      "x": 1382,
+      "y": 275,
+      "width": 103,
+      "height": 106,
+      "asset": "themes/library/reuse/tree-2.svg",
+      "drawOrder": 275
+    },
+    {
+      "id": "west-middle",
+      "x": 49,
+      "y": 416,
+      "width": 157,
+      "height": 191,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 416
+    },
+    {
+      "id": "east-middle",
+      "x": 1482,
+      "y": 423,
+      "width": 172,
+      "height": 190,
+      "asset": "themes/library/reuse/tree-3.svg",
+      "drawOrder": 423
+    },
+    {
+      "id": "west-low",
+      "x": 69,
+      "y": 733,
+      "width": 187,
+      "height": 209,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 733
+    },
+    {
+      "id": "east-low",
+      "x": 1445,
+      "y": 775,
+      "width": 200,
+      "height": 235,
+      "asset": "themes/library/reuse/tree-3.svg",
+      "drawOrder": 775
+    },
+    {
+      "id": "southwest-oak",
+      "x": 94,
+      "y": 983,
+      "width": 190,
+      "height": 211,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 983
+    },
+    {
+      "id": "southwest-small",
+      "x": 42,
+      "y": 979,
+      "width": 87,
+      "height": 108,
+      "asset": "themes/library/reuse/tree-2.svg",
+      "drawOrder": 979
+    },
+    {
+      "id": "southwest-inner",
+      "x": 437,
+      "y": 1014,
+      "width": 145,
+      "height": 163,
+      "asset": "themes/library/reuse/tree-3.svg",
+      "drawOrder": 1014
+    },
+    {
+      "id": "southwest-inner-small",
+      "x": 393,
+      "y": 1024,
+      "width": 105,
+      "height": 126,
+      "asset": "themes/library/reuse/tree-2.svg",
+      "drawOrder": 1024
+    },
+    {
+      "id": "southeast-oak",
+      "x": 1440,
+      "y": 985,
+      "width": 194,
+      "height": 207,
+      "asset": "themes/library/reuse/tree-1.svg",
+      "drawOrder": 985
+    },
+    {
+      "id": "southeast-inner",
+      "x": 1064,
+      "y": 1024,
+      "width": 152,
+      "height": 165,
+      "asset": "themes/library/reuse/tree-3.svg",
+      "drawOrder": 1024
+    },
+    {
+      "id": "southeast-inner-small",
+      "x": 1118,
+      "y": 1024,
+      "width": 110,
+      "height": 126,
+      "asset": "themes/library/reuse/tree-2.svg",
+      "drawOrder": 1024
+    }
+  ],
+  "boats": [],
+  "objects": [
+    {
+      "id": "grass-tuft-01",
+      "file": "grass-tuft-01.svg",
+      "x": 22,
+      "y": 25,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 25,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-07",
+      "file": "grass-tuft-07.svg",
+      "x": 1514,
+      "y": 36,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 36,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-03",
+      "file": "grass-tuft-03.svg",
+      "x": 566,
+      "y": 37,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 37,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-06",
+      "file": "grass-tuft-06.svg",
+      "x": 902,
+      "y": 38,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 38,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-04",
+      "file": "grass-tuft-04.svg",
+      "x": 622,
+      "y": 39,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 39,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-05",
+      "file": "grass-tuft-05.svg",
+      "x": 681,
+      "y": 52,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 52,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-05",
+      "file": "pebble-05.svg",
+      "x": 714,
+      "y": 61,
+      "width": 19,
+      "height": 11,
+      "drawOrder": 61,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-02",
+      "file": "grass-tuft-02.svg",
+      "x": 33,
+      "y": 67,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 67,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-quill-east",
+      "file": "flowers-quill-east.svg",
+      "x": 939,
+      "y": 73,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 73,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-04",
+      "file": "pebble-04.svg",
+      "x": 694,
+      "y": 77,
+      "width": 21,
+      "height": 11,
+      "drawOrder": 77,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-north",
+      "file": "low-bush-north.svg",
+      "x": 1013,
+      "y": 82,
+      "width": 116,
+      "height": 71,
+      "drawOrder": 82,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-northpink",
+      "file": "flowers-northpink.svg",
+      "x": 618,
+      "y": 87,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 87,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-far-northeast",
+      "file": "flowers-far-northeast.svg",
+      "x": 1302,
+      "y": 90,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 90,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-northwest",
+      "file": "flowers-northwest.svg",
+      "x": 437,
+      "y": 99,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 99,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-14",
+      "file": "grass-tuft-14.svg",
+      "x": 1044,
+      "y": 107,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 107,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-15",
+      "file": "grass-tuft-15.svg",
+      "x": 1216,
+      "y": 111,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 111,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-12",
+      "file": "grass-tuft-12.svg",
+      "x": 300,
+      "y": 129,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 129,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-northwest",
+      "file": "low-bush-northwest.svg",
+      "x": 536,
+      "y": 142,
+      "width": 138,
+      "height": 84,
+      "drawOrder": 142,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-upperwest",
+      "file": "flowers-upperwest.svg",
+      "x": 331,
+      "y": 146,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 146,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-06",
+      "file": "pebble-06.svg",
+      "x": 1230,
+      "y": 153,
+      "width": 22,
+      "height": 11,
+      "drawOrder": 153,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-north-centre",
+      "file": "flowers-north-centre.svg",
+      "x": 1007,
+      "y": 154,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 154,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-by-blue",
+      "file": "low-bush-by-blue.svg",
+      "x": 455,
+      "y": 168,
+      "width": 73,
+      "height": 45,
+      "drawOrder": 168,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-11",
+      "file": "grass-tuft-11.svg",
+      "x": 341,
+      "y": 168,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 168,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-13",
+      "file": "grass-tuft-13.svg",
+      "x": 999,
+      "y": 176,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 176,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-09",
+      "file": "grass-tuft-09.svg",
+      "x": 183,
+      "y": 196,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 196,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-08",
+      "file": "grass-tuft-08.svg",
+      "x": 1515,
+      "y": 197,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 197,
+      "kind": "plant"
+    },
+    {
+      "id": "lupins-by-hall",
+      "file": "lupins-by-hall.svg",
+      "x": 496,
+      "y": 244,
+      "width": 68,
+      "height": 91,
+      "drawOrder": 244,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-hall-east",
+      "file": "low-bush-hall-east.svg",
+      "x": 1054,
+      "y": 245,
+      "width": 103,
+      "height": 63,
+      "drawOrder": 245,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-03",
+      "file": "pebble-03.svg",
+      "x": 484,
+      "y": 268,
+      "width": 21,
+      "height": 11,
+      "drawOrder": 268,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-10",
+      "file": "grass-tuft-10.svg",
+      "x": 477,
+      "y": 315,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 315,
+      "kind": "plant"
+    },
+    {
+      "id": "northwest-flowers",
+      "file": "northwest-flowers.svg",
+      "x": 191,
+      "y": 372,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 372,
+      "kind": "plant"
+    },
+    {
+      "id": "northeast-flowers",
+      "file": "northeast-flowers.svg",
+      "x": 1345,
+      "y": 379,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 379,
+      "kind": "plant"
+    },
+    {
+      "id": "lamp-northwest",
+      "file": "lamp-northwest.svg",
+      "x": 516,
+      "y": 394,
+      "width": 40,
+      "height": 122,
+      "drawOrder": 394,
+      "kind": "prop",
+      "footprint": [
+        [
+          504,
+          377
+        ],
+        [
+          526,
+          377
+        ],
+        [
+          531,
+          388
+        ],
+        [
+          500,
+          388
+        ]
+      ]
+    },
+    {
+      "id": "lamp-northeast",
+      "file": "lamp-northeast.svg",
+      "x": 1033,
+      "y": 394,
+      "width": 40,
+      "height": 122,
+      "drawOrder": 394,
+      "kind": "prop",
+      "footprint": [
+        [
+          1021,
+          377
+        ],
+        [
+          1043,
+          377
+        ],
+        [
+          1048,
+          388
+        ],
+        [
+          1017,
+          388
+        ]
+      ]
+    },
+    {
+      "id": "grass-tuft-17",
+      "file": "grass-tuft-17.svg",
+      "x": 1516,
+      "y": 400,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 400,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-east-margin",
+      "file": "flowers-east-margin.svg",
+      "x": 1414,
+      "y": 400,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 400,
+      "kind": "plant"
+    },
+    {
+      "id": "hall-daisy-box",
+      "file": "hall-daisy-box.svg",
+      "x": 655,
+      "y": 401,
+      "width": 80,
+      "height": 76,
+      "drawOrder": 401,
+      "kind": "prop",
+      "footprint": [
+        [
+          624,
+          375
+        ],
+        [
+          686,
+          375
+        ],
+        [
+          682,
+          397
+        ],
+        [
+          628,
+          397
+        ]
+      ]
+    },
+    {
+      "id": "quill-post-hall",
+      "file": "quill-post-hall.svg",
+      "x": 772,
+      "y": 418,
+      "width": 448,
+      "height": 416,
+      "drawOrder": 418,
+      "kind": "building",
+      "footprint": [
+        [
+          626,
+          353
+        ],
+        [
+          915,
+          353
+        ],
+        [
+          915,
+          373
+        ],
+        [
+          875,
+          390
+        ],
+        [
+          875,
+          415
+        ],
+        [
+          675,
+          415
+        ],
+        [
+          675,
+          390
+        ],
+        [
+          626,
+          373
+        ]
+      ]
+    },
+    {
+      "id": "flowers-west-lane",
+      "file": "flowers-west-lane.svg",
+      "x": 119,
+      "y": 419,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 419,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-19",
+      "file": "grass-tuft-19.svg",
+      "x": 176,
+      "y": 427,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 427,
+      "kind": "plant"
+    },
+    {
+      "id": "red-pillar-postbox",
+      "file": "red-pillar-postbox.svg",
+      "x": 904,
+      "y": 434,
+      "width": 70,
+      "height": 132,
+      "drawOrder": 434,
+      "kind": "prop",
+      "footprint": [
+        [
+          879,
+          413
+        ],
+        [
+          928,
+          413
+        ],
+        [
+          931,
+          427
+        ],
+        [
+          878,
+          427
+        ]
+      ]
+    },
+    {
+      "id": "stack-of-books",
+      "file": "stack-of-books.svg",
+      "x": 231,
+      "y": 441,
+      "width": 70,
+      "height": 65,
+      "drawOrder": 441,
+      "kind": "prop",
+      "footprint": [
+        [
+          201,
+          422
+        ],
+        [
+          255,
+          423
+        ],
+        [
+          256,
+          435
+        ],
+        [
+          206,
+          437
+        ]
+      ]
+    },
+    {
+      "id": "coral-book-cottage",
+      "file": "coral-book-cottage.svg",
+      "x": 1217,
+      "y": 446,
+      "width": 280,
+      "height": 320,
+      "drawOrder": 446,
+      "kind": "building",
+      "footprint": [
+        [
+          1109,
+          416
+        ],
+        [
+          1324,
+          416
+        ],
+        [
+          1327,
+          432
+        ],
+        [
+          1110,
+          436
+        ]
+      ]
+    },
+    {
+      "id": "cottage-coral-flowers",
+      "file": "cottage-coral-flowers.svg",
+      "x": 1110,
+      "y": 448,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 448,
+      "kind": "plant"
+    },
+    {
+      "id": "blue-book-cottage",
+      "file": "blue-book-cottage.svg",
+      "x": 332,
+      "y": 450,
+      "width": 280,
+      "height": 320,
+      "drawOrder": 450,
+      "kind": "building",
+      "footprint": [
+        [
+          224,
+          420
+        ],
+        [
+          439,
+          420
+        ],
+        [
+          442,
+          436
+        ],
+        [
+          225,
+          440
+        ]
+      ]
+    },
+    {
+      "id": "low-bush-east-cottage",
+      "file": "low-bush-east-cottage.svg",
+      "x": 1313,
+      "y": 450,
+      "width": 96,
+      "height": 59,
+      "drawOrder": 450,
+      "kind": "plant"
+    },
+    {
+      "id": "cottage-blue-flowers",
+      "file": "cottage-blue-flowers.svg",
+      "x": 430,
+      "y": 451,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 451,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-01",
+      "file": "pebble-01.svg",
+      "x": 258,
+      "y": 459,
+      "width": 19,
+      "height": 11,
+      "drawOrder": 459,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-18",
+      "file": "grass-tuft-18.svg",
+      "x": 205,
+      "y": 460,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 460,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-02",
+      "file": "pebble-02.svg",
+      "x": 280,
+      "y": 469,
+      "width": 23,
+      "height": 11,
+      "drawOrder": 469,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-east-lane",
+      "file": "flowers-east-lane.svg",
+      "x": 1458,
+      "y": 533,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 533,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-16",
+      "file": "grass-tuft-16.svg",
+      "x": 1444,
+      "y": 534,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 534,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-lane-west-top",
+      "file": "flowers-lane-west-top.svg",
+      "x": 77,
+      "y": 535,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 535,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-34",
+      "file": "grass-tuft-34.svg",
+      "x": 1489,
+      "y": 538,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 538,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-lane-west",
+      "file": "flowers-lane-west.svg",
+      "x": 140,
+      "y": 558,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 558,
+      "kind": "plant"
+    },
+    {
+      "id": "arbor-lantern-1",
+      "file": "arbor-lantern-1.svg",
+      "x": 657,
+      "y": 579,
+      "width": 34,
+      "height": 54,
+      "drawOrder": 580,
+      "kind": "prop"
+    },
+    {
+      "id": "arbor-lantern-2",
+      "file": "arbor-lantern-2.svg",
+      "x": 773,
+      "y": 579,
+      "width": 34,
+      "height": 54,
+      "drawOrder": 580,
+      "kind": "prop"
+    },
+    {
+      "id": "arbor-lantern-3",
+      "file": "arbor-lantern-3.svg",
+      "x": 890,
+      "y": 579,
+      "width": 34,
+      "height": 54,
+      "drawOrder": 580,
+      "kind": "prop"
+    },
+    {
+      "id": "grass-tuft-35",
+      "file": "grass-tuft-35.svg",
+      "x": 77,
+      "y": 686,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 686,
+      "kind": "plant"
+    },
+    {
+      "id": "writing-desk-1",
+      "file": "writing-desk-1.svg",
+      "x": 650,
+      "y": 718,
+      "width": 116,
+      "height": 151,
+      "drawOrder": 718,
+      "kind": "worktable",
+      "footprint": [
+        [
+          602,
+          685
+        ],
+        [
+          695,
+          685
+        ],
+        [
+          695,
+          712
+        ],
+        [
+          602,
+          712
+        ]
+      ]
+    },
+    {
+      "id": "writing-desk-2",
+      "file": "writing-desk-2.svg",
+      "x": 774,
+      "y": 718,
+      "width": 116,
+      "height": 151,
+      "drawOrder": 718,
+      "kind": "worktable",
+      "footprint": [
+        [
+          726,
+          685
+        ],
+        [
+          819,
+          685
+        ],
+        [
+          819,
+          712
+        ],
+        [
+          726,
+          712
+        ]
+      ]
+    },
+    {
+      "id": "writing-desk-3",
+      "file": "writing-desk-3.svg",
+      "x": 899,
+      "y": 718,
+      "width": 116,
+      "height": 151,
+      "drawOrder": 718,
+      "kind": "worktable",
+      "footprint": [
+        [
+          851,
+          685
+        ],
+        [
+          944,
+          685
+        ],
+        [
+          944,
+          712
+        ],
+        [
+          851,
+          712
+        ]
+      ]
+    },
+    {
+      "id": "writing-stool-1",
+      "file": "writing-stool-1.svg",
+      "x": 648,
+      "y": 740,
+      "width": 60,
+      "height": 60,
+      "drawOrder": 740,
+      "kind": "prop",
+      "footprint": [
+        [
+          627,
+          724
+        ],
+        [
+          667,
+          724
+        ],
+        [
+          670,
+          736
+        ],
+        [
+          626,
+          736
+        ]
+      ]
+    },
+    {
+      "id": "writing-stool-2",
+      "file": "writing-stool-2.svg",
+      "x": 774,
+      "y": 740,
+      "width": 60,
+      "height": 60,
+      "drawOrder": 740,
+      "kind": "prop",
+      "footprint": [
+        [
+          753,
+          724
+        ],
+        [
+          793,
+          724
+        ],
+        [
+          796,
+          736
+        ],
+        [
+          752,
+          736
+        ]
+      ]
+    },
+    {
+      "id": "writing-stool-3",
+      "file": "writing-stool-3.svg",
+      "x": 899,
+      "y": 740,
+      "width": 60,
+      "height": 60,
+      "drawOrder": 740,
+      "kind": "prop",
+      "footprint": [
+        [
+          878,
+          724
+        ],
+        [
+          918,
+          724
+        ],
+        [
+          921,
+          736
+        ],
+        [
+          877,
+          736
+        ]
+      ]
+    },
+    {
+      "id": "vine-writing-pergola",
+      "file": "vine-writing-pergola.svg",
+      "x": 774,
+      "y": 742,
+      "width": 483,
+      "height": 290,
+      "drawOrder": 742,
+      "kind": "prop",
+      "footprint": [
+        [
+          547.5,
+          712
+        ],
+        [
+          590.5,
+          712
+        ],
+        [
+          590.5,
+          738
+        ],
+        [
+          547.5,
+          738
+        ]
+      ],
+      "footprints": [
+        [
+          [
+            547.5,
+            712
+          ],
+          [
+            590.5,
+            712
+          ],
+          [
+            590.5,
+            738
+          ],
+          [
+            547.5,
+            738
+          ]
+        ],
+        [
+          [
+            960,
+            712
+          ],
+          [
+            1000,
+            712
+          ],
+          [
+            1000,
+            740
+          ],
+          [
+            960,
+            740
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "shop-west-flowers",
+      "file": "shop-west-flowers.svg",
+      "x": 147,
+      "y": 751,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 751,
+      "kind": "plant"
+    },
+    {
+      "id": "shop-east-flowers",
+      "file": "shop-east-flowers.svg",
+      "x": 448,
+      "y": 763,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 763,
+      "kind": "plant"
+    },
+    {
+      "id": "cottage-green-flowers",
+      "file": "cottage-green-flowers.svg",
+      "x": 1106,
+      "y": 774,
+      "width": 86,
+      "height": 67,
+      "drawOrder": 774,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-east-green",
+      "file": "low-bush-east-green.svg",
+      "x": 1333,
+      "y": 774,
+      "width": 100,
+      "height": 61,
+      "drawOrder": 774,
+      "kind": "plant"
+    },
+    {
+      "id": "ink-and-quill-shop",
+      "file": "ink-and-quill-shop.svg",
+      "x": 321,
+      "y": 780,
+      "width": 322,
+      "height": 301,
+      "drawOrder": 780,
+      "kind": "building",
+      "footprint": [
+        [
+          197,
+          752
+        ],
+        [
+          444,
+          752
+        ],
+        [
+          448,
+          767
+        ],
+        [
+          198,
+          770
+        ]
+      ]
+    },
+    {
+      "id": "green-book-cottage",
+      "file": "green-book-cottage.svg",
+      "x": 1218,
+      "y": 780,
+      "width": 280,
+      "height": 320,
+      "drawOrder": 780,
+      "kind": "building",
+      "footprint": [
+        [
+          1110,
+          750
+        ],
+        [
+          1325,
+          750
+        ],
+        [
+          1328,
+          766
+        ],
+        [
+          1111,
+          770
+        ]
+      ]
+    },
+    {
+      "id": "shop-daisy-box",
+      "file": "shop-daisy-box.svg",
+      "x": 303,
+      "y": 789,
+      "width": 96,
+      "height": 76,
+      "drawOrder": 789,
+      "kind": "prop",
+      "footprint": [
+        [
+          264,
+          763
+        ],
+        [
+          342,
+          763
+        ],
+        [
+          338,
+          785
+        ],
+        [
+          268,
+          785
+        ]
+      ]
+    },
+    {
+      "id": "hanging-quill-shop-sign",
+      "file": "hanging-quill-shop-sign.svg",
+      "x": 469,
+      "y": 691,
+      "width": 72,
+      "height": 92,
+      "drawOrder": 790,
+      "kind": "prop"
+    },
+    {
+      "id": "grass-tuft-27",
+      "file": "grass-tuft-27.svg",
+      "x": 1302,
+      "y": 802,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 802,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-36",
+      "file": "grass-tuft-36.svg",
+      "x": 143,
+      "y": 804,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 804,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-23",
+      "file": "grass-tuft-23.svg",
+      "x": 397,
+      "y": 807,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 807,
+      "kind": "plant"
+    },
+    {
+      "id": "square-lavender-box-west",
+      "file": "square-lavender-box-west.svg",
+      "x": 653,
+      "y": 819,
+      "width": 108,
+      "height": 76,
+      "drawOrder": 819,
+      "kind": "prop",
+      "footprint": [
+        [
+          608,
+          793
+        ],
+        [
+          698,
+          793
+        ],
+        [
+          694,
+          815
+        ],
+        [
+          612,
+          815
+        ]
+      ]
+    },
+    {
+      "id": "square-lavender-box-east",
+      "file": "square-lavender-box-east.svg",
+      "x": 896,
+      "y": 819,
+      "width": 108,
+      "height": 76,
+      "drawOrder": 819,
+      "kind": "prop",
+      "footprint": [
+        [
+          851,
+          793
+        ],
+        [
+          941,
+          793
+        ],
+        [
+          937,
+          815
+        ],
+        [
+          855,
+          815
+        ]
+      ]
+    },
+    {
+      "id": "flowers-west-south",
+      "file": "flowers-west-south.svg",
+      "x": 202,
+      "y": 825,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 825,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-07",
+      "file": "pebble-07.svg",
+      "x": 243,
+      "y": 830,
+      "width": 24,
+      "height": 11,
+      "drawOrder": 830,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-east-south",
+      "file": "flowers-east-south.svg",
+      "x": 1345,
+      "y": 831,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 831,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-southeast-lane",
+      "file": "flowers-southeast-lane.svg",
+      "x": 1218,
+      "y": 837,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 837,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-22",
+      "file": "grass-tuft-22.svg",
+      "x": 332,
+      "y": 841,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 841,
+      "kind": "plant"
+    },
+    {
+      "id": "round-daisy-pot",
+      "file": "round-daisy-pot.svg",
+      "x": 775,
+      "y": 845,
+      "width": 90,
+      "height": 88,
+      "drawOrder": 845,
+      "kind": "prop",
+      "footprint": [
+        [
+          746,
+          812
+        ],
+        [
+          802,
+          812
+        ],
+        [
+          797,
+          832
+        ],
+        [
+          752,
+          832
+        ]
+      ]
+    },
+    {
+      "id": "grass-tuft-31",
+      "file": "grass-tuft-31.svg",
+      "x": 1190,
+      "y": 851,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 851,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-33",
+      "file": "grass-tuft-33.svg",
+      "x": 1375,
+      "y": 855,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 855,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-25",
+      "file": "grass-tuft-25.svg",
+      "x": 271,
+      "y": 858,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 858,
+      "kind": "plant"
+    },
+    {
+      "id": "lamp-southwest",
+      "file": "lamp-southwest.svg",
+      "x": 485,
+      "y": 867,
+      "width": 40,
+      "height": 122,
+      "drawOrder": 867,
+      "kind": "prop",
+      "footprint": [
+        [
+          473,
+          850
+        ],
+        [
+          495,
+          850
+        ],
+        [
+          500,
+          861
+        ],
+        [
+          469,
+          861
+        ]
+      ]
+    },
+    {
+      "id": "lamp-southeast",
+      "file": "lamp-southeast.svg",
+      "x": 1063,
+      "y": 867,
+      "width": 40,
+      "height": 122,
+      "drawOrder": 867,
+      "kind": "prop",
+      "footprint": [
+        [
+          1051,
+          850
+        ],
+        [
+          1073,
+          850
+        ],
+        [
+          1078,
+          861
+        ],
+        [
+          1047,
+          861
+        ]
+      ]
+    },
+    {
+      "id": "bench-west",
+      "file": "bench-west.svg",
+      "x": 594,
+      "y": 902,
+      "width": 116,
+      "height": 76,
+      "drawOrder": 902,
+      "kind": "prop",
+      "footprint": [
+        [
+          540,
+          876
+        ],
+        [
+          643,
+          876
+        ],
+        [
+          649,
+          895
+        ],
+        [
+          545,
+          897
+        ]
+      ]
+    },
+    {
+      "id": "bench-east",
+      "file": "bench-east.svg",
+      "x": 954,
+      "y": 902,
+      "width": 116,
+      "height": 76,
+      "drawOrder": 902,
+      "kind": "prop",
+      "footprint": [
+        [
+          900,
+          876
+        ],
+        [
+          1003,
+          876
+        ],
+        [
+          1009,
+          895
+        ],
+        [
+          905,
+          897
+        ]
+      ]
+    },
+    {
+      "id": "grass-tuft-24",
+      "file": "grass-tuft-24.svg",
+      "x": 349,
+      "y": 904,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 904,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-32",
+      "file": "grass-tuft-32.svg",
+      "x": 1222,
+      "y": 915,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 915,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-bottom-tulips",
+      "file": "flowers-bottom-tulips.svg",
+      "x": 1132,
+      "y": 932,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 932,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-bottom-west",
+      "file": "flowers-bottom-west.svg",
+      "x": 546,
+      "y": 956,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 956,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-09",
+      "file": "pebble-09.svg",
+      "x": 342,
+      "y": 966,
+      "width": 24,
+      "height": 11,
+      "drawOrder": 966,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-bottomeast",
+      "file": "low-bush-bottomeast.svg",
+      "x": 967,
+      "y": 967,
+      "width": 90,
+      "height": 55,
+      "drawOrder": 967,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-30",
+      "file": "grass-tuft-30.svg",
+      "x": 1505,
+      "y": 968,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 968,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-east-bottom",
+      "file": "flowers-east-bottom.svg",
+      "x": 1387,
+      "y": 972,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 972,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-bottom-pink",
+      "file": "flowers-bottom-pink.svg",
+      "x": 658,
+      "y": 974,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 974,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-11",
+      "file": "pebble-11.svg",
+      "x": 1198,
+      "y": 979,
+      "width": 30,
+      "height": 11,
+      "drawOrder": 979,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-08",
+      "file": "pebble-08.svg",
+      "x": 324,
+      "y": 980,
+      "width": 23,
+      "height": 11,
+      "drawOrder": 980,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-southwest-border",
+      "file": "flowers-southwest-border.svg",
+      "x": 168,
+      "y": 981,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 981,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-10",
+      "file": "pebble-10.svg",
+      "x": 710,
+      "y": 985,
+      "width": 19,
+      "height": 11,
+      "drawOrder": 985,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-bottom-east",
+      "file": "flowers-bottom-east.svg",
+      "x": 898,
+      "y": 987,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 987,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-12",
+      "file": "pebble-12.svg",
+      "x": 1236,
+      "y": 992,
+      "width": 23,
+      "height": 11,
+      "drawOrder": 992,
+      "kind": "plant"
+    },
+    {
+      "id": "pebble-13",
+      "file": "pebble-13.svg",
+      "x": 304,
+      "y": 992,
+      "width": 19,
+      "height": 11,
+      "drawOrder": 992,
+      "kind": "plant"
+    },
+    {
+      "id": "flowers-southwest-daisies",
+      "file": "flowers-southwest-daisies.svg",
+      "x": 207,
+      "y": 1006,
+      "width": 54,
+      "height": 58,
+      "drawOrder": 1006,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-26",
+      "file": "grass-tuft-26.svg",
+      "x": 1161,
+      "y": 1009,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 1009,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-20",
+      "file": "grass-tuft-20.svg",
+      "x": 27,
+      "y": 1010,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 1010,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-29",
+      "file": "grass-tuft-29.svg",
+      "x": 1500,
+      "y": 1013,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 1013,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-28",
+      "file": "grass-tuft-28.svg",
+      "x": 1405,
+      "y": 1015,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 1015,
+      "kind": "plant"
+    },
+    {
+      "id": "grass-tuft-21",
+      "file": "grass-tuft-21.svg",
+      "x": 67,
+      "y": 1017,
+      "width": 27,
+      "height": 22,
+      "drawOrder": 1017,
+      "kind": "plant"
+    },
+    {
+      "id": "low-bush-bottomwest",
+      "file": "low-bush-bottomwest.svg",
+      "x": 578,
+      "y": 1024,
+      "width": 116,
+      "height": 71,
+      "drawOrder": 1024,
+      "kind": "plant"
+    }
+  ],
+  "footprints": [
+    {
+      "id": "blue-book-cottage",
+      "polygon": [
+        [
+          224,
+          420
+        ],
+        [
+          439,
+          420
+        ],
+        [
+          442,
+          436
+        ],
+        [
+          225,
+          440
+        ]
+      ]
+    },
+    {
+      "id": "coral-book-cottage",
+      "polygon": [
+        [
+          1109,
+          416
+        ],
+        [
+          1324,
+          416
+        ],
+        [
+          1327,
+          432
+        ],
+        [
+          1110,
+          436
+        ]
+      ]
+    },
+    {
+      "id": "ink-and-quill-shop",
+      "polygon": [
+        [
+          197,
+          752
+        ],
+        [
+          444,
+          752
+        ],
+        [
+          448,
+          767
+        ],
+        [
+          198,
+          770
+        ]
+      ]
+    },
+    {
+      "id": "green-book-cottage",
+      "polygon": [
+        [
+          1110,
+          750
+        ],
+        [
+          1325,
+          750
+        ],
+        [
+          1328,
+          766
+        ],
+        [
+          1111,
+          770
+        ]
+      ]
+    },
+    {
+      "id": "quill-post-hall",
+      "polygon": [
+        [
+          626,
+          353
+        ],
+        [
+          915,
+          353
+        ],
+        [
+          915,
+          373
+        ],
+        [
+          875,
+          390
+        ],
+        [
+          875,
+          415
+        ],
+        [
+          675,
+          415
+        ],
+        [
+          675,
+          390
+        ],
+        [
+          626,
+          373
+        ]
+      ]
+    },
+    {
+      "id": "lamp-northwest",
+      "polygon": [
+        [
+          504,
+          377
+        ],
+        [
+          526,
+          377
+        ],
+        [
+          531,
+          388
+        ],
+        [
+          500,
+          388
+        ]
+      ]
+    },
+    {
+      "id": "lamp-northeast",
+      "polygon": [
+        [
+          1021,
+          377
+        ],
+        [
+          1043,
+          377
+        ],
+        [
+          1048,
+          388
+        ],
+        [
+          1017,
+          388
+        ]
+      ]
+    },
+    {
+      "id": "lamp-southwest",
+      "polygon": [
+        [
+          473,
+          850
+        ],
+        [
+          495,
+          850
+        ],
+        [
+          500,
+          861
+        ],
+        [
+          469,
+          861
+        ]
+      ]
+    },
+    {
+      "id": "lamp-southeast",
+      "polygon": [
+        [
+          1051,
+          850
+        ],
+        [
+          1073,
+          850
+        ],
+        [
+          1078,
+          861
+        ],
+        [
+          1047,
+          861
+        ]
+      ]
+    },
+    {
+      "id": "red-pillar-postbox",
+      "polygon": [
+        [
+          879,
+          413
+        ],
+        [
+          928,
+          413
+        ],
+        [
+          931,
+          427
+        ],
+        [
+          878,
+          427
+        ]
+      ]
+    },
+    {
+      "id": "writing-desk-1",
+      "polygon": [
+        [
+          602,
+          685
+        ],
+        [
+          695,
+          685
+        ],
+        [
+          695,
+          712
+        ],
+        [
+          602,
+          712
+        ]
+      ]
+    },
+    {
+      "id": "writing-desk-2",
+      "polygon": [
+        [
+          726,
+          685
+        ],
+        [
+          819,
+          685
+        ],
+        [
+          819,
+          712
+        ],
+        [
+          726,
+          712
+        ]
+      ]
+    },
+    {
+      "id": "writing-desk-3",
+      "polygon": [
+        [
+          851,
+          685
+        ],
+        [
+          944,
+          685
+        ],
+        [
+          944,
+          712
+        ],
+        [
+          851,
+          712
+        ]
+      ]
+    },
+    {
+      "id": "writing-stool-1",
+      "polygon": [
+        [
+          627,
+          724
+        ],
+        [
+          667,
+          724
+        ],
+        [
+          670,
+          736
+        ],
+        [
+          626,
+          736
+        ]
+      ]
+    },
+    {
+      "id": "writing-stool-2",
+      "polygon": [
+        [
+          753,
+          724
+        ],
+        [
+          793,
+          724
+        ],
+        [
+          796,
+          736
+        ],
+        [
+          752,
+          736
+        ]
+      ]
+    },
+    {
+      "id": "writing-stool-3",
+      "polygon": [
+        [
+          878,
+          724
+        ],
+        [
+          918,
+          724
+        ],
+        [
+          921,
+          736
+        ],
+        [
+          877,
+          736
+        ]
+      ]
+    },
+    {
+      "id": "bench-west",
+      "polygon": [
+        [
+          540,
+          876
+        ],
+        [
+          643,
+          876
+        ],
+        [
+          649,
+          895
+        ],
+        [
+          545,
+          897
+        ]
+      ]
+    },
+    {
+      "id": "bench-east",
+      "polygon": [
+        [
+          900,
+          876
+        ],
+        [
+          1003,
+          876
+        ],
+        [
+          1009,
+          895
+        ],
+        [
+          905,
+          897
+        ]
+      ]
+    },
+    {
+      "id": "stack-of-books",
+      "polygon": [
+        [
+          201,
+          422
+        ],
+        [
+          255,
+          423
+        ],
+        [
+          256,
+          435
+        ],
+        [
+          206,
+          437
+        ]
+      ]
+    },
+    {
+      "id": "hall-daisy-box",
+      "polygon": [
+        [
+          624,
+          375
+        ],
+        [
+          686,
+          375
+        ],
+        [
+          682,
+          397
+        ],
+        [
+          628,
+          397
+        ]
+      ]
+    },
+    {
+      "id": "shop-daisy-box",
+      "polygon": [
+        [
+          264,
+          763
+        ],
+        [
+          342,
+          763
+        ],
+        [
+          338,
+          785
+        ],
+        [
+          268,
+          785
+        ]
+      ]
+    },
+    {
+      "id": "square-lavender-box-west",
+      "polygon": [
+        [
+          608,
+          793
+        ],
+        [
+          698,
+          793
+        ],
+        [
+          694,
+          815
+        ],
+        [
+          612,
+          815
+        ]
+      ]
+    },
+    {
+      "id": "square-lavender-box-east",
+      "polygon": [
+        [
+          851,
+          793
+        ],
+        [
+          941,
+          793
+        ],
+        [
+          937,
+          815
+        ],
+        [
+          855,
+          815
+        ]
+      ]
+    },
+    {
+      "id": "round-daisy-pot",
+      "polygon": [
+        [
+          746,
+          812
+        ],
+        [
+          802,
+          812
+        ],
+        [
+          797,
+          832
+        ],
+        [
+          752,
+          832
+        ]
+      ]
+    },
+    {
+      "id": "vine-writing-pergola-west",
+      "polygon": [
+        [
+          547.5,
+          712
+        ],
+        [
+          590.5,
+          712
+        ],
+        [
+          590.5,
+          738
+        ],
+        [
+          547.5,
+          738
+        ]
+      ]
+    },
+    {
+      "id": "vine-writing-pergola-east",
+      "polygon": [
+        [
+          960,
+          712
+        ],
+        [
+          1000,
+          712
+        ],
+        [
+          1000,
+          740
+        ],
+        [
+          960,
+          740
+        ]
+      ]
+    }
+  ],
+  "paving": {
+    "clipPolygon": [
+      [
+        513,
+        347
+      ],
+      [
+        591,
+        330
+      ],
+      [
+        673,
+        331
+      ],
+      [
+        766,
+        347
+      ],
+      [
+        859,
+        332
+      ],
+      [
+        964,
+        343
+      ],
+      [
+        1049,
+        377
+      ],
+      [
+        1114,
+        433
+      ],
+      [
+        1151,
+        497
+      ],
+      [
+        1172,
+        568
+      ],
+      [
+        1191,
+        646
+      ],
+      [
+        1186,
+        733
+      ],
+      [
+        1160,
+        810
+      ],
+      [
+        1119,
+        859
+      ],
+      [
+        1033,
+        895
+      ],
+      [
+        949,
+        918
+      ],
+      [
+        855,
+        931
+      ],
+      [
+        811,
+        962
+      ],
+      [
+        807,
+        1024
+      ],
+      [
+        728,
+        1024
+      ],
+      [
+        725,
+        963
+      ],
+      [
+        671,
+        935
+      ],
+      [
+        572,
+        917
+      ],
+      [
+        478,
+        883
+      ],
+      [
+        426,
+        838
+      ],
+      [
+        400,
+        777
+      ],
+      [
+        385,
+        701
+      ],
+      [
+        355,
+        641
+      ],
+      [
+        323,
+        569
+      ],
+      [
+        304,
+        504
+      ],
+      [
+        307,
+        448
+      ],
+      [
+        340,
+        397
+      ],
+      [
+        413,
+        366
+      ]
+    ],
+    "stroke": "#d4ba6d",
+    "strokeWidth": 1.5,
+    "opacity": 0.85,
+    "polygons": [
+      {
+        "polygon": [
+          [
+            276,
+            364
+          ],
+          [
+            294,
+            338.5
+          ],
+          [
+            330,
+            338.5
+          ],
+          [
+            349,
+            365
+          ],
+          [
+            330,
+            391.5
+          ],
+          [
+            294,
+            391.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            390.5
+          ],
+          [
+            349,
+            365
+          ],
+          [
+            385,
+            365
+          ],
+          [
+            404,
+            391.5
+          ],
+          [
+            385,
+            418
+          ],
+          [
+            349,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            364
+          ],
+          [
+            404,
+            338.5
+          ],
+          [
+            440,
+            338.5
+          ],
+          [
+            459,
+            365
+          ],
+          [
+            440,
+            391.5
+          ],
+          [
+            404,
+            391.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            390.5
+          ],
+          [
+            459,
+            365
+          ],
+          [
+            495,
+            365
+          ],
+          [
+            514,
+            391.5
+          ],
+          [
+            495,
+            418
+          ],
+          [
+            459,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            364
+          ],
+          [
+            514,
+            338.5
+          ],
+          [
+            550,
+            338.5
+          ],
+          [
+            569,
+            365
+          ],
+          [
+            550,
+            391.5
+          ],
+          [
+            514,
+            391.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            390.5
+          ],
+          [
+            569,
+            365
+          ],
+          [
+            605,
+            365
+          ],
+          [
+            624,
+            391.5
+          ],
+          [
+            605,
+            418
+          ],
+          [
+            569,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            364
+          ],
+          [
+            624,
+            338.5
+          ],
+          [
+            660,
+            338.5
+          ],
+          [
+            679,
+            365
+          ],
+          [
+            660,
+            391.5
+          ],
+          [
+            624,
+            391.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            390.5
+          ],
+          [
+            679,
+            365
+          ],
+          [
+            715,
+            365
+          ],
+          [
+            734,
+            391.5
+          ],
+          [
+            715,
+            418
+          ],
+          [
+            679,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            364
+          ],
+          [
+            734,
+            338.5
+          ],
+          [
+            770,
+            338.5
+          ],
+          [
+            789,
+            365
+          ],
+          [
+            770,
+            391.5
+          ],
+          [
+            734,
+            391.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            390.5
+          ],
+          [
+            789,
+            365
+          ],
+          [
+            825,
+            365
+          ],
+          [
+            844,
+            391.5
+          ],
+          [
+            825,
+            418
+          ],
+          [
+            789,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            364
+          ],
+          [
+            844,
+            338.5
+          ],
+          [
+            880,
+            338.5
+          ],
+          [
+            899,
+            365
+          ],
+          [
+            880,
+            391.5
+          ],
+          [
+            844,
+            391.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            390.5
+          ],
+          [
+            899,
+            365
+          ],
+          [
+            935,
+            365
+          ],
+          [
+            954,
+            391.5
+          ],
+          [
+            935,
+            418
+          ],
+          [
+            899,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            364
+          ],
+          [
+            954,
+            338.5
+          ],
+          [
+            990,
+            338.5
+          ],
+          [
+            1009,
+            365
+          ],
+          [
+            990,
+            391.5
+          ],
+          [
+            954,
+            391.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            390.5
+          ],
+          [
+            1009,
+            365
+          ],
+          [
+            1045,
+            365
+          ],
+          [
+            1064,
+            391.5
+          ],
+          [
+            1045,
+            418
+          ],
+          [
+            1009,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            364
+          ],
+          [
+            1064,
+            338.5
+          ],
+          [
+            1100,
+            338.5
+          ],
+          [
+            1119,
+            365
+          ],
+          [
+            1100,
+            391.5
+          ],
+          [
+            1064,
+            391.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            390.5
+          ],
+          [
+            1119,
+            365
+          ],
+          [
+            1155,
+            365
+          ],
+          [
+            1174,
+            391.5
+          ],
+          [
+            1155,
+            418
+          ],
+          [
+            1119,
+            418
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            364
+          ],
+          [
+            1174,
+            338.5
+          ],
+          [
+            1210,
+            338.5
+          ],
+          [
+            1229,
+            365
+          ],
+          [
+            1210,
+            391.5
+          ],
+          [
+            1174,
+            391.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            417
+          ],
+          [
+            294,
+            391.5
+          ],
+          [
+            330,
+            391.5
+          ],
+          [
+            349,
+            418
+          ],
+          [
+            330,
+            444.5
+          ],
+          [
+            294,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            443.5
+          ],
+          [
+            349,
+            418
+          ],
+          [
+            385,
+            418
+          ],
+          [
+            404,
+            444.5
+          ],
+          [
+            385,
+            471
+          ],
+          [
+            349,
+            471
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            417
+          ],
+          [
+            404,
+            391.5
+          ],
+          [
+            440,
+            391.5
+          ],
+          [
+            459,
+            418
+          ],
+          [
+            440,
+            444.5
+          ],
+          [
+            404,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            443.5
+          ],
+          [
+            459,
+            418
+          ],
+          [
+            495,
+            418
+          ],
+          [
+            514,
+            444.5
+          ],
+          [
+            495,
+            471
+          ],
+          [
+            459,
+            471
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            417
+          ],
+          [
+            514,
+            391.5
+          ],
+          [
+            550,
+            391.5
+          ],
+          [
+            569,
+            418
+          ],
+          [
+            550,
+            444.5
+          ],
+          [
+            514,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            443.5
+          ],
+          [
+            569,
+            418
+          ],
+          [
+            605,
+            418
+          ],
+          [
+            624,
+            444.5
+          ],
+          [
+            605,
+            471
+          ],
+          [
+            569,
+            471
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            417
+          ],
+          [
+            624,
+            391.5
+          ],
+          [
+            660,
+            391.5
+          ],
+          [
+            679,
+            418
+          ],
+          [
+            660,
+            444.5
+          ],
+          [
+            624,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            443.5
+          ],
+          [
+            679,
+            418
+          ],
+          [
+            715,
+            418
+          ],
+          [
+            734,
+            444.5
+          ],
+          [
+            715,
+            471
+          ],
+          [
+            679,
+            471
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            417
+          ],
+          [
+            734,
+            391.5
+          ],
+          [
+            770,
+            391.5
+          ],
+          [
+            789,
+            418
+          ],
+          [
+            770,
+            444.5
+          ],
+          [
+            734,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            443.5
+          ],
+          [
+            789,
+            418
+          ],
+          [
+            825,
+            418
+          ],
+          [
+            844,
+            444.5
+          ],
+          [
+            825,
+            471
+          ],
+          [
+            789,
+            471
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            417
+          ],
+          [
+            844,
+            391.5
+          ],
+          [
+            880,
+            391.5
+          ],
+          [
+            899,
+            418
+          ],
+          [
+            880,
+            444.5
+          ],
+          [
+            844,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            443.5
+          ],
+          [
+            899,
+            418
+          ],
+          [
+            935,
+            418
+          ],
+          [
+            954,
+            444.5
+          ],
+          [
+            935,
+            471
+          ],
+          [
+            899,
+            471
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            417
+          ],
+          [
+            954,
+            391.5
+          ],
+          [
+            990,
+            391.5
+          ],
+          [
+            1009,
+            418
+          ],
+          [
+            990,
+            444.5
+          ],
+          [
+            954,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            443.5
+          ],
+          [
+            1009,
+            418
+          ],
+          [
+            1045,
+            418
+          ],
+          [
+            1064,
+            444.5
+          ],
+          [
+            1045,
+            471
+          ],
+          [
+            1009,
+            471
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            417
+          ],
+          [
+            1064,
+            391.5
+          ],
+          [
+            1100,
+            391.5
+          ],
+          [
+            1119,
+            418
+          ],
+          [
+            1100,
+            444.5
+          ],
+          [
+            1064,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            443.5
+          ],
+          [
+            1119,
+            418
+          ],
+          [
+            1155,
+            418
+          ],
+          [
+            1174,
+            444.5
+          ],
+          [
+            1155,
+            471
+          ],
+          [
+            1119,
+            471
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            417
+          ],
+          [
+            1174,
+            391.5
+          ],
+          [
+            1210,
+            391.5
+          ],
+          [
+            1229,
+            418
+          ],
+          [
+            1210,
+            444.5
+          ],
+          [
+            1174,
+            444.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            470
+          ],
+          [
+            294,
+            444.5
+          ],
+          [
+            330,
+            444.5
+          ],
+          [
+            349,
+            471
+          ],
+          [
+            330,
+            497.5
+          ],
+          [
+            294,
+            497.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            496.5
+          ],
+          [
+            349,
+            471
+          ],
+          [
+            385,
+            471
+          ],
+          [
+            404,
+            497.5
+          ],
+          [
+            385,
+            524
+          ],
+          [
+            349,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            470
+          ],
+          [
+            404,
+            444.5
+          ],
+          [
+            440,
+            444.5
+          ],
+          [
+            459,
+            471
+          ],
+          [
+            440,
+            497.5
+          ],
+          [
+            404,
+            497.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            496.5
+          ],
+          [
+            459,
+            471
+          ],
+          [
+            495,
+            471
+          ],
+          [
+            514,
+            497.5
+          ],
+          [
+            495,
+            524
+          ],
+          [
+            459,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            470
+          ],
+          [
+            514,
+            444.5
+          ],
+          [
+            550,
+            444.5
+          ],
+          [
+            569,
+            471
+          ],
+          [
+            550,
+            497.5
+          ],
+          [
+            514,
+            497.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            496.5
+          ],
+          [
+            569,
+            471
+          ],
+          [
+            605,
+            471
+          ],
+          [
+            624,
+            497.5
+          ],
+          [
+            605,
+            524
+          ],
+          [
+            569,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            470
+          ],
+          [
+            624,
+            444.5
+          ],
+          [
+            660,
+            444.5
+          ],
+          [
+            679,
+            471
+          ],
+          [
+            660,
+            497.5
+          ],
+          [
+            624,
+            497.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            496.5
+          ],
+          [
+            679,
+            471
+          ],
+          [
+            715,
+            471
+          ],
+          [
+            734,
+            497.5
+          ],
+          [
+            715,
+            524
+          ],
+          [
+            679,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            470
+          ],
+          [
+            734,
+            444.5
+          ],
+          [
+            770,
+            444.5
+          ],
+          [
+            789,
+            471
+          ],
+          [
+            770,
+            497.5
+          ],
+          [
+            734,
+            497.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            496.5
+          ],
+          [
+            789,
+            471
+          ],
+          [
+            825,
+            471
+          ],
+          [
+            844,
+            497.5
+          ],
+          [
+            825,
+            524
+          ],
+          [
+            789,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            470
+          ],
+          [
+            844,
+            444.5
+          ],
+          [
+            880,
+            444.5
+          ],
+          [
+            899,
+            471
+          ],
+          [
+            880,
+            497.5
+          ],
+          [
+            844,
+            497.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            496.5
+          ],
+          [
+            899,
+            471
+          ],
+          [
+            935,
+            471
+          ],
+          [
+            954,
+            497.5
+          ],
+          [
+            935,
+            524
+          ],
+          [
+            899,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            470
+          ],
+          [
+            954,
+            444.5
+          ],
+          [
+            990,
+            444.5
+          ],
+          [
+            1009,
+            471
+          ],
+          [
+            990,
+            497.5
+          ],
+          [
+            954,
+            497.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            496.5
+          ],
+          [
+            1009,
+            471
+          ],
+          [
+            1045,
+            471
+          ],
+          [
+            1064,
+            497.5
+          ],
+          [
+            1045,
+            524
+          ],
+          [
+            1009,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            470
+          ],
+          [
+            1064,
+            444.5
+          ],
+          [
+            1100,
+            444.5
+          ],
+          [
+            1119,
+            471
+          ],
+          [
+            1100,
+            497.5
+          ],
+          [
+            1064,
+            497.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            496.5
+          ],
+          [
+            1119,
+            471
+          ],
+          [
+            1155,
+            471
+          ],
+          [
+            1174,
+            497.5
+          ],
+          [
+            1155,
+            524
+          ],
+          [
+            1119,
+            524
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            470
+          ],
+          [
+            1174,
+            444.5
+          ],
+          [
+            1210,
+            444.5
+          ],
+          [
+            1229,
+            471
+          ],
+          [
+            1210,
+            497.5
+          ],
+          [
+            1174,
+            497.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            523
+          ],
+          [
+            294,
+            497.5
+          ],
+          [
+            330,
+            497.5
+          ],
+          [
+            349,
+            524
+          ],
+          [
+            330,
+            550.5
+          ],
+          [
+            294,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            549.5
+          ],
+          [
+            349,
+            524
+          ],
+          [
+            385,
+            524
+          ],
+          [
+            404,
+            550.5
+          ],
+          [
+            385,
+            577
+          ],
+          [
+            349,
+            577
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            523
+          ],
+          [
+            404,
+            497.5
+          ],
+          [
+            440,
+            497.5
+          ],
+          [
+            459,
+            524
+          ],
+          [
+            440,
+            550.5
+          ],
+          [
+            404,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            549.5
+          ],
+          [
+            459,
+            524
+          ],
+          [
+            495,
+            524
+          ],
+          [
+            514,
+            550.5
+          ],
+          [
+            495,
+            577
+          ],
+          [
+            459,
+            577
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            523
+          ],
+          [
+            514,
+            497.5
+          ],
+          [
+            550,
+            497.5
+          ],
+          [
+            569,
+            524
+          ],
+          [
+            550,
+            550.5
+          ],
+          [
+            514,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            549.5
+          ],
+          [
+            569,
+            524
+          ],
+          [
+            605,
+            524
+          ],
+          [
+            624,
+            550.5
+          ],
+          [
+            605,
+            577
+          ],
+          [
+            569,
+            577
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            523
+          ],
+          [
+            624,
+            497.5
+          ],
+          [
+            660,
+            497.5
+          ],
+          [
+            679,
+            524
+          ],
+          [
+            660,
+            550.5
+          ],
+          [
+            624,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            549.5
+          ],
+          [
+            679,
+            524
+          ],
+          [
+            715,
+            524
+          ],
+          [
+            734,
+            550.5
+          ],
+          [
+            715,
+            577
+          ],
+          [
+            679,
+            577
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            523
+          ],
+          [
+            734,
+            497.5
+          ],
+          [
+            770,
+            497.5
+          ],
+          [
+            789,
+            524
+          ],
+          [
+            770,
+            550.5
+          ],
+          [
+            734,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            549.5
+          ],
+          [
+            789,
+            524
+          ],
+          [
+            825,
+            524
+          ],
+          [
+            844,
+            550.5
+          ],
+          [
+            825,
+            577
+          ],
+          [
+            789,
+            577
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            523
+          ],
+          [
+            844,
+            497.5
+          ],
+          [
+            880,
+            497.5
+          ],
+          [
+            899,
+            524
+          ],
+          [
+            880,
+            550.5
+          ],
+          [
+            844,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            549.5
+          ],
+          [
+            899,
+            524
+          ],
+          [
+            935,
+            524
+          ],
+          [
+            954,
+            550.5
+          ],
+          [
+            935,
+            577
+          ],
+          [
+            899,
+            577
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            523
+          ],
+          [
+            954,
+            497.5
+          ],
+          [
+            990,
+            497.5
+          ],
+          [
+            1009,
+            524
+          ],
+          [
+            990,
+            550.5
+          ],
+          [
+            954,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            549.5
+          ],
+          [
+            1009,
+            524
+          ],
+          [
+            1045,
+            524
+          ],
+          [
+            1064,
+            550.5
+          ],
+          [
+            1045,
+            577
+          ],
+          [
+            1009,
+            577
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            523
+          ],
+          [
+            1064,
+            497.5
+          ],
+          [
+            1100,
+            497.5
+          ],
+          [
+            1119,
+            524
+          ],
+          [
+            1100,
+            550.5
+          ],
+          [
+            1064,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            549.5
+          ],
+          [
+            1119,
+            524
+          ],
+          [
+            1155,
+            524
+          ],
+          [
+            1174,
+            550.5
+          ],
+          [
+            1155,
+            577
+          ],
+          [
+            1119,
+            577
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            523
+          ],
+          [
+            1174,
+            497.5
+          ],
+          [
+            1210,
+            497.5
+          ],
+          [
+            1229,
+            524
+          ],
+          [
+            1210,
+            550.5
+          ],
+          [
+            1174,
+            550.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            576
+          ],
+          [
+            294,
+            550.5
+          ],
+          [
+            330,
+            550.5
+          ],
+          [
+            349,
+            577
+          ],
+          [
+            330,
+            603.5
+          ],
+          [
+            294,
+            603.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            602.5
+          ],
+          [
+            349,
+            577
+          ],
+          [
+            385,
+            577
+          ],
+          [
+            404,
+            603.5
+          ],
+          [
+            385,
+            630
+          ],
+          [
+            349,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            576
+          ],
+          [
+            404,
+            550.5
+          ],
+          [
+            440,
+            550.5
+          ],
+          [
+            459,
+            577
+          ],
+          [
+            440,
+            603.5
+          ],
+          [
+            404,
+            603.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            602.5
+          ],
+          [
+            459,
+            577
+          ],
+          [
+            495,
+            577
+          ],
+          [
+            514,
+            603.5
+          ],
+          [
+            495,
+            630
+          ],
+          [
+            459,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            576
+          ],
+          [
+            514,
+            550.5
+          ],
+          [
+            550,
+            550.5
+          ],
+          [
+            569,
+            577
+          ],
+          [
+            550,
+            603.5
+          ],
+          [
+            514,
+            603.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            602.5
+          ],
+          [
+            569,
+            577
+          ],
+          [
+            605,
+            577
+          ],
+          [
+            624,
+            603.5
+          ],
+          [
+            605,
+            630
+          ],
+          [
+            569,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            576
+          ],
+          [
+            624,
+            550.5
+          ],
+          [
+            660,
+            550.5
+          ],
+          [
+            679,
+            577
+          ],
+          [
+            660,
+            603.5
+          ],
+          [
+            624,
+            603.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            602.5
+          ],
+          [
+            679,
+            577
+          ],
+          [
+            715,
+            577
+          ],
+          [
+            734,
+            603.5
+          ],
+          [
+            715,
+            630
+          ],
+          [
+            679,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            576
+          ],
+          [
+            734,
+            550.5
+          ],
+          [
+            770,
+            550.5
+          ],
+          [
+            789,
+            577
+          ],
+          [
+            770,
+            603.5
+          ],
+          [
+            734,
+            603.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            602.5
+          ],
+          [
+            789,
+            577
+          ],
+          [
+            825,
+            577
+          ],
+          [
+            844,
+            603.5
+          ],
+          [
+            825,
+            630
+          ],
+          [
+            789,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            576
+          ],
+          [
+            844,
+            550.5
+          ],
+          [
+            880,
+            550.5
+          ],
+          [
+            899,
+            577
+          ],
+          [
+            880,
+            603.5
+          ],
+          [
+            844,
+            603.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            602.5
+          ],
+          [
+            899,
+            577
+          ],
+          [
+            935,
+            577
+          ],
+          [
+            954,
+            603.5
+          ],
+          [
+            935,
+            630
+          ],
+          [
+            899,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            576
+          ],
+          [
+            954,
+            550.5
+          ],
+          [
+            990,
+            550.5
+          ],
+          [
+            1009,
+            577
+          ],
+          [
+            990,
+            603.5
+          ],
+          [
+            954,
+            603.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            602.5
+          ],
+          [
+            1009,
+            577
+          ],
+          [
+            1045,
+            577
+          ],
+          [
+            1064,
+            603.5
+          ],
+          [
+            1045,
+            630
+          ],
+          [
+            1009,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            576
+          ],
+          [
+            1064,
+            550.5
+          ],
+          [
+            1100,
+            550.5
+          ],
+          [
+            1119,
+            577
+          ],
+          [
+            1100,
+            603.5
+          ],
+          [
+            1064,
+            603.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            602.5
+          ],
+          [
+            1119,
+            577
+          ],
+          [
+            1155,
+            577
+          ],
+          [
+            1174,
+            603.5
+          ],
+          [
+            1155,
+            630
+          ],
+          [
+            1119,
+            630
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            576
+          ],
+          [
+            1174,
+            550.5
+          ],
+          [
+            1210,
+            550.5
+          ],
+          [
+            1229,
+            577
+          ],
+          [
+            1210,
+            603.5
+          ],
+          [
+            1174,
+            603.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            629
+          ],
+          [
+            294,
+            603.5
+          ],
+          [
+            330,
+            603.5
+          ],
+          [
+            349,
+            630
+          ],
+          [
+            330,
+            656.5
+          ],
+          [
+            294,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            655.5
+          ],
+          [
+            349,
+            630
+          ],
+          [
+            385,
+            630
+          ],
+          [
+            404,
+            656.5
+          ],
+          [
+            385,
+            683
+          ],
+          [
+            349,
+            683
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            629
+          ],
+          [
+            404,
+            603.5
+          ],
+          [
+            440,
+            603.5
+          ],
+          [
+            459,
+            630
+          ],
+          [
+            440,
+            656.5
+          ],
+          [
+            404,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            655.5
+          ],
+          [
+            459,
+            630
+          ],
+          [
+            495,
+            630
+          ],
+          [
+            514,
+            656.5
+          ],
+          [
+            495,
+            683
+          ],
+          [
+            459,
+            683
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            629
+          ],
+          [
+            514,
+            603.5
+          ],
+          [
+            550,
+            603.5
+          ],
+          [
+            569,
+            630
+          ],
+          [
+            550,
+            656.5
+          ],
+          [
+            514,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            655.5
+          ],
+          [
+            569,
+            630
+          ],
+          [
+            605,
+            630
+          ],
+          [
+            624,
+            656.5
+          ],
+          [
+            605,
+            683
+          ],
+          [
+            569,
+            683
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            629
+          ],
+          [
+            624,
+            603.5
+          ],
+          [
+            660,
+            603.5
+          ],
+          [
+            679,
+            630
+          ],
+          [
+            660,
+            656.5
+          ],
+          [
+            624,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            655.5
+          ],
+          [
+            679,
+            630
+          ],
+          [
+            715,
+            630
+          ],
+          [
+            734,
+            656.5
+          ],
+          [
+            715,
+            683
+          ],
+          [
+            679,
+            683
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            629
+          ],
+          [
+            734,
+            603.5
+          ],
+          [
+            770,
+            603.5
+          ],
+          [
+            789,
+            630
+          ],
+          [
+            770,
+            656.5
+          ],
+          [
+            734,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            655.5
+          ],
+          [
+            789,
+            630
+          ],
+          [
+            825,
+            630
+          ],
+          [
+            844,
+            656.5
+          ],
+          [
+            825,
+            683
+          ],
+          [
+            789,
+            683
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            629
+          ],
+          [
+            844,
+            603.5
+          ],
+          [
+            880,
+            603.5
+          ],
+          [
+            899,
+            630
+          ],
+          [
+            880,
+            656.5
+          ],
+          [
+            844,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            655.5
+          ],
+          [
+            899,
+            630
+          ],
+          [
+            935,
+            630
+          ],
+          [
+            954,
+            656.5
+          ],
+          [
+            935,
+            683
+          ],
+          [
+            899,
+            683
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            629
+          ],
+          [
+            954,
+            603.5
+          ],
+          [
+            990,
+            603.5
+          ],
+          [
+            1009,
+            630
+          ],
+          [
+            990,
+            656.5
+          ],
+          [
+            954,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            655.5
+          ],
+          [
+            1009,
+            630
+          ],
+          [
+            1045,
+            630
+          ],
+          [
+            1064,
+            656.5
+          ],
+          [
+            1045,
+            683
+          ],
+          [
+            1009,
+            683
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            629
+          ],
+          [
+            1064,
+            603.5
+          ],
+          [
+            1100,
+            603.5
+          ],
+          [
+            1119,
+            630
+          ],
+          [
+            1100,
+            656.5
+          ],
+          [
+            1064,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            655.5
+          ],
+          [
+            1119,
+            630
+          ],
+          [
+            1155,
+            630
+          ],
+          [
+            1174,
+            656.5
+          ],
+          [
+            1155,
+            683
+          ],
+          [
+            1119,
+            683
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            629
+          ],
+          [
+            1174,
+            603.5
+          ],
+          [
+            1210,
+            603.5
+          ],
+          [
+            1229,
+            630
+          ],
+          [
+            1210,
+            656.5
+          ],
+          [
+            1174,
+            656.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            682
+          ],
+          [
+            294,
+            656.5
+          ],
+          [
+            330,
+            656.5
+          ],
+          [
+            349,
+            683
+          ],
+          [
+            330,
+            709.5
+          ],
+          [
+            294,
+            709.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            708.5
+          ],
+          [
+            349,
+            683
+          ],
+          [
+            385,
+            683
+          ],
+          [
+            404,
+            709.5
+          ],
+          [
+            385,
+            736
+          ],
+          [
+            349,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            682
+          ],
+          [
+            404,
+            656.5
+          ],
+          [
+            440,
+            656.5
+          ],
+          [
+            459,
+            683
+          ],
+          [
+            440,
+            709.5
+          ],
+          [
+            404,
+            709.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            708.5
+          ],
+          [
+            459,
+            683
+          ],
+          [
+            495,
+            683
+          ],
+          [
+            514,
+            709.5
+          ],
+          [
+            495,
+            736
+          ],
+          [
+            459,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            682
+          ],
+          [
+            514,
+            656.5
+          ],
+          [
+            550,
+            656.5
+          ],
+          [
+            569,
+            683
+          ],
+          [
+            550,
+            709.5
+          ],
+          [
+            514,
+            709.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            708.5
+          ],
+          [
+            569,
+            683
+          ],
+          [
+            605,
+            683
+          ],
+          [
+            624,
+            709.5
+          ],
+          [
+            605,
+            736
+          ],
+          [
+            569,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            682
+          ],
+          [
+            624,
+            656.5
+          ],
+          [
+            660,
+            656.5
+          ],
+          [
+            679,
+            683
+          ],
+          [
+            660,
+            709.5
+          ],
+          [
+            624,
+            709.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            708.5
+          ],
+          [
+            679,
+            683
+          ],
+          [
+            715,
+            683
+          ],
+          [
+            734,
+            709.5
+          ],
+          [
+            715,
+            736
+          ],
+          [
+            679,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            682
+          ],
+          [
+            734,
+            656.5
+          ],
+          [
+            770,
+            656.5
+          ],
+          [
+            789,
+            683
+          ],
+          [
+            770,
+            709.5
+          ],
+          [
+            734,
+            709.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            708.5
+          ],
+          [
+            789,
+            683
+          ],
+          [
+            825,
+            683
+          ],
+          [
+            844,
+            709.5
+          ],
+          [
+            825,
+            736
+          ],
+          [
+            789,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            682
+          ],
+          [
+            844,
+            656.5
+          ],
+          [
+            880,
+            656.5
+          ],
+          [
+            899,
+            683
+          ],
+          [
+            880,
+            709.5
+          ],
+          [
+            844,
+            709.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            708.5
+          ],
+          [
+            899,
+            683
+          ],
+          [
+            935,
+            683
+          ],
+          [
+            954,
+            709.5
+          ],
+          [
+            935,
+            736
+          ],
+          [
+            899,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            682
+          ],
+          [
+            954,
+            656.5
+          ],
+          [
+            990,
+            656.5
+          ],
+          [
+            1009,
+            683
+          ],
+          [
+            990,
+            709.5
+          ],
+          [
+            954,
+            709.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            708.5
+          ],
+          [
+            1009,
+            683
+          ],
+          [
+            1045,
+            683
+          ],
+          [
+            1064,
+            709.5
+          ],
+          [
+            1045,
+            736
+          ],
+          [
+            1009,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            682
+          ],
+          [
+            1064,
+            656.5
+          ],
+          [
+            1100,
+            656.5
+          ],
+          [
+            1119,
+            683
+          ],
+          [
+            1100,
+            709.5
+          ],
+          [
+            1064,
+            709.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            708.5
+          ],
+          [
+            1119,
+            683
+          ],
+          [
+            1155,
+            683
+          ],
+          [
+            1174,
+            709.5
+          ],
+          [
+            1155,
+            736
+          ],
+          [
+            1119,
+            736
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            682
+          ],
+          [
+            1174,
+            656.5
+          ],
+          [
+            1210,
+            656.5
+          ],
+          [
+            1229,
+            683
+          ],
+          [
+            1210,
+            709.5
+          ],
+          [
+            1174,
+            709.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            735
+          ],
+          [
+            294,
+            709.5
+          ],
+          [
+            330,
+            709.5
+          ],
+          [
+            349,
+            736
+          ],
+          [
+            330,
+            762.5
+          ],
+          [
+            294,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            761.5
+          ],
+          [
+            349,
+            736
+          ],
+          [
+            385,
+            736
+          ],
+          [
+            404,
+            762.5
+          ],
+          [
+            385,
+            789
+          ],
+          [
+            349,
+            789
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            735
+          ],
+          [
+            404,
+            709.5
+          ],
+          [
+            440,
+            709.5
+          ],
+          [
+            459,
+            736
+          ],
+          [
+            440,
+            762.5
+          ],
+          [
+            404,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            761.5
+          ],
+          [
+            459,
+            736
+          ],
+          [
+            495,
+            736
+          ],
+          [
+            514,
+            762.5
+          ],
+          [
+            495,
+            789
+          ],
+          [
+            459,
+            789
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            735
+          ],
+          [
+            514,
+            709.5
+          ],
+          [
+            550,
+            709.5
+          ],
+          [
+            569,
+            736
+          ],
+          [
+            550,
+            762.5
+          ],
+          [
+            514,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            761.5
+          ],
+          [
+            569,
+            736
+          ],
+          [
+            605,
+            736
+          ],
+          [
+            624,
+            762.5
+          ],
+          [
+            605,
+            789
+          ],
+          [
+            569,
+            789
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            735
+          ],
+          [
+            624,
+            709.5
+          ],
+          [
+            660,
+            709.5
+          ],
+          [
+            679,
+            736
+          ],
+          [
+            660,
+            762.5
+          ],
+          [
+            624,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            761.5
+          ],
+          [
+            679,
+            736
+          ],
+          [
+            715,
+            736
+          ],
+          [
+            734,
+            762.5
+          ],
+          [
+            715,
+            789
+          ],
+          [
+            679,
+            789
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            735
+          ],
+          [
+            734,
+            709.5
+          ],
+          [
+            770,
+            709.5
+          ],
+          [
+            789,
+            736
+          ],
+          [
+            770,
+            762.5
+          ],
+          [
+            734,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            761.5
+          ],
+          [
+            789,
+            736
+          ],
+          [
+            825,
+            736
+          ],
+          [
+            844,
+            762.5
+          ],
+          [
+            825,
+            789
+          ],
+          [
+            789,
+            789
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            735
+          ],
+          [
+            844,
+            709.5
+          ],
+          [
+            880,
+            709.5
+          ],
+          [
+            899,
+            736
+          ],
+          [
+            880,
+            762.5
+          ],
+          [
+            844,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            761.5
+          ],
+          [
+            899,
+            736
+          ],
+          [
+            935,
+            736
+          ],
+          [
+            954,
+            762.5
+          ],
+          [
+            935,
+            789
+          ],
+          [
+            899,
+            789
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            735
+          ],
+          [
+            954,
+            709.5
+          ],
+          [
+            990,
+            709.5
+          ],
+          [
+            1009,
+            736
+          ],
+          [
+            990,
+            762.5
+          ],
+          [
+            954,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            761.5
+          ],
+          [
+            1009,
+            736
+          ],
+          [
+            1045,
+            736
+          ],
+          [
+            1064,
+            762.5
+          ],
+          [
+            1045,
+            789
+          ],
+          [
+            1009,
+            789
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            735
+          ],
+          [
+            1064,
+            709.5
+          ],
+          [
+            1100,
+            709.5
+          ],
+          [
+            1119,
+            736
+          ],
+          [
+            1100,
+            762.5
+          ],
+          [
+            1064,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            761.5
+          ],
+          [
+            1119,
+            736
+          ],
+          [
+            1155,
+            736
+          ],
+          [
+            1174,
+            762.5
+          ],
+          [
+            1155,
+            789
+          ],
+          [
+            1119,
+            789
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            735
+          ],
+          [
+            1174,
+            709.5
+          ],
+          [
+            1210,
+            709.5
+          ],
+          [
+            1229,
+            736
+          ],
+          [
+            1210,
+            762.5
+          ],
+          [
+            1174,
+            762.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            788
+          ],
+          [
+            294,
+            762.5
+          ],
+          [
+            330,
+            762.5
+          ],
+          [
+            349,
+            789
+          ],
+          [
+            330,
+            815.5
+          ],
+          [
+            294,
+            815.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            814.5
+          ],
+          [
+            349,
+            789
+          ],
+          [
+            385,
+            789
+          ],
+          [
+            404,
+            815.5
+          ],
+          [
+            385,
+            842
+          ],
+          [
+            349,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            788
+          ],
+          [
+            404,
+            762.5
+          ],
+          [
+            440,
+            762.5
+          ],
+          [
+            459,
+            789
+          ],
+          [
+            440,
+            815.5
+          ],
+          [
+            404,
+            815.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            814.5
+          ],
+          [
+            459,
+            789
+          ],
+          [
+            495,
+            789
+          ],
+          [
+            514,
+            815.5
+          ],
+          [
+            495,
+            842
+          ],
+          [
+            459,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            788
+          ],
+          [
+            514,
+            762.5
+          ],
+          [
+            550,
+            762.5
+          ],
+          [
+            569,
+            789
+          ],
+          [
+            550,
+            815.5
+          ],
+          [
+            514,
+            815.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            814.5
+          ],
+          [
+            569,
+            789
+          ],
+          [
+            605,
+            789
+          ],
+          [
+            624,
+            815.5
+          ],
+          [
+            605,
+            842
+          ],
+          [
+            569,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            788
+          ],
+          [
+            624,
+            762.5
+          ],
+          [
+            660,
+            762.5
+          ],
+          [
+            679,
+            789
+          ],
+          [
+            660,
+            815.5
+          ],
+          [
+            624,
+            815.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            814.5
+          ],
+          [
+            679,
+            789
+          ],
+          [
+            715,
+            789
+          ],
+          [
+            734,
+            815.5
+          ],
+          [
+            715,
+            842
+          ],
+          [
+            679,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            788
+          ],
+          [
+            734,
+            762.5
+          ],
+          [
+            770,
+            762.5
+          ],
+          [
+            789,
+            789
+          ],
+          [
+            770,
+            815.5
+          ],
+          [
+            734,
+            815.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            814.5
+          ],
+          [
+            789,
+            789
+          ],
+          [
+            825,
+            789
+          ],
+          [
+            844,
+            815.5
+          ],
+          [
+            825,
+            842
+          ],
+          [
+            789,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            788
+          ],
+          [
+            844,
+            762.5
+          ],
+          [
+            880,
+            762.5
+          ],
+          [
+            899,
+            789
+          ],
+          [
+            880,
+            815.5
+          ],
+          [
+            844,
+            815.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            814.5
+          ],
+          [
+            899,
+            789
+          ],
+          [
+            935,
+            789
+          ],
+          [
+            954,
+            815.5
+          ],
+          [
+            935,
+            842
+          ],
+          [
+            899,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            788
+          ],
+          [
+            954,
+            762.5
+          ],
+          [
+            990,
+            762.5
+          ],
+          [
+            1009,
+            789
+          ],
+          [
+            990,
+            815.5
+          ],
+          [
+            954,
+            815.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            814.5
+          ],
+          [
+            1009,
+            789
+          ],
+          [
+            1045,
+            789
+          ],
+          [
+            1064,
+            815.5
+          ],
+          [
+            1045,
+            842
+          ],
+          [
+            1009,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            788
+          ],
+          [
+            1064,
+            762.5
+          ],
+          [
+            1100,
+            762.5
+          ],
+          [
+            1119,
+            789
+          ],
+          [
+            1100,
+            815.5
+          ],
+          [
+            1064,
+            815.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            814.5
+          ],
+          [
+            1119,
+            789
+          ],
+          [
+            1155,
+            789
+          ],
+          [
+            1174,
+            815.5
+          ],
+          [
+            1155,
+            842
+          ],
+          [
+            1119,
+            842
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            788
+          ],
+          [
+            1174,
+            762.5
+          ],
+          [
+            1210,
+            762.5
+          ],
+          [
+            1229,
+            789
+          ],
+          [
+            1210,
+            815.5
+          ],
+          [
+            1174,
+            815.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            841
+          ],
+          [
+            294,
+            815.5
+          ],
+          [
+            330,
+            815.5
+          ],
+          [
+            349,
+            842
+          ],
+          [
+            330,
+            868.5
+          ],
+          [
+            294,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            867.5
+          ],
+          [
+            349,
+            842
+          ],
+          [
+            385,
+            842
+          ],
+          [
+            404,
+            868.5
+          ],
+          [
+            385,
+            895
+          ],
+          [
+            349,
+            895
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            841
+          ],
+          [
+            404,
+            815.5
+          ],
+          [
+            440,
+            815.5
+          ],
+          [
+            459,
+            842
+          ],
+          [
+            440,
+            868.5
+          ],
+          [
+            404,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            867.5
+          ],
+          [
+            459,
+            842
+          ],
+          [
+            495,
+            842
+          ],
+          [
+            514,
+            868.5
+          ],
+          [
+            495,
+            895
+          ],
+          [
+            459,
+            895
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            841
+          ],
+          [
+            514,
+            815.5
+          ],
+          [
+            550,
+            815.5
+          ],
+          [
+            569,
+            842
+          ],
+          [
+            550,
+            868.5
+          ],
+          [
+            514,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            867.5
+          ],
+          [
+            569,
+            842
+          ],
+          [
+            605,
+            842
+          ],
+          [
+            624,
+            868.5
+          ],
+          [
+            605,
+            895
+          ],
+          [
+            569,
+            895
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            841
+          ],
+          [
+            624,
+            815.5
+          ],
+          [
+            660,
+            815.5
+          ],
+          [
+            679,
+            842
+          ],
+          [
+            660,
+            868.5
+          ],
+          [
+            624,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            867.5
+          ],
+          [
+            679,
+            842
+          ],
+          [
+            715,
+            842
+          ],
+          [
+            734,
+            868.5
+          ],
+          [
+            715,
+            895
+          ],
+          [
+            679,
+            895
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            841
+          ],
+          [
+            734,
+            815.5
+          ],
+          [
+            770,
+            815.5
+          ],
+          [
+            789,
+            842
+          ],
+          [
+            770,
+            868.5
+          ],
+          [
+            734,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            867.5
+          ],
+          [
+            789,
+            842
+          ],
+          [
+            825,
+            842
+          ],
+          [
+            844,
+            868.5
+          ],
+          [
+            825,
+            895
+          ],
+          [
+            789,
+            895
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            841
+          ],
+          [
+            844,
+            815.5
+          ],
+          [
+            880,
+            815.5
+          ],
+          [
+            899,
+            842
+          ],
+          [
+            880,
+            868.5
+          ],
+          [
+            844,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            867.5
+          ],
+          [
+            899,
+            842
+          ],
+          [
+            935,
+            842
+          ],
+          [
+            954,
+            868.5
+          ],
+          [
+            935,
+            895
+          ],
+          [
+            899,
+            895
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            841
+          ],
+          [
+            954,
+            815.5
+          ],
+          [
+            990,
+            815.5
+          ],
+          [
+            1009,
+            842
+          ],
+          [
+            990,
+            868.5
+          ],
+          [
+            954,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            867.5
+          ],
+          [
+            1009,
+            842
+          ],
+          [
+            1045,
+            842
+          ],
+          [
+            1064,
+            868.5
+          ],
+          [
+            1045,
+            895
+          ],
+          [
+            1009,
+            895
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            841
+          ],
+          [
+            1064,
+            815.5
+          ],
+          [
+            1100,
+            815.5
+          ],
+          [
+            1119,
+            842
+          ],
+          [
+            1100,
+            868.5
+          ],
+          [
+            1064,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            867.5
+          ],
+          [
+            1119,
+            842
+          ],
+          [
+            1155,
+            842
+          ],
+          [
+            1174,
+            868.5
+          ],
+          [
+            1155,
+            895
+          ],
+          [
+            1119,
+            895
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            841
+          ],
+          [
+            1174,
+            815.5
+          ],
+          [
+            1210,
+            815.5
+          ],
+          [
+            1229,
+            842
+          ],
+          [
+            1210,
+            868.5
+          ],
+          [
+            1174,
+            868.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            894
+          ],
+          [
+            294,
+            868.5
+          ],
+          [
+            330,
+            868.5
+          ],
+          [
+            349,
+            895
+          ],
+          [
+            330,
+            921.5
+          ],
+          [
+            294,
+            921.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            920.5
+          ],
+          [
+            349,
+            895
+          ],
+          [
+            385,
+            895
+          ],
+          [
+            404,
+            921.5
+          ],
+          [
+            385,
+            948
+          ],
+          [
+            349,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            894
+          ],
+          [
+            404,
+            868.5
+          ],
+          [
+            440,
+            868.5
+          ],
+          [
+            459,
+            895
+          ],
+          [
+            440,
+            921.5
+          ],
+          [
+            404,
+            921.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            920.5
+          ],
+          [
+            459,
+            895
+          ],
+          [
+            495,
+            895
+          ],
+          [
+            514,
+            921.5
+          ],
+          [
+            495,
+            948
+          ],
+          [
+            459,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            894
+          ],
+          [
+            514,
+            868.5
+          ],
+          [
+            550,
+            868.5
+          ],
+          [
+            569,
+            895
+          ],
+          [
+            550,
+            921.5
+          ],
+          [
+            514,
+            921.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            920.5
+          ],
+          [
+            569,
+            895
+          ],
+          [
+            605,
+            895
+          ],
+          [
+            624,
+            921.5
+          ],
+          [
+            605,
+            948
+          ],
+          [
+            569,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            894
+          ],
+          [
+            624,
+            868.5
+          ],
+          [
+            660,
+            868.5
+          ],
+          [
+            679,
+            895
+          ],
+          [
+            660,
+            921.5
+          ],
+          [
+            624,
+            921.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            920.5
+          ],
+          [
+            679,
+            895
+          ],
+          [
+            715,
+            895
+          ],
+          [
+            734,
+            921.5
+          ],
+          [
+            715,
+            948
+          ],
+          [
+            679,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            894
+          ],
+          [
+            734,
+            868.5
+          ],
+          [
+            770,
+            868.5
+          ],
+          [
+            789,
+            895
+          ],
+          [
+            770,
+            921.5
+          ],
+          [
+            734,
+            921.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            920.5
+          ],
+          [
+            789,
+            895
+          ],
+          [
+            825,
+            895
+          ],
+          [
+            844,
+            921.5
+          ],
+          [
+            825,
+            948
+          ],
+          [
+            789,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            894
+          ],
+          [
+            844,
+            868.5
+          ],
+          [
+            880,
+            868.5
+          ],
+          [
+            899,
+            895
+          ],
+          [
+            880,
+            921.5
+          ],
+          [
+            844,
+            921.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            920.5
+          ],
+          [
+            899,
+            895
+          ],
+          [
+            935,
+            895
+          ],
+          [
+            954,
+            921.5
+          ],
+          [
+            935,
+            948
+          ],
+          [
+            899,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            894
+          ],
+          [
+            954,
+            868.5
+          ],
+          [
+            990,
+            868.5
+          ],
+          [
+            1009,
+            895
+          ],
+          [
+            990,
+            921.5
+          ],
+          [
+            954,
+            921.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            920.5
+          ],
+          [
+            1009,
+            895
+          ],
+          [
+            1045,
+            895
+          ],
+          [
+            1064,
+            921.5
+          ],
+          [
+            1045,
+            948
+          ],
+          [
+            1009,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            894
+          ],
+          [
+            1064,
+            868.5
+          ],
+          [
+            1100,
+            868.5
+          ],
+          [
+            1119,
+            895
+          ],
+          [
+            1100,
+            921.5
+          ],
+          [
+            1064,
+            921.5
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            920.5
+          ],
+          [
+            1119,
+            895
+          ],
+          [
+            1155,
+            895
+          ],
+          [
+            1174,
+            921.5
+          ],
+          [
+            1155,
+            948
+          ],
+          [
+            1119,
+            948
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            894
+          ],
+          [
+            1174,
+            868.5
+          ],
+          [
+            1210,
+            868.5
+          ],
+          [
+            1229,
+            895
+          ],
+          [
+            1210,
+            921.5
+          ],
+          [
+            1174,
+            921.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            276,
+            947
+          ],
+          [
+            294,
+            921.5
+          ],
+          [
+            330,
+            921.5
+          ],
+          [
+            349,
+            948
+          ],
+          [
+            330,
+            974.5
+          ],
+          [
+            294,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            331,
+            973.5
+          ],
+          [
+            349,
+            948
+          ],
+          [
+            385,
+            948
+          ],
+          [
+            404,
+            974.5
+          ],
+          [
+            385,
+            1001
+          ],
+          [
+            349,
+            1001
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            386,
+            947
+          ],
+          [
+            404,
+            921.5
+          ],
+          [
+            440,
+            921.5
+          ],
+          [
+            459,
+            948
+          ],
+          [
+            440,
+            974.5
+          ],
+          [
+            404,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            441,
+            973.5
+          ],
+          [
+            459,
+            948
+          ],
+          [
+            495,
+            948
+          ],
+          [
+            514,
+            974.5
+          ],
+          [
+            495,
+            1001
+          ],
+          [
+            459,
+            1001
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            496,
+            947
+          ],
+          [
+            514,
+            921.5
+          ],
+          [
+            550,
+            921.5
+          ],
+          [
+            569,
+            948
+          ],
+          [
+            550,
+            974.5
+          ],
+          [
+            514,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            551,
+            973.5
+          ],
+          [
+            569,
+            948
+          ],
+          [
+            605,
+            948
+          ],
+          [
+            624,
+            974.5
+          ],
+          [
+            605,
+            1001
+          ],
+          [
+            569,
+            1001
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            606,
+            947
+          ],
+          [
+            624,
+            921.5
+          ],
+          [
+            660,
+            921.5
+          ],
+          [
+            679,
+            948
+          ],
+          [
+            660,
+            974.5
+          ],
+          [
+            624,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            661,
+            973.5
+          ],
+          [
+            679,
+            948
+          ],
+          [
+            715,
+            948
+          ],
+          [
+            734,
+            974.5
+          ],
+          [
+            715,
+            1001
+          ],
+          [
+            679,
+            1001
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            716,
+            947
+          ],
+          [
+            734,
+            921.5
+          ],
+          [
+            770,
+            921.5
+          ],
+          [
+            789,
+            948
+          ],
+          [
+            770,
+            974.5
+          ],
+          [
+            734,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            771,
+            973.5
+          ],
+          [
+            789,
+            948
+          ],
+          [
+            825,
+            948
+          ],
+          [
+            844,
+            974.5
+          ],
+          [
+            825,
+            1001
+          ],
+          [
+            789,
+            1001
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            826,
+            947
+          ],
+          [
+            844,
+            921.5
+          ],
+          [
+            880,
+            921.5
+          ],
+          [
+            899,
+            948
+          ],
+          [
+            880,
+            974.5
+          ],
+          [
+            844,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            881,
+            973.5
+          ],
+          [
+            899,
+            948
+          ],
+          [
+            935,
+            948
+          ],
+          [
+            954,
+            974.5
+          ],
+          [
+            935,
+            1001
+          ],
+          [
+            899,
+            1001
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            936,
+            947
+          ],
+          [
+            954,
+            921.5
+          ],
+          [
+            990,
+            921.5
+          ],
+          [
+            1009,
+            948
+          ],
+          [
+            990,
+            974.5
+          ],
+          [
+            954,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            991,
+            973.5
+          ],
+          [
+            1009,
+            948
+          ],
+          [
+            1045,
+            948
+          ],
+          [
+            1064,
+            974.5
+          ],
+          [
+            1045,
+            1001
+          ],
+          [
+            1009,
+            1001
+          ]
+        ],
+        "fill": "#ffedb7"
+      },
+      {
+        "polygon": [
+          [
+            1046,
+            947
+          ],
+          [
+            1064,
+            921.5
+          ],
+          [
+            1100,
+            921.5
+          ],
+          [
+            1119,
+            948
+          ],
+          [
+            1100,
+            974.5
+          ],
+          [
+            1064,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1101,
+            973.5
+          ],
+          [
+            1119,
+            948
+          ],
+          [
+            1155,
+            948
+          ],
+          [
+            1174,
+            974.5
+          ],
+          [
+            1155,
+            1001
+          ],
+          [
+            1119,
+            1001
+          ]
+        ],
+        "fill": "#ffe8a6"
+      },
+      {
+        "polygon": [
+          [
+            1156,
+            947
+          ],
+          [
+            1174,
+            921.5
+          ],
+          [
+            1210,
+            921.5
+          ],
+          [
+            1229,
+            948
+          ],
+          [
+            1210,
+            974.5
+          ],
+          [
+            1174,
+            974.5
+          ]
+        ],
+        "fill": "#ffe8a6"
+      }
+    ]
+  }
+}
