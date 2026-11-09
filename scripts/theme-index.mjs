@@ -79,7 +79,7 @@ export function checkTheme(theme) {
     try {
       const base = makeMap(theme, {world, walk, harbor, sleepers: []}).walk;
       sleepers = resolveSleepSpots(base, art.props ?? [], geometry(base).walkable, sleepHalfWidths(), {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false});
-      sleepNotes.push(...sleepShapeProblems(world.sleepSpots).map(p => `sleepSpots shape: ${p}`), ...sleepers.bad.map(b => `sleeper ${b.pose} ${Math.round(b.x)},${Math.round(b.y)} dropped: ${b.reason}`));
+      sleepNotes.push(...sleepShapeProblems(world.sleepSpots, world.sleepTotal ?? SLEEP_TOTAL).map(p => `sleepSpots shape: ${p}`), ...sleepers.bad.map(b => `sleeper ${b.pose} ${Math.round(b.x)},${Math.round(b.y)} dropped: ${b.reason}`));
       sleepers = sleepers.map(({x, y, pose, r, flip, tree}) => ({x: Math.round(x), y: Math.round(y), pose, r: Math.round(r * 10) / 10, flip, ...(tree ? {tree} : {})}));
       // A nod may overlap its own tree, but the tree still has to be on land.
       // Check the final map's drawn AND walking coasts, as the game does.
@@ -88,8 +88,8 @@ export function checkTheme(theme) {
     } catch (e) {sleepNotes.push(`sleepers: ${e.message}`); sleepers = null;}
   } else if (!problems.length) sleepNotes.push('no sleepSpots in world.json (no sleepers yet)');
   problems.push(...sleepNotes);
-  if (sleepers?.length !== SLEEP_TOTAL) problems.push(`expected ${SLEEP_TOTAL} resolved sleepers, got ${sleepers?.length ?? 0}`);
-  return {theme, ready: !problems.length, problems, files, sea: art?.sea ?? null, sleepers, sleepNotes};
+  if (sleepers?.length !== (world?.sleepTotal ?? SLEEP_TOTAL)) problems.push(`expected ${world?.sleepTotal ?? SLEEP_TOTAL} resolved sleepers, got ${sleepers?.length ?? 0}`);
+  return {theme, ready: !problems.length, problems, files, sleepTotal: world?.sleepTotal ?? SLEEP_TOTAL, sea: art?.sea ?? null, sleepers, sleepNotes};
 }
 
 function signature(reports) {
@@ -116,7 +116,7 @@ function writeIndex(reports) {
 function run(print = true) {
   const reports = THEME_IDS.filter(t => t !== 'home').map(checkTheme);
   if (print) for (const r of reports) {
-    console.log(`${r.ready ? 'READY ' : 'home  '} ${r.theme}${r.ready ? `  sleepers ${r.sleepers?.length ?? 0}/${SLEEP_TOTAL}` : '\n        ' + r.problems.slice(0, 8).join('\n        ')}`);
+    console.log(`${r.ready ? 'READY ' : 'home  '} ${r.theme}${r.ready ? `  sleepers ${r.sleepers?.length ?? 0}/${r.sleepTotal}` : '\n        ' + r.problems.slice(0, 8).join('\n        ')}`);
     if (r.ready && r.sleepNotes.length) console.log('        ' + r.sleepNotes.join('\n        '));
   }
   return reports;

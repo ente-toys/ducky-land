@@ -23,7 +23,7 @@ const area = ring => ring.reduce((a, p, i) => {const q = ring[(i + 1) % ring.len
 const sizes = sleepHalfWidths();
 
 // ---------- a) sleepers ----------
-test('a) sleepers: home preserves its 28 beds plus 12 additions; every theme has 40 beds and all eight poses', () => {
+test('a) sleepers: home preserves its 28 beds plus 12 additions; every theme has its approved bed count and all eight poses', () => {
   assert.equal(SLEEP_TOTAL, 40);
   assert.deepEqual(SLEEP_COUNTS, {nod: 4, hammock: 2, rock: 3, leaf: 4, book: 4, chair: 2, wing: 5, box: 4});
   assert.deepEqual(sleepShapeProblems(Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([p,s])=>[p,[...s,...(homeExtra[p]??[])]]))), []);
@@ -31,7 +31,7 @@ test('a) sleepers: home preserves its 28 beds plus 12 additions; every theme has
   for (const theme of readyThemes()) {
     const map = mapFor(theme);
     if (!map.world.sleepSpots) {test.diagnostic?.(`${theme}: no sleepSpots yet`); continue;}
-    assert.deepEqual(sleepShapeProblems(map.world.sleepSpots), [], `${theme}: sleepSpots has exactly home's shape and counts`);
+    assert.deepEqual(sleepShapeProblems(map.world.sleepSpots,map.world.sleepTotal??SLEEP_TOTAL), [], `${theme}: sleepSpots has exactly home's shape and counts`);
   }
 });
 
@@ -68,7 +68,7 @@ test('a) sleepers: the bed rules (ground, decks, paths, avoid zones, water, prop
 test('a) sleepers on the themed islands: each bed is on its land, off decks and water, and solid for the room server', () => {
   for (const id of themedIslands()) {
     const map = mapOf(id), beds = map.sleepers;
-    assert.equal(beds.length, 40, `${id} renders all 40 residents`);
+    assert.equal(beds.length, map.world.sleepTotal??SLEEP_TOTAL, `${id} renders all approved residents`);
     test.diagnostic?.(`${map.id}: ${beds.length}/${SLEEP_TOTAL} sleepers`);
     const base = geometry(map.baseWalk);
     for (const bed of beds) {

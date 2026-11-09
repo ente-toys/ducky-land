@@ -8,10 +8,10 @@ import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import legacy from './legacy-raster-art.json' with {type:'json'};
 const root=new URL('../public/pixi-art/',import.meta.url);
 
-test('Pixi art rejects new rasters, with frozen legacy exceptions in exactly four theme folders',()=>{
- // These existing Library, Community, Goldmine and Bog assets must
+test('Pixi art rejects new rasters, with frozen legacy exceptions in exactly three theme folders',()=>{
+ // These existing Library, Goldmine and Bog assets must
  // be redrawn. Exact path+content hashes prevent adding rasters inside them.
- assert.deepEqual([...legacy.folders].sort(),['themes/library/','themes/community/','themes/goldmine/','themes/bog/'].sort());
+ assert.deepEqual([...legacy.folders].sort(),['themes/library/','themes/goldmine/','themes/bog/'].sort());
  const violations=[];
  function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){
   const file=path.join(dir,entry.name);if(entry.isDirectory()){scan(file);continue;}

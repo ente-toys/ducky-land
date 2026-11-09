@@ -1,1 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><g stroke="#39472D" stroke-width="3" stroke-linejoin="round"><path d="M20 16H160V170H20Z" fill="#885931"/><path d="M20 10H160V156H20Z" fill="#C88941"/><path d="M22 12H158" fill="none"/><path d="M37 19h45" stroke="#EDBE70"/><path d="M22 36H158" fill="none"/><path d="M37 43h45" stroke="#EDBE70"/><path d="M22 60H158" fill="none"/><path d="M37 67h45" stroke="#EDBE70"/><path d="M22 84H158" fill="none"/><path d="M37 91h45" stroke="#EDBE70"/><path d="M22 108H158" fill="none"/><path d="M37 115h45" stroke="#EDBE70"/><path d="M22 132H158" fill="none"/><path d="M37 139h45" stroke="#EDBE70"/><path d="M15 0h10v40h-10Z" fill="#885931"/><ellipse cx="20" cy="0" rx="8" ry="4" fill="#E6B569"/><path d="M15 126h10v40h-10Z" fill="#885931"/><ellipse cx="20" cy="126" rx="8" ry="4" fill="#E6B569"/><path d="M155 0h10v40h-10Z" fill="#885931"/><ellipse cx="160" cy="0" rx="8" ry="4" fill="#E6B569"/><path d="M155 126h10v40h-10Z" fill="#885931"/><ellipse cx="160" cy="126" rx="8" ry="4" fill="#E6B569"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <title>Campfire Commons: pond dock</title>
+  <desc>Hand-drawn timber dock with four complete oval post caps. Original 180 square canvas and anchor.</desc>
+  <g stroke="#39472D" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M20 16H160V170H20Z" fill="#885931"/>
+    <path d="M20 10H160V156H20Z" fill="#C88941"/>
+    <path d="M22 12H158M22 36H158M22 60H158M22 84H158M22 108H158M22 132H158" fill="none"/>
+    <path d="M37 19H82M37 43H82M37 67H82M37 91H82M37 115H82M37 139H82" fill="none" stroke="#EDBE70"/>
+    <path d="M15 7H25V40H15Z" fill="#885931"/>
+    <ellipse cx="20" cy="7" rx="8" ry="4" fill="#E6B569"/>
+    <path d="M155 7H165V40H155Z" fill="#885931"/>
+    <ellipse cx="160" cy="7" rx="8" ry="4" fill="#E6B569"/>
+    <path d="M15 126H25V166H15Z" fill="#885931"/>
+    <ellipse cx="20" cy="126" rx="8" ry="4" fill="#E6B569"/>
+    <path d="M155 126H165V166H155Z" fill="#885931"/>
+    <ellipse cx="160" cy="126" rx="8" ry="4" fill="#E6B569"/>
+  </g>
+</svg>

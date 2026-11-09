@@ -1,0 +1,883 @@
+{
+  "name": "Storynest",
+  "hamlet": "storynest",
+  "theme": "community",
+  "island": "isle-250",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "blueprint": "../../gpt/storynest.png",
+  "anchor": "bottom-centre",
+  "coordinates": "Original blueprint pixels, origin top left. For each object x,y is the SVG bottom centre. left,top also supplied. Preserve full width,height. drawOrder ascending paints back to front. No crop padding in SVGs.",
+  "palette": {
+    "outline": "#39472d",
+    "lawn": "#a6c83d",
+    "paths": "#ffe6a5",
+    "roof": "#aa83d0",
+    "wall": "#fff0bd",
+    "baseShadow": "#7e913e"
+  },
+  "plaza": {
+    "id": "story-circle",
+    "cx": 762,
+    "cy": 630,
+    "rx": 387,
+    "ry": 171,
+    "polygon": [
+      [
+        706,
+        461
+      ],
+      [
+        811,
+        465
+      ],
+      [
+        922,
+        490
+      ],
+      [
+        1024,
+        533
+      ],
+      [
+        1090,
+        588
+      ],
+      [
+        1104,
+        644
+      ],
+      [
+        1071,
+        700
+      ],
+      [
+        1002,
+        753
+      ],
+      [
+        897,
+        791
+      ],
+      [
+        805,
+        807
+      ],
+      [
+        762,
+        825
+      ],
+      [
+        713,
+        805
+      ],
+      [
+        614,
+        791
+      ],
+      [
+        516,
+        754
+      ],
+      [
+        433,
+        699
+      ],
+      [
+        380,
+        638
+      ],
+      [
+        373,
+        584
+      ],
+      [
+        409,
+        538
+      ],
+      [
+        492,
+        496
+      ],
+      [
+        597,
+        471
+      ]
+    ],
+    "d": "M706 461C866 448 1056 514 1090 588C1133 661 1076 739 897 791Q813 809 762 825Q715 803 614 791C468 765 374 676 373 600C366 518 535 465 706 461Z"
+  },
+  "paths": [
+    {
+      "id": "south-entry",
+      "width": 67,
+      "points": [
+        [
+          762,
+          790
+        ],
+        [
+          759,
+          844
+        ],
+        [
+          754,
+          893
+        ],
+        [
+          722,
+          937
+        ],
+        [
+          658,
+          978
+        ],
+        [
+          620,
+          1024
+        ]
+      ],
+      "d": "M762 790C750 841 789 879 746 924S658 976 620 1024"
+    },
+    {
+      "id": "northwest-cottage",
+      "width": 62,
+      "points": [
+        [
+          458,
+          522
+        ],
+        [
+          431,
+          491
+        ],
+        [
+          364,
+          460
+        ],
+        [
+          337,
+          430
+        ],
+        [
+          342,
+          400
+        ],
+        [
+          376,
+          355
+        ]
+      ],
+      "d": "M458 522C447 475 329 475 338 420Q339 397 376 355"
+    },
+    {
+      "id": "southwest-cottage",
+      "width": 58,
+      "points": [
+        [
+          428,
+          681
+        ],
+        [
+          420,
+          728
+        ],
+        [
+          405,
+          781
+        ],
+        [
+          361,
+          817
+        ],
+        [
+          303,
+          828
+        ],
+        [
+          255,
+          820
+        ]
+      ],
+      "d": "M428 681Q438 729 403 787C367 834 308 842 255 820"
+    },
+    {
+      "id": "east-cottage",
+      "width": 60,
+      "points": [
+        [
+          1082,
+          559
+        ],
+        [
+          1118,
+          532
+        ],
+        [
+          1170,
+          493
+        ],
+        [
+          1230,
+          469
+        ],
+        [
+          1281,
+          474
+        ]
+      ],
+      "d": "M1082 559C1120 518 1190 458 1281 474"
+    },
+    {
+      "id": "southeast-cottage",
+      "width": 60,
+      "points": [
+        [
+          1090,
+          623
+        ],
+        [
+          1135,
+          625
+        ],
+        [
+          1224,
+          619
+        ],
+        [
+          1317,
+          606
+        ],
+        [
+          1328,
+          571
+        ]
+      ],
+      "d": "M1090 623C1164 638 1257 639 1304 611Q1334 593 1328 571"
+    },
+    {
+      "id": "treehouse",
+      "width": 44,
+      "points": [
+        [
+          950,
+          510
+        ],
+        [
+          1015,
+          492
+        ],
+        [
+          1046,
+          473
+        ]
+      ],
+      "d": "M950 510Q998 504 1046 473"
+    },
+    {
+      "id": "west-rim",
+      "width": 58,
+      "points": [
+        [
+          0,
+          683
+        ],
+        [
+          69,
+          706
+        ],
+        [
+          135,
+          753
+        ],
+        [
+          185,
+          805
+        ],
+        [
+          249,
+          828
+        ]
+      ],
+      "d": "M0 683C107 707 140 771 185 805Q215 826 249 828"
+    },
+    {
+      "id": "east-rim",
+      "width": 66,
+      "points": [
+        [
+          1400,
+          371
+        ],
+        [
+          1415,
+          331
+        ],
+        [
+          1465,
+          304
+        ],
+        [
+          1536,
+          280
+        ]
+      ],
+      "d": "M1400 371Q1378 323 1443 309L1536 280"
+    },
+    {
+      "id": "northwest-rim",
+      "width": 65,
+      "points": [
+        [
+          180,
+          0
+        ],
+        [
+          174,
+          39
+        ],
+        [
+          128,
+          77
+        ],
+        [
+          64,
+          100
+        ],
+        [
+          0,
+          123
+        ]
+      ],
+      "d": "M180 0C208 64 98 85 0 123"
+    }
+  ],
+  "objects": [
+    {
+      "id": "cottage-northwest",
+      "file": "cottage-northwest.svg",
+      "kind": "building",
+      "x": 380.5,
+      "y": 371,
+      "width": 267,
+      "height": 241,
+      "left": 247,
+      "top": 130,
+      "drawOrder": 371
+    },
+    {
+      "id": "cottage-east",
+      "file": "cottage-east.svg",
+      "kind": "building",
+      "x": 1327.0,
+      "y": 585,
+      "width": 262,
+      "height": 237,
+      "left": 1196,
+      "top": 348,
+      "drawOrder": 585
+    },
+    {
+      "id": "cottage-southwest",
+      "file": "cottage-southwest.svg",
+      "kind": "building",
+      "x": 293.5,
+      "y": 811,
+      "width": 269,
+      "height": 243,
+      "left": 159,
+      "top": 568,
+      "drawOrder": 811
+    },
+    {
+      "id": "cottage-southeast",
+      "file": "cottage-southeast.svg",
+      "kind": "building",
+      "x": 1145.0,
+      "y": 921,
+      "width": 252,
+      "height": 251,
+      "left": 1019,
+      "top": 670,
+      "drawOrder": 921
+    },
+    {
+      "id": "reading-treehouse",
+      "file": "reading-treehouse.svg",
+      "kind": "building",
+      "x": 1013.5,
+      "y": 502,
+      "width": 255,
+      "height": 370,
+      "left": 886,
+      "top": 132,
+      "drawOrder": 502
+    },
+    {
+      "id": "notice-board",
+      "file": "notice-board.svg",
+      "kind": "prop",
+      "x": 668.5,
+      "y": 466,
+      "width": 201,
+      "height": 190,
+      "left": 568,
+      "top": 276,
+      "drawOrder": 466
+    },
+    {
+      "id": "lamp-northwest",
+      "file": "lamp-northwest.svg",
+      "kind": "prop",
+      "x": 514.0,
+      "y": 475,
+      "width": 52,
+      "height": 133,
+      "left": 488,
+      "top": 342,
+      "drawOrder": 475
+    },
+    {
+      "id": "lamp-northeast",
+      "file": "lamp-northeast.svg",
+      "kind": "prop",
+      "x": 846.0,
+      "y": 475,
+      "width": 48,
+      "height": 132,
+      "left": 822,
+      "top": 343,
+      "drawOrder": 475
+    },
+    {
+      "id": "lamp-east",
+      "file": "lamp-east.svg",
+      "kind": "prop",
+      "x": 1164.0,
+      "y": 641,
+      "width": 54,
+      "height": 125,
+      "left": 1137,
+      "top": 516,
+      "drawOrder": 641
+    },
+    {
+      "id": "lamp-southwest",
+      "file": "lamp-southwest.svg",
+      "kind": "prop",
+      "x": 518.0,
+      "y": 771,
+      "width": 50,
+      "height": 135,
+      "left": 493,
+      "top": 636,
+      "drawOrder": 771
+    },
+    {
+      "id": "lamp-southeast",
+      "file": "lamp-southeast.svg",
+      "kind": "prop",
+      "x": 1003.0,
+      "y": 772,
+      "width": 52,
+      "height": 137,
+      "left": 977,
+      "top": 635,
+      "drawOrder": 772
+    },
+    {
+      "id": "bench-west",
+      "file": "bench-west.svg",
+      "kind": "prop",
+      "x": 455.5,
+      "y": 605,
+      "width": 117,
+      "height": 99,
+      "left": 397,
+      "top": 506,
+      "drawOrder": 605
+    },
+    {
+      "id": "bench-east",
+      "file": "bench-east.svg",
+      "kind": "prop",
+      "x": 1063.5,
+      "y": 615,
+      "width": 113,
+      "height": 97,
+      "left": 1007,
+      "top": 518,
+      "drawOrder": 615
+    },
+    {
+      "id": "fire-pit",
+      "file": "fire-pit.svg",
+      "kind": "prop",
+      "x": 762.5,
+      "y": 618,
+      "width": 127,
+      "height": 115,
+      "left": 699,
+      "top": 503,
+      "drawOrder": 618
+    },
+    {
+      "id": "log-seat-west",
+      "file": "log-seat-west.svg",
+      "kind": "prop",
+      "x": 644.5,
+      "y": 623,
+      "width": 105,
+      "height": 72,
+      "left": 592,
+      "top": 551,
+      "drawOrder": 623
+    },
+    {
+      "id": "log-seat-east",
+      "file": "log-seat-east.svg",
+      "kind": "prop",
+      "x": 880.5,
+      "y": 620,
+      "width": 103,
+      "height": 69,
+      "left": 829,
+      "top": 551,
+      "drawOrder": 620
+    },
+    {
+      "id": "log-seat-south",
+      "file": "log-seat-south.svg",
+      "kind": "prop",
+      "x": 763.0,
+      "y": 678,
+      "width": 152,
+      "height": 55,
+      "left": 687,
+      "top": 623,
+      "drawOrder": 678
+    },
+    {
+      "id": "flower-planter-west",
+      "file": "flower-planter-west.svg",
+      "kind": "prop",
+      "x": 627.0,
+      "y": 770,
+      "width": 114,
+      "height": 85,
+      "left": 570,
+      "top": 685,
+      "drawOrder": 770
+    },
+    {
+      "id": "flower-planter-east",
+      "file": "flower-planter-east.svg",
+      "kind": "prop",
+      "x": 894.0,
+      "y": 770,
+      "width": 112,
+      "height": 82,
+      "left": 838,
+      "top": 688,
+      "drawOrder": 770
+    },
+    {
+      "id": "flower-pot-south",
+      "file": "flower-pot-south.svg",
+      "kind": "prop",
+      "x": 761.5,
+      "y": 797,
+      "width": 101,
+      "height": 95,
+      "left": 711,
+      "top": 702,
+      "drawOrder": 797
+    },
+    {
+      "id": "flower-pot-board",
+      "file": "flower-pot-board.svg",
+      "kind": "prop",
+      "x": 579.5,
+      "y": 510,
+      "width": 97,
+      "height": 86,
+      "left": 531,
+      "top": 424,
+      "drawOrder": 510
+    },
+    {
+      "id": "treehouse-reading-bench",
+      "file": "treehouse-reading-bench.svg",
+      "kind": "prop",
+      "x": 1036.0,
+      "y": 344,
+      "width": 124,
+      "height": 66,
+      "left": 974,
+      "top": 278,
+      "drawOrder": 503
+    },
+    {
+      "id": "treehouse-bookshelf",
+      "file": "treehouse-bookshelf.svg",
+      "kind": "prop",
+      "x": 1031.0,
+      "y": 315,
+      "width": 94,
+      "height": 65,
+      "left": 984,
+      "top": 250,
+      "drawOrder": 503
+    },
+    {
+      "id": "treehouse-hanging-lantern",
+      "file": "treehouse-hanging-lantern.svg",
+      "kind": "prop",
+      "x": 963.0,
+      "y": 296,
+      "width": 38,
+      "height": 50,
+      "left": 944,
+      "top": 246,
+      "drawOrder": 503
+    }
+  ],
+  "trees": [
+    {
+      "id": "wisteria-west",
+      "asset": "themes/community/detail/tree-wisteria.svg",
+      "x": 132,
+      "y": 325,
+      "width": 215,
+      "height": 220,
+      "drawOrder": 324,
+      "reuse": true
+    },
+    {
+      "id": "green-northwest",
+      "asset": "plants/tree-3.svg",
+      "x": 250,
+      "y": 223,
+      "width": 210,
+      "height": 195,
+      "drawOrder": 222,
+      "reuse": true
+    },
+    {
+      "id": "green-north",
+      "asset": "plants/tree-3.svg",
+      "x": 524,
+      "y": 165,
+      "width": 194,
+      "height": 171,
+      "drawOrder": 165,
+      "reuse": true
+    },
+    {
+      "id": "green-north-small",
+      "asset": "plants/tree-3.svg",
+      "x": 595,
+      "y": 128,
+      "width": 116,
+      "height": 95,
+      "drawOrder": 128,
+      "reuse": true
+    },
+    {
+      "id": "treehouse-support",
+      "asset": "themes/community/detail/tree-wisteria.svg",
+      "x": 1013,
+      "y": 478,
+      "width": 382,
+      "height": 470,
+      "drawOrder": 235,
+      "reuse": true
+    },
+    {
+      "id": "treehouse-west",
+      "asset": "themes/community/detail/tree-wisteria.svg",
+      "x": 849,
+      "y": 350,
+      "width": 208,
+      "height": 283,
+      "drawOrder": 349,
+      "reuse": true
+    },
+    {
+      "id": "treehouse-east",
+      "asset": "themes/community/detail/tree-wisteria.svg",
+      "x": 1212,
+      "y": 351,
+      "width": 222,
+      "height": 224,
+      "drawOrder": 350,
+      "reuse": true
+    },
+    {
+      "id": "northeast-green",
+      "asset": "plants/tree-3.svg",
+      "x": 1372,
+      "y": 216,
+      "width": 203,
+      "height": 219,
+      "drawOrder": 216,
+      "reuse": true
+    },
+    {
+      "id": "far-northeast",
+      "asset": "plants/tree-1.svg",
+      "x": 1472,
+      "y": 126,
+      "width": 128,
+      "height": 135,
+      "drawOrder": 126,
+      "reuse": true
+    },
+    {
+      "id": "west-green",
+      "asset": "plants/tree-3.svg",
+      "x": 128,
+      "y": 494,
+      "width": 151,
+      "height": 164,
+      "drawOrder": 493,
+      "reuse": true
+    },
+    {
+      "id": "southwest-wisteria",
+      "asset": "themes/community/detail/tree-wisteria.svg",
+      "x": 129,
+      "y": 709,
+      "width": 211,
+      "height": 204,
+      "drawOrder": 708,
+      "reuse": true
+    },
+    {
+      "id": "east-green",
+      "asset": "plants/tree-1.svg",
+      "x": 1501,
+      "y": 537,
+      "width": 146,
+      "height": 150,
+      "drawOrder": 536,
+      "reuse": true
+    },
+    {
+      "id": "southwest-green",
+      "asset": "plants/tree-3.svg",
+      "x": 72,
+      "y": 945,
+      "width": 126,
+      "height": 159,
+      "drawOrder": 944,
+      "reuse": true
+    },
+    {
+      "id": "southwest-small",
+      "asset": "plants/tree-3.svg",
+      "x": 144,
+      "y": 993,
+      "width": 146,
+      "height": 158,
+      "drawOrder": 992,
+      "reuse": true
+    },
+    {
+      "id": "southeast-green",
+      "asset": "plants/tree-3.svg",
+      "x": 948,
+      "y": 951,
+      "width": 206,
+      "height": 172,
+      "drawOrder": 950,
+      "reuse": true
+    },
+    {
+      "id": "southeast-wisteria",
+      "asset": "themes/community/detail/tree-wisteria.svg",
+      "x": 1352,
+      "y": 934,
+      "width": 228,
+      "height": 222,
+      "drawOrder": 933,
+      "reuse": true
+    },
+    {
+      "id": "far-southeast",
+      "asset": "plants/tree-3.svg",
+      "x": 1469,
+      "y": 1029,
+      "width": 139,
+      "height": 160,
+      "drawOrder": 1028,
+      "reuse": true
+    }
+  ],
+  "sleepers": [
+    {
+      "id": "sleep-porch-nw",
+      "x": 335,
+      "y": 379,
+      "pose": "curled",
+      "radius": 15
+    },
+    {
+      "id": "sleep-west-bench",
+      "x": 452,
+      "y": 620,
+      "pose": "side",
+      "radius": 16
+    },
+    {
+      "id": "sleep-east-bench",
+      "x": 1068,
+      "y": 635,
+      "pose": "side",
+      "radius": 16
+    },
+    {
+      "id": "sleep-southwest",
+      "x": 336,
+      "y": 839,
+      "pose": "belly",
+      "radius": 16
+    },
+    {
+      "id": "sleep-southeast",
+      "x": 1200,
+      "y": 939,
+      "pose": "curled",
+      "radius": 15
+    },
+    {
+      "id": "sleep-garden",
+      "x": 869,
+      "y": 899,
+      "pose": "side",
+      "radius": 16
+    },
+    {
+      "id": "sleep-north-garden",
+      "x": 717,
+      "y": 254,
+      "pose": "belly",
+      "radius": 16
+    },
+    {
+      "id": "sleep-west-garden",
+      "x": 246,
+      "y": 480,
+      "pose": "curled",
+      "radius": 15
+    }
+  ],
+  "notes": [
+    "24 original hand-written SVGs, exactly one for each item in the crop manifest.",
+    "No new trees or ducks drawn. Tree spots reference existing island SVGs; sleepers are coordinates only.",
+    "Treehouse has no illustrated tree: compose reused treehouse-support behind its wooden shell. Furnishings are separate and must paint after the shell.",
+    "Attached cottage window boxes remain part of their cottage SVG.",
+    "Preview reuses existing tree art. PNG is only the requested check.png review, never embedded in an SVG."
+  ]
+}

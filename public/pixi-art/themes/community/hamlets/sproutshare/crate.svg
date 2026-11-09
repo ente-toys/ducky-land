@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="65" height="44" viewBox="0 0 65 44">
+<title>Sproutshare: crate</title>
+<desc>Hand-written vector drawing by GPT. Flat Campfire palette, front and roof camera, ink #39472d.</desc>
+<g transform="translate(1.5 1.5) scale(0.9538461538461539 0.9318181818181818)" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13L14 4H58L63 14V38H6Z" fill="#dba54c" stroke="#39472d" stroke-width="2.2"/><path d="M6 13L14 4H58L63 14Z" fill="#edc568" stroke="#39472d" stroke-width="2"/><rect x="7" y="14" width="55" height="24" rx="0" fill="#edc568" stroke="#39472d" stroke-width="1.8"/><path d="M8 26H61M16 14V39M53 14V39" fill="none" stroke="#a47d3d" stroke-width="2"/></g>
+</svg>

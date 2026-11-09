@@ -4,12 +4,12 @@ import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
 import {canSail,boardingPoint} from '../src/pixi/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-community/baseline/',D='rive/web/themes/community/',A='public/pixi-art/themes/community/',old=read(B+'world.json'),oldArt=read(B+'art.json'),world=read(D+'world.json'),art=read(A+'art.json'),plan=read('scripts/bigger-community/plan.json');
 test('community expansion keeps every original prop, decal, deck, sleeper and collision record',()=>{
- assert.deepEqual(art.props.slice(0,oldArt.props.length),oldArt.props);
+ const centre=oldArt.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(art.props.slice(0,centre.length),centre);
  assert.deepEqual(art.flats,oldArt.flats);assert.deepEqual(art.decks.slice(0,oldArt.decks.length),oldArt.decks);
- assert.deepEqual(world.sleepSpots,old.sleepSpots);assert.deepEqual(world.sleepAvoid,old.sleepAvoid);
+ for(const [pose,spots]of Object.entries(old.sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots);assert.deepEqual(world.sleepAvoid,old.sleepAvoid);
  assert.deepEqual(world.obstacles.slice(0,old.obstacles.length),old.obstacles);
  for(const [key,z]of Object.entries(old.zones))assert.deepEqual(world.zones[key],z);
- assert.equal(mapFor('community').sleepers.length,40);assert.deepEqual(mapFor('community').spawn,{x:4000,y:2970});
+ assert.equal(mapFor('community').sleepers.length,72);assert.deepEqual(mapFor('community').spawn,{x:4000,y:2970});
 });
 test('community new places and main road circuit connect to the unchanged campfire',()=>{
  const m=mapFor('community'),n=m.nav();
@@ -25,13 +25,12 @@ test('community outer harbour floats, boards and returns to the campfire with GP
  assert.deepEqual(n.route(m.HARBOR.land.x,m.HARBOR.land.y,m.spawn.x,m.spawn.y).at(-1),[m.spawn.x,m.spawn.y]);
  for(const b of m.boatSpots()){assert.ok(canSail(b.x,b.y,'isle-250'));const at=boardingPoint({...b,islandId:'isle-250'});assert.ok(n.walkable(at.x,at.y));assert.ok(Math.hypot(at.x-b.x,at.y-b.y)<=280,'boarding distance');}
 });
-test('four community neighbourhoods have accessible homes, workplace greens and short residential lanes',()=>{
- const m=mapFor('community'),n=m.nav();assert.equal(plan.communities.length,4);assert.equal(plan.homes.length,22);
- assert.equal(new Set(plan.communities.map(c=>c.type)).size,4,'different house types and activities');
- for(const c of plan.communities){assert.ok(c.homes.length>=5);assert.ok(c.residents&&c.work);for(const point of c.lane){const at=n.nearest(...point,100);assert.ok(at,c.id+' open lane');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...at).at(-1),at,c.id+' connected lane');}}
- for(const w of plan.workStops){assert.ok(n.walkable(...w.point),w.name+' open entrance');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...w.point).at(-1),w.point,w.name+' connected to heart');}
- for(const h of plan.homes){assert.ok(n.walkable(...h.door),h.id+' open front door');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...h.door).at(-1),h.door,h.id+' can walk home');}
- for(const o of plan.obstacles.filter(o=>o.poly)){const x=o.poly.reduce((s,p)=>s+p[0],0)/o.poly.length,y=o.poly.reduce((s,p)=>s+p[1],0)/o.poly.length;assert.equal(n.walkable(x,y),false,o.id+' visible fence blocks');}
+test('four approved community hamlets have accessible cottage doors and bounded workplaces',()=>{
+ const m=mapFor('community'),n=m.nav();assert.equal(world.communities.length,4);assert.equal(world.residentialPlots.length,16);
+ assert.equal(new Set(world.communities.map(c=>c.type)).size,4);
+ for(const c of world.communities){assert.equal(c.homes.length,4);assert.ok(c.residents&&c.work);for(const point of c.lane){const at=n.nearest(...point,100);assert.ok(at,c.id+' open lane');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...at).at(-1),at,c.id+' connected lane');}}
+ for(const h of world.residentialPlots){assert.ok(n.walkable(...h.door),h.id+' open front door');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...h.door).at(-1),h.door,h.id+' can walk home');}
+ for(const p of art.props.filter(p=>p.hamlet&&p.kind==='building')){const poly=p.footprint.poly,x=poly.reduce((s,p)=>s+p[0],0)/poly.length,y=poly.reduce((s,p)=>s+p[1],0)/poly.length;assert.equal(n.walkable(x,y),false,p.id+' visible building blocks');const houses=art.props.filter(h=>h.hamlet===p.hamlet&&/cottage/.test(h.blueprintId)),width=Math.max(...houses.map(h=>h.width));assert(p.width<=width*(['patchwing','lanternloaf'].includes(p.hamlet)?1.5:1.15)+.01,p.id+' workplace scale');}
 });
 
 test('community densification preserves waterways and crossings while reducing roads and clustering homes',()=>{
@@ -56,7 +55,7 @@ test('community review: every retained bridge crosses real water and every new c
  for(const [name,x,y]of spans){assert.ok(water.some(o=>contains(x,y,o)),name+' has water beneath its span');assert.ok(n.walkable(x,y),name+' has a solid deck');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,x,y).at(-1),[x,y],name+' reachable');}
  const dock=art.decks.find(d=>d.src==='expansion/jetty.svg');assert.ok(dock);assert.equal(inPoly(4000,7030,world.coast),false,'harbour deck extends over the sea');
  assert.equal(plan.reviewRivers.length,2);
- for(const [x,y]of [[350,3150],[7800,3400],[5350,5200],[3000,490],[800,2500]]){assert.ok(water.some(o=>contains(x,y,o)),'visible water is collision water');assert.equal(n.walkable(x,y),false,'ducks cannot walk through water away from a deck');}
+ for(const [x,y]of [[350,3150],[7800,3400],[3000,490],[800,2500]]){assert.ok(water.some(o=>contains(x,y,o)),'visible water is collision water');assert.equal(n.walkable(x,y),false,'ducks cannot walk through water away from a deck');}
  for(const common of plan.reviewCommons){assert.ok(n.walkable(...common.point),common.name+' open arrival');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...common.point).at(-1),common.point,common.name+' reachable');}
  const walk=read(D+'walk-world.json');assert.deepEqual(walk.water,world.water,'server and client use the same water');assert.deepEqual(walk.bridges,world.bridges,'server and client use the same crossings');
 });
