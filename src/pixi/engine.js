@@ -35,6 +35,7 @@ import {loadThemeArt} from './theme-art.js';
 import {benchSeatAt} from './bench-seat.js';
 import {setSailingHarbor} from './sailing-fx.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
+import {loadPondDuckies} from './pond-duckies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Texture, Matrix} from 'pixi.js';
 import rawWorld from '../../rive/web/world.json';
@@ -298,7 +299,10 @@ export class PixiIsland {
       // home-only extras: the pond and cove water, the fountain, the beach surf, the lake ripples, offline boats, falling leaves
       const keep = new Set([this.marker, ...this.birds.map(b => b.root), ...this.crows.map(c => c.root), ...this.butterflies.map(b => b.root), ...(this.weather?.roots?.() ?? [])]);
       const extras = [...this.water.children, ...this.objects.children, ...this.air.children].filter(c => !before.has(c) && !keep.has(c) && !/weather|cloud|rain|wind/i.test(c.label || ''));
-      this.arts = new Map([['home', {id: 'home', ready: true, groups: [this.homeGround, this.homeDecks, this.homeShadows, this.floatLayer, ...extras]}]]);
+      this.homePondDuckies=await loadPondDuckies('home',{tilt:TILT,acquire,release});
+      if(this.disposed){this.homePondDuckies.destroy();return;}
+      this.scene.addChildAt(this.homePondDuckies.root,this.scene.getChildIndex(this.decks));
+      this.arts = new Map([['home', {id: 'home', ready: true, pondDuckies:this.homePondDuckies, groups: [this.homeGround, this.homeDecks, this.homeShadows, this.floatLayer, this.homePondDuckies.root, ...extras]}]]);
       this.artShown = 'home';
       if (new URLSearchParams(location.search).has('qa')) globalThis.__duckyEngine = this;   // QA readback (headless checks only)
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
@@ -424,7 +428,8 @@ export class PixiIsland {
     this.archipelago?.setCurrent(id);   // the island you landed on becomes the real one, the rest are redrawn round it
     // boss 6 Nov: a themed island draws its own art (loaded now if it is not already) and walks its own map
     const mapId=artOf(id);
-    this.ensureArt(mapId); this.artShown=mapId; this.showArt(mapId);
+    this.releasePondDuckies(this.artShown);
+    this.artShown=mapId; this.ensureArt(mapId); this.ensurePondDuckies(mapId); this.showArt(mapId);
     this.arches=mapId === 'home' ? undefined : mapFor(mapId).world.arches ?? [];   // Duckies rise over this island's own arched bridges (placements.js deckY)
     this.applyMapAmbience(mapId);
     setSailingHarbor(harborOf(id));
@@ -807,6 +812,7 @@ export class PixiIsland {
       this.air.addChild(leaf); extra.push(leaf);
       return {sprite: leaf, x: tree.x, y: tree.y-150, phase: i*1.93};
     });
+    if (art.pondDuckies) this.scene.addChildAt(art.pondDuckies.root,this.scene.getChildIndex(this.decks));
     if (art.floatLayer) this.scene.addChildAt(art.floatLayer, this.scene.getChildIndex(this.floatLayer)+1);
     art.groups.push(...extra);
     for (const o of extra) o.visible=false;
@@ -858,7 +864,7 @@ export class PixiIsland {
     if (!map.art) return;
     this.arts.set(mapId, {id: mapId, ready: false});
     let pendingArt;
-    loadThemeArt(map, {acquire, release, groundPool:this.groundPool}).then(async art => {
+    loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT}).then(async art => {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
       for (const fx of art.fountainWaters??[]) this.objects.addChild(fx.root);
@@ -876,6 +882,7 @@ export class PixiIsland {
       await this.makeSleepers(mapId);
       if (this.disposed) {art.destroy();return;}
       this.arts.set(mapId, art);
+      if(mapId!==this.artShown)this.releasePondDuckies(mapId);
       if(this.wantedArts&&!this.wantedArts.has(mapId)&&mapId!==this.artShown){this.freeArt(mapId);return;}
       this.showArt(this.artShown);
       globalThis.__duckyThemeArt = [...this.arts.values()].filter(a => a.ready).map(a => a.id);   // QA readback
@@ -888,6 +895,23 @@ export class PixiIsland {
       console.warn(`theme ${mapId}: art did not load`, error);
       this.arts.set(mapId, {id: mapId, ready: false, failed: true});
     });
+  }
+  releasePondDuckies(id) {
+    const art=this.arts?.get(id);if(!art?.pondDuckies)return;
+    const root=art.pondDuckies.root,k=art.groups.indexOf(root);
+    if(k>=0)art.groups.splice(k,1);
+    art.pondDuckies.destroy();art.pondDuckies=null;
+    if(id==='home')this.homePondDuckies=null;
+  }
+  ensurePondDuckies(id) {
+    const art=this.arts?.get(id);
+    if(!art?.ready||art.pondDuckies||art.pondPending||this.disposed)return;
+    art.pondPending=loadPondDuckies(id,{tilt:TILT,acquire,release}).then(layer=>{
+      if(this.disposed||this.artShown!==id||this.arts?.get(id)!==art){layer.destroy();return;}
+      art.pondDuckies=layer;art.groups.push(layer.root);
+      this.scene.addChildAt(layer.root,this.scene.getChildIndex(this.decks));
+      this.showArt(this.artShown);
+    }).catch(error=>console.warn('Pond Duckies '+id,error)).finally(()=>{art.pondPending=null;});
   }
   freeArt(id) {
     const art=this.arts?.get(id); if (!art?.ready) return;
@@ -1216,6 +1240,8 @@ export class PixiIsland {
     this.ocean.tilePosition.set(-this.ocean.x+(reduced?0:t*2),-this.ocean.y+(reduced?0:t*.7));
     const flatVisible = !(this.globeT >= .97);   // a full globe samples snapshots, not the animated island scene
     const homeShown=this.artShown === 'home';   // boss 6 Nov: on a themed island the home art (and its water, surf, leaves) rests
+    const pondSeconds=Date.now()/1000;
+    this.arts?.get(this.artShown)?.pondDuckies?.update(pondSeconds,reduced,visible,flatVisible&&this.scene.visible);
     this.homeKites?.update(t, reduced, visible, homeShown && flatVisible);
     for (const [id, art] of this.arts ?? []) if (art.ready) art.kites?.update(t, reduced, visible, id === this.artShown && flatVisible);
     this.plantReactions?.begin(this.artShown,t,reduced,flatVisible);
@@ -1516,7 +1542,7 @@ export class PixiIsland {
     this.waterFX?.dispose();
     this.plantReactions?.destroy();
     this.travelView?.dispose();
-    for (const art of this.arts?.values() ?? []) if (art.id !== 'home') art.destroy?.();
+    for (const art of this.arts?.values() ?? []) {art.pondDuckies?.destroy();if (art.id !== 'home') art.destroy?.();}
     for (const sleepers of this.mapSleepers.values()) for (const {rig} of sleepers) rig.dispose();
     this.mapSleepers.clear();
     this.liveRigs.forEach(entry => {

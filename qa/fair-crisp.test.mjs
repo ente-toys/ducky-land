@@ -88,7 +88,8 @@ test('the production theme loader wires Fair ground and standing props into thei
  let loaded;
  try{
   loaded=await loadThemeArt({id:'fair',art:'/pixi-art/themes/fair/art.json',origin:{x:0,y:0},width:3000,height:3000},{acquire:async(src,r)=>{acquisitions.push([src,r]);const {Texture}=await import('pixi.js');return Texture.EMPTY;},release(){},groundPool:fakePool});
-  assert.deepEqual(acquisitions,[['/pixi-art/globe/fair-ground.svg',1]],'no fixed-resolution Fair props may be eagerly rasterised');
+  assert.deepEqual(acquisitions.filter(([src])=>!src.startsWith('/pixi-duck/float/')),[['/pixi-art/globe/fair-ground.svg',1]],'no fixed-resolution Fair scenery may be eagerly rasterised');
+  const floats=acquisitions.filter(([src])=>src.startsWith('/pixi-duck/float/'));const fairVariants=new Set(JSON.parse(readFileSync(new URL('../src/pixi/pond-regions.json',import.meta.url),'utf8')).ponds.filter(p=>p.island==='fair').flatMap(p=>p.duckies.map(d=>d.name)));assert.equal(floats.length,fairVariants.size,'one texture per Fair pond Ducky design');assert(floats.every(([,r])=>r<1),'tiny runtime Duckies retain a bounded texture budget');
   assert.equal(loaded.rasterPool.stats().budgetBytes,FAIR_ART_BUDGET_BYTES);
   assert(streams[0].entries.every(t=>t.screenResolution&&t.x>=1000&&t.y>=2000&&t.localX===undefined));
   assert.equal(typeof streams[0].loader.acquire,'function');

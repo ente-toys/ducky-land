@@ -11,6 +11,7 @@ import {fairTiles,FAIR_GROUND_TILE_SIZE,FAIR_ART_BUDGET_BYTES,FAIR_ART_UTILIZATI
 import {createFairRasterLoader} from './fair-art-stream.js';
 import {createGroundPool} from './ground-stream.js';
 
+import {loadPondDuckies} from './pond-duckies.js';
 import {createFountainWater} from './fountain.js';
 import {createAutumnLeaves} from './autumn-leaves.js';
 import {KITE_ASSETS, createHomeKites} from './home-kites.js';
@@ -18,7 +19,7 @@ import {KITE_ASSETS, createHomeKites} from './home-kites.js';
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoaderFactory=createRasterLoader}) {
+export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -164,21 +165,27 @@ export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoa
   // roots here also makes show/hide and unload use the same island lifecycle.
   const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : []), ...(autumnLeaves ? [autumnLeaves.layer] : []), ...fountainWaters.map(f=>f.root)];
   for (const group of groups) group.visible = false;
-  return {
+  const result = {
     id: map.id, map, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     overLayer, bridgeOver, kiteLayer, kites, autumnLeaves, fountainWaters,
     groups,
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      result.pondDuckies?.destroy();
       groundStreams.forEach(s=>s.destroy());
       rasterPool?.destroy();
       raster?.destroy();
       release(`/pixi-art/globe/${map.id}-ground.svg`);
-      for (const c of groups) c.destroy({children: true});
+      for (const c of groups) if(!c.destroyed)c.destroy({children: true});
       for (const f of fountainWaters) {if(!f.root.destroyed)f.root.destroy({children:true}); f.layer.destroy();}
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
     },
   };
+  try {
+    result.pondDuckies=await loadPondDuckies(map.id,{acquire,release,tilt});
+    groups.push(result.pondDuckies.root);
+  } catch(error) {result.destroy();throw error;}
+  return result;
 }
