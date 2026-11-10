@@ -16,8 +16,8 @@ test('Bog retains every original prop, sleeper, path and zone in place',()=>{
  for(const [id,z]of Object.entries(original.zones))assert.deepEqual(world.zones[id],z);
  const old=geometry(oldWalk),now=geometry(walk);for(let y=650;y<5200;y+=64)for(let x=650;x<7400;x+=64)if(inPoly(x,y,oldWalk.coast))assert.equal(now.walkable(x,y),old.walkable(x,y),`original walking ground changed ${x},${y}`);
 });
-test('Bog registers the expanded map and keeps all 40 original sleepers',()=>{
- const r=checkTheme('bog');assert.equal(r.ready,true,r.problems.join('\n'));assert.equal(r.sleepers.length,40);assert.equal(mapFor('bog').width,world.width);
+test('legacy Bog assets keep all 40 original sleepers while the delivered map is the new combat island',()=>{
+ const r=checkTheme('bog');assert.equal(r.ready,true,r.problems.join('\n'));assert.equal(r.sleepers.length,40);assert.equal(mapFor('bog').width,8400);
  for(const b of r.sleepers)assert.ok(inPoly(b.x,b.y,world.coast));
 });
 test('Each Bog neighbourhood has six homes, a workplace, and a reachable shared green',()=>{

@@ -36,6 +36,11 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
  try{
   try{Engine.prototype.tick.call(game,100);}catch(error){throw new Error('Background tick: '+error.message);}
   assert.ok(roomSteps>=5,'authoritative prediction still advances every fixed step');assert.equal(roomSteps,localSteps);assert.equal(scheduled,1);assert.equal(game.raf,42);
+  globalThis.document.hidden=true;
+  const before=roomSteps;
+  Engine.prototype.tick.call(game,200);assert.equal(roomSteps,before,'background RAF stays paused');
+  Engine.prototype.tick.call(game,200,{forceRender:true});assert.ok(roomSteps>before,'initial paint can prepare a hidden pane before focus');
+  globalThis.document.hidden=false;
   // The same real tick must reach screen-space snow once the bridge exposes
   // Iceland detail. Stop at that call so later GPU work needs no mock renderer.
   const reachedSnow=new Error('reached snowfall'),snowCalls=[];
@@ -47,7 +52,7 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
     weather:{update(){}},snowfall:{update(...args){snowCalls.push(args);throw reachedSnow;}}});
   for(const externalOverview of [true,false]){
     game.externalOverview=externalOverview;
-    let caught;try{Engine.prototype.tick.call(game,116);}catch(error){caught=error;}
+    let caught;try{Engine.prototype.tick.call(game,216);}catch(error){caught=error;}
     assert.equal(caught===reachedSnow,true,'visible tick reaches snowfall: '+(caught?.message??'no call'));
   }
   assert.equal(snowCalls.length,2);

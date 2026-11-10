@@ -70,8 +70,9 @@ world['bridges'].append(dict(poly=dockpoly))
 world['walkways'][-1]=dict(a=[3740,7410],b=[4430,7410],w=104)
 world['riverMouths']=[[3900,7750,4750,8450]]
 world['zones']['lantern-cove'].update(spawn=[3690,7010])
+world['sleepTotal']=0
 world['zones']['plaza']=dict(x=4200,y=3270,spawn=[4200,3270],r=600)
-harbor=dict(jetty=dict(foot=[3740,7410],tip=[4430,7410],width=104,art='home'),spawn=[1900,2090],water=dict(x=4390,y=7560),boats=[dict(x=4390,y=7560,turn=math.pi/2),dict(x=4300,y=7250,turn=math.pi/2)])
+harbor=dict(jetty=dict(foot=[3740,7410],tip=[4430,7410],width=104,art='home'),spawn=[1900,2090],water=dict(x=4390,y=7560),boats=[dict(x=4390,y=7560,turn=math.pi/2),dict(x=4300,y=7250,turn=math.pi/2),dict(x=4590,y=7560,turn=math.pi/2)])
 Path('src/pixi/bog-environment.json').write_text(json.dumps(dict(world=world,harbor=harbor,art='/pixi-art/themes/bog-arena/art.json',sea=P['sea'],centre=dict(x=4200,y=4000),sleepers=[]),separators=(',',':'))+'\n')
 Path('src/pixi/bog-blockers.json').write_text(json.dumps(D['blockers'],indent=2)+'\n')
 print('Ground coast, pools, united paths and shared collision written')

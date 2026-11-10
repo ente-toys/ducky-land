@@ -32,7 +32,7 @@ async function bogTerrain(){
 }
 let bog;
 for(const theme of selected?[id]:ids){
- const map=mapFor(theme),K=1024/Math.max(map.width,map.height),W=Math.round(map.width*K),H=Math.round(map.height*K),base=`public/pixi-art/themes/${theme}`;
+ const map=mapFor(theme),K=1024/Math.max(map.width,map.height),W=Math.round(map.width*K),H=Math.round(map.height*K),base=map.art?path.dirname('public'+map.art):`public/pixi-art/themes/${theme}`;
  const art=map.home?homeLayers():JSON.parse(read(base+'/art.json'));
  let tiles=map.home?art.tiles:art.ground.tiles;
  // A sparse runtime ground stream can retain a complete vector master for the globe.

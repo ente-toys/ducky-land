@@ -9,7 +9,7 @@
 import expansion from './home-expansion.json' with {type:'json'};
 import homeWorld from '../../rive/web/world.json' with {type: 'json'};
 import homeWalk from '../../rive/web/walk-world.json' with {type: 'json'};
-import READY from '../../rive/web/themes/index.js';   // written by scripts/theme-index.mjs: only the complete themes
+import READY from './delivered-themes.js';
 import {geometry, inPoly, inShape, coastIndex} from '../../rive/web/island-geometry.mjs';
 import {resolveSleepSpots, sleepHalfWidths, sleeperFootprint} from './sleep-spots.js';
 import {createNavigation} from './navigation.js';

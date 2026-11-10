@@ -8,7 +8,9 @@ export function setBogReviewCamera(game,x,y,zoom=.65){
  if(game.scene)game.scene.visible=true;
 }
 
-export async function waitForBogArt(game,{cancelled=()=>false,nextFrame=()=>new Promise(resolve=>requestAnimationFrame(resolve))}={}){
+// Browser panes can throttle RAF until they receive focus. Art readiness and
+// the initial paint must not depend on a user click or a foreground animation.
+export async function waitForBogArt(game,{cancelled=()=>false,nextFrame=()=>new Promise(resolve=>setTimeout(resolve,16))}={}){
  while(!cancelled()&&!game.disposed){
   const art=game.arts?.get('bog-arena');
   if(art?.failed)throw Error('Bog island artwork failed to load');
@@ -16,4 +18,14 @@ export async function waitForBogArt(game,{cancelled=()=>false,nextFrame=()=>new 
   await nextFrame();
  }
  return false;
+}
+
+export function paintBogFrame(game,x,y,zoom=.65){
+ game.resize();
+ setBogReviewCamera(game,x,y,zoom);
+ game.showArt(game.artShown);
+ cancelAnimationFrame(game.raf);
+ game.accumulator=0;
+ game.lastFrame=performance.now();
+ game.tick(game.lastFrame,{forceRender:true});
 }

@@ -4,6 +4,9 @@ import {ISLETS} from '../src/pixi/islets.js';
 // boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
 // (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
 import {mapOf} from '../src/pixi/island-maps.js';
+import {bogLandingNotice} from '../src/pixi/bog-combat/entry.js';
+import {getPlayerKarma} from '../src/pixi/bog-combat/karma.js';
+import {LiveBogRoom} from './bog-room.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
 import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
@@ -56,6 +59,25 @@ const islandCounts = connections => {
 };
 
 export class IslandRoom {
+  getPlayerKarma(actor,account) {
+    // Refresh from the signed-in account, including after socket hibernation.
+    // Landing packets never supply this balance.
+    if(!actor||!account)return 0;
+    actor.karma=this.karma.balance(account);
+    return getPlayerKarma(actor);
+  }
+
+  allowLanding(socket,info,islandId) {
+    const text=bogLandingNotice(islandId,this.getPlayerKarma(info.actor,info.account));
+    if(!text)return true;
+    info.landing=null;
+    Object.assign(info.actor,{docking:false,sailTarget:null,sailRoute:null});
+    info.input=ZERO;
+    if(Date.now()-(info.karmaNoticeAt??-Infinity)>3000){
+      this.send(socket,{type:'travel-notice',text});info.karmaNoticeAt=Date.now();
+    }
+    return false;
+  }
   constructor(ctx) {
     this.ctx = ctx;
     this.sql = ctx.storage.sql;
@@ -97,12 +119,17 @@ export class IslandRoom {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
+      if(info.bog)continue; // Restored after the world actors below.
       const actor = recoverIsland(info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null);
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       this.connections.set(socket, {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
     this.reconcileBoats();
     this.karma=new RoomKarma(this);
+    for(const socket of ctx.getWebSockets()){
+      const saved=socket.readyState===1&&socket.deserializeAttachment()?.bog;
+      if(saved&&!(this.bog??=new LiveBogRoom(this)).open(socket,saved))socket.close(1008,'Bog visit ended');
+    }
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
 
@@ -158,6 +185,17 @@ export class IslandRoom {
     this.prune(now);
     this.expire(now);
     if (pathname === '/room') return this.join(request, now);
+    if (pathname === '/bog-room') {
+      if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return reply({},426);
+      const params=new URL(request.url).searchParams,digest=request.headers.get('X-Session-Digest');
+      const bog=this.bog??=new LiveBogRoom(this);
+      if(!bog.admitted(digest))return reply({error:'Land at the Bog harbour with 5 karma first.'},403);
+      const team=params.get('mode')==='lobby'?null:params.get('team');
+      if(team===null&&params.get('mode')!=='lobby'||team!==null&&!['privacy','google'].includes(team))return reply({},400);
+      const [client,socket]=Object.values(new WebSocketPair());
+      this.ctx.acceptWebSocket(socket);bog.open(socket,{digest,team});
+      return new Response(null,{status:101,webSocket:client});
+    }
     const data = await request.json();
     if (pathname === '/friends') return this.friends(data, now);
     if (pathname === '/outfit') return this.saveOutfit(data, now);
@@ -501,6 +539,7 @@ export class IslandRoom {
   }
 
   webSocketMessage(socket, message) {
+    if(this.bog?.members.has(socket)){this.bog.message(socket,message);return;}
     const info = this.connections.get(socket);
     if (!info) return;
     const now = Date.now();
@@ -588,10 +627,11 @@ export class IslandRoom {
       case 'disembark':
         if (actor.mode === 'sailing') {
           info.input=ZERO; info.landing=null;
-          if (canDock(actor)) {const {water}=harborOf(actor.islandId); setSailDestination(actor,water.x,water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
+          if (canDock(actor)) {if(!this.allowLanding(socket,info,actor.islandId))break;const {water}=harborOf(actor.islandId); setSailDestination(actor,water.x,water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
           // boss 5 Nov: anywhere else, hop out onto the nearest shore within reach (this island's or a neighbour's)
           const spot=landingSpot(actor,this.navFor(actor.islandId));
           if (!spot) {this.send(socket,{type:'travel-notice',text:'Sail closer to the shore to dock.'}); break;}
+          if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) break;
           if (spot.islandId !== actor.islandId && (islandCounts(this.connections).get(spot.islandId) ?? 0) >= ISLAND_LIMIT) {this.send(socket,{type:'travel-notice',text:`That island is full (${ISLAND_LIMIT} Duckies). Try another one.`}); break;}
           // boss 5 Nov ("dock fix"): sail in to the water beside the sand first; the hop out happens when the boat arrives
           spot.approach=landingApproach(actor,spot);
@@ -637,11 +677,12 @@ export class IslandRoom {
         if (!boat) info.landing=null;   // the boat is gone (released or restored): nothing to sail in
         if (boat) {
           const from=actor.islandId;
-          if (crossIsland(actor,roomOn)) {info.input=ZERO; info.inputExpires=0; info.landing=null; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}   // sailed into a neighbour's harbor: its jetty docking takes over
+          if (crossIsland(actor,id=>roomOn(id)&&this.allowLanding(socket,info,id))) {info.input=ZERO; info.inputExpires=0; info.landing=null; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}   // sailed into a neighbour's harbor: its jetty docking takes over
           else if (destinationsFor(actor.islandId).some(d => !roomOn(d.destination) && Math.abs(actor.x-d.dock.x)<=65 && Math.abs(actor.y-d.dock.y)<=50)) full(socket,info);   // waiting at a full island's harbor mouth
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
           if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {   // reached the shore: hop out onto the sand
             const spot=info.landing; info.landing=null;
+            if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) continue;
             if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
             else {
             if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,spot.islet?reframeIslet(actor.islandId,spot.islandId,ISLETS.find(i=>i.id===spot.islet),actor):unplaceRigid(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
@@ -651,6 +692,7 @@ export class IslandRoom {
             info.input=ZERO;
             }
           } else if (actor.docking && near(actor,harborOf(actor.islandId).water,12)) {
+            if (!this.allowLanding(socket,info,actor.islandId)) continue;
             this.parkBoat(boat);   // Keep the arrival boat beside the jetty, available to board again.
             Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
@@ -701,6 +743,7 @@ export class IslandRoom {
   }
 
   webSocketClose(socket) {
+    if(this.bog?.members.has(socket)){this.bog.close(socket);return;}
     const info = this.connections.get(socket);
     if (!info) return;
     this.connections.delete(socket);

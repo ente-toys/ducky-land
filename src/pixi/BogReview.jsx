@@ -5,9 +5,9 @@ import {installBogEnvironment,BOG_AREAS} from './bog-environment.js';
 import {BOG_BLOCKERS} from './bog-blockers.js';
 import {combatForBogEnvironment} from './bog-combat/environment.js';
 import BogEntry from './bog-combat/BogEntry.jsx';
-import {setBogReviewCamera,waitForBogArt} from './bog-review-camera.js';
+import {setBogReviewCamera,waitForBogArt,paintBogFrame} from './bog-review-camera.js';
 
-// Explicit Bog entry. Normal world startup and its island registry stay intact.
+// Dev shortcut to the same island and combat used by normal boat entry.
 export default function BogReview(){
  const host=useRef(null);
  const [ready,setReady]=useState(null),[visit,setVisit]=useState(0),[error,setError]=useState('');
@@ -44,12 +44,9 @@ export default function BogReview(){
    if(!await waitForBogArt(game,{cancelled:()=>cancelled}))return;
    // Paint this local camera before exposing the picker/readiness. mount() only
    // reports the initial Home renderer ready, not the lazy Bog theme.
-   if(inspect&&new URLSearchParams(location.search).get('area')==='mid')camera(4200,2050,.65);
-   else camera(dock.x,dock.y-90,.65);
-   cancelAnimationFrame(game.raf);
-   game.lastFrame=performance.now();
-   game.tick(game.lastFrame);
-   await new Promise(resolve=>requestAnimationFrame(resolve));
+   const area=new URLSearchParams(location.search).get('area');
+   const focus=inspect&&BOG_AREAS[area]?BOG_AREAS[area]:null;
+   paintBogFrame(game,focus?.x??dock.x,focus?(area==='mid'?2050:focus.y):dock.y-90,.65);
    if(cancelled||game.disposed)return;
    game.canvas.dataset.state='ready';
    globalThis.bogReviewReady=true;
@@ -73,7 +70,7 @@ export default function BogReview(){
    <button onClick={()=>{const g=globalThis.bogGame;if(g){g.follow=true;g.camera.zoom=g.target.zoom=.8;g.canvas.focus();}}}>Follow Ducky</button>
    <button onClick={()=>{returnToDock();setVisit(n=>n+1);}}>Bog dock</button>
   </nav>
-  {ready&&!inspect&&<BogEntry key={visit} engine={ready.game} travel={{islandId:ready.combat.islandId,mode:'walking'}} status="playing" {...ready.combat} onReturnToDock={returnToDock} onLeave={returnToDock}/>}
+  {ready&&!inspect&&<BogEntry key={visit} engine={ready.game} travel={{islandId:ready.combat.islandId,mode:'walking'}} status="playing" {...ready.combat} leaveLabel="Back to island" returnLabel="Back to dock" onReturnToDock={returnToDock} onLeave={returnToDock}/>}
   {error&&<p role="alert" style={{position:'absolute',top:60,left:16,background:'#fff8e7',padding:20}}>The Bog could not load: {error}</p>}
  </main>;
 }

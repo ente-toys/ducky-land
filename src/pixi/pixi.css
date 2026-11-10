@@ -302,7 +302,7 @@
   box-sizing: border-box;
   width: min(var(--world-map-width), calc(100vw - 32px));
   aspect-ratio: 1;
-  overflow: hidden;
+  overflow: visible;
   border: 4px solid #20272ae6;
   border-radius: 50%;
   background: #6ec9de;
@@ -320,7 +320,7 @@
   .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height) + 180px); }
   .pixi-notifications { bottom: auto; }
 }
-.pixi-world-map svg { overflow: hidden; }
+.pixi-world-map svg { overflow: visible; }
 .pixi-nearby-island { transition: transform 80ms linear; }
 @media (prefers-reduced-motion: reduce) { .pixi-nearby-island { transition: none; } }
 

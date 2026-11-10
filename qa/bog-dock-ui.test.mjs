@@ -39,10 +39,10 @@ test('strict-mode dock chooses either side, returns with totals/medal case and r
     await render();assert.match(document.body.textContent,/Pick your side/);assert.equal(document.querySelector('.bog-combat-google').disabled,false);
     await click('Team GOOGLE');assert.equal(engine.bogCombat.room.client.self.team,'google');assert.match(document.querySelector('aside').textContent,/5 kills/);
     assert.equal(sockets.filter(s=>s.url.searchParams.has('team')&&s.readyState===1).length,1,'strict effects leave exactly one participant');
-    await click('Back to dock');assert.equal(engine.room,oldRoom);assert.equal(engine.bogCombat,undefined);assert.equal(returns,1);
+    await click('Back to boat');assert.equal(engine.room,oldRoom);assert.equal(engine.bogCombat,undefined);assert.equal(returns,1);
     assert.match(document.body.textContent,/Back at the dock/);assert.match(document.querySelector('dl').textContent,/Score50/);assert.match(document.querySelector('ul').textContent,/Earned/);
     await click('Pick a team');await click('Team PRIVACY');assert.equal(engine.bogCombat.room.client.self.team,'privacy');
-    await click('Back to dock');await click('Back to island');assert.equal(closed,1);
+    await click('Back to boat');await click('Back to boat');assert.equal(closed,1);
     await render({travel:{islandId:'isle-249',mode:'sailing'}});assert.equal(document.querySelector('[role="dialog"]'),null);
     await render();assert.ok(document.querySelector('[role="dialog"]'),'another landing opens the picker again');
   }finally{await act(async()=>root.unmount());assert.equal(engine.room,oldRoom);assert.equal(engine.bogCombat,undefined);assert.ok(sockets.every(s=>s.readyState===3));objects.destroy({children:true});dom.window.close();Object.assign(globalThis,originals);}

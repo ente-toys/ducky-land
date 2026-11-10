@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import PixiPage from './pixi/PixiPage.jsx';
 import './index.css';
 
-// Bog stays outside the normal world roster. The dev arena URL opens the Home engine.
+// Normal entry sails to Bog. Keep the direct arena URL as a dev-only shortcut.
 const Page = import.meta.env.DEV && new URLSearchParams(location.search).has('arena')
   ? (await import('./pixi/BogReview.jsx')).default : PixiPage;
 createRoot(document.getElementById('root')).render(

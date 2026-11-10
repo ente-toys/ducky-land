@@ -663,11 +663,11 @@
       "points": [
         [
           4200,
-          1628
+          1908
         ],
         [
           4200,
-          1800
+          2080
         ],
         [
           4200,
@@ -680,12 +680,12 @@
       "width": 104,
       "points": [
         [
-          3650,
-          1698
+          3665,
+          1888
         ],
         [
-          3650,
-          1870
+          3665,
+          2060
         ],
         [
           3650,
@@ -698,12 +698,12 @@
       "width": 104,
       "points": [
         [
-          4750,
-          1698
+          4735,
+          1888
         ],
         [
-          4750,
-          1870
+          4735,
+          2060
         ],
         [
           4750,
@@ -1186,17 +1186,17 @@
       "id": "mid-hall",
       "kind": "building",
       "type": "rect",
-      "x": 3987.6,
-      "y": 1427.9,
-      "width": 424.8,
-      "height": 191.9
+      "x": 3999,
+      "y": 1755,
+      "width": 402,
+      "height": 150
     },
     {
       "id": "mid-west",
       "kind": "building",
       "type": "rect",
-      "x": 3524,
-      "y": 1579.8,
+      "x": 3539,
+      "y": 1769.8,
       "width": 252,
       "height": 117.8
     },
@@ -1204,8 +1204,8 @@
       "id": "mid-east",
       "kind": "building",
       "type": "rect",
-      "x": 4624,
-      "y": 1579.8,
+      "x": 4609,
+      "y": 1769.8,
       "width": 252,
       "height": 117.8
     },
@@ -1262,114 +1262,6 @@
       "y": 3374,
       "width": 244.79999999999998,
       "height": 114
-    },
-    {
-      "id": "site-b-arcade-0-pier-0",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 5956,
-      "y": 3505,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-0-pier-1",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6080,
-      "y": 3505,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-1-pier-0",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 5846,
-      "y": 3655,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-1-pier-1",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 5970,
-      "y": 3655,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-2-pier-0",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 5926,
-      "y": 3825,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-2-pier-1",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6050,
-      "y": 3825,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-3-pier-0",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6586,
-      "y": 3505,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-3-pier-1",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6710,
-      "y": 3505,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-4-pier-0",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6696,
-      "y": 3655,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-4-pier-1",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6820,
-      "y": 3655,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-5-pier-0",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6616,
-      "y": 3825,
-      "width": 24,
-      "height": 24
-    },
-    {
-      "id": "site-b-arcade-5-pier-1",
-      "kind": "landmark",
-      "type": "rect",
-      "x": 6740,
-      "y": 3825,
-      "width": 24,
-      "height": 24
     },
     {
       "id": "site-b-willow-0",
@@ -3881,6 +3773,834 @@
       "y": 5851,
       "width": 30,
       "height": 26
+    },
+    {
+      "id": "fb-moon-west-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3205,
+      "y": 1361,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-west-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3375,
+      "y": 1416,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-west-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3495,
+      "y": 1531,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-west-tree-3-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3255,
+      "y": 1571,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-east-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4980,
+      "y": 1361,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-east-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5150,
+      "y": 1436,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-east-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5265,
+      "y": 1551,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-east-tree-3-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5035,
+      "y": 1601,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-back-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3990,
+      "y": 1076,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-back-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4150,
+      "y": 1006,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-moon-back-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4330,
+      "y": 1071,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-northwest-elbow-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2600,
+      "y": 2431,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-northwest-elbow-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2750,
+      "y": 2491,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-northwest-elbow-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2885,
+      "y": 2641,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-northeast-elbow-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5215,
+      "y": 2501,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-northeast-elbow-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5380,
+      "y": 2581,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-northeast-elbow-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5525,
+      "y": 2691,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-mid-west-foot-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3115,
+      "y": 2861,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-mid-west-foot-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3295,
+      "y": 2936,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-mid-west-foot-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3465,
+      "y": 3061,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-mid-east-foot-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4965,
+      "y": 3071,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-mid-east-foot-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5145,
+      "y": 3191,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-mid-east-foot-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5285,
+      "y": 3291,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-pond-bend-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2495,
+      "y": 3196,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-pond-bend-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2640,
+      "y": 3266,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-pond-bend-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2775,
+      "y": 3351,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-pond-bend-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6675,
+      "y": 3161,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-pond-bend-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6840,
+      "y": 3246,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-pond-bend-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6985,
+      "y": 3356,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-junction-back-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3540,
+      "y": 3131,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-junction-back-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3690,
+      "y": 3261,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-junction-back-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4465,
+      "y": 3021,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-junction-back-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4625,
+      "y": 3131,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-junction-back-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4755,
+      "y": 3226,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-upper-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2875,
+      "y": 4286,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-upper-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3045,
+      "y": 4331,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-upper-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3205,
+      "y": 4441,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-upper-tree-3-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2990,
+      "y": 4521,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-inner-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3560,
+      "y": 3996,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-inner-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3735,
+      "y": 4116,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-inner-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3870,
+      "y": 4226,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-inner-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4530,
+      "y": 4021,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-inner-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4705,
+      "y": 4116,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-inner-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4845,
+      "y": 4241,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-upper-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5130,
+      "y": 4426,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-upper-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5305,
+      "y": 4521,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-upper-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5465,
+      "y": 4631,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-upper-tree-3-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5235,
+      "y": 4661,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-bottom-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3430,
+      "y": 4831,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-bottom-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3600,
+      "y": 4911,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-middle-bottom-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3775,
+      "y": 5006,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-bottom-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4565,
+      "y": 4831,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-bottom-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4725,
+      "y": 4921,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-middle-bottom-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4890,
+      "y": 5021,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-lane-meadow-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2320,
+      "y": 4441,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-lane-meadow-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2485,
+      "y": 4541,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-lane-meadow-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2630,
+      "y": 4631,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-lane-meadow-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5905,
+      "y": 4431,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-lane-meadow-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6065,
+      "y": 4571,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-lane-meadow-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6225,
+      "y": 4651,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-triangle-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3115,
+      "y": 5841,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-triangle-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3275,
+      "y": 5926,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-triangle-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3440,
+      "y": 6031,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-inner-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3660,
+      "y": 5941,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-inner-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3815,
+      "y": 6036,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-inner-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 3965,
+      "y": 6166,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-inner-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4445,
+      "y": 5981,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-inner-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4615,
+      "y": 6081,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-inner-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4780,
+      "y": 6211,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-triangle-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 4940,
+      "y": 5781,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-triangle-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5110,
+      "y": 5876,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-triangle-tree-2-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 5245,
+      "y": 5996,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-loop-pocket-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 905,
+      "y": 4451,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-west-loop-pocket-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 1055,
+      "y": 4571,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-loop-pocket-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 7395,
+      "y": 4671,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-east-loop-pocket-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 7535,
+      "y": 4791,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-shore-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2105,
+      "y": 6421,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southwest-shore-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 2275,
+      "y": 6501,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-shore-tree-0-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6045,
+      "y": 6311,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "fb-southeast-shore-tree-1-trunk",
+      "kind": "tree",
+      "type": "rect",
+      "x": 6200,
+      "y": 6411,
+      "width": 30,
+      "height": 26
+    },
+    {
+      "id": "site-b-arcade-0-pier-0",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 5949,
+      "y": 3495,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-0-pier-1",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6087,
+      "y": 3495,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-1-pier-0",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 5869,
+      "y": 3685,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-1-pier-1",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 5988,
+      "y": 3685,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-2-pier-0",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 5938,
+      "y": 3815,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-2-pier-1",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6057,
+      "y": 3815,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-3-pier-0",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6579,
+      "y": 3495,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-3-pier-1",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6717,
+      "y": 3495,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-4-pier-0",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6708,
+      "y": 3645,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-4-pier-1",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6827,
+      "y": 3645,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-5-pier-0",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6609,
+      "y": 3815,
+      "width": 24,
+      "height": 18
+    },
+    {
+      "id": "site-b-arcade-5-pier-1",
+      "kind": "landmark",
+      "type": "rect",
+      "x": 6728,
+      "y": 3815,
+      "width": 24,
+      "height": 18
     }
   ],
   "props": [
@@ -4306,123 +5026,129 @@
     },
     {
       "id": "site-b-arcade-0",
-      "name": "site-b-arcade",
-      "src": "home/site-b-arcade.svg",
+      "name": "site-b-arcade-front",
+      "src": "home/site-b-arcade-front.svg",
       "x": 6030,
       "y": 3540,
       "width": 190,
-      "height": 205,
+      "height": 225,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "shadow": true,
+      "shadow": false,
       "wind": false,
       "shadowSize": [
         72,
         12
-      ]
+      ],
+      "view": "front"
     },
     {
       "id": "site-b-arcade-1",
-      "name": "site-b-arcade",
-      "src": "home/site-b-arcade.svg",
-      "x": 5920,
-      "y": 3690,
+      "name": "site-b-arcade-left",
+      "src": "home/site-b-arcade-left.svg",
+      "x": 5950,
+      "y": 3730,
       "width": 190,
-      "height": 205,
+      "height": 225,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "shadow": true,
+      "shadow": false,
       "wind": false,
       "shadowSize": [
         72,
         12
-      ]
+      ],
+      "view": "left"
     },
     {
       "id": "site-b-arcade-2",
-      "name": "site-b-arcade",
-      "src": "home/site-b-arcade.svg",
+      "name": "site-b-arcade-right",
+      "src": "home/site-b-arcade-right.svg",
       "x": 6000,
       "y": 3860,
       "width": 190,
-      "height": 205,
+      "height": 225,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "shadow": true,
+      "shadow": false,
       "wind": false,
       "shadowSize": [
         72,
         12
-      ]
+      ],
+      "view": "right"
     },
     {
       "id": "site-b-arcade-3",
-      "name": "site-b-arcade",
-      "src": "home/site-b-arcade.svg",
+      "name": "site-b-arcade-front",
+      "src": "home/site-b-arcade-front.svg",
       "x": 6660,
       "y": 3540,
       "width": 190,
-      "height": 205,
+      "height": 225,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "shadow": true,
+      "shadow": false,
       "wind": false,
       "shadowSize": [
         72,
         12
-      ]
+      ],
+      "view": "front"
     },
     {
       "id": "site-b-arcade-4",
-      "name": "site-b-arcade",
-      "src": "home/site-b-arcade.svg",
+      "name": "site-b-arcade-right",
+      "src": "home/site-b-arcade-right.svg",
       "x": 6770,
       "y": 3690,
       "width": 190,
-      "height": 205,
+      "height": 225,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "shadow": true,
+      "shadow": false,
       "wind": false,
       "shadowSize": [
         72,
         12
-      ]
+      ],
+      "view": "right"
     },
     {
       "id": "site-b-arcade-5",
-      "name": "site-b-arcade",
-      "src": "home/site-b-arcade.svg",
+      "name": "site-b-arcade-left",
+      "src": "home/site-b-arcade-left.svg",
       "x": 6690,
       "y": 3860,
       "width": 190,
-      "height": 205,
+      "height": 225,
       "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
       },
-      "shadow": true,
+      "shadow": false,
       "wind": false,
       "shadowSize": [
         72,
         12
-      ]
+      ],
+      "view": "left"
     },
     {
       "id": "site-bed-a-west-bush",
@@ -4580,8 +5306,8 @@
       "id": "site-seat-0",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 1750,
-      "y": 3950,
+      "x": 1810,
+      "y": 3550,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -4593,16 +5319,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        2050,
+        3700
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "site-seat-1",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 2360,
-      "y": 3940,
+      "x": 2290,
+      "y": 3550,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -4614,8 +5349,17 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        2050,
+        3700
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
@@ -4623,7 +5367,7 @@
       "name": "bench",
       "src": "home/bench.svg",
       "x": 6160,
-      "y": 4030,
+      "y": 3580,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -4635,8 +5379,17 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6350,
+        3770
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
@@ -4644,7 +5397,7 @@
       "name": "bench",
       "src": "home/bench.svg",
       "x": 6530,
-      "y": 4030,
+      "y": 3580,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -4656,8 +5409,17 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6350,
+        3770
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
@@ -16080,8 +16842,8 @@
       "id": "bench-0",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 1570,
-      "y": 2090,
+      "x": 1700,
+      "y": 1810,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16093,16 +16855,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        1900,
+        1950
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-1",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 2290,
-      "y": 2070,
+      "x": 2250,
+      "y": 1810,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16114,16 +16885,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        2250,
+        2010
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-2",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 6100,
-      "y": 2100,
+      "x": 6300,
+      "y": 1810,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16135,16 +16915,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6500,
+        1950
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-3",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 6860,
-      "y": 2070,
+      "x": 6850,
+      "y": 1810,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16156,16 +16945,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6850,
+        2010
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-4",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 1600,
-      "y": 5940,
+      "x": 1700,
+      "y": 5610,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16177,16 +16975,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        1900,
+        5750
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-5",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 2230,
-      "y": 5930,
+      "x": 2250,
+      "y": 5610,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16198,16 +17005,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        2250,
+        5810
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-6",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 6100,
-      "y": 5940,
+      "x": 6300,
+      "y": 5610,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16219,16 +17035,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6500,
+        5750
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-7",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 6840,
-      "y": 5920,
+      "x": 6850,
+      "y": 5610,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16240,16 +17065,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6850,
+        5810
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-8",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 3740,
-      "y": 2280,
+      "x": 3650,
+      "y": 2110,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16261,16 +17095,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        3650,
+        2310
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-9",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 4670,
-      "y": 2280,
+      "x": 4750,
+      "y": 2110,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16282,8 +17125,17 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        4750,
+        2310
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
@@ -16291,7 +17143,7 @@
       "name": "bench",
       "src": "home/bench.svg",
       "x": 1770,
-      "y": 4140,
+      "y": 3920,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16303,16 +17155,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        1770,
+        4090
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-11",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 6640,
-      "y": 4130,
+      "x": 6400,
+      "y": 3900,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16324,16 +17185,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        6400,
+        4090
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-12",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 3670,
-      "y": 6970,
+      "x": 3630,
+      "y": 7290,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16345,16 +17215,25 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        3740,
+        7410
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
       "id": "bench-13",
       "name": "bench",
       "src": "home/bench.svg",
-      "x": 4780,
-      "y": 6820,
+      "x": 5070,
+      "y": 7330,
       "width": 147.24,
       "height": 83.34,
       "scale": 1,
@@ -16366,8 +17245,17 @@
       "wind": false,
       "homeSource": "/pixi-art/detail/street--bench-wood.svg",
       "shadowSize": [
-        65,
-        12
+        58,
+        8
+      ],
+      "facing": "south",
+      "faces": [
+        4830,
+        7530
+      ],
+      "shadowOffset": [
+        0,
+        -2
       ]
     },
     {
@@ -18175,9 +19063,9 @@
     {
       "id": "cove-bridge",
       "src": "home/bridge-ew.svg",
-      "x": 3750,
-      "y": 6700,
-      "width": 1100,
+      "x": 3724,
+      "y": 6700.8,
+      "width": 1152,
       "height": 240,
       "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ew.svg",
       "overBoats": true

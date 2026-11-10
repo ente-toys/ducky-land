@@ -182,6 +182,18 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   return room(env).fetch(new Request('https://island.internal/room?play='+play,{headers}));
 }
 
+export async function connectBog({request,env}) {
+  const url=new URL(request.url);
+  if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return json({},426);
+  if(request.headers.get('Origin')!==url.origin)return json({},403);
+  const key=await digest(cookie(request,sessionCookie));
+  if(!key)return json({},401);
+  const headers=new Headers({Upgrade:'websocket','X-Session-Digest':key});
+  const params=new URLSearchParams();
+  for(const k of ['team','mode'])if(url.searchParams.has(k))params.set(k,url.searchParams.get(k));
+  return room(env).fetch(new Request('https://island.internal/bog-room?'+params,{headers}));
+}
+
 async function checkPlayAccess(env, key, fetchGitHub) {
   const result = await call(env,'/session/get',{digest:key});
   if (!result.ok) return {error:'Session unavailable. Please try again.',status:503};

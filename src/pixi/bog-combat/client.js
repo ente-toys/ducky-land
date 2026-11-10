@@ -41,7 +41,7 @@ export class ArenaClient{
     try{socket=this.socket=new this.Socket(this.url);}catch(error){this.connectionClosed({code:1006,reason:error.message});return;}
     const active=()=>!this.closed&&this.socket===socket;
     socket.onmessage=({data})=>{if(!active())return;let m;try{m=JSON.parse(data);}catch{return;}
-      if(m?.type==='arena-welcome'){this.id=m.id;this.onStatus('connected');return;}
+      if(m?.type==='arena-welcome'){this.id=m.id;this.snapshot=null;this.tracks.clear();this.onStatus('connected');return;}
       if(m?.type!=='arena-snapshot'||!Array.isArray(m.players)||m.tick<=(this.snapshot?.tick??-1))return;
       const now=performance.now(),self=m.players.find(p=>p.id===this.id),before=this.snapshot?.players.find(p=>p.id===this.id);
       for(const p of m.players){const old=this.tracks.get(p.id);this.tracks.set(p.id,{from:old?{...this.sample(p.id,now)}:p,to:p,start:now/1000,display:{}});}

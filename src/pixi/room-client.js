@@ -2,7 +2,9 @@ import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from './p
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
 import {mapOf} from './island-maps.js';
-import {islandFor, harborOf, destinationsFor, near, canSail, canDock, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from './islands.js';
+import {getPlayerKarma} from './bog-combat/karma.js';
+import {bogLandingNotice} from './bog-combat/entry.js';
+import {islandFor, harborOf, destinationsFor, near, canSail, canDock, landingSpot, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -161,6 +163,7 @@ export class RoomClient {
     this.snapshotBoats = new Map(boats.map(b => [b.id, b]));
     const own=players.find(pose => pose.id === this.id);
     const mode=own?.mode ?? 'walking';
+    if(this.mode==='sailing'&&mode==='walking')this.arrivalBoatId=this.player?.boatId;
     const changed=this.islandId !== islandId || this.mode !== mode || this.epoch !== epoch;
     if (changed) {
       this.pending=[];
@@ -276,7 +279,21 @@ export class RoomClient {
 
   board(boatId) { return this.send({type:'board',boatId}); }
 
+  returnToBoat() {
+    if(!this.player||this.player.mode!=='walking')return false;
+    const available=this.boats.filter(b=>!b.occupant);
+    const boat=available.find(b=>b.id===this.arrivalBoatId)??available.sort((a,b)=>
+      Math.hypot(a.x-this.player.x,a.y-this.player.y)-Math.hypot(b.x-this.player.x,b.y-this.player.y))[0];
+    return boat?this.board(boat.id):false;
+  }
+
   disembark() {
+    if(this.player?.mode==='sailing'){
+      const spot=canDock(this.player)?{islandId:this.islandId}:landingSpot(this.player,this.navHere());
+      const text=spot&&!spot.islet&&bogLandingNotice(spot.islandId,getPlayerKarma({room:this}));
+      if(text)this.onNotice(text);
+    }
+    // The client balance is only a notice hint. The server decides admission.
     return this.send({type:'disembark'});   // boss 5 Nov: the server docks at the harbor or hops you onto the nearest shore
   }
 

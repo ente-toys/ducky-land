@@ -14,8 +14,9 @@ import {ArenaLobbyClient} from '../src/pixi/bog-combat/client.js';
 import {DUCK_LENGTH as D} from '../src/pixi/bog-combat/rules.js';
 const MAP_SCALE=1;
 
-test('Bog dock entry is walking only, karma is disabled, team sizes remain free',()=>{
-  assert.equal(KARMA_REQUIRED,0);assert.ok(canEnterBog());
+test('Bog dock entry is walking only, needs five karma, and team sizes remain free',()=>{
+  assert.equal(KARMA_REQUIRED,5);assert.equal(canEnterBog(),false);
+  assert.equal(canEnterBog(4),false);assert.equal(canEnterBog(5),true);assert.equal(canEnterBog(6),true);
   assert.ok(dockArrival({islandId:'isle-249',mode:'walking'},'playing'));
   for(const [id,mode,status]of [['home','walking','playing'],['isle-249','sailing','playing'],['isle-249','walking','watching']])assert.equal(dockArrival({islandId:id,mode},status),false);
   const counts=teamCounts([{team:'privacy'},{team:'google',bot:true},{team:'privacy'}]);assert.deepEqual(counts,{privacy:2,google:0});assert.equal(suggestedTeam(counts),'google');assert.equal(suggestedTeam({privacy:0,google:0}),null);

@@ -2,6 +2,7 @@ import blockers from './bog-blockers.json' with {type:'json'};
 
 // Island-local world units, x right, y down. Rect x/y is its TOP LEFT.
 // Buildings/walls are authoritative solid footprints, not sprite bounds.
+// Arcade bays block only at their two drawn pier feet, leaving the opening clear.
 // Trees block only at the trunk; their canopy stays fully opaque.
 export const BOG_BLOCKERS = Object.freeze(blockers.map(b=>Object.freeze(b)));
 export const BOG_SOLIDS = Object.freeze(BOG_BLOCKERS.filter(b=>b.kind!=='tree'));

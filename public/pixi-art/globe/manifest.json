@@ -134,21 +134,21 @@
   },
   "bog": {
     "src": "/pixi-art/globe/bog.svg",
-    "sha256": "4f763d0956b8ed1ad0cc927b44cbb828f994af46a63ed3f15fb2a0bf5aac5cea",
+    "sha256": "d1feff2a462fc418ccfb3a4ff703f2e7e11a4f89e823e5e08dd5437414cb29b5",
     "width": 1024,
-    "height": 768,
-    "bytes": 306468,
-    "groundBytes": 239122,
+    "height": 1000,
+    "bytes": 295135,
+    "groundBytes": 165694,
     "quality": {
       "tolerance": 0.3,
       "minArea": 0.18,
       "paletteDistance": 38,
       "quantum": 0.5
     },
-    "worldPaths": 31,
-    "walkways": 0,
-    "flats": 0,
-    "decks": 6,
+    "worldPaths": 0,
+    "walkways": 2,
+    "flats": 263,
+    "decks": 2,
     "bridgeDetails": 0
   },
   "snow": {

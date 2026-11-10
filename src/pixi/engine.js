@@ -1118,8 +1118,8 @@ export class PixiIsland {
     }).finally(() => {this.interiorPending = null;});
   }
 
-  tick(now) {
-    if (this.disposed || document.hidden) return;
+  tick(now,{forceRender=false}={}) {
+    if (this.disposed || (document.hidden&&!forceRender)) return;
     const dt = Math.min(.1, (now - this.lastFrame) / 1000);
     this.frameTimes.push((now - this.lastFrame));
     if (this.frameTimes.length > 180) this.frameTimes.shift();

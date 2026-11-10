@@ -1,5 +1,6 @@
 // fA ownership: the two landmark courts. No combat, cover walls or other districts.
 import fs from 'node:fs';
+import {writeArcadeModules} from './arcade-modules.mjs';
 export function buildSites({root,write,reuse,add,building,rect,flats,sources,areas}) {
  const svg=(name,w,h,body)=>write(`${root}/home/${name}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><g stroke="#39472d" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">${body}</g></svg>`);
  svg('site-a-cauldron',350,290,`
@@ -24,12 +25,9 @@ export function buildSites({root,write,reuse,add,building,rect,flats,sources,are
  const chapelFile=`${root}/home/site-b-chapel.svg`;
  let chapel=fs.readFileSync(chapelFile,'utf8').replace('</svg>','<g stroke="#39472d" stroke-width="1.8" stroke-linejoin="round"><path d="M158 82V54Q180 22 202 54V82Z" fill="#d9b8df"/><path d="M165 76V56Q180 34 195 56V76Z" fill="#654569"/><path d="M170 67Q175 63 175 54Q180 45 185 54Q185 63 190 67Z" fill="#f5e277"/><circle cx="180" cy="70" r="3" fill="#d9a94c"/><path d="M149 47L180 18L211 47Z" fill="#168f98"/></g></svg>');
  fs.writeFileSync(chapelFile,chapel);
- // Separate upright bays form a horseshoe without making the arcade openings solid.
- svg('site-b-arcade',190,205,`<path d="M13 60Q95 18 177 60V80Q95 41 13 80Z" fill="#edceea"/>
- <path d="M13 75Q95 36 177 75V88Q95 49 13 88Z" fill="#b591c0"/>
- <g fill="#d9b8df"><path d="M23 78H43V179H23Z M147 78H167V179H147Z"/><ellipse cx="33" cy="180" rx="22" ry="9"/><ellipse cx="157" cy="180" rx="22" ry="9"/><path d="M17 74H49V87H17Z M141 74H173V87H141Z"/></g>
- <path d="M43 92Q95 131 147 92" fill="none" stroke="#93729e"/>
- <path d="M24 184H42M148 184H166" stroke="#93729e"/>`);
+ // The horseshoe uses three drawn straight modules, never a bowed lintel.
+ writeArcadeModules(root);
+ fs.copyFileSync(`${root}/home/site-b-arcade-front.svg`,`${root}/home/site-b-arcade.svg`);
  svg('site-bed',250,110,'<path d="M12 30Q38 4 103 14Q199 0 238 31L234 77Q177 112 33 86L12 65Z" fill="#93729e"/><path d="M12 30Q42 4 103 14Q199 0 238 31Q242 74 130 79Q26 79 12 30Z" fill="#b6d93b"/><path d="M19 53Q90 90 235 51" fill="none" stroke="#78962d"/>');
  reuse('site-willow','/pixi-art/detail/nature--tree-willow.svg',{'#4aa539':'#b6d93b','#2b7a37':'#78962d','#89c332':'#d0e967','#232323':'#39472d','#49a43a':'#b6d93b','#52b33f':'#b6d93b','#328126':'#78962d','#3a952c':'#78962d','#479b36':'#9dbf40','#61c34d':'#d0e967','#6ab55f':'#d0e967','#7ece6e':'#d0e967'});
  areas['site-a'].court=[495,325];areas['site-b'].court=[500,330];
@@ -41,7 +39,8 @@ export function buildSites({root,write,reuse,add,building,rect,flats,sources,are
  building('site-b-shrine','site-b-chapel',6350,3490,390,340);
  building('site-b-cottage','porch',6820,3500,340,300);
  for(const [i,x,y] of [[0,6030,3540],[1,5920,3690],[2,6000,3860],[3,6660,3540],[4,6770,3690],[5,6690,3860]]) {
-  add(`site-b-arcade-${i}`,'site-b-arcade',x,y,190,205,{shadowSize:[72,12]});
+  const view=['front','left','right','front','right','left'][i];
+  add(`site-b-arcade-${i}`,`site-b-arcade-${view}`,x,y,190,225,{view,shadowSize:[58,8]});
   for(const [j,dx] of [-62,62].entries())rect(`site-b-arcade-${i}-pier-${j}`,'landmark',x+dx-12,y-35,24,24);
  }
  for(const [id,x,y,colour] of [['a-west',1590,3800,'orchid'],['a-east',2490,3790,'lime'],['b-west',5980,4000,'lime'],['b-east',6740,4000,'orchid']]){

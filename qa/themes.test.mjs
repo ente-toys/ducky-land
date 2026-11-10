@@ -3,7 +3,7 @@ import {mapPoint} from '../src/pixi/sphere-coordinates.js';
 // The registry, each theme's own moorings, landing on a themed island, sailing round one, and maps of a different size.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import READY from '../rive/web/themes/index.js';
+import READY from '../src/pixi/delivered-themes.js';
 import {HOME_MAP, THEME_OF, TEST_THEMES, mapFor, mapOf, mapsVersion, readyThemes, registerMap, themeOfIsland} from '../src/pixi/island-maps.js';
 import {ISLANDS, boatSpots, canSail, createBoats, crossIsland, destinationsFor, fillMoorings, harborOf, islandOffset, landingApproach,
   landingSpot, originOffset, retireBoat, sailRoute, sailStep, seaBoundsFor, setSailDestination, boardingPoint} from '../src/pixi/islands.js';
@@ -27,7 +27,7 @@ test('registry: home is today\'s map, the three islands nearest home carry the t
   }
   for (const theme of readyThemes()) {
     const m = mapFor(theme);
-    assert.ok(m.art.endsWith(`/themes/${theme}/art.json`), `${theme} art url`);
+    assert.equal(m.art,READY[theme].art, `${theme} delivered art url`);
     assert.ok(m.nav().walkable(m.spawn.x, m.spawn.y), `${theme} spawn is walkable`);
     assert.ok(m.nav().walkable(m.HARBOR.land.x, m.HARBOR.land.y), `${theme} jetty end is walkable`);
   }

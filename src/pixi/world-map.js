@@ -4,7 +4,7 @@ import {sphereFrame, logMap} from './sphere.js';
 // Coordinates here are 'map' coordinates; each island plays in its own local coordinates, and
 // offsetOf(a, b) turns one island's local coordinates into the other's.
 import world from '../../rive/web/world.json' with {type: 'json'};
-import READY from '../../rive/web/themes/index.js';   // the delivered themes, for their map sizes (boss 6 Nov: themed islands are bigger)
+import READY from './delivered-themes.js';
 
 const W = 5800, H = 4400; // stable world layout, independent of Home's expanding bounds
 // The delivered roster, in finish order. Exactly Home plus these eight themes.

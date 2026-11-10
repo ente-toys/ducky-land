@@ -8,6 +8,8 @@ import IslandTravel from './IslandTravel.jsx';
 import IslandFriends from './IslandFriends.jsx';
 import WorldMap from './WorldMap.jsx';
 import IslandOutfit from './IslandOutfit.jsx';
+import BogEntry from './bog-combat/BogEntry.jsx';
+import {BOG_COMBAT} from './bog-combat/config.js';
 import './pixi.css';
 
 const notices = {
@@ -158,6 +160,9 @@ export default function PixiPage() {
       </div>
     </div>}
     {!error && <WorldMap island={island}/>}
+    {!error && <BogEntry engine={island} travel={travel} status={status} {...BOG_COMBAT}
+      name={session?.user?.login??'Ducky'}
+      onReturnToDock={()=>room.current?.returnToBoat()} onLeave={()=>room.current?.returnToBoat()}/>}
     {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {
       setSession(previous => ({...previous,user:{...previous.user,canPlay:true}}));
       setStarDialogOpen(false);

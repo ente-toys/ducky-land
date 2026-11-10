@@ -2,7 +2,7 @@ import {useEffect,useRef,useState} from 'react';
 import {attachBogCombat} from './attach.js';
 import './combat.css';
 
-export default function BogGame({engine,team,name='Ducky',profile,navigation,blockers,onLeave=()=>{},...options}) {
+export default function BogGame({engine,team,name='Ducky',profile,navigation,blockers,onLeave=()=>{},returnLabel='Back to boat',...options}) {
   const layer=useRef(null),leave=useRef(onLeave),[state,setState]=useState({status:'connecting'}),[attempt,setAttempt]=useState(0);
   leave.current=onLeave;
   useEffect(()=>{
@@ -25,6 +25,6 @@ export default function BogGame({engine,team,name='Ducky',profile,navigation,blo
     <small>WASD / arrows · Shift to run · Space, J or left click to shoot · Esc to leave</small>
     {status!=='connected'&&<p role="status">{error||'Connecting…'}{status==='reconnecting'?' Reconnecting…':''}</p>}
     {status==='disconnected'&&<button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button>}
-    <button onClick={()=>{if(layer.current)layer.current.leave();else leave.current(null);}}>Back to dock</button>
+    <button onClick={()=>{if(layer.current)layer.current.leave();else leave.current(null);}}>{returnLabel}</button>
   </aside>;
 }

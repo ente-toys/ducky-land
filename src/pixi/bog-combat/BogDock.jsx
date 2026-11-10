@@ -1,6 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
 import {ArenaLobbyClient,profileToken} from './client.js';
-import {canEnterBog} from './entry.js';
 import {MEDALS} from './medals.js';
 import {emptyStats} from './rules.js';
 import BogGame from './BogGame.jsx';
@@ -22,7 +21,7 @@ export function MedalCase({medals={}}) {
 
 // Render at dockArrival(travel,status). Choosing a side attaches gameplay to
 // engine's existing island. It never mounts another canvas or swaps the scene.
-export default function BogDock({engine,name='Ducky',profile:providedProfile,onLeave=()=>{},onReturnToDock=()=>{},initialPanel='teams',...options}) {
+export default function BogDock({engine,name='Ducky',profile:providedProfile,onLeave=()=>{},onReturnToDock=()=>{},initialPanel='teams',leaveLabel='Back to boat',...options}) {
   const [profile]=useState(()=>providedProfile??profileToken()),[team,setTeam]=useState(null),[panel,setPanel]=useState(initialPanel);
   const [data,setData]=useState(null),[status,setStatus]=useState('connecting'),[attempt,setAttempt]=useState(0),[lastVisit,setLastVisit]=useState(null);
   const dialog=useRef(null),leave=useRef(onLeave);leave.current=onLeave;
@@ -48,11 +47,11 @@ export default function BogDock({engine,name='Ducky',profile:providedProfile,onL
   const connected=status==='connected'&&data,stats=data?.stats??lastVisit?.stats??emptyStats(),medals=data?.medalCase??lastVisit?.medalCase??{};
   return <div className="bog-combat-dock">
     <section ref={dialog} className="bog-combat-card" role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="bog-combat-heading" onKeyDown={trapFocus}>
-      <header><small>BOOQUACK BOG · FREE PLAY</small><button onClick={onLeave}>Back to island</button></header>
+      <header><small>BOOQUACK BOG · FREE PLAY</small><button onClick={onLeave}>{leaveLabel}</button></header>
       <h1 id="bog-combat-heading">{panel==='teams'?'Pick your side.':panel==='case'?'Your medal case':'Back at the dock'}</h1>
       {panel==='teams'?<>
         <p>Drop in, make a splash. Any team size, leave whenever you like.</p>
-        <div className="bog-combat-teams">{['privacy','google'].map(id=><button className={`bog-combat-team bog-combat-${id}`} key={id} disabled={!connected||!canEnterBog()} onClick={()=>setTeam(id)}>
+        <div className="bog-combat-teams">{['privacy','google'].map(id=><button className={`bog-combat-team bog-combat-${id}`} key={id} disabled={!connected} onClick={()=>setTeam(id)}>
           <strong>Team {id==='privacy'?'PRIVACY':'GOOGLE'}</strong>
           <span>{connected?`${data.counts[id]} playing`:'Checking players…'}</span>
           <small>{connected&&data.suggested===id?'Could use a duck':'Any team size welcome'}</small>
