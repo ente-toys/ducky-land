@@ -1,3 +1,5 @@
+import {createPirateFleet,pirateBoatPoint} from './pirate-fleet.js';
+import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './home-motion.js';
 import {createHomeKites, KITE_ASSETS} from './home-kites.js';
 import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from './sphere-camera.js';
@@ -309,6 +311,9 @@ export class PixiIsland {
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
       await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
       if(this.disposed)return;
+      this.pirateFleet=createPirateFleet();
+      this.pirateView=await createPirateView(this.objects,this.pirateFleet);
+      this.cleanups.push(()=>this.pirateView.destroy());
       this.isletView=await createIsletView(this.app,this.scene,this.objects);   // boss 8 Nov: hand-drawn vector islets, globe atlas baked from them
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
@@ -951,7 +956,7 @@ export class PixiIsland {
   }
   captureArt(mapId) {
     if (!this.archipelago || this.archipelago.has(mapId) || !this.artReady(mapId)) return;
-    const hide=[...this.transientForCopies(),...(this.isletView?.transient()??[])].filter(o=>o?.visible);
+    const hide=[...this.transientForCopies(),...(this.pirateView?.entries.map(e=>e.root)??[]),...(this.isletView?.transient()??[])].filter(o=>o?.visible);
     hide.forEach(o => {o.visible=false;});
     this.showArt(mapId);
     const props=this.artProps(mapId).map(p => ({p, v:p.sprite.visible, s:p.shadow?.visible, tint:p.sprite.tint}));
@@ -1148,6 +1153,11 @@ export class PixiIsland {
       this.updateControlLabel();
       if (!player) { this.keys.clear(); this.follow = false; this.markerUntil = 0; }
     }
+    if(this.pirateFleet){
+      const occupied=(this.room?.boats??[]).filter(b=>b.occupant).map(b=>pirateBoatPoint(b,this.islandId));
+      if(player?.mode==='sailing')occupied.push(pirateBoatPoint({...player,islandId:this.islandId},this.islandId));
+      this.pirateFleet.update(dt,occupied);
+    }
     // The sphere has its own previews. Keep room/prediction stepping above,
     // but do not stream, animate or draw a hidden flat island behind the globe.
     if(this.externalOverview&&this.externalDetailVisible===false){
@@ -1255,6 +1265,11 @@ export class PixiIsland {
       this.room && import.meta.env.DEV && this.archipelago && this.globeT<.97
         ? previewMoorings(this.archipelago.islands,this.camera,this.width,this.height,TILT) : []);
     this.travelView?.update(boatPoses,t,reduced,visible,player,this.camera);
+    if(this.pirateFleet){
+      this.pirateView.update(this.externalPirateIsland??this.islandId,this.camera,t,dt,reduced,visible);
+      this.canvas.dataset.pirateCpuMs=this.pirateFleet.stats.cpuMs.toFixed(3);
+      this.canvas.dataset.pirateCount=this.pirateFleet.ships.length;
+    }
     this.weather.update(t,reduced,visible);
     this.snowfall?.update(t,reduced,this.artShown,this.width,this.height,flatVisible && !this.interior?.active);
     const breeze=windStrength(t,reduced);

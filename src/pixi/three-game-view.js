@@ -1,3 +1,4 @@
+import {pirateLocal} from './pirate-fleet.js';
 import {createThreeWorld} from './three-world-view.js';
 import {retainDetailArt} from './three-game-budget.js';
 import {detailBlend,directDetail,detailSize,detailCamera,detailScreen} from './three-detail-view.js';
@@ -62,7 +63,7 @@ export async function createThreeGameView(game,host){
   game.onInteriorChange=interior;
   function update(state){
     if(disposed||!world||!game.ready||game.interior?.active)return;
-    view=state;game.resize();const now=performance.now();if(now-last<1000/(state.altitude>.6?20:60)-.5)return;last=now;
+    view=state;game.externalPirateIsland=state.id;game.resize();const now=performance.now();if(now-last<1000/(state.altitude>.6?20:60)-.5)return;last=now;
     const detailVisible=state.altitude<1.8;
     game.externalDetailVisible=detailVisible;
     const id=state.id,map=mapOf(id),mapId=artOf(id);
@@ -110,7 +111,7 @@ export async function createThreeGameView(game,host){
     return{id:view.id,x:x-map.cx,y:y-map.cy};
   }
   try{
-    world=await createThreeWorld(layer,{onFrame:update,onInteract:()=>{following=false;},surfaceAtPointer:screen=>pickDetail(screen),onTap:({id,x,y,screen})=>{
+    world=await createThreeWorld(layer,{pirateFleet:game.pirateFleet,pirateProjection:ship=>{if(!view||blend<=0)return null;const p=pirateLocal(view.id,ship.p),screen=detailScreen(game.camera,p.x,p.y,game.width,game.height,host.clientWidth,host.clientHeight,TILT);return{...screen,width:ship.width*game.camera.zoom*host.clientWidth/game.width};},onFrame:update,onInteract:()=>{following=false;},surfaceAtPointer:screen=>pickDetail(screen),onTap:({id,x,y,screen})=>{
       if(!game.player)return;
       const frame=WORLD_ISLANDS.find(i=>i.id===id),own=WORLD_ISLANDS.find(i=>i.id===game.islandId);
       const visible=blend>0&&screen?pickDetail(screen):null;
@@ -120,6 +121,7 @@ export async function createThreeGameView(game,host){
       const pixel={x:game.width/2+(target.x-game.camera.x)*game.camera.zoom,y:game.height/2+(target.y-game.camera.y)*game.camera.zoom*TILT};
       game.tap(pixel);following=id===game.islandId;
     }});
+    if(import.meta.env?.DEV)game.inspectPirate=(x,y)=>{following=false;world.centreOn('home',x,y,.12,true);};
     if(disposed){world.destroy();return;}
     cancelAnimationFrame(game.raf);game.tick=()=>{};game.resize();game.canvas.style.visibility='hidden';game.app.renderer.background.alpha=0;
     game.canvas.dataset.earthView='active';game.canvas.setAttribute('aria-hidden','true');game.canvas.tabIndex=-1;find();

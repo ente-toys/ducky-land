@@ -1,3 +1,4 @@
+import {createThreePirates} from './three-pirates.js';
 import * as THREE from 'three';
 import {createIsletStanding} from './three-islet-props.js';
 import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate} from './three-live-geometry.js';
@@ -23,7 +24,7 @@ const out=x=>1-Math.pow(1-THREE.MathUtils.clamp(x,0,1),3);
 const HEART='<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.5 4 19 17.3"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>';
 
 // Continuous Three.js world. Pixi remains the island renderer and simulation.
-export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null}={}) {
+export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null,pirateFleet=null,pirateProjection=()=>null}={}) {
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -44,6 +45,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const ocean=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),atmosphere.water);
   ocean.name='Ocean'; globe.add(ocean);
 
+  const pirates=pirateFleet?await createThreePirates(scene,pirateFleet):null;let pirateDrawAt=0;
   let detailOpacity=0,direct=false;
   function planetLighting(shader){
     shader.uniforms.planetShade=planetShade;
@@ -271,6 +273,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     const detailStart=performance.now();
     const held=drag??zoomAnchor;
     onFrame({anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude:camera.position.z-1,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving});
+    if(!direct&&pirates?.update(globe.quaternion,camera,now/1000,dt,reduced,1-detailOpacity,pirateProjection,{width,height})&&now-pirateDrawAt>50){pirateDrawAt=now;demand.invalidate();}
     const detailCost=performance.now()-detailStart;detailMs+=detailCost;detailPeak=Math.max(detailPeak,detailCost);
     if(!direct&&demand.consume(moving)){
       const renderStart=performance.now();renderer.render(scene,camera);renderMs+=performance.now()-renderStart;renderCount++;drawCount+=renderer.info.render.calls;
@@ -344,6 +347,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   return {focus,focusIslet,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
 
     setActive(value){if(active===value)return;active=value;backdrop.setActive(value&&!direct);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
-    destroy(){destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();isletStanding.forEach(s=>s.ground.dispose());cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
+    destroy(){destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();pirates?.destroy();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();isletStanding.forEach(s=>s.ground.dispose());cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
   };
 }
