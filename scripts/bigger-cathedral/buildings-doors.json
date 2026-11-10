@@ -1,7 +1,7 @@
 [
   {
     "id": "bellpeep-foundry",
-    "src": "villages/bellpeep/foundry.svg",
+    "src": "villages/bellpeep/foundry-r2.svg",
     "door": [
       3800,
       -877
@@ -11,7 +11,7 @@
   },
   {
     "id": "bellpeep-house-west",
-    "src": "villages/bellpeep/house-1.svg",
+    "src": "villages/bellpeep/house-1-r2.svg",
     "door": [
       3273,
       -596
@@ -21,7 +21,7 @@
   },
   {
     "id": "bellpeep-house-east",
-    "src": "villages/bellpeep/house-2.svg",
+    "src": "villages/bellpeep/house-2-r2.svg",
     "door": [
       4326,
       -596
@@ -31,7 +31,7 @@
   },
   {
     "id": "bellpeep-house-south",
-    "src": "villages/bellpeep/house-3.svg",
+    "src": "villages/bellpeep/house-3-r2.svg",
     "door": [
       3798,
       -120
@@ -41,7 +41,7 @@
   },
   {
     "id": "olivello-house-west",
-    "src": "villages/olivello/house-1.svg",
+    "src": "villages/olivello/house-1-r2.svg",
     "door": [
       -818,
       2342.5
@@ -51,7 +51,7 @@
   },
   {
     "id": "olivello-house-east",
-    "src": "villages/olivello/house-2.svg",
+    "src": "villages/olivello/house-2-r2.svg",
     "door": [
       253,
       2487.5
@@ -61,7 +61,7 @@
   },
   {
     "id": "olivello-house-southwest",
-    "src": "villages/olivello/house-3.svg",
+    "src": "villages/olivello/house-3-r2.svg",
     "door": [
       -892,
       2844.5
@@ -71,7 +71,7 @@
   },
   {
     "id": "olivello-olive-workshop",
-    "src": "villages/olivello/olive-workshop.svg",
+    "src": "villages/olivello/olive-workshop-r2.svg",
     "door": [
       -272,
       2300
@@ -81,7 +81,7 @@
   },
   {
     "id": "tessera-house-northwest",
-    "src": "villages/tessera/house-northwest.svg",
+    "src": "villages/tessera/house-northwest-r2.svg",
     "door": [
       7891,
       2375.5
@@ -91,7 +91,7 @@
   },
   {
     "id": "tessera-house-southwest",
-    "src": "villages/tessera/house-southwest.svg",
+    "src": "villages/tessera/house-southwest-r2.svg",
     "door": [
       7892,
       2850.5
@@ -101,7 +101,7 @@
   },
   {
     "id": "tessera-house-southeast",
-    "src": "villages/tessera/house-southeast.svg",
+    "src": "villages/tessera/house-southeast-r2.svg",
     "door": [
       8891,
       2852.5
@@ -111,7 +111,7 @@
   },
   {
     "id": "tessera-mosaic-workshop",
-    "src": "villages/tessera/mosaic-workshop.svg",
+    "src": "villages/tessera/mosaic-workshop-r2.svg",
     "door": [
       8450,
       2289
@@ -121,7 +121,7 @@
   },
   {
     "id": "crumbbell-house-west",
-    "src": "villages/crumbbell/house-west.svg",
+    "src": "villages/crumbbell/house-west-r2.svg",
     "door": [
       3753,
       6670
@@ -131,7 +131,7 @@
   },
   {
     "id": "crumbbell-house-east",
-    "src": "villages/crumbbell/house-east.svg",
+    "src": "villages/crumbbell/house-east-r2.svg",
     "door": [
       4693,
       6671
@@ -141,7 +141,7 @@
   },
   {
     "id": "crumbbell-house-south",
-    "src": "villages/crumbbell/house-south.svg",
+    "src": "villages/crumbbell/house-south-r2.svg",
     "door": [
       4215,
       7071
@@ -151,7 +151,7 @@
   },
   {
     "id": "crumbbell-bakery",
-    "src": "villages/crumbbell/bakery.svg",
+    "src": "villages/crumbbell/bakery-r2.svg",
     "door": [
       4225,
       6492

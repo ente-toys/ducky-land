@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {liveSurfaceGeometry} from './three-live-geometry.js';
 import {WORLD_GEO, WORLD_ISLANDS} from './world-map.js';
 import {ISLETS} from './islets.js';
 import {sphereFrame} from './sphere.js';
@@ -110,7 +111,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const review=new URLSearchParams(location.search),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches||review.has('review');
   globe.quaternion.copy(focusQuaternion(sphereFrame(Number(review.get('viewLon')??0)*Math.PI/180,23*Math.PI/180)));
   function resize() {
-    const box=host.getBoundingClientRect(); width=box.width;height=box.height;pixelRatio=Math.min(devicePixelRatio,1.5);
+    const box=host.getBoundingClientRect(); width=Math.max(1,box.width);height=Math.max(1,box.height);pixelRatio=Math.min(devicePixelRatio||1,1.5);
     renderer.setSize(width,height);renderer.setPixelRatio(pixelRatio);camera.aspect=width/height;camera.updateProjectionMatrix();
     overlay.width=Math.round(width*pixelRatio);overlay.height=Math.round(height*pixelRatio);ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);
     demand.invalidate();
@@ -253,7 +254,8 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   raf=requestAnimationFrame(tick);onReady();
   function setLiveCanvas(id,canvas,placement,matrix,atlasWidth,atlasHeight,bounds=null){
     const patch=patches.find(p=>p.userData.island&&p.userData.id===id);if(!patch)return;
-    if(live?.id!==id){
+    if(bounds&&![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite))return;
+    if(live?.id!==id||live.canvasWidth!==canvas.width||live.canvasHeight!==canvas.height){
       if(live){live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();}
       const geometry=patch.geometry,texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
       const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
@@ -264,14 +266,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
           vec2 screen=mix(sphereClip.xy/sphereClip.w,vMapUv*2.-1.,detailFlat);
           gl_Position=vec4(screen*blendedW,mix(sphereClip.z/sphereClip.w,-.9,detailFlat)*blendedW,blendedW);`);
         shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
-      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.renderOrder=100;globe.add(mesh);live={id,patch,mesh};
+      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.renderOrder=100;globe.add(mesh);live={id,patch,mesh,canvasWidth:canvas.width,canvasHeight:canvas.height};
     }
     if(bounds){
       const old=live.bounds,w=bounds.width*1.8,h=bounds.height*1.8;
       if(!old||Math.abs(bounds.x-old.x)>old.width*.2||Math.abs(bounds.y-old.y)>old.height*.2||w<old.width*.65||w>old.width*1.5){
-        const geometry=new THREE.PlaneGeometry(w,h,64,64),pos=geometry.attributes.position,uv=geometry.attributes.uv;
-        for(let k=0;k<pos.count;k++){const x=bounds.x+pos.getX(k),y=bounds.y-pos.getY(k),p=surfacePoint(patch.userData.frame,x,y,WORLD_GEO.Rw);pos.setXYZ(k,p.x,p.y,p.z);uv.setXY(k,x/patch.userData.width+.5,.5-y/patch.userData.height);}
-        geometry.computeVertexNormals();geometry.computeBoundingSphere();if(live.ownsGeometry)live.mesh.geometry.dispose();live.mesh.geometry=geometry;live.ownsGeometry=true;live.bounds={...bounds,width:w,height:h};
+        const geometry=liveSurfaceGeometry(patch.userData.frame,bounds,patch.userData.width,patch.userData.height,WORLD_GEO.Rw);
+        if(!geometry)return;
+        if(live.ownsGeometry)live.mesh.geometry.dispose();live.mesh.geometry=geometry;live.ownsGeometry=true;live.bounds={...bounds,width:w,height:h};
       }
     }
     const t=atlasTransform(patch.userData.width,patch.userData.height,placement,matrix,atlasWidth,atlasHeight);

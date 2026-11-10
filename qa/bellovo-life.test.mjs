@@ -53,7 +53,7 @@ test('All sixteen Home benches face their view, have one shadow, paving, and a r
   assert.deepEqual([p.x,p.y],[x,y]);assert.equal(p.bench.view,view);assert.deepEqual(p.bench.target,target);
   const svg=plantFile(p);assert.doesNotMatch(svg,/(?:rotate|skew|matrix)\(/);assert.doesNotMatch(svg,/opacity=/);
   assert.equal(art.flats.filter(f=>f.id===id+'-shadow').length,0);
-  const onPaving=(px,py)=>id.startsWith('cloister')?((px-4100)/1067.9)**2+((py-2680)/822.4)**2<1:id.startsWith('b2')?Math.hypot(px-4100,py-4250)<390:art.flats.some(f=>/square/.test(f.id??'')&&px>f.x&&px<f.x+f.width&&py>f.y&&py<f.y+f.height);
+  const onPaving=(px,py)=>id.startsWith('cloister')?((px-4100)/1160)**2+((py-2490)/850)**2<1:id.startsWith('b2')?Math.hypot(px-4100,py-4250)<390:art.flats.some(f=>/square/.test(f.id??'')&&px>f.x&&px<f.x+f.width&&py>f.y&&py<f.y+f.height);
   for(const [dx,dy]of [[0,0],[-p.width*.35,0],[p.width*.35,0],[0,-25]])assert.ok(onPaving(x+dx,y+dy),id+' paving');
   const s=p.bench.seat;assert.ok(nav.walkable(s.x,s.y),id+' open seat');
   assert.ok(nav.route(map.spawn.x,map.spawn.y,s.x,s.y).length,id+' reachable seat');

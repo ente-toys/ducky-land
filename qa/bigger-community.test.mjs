@@ -1,13 +1,14 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import {outsideStageProps,outsideStageFlats,outsideStageObstacles} from './campfire-stage-scope.mjs';
 import {mapFor} from '../src/pixi/island-maps.js';
 import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
 import {canSail,boardingPoint} from '../src/pixi/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-community/baseline/',D='rive/web/themes/community/',A='public/pixi-art/themes/community/',old=read(B+'world.json'),oldArt=read(B+'art.json'),world=read(D+'world.json'),art=read(A+'art.json'),plan=read('scripts/bigger-community/plan.json');
 test('community expansion keeps every original prop, decal, deck, sleeper and collision record',()=>{
- const centre=oldArt.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(art.props.slice(0,centre.length),centre);
- assert.deepEqual(art.flats,oldArt.flats);assert.deepEqual(art.decks.slice(0,oldArt.decks.length),oldArt.decks);
+ const centre=oldArt.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(outsideStageProps(art.props.slice(0,centre.length)),outsideStageProps(centre));
+ assert.deepEqual(outsideStageFlats(art.flats),outsideStageFlats(oldArt.flats));assert.deepEqual(art.decks.slice(0,oldArt.decks.length),oldArt.decks);
  for(const [pose,spots]of Object.entries(old.sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots);assert.deepEqual(world.sleepAvoid,old.sleepAvoid);
- assert.deepEqual(world.obstacles.slice(0,old.obstacles.length),old.obstacles);
+ assert.deepEqual(outsideStageObstacles(world.obstacles).slice(0,outsideStageObstacles(old.obstacles).length),outsideStageObstacles(old.obstacles));
  for(const [key,z]of Object.entries(old.zones))assert.deepEqual(world.zones[key],z);
  assert.equal(mapFor('community').sleepers.length,72);assert.deepEqual(mapFor('community').spawn,{x:4000,y:2970});
 });

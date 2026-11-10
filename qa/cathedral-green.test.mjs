@@ -11,7 +11,7 @@ test('Bellovo green retains the coast, islets and dry residents after the approv
  assert.equal(map.sleepers.length,120);
  for(const k of ['coast','islets'])assert.deepEqual(world[k],old[k],k);
  for(const id of ['cathedral-hall','campanile','cloister-olive-well'])assert.ok(art.props.some(p=>p.id===id));
- assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-')).length,12);
+ assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-')).length,6);
  for(const s of map.sleepers)assert.ok(map.landAt(s.x,s.y));
 });
 test('Bellovo green uses existing vector art in authored clumps and clears the daisy carpets',()=>{
@@ -25,6 +25,6 @@ test('Bellovo B2 replaces the stone pads with a clipped lawn and preserves the r
  const centre=fs.readFileSync(A+art.ground.tiles.find(p=>p.src.includes('preserved-')).src,'utf8');
  assert.match(centre,/data-name="Bellovo unified paths"/);assert.match(centre,/clipPath id="paths-original-land"/);
  assert.doesNotMatch(centre,/<!--b2-garden-->|stroke="#fff0c7" stroke-width="(?:104|128)"/);
- assert.ok(art.flats.some(p=>p.src==='detail/piazza-mosaic.svg'));
+ assert.ok(art.flats.some(p=>p.src==='centre-A/paving.svg'));
  assert.ok(!art.props.some(p=>p.id==='cathedral-4'||/^cloister-cloister-(west|east)/.test(p.id)));
 });

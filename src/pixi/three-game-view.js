@@ -40,7 +40,16 @@ export async function createThreeGameView(game,host){
   };
   game.placeLabel=(label,x,y)=>{label.hidden=!view||view.altitude>.5||x<0||y<0||x>host.clientWidth||y>host.clientHeight;if(!label.hidden)label.style.translate=`${x}px ${y}px`;};
   game.liveCopies=()=>{retainDetailArt(game,game.externalDetailVisible===false?null:game.artShown);return[];};game.buildCopies=()=>{};
-  game.resize=()=>{if(game.interior?.active)return nativeResize();const size=detailSize(host.clientWidth,host.clientHeight,devicePixelRatio||1);if(game.width!==size.width||game.height!==size.height){game.width=size.width;game.height=size.height;game.app.renderer.resolution=1;game.app.renderer.resize(game.width,game.height);}game.canvas.style.width='100%';game.canvas.style.height='100%';};
+  game.resize=()=>{
+    if(game.interior?.active)return nativeResize();
+    // Keep globe uploads bounded; native close detail renders at the host's DPR.
+    const size=direct?{width:Math.max(1,host.clientWidth),height:Math.max(1,host.clientHeight)}:detailSize(host.clientWidth,host.clientHeight,devicePixelRatio||1);
+    const resolution=direct?Math.min(globalThis.devicePixelRatio||1,2):1;
+    if(game.width!==size.width||game.height!==size.height||game.app.renderer.resolution!==resolution){
+      game.width=size.width;game.height=size.height;game.app.renderer.resolution=resolution;game.app.renderer.resize(game.width,game.height);
+    }
+    game.canvas.style.width='100%';game.canvas.style.height='100%';
+  };
   const find=()=>{const p=game.room?.view()??game.player,m=mapOf(game.islandId);following=true;flatOffset.x=flatOffset.y=0;world?.centreOn(game.islandId,p?.x??m.cx,(p?.y??m.cy)-90,.12,true);};
   game.listen(window,'keydown',e=>{if(e.key.toLowerCase()==='f'&&!/INPUT|TEXTAREA|SELECT/.test(e.target?.tagName)&&!e.target?.isContentEditable)find();});
   game.flyHome=find;game.fit=()=>{following=false;world?.world();};home.onclick=find;

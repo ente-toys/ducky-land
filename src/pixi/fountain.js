@@ -3,6 +3,7 @@
 // boss 5 Nov: curved spills, landing foam and rings, gravity-driven splash droplets, and pool shimmer.
 import {Container, Graphics, Texture} from 'pixi.js';
 import {PALETTE} from './palette.js';
+import {basinClip, createBasinWater} from './fountain-basin.js';
 
 // boss 5 Nov: coordinates match the current 480 x 480 SVG; each mouth follows the round outer lip.
 const CENTRE = {x: 240, y: 300};
@@ -65,8 +66,15 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
   root.position.set(prop.x - centre.x * s, prop.y - centre.y * s);
   root.scale.set(s);
   root.zIndex = prop.y + 1;                           // just in front of the fountain sprite
+  root.visible = false;
+  const surface = layout.surface ? createBasinWater(layout.surface, root) : null;
+  water = surface ?? water;
   const g = new Graphics();
   root.addChild(g);
+  if (surface) {
+    const clip = basinClip(layout.surface); root.addChild(clip); g.mask = clip;
+    root.once('destroyed', () => surface.dispose());
+  }
   parent.addChild(root);
   if (layout.cleanArtwork !== false) cleanArtwork(prop, root);
   let last = null, seed = 7;
@@ -80,8 +88,11 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
   let splashAcc = 0, impactAcc = 0;
 
   function update(t, reduced, visible) {
+    visible = visible && !(typeof document !== 'undefined' && document.hidden);
+    const wasVisible = root.visible;
     root.visible = visible;
-    const dt = last === null ? 0 : Math.min(.05, Math.max(0, t - last)); last = t;
+    const dt = last === null || !wasVisible ? 0 : Math.min(.05, Math.max(0, t - last)); last = t;
+    surface?.update(dt, reduced, visible);
     if (!visible) return;
     g.clear();
     if (reduced) {drops.length = 0; splashAcc = impactAcc = 0; return;}
@@ -125,7 +136,7 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
         g.closePath().fill({color, alpha});
       };
       if (sp.jet) ribbon(0, 1, wob * 1.3, PALETTE.ink, 1);
-      ribbon(0, 1, wob, sp.jet ? 0xB5E7F7 : WATER, 1);
+      ribbon(0, 1, wob, surface ? WATER : sp.jet ? 0xB5E7F7 : WATER, 1);
       ribbon(0, 1, .3 * wob, HI, .48);
       for (let i = 0; i < 3; i++) {
         const u = fract(t * 1.25 + i / 3 + k * .21);
@@ -159,5 +170,5 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
       g.circle(d.x, d.y, d.r).fill({color: HI, alpha: .95});
     }
   }
-  return {root, update};
+  return {root, update, graphics: g, surface};
 }

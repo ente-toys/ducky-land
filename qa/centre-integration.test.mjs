@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {Sprite,Texture,Container,Graphics} from 'pixi.js';
+import {Sprite,Texture,Container,Graphics,DOMAdapter} from 'pixi.js';
 import {animatePieces,attachCentreMotion} from '../src/pixi/centre-motion.js';
 import {createGroundPool} from '../src/pixi/ground-stream.js';
 import {loadThemeArt} from '../src/pixi/theme-art.js';
@@ -10,7 +10,10 @@ import {createFairWater} from '../src/pixi/centre-motion/fair.js';
 import {updateCommunityCentre} from '../src/pixi/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
-test('all eight theme manifests load, release textures and resolve their authored animation pieces', async()=>{
+test('all eight theme manifests load, release textures and resolve their authored animation pieces', async t=>{
+ const adapter=DOMAdapter.get();
+ DOMAdapter.set({...adapter,createCanvas:()=>({getContext:()=>null})});
+ t.after(()=>DOMAdapter.set(adapter));
  const original=globalThis.fetch;
  globalThis.fetch=async url=>({ok:true,json:async()=>json('public'+url)});
  try {

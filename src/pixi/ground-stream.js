@@ -3,7 +3,7 @@ import {Sprite, Texture} from 'pixi.js';
 
 export const GROUND_BUDGET_BYTES = 128 * 1048576;
 export function tileInView(tile, camera, width, height, tilt = 1, margin = 192) {
-  const hw=width/(2*camera.zoom)+margin, hh=height/(2*camera.zoom*tilt)+margin;
+  const hw=width/(2*camera.zoom)+(typeof margin==='number'?margin:margin.x), hh=height/(2*camera.zoom*tilt)+(typeof margin==='number'?margin:margin.y);
   return tile.x < camera.x+hw && tile.x+tile.width > camera.x-hw &&
     tile.y < camera.y+hh && tile.y+tile.height > camera.y-hh;
 }
@@ -14,74 +14,131 @@ export function tileResolution(tile, zoom, dpr = 1) {
   return Math.min(tile.resolution ?? 1, ratio*Math.max(.0625, 2 ** Math.ceil(Math.log2(zoom*dpr))));
 }
 // A single pool for Home and live neighbours, including pending decodes. Far tiles
-// have no texture lease. The low-resolution terrain beneath them covers loading.
-export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES, concurrency = 2, utilization = .9,
-  makeSprite = () => new Sprite(Texture.EMPTY)} = {}) {
-  const streams=new Set(), resident=new Map(), pending=new Map();
-  let desired=new Map(), disposed=false, reserved=0, peak=0, failures=new Set(), deferred=new Set();
+// have no texture lease. New crops get a cheap preview before refinement.
+export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES, concurrency = 64, utilization = .9,
+  makeSprite = () => new Sprite(Texture.EMPTY),
+  schedule = globalThis.requestAnimationFrame?.bind(globalThis), now = () => performance.now(),
+  settleMs = schedule ? 100 : 0, planInterval = schedule ? 32 : 0,
+  frameBudgetMs = 5, progressive = !!schedule, prefetch = !!schedule} = {}) {
+  const streams=new Set(), resident=new Map(), pending=new Map(), cache=new Map();
+  let desired=new Map(), disposed=false, reserved=0, peak=0, failures=new Map(), deferred=new Set();
+  let scheduled=false,lastPlan=-Infinity,lastSignature='',plans=0,started=0,streamId=0;
+  const zooms=new Map();
+  const requestPump=()=>{if(!schedule){pump();return;}if(scheduled||disposed)return;scheduled=true;schedule(()=>{scheduled=false;pump();});};
   const blank=tile => {tile.sprite.texture=Texture.EMPTY;tile.sprite.visible=false;};
+  const discard=entry=>{reserved-=entry.bytes;entry.release(entry.src);};
+  const remember=(tile,entry)=>{
+    if(!progressive){discard(entry);return;}
+    let versions=cache.get(tile);if(!versions)cache.set(tile,versions=new Map());
+    if(versions.has(entry.src))discard(versions.get(entry.src));
+    versions.set(entry.src,entry);
+  };
+  const show=(tile,entry)=>{
+    resident.set(tile,entry);tile.sprite.texture=entry.texture;
+    tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);tile.sprite.visible=true;
+  };
   const drop=tile => {
     const entry=resident.get(tile);if (!entry)return;
-    blank(tile);resident.delete(tile);reserved-=entry.bytes;entry.release(entry.src);
+    blank(tile);resident.delete(tile);remember(tile,entry);
   };
   const pump=() => {
     if(disposed)return;
-    for(const [tile,need] of desired) {
-      if(pending.size>=concurrency)break;
-      const held=resident.get(tile);   // boss 8 Nov ("whenever I zoom the whole island is redrawing"): a tile keeps its current picture until the sharper one is ready
-      if(held?.src===need.src||pending.has(tile)||failures.has(need.src)||deferred.has(tile))continue;
-      // boss 8 Nov (a hard rectangle of missing terrace on Rosybutton Bay): over budget, old pictures kept for a zoom
-      // change go first, and a tile with nothing on screen falls back to a coarser picture instead of staying a hole
-      // The held texture is still alive while its replacement decodes. Count
-      // both here, rather than borrowing its bytes before it has been released.
-      for(const [t,e] of resident) {if(reserved+need.bytes<=budget)break;if(t!==tile&&desired.get(t)?.src!==e.src)drop(t);}
+    // Empty visible crops first, then visible refinements, then the walking ring.
+    const jobs=[...desired].sort(([a,an],[b,bn])=>
+      (an.visible?0:2)-(bn.visible?0:2)||
+      Number(resident.has(a))-Number(resident.has(b))||
+      (b.priority??0)-(a.priority??0)||an.distance-bn.distance);
+    const began=now();
+    for(const [tile,target] of jobs) {
+      if(pending.size>=concurrency||(schedule&&now()-began>=frameBudgetMs))break;
+      const held=resident.get(tile);
+      if(held?.resolution>=target.resolution||pending.has(tile)||deferred.has(tile))continue;
+      // Keep previously decoded crop+resolution leases in the SAME pool budget.
+      const versions=cache.get(tile);
+      const cached=versions&&[...versions.values()].find(e=>e.resolution>=target.resolution);
+      if(cached){versions.delete(cached.src);if(!versions.size)cache.delete(tile);if(held)remember(tile,held);show(tile,cached);continue;}
+      const resolution=progressive&&!held?Math.min(.5,target.resolution):target.resolution;
+      const need={...target,resolution,src:tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution,
+        bytes:Math.ceil(target.pixelWidth*resolution)*Math.ceil(target.pixelHeight*resolution)*4};
+      if(failures.has(need.src))continue;
+      for(const [t,entries] of cache){
+        for(const [src,entry] of entries){if(reserved+need.bytes<=budget)break;discard(entry);entries.delete(src);}
+        if(!entries.size)cache.delete(t);
+      }
+      // Ring crops may be evicted to fund a visible refinement. Never evict a
+      // visible resident, even when its replacement is already in flight.
+      for(const [t] of resident) {if(reserved+need.bytes<=budget)break;if(!desired.get(t)?.visible&&target.visible)drop(t);}
+      // drop() caches, so reclaim those leases too before reserving a decode.
+      for(const [t,entries] of cache){
+        for(const [src,entry] of entries){if(reserved+need.bytes<=budget)break;discard(entry);entries.delete(src);}
+        if(!entries.size)cache.delete(t);
+      }
       if(reserved+need.bytes>budget){deferred.add(tile);continue;}
-      reserved+=need.bytes;peak=Math.max(peak,reserved);pending.set(tile,need);
+      started++;reserved+=need.bytes;peak=Math.max(peak,reserved);pending.set(tile,need);
       need.acquire(need.src,need.resolution).then(texture=>{
-        if(disposed||desired.get(tile)?.src!==need.src) {need.release(need.src);reserved-=need.bytes;return;}
-        // SVG tiles are authored at tile size. Account for actual pixel extent too.
+        if(disposed||!desired.has(tile)) {need.release(need.src);reserved-=need.bytes;return;}
         const bytes=(texture.source.pixelWidth??tile.width*need.resolution)*(texture.source.pixelHeight??tile.height*need.resolution)*4;
         const stale=resident.get(tile);
-        if(reserved-need.bytes-(stale?.bytes??0)+bytes>budget){need.release(need.src);reserved-=need.bytes;deferred.add(tile);return;}   // over budget is not a broken tile: try again on the next view change
-        if(stale){resident.delete(tile);reserved-=stale.bytes;stale.release(stale.src);}
+        if(stale?.resolution>=need.resolution||reserved-need.bytes+bytes>budget){need.release(need.src);reserved-=need.bytes;deferred.add(tile);return;}
         reserved+=bytes-need.bytes;peak=Math.max(peak,reserved);
-        resident.set(tile,{...need,bytes});tile.sprite.texture=texture;
-        tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);tile.sprite.visible=true;   // home 10: bleed = a few units of overlap that hide the seam between tiles
-      }).catch(()=>{need.release(need.src);reserved-=need.bytes;failures.add(need.src);})
-        .finally(()=>{pending.delete(tile);pump();});
+        if(stale){resident.delete(tile);remember(tile,stale);}
+        show(tile,{...need,bytes,texture});
+      }).catch(error=>{need.release(need.src);reserved-=need.bytes;failures.set(need.src,String(error));})
+        .finally(()=>{pending.delete(tile);deferred.clear();requestPump();});
     }
+    // A synchronous submission can consume the budget before concurrency fills.
+    if(!pending.size&&jobs.some(([tile,n])=>!deferred.has(tile)&&!failures.has(n.src)&&(!resident.has(tile)||resident.get(tile).resolution<n.resolution)))requestPump();
   };
   return {
     create(tiles,container,url=src=>src,loader={acquire,release}) {
       const entries=tiles.map(t=>{const tile={...t,src:url(t.src),sprite:makeSprite(),acquire:loader.acquire,release:loader.release};
         tile.sprite.position.set((t.localX??t.x)+(t.flip?t.width:0),t.localY??t.y);if(t.flip)tile.sprite.scale.x=-1;blank(tile);container.addChild(tile.sprite);return tile;});
       let dead=false;
-      const stream={entries,destroy(){if(dead)return;dead=true;streams.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);tile.sprite.destroy();}}};
+      const resolutionTiles=[...new Map(entries.map(t=>[[t.screenResolution,t.rasterDensity,t.resolution,t.screenResolution?0:tileResolution(t,1)].join('|'),t])).values()];
+      const stream={id:++streamId,entries,resolutionTiles,destroy(){if(dead)return;dead=true;streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
       streams.add(stream);return stream;
     },
     update(views,dpr=1) {
       // boss 8 Nov (a hard rectangle of missing terrace on Rosybutton Bay): when everything in view cannot fit the budget at full
       // sharpness, the whole view steps down a sharpness level together. A slightly softer ground beats a tile that never draws.
-      let next, step=1;
+      const time=now();
+      const active=views.filter(v=>streams.has(v.stream));
+      let waiting=false,settled=false;
+      const planned=active.map(v=>{
+        let z=zooms.get(v.stream);
+        if(!z){z={value:v.camera.zoom,input:v.camera.zoom,at:time};zooms.set(v.stream,z);}
+        const step=v.stream.resolutionTiles.map(t=>tileResolution(t,v.camera.zoom,dpr)).join(',');
+        if(z.step!==step){if(z.step!==undefined)z.at=time;z.step=step;z.input=v.camera.zoom;}
+        if(time-z.at>=settleMs){settled ||= z.value!==z.input;z.value=z.input;}
+        else if(z.value!==z.input)waiting=true;
+        return {...v,camera:{...v.camera,zoom:z.value},cullCamera:v.camera};
+      });
+      const signature=JSON.stringify(active.map(v=>v.stream.id).concat(active.map(v=>[v.camera.x,v.camera.y,v.camera.zoom,v.width,v.height,v.tilt,dpr]),planned.map(v=>v.camera.zoom)));
+      if(active.length&&((signature===lastSignature&&!waiting&&!settled)||(!settled&&time-lastPlan<planInterval))){requestPump();return;}
+      lastSignature=signature;lastPlan=time;plans++;
+      let next, step=1, ringStep=1;
       do {
         next=new Map();let total=0;
-        for(const {stream,camera,width,height,tilt=1} of views) if(streams.has(stream)) {
-          for(const tile of stream.entries) if(tileInView(tile,camera,width,height,tilt,tile.viewMargin??192)) {
-            const resolution=Math.max(.0625,tileResolution(tile,camera.zoom,dpr)/step);
+        for(const {stream,camera,cullCamera,width,height,tilt=1} of planned) {
+          for(const tile of stream.entries) if(tileInView(tile,cullCamera,width,height,tilt,prefetch?{x:width/cullCamera.zoom,y:height/(cullCamera.zoom*tilt)}:(tile.viewMargin??192))) {
+            const visible=tileInView(tile,cullCamera,width,height,tilt,tile.viewMargin??192);
+            const resolution=Math.max(.0625,visible?tileResolution(tile,camera.zoom,dpr)/step:Math.min(.5,tileResolution(tile,camera.zoom,dpr))/ringStep);
             const src=tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution;
             const size=sourceSizes[tile.src]??[tile.width,tile.height];
             const bytes=Math.ceil(size[0]*resolution)*Math.ceil(size[1]*resolution)*4;
-            next.set(tile,{src,resolution,bytes,acquire:tile.acquire,release:tile.release});total+=bytes;
+            next.set(tile,{src,resolution,bytes,visible,pixelWidth:size[0],pixelHeight:size[1],distance:Math.hypot(tile.x+tile.width/2-cullCamera.x,tile.y+tile.height/2-cullCamera.y),acquire:tile.acquire,release:tile.release});total+=bytes;
           }
         }
         if(total<=budget*utilization||step>=16)break;
-        step*=2;
+        if(prefetch&&ringStep<8)ringStep*=2;else step*=2;
       } while(true);
-      desired=next;deferred.clear();
+      // Load standing props before decorative floor crops,
+      // so the centre of the view cannot sit behind thousands of off-centre decals.
+      desired=new Map([...next].sort(([a,an],[b,bn])=>(b.priority??0)-(a.priority??0)||an.distance-bn.distance));deferred.clear();
       for(const tile of [...resident.keys()]) if(!desired.has(tile))drop(tile);   // only tiles that left the view; a resolution change swaps on load
-      pump();
+      requestPump();
     },
-    stats(){return {budgetBytes:budget,reservedBytes:reserved,peakBytes:peak,residentTiles:resident.size,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size};},
+    stats(){return {budgetBytes:budget,reservedBytes:reserved,peakBytes:peak,residentTiles:resident.size,cachedTiles:cache.size,refiningTiles:[...desired].filter(([t,n])=>n.visible&&(resident.get(t)?.resolution??0)<n.resolution).length,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size,failures:[...failures].slice(0,8),desiredTiles:desired.size,missingTiles:[...desired.keys()].filter(t=>!resident.has(t)).length,plans,started};},
     destroy(){disposed=true;desired.clear();for(const stream of [...streams])stream.destroy();},
   };
 }

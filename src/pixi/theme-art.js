@@ -11,13 +11,14 @@ import {fairTiles,FAIR_GROUND_TILE_SIZE,FAIR_ART_BUDGET_BYTES,FAIR_ART_UTILIZATI
 import {createFairRasterLoader} from './fair-art-stream.js';
 import {createGroundPool} from './ground-stream.js';
 
+import {createFountainWater} from './fountain.js';
 import {createAutumnLeaves} from './autumn-leaves.js';
 import {KITE_ASSETS, createHomeKites} from './home-kites.js';
 
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release, groundPool}) {
+export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoaderFactory=createRasterLoader}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -32,7 +33,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const floating = manifest.floating ?? [];   // boss 6 Nov: lily pads and other floating things that bob on the water, like home's
   const fair=map.id==='fair',crisp=fair||manifest.raster?.enabled===true;
   const makeTiles=fair?fairTiles:rasterTiles,groundTileSize=fair?FAIR_GROUND_TILE_SIZE:RASTER_GROUND_TILE_SIZE;
-  const raster=crisp?(fair?createFairRasterLoader():createRasterLoader()):null;
+  const raster=crisp?(fair?createFairRasterLoader():rasterLoaderFactory()):null;
   const rasterPool=crisp?createGroundPool({...raster,budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
@@ -70,7 +71,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const crispSprite=(p,layer,anchor)=>{
     const container=new Container();container.position.set(p.x,p.y);layer?.addChild(container);
     const pool=!fair&&p.rasterPool==='ground'?groundPool:rasterPool;
-    groundStreams.push(pool.create(makeTiles(p,url(p.src),anchor),container,undefined,raster));
+    groundStreams.push(pool.create(makeTiles(p,url(p.src),anchor).map(t=>({...t,priority:p.rasterPriority??(props.includes(p)?2:0)})),container,undefined,raster));
     return container;
   };
   const tiled=(p,native,layer,anchor)=>{
@@ -119,7 +120,8 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
       if (prop.flip) sprite.scale.x *= -1;
     }
     if (prop.tint) sprite.tint = prop.tint;
-    sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true;   // boss 8 Nov: a hamlet object keeps GPT's draw order where it overlaps sprite.visible = false; sprite.themeArt = map.id;
+    sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true; // Keep authored depth order for overlapping hamlet objects.
+    sprite.themeArt = map.id;
     let shadow = null;
     if (!NO_SHADOW.test(name) && prop.shadow !== false) {
       const [rx, ry] = prop.shadowSize ?? (r => [r, r * .3])(Math.max(8, Math.min(300, prop.width * scale * .36)));   // boss 8 Nov: a hamlet building's base shadow fits its footprint
@@ -128,6 +130,13 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
     }
     const centrePiece = typeof prop.centrePiece === 'object' ? prop.centrePiece : centre.pieces.find(p => prop.id?.endsWith(p.id) && prop.src.includes('centre/'));
     return {...prop, centrePiece, id: prop.id ?? `${map.id}-${i}`, name, scale, sprite, shadow, deck: prop.deck ?? /bridge|deck/i.test(name), wind: prop.wind ?? (!prop.src.includes('centre/') && WIND.test(name))};
+  });
+  // Theme fountains share Home's water ribbons, landing rings and spray.
+  const fountainWaters = standing.filter(p=>p.fountainWater).map(p=>{
+    const layer=new Container({label:'Theme fountain water'});
+    const fx=createFountainWater(p,layer,null,p.fountainWater);
+    fx.root.zIndex=(p.sortY??p.y)+.5;
+    return {...fx,layer,x:p.x,y:p.y};
   });
   const floatLayer = new Container({label: `Theme ${map.id} - floating`});
   const floats = floating.map((item, i) => {
@@ -141,11 +150,13 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const kiteLayer = manifest.kites?.length ? new Container({label: `Theme ${map.id} - kites`}) : null;
   const kites = kiteLayer ? createHomeKites(kiteLayer, Object.fromEntries(KITE_ASSETS.map(src => [src, bySource.get(kiteSource(src))])), manifest.kites) : null;
   const autumnLeaves = manifest.autumn ? createAutumnLeaves(props, manifest.autumn.leaves.map(src => bySource.get(url(src))), manifest.autumn) : null;
-  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : []), ...(autumnLeaves ? [autumnLeaves.layer] : [])];
+  // The loader owns effects even before the engine mounts them. Keeping their
+  // roots here also makes show/hide and unload use the same island lifecycle.
+  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : []), ...(autumnLeaves ? [autumnLeaves.layer] : []), ...fountainWaters.map(f=>f.root)];
   for (const group of groups) group.visible = false;
   return {
     id: map.id, map, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
-    overLayer, bridgeOver, kiteLayer, kites, autumnLeaves,
+    overLayer, bridgeOver, kiteLayer, kites, autumnLeaves, fountainWaters,
     groups,
     destroy() {
       if (destroyed) return;
@@ -155,6 +166,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
       raster?.destroy();
       release(`/pixi-art/globe/${map.id}-ground.svg`);
       for (const c of groups) c.destroy({children: true});
+      for (const f of fountainWaters) {if(!f.root.destroyed)f.root.destroy({children:true}); f.layer.destroy();}
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
     },

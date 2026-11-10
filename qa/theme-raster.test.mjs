@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
-import {cropSVG,rasterTiles,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from '../src/pixi/theme-raster.js';
+import {cropSVG,rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from '../src/pixi/theme-raster.js';
 import {tileInView,tileResolution,GROUND_BUDGET_BYTES,createGroundPool} from '../src/pixi/ground-stream.js';
 import {rasterPeak} from '../scripts/globe-perf/raster-peak.mjs';
 import {rasterLayers} from '../scripts/bigger-cathedral/final-model.mjs';
-import {DOMAdapter} from 'pixi.js';
+import {DOMAdapter,ImageSource,Texture} from 'pixi.js';
+import {loadThemeArt} from '../src/pixi/theme-art.js';
 import {createCanvas,Image} from '@napi-rs/canvas';
 import {createRasterLoader} from '../src/pixi/theme-art-stream.js';
 test('The real crop loader produces device-sized canvases, shares leases, fetches each vector once and destroys released textures',async()=>{
@@ -41,7 +43,9 @@ test('Generic SVG crops preserve root styles, nonzero viewBoxes and world placem
   for(const zoom of [.6,1.8])assert.ok(tiles.every(t=>tileResolution(t,zoom,2)/(zoom*2*(t.rasterDensity??1))>=1));
  }
 });
-test('Every Bellovo viewport retains >=1 texel per device pixel at default and maximum zoom within unchanged caps',()=>{
+// boss 10 Nov: Bellovo's raster streaming is off (it redrew too slowly), so this budget only applies if it is switched back on.
+const bellovoRaster=JSON.parse(readFileSync(new URL('../public/pixi-art/themes/cathedral/art.json',import.meta.url),'utf8')).raster?.enabled===true;
+test('Every Bellovo viewport retains >=1 texel per device pixel at default and maximum zoom within unchanged caps',{skip:!bellovoRaster&&'Bellovo raster streaming is off'},()=>{
  const layers=rasterLayers();
  for(const zoom of [.6,1.8])for(const [width,height]of [[390,844],[1400,1000],[1920,1080]]){
   for(const [kind,tiles]of Object.entries(layers)){
@@ -60,4 +64,44 @@ test('Cropped streams release through their own loader and account for pending r
  pool.update(view(.6),2);pending.shift()();await new Promise(setImmediate);
  pool.update(view(1),2);assert.ok(pool.stats().reservedBytes<=250000);pending.shift()();await new Promise(setImmediate);
  assert.equal(releases.length,1);pool.destroy();assert.equal(releases.length,2);assert.equal(pool.stats().reservedBytes,0);
+});
+
+// An explicit raster opt-in fixture keeps module coverage independent of the
+// production islands that deliberately use static standing art.
+const rasterFixture={raster:{enabled:true},ground:{tiles:[{src:'floor.svg',x:3500,y:600,width:1000,height:1000}]},
+ decks:[{src:'deck.svg',x:3900,y:950,width:200,height:100,overBoats:true}],
+ flats:[{src:'paving.svg',x:4000,y:1200,width:300,height:200}],
+ props:[{id:'fixture-stage',src:'stage.svg',x:4000,y:1282,width:830,height:695,shadow:false,wind:false}]};
+test('Enabled raster fixture retains >=1 texel per device pixel at DPR 2 and both zoom limits within pool caps',()=>{
+ assert.equal(rasterFixture.raster.enabled,true);
+ const art=rasterFixture,url=p=>'/raster-fixture/'+p.src;
+ const layers={ground:art.ground.tiles.flatMap(p=>rasterTiles(p,url(p),undefined,RASTER_GROUND_TILE_SIZE)),art:[...art.decks.flatMap(p=>Array.from({length:p.overBoats?2:1},()=>[p,{x:0,y:0}])),...art.flats.map(p=>[p,p.topLeft?{x:0,y:0}:{x:.5,y:1}]),...art.props.map(p=>[p,p.anchor??{x:.5,y:1}])].flatMap(([p,a])=>rasterTiles(p,url(p),a))};
+ for(const zoom of [.6,1.8])for(const [width,height]of [[390,844],[1400,1000],[1920,1080]])for(const [name,tiles]of Object.entries(layers)){
+  const visible=tiles.filter(t=>tileInView(t,{x:4000,y:1050,zoom},width,height,1,t.viewMargin??192));assert(visible.length>0);
+  let bytes=0;for(const t of visible){const r=tileResolution(t,zoom,2);assert(r/(zoom*2)>=1);bytes+=Math.ceil(t.width*r)*Math.ceil(t.height*r)*4;}
+  assert(bytes<(name==='ground'?GROUND_BUDGET_BYTES*.9:RASTER_ART_BUDGET_BYTES*RASTER_ART_UTILIZATION),`${name}, ${zoom}, ${width}x${height}: ${bytes/1048576} MiB`);
+ }
+});
+test('Enabled raster fixture loads visible standing crops through the raster pool and releases them',async t=>{
+ const previousFetch=globalThis.fetch;t.after(()=>globalThis.fetch=previousFetch);
+ globalThis.fetch=async url=>({ok:true,json:async()=>url.endsWith('art.json')?rasterFixture:{pieces:[]}});
+ const textures=new Map();
+ const loader={acquire:async(src,resolution)=>{
+  const crop=new URL(src,'https://test').searchParams.get('rasterCrop').split(',').map(Number);
+  const texture=new Texture({source:new ImageSource({width:Math.ceil(crop[4]*resolution)/resolution,height:Math.ceil(crop[5]*resolution)/resolution,resolution})});
+  textures.set(src,texture);return texture;
+ },release:src=>{textures.get(src)?.destroy(true);textures.delete(src);},destroy(){}};
+ const groundPool=createGroundPool(loader);let loaded;
+ try{
+  loaded=await loadThemeArt({id:'raster-fixture',art:'/raster-fixture/art.json',origin:{x:3500,y:600},width:1000,height:1000},{groundPool,acquire:async()=>Texture.EMPTY,release(){},rasterLoaderFactory:()=>loader});
+  assert(loaded.rasterPool);assert(loaded.props.some(p=>p.id==='fixture-stage'));
+  const camera={x:4000,y:1050,zoom:1.8},views=loaded.groundStreams.map(stream=>({stream,camera,width:1400,height:1000}));
+  groundPool.update(views,2);loaded.rasterPool.update(views,2);
+  for(let i=0;i<1000&&(groundPool.stats().pendingTiles||loaded.rasterPool.stats().pendingTiles);i++)await new Promise(setImmediate);
+  const stream=loaded.groundStreams.find(s=>s.entries[0]?.src.includes('stage.svg'));assert(stream);
+  const visible=stream.entries.filter(tile=>tileInView(tile,camera,1400,1000,1,tile.viewMargin));
+  assert(visible.length>0);assert(visible.every(t=>t.sprite.visible&&t.sprite.texture!==Texture.EMPTY),'no missing standing crops');
+  for(const pool of [groundPool,loaded.rasterPool]){assert.equal(pool.stats().failedTiles,0);assert.equal(pool.stats().missingTiles,0);assert(pool.stats().peakBytes<=pool.stats().budgetBytes);}
+ }finally{loaded?.destroy();groundPool.destroy();}
+ assert.equal(textures.size,0);
 });

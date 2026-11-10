@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import {VILLAGES} from './villages-data.mjs';
+import {roofProfile,frontGable,villageDetails} from './round2-buildings.mjs';
 import {BUILDING_STYLES} from './buildings-data.mjs';
 const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
 const ink='#39472d',cream='#fff0cd',stone='#dbbd85',olive='#839953',deepOlive='#667e42',glass='#a5d3d2',wood='#b98955';
@@ -16,11 +17,14 @@ function badge(type,x,y){
  if(type==='shell')return path(`M${x-12} ${y+2}Q${x-17} ${y-11} ${x-8} ${y-9}Q${x-2} ${y-16} ${x+2} ${y-9}Q${x+14} ${y-12} ${x+12} ${y+1}L${x+3} ${y+10}H${x-3}Z`,'#f1cf8d')+path(`M${x} ${y+7}V${y-7}M${x-2} ${y+6}L${x-8} ${y-5}M${x+2} ${y+6}L${x+8} ${y-5}`,'none','#ae8351',1);
  return oval(x,y,12,12,cream)+oval(x,y,7,7,glass)+path(`M${x-7} ${y}H${x+7}M${x} ${y-7}V${y+7}`,'none',ink,1.2);
 }
-function windowAt(x,y,kind='pair'){
+function windowAt(x,y,kind='pair',style={}){
  const w=kind==='wide'?46:32,h=kind==='wide'?36:44;
  let s=kind==='arch'?path(`M${x-w/2} ${y+h}V${y+12}Q${x} ${y-12} ${x+w/2} ${y+12}V${y+h}Z`,glass):rect(x-w/2,y,w,h,glass,2);
  s+=path(`M${x} ${y+2}V${y+h}M${x-w/2} ${y+h*.57}H${x+w/2}`,'none',ink,1.3);
- for(const side of [-1,1]){const X=side<0?x-w/2-17:x+w/2+3;s+=rect(X,y+2,14,h-2,olive,2);for(let i=8;i<h-3;i+=8)s+=path(`M${X+3} ${y+i}h8`,'none',deepOlive,1.2);}
+ for(const side of [-1,1]){const X=side<0?x-w/2-17:x+w/2+3;s+=rect(X,y+2,14,h-2,olive,2);if(style.village==='tessera')s+=path(`M${X+7} ${y+12}l4 7 -4 7 -4 -7Z`,glass,ink,1.2);
+  else if(style.village==='olivello')s+=path(`M${X+7} ${y+4}v${h-9}M${X+2} ${y+10}h10M${X+2} ${y+h-8}h10`,'none',deepOlive,1.3);
+  else if(style.village==='bellpeep')s+=path(`M${X+3} ${y+8}h8M${X+3} ${y+h-7}h8M${X+7} ${y+4}v${h-9}`,'none',deepOlive,1.5);
+  else for(let i=8;i<h-3;i+=7)s+=path(`M${X+3} ${y+i}h8`,'none',deepOlive,1.2);}
  s+=rect(x-w/2-4,y+h,w+8,5,stone,1);
  return s;
 }
@@ -55,6 +59,12 @@ export function buildingSVG(id,W,H,s){
  const work=!!s.work,c=W/2,b=H-24,L=work?28:29,R=W-(work?58:53),side=27,wallTop=H-(work?173:169),peak=work?48:39,roofEnd=wallTop+10;
  let body=oval(W/2,H-21,W*.414,8,ink,'none',0,'opacity=".16" data-contact-shadow="true"');
  if(s.chimney){const X=s.chimney==='left'?W*.23:W*.73;body+=rect(X,peak-13,22,roofEnd-peak+13,s.wall,1)+path(`M${X+22} ${peak-13}l8 -5v${roofEnd-peak+13}l-8 5Z`,stone)+rect(X-4,peak-19,34,10,cream,2)+path(`M${X+3} ${peak-15}h19`,'none',ink,2);}
+ if(s.chimney){const X=s.chimney==='left'?W*.23:W*.73;
+  if(s.village==='bellpeep')body+=rect(X+2,peak-27,7,9,stone,1)+rect(X+14,peak-27,7,9,stone,1)+path(`M${X+1} ${peak+3}h21`,'none',s.roofColor,5);
+  if(s.village==='olivello')body+=path(`M${X-4} ${peak-19}l17 -10 21 10Z`,s.roofColor);
+  if(s.village==='tessera')body+=path(`M${X+11} ${peak-12}l6 6 -6 6 -6 -6Z`,glass,ink,1);
+  if(s.village==='crumbbell')body+=rect(X+3,peak-27,16,9,s.roofColor,1)+path(`M${X+2} ${peak-3}h19m-10 0v8`,'none',s.roofColor,2);
+ }
  // The right return is drawn explicitly. Every wall edge remains upright.
  body+=path(`M${R} ${wallTop}L${R+side} ${wallTop-20}V${b-21}L${R} ${b}Z`,'#dfc48f');
  body+=rect(L,wallTop,R-L,b-wallTop,s.wall,2);
@@ -62,10 +72,8 @@ export function buildingSVG(id,W,H,s){
  body+=path(`M${R+8} ${wallTop+28}l13 -8v30l-13 8Z`,glass,ink,1.3);
  body+=path(`M${R+14} ${wallTop+24}v30`,'none',ink,1.1);
 
- let roof;
- if(s.roof==='gable')roof=`M${L-15} ${roofEnd+3}L${L+side-15} ${roofEnd-24}L${c+side} ${peak}L${R+side+13} ${roofEnd-24}L${R+7} ${roofEnd+5}L${c} ${peak+24}Z`;
- else if(s.roof==='bonnet')roof=`M${L-17} ${roofEnd+6}Q${L-10} ${peak+43} ${L+29} ${peak+25}Q${c} ${peak-10} ${R-22} ${peak+16}Q${R+side+9} ${peak+37} ${R+side+12} ${roofEnd-18}L${R+6} ${roofEnd+7}Q${c} ${roofEnd-4} ${L-17} ${roofEnd+6}Z`;
- else roof=`M${L-16} ${roofEnd+5}L${L+27} ${peak+14}H${R-10}L${R+side+14} ${roofEnd-17}L${R+8} ${roofEnd+7}Z`;
+ const front=frontGable(s.roof,{L,R,c,peak,roofEnd});if(front)body+=path(front,s.wall);
+ const roof=roofProfile(s.roof,{L,R,c,side,peak,roofEnd});
  body+=`<g data-roof-plane="${s.roof}">${path(roof,s.roofColor)}`;
  if(s.roof==='gable'){
   body+=path(`M${L-11} ${roofEnd+3}L${c} ${peak+18}L${R+7} ${roofEnd-2}L${R+2} ${roofEnd+7}L${c} ${peak+31}L${L-8} ${roofEnd+12}Z`,cream);
@@ -85,11 +93,12 @@ export function buildingSVG(id,W,H,s){
  }else body+=badge(s.loft,c,s.roof==='gable'?peak+70:peak+67);
  // Doors are centred on the preserved path anchor; workshop machinery has its own bay.
  body+=door(c,b,work);
- if(work){body+=windowAt(c-112,wallTop+38,'arch');body+=craft(s.work,c+112,b-10);body+=rect(c-43,wallTop+5,86,22,cream,3)+badge(s.work==='bread'?'shell':s.work==='tile'?'diamond':s.work,c,wallTop+16);}
+ if(work){body+=windowAt(c-112,wallTop+38,'arch',s);body+=craft(s.work,c+112,b-10);body+=rect(c-43,wallTop+5,86,22,cream,3)+badge(s.work==='bread'?'shell':s.work==='tile'?'diamond':s.work,c,wallTop+16);}
  else{
-  const yy=wallTop+40;body+=windowAt(c-77,yy,s.windows)+windowAt(c+70,yy,s.windows==='wide'?'pair':s.windows);
+  const yy=wallTop+40;body+=windowAt(c-77,yy,s.windows,s)+windowAt(c+70,yy,s.windows==='wide'?'pair':s.windows,s);
   if(s.canopy)body+=path(`M${c-41} ${b-98}L${c-32} ${b-119}H${c+32}L${c+41} ${b-98}Q${c+23} ${b-87} ${c+9} ${b-98}Q${c-7} ${b-87} ${c-20} ${b-98}Q${c-31} ${b-88} ${c-41} ${b-98}Z`,olive);
  }
+ body+=villageDetails(s,{L,R,c,b,wallTop,work});
  if(s.tile)for(const X of [L+9,R-16])body+=path(`M${X} ${b-23}l7 -9 7 9 -7 9Z`,glass,ink,1.1);
  if(s.vine){body+=path(`M${L+9} ${b-14}Q${L+21} ${b-62} ${L+11} ${b-112}`,'none',deepOlive,2);for(let j=0;j<4;j++)body+=oval(L+13+(j%2?5:-4),b-34-j*20,7,3,olive,'none');}
  if(s.harbour)body+=path(`M${R+7} ${b-18}q11 4 17 -3M${R+7} ${b-12}q11 4 17 -3`,'none',wood,2);
@@ -112,9 +121,10 @@ export function applyBuildings(art,world,walk){
   const p=art.props.find(p=>p.id===id);if(!p)throw Error('Missing building '+id);
   const [W,H]=o.size,x=v.square[0]+o.offset[0],y=v.square[1]+o.offset[1]+H/2;
   if(p.x!==x||p.y!==y)throw Error('Door anchor moved for '+id);
+  p.src=p.src.replace(/(?:-r2)?\.svg$/,'-r2.svg');
   fs.writeFileSync(A+p.src,buildingSVG(id,W,H,style));
   // Canvas extends 56 units below the old art origin. Threshold is exactly y+40.
-  Object.assign(p,{anchor:{x:.5,y:1-56/H},shadow:false,flip:false,wind:false,door:[x,y+40]});
+  Object.assign(p,{anchor:{x:.5,y:1-56/H},rasterMargin:16,shadow:false,flip:false,wind:false,door:[x,y+40]});
   const solid={id,x,y:y-12,rx:W*.365,ry:32};
   for(const m of [world,walk]){const i=m.obstacles.findIndex(q=>q.id===id);if(i<0)throw Error('Missing collision '+id);m.obstacles[i]={...solid};}
   doors.push({id,src:p.src,door:[x,y+40],width:style.work?68:60,height:92});

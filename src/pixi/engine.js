@@ -859,6 +859,7 @@ export class PixiIsland {
     loadThemeArt(map, {acquire, release, groundPool:this.groundPool}).then(async art => {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
+      for (const fx of art.fountainWaters??[]) this.objects.addChild(fx.root);
       this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows); this.overDecks.addChild(art.overLayer);
       if (art.kiteLayer) {
         this.objects.addChild(art.kiteLayer);
@@ -1316,6 +1317,7 @@ export class PixiIsland {
       sprite.position.set(2820+Math.sin(i*2.4)*65*phase, 2260-100*Math.sin(phase*Math.PI));
       sprite.alpha = Math.sin(phase*Math.PI)*.7;
     });
+    for (const [id, art] of this.arts) for (const fx of art.fountainWaters??[]) fx.update(t,reduced,flatVisible&&id===this.artShown&&visible(fx.x,fx.y,650));
     this.fountainWater?.update(t, reduced, flatVisible && homeShown && this.fountainWater && visible(this.fountainWater.root.x + 250, this.fountainWater.root.y + 240, 400));
     this.splashes.forEach(({sprite,phase})=>{const age=(t*.7+phase)%1;sprite.visible=!reduced;sprite.scale.set(.4+age*1.3,.5+age*.9);sprite.alpha=Math.max(0,1-age*2)*.6;});
     this.marker.visible = this.markerUntil > t;

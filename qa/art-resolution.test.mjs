@@ -16,9 +16,12 @@ test('SVG raster sizing retains every screen pixel at maximum zoom and DPR with 
 test('oversized decorative SVG tiles render the same pixels as their original source',async()=>{
  // Non-transparent crop pixels, gradients, filters, and root viewBoxes survive
  // nested-SVG tiling. Compare actual raster output, not generated string shape.
- for(const [theme,src]of [['waterfall','detail/waterfall-last-lawn-flowers.svg'],['waterfall','centre/decal-water.svg'],['cathedral','detail/rose-inlay.svg']]){
+ // Bellovo retired rose-inlay with option A; use Pagepond's active compass inlay.
+ for(const [theme,src]of [['waterfall','detail/waterfall-last-lawn-flowers.svg'],['waterfall','centre/decal-water.svg'],['library','centre/decal-compass.svg']]){
   const a=JSON.parse(readFileSync(`public/pixi-art/themes/${theme}/art.json`));
-  const p=[...a.flats,...a.decks].find(p=>p.src===src),native=p.resolution??2;
+  const p=[...a.flats,...a.decks].find(p=>p.src===src);
+  assert.ok(p,`${theme}/${src}: fixture is placed in the current manifest`);
+  const native=p.resolution??(a.decks.includes(p)?1.5:2);
   const tiles=tiled[theme][[p.src,p.width,p.height,native].join('|')];assert.ok(tiles?.length);
   const full=await sharp(`public/pixi-art/themes/${theme}/${src}`).resize(Math.round(p.width),Math.round(p.height),{fit:'fill'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
   // Choose the tile whose original crop contains the most non-transparent pixels.

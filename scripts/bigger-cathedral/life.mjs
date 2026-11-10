@@ -20,11 +20,17 @@ for(const [tone,colors] of Object.entries(palettes))for(const kind of ['tree','b
  svg=svg.replace(/#(?:4AA539|2B7A37|89C332)/gi,v=>changes[v.toUpperCase()]);
  fs.writeFileSync(A+`autumn/${kind}-${n}-${tone}.svg`,svg);
 }
-// Tiny shared SVG textures. No per-tree Graphics geometry or texture creation.
-for(const [tone,[fill]]of Object.entries(palettes))fs.writeFileSync(A+`autumn/leaf-${tone}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14"><path d="M2 9Q2 1 10 2L17 1Q18 9 10 12Q5 14 2 9Z" fill="${fill}" stroke="#39472d" stroke-width="1.1" stroke-linejoin="round"/><path d="M1 13L13 4" fill="none" stroke="#39472d" stroke-width=".8" stroke-linecap="round"/></svg>`);
-const leaf=(x,y,fill,d)=>`<g transform="translate(${x} ${y}) rotate(${d})"><path d="M-7 0Q-4 -5 3 -3L8 0Q4 5 -2 3Z" fill="${fill}" stroke="#39472d" stroke-width=".65"/><path d="M-7 1L5 -1" stroke="#39472d" stroke-width=".5"/></g>`;
-// A sparse irregular little ground decal, only used under actual dry groves.
-fs.writeFileSync(A+'autumn/litter.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="130" viewBox="0 0 300 130">${[[27,49,12],[61,87,-21],[99,36,31],[141,91,7],[176,50,-32],[214,99,24],[259,64,-9],[282,39,15]].map(([x,y,r],i)=>leaf(x,y,Object.values(palettes)[i%3][0],r)).join('')}</svg>`);
+// Four clear, phone-readable leaf silhouettes. Intrinsic world size increases,
+// while the existing 3.625x decode and <=.96 sprite scale retain 2x DPR density.
+const outlines=[
+ 'M3 14Q2 4 15 4L29 2Q29 15 17 20Q8 24 3 14Z',
+ 'M3 14L7 10L4 5L12 7L16 2L19 7L27 4L26 11L31 14L24 17L24 21L17 20L12 23L9 18Z',
+ 'M3 15Q9 2 28 4Q30 17 15 21Q7 22 3 15Z',
+ 'M3 13Q5 3 17 3L30 3Q28 17 16 21Q6 23 3 13Z'
+];
+for(const [i,[tone,[fill]]]of Object.entries(palettes).entries())fs.writeFileSync(A+`autumn/leaf-${tone}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" width="34" height="26" viewBox="0 0 34 26"><path d="${outlines[i]}" fill="${fill}" stroke="#39472d" stroke-width="1.7" stroke-linejoin="round"/><path d="M2 24L24 8M12 16L11 10M17 13L24 14" fill="none" stroke="#39472d" stroke-width="1.15" stroke-linecap="round"/></svg>`);
+const leaf=(x,y,fill)=>`<path d="M${x-7} ${y}q3 -5 10 -3l5 3q-4 5 -10 3Z" fill="${fill}" stroke="#39472d" stroke-width=".65"/><path d="M${x-7} ${y+1}l12 -2" stroke="#39472d" stroke-width=".5"/>`;
+fs.writeFileSync(A+'autumn/litter.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="130" viewBox="0 0 300 130">${[[27,49],[61,87],[99,36],[141,91],[176,50],[214,99],[259,64],[282,39]].map(([x,y],i)=>leaf(x,y,Object.values(palettes)[i%3][0])).join('')}</svg>`);
 // Bench drawings are verbatim Home assets. Side views crop the empty margins
 // with a viewBox, preserving source geometry, ink weight and upright legs.
 for(const [view,file]of Object.entries({south:'',north:'-back',west:'-left',east:'-right'})){

@@ -7,20 +7,20 @@ import {makeMap} from '../src/pixi/island-maps.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json'),metrics=read('scripts/bigger-cathedral/centre-art-metrics.json');
 const nav=makeMap('cathedral',{world,walk,harbor,sleepers:[]}).nav(),ground=geometry(walk);
-const pieces=art.props.filter(p=>['cathedral-hall','campanile'].includes(p.id)||p.id.startsWith('centre-colonnade-'));
+const pieces=art.props.filter(p=>['cathedral-hall','campanile'].includes(p.id)||/^centre-(colonnade-|end-pavilion-)/.test(p.id));
 const centreSolids=w=>w.obstacles.filter(o=>o.id?.startsWith('centre-'));
 test('The centre has one cathedral, an attached corner tower and two curved open arms; the dividing arcade is retired',()=>{
- assert.equal(pieces.length,14);
- assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-left-')).length,6);
- assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-right-')).length,6);
+ assert.equal(pieces.length,10);
+ assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-left-')).length,3);
+ assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-right-')).length,3);
  assert.ok(!art.props.some(p=>/^cathedral-[23]$|^cloister-(cloister-back|roof-roses)/.test(p.id)));
  const hall=pieces.find(p=>p.id==='cathedral-hall'),tower=pieces.find(p=>p.id==='campanile');
  assert.ok(Math.abs(tower.x-hall.x)<hall.width/2,'tower meets the cathedral corner');
  assert.ok(tower.y<hall.y&&hall.y-tower.y<200,'same ground camera');
  const tree=art.props.find(p=>p.id==='cloister-olive-well'),well=art.props.find(p=>p.id==='centre-wishing-well');
- assert.deepEqual([tree.x,tree.y],[4100,2680],'trunk exactly on rose centre');
- assert.ok(Math.abs(well.x-tree.x)>200,'well beside tree');
- assert.equal(well.y,2750);
+ assert.deepEqual([tree.x,tree.y],[4100,2700],'olive rooted on raised fountain island');
+ assert.equal(well,undefined,'freestanding old well retired');
+ assert.ok(art.props.some(p=>p.id==='centre-A-fountain'));
 });
 test('Every centre SVG stays sharp at placed size, uses flat vector ink and has exactly one attached shadow',()=>{
  for(const p of pieces){

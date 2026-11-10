@@ -1385,19 +1385,13 @@
   ],
   "flats": [
     {
-      "src": "detail/piazza-mosaic.svg",
-      "x": 2710,
-      "y": 1200,
-      "width": 2780,
-      "height": 2370,
-      "topLeft": true
-    },
-    {
-      "src": "detail/rose-inlay.svg",
-      "x": 3450,
-      "y": 2160,
-      "width": 1300,
-      "height": 1040,
+      "id": "centre-A-paving",
+      "name": "Quiet round stone piazza",
+      "src": "centre-A/paving.svg",
+      "x": 2940,
+      "y": 1640,
+      "width": 2320,
+      "height": 1700,
       "topLeft": true
     },
     {
@@ -2374,8 +2368,8 @@
       "id": "life-b2-clump-13-1-shadow",
       "name": "Plant contact shadow",
       "src": "villages/plant-shadow.svg",
-      "x": 5066,
-      "y": 3564,
+      "x": 5136,
+      "y": 3354,
       "width": 88,
       "height": 24,
       "topLeft": true
@@ -5844,8 +5838,8 @@
       "id": "life-life-inner-north-east-shade-tree-0-shadow",
       "name": "Plant contact shadow",
       "src": "villages/plant-shadow.svg",
-      "x": 5284,
-      "y": 1554,
+      "x": 5364,
+      "y": 1784,
       "width": 132,
       "height": 24,
       "topLeft": true
@@ -5854,8 +5848,8 @@
       "id": "life-life-inner-north-east-shade-tree-1-shadow",
       "name": "Plant contact shadow",
       "src": "villages/plant-shadow.svg",
-      "x": 5476,
-      "y": 1664,
+      "x": 5306,
+      "y": 2474,
       "width": 88,
       "height": 24,
       "topLeft": true
@@ -7295,11 +7289,11 @@
     {
       "id": "cloister-olive-well",
       "name": "Central olive tree",
-      "src": "detail/central-olive.svg",
+      "src": "centre-A/olive.svg",
       "x": 4100,
-      "y": 2680,
-      "width": 420,
-      "height": 450,
+      "y": 2700,
+      "width": 714,
+      "height": 765,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -7309,18 +7303,19 @@
       "wind": false,
       "contact": false,
       "trunk": [
-        210,
-        440
+        357,
+        748
       ],
       "rasterDensity": 1.05,
-      "rasterMargin": 16
+      "rasterMargin": 16,
+      "sortY": 2740
     },
     {
       "id": "cloister-bench-1",
       "name": "Home wooden bench east",
       "src": "autumn/bench-east.svg",
-      "x": 3400,
-      "y": 2720,
+      "x": 3520,
+      "y": 2800,
       "width": 88.5,
       "height": 134.4,
       "scale": 1,
@@ -7344,11 +7339,11 @@
         "view": "east",
         "target": [
           4100,
-          2680
+          2720
         ],
         "seat": {
-          "x": 3400,
-          "y": 2705,
+          "x": 3520,
+          "y": 2785,
           "lift": 40,
           "turn": 1.5707963267948966
         }
@@ -7358,8 +7353,8 @@
       "id": "cloister-bench-2",
       "name": "Home wooden bench west",
       "src": "autumn/bench-west.svg",
-      "x": 4800,
-      "y": 2720,
+      "x": 4680,
+      "y": 2800,
       "width": 88.5,
       "height": 134.4,
       "scale": 1,
@@ -7383,11 +7378,11 @@
         "view": "west",
         "target": [
           4100,
-          2680
+          2720
         ],
         "seat": {
-          "x": 4800,
-          "y": 2705,
+          "x": 4680,
+          "y": 2785,
           "lift": 40,
           "turn": -1.5707963267948966
         }
@@ -7397,8 +7392,8 @@
       "id": "cloister-bench-3",
       "name": "Home wooden bench north",
       "src": "autumn/bench-north.svg",
-      "x": 3750,
-      "y": 3260,
+      "x": 3820,
+      "y": 3160,
       "width": 245.4,
       "height": 138.9,
       "scale": 1,
@@ -7422,11 +7417,11 @@
         "view": "north",
         "target": [
           4100,
-          2680
+          2720
         ],
         "seat": {
-          "x": 3750,
-          "y": 3245,
+          "x": 3820,
+          "y": 3145,
           "lift": 40,
           "turn": 3.141592653589793
         }
@@ -7436,8 +7431,8 @@
       "id": "cloister-bench-4",
       "name": "Home wooden bench north",
       "src": "autumn/bench-north.svg",
-      "x": 4450,
-      "y": 3260,
+      "x": 4380,
+      "y": 3160,
       "width": 245.4,
       "height": 138.9,
       "scale": 1,
@@ -7461,11 +7456,11 @@
         "view": "north",
         "target": [
           4100,
-          2680
+          2720
         ],
         "seat": {
-          "x": 4450,
-          "y": 3245,
+          "x": 4380,
+          "y": 3145,
           "lift": 40,
           "turn": 3.141592653589793
         }
@@ -7875,7 +7870,7 @@
     {
       "id": "bellpeep-foundry",
       "name": "bellpeep foundry",
-      "src": "villages/bellpeep/foundry.svg",
+      "src": "villages/bellpeep/foundry-r2.svg",
       "x": 3800,
       "y": -917,
       "width": 420,
@@ -7891,12 +7886,13 @@
       "door": [
         3800,
         -877
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "bellpeep-house-west",
       "name": "bellpeep house-west",
-      "src": "villages/bellpeep/house-1.svg",
+      "src": "villages/bellpeep/house-1-r2.svg",
       "x": 3273,
       "y": -636,
       "width": 320,
@@ -7912,12 +7908,13 @@
       "door": [
         3273,
         -596
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "bellpeep-house-east",
       "name": "bellpeep house-east",
-      "src": "villages/bellpeep/house-2.svg",
+      "src": "villages/bellpeep/house-2-r2.svg",
       "x": 4326,
       "y": -636,
       "width": 320,
@@ -7933,12 +7930,13 @@
       "door": [
         4326,
         -596
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "bellpeep-house-south",
       "name": "bellpeep house-south",
-      "src": "villages/bellpeep/house-3.svg",
+      "src": "villages/bellpeep/house-3-r2.svg",
       "x": 3798,
       "y": -160,
       "width": 320,
@@ -7954,7 +7952,8 @@
       "door": [
         3798,
         -120
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "bellpeep-bell-frame",
@@ -8122,7 +8121,7 @@
     {
       "id": "olivello-house-west",
       "name": "olivello house-west",
-      "src": "villages/olivello/house-1.svg",
+      "src": "villages/olivello/house-1-r2.svg",
       "x": -818,
       "y": 2302.5,
       "width": 320,
@@ -8138,12 +8137,13 @@
       "door": [
         -818,
         2342.5
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "olivello-house-east",
       "name": "olivello house-east",
-      "src": "villages/olivello/house-2.svg",
+      "src": "villages/olivello/house-2-r2.svg",
       "x": 253,
       "y": 2447.5,
       "width": 320,
@@ -8159,12 +8159,13 @@
       "door": [
         253,
         2487.5
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "olivello-house-southwest",
       "name": "olivello house-southwest",
-      "src": "villages/olivello/house-3.svg",
+      "src": "villages/olivello/house-3-r2.svg",
       "x": -892,
       "y": 2804.5,
       "width": 320,
@@ -8180,12 +8181,13 @@
       "door": [
         -892,
         2844.5
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "olivello-olive-workshop",
       "name": "olivello olive-workshop",
-      "src": "villages/olivello/olive-workshop.svg",
+      "src": "villages/olivello/olive-workshop-r2.svg",
       "x": -272,
       "y": 2260,
       "width": 420,
@@ -8201,7 +8203,8 @@
       "door": [
         -272,
         2300
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "olivello-olive-mill",
@@ -8369,7 +8372,7 @@
     {
       "id": "tessera-house-northwest",
       "name": "tessera house-northwest",
-      "src": "villages/tessera/house-northwest.svg",
+      "src": "villages/tessera/house-northwest-r2.svg",
       "x": 7891,
       "y": 2335.5,
       "width": 320,
@@ -8385,12 +8388,13 @@
       "door": [
         7891,
         2375.5
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "tessera-house-southwest",
       "name": "tessera house-southwest",
-      "src": "villages/tessera/house-southwest.svg",
+      "src": "villages/tessera/house-southwest-r2.svg",
       "x": 7892,
       "y": 2810.5,
       "width": 320,
@@ -8406,12 +8410,13 @@
       "door": [
         7892,
         2850.5
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "tessera-house-southeast",
       "name": "tessera house-southeast",
-      "src": "villages/tessera/house-southeast.svg",
+      "src": "villages/tessera/house-southeast-r2.svg",
       "x": 8891,
       "y": 2812.5,
       "width": 320,
@@ -8427,12 +8432,13 @@
       "door": [
         8891,
         2852.5
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "tessera-mosaic-workshop",
       "name": "tessera mosaic-workshop",
-      "src": "villages/tessera/mosaic-workshop.svg",
+      "src": "villages/tessera/mosaic-workshop-r2.svg",
       "x": 8450,
       "y": 2249,
       "width": 420,
@@ -8448,7 +8454,8 @@
       "door": [
         8450,
         2289
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "tessera-bench",
@@ -8599,7 +8606,7 @@
     {
       "id": "crumbbell-house-west",
       "name": "crumbbell house-west",
-      "src": "villages/crumbbell/house-west.svg",
+      "src": "villages/crumbbell/house-west-r2.svg",
       "x": 3753,
       "y": 6630,
       "width": 320,
@@ -8615,12 +8622,13 @@
       "door": [
         3753,
         6670
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "crumbbell-house-east",
       "name": "crumbbell house-east",
-      "src": "villages/crumbbell/house-east.svg",
+      "src": "villages/crumbbell/house-east-r2.svg",
       "x": 4693,
       "y": 6631,
       "width": 320,
@@ -8636,12 +8644,13 @@
       "door": [
         4693,
         6671
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "crumbbell-house-south",
       "name": "crumbbell house-south",
-      "src": "villages/crumbbell/house-south.svg",
+      "src": "villages/crumbbell/house-south-r2.svg",
       "x": 4215,
       "y": 7031,
       "width": 320,
@@ -8657,12 +8666,13 @@
       "door": [
         4215,
         7071
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "crumbbell-bakery",
       "name": "crumbbell bakery",
-      "src": "villages/crumbbell/bakery.svg",
+      "src": "villages/crumbbell/bakery-r2.svg",
       "x": 4225,
       "y": 6452,
       "width": 420,
@@ -8678,7 +8688,8 @@
       "door": [
         4225,
         6492
-      ]
+      ],
+      "rasterMargin": 16
     },
     {
       "id": "crumbbell-flower-planter",
@@ -8846,7 +8857,7 @@
     {
       "id": "cathedral-hall",
       "name": "Cathedral hall",
-      "src": "detail/cathedral.svg",
+      "src": "detail/cathedral-r2.svg",
       "x": 4020,
       "y": 1920,
       "width": 1120,
@@ -8856,6 +8867,7 @@
         "x": 0.5,
         "y": 1
       },
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
       "flip": false
@@ -8873,254 +8885,136 @@
         "x": 0.5,
         "y": 1
       },
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
       "flip": false
     },
     {
       "id": "centre-colonnade-left-1",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-left-1.svg",
-      "x": 3395,
+      "name": "Segmented stone arcade bay",
+      "src": "centre/arcade-left-1.svg",
+      "x": 3388,
       "y": 1899,
-      "width": 426,
-      "height": 424,
+      "width": 514,
+      "height": 538,
       "scale": 1,
       "anchor": {
         "x": 0.5,
-        "y": 0.9716981132075472
+        "y": 0.9553903345724907
       },
       "sortY": 1899,
       "contact": false,
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
-      "flip": false
+      "flip": false,
+      "arcadeVariant": "front-facing"
     },
     {
       "id": "centre-colonnade-left-2",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-left-2.svg",
-      "x": 3165,
+      "name": "Segmented stone arcade bay",
+      "src": "centre/arcade-left-2.svg",
+      "x": 3183,
       "y": 1999,
-      "width": 326,
-      "height": 464,
+      "width": 364,
+      "height": 578,
       "scale": 1,
       "anchor": {
         "x": 0.5,
-        "y": 0.9741379310344828
+        "y": 0.9584775086505191
       },
       "sortY": 1999,
       "contact": false,
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
-      "flip": false
+      "flip": false,
+      "arcadeVariant": "three-quarter-left"
     },
     {
       "id": "centre-colonnade-left-3",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-left-3.svg",
-      "x": 3000,
+      "name": "Segmented stone arcade bay",
+      "src": "centre/arcade-left-3.svg",
+      "x": 3083,
       "y": 2139,
-      "width": 296,
-      "height": 504,
+      "width": 304,
+      "height": 618,
       "scale": 1,
       "anchor": {
         "x": 0.5,
-        "y": 0.9761904761904762
+        "y": 0.9611650485436893
       },
       "sortY": 2139,
       "contact": false,
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-colonnade-left-4",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-left-4.svg",
-      "x": 2875,
-      "y": 2304,
-      "width": 246,
-      "height": 529,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9773156899810964
-      },
-      "sortY": 2304,
-      "contact": false,
-      "shadow": false,
-      "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-colonnade-left-5",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-left-5.svg",
-      "x": 2802.5,
-      "y": 2479,
-      "width": 191,
-      "height": 539,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9777365491651205
-      },
-      "sortY": 2479,
-      "contact": false,
-      "shadow": false,
-      "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-colonnade-left-6",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-left-6.svg",
-      "x": 2790,
-      "y": 2619,
-      "width": 166,
-      "height": 504,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9761904761904762
-      },
-      "sortY": 2619,
-      "contact": false,
-      "shadow": false,
-      "wind": false,
-      "flip": false
+      "flip": false,
+      "arcadeVariant": "three-quarter-left"
     },
     {
       "id": "centre-colonnade-right-1",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-right-1.svg",
-      "x": 4805,
+      "name": "Segmented stone arcade bay",
+      "src": "centre/arcade-right-1.svg",
+      "x": 4812,
       "y": 1899,
-      "width": 426,
-      "height": 424,
+      "width": 514,
+      "height": 538,
       "scale": 1,
       "anchor": {
         "x": 0.5,
-        "y": 0.9716981132075472
+        "y": 0.9553903345724907
       },
       "sortY": 1899,
       "contact": false,
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
-      "flip": false
+      "flip": false,
+      "arcadeVariant": "front-facing"
     },
     {
       "id": "centre-colonnade-right-2",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-right-2.svg",
-      "x": 5035,
+      "name": "Segmented stone arcade bay",
+      "src": "centre/arcade-right-2.svg",
+      "x": 5017,
       "y": 1999,
-      "width": 326,
-      "height": 464,
+      "width": 364,
+      "height": 578,
       "scale": 1,
       "anchor": {
         "x": 0.5,
-        "y": 0.9741379310344828
+        "y": 0.9584775086505191
       },
       "sortY": 1999,
       "contact": false,
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
-      "flip": false
+      "flip": false,
+      "arcadeVariant": "three-quarter-right"
     },
     {
       "id": "centre-colonnade-right-3",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-right-3.svg",
-      "x": 5200,
+      "name": "Segmented stone arcade bay",
+      "src": "centre/arcade-right-3.svg",
+      "x": 5117,
       "y": 2139,
-      "width": 296,
-      "height": 504,
+      "width": 304,
+      "height": 618,
       "scale": 1,
       "anchor": {
         "x": 0.5,
-        "y": 0.9761904761904762
+        "y": 0.9611650485436893
       },
       "sortY": 2139,
       "contact": false,
+      "rasterMargin": 16,
       "shadow": false,
       "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-colonnade-right-4",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-right-4.svg",
-      "x": 5325,
-      "y": 2304,
-      "width": 246,
-      "height": 529,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9773156899810964
-      },
-      "sortY": 2304,
-      "contact": false,
-      "shadow": false,
-      "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-colonnade-right-5",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-right-5.svg",
-      "x": 5397.5,
-      "y": 2479,
-      "width": 191,
-      "height": 539,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9777365491651205
-      },
-      "sortY": 2479,
-      "contact": false,
-      "shadow": false,
-      "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-colonnade-right-6",
-      "name": "Curved open colonnade",
-      "src": "centre/colonnade-right-6.svg",
-      "x": 5410,
-      "y": 2619,
-      "width": 166,
-      "height": 504,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9761904761904762
-      },
-      "sortY": 2619,
-      "contact": false,
-      "shadow": false,
-      "wind": false,
-      "flip": false
-    },
-    {
-      "id": "centre-wishing-well",
-      "name": "Wishing well",
-      "src": "detail/wishing-well.svg",
-      "x": 3850,
-      "y": 2750,
-      "width": 190,
-      "height": 210,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "shadow": false,
-      "wind": false,
-      "flip": false
+      "flip": false,
+      "arcadeVariant": "three-quarter-right"
     },
     {
       "id": "olive-1",
@@ -11150,8 +11044,8 @@
       "id": "b2-clump-13-1",
       "name": "Home autumn tree",
       "src": "autumn/tree-4-rust.svg",
-      "x": 5110,
-      "y": 3580,
+      "x": 5180,
+      "y": 3370,
       "width": 200,
       "height": 280,
       "scale": 1,
@@ -19443,8 +19337,8 @@
     },
     {
       "id": "life-inner-north-east-shade-tree-0",
-      "x": 5350,
-      "y": 1570,
+      "x": 5430,
+      "y": 1800,
       "grove": "inner-north-east-shade",
       "name": "Home autumn tree",
       "src": "autumn/tree-3-mustard.svg",
@@ -19467,8 +19361,8 @@
     },
     {
       "id": "life-inner-north-east-shade-tree-1",
-      "x": 5520,
-      "y": 1680,
+      "x": 5350,
+      "y": 2490,
       "grove": "inner-north-east-shade",
       "name": "Home autumn tree",
       "src": "autumn/tree-4-rust.svg",
@@ -22104,6 +21998,415 @@
         "kind": "bush",
         "tone": "mustard"
       }
+    },
+    {
+      "id": "centre-A-fountain",
+      "name": "Olive island stone fountain",
+      "src": "centre-A/fountain.svg",
+      "x": 4100,
+      "y": 2720,
+      "width": 960,
+      "height": 650,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.46153846153846156
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false,
+      "sortY": 2730,
+      "fountainWater": {
+        "centre": {
+          "x": 480,
+          "y": 300
+        },
+        "pool": {
+          "x": 480,
+          "y": 300,
+          "rx": 395,
+          "ry": 234
+        },
+        "minPoolY": 405,
+        "minDropY": 245,
+        "spray": null,
+        "cleanArtwork": false,
+        "surface": {
+          "width": 960,
+          "height": 650,
+          "pool": {"x": 480, "y": 300, "rx": 412.5, "ry": 247.5},
+          "island": {"x": 480, "y": 280, "rx": 182.5, "ry": 104.5, "bottom": 335.5, "depth": 61}
+        },
+        "spills": [
+          {
+            "start": 118,
+            "x": 160,
+            "bottom": 345,
+            "w": 10,
+            "jet": {
+              "y": 345,
+              "cx": 135,
+              "cy": 120
+            }
+          },
+          {
+            "start": 842,
+            "x": 800,
+            "bottom": 345,
+            "w": 10,
+            "jet": {
+              "y": 345,
+              "cx": 825,
+              "cy": 120
+            }
+          },
+          {
+            "start": 460,
+            "x": 500,
+            "bottom": 514,
+            "w": 12,
+            "jet": {
+              "y": 514,
+              "cx": 480,
+              "cy": 310
+            }
+          }
+        ]
+      },
+      "contact": false
+    },
+    {
+      "id": "centre-A-cafe-0",
+      "name": "Cafe table and umbrella",
+      "src": "centre-A/cafe-1.svg",
+      "x": 3450,
+      "y": 2510,
+      "width": 300,
+      "height": 290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-cafe-1",
+      "name": "Cafe table and umbrella",
+      "src": "centre-A/cafe-0.svg",
+      "x": 3450,
+      "y": 3150,
+      "width": 300,
+      "height": 290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-cafe-2",
+      "name": "Cafe table and umbrella",
+      "src": "centre-A/cafe-0.svg",
+      "x": 4950,
+      "y": 2570,
+      "width": 300,
+      "height": 290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-cafe-3",
+      "name": "Cafe table and umbrella",
+      "src": "centre-A/cafe-1.svg",
+      "x": 4850,
+      "y": 3170,
+      "width": 300,
+      "height": 290,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-stall",
+      "name": "Piazza cafe stall",
+      "src": "centre-A/cafe-stall.svg",
+      "x": 3070,
+      "y": 2440,
+      "width": 330,
+      "height": 330,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-planter-0",
+      "name": "Flower pot",
+      "src": "centre-A/planter.svg",
+      "x": 3500,
+      "y": 2290,
+      "width": 124,
+      "height": 168,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-planter-1",
+      "name": "Flower pot",
+      "src": "centre-A/planter.svg",
+      "x": 4720,
+      "y": 2290,
+      "width": 124,
+      "height": 168,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-planter-2",
+      "name": "Flower pot",
+      "src": "centre-A/planter.svg",
+      "x": 3530,
+      "y": 3050,
+      "width": 124,
+      "height": 168,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-planter-3",
+      "name": "Flower pot",
+      "src": "centre-A/planter.svg",
+      "x": 4650,
+      "y": 3070,
+      "width": 124,
+      "height": 168,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-planter-4",
+      "name": "Flower pot",
+      "src": "centre-A/planter.svg",
+      "x": 3750,
+      "y": 3290,
+      "width": 124,
+      "height": 168,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-planter-5",
+      "name": "Flower pot",
+      "src": "centre-A/planter.svg",
+      "x": 4540,
+      "y": 3280,
+      "width": 124,
+      "height": 168,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-lamp-0",
+      "name": "Piazza lamp post",
+      "src": "centre-A/lamp.svg",
+      "x": 3240,
+      "y": 2380,
+      "width": 86,
+      "height": 308,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-lamp-1",
+      "name": "Piazza lamp post",
+      "src": "centre-A/lamp.svg",
+      "x": 4960,
+      "y": 2380,
+      "width": 86,
+      "height": 308,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-lamp-2",
+      "name": "Piazza lamp post",
+      "src": "centre-A/lamp.svg",
+      "x": 3250,
+      "y": 3020,
+      "width": 86,
+      "height": 308,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-lamp-3",
+      "name": "Piazza lamp post",
+      "src": "centre-A/lamp.svg",
+      "x": 5030,
+      "y": 2910,
+      "width": 86,
+      "height": 308,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-A-lights-left",
+      "name": "Cafe string lights",
+      "src": "centre-A/lights.svg",
+      "x": 3470,
+      "y": 2220,
+      "width": 460,
+      "height": 115,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false,
+      "contact": false,
+      "sortY": 3350
+    },
+    {
+      "id": "centre-A-lights-right",
+      "name": "Cafe string lights",
+      "src": "centre-A/lights.svg",
+      "x": 4730,
+      "y": 2220,
+      "width": 460,
+      "height": 115,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": false,
+      "wind": false,
+      "flip": false,
+      "contact": false,
+      "sortY": 3350
+    },
+    {
+      "id": "centre-end-pavilion-left",
+      "name": "Square stone arcade end pavilion",
+      "src": "centre/end-pavilion-left.svg",
+      "x": 3100,
+      "y": 2144,
+      "width": 360,
+      "height": 490,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9571428571428572
+      },
+      "sortY": 2144,
+      "rasterMargin": 16,
+      "shadow": false,
+      "contact": false,
+      "wind": false,
+      "flip": false
+    },
+    {
+      "id": "centre-end-pavilion-right",
+      "name": "Square stone arcade end pavilion",
+      "src": "centre/end-pavilion-right.svg",
+      "x": 5100,
+      "y": 2144,
+      "width": 360,
+      "height": 490,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.9571428571428572
+      },
+      "sortY": 2144,
+      "rasterMargin": 16,
+      "shadow": false,
+      "contact": false,
+      "wind": false,
+      "flip": false
     }
   ],
   "origin": {
@@ -22122,6 +22425,6 @@
     "mobileMaxSprites": 48
   },
   "raster": {
-    "enabled": true
+    "enabled": false
   }
 }

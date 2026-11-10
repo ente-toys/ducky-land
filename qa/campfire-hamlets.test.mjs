@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {outsideStageProps,outsideStageFlats} from './campfire-stage-scope.mjs';
 import {auditCampfire} from '../scripts/campfire-hamlets/audit.mjs';
 import {makeMap} from '../src/pixi/island-maps.js';
 import {canSail} from '../src/pixi/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='rive/web/themes/community/',S='scripts/campfire-hamlets/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),plan=read(S+'placement.json'),before=read(S+'baseline/art.json');
 test('Campfire approved hamlets preserve the centre and keep every contact shadow under the piece',()=>{
- const old=read('scripts/bigger-community/baseline/art.json');const centre=old.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(art.props.slice(0,centre.length),centre);assert.deepEqual(art.flats,old.flats);
+ const old=read('scripts/bigger-community/baseline/art.json');const centre=old.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(outsideStageProps(art.props.slice(0,centre.length)),outsideStageProps(centre));assert.deepEqual(outsideStageFlats(art.flats),outsideStageFlats(old.flats));
  for(const [pose,spots]of Object.entries(read(S+'baseline/world.json').sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots);
  const tiles=art.ground.tiles.map(t=>fs.readFileSync(A+t.src,'utf8')).join('');
  assert.equal(art.props.filter(p=>p.hamlet&&p.kind==='building').length,20);

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Campfire Commons, stage review</title>
+<style>
+body{margin:0;background:#94b832;color:#39472d;font:14px system-ui}header{display:flex;align-items:center;gap:12px;padding:12px;background:#fff0d4}button{font:inherit;padding:8px 14px;color:inherit;cursor:pointer}#status{margin-left:auto}canvas{display:block}#error{position:absolute;bottom:0;padding:16px;background:#fff0d4;color:#a32b24;white-space:pre-wrap}
+</style>
+<header><strong>Campfire stage</strong><button id="climb">Walk up the steps</button><button id="down">Walk to the audience</button><button id="normal">Default zoom</button><button id="maximum">Maximum zoom</button><span id="status">Loading game artwork</span></header>
+<main></main><div id="error" hidden></div>
+<script type="module">
+import {Application,Assets,Container,Graphics} from 'pixi.js';
+import {loadThemeArt} from '/src/pixi/theme-art.js';
+import {attachCentreMotion} from '/src/pixi/centre-motion.js';
+import {createGroundPool} from '/src/pixi/ground-stream.js';
+import {mapFor} from '/src/pixi/island-maps.js';
+import {createDuck} from '/src/pixi/duck.js';
+import {setWalkDestination,walkStep} from '/src/pixi/player-motion.js';
+import {TILT} from '/src/pixi/camera.js';
+const status=document.querySelector('#status'),error=document.querySelector('#error');
+const app=new Application(),W=innerWidth,H=innerHeight-document.querySelector('header').offsetHeight;
+await app.init({width:W,height:H,resolution:2,autoDensity:true,antialias:true,background:'#94b832',autoStart:false,preference:'webgl'});
+document.querySelector('main').append(app.canvas);
+const scene=new Container(),objects=new Container({sortableChildren:true});app.stage.addChild(scene);
+const acquire=src=>Assets.load(src),release=src=>Assets.unload(src),groundPool=createGroundPool({acquire,release});
+const map=mapFor('community'),art=await loadThemeArt(map,{acquire,release,groundPool});
+scene.addChild(art.ground,art.decks,art.shadows,art.floatLayer,objects);
+for(const p of art.props){objects.addChild(p.sprite);p.sprite.scale.y/=TILT;}
+for(const group of art.groups)group.visible=group!==art.overLayer;
+await attachCentreMotion(art,{Graphics,Container},objects);
+const rig=await createDuck({outfit:{},seed:1,isPlayer:true});objects.addChild(rig.root);
+const duck={x:4000,y:1450,turn:Math.PI,path:[],until:0,action:0,travel:0},nav=map.nav();
+const camera={x:4000,y:1100,zoom:.6};
+document.querySelector('#climb').onclick=()=>setWalkDestination(duck,nav,4000,1080);
+document.querySelector('#down').onclick=()=>setWalkDestination(duck,nav,4000,1580);
+document.querySelector('#normal').onclick=()=>Object.assign(camera,{x:4000,y:1100,zoom:.6});
+document.querySelector('#maximum').onclick=()=>Object.assign(camera,{x:4000,y:1080,zoom:1.8});
+app.canvas.onclick=e=>{const b=app.canvas.getBoundingClientRect();setWalkDestination(duck,nav,camera.x+(e.clientX-b.left-W/2)/camera.zoom,camera.y+(e.clientY-b.top-H/2)/(camera.zoom*TILT));};
+let last=performance.now(),failed=false;
+function frame(now){
+ const dt=Math.min(.05,(now-last)/1000);last=now;
+ walkStep(duck,nav,dt,now/1000,{x:0,y:0});
+ rig.root.position.set(duck.x,duck.y);rig.root.scale.set(.88*.24*3,.88*.24*3/TILT);rig.root.zIndex=duck.y;
+ rig.update(dt,{turn:duck.turn,time:now/1000,action:duck.action,speed:duck.travel,reducedMotion:false});
+ scene.position.set(W/2-camera.x*camera.zoom,H/2-camera.y*camera.zoom*TILT);scene.scale.set(camera.zoom,camera.zoom*TILT);
+ for(const p of art.props)p.sprite.visible=Math.abs(p.x-camera.x)<W/camera.zoom/2+1000&&Math.abs(p.y-camera.y)<H/camera.zoom/2+1000;
+ const views=art.groundStreams.map(stream=>({stream,camera,width:W,height:H,tilt:TILT}));
+ groundPool.update(views,2);art.rasterPool.update(views,2);
+ if(!failed)try{art.updateCentre(now/1000,false);}catch(e){failed=true;error.hidden=false;error.textContent=e.stack;}
+ app.render();
+ const a=art.rasterPool.stats(),g=groundPool.stats();status.textContent=`DPR 2, zoom ${camera.zoom} · Ducky ${Math.round(duck.x)},${Math.round(duck.y)} · ${a.pendingTiles+g.pendingTiles} pending · ${a.failedTiles+g.failedTiles} failed`;
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</html>

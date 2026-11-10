@@ -1,102 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="739" height="618" viewBox="0 0 1478 1236">
-  <title>Campfire Commons concert stage</title>
-  <desc>Hand-drawn complete stage. Symmetric arched canopy, eight pendant lights, paired pillars and speakers, cloud screen, plank floor and three steps, with a wooden access rail on the left. Ground anchor: bottom centre.</desc>
-  <g stroke="#374055" stroke-width="14" stroke-linejoin="round" stroke-linecap="round">
-    <!-- Full stage foundation. Both ends return around the rounded apron. -->
-    <path fill="#63627E" d="M118 972 Q118 951 146 946 H1332 Q1360 951 1360 972 V1108 Q1360 1130 1338 1138 Q1270 1168 1186 1168 H292 Q208 1168 140 1138 Q118 1130 118 1108Z"/>
-    <path fill="#7D7A9B" d="M198 842 H1280 L1354 940 Q1376 966 1338 984 Q1274 1012 1186 1012 H292 Q204 1012 140 984 Q102 966 124 940Z"/>
-    <!-- Plank joints follow the shallow stage perspective. -->
-    <g fill="none" stroke="#63627E" stroke-width="11">
-      <path d="M322 846 226 996 M456 846 384 1007 M598 846 564 1010 M880 846 914 1010 M1022 846 1094 1007 M1156 846 1252 996"/>
-    </g>
-    <path fill="#9C94C8" d="M118 969 Q194 1012 292 1012 H1186 Q1284 1012 1360 969 V998 Q1279 1030 1186 1030 H292 Q199 1030 118 998Z"/>
-    <g fill="none" stroke="#4B4D5B" stroke-width="12">
-      <path d="M240 1024 V1160 M374 1030 V1168 M508 1030 V1168 M970 1030 V1168 M1104 1030 V1168 M1238 1024 V1160"/>
-    </g>
-
-    <!-- Rear structure and purple screen. -->
-    <path fill="#63627E" d="M208 317 Q399 125 739 125 Q1079 125 1270 317 V848 H208Z"/>
-    <path fill="#8279E0" d="M308 310 H1170 V842 H308Z"/>
-    <path fill="#BAABF6" stroke="none" d="M315 318 H637 Q429 340 315 454Z"/>
-    <path fill="#D9D2EF" stroke="none" d="M315 711 Q357 663 405 669 Q475 673 489 743 Q533 739 562 771 Q584 796 585 835 H315Z"/>
-    <path fill="#F8D77E" stroke="none" d="M863 835 Q880 753 953 717 Q1000 693 1059 708 Q1088 611 1163 603 V835Z"/>
-    <!-- One closed bubble silhouette avoids the original stray green rim. -->
-    <path fill="#F4EEFF" stroke-width="6" d="M517 546 C517 451 612 405 739 405 C866 405 961 451 961 546 C961 651 877 694 746 694 C719 694 694 692 670 688 C646 708 620 721 584 725 L607 665 C551 644 517 605 517 546Z"/>
-    <g fill="#8279DF" stroke="none">
-      <circle cx="665" cy="556" r="20"/>
-      <circle cx="739" cy="556" r="20"/>
-      <circle cx="813" cy="556" r="20"/>
-    </g>
-
-    <!-- Matched lilac columns, with capitals and foot plates. -->
-    <g fill="#BAABF6">
-      <path d="M183 344 H273 V835 H183Z"/>
-      <path d="M1205 344 H1295 V835 H1205Z"/>
-    </g>
-    <g fill="#D9D2EF" stroke="none">
-      <path d="M192 396 Q206 395 207 416 V793 H192Z"/>
-      <path d="M1214 396 Q1228 395 1229 416 V793 H1214Z"/>
-    </g>
-    <path fill="#F4EDEE" d="M182 306 Q228 294 274 306 L285 327 Q285 345 267 347 H189 Q171 345 171 327Z"/>
-    <path fill="#F4EDEE" d="M1204 306 Q1250 294 1296 306 L1307 327 Q1307 345 1289 347 H1211 Q1193 345 1193 327Z"/>
-    <g stroke="#F8D77E" stroke-width="12">
-      <path d="M199 321 H217 M239 321 H257 M1221 321 H1239 M1261 321 H1279"/>
-    </g>
-
-    <!-- Canopy silhouette is mirrored about x=739, with complete rounded ends. -->
-    <path fill="#BAABF6" d="M110 264 C245 126 488 20 739 20 C990 20 1233 126 1368 264 V322 Q1368 349 1344 341 L1309 310 C1153 202 946 145 739 145 C532 145 325 202 169 310 L134 341 Q110 349 110 322Z"/>
-    <path fill="#9282E9" stroke="none" d="M125 264 C284 134 519 78 739 78 C959 78 1194 134 1353 264 V322 L1310 283 C1151 179 945 125 739 125 C533 125 327 179 168 283 L125 322Z"/>
-    <path fill="#F4EDEE" stroke="none" d="M183 220 C288 136 419 79 556 53 Q570 49 572 56 Q573 62 560 66 C410 100 300 157 197 224 Q181 232 183 220Z"/>
-    <path fill="#7D7A9B" stroke="none" d="M1292 240 Q1320 260 1346 285 L1353 299 V277Z"/>
-    <!-- Curved timber light bar. -->
-    <path fill="#BC8055" stroke-width="12" d="M170 310 C325 201 532 145 739 145 C946 145 1153 201 1308 310 L1276 309 C1115 211 935 171 739 171 C543 171 363 211 202 309Z"/>
-    <g fill="none" stroke="#374055" stroke-width="10">
-      <path d="M321 230 330 253 M443 184 450 208 M568 157 572 181 M696 145 697 171 M782 145 781 171 M910 157 906 181 M1035 184 1028 208 M1157 230 1148 253"/>
-    </g>
-    <!-- Eight bulbs, four on either side. -->
-    <g stroke="#BC8055" stroke-width="10" fill="#F5EEEE">
-      <path fill="none" d="M284 256 V282 M409 201 V228 M539 168 V197 M669 150 V180 M809 150 V180 M939 168 V197 M1069 201 V228 M1194 256 V282"/>
-      <circle cx="284" cy="304" r="39"/>
-      <circle cx="409" cy="250" r="39"/>
-      <circle cx="539" cy="220" r="39"/>
-      <circle cx="669" cy="203" r="39"/>
-      <circle cx="809" cy="203" r="39"/>
-      <circle cx="939" cy="220" r="39"/>
-      <circle cx="1069" cy="250" r="39"/>
-      <circle cx="1194" cy="304" r="39"/>
-    </g>
-
-    <!-- Matching speaker cabinets. -->
-    <g fill="#4B4D5B">
-      <path d="M155 620 Q155 587 190 587 H316 Q351 587 351 620 V867 Q351 895 320 895 H186 Q155 895 155 867Z"/>
-      <path d="M1127 620 Q1127 587 1162 587 H1288 Q1323 587 1323 620 V867 Q1323 895 1292 895 H1158 Q1127 895 1127 867Z"/>
-    </g>
-    <g fill="#9C94C8" stroke-width="12">
-      <path d="M158 615 Q160 590 190 590 H316 Q340 590 348 615 Q304 630 253 623 Q202 628 158 615Z"/>
-      <path d="M1130 615 Q1132 590 1162 590 H1288 Q1312 590 1320 615 Q1276 630 1225 623 Q1174 628 1130 615Z"/>
-    </g>
-    <g fill="#39472D" stroke="#86B79B">
-      <circle cx="253" cy="680" r="23" stroke-width="15"/>
-      <circle cx="1225" cy="680" r="23" stroke-width="15"/>
-      <circle cx="253" cy="789" r="49" stroke-width="22"/>
-      <circle cx="1225" cy="789" r="49" stroke-width="22"/>
-    </g>
-
-    <!-- Left-only timber handrail, separate from the symmetric stage body. -->
-    <path fill="#BC8055" d="M115 881 Q107 875 100 883 L42 928 V1017 Q42 1032 58 1032 Q74 1032 74 1017 V951 L115 923Z"/>
-    <path fill="#F4EDEE" d="M31 852 48 842 48 925 31 937Z M69 826 87 815 87 896 69 909Z M104 803 119 794 119 870 104 883Z" stroke-width="10"/>
-    <path fill="#BC8055" d="M119 888 V1067 Q119 1086 103 1086 Q87 1086 87 1067 V910Z"/>
-    <path fill="#F8D77E" d="M31 870 Q14 882 14 863 Q14 846 29 836 L132 770 V800Z"/>
-    <path fill="#F8D77E" d="M36 936 132 873 V895 L44 953Z" stroke-width="10"/>
-    <path fill="#F8D77E" d="M20 883 Q20 870 32 870 Q46 870 46 883 V1008 Q46 1023 32 1023 Q20 1023 20 1008Z" stroke-width="10"/>
-
-    <!-- Three centred white treads; the bottom tread keeps the ground anchor. -->
-    <path fill="#9C94C8" d="M579 957 H899 Q930 957 930 990 V1039 H548 V990 Q548 957 579 957Z"/>
-    <path fill="#F4EDEE" stroke-width="11" d="M579 957 H899 Q922 957 926 981 L928 1000 H550 L552 981 Q556 957 579 957Z"/>
-    <path fill="#9C94C8" d="M558 1045 H920 Q947 1045 950 1074 V1122 H528 V1074 Q531 1045 558 1045Z"/>
-    <path fill="#F4EDEE" stroke-width="11" d="M558 1045 H920 Q941 1045 946 1066 L949 1086 H529 L532 1066 Q537 1045 558 1045Z"/>
-    <path fill="#9C94C8" d="M540 1128 H938 Q968 1128 973 1158 V1205 Q973 1220 958 1220 H520 Q505 1220 505 1205 V1158 Q510 1128 540 1128Z"/>
-    <path fill="#F4EDEE" stroke-width="11" d="M540 1128 H938 Q960 1128 968 1150 L972 1172 H506 L510 1150 Q518 1128 540 1128Z"/>
-    <path fill="#D9D2EF" stroke="none" d="M920 1135 H937 Q953 1135 960 1151 L964 1165 H943Z"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="830" height="695" viewBox="0 0 830 695">
+<title>Campfire Commons, gathering canopy in the Home camera</title>
+<desc>Upright front, visible curved lilac roof top and returned sides, warm campfire mural, timber deck and three centred cream steps. One tight contact shadow. Ink #39472d, flat colours only.</desc>
+<!-- The shadow follows the base and stair landing, rather than floating below the roof. -->
+<path id="contact-shadow" fill="#39472d" opacity=".18" d="M40 601Q48 589 100 591H730Q782 591 790 607V626Q774 645 540 642V679Q540 690 524 690H306Q290 690 290 679V642Q56 645 40 626Z"/>
+<g stroke="#39472d" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+<!-- Deep shell: the narrower rear wall leaves both rounded side returns visible. -->
+<path id="shell-side" fill="#8f7cbd" d="M88 236C230 88 600 88 742 236V487L703 520H127L88 487Z"/>
+<path id="backdrop" fill="#7668ad" d="M119 233Q415 26 711 233V462H119Z"/>
+<path fill="#c1a6df" stroke="none" d="M123 216H707V257Q568 214 415 249Q249 282 123 248Z"/>
+<!-- A woven banner and a warm campfire picture, with neighbours gathered around it. -->
+<path fill="#eac69e" d="M253 285Q415 263 577 285V430Q415 451 253 430Z"/>
+<path fill="#fae8bf" stroke="none" d="M265 294Q415 274 565 294V420Q415 439 265 420Z"/>
+<path fill="#bb8359" d="M362 410L461 391Q470 390 472 398Q473 404 465 407L369 425Q360 426 358 420Q356 413 362 410Z"/>
+<path fill="#d29a64" d="M368 391L466 411Q474 412 472 420Q470 426 462 424L364 405Q357 402 359 397Q361 390 368 391Z"/>
+<path fill="#ed9860" d="M380 390C362 372 379 350 389 338Q389 355 399 357C411 341 417 325 414 311C445 334 460 365 449 385Q441 401 415 402Q392 402 380 390Z"/>
+<path fill="#f5cd73" stroke="none" d="M400 391Q387 378 402 359Q405 371 413 370Q424 358 425 346Q448 375 431 392Q419 403 400 391Z"/>
+<!-- Two little listeners complete the stitched community emblem. -->
+<g fill="#ad85b8"><circle cx="309" cy="359" r="13"/><path d="M285 407Q282 378 309 377Q336 378 333 407Z"/></g>
+<g fill="#82a77b"><circle cx="520" cy="359" r="13"/><path d="M496 407Q493 378 520 377Q547 378 544 407Z"/></g>
+<path fill="none" stroke="#b88b64" stroke-width="2" stroke-dasharray="3 7" d="M273 301Q415 282 557 301M273 416Q415 433 557 416"/>
+<g fill="#f7d585" stroke="none"><path d="M348 316l3-8 3 8 8 3-8 3-3 8-3-8-8-3Z"/><path d="M480 322l3-7 3 7 7 3-7 3-3 7-3-7-7-3Z"/><circle cx="385" cy="293" r="3"/><circle cx="451" cy="302" r="3"/></g>
+<!-- Floor top, visible depth before the front fascia. -->
+<path id="deck-side" fill="#a47557" d="M48 533L95 452H735L782 533V604Q768 624 710 626H120Q62 624 48 604Z"/>
+<path fill="#bd8f65" d="M95 452H735L782 533Q770 557 710 566H120Q60 557 48 533Z"/>
+<g fill="none" stroke="#986e50" stroke-width="2.2"><path d="M159 454L122 563M238 454L213 566M326 454L315 566M415 454V566M504 454L515 566M592 454L617 566M671 454L708 563"/><path d="M95 486H735M76 520H754"/></g>
+<path fill="#e0b888" d="M48 533Q64 557 120 566H710Q766 557 782 533V546Q766 570 710 578H120Q64 570 48 546Z"/>
+<g fill="none" stroke="#865d47" stroke-width="2.2"><path d="M120 579V621M213 581V624M315 581V624M515 581V624M617 581V624M710 579V621"/></g>
+<!-- Columns have a front and a short darker return; they hold the front lip. -->
+<path fill="#9782c9" d="M95 220H126V465H95Z M704 220H735V465H704Z"/>
+<path fill="#c5afe9" d="M82 225H111V468H82Z M719 225H748V468H719Z"/>
+<path fill="#efe1f5" d="M76 218H119V236H76Z M711 218H754V236H711Z M75 462H119V478H75Z M711 462H755V478H711Z"/>
+<path fill="none" stroke="#e6d6f5" stroke-width="5" d="M91 249V448M728 249V448"/>
+<!-- The back arc and the front arc are separated by a broad roof top, not a flat arch stripe. -->
+<path id="canopy-top" fill="#c6b1ed" d="M48 163C161 65 285 24 415 24C545 24 669 65 782 163L800 224C682 142 550 102 415 102C280 102 148 142 30 224Z"/>
+<path fill="#ddd0f3" stroke="none" d="M57 161C181 69 300 37 415 37C530 37 649 69 773 161L776 173C646 93 526 61 415 61C304 61 184 93 54 173Z"/>
+<g fill="none" stroke="#ae94d5" stroke-width="2"><path d="M170 92L145 156M285 43L272 115M415 26V101M545 43L558 115M660 92L685 156"/></g>
+<path id="canopy-fascia" fill="#9b83d0" d="M30 224C148 142 280 102 415 102C550 102 682 142 800 224V247Q800 255 790 250C671 169 547 132 415 132C283 132 159 169 40 250Q30 255 30 247Z"/>
+<path fill="none" stroke="#e9dbf7" stroke-width="6" d="M43 227C163 150 285 115 415 115C545 115 667 150 787 227"/>
+<path fill="#7764a0" d="M48 163L30 224V247L49 234L65 184Z M782 163L800 224V247L781 234L765 184Z"/>
+<!-- Warm string lights follow a gentle catenary under the roof. -->
+<path fill="none" stroke="#705d48" stroke-width="4" d="M105 217Q415 301 725 217"/>
+<g fill="#fae5ac" stroke-width="2.5">
+<path fill="none" d="M150 229V244M226 246V262M302 257V273M377 262V280M453 262V280M528 257V273M604 246V262M680 229V244"/>
+<circle cx="150" cy="254" r="12"/><circle cx="226" cy="272" r="12"/><circle cx="302" cy="283" r="12"/><circle cx="377" cy="290" r="12"/><circle cx="453" cy="290" r="12"/><circle cx="528" cy="283" r="12"/><circle cx="604" cy="272" r="12"/><circle cx="680" cy="254" r="12"/>
+</g>
+<!-- Chunky cabinets: separate front, top and side, without rotating the artwork. -->
+<g id="speaker-left"><path fill="#605b72" d="M81 366L106 349H185L200 368V512L176 531H81Z"/><path fill="#a396bb" d="M81 366L106 349H185L176 369Z"/><path fill="#82748f" d="M176 369L185 349L200 368V512L176 531Z"/><path fill="#575369" d="M81 366H176V531H81Z"/><circle fill="#8fbaa3" cx="128" cy="405" r="15"/><circle fill="#39472d" stroke="none" cx="128" cy="405" r="7"/><circle fill="#8fbaa3" cx="128" cy="477" r="32"/><circle fill="#39472d" stroke="none" cx="128" cy="477" r="22"/><path fill="none" stroke="#afa0c0" stroke-width="2" d="M91 378H164M92 519H164"/></g>
+<g id="speaker-right"><path fill="#605b72" d="M630 368L645 349H724L749 366V531H654L630 512Z"/><path fill="#a396bb" d="M654 369L645 349H724L749 366Z"/><path fill="#82748f" d="M654 369L645 349L630 368V512L654 531Z"/><path fill="#575369" d="M654 366H749V531H654Z"/><circle fill="#8fbaa3" cx="702" cy="405" r="15"/><circle fill="#39472d" stroke="none" cx="702" cy="405" r="7"/><circle fill="#8fbaa3" cx="702" cy="477" r="32"/><circle fill="#39472d" stroke="none" cx="702" cy="477" r="22"/><path fill="none" stroke="#afa0c0" stroke-width="2" d="M666 378H739M666 519H738"/></g>
+<!-- Three broad treads join the deck, with no floating gaps. -->
+<g id="centred-stairs"><path fill="#9f8abb" d="M326 566H504L514 589V609H316V589Z"/><path fill="#fff0d4" d="M326 566H504L514 589H316Z"/><path fill="#9f8abb" d="M316 609H514L527 632V653H303V632Z"/><path fill="#fff0d4" d="M316 609H514L527 632H303Z"/><path fill="#9f8abb" d="M303 653H527L540 676V687H290V676Z"/><path fill="#fff0d4" d="M303 653H527L540 676H290Z"/></g>
+</g></svg>

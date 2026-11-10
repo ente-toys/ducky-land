@@ -80,10 +80,10 @@ export const GROVE_ADDITIONS = [
 // On the four village courts, the well mosaic, and the fountain ring.
 // Direction is a DRAWN view, never a sprite rotation or skew.
 export const BENCHES = [
- ['cloister-bench-1',3400,2720,'east',[4100,2680]],
- ['cloister-bench-2',4800,2720,'west',[4100,2680]],
- ['cloister-bench-3',3750,3260,'north',[4100,2680]],
- ['cloister-bench-4',4450,3260,'north',[4100,2680]],
+ ['cloister-bench-1',3520,2800,'east',[4100,2720]],
+ ['cloister-bench-2',4680,2800,'west',[4100,2720]],
+ ['cloister-bench-3',3820,3160,'north',[4100,2720]],
+ ['cloister-bench-4',4380,3160,'north',[4100,2720]],
  ['b2-bench-nw',3910,4065,'south',[4100,4250]],
  ['b2-bench-ne',4290,4065,'south',[4100,4250]],
  ['b2-bench-sw',3910,4490,'north',[4100,4250]],

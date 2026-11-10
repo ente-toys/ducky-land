@@ -153,6 +153,7 @@ uniform float uTime;
 uniform float uCalm;
 uniform float uSea;
 uniform float uInland;
+uniform float uSolid;
 ${Array.from({length: RINGS}, (_, i) => `uniform vec4 uRing${i};`).join('\n')}
 ${COAST_SURF}
 void main() {
@@ -197,7 +198,9 @@ void main() {
       color = mix(color, uCream, ink * smoothstep(2., 8., depth));
     }`).join('\n')}
   }
-  float alpha = coverage * (uInland > .5 ? 1. : mix(.46, 1., uSea));
+  // A standalone fountain supplies its own water base, matching Home's overlay over PALETTE.water.
+  if (uSolid > .5) color = mix(uWater, color, .46);
+  float alpha = coverage * (uInland > .5 ? 1. : mix(.46, 1., max(uSea, uSolid)));
   finalColor = vec4(color * alpha, alpha) * uColor;
 }`;
 
@@ -346,7 +349,7 @@ export function smoothDistance(mask, worldWidth, worldHeight, sea = false) {
   }
   for (let i = 0; i < a.length; i++) {data[i * 4 + 1] = Math.round(Math.max(0, a[i])); if (sea) data[i * 4 + 2] = Math.round(Math.max(0, -a[i]));}
 }
-function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zIndex}) {
+function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zIndex, solid = false}) {
   mask.sea = sea;
   // boss 5 Nov: erase enclosed painted highlights before measuring depth, retaining the true outer bank.
   if (id === 'pond' || id === 'cove') {
@@ -368,6 +371,7 @@ function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zInde
       uWater: {value: rgb(PALETTE.water), type: 'vec3<f32>'}, uCream: {value: rgb(PALETTE.cream), type: 'vec3<f32>'}, uInk: {value: rgb(PALETTE.ink), type: 'vec3<f32>'},
       ...Object.fromEntries(Array.from({length: RINGS}, (_, i) => [`uRing${i}`, {value: new Float32Array([0, 0, -100, 0]), type: 'vec4<f32>'}])),
       uInland: {value: Number(id === 'pond' || id === 'cove'), type: 'f32'},
+      uSolid: {value: Number(solid), type: 'f32'},
       uMix: {value: 0, type: 'f32'}, uTime: {value: 0, type: 'f32'}, uCalm: {value: 0, type: 'f32'}, uSea: {value: Number(sea), type: 'f32'},
     },
   }});
@@ -377,9 +381,14 @@ function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zInde
     contains(x, y) {const u = (x - rect.x) / rect.width, v = (y - rect.y) / rect.height;
       return u >= 0 && u <= 1 && v >= 0 && v <= 1 && mask.data[(Math.round(v * (mask.height - 1)) * mask.width + Math.round(u * (mask.width - 1))) * 4] > 128;},
     uniforms: shader.resources.waterUniforms.uniforms,
-    dispose() {mesh.destroy(); shader.destroy(); heights.destroy(); clip.destroy(); geometry.destroy();}};
+    dispose() {mesh.destroy(); shader.destroy(); heights.destroy(); clip.destroy(); geometry.destroy(true);}};
 }
 const empty = reason => ({active: false, reason, stats: {cpuMs: 0, cells: 0, steps: 0}, update() {}, splash() {return false;}, edge() {}, lily() {}, fountainSplash() {}, pause() {}, dispose() {}});
+
+// Home and themed fountains use the same masked mesh, palette, shader and closed height field.
+export function createFountainSurface(options) {
+  return makeBody(options);
+}
 
 // Masks come from the CURRENT tiled art, not the older world polygon or ground.svg. All setup is recoverable.
 export async function createWater({app, world, art, layer, objects, props, motion}) {
@@ -405,7 +414,7 @@ export async function createWater({app, world, art, layer, objects, props, motio
       const edit = svg => {svg.querySelector('#upper-water')?.setAttribute('fill', '#FF00FF'); svg.querySelector('#jet')?.remove();};
       for (const [id, x, y, rx, ry, upper] of [['pool', 240, 290, 180, 137.87234, false], ['bowl', 240, 223, 96, 73.531915, true]]) {
         const mask = await artMask(fountain.src, fountainRect, 720, 720, edit, upper);
-        const body = makeBody({id, rect: fountainRect, cols: 81, rows: 81, mask, parent: fountainRoot,
+        const body = createFountainSurface({id, rect: fountainRect, cols: 81, rows: 81, mask, parent: fountainRoot,
           shape: (u, v) => ((u * 480 - x) / rx) ** 2 + ((v * 480 - y) / ry) ** 2 < 1
             && (upper ? ((u * 480 - 240) / 61) ** 2 + ((v * 480 - 209) / 47) ** 2 > 1
               : ((u * 480 - 240) / 36) ** 2 + ((v * 480 - 297) / 40) ** 2 > 1)});

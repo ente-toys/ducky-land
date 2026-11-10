@@ -43,12 +43,13 @@ test('All thirteen fixed bridge anchors and their tangential path throats are re
   for(const side of ['a','b']){const t=input.routes.find(r=>r.id==='throat-'+b.id+'-'+side);assert.deepEqual(t.points[0],b[side]);assert.ok(Math.hypot(t.points[1][0]-t.points[0][0],t.points[1][1]-t.points[0][1])>=79);}
  }
 });
-test('All 16 village doors have short flush approaches; destination mosaics remain',()=>{
+test('All 16 village doors have short flush approaches; option A paving replaces only the centre mosaics',()=>{
  const doors=input.routes.filter(r=>r.id.endsWith('-door'));assert.equal(doors.length,16);
  for(const r of doors){const p=art.props.find(p=>p.id===r.id.slice(0,-5));assert.deepEqual(r.points[0],[p.x,p.y+40]);assert.ok(map.nav().walkable(...r.points[0]));}
- for(const src of ['detail/piazza-mosaic.svg','detail/rose-inlay.svg','villages/tessera/flower-mosaic.svg'])assert.ok(art.flats.some(p=>p.src===src));
+ for(const src of ['centre-A/paving.svg','villages/tessera/flower-mosaic.svg'])assert.ok(art.flats.some(p=>p.src===src));
  assert.doesNotMatch(fs.readFileSync(A+'communities/preserved-3200-1500.svg','utf8'),/clip-path="url\(#close-forecourt\)"/,'retired rear court stays removed');
- assert.ok(input.courts.some(c=>c.id==='centre-piazza'&&c.rx===1375&&c.ry===1053));
+ assert.ok(!art.flats.some(p=>/detail\/(piazza-mosaic|rose-inlay)\.svg/.test(p.src)));
+ assert.ok(input.courts.some(c=>c.id==='centre-piazza'&&c.rx===1160&&c.ry===850));
 });
 test('No approach ends as an unserved grass stub',()=>{
  const inCourt=p=>input.courts.some(c=>((p[0]-c.x)/c.rx)**2+((p[1]-c.y)/c.ry)**2<=1.05)||art.flats.filter(f=>/square/.test(f.src)).some(f=>p[0]>=f.x&&p[0]<=f.x+f.width&&p[1]>=f.y&&p[1]<=f.y+f.height);

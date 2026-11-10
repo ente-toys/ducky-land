@@ -1,12 +1,32 @@
 import {DOMAdapter, ImageSource, Texture} from 'pixi.js';
 import {cropSVG} from './theme-raster.js';
 
-// Same SVG -> Image -> canvas -> ImageSource pipeline as Pixi's loadSVG parser,
-// with a small cropped viewport. Leases are owned by the shared 128 MiB pool.
-export function createRasterLoader() {
+// SVG image decoding and ImageBitmap preparation run asynchronously. The pool
+// submits work under a 5ms animation-frame budget, without waiting for idle.
+// Leases are shared by crop+resolution; the pool retains cached leases under its
+// hard cap, so there is no second, unaccounted bitmap cache here.
+export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.bind(globalThis),
+  now=()=>performance.now(),frameBudgetMs=5,concurrency=64}={}) {
   const originals=new Map(),leases=new Map();
-  let disposed=false;
+  let disposed=false,scheduled=false,inFlight=0;
+  const queue=[];
+  const request=()=>{
+    if(!queue.length||scheduled||disposed||inFlight>=concurrency)return;
+    if(!schedule){drain();return;}
+    scheduled=true;schedule(()=>{scheduled=false;drain();});
+  };
+  const drain=()=>{
+    const began=now();
+    while(queue.length&&inFlight<concurrency&&(!schedule||now()-began<frameBudgetMs)){
+      const {run,resolve,reject}=queue.shift();inFlight++;
+      run().then(resolve,reject).finally(()=>{inFlight--;request();});
+      // Invoke preparation synchronously so its cost counts against this frame.
+    }
+    request();
+  };
+  const dispatch=run=>new Promise((resolve,reject)=>{if(disposed){reject(Error('Raster loader disposed'));return;}queue.push({run,resolve,reject});request();});
   const acquire=(key,resolution)=>{
+    if(disposed)return Promise.reject(Error('Raster loader disposed'));
     let held=leases.get(key);
     if(held&&held.resolution!==resolution)throw Error('Raster lease resolution mismatch');
     if(!held){
@@ -15,13 +35,31 @@ export function createRasterLoader() {
         url.searchParams.delete('rasterCrop');url.searchParams.delete('groundScale');
         const src=url.href;
         if(!originals.has(src))originals.set(src,fetch(src).then(r=>{if(!r.ok)throw Error(`Theme SVG ${r.status}: ${src}`);return r.text();}));
-        const svg=cropSVG(await originals.get(src),crop,resolution),adapter=DOMAdapter.get(),image=adapter.createImage();
-        image.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-        await image.decode();
-        const canvas=adapter.createCanvas(Math.ceil(crop[4]*resolution),Math.ceil(crop[5]*resolution));
-        const context=canvas.getContext('2d');context.imageSmoothingEnabled=true;context.imageSmoothingQuality='high';
-        context.drawImage(image,0,0,canvas.width,canvas.height);
-        return new Texture({source:new ImageSource({resource:canvas,resolution,alphaMode:'premultiply-alpha-on-upload'})});
+        const original=await originals.get(src);
+        return dispatch(async()=>{
+        if(disposed)throw Error('Raster loader disposed');
+        const svg=cropSVG(original,crop,resolution),adapter=DOMAdapter.get(),image=adapter.createImage();
+        const bitmap=typeof globalThis.createImageBitmap==='function';
+        const objectURL=bitmap?URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})):null;
+        try {
+          image.src=objectURL??'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+          await image.decode();
+          let resource;
+          if(bitmap){
+            try{resource=await createImageBitmap(image,{premultiplyAlpha:'premultiply'});}catch{ /* Canvas fallback for browsers without SVG bitmap support. */ }
+          }
+          if(!resource){
+            resource=adapter.createCanvas(Math.ceil(crop[4]*resolution),Math.ceil(crop[5]*resolution));
+            const context=resource.getContext('2d');context.imageSmoothingEnabled=true;context.imageSmoothingQuality='high';
+            context.drawImage(image,0,0,resource.width,resource.height);
+          }
+          const source=new ImageSource({resource,resolution,alphaMode:'premultiply-alpha-on-upload'});
+          if(typeof resource.close==='function')source.once('destroy',()=>resource.close());
+          return new Texture({source});
+        }finally{
+          if(objectURL){URL.revokeObjectURL(objectURL);image.src='';}
+        }
+        });
       })();
       leases.set(key,held={count:0,promise,resolution});
     }
@@ -33,5 +71,5 @@ export function createRasterLoader() {
       if(!held.count&&leases.get(key)===held){leases.delete(key);texture.destroy(true);}
     }).catch(()=>{if(leases.get(key)===held)leases.delete(key);});
   };
-  return {acquire,release,destroy(){if(disposed)return;disposed=true;originals.clear();}};
+  return {acquire,release,destroy(){if(disposed)return;disposed=true;originals.clear();for(const job of queue.splice(0))job.reject(Error('Raster loader disposed'));}};
 }

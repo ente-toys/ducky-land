@@ -1,3 +1,4 @@
+import {IDENTITIES} from './round2-buildings.mjs';
 // Authored identities. The village layout remains the authority for door anchors.
 export const BUILDING_STYLES={
  'bellpeep-foundry':{roof:'hip',work:'bell',chimney:'left',roofColor:'#be6c45',wall:'#fae7b9',loft:'round'},
@@ -17,3 +18,9 @@ export const BUILDING_STYLES={
  'crumbbell-house-south':{roof:'hip',loft:'dormer',windows:'wide',canopy:true,roofColor:'#d18a5a',wall:'#f7e0b3',harbour:true},
  'crumbbell-bakery':{roof:'bonnet',work:'bread',chimney:'left',roofColor:'#bd7049',wall:'#ffecc2',loft:'shell',harbour:true},
 };
+
+// All sixteen designs carry an authored roof and joinery combination.
+for(const [village,identity] of Object.entries(IDENTITIES)){
+ const entries=Object.entries(BUILDING_STYLES).filter(([id])=>id.startsWith(village+'-'));
+ entries.forEach(([id,s],i)=>Object.assign(s,{village,identity,roof:identity.roofs[i],porchWidth:[108,124,142,118][i],signSide:i%2?'left':'right',signDrop:[0,11,5,17][i],signShape:['board','pennant','diamond','board'][i]}));
+}

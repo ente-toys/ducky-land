@@ -14,7 +14,7 @@ const m=makeMap('cathedral',{world,walk,harbor}),nav=m.nav();
 test('Cathedral retains communities and sea access with the approved new centre and 120 sleepers',()=>{
  for(const id of ['cathedral-hall','campanile','cloister-olive-well'])assert.ok(art.props.some(p=>p.id===id));
  assert.ok(!art.props.some(p=>['cathedral-2','cathedral-3'].includes(p.id)));
- assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-')).length,12);
+ assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-')).length,6);
  assert.equal(art.decks.filter(p=>p.overBoats).length,13);
  assert.deepEqual(world.centrePlacement,before.centrePlacement);
  assert.equal(world.riverMouths.length,2);

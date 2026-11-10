@@ -28,7 +28,10 @@ test('Phone pool stays bounded, has three leaves per near tree, recycles across 
 
 test('The real theme loader acquires four SVG leaves once and disposes the entire leaf layer with the island',async t=>{
  const {readFileSync}=await import('node:fs');
- const {Texture}=await import('pixi.js');
+ const {Texture,DOMAdapter}=await import('pixi.js');
+ const adapter=DOMAdapter.get();
+ DOMAdapter.set({...adapter,createCanvas:()=>({getContext:()=>null})});
+ t.after(()=>DOMAdapter.set(adapter));
  const {loadThemeArt}=await import('../src/pixi/theme-art.js');
  const {createGroundPool}=await import('../src/pixi/ground-stream.js');
  const manifest=JSON.parse(readFileSync('public/pixi-art/themes/cathedral/art.json'));
@@ -41,6 +44,11 @@ test('The real theme loader acquires four SVG leaves once and disposes the entir
  const leafSources=leases.filter(s=>/autumn\/leaf-/.test(s));assert.equal(leafSources.length,4);
  pool.update(2,false,()=>true,{x:0,y:1000,zoom:.8});assert.ok(pool.stats.active>0);
  pool.update(3,true,()=>true,{x:0,y:1000,zoom:.8});assert.equal(pool.stats.active,0);
+ const water=art.fountainWaters[0];assert.ok(art.groups.includes(water.root));
+ const buffers=[...water.surface.geometry.buffers];
  art.destroy();art.destroy();assert.ok(pool.layer.destroyed);assert.ok(pool.slots.every(s=>s.sprite.destroyed));
+ for(const resource of [water.root,water.layer,water.graphics,water.surface.mesh,water.surface.heights,water.surface.clip,...buffers])assert.ok(resource.destroyed,'fountain resource released before mounting');
+ assert.equal(water.surface.geometry.buffers,null);
+ assert.equal(released.length,leases.length);
  for(const src of leafSources)assert.equal(released.filter(s=>s===src).length,1);
 });

@@ -43,10 +43,11 @@ test('Autumn roots, benches and doors remain clear of the new centre and each co
   assert.deepEqual(route[0],door.door);
  }
 });
-test('Piazza entrances land in its actual ellipse, with the central tree on the rose and the well beside it',()=>{
- const tree=art.props.find(p=>p.id==='cloister-olive-well');assert.deepEqual([tree.x,tree.y],[4100,2680]);
- assert.deepEqual([tree.x-tree.width*tree.anchor.x+tree.trunk[0],tree.y-tree.height*tree.anchor.y+tree.trunk[1]],[4100,2680],'drawn trunk, including SVG gutter, is exactly centred');
- const well=art.props.find(p=>p.id==='centre-wishing-well');assert.ok(Math.hypot(well.x-tree.x,well.y-tree.y)>200);
+test('Piazza entrances land in its actual ellipse, with the olive on the raised fountain island',()=>{
+ const tree=art.props.find(p=>p.id==='cloister-olive-well');assert.deepEqual([tree.x,tree.y],[4100,2700]);
+ assert.deepEqual([tree.x-tree.width*tree.anchor.x+tree.trunk[0],tree.y-tree.height*tree.anchor.y+tree.trunk[1]],[4100,2700],'drawn trunk, including SVG gutter, is exactly centred');
+ assert.ok(!art.props.some(p=>p.id==='centre-wishing-well'));
+ assert.ok(art.props.some(p=>p.id==='centre-A-fountain'));
  const court=read('scripts/bigger-cathedral/paths-input.json').courts.find(c=>c.id==='centre-piazza');
  assert.deepEqual([court.x,court.y,court.rx,court.ry],[PIAZZA.x,PIAZZA.y,PIAZZA.rx,PIAZZA.ry]);
  for(const name of ['olive-piazza','west-piazza','east-piazza','northeast-piazza']){

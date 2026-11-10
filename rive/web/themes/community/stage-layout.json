@@ -1,0 +1,280 @@
+{
+  "placement": {
+    "x": 4000,
+    "y": 1290,
+    "width": 830,
+    "height": 695,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    }
+  },
+  "origin": [
+    3585,
+    595
+  ],
+  "bounds": [
+    3585,
+    595,
+    4415,
+    1290
+  ],
+  "roofClearance": 24,
+  "audience": [
+    3510,
+    1310,
+    4490,
+    1990
+  ],
+  "treeMoves": {
+    "tree-1-106": [
+      4900,
+      850
+    ],
+    "tree-1-116": [
+      3200,
+      850
+    ],
+    "tree-1-126": [
+      3350,
+      1030
+    ],
+    "polish-tree-5": [
+      4700,
+      1140
+    ],
+    "tree-1-128": [
+      3200,
+      1590
+    ]
+  },
+  "solidLocal": {
+    "stage-back-wall": [
+      [
+        95,
+        440
+      ],
+      [
+        735,
+        440
+      ],
+      [
+        735,
+        454
+      ],
+      [
+        95,
+        454
+      ]
+    ],
+    "stage-wall-w": [
+      [
+        48,
+        495
+      ],
+      [
+        82,
+        460
+      ],
+      [
+        96,
+        470
+      ],
+      [
+        68,
+        537
+      ],
+      [
+        68,
+        610
+      ],
+      [
+        48,
+        604
+      ]
+    ],
+    "stage-wall-e": [
+      [
+        782,
+        495
+      ],
+      [
+        748,
+        460
+      ],
+      [
+        734,
+        470
+      ],
+      [
+        762,
+        537
+      ],
+      [
+        762,
+        610
+      ],
+      [
+        782,
+        604
+      ]
+    ],
+    "stage-front-w": [
+      [
+        68,
+        578
+      ],
+      [
+        299,
+        578
+      ],
+      [
+        299,
+        626
+      ],
+      [
+        120,
+        626
+      ],
+      [
+        68,
+        610
+      ]
+    ],
+    "stage-front-e": [
+      [
+        531,
+        578
+      ],
+      [
+        762,
+        578
+      ],
+      [
+        762,
+        610
+      ],
+      [
+        710,
+        626
+      ],
+      [
+        531,
+        626
+      ]
+    ],
+    "stage-cabinet-w": [
+      [
+        81,
+        513
+      ],
+      [
+        176,
+        513
+      ],
+      [
+        200,
+        494
+      ],
+      [
+        200,
+        512
+      ],
+      [
+        176,
+        531
+      ],
+      [
+        81,
+        531
+      ]
+    ],
+    "stage-cabinet-e": [
+      [
+        630,
+        494
+      ],
+      [
+        654,
+        513
+      ],
+      [
+        749,
+        513
+      ],
+      [
+        749,
+        531
+      ],
+      [
+        654,
+        531
+      ],
+      [
+        630,
+        512
+      ]
+    ]
+  },
+  "walkChecks": {
+    "path": [
+      4000,
+      1450
+    ],
+    "landing": [
+      4000,
+      1280
+    ],
+    "bottomTread": [
+      4000,
+      1265
+    ],
+    "middleTread": [
+      4000,
+      1220
+    ],
+    "topTread": [
+      4000,
+      1175
+    ],
+    "deckCentre": [
+      4000,
+      1130
+    ],
+    "deckBack": [
+      4000,
+      1070
+    ],
+    "deckLeft": [
+      3850,
+      1130
+    ],
+    "deckRight": [
+      4150,
+      1130
+    ]
+  },
+  "notes": "Local coordinates match stage.svg. Only the back wall, side walls, front fascia outside the stair opening and the two cabinet bases block. The 178-unit top tread stays open, including the 16-unit navigation pad. Rear scenery sorts behind feet on the deck; cabinet overlays sort at their base.",
+  "audienceMoves": {
+    "polish-border-activity-1-20": [
+      3500,
+      1330
+    ],
+    "polish-border-activity-1-21": [
+      3450,
+      1370
+    ],
+    "polish-border-activity-1-22": [
+      3520,
+      1395
+    ],
+    "polish-border-activity-1-23": [
+      4480,
+      1360
+    ],
+    "polish-border-activity-1-24": [
+      4520,
+      1405
+    ]
+  }
+}
