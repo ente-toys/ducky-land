@@ -18,7 +18,7 @@ const out=x=>1-Math.pow(1-THREE.MathUtils.clamp(x,0,1),3);
 const HEART='<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.5 4 19 17.3"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>';
 
 // Continuous Three.js world. Pixi remains the island renderer and simulation.
-export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{}}={}) {
+export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null}={}) {
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -39,12 +39,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const ocean=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),atmosphere.water);
   ocean.name='Ocean'; globe.add(ocean);
 
-  function planetLighting(shader){
+  const flatUniform={value:0};let direct=false;
+  function planetLighting(shader,flatten=false){
     shader.uniforms.planetShade=planetShade;
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 planetNormal;')
       .replace('#include <begin_vertex>','#include <begin_vertex>\nplanetNormal=normalize(mat3(modelViewMatrix)*normalize(position));');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float planetShade; varying vec3 planetNormal;')
-      .replace('#include <opaque_fragment>','vec3 sunlight=normalize(vec3(-.35,.45,1.));float daylight=clamp(dot(normalize(planetNormal),sunlight)/sunlight.z,0.,1.);outgoingLight*=mix(1.-planetShade,1.,daylight);\n#include <opaque_fragment>');
+    if(flatten)shader.uniforms.detailFlat=flatUniform;
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float planetShade; varying vec3 planetNormal;'+(flatten?' uniform float detailFlat;':'' ))
+      .replace('#include <opaque_fragment>','vec3 sunlight=normalize(vec3(-.35,.45,1.));float daylight=clamp(dot(normalize(planetNormal),sunlight)/sunlight.z,0.,1.);outgoingLight*=mix(mix(1.-planetShade,1.,daylight),1.,'+(flatten?'detailFlat':'0.')+');\n#include <opaque_fragment>');
   }
 
   // Small water marks rotate with the sphere, giving the eye an unambiguous 3D reference.
@@ -119,6 +121,11 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     const hit=pickSurfacePatch(camera,globe.quaternion,x,y,width,height,WORLD_ISLANDS,WORLD_GEO.Rw);
     return hit?patches.find(p=>p.userData.id===hit.id):null;
   }
+  function groundAtPointer(x,y){
+    const p=surfaceAtPointer({x,y});
+    if(p){const frame=WORLD_ISLANDS.find(i=>i.id===p.id);if(frame)return surfacePoint(frame,p.x,p.y,WORLD_GEO.Rw).normalize().applyQuaternion(globe.quaternion);}
+    return surfaceUnderPointer(camera,x,y,width,height);
+  }
   function coordinates(e) {const b=renderer.domElement.getBoundingClientRect();return {x:e.clientX-b.left,y:e.clientY-b.top};}
   function focus(id,{enter=false}={}) {
     const island=WORLD_ISLANDS.find(i=>i.id===id);if(!island)return;
@@ -130,9 +137,9 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   let drag=null,pinch=null;const pointers=new Map();
   function down(e) {
     if(!active||e.button>0)return;onInteract();renderer.domElement.focus({preventScroll:true});const p=coordinates(e);pointers.set(e.pointerId,p);renderer.domElement.setPointerCapture(e.pointerId);transition=null;
-    if(pointers.size===2){const [a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2,point=surfaceUnderPointer(camera,x,y,width,height);pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),altitude:camera.position.z-1,frame:pick(x,y)?.userData.frame,point:point?.applyQuaternion(globe.quaternion.clone().invert())};if(pinch.frame&&pinch.point)pinch.approach={startAltitude:pinch.altitude,angle:alignIslandNorth(globe.quaternion,pinch.frame,pinch.point,camera,0)};drag=null;return;}
+    if(pointers.size===2){const [a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2,point=groundAtPointer(x,y);pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),altitude:camera.position.z-1,frame:pick(x,y)?.userData.frame,point:point?.applyQuaternion(globe.quaternion.clone().invert())};if(pinch.frame&&pinch.point)pinch.approach={startAltitude:pinch.altitude,angle:alignIslandNorth(globe.quaternion,pinch.frame,pinch.point,camera,0)};drag=null;return;}
     zoomAnchor=null;targetAltitude=camera.position.z-1;
-    const point=surfaceUnderPointer(camera,p.x,p.y,width,height);
+    const point=groundAtPointer(p.x,p.y);
     if(!point)return;
     drag={...p,point:point.applyQuaternion(globe.quaternion.clone().invert()),distance:0};
     renderer.domElement.setPointerCapture(e.pointerId);renderer.domElement.style.cursor='grabbing';
@@ -150,12 +157,12 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     if(!drag)return;const p=coordinates(e),click=drag.distance<5;drag=null;
     if(renderer.domElement.hasPointerCapture(e.pointerId))renderer.domElement.releasePointerCapture(e.pointerId);
     renderer.domElement.style.cursor='grab';
-    if(click){const hit=pick(p.x,p.y);if(camera.position.z<1.6){const frame=hit?.userData.frame??WORLD_ISLANDS.find(i=>i.id===selected),point=surfaceUnderPointer(camera,p.x,p.y,width,height)?.applyQuaternion(globe.quaternion.clone().invert());if(point)onTap({id:frame.id,...surfaceCoordinates(frame,point,WORLD_GEO.Rw)});}else if(hit)focus(hit.userData.id,{enter:true});}
+    if(click){const hit=pick(p.x,p.y);if(camera.position.z<1.6){const frame=hit?.userData.frame??WORLD_ISLANDS.find(i=>i.id===selected),point=surfaceUnderPointer(camera,p.x,p.y,width,height)?.applyQuaternion(globe.quaternion.clone().invert());if(point)onTap({id:frame.id,...surfaceCoordinates(frame,point,WORLD_GEO.Rw),screen:p});}else if(hit)focus(hit.userData.id,{enter:true});}
   }
   function wheel(e) {
     e.preventDefault();if(!active)return;onInteract();const p=coordinates(e),hit=pick(p.x,p.y);
     if(hit&&selected!==hit.userData.id){selected=hit.userData.id;onSelect(hit.userData.frame);}
-    const point=surfaceUnderPointer(camera,p.x,p.y,width,height),previous=zoomAnchor;
+    const point=groundAtPointer(p.x,p.y),previous=zoomAnchor;
     zoomAnchor=point?{point:point.applyQuaternion(globe.quaternion.clone().invert()),...p}:null;
     transition=null;
     const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?height:1);
@@ -226,14 +233,15 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       if(detailId!==selected){detailId=selected;onDetail(selected);}
     }
     const frame=WORLD_ISLANDS.find(i=>i.id===selected);
-    if(atmosphere.update(now/1000,camera.position.z,reduced))demand.invalidate();
+    if(!direct&&atmosphere.update(now/1000,camera.position.z,reduced))demand.invalidate();
     const detailStart=performance.now();
-    onFrame({id:selected,altitude:camera.position.z-1,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving});
+    const held=drag??zoomAnchor;
+    onFrame({anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude:camera.position.z-1,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving});
     const detailCost=performance.now()-detailStart;detailMs+=detailCost;detailPeak=Math.max(detailPeak,detailCost);
-    if(demand.consume(moving)){
+    if(!direct&&demand.consume(moving)){
       const renderStart=performance.now();renderer.render(scene,camera);renderMs+=performance.now()-renderStart;renderCount++;drawCount+=renderer.info.render.calls;
     }
-    if(now-overlayAt>=1000/60-.5){const overlayDt=Math.min(.1,(now-overlayAt)/1000);overlayAt=now;if(camera.position.z>1.6)activity(now/1000,overlayDt);else ctx.clearRect(0,0,width,height);}
+    if(now-overlayAt>=1000/60-.5){const overlayDt=Math.min(.1,(now-overlayAt)/1000);overlayAt=now;if(!direct&&camera.position.z>1.6)activity(now/1000,overlayDt);else ctx.clearRect(0,0,width,height);}
     frames.push(dt*1000);if(frames.length>90)frames.shift();
     if(++frameCount%30===0){const el=renderer.domElement;el.dataset.frameMeanMs=(frames.reduce((a,b)=>a+b,0)/frames.length).toFixed(1);el.dataset.quaternion=globe.quaternion.toArray().map(n=>n.toFixed(5)).join(',');el.dataset.patchCount=patches.length;el.dataset.cameraDistance=camera.position.z.toFixed(3);el.dataset.selectedIsland=selected;el.dataset.projection='continuous-sphere';el.dataset.liveIsland=live?.id??'';el.dataset.globeDiameter=(globeRadius()*2).toFixed(1);el.dataset.waterPhase=atmosphere.phase.toFixed(3);}
     if(now-statsAt>=1000){const d=renderer.domElement.dataset,seconds=(now-statsAt)/1000;d.rendersPerSecond=(renderCount/seconds).toFixed(1);d.drawCallsPerSecond=(drawCount/seconds).toFixed(1);d.renderCpuMs=(renderMs/Math.max(1,renderCount)).toFixed(2);d.detailCpuMsPerSecond=(detailMs/seconds).toFixed(2);d.detailPeakMs=detailPeak.toFixed(2);d.frameP95Ms=[...frames].sort((a,b)=>a-b)[Math.floor(frames.length*.95)]?.toFixed(1);d.seaColor='#'+PALETTE.water.toString(16).toUpperCase();statsAt=now;renderCount=drawCount=renderMs=detailMs=detailPeak=0;}
@@ -249,8 +257,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       if(live){live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();}
       const geometry=patch.geometry,texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
       const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
-      material.onBeforeCompile=shader=>{planetLighting(shader);shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
-      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';globe.add(mesh);live={id,patch,mesh};
+      material.onBeforeCompile=shader=>{planetLighting(shader,true);
+        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform float detailFlat;').replace('#include <project_vertex>',`#include <project_vertex>
+          vec4 sphereClip=gl_Position;
+          float blendedW=mix(sphereClip.w,1.,detailFlat);
+          vec2 screen=mix(sphereClip.xy/sphereClip.w,vMapUv*2.-1.,detailFlat);
+          gl_Position=vec4(screen*blendedW,mix(sphereClip.z/sphereClip.w,-.9,detailFlat)*blendedW,blendedW);`);
+        shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
+      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.renderOrder=100;globe.add(mesh);live={id,patch,mesh};
     }
     if(bounds){
       const old=live.bounds,w=bounds.width*1.8,h=bounds.height*1.8;
@@ -265,6 +279,16 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     live.mesh.material.map.matrix.copy(gpuMatrix);patch.userData.atlasUniform.value=1;live.mesh.material.map.needsUpdate=true;demand.invalidate();
   }
   function clearLiveCanvas(){if(!live)return;live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();live=null;demand.invalidate();}
+  function setPresentation(blend,value){
+    flatUniform.value=blend;
+    if(direct!==value){
+      direct=value;renderer.domElement.setAttribute('aria-label',direct?'Ducky Land island. Drag to pan, scroll to zoom, click to walk.':'Rotating Ducky Land globe');renderer.domElement.style.opacity=direct?'0':'1';host.style.background=direct?'transparent':'#000';
+      for(const c of host.querySelectorAll('.space-backdrop,.space-effects,.heart-overlay'))c.style.visibility=direct?'hidden':'';
+      backdrop.setActive(active&&!direct);demand.invalidate();
+    }
+    renderer.domElement.dataset.presentation=direct?'native-pixi':'three-globe';
+    renderer.domElement.dataset.detailBlend=blend.toFixed(3);
+  }
   function setSpaceStyle(id){spaceStyle=SPACE_LOOKS[id]?id:'starlight';const look=SPACE_LOOKS[spaceStyle];planetShade.value=look.shade;backdrop.setStyle(spaceStyle);renderer.domElement.dataset.spaceStyle=spaceStyle;demand.invalidate();return look;}
   renderer.domElement.dataset.spaceStyle=spaceStyle;
   renderer.domElement.dataset.cloudCount=String(atmosphere.cloudCount);renderer.domElement.dataset.atmosphereRim='none';renderer.domElement.dataset.waterMotion='animated-wave-normals';
@@ -279,9 +303,9 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     demand.invalidate();
   }
   function project(id,x,y){const frame=WORLD_ISLANDS.find(i=>i.id===id);if(!frame)return null;const map=mapOf(id),p=surfacePoint(frame,x-map.cx,y-map.cy,WORLD_GEO.Rw).applyQuaternion(globe.quaternion);if(!visiblePoint(p,camera.position))return null;p.project(camera);return{x:(p.x+1)*width/2,y:(1-p.y)*height/2};}
-  return {focus,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,
+  return {focus,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
 
-    setActive(value){if(active===value)return;active=value;backdrop.setActive(value);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
+    setActive(value){if(active===value)return;active=value;backdrop.setActive(value&&!direct);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
     destroy(){destroyed=true;cancelAnimationFrame(raf);resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
   };
 }

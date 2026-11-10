@@ -1119,6 +1119,11 @@ export class PixiIsland {
       this.updateControlLabel();
       if (!player) { this.keys.clear(); this.follow = false; this.markerUntil = 0; }
     }
+    // The sphere has its own previews. Keep room/prediction stepping above,
+    // but do not stream, animate or draw a hidden flat island behind the globe.
+    if(this.externalOverview&&this.externalDetailVisible===false){
+      this.raf=requestAnimationFrame(time=>this.tick(time));return;
+    }
     const t = this.sim.time;
     const reduced = this.motion.matches;
     // Prepare the hidden museum only when a player approaches it; visiting the island
