@@ -18,6 +18,7 @@ import {sampleGlobeSpin, coastGlobeSpin} from './globe-motion.js';
 import {trackUpright} from './upright.js';
 import {attachCentreMotion} from './centre-motion.js';
 import {createWeather,windStrength} from './weather.js';
+import {createSnowfall} from './snowfall.js';
 import {createBird,birdPose,createCrow,crowPose} from './birds.js';
 import {createBeachSurf, shoreOf} from './surf.js';
 import {createRowboat} from './rowboat.js';
@@ -164,6 +165,7 @@ export class PixiIsland {
       this.scene.addChild(this.ground, this.water, this.floatLayer, this.decks, this.contactShadows, this.objects, this.overDecks, this.air);
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
+      this.snowfall=createSnowfall(this.app.stage);
       this.loaded.push(LEAF_TEXTURE);
       const leafTexture=await acquire(LEAF_TEXTURE);
       if (this.disposed) return;
@@ -1226,6 +1228,7 @@ export class PixiIsland {
         ? previewMoorings(this.archipelago.islands,this.camera,this.width,this.height,TILT) : []);
     this.travelView?.update(boatPoses,t,reduced,visible,player,this.camera);
     this.weather.update(t,reduced,visible);
+    this.snowfall?.update(t,reduced,this.artShown,this.width,this.height,flatVisible && !this.interior?.active);
     const breeze=windStrength(t,reduced);
     this.gust *= Math.exp(-dt * 2.5);
     if (!homeShown) this.artProps(this.artShown).forEach((prop, i) => {   // the themed island's own props: culled, and the plants sway
@@ -1503,6 +1506,7 @@ export class PixiIsland {
     cancelAnimationFrame(this.raf);
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());
+    this.snowfall?.destroy();
     this.groundPool?.destroy();
     this.livePatches?.destroy();this.archipelago?.destroy(); this.worldView?.destroy();this.isletView?.destroy();
     this.clearChat();

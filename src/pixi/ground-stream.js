@@ -3,6 +3,7 @@ import {Sprite, Texture} from 'pixi.js';
 
 export const GROUND_BUDGET_BYTES = 128 * 1048576;
 export function tileInView(tile, camera, width, height, tilt = 1, margin = 192) {
+  margin=tile.margin??margin;
   const hw=width/(2*camera.zoom)+(typeof margin==='number'?margin:margin.x), hh=height/(2*camera.zoom*tilt)+(typeof margin==='number'?margin:margin.y);
   return tile.x < camera.x+hw && tile.x+tile.width > camera.x-hw &&
     tile.y < camera.y+hh && tile.y+tile.height > camera.y-hh;

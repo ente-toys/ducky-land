@@ -23,7 +23,7 @@ for(const theme of ['bog','snow'])test(`${theme}: full live contract, unique art
   // checkTheme above validates that cap and the origin-aware sea margin.
   const m=mapFor(theme);assert.equal(m.id,theme);
   assert.deepEqual([m.width,m.height],[READY[theme].world.width,READY[theme].world.height]);
-  assert.equal(m.sleepers.length,40);assert.equal(new Set(m.sleepers.map(s=>s.pose)).size,8);
+  assert.equal(m.sleepers.length,theme==='snow'?60:40);assert.equal(new Set(m.sleepers.map(s=>s.pose)).size,8);
   for(const s of m.sleepers)assert.ok(m.landAt(s.x,s.y));
   const a=JSON.parse(readFileSync(`public/pixi-art/themes/${theme}/art.json`));
   for(const p of [...a.ground.tiles,...a.props,...a.flats,...a.decks]) {
@@ -42,15 +42,14 @@ test('Boo Boxing Ring: walk through the south opening onto the mat, ropes and po
   assert.equal(m.world.boxingRing.fightCode,false);
 });
 
-test('Iceland: one connected island with three preserved centres, frozen rink and pole marker',()=>{
+test('Iceland B2: connected places, walkable rink and decorated pine replace the retired three centres',()=>{
   assert.ok(!WORLD_ISLANDS.some(i=>i.theme==='frost2'||i.theme==='frost3'));
   const m=mapFor('snow'),n=m.nav();
-  assert.deepEqual(m.world.districts.map(d=>d.theme),['snow','frost2','frost3']);
-  for(const z of ['snow','frost2','frost3','rink']) {
-    const [x,y]=m.world.zones[z].spawn;assert.ok(n.walkable(x,y),z);
-    assert.ok(n.route(m.spawn.x,m.spawn.y,x,y).length,`walking to ${z}`);
+  for(const z of Object.values(m.world.zones)) {
+    const [x,y]=z.spawn;assert.ok(n.walkable(x,y));
+    assert.ok(n.route(m.spawn.x,m.spawn.y,x,y).length || n.clearLine([m.spawn.x,m.spawn.y],[x,y]));
   }
-  assert.ok(n.walkable(4000,2900),'ice is walkable');
-  assert.equal(m.landAt(4000,2900),true,'boats stay off the rink');
-  assert.ok(m.world.props.some(p=>p.id==='iceland-pole-marker'));
+  const [x,y]=m.world.zones.rink.spawn;
+  assert.equal(m.landAt(x,y),true,'boats stay off the rink');
+  assert.ok(m.world.props.some(p=>p.id==='decorated-pine'));
 });

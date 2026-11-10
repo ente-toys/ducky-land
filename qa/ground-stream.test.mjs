@@ -56,3 +56,14 @@ test('failed ground uploads release their lease, keep the terrain fallback, and 
  for(let k=0;k<100;k++)pool.update([view(stream)]);
  assert.equal(calls,1);assert.equal(releases,1);assert.equal(pool.stats().reservedBytes,0);assert.equal(stream.entries[0].sprite.visible,false);pool.destroy();
 });
+
+// Both sides of the Iceland/main merge use this API: Iceland overrides a tile's
+// margin, while main prefetches a viewport-sized rectangle on each axis.
+test('ground culling combines per-tile overrides with rectangular prefetch margins',()=>{
+ const camera={x:0,y:0,zoom:1};
+ assert.equal(tileInView({...tile(),x:120},{...camera},100,100,1,{x:80,y:10}),true);
+ assert.equal(tileInView({...tile(),x:0,y:120},camera,100,100,1,{x:80,y:10}),false);
+ assert.equal(tileInView({...tile(),x:120,margin:0},camera,100,100,1,{x:80,y:10}),false);
+ assert.equal(tileInView({...tile(),x:120,margin:80},camera,100,100,1,0),true);
+ assert.equal(tileInView({...tile(),x:0,y:120,margin:{x:10,y:80}},camera,100,100,1,0),true);
+});

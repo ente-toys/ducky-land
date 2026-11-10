@@ -35,6 +35,8 @@ for(const theme of selected?[id]:ids){
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),W=Math.round(map.width*K),H=Math.round(map.height*K),base=`public/pixi-art/themes/${theme}`;
  const art=map.home?homeLayers():JSON.parse(read(base+'/art.json'));
  let tiles=map.home?art.tiles:art.ground.tiles;
+ // A sparse runtime ground stream can retain a complete vector master for the globe.
+ if(!map.home && art.ground.vector)tiles=[{src:art.ground.vector,x:map.origin.x,y:map.origin.y,width:map.width,height:map.height}];
  // These generators embedded cropped original SVGs in every tile. Recover
  // one vector master and its unchanged dry-land clip instead of duplicating
  // the entire original drawing dozens of times.

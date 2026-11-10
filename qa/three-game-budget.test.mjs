@@ -36,5 +36,22 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
  try{
   try{Engine.prototype.tick.call(game,100);}catch(error){throw new Error('Background tick: '+error.message);}
   assert.ok(roomSteps>=5,'authoritative prediction still advances every fixed step');assert.equal(roomSteps,localSteps);assert.equal(scheduled,1);assert.equal(game.raf,42);
+  // The same real tick must reach screen-space snow once the bridge exposes
+  // Iceland detail. Stop at that call so later GPU work needs no mock renderer.
+  const reachedSnow=new Error('reached snowfall'),snowCalls=[];
+  Object.defineProperty(game,'motion',{value:{matches:false},configurable:true});
+  Object.assign(game,{externalDetailVisible:true,artShown:'snow',sim:{time:2,step(){}},room:null,
+    camera:{x:0,y:0,zoom:1},target:{x:0,y:0,zoom:1},zoomMotion:{velocity:0},minZoom:.1,
+    width:1200,height:800,gestures:{pointers:new Map()},globeT:0,arts:new Map(),
+    scene:{setFromMatrix(){}},upright:{update(){}},ocean:{position:{set(){}},tilePosition:{set(){}}},
+    weather:{update(){}},snowfall:{update(...args){snowCalls.push(args);throw reachedSnow;}}});
+  for(const externalOverview of [true,false]){
+    game.externalOverview=externalOverview;
+    let caught;try{Engine.prototype.tick.call(game,116);}catch(error){caught=error;}
+    assert.equal(caught===reachedSnow,true,'visible tick reaches snowfall: '+(caught?.message??'no call'));
+  }
+  assert.equal(snowCalls.length,2);
+  for(const args of snowCalls)assert.deepEqual(args,[2,false,'snow',1200,800,true]);
+
  }finally{globalThis.document=prior.document;globalThis.requestAnimationFrame=prior.requestAnimationFrame;}
 });

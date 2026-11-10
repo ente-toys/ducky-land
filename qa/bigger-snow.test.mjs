@@ -1,66 +1,93 @@
+// Iceland v2 replaces the old river expansion. These assertions cover the
+// approved B2 contract rather than preserving the retired island snapshot.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFileSync,existsSync} from 'node:fs';
+import {Texture} from 'pixi.js';
 import {makeMap} from '../src/pixi/island-maps.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
-import {geometry,inPoly,inShape} from '../rive/web/island-geometry.mjs';
-import {communities,bridges,rivers,coast,roads} from '../scripts/bigger-snow/plan.mjs';
+import {inPoly} from '../rive/web/island-geometry.mjs';
+import {tileResolution,tileInView,GROUND_BUDGET_BYTES,createGroundPool} from '../src/pixi/ground-stream.js';
+import {loadThemeArt} from '../src/pixi/theme-art.js';
+import {snowVisible,snowPose,createSnowfall,SNOW_POOL_SIZE} from '../src/pixi/snowfall.js';
+import {Container} from 'pixi.js';
 const j=p=>JSON.parse(readFileSync(p));
-const art=j('public/pixi-art/themes/snow/art.json'),world=j('rive/web/themes/snow/world.json'),walk=j('rive/web/themes/snow/walk-world.json'),harbor=j('rive/web/themes/snow/harbor.json');
-const old=j('scripts/bigger-snow/baseline/art.json'),oldWorld=j('scripts/bigger-snow/baseline/world.json');
+const world=j('rive/web/themes/snow/world.json'),walk=j('rive/web/themes/snow/walk-world.json'),harbor=j('rive/web/themes/snow/harbor.json'),art=j('public/pixi-art/themes/snow/art.json');
 const ready=checkTheme('snow'),map=makeMap('snow',{world,walk,harbor,sleepers:ready.sleepers}),nav=map.nav();
 const route=(x,y)=>nav.walkable(x,y)&&(nav.clearLine([map.spawn.x,map.spawn.y],[x,y])||nav.route(map.spawn.x,map.spawn.y,x,y).length>0);
-test('snow communities preserve every original prop, ground tile, decal, path, solid and sleeping position',()=>{
- assert.deepEqual(art.props.slice(0,old.props.length),old.props);assert.deepEqual(art.flats.slice(0,old.flats.length),old.flats);assert.deepEqual(art.ground.tiles.slice(-old.ground.tiles.length),old.ground.tiles);assert.deepEqual(world.sleepSpots,oldWorld.sleepSpots);assert.deepEqual(world.paths.slice(0,oldWorld.paths.length),oldWorld.paths);assert.deepEqual(world.obstacles.slice(0,oldWorld.obstacles.length),oldWorld.obstacles);assert.deepEqual(harbor.spawn,j('scripts/bigger-snow/baseline/harbor.json').spawn);
+const area=c=>Math.abs(c.reduce((n,a,i)=>{const b=c[(i+1)%c.length];return n+a[0]*b[1]-a[1]*b[0]},0)/2);
+test('Iceland B2 coast is 112-125% of Home area, wider than tall, with a real harbour bay',()=>{
+ const ratio=area(world.coast)/area(j('rive/web/world.json').coast);assert.ok(ratio>=1.12&&ratio<=1.25,ratio);
+ const extent=axis=>Math.max(...world.coast.map(p=>p[axis]))-Math.min(...world.coast.map(p=>p[axis]));assert.ok(extent(0)>extent(1));
+ assert.ok(world.coast.length>200);assert.deepEqual(walk.coast,world.coast);
+ assert.ok(!inPoly(map.HARBOR.water.x,map.HARBOR.water.y,world.coast));
 });
-test('snow has four lived-in communities, 21 homes, reachable homes and workplaces',()=>{
- assert.equal(communities.length,4);assert.equal(communities.reduce((n,c)=>n+c.homes.length,0),21);
- for(const c of communities){assert.ok(route(...c.spawn),c.name+' court');for(const[type,x,y]of [...c.homes,...c.work])assert.ok(route(x,y+65),c.name+' '+type+' front door '+x+','+y)}
- for(const p of art.props.filter(p=>p.id?.startsWith('snow-community'))){assert.ok(inPoly(p.x,p.y,coast),'offshore '+p.id);assert.ok(!world.water.some(o=>inShape(p.x,p.y,o,20)),'prop in river '+p.id);const o=world.obstacles.find(o=>o.prop===p.id);if(o)assert.ok(!geometry(walk).walkable(o.x,o.y),'solid prop must block '+p.id)}
+test('Iceland replaces rivers, bridges, kites and ski centres with one solid snow island and one rink',()=>{
+ for(const field of ['water','bridges','islets','walkways'])assert.deepEqual(world[field],[]);
+ assert.deepEqual(art.decks,[]);assert.equal(art.kites?.length??0,0);assert.equal(world.boatWater?.length??0,0);
+ assert.equal(art.flats.filter(p=>p.id==='rink').length,1);assert.ok(nav.walkable(...world.zones.rink.spawn));assert.ok(map.landAt(...world.zones.rink.spawn));
+ assert.ok(!/ski|telescope|stargaz|river|bridge|kite/.test(art.props.map(p=>p.id).join(' ')));
 });
-test('snow rivers are real unwalkable water; every bridge crosses water and connects both banks',()=>{
- for(const b of bridges){assert.ok(world.water.some(o=>inShape(b.x,b.y,o)),b.id+' must span water');assert.ok(nav.walkable(b.x,b.y),b.id+' deck');assert.ok(route(b.x,b.y),b.id+' reachable');const off=b.axis==='h'?[b.w/2+50,0]:[0,b.h/2+50];for(const side of [-1,1])assert.ok(route(b.x+off[0]*side,b.y+off[1]*side),b.id+' bank '+side)}
- for(const p of art.flats.filter(p=>p.community))assert.ok(!world.water.some(o=>inShape(p.x+p.width/2,p.y+p.height/2,o,20)),'garden in river');
- for(const r of roads)for(const[x,y]of r.line)if(world.water.some(o=>inShape(x,y,o,20)))assert.ok(nav.walkable(x,y),'road must cross on a real bridge '+r.id);
- for(const r of rivers){let wet=0;for(const[x,y]of r.line){if(!inPoly(x,y,coast)||world.bridges.some(b=>Math.abs(x-b.x)<b.w/2+20&&Math.abs(y-b.y)<b.h/2+20))continue;assert.ok(!nav.walkable(x,y),r.id+' water '+x+','+y);assert.ok(map.landAt(x,y),'boats stay out of inland streams');wet++}assert.ok(wet>20,r.id+' flowing channel')}
+test('all B2 places, fourteen building doors and the harbour are reachable; solids match their art',()=>{
+ assert.ok(ready.ready,ready.problems.join('\n'));
+ for(const [name,z]of Object.entries(world.zones))assert.ok(route(...z.spawn),name);
+ for(const [name,x,y]of world.iceland2.doors)assert.ok(route(x,y),name+' doorway');
+ for(const p of art.props){assert.ok(inPoly(p.x,p.y,world.coast),p.id+' offshore');const solid=world.obstacles.find(o=>o.prop===p.id);if(solid)assert.equal(nav.walkable(solid.x,solid.y),false,p.id+' solid');}
+ assert.ok(route(map.HARBOR.land.x,map.HARBOR.land.y));
+ for(const b of map.boatSpots())for(let i=0;i<16;i++){const a=i*Math.PI/8;assert.ok(!map.landAt(b.x+46*Math.cos(a),b.y+46*Math.sin(a)),'boat hull clearance');}
 });
-test('snow keeps 40 sleepers on land, a sea harbour and GPU-safe texture tiles',()=>{
- assert.ok(ready.ready,ready.problems.join('\n'));assert.equal(ready.sleepers.length,40);for(const b of ready.sleepers)assert.ok(map.landAt(b.x,b.y));assert.ok(route(map.HARBOR.land.x,map.HARBOR.land.y));for(const b of map.boatSpots()){assert.ok(!map.landAt(b.x,b.y),'boat afloat');for(let i=0;i<16;i++){const a=i*Math.PI/8;assert.ok(!map.landAt(b.x+46*Math.cos(a),b.y+46*Math.sin(a)),'boat hull afloat')}}for(const t of art.ground.tiles){assert.ok(Math.max(t.width,t.height)*(t.resolution??1)<=1536);assert.ok(existsSync('public/pixi-art/themes/snow/'+t.src))}
+test('Iceland has exactly sixty resolved solid residents, all eight approved sleep poses',()=>{
+ assert.equal(world.sleepTotal,60);assert.equal(ready.sleepers.length,60);assert.equal(map.sleepers.length,60);
+ assert.equal(new Set(map.sleepers.map(b=>b.pose)).size,8);
+ for(const bed of map.sleepers){assert.ok(map.landAt(bed.x,bed.y));assert.ok(map.walk.obstacles.some(o=>o.sleeper&&Math.abs(o.x-bed.x)<1));}
 });
-
-test('snow review audits every rendered bridge and both river mouths', async()=>{
- const {commons}=await import('../scripts/bigger-snow/plan.mjs');
- assert.equal(art.decks.length,bridges.length,'no unaudited bridge or boardwalk layer');
- for(const b of bridges){
-  assert.ok(art.decks.some(p=>p.id==='snow-'+b.id));
-  // A centre-only check can miss a bridge perched along the edge of a river.
-  // Sample across the full usable deck width, perpendicular to the crossing.
-  for(const k of [-.28,-.14,0,.14,.28]){
-   const x=b.x+(b.axis==='v'?b.w*k:0),y=b.y+(b.axis==='h'?b.h*k:0);
-   assert.ok(world.water.some(o=>inShape(x,y,o)),b.id+' deck width over water at '+k);
-  }
+test('Home plant silhouettes are retained under snow caps and every plant base clears a path',()=>{
+ for(const family of ['tree','bush'])for(let i=1;i<=(family==='tree'?5:4);i++){
+  const original=readFileSync(`public/pixi-art/plants/${family}-${i}.svg`,'utf8');const capped=readFileSync(`public/pixi-art/themes/snow/v2/${family}-${i}.svg`,'utf8');assert.ok(capped.startsWith(original.slice(0,original.lastIndexOf('</svg>'))));assert.ok(capped.includes('clipPath'));assert.ok(capped.includes('#fffdf8'));
  }
- for(const r of rivers)for(const p of [r.line[0],r.line.at(-1)])assert.ok(!inPoly(...p,coast),r.id+' mouth must reach sea');
- const homes=art.props.filter(p=>/-home-\d\.svg$/.test(p.src));assert.equal(homes.length,21);assert.equal(new Set(homes.map(p=>p.src)).size,21);
- assert.equal(commons.length,4);
- for(const c of commons){assert.ok(route(...c.at),c.name+' clearing reachable');assert.ok(art.flats.some(p=>p.common===c.id),c.name+' planted beds');}
- for(const p of art.props.filter(p=>p.id?.startsWith('snow-common-'))){assert.ok(inPoly(p.x,p.y,coast),p.id+' land');assert.ok(!world.water.some(o=>inShape(p.x,p.y,o,20)),p.id+' dry base');const o=world.obstacles.find(o=>o.prop===p.id);assert.ok(o&&!nav.walkable(o.x,o.y),p.id+' matching solid footprint');}
+ const dist=(p,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((p.x-a[0])*dx+(p.y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(p.x-a[0]-dx*t,p.y-a[1]-dy*t)};
+ for(const p of art.props.filter(p=>/grove|bush/.test(p.id)))for(const l of world.paths)for(let i=1;i<l.length;i++)assert.ok(dist(p,l[i-1],l[i])>=80,p.id+' on path');
+});
+test('every SVG crop retains at least one texel per device pixel at default and maximum zoom at 2x DPR',()=>{
+ for(const p of [...art.props,...art.flats]){
+  assert.ok(p.tiles?.length,p.id+' must stream rather than decode a huge static texture');
+  const xspan=Math.max(...p.tiles.map(t=>t.x+t.width)),yspan=Math.max(...p.tiles.map(t=>t.y+t.height));assert.ok(Math.abs(xspan-p.width)<.01);assert.ok(Math.abs(yspan-p.height)<.01);
+  for(const t of p.tiles){assert.ok(existsSync('public/pixi-art/themes/snow/'+t.src));assert.ok(Math.max(t.width,t.height)<=256);for(const z of [1,1.8])assert.ok(tileResolution(t,z,2)/(z*2)>=1,p.id+' zoom '+z);}
+ }
+ for(const p of [...art.props,...art.flats])assert.ok(!/gradient|filter|<image/i.test(readFileSync('public/pixi-art/themes/snow/'+p.src,'utf8')));
+});
+test('standing SVG streams retain the depth anchor and allocate no eager landmark textures',async t=>{
+ const fetchBefore=globalThis.fetch;t.after(()=>globalThis.fetch=fetchBefore);globalThis.fetch=async url=>({ok:true,json:async()=>url.endsWith('art.json')?art:{pieces:[]}});
+ const decoded=[];const acquired=[];const pool=createGroundPool({acquire:async src=>{decoded.push(src);return Texture.EMPTY},release:()=>{}});const loaded=await loadThemeArt({...map,art:'/pixi-art/themes/snow/art.json'},{groundPool:pool,acquire:async src=>{acquired.push(src);return Texture.EMPTY},release:()=>{}});
+ assert.ok(acquired.includes('/pixi-art/globe/snow-ground.svg'));assert.ok(acquired.every(src=>src.endsWith('snow-ground.svg')||[...art.props,...art.flats].some(p=>p.preload&&src.endsWith(p.src))));assert.equal(pool.stats().residentTiles,0);
+ const pine=loaded.props.find(p=>p.id==='decorated-pine');assert.equal(pine.sprite.x,pine.x);assert.equal(pine.sprite.y,pine.y);
+ const stream=loaded.groundStreams.find(s=>s.entries[0]?.src.includes('bakery-tile'));
+ assert.ok(stream);const bakery=loaded.props.find(p=>p.id==='bakery');assert.equal(stream.entries[0].sprite.x,stream.entries[0].x-bakery.x);assert.equal(stream.entries[0].sprite.y,stream.entries[0].y-bakery.y);
+ assert.ok(!loaded.groundStreams.some(s=>s.entries[0]?.src.includes('decorated-pine-tile')),'FIX4 rink pieces are present before streaming');
+ pool.update([{stream,camera:{x:bakery.x,y:bakery.y-bakery.height/2,zoom:1},width:1200,height:800}],2);
+ for(let i=0;i<100&&pool.stats().pendingTiles;i++)await new Promise(resolve=>setImmediate(resolve));
+ assert.ok(decoded.length>0,'authored crops decode through the shared loader');assert.equal(pool.stats().failedTiles,0);assert.ok(pool.stats().residentTiles>0);
+ loaded.destroy();pool.destroy();assert.equal(pool.stats().streams,0);
+});
+test('screen-space snow is pooled, phone-capped, absent over toolbars and disabled for reduced motion and other islands',()=>{
+ assert.equal(snowVisible('snow',false),true);for(const args of [['snow',true],['home',false],['snow',false,false]])assert.equal(snowVisible(...args),false);
+ const stage=new Container(),snow=createSnowfall(stage);snow.update(0,false,'snow',390,844,true);assert.equal(snow.root.children.filter(s=>s.visible).length,72);const children=[...snow.root.children];snow.update(10,false,'snow',1200,800,true);assert.equal(snow.root.children.length,SNOW_POOL_SIZE);assert.deepEqual(snow.root.children,children);
+ snow.update(20,true,'snow',1200,800,true);assert.equal(snow.root.visible,false);
+ for(let i=0;i<SNOW_POOL_SIZE;i++){const p=snowPose(i,500,390,844);assert.ok(p.y>=80&&p.y<764);assert.ok(p.x>=0&&p.x<390);}
+ snow.destroy();stage.destroy();
 });
 
-test('snow dense streets keep clear walking lines and preserve the river crossings',()=>{
- const before=j('scripts/bigger-snow/dense-before.json');
- assert.deepEqual(coast,before.coast);
- assert.deepEqual(rivers,before.rivers);
- assert.deepEqual(bridges,before.bridges);
- assert.deepEqual(communities.map(c=>[c.id,c.name,c.at,c.spawn]),before.communities.map(c=>[c.id,c.name,c.at,c.spawn]));
- assert.equal(roads[0].w,122);
- for(const r of roads.slice(1))assert.ok(r.w<roads[0].w,r.id+' is a narrow lane');
- for(const r of roads)for(let i=1;i<r.line.length;i++){
-  const a=r.line[i-1],b=r.line[i],steps=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/10);
-  for(let k=0;k<=steps;k++){
-   const x=a[0]+(b[0]-a[0])*k/steps,y=a[1]+(b[1]-a[1])*k/steps;
-   if(inPoly(x,y,oldWorld.coast))continue;
-   assert.ok(nav.walkable(x,y),r.id+' obstructed at '+x+','+y);
-  }
+test('Iceland representative 2x DPR views fit the shared pool without a sharpness downgrade',()=>{
+ const tiles=[...art.ground.tiles,...art.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x+t.x,y:p.y+t.y}))),...art.props.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y})))];
+ for(const [width,height]of [[1440,900],[390,844]])for(const zoom of [1,1.8])for(const name of ['plaza','rink','bakery','lodge','workshop','harbour']){
+  const camera={...world.zones[name],zoom};let bytes=0;
+  for(const t of tiles)if(tileInView(t,camera,width,height)){const r=tileResolution(t,zoom,2);bytes+=t.width*t.height*r*r*4;}
+  assert.ok(bytes<=GROUND_BUDGET_BYTES*.9,`${name} ${width}px zoom ${zoom}: ${bytes/1048576} MiB`);
+ }
+});
+
+test('the three rink gates stay open across both sides of the fence',()=>{
+ for(const [name,[x,y]] of Object.entries(world.iceland2.gates))for(const off of [-50,0,50]){
+  const X=x+(name==='west-gate'?off:0),Y=y+(name==='west-gate'?0:off);assert.ok(route(X,Y),`${name} ${off}`);
  }
 });

@@ -153,21 +153,21 @@
   },
   "snow": {
     "src": "/pixi-art/globe/snow.svg",
-    "sha256": "38f80c27397f7cbe241363862d1890485be4b32778faab1eed6d066194155215",
+    "sha256": "152669e082811ebd8a378f0e46eeb76e706627d835a22f68c7fc38e37c1bd127",
     "width": 1024,
-    "height": 832,
-    "bytes": 189336,
-    "groundBytes": 110500,
+    "height": 794,
+    "bytes": 108868,
+    "groundBytes": 28227,
     "quality": {
       "tolerance": 0.3,
       "minArea": 0.18,
       "paletteDistance": 38,
       "quantum": 0.5
     },
-    "worldPaths": 17,
+    "worldPaths": 25,
     "walkways": 0,
-    "flats": 49,
-    "decks": 6,
+    "flats": 2,
+    "decks": 0,
     "bridgeDetails": 0
   }
 }

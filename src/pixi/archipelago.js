@@ -94,6 +94,13 @@ export function createArchipelago(app, scene, layer, world) {
     // Reuse the real island terrain and major landmarks, including delivered themes.
     // Read back a small image once per texture/tint, never once per movement tick.
     thumbnailOf(id) {
+      // Iceland streams its scenery lazily. Its authored vector preview is complete
+      // even before the visible tiles are resident, so the polar radar never
+      // caches an empty GPU capture. Keep the map's full world-space dimensions.
+      if (artOf(id) === 'snow') {
+        const size = mapFor('snow');
+        return {src: '/pixi-art/globe/snow.svg', width: size.width, height: size.height};
+      }
       const texture = radarTextures.get(artOf(id)) ?? radarTextures.get('home');
       if (!texture) return null;
       const island = islands.find(item => item.id === id);

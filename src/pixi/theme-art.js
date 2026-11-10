@@ -37,7 +37,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoa
   const rasterPool=crisp?createGroundPool({...raster,budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
-    ...flats.filter(p=>!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.map(p => ({...p, resolution: p.resolution ?? 2})),
+    ...flats.filter(p=>(!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
   // Repeated flowers, tiles and props share one lease per theme, at the highest
@@ -81,6 +81,14 @@ export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoa
     groundStreams.push(groundPool.create(set.map(t=>({...t,x:x+(p.flip?p.width-t.x-t.width:t.x),y:t.y+y,flip:p.flip})),container));
     return true;
   };
+  // Authored standing pieces keep their depth-sort anchor; their SVG crops
+  // share the ground pool and are culled in map coordinates.
+  const streamedPiece=(p,layer,anchor)=>{
+    if(!p.tiles?.length||p.preload)return null;
+    const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);
+    const stream=groundPool.create(p.tiles.map(t=>({...t,x:p.x-p.width*anchor.x+t.x,y:p.y-p.height*anchor.y+t.y,localX:t.x-p.width*anchor.x,localY:t.y-p.height*anchor.y})),node,url);
+    groundStreams.push(stream);return node;
+  };
   let terrain;
   try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
   catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
@@ -105,7 +113,8 @@ export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoa
   }
   for (const flat of flats) {
     if(crisp){crispSprite(flat,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1});continue;}
-    if(tiled(flat,2,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
+    if(streamedPiece(flat,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
+    if(!flat.preload&&tiled(flat,2,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
     const s = new Sprite(textures[k++]); s.position.set(flat.x, flat.y);
     if (!flat.topLeft) s.anchor.set(.5, 1);   // decals sit on their base point, like home's
     s.width = flat.width; s.height = flat.height; if (flat.flip) s.scale.x *= -1;
@@ -113,12 +122,13 @@ export async function loadThemeArt(map, {acquire, release, groundPool, rasterLoa
   }
   const standing = props.map((prop, i) => {
     const scale = prop.scale ?? 1, anchor = prop.anchor ?? {x: .5, y: 1}, name = prop.name ?? prop.asset ?? prop.src;
-    const sprite = crisp?crispSprite(prop,null,anchor):new Sprite(textures[k++]);
-    if(!crisp){
+    const sprite = crisp?crispSprite(prop,null,anchor):(streamedPiece(prop,null,anchor) ?? new Sprite(textures[k++]));
+    if(!crisp&&(!prop.tiles?.length||prop.preload)){
       sprite.anchor.set(anchor.x, anchor.y); sprite.position.set(prop.x, prop.y);
       sprite.width = prop.width * scale; sprite.height = prop.height * scale;
       if (prop.flip) sprite.scale.x *= -1;
     }
+    if(!crisp&&prop.tiles?.length&&prop.flip)sprite.scale.x *= -1;
     if (prop.tint) sprite.tint = prop.tint;
     sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true; // Keep authored depth order for overlapping hamlet objects.
     sprite.themeArt = map.id;
