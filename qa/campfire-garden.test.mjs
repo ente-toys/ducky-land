@@ -15,9 +15,9 @@ test('Campfire outer gardens reuse coloured centre art with contact shadows and 
  assert(!world.water.some(w=>w.rx===108&&w.ry===54));
  assert(!tiles.includes('cx="700" cy="894"'));
 });
-test('Campfire keeps all forty centre beds and adds thirty-two approved sleepers on the outer lawn',()=>{
+test('Campfire retains the centre residents with the path-edge wing moved onto lawn and reaches one hundred sleepers',()=>{
  const old=read('scripts/campfire-hamlets/baseline/world.json');
- for(const [pose,spots]of Object.entries(old.sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots);
- const checked=checkTheme('community');assert.deepEqual(checked.problems,[]);assert.equal(checked.sleepers.length,72);
- for(const pose of ['book','rock','leaf','wing'])assert.equal(world.sleepSpots[pose].length,old.sleepSpots[pose].length+8);
+ for(const [pose,spots]of Object.entries(old.sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots.map(p=>pose==='wing'&&p[0]===5800&&p[1]===3676?[6190,3700,p[2]]:p));
+ const checked=checkTheme('community');assert.deepEqual(checked.problems,[]);assert.equal(checked.sleepers.length,100);
+ assert.equal(world.sleepTotal,100);
 });

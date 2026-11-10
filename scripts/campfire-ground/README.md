@@ -14,3 +14,5 @@ The build writes only the existing expansion/ground-*.svg files. All 48 are comp
 Each output keeps its existing 1400 by 1400 intrinsic size and world viewport. Offscreen detail is removed. Large polygon rings are cropped 200 world units beyond the tile, safely beyond the widest stroke. Patterns retain their original global phase. Output references are self-contained.
 
 The seam check compares each pair's 64-unit strip against the uncropped canonical drawing rendered in matching full-tile viewports, including the two centre columns/rows at each join and opaque-pixel gaps. Matching viewports avoids false differences from librsvg's pattern sampling when rendering a narrow strip directly.
+
+The Home path and water pass now composes material.mjs before tiling: one #fde48c path union at 128/104 widths, winding lawn holes preserved, sea-colour inland water and no dark coast contour. Lawn decoration comes only from the original source.svg, unchanged from d1d791e6. No extra lawn tufts, flowers or darker patches are generated. The report records zero added lawn features. Flattened path rings are cropped directly per tile to keep payload near the original size.

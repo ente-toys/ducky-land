@@ -346,39 +346,109 @@
   },
   "decks": [
     {
+      "id": "campfire-northwest",
       "src": "jetty-nw.svg",
-      "x": 889,
-      "y": 1188,
+      "x": 933.5,
+      "y": 1282,
       "width": 448,
-      "height": 412
+      "height": 272,
+      "homeBridge": "nw",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-nw.svg",
+      "a": [
+        1333,
+        1516
+      ],
+      "b": [
+        982,
+        1345
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "campfire-northwest"
     },
     {
+      "id": "campfire-northeast",
       "src": "jetty-ne.svg",
-      "x": 6614,
-      "y": 1158,
-      "width": 435,
-      "height": 463
+      "x": 6583.5,
+      "y": 1253,
+      "width": 410,
+      "height": 336,
+      "homeBridge": "ne",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ne.svg",
+      "a": [
+        6632,
+        1551
+      ],
+      "b": [
+        6945,
+        1316
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "campfire-northeast"
     },
     {
+      "id": "campfire-east",
       "src": "jetty-e.svg",
-      "x": 6954,
-      "y": 2944,
-      "width": 476,
-      "height": 323
+      "x": 6929,
+      "y": 3001.3,
+      "width": 421,
+      "height": 190.9,
+      "homeBridge": "ew",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ew.svg",
+      "a": [
+        6935,
+        3103
+      ],
+      "b": [
+        7344,
+        3144
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "campfire-east"
     },
     {
+      "id": "campfire-west-islet",
       "src": "bridge-islet-1.svg",
-      "x": 1670.31,
-      "y": 4028.65,
-      "width": 337.97,
-      "height": 475.35
+      "x": 1691.5,
+      "y": 4036,
+      "width": 295,
+      "height": 452,
+      "homeBridge": "ne",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ne.svg",
+      "a": [
+        1938,
+        4099
+      ],
+      "b": [
+        1740,
+        4450
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "campfire-west-islet"
     },
     {
+      "id": "campfire-east-islet",
       "src": "bridge-islet-2.svg",
-      "x": 5985.84,
-      "y": 4018.19,
-      "width": 337.97,
-      "height": 475.35
+      "x": 6007.5,
+      "y": 4025,
+      "width": 295,
+      "height": 453,
+      "homeBridge": "nw",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-nw.svg",
+      "a": [
+        6056,
+        4088
+      ],
+      "b": [
+        6254,
+        4440
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "campfire-east-islet"
     },
     {
       "src": "detail/pond-dock.svg",
@@ -396,59 +466,150 @@
     },
     {
       "id": "arched-0",
-      "src": "/pixi-art/themes/sunflower/bridges/bridge-ns.svg",
-      "x": 3872,
-      "y": 315.2639405204461,
-      "width": 256,
-      "height": 399.40520446096656
+      "src": "bridges/home-arched-0.svg",
+      "x": 3933.8,
+      "y": 337,
+      "width": 132.4,
+      "height": 365,
+      "homeBridge": "ns",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ns.svg",
+      "a": [
+        4000,
+        374
+      ],
+      "b": [
+        4000,
+        690
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-0"
     },
     {
       "id": "arched-1",
-      "src": "/pixi-art/home-expansion-c/bridges/bridge-ew.svg",
-      "x": 600.4285714285714,
-      "y": 2640.8,
-      "width": 361.14285714285717,
-      "height": 256
+      "src": "bridges/home-arched-1.svg",
+      "x": 617,
+      "y": 2697.8,
+      "width": 328,
+      "height": 170.4,
+      "homeBridge": "ew",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ew.svg",
+      "a": [
+        623,
+        2820
+      ],
+      "b": [
+        939,
+        2820
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-1"
     },
     {
       "id": "arched-2",
-      "src": "/pixi-art/themes/sunflower/bridges/bridge-ns.svg",
-      "x": 3512,
-      "y": 4814.278810408922,
-      "width": 256,
-      "height": 508.10408921933083
+      "src": "bridges/home-arched-2.svg",
+      "x": 3573.8,
+      "y": 4852,
+      "width": 132.4,
+      "height": 451,
+      "homeBridge": "ns",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ns.svg",
+      "a": [
+        3640,
+        4889
+      ],
+      "b": [
+        3640,
+        5291
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-2"
     },
     {
       "id": "arched-3",
-      "src": "/pixi-art/themes/sunflower/bridges/bridge-ns.svg",
-      "x": -598,
-      "y": 3111.0706319702604,
-      "width": 256,
-      "height": 346.3197026022305
+      "src": "bridges/home-arched-3.svg",
+      "x": -536.2,
+      "y": 3125,
+      "width": 132.4,
+      "height": 323,
+      "homeBridge": "ns",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ns.svg",
+      "a": [
+        -470,
+        3162
+      ],
+      "b": [
+        -470,
+        3436
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-3"
     },
     {
       "id": "arched-4",
-      "src": "/pixi-art/themes/sunflower/bridges/bridge-ns.svg",
-      "x": -1248,
-      "y": 3214.442379182156,
-      "width": 256,
-      "height": 343.7918215613383
+      "src": "bridges/home-arched-4.svg",
+      "x": -1186.2,
+      "y": 3228,
+      "width": 132.4,
+      "height": 321,
+      "homeBridge": "ns",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ns.svg",
+      "a": [
+        -1120,
+        3265
+      ],
+      "b": [
+        -1120,
+        3537
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-4"
     },
     {
       "id": "arched-5",
-      "src": "/pixi-art/themes/sunflower/bridges/bridge-ns.svg",
-      "x": 8252,
-      "y": 3343.8661710037177,
-      "width": 256,
-      "height": 381.7100371747212
+      "src": "bridges/home-arched-5.svg",
+      "x": 8313.8,
+      "y": 3363,
+      "width": 132.4,
+      "height": 351,
+      "homeBridge": "ns",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ns.svg",
+      "a": [
+        8380,
+        3400
+      ],
+      "b": [
+        8380,
+        3702
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-5"
     },
     {
       "id": "arched-6",
-      "src": "/pixi-art/themes/sunflower/bridges/bridge-ns.svg",
-      "x": 8957,
-      "y": 3556.724907063197,
-      "width": 256,
-      "height": 369.07063197026025
+      "src": "bridges/home-arched-6.svg",
+      "x": 9018.8,
+      "y": 3574,
+      "width": 132.4,
+      "height": 341,
+      "homeBridge": "ns",
+      "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ns.svg",
+      "a": [
+        9085,
+        3611
+      ],
+      "b": [
+        9085,
+        3903
+      ],
+      "overBoats": true,
+      "resolution": 2,
+      "bridgeId": "arched-6"
     }
   ],
   "flats": [
@@ -176957,6 +177118,762 @@
       "shadow": false,
       "wind": false,
       "sortY": 1126
+    },
+    {
+      "id": "life-north-reading-1",
+      "name": "Campfire north-reading tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 2340,
+      "y": -190,
+      "width": 202.8,
+      "height": 280.8,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-reading-2",
+      "name": "Campfire north-reading tree",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 2480,
+      "y": -100,
+      "width": 222,
+      "height": 281.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-reading-3",
+      "name": "Campfire north-reading tree",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 2250,
+      "y": -65,
+      "width": 144,
+      "height": 201.6,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-reading-4",
+      "name": "Campfire north-reading bush",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 2370,
+      "y": -40,
+      "width": 134.4,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-reading-5",
+      "name": "Campfire north-reading bush",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 2540,
+      "y": -52,
+      "width": 81.19999999999999,
+      "height": 72.8,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-crown-1",
+      "name": "Campfire north-crown tree",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 3440,
+      "y": -210,
+      "width": 252,
+      "height": 319.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-crown",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-crown-2",
+      "name": "Campfire north-crown tree",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 3500,
+      "y": -160,
+      "width": 117,
+      "height": 296.40000000000003,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-crown",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-crown-3",
+      "name": "Campfire north-crown tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 3300,
+      "y": -85,
+      "width": 182,
+      "height": 251.99999999999997,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-crown",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-crown-4",
+      "name": "Campfire north-crown tree",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 3450,
+      "y": -30,
+      "width": 136,
+      "height": 190.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-crown",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-crown-5",
+      "name": "Campfire north-crown bush",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 3320,
+      "y": -32,
+      "width": 104,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-crown",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-crown-6",
+      "name": "Campfire north-crown bush",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 3510,
+      "y": -28,
+      "width": 105,
+      "height": 75,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-crown",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-heart-1",
+      "name": "Campfire north-heart tree",
+      "src": "/pixi-art/plants/tree-2.svg",
+      "x": 4740,
+      "y": -245,
+      "width": 151.2,
+      "height": 302.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-heart",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-heart-2",
+      "name": "Campfire north-heart tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 4860,
+      "y": -150,
+      "width": 213.2,
+      "height": 295.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-heart",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-heart-3",
+      "name": "Campfire north-heart tree",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 4680,
+      "y": -80,
+      "width": 160,
+      "height": 224,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-heart",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-heart-4",
+      "name": "Campfire north-heart bush",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 4770,
+      "y": -40,
+      "width": 142.79999999999998,
+      "height": 93.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-heart",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-heart-5",
+      "name": "Campfire north-heart bush",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 4930,
+      "y": -65,
+      "width": 87,
+      "height": 78,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-heart",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-lilac-1",
+      "name": "Campfire north-lilac tree",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 5660,
+      "y": -230,
+      "width": 126,
+      "height": 319.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-lilac-2",
+      "name": "Campfire north-lilac tree",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 5790,
+      "y": -140,
+      "width": 222,
+      "height": 281.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-lilac-3",
+      "name": "Campfire north-lilac tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 5550,
+      "y": -95,
+      "width": 182,
+      "height": 251.99999999999997,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "north-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-lilac-4",
+      "name": "Campfire north-lilac bush",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 5610,
+      "y": -45,
+      "width": 104,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-north-lilac-5",
+      "name": "Campfire north-lilac bush",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 5810,
+      "y": -60,
+      "width": 100.8,
+      "height": 72,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "north-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-reading-1",
+      "name": "Campfire south-reading tree",
+      "src": "/pixi-art/plants/tree-2.svg",
+      "x": 2680,
+      "y": 5340,
+      "width": 144,
+      "height": 288,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-reading-2",
+      "name": "Campfire south-reading tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 2830,
+      "y": 5410,
+      "width": 218.4,
+      "height": 302.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-reading-3",
+      "name": "Campfire south-reading tree",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 2700,
+      "y": 5460,
+      "width": 150,
+      "height": 210,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-reading-4",
+      "name": "Campfire south-reading bush",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 2850,
+      "y": 5480,
+      "width": 134.4,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-reading-5",
+      "name": "Campfire south-reading bush",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 2600,
+      "y": 5400,
+      "width": 87,
+      "height": 78,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-reading",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-meadow-1",
+      "name": "Campfire south-meadow tree",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4300,
+      "y": 5480,
+      "width": 240,
+      "height": 304,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-meadow",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-meadow-2",
+      "name": "Campfire south-meadow tree",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 4410,
+      "y": 5540,
+      "width": 114,
+      "height": 288.8,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-meadow",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-meadow-3",
+      "name": "Campfire south-meadow tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 4200,
+      "y": 5600,
+      "width": 197.6,
+      "height": 273.6,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-meadow",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-meadow-4",
+      "name": "Campfire south-meadow bush",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 4270,
+      "y": 5630,
+      "width": 104,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-meadow",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-meadow-5",
+      "name": "Campfire south-meadow bush",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 4470,
+      "y": 5560,
+      "width": 105,
+      "height": 75,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-meadow",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-lilac-1",
+      "name": "Campfire south-lilac tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 5080,
+      "y": 5350,
+      "width": 218.4,
+      "height": 302.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-lilac-2",
+      "name": "Campfire south-lilac tree",
+      "src": "/pixi-art/plants/tree-2.svg",
+      "x": 5220,
+      "y": 5400,
+      "width": 144,
+      "height": 288,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-lilac-3",
+      "name": "Campfire south-lilac tree",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 5110,
+      "y": 5470,
+      "width": 152,
+      "height": 212.8,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-lilac-4",
+      "name": "Campfire south-lilac bush",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 5270,
+      "y": 5490,
+      "width": 134.4,
+      "height": 88,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-lilac-5",
+      "name": "Campfire south-lilac bush",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 5020,
+      "y": 5500,
+      "width": 81.19999999999999,
+      "height": 72.8,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-lilac",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-coast-1",
+      "name": "Campfire south-coast tree",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4760,
+      "y": 6500,
+      "width": 252,
+      "height": 319.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-coast",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-coast-2",
+      "name": "Campfire south-coast tree",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 4890,
+      "y": 6530,
+      "width": 120,
+      "height": 304,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-coast",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-coast-3",
+      "name": "Campfire south-coast tree",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 4670,
+      "y": 6590,
+      "width": 187.2,
+      "height": 259.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-coast",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-coast-4",
+      "name": "Campfire south-coast tree",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 4790,
+      "y": 6660,
+      "width": 144,
+      "height": 201.6,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "tree",
+      "lifeGrove": "south-coast",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-coast-5",
+      "name": "Campfire south-coast bush",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 4650,
+      "y": 6630,
+      "width": 104,
+      "height": 80,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-coast",
+      "contact": false,
+      "wind": false
+    },
+    {
+      "id": "life-south-coast-6",
+      "name": "Campfire south-coast bush",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 4880,
+      "y": 6650,
+      "width": 105,
+      "height": 75,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "kind": "bush",
+      "lifeGrove": "south-coast",
+      "contact": false,
+      "wind": false
     }
   ],
   "paletteVersion": 3,

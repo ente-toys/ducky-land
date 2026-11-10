@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="328" height="170.4" viewBox="24 47 328 170.4" data-home-source="/pixi-art/home-expansion-c/bridges/bridge-ew.svg">
+  <title>Honeywood footbridge, east-west</title>
+  <desc>Hand-drawn 420 by 120 world-unit bridge. High three-quarter camera, ground depth 0.62, 24-unit crown. Near bank is at the bottom. Transparent background.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Paired little end sills, on the banks rather than in the water. -->
+
+
+    <!-- Far handrail: six upright posts, two curved horizontal rails. -->
+    <g fill="#C9C3F2">
+      <path d="M27 98 L33 98 L33 140 L27 140 Z M90.2 83 L96.2 83 L96.2 125 L90.2 125 Z M153.4 75 L159.4 75 L159.4 117 L153.4 117 Z M216.6 75 L222.6 75 L222.6 117 L216.6 117 Z M279.8 83 L285.8 83 L285.8 125 L279.8 125 Z M343 98 L349 98 L349 140 L343 140 Z" data-home-path="2"/>
+      <path d="M30 125 Q188 77 346 125 L346 129 Q188 81 30 129 Z" data-home-path="3"/>
+      <path d="M28.49524 98 Q188 50 347.50476 98 L347.50476 102 Q188 54 28.49524 102 Z" data-home-path="4"/>
+    </g>
+    <!-- The two deck edges have the same arch and stay 74.4 units apart. -->
+    <path fill="#6F78D8" d="M30 132 Q188 84 346 132 L346 214 Q188 166 30 214 Z" data-home-path="5"/>
+    <path fill="#C9C3F2" d="M30 132 Q188 84 346 132 L346 206.4 Q188 158.4 30 206.4 Z" data-home-path="6"/>
+    <!-- Transverse boards. The crown belongs to the deck, never to its width. -->
+    <path fill="none" stroke-width=".85" d="M51.06667 126 L51.06667 200.4 M72.13333 120.9 L72.13333 195.3 M93.2 116.6 L93.2 191 M114.26667 113.2 L114.26667 187.6 M135.33333 110.7 L135.33333 185.1 M156.4 109 L156.4 183.4 M177.46667 108.1 L177.46667 182.5 M198.53333 108.1 L198.53333 182.5 M219.6 109 L219.6 183.4 M240.66667 110.7 L240.66667 185.1 M261.73333 113.2 L261.73333 187.6 M282.8 116.6 L282.8 191 M303.86667 120.9 L303.86667 195.3 M324.93333 126 L324.93333 200.4" data-home-path="7"/>
+    <!-- A few short, quiet grain marks, just as sparse as the pond bridge. -->
+    <path fill="none" stroke-width=".65" d="M60.84762 145 L60.84762 162 M102.22857 151 L102.22857 165 M166.93333 127 L166.93333 140 M207.5619 153 L207.5619 168 M273.01905 135 L273.01905 148 M313.64762 159 L313.64762 176" data-home-path="8"/>
+    <!-- Visible near fascia and its narrow upper lip. -->
+    <path fill="#6F78D8" d="M30 206.4 Q188 158.4 346 206.4 L346 214.4 Q188 166.4 30 214.4 Z" data-home-path="9"/>
+    <path fill="#C9C3F2" d="M30 202.4 Q188 154.4 346 202.4 L346 206.4 Q188 158.4 30 206.4 Z" data-home-path="10"/>
+    <g fill="#C9C3F2">
+      <path d="M27 172.4 L33 172.4 L33 214.4 L27 214.4 Z M90.2 157 L96.2 157 L96.2 199 L90.2 199 Z M153.4 149.4 L159.4 149.4 L159.4 191.4 L153.4 191.4 Z M216.6 149.4 L222.6 149.4 L222.6 191.4 L216.6 191.4 Z M279.8 157 L285.8 157 L285.8 199 L279.8 199 Z M343 172.4 L349 172.4 L349 214.4 L343 214.4 Z" data-home-path="11"/>
+      <path d="M30 199.4 Q188 151.4 346 199.4 L346 203.4 Q188 155.4 30 203.4 Z" data-home-path="12"/>
+      <path d="M28.49524 172.4 Q188 124.4 347.50476 172.4 L347.50476 176.4 Q188 128.4 28.49524 176.4 Z" data-home-path="13"/>
+    </g>
+    <!-- End-grain lines and modest fixing pins. -->
+    <path fill="none" stroke-width=".65" d="M30 178 L30 191 M93.2 163 L93.2 175 M156.4 155 L156.4 167 M219.6 155 L219.6 167 M282.8 163 L282.8 175 M346 178 L346 191" data-home-path="14"/>
+    <path fill="none" stroke-width="1.5" d="M30 175 L30 175.4 M93.2 160 L93.2 160.4 M156.4 152 L156.4 152.4 M219.6 152 L219.6 152.4 M282.8 160 L282.8 160.4 M346 175 L346 175.4" data-home-path="15"/>
+  </g>
+</svg>

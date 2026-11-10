@@ -6,9 +6,18 @@ import {fileURLToPath} from 'node:url';
 import {DOMParser,XMLSerializer} from '@xmldom/xmldom';
 import {Path2D} from '@napi-rs/canvas';
 import {transform,mul,I} from '../globe-svg/compile.mjs';
+import {composeGround} from './material.mjs';
+import {contours,simplifyRing} from '../pagepond/geometry.mjs';
 const dir=fileURLToPath(new URL('./',import.meta.url)),rootDir=fileURLToPath(new URL('../../',import.meta.url));
 const A=rootDir+'public/pixi-art/themes/community/',parser=new DOMParser(),serializer=new XMLSerializer();
 export const source=fs.readFileSync(dir+'source.svg','utf8');
+// Boolean fillets can contain thousands of tiny cubic segments. Flatten with
+// <=3-unit chords, then simplify by 0.08 world units, well below one device
+// pixel. This keeps static SVG decode cost close to the original ground.
+export const compactFloor=d=>contours(d,3).map(r=>{
+ const points=simplifyRing(r,.08);
+ return points.length>2?'M'+points.map(p=>p.map(n=>+n.toFixed(3)).join(' ')).join('L')+'Z':'';
+}).join('');
 const elements=n=>Array.from(n.childNodes??[]).filter(n=>n.nodeType===1);
 // Homeland's flat lawn, retaining every existing patch, tuft and pebble position.
 const palette={'#a7c653':'#93b72f','#99ba48':'#a8ca48'};
@@ -41,11 +50,12 @@ export function tileSvg(tile,{style=true,cull=true,sourceSvg=source}={}){
   const tag=n.localName,ctm=mul(m,transform(n.getAttribute('transform')));
   if(style)for(const k of ['fill','stroke']){const value=n.getAttribute(k).toLowerCase();if(palette[value])n.setAttribute(k,palette[value]);if(k==='stroke'&&ink.has(value))n.setAttribute(k,'#39472d');}
   // Patterns retain their local coordinates and phase across every tile.
-  if(tag==='pattern')return;
+  if(tag==='pattern'||tag==='symbol')return;
   let p=null;
   if(tag==='path')p=new Path2D(n.getAttribute('d'));
   if(tag==='ellipse'){p=new Path2D();p.ellipse(+n.getAttribute('cx'),+n.getAttribute('cy'),+n.getAttribute('rx'),+n.getAttribute('ry'),0,0,Math.PI*2);}
   if(tag==='rect'){p=new Path2D();p.rect(+n.getAttribute('x'),+n.getAttribute('y'),+n.getAttribute('width'),+n.getAttribute('height'));}
+  if(tag==='use'){p=new Path2D();p.rect(+n.getAttribute('x'),+n.getAttribute('y'),+n.getAttribute('width'),+n.getAttribute('height'));}
   if(p&&cull){const world=new Path2D(p).transform({a:ctm[0],b:ctm[1],c:ctm[2],d:ctm[3],e:ctm[4],f:ctm[5]}),b=world.computeTightBounds();
    if(b[0]>box[2]||b[2]<box[0]||b[1]>box[3]||b[3]<box[1]){n.parentNode.removeChild(n);return;}
    // Only filled, huge polygon geometry is cropped. Small marks and all curves
@@ -53,16 +63,29 @@ export function tileSvg(tile,{style=true,cull=true,sourceSvg=source}={}){
    if(tag==='path'&&n.getAttribute('d').length>5000&&!/[CQAHVSTcqahvst]/.test(n.getAttribute('d'))&&ctm.slice(0,4).every((v,i)=>v===I[i])){
     n.setAttribute('d',cropPolygons(n.getAttribute('d'),[box[0]-ctm[4],box[1]-ctm[5],box[2]-ctm[4],box[3]-ctm[5]]));
    }
+   if(tag==='path'&&n.getAttribute('data-ground')==='paths'){
+    // Clip each flattened winding ring directly. Skia can retain the entire
+    // complex floor when its boolean intersection fails.
+    n.setAttribute('d',cropPolygons(compactFloor(p.toSVGString()),box));
+   }
   }
   for(const child of elements(n))walk(child,ctm);
   if(tag==='g'&&!elements(n).length)n.parentNode.removeChild(n);
  }
  walk(root);
  // Drop unreferenced definitions after tile culling, without external references.
- let changed=true;while(changed){changed=false;const xml=serializer.serializeToString(root);for(const n of Array.from(root.getElementsByTagName('*')))if(n.hasAttribute('id')&&!xml.includes(`url(#${n.getAttribute('id')})`)){n.parentNode.removeChild(n);changed=true;}}
+ let changed=true;while(changed){changed=false;const xml=serializer.serializeToString(root);for(const n of Array.from(root.getElementsByTagName('*')))if(n.hasAttribute('id')&&!xml.includes(`url(#${n.getAttribute('id')})`)&&!xml.includes(`href="#${n.getAttribute('id')}"`)){n.parentNode.removeChild(n);changed=true;}}
  const svg=serializer.serializeToString(root).replace(/>\s+</g,'><');
  if(/<(?:image|linearGradient|radialGradient|filter)\b|data:/i.test(svg))throw Error('Non-vector output');
  return svg;
 }
-export function build(){const art=JSON.parse(fs.readFileSync(A+'art.json')),sizes=[];for(const tile of art.ground.tiles){if(!tile.src.startsWith('expansion/ground-'))throw Error('Unexpected tile '+tile.src);const svg=tileSvg(tile);fs.writeFileSync(A+tile.src,svg);sizes.push(Buffer.byteLength(svg));}console.log(JSON.stringify({tiles:sizes.length,totalBytes:sizes.reduce((a,b)=>a+b),minBytes:Math.min(...sizes),maxBytes:Math.max(...sizes)}));}
-if(process.argv[1]===fileURLToPath(import.meta.url))build();
+export async function build(){
+ const art=JSON.parse(fs.readFileSync(A+'art.json')),sizes=[],composed=await composeGround(source);
+ for(const tile of art.ground.tiles){if(!tile.src.startsWith('expansion/ground-'))throw Error('Unexpected tile '+tile.src);const svg=tileSvg(tile,{sourceSvg:composed.svg});fs.writeFileSync(A+tile.src,svg);sizes.push(Buffer.byteLength(svg));}
+ // Only route widths are updated. Props, stage, water, walk data and manifest
+ // are owned by other packages and must remain byte-for-byte untouched.
+ const file=rootDir+'rive/web/themes/community/world.json',world=JSON.parse(fs.readFileSync(file));world.pathWidths=composed.report.widths;fs.writeFileSync(file,JSON.stringify(world,null,2)+'\n');
+ fs.writeFileSync(dir+'ground-plan.json',JSON.stringify(composed.report,null,2)+'\n');
+ console.log(JSON.stringify({tiles:sizes.length,totalBytes:sizes.reduce((a,b)=>a+b),minBytes:Math.min(...sizes),maxBytes:Math.max(...sizes),...composed.report.counts}));
+}
+if(process.argv[1]===fileURLToPath(import.meta.url))await build();

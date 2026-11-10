@@ -1,100 +1,33 @@
-<?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="435" height="463" viewBox="6614 1158 435 463">
-<title>Campfire Commons pier ne</title>
-<desc>Original Ducky Land vector artwork: Campfire Commons ground (scripts/themes/community-build.py).</desc>
-<path d="M 6694.4 1460.5 L 6955.8 1264.4 L 7018.2 1347.6 L 6756.8 1543.7 Z" fill="#374055" fill-opacity="0.14"/>
-<ellipse cx="6691" cy="1483.3" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6686.5" y="1443.3" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6691" cy="1483.3" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6746.2" cy="1556.9" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6741.7" y="1516.9" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6746.2" cy="1556.9" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6742" cy="1445" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6737.5" y="1405" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6742" cy="1445" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6797.2" cy="1518.6" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6792.7" y="1478.6" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6797.2" cy="1518.6" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6793" cy="1406.8" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6788.5" y="1366.8" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6793" cy="1406.8" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6848.2" cy="1480.4" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6843.7" y="1440.4" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6848.2" cy="1480.4" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6844" cy="1368.5" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6839.5" y="1328.5" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6844" cy="1368.5" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6899.2" cy="1442.1" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6894.7" y="1402.1" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6899.2" cy="1442.1" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6895" cy="1330.3" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6890.5" y="1290.3" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6895" cy="1330.3" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6950.2" cy="1403.9" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6945.7" y="1363.9" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6950.2" cy="1403.9" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="6946" cy="1292" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6941.5" y="1252" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6946" cy="1292" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<ellipse cx="7001.2" cy="1365.6" rx="12" ry="4.6" fill="#374055" fill-opacity="0.12"/>
-<rect x="6996.7" y="1325.6" width="9" height="40" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="7001.2" cy="1365.6" rx="11" ry="4.2" fill="none" stroke="#FFF0C7" stroke-width="1.6" stroke-opacity="0.9"/>
-<path d="M 6707.2 1559.6 L 7011.2 1331.6 L 7011.2 1342.6 L 6707.2 1570.6 Z" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<path d="M 6644.8 1476.4 L 6948.8 1248.4 L 7011.2 1331.6 L 6707.2 1559.6 Z" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<path d="M 6652.2 1479.6 L 6949.8 1256.4" stroke="#885931" stroke-width="1.6" stroke-opacity="0.8"/>
-<path d="M 6706.2 1551.6 L 7003.8 1328.4" stroke="#885931" stroke-width="1.6" stroke-opacity="0.8"/>
-<path d="M 6662 1466 L 6722 1546" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6679.6 1452.8 L 6739.6 1532.8" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6709 1473.7 L 6719.8 1488.1" stroke="#885931" stroke-width="1.11"/>
-<path d="M 6697.2 1439.6 L 6757.2 1519.6" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6714.8 1426.4 L 6774.8 1506.4" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6732.4 1413.2 L 6792.4 1493.2" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6780.6 1459.1 L 6791.4 1473.5" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6750 1400 L 6810 1480" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6767.6 1386.8 L 6827.6 1466.8" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6785.2 1373.6 L 6845.2 1453.6" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6814.6 1394.5 L 6825.4 1408.9" stroke="#885931" stroke-width="1.11"/>
-<path d="M 6802.8 1360.4 L 6862.8 1440.4" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6820.4 1347.2 L 6880.4 1427.2" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6838 1334 L 6898 1414" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6886.2 1379.9 L 6897 1394.3" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6855.6 1320.8 L 6915.6 1400.8" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6873.2 1307.6 L 6933.2 1387.6" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6890.8 1294.4 L 6950.8 1374.4" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6920.2 1315.3 L 6931 1329.7" stroke="#885931" stroke-width="1.11"/>
-<path d="M 6908.4 1281.2 L 6968.4 1361.2" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6926 1268 L 6986 1348" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6943.6 1254.8 L 7003.6 1334.8" stroke="#374055" stroke-width="1.11"/>
-<path d="M 6991.8 1300.7 L 7002.6 1315.1" stroke="#374055" stroke-width="1.11"/>
-<rect x="6648.5" y="1444" width="9" height="30" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6709.1" y="1398.5" width="9" height="30" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6769.8" y="1353" width="9" height="30" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<path d="M 6653 1447 L 6713.6 1401.5 L 6774.3 1356" fill="none" stroke="#374055" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 6653 1447 L 6713.6 1401.5 L 6774.3 1356" fill="none" stroke="#C88941" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="6646.5" y="1441.5" width="13" height="5" rx="1.7" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6707.1" y="1396" width="13" height="5" rx="1.7" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6767.8" y="1350.5" width="13" height="5" rx="1.7" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6707.3" y="1522.4" width="9" height="30" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6767.9" y="1476.9" width="9" height="30" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6828.6" y="1431.4" width="9" height="30" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<path d="M 6711.8 1525.4 L 6772.4 1479.9 L 6833.1 1434.4" fill="none" stroke="#374055" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 6711.8 1525.4 L 6772.4 1479.9 L 6833.1 1434.4" fill="none" stroke="#C88941" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="6705.3" y="1519.9" width="13" height="5" rx="1.7" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6765.9" y="1474.4" width="13" height="5" rx="1.7" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6826.6" y="1428.9" width="13" height="5" rx="1.7" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<rect x="6940.9" y="1207.2" width="7" height="52" fill="#5B6178" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<circle cx="6944.4" cy="1199.2" r="20" fill="#FFF0C7" fill-opacity="0.45"/>
-<rect x="6931.4" y="1188.2" width="26" height="20" rx="9" fill="#C9C3F2" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<circle cx="6937.4" cy="1198.2" r="2.6" fill="#FFFFFF"/>
-<circle cx="6944.4" cy="1198.2" r="2.6" fill="#FFFFFF"/>
-<circle cx="6951.4" cy="1198.2" r="2.6" fill="#FFFFFF"/>
-<rect x="6996.1" y="1280.8" width="7" height="52" fill="#5B6178" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<circle cx="6999.6" cy="1272.8" r="20" fill="#FFF0C7" fill-opacity="0.45"/>
-<rect x="6986.6" y="1261.8" width="26" height="20" rx="9" fill="#C9C3F2" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<circle cx="6992.6" cy="1271.8" r="2.6" fill="#FFFFFF"/>
-<circle cx="6999.6" cy="1271.8" r="2.6" fill="#FFFFFF"/>
-<circle cx="7006.6" cy="1271.8" r="2.6" fill="#FFFFFF"/>
-<ellipse cx="6944.1" cy="1370.4" rx="9" ry="3.5" fill="#374055" fill-opacity="0.2"/>
-<rect x="6938.1" y="1354.4" width="12" height="16" rx="3" fill="#885931" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
-<ellipse cx="6944.1" cy="1354.4" rx="7.5" ry="3.2" fill="#C88941" stroke="#374055" stroke-width="2.22" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="410" height="336" viewBox="43 -6 410 336" data-home-source="/pixi-art/home-expansion-c/bridges/bridge-ne.svg">
+  <title>Honeywood footbridge, northeast</title>
+  <desc>Hand-drawn solid bridge, 420 by 120 world units. The path rises northeast from the near bank at lower left. A 45-degree ground rotation is projected with 0.62 depth, and a 24-unit vertical crown. Cross-planks remain straight; both rails share one arch.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+    <!-- End sills follow the width of the bridge. -->
+
+
+    <!-- Back rail, drawn behind the deck. -->
+    <g fill="#C9C3F2">
+      <path d="M46 232 L52 232 L52 273 L46 273 Z M108.2 169.8 L114.2 169.8 L114.2 210.8 L108.2 210.8 Z M171.4 114.6 L177.4 114.6 L177.4 155.6 L171.4 155.6 Z M233.6 68.4 L239.6 68.4 L239.6 109.4 L233.6 109.4 Z M295.8 29.2 L301.8 29.2 L301.8 70.2 L295.8 70.2 Z M359 -3 L365 -3 L365 38 L359 38 Z" data-home-path="2"/>
+      <path d="M49 257 Q206 91.5 362 22 L362 26 Q206 95.5 49 261 Z" data-home-path="3"/>
+      <path d="M47 232 Q206 66.5 364 -3 L364 1 Q206 70.5 47 236 Z" data-home-path="4"/>
+    </g>
+    <!-- Constant-width top surface. These are two congruent arch curves. -->
+    <path fill="#6F78D8" d="M49 266 Q206 100.5 362 31 L447 83 L447 92 Q290 161.5 134 327 L49 275 Z" data-home-path="5"/>
+    <path fill="#C9C3F2" d="M49 266 Q206 100.5 362 31 L447 83 Q290 152.5 134 318 Z" data-home-path="6"/>
+    <path fill="none" stroke-width=".85" d="M70.06667 244.6 L155.06667 296.6 M91.13333 223.2 L176.13333 275.2 M111.2 203.8 L196.2 255.8 M132.26667 184.4 L217.26667 236.4 M153.33333 166 L238.33333 218 M174.4 148.6 L259.4 200.6 M195.46667 132.2 L280.46667 184.2 M215.53333 116.8 L300.53333 168.8 M236.6 102.4 L321.6 154.4 M257.66667 88 L342.66667 140 M278.73333 74.6 L363.73333 126.6 M298.8 63.2 L383.8 115.2 M319.86667 50.8 L404.86667 102.8 M340.93333 40.4 L425.93333 92.4" data-home-path="7"/>
+    <path fill="none" stroke-width=".65" d="M93.33333 266.75 L111.33333 277.75 M132 230.25 L146 239.25 M191.66667 188.75 L206.66667 197.75 M240.33333 146.25 L255.33333 155.25 M305 112.75 L320 121.75 M362.66667 76.25 L380.66667 87.25" data-home-path="8"/>
+    <!-- Exposed near side has a shallow timber fascia, not a curved sheet. -->
+    <path fill="#6F78D8" d="M134 318 Q290 152.5 447 83 L447 92 Q290 161.5 134 327 Z" data-home-path="9"/>
+    <path fill="#C9C3F2" d="M134 314 Q290 148.5 447 79 L447 83 Q290 152.5 134 318 Z" data-home-path="10"/>
+    <path fill="#6F78D8" d="M49 266 L134 318 L134 327 L49 275 Z" data-home-path="11"/>
+    <path fill="none" stroke-width=".75" d="M69 278 L69 285 M91 292 L91 299 M112 305 L112 312" data-home-path="12"/>
+    <!-- Near rail is exactly one deck-width from the back rail. -->
+    <g fill="#C9C3F2">
+      <path d="M131 284 L137 284 L137 325 L131 325 Z M193.2 221.8 L199.2 221.8 L199.2 262.8 L193.2 262.8 Z M256.4 166.6 L262.4 166.6 L262.4 207.6 L256.4 207.6 Z M318.6 120.4 L324.6 120.4 L324.6 161.4 L318.6 161.4 Z M380.8 81.2 L386.8 81.2 L386.8 122.2 L380.8 122.2 Z M444 49 L450 49 L450 90 L444 90 Z" data-home-path="13"/>
+      <path d="M134 309 Q290 143.5 447 74 L447 78 Q290 147.5 134 313 Z" data-home-path="14"/>
+      <path d="M132 284 Q290 118.5 449 49 L449 53 Q290 122.5 132 288 Z" data-home-path="15"/>
+    </g>
+    <path fill="none" stroke-width=".65" d="M134 290 L134 302 M196.2 228.8 L196.2 240.8 M259.4 173.6 L259.4 185.6 M321.6 127.4 L321.6 139.4 M383.8 88.2 L383.8 100.2 M447 56 L447 68" data-home-path="16"/>
+    <path fill="none" stroke-width="1.5" d="M134 287 L134 287.4 M196.2 224.8 L196.2 225.2 M259.4 169.6 L259.4 170 M321.6 123.4 L321.6 123.8 M383.8 84.2 L383.8 84.6 M447 52 L447 52.4" data-home-path="17"/>
+  </g>
 </svg>

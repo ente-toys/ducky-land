@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="132.4" height="351" viewBox="53.8 13 132.4 351" data-home-source="/pixi-art/home-expansion-c/bridges/bridge-ns.svg">
+  <title>Honeywood footbridge, north-south</title>
+  <desc>Hand-drawn 420 by 120 world-unit bridge, looking along the deck. Ground depth 0.62, 24-unit crown, mild twelve-unit width convergence. All cross-planks are straight and horizontal. Near bank is at the bottom.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Far and near bank sills. -->
+
+
+    <!-- The arch is in the longitudinal profile, not a bent cross-section. -->
+    <path fill="#6F78D8" d="M66 50 L60 352 L60 361 L66 59 Z M174 50 L180 352 L180 361 L174 59 Z" data-home-path="2"/>
+    <path fill="#C9C3F2" d="M66 50 Q63 177 60 352 L180 352 Q177 177 174 50 Z" data-home-path="3"/>
+    <!-- Fifteen broad boards follow the rise and fall of the crown. -->
+    <path fill="none" stroke-width=".85" d="M65.6 64.2 L174.4 64.2 M65.2 79.2 L174.8 79.2 M64.8 95 L175.2 95 M64.4 111.7 L175.6 111.7 M64 129.4 L176 129.4 M63.6 147.8 L176.4 147.8 M63.2 167.1 L176.8 167.1 M62.8 187.3 L177.2 187.3 M62.4 208.2 L177.6 208.2 M62 230.1 L178 230.1 M61.6 252.8 L178.4 252.8 M61.2 276.4 L178.8 276.4 M60.8 300.7 L179.2 300.7 M60.4 325.9 L179.6 325.9" data-home-path="4"/>
+    <path fill="none" stroke-width=".65" d="M84 85.78518 L104 85.78518 M136 119.44053 L158 119.44053 M78 157.18414 L95 157.18414 M126 196.68288 L147 196.68288 M88 242.56307 L113 242.56307 M146 287.95678 L166 287.95678 M77 337.45088 L99 337.45088" data-home-path="5"/>
+    <!-- Square end beam, with a flat shaded face. -->
+    <path fill="#6F78D8" d="M60 352 L180 352 L180 361 L60 361 Z" data-home-path="6"/>
+    <path fill="#C9C3F2" d="M59 348 L181 348 L181 353 L59 353 Z" data-home-path="7"/>
+    <!-- Paired posts share exactly the same stations and heights. -->
+    <g fill="#C9C3F2">
+      <path d="M62.8 16 L69.2 16 L69.2 57 L62.8 57 Z M61.6 61 L68 61 L68 102 L61.6 102 Z M60.4 113.8 L66.8 113.8 L66.8 154.8 L60.4 154.8 Z M59.2 174.2 L65.6 174.2 L65.6 215.2 L59.2 215.2 Z M58 242.4 L64.4 242.4 L64.4 283.4 L58 283.4 Z M56.8 318 L63.2 318 L63.2 359 L56.8 359 Z" data-home-path="8"/>
+      <path d="M170.8 16 L177.2 16 L177.2 57 L170.8 57 Z M172 61 L178.4 61 L178.4 102 L172 102 Z M173.2 113.8 L179.6 113.8 L179.6 154.8 L173.2 154.8 Z M174.4 174.2 L180.8 174.2 L180.8 215.2 L174.4 215.2 Z M175.6 242.4 L182 242.4 L182 283.4 L175.6 283.4 Z M176.8 318 L183.2 318 L183.2 359 L176.8 359 Z" data-home-path="9"/>
+      <!-- Rail ribbons are narrow solid timber, without widening or bowing sideways. -->
+      <path d="M65 41 Q62 168 59 343 L61 343 Q64 168 67 41 Z M173 41 Q176 168 179 343 L181 343 Q178 168 175 41 Z" data-home-path="10"/>
+      <path d="M64.5 16 Q61.5 143 58.5 318 L61.5 318 Q64.5 143 67.5 16 Z M172.5 16 Q175.5 143 178.5 318 L181.5 318 Q178.5 143 175.5 16 Z" data-home-path="11"/>
+    </g>
+    <path fill="none" stroke-width=".65" d="M60 324 L60 337 M180 324 L180 337 M61.2 248.6 L61.2 260.6 M178.8 248.6 L178.8 260.6 M62.4 180.2 L62.4 192.2 M177.6 180.2 L177.6 192.2" data-home-path="12"/>
+    <path fill="none" stroke-width="1.5" d="M60 321 L60 321.4 M180 321 L180 321.4 M61.2 245.6 L61.2 246 M178.8 245.6 L178.8 246 M62.4 177.2 L62.4 177.6 M177.6 177.2 L177.6 177.6" data-home-path="13"/>
+  </g>
+</svg>

@@ -50,8 +50,8 @@ test('Campfire stair landing joins a 104-unit path and preserves all stage signs
   if(id==='events-stage')assert.deepEqual(after,{...before,...layout.placement,scale:1,shadow:false,wind:false,sortY:1049});
   else {const [x,y]=layout.treeMoves[id]??layout.audienceMoves[id];assert.deepEqual(after,{...before,x,y});}
  }
- assert.deepEqual(world.props,art.props);assert.deepEqual(walk.props,art.props);
- assert.deepEqual(checked.problems,[]);assert.equal(checked.sleepers.length,72);
+ assert.deepEqual(world.props,art.props.filter(p=>!p.lifeGrove));assert.deepEqual(walk.props,art.props.filter(p=>!p.lifeGrove));
+ assert.deepEqual(checked.problems,[]);assert.equal(checked.sleepers.length,100);
 });
 
 test('Campfire server and client block physical stage walls and cabinets, leaving every stair tread and deck open',()=>{
