@@ -1,0 +1,104 @@
+[
+  {
+    "theme": "fair",
+    "file": "whole.png",
+    "view": [
+      -2500,
+      -1800,
+      12000,
+      8200
+    ],
+    "scale": 0.18,
+    "size": [
+      2160,
+      1476
+    ],
+    "props": 428,
+    "sleepers": 90
+  },
+  {
+    "theme": "fair",
+    "file": "close/hill.png",
+    "view": [
+      6900,
+      480,
+      1550,
+      1250
+    ],
+    "scale": 0.8,
+    "size": [
+      1240,
+      1000
+    ],
+    "props": 428,
+    "sleepers": 90
+  },
+  {
+    "theme": "fair",
+    "file": "close/picnic.png",
+    "view": [
+      4450,
+      4140,
+      1450,
+      1060
+    ],
+    "scale": 0.8,
+    "size": [
+      1160,
+      848
+    ],
+    "props": 428,
+    "sleepers": 90
+  },
+  {
+    "theme": "fair",
+    "file": "close/nw.png",
+    "view": [
+      -1450,
+      -200,
+      1700,
+      1700
+    ],
+    "scale": 0.65,
+    "size": [
+      1105,
+      1105
+    ],
+    "props": 428,
+    "sleepers": 90
+  },
+  {
+    "theme": "fair",
+    "file": "close/sw.png",
+    "view": [
+      -1550,
+      3100,
+      1500,
+      1800
+    ],
+    "scale": 0.65,
+    "size": [
+      975,
+      1170
+    ],
+    "props": 428,
+    "sleepers": 90
+  },
+  {
+    "theme": "fair",
+    "file": "close/se.png",
+    "view": [
+      5300,
+      4080,
+      1700,
+      1350
+    ],
+    "scale": 0.65,
+    "size": [
+      1105,
+      878
+    ],
+    "props": 428,
+    "sleepers": 90
+  }
+]

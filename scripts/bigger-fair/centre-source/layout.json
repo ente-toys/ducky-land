@@ -3880,42 +3880,42 @@
     {
       "id": "bench-01",
       "file": "bench.svg",
-      "x": 196,
-      "y": 509,
+      "x": 157,
+      "y": 518,
       "width": 51,
       "height": 32.9241,
       "drawOrder": 1509,
-      "rotation": -10
+      "rotation": 0
     },
     {
       "id": "bench-02",
       "file": "bench.svg",
-      "x": 274,
-      "y": 510,
+      "x": 317,
+      "y": 518,
       "width": 51,
       "height": 32.9241,
       "drawOrder": 1510,
-      "rotation": 32
+      "rotation": 0
     },
     {
       "id": "bench-03",
       "file": "bench.svg",
-      "x": 1260,
-      "y": 510,
+      "x": 1219,
+      "y": 518,
       "width": 51,
       "height": 32.9241,
       "drawOrder": 1510,
-      "rotation": -10
+      "rotation": 0
     },
     {
       "id": "bench-04",
       "file": "bench.svg",
-      "x": 1340,
-      "y": 511,
+      "x": 1379,
+      "y": 518,
       "width": 51,
       "height": 32.9241,
       "drawOrder": 1511,
-      "rotation": 32
+      "rotation": 0
     },
     {
       "id": "banner-post-01",
@@ -3960,8 +3960,8 @@
     {
       "id": "bench-05",
       "file": "bench.svg",
-      "x": 684,
-      "y": 656,
+      "x": 700,
+      "y": 751,
       "width": 74,
       "height": 47.7722,
       "drawOrder": 1656,
@@ -3970,12 +3970,12 @@
     {
       "id": "bench-06",
       "file": "bench.svg",
-      "x": 844,
-      "y": 656,
+      "x": 836,
+      "y": 751,
       "width": 74,
       "height": 47.7722,
       "drawOrder": 1656,
-      "rotation": 15
+      "rotation": 0
     },
     {
       "id": "north-canal-bridge",
@@ -4120,8 +4120,8 @@
     {
       "id": "plaza-bench-west",
       "file": "bench.svg",
-      "x": 636,
-      "y": 802,
+      "x": 610,
+      "y": 818,
       "width": 40,
       "height": 25.82278481012658,
       "drawOrder": 802,
@@ -4130,8 +4130,8 @@
     {
       "id": "plaza-bench-east",
       "file": "bench.svg",
-      "x": 900,
-      "y": 802,
+      "x": 926,
+      "y": 818,
       "width": 40,
       "height": 25.82278481012658,
       "drawOrder": 802,

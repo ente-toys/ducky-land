@@ -1,0 +1,27 @@
+✔ AC-2 preserves retained outer scenery, keeps castle art and resolves 90 approved sleepers (27.775375ms)
+✔ all four Fair communities, home doors and the full coast loop connect to the original plaza (1641.42525ms)
+✔ expanded Fair has GPU-safe ground tiles, ten usable boats and a sea-facing harbour (61.338417ms)
+✔ Fair communities have inhabited homes and theme-specific workplaces outside the preserved heart (63.073875ms)
+✔ Fair inland decks cross actual blocked water and connect to the heart (45.866583ms)
+✔ Fair neighbours have distinct home sizes, roofs and domestic details (1.740292ms)
+✔ Fair centre has open lawns, no flower fields or fence, and six small tree clumps (128.572542ms)
+✔ Fair uses all four approved SVG hamlets with 17 homes, workplaces, shadows and solid bases (594.979209ms)
+✔ Fair hamlet bases have 80 units of grass beside the moat and stand clear of the beach (6.054541ms)
+✔ all 90 approved sleepers resolve and each hamlet uses both authored sleeper points (0.137334ms)
+✔ Fair runtime and server registry resolve 90 residents, retaining the exact original forty (277.764042ms)
+✔ Home hill and modest workers picnic retain the listed props, use upright benches and approved bush art (5.118959ms)
+✔ twelve authored kite stakes and flying envelopes clear water, roofs and route corridors in four pockets (5.008709ms)
+✔ Fair kites use the actual Home animation, attached strings and reduced-motion stillness without sockets (2822.073167ms)
+✔ Fair balloon kiosk has a solid base, duck scale, four lamps and two benches (4.517791ms)
+✔ all Fair residents resolve clear of the kiosk and the new plaza rim and steps (0.145083ms)
+✔ Fair boats sail in from each sea mouth and all the way round the moat (890.592709ms)
+✔ Fair moat bridges carry walkers, boats fit below, and the castle lagoon stays separate (340.185125ms)
+✔ Fair resolves 90 residents and the castle islet has a walking entrance (0.618625ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3543.708417

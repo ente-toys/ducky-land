@@ -1,0 +1,12 @@
+✔ Fair runtime and server registry resolve 90 residents, retaining the exact original forty (252.680291ms)
+✔ Home hill and modest workers picnic retain the listed props, use upright benches and approved bush art (6.255625ms)
+✔ twelve authored kite stakes and flying envelopes clear water, roofs and route corridors in four pockets (5.185292ms)
+✔ Fair kites use the actual Home animation, attached strings and reduced-motion stillness without sockets (4663.563958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5243.406125

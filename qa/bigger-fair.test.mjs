@@ -8,16 +8,17 @@ import {canSail,boardingPoint,landingSpot} from '../src/pixi/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const S='scripts/bigger-fair/',D='rive/web/themes/fair/',w=read(D+'world.json'),walk=read(D+'walk-world.json'),h=read(D+'harbor.json'),a=read('public/pixi-art/themes/fair/art.json'),e=read(S+'expansion.json');
 const checked=checkTheme('fair'),map=makeMap('fair',{world:w,walk,harbor:h,sleepers:checked.sleepers}),nav=map.nav();
-test('AC-2 preserves retained outer scenery, keeps castle art and resolves 40 approved sleepers',()=>{
+test('AC-2 preserves retained outer scenery, keeps castle art and resolves 90 approved sleepers',()=>{
  const old=read(S+'original-art.json'),ow=read(S+'original-world.json');
  for(const p of [...old.props,...e.newProps].filter(p=>!inPoly(p.x,p.y,ow.coast))){
   const current=a.props.find(q=>q.id===p.id);if (Object.hasOwn(read(S+'hamlets.json'),p.community) || read(S+'hamlets/retired-obstacles.json').some(q=>q.id===p.id)) continue;
   assert(current,'outer prop '+p.id);
-  for(const key of ['src','x','y','width','height','scale'])assert.deepEqual(current[key],p[key],p.id+' '+key);
+  const move=read('scripts/fair-life/layout.json').moves[p.id];
+  for(const key of ['src','x','y','width','height','scale'])assert.deepEqual(current[key],move&&key==='x'?move[0]:move&&key==='y'?move[1]:p[key],p.id+' '+key);
  }
  assert.equal(a.props.find(p=>p.id==='fair-0').src,'castle.svg');
  assert.deepEqual(w.paths,read(D+'paths.json'),'sleeper checks use the combined centre and hamlet road graph');
- assert(checked.ready,checked.problems.join('\n'));assert.equal(checked.sleepers.length,40);
+ assert(checked.ready,checked.problems.join('\n'));assert.equal(checked.sleepers.length,90);
  assert.equal(new Set(a.props.map(p=>p.id)).size,a.props.length);
 });
 test('all four Fair communities, home doors and the full coast loop connect to the original plaza',()=>{
@@ -53,7 +54,7 @@ test('Fair communities have inhabited homes and theme-specific workplaces outsid
 test('Fair inland decks cross actual blocked water and connect to the heart',async()=>{
  const {inShape}=await import('../rive/web/island-geometry.mjs');
  const wet=(x,y)=>w.water.some(shape=>inShape(x,y,shape));
- assert.equal(a.decks.length,11);
+ assert.equal(a.decks.length,12);
  for(const b of w.bridges){
   assert(wet(b.x,b.y),b.id+' has no water beneath its deck');
   assert(nav.walkable(b.x,b.y),b.id+' deck is blocked');

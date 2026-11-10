@@ -1321,6 +1321,7 @@ export class PixiIsland {
       }
     }
     this.groundPool?.update(views,Math.min(devicePixelRatio||1,2));
+    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2));
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     const visitors=this.copyVisitors(copies);
     for (const {o} of visitors) o.visible=false;

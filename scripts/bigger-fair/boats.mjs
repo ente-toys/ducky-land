@@ -32,14 +32,10 @@ for(const w of [world,walk]){
  w.riverMouths=[[-2450,3100,-1750,3750],[8650,1400,9600,2050]];
 }
 world.arches=arches;
-// Water is painted into the existing extension tiles, with a rounded sand bank.
-let paint=`<!--fair-rivers--><g id="fair-rivers"><defs><clipPath id="fair-mouth-land"><path d="${pathD(coast)}"/></clipPath></defs>`;
-paint+='<g clip-path="url(#fair-mouth-land)">';
-for(const s of CHANNELS){const d='M'+s.line.map(p=>p.join(' ')).join('L');paint+=`<path d="${d}" fill="none" stroke="#F9E2A1" stroke-width="${s.width+45}" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#75CCD2" stroke-width="${s.width}" stroke-linejoin="round"/>`;}
-paint+='</g>';
-for(const s of mouths){const banks=[s.left,s.right].map(c=>'M'+c[0].join(' ')+'C'+c.slice(1).map(p=>p.join(' ')).join(' ')).join(' ');paint+=`<g clip-path="url(#fair-mouth-land)"><path d="${banks}" fill="none" stroke="#F9E2A1" stroke-width="48"/></g><path d="${pathD(s.poly)}" fill="${art.sea}"/><g clip-path="url(#fair-mouth-land)"><path d="${banks}" fill="none" stroke="#487E67" stroke-width="3"/></g>`;}
-paint+='</g>';
-for(const t of art.ground.tiles){let svg=fs.readFileSync(A+t.src,'utf8');svg=svg.replace(/<!--fair-rivers-->[\s\S]*?(?=<!--fair-centre-->|<\/svg>$)/,'');const needed=(t.x<720&&t.x+t.width>-2450&&t.y<3700&&t.y+t.height>3000)||(t.x<9600&&t.x+t.width>6750&&t.y<2200&&t.y+t.height>1400);const end=svg.indexOf('<!--fair-centre-->');if(needed)svg=end<0?svg.replace(/<\/svg>\s*$/,paint+'</svg>'):svg.slice(0,end)+paint+svg.slice(end);fs.writeFileSync(A+t.src,svg);}
 save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);
 save('scripts/bigger-fair/centre-source/sailing.json',{ring:inner.map((p,i)=>p.map((v,k)=>(v+outer[i][k])/2)),channels:CHANNELS.map(s=>s.line),bridges});
 console.log('Fair: 11 arched crossings, two sea mouths, sailable ring.');
+
+// One union for ring, tributaries and mouths, with the shared path surface.
+const {rebuildFairSurface}=await import('./paths.mjs');
+rebuildFairSurface();

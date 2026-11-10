@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {FIT} from './centre-data.mjs';
 import {INNER_GROVES,OUTER_GROVES,BANK_BUSHES} from './greenery-data.mjs';
+import {PLANT_MODELS} from './plant-kit.mjs';
+import {applyPlants} from './plants-apply.mjs';
 import {geometry,inPoly,inShape} from '../../rive/web/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
@@ -13,8 +15,8 @@ const mine=p=>(p.id??p.name??'').startsWith('fair-green-');
 art.props=art.props.filter(p=>!mine(p));world.props=world.props.filter(p=>!mine(p));
 for(const w of [world,walk])w.obstacles=w.obstacles.filter(p=>!mine(p));
 const base=geometry(walk),models={};
-for(const n of [1,2,3,4])models['t'+n]=art.props.find(p=>p.src===`reuse/tree-${n}.svg`);
-for(const n of [2,3])models['b'+n]=art.props.find(p=>p.src===`reuse/bush-${n}.svg`);
+for(const n of [1,2,3,4,5])models['t'+n]=art.props.find(p=>p.src===`reuse/tree-${n}.svg`)??PLANT_MODELS['tree-'+n];
+for(const n of [1,2,3,4])models['b'+n]=art.props.find(p=>p.src===`reuse/bush-${n}.svg`)??PLANT_MODELS['bush-'+n];
 const P=([x,y])=>[+(FIT.cx+(x-768)*FIT.sx).toFixed(1),+(FIT.cy+(y-520)*FIT.sy).toFixed(1)];
 const added=[],problems=[];
 const segmentDistance=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t);};
@@ -35,8 +37,12 @@ function place(group,list,inner){for(const [i,[model,xx,yy]]of list.entries()){
 for(const [g,p]of Object.entries(INNER_GROVES))place(g,p,true);
 for(const [g,p]of Object.entries(OUTER_GROVES))place(g,p,false);
 for(const [g,p]of Object.entries(BANK_BUSHES))place('bank-'+g,p,true);
+const planting=applyPlants(art,world,walk);problems.push(...planting.problems);
 const nav=geometry(walk),beds=resolveSleepSpots(world,art.props,(x,y)=>nav.walkable(x,y),sleepHalfWidths(),{spots:world.sleepSpots,warn:false});
-if(beds.length!==40)problems.push(...beds.bad.map(p=>JSON.stringify(p)));
+// The life pass adds fifty to the original forty. Validate whichever complete
+// source set is present, including a rerun after the life pass.
+const authoredBeds=Object.values(world.sleepSpots).reduce((n,spots)=>n+spots.length,0);
+if(beds.length!==authoredBeds)problems.push(...beds.bad.map(p=>JSON.stringify(p)));
 assert.equal(problems.length,0,problems.join('\n'));
 save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);save(D+'placements.json',art.props);
 const trees=p=>/\/tree-/.test(p.src),bushes=p=>/\/bush-/.test(p.src);

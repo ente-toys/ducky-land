@@ -1361,28 +1361,12 @@
      1456.5
     ],
     [
-     8486.7,
-     1541.4
+     8330.3,
+     1594.1
     ],
     [
-     8493.7,
-     1622.8
-    ],
-    [
-     8500,
-     1700
-    ],
-    [
-     8504.3,
-     1770
-    ],
-    [
-     8505.4,
-     1832
-    ],
-    [
-     8504.2,
-     1889
+     8627.3,
+     1778.1
     ],
     [
      8501.9,
@@ -8517,7 +8501,7 @@
    "name": "Tree",
    "src": "reuse/tree-3.svg",
    "x": -550,
-   "y": 3550,
+   "y": 3790,
    "width": 300,
    "height": 380,
    "anchor": {
@@ -8530,7 +8514,7 @@
    "footprints": [
     {
      "x": -550,
-     "y": 3541,
+     "y": 3781,
      "rx": 31,
      "ry": 22
     }
@@ -8729,51 +8713,129 @@
    ]
   },
   {
+   "community": "commons",
    "id": "fair-community-180",
-   "name": "bench park",
-   "src": "reuse/street--bench-park.svg",
-   "x": 1430,
-   "y": 300,
+   "name": "Bench",
+   "asset": "bench-wood-back",
+   "src": "/pixi-art/detail/street--bench-wood-back.svg",
+   "x": 1360,
+   "y": -510,
    "width": 818,
-   "height": 493,
+   "height": 463,
+   "scale": 0.18,
    "anchor": {
     "x": 0.5,
-    "y": 0.9757
+    "y": 0.9740820734341252
    },
-   "scale": 0.25,
-   "flip": false,
-   "community": "commons",
+   "resolution": 0.9,
+   "seat": true,
+   "wind": false,
+   "shadow": true,
+   "shadowSize": [
+    53,
+    8
+   ],
+   "shadowOffset": [
+    -3.18,
+    -0.8
+   ],
+   "look": "back",
+   "footprint": {
+    "name": "fair-community-180",
+    "x": 1360,
+    "y": -520,
+    "rx": 70,
+    "ry": 24
+   },
    "footprints": [
     {
-     "x": 1430,
-     "y": 271.37,
-     "rx": 85.89,
-     "ry": 34.765
+     "name": "fair-community-180",
+     "x": 1360,
+     "y": -520,
+     "rx": 70,
+     "ry": 24
     }
+   ],
+   "pavingFeet": [
+    [
+     1308.07,
+     -510
+    ],
+    [
+     1411.75,
+     -510
+    ],
+    [
+     1308.34,
+     -528.18
+    ],
+    [
+     1410.58,
+     -528.18
+    ]
    ]
   },
   {
+   "community": "commons",
    "id": "fair-community-181",
-   "name": "bench park",
-   "src": "reuse/street--bench-park.svg",
-   "x": -730,
-   "y": 4090,
+   "name": "Bench",
+   "asset": "bench-wood-right",
+   "src": "/pixi-art/detail/street--bench-wood-right.svg",
+   "x": -1530,
+   "y": 4300,
    "width": 818,
-   "height": 493,
+   "height": 463,
+   "scale": 0.28,
    "anchor": {
     "x": 0.5,
-    "y": 0.9757
+    "y": 0.9740820734341252
    },
-   "scale": 0.25,
-   "flip": false,
-   "community": "commons",
+   "resolution": 1.4,
+   "seat": true,
+   "wind": false,
+   "shadow": true,
+   "shadowSize": [
+    30,
+    9
+   ],
+   "shadowOffset": [
+    -1.8,
+    -0.9
+   ],
+   "look": "right",
+   "footprint": {
+    "name": "fair-community-181",
+    "x": -1530,
+    "y": 4270,
+    "rx": 30,
+    "ry": 62
+   },
    "footprints": [
     {
-     "x": -730,
-     "y": 4061.37,
-     "rx": 85.89,
-     "ry": 34.765
+     "name": "fair-community-181",
+     "x": -1530,
+     "y": 4270,
+     "rx": 30,
+     "ry": 62
     }
+   ],
+   "pavingFeet": [
+    [
+     -1502.28,
+     4300
+    ],
+    [
+     -1554.36,
+     4300
+    ],
+    [
+     -1552.96,
+     4217.12
+    ],
+    [
+     -1552.96,
+     4284.04
+    ]
    ]
   },
   {
@@ -8789,7 +8851,7 @@
     "x": 0.5,
     "y": 1
    },
-   "shadow": false,
+   "shadow": true,
    "footprint": {
     "x": -540,
     "y": 3993,
@@ -8804,6 +8866,14 @@
      "rx": 90,
      "ry": 27
     }
+   ],
+   "shadowSize": [
+    65,
+    11.935
+   ],
+   "shadowOffset": [
+    0,
+    -14.756
    ]
   },
   {
@@ -8819,7 +8889,7 @@
     "x": 0.5,
     "y": 1
    },
-   "shadow": false,
+   "shadow": true,
    "footprint": {
     "x": 6260,
     "y": 4793,
@@ -8834,6 +8904,14 @@
      "rx": 90,
      "ry": 27
     }
+   ],
+   "shadowSize": [
+    65,
+    11.935
+   ],
+   "shadowOffset": [
+    0,
+    -14.756
    ]
   },
   {
@@ -8849,7 +8927,7 @@
     "x": 0.5,
     "y": 1
    },
-   "shadow": false,
+   "shadow": true,
    "footprint": {
     "x": 4500,
     "y": 4758,
@@ -8864,6 +8942,14 @@
      "rx": 77,
      "ry": 22
     }
+   ],
+   "shadowSize": [
+    70.3,
+    10.725
+   ],
+   "shadowOffset": [
+    -8.55,
+    -21.79
    ]
   },
   {
@@ -9086,8 +9172,8 @@
    "id": "fair-community-214",
    "name": "Tree",
    "src": "reuse/tree-3.svg",
-   "x": -930,
-   "y": 3630,
+   "x": -1000,
+   "y": 3800,
    "width": 300,
    "height": 380,
    "anchor": {
@@ -9099,8 +9185,8 @@
    "community": "commons",
    "footprints": [
     {
-     "x": -930,
-     "y": 3621,
+     "x": -1000,
+     "y": 3791,
      "rx": 31,
      "ry": 22
     }
@@ -10019,36 +10105,68 @@
    "wind": true
   },
   {
-   "id": "hamlet-bobbinbell-bench-honeywood-26",
-   "name": "bench-honeywood",
-   "src": "hamlets/bobbinbell/bench-honeywood.svg",
-   "x": -1146.4,
-   "y": 2002.4,
-   "width": 187,
-   "height": 146.2,
-   "scale": 1,
-   "anchor": {
-    "x": 0.5,
-    "y": 1
-   },
-   "resolution": 1.5,
    "community": "bobbinbell",
    "order": 788,
+   "id": "hamlet-bobbinbell-bench-honeywood-26",
+   "name": "Bench",
+   "asset": "bench-wood-front",
+   "src": "/pixi-art/detail/street--bench-wood.svg",
+   "x": -1046.4,
+   "y": 2002.4,
+   "width": 818,
+   "height": 463,
+   "scale": 0.18,
+   "anchor": {
+    "x": 0.5,
+    "y": 0.9740820734341252
+   },
+   "resolution": 0.9,
+   "seat": true,
+   "wind": false,
+   "shadow": true,
+   "shadowSize": [
+    53,
+    8
+   ],
+   "shadowOffset": [
+    -3.18,
+    -0.8
+   ],
+   "look": "front",
+   "footprint": {
+    "name": "hamlet-bobbinbell-bench-honeywood-26",
+    "x": -1046.4,
+    "y": 1992.4,
+    "rx": 70,
+    "ry": 24
+   },
    "footprints": [
     {
-     "x": -1146.4,
-     "y": 1977.6,
-     "rx": 56.1,
-     "ry": 16.8
+     "name": "hamlet-bobbinbell-bench-honeywood-26",
+     "x": -1046.4,
+     "y": 1992.4,
+     "rx": 70,
+     "ry": 24
     }
    ],
-   "z": 2002.4,
-   "footprint": {
-    "x": -1146.4,
-    "y": 1977.6,
-    "rx": 56.1,
-    "ry": 16.8
-   }
+   "pavingFeet": [
+    [
+     -1098.33,
+     2002.4
+    ],
+    [
+     -994.65,
+     2002.4
+    ],
+    [
+     -1095.9,
+     1962.44
+    ],
+    [
+     -998.16,
+     1962.44
+    ]
+   ]
   },
   {
    "id": "hamlet-bobbinbell-house-blue-bow-27",
@@ -11324,7 +11442,16 @@
     "y": 47.2,
     "rx": 25.9,
     "ry": 7.8
-   }
+   },
+   "shadow": true,
+   "shadowSize": [
+    19.872,
+    6.48
+   ],
+   "shadowOffset": [
+    0,
+    -8.064
+   ]
   },
   {
    "id": "hamlet-cloudpop-lamp-east-entry",
@@ -11356,7 +11483,16 @@
     "y": 47.2,
     "rx": 25.9,
     "ry": 7.8
-   }
+   },
+   "shadow": true,
+   "shadowSize": [
+    19.872,
+    6.48
+   ],
+   "shadowOffset": [
+    0,
+    -8.064
+   ]
   },
   {
    "id": "hamlet-cloudpop-flowerbox-west-entry",
@@ -14546,7 +14682,16 @@
     "y": 3009.3,
     "rx": 27.5,
     "ry": 8.3
-   }
+   },
+   "shadow": true,
+   "shadowSize": [
+    21.114,
+    6.885
+   ],
+   "shadowOffset": [
+    0,
+    -6.712
+   ]
   },
   {
    "id": "hamlet-waddleshow-coral-stall",

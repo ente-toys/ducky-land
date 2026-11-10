@@ -1,3 +1,4 @@
+import {rebuildFairSurface} from './paths.mjs';
 // Authored Waddlewish extension: fixed scenes, not a prop scatter generator.
 import fs from 'node:fs';
 import {render} from './render-core.mjs';
@@ -106,26 +107,10 @@ export function composeProps(){newProps.length=0;
  return newProps;
 }
 // Repeating tiny ground marks provide texture only. All scenery above is hand placed.
-export function ground(){let g=`<defs><pattern id="grain" width="177" height="139" patternUnits="userSpaceOnUse"><path d="M17 29l4 -7 5 8 M105 101l4 -8 5 7 M149 49l3 -6 5 7" fill="none" stroke="#729F39" stroke-width="2.6" opacity=".5"/><ellipse cx="67" cy="51" rx="10" ry="3" fill="#C3DE65" opacity=".7"/><ellipse cx="29" cy="109" rx="3" ry="2" fill="#D9E581"/><circle cx="130" cy="22" r="2" fill="#83B13E"/></pattern><clipPath id="grown-land"><path d="${d(coast)}Z"/></clipPath></defs>`;
- g+=`<path d="${d(coast)}Z" fill="#A6E3DE" stroke="#A6E3DE" stroke-width="120" opacity=".6"/><path d="${d(coast)}Z" fill="${cream}" stroke="#E4C27D" stroke-width="6"/>`;
- const inset=coast.map(([x,y])=>[3600+(x-3600)*.978,2400+(y-2400)*.97]);
- g+=`<path d="${d(inset)}Z" fill="#9CC63E" stroke="#7CA445" stroke-width="5"/><path d="${d(inset)}Z" fill="url(#grain)"/>`;
- // Broad organic shade patches under the groups and open textured meadows.
- const patches=[[-700,-70,850,380],[3430,-640,1220,480],[7540,-100,990,490],[8100,2400,850,590],[7420,4680,1100,560],[3600,5250,1300,610],[-100,4870,1100,570],[-1220,2390,800,590],[920,-430,780,250],[5650,-440,760,270],[7600,1200,420,720],[7750,3500,500,620],[5600,4900,850,340],[1660,4800,900,340],[-660,3830,520,660],[-680,1200,460,650]];
- for(const [x,y,rx,ry]of patches)g+=`<path d="M${x-rx} ${y} C${x-rx*.9} ${y-ry} ${x+rx*.3} ${y-ry*1.15} ${x+rx} ${y-ry*.15} C${x+rx*1.2} ${y+ry*.8} ${x-rx*.7} ${y+ry} ${x-rx} ${y}Z" fill="#90BD38" opacity=".55"/>`;
- for(const p of paths){const s=d(p.line)+(p===paths[0]?'Z':'');g+=`<path d="${s}" fill="none" stroke="#7FA642" stroke-width="${p.w+36}" opacity=".45"/><path d="${s}" fill="none" stroke="#DCC97D" stroke-width="${p.w+13}"/><path d="${s}" fill="none" stroke="${cream}" stroke-width="${p.w}"/>`;}
- for(const p of places){const [rx,ry]=p.floor;g+=`<ellipse cx="${p.x}" cy="${p.y+160}" rx="${rx}" ry="${ry}" fill="#DDC67A"/><ellipse cx="${p.x}" cy="${p.y+160}" rx="${rx-9}" ry="${ry-9}" fill="${cream}"/>`;
- if(p.kind==='paved'){g+=`<ellipse cx="${p.x}" cy="${p.y+160}" rx="${rx*.82}" ry="${ry*.74}" fill="#F8DAB0" stroke="#D8B578" stroke-width="4"/><ellipse cx="${p.x}" cy="${p.y+160}" rx="${rx*.66}" ry="${ry*.58}" fill="none" stroke="${pink}" stroke-width="20"/>`;
- for(let i=-4;i<=4;i++)g+=`<path d="M${p.x+i*rx*.16} ${p.y+160-ry*.5} v${ry}" stroke="#DEBC82" stroke-width="2" opacity=".4"/>`;
- }else g+=`<ellipse cx="${p.x}" cy="${p.y+160}" rx="${rx*.78}" ry="${ry*.71}" fill="#B8D65D"/><ellipse cx="${p.x}" cy="${p.y+160}" rx="${rx*.78}" ry="${ry*.71}" fill="url(#grain)"/>`;
- }
- return g;
-}
-export function buildTiles(){const tiles=[],xx=[-2500,-1250,0,1450,2900,4350,5800,7250,8375,9500],yy=[-1800,-900,0,1213,2426,3639,4850,5625,6400];const ext=ground();
- for(let r=0;r<yy.length-1;r++)for(let c=0;c<xx.length-1;c++){const x=xx[c],y=yy[r],w=xx[c+1]-x,h=yy[r+1]-y;let inside='';
- const t=original.ground.tiles.find(t=>t.x===x&&t.y===y);
- if(t){let s=fs.readFileSync(A+t.src,'utf8');s=s.replace(/<path[^>]*fill="#A6E3DE"[^>]*\/>/g,'').replace(/<path[^>]*stroke="#C9F1EE"[^>]*stroke-width="46"[^>]*\/>/g,'').replace(/<ellipse[^>]*fill="#A6E3DE"[^>]*\/>/g,'');inside=s.replace('<svg ',`<svg x="${x}" y="${y}" `);}
- const src=`bigger/ground-${r}-${c}.svg`;fs.writeFileSync(A+src,`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}" stroke-linecap="round" stroke-linejoin="round"><title>Waddlewish expanded ground ${r} ${c}</title>${ext}${inside}</svg>`);tiles.push({src,x,y,width:w,height:h});}
+export function buildTiles(){
+ const tiles=[],xx=[-2500,-1250,0,1450,2900,4350,5800,7250,8375,9500],yy=[-1800,-900,0,1213,2426,3639,4850,5625,6400];
+ for(let r=0;r<yy.length-1;r++)for(let c=0;c<xx.length-1;c++)tiles.push({src:`bigger/ground-${r}-${c}.svg`,x:xx[c],y:yy[r],width:xx[c+1]-xx[c],height:yy[r+1]-yy[r]});
+ rebuildFairSurface({tiles,routeWrites:false});
  return tiles;
 }
 export async function design(){assets();composeProps();const art={...original,...bounds,ground:{tiles:buildTiles()},props:[...original.props,...newProps]};write('scripts/bigger-fair/design.json',{...bounds,coast,places,paths,newProps});write('scripts/bigger-fair/proposed-art.json',art);

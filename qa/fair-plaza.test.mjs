@@ -8,7 +8,8 @@ const P=([x,y])=>[3570+(x-768)*4.3,2220+(y-520)*3.8];
 test('Fair balloon kiosk has a solid base, duck scale, four lamps and two benches',()=>{
  const kiosk=art.props.find(p=>p.id==='ac2-balloon-kiosk');
  assert(Math.abs(kiosk.height*kiosk.scale-481.6)<.01);
- assert.equal(kiosk.shadow,false);
+ assert.equal(kiosk.shadow,true);
+ assert(kiosk.shadowSize[0]>0&&kiosk.shadowSize[0]<kiosk.width*kiosk.scale*.3);
  assert(!nav.walkable(kiosk.x,kiosk.y-20));
  assert.equal(art.props.filter(p=>p.id.startsWith('ac2-plaza-lamp-')).length,4);
  assert.equal(art.props.filter(p=>p.id.startsWith('ac2-plaza-bench-')).length,2);
@@ -18,8 +19,8 @@ test('Fair balloon kiosk has a solid base, duck scale, four lamps and two benche
   assert(nav.route(map.spawn.x,map.spawn.y,...p).length||nav.clearLine([map.spawn.x,map.spawn.y],p),'unreachable '+q);
  }
 });
-test('all Fair residents resolve clear of the kiosk and the new plaza rim and steps',()=>{
- assert.equal(map.sleepers.length,40);
+test('all Fair residents retain clear space around the flush balloon court',()=>{
+ assert.equal(map.sleepers.length,90);
  for(const s of map.sleepers){
   const x=(s.x-3570)/4.3+768,y=(s.y-2220)/3.8+520;
   const r=Math.hypot((x-768)/179,(y-818)/87);

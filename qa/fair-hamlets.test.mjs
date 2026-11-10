@@ -18,7 +18,7 @@ test('Fair uses all four approved SVG hamlets with 17 homes, workplaces, shadows
   const ps=placed.filter(p=>p.community===h);assert(ps.some(p=>p.role==='workplace'));
   assert(ps.some(p=>p.role==='home'));
   for(const p of ps){
-   const svg=fs.readFileSync(A+p.src,'utf8');assert(!/<image|gradient/i.test(svg),p.id);
+   const svg=fs.readFileSync(p.src.startsWith('/pixi-art/')?'public'+p.src:A+p.src,'utf8');assert(!/<image|gradient/i.test(svg),p.id);
    assert(objects(h).some(o=>p.id===`hamlet-${h}-${o.id}`),'object absent from approved layout');
    if(p.role){assert(p.shadowSize?.[0]>0,p.id+' lacks base shadow');assert(p.footprints.length,p.id+' lacks solid base');assert(nav.walkable(...p.door),p.id+' door blocked');assert(nav.route(map.spawn.x,map.spawn.y,...p.door).length||nav.clearLine([map.spawn.x,map.spawn.y],p.door),p.id+' unreachable');}
    for(const f of p.footprints??[]){assert(walk.obstacles.some(w=>w.name===p.id&&w.x===f.x&&w.y===f.y));assert(!nav.walkable(f.x,f.y),p.id+' nonsolid');}
@@ -30,7 +30,7 @@ test('Fair hamlet bases have 80 units of grass beside the moat and stand clear o
   for(const [x,y]of pts){assert(inShape(x,y,{poly:world.coast},-240),p.id+' beach');assert(!inShape(x,y,{poly:outer},80),p.id+' moat bank');for(const s of streams)assert(!inShape(x,y,{poly:s.poly},80),p.id+' stream bank');}
  }
 });
-test('all 40 approved sleepers resolve and each hamlet uses both authored sleeper points',()=>{
- assert(checked.ready,checked.problems.join('\n'));assert.equal(checked.sleepers.length,40);
+test('all 90 approved sleepers resolve and each hamlet uses both authored sleeper points',()=>{
+ assert(checked.ready,checked.problems.join('\n'));assert.equal(checked.sleepers.length,90);
  for(const [h,c]of Object.entries(config)){assert.equal(c.sleepers.length,2);assert.equal(layouts[h].sleepers.length,2);for(const s of c.sleepers){const spot=world.sleepSpots[s.pose][s.index];assert(checked.sleepers.some(p=>p.pose===s.pose&&Math.abs(p.x-spot[0])<1&&Math.abs(p.y-spot[1])<1));}}
 });

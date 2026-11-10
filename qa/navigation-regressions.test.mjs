@@ -18,7 +18,7 @@ function reference(world,x,y) {
     const islet=world.islets.some(([cx,cy,rx,ry])=>((x-cx)/(rx-20))**2+((y-cy)/(ry-20))**2<1);
     if (!deck&&!islet) return false;
   }
-  const bridge=world.bridges.some(b=>Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
+  const bridge=world.bridges.some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
   return (bridge||!world.water.some(o=>inShape(x,y,o,20)))&&!world.obstacles.some(o=>inShape(x,y,o,16));
 }
 
@@ -28,6 +28,7 @@ test('accelerated walking geometry matches unindexed collision checks on all thi
     const world=map.walk,{walkable}=geometry(world),origin=map.origin;
     const points=Array.from({length:800},()=>[origin.x+rnd()*map.width,origin.y+rnd()*map.height]);
     for (const b of world.bridges) {
+      for(const p of b.poly??[])for(const delta of [-.001,0,.001])points.push(p.map(v=>v+delta));
       for (const dx of [0,-b.w/2+8,b.w/2-8]) for (const dy of [0,-b.h/2+12,b.h/2-12]) {
         for (const delta of [-.001,0,.001]) points.push([b.x+dx+delta,b.y+dy+delta]);
       }

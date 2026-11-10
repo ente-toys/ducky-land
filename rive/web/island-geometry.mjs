@@ -51,7 +51,7 @@ export function geometry(world){
   // Community maps can have hundreds of crossing rectangles. Index their exact
   // walking bounds too, so every route sample only checks nearby bridges.
   bridgeNear??=shapeIndex(world.bridges.map(b=>({...b,rx:Math.max(0,b.w/2-8),ry:Math.max(0,b.h/2-12)})),0);
-  const bridge=bridgeNear(x,y).some(b=>Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
+  const bridge=bridgeNear(x,y).some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
   waterNear??=shapeIndex(world.water,20);solidNear??=shapeIndex(world.obstacles,16);
   return (bridge||!waterNear(x,y).some(o=>inShape(x,y,o,20)))&&!solidNear(x,y).some(o=>inShape(x,y,o,16));
  }

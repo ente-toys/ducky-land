@@ -1,41 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="322" height="525.097" viewBox="359 498.147 322 525.097"><g transform="matrix(1.3417 0 0 1.5444 359 498.1467)">
-  <title>Honeywood arched footbridge, north-south</title>
-  <desc>Gentle high overhead view. Original landing sills and 120-unit walking corridor preserved. The bowed deck swells at the raised crown, with closely spaced sunlit crest planks, curved paired rails and shaded arch cheeks. Transparent background.</desc>
-  <!-- A small, hard-edged cast shadow lies on the water under the crown. -->
-  <path fill="#39472d" opacity=".22" d="M55 148 Q120 130 185 148 L197 208 Q120 227 44 208 Z"/>
-  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
-    <!-- Unchanged bank sills, including their exact original landing coordinates. -->
-    <path fill="#e4c567" d="M59 47 L67 42 L173 42 L181 47 L181 64 L59 64 Z M51 305 L59 300 L181 300 L189 305 L189 325 L51 325 Z"/>
-    <path fill="#c88941" d="M59 59 L181 59 L181 66 L59 66 Z M51 318 L189 318 L189 327 L51 327 Z"/>
-    <!-- Arch cheeks: deep at the crown, tapering onto both banks. -->
-    <path fill="#885931" d="M66 50 C64 81 54 110 54 149 C54 197 59 262 60 310 L60 319 C53 264 45 212 46 170 C46 120 60 78 66 50 Z"/>
-    <path fill="#885931" d="M174 50 C176 81 186 110 186 149 C186 197 181 262 180 310 L180 319 C187 264 195 212 194 170 C194 120 180 78 174 50 Z"/>
-    <path fill="none" stroke="#c88941" stroke-width="2.1" d="M59 82 C47 132 47 178 52 212 M181 82 C193 132 193 178 188 212"/>
-    <!-- The original end-to-end footprint, with the elevated middle presented forward. -->
-    <path fill="#c88941" d="M66 50 L174 50 C174 86 180 112 180 149 C180 197 180 262 180 310 L60 310 C60 262 60 197 60 149 C60 112 66 86 66 50 Z"/>
-    <!-- Flat light bands describe the convex crown, without gradients. -->
-    <path fill="#d79a4c" stroke="none" d="M62 99 Q120 111 178 99 L180 119 Q120 133 60 119 Z"/>
-    <path fill="#e4b35e" stroke="none" d="M60 119 Q120 133 180 119 L180 151 Q120 170 60 151 Z"/>
-    <path fill="#d99e4e" stroke="none" d="M60 151 Q120 170 180 151 L180 176 Q120 197 60 176 Z"/>
-    <path fill="#bc7c38" stroke="none" d="M60 250 Q120 267 180 250 L180 310 L60 310 Z"/>
-    <!-- Board spacing compresses over the crown and opens on the near descent. -->
-    <path fill="none" stroke-width=".9" d="M65.5 62 Q120 64 174.5 62 M64.5 77 Q120 82 175.5 77 M63 90 Q120 99 177 90 M62 101 Q120 113 178 101 M61 111 Q120 125 179 111 M60 120 Q120 136 180 120 M60 129 Q120 146 180 129 M60 139 Q120 157 180 139 M60 151 Q120 170 180 151 M60 165 Q120 186 180 165 M60 181 Q120 203 180 181 M60 200 Q120 223 180 200 M60 223 Q120 244 180 223 M60 249 Q120 268 180 249 M60 278 Q120 290 180 278"/>
-    <path fill="none" stroke-width=".65" d="M83 72 L104 73 M139 94 L158 92 M77 117 L91 120 M130 142 L149 141 M83 174 L100 177 M137 208 L160 204 M77 240 L99 244 M132 277 L155 274 M78 301 L103 302"/>
-    <path fill="#885931" d="M60 310 L180 310 L180 319 L60 319 Z"/>
-    <path fill="#c88941" d="M59 306 L181 306 L181 311 L59 311 Z"/>
-    <!-- Six pairs of posts follow the same lifted longitudinal profile. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="484" height="244" viewBox="215.1 897.05 484 244"><g transform="translate(217.1 899.05) scale(1 1)">
+  <title>Honeywood footbridge, east-west</title>
+  <desc>Hand-drawn 420 by 120 world-unit bridge. High three-quarter camera, ground depth 0.62, 24-unit crown. Near bank is at the bottom. Transparent background.</desc>
+  <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"><!-- Far handrail: six upright posts, two curved horizontal rails. -->
     <g fill="#c88941">
-      <path d="M62.8 16 H69.2 V57 H62.8 Z M55 59 H61 V103 H55 Z M50 100 H56 V145 H50 Z M51 143 H57 V189 H51 Z M54 203 H60 V249 H54 Z M56.8 276 H63.2 V317 H56.8 Z"/>
-      <path d="M170.8 16 H177.2 V57 H170.8 Z M179 59 H185 V103 H179 Z M184 100 H190 V145 H184 Z M183 143 H189 V189 H183 Z M180 203 H186 V249 H180 Z M176.8 276 H183.2 V317 H176.8 Z"/>
+      <path d="M27 98 L33 98 L33 140 L27 140 Z M111 83 L117 83 L117 125 L111 125 Z M195 75 L201 75 L201 117 L195 117 Z M279 75 L285 75 L285 117 L279 117 Z M363 83 L369 83 L369 125 L363 125 Z M447 98 L453 98 L453 140 L447 140 Z"/>
+      <path d="M30 125 Q240 77 450 125 L450 129 Q240 81 30 129 Z"/>
+      <path d="M28 98 Q240 50 452 98 L452 102 Q240 54 28 102 Z"/>
     </g>
-    <!-- Continuous curved rail ribbons, bowed strongly at the lifted crown. -->
-    <path fill="#c88941" d="M64.5 16 C59 50 49 79 49.5 112 C49.5 157 54.5 219 58.5 276 L62 276 C58 219 53 157 53 112 C52.5 79 62.5 50 68 16 Z"/>
-    <path fill="#c88941" d="M172 16 C177.5 50 187.5 79 187 112 C187 157 182 219 178 276 L181.5 276 C185.5 219 190.5 157 190.5 112 C191 79 181 50 175.5 16 Z"/>
-    <path fill="#c88941" d="M64 41 C58.5 75 49 104 50 137 C50 182 55 244 59 301 L62 301 C58 244 53 182 53 137 C52 104 61.5 75 67 41 Z"/>
-    <path fill="#c88941" d="M173 41 C178.5 75 188 104 187 137 C187 182 182 244 178 301 L181 301 C185 244 190 182 190 137 C191 104 181.5 75 176 41 Z"/>
-    <!-- Thin sun-facing rail edges and restrained end-grain marks. -->
-    <path fill="none" stroke="#e4c567" stroke-width="1" d="M66 18 C60.5 52 50.5 81 51 112 C51 157 56 219 60 274 M174 18 C179.5 52 189.5 81 189 112 C189 157 184 219 180 274"/>
-    <path fill="none" stroke-width=".65" d="M59.5 284 V297 M180.5 284 V297 M56.5 211 V224 M183.5 211 V224 M53.5 151 V164 M186.5 151 V164"/>
-    <path fill="none" stroke-width="1.5" d="M59.5 280 V280.4 M180.5 280 V280.4 M56.5 207 V207.4 M183.5 207 V207.4"/>
+    <!-- The two deck edges have the same arch and stay 74.4 units apart. -->
+    <path fill="#885931" d="M30 132 Q240 84 450 132 L450 214 Q240 166 30 214 Z"/>
+    <path fill="#c88941" d="M30 132 Q240 84 450 132 L450 206.4 Q240 158.4 30 206.4 Z"/>
+    <!-- Transverse boards. The crown belongs to the deck, never to its width. -->
+    <path fill="none" stroke-width=".85" d="M58 126 L58 200.4 M86 120.9 L86 195.3 M114 116.6 L114 191 M142 113.2 L142 187.6 M170 110.7 L170 185.1 M198 109 L198 183.4 M226 108.1 L226 182.5 M254 108.1 L254 182.5 M282 109 L282 183.4 M310 110.7 L310 185.1 M338 113.2 L338 187.6 M366 116.6 L366 191 M394 120.9 L394 195.3 M422 126 L422 200.4"/>
+    <!-- A few short, quiet grain marks, just as sparse as the pond bridge. -->
+    <path fill="none" stroke-width=".65" d="M71 145 L71 162 M126 151 L126 165 M212 127 L212 140 M266 153 L266 168 M353 135 L353 148 M407 159 L407 176"/>
+    <!-- Visible near fascia and its narrow upper lip. -->
+    <path fill="#885931" d="M30 206.4 Q240 158.4 450 206.4 L450 214.4 Q240 166.4 30 214.4 Z"/>
+    <path fill="#c88941" d="M30 202.4 Q240 154.4 450 202.4 L450 206.4 Q240 158.4 30 206.4 Z"/>
+    <g fill="#c88941">
+      <path d="M27 172.4 L33 172.4 L33 214.4 L27 214.4 Z M111 157 L117 157 L117 199 L111 199 Z M195 149.4 L201 149.4 L201 191.4 L195 191.4 Z M279 149.4 L285 149.4 L285 191.4 L279 191.4 Z M363 157 L369 157 L369 199 L363 199 Z M447 172.4 L453 172.4 L453 214.4 L447 214.4 Z"/>
+      <path d="M30 199.4 Q240 151.4 450 199.4 L450 203.4 Q240 155.4 30 203.4 Z"/>
+      <path d="M28 172.4 Q240 124.4 452 172.4 L452 176.4 Q240 128.4 28 176.4 Z"/>
+    </g>
+    <!-- End-grain lines and modest fixing pins. -->
+    <path fill="none" stroke-width=".65" d="M30 178 L30 191 M114 163 L114 175 M198 155 L198 167 M282 155 L282 167 M366 163 L366 175 M450 178 L450 191"/>
+    <path fill="none" stroke-width="1.5" d="M30 175 L30 175.4 M114 160 L114 160.4 M198 152 L198 152.4 M282 152 L282 152.4 M366 160 L366 160.4 M450 175 L450 175.4"/>
   </g>
 </g></svg>

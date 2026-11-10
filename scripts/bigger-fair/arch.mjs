@@ -1,30 +1,25 @@
-import {readFileSync,existsSync} from 'node:fs';
-const A='public/pixi-art/themes/fair/', BRIDGE_ART='public/pixi-art/home-expansion-c/bridges',DEPTH=.62;
-const r3=v=>Math.round(v*1000)/1000;
-const BRIDGE_SILLS = {ns: [[120, 312], [120, 53]], ew: [[32, 168], [448, 168]], ne: [[90, 296], [395, 104]], nw: [[395, 296], [85, 104]]};
-const PLANK = {ne: [1, DEPTH], nw: [1, -DEPTH]};
-export function archBridge({a, b, w}) {
-  const [near, far] = a[1] >= b[1] ? [a, b] : [b, a], X = far[0] - near[0], Y = far[1] - near[1];
-  const dir = Math.abs(Y) < Math.abs(X) * .25 ? 'ew' : Math.abs(X) < Math.abs(Y) * .25 ? 'ns' : X > 0 ? 'ne' : 'nw';
-  // boss 8 Nov: Sunbob's own redraw of a direction (bridges/bridge-ns.svg, GPT's arched north-south bridge) wins over Home's
-  const own = `${A}ac2/bridge-${dir}.svg`, src = readFileSync(existsSync(own) ? own : `${BRIDGE_ART}/bridge-${dir}.svg`, 'utf8'), [W, H] = src.match(/viewBox="0 0 (\d+) (\d+)"/).slice(1).map(Number);
-  let [n0, f0] = BRIDGE_SILLS[dir];
-  if (dir === 'ew' && X < 0) [n0, f0] = [f0, n0];
-  const As = [f0[0] - n0[0], f0[1] - n0[1]];
-  let sx, c, d;
-  // Sunbob: a long north-south span (the old south-west deck, 460) keeps a walk-wide deck instead of growing as wide as it is long
-  if (dir === 'ns') {d = Math.abs(Y) / Math.abs(As[1]); sx = Math.min(d, w * 1.15 / 120); c = 0;}
-  else if (dir === 'ew') {sx = X / As[0]; d = 1; c = Y / As[0];}
-  else {
-    sx = X / As[0];
-    const g = [X, Y / DEPTH], q = [g[1], -g[0]].map(v => v * Math.sign(g[1] || 1)), qs = [q[0], q[1] * DEPTH], p = PLANK[dir];
-    const lam = sx * p[0] / qs[0], r1v = lam * qs[1], det = p[0] * As[1] - p[1] * As[0];
-    c = (r1v * As[1] - p[1] * Y) / det; d = (p[0] * Y - As[0] * r1v) / det;
-  }
-  // the ns sill sits at x 120: keep it centred on the crossing when the deck is narrowed
-  const e = near[0] - sx * n0[0], f = near[1] - c * n0[0] - d * n0[1];
-  const T = ([x, y]) => [sx * x + e, c * x + d * y + f], cs = [[0, 0], [W, 0], [0, H], [W, H]].map(T);
-  const xs = cs.map(q => q[0]), ys = cs.map(q => q[1]), box = [Math.min(...xs), Math.min(...ys), Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)];
-  const inner = src.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
-  return {box, dir, crown: Math.round(24 * d), svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${r3(box[2])}" height="${r3(box[3])}" viewBox="${box.map(r3).join(' ')}"><g transform="matrix(${[sx, c, 0, d, e, f].map(v => Math.round(v * 1e4) / 1e4).join(' ')})">${inner}</g></svg>`};
+import {readFileSync} from 'node:fs';
+const ROOT='public/pixi-art/home-expansion-c/bridges/';
+const fmt=v=>+v.toFixed(4);
+// Exact deck surface centres after removing Home's raised bank-sill wrapper.
+export const BRIDGE_SILLS={ns:[[120,310],[120,50]],ew:[[30,169.2],[450,169.2]],ne:[[91.5,292],[388.5,108]],nw:[[388.5,292],[91.5,108]]};
+export function archBridge({a,b}){
+ const [near,far]=a[1]>=b[1]?[a,b]:[b,a],v=far.map((x,i)=>x-near[i]);
+ const dir=Math.abs(v[1])<1e-6?'ew':Math.abs(v[0])<1e-6?'ns':v[0]>0?'ne':'nw';
+ let source=readFileSync(ROOT+'bridge-'+dir+'.svg','utf8');
+ const [W,H]=source.match(/viewBox="0 0 (\d+) (\d+)"/).slice(1).map(Number);
+ let [n,f]=BRIDGE_SILLS[dir];if(dir==='ew'&&v[0]<0)[n,f]=[f,n];
+ const u=f.map((x,i)=>x-n[i]);
+ // Fair's crossings are square cardinal spans. Never shear a bridge to chase a path.
+ // A diagonal must use its approved source bearing; a new bearing needs a landing remap.
+ const sx=dir==='ns'?1:v[0]/u[0],sy=dir==='ew'?1:v[1]/u[1];
+ if(dir!=='ns'&&dir!=='ew'&&Math.abs(sx-sy)>1e-5)throw Error('Bridge must use the Honeywood '+dir+' bearing');
+ const x=near[0]-sx*n[0],y=near[1]-sy*n[1];
+ let inner=source.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
+ const start=inner.indexOf('<g stroke='),head=inner.slice(0,start),body=inner.slice(start);
+ const cut=body.indexOf('<!-- '+(dir==='ew'?'Far handrail':dir==='ns'?'The arch':'Back rail'));
+ if(cut>0)inner=head+body.slice(0,body.indexOf('>')+1)+body.slice(cut);
+ const box=[x-2,y-2,W*sx+4,H*sy+4];
+ return {box,dir,crown:24*sy,squash:dir==='ew'?.62:undefined,transform:[sx,0,0,sy,x,y],
+ svg:`<svg xmlns="http://www.w3.org/2000/svg" width="${fmt(box[2])}" height="${fmt(box[3])}" viewBox="${box.map(fmt).join(' ')}"><g transform="translate(${fmt(x)} ${fmt(y)}) scale(${fmt(sx)} ${fmt(sy)})">${inner}</g></svg>`};
 }

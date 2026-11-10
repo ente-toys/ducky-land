@@ -22,5 +22,5 @@ test('Fair centre has open lawns, no flower fields or fence, and six small tree 
  // Sample each former planting area away from retained ride/bench footprints.
  for(const [x,y] of [[440,240],[1090,240],[310,365],[1230,365],[240,455],[240,625],[1285,475],[1285,625],[410,800],[1120,800],[640,550],[895,550]])
   assert(nav.walkable(FIT.cx+(x-768)*FIT.sx,FIT.cy+(y-520)*FIT.sy),`lawn ${x},${y}`);
- assert.equal(mapFor('fair').sleepers.length,40);
+ assert.equal(mapFor('fair').sleepers.length,90);
 });

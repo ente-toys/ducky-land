@@ -1044,7 +1044,7 @@
   },
   {
    "x": -550,
-   "y": 3541,
+   "y": 3781,
    "rx": 31,
    "ry": 22
   },
@@ -1181,8 +1181,8 @@
    "ry": 26
   },
   {
-   "x": -930,
-   "y": 3621,
+   "x": -1000,
+   "y": 3791,
    "rx": 31,
    "ry": 22
   },
@@ -1269,34 +1269,6 @@
    "ry": 20
   },
   {
-   "name": "ac2-bench-01",
-   "x": 1110.4,
-   "y": 2158.2,
-   "rx": 76.755,
-   "ry": 20
-  },
-  {
-   "name": "ac2-bench-02",
-   "x": 1445.8000000000002,
-   "y": 2162,
-   "rx": 76.755,
-   "ry": 20
-  },
-  {
-   "name": "ac2-bench-03",
-   "x": 5685.6,
-   "y": 2162,
-   "rx": 76.755,
-   "ry": 20
-  },
-  {
-   "name": "ac2-bench-04",
-   "x": 6029.6,
-   "y": 2165.8,
-   "rx": 76.755,
-   "ry": 20
-  },
-  {
    "name": "ac2-banner-post-01",
    "x": 3221.7,
    "y": 2238,
@@ -1322,20 +1294,6 @@
    "x": 3914,
    "y": 2576.2,
    "rx": 13,
-   "ry": 20
-  },
-  {
-   "name": "ac2-bench-05",
-   "x": 3208.8,
-   "y": 2716.8,
-   "rx": 111.36999999999999,
-   "ry": 20
-  },
-  {
-   "name": "ac2-bench-06",
-   "x": 3896.8,
-   "y": 2716.8,
-   "rx": 111.36999999999999,
    "ry": 20
   },
   {
@@ -1371,20 +1329,6 @@
    "x": 4043,
    "y": 3609.8,
    "rx": 13,
-   "ry": 20
-  },
-  {
-   "name": "ac2-plaza-bench-west",
-   "x": 3002.4,
-   "y": 3271.6,
-   "rx": 60.199999999999996,
-   "ry": 20
-  },
-  {
-   "name": "ac2-plaza-bench-east",
-   "x": 4137.6,
-   "y": 3271.6,
-   "rx": 60.199999999999996,
    "ry": 20
   },
   {
@@ -1645,13 +1589,6 @@
    "rx": 49.5,
    "ry": 14.8,
    "name": "hamlet-bobbinbell-bush-cluster-25"
-  },
-  {
-   "x": -1146.4,
-   "y": 1977.6,
-   "rx": 56.1,
-   "ry": 16.8,
-   "name": "hamlet-bobbinbell-bench-honeywood-26"
   },
   {
    "x": -1393.6,
@@ -3167,8 +3104,8 @@
   },
   {
    "name": "fair-green-east-fork-6",
-   "x": 7820,
-   "y": 1001,
+   "x": 7810,
+   "y": 1351,
    "rx": 25.52,
    "ry": 16
   },
@@ -3251,15 +3188,15 @@
   },
   {
    "name": "fair-green-southeast-road-0",
-   "x": 5620,
-   "y": 4711,
+   "x": 5550,
+   "y": 5151,
    "rx": 29,
    "ry": 20
   },
   {
    "name": "fair-green-southeast-road-1",
-   "x": 5810,
-   "y": 4811,
+   "x": 6010,
+   "y": 5091,
    "rx": 29,
    "ry": 20
   },
@@ -3444,250 +3381,2457 @@
    "y": 3290.2,
    "rx": 36.96,
    "ry": 16
+  },
+  {
+   "name": "fair-plant-northwest-coast-0",
+   "x": -910,
+   "y": -698,
+   "rx": 26.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-northwest-coast-1",
+   "x": -660,
+   "y": -793,
+   "rx": 21.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-northwest-coast-2",
+   "x": -420,
+   "y": -838,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-northwest-coast-3",
+   "x": -800,
+   "y": -538,
+   "rx": 16.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-northwest-coast-4",
+   "x": -530,
+   "y": -598,
+   "rx": 15.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-northwest-coast-5",
+   "x": -1040,
+   "y": -628,
+   "rx": 54.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-northwest-coast-6",
+   "x": -940,
+   "y": -493,
+   "rx": 50.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-northwest-coast-7",
+   "x": -755,
+   "y": -448,
+   "rx": 62.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-northwest-coast-8",
+   "x": -570,
+   "y": -483,
+   "rx": 40.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-northwest-coast-9",
+   "x": -355,
+   "y": -628,
+   "rx": 43.3,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-west-0",
+   "x": 180,
+   "y": -923,
+   "rx": 22.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-west-1",
+   "x": 430,
+   "y": -928,
+   "rx": 25.1,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-west-2",
+   "x": 670,
+   "y": -973,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-west-3",
+   "x": 300,
+   "y": -758,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-west-4",
+   "x": 580,
+   "y": -778,
+   "rx": 15.6,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-west-5",
+   "x": 55,
+   "y": -848,
+   "rx": 48.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-west-6",
+   "x": 180,
+   "y": -728,
+   "rx": 54.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-west-7",
+   "x": 430,
+   "y": -753,
+   "rx": 59.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-west-8",
+   "x": 655,
+   "y": -743,
+   "rx": 42.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-west-9",
+   "x": 800,
+   "y": -878,
+   "rx": 46.6,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-pond-0",
+   "x": 1150,
+   "y": -998,
+   "rx": 27.4,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-pond-1",
+   "x": 1410,
+   "y": -1048,
+   "rx": 22.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-pond-2",
+   "x": 1660,
+   "y": -1078,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-pond-3",
+   "x": 1280,
+   "y": -838,
+   "rx": 15.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-pond-4",
+   "x": 1540,
+   "y": -863,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-pond-5",
+   "x": 990,
+   "y": -898,
+   "rx": 57,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-pond-6",
+   "x": 1115,
+   "y": -768,
+   "rx": 48.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-pond-7",
+   "x": 1350,
+   "y": -823,
+   "rx": 41.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-pond-8",
+   "x": 1575,
+   "y": -833,
+   "rx": 62.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-pond-9",
+   "x": 1800,
+   "y": -958,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-gap-0",
+   "x": 2070,
+   "y": -1108,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-gap-1",
+   "x": 2270,
+   "y": -1128,
+   "rx": 25.1,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-gap-2",
+   "x": 2140,
+   "y": -963,
+   "rx": 16,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-gap-3",
+   "x": 1935,
+   "y": -1008,
+   "rx": 45.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-gap-4",
+   "x": 2050,
+   "y": -883,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-gap-5",
+   "x": 2290,
+   "y": -948,
+   "rx": 42.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-0",
+   "x": 3140,
+   "y": -1188,
+   "rx": 22.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-1",
+   "x": 3370,
+   "y": -1188,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-2",
+   "x": 3580,
+   "y": -1138,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-3",
+   "x": 2990,
+   "y": -1118,
+   "rx": 43.3,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-4",
+   "x": 3170,
+   "y": -1068,
+   "rx": 44.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-5",
+   "x": 3400,
+   "y": -1078,
+   "rx": 38.6,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northwest-border-6",
+   "x": 3650,
+   "y": -1118,
+   "rx": 54.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-0",
+   "x": 4760,
+   "y": -1108,
+   "rx": 19.8,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-1",
+   "x": 5000,
+   "y": -1098,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-2",
+   "x": 5220,
+   "y": -1088,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-3",
+   "x": 4590,
+   "y": -1108,
+   "rx": 40.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-4",
+   "x": 4820,
+   "y": -1098,
+   "rx": 44.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-5",
+   "x": 5080,
+   "y": -1098,
+   "rx": 34.3,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-cloudpop-northeast-border-6",
+   "x": 5400,
+   "y": -1088,
+   "rx": 52.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-east-0",
+   "x": 7060,
+   "y": -828,
+   "rx": 25.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-east-1",
+   "x": 7300,
+   "y": -798,
+   "rx": 22.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-east-2",
+   "x": 7530,
+   "y": -718,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-east-3",
+   "x": 7140,
+   "y": -648,
+   "rx": 15.6,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-east-4",
+   "x": 7410,
+   "y": -598,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-north-coast-east-5",
+   "x": 6900,
+   "y": -968,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-east-6",
+   "x": 7080,
+   "y": -983,
+   "rx": 52.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-east-7",
+   "x": 7300,
+   "y": -968,
+   "rx": 42.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-east-8",
+   "x": 7510,
+   "y": -908,
+   "rx": 62.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-north-coast-east-9",
+   "x": 7680,
+   "y": -578,
+   "rx": 49.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-meadow-0",
+   "x": 260,
+   "y": -8,
+   "rx": 27.4,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-meadow-1",
+   "x": 500,
+   "y": 152,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-meadow-2",
+   "x": 300,
+   "y": 252,
+   "rx": 21.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-meadow-3",
+   "x": 50,
+   "y": 52,
+   "rx": 15.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-meadow-4",
+   "x": 140,
+   "y": 222,
+   "rx": 15.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-meadow-5",
+   "x": 90,
+   "y": -108,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-meadow-6",
+   "x": 500,
+   "y": 362,
+   "rx": 48.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-meadow-7",
+   "x": 300,
+   "y": 422,
+   "rx": 40.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-meadow-8",
+   "x": 450,
+   "y": 502,
+   "rx": 59.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-coast-shoulder-0",
+   "x": -1540,
+   "y": -343,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-coast-shoulder-1",
+   "x": -1330,
+   "y": -473,
+   "rx": 20.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-coast-shoulder-2",
+   "x": -1425,
+   "y": -198,
+   "rx": 16.3,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-west-coast-shoulder-3",
+   "x": -1640,
+   "y": -208,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-coast-shoulder-4",
+   "x": -1530,
+   "y": -98,
+   "rx": 38.6,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-west-coast-shoulder-5",
+   "x": -1270,
+   "y": -323,
+   "rx": 45.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southwest-meadow-0",
+   "x": -200,
+   "y": 4612,
+   "rx": 22.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southwest-meadow-1",
+   "x": -30,
+   "y": 4442,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southwest-meadow-2",
+   "x": -270,
+   "y": 4802,
+   "rx": 23.9,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southwest-meadow-3",
+   "x": 0,
+   "y": 4642,
+   "rx": 48.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southwest-meadow-4",
+   "x": -440,
+   "y": 4742,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southwest-meadow-5",
+   "x": -320,
+   "y": 4572,
+   "rx": 59.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southwest-meadow-6",
+   "x": -165,
+   "y": 4722,
+   "rx": 40.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-0",
+   "x": 4700,
+   "y": 5122,
+   "rx": 26.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-1",
+   "x": 4940,
+   "y": 5172,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-2",
+   "x": 5180,
+   "y": 5152,
+   "rx": 21.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-3",
+   "x": 4795,
+   "y": 5312,
+   "rx": 15.6,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-4",
+   "x": 5060,
+   "y": 5322,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-5",
+   "x": 4530,
+   "y": 5222,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-6",
+   "x": 4650,
+   "y": 5292,
+   "rx": 48.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-7",
+   "x": 4890,
+   "y": 5302,
+   "rx": 40.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-8",
+   "x": 5170,
+   "y": 5302,
+   "rx": 62.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-sugarspoon-east-9",
+   "x": 5350,
+   "y": 5222,
+   "rx": 49.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-south-coast-east-0",
+   "x": 6030,
+   "y": 5592,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-south-coast-east-1",
+   "x": 6260,
+   "y": 5592,
+   "rx": 25.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-south-coast-east-2",
+   "x": 6500,
+   "y": 5672,
+   "rx": 20.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-south-coast-east-3",
+   "x": 6180,
+   "y": 5702,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-south-coast-east-4",
+   "x": 6420,
+   "y": 5692,
+   "rx": 15.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-south-coast-east-5",
+   "x": 5870,
+   "y": 5682,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-south-coast-east-6",
+   "x": 6030,
+   "y": 5662,
+   "rx": 45.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-south-coast-east-7",
+   "x": 6310,
+   "y": 5662,
+   "rx": 40.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-south-coast-east-8",
+   "x": 6565,
+   "y": 5642,
+   "rx": 62.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-south-coast-east-9",
+   "x": 6740,
+   "y": 5632,
+   "rx": 51.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southeast-coast-0",
+   "x": 7940,
+   "y": 5122,
+   "rx": 24.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southeast-coast-1",
+   "x": 7990,
+   "y": 4932,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southeast-coast-2",
+   "x": 8170,
+   "y": 4742,
+   "rx": 20.7,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southeast-coast-3",
+   "x": 7890,
+   "y": 5232,
+   "rx": 15,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southeast-coast-4",
+   "x": 8140,
+   "y": 5082,
+   "rx": 15.2,
+   "ry": 18
+  },
+  {
+   "name": "fair-plant-southeast-coast-5",
+   "x": 7760,
+   "y": 5272,
+   "rx": 48.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southeast-coast-6",
+   "x": 7750,
+   "y": 5352,
+   "rx": 49.2,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southeast-coast-7",
+   "x": 7990,
+   "y": 5202,
+   "rx": 40.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southeast-coast-8",
+   "x": 8190,
+   "y": 5032,
+   "rx": 59.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-plant-southeast-coast-9",
+   "x": 8350,
+   "y": 4852,
+   "rx": 46.6,
+   "ry": 16
+  },
+  {
+   "name": "fair-life-hill-telescope",
+   "x": 7500,
+   "y": 1238,
+   "rx": 62,
+   "ry": 19
+  },
+  {
+   "name": "fair-life-hill-sign",
+   "x": 7710,
+   "y": 1298,
+   "rx": 16,
+   "ry": 10
+  },
+  {
+   "name": "fair-life-picnic-table",
+   "x": 5030,
+   "y": 4538,
+   "rx": 64,
+   "ry": 25
+  },
+  {
+   "name": "fair-life-picnic-bush-0",
+   "x": 4760,
+   "y": 4778,
+   "rx": 32,
+   "ry": 16
+  },
+  {
+   "name": "fair-life-picnic-bush-1",
+   "x": 5080,
+   "y": 4828,
+   "rx": 32,
+   "ry": 16
+  },
+  {
+   "name": "fair-life-picnic-bush-2",
+   "x": 5350,
+   "y": 4768,
+   "rx": 32,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-coast-north-t0",
+   "x": -1566.7,
+   "y": 238.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-west-coast-north-t1",
+   "x": -1680,
+   "y": 378.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-west-coast-north-t2",
+   "x": -1733.3,
+   "y": 525.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-west-coast-north-b0",
+   "x": -1680,
+   "y": 312,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-coast-north-b5",
+   "x": -1453.3,
+   "y": 145.3,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-north-b0",
+   "x": -1340,
+   "y": 2918.7,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-north-b3",
+   "x": -793.3,
+   "y": 3058.7,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-north-b4",
+   "x": -606.7,
+   "y": 2972,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-south-b0",
+   "x": -1700,
+   "y": 3838.7,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-south-b1",
+   "x": -1640,
+   "y": 4058.7,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-south-b2",
+   "x": -1580,
+   "y": 4442,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-mouth-south-b5",
+   "x": -1273.3,
+   "y": 3898.7,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-lawn-t1",
+   "x": 533.3,
+   "y": 4598.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southwest-lawn-t2",
+   "x": 713.3,
+   "y": 4392,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southwest-lawn-b2",
+   "x": 533.3,
+   "y": 4738.7,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-lawn-b3",
+   "x": 746.7,
+   "y": 4638.7,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-lawn-b4",
+   "x": 893.3,
+   "y": 4485.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-lawn-b5",
+   "x": 560,
+   "y": 4372,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-coast-t0",
+   "x": -40,
+   "y": 5412,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southwest-coast-t1",
+   "x": 193.3,
+   "y": 5498.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southwest-coast-t2",
+   "x": 453.3,
+   "y": 5512,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southwest-coast-b0",
+   "x": -186.7,
+   "y": 5505.3,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-coast-b1",
+   "x": 6.7,
+   "y": 5592,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-coast-b2",
+   "x": 233.3,
+   "y": 5618.7,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-coast-b3",
+   "x": 466.7,
+   "y": 5625.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-coast-b4",
+   "x": 626.7,
+   "y": 5572,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-west-t0",
+   "x": 2193.3,
+   "y": -54.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-bank-west-t1",
+   "x": 2433.3,
+   "y": 52,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-bank-west-t2",
+   "x": 2660,
+   "y": 152,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-bank-west-t3",
+   "x": 2313.3,
+   "y": 252,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-bank-west-b0",
+   "x": 2080,
+   "y": 45.3,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-west-b1",
+   "x": 2186.7,
+   "y": 298.7,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-west-b5",
+   "x": 2506.7,
+   "y": 158.7,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-pond-west-t1",
+   "x": 526.7,
+   "y": -308,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-pond-west-t2",
+   "x": 273.3,
+   "y": -201.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-pond-west-b0",
+   "x": 186.7,
+   "y": -334.7,
+   "rx": 58.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-pond-west-b1",
+   "x": 326.7,
+   "y": -121.3,
+   "rx": 31.6,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-pond-west-b4",
+   "x": 133.3,
+   "y": -188,
+   "rx": 41.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-coast-cloudgap-t2",
+   "x": 6073.3,
+   "y": -968,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-coast-cloudgap-b0",
+   "x": 5533.3,
+   "y": -1041.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-coast-cloudgap-b5",
+   "x": 6473.3,
+   "y": -908,
+   "rx": 45.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northeast-coast-t0",
+   "x": 7760,
+   "y": -421.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-northeast-coast-t1",
+   "x": 7960,
+   "y": -341.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-northeast-coast-t2",
+   "x": 8186.7,
+   "y": -181.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-northeast-coast-b3",
+   "x": 8173.3,
+   "y": -14.7,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northeast-coast-b4",
+   "x": 8333.3,
+   "y": -101.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northeast-coast-b5",
+   "x": 8120,
+   "y": -301.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-coast-upper-t0",
+   "x": 8540,
+   "y": 232,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-coast-upper-t1",
+   "x": 8640,
+   "y": 438.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-coast-upper-t2",
+   "x": 8593.3,
+   "y": 645.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-coast-upper-b0",
+   "x": 8433.3,
+   "y": 332,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-coast-upper-b1",
+   "x": 8533.3,
+   "y": 552,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-coast-upper-b2",
+   "x": 8653.3,
+   "y": 738.7,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-coast-upper-b3",
+   "x": 8740,
+   "y": 618.7,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-t0",
+   "x": 7246.7,
+   "y": -61.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-t1",
+   "x": 7433.3,
+   "y": 45.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-t2",
+   "x": 7260,
+   "y": 212,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-b0",
+   "x": 7160,
+   "y": 45.3,
+   "rx": 40.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-b1",
+   "x": 7133.3,
+   "y": 258.7,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-b2",
+   "x": 7306.7,
+   "y": 338.7,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-b3",
+   "x": 7473.3,
+   "y": 252,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-b4",
+   "x": 7573.3,
+   "y": 125.30000000000001,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-lawn-bank-b5",
+   "x": 7380,
+   "y": -61.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southeast-lawn-t1",
+   "x": 7600,
+   "y": 4505.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southeast-lawn-t2",
+   "x": 7833.3,
+   "y": 4605.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southeast-lawn-t3",
+   "x": 7566.7,
+   "y": 4765.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-southeast-lawn-b2",
+   "x": 7533.3,
+   "y": 4885.3,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southeast-lawn-b5",
+   "x": 7660,
+   "y": 4645.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-middle-b0",
+   "x": 3940,
+   "y": 5845.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-middle-b1",
+   "x": 4133.3,
+   "y": 5865.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-middle-b2",
+   "x": 4360,
+   "y": 5858.7,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-middle-b4",
+   "x": 4733.3,
+   "y": 5818.7,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-middle-b5",
+   "x": 4886.7,
+   "y": 5805.3,
+   "rx": 34.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-bank-west-t0",
+   "x": 993.3,
+   "y": 4198.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-south-bank-west-t1",
+   "x": 1213.3,
+   "y": 4285.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-south-bank-west-t2",
+   "x": 1433.3,
+   "y": 4225.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-south-bank-west-b0",
+   "x": 893.3,
+   "y": 4325.3,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-bank-west-b1",
+   "x": 1100,
+   "y": 4392,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-bank-west-b2",
+   "x": 1306.7,
+   "y": 4405.3,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-bank-west-b3",
+   "x": 1513.3,
+   "y": 4325.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-bank-west-b4",
+   "x": 1600,
+   "y": 4245.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-bank-west-b5",
+   "x": 1286.7,
+   "y": 4132,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-picnic-east-shade-b4",
+   "x": 6033.3,
+   "y": 4192,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-west-t0",
+   "x": 1573.3,
+   "y": 758.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-inner-west-t1",
+   "x": 1800,
+   "y": 818.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-inner-west-b0",
+   "x": 1473.3,
+   "y": 852,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-west-b1",
+   "x": 1626.7,
+   "y": 952,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-west-b2",
+   "x": 1820,
+   "y": 985.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-west-b3",
+   "x": 2020,
+   "y": 898.7,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-west-b4",
+   "x": 2126.7,
+   "y": 772,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-east-t1",
+   "x": 5660,
+   "y": 878.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-north-inner-east-b0",
+   "x": 5306.7,
+   "y": 865.3,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-east-b3",
+   "x": 5653.3,
+   "y": 1065.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-inner-east-b4",
+   "x": 5773.3,
+   "y": 945.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-inner-bank-t0",
+   "x": 573.3,
+   "y": 1578.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-west-inner-bank-t1",
+   "x": 713.3,
+   "y": 1672,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-west-inner-bank-b3",
+   "x": 800,
+   "y": 1765.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-inner-bank-t0",
+   "x": 6440,
+   "y": 1525.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-inner-bank-t1",
+   "x": 6566.7,
+   "y": 1638.7,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-east-inner-bank-b0",
+   "x": 6340,
+   "y": 1618.7,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-inner-bank-b3",
+   "x": 6666.7,
+   "y": 1798.7,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-inner-bank-b4",
+   "x": 6660,
+   "y": 1585.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-inner-bank-b5",
+   "x": 6313.3,
+   "y": 1492,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-inner-west-t1",
+   "x": 1606.7,
+   "y": 3112,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-south-inner-west-b0",
+   "x": 1633.3,
+   "y": 3045.3,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-inner-west-b4",
+   "x": 1860,
+   "y": 3318.7,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-inner-east-t0",
+   "x": 5286.7,
+   "y": 2972,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-south-inner-east-b4",
+   "x": 5833.3,
+   "y": 2985.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-inner-east-b5",
+   "x": 5473.3,
+   "y": 2925.3,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-skirt-b0",
+   "x": -873.3,
+   "y": -421.3,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-skirt-b1",
+   "x": -693.3,
+   "y": -401.3,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-skirt-b3",
+   "x": -206.7,
+   "y": 32,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-skirt-b5",
+   "x": 233.3,
+   "y": 185.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-skirt-b6",
+   "x": 400,
+   "y": 225.3,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-skirt-b7",
+   "x": 560,
+   "y": 105.3,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-coast-skirt-b0",
+   "x": 980,
+   "y": -821.3,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b0",
+   "x": 1640,
+   "y": 332,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b2",
+   "x": 1973.3,
+   "y": 238.7,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b3",
+   "x": 1500,
+   "y": 145.3,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b4",
+   "x": 2066.7,
+   "y": -81.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b5",
+   "x": 2266.7,
+   "y": 25.299999999999997,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b6",
+   "x": 2533.3,
+   "y": 18.7,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-north-bank-skirt-b7",
+   "x": 2706.7,
+   "y": 65.3,
+   "rx": 34.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-bank-skirt-b0",
+   "x": 4940,
+   "y": 938.7,
+   "rx": 38.1,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-bank-skirt-b1",
+   "x": 5080,
+   "y": 1038.7,
+   "rx": 42.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-bank-skirt-b4",
+   "x": 6206.7,
+   "y": 1112,
+   "rx": 48.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-bank-skirt-b5",
+   "x": 6306.7,
+   "y": 1225.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-bank-skirt-b7",
+   "x": 6333.3,
+   "y": 1392,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-bank-skirt-b2",
+   "x": 1253.3,
+   "y": 3032,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southeast-bank-skirt-b3",
+   "x": 5340,
+   "y": 3678.7,
+   "rx": 34.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southeast-bank-skirt-b5",
+   "x": 6086.7,
+   "y": 4672,
+   "rx": 45.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southeast-bank-skirt-b7",
+   "x": 6460,
+   "y": 4725.3,
+   "rx": 41.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-hamlet-skirt-b3",
+   "x": 7240,
+   "y": 3905.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-hamlet-skirt-b4",
+   "x": 7413.3,
+   "y": 4025.3,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-hamlet-skirt-b5",
+   "x": 7593.3,
+   "y": 4105.3,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-hamlet-skirt-b6",
+   "x": 7886.7,
+   "y": 4232,
+   "rx": 34.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-east-hamlet-skirt-b7",
+   "x": 8086.7,
+   "y": 4172,
+   "rx": 44.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-hamlet-skirt-b1",
+   "x": -1500,
+   "y": 2445.3,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-hamlet-skirt-b4",
+   "x": -80,
+   "y": 2505.3,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-west-hamlet-skirt-b5",
+   "x": -220,
+   "y": 2292,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-skirt-b0",
+   "x": 4533.3,
+   "y": 5318.7,
+   "rx": 50,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-skirt-b1",
+   "x": 4706.7,
+   "y": 5352,
+   "rx": 29,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-skirt-b3",
+   "x": 5073.3,
+   "y": 5245.3,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-skirt-b5",
+   "x": 5473.3,
+   "y": 5258.7,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-skirt-b6",
+   "x": 5653.3,
+   "y": 5338.7,
+   "rx": 34.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-south-coast-skirt-b7",
+   "x": 5820,
+   "y": 5285.3,
+   "rx": 44.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f3",
+   "x": 7993.3,
+   "y": -128,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f4",
+   "x": 8640,
+   "y": 598.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f5",
+   "x": 493.3,
+   "y": 4678.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f6",
+   "x": 366.7,
+   "y": 5578.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f7",
+   "x": 1153.3,
+   "y": 4318.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f9",
+   "x": 1540,
+   "y": 918.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f10",
+   "x": 5580,
+   "y": 992,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f11",
+   "x": 726.7,
+   "y": 1772,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f12",
+   "x": 6606.7,
+   "y": 1818.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f13",
+   "x": 7333.3,
+   "y": 4712,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f14",
+   "x": 7740,
+   "y": 4765.3,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-grove-edge-flowers-f16",
+   "x": 5660,
+   "y": 3078.7,
+   "rx": 10,
+   "ry": 7
+  },
+  {
+   "name": "fair-dense-north-shore-east-b4",
+   "x": 5793.3,
+   "y": -1048,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-picnic-north-shade-t0",
+   "x": 4886.7,
+   "y": 4305.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-picnic-north-shade-t1",
+   "x": 5086.7,
+   "y": 4265.3,
+   "rx": 28,
+   "ry": 20
+  },
+  {
+   "name": "fair-dense-picnic-north-shade-b2",
+   "x": 5160,
+   "y": 4398.7,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-grove-skirt-b0",
+   "x": 486.7,
+   "y": 4518.7,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-grove-skirt-b1",
+   "x": 620,
+   "y": 4572,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-grove-skirt-b3",
+   "x": 893.3,
+   "y": 4392,
+   "rx": 44.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-grove-skirt-b5",
+   "x": 1060,
+   "y": 4458.7,
+   "rx": 37.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-grove-skirt-b6",
+   "x": 1233.3,
+   "y": 4445.3,
+   "rx": 41.7,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-southwest-grove-skirt-b7",
+   "x": 1400,
+   "y": 4445.3,
+   "rx": 32.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-bank-skirt-b0",
+   "x": 2020,
+   "y": 5.300000000000001,
+   "rx": 35.4,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-bank-skirt-b1",
+   "x": 2126.7,
+   "y": 112,
+   "rx": 54.8,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-bank-skirt-b2",
+   "x": 2200,
+   "y": 212,
+   "rx": 34.5,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-bank-skirt-b4",
+   "x": 2586.7,
+   "y": 78.7,
+   "rx": 44.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-dense-northwest-bank-skirt-b6",
+   "x": 2646.7,
+   "y": -74.7,
+   "rx": 37.9,
+   "ry": 16
+  },
+  {
+   "name": "fair-community-180",
+   "x": 1360,
+   "y": -520,
+   "rx": 70,
+   "ry": 24
+  },
+  {
+   "name": "fair-community-181",
+   "x": -1530,
+   "y": 4270,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "ac2-bench-01",
+   "x": 942.7000000000003,
+   "y": 2182.4,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "ac2-bench-02",
+   "x": 1630.7,
+   "y": 2182.4,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "ac2-bench-03",
+   "x": 5509.3,
+   "y": 2182.4,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "ac2-bench-04",
+   "x": 6197.299999999999,
+   "y": 2182.4,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "ac2-bench-05",
+   "x": 3277.6,
+   "y": 3087.8,
+   "rx": 70,
+   "ry": 24
+  },
+  {
+   "name": "ac2-bench-06",
+   "x": 3862.4,
+   "y": 3087.8,
+   "rx": 70,
+   "ry": 24
+  },
+  {
+   "name": "ac2-plaza-bench-west",
+   "x": 2890.6,
+   "y": 3322.3999999999996,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "ac2-plaza-bench-east",
+   "x": 4249.4,
+   "y": 3322.3999999999996,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "hamlet-bobbinbell-bench-honeywood-26",
+   "x": -1046.4,
+   "y": 1992.4,
+   "rx": 70,
+   "ry": 24
+  },
+  {
+   "name": "fair-life-hill-bench",
+   "x": 7360,
+   "y": 1250,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "fair-life-picnic-seat-west",
+   "x": 4860,
+   "y": 4600,
+   "rx": 30,
+   "ry": 62
+  },
+  {
+   "name": "fair-life-picnic-seat-east",
+   "x": 5200,
+   "y": 4600,
+   "rx": 30,
+   "ry": 62
   }
  ],
  "walkways": [
   {
    "id": "west-heart",
-   "w": 140,
    "a": [
-    160,
-    2830
+    194.55,
+    2839.45
    ],
    "b": [
-    580,
-    2830
+    614.55,
+    2839.45
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "northwest-heart",
-   "w": 140,
    "a": [
-    520,
-    580
+    247.09999999999997,
+    1068.25
    ],
    "b": [
-    520,
-    980
+    667.0999999999999,
+    1068.25
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "north-heart",
-   "w": 140,
    "a": [
-    3560,
-    175
+    3566.15,
+    557.4
    ],
    "b": [
-    3560,
-    565
+    3566.15,
+    167.39999999999998
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "northeast-heart",
-   "w": 140,
    "a": [
-    6560,
-    495
+    6407.9,
+    713.2
    ],
    "b": [
-    6560,
-    835
+    6704.9,
+    529.2
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "east-heart",
-   "w": 140,
    "a": [
-    6680,
-    2590
+    6675.6,
+    2624.1000000000004
    ],
    "b": [
-    7120,
-    2590
+    7115.6,
+    2624.1000000000004
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "southeast-heart",
-   "w": 140,
    "a": [
-    6460,
-    3530
+    6642.9,
+    3841.05
    ],
    "b": [
-    6460,
-    3930
+    6345.9,
+    3657.05
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "south-heart",
-   "w": 140,
    "a": [
-    3570,
-    3865
+    3603.9,
+    4260
    ],
    "b": [
-    3570,
-    4275
+    3603.9,
+    3850
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "southwest-heart",
-   "w": 140,
    "a": [
-    820,
-    3540
+    616.4000000000001,
+    3783.1
    ],
    "b": [
-    820,
-    4020
+    913.4000000000001,
+    3599.1
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "ribbon-coast",
-   "w": 140,
    "a": [
-    -1550,
-    3130
+    -1556.2,
+    3540.6
    ],
    "b": [
-    -1550,
-    3550
+    -1556.2,
+    3120.6
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "wishwater-lane",
-   "w": 140,
    "a": [
-    7780,
-    1710
+    7791.6,
+    2149.7
    ],
    "b": [
-    7780,
-    2150
+    7791.6,
+    1709.7
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "wishwater-coast",
-   "w": 140,
    "a": [
-    8500,
-    1480
+    8627.3,
+    1778.1
    ],
    "b": [
-    8500,
-    1920
+    8330.3,
+    1594.1
    ],
+   "w": 112,
    "boatPassUnder": true
   },
   {
    "id": "ac2-lagoon-bridge",
    "a": [
     3570,
-    1403
+    1415
    ],
    "b": [
     3570,
-    1737.4
+    1757.4
    ],
-   "w": 220,
-   "boatPassUnder": false
+   "w": 112,
+   "boatPassUnder": true
   }
  ],
  "bridges": [
   {
    "id": "west-heart",
-   "x": 370,
-   "y": 2830,
-   "w": 560,
-   "h": 140
+   "x": 404.54999999999995,
+   "y": 2839.45,
+   "w": 532,
+   "h": 112
   },
   {
    "id": "northwest-heart",
-   "x": 520,
-   "y": 780,
-   "w": 140,
-   "h": 540
+   "x": 457.0999999999999,
+   "y": 1068.25,
+   "w": 532,
+   "h": 112
   },
   {
    "id": "north-heart",
-   "x": 3560,
-   "y": 370,
-   "w": 140,
-   "h": 530
+   "x": 3566.15,
+   "y": 362.4,
+   "w": 112,
+   "h": 502
   },
   {
    "id": "northeast-heart",
-   "x": 6560,
-   "y": 665,
-   "w": 140,
-   "h": 480
+   "x": 6556.4,
+   "y": 621.2,
+   "w": 409,
+   "h": 296,
+   "poly": [
+    [
+     6450.326406871192,
+     739.5043722601396
+    ],
+    [
+     6365.473593128807,
+     686.8956277398605
+    ],
+    [
+     6662.473593128807,
+     502.89562773986046
+    ],
+    [
+     6747.326406871192,
+     555.5043722601396
+    ]
+   ]
   },
   {
    "id": "east-heart",
-   "x": 6900,
-   "y": 2590,
-   "w": 580,
-   "h": 140
+   "x": 6895.6,
+   "y": 2624.1000000000004,
+   "w": 552,
+   "h": 112
   },
   {
    "id": "southeast-heart",
-   "x": 6460,
-   "y": 3730,
-   "w": 140,
-   "h": 540
+   "x": 6494.4,
+   "y": 3749.05,
+   "w": 409,
+   "h": 296,
+   "poly": [
+    [
+     6685.326406871192,
+     3814.7456277398605
+    ],
+    [
+     6600.473593128807,
+     3867.35437226014
+    ],
+    [
+     6303.473593128807,
+     3683.35437226014
+    ],
+    [
+     6388.326406871192,
+     3630.7456277398605
+    ]
+   ]
   },
   {
    "id": "south-heart",
-   "x": 3570,
-   "y": 4070,
-   "w": 140,
-   "h": 550
+   "x": 3603.9,
+   "y": 4055,
+   "w": 112,
+   "h": 522
   },
   {
    "id": "southwest-heart",
-   "x": 820,
-   "y": 3780,
-   "w": 140,
-   "h": 620
+   "x": 764.9000000000001,
+   "y": 3691.1,
+   "w": 409,
+   "h": 296,
+   "poly": [
+    [
+     658.826406871193,
+     3809.4043722601396
+    ],
+    [
+     573.9735931288072,
+     3756.7956277398603
+    ],
+    [
+     870.9735931288072,
+     3572.7956277398603
+    ],
+    [
+     955.826406871193,
+     3625.4043722601396
+    ]
+   ]
   },
   {
    "id": "ribbon-coast",
-   "x": -1550,
-   "y": 3340,
-   "w": 140,
-   "h": 560
+   "x": -1556.2,
+   "y": 3330.6,
+   "w": 112,
+   "h": 532
   },
   {
    "id": "wishwater-lane",
-   "x": 7780,
-   "y": 1930,
-   "w": 140,
-   "h": 580
+   "x": 7791.6,
+   "y": 1929.6999999999998,
+   "w": 112,
+   "h": 551.9999999999998
   },
   {
    "id": "wishwater-coast",
-   "x": 8500,
-   "y": 1700,
-   "w": 140,
-   "h": 580
+   "x": 8478.8,
+   "y": 1686.1,
+   "w": 409,
+   "h": 296,
+   "poly": [
+    [
+     8669.726406871192,
+     1751.7956277398603
+    ],
+    [
+     8584.873593128807,
+     1804.4043722601396
+    ],
+    [
+     8287.873593128807,
+     1620.4043722601396
+    ],
+    [
+     8372.726406871192,
+     1567.7956277398603
+    ]
+   ]
   },
   {
    "id": "ac2-lagoon-bridge",
    "x": 3570,
-   "y": 1570.2,
-   "w": 220,
-   "h": 414.4000000000001
+   "y": 1586.2,
+   "w": 112,
+   "h": 454.4000000000001
   }
  ],
  "islets": [],
@@ -11998,6 +14142,251 @@
      1236.56
     ]
    ]
+  },
+  {
+   "id": "ac2-lagoon-outlet",
+   "poly": [
+    [
+     4406.296943186422,
+     812.360387969268
+    ],
+    [
+     4474.920195798752,
+     665.3105609428467
+    ],
+    [
+     4543.688148646662,
+     522.862658615034
+    ],
+    [
+     4608.3314167209755,
+     403.66125941863856
+    ],
+    [
+     4613.473536556548,
+     392.4923286999608
+    ],
+    [
+     4617.113826846217,
+     380.747768409811
+    ],
+    [
+     4619.190001213847,
+     368.6285312309609
+    ],
+    [
+     4619.666535740382,
+     356.3419806716281
+    ],
+    [
+     4618.535276787953,
+     344.098343018358
+    ],
+    [
+     4615.815580510882,
+     332.1071103059758
+    ],
+    [
+     4611.55398166651,
+     320.57345585078815
+    ],
+    [
+     4605.8233973926035,
+     309.6947236782565
+    ],
+    [
+     4598.721879574907,
+     299.6570519120071
+    ],
+    [
+     4590.370937152194,
+     290.63218789892903
+    ],
+    [
+     4580.913457064635,
+     282.7745495644509
+    ],
+    [
+     4570.5112594186385,
+     276.21858327902476
+    ],
+    [
+     4559.3423286999605,
+     271.0764634434513
+    ],
+    [
+     4547.597768409811,
+     267.43617315378225
+    ],
+    [
+     4535.4785312309605,
+     265.35999878615297
+    ],
+    [
+     4523.191980671628,
+     264.8834642596179
+    ],
+    [
+     4510.948343018358,
+     266.0147232120463
+    ],
+    [
+     4498.957110305975,
+     268.734419489118
+    ],
+    [
+     4487.423455850788,
+     272.99601833349004
+    ],
+    [
+     4476.544723678257,
+     278.72660260739667
+    ],
+    [
+     4466.507051912007,
+     285.82812042509335
+    ],
+    [
+     4457.482187898929,
+     294.17906284780645
+    ],
+    [
+     4449.624549564451,
+     303.63654293536484
+    ],
+    [
+     4443.068583279024,
+     314.0387405813615
+    ],
+    [
+     4377.368583279024,
+     435.18874058136146
+    ],
+    [
+     4375.34814618173,
+     439.13358781186946
+    ],
+    [
+     4305.34814618173,
+     584.1335878118695
+    ],
+    [
+     4304.818784840445,
+     585.2487662588744
+    ],
+    [
+     4234.818784840445,
+     735.2487662588744
+    ],
+    [
+     4232.723191056785,
+     740.0892764227142
+    ],
+    [
+     4182.723191056785,
+     865.0892764227142
+    ],
+    [
+     4178.913092439956,
+     876.7798520429333
+    ],
+    [
+     4176.661516065541,
+     888.8677308325389
+    ],
+    [
+     4176.006987029562,
+     901.1460858340479
+    ],
+    [
+     4176.960704505293,
+     913.4048309891814
+    ],
+    [
+     4179.506350122304,
+     925.4342157695687
+    ],
+    [
+     4183.600367178303,
+     937.0284140664418
+    ],
+    [
+     4189.172705906384,
+     947.9890459324222
+    ],
+    [
+     4196.128022045967,
+     958.1285719174216
+    ],
+    [
+     4204.347308209525,
+     967.2735019206292
+    ],
+    [
+     4213.689930131983,
+     975.2673636542363
+    ],
+    [
+     4223.9960329619835,
+     981.9733799276638
+    ],
+    [
+     4235.089276422715,
+     987.2768089432144
+    ],
+    [
+     4246.779852042933,
+     991.0869075600436
+    ],
+    [
+     4258.867730832539,
+     993.3384839344586
+    ],
+    [
+     4271.146085834048,
+     993.9930129704384
+    ],
+    [
+     4283.404830989181,
+     993.0392954947074
+    ],
+    [
+     4295.434215769568,
+     990.493649877696
+    ],
+    [
+     4307.028414066442,
+     986.3996328216974
+    ],
+    [
+     4317.989045932422,
+     980.8272940936159
+    ],
+    [
+     4328.128571917422,
+     973.871977954033
+    ],
+    [
+     4337.273501920629,
+     965.6526917904749
+    ],
+    [
+     4345.267363654237,
+     956.3100698680169
+    ],
+    [
+     4351.973379927664,
+     946.0039670380162
+    ],
+    [
+     4357.276808943215,
+     934.9107235772858
+    ],
+    [
+     4406.296943186422,
+     812.360387969268
+    ]
+   ]
   }
  ],
  "origin": {
@@ -18155,6 +20544,1400 @@
    [
     8655.73390625,
     1750.8353125
+   ]
+  ],
+  [
+   [
+    4649.3022995325,
+    1193.999523765
+   ],
+   [
+    4644.0992475025,
+    1244.654030305
+   ],
+   [
+    4190.4877114325,
+    1273.040314165
+   ],
+   [
+    4193.4977415325,
+    1254.8001317650003
+   ]
+  ],
+  [
+   [
+    4644.09932931,
+    1244.65368745
+   ],
+   [
+    4628.57617408,
+    1294.8141890499999
+   ],
+   [
+    4181.50070337,
+    1291.1281521900003
+   ],
+   [
+    4190.4877932399995,
+    1273.03997131
+   ]
+  ],
+  [
+   [
+    4628.576336835,
+    1294.8138511349998
+   ],
+   [
+    4602.819079265,
+    1344.024343235
+   ],
+   [
+    4166.665717774999,
+    1308.8359913550003
+   ],
+   [
+    4181.500866125,
+    1291.1278142750002
+   ]
+  ],
+  [
+   [
+    4602.81932157,
+    1344.0240135850001
+   ],
+   [
+    4567.128964670001,
+    1391.752490865
+   ],
+   [
+    4146.02575368,
+    1326.0498338450002
+   ],
+   [
+    4166.665960079999,
+    1308.8356617050003
+   ]
+  ],
+  [
+   [
+    4567.1292840525,
+    1391.75217252
+   ],
+   [
+    4521.8498312625,
+    1437.61863118
+   ],
+   [
+    4119.8818116225,
+    1342.5796808000002
+   ],
+   [
+    4146.0260730625005,
+    1326.0495155
+   ]
+  ],
+  [
+   [
+    4521.850224605,
+    1437.618327275
+   ],
+   [
+    4467.411680225,
+    1481.1287623750002
+   ],
+   [
+    4088.405890205,
+    1358.235533455
+   ],
+   [
+    4119.882204965,
+    1342.5793768950002
+   ]
+  ],
+  [
+   [
+    4467.412143765,
+    1481.1284758550003
+   ],
+   [
+    4404.330512955,
+    1521.864883215
+   ],
+   [
+    4051.984989535,
+    1372.941393995
+   ],
+   [
+    4088.4063537449997,
+    1358.235246935
+   ]
+  ],
+  [
+   [
+    4404.3310423924995,
+    1521.864616835
+   ],
+   [
+    4333.1653307424995,
+    1559.446992655
+   ],
+   [
+    4010.8771078924997,
+    1386.4692628949997
+   ],
+   [
+    4051.9855189725,
+    1372.941127615
+   ]
+  ],
+  [
+   [
+    4333.1659209174995,
+    1559.446749075
+   ],
+   [
+    4254.6901361675,
+    1593.495089555
+   ],
+   [
+    3965.5552448474996,
+    1398.7431420550001
+   ],
+   [
+    4010.8776980674998,
+    1386.4690193149997
+   ]
+  ],
+  [
+   [
+    4254.6907811675,
+    1593.4948710550002
+   ],
+   [
+    4169.6359306275,
+    1623.705173155
+   ],
+   [
+    3916.4063983574997,
+    1409.611032235
+   ],
+   [
+    3965.5558898474997,
+    1398.742923555
+   ]
+  ],
+  [
+   [
+    4169.63662454,
+    1623.704981825
+   ],
+   [
+    4078.7767159500004,
+    1649.7732425049999
+   ],
+   [
+    3863.90356724,
+    1418.996934765
+   ],
+   [
+    3916.40709227,
+    1409.610840905
+   ]
+  ],
+  [
+   [
+    4078.7774520025005,
+    1649.773080055
+   ],
+   [
+    3983.0154943925,
+    1671.471297035
+   ],
+   [
+    3808.6057503125,
+    1426.824850595
+   ],
+   [
+    3863.9043032925,
+    1418.996772315
+   ]
+  ],
+  [
+   [
+    3983.0162653825,
+    1671.471165175
+   ],
+   [
+    3883.2982682125003,
+    1688.5333357949999
+   ],
+   [
+    3750.9859451025,
+    1432.980780295
+   ],
+   [
+    3808.6065213025,
+    1426.824718735
+   ]
+  ],
+  [
+   [
+    3883.2990667225004,
+    1688.53323576
+   ],
+   [
+    3780.5710394525,
+    1700.8833592600001
+   ],
+   [
+    3691.6461502125,
+    1437.4267247199998
+   ],
+   [
+    3750.9867436125,
+    1432.9806802599999
+   ]
+  ],
+  [
+   [
+    3780.5718579575,
+    1700.883292
+   ],
+   [
+    3675.7798100475,
+    1708.3313664800003
+   ],
+   [
+    3631.1023632775,
+    1440.08668406
+   ],
+   [
+    3691.6469687175,
+    1437.42665746
+   ]
+  ],
+  [
+   [
+    3675.7806405925003,
+    1708.3313327550002
+   ],
+   [
+    3569.9995827925,
+    1710.801357455
+   ],
+   [
+    3569.9995827925,
+    1440.998659455
+   ],
+   [
+    3631.1031938225,
+    1440.0866503349998
+   ]
+  ],
+  [
+   [
+    3570.0004172075,
+    1710.801357455
+   ],
+   [
+    3464.2193594074997,
+    1708.3313327550002
+   ],
+   [
+    3508.8968061775,
+    1440.0866503349998
+   ],
+   [
+    3570.0004172075,
+    1440.998659455
+   ]
+  ],
+  [
+   [
+    3464.2201899525,
+    1708.3313664800003
+   ],
+   [
+    3359.4281420425,
+    1700.883292
+   ],
+   [
+    3448.3530312825,
+    1437.42665746
+   ],
+   [
+    3508.8976367225,
+    1440.08668406
+   ]
+  ],
+  [
+   [
+    3359.4289605475,
+    1700.8833592600001
+   ],
+   [
+    3256.7009332774996,
+    1688.53323576
+   ],
+   [
+    3389.0132563875,
+    1432.9806802599999
+   ],
+   [
+    3448.3538497875,
+    1437.4267247199998
+   ]
+  ],
+  [
+   [
+    3256.7017317874997,
+    1688.5333357949999
+   ],
+   [
+    3156.9837346175,
+    1671.471165175
+   ],
+   [
+    3331.3934786975,
+    1426.824718735
+   ],
+   [
+    3389.0140548975,
+    1432.980780295
+   ]
+  ],
+  [
+   [
+    3156.9845056075,
+    1671.471297035
+   ],
+   [
+    3061.2225479974995,
+    1649.773080055
+   ],
+   [
+    3276.0956967075,
+    1418.996772315
+   ],
+   [
+    3331.3942496875,
+    1426.824850595
+   ]
+  ],
+  [
+   [
+    3061.2232840499996,
+    1649.7732425049999
+   ],
+   [
+    2970.3633754599996,
+    1623.704981825
+   ],
+   [
+    3223.59290773,
+    1409.610840905
+   ],
+   [
+    3276.09643276,
+    1418.996934765
+   ]
+  ],
+  [
+   [
+    2970.3640693724997,
+    1623.705173155
+   ],
+   [
+    2885.3092188324995,
+    1593.4948710550002
+   ],
+   [
+    3174.4441101525003,
+    1398.742923555
+   ],
+   [
+    3223.5936016425003,
+    1409.611032235
+   ]
+  ],
+  [
+   [
+    2885.3098638324996,
+    1593.495089555
+   ],
+   [
+    2806.8340790824996,
+    1559.446749075
+   ],
+   [
+    3129.1223019325002,
+    1386.4690193149997
+   ],
+   [
+    3174.4447551525004,
+    1398.7431420550001
+   ]
+  ],
+  [
+   [
+    2806.8346692574996,
+    1559.446992655
+   ],
+   [
+    2735.6689576075005,
+    1521.864616835
+   ],
+   [
+    3088.0144810275,
+    1372.941127615
+   ],
+   [
+    3129.1228921075003,
+    1386.4692628949997
+   ]
+  ],
+  [
+   [
+    2735.669487045,
+    1521.864883215
+   ],
+   [
+    2672.587856235,
+    1481.1284758550003
+   ],
+   [
+    3051.5936462550003,
+    1358.235246935
+   ],
+   [
+    3088.015010465,
+    1372.941393995
+   ]
+  ],
+  [
+   [
+    2672.5883197749995,
+    1481.1287623750002
+   ],
+   [
+    2618.1497753950002,
+    1437.618327275
+   ],
+   [
+    3020.117795035,
+    1342.5793768950002
+   ],
+   [
+    3051.594109795,
+    1358.235533455
+   ]
+  ],
+  [
+   [
+    2618.1501687375,
+    1437.61863118
+   ],
+   [
+    2572.8707159475002,
+    1391.75217252
+   ],
+   [
+    2993.9739269374995,
+    1326.0495155
+   ],
+   [
+    3020.1181883775,
+    1342.5796808000002
+   ]
+  ],
+  [
+   [
+    2572.8710353300003,
+    1391.752490865
+   ],
+   [
+    2537.18067843,
+    1344.0240135850001
+   ],
+   [
+    2973.3340399200006,
+    1308.8356617050003
+   ],
+   [
+    2993.9742463199996,
+    1326.0498338450002
+   ]
+  ],
+  [
+   [
+    2537.1809207349997,
+    1344.024343235
+   ],
+   [
+    2511.4236631650006,
+    1294.8138511349998
+   ],
+   [
+    2958.4991338749996,
+    1291.1278142750002
+   ],
+   [
+    2973.334282225,
+    1308.8359913550003
+   ]
+  ],
+  [
+   [
+    2511.4238259200006,
+    1294.8141890499999
+   ],
+   [
+    2495.9006706900004,
+    1244.65368745
+   ],
+   [
+    2949.51220676,
+    1273.03997131
+   ],
+   [
+    2958.4992966299997,
+    1291.1281521900003
+   ]
+  ],
+  [
+   [
+    2495.9007524975004,
+    1244.654030305
+   ],
+   [
+    2490.6977004675,
+    1193.999523765
+   ],
+   [
+    2946.5022584675,
+    1254.8001317650003
+   ],
+   [
+    2949.5122885675,
+    1273.040314165
+   ]
+  ],
+  [
+   [
+    2490.6977004675,
+    1193.999868235
+   ],
+   [
+    2495.9007524975004,
+    1143.345361695
+   ],
+   [
+    2949.5122885675,
+    1236.560293835
+   ],
+   [
+    2946.5022584675,
+    1254.8004762350001
+   ]
+  ],
+  [
+   [
+    2495.9006706900004,
+    1143.34570455
+   ],
+   [
+    2511.4238259200006,
+    1093.18520295
+   ],
+   [
+    2958.4992966299997,
+    1218.4724558100002
+   ],
+   [
+    2949.51220676,
+    1236.56063669
+   ]
+  ],
+  [
+   [
+    2511.4236631650006,
+    1093.1855408650001
+   ],
+   [
+    2537.1809207349997,
+    1043.9750487649999
+   ],
+   [
+    2973.334282225,
+    1200.764616645
+   ],
+   [
+    2958.4991338749996,
+    1218.4727937250002
+   ]
+  ],
+  [
+   [
+    2537.18067843,
+    1043.9753784149998
+   ],
+   [
+    2572.8710353300003,
+    996.2469011350003
+   ],
+   [
+    2993.9742463199996,
+    1183.550774155
+   ],
+   [
+    2973.3340399200006,
+    1200.7649462949998
+   ]
+  ],
+  [
+   [
+    2572.8707159475002,
+    996.2472194800002
+   ],
+   [
+    2618.1501687375,
+    950.3807608200001
+   ],
+   [
+    3020.1181883775,
+    1167.0209272
+   ],
+   [
+    2993.9739269374995,
+    1183.5510924999999
+   ]
+  ],
+  [
+   [
+    2618.1497753950002,
+    950.3810647250001
+   ],
+   [
+    2672.5883197749995,
+    906.870629625
+   ],
+   [
+    3051.594109795,
+    1151.365074545
+   ],
+   [
+    3020.117795035,
+    1167.021231105
+   ]
+  ],
+  [
+   [
+    2672.587856235,
+    906.870916145
+   ],
+   [
+    2735.669487045,
+    866.1345087850002
+   ],
+   [
+    3088.015010465,
+    1136.659214005
+   ],
+   [
+    3051.5936462550003,
+    1151.3653610650001
+   ]
+  ],
+  [
+   [
+    2735.6689576075005,
+    866.1347751650002
+   ],
+   [
+    2806.8346692574996,
+    828.5523993450004
+   ],
+   [
+    3129.1228921075003,
+    1123.131345105
+   ],
+   [
+    3088.0144810275,
+    1136.6594803849998
+   ]
+  ],
+  [
+   [
+    2806.8340790824996,
+    828.5526429250003
+   ],
+   [
+    2885.3098638324996,
+    794.5043024450001
+   ],
+   [
+    3174.4447551525004,
+    1110.857465945
+   ],
+   [
+    3129.1223019325002,
+    1123.1315886850002
+   ]
+  ],
+  [
+   [
+    2885.3092188324995,
+    794.5045209450001
+   ],
+   [
+    2970.3640693724997,
+    764.2942188449998
+   ],
+   [
+    3223.5936016425003,
+    1099.9895757650002
+   ],
+   [
+    3174.4441101525003,
+    1110.857684445
+   ]
+  ],
+  [
+   [
+    2970.3633754599996,
+    764.2944101749998
+   ],
+   [
+    3061.2232840499996,
+    738.2261494950001
+   ],
+   [
+    3276.09643276,
+    1090.6036732349999
+   ],
+   [
+    3223.59290773,
+    1099.9897670950002
+   ]
+  ],
+  [
+   [
+    3061.2225479974995,
+    738.226311945
+   ],
+   [
+    3156.9845056075,
+    716.5280949650002
+   ],
+   [
+    3331.3942496875,
+    1082.7757574050001
+   ],
+   [
+    3276.0956967075,
+    1090.603835685
+   ]
+  ],
+  [
+   [
+    3156.9837346175,
+    716.5282268250002
+   ],
+   [
+    3256.7017317874997,
+    699.4660562050001
+   ],
+   [
+    3389.0140548975,
+    1076.6198277050003
+   ],
+   [
+    3331.3934786975,
+    1082.7758892650002
+   ]
+  ],
+  [
+   [
+    3256.7009332774996,
+    699.46615624
+   ],
+   [
+    3359.4289605475,
+    687.1160327400002
+   ],
+   [
+    3448.3538497875,
+    1072.1738832800002
+   ],
+   [
+    3389.0132563875,
+    1076.61992774
+   ]
+  ],
+  [
+   [
+    3359.4281420425,
+    687.1161000000002
+   ],
+   [
+    3464.2201899525,
+    679.6680255200001
+   ],
+   [
+    3508.8976367225,
+    1069.5139239400003
+   ],
+   [
+    3448.3530312825,
+    1072.17395054
+   ]
+  ],
+  [
+   [
+    3464.2193594074997,
+    679.668059245
+   ],
+   [
+    3570.0004172075,
+    677.198034545
+   ],
+   [
+    3570.0004172075,
+    1068.6019485450001
+   ],
+   [
+    3508.8968061775,
+    1069.5139576650001
+   ]
+  ],
+  [
+   [
+    3569.9995827925,
+    677.198034545
+   ],
+   [
+    3675.7806405925003,
+    679.668059245
+   ],
+   [
+    3631.1031938225,
+    1069.5139576650001
+   ],
+   [
+    3569.9995827925,
+    1068.6019485450001
+   ]
+  ],
+  [
+   [
+    3675.7798100475,
+    679.6680255200001
+   ],
+   [
+    3780.5718579575,
+    687.1161000000002
+   ],
+   [
+    3691.6469687175,
+    1072.17395054
+   ],
+   [
+    3631.1023632775,
+    1069.5139239400003
+   ]
+  ],
+  [
+   [
+    3780.5710394525,
+    687.1160327400002
+   ],
+   [
+    3883.2990667225004,
+    699.46615624
+   ],
+   [
+    3750.9867436125,
+    1076.61992774
+   ],
+   [
+    3691.6461502125,
+    1072.1738832800002
+   ]
+  ],
+  [
+   [
+    3883.2982682125003,
+    699.4660562050001
+   ],
+   [
+    3983.0162653825,
+    716.5282268250002
+   ],
+   [
+    3808.6065213025,
+    1082.7758892650002
+   ],
+   [
+    3750.9859451025,
+    1076.6198277050003
+   ]
+  ],
+  [
+   [
+    3983.0154943925,
+    716.5280949650002
+   ],
+   [
+    4078.7774520025005,
+    738.226311945
+   ],
+   [
+    3863.9043032925,
+    1090.603835685
+   ],
+   [
+    3808.6057503125,
+    1082.7757574050001
+   ]
+  ],
+  [
+   [
+    4078.7767159500004,
+    738.2261494950001
+   ],
+   [
+    4169.63662454,
+    764.2944101749998
+   ],
+   [
+    3916.40709227,
+    1099.9897670950002
+   ],
+   [
+    3863.90356724,
+    1090.6036732349999
+   ]
+  ],
+  [
+   [
+    4169.6359306275,
+    764.2942188449998
+   ],
+   [
+    4254.6907811675,
+    794.5045209450001
+   ],
+   [
+    3965.5558898474997,
+    1110.857684445
+   ],
+   [
+    3916.4063983574997,
+    1099.9895757650002
+   ]
+  ],
+  [
+   [
+    4254.6901361675,
+    794.5043024450001
+   ],
+   [
+    4333.1659209174995,
+    828.5526429250003
+   ],
+   [
+    4010.8776980674998,
+    1123.1315886850002
+   ],
+   [
+    3965.5552448474996,
+    1110.857465945
+   ]
+  ],
+  [
+   [
+    4333.1653307424995,
+    828.5523993450004
+   ],
+   [
+    4404.3310423924995,
+    866.1347751650002
+   ],
+   [
+    4051.9855189725,
+    1136.6594803849998
+   ],
+   [
+    4010.8771078924997,
+    1123.131345105
+   ]
+  ],
+  [
+   [
+    4404.330512955,
+    866.1345087850002
+   ],
+   [
+    4467.412143765,
+    906.870916145
+   ],
+   [
+    4088.4063537449997,
+    1151.3653610650001
+   ],
+   [
+    4051.984989535,
+    1136.659214005
+   ]
+  ],
+  [
+   [
+    4467.411680225,
+    906.870629625
+   ],
+   [
+    4521.850224605,
+    950.3810647250001
+   ],
+   [
+    4119.882204965,
+    1167.021231105
+   ],
+   [
+    4088.405890205,
+    1151.365074545
+   ]
+  ],
+  [
+   [
+    4521.8498312625,
+    950.3807608200001
+   ],
+   [
+    4567.1292840525,
+    996.2472194800002
+   ],
+   [
+    4146.0260730625005,
+    1183.5510924999999
+   ],
+   [
+    4119.8818116225,
+    1167.0209272
+   ]
+  ],
+  [
+   [
+    4567.128964670001,
+    996.2469011350003
+   ],
+   [
+    4602.81932157,
+    1043.9753784149998
+   ],
+   [
+    4166.665960079999,
+    1200.7649462949998
+   ],
+   [
+    4146.02575368,
+    1183.550774155
+   ]
+  ],
+  [
+   [
+    4602.819079265,
+    1043.9750487649999
+   ],
+   [
+    4628.576336835,
+    1093.1855408650001
+   ],
+   [
+    4181.500866125,
+    1218.4727937250002
+   ],
+   [
+    4166.665717774999,
+    1200.764616645
+   ]
+  ],
+  [
+   [
+    4628.57617408,
+    1093.18520295
+   ],
+   [
+    4644.09932931,
+    1143.34570455
+   ],
+   [
+    4190.4877932399995,
+    1236.56063669
+   ],
+   [
+    4181.50070337,
+    1218.4724558100002
+   ]
+  ],
+  [
+   [
+    4644.0992475025,
+    1143.345361695
+   ],
+   [
+    4649.3022995325,
+    1193.999868235
+   ],
+   [
+    4193.4977415325,
+    1254.8004762350001
+   ],
+   [
+    4190.4877114325,
+    1236.560293835
+   ]
+  ],
+  [
+   [
+    4406.297055292378,
+    812.3621992295293
+   ],
+   [
+    4474.920994137234,
+    665.3109017048378
+   ],
+   [
+    4543.689634664673,
+    522.8615748980018
+   ],
+   [
+    4608.333549171667,
+    403.6589836876144
+   ],
+   [
+    4613.475720428438,
+    392.4899412796295
+   ],
+   [
+    4617.11604712101,
+    380.7452635438767
+   ],
+   [
+    4619.192242250383,
+    368.6259051726549
+   ],
+   [
+    4619.668781542264,
+    356.3392317478165
+   ],
+   [
+    4618.537511277245,
+    344.09547165816986
+   ],
+   [
+    4615.817787803211,
+    332.10411903346056
+   ],
+   [
+    4611.55614634285,
+    320.5703492417283
+   ],
+   [
+    4605.825504763102,
+    309.6915082818749
+   ],
+   [
+    4598.723915930227,
+    299.6537361389079
+   ],
+   [
+    4590.37288999809,
+    290.6287818771897
+   ],
+   [
+    4580.915315335729,
+    282.77106496632825
+   ],
+   [
+    4570.513013667757,
+    276.21503312123923
+   ],
+   [
+    4559.343971259772,
+    271.0728618644674
+   ],
+   [
+    4547.599293524019,
+    267.43253517189544
+   ],
+   [
+    4535.479935152797,
+    265.3563400425225
+   ],
+   [
+    4523.193261727959,
+    264.8798007506421
+   ],
+   [
+    4510.9495016383125,
+    266.0110710156601
+   ],
+   [
+    4498.958149013602,
+    268.7307944896946
+   ],
+   [
+    4487.42437922187,
+    272.99243595005504
+   ],
+   [
+    4476.5455382620175,
+    278.7230775298044
+   ],
+   [
+    4466.507766119051,
+    285.82466636267924
+   ],
+   [
+    4457.482811857332,
+    294.1756922948166
+   ],
+   [
+    4449.62509494647,
+    303.63326695717586
+   ],
+   [
+    4443.069063101381,
+    314.035568625149
+   ],
+   [
+    4377.368406101381,
+    435.18678012514897
+   ],
+   [
+    4375.3479487997165,
+    439.1316668041293
+   ],
+   [
+    4305.347248799716,
+    584.1331168041293
+   ],
+   [
+    4304.817882164818,
+    585.2483064029187
+   ],
+   [
+    4234.8171821648175,
+    735.2498064029187
+   ],
+   [
+    4232.72156742522,
+    740.0903649718601
+   ],
+   [
+    4182.72106742522,
+    865.09161497186
+   ],
+   [
+    4178.910930707405,
+    876.7823074978354
+   ],
+   [
+    4176.659331817226,
+    888.8703071662289
+   ],
+   [
+    4176.004796235957,
+    901.148784951288
+   ],
+   [
+    4176.958523248862,
+    913.4076526938729
+   ],
+   [
+    4179.50419432233,
+    925.4371577681081
+   ],
+   [
+    4183.598252318498,
+    937.0314720069641
+   ],
+   [
+    4189.170646769968,
+    947.9922134792632
+   ],
+   [
+    4196.126032462711,
+    958.1318408595225
+   ],
+   [
+    4204.345400819131,
+    967.2768623120301
+   ],
+   [
+    4213.688116167808,
+    975.2708039842546
+   ],
+   [
+    4223.9943220588375,
+    981.9768873178448
+   ],
+   [
+    4235.0876764520035,
+    987.2803693676856
+   ],
+   [
+    4246.778368977978,
+    991.0905060855009
+   ],
+   [
+    4258.8663686463715,
+    993.3421049756796
+   ],
+   [
+    4271.144846431431,
+    993.9966405569498
+   ],
+   [
+    4283.4037141740155,
+    993.042913544044
+   ],
+   [
+    4295.433219248251,
+    990.4972424705766
+   ],
+   [
+    4307.027533487107,
+    986.4031844744073
+   ],
+   [
+    4317.988274959406,
+    980.8307900229386
+   ],
+   [
+    4328.1279023396655,
+    973.8754043301942
+   ],
+   [
+    4337.272923792173,
+    965.6560359737746
+   ],
+   [
+    4345.266865464398,
+    956.3133206250973
+   ],
+   [
+    4351.972948797988,
+    946.0071147340683
+   ],
+   [
+    4357.276430847828,
+    934.9137603409033
+   ],
+   [
+    4406.297055292378,
+    812.3621992295293
    ]
   ]
  ],

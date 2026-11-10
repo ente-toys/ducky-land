@@ -1,0 +1,68 @@
+{
+  "item": "Fair review fixes 3 and 4",
+  "island": "isle-170",
+  "branch": "fp-bridges",
+  "committed": false,
+  "bridgeCount": 12,
+  "approvedSource": "public/pixi-art/home-expansion-c/bridges/bridge-{ew,ns,ne,nw}.svg",
+  "style": {
+    "ink": "#39472d",
+    "timber": "#F4A7B9",
+    "shade": "#C87591",
+    "endSill": "removed only the original Home bank slab",
+    "transforms": "cardinal longitudinal scale only; diagonals use source dimensions, translation only"
+  },
+  "sources": [
+    "scripts/bigger-fair/arch.mjs",
+    "scripts/bigger-fair/bridges.mjs",
+    "scripts/bigger-fair/bridge-water.py"
+  ],
+  "merge": {
+    "order": [
+      "Merge bridge source and geometry support.",
+      "Run node scripts/bigger-fair/bridges.mjs after centre and bank regeneration to get final exact crossing endpoints.",
+      "Load scripts/bigger-fair/bridge-landings.json in the ONE approved Home path union. Union all 24 dry throat polygons, connect existing lane ends to their back points, subtract waterCutout. No overlay painter.",
+      "Bank/water worker must retain the lagoon outline/outlet and remove the remaining old ring/tributary bank fragments. Outlet contour is available from python3 scripts/bigger-fair/bridge-water.py.",
+      "Rerun scripts/bigger-fair/bridges-proof.mjs after the final path merge, then sail/walk checks."
+    ],
+    "runtime": [
+      "world.json and walk-world.json: 12 matching bridges/walkways; diagonal deck polygons; connected lagoon boatWater.",
+      "art.json: 12 overBoats decks; removes only ac2-islet-bridge blueprint sprite.",
+      "centre.mjs: skip old blueprint islet bridge, invoke finalizer at end.",
+      "rive/web/island-geometry.mjs: honor bridge.poly for real diagonal footprints.",
+      "expansion.json, paths.json and world.paths: only the wishwater-coast bridge approach is rerouted."
+    ]
+  },
+  "preserved": {
+    "nonBridgeProps": "byte-for-byte equal to HEAD",
+    "sleepSpots": "unchanged, 40 resolve",
+    "coast": "unchanged",
+    "harborAndTenApprovedBoats": "unchanged",
+    "castle": "unchanged, dry islet remains at 3570,1250"
+  },
+  "verification": {
+    "targeted": "13/13 pass; harbour/lagoon/ring/mouth round trips and both directions under all twelve bridges",
+    "retentionAndIdempotence": "PASS",
+    "nonSocket": {
+      "status": "PASS",
+      "files": 91,
+      "command": "node --test --test-concurrency=4 <all qa/*.test.mjs except network.test.mjs and multiplayer.test.mjs>",
+      "summary": [
+        "ℹ tests 378",
+        "ℹ suites 0",
+        "ℹ pass 378",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 76315.495792"
+      ]
+    },
+    "navigation": "2/2 regression checks pass, including unindexed oracle across all thirteen maps"
+  },
+  "limitations": [
+    "Final flush visual landings depend on the parallel path worker consuming the supplied throat union input. Current PNGs intentionally still show old path residue.",
+    "Static SVG composites were inspected; no live GPU or runtime depth screenshot is claimed. overBoats uses the existing theme renderer.",
+    "Shared team feed write was blocked by filesystem sandbox (feed.md outside writable roots)."
+  ]
+}

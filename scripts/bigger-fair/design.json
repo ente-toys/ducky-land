@@ -6842,7 +6842,7 @@
    "name": "Tree",
    "src": "reuse/tree-3.svg",
    "x": -550,
-   "y": 3550,
+   "y": 3790,
    "width": 300,
    "height": 380,
    "anchor": {
@@ -7588,8 +7588,8 @@
    "id": "fair-community-214",
    "name": "Tree",
    "src": "reuse/tree-3.svg",
-   "x": -930,
-   "y": 3630,
+   "x": -1000,
+   "y": 3800,
    "width": 300,
    "height": 380,
    "anchor": {

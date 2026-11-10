@@ -1,9 +1,10 @@
 // Four authored neighbourhoods. Coordinates are a scene plan, never generated scenery.
 import fs from 'node:fs';
 import sharp from 'sharp';
-import {original,bounds,coast,smooth,read,write} from './design.mjs';
+import {buildTiles,original,bounds,coast,smooth,read,write} from './design.mjs';
 import {render} from './render-core.mjs';
 import {inner,outer,streams,crossings,pathD} from './fix-geometry.mjs';
+import {fitContact} from './furniture.mjs';
 const A='public/pixi-art/themes/fair/',S='scripts/bigger-fair/';
 const O='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/';
 const ink='#A88A46',cream='#FFF0AE',pink='#F6A9B6',blue='#89CEDD',mint='#A6E3DE',yellow='#FFE078';
@@ -11,7 +12,7 @@ const el=(x,y,rx,ry,c,more='')=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${r
 const r=(x,y,w,h,c,rad=7)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rad}" fill="${c}"/>`;
 const p=(d,c='none',more='')=>`<path d="${d}" fill="${c}" ${more}/>`;
 const svg=(w,h,s)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" stroke-linecap="round" stroke-linejoin="round"><g stroke="${ink}" stroke-width="3.5">${s}</g></svg>`;
-function asset(name,w,h,s){fs.writeFileSync(A+'bigger/'+name+'.svg',svg(w,h,s));}
+function asset(name,w,h,s){fs.writeFileSync(A+'bigger/'+name+'.svg',svg(w,h,s).replace(`stroke="${ink}"`,/^(tea-table|flour-crates)$/.test(name)?'stroke="#39472d"':`stroke="${ink}"`));}
 function window(x,y,c=mint){return r(x,y,57,65,cream,15)+r(x+7,y+7,43,49,c,11)+p(`M${x+29} ${y+7}v48 M${x+7} ${y+32}h43`)+p(`M${x-6} ${y+70}h70`,'none','stroke-width="7"')+r(x-5,y+72,68,21,pink,4)+p(`M${x+2} ${y+75}l8 -14 9 13 13 -19 10 18 12 -15 8 17`,'#8FBA48');}
 function door(x,y){return p(`M${x} ${y+85}v-62q32 -42 64 0v62Z`,'#D4A46C')+p(`M${x+8} ${y+80}v-58q24 -27 48 0v58Z`,cream)+el(x+46,y+48,4,4,ink)+p(`M${x-14} ${y+88}h92l14 19h-120Z`,'#E5C383');}
 function house(kind,roof){let s=el(220,417,192,31,'#B8CC6D')+p('M55 215L55 373Q220 431 385 373V215Z',cream)+p('M55 216V373L85 384V217Z','#E4C782');
@@ -73,7 +74,7 @@ export const paths=[{line:[...ring,ring[0]],w:190,widths:[.95,1.06,.92,1.08,.96,
 const props=[];let community;
 const templates=new Map(original.props.map(p=>[p.src,p]));
 function kit(src,x,y,scale=1){const t=templates.get(src);if(!t)throw Error(src);props.push({...t,id:'fair-community-'+props.length,x,y,scale,community});}
-function custom(src,x,y,w,h,rx,ry,extra={}){props.push({id:'fair-community-'+props.length,name:src.replaceAll('-',' '),src:'bigger/'+src+'.svg',x,y,width:w,height:h,scale:1,anchor:{x:.5,y:1},shadow:false,footprint:rx?{x,y:y-ry,rx,ry}:null,community,...extra});}
+function custom(src,x,y,w,h,rx,ry,extra={}){props.push(fitContact({id:'fair-community-'+props.length,name:src.replaceAll('-',' '),src:'bigger/'+src+'.svg',x,y,width:w,height:h,scale:1,anchor:{x:.5,y:1},shadow:false,footprint:rx?{x,y:y-ry,rx,ry}:null,community,...extra}));}
 const homes=[];
 function home(type,x,y){
  const i=homes.filter(h=>h.community===community).length;
@@ -142,7 +143,7 @@ function compose(){
  community='commons';
  for(const [src,x,y,k]of [
  ['tree-3',900,50,1.05],['tree-4',1240,-30,.95],['tree-2',1520,110,1.05],['tree-1',1120,300,.9],
- ['tree-4',-970,3650,1.2],['tree-3',-550,3550,1.1],['tree-2',-1160,3940,1.05],
+ ['tree-4',-970,3650,1.2],['tree-3',-550,3790,1.1],['tree-2',-1160,3940,1.05],
  ['tree-1',6000,4520,1.1],['tree-4',6370,4560,1.05],['tree-3',6610,4770,.95],
  ['tree-3',7420,690,1.15],['tree-4',7760,800,1.05],['tree-2',7640,1120,.95],
  ['tree-4',3990,4630,1.05],['tree-3',4480,4510,1.1],['tree-2',4790,4650,.95]])tree(src,x,y,k);
@@ -164,83 +165,12 @@ function compose(){
  for(const [src,x,y,k]of [['tree-3',4870,5220,1.1],['tree-4',5320,5260,1],['tree-2',5020,4770,1.1],['bush-3',5470,5310,1]])tree(src,x,y,k);
  // A few authored groups frame open commons; no isolated attraction sites.
  community='commons';
- for(const [src,x,y,k]of [['tree-3',7600,650,1.15],['tree-4',7470,1050,1.1],['bush-2',7420,1180,1],['tree-1',5900,4680,1.15],['tree-2',6210,4800,1.1],['bush-3',6080,4930,1],['tree-3',-930,3630,1.1],['tree-4',-590,3830,1.1],['bush-2',-690,3970,1]])tree(src,x,y,k);
+ for(const [src,x,y,k]of [['tree-3',7600,650,1.15],['tree-4',7470,1050,1.1],['bush-2',7420,1180,1],['tree-1',5900,4680,1.15],['tree-2',6210,4800,1.1],['bush-3',6080,4930,1],['tree-3',-1000,3800,1.1],['tree-4',-590,3830,1.1],['bush-2',-690,3970,1]])tree(src,x,y,k);
  return props;
 }
 const d=pts=>'M'+pts.map(q=>q.map(v=>Math.round(v*10)/10).join(' ')).join('L');
-// Variable-width earth road, irregular bank and ruts follow the centre curve.
-function roadShape(road){const left=[],right=[],widths=road.widths||[.9,1.18,.86,1.3,.96];
- const normal=[];
- road.line.forEach(([x,y],i)=>{const a=road.line[Math.max(0,i-1)],b=road.line[Math.min(road.line.length-1,i+1)],len=Math.hypot(b[0]-a[0],b[1]-a[1])||1,n=[-(b[1]-a[1])/len,(b[0]-a[0])/len];normal.push(n);
- const f=i/(road.line.length-1)*(widths.length-1),j=Math.min(widths.length-2,Math.floor(f)),mix=f-j,w=road.w/2*(widths[j]*(1-mix)+widths[j+1]*mix)+(Math.sin(i*.71)*5+Math.cos(i*.34)*6);
- left.push([x+n[0]*w,y+n[1]*w]);right.push([x-n[0]*w,y-n[1]*w]);});
- return {outline:d(smooth([...left,...right.toReversed()],true,3))+'Z',left,right,normal};
-}
-function ground(){let g=`<defs><pattern id="grain" width="177" height="139" patternUnits="userSpaceOnUse"><path d="M17 29l4 -7 5 8 M105 101l4 -8 5 7 M149 49l3 -6 5 7" fill="none" stroke="#729F39" stroke-width="2.6" opacity=".5"/><ellipse cx="67" cy="51" rx="10" ry="3" fill="#C3DE65" opacity=".7"/><ellipse cx="29" cy="109" rx="3" ry="2" fill="#D9E581"/><circle cx="130" cy="22" r="2" fill="#83B13E"/></pattern></defs>`;
- g+=p(d(coast)+'Z',mint,'stroke="#A6E3DE" stroke-width="90" opacity=".6"')+p(d(coast)+'Z',cream,'stroke="#E4C27D" stroke-width="6"');
- const inset=coast.map(([x,y])=>[3600+(x-3600)*.978,2400+(y-2400)*.97]);
- g+=p(d(inset)+'Z','#9CC63E','stroke="#7CA445" stroke-width="5"')+p(d(inset)+'Z','url(#grain)');
- // Authored irregular commons and greener household gardens.
- for(const [x,y,rx,ry]of [[-850,1450,1000,1300],[3650,-500,2850,520],[7890,2970,930,1650],[2550,5100,3200,580],[-700,3750,600,700],[7400,750,680,620],[5880,4700,800,520]])g+=p(`M${x-rx} ${y}C${x-rx*.9} ${y-ry} ${x+rx*.4} ${y-ry} ${x+rx} ${y}S${x-rx*.5} ${y+ry} ${x-rx} ${y}Z`,'#8EBB38','opacity=".48"');
- for(const h of homes)g+=p(`M${h.x-300} ${h.y-110}Q${h.x-320} ${h.y-280} ${h.x} ${h.y-270}T${h.x+310} ${h.y-80}Q${h.x+300} ${h.y+160} ${h.x} ${h.y+150}T${h.x-300} ${h.y-110}Z`,'#AFCE57','stroke="#8AAC40" stroke-width="3"');
- const roads=paths.map(roadShape);
- for(const z of places.filter(z=>z.kind==='paved')){const [rx,ry]=z.floor,x=z.x,y=z.y+150;roads.push({outline:`M${x-rx} ${y}C${x-rx*.8} ${y-ry} ${x+rx*.6} ${y-ry*.9} ${x+rx} ${y-10}S${x-rx*.6} ${y+ry} ${x-rx} ${y}Z`});}
- // All banks first, then all sandy fills so junctions merge into one shared surface.
- for(const q of roads)g+=p(q.outline,'#FFF0AE','stroke="#648C37" stroke-width="32"')+p(q.outline,'none','stroke="#9D9856" stroke-width="15"');
- for(const q of roads)g+=p(q.outline,'#F3DF98','stroke="none"');
- g+=`<defs><clipPath id="road-interior">${roads.map(q=>p(q.outline)).join('')}</clipPath></defs><g clip-path="url(#road-interior)" stroke="none">`;
- for(let j=0;j<paths.length;j++){const road=paths[j],q=roads[j];
- for(const offset of [-.23,.21]){const line=road.line.map(([x,y],i)=>[x+q.normal[i][0]*road.w*offset,y+q.normal[i][1]*road.w*offset]);for(let from=0;from<line.length-3;from+=15)g+=p(d(line.slice(from,from+8)),'none',`stroke="#C6A966" stroke-width="${j===0?11:8}" opacity=".55"`);}
- for(let i=3;i<road.line.length-3;i+=9){const [x,y]=road.line[i];g+=el(x,y,22,6,'#FFF4BF','transform="rotate(-15 '+x+' '+y+')" opacity=".75"');}}
- g+='</g>';
- // Tufts overhang both bank lips, alternating quiet and dressed stretches.
- for(let j=0;j<paths.length;j++){const q=roads[j];for(let i=3;i<q.left.length-3;i+=j===0?5:4){for(const edge of [q.left,q.right]){const [x,y]=edge[i];g+=p(`M${x-23} ${y+3}q-12 -17 -1 -27l10 17 2 -30q10 -5 15 24l8 -19q10 -2 10 21l10 -10q11 7 -2 24`,'#93BE40','stroke="#688F38" stroke-width="2.6"');}}
- for(let i=6;i<q.left.length-3;i+=14){const [x,y]=q.left[i];g+=el(x+17,y+18,7,4,'#C4B285','stroke="#A59568" stroke-width="1.3"')+el(x+33,y+11,4,3,'#D7CB9A','stroke="#A59568" stroke-width="1"');}}
- // Garden beds, stepping stones and pale washing greens belong to each home.
- for(const h of homes)for(const [dx,dy]of [[0,19],[2,59],[7,98]])g+=el(h.x+dx,h.y+dy,30,12,'#E4D69D','stroke="#B2A66B" stroke-width="2"');
- // Shallow worn arcs give the shared greens texture without a drawn border across a road.
- for(const z of places){const [rx,ry]=z.floor,x=z.x,y=z.y+150;g+=p(`M${x-rx*.7} ${y+30}Q${x} ${y+ry*.55} ${x+rx*.7} ${y+20}`,'none','stroke="#E6CE8B" stroke-width="5" opacity=".5"');}
-
- // Household orchards and tended beds occupy the deleted parallel streets.
- for(const [x,y,rx,ry]of [[1180,135,450,240],[-840,3910,430,280],[6260,4770,480,260],[7570,880,350,340],[4330,4570,550,230],[-1120,2370,330,180],[2450,-550,590,210],[5870,-500,510,170],[7900,4800,470,240],[4900,5050,660,260]]){
-  g+=el(x,y,rx,ry,'#A5CA53','stroke="#83A344" stroke-width="4"')+el(x,y,rx,ry,'url(#grain)');
- }
- // These exact beds belong to Bobbinbell's dye garden, Cloudpop's flowers,
- // Waddleshow's reed/prop garden and Sugarspoon's kitchen plots.
- for(const [x,y,rx,ry,c]of [[-1670,2400,160,150,pink],[-1270,2410,150,130,blue],[2370,-620,210,80,yellow],[2790,-520,160,80,pink],[8060,4570,160,140,mint],[8420,4580,145,130,yellow],[4800,5010,220,110,yellow],[5280,5060,190,120,mint]]){
-  g+=p(`M${x-rx} ${y-ry}q${rx} -18 ${rx*2} 0v${ry*2}q-${rx} 18 -${rx*2} 0Z`,'#B9A164','stroke="#8D813F" stroke-width="4"');
-  for(const row of [-.55,0,.55])for(const col of [-.6,0,.6]){const xx=x+rx*col,yy=y+ry*row;g+=p(`M${xx} ${yy+14}v-29m0 16l-17 -10m17 4l15 -12`,'none','stroke="#71913D" stroke-width="4"')+el(xx,yy-17,9,7,c,'stroke="#967F48" stroke-width="2"');}
- }
- // Bakery herb plots, each bed drawn as a tended patch with its own crop.
- for(const [x,y]of [[3940,4550],[4150,4590],[4360,4550],[4580,4530]]){
-  g+=p(`M${x-65} ${y-32}q65 -15 130 0v70q-65 18 -130 0Z`,'#BFAB66','stroke="#967E45" stroke-width="3"');
-  for(const dx of [-40,0,40])g+=p(`M${x+dx} ${y+20}l-17 -30 21 12 12 -26 4 35`,'#769F3E','stroke="#608835" stroke-width="2"');
- }
- g+=`<defs><clipPath id="island-river">${p(d(coast)+'Z')}</clipPath></defs><g clip-path="url(#island-river)">`;
- const canal=pathD(outer)+pathD(inner.toReversed());
- g+=p(canal,'#86CBCD','fill-rule="evenodd" stroke="#789B58" stroke-width="12"');
- g+=p(canal,'none','stroke="#C8D99A" stroke-width="4"');
- for(const stream of streams){g+=p(pathD(stream.poly),'#86CBCD','stroke="#71934C" stroke-width="12"')+p(pathD(stream.poly),'none','stroke="#BED181" stroke-width="4"');}
- g+=el(950,-310,300,130,'#86CBCD','stroke="#71934C" stroke-width="12"')+el(950,-310,300,130,'none','stroke="#BED181" stroke-width="4"');
- // Short glints, stones, lily leaves and reeds belong to named river bends.
- for(const [x,y]of [[300,2150],[540,2950],[2160,4020],[4260,4045],[5900,3970],[6870,1590],[5240,405],[940,-310],[1090,-285],[-700,3460],[8160,1850]]){
-  g+=p(`M${x-45} ${y}q45 -13 90 -3 M${x-16} ${y+17}h40`,'none','stroke="#D2F0D9" stroke-width="5"');
-  g+=el(x+60,y+22,17,9,'#A8C66B','stroke="#6C9350" stroke-width="2"')+p(`M${x+62} ${y+22}l13 -6`,'none','stroke="#6C9350" stroke-width="2"');
- }
- for(const [x,y]of [[2290,4150],[4880,4140],[-1040,3560],[7290,1760],[8500,1510],[640,520],[690,-210],[1170,-400]]){
-  g+=el(x,y,27,13,'#B3B88A','stroke="#7F9358" stroke-width="3"')+p(`M${x+32} ${y+5}q-10 -42 -4 -56M${x+38} ${y+5}q5 -34 16 -43M${x+27} ${y+5}q-22 -30 -19 -42`,'none','stroke="#71974B" stroke-width="5"');
- }
- return g+'</g>';
-}
-async function tiles(){const xx=[-2500,-1250,0,1450,2900,4350,5800,7250,8375,9500],yy=[-1800,-900,0,1213,2426,3639,4850,5625,6400],tiles=[],ext=ground();
- for(let row=0;row<yy.length-1;row++)for(let col=0;col<xx.length-1;col++){const x=xx[col],y=yy[row],w=xx[col+1]-x,h=yy[row+1]-y;let inside='';const t=original.ground.tiles.find(t=>t.x===x&&t.y===y);
- if(t){let s=fs.readFileSync(A+t.src,'utf8');s=s.replace(/<path[^>]*fill="#A6E3DE"[^>]*\/>/g,'').replace(/<path[^>]*stroke="#C9F1EE"[^>]*stroke-width="46"[^>]*\/>/g,'').replace(/<ellipse[^>]*fill="#A6E3DE"[^>]*\/>/g,'');inside=s.replace('<svg ',`<svg x="${x}" y="${y}" `);}
- const riverOverlay=ext.slice(ext.indexOf('<defs><clipPath id="island-river">'));
- const dryCoast=read(S+'original-world.json').coast;
- const outsideOld=`<defs><mask id="keep-original" maskUnits="userSpaceOnUse" x="-2500" y="-1800" width="12000" height="8200"><rect x="-2500" y="-1800" width="12000" height="8200" fill="white"/><path d="${pathD(dryCoast)}" fill="black" stroke="black" stroke-width="6"/></mask></defs><g mask="url(#keep-original)">${riverOverlay}</g>`;
- const src=`bigger/ground-${row}-${col}.svg`;fs.writeFileSync(A+src,`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}" stroke-linecap="round" stroke-linejoin="round">${ext}${inside}${outsideOld}</svg>`);tiles.push({src,x,y,width:w,height:h,resolution:t?1:.8});}
- return tiles;
-}
+// Ground is delegated; no nested original tiles or alternate road painter.
+async function tiles(){return buildTiles();}
 makeAssets();compose();
 const art={...original,...bounds,ground:{tiles:await tiles()},props:[...original.props,...props]};
 write(S+'design.json',{...bounds,coast,places,paths,newProps:props,homes});write(S+'proposed-art.json',art);

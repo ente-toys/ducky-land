@@ -1,23 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="360" height="194" viewBox="0 0 360 194">
-<title>Checkered balloon plaza and entry steps</title><desc>Bottom centre anchor. The lantern promenade's pink and cream tiles continue in parallel foreshortened rows inside the cream rim. Original edge and three south steps retained.</desc>
+<title>Flush checker balloon court</title>
+<desc>One flat destination surface at lawn and path level. No plinth, raised rim, edge wall or steps. Balloon kiosk remains a separate standing object.</desc>
 <defs>
-<clipPath id="balloon-plaza-paving"><ellipse cx="180" cy="88" rx="171" ry="82"/></clipPath>
-<!-- Blueprint coordinates: plaza origin (588,730), promenade tile origin (718,414). -->
 <pattern id="balloon-plaza-checks" patternUnits="userSpaceOnUse" x="130" y="-316" width="66" height="48">
-<g stroke="#D9B367" stroke-width=".65">
-<rect width="33" height="24" fill="#F4BAC0"/>
-<rect x="33" width="33" height="24" fill="#FFECAC"/>
-<rect y="24" width="33" height="24" fill="#FFECAC"/>
-<rect x="33" y="24" width="33" height="24" fill="#F4BAC0"/>
-</g>
+<rect width="66" height="48" fill="#FFECAC"/>
+<path d="M0 0H33V24H0ZM33 24H66V48H33Z" fill="#F4BAC0"/>
 </pattern>
 </defs>
-<g stroke="#39472d" stroke-width="1.35" stroke-linejoin="round">
-<path d="M1 88A179 87 0 0 1 359 88V94A179 87 0 0 1 1 94Z" fill="#E4C57B"/>
-<ellipse cx="180" cy="88" rx="179" ry="87" fill="#FFF0BF"/>
-<rect x="9" y="6" width="342" height="164" fill="url(#balloon-plaza-checks)" stroke="none" clip-path="url(#balloon-plaza-paving)"/>
-<ellipse cx="180" cy="88" rx="171" ry="82" fill="none" stroke="#E4C57B" stroke-width=".9"/>
-<path d="M144 164H216V172L219 177V181L222 187V194H138V187L141 181V177L144 172Z" fill="#FFF0BF"/>
-<path d="M144 172H216M141 181H219M138 187H222" fill="none"/>
-<path d="M145 166H215M142 178H218M139 184H221" fill="none" stroke="#E4C57B" stroke-width=".8"/>
-</g></svg>
+<ellipse cx="180" cy="88" rx="179" ry="87" fill="url(#balloon-plaza-checks)"/>
+</svg>

@@ -96,22 +96,22 @@
   },
   "fair": {
     "src": "/pixi-art/globe/fair.svg",
-    "sha256": "9c8ab3a4a9f12be6b3625e88c4295f05483b599c0e7b063aba52e9e8d5857cb9",
+    "sha256": "c4e9308ec4e8a6425d57da288adf93e3fd9f75656a117cd3fd67e51a71a3d2a6",
     "width": 1024,
     "height": 700,
-    "bytes": 462804,
-    "groundBytes": 238381,
+    "bytes": 278849,
+    "groundBytes": 35764,
     "quality": {
       "tolerance": 0.3,
       "minArea": 0.18,
       "paletteDistance": 38,
       "quantum": 0.5
     },
-    "worldPaths": 23,
+    "worldPaths": 63,
     "walkways": 12,
-    "flats": 0,
-    "decks": 11,
-    "bridgeDetails": 1
+    "flats": 2,
+    "decks": 12,
+    "bridgeDetails": 0
   },
   "cathedral": {
     "src": "/pixi-art/globe/cathedral.svg",
