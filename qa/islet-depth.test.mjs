@@ -90,7 +90,10 @@ test('production islet props sort with Duckies by their foot, preserve the compl
    duck.rotation=Math.atan2(si,co);
    // Test lossless split artwork in its own frame, preserving its source depth
    // order. Chart-space foot sorting was checked above, before this comparison.
-   for(const {piece,sprite}of v.props)sprite.zIndex=(piece.foot[1]-512)*k;
+   for(const {piece,sprite}of v.props){
+    assert.equal(sprite.rotation,0,'props stay screen-upright in a level gameplay camera');
+    sprite.rotation=Math.atan2(si,co);sprite.zIndex=(piece.foot[1]-512)*k;
+   }
    objects.sortChildren();
    renderer.render({container:scene,clear:true});
    const layered=output.getContext('2d').getImageData(0,0,1024,1024).data.slice();

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {createIsletStanding} from './three-islet-props.js';
 import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate} from './three-live-geometry.js';
 import {detailViewport} from './three-detail-view.js';
 import {WORLD_GEO, WORLD_ISLANDS} from './world-map.js';
@@ -66,7 +67,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const waves=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(wavePositions,3)),new THREE.LineBasicMaterial({color:PALETTE.cream,transparent:true,opacity:.25}));
   waves.name='Water marks'; globe.add(waves);
 
-  const loader=new THREE.TextureLoader(), patches=[], cleanups=[];
+  const loader=new THREE.TextureLoader(), patches=[], cleanups=[],isletStanding=[],isletStandBlend={value:0};
   async function patch(frame,width,height,url,island=false) {
     const texture=await loader.loadAsync(url); texture.colorSpace=THREE.SRGBColorSpace;
     if(!island){
@@ -85,10 +86,17 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     geometry.computeVertexNormals();geometry.computeBoundingSphere();
     const mesh=new THREE.Mesh(geometry,
       new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,side:THREE.FrontSide}));
+    const standing=!island?await createIsletStanding(scene,frame,await(await fetch(url)).text(),isletStandBlend):null;
+    if(standing)isletStanding.push(standing);
     const atlasUniform={value:0};
     const atlasMatrix={value:new THREE.Matrix3()};
     mesh.material.onBeforeCompile=shader=>{
       planetLighting(shader);
+      if(standing){
+        shader.uniforms.isletStandBlend=isletStandBlend;shader.uniforms.isletGroundMap={value:standing.ground};
+        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float isletStandBlend;uniform sampler2D isletGroundMap;');
+        shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','vec4 isletColor=mix(texture2D(map,vMapUv),texture2D(isletGroundMap,vMapUv),isletStandBlend);diffuseColor*=isletColor;');
+      }
       shader.uniforms.liveAtlas=atlasUniform;shader.uniforms.atlasMatrix=atlasMatrix;
       shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform mat3 atlasMatrix; varying vec2 atlasPoint;')
         .replace('#include <begin_vertex>','#include <begin_vertex>\natlasPoint=(atlasMatrix*vec3(uv,1.)).xy;');
@@ -96,6 +104,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
         .replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(liveAtlas>.5&&all(greaterThanEqual(atlasPoint,vec2(0.)))&&all(lessThanEqual(atlasPoint,vec2(1.))))discard;');
     };
     mesh.name=frame.name??frame.art; mesh.userData={id:frame.id,island,frame,width,height,texture,atlasUniform,atlasMatrix};
+    mesh.material.customProgramCacheKey=()=>standing?'islet-standing-ground':'island-ground';
     globe.add(mesh); patches.push(mesh); return mesh;
   }
   await Promise.all([
@@ -249,6 +258,8 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     if(Math.abs(camera.near-near)>1e-7){camera.near=near;camera.updateProjectionMatrix();}
     backdrop.setRotation(globe.quaternion);
     globe.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+    isletStandBlend.value=1-THREE.MathUtils.smoothstep(camera.position.z,1.65,3.3);
+    if(!direct)for(const standing of isletStanding)standing.update(globe.quaternion,camera);
     const centre=new THREE.Vector3(0,0,1).applyQuaternion(globe.quaternion.clone().invert());
     if(camera.position.z<2.8&&!transition){
       const nearest=WORLD_ISLANDS.reduce((a,b)=>new THREE.Vector3(...a.center).dot(centre)>new THREE.Vector3(...b.center).dot(centre)?a:b);
@@ -325,9 +336,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     demand.invalidate();
   }
   function project(id,x,y){const frame=WORLD_ISLANDS.find(i=>i.id===id);if(!frame)return null;const map=mapOf(id),p=surfacePoint(frame,x-map.cx,y-map.cy,WORLD_GEO.Rw).applyQuaternion(globe.quaternion);if(!visiblePoint(p,camera.position))return null;p.project(camera);return{x:(p.x+1)*width/2,y:(1-p.y)*height/2};}
-  return {focus,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
+  function focusIslet(id){
+    const frame=ISLETS.find(i=>i.id===id);if(!frame)return;
+    selected=frame.home;onSelect(WORLD_ISLANDS.find(i=>i.id===selected));zoomAnchor=null;targetAltitude=.65;
+    transition={at:performance.now(),duration:reduced?1:700,from:globe.quaternion.clone(),to:focusQuaternion(frame),z0:camera.position.z,z1:1+targetAltitude};demand.invalidate();
+  }
+  return {focus,focusIslet,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
 
     setActive(value){if(active===value)return;active=value;backdrop.setActive(value&&!direct);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
-    destroy(){destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
+    destroy(){destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();isletStanding.forEach(s=>s.ground.dispose());cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
   };
 }

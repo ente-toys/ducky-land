@@ -98,11 +98,11 @@ const {outputFiles:[bundle]}=await build({
       'export const createGlobeAtmosphere=()=>({water:globalThis.__wideQA.water,update(){return false;},destroy(){},cloudCount:0,phase:0});'}));
   }}]
 });
-const {createThreeGameView}=await import('data:text/javascript;base64,'+Buffer.from(bundle.text.replaceAll('"three"',JSON.stringify(import.meta.resolve('three')))).toString('base64'));
+const {createThreeGameView}=await import('data:text/javascript;base64,'+Buffer.from(bundle.text.replaceAll('"three"',JSON.stringify(import.meta.resolve('three'))).replaceAll('"pixi.js"',JSON.stringify(import.meta.resolve('pixi.js')))).toString('base64'));
 
 for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at ${width}x${height} keeps full width and native render ownership`,async()=>{
   const dom=new JSDOM('<div id="host"><canvas></canvas></div>',{pretendToBeVisual:true,url:'http://localhost/'}),{window}=dom,host=window.document.querySelector('#host'),canvas=host.querySelector('canvas');
-  const keys=['window','document','location','Image','ResizeObserver','requestAnimationFrame','cancelAnimationFrame','matchMedia','devicePixelRatio','performance','__wideQA'],prior=new Map(keys.map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)]));
+  const keys=['window','document','location','Image','DOMParser','XMLSerializer','fetch','ResizeObserver','requestAnimationFrame','cancelAnimationFrame','matchMedia','devicePixelRatio','performance','__wideQA'],prior=new Map(keys.map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)]));
   const callbacks=new Map(),observers=[],renderers=[];let nextRAF=0,now=performance.now(),nativeRenders=0,view;
   let box={width,height,left:0,top:0};window.HTMLElement.prototype.getBoundingClientRect=()=>box;
   Object.defineProperties(host,{clientWidth:{get:()=>box.width},clientHeight:{get:()=>box.height}});
@@ -115,7 +115,7 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     const context=bitmap.getContext('2d');
     if(!Object.hasOwn(context,'drawImage')){
       const drawImage=context.drawImage.bind(context);
-      context.drawImage=(source,...args)=>drawImage(canvases.get(source)??source,...args);
+      context.drawImage=(source,...args)=>drawImage(canvases.get(source)??source.bitmap??source,...args);
     }
     return context;
   };
@@ -125,7 +125,8 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     render(scene,camera){this.scene=scene;this.camera=camera;this.renders++;}
   }
   const globals={window,document:window.document,location:window.location,devicePixelRatio:2,performance:{now:()=>now},
-    Image:class{async decode(){}},ResizeObserver:class{constructor(fn){observers.push(fn);}observe(){}disconnect(){}},
+    Image:class{async decode(){this.bitmap=await loadImage(this.src);}},DOMParser:window.DOMParser,XMLSerializer:window.XMLSerializer,
+    fetch:async url=>({text:()=>readFile(new URL('../public'+new URL(url,window.location.href).pathname,import.meta.url),'utf8')}),ResizeObserver:class{constructor(fn){observers.push(fn);}observe(){}disconnect(){}},
     requestAnimationFrame:fn=>{callbacks.set(++nextRAF,fn);return nextRAF;},cancelAnimationFrame:id=>callbacks.delete(id),matchMedia:()=>({matches:true}),
     __wideQA:{Renderer,Loader:class{async loadAsync(url){
       const path=new URL('../public'+new URL(url,window.location.href).pathname,import.meta.url);

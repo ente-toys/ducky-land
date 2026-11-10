@@ -44,8 +44,8 @@ export function layoutIslet(i){
  // Where the boat ties up. Off an east or west jetty it waits past the tip; off a south (or north) jetty it lies alongside
  // the tip on the side away from the island's middle, because a boat stands up on screen and would cover the deck and the Ducky stepping off it.
  const out=(tip[0]-c[0])*-dir[1]+(tip[1]-c[1])*dir[0],side=out>=0?[-dir[1],dir[0]]:[dir[1],-dir[0]],across=Math.abs(dir[1])>Math.abs(dir[0]);
- const water=across?[tip[0]-dir[0]*40*ISLET_SCALE+side[0]*(m.jetty.width*k/2+(BOAT_ROOM-12)*ISLET_SCALE),tip[1]-dir[1]*40*ISLET_SCALE+side[1]*(m.jetty.width*k/2+(BOAT_ROOM-12)*ISLET_SCALE)]:at(BOAT_ROOM*ISLET_SCALE);
- const jetty={foot,tip,land:at(-26*ISLET_SCALE),water,dir,width:m.jetty.width*k};
+ const water=across?[tip[0]-dir[0]*40+side[0]*(m.jetty.width*k/2+BOAT_ROOM-12),tip[1]-dir[1]*40+side[1]*(m.jetty.width*k/2+BOAT_ROOM-12)]:at(BOAT_ROOM);
+ const jetty={foot,tip,land:at(-26),water,dir,width:m.jetty.width*k};
  return {...i,...frame,radius,home:near.id,coast,lakes,blocked,jetty,landCentre:c,collisionCenter:expMap(frame,c[0],c[1],WORLD_GEO.Rw),cap:Math.cos(i.width*.71/WORLD_GEO.Rw)};
 }
 export const ISLETS=data.placements.map(layoutIslet);

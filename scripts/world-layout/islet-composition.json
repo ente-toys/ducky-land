@@ -1,57 +1,145 @@
 {
-  "08-snow-igloo": {
-    "region": "Iceland",
-    "lon": 14,
-    "lat": 61
-  },
-  "04-small-mountain": {
-    "region": "Campfire",
-    "lon": -117,
-    "lat": 11
+  "odyssey": {
+    "lon": 135,
+    "lat": -54,
+    "region": "Southern passage",
+    "reason": "Separate the horse from the Rosybutton-side cluster and give the southern sea a clear landmark.",
+    "dockApproach": {
+      "foot": [
+        480,
+        705
+      ],
+      "heading": 84
+    }
   },
   "tree-and-rowboat": {
-    "region": "Home",
-    "lon": -27,
-    "lat": 22
-  },
-  "05-lighthouse-rock": {
-    "region": "Sunbob",
-    "lon": 60,
-    "lat": -9
+    "lon": -33,
+    "lat": 20,
+    "region": "Home passage",
+    "reason": "Open a wider channel beside Home while keeping a recognisable nearby stop.",
+    "dockApproach": {
+      "foot": [
+        413.313,
+        697.354
+      ],
+      "heading": 28
+    }
   },
   "broken-shipwreck": {
+    "lon": -42,
+    "lat": 54,
     "region": "Northern passage",
-    "lon": -155,
-    "lat": 50
+    "reason": "Bring the larger wreck into the open northern Home/Campfire passage.",
+    "dockApproach": {
+      "foot": [
+        555,
+        426
+      ],
+      "heading": -90
+    }
+  },
+  "04-small-mountain": {
+    "lon": -117,
+    "lat": 11,
+    "region": "Campfire",
+    "reason": "Keep the waterfall as the quieter western stop.",
+    "dockApproach": {
+      "foot": [
+        735,
+        548
+      ],
+      "heading": -36
+    }
+  },
+  "05-lighthouse-rock": {
+    "lon": 33,
+    "lat": -22,
+    "region": "Home southern passage",
+    "reason": "Put the lighthouse on the open Home-side sailing approach rather than on the Sunbob centre line.",
+    "dockApproach": {
+      "foot": [
+        305,
+        620
+      ],
+      "heading": -150
+    }
   },
   "06-palm-treasure": {
-    "region": "Pagepond",
-    "lon": 73,
-    "lat": -48
-  },
-  "12-coral-atoll": {
-    "region": "Fair",
-    "lon": 151,
-    "lat": -13
+    "lon": 89,
+    "lat": -50,
+    "region": "Pagepond southern passage",
+    "reason": "Pair the southern treasure route with the horse, separated by open water.",
+    "dockApproach": {
+      "foot": [
+        665,
+        516
+      ],
+      "heading": -59
+    }
   },
   "07-pink-blossom": {
-    "region": "Rosybutton",
-    "lon": -171,
-    "lat": -42
+    "lon": -123,
+    "lat": -49,
+    "region": "Rosybutton southern passage",
+    "reason": "Release the dense western Rosybutton cluster and create a loose southern pair with the volcano.",
+    "dockApproach": {
+      "foot": [
+        265,
+        515
+      ],
+      "heading": -128
+    }
   },
-  "odyssey": {
-    "region": "Southern passage",
-    "lon": 163,
-    "lat": -50
+  "08-snow-igloo": {
+    "lon": 14,
+    "lat": 61,
+    "region": "Iceland",
+    "reason": "Retain the clear cold-water stepping stone below Iceland.",
+    "dockApproach": {
+      "foot": [
+        510,
+        350
+      ],
+      "heading": -90
+    }
   },
   "09-spooky-purple": {
+    "lon": -29,
+    "lat": -55,
     "region": "Bog",
-    "lon": -22,
-    "lat": -53
+    "reason": "Keep a quiet isolated arrival on the northern edge of Bog water.",
+    "dockApproach": {
+      "foot": [
+        560,
+        696
+      ],
+      "heading": 90
+    }
   },
   "11-volcano": {
-    "region": "Bellovo",
-    "lon": -97,
-    "lat": -25
+    "lon": -90,
+    "lat": -37,
+    "region": "Bellovo southern passage",
+    "reason": "Give the Bellovo/Rosybutton passage a second, unequal landmark.",
+    "dockApproach": {
+      "foot": [
+        781,
+        595
+      ],
+      "heading": -15
+    }
+  },
+  "12-coral-atoll": {
+    "lon": 151,
+    "lat": -7,
+    "region": "Fair passage",
+    "reason": "Offset the coral lagoon from the vertical Fair/Pagepond alignment.",
+    "dockApproach": {
+      "foot": [
+        745,
+        425
+      ],
+      "heading": -68
+    }
   }
 }

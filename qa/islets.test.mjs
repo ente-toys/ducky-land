@@ -150,7 +150,8 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   assert.ok(setWalkDestination(actor,nav,goal.x,goal.y),`${i.id} can walk inland`);
   let walked=0;
   for(let k=0;k<1200&&actor.path.length;k++){const x=actor.x,y=actor.y;walkStep(actor,nav,.05,k*.05,{x:0,y:0});walked+=Math.hypot(actor.x-x,actor.y-y);assert.ok(nav.walkable(actor.x,actor.y),`${i.id} stays on land`);}
-  assert.ok(walked>i.width*.2,`${i.id} walked ${Math.round(walked)}`);
+  assert.ok(walked>100,`${i.id} traversed inland from its shorter dock`);
+  assert.ok(Math.hypot(actor.x-goal.x,actor.y-goal.y)<45,`${i.id} reached the inland destination`);
   // the walk area is the islet itself, never the sea round it
   assert.equal(nav.walkable(w.water.x,w.water.y),false);
   // back to the boat: board from the jetty
@@ -249,7 +250,7 @@ test('an islet landing keeps its drawn art fixed on screen across rigid charts',
  }
 });
 
-test('3x scales land, prop footprints, deck width and both dock anchors as one scene',()=>{
+test('3x scales land and prop footprints while Home bridges and boarding clearance stay at player scale',()=>{
  assert.equal(ISLET_SCALE,3);
  const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
  for(const i of ISLETS){
@@ -258,10 +259,12 @@ test('3x scales land, prop footprints, deck width and both dock anchors as one s
   for(const [n,b]of m.blocked.entries())for(const [j,p]of b.polygon.entries())for(let a=0;a<2;a++)close(i.blocked[n][j][a],(p[a]-512)*k*3);
   for(const key of ['foot','tip'])for(let a=0;a<2;a++)close(i.jetty[key][a],(m.jetty[key][a]-512)*k*3);
   close(i.jetty.width,m.jetty.width*k*3);
-  for(let a=0;a<2;a++)close(i.jetty.land[a],i.jetty.tip[a]-i.jetty.dir[a]*26*3);
-  const tip=i.jetty.tip.map(v=>v/3),c=i.landCentre.map(v=>v/3),dir=i.jetty.dir;
+  close(i.jetty.width,112);close(Math.hypot(i.jetty.tip[0]-i.jetty.foot[0],i.jetty.tip[1]-i.jetty.foot[1]),320);
+  assert.match(m.jetty.homeSource,/home-expansion-c\/bridges\/bridge-(ew|ns|ne|nw)\.svg/);
+  for(let a=0;a<2;a++)close(i.jetty.land[a],i.jetty.tip[a]-i.jetty.dir[a]*26);
+  const tip=i.jetty.tip,c=i.landCentre,dir=i.jetty.dir;
   const out=(tip[0]-c[0])*-dir[1]+(tip[1]-c[1])*dir[0],side=out>=0?[-dir[1],dir[0]]:[dir[1],-dir[0]];
-  const water=Math.abs(dir[1])>Math.abs(dir[0])?tip.map((v,a)=>v-dir[a]*40+side[a]*(m.jetty.width*k/2+60)):tip.map((v,a)=>v+dir[a]*72);
-  for(let a=0;a<2;a++)close(i.jetty.water[a],water[a]*3);
+  const water=Math.abs(dir[1])>Math.abs(dir[0])?tip.map((v,a)=>v-dir[a]*40+side[a]*(i.jetty.width/2+60)):tip.map((v,a)=>v+dir[a]*72);
+  for(let a=0;a<2;a++)close(i.jetty.water[a],water[a]);
  }
 });
