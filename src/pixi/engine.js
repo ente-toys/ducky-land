@@ -6,6 +6,7 @@ import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
 import {globeBall,uprightFade,northUpRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from './globe-look.js';
 import {unplaceRigid,flatRigid} from './rigid.js';
+import {withRigidVisitors} from './rigid-visitors.js';
 import {localPoint,spherePoint} from './sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from './zoom-motion.js';
@@ -996,15 +997,12 @@ export class PixiIsland {
     // boss 5 Nov ("I went to another island, but I am going under the island"): a copy is drawn over the real island, so a
     // boat, Ducky or name board out in a neighbour's waters went under that copy's jetty, sign and trees. Each one is drawn
     // again inside its copy's pass, moved into that island's frame for the moment, so it sorts among the copy's own things.
-    const shift=(o, dx, dy) => {o.x+=dx; o.y+=dy; o.zIndex+=dy; if (o.mask?.position) {o.mask.x+=dx; o.mask.y+=dy;}};   // a seated Ducky's hull mask moves with it
     for (const island of copies) {
       const mine=visitors.filter(v => v.copy === island).map(v => v.o);   // the copy's map origin
-      const saved=mine.map(o=>({o,x:o.x,y:o.y,z:o.zIndex}));
-      for(const {o}of saved){const p=unplaceRigid(this.islandId,island.id,o);o.visible=true;shift(o,p.x-o.x,p.y-o.y);}
-      this.showArt(island.map);cull(island.map,island.id);
-      this.livePatches.draw(this.islandId,island.id,this.scene,this.camera,this.width,this.height,TILT,target);
-      for(const {o,x,y,z}of saved){shift(o,x-o.x,y-o.y);o.zIndex=z;o.visible=false;}
-
+      withRigidVisitors(this.islandId,island.id,mine,()=>{
+        this.showArt(island.map);cull(island.map,island.id);
+        this.livePatches.draw(this.islandId,island.id,this.scene,this.camera,this.width,this.height,TILT,target);
+      });
     }
     this.scene.visible=sceneVisible;
     this.showArt(this.artShown);
