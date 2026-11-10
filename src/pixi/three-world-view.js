@@ -4,6 +4,8 @@ import {WORLD_GEO, WORLD_ISLANDS} from './world-map.js';
 import {ISLETS} from './islets.js';
 import {sphereFrame} from './sphere.js';
 import {heartPose} from './heart-motion.js';
+import {rotateGlobeFromScreen} from './three-globe-math.js';
+import {createHeartLocations,heartArtContains,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from './heart-activity.js';
 import {focusQuaternion, islandQuaternion, focusSurfaceQuaternion, surfacePoint, surfaceCoordinates, surfaceUnderPointer, lockSurfaceAnchor, atlasTransform, pickSurfacePatch, visiblePoint, EARTH_DISTANCE} from './three-globe-math.js';
 import {alignIslandNorth,approachProgress} from './three-island-approach.js';
 import {RenderDemand} from './three-render-demand.js';
@@ -67,6 +69,13 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const loader=new THREE.TextureLoader(), patches=[], cleanups=[];
   async function patch(frame,width,height,url,island=false) {
     const texture=await loader.loadAsync(url); texture.colorSpace=THREE.SRGBColorSpace;
+    if(!island){
+      // Some islet SVGs specify only a viewBox. Give WebGL an explicit-sized
+      // bitmap, matching canvas sampling, instead of an empty SVG upload.
+      const bitmap=document.createElement('canvas');bitmap.width=bitmap.height=512;
+      bitmap.getContext('2d').drawImage(texture.image,0,0,512,512);
+      texture.image=bitmap;texture.needsUpdate=true;
+    }
     texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
     const geometry=new THREE.PlaneGeometry(width,height,island?96:24,island?72:24),positions=geometry.attributes.position;
     for(let k=0;k<positions.count;k++){
@@ -105,6 +114,15 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   let width=1,height=1,pixelRatio=1,selected='home',active=true,destroyed=false,raf=0,transition=null,last=performance.now(),due=0,seed=7;
   let targetAltitude=EARTH_DISTANCE-1,zoomAnchor=null,live=null,detailId=null;
   const events=[], random=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
+  // Collision maps also contain detached/legacy coast pieces that the preview
+  // does not draw. Check the actual displayed art once while building locations.
+  const heartMasks=new Map(patches.map(p=>{
+    const c=document.createElement('canvas');c.width=256;c.height=256;
+    const context=c.getContext('2d',{willReadFrequently:true});context.drawImage(p.userData.texture.image,0,0,256,256);
+    return [p.userData.frame,context.getImageData(0,0,256,256)];
+  }));
+  const heartLocation=createHeartLocations(WORLD_ISLANDS,mapOf,random,ISLETS,(frame,x,y)=>heartArtContains(frame,x,y,heartMasks.get(frame)));
+  heartMasks.clear();
   const frames=[];
   let frameCount=0;
   let statsAt=performance.now(),renderCount=0,drawCount=0,renderMs=0,detailMs=0,detailPeak=0,overlayAt=-Infinity;
@@ -141,15 +159,16 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     if(pointers.size===2){const [a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2,point=groundAtPointer(x,y);pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),altitude:camera.position.z-1,frame:pick(x,y)?.userData.frame,point:point?.applyQuaternion(globe.quaternion.clone().invert())};if(pinch.frame&&pinch.point)pinch.approach={startAltitude:pinch.altitude,angle:alignIslandNorth(globe.quaternion,pinch.frame,pinch.point,camera,0)};drag=null;return;}
     zoomAnchor=null;targetAltitude=camera.position.z-1;
     const point=groundAtPointer(p.x,p.y);
-    if(!point)return;
-    drag={...p,point:point.applyQuaternion(globe.quaternion.clone().invert()),distance:0};
+    drag={...p,point:point?.applyQuaternion(globe.quaternion.clone().invert())??null,distance:0};
     renderer.domElement.setPointerCapture(e.pointerId);renderer.domElement.style.cursor='grabbing';
   }
   function move(e) {
     const p=coordinates(e);if(pointers.has(e.pointerId))pointers.set(e.pointerId,p);
     if(pinch&&pointers.size>=2){const[a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2;targetAltitude=THREE.MathUtils.clamp(pinch.altitude*pinch.distance/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),.018,7);zoomAnchor=pinch.point?{point:pinch.point,x,y,island:targetAltitude<pinch.altitude?pinch.frame:null,approach:pinch.approach}:null;demand.invalidate();return;}
     if(!drag) {const hit=pick(p.x,p.y);renderer.domElement.style.cursor=hit?'pointer':'grab';renderer.domElement.dataset.hoveredIsland=hit?.userData.id??'';return;}
-    lockSurfaceAnchor(globe.quaternion,drag.point,camera,p.x,p.y,width,height);
+    if(!drag.point||!lockSurfaceAnchor(globe.quaternion,drag.point,camera,p.x,p.y,width,height)){
+      drag.point=null;rotateGlobeFromScreen(globe.quaternion,p.x-drag.x,p.y-drag.y,height);
+    }
     demand.invalidate();
     drag.distance+=Math.hypot(p.x-drag.x,p.y-drag.y);Object.assign(drag,{x:p.x,y:p.y});
   }
@@ -178,11 +197,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   listen('keydown',e=>{if(e.key==='0'||e.key==='Escape'){e.preventDefault();onInteract();world();}else if(['+','=','-'].includes(e.key)){e.preventDefault();wheel({preventDefault(){},clientX:renderer.domElement.getBoundingClientRect().left+width/2,clientY:renderer.domElement.getBoundingClientRect().top+height/2,deltaY:e.key==='-'?160:-160,deltaMode:0});}});listen('pointerdown',down);listen('pointermove',move);listen('pointerup',up);listen('pointercancel',()=>{drag=null;pinch=null;pointers.clear();});listen('wheel',wheel,{passive:false});
 
   function activity(time,dt) {
-    ctx.clearRect(0,0,width,height);ctx.save();ctx.beginPath();ctx.arc(width/2,height/2,globeRadius(),0,Math.PI*2);ctx.clip();
+    // Surface anchors are occluded below; the rising heart itself is free to
+    // cross the planet silhouette, without a circular cookie-cutter edge.
+    ctx.clearRect(0,0,width,height);ctx.save();
     const px=Math.min(1.5,Math.max(1,globeRadius()/240));
-    for(due-=dt;due<0;due+=.035) {
-      const island=WORLD_ISLANDS[Math.floor(random()*WORLD_ISLANDS.length)],a=random()*Math.PI*2,r=random()*.22*Math.min(island.width,island.height),x=Math.cos(a)*r,y=Math.sin(a)*r;
-      events.push({position:surfacePoint(island,x,y,WORLD_GEO.Rw),normal:surfacePoint(island,x,y,WORLD_GEO.Rw).normalize(),at:time,heart:random()<.7,duration:2+random()*.8,seed:x});
+    for(due-=dt;due<0;due+=HEART_ACTIVITY_INTERVAL*(.8+random()*.4)) {
+      if(events.length>=HEART_ACTIVITY_LIMIT)continue;
+      const {island,x,y}=heartLocation();
+      events.push({position:surfacePoint(island,x,y,WORLD_GEO.Rw),normal:surfacePoint(island,x,y,WORLD_GEO.Rw).normalize(),at:time,heart:random()<HEART_ACTIVITY_CHANCE,duration:2+random()*.8,seed:x});
     }
     for(let i=events.length-1;i>=0;i--) {
       const event=events[i],sec=time-event.at,age=sec/event.duration;if(age>=1){events.splice(i,1);continue;}

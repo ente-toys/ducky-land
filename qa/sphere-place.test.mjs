@@ -78,12 +78,12 @@ test('sailing to Iceland docks on its own jetty and beach from both hemispheres'
   }
  }
 });
-test('space outside the sphere cannot sample flat land, and activity is clipped to the ball',()=>{
+test('space outside the sphere cannot sample flat land, while hearts can rise beyond the rim',()=>{
  const code=readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
  assert.match(code,/if\(edge>=1\.\)return space;/);
- assert.match(code,/life.mask=pin.mask=masking\?sphereMask:null/);
+ assert.match(code,/pin.mask=masking\?sphereMask:null/);
  assert.match(code,/if\(masking\)sphereMask\.circle/);   // the mask disc is only drawn while masking (else it showed as a white ball)
- assert.match(code,/life.mask=sphereMask;pin.mask=sphereMask/);
+ assert.doesNotMatch(code,/life\.mask\s*=/);
  assert.doesNotMatch(code,/texture\(uWorld,\s*fract|1\s*\/\s*Math\.max\(\.3,\s*Math\.cos/);
 });
 

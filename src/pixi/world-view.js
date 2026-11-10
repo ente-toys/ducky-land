@@ -6,6 +6,7 @@ import {flatRigid} from './rigid.js';
 import {globeScreen,paintWeight} from './globe-screen.js';
 import {globeDrag,lonLat,centreOf,globeBall} from './globe-look.js';
 import {mapOf} from './island-maps.js';
+import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from './heart-activity.js';
 import {ISLETS} from './islets.js';
 
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
@@ -282,13 +283,14 @@ export function createWorldView(app, scene, isletView) {
   const pin = makePin();
   app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
   app.stage.addChildAt(pin, app.stage.getChildIndex(life) + 1);
-  const sphereMask=new Graphics();app.stage.addChild(sphereMask);life.mask=sphereMask;pin.mask=sphereMask;
+  const sphereMask=new Graphics();app.stage.addChild(sphereMask);pin.mask=sphereMask;
   life.visible = pin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
   const out = x => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);   // ease-out: quick start, soft landing
   let seed = 7;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+  const heartLocation = createHeartLocations(WORLD_ISLANDS, mapOf, rand, ISLETS);
   const ripples = [];
   let lastT = 0, rippleDue = 0, hover = false, hoverK = 1;
   return {
@@ -320,7 +322,7 @@ export function createWorldView(app, scene, isletView) {
       u.uBall=ball;
       // The mask is a white disc: only draw it while it is actually masking, or it shows as a white ball mid-zoom.
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
-      life.mask=pin.mask=masking?sphereMask:null;
+      pin.mask=masking?sphereMask:null;
       const basis=cam.basis??{a:1,b:0,c:0,d:1};u.uBasis.set([basis.a,basis.b,basis.c,basis.d]);
       this.roll=0;
       u.uAnchor.set(anchor.center);u.uEast.set(anchor.east);u.uNorth.set(anchor.north);
@@ -409,8 +411,10 @@ export function createWorldView(app, scene, isletView) {
       const busy = ease((ball - .25) / .4);
       life.visible = busy > .01; life.alpha = busy;
       if (busy > .01) {
-        const pick=()=>{const i=islands[Math.floor(rand()*islands.length)],a=rand()*6.283,r=rand()*.22*Math.min(i.width,i.height);return localPoint(id,expMap(i,Math.cos(a)*r,Math.sin(a)*r,Rw));};
-        for (rippleDue -= dt; rippleDue < 0; rippleDue += .035) ripples.push({...pick(), at: time, heart: rand() < .7, dur: 2 + rand() * .8});   // boss 5 Nov: the hearts are the 30,000 stars, so lots of them
+        const pick=()=>{const {island,x,y}=heartLocation();return localPoint(id,expMap(island,x,y,Rw));};
+        for (rippleDue -= dt; rippleDue < 0; rippleDue += HEART_ACTIVITY_INTERVAL*(.8+rand()*.4)) {
+          if(ripples.length<HEART_ACTIVITY_LIMIT)ripples.push({...pick(), at: time, heart: rand() < HEART_ACTIVITY_CHANCE, dur: 2 + rand() * .8});
+        }
         const px = Math.min(1.5, Math.max(1, Rp / 240));   // hearts and ripples stay a friendly size at every zoom   // sizes follow the globe
         for (const c of glows.children) c.visible = false;
         for (const c of hearts.children) c.visible = false;

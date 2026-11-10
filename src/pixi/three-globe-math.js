@@ -4,6 +4,13 @@ import {expMap, logMap} from './sphere.js';
 export const SURFACE_RADIUS=1.001;
 export const EARTH_DISTANCE=5.2;
 
+// Background drags turn the globe in camera axes, even outside its silhouette.
+export function rotateGlobeFromScreen(quaternion,dx,dy,height) {
+  const scale=Math.PI/Math.max(1,height);
+  quaternion.premultiply(new Quaternion().setFromAxisAngle(new Vector3(0,1,0),dx*scale));
+  quaternion.premultiply(new Quaternion().setFromAxisAngle(new Vector3(1,0,0),dy*scale)).normalize();
+}
+
 // The original artwork's coordinates become distances along one continuous sphere.
 export function surfacePoint(frame,x,y,radius) {
   return new Vector3(...expMap(frame,x,y,radius)).multiplyScalar(SURFACE_RADIUS);
