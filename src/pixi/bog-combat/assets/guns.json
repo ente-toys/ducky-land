@@ -1,0 +1,1394 @@
+[
+  {
+    "name": "gun-c-privacy-held-n",
+    "file": "gun-c-privacy-held-n.svg",
+    "shadowFile": "gun-c-privacy-held-n-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "n",
+    "rigAngle": 180,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.622,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.804,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.804,
+      -225.186
+    ],
+    "muzzle": [
+      268.804,
+      -320.947
+    ],
+    "aimWorldVector": [
+      -1,
+      -1
+    ],
+    "aimScreenVector": [
+      0.0,
+      -0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 80,
+    "h": 163,
+    "viewBox": [
+      229,
+      -348,
+      80,
+      163
+    ],
+    "anchor": {
+      "x": -229,
+      "y": 348
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-n-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      39.804,
+      27.053
+    ],
+    "gripLocal": [
+      39.804,
+      122.814
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-ne",
+    "file": "gun-c-privacy-held-ne.svg",
+    "shadowFile": "gun-c-privacy-held-ne-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "ne",
+    "rigAngle": 135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        120.047,
+        -345.38
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        188.116,
+        -192.703
+      ],
+      "contactPosed": [
+        236.23,
+        -225.191
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      236.23,
+      -225.191
+    ],
+    "muzzle": [
+      329.23,
+      -301.691
+    ],
+    "aimWorldVector": [
+      0,
+      -1
+    ],
+    "aimScreenVector": [
+      1.0,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 141,
+    "viewBox": [
+      173,
+      -334,
+      180,
+      141
+    ],
+    "anchor": {
+      "x": -173,
+      "y": 334
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-ne-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      156.23,
+      32.309
+    ],
+    "gripLocal": [
+      63.23,
+      108.809
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-e",
+    "file": "gun-c-privacy-held-e.svg",
+    "shadowFile": "gun-c-privacy-held-e-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "e",
+    "rigAngle": 90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        43.52,
+        -303.109
+      ],
+      "rotationDegrees": -25,
+      "contactRest": [
+        95.754,
+        -197.627
+      ],
+      "contactPosed": [
+        135.438,
+        -229.585
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      135.438,
+      -229.585
+    ],
+    "muzzle": [
+      266.96,
+      -259.585
+    ],
+    "aimWorldVector": [
+      1,
+      -1
+    ],
+    "aimScreenVector": [
+      1.41421,
+      0.0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 214,
+    "h": 115,
+    "viewBox": [
+      58,
+      -324,
+      214,
+      115
+    ],
+    "anchor": {
+      "x": -58,
+      "y": 324
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-e-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      208.96,
+      64.415
+    ],
+    "gripLocal": [
+      77.438,
+      94.415
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-se",
+    "file": "gun-c-privacy-held-se.svg",
+    "shadowFile": "gun-c-privacy-held-se-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "se",
+    "rigAngle": 45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        154.668,
+        -352.735
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        222.737,
+        -200.058
+      ],
+      "contactPosed": [
+        270.85,
+        -232.546
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      270.85,
+      -232.546
+    ],
+    "muzzle": [
+      363.85,
+      -216.046
+    ],
+    "aimWorldVector": [
+      1,
+      0
+    ],
+    "aimScreenVector": [
+      1.0,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 138,
+    "viewBox": [
+      208,
+      -325,
+      180,
+      138
+    ],
+    "anchor": {
+      "x": -208,
+      "y": 325
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-se-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      155.85,
+      108.954
+    ],
+    "gripLocal": [
+      62.85,
+      92.454
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-s",
+    "file": "gun-c-privacy-held-s.svg",
+    "shadowFile": "gun-c-privacy-held-s-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "s",
+    "rigAngle": 0,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.623,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.805,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.805,
+      -225.186
+    ],
+    "muzzle": [
+      268.805,
+      -189.425
+    ],
+    "aimWorldVector": [
+      1,
+      1
+    ],
+    "aimScreenVector": [
+      0.0,
+      0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 82,
+    "h": 150,
+    "viewBox": [
+      228,
+      -312,
+      82,
+      150
+    ],
+    "anchor": {
+      "x": -228,
+      "y": 312
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-s-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      40.805,
+      122.575
+    ],
+    "gripLocal": [
+      40.805,
+      86.814
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-sw",
+    "file": "gun-c-privacy-held-sw.svg",
+    "shadowFile": "gun-c-privacy-held-sw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "sw",
+    "rigAngle": -45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -136.761,
+        -349.737
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -204.83,
+        -197.06
+      ],
+      "contactPosed": [
+        -252.944,
+        -229.548
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -252.944,
+      -229.548
+    ],
+    "muzzle": [
+      -345.944,
+      -213.048
+    ],
+    "aimWorldVector": [
+      0,
+      1
+    ],
+    "aimScreenVector": [
+      -1.0,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 132,
+    "viewBox": [
+      -370,
+      -316,
+      180,
+      132
+    ],
+    "anchor": {
+      "x": 370,
+      "y": 316
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-sw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      24.056,
+      102.952
+    ],
+    "gripLocal": [
+      117.056,
+      86.452
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-w",
+    "file": "gun-c-privacy-held-w.svg",
+    "shadowFile": "gun-c-privacy-held-w-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "w",
+    "rigAngle": -90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -33.421,
+        -314.589
+      ],
+      "rotationDegrees": 25,
+      "contactRest": [
+        -85.223,
+        -209.044
+      ],
+      "contactPosed": [
+        -124.975,
+        -240.825
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -124.975,
+      -240.825
+    ],
+    "muzzle": [
+      -256.497,
+      -270.825
+    ],
+    "aimWorldVector": [
+      -1,
+      1
+    ],
+    "aimScreenVector": [
+      -1.41421,
+      0.0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 218,
+    "h": 127,
+    "viewBox": [
+      -266,
+      -334,
+      218,
+      127
+    ],
+    "anchor": {
+      "x": 266,
+      "y": 334
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-w-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      9.503,
+      63.175
+    ],
+    "gripLocal": [
+      141.025,
+      93.175
+    ]
+  },
+  {
+    "name": "gun-c-privacy-held-nw",
+    "file": "gun-c-privacy-held-nw.svg",
+    "shadowFile": "gun-c-privacy-held-nw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "privacy",
+    "facing": "nw",
+    "rigAngle": -135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        -112.074,
+        -341.045
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -179.588,
+        -188.352
+      ],
+      "contactPosed": [
+        -227.74,
+        -220.651
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -227.74,
+      -220.651
+    ],
+    "muzzle": [
+      -320.74,
+      -297.151
+    ],
+    "aimWorldVector": [
+      -1,
+      0
+    ],
+    "aimScreenVector": [
+      -1.0,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 148,
+    "viewBox": [
+      -345,
+      -328,
+      180,
+      148
+    ],
+    "anchor": {
+      "x": 345,
+      "y": 328
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-privacy-held-nw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      24.26,
+      30.849
+    ],
+    "gripLocal": [
+      117.26,
+      107.349
+    ]
+  },
+  {
+    "name": "gun-c-google-held-n",
+    "file": "gun-c-google-held-n.svg",
+    "shadowFile": "gun-c-google-held-n-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "n",
+    "rigAngle": 180,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.622,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.804,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.804,
+      -225.186
+    ],
+    "muzzle": [
+      268.804,
+      -320.947
+    ],
+    "aimWorldVector": [
+      -1,
+      -1
+    ],
+    "aimScreenVector": [
+      0.0,
+      -0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 80,
+    "h": 163,
+    "viewBox": [
+      229,
+      -348,
+      80,
+      163
+    ],
+    "anchor": {
+      "x": -229,
+      "y": 348
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-n-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      39.804,
+      27.053
+    ],
+    "gripLocal": [
+      39.804,
+      122.814
+    ]
+  },
+  {
+    "name": "gun-c-google-held-ne",
+    "file": "gun-c-google-held-ne.svg",
+    "shadowFile": "gun-c-google-held-ne-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "ne",
+    "rigAngle": 135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        120.047,
+        -345.38
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        188.116,
+        -192.703
+      ],
+      "contactPosed": [
+        236.23,
+        -225.191
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      236.23,
+      -225.191
+    ],
+    "muzzle": [
+      329.23,
+      -301.691
+    ],
+    "aimWorldVector": [
+      0,
+      -1
+    ],
+    "aimScreenVector": [
+      1.0,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 141,
+    "viewBox": [
+      173,
+      -334,
+      180,
+      141
+    ],
+    "anchor": {
+      "x": -173,
+      "y": 334
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-ne-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      156.23,
+      32.309
+    ],
+    "gripLocal": [
+      63.23,
+      108.809
+    ]
+  },
+  {
+    "name": "gun-c-google-held-e",
+    "file": "gun-c-google-held-e.svg",
+    "shadowFile": "gun-c-google-held-e-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "e",
+    "rigAngle": 90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        43.52,
+        -303.109
+      ],
+      "rotationDegrees": -25,
+      "contactRest": [
+        95.754,
+        -197.627
+      ],
+      "contactPosed": [
+        135.438,
+        -229.585
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      135.438,
+      -229.585
+    ],
+    "muzzle": [
+      266.96,
+      -259.585
+    ],
+    "aimWorldVector": [
+      1,
+      -1
+    ],
+    "aimScreenVector": [
+      1.41421,
+      0.0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 214,
+    "h": 115,
+    "viewBox": [
+      58,
+      -324,
+      214,
+      115
+    ],
+    "anchor": {
+      "x": -58,
+      "y": 324
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-e-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      208.96,
+      64.415
+    ],
+    "gripLocal": [
+      77.438,
+      94.415
+    ]
+  },
+  {
+    "name": "gun-c-google-held-se",
+    "file": "gun-c-google-held-se.svg",
+    "shadowFile": "gun-c-google-held-se-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "se",
+    "rigAngle": 45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        154.668,
+        -352.735
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        222.737,
+        -200.058
+      ],
+      "contactPosed": [
+        270.85,
+        -232.546
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      270.85,
+      -232.546
+    ],
+    "muzzle": [
+      363.85,
+      -216.046
+    ],
+    "aimWorldVector": [
+      1,
+      0
+    ],
+    "aimScreenVector": [
+      1.0,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 138,
+    "viewBox": [
+      208,
+      -325,
+      180,
+      138
+    ],
+    "anchor": {
+      "x": -208,
+      "y": 325
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-se-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      155.85,
+      108.954
+    ],
+    "gripLocal": [
+      62.85,
+      92.454
+    ]
+  },
+  {
+    "name": "gun-c-google-held-s",
+    "file": "gun-c-google-held-s.svg",
+    "shadowFile": "gun-c-google-held-s-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "s",
+    "rigAngle": 0,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.623,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.805,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.805,
+      -225.186
+    ],
+    "muzzle": [
+      268.805,
+      -189.425
+    ],
+    "aimWorldVector": [
+      1,
+      1
+    ],
+    "aimScreenVector": [
+      0.0,
+      0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 82,
+    "h": 150,
+    "viewBox": [
+      228,
+      -312,
+      82,
+      150
+    ],
+    "anchor": {
+      "x": -228,
+      "y": 312
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-s-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      40.805,
+      122.575
+    ],
+    "gripLocal": [
+      40.805,
+      86.814
+    ]
+  },
+  {
+    "name": "gun-c-google-held-sw",
+    "file": "gun-c-google-held-sw.svg",
+    "shadowFile": "gun-c-google-held-sw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "sw",
+    "rigAngle": -45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -136.761,
+        -349.737
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -204.83,
+        -197.06
+      ],
+      "contactPosed": [
+        -252.944,
+        -229.548
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -252.944,
+      -229.548
+    ],
+    "muzzle": [
+      -345.944,
+      -213.048
+    ],
+    "aimWorldVector": [
+      0,
+      1
+    ],
+    "aimScreenVector": [
+      -1.0,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 132,
+    "viewBox": [
+      -370,
+      -316,
+      180,
+      132
+    ],
+    "anchor": {
+      "x": 370,
+      "y": 316
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-sw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      24.056,
+      102.952
+    ],
+    "gripLocal": [
+      117.056,
+      86.452
+    ]
+  },
+  {
+    "name": "gun-c-google-held-w",
+    "file": "gun-c-google-held-w.svg",
+    "shadowFile": "gun-c-google-held-w-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "w",
+    "rigAngle": -90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -33.421,
+        -314.589
+      ],
+      "rotationDegrees": 25,
+      "contactRest": [
+        -85.223,
+        -209.044
+      ],
+      "contactPosed": [
+        -124.975,
+        -240.825
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -124.975,
+      -240.825
+    ],
+    "muzzle": [
+      -256.497,
+      -270.825
+    ],
+    "aimWorldVector": [
+      -1,
+      1
+    ],
+    "aimScreenVector": [
+      -1.41421,
+      0.0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 218,
+    "h": 127,
+    "viewBox": [
+      -266,
+      -334,
+      218,
+      127
+    ],
+    "anchor": {
+      "x": 266,
+      "y": 334
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-w-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      9.503,
+      63.175
+    ],
+    "gripLocal": [
+      141.025,
+      93.175
+    ]
+  },
+  {
+    "name": "gun-c-google-held-nw",
+    "file": "gun-c-google-held-nw.svg",
+    "shadowFile": "gun-c-google-held-nw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "google",
+    "facing": "nw",
+    "rigAngle": -135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        -112.074,
+        -341.045
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -179.588,
+        -188.352
+      ],
+      "contactPosed": [
+        -227.74,
+        -220.651
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -227.74,
+      -220.651
+    ],
+    "muzzle": [
+      -320.74,
+      -297.151
+    ],
+    "aimWorldVector": [
+      -1,
+      0
+    ],
+    "aimScreenVector": [
+      -1.0,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 148,
+    "viewBox": [
+      -345,
+      -328,
+      180,
+      148
+    ],
+    "anchor": {
+      "x": 345,
+      "y": 328
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-google-held-nw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      24.26,
+      30.849
+    ],
+    "gripLocal": [
+      117.26,
+      107.349
+    ]
+  }
+]

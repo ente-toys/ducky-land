@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="630" viewBox="0 0 1450 630">
+  <defs>
+    <!-- Round piles: their origins sit on the deck, their feet continue below it. -->
+    <g id="pile" stroke="#39472d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-17-49C-18-26-17 2-17 28Q-2 39 16 28L17-49Z" fill="#c19042"/>
+      <path d="M5-47L16-49 16 28Q10 33 4 33Z" fill="#a37334" stroke="none"/>
+      <path d="M-12-43L-11 23" fill="none" stroke="#e9b85e" stroke-width="3"/>
+      <path d="M-4-29L-5-7M0 17L0 27M10-37L9-24" fill="none" stroke-width="1.3"/>
+      <ellipse cy="-49" rx="20" ry="8" fill="#f0ce83"/>
+      <path d="M-12-50Q-2-55 10-50M-7-46Q0-44 7-47" fill="none" stroke="#b88b46" stroke-width="1.3"/>
+      <path d="M-19-8Q-1 1 18-9L19-2Q0 9-19-1Z" fill="#f5d88a"/>
+      <path d="M-19 0Q-1 9 19-1L19 6Q0 17-19 7Z" fill="#f0cc76"/>
+      <path d="M-19 8Q0 17 19 6L19 13Q0 24-19 15Z" fill="#f5d88a"/>
+      <path d="M-13-5L-8 1M-3-1L2 5M8-3L12 2M-13 4L-9 10M-2 8L3 14M10 7L14 11M-12 13L-7 19M1 16L5 20" fill="none" stroke="#b58b45" stroke-width="1.1"/>
+    </g>
+    <g id="bollard" stroke="#39472d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-19 1Q0-7 19 0L18 8Q0 16-19 8Z" fill="#956b38"/>
+      <ellipse rx="19" ry="7" fill="#ce9d4f"/>
+      <path d="M-9-20L-9-1Q0 5 9-1L9-20" fill="#a78048"/>
+      <path d="M-16-24Q0-31 16-24L16-17Q0-11-16-17Z" fill="#6e7755"/>
+      <ellipse cy="-24" rx="16" ry="6" fill="#9caa7b"/>
+      <path d="M-4-23L6-24" fill="none" stroke="#c7d0a2"/>
+    </g>
+  </defs>
+<g id="home-quay-contact" fill="#39472d" opacity=".13"><path d="M49 291L596 275L598 285L49 301Z M875 263L1387 237L1387 247L875 273Z M615 600L890 589V603L615 614Z"/></g>  <g stroke="#39472d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- End grain and the visible skirt follow the original collision silhouette. -->
+    <path d="M30 50L1350 30L1390 259L873 284L877 575L612 594L596 296L49 312Z" fill="#aa793c"/>
+    <path d="M49 289L596 273L612 570L877 551L877 575L612 594L596 296L49 312Z" fill="#ad7c3c"/>
+    <path d="M873 260L1390 235L1390 259L873 284Z" fill="#a47438"/>
+    <path d="M49 295L596 279M614 577L875 559M878 268L1388 243" fill="none" stroke="#d6a252" stroke-width="3"/>
+    <path d="M179 288L180 307M365 282L366 302M539 278L540 297M614 571L615 590M693 568L694 587M790 561L791 580M971 258L972 279M1157 249L1158 270M1326 241L1327 261" fill="none" stroke-width="1.7"/>
+    <path d="M598 301L613 575M875 290L877 549" fill="none" stroke="#805f32" stroke-width="5"/>
+    <!-- A narrow dark bed makes the tiny spaces between the boards read as gaps. -->
+    <path d="M30 50L1350 30L1387 236L871 262L875 551L612 571L596 274L48 290Z" fill="#91723d"/>
+    <!-- Each plank and butt joint is drawn individually, with a lightly uneven edge. -->
+    <path d="M31 51Q171 50 322 46L324 76Q174 77 34 81Z" fill="#e7bd6b"/>
+    <path d="M325 46Q489 42 675 41L676 70Q500 71 327 76Z" fill="#edc777"/>
+    <path d="M678 41Q846 41 1035 36L1037 65Q855 65 679 70Z" fill="#dfae58"/>
+    <path d="M1038 36Q1197 35 1350 31L1355 60Q1196 65 1040 65Z" fill="#ecc171"/>
+    <path d="M34 84L194 81L195 112L37 116Z" fill="#edc777"/>
+    <path d="M197 81L539 76L540 107L198 112Z" fill="#deb060"/>
+    <path d="M542 76L908 70L910 102L543 107Z" fill="#e9bd67"/>
+    <path d="M911 70L1356 63L1361 94L912 102Z" fill="#e6b65f"/>
+    <path d="M37 119L389 113L391 146L40 152Z" fill="#dfaf58"/>
+    <path d="M392 113L750 107L751 140L394 146Z" fill="#ebc273"/>
+    <path d="M753 107L1122 101L1124 134L754 140Z" fill="#efc97a"/>
+    <path d="M1125 101L1362 97L1368 130L1127 134Z" fill="#dfaf59"/>
+    <path d="M40 155L249 151L251 184L43 189Z" fill="#edc373"/>
+    <path d="M252 151L602 145L604 178L254 184Z" fill="#e7b965"/>
+    <path d="M605 145L960 139L961 172L607 178Z" fill="#ddac55"/>
+    <path d="M963 139L1368 133L1375 165L964 172Z" fill="#ecc474"/>
+    <path d="M43 192L446 184L447 219L46 227Z" fill="#dfb05e"/>
+    <path d="M449 184L815 178L816 212L450 219Z" fill="#edc777"/>
+    <path d="M818 178L1194 172L1196 206L819 212Z" fill="#e7bb66"/>
+    <path d="M1197 172L1375 168L1381 201L1199 206Z" fill="#e0ae58"/>
+    <path d="M46 230L294 224L296 258L49 264Z" fill="#edc677"/>
+    <path d="M297 224L651 218L653 252L299 258Z" fill="#e7b962"/>
+    <path d="M654 218L1001 211L1002 245L656 252Z" fill="#dfaf5d"/>
+    <path d="M1004 211L1382 204L1387 235L1005 245Z" fill="#ebc373"/>
+    <!-- Front apron boards stop at the open stem junction. -->
+    <path d="M49 267L367 260L368 280L49 290Z" fill="#f0c97a"/>
+    <path d="M370 260L595 255L596 274L371 280Z" fill="#e0ad54"/>
+    <path d="M875 251L1160 240L1161 247L875 262Z" fill="#efc777"/>
+    <path d="M1163 240L1387 230L1387 236L1163 247Z" fill="#edc372"/>
+    <!-- Crosswise stem planks, keeping the same taper and landing. -->
+    <path d="M598 257L870 247L871 280L600 292Z" fill="#ebc071"/>
+    <path d="M600 295L871 283L871 316L602 331Z" fill="#e0ad57"/>
+    <path d="M602 334L871 319L872 352L604 368Z" fill="#efc778"/>
+    <path d="M604 371L872 355L872 390L606 407Z" fill="#e5b660"/>
+    <path d="M606 410L872 393L873 428L608 446Z" fill="#edc474"/>
+    <path d="M608 449L873 431L873 467L610 485Z" fill="#dfad56"/>
+    <path d="M610 488L873 470L874 505L611 525Z" fill="#eac06d"/>
+    <path d="M611 528L874 508L875 544L613 564Z" fill="#e4b661"/>
+    <path d="M613 566L875 547L875 552L613 571Z" fill="#f0cd80"/>
+    <!-- Light worn lips are solid colour, never a lighting effect. -->
+    <path d="M43 54L309 50M339 49L664 44M691 45L1023 39M1050 39L1335 35M47 122L377 116M407 116L739 110M770 110L1108 104M57 233L280 228M310 228L640 221M665 222L988 215M1019 214L1368 208M615 299L857 288M617 338L858 324M620 414L858 399M623 492L860 476M626 532L860 514" fill="none" stroke="#f5d48b" stroke-width="2.4"/>
+    <!-- Sparse grain, knots and little splits in the honey wood. -->
+    <g fill="none" stroke="#b88a43" stroke-width="1.6">
+      <path d="M109 66Q152 62 182 65M213 61L253 60M422 61Q470 65 514 60M761 55L805 54M1176 48Q1218 53 1262 48"/>
+      <path d="M74 101L133 99M269 99Q306 103 343 98M617 92L674 91M1004 88Q1042 82 1087 85M1257 80L1308 79"/>
+      <path d="M152 137Q195 130 244 133M472 129L525 128M841 125Q881 129 928 122M1186 116L1247 115"/>
+      <path d="M84 173Q117 168 151 172M338 169L400 168M697 161Q736 155 787 158M1031 156L1085 154M1257 149L1319 148"/>
+      <path d="M157 211L214 209M291 201Q327 206 373 201M530 202L577 201M892 196Q939 191 977 194M1077 187L1131 187"/>
+      <path d="M113 248L169 245M398 242Q449 235 491 238M737 235L780 234M1083 231Q1123 226 1163 228M1262 219L1303 218"/>
+      <path d="M127 279L183 276M450 269L497 267M953 254L1014 252M1221 244L1266 242"/>
+      <path d="M663 277L696 275M777 270L824 268M640 316L691 314M750 303Q785 308 825 302M657 354Q695 348 730 351M781 340L830 337M642 392L684 389M752 381L804 379M659 432Q710 424 745 428M792 419L831 417M644 470L697 467M755 460L794 457M659 509L701 505M759 499Q799 490 835 493M652 547Q693 551 725 542M780 535L826 531"/>
+      <path d="M325 48L329 55 324 62M911 72L916 78 913 84M447 187L453 195 449 201M1124 103L1118 111 1123 118M602 337L610 343 607 348M870 433L863 441 870 445M613 533L621 540 617 546"/>
+      <path d="M551 57Q564 48 576 55Q568 63 551 57ZM557 56Q565 53 571 55M1093 120Q1107 110 1116 119Q1105 128 1093 120ZM1099 119L1109 118M232 241Q244 231 258 238Q247 249 232 241ZM239 239L250 238M704 388Q716 379 730 385Q718 395 704 388ZM710 387L723 385M794 546Q806 538 819 543Q806 552 794 546Z"/>
+    </g>
+    <!-- Paired nail heads on plank ends and supporting joists. -->
+    <g fill="#71613a" stroke="none">
+      <circle cx="47" cy="63" r="2.2"/><circle cx="310" cy="60" r="2"/><circle cx="338" cy="60" r="2"/><circle cx="661" cy="56" r="2"/><circle cx="691" cy="56" r="2.1"/><circle cx="1022" cy="51" r="2"/><circle cx="1052" cy="51" r="2"/><circle cx="1336" cy="46" r="2.2"/>
+      <circle cx="50" cy="98" r="2.1"/><circle cx="182" cy="97" r="2"/><circle cx="211" cy="96" r="2"/><circle cx="526" cy="92" r="2"/><circle cx="555" cy="91" r="2"/><circle cx="895" cy="86" r="2"/><circle cx="925" cy="86" r="2"/><circle cx="1343" cy="80" r="2.1"/>
+      <circle cx="54" cy="135" r="2.1"/><circle cx="377" cy="130" r="2"/><circle cx="406" cy="129" r="2"/><circle cx="738" cy="125" r="2"/><circle cx="766" cy="124" r="2"/><circle cx="1109" cy="118" r="2"/><circle cx="1140" cy="118" r="2"/><circle cx="1350" cy="115" r="2.1"/>
+      <circle cx="58" cy="171" r="2.1"/><circle cx="238" cy="168" r="2"/><circle cx="265" cy="166" r="2"/><circle cx="590" cy="162" r="2"/><circle cx="620" cy="160" r="2"/><circle cx="948" cy="156" r="2"/><circle cx="978" cy="154" r="2"/><circle cx="1357" cy="150" r="2.1"/>
+      <circle cx="61" cy="209" r="2.1"/><circle cx="434" cy="204" r="2"/><circle cx="463" cy="201" r="2"/><circle cx="803" cy="196" r="2"/><circle cx="833" cy="195" r="2"/><circle cx="1182" cy="191" r="2"/><circle cx="1212" cy="189" r="2"/><circle cx="1365" cy="184" r="2.1"/>
+      <circle cx="64" cy="246" r="2.1"/><circle cx="282" cy="241" r="2"/><circle cx="312" cy="240" r="2"/><circle cx="640" cy="235" r="2"/><circle cx="670" cy="234" r="2"/><circle cx="989" cy="228" r="2"/><circle cx="1019" cy="228" r="2"/><circle cx="1372" cy="221" r="2.1"/>
+      <circle cx="620" cy="273" r="2.2"/><circle cx="852" cy="264" r="2.2"/><circle cx="622" cy="311" r="2.2"/><circle cx="852" cy="300" r="2.2"/><circle cx="624" cy="349" r="2.2"/><circle cx="853" cy="336" r="2.2"/><circle cx="626" cy="388" r="2.2"/><circle cx="854" cy="374" r="2.2"/><circle cx="628" cy="427" r="2.2"/><circle cx="854" cy="412" r="2.2"/><circle cx="630" cy="466" r="2.2"/><circle cx="855" cy="451" r="2.2"/><circle cx="632" cy="505" r="2.2"/><circle cx="856" cy="490" r="2.2"/><circle cx="634" cy="545" r="2.2"/><circle cx="857" cy="528" r="2.2"/>
+    </g>
+    <!-- Shore-side piles are kept low enough to stay inside the original art box. -->
+    <use href="#pile" transform="translate(52 60)"/>
+    <use href="#pile" transform="translate(395 60)"/>
+    <use href="#pile" transform="translate(1001 60)"/>
+    <use href="#pile" transform="translate(1347 61)"/>
+    <!-- A small packing crate rests against the back edge, clear of the crossing. -->
+    <path d="M161 81L221 78L241 88L180 93Z" fill="#9f7b3c" stroke="none"/>
+    <path d="M160 35L218 33L234 42L176 46Z" fill="#f0cd80"/>
+    <path d="M176 46L234 42L233 83L175 87Z" fill="#d7a352"/>
+    <path d="M160 35L176 46L175 87L159 76Z" fill="#af7d39"/>
+    <path d="M194 46L193 85M214 45L214 84M161 48L174 57M161 63L174 72M180 49L229 46 229 53 181 57ZM180 75L228 71 228 79 180 83Z" fill="#edc375" stroke-width="1.5"/>
+    <path d="M184 56L225 72L225 78L184 63Z" fill="#f2ce80" stroke-width="1.7"/>
+    <path d="M179 37L199 44M199 35L219 43" fill="none" stroke="#bc9149" stroke-width="1.4"/>
+    <g fill="#71613a" stroke="none"><circle cx="185" cy="53" r="1.5"/><circle cx="224" cy="49" r="1.5"/><circle cx="185" cy="79" r="1.5"/><circle cx="224" cy="75" r="1.5"/></g>
+    <use href="#bollard" transform="translate(1135 65)"/>
+    <use href="#bollard" transform="translate(267 271)"/>
+    <!-- Loose rope is an oval coil, with its tail tucked along the front apron. -->
+    <path d="M1115 239Q1099 245 1092 239Q1082 231 1092 222Q1108 207 1134 211Q1161 214 1162 228Q1162 244 1136 248Q1110 253 1098 244" fill="none" stroke="#39472d" stroke-width="9"/>
+    <path d="M1115 239Q1099 245 1092 239Q1082 231 1092 222Q1108 207 1134 211Q1161 214 1162 228Q1162 244 1136 248Q1110 253 1098 244" fill="none" stroke="#f0d28a" stroke-width="5"/>
+    <path d="M1101 230C1101 218 1148 213 1152 227C1157 240 1111 247 1103 235C1095 223 1133 218 1141 225C1152 235 1116 241 1113 232C1111 225 1130 224 1132 229" fill="none" stroke="#39472d" stroke-width="8"/>
+    <path d="M1101 230C1101 218 1148 213 1152 227C1157 240 1111 247 1103 235C1095 223 1133 218 1141 225C1152 235 1116 241 1113 232C1111 225 1130 224 1132 229" fill="none" stroke="#f4d68d" stroke-width="4.5"/>
+    <path d="M1098 244Q1084 250 1071 246Q1062 241 1054 247" fill="none" stroke="#39472d" stroke-width="7"/>
+    <path d="M1098 244Q1084 250 1071 246Q1062 241 1054 247" fill="none" stroke="#edcf86" stroke-width="3.8"/>
+    <path d="M1093 226L1097 230M1109 216L1112 220M1128 214L1127 218M1147 220L1144 224M1158 231L1153 230M1142 243L1140 239M1120 247L1120 242M1106 238L1108 234M1119 224L1121 228M1081 247L1083 243M1066 246L1066 242" fill="none" stroke="#b18b47" stroke-width="1.2"/>
+    <!-- Chunky front-edge posts, with no rail across a walking route. -->
+    <use href="#pile" transform="translate(74 290)"/>
+    <use href="#pile" transform="translate(418 280)"/>
+    <use href="#pile" transform="translate(597 275)"/>
+    <use href="#pile" transform="translate(879 261)"/>
+    <use href="#pile" transform="translate(1227 245)"/>
+    <use href="#pile" transform="translate(1380 240)"/>
+    <!-- In-water piles have long lower ends under the stem's timber fascia. -->
+    <path d="M597 380L598 435Q610 442 624 433L624 379Z" fill="#ac7b38"/>
+    <path d="M859 365L860 422Q874 429 887 420L888 365Z" fill="#ac7b38"/>
+    <path d="M612 540L613 607Q628 615 640 606L641 540Z" fill="#ae7d38"/>
+    <path d="M861 525L862 596Q877 604 890 593L890 525Z" fill="#a57535"/>
+    <path d="M601 401L601 430M864 392L864 417M617 575L618 603M866 568L867 592" fill="none" stroke="#d7a751" stroke-width="3"/>
+    <use href="#pile" transform="translate(610 379)"/>
+    <use href="#pile" transform="translate(874 365)"/>
+    <use href="#pile" transform="translate(626 555)"/>
+    <use href="#pile" transform="translate(876 537)"/>
+    <!-- A little harbour lantern grows out of the last right-hand pile. -->
+    <path d="M872 488L872 414Q872 404 883 404L906 404" fill="none" stroke-width="10"/>
+    <path d="M872 488L872 414Q872 404 883 404L906 404" fill="none" stroke="#c3944a" stroke-width="5"/>
+    <path d="M878 431Q893 431 897 412" fill="none" stroke-width="2"/>
+    <path d="M903 403L903 415" fill="none" stroke-width="3"/>
+    <path d="M891 426Q903 420 915 426L913 452Q903 459 893 453Z" fill="#f9db80"/>
+    <path d="M906 426L915 426L913 452L906 455Z" fill="#e7ae4e" stroke="none"/>
+    <path d="M898 429L898 448" fill="none" stroke="#fff0b4" stroke-width="4"/>
+    <path d="M890 426Q887 423 892 421L899 415L907 415L915 422Q919 425 915 427Z" fill="#a88143"/>
+    <path d="M891 452Q903 457 915 451L915 458Q904 464 891 459Z" fill="#8e713f"/>
+    <path d="M900 414Q899 408 903 408Q908 408 907 414" fill="none" stroke-width="2"/>
+    <path d="M892 423Q904 427 915 423" fill="none" stroke="#d4ae61" stroke-width="1.5"/>
+  </g>
+</svg>

@@ -1,0 +1,3494 @@
+[
+  {
+    "id": "privacy-nw-hall",
+    "kind": "building",
+    "type": "rect",
+    "x": 1847.2,
+    "y": 1473.6,
+    "width": 345.59999999999997,
+    "height": 159.6
+  },
+  {
+    "id": "privacy-nw-annex",
+    "kind": "building",
+    "type": "rect",
+    "x": 1390.4,
+    "y": 1565.6,
+    "width": 259.2,
+    "height": 121.6
+  },
+  {
+    "id": "google-ne-hall",
+    "kind": "building",
+    "type": "rect",
+    "x": 6447.2,
+    "y": 1473.6,
+    "width": 345.59999999999997,
+    "height": 159.6
+  },
+  {
+    "id": "google-ne-annex",
+    "kind": "building",
+    "type": "rect",
+    "x": 5990.4,
+    "y": 1565.6,
+    "width": 259.2,
+    "height": 121.6
+  },
+  {
+    "id": "privacy-sw-hall",
+    "kind": "building",
+    "type": "rect",
+    "x": 1847.2,
+    "y": 5273.6,
+    "width": 345.59999999999997,
+    "height": 159.6
+  },
+  {
+    "id": "privacy-sw-annex",
+    "kind": "building",
+    "type": "rect",
+    "x": 1390.4,
+    "y": 5365.6,
+    "width": 259.2,
+    "height": 121.6
+  },
+  {
+    "id": "google-se-hall",
+    "kind": "building",
+    "type": "rect",
+    "x": 6447.2,
+    "y": 5273.6,
+    "width": 345.59999999999997,
+    "height": 159.6
+  },
+  {
+    "id": "google-se-annex",
+    "kind": "building",
+    "type": "rect",
+    "x": 5990.4,
+    "y": 5365.6,
+    "width": 259.2,
+    "height": 121.6
+  },
+  {
+    "id": "mid-hall",
+    "kind": "building",
+    "type": "rect",
+    "x": 3999,
+    "y": 1755,
+    "width": 402,
+    "height": 150
+  },
+  {
+    "id": "mid-west",
+    "kind": "building",
+    "type": "rect",
+    "x": 3539,
+    "y": 1769.8,
+    "width": 252,
+    "height": 117.8
+  },
+  {
+    "id": "mid-east",
+    "kind": "building",
+    "type": "rect",
+    "x": 4609,
+    "y": 1769.8,
+    "width": 252,
+    "height": 117.8
+  },
+  {
+    "id": "cove-boathouse",
+    "kind": "building",
+    "type": "rect",
+    "x": 3616,
+    "y": 6670.9,
+    "width": 288,
+    "height": 134.9
+  },
+  {
+    "id": "site-a-apothecary",
+    "kind": "building",
+    "type": "rect",
+    "x": 1494,
+    "y": 3349.8,
+    "width": 252,
+    "height": 117.8
+  },
+  {
+    "id": "site-a-cottage",
+    "kind": "building",
+    "type": "rect",
+    "x": 2350.4,
+    "y": 3315.6,
+    "width": 259.2,
+    "height": 121.6
+  },
+  {
+    "id": "site-a-cauldron",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 1945,
+    "y": 3530,
+    "width": 210,
+    "height": 140
+  },
+  {
+    "id": "site-b-shrine",
+    "kind": "building",
+    "type": "rect",
+    "x": 6209.6,
+    "y": 3347.2,
+    "width": 280.8,
+    "height": 129.2
+  },
+  {
+    "id": "site-b-cottage",
+    "kind": "building",
+    "type": "rect",
+    "x": 6697.6,
+    "y": 3374,
+    "width": 244.79999999999998,
+    "height": 114
+  },
+  {
+    "id": "site-b-arcade-0-pier-0",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 5956,
+    "y": 3505,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-0-pier-1",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6080,
+    "y": 3505,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-1-pier-0",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 5846,
+    "y": 3655,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-1-pier-1",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 5970,
+    "y": 3655,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-2-pier-0",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 5926,
+    "y": 3825,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-2-pier-1",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6050,
+    "y": 3825,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-3-pier-0",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6586,
+    "y": 3505,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-3-pier-1",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6710,
+    "y": 3505,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-4-pier-0",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6696,
+    "y": 3655,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-4-pier-1",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6820,
+    "y": 3655,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-5-pier-0",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6616,
+    "y": 3825,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-arcade-5-pier-1",
+    "kind": "landmark",
+    "type": "rect",
+    "x": 6740,
+    "y": 3825,
+    "width": 24,
+    "height": 24
+  },
+  {
+    "id": "site-b-willow-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5636,
+    "y": 3407,
+    "width": 28,
+    "height": 22
+  },
+  {
+    "id": "site-b-willow-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5836,
+    "y": 3317,
+    "width": 28,
+    "height": 22
+  },
+  {
+    "id": "privacy-nw-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 1308,
+    "y": 1995,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "privacy-nw-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 2248,
+    "y": 1995,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "google-ne-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 5908,
+    "y": 1995,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "google-ne-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 6848,
+    "y": 1995,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "site-a-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 1458,
+    "y": 3915,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "site-a-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 2398,
+    "y": 3915,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "site-b-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 5758,
+    "y": 3915,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "site-b-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 6698,
+    "y": 3915,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "privacy-sw-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 1308,
+    "y": 5795,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "privacy-sw-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 2248,
+    "y": 5795,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "google-se-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 5908,
+    "y": 5795,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "google-se-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 6848,
+    "y": 5795,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "mid-wall-0",
+    "kind": "wall",
+    "type": "rect",
+    "x": 3588,
+    "y": 2325,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "mid-wall-1",
+    "kind": "wall",
+    "type": "rect",
+    "x": 4568,
+    "y": 2325,
+    "width": 244,
+    "height": 58
+  },
+  {
+    "id": "grove-0-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1305,
+    "y": 1161,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-0-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1085,
+    "y": 1261,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-0-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1265,
+    "y": 1291,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-1-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1475,
+    "y": 1031,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-1-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1615,
+    "y": 901,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-1-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1775,
+    "y": 1006,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-1-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1890,
+    "y": 1121,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-1-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1685,
+    "y": 1161,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-1-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1510,
+    "y": 1201,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-2-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2045,
+    "y": 1091,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-2-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2205,
+    "y": 971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-2-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2385,
+    "y": 1056,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-2-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2290,
+    "y": 1191,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-3-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2705,
+    "y": 1151,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-3-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2900,
+    "y": 1071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-3-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3045,
+    "y": 1181,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-3-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2825,
+    "y": 1281,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-3-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3005,
+    "y": 1311,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-4-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3315,
+    "y": 811,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-4-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3455,
+    "y": 681,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-4-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3615,
+    "y": 786,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-4-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3730,
+    "y": 901,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-4-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3525,
+    "y": 941,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-4-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3350,
+    "y": 981,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-5-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3895,
+    "y": 701,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-5-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4055,
+    "y": 581,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-5-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4235,
+    "y": 666,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-5-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4140,
+    "y": 801,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-6-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4505,
+    "y": 801,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-6-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4700,
+    "y": 721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-6-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4845,
+    "y": 831,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-6-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4625,
+    "y": 931,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-6-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4805,
+    "y": 961,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-7-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5165,
+    "y": 1161,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-7-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5305,
+    "y": 1031,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-7-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5465,
+    "y": 1136,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-7-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5580,
+    "y": 1251,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-7-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5375,
+    "y": 1291,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-7-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5200,
+    "y": 1331,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-8-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5895,
+    "y": 1071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-8-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6055,
+    "y": 951,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-8-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6235,
+    "y": 1036,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-8-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6140,
+    "y": 1171,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-9-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6655,
+    "y": 1131,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-9-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6850,
+    "y": 1051,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-9-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6995,
+    "y": 1161,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-9-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6775,
+    "y": 1261,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-9-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6955,
+    "y": 1291,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-10-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 735,
+    "y": 1711,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-10-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 875,
+    "y": 1581,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-10-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1035,
+    "y": 1686,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-10-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1150,
+    "y": 1801,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-10-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 945,
+    "y": 1841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-10-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 770,
+    "y": 1881,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-11-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 835,
+    "y": 2191,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-11-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1015,
+    "y": 2276,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-11-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 920,
+    "y": 2411,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-12-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2595,
+    "y": 1761,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-12-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2790,
+    "y": 1681,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-12-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2935,
+    "y": 1791,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-12-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2715,
+    "y": 1891,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-12-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2895,
+    "y": 1921,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-13-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2845,
+    "y": 2321,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-13-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3260,
+    "y": 2411,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-13-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3055,
+    "y": 2451,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-13-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2880,
+    "y": 2491,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-14-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5275,
+    "y": 1871,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-14-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5435,
+    "y": 1751,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-14-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5615,
+    "y": 1836,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-14-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5520,
+    "y": 1971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-15-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7075,
+    "y": 1771,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-15-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7270,
+    "y": 1691,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-15-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7415,
+    "y": 1801,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-15-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7195,
+    "y": 1901,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-15-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7375,
+    "y": 1931,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-16-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7285,
+    "y": 2321,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-16-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7320,
+    "y": 2491,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-17-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 875,
+    "y": 3041,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-17-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1035,
+    "y": 2921,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-17-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1120,
+    "y": 3141,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-18-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1385,
+    "y": 2911,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-18-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1505,
+    "y": 3041,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-18-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1685,
+    "y": 3071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-19-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2415,
+    "y": 2866,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-19-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2530,
+    "y": 2981,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-19-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2325,
+    "y": 3021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-19-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2150,
+    "y": 3061,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-20-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2705,
+    "y": 3251,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-20-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2865,
+    "y": 3131,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-20-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3045,
+    "y": 3216,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-20-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2950,
+    "y": 3351,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-21-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5265,
+    "y": 2981,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-21-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5460,
+    "y": 2901,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-21-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5605,
+    "y": 3011,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-21-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5385,
+    "y": 3111,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-21-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5565,
+    "y": 3141,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-22-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5725,
+    "y": 2821,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-22-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6140,
+    "y": 2911,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-22-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5935,
+    "y": 2951,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-22-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5760,
+    "y": 2991,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-23-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6715,
+    "y": 2971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-23-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6875,
+    "y": 2851,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-23-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7055,
+    "y": 2936,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-23-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6960,
+    "y": 3071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-24-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7265,
+    "y": 3191,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-24-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7460,
+    "y": 3111,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-24-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7605,
+    "y": 3221,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-24-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7385,
+    "y": 3321,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-24-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7565,
+    "y": 3351,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-25-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 635,
+    "y": 3661,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-25-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 775,
+    "y": 3531,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-25-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 935,
+    "y": 3636,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-25-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1050,
+    "y": 3751,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-25-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 845,
+    "y": 3791,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-25-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 670,
+    "y": 3831,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-26-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 845,
+    "y": 4211,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-26-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1005,
+    "y": 4091,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-26-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1185,
+    "y": 4176,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-26-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1090,
+    "y": 4311,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-27-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3145,
+    "y": 4031,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-27-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2925,
+    "y": 4131,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-27-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3105,
+    "y": 4161,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-28-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3265,
+    "y": 3491,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-28-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3405,
+    "y": 3361,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-28-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3680,
+    "y": 3581,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-29-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4945,
+    "y": 3401,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-29-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5125,
+    "y": 3486,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-30-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5205,
+    "y": 4081,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-30-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5400,
+    "y": 4001,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-30-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5545,
+    "y": 4111,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-30-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5325,
+    "y": 4211,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-30-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5505,
+    "y": 4241,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-31-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7215,
+    "y": 3911,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-31-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7355,
+    "y": 3781,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-31-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7515,
+    "y": 3886,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-31-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7630,
+    "y": 4001,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-31-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7425,
+    "y": 4041,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-31-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7250,
+    "y": 4081,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-32-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7385,
+    "y": 4491,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-32-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7545,
+    "y": 4371,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-32-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7725,
+    "y": 4456,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-32-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7630,
+    "y": 4591,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-33-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 950,
+    "y": 4831,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-33-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1095,
+    "y": 4941,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-33-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 875,
+    "y": 5041,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-33-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1055,
+    "y": 5071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-34-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1205,
+    "y": 4851,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-34-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1345,
+    "y": 4721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-34-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1415,
+    "y": 4981,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-34-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1240,
+    "y": 5021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-35-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1935,
+    "y": 4841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-35-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2095,
+    "y": 4721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-35-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2275,
+    "y": 4806,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-35-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2180,
+    "y": 4941,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-36-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2705,
+    "y": 5021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-36-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2900,
+    "y": 4941,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-36-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3045,
+    "y": 5051,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-36-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2825,
+    "y": 5151,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-36-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3005,
+    "y": 5181,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-37-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3335,
+    "y": 4631,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-37-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3475,
+    "y": 4501,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-37-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3635,
+    "y": 4606,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-37-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3750,
+    "y": 4721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-37-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3545,
+    "y": 4761,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-37-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3370,
+    "y": 4801,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-38-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4575,
+    "y": 4661,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-38-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4735,
+    "y": 4541,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-38-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4915,
+    "y": 4626,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-38-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4820,
+    "y": 4761,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-39-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5265,
+    "y": 4971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-39-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5460,
+    "y": 4891,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-39-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5605,
+    "y": 5001,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-39-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5385,
+    "y": 5101,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-39-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5565,
+    "y": 5131,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-40-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5855,
+    "y": 4831,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-40-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5995,
+    "y": 4701,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-40-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6155,
+    "y": 4806,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-40-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6270,
+    "y": 4921,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-40-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6065,
+    "y": 4961,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-40-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5890,
+    "y": 5001,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-41-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6605,
+    "y": 4841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-41-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6765,
+    "y": 4721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-42-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7205,
+    "y": 5111,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-42-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7400,
+    "y": 5031,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-42-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7545,
+    "y": 5141,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-42-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7325,
+    "y": 5241,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-42-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7505,
+    "y": 5271,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-43-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 745,
+    "y": 5811,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-43-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 885,
+    "y": 5681,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-43-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1045,
+    "y": 5786,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-43-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1160,
+    "y": 5901,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-43-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 955,
+    "y": 5941,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-43-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 780,
+    "y": 5981,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-44-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1005,
+    "y": 6301,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-44-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1165,
+    "y": 6181,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-44-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1345,
+    "y": 6266,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-44-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1250,
+    "y": 6401,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-45-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2265,
+    "y": 6201,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-45-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2460,
+    "y": 6121,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-45-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2605,
+    "y": 6231,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-45-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2385,
+    "y": 6331,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-45-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2565,
+    "y": 6361,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-46-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2715,
+    "y": 5951,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-46-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2855,
+    "y": 5821,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-46-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3015,
+    "y": 5926,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-46-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3130,
+    "y": 6041,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-46-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2925,
+    "y": 6081,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-47-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5315,
+    "y": 6041,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-47-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5475,
+    "y": 5921,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-47-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5655,
+    "y": 6006,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-48-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5855,
+    "y": 6331,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-48-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6050,
+    "y": 6251,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-48-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6195,
+    "y": 6361,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-48-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5975,
+    "y": 6461,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-48-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6155,
+    "y": 6491,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-49-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6695,
+    "y": 6301,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-49-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6835,
+    "y": 6171,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-49-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6995,
+    "y": 6276,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-49-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7110,
+    "y": 6391,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-49-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6905,
+    "y": 6431,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-49-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6730,
+    "y": 6471,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-50-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7265,
+    "y": 5841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-50-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7425,
+    "y": 5721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-51-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2725,
+    "y": 6741,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-51-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2920,
+    "y": 6661,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-51-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3065,
+    "y": 6771,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-51-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2845,
+    "y": 6871,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-51-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3025,
+    "y": 6901,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-52-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3105,
+    "y": 7151,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-52-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3245,
+    "y": 7021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-52-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3405,
+    "y": 7126,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-52-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3520,
+    "y": 7241,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-52-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3315,
+    "y": 7281,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-53-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5095,
+    "y": 6836,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-53-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5000,
+    "y": 6971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-54-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5105,
+    "y": 7171,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-54-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5300,
+    "y": 7091,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-54-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5225,
+    "y": 7301,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-55-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3505,
+    "y": 7431,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-55-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3715,
+    "y": 7561,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-55-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3540,
+    "y": 7601,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-56-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4905,
+    "y": 7526,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-56-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4810,
+    "y": 7661,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-57-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3355,
+    "y": 2841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-57-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3550,
+    "y": 2761,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-57-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3695,
+    "y": 2871,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-57-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3475,
+    "y": 2971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-57-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3655,
+    "y": 3001,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-58-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4565,
+    "y": 2841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-58-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4705,
+    "y": 2711,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-58-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4865,
+    "y": 2816,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-58-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4980,
+    "y": 2931,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-58-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4775,
+    "y": 2971,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-58-trunk-5",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4600,
+    "y": 3011,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-59-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3275,
+    "y": 5771,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-59-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3435,
+    "y": 5651,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-59-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3615,
+    "y": 5736,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-59-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3520,
+    "y": 5871,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-60-trunk-0",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4585,
+    "y": 5691,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-60-trunk-1",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4780,
+    "y": 5611,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-60-trunk-2",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4925,
+    "y": 5721,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-60-trunk-3",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4705,
+    "y": 5821,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "grove-60-trunk-4",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4885,
+    "y": 5851,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-west-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3205,
+    "y": 1361,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-west-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3375,
+    "y": 1416,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-west-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3495,
+    "y": 1531,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-west-tree-3-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3255,
+    "y": 1571,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-east-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4980,
+    "y": 1361,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-east-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5150,
+    "y": 1436,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-east-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5265,
+    "y": 1551,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-east-tree-3-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5035,
+    "y": 1601,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-back-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3990,
+    "y": 1076,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-back-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4150,
+    "y": 1006,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-moon-back-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4330,
+    "y": 1071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-northwest-elbow-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2600,
+    "y": 2431,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-northwest-elbow-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2750,
+    "y": 2491,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-northwest-elbow-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2885,
+    "y": 2641,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-northeast-elbow-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5215,
+    "y": 2501,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-northeast-elbow-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5380,
+    "y": 2581,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-northeast-elbow-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5525,
+    "y": 2691,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-mid-west-foot-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3115,
+    "y": 2861,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-mid-west-foot-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3295,
+    "y": 2936,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-mid-west-foot-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3465,
+    "y": 3061,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-mid-east-foot-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4965,
+    "y": 3071,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-mid-east-foot-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5145,
+    "y": 3191,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-mid-east-foot-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5285,
+    "y": 3291,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-pond-bend-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2495,
+    "y": 3196,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-pond-bend-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2640,
+    "y": 3266,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-pond-bend-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2775,
+    "y": 3351,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-pond-bend-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6675,
+    "y": 3161,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-pond-bend-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6840,
+    "y": 3246,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-pond-bend-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6985,
+    "y": 3356,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-junction-back-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3540,
+    "y": 3131,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-junction-back-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3690,
+    "y": 3261,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-junction-back-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4465,
+    "y": 3021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-junction-back-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4625,
+    "y": 3131,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-junction-back-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4755,
+    "y": 3226,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-upper-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2875,
+    "y": 4286,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-upper-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3045,
+    "y": 4331,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-upper-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3205,
+    "y": 4441,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-upper-tree-3-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2990,
+    "y": 4521,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-inner-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3560,
+    "y": 3996,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-inner-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3735,
+    "y": 4116,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-inner-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3870,
+    "y": 4226,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-inner-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4530,
+    "y": 4021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-inner-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4705,
+    "y": 4116,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-inner-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4845,
+    "y": 4241,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-upper-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5130,
+    "y": 4426,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-upper-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5305,
+    "y": 4521,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-upper-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5465,
+    "y": 4631,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-upper-tree-3-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5235,
+    "y": 4661,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-bottom-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3430,
+    "y": 4831,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-bottom-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3600,
+    "y": 4911,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-middle-bottom-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3775,
+    "y": 5006,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-bottom-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4565,
+    "y": 4831,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-bottom-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4725,
+    "y": 4921,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-middle-bottom-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4890,
+    "y": 5021,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-lane-meadow-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2320,
+    "y": 4441,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-lane-meadow-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2485,
+    "y": 4541,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-lane-meadow-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2630,
+    "y": 4631,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-lane-meadow-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5905,
+    "y": 4431,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-lane-meadow-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6065,
+    "y": 4571,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-lane-meadow-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6225,
+    "y": 4651,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-triangle-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3115,
+    "y": 5841,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-triangle-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3275,
+    "y": 5926,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-triangle-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3440,
+    "y": 6031,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-inner-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3660,
+    "y": 5941,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-inner-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3815,
+    "y": 6036,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-inner-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 3965,
+    "y": 6166,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-inner-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4445,
+    "y": 5981,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-inner-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4615,
+    "y": 6081,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-inner-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4780,
+    "y": 6211,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-triangle-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 4940,
+    "y": 5781,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-triangle-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5110,
+    "y": 5876,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-triangle-tree-2-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 5245,
+    "y": 5996,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-loop-pocket-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 905,
+    "y": 4451,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-west-loop-pocket-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 1055,
+    "y": 4571,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-loop-pocket-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7395,
+    "y": 4671,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-east-loop-pocket-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 7535,
+    "y": 4791,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-shore-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2105,
+    "y": 6421,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southwest-shore-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 2275,
+    "y": 6501,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-shore-tree-0-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6045,
+    "y": 6311,
+    "width": 30,
+    "height": 26
+  },
+  {
+    "id": "fb-southeast-shore-tree-1-trunk",
+    "kind": "tree",
+    "type": "rect",
+    "x": 6200,
+    "y": 6411,
+    "width": 30,
+    "height": 26
+  }
+]

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 160"><title>Solid Bog cover-harvest, Home court cover</title><g stroke="#39472d" stroke-width="2.2" stroke-linejoin="round"><path d="M8 95H252V153H8Z" fill="#8d769d"/><path d="M8 95L19 82H241L252 95Z" fill="#c6b8cc"/><path d="M8 95H252V105H8Z" fill="#b2a1bf"/><path d="M8 126H252M65 106V126M173 106V126M114 126V153M221 126V153" fill="none" stroke="#6d5c80" stroke-width="1.4"/><path d="M15 108V147" stroke="#d9ccdb"/></g><g transform="translate(15 18) scale(.67)">
+<title>Three stacked golden hay rolls</title>
+<g stroke="#39472d" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+<ellipse fill="#d6b653" stroke="none" cx="66" cy="110" rx="65" ry="6"/>
+<path fill="#b6d93b" d="M76 59Q90 40 111 49Q130 55 131 79Q132 99 118 104L94 112L72 96Z"/>
+<path fill="#8ea63a" stroke="none" d="M83 91L121 83Q131 79 130 86Q128 101 118 104L94 112L79 103Z"/>
+<ellipse fill="#d2e485" cx="99" cy="83" rx="22" ry="28"/>
+<path fill="none" stroke="#78962d" stroke-width="2" d="M104 65Q87 61 86 80Q86 98 100 100Q115 100 113 81Q112 71 103 73Q97 74 98 83Q99 88 104 85"/>
+<path fill="#b6d93b" d="M40 7Q51-1 63 4L91 16Q112 26 102 47Q95 63 77 59L48 48Q23 40 31 18Z"/>
+<path fill="#8ea63a" stroke="none" d="M30 29Q31 44 48 48L77 59Q92 62 100 50L68 37Z"/>
+<ellipse fill="#d2e485" cx="78" cy="34" rx="23" ry="26" transform="rotate(-20 78 34)"/>
+<path fill="none" stroke="#78962d" stroke-width="2" d="M84 17Q66 12 64 32Q63 48 77 51Q92 53 93 36Q94 26 85 25Q75 23 75 33Q75 41 82 38Q85 36 82 32"/>
+<path fill="none" stroke="#78962d" stroke-width="1" d="M43 10Q35 24 42 40M53 7Q43 23 51 45"/>
+<path fill="#b6d93b" d="M14 50Q30 41 43 47L71 61Q90 77 79 98Q69 115 49 110L20 101Q2 95 2 77Q1 60 14 50Z"/>
+<path fill="#8ea63a" stroke="none" d="M3 84Q5 96 20 101L49 110Q69 115 79 98L47 84Z"/>
+<ellipse fill="#d2e485" cx="53" cy="82" rx="27" ry="29" transform="rotate(-16 53 82)"/>
+<path fill="none" stroke="#78962d" stroke-width="2" d="M60 62Q40 57 37 78Q35 98 51 102Q69 106 70 85Q72 72 61 72Q49 69 48 81Q46 92 55 91Q62 89 58 82"/>
+<path fill="none" stroke="#78962d" stroke-width="1" d="M14 53Q6 70 15 91M25 49Q15 67 25 98"/>
+</g></g><g transform="translate(119 48) scale(.8)">
+ <g stroke="#39472d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path fill="#518d87" d="M3 15l3 29q2 13 28 13 28-1 29-15l2-27z"/>
+  <path fill="#79aaa0" stroke="none" d="M8 18l4 29q9 7 22 7V22z"/>
+  <ellipse fill="#b5d5bb" cx="34" cy="15" rx="31" ry="12"/>
+  <ellipse fill="#397b79" cx="34" cy="15" rx="25" ry="7"/>
+  <path fill="#66bdcc" d="M10 16q22-7 48 0-3 7-24 7-20 0-24-7z"/>
+  <path fill="none" stroke-width="1" d="M15 27l2 23m13-20v23m15-23-1 23m13-27-3 23M5 24q29 15 59-1M6 43q28 15 57-1"/>
+  <path fill="none" stroke="#b8e2dc" stroke-width="1.5" d="M19 18h14m7-2h10"/>
+ </g>
+</g><g transform="translate(181 48) scale(.8)">
+ <g stroke="#39472d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path fill="#518d87" d="M3 15l3 29q2 13 28 13 28-1 29-15l2-27z"/>
+  <path fill="#79aaa0" stroke="none" d="M8 18l4 29q9 7 22 7V22z"/>
+  <ellipse fill="#b5d5bb" cx="34" cy="15" rx="31" ry="12"/>
+  <ellipse fill="#397b79" cx="34" cy="15" rx="25" ry="7"/>
+  <path fill="#66bdcc" d="M10 16q22-7 48 0-3 7-24 7-20 0-24-7z"/>
+  <path fill="none" stroke-width="1" d="M15 27l2 23m13-20v23m15-23-1 23m13-27-3 23M5 24q29 15 59-1M6 43q28 15 57-1"/>
+  <path fill="none" stroke="#b8e2dc" stroke-width="1.5" d="M19 18h14m7-2h10"/>
+ </g>
+</g></svg>
