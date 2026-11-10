@@ -137,7 +137,9 @@ test('any boat can be boarded from nearby sand, and you can land on any shore yo
     assert.ok(Math.hypot(deck.x-boat.x,deck.y-boat.y)>40 && Math.hypot(deck.x-boat.x,deck.y-boat.y)<300,boat.id);
   }
   assert.ok(landingSpot({islandId:'home',...HARBOR.water}),'the harbor shore is in reach');
-  assert.equal(landingSpot({islandId:'home',x:-1500,y:-1500}),null,'open sea: nothing to land on');
+  const openSea={islandId:'home',x:-8000,y:0};
+  assert.ok(canSail(openSea.x,openSea.y,openSea.islandId),'fixture is open navigable water');
+  assert.equal(landingSpot(openSea),null,'open sea: nothing to land on');
   const there=landingSpot({islandId:'home',...destinationsFor('home')[0].dock});   // beside the neighbour's own jetty (its map may be themed)
   assert.equal(there.islandId,destinationsFor('home')[0].destination,'a neighbour shore lands you on that island');
 });

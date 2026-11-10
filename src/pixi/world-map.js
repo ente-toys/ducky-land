@@ -30,11 +30,12 @@ export const ISLAND_COUNT = 1 + FINISHED_THEMES.length;
 // boss 8 Nov 15:25 picked layout C "real little planet": cold band under the Iceland cap, warm belt round Home, Bog alone in the far south.
 // Order = FINISHED_THEMES: sunflower, pink, library, community, fair, cathedral, bog, snow.
 const ANCHORS = [
-  [55.7, 25.7], [-74.1, -5.7], [66, -34], [-107.4, 36.9], [154.3, -32.5],
-  [-31.8, -35.3], [0, -90], [0, 90],
-];   // boss 8 Nov 17:05: spread to shrink the biggest empty sea patch (17.4 -> 14.2 deg); Iceland N pole, fight club S pole
+  [60, 28], [-140, -22], [105, -23], [-85, 29], [164, 24],
+  [-57, -24], [0, -90], [0, 90],
+];   // Stagger the middle islands around both hemispheres; Iceland and Bog stay at the poles.
 // After moving an anchor or changing the globe size: coastGaps() (sphere-shores.js) must keep BOAT_CHANNEL between every
-// pair of real coasts, jetties included, then re-place the islets with `node scripts/islets/place.mjs`.
+// pair of real coasts, jetties included. Islets are hand-composed in scripts/world-layout/islet-composition.json;
+// validate their existing boat channels after moving a major island, rather than scattering them again.
 const RAD=Math.PI/180;
 export const SPHERE_CIRCUMFERENCE=74000;   // spacing is checked on the real coasts: coastGaps() in sphere-shores.js
 const BASE_SIZES=new Map(['home',...FINISHED_THEMES].map(t=>[t,sizeOfTheme(t)]));
@@ -53,7 +54,7 @@ export function layoutWorld(sizeOf=sizeOfTheme,seed=11,finished=FINISHED_THEMES)
   const base=BASE_SIZES.get(i.theme??'home');scale=Math.max(scale,i.width/base.width,i.height/base.height);
  }
  const Rw=SPHERE_CIRCUMFERENCE/(2*Math.PI)*scale,SX=2*Math.PI*Rw,wrapd=(v,p)=>v-p*Math.round(v/p);
- const islands=out.map(i=>({...i,...sphereFrame(i.lon,i.lat),x:W/2+i.lon*Rw,y:H/2-i.lat*Rw}));
+ const islands=out.map(i=>({...i,...sphereFrame(i.lon,i.lat),x:W/2+(i.lon*Rw),y:H/2+(-i.lat*Rw)}));
  return {islands,Rw,SX,wrapd,bounds:{x0:W/2-SX/2,x1:W/2+SX/2,y0:H/2-Math.PI*Rw/2,y1:H/2+Math.PI*Rw/2}};
 }
 

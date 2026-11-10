@@ -80,12 +80,20 @@ export default function PixiPage() {
     // dev only: ?offline plays the island locally with no room server (for design review); absent = unchanged
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
-      onError:() => setError(true),onInteriorChange:setIndoors});
+      externalOverview:true,transparent:true,renderResolution:1,onError:() => setError(true),onInteriorChange:setIndoors});
     island.current = game;
-    game.mount(host.current);
+    let earth=null,cancelled=false;
+    game.mount(host.current).then(async()=>{
+      if(cancelled||!game.ready)return;
+      const {createThreeGameView}=await import('./three-game-view.js');
+      if(cancelled)return;
+      earth=await createThreeGameView(game,host.current);
+      if(cancelled)earth?.destroy();
+    }).catch(error=>{console.error('Could not initialize world',error);setError(true);});
     client.connect();
     refresh();
     return () => {
+      cancelled=true;earth?.destroy();
       abort.abort();
       client.dispose();
       game.dispose();

@@ -48,7 +48,7 @@ export function globeScreen({id,cam,ball,w,h,basis}){
   const xp=screenOf(S(step,0)),xm=screenOf(S(-step,0)),yp=screenOf(S(0,step)),ym=screenOf(S(0,-step));
   if(!xp||!xm||!yp||!ym)return null;
   const q=polar((xp.x-xm.x)/(2*step),(xp.y-xm.y)/(2*step),(yp.x-ym.x)/(2*step),(yp.y-ym.y)/(2*step));
-  const depth=dot(c,view.center),a=Math.acos(Math.max(-1,Math.min(1,depth))),limb=ball>.5?1:smooth((Math.PI/2-a)/.12);
+  const depth=dot(c,view.center),a=Math.acos(Math.max(-1,Math.min(1,depth))),limb=ball===0||ball>.5?1:smooth((Math.PI/2-a)/.12);
   const scale=(cam.zoom*(1-ball)+q.scale*ball)*(ball>.5?1:limb);
   if(!(scale>1e-6))return null;
   return {x:C.x,y:C.y,cos:q.cos,sin:q.sin,scale,depth};

@@ -3,7 +3,7 @@ import {atlasReference,midZoomQuality} from '../scripts/sphere-quality.mjs';
 import {WORLD_ISLANDS,WORLD_GEO,worldIsland} from '../src/pixi/world-map.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {mapPoint,localPoint} from '../src/pixi/sphere-coordinates.js';
-import {expMap,unit} from '../src/pixi/sphere.js';
+import {expMap,unit,sphereFrame} from '../src/pixi/sphere.js';
 import {globeScreen} from '../src/pixi/globe-screen.js';
 import {rollBasis} from '../src/pixi/globe-look.js';
 import test from 'node:test';
@@ -52,9 +52,14 @@ test('painted quality reference uses the full curved chart and camera rotation, 
 test('overlapping chart rectangles choose opaque art, then the nearest centre',()=>{
  const a=worldIsland('home'),b=worldIsland('blossom'),width=1440,height=900;
  const image=(r,g,alpha)=>({width:2,height:2,data:new Uint8Array([r,g,0,alpha,r,g,0,alpha,r,g,0,alpha,r,g,0,alpha])});
+ // The world layout deliberately has open sea between these islands now.
+ // Use an explicit overlapping pair to exercise opacity and nearest-centre selection.
+ const original={...b};Object.assign(b,sphereFrame(.2,0));
+ try{
  const state=k=>({islandId:'home',ball:1,camera:{...localPoint('home',unit(a.center.map((v,i)=>v*(1-k)+b.center[i]*k))),zoom:.04}});
  const sample=(k,alpha)=>atlasReference(width/2,height/2,state(k),new Map([['home',image(255,0,alpha)],['sunflower',image(0,255,255)]]),width,height).colour;
  assert.deepEqual(sample(.49,255),[255,0,0],'Home is nearest at this shared pixel');
  assert.deepEqual(sample(.51,255),[0,255,0],'later island wins when its centre is nearer');
  assert.deepEqual(sample(.49,2),[0,255,0],'transparent padding cannot cut an opaque neighbour');
+ }finally{Object.assign(b,original);}
 });

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {ISLETS,ISLET_ART,ISLET_SEED,ISLET_SCALE} from '../src/pixi/islets.js';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {sphereShores,sphereShoreGap,BOAT_CHANNEL} from '../src/pixi/sphere-shores.js';
-import {angle} from '../src/pixi/sphere.js';
+import {angle,sphereFrame} from '../src/pixi/sphere.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {canSail,landingSpot,landingApproach,sailRoute,sailStep,setSailDestination,boardingPoint,navOf,BOAT_RADIUS,ISLANDS,seaBoundsFor} from '../src/pixi/islands.js';
 import {placeIslet,reframeIslet,isletLandingFrame} from '../src/pixi/islet-placement.js';
@@ -116,9 +116,10 @@ test('boat collision agrees in different island charts and covers every islet\'s
   // the drawn jetty faces open sea: straight out from its tip there is no land and no other islet for the docking reach
   for(let t=0;t<=420;t+=50){const l=placeIslet(i.home,i,[i.jetty.tip[0]+i.jetty.dir[0]*(t+72),i.jetty.tip[1]+i.jetty.dir[1]*(t+72)]);
    assert.ok(canSail(l.x,l.y,i.home),`${i.id} open sea ${t} out from its jetty`);}
-  // upright in the view you sail and walk it in: its art is never turned against our camera
-  const p=placeIslet(i.home,i,[0,0]),e=placeIslet(i.home,i,[100,0]);
-  assert.ok(Math.abs(Math.atan2(e.y-p.y,e.x-p.x))<.01,`${i.id} stands upright on ${i.home}`);
+  // On the continuous globe, match the large islands' geographic north rather
+  // than counter-rotating the art for a different island's flat chart.
+  const north=sphereFrame(i.lon,i.lat).north;
+  assert.ok(Math.hypot(...north.map((v,k)=>v-i.north[k]))<1e-10,`${i.id} follows geographic north`);
   // its props stand on the ground: walked round, never through
   for(const b of i.blocked){const cx=b.reduce((s,q)=>s+q[0],0)/b.length,cy=b.reduce((s,q)=>s+q[1],0)/b.length,q=placeIslet(i.home,i,[cx,cy]);
    assert.equal(navOf(i.home).walkable(q.x,q.y),false,`${i.id} prop footprint is solid`);}
@@ -202,7 +203,7 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
 });
 test('route planner steers round an islet and manual sailing stops at its land',()=>{
  const i=ISLETS[0],id=WORLD_ISLANDS.reduce((a,b)=>angle(i.center,a.center)<angle(i.center,b.center)?a:b).id;
- const a=placeIslet(id,i,[i.landCentre[0]-1500*ISLET_SCALE,i.landCentre[1]]),b=placeIslet(id,i,[i.landCentre[0]+1500*ISLET_SCALE,i.landCentre[1]]);
+ const a=placeIslet(id,i,[i.landCentre[0]-1000*ISLET_SCALE,i.landCentre[1]]),b=placeIslet(id,i,[i.landCentre[0]+1000*ISLET_SCALE,i.landCentre[1]]);
  const route=sailRoute(id,a,b);assert.ok(route?.length>1,'direct line crosses solid islet');
  let last=a;for(const to of route){const steps=Math.ceil(Math.hypot(to.x-last.x,to.y-last.y)/12);for(let k=0;k<=steps;k++){const p={x:last.x+(to.x-last.x)*k/steps,y:last.y+(to.y-last.y)*k/steps};assert.ok(canSail(p.x,p.y,id));}last=to;}
  const actor={...a,islandId:id,mode:'sailing'},p=placeIslet(id,i,i.landCentre),d=Math.hypot(p.x-a.x,p.y-a.y);

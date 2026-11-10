@@ -1,0 +1,57 @@
+{
+  "08-snow-igloo": {
+    "region": "Iceland",
+    "lon": 14,
+    "lat": 61
+  },
+  "04-small-mountain": {
+    "region": "Campfire",
+    "lon": -117,
+    "lat": 11
+  },
+  "tree-and-rowboat": {
+    "region": "Home",
+    "lon": -27,
+    "lat": 22
+  },
+  "05-lighthouse-rock": {
+    "region": "Sunbob",
+    "lon": 60,
+    "lat": -9
+  },
+  "broken-shipwreck": {
+    "region": "Northern passage",
+    "lon": -155,
+    "lat": 50
+  },
+  "06-palm-treasure": {
+    "region": "Pagepond",
+    "lon": 73,
+    "lat": -48
+  },
+  "12-coral-atoll": {
+    "region": "Fair",
+    "lon": 151,
+    "lat": -13
+  },
+  "07-pink-blossom": {
+    "region": "Rosybutton",
+    "lon": -171,
+    "lat": -42
+  },
+  "odyssey": {
+    "region": "Southern passage",
+    "lon": 163,
+    "lat": -50
+  },
+  "09-spooky-purple": {
+    "region": "Bog",
+    "lon": -22,
+    "lat": -53
+  },
+  "11-volcano": {
+    "region": "Bellovo",
+    "lon": -97,
+    "lat": -25
+  }
+}

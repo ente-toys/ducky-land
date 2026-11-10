@@ -7,7 +7,7 @@ import {Canvas,createCanvas} from '@napi-rs/canvas';
 import {Container,Graphics,Matrix,DOMAdapter} from 'pixi.js';
 import {CanvasRenderer} from '../node_modules/pixi.js/lib/rendering/renderers/canvas/CanvasRenderer.mjs';
 import {ISLETS,ISLET_META,ISLET_ART} from '../src/pixi/islets.js';
-import {placeIslet} from '../src/pixi/islet-placement.js';
+import {placeIslet,isletPlacement} from '../src/pixi/islet-placement.js';
 import {isletWalk} from '../src/pixi/islet-walk.js';
 import {navOf} from '../src/pixi/islands.js';
 import {inPoly} from '../rive/web/island-geometry.mjs';
@@ -84,7 +84,14 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     assert.ok(objects.getChildIndex(sprite)<objects.getChildIndex(duck),`${i.art}/${piece.id} is behind a Ducky in front`);
    }
    duck.visible=false;
-   scene.setFromMatrix(new Matrix(1/k,0,0,1/k,512-p.x/k,512-p.y/k));
+   // Compare in the islet's own north-up frame, undoing its chart rotation.
+   const r=isletPlacement(i.home,i),co=r.cos,si=r.sin;
+   scene.setFromMatrix(new Matrix(co/k,-si/k,si/k,co/k,512-(co*p.x+si*p.y)/k,512-(-si*p.x+co*p.y)/k));
+   duck.rotation=Math.atan2(si,co);
+   // Test lossless split artwork in its own frame, preserving its source depth
+   // order. Chart-space foot sorting was checked above, before this comparison.
+   for(const {piece,sprite}of v.props)sprite.zIndex=(piece.foot[1]-512)*k;
+   objects.sortChildren();
    renderer.render({container:scene,clear:true});
    const layered=output.getContext('2d').getImageData(0,0,1024,1024).data.slice();
    const full=new Graphics(svgContext(source(i.art),parse));renderer.render({container:full,clear:true});
@@ -97,6 +104,7 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     writeFileSync(`/tmp/islet-depth-art/${i.art}-full.png`,output.toBuffer('image/png'));
    }
    assert.ok(changed<(i.art==='broken-shipwreck'?1024:512),`${i.art}: split preserves the picture (${changed} changed pixels)`);   // 8 Nov: the shipwreck split drops the soft hull shadows (964 px); on the Home to-dofull.destroy();
+   for(const {sprite}of v.props)sprite.zIndex=sprite.y;objects.sortChildren();
    // An opaque Ducky body behind the oak is covered by the actual production tree.
    if(i.art==='tree-and-rowboat'){
     const oak=v.props.find(p=>p.piece.id==='oak');

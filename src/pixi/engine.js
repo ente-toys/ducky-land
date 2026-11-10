@@ -95,7 +95,8 @@ function release(src) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null} = {}) {
+  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, externalOverview = false} = {}) {
+    this.transparent=transparent;this.renderResolution=renderResolution;this.externalOverview=externalOverview;
     this.onInteriorChange = onInteriorChange;
     this.room = room;
     this.islandId = 'home';
@@ -136,8 +137,8 @@ export class PixiIsland {
     this.app = new Application();
     try {
       await this.app.init({width: host.clientWidth || 1280, height: host.clientHeight || 720,
-        resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true,
-        antialias: true, background: '#6EC9DE', preference: 'webgl', autoStart: false,
+        resolution: Math.min(this.renderResolution ?? (devicePixelRatio || 1), 2), autoDensity: true,
+        antialias: true, background: '#6EC9DE', backgroundAlpha:this.transparent?0:1, preference: 'webgl', autoStart: false,
         sharedTicker: false});
       if (this.disposed) { this.app.destroy({removeView:true,releaseGlobalResources:false}, {children: true}); return; }
       this.initialized = true;
@@ -304,7 +305,7 @@ export class PixiIsland {
       this.isletView=await createIsletView(this.app,this.scene,this.objects);   // boss 8 Nov: hand-drawn vector islets, globe atlas baked from them
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
-      this.worldView = createWorldView(this.app, this.scene, this.isletView); this.worldView.prepare(); globalThis.__duckyPin = () => this.worldView?.pinPoint(); globalThis.__duckyRigid = () => this.rigidReadback();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
+      if(!this.externalOverview){this.worldView = createWorldView(this.app, this.scene, this.isletView); this.worldView.prepare();} globalThis.__duckyPin = () => this.worldView?.pinPoint(); globalThis.__duckyRigid = () => this.rigidReadback();   // QA readback: where the 'You' pin is on screen   // boss 5 Nov: tilted horizon, then the little planet
       if (this.room) {
         this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
         if (this.disposed) {this.travelView.dispose(); return;}
@@ -1196,6 +1197,7 @@ export class PixiIsland {
       this.camera.basis=easeLandingBasis(this.landingView.basis,progress);
       if(progress>=1){this.landingView=null;delete this.camera.basis;}
     }
+    if(this.externalCamera){Object.assign(this.camera,this.externalCamera);Object.assign(this.target,this.externalCamera);delete this.camera.basis;}
     const viewMatrix=cameraMatrix(this.camera,this.width,this.height,TILT);
     this.scene.setFromMatrix(new Matrix(viewMatrix.a,viewMatrix.b,viewMatrix.c,viewMatrix.d,viewMatrix.tx,viewMatrix.ty));
     this.upright.update();   // the pond bridge stands up; the jetties lie flat

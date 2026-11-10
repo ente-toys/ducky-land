@@ -14,7 +14,7 @@ import volcano from '../../public/pixi-art/islets/11-volcano.meta.json' with {ty
 import coralAtoll from '../../public/pixi-art/islets/12-coral-atoll.meta.json' with {type:'json'};
 import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {sphereFrame,expMap,logMap,angle} from './sphere.js';
-import {isletPlacement,placeIslet,unplaceIslet} from './islet-placement.js';
+import {placeIslet,unplaceIslet} from './islet-placement.js';
 import {inPoly} from '../../rive/web/island-geometry.mjs';
 export const ISLET_SEED=data.seed;
 export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','05-lighthouse-rock','06-palm-treasure','07-pink-blossom','08-snow-igloo','09-spooky-purple','11-volcano','12-coral-atoll'];
@@ -25,17 +25,13 @@ export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-smal
 export const ISLET_META=Object.fromEntries([odyssey,treeAndRowboat,brokenShipwreck,smallMountain,lighthouseRock,palmTreasure,pinkBlossom,snowIgloo,spookyPurple,volcano,coralAtoll].map(m=>[m.art,m]));
 export const ISLET_VIEWBOX=1024;
 const BOAT_ROOM=46+26;   // the boat's radius plus a little water between hull and jetty tip
-// The art is drawn for our camera (ground from above, props standing up facing south), so an islet must never turn: its
-// frame is rolled until its east runs straight across the screen of its home island, the view you sail and walk it in.
-function upright(i,home){
- let roll=0;
- for(let k=0;k<4;k++){const f=sphereFrame(i.lon,i.lat,roll),r=isletPlacement(home,f);roll+=Math.atan2(r.sin,r.cos);}
- return sphereFrame(i.lon,i.lat,roll);
-}
 export function layoutIslet(i){
  const centre=sphereFrame(i.lon,i.lat).center;
- const near=WORLD_ISLANDS.reduce((a,b)=>angle(centre,a.center)<angle(centre,b.center)?a:b);
- const frame=upright(i,near.id),m=ISLET_META[i.art],k=i.width/ISLET_VIEWBOX;
+ const distance=a=>angle(centre,a.center);
+ const near=WORLD_ISLANDS.reduce((a,b)=>distance(a)<distance(b)?a:b);
+ // Use the same geographic north as the large islands. A nearest-island chart
+ // correction made polar islets face sideways on the continuous Three globe.
+ const frame=sphereFrame(i.lon,i.lat),m=ISLET_META[i.art],k=i.width/ISLET_VIEWBOX;
  const map=([u,v])=>[(u-ISLET_VIEWBOX/2)*k,(v-ISLET_VIEWBOX/2)*k],ring=r=>r.map(map);
  const coast=ring(m.land),lakes=m.holes.map(ring),blocked=m.blocked.map(b=>ring(b.polygon));
  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;

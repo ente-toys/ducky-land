@@ -40,7 +40,7 @@ test('retired islands cannot load maps, appear as travel targets or retain boats
 
 test('all nine islands retain their authored globe anchors and globe scale', async () => {
   const {WORLD_GEO} = await import('../src/pixi/world-map.js');
-  const anchors=[[0,0],[55.7,25.7],[-74.1,-5.7],[66,-34],[-107.4,36.9],[154.3,-32.5],[-31.8,-35.3],[0,-90],[0,90]];
+  const anchors=[[0,0],[60,28],[-140,-22],[105,-23],[-85,29],[164,24],[-57,-24],[0,-90],[0,90]];
   for(const [k,i] of WORLD_ISLANDS.entries()) {
     assert.equal(i.lon,anchors[k][0]*(Math.PI/180));
     assert.equal(i.lat,anchors[k][1]*(Math.PI/180));
