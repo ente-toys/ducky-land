@@ -11,16 +11,16 @@ const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',B='sc
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 const before=read(B+'world.json'),oldArt=read(B+'art.json'),oldWalk=read(B+'walk-world.json'),plan=read('scripts/bigger-cathedral/plan.json');
 const m=makeMap('cathedral',{world,walk,harbor}),nav=m.nav();
-test('Cathedral protects retained architecture, communities and all 40 sleepers',()=>{
-  // B2 retires the south arcade and side walls; the cathedral, tower, flanking arcades and front loggia stay exact.
-  for(const p of oldArt.props.filter(p=>['cathedral-hall','campanile','cathedral-2','cathedral-3','cloister-olive-well'].includes(p.id)||/^cloister-(cloister-back|roof-roses|bench-[1-4]$)/.test(p.id)))assert.deepEqual(art.props.find(q=>q.id===p.id),p);
-  assert.equal(art.decks.filter(p=>p.overBoats).length,13,'reviewed arched replacements');
-  const expected=structuredClone(before.sleepSpots);for(const [pose,points]of Object.entries(REST))for(const [i,[x,y]]of Object.entries(points))expected[pose][i]=[x,y,expected[pose][i][2]];for(const [pose,points]of Object.entries(VILLAGE_REST))for(const [i,[x,y]]of Object.entries(points))expected[pose][i]=[x,y,expected[pose][i][2]];assert.deepEqual(world.sleepSpots,expected);
-  for(const key of ['centrePlacement'])assert.deepEqual(world[key],before[key]);
-  assert.equal(world.riverMouths.length,2,'rivers now join the sea');
- for(const [x,y]of before.islets)assert.ok(m.landAt(x,y),'former islet remains land');
- assert.equal(m.sleepers.length,40);
- assert.deepEqual(m.sleepers.map(s=>s.pose).sort(),makeMap('cathedral',{world:before,walk:oldWalk,harbor:read(B+'harbor.json')}).sleepers.map(s=>s.pose).sort());
+test('Cathedral retains communities and sea access with the approved new centre and 120 sleepers',()=>{
+ for(const id of ['cathedral-hall','campanile','cloister-olive-well'])assert.ok(art.props.some(p=>p.id===id));
+ assert.ok(!art.props.some(p=>['cathedral-2','cathedral-3'].includes(p.id)));
+ assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-')).length,12);
+ assert.equal(art.decks.filter(p=>p.overBoats).length,13);
+ assert.deepEqual(world.centrePlacement,before.centrePlacement);
+ assert.equal(world.riverMouths.length,2);
+ for(const [x,y]of before.islets)assert.ok(m.landAt(x,y));
+ assert.equal(m.sleepers.length,120);
+ assert.equal(new Set(m.sleepers.map(s=>s.pose)).size,8);
  for(const s of m.sleepers)assert.ok(m.landAt(s.x,s.y));
 });
 test('Every community square, front door and workplace connects to the piazza',()=>{

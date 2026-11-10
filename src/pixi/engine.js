@@ -31,6 +31,7 @@ import {isletWalks} from './islet-walk.js';
 import {reframeIslet,isletLandingFrame} from './islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from './island-maps.js';   // boss 6 Nov: themed islands, each with its own map and art
 import {loadThemeArt} from './theme-art.js';
+import {benchSeatAt} from './bench-seat.js';
 import {setSailingHarbor} from './sailing-fx.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {floatingPose} from './floating.js';
@@ -797,7 +798,8 @@ export class PixiIsland {
         ripples.push({sprite: ripple, phase, x: ripple.x, y: ripple.y});
       }
     });
-    const leaves=art.props.filter(p => /tree/i.test(p.name)).slice(0, 60).map((tree, i) => {
+    if (art.autumnLeaves) this.air.addChild(art.autumnLeaves.layer);
+    const leaves=(art.autumnLeaves ? [] : art.props.filter(p => /tree/i.test(p.name)).slice(0, 60)).map((tree, i) => {
       const leaf=new Graphics().ellipse(0, 0, 6, 2.5).fill(i % 3 ? PALETTE.grass : PALETTE.sandShade);
       this.air.addChild(leaf); extra.push(leaf);
       return {sprite: leaf, x: tree.x, y: tree.y-150, phase: i*1.93};
@@ -1228,6 +1230,7 @@ export class PixiIsland {
       }
     });
     for (const art of this.arts.values()) if (art.ready) art.updateCentre?.(t, reduced);
+    for (const [id, art] of this.arts) if (art.ready) art.autumnLeaves?.update(t, reduced, visible, {x:this.camera.x,y:this.camera.y,zoom:this.camera.zoom,shown:id===this.artShown&&flatVisible});
     if (homeShown) this.props.forEach((prop, i) => {
       prop.sprite.visible = visible(prop.x, prop.y, Math.max(prop.width, prop.height) * prop.scale);
       if(prop.shadow)prop.shadow.visible=prop.sprite.visible;
@@ -1245,12 +1248,14 @@ export class PixiIsland {
       const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
+      const seat = !homeShown && duck.player ? benchSeatAt(this.artProps(this.artShown), {...duck,x,y}) : null;
       const hop = jumpPose(duck.jumpLeft, reduced, {turn: duck.turn, moving: duck.travel > 20});   // boss 6 Nov: crouch, stretch, lean, land
       rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift);   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
+      if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       rig.root.visible = (homeShown || duck.player) && visible(x, y, 200);   // the sleepers lie on the home map's spots
       if (duck.player) this.plantReactions?.track(duck,x,y,rig.root.visible && !(duck.jumpLeft>0));
-      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
+      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: seat?.turn ?? duck.turn, seated:Boolean(seat), time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
       if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x:deckX(x,y,this.arches), y: deckY(x, y, this.arches), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
       if (homeShown) this.bumpSleeper(duck, rig, player);   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once
     });
@@ -1451,6 +1456,7 @@ export class PixiIsland {
       }
       // boss 5 Nov: sailing-fx.js says where a Ducky is drawn: hopping in, seated low in the hull, or hopping out onto the jetty
       const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
+      const seat = this.artShown==='cathedral' ? benchSeatAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;
       if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
       }
@@ -1466,9 +1472,10 @@ export class PixiIsland {
       rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');   // boss 5 Nov: your ring only on land, never on the boat or mid-hop
       if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:deckX(look.x,look.y,this.arches), y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
+      if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       rig.root.visible = visible(look.x,look.y,200);
       this.plantReactions?.track(entry,x,y,rig.root.visible && look.deck && pose.mode!=='sailing' && !(pose.jumpLeft>0));
-      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:look.turn, time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:seat?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
       if (pose.mode === 'sailing') sailers.push(look);
     }
     this.updateBridgeOver(sailers);

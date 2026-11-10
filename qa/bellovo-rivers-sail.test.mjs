@@ -26,8 +26,8 @@ test('Every Bellovo arch carries walkers across the full span and admits boats u
   for(let i=0;i<=20;i++){const p=b.a.map((v,k)=>v+(b.b[k]-v)*i/20);assert.ok(nav.walkable(...p),'walking '+b.id+' '+p);}
  }
 });
-test('Bellovo keeps 40 approved sleepers on dry ground and three moored boats',()=>{
- assert.equal(map.sleepers.length,40);
+test('Bellovo keeps 120 approved sleepers on dry ground and three moored boats',()=>{
+ assert.equal(map.sleepers.length,120);
  for(const s of map.sleepers){assert.ok(!map.world.water.some(w=>inShape(s.x,s.y,w)),'dry sleeper '+s.x+','+s.y);assert.ok(!map.world.bridges.some(b=>Math.abs(s.x-b.x)<b.w/2&&Math.abs(s.y-b.y)<b.h/2),'off bridges');}
  assert.equal(map.HARBOR.moorings.length,3);for(const p of map.HARBOR.moorings)assert.ok(canSail(p.x,p.y,id));
  assert.ok(map.nav().route(map.HARBOR.land.x,map.HARBOR.land.y,map.spawn.x,map.spawn.y).length,'port connected');

@@ -1,6 +1,7 @@
 // Run from the repo root. Rebuild only this lane, preserving current greenery and communities.
 import fs from 'node:fs';
-import {archBridge} from './arch-bridge.mjs';
+import {honeywoodBridge} from './bridges.mjs';
+import {rebuildWaterArt} from './water-art.mjs';
 import {port} from './water-data.mjs';
 const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',S='scripts/bigger-cathedral/water-source/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,o)=>fs.writeFileSync(p,JSON.stringify(o,null,2)+'\n');
@@ -8,21 +9,14 @@ const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.
 const path=p=>'M'+p.map(q=>q.join(' ')).join('L')+'Z';
 const waterShapes=polys=>polys.map((poly,i)=>{const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]);return {id:'bellovo-water-'+i,poly,x:(Math.min(...xs)+Math.max(...xs))/2,y:(Math.min(...ys)+Math.max(...ys))/2,rx:(Math.max(...xs)-Math.min(...xs))/2,ry:(Math.max(...ys)-Math.min(...ys))/2};});
 const water=waterShapes(geo.polys);
-// Transparent SVG tiles sit above existing ground and below props, so no raster preservation is needed.
-const coast=path(world.coast),shapes=geo.polys.map(path).join(' ');
-const body=`<defs><clipPath id="bellovo-coast"><path d="${coast}"/></clipPath></defs><g clip-path="url(#bellovo-coast)"><path d="${shapes}" fill="${art.sea}" stroke="#fde48c" stroke-width="38" stroke-linejoin="round"/><path d="${shapes}" fill="${art.sea}" stroke="#fff0c7" stroke-width="10" stroke-linejoin="round"/></g><path d="${shapes}" fill="${art.sea}"/>`;
-art.ground.tiles=art.ground.tiles.filter(t=>!t.src.startsWith('bridges/water-'));
-for(let y=-2400,r=0;y<8000;y+=1400,r++)for(let x=-2200,c=0;x<10600;x+=1400,c++){
- const width=Math.min(1400,10600-x),height=Math.min(1400,8000-y);
- if(!water.some(w=>w.x+w.rx+25>x&&w.x-w.rx-25<x+width&&w.y+w.ry+25>y&&w.y-w.ry-25<y+height))continue;
- const src=`bridges/water-${r}-${c}.svg`;fs.writeFileSync(A+src,`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="${x} ${y} ${width} ${height}">${body}</svg>`);art.ground.tiles.push({src,x,y,width,height,resolution:1});
-}
+// Art is generated from the continuous dry/sea contour, including both mouths.
+rebuildWaterArt(art);
 art.decks=art.decks.filter(d=>!/^deck-(jetty|arch|pond)/.test(d.src)&&!d.src.startsWith('communities/river-bridge-')&&!d.src.startsWith('bridges/'));
 const arches=[],walkways=[],rects=[];
 for(const b of geo.bridges){
- const br=archBridge(b),src=`bridges/arch-${b.id}.svg`;fs.writeFileSync(A+src,br.svg);const [x,y,width,height]=br.box;
- art.decks.push({id:'bellovo-'+b.id,src,x,y,width,height,overBoats:true,resolution:1.5});
- arches.push({...b,r:br.crown});walkways.push({...b,boatPassUnder:true});
+ const br=honeywoodBridge(b);fs.writeFileSync(A+br.deck.src,br.svg);
+ art.decks.push(br.deck);
+ arches.push({...b,r:24});walkways.push({...b,boatPassUnder:true});
  const len=Math.hypot(b.b[0]-b.a[0],b.b[1]-b.a[1]),n=Math.ceil(len/20);
  for(let i=0;i<=n;i++){const t=i/n;rects.push({id:'bellovo-'+b.id,x:b.a[0]+(b.b[0]-b.a[0])*t,y:b.a[1]+(b.b[1]-b.a[1])*t,w:b.w,h:b.w});}
 }

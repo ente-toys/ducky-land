@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="295" height="448" viewBox="260 15 295 448" data-detail="1">
+<title>Wooden bench, sitter faces east</title>
+<g stroke-linecap="round" stroke-linejoin="round">
+<path d="M527 372 L489 372 L489 442 Q489 451 498 451 L518 451 Q527 451 527 442 Z" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<path d="M341 372 L303 372 L303 442 Q303 451 312 451 L332 451 Q341 451 341 442 Z" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<path d="M343 85 L311 85 L311 155 L343 155 Z" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<path d="M343 324 L311 324 L311 394 L343 394 Z" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<path d="M539 386 L348 386 L348 405 Q348 424 367 424 L520 424 Q539 424 539 405 Z" fill="#885931" stroke="#39472D" stroke-width="12.3"/>
+<path d="M524 96 L363 96 Q348 96 348 111 L348 390 Q348 406 364 406 L523 406 Q539 406 539 390 L539 111 Q539 96 524 96 Z" fill="#C88941"/>
+<path d="M539 96 L509 96 L509 392 L348 392 L348 390 Q348 406 364 406 L523 406 Q539 406 539 390 Z" fill="#885931"/>
+<path d="M524 96 L363 96 Q348 96 348 111 L348 390 Q348 406 364 406 L523 406 Q539 406 539 390 L539 111 Q539 96 524 96 Z" fill="none" stroke="#39472D" stroke-width="12.3"/>
+<path d="M475 98 L475 404 M411 98 L411 404" fill="none" stroke="#39472D" stroke-width="6.2"/>
+<path d="M509 158 Q518 196 509 226 M445 278 Q455 317 444 347" fill="none" stroke="#885931" stroke-width="6.2"/>
+<path d="M330 51 L279 51 L279 334 Q279 350 295 350 L330 350 Z" fill="#C88941"/>
+<path d="M330 51 L315 51 L315 350 L330 350 Z" fill="#885931"/>
+<path d="M330 51 L279 51 L279 334 Q279 350 295 350 L330 350 Z" fill="none" stroke="#39472D" stroke-width="12.3"/>
+<path d="M347 31 L299 31 Q279 31 279 51 L279 314 Q279 330 295 330 L347 330 Q363 330 363 314 L363 47 Q363 31 347 31 Z" fill="#C88941"/>
+<path d="M363 47 Q363 31 347 31 L335 31 L335 330 L347 330 Q363 330 363 314 Z" fill="#885931"/>
+<path d="M347 31 L299 31 Q279 31 279 51 L279 314 Q279 330 295 330 L347 330 Q363 330 363 314 L363 47 Q363 31 347 31 Z" fill="none" stroke="#39472D" stroke-width="12.3"/>
+<path d="M327 111 Q335 154 326 189" fill="none" stroke="#885931" stroke-width="6.2"/>
+</g>
+</svg>

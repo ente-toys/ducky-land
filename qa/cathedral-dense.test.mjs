@@ -14,7 +14,7 @@ test('Cathedral roads use the design-system widths and every village frontage is
  const world=read(D+'world.json');
  assert.equal(world.paths.length,world.pathWidths.length);
  assert.ok(world.pathWidths.every(w=>w>=90&&w<=128));
- assert.ok(world.pathWidths.slice(24).every(w=>w===104));
+ assert.ok(world.pathSystem.routes.filter(r=>/-door$|-arrival$/.test(r.id)).every(r=>r.width===104));
 });
 test('Approved simple villages each have three houses, a workplace, two benches and two lamps',()=>{
  const art=read('public/pixi-art/themes/cathedral/art.json'),world=read(D+'world.json');

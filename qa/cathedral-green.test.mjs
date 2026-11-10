@@ -7,12 +7,11 @@ const read=p=>JSON.parse(fs.readFileSync(p));
 const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',B='scripts/bigger-cathedral/green-source/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read(B+'world.json'),before=read(B+'art.json'),harbor=read(D+'harbor.json');
 const map=makeMap('cathedral',{world,walk,harbor});
-test('Bellovo green keeps the exact forty approved sleepers and protected buildings',()=>{
- const previous=makeMap('cathedral',{world:old,walk:read(B+'walk-world.json'),harbor});
- assert.equal(map.sleepers.length,40);assert.deepEqual(map.sleepers.map(s=>[s.pose,s.flip,s.tree]).sort(),previous.sleepers.map(s=>[s.pose,s.flip,s.tree]).sort());
- // Water, bridges and decks belong to the water lane (qa/bellovo-rivers-sail.test.mjs); green keeps everything else.
+test('Bellovo green retains the coast, islets and dry residents after the approved centre and population replacement',()=>{
+ assert.equal(map.sleepers.length,120);
  for(const k of ['coast','islets'])assert.deepEqual(world[k],old[k],k);
- for(const p of before.props.filter(p=>['cathedral-hall','campanile','cathedral-2','cathedral-3','cloister-olive-well'].includes(p.id)||/^cloister-(cloister-back|roof-roses|bench-[1-4]$)/.test(p.id)))assert.deepEqual(art.props.find(q=>q.id===p.id),p,p.id);
+ for(const id of ['cathedral-hall','campanile','cloister-olive-well'])assert.ok(art.props.some(p=>p.id===id));
+ assert.equal(art.props.filter(p=>p.id.startsWith('centre-colonnade-')).length,12);
  for(const s of map.sleepers)assert.ok(map.landAt(s.x,s.y));
 });
 test('Bellovo green uses existing vector art in authored clumps and clears the daisy carpets',()=>{
@@ -24,7 +23,8 @@ test('Bellovo green uses existing vector art in authored clumps and clears the d
 });
 test('Bellovo B2 replaces the stone pads with a clipped lawn and preserves the round piazza',()=>{
  const centre=fs.readFileSync(A+art.ground.tiles.find(p=>p.src.includes('preserved-')).src,'utf8');
- assert.match(centre,/<!--b2-garden-->/);assert.match(centre,/clipPath id="b2-inner"/);
+ assert.match(centre,/data-name="Bellovo unified paths"/);assert.match(centre,/clipPath id="paths-original-land"/);
+ assert.doesNotMatch(centre,/<!--b2-garden-->|stroke="#fff0c7" stroke-width="(?:104|128)"/);
  assert.ok(art.flats.some(p=>p.src==='detail/piazza-mosaic.svg'));
  assert.ok(!art.props.some(p=>p.id==='cathedral-4'||/^cloister-cloister-(west|east)/.test(p.id)));
 });

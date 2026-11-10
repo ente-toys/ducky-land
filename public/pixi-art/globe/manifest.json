@@ -115,21 +115,21 @@
   },
   "cathedral": {
     "src": "/pixi-art/globe/cathedral.svg",
-    "sha256": "87f0dbc87727f31562374e783e24946907a4763996b82d270efef31e789994c2",
+    "sha256": "2b7f0f2732e875e0a0483c090f5dbd3846dd8a70505a628a81fbf644f4734eec",
     "width": 1024,
     "height": 832,
-    "bytes": 468233,
-    "groundBytes": 324712,
+    "bytes": 237419,
+    "groundBytes": 100988,
     "quality": {
-      "tolerance": 0.8,
-      "minArea": 1.08,
-      "paletteDistance": 63,
-      "quantum": 1
+      "tolerance": 0.3,
+      "minArea": 0.18,
+      "paletteDistance": 38,
+      "quantum": 0.5
     },
-    "worldPaths": 26,
-    "walkways": 7,
-    "flats": 30,
-    "decks": 18,
+    "worldPaths": 84,
+    "walkways": 14,
+    "flats": 587,
+    "decks": 15,
     "bridgeDetails": 0
   },
   "bog": {

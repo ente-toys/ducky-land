@@ -2,6 +2,7 @@
 // only. Source snapshots are local/repository data so rebuilding needs no git
 // history or concepts directory. Water SVG groups are copied byte-for-byte.
 import fs from 'node:fs';
+import {rebuildPaths} from './paths.mjs';
 import {JSDOM} from 'jsdom';
 import {CLUMPS,LINKS} from './green-data.mjs';
 import {smooth} from './design.mjs';
@@ -10,30 +11,23 @@ const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,v)=>fs.writeFileSync(p,JSON
 const art=read(B+'art.json'),world=read(B+'world.json'),walk=read(B+'walk-world.json');
 const dom=s=>new JSDOM(s,{contentType:'image/svg+xml'}).window.document.documentElement;
 const svg=(w,h,box,body)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${box}">${body}</svg>`;
-const line=(p,w)=>`<path d="M${p.map(q=>q.join(',')).join('L')}" fill="none" stroke="#fde48c" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
 const paths=world.paths.map(p=>structuredClone(p));
 // The north-east lane now joins the existing village road, rather than ending
 // alone behind the first house. All crossing and dock endpoints are retained.
 paths[16].push([7896.67,1996.67]);
 const widths=paths.map((p,i)=>i<19?128:104);
-const roadBody=paths.map((p,i)=>line(p,widths[i])).join('')+LINKS.map(p=>line(smooth(p),104)).join('');
 const source=dom(fs.readFileSync(B+'extension.svg','utf8'));
 const extension=source.children[1];
 // Keep the exact coast, beach, grass perimeter and every water layer. Remove
 // the old meadow repeat, road outlines, ruts and edge scallop carpets.
 for(const n of [...extension.children].slice(4))n.remove();
-const roadGroup=source.ownerDocument.createElementNS('http://www.w3.org/2000/svg','g');
-roadGroup.setAttribute('clip-path','url(#extension-land)');roadGroup.setAttribute('mask','url(#fix-dry)');
-roadGroup.innerHTML=roadBody+read('scripts/bigger-cathedral/plan.json').communities.map(c=>`<ellipse cx="${c.x}" cy="${c.y}" rx="305" ry="205" fill="#fde48c"/>`).join('');
-// Insert beneath farms and streams, keeping all community garden drawings.
-source.insertBefore(roadGroup,source.children[3]);
+// Roads are owned exclusively by paths.mjs.
 for(const t of art.ground.tiles.filter(t=>t.src.endsWith('.svg')&&!t.src.startsWith('communities/preserved-')))fs.writeFileSync(A+t.src,svg(t.width,t.height,`${t.x} ${t.y} ${t.width} ${t.height}`,source.innerHTML));
 // Restore native vectors for the inner tile layer. All floor paths, pads,
 // pond banks, forecourt and stone details remain in their original order.
 const native=dom(fs.readFileSync('scripts/bigger-cathedral/baseline/ground.svg','utf8'));
 const children=[...native.children];children[17].remove();
 for(let i=18;i<40;i++)children[i].remove();
-const insert=native.ownerDocument.createElementNS('http://www.w3.org/2000/svg','g');insert.innerHTML=paths.slice(0,11).map(p=>line(p,128)).join('')+LINKS.map(p=>line(smooth(p),104)).join('');native.insertBefore(insert,children[40]);
 // The tiny existing symbols survive only along paths and at buildings. Open
 // lawn no longer carries a uniform all-over sprinkle.
 const distance=(x,y,p)=>{let d=Infinity;for(let i=1;i<p.length;i++){let a=p[i-1],b=p[i],dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));d=Math.min(d,Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy));}return d;};
@@ -68,3 +62,5 @@ world.paths=paths;world.pathWidths=widths;world.props=art.props;
 save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);
 save('scripts/bigger-cathedral/green-metrics.json',{removedDaisyBorders:removed.filter(p=>p.name==='Daisy flower border').length,removedTrees:removed.filter(tree).length,removedBushes:removed.filter(bush).length,clumps:CLUMPS.length,addedTrees:CLUMPS.flatMap(c=>c[1]).filter(p=>p[2]!=='b').length,addedBushes:CLUMPS.flatMap(c=>c[1]).filter(p=>p[2]==='b').length,retainedSleeperTrees:[...sleeperIds],vectorInnerTiles:32,doorAndJunctionLinks:LINKS.length});
 console.log(read('scripts/bigger-cathedral/green-metrics.json'));
+
+rebuildPaths();

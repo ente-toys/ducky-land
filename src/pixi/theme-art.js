@@ -5,10 +5,13 @@
 import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from './art-resolution.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
+import {rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
+import {createRasterLoader} from './theme-art-stream.js';
 import {fairTiles,FAIR_GROUND_TILE_SIZE,FAIR_ART_BUDGET_BYTES,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from './fair-raster.js';
 import {createFairRasterLoader} from './fair-art-stream.js';
 import {createGroundPool} from './ground-stream.js';
 
+import {createAutumnLeaves} from './autumn-leaves.js';
 import {KITE_ASSETS, createHomeKites} from './home-kites.js';
 
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
@@ -27,8 +30,10 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const url = src => /^(\/|https?:|data:)/.test(src) ? src : base + src;
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [], props = manifest.props ?? [];
   const floating = manifest.floating ?? [];   // boss 6 Nov: lily pads and other floating things that bob on the water, like home's
-  const crisp=map.id==='fair',raster=crisp?createFairRasterLoader():null;
-  const rasterPool=crisp?createGroundPool({...raster,budget:FAIR_ART_BUDGET_BYTES,utilization:FAIR_ART_UTILIZATION}):null;
+  const fair=map.id==='fair',crisp=fair||manifest.raster?.enabled===true;
+  const makeTiles=fair?fairTiles:rasterTiles,groundTileSize=fair?FAIR_GROUND_TILE_SIZE:RASTER_GROUND_TILE_SIZE;
+  const raster=crisp?(fair?createFairRasterLoader():createRasterLoader()):null;
+  const rasterPool=crisp?createGroundPool({...raster,budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
     ...flats.filter(p=>!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.map(p => ({...p, resolution: p.resolution ?? 2})),
@@ -38,8 +43,9 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   // requested resolution. Fair alone places over 1,900 sprites from 108 sources.
   const resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
-  const kiteSource=src=>crisp?src+'?fairRaster='+FAIR_KITE_RESOLUTION:src;
-  if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(kiteSource(src), crisp?FAIR_KITE_RESOLUTION:2);
+  const kiteSource=src=>fair?src+'?fairRaster='+FAIR_KITE_RESOLUTION:src;
+  if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(kiteSource(src), fair?FAIR_KITE_RESOLUTION:2);
+  for (const src of manifest.autumn?.leaves ?? []) resolutions.set(url(src), crisp?3.625:2);
   const uniqueSources = [...resolutions.keys()];
   const loaded=new Array(uniqueSources.length);let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
@@ -51,6 +57,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const failed = loaded.find(result => result.status === 'rejected');
   if (failed) {
     uniqueSources.forEach(src => release(src));
+    rasterPool?.destroy();raster?.destroy();
     throw failed.reason;
   }
   const bySource = new Map(uniqueSources.map((src, i) => [src, loaded[i].value]));
@@ -59,10 +66,11 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   const ground = new Container({label: `Theme ${map.id} - ground`}), deckLayer = new Container({label: `Theme ${map.id} - decks`});
   const shadows = new Container({label: `Theme ${map.id} - shadows`});
   let k = 0;
-  const groundStream=crisp?groundPool.create(tiles.flatMap(p=>fairTiles(p,url(p.src),undefined,FAIR_GROUND_TILE_SIZE).map(({localX,localY,...t})=>t)),ground,undefined,raster):groundPool.create(tiles,ground,url),groundStreams=[groundStream];
+  const groundStream=crisp?groundPool.create(tiles.flatMap(p=>makeTiles(p,url(p.src),undefined,groundTileSize).map(({localX,localY,...t})=>t)),ground,undefined,raster):groundPool.create(tiles,ground,url),groundStreams=[groundStream];
   const crispSprite=(p,layer,anchor)=>{
     const container=new Container();container.position.set(p.x,p.y);layer?.addChild(container);
-    groundStreams.push(rasterPool.create(fairTiles(p,url(p.src),anchor),container));
+    const pool=!fair&&p.rasterPool==='ground'?groundPool:rasterPool;
+    groundStreams.push(pool.create(makeTiles(p,url(p.src),anchor),container,undefined,raster));
     return container;
   };
   const tiled=(p,native,layer,anchor)=>{
@@ -74,7 +82,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   };
   let terrain;
   try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
-  catch(error){groundStream.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
+  catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
   const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
   // boss 8 Nov (sailable rivers, as home's engine.js bridgeOver): a deck marked overBoats is a river bridge a boat passes under. A copy
   // above the Duckies is shown only while a boat is beneath it, so the deck is drawn over the hull.
@@ -123,19 +131,21 @@ export async function loadThemeArt(map, {acquire, release, groundPool}) {
   });
   const floatLayer = new Container({label: `Theme ${map.id} - floating`});
   const floats = floating.map((item, i) => {
-    const sprite = new Sprite(textures[k++]), anchor = item.anchor ?? {x: .5, y: .5};
-    sprite.anchor.set(anchor.x, anchor.y); sprite.position.set(item.x, item.y); sprite.width = item.width; sprite.height = item.height;
-    if (item.flip) sprite.scale.x *= -1;
+    const anchor = item.anchor ?? {x: .5, y: .5};
+    const sprite = crisp?crispSprite(item,null,anchor):new Sprite(textures[k++]);
+    if(!crisp){sprite.anchor.set(anchor.x, anchor.y); sprite.position.set(item.x, item.y); sprite.width = item.width; sprite.height = item.height;
+    if (item.flip) sprite.scale.x *= -1;}
     floatLayer.addChild(sprite);
     return {...item, phase: item.phase ?? i * 1.7, sprite};
   });
   const kiteLayer = manifest.kites?.length ? new Container({label: `Theme ${map.id} - kites`}) : null;
   const kites = kiteLayer ? createHomeKites(kiteLayer, Object.fromEntries(KITE_ASSETS.map(src => [src, bySource.get(kiteSource(src))])), manifest.kites) : null;
-  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : [])];
+  const autumnLeaves = manifest.autumn ? createAutumnLeaves(props, manifest.autumn.leaves.map(src => bySource.get(url(src))), manifest.autumn) : null;
+  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : []), ...(autumnLeaves ? [autumnLeaves.layer] : [])];
   for (const group of groups) group.visible = false;
   return {
     id: map.id, map, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
-    overLayer, bridgeOver, kiteLayer, kites,
+    overLayer, bridgeOver, kiteLayer, kites, autumnLeaves,
     groups,
     destroy() {
       if (destroyed) return;

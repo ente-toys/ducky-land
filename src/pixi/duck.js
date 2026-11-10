@@ -216,7 +216,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     }
     (view.match||=new Map()).set(other,map);return map;
   }
-  let glide={other:null,w:0,lo:false}, sailing=false;
+  let glide={other:null,w:0,lo:false}, sailing=false, seated=false;
   const smooth=(a,b,x)=>{const k=clamp((x-a)/(b-a),0,1);return k*k*(3-2*k);};
   function twinFrame(entry,frame,angle,otherAngle){
     const i=(entry.frames[String(angle)]||[]).indexOf(frame),theirs=entry.frames[String(otherAngle)]||[],t=theirs[i];
@@ -225,7 +225,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   function renderView(view,t){
     const p=pose,face=Math.abs(view.spec.angle)<=90,lookSide=Math.sign(Math.sin(view.spec.angle*Math.PI/180)),fx=moveFx(),fwdX=Math.sin(view.spec.angle*Math.PI/180),fwdY=Math.cos(view.spec.angle*Math.PI/180)*.35;
     view.body.y=p.bob;view.body.rotation=p.sway+(p.lean+fx.tip)*lookSide+turnLean;view.body.scale.set((1-p.breath*.32)*p.sqx*fx.sqx,(1+p.breath)*p.sqy*fx.sqy);view.body.y+=fx.bob+12;   // boss 4 Nov: belly sits over the top edge of the feet, no dark band between them
-    view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=1-clamp(-p.bob,0,35)*.01;
+    view.shadow.scale.set(1-clamp(-p.bob,0,35)*.005,1);view.shadow.alpha=seated?0:1-clamp(-p.bob,0,35)*.01;
     const blinkAt=(t+phase)%4.8,blink=blinkAt<.14?Math.max(.06,Math.abs(blinkAt-.07)/.07):1;
     const shift={};   // how far each part glided this frame, so the outfit glides with it
     for(const part of view.parts){
@@ -235,7 +235,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         else joint.scale.set(Math.max(0,1-glide.w*2));}
       part.gx=joint.x;part.gy=joint.y;   // glided seat, before pose offsets (eye pieces sit on it)
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
-      if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;}
+      if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;if(seated){joint.x+=fwdX*24;joint.y-=12;joint.rotation+=side*.12;}}
       if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.x+=look.x;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;}
       if(part.role==='beak'){joint.x+=look.x*1.15;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;joint.scale.set(1+p.bill*.08,1+p.bill*1.8);}
       if(part.role==='tuft'){joint.y+=p.headY*.42;joint.rotation=p.headTilt+p.tail*.35;}
@@ -334,9 +334,10 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.angry=p.angry>.02&&face;
     if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
-  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false}={}){
+  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     sailing=isSailing;
+    seated=isSeated;
     const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
     if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}

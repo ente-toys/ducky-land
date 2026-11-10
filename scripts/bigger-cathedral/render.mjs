@@ -4,13 +4,13 @@ import {makeMap} from '../../src/pixi/island-maps.js';
 export const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger';
 export const A='public/pixi-art/themes/cathedral/';
 export async function render(art,{x=-2200,y=-2000,k=.14,width=1680,height=1330,original=false,world=null,walk=null,harbor=null,nativeGround=false}={}){
- const layers=[],cache=new Map();
+ const layers=[],cache=new Map(),dimensions=new Map();
  async function add(p,type){
  const scale=p.scale??1,w=Math.max(1,Math.round(p.width*scale*k)),h=Math.max(1,Math.round(p.height*scale*k)),anchor=type==='prop'?(p.anchor??{x:.5,y:1}):type==='flat'&&!p.topLeft?{x:.5,y:1}:{x:0,y:0};
  const l=Math.round((p.x-x)*k-anchor.x*w),t=Math.round((p.y-y)*k-anchor.y*h);
  if(l>=width||t>=height||l+w<=0||t+h<=0)return;
  const src=p.src.startsWith('/')?'public'+p.src:A+p.src,key=[src,w,h,p.flip].join('|');let buf=cache.get(key);
- if(!buf){let input=src;if(nativeGround&&type==='ground'&&src.endsWith('.svg'))input=await sharp(src).png().toBuffer();let im=sharp(input,{limitInputPixels:false}).resize(w,h,{fit:'fill'});if(p.flip)im=im.flop();buf=await im.png().toBuffer();cache.set(key,buf);}
+ if(!buf){let input=src,density=72;if(src.endsWith('.svg')){if(!dimensions.has(src))dimensions.set(src,await sharp(src).metadata());const m=dimensions.get(src);density=72*Math.max(1,w/m.width,h/m.height);}if(nativeGround&&type==='ground'&&src.endsWith('.svg'))input=await sharp(src).png().toBuffer();let im=sharp(input,{limitInputPixels:false,density}).resize(w,h,{fit:'fill'});if(p.flip)im=im.flop();buf=await im.png().toBuffer();cache.set(key,buf);}
  const left=Math.max(0,l),top=Math.max(0,t),cl=Math.max(0,-l),ct=Math.max(0,-t),ww=Math.min(w-cl,width-left),hh=Math.min(h-ct,height-top);
  if(cl||ct||ww<w||hh<h)buf=await sharp(buf).extract({left:cl,top:ct,width:ww,height:hh}).png().toBuffer();layers.push({input:buf,left,top});
  }
@@ -25,7 +25,7 @@ export async function render(art,{x=-2200,y=-2000,k=.14,width=1680,height=1330,o
     props.push({src:l.src,x:bed.x,y:bed.y+.01,width:w,height:h,scale:1,anchor:{x:bed.flip?1-(x0+x1)/2*u/w:(x0+x1)/2*u/w,y:y1*u/h},flip:bed.flip});}
   }
  }
- for(const p of props.sort((a,b)=>a.y-b.y))await add(p,'prop');
+ for(const p of props.sort((a,b)=>(a.sortY??a.y)-(b.sortY??b.y)))await add(p,'prop');
  return sharp({create:{width,height,channels:4,background:art.sea}}).composite(layers).png().toBuffer();
 }
 if(process.argv[1]?.endsWith('/render.mjs')){

@@ -13,7 +13,7 @@ const segmentDistance=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,M
 test('B2 keeps the approved garden objects after the village replacement',()=>{
  for(const [id]of FEATURES.filter(([id])=>!id.startsWith('balustrade')))assert.ok(art.props.some(p=>p.id==='b2-'+id),id);
  assert.equal(art.props.filter(p=>p.id?.startsWith('b2-parterre')).length,4);
- for(const p of art.props.filter(p=>inside(p)&&/tree|bush/i.test(p.name)&&p.id!=='cloister-olive-well'))assert.match(p.src,/^\/pixi-art\/plants\/(tree-[1-5]|bush-[1-4])\.svg$/);
+ for(const p of art.props.filter(p=>inside(p)&&/tree|bush/i.test(p.name)&&p.id!=='cloister-olive-well'))assert.match(p.src,/^autumn\/(tree-[1-5]|bush-[1-4])-(amber|rust|mustard|green)\.svg$/);
  for(const p of art.props.filter(p=>p.id?.startsWith('b2-')))assert.doesNotMatch(fs.readFileSync(p.src.startsWith('/')?'public'+p.src:A+p.src,'utf8'),/<image\b|<(?:linear|radial)Gradient\b|data:image/i,p.id);
 });
 test('Home clump roots stay dry, clear of paths, and use solid shallow trunks',()=>{
@@ -26,16 +26,19 @@ test('Home clump roots stay dry, clear of paths, and use solid shallow trunks',(
  for(const p of art.props.filter(p=>/^b2-(clump|nod)/.test(p.id))){
   assert.ok(map.landAt(p.x,p.y),p.id+' dry');
   if(p.name!=='Home garden tree')continue;
-  for(const [i,line]of world.paths.entries())for(let j=1;j<line.length;j++)assert.ok(segmentDistance(p.x,p.y,line[j-1],line[j])>(world.pathWidths[i]/2+40),p.id+' clears lane '+i);
+  // Keep the fixed east bridge axis. Its Home-width throat has 26 units from
+  // paved edge to root; the full 16-unit walking envelope is checked by paths QA.
+  const fixedThroat=world.walkways.some(b=>b.id==='east-main-1'&&[b.a,b.b].some(q=>Math.hypot(p.x-q[0],p.y-q[1])<200));
+  for(const [i,line]of world.paths.entries())for(let j=1;j<line.length;j++)assert.ok(segmentDistance(p.x,p.y,line[j-1],line[j])>(world.pathWidths[i]/2+(fixedThroat?24:40)),p.id+' clears lane '+i);
   assert.ok(walk.obstacles.some(o=>o.id===p.id&&o.rx===18&&o.ry===12),'trunk '+p.id);
  }
 });
 test('Every drawn inner curve supports walking, including the fountain plaza arrivals and pond approach',()=>{
  for(const [i,line]of world.paths.entries())if(i>=10&&i<24)for(const [x,y]of line)assert.ok(map.nav().walkable(x,y),'lane '+i+' '+x+','+y);
  assert.deepEqual(walk.paths,world.paths);
- assert.equal(map.sleepers.length,40);
+ assert.equal(map.sleepers.length,120);
 });
-test('All thirteen bridge sprites retain sailing geometry with Home and redrawn NS art',()=>{
+test('All thirteen bridge sprites retain sailing geometry with the Home family',()=>{
  const geo=read('scripts/bigger-cathedral/water-geometry.json');
  for(const b of geo.bridges){const p=art.decks.find(p=>p.id==='bellovo-'+b.id);assert.ok(p.overBoats);assert.match(p.src,/^bridges\/home-/);assert.ok(['ns','ew','ne','nw'].includes(p.homeBridge));assert.deepEqual(world.walkways.find(w=>w.id===b.id),{...b,boatPassUnder:true});}
 });

@@ -8,7 +8,7 @@ export function tileInView(tile, camera, width, height, tilt = 1, margin = 192) 
     tile.y < camera.y+hh && tile.y+tile.height > camera.y-hh;
 }
 export function tileResolution(tile, zoom, dpr = 1) {
-  if(tile.screenResolution)return Math.min(tile.resolution??4,Math.ceil(zoom*dpr*16)/16);
+  if(tile.screenResolution)return Math.min(tile.resolution??4,Math.ceil(zoom*dpr*(tile.rasterDensity??1)*16)/16);
   const size=sourceSizes[tile.src]??[tile.width??1,tile.height??1];
   const ratio=Math.max((tile.width??size[0])/size[0],(tile.height??size[1])/size[1]);
   return Math.min(tile.resolution ?? 1, ratio*Math.max(.0625, 2 ** Math.ceil(Math.log2(zoom*dpr))));
