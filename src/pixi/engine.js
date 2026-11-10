@@ -27,6 +27,7 @@ import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
 import {copyHolding} from './sphere-shores.js';
 import {createWorldView} from './world-view.js';
+import {createKarmaView} from './karma-view.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
 import {isletWalks} from './islet-walk.js';
 import {reframeIslet,isletLandingFrame} from './islet-placement.js';
@@ -317,6 +318,7 @@ export class PixiIsland {
         if (this.disposed) {this.travelView.dispose(); return;}
         this.travelView.fx.waterSplash=(x,y)=>{if (this.artShown === 'home') this.waterFX?.splash(x,y,.85,30);};   // home's water field only (boss 6 Nov)   // boss 5 Nov: a boarding Ducky rocks the real water too
         this.switchIsland(this.room.islandId);
+        this.karmaView=await createKarmaView(this);
       }
       this.bindInput();
       this.observer = new ResizeObserver(() => this.resize());
@@ -1318,6 +1320,7 @@ export class PixiIsland {
     const live = this.room?.poses(now / 1000) ?? [];
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible);
+    this.karmaView?.update(dt,t,reduced,visible);
     this.plantReactions?.update(t);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
     this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>{wing.rotation=(i?1:-1)*(pose.flap-.4)*.45;wing.scale.y=.75+.25*Math.cos(pose.flap*3);});});
@@ -1486,6 +1489,7 @@ export class PixiIsland {
       entry.emoteVersion = emoteVersion;
       const rig = entry.rig;
       if (!rig) continue;
+      rig.setKarma?.(pose.karma??0);
       if (!sameOutfit(entry.outfit,pose.outfit) && !entry.outfitLoading) {
         entry.outfitLoading = true;
         rig.setOutfit(pose.outfit).then(() => {entry.outfit = {...pose.outfit};})
@@ -1533,6 +1537,7 @@ export class PixiIsland {
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());
     this.snowfall?.destroy();
+    this.karmaView?.destroy();
     this.groundPool?.destroy();
     this.livePatches?.destroy();this.archipelago?.destroy(); this.worldView?.destroy();this.isletView?.destroy();
     this.clearChat();

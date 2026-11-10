@@ -2,6 +2,7 @@ import {createDuckFeedback} from './feedback.js';
 import { Assets, Container, Graphics, Sprite } from 'pixi.js';
 import {SLEEP_ASSETS, createSleeper} from './sleeper.js';
 import {OUTFIT_OPTIONS} from './outfits.js';
+import {createKarmaQuiver} from './karma-quiver.js';
 
 export const duckAnimationNames=Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
 const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2, STUMBLE=.35;
@@ -16,7 +17,7 @@ async function library(){
   if(!libraryPromise)libraryPromise=(async()=>{
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);
     const data=await response.json();
-    const sources=new Set([...SLEEP_ASSETS,...data.views.flatMap(v=>v.parts.map(p=>p.url))]);
+    const sources=new Set(['/pixi-art/karma/golden-feather.svg',...SLEEP_ASSETS,...data.views.flatMap(v=>v.parts.map(p=>p.url))]);
     // SVG geometry and raster textures are independent: do not wait for every
     // image to decode before starting the body-outline requests.
     await Promise.all([
@@ -151,6 +152,12 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const jumpShadow=new Graphics({label:'Jump shadow'}).ellipse(0,0,74,19).fill({color:0x39472D});jumpShadow.visible=false;root.addChildAt(jumpShadow,0);
   const feedback=createDuckFeedback(isPlayer);art.addChild(feedback.ring);
   const views=data.views.map(makeView);art.addChild(views.find(v=>v.spec.angle===0).root);art.addChild(feedback.bubble,feedback.sleep);
+  const quivers=new Map();
+  let karmaEnabled=false,karmaCount=0;
+  const setKarma=(total=0)=>{
+    karmaEnabled=true;karmaCount=Math.max(0,Math.floor(total));
+    if(!quivers.size)for(const view of views)quivers.set(view,createKarmaQuiver(view,Assets.get('/pixi-art/karma/golden-feather.svg')));
+  };
   // boss 5 Nov: a sleeping Ducky is one of the 8 approved poses, picked once (placement or seed) so it never rerolls
   const nap = createSleeper(sleep, seed);
   art.addChildAt(nap.root, art.children.length - 2);
@@ -375,6 +382,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     nap.root.visible = sleeping;
     if (sleeping) nap.update(t, reducedMotion);
     else renderView(current,t);
+    if(karmaEnabled)quivers.get(current)?.update(dt,karmaCount,reducedMotion,turnAngle,glide);
     feedback.update(currentAction,actionTime+ (persistentSleep?phase:0),reducedMotion,persistentSleep);
     if (sleeping) {feedback.sleep.visible = false; feedback.bubble.visible = false; feedback.bubble.emoteAction = 0;}   // boss 5 Nov: the pose's own z's, nothing doubles
     if(arriveT<1.1&&!reducedMotion){const f=arriveT*60;art.y=keyAt(DROP.y,f)*artHeight*SCALE;art.scale.set(SCALE*keyAt(DROP.sx,f),SCALE*keyAt(DROP.sy,f));}
@@ -409,5 +417,5 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};
   const sleeper={poke:()=>nap.root.visible&&nap.poke(),bounds:()=>nap.root.getBounds()};   // boss 5 Nov: tap or bump wobbles a sleeper
   const showRing=on=>{feedback.ring.visible=Boolean(isPlayer&&on);};   // boss 5 Nov: no red ring on the deck while sailing or hopping
-  return {root,update,dispose,setOutfit,arrive,stumble,sleeper,showRing,animationNames:duckAnimationNames};
+  return {root,update,dispose,setOutfit,setKarma,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,animationNames:duckAnimationNames};
 }

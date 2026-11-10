@@ -9,6 +9,7 @@ import {chatText} from '../src/pixi/chat.js';
 import {FRIEND_RADIUS} from '../src/pixi/friends.js';
 import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/pixi/islands.js';
 import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
+import {RoomKarma} from './karma.js';
 
 // boss 6 Nov ("room for 100 Duckies on every island, and stalls"): ONE room (this Durable Object) runs all 300 islands, so
 // the old 16 was a cap on the whole world. Now each island holds up to ISLAND_LIMIT players, and the room as a whole up to
@@ -27,7 +28,7 @@ function reply(data, status = 200) {
 
 function publicPose(actor) {
   const {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft=0,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
-  return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked};
+  return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked,karma:actor.karma??0};
 }
 // boss 6 Nov (100 Duckies on one island): what goes on the wire each tick. The same pose, with positions to a hundredth of a
 // unit and angles to a thousandth (a full double is ~18 digits), so a 100-Ducky snapshot is far smaller. Saved poses keep
@@ -101,6 +102,7 @@ export class IslandRoom {
       this.connections.set(socket, {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
     }
     this.reconcileBoats();
+    this.karma=new RoomKarma(this);
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
 
@@ -344,6 +346,7 @@ export class IslandRoom {
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
       // Retired islands cannot retain a saved walking or sailing session.
       recoverIsland(info.actor);
+      info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
       if (previous) this.demote(previous[0], previous[1], 'taken-over');
@@ -381,6 +384,7 @@ export class IslandRoom {
   // periodically renew the baseline for clients that opt into deltas.
   broadcast() {
     const now = Date.now();
+    this.karma.broadcast(now);
     const online = new Set([...this.connections].map(([socket,info]) =>
       info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
@@ -679,6 +683,7 @@ export class IslandRoom {
       walking.get(actor.islandId).push(actor);
     }
     for (const [islandId, walkers] of walking) if (walkers.length > 1 && separateActors(walkers,this.navFor(islandId),.05)) active=true;
+    this.karma.update(now);
     for (const [socket,info] of this.connections) if (info.actor) this.attach(socket,info);
     // a sailor clear of the jetty leaves a fresh boat at the mooring (boss 6 Nov); with nobody sailing no boat moves, so the
     // 1,800 boats are only re-checked and re-saved while someone is aboard

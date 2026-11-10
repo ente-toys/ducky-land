@@ -1,0 +1,61 @@
+import sites from './karma-sites.json' with {type:'json'};
+
+export const KARMA_ACTIVE=50;
+export const KARMA_RADIUS=65;
+export const KARMA_PER_REGION=3;
+export const KARMA_RESPAWN_MIN=30_000;
+export const KARMA_RESPAWN_MAX=60_000;
+export const KARMA_SITES=sites;
+
+// The room owns this pool. Clients never award Karma or choose respawn points.
+export class KarmaPool {
+  constructor(saved=null,random=Math.random){
+    this.random=random;this.version=1;
+    this.sites=new Map(sites.map(s=>[s.id,s]));
+    const valid=saved?.length===KARMA_ACTIVE&&new Set(saved.map(s=>s.id)).size===KARMA_ACTIVE&&new Set(saved.map(s=>s.siteId)).size===KARMA_ACTIVE&&saved.every(s=>this.sites.has(s.siteId)&&Number.isFinite(s.readyAt));
+    const counts=new Map();
+    if(valid)for(const slot of saved){const region=this.sites.get(slot.siteId).region;counts.set(region,(counts.get(region)??0)+1);}
+    if(valid&&[...counts.values()].every(n=>n<=KARMA_PER_REGION))this.slots=saved.map(s=>({...s}));
+    else{
+      const regions=[...new Set(sites.map(s=>s.region))],major=regions.filter(r=>!r.startsWith('sea-')),small=regions.filter(r=>r.startsWith('sea-'));
+      this.slots=[];
+      const add=region=>{const site=this.choose(region);this.slots.push({id:`karma-${this.slots.length}`,siteId:site.id,readyAt:0});};
+      // Two on every landmass, then a third on the main islands and four islets.
+      // A five-feather journey visits at least two landmasses instead of one loop.
+      for(const region of regions)for(let n=0;n<2;n++)add(region);
+      for(const region of major)add(region);
+      const shuffled=[...small];
+      for(let n=shuffled.length-1;n>0;n--){const k=Math.floor(this.random()*(n+1));[shuffled[n],shuffled[k]]=[shuffled[k],shuffled[n]];}
+      for(let n=0;this.slots.length<KARMA_ACTIVE;n++)add(shuffled[n]);
+    }
+  }
+  choose(region,previous=null){
+    const used=new Set(this.slots.map(s=>s.siteId));
+    let options=sites.filter(s=>s.region===region&&!used.has(s.id)&&s.id!==previous?.id);
+    if(!options.length)options=sites.filter(s=>!used.has(s.id)&&s.id!==previous?.id);
+    if(previous){const distant=options.filter(s=>s.islandId!==previous.islandId||Math.hypot(s.x-previous.x,s.y-previous.y)>450);if(distant.length)options=distant;}
+    return options[Math.floor(this.random()*options.length)];
+  }
+  refresh(now){let changed=false;for(const slot of this.slots)if(slot.readyAt>0&&slot.readyAt<=now){slot.readyAt=0;changed=true;}if(changed)this.version++;return changed;}
+  visible(islandId){return this.slots.filter(s=>s.readyAt===0).flatMap(slot=>{const site=this.sites.get(slot.siteId);return site.islandId===islandId?[{...site,id:slot.id}]:[];});}
+  claim(actor,now,canReach=()=>true){
+    if(actor.mode!=='walking'||actor.jumpLeft>0)return null;
+    const slot=this.slots.find(s=>{
+      const site=this.sites.get(s.siteId);
+      return s.readyAt===0&&site.islandId===actor.islandId&&Math.hypot(actor.x-site.x,actor.y-site.y)<=KARMA_RADIUS&&canReach(site);
+    });
+    if(!slot)return null;
+    const from=this.sites.get(slot.siteId);
+    const counts=new Map();for(const current of this.slots){const region=this.sites.get(current.siteId).region;counts.set(region,(counts.get(region)??0)+1);}
+    // Collected feathers move to another landmass, keeping every region at no more than three
+    // reservations and avoiding a quick refill at the same farming spot.
+    const regions=[...new Set(sites.map(s=>s.region))].filter(r=>r!==from.region&&(counts.get(r)??0)<KARMA_PER_REGION);
+    const minimum=Math.min(...regions.map(r=>counts.get(r)??0));
+    const choices=regions.filter(r=>(counts.get(r)??0)===minimum);
+    const next=this.choose(choices[Math.floor(this.random()*choices.length)],from);
+    slot.siteId=next.id;slot.readyAt=now+KARMA_RESPAWN_MIN+Math.floor(this.random()*(KARMA_RESPAWN_MAX-KARMA_RESPAWN_MIN));
+    this.version++;
+    return {id:slot.id,islandId:from.islandId,x:from.x,y:from.y};
+  }
+  save(){return this.slots.map(s=>({...s}));}
+}

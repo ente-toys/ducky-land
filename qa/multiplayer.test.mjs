@@ -585,7 +585,8 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     await eventually(() => guest.snapshot?.players.length === 2);
     const spawn = guest.duck(id);
     assert.deepEqual([spawn.x,spawn.y],world.zones.plaza.spawn);
-    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','jumpLeft','mode','outfit','travel','turn','x','y']);
+    assert.deepEqual(Object.keys(spawn).sort(),['action','boatId','emoteVersion','exitLocked','id','islandId','jumpLeft','karma','mode','outfit','travel','turn','x','y']);
+    assert.equal(spawn.karma,0,'new accounts start with zero Karma');
     assert.equal((await eventually(() => b.duck(id)))?.login,'account-101');
     assert.equal(b.duck()?.login,'account-102');
     assert.equal(guest.snapshot.self,null);

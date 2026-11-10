@@ -17,7 +17,28 @@ const compiler=await createTravelCompiler({stdin:{resolveDir:root,contents:`
         this.sql.exec('INSERT OR REPLACE INTO sessions (digest,account,login,expires,can_play,github_token) VALUES(?,?,?,?,1,?)',account,account,account,Date.now()+86400000,'local-fixture');
         return new Response(null,{status:204});
       }
-      if (path === '/__test/state') return Response.json({boats:this.boats,players:[...this.connections.values()].map(info=>info.actor).filter(Boolean)});
+      if (path === '/__test/state') return Response.json({feathers:this.karma.pool.slots.filter(s=>s.readyAt===0).map(s=>({...this.karma.pool.sites.get(s.siteId),id:s.id})),boats:this.boats,players:[...this.connections.values()].map(info=>info.actor).filter(Boolean)});
+      if (path === '/__test/karma-review') {
+        const {account,action}=await request.json();
+        const entry=[...this.connections].find(([,info])=>info.account===account&&info.actor);
+        if(!entry)return Response.json({error:'Wait for your duck to arrive.'},{status:409});
+        const actor=entry[1].actor,now=Date.now();
+        if(action==='reset'){
+          this.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,0)',account);this.karma.balances.set(account,0);actor.karma=0;
+        }else if(action==='turn')actor.turn=Math.abs(actor.turn??0)<1?Math.PI:0;
+        else if(action==='spawn'){
+          const nav=this.navFor(actor.islandId);
+          const point=[[150,0],[-150,0],[0,150],[0,-150],[180,100]].map(([dx,dy])=>nav.nearest(actor.x+dx,actor.y+dy,65)).find(p=>p&&Math.hypot(p[0]-actor.x,p[1]-actor.y)>85&&nav.clearLine([actor.x,actor.y],p));
+          if(!point)return Response.json({error:'Walk into an open area and try again.'},{status:409});
+          const slot=this.karma.pool.slots[0],site={id:'local-review-feather',region:'home',islandId:actor.islandId,x:point[0],y:point[1]};
+          this.karma.pool.sites.set(site.id,site);slot.siteId=site.id;slot.readyAt=0;this.karma.pool.version++;
+        }else if(action==='collect'){
+          const slot=this.karma.pool.slots.find(s=>s.readyAt===0&&s.siteId==='local-review-feather');
+          if(!slot)return Response.json({error:'Press Spawn nearby first.'},{status:409});
+          const site=this.karma.pool.sites.get(slot.siteId);Object.assign(actor,{x:site.x,y:site.y,mode:'walking',path:[],jumpLeft:0,travel:0});this.karma.update(now);
+        }
+        this.attach(...entry);this.broadcast();return Response.json({balance:actor.karma??0});
+      }
       if (path === '/__test/pose') {
         const {account,pose,steps=0}=await request.json();
         const entry=[...this.connections].find(([,info])=>info.account===account && info.actor);

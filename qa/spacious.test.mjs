@@ -204,7 +204,7 @@ test('d) an island holds 100: a boat cannot land a 101st (it waits at the harbor
   clearInterval(room.timer); room.timer = null;
 });
 
-test('d) the room sends each island only its own players, and the same JSON as before, field for field', async () => {
+test('d) the room sends each island only its own players, and the documented player fields including Karma', async () => {
   const room = await makeRoom(), [a, b] = themedIslands().length >= 2 ? themedIslands() : ['home', 'blossom'];
   const pa = addPlayer(room, 1, {islandId: a, ...mapOf(a).spawn}), pb = addPlayer(room, 2, {islandId: b, ...mapOf(b).spawn});
   pa.actor.x += .123456789;
@@ -212,7 +212,8 @@ test('d) the room sends each island only its own players, and the same JSON as b
   const sa = JSON.parse(pa.socket.last), sb = JSON.parse(pb.socket.last);
   assert.deepEqual(sa.players.map(p => p.id), [pa.actor.id]); assert.deepEqual(sb.players.map(p => p.id), [pb.actor.id]);
   assert.equal(sa.islandId, a); assert.ok(sa.boats.every(boat => boat.islandId === a));
-  assert.deepEqual(Object.keys(sa.players[0]).sort(), ['accountId', 'action', 'boatId', 'emoteVersion', 'exitLocked', 'id', 'islandId', 'jumpLeft', 'login', 'mode', 'outfit', 'travel', 'turn', 'x', 'y']);
+  assert.deepEqual(Object.keys(sa.players[0]).sort(), ['accountId', 'action', 'boatId', 'emoteVersion', 'exitLocked', 'id', 'islandId', 'jumpLeft', 'karma', 'login', 'mode', 'outfit', 'travel', 'turn', 'x', 'y']);
+  assert.equal(sa.players[0].karma,0,'new accounts start with zero Karma');
   assert.equal(sa.players[0].x, Math.round(pa.actor.x * 100) / 100, 'positions to a hundredth on the wire');
   assert.deepEqual(Object.keys(sa.self).sort(), ['ack', 'docking', 'emoteLeft', 'path', 'sailTarget']);
 });

@@ -1,0 +1,79 @@
+{
+  "model": "Known locations, nearest reachable route, five initial feathers, no search time or respawns. An informed-route baseline, not a playtest.",
+  "speed": 245,
+  "samplesPerIsland": 20,
+  "rows": [
+    {
+      "island": "Home Island",
+      "walkSeconds": {
+        "min": 48,
+        "median": 76,
+        "max": 106
+      },
+      "runMedianSeconds": 45
+    },
+    {
+      "island": "Sunbob Fields",
+      "walkSeconds": {
+        "min": 46,
+        "median": 71,
+        "max": 91
+      },
+      "runMedianSeconds": 42
+    },
+    {
+      "island": "Rosybutton Bay",
+      "walkSeconds": {
+        "min": 40,
+        "median": 71,
+        "max": 94
+      },
+      "runMedianSeconds": 42
+    },
+    {
+      "island": "Pagepond",
+      "walkSeconds": {
+        "min": 58,
+        "median": 96,
+        "max": 123
+      },
+      "runMedianSeconds": 57
+    },
+    {
+      "island": "Campfire Commons",
+      "walkSeconds": {
+        "min": 60,
+        "median": 89,
+        "max": 111
+      },
+      "runMedianSeconds": 52
+    },
+    {
+      "island": "Waddlewish Fair",
+      "walkSeconds": {
+        "min": 50,
+        "median": 79,
+        "max": 100
+      },
+      "runMedianSeconds": 47
+    },
+    {
+      "island": "Bellovo Piazza",
+      "walkSeconds": {
+        "min": 47,
+        "median": 67,
+        "max": 94
+      },
+      "runMedianSeconds": 39
+    },
+    {
+      "island": "Iceland",
+      "walkSeconds": {
+        "min": 47,
+        "median": 69,
+        "max": 107
+      },
+      "runMedianSeconds": 41
+    }
+  ]
+}

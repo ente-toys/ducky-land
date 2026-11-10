@@ -26,6 +26,7 @@ export class RoomClient {
     this.onNotice = onNotice;
     this.onNearby = () => {};
     this.onFriendsChanged = () => {};
+    this.onKarmaPickup = () => {};
     this.friends = null;
     this.dismissedFriends = new Set();
     this.islandId = 'home';
@@ -60,6 +61,7 @@ export class RoomClient {
     this.tick = -1;
     this.snapshotPlayers = new Map();
     this.snapshotBoats = new Map();
+    this.karma=0;this.feathers=[];this.featherIsland=null;
     this.pending = [];
     this.input = ZERO;
     this.lastInput = -Infinity;
@@ -101,6 +103,14 @@ export class RoomClient {
       if (socket !== this.socket) return;
       if (data === 'pong') { pendingPing = null; return; }
       const message = JSON.parse(data);
+      if(message.type==='karma-state'){
+        this.karma=message.balance;this.feathers=message.feathers;this.featherIsland=message.islandId;
+      }
+      if(message.type==='karma-pickup'){
+        if(message.playerId===this.id)this.karma=message.total;
+        this.feathers=this.feathers.filter(f=>f.id!==message.id);
+        this.onKarmaPickup(message);
+      }
       if (message.type === 'travel-notice') this.onNotice(message.text);
       if (message.type === 'friends-changed') this.onFriendsChanged();
       if (message.type === 'delta') {
