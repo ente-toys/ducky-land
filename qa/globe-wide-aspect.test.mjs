@@ -1,0 +1,179 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+import {createCanvas,loadImage} from '@napi-rs/canvas';
+import {fileURLToPath} from 'node:url';
+import {readFile} from 'node:fs/promises';
+import {CanvasTexture,Group,Matrix3,MeshBasicMaterial,Quaternion,Scene,ShaderLib,Vector3} from 'three';
+import {detailViewport,detailSize,detailCamera,detailBlend} from '../src/pixi/three-detail-view.js';
+import {liveSurfaceBounds,liveSurfaceNeedsUpdate,liveSurfaceGeometry} from '../src/pixi/three-live-geometry.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
+import {mapOf} from '../src/pixi/island-maps.js';
+import {atlasTransform,focusQuaternion} from '../src/pixi/three-globe-math.js';
+import {cameraMatrix} from '../src/pixi/sphere-camera.js';
+import {flatRigid} from '../src/pixi/rigid.js';
+
+const sizes=[[2560,1080],[1920,1080],[393,852]];
+const frame=WORLD_ISLANDS.find(i=>i.theme==='community'),map=mapOf(frame.id);
+
+function assertViewport(mesh,width,height){
+  assert.equal(mesh.frustumCulled,false,'the sphere camera must not cull the screen plane');
+  assert.equal(mesh.material.depthTest,false,'ocean and island depths must not clip the handoff');
+  assert.equal(mesh.material.depthWrite,false);
+  const shader={vertexShader:ShaderLib.basic.vertexShader};
+  mesh.material.onBeforeCompile(shader);
+  assert.ok(!shader.vertexShader.includes('#include <project_vertex>'),'handoff projection must bypass the globe camera and rotation');
+  assert.ok(shader.vertexShader.includes('gl_Position=vec4(position.xy,0.,1.);'));
+  assert.ok(shader.vertexShader.includes('vMapUv=uv;'),'screen capture must bypass the spherical atlas UV transform');
+  // Use the actual plane triangles and UVs. Every viewport corner, edge and
+  // interior pixel must have a triangle and sample the same capture location.
+  const {position,uv}=mesh.geometry.attributes,indices=mesh.geometry.index.array;
+  for(const sx of [0,.01,.25,.5,.75,.99,1])for(const sy of [0,.01,.5,.99,1]){
+    const x=sx*2-1,y=1-sy*2;
+    let hit=false;
+    for(let k=0;k<indices.length;k+=3){
+      const [a,b,c]=indices.slice(k,k+3),ax=position.getX(a),ay=position.getY(a),bx=position.getX(b),by=position.getY(b),cx=position.getX(c),cy=position.getY(c);
+      const det=(by-cy)*(ax-cx)+(cx-bx)*(ay-cy),u=((by-cy)*(x-cx)+(cx-bx)*(y-cy))/det,v=((cy-ay)*(x-cx)+(ax-cx)*(y-cy))/det,w=1-u-v;
+      if(Math.min(u,v,w)<-1e-8)continue;
+      const tx=u*uv.getX(a)+v*uv.getX(b)+w*uv.getX(c),ty=u*uv.getY(a)+v*uv.getY(b)+w*uv.getY(c);
+      assert.ok(Math.abs(tx*width-sx*width)<1e-6&&Math.abs((1-ty)*height-sy*height)<1e-6,'capture spans the entire CSS viewport without a UV crop');hit=true;break;
+    }
+    assert.ok(hit,`uncovered pixel at ${sx*width},${sy*height}`);
+  }
+}
+
+test('Campfire handoff covers every viewport edge throughout zoom-out, even after a half turn',()=>{
+  for(const [width,height]of sizes)for(const heading of [0,.7,Math.PI/2,Math.PI]){
+    const size=detailSize(width,height,2),texture=new CanvasTexture({width:size.width,height:size.height}),viewport=detailViewport(texture),scene=new Scene(),globe=new Group();
+    scene.add(globe,viewport);globe.quaternion.copy(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),heading).multiply(focusQuaternion(frame)));scene.updateMatrixWorld(true);
+    assert.ok(Math.max(size.width,size.height)<=1536);
+    assert.ok(Math.abs(size.width/size.height-width/height)<.003);
+    // The same texture has a nonidentity atlas matrix for the spherical mesh.
+    // The viewport plane must still sample the complete, untransformed image.
+    for(const altitude of [.16,.17,.18,.20,.23,.26,.30,.35,.36]){
+      const camera=detailCamera(frame,map,{fov:35,altitude,radius:WORLD_GEO.Rw,point:{x:900,y:-400},width,height},size.width,size.height);
+      const t=atlasTransform(frame.width,frame.height,flatRigid(frame.id,frame.id),cameraMatrix(camera,size.width,size.height),size.width,size.height);
+      texture.matrixAutoUpdate=false;texture.matrix=new Matrix3().set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
+      // Rotating the world does not parent, rotate or rescale the viewport.
+      assert.equal(viewport.parent,scene);assert.ok(viewport.matrixWorld.equals(scene.matrixWorld));
+      viewport.material.opacity=detailBlend(altitude);assertViewport(viewport,width,height);
+    }
+    viewport.geometry.dispose();viewport.material.dispose();texture.dispose();
+  }
+});
+
+test('combined camera pan and zoom-out cannot escape the cached live surface, in either axis',()=>{
+  for(const [width,height]of sizes){
+    let bounds={x:0,y:0,width,height},cached=liveSurfaceBounds(bounds),rebuilds=0;
+    // Each change passes the old separate pan and scale thresholds, but their
+    // combined extent exceeds the old mesh, exposing the static globe at left.
+    const panned={x:-width*.35,y:height*.35,width:width*1.4,height:height*1.4};
+    assert.ok(liveSurfaceNeedsUpdate(cached,panned));
+    for(let step=0;step<=120;step++){
+      const scale=1+step*.01;bounds={x:-width*step*.003,y:height*step*.003,width:width*scale,height:height*scale};
+      if(liveSurfaceNeedsUpdate(cached,bounds)){cached=liveSurfaceBounds(bounds);rebuilds++;}
+      assert.ok(Math.abs(bounds.x-cached.x)+bounds.width/2<=cached.width/2);
+      assert.ok(Math.abs(bounds.y-cached.y)+bounds.height/2<=cached.height/2);
+    }
+    assert.ok(rebuilds<10,'retain padded geometry reuse rather than remeshing every frame');
+    assert.ok(liveSurfaceNeedsUpdate(cached,{...bounds,height:cached.height*1.1}),'height-only resize also checks coverage');
+    const geometry=liveSurfaceGeometry(frame,bounds,frame.width,frame.height,WORLD_GEO.Rw);
+    assert.ok([...geometry.attributes.position.array].every(Number.isFinite));geometry.dispose();
+  }
+});
+
+// Run the real bridge, world, cameras, events and render-demand code. Only the
+// GPU and decorative backdrop are replaced for Node execution. Real art and
+// canvas pixels keep heart-location initialization in the handoff path.
+const {outputFiles:[bundle]}=await build({
+  entryPoints:[fileURLToPath(new URL('../src/pixi/three-game-view.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,
+  plugins:[{name:'headless-decoration',setup(b){
+    b.onLoad({filter:/three-world-view\.js$/},async args=>({contents:(await readFile(args.path,'utf8'))
+      .replace('new THREE.WebGLRenderer(','new globalThis.__wideQA.Renderer(')
+      .replace('new THREE.TextureLoader(','new globalThis.__wideQA.Loader(')}));
+    b.onResolve({filter:/three-(space-backdrop|atmosphere)\.js$/},args=>({path:args.path,namespace:'decoration'}));
+    b.onLoad({filter:/.*/,namespace:'decoration'},args=>({contents:args.path.includes('space-backdrop')?
+      'export const SPACE_LOOKS={starlight:{shade:0}};export const createSpaceBackdrop=()=>({setRotation(){},setActive(){},destroy(){}});':
+      'export const createGlobeAtmosphere=()=>({water:globalThis.__wideQA.water,update(){return false;},destroy(){},cloudCount:0,phase:0});'}));
+  }}]
+});
+const {createThreeGameView}=await import('data:text/javascript;base64,'+Buffer.from(bundle.text.replaceAll('"three"',JSON.stringify(import.meta.resolve('three')))).toString('base64'));
+
+for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at ${width}x${height} keeps full width and native render ownership`,async()=>{
+  const dom=new JSDOM('<div id="host"><canvas></canvas></div>',{pretendToBeVisual:true,url:'http://localhost/'}),{window}=dom,host=window.document.querySelector('#host'),canvas=host.querySelector('canvas');
+  const keys=['window','document','location','Image','ResizeObserver','requestAnimationFrame','cancelAnimationFrame','matchMedia','devicePixelRatio','performance','__wideQA'],prior=new Map(keys.map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)]));
+  const callbacks=new Map(),observers=[],renderers=[];let nextRAF=0,now=performance.now(),nativeRenders=0,view;
+  let box={width,height,left:0,top:0};window.HTMLElement.prototype.getBoundingClientRect=()=>box;
+  Object.defineProperties(host,{clientWidth:{get:()=>box.width},clientHeight:{get:()=>box.height}});
+  const canvases=new WeakMap();
+  window.HTMLCanvasElement.prototype.getContext=function(){
+    let bitmap=canvases.get(this);
+    if(!bitmap){bitmap=createCanvas(this.width,this.height);canvases.set(this,bitmap);}
+    if(bitmap.width!==this.width)bitmap.width=this.width;
+    if(bitmap.height!==this.height)bitmap.height=this.height;
+    const context=bitmap.getContext('2d');
+    if(!Object.hasOwn(context,'drawImage')){
+      const drawImage=context.drawImage.bind(context);
+      context.drawImage=(source,...args)=>drawImage(canvases.get(source)??source,...args);
+    }
+    return context;
+  };
+  class Renderer{
+    constructor(){this.domElement=window.document.createElement('canvas');this.capabilities={getMaxAnisotropy:()=>1};this.info={render:{calls:1}};this.renders=0;this.domElement.getBoundingClientRect=()=>box;this.domElement.setPointerCapture=()=>{};this.domElement.hasPointerCapture=()=>false;renderers.push(this);}
+    setPixelRatio(){}setSize(){}dispose(){}
+    render(scene,camera){this.scene=scene;this.camera=camera;this.renders++;}
+  }
+  const globals={window,document:window.document,location:window.location,devicePixelRatio:2,performance:{now:()=>now},
+    Image:class{async decode(){}},ResizeObserver:class{constructor(fn){observers.push(fn);}observe(){}disconnect(){}},
+    requestAnimationFrame:fn=>{callbacks.set(++nextRAF,fn);return nextRAF;},cancelAnimationFrame:id=>callbacks.delete(id),matchMedia:()=>({matches:true}),
+    __wideQA:{Renderer,Loader:class{async loadAsync(url){
+      const path=new URL('../public'+new URL(url,window.location.href).pathname,import.meta.url);
+      return new CanvasTexture(await loadImage(fileURLToPath(path)));
+    }},water:new MeshBasicMaterial()}};
+  for(const [key,value]of Object.entries(globals))Object.defineProperty(globalThis,key,{value,writable:true,configurable:true});
+  const game={canvas,width,height,artShown:'community',islandId:frame.id,ready:true,arts:new Map([['home',{ready:true}],['community',{ready:true}]]),
+    camera:{x:map.cx,y:map.cy,zoom:1},target:{},zoomMotion:{velocity:0},player:{x:map.cx,y:map.cy},rigs:[],localDucks:[],liveRigs:new Map(),ocean:{alpha:1,visible:true},keys:new Set(),touchInput:{x:0,y:0},
+    app:{render(){nativeRenders++;},renderer:{resolution:1,background:{alpha:1},resize(w,h){canvas.width=Math.round(w*this.resolution);canvas.height=Math.round(h*this.resolution);}}},
+    tick(){this.app.render();},resize(){},onInteriorChange(){},listen(){},ensureArt(){},artReady(){return true;},showArt(){},applyMapAmbience(){},freeArt(){},tap(){}};
+  const step=()=>{const frames=[...callbacks.values()];callbacks.clear();now=Math.max(now,performance.now())+17;for(const fn of frames)fn(now);};
+  const wheel=delta=>renderers[0].domElement.dispatchEvent(new window.WheelEvent('wheel',{clientX:box.width*.37,clientY:box.height*.61,deltaY:delta,cancelable:true}));
+  try{
+    view=await createThreeGameView(game,host);for(let i=0;i<4;i++)step();
+    assert.equal(renderers.length,1,'handoff uses the existing Three renderer');
+    const renderer=renderers[0];assert.equal(renderer.domElement.dataset.presentation,'native-pixi','initial close view: '+renderer.camera.position.z);
+    const renders=renderer.renders,flat=renderer.scene.getObjectByName('Live viewport handoff'),version=flat.material.map.version;
+    for(let i=0;i<5;i++)step();
+    assert.equal(renderer.renders,renders,'native close-up skips Three draws');assert.equal(flat.material.map.version,version,'native close-up skips texture uploads');
+    assert.ok(nativeRenders>0);
+    wheel(300);for(let i=0;i<3;i++)step();
+    assert.equal(renderer.domElement.dataset.presentation,'three-globe','zoom-out camera: '+renderer.camera.position.z);
+    const globe=renderer.scene.getObjectByName('World: ocean, islands, islets and activity anchors');
+    globe.quaternion.premultiply(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),.7));
+    for(const delta of [80,100,100]){
+      wheel(delta);for(let i=0;i<2;i++)step();
+      const viewport=renderer.scene.getObjectByName('Live viewport handoff');assertViewport(viewport,box.width,box.height);
+      assert.ok(viewport.visible&&viewport.material.opacity>0&&viewport.material.opacity<1,'zoom-out blends across the whole viewport');
+      assert.equal(viewport.parent,renderer.scene,'handoff must not inherit the globe rotation');
+      const surface=renderer.scene.getObjectByName('Live island detail');
+      assert.equal(viewport.material.map,surface.material.map,'one capture and texture upload for both planes');
+      const shader={uniforms:{},vertexShader:ShaderLib.basic.vertexShader,fragmentShader:ShaderLib.basic.fragmentShader};surface.material.onBeforeCompile(shader);
+      assert.ok(shader.vertexShader.includes('#include <project_vertex>'),'spherical detail stays on the sphere instead of dragging the atlas crop into the viewport');
+      assert.ok(Math.abs(game.width/game.height-box.width/box.height)<.003);
+      assert.ok(Math.max(canvas.width,canvas.height)<=1536,'handoff upload stays bounded');
+      assert.equal(canvas.style.width,'100%');assert.equal(canvas.style.height,'100%');
+    }
+    box={...box,width:height,height:width};for(const resize of observers)resize();for(let i=0;i<3;i++)step();
+    assert.equal(renderer.camera.aspect,box.width/box.height,'camera aspect refreshes on landscape/portrait resize');
+    assertViewport(renderer.scene.getObjectByName('Live viewport handoff'),box.width,box.height);
+    // A single large zoom-in returns ownership; no persistent second draw loop.
+    wheel(-1400);for(let i=0;i<4;i++)step();assert.equal(renderer.domElement.dataset.presentation,'native-pixi','return to close view: '+renderer.camera.position.z);
+    const after=renderer.renders;for(let i=0;i<4;i++)step();assert.equal(renderer.renders,after);
+  }catch(error){
+    // Bundled data-URL stack traces otherwise print the entire source bundle.
+    throw new Error(error.message);
+  }finally{
+    view?.destroy();globals.__wideQA.water.dispose();dom.window.close();
+    for(const [key,descriptor]of prior)if(descriptor)Object.defineProperty(globalThis,key,descriptor);else delete globalThis[key];
+  }
+});

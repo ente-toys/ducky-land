@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {fileURLToPath} from 'node:url';
 import {createHeartLocations,heartArtContains} from '../src/pixi/heart-activity.js';
 import sharp from 'sharp';
 import {Quaternion} from 'three';
@@ -42,7 +43,7 @@ test('heart anchors must also be inside the displayed art, excluding invisible l
   const masks=new Map();
   for(const frame of [...WORLD_ISLANDS,...ISLETS]){
     const relative=frame.art?`../public/pixi-art/islets/${frame.art}.svg`:`../public/pixi-art/globe/${frame.theme??'home'}.svg`;
-    const {data,info}=await sharp(new URL(relative,import.meta.url).pathname).resize(256,256,{fit:'fill'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+    const {data,info}=await sharp(fileURLToPath(new URL(relative,import.meta.url))).resize(256,256,{fit:'fill'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
     masks.set(frame,{data,width:info.width,height:info.height});
   }
   let seed=7;

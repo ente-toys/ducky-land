@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {liveSurfaceGeometry} from './three-live-geometry.js';
+import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate} from './three-live-geometry.js';
+import {detailViewport} from './three-detail-view.js';
 import {WORLD_GEO, WORLD_ISLANDS} from './world-map.js';
 import {ISLETS} from './islets.js';
 import {sphereFrame} from './sphere.js';
@@ -42,14 +43,13 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const ocean=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),atmosphere.water);
   ocean.name='Ocean'; globe.add(ocean);
 
-  const flatUniform={value:0};let direct=false;
-  function planetLighting(shader,flatten=false){
+  let detailOpacity=0,direct=false;
+  function planetLighting(shader){
     shader.uniforms.planetShade=planetShade;
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 planetNormal;')
       .replace('#include <begin_vertex>','#include <begin_vertex>\nplanetNormal=normalize(mat3(modelViewMatrix)*normalize(position));');
-    if(flatten)shader.uniforms.detailFlat=flatUniform;
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float planetShade; varying vec3 planetNormal;'+(flatten?' uniform float detailFlat;':'' ))
-      .replace('#include <opaque_fragment>','vec3 sunlight=normalize(vec3(-.35,.45,1.));float daylight=clamp(dot(normalize(planetNormal),sunlight)/sunlight.z,0.,1.);outgoingLight*=mix(mix(1.-planetShade,1.,daylight),1.,'+(flatten?'detailFlat':'0.')+');\n#include <opaque_fragment>');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float planetShade; varying vec3 planetNormal;')
+      .replace('#include <opaque_fragment>','vec3 sunlight=normalize(vec3(-.35,.45,1.));float daylight=clamp(dot(normalize(planetNormal),sunlight)/sunlight.z,0.,1.);outgoingLight*=mix(1.-planetShade,1.,daylight);\n#include <opaque_fragment>');
   }
 
   // Small water marks rotate with the sphere, giving the eye an unambiguous 3D reference.
@@ -278,33 +278,31 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     const patch=patches.find(p=>p.userData.island&&p.userData.id===id);if(!patch)return;
     if(bounds&&![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite))return;
     if(live?.id!==id||live.canvasWidth!==canvas.width||live.canvasHeight!==canvas.height){
-      if(live){live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();}
+      clearLiveCanvas();
       const geometry=patch.geometry,texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
       const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
-      material.onBeforeCompile=shader=>{planetLighting(shader,true);
-        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform float detailFlat;').replace('#include <project_vertex>',`#include <project_vertex>
-          vec4 sphereClip=gl_Position;
-          float blendedW=mix(sphereClip.w,1.,detailFlat);
-          vec2 screen=mix(sphereClip.xy/sphereClip.w,vMapUv*2.-1.,detailFlat);
-          gl_Position=vec4(screen*blendedW,mix(sphereClip.z/sphereClip.w,-.9,detailFlat)*blendedW,blendedW);`);
+      material.onBeforeCompile=shader=>{planetLighting(shader);
         shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
-      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.renderOrder=100;globe.add(mesh);live={id,patch,mesh,canvasWidth:canvas.width,canvasHeight:canvas.height};
+      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.renderOrder=100;globe.add(mesh);
+      const viewport=detailViewport(texture);viewport.material.opacity=detailOpacity;viewport.visible=detailOpacity>0&&!direct;scene.add(viewport);
+      live={id,patch,mesh,viewport,canvasWidth:canvas.width,canvasHeight:canvas.height};
     }
     if(bounds){
-      const old=live.bounds,w=bounds.width*1.8,h=bounds.height*1.8;
-      if(!old||Math.abs(bounds.x-old.x)>old.width*.2||Math.abs(bounds.y-old.y)>old.height*.2||w<old.width*.65||w>old.width*1.5){
+      if(liveSurfaceNeedsUpdate(live.bounds,bounds)){
         const geometry=liveSurfaceGeometry(patch.userData.frame,bounds,patch.userData.width,patch.userData.height,WORLD_GEO.Rw);
         if(!geometry)return;
-        if(live.ownsGeometry)live.mesh.geometry.dispose();live.mesh.geometry=geometry;live.ownsGeometry=true;live.bounds={...bounds,width:w,height:h};
+        if(live.ownsGeometry)live.mesh.geometry.dispose();live.mesh.geometry=geometry;live.ownsGeometry=true;live.bounds=liveSurfaceBounds(bounds);
       }
     }
     const t=atlasTransform(patch.userData.width,patch.userData.height,placement,matrix,atlasWidth,atlasHeight);
     const gpuMatrix=patch.userData.atlasMatrix.value;gpuMatrix.set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
     live.mesh.material.map.matrix.copy(gpuMatrix);patch.userData.atlasUniform.value=1;live.mesh.material.map.needsUpdate=true;demand.invalidate();
   }
-  function clearLiveCanvas(){if(!live)return;live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();live=null;demand.invalidate();}
+  function clearLiveCanvas(){if(!live)return;live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);scene.remove(live.viewport);live.viewport.geometry.dispose();live.viewport.material.dispose();live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();live=null;demand.invalidate();}
   function setPresentation(blend,value){
-    flatUniform.value=blend;
+    if(detailOpacity!==blend)demand.invalidate();
+    detailOpacity=blend;
+    if(live){live.viewport.material.opacity=blend;live.viewport.visible=blend>0&&!value;}
     if(direct!==value){
       direct=value;renderer.domElement.setAttribute('aria-label',direct?'Ducky Land island. Drag to pan, scroll to zoom, click to walk.':'Rotating Ducky Land globe');renderer.domElement.style.opacity=direct?'0':'1';host.style.background=direct?'transparent':'#000';
       for(const c of host.querySelectorAll('.space-backdrop,.space-effects,.heart-overlay'))c.style.visibility=direct?'hidden':'';
@@ -330,6 +328,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   return {focus,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
 
     setActive(value){if(active===value)return;active=value;backdrop.setActive(value&&!direct);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
-    destroy(){destroyed=true;cancelAnimationFrame(raf);resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
+    destroy(){destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
   };
 }

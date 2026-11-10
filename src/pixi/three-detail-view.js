@@ -1,6 +1,23 @@
 import {surfaceCoordinates} from './three-globe-math.js';
+import {Mesh,MeshBasicMaterial,PlaneGeometry} from 'three';
 
-// Flatten only in the final close approach, after the island's heading has
+// A handoff is a viewport image, not an island patch. Morphing the curved
+// patch into atlas UVs moves the capture boundary inside the screen after a
+// rotation (and can collapse it at a half turn). Composite the full capture
+// in clip space instead, sharing the live texture and its single upload.
+export function detailViewport(texture){
+  const material=new MeshBasicMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false,toneMapped:false});
+  material.onBeforeCompile=shader=>{
+    shader.vertexShader=shader.vertexShader
+      .replace('#include <uv_vertex>','#include <uv_vertex>\nvMapUv=uv;')
+      .replace('#include <project_vertex>','gl_Position=vec4(position.xy,0.,1.);');
+  };
+  const mesh=new Mesh(new PlaneGeometry(2,2),material);
+  mesh.name='Live viewport handoff';mesh.frustumCulled=false;mesh.renderOrder=101;
+  return mesh;
+}
+
+// Blend into the native viewport only in the final close approach, after the island's heading has
 // largely settled. Hysteresis prevents mode changes at a single wheel boundary.
 export function detailBlend(altitude){
   if(altitude<=.160001)return 1;
