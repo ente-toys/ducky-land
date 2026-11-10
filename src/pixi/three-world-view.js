@@ -4,6 +4,7 @@ import {ISLETS} from './islets.js';
 import {sphereFrame} from './sphere.js';
 import {heartPose} from './heart-motion.js';
 import {focusQuaternion, islandQuaternion, focusSurfaceQuaternion, surfacePoint, surfaceCoordinates, surfaceUnderPointer, lockSurfaceAnchor, atlasTransform, pickSurfacePatch, visiblePoint, EARTH_DISTANCE} from './three-globe-math.js';
+import {alignIslandNorth,approachProgress} from './three-island-approach.js';
 import {RenderDemand} from './three-render-demand.js';
 import {PALETTE} from './palette.js';
 import {mapOf} from './island-maps.js';
@@ -129,7 +130,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   let drag=null,pinch=null;const pointers=new Map();
   function down(e) {
     if(!active||e.button>0)return;onInteract();renderer.domElement.focus({preventScroll:true});const p=coordinates(e);pointers.set(e.pointerId,p);renderer.domElement.setPointerCapture(e.pointerId);transition=null;
-    if(pointers.size===2){const [a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2,point=surfaceUnderPointer(camera,x,y,width,height);pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),altitude:camera.position.z-1,point:point?.applyQuaternion(globe.quaternion.clone().invert())};drag=null;return;}
+    if(pointers.size===2){const [a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2,point=surfaceUnderPointer(camera,x,y,width,height);pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),altitude:camera.position.z-1,frame:pick(x,y)?.userData.frame,point:point?.applyQuaternion(globe.quaternion.clone().invert())};if(pinch.frame&&pinch.point)pinch.approach={startAltitude:pinch.altitude,angle:alignIslandNorth(globe.quaternion,pinch.frame,pinch.point,camera,0)};drag=null;return;}
     zoomAnchor=null;targetAltitude=camera.position.z-1;
     const point=surfaceUnderPointer(camera,p.x,p.y,width,height);
     if(!point)return;
@@ -138,7 +139,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   }
   function move(e) {
     const p=coordinates(e);if(pointers.has(e.pointerId))pointers.set(e.pointerId,p);
-    if(pinch&&pointers.size>=2){const[a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2;targetAltitude=THREE.MathUtils.clamp(pinch.altitude*pinch.distance/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),.018,7);zoomAnchor=pinch.point?{point:pinch.point,x,y}:null;demand.invalidate();return;}
+    if(pinch&&pointers.size>=2){const[a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2;targetAltitude=THREE.MathUtils.clamp(pinch.altitude*pinch.distance/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),.018,7);zoomAnchor=pinch.point?{point:pinch.point,x,y,island:targetAltitude<pinch.altitude?pinch.frame:null,approach:pinch.approach}:null;demand.invalidate();return;}
     if(!drag) {const hit=pick(p.x,p.y);renderer.domElement.style.cursor=hit?'pointer':'grab';renderer.domElement.dataset.hoveredIsland=hit?.userData.id??'';return;}
     lockSurfaceAnchor(globe.quaternion,drag.point,camera,p.x,p.y,width,height);
     demand.invalidate();
@@ -154,11 +155,16 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   function wheel(e) {
     e.preventDefault();if(!active)return;onInteract();const p=coordinates(e),hit=pick(p.x,p.y);
     if(hit&&selected!==hit.userData.id){selected=hit.userData.id;onSelect(hit.userData.frame);}
-    const point=surfaceUnderPointer(camera,p.x,p.y,width,height);
+    const point=surfaceUnderPointer(camera,p.x,p.y,width,height),previous=zoomAnchor;
     zoomAnchor=point?{point:point.applyQuaternion(globe.quaternion.clone().invert()),...p}:null;
     transition=null;
     const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?height:1);
     targetAltitude=THREE.MathUtils.clamp(targetAltitude*Math.exp(delta*.0015),.018,7);
+    if(zoomAnchor){
+      zoomAnchor.island=delta<0?hit?.userData.frame:null;
+      if(zoomAnchor.island)zoomAnchor.approach=previous?.island?.id===zoomAnchor.island.id?previous.approach:null;
+      if(zoomAnchor.island&&!zoomAnchor.approach)zoomAnchor.approach={startAltitude:camera.position.z-1,angle:alignIslandNorth(globe.quaternion,zoomAnchor.island,zoomAnchor.point,camera,0)};
+    }
   }
   function listen(name,fn,options){renderer.domElement.addEventListener(name,fn,options);cleanups.push(()=>renderer.domElement.removeEventListener(name,fn,options));}
   listen('keydown',e=>{if(e.key==='0'||e.key==='Escape'){e.preventDefault();onInteract();world();}else if(['+','=','-'].includes(e.key)){e.preventDefault();wheel({preventDefault(){},clientX:renderer.domElement.getBoundingClientRect().left+width/2,clientY:renderer.domElement.getBoundingClientRect().top+height/2,deltaY:e.key==='-'?160:-160,deltaMode:0});}});listen('pointerdown',down);listen('pointermove',move);listen('pointerup',up);listen('pointercancel',()=>{drag=null;pinch=null;pointers.clear();});listen('wheel',wheel,{passive:false});
@@ -189,7 +195,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   }
   function tick(now) {
     if(destroyed||!active||document.hidden)return;const dt=Math.min(.1,(now-last)/1000);last=now;
-    const moving=!!(drag||transition||Math.abs(camera.position.z-1-targetAltitude)>1e-7);
+    let moving=!!(drag||transition||Math.abs(camera.position.z-1-targetAltitude)>1e-7);
     if(transition) {
       const t=ease((now-transition.at)/transition.duration);
       globe.quaternion.slerpQuaternions(transition.from,transition.to,t);camera.position.z=THREE.MathUtils.lerp(transition.z0,transition.z1,t);
@@ -200,6 +206,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       if(zoomAnchor&&!lockSurfaceAnchor(globe.quaternion,zoomAnchor.point,camera,zoomAnchor.x,zoomAnchor.y,width,height)){
         camera.position.z=previous;targetAltitude=previous-1;zoomAnchor=null;
       }
+    }
+    if(zoomAnchor?.island&&zoomAnchor.approach&&!drag&&!transition){
+      const progress=approachProgress(zoomAnchor.approach.startAltitude,camera.position.z-1),remaining=zoomAnchor.approach.angle*(1-progress);
+      const angle=alignIslandNorth(globe.quaternion,zoomAnchor.island,zoomAnchor.point,camera,reduced?1:1-Math.exp(-14*dt),reduced?Infinity:2.4*dt,reduced?0:remaining);
+      renderer.domElement.dataset.approachProgress=progress.toFixed(3);
+      renderer.domElement.dataset.approachIsland=zoomAnchor.island.id;
+      renderer.domElement.dataset.approachHeadingDeg=(angle*180/Math.PI).toFixed(3);
+      if(Math.abs(angle-(reduced?0:remaining))>1e-5){moving=true;demand.invalidate();}
     }
     const near=Math.max(.001,Math.min(.2,(camera.position.z-1)*.2));
     if(Math.abs(camera.near-near)>1e-7){camera.near=near;camera.updateProjectionMatrix();}
