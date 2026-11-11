@@ -1,0 +1,39 @@
+<!doctype html><html><head><title>Ducky audit controls</title><style>body{margin:0;font:13px system-ui;height:100vh;display:flex;flex-direction:column}header{padding:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}iframe{width:100vw;flex:1;min-height:0;border:0}output{white-space:pre-wrap}button,select{font:inherit;padding:4px}</style></head><body><header><label>Island <select id="island"></select></label><button id="visit">Visit spawn</button><button id="harbor">Visit harbor</button><button id="board">Board boat</button><button id="dock">Dock boat</button><button id="reload">Reload game</button><button id="measure">Measure five starts</button><button id="transitions">Measure five island tours</button><button id="reduced">Toggle reduced motion</button><button id="focused" style="position:fixed;right:8px;bottom:58px;z-index:2">Measure selected transition</button><button id="background" style="position:fixed;right:8px;bottom:24px;z-index:2">Check background recovery</button><output id="status">Loading</output></header><iframe title="Local game" src="/?qa"></iframe><details><summary>Measurements</summary><pre id="results"></pre></details><script type="module">
+import {WORLD_ISLANDS} from '/src/pixi/world-map.js';
+import {mapOf} from '/src/pixi/island-maps.js';
+const frame=document.querySelector('iframe'),select=document.querySelector('select'),status=document.querySelector('#status'),results=document.querySelector('#results');
+for(const i of WORLD_ISLANDS)select.add(new Option(i.name,i.id));
+const game=()=>frame.contentWindow.__duckyEngine;
+const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function ready(){const until=performance.now()+60000;while(performance.now()<until){const g=game();if(g?.ready&&g.room?.player&&g.islandId===g.room.player.islandId&&g.artShown===mapOf(g.islandId).id&&(g.artShown==='home'||g.arts.get(g.artShown)?.ready)&&g.canvas.dataset.earthView==='active')return g;await pause(50);}throw Error('Game readiness timeout');}
+async function visit(harbor=false){const g=await ready(),id=select.value,map=mapOf(id),p=harbor?map.HARBOR.land:map.spawn;const at=performance.now();const response=await fetch('/test/pose',{method:'POST',body:JSON.stringify({account:'browser-test',islandId:id,x:p.x,y:p.y})});if(!response.ok)throw Error('Placement failed');const until=performance.now()+60000;while(performance.now()<until){if(g.islandId===id&&g.artShown===map.id&&(id==='home'||g.arts.get(g.artShown)?.ready)){await pause(250);status.textContent=map.id+' ready';return performance.now()-at;}await pause(50);}throw Error('Island readiness timeout');}
+const run=fn=>async()=>{const controls=[...document.querySelectorAll('header button,header select')];controls.forEach(b=>b.disabled=true);try{status.textContent='Working';await fn();}catch(e){status.textContent='FAIL '+e.message;throw e;}finally{controls.forEach(b=>b.disabled=false);}};
+document.querySelector('#visit').onclick=run(()=>visit());document.querySelector('#harbor').onclick=run(()=>visit(true));
+document.querySelector('#board').onclick=run(async()=>{const g=await ready();g.room.returnToBoat();status.textContent='Board command sent';});
+document.querySelector('#dock').onclick=run(async()=>{const g=await ready();g.room.disembark();status.textContent='Dock command sent';});
+let reduced=false;
+async function reload(){await new Promise(resolve=>{frame.onload=()=>{frame.onload=null;resolve();};frame.src=(reduced?'/qa/audit-game.html?qa&reduced&run=':'/?qa&run=')+Date.now();});return ready();}
+document.querySelector('#reload').onclick=run(async()=>{await reload();status.textContent='Game ready';});
+document.querySelector('#measure').onclick=run(async()=>{select.value='home';await visit();const runs=[];for(let i=0;i<5;i++){const at=performance.now();await reload();runs.push(performance.now()-at);status.textContent='Startup '+(i+1)+'/5';}results.textContent=JSON.stringify({startupMs:runs},null,2);status.textContent='Startup measurement complete';});
+document.querySelector('#transitions').onclick=run(async()=>{const runs={};for(let n=0;n<5;n++)for(const i of WORLD_ISLANDS){select.value=i.id;(runs[i.name]??=[]).push(await visit());}results.textContent=JSON.stringify({transitionMs:runs},null,2);status.textContent='Transition measurement complete';});
+document.querySelector('#reduced').onclick=run(async()=>{reduced=!reduced;const g=await reload();status.textContent='Reduced motion '+g.motion.matches;});
+document.querySelector('#focused').onclick=run(async()=>{
+ const target=WORLD_ISLANDS.find(i=>i.id===select.value),index=WORLD_ISLANDS.indexOf(target),previous=WORLD_ISLANDS[(index+WORLD_ISLANDS.length-1)%WORLD_ISLANDS.length],runs=[];
+ for(let i=0;i<5;i++){select.value=previous.id;await visit();select.value=target.id;runs.push(await visit());}
+ results.textContent=JSON.stringify({transitionMs:{[target.name]:runs}},null,2);status.textContent='Focused measurement complete';
+});
+document.querySelector('#background').onclick=run(async()=>{
+ const g=await ready(),doc=frame.contentDocument;let hidden=true;
+ Object.defineProperty(doc,'hidden',{configurable:true,get:()=>hidden});
+ Object.defineProperty(doc,'visibilityState',{configurable:true,get:()=>hidden?'hidden':'visible'});
+ try{
+  doc.dispatchEvent(new Event('visibilitychange'));const before=g.frame;
+  await pause(600);if(g.frame!==before)throw Error('Hidden frame still advances');
+  hidden=false;doc.dispatchEvent(new Event('visibilitychange'));
+  await pause(600);if(g.frame<=before)throw Error('Visible frame did not resume');
+  status.textContent='Background recovery passed (simulated visibility)';
+ }finally{delete doc.hidden;delete doc.visibilityState;doc.dispatchEvent(new Event('visibilitychange'));}
+});
+setInterval(()=>{const g=game();if(g?.ready){document.body.dataset.game=JSON.stringify({island:g.islandId,mode:g.player?.mode,position:g.player&&[g.player.x,g.player.y],art:g.artShown,ready:g.artShown==='home'||g.arts.get(g.artShown)?.ready,frame:g.frame,zoom:g.camera.zoom,reduced:g.motion.matches,errors:[...g.arts.values()].filter(a=>a.failed).length});}},500);
+ready().then(()=>status.textContent='Game ready').catch(e=>status.textContent=e.message);
+</script></body></html>

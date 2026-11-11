@@ -38,8 +38,8 @@ export class LiveBogRoom {
   // already created this paid entry; opening/restoring sockets never recharges.
   const visit=this.owner.karma.beginBogEntry(user.account);if(!visit)return false;
   info.actor.karma=this.owner.karma.balance(user.account);
-  // One signed-in participant per account, just like the world room.
-  if(team)for(const [peer,m]of this.members)if(m.account===user.account&&m.team){this.close(peer);peer.close(4001,'Arena session replaced by reconnect');}
+  // Keep one participant and one lobby per account, including reconnects.
+  for(const [peer,m]of this.members)if(m.account===user.account&&Boolean(m.team)===Boolean(team)){this.close(peer);peer.close(4001,'Arena session replaced by reconnect');}
   if(this.owner.karma.bogEntry(user.account)?.id!==visit.id)return false;
   const m={digest,account:user.account,entryId:visit.id,id,team:team?(visit.combat?.team??team):null,tokens:90,tokenAt:Date.now()};
   if(team){
@@ -78,10 +78,13 @@ export class LiveBogRoom {
   let data;try{data=JSON.parse(message);}catch{return;}
   if(m.team&&data?.type==='arena-input')this.arena.input(m.id,data);
  }
- step(){
+prune(){
   for(const [socket,m]of this.members)if(socket.readyState!==1||!this.admitted(m.digest)||this.owner.karma.bogEntry(m.account)?.id!==m.entryId){
    this.close(socket);socket.close(1008,'Bog visit ended');
   }
+ }
+ step(){
+  this.prune();
   if(!this.arena.state.players.size)return;
   this.bots.step();
   this.arena.step(1/60);

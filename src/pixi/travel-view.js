@@ -1,16 +1,8 @@
-import {Container, Graphics, Sprite, Text} from 'pixi.js';
+import {Container, Sprite} from 'pixi.js';
 import {destinationsFor, boatSpots} from './islands.js';
 import {createHarbor} from './harbor.js';
 import {createSailingFX} from './sailing-fx.js';
 import {createSea} from './sea-islands.js';
-
-function label(text,x,y,size=32) {
-  const node=new Text({text,style:{fontFamily:'system-ui, sans-serif',fontSize:size,fontWeight:'600',fill:0x39472d,
-    stroke:{color:0xfff0c7,width:5},align:'center'}});
-  node.anchor.set(.5,1);
-  node.position.set(x,y);
-  return node;
-}
 
 const BORN=.4, BOB_PX=10;   // boss 6 Nov: a refilled boat fades and bobs in over 0.4 s, no pop
 const HOP=.5, DRIFT=.9, DRIFT_PX=36;   // the boat you stepped off waits for your hop, then drifts 36 px as it fades
@@ -20,7 +12,7 @@ const driftBy=(heading,d) => ({x:-Math.sin(heading)*d,y:-Math.cos(heading)*d*.45
 const atMooring=boat => boatSpots(boat.islandId).some(spot => spot.x === boat.x && spot.y === boat.y);   // that island's own map's spots
 
 export async function createTravelView(objects,water,air,decks) {
-  const [sea]=await Promise.all([createSea(water,objects,air)]);   // boss 5 Nov: the cloud bank and sea islands live in sea-islands.js
+  const sea=await createSea(water,objects,air);   // boss 5 Nov: the cloud bank and sea islands live in sea-islands.js
   const harbor=createHarbor(decks,objects);   // boss 5 Nov: a real jetty, signpost and flag (harbor.js)
   const vessels=new Map(), leaving=[], fx=await createSailingFX({water,objects});
   const destroyVessel=entry => {entry.front?.destroy({children:true}); entry.root.destroy({children:true});};

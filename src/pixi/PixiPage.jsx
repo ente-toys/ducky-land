@@ -93,8 +93,10 @@ export default function PixiPage() {
       if(import.meta.env.DEV&&new URLSearchParams(location.search).has('pirates')){const {piratePreview}=await import('../../scripts/pirate-ships/preview.js');await piratePreview(game);}
       if(cancelled)earth?.destroy();
     }).catch(error=>{console.error('Could not initialize world',error);setError(true);});
-    client.connect();
-    refresh();
+    if (!offline) {
+      client.connect();
+      refresh();
+    }
     return () => {
       cancelled=true;earth?.destroy();
       abort.abort();

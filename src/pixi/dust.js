@@ -1,7 +1,7 @@
 // boss 6 Nov: little dust puffs at a Ducky's feet, a ring of them on a jump landing and one now and then while running.
 // Pooled cream puffs with the island's ink outline, drawn in the world (they stay where they were kicked up), grow and
 // fade in about a third of a second. Cheap: at most POOL puffs ever exist; the oldest is reused when they run out.
-import {Container, Graphics} from 'pixi.js';
+import {Graphics} from 'pixi.js';
 import {PALETTE} from './palette.js';
 import {JUMP_LAND, RUN_SPEED, WALK_SPEED} from './player-motion.js';
 

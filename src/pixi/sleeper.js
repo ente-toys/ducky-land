@@ -32,7 +32,7 @@ export const SLEEP_SNOW_SURFACES = {
   box: [[376, 92, 250, .02], [533, 314, 110, .95], [367, 410, 670, 0]],
 };
 const POKE = .6, POKE_COOL = .8;   // boss 5 Nov: a poke wobbles .6 s; spam taps do not stack
-const Z_SRC = '/pixi-duck/sleep/z.svg', Z_H = 105, Z_SIZES = [.72, .86, 1], STAND_HEAD = 285, INK = 0x232323;
+const Z_SRC = '/pixi-duck/sleep/z.svg', Z_H = 105, Z_SIZES = [.72, .86, 1], STAND_HEAD = 285;
 export const SLEEP_ASSETS = [Z_SRC, ...Object.values(data.poses).flatMap(p => p.layers.map(l => l.src))];
 const TAU = Math.PI * 2, DEG = Math.PI / 180;
 const clamp01 = x => Math.min(1, Math.max(0, x)), io = x => .5 - .5 * Math.cos(Math.PI * clamp01(x)), outCubic = x => 1 - (1 - clamp01(x)) ** 3;

@@ -23,7 +23,6 @@ export {TEST_THEMES};
 export const THEME_OF = new Map(WORLD_ISLANDS.filter(i => i.theme).map(i => [i.id,i.theme]));
 export const themeOfIsland = id => THEME_OF.get(id) ?? 'home';
 
-const near = (a, b, r) => Math.hypot(a.x - b.x, a.y - b.y) <= r;
 const BOAT_RADIUS = 46;
 export const FIELD_RES = 25, FIELD_PAD = 700;
 

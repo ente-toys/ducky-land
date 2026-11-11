@@ -430,6 +430,7 @@ export class IslandRoom {
   // island and name visibility. Full snapshots also serve legacy clients and
   // periodically renew the baseline for clients that opt into deltas.
   broadcast() {
+    this.bog?.prune();
     const now = Date.now();
     this.karma.broadcast(now);
     const online = new Set([...this.connections].map(([socket,info]) =>
@@ -760,7 +761,10 @@ export class IslandRoom {
     }
   }
 
-  webSocketClose(socket) {
+  webSocketClose(socket, code = 1000, reason = '') {
+    // Some transports still deliver CLOSING sockets. Finish the handshake
+    // before removing their state; otherwise idle peers wait for a timeout.
+    if (socket.readyState === 2) socket.close(code === 1005 || code === 1006 ? 1000 : code, reason);
     if(this.bog?.members.has(socket)){this.bog.close(socket);return;}
     const info = this.connections.get(socket);
     if (!info) return;
@@ -778,7 +782,7 @@ export class IslandRoom {
   }
 
   webSocketError(socket) {
-    this.webSocketClose(socket);
+    this.webSocketClose(socket, 1011, 'Connection lost');
     socket.close(1011, 'Connection lost');
   }
 }

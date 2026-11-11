@@ -5,12 +5,16 @@
 //   node scripts/load-live.mjs [players=100] [island=blossom] [seconds=20] [port=8941]
 import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
-import {mkdtempSync} from 'node:fs';
-import {tmpdir} from 'node:os';
-import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import WebSocket from 'ws';
 import {mapOf} from '../src/pixi/island-maps.js';
+
+// Extended matrix: incremental and legacy updates, spectators, caps and churn.
+if (process.argv[2] === '--audit') {
+  process.argv.splice(2, 1);
+  await import('./audit-load.mjs');
+  process.exit(0);
+}
 
 const [N = 100, island = 'blossom', seconds = 20, port = 8941] = process.argv.slice(2).map((v, i) => i === 1 ? v : Number(v));
 if (Number(port) === 8890) throw Error('8890 is the boss\'s server: pick another port');
@@ -49,7 +53,6 @@ const {outputFiles: [bundle]} = await build({stdin: {resolveDir: root, contents:
     return new Response('load test', {status: 200});
   }};
 `}, bundle: true, format: 'esm', write: false});
-const assets = mkdtempSync(join(tmpdir(), 'ducky-load-'));
 const INSPECT = process.env.LOAD_PROFILE ? Number(port) + 1 : undefined;   // LOAD_PROFILE=out.cpuprofile: profile the room while it runs
 const mf = new Miniflare(convertV4MiniflareOptions({host: '127.0.0.1', port: Number(port), ...(INSPECT ? {inspectorPort: INSPECT} : {}), modules: [{type: 'ESModule', path: 'index.js', contents: bundle.text}],
   compatibilityDate: '2026-11-02', durableObjects: {ISLAND: {className: 'LoadRoom', useSQLite: true}}}));

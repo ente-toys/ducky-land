@@ -1,7 +1,6 @@
 // Host-side decisions only. All art, poses, names and speech are native Rive.
 export const POSE = Object.freeze({idle:0, walk:1, quack:2, dance:3, sit:4, wave:5, look:6, preen:7, sleep:8});
 const NAMES = ['quackers','mo','aya_22','bread_boy','pip','lulu','nori','miso','toto','sunny','peep','boba'];
-const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
 const R = 31;
 
 export class CrowdBrain {

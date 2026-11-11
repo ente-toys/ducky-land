@@ -214,7 +214,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   ];
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
   // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
-  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,stumbleT=9,stumbleDir={x:-1,y:0},icePhase=null,gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
+  let landT=9,lastSpeed=0,arriveT=9,stumbleT=9,stumbleDir={x:-1,y:0},icePhase=null,gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
   // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
   const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
   const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
@@ -253,7 +253,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         (frame.layer==='feet'?view.feet:frame.layer==='held'?view.held:frame.layer==='behind'?view.behind:view.clothes).addChild(node);
         // boss 4 Nov: collars and scarves WRAP: drawn a touch wider than the neck and clipped to the (morphing) body outline, so the ends always land on it
         let mask=null;if((frame.attachment==='neck'||frame.wrap)&&view.morph){mask=new Graphics();view.bodyPart.joint.addChild(mask);node.mask=mask;
-          const me=view.spec.morph.body,[ox,oy]=[view.bodyPart.joint.rest.x,view.bodyPart.joint.rest.y],ny=frame.rect[1]+Math.min(45,frame.rect[3]/2),band=me.filter(q=>Math.abs(q[1]-ny)<40).map(q=>q[0]);
+          const me=view.spec.morph.body,ny=frame.rect[1]+Math.min(45,frame.rect[3]/2),band=me.filter(q=>Math.abs(q[1]-ny)<40).map(q=>q[0]);
           const cx=band.length?(Math.min(...band)+Math.max(...band))/2:frame.rect[0]+frame.rect[2]/2,k=frame.wrapScale||1.15;sprite.scale.x=k;sprite.x=cx+(frame.rect[0]-cx)*k-x;}
         // the body's ink line is redrawn over the garment where it crosses the outline, so the cut ends carry the same ink edge
         let ink=null,cut=null;if(mask){cut=new Sprite(sprite.texture);cut.position.copyFrom(sprite.position);cut.scale.copyFrom(sprite.scale);ink=new Graphics();ink.mask=cut;node.addChild(cut,ink);}
@@ -412,8 +412,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     seated=isSeated;
     const next=ice?0:typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
-    if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
-    landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;stumbleT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
+    if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
+    landT+=dt;arriveT+=dt;stumbleT+=dt;if(reducedMotion)landT=9;if(currentAction===1)lastSpeed=safe(speed);
     actionTime+=dt;
     // boss 4 Nov: steps follow the distance walked (one step per 45 world units), and the waddle eases in over two steps and out on stopping
     const walking=currentAction===1,v=walking?Math.max(safe(speed),40):lastSpeed*gait;

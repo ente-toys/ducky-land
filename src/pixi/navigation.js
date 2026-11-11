@@ -1,7 +1,6 @@
 import {geometry} from '../../rive/web/island-geometry.mjs';
 export function createNavigation(world,{cellSize=32,walkable:customWalkable}={}){
 const walkable=customWalkable??geometry(world).walkable;
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const X0=world.origin?.x ?? 0,Y0=world.origin?.y ?? 0;
 const CELL=cellSize,COLS=Math.ceil(world.width/CELL),ROWS=Math.ceil(world.height/CELL);
 const grid=new Uint8Array(COLS*ROWS);

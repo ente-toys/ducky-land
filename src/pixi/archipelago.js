@@ -18,7 +18,6 @@ export function createArchipelago(app, scene, layer, world) {
   // its centre, so maps of any size line up. cx, cy: the centre of the current island's map in its local coordinates.
   let cx = world.width / 2, cy = world.height / 2;
   const SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0;
-  const wrap = v => v - SX * Math.round(v / SX);
   const root = new Container({label: 'Archipelago'}), copies = new Container({label: 'Island copies'});
   const people = new Container({label: '30,000 Duckies'});
   const peopleTextures = new Map();
@@ -33,7 +32,7 @@ export function createArchipelago(app, scene, layer, world) {
   const sprites = new Map();
   // every island in the current island's local coordinates: the current one sits where the real scene is drawn
   const place = () => {
-    const here = worldIsland(current), m = mapOf(current);
+    const m = mapOf(current);
     cx = m.cx; cy = m.cy;
     islands = WORLD_ISLANDS.map(island => ({...island, ...placement(current,island.id), from:current,
       scale: 1, flip: 1, rot: 0, home: island.id === current, map: artOf(island.id), localCentre:{x:mapOf(island.id).cx,y:mapOf(island.id).cy}, width: mapOf(island.id).width, height: mapOf(island.id).height}));

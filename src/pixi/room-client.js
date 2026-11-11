@@ -4,7 +4,7 @@ import {nearbyFriend} from './friends.js';
 import {mapOf} from './island-maps.js';
 import {getPlayerKarma} from './bog-combat/karma.js';
 import {bogLandingNotice} from './bog-combat/entry.js';
-import {islandFor, harborOf, destinationsFor, near, canSail, canDock, landingSpot, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from './islands.js';
+import {islandFor, harborOf, canSail, canDock, landingSpot, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from './islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;

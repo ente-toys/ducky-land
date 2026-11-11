@@ -1,4 +1,4 @@
-import {horizonRatio,pixelChart,lensAngle} from './sphere-projection.js';
+import {horizonRatio,pixelChart} from './sphere-projection.js';
 import {spherePoint,localPoint,viewFrame} from './sphere-coordinates.js';
 import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from './world-map.js';
 import {dot,expMap} from './sphere.js';
@@ -407,7 +407,7 @@ export function createWorldView(app, scene, isletView) {
       };
       this.stickers=[...stickers,...islets].map(s=>{const m=drawn(s),r=s.st;return m&&{kind:s.kind,id:s.id,mode:s.mode===2?'live':s.kind==='islet'?'islet-atlas':'atlas',width:s.islet?.width,...m,
         rigid:r?{x:r.x,y:r.y,a:r.cos*r.scale,b:r.sin*r.scale,c:-r.sin*r.scale,d:r.cos*r.scale}:null};}).filter(Boolean);
-      const islands = arch.islands, dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
+      const dt = Math.min(.1, Math.max(0, time - lastT)); lastT = time;
       const busy = ease((ball - .25) / .4);
       life.visible = busy > .01; life.alpha = busy;
       if (busy > .01) {

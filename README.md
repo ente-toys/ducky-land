@@ -79,3 +79,37 @@ its redirect URI. Set its client ID and secret as `GITHUB_CLIENT_ID` and
 Vite and its static preview serve the artwork. Live play needs the Pages
 Functions and a bound room Worker. The Node server started by `npm start`
 remains a fixture for the legacy network tests.
+
+## Local audit validation
+
+Use Node 24 and `npm ci`. With `npm start` running on port 8810, run
+`npm test`, `npm run build`, and `git diff --check`. The test workflow includes
+the generated SVG source-freshness check. Regenerate stale artwork with the
+existing `npm run globe:assets` generator; do not edit fingerprints manually.
+
+`node scripts/load-live.mjs --audit` runs the real Worker in local Miniflare:
+100 players, then 200 players across two islands plus 64 spectators, using
+both incremental updates and legacy snapshots. Each scenario measures 60
+seconds after warmup, followed by a 900-second reconnect/transition soak.
+Optional arguments are scenario seconds, soak seconds, and port (default
+8941). The harness checks admission, counts, update ordering, valid poses,
+unexpected disconnects, server-step p95 below 50 ms, and final connection
+and timer cleanup. Output is one JSON result per scenario.
+
+For browser checks, run `npx vite --config qa/audit-vite.config.mjs --configLoader native` and open
+`http://127.0.0.1:5188/qa/audit-browser.html`. Its controls place a synthetic
+local account on each island and expose five-run startup/transition
+measurements. Responses disable HTTP caching for fresh-document startup
+checks; shader/OS caches are not reset. `AUDIT_PORT` and `AUDIT_ROOM_PORT`
+allow an unchanged checkout to run alongside it for comparison.
+Restart this fixture after editing Worker code. Use `--soak-only` with the
+load command to repeat just the churn scenario while investigating a failure.
+The reduced-motion control supplies the media preference before loading the
+game. The background check simulates document visibility events and verifies
+that frames stop and resume; it does not change the operating system's settings.
+
+Synthetic sessions and placement routes exist only in the in-memory test
+Worker bound to loopback. Neither QA configuration is a deployment entrypoint.
+Real OAuth, account access, logout and persistence must also be checked on a
+separate preview with preview-specific OAuth credentials; local sessions do
+not validate those flows.

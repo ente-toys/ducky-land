@@ -2,7 +2,7 @@ import {Rectangle, Sprite, Texture} from 'pixi.js';
 
 // Centre textures stay cached. Only transforms and opacity change per frame.
 export function animatePieces(records, seconds, reduced = false) {
-  for (const {piece, sprite:s, flip=false} of records) {
+  for (const {piece, sprite:s} of records) {
     const a=piece.animate;
     if (!a || !s.visible) continue;
     // Capture after the engine has applied its upright correction.

@@ -1,6 +1,6 @@
 import {spherePoint,viewFrame} from './sphere-coordinates.js';
 import {logMap} from './sphere.js';
-import {WORLD_ISLANDS, WORLD_GEO, worldIsland} from './world-map.js';
+import {WORLD_ISLANDS, WORLD_GEO} from './world-map.js';
 import {mapOf} from './island-maps.js';
 import {BOG_RADAR_ISLAND, placeBogRadar} from './bog-radar.js';
 

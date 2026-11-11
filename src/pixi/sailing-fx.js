@@ -36,7 +36,6 @@ export async function createSailingFX({water,objects}) {
   const wakes=new Graphics({label:'Boat wakes'}), rings=new Graphics({label:'Boarding rings'});
   water.addChild(wakes,rings);
   const boats=new Map(), ducks=new Map(), splashes=[], dust=[];
-  let last=clock();
   const fx={waterSplash:null};
 
   function ring(x,y,size=1) {
@@ -198,7 +197,7 @@ export async function createSailingFX({water,objects}) {
     },
     // per frame, after every boat: wakes, rings, dust; boats and Duckies not seen for a while are forgotten
     draw(reduced) {
-      const now=clock(); last=now;
+      const now=clock();
       wakes.clear(); rings.clear();
       for (const [id,s] of boats) {
         if (now-s.seen>3) {boats.delete(id); continue;}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f5ef" />
+    <title>Ducky Land</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Test-only media preference, installed before production modules load.
+      if (new URLSearchParams(location.search).has('reduced')) {
+        const originalMatchMedia = window.matchMedia.bind(window);
+        window.matchMedia = query => {
+          const media = originalMatchMedia(query);
+          if (query.includes('prefers-reduced-motion')) Object.defineProperty(media, 'matches', {value: true});
+          return media;
+        };
+      }
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

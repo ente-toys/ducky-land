@@ -2,7 +2,7 @@ import {pirateLocal} from './pirate-fleet.js';
 import {createThreeWorld} from './three-world-view.js';
 import {retainDetailArt} from './three-game-budget.js';
 import {detailWork,detailMovement} from './three-detail-budget.js';
-import {detailBlend,directDetail,detailSize,detailCamera,detailScreen,DETAIL_CAPTURE_SCALE} from './three-detail-view.js';
+import {detailBlend,directDetail,detailSize,detailCamera,detailScreen} from './three-detail-view.js';
 import {mapOf,artOf} from './island-maps.js';
 import {WORLD_ISLANDS,WORLD_GEO} from './world-map.js';
 import {captureCoverage} from './three-capture-coverage.js';

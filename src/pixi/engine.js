@@ -23,14 +23,13 @@ import {createWeather,windStrength} from './weather.js';
 import {createSnowfall} from './snowfall.js';
 import {createBird,birdPose,createCrow,crowPose} from './birds.js';
 import {createBeachSurf, shoreOf} from './surf.js';
-import {createRowboat} from './rowboat.js';
 import {createMooredBoats} from './sailboats.js';
 import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
 import {copyHolding} from './sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {createKarmaView} from './karma-view.js';
-import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
+import {harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
 import {isletWalks} from './islet-walk.js';
 import {reframeIslet,isletLandingFrame} from './islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from './island-maps.js';   // boss 6 Nov: themed islands, each with its own map and art
@@ -52,7 +51,7 @@ import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
 import {createWater} from './water.js';
-import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_MOUTHS, HOME_GROUND_DECALS, HOME_ORIGIN, decalsFor, deckY, deckX, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
+import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_MOUTHS, HOME_GROUND_DECALS, HOME_ORIGIN, deckY, deckX, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from './placements.js';
 import {sleepHalfWidths} from './sleeper.js';
 import {createInterior} from './interior.js';
 const napWidths = sleepHalfWidths(.88 * .24 * 3);   // world half width per sleeping pose
@@ -1418,7 +1417,7 @@ export class PixiIsland {
       const streams=this.artShown==='home'?[this.homeGroundStream]:this.arts.get(this.artShown)?.groundStreams??[];
       for(const stream of streams)views.push({stream,camera:this.camera,width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       for(const island of copies) {
-        const m=mapFor(island.map),streams=island.map==='home'?[this.homeGroundStream]:this.arts.get(island.map)?.groundStreams??[];
+        const streams=island.map==='home'?[this.homeGroundStream]:this.arts.get(island.map)?.groundStreams??[];
         for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }

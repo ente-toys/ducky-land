@@ -25,6 +25,18 @@ function balance(room,player,value){
  room.karma.balances.delete(player.account);
 }
 
+test('world socket errors preserve the error close code during handshake cleanup',async()=>{
+ const room=await makeRoom();
+ try{
+  const p=addPlayer(room,7999,{...mapOf('home').spawn}),closed=[];
+  p.socket.readyState=2;
+  p.socket.close=(...args)=>{closed.push(args);p.socket.readyState=3;};
+  room.webSocketError(p.socket);
+  assert.deepEqual(closed[0],[1011,'Connection lost']);
+  assert.equal(room.connections.has(p.socket),false);
+ }finally{stop(room);}
+});
+
 test('Bog uses its approved map at its saved polar slot, with the same afloat and walkable harbour contract as Pagepond/Bellovo',()=>{
  assert.equal(getPlayerKarma(),0);assert.equal(KARMA_REQUIRED,5);
  assert.equal(bog.id,'bog');assert.equal(bog.width,8400);assert.equal(bog.height,8200);
@@ -157,4 +169,55 @@ test('hibernation restores karma before reopening a landed Bog socket',async()=>
   assert.equal(restored.bog.members.has(arena),true);
   assert.equal(restored.connections.get(p.socket).actor.karma,0);
  }finally{if(restored)stop(restored);stop(room);}
+});
+
+test('production Bog reconnects retain one lobby and one participant per account',async()=>{
+ const room=await makeRoom(),p=addPlayer(room,7400,{islandId:BOG_ISLAND,...bog.HARBOR.land});
+ balance(room,p,5);
+ const service=new LiveBogRoom(room);
+ const peer=()=>({readyState:1,send(){},serializeAttachment(){},close(code){this.code=code;this.readyState=3;}});
+ try{
+  const participant=peer();assert.equal(service.open(participant,{digest:p.account,team:'privacy'}),true);
+  let previous;
+  for(let i=0;i<8;i++){
+   const lobby=peer();assert.equal(service.open(lobby,{digest:p.account}),true);
+   assert.equal(service.members.size,2,'reconnecting lobby replaces its old slot');
+   assert.equal([...service.arena.state.players.values()].filter(p=>!p.bot).length,1,'lobby reconnect keeps the participant');
+   if(previous){assert.equal(previous.code,4001);service.close(previous);assert.equal(service.members.size,2,'late close cannot remove replacement');}
+   previous=lobby;
+  }
+  const replacement=peer();assert.equal(service.open(replacement,{digest:p.account,team:'google'}),true);
+  assert.equal(participant.code,4001);assert.equal(service.members.size,2);
+  assert.equal([...service.arena.state.players.values()].filter(p=>!p.bot).length,1);
+ }finally{service.dispose();stop(room);}
+});
+
+test('idle production lobbies close when the world session expires or disconnects',async()=>{
+ const room=await makeRoom();room.bog=new LiveBogRoom(room);
+ const peer=()=>({readyState:1,send(){},serializeAttachment(){},close(code){this.code=code;this.readyState=3;}});
+ try{
+  const p=addPlayer(room,7500,{islandId:BOG_ISLAND,...bog.HARBOR.land});balance(room,p,5);
+  const lobby=peer();assert(room.bog.open(lobby,{digest:p.account}));
+  room.expire(Date.now()+86400001);
+  assert.equal(room.bog.members.size,0,'session expiry releases idle lobby');assert.equal(lobby.readyState,3);
+  const q=addPlayer(room,7501,{islandId:BOG_ISLAND,...bog.HARBOR.land});balance(room,q,5);
+  const other=peer();assert(room.bog.open(other,{digest:q.account}));
+  room.webSocketClose(q.socket);
+  assert.equal(room.bog.members.size,0,'world disconnect releases idle lobby');assert.equal(other.readyState,3);
+ }finally{stop(room);}
+});
+
+test('Bog replacement retains the paid visit team and scores, isolates accounts and ignores retired input',async()=>{
+ const room=await makeRoom();room.bog=new LiveBogRoom(room);
+ const peer=()=>({readyState:1,send(){},serializeAttachment(){},close(){this.readyState=3;}});
+ try{
+  const p=addPlayer(room,7600,{islandId:BOG_ISLAND,...bog.HARBOR.land}),q=addPlayer(room,7601,{islandId:BOG_ISLAND,...bog.HARBOR.land});balance(room,p,5);balance(room,q,5);
+  const old=peer(),other=peer(),fresh=peer();room.bog.open(old,{digest:p.account,team:'privacy'});room.bog.open(other,{digest:q.account,team:'google'});
+  const before=room.bog.arena.state.players.get(room.bog.members.get(old).id);before.stats.score=70;before.stats.tags=7;
+  room.bog.open(fresh,{digest:p.account,team:'google'});
+  const after=room.bog.arena.state.players.get(room.bog.members.get(fresh).id);
+  assert.equal(after.stats.score,70);assert.equal(after.stats.tags,7);assert.equal(after.team,'privacy','the paid visit retains its original team');
+  room.bog.message(old,JSON.stringify({type:'arena-input',seq:999,x:1,y:0,fire:true}));room.bog.close(old);
+  assert.equal(after.seq,-1);assert.equal([...room.bog.arena.state.players.values()].filter(p=>!p.bot).length,2);assert(room.bog.members.has(other));
+ }finally{stop(room);}
 });

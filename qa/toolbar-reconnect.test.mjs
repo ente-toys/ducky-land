@@ -7,28 +7,31 @@ import React, {act} from 'react';
 
 // Exercise the real page, toolbar components and RoomClient. Only the GPU
 // renderer and the WebSocket transport are replaced, so no server is needed.
-const {outputFiles:[bundle]} = await build({
-  entryPoints:[fileURLToPath(new URL('../src/pixi/PixiPage.jsx',import.meta.url))],
-  bundle:true, packages:'external', jsx:'automatic', format:'esm', write:false,
-  loader:{'.css':'empty'}, define:{'import.meta.env.DEV':'false'},
-  plugins:[{name:'headless-island',setup(build) {
-    build.onLoad({filter:/\/src\/pixi\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
-    build.onLoad({filter:/\/src\/pixi\/engine\.js$/},()=>({contents:`
-      export class PixiIsland {
-        constructor({room}) {this.room = room; globalThis.toolbarEngines.push(this);}
-        mount() {return Promise.resolve();}
-        clearChat() {}
-        stopInput() {this.stops = (this.stops ?? 0) + 1;}
-        positionChatEditor() {}
-        travelOptions() {return {};}
-        dispose() {this.disposed = true;}
-      }
-    `}));
-  }}],
-});
-const code = ['react','react/jsx-runtime','react-dom','pixi.js'].reduce((text,name)=>
-  text.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name))),bundle.text);
-const {default:PixiPage} = await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+async function loadPage(dev = false) {
+  const {outputFiles:[bundle]} = await build({
+    entryPoints:[fileURLToPath(new URL('../src/pixi/PixiPage.jsx',import.meta.url))],
+    bundle:true, packages:'external', jsx:'automatic', format:'esm', write:false,
+    loader:{'.css':'empty'}, define:{'import.meta.env.DEV':String(dev)},
+    plugins:[{name:'headless-island',setup(build) {
+      build.onLoad({filter:/\/src\/pixi\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
+      build.onLoad({filter:/\/src\/pixi\/engine\.js$/},()=>({contents:`
+        export class PixiIsland {
+          constructor({room}) {this.room = room; globalThis.toolbarEngines.push(this);}
+          mount() {return Promise.resolve();}
+          clearChat() {}
+          stopInput() {this.stops = (this.stops ?? 0) + 1;}
+          positionChatEditor() {}
+          travelOptions() {return {};}
+          dispose() {this.disposed = true;}
+        }
+      `}));
+    }}],
+  });
+  const code = ['react','react/jsx-runtime','react-dom','pixi.js'].reduce((text,name)=>
+    text.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name))),bundle.text);
+  return (await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'))).default;
+}
+const PixiPage = await loadPage();
 
 // IDs are scoped by item type, including accounts whose IDs match an island.
 for (const accountId of ['42','home']) test(`five reconnects and map reloads retain one toolbar and clean up listeners (account ${accountId})`,async t=>{
@@ -149,6 +152,44 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     await act(async()=>root.unmount());
     t.mock.restoreAll();
     t.mock.timers.reset();
+    dom.window.close();
+    Object.assign(globalThis,originals);
+  }
+});
+
+
+test('offline preview never opens a live room or fetches account data',async()=>{
+  const OfflinePage = await loadPage(true);
+  const dom = new JSDOM('<div id="root"></div>',{url:'http://localhost/?offline'});
+  const keys = ['window','document','location','history','fetch','WebSocket',
+    'IS_REACT_ACT_ENVIRONMENT','toolbarEngines'];
+  const originals = Object.fromEntries(keys.map(key=>[key,globalThis[key]]));
+  const requests = [], sockets = [], engines = [];
+  Object.assign(globalThis,{window:dom.window,document:dom.window.document,location:dom.window.location,
+    history:dom.window.history,IS_REACT_ACT_ENVIRONMENT:true,toolbarEngines:engines,
+    fetch:async url=>{requests.push(url);return Response.json({user:null});},
+    WebSocket:class {
+      constructor(url) {sockets.push(url);}
+      close() {}
+    },
+  });
+  const {createRoot} = await import('react-dom/client');
+  let root = createRoot(document.getElementById('root'));
+  try {
+    await act(async()=>root.render(React.createElement(React.StrictMode,null,React.createElement(OfflinePage))));
+    assert.ok(engines.length>0 && engines.every(engine=>engine.room===null));
+    assert.deepEqual(sockets,[]);
+    assert.deepEqual(requests,[]);
+    for (let i=0;i<3;i++) {
+      await act(async()=>root.unmount());
+      assert.ok(engines.every(engine=>engine.disposed));
+      root=createRoot(document.getElementById('root'));
+      await act(async()=>root.render(React.createElement(OfflinePage)));
+      assert.deepEqual(sockets,[]);assert.deepEqual(requests,[]);
+    }
+  } finally {
+    await act(async()=>root.unmount());
+    assert.ok(engines.every(engine=>engine.disposed));
     dom.window.close();
     Object.assign(globalThis,originals);
   }

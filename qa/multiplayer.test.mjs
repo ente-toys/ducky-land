@@ -7,6 +7,7 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
+import WebSocket from 'ws';
 import {createNavigation} from '../src/pixi/navigation.js';
 import {world} from '../server-world.mjs';
 import {HARBOR,harborOf,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
@@ -103,6 +104,24 @@ before(async () => {
 });
 
 after(async () => { await mf?.dispose(); });
+
+test('an idle guest receives a reciprocal close frame over a real socket', async () => {
+  const url = new URL('/api/room?play=0', await mf.ready);
+  const socket = new WebSocket(url.href.replace('http:', 'ws:'), {headers:{Origin:url.origin}});
+  try {
+    const code = await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(Error('Server did not finish the close handshake')), 5000);
+      socket.on('error', error => {clearTimeout(timer); reject(error);});
+      socket.on('close', code => {clearTimeout(timer); resolve(code);});
+      socket.on('message', data => {
+        if (JSON.parse(data).type === 'snapshot') socket.close(1000, 'Guest leaving');
+      });
+    });
+    assert.equal(code, 1000);
+  } finally {
+    socket.terminate();
+  }
+});
 
 const request = (path, options) => mf.dispatchFetch(origin+path,{redirect:'manual',...options});
 const cookiePart = value => value.split(';',1)[0];

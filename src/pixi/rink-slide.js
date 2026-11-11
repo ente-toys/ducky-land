@@ -1,4 +1,3 @@
-import {createNavigation} from './navigation.js';
 import {inPoly} from '../../rive/web/island-geometry.mjs';
 // Ice and dry jetty use the exact authored lake boundary on every peer.
 export function onRink(rink, x, y) {
@@ -11,24 +10,9 @@ function segmentGap(x,y,a,b){const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.m
 export function onIcePath(paths, x, y) {
   return (paths??[]).some(r=>r.samples.some((p,i)=>i>0&&segmentGap(x,y,r.samples[i-1],p)<=r.width/2-6));
 }
-const nearLake=(r,x,y)=>x>r.x-220&&y>r.y-220&&x<r.x+r.width+220&&y<r.y+r.height+220;
 export const onIce = (nav, x, y) => onRink(nav.rink,x,y) || onIcePath(nav.icePaths,x,y);
 
-// Cache a small ice-only graph per shared island navigator. Ordinary walking
-// still uses the full snow map, so every bank and the jetty stay freely usable.
-const iceMaps=new WeakMap();
-function iceNavigation(nav){
- let result=iceMaps.get(nav);if(result)return result;
- // Lake plus every ice path (and the flared mouths between them), so a slide follows the paths to the heart.
- const r=nav.rink,pts=[...r.poly,...(nav.icePaths??[]).flatMap(q=>q.samples)],xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
- const x0=Math.min(...xs)-96,y0=Math.min(...ys)-96;
- result=createNavigation({origin:{x:x0,y:y0},width:Math.max(...xs)+96-x0,height:Math.max(...ys)+96-y0},
-  {cellSize:24,walkable:(x,y)=>nav.walkable(x,y)&&(onIce(nav,x,y)||nearLake(r,x,y))});
- iceMaps.set(nav,result);return result;
-}
-
 export const RINK_TWIRL = .6, RINK_REDUCED_GLIDE = .55;   // kept for older callers
-const approach = (from,to,amount) => from+Math.max(-amount,Math.min(amount,to-from));
 
 export function rinkTilt(ice, speed, time, reduced=false) {
   return !ice || reduced || speed < 8 ? 0 : Math.sin(time*7)*.045*Math.min(1,speed/150);
