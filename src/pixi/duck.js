@@ -1,5 +1,6 @@
 import {createDuckFeedback} from './feedback.js';
 import { Assets, Container, Graphics, Sprite } from 'pixi.js';
+import {ART_TEXTURE} from './art-texture.js';
 import {SLEEP_ASSETS, createSleeper} from './sleeper.js';
 import {OUTFIT_OPTIONS} from './outfits.js';
 import {createSnowCover} from './snow-cover.js';
@@ -15,7 +16,7 @@ const ownedURLs=new Set(),inFlight=new Set();
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const angleDifference=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 const safe=(n,fallback=0)=>Number.isFinite(n)?n:fallback;
-function loadTexture(url){ownedURLs.add(url);const promise=Assets.load(url);inFlight.add(promise);promise.then(()=>inFlight.delete(promise),()=>inFlight.delete(promise));return promise;}
+function loadTexture(url){ownedURLs.add(url);const promise=Assets.load({src:url,data:ART_TEXTURE});inFlight.add(promise);promise.then(()=>inFlight.delete(promise),()=>inFlight.delete(promise));return promise;}
 async function library(){
   if(!libraryPromise)libraryPromise=(async()=>{
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);

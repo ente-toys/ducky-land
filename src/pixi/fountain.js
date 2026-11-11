@@ -1,7 +1,8 @@
 // Living water for the wishing-bowls fountain (boss 3 Nov: "make the fountain water more lively"). The stone, bowls and
 // statue are one static SVG (public/pixi-art/fountain-wishing.svg); this layer animates the water on top of it:
 // boss 5 Nov: curved spills, landing foam and rings, gravity-driven splash droplets, and pool shimmer.
-import {Container, Graphics, Texture} from 'pixi.js';
+import {Container, Graphics, ImageSource, Texture} from 'pixi.js';
+import {ART_TEXTURE} from './art-texture.js';
 import {PALETTE} from './palette.js';
 import {basinClip, createBasinWater} from './fountain-basin.js';
 
@@ -42,7 +43,7 @@ async function cleanArtwork(prop, root) {
     if (root.destroyed || prop.sprite.destroyed) return;
     const canvas = document.createElement('canvas'); canvas.width = canvas.height = 960;
     canvas.getContext('2d').drawImage(img, 0, 0, 960, 960);
-    const original = prop.sprite.texture, texture = Texture.from(canvas);
+    const original = prop.sprite.texture, texture = new Texture({source: new ImageSource({resource: canvas, ...ART_TEXTURE})});
     const sx = prop.sprite.scale.x, sy = prop.sprite.scale.y;
     prop.sprite.texture = texture;
     prop.sprite.scale.set(sx * original.width / texture.width, sy * original.height / texture.height);

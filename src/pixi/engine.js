@@ -1,3 +1,4 @@
+import {ART_TEXTURE} from './art-texture.js';
 import {createPirateFleet,pirateBoatPoint} from './pirate-fleet.js';
 import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './home-motion.js';
@@ -85,15 +86,18 @@ function contactShadow(prop) {
   const [sx,sy] = prop.shadowOffset ?? [nudge*2,nudge];
   return new Graphics().ellipse(sx, sy, rx, ry).fill({color, alpha});
 }
-function acquire(src, resolution = 1) {
+function acquire(src, resolution = 1, {mipmaps = true} = {}) {
   let entry = textureLeases.get(src);
   if (!entry) {
-    entry = {count: 0, promise: Assets.load({src, data: {resolution}})};
+    entry = {count: 0, promise: Assets.load({src, data: {resolution, ...(mipmaps ? ART_TEXTURE : {})}})};
     textureLeases.set(src, entry);
   }
   entry.count++;
   return entry.promise;
 }
+// Ground tiles stream at the resolution the current zoom needs, and the pool's
+// byte budget counts their base level only, so they stay without mipmaps.
+const acquireGround = (src, resolution) => acquire(src, resolution, {mipmaps: false});
 function release(src) {
   const entry = textureLeases.get(src);
   if (!entry || --entry.count) return;
@@ -206,7 +210,7 @@ export class PixiIsland {
         {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true}, ...decals.map(d => ({...d, resolution: 2.5})), ...HOME_GROUND_DECALS.map(d => ({...d, resolution: 2.5}))];
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
-      this.groundPool=createGroundPool({acquire,release});
+      this.groundPool=createGroundPool({acquire:acquireGround,release});
       const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];   // boss 3 Nov: arched jetties right after the tiles
       // Keep collision data complete, but prioritize artwork around the initial camera.
       const halfWidth = this.width / (2 * this.camera.zoom) + 600;

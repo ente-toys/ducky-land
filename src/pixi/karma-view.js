@@ -1,10 +1,11 @@
 import {Assets,Container,Graphics,Sprite,Text,Point,Texture,ColorMatrixFilter} from 'pixi.js';
+import {ART_TEXTURE} from './art-texture.js';
 import {mapPoint} from './sphere-coordinates.js';
 import {TILT} from './camera.js';
 import {artOf} from './island-maps.js';
 
 export async function createKarmaView(game){
-  const texture=await Assets.load('/pixi-art/karma/golden-feather.svg');
+  const texture=await Assets.load({src:'/pixi-art/karma/golden-feather.svg',data:ART_TEXTURE});
   // One shared small glow texture, no per-frame blur or whole-screen bloom.
   const glowCanvas=document.createElement('canvas');glowCanvas.width=glowCanvas.height=128;
   const gc=glowCanvas.getContext('2d'),gradient=gc.createRadialGradient(64,64,0,64,64,64);

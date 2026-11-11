@@ -1,7 +1,8 @@
 import {Assets,Container,Sprite,Graphics} from 'pixi.js';
 import {PIRATE_ART,pirateLocal,pirateMotion,pirateFacing} from './pirate-fleet.js';
 import {canSail} from './islands.js';
-export async function createPirateView(objects,fleet,{load=url=>Assets.load(url)}={}){
+import {ART_TEXTURE} from './art-texture.js';
+export async function createPirateView(objects,fleet,{load=url=>Assets.load({src:url,data:ART_TEXTURE})}={}){
  const textures=await Promise.all(PIRATE_ART.map(n=>load('/pixi-art/pirate-ships/'+n+'.svg')));
  const entries=fleet.ships.map(ship=>{
   const root=new Container({label:'Ambient pirate '+ship.id,eventMode:'none'}),wake=new Graphics(),sprite=new Sprite(textures[ship.art]);

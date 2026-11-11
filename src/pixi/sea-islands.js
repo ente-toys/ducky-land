@@ -1,6 +1,7 @@
 // boss 5 Nov: the islands you can sail to are real copies of ours now (archipelago.js draws them at their true places),
 // so the sea only adds each neighbour's name board: it stands on that island's jetty and pops up once as you sail close.
 import {Assets, Sprite} from 'pixi.js';
+import {ART_TEXTURE} from './art-texture.js';
 import {HARBOR} from './islands.js';
 
 let boardSource;
@@ -36,7 +37,7 @@ async function signTexture(name, entry) {
   let svg = await boardSource;
   svg = svg.replace(/<text([^>]*?)x="[^"]*"/, '<text$1x="0" text-anchor="middle"').replace(/font-size="22"([^>]*)>LITTLE ISLE</, `font-size="20"$1>${name.toUpperCase()}<`);
   entry.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  return Assets.load({src: entry.src, data: {resolution: 3}});
+  return Assets.load({src: entry.src, data: {resolution: 3, ...ART_TEXTURE}});
 }
 
 const revealed = new Set();   // a name pops once per visit to the page; after that the sign just stands there

@@ -1,3 +1,4 @@
+import {createFrameClock} from './frame-clock.js';
 import {createThreePirates} from './three-pirates.js';
 import * as THREE from 'three';
 import {createIsletStanding} from './three-islet-props.js';
@@ -139,7 +140,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     heartMasks.clear();
   }
   refreshHeartLocations();
-  const frames=[];
+  const frames=[],frameTime=createFrameClock();
   let frameCount=0;
   let statsAt=performance.now(),renderCount=0,drawCount=0,renderMs=0,detailMs=0,detailPeak=0,overlayAt=-Infinity,overlayPainted=false;
   const review=new URLSearchParams(location.search),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches||review.has('review');
@@ -239,8 +240,8 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     }
     ctx.restore();ctx.globalAlpha=1;
   }
-  function tick(now) {
-    if(destroyed||!active||document.hidden)return;const dt=Math.min(.1,(now-last)/1000);last=now;
+  function tick(rawNow) {
+    if(destroyed||!active||document.hidden)return;const now=frameTime(rawNow),dt=Math.min(.1,(now-last)/1000);last=now;
     let moving=!!(drag||transition||Math.abs(camera.position.z-1-targetAltitude)>1e-7);
     const flying=Boolean(transition);
     if(transition) {
