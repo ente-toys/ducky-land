@@ -44,7 +44,7 @@ import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Texture,
 import rawWorld from '../../rive/web/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
-import {startJump,jumpHeight,jumpPose,MUSEUM_DOOR,atMuseumDoor} from './player-motion.js';
+import {startJump,jumpHeight,jumpPose,JUMP_SECONDS,MUSEUM_DOOR,atMuseumDoor} from './player-motion.js';
 import {createDust} from './dust.js';
 import {createPlantReactions, LEAF_TEXTURE} from './plant-reactions.js';
 import {createAudio} from './audio.js';
@@ -65,6 +65,10 @@ import {sameOutfit} from './outfits.js';
 // Simulation and audio are renderer-independent; neither imports Three.js or Rive.
 const textureLeases = new Map();
 const ZERO = {x:0,y:0};
+const SIM_STEP = 1 / 60;
+const renderJumpLeft = (left, accumulator) => left > 0
+  ? Math.min(JUMP_SECONDS, left + SIM_STEP - accumulator)
+  : 0;
 const CHAT_LABEL_GAP = 4;
 // boss 3 Nov, fix 4: ONE contact shadow for every grounded prop: a flat unoutlined ellipse tucked under the base,
 // 12-18% opacity, tinted for the ground under it, nudged at most .15H toward the lower right. [pattern, width share, depth ratio]
@@ -866,14 +870,15 @@ export class PixiIsland {
   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once (every map's sleepers)
   bumpSleeper(duck, rig, player) {
     if (!(duck.sleeping && duck.footprint && player && rig.sleeper)) return;
-    const f=duck.footprint, ex=(player.x-f.x)/(f.rx+26), ey=(player.y-f.y)/(f.ry+26), near=ex*ex+ey*ey < 1;
+    const f=duck.footprint, ex=(player.x-f.x)/(f.rx+26), ey=(player.y-f.y)/(f.ry+26);
+    if (ex*ex+ey*ey >= 1) {duck.bumped=false;return;}
+    if (duck.bumped || player.path?.length) return;
     const last=this.bumpFrom || player, mx=player.x-last.x, my=player.y-last.y, ml=Math.hypot(mx, my), tx=f.x-player.x, ty=f.y-player.y;
-    const into=!player.path?.length && ml > .05 && (mx*tx+my*ty)/(ml*(Math.hypot(tx, ty) || 1)) > .55;   // heading into it, not sliding past its side or skirting it on a route
-    if (near && into && !duck.bumped) {
+    const into=ml > .05 && (mx*tx+my*ty)/(ml*(Math.hypot(tx, ty) || 1)) > .55;
+    if (into) {
       duck.bumped=true;
       if (rig.sleeper.poke()) this.playerRig()?.stumble?.({x: player.x-f.x, y: (player.y-f.y)*TILT});
     }
-    if (!near) duck.bumped=false;
   }
   // Lazy: a theme's art loads only when its island (or a copy of it) comes near; until then that island is not drawn live
   ensureArt(mapId) {
@@ -1120,10 +1125,22 @@ export class PixiIsland {
     }).finally(() => {this.interiorPending = null;});
   }
 
-  tick(now,{forceRender=false}={}) {
+  playerView() {
+    if (this.room) return this.room.view();
+    const player = this.player;
+    if (!player) return null;
+    const alpha = this.accumulator * 60;
+    return {
+      x: player.previousX + (player.x - player.previousX) * alpha,
+      y: player.previousY + (player.y - player.previousY) * alpha,
+    };
+  }
+
+  tick(now,{forceRender=false,followCamera}={}) {
     if (this.disposed || (document.hidden&&!forceRender)) return;
-    const dt = Math.min(.1, (now - this.lastFrame) / 1000);
-    this.frameTimes.push((now - this.lastFrame));
+    const elapsed = Math.max(0, now - this.lastFrame);
+    const dt = Math.min(.1, elapsed / 1000);
+    this.frameTimes.push(elapsed);
     if (this.frameTimes.length > 180) this.frameTimes.shift();
     this.lastFrame = now;
     this.frame++;
@@ -1143,10 +1160,10 @@ export class PixiIsland {
     if (this.keys.has('shift') && ['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].some(k => this.keys.has(k)) && (input.x || input.y)) input.run=true;
     if (this.travelView?.fx.holding(this.room?.id)) input.x=input.y=0;   // boss 5 Nov: the hop in or out finishes before steering (at most 0.6 s)
     const indoors = this.interior?.active;
-    while (this.accumulator >= 1 / 60) {
-      this.sim.step(1 / 60, this.room || indoors ? ZERO : input);
-      this.room?.step(1 / 60, indoors ? ZERO : input);
-      this.accumulator -= 1 / 60;
+    while (this.accumulator >= SIM_STEP) {
+      this.sim.step(SIM_STEP, this.room || indoors ? ZERO : input);
+      this.room?.step(SIM_STEP, indoors ? ZERO : input);
+      this.accumulator -= SIM_STEP;
     }
     this.room?.setAlpha(this.accumulator * 60);   // boss 5 Nov ("blurry and shaky"): the own Ducky and boat draw between steps
     const player = this.player;
@@ -1165,7 +1182,7 @@ export class PixiIsland {
     if(this.externalOverview&&this.externalDetailVisible===false){
       this.raf=requestAnimationFrame(time=>this.tick(time));return;
     }
-    const t = this.sim.time;
+    const t = this.sim.time + this.accumulator;
     const reduced = this.motion.matches;
     // Prepare the hidden museum only when a player approaches it; visiting the island
     // or watching the globe no longer rasterizes the entire room at startup.
@@ -1190,7 +1207,7 @@ export class PixiIsland {
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
     if (this.follow && player) {
-      const shown=this.room?.view() ?? player;   // follow where the Ducky is drawn, not its last fixed step or uncorrected guess
+      const shown=this.playerView();
       Object.assign(this.target, {x:shown.x, y:shown.y-90});
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {   // a flicked globe keeps turning and slows down
@@ -1243,7 +1260,10 @@ export class PixiIsland {
       this.camera.basis=easeLandingBasis(this.landingView.basis,progress);
       if(progress>=1){this.landingView=null;delete this.camera.basis;}
     }
-    if(this.externalCamera){Object.assign(this.camera,this.externalCamera);Object.assign(this.target,this.externalCamera);delete this.camera.basis;}
+    if(this.externalCamera){
+      followCamera?.(this.externalCamera, this.playerView());
+      Object.assign(this.camera,this.externalCamera);Object.assign(this.target,this.externalCamera);delete this.camera.basis;
+    }
     const viewMatrix=cameraMatrix(this.camera,this.width,this.height,TILT);
     this.scene.setFromMatrix(new Matrix(viewMatrix.a,viewMatrix.b,viewMatrix.c,viewMatrix.d,viewMatrix.tx,viewMatrix.ty));
     this.upright.update();   // the pond bridge stands up; the jetties lie flat
@@ -1305,7 +1325,7 @@ export class PixiIsland {
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
       const seat = !homeShown && duck.player ? benchSeatAt(this.artProps(this.artShown), {...duck,x,y}) : null;
-      const hop = jumpPose(duck.jumpLeft, reduced, {turn: duck.turn, moving: duck.travel > 20});   // boss 6 Nov: crouch, stretch, lean, land
+      const hop = jumpPose(renderJumpLeft(duck.jumpLeft, this.accumulator), reduced, {turn: duck.turn, moving: duck.travel > 20});
       rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift);   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
       if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
@@ -1525,7 +1545,8 @@ export class PixiIsland {
         rig.root.mask=look.mask?entry.seatMask:null;
       }
       rig.root.scale.set(look.scale*look.sx,look.scale*look.sy/TILT);
-      const hop=look.deck ? jumpPose(pose.jumpLeft,reducedMotion,{turn:look.turn,moving:look.speed>20}) : null;   // boss 6 Nov: the jump's crouch, stretch, lean and landing
+      const jumpLeft=isPlayer?renderJumpLeft(pose.jumpLeft,this.accumulator):pose.jumpLeft;
+      const hop=look.deck ? jumpPose(jumpLeft,reducedMotion,{turn:look.turn,moving:look.speed>20}) : null;
       rig.root.position.set(look.deck&&pose.mode!=='sailing'?deckX(look.x,look.y,this.arches):look.x,(look.deck?deckY(look.x,look.y,this.arches):look.y)-(hop?.lift ?? 0));   // Ashwin's space-to-jump, on our boarding/sailing look
       rig.root.rotation=look.rotation; rig.root.alpha=look.alpha;
       rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');   // boss 5 Nov: your ring only on land, never on the boat or mid-hop

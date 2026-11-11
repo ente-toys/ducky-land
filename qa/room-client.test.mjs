@@ -104,6 +104,32 @@ test('Shift sends a run flag with keyboard input and changing it alone resends i
   room.dispose();
 });
 
+test('position corrections remain continuous at snapshots and between prediction steps',()=>{
+  const {room}=setup();
+  room.snapshot(packet(1));
+  room.step(1/60,{x:0,y:0});
+  room.setAlpha(.5);
+  const before=room.view().x;
+  const next=packet(2);
+  next.players[0].x+=20;
+  room.snapshot(next);
+  assert.equal(room.view().x,before,'receiving a snapshot does not move the rendered duck');
+  room.setAlpha(1);
+  const endOfStep=room.view().x;
+  room.step(1/60,{x:0,y:0});
+  room.setAlpha(0);
+  assert.equal(room.view().x,endOfStep,'starting a step does not jump to the newly decayed correction');
+  room.setAlpha(1);
+  assert.ok(room.view().x>endOfStep,'the correction still converges toward the server');
+  const late=packet(3);
+  late.players[0].x-=20;
+  room.snapshot(late);
+  const beforeWalk=room.view().x;
+  room.step(1/60,{x:1,y:0});
+  assert.ok(room.view().x>beforeWalk,'catching up to the server does not pull a walking duck backwards');
+  room.dispose();
+});
+
 test('nearby friends choose the closest live account, retain it, and respect saves, dismissals and reconnects',()=>{
   const {room}=setup();
   const candidates=[];

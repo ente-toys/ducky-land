@@ -197,7 +197,6 @@ export class RoomClient {
         if (previous) {
           this.offsetX += previous.x - this.player.x;
           this.offsetY += previous.y - this.player.y;
-          if (this.prev) {this.prev.x -= previous.x - this.player.x; this.prev.y -= previous.y - this.player.y;}   // the in-between frame keeps its place too
           if (Math.hypot(this.offsetX,this.offsetY) > 90) {this.offsetX = this.offsetY = 0; this.prev = null;}
         } else this.prev = null;
       } else {
@@ -334,7 +333,10 @@ export class RoomClient {
   step(dt, input) {
     if (!this.player) return;
     const now = nowSeconds();
-    this.prev = {x:this.player.x, y:this.player.y, turn:this.player.turn};   // boss 5 Nov ("blurry and shaky"): the frame draws between this and the new step
+    const {x,y,turn}=this.player;
+    // Save the corrected position so the correction itself is interpolated
+    // between steps, along with the movement.
+    this.prev = {x:x+this.offsetX, y:y+this.offsetY, turn};
     if (this.input.x !== input.x || this.input.y !== input.y || Boolean(this.input.run) !== Boolean(input.run) || (moving(input) && now-this.lastInput >= .1)) {
       if (this.send({type:'input',x:input.x,y:input.y,...(input.run ? {run:true} : {})}, now)) {   // boss 6 Nov: Shift held = run (the server caps the speed)
         this.input = input;
@@ -343,9 +345,14 @@ export class RoomClient {
     }
     if (this.player.mode === 'sailing') sailStep(this.player,dt,input);
     else walkStep(this.player, this.navHere(), dt, now, input);
-    const decay = Math.exp(-19 * dt);
-    this.offsetX *= decay;
-    this.offsetY *= decay;
+    let correction = 1 - Math.exp(-19 * dt);
+    const dx = this.player.x - x, dy = this.player.y - y;
+    const forwardOffset = this.offsetX * dx + this.offsetY * dy;
+    // A late snapshot can put the prediction ahead of the server. Pay that
+    // correction down without pulling the duck backwards while it moves.
+    if (forwardOffset > 0) correction = Math.min(correction, (dx*dx + dy*dy) / (2 * forwardOffset));
+    this.offsetX *= 1 - correction;
+    this.offsetY *= 1 - correction;
   }
 
   // The own Ducky steps at a fixed 60 Hz but the screen draws at 60-120 Hz: drawn as is, it moves on every other frame
@@ -356,9 +363,10 @@ export class RoomClient {
     const p = this.player;
     if (!p) return null;
     const q = this.prev, k = 1 - this.alpha;
-    if (!q || k <= 0) return {x:p.x+this.offsetX, y:p.y+this.offsetY, turn:p.turn};
+    const x = p.x + this.offsetX, y = p.y + this.offsetY;
+    if (!q || k <= 0) return {x,y,turn:p.turn};
     const turn = p.turn - q.turn;
-    return {x:p.x+(q.x-p.x)*k+this.offsetX, y:p.y+(q.y-p.y)*k+this.offsetY, turn:p.turn-Math.atan2(Math.sin(turn), Math.cos(turn))*k};
+    return {x:x+(q.x-x)*k, y:y+(q.y-y)*k, turn:p.turn-Math.atan2(Math.sin(turn), Math.cos(turn))*k};
   }
 
   poses(now = nowSeconds()) {

@@ -141,7 +141,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   refreshHeartLocations();
   const frames=[];
   let frameCount=0;
-  let statsAt=performance.now(),renderCount=0,drawCount=0,renderMs=0,detailMs=0,detailPeak=0,overlayAt=-Infinity;
+  let statsAt=performance.now(),renderCount=0,drawCount=0,renderMs=0,detailMs=0,detailPeak=0,overlayAt=-Infinity,overlayPainted=false;
   const review=new URLSearchParams(location.search),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches||review.has('review');
   globe.quaternion.copy(focusQuaternion(sphereFrame(Number(review.get('viewLon')??0)*Math.PI/180,23*Math.PI/180)));
   function resize() {
@@ -285,7 +285,8 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     const detailStart=performance.now();
     const held=drag??zoomAnchor;
     const altitude=camera.position.z-1,zooming=Math.abs(Math.log(targetAltitude/altitude))>.035;
-    onFrame({heading,anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving,flying,zooming});
+    const landing=flying&&targetAltitude<.9;
+    onFrame({now,heading,anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving,flying,landing,zooming});
     if(!direct&&pirates?.update(globe.quaternion,camera,now/1000,dt,reduced,1-detailOpacity,pirateProjection,{width,height}))ambientChanged=true;
     if(!direct&&ambientClock.update(now,ambientChanged))demand.invalidate();
     const detailCost=performance.now()-detailStart;detailMs+=detailCost;detailPeak=Math.max(detailPeak,detailCost);
@@ -294,7 +295,13 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       for(const patch of patches)if(!patch.userData.island)patch.visible=!live||!isletCapture(patch.userData.frame);
       const renderStart=performance.now();renderer.render(scene,camera);renderMs+=performance.now()-renderStart;renderCount++;drawCount+=renderer.info.render.calls;
     }
-    if(now-overlayAt>=1000/60-.5){const overlayDt=Math.min(.1,(now-overlayAt)/1000);overlayAt=now;if(!direct&&camera.position.z>1.6)activity(now/1000,overlayDt);else ctx.clearRect(0,0,width,height);}
+    if(!direct&&camera.position.z>1.6){
+      if(now-overlayAt>=1000/60-.5){
+        activity(now/1000,Math.min(.1,(now-overlayAt)/1000));overlayAt=now;overlayPainted=true;
+      }
+    }else if(overlayPainted){
+      ctx.clearRect(0,0,width,height);overlayPainted=false;
+    }
     frames.push(dt*1000);if(frames.length>90)frames.shift();
     if(++frameCount%30===0){const el=renderer.domElement;el.dataset.frameMeanMs=(frames.reduce((a,b)=>a+b,0)/frames.length).toFixed(1);el.dataset.quaternion=globe.quaternion.toArray().map(n=>n.toFixed(5)).join(',');el.dataset.patchCount=patches.length;el.dataset.cameraDistance=camera.position.z.toFixed(3);el.dataset.selectedIsland=selected;el.dataset.projection='continuous-sphere';el.dataset.liveIsland=live?.id??'';el.dataset.globeDiameter=(globeRadius()*2).toFixed(1);el.dataset.waterPhase=atmosphere.phase.toFixed(3);}
     if(now-statsAt>=1000){const d=renderer.domElement.dataset,seconds=(now-statsAt)/1000;d.rendersPerSecond=(renderCount/seconds).toFixed(1);d.drawCallsPerSecond=(drawCount/seconds).toFixed(1);d.renderCpuMs=(renderMs/Math.max(1,renderCount)).toFixed(2);d.detailCpuMsPerSecond=(detailMs/seconds).toFixed(2);d.detailPeakMs=detailPeak.toFixed(2);d.frameP95Ms=[...frames].sort((a,b)=>a-b)[Math.floor(frames.length*.95)]?.toFixed(1);d.seaColor='#'+PALETTE.water.toString(16).toUpperCase();statsAt=now;renderCount=drawCount=renderMs=detailMs=detailPeak=0;}
@@ -345,6 +352,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       viewport.material.opacity=detailOpacity;
       globe.add(mesh);scene.add(viewport);
       live={id,patch,mesh,viewport,canvasWidth:canvas.width,canvasHeight:canvas.height};
+      renderer.domElement.dataset.liveIsland=id;
     }
     if(bounds){
       if(liveSurfaceNeedsUpdate(live.bounds,bounds)){
@@ -366,6 +374,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     if(live.ownsGeometry)live.mesh.geometry.dispose();
     live.mesh.geometry=live.patch.geometry;
     live=null;
+    renderer.domElement.dataset.liveIsland='';
     // Keep the compiled material across approaches, releasing the old canvas
     // texture and custom geometry as soon as their capture is off screen.
     demand.invalidate();

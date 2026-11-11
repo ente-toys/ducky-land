@@ -1,14 +1,13 @@
 export const DETAIL_BLEND_START = .36;
 
-// The globe atlas is sufficient at orbit distance. Prepare the approaching
-// island before exposing live detail, but do not run its animated Pixi scene
-// or upload its canvas while it is still small on the sphere.
-export function detailWork(altitude,wasVisible=false){
-  const visible=altitude<(wasVisible?.7:.6);
+export function detailWork(altitude,wasVisible=false,landing=false){
+  // Selecting an island stops at .65, where the orbit atlas already looks
+  // soft. Keep live detail through that stop and the next zoom-out step.
+  const visible=altitude<(wasVisible?1:.9);
   // In the curved view, Three can move the globe every frame while reusing
   // the last Pixi capture. The final handoff needs a capture every frame.
   const hz=!visible?20:altitude>=DETAIL_BLEND_START?30:60;
-  return {visible,preload:altitude<.85,hz};
+  return {visible,preload:landing||altitude<1.2,hz};
 }
 
 // Shortcuts such as 0, Q and M do not mean the player started walking.

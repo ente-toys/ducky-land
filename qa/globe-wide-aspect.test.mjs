@@ -205,8 +205,12 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
   const game={isletView:{views:[{i:isletFrame,root:{visible:true},props:[{sprite:isletProp}]}],update(){}},canvas,width,height,artShown:'community',islandId:frame.id,ready:true,arts:new Map([['home',{ready:true}],['community',{ready:true}]]),
     camera:{x:map.cx,y:map.cy,zoom:1},target:{},zoomMotion:{velocity:0},player:{x:map.cx,y:map.cy},rigs:[],localDucks:[],liveRigs:new Map(),ocean:{alpha:1,visible:true},keys:new Set(),touchInput:{x:0,y:0},
     app:{render(){nativeRenders++;nativeProps.push(isletProp.visible);},renderer:{resolution:1,background:{alpha:1},resize(w,h,resolution=this.resolution){this.resolution=resolution;canvas.width=Math.round(w*resolution);canvas.height=Math.round(h*resolution);}}},
-    tick(){this.app.render();},resize(){},onInteriorChange(){},listen(){},ensureArt(){},artReady(){return true;},showArt(){},applyMapAmbience(){},freeArt(){},tap(){}};
-  const step=()=>{const frames=[...callbacks.values()];callbacks.clear();now=Math.max(now,performance.now())+17;for(const fn of frames)fn(now);};
+    tick(now,{followCamera}={}){
+      if(this.keys.has('d'))this.player.x+=4;
+      followCamera?.(this.externalCamera,this.playerView());
+      this.app.render();
+    },playerView(){return this.player;},resize(){},onInteriorChange(){},listen(){},ensureArt(){},artReady(){return true;},showArt(){},applyMapAmbience(){},freeArt(){},tap(){}};
+  const step=(ms=17)=>{const frames=[...callbacks.values()];callbacks.clear();now+=ms;for(const fn of frames)fn(now);};
   const settle=async()=>{
     let done=false;view.ready.finally(()=>{done=true;});
     for(let k=0;!done&&k<2000;k++){step();await new Promise(resolve=>setTimeout(resolve,0));}
@@ -216,11 +220,19 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
   try{
     view=await createThreeGameView(game,host);await settle();for(let i=0;i<4;i++)step();
     assert.equal(renderers.length,1,'handoff uses the existing Three renderer');
-    const renderer=renderers[0];assert.equal(renderer.domElement.dataset.presentation,'native-pixi','initial close view: '+renderer.camera.position.z);
-    const renders=renderer.renders,flat=renderer.scene.getObjectByName('Live viewport handoff'),version=flat.material.map.version;
+    const renderer=renderers[0];assert.equal(renderer.domElement.dataset.presentation,'native-pixi','initial close view');
+    const renders=renderer.renders,flat=renderer.scene?.getObjectByName('Live viewport handoff'),version=flat?.material.map.version;
     for(let i=0;i<5;i++)step();
-    assert.equal(renderer.renders,renders,'native close-up skips Three draws');assert.equal(flat.material.map.version,version,'native close-up skips texture uploads');
+    assert.equal(renderer.renders,renders,'native close-up skips Three draws');assert.equal(flat?.material.map.version,version,'native close-up skips texture uploads');
     assert.ok(nativeRenders>0);assert.equal(nativeProps.at(-1),true,'native close-up draws its own upright islet props');assert.equal(canvas.style.visibility,'visible');
+    const beforeWalk=nativeRenders;
+    game.keys.add('d');
+    for(let i=0;i<6;i++){
+      step(1000/120);
+      assert.equal(game.externalCamera.x,game.player.x,'camera follows the pose produced by the current frame');
+    }
+    game.keys.delete('d');
+    assert.equal(nativeRenders-beforeWalk,6,'close-up draws every display frame at 120 Hz');
     wheel(300);for(let i=0;i<3;i++)step();
     assert.equal(renderer.domElement.dataset.presentation,'three-globe','zoom-out camera: '+renderer.camera.position.z);
     const globe=renderer.scene.getObjectByName('World: ocean, islands, islets and activity anchors');
@@ -256,7 +268,7 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
       const atlasShader={uniforms:{},vertexShader:ShaderLib.basic.vertexShader,fragmentShader:ShaderLib.basic.fragmentShader};atlas.material.onBeforeCompile(atlasShader);
       assert.ok(!atlasShader.fragmentShader.includes('if(liveAtlas>.5'),'the base atlas must not be cut out beneath a partial viewport capture');
       assert.ok(Math.abs(game.width/game.height-box.width/box.height)<.003);
-      assert.ok(Math.max(canvas.width,canvas.height)<=1536,'handoff upload stays bounded');
+      assert.ok(Math.max(canvas.width,canvas.height)<=2048,'handoff upload stays bounded');
       assert.equal(canvas.style.width,'100%');assert.equal(canvas.style.height,'100%');
     }
     const capture=renderer.scene.getObjectByName('Live island detail'),oldMaterial=capture.material,oldTexture=oldMaterial.map;

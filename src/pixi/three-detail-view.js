@@ -37,8 +37,9 @@ export function detailBlend(altitude,heading=0){
   return ease(t)*ease(north);
 }
 export function directDetail(altitude,previous,ready){return ready&&(previous?altitude<.18:altitude<=.160001);}
-export function detailSize(width,height,dpr=1){
-  const density=Math.min(1.5,dpr,1536/Math.max(1,width,height));
+export function detailSize(width,height,dpr=1,highDensity=false){
+  const limit=highDensity?2048:1536;
+  const density=Math.min(highDensity?2:1.5,dpr,limit/Math.max(1,width,height));
   return {width:Math.max(1,Math.round(width*density)),height:Math.max(1,Math.round(height*density))};
 }
 

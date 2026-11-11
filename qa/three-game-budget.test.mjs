@@ -52,11 +52,14 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
     weather:{update(){}},snowfall:{update(...args){snowCalls.push(args);throw reachedSnow;}}});
   for(const externalOverview of [true,false]){
     game.externalOverview=externalOverview;
-    let caught;try{Engine.prototype.tick.call(game,216);}catch(error){caught=error;}
+    let caught;try{Engine.prototype.tick.call(game,externalOverview?208:216);}catch(error){caught=error;}
     assert.equal(caught===reachedSnow,true,'visible tick reaches snowfall: '+(caught?.message??'no call'));
   }
   assert.equal(snowCalls.length,2);
-  for(const args of snowCalls)assert.deepEqual(args,[2,false,'snow',1200,800,true]);
+  for(const [i,[time,...args]] of snowCalls.entries()){
+    assert.ok(Math.abs(time-(2+.008*(i+1)))<1e-9,'visual time advances between fixed simulation steps');
+    assert.deepEqual(args,[false,'snow',1200,800,true]);
+  }
 
  }finally{globalThis.document=prior.document;globalThis.requestAnimationFrame=prior.requestAnimationFrame;}
 });
