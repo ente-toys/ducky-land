@@ -1,5 +1,6 @@
 import {useEffect, useLayoutEffect, useState} from 'react';
 import {CHAT_LIMIT} from './chat.js';
+import IslandHudIcon from './IslandHudIcon.jsx';
 
 export default function IslandChat({room, island, editor}) {
   const [open, setOpen] = useState(false);
@@ -31,10 +32,10 @@ export default function IslandChat({room, island, editor}) {
     island.current?.canvas?.focus({preventScroll:true});
   }
 
-  if (!open) return <button type="button" aria-keyshortcuts="C" onClick={() => {
+  if (!open) return <button className="pixi-hud-tool" type="button" aria-label="Chat" aria-keyshortcuts="C" title="Chat (C)" onClick={() => {
     island.current?.stopInput();
     setOpen(true);
-  }}>Chat <kbd aria-hidden="true">C</kbd></button>;
+  }}><IslandHudIcon name="chat"/><span className="pixi-tool-label">Chat</span></button>;
 
   return <form className="pixi-chat" aria-label="Island chat" onSubmit={event => {
     event.preventDefault();

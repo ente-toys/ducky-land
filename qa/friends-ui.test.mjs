@@ -34,7 +34,7 @@ async function setup(api) {
   const root = createRoot(document.getElementById('root'));
   const render = overrides => act(async () => root.render(React.createElement(IslandFriends,{...props,...overrides})));
   const click = text => {
-    const button=[...document.querySelectorAll('button')].find(button => button.textContent === text);
+    const button=[...document.querySelectorAll('button')].find(button => button.textContent === text || button.getAttribute('aria-label') === text);
     assert.ok(button,`Missing button: ${text}`);
     return act(async()=>button.click());
   };
@@ -89,7 +89,7 @@ test('friend UI sends requests, shows pending state and requires acceptance befo
     incoming=[person];
     await act(async()=>ui.room.onFriendsChanged());
     assert.match(document.querySelector('.pixi-friend-prompt').textContent,/sent you a friend request/);
-    await ui.click('Friends (1)');
+    await ui.click('Friends, 1 pending');
     assert.match(document.querySelector('[aria-label="Friend requests"]').textContent,/@prag-design/);
     await ui.click('Accept');
     assert.equal(document.querySelector('[aria-label="Friend requests"]'),null);

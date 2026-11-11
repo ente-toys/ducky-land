@@ -81,9 +81,10 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     current().receive({type:'welcome',id:'self'});
   });
   const map = (epoch,islandId)=>act(async()=>current().receive({type:'snapshot',epoch,tick:1,islandId,players:[],boats:[]}));
-  const buttons = text=>[...document.querySelectorAll('.pixi-live button')].filter(button=>button.textContent.trim() === text);
+  const buttons = name=>[...document.querySelectorAll('.pixi-live button')].filter(button=>
+    (button.getAttribute('aria-label') ?? button.textContent.trim()) === name);
   const counts = playing=>{
-    for (const name of ['Change outfit','Chat C','Friends','Sign out']) {
+    for (const name of ['Change outfit','Chat','Friends','Sign out']) {
       assert.equal(buttons(name).length,playing || ['Friends','Sign out'].includes(name) ? 1 : 0,name);
     }
     assert.equal(keydowns.size,playing ? 1 : 0,'one live Chat shortcut');
