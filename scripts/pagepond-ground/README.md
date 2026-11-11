@@ -24,5 +24,3 @@ The boat build also overlaps boat-water tiles by 0.05 world units to close invis
 Inkleaf's four cottage fronts and print-hall slab have level eaves, walls and steps. Book covers, colours, identity, dimensions and existing baked/engine shadow settings remain. Every other protected prop and prop source is checked against `data/keep.json`. This work adds no planting, residents, kites, hill or shadow edits.
 
 `geometry-audit.json` checks full-width lanes, fixed contacts, sleeper footprints, interior crossings and served ends. `walk-audit.json` checks 8-unit walking samples and exact reachable endpoints against production navigation. `surface.json`, `sampled-routes.json` and `path-surface.svgfrag` provide the final clearance contour for the planting job. Current resolved residents are exported to `data/current-sleepers.json` at build time.
-
-Static verification images are local under `artifacts/pagepond-A`; these are assembly renders, not claims of live browser acceptance. No commit or publication is performed.
