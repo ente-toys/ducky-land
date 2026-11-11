@@ -88,6 +88,16 @@ test('exact viewport sweep matches actual culling, and real pools lower density 
       const peak = view.pools[kind], allocation = visibleAllocation(tiles, peak.camera, view.width, view.height);
       assert.equal(allocation.bytes / 1048576, peak.peakMiB, theme + ' ' + kind + ' sweep witness');
       const requested = [], released = [], budget = kind === 'ground' ? GROUND_BUDGET_BYTES : RASTER_ART_BUDGET_BYTES;
+      // The audit above reports placement demand. The live pool leases each
+      // identical SVG crop once, including duplicate bridge/deck placements.
+      const sources = [...new Map(allocation.visible.map(t => [t.src, t])).values()];
+      const threshold = budget * (kind === 'ground' ? .9 : RASTER_ART_UTILIZATION);
+      let step = 1, sharedBytes;
+      do {
+        sharedBytes = sources.reduce((sum, t) => sum + Math.ceil(t.width * t.resolution / step) * Math.ceil(t.height * t.resolution / step) * 4, 0);
+        if (sharedBytes <= threshold || step === 16) break;
+        step *= 2;
+      } while (true);
       const pool = createGroundPool({budget, utilization: kind === 'ground' ? .9 : RASTER_ART_UTILIZATION, concurrency: 256,
         makeSprite: () => ({position: {set() {}}, scale: {x: 1}, destroy() {}}),
         acquire: async (src, resolution) => {
@@ -102,9 +112,11 @@ test('exact viewport sweep matches actual culling, and real pools lower density 
         assert.equal(pool.stats().pendingTiles, 0);
         assert.equal(pool.stats().failedTiles, 0);
         assert.equal(pool.stats().residentTiles, allocation.visible.length);
-        assert.equal(pool.stats().reservedBytes / 1048576, peak.actualMiB);
+        assert.equal(pool.stats().reservedBytes, sharedBytes);
+        assert.equal(pool.stats().sharedSources, sources.length);
+        assert.equal(requested.length, sources.length);
         assert(pool.stats().peakBytes <= budget);
-        assert(requested.every(r => r.resolution === 3.625 / peak.step), theme + ' actual downsampling divisor');
+        assert(requested.every(r => r.resolution === 3.625 / step), theme + ' actual downsampling divisor');
       } finally {pool.destroy();}
       assert.equal(pool.stats().reservedBytes, 0);
       assert.equal(requested.length, released.length);

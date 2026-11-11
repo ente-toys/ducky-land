@@ -24,10 +24,27 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   const streams=new Set(), resident=new Map(), pending=new Map(), cache=new Map();
   let desired=new Map(), disposed=false, reserved=0, peak=0, failures=new Map(), deferred=new Set();
   let scheduled=false,lastPlan=-Infinity,lastSignature='',plans=0,started=0,streamId=0,zooming=false;
-  const zooms=new Map();
+  const zooms=new Map(),allocations=new Map();
+  // Count shared GPU sources once, including pending decodes and cached previews.
+  // A thousand placements of a pine must neither decode nor reserve it a thousand times.
+  const retain=need=>{
+    let sources=allocations.get(need.acquire);
+    if(!sources)allocations.set(need.acquire,sources=new Map());
+    let allocation=sources.get(need.src);
+    if(!allocation){
+      allocation={refs:0,bytes:need.bytes,src:need.src,release:need.release,sources};
+      sources.set(need.src,allocation);reserved+=need.bytes;peak=Math.max(peak,reserved);started++;
+      allocation.promise=need.acquire(need.src,need.resolution,{visible:need.visible,priority:need.priority??0,distance:need.distance});
+    }
+    allocation.refs++;need.allocation=allocation;return allocation.promise;
+  };
+  const extraBytes=need=>allocations.get(need.acquire)?.has(need.src)?0:need.bytes;
   const requestPump=()=>{if(!schedule){pump();return;}if(scheduled||disposed)return;scheduled=true;schedule(()=>{scheduled=false;pump();});};
   const blank=tile => {tile.sprite.texture=Texture.EMPTY;tile.sprite.visible=false;};
-  const discard=entry=>{reserved-=entry.bytes;entry.release(entry.src);};
+  const discard=entry=>{
+    const a=entry.allocation;if(--a.refs)return;
+    reserved-=a.bytes;a.sources.delete(a.src);a.release(a.src);
+  };
   const remember=(tile,entry)=>{
     if(!progressive){discard(entry);return;}
     let versions=cache.get(tile);if(!versions)cache.set(tile,versions=new Map());
@@ -36,7 +53,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   };
   const show=(tile,entry)=>{
     resident.set(tile,entry);tile.sprite.texture=entry.texture;
-    tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);tile.sprite.visible=true;
+    tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);tile.sprite.visible=tile.render!==false;
   };
   const drop=tile => {
     const entry=resident.get(tile);if (!entry)return;
@@ -59,33 +76,33 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       const versions=cache.get(tile);
       const cached=versions&&[...versions.values()].find(e=>e.resolution>=target.resolution);
       if(cached){versions.delete(cached.src);if(!versions.size)cache.delete(tile);if(held)remember(tile,held);show(tile,cached);continue;}
-      const resolution=progressive&&!held?Math.min(.5,target.resolution):target.resolution;
+      const resolution=progressive&&!held&&!tile.fullResolutionFirst?Math.min(.5,target.resolution):target.resolution;
       const need={...target,resolution,src:tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution,
         bytes:Math.ceil(target.pixelWidth*resolution)*Math.ceil(target.pixelHeight*resolution)*4};
       if(failures.has(need.src))continue;
       for(const [t,entries] of cache){
-        for(const [src,entry] of entries){if(reserved+need.bytes<=budget)break;discard(entry);entries.delete(src);}
+        for(const [src,entry] of entries){if(reserved+extraBytes(need)<=budget)break;discard(entry);entries.delete(src);}
         if(!entries.size)cache.delete(t);
       }
       // Ring crops may be evicted to fund a visible refinement. Never evict a
       // visible resident, even when its replacement is already in flight.
-      for(const [t] of resident) {if(reserved+need.bytes<=budget)break;if(!desired.get(t)?.visible&&target.visible)drop(t);}
+      for(const [t] of resident) {if(reserved+extraBytes(need)<=budget)break;if(!desired.get(t)?.visible&&target.visible)drop(t);}
       // drop() caches, so reclaim those leases too before reserving a decode.
       for(const [t,entries] of cache){
-        for(const [src,entry] of entries){if(reserved+need.bytes<=budget)break;discard(entry);entries.delete(src);}
+        for(const [src,entry] of entries){if(reserved+extraBytes(need)<=budget)break;discard(entry);entries.delete(src);}
         if(!entries.size)cache.delete(t);
       }
-      if(reserved+need.bytes>budget){deferred.add(tile);continue;}
-      submitted++;started++;reserved+=need.bytes;peak=Math.max(peak,reserved);pending.set(tile,need);
-      need.acquire(need.src,need.resolution).then(texture=>{
-        if(disposed||!desired.has(tile)) {need.release(need.src);reserved-=need.bytes;return;}
+      if(reserved+extraBytes(need)>budget){deferred.add(tile);continue;}
+      submitted++;pending.set(tile,need);
+      retain(need).then(texture=>{
+        if(disposed||!desired.has(tile)) {discard(need);return;}
         const bytes=(texture.source.pixelWidth??tile.width*need.resolution)*(texture.source.pixelHeight??tile.height*need.resolution)*4;
         const stale=resident.get(tile);
-        if(stale?.resolution>=need.resolution||reserved-need.bytes+bytes>budget){need.release(need.src);reserved-=need.bytes;deferred.add(tile);return;}
-        reserved+=bytes-need.bytes;peak=Math.max(peak,reserved);
+        if(stale?.resolution>=need.resolution||reserved-need.allocation.bytes+bytes>budget){discard(need);deferred.add(tile);return;}
+        reserved+=bytes-need.allocation.bytes;need.allocation.bytes=bytes;peak=Math.max(peak,reserved);
         if(stale){resident.delete(tile);remember(tile,stale);}
         show(tile,{...need,bytes,texture});
-      }).catch(error=>{need.release(need.src);reserved-=need.bytes;failures.set(need.src,String(error));})
+      }).catch(error=>{discard(need);failures.set(need.src,String(error));})
         .finally(()=>{pending.delete(tile);deferred.clear();requestPump();});
     }
     // A synchronous submission can consume the budget before concurrency fills.
@@ -123,15 +140,17 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       lastSignature=signature;lastPlan=time;plans++;
       let next, step=1, ringStep=1;
       do {
-        next=new Map();let total=0;
+        next=new Map();let total=0;const plannedSources=new Map();
         for(const {stream,camera,cullCamera,width,height,tilt=1} of planned) {
-          for(const tile of stream.entries) if(tileInView(tile,cullCamera,width,height,tilt,prefetch?{x:width/cullCamera.zoom,y:height/(cullCamera.zoom*tilt)}:(tile.viewMargin??192))) {
-            const visible=tileInView(tile,cullCamera,width,height,tilt,tile.viewMargin??192);
+          for(const tile of stream.entries) if(tile.preload||tileInView(tile,cullCamera,width,height,tilt,tile.prefetchMargin??(prefetch?{x:width/cullCamera.zoom,y:height/(cullCamera.zoom*tilt)}:(tile.viewMargin??192)))) {
+            const visible=!tile.preload&&tileInView(tile,cullCamera,width,height,tilt,tile.viewMargin??192);
             const resolution=Math.max(.0625,visible?tileResolution(tile,camera.zoom,dpr)/step:Math.min(.5,tileResolution(tile,camera.zoom,dpr))/ringStep);
             const src=tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution;
-            const size=sourceSizes[tile.src]??[tile.width,tile.height];
+            const size=tile.pixelWidth?[tile.pixelWidth,tile.pixelHeight]:(sourceSizes[tile.src]??[tile.width,tile.height]);
             const bytes=Math.ceil(size[0]*resolution)*Math.ceil(size[1]*resolution)*4;
-            next.set(tile,{src,resolution,bytes,visible,pixelWidth:size[0],pixelHeight:size[1],distance:Math.hypot(tile.x+tile.width/2-cullCamera.x,tile.y+tile.height/2-cullCamera.y),acquire:tile.acquire,release:tile.release});total+=bytes;
+            next.set(tile,{src,resolution,bytes,visible,pixelWidth:size[0],pixelHeight:size[1],distance:Math.hypot(tile.x+tile.width/2-cullCamera.x,tile.y+tile.height/2-cullCamera.y),acquire:tile.acquire,release:tile.release,priority:tile.priority});
+            let sources=plannedSources.get(tile.acquire);if(!sources)plannedSources.set(tile.acquire,sources=new Map());
+            if(!sources.has(src)){sources.set(src,true);total+=bytes;}
           }
         }
         if(total<=budget*utilization||step>=16)break;
@@ -143,7 +162,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       for(const tile of [...resident.keys()]) if(!desired.has(tile))drop(tile);   // only tiles that left the view; a resolution change swaps on load
       requestPump();
     },
-    stats(){return {budgetBytes:budget,reservedBytes:reserved,peakBytes:peak,residentTiles:resident.size,cachedTiles:cache.size,refiningTiles:[...desired].filter(([t,n])=>n.visible&&(resident.get(t)?.resolution??0)<n.resolution).length,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size,failures:[...failures].slice(0,8),desiredTiles:desired.size,missingTiles:[...desired.keys()].filter(t=>!resident.has(t)).length,plans,started};},
+    stats(){return {budgetBytes:budget,reservedBytes:reserved,peakBytes:peak,residentTiles:resident.size,cachedTiles:cache.size,refiningTiles:[...desired].filter(([t,n])=>n.visible&&(resident.get(t)?.resolution??0)<n.resolution).length,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size,failures:[...failures].slice(0,8),desiredTiles:desired.size,missingTiles:[...desired.keys()].filter(t=>!resident.has(t)).length,plans,started,sharedSources:[...allocations.values()].reduce((n,s)=>n+s.size,0)};},
     destroy(){disposed=true;desired.clear();for(const stream of [...streams])stream.destroy();},
   };
 }

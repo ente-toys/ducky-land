@@ -1,18 +1,20 @@
 import {Sprite} from 'pixi.js';
 import {createPlantContacts, foliageColour, PLANT_SWAY, LEAF_LIFE, LEAF_CAP} from './plant-contact.js';
+import {createPlantSnow} from './plant-snow.js';
 
 export const LEAF_TEXTURE = '/pixi-art/fx/contact-leaf.svg';
 const EMPTY=[];
 
-export function createPlantReactions(parent, texture) {
+export function createPlantReactions(parent, texture,options={}) {
   const maps=new Map(), colours=new Map(), leaves=[];
-  let current=null, reduced=false, shown=true;
+  let current=null, reduced=false, shown=true, snow=null;
   for (let i=0;i<LEAF_CAP;i++) {
     const sprite=new Sprite(texture); sprite.anchor.set(.5); sprite.visible=false;
     parent.addChild(sprite);
     leaves.push({sprite,at:-Infinity,x:0,y:0,fall:0,direction:1,phase:0});
   }
   function bump(plant,time) {
+    if (plant.snow) {snow?.bump(plant,time);return;}
     if (plant.kind!=='tree') return;
     const leaf=leaves.find(l=>time-l.at>=LEAF_LIFE);
     if (!leaf) return; // Full pool: keep the sway, never allocate or replace a visible leaf.
@@ -36,8 +38,12 @@ export function createPlantReactions(parent, texture) {
   }
   return {
     register(id,props,obstacles,base='') {
-      const map=createPlantContacts(props,obstacles,bump); maps.set(id,map);
+      const winter=id==='snow';
+      const map=createPlantContacts(props,obstacles,bump,{snow:winter}); maps.set(id,map);
+      map.snow=winter;
+      if (winter && !snow) snow=createPlantSnow(parent,options.snow);
       for (const plant of map.plants) {
+        if (winter) {snow.prepare(plant,base);continue;}
         if (plant.kind!=='tree') continue;
         const src=plant.prop.src, url=/^(\/|https?:|data:)/.test(src)?src:base+src;
         let colour=colours.get(url);
@@ -50,8 +56,12 @@ export function createPlantReactions(parent, texture) {
     },
     begin(id,time,reduce=false,visible=true) {
       const map=maps.get(id);
+      // begin runs before the engine's ambient sway pass. Clear our previous
+      // contribution here so repeated contacts and handoffs cannot accumulate skew.
+      restore(current);
       if (map!==current) {
-        restore(current); current=map;
+        current=map;
+        snow?.reset();
         for (const l of leaves) {l.at=-Infinity; l.sprite.visible=false;}
       }
       reduced=reduce; shown=visible;
@@ -84,8 +94,9 @@ export function createPlantReactions(parent, texture) {
         s.rotation=l.direction*u*1.8+flutter*.18;
         s.alpha=Math.min(1,(1-u)*4);
       }
+      snow?.update(time,shown&&current?.snow,reduced);
     },
-    unregister(id) {const map=maps.get(id); restore(map); maps.delete(id); if (current===map) current=null;},
-    destroy() {for (const map of maps.values()) restore(map); maps.clear(); colours.clear(); for (const l of leaves) l.sprite.destroy();},
+    unregister(id) {const map=maps.get(id); restore(map); if(map?.snow){snow?.remove(map.plants);snow?.destroy();snow=null;} maps.delete(id); if (current===map) {current=null;snow?.reset();}},
+    destroy() {for (const map of maps.values()) restore(map); maps.clear(); colours.clear();snow?.destroy(); for (const l of leaves) l.sprite.destroy();},
   };
 }

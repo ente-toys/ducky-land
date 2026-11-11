@@ -1,3 +1,4 @@
+import {stepRink} from './rink-slide.js';
 export const WALK_SPEED = 245;
 // boss 6 Nov: hold Shift with the arrow keys / WASD to run. The input only carries a yes/no run flag; the speed comes
 // from here on the server, so a client can never ask for more than RUN_SPEED. Taps, routes and sailing never run.
@@ -105,6 +106,7 @@ export function walkStep(actor, nav, dt, now, input) {
   actor.previousX = actor.x;
   actor.previousY = actor.y;
   actor.travel = 0;
+  if (stepRink(actor,nav,dt,input,slideStep)) return;
   const manual = input.x !== 0 || input.y !== 0;
   if (manual) {
     actor.path = [];

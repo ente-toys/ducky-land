@@ -19,6 +19,18 @@ const MOTION = {
 };   // cap: head-top centre x, y, angle, head width (svg units); only nod, rock and box keep their cap
 import {SLEEP_SIZE} from './sleep-spots.js';   // boss 5 Nov: sleepers 10% smaller, then 10% more (.9 x .9); the only size knob, do not stack another
 export {SLEEP_SIZE};
+// Hand-seated snow surfaces, in each pose's original SVG coordinates.
+// Head and back ride the duck; bedding rides its own cloth/prop, never the Zs.
+export const SLEEP_SNOW_SURFACES = {
+  nod: [[342, 79, 290, .03], [594, 382, 165, .75], [338, 950, 0, 0]],
+  leaf: [[274, 66, 215, -.2], [680, 265, 190, .8], [630, 171, 300, -.06]],
+  wing: [[367, 103, 240, .03], [653, 230, 245, .5], [463, 561, 0, 0]],
+  hammock: [[523, 104, 225, -.14], [673, 318, 115, 1.05], [430, 527, 290, -.04]],
+  rock: [[373, 83, 255, .05], [535, 405, 145, .9], [673, 352, 130, .28]],
+  book: [[429, 104, 300, .18], [764, 273, 200, .65], [465, 530, 730, 0]],
+  chair: [[393, 165, 180, -.12], [518, 346, 100, .9], [586, 90, 210, .17]],
+  box: [[376, 92, 250, .02], [533, 314, 110, .95], [367, 410, 670, 0]],
+};
 const POKE = .6, POKE_COOL = .8;   // boss 5 Nov: a poke wobbles .6 s; spam taps do not stack
 const Z_SRC = '/pixi-duck/sleep/z.svg', Z_H = 105, Z_SIZES = [.72, .86, 1], STAND_HEAD = 285, INK = 0x232323;
 export const SLEEP_ASSETS = [Z_SRC, ...Object.values(data.poses).flatMap(p => p.layers.map(l => l.src))];
@@ -110,14 +122,14 @@ export function createSleeper(sleep, seed = 0) {
       burst.stroke({color: 0xffffff, width: 5.5, cap: 'round'}); burst.alpha = 1 - pop;
     }
   }
-  function update(time, reduced = false) {
+  function update(time, reduced = false, shiver = 0) {
     now = time;
     const t = (reduced ? 1.2 : time) + off, b = breath(t, P), pt = time - pokedAt, on = pt < POKE && !reduced;
     let tilt = m.tilt * breath(t - .35, P);
     if (m.nod) tilt += -1.1 * droop(t, P);
     // poke: a quick squash from the ground point, then 2-3 soft damped wobbles back into the breath
     const damp = on ? Math.exp(-5.5 * pt) : 0, w = damp * Math.cos(TAU * 4.2 * pt);
-    duck.rotation = (tilt + 4 * damp * Math.sin(TAU * 4.2 * pt)) * DEG;
+    duck.rotation = (tilt + 4 * damp * Math.sin(TAU * 4.2 * pt)) * DEG + shiver;
     duck.scale.set(1 + .008 * b + .1 * w, 1 + .025 * b - .16 * w); duck.x = duck.pivot.x;
     puff.forEach((z, k) => {
       const u = (pt - k * .05) / .75; z.visible = !reduced && u >= 0 && u < 1;
@@ -149,6 +161,16 @@ export function createSleeper(sleep, seed = 0) {
     s.position.set(frame.rect[0] - (view.attachments.head[0] + view.attachments.head[1]) / 2, frame.rect[1] - view.attachments.headY);
     hat.addChild(s);
   }
+  const snowSurfaces = SLEEP_SNOW_SURFACES[name].map(([x, y, width, rotation], i) => {
+    const parent = i < 2 ? duck : prop || cloth || bed;
+    const sprite = parent === bed ? null : parent.children[0];
+    const region = [(x - width / 2) / pose.W, (x + width / 2) / pose.W, i === 0 ? y / pose.H : 0];
+    if (i === 2 && name === 'box') region[3] = [[.04, .29], [.77, .97]];
+    if (i === 2 && name === 'book') region[3] = [[.04, .24], [.65, .93]];
+    return {parent, x, y, width, rotation: sprite ? 0 : rotation,
+      ink: 7.5, depthWidth: width * data.F, texture: sprite?.texture, spriteX: 0, spriteY: 0, sx: 1 / data.F, sy: 1 / data.F,
+      region, crownKey: sprite ? `${name}:${i}` : null};
+  });
   update(0);
-  return {root, update, setCap, poke, pose: name, flip};
+  return {root, update, setCap, poke, pose: name, flip, snowSurfaces};
 }

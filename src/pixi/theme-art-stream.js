@@ -1,4 +1,4 @@
-import {DOMAdapter, ImageSource, Texture} from 'pixi.js';
+import {DOMAdapter, ImageSource, Texture, Rectangle} from 'pixi.js';
 import {cropSVG} from './theme-raster.js';
 
 // SVG image decoding and ImageBitmap preparation run asynchronously. The pool
@@ -6,7 +6,7 @@ import {cropSVG} from './theme-raster.js';
 // Leases are shared by crop+resolution; the pool retains cached leases under its
 // hard cap, so there is no second, unaccounted bitmap cache here.
 export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.bind(globalThis),
-  now=()=>performance.now(),frameBudgetMs=5,concurrency=64}={}) {
+  now=()=>performance.now(),frameBudgetMs=5,concurrency=64,prepareSVG=cropSVG,exactFrame=false}={}) {
   const originals=new Map(),leases=new Map();
   let disposed=false,scheduled=false,inFlight=0;
   const queue=[];
@@ -18,14 +18,15 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
   const drain=()=>{
     const began=now();
     while(queue.length&&inFlight<concurrency&&(!schedule||now()-began<frameBudgetMs)){
+      queue.sort((a,b)=>Number(Boolean(b.order.visible))-Number(Boolean(a.order.visible))||(b.order.priority??0)-(a.order.priority??0)||(a.order.distance??0)-(b.order.distance??0));
       const {run,resolve,reject}=queue.shift();inFlight++;
       run().then(resolve,reject).finally(()=>{inFlight--;request();});
       // Invoke preparation synchronously so its cost counts against this frame.
     }
     request();
   };
-  const dispatch=run=>new Promise((resolve,reject)=>{if(disposed){reject(Error('Raster loader disposed'));return;}queue.push({run,resolve,reject});request();});
-  const acquire=(key,resolution)=>{
+  const dispatch=(run,order)=>new Promise((resolve,reject)=>{if(disposed){reject(Error('Raster loader disposed'));return;}queue.push({run,resolve,reject,order});request();});
+  const acquire=(key,resolution,order={})=>{
     if(disposed)return Promise.reject(Error('Raster loader disposed'));
     let held=leases.get(key);
     if(held&&held.resolution!==resolution)throw Error('Raster lease resolution mismatch');
@@ -38,7 +39,7 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
         const original=await originals.get(src);
         return dispatch(async()=>{
         if(disposed)throw Error('Raster loader disposed');
-        const svg=cropSVG(original,crop,resolution),adapter=DOMAdapter.get(),image=adapter.createImage();
+        const svg=prepareSVG(original,crop,resolution),adapter=DOMAdapter.get(),image=adapter.createImage();
         const bitmap=typeof globalThis.createImageBitmap==='function';
         const objectURL=bitmap?URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})):null;
         try {
@@ -55,11 +56,11 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
           }
           const source=new ImageSource({resource,resolution,alphaMode:'premultiply-alpha-on-upload'});
           if(typeof resource.close==='function')source.once('destroy',()=>resource.close());
-          return new Texture({source});
+          return new Texture({source,...(exactFrame?{frame:new Rectangle(0,0,crop[4],crop[5])}:{})});
         }finally{
           if(objectURL){URL.revokeObjectURL(objectURL);image.src='';}
         }
-        });
+        },order);
       })();
       leases.set(key,held={count:0,promise,resolution});
     }

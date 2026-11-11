@@ -9,7 +9,8 @@ import {checkTheme} from '../scripts/theme-index.mjs';
 import {inPoly} from '../rive/web/island-geometry.mjs';
 import {tileResolution,tileInView,GROUND_BUDGET_BYTES,createGroundPool} from '../src/pixi/ground-stream.js';
 import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {snowVisible,snowPose,createSnowfall,SNOW_POOL_SIZE} from '../src/pixi/snowfall.js';
+import {ICELAND_SMOKE} from '../src/pixi/iceland-life.js';
+import {snowVisible,snowPose,createSnowfall,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
 import {Container} from 'pixi.js';
 const j=p=>JSON.parse(readFileSync(p));
 const world=j('rive/web/themes/snow/world.json'),walk=j('rive/web/themes/snow/walk-world.json'),harbor=j('rive/web/themes/snow/harbor.json'),art=j('public/pixi-art/themes/snow/art.json');
@@ -58,27 +59,29 @@ test('every SVG crop retains at least one texel per device pixel at default and 
 });
 test('standing SVG streams retain the depth anchor and allocate no eager landmark textures',async t=>{
  const fetchBefore=globalThis.fetch;t.after(()=>globalThis.fetch=fetchBefore);globalThis.fetch=async url=>({ok:true,json:async()=>url.endsWith('art.json')?art:{pieces:[]}});
- const decoded=[];const acquired=[];const pool=createGroundPool({acquire:async src=>{decoded.push(src);return Texture.EMPTY},release:()=>{}});const loaded=await loadThemeArt({...map,art:'/pixi-art/themes/snow/art.json'},{groundPool:pool,acquire:async src=>{acquired.push(src);return Texture.EMPTY},release:()=>{}});
- assert.ok(acquired.includes('/pixi-art/globe/snow-ground.svg'));assert.ok(acquired.every(src=>src.endsWith('snow-ground.svg')||[...art.props,...art.flats].some(p=>p.preload&&src.endsWith(p.src))));assert.equal(pool.stats().residentTiles,0);
- const pine=loaded.props.find(p=>p.id==='decorated-pine');assert.equal(pine.sprite.x,pine.x);assert.equal(pine.sprite.y,pine.y);
- const stream=loaded.groundStreams.find(s=>s.entries[0]?.src.includes('bakery-tile'));
- assert.ok(stream);const bakery=loaded.props.find(p=>p.id==='bakery');assert.equal(stream.entries[0].sprite.x,stream.entries[0].x-bakery.x);assert.equal(stream.entries[0].sprite.y,stream.entries[0].y-bakery.y);
- assert.ok(!loaded.groundStreams.some(s=>s.entries[0]?.src.includes('decorated-pine-tile')),'FIX4 rink pieces are present before streaming');
- pool.update([{stream,camera:{x:bakery.x,y:bakery.y-bakery.height/2,zoom:1},width:1200,height:800}],2);
- for(let i=0;i<100&&pool.stats().pendingTiles;i++)await new Promise(resolve=>setImmediate(resolve));
- assert.ok(decoded.length>0,'authored crops decode through the shared loader');assert.equal(pool.stats().failedTiles,0);assert.ok(pool.stats().residentTiles>0);
+ const decoded=[];const acquired=[];
+ const raster={acquire:async(src,r)=>{decoded.push(src);const crop=new URL(src,'https://test').searchParams.get('rasterCrop').split(',').map(Number);return Texture.EMPTY;},release(){},destroy(){}};const pool=createGroundPool({acquire:async src=>{decoded.push(src);return Texture.EMPTY},release:()=>{}});const loaded=await loadThemeArt({...map,art:'/pixi-art/themes/snow/art.json'},{groundPool:pool,icelandRasterLoaderFactory:()=>raster,acquire:async src=>{acquired.push(src);return Texture.EMPTY},release:()=>{}});
+ assert.ok(acquired.includes('/pixi-art/globe/snow-ground.svg'));assert.ok(acquired.every(src=>src===ICELAND_SMOKE||src.endsWith('snow-ground.svg')||[...art.props,...art.flats].some(p=>p.preload&&src.endsWith(p.src))));assert.equal(pool.stats().residentTiles,0);
+ const pine=loaded.props.find(p=>p.id==='lake-bank-pine-2');assert.equal(pine.sprite.x,pine.x);assert.equal(pine.sprite.y,pine.y);
+ const bakery=art.props.find(p=>p.id==='bakery');const stream=loaded.groundStreams.find(s=>s.entries[0]?.src.includes(bakery.src+'?'));
+ assert.ok(stream);assert.ok(Math.abs(stream.entries[0].sprite.x-(stream.entries[0].x-bakery.x))<1e-8);assert.ok(Math.abs(stream.entries[0].sprite.y-(stream.entries[0].y-bakery.y))<1e-8);
+ assert.ok(!loaded.groundStreams.some(s=>s.entries[0]?.src.includes('lake-bank-pine-2-tile')),'FIX4 rink pieces are present before streaming');
+ loaded.rasterPool.update([{stream,camera:{x:bakery.x,y:bakery.y-bakery.height/2,zoom:1},width:1200,height:800}],2);
+ for(let i=0;i<100&&loaded.rasterPool.stats().pendingTiles;i++)await new Promise(resolve=>setImmediate(resolve));
+ assert.ok(decoded.length>0,'authored crops decode through the shared loader');assert.equal(loaded.rasterPool.stats().failedTiles,0);assert.ok(loaded.rasterPool.stats().residentTiles>0);
  loaded.destroy();pool.destroy();assert.equal(pool.stats().streams,0);
 });
-test('screen-space snow is pooled, phone-capped, absent over toolbars and disabled for reduced motion and other islands',()=>{
+test('screen-space snow is pooled, phone-capped, covers the whole view and disabled for reduced motion and other islands',()=>{
+ assert.equal(SNOW_POOL_SIZE,180);assert.equal(SNOW_PHONE_COUNT,90);
  assert.equal(snowVisible('snow',false),true);for(const args of [['snow',true],['home',false],['snow',false,false]])assert.equal(snowVisible(...args),false);
- const stage=new Container(),snow=createSnowfall(stage);snow.update(0,false,'snow',390,844,true);assert.equal(snow.root.children.filter(s=>s.visible).length,72);const children=[...snow.root.children];snow.update(10,false,'snow',1200,800,true);assert.equal(snow.root.children.length,SNOW_POOL_SIZE);assert.deepEqual(snow.root.children,children);
+ const stage=new Container(),snow=createSnowfall(stage);snow.update(0,false,'snow',390,844,true);assert.equal(snow.root.children.filter(s=>s.visible).length,SNOW_PHONE_COUNT);const children=[...snow.root.children];snow.update(10,false,'snow',1200,800,true);assert.equal(snow.root.children.length,SNOW_POOL_SIZE);assert.deepEqual(snow.root.children,children);
  snow.update(20,true,'snow',1200,800,true);assert.equal(snow.root.visible,false);
- for(let i=0;i<SNOW_POOL_SIZE;i++){const p=snowPose(i,500,390,844);assert.ok(p.y>=80&&p.y<764);assert.ok(p.x>=0&&p.x<390);}
+ for(let i=0;i<SNOW_POOL_SIZE;i++){const p=snowPose(i,500,390,844);assert.ok(p.y>=-48&&p.y<892);assert.ok(p.x>=-48&&p.x<438);}
  snow.destroy();stage.destroy();
 });
 
 test('Iceland representative 2x DPR views fit the shared pool without a sharpness downgrade',()=>{
- const tiles=[...art.ground.tiles,...art.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x+t.x,y:p.y+t.y}))),...art.props.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y})))];
+ const tiles=[...art.ground.tiles,...art.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-(p.topLeft?0:p.width/2)+t.x,y:p.y-(p.topLeft?0:p.height)+t.y}))),...art.props.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y})))];
  for(const [width,height]of [[1440,900],[390,844]])for(const zoom of [1,1.8])for(const name of ['plaza','rink','bakery','lodge','workshop','harbour']){
   const camera={...world.zones[name],zoom};let bytes=0;
   for(const t of tiles)if(tileInView(t,camera,width,height)){const r=tileResolution(t,zoom,2);bytes+=t.width*t.height*r*r*4;}
@@ -86,8 +89,8 @@ test('Iceland representative 2x DPR views fit the shared pool without a sharpnes
  }
 });
 
-test('the three rink gates stay open across both sides of the fence',()=>{
- for(const [name,[x,y]] of Object.entries(world.iceland2.gates))for(const off of [-50,0,50]){
-  const X=x+(name==='west-gate'?off:0),Y=y+(name==='west-gate'?0:off);assert.ok(route(X,Y),`${name} ${off}`);
+test('the three existing paths meet the freely walkable lake shore',()=>{
+ for(const [name,[x,y]] of Object.entries(world.iceland2.shores))for(const off of [-50,0,50]){
+  const X=x+(name==='west-shore'?off:0),Y=y+(name==='west-shore'?0:off);assert.ok(route(X,Y),`${name} ${off}`);
  }
 });

@@ -1,0 +1,58 @@
+{
+  "cottage-1": {
+    "file": "cottage-1.svg",
+    "width": 400,
+    "height": 463.37,
+    "door": {
+      "x": 200,
+      "y": 411.52
+    },
+    "groundFootprintWidth": 346.5,
+    "foot": {
+      "x": 200,
+      "y": 463.37
+    }
+  },
+  "cottage-2": {
+    "file": "cottage-2.svg",
+    "width": 400,
+    "height": 487.33,
+    "door": {
+      "x": 200,
+      "y": 438.91
+    },
+    "groundFootprintWidth": 345.25,
+    "foot": {
+      "x": 200,
+      "y": 487.33
+    }
+  },
+  "cottage-3": {
+    "file": "cottage-3.svg",
+    "width": 400,
+    "height": 455.6,
+    "door": {
+      "x": 200,
+      "y": 407.47
+    },
+    "groundFootprintWidth": 355.19,
+    "foot": {
+      "x": 200,
+      "y": 455.6
+    }
+  },
+  "cottage-4": {
+    "file": "cottage-4.svg",
+    "width": 400,
+    "height": 454.85,
+    "door": {
+      "x": 200,
+      "y": 406.6
+    },
+    "groundFootprintWidth": 332.78,
+    "foot": {
+      "x": 200,
+      "y": 454.85
+    }
+  }
+}

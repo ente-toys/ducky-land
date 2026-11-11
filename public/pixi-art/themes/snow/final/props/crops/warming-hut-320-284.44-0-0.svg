@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><svg width="320" height="284.44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 320" fill="none" stroke="#39472d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><title>warming hut</title>
+ <path d="M78 72V25H115V88" fill="#8d9389"/><path d="M71 27Q70 15 82 15H111Q125 15 122 27Z" fill="#fffcef"/>
+ <path d="M43 155L180 57L317 155V284H43Z" fill="#fff2c6"/>
+ <path d="M44 181H316" stroke="#b69457" stroke-width="2"/><path d="M44 207H316" stroke="#b69457" stroke-width="2"/><path d="M44 233H316" stroke="#b69457" stroke-width="2"/><path d="M44 259H316" stroke="#b69457" stroke-width="2"/>
+ <path d="M37 152L180 46L324 152L315 171L180 73L47 171Z" fill="#ed8060"/>
+ <path d="M21 136Q65 91 94 73Q120 56 151 40Q179 24 207 40Q241 62 270 85L338 140Q349 154 336 164Q326 171 313 158L296 144Q287 167 269 155L251 137Q245 158 227 142L209 124Q199 140 183 126L165 115Q150 139 134 130L115 117Q106 143 87 136L66 132Q52 154 36 153Q15 153 21 136Z" fill="#fffcef"/>
+ <path d="M124 134L180 91L236 134Z" fill="#efc052"/><path d="M180 94V132M151 114L163 133M207 113L195 133"/>
+ <path d="M219 284V191Q219 158 246 158Q274 158 274 191V284Z" fill="#168e88"/>
+ <path d="M232 202V188Q232 172 247 172Q261 172 261 188V202Z" fill="#ffdf72"/><path d="M247 173V202M231 188H262" stroke="#fff3b1"/>
+ <circle cx="231" cy="233" r="5" fill="#f4c74b"/>
+ <rect x="67" y="169" width="51" height="58" rx="5" fill="#ffda59"/><path d="M92 170V226M67 198H118"/><rect x="137" y="169" width="51" height="58" rx="5" fill="#ffda59"/><path d="M162 170V226M137 198H188"/>
+ <path d="M38 282H321V295H38Z" fill="#cb9340"/><path d="M211 292H284L294 305H202Z" fill="#efc052"/><path d="M202 305H294L304 316H193Z" fill="#efc052"/>
+ <path d="M48 155V281M312 155V281" stroke="#cb9340" stroke-width="10"/>
+</svg>
+</svg>

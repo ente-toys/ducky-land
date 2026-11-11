@@ -45,7 +45,7 @@ test('legacy Boo Boxing Ring assets retain their south opening, solid ropes and 
   assert.equal(m.world.boxingRing.fightCode,false);
 });
 
-test('Iceland B2: connected places, walkable rink and decorated pine replace the retired three centres',()=>{
+test('Iceland B2: connected places and the natural frozen lake replace the retired three centres',()=>{
   assert.ok(!WORLD_ISLANDS.some(i=>i.theme==='frost2'||i.theme==='frost3'));
   const m=mapFor('snow'),n=m.nav();
   for(const z of Object.values(m.world.zones)) {
@@ -54,5 +54,6 @@ test('Iceland B2: connected places, walkable rink and decorated pine replace the
   }
   const [x,y]=m.world.zones.rink.spawn;
   assert.equal(m.landAt(x,y),true,'boats stay off the rink');
-  assert.ok(m.world.props.some(p=>p.id==='decorated-pine'));
+  assert.ok(m.world.props.some(p=>p.id==='lake-bank-pine-2'));
+  assert.ok(!m.world.props.some(p=>p.id==='decorated-pine'));
 });

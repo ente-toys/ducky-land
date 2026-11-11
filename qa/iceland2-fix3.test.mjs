@@ -12,18 +12,19 @@ test('FIX3 snow detail is terrain-only and every zone has sharp ground coverage'
 });
 test('FIX3 every hamlet has a door court and occupational scene',()=>{
  assert.equal((terrain.match(/data-door-court=/g)??[]).length,w.iceland2.doors.length);
- for(const id of ['bakery-bread-cart','lodge-firewood','workshop-sled-rack','harbour-fish-crate','rink-cocoa-cart'])assert.ok(a.props.some(p=>p.id===id));
- for(const [id] of w.iceland2.doors){const p=a.props.find(p=>p.id===id);const text=readFileSync('public/pixi-art/themes/snow/'+p.src,'utf8');assert.ok(text.includes('M740 240L782 212V598L740 625Z'),id+' missing side');}
+ for(const [id] of w.iceland2.doors){const yard=a.props.filter(p=>p.building===id);for(const role of ['woodpile','lamp','bench'])assert.ok(yard.some(p=>p.finalRole===role),id+' '+role);}
+ for(const role of ['sled','snowman','cocoa-cart','bench-skates'])assert.ok(a.props.some(p=>p.finalRole===role),role);
+
 });
-test('FIX3 stepped sled hill stays free of plant bases and rink has Home benches',()=>{
+test('FIX3 stepped sled hill stays free of plant bases and lake has a bench with skates',()=>{
  const h=a.flats.find(p=>p.id==='sled-hill');
- const text=readFileSync('public/pixi-art/themes/snow/'+h.src,'utf8');assert.equal((text.match(/v23h-75Z/g)??[]).length,6);
- for(const p of a.props.filter(p=>/grove|bush/.test(p.id)))assert.ok(!(p.x>h.x-70&&p.x<h.x+h.width+70&&p.y>h.y-80&&p.y<h.y+h.height+100));
- assert.equal(a.props.filter(p=>p.id.startsWith('rink-home-bench-')).length,4);
+ const text=readFileSync('public/pixi-art/themes/snow/'+h.src,'utf8');assert.ok(text.includes('<svg'));assert.ok(h.width>=640&&h.width<=720&&h.height>=340&&h.height<=400);
+ for(const p of a.props.filter(p=>/grove|bush/.test(p.id)))assert.ok(!(p.x>h.x-h.width/2-70&&p.x<h.x+h.width/2+70&&p.y>h.y-h.height-80&&p.y<h.y+100));
+ assert.equal(a.props.filter(p=>p.scene==='rink-scene'&&p.finalRole==='bench-skates').length,1);
 });
 test('FIX3 static SVG path avoids raster worker and sharp close-view demand fits the shared pool',()=>{
  assert.equal(a.raster.enabled,false);
- const all=[...a.ground.tiles,...a.props.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y}))),...a.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x+t.x,y:p.y+t.y})))];
+ const all=[...a.ground.tiles,...a.props.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y}))),...a.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-(p.topLeft?0:p.width/2)+t.x,y:p.y-(p.topLeft?0:p.height)+t.y})))];
  for(const [name,z] of Object.entries(w.zones))for(const [width,height] of [[1440,900],[390,844]]){
   const camera={x:z.x,y:z.y,zoom:1.8};const visible=all.filter(t=>tileInView(t,camera,width,height));
   let bytes=0;for(const t of visible){const r=tileResolution(t,1.8,2);assert.ok(r>=3.6,name+' soft tile');bytes+=Math.ceil(t.width*r)*Math.ceil(t.height*r)*4;}

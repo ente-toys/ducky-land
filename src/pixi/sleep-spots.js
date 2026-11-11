@@ -67,10 +67,11 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
     const r = sizes[pose], tree = pose === 'nod' && props.find(p => p.id === spot?.[0]);
     const [x, y, flip] = tree ? [tree.x + (spot[1] ?? 0), tree.y + 14, spot[2]] : Array.isArray(spot) ? spot : [NaN, NaN];   // in front of the trunk base: its back on the bark
     let reason = !(pose in SLEEP_COUNTS) ? 'unknown pose' : pose === 'nod' && !tree ? `no tree ${spot?.[0]}` : !Number.isFinite(x) || !Number.isFinite(y) ? 'bad point' : why(x, y, pose, r, tree);
-    const near = !reason && [...occupied, ...out].find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
+    const seat = props.find(p=>p.id===spot?.[3]?.seat&&p.occupiedBySleeper&&p.finalRole==='bench'&&p.contact===false)?.id;
+    const near = !reason && [...occupied, ...out].find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && !(seat && s.seat && seat !== s.seat) && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
     reason ||= near && `near ${near.pose}`;
     if (reason) {bad.push({pose, x, y, reason}); continue;}
-    out.push({x, y, pose, r, flip: Boolean(flip), tree: tree ? tree.id : undefined});
+    out.push({x, y, pose, r, flip: Boolean(flip), tree: tree ? tree.id : undefined, ...(seat ? {seat} : {})});
   }
   if (bad.length && warn) console.warn('sleep spots dropped', bad);
   out.bad = bad;

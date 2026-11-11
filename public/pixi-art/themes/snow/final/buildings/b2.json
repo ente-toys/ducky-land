@@ -1,0 +1,32 @@
+{
+  "gallery": {
+    "file": "gallery.svg",
+    "width": 360,
+    "height": 355.08,
+    "door": {
+      "x": 180.49,
+      "y": 313.07
+    },
+    "groundFootprintWidth": 332.43,
+    "footprintWidth": 332.43,
+    "foot": {
+      "x": 180,
+      "y": 355.08
+    }
+  },
+  "cocoa-hut": {
+    "file": "cocoa-hut.svg",
+    "width": 360,
+    "height": 357.98,
+    "door": {
+      "x": 303.71,
+      "y": 324.94
+    },
+    "groundFootprintWidth": 338.43,
+    "footprintWidth": 338.43,
+    "foot": {
+      "x": 180,
+      "y": 357.98
+    }
+  }
+}

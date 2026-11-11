@@ -31,7 +31,8 @@ function reply(data, status = 200) {
 
 function publicPose(actor) {
   const {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft=0,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
-  return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked,karma:actor.karma??0};
+  return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked,karma:actor.karma??0,
+    ice:mode==='walking'?actor.ice??null:null,reducedMotion:actor.reducedMotion===true};
 }
 // boss 6 Nov (100 Duckies on one island): what goes on the wire each tick. The same pose, with positions to a hundredth of a
 // unit and angles to a thousandth (a full double is ~18 digits), so a 100-Ducky snapshot is far smaller. Saved poses keep
@@ -39,6 +40,7 @@ function publicPose(actor) {
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
 function wirePose(actor) {
   const pose = publicPose(actor);
+  if (pose.ice) pose.ice={phase:pose.ice.phase,elapsed:pose.ice.elapsed};
   pose.x = r2(pose.x); pose.y = r2(pose.y); pose.turn = r3(pose.turn); pose.travel = r2(pose.travel); pose.jumpLeft = r3(pose.jumpLeft);
   return pose;
 }
@@ -446,7 +448,7 @@ export class IslandRoom {
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
-      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000)}) : 'null';
+      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true}) : 'null';
       const named = !!(info.digest && info.expires > now);
       const full = text(islandId, named) + self + '}';
       if (!info.deltas) {this.sendText(socket, full); continue;}
@@ -596,6 +598,7 @@ export class IslandRoom {
         // boss 5 Nov: a stop from the window losing focus must not strand a Ducky in a boat that is sailing in to land
         if (command.stop === true && !info.landing) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
         info.input = {x:command.x,y:command.y,run:command.run === true};   // boss 6 Nov: Shift runs; the speed itself is capped in walkStep
+        if (typeof command.reducedMotion==='boolean') actor.reducedMotion=command.reducedMotion;
         info.inputExpires = now+350;
         break;
       case 'destination':
@@ -715,7 +718,7 @@ export class IslandRoom {
           }
         }
       }
-      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || info.landing || actor.jumpLeft > 0 || actor.until > now/1000);
+      active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || info.landing || actor.jumpLeft > 0 || actor.until > now/1000 || (actor.ice && actor.ice.phase!=='drift'));
     }
     const walking = new Map();   // boss 6 Nov: each island's walkers, gathered in one pass (was 300 passes over every player)
     for (const info of this.connections.values()) {

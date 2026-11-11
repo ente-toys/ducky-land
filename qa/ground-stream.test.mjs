@@ -33,7 +33,7 @@ test('the ground pool decodes only visible tiles, releases far textures, and res
 test('all live islands share the byte limit: an over-budget view steps down in sharpness and still draws every tile',async()=>{
  const completions=[],released=[],sizes=[];
  const pool=createGroundPool({makeSprite:sprite,budget:80000,concurrency:2,acquire:(src,resolution)=>new Promise(r=>completions.push(()=>{sizes.push(resolution);r({source:{pixelWidth:100*resolution,pixelHeight:100*resolution}});})),release:src=>released.push(src)});
- const streams=Array.from({length:13},()=>pool.create([tile()],container));
+ const streams=Array.from({length:13},(_,i)=>pool.create([{...tile(),src:`/island-${i}.svg`}],container));
  pool.update(streams.map(s=>view(s)));
  assert.equal(completions.length,2);assert.ok(pool.stats().reservedBytes<=80000);
  while(completions.length){completions.splice(0).forEach(f=>f());await flush();}
@@ -83,4 +83,32 @@ test('fast zoom fills visible holes and resumes refinement and prefetch after se
  assert.ok(requests.includes('/ground-0.svg?groundScale=1'));
  assert.ok(requests.some(src=>src.startsWith('/ground-160.svg?')));
  pool.destroy();
+});
+
+test('zoom throttling retains shared source leases, priority and distance through refinement',async()=>{
+ const frames=[],requests=[],released=[];
+ const pool=createGroundPool({makeSprite:sprite,budget:100000,schedule:fn=>frames.push(fn),settleMs:0,planInterval:0,
+  acquire:async(src,resolution,options)=>{requests.push({src,resolution,options});return {source:{pixelWidth:100*resolution,pixelHeight:100*resolution}};},
+  release:src=>released.push(src)});
+ const stream=pool.create(Array.from({length:8},(_,i)=>({...tile(i),src:i<2?'/hut.svg':'/pine.svg',priority:i<2?9:5,viewMargin:0})),container);
+ const step=async()=>{frames.splice(0).forEach(fn=>fn());await flush();};
+ pool.update([view(stream)],1,true);
+ await step();
+ assert.equal(requests.length,1,'duplicate placements share the pending decode');
+ assert.equal(requests[0].src,'/hut.svg?groundScale=0.5');
+ assert.deepEqual(requests[0].options,{visible:true,priority:9,distance:0});
+ for(let i=0;i<8;i++)await step();
+ assert.equal(pool.stats().residentTiles,8);
+ assert.equal(pool.stats().sharedSources,2);
+ assert.equal(pool.stats().reservedBytes,20000);
+ assert(requests.every(r=>r.resolution===.5),'zoom fills holes without refining');
+ pool.update([view(stream)],1,false);
+ for(let i=0;i<8;i++)await step();
+ assert.equal(pool.stats().refiningTiles,0);
+ assert.equal(requests.length,4,'two previews and two full-resolution sources');
+ assert.equal(pool.stats().reservedBytes,100000,'cached and resident shared sources count once');
+ assert(pool.stats().peakBytes<=100000);
+ pool.destroy();
+ assert.equal(pool.stats().reservedBytes,0);
+ assert.deepEqual(released.sort(),requests.map(r=>r.src).sort(),'each shared lease releases once');
 });

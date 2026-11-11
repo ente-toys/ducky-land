@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 const base='public/pixi-art/themes/snow/';
 const art=JSON.parse(readFileSync(base+'art.json'));
-for(const id of ['bakery','grove-0-tree-0','home-bench-0','decorated-pine'])test(`Iceland streamed SVG preserves ${id} source pixels and inherited styles`,async()=>{
+for(const id of ['bakery','final-grove-0-tree-0','bakery-yard-bench-5','lake-warming-hut'])test(`Iceland streamed SVG preserves ${id} source pixels and inherited styles`,async()=>{
  const p=art.props.find(p=>p.id===id),text=readFileSync(base+p.src,'utf8');
  const root=text.slice(0,text.indexOf('>')+1).replace(/\s(?:width|height)="[^"]*"/g,'').replace('<svg',`<svg width="${p.width}" height="${p.height}"`);
  const full=`<svg xmlns="http://www.w3.org/2000/svg" width="${Math.ceil(p.width)}" height="${Math.ceil(p.height)}">${root}${text.slice(text.indexOf('>')+1)}</svg>`;

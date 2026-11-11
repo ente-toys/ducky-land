@@ -1127,7 +1127,7 @@
         },
         {
           "path": "src/pixi/sleep-spots.js",
-          "sha256": "17450d8a4c3fb96e9759de7049e087c6f778cc9f61b56e2dc6770cb71ac3fdcc"
+          "sha256": "a66fd968d16bc85fc38d005f0ee055c4d58378d209090178932212ce5202a860"
         },
         {
           "path": "src/pixi/walk-shapes.json",
@@ -1138,18 +1138,18 @@
           "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
         }
       ],
-      "sha256": "f777fd211777e91d06270f97bd1a3587644d7ca3758a872b3a832a449b2629ec"
+      "sha256": "15a1170e49e14a341d5a633842b66eb906381b6c5bccc5b9e489b638aec387c2"
     },
-    "groundSha256": "56ee8e11f7874b9863927cd207ba9197d603b47af761282805b2fe825a62da95",
+    "groundSha256": "0a48b9d96e8f766362276d1d3a892fc659e5e4362d023ae78ffd4638cc80d465",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "8f3c604bfbc30f9051569632d5e3a33cafc1a5d2e085a527f9860d2720a68b67",
+    "sha256": "69b84fa80ac6981861499a3c8ca909da5f828fcf4c1fce13e96240af1b81198b",
     "width": 1024,
     "height": 768,
-    "bytes": 989102,
-    "groundBytes": 801205,
+    "bytes": 1176863,
+    "groundBytes": 968615,
     "quality": {
-      "tolerance": 0.6,
-      "minArea": 0.28,
+      "tolerance": 0.4,
+      "minArea": 0.2,
       "paletteDistance": 0,
       "quantum": 0.5
     },
@@ -11611,251 +11611,1575 @@
     "sources": {
       "version": 1,
       "theme": "snow",
-      "modelSha256": "1ecb47705092fc828cf7358b41eb87f552ab78176a34b4804b3fab922b68a46e",
+      "modelSha256": "29c6ccc4660519bf0aafaeb36a561b0108320c17712e96943dc5fc63c1b76133",
       "files": [
         {
           "path": "public/pixi-art/themes/snow/art.json",
-          "sha256": "f9b50aeca8995328228200b0b1324eb68c772f7e24d784ffbe64e61e1a01e0bc"
+          "sha256": "7b8802c409568cbeddb6ad099c3b2b022c50174992b8a411cd76132515cef5fd"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bakery-oven.svg",
-          "sha256": "16d5a17ea1a653e28b0502556326896f7813990dc29710f731b7ae32d4240a18"
+          "path": "public/pixi-art/themes/snow/final/buildings/bakery.svg",
+          "sha256": "9f3c61c2eb581d4fe62af828fce4a238cf8720f691f9f343d7c3efebb77fa9bb"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bakery-store.svg",
-          "sha256": "de60813687c91e027c473ff88297d217620533bce8909270e67321a4e11c8855"
+          "path": "public/pixi-art/themes/snow/final/buildings/cocoa-hut.svg",
+          "sha256": "3bd04d93d8dd6680ac81bbd553d70545f9b802ef74f87bcf27c7aa074e2dac3c"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bakery.svg",
-          "sha256": "a858fa897554e3c2ce979f3854c41f8c389929a7e6c8d93a58b4ef3112214dc5"
+          "path": "public/pixi-art/themes/snow/final/buildings/cottage-1.svg",
+          "sha256": "3da374bf88c3f5c95974f5c0f515ff8f0a252efaac6e9e2d81eefdb3870c25f9"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bread-cart.svg",
-          "sha256": "852cb5c004cf6a994f00b983be37d02898493960ef825f0aeba25a6720161fd3"
+          "path": "public/pixi-art/themes/snow/final/buildings/cottage-2.svg",
+          "sha256": "8212c10c054d914678a5543298831b8a2347073cfc911ec76d437e2cf9439eec"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bush-1.svg",
-          "sha256": "1bab92ebc761f05c66991a3f9e4a658a77586efe279052e13977b24eac862f6e"
+          "path": "public/pixi-art/themes/snow/final/buildings/cottage-3.svg",
+          "sha256": "020b611fc9026a19f3b27ea74a510bc8f6a6923dddccc454a7b308d9340c8d3f"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bush-2.svg",
-          "sha256": "3683fab025e830c58ce91b96716dcb43731fe55152a0111fd734e15969f3bd22"
+          "path": "public/pixi-art/themes/snow/final/buildings/cottage-4.svg",
+          "sha256": "53238223219447e79493c18bc51ec41fd5a1423f38d6c819f45cdbb695a8f61e"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bush-3.svg",
-          "sha256": "de95f549a318aa11dff553eb3fbea713e5992a46e9e85ec8cd0fda5bcf3aefc3"
+          "path": "public/pixi-art/themes/snow/final/buildings/gallery.svg",
+          "sha256": "34d50b8073c689533b770d945a3129ec95db52f8fe280d86898867578968e584"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/bush-4.svg",
-          "sha256": "07148c64d0bbae1c24dc826ea82fbb7f2264aad9dcd2b20cad22f8067bb9bd2a"
+          "path": "public/pixi-art/themes/snow/final/buildings/lodge.svg",
+          "sha256": "5211e9748ccab51cf00352aac6cf32666e2bcdafb5cf37cdcb7e8bc8857c9823"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/cocoa-cart.svg",
-          "sha256": "8ec16c3e8726baef5532930baa9c651cc718d8350f6ee8924c3c5a781f48d663"
+          "path": "public/pixi-art/themes/snow/final/buildings/smoke.svg",
+          "sha256": "1d3774cbbb450450943f46b08e1e4753601a94c90ccf320a4510a8401379d3f0"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/cocoa-hut.svg",
-          "sha256": "34de73bb558d7184b20ac0020177518776f9b35ca8fa95553db602a19f9d1e48"
+          "path": "public/pixi-art/themes/snow/final/buildings/workshop.svg",
+          "sha256": "f80703f1ba3dcc6a2c67081855b87f0600e673f56568e336fdfadf8685cf3084"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/cocoa-stall.svg",
-          "sha256": "c6221474b9c5466940f3bd7c9ccc77797180b07c68bfc25d4b68ceb124420a55"
+          "path": "public/pixi-art/themes/snow/final/props/bench-view.svg",
+          "sha256": "819504f4a12228cdc7de4f260480116b25f7bcba401a323ae799c552de2edb98"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/decorated-pine.svg",
-          "sha256": "75815100b24d95fa2d83dcfd1b93e2a4e3411418b31ab4c90feb68fe8116db78"
+          "path": "public/pixi-art/themes/snow/final/props/bench.svg",
+          "sha256": "e5ed44671b69e9783e55e688de703a7c9ddf26057d6a14dc5b5bb67063324bc0"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/firewood-stack.svg",
-          "sha256": "57357fdbefa11762727978285b912f7c65f8dd5cdeb44de5adc0274c675dd69d"
+          "path": "public/pixi-art/themes/snow/final/props/berry-bush.svg",
+          "sha256": "237365ee300c53d84b5b420c04a0fbb787aa65bd65b3349c4f784a026bdd08b3"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/fish-crate.svg",
-          "sha256": "34bb758449d0e6bb5fd98a0625fdf45c45a2fb29d2d8de3f4c6551787b941a76"
+          "path": "public/pixi-art/themes/snow/final/props/camp-snow.svg",
+          "sha256": "508d2921615f6fe3eb9ff33aeacefb09a3cb2bb9d16e47c796ec90e18b835b6f"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/fishing-east.svg",
-          "sha256": "1b841e4f8ede68ab26ea91715f2df8ffd4ea3827ac8ebd4d9828e18ae1cf7b80"
+          "path": "public/pixi-art/themes/snow/final/props/cocoa-cart.svg",
+          "sha256": "f42dd3996ad5f9ce03ba9465389510ffd3cfd318cbe1ce7d9ebc874bffc99e06"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/fishing-hall.svg",
-          "sha256": "fc4ad7e5268c9903a9bb208dfdc138f11dd04a711497013a4865a0ec98ffa7ec"
+          "path": "public/pixi-art/themes/snow/final/props/cocoa-table.svg",
+          "sha256": "b4ba8d129da225fc316cd7805200b127df66e83d193ca5fa0eece16f60549194"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/fishing-west.svg",
-          "sha256": "98aa921c89d3820d364845abe44b58464164bd6dfad4fd8cf4c0ddfa71a79d6f"
+          "path": "public/pixi-art/themes/snow/final/props/drift-cluster.svg",
+          "sha256": "9d53a02daee3107e0e5e5d113e2d438b4e2fdf5c9be050776e415299cee439cb"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/home-bench.svg",
-          "sha256": "affb6c62d37390febe209cbc71225f15356718e969822a4d2da73e5afa9d4f3a"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-east-1.svg",
+          "sha256": "092c4faf91b28fa28c7b7b8d6330ec13faae6c57e0a183df3bd7cb6bf95c0038"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/ice-duck-gallery.svg",
-          "sha256": "aa5f3e0048c84a36378799788bdffd564c3c5f06b52bebdc036ebfbf282bd339"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-east-2.svg",
+          "sha256": "c4fbf74b2c5d390c2465fa32304bfd411b4ef502744f445983194f0522fdc7c9"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/ice-duck-sculpture.svg",
-          "sha256": "b534ce5c65c5a0e4eaf433188fd94f4a22bc81d952cc7a43468e868d37ff1de0"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-front-1.svg",
+          "sha256": "1ad07fac57905a7f3633656fe08edb9b24c123210329e827ff2ad39cf5ddc104"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/lodge-east.svg",
-          "sha256": "6e6fe6a04749e770656869318088542936721dfea83d2d3883432137e45b56c4"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-front-2.svg",
+          "sha256": "57f7379e965120c1d5601dd871d0b322d4ff696a004efbcf1ff6bbe3b436c7af"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/lodge-west.svg",
-          "sha256": "1083bc4906626b43b91210029747165872e9312719dac6d72b2d164b9cbbb337"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-west-1.svg",
+          "sha256": "7e0771403c45c9c84549b353fb136b1737be3d1e7cd98c2ceed2fdd5e3539d80"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/lodge.svg",
-          "sha256": "13dec9fd648fd2cae4f36839ce7e16936a54adbe886f723d2a8ad1f5cd85fc43"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-west-2.svg",
+          "sha256": "a82a8ccedd9a8e90949bad110253b15b8959d31a73b32655effa4c3ecb5ecdd0"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-0.svg",
-          "sha256": "0a3847ff4a9cd201ce225c3290ba7209708c228aff0dc31bd728052938631370"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-west-3.svg",
+          "sha256": "2cba7d6dac86d2fd4a0f90f7fa46c534572b138279da1a19fae854e042d52811"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-1.svg",
-          "sha256": "48a5d8e768dd01f824aa232cf763f0be7a9be6ab1b4cd9a9397e713dc64f2501"
+          "path": "public/pixi-art/themes/snow/final/props/fences/snowman-west-4.svg",
+          "sha256": "c916bf3f9f5bc59623c62d38c7d50d8cebb5109f329e93a51a31fd351b9ceec9"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-2.svg",
-          "sha256": "fff39d37747adc305c01bc4cda59832bf860c1a5491b4e9d4e9aa10ab7fc51bd"
+          "path": "public/pixi-art/themes/snow/final/props/flowerpot.svg",
+          "sha256": "a36f1387671f18d106c619fc5ebd6ba787bcb03734ab7195756ca7c95d001a68"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-3.svg",
-          "sha256": "fe7299541a8088053b04a96fc0c85bf5148a38a095d4edab4f752826fa56f3f9"
+          "path": "public/pixi-art/themes/snow/final/props/frost-cluster.svg",
+          "sha256": "0fada300af3a3c81fd50e99c7543db3e180f09bb5520a7341fec9f281da5dbb9"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-4.svg",
-          "sha256": "34f7a0cfe4018f9d4af0b86e59849220d69a4074c9c0da1c9b7735a77a68b1cd"
+          "path": "public/pixi-art/themes/snow/final/props/lamp.svg",
+          "sha256": "dc4e79d3c02467de428ffc0e09fb3ea01ec4416f24e1aad0419fe806a7e55dd6"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-5.svg",
-          "sha256": "06641001d5d6f4dbfac77c5ef08ddf63b78c655400b89698f9ef2994ec74364f"
+          "path": "public/pixi-art/themes/snow/final/props/mailbox.svg",
+          "sha256": "eba9ee1b4430212eb2b7931a8e329e0e4fd7f9fccf7c163434b20ea17034d067"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-6.svg",
-          "sha256": "e4ebfffe2c646e33cace0086457388cfb6149a18300a121a2a482eb39bf1aac8"
+          "path": "public/pixi-art/themes/snow/final/props/mini-snowman.svg",
+          "sha256": "9d6bd5847afc9c3420ae147c3fade3222405a1248ec6d0ec857d7a44da65923d"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-7.svg",
-          "sha256": "93547e45ef6df92487216e288515123d4934402628188cbbe5ea52c68aefe94a"
+          "path": "public/pixi-art/themes/snow/final/props/pebbles-cluster.svg",
+          "sha256": "d3cf71389151fd14265c2a35821fd28b7217093a914abc9876bf43fa3abe5f2f"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-8.svg",
-          "sha256": "545cefbe21c2858c119a296259df53dd39daec751765c595c03df7b0ffe731c3"
+          "path": "public/pixi-art/themes/snow/final/props/pine-large.svg",
+          "sha256": "f01ea13c3cf43313fbcac8cd8f481e270356643ef135b29dddc4ac56123dff40"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-0-9.svg",
-          "sha256": "853c7f0f1bb56991a7f0734ff11f877a273c9eb55c67932fd6271367205c83ea"
+          "path": "public/pixi-art/themes/snow/final/props/pine-medium.svg",
+          "sha256": "6bc5ec214bdc3f9d5f6def202d8afd94551c3f4c23bd36492797a802c3ac8bbf"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-1-0.svg",
-          "sha256": "02346359ee9e4e92d8525cc921873c58ab2bde2a63f96d0f481d85ee77a46e78"
+          "path": "public/pixi-art/themes/snow/final/props/pine-small.svg",
+          "sha256": "714ccc203639ef596c5a55dc19b89a1f78a30eb47bbb1998c91c64aab49e0498"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-1-1.svg",
-          "sha256": "f5e73c898d55373d4693d91bd5839ac71428a4f05b7d006c5eb3d21bedb2cab0"
+          "path": "public/pixi-art/themes/snow/final/props/scarf-basket.svg",
+          "sha256": "45c4726d76d84c2db3241ba0a1751b4632dff9092b66834a34ce70583e15df0d"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-1-2.svg",
-          "sha256": "d446bc53b58c94523755f7b6fd8d46457e0a71b4474940ac737eec2e21d0e4c6"
+          "path": "public/pixi-art/themes/snow/final/props/shrub-large.svg",
+          "sha256": "91c5e1e064f91bddc8d67fde395fcee5e3c57b2a5391ffaca54f5fe565c9178b"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-1-3.svg",
-          "sha256": "3105bd604e26a88bcdf48081b06afbf3108f2bb14be0b925f0f7957da70ef5ca"
+          "path": "public/pixi-art/themes/snow/final/props/shrub-medium.svg",
+          "sha256": "9158b88ed62e7aa57b5848b828ecbd33de2cd9137f3053efe75baf8b80abfa92"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-1-4.svg",
-          "sha256": "91fc98ce965b45173dcbea22ad7d09a0d8bd051da994a9318a524eda29a68672"
+          "path": "public/pixi-art/themes/snow/final/props/sled-1.svg",
+          "sha256": "07bd41bb3204a666fa43d0ed1c25626b833a576afa1d9103edb91a8fb931aa77"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-2-0.svg",
-          "sha256": "7ae3df32f2219ff8161369fab4a328806e52e7a2865dd6ce08fe237cf1b114a3"
+          "path": "public/pixi-art/themes/snow/final/props/sled-hill.svg",
+          "sha256": "4c78e93e931a847e337e7216a33c7804c81871af5bdaad5336d8e69e638d2b3f"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-2-1.svg",
-          "sha256": "d14c886e1f073f62709996bd3de786a92f785bfb0bbb074a3876c381264968ad"
+          "path": "public/pixi-art/themes/snow/final/props/snow-cabin.svg",
+          "sha256": "78404718db72f1a5f048829992e8b12e88310b6755fbd8d83f64e225380e2bb7"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-2-2.svg",
-          "sha256": "478834c559bdb3c23ac4c03d25b060005301903b40a4d15da8a5ca1638a765fe"
+          "path": "public/pixi-art/themes/snow/final/props/snowball-big.svg",
+          "sha256": "ecbf2db625db42bd7cab3c36dcf4c0a34b6d57c1f3382d6428a113adaf6ded76"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-2-3.svg",
-          "sha256": "007e7bcf7ebd1ec2b373d448fb08a74e29b4d3a77bce4eb41d7008e17c2370ec"
+          "path": "public/pixi-art/themes/snow/final/props/snowball-pile.svg",
+          "sha256": "9aae036e60a47b202448ce755a5489fc1c6cb4b3da936d9bfc37d8101a890566"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink-fence-2-4.svg",
-          "sha256": "291033677b51a24ab1c6eab1710a8dcb6f5a6e11a8b694a37dd5370e7adc016b"
+          "path": "public/pixi-art/themes/snow/final/props/snowman-small.svg",
+          "sha256": "e0d3c6f83f64adf2bce67306c42e694cd1510997c7aa9f4e93f2867a9914e45c"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/rink.svg",
-          "sha256": "7e3e0dd27bdf84ba48ad62044c928b067c4d7ddbf44be46328c6f36965f8d4c5"
+          "path": "public/pixi-art/themes/snow/final/props/snowman.svg",
+          "sha256": "db29a965324f8ee9d964b384095118016ac73fbac1bfbf61cf5bf3ad5bedb1e4"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/sled-hill-start.svg",
-          "sha256": "b37e2be4c430335459a1e2b6b618280d7fe0e923545d44d38cebfe43d48b4a65"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-0.svg",
+          "sha256": "f65b8f8df37334bcc988d55a722d98225dbd60e844df33bba89cd297a5e65904"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/sled-hill.svg",
-          "sha256": "346e93ca5ff7da3ee73a21707e4d063510aec6eaac2467d5699243c7b3eb874b"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-12.svg",
+          "sha256": "bc45cbaa68ab92049e85d42e7ed4ecbc8fa26b5f2354e63d211211f61f0a1f36"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/sled-rack.svg",
-          "sha256": "3b15804fbb28502024632a3304532cc718b7170d234e66430325d8df8e9b2f1a"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-16.svg",
+          "sha256": "0f67605e1659c2252c0137d5bc0520e81e30b1e9eaae74da6e078fdd11bbdb08"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/sled-workshop.svg",
-          "sha256": "b3daa59710e9ec2a26abe72dbeaacc2d8b04d02ac1d8c9e643a1128d7a9266f7"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-20.svg",
+          "sha256": "6c79d6dc2463f483823a97d45d12da136fb4c3f2e13bb579de9edf52ac509cdd"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/snow-lantern.svg",
-          "sha256": "78045431d0f6e7586fb00fa397ae2bf943584d93d2ee664aa15fae8570527e68"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-24.svg",
+          "sha256": "3a76e36f017f2546d4eec9ecd11706db281f8a95fe9982da793ce188886df5b0"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/snowman-0.svg",
-          "sha256": "73334daeab01f149fbe40ef664a069087cfe1efb471d979a8950ac41b090c8d5"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-28.svg",
+          "sha256": "190beb7bdf8cfef1d7fad6cb99f7073163ebb2f8eb2189116bbec14d83be82c7"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/snowman-1.svg",
-          "sha256": "c9e9866ca71bef6564d7cde0659175a95d8c4cff2b642f993188e7feba8493de"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-32.svg",
+          "sha256": "a13bf91a184e041d81726f5e56fed2586ecd503095bde8183d9a7fd88304ef89"
         },
         {
-          "path": "public/pixi-art/themes/snow/v2/snowman-2.svg",
-          "sha256": "d5a403a44ca443f47b67dbb0aa8f93a18acd438210d9dce35bdc01389b1c3f93"
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-36.svg",
+          "sha256": "456837518a526edea22f7e69db0419f1b99f88b290869300953112f579e61adf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-4.svg",
+          "sha256": "0edfe525f5875fd6ce206355228821fa58c1d1c3b5fb79845580bc7dbfd94af1"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-40.svg",
+          "sha256": "c8558bc4b88d15a32f45ade57d3d7184b10ea69a812446892313acd1aa6573e6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-44.svg",
+          "sha256": "2f0994da6f4da143a208f8422d86ae6a82ef3c7d18f66bad265d82f03027c011"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-48.svg",
+          "sha256": "44c6944a5a13fb76b4fd2ede7b18357b80e604b929937b7d519bc115bac7c977"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-0-trail-8.svg",
+          "sha256": "a6c072f081ba15f7315c55a3b4f308a7cb436ba0c60b0fa61a5df5b96a22c357"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-0.svg",
+          "sha256": "6286c4144c34a93807ddd9079395d54225b0aa819b4c4ab3e502351fba77fa48"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-12.svg",
+          "sha256": "9665034fa85b267656b5697af7ba8562af529b6c43a72e271aadba8b9a41cd7a"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-16.svg",
+          "sha256": "829dc0b0b0766856bda9a50d5c59938bf083bd4d26de76cdc3fbdf81e7fa90b4"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-20.svg",
+          "sha256": "4160d4ab573098f4ec6e7eca1f46049d539ad686352fcfa6c93024b9ff71729b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-24.svg",
+          "sha256": "18319b8ea68bb92852ee43083124a5921e950f61c0c8e6b88836734bb8224b87"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-28.svg",
+          "sha256": "390b803dfd84627f08a987a76799aab2f0d0e17ccc07bcde743173be81c7a42c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-4.svg",
+          "sha256": "f1ef87f50ea5dd25ed1242c739e4bff954b01f3931194baa9775733253cf88a0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-1-trail-8.svg",
+          "sha256": "39d3c994e0dc56261d4703154a04c655b04e7d1621dd5ae9c0dcc7f9d103bf19"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-0.svg",
+          "sha256": "4f2d9e13ea5fc9086930ee40a868b54ac3f8cca099c9cb13b0164ccc0707e11d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-12.svg",
+          "sha256": "b6c1025764400b388e27570f662669dff37383cc6d74f64d1f36ede670b6fbd9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-16.svg",
+          "sha256": "b6c1025764400b388e27570f662669dff37383cc6d74f64d1f36ede670b6fbd9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-20.svg",
+          "sha256": "b6c1025764400b388e27570f662669dff37383cc6d74f64d1f36ede670b6fbd9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-24.svg",
+          "sha256": "95ab32274a84fbc96424ae7b7c6a47d15188e0576a29a4d3882c69714bf903d0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-28.svg",
+          "sha256": "d1e634154cb0ec7674d5729c5d1591ab5653c2ab9ac55e3be33b25a35befeb34"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-32.svg",
+          "sha256": "73ed0eb05869202e1aa7317efd1d808d0e813198d4de593593ef625cfc405d75"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-36.svg",
+          "sha256": "a8a0be1f32d0818051e99103f0a3c6dc9313388f6fc4d45b13e8b5b85c556a00"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-4.svg",
+          "sha256": "7dc746c37f6a132f2e34fcba72c1884cd6732edc6dd395ed43d8effee3c5ad70"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-40.svg",
+          "sha256": "277c7fb8ba8fa2dfd225b14fdef035fe8d9305fb96e34e3921eb7955771863ab"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-44.svg",
+          "sha256": "2c6c2771b6c9fa847c316c96e1d8e690e6bccddf7d5c4d5d4ffc413f8d224927"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-48.svg",
+          "sha256": "47535a8ef52569bac0584de7967f68d3e36bd06736178de63859871e93a05f34"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-52.svg",
+          "sha256": "9974a1b2a95271e9813621b5686fd970978b1eaf8b9de4cde91a189c8b4e186b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-10-trail-8.svg",
+          "sha256": "b6c1025764400b388e27570f662669dff37383cc6d74f64d1f36ede670b6fbd9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-11-trail-0.svg",
+          "sha256": "246b65f1e79c3284cebaa671769130f0332f63d03f322933e79a5a60213a07a1"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-11-trail-12.svg",
+          "sha256": "6711fefcfaf773590a1dc801f44e43830a981c61fa2e3b63c7bf2db5885f985d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-11-trail-16.svg",
+          "sha256": "92393eeb0f7aeb1dda8bdbbdd3637d51c573e2393c432d31f48970ae5b56c2f9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-11-trail-20.svg",
+          "sha256": "268adfdeba1525eca83511cb3896a62e7701b1e4735459b1dad665781c9ae7d0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-11-trail-4.svg",
+          "sha256": "a810f9801f072792094c172247fa652f1d33e2e3c4982b08a7604007a0e7b665"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-11-trail-8.svg",
+          "sha256": "80fda7c78a8a3c0e6db2cfd692c7d87303f163ea83ca48c198c379afc2408bb6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-0.svg",
+          "sha256": "a3b81afa09884d600e970e9ab3f5ab7c2f02d008345edb8e17262b9465e3c075"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-12.svg",
+          "sha256": "7e8b92263d71354e6dba71aa447d0b1c745ff6e722e16748fb98cbe7aa5efdc6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-16.svg",
+          "sha256": "bd9e4d1e37c6a7ad1d2e3ed8c552c0e0705d71ea4b88670162bdeb6720936764"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-20.svg",
+          "sha256": "3e7f2068955948e393aab13176a98f443d78364c5eaaf27c6374f041a4dc95bc"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-24.svg",
+          "sha256": "09b065e51394a0795d697224f9fb22d58f34485126c0db4dcc1ceeb21d5f0617"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-28.svg",
+          "sha256": "209013d52d5a63539fef479af63b305a16baeec08313460ac2ba3a35b9db27a5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-32.svg",
+          "sha256": "209013d52d5a63539fef479af63b305a16baeec08313460ac2ba3a35b9db27a5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-36.svg",
+          "sha256": "209013d52d5a63539fef479af63b305a16baeec08313460ac2ba3a35b9db27a5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-4.svg",
+          "sha256": "6df9a0d18a76a361a1c239e60e4f80634d5c53074bdd05e09e6d1983ec22fb5b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-40.svg",
+          "sha256": "209013d52d5a63539fef479af63b305a16baeec08313460ac2ba3a35b9db27a5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-44.svg",
+          "sha256": "dca4353a3589f0bcff026056530a25ef49fcd565554e708628eea51806d92f11"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-48.svg",
+          "sha256": "c813290ab042eea377ac225a63ff9d829a3a02d106f0ce770e6695071c94ab4a"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-52.svg",
+          "sha256": "464eea1ce9a24da95fbaee626f8aed00aa4d361b3b3b398f6c90f160674e2a7b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-56.svg",
+          "sha256": "0fb6471123e2bc423b963b15e2a5979b4eb9d726ea5498d67ee96b8e7162547a"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-60.svg",
+          "sha256": "10bfa12ed4daa8f9f97942a6495821cb6d787c5c42349944f5851c3f7a9d66c6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-64.svg",
+          "sha256": "7edb7103c56832405ddb03e0a7e16a4e4d74f447c2c432d080b39ad202986462"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-68.svg",
+          "sha256": "d41c909c39fdc0bee744f6740d90cebcf584774d704a8efe7242058c771b5b8f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-72.svg",
+          "sha256": "43587ea0544d6af8754a9c27b4a942aad2c38ed6b7f5ff2feea8ff35c4f36af4"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-12-trail-8.svg",
+          "sha256": "f84fbabf2d59889f2bf3f567f3391e9da266c8e423c057cd1347478801d58e73"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-0.svg",
+          "sha256": "1fe8e08b8cfd01c249c72c624d8c99873105c01b36586cf21f40679d4ab634de"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-100.svg",
+          "sha256": "0ac8342cca509fe9f235a0a0730f3c81ee3e3fa0d0c91b59d5f8b4a13d20ec03"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-12.svg",
+          "sha256": "cda30417e49760ac35e25321496f1a5be643303900703afde011dff5191529fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-16.svg",
+          "sha256": "cda30417e49760ac35e25321496f1a5be643303900703afde011dff5191529fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-20.svg",
+          "sha256": "bdbb5f1b142987b5ba3a47b42e5bba7c549709b0dabf33464d3e0e7ebe431050"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-24.svg",
+          "sha256": "764621f57476a81853ccdd5e8f58dc76394d08a65b7c7dd217f8a0aff867b392"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-28.svg",
+          "sha256": "38372f31e37d200af7d6f89542e62426fbc1a4fb3af6a05e50806776ada15a5f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-32.svg",
+          "sha256": "7b2f6356b1e33ad277974d2d5d7c96327bab7322fcba3d3ba7dc630a6df3d5f8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-36.svg",
+          "sha256": "f23e5faffa0211c161ca96f2affac23d3ee3b13cb9e5b811b2762f6adb5435d7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-4.svg",
+          "sha256": "24d926582221c60b2099c33fa707c2f961f1916da3ba6857e8c74f8ab812fd0c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-40.svg",
+          "sha256": "ecf4b3d231f1888fb4ca448bd52be88c28bd70ab52b303abd8569f075a88eef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-44.svg",
+          "sha256": "ecf4b3d231f1888fb4ca448bd52be88c28bd70ab52b303abd8569f075a88eef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-48.svg",
+          "sha256": "ecf4b3d231f1888fb4ca448bd52be88c28bd70ab52b303abd8569f075a88eef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-52.svg",
+          "sha256": "ecf4b3d231f1888fb4ca448bd52be88c28bd70ab52b303abd8569f075a88eef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-56.svg",
+          "sha256": "ecf4b3d231f1888fb4ca448bd52be88c28bd70ab52b303abd8569f075a88eef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-60.svg",
+          "sha256": "ecf4b3d231f1888fb4ca448bd52be88c28bd70ab52b303abd8569f075a88eef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-64.svg",
+          "sha256": "d772dac1a1f9b7f0995f36f86a8525f72a59b59c5c1762f92c31181126f31db0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-68.svg",
+          "sha256": "d119e67f1c438320d365a697dcf4670a87a102aeca18a5e929072f7725eca4b0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-72.svg",
+          "sha256": "cb1f5df2870be45c5b5351670b5b2df8da7d6a364eef4b42789943f5eb58267e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-76.svg",
+          "sha256": "57a3ad3b19876dd908bab42dc055fdcf7a65d156d45f67807ef207ccd3ac16fc"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-8.svg",
+          "sha256": "741195d070ae2a61276511d0522cb576c5695cdb73e1014633f758ab73d604ab"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-80.svg",
+          "sha256": "3269cbc3d0c948d8c783952457ed363908e931b9e87a95281419fbab2b77050d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-84.svg",
+          "sha256": "3c97cc43317f06a7603557b4966cf1b4d0b9f3d31060d64b9757b78b59d067e7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-88.svg",
+          "sha256": "c9dd1bafab2394da3c49fc6790e012d24377ba64f47fa0fe4d85ed770e3b66c1"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-92.svg",
+          "sha256": "4c86621444b04087fc2f3fec919d5e484f36c5ac3d45bb5b461df4b31ac09769"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-13-trail-96.svg",
+          "sha256": "6d5fd2ab6a3a90df4bf4686aefdf7880cf3edf06a18f75bc21a53c56d23a005d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-14-trail-0.svg",
+          "sha256": "f0f0543337dc975a0777bb5dc788e0e8474ea5df3c9f55d36419d5a22b7c9df9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-14-trail-4.svg",
+          "sha256": "df620a526a64bccf7d97461f6524a886c4a4906966a7bff2a8d487b9c7465f73"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-14-trail-8.svg",
+          "sha256": "f3fb9c45abf0ca6723da677e198d207b98e9aae45f03078e94629ec24c02f986"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-0.svg",
+          "sha256": "070679656d9b9d67cf0e714d240a943d793b96e7eebac722d40e6c6b5892605e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-12.svg",
+          "sha256": "b21dd1893797c221d3be5b5dd25440beb2f722adb261d4d16fbe4bb6c660dcab"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-16.svg",
+          "sha256": "bb947fdb4eaad41f9af3ed25e9082f47581ad61c8b4b247297f68ee1b7f9265f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-20.svg",
+          "sha256": "d9dd9b9cfaa38bceff23d243220f802e95ed3b87146f154bbad6a02c6ff44cbb"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-24.svg",
+          "sha256": "f7808ae5e9900a8830f145c2711b2b2e61b6e11af295d190f91039a11df702ca"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-28.svg",
+          "sha256": "fd819f0d86b19dbe5661ac8283a55b6388bc00b0bff9b0bebcfd7255b3b856e8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-32.svg",
+          "sha256": "cccee4c8a19dd8e259c0842d9210d0e71f57bd45b46a1e9697d2912b72d8946e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-4.svg",
+          "sha256": "904399ed94750bdfd830dd7535563a05a395040c9bd1edeae89897555256e1b0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-15-trail-8.svg",
+          "sha256": "4a4ce7b8b5e2104704fea53ee795b1be60883a30a4fa6dcbe86feb6e22a6adaa"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-0.svg",
+          "sha256": "76d3864b5d28bdb30ced3408085496fb4722a7c0dc6979e0dbb02a2db7bb87ee"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-12.svg",
+          "sha256": "38b3554b37147066e3a4aca9cb25fea10ba7aba04d252e277e9a8a6b1d8fce11"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-16.svg",
+          "sha256": "b20319cf6d00d7591ea8054ba1813c9431b3c515baa34be735b690230a4f2632"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-20.svg",
+          "sha256": "1afc9641747aadbbee8975d34cc23dc412e6dca7b766449f809ccf424f96d6fc"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-24.svg",
+          "sha256": "039da3d79b5e8e1fb3a9a63b9cd24b0adca5ece3a7cc0df524c0c79fbfc615f3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-28.svg",
+          "sha256": "6ff8e73ebed3f5f0e605ac0473a9956979647fe455649a07731de090803db500"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-32.svg",
+          "sha256": "db443718ec5d561d29706454e52afb188defff4e3fc598a4d4c6f8125fdfcece"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-36.svg",
+          "sha256": "2f89bd178ca979aba58b1ec89c949586734559f2f30d60c09c0876c5ca446f59"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-4.svg",
+          "sha256": "38b3554b37147066e3a4aca9cb25fea10ba7aba04d252e277e9a8a6b1d8fce11"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-16-trail-8.svg",
+          "sha256": "38b3554b37147066e3a4aca9cb25fea10ba7aba04d252e277e9a8a6b1d8fce11"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-17-trail-0.svg",
+          "sha256": "362dda92f7e9e09faae169203387da0428a1f19d7c633ff57e0fa870c353af2e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-17-trail-12.svg",
+          "sha256": "625f8e85462d90aa743c4e19072a57939b0efce76245e7d598ef954a7087484d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-17-trail-16.svg",
+          "sha256": "0fd3bb57b6edd6b7977bd6aa2a974319305e6761cc3da61205806947337c207b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-17-trail-4.svg",
+          "sha256": "019235e901c90aec993a501d7601dbccff67114d5f3dce831db331cf83498c31"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-17-trail-8.svg",
+          "sha256": "f8fc986f6384c0d1b226f65adfdb4e957eaee9c10373d7f22232d033daeecd70"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-0.svg",
+          "sha256": "8b0e907f36361950bf444ac01006ad87e658d2c5c98db23e9a158c5e42b18c1d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-100.svg",
+          "sha256": "4259f34b177790b2e0ea60b3055908e2237cab3f7122920267215bec56cd9525"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-104.svg",
+          "sha256": "8a8f067dee81b8d6d6444c271f2c854799ddf1a31d1fd858ef7975f8c1285fbd"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-12.svg",
+          "sha256": "6a8f5d6bdd161fd5c821d34a944bf323d44e5078aac9d83e1251e93880bfc81c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-16.svg",
+          "sha256": "6a8f5d6bdd161fd5c821d34a944bf323d44e5078aac9d83e1251e93880bfc81c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-20.svg",
+          "sha256": "6a8f5d6bdd161fd5c821d34a944bf323d44e5078aac9d83e1251e93880bfc81c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-24.svg",
+          "sha256": "6a8f5d6bdd161fd5c821d34a944bf323d44e5078aac9d83e1251e93880bfc81c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-28.svg",
+          "sha256": "6a8f5d6bdd161fd5c821d34a944bf323d44e5078aac9d83e1251e93880bfc81c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-32.svg",
+          "sha256": "51c39f9b004170bde0ab8c45b0f82311b3d2b9fefaa48b273e2012e0d16923d4"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-36.svg",
+          "sha256": "8e2731d35c5567a3692403e1cf7d1bc005f1120bc6116fceadbd218e62a2e0de"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-4.svg",
+          "sha256": "15b74c421b454c7ebefd789f6b50cbc16a828c77b48ef95f94b315b0f5d7c5b1"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-40.svg",
+          "sha256": "eab36fe42ab2b846062246a41ed85931addc6025857eac8e360776ef747cf56d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-44.svg",
+          "sha256": "eab36fe42ab2b846062246a41ed85931addc6025857eac8e360776ef747cf56d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-48.svg",
+          "sha256": "eab36fe42ab2b846062246a41ed85931addc6025857eac8e360776ef747cf56d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-52.svg",
+          "sha256": "eab36fe42ab2b846062246a41ed85931addc6025857eac8e360776ef747cf56d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-56.svg",
+          "sha256": "eab36fe42ab2b846062246a41ed85931addc6025857eac8e360776ef747cf56d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-60.svg",
+          "sha256": "eab36fe42ab2b846062246a41ed85931addc6025857eac8e360776ef747cf56d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-64.svg",
+          "sha256": "821b3d1cf41bad2c51c99e853ad377c309495db57b868a0730e859598bd4a541"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-68.svg",
+          "sha256": "fcc2b1378a2eeb9bbaeb6651372949a73199ca2fef085c0b18c1c82800918e41"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-72.svg",
+          "sha256": "a8d4e78de8fa50a8213e4f40ad6cb9b204b594fec5a2374cd28b197f4cea9966"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-76.svg",
+          "sha256": "f4c2f8bbf00d84bc2e3a54b613ccde6d555728bca0127192db3ee0f9a5368728"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-8.svg",
+          "sha256": "138440544d13ee1c3833eae97926daa752e3022b1e62379ad49b2a1833a29e13"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-80.svg",
+          "sha256": "1dfb0112c546a5c91a2e144f8533834ab8e39ceec5b93f43a550385d3f40326b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-84.svg",
+          "sha256": "a93c89aeea44f25e41f0acab8b80a66c6d15642ab349a096b8de8399fecdab4d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-88.svg",
+          "sha256": "1de9343d34bccbb2ab9ce1c2745efe5f9ffa8490371619df56be3b68ab5e693f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-92.svg",
+          "sha256": "aeac9f6aa2131240caf0e1ddd7b9bb146249c32118693cd81a972c5c1b41e2ef"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-18-trail-96.svg",
+          "sha256": "af85b622e654c8d4bae4208e1a0f44aac97ced73151bd93873bb022e592b79f9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-0.svg",
+          "sha256": "005f82c67b45f7d01a8752cce2844b230a1b03fc6762da270d8872152f027907"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-12.svg",
+          "sha256": "c1294a1f415367a1d7d7d038f882704996a53b90510e6da79f508785ef3f43bf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-16.svg",
+          "sha256": "c1294a1f415367a1d7d7d038f882704996a53b90510e6da79f508785ef3f43bf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-20.svg",
+          "sha256": "c1294a1f415367a1d7d7d038f882704996a53b90510e6da79f508785ef3f43bf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-24.svg",
+          "sha256": "c1294a1f415367a1d7d7d038f882704996a53b90510e6da79f508785ef3f43bf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-28.svg",
+          "sha256": "926b979db00d05cc8027c52953c137e47a935291ba338a2ffcc2f5dad62e0357"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-32.svg",
+          "sha256": "95826d70b48335aba1087d7a1062bf71eef3888d50d5e680145df8aabadb770f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-36.svg",
+          "sha256": "0a1a0b3c80d83acb4f687fb1d44b3c5f7fda374a377e5b4fd33d4da288241413"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-4.svg",
+          "sha256": "c1294a1f415367a1d7d7d038f882704996a53b90510e6da79f508785ef3f43bf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-40.svg",
+          "sha256": "f375f46959e1e9621f08429d3505dca590f0cfde6ac1a017ef8edad7d529d138"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-44.svg",
+          "sha256": "29c31d7ece137b32149061c7fb3a3d11b64a22219b504ed11ad1fbb8bea21acb"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-48.svg",
+          "sha256": "85f7b2afb6a078eec22977e5177f3a0dbdf2161a0d6ebf745b2e67194bc54e06"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-52.svg",
+          "sha256": "456fe8e7eef6a6e0426ffb811a4c7a8dbc3d628d52ef010062bcb9129caeb08e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-56.svg",
+          "sha256": "1e44167b29b325a79162614c6b2d427f569495cb2f5d3a51595e5d6064a7ef6a"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-19-trail-8.svg",
+          "sha256": "c1294a1f415367a1d7d7d038f882704996a53b90510e6da79f508785ef3f43bf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-0.svg",
+          "sha256": "d85627aa6da24c5c9d9191e28d346d20ecaaaf05ad71f2e0b1632e60ef7fcd1b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-12.svg",
+          "sha256": "ebff69a8a1040e3a7d8e7ffec120ee294fdab64e2decb3882ef84532c15b75e7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-16.svg",
+          "sha256": "f9741d7a24b1e1a23eb905deb865db8d9eeea34d5aa93a466e613281355a6836"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-20.svg",
+          "sha256": "e23361eff1033a568836c6e6cdd62d34e15da2330d74d2443a8d56a6cecbf0da"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-24.svg",
+          "sha256": "a02905d39616d4caa789dbdf8b4e9043a362dba2858e33512908d67771701297"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-28.svg",
+          "sha256": "b3d95a61693be12bd1307a8d302d9bc5220239fb01bdb5c56f50c23d816dd7ca"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-32.svg",
+          "sha256": "7b84e4cb00c44ad4522705daa337d252535c6d0d95e8227ed886e5504d514c9f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-36.svg",
+          "sha256": "752ff9cf218d46c870449c3b0af9b9c0f37f67766049cda8b29122107c446d5a"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-4.svg",
+          "sha256": "d63f49e68a6fef32dc7869c9a233bc93bec46d3ae4af146f76fd9dd65645dd82"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-40.svg",
+          "sha256": "b327fd45077e2e76d388603ac9fdd2d14dc67c4317112ab09fd5df2cd0bb6478"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-44.svg",
+          "sha256": "633c00d622ba44cf881310b32fdc0a61e52ce5f2a016e67ae4c32714495dc1e3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-48.svg",
+          "sha256": "1cae0a1e6dded505a9f79df9c4e6905e7b2322642b2c025d08a4592ade2a6e1a"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-52.svg",
+          "sha256": "74227f4922df3556b7a8dc374b0f9c20c88442ec1f9599c1c1cc751a6d4a3078"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-56.svg",
+          "sha256": "7edf272ebaf8b91e2166aef5169d5b68f92632d1eaf09354a06e9d367520044f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-60.svg",
+          "sha256": "c62a244cf2720f52cb5449e1ac3323cfc634f87cbcbf6ab73566e356e0f038ed"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-64.svg",
+          "sha256": "6631533bf3be390212c285748d7343a5afa9f5e192b547b81d78862f1ef793b6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-68.svg",
+          "sha256": "8d32714de9586efa59ea6d170edf57fed57d4ea74c96b88ec855d3a1ea1f9b22"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-72.svg",
+          "sha256": "aed4adaa65c40aa42937025e5174d254070b96053d695642c9e398b8697bee04"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-76.svg",
+          "sha256": "da2db3240d057deda859185ff17f140dc56d480a3d5091fe2c54938a3f91270d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-8.svg",
+          "sha256": "195572aa16a244a98ebe700fb81e3e0ec7332fd372f2104d9aa4b0583743dce4"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-2-trail-80.svg",
+          "sha256": "7612220b189cabad60f3ec6486d37851bfec4b8ec0432be30a94a8926b0434b7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-0.svg",
+          "sha256": "06d41a18be6dc141ee8a1ab58f21d7f04c284ea4f5239d2c6c81a954e2e12f00"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-12.svg",
+          "sha256": "b1ff0789987a756b6cdaa221118be97eb15211295efd76c87042ecc275d84b7b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-16.svg",
+          "sha256": "b1ff0789987a756b6cdaa221118be97eb15211295efd76c87042ecc275d84b7b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-20.svg",
+          "sha256": "b1ff0789987a756b6cdaa221118be97eb15211295efd76c87042ecc275d84b7b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-24.svg",
+          "sha256": "e9e03bee1e60e9be82275f740023990dae6a0c547920005e68cdd9de30ab5c06"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-28.svg",
+          "sha256": "bee88a3f6a9649dec4ccdb93892099de8744459386597be8dba0ed7b0e6077a7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-32.svg",
+          "sha256": "5566fd637345ac9daa0d9a58607b8085887b96a2cab0966f4be4e47791126400"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-36.svg",
+          "sha256": "7cef209a31e9f345d7440e1998aca8f33731cf8a234e279fa2ad2077fbbc2b59"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-4.svg",
+          "sha256": "c74dd611b607b4e1d23888c3243814a9e7c5a4b419f2545feaf990706f162ab0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-40.svg",
+          "sha256": "28af975f817958a3f3b15f41aab4d1df89cdff6c800301848f0fa17c99a331b1"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-44.svg",
+          "sha256": "97d0a83cb060731157b22ffe09982bcc40f67ee58b28ed81d30ffd9d46739ef5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-48.svg",
+          "sha256": "11bbd60775244083247a7d24a3939a99cbd338e2f7fc94eef139f7c7b807095f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-3-trail-8.svg",
+          "sha256": "fd4720cc2270f00e37e6b04f0603722902b5e0ad46a2d47e78c7084453c5c081"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-0.svg",
+          "sha256": "8b0e907f36361950bf444ac01006ad87e658d2c5c98db23e9a158c5e42b18c1d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-100.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-104.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-108.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-112.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-116.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-12.svg",
+          "sha256": "574a383545bdc279e97e576daae6e0be09a9246223cd7183675500875d11ce96"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-120.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-124.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-128.svg",
+          "sha256": "3731c3a251bfd440c517004dca0363219548ac596259299416c4439b468f0d0d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-132.svg",
+          "sha256": "c415c658168ddfcc67d6807b70353b3ea114d7702ed365225d736a9adcc61e82"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-136.svg",
+          "sha256": "fa1a4ad505ee0eacf5b0e08fda4217087a46cd917c9a9e4fd58a96cfca6ac19b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-16.svg",
+          "sha256": "5a0819ea07fc86df7e131d80b0b1335575714b59851c26dad6256ae916128dd3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-20.svg",
+          "sha256": "ba43e17abc6c4c25166689ff1844c095ca86b13c4b5f147eb8f67216a728de7c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-24.svg",
+          "sha256": "ba43e17abc6c4c25166689ff1844c095ca86b13c4b5f147eb8f67216a728de7c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-28.svg",
+          "sha256": "ba43e17abc6c4c25166689ff1844c095ca86b13c4b5f147eb8f67216a728de7c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-32.svg",
+          "sha256": "ca82791e2d1a0253a78788541173e18eb71b7cd76c98192b20e1d60b9a4c7956"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-36.svg",
+          "sha256": "ee3560312b20a79c5770cc76c3cedb074146d0ccfe2cedecb2c7335c622b598c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-4.svg",
+          "sha256": "457f32f18ed682131523755e98bc851aa09966bc794718f446f3018f1c9bceb7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-40.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-44.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-48.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-52.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-56.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-60.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-64.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-68.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-72.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-76.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-8.svg",
+          "sha256": "7f12dee512fff356b8e850842eee61f9cac5f6b69643e411a842dfa2a61a2bca"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-80.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-84.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-88.svg",
+          "sha256": "6ba229ac5568910cba194a714b910a553eb79501d317755e3702734288a9c20d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-92.svg",
+          "sha256": "169ebee4894f63557ef0fbf4a053c7930406a6f82651ea4784adbb4370419ea6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-4-trail-96.svg",
+          "sha256": "bf52e0d59e9232b51342ed75b03b9c074fb2f502927e11281819e3753fe24073"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-0.svg",
+          "sha256": "997c472b055087f6710ffb4de37215287dbfd975eff3c6635baa9ee6b226ae55"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-12.svg",
+          "sha256": "2c61ba2f1d5915c6a3898a558be6c8c016f50aa4142f7c98a65c391e1489de80"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-16.svg",
+          "sha256": "21979af42603dccaeb400a64a4689062a625e1c227e24704ff2ec66515a24fbd"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-20.svg",
+          "sha256": "53397f59cb9afb63be6871f822f23319f3f727d4ef66cf344aa0f9b6ee63cfde"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-24.svg",
+          "sha256": "b064390473e37a05611bc0805726099ee28483d063cdb09ed7bc573f15bd3369"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-28.svg",
+          "sha256": "de9208256317d56eb4ecaab5f42e920c32ed9ce4f7ed2c05c08684978b34e29d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-32.svg",
+          "sha256": "e3e5d98392a3dea1ae3a864a6c0afb9ff1d34a64e13af1b01a73d4fa4d076b61"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-36.svg",
+          "sha256": "bcb75a0b7da3b053d7760831f9b57eb60c7aa67986b8a11ddd167cd7758553e2"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-4.svg",
+          "sha256": "926f33fbda57ce165f188f2aeccda7c0e8a3e8c0bd43faa8e236f3d8d35b8a54"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-40.svg",
+          "sha256": "ce6db7650ef4d9867e2b47a1c717e4af0cc4120eddbe012a2cde81abc50fb849"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-44.svg",
+          "sha256": "d475f3c2dc8726e87c5b668ebd19063ce4d0b20a05423ab4fab3db489f92d42d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-48.svg",
+          "sha256": "ad3e83ea46ee07de83c6dd5a6fd888b5bb014acbe3a49a4fb18b224e0ddd6e91"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-5-trail-8.svg",
+          "sha256": "73faaed7f1342572f27ea8b23187d658deff72fb94cec2ff9466d475e1f49b19"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-0.svg",
+          "sha256": "f60c9f88e36578d7a2a439ae2504eab6b8c9fedfceaf4ef56eec6bf132400097"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-12.svg",
+          "sha256": "4737c9e89686ea51c8613a64e7a66a30ec7b3bc31f7b7adb2ef0605299abb2ca"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-16.svg",
+          "sha256": "d28e3f0fd846dec9328303dc6e98f804b8bc4badf7d896085b220eb6e3045232"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-20.svg",
+          "sha256": "839fb8b443b221089723f67a1ae8c690287570da135860a636b068a67f737a55"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-24.svg",
+          "sha256": "fb4c9575d1e17feb35d5bc72e33e588b95592ce26c75c1936c144e2690aa8cca"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-28.svg",
+          "sha256": "0fbaca1c325240f585881c010f0e96a14485735a3b2a9f6ace816d4d732cae00"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-32.svg",
+          "sha256": "7e3fca6a0d35db74f230966cbc4152c0265b3080d8c9d49dc921f3f65702f693"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-4.svg",
+          "sha256": "439fe1038cd2e7e670c5bed7954ef6f1ad446f4242f042e66cd27f152ce8cded"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-6-trail-8.svg",
+          "sha256": "4c25440e38860b765dbef7eec8ea72a8831c8fb3169b2c70127b61abdeb20da5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-0.svg",
+          "sha256": "e4b421869b6a80a37e79e0370c538acb7cc343921ca4caaf1a559dbefaccd8bd"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-12.svg",
+          "sha256": "6543c354dd817db21135f9bbd4f5efa76a74eb8e6a9e950d490e8518594981ac"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-16.svg",
+          "sha256": "ffae4ed9d0fdc6729a36cdbc66f7b9553ecc0f979d8175d2a5f7f75221b1ab1b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-20.svg",
+          "sha256": "97d7243fe95358b202a6f66c2b93340aa6bf2b3dbade68df82ccf9a611e4737e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-24.svg",
+          "sha256": "178da2e45ee991b8b9e42ceaf26454b30fea37c39c16ee3bd18ee13b918a06fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-28.svg",
+          "sha256": "178da2e45ee991b8b9e42ceaf26454b30fea37c39c16ee3bd18ee13b918a06fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-32.svg",
+          "sha256": "178da2e45ee991b8b9e42ceaf26454b30fea37c39c16ee3bd18ee13b918a06fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-36.svg",
+          "sha256": "178da2e45ee991b8b9e42ceaf26454b30fea37c39c16ee3bd18ee13b918a06fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-4.svg",
+          "sha256": "31c16d364614dfe069cb834640c37a64eda11f270cdfe520a8858789b515f559"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-40.svg",
+          "sha256": "178da2e45ee991b8b9e42ceaf26454b30fea37c39c16ee3bd18ee13b918a06fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-44.svg",
+          "sha256": "c148962ec9a006c3c4d90f8c8c3300843f44e44ede6af91f7553e84ac57bd83c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-48.svg",
+          "sha256": "b93f503c265b6d12ef02a9988ba890d964fa010bf6e2f202cfea6d662c7b0321"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-52.svg",
+          "sha256": "b8fca9be0ae7dfc4232af0d6a8e905347815d5888b56a776736454d8b295ed72"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-56.svg",
+          "sha256": "b60c5c12a8e1f6c4c756768e9eb6ae4988043f6e89707459eb57a80f46ab2a5f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-60.svg",
+          "sha256": "49e55ab34c8f21e9d827e96e2f22e3086cb3778365fd1c4e9b1bbd685cc401d7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-7-trail-8.svg",
+          "sha256": "1f94221e88dd6ac549b4751e0948423da8e93e529bf0271bf0ff1306e5388887"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-0.svg",
+          "sha256": "8b0e907f36361950bf444ac01006ad87e658d2c5c98db23e9a158c5e42b18c1d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-12.svg",
+          "sha256": "574a383545bdc279e97e576daae6e0be09a9246223cd7183675500875d11ce96"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-16.svg",
+          "sha256": "5a0819ea07fc86df7e131d80b0b1335575714b59851c26dad6256ae916128dd3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-20.svg",
+          "sha256": "ba43e17abc6c4c25166689ff1844c095ca86b13c4b5f147eb8f67216a728de7c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-24.svg",
+          "sha256": "ba43e17abc6c4c25166689ff1844c095ca86b13c4b5f147eb8f67216a728de7c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-28.svg",
+          "sha256": "ba43e17abc6c4c25166689ff1844c095ca86b13c4b5f147eb8f67216a728de7c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-32.svg",
+          "sha256": "921cd179ca84ed11d9a7bf72f0a76c55b4d7d778f52c92fd250f3eb1ba6e8ece"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-36.svg",
+          "sha256": "0a0ccec36e4f2ffd2d0ba81f2d4753677be5b5f883a51dd477c0c8fd440db086"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-4.svg",
+          "sha256": "457f32f18ed682131523755e98bc851aa09966bc794718f446f3018f1c9bceb7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-40.svg",
+          "sha256": "fb0ffe371be20cf84e2e245f8e5ecf82a2f38a245ba09557e7da871a95d50dff"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-44.svg",
+          "sha256": "b61c01d52015e59b46e153221b9fbff6949ac5dbfd107db715b00d9be92258b5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-48.svg",
+          "sha256": "55cf4aa43843b4105ecd24c38b89ccf5bcdd7546ed5368f87eeda67f19b00e65"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-52.svg",
+          "sha256": "f4d441badb427c2d57ce03ec18fe8d0ddcc45460a8c7464b7911689537a4b392"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-56.svg",
+          "sha256": "f7ec5edca244d2800d593f54667c941604e488c0d9406e1780fb9375d7c41708"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-60.svg",
+          "sha256": "62db275c4638be0d62b2dd7424c8527f78bdb3de56651275a88b3e6cb31a0339"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-64.svg",
+          "sha256": "d63324df0fe492e6e5d23aa79d6dc6e5f346484a5ea0dae501653ed26a83d818"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-68.svg",
+          "sha256": "be7222d1f2ffa6e9cdf946b32155a9b870a6bd21486fb2d8adbfdf14ed9f5f27"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-72.svg",
+          "sha256": "8df0744395656da8733195f31ca0f495d4aefa2f1d153121a84a7f3af7d407c9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-76.svg",
+          "sha256": "d60b96a8f96c34efbc24dc6710f361fa6906434660df1e2bcaa77d1d663f84c8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-8.svg",
+          "sha256": "7f12dee512fff356b8e850842eee61f9cac5f6b69643e411a842dfa2a61a2bca"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-80.svg",
+          "sha256": "ee817924c3bd067b41ad9362ef0f26440f617b4b9da95fd25a9c8624b906d812"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-84.svg",
+          "sha256": "acb0a925073ee03d866c0b56b2ce1832ef3b7fb1007fc311dceed503e3e9817d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-88.svg",
+          "sha256": "dbf4ef6a343df06a32d43da8f24e811b1d6a78759543a05fcba5fe5d201669e3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-8-trail-92.svg",
+          "sha256": "4c33d6d1634fcdd6bc8c7ad3518da5e07ce037a37e624318a5082161a6262f0c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-0.svg",
+          "sha256": "5d1ff8916f7b3e4867c5ff2ea57a69e7475065be9d2c44cb13faeede5507f7fe"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-12.svg",
+          "sha256": "8168780ef172ad694281d77b4211842f957c19e754ff634837df3b80d85b8b43"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-16.svg",
+          "sha256": "8168780ef172ad694281d77b4211842f957c19e754ff634837df3b80d85b8b43"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-20.svg",
+          "sha256": "8168780ef172ad694281d77b4211842f957c19e754ff634837df3b80d85b8b43"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-24.svg",
+          "sha256": "8168780ef172ad694281d77b4211842f957c19e754ff634837df3b80d85b8b43"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-28.svg",
+          "sha256": "f0476b7d15d2d0287ad37aa97a99c2df9a656c6fb2368480ad3b350acfe23223"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-32.svg",
+          "sha256": "10c950a15c24ebe3370b89b6a12c74bfbcfa1f0290a1afb8c251ebd3a03a82a5"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-36.svg",
+          "sha256": "c03b04fbddf10483c13082aedbfb3d5633397eceacc451945a9932568e6457d1"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-4.svg",
+          "sha256": "0cd7b4a261ed9f0da41f898563c34b7aafc35e56ca529da49e195f5cc141bb01"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-40.svg",
+          "sha256": "5cfa65702a8be496488d72425afa0c98ed694969ee9f41726a5fcf6043cec1f8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-44.svg",
+          "sha256": "66ebfa639944ccec3a4339524d557d1036ffc8b904c667f5bd67089b3317226c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-48.svg",
+          "sha256": "27d7cf31fc39c43a74728a4a87d7eef25198a885493079df2d8df50e8bfecc96"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-52.svg",
+          "sha256": "7c9ddd6944db54dac398078e1b65ef5eea1a5975ee1fdd9ba35fcaa2bd6ea8fd"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-56.svg",
+          "sha256": "4a2aab3a3bc67a18d6387de4c728a6edcc45a17c743d88db9871f088249c2e7e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-60.svg",
+          "sha256": "992326013888b99e02dbb8692d6591a73c8e7d4a22b0067a56b47d7608fcb22e"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-64.svg",
+          "sha256": "980c201b4898f2edbde3e94a47635e7ee578346f24d024b7441a27eeac5860e6"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-68.svg",
+          "sha256": "38dee5e99b506e05a67cd836bd24432ab2bff3d45493d028dbaa6de862acced4"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-72.svg",
+          "sha256": "8cc48ad2b36f08f075973b6c5590523e9374271741dd4f04f52b6b966ff33b86"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-76.svg",
+          "sha256": "886dc9b1841be442bd4e8a776b2a51a36cdfc08e10fe881d882ab854caf454a7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-8.svg",
+          "sha256": "8168780ef172ad694281d77b4211842f957c19e754ff634837df3b80d85b8b43"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/camp-9-trail-80.svg",
+          "sha256": "81bff2d17cfe74ddedbf71d20a870e40ace30369b7c5643cbc2af42a98f67ef8"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-0.svg",
+          "sha256": "e7029e0aa1316490e5dbe44a3a0207eff5c31eb8f8d1ea072869c8e79ce5ab6d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-12.svg",
+          "sha256": "e1516e3cd44ca089ae727f91dcbde3da54657268ddf33f8b7917e449712473fc"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-16.svg",
+          "sha256": "65e43118c314c50a8046ba926fb0ac665b7eab33a185aaa5d00f9892bbb62867"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-20.svg",
+          "sha256": "b6fd8e175554606926a05682e710ed8244fe2520460ba31d6592c8e197a5ca82"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-24.svg",
+          "sha256": "863e46fe9c898d24fef6ab5db94ed1680b546637f53d50806eb10e9dc2dd2d49"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-28.svg",
+          "sha256": "5986cc2ebae2696d6da7d097f3c2213aa82096f64366bcd2d418673d8571601c"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-32.svg",
+          "sha256": "bc93ebc66b3f47f6963fdd47fd597b7c4c095c81cfd53eddf8097555c1c0241b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-36.svg",
+          "sha256": "f21790b94977cc1c0ebf4231b6e129e7e6f31113c1f839f784c46b47cae5facf"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-4.svg",
+          "sha256": "09916dfc2027cac98ca743030e852205e04c6c54938d15494ac02ee2babf09df"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-40.svg",
+          "sha256": "94917a8b292f73e6736592c4114d38848a6ba4e6fbf9f9062e24beac3477fd18"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-44.svg",
+          "sha256": "94917a8b292f73e6736592c4114d38848a6ba4e6fbf9f9062e24beac3477fd18"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-48.svg",
+          "sha256": "94917a8b292f73e6736592c4114d38848a6ba4e6fbf9f9062e24beac3477fd18"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-52.svg",
+          "sha256": "d993038f8075627eac6020ded334dd445861cdaf4ffd614ffd865651eebb2526"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-56.svg",
+          "sha256": "6731c34727524f82228920817943ee2fb4645047cf857ef76e3b8acd1dee2f02"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-60.svg",
+          "sha256": "29e6cf4dd5a49a39446e2bbd512451347d0ab64b4d5d98e786ea3d246a5bccf3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-64.svg",
+          "sha256": "87180879673a2f73229084b80d8d5b373ebbcfc9ff2572cd1b8f91ec8f9ed3aa"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-68.svg",
+          "sha256": "550d88e0cfd8f79090e63c610704d9256541594e7cb57e344631dd89ab16c2c9"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-72.svg",
+          "sha256": "bd3e71a417203be85858857dff2a19c753c2f9e7b758dadd9641648620ae96c7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-76.svg",
+          "sha256": "201494c2edfc4beb8c5a4b300dbf27a6c3a7990c00f369b287e3c6e7a4146799"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-8.svg",
+          "sha256": "c845e4a99c2af9fcafaaedb040dca591313514ebbc199bd30fdab42fb05edf73"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-80.svg",
+          "sha256": "30bbfd2fb7e432b9f0fbbd3a6eacee4ec7a2fe418884c467ea0c9d10ba146190"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-84.svg",
+          "sha256": "371153a95b7e4f6dd40b4d913d444361030d09d046dce1fb29e4989cef454814"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-88.svg",
+          "sha256": "12f721b1a9092820db1ecf15881785aad91f811413da4116961a7e1a3c709318"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/trails/snowman-scene-trail-92.svg",
+          "sha256": "75a55ff997fa32fd6edc1d1a8bf531606e859d75de0cdd3700afc3cec4b12e0d"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/woodpile.svg",
+          "sha256": "5021f2fec497453f0ba04b3ec4f74eb384c34e7c4ce4da4ab8510d536a31268f"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/props/woodshed.svg",
+          "sha256": "2992b1aced9e4c9f4c7ccb0e22248d3ed01b8821668b89e403e386dcea53c964"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/bench-skates.svg",
+          "sha256": "19d7a19980b72af82f209ec842966dcbef5efbf030d4608677677f0251e79a55"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/jetty.svg",
+          "sha256": "158786e2e95463fb8a9c64eb2987e0285cea2630c4c08690db42c369300e77f7"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/lake.svg",
+          "sha256": "a062d9ab53198595f8c1def636f77e745ff4f9a1ef8dc0f009ab330faf35cb55"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/lantern-post.svg",
+          "sha256": "d9bf3fbd76c934ae521d177533ff12e6e226205e4af98a4a116e06cbd6799694"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/mug-table.svg",
+          "sha256": "f3b4fae7fc38e2f5a81205dd5100476232da425373cd2733981443105930b057"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/reeds-1.svg",
+          "sha256": "e59ec7c2cee7af4b23122dd75146a174225f2a1007ec0159a659863f4b9d67d0"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/reeds-2.svg",
+          "sha256": "e292b99a8f3aa59800c002c10e805dfc8ae067f08b00306231f9aa5d464f4959"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/rock-1.svg",
+          "sha256": "64f8aac72dac838e64d4ff4a0696627cdb3459e96ea230e15493f95554327be3"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/rock-2.svg",
+          "sha256": "7f1768ea67b06c7dd19d287ea7c6c47d9632c07e8daa78af84b1c7bdab1f0f19"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/rock-3.svg",
+          "sha256": "12f36c35cf767168f04f2ec3dfdc8240abeaa381b5421b766828e438007dc313"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/sled.svg",
+          "sha256": "07f4fc4eea3158fa5c5b81f93e2fe96f3fb336256565edc5df781d5df30bf270"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/warming-hut.svg",
+          "sha256": "49fccdb650f24570b7b14638a8a51dd0c924ea926b5d62fc772f3893a4216c4b"
+        },
+        {
+          "path": "public/pixi-art/themes/snow/final/rink/woodpile.svg",
+          "sha256": "c0e7ef450eafd64203206a66dbed42c13997a1105e656d46e12cd4a3d24864e8"
         },
         {
           "path": "public/pixi-art/themes/snow/v2/terrain.svg",
-          "sha256": "e9351e7b2cff0a8b1b4d83387afc8ffc57db98eb85a6f40d4ade62b7f5dbfb9c"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/tool-shed.svg",
-          "sha256": "feb63a5bcd34aa143dfb9e38a07cd8c69f039d5bd166be1d31c9f72d070fba98"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/tree-1.svg",
-          "sha256": "d3180d31cc38cd5bf5f90063bed3bab13ca4d5da15075d1440883fd581cb9046"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/tree-2.svg",
-          "sha256": "6ed460c10aeac578498b851d0bf0cbe09603482d82c7eef6853201652d225c5b"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/tree-3.svg",
-          "sha256": "c4f3a4ef7d027eb0beda77913deb155c68a4e84c6772dd73780c45b968803496"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/tree-4.svg",
-          "sha256": "59b547c4c6d6aa595007484ec68d07ca21fac4ffd6a10b1e29bdddb003fc9a44"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/tree-5.svg",
-          "sha256": "5897682f71729790543f35d719a37fc3f644aac117270836674d8dd954349c0c"
-        },
-        {
-          "path": "public/pixi-art/themes/snow/v2/workshop-store.svg",
-          "sha256": "02151e327ad84cfd915f270d698edcb4b8c4fecf327ebeb536f590eec36d7643"
+          "sha256": "81bb16f9ba942ec90760eaad6a78315555d992bcbfc835cff9cb7c3c541c6660"
         },
         {
           "path": "rive/web/island-geometry.mjs",
@@ -11894,15 +13218,15 @@
           "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
         }
       ],
-      "sha256": "cb40d7fe84a1c575310a49e0f3e5b56b28236ba92ffa3187b8e003cbf09bd59e"
+      "sha256": "12f4ee3cf5d5c5480caf06740a73373c9e9147f5fce0965a60d189709e46d183"
     },
-    "groundSha256": "a22606b1dacd2dcbcb61029a6e1fde79ffe3fbd1e79839419ebb892a0f4fd9e3",
+    "groundSha256": "2fdaf51c505df0bc6703d582052b7ebf887085beafe964d8bbdf50495e6a2790",
     "src": "/pixi-art/globe/snow.svg",
-    "sha256": "3d4c7d9a45b1fd8fe1a282224ead3858dc084346f55ecd9df9aadaf8bcb0bc0a",
+    "sha256": "59d4c9f75c2d029b9c04d051d7b47fd005ac9a732843b686f0f1f68c1a809d0c",
     "width": 1024,
     "height": 794,
-    "bytes": 144980,
-    "groundBytes": 43981,
+    "bytes": 326799,
+    "groundBytes": 205378,
     "quality": {
       "tolerance": 0.2,
       "minArea": 0.12,
@@ -11911,8 +13235,8 @@
     },
     "worldPaths": 25,
     "walkways": 0,
-    "flats": 2,
+    "flats": 644,
     "decks": 0,
-    "bridgeDetails": 0
+    "bridgeDetails": 1
   }
 }

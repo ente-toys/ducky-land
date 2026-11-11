@@ -2,10 +2,13 @@ import {createDuckFeedback} from './feedback.js';
 import { Assets, Container, Graphics, Sprite } from 'pixi.js';
 import {SLEEP_ASSETS, createSleeper} from './sleeper.js';
 import {OUTFIT_OPTIONS} from './outfits.js';
+import {createSnowCover} from './snow-cover.js';
 import {createKarmaQuiver} from './karma-quiver.js';
+import {rinkTilt} from './rink-slide.js';
 
 export const duckAnimationNames=Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
 const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2, STUMBLE=.35;
+const SNOW_HEAD_REGION = [.19, .81], SNOW_SHOULDER_REGION = [.22, .70];
 const slotOrder=['acc','shades','cap','shoes'];
 let libraryPromise,liveDucks=0;
 const ownedURLs=new Set(),inFlight=new Set();
@@ -124,10 +127,18 @@ async function createSleepingDuck(sleep, seed) {
     nap.root.visible = true;
     art.addChild(nap.root);
     nap.update(0, false);
+    const snowCover = createSnowCover(seed, true);
     let disposed = false;
     return {
       root,
-      update(dt, {time = 0, reducedMotion = false} = {}) {if (!disposed) nap.update(time, reducedMotion);},
+      update(dt, {time = 0, reducedMotion = false} = {}) {
+        if (disposed) return;
+        nap.update(time, reducedMotion, snowCover.state.shiver);
+        snowCover.render(nap.snowSurfaces);
+      },
+      snowCover,
+      trackSnow: snowCover.track,
+      clearSnow: snowCover.clear,
       sleeper: {poke: () => nap.poke(), bounds: () => nap.root.getBounds()},
       setOutfit: async () => {},
       animationNames: duckAnimationNames,
@@ -135,6 +146,7 @@ async function createSleepingDuck(sleep, seed) {
         if (disposed) return;
         disposed = true;
         liveDucks--;
+        snowCover.destroy();
         root.removeFromParent();
         root.destroy({children: true});
       },
@@ -162,9 +174,14 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const nap = createSleeper(sleep, seed);
   art.addChildAt(nap.root, art.children.length - 2);
   let disposed=false,elapsed=0,actionTime=0,walkPhase=Math.abs(seed)*2.399,currentAction=0,version,turnAngle=0,current=views.find(v=>v.spec.angle===0),outfitVersion=0;
+  const snowCover = createSnowCover(seed);
+  const snowSurfaces = [
+    {parent: current.body, x: 0, y: 0, width: 0, rotation: 0},
+    {parent: current.body, x: 0, y: 0, width: 0, rotation: 0},
+  ];
   let clothing={...outfit},pose=defaultPose();const phase=Math.abs(seed)*1.618%5;
   // boss 4 Nov: landing settle when a walk stops, a small anticipation when it starts, and a squash-pinch on every turn
-  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,stumbleT=9,stumbleDir={x:-1,y:0},gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
+  let landT=9,startT=9,turnT=9,lastSpeed=0,arriveT=9,stumbleT=9,stumbleDir={x:-1,y:0},icePhase=null,gait=0,turnLean=0,lastTurn=0,look={x:0,y:0},lookGoal={x:0,y:0},lookAt=2+Math.abs(seed)%3;
   // boss 4 Nov: the Rive 'Arrival Drop' (66 frames at 60 fps): falls in, squashes on touchdown, one small bounce, settles
   const DROP={y:[[0,-1.23],[27,0],[37,-.026],[49,0],[66,0]],sx:[[0,.96],[25,.96],[29,1.18],[39,.98],[49,1],[66,1]],sy:[[0,1.04],[25,1.04],[29,.78],[39,1.04],[49,1],[66,1]]};
   const keyAt=(keys,f)=>{for(let i=1;i<keys.length;i++)if(f<=keys[i][0]){const [f0,a]=keys[i-1],[f1,b]=keys[i],u=(f-f0)/(f1-f0),e=u*u*(3-2*u);return a+(b-a)*e;}return keys.at(-1)[1];};
@@ -183,6 +200,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const frames=entries.flatMap(entry=>Object.values(entry.frames).flat()).filter(frame=>frame.visible);
     await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));
     if(disposed||request!==outfitVersion)return;
+    snowCover.clear();
     clothing={...next};
     // sleeping Duckies stay bare for now; their outfits come later
     for(const view of views){
@@ -341,11 +359,11 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.angry=p.angry>.02&&face;
     if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
-  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false}={}){
+  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false,ice=null}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     sailing=isSailing;
     seated=isSeated;
-    const next=typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
+    const next=ice?0:typeof action==='string'?Number(Object.entries(duckAnimationNames).find(([,name])=>name===action)?.[0]||0):Number(action);
     const chosen=Number.isInteger(next)&&next>=0&&next<=9?next:0;
     if(chosen!==currentAction||(emoteVersion!==undefined&&emoteVersion!==version)){if(currentAction===1&&chosen!==1)landT=0;if(chosen===1&&currentAction!==1)startT=0;currentAction=chosen;actionTime=0;version=emoteVersion;}
     landT+=dt;startT+=dt;turnT+=dt;arriveT+=dt;stumbleT+=dt;if(reducedMotion)landT=startT=turnT=9;if(currentAction===1)lastSpeed=safe(speed);
@@ -388,6 +406,12 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     if(arriveT<1.1&&!reducedMotion){const f=arriveT*60;art.y=keyAt(DROP.y,f)*artHeight*SCALE;art.scale.set(SCALE*keyAt(DROP.sx,f),SCALE*keyAt(DROP.sy,f));}
     else{art.y=0;art.scale.set(SCALE);}
     art.x=0;art.rotation=0;
+    // No balancing animation exists in the rig. Tilt gently over planted feet
+    // instead, suppressing the walking gait while momentum carries the duck.
+    art.rotation+=rinkTilt(ice,speed,t,reducedMotion);
+    // boss 11 Nov: a Ducky sliding off the ice crashes onto the land with the bump stumble
+    if(ice?.phase==='crash'&&icePhase!=='crash'){stumbleT=0;stumbleDir={x:-Math.sin(turn),y:-Math.cos(turn)};}
+    icePhase=ice?.phase??null;
     // boss 6 Nov: the jump's squash, stretch and lean (player-motion.js jumpPose), scaled about the feet; the caller lifts the root
     jumpShadow.visible=Boolean(jump&&jump.shadow>0&&!sleeping);
     if(jump&&!sleeping){art.scale.x*=jump.sx;art.scale.y*=jump.sy;art.rotation+=jump.rotation;
@@ -400,6 +424,51 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       art.rotation=lean*4.2*Math.PI/180*Math.exp(-2.2*u)*Math.sin(TAU*u);
       art.scale.x*=1+.07*sq;art.scale.y*=1-.09*sq;
     }
+    if (!reducedMotion) art.rotation += snowCover.state.shiver;
+    if (snowCover.state.active && root.visible) {
+      if (sleeping) snowCover.render(nap.snowSurfaces);
+      else {
+        const head = snowSurfaces[0], back = snowSurfaces[1], a = current.spec.attachments;
+        let hat = null;
+        for (const g of current.garments) if (g.entry.slot === 'cap' && g.frame.attachment === 'head') {hat = g; break;}
+        if (hat) {
+          head.parent = hat.node;
+          head.texture = hat.sprite.texture;
+          head.spriteX = hat.sprite.x; head.spriteY = hat.sprite.y;
+          head.sx = hat.sprite.scale.x; head.sy = hat.sprite.scale.y;
+          head.x = hat.sprite.x + hat.frame.rect[2] * hat.sprite.scale.x * .5;
+          head.y = hat.sprite.y + 7 * hat.sprite.scale.y;
+          head.width = hat.frame.rect[2] * hat.sprite.scale.x * .56;
+          head.rotation = 0;
+          head.region = null; head.crownKey = undefined; head.ink = 8.8 / Math.abs(head.sx);
+        } else {
+          const body = current.bodyPart;
+          head.texture = body?.sprite.texture;
+          head.spriteX = body?.sprite.x || 0; head.spriteY = body?.sprite.y || 0;
+          head.sx = body?.sprite.scale.x || 1; head.sy = body?.sprite.scale.y || 1;
+          head.region = SNOW_HEAD_REGION; head.crownKey = undefined; head.ink = 8.8;
+          const b = glide.other?.spec.attachments, w = b ? glide.w : 0;
+          head.parent = body?.joint || current.body;
+          head.x = (a.head[0] + a.head[1]) / 2 + (b ? (b.head[0] + b.head[1] - a.head[0] - a.head[1]) / 2 * w : 0) + look.x * .4;
+          head.y = a.headY + (b ? (b.headY - a.headY) * w : 0) + pose.headY + 8;
+          head.width = (a.head[1] - a.head[0]) * .8;
+          head.rotation = pose.headTilt;
+        }
+        let backWing = null;
+        const side = -Math.sin(turnAngle) || -1;
+        for (const part of current.parts) if (part.role === 'wing' && (!backWing || part.joint.x * side > backWing.joint.x * side)) backWing = part;
+        back.parent = backWing?.joint || current.body;
+        back.texture = backWing?.sprite.texture;
+        back.spriteX = backWing?.sprite.x || 0; back.spriteY = backWing?.sprite.y || 0;
+        back.sx = backWing?.sprite.scale.x || 1; back.sy = backWing?.sprite.scale.y || 1;
+        back.x = back.spriteX + (backWing?.rect[2] || 140) * .5;
+        back.y = back.spriteY + 8;
+        back.width = (backWing?.rect[2] || 140) * .6;
+        back.rotation = 0;
+        back.region = SNOW_SHOULDER_REGION; back.crownKey = undefined; back.ink = 8.8;
+        snowCover.render(snowSurfaces);
+      }
+    }
     root.duckDirection=degrees;
   }
   function dispose(){
@@ -407,6 +476,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     disposed=true;
     outfitVersion++;
     liveDucks--;
+    snowCover.destroy();
     for(const view of views)if(!view.root.parent)view.root.destroy({children:true});
     root.removeFromParent();
     root.destroy({children:true});
@@ -417,5 +487,5 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};
   const sleeper={poke:()=>nap.root.visible&&nap.poke(),bounds:()=>nap.root.getBounds()};   // boss 5 Nov: tap or bump wobbles a sleeper
   const showRing=on=>{feedback.ring.visible=Boolean(isPlayer&&on);};   // boss 5 Nov: no red ring on the deck while sailing or hopping
-  return {root,update,dispose,setOutfit,setKarma,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,animationNames:duckAnimationNames};
+  return {root,update,dispose,setOutfit,setKarma,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,snowCover,trackSnow:snowCover.track,clearSnow:snowCover.clear,animationNames:duckAnimationNames};
 }

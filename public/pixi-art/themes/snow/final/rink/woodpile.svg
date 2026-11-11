@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="156" viewBox="0 0 180 156" fill="none" stroke="#39472d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><title>woodpile</title>
+ <path d="M15 44H165V145H15Z" fill="#b18346"/><path d="M23 45H157V141H23Z" fill="#6f744f"/>
+ <ellipse cx="44" cy="73" rx="18" ry="19" fill="#edc768"/><ellipse cx="44" cy="73" rx="6" ry="7" stroke="#be9c4b" stroke-width="2"/><ellipse cx="82" cy="75" rx="18" ry="19" fill="#edc768"/><ellipse cx="82" cy="75" rx="6" ry="7" stroke="#be9c4b" stroke-width="2"/><ellipse cx="125" cy="72" rx="18" ry="19" fill="#edc768"/><ellipse cx="125" cy="72" rx="6" ry="7" stroke="#be9c4b" stroke-width="2"/><ellipse cx="42" cy="110" rx="18" ry="19" fill="#edc768"/><ellipse cx="42" cy="110" rx="6" ry="7" stroke="#be9c4b" stroke-width="2"/><ellipse cx="82" cy="113" rx="18" ry="19" fill="#edc768"/><ellipse cx="82" cy="113" rx="6" ry="7" stroke="#be9c4b" stroke-width="2"/><ellipse cx="125" cy="110" rx="18" ry="19" fill="#edc768"/><ellipse cx="125" cy="110" rx="6" ry="7" stroke="#be9c4b" stroke-width="2"/>
+ <path d="M13 39Q24 17 57 17Q84 8 116 18Q146 17 167 34Q178 45 168 52Q154 59 142 48Q123 57 107 47Q89 59 71 48Q53 58 36 48Q15 58 10 46Z" fill="#fffcef"/>
+ <path d="M17 50V147M162 50V147" stroke="#efc052" stroke-width="8"/>
+</svg>

@@ -212,8 +212,8 @@ test('d) the room sends each island only its own players, and the documented pla
   const sa = JSON.parse(pa.socket.last), sb = JSON.parse(pb.socket.last);
   assert.deepEqual(sa.players.map(p => p.id), [pa.actor.id]); assert.deepEqual(sb.players.map(p => p.id), [pb.actor.id]);
   assert.equal(sa.islandId, a); assert.ok(sa.boats.every(boat => boat.islandId === a));
-  assert.deepEqual(Object.keys(sa.players[0]).sort(), ['accountId', 'action', 'boatId', 'emoteVersion', 'exitLocked', 'id', 'islandId', 'jumpLeft', 'karma', 'login', 'mode', 'outfit', 'travel', 'turn', 'x', 'y']);
+  assert.deepEqual(Object.keys(sa.players[0]).sort(), ['accountId', 'action', 'boatId', 'emoteVersion', 'exitLocked', 'ice', 'id', 'islandId', 'jumpLeft', 'karma', 'login', 'mode', 'outfit', 'reducedMotion', 'travel', 'turn', 'x', 'y']);
   assert.equal(sa.players[0].karma,0,'new accounts start with zero Karma');
   assert.equal(sa.players[0].x, Math.round(pa.actor.x * 100) / 100, 'positions to a hundredth on the wire');
-  assert.deepEqual(Object.keys(sa.self).sort(), ['ack', 'docking', 'emoteLeft', 'path', 'sailTarget']);
+  assert.deepEqual(Object.keys(sa.self).sort(), ['ack', 'docking', 'emoteLeft', 'ice', 'path', 'reducedMotion', 'sailTarget']);
 });

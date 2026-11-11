@@ -1,0 +1,185 @@
+[
+  {
+    "file": "berry-shrub-1.svg",
+    "width": 132,
+    "height": 79.2,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 66,
+      "y": 79.2
+    }
+  },
+  {
+    "file": "berry-shrub-2.svg",
+    "width": 148.8,
+    "height": 86.88,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 74.4,
+      "y": 86.88
+    }
+  },
+  {
+    "file": "pebbles-1.svg",
+    "width": 118.08,
+    "height": 35.52,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 59.04,
+      "y": 35.52
+    }
+  },
+  {
+    "file": "pebbles-2.svg",
+    "width": 95.04,
+    "height": 37.44,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 47.52,
+      "y": 37.44
+    }
+  },
+  {
+    "file": "pebbles-3.svg",
+    "width": 95.04,
+    "height": 37.44,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 47.52,
+      "y": 37.44
+    }
+  },
+  {
+    "file": "drift-1.svg",
+    "width": 45.12,
+    "height": 19.68,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 22.56,
+      "y": 19.68
+    }
+  },
+  {
+    "file": "drift-2.svg",
+    "width": 46.56,
+    "height": 20.16,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 23.28,
+      "y": 20.16
+    }
+  },
+  {
+    "file": "drift-3.svg",
+    "width": 48.96,
+    "height": 20.64,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 24.48,
+      "y": 20.64
+    }
+  },
+  {
+    "file": "footprints-1.svg",
+    "width": 95.2,
+    "height": 42,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 47.6,
+      "y": 42
+    }
+  },
+  {
+    "file": "footprints-2.svg",
+    "width": 107.2,
+    "height": 32.4,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 53.6,
+      "y": 32.4
+    }
+  },
+  {
+    "file": "footprints-3.svg",
+    "width": 87.2,
+    "height": 45.2,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "foot": {
+      "x": 43.6,
+      "y": 45.2
+    }
+  },
+  {
+    "file": "drift-cluster.svg",
+    "width": 255,
+    "height": 76,
+    "motifCount": 2,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    }
+  },
+  {
+    "file": "frost-cluster.svg",
+    "width": 260,
+    "height": 103,
+    "motifCount": 3,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    }
+  },
+  {
+    "file": "tracks-cluster.svg",
+    "width": 135,
+    "height": 65,
+    "motifCount": 6,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    }
+  },
+  {
+    "file": "shade-cluster.svg",
+    "width": 460,
+    "height": 140,
+    "motifCount": 2,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    }
+  }
+]

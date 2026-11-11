@@ -191,7 +191,8 @@ export class RoomClient {
       if (pose.id === this.id && self) {
         const previous = changed ? null : this.player;
         this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, docking:self.docking, until:now+self.emoteLeft,
-          pace:previous?.pace ?? 0, heading:previous?.heading ?? null};
+          pace:previous?.pace ?? 0, heading:previous?.heading ?? null,
+          ice:self.ice?structuredClone(self.ice):null,reducedMotion:self.reducedMotion===true};
         this.pending = this.pending.filter(command => command.seq > self.ack);
         for (const command of this.pending) this.predict(command, now);
         if (previous) {
@@ -238,6 +239,7 @@ export class RoomClient {
   }
 
   predict(command, now) {
+    if (command.type==='input' && typeof command.reducedMotion==='boolean') this.player.reducedMotion=command.reducedMotion;
     if (command.type === 'jump') return startJump(this.player);
     if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
     if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
@@ -337,8 +339,8 @@ export class RoomClient {
     // Save the corrected position so the correction itself is interpolated
     // between steps, along with the movement.
     this.prev = {x:x+this.offsetX, y:y+this.offsetY, turn};
-    if (this.input.x !== input.x || this.input.y !== input.y || Boolean(this.input.run) !== Boolean(input.run) || (moving(input) && now-this.lastInput >= .1)) {
-      if (this.send({type:'input',x:input.x,y:input.y,...(input.run ? {run:true} : {})}, now)) {   // boss 6 Nov: Shift held = run (the server caps the speed)
+    if (this.input.x !== input.x || this.input.y !== input.y || Boolean(this.input.run) !== Boolean(input.run) || this.input.reducedMotion!==input.reducedMotion || (moving(input) && now-this.lastInput >= .1)) {
+      if (this.send({type:'input',x:input.x,y:input.y,reducedMotion:input.reducedMotion===true,...(input.run ? {run:true} : {})}, now)) {   // boss 6 Nov: Shift held = run (the server caps the speed)
         this.input = input;
         this.lastInput = now;
       }

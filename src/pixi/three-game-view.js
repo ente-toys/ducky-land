@@ -16,8 +16,8 @@ import {surfacePoint,surfaceCoordinates} from './three-globe-math.js';
 
 // One live game/room supplies the detail texture. The globe never creates a
 // second player, connection or simulation, and the same camera handles every zoom.
-export async function createThreeGameView(game,host){
-  let disposed=false,world=null,last=0,view=null,following=true,shown=game.artShown,direct=false,blend=0;
+export async function createThreeGameView(game,host,{createWorld=createThreeWorld}={}){
+  let disposed=false,world=null,last=0,view=null,following=true,shown=game.artShown,direct=false,blend=0,flatFrames=0;
   const flatOffset={x:0,y:0};
   const captureScale=()=>direct?1:captureCoverage(host.clientWidth/Math.max(1,host.clientHeight),view?.heading??0,blend,Math.min(game.width,game.height));
   const nativeTick=game.tick.bind(game),nativeRender=game.app.render.bind(game.app),nativeResize=game.resize.bind(game),nativeInterior=game.onInteriorChange;
@@ -62,7 +62,7 @@ export async function createThreeGameView(game,host){
   game.listen(window,'keydown',e=>{if(e.key.toLowerCase()==='f'&&!/INPUT|TEXTAREA|SELECT/.test(e.target?.tagName)&&!e.target?.isContentEditable)find();});
   game.flyHome=find;game.fit=()=>{following=false;world?.world();};home.onclick=find;
   function interior(active){
-    nativeInterior(active);game.canvas.setAttribute('aria-hidden',active?'false':'true');game.canvas.tabIndex=active?0:-1;direct=false;game.externalZooming=false;world?.setPresentation(0,false);
+    nativeInterior(active);game.canvas.setAttribute('aria-hidden',active?'false':'true');game.canvas.tabIndex=active?0:-1;direct=false;flatFrames=0;game.externalZooming=false;world?.setPresentation(0,false);
     layer.style.display=active?'none':'';game.canvas.style.visibility=active?'':'hidden';world?.setActive(!active);
     if(active){game.externalDetailVisible=true;game.externalCamera=null;game.tick=nativeTick;nativeResize();game.raf=requestAnimationFrame(nativeTick);}
     else{cancelAnimationFrame(game.raf);game.tick=()=>{};game.resize();last=0;find();}
@@ -75,14 +75,21 @@ export async function createThreeGameView(game,host){
   }
   function update(state){
     if(disposed||!world||!game.ready||game.interior?.active)return;
+    if(view?.id!==state.id){
+      // The incoming camera may still be waiting for art. Invalidate before the
+      // frame-rate gate, including copies that share the same theme/map id.
+      world.clearLiveCanvas();direct=false;flatFrames=0;
+      world.setPresentation(0,false);game.canvas.style.visibility='hidden';
+    }
     view=state;game.externalPirateIsland=state.id;game.externalZooming=state.zooming;
     const {now,id}=state,mapId=artOf(id);
     const work=detailWork(state.altitude,game.externalDetailVisible===true,state.landing);
+    if(shown!==mapId||game.artShown!==mapId){flatFrames=0;direct=false;}
     // Decide the owner before sizing and drawing: never expose an overscan
     // capture as the native viewport for one frame during takeover.
     const nextBlend=detailBlend(state.altitude,state.heading);
     const sameArt=shown===mapId&&game.artShown===mapId;
-    const nextDirect=nextBlend===1&&directDetail(state.altitude,direct&&sameArt,game.artReady(mapId));
+    const nextDirect=nextBlend===1&&sameArt&&directDetail(state.altitude,direct,game.artReady(mapId))&&(direct||flatFrames>=2);
     // The native scene follows the browser's paint clock. Throttle only
     // offscreen simulation and the captures that Three uploads.
     if(!direct&&!nextDirect&&now-last<1000/work.hz-.5)return;
@@ -94,7 +101,7 @@ export async function createThreeGameView(game,host){
     retainDetailArt(game,work.preload?mapId:null);
     if(work.preload)game.ensureArt(mapId);
     if(!detailVisible){
-      direct=false;blend=0;world.setPresentation(0,false);game.canvas.style.visibility='hidden';flatOffset.x=flatOffset.y=0;
+      direct=false;blend=0;flatFrames=0;world.setPresentation(0,false);game.canvas.style.visibility='hidden';flatOffset.x=flatOffset.y=0;
       nativeTick(now);cancelAnimationFrame(game.raf);world.clearLiveCanvas();
       home.hidden=!game.player;if(game.nameLayer)game.nameLayer.style.opacity='0';
       return;
@@ -114,11 +121,14 @@ export async function createThreeGameView(game,host){
     if(game.interior?.active)return;
     const p=game.playerView();
     if(following&&p&&state.altitude<.55&&!state.flying)world.centreOn(game.islandId,p.x,p.y-90);
-    const ready=game.artReady(mapId);
-    world.setPresentation(blend,direct);
+    const ready=game.artShown===mapId&&game.artReady(mapId);
+    if(!ready){direct=false;world.clearLiveCanvas();}
+    flatFrames=blend===1&&ready?flatFrames+1:0;
+    world.setPresentation(ready?blend:0,direct);
     game.canvas.style.visibility=direct?'visible':'hidden';
+    // Native takeover pauses uploads but keeps this island's dormant handoff.
+    // Island-id changes and unready/mismatched art invalidate it above.
     if(!direct&&detailVisible&&ready)world.setLiveCanvas(id,game.canvas,flatRigid(id,id),atlasCameraMatrix(game.camera,game.width,game.height,TILT),game.width,game.height,{x:game.camera.x-map.cx,y:game.camera.y-map.cy,width:game.width/zoom,height:game.height/(zoom*TILT)},captureScale());
-    else if(!detailVisible)world.clearLiveCanvas();
     home.hidden=!p||state.altitude<.5;
     if(game.nameLayer)game.nameLayer.style.opacity=state.altitude>.5?'0':'';
     const c=layer.querySelector('canvas[data-renderer="threejs"]');if(c){c.dataset.playerIsland=game.islandId;c.dataset.livePlayerCount=String(game.liveRigs.size);c.dataset.gameIntegrated='true';c.dataset.captureSize=game.width+'x'+game.height;}
@@ -135,7 +145,7 @@ export async function createThreeGameView(game,host){
     return{id:view.id,x:x-map.cx,y:y-map.cy};
   }
   try{
-    world=await createThreeWorld(layer,{initialIsland:game.islandId,isletCapture:frame=>game.externalDetailVisible===true&&Boolean(game.isletView?.views?.find(v=>v.i.id===frame.id)?.root.visible),isletProjection:(frame,piece)=>{
+    world=await createWorld(layer,{initialIsland:game.islandId,isletCapture:frame=>game.externalDetailVisible===true&&Boolean(game.isletView?.views?.find(v=>v.i.id===frame.id)?.root.visible),isletProjection:(frame,piece)=>{
       if(!view)return null;
       const native=game.isletView?.views?.find(v=>v.i.id===frame.id);if(!native?.root.visible)return null;
       const k=frame.width/1024,p=placeIslet(view.id,frame,[(piece.foot[0]-512)*k,(piece.foot[1]-512)*k]);

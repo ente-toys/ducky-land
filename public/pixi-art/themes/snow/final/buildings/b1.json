@@ -1,0 +1,54 @@
+{
+  "bakery": {
+    "file": "bakery.svg",
+    "width": 360,
+    "height": 374.18,
+    "door": {
+      "x": 271.27,
+      "y": 330.91
+    },
+    "groundFootprintWidth": 327.27,
+    "foot": {
+      "x": 180.0,
+      "y": 374.18
+    }
+  },
+  "workshop": {
+    "file": "workshop.svg",
+    "width": 360,
+    "height": 278.49,
+    "door": {
+      "x": 134.23,
+      "y": 243.88
+    },
+    "groundFootprintWidth": 326.68,
+    "foot": {
+      "x": 180.0,
+      "y": 278.49
+    }
+  },
+  "lodge": {
+    "file": "lodge.svg",
+    "width": 360,
+    "height": 427.72,
+    "door": {
+      "x": 179.56,
+      "y": 363.5
+    },
+    "groundFootprintWidth": 321.55,
+    "foot": {
+      "x": 180.0,
+      "y": 427.72
+    }
+  },
+  "smoke": {
+    "file": "smoke.svg",
+    "width": 72,
+    "height": 48.24,
+    "groundFootprintWidth": 0.0,
+    "foot": {
+      "x": 36.0,
+      "y": 48.24
+    }
+  }
+}

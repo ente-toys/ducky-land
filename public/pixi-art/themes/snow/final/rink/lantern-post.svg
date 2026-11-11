@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="260" viewBox="0 0 160 260" fill="none" stroke="#39472d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><title>lantern post</title>
+ <path d="M107 40V248H129V40" fill="#efc052"/><path d="M114 44V245" stroke="#cb9340" stroke-width="4"/>
+ <path d="M38 32H130V48H38Z" fill="#efc052"/><path d="M88 48L108 70V48" fill="#cb9340"/>
+ <path d="M32 29Q35 18 53 22L84 23Q105 17 130 24Q143 27 139 38Q136 47 119 42L101 40Q86 49 72 40L49 39Q30 44 29 35Z" fill="#fffcef"/>
+ <path d="M55 49V66"/><path d="M46 74V66H63V74L79 93H30Z" fill="#168e88"/>
+ <path d="M34 95H75V147H34Z" fill="#ffdb64"/><path d="M47 96V147M64 96V147" stroke-width="3"/>
+ <path d="M31 148H79V158H31Z" fill="#168e88"/><path d="M30 93H79"/>
+ <path d="M98 248Q115 239 136 248" stroke="#fffcef" stroke-width="11"/>
+</svg>

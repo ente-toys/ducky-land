@@ -1,0 +1,290 @@
+{
+  "assets": [
+    {
+      "file": "sled-1.svg",
+      "width": 164,
+      "height": 118,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 82.0,
+        "y": 118
+      }
+    },
+    {
+      "file": "sled-2.svg",
+      "width": 164,
+      "height": 118,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 82.0,
+        "y": 118
+      }
+    },
+    {
+      "file": "cocoa-cart.svg",
+      "width": 361,
+      "height": 509,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 180.5,
+        "y": 509
+      }
+    },
+    {
+      "file": "snow-cabin.svg",
+      "width": 551,
+      "height": 430,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 275.5,
+        "y": 430
+      }
+    },
+    {
+      "file": "woodshed.svg",
+      "width": 314,
+      "height": 268,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 157,
+        "y": 268
+      }
+    },
+    {
+      "file": "snowman.svg",
+      "width": 301,
+      "height": 294,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 150.5,
+        "y": 294
+      }
+    },
+    {
+      "file": "snowman-small.svg",
+      "width": 227,
+      "height": 237,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 113.5,
+        "y": 237
+      }
+    },
+    {
+      "file": "snowball-big.svg",
+      "width": 212,
+      "height": 206,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 106,
+        "y": 206
+      }
+    },
+    {
+      "file": "scarf-basket.svg",
+      "width": 239,
+      "height": 194,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 119.5,
+        "y": 194
+      }
+    },
+    {
+      "file": "snowball-pile.svg",
+      "width": 214,
+      "height": 163,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 107,
+        "y": 163
+      }
+    },
+    {
+      "file": "berry-bush.svg",
+      "width": 183,
+      "height": 162,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 91.5,
+        "y": 162
+      }
+    },
+    {
+      "file": "rink-bench.svg",
+      "width": 375,
+      "height": 326,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 187.5,
+        "y": 326
+      }
+    },
+    {
+      "file": "umbrella-table.svg",
+      "width": 365,
+      "height": 528,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 182.5,
+        "y": 528
+      }
+    },
+    {
+      "file": "skate-rack.svg",
+      "width": 382,
+      "height": 357,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 191,
+        "y": 357
+      }
+    },
+    {
+      "file": "yard-fence-segment.svg",
+      "width": 295,
+      "height": 162,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 147.5,
+        "y": 162
+      }
+    },
+    {
+      "file": "flag-red.svg",
+      "width": 124,
+      "height": 201,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 62,
+        "y": 201
+      }
+    },
+    {
+      "file": "flag-teal.svg",
+      "width": 124,
+      "height": 201,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 62,
+        "y": 201
+      }
+    },
+    {
+      "file": "top-deck-rail.svg",
+      "width": 479,
+      "height": 161,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 239.5,
+        "y": 161
+      }
+    },
+    {
+      "file": "sled-hill.svg",
+      "width": 900,
+      "height": 480,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 450.0,
+        "y": 480
+      }
+    },
+    {
+      "file": "light-pole.svg",
+      "width": 82,
+      "height": 652,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 41,
+        "y": 652
+      }
+    },
+    {
+      "file": "light-strand.svg",
+      "width": 850,
+      "height": 131,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 425,
+        "y": 131
+      }
+    },
+    {
+      "file": "rink-shrub.svg",
+      "width": 199,
+      "height": 194,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "foot": {
+        "x": 99.5,
+        "y": 194
+      }
+    }
+  ]
+}

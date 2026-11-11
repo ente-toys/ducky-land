@@ -6,8 +6,12 @@ const CONTACT_PAD = 22, RELEASE_PAD = 30, CELL = 256;
 const key = (x, y) => x * 65536 + y;
 const word = name => new RegExp(`(?:^|[\\s/_-])${name}(?:$|[\\s/_.-]|[0-9])`, 'i');
 const TREE = word('tree'), BUSH = word('bush');
-export function plantKind(prop) {
+export function plantKind(prop,snow=false) {
   const label = `${prop.name ?? ''} ${prop.asset ?? ''} ${prop.src ?? ''}`;
+  if (snow) {
+    if (prop.finalKind==='tree' || /(?:^|[\s/_-])(?:pine|fir|spruce)(?:$|[\s/_.-]|[0-9])/i.test(label)) return 'tree';
+    if (prop.finalKind==='shrub' || /(?:^|[\s/_-])shrub(?:$|[\s/_.-]|[0-9])/i.test(label)) return 'bush';
+  }
   return TREE.test(label) ? 'tree' : BUSH.test(label) ? 'bush' : null;
 }
 
@@ -32,16 +36,21 @@ export function plantBlocker(prop, obstacles) {
 }
 
 // One index per loaded map. Actor histories are retained once per rig, never allocated per frame.
-export function createPlantContacts(props, obstacles, onBump) {
+export function createPlantContacts(props, obstacles, onBump,{snow=false}={}) {
   const plants=[], cells=new Map(), actors=new WeakMap();
   let time=0, reduced=false;
   for (const prop of props) {
-    const kind=plantKind(prop);
+    const kind=plantKind(prop,snow);
     if (!kind) continue;
-    const blocker=plantBlocker(prop,obstacles);
+    // Iceland's soft decorative shrubs deliberately have no walking blocker.
+    // Give them a contact region only, keeping the authored collision map intact.
+    const blocker=plantBlocker(prop,obstacles)??(snow&&kind==='bush'?{
+      x:prop.x,y:prop.y-8,rx:Math.max(8,prop.width*(prop.scale??1)*.18),
+      ry:Math.max(6,prop.height*(prop.scale??1)*.06),
+    }:null);
     if (!blocker) continue;
     const b=bounds(blocker), plant={prop,kind,blocker,x:(b[0]+b[2])/2,y:(b[1]+b[3])/2,
-      lastAt:-Infinity,direction:1};
+      lastAt:-Infinity,direction:1,snow};
     plants.push(plant);
     for (let c=Math.floor((b[0]-RELEASE_PAD)/CELL);c<=Math.floor((b[2]+RELEASE_PAD)/CELL);c++)
       for (let r=Math.floor((b[1]-RELEASE_PAD)/CELL);r<=Math.floor((b[3]+RELEASE_PAD)/CELL);r++) {

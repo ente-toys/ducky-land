@@ -47,6 +47,7 @@ import {createSimulation} from './simulation.js';
 import {startJump,jumpHeight,jumpPose,JUMP_SECONDS,MUSEUM_DOOR,atMuseumDoor} from './player-motion.js';
 import {createDust} from './dust.js';
 import {createPlantReactions, LEAF_TEXTURE} from './plant-reactions.js';
+import {createRinkTrails} from './rink-trails.js';
 import {createAudio} from './audio.js';
 import {createDuck, disposeDuckAssets} from './duck.js';   // boss 3 Nov: back to Ashwin's PixiJS Ducky (no Rive)
 import {createFountainWater} from './fountain.js';
@@ -178,6 +179,7 @@ export class PixiIsland {
       const leafTexture=await acquire(LEAF_TEXTURE);
       if (this.disposed) return;
       this.plantReactions=createPlantReactions(this.air,leafTexture);
+      this.rinkTrails=createRinkTrails(this.decks);
       // boss 3 Nov: props are placed on the bare island first, then the client sim collides with where they really stand
       const props = createPlacements(world, geometry({...world, obstacles: []}).walkable)
         .filter(prop => !this.room || harborClear(prop)), local = this.room ? harborWorld(walkWorld(world, props)) : walkWorld(world, props);   // boss 5 Nov: live, the jetty deck is walkable (same as scripts/walk-world.mjs)
@@ -450,7 +452,10 @@ export class PixiIsland {
     // boss 6 Nov: a themed island draws its own art (loaded now if it is not already) and walks its own map
     const mapId=artOf(id);
     this.releasePondDuckies(this.artShown);
+    this.arts?.get(this.artShown)?.icelandLife?.release();
     this.artShown=mapId; this.ensureArt(mapId); this.ensurePondDuckies(mapId); this.showArt(mapId);
+    const lifeArt = this.arts?.get(mapId);
+    lifeArt?.icelandLife?.ensure(this.objects, lifeArt.groups).then(() => this.showArt(this.artShown)).catch(error => console.warn('Iceland life', error));
     this.arches=mapId === 'home' ? undefined : mapFor(mapId).world.arches ?? [];   // Duckies rise over this island's own arched bridges (placements.js deckY)
     this.applyMapAmbience(mapId);
     setSailingHarbor(harborOf(id));
@@ -800,6 +805,11 @@ export class PixiIsland {
     }
     if (mapId !== 'home') {for (const r of this.sleeperRigs()) r.root.visible=false; for (const f of this.floating ?? []) f.sprite.visible=false;}
     for (const [id, set] of this.mapSleepers) if (id !== mapId) for (const {rig} of set) rig.root.visible=false;   // boss 6 Nov: each map shows only its own sleepers
+    if (mapId !== 'snow' && this.artShown !== 'snow') {
+      for (const rig of this.rigs ?? []) rig.clearSnow?.();
+      for (const {rig} of this.liveRigs?.values() ?? []) rig?.clearSnow?.();
+      for (const list of this.mapSleepers.values()) for (const {rig} of list) rig.clearSnow?.();
+    }
     this.travelView?.showJetty(mapId);
   }
   // boss 6 Nov: the map the camera is on now (its size sets the island fit and the zoom floor)
@@ -899,6 +909,7 @@ export class PixiIsland {
         for (const {root} of art.kites.entries) {this.objects.addChild(root); art.groups.push(root);}
       }
       for (const p of art.props) (p.deck ? this.decks : this.objects).addChild(p.sprite);
+      art.icelandLife?.current?.mount(this.objects);
       await attachCentreMotion(art, {Graphics, Container}, this.objects);
       if (this.disposed) {art.destroy(); return;}
       this.plantReactions.register(mapId,art.props,map.walk.obstacles,map.art.slice(0,map.art.lastIndexOf('/')+1));
@@ -906,6 +917,7 @@ export class PixiIsland {
       await this.makeSleepers(mapId);
       if (this.disposed) {art.destroy();return;}
       this.arts.set(mapId, art);
+      if(mapId!==this.artShown)art.icelandLife?.release();
       if(mapId!==this.artShown)this.releasePondDuckies(mapId);
       if(this.wantedArts&&!this.wantedArts.has(mapId)&&mapId!==this.artShown){this.freeArt(mapId);return;}
       this.showArt(this.artShown);
@@ -1152,6 +1164,7 @@ export class PixiIsland {
       // boss 5 Nov: boarding and docking keep the zoom you chose (no camera jump), the camera only follows
     }
     const input = {
+      reducedMotion:this.motion.matches,
       x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')) + this.touchInput.x,
       y: Number(this.keys.has('s') || this.keys.has('arrowdown')) - Number(this.keys.has('w') || this.keys.has('arrowup')) + this.touchInput.y,
     };
@@ -1279,6 +1292,7 @@ export class PixiIsland {
     this.homeKites?.update(t, reduced, visible, homeShown && flatVisible);
     for (const [id, art] of this.arts ?? []) if (art.ready) art.kites?.update(t, reduced, visible, id === this.artShown && flatVisible);
     this.plantReactions?.begin(this.artShown,t,reduced,flatVisible);
+    this.rinkTrails?.begin(t,mapFor(this.artShown).walk.iceland2?.rink,reduced,flatVisible&&!this.interior?.active);
     if (homeShown && flatVisible) this.waterFX?.update(dt, t, {x: this.camera.x-halfWidth, y: this.camera.y-halfHeight, width: halfWidth*2, height: halfHeight*2});
     if (homeShown && flatVisible) this.surf?.update(t, reduced, visible);
     if (flatVisible) this.rowboat?.update(t, reduced, visible);
@@ -1331,7 +1345,10 @@ export class PixiIsland {
       if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       rig.root.visible = (homeShown || duck.player) && visible(x, y, 200);   // the sleepers lie on the home map's spots
       if (duck.player) this.plantReactions?.track(duck,x,y,rig.root.visible && !(duck.jumpLeft>0));
-      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, speed: duck.travel, turn: seat?.turn ?? duck.turn, seated:Boolean(seat), time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
+      rig.trackSnow?.(t, (homeShown || duck.player) && !this.interior?.active ? this.artShown : null,
+        duck.action, duck.travel, reduced, duck.emoteVersion, duck.jumpLeft > 0);
+      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, ice:duck.ice, speed: duck.travel, turn: seat?.turn ?? duck.turn, seated:Boolean(seat), time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
+      if (duck.player) this.rinkTrails?.track(duck,x,y,duck.travel,rig.root.visible&&!(duck.jumpLeft>0));
       if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x:deckX(x,y,this.arches), y: deckY(x, y, this.arches), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
       if (homeShown) this.bumpSleeper(duck, rig, player);   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once
     });
@@ -1339,6 +1356,7 @@ export class PixiIsland {
       for (const {duck, rig} of this.mapSleepers.get(this.artShown) ?? []) {
         rig.root.position.set(duck.x, duck.y); rig.root.zIndex=duck.y;
         rig.root.visible=visible(duck.x, duck.y, 200);
+        rig.trackSnow?.(t, this.artShown, 7, 0, reduced, 0);
         if (flatVisible && rig.root.visible) rig.update(dt, {action: 7, speed: 0, turn: 0, time: t, reducedMotion: reduced, emoteVersion: 0, persistentSleep: true, jump: jumpPose(0, reduced, {turn: 0, moving: false})});
         this.bumpSleeper(duck, rig, player);
       }
@@ -1355,6 +1373,7 @@ export class PixiIsland {
     }
     if (player) this.bumpFrom = {x: player.x, y: player.y};
     const live = this.room?.poses(now / 1000) ?? [];
+    this.arts?.get(this.artShown)?.icelandLife?.current?.update(t, reduced, visible, flatVisible && this.scene.visible, player, live);
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible);
     this.karmaView?.update(dt,t,reduced,visible);
@@ -1555,7 +1574,12 @@ export class PixiIsland {
       if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       rig.root.visible = visible(look.x,look.y,200);
       this.plantReactions?.track(entry,x,y,rig.root.visible && look.deck && pose.mode!=='sailing' && !(pose.jumpLeft>0));
-      if (rig.root.visible) rig.update(dt, {action, speed:look.speed, turn:seat?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      const snowMoved = entry.snowX !== undefined && (Math.abs(x - entry.snowX) > .01 || Math.abs(y - entry.snowY) > .01);
+      rig.trackSnow?.(time, !this.interior?.active && pose.mode !== 'sailing' ? this.artShown : null,
+        action, travel, reducedMotion, emoteVersion, snowMoved || pose.jumpLeft > 0);
+      entry.snowX = x; entry.snowY = y;
+      if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:seat?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      this.rinkTrails?.track(entry,x,y,travel,rig.root.visible&&look.deck&&pose.mode!=='sailing'&&!(pose.jumpLeft>0));
       if (pose.mode === 'sailing') sailers.push(look);
     }
     this.updateBridgeOver(sailers);
@@ -1584,6 +1608,7 @@ export class PixiIsland {
     this.audio.dispose();
     this.waterFX?.dispose();
     this.plantReactions?.destroy();
+    this.rinkTrails?.destroy();
     this.travelView?.dispose();
     for (const art of this.arts?.values() ?? []) {art.pondDuckies?.destroy();if (art.id !== 'home') art.destroy?.();}
     for (const sleepers of this.mapSleepers.values()) for (const {rig} of sleepers) rig.dispose();

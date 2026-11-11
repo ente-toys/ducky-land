@@ -22,6 +22,23 @@ const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandI
   self:{ack:0,path:[],emoteLeft:0},
 });
 
+test('ice reduced-motion input changes preserve corrected interpolation and resend without steering changes',()=>{
+  const {room,sent}=setup();
+  room.snapshot(packet(1));
+  room.offsetX=12;room.offsetY=-4;
+  const before=room.view();
+  room.step(1/60,{x:1,y:0,reducedMotion:true});
+  assert.deepEqual(room.prev,{x:before.x,y:before.y,turn:before.turn});
+  assert.equal(sent.at(-1).reducedMotion,true);
+  assert.equal(room.player.reducedMotion,true);
+  const count=sent.length;
+  room.step(1/60,{x:1,y:0,reducedMotion:false});
+  assert.equal(sent.length,count+1);
+  assert.equal(sent.at(-1).reducedMotion,false);
+  assert.equal(room.player.reducedMotion,false);
+  room.dispose();
+});
+
 test('jump prediction keeps walking, prevents repeated jumps, reconciles and lands remote ducks',()=>{
   const {room,sent}=setup();
   room.snapshot(packet(1));

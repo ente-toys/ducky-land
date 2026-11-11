@@ -1,0 +1,83 @@
+{
+  "method": "Native SVG decode and canvas raster harness, no GPU; local disk reads; 16 ms frame submission. Browser timing is unverified because sandbox rejects local listeners and Chromium launch.",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "dpr": 2,
+    "zoom": 0.6
+  },
+  "before": {
+    "firstVisibleMs": 312.794166,
+    "settledMs": 448.0575,
+    "totalMs": 448.07045800000003,
+    "acquisitions": 575,
+    "decodes": 457,
+    "uniqueReads": 232,
+    "rasterMs": 6271.2888840000105,
+    "visiblePieceSources": 144,
+    "pools": [
+      {
+        "budgetBytes": 134217728,
+        "reservedBytes": 120005924,
+        "peakBytes": 120007404,
+        "residentTiles": 286,
+        "cachedTiles": 286,
+        "refiningTiles": 0,
+        "pendingTiles": 0,
+        "streams": 1402,
+        "failedTiles": 0,
+        "failures": [],
+        "desiredTiles": 286,
+        "missingTiles": 0,
+        "plans": 1,
+        "started": 572
+      }
+    ]
+  },
+  "after": {
+    "firstVisibleMs": 301.020625,
+    "settledMs": 395.54287500000004,
+    "totalMs": 395.562292,
+    "acquisitions": 298,
+    "decodes": 298,
+    "uniqueReads": 192,
+    "rasterMs": 6323.820461999998,
+    "visiblePieceSources": 56,
+    "pools": [
+      {
+        "budgetBytes": 134217728,
+        "reservedBytes": 85786624,
+        "peakBytes": 85786624,
+        "residentTiles": 77,
+        "cachedTiles": 77,
+        "refiningTiles": 0,
+        "pendingTiles": 0,
+        "streams": 1,
+        "failedTiles": 0,
+        "failures": [],
+        "desiredTiles": 77,
+        "missingTiles": 0,
+        "plans": 1,
+        "started": 154,
+        "sharedSources": 154
+      },
+      {
+        "budgetBytes": 83886080,
+        "reservedBytes": 15331072,
+        "peakBytes": 15331072,
+        "residentTiles": 195,
+        "cachedTiles": 0,
+        "refiningTiles": 0,
+        "pendingTiles": 0,
+        "streams": 1403,
+        "failedTiles": 0,
+        "failures": [],
+        "desiredTiles": 195,
+        "missingTiles": 0,
+        "plans": 1,
+        "started": 142,
+        "sharedSources": 142
+      }
+    ]
+  }
+}
