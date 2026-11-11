@@ -172,7 +172,7 @@ export function createSleeper(sleep, seed = 0) {
       region, crownKey: sprite ? `${name}:${i}` : null};
   });
   update(0);
-  let devil;
+  let devil,privacyShades;
   function setAppearance(appearance=null){
     const replacement=appearance?.textures.get(`${name}-duck.svg`);
     const base=duck.children.find(n=>n instanceof Sprite);
@@ -185,6 +185,12 @@ export function createSleeper(sleep, seed = 0) {
       devil.addChild(tail,left,right);duck.addChildAt(devil,0);
     }
     if(devil)devil.visible=Boolean(replacement);
+    const shades=appearance?.shades?.sleep.get(`${name}-shades.svg`);
+    if(shades&&!privacyShades){
+      privacyShades=new Sprite({texture:shades,label:'Sleeping Privacy sunglasses'});
+      duck.addChild(privacyShades);
+    }
+    if(privacyShades)privacyShades.visible=Boolean(shades);
   }
   return {root, update, setCap, setAppearance, poke, pose: name, flip, snowSurfaces};
 }

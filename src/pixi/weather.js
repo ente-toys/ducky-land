@@ -30,7 +30,10 @@ export function createWeather(world,scene,air){
   setMap(map){
     const w=map?.world ?? world, h=map?.height ?? world.height;
     width=map?.width ?? world.width;
-    clouds.forEach((c,i)=>{const y=home.clouds[i];c.y=!map||map.home?y:y<home.height/2?y:h-(home.height-y);});
+    // A themed island with an authored coast keeps its clouds out over the sea beyond that coast, never over the land.
+    const coast=!map||map.home?null:w?.coast,ys=coast?.length?coast.map(p=>p[1]):null,top=ys&&Math.min(...ys),bottom=ys&&Math.max(...ys);
+    clouds.forEach((c,i)=>{const y=home.clouds[i],north=y<home.height/2;
+      c.y=!map||map.home?y:ys?(north?top-260+(y-230)*.6:bottom+260+(y-4120)*.6):north?y:h-(home.height-y);});
     const zones=!map||map.home?null:zonesOf(w);
     if(!zones){gusts.forEach((g,i)=>{if(home.gusts[i]){[g.x,g.y]=home.gusts[i];g.off=false;}else{g.off=true;g.sprite.visible=false;}});return;}
     while(gusts.length<zones.length)gusts.push({sprite:ribbon(),x:0,y:0,phase:gusts.length*.137});

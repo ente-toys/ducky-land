@@ -1,20 +1,29 @@
 import {Container,Graphics,Text} from 'pixi.js';
 import {PAINT,RULES} from './rules.js';
 import {traceShot} from './physics.js';
+import {isCombatHidden} from './hide-bushes.js';
+import {BOG_TEAM_COLOURS} from './readability.js';
 
 export function createTeamMarker(objects,pose,{tilt=1}={}) {
-  const root=new Container({label:'Bog team marker'}),ring=new Graphics();
+  const root=new Container({label:'Bog team marker'}),ring=new Graphics({label:'Bog saturated team ring'});
   root.upright=true;
-  const colours=PAINT[pose.team];
-  if(colours.length===1)ring.circle(0,0,28).stroke({color:colours[0],width:3});
-  else colours.forEach((color,i)=>ring.arc(0,0,28,i*Math.PI/2,(i+1)*Math.PI/2).stroke({color,width:3}));
-  const tag=new Text({text:pose.name,style:{fontFamily:'system-ui',fontSize:14,fontWeight:'700',fill:colours[0],stroke:{color:0x23182f,width:4}}});
-  tag.anchor.set(.5,1);tag.y=-174;root.addChild(ring,tag);objects.addChild(root);
+  const colours=BOG_TEAM_COLOURS[pose.team];
+  ring.circle(0,0,31).stroke({color:colours.rim,width:11});
+  ring.circle(0,0,31).stroke({color:colours.ring,width:7});
+  const tag=new Text({label:'Bog team name',text:pose.name,style:{fontFamily:'system-ui',fontSize:14,fontWeight:'700',fill:colours.ring,stroke:{color:0x23182f,width:4}}});
+  const hiddenIcon=new Graphics({label:'Bog hidden eye-slash'});
+  hiddenIcon.roundRect(-15,-11,30,22,7).fill(0x23182F);
+  hiddenIcon.moveTo(-10,0).quadraticCurveTo(0,-11,10,0).quadraticCurveTo(0,11,-10,0).stroke({color:0xFFFFFF,width:2});
+  hiddenIcon.circle(0,0,3).fill(0xFFFFFF);
+  hiddenIcon.moveTo(-10,-8).lineTo(10,8).stroke({color:0x23182F,width:5,cap:'round'});
+  hiddenIcon.moveTo(-10,-8).lineTo(10,8).stroke({color:0xFFFFFF,width:2.5,cap:'round'});
+  hiddenIcon.y=-220;hiddenIcon.visible=false;
+  tag.anchor.set(.5,1);tag.y=-174;root.addChild(ring,tag,hiddenIcon);objects.addChild(root);
   return {root,update(p,rig,time){
     root.position.set(rig.root.x,rig.root.y);root.zIndex=rig.root.zIndex-.1;root.visible=rig.root.visible&&p.alive;
-    const hidden=p.alive&&p.shieldUntil>time;
-    tag.text=hidden?`${p.name} · Hidden ${Math.ceil(p.shieldUntil-time)}s`:p.name;
-    tag.scale.y=1/tilt;ring.alpha=hidden?.5:1;
+    const hidden=isCombatHidden(p,time);
+    tag.text=p.alive&&p.shieldUntil>time?`${p.name} · Hidden ${Math.ceil(p.shieldUntil-time)}s`:hidden?`${p.name} · Hidden in bush`:p.name;
+    tag.scale.y=hiddenIcon.scale.y=1/tilt;ring.alpha=1;hiddenIcon.visible=hidden;
   },dispose(){root.removeFromParent();root.destroy({children:true});}};
 }
 

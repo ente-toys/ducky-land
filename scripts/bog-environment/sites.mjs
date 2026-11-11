@@ -51,7 +51,8 @@ export function buildSites({root,write,reuse,add,building,rect,flats,sources,are
  for(const [i,x,y] of [[0,1750,3950],[1,2360,3940],[2,6160,4030],[3,6530,4030]])add(`site-seat-${i}`,'bench',x,y,147.24,83.34,{anchor:{x:.5,y:451/463},homeSource:sources.bench,shadowSize:[65,12]});
  for(const [i,x,y] of [[0,1770,3510],[1,2310,3500],[2,6120,3500],[3,6570,3500]])add(`site-lantern-${i}`,'lantern',x,y,65,155,{homeSource:sources.lantern,shadowSize:[14,8]});
  for(const [i,x,y] of [[0,5650,3430],[1,5850,3340]]){
-  add(`site-b-willow-${i}`,'site-willow',x,y,230,330,{homeSource:sources['site-willow'],shadowSize:[45,15]});
+  // boss 11 Nov: no willows; the Bog uses only our recoloured tree kit.
+  add(`site-b-willow-${i}`,i?'tree-2-lime':'tree-4-lime',x,y,i?180:200,i?360:280,{shadowSize:[i?39.6:44,17]});
   rect(`site-b-willow-${i}`,'tree',x-14,y-23,28,22);
  }
  flats.push({src:'home/lily-0.svg',x:5790,y:3520,width:70,height:36,anchor:{x:.5,y:.5}});

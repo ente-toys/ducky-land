@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="112" viewBox="0 0 240 112"><title>Low lilac defensive yard wall</title><g stroke="#39272f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M10 37H230V105H10Z" fill="#d1a28f"/>
+ <path d="M9 36l9-15h204l9 15v13H9Z" fill="#ffe3b8"/>
+ <path d="M9 36H231M76 50v54m88-54v54" fill="none" stroke="#945b62"/>
+ <path d="M7 36H32V107H7ZM208 36h25v71h-25Z" fill="#b9847a"/>
+ <path d="M3 17h33v22H3ZM204 17h33v22h-33Z" fill="#ffe3b8"/></g><g stroke="#39272f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><g data-detail="spiky-fence" fill="#6e303d"><path d="M38 72H202V86H38Z"/><path d="M41 75V32L49 13L57 32V75ZM69 75V32L77 13L85 32V75ZM97 75V32L105 13L113 32V75ZM125 75V32L133 13L141 32V75ZM153 75V32L161 13L169 32V75ZM181 75V32L189 13L197 32V75Z"/><path d="M49 26v38m28-38v38m28-38v38m28-38v38m28-38v38m28-38v38" stroke="#a75b67" stroke-width="1.5"/></g><path d="M64 90l-5 7 5 9M172 87l8 8-4 9" fill="none" stroke="#80525b"/></g></svg>

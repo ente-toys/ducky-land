@@ -2,6 +2,7 @@ import {walkStep} from '../player-motion.js';
 import {facingVector,movementFacing} from './facing.js';
 import {traceShot} from './physics.js';
 import {RULES} from './rules.js';
+import {isCombatHidden} from './hide-bushes.js';
 
 const sight={point:{x:0,y:0},fraction:1,blocker:null};
 // Called on the authority at fire time for every participant, including bots.
@@ -10,7 +11,7 @@ export function assistShot(shot,player,players,blockers,time){
   let nearest=RULES.range*RULES.range,target=null;
   const cosine=Math.cos(RULES.aimCone);
   for(const enemy of players){
-    if(!enemy.alive||enemy.team===player.team||enemy.shieldUntil>time)continue;
+    if(!enemy.alive||enemy.team===player.team||isCombatHidden(enemy,time))continue;
     const dx=enemy.x-player.x,dy=enemy.y-player.y,d2=dx*dx+dy*dy;
     if(d2<=0||d2>nearest||(dx*shot.dx+dy*shot.dy)/Math.sqrt(d2)<cosine)continue;
     if(traceShot(player,enemy,blockers,sight).blocker)continue;

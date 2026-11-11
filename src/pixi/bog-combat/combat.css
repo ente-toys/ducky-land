@@ -29,3 +29,5 @@
 .bog-demo-winner{position:fixed;inset:35% 0 auto;z-index:60;display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px;background:#fff9df;color:#39472d;border-block:4px solid #39472d;pointer-events:none}.bog-demo-winner strong{font-size:clamp(28px,5vw,58px)}.bog-demo-winner span{font-size:18px}
 
 .bog-combat-lives{display:flex;gap:6px;margin:6px 0;color:#ff777f;font-size:21px;line-height:1}.bog-combat-lives .lost{opacity:.2}
+
+.bog-combat-popper-icon{width:30px;height:22px;object-fit:contain;vertical-align:middle;margin-right:6px}

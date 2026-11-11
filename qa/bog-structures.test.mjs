@@ -11,7 +11,7 @@ const layout=JSON.parse(fs.readFileSync('scripts/bog-environment/layout.json'));
 const nav=makeMap('bog-structures',data).nav();
 test('every upright Home facade has a connected door lane and one contact shadow',()=>{
  const buildings=art.props.filter(p=>p.homeSource?.includes('home-hamlets')&&p.name!=='home-planting-bed');
- assert.equal(buildings.length,16);
+ assert.equal(buildings.length,20);
  for(const p of buildings){
   assert.ok(!p.rotation&&!p.skew,p.id);
   assert.ok(p.shadow&&p.shadowSize[1]<=25,p.id+' contact');
@@ -22,10 +22,13 @@ test('every upright Home facade has a connected door lane and one contact shadow
   for(const q of buildings.filter(q=>q.id!==p.id&&Math.hypot(q.x-p.x,q.y-p.y)<700))assert.notEqual(q.homeSource,p.homeSource,p.id+' distinct neighbour');
  }
 });
-test('all eighteen Home benches remain unrotated and face a reachable southern view',()=>{
- const benches=art.props.filter(p=>p.name==='bench');assert.equal(benches.length,18);
- assert.equal(fs.readFileSync(root+'home/bench.svg','utf8'),fs.readFileSync('public/pixi-art/detail/street--bench-wood.svg','utf8'));
- for(const p of benches){assert.ok(!p.rotation&&!p.skew);assert.equal(p.facing,'south');assert.ok(p.faces[1]>p.y);assert.ok(nav.walkable(p.x,p.y+35),p.id+' seat access');}
+test('fight areas have no benches, names, planters, flowers, sleepers or lane wildlife',()=>{
+ const forbidden=/^(bench|flowers|home-planting-bed|sleeping-ducky|sleeping-z|cream-moth|pond-frog|cover-planter)$/;
+ assert.deepEqual(art.props.filter(p=>forbidden.test(p.name)||p.id.startsWith('label-')),[]);
+ assert.ok(!art.flats.some(p=>p.src.includes('site-bed.svg')));
+ assert.ok(!fs.readdirSync(root+'home').some(p=>/^label-.*\.svg$/.test(p)));
+ const lamps=art.props.filter(p=>p.name==='lantern');assert.equal(lamps.length,4);
+ for(const p of lamps)assert.match(p.id,/^(privacy-nw|google-ne|privacy-sw|google-se)-lamp-0$/);
 });
 test('arcade uses three independently drawn straight views and exact pier collision',()=>{
  const bays=art.props.filter(p=>p.id.startsWith('site-b-arcade-'));

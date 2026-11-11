@@ -27,12 +27,12 @@ test('Bog uses the island audio unlock, mute, active-source stopping and disposa
   try{
     let now=0;const audio=createAudio(),playSound=createBogSounds(audio,{now:()=>now});
     assert.equal(created,0);playSound('shot');assert.equal(started,0);
-    await audio.unlock();assert.equal(created,1);assert.equal(generated,6);
+    await audio.unlock();assert.equal(created,1);assert.equal(generated,Object.keys(BOG_SOUNDS).length);
     now=1000;assert.equal(playSound('shot'),true);assert.equal(started,1);assert.equal(playSound('shot'),false);
     playSound('pickup');assert.equal(started,2);assert.equal(playSound('wat'),false);
     audio.toggle();assert.equal(audio.muted,true);assert.equal(stopped,2);
     now=2000;playSound('tag');assert.equal(started,2);audio.toggle();now=3000;playSound('tag');assert.equal(started,3);
-    await audio.unlock();assert.equal(generated,6,'samples are cached across unlocks');
+    await audio.unlock();assert.equal(generated,Object.keys(BOG_SOUNDS).length,'samples are cached across unlocks');
     await audio.suspend();now=4000;playSound('respawn');assert.equal(started,3);
     await audio.resume();now=5000;playSound('respawn');assert.equal(started,4);
     audio.dispose();assert.equal(closed,1);now=6000;playSound('ghost');assert.equal(started,4);

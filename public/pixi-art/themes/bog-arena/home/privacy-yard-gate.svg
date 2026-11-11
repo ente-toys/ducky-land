@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="260" viewBox="0 0 240 260"><title>Open lilac arch, two solid gate feet</title><g stroke="#39362a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M14 251V116Q120-51 226 116V251H194V123Q120 4 46 123V251Z" fill="#f4e8c9"/>
+ <path d="M14 116Q120-51 226 116L212 128Q120-13 28 128Z" fill="#fff9e5"/>
+ <path d="M29 122V251H46V123Q120 4 194 123V251H210V122Q120-15 29 122Z" fill="#fffbed"/>
+ <path d="M9 237H49V257H9ZM191 237h40v20h-40Z" fill="#f5edda"/>
+ <path d="M120 83v12" fill="none"/><path d="M105 106l15-12 15 12v31l-15 6-15-6Z" fill="#e6cda0"/><path d="M102 106l18-12 18 12-18 7Z" fill="#42c3ef"/><path d="M120 113v27M112 117v12" fill="none"/></g><g stroke="#39362a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><g data-detail="halo"><ellipse cx="120" cy="25" rx="24" ry="6" fill="#c8b68f"/><ellipse cx="120" cy="25" rx="20" ry="3.4" fill="#fffbed"/></g><g transform="translate(120 67) scale(.7)"><g data-detail="angel-wings" transform="translate(0 0)"><path d="M-3 0Q-15-15-30-10Q-35-5-24 1Q-31 5-19 8Q-23 13-12 13Q-4 12-3 0ZM3 0Q15-15 30-10Q35-5 24 1Q31 5 19 8Q23 13 12 13Q4 12 3 0Z" fill="#ffffff"/></g></g></g></svg>

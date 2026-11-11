@@ -7,6 +7,7 @@ sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import Polygon,LineString,Point
 from shapely.ops import unary_union
 from shapely import affinity
+from cove_geometry import round_cove
 D=json.load(open('scripts/bog-environment/layout.json')); P=D['palette']; W=D['width']; H=D['height']
 def smooth(p,closed=False):
     out=[]; q=([p[-1]]+p+[p[0],p[1]]) if closed else ([p[0]]+p+[p[-1]])
@@ -26,6 +27,8 @@ coast=smooth([[4200,330],[4950,600],[5520,860],[6400,660],[7100,1010],[7460,1640
 land=Polygon(coast).buffer(0)
 wetShapes=[Polygon(smooth(p['points'],True)).buffer(0) for p in D['pools']]
 wet=unary_union(wetShapes)
+coast=round_cove(coast,wetShapes[next(i for i,p in enumerate(D['pools']) if p['id']=='cove-pool')])
+land=Polygon(coast)
 roads=unary_union([LineString(smooth(r['points'])).buffer(r['width']/2,quad_segs=12) for r in D['routes']])
 courts=[]
 for name,a in D['areas'].items():

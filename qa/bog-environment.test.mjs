@@ -26,7 +26,10 @@ test('all eight courts and the Home dock connect with the actual padded island n
  for(let y=7560;y<=8400;y+=20)assert.equal(map.landAt(4450,y),false,`open sea mouth ${y}`);
 });
 test('exported building/wall rectangles match movement obstacles exactly',()=>{
- assert.equal(BOG_SOLIDS.filter(b=>b.kind==='building').length,16);
+ // Colonnades and headstones have individual feet rather than a broad box.
+ const facades=art.props.filter(p=>p.homeSource?.includes('home-hamlets')&&p.name!=='home-planting-bed');
+ assert.equal(facades.length,20);
+ for(const p of facades)assert.ok(BOG_SOLIDS.some(b=>b.id===p.id||b.prop===p.id),p.id+' physical footprint');
  assert.equal(BOG_SOLIDS.filter(b=>b.kind==='wall').length,14);
  assert.equal(new Set(BOG_BLOCKERS.map(b=>b.id)).size,BOG_BLOCKERS.length);
  const shapes=bogBlockerPolygons();

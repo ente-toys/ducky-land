@@ -6,6 +6,7 @@ import {OUTFIT_OPTIONS} from './outfits.js';
 import {createSnowCover} from './snow-cover.js';
 import {createKarmaQuiver} from './karma-quiver.js';
 import {rinkTilt} from './rink-slide.js';
+import {createPrivacyShades} from './privacy-shades.js';
 
 export const duckAnimationNames=Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
 const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2, STUMBLE=.35;
@@ -175,9 +176,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       view.morphWeight=undefined;
       for(const part of view.parts){
         part.sprite.texture=next?.textures.get(part.url.split('/').at(-1))??Assets.get(part.url);
-        if(part.role==='tail')part.sprite.visible=!next;
+        if(part.role==='tail')part.sprite.visible=!next?.tail;
       }
-      if(next&&!view.devil){
+      if(next?.horn&&!view.devil){
         const tuft=view.parts.find(p=>p.role==='tuft'),tail=view.parts.find(p=>p.role==='tail');
         const horns=new Container({label:'Google devil horns'}),left=new Sprite(next.horn),right=new Sprite(next.horn),spade=new Sprite(next.tail);
         left.anchor.set(.35,.88);right.anchor.set(.35,.88);left.scale.x=-1;horns.addChild(left,right);
@@ -192,7 +193,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         horns.position.set(tuft.joint.x-25,tuft.joint.y+27);
         view.devil={horns,spade,tuft,tail,tailOffset,positions};
       }
-      if(view.devil){view.devil.horns.visible=Boolean(next);view.devil.spade.visible=Boolean(next);}
+      if(view.devil){view.devil.horns.visible=Boolean(next?.horn);view.devil.spade.visible=Boolean(next?.tail);}
+      if(next?.shades&&!view.privacyShades)view.privacyShades=createPrivacyShades(view,next.shades);
+      if(view.privacyShades)view.privacyShades.root.visible=Boolean(next?.shades);
     }
     // Combat attaches after the island's update. Repaint the current outline
     // now so the first rendered Google frame cannot flash the yellow palette.
@@ -296,13 +299,13 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       part.gx=joint.x;part.gy=joint.y;   // glided seat, before pose offsets (eye pieces sit on it)
       if(part.role==='wing'){joint.rotation=side<0?p.wingL:p.wingR;joint.y+=Math.abs(p.sway)*10;}
       if(part.role==='foot'){const lift=side<0?p.footL:p.footR,step=side<0?p.stepL:p.stepR;joint.y-=lift;joint.x+=step*fwdX;joint.y+=step*fwdY;joint.rotation=-side*lift*.005;if(seated){joint.x+=fwdX*24;joint.y-=12;joint.rotation+=side*.12;}}
-      if(part.role==='eye'){joint.visible=currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.x+=look.x;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;}
+      if(part.role==='eye'){joint.visible=!appearance?.shades&&currentAction!==5;joint.scale.y=Math.min(p.eye,blink);joint.x+=look.x;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;}
       if(part.role==='beak'){joint.x+=look.x*1.15;joint.y+=p.headY+look.y;joint.rotation=p.headTilt+turnLean*.6;joint.scale.set(1+p.bill*.08,1+p.bill*1.8);}
       if(part.role==='tuft'){joint.y+=p.headY*.42;joint.rotation=p.headTilt+p.tail*.35;}
       if(part.role==='tail')joint.rotation=p.tail;
       if(part.role==='toe')joint.visible=!clothing.shoes&&currentAction!==1;
     }
-    if(appearance&&view.devil){
+    if(appearance?.horn&&view.devil){
       const {horns,tuft,positions,spade,tail,tailOffset}=view.devil;
       horns.position.set(tuft.joint.x-25,tuft.joint.y+27);
       horns.rotation=tuft.joint.rotation;
@@ -315,6 +318,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         horn.position.set(p.x+(other.x-p.x)*w,p.y+(other.y-p.y)*w);horn.scale.set((i===0?-1:1)*k,k);
       }
     }
+    if(appearance?.shades)view.privacyShades.update(turnAngle);
     // Body geometry depends on the turn, while walking animates its container.
     // Subpixel turn steps avoid rebuilding and triangulating an identical outline.
     const morphWeight = Math.round(glide.w * 128) / 128;
@@ -402,10 +406,10 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     for(const g of view.garments){for(const gh of g.ghosts.values())gh.visible=false;g.sprite.alpha=1;if(g.node.alpha<1){g.node.scale.set(Math.max(0,g.node.alpha));g.node.alpha=1;}else g.node.scale.set(1);}
     if (currentAction===5 || view.laughing) view.expressions.clear();
     view.laughing=currentAction===5;
-    if(currentAction===5)for(const eye of eyes){const {x,y}=eye.joint;view.expressions.moveTo(x-14,y).quadraticCurveTo(x,y-17,x+14,y).stroke({color:0x232323,width:5,cap:'round'});}
+    if(currentAction===5&&!appearance?.shades)for(const eye of eyes){const {x,y}=eye.joint;view.expressions.moveTo(x-14,y).quadraticCurveTo(x,y-17,x+14,y).stroke({color:0x232323,width:5,cap:'round'});}
     if (p.angry>.02&&face || view.angry) view.brows.clear();
     view.angry=p.angry>.02&&face;
-    if(p.angry>.02&&face)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
+    if(p.angry>.02&&face&&!appearance?.shades)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
   function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false,ice=null}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;

@@ -1,4 +1,5 @@
 import {createBotBrain,createBotController,resetBotBrain} from '../src/pixi/bog-combat/bot-brain.js';
+import {isCombatHidden} from '../src/pixi/bog-combat/hide-bushes.js';
 
 export const BOT_FILL=6;
 
@@ -11,7 +12,7 @@ export function createBogBots(arena,combat,options={}){
  const departures=[];let serial=0;
  function remove(slot,poof=true){
   const p=arena.state.players.get(slot.id);if(!p?.bot)return;
-  if(poof){departures.push({id:++serial,x:p.x,y:p.y,team:p.team,hidden:p.alive&&p.shieldUntil>arena.state.time,time:arena.state.time});if(departures.length>BOT_FILL)departures.shift();}
+  if(poof){departures.push({id:++serial,x:p.x,y:p.y,team:p.team,hidden:isCombatHidden(p,arena.state.time),time:arena.state.time});if(departures.length>BOT_FILL)departures.shift();}
   arena.leave(slot.id);resetBotBrain(slot.brain);
  }
  function replace(team){

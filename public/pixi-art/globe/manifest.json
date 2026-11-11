@@ -11239,19 +11239,15 @@
     "sources": {
       "version": 1,
       "theme": "bog",
-      "modelSha256": "5894b44309aa29b0f831abd96ada9d7131ae1f2a5d5a2c1c434c68c733a4fe2f",
+      "modelSha256": "898e1f9518aa333f6712dae05f56fa5c869c3467bbfc2f01463b9bbb855f4d9e",
       "files": [
         {
           "path": "public/pixi-art/themes/bog-arena/art.json",
-          "sha256": "b5816c2a31422c0f974ab905f6ce318c7ad48cf5ba8a369c5a984a49b7d5e17d"
+          "sha256": "f6e0fe1f0aa096226f3a99a85104c089927e22086f61015d7d3521854a8f492e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/ground.svg",
-          "sha256": "72be574a20b18ab2fbf1c988d6119defc7cadd21d8cd87a792696ffa720226f7"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/bench.svg",
-          "sha256": "0eada8da38c75aeaebad9c52bb6fd8bfb34163b53e54bba5bba2ffacbed8a2f0"
+          "sha256": "4c38e50e45c357c14b07c6cd4fb2a8d700f0e1204f88ec8f25910a22c2ae9741"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bridge-ew.svg",
@@ -11259,179 +11255,235 @@
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-1-lime.svg",
-          "sha256": "004a16a5bb5f2d41dd5ca21cb3a1053a350fcd12dfdb7459f6460a881bef3859"
+          "sha256": "4ad0a5721ca4775ec59041c01df871c66dfbd546d36ac4fb638178c889737d0f"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/bush-1-magenta.svg",
+          "sha256": "3310e157570fb75fc7599d5127fdab0bea1e2d19049da62ab274c3f5be9bcfbc"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-1-orchid.svg",
-          "sha256": "172dc520bd3526bb2e3e2da193a4f2678bc3a816ec568214ff13bb5598cd37a0"
+          "sha256": "1ec6b4e60cbf317a94361ae2935306ed44425b43de6d3c0db2a466be525fbe6b"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-1-sage.svg",
-          "sha256": "780ac0a0856b75914d2df7abaecfb938fa2821bb969bb852dc71abc34f659a2a"
+          "sha256": "08f6a163bb646c83678ea4230525477bde72c2beb45e81833d3ea140a7c121c1"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-1-teal.svg",
-          "sha256": "b69a8e94d9c59c03c23e9e8303fef80658b41e8be3cae0392c9577f6ab855da1"
+          "sha256": "2c48208fec540e95d1e3dcbf51444518989b73eaded9f8db81627a734c5cceb1"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-2-lime.svg",
-          "sha256": "187832a50514671823b6393b2480f15b1b1d89cafbcccb5db26b608e4d6c7476"
+          "sha256": "7973755d645c831bd6b2fc08e51ef08e9c4b367ef1bb4df7e4221d5dcb386f52"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/bush-2-magenta.svg",
+          "sha256": "78c12313dd19304ace10ea3d7a8182d4767904996fb026ffe0dde563af9fe4f1"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-2-orchid.svg",
-          "sha256": "1bfbedacacbfa639a30f60a50ce84be744b8ad3323d8cbb847dd0f62d37c62dc"
+          "sha256": "5edd7d6dbd3ddaf34be52876b0c170abe2f1b850654e5d0bcc740fc4202c1bfd"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-2-sage.svg",
-          "sha256": "80e1c85a0e34bf20ac4c2b21065a71c58e9fdaa293a902667cc027820f8dcb5a"
+          "sha256": "78e48b179b00b32107b6ae83f9978d6d0ea673a337122e57c0b91880415cb76f"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-2-teal.svg",
-          "sha256": "085c10db77074e2acd783edcd085ed21ca2aef5c36fa26bdf98f470ef0e54e69"
+          "sha256": "84e412791bb99b29189308f213ba69759efaf33267e69830e039da8bbe8eacab"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-3-lime.svg",
-          "sha256": "f3327f6491f7fc79426e53bb924fdc96b40569d3cecc064bf5e521cb13a86034"
+          "sha256": "d2b62de78675d69293b890eab20ca46d43beec69a165d58f3d2bd1673ff4f8d0"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/bush-3-magenta.svg",
+          "sha256": "4dbe1206e498e21a6f6ba8db3f95749450152fdec556326c2d00a40ca613914b"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-3-orchid.svg",
-          "sha256": "08280df19ab60572bd3ca82109bc8e58f9caa74016872ea64f118787f2576f4b"
+          "sha256": "899d44139efb05adca6b27e5caf4f264f2f044b991eb76ed981b5309b6bf31d9"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-3-sage.svg",
-          "sha256": "d6224211d96982872d5052ccef196e68fa9eec34255da1cf8bc06fcc2c4acef3"
+          "sha256": "16ea4895b8c598f4df026cefee5d5704412e99222a953b901f3c3b58327caf32"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-3-teal.svg",
-          "sha256": "7a2837937452363958baf25b4f824d854259d76d667efe6ee1f1ae420469a686"
+          "sha256": "fecbcdde97ee1a9d1b79bc94a3612c42f75033d7af8c6d8844e93a1b9b0f72a5"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-4-lime.svg",
-          "sha256": "aab76b8fe50c0c485223c4d7771e83b18ee901d36bd71085c0a2187f2f4d80d7"
+          "sha256": "dd7598c7d641b15162c6c1c00cb73ea99f2e424334664c61f9806b476eae6df0"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/bush-4-magenta.svg",
+          "sha256": "09cb21d8b87a1d0dacfb8d5a1ae4899f13408f79701ed298d04ee15532f4fa1f"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-4-orchid.svg",
-          "sha256": "961940ecdb85d0ba3d8c1b7bdd37aa7e3b2b44369dff6ad24cadd7c4e064dca0"
+          "sha256": "4113f24cddb998f6eaac695ac9688f71b70bdea5cee39f4fdedfe7fd97b5e6ec"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-4-sage.svg",
-          "sha256": "d7f1593b0dc30104ff43f6aae110d5722d34cbacdf6cecf0f7972c86cef2fa9e"
+          "sha256": "39d835c06642b4ed96349e3e629eed5f6530d6d812f068a8fb36674efbe21e85"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/bush-4-teal.svg",
-          "sha256": "6e96166d7a2f41a0679fbd3ddd43375f342c744117823b46df1f715dd15bac38"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/cottage.svg",
-          "sha256": "0024bbe2f5a5120373c359fcaa5b0a7c6920c8a472ef6869e03c38d9274f435e"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/cover-crates.svg",
-          "sha256": "812e0b8962b43b7e577e14ee73e63636c67a6967fabada289b7a633282bdef98"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/cover-harvest.svg",
-          "sha256": "3789ee2eeca02d2f8a244a38dc88ada1ebf9cf0f0765502f3fe605f1cb3d53ed"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/cover-planter.svg",
-          "sha256": "d0fc8be9887e78f3790b88d27cbc0a2492a6bafc55e976f9c7302bf2f8bb409b"
+          "sha256": "d0e81d3112df0fc20dbc41e7fb37d16fa5d33103daedadfdbe3f6e24d6bd3394"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/dock.svg",
           "sha256": "f2eb6c321d5181254802968d0a99ea3743b5eca1a1c8a4bc46ee87b9c2e055c7"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/fb-moon-hall.svg",
-          "sha256": "e5d8866bf9ba974d72a14f85096d88764d50c3bf92f9d0f852c9fb5bb3dc00f1"
-        },
-        {
           "path": "public/pixi-art/themes/bog-arena/home/fb-moon-seal.svg",
-          "sha256": "890172cefb2ef6288d3ac0f0ea9d991c5015b73072d8c398c4bd949e5998c461"
+          "sha256": "b3938975a2d29ee10d6cf326dea8bfaea8c96bbabbfb11283e10144ea0d1d11f"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/fb-tuft.svg",
           "sha256": "06e820782bfb1950b49a4d62307c1cb07548306bfc3a3f15b413f54d26c1da76"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/flowers.svg",
-          "sha256": "605439c655446b9bbdaa5379bd779173df7f64fd3bbc1d3bf382598ea71dc4ad"
+          "path": "public/pixi-art/themes/bog-arena/home/firefly-glints.svg",
+          "sha256": "9814de110eb447f429c39789094265b11c9870b472402a71a3f7eb7f8d2576dc"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/hall.svg",
-          "sha256": "b1080ef5ad36ac3e424740ffd7b4d436e1e3011e0dbace99a03a18e446443e8b"
+          "path": "public/pixi-art/themes/bog-arena/home/google-door-glow.svg",
+          "sha256": "889afc745affdb1b1bae0924579de5b1e4cb9ece1b24f94cae2657b3392ce012"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-google-ne.svg",
-          "sha256": "9aa5d29647d6f2cc50aae8e37dce35c311f1676046625e158f45247005f5eb77"
+          "path": "public/pixi-art/themes/bog-arena/home/google-lantern.svg",
+          "sha256": "2291c37a766a36282722d3e5c8469b83c85ef177a38a2df3141d39efc195933d"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-google-se.svg",
-          "sha256": "a975f323927c6c4fe08073ba0098a64f0cbefaeebfb23b6bf4b8ec4dfbed0f87"
+          "path": "public/pixi-art/themes/bog-arena/home/google-ne-annex-team.svg",
+          "sha256": "5ea1de52664b33cf44a0f3926187ce378fb5304fbb4f59195d9cb61254032fba"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-lantern-cove.svg",
-          "sha256": "1dc276be1e3ed7eff43641df291e71270661abdc0726c467f4f2216175719d09"
+          "path": "public/pixi-art/themes/bog-arena/home/google-ne-hall-team.svg",
+          "sha256": "ac73e5c518409b0898b03a17b72093d6aa155ea9b386ef89e1b945b5bd56a267"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-mid.svg",
-          "sha256": "b61f1db65cef2e83d332888459188fc7cf8aea90ef65f0f7fdd170fea3cc4171"
+          "path": "public/pixi-art/themes/bog-arena/home/google-porch.svg",
+          "sha256": "0c146b1b48294a7bb3b13e10b4a903260d453003db7d190bff04d247872cce3a"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-privacy-nw.svg",
-          "sha256": "ad6e0458d5e1671b0affe23b8d4983a1fd923402a27f870379d7d4dfb71815f0"
+          "path": "public/pixi-art/themes/bog-arena/home/google-se-annex-team.svg",
+          "sha256": "5ea1de52664b33cf44a0f3926187ce378fb5304fbb4f59195d9cb61254032fba"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-privacy-sw.svg",
-          "sha256": "b8b608a1034d12c5dbeb314b66889299ea33c6ed0c91186730b1f4931587ee6d"
+          "path": "public/pixi-art/themes/bog-arena/home/google-se-hall-team.svg",
+          "sha256": "ac73e5c518409b0898b03a17b72093d6aa155ea9b386ef89e1b945b5bd56a267"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-site-a.svg",
-          "sha256": "65a2d2d98138935e722f01a37625685a5e0f9047b0e1ba356f6bf39884f4a523"
+          "path": "public/pixi-art/themes/bog-arena/home/google-wz-crates.svg",
+          "sha256": "81693787bf8512e62171f09fd2f022aa7d12b62d5587e779de88bee2960ff895"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/label-site-b.svg",
-          "sha256": "3fcea2ffc80902acd5080e6257f86f5c2df8cf9d9fd61229247d3fb3b66709e9"
+          "path": "public/pixi-art/themes/bog-arena/home/google-wz-sacks.svg",
+          "sha256": "218b666417caf3954a1e2220f8d0d5f361f9dd278f1d5bfeec3daafddf1565e0"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/lantern.svg",
-          "sha256": "2db253a439a2fa868bbb5fd8f67ac3b0bef365f0d9842d1aa0f5f6a2c052eb62"
+          "path": "public/pixi-art/themes/bog-arena/home/google-wz-wall.svg",
+          "sha256": "a5b28994ed9eba709b15f50a2b8945c595812f16b310bb281d5acf53cbd2a952"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/google-yard-gate.svg",
+          "sha256": "011fe24260d33352e1e5df4b50354fc5a95e3dde325ddbc721a5c80fb0cf9e6e"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/google-yard-wall.svg",
+          "sha256": "f7dad0fa2b6f303753e4e9baa27c91e1cd74683495630606bd05da8e477778ae"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/lantern-ground-glow.svg",
+          "sha256": "77048e65a5fefea9a9375f8288be655bb7661e8f060fc38b1401c5a498c7b276"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/lily-0.svg",
-          "sha256": "3769d2ae59be3f5c30d8ffe1721745d945bbfc06b3c4d88d8c9fcb744e8c8e40"
+          "sha256": "3385df8095a3adfff8c496d8842de3f00d4c3e40384ae206ae6a871ae68c4447"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/lily-1.svg",
-          "sha256": "8f2ef3362b6f494f429570f494e5119808f7dd6ffaef82863d85bfda0c59850e"
+          "sha256": "4ecd43b0d6df0929b39402054eacf6f059f8cd3d4e070bc013744ec73bb8465e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/lily-2.svg",
-          "sha256": "9cfc85f52b4fbd1229c1af5bf6df7833b4d82a95c07f94099c753745f9d9afce"
+          "sha256": "086454887de80383ad4652848ec7bf8e8d1725b22a0f4379cc955f54426c7c4c"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/lily-3.svg",
-          "sha256": "829ecef46cb48e85dd5c254d688276794d4d8945db892eee5e27dfc14e92edf8"
+          "sha256": "61b8a39cfd5198c902e66fb53082da8322028012414806e52bed4680689f6c6b"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/lodge.svg",
-          "sha256": "5471ab561a6a03b87ce81ccd8d0983b48807e790ef8957e404a296e85351ce5a"
+          "path": "public/pixi-art/themes/bog-arena/home/p2-balustrade.svg",
+          "sha256": "4c16d0fa147c84a10ad9492d46f24553d4486bbefe488d438f59ea45561a805c"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/porch.svg",
-          "sha256": "bb6e2fcb4a659d59cf3b2671b5b6b72412927a5d45c64b8efa62633b3e203847"
+          "path": "public/pixi-art/themes/bog-arena/home/p2-colonnade.svg",
+          "sha256": "2365d9d1b62c6b6423915b5413689b0f32fc787fac3a384d82387699bb16e5c4"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/qa-home-planting-bed.svg",
-          "sha256": "58a4c053bfc3b637731e56bd72d74c330c7a60490623a8f574204fc6b1d4ef5a"
+          "path": "public/pixi-art/themes/bog-arena/home/p2-headstone.svg",
+          "sha256": "fa2b86f2833ad7703f84ef3817da985d4971aefc8e9d9d7bd6fcdf3e8c69778a"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/p2-site-a-pond.svg",
+          "sha256": "836c41fcee4d650acb8b23e12fe3ee93fda2b432e1535f3fb16cef1c49ce82a6"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-lantern.svg",
+          "sha256": "b4003d4f60aca43f0e9b5acb8fa4f5670837b167f98c1fa69d34d6b2afa8d159"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-nw-annex-team.svg",
+          "sha256": "16f7403f816bf64ec77d727c131d81936d1b32f39e7b7399d5b55499a3b54a69"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-nw-hall-team.svg",
+          "sha256": "8c5c69cd80bd2e5ca00bbc125a76924c28459d2914b19e541ae146d0f26ee52d"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-porch.svg",
+          "sha256": "3519565c4a8e1f009a6f756527c02ca076fb94d659eb00c65d28662d36cb60f9"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-sw-annex-team.svg",
+          "sha256": "b13056e54d844d410422e505baca95b7106ad3e6e6aad082334961de9a174c6c"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-sw-hall-team.svg",
+          "sha256": "8c5c69cd80bd2e5ca00bbc125a76924c28459d2914b19e541ae146d0f26ee52d"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-wz-crates.svg",
+          "sha256": "66214b374406951f6ccb0710892af9a1bdd7f9c5f0aa0046861110ea55aa4847"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-wz-sacks.svg",
+          "sha256": "e405d0fe3699a66e5519707dad03c58e0811caec9a95d024c43ddb21cbb0d621"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-wz-wall.svg",
+          "sha256": "0feb5d098af32d27f0ca2cd2c746e12ec185cff13bc124fe1c4de988ecf1df06"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-yard-gate.svg",
+          "sha256": "fa89569c39639aa3a81a107e482ce68112764b34a327804471b0254c90582e0e"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/privacy-yard-wall.svg",
+          "sha256": "764436e6fc610798adb57692d484e9510cd2fdc203e0909d73dea27cb70bc76e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/reeds.svg",
-          "sha256": "c2a012c364068dad27e317c443950e28f082b127bd3d8ca110009ba9c0af1d36"
+          "sha256": "ca053034e829ebf38eddf77aa33c286871858a70e928bcd59dcabf0ea440a0fa"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/site-a-cauldron.svg",
-          "sha256": "ea6bc429770d1a6bf6f6ef7e59d109fdb6dbbc8c335fcd57569474e263c3cb86"
+          "sha256": "9b2fbce239e5e22af6fb1659653dd68985e4d740d2c314fde685a4c0f0b0f2f1"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/site-a-glow.svg",
@@ -11439,115 +11491,187 @@
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/site-b-arcade-front.svg",
-          "sha256": "b322f21b12b01eb0e954c43531c9ddd20c1a4248990b1f9192b179a3e516bec4"
+          "sha256": "3769b6846c82b44862e13674f03e347948e3dfa2fde99123bac2095229d86a36"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/site-b-arcade-left.svg",
-          "sha256": "c3a74dbedf0680c6335de8108d2e75a91bee98a6afee1ac8e42e218b69db60d2"
+          "sha256": "02cd88b1a52fb753b723f70280c86dbf382e786dea777c77f0150ae5b67444ea"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/site-b-arcade-right.svg",
-          "sha256": "375ebfb7fcf133085a60827a855b7494ff4e7bd0691bdc5948ed6e09ab139d65"
+          "sha256": "d8976f06d77c64e4bb93b02c4358b8b79f8760343882acd77d1bfc302bfa0c4d"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/site-b-chapel.svg",
-          "sha256": "f2c794b1db53bbab3ec9b39ae03ed233165cd31c4187107a3442991728116444"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/site-bed.svg",
-          "sha256": "e72a55c72b68cb1fe959968f647e98e291ef9185cc4af8bf62c9cabf4eff3c91"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/site-willow.svg",
-          "sha256": "88c08aefdc282df3358088637a59a3c215d10f16e2b0fe4900a1c70dee1421e4"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/studio.svg",
-          "sha256": "fd08e8033595a833597156a6c9cf68bb4795c3269ea9fd6073645c1ad2e9b34f"
+          "path": "public/pixi-art/themes/bog-arena/home/site-b-headstones.svg",
+          "sha256": "7f5006f1d0bfe56bacf84289b0e40b33f72f76394186db333d06d36c06f2f8f9"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-1-lime.svg",
-          "sha256": "20cb5bea0fa4bb500466565d68db5190ae9fae43def0f339f0a643f9c07085c9"
+          "sha256": "d089c192c1b47e56bf23a82368fca53cae3f038941026e292210e547a8208930"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/tree-1-magenta.svg",
+          "sha256": "1fb66e1ecb8dabd0b12368ecc2d81670034ffa5ee554baf346f3bc11b09e0b66"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-1-orchid.svg",
-          "sha256": "1d6a18f3470ac21ce8d56916dcb4648a877a8e30cee7ba07b7e40ec1e4e8fed5"
+          "sha256": "872ccac00a254d79844cc0ab5eb4cea22be8badbd2a9715fbdd52e3a376b5ba9"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-1-sage.svg",
-          "sha256": "dab5f1286c79f28492dab91179e83ab91376b386c5ab4aa4dc8b6fad2912d678"
+          "sha256": "5f08e4739532922d67facf4aeaf3a77c3f0c8c2a9cc27b559372f24b095b78fe"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-1-teal.svg",
-          "sha256": "e6ab28b6dc454d6c2b4406e81eb003c088d42da5e554cc8cb83fb7fc722226a9"
+          "sha256": "4778dccb5ce194f9cb2f1d93e920bd3faa6918ef04b38e4eafbb1409e271ab26"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-2-lime.svg",
-          "sha256": "97c5040d7a6e999ce39cbac72a40c9659b60dd412f0a62b051f048d9409aeff0"
+          "sha256": "1587c0c8a6f439ffb41e477b41ff9890ab857bd6937ca6178d40c67944c620ee"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/tree-2-magenta.svg",
+          "sha256": "7cfa2f0849514cbd090623d0008ca2186490a631191dd64c1e4ef00759c874d5"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-2-orchid.svg",
-          "sha256": "c117bcd3f331137a6ab18c11740eb087b1802280e57ad347e0fabf7d59cd39e0"
+          "sha256": "dbf5186ac7d806cb669a26668864ec60085d6390c36bb3c82fc755e707e78e1a"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-2-sage.svg",
-          "sha256": "0288864a89807bcc9a06c8ac8ecdb0087fc7fc766fcd6e58965bf4054dd920e4"
+          "sha256": "1bc0059372f65bc40e8d945bbeb7989d475a846223f37aef6cab0149e7917239"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-2-teal.svg",
-          "sha256": "4a6eff7ddd1668b55329f0362b7909a4a19c4a20b14303bc8622ba9cfbea50d7"
+          "sha256": "f8c7fd5993b881b26a4a12acab298103185666e47be0ff7f7490fbde0d45b028"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-3-lime.svg",
-          "sha256": "af94bfe27216917f2ecc01de02bf6c8e4dd6669ac7077bbdf04cc5ab4d956346"
+          "sha256": "3be9f9659390d04b07d886b234270588ec893f37d5402c4240eb6a9d090832a5"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/tree-3-magenta.svg",
+          "sha256": "3c015b337e426e7c253d1770d7fcee5f7551fee9a2ace5b8f60907e33b165c8e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-3-orchid.svg",
-          "sha256": "4fd665b9472ee1884e485936b8e0aada1905688d4ca4e7d406841612f38e3841"
+          "sha256": "ba67f8ab3149a75ddfc3e83eb411b5f950bcc10dcffb406354ee0c5ab1968e4e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-3-sage.svg",
-          "sha256": "7d667503f4be986c955a8578cb62b9d4b80fca4167194fac1bd2ac3118048cdb"
+          "sha256": "e4945fe5dffffd490807c4b90193b8adc461ed195c633d2fde3b3c502c3167d6"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-3-teal.svg",
-          "sha256": "214968697ca19daa50764a9bb55579a1d9066672dca21bbe97207cbef5e22782"
+          "sha256": "7d1a1f36e964ec7bc1ecde11c9ef5c4860bd0b3deb1d1b9fa574a2f3ae1b0db6"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-4-lime.svg",
-          "sha256": "485d98041e54888c671c8fe92f568b467c4a29735949448a367d4e0aeba7b751"
+          "sha256": "15ff7bd068e4503abf9770f5e592b1ffd244a5f928f55da074c798567519875f"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/tree-4-magenta.svg",
+          "sha256": "cb07bd47d72ec9b60217c135480bf45a6c13630b644256ab7ca25681fea4cd8c"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-4-orchid.svg",
-          "sha256": "33e70a622d2383b41c74b84a241d2b79eee25730892f27000c7b0e05436ca430"
+          "sha256": "a217cc8e5bf2a1e356029310f49a2bda1088b7ee34ffb59c9ea92720986c67af"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-4-sage.svg",
-          "sha256": "f2f9d0da8ad5db13c448b4117c4f586b9d6683743239c5d2a52b7284b7611cb0"
+          "sha256": "183f85440536bbdd7fa7265e57ddfea604923d6b6c9c104e381588b26217e779"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-4-teal.svg",
-          "sha256": "4a48be79b31d54fd0a5a0dee2985eb7480dd1084aafe53855cd4cdedd1a5751c"
+          "sha256": "5ecce54f2c5d1d17f34b5b4fb6f166ce37572e6680f944639eee39d9dd0fe159"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-5-lime.svg",
-          "sha256": "322f4ba763e636bfa0728a9f2df318c98676f5cd05f6b760b79b152199d384dd"
+          "sha256": "ce6edc32b4d6bdd9b4883fc9ff6ab8dec641ba5a5ee51aff1060f3cd4a212382"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/tree-5-magenta.svg",
+          "sha256": "d093ecd7f18d4a9c2f68e5c24dedac63be0b40207e2bfdf7e6cc2a8729c92e3f"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-5-orchid.svg",
-          "sha256": "f763011d7dcaee934b47b9df21e3fcca9d33e874bbc6d60ae6a99fff8ae92242"
+          "sha256": "63f0bccdc7c8932d7f019866a38cf4e6973f3a5058fd0431717404bff806d65e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-5-sage.svg",
-          "sha256": "ab0c4615e2b8836b2c80fe280857344f390828c2e01431def19abf459d99615c"
+          "sha256": "c1247895a2a82759c09fd885c60d9681c7347e1228af05c44008917f8304bb99"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-5-teal.svg",
-          "sha256": "64686b435acbaeb31df9e8794c56d9cdb435a385544380201051213edec03e03"
+          "sha256": "9d8f3246f4b97cb90261c2b9c9f7894c9515a3731528fa7b3c63d2d71b51cf11"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tuft.svg",
           "sha256": "4343ab272889d79e72b6997e653c4ef6e37835fab26b91cb71398283cf4867aa"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-barrels.svg",
+          "sha256": "63c80a6a7bb0b94a0a1e6d6e062651937772e2df2581b182c85265d645a9e32d"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-cove-boathouse.svg",
+          "sha256": "e6c6140e6f1dee61ab6659e5250387fa056c59d7dc0a8f0d163b76606c78af46"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-crates.svg",
+          "sha256": "259a55f6d1e3be56084004b4d104c73147fdcd95158fd40fd4dfa02c2d6eba7b"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-east-shell.svg",
+          "sha256": "d007ba55b15a951d02dadc65ba029fa438ff11b4c69aa2a37cc3861490210f17"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-mid-hall.svg",
+          "sha256": "85683876a85b8b5ecade5a25d0b0c4b8c10cdfaa124031b91a93c4f508b9b011"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-north-shell.svg",
+          "sha256": "d007ba55b15a951d02dadc65ba029fa438ff11b4c69aa2a37cc3861490210f17"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-ruin-ns.svg",
+          "sha256": "9b66ca85ec39ae6d88ed08dcfcbe6aa0d50a8647650cff289b0fb97e22d16c84"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-ruin.svg",
+          "sha256": "10019e505961a7c8aa45b7c404594426bb01e7123496e708dfc584ca5b0e51e6"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-sacks.svg",
+          "sha256": "97186431f40dd2a2946496b15a4bac7b251d1fae5bad19d66366a0715bdb05fd"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-site-a-apothecary.svg",
+          "sha256": "73cc6383e99d815ededef49f1c28d2ea49dbf26c2b6a0475122fc779f67360d8"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-site-a-cottage.svg",
+          "sha256": "c17b832996fd9e5091ada8a018b2ed298ab59e177c7df173dc098bfab4fddf20"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-site-b-shrine.svg",
+          "sha256": "8db8c4e851e4dd636567eea8bfaf4cd60969f05f66b0a1a74e175dcafc10b1a9"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-south-shell.svg",
+          "sha256": "a5d583bdb4112fd168d98517c505c608d5b1d629b020bd6c4dec953c72f95245"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-wall-ns.svg",
+          "sha256": "f3ffebec4a89d7141aac93c8f7193d2270d7f5321ed3868dec0f4047a32e808d"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-wall.svg",
+          "sha256": "8bd6dabe81278f69effff077fd1d40d4008358da2125e1db1c2a1800d8d7e9a7"
+        },
+        {
+          "path": "public/pixi-art/themes/bog-arena/home/wz-west-shell.svg",
+          "sha256": "d007ba55b15a951d02dadc65ba029fa438ff11b4c69aa2a37cc3861490210f17"
         },
         {
           "path": "rive/web/island-geometry.mjs",
@@ -11586,15 +11710,15 @@
           "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
         }
       ],
-      "sha256": "d45c13f43d07c2fb4c61e0aa25ab10800be8ab2a9c0463c583e669acfaaea8ad"
+      "sha256": "7afe1f2a0a5d18771516377e502458e5135980f1a29f2f4a5a038189182aa8ee"
     },
-    "groundSha256": "74475d81a20a6ca7a6b8a1617b149eda0e45299dfa94c135f75f28c2c5a5ee4e",
+    "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
-    "sha256": "833d0cb0a6179e5bfbedecce62a85f4e2024bd169b296bbf79302265ea77d033",
+    "sha256": "d1b1b109e802d5b2190b5c1328e4e3a1edb8fc1e10af32b8a26447273ba91044",
     "width": 1024,
     "height": 1000,
-    "bytes": 432970,
-    "groundBytes": 265286,
+    "bytes": 643213,
+    "groundBytes": 398644,
     "quality": {
       "tolerance": 0.2,
       "minArea": 0.12,
@@ -11603,7 +11727,7 @@
     },
     "worldPaths": 0,
     "walkways": 2,
-    "flats": 263,
+    "flats": 266,
     "decks": 2,
     "bridgeDetails": 0
   },

@@ -1,8 +1,8 @@
 // Short, deterministic mono buffers, generated once on the island's existing
 // AudioContext. Playback shares M mute, unlock, suspend and disposal with quack.
-export const BOG_SOUNDS=Object.freeze({shot:.075,splat:.13,tag:.22,ghost:.42,respawn:.3,pickup:.18});
-const volumes={shot:.055,splat:.085,tag:.075,ghost:.045,respawn:.065,pickup:.065};
-const gaps={shot:100,splat:90,tag:100,ghost:300,respawn:250,pickup:100};
+export const BOG_SOUNDS=Object.freeze({shot:.075,splat:.13,tag:.22,ghost:.42,respawn:.3,pickup:.18,rustle:.16});
+const volumes={shot:.055,splat:.085,tag:.075,ghost:.045,respawn:.065,pickup:.065,rustle:.035};
+const gaps={shot:100,splat:90,tag:100,ghost:300,respawn:250,pickup:100,rustle:400};
 const tau=Math.PI*2;
 export function synthesizeBogSound(context,name){
   const duration=BOG_SOUNDS[name];if(!duration)return null;
@@ -15,6 +15,10 @@ export function synthesizeBogSound(context,name){
       seed=(Math.imul(seed,1664525)+1013904223)>>>0;
       phase+=tau*(115+200*Math.exp(-t*30))/rate;
       sample=(Math.sin(phase)*.7+(seed/4294967296*2-1)*.3)*Math.exp(-t*20);
+    }
+    if(name==='rustle'){
+      seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+      sample=(seed/4294967296*2-1)*(.55+.45*Math.sin(tau*37*t))*Math.exp(-t*12);
     }
     if(name==='tag')sample=(Math.sin(tau*1046.5*t)+.3*Math.sin(tau*1568*t))*Math.exp(-t*16)*.65;
     if(name==='ghost'){phase+=tau*(340-130*u)/rate;sample=Math.sin(phase)*Math.sin(Math.PI*u)*(.8+.2*Math.sin(tau*5*t));}

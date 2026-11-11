@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="200" viewBox="0 0 640 200"><title>Teal covered porch with four independent posts</title><g stroke="#39362a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M29 17H611L630 69H10Z" fill="#42c3ef"/>
+ <path d="M10 69H630V84H10Z" fill="#c0ad83"/>
+ <path d="M90 69l-12-52" fill="none"/><path d="M172 69l-12-52" fill="none"/><path d="M254 69l-12-52" fill="none"/><path d="M336 69l-12-52" fill="none"/><path d="M418 69l-12-52" fill="none"/><path d="M500 69l-12-52" fill="none"/><path d="M582 69l-12-52" fill="none"/>
+ <path d="M24 85L59 115M616 85l-35 30" fill="none" stroke-width="8"/>
+ <path d="M33 84h18v101h-18Z" fill="#229bca"/><path d="M27 178h30v16h-30Z" fill="#42c3ef"/><path d="M181 84h18v101h-18Z" fill="#229bca"/><path d="M175 178h30v16h-30Z" fill="#42c3ef"/><path d="M441 84h18v101h-18Z" fill="#229bca"/><path d="M435 178h30v16h-30Z" fill="#42c3ef"/><path d="M589 84h18v101h-18Z" fill="#229bca"/><path d="M583 178h30v16h-30Z" fill="#42c3ef"/>
+ <path d="M232 184H408L419 194H221Z" fill="#fff9e5"/>
+ <path d="M320 79v12" fill="none"/><path d="M305 102l15-12 15 12v31l-15 6-15-6Z" fill="#e6cda0"/><path d="M302 102l18-12 18 12-18 7Z" fill="#42c3ef"/><path d="M320 109v27M312 113v12" fill="none"/></g><g stroke="#39362a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M27 178H57V194H27ZM175 178H205V194H175ZM435 178H465V194H435ZM583 178H613V194H583Z" fill="#c0ad83"/></g></svg>

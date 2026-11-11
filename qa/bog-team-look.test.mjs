@@ -36,6 +36,29 @@ test('Google Popper has the reference colours, valid muzzle bounds and all eight
  }
 });
 
+test('Privacy alone has flat black shades and white/yellow padlock poppers in every direction, on death and in the HUD',()=>{
+ const dir=new URL('../src/pixi/bog-combat/assets/',import.meta.url);
+ for(const spec of guns){
+  const svg=fs.readFileSync(new URL(spec.file,dir),'utf8');
+  assert.doesNotMatch(svg,banned);
+  if(spec.team==='privacy'){
+   for(const colour of ['#FFFFFF','#FFD525','#232323'])assert.ok(svg.includes(colour),spec.file+' '+colour);
+   assert.match(svg,/id="privacy-padlock"/);
+   assert.doesNotMatch(svg,/#348261|#99d74b|#9e79be/i);
+  }else assert.doesNotMatch(svg,/privacy-padlock/);
+ }
+ const dropped=fs.readFileSync(new URL('ghosts/privacy-popper.svg',dir),'utf8');
+ for(const colour of ['#FFFFFF','#FFD525','#232323'])assert.ok(dropped.includes(colour));
+ assert.match(dropped,/id="privacy-padlock"/);assert.doesNotMatch(dropped,banned);
+ for(const file of fs.readdirSync(new URL('privacy-ducky/',dir))){
+  const svg=fs.readFileSync(new URL('privacy-ducky/'+file,dir),'utf8');
+  assert.doesNotMatch(svg,banned);assert.match(svg,/#232323/);
+ }
+ const hud=fs.readFileSync(new URL('../src/pixi/bog-combat/BogGame.jsx',import.meta.url),'utf8');
+ assert.ok(hud.includes('/pixi-art/themes/bog-arena/hud/'));assert.ok(hud.includes("'privacy-padlock'"));
+ assert.ok(fs.readFileSync(new URL('../public/pixi-art/themes/bog-arena/hud/privacy-padlock-popper.svg',import.meta.url),'utf8').includes('id="privacy-padlock"'));
+});
+
 const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/duck.js',import.meta.url))],bundle:true,packages:'external',format:'esm',write:false});
 const {createDuck,disposeDuckAssets}=await import('data:text/javascript;base64,'+Buffer.from(bundle.text.replaceAll('"pixi.js"',JSON.stringify(import.meta.resolve('pixi.js')))).toString('base64'));
 const descendants=node=>[node,...(node.children??[]).flatMap(descendants)];
@@ -55,10 +78,12 @@ test('real rigs share red textures, morph in red, keep every emote and restore y
  Graphics.prototype.fill=function(style){const list=fills.get(this)??[];list.push(typeof style==='number'?style:style?.color);fills.set(this,list);return original.fill.call(this,style);};
  const texture=(width=80,height=110)=>{const t=new Texture({source:new TextureSource({width,height})});owned.push(t);return t;};
  const look={body:0xEF5144,belly:0xFF9C90,horn:texture(),tail:texture(205,232),textures:new Map()};
+ const privateTextures=new Map(['lens.svg','bridge.svg','nod-shades.svg','wing-shades.svg'].map(file=>[file,texture()]));
+ const privateLook={textures:privateTextures,shades:{lens:privateTextures.get('lens.svg'),bridge:privateTextures.get('bridge.svg'),sleep:privateTextures}};
  for(const file of fs.readdirSync(base))look.textures.set(file,texture());
  try{
   const privacy=await createDuck({outfit:{},seed:1}),google=await createDuck({outfit:{},seed:7}),peer=await createDuck({outfit:{},seed:9});rigs.push(privacy,google,peer);
-  google.setAppearance(look);peer.setAppearance(look);
+  google.setAppearance(look);peer.setAppearance(look);privacy.setAppearance(privateLook);
   const firstMorph=descendants(direction(google)).find(n=>n.label==='body-0').children.find(n=>n instanceof Graphics);
   assert.equal(fills.get(firstMorph).at(-3),0xEF5144,'appearance repaints the visible morph before the next frame');
   const bodies=new Map();
@@ -72,18 +97,46 @@ test('real rigs share red textures, morph in red, keep every emote and restore y
    assert.equal(nodes.find(n=>n.label==='tail-0').children[0].visible,false);
    const horns=nodes.find(n=>n.label==='Google devil horns');assert.ok(horns.visible);assert.equal(horns.children.length,2);assert.equal(horns.children[0].texture,look.horn);
    assert.ok(!descendants(privacy.root).some(n=>n.label==='Google devil horns'));
+   const privateView=direction(privacy),privateNodes=descendants(privateView),shades=privateNodes.find(n=>n.label==='Privacy sunglasses');
+   const hasEyes=Math.abs(angle)<=90;
+   assert.equal(shades.visible,hasEyes);
+   for(const eye of privateNodes.filter(n=>n.label?.startsWith('eye-'))){
+    assert.equal(eye.visible,false,'Privacy eyes are replaced, including after a blink');
+    const lens=privateNodes.find(n=>n.label===`Privacy lens ${eye.label}`);
+    assert.equal(lens.x,eye.x);assert.equal(lens.y,eye.y);assert.equal(lens.rotation,eye.rotation);
+    assert.equal(lens.scale.y,1,'glasses never squash with blinking eyes');
+   }
+   assert.ok(privateNodes.find(n=>n.label==='tail-0').children[0].visible,'Privacy keeps the original tail');
+   assert.ok(!descendants(google.root).some(n=>n.label==='Privacy sunglasses'));
    const privacyBody=descendants(direction(privacy)).find(n=>n.label==='body-0'),privacyMorph=privacyBody.children.find(n=>n instanceof Graphics);
    assert.ok(fills.get(privacyMorph).includes(0xFFD525));assert.ok(!fills.get(privacyMorph).includes(0xEF5144));
    bodies.set(angle,{view,horns,count:nodes.length});
   }
-  for(let action=0;action<=9;action++)for(const rig of [google,peer]){
+  for(let action=0;action<=9;action++)for(const rig of [google,peer,privacy]){
    for(let frame=0;frame<40;frame++)rig.update(1/60,{action,speed:action===1?275:0,turn:Math.PI/2,time:6+frame/60});
-   if(action===7){const sleep=descendants(rig.root).find(n=>n.label?.startsWith('Sleeping Ducky'));assert.ok(sleep.visible);assert.ok(descendants(sleep).some(n=>n instanceof Sprite&&[look.textures.get('nod-duck.svg'),look.textures.get('wing-duck.svg')].includes(n.texture)));}
+   if(action===7){const sleep=descendants(rig.root).find(n=>n.label?.startsWith('Sleeping Ducky'));assert.ok(sleep.visible);if(rig===privacy)assert.ok(descendants(sleep).find(n=>n.label==='Sleeping Privacy sunglasses').visible);else assert.ok(descendants(sleep).some(n=>n instanceof Sprite&&[look.textures.get('nod-duck.svg'),look.textures.get('wing-duck.svg')].includes(n.texture)));}
   }
+  // All intermediate turns keep each lens on the same articulated eye joint.
+  for(let angle=-180;angle<=180;angle+=5){
+   for(let frame=0;frame<90;frame++)privacy.update(1/60,{turn:angle*Math.PI/180,action:3,time:7+frame/60});
+   const nodes=descendants(direction(privacy));
+   for(const eye of nodes.filter(n=>n.label?.startsWith('eye-'))){
+    const lens=nodes.find(n=>n.label===`Privacy lens ${eye.label}`);
+    assert.equal(lens.x,eye.x);assert.equal(lens.y,eye.y);assert.equal(lens.rotation,eye.rotation);
+   }
+  }
+  privacy.setAppearance(null);privacy.update(1/60,{turn:0,reducedMotion:true});
+  assert.equal(descendants(direction(privacy)).find(n=>n.label==='Privacy sunglasses').visible,false);
+  assert.ok(descendants(direction(privacy)).filter(n=>n.label?.startsWith('eye-')).every(n=>n.visible));
   for(const angle of manifest.views.map(v=>v.angle)){
    for(let i=0;i<180;i++)google.update(1/60,{turn:angle*Math.PI/180});
    const now=direction(google),old=bodies.get(angle);assert.equal(now,old.view);assert.equal(descendants(now).length,old.count);assert.equal(descendants(now).find(n=>n.label==='Google devil horns'),old.horns);
   }
+  // Reusing a rig for the other team must hide the previous team's decorations.
+  google.setAppearance(privateLook);google.update(1/60,{turn:0,reducedMotion:true});
+  assert.equal(descendants(direction(google)).find(n=>n.label==='Google devil horns').visible,false);
+  assert.ok(descendants(direction(google)).find(n=>n.label==='Privacy sunglasses').visible);
+  google.setAppearance(look);
   // Reset on leaving combat does not allocate replacement artwork or mutate peers.
   google.setAppearance(null);google.update(1/60,{turn:Math.PI/4});
   assert.equal(descendants(direction(google)).find(n=>n.label==='Google devil horns').visible,false);
@@ -96,8 +149,8 @@ test('real rigs share red textures, morph in red, keep every emote and restore y
  }
 });
 
-test('the shared gun attachment selects Google appearance and removes it on cleanup',()=>{
- const changes=[],look={},items=[];items.googleLook=look;
+test('the shared player and bot gun attachment selects each team appearance and removes it on cleanup',()=>{
+ const changes=[],look={},privateLook={},items=[];items.googleLook=look;items.privacyLook=privateLook;
  const rig={setAppearance:a=>changes.push(a)},google=attachGunC(rig,items,'google',{});google.dispose();
- const privacy=attachGunC(rig,items,'privacy',{});privacy.dispose();assert.deepEqual(changes,[look,null,null,null]);
+ const privacy=attachGunC(rig,items,'privacy',{});privacy.dispose();assert.deepEqual(changes,[look,null,privateLook,null]);
 });

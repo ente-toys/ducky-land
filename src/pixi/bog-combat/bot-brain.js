@@ -4,6 +4,7 @@ import {movementFacing,facingVector} from './facing.js';
 import {RULES} from './rules.js';
 import {BOG_AREAS} from '../bog-environment.js';
 import {createBotNavigation} from './bot-navigation.js';
+import {isCombatHidden} from './hide-bushes.js';
 const LANES=['mid','site-a','site-b'];
 
 export function createBotBrain(index=0){
@@ -27,7 +28,7 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
     b.reactAt=sim.state.time+(showcase?(p.team==='privacy'?.055:.19):.20+random()*.10);
     let enemy=null,near=null,nearest=Infinity,visible=RULES.range;
     for(const e of sim.state.players.values()){
-      if(!e.alive||e.team===p.team||e.shieldUntil>sim.state.time)continue;
+      if(!e.alive||e.team===p.team||isCombatHidden(e,sim.state.time))continue;
       const distance=Math.hypot(e.x-p.x,e.y-p.y);
       if(distance<nearest){nearest=distance;near=e;}
       if(distance<visible&&!traceShot(p,e,combat.blockers).blocker){visible=distance;enemy=e;}

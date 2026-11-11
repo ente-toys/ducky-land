@@ -152,7 +152,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     let shadow = null;
     if (!NO_SHADOW.test(name) && prop.shadow !== false) {
       const [rx, ry] = prop.shadowSize ?? (r => [r, r * .3])(Math.max(8, Math.min(300, prop.width * scale * .36)));   // boss 8 Nov: a hamlet building's base shadow fits its footprint
-      shadow = new Graphics().ellipse(rx * .06, ry * .1, rx, ry).fill({color: 0x3c5a2a, alpha: .15});
+      shadow = new Graphics().ellipse(rx * .06, ry * .1, rx, ry).fill({color: manifest.shadowColor ?? 0x3c5a2a, alpha: manifest.shadowAlpha ?? .15});   // boss 11 Nov: dark islands (Bog) set their own ground shadow
       shadow.position.set(prop.x + (prop.shadowOffset?.[0] ?? 0), prop.y + (prop.shadowOffset?.[1] ?? 0)); shadows.addChild(shadow);
     }
     const centrePiece = typeof prop.centrePiece === 'object' ? prop.centrePiece : centre.pieces.find(p => prop.id?.endsWith(p.id) && prop.src.includes('centre/'));
