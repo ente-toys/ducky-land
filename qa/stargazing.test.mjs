@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {telescopeSpot, telescopeNear, telescopePeerAt} from '../src/pixi/telescope.js';
-import {starPlace, anonymousStars, readSky} from '../src/pixi/stargaze-sky.js';
+import {starPlace, anonymousStars, waitingStars, readSky, skyCounts} from '../src/pixi/stargaze-sky.js';
 import {makeRoom, addPlayer} from './room-harness.mjs';
 import {stars} from '../server/pages-auth.js';
 
@@ -37,6 +37,13 @@ test('every star keeps its place', () => {
   assert.equal(many.constellation, 15, 'the Great Duck borrows the first fifteen');
   assert.equal(anonymousStars(3).constellation, 0);
   assert.equal(anonymousStars(-5).count, 0);
+  // the stars nobody has lit yet have their own places, which never move a stargazer's, and reach past the stargazers
+  const waiting = waitingStars();
+  assert.equal(waiting.count, 10_000);
+  assert.equal(waitingStars(3).x[2], waiting.x[2]);
+  assert.notEqual(waiting.x[0], many.x[0]);
+  assert.ok(Array.from(waiting.x).some((x, i) => Math.hypot(x, waiting.y[i]) > 2600), 'out to the edge of what the telescope can see');
+  assert.equal(waitingStars(-1).count, 0);
 });
 
 test('the sky names the people who played and counts everyone else', () => {
@@ -47,12 +54,24 @@ test('the sky names the people who played and counts everyone else', () => {
   assert.equal(sky.me.login, 'antara');
   assert.deepEqual(sky.friends.map(star => star.login), ['prag']);
   assert.equal(sky.named.find(star => star.login === 'aswin').online, true);
+  assert.equal(sky.named.find(star => star.login === 'prag').online, false);
+  assert.equal(sky.me.online, true, 'whoever is looking through the telescope is here');
   // a count GitHub could not give us never hides the people we do know, and you always have your own star
   const unknown = readSky({total:null, me:{accountId:'7', login:'antara', starred:true}, players:[['3','prag']], online:[], friends:[]});
   assert.equal(unknown.total, 2);
   assert.equal(unknown.me.login, 'antara');
   assert.equal(readSky({total:5, me:{accountId:'7', login:'antara', starred:false}, players:[]}).me, null);
   assert.equal(readSky(null).total, 0);
+});
+
+test('the telescope counts who is online and who is offline', () => {
+  const data = {total:30_048, me:{accountId:'7', login:'antara', starred:true},
+    players:[['3','prag'], ['7','antara'], ['9','aswin']], online:['9', 'stranger'], friends:[]};
+  assert.deepEqual(skyCounts(data), {total:30_048, online:2, offline:30_046});
+  const sky = readSky(data);
+  assert.deepEqual([sky.total, sky.online, sky.offline], [30_048, 2, 30_046]);
+  assert.equal(sky.named.filter(star => star.online).length, sky.online, 'every glowing star is counted, and nothing else');
+  assert.deepEqual(skyCounts(null), {total:0, online:0, offline:0});
 });
 
 const post = (room, path, data) => room.fetch(new Request('https://island.internal'+path,
@@ -70,17 +89,20 @@ test('the room remembers who starred and answers the telescope', async () => {
   assert.equal(sky.total, null);
   assert.deepEqual(sky.online, []);
   // someone who removes their star is no longer named; someone who adds one is
-  await post(room, '/session/access', {digest:'d-prag', canPlay:false});
-  await post(room, '/session/access', {digest:'d-guest', canPlay:true});
+  await post(room, '/session/access', {digest:'d-prag', canPlay:false, starred:false});
+  await post(room, '/session/access', {digest:'d-guest', canPlay:true, starred:true});
+  // play access withdrawn because GitHub could not be asked says nothing about the star
+  await post(room, '/session/access', {digest:'d-antara', canPlay:false});
   await post(room, '/stars/count', {count:30_048});
   await post(room, '/stars/count', {count:'many'});
   room.sql.exec('INSERT INTO friends VALUES(?,?,?)', '7', '5', Date.now());
   const player = addPlayer(room, 1, {x:100, y:100});
   sky = await (await post(room, '/stars', {digest:'d-antara'})).json();
-  assert.deepEqual(sky.players, [['5','no-star'], ['7','antara']]);
+  assert.deepEqual(sky.players, [['5','no-star'], ['7','antara'], [player.account, player.account]], 'whoever is playing is named');
   assert.equal(sky.total, 30_048);
   assert.deepEqual(sky.friends, ['5']);
   assert.deepEqual(sky.online, [player.account]);
+  assert.ok(!('unstarred' in sky), 'people who signed in without a star are not counted or named');
 });
 
 test('the telescope asks GitHub for the star count at most every ten minutes', async () => {

@@ -115,8 +115,9 @@ export class IslandRoom {
       SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
     this.migrateFriends();
     // The telescope sky names everyone who starred ente/ente and has signed in here, for longer than the week a session lasts.
+    // starred is 1 or 0 once GitHub has answered for that account, and stays NULL until then.
     if (!this.sql.exec('PRAGMA table_info(accounts)').toArray().some(column => column.name === 'starred')) {
-      this.sql.exec('ALTER TABLE accounts ADD COLUMN starred INTEGER NOT NULL DEFAULT 0');
+      this.sql.exec('ALTER TABLE accounts ADD COLUMN starred INTEGER');
       this.sql.exec('UPDATE accounts SET starred=1 WHERE account IN (SELECT account FROM sessions WHERE can_play=1 AND expires>?)', Date.now());
     }
     this.sql.exec('CREATE TABLE IF NOT EXISTS star_count (id INTEGER PRIMARY KEY, count INTEGER NOT NULL, checked INTEGER NOT NULL)');
@@ -244,7 +245,8 @@ export class IslandRoom {
     if (pathname === '/session/access') {
       this.sql.exec('UPDATE sessions SET can_play=? WHERE digest=?', data.canPlay === true ? 1 : 0, data.digest);
       const checked = this.session(data.digest, now);
-      if (checked) this.sql.exec('UPDATE accounts SET starred=? WHERE account=?', data.canPlay === true ? 1 : 0, checked.account);
+      // play access is also withdrawn when GitHub could not be asked; only a real answer changes who has starred
+      if (checked && typeof data.starred === 'boolean') this.sql.exec('UPDATE accounts SET starred=? WHERE account=?', data.starred ? 1 : 0, checked.account);
       if (!data.canPlay) {
         const user = this.session(data.digest);
         if (user) this.sql.exec('DELETE FROM resumes WHERE account=?',user.account);
@@ -303,10 +305,11 @@ export class IslandRoom {
     const user = this.session(data.digest, now);
     if (!user) return reply({error:'Please sign in again to look through the telescope.'},401);
     const count = this.sql.exec('SELECT count,checked FROM star_count WHERE id=1').toArray()[0];
-    const players = this.sql.exec('SELECT account,login FROM accounts WHERE starred=1 ORDER BY account LIMIT ?', STARGAZER_LIMIT)
-      .toArray().map(row => [row.account,row.login]);
-    const online = [...new Set([...this.connections.values()]
-      .filter(info => info.actor && info.account && info.expires > now).map(info => info.account))];
+    const named = new Map(this.sql.exec('SELECT account,login FROM accounts WHERE starred=1 ORDER BY account LIMIT ?', STARGAZER_LIMIT)
+      .toArray().map(row => [row.account,row.login]));
+    const playing = [...this.connections.values()].filter(info => info.actor && info.account && info.expires > now);
+    for (const info of playing) if (info.login) named.set(info.account, info.login);   // whoever is playing is always named
+    const players = [...named], online = [...new Set(playing.map(info => info.account))];
     const friends = this.sql.exec('SELECT friend_account_id AS account FROM friends WHERE owner_account_id=?', user.account)
       .toArray().map(row => row.account);
     return reply({total:count?.count ?? null, checked:count?.checked ?? 0,

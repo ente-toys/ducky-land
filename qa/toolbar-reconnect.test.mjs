@@ -87,8 +87,8 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
       assert.equal(buttons(name).length,playing || ['Friends','Sign out'].includes(name) ? 1 : 0,name);
     }
     assert.equal(keydowns.size,playing ? 1 : 0,'one live Chat shortcut');
-    assert.deepEqual([...intervals.values()].sort((a,b)=>a-b),playing ? [80,250,5000] : [80],
-      'one minimap timer, one travel timer and one connection heartbeat');
+    assert.deepEqual([...intervals.values()].sort((a,b)=>a-b),playing ? [80,250,250,5000] : [80],
+      'one minimap timer, one travel timer, one telescope timer and one connection heartbeat');
   };
   const click = async text=>{
     assert.equal(buttons(text).length,1,text);

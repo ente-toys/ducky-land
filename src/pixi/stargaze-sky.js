@@ -2,10 +2,15 @@
 // GitHub only tells us how many stargazers there are, so most stars are anonymous. The people who have signed in to
 // Ducky Land get a named star, the one from the hill's signpost. A named star's place comes from its account alone, so it
 // never moves; the anonymous stars come from one seeded sequence, so a growing count only ever adds stars at the end.
+// Every star is gold and its brightness says who it is (boss 11 Nov): the Duckies on an island right now glow, every
+// other stargazer is dimmed, and dimmer still are the stars nobody has lit yet, for everyone who has not starred. Those
+// fill the whole sky, out past the stargazers. Nobody can count them, so the sky does not try.
 // Drawn flat like the rest of the world: palette.js colours, ink outlines, the 4-point sparkle of three-space-backdrop.js.
 const R = 2000;   // radius of the star field, in sky units
-const INK = '#39472d', CREAM = '#fff0c7', NIGHT = '#16323c', SUN = '#ffb937', TAG = '#fff9df';
-const COLORS = ['#fff0c7','#e1ebf2','#fff0c7','#cfe6ea'];
+const INK = '#39472d', NIGHT = '#16323c', GOLD = '#ffb937', PALE = '#ffd98a', TAG = '#fff9df';
+const COLORS = ['#ffb937','#ffc65c','#ffd98a','#f0a62e'];
+const OFFLINE = .62, WAITING = .34;   // how bright a star that is not online is drawn
+const WIDE = R*1.4, UNLIT = 10_000;   // the unlit stars reach past the stargazers, as far as the telescope can be turned
 const CLUSTERS = [[-1150,-620],[980,-940],[1240,560],[-380,1180],[420,330]];
 const BAND = -.46, BAND_COS = Math.cos(BAND), BAND_SIN = Math.sin(BAND);
 // The Great Duck: the first few anonymous stars are borrowed for one constellation.
@@ -60,30 +65,53 @@ export function anonymousStars(count) {
   }
   return {count:n, x, y, size, phase, hue, constellation};
 }
+// The stars nobody has lit yet, for the people who have not starred: spread evenly over a wider sky than the
+// stargazers'. They have their own sequence, so a stargazer's star never moves to make room for them.
+export function waitingStars(count = UNLIT) {
+  const rnd = mulberry(20261112), n = Math.min(20_000, Math.max(0, count|0));
+  const x = new Float32Array(n), y = new Float32Array(n), size = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const a = rnd()*TAU, d = Math.sqrt(rnd())*WIDE;
+    x[i] = Math.cos(a)*d; y[i] = Math.sin(a)*d; size[i] = .7+rnd()*.7;
+  }
+  return {count:n, x, y, size};
+}
+// The numbers the telescope shows: stargazers on an island right now and every other stargazer. Whoever is looking
+// through the telescope is online.
+export function skyCounts(data) {
+  const me = data?.me?.starred ? String(data.me.accountId) : null;
+  const known = new Set((data?.players ?? []).filter(player => typeof player[1] === 'string').map(player => String(player[0])));
+  if (me && typeof data.me.login === 'string') known.add(me);
+  const online = new Set((data?.online ?? []).map(String).filter(accountId => known.has(accountId)));
+  if (me && known.has(me)) online.add(me);
+  const total = Math.max(Number.isSafeInteger(data?.total) ? data.total : 0, known.size);
+  return {total, online:online.size, offline:total-online.size};
+}
 // Turn the server's answer into what the sky draws.
 export function readSky(data) {
-  const me = data?.me?.accountId ?? null, online = new Set(data?.online ?? []), friends = new Set(data?.friends ?? []);
+  const me = data?.me?.starred ? String(data.me.accountId) : null;
+  const online = new Set((data?.online ?? []).map(String)), friends = new Set((data?.friends ?? []).map(String));
   const seen = new Set(), named = [];
   const add = (accountId, login) => {
     accountId = String(accountId);
     if (seen.has(accountId) || typeof login !== 'string') return;
     seen.add(accountId);
     named.push({accountId, login, ...starPlace(accountId), phase:hashAccount(accountId)%628/100,
-      me:accountId === me, online:online.has(accountId), friend:friends.has(accountId)});
+      me:accountId === me, online:accountId === me || online.has(accountId), friend:friends.has(accountId)});
   };
   for (const [accountId,login] of data?.players ?? []) add(accountId, login);
-  if (me && data.me.starred) add(me, data.me.login);
-  const total = Math.max(Number.isSafeInteger(data?.total) ? data.total : 0, named.length);
-  return {total, named, me:named.find(star => star.me) ?? null, friends:named.filter(star => star.friend)};
+  if (me) add(me, data.me.login);
+  return {...skyCounts(data), named, me:named.find(star => star.me) ?? null, friends:named.filter(star => star.friend)};
 }
 
 const ease = t => t < .5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
 const escapeText = text => String(text).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const starIcon = fill => `<svg width="18" height="18" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0 -8.5L2.6 -2.9 8.6 -2.3 4.1 1.8 5.3 7.8 0 4.8 -5.3 7.8 -4.1 1.8 -8.6 -2.3 -2.6 -2.9Z" fill="${fill}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
-const dotIcon = `<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="3" fill="${CREAM}" stroke="${INK}" stroke-width="1.2"/></svg>`;
+// the tag's picture of a star: a gold star on a patch of night, as bright as the star it is about
+const starIcon = level => `<svg width="22" height="22" viewBox="-11 -11 22 22" aria-hidden="true"><circle r="11" fill="${NIGHT}"/><path d="M0 -7.2L2.2 -2.5 7.3 -2 3.5 1.5 4.5 6.6 0 4.1 -4.5 6.6 -3.5 1.5 -7.3 -2 -2.2 -2.5Z" fill="${GOLD}" opacity="${level}"/></svg>`;
 
 export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}}) {
   const ctx = canvas.getContext('2d'), reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const waiting = waitingStars();
   let anon = anonymousStars(0), sky = readSky(null), buckets = COLORS.map(() => [[],[]]), bright = [], grid = new Map();
   let cam = {x:0, y:0, z:.14}, size = 400, dpr = 1, raf = 0, running = false, loaded = false, fly = null, focus = null, pinned = false;
   let shooting = null;
@@ -154,8 +182,17 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
         ctx.beginPath(); ctx.arc(px+r*.48,py-r*.2,r*.92,0,TAU); ctx.fillStyle = NIGHT; ctx.fill(); ctx.stroke(); ctx.restore();
       }
     }
-    // anonymous stargazers: flat dots
     const k = .5+.5*Math.min(1.6, z), dim = Math.min(1, .5+z*.6);
+    if (waiting.count) {   // not lit yet: the dimmest stars, all over the sky
+      ctx.fillStyle = GOLD; ctx.globalAlpha = WAITING*dim;
+      for (let i = 0; i < waiting.count; i++) {
+        const px = half+(waiting.x[i]-cam.x)*z, py = half+(waiting.y[i]-cam.y)*z, dx = px-half, dy = py-half;
+        if (dx*dx+dy*dy > r2) continue;
+        const d = Math.max(.9, waiting.size[i]*k*1.5);
+        ctx.fillRect(px-d/2, py-d/2, d, d);
+      }
+    }
+    // stargazers we cannot name: flat dots, dimmed
     for (let c = 0; c < COLORS.length; c++) {
       ctx.fillStyle = COLORS[c];
       for (let group = 0; group < 2; group++) {
@@ -169,16 +206,16 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
         }
       }
     }
-    ctx.fillStyle = CREAM;
+    ctx.fillStyle = PALE;
     for (let n = 0; n < bright.length; n++) {
       const i = bright[n], px = sx(anon.x[i]), py = sy(anon.y[i]);
       if (!inside(px,py)) continue;
       const wave = reduced ? .6 : .5+.5*Math.sin(t*1.6+anon.phase[i]);
-      ctx.globalAlpha = .55+.45*wave; sparkle(px, py, Math.max(2.4, anon.size[i]*k*1.9)*(.72+.38*wave));
+      ctx.globalAlpha = .42+.28*wave; sparkle(px, py, Math.max(2.4, anon.size[i]*k*1.9)*(.72+.38*wave));
     }
     ctx.globalAlpha = 1;
     if (anon.constellation) {   // the Great Duck
-      ctx.strokeStyle = CREAM; ctx.globalAlpha = Math.min(.75, .3+z*.6); ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.beginPath();
+      ctx.strokeStyle = PALE; ctx.globalAlpha = Math.min(.75, .3+z*.6); ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.beginPath();
       for (let i = 0; i < DUCK.length; i++) if (i) ctx.lineTo(sx(anon.x[i]), sy(anon.y[i])); else ctx.moveTo(sx(anon.x[i]), sy(anon.y[i]));
       ctx.closePath(); ctx.stroke(); ctx.globalAlpha = 1;
       const lx = sx(DUCK_AT[0]+3.9*DUCK_SIZE), ly = sy(DUCK_AT[1]+3.5*DUCK_SIZE);
@@ -186,33 +223,38 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
     }
     const me = sky.me, mx = me ? sx(me.x) : 0, my = me ? sy(me.y) : 0;
     if (me && sky.friends.length) {   // your constellation: you and your island friends
-      ctx.strokeStyle = SUN; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([2,7]); ctx.beginPath();
+      ctx.strokeStyle = GOLD; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([2,7]); ctx.beginPath();
       for (const friend of sky.friends) {ctx.moveTo(mx,my); ctx.lineTo(sx(friend.x), sy(friend.y));}
       ctx.stroke(); ctx.setLineDash([]);
     }
-    // people who have played here: the signpost star, named once you look closely
-    const r = Math.max(2.6, 7.5*k*Math.min(1, .35+z)), named = [];
+    // people who have played here: the signpost star, named once you look closely. Offline ones are dimmed like every
+    // other stargazer; the ones on an island right now are drawn last and glow: a sparkle behind the star and a slow ring.
+    const r = Math.max(2.6, 7.5*k*Math.min(1, .35+z)), lit = Math.max(5.5, r*1.35), named = [], glowing = [];
+    const glow = (px, py, radius, phase, reach) => {
+      const pulse = reduced ? .4 : (t*.6+phase)%1, wave = reduced ? .6 : .5+.5*Math.sin(t*2+phase);
+      ctx.strokeStyle = GOLD; ctx.lineWidth = 2; ctx.globalAlpha = 1-pulse; ctx.beginPath(); ctx.arc(px,py,radius+2+pulse*reach,0,TAU); ctx.stroke();
+      ctx.globalAlpha = .9; ctx.fillStyle = PALE; sparkle(px, py, radius*(1.9+.25*wave)); ctx.globalAlpha = 1;
+    };
     for (const star of sky.named) {
       if (star.me) continue;
       const px = sx(star.x), py = sy(star.y);
       if (!inside(px,py)) continue;
-      if (star.online) {
-        const pulse = reduced ? .4 : (t*.7+star.phase)%1;
-        ctx.strokeStyle = '#7bd08a'; ctx.lineWidth = 2; ctx.globalAlpha = 1-pulse; ctx.beginPath(); ctx.arc(px,py,r+2+pulse*13,0,TAU); ctx.stroke(); ctx.globalAlpha = 1;
-      }
-      if (r < 3.6) {ctx.fillStyle = '#fff0b2'; ctx.beginPath(); ctx.arc(px,py,r,0,TAU); ctx.fill();}
-      else inkStar(px, py, r, '#fff0b2', star.phase*.05, Math.max(1.4, r*.2));
-      if (star.online && r >= 3.6) {
-        ctx.beginPath(); ctx.arc(px+r*.8, py+r*.75, Math.max(2.6, r*.36), 0, TAU); ctx.fillStyle = '#409447'; ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1.3; ctx.stroke();
+      if (star.online) glowing.push([star, px, py]);
+      else {
+        ctx.globalAlpha = OFFLINE;
+        if (r < 3.6) {ctx.fillStyle = GOLD; ctx.beginPath(); ctx.arc(px,py,r,0,TAU); ctx.fill();}
+        else inkStar(px, py, r, GOLD, star.phase*.05, Math.max(1.4, r*.2));
+        ctx.globalAlpha = 1;
       }
       if (star !== focus && (z >= .85 || (star.friend && z >= .5))) named.push([Math.hypot(px-half, py-half), star, px, py]);
     }
-    named.sort((a, b) => (b[1].friend-a[1].friend) || a[0]-b[0]);   // friends first, then the stars nearest the middle
-    for (const [, star, px, py] of named.slice(0, 16)) label('@'+star.login, px, py+r+7);
-    if (me && inside(mx,my,1.3)) {   // your star
-      const mr = Math.max(9, 12*k), pulse = reduced ? .4 : (t*.55)%1;
-      ctx.strokeStyle = SUN; ctx.lineWidth = 2.2; ctx.globalAlpha = 1-pulse; ctx.beginPath(); ctx.arc(mx,my,mr+3+pulse*20,0,TAU); ctx.stroke(); ctx.globalAlpha = 1;
-      inkStar(mx, my, mr, SUN, 0, Math.max(2, mr*.2));
+    for (const [star, px, py] of glowing) {glow(px, py, lit, star.phase, 14); inkStar(px, py, lit, GOLD, star.phase*.05, Math.max(1.4, lit*.2));}
+    named.sort((a, b) => (b[1].friend-a[1].friend) || (b[1].online-a[1].online) || a[0]-b[0]);   // friends, then who is online, then the middle
+    for (const [, star, px, py] of named.slice(0, 16)) label('@'+star.login, px, py+(star.online ? lit : r)+7);
+    if (me && inside(mx,my,1.3)) {   // your star: you are here, so it glows, and it is the biggest
+      const mr = Math.max(9, 12*k);
+      glow(mx, my, mr, 0, 20);
+      inkStar(mx, my, mr, GOLD, 0, Math.max(2, mr*.2));
       ctx.fillStyle = '#ffe9a8'; ctx.beginPath(); ctx.ellipse(mx-mr*.2, my-mr*.22, mr*.17, mr*.1, -.6, 0, TAU); ctx.fill();
       if (focus !== me) label('@'+me.login, mx, my+mr+9, {fontSize:12.5});
     }
@@ -220,8 +262,8 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
       const a = (now-t0)/1500;
       if (a >= 1 || i >= anon.count) {born.delete(i); continue;}
       const px = sx(anon.x[i]), py = sy(anon.y[i]);
-      ctx.strokeStyle = CREAM; ctx.globalAlpha = 1-a; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(px,py,5+a*34,0,TAU); ctx.stroke(); ctx.globalAlpha = 1;
-      inkStar(px, py, 7+3*(1-a), '#fff0b2', a*1.2, 1.6);
+      ctx.strokeStyle = PALE; ctx.globalAlpha = 1-a; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(px,py,5+a*34,0,TAU); ctx.stroke(); ctx.globalAlpha = 1;
+      inkStar(px, py, 7+3*(1-a), GOLD, a*1.2, 1.6);
     }
     if (!shooting && queue.length) {const i = queue.shift(); if (i < anon.count) shooting = {i, fx:size*(.1+Math.random()*.25), fy:-20, t0:now, ms:reduced ? 1 : 950};}
     if (shooting) {   // the shooting star that brings a new stargazer's star
@@ -229,8 +271,8 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
       const px = shooting.fx+(ex-shooting.fx)*e, py = shooting.fy+(ey-shooting.fy)*e, angle = Math.atan2(ey-shooting.fy, ex-shooting.fx);
       const length = 70*Math.sin(a*Math.PI)+18, nx = Math.cos(angle+Math.PI/2)*5, ny = Math.sin(angle+Math.PI/2)*5;
       ctx.beginPath(); ctx.moveTo(px+nx,py+ny); ctx.lineTo(px-Math.cos(angle)*length, py-Math.sin(angle)*length); ctx.lineTo(px-nx,py-ny); ctx.closePath();
-      ctx.fillStyle = CREAM; ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
-      inkStar(px, py, 9, '#fff0b2', a*5, 1.8);
+      ctx.fillStyle = PALE; ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
+      inkStar(px, py, 9, GOLD, a*5, 1.8);
       if (a >= 1) {born.set(shooting.i, now); shooting = null;}
     }
     if (focus) placeTag();
@@ -247,7 +289,7 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
     raf = requestAnimationFrame(frame);
   }
 
-  // What is under the pointer: a named star first, then the nearest anonymous one. Returns a star object.
+  // What is under the pointer: a named star first, then the nearest unnamed one. Returns a star object.
   function pick(px, py) {
     let best = null, distance = 22;
     for (const star of sky.named) {const d = Math.hypot(sx(star.x)-px, sy(star.y)-py); if (d < distance) {distance = d; best = star;}}
@@ -257,18 +299,23 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
     for (let gx = cx-reach; gx <= cx+reach; gx++) for (let gy = cy-reach; gy <= cy+reach; gy++) {
       for (const i of grid.get(gx*256+gy) ?? []) {const d = Math.hypot(sx(anon.x[i])-px, sy(anon.y[i])-py); if (d < distance) {distance = d; hit = i;}}
     }
-    return hit < 0 ? null : {anonymous:hit, x:anon.x[hit], y:anon.y[hit]};
+    if (hit >= 0) return {anonymous:hit, x:anon.x[hit], y:anon.y[hit]};
+    let wait = -1; distance = 12;   // a stargazer's star wins over an unlit one beside it
+    for (let i = 0; i < waiting.count; i++) {const d = Math.hypot(sx(waiting.x[i])-px, sy(waiting.y[i])-py); if (d < distance) {distance = d; wait = i;}}
+    return wait < 0 ? null : {waiting:wait, x:waiting.x[wait], y:waiting.y[wait]};
   }
-  const same = (a, b) => a === b || (a && b && a.anonymous !== undefined && a.anonymous === b.anonymous);
+  const same = (a, b) => a === b || (a && b && ((a.anonymous !== undefined && a.anonymous === b.anonymous) || (a.waiting !== undefined && a.waiting === b.waiting)));
   function show(star) {
     if (same(star, focus)) return;
     focus = star;
     if (!star) {tag.hidden = true; return;}
-    if (star.anonymous !== undefined) {
-      tag.innerHTML = `<span>${dotIcon}</span><div><b>Star #${(sky.named.length+star.anonymous+1).toLocaleString('en')}</b><small>${star.anonymous < anon.constellation ? 'Part of the Great Duck' : 'A stargazer who hasn’t visited yet'}</small></div>`;
+    if (star.waiting !== undefined) {
+      tag.innerHTML = `<span>${starIcon(WAITING)}</span><div><b>Not lit yet</b><small>Waiting for someone to star Ente</small></div>`;
+    } else if (star.anonymous !== undefined) {
+      tag.innerHTML = `<span>${starIcon(OFFLINE)}</span><div><b>Star #${(sky.named.length+star.anonymous+1).toLocaleString('en')}</b><small>${star.anonymous < anon.constellation ? 'Part of the Great Duck' : 'Offline'}</small></div>`;
     } else {
-      const about = star.me ? 'Your star' : [star.online ? 'On the island right now' : 'Has played Ducky Land', star.friend ? 'your friend' : ''].filter(Boolean).join(' · ');
-      tag.innerHTML = `<span>${starIcon(star.me ? SUN : '#fff0b2')}</span><div><b>@${escapeText(star.login)}</b><small>${about}</small></div>`;
+      const about = star.me ? 'Your star' : [star.online ? 'Online now' : 'Offline', star.friend ? 'your friend' : ''].filter(Boolean).join(' · ');
+      tag.innerHTML = `<span>${starIcon(star.online ? 1 : OFFLINE)}</span><div><b>@${escapeText(star.login)}</b><small>${about}</small></div>`;
     }
     tag.hidden = false; placeTag();
   }
@@ -330,7 +377,7 @@ export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}})
       const count = sky.total-sky.named.length;
       if (count !== anon.count) {const was = anon.count; anon = anonymousStars(count); index(); if (before !== null && sky.total > before) for (let i = Math.max(was, count-3); i < count; i++) queue.push(i);}
       if (before !== null && sky.total > before) onNews(`Someone just starred Ente. Star #${sky.total.toLocaleString('en')} is lit.`);
-      if (focus && focus.anonymous === undefined) {const again = sky.named.find(star => star.accountId === focus.accountId) ?? null; focus = undefined; show(again);}
+      if (focus && focus.anonymous === undefined && focus.waiting === undefined) {const again = sky.named.find(star => star.accountId === focus.accountId) ?? null; focus = undefined; show(again);}
       if (!loaded) {loaded = true; if (sky.me) setTimeout(() => {if (running) findMe();}, reduced ? 0 : 700);}
     },
     findMe,

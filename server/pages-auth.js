@@ -249,7 +249,7 @@ async function checkPlayAccess(env, key, fetchGitHub) {
       'Could not check your GitHub star. Please try again.',status:starred.status === 401 ? 401 : 503};
   }
   const canPlay = starred.status === 204;
-  const saved = await call(env,'/session/access',{digest:key,canPlay});
+  const saved = await call(env,'/session/access',{digest:key,canPlay,starred:canPlay});
   if (!saved.ok) return {error:'Could not update play access. Please try again.',status:503};
   return {canPlay};
 }

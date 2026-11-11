@@ -72,8 +72,12 @@ Guests see anonymous join notices.
 GitHub only lets a repository's admins and collaborators list its stargazers, so the
 telescope's sky takes the star count from the public repository and names only the
 people who signed in here with a star. Their stars keep the same place on every
-visit. Ducks on an island right now pulse green, and your friends are joined to
-your star. The count is refreshed from GitHub at most every ten minutes.
+visit, and your friends are joined to your star. Every star is gold and its
+brightness says who it is: stargazers on an island right now glow, every other
+stargazer is dimmed, and dimmer still are the stars nobody has lit yet, for
+everyone who has not starred, which fill the rest of the sky. The sky counts who
+is online and who is offline; the unlit stars are not counted. The star count is
+refreshed from GitHub at most every ten minutes.
 
 Chat follows the duck while walking. Text appears live to other signed-in users,
 disappears after five seconds, and has no history. Esc clears it immediately.

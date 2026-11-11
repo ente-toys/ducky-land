@@ -2,16 +2,18 @@
 // then the night sky opens: one star for everyone who starred ente/ente (stargaze-sky.js draws it, /api/stars feeds it).
 
 import {useEffect, useRef, useState} from 'react';
-import {createStargazeSky} from './stargaze-sky.js';
+import {createStargazeSky, skyCounts} from './stargaze-sky.js';
 
 const REFRESH_MS = 30_000;
-// dev only (?offline): there is no room server to ask, so the sky shows this fixture
-const OFFLINE_SKY = {total:30_000, me:{accountId:'1',login:'you',starred:true}, players:[['1','you']], online:['1'], friends:[]};
-const STAR = 'M0 -8.5L2.6 -2.9 8.6 -2.3 4.1 1.8 5.3 7.8 0 4.8 -5.3 7.8 -4.1 1.8 -8.6 -2.3 -2.6 -2.9Z';
-const Star = ({fill}) => <svg width="16" height="16" viewBox="-10 -10 20 20" aria-hidden="true">
-  <path d={STAR} fill={fill} stroke="#39472d" strokeWidth="1.6" strokeLinejoin="round"/></svg>;
-const Dot = ({fill, r}) => <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-  <circle cx="6" cy="6" r={r} fill={fill} stroke="#39472d" strokeWidth="1.2"/></svg>;
+// dev only (?dev=1 or ?offline): there is no room server to ask, so the sky shows this fixture
+const OFFLINE_SKY = {total:30_000, me:{accountId:'1',login:'you',starred:true}, online:['1','2','3','4'], friends:['2','6'],
+  players:[['1','you'],['2','mallard'],['3','pekin'],['4','teal'],['5','eider'],['6','wigeon'],['7','pintail'],['8','gadwall']]};
+const STAR = 'M0 -7.2L2.2 -2.5 7.3 -2 3.5 1.5 4.5 6.6 0 4.1 -4.5 6.6 -3.5 1.5 -7.3 -2 -2.2 -2.5Z';
+// every star is gold; how bright it is says who it is, so the key shows each one on a patch of night
+const Star = ({level}) => <svg width="20" height="20" viewBox="-11 -11 22 22" aria-hidden="true">
+  <circle r="11" fill="#16323c"/>{level === 1 && <circle r="8.6" fill="none" stroke="#ffb937" strokeWidth="1.2" opacity=".55"/>}
+  <path d={STAR} fill="#ffb937" opacity={level} transform={level === 1 ? undefined : 'scale(.8)'}/></svg>;
+const number = value => value.toLocaleString('en');
 
 export default function IslandStargaze({island, playing, offline = false}) {
   const [near, setNear] = useState(false);
@@ -109,21 +111,20 @@ export default function IslandStargaze({island, playing, offline = false}) {
     return () => clearTimeout(id);
   }, [news]);
 
-  const total = sky ? Math.max(Number.isSafeInteger(sky.total) ? sky.total : 0, sky.players?.length ?? 0) : null;
+  const counts = sky ? skyCounts(sky) : null;
   return <>
     {near && !open && <button className="pixi-travel-action" onClick={look} disabled={walking}>
       Look through the telescope <kbd>Enter</kbd>
     </button>}
     {open && <dialog ref={dialog} className="pixi-stargaze" aria-labelledby="stargaze-title" onClose={() => setOpen(false)}>
       <header className="pixi-stargaze-card">
-        <h2 id="stargaze-title">{total === null ? 'Counting the stars…' : `${total.toLocaleString('en')} stars`}</h2>
+        <h2 id="stargaze-title">{counts ? `${number(counts.total)} stars` : 'Counting the stars…'}</h2>
         <p>One for everyone who starred ente/ente</p>
-        <ul>
-          <li><Star fill="#ffb937"/>Your star</li>
-          <li><Star fill="#fff0b2"/>Ducks who have played here</li>
-          <li><Dot fill="#409447" r="4.4"/>On the island right now</li>
-          <li><Dot fill="#fff0c7" r="2.6"/>Stargazers who haven’t visited yet</li>
-        </ul>
+        {counts && <ul>
+          <li><Star level={1}/><span><b>{number(counts.online)}</b> online</span></li>
+          <li><Star level={.62}/><span><b>{number(counts.offline)}</b> offline</span></li>
+          <li><Star level={.34}/><span>Not starred yet</span></li>
+        </ul>}
       </header>
       <div className="pixi-stargaze-stage" ref={stage}>
         <div className="pixi-stargaze-lens" ref={lens}>
