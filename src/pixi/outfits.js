@@ -18,7 +18,8 @@ export function sameOutfit(a, b) {
 
 export function randomOutfit(current, random = Math.random) {
   const outfit = Object.fromEntries(Object.entries(OUTFIT_OPTIONS).map(([slot, options]) => {
-    const choices = slot === 'shades' || slot === 'acc' ? [0, ...options] : options;
+    if (slot === 'acc') return [slot, 0];   // boss 11 Nov: accessories removed
+    const choices = slot === 'shades' ? [0, ...options] : options;
     return [slot, choices[Math.floor(random() * choices.length)]];
   }));
   if (sameOutfit(current, outfit)) {

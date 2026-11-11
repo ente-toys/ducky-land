@@ -30,8 +30,8 @@ test('item rows show all supported assets, change only the chosen slot, allow re
   try {
     await render();
     const rows = [...document.querySelectorAll('fieldset')];
-    assert.deepEqual(rows.map(row => row.querySelector('legend').textContent),['Hats','Glasses','Accessories','Shoes']);
-    for (const [i,slot] of Object.keys(OUTFIT_OPTIONS).entries()) {
+    assert.deepEqual(rows.map(row => row.querySelector('legend').textContent),['Hats','Glasses','Shoes']);
+    for (const [i,slot] of Object.keys(OUTFIT_OPTIONS).filter(slot => slot !== 'acc').entries()) {
       const row = rows[i];
       const items = wardrobe.filter(item => item.slot === slot && OUTFIT_OPTIONS[slot].includes(item.index));
       assert.equal(row.querySelectorAll('button').length,items.length+1);

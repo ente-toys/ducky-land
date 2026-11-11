@@ -196,7 +196,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const request=++outfitVersion;
     // boss 4 Nov: only the outfits that wrap the Ducky well stay; a dropped one is swapped for a kept one of the same kind
     const keep=e=>OUTFIT_OPTIONS[e.slot]?.includes(e.index),swap=(slot,index)=>{const all=data.wardrobe.filter(e=>e.slot===slot),hit=all.find(e=>e.index===Number(index)||e.id===index);if(!hit||keep(hit))return hit;const kept=all.filter(keep);return kept[hit.index%kept.length];};
-    const entries=Object.entries(next).map(([slot,index])=>swap(slot==='accessory'?'acc':slot,index)).filter(Boolean).sort((a,b)=>slotOrder.indexOf(a.slot)-slotOrder.indexOf(b.slot));
+    const entries=Object.entries(next).filter(([slot])=>slot!=='acc'&&slot!=='accessory').map(([slot,index])=>swap(slot,index))   // boss 11 Nov: accessories removed, saved ones are not drawn
+      .filter(Boolean).sort((a,b)=>slotOrder.indexOf(a.slot)-slotOrder.indexOf(b.slot));
     const frames=entries.flatMap(entry=>Object.values(entry.frames).flat()).filter(frame=>frame.visible);
     await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));
     if(disposed||request!==outfitVersion)return;

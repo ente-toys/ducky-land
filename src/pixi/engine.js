@@ -864,7 +864,7 @@ export class PixiIsland {
     this.mapSleepers.set(mapId, []);
     let salt=0; for (const c of mapId) salt=(salt*31+c.charCodeAt(0)) % 997;
     const ducks=beds.map((b, i) => ({id: 1000+i, x: b.x, y: b.y, previousX: b.x, previousY: b.y, sleeping: true, action: 7, turn: 0, travel: 0, emoteVersion: 0, jumpLeft: 0,
-      sleep: {pose: b.pose, flip: b.flip}, footprint: sleeperFootprint(b), outfit: {cap: 1+i%13, shades: i%4===0 ? 1+i%3 : 0, acc: i%3===0 ? 1+i%7 : 0, shoes: 1+i%10}}));
+      sleep: {pose: b.pose, flip: b.flip}, footprint: sleeperFootprint(b), outfit: {cap: 1+i%13, shades: i%4===0 ? 1+i%3 : 0, acc: 0, shoes: 1+i%10}}));
     const results=await Promise.allSettled(ducks.map((d, i) => createDuck({outfit: d.outfit, seed: d.id+21+salt, isPlayer: false, sleep: d.sleep})));
     const set=results.map((r, i) => r.status === 'fulfilled' ? {duck: ducks[i], rig: r.value} : null).filter(Boolean);
     if (this.disposed) {set.forEach(({rig}) => rig.dispose()); return;}
