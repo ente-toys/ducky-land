@@ -35,6 +35,7 @@ import {createTravelView} from './travel-view.js';
 import {createArchipelago} from './archipelago.js';
 import {copyHolding} from './sphere-shores.js';
 import {createWorldView} from './world-view.js';
+import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from './islands.js';
 import {isletWalks} from './islet-walk.js';
@@ -346,7 +347,11 @@ export class PixiIsland {
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
       if(!this.externalOverview){
-        this.worldView=createWorldView(this.app,this.scene,this.isletView);
+        this.loaded.push(CLOUD_TEXTURE);
+        const clouds=await acquire(CLOUD_TEXTURE);
+        if(this.disposed)return;
+        clouds.source.style.addressModeU='repeat';clouds.source.style.maxAnisotropy=4;clouds.source.style.update();
+        this.worldView=createWorldView(this.app,this.scene,this.isletView,clouds);
         const map=this.mapHere(),warmCamera={x:map.cx,y:map.cy,zoom:this.minZoom};
         const matrix=cameraMatrix(warmCamera,this.width,this.height,TILT);
         this.scene.setFromMatrix(new Matrix(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty));
@@ -1476,7 +1481,7 @@ export class PixiIsland {
     for (const {o} of visitors) o.visible=false;
     if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies, visitors);
     this.isletView?.update(this.islandId,this.camera,this.viewSpan.width,this.viewSpan.height,(this.globeT||0)>.001);
-    this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player);   // Guests have no player island to point toward.
+    this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced);   // Guests have no player island to point toward.
     if (this.nameLayer) {   // boss 6 Nov: the name tags fade out as the 'You' pin fades in, by the same zoom progress (no pop)
       const tags=1-(this.worldView?.pinIn ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
       if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
