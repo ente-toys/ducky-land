@@ -1,2 +1,0 @@
-No WebGL support. Image mesh will not be drawn.
-{"renderer":"Rive Canvas2D WASM, Skia CPU","runtime":"@rive-app/canvas-advanced 2.43.1","artboards":["Five Imports"],"selected":"Five Imports","bounds":{"minX":0,"minY":0,"maxX":2800,"maxY":1240},"output":"pipeline-five/proof.png","canvas":[2800,1240]}

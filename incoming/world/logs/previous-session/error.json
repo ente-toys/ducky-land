@@ -1,1 +1,0 @@
-{"error":"TypeError: Cannot read properties of undefined (reading 'some')","stack":"TypeError: Cannot read properties of undefined (reading 'some')\n    at walkable (http://127.0.0.1:8801/game.js:23:31)\n    at http://127.0.0.1:8801/game.js:37:62"}
