@@ -21,12 +21,27 @@ export function createPickupsView(objects,art,{tilt=1}={}){
         const root=new Container({label:`Bog ${spot.kind} pickup`}),ring=new Graphics(),icon=new Sprite(art[spot.kind]??Texture.EMPTY);
         root.upright=true;ring.ellipse(0,0,42,27).fill({color:colours[spot.kind],alpha:.12}).stroke({color:colours[spot.kind],alpha:.5,width:2});
         icon.anchor.set(.5,1);icon.width=64;icon.height=64;icon.scale.y/=tilt;
-        root.addChild(ring,icon);objects.addChild(root);node={root,ring,icon};nodes.set(spot.id,node);
+        // Paint-only glints suggest the swirl catching the light. Draw once;
+        // frame updates only change opacity, never geometry or textures.
+        let shimmer;
+        if(spot.kind==='paint'){
+          shimmer=[new Graphics({label:'Paint swirl glint A'}),new Graphics({label:'Paint swirl glint B'})];
+          shimmer[0].moveTo(-11,-29).quadraticCurveTo(-8,-32,-4,-33).stroke({color:0xffffff,width:1.3,cap:'round'});
+          shimmer[1].moveTo(5,-17).quadraticCurveTo(8,-18,10,-21).stroke({color:0xffffff,width:1.3,cap:'round'});
+          for(const glint of shimmer)glint.scale.y=1/tilt;
+        }
+        root.addChild(ring,icon);if(shimmer)root.addChild(...shimmer);
+        objects.addChild(root);node={root,ring,icon,shimmer};nodes.set(spot.id,node);
       }
       node.root.visible=spot.readyAt<=time;
       node.root.position.set(spot.x,spot.y);node.root.zIndex=spot.y+.05;
-      const bob=reduced?0:Math.sin(time*2+spot.x*.01)*3;
+      const paint=spot.kind==='paint';
+      const bob=reduced?0:Math.sin(time*(paint?Math.PI*2/1.6:2)+spot.x*.01)*(paint?5:3);
       node.icon.y=(-14-bob)/tilt;node.ring.alpha=reduced?.8:.75+Math.sin(time*2)*.15;
+      if(node.shimmer)for(let i=0;i<node.shimmer.length;i++){
+        const glint=node.shimmer[i];glint.y=node.icon.y;glint.visible=!reduced;
+        glint.alpha=reduced?0:Math.max(0,Math.sin(time*Math.PI*2/4.8+spot.x*.01+i*Math.PI))*.45;
+      }
     }
   },dispose(){for(const {root}of nodes.values()){root.removeFromParent();root.destroy({children:true});}nodes.clear();}};
 }
