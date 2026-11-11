@@ -3,11 +3,12 @@ import react from '@vitejs/plugin-react';
 import {readFileSync} from 'node:fs';
 import {runtimeManifest} from './scripts/globe-svg/runtime-manifest.mjs';
 import {productionProxy,productionSignIn} from './scripts/vite-production-proxy.mjs';
+import {productionAssets} from './scripts/production-assets.mjs';
 
 export default defineConfig({
   // Serve the homepage directly and let removed routes return 404.
   appType: 'mpa',
-  plugins: [react(), productionSignIn(), {
+  plugins: [react(), productionSignIn(), productionAssets(), {
     name: 'share-theme-walk-data',
     apply: 'build',
     enforce: 'post',

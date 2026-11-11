@@ -7,8 +7,7 @@ import {build} from 'esbuild';
 import {geometry} from '../../rive/web/island-geometry.mjs';
 import {mapOf} from '../../src/pixi/island-maps.js';
 const root=process.cwd();
-const placementSource=readFileSync(root+'/src/pixi/placements.js','utf8').replace(/const urls = import\.meta\.glob[^;]+;/,"const urls = Object.fromEntries(library.assets.map(a=>['../../'+a.file,'/'+a.file]));");
-const bundle=await build({stdin:{contents:placementSource,resolveDir:root+'/src/pixi',sourcefile:'placements.js',loader:'js'},bundle:true,platform:'node',format:'esm',write:false});
+const bundle=await build({entryPoints:[root+'/src/pixi/placements.js'],bundle:true,platform:'node',format:'esm',write:false});
 const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
 export function homeLayers(){
  const world=P.trimWorld(mapOf('home').world),props=P.createPlacements(world,geometry({...world,obstacles:[]}).walkable);

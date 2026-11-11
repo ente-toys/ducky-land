@@ -47,13 +47,8 @@ export async function sourceSize(src) {
 let homePromise;
 export function homeModel() {
   return homePromise ??= (async () => {
-    // Vite's glob only supplies asset URLs. Replace that one expression for Node,
-    // then execute the real production placement functions without reimplementing them.
-    const source = readFileSync('src/pixi/placements.js', 'utf8').replace(
-      /const urls = import\.meta\.glob[^;]+;/,
-      "const urls = Object.fromEntries(library.assets.map(a => ['../../' + a.file, '/' + a.file]));");
-    const bundled = await build({stdin: {contents: source, resolveDir: resolve('src/pixi'),
-      sourcefile: 'placements.js', loader: 'js'}, bundle: true, platform: 'node', format: 'esm', write: false});
+    const bundled = await build({entryPoints: [resolve('src/pixi/placements.js')],
+      bundle: true, platform: 'node', format: 'esm', write: false});
     const P = await import('data:text/javascript;base64,' + Buffer.from(bundled.outputFiles[0].text).toString('base64'));
     const props = P.createPlacements().filter(harborClear);
     const art = {ground: {tiles: P.HOME_TILES}, props: props.filter(p => p.asset !== 'rowboat'),
