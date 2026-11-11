@@ -1,8 +1,8 @@
 export const OUTFIT_OPTIONS = Object.freeze({
-  cap: [1, 3, 4, 5, 6, 7, 8, 10],
-  shades: [1, 2],
+  cap: [1, 3, 4, 5, 6, 7, 8, 10, 14, 15, 16, 17, 18],
+  shades: [1, 2, 4, 5, 6, 7],
   acc: [1, 4, 6],
-  shoes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  shoes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
 });
 
 export function validOutfit(outfit) {

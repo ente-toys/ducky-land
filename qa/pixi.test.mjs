@@ -101,10 +101,10 @@ test('original island art has complete placements, valid clipped SVGs and GPU-sa
   assert.equal(area, art.world.width * art.world.height);
 });
 
-test('all 34 wearables cover eight measured directions without missing or clipped artwork', () => {
+test('all 47 wearables cover eight measured directions without missing or clipped artwork', () => {
   const manifest = JSON.parse(readFileSync(new URL('../public/pixi-duck/manifest.json', import.meta.url)));
   const parser = new (new JSDOM('').window.DOMParser)();
-  assert.equal(manifest.wardrobe.length, 34);
+  assert.equal(manifest.wardrobe.length, 47);
   for(const view of manifest.views)for(const wing of view.parts.filter(part=>part.role==='wing')){
     const x=wing.pivot[0]-view.ground[0];
     assert.ok(x>view.attachments.neckTop[0]&&x<view.attachments.neckTop[1], 'wing hinge remains inside the shoulder');

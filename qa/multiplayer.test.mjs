@@ -231,7 +231,7 @@ test('randomized outfits isolate GitHub IDs and persist across reconnects, logou
     assert.equal((await save(owner.session,saved,{Origin:'https://elsewhere.example'})).status,403);
     assert.equal((await save(locked.session,saved)).status,403);
     for (const invalid of [null,[],{}, {...saved,cap:2}, {...saved,shades:3}, {...saved,acc:2},
-      {...saved,shoes:11}, {...saved,cap:'3'}, {...saved,extra:1}]) {
+      {...saved,shoes:15}, {...saved,cap:'3'}, {...saved,extra:1}]) {
       assert.equal((await save(owner.session,invalid)).status,400);
     }
     assert.equal((await request('/api/outfit',{method:'POST',headers:{Origin:origin,Cookie:owner.session},body:'{'})).status,400);
