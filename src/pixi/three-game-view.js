@@ -22,16 +22,7 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
   const captureScale=()=>direct?1:captureCoverage(host.clientWidth/Math.max(1,host.clientHeight),view?.heading??0,blend,Math.min(game.width,game.height));
   const nativeTick=game.tick.bind(game),nativeRender=game.app.render.bind(game.app),nativeResize=game.resize.bind(game),nativeInterior=game.onInteriorChange;
   const layer=document.createElement('div');layer.className='pixi-earth-view';Object.assign(layer.style,{position:'absolute',inset:0,zIndex:'1',background:'#000',visibility:'hidden'});host.append(layer);
-  const home=document.createElement('button');
-  home.className='pixi-earth-find';
-  home.type='button';
-  home.hidden=true;
-  home.setAttribute('aria-keyshortcuts','F');
-  const shortcut=document.createElement('kbd');
-  shortcut.textContent='F';
-  shortcut.setAttribute('aria-hidden','true');
-  home.append('Find my duck',shortcut);
-  layer.append(home);
+  const home=document.createElement('button');home.className='pixi-earth-find';home.textContent='Your duck';home.type='button';Object.assign(home.style,{position:'absolute',bottom:'20px',left:'50%',transform:'translateX(-50%)',zIndex:3});layer.append(home);
   const objects=()=>[...game.rigs.filter((r,i)=>game.localDucks[i]?.player).map(r=>r.root),...[...game.liveRigs.values()].map(e=>e.rig?.root),...(game.travelView?.transient()??[])].filter(Boolean);
   const originalIsletUpdate=game.isletView?.update.bind(game.isletView);
   if(originalIsletUpdate)game.isletView.update=(id,...args)=>originalIsletUpdate(view?.id??id,...args);

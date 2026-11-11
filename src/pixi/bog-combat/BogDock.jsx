@@ -46,31 +46,21 @@ export default function BogDock({engine,name='Ducky',profile:providedProfile,onL
   if(team)return <BogGame {...options} engine={engine} team={team} name={name} profile={profile} onLeave={back}/>;
   const connected=status==='connected'&&data,stats=data?.stats??lastVisit?.stats??emptyStats(),medals=data?.medalCase??lastVisit?.medalCase??{};
   return <div className="bog-combat-dock">
-    <section ref={dialog} className="pixi-dialog bog-combat-card" role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="bog-combat-heading" onKeyDown={trapFocus}>
-      <header className="pixi-dialog-header">
-        <div><small>Booquack Bog · 5 feathers per entry</small>
-          <h1 id="bog-combat-heading">{panel==='teams'?'Pick your side.':panel==='case'?'Your medal case':'Back at the dock'}</h1>
-        </div>
-        <button className="pixi-dialog-button" onClick={onLeave}>{leaveLabel}</button>
-      </header>
-      <div className="pixi-dialog-body">
-        {panel==='teams'?<>
-          <p>Drop in, make a splash. Any team size, leave whenever you like.</p>
-          <div className="bog-combat-teams">{['privacy','google'].map(id=><button className={`pixi-dialog-button bog-combat-team bog-combat-${id}`} key={id} disabled={!connected} onClick={()=>setTeam(id)}>
-            <strong>Team {id==='privacy'?'PRIVACY':'GOOGLE'}</strong>
-            <span>{connected?`${data.counts[id]} playing`:'Checking players…'}</span>
-            <small>{connected&&data.suggested===id?'Could use a duck':'Any team size welcome'}</small>
-          </button>)}</div>
-          <p>WASD or arrows to walk and turn. Shift to run. Hold Space to shoot forward, or use J or left click.</p>
-          <p>Five lives per entry. Each tag costs a life. Respawn hidden at your base for 7 seconds. Shooting ends hiding.</p>
-        </>:<><p>Your lifetime progress carries over every visit.</p><LifetimeStats stats={stats}/><MedalCase medals={medals}/></>}
-        {status==='disconnected'?<p role="status">The bog is unavailable. <button className="pixi-dialog-button" onClick={()=>setAttempt(n=>n+1)}>Reconnect</button></p>:
-          status==='connecting'&&<p role="status">Connecting to the bog…</p>}
-      </div>
-      <footer className="pixi-dialog-footer">
-        <span>{Object.keys(medals).length} / {MEDALS.length} medals earned</span>
-        <button className="pixi-dialog-button" onClick={()=>setPanel(panel==='teams'?'case':'teams')}>{panel==='teams'?'Medal case':'Pick a team'}</button>
-      </footer>
+    <section ref={dialog} className="bog-combat-card" role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="bog-combat-heading" onKeyDown={trapFocus}>
+      <header><small>BOOQUACK BOG · 5 feathers per entry</small><button onClick={onLeave}>{leaveLabel}</button></header>
+      <h1 id="bog-combat-heading">{panel==='teams'?'Pick your side.':panel==='case'?'Your medal case':'Back at the dock'}</h1>
+      {panel==='teams'?<>
+        <p>Drop in, make a splash. Any team size, leave whenever you like.</p>
+        <div className="bog-combat-teams">{['privacy','google'].map(id=><button className={`bog-combat-team bog-combat-${id}`} key={id} disabled={!connected} onClick={()=>setTeam(id)}>
+          <strong>Team {id==='privacy'?'PRIVACY':'GOOGLE'}</strong>
+          <span>{connected?`${data.counts[id]} playing`:'Checking players…'}</span>
+          <small>{connected&&data.suggested===id?'Could use a duck':'Any team size welcome'}</small>
+        </button>)}</div>
+        <p>WASD / arrows to walk and turn. Shift to run. Hold Space to shoot forwards, J or left click also shoot.</p>
+        <p>Five lives per entry. Each tag costs a life. Respawn hidden at your base for 7 seconds. Shooting ends hiding.</p>
+      </>:<><p>Your lifetime progress carries over every visit.</p><LifetimeStats stats={stats}/><MedalCase medals={medals}/></>}
+      <footer><span>{Object.keys(medals).length} / {MEDALS.length} medals earned</span><button onClick={()=>setPanel(panel==='teams'?'case':'teams')}>{panel==='teams'?'Medal case':'Pick a team'}</button></footer>
+      <p role="status">{status==='disconnected'?<>The bog is unavailable. <button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button></>:status==='connecting'?'Connecting to the bog…':'Ready to make a splash.'}</p>
     </section>
   </div>;
 }

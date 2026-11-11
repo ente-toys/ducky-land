@@ -1,32 +1,30 @@
-@import '../dialog.css';
-
-.bog-combat-hud { --bog-surface:#261d38; color:#fff8e7; font:15px/1.5 system-ui,sans-serif; }
-.bog-combat-dock { position:fixed; inset:0; z-index:100; display:grid; place-items:center; background:#173f42a6; }
-.bog-combat-card { --dialog-width:640px; }
-.bog-combat-card header small { display:block; margin-bottom:4px; color:#3b6c57; }
-.bog-combat-card footer,.bog-combat-score { display:flex; justify-content:space-between; align-items:center; gap:12px; }
-.bog-combat-card .pixi-dialog-body p { margin:12px 0 0; }
-.bog-combat-hud button { appearance:none; font:inherit; color:inherit; background:#3c2e50; border:1px solid #8d799d; border-radius:12px; padding:8px 16px; cursor:pointer; }
-.bog-combat-hud button:active { transform:scale(.97); }
-.bog-combat-hud :focus-visible { outline:3px solid #ffe161; outline-offset:4px; }
-.bog-combat-teams { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
-.bog-combat-teams .bog-combat-team { display:grid; justify-content:start; gap:4px; text-align:left; padding:14px; }
-.bog-combat-team strong { font-size:17px; }
-.bog-combat-team.bog-combat-privacy { background:#d8ebc6; border-top:3px solid #508651; }
-.bog-combat-team.bog-combat-google { background:#dceff1; border-top:3px solid #43839e; }
-.bog-combat-team:disabled { opacity:.7; }
+.bog-combat-dock,.bog-combat-hud { --bog-surface:#261d38; --bog-ink:#fff8e7; --bog-green:#08c225; color:var(--bog-ink); font:15px/1.5 system-ui,sans-serif; }
+.bog-combat-dock { position:fixed; inset:0; z-index:100; display:grid; place-items:center; background:#17112280; padding:24px; }
+.bog-combat-card { width:min(680px,100%); max-height:90dvh; overflow:auto; box-sizing:border-box; padding:32px; background:var(--bog-surface); border:2px solid #736282; border-radius:24px; box-shadow:0 12px 48px #15102150; }
+.bog-combat-card header,.bog-combat-card footer,.bog-combat-score { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.bog-combat-card h1 { font-size:32px; line-height:1.1; margin:24px 0; }
+.bog-combat-card p { margin:16px 0; }
+.bog-combat-dock button,.bog-combat-hud button { appearance:none; font:inherit; color:inherit; background:#3c2e50; border:1px solid #8d799d; border-radius:12px; padding:8px 16px; cursor:pointer; }
+.bog-combat-dock button:active,.bog-combat-hud button:active { transform:scale(.97); }
+.bog-combat-dock button:disabled { cursor:wait; opacity:.5; }
+.bog-combat-dock :focus-visible,.bog-combat-hud :focus-visible { outline:3px solid #ffe161; outline-offset:4px; }
+.bog-combat-teams { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }
+.bog-combat-teams .bog-combat-team { display:grid; gap:8px; text-align:left; padding:24px; }
+.bog-combat-team strong { font-size:21px; }
+.bog-combat-team.bog-combat-privacy { border-top:4px solid var(--bog-green); }
+.bog-combat-team.bog-combat-google { border-top:4px solid #2788d9; border-right:4px solid #fa5452; border-bottom:4px solid #ffe23d; border-left:4px solid #20c75b; }
 .bog-combat-lifetime { display:flex; flex-wrap:wrap; gap:24px; }
 .bog-combat-lifetime dt { font-size:12px; opacity:.7; }
 .bog-combat-lifetime dd { margin:0; font-size:24px; }
 .bog-combat-medals { list-style:none; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.bog-combat-medals li { display:grid; gap:4px; padding:10px 12px; border:1px solid #a3c6b5; border-radius:9px; background:#e2f1e5; }
+.bog-combat-medals li { display:grid; gap:4px; }
 .bog-combat-medals span { font-size:12px; opacity:.75; }
 .bog-combat-hud { position:fixed; left:16px; bottom:16px; z-index:80; max-width:min(560px,calc(100vw - 64px)); padding:16px; border-radius:16px; background:var(--bog-surface); pointer-events:none; }
 .bog-combat-hud p { margin:4px 0; }
 .bog-combat-hud button { pointer-events:auto; margin:8px 8px 0 0; }
 .bog-combat-hud small { display:block; opacity:.75; }
-@media(max-width:440px) { .bog-combat-teams,.bog-combat-medals { grid-template-columns:1fr; } .bog-combat-card header { align-items:flex-start; } }
-@media(prefers-reduced-motion:reduce) { .bog-combat-hud button:active { transform:none; } }
+@media(max-width:540px) { .bog-combat-dock { padding:12px; } .bog-combat-card { padding:24px; } .bog-combat-teams,.bog-combat-medals { grid-template-columns:1fr; } .bog-combat-card header { align-items:flex-start; } }
+@media(prefers-reduced-motion:reduce) { .bog-combat-dock button:active,.bog-combat-hud button:active { transform:none; } }
 
 .bog-demo-winner{position:fixed;inset:35% 0 auto;z-index:60;display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px;background:#fff9df;color:#39472d;border-block:4px solid #39472d;pointer-events:none}.bog-demo-winner strong{font-size:clamp(28px,5vw,58px)}.bog-demo-winner span{font-size:18px}
 

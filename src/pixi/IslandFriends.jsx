@@ -1,6 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import IslandHudIcon from './IslandHudIcon.jsx';
 
 export default function IslandFriends({room, island, status, indoors, notificationHost}) {
   const [friends, setFriends] = useState([]);
@@ -104,48 +103,42 @@ export default function IslandFriends({room, island, status, indoors, notificati
   const request = incoming[0];
   const showPrompt = !open && !loading && !loadError && (request || status === 'playing' && !indoors);
   return <>
-    <button className="pixi-hud-tool" type="button" aria-label={incoming.length ? `Friends, ${incoming.length} pending` : 'Friends'}
-      onClick={() => {setOpen(true); refresh.current();}}>
-      <IslandHudIcon name="friends"/><span className="pixi-tool-label">Friends</span>
-      {incoming.length > 0 && <span className="pixi-tool-count" aria-hidden="true">{incoming.length}</span>}
-    </button>
-    {open && <dialog ref={dialog} className="pixi-dialog pixi-friends-dialog" aria-labelledby="friends-title"
+    <button type="button" onClick={() => {setOpen(true); refresh.current();}}>Friends{incoming.length ? ` (${incoming.length})` : ''}</button>
+    {open && <dialog ref={dialog} className="pixi-friends-dialog" aria-labelledby="friends-title"
       onClose={() => setOpen(false)} onCancel={() => setOpen(false)} onKeyDown={event => event.stopPropagation()}>
-      <header className="pixi-dialog-header">
+      <div className="pixi-friends-heading">
         <h2 id="friends-title">Your friends</h2>
-        <button className="pixi-dialog-button pixi-dialog-close" type="button" onClick={() => setOpen(false)} aria-label="Close friends">×</button>
-      </header>
-      <div className="pixi-dialog-body">
-        <p>Walk near someone to send a friend request.</p>
-        {loading && <p role="status">Loading friends…</p>}
-        {loadError && <div role="alert"><p>{loadError}</p><button className="pixi-dialog-button" type="button" onClick={() => refresh.current()}>Try again</button></div>}
-        {actionError && <p role="alert">{actionError}</p>}
-        {feedback && <p role={feedback.error ? 'alert' : 'status'}>{feedback.text}</p>}
-        {!loading && !loadError && incoming.length > 0 && <section aria-label="Friend requests">
-          <h3>Friend requests</h3>
-          <ul className="pixi-friends-list">{incoming.map(request => <li key={request.accountId}>
-            <span>@{request.login}</span>
-            <div className="pixi-friend-actions">
-              <button className="pixi-dialog-button pixi-dialog-primary" type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'accept')}>Accept</button>
-              <button className="pixi-dialog-button" type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'decline')}>Decline</button>
-            </div>
-          </li>)}</ul>
-        </section>}
-        {!loading && !loadError && outgoing.length > 0 && <section aria-label="Sent requests">
-          <h3>Sent requests</h3>
-          <ul className="pixi-friends-list">{outgoing.map(request => <li key={request.accountId}>
-            <span>@{request.login}</span>
-            <button className="pixi-dialog-button" type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'cancel')}>Cancel</button>
-          </li>)}</ul>
-        </section>}
-        {!loading && !loadError && (friends.length ? <ul className="pixi-friends-list">
-          {friends.map(friend => <li key={friend.accountId}>
-            <span>@{friend.login}</span>
-            <button className="pixi-dialog-button" type="button" disabled={pending !== null} aria-label={`Remove @${friend.login}`}
-              onClick={() => change('DELETE',friend)}>{pending === friend.accountId ? 'Removing…' : 'Remove'}</button>
-          </li>)}
-        </ul> : <p className="pixi-friends-empty">No friends yet.</p>)}
+        <button type="button" onClick={() => setOpen(false)} aria-label="Close friends">×</button>
       </div>
+      <p>Walk near someone to send a friend request.</p>
+      {loading && <p role="status">Loading friends…</p>}
+      {loadError && <div role="alert"><p>{loadError}</p><button type="button" onClick={() => refresh.current()}>Try again</button></div>}
+      {actionError && <p role="alert">{actionError}</p>}
+      {feedback && <p role={feedback.error ? 'alert' : 'status'}>{feedback.text}</p>}
+      {!loading && !loadError && incoming.length > 0 && <section aria-label="Friend requests">
+        <h3>Friend requests</h3>
+        <ul className="pixi-friends-list">{incoming.map(request => <li key={request.accountId}>
+          <span>@{request.login}</span>
+          <div className="pixi-friend-actions">
+            <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'accept')}>Accept</button>
+            <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'decline')}>Decline</button>
+          </div>
+        </li>)}</ul>
+      </section>}
+      {!loading && !loadError && outgoing.length > 0 && <section aria-label="Sent requests">
+        <h3>Sent requests</h3>
+        <ul className="pixi-friends-list">{outgoing.map(request => <li key={request.accountId}>
+          <span>@{request.login}</span>
+          <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'cancel')}>Cancel</button>
+        </li>)}</ul>
+      </section>}
+      {!loading && !loadError && (friends.length ? <ul className="pixi-friends-list">
+        {friends.map(friend => <li key={friend.accountId}>
+          <span>@{friend.login}</span>
+          <button type="button" disabled={pending !== null} aria-label={`Remove @${friend.login}`}
+            onClick={() => change('DELETE',friend)}>{pending === friend.accountId ? 'Removing…' : 'Remove'}</button>
+        </li>)}
+      </ul> : <p className="pixi-friends-empty">No friends yet. Your next friend could be a few waddles away.</p>)}
     </dialog>}
     {notificationHost && showPrompt && (request || candidate || feedback) && createPortal(
       <aside className="pixi-friend-prompt" aria-label={request ? "Friend request" : "Nearby friend"}>

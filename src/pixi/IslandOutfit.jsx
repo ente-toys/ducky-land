@@ -3,7 +3,6 @@ import {createPortal} from 'react-dom';
 import {Application} from 'pixi.js';
 import {createDuck, getDuckWardrobe} from './duck.js';
 import {OUTFIT_OPTIONS, randomOutfit, sameOutfit} from './outfits.js';
-import IslandHudIcon from './IslandHudIcon.jsx';
 
 // boss 11 Nov: accessories removed; only hats, glasses and shoes
 const outfitRows = {cap:'Hats', shades:'Glasses', shoes:'Shoes'};
@@ -150,15 +149,15 @@ function OutfitEditor({initial, island, offline, onClose}) {
     }
   }
 
-  return <dialog ref={dialog} className="pixi-dialog pixi-outfit-dialog" aria-labelledby="outfit-title"
+  return <dialog ref={dialog} className="pixi-outfit-dialog" aria-labelledby="outfit-title"
     onClose={event => {if (!event.currentTarget.open) onClose();}}
     onCancel={event => {if (saving) event.preventDefault(); else onClose();}}
     onKeyDown={event => event.stopPropagation()}>
-    <header className="pixi-dialog-header">
+    <div className="pixi-outfit-heading">
       <h2 id="outfit-title">Change outfit</h2>
-      <button className="pixi-dialog-button pixi-dialog-close" type="button" aria-label="Close outfit editor" disabled={saving} onClick={onClose}>×</button>
-    </header>
-    <div className="pixi-dialog-body pixi-outfit-content">
+      <button className="pixi-outfit-close" type="button" aria-label="Close outfit editor" disabled={saving} onClick={onClose}>×</button>
+    </div>
+    <div className="pixi-outfit-content">
       <div className="pixi-outfit-stage">
         <OutfitPreview outfit={draft} onBusy={setBusy} onError={setPreviewError}/>
         <span className="pixi-outfit-shadow" aria-hidden="true"/>
@@ -169,18 +168,16 @@ function OutfitEditor({initial, island, offline, onClose}) {
         setDraft(next);
       }}/> : <p role="status">{wardrobeError || 'Loading items…'}</p>}
     </div>
-    <footer className="pixi-dialog-footer">
-      {(previewError || saveError) && <p className="pixi-dialog-error" role="alert">{previewError || saveError}</p>}
-      <div className="pixi-outfit-actions">
-        <button type="button" className="pixi-dialog-button pixi-outfit-random" disabled={busy || saving} onClick={() => {
-          setSaveError('');
-          setDraft(previous => randomOutfit(previous));
-        }}>Randomize</button>
-        <button type="button" className="pixi-dialog-button pixi-dialog-primary pixi-outfit-save" disabled={!changed || busy || saving || Boolean(previewError)} onClick={save}>
-          {saving ? 'Saving…' : 'Save outfit'}
-        </button>
-      </div>
-    </footer>
+    {(previewError || saveError) && <p className="pixi-outfit-error" role="alert">{previewError || saveError}</p>}
+    <div className="pixi-outfit-actions">
+      <button type="button" className="pixi-outfit-random" disabled={busy || saving} onClick={() => {
+        setSaveError('');
+        setDraft(previous => randomOutfit(previous));
+      }}>Randomize</button>
+      <button type="button" className="pixi-outfit-save" disabled={!changed || busy || saving || Boolean(previewError)} onClick={save}>
+        {saving ? 'Saving…' : 'Save'}
+      </button>
+    </div>
   </dialog>;
 }
 
@@ -188,12 +185,12 @@ export default function IslandOutfit({island, offline = false}) {
   const [initial,setInitial] = useState(null);
   const [error,setError] = useState('');
   return <>
-    <button className="pixi-hud-tool" type="button" aria-label="Change outfit" onClick={() => {
+    <button type="button" onClick={() => {
       const outfit = island.current?.player?.outfit;
       if (!outfit) {setError('Your duck is still arriving. Please try again.'); return;}
       setError('');
       setInitial({...outfit});
-    }}><IslandHudIcon name="outfit"/><span className="pixi-tool-label">Outfit</span></button>
+    }}>Change outfit</button>
     {error && <span role="status">{error}</span>}
     {initial && createPortal(<OutfitEditor initial={initial} island={island} offline={offline} onClose={() => setInitial(null)}/>,document.body)}
   </>;

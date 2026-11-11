@@ -8,12 +8,13 @@ import IslandTravel from './IslandTravel.jsx';
 import IslandFriends from './IslandFriends.jsx';
 import WorldMap from './WorldMap.jsx';
 import IslandOutfit from './IslandOutfit.jsx';
-import IslandHudIcon from './IslandHudIcon.jsx';
 import BogEntry from './bog-combat/BogEntry.jsx';
 import {BOG_COMBAT} from './bog-combat/config.js';
 import './pixi.css';
 
 const notices = {
+  connecting:'Connecting to the island…',
+  reconnecting:'Reconnecting…',
   'spectators-full':'Live view is full.',
   'players-full':'The island is full. You can still watch.',
   'taken-over':'Your duck is playing in another tab.',
@@ -119,74 +120,45 @@ export default function PixiPage() {
     }
   }
 
-  const guest = !offline && session && !session.user && status !== 'playing';
+  const guest = session && !session.user && status !== 'playing';
   const retryLive = status === 'spectators-full';
   const starRequired = session?.user && !session.user.canPlay;
   const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
-  const playing = status === 'playing';
-  const signedIn = Boolean(session?.user || playing);
-  const connected = playing || ['watching','players-full','taken-over','star-required'].includes(status);
-  const modeLabel = offline ? 'Offline' : playing ? 'Playing' : connected ? 'Watching' :
-    status === 'connecting' ? 'Connecting…' : status === 'reconnecting' ? 'Reconnecting…' : 'Disconnected';
-  const message = notice || notices[status];
-  return <main className="pixi-page">
+  return <main className={`pixi-page${guest ? ' pixi-page--guest' : ''}`}>
     <div className="pixi-host" ref={host}/>
+    <img className="pixi-ente-logo" src="/ente-wordmark-white.svg" alt="Ente" width="844" height="264"/>
     <div className="pixi-chat-layer">
       <div ref={nameLayer}/>
       <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>
     </div>
-    {!error && <header className="pixi-live" aria-label="Ducky Land controls">
-      <div className="pixi-hud-identity">
-        <img className="pixi-ente-logo" src="/ente-wordmark-white.svg" alt="Ente" width="844" height="264"/>
-        <div className="pixi-hud-presence">
-          <span className="pixi-hud-mode" role="status">
-            <span className="pixi-online-dot" data-connected={!offline && connected} aria-hidden="true"/>
-            {modeLabel}
-          </span>
-          {!offline && connected && online !== null && <span className="pixi-hud-count">{online} online</span>}
-        </div>
-      </div>
-      {(signedIn || offline) && <div className="pixi-hud-tools" role="group" aria-label="Game actions">
-        {playing && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
-        {(playing || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
-        {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}
-          status={status} indoors={indoors} notificationHost={notificationHost}/>}
-        {signedIn && <>
-          <button type="button" className="pixi-hud-tool" aria-label="Account options" popoverTarget="pixi-account">
-            <IslandHudIcon name="menu"/>
-          </button>
-          <div id="pixi-account" className="pixi-account" popover="auto">
-            {session?.user?.login && <p>@{session.user.login}</p>}
-            <button type="button" onClick={logout} disabled={signingOut}>{signingOut ? 'Signing out…' : 'Sign out'}</button>
-          </div>
-        </>}
-      </div>}
-      {(message || starRequired || retryLive || retryPlay) && <div className="pixi-hud-notice">
-        {message && <span role="status">{message}</span>}
-        {starRequired && <button type="button" onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
-        {retryLive && <button type="button" onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
-        {retryPlay && <button type="button" onClick={() => room.current?.connect()}>
-          {status === 'taken-over' ? 'Take control' : 'Join island'}
-        </button>}
-      </div>}
-    </header>}
-    {!error && <>
+    {!error && <aside className="pixi-live" aria-label="Live island">
+      <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
+      {/* Keys share this sibling list: scope each ID to its toolbar item so
+          reconnects and island changes unmount the correct UI and effects. */}
+      {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
+      {(status === 'playing' || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
+      {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}
+        status={status} indoors={indoors} notificationHost={notificationHost}/>}
+      {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
+      {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
+      {retryPlay && <button onClick={() => room.current?.connect()}>
+        {status === 'taken-over' ? 'Take control' : 'Join island'}
+      </button>}
+      {(session?.user || status === 'playing') && <button onClick={logout} disabled={signingOut}>Sign out</button>}
+    </aside>}
+    {!error && guest && <aside className="pixi-guest-play" aria-labelledby="pixi-guest-heading">
+      <h2 id="pixi-guest-heading">Your duck is waiting</h2>
+      <p>Sign in to walk, quack, and explore.</p>
+      {session.signInAvailable
+        ? <a href="/auth/github/start">Play with GitHub <span aria-hidden="true">→</span></a>
+        : <><button disabled>Play with GitHub</button><small>Sign-in is unavailable right now.</small></>}
+    </aside>}
+    {!error && <div className="pixi-bottom-hud">
       <IslandTravel travel={travel} playing={status==='playing'} room={room} island={island} notice={travelNotice}/>
-      <div className="pixi-bottom-center">
-        <div className="pixi-notifications" ref={setNotificationHost}>
-          <IslandPresence latestJoin={latestJoin}/>
-        </div>
-        {guest && <div className="pixi-guest-slot">
-          <aside className="pixi-guest-play" aria-labelledby="pixi-guest-heading">
-            <h2 id="pixi-guest-heading">Your duck is waiting</h2>
-            <p>Sign in to walk, quack, and explore.</p>
-            {session.signInAvailable
-              ? <a href="/auth/github/start">Play with GitHub <span aria-hidden="true">→</span></a>
-              : <><button disabled>Play with GitHub</button><small>Sign-in is unavailable right now.</small></>}
-          </aside>
-        </div>}
+      <div className="pixi-notifications" ref={setNotificationHost}>
+        <IslandPresence online={online} latestJoin={latestJoin}/>
       </div>
-    </>}
+    </div>}
     {!error && <WorldMap island={island}/>}
     {!error && <BogEntry engine={island} travel={travel} status={status} {...BOG_COMBAT}
       accountId={session?.user?.accountId}

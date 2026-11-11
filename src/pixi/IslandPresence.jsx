@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 
-export default function IslandPresence({latestJoin}) {
+export default function IslandPresence({online, latestJoin}) {
   const [toasts, setToasts] = useState([]);
   const timers = useRef(new Map());
 
@@ -22,10 +22,16 @@ export default function IslandPresence({latestJoin}) {
     timers.current.clear();
   }, []);
 
-  return <div className="pixi-join-toasts" role="status" aria-live="polite" aria-relevant="additions">
-    {toasts.map(toast => <div className="pixi-join-toast" key={toast.id}>
-      <span>{toast.login ? `@${toast.login}` : 'A player'} joined the island</span>
-      <button type="button" aria-label="Dismiss join notification" onClick={() => dismiss(toast.id)}>×</button>
-    </div>)}
-  </div>;
+  return <>
+    <div className="pixi-online" aria-label="Live users">
+      <span className="pixi-online-dot" aria-hidden="true"/>
+      {online === null ? 'Connecting…' : `${online} ${online === 1 ? 'user' : 'users'} online`}
+    </div>
+    <div className="pixi-join-toasts" role="status" aria-live="polite" aria-relevant="additions">
+      {toasts.map(toast => <div className="pixi-join-toast" key={toast.id}>
+        <span>{toast.login ? `@${toast.login}` : 'A player'} joined the island</span>
+        <button type="button" aria-label="Dismiss join notification" onClick={() => dismiss(toast.id)}>×</button>
+      </div>)}
+    </div>
+  </>;
 }

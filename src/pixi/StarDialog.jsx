@@ -30,19 +30,17 @@ export default function StarDialog({onClose, onConfirm}) {
     return () => element.close();
   }, []);
 
-  return <dialog ref={dialog} className="pixi-dialog pixi-star-dialog" aria-labelledby="star-title"
-    aria-describedby="star-description" onClose={event => {if (!event.currentTarget.open) onClose();}}
-    onKeyDown={event => event.stopPropagation()}>
-    <header className="pixi-dialog-header"><h2 id="star-title">Star Ente to join the island</h2></header>
-    <div className="pixi-dialog-body">
-      <p id="star-description">Star <strong>ente/ente</strong> on GitHub with the account you signed in with, then check again to start playing.</p>
-      {error && <p className="pixi-dialog-error" role="alert">{error}</p>}
+  return <dialog ref={dialog} className="pixi-star-dialog" aria-labelledby="star-title"
+    aria-describedby="star-description" onClose={onClose}>
+    <h2 id="star-title">Star Ente to join the island</h2>
+    <p id="star-description">You’re signed in! Playing is available to people who have starred
+      {' '}<strong>ente/ente</strong> on GitHub. Give it a star, then come back and check again.</p>
+    {error && <p role="alert">{error}</p>}
+    <div className="pixi-star-actions">
+      <a href="https://github.com/ente/ente" target="_blank" rel="noopener noreferrer">Star ente/ente ↗</a>
+      <button onClick={retry} disabled={checking}>{checking ? 'Checking…' : 'I’ve starred it — check again'}</button>
+      {signInRequired && <a href="/auth/github/start">Sign in again</a>}
+      <button onClick={onClose}>Keep watching</button>
     </div>
-    <footer className="pixi-dialog-footer pixi-star-actions">
-      <a className="pixi-dialog-button pixi-dialog-primary" href="https://github.com/ente/ente" target="_blank" rel="noopener noreferrer">Star ente/ente ↗</a>
-      <button className="pixi-dialog-button" type="button" onClick={retry} disabled={checking}>{checking ? 'Checking…' : 'I’ve starred it — check again'}</button>
-      {signInRequired && <a className="pixi-dialog-button" href="/auth/github/start">Sign in again</a>}
-      <button className="pixi-dialog-button pixi-star-watch" type="button" onClick={onClose}>Keep watching</button>
-    </footer>
   </dialog>;
 }
