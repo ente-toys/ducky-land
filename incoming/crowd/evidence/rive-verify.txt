@@ -1,2 +1,0 @@
-[23:01:40.968] rive  compiling 2 markup files as one document: plaza.rml, scene.rml
-[23:01:44.744] rive  verified (0 bytes, 3791ms, 0 errors, 0 warnings)

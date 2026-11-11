@@ -1,9 +1,0 @@
-{
-  "schema": 1,
-  "summary": true,
-  "problems": [],
-  "artboards": [
-    {"name": "Five Imports", "objects": 5497, "types": {"Artboard": 1, "CubicDetachedVertex": 3704, "Fill": 228, "LayoutComponentStyle": 1, "Node": 7, "PointsPath": 412, "Rectangle": 1, "Shape": 228, "SolidColor": 228, "StraightVertex": 687}}
-  ],
-  "roots": {"objects": 1, "types": {"Backboard": 1}}
-}
