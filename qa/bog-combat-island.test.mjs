@@ -93,15 +93,15 @@ test('combat attaches to one existing scene and restores the island room and lis
     let leaves=0,stops=0,draws=0;class Socket{readyState=1;bufferedAmount=0;send(){}close(){}}
     const engine={canvas,objects,room:previousRoom,islandId:'isle-249',liveRigs:new Map(),renderLiveDucks(){draws++;},stopInput(){stops++;},dispose(){this.disposed=true;}};
     const originalRender=engine.renderLiveDucks,originalDispose=engine.dispose;
-    layer=await attachBogCombat(engine,{team:'privacy',profile:'x'.repeat(36),Socket,url:'ws://localhost/arena-room',loadGun:async()=>[],onLeave:()=>leaves++});
+    layer=await attachBogCombat(engine,{team:'privacy',profile:'x'.repeat(36),Socket,url:'ws://localhost/arena-room',loadGhosts:async()=>({}),loadGun:async()=>[],onLeave:()=>leaves++});
     assert.equal(engine.room,layer.room);assert.equal(engine.objects,objects);assert.equal(engine.bogCombat,layer);
     engine.renderLiveDucks([],1/60,0,false,()=>true);assert.equal(draws,1);
-    await assert.rejects(()=>attachBogCombat(engine,{loadGun:async()=>[]}),/already attached/);
+    await assert.rejects(()=>attachBogCombat(engine,{loadGhosts:async()=>({}),loadGun:async()=>[]}),/already attached/);
     let removed=0;engine.liveRigs.set('combat-ghost',{rig:{dispose(){removed++;}},nameplate:{remove(){removed++;}}});
     layer.leave();layer.leave();assert.equal(leaves,1);assert.equal(stops,2);assert.equal(engine.room,previousRoom);
     assert.equal(engine.liveRigs.size,0);assert.equal(removed,2,'offline exit disposes combat rigs immediately');
     assert.equal(engine.renderLiveDucks,originalRender);assert.equal(engine.dispose,originalDispose);assert.equal(engine.bogCombat,undefined);assert.equal(objects.children.length,0);
-    layer=await attachBogCombat(engine,{team:'google',profile:'x'.repeat(36),Socket,url:'ws://localhost/arena-room',loadGun:async()=>[]});
+    layer=await attachBogCombat(engine,{team:'google',profile:'x'.repeat(36),Socket,url:'ws://localhost/arena-room',loadGhosts:async()=>({}),loadGun:async()=>[]});
     engine.dispose();assert.equal(engine.disposed,true);assert.equal(engine.room,previousRoom);assert.equal(engine.bogCombat,undefined);objects.destroy({children:true});
   }finally{layer?.leave(false);globalThis.window=previousWindow;globalThis.document=previousDocument;dom.window.close();}
 });
@@ -109,7 +109,7 @@ test('combat attaches to one existing scene and restores the island room and lis
 test('a cancelled gun load cannot attach combat after its React visit has ended',async()=>{
   const originalRoom={},engine={canvas:{},objects:{},room:originalRoom};
   const abort=new AbortController();let finish;
-  const pending=attachBogCombat(engine,{navigation:{},signal:abort.signal,loadGun:()=>new Promise(resolve=>{finish=resolve;})});
+  const pending=attachBogCombat(engine,{navigation:{},signal:abort.signal,loadGhosts:async()=>({}),loadGun:()=>new Promise(resolve=>{finish=resolve;})});
   abort.abort();finish([]);await assert.rejects(pending,{name:'AbortError'});
   assert.equal(engine.room,originalRoom);assert.equal(engine.bogCombat,undefined);
 });

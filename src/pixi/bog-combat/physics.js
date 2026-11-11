@@ -60,13 +60,14 @@ export function prepareShotIndex(blockers){
   }
   index={cell,buckets,key,stamp:0};shotIndices.set(blockers,index);return index;
 }
-export function traceShot(from,to,blockers) {
+export function traceShot(from,to,blockers,out=null) {
+  out??={point:{x:0,y:0},fraction:1,blocker:null};
   const rx=to.x-from.x,ry=to.y-from.y,index=prepareShotIndex(blockers),stamp=++index.stamp;let nearest=1,blocker=null;
   for(let y=Math.floor(Math.min(from.y,to.y)/index.cell);y<=Math.floor(Math.max(from.y,to.y)/index.cell);y++)for(let x=Math.floor(Math.min(from.x,to.x)/index.cell);x<=Math.floor(Math.max(from.x,to.x)/index.cell);x++){
     const list=index.buckets.get(index.key(x,y));if(!list)continue;
     for(const node of list){
       if(node.stamp===stamp)continue;node.stamp=stamp;const b=node.b;
-      if(inside(from,b.polygon))return {point:{x:from.x,y:from.y},fraction:0,blocker:b};
+      if(inside(from,b.polygon)){out.point.x=from.x;out.point.y=from.y;out.fraction=0;out.blocker=b;return out;}
       for(let i=0;i<b.polygon.length;i++){
         const a=b.polygon[i],c=b.polygon[(i+1)%b.polygon.length],ex=c.x-a.x,ey=c.y-a.y,den=rx*ey-ry*ex;
         if(Math.abs(den)<1e-9)continue;
@@ -75,5 +76,5 @@ export function traceShot(from,to,blockers) {
       }
     }
   }
-  return {point:{x:from.x+rx*nearest,y:from.y+ry*nearest},fraction:nearest,blocker};
+  out.point.x=from.x+rx*nearest;out.point.y=from.y+ry*nearest;out.fraction=nearest;out.blocker=blocker;return out;
 }

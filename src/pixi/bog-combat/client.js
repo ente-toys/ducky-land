@@ -1,9 +1,9 @@
 import {walkingActor,navigationFor} from './physics.js';
-import {walkStep,playEmote} from '../player-motion.js';
+import {playEmote} from '../player-motion.js';
 import {samplePlayerTrack,displayedPlayer} from './view.js';
 import {getBogBlockers} from './blockers.js';
 import {BOG_COMBAT} from './config.js';
-import {movementFacing} from './facing.js';
+import {combatWalkStep} from './mechanics.js';
 
 export const ARENA_INPUT_INTERVAL=1000/30;
 // Refresh held controls well inside the server's 350 ms input timeout.
@@ -26,9 +26,10 @@ export function arenaURL({team,name,profile},base=globalThis.location?.href||'ht
 // The client submits directions and trigger state, never positions, tags or
 // rewards. Local walking is predicted; all gameplay state comes from snapshots.
 export class ArenaClient{
-  constructor({team,name,profile=profileToken(),onSnapshot=()=>{},onStatus=()=>{},Socket=WebSocket,url,schedule=setTimeout,cancel=clearTimeout,navigation,blockers=getBogBlockers(),bounds=BOG_COMBAT.bounds}={}){
-    Object.assign(this,{id:null,snapshot:null,seq:0,lastSend:-Infinity,onSnapshot,onStatus});
+  constructor({team,name,profile=profileToken(),onSnapshot=()=>{},onStatus=()=>{},onExit=()=>{},Socket=WebSocket,url,schedule=setTimeout,cancel=clearTimeout,navigation,blockers=getBogBlockers(),bounds=BOG_COMBAT.bounds}={}){
+    Object.assign(this,{id:null,snapshot:null,seq:0,lastSend:-Infinity,onSnapshot,onStatus,onExit});
     this.nav=navigation??(blockers===getBogBlockers()&&bounds===BOG_COMBAT.bounds?BOG_COMBAT.navigation:navigationFor(blockers,bounds));this.pending=[];this.commands=Array.from({length:120},()=>({input:{x:0,y:0,run:false}}));this.commandIndex=0;this.lastControl={};this.offsetX=this.offsetY=0;this.previous=null;this.display={};
+    this.dodgeSerial=0;this.predictionInput={x:0,y:0,run:false,dodge:0};
     this.closed=false;this.tracks=new Map();this.predicted=null;this.controlled={x:0,y:0};
     Object.assign(this,{Socket,url:url||arenaURL({team,name,profile}),schedule,cancel,retries:0,retryTimer:null});
     this.connect();
@@ -41,6 +42,7 @@ export class ArenaClient{
     try{socket=this.socket=new this.Socket(this.url);}catch(error){this.connectionClosed({code:1006,reason:error.message});return;}
     const active=()=>!this.closed&&this.socket===socket;
     socket.onmessage=({data})=>{if(!active())return;let m;try{m=JSON.parse(data);}catch{return;}
+      if(m?.type==='arena-exit'){this.closed=true;if(this.retryTimer!==null)this.cancel(this.retryTimer);this.onExit(m);socket.close();return;}
       if(m?.type==='arena-welcome'){this.id=m.id;this.snapshot=null;this.tracks.clear();this.onStatus('connected');return;}
       if(m?.type!=='arena-snapshot'||!Array.isArray(m.players)||m.tick<=(this.snapshot?.tick??-1))return;
       const now=performance.now(),self=m.players.find(p=>p.id===this.id),before=this.snapshot?.players.find(p=>p.id===this.id);
@@ -48,9 +50,9 @@ export class ArenaClient{
       for(const id of this.tracks.keys())if(!m.players.some(p=>p.id===id))this.tracks.delete(id);
       if(self){
         const previous=this.predicted,reset=!previous||!self.alive||before?.alive!==self.alive||Math.hypot(previous.x-self.x,previous.y-self.y)>96;
-        this.predicted=walkingActor(self);this.time=m.time??0;
+        this.predicted=walkingActor(self);this.time=m.time??0;this.dodgeSerial=Math.max(this.dodgeSerial,self.dodgeSerial??0);
         this.pending=this.pending.filter(command=>command.seq>self.ack);
-        if(self.alive&&!reset)for(const command of this.pending)walkStep(this.predicted,this.nav,command.dt,this.time+=command.dt,command.input);
+        if(self.alive&&!reset)for(const command of this.pending)combatWalkStep(this.predicted,this.nav,command.dt,this.time+=command.dt,command.input);
         if(reset){this.offsetX=this.offsetY=0;this.previous=null;this.pending.length=0;}
         else {const dx=previous.x-this.predicted.x,dy=previous.y-this.predicted.y;this.offsetX+=dx;this.offsetY+=dy;if(Math.hypot(this.offsetX,this.offsetY)>90){this.offsetX=this.offsetY=0;this.previous=null;}if(this.previous){this.previous.x-=dx;this.previous.y-=dy;}}
 
@@ -74,23 +76,24 @@ export class ArenaClient{
     return samplePlayerTrack(t,now/1000,t.display,.05);
   }
   view(alpha=1){return this.predicted?displayedPlayer(this.predicted,this.previous,alpha,this.offsetX,this.offsetY,this.display):null;}
+  queueDodge(){if(this.self?.alive)this.dodgeSerial++;}
   control(vector,facing,fire,dt,now=performance.now(),emote=null){
     const self=this.self;
     if(emote)this.queuedEmote=emote;
     const run=vector.run===true,held=!!fire;
-    const changed=this.lastControl.x!==vector.x||this.lastControl.y!==vector.y||this.lastControl.run!==run||this.lastControl.fire!==held||this.lastControl.facing!==facing;
+    const changed=this.lastControl.dodge!==this.dodgeSerial||this.lastControl.x!==vector.x||this.lastControl.y!==vector.y||this.lastControl.run!==run||this.lastControl.fire!==held||this.lastControl.facing!==facing;
     const elapsed=now-this.lastSend;
     // Coalesce to the latest controls. Changes and emotes share the hard 30 Hz
     // ceiling; held fire is one flag, with shots scheduled by the simulation.
     const send=this.id&&!this.closed&&this.socket.readyState===1&&elapsed+1e-7>=ARENA_INPUT_INTERVAL&&(changed||this.queuedEmote||elapsed>=ARENA_INPUT_KEEPALIVE)&&this.socket.bufferedAmount<=4096;
-    if(send){this.lastSend=now;Object.assign(this.lastControl,{x:vector.x,y:vector.y,run,fire:held,facing});this.socket.send(JSON.stringify({type:'arena-input',seq:this.seq++,x:vector.x,y:vector.y,run,facing,fire:held,...(this.queuedEmote?{emote:this.queuedEmote}:{})}));this.queuedEmote=null;}
+    if(send){this.lastSend=now;Object.assign(this.lastControl,{x:vector.x,y:vector.y,run,fire:held,facing,dodge:this.dodgeSerial});this.socket.send(JSON.stringify({type:'arena-input',seq:this.seq++,x:vector.x,y:vector.y,run,facing,fire:held,...(this.dodgeSerial?{dodge:this.dodgeSerial}:{}),...(this.queuedEmote?{emote:this.queuedEmote}:{})}));this.queuedEmote=null;}
     if(self?.alive&&this.predicted&&dt>0){
       if(!this.previous)this.previous={};this.previous.x=this.predicted.x;this.previous.y=this.predicted.y;this.previous.turn=this.predicted.turn;
       this.time=(this.time??this.snapshot.time??0)+dt;if(emote)playEmote(this.predicted,emote,this.time);
-      walkStep(this.predicted,this.nav,dt,this.time,vector);
-      this.predicted.facing=movementFacing(vector,this.predicted.facing??0);
+      this.predictionInput.x=vector.x;this.predictionInput.y=vector.y;this.predictionInput.run=run;this.predictionInput.dodge=this.dodgeSerial;
+      combatWalkStep(this.predicted,this.nav,dt,this.time,this.predictionInput);
       const command=this.commands[this.commandIndex++%this.commands.length];if(this.pending.length===this.commands.length)this.pending.shift();
-      command.seq=this.seq-1;command.dt=dt;command.input.x=vector.x;command.input.y=vector.y;command.input.run=vector.run===true;this.pending.push(command);
+      command.seq=this.seq-1;command.dt=dt;command.input.x=vector.x;command.input.y=vector.y;command.input.run=vector.run===true;command.input.dodge=this.dodgeSerial;this.pending.push(command);
       const decay=Math.exp(-19*dt);this.offsetX*=decay;this.offsetY*=decay;
     }
   }

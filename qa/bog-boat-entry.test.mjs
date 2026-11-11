@@ -57,6 +57,8 @@ for(const karma of [0,4,5,6])test(`normal boat harbour arrival with ${karma} kar
   }else{
    assert.equal(p.actor.mode,'walking');assert.equal(p.actor.islandId,BOG_ISLAND);
    assert.deepEqual([p.actor.x,p.actor.y],[bog.HARBOR.land.x,bog.HARBOR.land.y]);assert.equal(p.boat.occupant,null);
+   assert.equal(room.karma.balance(p.account),karma-5);assert.equal(p.actor.karma,karma-5);
+   room.step();assert.equal(room.karma.balance(p.account),karma-5,'one charge per landing');
    // The same normal board command returns to the same arrival vessel.
    room.webSocketMessage(p.socket,JSON.stringify({type:'board',seq:1,islandId:BOG_ISLAND,boatId:p.boat.id}));room.step();
    assert.equal(p.actor.mode,'sailing');assert.equal(p.actor.boatId,p.boat.id);assert.equal(p.boat.occupant,p.actor.id);
@@ -105,7 +107,7 @@ test('production lobby and teams use the landed account, keep saved stats, and r
   const lobby=peer(),participant=peer();
   assert.equal(service.open(lobby,{digest:p.account}),true);assert.equal(lobby.notes.at(-1).type,'arena-lobby');
   assert.equal(service.open(participant,{digest:p.account,team:'google'}),true);
-  const player=service.arena.state.players.values().next().value;assert.equal(player.profile,p.account);
+  const player=[...service.arena.state.players.values()].find(q=>!q.bot);assert.equal(player.profile,p.account);
   assert.equal(lobby.notes.at(-1).counts.google,1);
   service.message(participant,JSON.stringify({type:'arena-input',seq:0,x:1,y:0,run:true,fire:false}));
   for(let i=0;i<10;i++)service.step();assert.ok(player.x>6500);
@@ -113,7 +115,7 @@ test('production lobby and teams use the landed account, keep saved stats, and r
   assert.equal(service.profile(p.account).stats.tags,3);assert.equal(service.profile(p.account).medalCase['first-splat'],true);
   const restored=new LiveBogRoom(room);assert.equal(restored.profile(p.account).stats.tags,3);restored.dispose();
   p.actor.mode='sailing';assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
-  p.actor.mode='walking';balance(room,p,4);p.actor.karma=999;assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
+  p.actor.mode='walking';room.karma.endBogEntry(p.account);balance(room,p,4);p.actor.karma=999;assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
   assert.equal(service.open(peer(),{digest:'untrusted',team:'privacy'}),false);
  }finally{service.dispose();stop(room);}
 });
@@ -144,7 +146,7 @@ test('client reads room karma for the notice while leaving admission to the serv
 
 test('hibernation restores karma before reopening a landed Bog socket',async()=>{
  const room=await makeRoom(),p=addPlayer(room,7300,{islandId:BOG_ISLAND,...bog.HARBOR.land});
- balance(room,p,5);p.actor.karma=0;
+ balance(room,p,5);room.karma.beginBogEntry(p.account);p.actor.karma=0;
  const info=room.connections.get(p.socket);
  p.socket.deserializeAttachment=()=>info;
  const arena={readyState:1,send(){},serializeAttachment(){},deserializeAttachment:()=>({bog:{digest:p.account,team:null,id:'restored'}}),close(){this.readyState=3;}};
@@ -153,6 +155,6 @@ test('hibernation restores karma before reopening a landed Bog socket',async()=>
  try{
   restored=new IslandRoom({...room.ctx,getWebSockets:()=>[p.socket,arena]});
   assert.equal(restored.bog.members.has(arena),true);
-  assert.equal(restored.connections.get(p.socket).actor.karma,5);
+  assert.equal(restored.connections.get(p.socket).actor.karma,0);
  }finally{if(restored)stop(restored);stop(room);}
 });

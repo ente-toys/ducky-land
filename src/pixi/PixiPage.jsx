@@ -189,6 +189,7 @@ export default function PixiPage() {
     </>}
     {!error && <WorldMap island={island}/>}
     {!error && <BogEntry engine={island} travel={travel} status={status} {...BOG_COMBAT}
+      accountId={session?.user?.accountId}
       name={session?.user?.login??'Ducky'}
       onReturnToDock={()=>room.current?.returnToBoat()} onLeave={()=>room.current?.returnToBoat()}/>}
     {starRequired && starDialogOpen && <StarDialog onClose={() => setStarDialogOpen(false)} onConfirm={() => {

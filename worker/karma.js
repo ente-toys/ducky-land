@@ -2,8 +2,9 @@ import {KarmaPool} from '../src/pixi/karma-pool.js';
 
 export class RoomKarma {
   constructor(room){
-    this.room=room;this.balances=new Map();
+    this.room=room;this.balances=new Map();this.bogEntries=new Map();
     room.sql.exec('CREATE TABLE IF NOT EXISTS karma_balances (account TEXT PRIMARY KEY, balance INTEGER NOT NULL DEFAULT 0 CHECK(balance>=0)); CREATE TABLE IF NOT EXISTS karma_world (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
+    room.sql.exec('CREATE TABLE IF NOT EXISTS bog_entries (account TEXT PRIMARY KEY, state TEXT NOT NULL)');
     const row=room.sql.exec('SELECT state FROM karma_world WHERE id=1').toArray()[0];
     let saved;try{saved=row?JSON.parse(row.state):null;}catch{saved=null;}
     this.pool=new KarmaPool(saved);
@@ -13,6 +14,32 @@ export class RoomKarma {
     if(!account)return 0;
     if(!this.balances.has(account))this.balances.set(account,this.room.sql.exec('SELECT balance FROM karma_balances WHERE account=?',account).toArray()[0]?.balance??0);
     return this.balances.get(account);
+  }
+  bogEntry(account){
+    if(!this.bogEntries.has(account)){
+      const row=this.room.sql.exec('SELECT state FROM bog_entries WHERE account=?',account).toArray()[0];
+      this.bogEntries.set(account,row?JSON.parse(row.state):null);
+    }
+    return this.bogEntries.get(account);
+  }
+  beginBogEntry(account,cost=5){
+    const current=this.bogEntry(account);if(current)return current;
+    const balance=this.balance(account);if(balance<cost)return null;
+    const entry={id:crypto.randomUUID(),lives:5,combat:null};
+    const save=()=>{
+      this.room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',account,balance-cost);
+      this.room.sql.exec('INSERT OR REPLACE INTO bog_entries VALUES(?,?)',account,JSON.stringify(entry));
+    };
+    if(this.room.ctx.storage.transactionSync)this.room.ctx.storage.transactionSync(save);else save();
+    this.balances.set(account,balance-cost);this.bogEntries.set(account,entry);return entry;
+  }
+  saveBogEntry(account,entry){
+    if(this.bogEntry(account)?.id!==entry.id)return;
+    this.room.sql.exec('INSERT OR REPLACE INTO bog_entries VALUES(?,?)',account,JSON.stringify(entry));
+    this.bogEntries.set(account,entry);
+  }
+  endBogEntry(account){
+    this.room.sql.exec('DELETE FROM bog_entries WHERE account=?',account);this.bogEntries.set(account,null);
   }
   persist(){this.room.sql.exec('INSERT OR REPLACE INTO karma_world VALUES(1,?)',JSON.stringify(this.pool.save()));}
   update(now){

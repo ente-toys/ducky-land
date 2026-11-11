@@ -12,7 +12,9 @@ export function createTeamMarker(objects,pose,{tilt=1}={}) {
   tag.anchor.set(.5,1);tag.y=-174;root.addChild(ring,tag);objects.addChild(root);
   return {root,update(p,rig,time){
     root.position.set(rig.root.x,rig.root.y);root.zIndex=rig.root.zIndex-.1;root.visible=rig.root.visible&&p.alive;
-    tag.scale.y=1/tilt;ring.alpha=p.shieldUntil>time?.5:1;
+    const hidden=p.alive&&p.shieldUntil>time;
+    tag.text=hidden?`${p.name} · Hidden ${Math.ceil(p.shieldUntil-time)}s`:p.name;
+    tag.scale.y=1/tilt;ring.alpha=hidden?.5:1;
   },dispose(){root.removeFromParent();root.destroy({children:true});}};
 }
 
@@ -43,10 +45,11 @@ export function createCombatEffects(objects,{blockers=[],muzzleFor=()=>null,tilt
         node.position.set(end.x,end.y-34);node.zIndex=end.y+.2;
       }
       for(const splat of snapshot.splats){
+        // Knockout owns the approved puddle, including its fade before respawn.
+        if(splat.kind==='tag')continue;
         const node=graphic(`splat-${splat.id}`,PAINT[splat.team][splat.colour%PAINT[splat.team].length],'splat');
         node.position.set(splat.x,splat.y-(splat.kind==='wall'?16:0));node.zIndex=splat.y-.2;
         node.alpha=Math.max(0,Math.min(.8,(splat.expires-time)/1.5));
-        if(splat.kind==='tag'&&!reducedMotion)node.scale.set(1+Math.max(0,.2-(time-splat.born))*2);
       }
       if(self&&time<flashUntil){const muzzle=muzzleFor(self.id);if(muzzle){const node=graphic('local-muzzle',PAINT[self.team][0],'flash');node.position.set(muzzle.x,muzzle.y);node.zIndex=self.y+1;}}
       for(const [key,node] of active)if(!kept.has(key)){node.removeFromParent();node.visible=false;active.delete(key);pool.push(node);}

@@ -29,6 +29,8 @@ test('socket transport accepts local clients, rejects unrelated origins and inva
 });
 test('two WebSocket handlers share authoritative movement, snapshots and disconnect cleanup',()=>{
   const {room,connect}=fixture(),a=connect(),b=connect(other,'google'),id=a.messages[0].id;
+  assert.equal(b.messages.at(-1).players.some(p=>p.id===id),false,'hidden enemies are not sent');
+  room.arena.state.players.get(id).shieldUntil=0;
   assert.equal(room.arena.state.practice,false);const start=room.arena.state.players.get(id).x;
   a.emit('message',Buffer.from(JSON.stringify({type:'arena-input',seq:1,x:1,y:0,ax:1,ay:0,fire:false,score:9999})),false);
   for(let i=0;i<6;i++)room.step();room.broadcast();

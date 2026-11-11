@@ -1,16 +1,20 @@
 import {Assets,Container,Point,Sprite} from 'pixi.js';
 import guns from './assets/guns.json' with {type:'json'};
+import {loadGoogleLook} from './team-look.js';
 
 let loading;
 export function loadGunC() {
   const urls=import.meta.glob('./assets/*.svg',{query:'?url',import:'default',eager:true});
-  return loading??=Promise.all(guns.map(async spec=>({...spec,texture:await Assets.load(urls[`./assets/${spec.file}`])}))).catch(error=>{loading=null;throw error;});
+  return loading??=Promise.all([
+    Promise.all(guns.map(async spec=>({...spec,texture:await Assets.load(urls[`./assets/${spec.file}`])}))),loadGoogleLook(),
+  ]).then(([items,look])=>Object.assign(items,{googleLook:look})).catch(error=>{loading=null;throw error;});
 }
 const delta=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 
 // Attach to the actual island Ducky's original wing joint. No duplicate duck
 // rig, outfit, new player renderer, or floating weapon sprite is created.
 export function attachGunC(rig,items,team,objects) {
+  rig.setAppearance?.(team==='google'?items.googleLook:null);
   const equipment=new Map(),a=new Point(),b=new Point(),pa=new Point(),pb=new Point(),muzzle=new Point(),out=new Point();
   const candidates=items.filter(item=>item.team===team);
   let current=null;
@@ -47,6 +51,7 @@ export function attachGunC(rig,items,team,objects) {
       current.mount.toGlobal(muzzle,out);return objects.toLocal(out,undefined,muzzle);
     },
     dispose() {
+      rig.setAppearance?.(null);
       for(const {mount,wing,index,body} of equipment.values()){
         if(!mount.destroyed){mount.removeFromParent();mount.destroy({children:true});}
         if(!body.destroyed&&wing.parent===body)body.setChildIndex(wing,Math.min(index,body.children.length-1));

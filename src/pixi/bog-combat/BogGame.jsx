@@ -1,8 +1,11 @@
 import {useEffect,useRef,useState} from 'react';
+import {RULES} from './rules.js';
 import {attachBogCombat} from './attach.js';
 import './combat.css';
+import DodgePip from './DodgePip.jsx';
+import BogTutorial from './Tutorial.jsx';
 
-export default function BogGame({engine,team,name='Ducky',profile,navigation,blockers,onLeave=()=>{},returnLabel='Back to boat',...options}) {
+export default function BogGame({engine,team,name='Ducky',profile,accountId,navigation,blockers,onLeave=()=>{},returnLabel='Back to boat',...options}) {
   const layer=useRef(null),leave=useRef(onLeave),[state,setState]=useState({status:'connecting'}),[attempt,setAttempt]=useState(0);
   leave.current=onLeave;
   useEffect(()=>{
@@ -19,10 +22,13 @@ export default function BogGame({engine,team,name='Ducky',profile,navigation,blo
   },[engine,team,name,profile,navigation,blockers,attempt]);
   const {self,snapshot,status,error}=state;
   return <aside className="bog-combat-hud" aria-label="Bog paint game">
-    <div className="bog-combat-score"><span>PRIVACY {snapshot?.scores.privacy??0}</span><span>GOOGLE {snapshot?.scores.google??0}</span></div>
-    <p>Team {team==='privacy'?'PRIVACY':'GOOGLE'} · {self?.stats.tags??0} kills · {self?.stats.medals??0} medals</p>
-    <p>{self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-snapshot.time))}…`:self?`Paint ${self.ammo} / 12`:'Entering the bog…'}</p>
-    <small>WASD / arrows · Shift to run · Space, J or left click to shoot · Esc to leave</small>
+    {self&&<BogTutorial identity={accountId??profile??'local'} self={self} engine={engine}/>}
+    {/* Personal score only (boss 11 Nov): no team totals in the real game. */}
+    <div className="bog-combat-score"><span>SCORE {self?.stats.score??0}</span><span>{self?.stats.tags??0} TAGS</span></div>
+    <p>Team {(self?.team??team)==='privacy'?'PRIVACY':'GOOGLE'} · {self?.stats.tags??0} kills · {self?.stats.medals??0} medals{self&&` · ${self.karma??0} feathers`}</p>
+    <div className="bog-combat-lives" role="img" aria-label={`${self?.lives??RULES.lives} lives left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<(self?.lives??RULES.lives)?'':'lost'}>♥</span>)}</div>
+    <p>{self?.out?'Out of lives! Paddling to an islet…':self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-snapshot.time))}…`:self?`${self.shieldUntil>snapshot.time?`Hidden ${Math.ceil(self.shieldUntil-snapshot.time)}s · `:''}Paint ${self.ammo} / 12`:'Entering the bog…'}<DodgePip self={self} time={snapshot?.time}/></p>
+    <small>WASD / arrows · Shift to run · Q to hop · Space, J or left click to shoot · Esc to leave</small>
     {status!=='connected'&&<p role="status">{error||'Connecting…'}{status==='reconnecting'?' Reconnecting…':''}</p>}
     {status==='disconnected'&&<button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button>}
     <button onClick={()=>{if(layer.current)layer.current.leave();else leave.current(null);}}>{returnLabel}</button>

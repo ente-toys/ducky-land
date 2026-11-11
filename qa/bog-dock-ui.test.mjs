@@ -32,7 +32,7 @@ test('strict-mode dock chooses either side, returns with totals/medal case and r
   }
   const oldRoom={},objects=new Container(),engine={canvas:document.querySelector('canvas'),objects,room:oldRoom,liveRigs:new Map(),stopInput(){},renderLiveDucks(){},dispose(){}};
   const root=createRoot(document.getElementById('root'));
-  const props={...BOG_COMBAT,engine,Socket,profile:'ui-profile-'.padEnd(36,'a'),loadGun:async()=>[],travel:{islandId:'isle-249',mode:'walking'},status:'playing',onReturnToDock:()=>returns++,onLeave:()=>closed++};
+  const props={...BOG_COMBAT,engine,Socket,profile:'ui-profile-'.padEnd(36,'a'),loadGhosts:async()=>({}),loadGun:async()=>[],travel:{islandId:'isle-249',mode:'walking'},status:'playing',onReturnToDock:()=>returns++,onLeave:()=>closed++};
   const click=async text=>{const button=[...document.querySelectorAll('button')].find(b=>b.textContent.includes(text));assert.ok(button,text);await act(async()=>button.click());};
   const render=async options=>{await act(async()=>root.render(React.createElement(React.StrictMode,null,React.createElement(BogEntry,{...props,...options}))));};
   try{

@@ -3,14 +3,16 @@ const guarded=e=>e.defaultPrevented||e.isComposing||e.metaKey||e.ctrlKey||e.altK
 
 // Capture only combat's controls. WASD/arrows, Shift, emotes, camera and all
 // other island controls keep flowing to the island engine's existing listeners.
-export function bindCombatInput(canvas,{onFire=()=>{},onLeave=()=>{},keyboard=globalThis.window,document=globalThis.document}={}) {
-  const keys=new Set(),removers=[];let pointer=false;
+export function bindCombatInput(canvas,{onFire=()=>{},onDodge=()=>{},onLeave=()=>{},keyboard=globalThis.window,document=globalThis.document}={}) {
+  const keys=new Set(),removers=[];let pointer=false,lastShift=-Infinity;
   const listen=(target,event,fn,options)=>{target.addEventListener(event,fn,options);removers.push(()=>target.removeEventListener(event,fn,options));};
   const update=()=>onFire(pointer||keys.size>0);
-  const clear=()=>{keys.clear();pointer=false;update();};
+  const clear=()=>{keys.clear();pointer=false;lastShift=-Infinity;update();};
   listen(keyboard,'keydown',e=>{
     if(guarded(e))return;
     if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();clear();onLeave();return;}
+    if(e.code==='KeyQ'||e.key?.toLowerCase()==='q'){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)onDodge();return;}
+    if((e.code==='ShiftLeft'||e.code==='ShiftRight')&&!e.repeat){const now=e.timeStamp??performance.now();if(now-lastShift<280){onDodge();lastShift=-Infinity;}else lastShift=now;}
     if(!shootKey(e))return;
     e.preventDefault();e.stopImmediatePropagation();keys.add(e.code||e.key);update();
   },true);

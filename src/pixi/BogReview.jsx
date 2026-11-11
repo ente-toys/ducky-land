@@ -1,4 +1,5 @@
-import {useEffect,useRef,useState} from 'react';
+import {lazy,Suspense,useEffect,useRef,useState} from 'react';
+const BogDemo=import.meta.env.DEV?lazy(()=>import('./bog-combat/BogDemo.jsx')):null;
 import {PixiIsland} from './engine.js';
 import {createSimulation} from './simulation.js';
 import {installBogEnvironment,BOG_AREAS} from './bog-environment.js';
@@ -11,6 +12,8 @@ import {setBogReviewCamera,waitForBogArt,paintBogFrame} from './bog-review-camer
 export default function BogReview(){
  const host=useRef(null);
  const [ready,setReady]=useState(null),[visit,setVisit]=useState(0),[error,setError]=useState('');
+ const rawBots=new URLSearchParams(location.search).get('bots');
+ const bots=import.meta.env.DEV&&/^\d+$/.test(rawBots??'')?Math.min(20,Math.max(0,Number(rawBots))):0;
  const inspect=new URLSearchParams(location.search).has('inspect');
  useEffect(()=>{
   let cancelled=false,installation;
@@ -70,7 +73,8 @@ export default function BogReview(){
    <button onClick={()=>{const g=globalThis.bogGame;if(g){g.follow=true;g.camera.zoom=g.target.zoom=.8;g.canvas.focus();}}}>Follow Ducky</button>
    <button onClick={()=>{returnToDock();setVisit(n=>n+1);}}>Bog dock</button>
   </nav>
-  {ready&&!inspect&&<BogEntry key={visit} engine={ready.game} travel={{islandId:ready.combat.islandId,mode:'walking'}} status="playing" {...ready.combat} leaveLabel="Back to island" returnLabel="Back to dock" onReturnToDock={returnToDock} onLeave={returnToDock}/>}
+  {ready&&bots>0&&<Suspense fallback={null}><BogDemo engine={ready.game} combat={ready.combat} count={bots}/></Suspense>}
+  {ready&&!inspect&&!bots&&<BogEntry key={visit} engine={ready.game} travel={{islandId:ready.combat.islandId,mode:'walking'}} status="playing" {...ready.combat} leaveLabel="Back to island" returnLabel="Back to dock" onReturnToDock={returnToDock} onLeave={returnToDock}/>}
   {error&&<p role="alert" style={{position:'absolute',top:60,left:16,background:'#fff8e7',padding:20}}>The Bog could not load: {error}</p>}
  </main>;
 }

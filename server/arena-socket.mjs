@@ -41,7 +41,7 @@ export function createArenaSocket(wss,profiles,{now=()=>performance.now(),combat
     catch(error){log(`[arena] ${error.message}`);closeSocket(ws,1011,'Bog environment is not ready');return;}
     if(!player){closeSocket(ws,1008,'Profile already in arena');return;}
     const entry={ws,profile,lastSeen:now(),alive:true,tokens:ARENA_INPUT_BURST,tokenAt:now()};sockets.set(id,entry);byProfile.set(profile,id);
-    send(ws,{type:'arena-welcome',id,hz:60,stats:{...player.stats}});send(ws,arena.snapshot());
+    send(ws,{type:'arena-welcome',id,hz:60,stats:{...player.stats}});send(ws,arena.snapshot(team));
     ws.on('message',(buffer,binary)=>{
       if(sockets.get(id)!==entry)return;
       const time=now();entry.tokens=Math.min(ARENA_INPUT_BURST,entry.tokens+Math.max(0,time-entry.tokenAt)*ARENA_INPUT_PER_MS);entry.tokenAt=time;
@@ -53,7 +53,7 @@ export function createArenaSocket(wss,profiles,{now=()=>performance.now(),combat
     ws.on('close',()=>remove(id));ws.on('error',()=>remove(id));
   });
   function step(){arena.step(1/60);}
-  function broadcast(){const snapshot=arena.snapshot();for(const {ws} of sockets.values())send(ws,snapshot);for(const [ws,entry]of observers)send(ws,lobby(entry.profile));}
+  function broadcast(){for(const [id,{ws}] of sockets)send(ws,arena.snapshot(arena.state.players.get(id)?.team));for(const [ws,entry]of observers)send(ws,lobby(entry.profile));}
   function heartbeat(){for(const [ws,entry]of observers){if(!entry.alive||now()-entry.lastSeen>15000){observers.delete(ws);ws.terminate();}else{entry.alive=false;ws.ping();}}for(const [id,entry]of sockets){if(!entry.alive||now()-entry.lastSeen>15000){entry.ws.terminate();remove(id);}else{entry.alive=false;entry.ws.ping();}}}
   let closed=false;
   function close(){if(closed)return;closed=true;for(const [id,{ws}]of sockets){remove(id);ws.terminate();}for(const ws of observers.keys())ws.terminate();observers.clear();profiles.flush();}

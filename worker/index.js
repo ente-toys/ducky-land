@@ -4,7 +4,7 @@ import {ISLETS} from '../src/pixi/islets.js';
 // boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
 // (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
 import {mapOf} from '../src/pixi/island-maps.js';
-import {bogLandingNotice} from '../src/pixi/bog-combat/entry.js';
+import {BOG_ISLAND,bogLandingNotice} from '../src/pixi/bog-combat/entry.js';
 import {getPlayerKarma} from '../src/pixi/bog-combat/karma.js';
 import {LiveBogRoom} from './bog-room.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
@@ -79,6 +79,12 @@ export class IslandRoom {
       this.send(socket,{type:'travel-notice',text});info.karmaNoticeAt=Date.now();
     }
     return false;
+  }
+  chargeBogLanding(socket,info,islandId){
+    if(islandId!==BOG_ISLAND)return true;
+    if(!this.karma.beginBogEntry(info.account))return this.allowLanding(socket,info,islandId);
+    info.actor.karma=this.karma.balance(info.account);
+    return true;
   }
   constructor(ctx) {
     this.ctx = ctx;
@@ -195,7 +201,7 @@ export class IslandRoom {
       const team=params.get('mode')==='lobby'?null:params.get('team');
       if(team===null&&params.get('mode')!=='lobby'||team!==null&&!['privacy','google'].includes(team))return reply({},400);
       const [client,socket]=Object.values(new WebSocketPair());
-      this.ctx.acceptWebSocket(socket);bog.open(socket,{digest,team});
+      this.ctx.acceptWebSocket(socket);if(!bog.open(socket,{digest,team}))socket.close(1008,'Bog visit ended');
       return new Response(null,{status:101,webSocket:client});
     }
     const data = await request.json();
@@ -386,6 +392,7 @@ export class IslandRoom {
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
       // Retired islands cannot retain a saved walking or sailing session.
       recoverIsland(info.actor);
+      if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
@@ -429,19 +436,25 @@ export class IslandRoom {
       info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
     const groups = new Map();
+    // Combat uses its own team-filtered poses. Do not expose the parked world
+    // actor at the harbour to other viewers while that account is fighting.
+    const combatAccounts=new Set([...(this.bog?.arena.state.players.values()??[])].map(p=>p.profile));
     for (const info of this.connections.values()) {
-      if (!info.actor) continue;
+      if (!info.actor||combatAccounts.has(info.account)) continue;
       const islandId = info.actor.islandId, pose = wirePose(info.actor);
       if (!groups.has(islandId)) groups.set(islandId, {guests:[], named:[]});
       const group = groups.get(islandId);
       group.guests.push(pose); group.named.push({...pose, login:info.login, accountId:info.account});
     }
     const shared = new Map(), empty = {guests:[], named:[]};
-    const text = (islandId, named) => {
-      const key = `${named ? 1 : 0}|${islandId}`;
+    const text = (islandId, named, info) => {
+      const combatSelf=!!info.actor&&combatAccounts.has(info.account);
+      const key = `${named ? 1 : 0}|${islandId}${combatSelf?'|'+info.account:''}`;
       if (!shared.has(key)) {
         const group = groups.get(islandId) ?? empty;
-        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId))},"players":${JSON.stringify(named ? group.named : group.guests)},"self":`);
+        const poses=named?group.named:group.guests;
+        const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
+        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId))},"players":${JSON.stringify(players)},"self":`);
       }
       return shared.get(key);
     };
@@ -450,10 +463,10 @@ export class IslandRoom {
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
       const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true}) : 'null';
       const named = !!(info.digest && info.expires > now);
-      const full = text(islandId, named) + self + '}';
+      const full = text(islandId, named, info) + self + '}';
       if (!info.deltas) {this.sendText(socket, full); continue;}
       this.snapshotGroups ??= new Map();
-      const key = `${named ? 1 : 0}|${islandId}`;
+      const key = `${named ? 1 : 0}|${islandId}${info.actor&&combatAccounts.has(info.account)?'|'+info.account:''}`;
       let group = this.snapshotGroups.get(key);
       if (group?.tick !== tick) {
         const snapshot = JSON.parse(full);
@@ -688,6 +701,7 @@ export class IslandRoom {
             if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) continue;
             if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
             else {
+            if(!spot.islet&&!this.chargeBogLanding(socket,info,spot.islandId))continue;
             if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,spot.islet?reframeIslet(actor.islandId,spot.islandId,ISLETS.find(i=>i.id===spot.islet),actor):unplaceRigid(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
             Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
             this.parkBoat(boat);   // Keep the boat in the arrival island's coordinate frame, beside the landing.
@@ -695,7 +709,7 @@ export class IslandRoom {
             info.input=ZERO;
             }
           } else if (actor.docking && near(actor,harborOf(actor.islandId).water,12)) {
-            if (!this.allowLanding(socket,info,actor.islandId)) continue;
+            if (!this.allowLanding(socket,info,actor.islandId)||!this.chargeBogLanding(socket,info,actor.islandId)) continue;
             this.parkBoat(boat);   // Keep the arrival boat beside the jetty, available to board again.
             Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
@@ -712,6 +726,7 @@ export class IslandRoom {
           actor.path=[];
           if (!aboard || boat.occupant) this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           else {
+            if(actor.islandId===BOG_ISLAND)this.karma.endBogEntry(info.account);
             boat.occupant=actor.id; boat.departure=actor.islandId;
             Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false,jumpLeft:0});
             info.input=ZERO;

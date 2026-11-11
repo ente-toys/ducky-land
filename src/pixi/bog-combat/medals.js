@@ -9,11 +9,11 @@ export const MEDALS=Object.freeze([
   {id:'mvp',name:'MVP',detail:'Earn 25 lifetime tags.'},
   {id:'sharpshooter',name:'Sharpshooter',detail:'Land a paint tag from at least eight duck lengths.'},
   {id:'cauldron-saver',name:'Cauldron Saver',detail:'Tag an opponent in the cauldron courtyard.'},
-  {id:'comeback',name:'Comeback',detail:'After being tagged, score while your team is behind.'},
+  {id:'comeback',name:'Comeback',detail:'Tag the duck who last tagged you.'},
 ]);
 export function cleanMedalCase(value){return Object.fromEntries(MEDALS.filter(m=>value?.[m.id]===true).map(m=>[m.id,true]));}
 export function tagMedals({owner,victim,players,time,distance,scores,inBonusZone=false}){
-  const live=[...players].filter(p=>p.alive||p.id===victim.id);
+  const live=[...players].filter(p=>!p.bot&&(p.alive||p.id===victim.id));
   const friends=live.filter(p=>p.team===owner.team).length,enemies=live.filter(p=>p.team!==owner.team).length;
   const conditions={
     'first-splat':owner.stats.tags>=1,
@@ -23,7 +23,7 @@ export function tagMedals({owner,victim,players,time,distance,scores,inBonusZone
     mvp:owner.stats.tags>=25,
     sharpshooter:distance>=8*D,
     'cauldron-saver':inBonusZone,
-    comeback:owner.comebackReady&&scores[owner.team]<scores[victim.team],
+    comeback:owner.comebackReady&&owner.lastTaggedBy===victim.id,
   };
   const earned=MEDALS.filter(m=>conditions[m.id]&&!owner.medalCase[m.id]).map(m=>m.id);
   for(const id of earned)owner.medalCase[id]=true;

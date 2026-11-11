@@ -44,7 +44,7 @@
       -1
     ],
     "aimScreenVector": [
-      0.0,
+      0,
       -0.70711
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
@@ -131,7 +131,7 @@
       -1
     ],
     "aimScreenVector": [
-      1.0,
+      1,
       -0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
@@ -219,7 +219,7 @@
     ],
     "aimScreenVector": [
       1.41421,
-      0.0
+      0
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
@@ -305,7 +305,7 @@
       0
     ],
     "aimScreenVector": [
-      1.0,
+      1,
       0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
@@ -392,7 +392,7 @@
       1
     ],
     "aimScreenVector": [
-      0.0,
+      0,
       0.70711
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
@@ -479,7 +479,7 @@
       1
     ],
     "aimScreenVector": [
-      -1.0,
+      -1,
       0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
@@ -567,7 +567,7 @@
     ],
     "aimScreenVector": [
       -1.41421,
-      0.0
+      0
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
@@ -653,7 +653,7 @@
       0
     ],
     "aimScreenVector": [
-      -1.0,
+      -1,
       -0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
@@ -732,30 +732,30 @@
       -225.186
     ],
     "muzzle": [
-      268.804,
-      -320.947
+      240.92399999999998,
+      -355.56600000000003
     ],
     "aimWorldVector": [
       -1,
       -1
     ],
     "aimScreenVector": [
-      0.0,
+      0,
       -0.70711
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 80,
-    "h": 163,
+    "w": 145,
+    "h": 201,
     "viewBox": [
-      229,
-      -348,
-      80,
-      163
+      169,
+      -363,
+      145,
+      201
     ],
     "anchor": {
-      "x": -229,
-      "y": 348
+      "x": -169,
+      "y": 363
     },
     "shadow": {
       "w": 1,
@@ -774,12 +774,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      39.804,
-      27.053
+      71.92399999999998,
+      7.433999999999969
     ],
     "gripLocal": [
-      39.804,
-      122.814
+      99.80399999999997,
+      137.814
     ]
   },
   {
@@ -819,30 +819,30 @@
       -225.191
     ],
     "muzzle": [
-      329.23,
-      -301.691
+      340.37710212003014,
+      -308.43533866636216
     ],
     "aimWorldVector": [
       0,
       -1
     ],
     "aimScreenVector": [
-      1.0,
+      1,
       -0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 180,
-    "h": 141,
+    "w": 244,
+    "h": 219,
     "viewBox": [
-      173,
-      -334,
-      180,
-      141
+      136,
+      -376,
+      244,
+      219
     ],
     "anchor": {
-      "x": -173,
-      "y": 334
+      "x": -136,
+      "y": 376
     },
     "shadow": {
       "w": 1,
@@ -861,12 +861,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      156.23,
-      32.309
+      204.37710212003014,
+      67.56466133363784
     ],
     "gripLocal": [
-      63.23,
-      108.809
+      100.22999999999999,
+      150.809
     ]
   },
   {
@@ -906,8 +906,8 @@
       -229.585
     ],
     "muzzle": [
-      266.96,
-      -259.585
+      265.818,
+      -257.46500000000003
     ],
     "aimWorldVector": [
       1,
@@ -915,21 +915,21 @@
     ],
     "aimScreenVector": [
       1.41421,
-      0.0
+      0
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 214,
-    "h": 115,
+    "w": 201,
+    "h": 144,
     "viewBox": [
-      58,
-      -324,
-      214,
-      115
+      73,
+      -329,
+      201,
+      144
     ],
     "anchor": {
-      "x": -58,
-      "y": 324
+      "x": -73,
+      "y": 329
     },
     "shadow": {
       "w": 1,
@@ -948,12 +948,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      208.96,
-      64.415
+      192.81799999999998,
+      71.53499999999997
     ],
     "gripLocal": [
-      77.438,
-      94.415
+      62.43799999999999,
+      99.41499999999999
     ]
   },
   {
@@ -993,30 +993,30 @@
       -232.546
     ],
     "muzzle": [
-      363.85,
-      -216.046
+      399.9337322051079,
+      -199.17492150379314
     ],
     "aimWorldVector": [
       1,
       0
     ],
     "aimScreenVector": [
-      1.0,
+      1,
       0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 180,
-    "h": 138,
+    "w": 244,
+    "h": 219,
     "viewBox": [
-      208,
-      -325,
-      180,
-      138
+      195,
+      -350,
+      244,
+      219
     ],
     "anchor": {
-      "x": -208,
-      "y": 325
+      "x": -195,
+      "y": 350
     },
     "shadow": {
       "w": 1,
@@ -1035,12 +1035,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      155.85,
-      108.954
+      204.9337322051079,
+      150.82507849620686
     ],
     "gripLocal": [
-      62.85,
-      92.454
+      75.85000000000002,
+      117.45400000000001
     ]
   },
   {
@@ -1080,30 +1080,30 @@
       -225.186
     ],
     "muzzle": [
-      268.805,
-      -189.425
+      296.685,
+      -94.80600000000001
     ],
     "aimWorldVector": [
       1,
       1
     ],
     "aimScreenVector": [
-      0.0,
+      0,
       0.70711
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 82,
-    "h": 150,
+    "w": 145,
+    "h": 201,
     "viewBox": [
-      228,
-      -312,
-      82,
-      150
+      224,
+      -288,
+      145,
+      201
     ],
     "anchor": {
-      "x": -228,
-      "y": 312
+      "x": -224,
+      "y": 288
     },
     "shadow": {
       "w": 1,
@@ -1122,12 +1122,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      40.805,
-      122.575
+      72.685,
+      193.194
     ],
     "gripLocal": [
-      40.805,
-      86.814
+      44.80500000000001,
+      62.81399999999999
     ]
   },
   {
@@ -1167,30 +1167,30 @@
       -229.548
     ],
     "muzzle": [
-      -345.944,
-      -213.048
+      -382.0277322051079,
+      -196.17692150379315
     ],
     "aimWorldVector": [
       0,
       1
     ],
     "aimScreenVector": [
-      -1.0,
+      -1,
       0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 180,
-    "h": 132,
+    "w": 244,
+    "h": 219,
     "viewBox": [
-      -370,
-      -316,
-      180,
-      132
+      -421,
+      -347,
+      244,
+      219
     ],
     "anchor": {
-      "x": 370,
-      "y": 316
+      "x": 421,
+      "y": 347
     },
     "shadow": {
       "w": 1,
@@ -1209,12 +1209,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      24.056,
-      102.952
+      38.972267794892105,
+      150.82307849620685
     ],
     "gripLocal": [
-      117.056,
-      86.452
+      168.056,
+      117.452
     ]
   },
   {
@@ -1254,8 +1254,8 @@
       -240.825
     ],
     "muzzle": [
-      -256.497,
-      -270.825
+      -255.355,
+      -268.705
     ],
     "aimWorldVector": [
       -1,
@@ -1263,21 +1263,21 @@
     ],
     "aimScreenVector": [
       -1.41421,
-      0.0
+      0
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 218,
-    "h": 127,
+    "w": 201,
+    "h": 145,
     "viewBox": [
-      -266,
-      -334,
-      218,
-      127
+      -263,
+      -341,
+      201,
+      145
     ],
     "anchor": {
-      "x": 266,
-      "y": 334
+      "x": 263,
+      "y": 341
     },
     "shadow": {
       "w": 1,
@@ -1296,12 +1296,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      9.503,
-      63.175
+      7.64500000000001,
+      72.29500000000002
     ],
     "gripLocal": [
-      141.025,
-      93.175
+      138.025,
+      100.17500000000001
     ]
   },
   {
@@ -1341,30 +1341,30 @@
       -220.651
     ],
     "muzzle": [
-      -320.74,
-      -297.151
+      -331.8871021200302,
+      -303.8953386663622
     ],
     "aimWorldVector": [
       -1,
       0
     ],
     "aimScreenVector": [
-      -1.0,
+      -1,
       -0.5
     ],
     "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
     "scaleToDuckSource": 1,
-    "w": 180,
-    "h": 148,
+    "w": 244,
+    "h": 219,
     "viewBox": [
-      -345,
-      -328,
-      180,
-      148
+      -371,
+      -372,
+      244,
+      219
     ],
     "anchor": {
-      "x": 345,
-      "y": 328
+      "x": 371,
+      "y": 372
     },
     "shadow": {
       "w": 1,
@@ -1383,12 +1383,12 @@
     },
     "shadowKind": "none",
     "muzzleLocal": [
-      24.26,
-      30.849
+      39.11289787996981,
+      68.10466133363781
     ],
     "gripLocal": [
-      117.26,
-      107.349
+      143.26,
+      151.349
     ]
   }
 ]

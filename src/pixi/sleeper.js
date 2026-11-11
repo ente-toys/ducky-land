@@ -172,5 +172,19 @@ export function createSleeper(sleep, seed = 0) {
       region, crownKey: sprite ? `${name}:${i}` : null};
   });
   update(0);
-  return {root, update, setCap, poke, pose: name, flip, snowSurfaces};
+  let devil;
+  function setAppearance(appearance=null){
+    const replacement=appearance?.textures.get(`${name}-duck.svg`);
+    const base=duck.children.find(n=>n instanceof Sprite);
+    base.texture=replacement??Assets.get(pose.layers.find(l=>l.id==='duck').src);
+    if(replacement&&!devil){
+      devil=new Container({label:'Sleeping Google devil parts'});
+      const nod=name==='nod',left=new Sprite(appearance.horn),right=new Sprite(appearance.horn),tail=new Sprite(appearance.tail),k=nod?1.35:1.2;
+      for(const [i,horn]of [left,right].entries()){horn.anchor.set(.35,.88);horn.position.set((nod?320:320)+(i===0?-145:145),nod?155:142);horn.scale.set((i===0?-1:1)*k,k);}
+      tail.anchor.set(8/205,210/232);tail.position.set(nod?620:710,nod?800:390);tail.scale.set(nod?1:1.1);
+      devil.addChild(tail,left,right);duck.addChildAt(devil,0);
+    }
+    if(devil)devil.visible=Boolean(replacement);
+  }
+  return {root, update, setCap, setAppearance, poke, pose: name, flip, snowSurfaces};
 }

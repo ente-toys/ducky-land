@@ -164,6 +164,39 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const jumpShadow=new Graphics({label:'Jump shadow'}).ellipse(0,0,74,19).fill({color:0x39472D});jumpShadow.visible=false;root.addChildAt(jumpShadow,0);
   const feedback=createDuckFeedback(isPlayer);art.addChild(feedback.ring);
   const views=data.views.map(makeView);art.addChild(views.find(v=>v.spec.angle===0).root);art.addChild(feedback.bubble,feedback.sleep);
+  let appearance=null;
+  // Arena looks change the existing articulated parts. Texture banks belong to
+  // the caller and are shared by every duck, including all eight turn views.
+  function setAppearance(next=null){
+    if(disposed||appearance===next)return;appearance=next;
+    nap.setAppearance?.(next);
+    for(const view of views){
+      view.morphWeight=undefined;
+      for(const part of view.parts){
+        part.sprite.texture=next?.textures.get(part.url.split('/').at(-1))??Assets.get(part.url);
+        if(part.role==='tail')part.sprite.visible=!next;
+      }
+      if(next&&!view.devil){
+        const tuft=view.parts.find(p=>p.role==='tuft'),tail=view.parts.find(p=>p.role==='tail');
+        const horns=new Container({label:'Google devil horns'}),left=new Sprite(next.horn),right=new Sprite(next.horn),spade=new Sprite(next.tail);
+        left.anchor.set(.35,.88);right.anchor.set(.35,.88);left.scale.x=-1;horns.addChild(left,right);
+        view.body.addChildAt(horns,view.body.getChildIndex(view.bodyPart.joint));
+        spade.anchor.set(8/205,210/232);spade.scale.x=tail.side;
+        view.body.addChildAt(spade,view.body.getChildIndex(view.bodyPart.joint));
+        const tailOffset=Math.abs(view.spec.angle)===180?tail.side*100:0;
+        spade.position.set(tail.joint.x+tailOffset,tail.joint.y);
+        const radians=view.spec.angle*Math.PI/180,sin=Math.sin(radians),span=30+92*Math.abs(Math.cos(radians));
+        const positions=[-1,1].map(side=>({x:side*span,y:side*sin<0?-10*Math.abs(sin):0,k:side*sin<0?1-Math.abs(sin)*.22:1}));
+        for(let i=0;i<2;i++){const horn=horns.children[i],p=positions[i];horn.position.set(p.x,p.y);horn.scale.set((i===0?-1:1)*p.k,p.k);}
+        horns.position.set(tuft.joint.x-25,tuft.joint.y+27);
+        view.devil={horns,spade,tuft,tail,tailOffset,positions};
+      }
+      if(view.devil){view.devil.horns.visible=Boolean(next);view.devil.spade.visible=Boolean(next);}
+    }
+    // Combat attaches after the island's update. Repaint the current outline
+    // now so the first rendered Google frame cannot flash the yellow palette.
+    if(current.root.visible)renderView(current,elapsed);
+  }
   const quivers=new Map();
   let karmaEnabled=false,karmaCount=0;
   const setKarma=(total=0)=>{
@@ -268,6 +301,19 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       if(part.role==='tail')joint.rotation=p.tail;
       if(part.role==='toe')joint.visible=!clothing.shoes&&currentAction!==1;
     }
+    if(appearance&&view.devil){
+      const {horns,tuft,positions,spade,tail,tailOffset}=view.devil;
+      horns.position.set(tuft.joint.x-25,tuft.joint.y+27);
+      horns.rotation=tuft.joint.rotation;
+      const otherOffset=glide.other?.devil?.tailOffset??tailOffset;
+      spade.position.set(tail.joint.x+tailOffset+(otherOffset-tailOffset)*glide.w,tail.joint.y);
+      spade.rotation=tail.joint.rotation;
+      spade.scale.x=tail.side+((glide.other?.devil?.tail.side??tail.side)-tail.side)*glide.w;
+      for(let i=0;i<2;i++){
+        const horn=horns.children[i],p=positions[i],other=glide.other?.devil?.positions[i]??p,w=glide.w,k=p.k+(other.k-p.k)*w;
+        horn.position.set(p.x+(other.x-p.x)*w,p.y+(other.y-p.y)*w);horn.scale.set((i===0?-1:1)*k,k);
+      }
+    }
     // Body geometry depends on the turn, while walking animates its container.
     // Subpixel turn steps avoid rebuilding and triangulating an identical outline.
     const morphWeight = Math.round(glide.w * 128) / 128;
@@ -279,9 +325,9 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       const mix=(a,b,k)=>a.map((p,i)=>[p[0]+((b?b[i][0]:p[0])-p[0])*k-ox,p[1]+((b?b[i][1]:p[1])-p[1])*k-oy]);
       const shrink=(a,k)=>{const cx=a.reduce((s,p)=>s+p[0],0)/a.length,cy=a.reduce((s,p)=>s+p[1],0)/a.length;return a.map(p=>[cx+(p[0]-cx)*k-ox,cy+(p[1]-cy)*k-oy]);};
       const g=view.morph;g.clear();
-      const outline=mix(me.body,other?.body,w).flat();g.poly(outline).fill(BODY).stroke({color:INK,width:9,join:'round'});
+      const outline=mix(me.body,other?.body,w).flat();g.poly(outline).fill(appearance?.body??BODY).stroke({color:INK,width:9,join:'round'});
       for(const garment of view.garments)if(garment.mask){garment.mask.clear().poly(outline).fill(0xffffff);garment.outline=outline;}
-      if(me.belly)g.poly((other&&!other.belly?shrink(me.belly,Math.max(0,1-w*2)):mix(me.belly,other?.belly,w)).flat()).fill(BELLY);
+      if(me.belly)g.poly((other&&!other.belly?shrink(me.belly,Math.max(0,1-w*2)):mix(me.belly,other?.belly,w)).flat()).fill(appearance?.belly??BELLY);
       // The white body highlight reads as a cut-out fringe against the cream sail.
       if(me.shine&&!sailing)g.poly((other&&!other.shine?shrink(me.shine,Math.max(0,1-w*2)):mix(me.shine,other?.shine,w)).flat()).fill(0xFFFFFF);
     }
@@ -488,5 +534,5 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};
   const sleeper={poke:()=>nap.root.visible&&nap.poke(),bounds:()=>nap.root.getBounds()};   // boss 5 Nov: tap or bump wobbles a sleeper
   const showRing=on=>{feedback.ring.visible=Boolean(isPlayer&&on);};   // boss 5 Nov: no red ring on the deck while sailing or hopping
-  return {root,update,dispose,setOutfit,setKarma,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,snowCover,trackSnow:snowCover.track,clearSnow:snowCover.clear,animationNames:duckAnimationNames};
+  return {root,update,dispose,setOutfit,setAppearance,setKarma,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,snowCover,trackSnow:snowCover.track,clearSnow:snowCover.clear,animationNames:duckAnimationNames};
 }

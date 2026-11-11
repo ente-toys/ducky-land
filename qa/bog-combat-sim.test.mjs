@@ -13,7 +13,7 @@ const advance=(arena,seconds)=>{for(let i=0;i<Math.round(seconds*60);i++)arena.s
 function fixture(options={}){
   const arena=createArena({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='privacy'?100:450,y:300,base:team}],practice:false,...options});
   const a=arena.join({id:'a',name:'A',team:'privacy'}),b=arena.join({id:'b',name:'B',team:'google'});
-  advance(arena,1.6);return {arena,a,b};
+  advance(arena,RULES.spawnShield+.1);return {arena,a,b};
 }
 // Collision fixtures set the actor's authoritative facing before the trigger.
 const shot=(arena,id='a',seq=0,extra={})=>{arena.state.players.get(id).facing=(extra.ax??1)>0?Math.PI/2:-Math.PI/2;return arena.input(id,{seq,x:0,y:0,ax:1,ay:0,fire:true,...extra});};
@@ -50,7 +50,7 @@ test('tagged duck cannot move or fire and respawns at its own base after three s
   shot(arena,'b',10,{x:-1,ax:-1});advance(arena,.3);assert.equal(b.x,position.x);assert.equal(b.y,position.y);assert.equal(arena.state.shots.length,0);
   advance(arena,2.5);assert.equal(b.alive,false);advance(arena,.3);assert.equal(b.alive,true);assert.equal(b.x,450);assert.equal(b.base,'google');assert.ok(b.shieldUntil>arena.state.time);
 });
-test('spawn shield is brief and firing breaks your own protection',()=>{
+test('spawn hiding is seven seconds and firing breaks your own protection',()=>{
   const {arena,a,b}=fixture();b.shieldUntil=arena.state.time+1;shot(arena);advance(arena,.3);assert.equal(b.alive,true);
   a.shieldUntil=arena.state.time+1;shot(arena,'a',2);advance(arena,.1);assert.ok(a.shieldUntil<=arena.state.time);
 });

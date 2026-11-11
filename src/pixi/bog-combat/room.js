@@ -19,6 +19,7 @@ export class BogCombatRoom {
   get totals(){const p=this.client.self;return p?{stats:{...p.stats},medalCase:{...p.medalCase}}:null;}
   navHere(){return this.client.nav;}
   setAlpha(alpha){this.alpha=Math.max(0,Math.min(1,alpha));}
+  dodge(){this.client.queueDodge();}
   setFire(fire){this.fire=!!fire;}
   step(dt,input,now=performance.now()) {
     const living=this.client.self?.alive;
