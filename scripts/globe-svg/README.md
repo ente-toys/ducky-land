@@ -1,7 +1,7 @@
 Run from the worktree root:
 
 ```sh
-node scripts/globe-svg/build.mjs          # all 13 islands
+node scripts/globe-svg/build.mjs          # all 9 active islands
 node scripts/globe-svg/build.mjs fair     # one theme
 node scripts/globe-svg/build.mjs isle-170 # one island ID
 ```
@@ -19,9 +19,10 @@ including buildings, trees, gardens and field sprites. There is no fixed limit
 on a building's retained shapes. Opaque pattern bases remain; transparent fine
 grain is omitted. Gradients become solid source colours.
 
-Each output has a 1024-pixel longest edge. Half-pixel coordinate rounding,
-relative path commands, close-colour consolidation and safe same-fill merging
-keep files small. Adaptive detail levels enforce **less than 600,000 bytes per
+Each output has a 1024-pixel longest edge. Quarter/half-pixel coordinate rounding,
+relative path commands and safe same-fill merging keep files small. Source
+colours remain exact, with paletteDistance zero; neighbouring colours are never
+merged to satisfy the size cap. Adaptive detail levels enforce **less than 1,500,000 bytes per
 file**. The manifest records the chosen tolerance, coordinate grid, source
 counts, bytes and hash. A new source rebuild that cannot fit throws an error.
 

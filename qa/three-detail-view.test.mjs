@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {surfacePoint,surfaceCoordinates} from '../src/pixi/three-globe-math.js';
-import {detailBlend,directDetail,detailSize,detailCamera,detailScreen} from '../src/pixi/three-detail-view.js';
+import {DETAIL_CAPTURE_SCALE,detailBlend,directDetail,detailSize,detailCamera,detailScreen} from '../src/pixi/three-detail-view.js';
 
 test('handoff preserves the grabbed world point on desktop and portrait screens, on every island including poles',()=>{
  for(const frame of WORLD_ISLANDS)for(const [width,height]of [[1512,827],[393,852]])for(const altitude of [.36,.23,.16,.12,.05]){
@@ -29,4 +29,23 @@ test('releasing a drag preserves the handoff camera offset instead of snapping b
  const state={fov:35,altitude:.12,radius:WORLD_GEO.Rw,point:{x:300,y:800},anchor:{point,x:440,y:430},width:1000,height:700};
  const before=detailCamera(frame,map,state,1000,700,1,offset),after=detailCamera(frame,map,{...state,anchor:null},1000,700,1,offset);
  assert.ok(Math.hypot(before.x-after.x,before.y-after.y)<1e-12);
+});
+
+test('overscan keeps cursor anchors and screen placement unchanged at the same upload budget',()=>{
+ for(const frame of WORLD_ISLANDS)for(const [width,height]of [[2560,1080],[393,852]])for(const tilt of [1,.4]){
+  const size=detailSize(width,height,2),map=mapOf(frame.id),point=surfacePoint(frame,1300,-700,WORLD_GEO.Rw);
+  const state={fov:35,altitude:.23,radius:WORLD_GEO.Rw,point:{x:900,y:-400},anchor:{point,x:width*.14,y:height*.83},width,height};
+  const native=detailCamera(frame,map,state,size.width,size.height,tilt,{x:0,y:0});
+  const over=detailCamera(frame,map,state,size.width,size.height,tilt,{x:0,y:0},DETAIL_CAPTURE_SCALE);
+  assert.ok(Math.abs(native.zoom-over.zoom*DETAIL_CAPTURE_SCALE)<1e-12);
+  assert.ok(Math.hypot(native.x-over.x,native.y-over.y)<1e-8,'overscan changes coverage, not the grabbed map point');
+  for(const [x,y]of [[1300,-700],[500,1000],[-1000,-2000]]){
+   const a=detailScreen(native,map.cx+x,map.cy+y,size.width,size.height,width,height,tilt);
+   const b=detailScreen(over,map.cx+x,map.cy+y,size.width,size.height,width,height,tilt,DETAIL_CAPTURE_SCALE);
+   assert.ok(Math.hypot(a.x-b.x,a.y-b.y)<1e-8,'centre cropping restores the original screen placement');
+  }
+  const anchorPixel=detailScreen(over,map.cx+1300,map.cy-700,size.width,size.height,width,height,tilt,DETAIL_CAPTURE_SCALE);
+  assert.ok(Math.hypot(anchorPixel.x-state.anchor.x,anchorPixel.y-state.anchor.y)<1e-7);
+  assert.ok(Math.max(size.width,size.height)<=1536,'overscan does not raise upload resolution');
+ }
 });

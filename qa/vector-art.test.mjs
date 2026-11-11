@@ -34,9 +34,11 @@ test('every globe preview and fallback is a bounded, self-contained vector match
  for(const island of WORLD_ISLANDS){const id=island.theme??'home';
   for(const suffix of ['', '-ground']){
    const svg=fs.readFileSync(new URL(`${id}${suffix}.svg`,dir),'utf8');
+   assert.equal(manifest[id].quality.paletteDistance,0,`${id} must preserve native source colours`);
    assert.doesNotMatch(svg,/<(?:image|linearGradient|radialGradient|filter)\b|data:/i,id+suffix);
    assert.doesNotMatch(svg,/<style\b|\bclass=/,id+suffix+' has unresolved CSS');
-   assert.ok(Buffer.byteLength(svg)<600000,`${id}${suffix} exceeds 600 KB`);
+   // Exact source colours take precedence over the former palette-merged 600 KB cap.
+   assert.ok(Buffer.byteLength(svg)<1_500_000,`${id}${suffix} exceeds 1.5 MB`);
    assert.match(svg,/<svg[^>]*width="1024"/);
    const ids=new Set([...svg.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
    for(const m of svg.matchAll(/(?:url\(#([^)]*)\)|(?:xlink:)?href="#([^"]+)")/g))assert.ok(ids.has(m[1]??m[2]),`${id}${suffix}: unresolved ${m[1]??m[2]}`);

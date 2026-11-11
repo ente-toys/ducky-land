@@ -1,8 +1,8 @@
 import {createThreePirates} from './three-pirates.js';
 import * as THREE from 'three';
 import {createIsletStanding} from './three-islet-props.js';
-import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate} from './three-live-geometry.js';
-import {detailViewport} from './three-detail-view.js';
+import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate,liveCaptureEdgeShader,liveCaptureProjection} from './three-live-geometry.js';
+import {detailViewport,DETAIL_CAPTURE_SCALE} from './three-detail-view.js';
 import {WORLD_GEO, WORLD_ISLANDS} from './world-map.js';
 import {ISLETS} from './islets.js';
 import {sphereFrame} from './sphere.js';
@@ -11,7 +11,8 @@ import {rotateGlobeFromScreen} from './three-globe-math.js';
 import {createHeartLocations,heartArtContains,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from './heart-activity.js';
 import {focusQuaternion, islandQuaternion, focusSurfaceQuaternion, surfacePoint, surfaceCoordinates, surfaceUnderPointer, lockSurfaceAnchor, atlasTransform, pickSurfacePatch, visiblePoint, EARTH_DISTANCE} from './three-globe-math.js';
 import {alignIslandNorth,approachProgress} from './three-island-approach.js';
-import {RenderDemand} from './three-render-demand.js';
+import {loadWorldAssets} from './three-asset-queue.js';
+import {RenderDemand,AmbientDrawClock} from './three-render-demand.js';
 import {PALETTE} from './palette.js';
 import {mapOf} from './island-maps.js';
 import {transport} from './sphere.js';
@@ -24,7 +25,7 @@ const out=x=>1-Math.pow(1-THREE.MathUtils.clamp(x,0,1),3);
 const HEART='<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.5 4 19 17.3"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>';
 
 // Continuous Three.js world. Pixi remains the island renderer and simulation.
-export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null,pirateFleet=null,pirateProjection=()=>null}={}) {
+export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null,pirateFleet=null,pirateProjection=()=>null,initialIsland='home',isletProjection=()=>null,isletCapture=()=>false}={}) {
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -45,8 +46,8 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const ocean=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),atmosphere.water);
   ocean.name='Ocean'; globe.add(ocean);
 
-  const pirates=pirateFleet?await createThreePirates(scene,pirateFleet):null;let pirateDrawAt=0;
-  let detailOpacity=0,direct=false;
+  const pirates=pirateFleet?await createThreePirates(scene,pirateFleet):null;const ambientClock=new AmbientDrawClock();
+  let detailOpacity=0,direct=false;const liveCaptureBlend={value:0},liveCaptureScale={value:DETAIL_CAPTURE_SCALE};
   function planetLighting(shader){
     shader.uniforms.planetShade=planetShade;
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 planetNormal;')
@@ -69,16 +70,20 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const waves=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(wavePositions,3)),new THREE.LineBasicMaterial({color:PALETTE.cream,transparent:true,opacity:.25}));
   waves.name='Water marks'; globe.add(waves);
 
-  const loader=new THREE.TextureLoader(), patches=[], cleanups=[],isletStanding=[],isletStandBlend={value:0};
+  const loader=new THREE.TextureLoader(), patches=[], cleanups=[],isletStanding=[],assetState={disposed:false};
+  const assetStart=performance.now();
   async function patch(frame,width,height,url,island=false) {
-    const texture=await loader.loadAsync(url); texture.colorSpace=THREE.SRGBColorSpace;
-    if(!island){
-      // Some islet SVGs specify only a viewBox. Give WebGL an explicit-sized
-      // bitmap, matching canvas sampling, instead of an empty SVG upload.
-      const bitmap=document.createElement('canvas');bitmap.width=bitmap.height=512;
-      bitmap.getContext('2d').drawImage(texture.image,0,0,512,512);
-      texture.image=bitmap;texture.needsUpdate=true;
+    // Islets use the ground-only split directly. Loading the full SVG here as
+    // well would decode/rasterize it twice and reintroduce baked upright props.
+    const standing=!island?await createIsletStanding(scene,frame,await(await fetch(url)).text()):null;
+    const texture=standing?standing.ground:await loader.loadAsync(url);
+    texture.colorSpace=THREE.SRGBColorSpace;
+    if(assetState.disposed){
+      texture.dispose();
+      for(const {mesh}of standing?.props??[]){scene.remove(mesh);mesh.geometry.dispose();mesh.material.map.dispose();mesh.material.dispose();}
+      return;
     }
+    if(standing)isletStanding.push(standing);
     texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
     const geometry=new THREE.PlaneGeometry(width,height,island?96:24,island?72:24),positions=geometry.attributes.position;
     for(let k=0;k<positions.count;k++){
@@ -88,31 +93,27 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     geometry.computeVertexNormals();geometry.computeBoundingSphere();
     const mesh=new THREE.Mesh(geometry,
       new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,side:THREE.FrontSide}));
-    const standing=!island?await createIsletStanding(scene,frame,await(await fetch(url)).text(),isletStandBlend):null;
-    if(standing)isletStanding.push(standing);
     const atlasUniform={value:0};
     const atlasMatrix={value:new THREE.Matrix3()};
     mesh.material.onBeforeCompile=shader=>{
       planetLighting(shader);
-      if(standing){
-        shader.uniforms.isletStandBlend=isletStandBlend;shader.uniforms.isletGroundMap={value:standing.ground};
-        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float isletStandBlend;uniform sampler2D isletGroundMap;');
-        shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','vec4 isletColor=mix(texture2D(map,vMapUv),texture2D(isletGroundMap,vMapUv),isletStandBlend);diffuseColor*=isletColor;');
-      }
       shader.uniforms.liveAtlas=atlasUniform;shader.uniforms.atlasMatrix=atlasMatrix;
       shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform mat3 atlasMatrix; varying vec2 atlasPoint;')
         .replace('#include <begin_vertex>','#include <begin_vertex>\natlasPoint=(atlasMatrix*vec3(uv,1.)).xy;');
-      shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float liveAtlas; varying vec2 atlasPoint;')
-        .replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(liveAtlas>.5&&all(greaterThanEqual(atlasPoint,vec2(0.)))&&all(lessThanEqual(atlasPoint,vec2(1.))))discard;');
+      // The atlas remains under the live capture, including its feathered edge.
     };
     mesh.name=frame.name??frame.art; mesh.userData={id:frame.id,island,frame,width,height,texture,atlasUniform,atlasMatrix};
-    mesh.material.customProgramCacheKey=()=>standing?'islet-standing-ground':'island-ground';
+    mesh.material.customProgramCacheKey=()=> 'planet-ground';
     globe.add(mesh); patches.push(mesh); return mesh;
   }
-  await Promise.all([
-    ...WORLD_ISLANDS.map(i=>{const m=manifest[i.theme??'home'];return patch(i,i.width,i.height,`${m.src}?v=${m.sha256.slice(0,12)}`,true);}),
-    ...ISLETS.map(i=>patch(i,i.width,i.width,`/pixi-art/islets/${i.art}.svg`))
-  ]);
+  const assetTasks=[
+    ...WORLD_ISLANDS.map(i=>()=>{const m=manifest[i.theme??'home'];return patch(i,i.width,i.height,`${m.src}?v=${m.sha256.slice(0,12)}`,true);}),
+    ...ISLETS.map(i=>()=>patch(i,i.width,i.width,`/pixi-art/islets/${i.art}.svg`))
+  ];
+  // The current Home view can be used immediately. Other atlas/islet work is
+  // bounded and yields between jobs instead of holding up the first frame.
+  const first=Math.max(0,WORLD_ISLANDS.findIndex(i=>i.id===initialIsland));
+  await assetTasks.splice(first,1)[0]();
 
   const overlay=document.createElement('canvas'); overlay.className='heart-overlay'; overlay.setAttribute('aria-hidden','true');
   host.append(overlay); const ctx=overlay.getContext('2d');
@@ -127,13 +128,17 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const events=[], random=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
   // Collision maps also contain detached/legacy coast pieces that the preview
   // does not draw. Check the actual displayed art once while building locations.
-  const heartMasks=new Map(patches.map(p=>{
-    const c=document.createElement('canvas');c.width=256;c.height=256;
-    const context=c.getContext('2d',{willReadFrequently:true});context.drawImage(p.userData.texture.image,0,0,256,256);
-    return [p.userData.frame,context.getImageData(0,0,256,256)];
-  }));
-  const heartLocation=createHeartLocations(WORLD_ISLANDS,mapOf,random,ISLETS,(frame,x,y)=>heartArtContains(frame,x,y,heartMasks.get(frame)));
-  heartMasks.clear();
+  let heartLocation;
+  function refreshHeartLocations(){
+    const heartMasks=new Map(patches.map(p=>{
+      const c=document.createElement('canvas');c.width=256;c.height=256;
+      const context=c.getContext('2d',{willReadFrequently:true});context.drawImage(p.userData.texture.image,0,0,256,256);
+      return [p.userData.frame,context.getImageData(0,0,256,256)];
+    }));
+    heartLocation=createHeartLocations(WORLD_ISLANDS.filter(i=>heartMasks.has(i)),mapOf,random,ISLETS.filter(i=>heartMasks.has(i)),(frame,x,y)=>heartArtContains(frame,x,y,heartMasks.get(frame)));
+    heartMasks.clear();
+  }
+  refreshHeartLocations();
   const frames=[];
   let frameCount=0;
   let statsAt=performance.now(),renderCount=0,drawCount=0,renderMs=0,detailMs=0,detailPeak=0,overlayAt=-Infinity;
@@ -256,12 +261,16 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       renderer.domElement.dataset.approachHeadingDeg=(angle*180/Math.PI).toFixed(3);
       if(Math.abs(angle-(reduced?0:remaining))>1e-5){moving=true;demand.invalidate();}
     }
+    // After a close drag, settle the heading at the same gentle angular rate
+    // used during zoom. The centre anchor stays fixed throughout this twist.
+    if(!zoomAnchor?.island&&!drag&&!transition&&camera.position.z<1.5){
+      const frame=WORLD_ISLANDS.find(i=>i.id===selected),anchor=surfaceUnderPointer(camera,width/2,height/2,width,height)?.applyQuaternion(globe.quaternion.clone().invert());
+      if(anchor){const angle=alignIslandNorth(globe.quaternion,frame,anchor,camera,reduced?1:1-Math.exp(-14*dt),reduced?Infinity:2.4*dt);if(Math.abs(angle)>1e-5){moving=true;demand.invalidate();}}
+    }
     const near=Math.max(.001,Math.min(.2,(camera.position.z-1)*.2));
     if(Math.abs(camera.near-near)>1e-7){camera.near=near;camera.updateProjectionMatrix();}
     backdrop.setRotation(globe.quaternion);
     globe.updateMatrixWorld(true);camera.updateMatrixWorld(true);
-    isletStandBlend.value=1-THREE.MathUtils.smoothstep(camera.position.z,1.65,3.3);
-    if(!direct)for(const standing of isletStanding)standing.update(globe.quaternion,camera);
     const centre=new THREE.Vector3(0,0,1).applyQuaternion(globe.quaternion.clone().invert());
     if(camera.position.z<2.8&&!transition){
       const nearest=WORLD_ISLANDS.reduce((a,b)=>new THREE.Vector3(...a.center).dot(centre)>new THREE.Vector3(...b.center).dot(centre)?a:b);
@@ -269,11 +278,16 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       if(detailId!==selected){detailId=selected;onDetail(selected);}
     }
     const frame=WORLD_ISLANDS.find(i=>i.id===selected);
-    if(!direct&&atmosphere.update(now/1000,camera.position.z,reduced))demand.invalidate();
+    const heading=alignIslandNorth(globe.quaternion,frame,zoomAnchor?.point??centre,camera,0);
+    renderer.domElement.dataset.captureHeadingDeg=(heading*180/Math.PI).toFixed(2);
+    let ambientChanged=!direct&&atmosphere.update(now/1000,camera.position.z,reduced);
     const detailStart=performance.now();
     const held=drag??zoomAnchor;
-    onFrame({anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude:camera.position.z-1,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving});
-    if(!direct&&pirates?.update(globe.quaternion,camera,now/1000,dt,reduced,1-detailOpacity,pirateProjection,{width,height})&&now-pirateDrawAt>50){pirateDrawAt=now;demand.invalidate();}
+    onFrame({heading,anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude:camera.position.z-1,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving});
+    if(!direct)for(const standing of isletStanding)standing.update(globe.quaternion,camera,isletProjection);
+    for(const patch of patches)if(!patch.userData.island)patch.visible=!live||!isletCapture(patch.userData.frame);
+    if(!direct&&pirates?.update(globe.quaternion,camera,now/1000,dt,reduced,1-detailOpacity,pirateProjection,{width,height}))ambientChanged=true;
+    if(!direct&&ambientClock.update(now,ambientChanged))demand.invalidate();
     const detailCost=performance.now()-detailStart;detailMs+=detailCost;detailPeak=Math.max(detailPeak,detailCost);
     if(!direct&&demand.consume(moving)){
       const renderStart=performance.now();renderer.render(scene,camera);renderMs+=performance.now()-renderStart;renderCount++;drawCount+=renderer.info.render.calls;
@@ -288,17 +302,28 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   document.addEventListener('visibilitychange',visibility);cleanups.push(()=>document.removeEventListener('visibilitychange',visibility));
   renderer.domElement.dataset.selectedIsland=selected;renderer.domElement.dataset.islandCount=WORLD_ISLANDS.length;renderer.domElement.dataset.isletCount=ISLETS.length;
   raf=requestAnimationFrame(tick);onReady();
-  function setLiveCanvas(id,canvas,placement,matrix,atlasWidth,atlasHeight,bounds=null){
+  const ready=loadWorldAssets(assetTasks,{
+    stopped:()=>assetState.disposed,
+    onLoaded:()=>{renderer.domElement.dataset.patchCount=patches.length;demand.invalidate();},
+    onError:error=>{console.warn('World preview asset failed',error);renderer.domElement.dataset.assetErrors=String(Number(renderer.domElement.dataset.assetErrors??0)+1);}
+  }).then(()=>{if(!assetState.disposed){try{refreshHeartLocations();}catch(error){console.warn('World activity mask failed',error);}renderer.domElement.dataset.assetsReadyMs=(performance.now()-assetStart).toFixed(1);}});
+  function setLiveCanvas(id,canvas,placement,matrix,atlasWidth,atlasHeight,bounds=null,captureScale=DETAIL_CAPTURE_SCALE){
+    liveCaptureScale.value=captureScale;
     const patch=patches.find(p=>p.userData.island&&p.userData.id===id);if(!patch)return;
     if(bounds&&![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite))return;
     if(live?.id!==id||live.canvasWidth!==canvas.width||live.canvasHeight!==canvas.height){
       clearLiveCanvas();
       const geometry=patch.geometry,texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
-      const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
-      material.onBeforeCompile=shader=>{planetLighting(shader);
+      const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:0,depthWrite:false,depthTest:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+      material.onBeforeCompile=shader=>{planetLighting(shader);liveCaptureEdgeShader(shader,canvas);liveCaptureProjection(shader,liveCaptureBlend,liveCaptureScale);
+        // The independently tessellated atlas and live surface intersect even
+        // with polygon offset. Live detail owns this coverage; only reject
+        // the back hemisphere instead of depth-testing against the old atlas.
+        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <project_vertex>','#include <project_vertex>\ncaptureWorldPoint=(modelMatrix*vec4(transformed,1.)).xyz;');
+        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(liveCaptureBlend<.001&&dot(captureWorldPoint,cameraPosition-captureWorldPoint)<=0.)discard;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
-      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.renderOrder=100;globe.add(mesh);
-      const viewport=detailViewport(texture);viewport.material.opacity=detailOpacity;viewport.visible=detailOpacity>0&&!direct;scene.add(viewport);
+      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.frustumCulled=false;mesh.renderOrder=100;globe.add(mesh);
+      const viewport=detailViewport(texture,DETAIL_CAPTURE_SCALE);viewport.material.opacity=detailOpacity;viewport.visible=false;scene.add(viewport);
       live={id,patch,mesh,viewport,canvasWidth:canvas.width,canvasHeight:canvas.height};
     }
     if(bounds){
@@ -315,8 +340,8 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   function clearLiveCanvas(){if(!live)return;live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);scene.remove(live.viewport);live.viewport.geometry.dispose();live.viewport.material.dispose();live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();live=null;demand.invalidate();}
   function setPresentation(blend,value){
     if(detailOpacity!==blend)demand.invalidate();
-    detailOpacity=blend;
-    if(live){live.viewport.material.opacity=blend;live.viewport.visible=blend>0&&!value;}
+    detailOpacity=blend;liveCaptureBlend.value=blend;
+    if(live){live.viewport.material.opacity=blend;live.viewport.visible=false;}
     if(direct!==value){
       direct=value;renderer.domElement.setAttribute('aria-label',direct?'Ducky Land island. Drag to pan, scroll to zoom, click to walk.':'Rotating Ducky Land globe');renderer.domElement.style.opacity=direct?'0':'1';host.style.background=direct?'transparent':'#000';
       for(const c of host.querySelectorAll('.space-backdrop,.space-effects,.heart-overlay'))c.style.visibility=direct?'hidden':'';
@@ -344,9 +369,9 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     selected=frame.home;onSelect(WORLD_ISLANDS.find(i=>i.id===selected));zoomAnchor=null;targetAltitude=.65;
     transition={at:performance.now(),duration:reduced?1:700,from:globe.quaternion.clone(),to:focusQuaternion(frame),z0:camera.position.z,z1:1+targetAltitude};demand.invalidate();
   }
-  return {focus,focusIslet,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
+  return {ready,focus,focusIslet,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
 
     setActive(value){if(active===value)return;active=value;backdrop.setActive(value&&!direct);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
-    destroy(){destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();pirates?.destroy();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();isletStanding.forEach(s=>s.ground.dispose());cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
+    destroy(){assetState.disposed=true;destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();pirates?.destroy();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
   };
 }

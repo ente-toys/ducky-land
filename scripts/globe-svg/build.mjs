@@ -12,26 +12,34 @@ import {mapOf,mapFor} from '../../src/pixi/island-maps.js';
 import {homeLayers} from '../globe-perf/snapshot.mjs';
 import {num,inline,serialize,parse} from './vector.mjs';
 import {compile,markup,rectClip,crop} from './compile.mjs';
+import {createSourceTracker} from './sources.mjs';
 const ROOT=fileURLToPath(new URL('../../',import.meta.url));
 process.chdir(ROOT);
+const MAX_VECTOR_BYTES=1_500_000; // Keep current source colours instead of palette-merging to satisfy an arbitrary 600 KB cap.
 const OUT='public/pixi-art/globe';fs.mkdirSync(OUT,{recursive:true});
 const selected=process.argv[2],ids=[...new Set(WORLD_ISLANDS.map(i=>mapOf(i.id).id))];
 const id=selected&&(ids.includes(selected)?selected:WORLD_ISLANDS.some(i=>i.id===selected)?mapOf(selected).id:null);
 if(selected&&!id)throw Error(`Unknown island ${selected}. Choose ${ids.join(', ')}`);
 const manifest=fs.existsSync(`${OUT}/manifest.json`)?JSON.parse(fs.readFileSync(`${OUT}/manifest.json`)):{};
-const files=new Map();
-function read(file){if(!files.has(file))files.set(file,fs.readFileSync(file,'utf8'));return files.get(file);}
+const files=new Map();let activeSources;
+function record(file){if(!file.startsWith('@')&&fs.existsSync(file))activeSources?.record(file);}
+function recordBundle(result){for(const file of Object.keys(result.metafile?.inputs??{}))record(file);}
+function read(file){if(!files.has(file))files.set(file,fs.readFileSync(file,'utf8'));if(!file.startsWith('@'))activeSources?.record(file,files.get(file));return files.get(file);}
 const source=(src,base)=>src.startsWith('/pixi-art/')?'public'+src:src.startsWith('/assets/')?'.'+src:path.join(base,src);
 
 // Bog's old generator only kept PNG crops. Evaluate its authored terrain with
 // filesystem writes disabled to recover the vector, without rebuilding the map.
 async function bogTerrain(){
- const result=await build({entryPoints:['scripts/bigger-bog/densify.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'read-only-sources',setup(b){b.onLoad({filter:/densify\.mjs$/},a=>({contents:read(a.path).split('\n').slice(0,read(a.path).split('\n').findIndex(l=>l.startsWith('writeFileSync(`${base}/terrain-master.svg`'))+1).join('\n').replace("import sharp from 'sharp';",'')+'\nexport {svg,plan};',loader:'js'}));b.onResolve({filter:/^node:fs$/},a=>a.namespace==='readonly'?{path:'node:fs',external:true}:({path:'fs',namespace:'readonly'}));b.onLoad({filter:/.*/,namespace:'readonly'},()=>({contents:"import fs from 'node:fs'; export const readFileSync=(p,...args)=>fs.readFileSync(p==='scripts/bigger-bog/original-harbor.json'?'rive/web/themes/bog/harbor.json':p.endsWith('/before-walk.json')?'scripts/bigger-bog/evidence/dense/before-world.json':p.endsWith('/before-plan.json')?'scripts/bigger-bog/plan.json':p,...args); export const writeFileSync=()=>{}, mkdirSync=()=>{};",loader:'js'}));}}]});
+ activeSources.recordCode('scripts/bigger-bog/densify.mjs');
+ for(const file of ['scripts/bigger-bog/evidence/dense/before-art.json','scripts/bigger-bog/evidence/dense/before-world.json','scripts/bigger-bog/plan.json','rive/web/themes/bog/harbor.json'])record(file);
+ const result=await build({metafile:true,entryPoints:['scripts/bigger-bog/densify.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'read-only-sources',setup(b){b.onLoad({filter:/densify\.mjs$/},a=>({contents:read(a.path).split('\n').slice(0,read(a.path).split('\n').findIndex(l=>l.startsWith('writeFileSync(`${base}/terrain-master.svg`'))+1).join('\n').replace("import sharp from 'sharp';",'')+'\nexport {svg,plan};',loader:'js'}));b.onResolve({filter:/^node:fs$/},a=>a.namespace==='readonly'?{path:'node:fs',external:true}:({path:'fs',namespace:'readonly'}));b.onLoad({filter:/.*/,namespace:'readonly'},()=>({contents:"import fs from 'node:fs'; export const readFileSync=(p,...args)=>fs.readFileSync(p==='scripts/bigger-bog/original-harbor.json'?'rive/web/themes/bog/harbor.json':p.endsWith('/before-walk.json')?'scripts/bigger-bog/evidence/dense/before-world.json':p.endsWith('/before-plan.json')?'scripts/bigger-bog/plan.json':p,...args); export const writeFileSync=()=>{}, mkdirSync=()=>{};",loader:'js'}));}}]});
+ recordBundle(result);
  const module=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
  return module.svg(module.plan.origin.x,module.plan.origin.y,module.plan.width,module.plan.height);
 }
 let bog;
 for(const theme of selected?[id]:ids){
+ activeSources=createSourceTracker(ROOT,theme);
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),W=Math.round(map.width*K),H=Math.round(map.height*K),base=map.art?path.dirname('public'+map.art):`public/pixi-art/themes/${theme}`;
  const art=map.home?homeLayers():JSON.parse(read(base+'/art.json'));
  let tiles=map.home?art.tiles:art.ground.tiles;
@@ -49,9 +57,12 @@ for(const theme of selected?[id]:ids){
  }
  // Restore exact vectors where legacy ground tiles embedded raster crops.
  if(theme==='library'&&tiles.some(t=>t.src.startsWith('bigger/ground-')&&/<image/.test(read(source(t.src,base))))){
+  activeSources.recordCode('scripts/bigger-library/ground.mjs');
   // Original bridge orientations are present in the current world, while an
   // old untracked fixed-crossings.json is absent in clean checkouts.
-  const libraryBundle=await build({entryPoints:['scripts/bigger-library/ground.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'current-crossings',setup(b){b.onLoad({filter:/waterways\.mjs$/},a=>({contents:read(a.path).replace("read('scripts/bigger-library/fixed-crossings.json')",JSON.stringify(JSON.parse(read('scripts/bigger-library/plan.json')).crossings)),loader:'js'}));}}]});
+  for(const file of ['scripts/bigger-library/original/world.json','scripts/bigger-library/original/walk-world.json','scripts/bigger-library/original/art.json','scripts/bigger-library/original/harbor.json','scripts/bigger-library/original/ground.svg','scripts/bigger-library/plan.json'])record(file);
+  const libraryBundle=await build({metafile:true,entryPoints:['scripts/bigger-library/ground.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'current-crossings',setup(b){b.onLoad({filter:/waterways\.mjs$/},a=>({contents:read(a.path).replace("read('scripts/bigger-library/fixed-crossings.json')",JSON.stringify(JSON.parse(read('scripts/bigger-library/plan.json')).crossings)),loader:'js'}));}}]});
+  recordBundle(libraryBundle);
   const {extensionBody}=await import('data:text/javascript;base64,'+Buffer.from(libraryBundle.outputFiles[0].text).toString('base64'));
   const {original,pathRing}=await import('../bigger-library/model.mjs');
   const old=original.world.coastRings.map(pathRing).join(' '),o=map.origin;
@@ -132,19 +143,34 @@ for(const theme of selected?[id]:ids){
  for(const p of [...art.props].sort((a,b)=>a.y-b.y))add(p,'prop');
  let globe,ground,quality;
  for(let level=0;level<10;level++){
-  quality={tolerance:+(.3+level*.1).toFixed(2),minArea:+(.18+level*.18).toFixed(2),paletteDistance:Math.min(65,38+level*5),quantum:level<5?.5:1};
+  quality={tolerance:+(.2+level*.1).toFixed(2),minArea:+(.12+level*.04).toFixed(2),paletteDistance:0,quantum:level<2?.25:.5};
   const terrainText=markup(terrain,quality),symbols=defs.map(({name,size,records})=>`<symbol id="${name}" viewBox="0 0 ${num(size.w)} ${num(size.h)}" preserveAspectRatio="none">${markup(records,quality)}</symbol>`);
   const wrap=(groundOnly)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${symbols.slice(0,groundOnly?groundDefsCount:symbols.length).join('')}</defs>${terrainText}${(groundOnly?groundPaint:paint).join('')}</svg>\n`;
   ground=dropSeaBox(wrap(true),W,H);globe=dropSeaBox(wrap(false),W,H);   // boss 9 Nov ('why blue box'): no full-canvas sea shape
-  if(Buffer.byteLength(globe)<600000&&Buffer.byteLength(ground)<600000)break;
+  if(Buffer.byteLength(globe)<MAX_VECTOR_BYTES&&Buffer.byteLength(ground)<MAX_VECTOR_BYTES)break;
  }
- if(Buffer.byteLength(globe)>=600000||Buffer.byteLength(ground)>=600000)throw Error(`${theme} cannot fit the 600 KB vector budget`);
+ // Sunbob's tiles are viewports onto one continuous authored world drawing.
+ // Retain that exact drawing for the fallback, so no recompilation changes its
+ // seam bleed, paint order or colours. Only the root viewport is resized.
+ if(theme==='sunflower'){
+  let drawing;
+  for(const tile of art.ground.tiles){
+   const svg=read(source(tile.src,base)),body=svg.slice(svg.indexOf('>')+1);
+   if(/<(?:image|linearGradient|radialGradient|filter)\b|data:/i.test(svg))throw Error('Sunbob continuous ground must be flat vector art');
+   if(drawing!==undefined&&body!==drawing)throw Error(`Sunbob tile ${tile.src} differs from the continuous ground drawing`);
+   drawing=body;
+  }
+  if(!drawing)throw Error('Sunbob continuous ground is missing');
+  ground=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${map.origin.x} ${map.origin.y} ${map.width} ${map.height}">${drawing}`;
+ }
+ if(Buffer.byteLength(globe)>=MAX_VECTOR_BYTES||Buffer.byteLength(ground)>=MAX_VECTOR_BYTES)throw Error(`${theme} cannot fit the 1.5 MB vector budget: ${Buffer.byteLength(globe)} / ${Buffer.byteLength(ground)} B`);
  for(const [suffix,svg]of [['-ground',ground],['',globe]]){
   if(/<image\b|data:|<(?:linearGradient|radialGradient|filter)\b/i.test(svg))throw Error(`Non-vector content in ${theme}${suffix}`);
   fs.writeFileSync(`${OUT}/${theme}${suffix}.svg`,svg);
  }
- manifest[theme]={src:`/pixi-art/globe/${theme}.svg`,sha256:createHash('sha256').update(globe).digest('hex'),width:W,height:H,bytes:Buffer.byteLength(globe),groundBytes:Buffer.byteLength(ground),quality,worldPaths:map.world.paths?.length??0,walkways:map.world.walkways?.length??0,flats:art.flats?.length??0,decks:art.decks?.length??0,bridgeDetails:bridgeDetails.length};
- console.log(`${theme}: globe ${manifest[theme].bytes} B, ground ${manifest[theme].groundBytes} B (${W}x${H})`);
+ manifest[theme]={sources:activeSources.snapshot({map,art}),groundSha256:createHash('sha256').update(ground).digest('hex'),src:`/pixi-art/globe/${theme}.svg`,sha256:createHash('sha256').update(globe).digest('hex'),width:W,height:H,bytes:Buffer.byteLength(globe),groundBytes:Buffer.byteLength(ground),quality,worldPaths:map.world.paths?.length??0,walkways:map.world.walkways?.length??0,flats:art.flats?.length??0,decks:art.decks?.length??0,bridgeDetails:bridgeDetails.length};
+ fs.writeFileSync(`${OUT}/manifest.json`,JSON.stringify(manifest,null,2)+'\n');
+ console.log(`${theme}: globe ${manifest[theme].bytes} B, ground ${manifest[theme].groundBytes} B (${W}x${H}; tolerance ${quality.tolerance}, minArea ${quality.minArea}, exact source colours)`);
 }
 
 function dropSeaBox(svg,W,H){

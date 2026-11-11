@@ -1,4 +1,4 @@
-import {PlaneGeometry} from 'three';
+import {PlaneGeometry,Vector2} from 'three';
 import {surfacePoint} from './three-globe-math.js';
 
 export function liveSurfaceBounds(bounds){return {...bounds,width:bounds.width*1.8,height:bounds.height*1.8};}
@@ -24,4 +24,36 @@ export function liveSurfaceGeometry(frame,bounds,width,height,radius) {
   }
   geometry.computeVertexNormals();geometry.computeBoundingSphere();
   return geometry;
+}
+
+// The live detail texture covers only the native viewport. Its rectangular
+// boundary becomes a diagonal on the globe after rotation. Keep the atlas
+// underneath and taper only this detail layer, rather than punching a hole in
+// the atlas or extending the texture's final pixels across the sea.
+export function liveCaptureEdgeShader(shader,canvas){
+  const width=Math.max(1,canvas.width),height=Math.max(1,canvas.height);
+  shader.uniforms.liveCaptureFeather={value:new Vector2(Math.min(.12,48/width),Math.min(.12,48/height))};
+  shader.fragmentShader=shader.fragmentShader
+    .replace('#include <common>','#include <common>\nuniform vec2 liveCaptureFeather;')
+    .replace('#include <map_fragment>',`#include <map_fragment>
+      vec2 captureEdge=min(vMapUv,vec2(1.)-vMapUv);
+      vec2 captureFade=smoothstep(vec2(0.),liveCaptureFeather,captureEdge);
+      diffuseColor.a*=captureFade.x*captureFade.y;`);
+}
+
+// One captured surface changes projection continuously. Drawing a second flat
+// viewport over the spherical copy would show two positions for every tree and
+// shoreline. At the flat endpoint W also becomes constant, so perspective UV
+// interpolation becomes an exact affine viewport image rather than a warped one.
+export function liveCaptureProjection(shader,blendUniform,captureScale=1){
+  shader.uniforms.liveCaptureBlend=blendUniform;
+  shader.uniforms.liveCaptureScale=typeof captureScale==='object'?captureScale:{value:Math.max(1,Number(captureScale)||1)};
+  shader.vertexShader=shader.vertexShader
+    .replace('#include <common>','#include <common>\nuniform float liveCaptureBlend;uniform float liveCaptureScale;')
+    .replace('#include <project_vertex>',`#include <project_vertex>
+      vec2 captureFlatNdc=(vMapUv-vec2(.5))*2.*liveCaptureScale;
+      vec3 captureCurvedNdc=gl_Position.xyz/gl_Position.w;
+      float captureW=mix(gl_Position.w,1.,liveCaptureBlend);
+      gl_Position=vec4(mix(captureCurvedNdc,vec3(captureFlatNdc,0.),liveCaptureBlend)*captureW,captureW);`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float liveCaptureBlend;');
 }

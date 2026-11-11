@@ -4,14 +4,15 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test qa/*.test.mjs",
-    "build": "vite build",
+    "test": "node scripts/globe-svg/check.mjs && node --test qa/*.test.mjs",
+    "build": "node scripts/globe-svg/check.mjs && vite build",
     "dev": "vite",
     "preview": "vite preview",
     "globe:assets": "node scripts/globe-perf/refresh.mjs",
     "bog:dev": "vite --config scripts/bog-environment/vite.config.mjs --configLoader native --port 8897 --strictPort",
     "bog:build": "vite build --config scripts/bog-environment/vite.config.mjs --configLoader native",
-    "bog:capture": "node scripts/bog-environment/capture.mjs"
+    "bog:capture": "node scripts/bog-environment/capture.mjs",
+    "globe:check": "node scripts/globe-svg/check.mjs"
   },
   "dependencies": {
     "@rive-app/webgl2-advanced": "^2.46.0",
