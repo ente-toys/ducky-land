@@ -21,7 +21,7 @@ import {createIcelandLifeLifecycle} from './iceland-life.js';
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader}) {
+export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader,prepareTexture}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -39,7 +39,8 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const iceland=map.id==='snow'&&Boolean(manifest.icelandFinal);
   const fair=map.id==='fair',crisp=fair||manifest.raster?.enabled===true;
   const makeTiles=fair?fairTiles:rasterTiles,groundTileSize=fair?FAIR_GROUND_TILE_SIZE:RASTER_GROUND_TILE_SIZE;
-  const raster=iceland?icelandRasterLoaderFactory():crisp?(fair?createFairRasterLoader():rasterLoaderFactory()):null;
+  const rawRaster=iceland?icelandRasterLoaderFactory():crisp?(fair?createFairRasterLoader():rasterLoaderFactory()):null;
+  const raster=rawRaster&&prepareTexture?{...rawRaster,acquire:async(...args)=>{const texture=await rawRaster.acquire(...args);await prepareTexture(texture);return texture;}}:rawRaster;
   const rasterPool=crisp||iceland?createGroundPool({...raster,budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp||iceland?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),

@@ -83,16 +83,13 @@ export default function PixiPage() {
     // Development bypass uses the local simulation, without an authenticated room.
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
-      externalOverview:true,transparent:true,renderResolution:1,onError:() => setError(true),onInteriorChange:setIndoors});
+      onError:() => setError(true),onInteriorChange:setIndoors});
     island.current = game;
-    let earth=null,cancelled=false;
+    let cancelled=false;
     game.mount(host.current).then(async()=>{
       if(cancelled||!game.ready)return;
-      const {createThreeGameView}=await import('./three-game-view.js');
-      if(cancelled)return;
-      earth=await createThreeGameView(game,host.current);
+      if(import.meta.env.DEV&&new URLSearchParams(location.search).has('profile')){const {profileMovement}=await import('../../scripts/performance/movement-profile.js');if(!cancelled)profileMovement(game);}
       if(import.meta.env.DEV&&new URLSearchParams(location.search).has('pirates')){const {piratePreview}=await import('../../scripts/pirate-ships/preview.js');await piratePreview(game);}
-      if(cancelled)earth?.destroy();
     }).catch(error=>{console.error('Could not initialize world',error);setError(true);});
     if (offline) {
       setStatus('local');
@@ -101,7 +98,7 @@ export default function PixiPage() {
       refresh();
     }
     return () => {
-      cancelled=true;earth?.destroy();
+      cancelled=true;
       abort.abort();
       client.dispose();
       game.dispose();

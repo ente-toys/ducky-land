@@ -146,7 +146,7 @@ for(const theme of selected?[id]:ids){
   quality={tolerance:+(.2+level*.1).toFixed(2),minArea:+(.12+level*.04).toFixed(2),paletteDistance:0,quantum:level<2?.25:.5};
   const terrainText=markup(terrain,quality),symbols=defs.map(({name,size,records})=>`<symbol id="${name}" viewBox="0 0 ${num(size.w)} ${num(size.h)}" preserveAspectRatio="none">${markup(records,quality)}</symbol>`);
   const wrap=(groundOnly)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${symbols.slice(0,groundOnly?groundDefsCount:symbols.length).join('')}</defs>${terrainText}${(groundOnly?groundPaint:paint).join('')}</svg>\n`;
-  ground=dropSeaBox(wrap(true),W,H);globe=dropSeaBox(wrap(false),W,H);   // boss 9 Nov ('why blue box'): no full-canvas sea shape
+  ground=dropSeaBox(wrap(true),W,H,theme);globe=dropSeaBox(wrap(false),W,H,theme);
   if(Buffer.byteLength(globe)<MAX_VECTOR_BYTES&&Buffer.byteLength(ground)<MAX_VECTOR_BYTES)break;
  }
  // Sunbob's tiles are viewports onto one continuous authored world drawing.
@@ -173,10 +173,14 @@ for(const theme of selected?[id]:ids){
  console.log(`${theme}: globe ${manifest[theme].bytes} B, ground ${manifest[theme].groundBytes} B (${W}x${H}; tolerance ${quality.tolerance}, minArea ${quality.minArea}, exact source colours)`);
 }
 
-function dropSeaBox(svg,W,H){
+function dropSeaBox(svg,W,H,theme){
  const [head,body]=svg.split('</defs>');
  return head+'</defs>'+body.replace(/<path fill="(#[0-9a-f]{6})"[^>]* d="([^"]+)"\/>/gi,(all,fill,d)=>{
   if(!/^#(?:6ec9de|6fc9de|7fd3d6|86cbcd|97dce5|a6e3de)$/i.test(fill))return all;
+  // Library's legacy tiles split one ocean rectangle into many little paths.
+  // Each misses the full-canvas test below. Open water must remain transparent
+  // so the globe paints one continuous ocean, including its canal openings.
+  if(theme==='library'&&/^#6ec9de$/i.test(fill))return '';
   const n=d.match(/-?\d+\.?\d*/g)?.map(Number)??[],xs=n.filter((_,i)=>i%2===0),ys=n.filter((_,i)=>i%2===1);
   return xs.length&&Math.min(...xs)<=W*.05&&Math.max(...xs)>=W*.95&&Math.min(...ys)<=H*.05&&Math.max(...ys)>=H*.95?'':all;
  });

@@ -62,6 +62,7 @@ uniform float uTime;
 uniform vec2 uCam;
 uniform float uZoom;
 uniform vec2 uRes;
+uniform float uDpr;
 uniform float uR;
 uniform float uBall;
 uniform float uLive;
@@ -136,7 +137,7 @@ vec3 islands(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
    c=textureLod(uScene,sceneUV(g),0.);
   }else{
    // Mip level from the true footprint one pixel across and down, biased sharp (x.6).
-   vec2 qx=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(0.,1.),P2);
+   vec2 qx=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(1./uDpr,0.),P1),qy=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(0.,1./uDpr),P2);
    vec2 dx=(qx-q)/info.xy*(.6*1022./4096.),dy=(qy-q)/info.xy*(.6*1022./4096.);
    c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
   }
@@ -153,7 +154,7 @@ vec3 islets(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
   vec2 q=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X,P0);
   vec2 uv=q/info.x+.5;
   if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
-  vec2 qx=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(0.,1.),P2);
+  vec2 qx=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(1./uDpr,0.),P1),qy=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(0.,1./uDpr),P2);
   int c4=int(info.z+.5);vec2 cell=vec2(float(c4%4),float(c4/4)),scale=.6*508./512./vec2(4.,3.);
   float alpha=textureLod(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),0.).a,distance=dot(q,q);
   if(!owns(alpha,distance,bestAlpha,bestDistance))continue;
@@ -186,7 +187,7 @@ vec3 surfaceAt(vec2 uv){
 vec3 planet(vec2 uv){
  vec2 px=chartDelta((uv-.5)*uRes);float Rp=uR*uRes.y,d=length(px)/Rp;
  float ball=uBall;
- vec2 sp=uv*uRes;vec3 space=vec3(.07,.09,.22);
+ vec2 sp=uv*uRes;vec3 space=vec3(0.);
  float st=hash(floor(sp/2.)),tw=.5+.5*sin(uTime*1.7+st*40.);
  space+=vec3(1.,.95,.8)*step(.9975,st)*tw*step(1.03,d);
  // The flat chart's horizon starts beyond the viewport, then contracts
@@ -196,7 +197,7 @@ vec3 planet(vec2 uv){
  space=mix(space,vec3(.36,.68,1.),air*.7);
  if(edge>=1.)return space;
  vec2 dir=d>0.?px/length(px):vec2(0.);
- vec3 p=surfaceAt(uv),p1=surfaceAt(uv+vec2(1./uRes.x,0.)),p2=surfaceAt(uv+vec2(0.,1./uRes.y));
+ vec3 p=surfaceAt(uv),p1=surfaceAt(uv+vec2(1./(uRes.x*uDpr),0.)),p2=surfaceAt(uv+vec2(0.,1./(uRes.y*uDpr)));
  vec3 v=vec3(dir.x*edge,-dir.y*edge,sqrt(max(0.,1.-edge*edge)));
  vec3 ocean=mix(uSea,vec3(.2,.52,.86),ball);
  vec3 col=sea(p,ocean);
@@ -241,13 +242,13 @@ function makePin() {
 
 export function createWorldView(app, scene, isletView) {
   const shoreTextures = new Map();
-  let rt = RenderTexture.create({width: 2, height: 2, resolution: 1}), w = 0, h = 0, worldTex = null, worldVersion = -1;
+  let rt = RenderTexture.create({width: 2, height: 2, resolution:app.renderer.resolution}), w = 0, h = 0, worldTex = null, worldVersion = -1;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
     uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, viewUniforms: {
       uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
-      uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},
+      uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},uDpr:{value:app.renderer.resolution,type:'f32'},
 
       uSea: {value: new Float32Array([0x6E / 255, 0xC9 / 255, 0xDE / 255]), type: 'vec3<f32>'},
       uSph: {value: new Float32Array([0, 0, 1]), type: 'vec3<f32>'},
@@ -296,10 +297,24 @@ export function createWorldView(app, scene, isletView) {
   return {
     // Compile and warm the globe pipeline while the loading screen is present.
     // Its first visible frame can then use the same shader and GPU buffers.
-    prepare() {
-      mesh.visible = true; mesh.scale.set(2);
-      try {app.renderer.render({container: mesh, clear: false});}
-      finally {mesh.visible = false;}
+    prepare(width=app.screen.width,height=app.screen.height,arch,worldSize,floorZoom,camera) {
+      if(!arch||!camera){mesh.visible=true;mesh.scale.set(2);try{app.renderer.render({container:mesh,clear:false});}finally{mesh.visible=false;}return;}
+      // Build the real atlas, allocate the live capture at viewport size, and
+      // execute the full globe shader while the loading screen still owns UI.
+      // A 2px dummy draw never warmed the actual textures or render targets.
+      const warm=RenderTexture.create({width,height,resolution:app.renderer.resolution});
+      try{
+        this.update(1,width,height,0,{...camera,zoom:floorZoom},arch,worldSize,floorZoom,false,null);
+        app.renderer.render({container:mesh,target:warm,clear:true});
+        // Also exercise the live-scene handoff. resize() alone leaves its GL
+        // allocation lazy, so a full-globe-only warmup still stalls mid-zoom.
+        this.update(.5,width,height,0,{...camera,zoom:Math.max(.07,floorZoom*3)},arch,worldSize,floorZoom,false,null);
+        app.renderer.render({container:mesh,target:warm,clear:true});
+        this.warmed=true;
+      }finally{
+        this.update(0,width,height,0,camera,arch,worldSize,floorZoom,false,null);
+        warm.destroy(true);
+      }
     },
     pinIn: 0,   // 0..1, how far the 'You' pin has come in (engine.js fades the name tags out by the same amount)
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
@@ -327,7 +342,7 @@ export function createWorldView(app, scene, isletView) {
       this.roll=0;
       u.uAnchor.set(anchor.center);u.uEast.set(anchor.east);u.uNorth.set(anchor.north);
       u.uFocus.set(view.center);u.uViewEast.set(view.east);u.uViewNorth.set(view.north);
-      u.uSph.set([m.cx,m.cy,Rw]);u.uR=R;u.uTime=time;u.uZoom=cam.zoom;u.uCam.set([cam.x,cam.y]);u.uRes.set([w,h]);
+      u.uSph.set([m.cx,m.cy,Rw]);u.uR=R;u.uDpr=app.renderer.resolution;u.uTime=time;u.uZoom=cam.zoom;u.uCam.set([cam.x,cam.y]);u.uRes.set([w,h]);
       const horizon=Rp*horizonRatio(ball);
       const gOf=(px,py)=>{
         const p=pixelChart(id,cam,px,py,ball);return p?[p.x,p.y]:[NaN,NaN];
