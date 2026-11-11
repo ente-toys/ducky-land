@@ -1559,6 +1559,7 @@ export class PixiIsland {
 
   renderLiveDucks(poses, dt, time, reducedMotion, visible) {
     const ids = new Set(poses.map(pose => pose.id)), sailers = [];
+    const scopeProps = this.artShown === 'home' ? this.props : this.arts?.get(this.artShown)?.props;   // where this map's telescopes are
     for (const [id, entry] of this.liveRigs) {
       if (ids.has(id)) continue;
       entry.rig?.dispose();
@@ -1628,7 +1629,7 @@ export class PixiIsland {
       // boss 5 Nov: sailing-fx.js says where a Ducky is drawn: hopping in, seated low in the hull, or hopping out onto the jetty
       const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
       const seat = this.artShown==='cathedral' ? benchSeatAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;
-      const peer = !seat ? telescopePeerAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;   // every Ducky at an eyepiece looks through it
+      const peer = !seat ? telescopePeerAt(scopeProps, {...pose,x,y,action,travel}) : null;   // every Ducky at an eyepiece looks through it
       if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
       }
