@@ -8,6 +8,7 @@ import {globeDrag,lonLat,centreOf,globeBall} from './globe-look.js';
 import {mapOf} from './island-maps.js';
 import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from './heart-activity.js';
 import {ISLETS} from './islets.js';
+import {cloudState,CLOUD_SHADER} from './globe-clouds.js';
 
 // boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
 // floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
@@ -75,6 +76,7 @@ uniform vec3 uFocus;
 uniform vec3 uViewEast;
 uniform vec3 uViewNorth;
 uniform vec3 uSph;
+${CLOUD_SHADER}
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 vec3 surface(vec2 g){
  vec2 q=g-uSph.xy;float d=length(q),a=d/uSph.z;
@@ -206,6 +208,7 @@ vec3 planet(vec2 uv){
  float lit=dot(v,normalize(vec3(-.5,.5,.72)));
  col=mix(col,col*vec3(.72,.8,.98),(1.-smoothstep(.12,.3,lit))*ball);
  col=mix(col,col+vec3(.06,.07,.08),smoothstep(.8,.95,lit)*ball);
+ col=atmosphere(col,p,dir,edge);
  col=mix(col,vec3(.55,.82,1.),pow(smoothstep(.94,1.,edge),2.)*.45*ball);
  return col;
 }
@@ -240,13 +243,14 @@ function makePin() {
   return pin;
 }
 
-export function createWorldView(app, scene, isletView) {
+export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPTY) {
   const shoreTextures = new Map();
   let rt = RenderTexture.create({width: 2, height: 2, resolution:app.renderer.resolution}), w = 0, h = 0, worldTex = null, worldVersion = -1;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
-    uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, viewUniforms: {
+    uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, uClouds:cloudTexture.source, viewUniforms: {
+      uCloudPhase:{value:0,type:'f32'},uCloudFade:{value:0,type:'f32'},
       uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
       uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},uDpr:{value:app.renderer.resolution,type:'f32'},
 
@@ -318,7 +322,7 @@ export function createWorldView(app, scene, isletView) {
     },
     pinIn: 0,   // 0..1, how far the 'You' pin has come in (engine.js fades the name tags out by the same amount)
     // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
-    update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me) {
+    update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me, reduced=false) {
       const on = t > .001;
       mesh.visible = on;
       if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {   // rebuilt when a themed island's snapshot arrives
@@ -335,6 +339,7 @@ export function createWorldView(app, scene, isletView) {
       const id=arch.current,m=mapOf(id),anchor=worldIsland(id),view=viewFrame(id,cam);
       const Rw=WORLD_GEO.Rw,R=Rw*cam.zoom/h,Rp=Rw*cam.zoom,ball=globeBall(t,cam.zoom,h);
       u.uBall=ball;
+      const clouds=cloudState(ball,time,reduced);u.uCloudPhase=clouds.phase;u.uCloudFade=clouds.fade;
       // The mask is a white disc: only draw it while it is actually masking, or it shows as a white ball mid-zoom.
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
       pin.mask=masking?sphereMask:null;
