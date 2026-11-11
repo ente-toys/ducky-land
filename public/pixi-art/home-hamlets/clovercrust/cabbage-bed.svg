@@ -1,8 +1,0 @@
-<svg width="246" height="149" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 183 111"><title>Nine leafy cabbages in a flat soil bed</title>
-<defs><g id="c" stroke="#39472d" stroke-width="1.05" stroke-linejoin="round"><path fill="#63ae3c" d="M3 24Q-2 15 6 12Q3 2 14 5Q22-3 29 4Q39 0 40 12Q47 16 40 25Q27 35 12 29Z"/><path fill="#8ac442" d="M10 24Q5 15 13 11Q11 3 21 5Q31 2 32 13Q41 17 32 25Z"/><path fill="#a7ce4e" d="M15 23Q11 15 19 10Q27 6 30 14L27 26Z"/><path fill="none" d="M18 26Q15 16 22 9M12 22L8 18M29 25L35 18"/></g></defs>
-<path fill="#9d763b" stroke="#39472d" stroke-width="1.1" d="M37 1L182 6L155 110L1 102Z"/>
-<path fill="#b48c48" d="M39 6L176 10L152 102L7 97Z"/>
-<use href="#c" x="43" y="4"/><use href="#c" x="90" y="6"/><use href="#c" x="136" y="8"/>
-<use href="#c" x="28" y="34"/><use href="#c" x="76" y="36"/><use href="#c" x="123" y="38"/>
-<use href="#c" x="11" y="65"/><use href="#c" x="61" y="68"/><use href="#c" x="110" y="70"/>
-</svg>

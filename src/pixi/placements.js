@@ -20,7 +20,6 @@ const segDist = (x, y, a, b) => {const dx = b[0]-a[0], dy = b[1]-a[1], t = Math.
 const reviewPathClear = (x,y,pad=0) => !homeRoutes.some(r => r.samples.slice(1).some((b,i)=>segDist(x,y,r.samples[i],b)<r.width/2+pad));
 const pathDist = (x, y) => Math.min(...footpaths.flatMap(l => l.slice(1).map((b, i) => segDist(x, y, l[i], b))));   // GPT's placement pass (boss 3 Nov): remove / move / swap on top of the base placement
 
-const urls = import.meta.glob('../../assets/**/*.svg', {eager: true, query: '?url', import: 'default'});
 const byName = new Map(library.assets.map(asset => [asset.name, asset]));
 // These are the original page's post-load substitutions, formerly in assets.js.
 const replacements = {
@@ -55,7 +54,7 @@ function sized(p) {
 
 function place(asset, point) {
   const src = asset.name === 'rowboat' ? '/pixi-art/rowing-hull.svg'
-    : original.enhancedAssets[asset.file] || urls[`../../${asset.file}`];
+    : original.enhancedAssets[asset.file];
   return {...point, asset: asset.name, src,
     width: asset.size.width, height: asset.size.height, resolution: .5,
     anchor: {x: asset.anchor.x / asset.size.width, y: asset.anchor.y / asset.size.height}, scale: .24};
