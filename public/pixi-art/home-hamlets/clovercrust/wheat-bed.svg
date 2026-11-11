@@ -1,8 +1,0 @@
-<svg width="243" height="155" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 181 115"><title>Golden wheat in a little field block</title>
-<defs><g id="w" stroke="#39472d" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"><path fill="none" d="M9 46L10 9"/><path fill="#f9d65f" d="M9 29Q1 26 2 19L8 22Q1 17 3 12L8 16Q4 7 9 1Q15 6 12 16L17 11Q21 16 12 23L18 18Q21 26 11 30Z"/><path fill="#83b23e" stroke="none" d="M9 43Q1 39 1 31Q8 33 9 43ZM11 40Q14 32 19 30Q20 38 11 43Z"/></g></defs>
-<path fill="#ae873e" stroke="#39472d" stroke-width="1.1" d="M31 23L168 24L180 107L1 114Z"/>
-<path fill="#b99747" d="M34 29L163 29L173 101L8 108Z"/>
-<use href="#w" x="43" y="1"/><use href="#w" x="74" y="0"/><use href="#w" x="105" y="0"/><use href="#w" x="135" y="1"/>
-<use href="#w" x="25" y="18"/><use href="#w" x="57" y="20"/><use href="#w" x="89" y="19"/><use href="#w" x="121" y="19"/><use href="#w" x="154" y="20"/>
-<use href="#w" x="23" y="45"/><use href="#w" x="54" y="47"/><use href="#w" x="86" y="46"/><use href="#w" x="117" y="46"/><use href="#w" x="149" y="47"/>
-</svg>
