@@ -43,6 +43,7 @@ import {reframeIslet,isletLandingFrame} from './islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from './island-maps.js';   // boss 6 Nov: themed islands, each with its own map and art
 import {loadThemeArt} from './theme-art.js';
 import {benchSeatAt} from './bench-seat.js';
+import {telescopeNear,telescopePeerAt} from './telescope.js';
 import {setSailingHarbor} from './sailing-fx.js';
 import {createButterfly,butterflyPose} from './butterflies.js';
 import {loadPondDuckies} from './pond-duckies.js';
@@ -740,6 +741,22 @@ export class PixiIsland {
     else if (options.dock) {this.keys.clear(); this.touchInput={x:0,y:0}; this.room.disembark();}   // a held arrow key would steer away and cancel the dock
   }
 
+  // Near a stargazing telescope a "Look through the telescope" button appears. Shown by IslandStargaze.jsx.
+  telescopeOptions() {
+    const me=this.player;
+    if (!me || me.mode === 'sailing' || this.interior?.active) return {};
+    const props=this.artProps(this.artShown), spot=telescopeNear(props, me);
+    return spot ? {telescope:spot.id, at:Boolean(telescopePeerAt(props, me))} : {};
+  }
+  // Walk to the eyepiece. Returns false when no telescope is within reach.
+  telescopeAction() {
+    const me=this.player, props=this.artProps(this.artShown), spot=me && me.mode !== 'sailing' ? telescopeNear(props, me) : null;
+    if (!spot) return false;
+    if (!telescopePeerAt(props, me)) this.setDestination(spot);
+    this.follow=true; this.fitMode=false;
+    return true;
+  }
+
   tap(point) {
     if (this.interior?.active) {this.interior.tap(point); return;}   // boss 5 Nov: inside the museum a tap walks there
     if (this.globeT > 0 && this.worldView?.pinAt(point)) {this.flyHome(); return;}   // boss 6 Nov: tap the 'You' pin, fly back to your Ducky
@@ -1390,15 +1407,17 @@ export class PixiIsland {
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
       const seat = !homeShown && duck.player ? benchSeatAt(this.artProps(this.artShown), {...duck,x,y}) : null;
+      const peer = !seat && duck.player ? telescopePeerAt(this.artProps(this.artShown), {...duck,x,y}) : null;   // at a telescope's eyepiece
       const hop = jumpPose(renderJumpLeft(duck.jumpLeft, this.accumulator), reduced, {turn: duck.turn, moving: duck.travel > 20});
       rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift);   // boss 3 Nov: Duckies walk up and over the arched bridges
       rig.root.zIndex = y;
       if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
+      if (peer) {rig.root.position.set(peer.x,peer.y);rig.root.zIndex=peer.y;}
       rig.root.visible = (homeShown || duck.player) && visible(x, y, 200);   // the sleepers lie on the home map's spots
       if (duck.player) this.plantReactions?.track(duck,x,y,rig.root.visible && !(duck.jumpLeft>0));
       rig.trackSnow?.(t, (homeShown || duck.player) && !this.interior?.active ? this.artShown : null,
         duck.action, duck.travel, reduced, duck.emoteVersion, duck.jumpLeft > 0);
-      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, ice:duck.ice, speed: duck.travel, turn: seat?.turn ?? duck.turn, seated:Boolean(seat), time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
+      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, ice:duck.ice, speed: duck.travel, turn: seat?.turn ?? peer?.turn ?? duck.turn, seated:Boolean(seat), time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
       if (duck.player) this.rinkTrails?.track(duck,x,y,duck.travel,rig.root.visible&&!(duck.jumpLeft>0));
       if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x:deckX(x,y,this.arches), y: deckY(x, y, this.arches), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
       if (homeShown) this.bumpSleeper(duck, rig, player);   // boss 5 Nov: walking into a sleeper stops at its edge and wobbles it once
@@ -1609,6 +1628,7 @@ export class PixiIsland {
       // boss 5 Nov: sailing-fx.js says where a Ducky is drawn: hopping in, seated low in the hull, or hopping out onto the jetty
       const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
       const seat = this.artShown==='cathedral' ? benchSeatAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;
+      const peer = !seat ? telescopePeerAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;   // every Ducky at an eyepiece looks through it
       if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
       }
@@ -1626,13 +1646,14 @@ export class PixiIsland {
       if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:deckX(look.x,look.y,this.arches), y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
       if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
+      if (peer) {rig.root.position.set(peer.x,peer.y);rig.root.zIndex=peer.y;}
       rig.root.visible = visible(look.x,look.y,200);
       this.plantReactions?.track(entry,x,y,rig.root.visible && look.deck && pose.mode!=='sailing' && !(pose.jumpLeft>0));
       const snowMoved = entry.snowX !== undefined && (Math.abs(x - entry.snowX) > .01 || Math.abs(y - entry.snowY) > .01);
       rig.trackSnow?.(time, !this.interior?.active && pose.mode !== 'sailing' ? this.artShown : null,
         action, travel, reducedMotion, emoteVersion, snowMoved || pose.jumpLeft > 0);
       entry.snowX = x; entry.snowY = y;
-      if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:seat?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:seat?.turn ?? peer?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
       this.rinkTrails?.track(entry,x,y,travel,rig.root.visible&&look.deck&&pose.mode!=='sailing'&&!(pose.jumpLeft>0));
       if (pose.mode === 'sailing') sailers.push(look);
     }

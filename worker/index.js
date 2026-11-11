@@ -20,6 +20,7 @@ import {RoomKarma} from './karma.js';
 export const ISLAND_LIMIT = 100;
 export const PLAYER_LIMIT = 200;
 const SPECTATOR_LIMIT = 64;
+const STARGAZER_LIMIT = 5000;   // the most named stars one telescope sky is sent
 const RESUME_MS = 15_000;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
@@ -113,6 +114,12 @@ export class IslandRoom {
     this.sql.exec(`INSERT OR IGNORE INTO accounts (account,login)
       SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
     this.migrateFriends();
+    // The telescope sky names everyone who starred ente/ente and has signed in here, for longer than the week a session lasts.
+    if (!this.sql.exec('PRAGMA table_info(accounts)').toArray().some(column => column.name === 'starred')) {
+      this.sql.exec('ALTER TABLE accounts ADD COLUMN starred INTEGER NOT NULL DEFAULT 0');
+      this.sql.exec('UPDATE accounts SET starred=1 WHERE account IN (SELECT account FROM sessions WHERE can_play=1 AND expires>?)', Date.now());
+    }
+    this.sql.exec('CREATE TABLE IF NOT EXISTS star_count (id INTEGER PRIMARY KEY, count INTEGER NOT NULL, checked INTEGER NOT NULL)');
     this.sql.exec('CREATE TABLE IF NOT EXISTS outfits (account TEXT PRIMARY KEY, outfit TEXT NOT NULL)');
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
@@ -207,6 +214,11 @@ export class IslandRoom {
     const data = await request.json();
     if (pathname === '/friends') return this.friends(data, now);
     if (pathname === '/outfit') return this.saveOutfit(data, now);
+    if (pathname === '/stars') return this.stars(data, now);
+    if (pathname === '/stars/count') {
+      if (Number.isSafeInteger(data.count) && data.count >= 0) this.sql.exec('INSERT OR REPLACE INTO star_count VALUES(1,?,?)', data.count, now);
+      return reply({});
+    }
     if (pathname === '/flow') {
       if (data.previous) this.sql.exec('DELETE FROM flows WHERE state=?', data.previous);
       if (this.sql.exec('SELECT count(*) AS count FROM flows').one().count >= 256) return reply({}, 429);
@@ -220,6 +232,7 @@ export class IslandRoom {
     if (pathname === '/session/new') {
       this.sql.exec('INSERT INTO accounts (account,login) VALUES(?,?) ON CONFLICT(account) DO UPDATE SET login=excluded.login',
         data.account, data.login);
+      this.sql.exec('UPDATE accounts SET starred=? WHERE account=?', data.canPlay === true ? 1 : 0, data.account);
       this.sql.exec('UPDATE sessions SET login=? WHERE account=?', data.login, data.account);
       for (const [socket,info] of this.connections) {
         if (info.account === data.account) {info.login=data.login; this.attach(socket,info);}
@@ -230,6 +243,8 @@ export class IslandRoom {
     }
     if (pathname === '/session/access') {
       this.sql.exec('UPDATE sessions SET can_play=? WHERE digest=?', data.canPlay === true ? 1 : 0, data.digest);
+      const checked = this.session(data.digest, now);
+      if (checked) this.sql.exec('UPDATE accounts SET starred=? WHERE account=?', data.canPlay === true ? 1 : 0, checked.account);
       if (!data.canPlay) {
         const user = this.session(data.digest);
         if (user) this.sql.exec('DELETE FROM resumes WHERE account=?',user.account);
@@ -280,6 +295,22 @@ export class IslandRoom {
       FROM friend_requests r JOIN accounts a ON a.account=r.receiver_account_id
       WHERE r.sender_account_id=? ORDER BY r.created_at,r.receiver_account_id`, account).toArray();
     return {friends,incoming,outgoing};
+  }
+
+  // The telescope's night sky: one star for everyone who starred ente/ente. GitHub only says how many there are, so the
+  // named stars are the people who signed in here with a star. Signed-in viewers already see these usernames above the Duckies.
+  stars(data, now) {
+    const user = this.session(data.digest, now);
+    if (!user) return reply({error:'Please sign in again to look through the telescope.'},401);
+    const count = this.sql.exec('SELECT count,checked FROM star_count WHERE id=1').toArray()[0];
+    const players = this.sql.exec('SELECT account,login FROM accounts WHERE starred=1 ORDER BY account LIMIT ?', STARGAZER_LIMIT)
+      .toArray().map(row => [row.account,row.login]);
+    const online = [...new Set([...this.connections.values()]
+      .filter(info => info.actor && info.account && info.expires > now).map(info => info.account))];
+    const friends = this.sql.exec('SELECT friend_account_id AS account FROM friends WHERE owner_account_id=?', user.account)
+      .toArray().map(row => row.account);
+    return reply({total:count?.count ?? null, checked:count?.checked ?? 0,
+      me:{accountId:user.account,login:user.login,starred:!!user.canPlay}, players, online, friends});
   }
 
   saveOutfit(data, now) {

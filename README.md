@@ -20,6 +20,11 @@ to zoom, press F to follow your duck, and press Home or 0 for the island overvie
 Q or 1 quacks, E dances, 2–7 trigger other emotes, and M toggles sound. Tap your
 duck twice to dance. Press 5 for a side nap.
 
+Walk up to a stargazing telescope and press Enter, or choose **Look through the
+telescope**. Your duck walks to the eyepiece and the night sky opens with one star
+for everyone who starred [ente/ente](https://github.com/ente/ente). Drag to look
+around, scroll or pinch to zoom, and tap a star to see whose it is.
+
 The 28 ambient ducks pick from three sleeping poses. A duck rows around Racing
 Lake, crows circle the island, and waves roll onto Lighthouse Beach. Reduced
 motion quiets the animation, and hidden tabs pause simulation and audio.
@@ -63,6 +68,12 @@ A live user count appears at the bottom left, including players and viewers
 (signed-in accounts count once across tabs). New players trigger a join toast
 at the bottom right; quick reconnects and tab takeovers do not repeat it.
 Guests see anonymous join notices.
+
+GitHub only lets a repository's admins and collaborators list its stargazers, so the
+telescope's sky takes the star count from the public repository and names only the
+people who signed in here with a star. Their stars keep the same place on every
+visit. Ducks on an island right now pulse green, and your friends are joined to
+your star. The count is refreshed from GitHub at most every ten minutes.
 
 Chat follows the duck while walking. Text appears live to other signed-in users,
 disappears after five seconds, and has no history. Esc clears it immediately.
