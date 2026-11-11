@@ -47,7 +47,8 @@ export default function PixiPage() {
   const [starDialogOpen, setStarDialogOpen] = useState(true);
   const [indoors,setIndoors] = useState(false);
   const [notificationHost,setNotificationHost] = useState(null);
-  const offline = import.meta.env.DEV && new URLSearchParams(location.search).has('offline');
+  const params = new URLSearchParams(location.search);
+  const offline = import.meta.env.DEV && (params.get('dev') === '1' || params.has('offline'));
 
   useEffect(() => {setTravelNotice('');},[travel.islandId,travel.mode]);
 
@@ -79,7 +80,7 @@ export default function PixiPage() {
     }, (id,text) => island.current?.showChat(id,text), setOnline, setLatestJoin, state => {
       setTravel(state);
     }, setTravelNotice);
-    // dev only: ?offline plays the island locally with no room server (for design review); absent = unchanged
+    // Development bypass uses the local simulation, without an authenticated room.
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
       externalOverview:true,transparent:true,renderResolution:1,onError:() => setError(true),onInteriorChange:setIndoors});
@@ -93,8 +94,12 @@ export default function PixiPage() {
       if(import.meta.env.DEV&&new URLSearchParams(location.search).has('pirates')){const {piratePreview}=await import('../../scripts/pirate-ships/preview.js');await piratePreview(game);}
       if(cancelled)earth?.destroy();
     }).catch(error=>{console.error('Could not initialize world',error);setError(true);});
-    client.connect();
-    refresh();
+    if (offline) {
+      setStatus('local');
+    } else {
+      client.connect();
+      refresh();
+    }
     return () => {
       cancelled=true;earth?.destroy();
       abort.abort();
@@ -120,7 +125,7 @@ export default function PixiPage() {
     }
   }
 
-  const guest = session && !session.user && status !== 'playing';
+  const guest = !offline && session && !session.user && status !== 'playing';
   const retryLive = status === 'spectators-full';
   const starRequired = session?.user && !session.user.canPlay;
   const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
@@ -132,7 +137,7 @@ export default function PixiPage() {
       <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>
     </div>
     {!error && <aside className="pixi-live" aria-label="Live island">
-      <div role="status">{notice || notices[status] || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
+      <div role="status">{notice || (offline ? 'Local development · Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
       {/* Keys share this sibling list: scope each ID to its toolbar item so
           reconnects and island changes unmount the correct UI and effects. */}
       {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
@@ -154,7 +159,7 @@ export default function PixiPage() {
         : <><button disabled>Play with GitHub</button><small>Sign-in is unavailable right now.</small></>}
     </aside>}
     {!error && <div className="pixi-bottom-hud">
-      <IslandTravel travel={travel} playing={status==='playing'} room={room} island={island} notice={travelNotice}/>
+      <IslandTravel travel={travel} playing={status==='playing' || offline} room={room} island={island} notice={travelNotice}/>
       <div className="pixi-notifications" ref={setNotificationHost}>
         <IslandPresence online={online} latestJoin={latestJoin}/>
       </div>

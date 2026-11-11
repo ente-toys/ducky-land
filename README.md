@@ -79,3 +79,12 @@ its redirect URI. Set its client ID and secret as `GITHUB_CLIENT_ID` and
 Vite and its static preview serve the artwork. Live play needs the Pages
 Functions and a bound room Worker. The Node server started by `npm start`
 remains a fixture for the legacy network tests.
+
+### Local play without sign-in
+
+Run `npm run dev` and open the printed local URL with `?dev=1` (for example,
+`http://127.0.0.1:5175/?dev=1`). This starts a local duck without GitHub signup
+or a session request. Remove `?dev=1` to return to the normal sign-in flow.
+The bypass is disabled in production builds. It uses the local simulation, so
+live multiplayer, chat, friends, and account persistence require normal sign-in.
+The existing `?offline` design-preview flag enables the same mode.

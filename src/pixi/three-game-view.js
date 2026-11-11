@@ -1,3 +1,4 @@
+import {followPosition} from './follow-camera.js';
 import {pirateLocal} from './pirate-fleet.js';
 import {createThreeWorld} from './three-world-view.js';
 import {retainDetailArt} from './three-game-budget.js';
@@ -19,6 +20,7 @@ import {surfacePoint,surfaceCoordinates} from './three-globe-math.js';
 export async function createThreeGameView(game,host,{createWorld=createThreeWorld}={}){
   let disposed=false,world=null,last=0,view=null,following=true,shown=game.artShown,direct=false,blend=0,flatFrames=0;
   const flatOffset={x:0,y:0};
+  let followPositionState=null;
   const captureScale=()=>direct?1:captureCoverage(host.clientWidth/Math.max(1,host.clientHeight),view?.heading??0,blend,Math.min(game.width,game.height));
   const nativeTick=game.tick.bind(game),nativeRender=game.app.render.bind(game.app),nativeResize=game.resize.bind(game),nativeInterior=game.onInteriorChange;
   const layer=document.createElement('div');layer.className='pixi-earth-view';Object.assign(layer.style,{position:'absolute',inset:0,zIndex:'1',background:'#000',visibility:'hidden'});host.append(layer);
@@ -70,8 +72,9 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
   game.onInteriorChange=interior;
   function followCamera(camera, player){
     if(!player || view.id!==game.islandId)return;
-    camera.x=player.x;
-    camera.y=player.y-90;
+    followPositionState=followPosition(followPositionState,{x:player.x,y:player.y-90},view.now);
+    camera.x=followPositionState.x;
+    camera.y=followPositionState.y;
   }
   function update(state){
     if(disposed||!world||!game.ready||game.interior?.active)return;
@@ -116,11 +119,13 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     game.externalCamera=camera;
     Object.assign(game.camera,game.externalCamera);delete game.camera.basis;Object.assign(game.target,game.camera);
     // Follow the pose produced by this tick, before the camera and duck draw.
-    nativeTick(now,{followCamera:direct&&following&&!state.flying?followCamera:undefined});
+    const smoothFollow=direct&&following&&!state.flying&&view.id===game.islandId;
+    if(!smoothFollow)followPositionState=null;
+    nativeTick(now,{followCamera:smoothFollow?followCamera:undefined});
     cancelAnimationFrame(game.raf);
     if(game.interior?.active)return;
     const p=game.playerView();
-    if(following&&p&&state.altitude<.55&&!state.flying)world.centreOn(game.islandId,p.x,p.y-90);
+    if(following&&p&&state.altitude<.55&&!state.flying)world.centreOn(game.islandId,smoothFollow?camera.x:p.x,smoothFollow?camera.y:p.y-90);
     const ready=game.artShown===mapId&&game.artReady(mapId);
     if(!ready){direct=false;world.clearLiveCanvas();}
     flatFrames=blend===1&&ready?flatFrames+1:0;

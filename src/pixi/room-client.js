@@ -68,6 +68,7 @@ export class RoomClient {
     this.input = ZERO;
     this.lastInput = -Infinity;
     this.offsetX = this.offsetY = 0;
+    this.correctionX = this.correctionY = 0;
     this.prev = null; this.alpha = 1;
   }
 
@@ -169,6 +170,7 @@ export class RoomClient {
       this.pending=[];
       this.input=ZERO;
       this.offsetX=this.offsetY=0;
+      this.correctionX=this.correctionY=0;
       this.tracks.clear();
       this.boatTracks.clear();
       clearTimeout(this.chatTimer);
@@ -198,7 +200,7 @@ export class RoomClient {
         if (previous) {
           this.offsetX += previous.x - this.player.x;
           this.offsetY += previous.y - this.player.y;
-          if (Math.hypot(this.offsetX,this.offsetY) > 90) {this.offsetX = this.offsetY = 0; this.prev = null;}
+          if (Math.hypot(this.offsetX,this.offsetY) > 90) {this.offsetX = this.offsetY = 0; this.correctionX = this.correctionY = 0; this.prev = null;}
         } else this.prev = null;
       } else {
         const last = this.tracks.get(pose.id);
@@ -347,14 +349,30 @@ export class RoomClient {
     }
     if (this.player.mode === 'sailing') sailStep(this.player,dt,input);
     else walkStep(this.player, this.navHere(), dt, now, input);
-    let correction = 1 - Math.exp(-19 * dt);
+    // Critically damp the visual correction. Snapshots change its destination,
+    // but preserve its velocity so every update cannot kick the duck's speed.
+    const omega = 12, decay = Math.exp(-omega * dt);
+    const settle = (offset, velocity) => {
+      const c = velocity + omega * offset;
+      return [(offset + c * dt) * decay, (velocity - omega * c * dt) * decay];
+    };
+    let [offsetX, velocityX] = settle(this.offsetX, this.correctionX);
+    let [offsetY, velocityY] = settle(this.offsetY, this.correctionY);
     const dx = this.player.x - x, dy = this.player.y - y;
-    const forwardOffset = this.offsetX * dx + this.offsetY * dy;
-    // A late snapshot can put the prediction ahead of the server. Pay that
-    // correction down without pulling the duck backwards while it moves.
-    if (forwardOffset > 0) correction = Math.min(correction, (dx*dx + dy*dy) / (2 * forwardOffset));
-    this.offsetX *= 1 - correction;
-    this.offsetY *= 1 - correction;
+    const distance2 = dx * dx + dy * dy;
+    const backward = (this.offsetX - offsetX) * dx + (this.offsetY - offsetY) * dy;
+    // Keep at least half the forward step even during a large correction.
+    if (backward > distance2 / 2 && distance2 > 0) {
+      const scale = distance2 / (2 * backward);
+      offsetX = this.offsetX + (offsetX - this.offsetX) * scale;
+      offsetY = this.offsetY + (offsetY - this.offsetY) * scale;
+      velocityX *= scale;
+      velocityY *= scale;
+    }
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+    this.correctionX = velocityX;
+    this.correctionY = velocityY;
   }
 
   // The own Ducky steps at a fixed 60 Hz but the screen draws at 60-120 Hz: drawn as is, it moves on every other frame

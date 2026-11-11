@@ -226,13 +226,39 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     assert.equal(renderer.renders,renders,'native close-up skips Three draws');assert.equal(flat?.material.map.version,version,'native close-up skips texture uploads');
     assert.ok(nativeRenders>0);assert.equal(nativeProps.at(-1),true,'native close-up draws its own upright islet props');assert.equal(canvas.style.visibility,'visible');
     const beforeWalk=nativeRenders;
+    const assertFollowCentre=()=>{
+      const globe=renderer.scene.getObjectByName('World: ocean, islands, islets and activity anchors');
+      const centre=surfacePoint(frame,game.externalCamera.x-map.cx,game.externalCamera.y-map.cy,WORLD_GEO.Rw)
+        .normalize().applyQuaternion(globe.quaternion);
+      assert.ok(centre.distanceTo(new Vector3(0,0,1))<1e-9,'globe centres on the smoothed native camera, not the raw player pose');
+    };
     game.keys.add('d');
     for(let i=0;i<6;i++){
+      const previousX=game.externalCamera.x;
       step(1000/120);
-      assert.equal(game.externalCamera.x,game.player.x,'camera follows the pose produced by the current frame');
+      assert.ok(game.externalCamera.x>previousX,'camera responds to movement produced by this frame');
+      assert.ok(game.externalCamera.x<game.player.x,'camera eases behind the moving player instead of snapping');
+      assert.equal(game.externalCamera.y,game.player.y-90,'horizontal movement preserves vertical framing');
+      assertFollowCentre();
     }
     game.keys.delete('d');
     assert.equal(nativeRenders-beforeWalk,6,'close-up draws every display frame at 120 Hz');
+    for(let i=0;i<60;i++){
+      const previousX=game.externalCamera.x;
+      step(1000/60);
+      assert.ok(game.externalCamera.x>=previousX&&game.externalCamera.x<=game.player.x,'stopping settles the camera without reversing or overshooting');
+    }
+    assert.ok(game.player.x-game.externalCamera.x<.001,'the camera catches up after the player stops');
+    assertFollowCentre();
+    // A short manual drag must discard follow history even though it is too
+    // short to trigger the elapsed-time or teleport reset in the smoother.
+    for(const [type,x]of [['pointerdown',box.width/2],['pointermove',box.width/2+24],['pointerup',box.width/2+24]])
+      renderer.domElement.dispatchEvent(new window.MouseEvent(type,{clientX:x,clientY:box.height/2,button:0}));
+    step(1000/120);
+    assert.ok(Math.abs(game.externalCamera.x-game.player.x)>1,'manual pan holds its own camera position');
+    game.player.x+=40;game.keys.add('d');step(1000/120);game.keys.delete('d');
+    assert.equal(game.externalCamera.x,game.player.x,'resuming follow starts at the current pose instead of restoring stale pre-pan lag');
+    assertFollowCentre();
     wheel(300);for(let i=0;i<3;i++)step();
     assert.equal(renderer.domElement.dataset.presentation,'three-globe','zoom-out camera: '+renderer.camera.position.z);
     const globe=renderer.scene.getObjectByName('World: ocean, islands, islets and activity anchors');

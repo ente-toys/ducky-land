@@ -147,6 +147,34 @@ test('position corrections remain continuous at snapshots and between prediction
   room.dispose();
 });
 
+test('repeated server corrections do not kick walking speed forward and back',()=>{
+  const {room}=setup();
+  room.snapshot(packet(1));
+  room.setAlpha(1);
+  const input={x:1,y:0};
+  for(let i=0;i<12;i++)room.step(1/60,input);
+  let previousStep=245/60;
+  for(let i=0;i<120;i++){
+    const before=room.view().x;
+    if(i%6===0){
+      const next=packet(2+i);
+      Object.assign(next.players[0],room.player,{x:room.player.x+(i%12===0?-8:8)});
+      next.self.ack=room.seq;
+      room.snapshot(next);
+      assert.ok(Math.abs(room.view().x-before)<1e-9,'snapshot preserves the drawn position');
+    }
+    room.step(1/60,input);
+    const step=room.view().x-before;
+    assert.ok(step>0,'walking never reverses');
+    assert.ok(Math.abs(step-previousStep)<.8,'network corrections accelerate smoothly');
+    previousStep=step;
+  }
+  room.stopInput();
+  for(let i=0;i<180;i++)room.step(1/60,{x:0,y:0});
+  assert.ok(Math.hypot(room.offsetX,room.offsetY)<.001,'correction settles after stopping');
+  room.dispose();
+});
+
 test('nearby friends choose the closest live account, retain it, and respect saves, dismissals and reconnects',()=>{
   const {room}=setup();
   const candidates=[];
