@@ -18,7 +18,7 @@ export class RoomKarma {
   update(now){
     const room=this.room;
     if(![...room.connections.values()].some(info=>info.actor))return;
-    let changed=this.pool.refresh(now);
+    let needsPersist=this.pool.refresh(now);
     for(const info of room.connections.values()){
       const actor=info.actor;if(!actor||!info.account||info.expires<=now)continue;
       actor.karma=this.balance(info.account);
@@ -27,12 +27,12 @@ export class RoomKarma {
       const total=actor.karma+1;
       const save=()=>{room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',info.account,total);this.persist();};
       if(room.ctx.storage.transactionSync)room.ctx.storage.transactionSync(save);else save();
-      this.balances.set(info.account,total);actor.karma=total;changed=true;
+      this.balances.set(info.account,total);actor.karma=total;needsPersist=false;
       for(const [socket,viewer]of room.connections)if((viewer.actor?.islandId??viewer.islandId??'home')===actor.islandId){
         room.send(socket,{type:'karma-pickup',...pickup,playerId:actor.id,total});
       }
     }
-    if(changed)this.persist();
+    if(needsPersist)this.persist();
   }
   broadcast(now){
     const shared=new Map();

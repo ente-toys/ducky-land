@@ -1,13 +1,13 @@
 import {createThreePirates} from './three-pirates.js';
 import * as THREE from 'three';
 import {createIsletStanding} from './three-islet-props.js';
-import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate,liveCaptureEdgeShader,liveCaptureProjection} from './three-live-geometry.js';
+import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate,captureFeather,liveCaptureEdgeShader,liveCaptureProjection} from './three-live-geometry.js';
 import {detailViewport,DETAIL_CAPTURE_SCALE} from './three-detail-view.js';
 import {WORLD_GEO, WORLD_ISLANDS} from './world-map.js';
 import {ISLETS} from './islets.js';
 import {sphereFrame} from './sphere.js';
 import {heartPose} from './heart-motion.js';
-import {rotateGlobeFromScreen} from './three-globe-math.js';
+import {rotateGlobeFromScreen,zoomDistance} from './three-globe-math.js';
 import {createHeartLocations,heartArtContains,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from './heart-activity.js';
 import {focusQuaternion, islandQuaternion, focusSurfaceQuaternion, surfacePoint, surfaceCoordinates, surfaceUnderPointer, lockSurfaceAnchor, atlasTransform, pickSurfacePatch, visiblePoint, EARTH_DISTANCE} from './three-globe-math.js';
 import {alignIslandNorth,approachProgress} from './three-island-approach.js';
@@ -18,7 +18,7 @@ import {mapOf} from './island-maps.js';
 import {transport} from './sphere.js';
 import {SPACE_LOOKS,createSpaceBackdrop} from './three-space-backdrop.js';
 import {createGlobeAtmosphere} from './three-atmosphere.js';
-import manifest from '../../public/pixi-art/globe/manifest.json' with {type:'json'};
+import {globePreviewUrl} from './globe-preview.js';
 
 const ease=x=>{x=THREE.MathUtils.clamp(x,0,1);return x*x*(3-2*x);};
 const out=x=>1-Math.pow(1-THREE.MathUtils.clamp(x,0,1),3);
@@ -107,7 +107,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     globe.add(mesh); patches.push(mesh); return mesh;
   }
   const assetTasks=[
-    ...WORLD_ISLANDS.map(i=>()=>{const m=manifest[i.theme??'home'];return patch(i,i.width,i.height,`${m.src}?v=${m.sha256.slice(0,12)}`,true);}),
+    ...WORLD_ISLANDS.map(i=>()=>patch(i,i.width,i.height,globePreviewUrl(i),true)),
     ...ISLETS.map(i=>()=>patch(i,i.width,i.width,`/pixi-art/islets/${i.art}.svg`))
   ];
   // The current Home view can be used immediately. Other atlas/islet work is
@@ -242,13 +242,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   function tick(now) {
     if(destroyed||!active||document.hidden)return;const dt=Math.min(.1,(now-last)/1000);last=now;
     let moving=!!(drag||transition||Math.abs(camera.position.z-1-targetAltitude)>1e-7);
+    const flying=Boolean(transition);
     if(transition) {
       const t=ease((now-transition.at)/transition.duration);
-      globe.quaternion.slerpQuaternions(transition.from,transition.to,t);camera.position.z=THREE.MathUtils.lerp(transition.z0,transition.z1,t);
+      globe.quaternion.slerpQuaternions(transition.from,transition.to,t);camera.position.z=zoomDistance(transition.z0,transition.z1,t);
       if(t>=1)transition=null;
     }else if(Math.abs(camera.position.z-1-targetAltitude)>1e-7){
       const previous=camera.position.z;
-      camera.position.z=1+Math.exp(THREE.MathUtils.lerp(Math.log(previous-1),Math.log(targetAltitude),reduced?1:1-Math.exp(-18*dt)));
+      camera.position.z=zoomDistance(previous,1+targetAltitude,reduced?1:1-Math.exp(-18*dt));
       if(zoomAnchor&&!lockSurfaceAnchor(globe.quaternion,zoomAnchor.point,camera,zoomAnchor.x,zoomAnchor.y,width,height)){
         camera.position.z=previous;targetAltitude=previous-1;zoomAnchor=null;
       }
@@ -283,13 +284,14 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     let ambientChanged=!direct&&atmosphere.update(now/1000,camera.position.z,reduced);
     const detailStart=performance.now();
     const held=drag??zoomAnchor;
-    onFrame({heading,anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude:camera.position.z-1,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving});
-    if(!direct)for(const standing of isletStanding)standing.update(globe.quaternion,camera,isletProjection);
-    for(const patch of patches)if(!patch.userData.island)patch.visible=!live||!isletCapture(patch.userData.frame);
+    const altitude=camera.position.z-1,zooming=Math.abs(Math.log(targetAltitude/altitude))>.035;
+    onFrame({heading,anchor:held?{point:held.point,x:held.x,y:held.y}:null,id:selected,altitude,point:surfaceCoordinates(frame,centre,WORLD_GEO.Rw),distance:camera.position.z,fov:camera.fov,width,height,moving,flying,zooming});
     if(!direct&&pirates?.update(globe.quaternion,camera,now/1000,dt,reduced,1-detailOpacity,pirateProjection,{width,height}))ambientChanged=true;
     if(!direct&&ambientClock.update(now,ambientChanged))demand.invalidate();
     const detailCost=performance.now()-detailStart;detailMs+=detailCost;detailPeak=Math.max(detailPeak,detailCost);
     if(!direct&&demand.consume(moving)){
+      for(const standing of isletStanding)standing.update(globe.quaternion,camera,isletProjection);
+      for(const patch of patches)if(!patch.userData.island)patch.visible=!live||!isletCapture(patch.userData.frame);
       const renderStart=performance.now();renderer.render(scene,camera);renderMs+=performance.now()-renderStart;renderCount++;drawCount+=renderer.info.render.calls;
     }
     if(now-overlayAt>=1000/60-.5){const overlayDt=Math.min(.1,(now-overlayAt)/1000);overlayAt=now;if(!direct&&camera.position.z>1.6)activity(now/1000,overlayDt);else ctx.clearRect(0,0,width,height);}
@@ -306,24 +308,42 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     stopped:()=>assetState.disposed,
     onLoaded:()=>{renderer.domElement.dataset.patchCount=patches.length;demand.invalidate();},
     onError:error=>{console.warn('World preview asset failed',error);renderer.domElement.dataset.assetErrors=String(Number(renderer.domElement.dataset.assetErrors??0)+1);}
-  }).then(()=>{if(!assetState.disposed){try{refreshHeartLocations();}catch(error){console.warn('World activity mask failed',error);}renderer.domElement.dataset.assetsReadyMs=(performance.now()-assetStart).toFixed(1);}});
-  function setLiveCanvas(id,canvas,placement,matrix,atlasWidth,atlasHeight,bounds=null,captureScale=DETAIL_CAPTURE_SCALE){
-    liveCaptureScale.value=captureScale;
-    const patch=patches.find(p=>p.userData.island&&p.userData.id===id);if(!patch)return;
-    if(bounds&&![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite))return;
-    if(live?.id!==id||live.canvasWidth!==canvas.width||live.canvasHeight!==canvas.height){
-      clearLiveCanvas();
-      const geometry=patch.geometry,texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
+  }).then(async()=>{
+    if(assetState.disposed)return;
+    try{refreshHeartLocations();}catch(error){console.warn('World activity mask failed',error);}
+    // Prepare offscreen materials before the first zoom or rotation reveals them.
+    await renderer.compileAsync(scene,camera);
+    if(!assetState.disposed)renderer.domElement.dataset.assetsReadyMs=(performance.now()-assetStart).toFixed(1);
+  });
+  const liveFeather=new THREE.Vector2();
+  let capture=null;
+  function createCapture(geometry,texture){
       const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:0,depthWrite:false,depthTest:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
-      material.onBeforeCompile=shader=>{planetLighting(shader);liveCaptureEdgeShader(shader,canvas);liveCaptureProjection(shader,liveCaptureBlend,liveCaptureScale);
+      material.onBeforeCompile=shader=>{planetLighting(shader);liveCaptureEdgeShader(shader,liveFeather);liveCaptureProjection(shader,liveCaptureBlend,liveCaptureScale);
         // The independently tessellated atlas and live surface intersect even
         // with polygon offset. Live detail owns this coverage; only reject
         // the back hemisphere instead of depth-testing against the old atlas.
         shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <project_vertex>','#include <project_vertex>\ncaptureWorldPoint=(modelMatrix*vec4(transformed,1.)).xyz;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(liveCaptureBlend<.001&&dot(captureWorldPoint,cameraPosition-captureWorldPoint)<=0.)discard;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
-      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.frustumCulled=false;mesh.renderOrder=100;globe.add(mesh);
-      const viewport=detailViewport(texture,DETAIL_CAPTURE_SCALE);viewport.material.opacity=detailOpacity;viewport.visible=false;scene.add(viewport);
+      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.frustumCulled=false;mesh.renderOrder=100;
+      const viewport=detailViewport(texture,DETAIL_CAPTURE_SCALE);viewport.visible=false;
+      return {mesh,viewport};
+  }
+  function setLiveCanvas(id,canvas,placement,matrix,atlasWidth,atlasHeight,bounds=null,captureScale=DETAIL_CAPTURE_SCALE){
+    liveCaptureScale.value=captureScale;
+    const patch=patches.find(p=>p.userData.island&&p.userData.id===id);if(!patch)return;
+    if(bounds&&![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite))return;
+    if(live?.id!==id||live.canvasWidth!==canvas.width||live.canvasHeight!==canvas.height){
+      clearLiveCanvas();
+      const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
+      captureFeather(canvas,liveFeather);
+      capture??=createCapture(patch.geometry,texture);
+      const {mesh,viewport}=capture;
+      mesh.geometry=patch.geometry;
+      mesh.material.map=viewport.material.map=texture;
+      viewport.material.opacity=detailOpacity;
+      globe.add(mesh);scene.add(viewport);
       live={id,patch,mesh,viewport,canvasWidth:canvas.width,canvasHeight:canvas.height};
     }
     if(bounds){
@@ -337,7 +357,19 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     const gpuMatrix=patch.userData.atlasMatrix.value;gpuMatrix.set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
     live.mesh.material.map.matrix.copy(gpuMatrix);patch.userData.atlasUniform.value=1;live.mesh.material.map.needsUpdate=true;demand.invalidate();
   }
-  function clearLiveCanvas(){if(!live)return;live.patch.userData.atlasUniform.value=0;globe.remove(live.mesh);scene.remove(live.viewport);live.viewport.geometry.dispose();live.viewport.material.dispose();live.mesh.material.map.dispose();live.mesh.material.dispose();if(live.ownsGeometry)live.mesh.geometry.dispose();live=null;demand.invalidate();}
+  function clearLiveCanvas(){
+    if(!live)return;
+    live.patch.userData.atlasUniform.value=0;
+    globe.remove(live.mesh);scene.remove(live.viewport);
+    live.mesh.material.map.dispose();
+    live.mesh.material.map=live.viewport.material.map=null;
+    if(live.ownsGeometry)live.mesh.geometry.dispose();
+    live.mesh.geometry=live.patch.geometry;
+    live=null;
+    // Keep the compiled material across approaches, releasing the old canvas
+    // texture and custom geometry as soon as their capture is off screen.
+    demand.invalidate();
+  }
   function setPresentation(blend,value){
     if(detailOpacity!==blend)demand.invalidate();
     detailOpacity=blend;liveCaptureBlend.value=blend;
@@ -372,6 +404,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   return {ready,focus,focusIslet,world,setLiveCanvas,clearLiveCanvas,setSpaceStyle,centreOn,project,setPresentation,
 
     setActive(value){if(active===value)return;active=value;backdrop.setActive(value&&!direct);cancelAnimationFrame(raf);if(value){last=performance.now();resize();demand.invalidate();raf=requestAnimationFrame(tick);}},
-    destroy(){assetState.disposed=true;destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();pirates?.destroy();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
+    destroy(){assetState.disposed=true;destroyed=true;cancelAnimationFrame(raf);clearLiveCanvas();if(capture){capture.mesh.material.dispose();capture.viewport.material.dispose();capture.viewport.geometry.dispose();}pirates?.destroy();resizeObserver.disconnect();backdrop.destroy();atmosphere.destroy();cleanups.forEach(fn=>fn());const geometries=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){o.material.map?.dispose();o.material.dispose();}});geometries.forEach(g=>g.dispose());renderer.dispose();renderer.domElement.remove();overlay.remove();}
   };
 }

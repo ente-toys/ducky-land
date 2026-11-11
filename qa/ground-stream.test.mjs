@@ -67,3 +67,20 @@ test('ground culling combines per-tile overrides with rectangular prefetch margi
  assert.equal(tileInView({...tile(),x:120,margin:80},camera,100,100,1,0),true);
  assert.equal(tileInView({...tile(),x:0,y:120,margin:{x:10,y:80}},camera,100,100,1,0),true);
 });
+
+test('fast zoom fills visible holes and resumes refinement and prefetch after settling',async()=>{
+ const frames=[],requests=[];
+ const pool=createGroundPool({makeSprite:sprite,schedule:fn=>frames.push(fn),settleMs:0,planInterval:0,
+  acquire:async(src,resolution)=>{requests.push(src);return {source:{pixelWidth:100*resolution,pixelHeight:100*resolution}};},release(){}});
+ const stream=pool.create([{...tile(),viewMargin:0},{...tile(160),viewMargin:0}],container);
+ const step=async()=>{frames.splice(0).forEach(fn=>fn());await flush();};
+ pool.update([view(stream)],1,true);
+ await step();await step();
+ assert.deepEqual(requests,['/ground-0.svg?groundScale=0.5']);
+ assert.equal(stream.entries[0].sprite.visible,true);
+ pool.update([view(stream)],1,false);
+ await step();await step();
+ assert.ok(requests.includes('/ground-0.svg?groundScale=1'));
+ assert.ok(requests.some(src=>src.startsWith('/ground-160.svg?')));
+ pool.destroy();
+});

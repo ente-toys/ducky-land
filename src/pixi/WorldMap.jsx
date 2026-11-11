@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import {worldIsland} from './world-map.js';
 import {nearbyMapFrame, nearbyHeading, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
 import {BOG_RADAR_ICON, BOG_RADAR_SIZE_PX} from './bog-radar.js';
+import {globePreviewUrl} from './globe-preview.js';
 
 const width = 1000;
 const scale = width / NEARBY_MAP_WIDTH;
@@ -38,12 +39,12 @@ export default function WorldMap({island}) {
       const outlineRadius = width / 2 + 2 * iconSize / BOG_RADAR_SIZE_PX;
       const islands = nearbyMapFrame(engine.islandId, engine.player ?? engine.camera, radar.current,
         outlineRadius / scale).map(item => ({
-        ...item, art: engine.archipelago?.thumbnailOf(item.id) ?? null, x: Math.round(item.x * scale * 4) / 4, y: Math.round(item.y * scale * 4) / 4,
+        ...item, x: Math.round(item.x * scale * 4) / 4, y: Math.round(item.y * scale * 4) / 4,
       }));
       const bogX = radar.current.x * scale, bogY = radar.current.y * scale, bogVisible = radar.current.visible;
       setFrame(previous => previous.playing === playing && previous.heading === heading && previous.bogX === bogX && previous.bogY === bogY && previous.bogVisible === bogVisible && islands.every((item, index) => {
         const old = previous.islands[index];
-        return old?.id === item.id && old.art === item.art && old.x === item.x && old.y === item.y && Math.abs(old.bearing-item.bearing)<.1;
+        return old?.id === item.id && old.x === item.x && old.y === item.y && Math.abs(old.bearing-item.bearing)<.1;
       }) ? previous : {islands, playing, heading, bogX, bogY, bogVisible});
     }
     update();
@@ -56,12 +57,16 @@ export default function WorldMap({island}) {
       aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Paint gun badge: Booquack Bog, pinned to the rim when distant.`}>
       <defs><clipPath id="pixi-world-map-terrain-clip"><circle cx={width / 2} cy={height / 2} r={width / 2}/></clipPath></defs>
       <g clipPath="url(#pixi-world-map-terrain-clip)">
-        {frame.islands.map(item => <g className="pixi-nearby-island" key={item.id}
-          style={{transform: `translate(${width / 2 + item.x}px, ${height / 2 + item.y}px)`}}>
-          <title>{worldIsland(item.id).name}</title>
-          {item.art && <image href={item.art.src} x={-item.art.width * scale / 2} y={-item.art.height * scale / 2}
-            width={item.art.width * scale} height={item.art.height * scale} transform={`rotate(${item.bearing})`}/>}
-        </g>)}
+        {frame.islands.map(item => {
+          const island = worldIsland(item.id);
+          const artWidth = island.width * scale, artHeight = island.height * scale;
+          return <g className="pixi-nearby-island" key={item.id}
+            style={{transform: `translate(${width / 2 + item.x}px, ${height / 2 + item.y}px)`}}>
+            <title>{island.name}</title>
+            <image href={globePreviewUrl(island)} x={-artWidth / 2} y={-artHeight / 2}
+              width={artWidth} height={artHeight} transform={`rotate(${item.bearing})`}/>
+          </g>;
+        })}
       </g>
       {frame.bogVisible && <circle cx={width / 2 + frame.bogX} cy={height / 2 + frame.bogY} r={iconSize * .56}
         fill="none" stroke="#f6c64a" strokeWidth={iconSize * .14}/>}

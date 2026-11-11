@@ -1,5 +1,6 @@
 import {surfaceCoordinates} from './three-globe-math.js';
 import {Mesh,MeshBasicMaterial,PlaneGeometry} from 'three';
+import {DETAIL_BLEND_START} from './three-detail-budget.js';
 
 // A handoff is a viewport image, not an island patch. Morphing the curved
 // patch into atlas UVs moves the capture boundary inside the screen after a
@@ -27,7 +28,7 @@ export function detailViewport(texture,captureScale=1){
 // largely settled. Hysteresis prevents mode changes at a single wheel boundary.
 export function detailBlend(altitude,heading=0){
   const ease=t=>t*t*t*(t*(t*6-15)+10);
-  const t=altitude<=.160001?1:Math.max(0,Math.min(1,Math.log(.36/altitude)/Math.log(.36/.16)));
+  const t=altitude<=.160001?1:Math.max(0,Math.min(1,Math.log(DETAIL_BLEND_START/altitude)/Math.log(DETAIL_BLEND_START/.16)));
   // A rapid wheel/pinch can outrun the deliberately capped globe rotation.
   // Interpolating opposite screen orientations collapses the live surface.
   // Keep its curved projection until north is close, then flatten smoothly.

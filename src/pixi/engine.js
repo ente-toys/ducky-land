@@ -309,7 +309,9 @@ export class PixiIsland {
       this.artShown = 'home';
       if (new URLSearchParams(location.search).has('qa')) globalThis.__duckyEngine = this;   // QA readback (headless checks only)
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
-      await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
+      // The Three.js globe loads its own artwork. The flat scene only needs
+      // the archipelago's layout when it is used as the detail renderer.
+      if (!this.externalOverview) await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
       if(this.disposed)return;
       this.pirateFleet=createPirateFleet();
       this.pirateView=await createPirateView(this.objects,this.pirateFleet);
@@ -342,26 +344,34 @@ export class PixiIsland {
     // Bound decode work while the player can already move. Prioritize the camera
     // again between loads in case it moved away from the initial spawn.
     const remaining = [...deferred];
+    const targets = new Map(deferred.map(({placeholder}) => [placeholder, []]));
+    const collect = node => {
+      targets.get(node.texture)?.push(node);
+      for (const child of node.children ?? []) collect(child);
+    };
+    collect(this.scene);
     const worker = async () => {
       while (remaining.length && !this.disposed) {
-        remaining.sort((a, b) => Math.hypot(a.entry.x - this.camera.x, a.entry.y - this.camera.y) - Math.hypot(b.entry.x - this.camera.x, b.entry.y - this.camera.y));
-        const {entry, placeholder} = remaining.shift();
+        let closest = 0, distance = Infinity;
+        for (let i = 0; i < remaining.length; i++) {
+          const {x, y} = remaining[i].entry;
+          const d = (x - this.camera.x) ** 2 + (y - this.camera.y) ** 2;
+          if (d < distance) { closest = i; distance = d; }
+        }
+        const [{entry, placeholder}] = remaining.splice(closest, 1);
         try {
           this.loaded.push(entry.src);
           const texture = await acquire(entry.src, entry.rasterResolution??artResolution(entry,entry.resolution??1));
           if (this.disposed) continue;
-          const replace = node => {
-            if (node.texture === placeholder) {
-              const width = node.width, height = node.height;
-              node.texture = texture;
-              node.width = width; node.height = height;
-            }
-            for (const child of node.children ?? []) replace(child);
-          };
-          replace(this.scene);
+          for (const node of targets.get(placeholder)) {
+            if (node.destroyed || node.texture !== placeholder) continue;
+            const {width, height} = node;
+            node.texture = texture;
+            node.width = width; node.height = height;
+          }
         } catch (error) {
           if (!this.disposed) this.onError(error);
-        } finally {placeholder.destroy();}
+        } finally {targets.delete(placeholder);placeholder.destroy();}
       }
     };
     await Promise.all(Array.from({length: 4}, worker));
@@ -563,9 +573,11 @@ export class PixiIsland {
       const key = event.key.toLowerCase();
       if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter','shift'].includes(key)) return;
       event.preventDefault();
-      this.audio.unlock();
       this.keys.add(key);
       if (event.repeat) return;
+      // Navigation shortcuts can be the first key pressed. Only wake the
+      // audio device for gameplay input that can actually play a sound.
+      if (!['f','home','0','+','=','-'].includes(key)) this.audio.unlock();
       if (key === ' ') this.jump();
       if (key === 'enter') this.travelAction();   // boss 5 Nov: Enter takes the boat you are next to, or docks at the shore you are near
       if (key === 'q') this.triggerEmote(2);
@@ -940,7 +952,7 @@ export class PixiIsland {
       this.marker, ...(this.travelView?.transient() ?? [])].filter(o => o?.visible);
   }
   buildCopies() {
-    if (!this.archipelago || this.sceneryPending || this.snapshotFrame===this.frame) return;
+    if (this.externalOverview || !this.archipelago || this.sceneryPending || this.snapshotFrame===this.frame) return;
     if (!this.archipelago.has('home')) {this.snapshotFrame=this.frame;this.captureArt('home');return;}
     // Snapshotting a newly loaded theme can rasterize thousands of objects.
     // Keep it out of active gestures, then capture at most one theme per frame.
@@ -967,16 +979,6 @@ export class PixiIsland {
     // switched off; its snapshot came out empty (the globe and the far copies showed only its shallows). Draw it switched on.
     const sceneVisible=this.scene.visible; this.scene.visible=true;
     this.archipelago.build(mapId);
-    const radarHidden = new Set([
-      ...props.filter(({p}) => !/museum|library|lighthouse|fountain|barn|windmill|tower/i.test(p.name || p.asset || '')).map(({p}) => p.sprite),
-      ...props.map(({p}) => p.shadow), ...this.rigs.map(rig => rig.root),
-      ...naps.map(([root]) => root), ...floats.map(([item]) => item.sprite), this.flats,
-      mapId === 'home' ? this.floatLayer : null,
-      this.arts?.get(mapId)?.shadows, this.arts?.get(mapId)?.floatLayer,
-    ].filter(object => object?.visible));
-    radarHidden.forEach(object => {object.visible = false;});
-    try {this.archipelago.buildRadar(mapId);}
-    finally {radarHidden.forEach(object => {object.visible = true;});}
     this.scene.visible=sceneVisible;
     hide.forEach(o => {o.visible=true;});
     for (const {p,v,s,tint} of props) {p.sprite.visible=v; if (p.shadow) p.shadow.visible=s; p.sprite.tint=tint;}
@@ -1381,8 +1383,8 @@ export class PixiIsland {
         for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }
-    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2));
-    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2));
+    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
+    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     const visitors=this.copyVisitors(copies);
     for (const {o} of visitors) o.visible=false;

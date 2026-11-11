@@ -30,9 +30,13 @@ export function liveSurfaceGeometry(frame,bounds,width,height,radius) {
 // boundary becomes a diagonal on the globe after rotation. Keep the atlas
 // underneath and taper only this detail layer, rather than punching a hole in
 // the atlas or extending the texture's final pixels across the sea.
-export function liveCaptureEdgeShader(shader,canvas){
+export function captureFeather(canvas,target=new Vector2()){
   const width=Math.max(1,canvas.width),height=Math.max(1,canvas.height);
-  shader.uniforms.liveCaptureFeather={value:new Vector2(Math.min(.12,48/width),Math.min(.12,48/height))};
+  return target.set(Math.min(.12,48/width),Math.min(.12,48/height));
+}
+
+export function liveCaptureEdgeShader(shader,feather){
+  shader.uniforms.liveCaptureFeather={value:feather};
   shader.fragmentShader=shader.fragmentShader
     .replace('#include <common>','#include <common>\nuniform vec2 liveCaptureFeather;')
     .replace('#include <map_fragment>',`#include <map_fragment>

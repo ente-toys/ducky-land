@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {Container} from 'pixi.js';
 import sharp from 'sharp';
 import {homeArtwork} from '../scripts/globe-perf/snapshot.mjs';
-import {createArchipelago} from '../src/pixi/archipelago.js';
+import {globePreviewUrl} from '../src/pixi/globe-preview.js';
+import {worldIsland} from '../src/pixi/world-map.js';
 import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
 const j=p=>JSON.parse(readFileSync(p));
 const w=j('rive/web/themes/snow/world.json'),a=j('public/pixi-art/themes/snow/art.json');
@@ -49,9 +49,9 @@ test('FIX1 snow coast clips sand paths to land and sled sits over a shaded hill'
  const hill=a.flats.find(p=>p.id==='sled-hill'),sled=byId('sled-hill-start');assert.ok(hill.width>=800&&hill.height>=400);assert.ok(sled.x>=hill.x&&sled.x<=hill.x+hill.width&&sled.y>=hill.y&&sled.y<=hill.y+hill.height);
 });
 test('FIX1 polar minimap uses complete snow vector before GPU streams load',async()=>{
- const layer=new Container(),scene=new Container();const arch=createArchipelago({},scene,layer,w);
- const thumb=arch.thumbnailOf('isle-55');assert.equal(thumb.src,'/pixi-art/globe/snow.svg');assert.equal(thumb.width,w.width);assert.equal(thumb.height,w.height);
- const {data,info}=await sharp('public'+thumb.src).ensureAlpha().raw().toBuffer({resolveWithObject:true});let land=0,opaque=0;
+ const island=worldIsland('isle-55'),src=new URL(globePreviewUrl(island),'http://localhost').pathname;
+ assert.equal(src,'/pixi-art/globe/snow.svg');assert.equal(island.width,w.width);assert.equal(island.height,w.height);
+ const {data,info}=await sharp('public'+src).ensureAlpha().raw().toBuffer({resolveWithObject:true});let land=0,opaque=0;
  for(let i=0;i<data.length;i+=4){if(data[i+3]>128)opaque++;if(data[i]>230&&data[i+1]>225&&data[i+2]>230&&data[i+3]>128)land++;}
- assert.ok(land>info.width*info.height*.3,'snow land missing');assert.ok(opaque<info.width*info.height*.9,'sea transparency missing');arch.destroy();scene.destroy();layer.destroy();
+ assert.ok(land>info.width*info.height*.3,'snow land missing');assert.ok(opaque<info.width*info.height*.9,'sea transparency missing');
 });

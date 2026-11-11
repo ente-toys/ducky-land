@@ -4,6 +4,12 @@ import {expMap, logMap} from './sphere.js';
 export const SURFACE_RADIUS=1.001;
 export const EARTH_DISTANCE=5.2;
 
+// Image scale is proportional to 1 / altitude near the island. Interpolate
+// altitude ratios so a fly-in does not cram most of the zoom into its end.
+export function zoomDistance(from,to,progress){
+  return 1+(from-1)*Math.pow((to-1)/(from-1),progress);
+}
+
 // Background drags turn the globe in camera axes, even outside its silhouette.
 export function rotateGlobeFromScreen(quaternion,dx,dy,height) {
   const scale=Math.PI/Math.max(1,height);

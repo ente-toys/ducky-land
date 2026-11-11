@@ -12,7 +12,7 @@ export const inShape=(x,y,o,pad=0)=>o.poly?(pad<0?inPoly(x,y,o.poly)&&edgeDist(x
 // boss 6 Nov (100 Duckies on one island): a coarse grid of which water and obstacle shapes could touch each spot, so a walk
 // test only tries the few shapes near it instead of every traced outline on a big island. Exactly the same answers: a shape
 // is listed in every cell its padded box reaches. Built on first use (the shape lists are fixed by then).
-function shapeIndex(list,pad,CELL=256){
+export function shapeIndex(list,pad,CELL=256){
  const cells=new Map(),key=(c,r)=>c*65536+r;
  for(const o of list){
   let x0,y0,x1,y1;
@@ -24,6 +24,30 @@ function shapeIndex(list,pad,CELL=256){
  const none=[];
  return (x,y)=>cells.get(key(Math.floor(x/CELL),Math.floor(y/CELL)))??none;
 }
+// An exact horizontal ray only crosses edges that span the query's Y band.
+// Keep the original crossing rule, including the half-open vertex boundary.
+export function polygonIndex(poly,cellSize=64){
+ const rows=new Map();
+ for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+  const a=poly[i],b=poly[j];
+  if(a[1]===b[1])continue;
+  const edge=[a,b];
+  const first=Math.floor(Math.min(a[1],b[1])/cellSize),last=Math.floor(Math.max(a[1],b[1])/cellSize);
+  for(let row=first;row<=last;row++){
+   if(!rows.has(row))rows.set(row,[]);
+   rows.get(row).push(edge);
+  }
+ }
+ return (x,y)=>{
+  const edges=rows.get(Math.floor(y/cellSize));
+  if(!edges)return false;
+  let inside=false;
+  for(const [a,b] of edges){
+   if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;
+  }
+  return inside;
+ };
+}
 // boss 6 Nov (100 Duckies on a big island): which side of the coast each 64-unit cell is on. A cell no coast edge comes near
 // is wholly inside or wholly outside, so only cells the coastline crosses still need the full point-in-polygon test. Exact:
 // every edge is sampled every 16 units and each sample marks its cell and the eight round it.
@@ -34,7 +58,8 @@ export function coastIndex(coast,CELL=64){
  for(let i=0;i<coast.length;i++){const a=coast[i],b=coast[(i+1)%coast.length],n=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/16));
   for(let k=0;k<=n;k++){const c=Math.floor((a[0]+(b[0]-a[0])*k/n-x0)/CELL),r=Math.floor((a[1]+(b[1]-a[1])*k/n-y0)/CELL);
    for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const cc=c+dc,rr=r+dr;if(cc>=0&&rr>=0&&cc<cols&&rr<rows)cls[rr*cols+cc]=2;}}}
- for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const i=r*cols+c;if(!cls[i])cls[i]=inPoly(x0+(c+.5)*CELL,y0+(r+.5)*CELL,coast)?1:3;}
+ const contains=polygonIndex(coast,CELL);
+ for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const i=r*cols+c;if(!cls[i])cls[i]=contains(x0+(c+.5)*CELL,y0+(r+.5)*CELL)?1:3;}
  return (x,y)=>{const c=Math.floor((x-x0)/CELL),r=Math.floor((y-y0)/CELL);if(c<0||r<0||c>=cols||r>=rows)return 0;const v=cls[r*cols+c];return v===3?0:v;};
 }
 export function geometry(world){

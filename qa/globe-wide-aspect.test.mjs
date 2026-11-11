@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {readFile} from 'node:fs/promises';
 import {CanvasTexture,Group,Matrix3,Mesh,MeshBasicMaterial,PerspectiveCamera,PlaneGeometry,Quaternion,Raycaster,Scene,ShaderLib,Vector2,Vector3,Vector4} from 'three';
 import {DETAIL_CAPTURE_SCALE,detailViewport,detailSize,detailCamera,detailBlend} from '../src/pixi/three-detail-view.js';
-import {liveSurfaceBounds,liveSurfaceNeedsUpdate,liveSurfaceGeometry,liveCaptureEdgeShader,liveCaptureProjection} from '../src/pixi/three-live-geometry.js';
+import {liveSurfaceBounds,liveSurfaceNeedsUpdate,liveSurfaceGeometry,captureFeather,liveCaptureEdgeShader,liveCaptureProjection} from '../src/pixi/three-live-geometry.js';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {ISLETS} from '../src/pixi/islets.js';
@@ -133,7 +133,7 @@ test('independent globe tessellations cross in depth, so live detail must own it
 test('live capture tapers its own edges without changing texture coordinates or cutting the atlas',()=>{
   for(const [width,height]of sizes){
     const size=detailSize(width,height,2),shader={uniforms:{},fragmentShader:ShaderLib.basic.fragmentShader};
-    liveCaptureEdgeShader(shader,size);
+    liveCaptureEdgeShader(shader,captureFeather(size));
     const feather=shader.uniforms.liveCaptureFeather.value;
     assert.ok(feather.x>0&&feather.x<=.12&&feather.y>0&&feather.y<=.12);
     assert.ok(shader.fragmentShader.includes('diffuseColor.a*=captureFade.x*captureFade.y;'),'a rotated capture edge must fade to the unchanged atlas');
@@ -188,6 +188,7 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
   class Renderer{
     constructor(){this.domElement=window.document.createElement('canvas');this.capabilities={getMaxAnisotropy:()=>1};this.info={render:{calls:1}};this.renders=0;this.domElement.getBoundingClientRect=()=>box;this.domElement.setPointerCapture=()=>{};this.domElement.hasPointerCapture=()=>false;renderers.push(this);}
     setPixelRatio(){}setSize(){}dispose(){}
+    async compileAsync(){}
     render(scene,camera){this.scene=scene;this.camera=camera;this.renders++;}
   }
   const globals={window,document:window.document,location:window.location,devicePixelRatio:2,performance:{now:()=>now},
@@ -203,7 +204,7 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
   assert.ok(isletFrame,'exercise the lighthouse reported in the double-scenery screenshot');
   const game={isletView:{views:[{i:isletFrame,root:{visible:true},props:[{sprite:isletProp}]}],update(){}},canvas,width,height,artShown:'community',islandId:frame.id,ready:true,arts:new Map([['home',{ready:true}],['community',{ready:true}]]),
     camera:{x:map.cx,y:map.cy,zoom:1},target:{},zoomMotion:{velocity:0},player:{x:map.cx,y:map.cy},rigs:[],localDucks:[],liveRigs:new Map(),ocean:{alpha:1,visible:true},keys:new Set(),touchInput:{x:0,y:0},
-    app:{render(){nativeRenders++;nativeProps.push(isletProp.visible);},renderer:{resolution:1,background:{alpha:1},resize(w,h){canvas.width=Math.round(w*this.resolution);canvas.height=Math.round(h*this.resolution);}}},
+    app:{render(){nativeRenders++;nativeProps.push(isletProp.visible);},renderer:{resolution:1,background:{alpha:1},resize(w,h,resolution=this.resolution){this.resolution=resolution;canvas.width=Math.round(w*resolution);canvas.height=Math.round(h*resolution);}}},
     tick(){this.app.render();},resize(){},onInteriorChange(){},listen(){},ensureArt(){},artReady(){return true;},showArt(){},applyMapAmbience(){},freeArt(){},tap(){}};
   const step=()=>{const frames=[...callbacks.values()];callbacks.clear();now=Math.max(now,performance.now())+17;for(const fn of frames)fn(now);};
   const settle=async()=>{
@@ -258,9 +259,14 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
       assert.ok(Math.max(canvas.width,canvas.height)<=1536,'handoff upload stays bounded');
       assert.equal(canvas.style.width,'100%');assert.equal(canvas.style.height,'100%');
     }
+    const capture=renderer.scene.getObjectByName('Live island detail'),oldMaterial=capture.material,oldTexture=oldMaterial.map;
+    let released=false;oldTexture.addEventListener('dispose',()=>{released=true;});
     box={...box,width:height,height:width};for(const resize of observers)resize();for(let i=0;i<3;i++)step();
     assert.equal(renderer.camera.aspect,box.width/box.height,'camera aspect refreshes on landscape/portrait resize');
     assertViewport(renderer.scene.getObjectByName('Live viewport handoff'),box.width,box.height);
+    assert.equal(renderer.scene.getObjectByName('Live island detail').material,oldMaterial,'resize keeps the compiled capture shader');
+    assert.notEqual(oldMaterial.map,oldTexture,'the new canvas size gets a fresh texture');
+    assert.ok(released,'resize releases the old GPU texture');
     // A single large zoom-in returns ownership; no persistent second draw loop.
     wheel(-1400);for(let i=0;i<4;i++)step();assert.equal(renderer.domElement.dataset.presentation,'native-pixi','return to close view: '+renderer.camera.position.z);
     const after=renderer.renders;for(let i=0;i<4;i++)step();assert.equal(renderer.renders,after);assert.equal(nativeProps.at(-1),true,'return to direct native restores upright islet props');assert.equal(canvas.style.visibility,'visible');

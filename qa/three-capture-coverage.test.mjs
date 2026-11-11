@@ -40,3 +40,12 @@ test('adaptive world-space coverage leaves the 1536-pixel capture budget intact 
  assert.throws(()=>captureCoverage(0,0),RangeError);
  assert.throws(()=>captureCoverage(1,NaN),RangeError);
 });
+
+test('the flattened capture uses more pixels while keeping the feather past the viewport',()=>{
+ for(const [width,height] of [[1400,1000],[1536,864],[393,852]]){
+  const minPixels=Math.min(width,height),edge=Math.min(.12,48/minPixels);
+  const scale=captureCoverage(width/height,0,1,minPixels);
+  assert.ok(scale<1.5);
+  assert.ok(.5-.5/scale>=edge-1e-12);
+ }
+});

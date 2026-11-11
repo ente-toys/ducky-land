@@ -5,7 +5,8 @@ import {detailWork,detailMovement} from '../src/pixi/three-detail-budget.js';
 test('approach prepares island art before spending on live detail and texture uploads',()=>{
   assert.deepEqual(detailWork(1.2),{visible:false,preload:false,hz:20});
   assert.deepEqual(detailWork(.8),{visible:false,preload:true,hz:20});
-  assert.deepEqual(detailWork(.59),{visible:true,preload:true,hz:60});
+  assert.deepEqual(detailWork(.59),{visible:true,preload:true,hz:30});
+  assert.equal(detailWork(.35).hz,60,'the blended handoff updates the capture at display cadence');
   assert.equal(detailWork(.16).hz,60,'native walking and the final zoom retain display cadence');
 });
 

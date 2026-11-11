@@ -84,7 +84,8 @@ test('every keeper and its archived ripple art is clean flat SVG, with no PNG ad
  const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'});
  const added=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'});
  assert(!/\.png$/im.test(changed+'\n'+added),'no PNG in tracked changes or new files');
- assert(!changed.split('\n').some(p=>/^(public\/pixi-art|rive\/web\/themes|src\/pixi\/islet)/.test(p)),'source art and islets untouched');
+ const artChanges=changed.split('\n').filter(p=>p!=='public/pixi-art/globe/manifest.json');
+ assert(!artChanges.some(p=>/^(public\/pixi-art|rive\/web\/themes|src\/pixi\/islet)/.test(p)),'source art and islets untouched');
 });
 
 test('runtime owns every assigned Ducky, pauses hidden layers and releases all water FX and leases on leave',async()=>{

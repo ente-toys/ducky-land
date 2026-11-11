@@ -10,7 +10,7 @@ import expansion from './home-expansion.json' with {type:'json'};
 import homeWorld from '../../rive/web/world.json' with {type: 'json'};
 import homeWalk from '../../rive/web/walk-world.json' with {type: 'json'};
 import READY from './delivered-themes.js';
-import {geometry, inPoly, inShape, coastIndex} from '../../rive/web/island-geometry.mjs';
+import {geometry, inPoly, inShape, coastIndex, polygonIndex, shapeIndex} from '../../rive/web/island-geometry.mjs';
 import {resolveSleepSpots, sleepHalfWidths, sleeperFootprint} from './sleep-spots.js';
 import {createNavigation} from './navigation.js';
 import {FINISHED_THEMES, TEST_THEMES, WORLD_ISLANDS} from './world-map.js';
@@ -58,12 +58,16 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
   const islets = world.islets ?? [], walkways = (id === 'home' ? walking.walkways : world.walkways) ?? world.walkways ?? [];
   let coastTests=null;
   const coastContains=(x,y)=>{
-    coastTests??=(world.boatCoast?[world.boatCoast]:[...new Set([walking.coast,world.coast])]).map(poly=>({poly,index:coastIndex(poly)}));
-    return coastTests.some(({poly,index})=>{const side=index(x,y);return side===1||side===2&&inPoly(x,y,poly);});
+    coastTests??=(world.boatCoast?[world.boatCoast]:[...new Set([walking.coast,world.coast])]).map(poly=>({contains:polygonIndex(poly),index:coastIndex(poly)}));
+    return coastTests.some(({contains,index})=>{const side=index(x,y);return side===1||side===2&&contains(x,y);});
   };
   // boss 8 Nov (sailable rivers): home's rivers that reach the sea are water for boats, though they lie inside the coast
   const boatWater=(world.boatWater??[]).map(poly=>({poly,x0:Math.min(...poly.map(p=>p[0])),x1:Math.max(...poly.map(p=>p[0])),y0:Math.min(...poly.map(p=>p[1])),y1:Math.max(...poly.map(p=>p[1]))}));
-  const riverAt=(x,y)=>boatWater.some(w=>x>w.x0&&x<w.x1&&y>w.y0&&y<w.y1&&inPoly(x,y,w.poly));
+  let waterNear=null;
+  const riverAt=(x,y)=>{
+    waterNear??=shapeIndex(boatWater,0);
+    return waterNear(x,y).some(w=>x>w.x0&&x<w.x1&&y>w.y0&&y<w.y1&&inPoly(x,y,w.poly));
+  };
   const solidDecks=walkways.filter(w=>!w.boatPassUnder).map(({a,b,w})=>({a,b,w,dx:b[0]-a[0],dy:b[1]-a[1],l2:(b[0]-a[0])**2+(b[1]-a[1])**2,x0:Math.min(a[0],b[0])-w/2,x1:Math.max(a[0],b[0])+w/2,y0:Math.min(a[1],b[1])-w/2,y1:Math.max(a[1],b[1])+w/2}));
   function landAt(x, y) {
     if (x < (world.origin?.x ?? 0) - 600 || y < (world.origin?.y ?? 0) - 600 || x > (world.origin?.x ?? 0) + W + 600 || y > (world.origin?.y ?? 0) + H + 600) return false;   // nowhere near this island

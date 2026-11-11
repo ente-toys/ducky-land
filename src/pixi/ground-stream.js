@@ -23,7 +23,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   frameBudgetMs = 5, progressive = !!schedule, prefetch = !!schedule} = {}) {
   const streams=new Set(), resident=new Map(), pending=new Map(), cache=new Map();
   let desired=new Map(), disposed=false, reserved=0, peak=0, failures=new Map(), deferred=new Set();
-  let scheduled=false,lastPlan=-Infinity,lastSignature='',plans=0,started=0,streamId=0;
+  let scheduled=false,lastPlan=-Infinity,lastSignature='',plans=0,started=0,streamId=0,zooming=false;
   const zooms=new Map();
   const requestPump=()=>{if(!schedule){pump();return;}if(scheduled||disposed)return;scheduled=true;schedule(()=>{scheduled=false;pump();});};
   const blank=tile => {tile.sprite.texture=Texture.EMPTY;tile.sprite.visible=false;};
@@ -45,13 +45,14 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   const pump=() => {
     if(disposed)return;
     // Empty visible crops first, then visible refinements, then the walking ring.
-    const jobs=[...desired].sort(([a,an],[b,bn])=>
+    const jobs=[...desired].filter(([tile,target])=>!zooming||target.visible&&!resident.has(tile)).sort(([a,an],[b,bn])=>
       (an.visible?0:2)-(bn.visible?0:2)||
       Number(resident.has(a))-Number(resident.has(b))||
       (b.priority??0)-(a.priority??0)||an.distance-bn.distance);
     const began=now();
+    let submitted=0;
     for(const [tile,target] of jobs) {
-      if(pending.size>=concurrency||(schedule&&now()-began>=frameBudgetMs))break;
+      if(pending.size>=concurrency||(schedule&&(now()-began>=frameBudgetMs||zooming&&submitted>=2)))break;
       const held=resident.get(tile);
       if(held?.resolution>=target.resolution||pending.has(tile)||deferred.has(tile))continue;
       // Keep previously decoded crop+resolution leases in the SAME pool budget.
@@ -75,7 +76,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         if(!entries.size)cache.delete(t);
       }
       if(reserved+need.bytes>budget){deferred.add(tile);continue;}
-      started++;reserved+=need.bytes;peak=Math.max(peak,reserved);pending.set(tile,need);
+      submitted++;started++;reserved+=need.bytes;peak=Math.max(peak,reserved);pending.set(tile,need);
       need.acquire(need.src,need.resolution).then(texture=>{
         if(disposed||!desired.has(tile)) {need.release(need.src);reserved-=need.bytes;return;}
         const bytes=(texture.source.pixelWidth??tile.width*need.resolution)*(texture.source.pixelHeight??tile.height*need.resolution)*4;
@@ -99,9 +100,12 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       const stream={id:++streamId,entries,resolutionTiles,destroy(){if(dead)return;dead=true;streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
       streams.add(stream);return stream;
     },
-    update(views,dpr=1) {
+    update(views,dpr=1,fastZoom=false) {
       // boss 8 Nov (a hard rectangle of missing terrace on Rosybutton Bay): when everything in view cannot fit the budget at full
       // sharpness, the whole view steps down a sharpness level together. A slightly softer ground beats a tile that never draws.
+      // Keep filling holes during zoom, but let existing tiles cover the
+      // transition before refining them or decoding outside the viewport.
+      zooming=fastZoom;
       const time=now();
       const active=views.filter(v=>streams.has(v.stream));
       let waiting=false,settled=false;

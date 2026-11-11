@@ -3,8 +3,15 @@ import assert from 'node:assert/strict';
 import {PerspectiveCamera,Quaternion,Vector3} from 'three';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {transport} from '../src/pixi/sphere.js';
-import {surfacePoint,focusQuaternion,lockSurfaceAnchor,SURFACE_RADIUS} from '../src/pixi/three-globe-math.js';
+import {surfacePoint,focusQuaternion,lockSurfaceAnchor,zoomDistance,SURFACE_RADIUS} from '../src/pixi/three-globe-math.js';
 import {alignIslandNorth,approachProgress} from '../src/pixi/three-island-approach.js';
+
+test('a fly-in distributes magnification across the approach',()=>{
+ const orbit=5.2,close=1.12,half=zoomDistance(orbit,close,.5);
+ assert.ok(Math.abs((orbit-1)/(half-1)-(half-1)/(close-1))<1e-12);
+ assert.equal(zoomDistance(orbit,close,0),orbit);
+ assert.equal(zoomDistance(orbit,close,1),close);
+});
 
 test('every island eases upright during approach while the same off-centre ground point stays under the cursor, including both poles',()=>{
  let drift=0;

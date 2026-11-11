@@ -28,6 +28,8 @@ export class KarmaPool {
       for(let n=shuffled.length-1;n>0;n--){const k=Math.floor(this.random()*(n+1));[shuffled[n],shuffled[k]]=[shuffled[k],shuffled[n]];}
       for(let n=0;this.slots.length<KARMA_ACTIVE;n++)add(shuffled[n]);
     }
+    this.indexVersion=0;
+    this.activeByIsland=new Map();
   }
   choose(region,previous=null){
     const used=new Set(this.slots.map(s=>s.siteId));
@@ -37,15 +39,28 @@ export class KarmaPool {
     return options[Math.floor(this.random()*options.length)];
   }
   refresh(now){let changed=false;for(const slot of this.slots)if(slot.readyAt>0&&slot.readyAt<=now){slot.readyAt=0;changed=true;}if(changed)this.version++;return changed;}
-  visible(islandId){return this.slots.filter(s=>s.readyAt===0).flatMap(slot=>{const site=this.sites.get(slot.siteId);return site.islandId===islandId?[{...site,id:slot.id}]:[];});}
+  activeOn(islandId){
+    if(this.indexVersion!==this.version){
+      this.activeByIsland.clear();
+      for(const slot of this.slots){
+        if(slot.readyAt!==0)continue;
+        const site=this.sites.get(slot.siteId);
+        if(!this.activeByIsland.has(site.islandId))this.activeByIsland.set(site.islandId,[]);
+        this.activeByIsland.get(site.islandId).push({slot,site});
+      }
+      this.indexVersion=this.version;
+    }
+    return this.activeByIsland.get(islandId);
+  }
+  visible(islandId){return this.activeOn(islandId)?.map(({slot,site})=>({...site,id:slot.id}))??[];}
   claim(actor,now,canReach=()=>true){
     if(actor.mode!=='walking'||actor.jumpLeft>0)return null;
-    const slot=this.slots.find(s=>{
-      const site=this.sites.get(s.siteId);
-      return s.readyAt===0&&site.islandId===actor.islandId&&Math.hypot(actor.x-site.x,actor.y-site.y)<=KARMA_RADIUS&&canReach(site);
+    const pickup=this.activeOn(actor.islandId)?.find(({site})=>{
+      const dx=actor.x-site.x,dy=actor.y-site.y;
+      return dx*dx+dy*dy<=KARMA_RADIUS*KARMA_RADIUS&&canReach(site);
     });
-    if(!slot)return null;
-    const from=this.sites.get(slot.siteId);
+    if(!pickup)return null;
+    const {slot,site:from}=pickup;
     const counts=new Map();for(const current of this.slots){const region=this.sites.get(current.siteId).region;counts.set(region,(counts.get(region)??0)+1);}
     // Collected feathers move to another landmass, keeping every region at no more than three
     // reservations and avoiding a quick refill at the same farming spot.
