@@ -1,9 +1,0 @@
-Authored Bog plan: 4 neighbourhoods, 137 new props.
-{
-  scale: 0.25,
-  checkedInteriorPixels: 1692304,
-  changedInteriorPixels: 0,
-  maxChannelDifference: 0,
-  examples: [],
-  method: 'Independent before and after production-art assembly; no pixel replacement or restoration.'
-}
