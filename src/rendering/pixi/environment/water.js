@@ -30,6 +30,7 @@ export function createWaveField({width, height, cols, rows, wet, damping = .991,
   let previous = new Float32Array(count), current = new Float32Array(count), next = new Float32Array(count), steps = 0;
   const kicks = new Float32Array(count);
   const packed = new Uint8Array(count * 4), indices = new Int32Array(active);
+  for (let i = 0; i < packed.length; i += 2) packed[i] = 0x80;
   function impulse(x, y, strength = .5, radius = 2) {
     if (![x, y, strength, radius].every(Number.isFinite)) return false;
     const gx = x / dx, gy = y / dy, rx = Math.max(1.3, radius / dx), ry = Math.max(1.3, radius / dy);
@@ -58,7 +59,8 @@ export function createWaveField({width, height, cols, rows, wet, damping = .991,
     const old = previous; previous = current; current = next; next = old; steps++;
   }
   function pack() {
-    for (let i = 0; i < count; i++) {
+    for (let n = 0; n < indices.length; n++) {
+      const i = indices[n];
       const a = Math.round((previous[i] / (2 * LIMIT) + .5) * 65535), b = Math.round((current[i] / (2 * LIMIT) + .5) * 65535), k = i * 4;
       packed[k] = a >> 8; packed[k + 1] = a & 255; packed[k + 2] = b >> 8; packed[k + 3] = b & 255;
     }
