@@ -150,6 +150,12 @@ export function retireBoat(boats,boat) {
   boat.occupant=null; boat.parked=true;
   if (boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
     Object.assign(boat,{x:spot.x,y:spot.y,turn:spot.turn,departure:home,parked:false});
+  // A landing can change coordinate frames. Keep arrivals only where the hull
+  // still fits in the destination island's water.
+  if (!canSail(boat.x,boat.y,boat.islandId)) {
+    const index=boats.indexOf(boat);
+    if (index!==-1) boats.splice(index,1);
+  }
   fillMoorings(boats);
 }
 
@@ -192,7 +198,7 @@ export function landingApproach(actor,spot) {
   if (spot.islet) {
     const i=ISLETS.find(i=>i.id===spot.islet),p=placeIslet(actor.islandId,i,i.jetty.water);
     const q={x:Math.round(p.x),y:Math.round(p.y)};
-    if (near(actor,q,14) || (canSail(q.x,q.y,actor.islandId) && sailRoute(actor.islandId,actor,q))) return q;
+    if (canSail(q.x,q.y,actor.islandId) && (near(actor,q,14) || sailRoute(actor.islandId,actor,q))) return q;
   }
   const at=spot.islet?placeIslet(actor.islandId,ISLETS.find(i=>i.id===spot.islet),ISLETS.find(i=>i.id===spot.islet).jetty.land):placeRigid(actor.islandId,spot.islandId,spot);
   const sx=at.x,sy=at.y,len=Math.hypot(actor.x-sx,actor.y-sy)||1;
@@ -200,7 +206,7 @@ export function landingApproach(actor,spot) {
     const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};
     if (canSail(p.x,p.y,actor.islandId) && sailRoute(actor.islandId,actor,p)) return p;
   }
-  return {x:Math.round(actor.x),y:Math.round(actor.y)};
+  return {x:actor.x,y:actor.y};
 }
 
 // every island drawn inside this sea is solid land, not only the ones you can dock at (review 5 Nov): each one's origin in

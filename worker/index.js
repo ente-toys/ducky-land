@@ -127,7 +127,9 @@ export class IslandRoom {
     // keep saved boats (position, occupant), then fill every mooring on every island (300 islands, boss 6 Nov: all the boats)
     this.sql.exec('CREATE TABLE IF NOT EXISTS boat_states (id TEXT PRIMARY KEY, state TEXT NOT NULL)');
     const rows = this.sql.exec('SELECT id,state FROM boat_states').toArray();
-    this.boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : createBoats();
+    const boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : createBoats();
+    this.boats = boats.filter(boat => boat?.parked !== true || boat.occupant ||
+      (islandFor(boat.islandId) && canSail(boat.x,boat.y,boat.islandId)));
     this.savedBoatRows = new Map(saved ? [] : rows.map(row => [row.id, row.state]));
     fillMoorings(this.boats);
     this.legacyBoats = Boolean(saved);
@@ -138,7 +140,9 @@ export class IslandRoom {
       if(info.bog)continue; // Restored after the world actors below.
       const actor = recoverIsland(info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null);
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
-      this.connections.set(socket, {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()});
+      const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()};
+      this.connections.set(socket, restored);
+      if (this.recoverSailingPosition(actor)) this.attach(socket, restored);
     }
     this.reconcileBoats();
     this.karma=new RoomKarma(this);
@@ -183,6 +187,31 @@ export class IslandRoom {
     for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
     for (const boat of [...this.boats]) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
     this.saveBoats();
+  }
+
+  recoverSailingPosition(actor) {
+    if (actor?.mode !== 'sailing') return false;
+    const boat = this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
+    if (!boat || canSail(actor.x, actor.y, actor.islandId)) return false;
+
+    // A saved sailing position can be inside the current coast. Find nearby
+    // water first, with the current island's harbor as a safe fallback.
+    let position = harborOf(actor.islandId).water;
+    search: for (const distance of [16, 32, 64, 128, 256]) {
+      for (let i = 0; i < 16; i++) {
+        const angle = i * Math.PI / 8;
+        const x = actor.x + Math.cos(angle) * distance;
+        const y = actor.y + Math.sin(angle) * distance;
+        if (canSail(x, y, actor.islandId)) {
+          position = {x, y};
+          break search;
+        }
+      }
+    }
+    const {x, y} = position;
+    Object.assign(actor, {x, y, travel:0, sailTarget:null, sailRoute:null, docking:false, exitLocked:false});
+    Object.assign(boat, {x, y, islandId:actor.islandId});
+    return true;
   }
 
   session(digest, now = Date.now()) {
@@ -431,6 +460,7 @@ export class IslandRoom {
       // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
       // Retired islands cannot retain a saved walking or sailing session.
       recoverIsland(info.actor);
+      if (this.recoverSailingPosition(info.actor)) this.saveBoats();
       if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
