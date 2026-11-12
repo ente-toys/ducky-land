@@ -1,8 +1,29 @@
 import {DOMAdapter, ImageSource, Texture, Rectangle} from 'pixi.js';
 import {cropSVG} from './theme-raster.js';
 
+async function rasterizeSVG(svg,crop,resolution) {
+  const adapter=DOMAdapter.get(),image=adapter.createImage();
+  const bitmap=typeof globalThis.createImageBitmap==='function';
+  const objectURL=bitmap?URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})):null;
+  try {
+    image.src=objectURL??'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+    await image.decode();
+    if(bitmap){
+      try{return await createImageBitmap(image,{premultiplyAlpha:'premultiply'});}catch{  }
+    }
+    const canvas=adapter.createCanvas(Math.ceil(crop[4]*resolution),Math.ceil(crop[5]*resolution));
+    const context=canvas.getContext('2d');
+    context.imageSmoothingEnabled=true;context.imageSmoothingQuality='high';
+    context.drawImage(image,0,0,canvas.width,canvas.height);
+    return canvas;
+  }finally{
+    if(objectURL){URL.revokeObjectURL(objectURL);image.src='';}
+  }
+}
+
 export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.bind(globalThis),
-  now=()=>performance.now(),frameBudgetMs=5,concurrency=64,prepareSVG=cropSVG,exactFrame=false}={}) {
+  now=()=>performance.now(),frameBudgetMs=5,concurrency=64,prepareSVG=cropSVG,exactFrame=false,
+  prepareSource=text=>text,rasterize=(original,crop,resolution)=>rasterizeSVG(prepareSVG(original,crop,resolution),crop,resolution)}={}) {
   const originals=new Map(),leases=new Map();
   let disposed=false,scheduled=false,inFlight=0;
   const queue=[];
@@ -30,31 +51,14 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
         const url=new URL(key,globalThis.location.href),crop=url.searchParams.get('rasterCrop').split(',').map(Number);
         url.searchParams.delete('rasterCrop');url.searchParams.delete('groundScale');
         const src=url.href;
-        if(!originals.has(src))originals.set(src,fetch(src).then(r=>{if(!r.ok)throw Error(`Theme SVG ${r.status}: ${src}`);return r.text();}));
+        if(!originals.has(src))originals.set(src,fetch(src).then(r=>{if(!r.ok)throw Error(`Theme SVG ${r.status}: ${src}`);return r.text();}).then(prepareSource));
         const original=await originals.get(src);
         return dispatch(async()=>{
-        if(disposed)throw Error('Raster loader disposed');
-        const svg=prepareSVG(original,crop,resolution),adapter=DOMAdapter.get(),image=adapter.createImage();
-        const bitmap=typeof globalThis.createImageBitmap==='function';
-        const objectURL=bitmap?URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})):null;
-        try {
-          image.src=objectURL??'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-          await image.decode();
-          let resource;
-          if(bitmap){
-            try{resource=await createImageBitmap(image,{premultiplyAlpha:'premultiply'});}catch{  }
-          }
-          if(!resource){
-            resource=adapter.createCanvas(Math.ceil(crop[4]*resolution),Math.ceil(crop[5]*resolution));
-            const context=resource.getContext('2d');context.imageSmoothingEnabled=true;context.imageSmoothingQuality='high';
-            context.drawImage(image,0,0,resource.width,resource.height);
-          }
+          if(disposed)throw Error('Raster loader disposed');
+          const resource=await rasterize(original,crop,resolution);
           const source=new ImageSource({resource,resolution,alphaMode:'premultiply-alpha-on-upload'});
           if(typeof resource.close==='function')source.once('destroy',()=>resource.close());
           return new Texture({source,...(exactFrame?{frame:new Rectangle(0,0,crop[4],crop[5])}:{})});
-        }finally{
-          if(objectURL){URL.revokeObjectURL(objectURL);image.src='';}
-        }
         },order);
       })();
       leases.set(key,held={count:0,promise,resolution});

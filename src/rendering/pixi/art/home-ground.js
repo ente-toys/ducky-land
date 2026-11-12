@@ -1,7 +1,7 @@
 import expansion from '../../../world/home/home-expansion.json' with {type:'json'};
 import {createRasterLoader} from './theme-art-stream.js';
-import {cropSVG} from './theme-raster.js';
 import {Container,Graphics,Sprite} from 'pixi.js';
+import {prepareHomeGround,rasterizeHomeGround} from './home-ground-raster.js';
 
 const HOME_GROUND_TILE_SIZE = 128;
 const HOME_GROUND_GUTTER = 1;
@@ -16,12 +16,6 @@ export function homeGroundTiles(sources, size = HOME_GROUND_TILE_SIZE) {
   return tiles;
 }
 
-function homeGroundSVG(original,crop,density=1){
-  const {origin,width,height}=expansion;
-  const root=original.match(/<svg\b[^>]*>/)[0];
-  const full=root.replace(/\bviewBox\s*=\s*(["']).*?\1/,`viewBox="${origin.x} ${origin.y} ${width} ${height}"`);
-  return cropSVG(original.replace(root,full),crop,density);
-}
 export function createHomeGroundFallback(texture,stream){
   const root=new Container({label:'Home missing ground fallback'});
   const sprite=new Sprite(texture),mask=new Graphics({label:'Home missing crop mask'});
@@ -49,7 +43,8 @@ export function createHomeGroundFallback(texture,stream){
 }
 
 export function createHomeGroundLoader(options={}){
-  const loader=createRasterLoader({concurrency:8,frameBudgetMs:2,...options,prepareSVG:homeGroundSVG});
+  const loader=createRasterLoader({concurrency:8,frameBudgetMs:2,...options,
+    prepareSource:prepareHomeGround,rasterize:rasterizeHomeGround});
   return {...loader,async acquire(key,resolution,order){
     const texture=await loader.acquire(key,resolution,order);
     const crop=new URL(key,'https://home.invalid').searchParams.get('rasterCrop').split(',').map(Number);

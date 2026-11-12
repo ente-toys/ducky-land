@@ -2,7 +2,7 @@ import {GraphicsContext,GraphicsPath,Matrix} from 'pixi.js';
 const INHERITED=['fill','stroke','stroke-width','fill-opacity','stroke-opacity','stroke-linecap','stroke-linejoin','stroke-miterlimit','fill-rule'];
 const ROOT={fill:'#000','stroke':'none','stroke-width':'1','fill-opacity':'1','stroke-opacity':'1','stroke-linecap':'butt','stroke-linejoin':'miter','stroke-miterlimit':'4','fill-rule':'nonzero',opacity:1};
 const num=(el,name,fallback=0)=>{const v=parseFloat(el.getAttribute(name));return Number.isFinite(v)?v:fallback;};
-function transformOf(text){
+export function transformOf(text){
  const m=new Matrix();
  for(const [,op,args]of text.matchAll(/(\w+)\s*\(([^)]*)\)/g)){
   const a=args.split(/[\s,]+/).filter(Boolean).map(Number),t=new Matrix();
