@@ -255,11 +255,12 @@ test('docking at another island keeps the arrival boat and leaves both islands m
   boat.occupant='duck';
   check();
   for (let step=1;step<=8;step++) {Object.assign(boat,{x:boat.x-step*60}); check();}   // sails clear of the islet
-  Object.assign(boat,{islandId:there,x:2400,y:300}); check();   // crosses into the neighbour's waters
+  const arrival=harborOf(there).water;
+  Object.assign(boat,{islandId:there,...arrival}); check();   // crosses into the neighbour's waters
   assert.equal(countOn(boats,there),perThere+1,'the neighbour shows its own boats plus yours');
   retireBoat(boats,boat); check();   // hops out on the neighbour's shore
   assert.ok(boats.includes(boat),'the arrival boat remains parked');
-  assert.deepEqual([boat.islandId,boat.x,boat.y,boat.occupant,boat.parked],[there,2400,300,null,true]);
+  assert.deepEqual([boat.islandId,boat.x,boat.y,boat.occupant,boat.parked],[there,arrival.x,arrival.y,null,true]);
   const restored=JSON.parse(JSON.stringify(boats));fillMoorings(restored);
   assert.deepEqual(restored.find(b=>b.id===boat.id),boat,'parked boat survives reconciliation after reload');
   assert.ok(mooredAt(boats,there).every(Boolean),`all ${perThere} of ${there}'s moorings are full`);
