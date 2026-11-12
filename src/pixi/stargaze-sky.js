@@ -2,14 +2,15 @@
 // GitHub only tells us how many stargazers there are, so most stars are anonymous. The people who have signed in to
 // Ducky Land get a named star, the one from the hill's signpost. A named star's place comes from its account alone, so it
 // never moves; the anonymous stars come from one seeded sequence, so a growing count only ever adds stars at the end.
-// Every star is gold and its brightness says who it is (boss 11 Nov): the Duckies on an island right now glow, every
-// other stargazer is dimmed, and dimmer still are the stars nobody has lit yet, for everyone who has not starred. Those
-// fill the whole sky, out past the stargazers. Nobody can count them, so the sky does not try.
-// Drawn flat like the rest of the world: palette.js colours, ink outlines, the 4-point sparkle of three-space-backdrop.js.
+// A permanent 3D universe surrounds the observer. Arrival and interaction use
+// the same positions, camera and full-resolution, on-demand rendering.
+import {universePosition,cameraBasis,projectStar,arrivalPose,lookAt,angleDelta,DEFAULT_FOV} from './star-universe.js';
+import {astronautAt,SPACE_DUCKY_WIDTH,SPACE_DUCKY_HEIGHT} from './space-ducky.js';
+import {themedConstellations} from './themed-constellations.js';
+import {starConstellations} from './star-constellations.js';
 const R = 2000;   // radius of the star field, in sky units
-const INK = '#39472d', NIGHT = '#16323c', GOLD = '#ffb937', PALE = '#ffd98a', TAG = '#fff9df';
-const COLORS = ['#ffb937','#ffc65c','#ffd98a','#f0a62e'];
-const OFFLINE = .62, WAITING = .34;   // how bright a star that is not online is drawn
+const NIGHT = '#000000', GOLD = '#e8bb6a', PALE = '#fff5de', OWNER_GREEN='#08c225';
+const COLORS = ['#f4f3ee','#dfebf7','#e7d0ae','#c4cbe0'];
 const WIDE = R*1.4, UNLIT = 10_000;   // the unlit stars reach past the stargazers, as far as the telescope can be turned
 const CLUSTERS = [[-1150,-620],[980,-940],[1240,560],[-380,1180],[420,330]];
 const BAND = -.46, BAND_COS = Math.cos(BAND), BAND_SIN = Math.sin(BAND);
@@ -104,293 +105,194 @@ export function readSky(data) {
   return {...skyCounts(data), named, me:named.find(star => star.me) ?? null, friends:named.filter(star => star.friend)};
 }
 
-const ease = t => t < .5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
-const escapeText = text => String(text).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-// the tag's picture of a star: a gold star on a patch of night, as bright as the star it is about
-const starIcon = level => `<svg width="22" height="22" viewBox="-11 -11 22 22" aria-hidden="true"><circle r="11" fill="${NIGHT}"/><path d="M0 -7.2L2.2 -2.5 7.3 -2 3.5 1.5 4.5 6.6 0 4.1 -4.5 6.6 -3.5 1.5 -7.3 -2 -2.2 -2.5Z" fill="${GOLD}" opacity="${level}"/></svg>`;
-
-export function createStargazeSky({stage, lens, canvas, tag, onNews = () => {}}) {
-  const ctx = canvas.getContext('2d'), reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const waiting = waitingStars();
-  let anon = anonymousStars(0), sky = readSky(null), buckets = COLORS.map(() => [[],[]]), bright = [], grid = new Map();
-  let cam = {x:0, y:0, z:.14}, size = 400, dpr = 1, raf = 0, running = false, loaded = false, fly = null, focus = null, pinned = false;
-  let shooting = null;
-  const born = new Map(), queue = [];
-  const CELL = 90;
-  const zMin = () => size/(R*2.08), zMax = 3.2;
-  const sx = x => size/2+(x-cam.x)*cam.z, sy = y => size/2+(y-cam.y)*cam.z;
-
-  function index() {
-    buckets = COLORS.map(() => [[],[]]); bright = []; grid = new Map();
-    for (let i = 0; i < anon.count; i++) {
-      if (anon.size[i] >= 1.9) bright.push(i); else buckets[anon.hue[i]][anon.size[i] < 1.1 ? 0 : 1].push(i);
-      const key = ((anon.x[i]+R)/CELL|0)*256+((anon.y[i]+R)/CELL|0);
-      const cell = grid.get(key); if (cell) cell.push(i); else grid.set(key,[i]);
+const escapeText=text=>String(text).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ease=t=>t*t*(3-2*t);
+export function createStargazeSky({stage,lens,canvas,tag,owner,astronaut,onNews=()=>{}}){
+  const ctx=canvas.getContext('2d',{alpha:false}),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let width=1,height=1,dpr=1,running=false,raf=0,resizeObserver,dirty=true,loaded=false,paints=0;
+  let sky=readSky(null),stars=[],lines=[],themeLines=[],me=null,focus=null,pinned=false;
+  let cam={x:0,y:0,z:0,yaw:0,pitch:0,fov:DEFAULT_FOV},pose=cam,intro=null,fly=null,velocity={yaw:0,pitch:0},lastFrame=0,astronautStart=null,astronautAnchor={yaw:0,pitch:0};
+  let screenX=new Float32Array(0),screenY=new Float32Array(0),screenZ=new Float32Array(0),screenSize=new Float32Array(0),previousX=new Float32Array(0),previousY=new Float32Array(0);
+  let heads=new Int32Array(0),links=new Int32Array(0),columns=1,rows=1,visibleCount=0,lastPaint=0;
+  const CELL=24,pointers=new Map(),cleanups=[],timings=[];
+  const listen=(target,name,fn,options)=>{target.addEventListener(name,fn,options);cleanups.push(()=>target.removeEventListener(name,fn,options));};
+  const sprites=COLORS.map(color=>{const image=document.createElement('canvas');image.width=image.height=64;const g=image.getContext('2d'),light=g.createRadialGradient(32,32,0,32,32,32);light.addColorStop(0,'#fff');light.addColorStop(.06,color);light.addColorStop(.18,color+'9a');light.addColorStop(.45,color+'25');light.addColorStop(1,color+'00');g.fillStyle=light;g.fillRect(0,0,64,64);return image;});
+  const ownerSprite=(()=>{const image=document.createElement('canvas');image.width=image.height=64;const g=image.getContext('2d'),light=g.createRadialGradient(32,32,0,32,32,32);light.addColorStop(0,'#d9ffe6');light.addColorStop(.1,OWNER_GREEN);light.addColorStop(.4,'#08c22545');light.addColorStop(1,'#08c22500');g.fillStyle=light;g.fillRect(0,0,64,64);return image;})();
+  function fit(){const box=stage.getBoundingClientRect();width=Math.max(240,Math.floor(box.width));height=Math.max(320,Math.floor(box.height));dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);columns=Math.ceil(width/CELL);rows=Math.ceil(height/CELL);heads=new Int32Array(columns*rows);dirty=true;}
+  function clamp(){cam.pitch=Math.max(-Math.PI*.485,Math.min(Math.PI*.485,cam.pitch));cam.fov=Math.max(.45,Math.min(1.9,cam.fov));}
+  function interrupt(){
+    // Continue from the exact visible pose. No jump back to the arrival's target.
+    if(intro){cam={x:pose.x,y:pose.y,z:pose.z,yaw:pose.yaw,pitch:pose.pitch,fov:pose.fov};intro=null;}
+    fly=null;velocity={yaw:0,pitch:0};dirty=true;canvas.dataset.intro='complete';
+  }
+  function prepareIntro(){
+    fly=null;velocity={yaw:0,pitch:0};lastPaint=0;previousX.fill(NaN);previousY.fill(NaN);pinned=false;tooltip(null);
+    cam={x:0,y:0,z:0,yaw:0,pitch:0,fov:DEFAULT_FOV};
+    if(me)cam=lookAt(me,cam);
+    // Align precisely from the small head offset too.
+    if(me){const b=cameraBasis(cam);cam=lookAt(me,{...cam,x:b.x,y:b.y,z:b.z});cam.x=cam.y=cam.z=0;}
+    astronautAnchor={yaw:cam.yaw,pitch:cam.pitch,offsetX:(Math.random()<.5?-1:1)*(160+Math.random()*100),offsetY:(Math.random()<.5?-1:1)*(110+Math.random()*40),distance:440+Math.random()*180,phase:Math.random()*TAU};astronautStart=null;
+    intro=reduced?null:{at:null,target:{...cam}};pose=intro?arrivalPose(0,cam):cam;dirty=true;
+    canvas.dataset.intro=reduced?'complete':'opening';
+  }
+  function tooltip(star){
+    focus=star;dirty=true;
+    if(!star||star===me){tag.hidden=true;return;}
+    const label=star.login?`@${star.login}`:`Star #${(star.index+1).toLocaleString('en')}`;
+    const about=star.login?(star.online?'Online now':star.friend?'Your friend · Offline':'Offline'):'An Ente stargazer';
+    tag.innerHTML=`<div><b>${escapeText(label)}</b><small>${escapeText(about)}</small></div>`;tag.hidden=false;
+  }
+  function placeLabels(){
+    if(me&&owner){
+      const p=projectStar(me,pose,width,height),ow=owner.offsetWidth||130,oh=owner.offsetHeight||50;
+      let x=p.x,y=p.y;
+      // Directly behind the viewer has no horizontal bearing. Keep the label
+      // on an edge, rather than incorrectly pinning it to the screen centre.
+      if(p.z<=2&&Math.hypot(x-width/2,y-height/2)<30)x=width-20;
+      owner.style.left=Math.max(ow/2+15,Math.min(width-ow/2-15,x))+'px';owner.style.top=Math.max(80+oh,Math.min(height-26,y-20))+'px';owner.style.transform='translate(-50%,-100%)';owner.dataset.offscreen=String(!p.visible);
+      canvas.dataset.ownerX=String(p.x);canvas.dataset.ownerY=String(p.y);
     }
+    if(focus&&focus!==me){const p=projectStar(focus,pose,width,height);tag.hidden=!p.visible;if(p.visible){const tw=tag.offsetWidth||160,th=tag.offsetHeight||60;tag.style.left=Math.max(tw/2+12,Math.min(width-tw/2-12,p.x))+'px';tag.style.top=Math.max(80+th+16,Math.min(height-16,p.y-14))+'px';tag.style.transform='translate(-50%,-100%)';}}
   }
-  function fit() {
-    const box = stage.getBoundingClientRect();
-    size = Math.max(200, Math.floor(Math.min(box.width, box.height)-68));
-    lens.style.width = lens.style.height = size+'px';
-    dpr = Math.min(2, devicePixelRatio || 1);
-    canvas.width = canvas.height = Math.round(size*dpr);
-    clamp();
+  function moveAstronaut(now){
+    if(!astronaut||!loaded)return;
+    if(astronautStart===null)astronautStart=now;
+    const point=astronautAt(now-astronautStart,astronautAnchor,reduced),p=projectStar(point,pose,width,height);
+    astronaut.hidden=!p.visible;
+    if(!p.visible)return;
+    const focal=height/(2*Math.tan(pose.fov/2)),h=Math.max(18,Math.min(86,58*focal/p.z)),scale=h/SPACE_DUCKY_HEIGHT,w=SPACE_DUCKY_WIDTH*scale;
+    const label=owner&&me?{left:Number.parseFloat(owner.style.left)-(owner.offsetWidth||130)/2,top:Number.parseFloat(owner.style.top)-(owner.offsetHeight||50),right:Number.parseFloat(owner.style.left)+(owner.offsetWidth||130)/2,bottom:Number.parseFloat(owner.style.top)+22}:null;
+    const collision=label&&p.x+w/2+18>label.left&&p.x-w/2-18<label.right&&p.y+h/2+18>label.top&&p.y-h/2-18<label.bottom;
+    astronaut.style.width=w+'px';astronaut.style.height=h+'px';
+    astronaut.style.transform=`translate3d(${p.x-w/2}px,${p.y-h/2}px,0) rotate(${point.roll}deg)`;
+    astronaut.style.opacity=String(collision?0:(pose.exposure??1));
+    astronaut.style.setProperty?.('--ducky-scale',String(scale));
+    astronaut.dataset.depth=String(p.z);astronaut.dataset.worldPosition=JSON.stringify({x:point.x,y:point.y,z:point.z});
   }
-  function clamp() {
-    cam.z = Math.min(zMax, Math.max(zMin(), cam.z));
-    const limit = Math.max(0, R-size*.36/cam.z), d = Math.hypot(cam.x, cam.y);
-    if (d > limit) {cam.x *= limit/d; cam.y *= limit/d;}
-  }
-  function flyTo(x, y, z, ms = 1100) {
-    if (reduced) ms = 0;
-    fly = {x0:cam.x, y0:cam.y, z0:cam.z, x, y, z:Math.min(zMax, Math.max(zMin(), z)), t0:performance.now(), ms};
-    if (!ms) {cam = {x, y, z:fly.z}; clamp(); fly = null;}
-  }
-
-  const sparkle = (x, y, r) => {
-    ctx.beginPath(); ctx.moveTo(x,y-r); ctx.quadraticCurveTo(x+r*.16,y-r*.16,x+r,y); ctx.quadraticCurveTo(x+r*.16,y+r*.16,x,y+r);
-    ctx.quadraticCurveTo(x-r*.16,y+r*.16,x-r,y); ctx.quadraticCurveTo(x-r*.16,y-r*.16,x,y-r); ctx.fill();
-  };
-  const starPath = (x, y, r, turn = 0) => {
-    ctx.beginPath();
-    for (let n = 0; n < 10; n++) {
-      const a = turn-Math.PI/2+n*Math.PI/5, d = n%2 ? r*.5 : r;
-      if (n) ctx.lineTo(x+Math.cos(a)*d, y+Math.sin(a)*d); else ctx.moveTo(x+Math.cos(a)*d, y+Math.sin(a)*d);
+  function draw(now){
+    const started=performance.now(),basis=cameraBasis(pose),focal=height/(2*Math.tan(pose.fov/2));
+    heads.fill(-1);visibleCount=0;let near=0,far=0;
+    const exposure=pose.exposure??1,trail=pose.trails??0;
+    // Exactly one perspective projection and one point per star. The intro,
+    // drag, picking, name labels and constellation edges share this geometry.
+    for(let i=0;i<stars.length;i++){
+      const s=stars[i],dx=s.x-basis.x,dy=s.y-basis.y,dz=s.z-basis.z;
+      const vx=basis.cy*dx-basis.sy*dz,vz0=basis.sy*dx+basis.cy*dz;
+      const vy=basis.cp*dy-basis.sp*vz0,vz=basis.sp*dy+basis.cp*vz0;
+      screenZ[i]=vz;
+      if(vz<=2){screenX[i]=screenY[i]=NaN;continue;}
+      const x=width/2+vx*focal/vz,y=height/2-vy*focal/vz;
+      screenX[i]=x;screenY[i]=y;screenSize[i]=Math.max(.55,Math.min(3.5,Math.sqrt(350/vz)));
+      if(x<0||x>=width||y<0||y>=height)continue;
+      visibleCount++;if(s.radius<250)near++;else if(s.radius>750)far++;
+      const cell=Math.floor(x/CELL)+Math.floor(y/CELL)*columns;links[i]=heads[cell];heads[cell]=i;
     }
-    ctx.closePath();
-  };
-  const inkStar = (x, y, r, fill, turn = 0, line = 2) => {
-    ctx.lineJoin = 'round'; starPath(x,y,r,turn); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = line; ctx.stroke();
-  };
-  function label(text, x, y, {fontSize = 11, fill = TAG, line = '#564537', color = '#332b23'} = {}) {
-    ctx.font = `700 ${fontSize}px system-ui,sans-serif`;
-    const w = ctx.measureText(text).width+16, h = fontSize+9;
-    ctx.fillStyle = fill; ctx.strokeStyle = line; ctx.lineWidth = 1.2;
-    ctx.beginPath(); ctx.roundRect(x-w/2, y, w, h, h/2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, x, y+h/2+.5);
-  }
-
-  function draw(now) {
-    const t = now/1000, z = cam.z, half = size/2, r2 = (half+10)**2;
-    const inside = (px, py, slack = 1) => (px-half)**2+(py-half)**2 <= r2*slack;
-    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalAlpha = 1; ctx.fillStyle = NIGHT; ctx.fillRect(0,0,size,size);
-    {   // a storybook moon
-      const px = sx(1180), py = sy(-1040), r = Math.max(11, 78*z);
-      if ((px-half)**2+(py-half)**2 < (half+r*2)**2) {
-        ctx.save(); ctx.beginPath(); ctx.arc(px,py,r,0,TAU); ctx.fillStyle = '#ffe9a8'; ctx.fill();
-        ctx.strokeStyle = INK; ctx.lineWidth = Math.max(1.6, r*.07); ctx.stroke(); ctx.clip();
-        ctx.beginPath(); ctx.arc(px+r*.48,py-r*.2,r*.92,0,TAU); ctx.fillStyle = NIGHT; ctx.fill(); ctx.stroke(); ctx.restore();
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalAlpha=1;ctx.fillStyle=NIGHT;ctx.fillRect(0,0,width,height);
+    for(let hue=0;hue<4;hue++){
+      ctx.fillStyle=ctx.strokeStyle=COLORS[hue];ctx.globalAlpha=exposure*.78;ctx.lineWidth=.65;ctx.beginPath();
+      for(let i=0;i<stars.length;i++){
+        const s=stars[i];if(s.login||s.hue!==hue||screenZ[i]<=2)continue;
+        const x=screenX[i],y=screenY[i];if(x< -24||x>width+24||y< -24||y>height+24)continue;
+        const r=s.size*screenSize[i];
+        if(s.size>1.6){ctx.drawImage(sprites[hue],x-r*2,y-r*2,r*4,r*4);
+          // Real frame displacement, never a second wrapped star layer.
+          if(trail&&lastPaint&&Number.isFinite(previousX[i])&&Math.hypot(x-previousX[i],y-previousY[i])<160){const scale=trail*Math.min(3,40/Math.max(8,now-lastPaint));ctx.moveTo(x,y);ctx.lineTo(x-(x-previousX[i])*scale,y-(y-previousY[i])*scale);}
+        }else ctx.fillRect(x-r/2,y-r/2,r,r);
       }
+      ctx.stroke();
     }
-    const k = .5+.5*Math.min(1.6, z), dim = Math.min(1, .5+z*.6);
-    if (waiting.count) {   // not lit yet: the dimmest stars, all over the sky
-      ctx.fillStyle = GOLD; ctx.globalAlpha = WAITING*dim;
-      for (let i = 0; i < waiting.count; i++) {
-        const px = half+(waiting.x[i]-cam.x)*z, py = half+(waiting.y[i]-cam.y)*z, dx = px-half, dy = py-half;
-        if (dx*dx+dy*dy > r2) continue;
-        const d = Math.max(.9, waiting.size[i]*k*1.5);
-        ctx.fillRect(px-d/2, py-d/2, d, d);
-      }
+    ctx.lineCap='round';
+    for(const [a,b]of [...lines,...themeLines]){
+      const ai=a.index,bi=b.index;if(screenZ[ai]<=2||screenZ[bi]<=2)continue;
+      const active=focus===a||focus===b;ctx.globalAlpha=(active ? .8 : .34)*(pose.lines??1)*exposure;ctx.strokeStyle=active?PALE:'#e7cf98';ctx.lineWidth=active?1.5:1;
+      ctx.beginPath();ctx.moveTo(screenX[ai],screenY[ai]);ctx.lineTo(screenX[bi],screenY[bi]);ctx.stroke();
     }
-    // stargazers we cannot name: flat dots, dimmed
-    for (let c = 0; c < COLORS.length; c++) {
-      ctx.fillStyle = COLORS[c];
-      for (let group = 0; group < 2; group++) {
-        const list = buckets[c][group];
-        ctx.globalAlpha = (group ? .95 : .6)*dim;
-        for (let n = 0; n < list.length; n++) {
-          const i = list[n], px = half+(anon.x[i]-cam.x)*z, py = half+(anon.y[i]-cam.y)*z, dx = px-half, dy = py-half;
-          if (dx*dx+dy*dy > r2) continue;
-          const d = Math.max(.8, anon.size[i]*k);
-          if (d < 1.7) ctx.fillRect(px-d/2, py-d/2, d, d); else {ctx.beginPath(); ctx.arc(px,py,d/2,0,TAU); ctx.fill();}
-        }
-      }
+    // Quiet warm points make the illustrated chains readable without icons.
+    ctx.fillStyle='#f3dfad';ctx.globalAlpha=.75*(pose.lines??1)*exposure;
+    const endpoints=new Set(themeLines.flat());
+    for(const s of endpoints){const i=s.index;if(screenZ[i]<=2)continue;const x=screenX[i],y=screenY[i];if(x<0||x>width||y<0||y>height)continue;ctx.beginPath();ctx.arc(x,y,1.65,0,TAU);ctx.fill();}
+    for(const s of sky.named){
+      const i=s.index,x=screenX[i],y=screenY[i];if(screenZ[i]<=2||x< -30||x>width+30||y< -30||y>height+30)continue;
+      const active=s===focus,r=(s.me?7:s.featured?3.5:1.7)*Math.min(1.5,screenSize[i]);
+      ctx.globalAlpha=exposure*(s.online||s.me||active?1:.65);ctx.drawImage(s.me?ownerSprite:sprites[s.hue],x-r*2,y-r*2,r*4,r*4);
+      ctx.fillStyle=s.me?OWNER_GREEN:'#ffffff';ctx.beginPath();ctx.arc(x,y,Math.max(.65,r*.18),0,TAU);ctx.fill();
+      if(active&&!s.me){ctx.strokeStyle=GOLD;ctx.lineWidth=1;ctx.globalAlpha=.6*exposure;ctx.beginPath();ctx.arc(x,y,r+5,0,TAU);ctx.stroke();}
     }
-    ctx.fillStyle = PALE;
-    for (let n = 0; n < bright.length; n++) {
-      const i = bright[n], px = sx(anon.x[i]), py = sy(anon.y[i]);
-      if (!inside(px,py)) continue;
-      const wave = reduced ? .6 : .5+.5*Math.sin(t*1.6+anon.phase[i]);
-      ctx.globalAlpha = .42+.28*wave; sparkle(px, py, Math.max(2.4, anon.size[i]*k*1.9)*(.72+.38*wave));
-    }
-    ctx.globalAlpha = 1;
-    if (anon.constellation) {   // the Great Duck
-      ctx.strokeStyle = PALE; ctx.globalAlpha = Math.min(.75, .3+z*.6); ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.beginPath();
-      for (let i = 0; i < DUCK.length; i++) if (i) ctx.lineTo(sx(anon.x[i]), sy(anon.y[i])); else ctx.moveTo(sx(anon.x[i]), sy(anon.y[i]));
-      ctx.closePath(); ctx.stroke(); ctx.globalAlpha = 1;
-      const lx = sx(DUCK_AT[0]+3.9*DUCK_SIZE), ly = sy(DUCK_AT[1]+3.5*DUCK_SIZE);
-      if (z > .3 && inside(lx,ly,.8)) label('The Great Duck', lx, ly, {fontSize:12});
-    }
-    const me = sky.me, mx = me ? sx(me.x) : 0, my = me ? sy(me.y) : 0;
-    if (me && sky.friends.length) {   // your constellation: you and your island friends
-      ctx.strokeStyle = GOLD; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([2,7]); ctx.beginPath();
-      for (const friend of sky.friends) {ctx.moveTo(mx,my); ctx.lineTo(sx(friend.x), sy(friend.y));}
-      ctx.stroke(); ctx.setLineDash([]);
-    }
-    // people who have played here: the signpost star, named once you look closely. Offline ones are dimmed like every
-    // other stargazer; the ones on an island right now are drawn last and glow: a sparkle behind the star and a slow ring.
-    const r = Math.max(2.6, 7.5*k*Math.min(1, .35+z)), lit = Math.max(5.5, r*1.35), named = [], glowing = [];
-    const glow = (px, py, radius, phase, reach) => {
-      const pulse = reduced ? .4 : (t*.6+phase)%1, wave = reduced ? .6 : .5+.5*Math.sin(t*2+phase);
-      ctx.strokeStyle = GOLD; ctx.lineWidth = 2; ctx.globalAlpha = 1-pulse; ctx.beginPath(); ctx.arc(px,py,radius+2+pulse*reach,0,TAU); ctx.stroke();
-      ctx.globalAlpha = .9; ctx.fillStyle = PALE; sparkle(px, py, radius*(1.9+.25*wave)); ctx.globalAlpha = 1;
-    };
-    for (const star of sky.named) {
-      if (star.me) continue;
-      const px = sx(star.x), py = sy(star.y);
-      if (!inside(px,py)) continue;
-      if (star.online) glowing.push([star, px, py]);
-      else {
-        ctx.globalAlpha = OFFLINE;
-        if (r < 3.6) {ctx.fillStyle = GOLD; ctx.beginPath(); ctx.arc(px,py,r,0,TAU); ctx.fill();}
-        else inkStar(px, py, r, GOLD, star.phase*.05, Math.max(1.4, r*.2));
-        ctx.globalAlpha = 1;
-      }
-      if (star !== focus && (z >= .85 || (star.friend && z >= .5))) named.push([Math.hypot(px-half, py-half), star, px, py]);
-    }
-    for (const [star, px, py] of glowing) {glow(px, py, lit, star.phase, 14); inkStar(px, py, lit, GOLD, star.phase*.05, Math.max(1.4, lit*.2));}
-    named.sort((a, b) => (b[1].friend-a[1].friend) || (b[1].online-a[1].online) || a[0]-b[0]);   // friends, then who is online, then the middle
-    for (const [, star, px, py] of named.slice(0, 16)) label('@'+star.login, px, py+(star.online ? lit : r)+7);
-    if (me && inside(mx,my,1.3)) {   // your star: you are here, so it glows, and it is the biggest
-      const mr = Math.max(9, 12*k);
-      glow(mx, my, mr, 0, 20);
-      inkStar(mx, my, mr, GOLD, 0, Math.max(2, mr*.2));
-      ctx.fillStyle = '#ffe9a8'; ctx.beginPath(); ctx.ellipse(mx-mr*.2, my-mr*.22, mr*.17, mr*.1, -.6, 0, TAU); ctx.fill();
-      if (focus !== me) label('@'+me.login, mx, my+mr+9, {fontSize:12.5});
-    }
-    for (const [i, t0] of born) {   // a star that was just lit
-      const a = (now-t0)/1500;
-      if (a >= 1 || i >= anon.count) {born.delete(i); continue;}
-      const px = sx(anon.x[i]), py = sy(anon.y[i]);
-      ctx.strokeStyle = PALE; ctx.globalAlpha = 1-a; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(px,py,5+a*34,0,TAU); ctx.stroke(); ctx.globalAlpha = 1;
-      inkStar(px, py, 7+3*(1-a), GOLD, a*1.2, 1.6);
-    }
-    if (!shooting && queue.length) {const i = queue.shift(); if (i < anon.count) shooting = {i, fx:size*(.1+Math.random()*.25), fy:-20, t0:now, ms:reduced ? 1 : 950};}
-    if (shooting) {   // the shooting star that brings a new stargazer's star
-      const a = Math.min(1, (now-shooting.t0)/shooting.ms), e = a*a*(3-2*a), ex = sx(anon.x[shooting.i]), ey = sy(anon.y[shooting.i]);
-      const px = shooting.fx+(ex-shooting.fx)*e, py = shooting.fy+(ey-shooting.fy)*e, angle = Math.atan2(ey-shooting.fy, ex-shooting.fx);
-      const length = 70*Math.sin(a*Math.PI)+18, nx = Math.cos(angle+Math.PI/2)*5, ny = Math.sin(angle+Math.PI/2)*5;
-      ctx.beginPath(); ctx.moveTo(px+nx,py+ny); ctx.lineTo(px-Math.cos(angle)*length, py-Math.sin(angle)*length); ctx.lineTo(px-nx,py-ny); ctx.closePath();
-      ctx.fillStyle = PALE; ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
-      inkStar(px, py, 9, GOLD, a*5, 1.8);
-      if (a >= 1) {born.set(shooting.i, now); shooting = null;}
-    }
-    if (focus) placeTag();
+    ctx.globalAlpha=1;placeLabels();
+    previousX.set(screenX);previousY.set(screenY);lastPaint=now;
+    canvas.dataset.totalStars=String(stars.length);canvas.dataset.backgroundStars=String(stars.length-sky.named.length);canvas.dataset.namedStars=String(sky.named.length);canvas.dataset.visibleStars=String(visibleCount);canvas.dataset.nearStars=String(near);canvas.dataset.farStars=String(far);canvas.dataset.resolution=String(dpr);
+    canvas.dataset.spaceMode='surround-3d';canvas.dataset.view='inside';canvas.dataset.camera=JSON.stringify({x:pose.x,y:pose.y,z:pose.z,yaw:pose.yaw,pitch:pose.pitch,fov:pose.fov});
+    canvas.dataset.namedTargets=JSON.stringify(sky.named.filter(s=>s.featured&&screenZ[s.index]>2&&screenX[s.index]>=0&&screenX[s.index]<width&&screenY[s.index]>=0&&screenY[s.index]<height).map(s=>({login:s.login,x:screenX[s.index],y:screenY[s.index]})));
+    canvas.dataset.hoveredStar=focus?.login??'';canvas.dataset.paintCount=String(++paints);canvas.dataset.paintMode=intro?'arrival':fly||Math.hypot(velocity.yaw,velocity.pitch)>.00001?'camera':'on-demand';
+    canvas.dataset.intro=intro?(pose.progress<.1?'opening':pose.progress<.76?'flight':'resolve'):'complete';canvas.dataset.introProgress=String(pose.progress??1);canvas.dataset.introStars=String(stars.length);canvas.dataset.constellationEdges=String(lines.length+themeLines.length);
+    timings.push(performance.now()-started);if(timings.length>120)timings.shift();canvas.dataset.drawMs=JSON.stringify({mean:timings.reduce((a,b)=>a+b,0)/timings.length,p95:[...timings].sort((a,b)=>a-b)[Math.floor(timings.length*.95)]});dirty=false;
   }
-  function frame(now) {
-    if (!running) return;
-    if (fly) {
-      const a = fly.ms ? Math.min(1, (now-fly.t0)/fly.ms) : 1, e = ease(a);
-      cam.z = Math.exp(Math.log(fly.z0)+(Math.log(fly.z)-Math.log(fly.z0))*e);
-      cam.x = fly.x0+(fly.x-fly.x0)*e; cam.y = fly.y0+(fly.y-fly.y0)*e; clamp();
-      if (a >= 1) fly = null;
+  function frame(now){
+    if(!running)return;
+    const dt=Math.min(40,lastFrame?now-lastFrame:16.7);lastFrame=now;
+    if(intro){if(intro.at===null)intro.at=now;pose=arrivalPose(now-intro.at,intro.target);dirty=true;if(pose.done){cam={...intro.target};pose=cam;intro=null;}}
+    else{
+      if(fly){const t=Math.min(1,(now-fly.at)/650),e=ease(t);cam={...fly.to,yaw:fly.from.yaw+angleDelta(fly.from.yaw,fly.to.yaw)*e,pitch:fly.from.pitch+(fly.to.pitch-fly.from.pitch)*e,fov:fly.from.fov+(fly.to.fov-fly.from.fov)*e};dirty=true;if(t===1)fly=null;}
+      if(!pointers.size&&Math.hypot(velocity.yaw,velocity.pitch)>.00001){cam.yaw+=velocity.yaw*dt;cam.pitch+=velocity.pitch*dt;const decay=Math.exp(-dt/100);velocity.yaw*=decay;velocity.pitch*=decay;clamp();dirty=true;}
+      pose=cam;
     }
-    draw(now);
-    raf = requestAnimationFrame(frame);
+    if(dirty)draw(now);moveAstronaut(now);raf=requestAnimationFrame(frame);
   }
-
-  // What is under the pointer: a named star first, then the nearest unnamed one. Returns a star object.
-  function pick(px, py) {
-    let best = null, distance = 22;
-    for (const star of sky.named) {const d = Math.hypot(sx(star.x)-px, sy(star.y)-py); if (d < distance) {distance = d; best = star;}}
-    if (best) return best;
-    const wx = cam.x+(px-size/2)/cam.z, wy = cam.y+(py-size/2)/cam.z, cx = (wx+R)/CELL|0, cy = (wy+R)/CELL|0, reach = Math.max(1, Math.ceil(16/cam.z/CELL));
-    let hit = -1; distance = 16;
-    for (let gx = cx-reach; gx <= cx+reach; gx++) for (let gy = cy-reach; gy <= cy+reach; gy++) {
-      for (const i of grid.get(gx*256+gy) ?? []) {const d = Math.hypot(sx(anon.x[i])-px, sy(anon.y[i])-py); if (d < distance) {distance = d; hit = i;}}
+  function pick(x,y){
+    if(!loaded)return null;
+    let selected=null,distance=12;
+    const cx=Math.floor(x/CELL),cy=Math.floor(y/CELL);
+    for(let gy=Math.max(0,cy-1);gy<=Math.min(rows-1,cy+1);gy++)for(let gx=Math.max(0,cx-1);gx<=Math.min(columns-1,cx+1);gx++)for(let i=heads[gx+gy*columns];i>=0;i=links[i]){
+      const s=stars[i],d=Math.hypot(screenX[i]-x,screenY[i]-y),score=d-(s.login?4:0);if(score<distance){selected=s;distance=score;}
     }
-    if (hit >= 0) return {anonymous:hit, x:anon.x[hit], y:anon.y[hit]};
-    let wait = -1; distance = 12;   // a stargazer's star wins over an unlit one beside it
-    for (let i = 0; i < waiting.count; i++) {const d = Math.hypot(sx(waiting.x[i])-px, sy(waiting.y[i])-py); if (d < distance) {distance = d; wait = i;}}
-    return wait < 0 ? null : {waiting:wait, x:waiting.x[wait], y:waiting.y[wait]};
+    return selected;
   }
-  const same = (a, b) => a === b || (a && b && ((a.anonymous !== undefined && a.anonymous === b.anonymous) || (a.waiting !== undefined && a.waiting === b.waiting)));
-  function show(star) {
-    if (same(star, focus)) return;
-    focus = star;
-    if (!star) {tag.hidden = true; return;}
-    if (star.waiting !== undefined) {
-      tag.innerHTML = `<span>${starIcon(WAITING)}</span><div><b>Not lit yet</b><small>Waiting for someone to star Ente</small></div>`;
-    } else if (star.anonymous !== undefined) {
-      tag.innerHTML = `<span>${starIcon(OFFLINE)}</span><div><b>Star #${(sky.named.length+star.anonymous+1).toLocaleString('en')}</b><small>${star.anonymous < anon.constellation ? 'Part of the Great Duck' : 'Offline'}</small></div>`;
-    } else {
-      const about = star.me ? 'Your star' : [star.online ? 'Online now' : 'Offline', star.friend ? 'your friend' : ''].filter(Boolean).join(' · ');
-      tag.innerHTML = `<span>${starIcon(star.online ? 1 : OFFLINE)}</span><div><b>@${escapeText(star.login)}</b><small>${about}</small></div>`;
-    }
-    tag.hidden = false; placeTag();
+  function turn(dx,dy,ms=16.7){
+    const scale=cam.fov/height;cam.yaw-=dx*scale;cam.pitch+=dy*scale;clamp();pose=cam;dirty=true;
+    velocity=reduced?{yaw:0,pitch:0}:{yaw:-dx*scale/Math.max(8,ms)*.35,pitch:dy*scale/Math.max(8,ms)*.35};
   }
-  function placeTag() {
-    const px = sx(focus.x), py = sy(focus.y);
-    if ((px-size/2)**2+(py-size/2)**2 > (size/2)**2) {tag.hidden = true; return;}
-    tag.hidden = false;
-    tag.style.left = Math.min(size-70, Math.max(70, px))+'px'; tag.style.top = py+'px';
-    tag.style.transform = py < 74 ? 'translate(-50%,18px)' : 'translate(-50%,calc(-100% - 18px))';
-  }
-
-  // drag to look around, pinch or wheel to zoom, tap to see whose star it is
-  const points = new Map(), cleanups = [];
-  let moved = 0, pinch = 0;
-  const local = event => {const box = lens.getBoundingClientRect(); return [event.clientX-box.left, event.clientY-box.top];};
-  const listen = (target, name, fn, options) => {target.addEventListener(name, fn, options); cleanups.push(() => target.removeEventListener(name, fn, options));};
-  function zoomAt(px, py, factor) {
-    const wx = cam.x+(px-size/2)/cam.z, wy = cam.y+(py-size/2)/cam.z;
-    cam.z = Math.min(zMax, Math.max(zMin(), cam.z*factor));
-    cam.x = wx-(px-size/2)/cam.z; cam.y = wy-(py-size/2)/cam.z; clamp();
-  }
-  listen(lens, 'pointerdown', event => {
-    lens.setPointerCapture(event.pointerId); points.set(event.pointerId, local(event)); moved = 0; fly = null;
-    if (points.size === 2) {const [a,b] = [...points.values()]; pinch = Math.hypot(a[0]-b[0], a[1]-b[1]);}
+  function zoom(factor){interrupt();cam.fov/=factor;clamp();pose=cam;}
+  function flyTo(target){interrupt();pinned=false;tooltip(null);if(reduced){cam=target;pose=cam;dirty=true;}else fly={from:{...cam},to:target,at:performance.now()};}
+  function findMe(){if(!me)return;const b=cameraBasis(cam),target=lookAt(me,{...cam,x:b.x,y:b.y,z:b.z});target.x=cam.x;target.y=cam.y;target.z=cam.z;flyTo(target);}
+  function whole(){flyTo({...cam,x:0,y:0,z:0,fov:DEFAULT_FOV});}
+  const local=e=>{const r=lens.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top,at:performance.now()};};
+  let moved=0,gestureTap=false;
+  listen(lens,'pointerdown',e=>{if(e.target!==canvas)return;interrupt();canvas.focus?.({preventScroll:true});lens.setPointerCapture(e.pointerId);pointers.set(e.pointerId,local(e));moved=0;gestureTap=pointers.size===1;});
+  listen(lens,'pointermove',e=>{
+    const p=local(e),previous=pointers.get(e.pointerId);
+    if(!previous){if(!intro&&!pinned&&e.pointerType==='mouse'){const hit=e.target===canvas?pick(p.x,p.y):null;if(hit!==focus)tooltip(hit);}return;}
+    const old=[...pointers.values()];pointers.set(e.pointerId,p);
+    if(pointers.size===1){const dx=p.x-previous.x,dy=p.y-previous.y;turn(dx,dy,p.at-previous.at);moved+=Math.hypot(dx,dy);if(moved>5){tooltip(null);lens.classList.add('dragging');}}
+    else if(pointers.size===2){const next=[...pointers.values()],before=Math.hypot(old[0].x-old[1].x,old[0].y-old[1].y),after=Math.hypot(next[0].x-next[1].x,next[0].y-next[1].y);if(before>0){cam.fov*=before/Math.max(1,after);clamp();dirty=true;}gestureTap=false;velocity={yaw:0,pitch:0};}
   });
-  listen(lens, 'pointermove', event => {
-    const p = local(event);
-    if (!points.has(event.pointerId)) {if (event.pointerType === 'mouse' && !pinned) show(pick(p[0], p[1])); return;}
-    const previous = points.get(event.pointerId); points.set(event.pointerId, p);
-    if (points.size === 1) {
-      cam.x -= (p[0]-previous[0])/cam.z; cam.y -= (p[1]-previous[1])/cam.z; moved += Math.abs(p[0]-previous[0])+Math.abs(p[1]-previous[1]);
-      if (moved > 6) lens.classList.add('dragging');
-      clamp();
-    } else if (points.size === 2) {
-      const [a,b] = [...points.values()], d = Math.hypot(a[0]-b[0], a[1]-b[1]);
-      if (pinch) zoomAt((a[0]+b[0])/2, (a[1]+b[1])/2, d/pinch);
-      pinch = d; moved = 99;
-    }
+  const release=e=>{if(!pointers.has(e.pointerId))return;const p=local(e);pointers.delete(e.pointerId);lens.classList.remove('dragging');if(e.type==='pointerup'&&gestureTap&&moved<5){const hit=pick(p.x,p.y);pinned=e.pointerType!=='mouse'&&Boolean(hit);tooltip(hit);}if(e.type==='pointercancel')velocity={yaw:0,pitch:0};if(!pointers.size)gestureTap=false;};
+  listen(lens,'pointerup',release);listen(lens,'pointercancel',release);listen(lens,'pointerleave',()=>{if(!pinned&&!pointers.size)tooltip(null);});
+  listen(lens,'wheel',e=>{e.preventDefault();zoom(Math.exp(-e.deltaY*.0012));},{passive:false});
+  listen(canvas,'keydown',e=>{
+    if(e.key.toLowerCase()==='r'){e.preventDefault();prepareIntro();return;}
+    if(!['+','=','-','0','Home','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+    e.preventDefault();interrupt();if(e.key==='Home')findMe();else if(e.key==='0')whole();else if(['+','=','-'].includes(e.key))zoom(e.key==='-'?1/1.2:1.2);else turn(e.key==='ArrowLeft'?80:e.key==='ArrowRight'?-80:0,e.key==='ArrowUp'?-60:e.key==='ArrowDown'?60:0);velocity={yaw:0,pitch:0};
   });
-  const release = event => {
-    if (!points.has(event.pointerId)) return;
-    const p = local(event); points.delete(event.pointerId); lens.classList.remove('dragging'); pinch = 0;
-    if (moved <= 6) {const star = pick(p[0], p[1]); pinned = Boolean(star); focus = undefined; show(star);}
-  };
-  listen(lens, 'pointerup', release); listen(lens, 'pointercancel', release);
-  listen(lens, 'pointerleave', () => {if (!pinned) show(null);});
-  listen(lens, 'wheel', event => {event.preventDefault(); fly = null; zoomAt(...local(event), Math.exp(-event.deltaY*.0016));}, {passive:false});
-  listen(window, 'resize', () => {if (running) fit();});
-
-  function findMe() {
-    if (!sky.me) return;
-    pinned = true; focus = undefined; show(sky.me); flyTo(sky.me.x, sky.me.y, 1.15, 1200);
-  }
+  listen(canvas,'dblclick',whole);
   return {
-    start() {if (running) return; running = true; fit(); cam = {x:0, y:0, z:zMin()}; raf = requestAnimationFrame(frame);},
-    setData(data) {
-      const before = loaded ? sky.total : null;
-      sky = readSky(data);
-      const count = sky.total-sky.named.length;
-      if (count !== anon.count) {const was = anon.count; anon = anonymousStars(count); index(); if (before !== null && sky.total > before) for (let i = Math.max(was, count-3); i < count; i++) queue.push(i);}
-      if (before !== null && sky.total > before) onNews(`Someone just starred Ente. Star #${sky.total.toLocaleString('en')} is lit.`);
-      if (focus && focus.anonymous === undefined && focus.waiting === undefined) {const again = sky.named.find(star => star.accountId === focus.accountId) ?? null; focus = undefined; show(again);}
-      if (!loaded) {loaded = true; if (sky.me) setTimeout(() => {if (running) findMe();}, reduced ? 0 : 700);}
+    start(){if(running)return;running=true;fit();resizeObserver=new ResizeObserver(fit);resizeObserver.observe(stage);raf=requestAnimationFrame(frame);},
+    setData(data){
+      const previousTotal=loaded?sky.total:null,focusedId=focus?.accountId;
+      sky=readSky(data);const named=sky.named.map((s,i)=>({...s,...universePosition(hashAccount('person:'+s.accountId)),featured:i<60||s.me||s.friend,index:i}));
+      sky={...sky,named};me=named.find(s=>s.me)??null;sky.me=me;sky.friends=named.filter(s=>s.friend);
+      stars=[...named];for(let i=named.length;i<sky.total;i++)stars.push({...universePosition(hashAccount('anonymous:'+i)),index:i});
+      const total=stars.length;screenX=new Float32Array(total);screenY=new Float32Array(total);screenZ=new Float32Array(total);screenSize=new Float32Array(total);previousX=new Float32Array(total);previousY=new Float32Array(total);previousX.fill(NaN);previousY.fill(NaN);links=new Int32Array(total);lastPaint=0;
+      // Reuse the small-chain builder in angular space. Edges connect nearby
+      // directions only, with a 3D chord drawn at the actual endpoint depths.
+      const candidates=named.filter(s=>s.featured).map(s=>({...s,x:s.longitude*1800,y:s.latitude*1800}));
+      lines=starConstellations(candidates).map(([a,b])=>[stars[a.index],stars[b.index]]).filter(([a,b])=>(a.x*b.x+a.y*b.y+a.z*b.z)/(a.radius*b.radius)>.92);
+      const heading=me?{yaw:Math.atan2(me.x,me.z),pitch:Math.atan2(me.y,Math.hypot(me.x,me.z))}:{yaw:0,pitch:0};
+      const themed=themedConstellations(stars,heading);themeLines=themed.lines;canvas.dataset.themedConstellations=themed.groups.map(g=>g.name).join(',');
+      focus=focusedId?named.find(s=>s.accountId===focusedId)??null:null;if(focus)tooltip(focus);else tag.hidden=true;
+      if(!loaded){loaded=true;prepareIntro();}else if(previousTotal!==null&&sky.total>previousTotal)onNews(`Someone just starred Ente. ${sky.total.toLocaleString('en')} stars in our sky.`);
+      dirty=true;
     },
-    findMe,
-    zoom(factor) {flyTo(cam.x, cam.y, cam.z*factor, 350);},
-    whole() {pinned = false; show(null); flyTo(0, 0, zMin(), 900);},
-    constellation() {   // frame you and your friends
-      const stars = [sky.me, ...sky.friends].filter(Boolean);
-      if (stars.length < 2) return findMe();
-      const xs = stars.map(star => star.x), ys = stars.map(star => star.y);
-      const w = Math.max(...xs)-Math.min(...xs), h = Math.max(...ys)-Math.min(...ys);
-      pinned = false; show(null);
-      flyTo((Math.max(...xs)+Math.min(...xs))/2, (Math.max(...ys)+Math.min(...ys))/2, size*.72/Math.max(w, h, 200), 1100);
-    },
-    dispose() {running = false; cancelAnimationFrame(raf); for (const cleanup of cleanups) cleanup(); tag.hidden = true;},
+    findMe,whole,zoom,replayIntro:prepareIntro,constellation:findMe,
+    dispose(){running=false;cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const fn of cleanups)fn();pointers.clear();stars=[];lines=[];themeLines=[];intro=fly=null;tag.hidden=true;if(astronaut)astronaut.hidden=true;}
   };
 }

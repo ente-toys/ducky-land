@@ -10,7 +10,7 @@ import React, {act} from 'react';
 const {outputFiles:[bundle]} = await build({
   entryPoints:[fileURLToPath(new URL('../src/pixi/PixiPage.jsx',import.meta.url))],
   bundle:true, packages:'external', jsx:'automatic', format:'esm', write:false,
-  loader:{'.css':'empty'}, define:{'import.meta.env.DEV':'false'},
+  loader:{'.css':'empty','.svg':'text'}, define:{'import.meta.env.DEV':'false'},
   plugins:[{name:'headless-island',setup(build) {
     build.onLoad({filter:/\/src\/pixi\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
     build.onLoad({filter:/\/src\/pixi\/engine\.js$/},()=>({contents:`

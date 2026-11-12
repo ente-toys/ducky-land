@@ -380,36 +380,49 @@
 
 .pixi-host{position:relative;z-index:0}.pixi-earth-view>canvas{position:absolute;inset:0}.pixi-earth-view .heart-overlay{pointer-events:none}.pixi-earth-find{border:1px solid #8b754b;border-radius:24px;padding:12px 20px;background:#fff1cd;color:#334741;font:600 14px system-ui;cursor:pointer}.pixi-earth-find:focus-visible{outline:3px solid #ffda6d;outline-offset:3px}
 
-/* The telescope's night sky (IslandStargaze.jsx): a round lens in the telescope's own colours, over the dimmed island */
-.pixi-stargaze { box-sizing: border-box; width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; border: 0; background: transparent; color: #332b23; overflow: hidden; font: 14px/1.4 system-ui, sans-serif;
-  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
-.pixi-stargaze[open] { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; }
-.pixi-stargaze::backdrop { background: #1f3a35d9; }
-.pixi-stargaze-card { justify-self: start; max-width: 100%; padding: 12px 16px; border: 1px solid #564537; border-radius: 12px; background: #fff9df; box-shadow: 0 3px 0 #56453755; }
-.pixi-stargaze-card h2 { margin: 0; font-size: 21px; line-height: 1.2; font-variant-numeric: tabular-nums; }
-.pixi-stargaze-card p { margin: 1px 0 0; color: #6b5d4f; }
-.pixi-stargaze-card ul { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 9px 0 0; padding: 9px 0 0; list-style: none; border-top: 1px solid #56453740; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.pixi-stargaze-card li { display: flex; align-items: center; gap: 6px; }
-.pixi-stargaze-card li b { font-weight: 800; }
-.pixi-stargaze-card svg { flex: none; }
-.pixi-stargaze-stage { position: relative; min-width: 0; min-height: 0; display: grid; place-items: center; }
-.pixi-stargaze-lens { position: relative; border-radius: 50%; overflow: hidden; touch-action: none; cursor: grab; background: #16323c;
-  box-shadow: 0 0 0 3.5px #39472d, 0 0 0 10px #42718d, 0 0 0 13.5px #39472d, 0 0 0 25px #fff0c7, 0 0 0 28.5px #39472d, 0 8px 0 28.5px #173e3999;
-  animation: pixi-stargaze-open .5s cubic-bezier(.34,1.3,.64,1); }
-.pixi-stargaze-lens.dragging { cursor: grabbing; }
-.pixi-stargaze-lens canvas { display: block; width: 100%; height: 100%; }
-.pixi-stargaze-tag { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 9px; max-width: min(290px, 84%); padding: 6px 13px 6px 7px; border: 1px solid #564537; border-radius: 12px; background: #fff9df; box-shadow: 0 3px 0 #56453755; pointer-events: none; font-size: 13px; line-height: 1.25; white-space: nowrap; }
-.pixi-stargaze-tag[hidden] { display: none; }
-.pixi-stargaze-tag > span { flex: none; display: grid; place-items: center; }
-.pixi-stargaze-tag b { display: block; font-size: 14px; }
-.pixi-stargaze-tag small { color: #6b5d4f; font-size: 13px; font-weight: 600; }
-.pixi-stargaze-news { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); max-width: 82%; margin: 0; padding: 9px 14px; border: 1px solid #564537; border-radius: 12px; background: #fff9df; box-shadow: 0 3px 0 #56453755; font-weight: 700; text-align: center; pointer-events: none; }
-.pixi-stargaze-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
-.pixi-stargaze-actions button { display: inline-flex; align-items: center; gap: 9px; min-width: 44px; min-height: 44px; justify-content: center; padding: 8px 14px; border: 1px solid #564537; border-radius: 10px; background: #ffda69; color: #332b23; box-shadow: 0 3px 0 #564537; font: 600 14px/1.35 system-ui, sans-serif; cursor: pointer; }
-.pixi-stargaze-actions button.pixi-stargaze-quiet { background: #fff9df; }
-.pixi-stargaze-actions button:active { transform: translateY(2px); box-shadow: 0 1px 0 #564537; }
-.pixi-stargaze-actions button:focus-visible { outline: 3px solid #fff9df; outline-offset: 2px; }
-.pixi-stargaze-actions kbd { padding: 2px 7px; border: 1px solid #56453799; border-radius: 6px; background: #fff9df; font: 600 12px/1.3 system-ui, sans-serif; }
+/* Telescope: island cream panels over permanent 3D space, no control dock. */
+.pixi-stargaze{box-sizing:border-box;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:0;border:0;overflow:hidden;background:#000;color:#302c24;font:14px/1.35 ui-rounded,system-ui,sans-serif}
+.pixi-stargaze[open]{display:block}.pixi-stargaze::backdrop{background:#000}
+.pixi-stargaze-stage,.pixi-stargaze-lens{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0}
+.pixi-stargaze-lens{overflow:hidden;touch-action:none;cursor:grab;background:#000}.pixi-stargaze-lens.dragging{cursor:grabbing}
+.pixi-stargaze-lens canvas{display:block;width:100%;height:100%;outline:none}.pixi-stargaze-lens canvas:focus-visible{outline:2px solid #ffda6d;outline-offset:-4px}
+.pixi-stargaze-bar{position:absolute;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:17px;min-height:52px;max-width:calc(100% - 168px);box-sizing:border-box;padding:11px 21px;white-space:nowrap;color:#332b23;background:#fff9df;border:1.5px solid #564537;border-radius:18px;box-shadow:0 3px 0 #56453788}
+.pixi-stargaze-bar h2{margin:0;font-size:16px;line-height:1.2;letter-spacing:-.025em;font-weight:750}
+.pixi-stargaze-total{font-size:16px;font-weight:700;padding-left:17px;border-left:1px solid #b9a77a;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pixi-stargaze-online{display:flex;align-items:center;gap:7px;padding-left:17px;border-left:1px solid #b9a77a;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:#66583b}
+.pixi-stargaze-online i{width:8px;height:8px;border-radius:50%;background:#08c225;border:1px solid #387744}
+.pixi-stargaze-close{position:absolute;z-index:12;right:max(20px,env(safe-area-inset-right));top:max(20px,env(safe-area-inset-top));display:grid;place-items:center;width:44px;height:44px;border:1.5px solid #564537;border-radius:15px;background:#fff9df;color:#332b23;box-shadow:0 3px 0 #56453788;cursor:pointer}
+.pixi-stargaze-close:hover{background:#ffedb1}.pixi-stargaze-close:active{box-shadow:0 1px 0 #56453788}
+.pixi-stargaze-optics{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 65%,#00000012 85%,#00000055 100%)}
+.pixi-stargaze-hint{position:absolute;z-index:3;bottom:17px;left:50%;transform:translateX(-50%);text-align:center;color:#ddccaa;font-size:11px;font-weight:500;pointer-events:none;line-height:1.5;white-space:nowrap}
+.pixi-stargaze-hint small{display:block;font-size:9px;opacity:.6}.pixi-stargaze-touch-hint{display:none}
+.pixi-stargaze-you,.pixi-stargaze-tag{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;max-width:min(290px,80vw);padding:8px 13px;border:1.5px solid #39472d;border-radius:14px;background:#fff3ce;color:#302c24;box-shadow:0 3px 0 #0007;font:700 14px/1.2 ui-rounded,system-ui,sans-serif;letter-spacing:-.015em;white-space:nowrap}
+.pixi-stargaze-you{cursor:pointer;pointer-events:auto;z-index:5;min-height:45px}
+.pixi-stargaze-you::after,.pixi-stargaze-tag::after{content:'';position:absolute;bottom:-6px;left:calc(50% - 5px);width:10px;height:10px;transform:rotate(45deg);background:#fff3ce;border-right:1.5px solid #39472d;border-bottom:1.5px solid #39472d}
+.pixi-stargaze-you[hidden],.pixi-stargaze-tag[hidden]{display:none}
+.pixi-stargaze-you small,.pixi-stargaze-tag small{display:block;margin-top:3px;font-size:11px;font-weight:500;color:#66583b}
+.pixi-stargaze-you svg,.pixi-stargaze-tag svg{flex:none}.pixi-stargaze-tag{pointer-events:none;z-index:6}.pixi-stargaze-tag b{display:block;font-size:14px}
+.pixi-stargaze-edge-arrow{display:none}.pixi-stargaze-you[data-offscreen=true] .pixi-stargaze-edge-arrow{display:inline}
+.pixi-stargaze-news{position:absolute;left:50%;top:90px;transform:translateX(-50%);max-width:82%;margin:0;padding:9px 14px;border:1.5px solid #39472d;border-radius:12px;background:#fff3ce;font-weight:650;text-align:center;pointer-events:none;z-index:7}
+.pixi-stargaze button:focus-visible{outline:3px solid #fff9df;outline-offset:3px}.pixi-stargaze button:active{translate:0 1px}
+@media(max-width:650px){
+ .pixi-stargaze-bar{top:max(12px,env(safe-area-inset-top));left:12px;right:70px;transform:none;max-width:none;flex-wrap:wrap;gap:6px 12px;padding:10px 14px;min-height:65px;border-radius:16px}
+ .pixi-stargaze-bar h2{flex-basis:100%;font-size:15px}.pixi-stargaze-total{padding:0;border:0;font-size:14px}.pixi-stargaze-online{padding:0 0 0 12px;font-size:11px;gap:6px}.pixi-stargaze-online i{width:7px;height:7px}
+ .pixi-stargaze-close{top:max(14px,env(safe-area-inset-top));right:12px}.pixi-stargaze-hint{bottom:13px;font-size:10px}
+ .pixi-stargaze-you,.pixi-stargaze-tag{font-size:12px;padding:7px 10px}.pixi-stargaze-you small,.pixi-stargaze-tag small{font-size:10px}
+}
+@media(hover:none){.pixi-stargaze-desktop-hint{display:none}.pixi-stargaze-touch-hint{display:inline}}
+
+/* Selected direction 03: deep green owner capsule and matching green star. */
+.pixi-stargaze-you{border:1.5px solid #08c225;border-radius:999px;background:#071d0beF;color:#edfff2;padding:8px 16px;gap:9px;box-shadow:0 3px 14px #0008}
+.pixi-stargaze-you small{color:#9fc7ae}
+.pixi-stargaze-you::after{background:#071d0b;border-color:#08c225}
+.pixi-stargaze-you:focus-visible{outline:2px solid #a0edbc;outline-offset:4px}
+.pixi-space-ducky{position:absolute;top:0;left:0;z-index:3;pointer-events:none;transform-origin:50% 50%;will-change:transform;transition:opacity .25s ease}
+.pixi-space-ducky[hidden]{display:none}
+.pixi-space-ducky-art{width:2679.98px;height:2804.81px;transform:scale(var(--ducky-scale, .05));transform-origin:0 0}
+.pixi-space-ducky-eye{transform-box:fill-box;transform-origin:center;animation:pixi-space-blink 5.3s linear infinite}
+@keyframes pixi-space-blink{0%,48%,52%,93%,97%,100%{transform:rotate(-25deg) scaleY(1)}50%,95%{transform:rotate(-25deg) scaleY(.075)}}
+@media(prefers-reduced-motion:reduce){.pixi-space-ducky-eye{animation:none}.pixi-space-ducky{will-change:auto}}
+
 .pixi-travel-action:disabled { opacity: .7; cursor: default; }
-@keyframes pixi-stargaze-open { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .pixi-stargaze-lens { animation: none; } }
