@@ -899,7 +899,7 @@
         },
         {
           "path": "src/world/home/home-building-lines.js",
-          "sha256": "07c9389ac81a954f471c3de19c06e129239f5a95194500c636bfd6f30827f2de"
+          "sha256": "a7d24f8b11c793206e593ee944f2387e65b926ed6c5903cd317d5d1833ac7ff0"
         },
         {
           "path": "src/world/home/home-buildings.js",
@@ -1010,7 +1010,7 @@
           "sha256": "46b255c73cb26fbe258412408ef50075b8f699a44f2b0a1de58f4c8378442162"
         }
       ],
-      "sha256": "64d7f692b54971df18dd395f6649627fd72ddd25dc3a3dd71f37a99f50173a11"
+      "sha256": "936c7f9e44737b8cc17258191fa73f59fc89fae08c9f5ae1d58db428dfccfd40"
     },
     "groundSha256": "5c0e19c7055d7b907164d27131d71813409550609b8a8a2a20c5d1787f3333cc",
     "src": "/pixi-art/globe/home.svg",

@@ -34,7 +34,7 @@ export function solidLineTest(obstacles,pad=16) {
           if((ax+t*ux)**2+(ay+t*uy)**2<1)return false;
         }
       }
-      if(x===ex&&y===ey)return true;
+      if(x===ex&&y===ey||Math.min(nextX,nextY)>1)return true;   // a line through an exact grid corner steps past the end cell
       if(nextX<nextY){x+=sx;nextX+=stepX;}else if(nextY<nextX){y+=sy;nextY+=stepY;}else{x+=sx;y+=sy;nextX+=stepX;nextY+=stepY;}
     }
   };
