@@ -17,7 +17,7 @@ const notices = {
   connecting:'Connecting to the island…',
   reconnecting:'Reconnecting…',
   'spectators-full':'Live view is full.',
-  'players-full':'The island is full. You can still watch.',
+  'players-full':'There’s no room to join right now. You can still watch.',
   'taken-over':'Your duck is playing in another tab.',
   expired:'Your session expired.',
   'star-required':'Star ente/ente to play. You can still watch.',
@@ -44,6 +44,7 @@ export default function PixiPage() {
   const [status, setStatus] = useState('connecting');
   const [session, setSession] = useState(null);
   const [notice, setNotice] = useState('');
+  const [arrival, setArrival] = useState('');
   const [signingOut, setSigningOut] = useState(false);
   const [starDialogOpen, setStarDialogOpen] = useState(true);
   const [indoors,setIndoors] = useState(false);
@@ -70,6 +71,7 @@ export default function PixiPage() {
       url.searchParams.delete('auth');
       history.replaceState(history.state, '', url);
     }
+    let arrivalTimer;
     const client = new RoomClient(state => {
       setStatus(state);
       if (['connecting','reconnecting','expired','signed-out','spectators-full'].includes(state)) {
@@ -83,6 +85,12 @@ export default function PixiPage() {
     }, setTravelNotice);
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
+      randomArrival:offline, onArrival:name => {
+        setArrival(`Landed in ${name}`);
+        clearTimeout(arrivalTimer);
+        arrivalTimer = setTimeout(() => setArrival(''), 4000);
+        if (offline) setTravel({islandId:island.current.islandId,mode:'walking',available:0});
+      },
       externalOverview:true,transparent:true,renderResolution:1,onError:() => setError(true),onInteriorChange:setIndoors});
     island.current = game;
     let earth=null,cancelled=false;
@@ -102,6 +110,7 @@ export default function PixiPage() {
     return () => {
       cancelled=true;earth?.destroy();
       abort.abort();
+      clearTimeout(arrivalTimer);
       client.dispose();
       game.dispose();
       island.current = null;
@@ -136,7 +145,7 @@ export default function PixiPage() {
       <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>
     </div>
     {!error && <aside className="pixi-live" aria-label="Live island">
-      <div role="status">{notice || (offline ? 'Local development · Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
+      <div role="status">{notice || arrival || (offline ? 'Local development · Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
       {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
       {(status === 'playing' || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
       {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}

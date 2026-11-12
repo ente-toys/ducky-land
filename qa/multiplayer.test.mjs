@@ -1,6 +1,6 @@
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import {mapOf} from '../src/world/island-maps.js';
-import {originOffset} from '../src/gameplay/islands.js';
+import {navOf, originOffset} from '../src/gameplay/islands.js';
 import assert from 'node:assert/strict';
 import test, {after, before} from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
@@ -20,10 +20,17 @@ let mf;
 before(async () => {
   const root = fileURLToPath(new URL('../',import.meta.url));
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
-    import {IslandRoom} from './worker/index.js';
+    import {IslandRoom, ISLAND_LIMIT} from './worker/index.js';
+    import {mapOf} from './src/world/island-maps.js';
     import {createBoats} from './src/gameplay/islands.js';
     import {start, callback, session, logout, connect, playAccess, friends, outfit} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
+      pickSpawn(account, counts, occupied) {
+        if (Number(account) >= 9800) return super.pickSpawn(account, counts, occupied);
+        // Keep Home movement, chat, and docking fixtures on their original map.
+        return (counts.get('home') ?? 0) < ISLAND_LIMIT
+          ? {islandId:'home', ...mapOf('home').spawn, name:'Home Island'} : null;
+      }
       async fetch(request) {
         const path = new URL(request.url).pathname;
         if (path === '/test/reset-boats') {this.boats=createBoats();this.saveBoats();return new Response(null,{status:204});}
@@ -969,6 +976,20 @@ test('player and spectator caps still allow watching and an explicit retry', asy
     const retried = await socket();
     spectators.push(retried);
     assert.equal(retried.welcome.reason,null);
+    const {session:worldwideSession} = await signIn(9800);
+    const worldwide = await socket(worldwideSession);
+    players.push(worldwide);
+    const dropped = await eventually(() => worldwide.duck());
+    assert.notEqual(dropped.islandId,'home');
+    assert.notEqual(dropped.islandId,'isle-249','fresh accounts cannot spawn on Booquack Bog');
+    assert.equal(worldwide.snapshot.islandId,dropped.islandId);
+    assert.ok(navOf(dropped.islandId).walkable(dropped.x,dropped.y));
+    assert.ok(worldwide.welcome.arrival);
+    const handoff = await socket(worldwideSession);
+    players.push(handoff);
+    const same = await eventually(() => handoff.duck());
+    assert.equal(handoff.welcome.arrival,undefined);
+    assert.deepEqual([same.id,same.islandId,same.x,same.y],[dropped.id,dropped.islandId,dropped.x,dropped.y]);
   } finally {
     for (const client of [...players,...spectators]) client.close();
   }

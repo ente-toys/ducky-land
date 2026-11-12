@@ -96,6 +96,8 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     const map=mapOf(id);
     const detailVisible=work.visible;
     game.externalDetailVisible=detailVisible;
+    game.externalArrivalReady=detailVisible && !state.flying && state.altitude < .16 &&
+      id === game.islandId;
     game.resize();
     retainDetailArt(game,work.preload?mapId:null);
     if(work.preload)game.ensureArt(mapId);
@@ -149,7 +151,7 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
       const k=frame.width/1024,p=placeIslet(view.id,frame,[(piece.foot[0]-512)*k,(piece.foot[1]-512)*k]);
       const screen=detailScreen(game.camera,p.x,p.y,game.width,game.height,host.clientWidth,host.clientHeight,TILT,captureScale());
       return {...screen,pixelsPerUnit:game.camera.zoom*host.clientWidth/game.width*captureScale()*WORLD_GEO.Rw,blend,width:host.clientWidth,height:host.clientHeight};
-    },pirateFleet:game.pirateFleet,pirateProjection:ship=>{if(!view||blend<=0)return null;const p=pirateLocal(view.id,ship.p),screen=detailScreen(game.camera,p.x,p.y,game.width,game.height,host.clientWidth,host.clientHeight,TILT,captureScale());return{...screen,width:ship.width*game.camera.zoom*host.clientWidth/game.width*captureScale()};},onFrame:update,onInteract:()=>{following=false;},surfaceAtPointer:screen=>pickDetail(screen),onTap:({id,x,y,screen})=>{
+    },pirateFleet:game.pirateFleet,pirateProjection:ship=>{if(!view||blend<=0)return null;const p=pirateLocal(view.id,ship.p),screen=detailScreen(game.camera,p.x,p.y,game.width,game.height,host.clientWidth,host.clientHeight,TILT,captureScale());return{...screen,width:ship.width*game.camera.zoom*host.clientWidth/game.width*captureScale()};},onFrame:update,onInteract:()=>{following=false;if(game.arrival)game.finishArrival();},surfaceAtPointer:screen=>pickDetail(screen),onTap:({id,x,y,screen})=>{
       if(!game.player)return;
       const frame=WORLD_ISLANDS.find(i=>i.id===id),own=WORLD_ISLANDS.find(i=>i.id===game.islandId);
       const visible=blend>0&&screen?pickDetail(screen):null;
