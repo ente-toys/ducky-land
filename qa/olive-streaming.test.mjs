@@ -6,8 +6,8 @@ import {createGroundPool,tileInView} from '../src/rendering/pixi/art/ground-stre
 import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 import {mapFor} from '../src/world/island-maps.js';
 import {rasterTiles,cropSVG} from '../src/rendering/pixi/art/theme-raster.js';
-import {liveSurfaceGeometry} from '../src/rendering/three/three-live-geometry.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {patchGeometry} from '../src/rendering/pixi/sphere-mesh.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import sharp from 'sharp';
 const flush=()=>new Promise(setImmediate);
 const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
@@ -101,18 +101,13 @@ test('frame time budget starts several decodes and retains crops through zoom se
  assert(stream.entries.every(t=>t.sprite.visible));pool.destroy();
 });
 
-test('live surface mesh has valid vertices and triangles at every island and rejects invalid viewport bounds',()=>{
+test('native live patches have valid vertices, UVs and triangles at every island',()=>{
  for(const frame of WORLD_ISLANDS){
-   const geometry=liveSurfaceGeometry(frame,{x:1,y:-9,width:1000,height:700},frame.width,frame.height,WORLD_GEO.Rw);
-   assert(geometry);
-   const {position,uv}=geometry.attributes;
-   assert(position.array.every(Number.isFinite));
-   assert.equal(uv.count,position.count);
-   assert(uv.array.every(Number.isFinite));
-   assert(geometry.indices.length>0 && geometry.indices.length%3===0);
-   assert(geometry.indices.every(index=>index<position.count));
-   geometry.dispose();
-   for(const bounds of [{x:NaN,y:0,width:10,height:10},{x:0,y:0,width:Infinity,height:10},{x:0,y:0,width:0,height:10}])assert.equal(liveSurfaceGeometry(frame,bounds,frame.width,frame.height,WORLD_GEO.Rw),null);
+   const geometry=patchGeometry('home',frame.id,{x:1,y:-9,width:1000,height:700});
+   const position=geometry.getAttribute('aPosition').buffer.data,uv=geometry.getAttribute('aUV').buffer.data;
+   assert(position.every(Number.isFinite));assert.equal(uv.length,position.length);assert(uv.every(Number.isFinite));
+   const indices=geometry.indexBuffer.data;
+   assert(indices.length>0&&indices.length%3===0);assert(indices.every(i=>i<position.length/2));geometry.destroy();
  }
 });
 

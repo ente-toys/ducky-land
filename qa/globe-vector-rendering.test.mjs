@@ -3,6 +3,17 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {mapFor} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+
+test('every shipped island preview has transparent sea, including Pagepond tiled terrain',async()=>{
+ for(const theme of new Set(WORLD_ISLANDS.map(i=>i.theme??'home')))for(const suffix of ['', '-ground']){
+  const {data,info}=await sharp(`public/pixi-art/globe/${theme}${suffix}.svg`).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+  for(const [u,v]of [[.01,.01],[.99,.01],[.01,.99],[.99,.99]]){
+   const alpha=data[(Math.floor(v*info.height)*info.width+Math.floor(u*info.width))*4+3];
+   assert.equal(alpha,0,`${theme}${suffix} sea at ${u},${v} must not become globe land`);
+  }
+ }
+});
 
 async function sourcePatch(theme,cx,cy,{props=false}={}){
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),base=`public/pixi-art/themes/${theme}/`,art=JSON.parse(fs.readFileSync(base+'art.json'));

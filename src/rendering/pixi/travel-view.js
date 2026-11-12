@@ -3,6 +3,8 @@ import {destinationsFor, boatSpots} from '../../gameplay/islands.js';
 import {createHarbor} from './harbor.js';
 import {createSailingFX} from './sailing-fx.js';
 import {createSea} from './sea-islands.js';
+import {sailingUpright} from './sailing-upright.js';
+import {TILT} from '../shared/camera.js';
 
 function label(text,x,y,size=32) {
   const node=new Text({text,style:{fontFamily:'system-ui, sans-serif',fontSize:size,fontWeight:'600',fill:0x39472d,
@@ -18,6 +20,12 @@ const smooth=u => u*u*(3-2*u);
 const bobIn=k => k>=1 ? 0 : (1-k)**2*Math.cos(k*Math.PI*1.5);
 const driftBy=(heading,d) => ({x:-Math.sin(heading)*d,y:-Math.cos(heading)*d*.45});
 const atMooring=boat => boatSpots(boat.islandId).some(spot => spot.x === boat.x && spot.y === boat.y);
+function uprightVessel(entry,camera,fx){
+  entry.root.rotation=entry.seat?.roll??0;
+  entry.root.skew.set(0,0);entry.root.scale.set(1,1/TILT);
+  sailingUpright(entry.root,camera?.basis,TILT);
+  fx.front(entry);
+}
 
 export async function createTravelView(objects,water,air,decks) {
   const [sea]=await Promise.all([createSea(water,objects,air)]);
@@ -105,7 +113,8 @@ export async function createTravelView(objects,water,air,decks) {
         }
       }
       if (boats.length) settled=true;
-      for (const entry of [...vessels.values(), ...leaving]) fx.front(entry);
+      for(const entry of vessels.values())uprightVessel(entry,camera,fx);
+      for(const entry of leaving)uprightVessel(entry,camera,fx);
       fx.draw(reduced);
     },
   };

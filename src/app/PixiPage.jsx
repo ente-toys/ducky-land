@@ -91,16 +91,9 @@ export default function PixiPage() {
         arrivalTimer = setTimeout(() => setArrival(''), 4000);
         if (offline) setTravel({islandId:island.current.islandId,mode:'walking',available:0});
       },
-      externalOverview:true,transparent:true,renderResolution:1,onError:() => setError(true),onInteriorChange:setIndoors});
+      onError:() => setError(true),onInteriorChange:setIndoors});
     island.current = game;
-    let earth=null,cancelled=false;
-    game.mount(host.current).then(async()=>{
-      if(cancelled||!game.ready)return;
-      const {createThreeGameView}=await import('../rendering/three/three-game-view.js');
-      if(cancelled)return;
-      earth=await createThreeGameView(game,host.current);
-      if(cancelled)earth?.destroy();
-    }).catch(error=>{console.error('Could not initialize world',error);setError(true);});
+    game.mount(host.current).catch(error=>{console.error('Could not initialize world',error);setError(true);});
     if (offline) {
       setStatus('local');
     } else {
@@ -108,7 +101,6 @@ export default function PixiPage() {
       refresh();
     }
     return () => {
-      cancelled=true;earth?.destroy();
       abort.abort();
       clearTimeout(arrivalTimer);
       client.dispose();

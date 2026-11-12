@@ -192,7 +192,7 @@ void main(){finalColor=vec4(planet(vUV),1.);}
 function buildWorldTexture(app,islands,bounds,arch){
  const box=new Container();
  WORLD_ISLANDS.forEach((island,k)=>{
-  const s=new Sprite(arch.textureOf(island.id));s.position.set(k%4*1024+1,Math.floor(k/4)*1024+1);s.width=s.height=1022;box.addChild(s);
+  const s=new Sprite(arch.globeTextureOf(island.id));s.position.set(k%4*1024+1,Math.floor(k/4)*1024+1);s.width=s.height=1022;box.addChild(s);
  });
  const rt=RenderTexture.create({width:4096,height:4096,scaleMode:'linear',autoGenerateMipmaps:true});
  app.renderer.render({container:box,target:rt,clear:true});box.destroy({children:true});rt.source.updateMipmaps();return rt;

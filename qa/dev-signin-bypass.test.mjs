@@ -14,7 +14,6 @@ for (const {name,dev,query,offline,signInAvailable=true} of [
     entryPoints:['src/app/PixiPage.jsx'],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,
     loader:{'.css':'empty'},define:{'import.meta.env.DEV':String(dev)},
     plugins:[{name:'headless',setup(build){
-      build.onLoad({filter:/\/src\/rendering\/three\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
       build.onLoad({filter:/\/src\/rendering\/pixi\/engine\.js$/},()=>({contents:`
         export class PixiIsland {
           constructor(options){globalThis.devEngines.push(options);}

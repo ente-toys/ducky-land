@@ -1,6 +1,6 @@
 import {overviewPatch} from './sphere-mesh.js';
 import {flatRigid} from '../../world/rigid.js';
-import {Container, Graphics, Rectangle, Sprite} from 'pixi.js';
+import {Container, Graphics, Rectangle, Sprite, Texture} from 'pixi.js';
 import {MAP_BOUNDS, WORLD_ISLANDS, worldIsland} from '../../world/world-map.js';
 import {artOf, mapFor, mapOf} from '../../world/island-maps.js';
 
@@ -19,6 +19,9 @@ export function createArchipelago(app, scene, layer, world) {
   let destroyed=false;
   let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
   const textures = new Map();
+  // Live snapshots can contain streamed water tiles. Only authored transparent
+  // previews may define the globe's colour atlas and land ownership mask.
+  const previews = new Map();
   const leasedPreviews=new Set();
   const textureOf = id => textures.get(artOf(id)) ?? textures.get('home');
   const sizeOf = id => mapFor(textures.has(artOf(id)) ? artOf(id) : 'home');
@@ -72,11 +75,16 @@ export function createArchipelago(app, scene, layer, world) {
         return [id,texture];
       }));
       if(destroyed)return;
-      for(const [id,texture] of loaded){textures.set(id,texture);leasedPreviews.add(texture);}
+      for(const [id,texture] of loaded){
+        const old=textures.get(id);
+        if(old&&!leasedPreviews.has(old))old.destroy(true);
+        textures.set(id,texture);previews.set(id,texture);leasedPreviews.add(texture);
+      }
       version++;place();draw();
     },
     get current(){return current;}, get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return textures.get('home') ?? null;},
     get version() {return version;}, has: mapId => textures.has(mapId), textureOf, sizeOf,
+    globeTextureOf: id => previews.get(artOf(id)) ?? Texture.EMPTY,
     build(mapId = 'home') {
       if (textures.has(mapId)) return;
       const m = mapFor(mapId), keep = {x: scene.position.x, y: scene.position.y, sx: scene.scale.x, sy: scene.scale.y};

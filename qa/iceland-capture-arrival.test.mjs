@@ -1,25 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createThreeGameView} from '../src/rendering/three/three-game-view.js';
+import {cameraGame} from './helpers/pixi-engine.mjs';
+import {mapOf} from '../src/world/island-maps.js';
 
-test('island arrival clears the previous capture before throttling and never uploads mismatched art',async t=>{
- const old={document:globalThis.document,window:globalThis.window,performance:globalThis.performance,devicePixelRatio:globalThis.devicePixelRatio,cancelAnimationFrame:globalThis.cancelAnimationFrame};
- t.after(()=>Object.assign(globalThis,old));
- let time=100,frame,capture=null,clears=0,presentation,switchDuringTick=false;
- const element=()=>({style:{},dataset:{},append(){},remove(){},setAttribute(){},querySelector(){return null;}});
- Object.assign(globalThis,{document:{createElement:element},window:{},performance:{now:()=>time},devicePixelRatio:1,cancelAnimationFrame(){}});
- const host={...element(),clientWidth:1440,clientHeight:900};
- const game={ready:true,artShown:'home',islandId:'home',camera:{x:0,y:0,zoom:1},target:{},width:1440,height:900,keys:new Set(),zoomMotion:{},
-  canvas:element(),app:{render(){},renderer:{resolution:1,resize(){},background:{alpha:1}}},arts:new Map([['home',{ready:true}]]),rigs:[],localDucks:[],liveRigs:new Map(),
-  playerView(){return this.player;},tick(){if(switchDuringTick)this.artShown='home';},resize(){},onInteriorChange(){},listen(){},ensureArt(){},showArt(){},applyMapAmbience(){},freeArt(id){this.arts.delete(id);},artReady(id){return id==='home'||Boolean(this.arts.get(id)?.ready);}};
- const view=await createThreeGameView(game,host,{createWorld:async(_layer,options)=>{frame=options.onFrame;return {
-  ready:Promise.resolve(),centreOn(){},destroy(){},setLiveCanvas(id){capture=id;},clearLiveCanvas(){capture=null;clears++;},setPresentation(blend,direct){presentation={blend,direct};}};}});
- const state=id=>({now:time,id,altitude:.3,heading:0,fov:45,point:{x:0,y:0}});
- frame(state('home'));assert.equal(capture,'home');
- const before=clears;time+=1;frame(state('isle-55'));assert.equal(capture,null);assert(clears>before,'invalidation precedes the 60Hz gate');assert.equal(presentation.blend,0);
- time+=20;frame(state('isle-55'));assert.equal(capture,null);assert.equal(game.canvas.style.visibility,'hidden');
- game.arts.set('snow',{ready:true});time+=20;frame(state('isle-55'));assert.equal(capture,'isle-55');
- switchDuringTick=true;
- time+=20;frame(state('isle-55'));assert.equal(capture,null);assert.equal(game.canvas.style.visibility,'hidden');
- view.destroy();
+test('native island arrival waits for matching ready art and a player rig, then completes once',t=>{
+ const prior=globalThis.document;globalThis.document={hidden:false};t.after(()=>globalThis.document=prior);
+ const player={id:'me',mode:'walking',x:0,y:0},game=cameraGame(player),snow='isle-55';
+ game.islandId=snow;game.artShown='home';game.arrival={id:'me',name:'Iceland'};
+ let finishes=0,rig=null;game.playerRig=()=>rig;game.finishArrival=()=>{finishes++;game.arrival=null;};
+ game.frameAt(10);assert.equal(game.arrival.start,undefined);
+ game.artShown='snow';game.arts.set('snow',{ready:false});rig={};game.frameAt(20);assert.equal(game.arrival.start,undefined);
+ game.arts.get('snow').ready=true;rig=null;game.frameAt(30);assert.equal(game.arrival.start,undefined);
+ rig={};game.frameAt(40);assert.equal(game.arrival.start,40);game.frameAt(559);assert.equal(finishes,0);
+ game.frameAt(560);assert.equal(finishes,1);game.frameAt(580);assert.equal(finishes,1);
+});
+
+test('native flyHome returns to the current player from the globe at every island, including reduced motion',t=>{
+ const prior=globalThis.document;globalThis.document={hidden:false};t.after(()=>globalThis.document=prior);
+ for(const id of ['home','blossom','sunset','isle-55','isle-249'])for(const reduced of [false,true]){
+  const map=mapOf(id),player={id:'me',mode:'walking',x:map.cx,y:map.cy},game=cameraGame(player);
+  game.islandId=id;game.motion.matches=reduced;game.camera={x:map.cx+12000,y:map.cy-8000,zoom:.03};game.target={...game.camera};
+  game.archipelago={bounds:{x0:-100000,x1:100000}};game.flyHome();const start=game.fly.at;
+  if(!reduced){game.stepFly(start+350,player);assert.ok(game.camera.zoom>.03&&game.camera.zoom<game.fly.zoom);player.x+=50;}
+  game.stepFly(start+701,player);assert.equal(game.fly,null);assert.equal(game.follow,true);assert.ok(Math.abs(game.camera.x-player.x)<1e-8);assert.ok(Math.abs(game.camera.y-player.y+90)<1e-8);assert.ok(game.camera.zoom>game.minZoom);assert.deepEqual(game.camera,game.target);
+ }
 });

@@ -4,6 +4,8 @@ import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './environment/home-motion.js';
 import {createHomeKites, KITE_ASSETS} from './environment/home-kites.js';
 import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from '../shared/sphere-camera.js';
+import {createSailingCamera} from '../shared/sailing-camera.js';
+import {sailingUpright} from './sailing-upright.js';
 import {WORLD_GEO,WORLD_ISLANDS} from '../../world/world-map.js';
 import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
@@ -108,8 +110,8 @@ function release(src) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, externalOverview = false, randomArrival = false, onArrival = () => {}} = {}) {
-    this.transparent=transparent;this.renderResolution=renderResolution;this.externalOverview=externalOverview;
+  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, randomArrival = false, onArrival = () => {}} = {}) {
+    this.transparent=transparent;this.renderResolution=renderResolution;
     this.onInteriorChange = onInteriorChange;
     this.room = room;
     this.islandId = 'home';
@@ -309,7 +311,7 @@ export class PixiIsland {
       this.artShown = 'home';
       if (new URLSearchParams(location.search).has('qa')) globalThis.__duckyEngine = this;
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
-      if (!this.externalOverview) await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
+      await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
       if(this.disposed)return;
       this.pirateFleet=createPirateFleet();
       this.pirateView=await createPirateView(this.objects,this.pirateFleet);
@@ -317,7 +319,7 @@ export class PixiIsland {
       this.isletView=await createIsletView(this.app,this.scene,this.objects);
       this.scene.setChildIndex(this.isletView.layer,this.scene.getChildIndex(this.water)+1);
       if(this.disposed){this.isletView.destroy();return;}
-      if(!this.externalOverview){
+      {
         this.loaded.push(CLOUD_TEXTURE);
         const clouds=await acquire(CLOUD_TEXTURE);
         if(this.disposed)return;
@@ -475,8 +477,13 @@ export class PixiIsland {
     this.travelView?.switchIsland(id, hop && reframe);
     if (hop) {
       for (const c of [this.camera, this.target]) Object.assign(c,reframe(c));
-      this.landingView={at:performance.now(),basis:rigidLandingBasis(previousIsland,id,this.camera.basis,landed?isletLandingFrame(previousIsland,id,landed):undefined)};
-      this.camera.basis=easeLandingBasis(this.landingView.basis,0);
+      const basis=rigidLandingBasis(previousIsland,id,this.camera.basis,landed?isletLandingFrame(previousIsland,id,landed):undefined);
+      // Sailing has already levelled the destination before Dock becomes
+      // available. Keep the old landing animation for non-sailing travel.
+      this.landingView=this.sailingCamera?.active?null:{at:performance.now(),basis};
+      if(this.landingView)this.camera.basis=easeLandingBasis(basis,0);
+      else delete this.camera.basis;
+      if(this.sailingCamera)this.sailingCamera.active=false;
     } else {
       const player=this.player;
       const focus=player ?? harborOf(id).land;
@@ -971,7 +978,7 @@ export class PixiIsland {
       this.marker, ...(this.travelView?.transient() ?? [])].filter(o => o?.visible);
   }
   buildCopies() {
-    if (this.externalOverview || !this.archipelago || this.sceneryPending || this.snapshotFrame===this.frame) return;
+    if (!this.archipelago || this.sceneryPending || this.snapshotFrame===this.frame) return;
     if (!this.archipelago.has('home')) {this.snapshotFrame=this.frame;this.captureArt('home');return;}
     if(this.gestures.pointers.size || this.spin || Math.abs(Math.log(this.camera.zoom/this.target.zoom))>.015) return;
     for (const [id, art] of this.arts ?? []) if (art.ready && id !== 'home' && !this.archipelago.has(id)) {
@@ -983,7 +990,7 @@ export class PixiIsland {
   }
   captureArt(mapId) {
     if (!this.archipelago || this.archipelago.has(mapId) || !this.artReady(mapId)) return;
-    const hide=[...this.transientForCopies(),...(this.pirateView?.entries.map(e=>e.root)??[]),...(this.isletView?.transient()??[])].filter(o=>o?.visible);
+    const hide=[this.ocean,...this.transientForCopies(),...(this.pirateView?.entries.map(e=>e.root)??[]),...(this.isletView?.transient()??[])].filter(o=>o?.visible);
     hide.forEach(o => {o.visible=false;});
     this.showArt(mapId);
     const props=this.artProps(mapId).map(p => ({p, v:p.sprite.visible, s:p.shadow?.visible, tint:p.sprite.tint}));
@@ -1131,7 +1138,7 @@ export class PixiIsland {
     };
   }
 
-  tick(now,{forceRender=false,followCamera}={}) {
+  tick(now,{forceRender=false}={}) {
     if (this.disposed || (document.hidden&&!forceRender)) return;
     const elapsed = Math.max(0, now - this.lastFrame);
     const dt = Math.min(.1, elapsed / 1000);
@@ -1153,7 +1160,7 @@ export class PixiIsland {
       this.flyHome();
     }
     if (this.arrival?.id !== actor?.id) this.arrival = null;
-    const arrivalViewReady = this.externalOverview ? this.externalArrivalReady :
+    const arrivalViewReady =
       this.artShown === artOf(this.islandId) && this.artReady(this.artShown);
     if (this.arrival && arrivalViewReady && this.playerRig()) {
       if (this.arrival.start === undefined) this.arrival.start = now;
@@ -1184,9 +1191,6 @@ export class PixiIsland {
       const occupied=(this.room?.boats??[]).filter(b=>b.occupant).map(b=>pirateBoatPoint(b,this.islandId));
       if(player?.mode==='sailing')occupied.push(pirateBoatPoint({...player,islandId:this.islandId},this.islandId));
       this.pirateFleet.update(dt,occupied);
-    }
-    if(this.externalOverview&&this.externalDetailVisible===false){
-      this.raf=requestAnimationFrame(time=>this.tick(time));return;
     }
     const t = this.sim.time + this.accumulator;
     const reduced = this.motion.matches;
@@ -1251,7 +1255,13 @@ export class PixiIsland {
       if (quiet > 0) {this.globeAim=null; const b=this.archipelago.bounds, step=quiet*(t-.9)/.1*(b.x1-b.x0)/240*dt; turnLongitude(this.islandId,this.camera,step/WORLD_GEO.Rw); turnLongitude(this.islandId,this.target,step/WORLD_GEO.Rw);}
       this.globeT=t;
     }
-    if(!this.landingView){
+    const sailing=player?.mode==='sailing'&&!this.globeT&&!this.fly;
+    if(sailing){
+      this.sailingCamera??=createSailingCamera();
+      this.camera.basis=this.sailingCamera.update(this.islandId,player,dt,reduced,this.camera.basis);
+      this.landingView=null;
+    }else if(this.sailingCamera)this.sailingCamera.active=false;
+    if(!this.landingView&&!sailing){
       const ball=this.globeT>.001 ? globeBall(this.globeT,this.camera.zoom,this.height) : 0,fade=uprightFade(ball);
       if(fade>0)this.camera.basis=rollBasis(fade*northUpRoll(this.islandId,spherePoint(this.islandId,this.camera)));
       else delete this.camera.basis;
@@ -1260,10 +1270,6 @@ export class PixiIsland {
       const progress=(now-this.landingView.at)/600;
       this.camera.basis=easeLandingBasis(this.landingView.basis,progress);
       if(progress>=1){this.landingView=null;delete this.camera.basis;}
-    }
-    if(this.externalCamera){
-      followCamera?.(this.externalCamera, this.playerView());
-      Object.assign(this.camera,this.externalCamera);Object.assign(this.target,this.externalCamera);delete this.camera.basis;
     }
     const viewMatrix=cameraMatrix(this.camera,this.width,this.height,TILT);
     this.scene.setFromMatrix(new Matrix(viewMatrix.a,viewMatrix.b,viewMatrix.c,viewMatrix.d,viewMatrix.tx,viewMatrix.ty));
@@ -1290,7 +1296,7 @@ export class PixiIsland {
         ? previewMoorings(this.archipelago.islands,this.camera,this.width,this.height,TILT) : []);
     this.travelView?.update(boatPoses,t,reduced,visible,player,this.camera);
     if(this.pirateFleet){
-      this.pirateView.update(this.externalPirateIsland??this.islandId,this.camera,t,dt,reduced,visible);
+      this.pirateView.update(this.islandId,this.camera,t,dt,reduced,visible);
       this.canvas.dataset.pirateCpuMs=this.pirateFleet.stats.cpuMs.toFixed(3);
       this.canvas.dataset.pirateCount=this.pirateFleet.ships.length;
     }
@@ -1409,8 +1415,8 @@ export class PixiIsland {
         for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }
-    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
-    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
+    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2));
+    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2));
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     const visitors=this.copyVisitors(copies);
     for (const {o} of visitors) o.visible=false;
@@ -1554,7 +1560,8 @@ export class PixiIsland {
       const jumpLeft=isPlayer?renderJumpLeft(pose.jumpLeft,this.accumulator):pose.jumpLeft;
       const hop=look.deck ? jumpPose(jumpLeft,reducedMotion,{turn:look.turn,moving:look.speed>20}) : null;
       rig.root.position.set(look.deck&&pose.mode!=='sailing'?deckX(look.x,look.y,this.arches):look.x,(look.deck?deckY(look.x,look.y,this.arches):look.y)-(hop?.lift ?? 0)-(isPlayer ? this.arrivalLift(now) : 0));
-      rig.root.rotation=look.rotation; rig.root.alpha=look.alpha;
+      rig.root.rotation=look.rotation;rig.root.skew.set(0,0); rig.root.alpha=look.alpha;
+      if(pose.mode==='sailing')sailingUpright(rig.root,this.camera.basis,TILT);
       rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');
       if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:deckX(look.x,look.y,this.arches), y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
