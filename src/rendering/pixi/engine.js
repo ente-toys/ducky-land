@@ -396,7 +396,7 @@ export class PixiIsland {
   }
 
   createAmbient() {
-    this.weather=createWeather(world,this.scene,this.air);
+    this.weather=createWeather(world,this.air);
     this.surf = createBeachSurf(this.water, shoreOf(world), HOME_MOUTHS);
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;

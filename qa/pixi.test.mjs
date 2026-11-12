@@ -306,13 +306,10 @@ test('persistent sleep indicators remain visible and stop drifting with reduced 
   } finally {feedback.ring.destroy();feedback.bubble.destroy({children:true});feedback.sleep.destroy({children:true});}
 });
 
-test('clouds drift continuously through the world and wind respects reduced motion',async()=>{
-  const {cloudPose,windStrength}=await import('../src/rendering/pixi/environment/weather.js');
-  const cloud={x:2300,y:1850,speed:8,phase:0};
-  assert.ok(cloudPose(cloud,10,5800).x>cloudPose(cloud,0,5800).x);
+test('wind respects reduced motion',async()=>{
+  const {windStrength}=await import('../src/rendering/pixi/environment/weather.js');
   for(let time=0;time<2000;time+=7){
-    const pose=cloudPose(cloud,time,5800);assert.ok(pose.x>=-500&&pose.x<6300);assert.ok(Math.abs(pose.y-cloud.y)<=18);
     assert.ok(windStrength(time)>=.35&&windStrength(time)<=1);
-    assert.equal(windStrength(time,true),0);assert.deepEqual(cloudPose(cloud,time,5800,true),cloudPose(cloud,0,5800,true));
+    assert.equal(windStrength(time,true),0);
   }
 });
