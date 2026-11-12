@@ -1,5 +1,3 @@
-// Run alongside `npx vite --port 5265 --strictPort --host 127.0.0.1`.
-// Uses the actual PixiIsland renderer and runtime-only theme registration, no src edits.
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync} from 'node:fs';
 const OUT=process.env.OUT||'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/fair';mkdirSync(OUT,{recursive:true});

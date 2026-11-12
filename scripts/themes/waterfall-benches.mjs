@@ -1,4 +1,3 @@
-// Use Home's exact slatted arc construction at each Waterfall ring's own radius.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 const A='public/pixi-art/themes/waterfall/',D='assets/world/themes/waterfall/';
@@ -24,9 +23,7 @@ function bench(id,cx,cy,r,k,deg,span,local=false){
  const p={id:`waterfall-arc-${id}`,name:'Curved ring bench',src:file,x,y,width,height,scale:1,anchor:{x:(x-x0)/width,y:(y-y0)/height},shadow:false,wind:false};
  const block={poly:footprint,waterfallArc:id};
  if(local){
-  // SVG is in world-size units; metadata stays centre-local for future integration.
   const piece={id,file:`${id}.svg`,layer:'sorted',x:(x0-3900)/.48,y:(y0-3800)/.48,width:width/.48,height:height/.48,anchor:{x:0,y:0},at:[(x0-3900)/.48,(y0-3800)/.48],sortY:(y-3800)/.48};
-  // Use a local viewBox as centre pieces must remain independently reusable.
   const raw=readFileSync(A+file,'utf8').replace(`viewBox="${x0} ${y0} ${width} ${height}"`,`viewBox="${piece.x} ${piece.y} ${piece.width} ${piece.height}"`).replace('</title>','</title><g transform="scale(2.0833333333333335) translate(-3900 -3800)">').replace('</svg>','</g></svg>');
   writeFileSync(A+file,raw);p.centrePiece=piece;p.id=`integrated-centre-${id}`;p.name=`Centre ${id}`;
   centre.pieces=centre.pieces.map(q=>q.id===id?piece:q);
@@ -35,12 +32,10 @@ function bench(id,cx,cy,r,k,deg,span,local=false){
  art.props.push(p);world.obstacles.push(block);records.push({id,cx,cy,r,k,deg,span,footprint});
 }
 [-111,-69,145,35].forEach((deg,i)=>bench(`bench-${i}`,3900,3800,477,.7659574468,deg,24,true));
-// Rear halves of activity lawns, outside the free field and away from entrances.
 bench('fern-west',1730,2600,644,495/644,-112,20);
 bench('fern-east',1730,2600,644,495/644,-68,20);
 bench('lagoon-west',6100,2600,644,495/644,-112,20);
 bench('lagoon-east',6100,2600,644,495/644,-68,20);
-// The shallow south green gets the same construction, fitted to its own rim.
 bench('picnic-west',3900,4630,660,290/660,-125,16);
 bench('picnic-east',3900,4630,660,290/660,-55,16);
 world.props=art.props;walk.obstacles=world.obstacles;

@@ -1,5 +1,3 @@
-// Repeatable HOME-quality pass. Only Neon files are written.
-// Run after neon-world + neon-finish, or rerun from the saved pre-polish source.
 import fs from 'node:fs';
 import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
 const A='public/pixi-art/themes/neon/',D='assets/world/themes/neon/',B=A+'polish-source/';
@@ -25,7 +23,6 @@ const pathNear=(x,y,pad)=>paths.some((p,i)=>lineDist(x,y,p)<([0,1,2,3,4,5,6].inc
 const bare=geometry({...walk,obstacles:[]}),inland=offset(world.coast,90);
 const waterMargin=world.water.map(q=>q.poly?offset(q.poly,-150):null);
 const centre=world.zones.centre;
-// A small HOME wooden dock enters the pond from its quiet west bank.
 {
  const pond=world.water[0],J={a:[5034.08,1638.41],b:[5469.9,1681.99],vb:[5004.9592,1492.5089,494.0617,277.2587]};
  const at=[pond.x-pond.rx-70,pond.y+50],sx=.38,sy=1;
@@ -35,7 +32,6 @@ const centre=world.zones.centre;
  fs.writeFileSync(A+'pond-dock.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="${x} ${y} ${width} ${height}"><g transform="translate(${at.join(' ')}) scale(${sx} ${sy}) translate(${-J.a[0]} ${-J.a[1]})">${inner}</g></svg>`);
  art.decks.push({src:'pond-dock.svg',x,y,width,height});
  const walkway={a:at,b,w:84};world.walkways.push(walkway);walk.walkways.push(walkway);
- // Inland water requires a bridge footprint as well as the deck walkway.
  const bridge={x:(at[0]+b[0])/2,y:(at[1]+b[1])/2,w:b[0]-at[0]+76,h:b[1]-at[1]+72};
  world.bridges.push(bridge);walk.bridges.push(bridge);
 }
@@ -44,7 +40,6 @@ const isCoreTree=p=>/reuse\/tree-[1-5]\.svg/.test(p.src);
 const isShop=p=>/^shop-/.test(p.src);
 const width=p=>p.width*p.scale,height=p=>p.height*p.scale;
 
-// Warm sand shore and HOME's water. Geometry, area and docking stay exact.
 const shore=[];
 for(const [d,w,col,alpha]of [[-130,80,'#9EDEE5',.35],[-65,60,'#99E0E8',.8],[-25,22,'#B7ECED',.9],[-16,7,'#FFF0C7',1]])shore.push(`<path d="${dz(offset(world.coast,d))}" fill="none" stroke="${col}" stroke-width="${w}" opacity="${alpha}"/>`);
 for(const [x,y,rx,ry]of world.islets)for(const [pad,w,col]of [[110,32,'#9ADFE7'],[65,20,'#B7ECED'],[24,7,'#FFF0C7']])shore.push(`<ellipse cx="${x}" cy="${y}" rx="${rx+pad}" ry="${ry+pad*.7}" fill="none" stroke="${col}" stroke-width="${w}"/>`);
@@ -56,16 +51,13 @@ ground=ground.replace(/<path d="[\s\S]*?fill="#86B064"[^>]*\/>/,shore.join('\n')
 const colours={'#86B064':'#93B72F','#79A35A':'#85AA2B','#5F8A4E':'#718B2C','#DCD5EC':'#FDE48C','#C3BADB':'#E8CA73','#8F90B8':'#E8C56E','#5D6190':'#C2A357','#CDBCD9':'#FDE48C','#B19FC2':'#D4B966','#8A84AE':'#B89A55','#D8CAE2':'#F8E8AC','#5B83B8':'#62BACE','#9DBDE6':'#9DDEEA','#9A9CC0':'#E8C56E','#5A78A8':'#8BD4E0','#8FBA6B':'#98BC38','#9CC577':'#A0C343'};
 for(const [a,b]of Object.entries(colours))ground=ground.split(a).join(b);
 ground=ground.replace(/<path[^>]*stroke-dasharray="40 60"[^>]*\/>/g,'');
-// Keep walking room at 1.5x HOME or more, and reclaim surplus paving as grass.
 ground=ground.replace(/stroke-width="(266|258|250|216|208|200)"/g,(_,n)=>`stroke-width="${{266:216,258:208,250:200,216:196,208:188,200:180}[n]}"`);
-// Both little hard-surfaced ovals become garden lawns. Keep their reserved footprints.
 const lines=ground.split('\n');
 for(let i=0;i<lines.length;i++)if(/<clipPath id="pz[12]"/.test(lines[i])){
  const z=world.zones[lines[i].includes('pz1')?'activity-1':'activity-4'];
  lines.splice(i,4,`<ellipse cx="${z.x}" cy="${z.y}" rx="${z.rx-10}" ry="${z.ry-9}" fill="#98BC38" stroke="#718B2C" stroke-width="4"/>`);
 }
 ground=lines.join('\n');
-// Reserved stall rows are garden strips with softly curved ends.
 const stripLines=ground.split('\n');
 for(let i=0;i<stripLines.length;i++)if(/<clipPath id="stall[012]"/.test(stripLines[i])){
  const n=+stripLines[i].match(/stall(\d)/)[1],z=world.zones[`stalls-${n+1}`],p=z.poly;
@@ -77,7 +69,6 @@ ground=stripLines.join('\n');
 for(const id of ['activity-1','activity-4'])world.zones[id].kind='lawn';
 art.sea='#6EC9DE';
 
-// Preserve existing tree sizes exactly; add large trees around the fixed sleeper art.
 const templates={};
 for(const p of art.props)if(!templates[p.src])templates[p.src]=p;
 function importHome(name,label,h){
@@ -94,7 +85,6 @@ function importHome(name,label,h){
 }
 const picnic=importHome('street--picnic-blanket','Picnic blanket',85),basket=importHome('street--picnic-basket','Picnic basket',65),sign=importHome('street--signpost-three-way','Garden signpost',170);
 importHome('nature--rock-round','Rock',80);
-// Reuse the studio's small flat timber props, copied into Neon before placement.
 for(const [name,label]of [['community-crate','Crate'],['community-barrel','Barrel'],['garden-butterfly','Garden butterfly']]){
  const target='reuse/'+name.replace('community-','neon-')+'.svg';
  fs.copyFileSync('public/pixi-art/themes/community/detail/'+name+'.svg',A+target);
@@ -131,22 +121,18 @@ function add(src,x,y,kind='small',mult=1){
  if(kind!=='flat')walk.obstacles.push({x:p.x,y:r(p.y-(kind==='tree'?9:kind==='shop'?w*.2:10)),rx:r(kind==='tree'?31:kind==='shop'?w*.47:Math.min(100,w*.36)),ry:r(kind==='tree'?22:kind==='shop'?w*.22:Math.min(30,height(p)*.18)),neonPolish:true});
  return true;
 }
-// Distinct shops and kiosks on the north and outer promenades.
 for(const [src,x,y]of [['shop-cat.svg',3500,990],['shop-star.svg',4450,1030],['shop-noodle.svg',5250,1030],['shop-boba.svg',1550,3050]])add(src,x,y,'shop',1.2);
 for(let n=0,tries=0;n<2&&tries<16000;tries++)if(add(['shop-cupcake.svg','shop-star.svg'][n],950+rnd()*5800,1050+rnd()*2700,'shop',1.15))n++;
 for(let n=0,tries=0;n<5&&tries<12000;tries++){
  const x=900+rnd()*5900,y=1000+rnd()*2900;
  if(add('noodle-kiosk.svg',x,y,'shop',1.06))n++;
 }
-// Grow groves of 3-7 from existing trees and along outer lawn edges.
-// Planters and flowers break up the long northern beach promenade.
 for(let x=3300;x<4800;x+=220){
  const t=templates['planter-box.svg'],p={...t,id:'neon-polish-north-'+x,x,y:940,scale:t.scale*.65,flip:false};
  if(bare.walkable(x,940)&&!pathNear(x,940,30)&&!reserved(x,940,40)&&!beds.some(b=>Math.hypot(x-b.x,940-b.y)<b.r+100)){
   art.props.push(p);additions.push({...p,kind:'small'});walk.obstacles.push({x,y:930,rx:40,ry:18,neonPolish:true});
  }
 }
-// North beach grove breaks the long bare horizon behind the promenade.
 for(const [i,x]of [3100,3280,3530,3910,4150,4490,4720].entries())add(`reuse/tree-${1+i%5}.svg`,x,950+(i%3)*15,'tree',1.08);
 const groveSeeds=[...art.props.filter(isCoreTree).map(p=>[p.x,p.y]),[3050,980],[4000,980],[4850,1100],[5600,1250],[1150,2500],[6550,2800],[3100,3700],[4700,3700]];
 let core=art.props.filter(isCoreTree).length;
@@ -155,9 +141,7 @@ for(let tries=0;tries<35000&&core<64;tries++){
  const src=`reuse/tree-${1+tries%5}.svg`;
  if(add(src,gx+Math.cos(a)*dd,gy+Math.sin(a)*dd*.7,'tree',1.05+rnd()*.18))core++;
 }
-// Bushes under the new groves. These are low enough to keep the sleepers visible.
 for(const t of additions.filter(p=>p.kind==='tree'))for(const side of [-1,1])add(`reuse/bush-${1+Math.floor(rnd()*6)}.svg`,t.x+side*(80+rnd()*80),t.y+35+rnd()*30,'small',.85);
-// Dress each reserved area from outside its boundary, leaving approaches open.
 for(const [id,z]of zones){
  if(z.poly){
   const line=z.line;
@@ -173,18 +157,15 @@ for(const [id,z]of zones){
   }
  }
 }
-// Pond rim: rocks and reeds, without consuming the water or its approaches.
 const pond=world.water[0];
 for(let i=0;i<14;i++){
  const a=i*Math.PI/7;add(i%3===0?'reuse/nature--reeds.svg':'reuse/nature--rock-round.svg',pond.x+Math.cos(a)*(pond.rx+100),pond.y+Math.sin(a)*(pond.ry+85),'small',.7+rnd()*.3);
 }
-// Everyday life on free lawns: picnics, signs, benches and small flowering beds.
 const smalls=[picnic,basket,sign,'reuse/street--bench-wood.svg','sign-board.svg','planter-box.svg','reuse/nature--rock-round.svg','reuse/flower-1.svg','reuse/flower-2.svg','reuse/flower-3.svg'];
 for(let n=0,tries=0;n<55&&tries<22000;tries++){
  const src=smalls[n%smalls.length],kind=src===picnic||src.includes('flower')?'flat':'small';
  if(add(src,900+rnd()*5900,1000+rnd()*3000,kind,.85))n++;
 }
-// Timber supplies live beside kiosks; butterflies sit over flower gardens.
 for(const p of art.props.filter(q=>/kiosk|shop/.test(q.src))){
  for(const side of [-1,1])add(side<0?'reuse/neon-crate.svg':'reuse/neon-barrel.svg',p.x+side*(width(p)*.55+90),p.y+55,'small',.9);
 }
@@ -196,13 +177,11 @@ for(let n=0,tries=0;n<3&&tries<3000;tries++){
 for(const [id,z]of zones.filter(([id])=>id.startsWith('activity'))){
  for(const side of [-1,1])add('reuse/garden-butterfly.svg',z.x+side*(z.rx+70),z.y-z.ry-60,'flat',.85);
 }
-// Low flowers and planters around the locked crossing, between the path mouths.
 for(let i=0;i<24;i++){
  const a=(i+.5)*Math.PI/12,x=centre.x+Math.cos(a)*(centre.rx+100),y=centre.y+Math.sin(a)*(centre.ry+80);
  add(i%3===0?'planter-box.svg':`reuse/flower-${1+i%3}.svg`,x,y,i%3===0?'small':'flat',.8);
 }
 
-// HOME decals, at source scale, across all grass including the open lawns.
 let decals=0;
 for(let tries=0;decals<1300&&tries<100000;tries++){
  const x=850+rnd()*6200,y=850+rnd()*3500;
@@ -214,14 +193,12 @@ for(let tries=0;decals<1300&&tries<100000;tries++){
  const sample=art.flats.find(p=>p.src===`reuse/${src}.svg`);
  art.flats.push({...sample,x:r(x),y:r(y),flip:rnd()<.5});decals++;
 }
-// Flower borders frame the open activity lawns without occupying their interiors.
 for(const [,z]of zones.filter(([id])=>id.startsWith('activity')))for(let i=0;i<52;i++){
  const a=i*Math.PI/26,x=z.x+Math.cos(a)*(z.rx+38),y=z.y+Math.sin(a)*(z.ry+30);
  if(pathNear(x,y,18)||!bare.walkable(x,y))continue;
  const sample=art.flats.find(p=>p.src===`reuse/flower-dot-${1+i%3}.svg`);
  art.flats.push({...sample,x:r(x),y:r(y),width:sample.width*1.5,height:sample.height*1.5});
 }
-// Save exact tile crops from the new ground. Transparent sea keeps shared-world water intact.
 ground=ground.replace(/<desc>[\s\S]*?<\/desc>/,'<desc>Tickytown polished ground: HOME turquoise water, warm sand shore, rich grass, curved cream paths. Night character lives in the neon shop signs and lamps.</desc>');
 fs.writeFileSync(A+'ground.svg',ground);
 for(const t of art.ground.tiles){let s=ground.replace(/width="[^"]+" height="[^"]+" viewBox="[^"]+"/,`width="${t.width}" height="${t.height}" viewBox="${t.x} ${t.y} ${t.width} ${t.height}"`);fs.writeFileSync(A+t.src,s);}

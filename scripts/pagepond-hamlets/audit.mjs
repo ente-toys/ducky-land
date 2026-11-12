@@ -1,4 +1,3 @@
-// The current audit covers the whole island and exact full-radius route geometry.
 export {auditPagepond} from '../pagepond-ground/walk-audit.mjs';
 import {auditPagepond} from '../pagepond-ground/walk-audit.mjs';
 import fs from 'node:fs';

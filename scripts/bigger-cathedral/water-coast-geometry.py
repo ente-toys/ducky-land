@@ -12,14 +12,7 @@ world=json.loads(Path('assets/world/themes/cathedral/world.json').read_text())
 geo=json.loads((P/'water-geometry.json').read_text())
 land=Polygon(world['coast']).buffer(0)
 wet=unary_union([Polygon(p).buffer(0) for p in geo['polys']])
-# Round the four estuary shoulders and any little convex shore spikes. This
-# rounds their artwork locally, leaving sailing bounds and anchors intact.
 dry=land.difference(wet).buffer(-40,quad_segs=16).buffer(40,quad_segs=16)
-# Cover the complete old outer surf (75 units outside the old contour), and
-# rebuild sand and foam from the SAME completed dry contour as the waterways.
-# Keep Bellovo's generous outer beach, tapering into the narrow river banks.
-# Its inner grass edge is also a joined rounded contour, so a leftover beach
-# wedge cannot cut across an estuary after its foam has been corrected.
 inset=scale(land,.958,.955,origin=(4100,2750))
 grass=inset.intersection(dry.buffer(-26)).buffer(-55,quad_segs=16).buffer(55,quad_segs=16)
 sand=dry.difference(grass)

@@ -1,5 +1,3 @@
-// The dedicated arena opens directly in local island coordinates. It is not a
-// globe landing, so none of the previous Home frame or landing inertia applies.
 export function setBogReviewCamera(game,x,y,zoom=.65){
  game.follow=false;game.fitMode=false;game.fly=null;game.spin=null;
  game.landingView=null;game.globeAim=null;game.globeT=0;game.birdEye=false;
@@ -8,8 +6,6 @@ export function setBogReviewCamera(game,x,y,zoom=.65){
  if(game.scene)game.scene.visible=true;
 }
 
-// Browser panes can throttle RAF until they receive focus. Art readiness and
-// the initial paint must not depend on a user click or a foreground animation.
 export async function waitForBogArt(game,{cancelled=()=>false,nextFrame=()=>new Promise(resolve=>setTimeout(resolve,16))}={}){
  while(!cancelled()&&!game.disposed){
   const art=game.arts?.get('bog-arena');

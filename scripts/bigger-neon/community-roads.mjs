@@ -1,4 +1,3 @@
-// Variable-width earthen roads. The irregular outlines, bank and wear follow the road direction.
 export function road(ps,width=290){
  const points=[],closed=ps.length>3&&ps[0][0]===ps.at(-1)[0]&&ps[0][1]===ps.at(-1)[1],n=ps.length-1;
  for(let i=0;i<ps.length-1;i++){
@@ -23,7 +22,6 @@ export function road(ps,width=290){
  const bank=`<path d="${polygon}" transform="translate(0 24)" fill="#5d703b" opacity=".42"/><path d="${polygon}" fill="#f4dda0" stroke="#697743" stroke-width="15"/>`;
  const surface=`<path d="${polygon}" fill="#f4dda0"/>`;
  let wear='',verge='';
- // Worn wheel/foot tracks, kept sparse and aligned with the curve.
  for(const offset of [-.21,.14]){
   const line=points.map((p,i)=>{const a=points[closed?(i-1+points.length-1)%(points.length-1):Math.max(0,i-1)],b=points[closed?(i+1)%(points.length-1):Math.min(points.length-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy)||1;return[p[0]-dy/len*width*offset,p[1]+dx/len*width*offset];});
   for(let start=3;start<line.length-4;start+=15){const segment=line.slice(start,start+8);wear+=`<path d="M${segment.map(p=>p.join(',')).join('L')}" fill="none" stroke="#d5b97c" opacity=".3" stroke-width="${offset<0?15:9}"/>`;}
@@ -34,7 +32,6 @@ export function road(ps,width=290){
   if(i%3===0)verge+=`<ellipse cx="${x+18}" cy="${y+11*flip}" rx="8" ry="5" fill="#b5b69a" stroke="#797f68" stroke-width="2"/><ellipse cx="${x+36}" cy="${y+5}" rx="4" ry="3" fill="#d0c9a6"/>`;
   if(i%4===0)verge+=`<path d="M${x-20} ${y-7}q3 -13 7 -17" stroke="#5b8c54" stroke-width="2"/><circle cx="${x-13}" cy="${y-24}" r="5" fill="#edafc0"/>`;
  }
- // Directional light patches, sand grains and small embedded stones in the worn bed.
  for(let i=8;i<points.length-3;i+=11){const[x,y]=points[i];wear+=`<ellipse cx="${x}" cy="${y}" rx="29" ry="9" fill="#fff0be" opacity=".4"/><path d="M${x+15} ${y+24}l17 2m-57 -12l10 -2" stroke="#d3b77d" stroke-width="2"/><ellipse cx="${x+width*.32}" cy="${y+7}" rx="4" ry="2.4" fill="#bab79a"/>`;}
  return {bank,verge,surface,wear};
 }

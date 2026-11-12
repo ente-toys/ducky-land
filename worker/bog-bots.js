@@ -3,8 +3,6 @@ import {isCombatHidden} from '../src/pixi/bog-combat/hide-bushes.js';
 
 export const BOT_FILL=6;
 
-// Six reusable slots, with no account, paid entry, SQL, or world actor. The
-// normal authority owns their movement, shots, five lives and hidden respawns.
 export function createBogBots(arena,combat,options={}){
  const controller=createBotController(arena,combat,options);
  const slots=Array.from({length:BOT_FILL},(_,i)=>({id:`bog-bot-${i+1}`,name:`Bog Bot ${i+1}`,brain:createBotBrain(i)}));

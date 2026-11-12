@@ -1,4 +1,3 @@
-// Isolated copy of qa/network.test.mjs, only fixture port and relative imports differ.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import WebSocket from 'ws';

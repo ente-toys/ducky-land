@@ -1,24 +1,17 @@
 import {Container,Graphics,Sprite} from 'pixi.js';
 
-// Attached to the original articulated body, including its walk and turn.
 export function createKarmaQuiver(view,texture){
   const root=new Container({label:'Karma feather quiver'}),pouch=new Container(),strap=new Graphics();
   const rear=new Container({label:'Quiver behind body'}),strapMask=new Graphics({label:'Sling body clip'});
   const ink=0x59412a;
   root.visible=false;rear.visible=false;
-  // Place the front sling under the wings, beak and wardrobe, rather than
-  // drawing a detached line over all of the Ducky's parts.
   view.body.addChildAt(rear,0);
-  // Rear tail artwork includes a yellow fill. Seat the quiver above that
-  // fill, while keeping the nearer wing and wardrobe on their original layers.
   const bodyIndex=Math.max(view.body.children.indexOf(view.bodyPart?.joint),
     ...(view.parts??[]).filter(part=>part.role==='tail').map(part=>view.body.children.indexOf(part.joint)));
   view.body.addChildAt(root,bodyIndex>=0?bodyIndex+1:view.body.children.length);
   root.addChild(strap,strapMask);strap.mask=strapMask;
   let lastAngle=NaN;
   function fit(angle,glide){
-    // One continuous sling wrapped around the torso. Only its near hemisphere
-    // is drawn; the hidden half continues behind the Ducky, without loose ends.
     const step=Math.round(angle*256)/256;
     if(step===lastAngle)return;
     lastAngle=step;strap.clear();
@@ -43,8 +36,6 @@ export function createKarmaQuiver(view,texture){
     pouch.scale.set(1.18);
   }
 
-  // Back rim first, then feathers, then the front leather. The shafts disappear
-  // into the dark opening instead of hovering above it.
   pouch.addChild(new Graphics().ellipse(0,0,53,19).fill(0x503722).stroke({color:ink,width:7}));
   const feathers=[];
   for(let n=0;n<5;n++){
@@ -59,7 +50,6 @@ export function createKarmaQuiver(view,texture){
     .quadraticCurveTo(0,27,-52,2).closePath().fill(0xad7545).stroke({color:ink,width:8,join:'round'});
   leather.moveTo(31,17).quadraticCurveTo(34,100,12,143)
     .quadraticCurveTo(37,136,43,108).lineTo(51,6).closePath().fill(0x87532f);
-  // Rolled cuff and a simple sewn seam keep the small silhouette readable.
   leather.moveTo(-51,3).quadraticCurveTo(0,28,51,3).lineTo(49,24)
     .quadraticCurveTo(0,48,-49,24).closePath().fill(0xc4945e).stroke({color:ink,width:6,join:'round'});
   leather.moveTo(-33,45).quadraticCurveTo(-31,112,-17,128).stroke({color:0xd8ad78,width:3,cap:'round'});

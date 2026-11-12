@@ -81,7 +81,6 @@ export default function PixiPage() {
     }, (id,text) => island.current?.showChat(id,text), setOnline, setLatestJoin, state => {
       setTravel(state);
     }, setTravelNotice);
-    // Development bypass uses the local simulation, without an authenticated room.
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
       externalOverview:true,transparent:true,renderResolution:1,onError:() => setError(true),onInteriorChange:setIndoors});
@@ -139,8 +138,6 @@ export default function PixiPage() {
     </div>
     {!error && <aside className="pixi-live" aria-label="Live island">
       <div role="status">{notice || (offline ? 'Local development · Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
-      {/* Keys share this sibling list: scope each ID to its toolbar item so
-          reconnects and island changes unmount the correct UI and effects. */}
       {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
       {(status === 'playing' || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
       {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}

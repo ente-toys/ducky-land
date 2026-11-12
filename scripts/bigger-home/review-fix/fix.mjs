@@ -1,4 +1,3 @@
-// Authored Home-only corrections. Surface repetition is brushwork, never prop placement.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {inPoly} from '../../../assets/world/island-geometry.mjs';
 export function finishProps({E,D,svg,custom,kit,reuse,plant,bench,flowers,at}) {
@@ -12,7 +11,6 @@ export function finishProps({E,D,svg,custom,kit,reuse,plant,bench,flowers,at}) {
   s=s.replaceAll(`fill="${roof}"`,`fill="${roofs[(i+E.communities.indexOf(c))%roofs.length]}"`)
    .replaceAll(`fill="${wall}"`,`fill="${walls[(i*2+E.communities.indexOf(c))%walls.length]}"`);
   const w=p.width,h=p.height,sx=[.88,1,.95,1.04,.91,1.02][i],sy=[.90,1.06,1,.94,1.02,.86][i];
-  // Keep the doorway and base anchored; the existing conservative solid footprint still fits.
   s=s.replace('<g stroke=',`<g transform="translate(${w*(1-sx)/2} ${h*(1-sy)}) scale(${sx} ${sy})" stroke=`);
   let detail='';
   if(i%3===0)detail=`<path d="M${w*.23} 138V94L${w*.32} 62L${w*.41} 94V138Z" fill="${walls[i]}"/><path d="M${w*.20} 98L${w*.32} 52L${w*.44} 98" fill="none" stroke="${roofs[i]}" stroke-width="15"/><path d="M${w*.29} 103H${w*.35}V129H${w*.29}Z" fill="#6ec9de"/>`;
@@ -21,7 +19,6 @@ export function finishProps({E,D,svg,custom,kit,reuse,plant,bench,flowers,at}) {
   s=s.replace('</g></svg>',detail+'</g></svg>');const name=`${p.asset}-${c.id}-${i+1}`;
   writeFileSync(`${D}/${name}.svg`,s);p.src=`/pixi-art/home-communities/${name}.svg`;p.houseVariant={roof:roofs[(i+E.communities.indexOf(c))%6],wall:walls[(i*2+E.communities.indexOf(c))%6],widthScale:sx,heightScale:sy,feature:['dormer','shutters-and-wide-porch','garden-bay'][i%3]};
  }
- // Each common has its own use. The two tested running discs remain entirely clear.
  E.commons=[
   {id:'cider-grove',name:'Ciderbasket Grove',point:at([137,474]),use:'apple harvest and shared picnic'},
   {id:'seed-share',name:'Seedshare Beds',point:at([1047,231]),use:'seed nursery between gardeners and farmers'},
@@ -51,11 +48,9 @@ export function finishGround({E,D,svg,at,px,curve,sample,roads,old}) {
  const polygons=rivers.map(r=>({...r,poly:ribbon(r.points,r.width)}));
  polygons.push({id:'millhead-pond',name:'Millhead Pond',poly:[[1373,385],[1382,365],[1408,361],[1429,379],[1422,398],[1397,409]]});
  polygons.push({id:'quay-tidal-inlet',name:'Reedwhistle Tidal Inlet',poly:[[875,1195],[940,1183],[1004,1190],[1080,1183],[1154,1202],[1151,1252],[1040,1291],[907,1255]]});
- // Clip the river on the old bank. This leaves every original ground pixel in place.
  const water=polygons.map(r=>{const p=r.poly.map(at);return{id:r.id,x:p.reduce((s,p)=>s+p[0],0)/p.length,y:p.reduce((s,p)=>s+p[1],0)/p.length,rx:1,ry:1,poly:p};});
  E.rivers=rivers.map(r=>({...r,points:r.points.map(at),width:r.width/.18}));E.riverWater=water;
  const additions=[];
- // Original dry jetties become water crossings, retaining their exact artwork and arch.
  const legacy=[
   {id:'old-jetty-1',a:[3320,3319],b:[3320,3730],w:115},
   {id:'old-jetty-2',a:[1137.84,3066.05],b:[940.19,3417.43],w:84},
@@ -65,7 +60,6 @@ export function finishGround({E,D,svg,at,px,curve,sample,roads,old}) {
  const bridgeRect=(id,a,b,w)=>({id,x:(a[0]+b[0])/2,y:(a[1]+b[1])/2,w:Math.max(w,Math.abs(b[0]-a[0])+w),h:Math.max(w,Math.abs(b[1]-a[1])+w)});
  E.riverBridges=legacy.map(({id,a,b,w})=>bridgeRect(id,a,b,w));
  for(const [i,b]of E.walkways.entries())E.riverBridges.push(bridgeRect('existing-deck-'+i,b.a,b.b,b.w));
- // Intersections of authored road and river centrelines determine the required crossings.
  function intersect(a,b,c,d){const ax=b[0]-a[0],ay=b[1]-a[1],bx=d[0]-c[0],by=d[1]-c[1],den=ax*by-ay*bx;if(Math.abs(den)<1e-6)return null;const t=((c[0]-a[0])*by-(c[1]-a[1])*bx)/den,u=((c[0]-a[0])*ay-(c[1]-a[1])*ax)/den;return t>=0&&t<=1&&u>=0&&u<=1?[a[0]+t*ax,a[1]+t*ay,ax,ay]:null;}
  for(const r of rivers){const stream=sample(r.points);for(const [ri,road]of roads.entries()){const lane=sample(road.p);for(let i=1;i<lane.length;i++)for(let j=1;j<stream.length;j++){const hit=intersect(lane[i-1],lane[i],stream[j-1],stream[j]);if(!hit)continue;const[x,y,dx,dy]=hit;if(inPoly(x,y,old))continue;
   if(additions.some(v=>Math.hypot(v.x-x,v.y-y)<30))continue;
@@ -86,10 +80,8 @@ export function finishGround({E,D,svg,at,px,curve,sample,roads,old}) {
  for(const d of outlines)g+=`<path d="${d}" fill="#6ec9de" stroke="#477f35" stroke-width="6" stroke-linejoin="round"/><path d="${d}" fill="#6ec9de" stroke="#d9cc86" stroke-width="2.3" stroke-linejoin="round"/>`;
  for(const d of outlines)g+=`<path d="${d}" fill="#6ec9de"/>`;
  for(const r of rivers){const a=sample(r.points);for(let i=3;i<a.length-3;i+=7){const[x,y]=a[i];g+=`<path d="M${x-3} ${y}q4-2 9 0" fill="none" stroke="#b3e5df" stroke-width="1"/>`;}}
- // Harvest strips and mown picnic greens articulate the remaining commons without filling them with solids.
  for(const[cx,cy,rx,ry]of [[132,476,104,83],[1430,750,105,92],[682,1163,118,42],[446,128,87,46],[1045,178,68,58],[40,938,67,55]])g+=`<path d="${curve([[cx-rx,cy],[cx-rx*.5,cy-ry],[cx+rx*.6,cy-ry*.8],[cx+rx,cy],[cx+rx*.4,cy+ry],[cx-rx*.65,cy+ry*.7]])}" fill="#b4cd4a" fill-opacity=".32" stroke="#7d9e3a" stroke-width="1" stroke-dasharray="3 6"/>`;
  for(const[x,y,len]of [[596,1144,128],[608,1156,133],[629,1170,126],[654,1185,105]])g+=`<path d="M${x} ${y}q${len/2} 9 ${len} -2" fill="none" stroke="#dfd075" stroke-width="4" stroke-linecap="round" stroke-dasharray="5 3 9 4"/>`;
- // Top-bank fishing shelf with stepping stones and lily pads, kept away from the bridge decks.
  for(const[x,y]of [[525,820],[566,831],[810,849],[941,971],[925,1009],[1348,414],[1277,454]])g+=`<ellipse cx="${x}" cy="${y}" rx="3.8" ry="2" fill="#dad3a4" stroke="#969068" stroke-width=".8"/>`;
  for(const[x,y]of [[568,824],[787,851],[944,958],[853,1149],[1378,399],[1267,460]])g+=`<path d="M${x-4} ${y}a5 2.7 0 1 0 5-2l-3 2Z" fill="#7ebd65" stroke="#477f35" stroke-width=".6"/>`;
  return g;

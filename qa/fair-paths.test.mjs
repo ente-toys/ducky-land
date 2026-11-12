@@ -37,7 +37,6 @@ test('Every Fair route and interpolated segment avoids water, props and runtime 
   for(const p of r.samples)assert(nav.walkable(...p),`${r.id} blocked at ${p}`);
   for(let i=1;i<r.samples.length;i++)assert(nav.clearLine(r.samples[i-1],r.samples[i]),`${r.id} crosses an obstacle between ${r.samples[i-1]} and ${r.samples[i]}`);
  }
- // These two fixed tree feet were called out in the review. Route around them.
  const trees=art.props.filter(p=>/^hamlet-sugarspoon-tree-round-(11|12)$/.test(p.id));
  assert.equal(trees.length,2);
  for(const tree of trees)for(const r of audit.routes)for(const p of r.samples)assert(!inShape(...p,tree.footprint,r.width/2+7),`${r.id} crowds ${tree.id}`);

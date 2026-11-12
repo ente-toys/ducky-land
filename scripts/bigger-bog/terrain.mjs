@@ -7,25 +7,18 @@ export const waters=plan.rivers.map(r=>({id:r.id,poly:ribbon(r.points,r.points.m
 export const terrainDefs=`<pattern id="marsh-grass" width="370" height="290" patternUnits="userSpaceOnUse"><path d="M37 60l-4-16 9 9 8-14-2 20M227 178l-6-13 9 7 5-14 3 15M111 236l-3-9 8 7 6-10" fill="none" stroke="#6F9066" stroke-width="2.4" opacity=".44"/><path d="M64 139q35-13 62 2M269 39q20-9 38 0M203 249q24-10 40-2" fill="none" stroke="#C6D99E" stroke-width="9" opacity=".42"/><ellipse cx="157" cy="83" rx="24" ry="8" fill="#87AA75" opacity=".13"/><ellipse cx="314" cy="215" rx="18" ry="6" fill="#E2D29D" opacity=".15"/></pattern><pattern id="road-grain" width="163" height="129" patternUnits="userSpaceOnUse"><path d="M12 38q33-8 59-1M91 93l31-3" stroke="#C6AB77" stroke-width="3" opacity=".55" fill="none"/><ellipse cx="31" cy="91" rx="10" ry="4" fill="#F0E1B4"/><ellipse cx="123" cy="27" rx="3" ry="2" fill="#A18458"/></pattern><clipPath id="land"><path d="${path(plan.coast)}"/></clipPath><mask id="newland"><rect x="-3000" y="-3000" width="15000" height="13000" fill="white"/><path d="${path(original.world.coast)}" fill="black"/></mask>`;
 export function makeTerrain(layout=plan,{junctions=true,greens=false}={}){
 let body=`<path d="${path(plan.coast.map(([x,y])=>[x,y+38]))}" fill="#87AA75" stroke="#39472D" stroke-width="10"/><path d="${path(plan.coast)}" fill="${sand}" stroke="#A8C594" stroke-width="36"/><path d="${path(plan.coast)}" fill="${grass}" stroke="${sand}" stroke-width="145"/><g clip-path="url(#land)" mask="url(#newland)"><path d="${path(plan.coast)}" fill="url(#marsh-grass)"/>`;
-// Composed meadows and broad darker raised banks, not randomly scattered props.
 for(const [xx,yy,rx,ry]of [[-1270,2550,520,900],[-1100,4350,610,850],[9200,2700,560,1000],[9200,4780,490,720],[2150,-1000,1100,340],[6500,-1050,1000,310],[2100,6860,1000,460],[6600,7050,830,380],[1000,900,420,300],[8000,950,430,280],[1000,5500,550,290]]){const [x,y]=fitted([xx,yy]);body+=`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#87AA75" opacity=".18"/>`;}
-// A warm uneven polygon for every road. Outlined bank, cast shadow, sandy interior,
-// inset ruts, hand ink tufts and sparse edge pebbles follow its changing outline.
 const roadShapes=layout.roads.map(r=>({r,b:ribbon(r.pts,r.widths,true)}));
-// Small round caps finish the narrower residential lanes at their garden gates.
 if(!junctions)for(const {r,b}of [...roadShapes])for(const i of [0,b.pts.length-1]){
  const p=b.pts[i],radius=(i===0?r.widths[0]:r.widths.at(-1))/2;
  const poly=Array.from({length:32},(_,j)=>[p[0]+Math.cos(j*Math.PI/16)*radius,p[1]+Math.sin(j*Math.PI/16)*radius]);
  roadShapes.push({r:{id:r.id+'-cap'},b:{pts:[p],left:[],right:[],poly}});
 }
-// Widen the four heart approaches into rounded junctions. Their sandy interiors
-// join the roads before edge dressing, so no bank cuts across a walking route.
 if(junctions)for(const [id,index,rx,ry]of [['south-heart',2,380,350],['west-heart',3,350,325],['east-heart',3,350,325],['north-heart',3,360,330]]){
  const p=plan.roads.find(r=>r.id===id).pts[index];const poly=Array.from({length:48},(_,i)=>[p[0]+Math.cos(i*Math.PI/24)*rx,p[1]+Math.sin(i*Math.PI/24)*ry]);
  roadShapes.push({r:{id:id+'-junction'},b:{pts:[p],left:[],right:[],poly}});
 }
 for(const {b}of roadShapes){const p=path(b.poly);body+=`<path d="${p}" transform="translate(0 12)" fill="#71895B" stroke="#71895B" stroke-width="52" opacity=".48"/><path d="${p}" fill="${sand}" stroke="#8DAE68" stroke-width="38" stroke-linejoin="round"/><path d="${p}" fill="${sand}" stroke="#536C41" stroke-width="8" stroke-linejoin="round"/>`;}
-// All sandy interiors are painted after all banks, so junctions are open.
 for(const {b}of roadShapes)body+=`<path d="${path(b.poly)}" fill="${sand}"/><path d="${path(b.poly)}" fill="url(#road-grain)"/>`;
 for(const {b}of roadShapes){const line='M'+b.pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join('L');body+=`<path d="${line}" fill="none" stroke="#C6AB77" stroke-width="10" opacity=".43" stroke-linecap="round"/><path d="${line}" transform="translate(0 29)" fill="none" stroke="#F0E1B4" stroke-width="21" opacity=".52" stroke-linecap="round"/>`;
  const exposed=(x,y)=>!roadShapes.some(q=>q.b!==b&&inPoly(x,y,q.b.poly));
@@ -35,7 +28,6 @@ for(const {b}of roadShapes){const line='M'+b.pts.map(p=>p.map(v=>v.toFixed(1)).j
 for(const c of plan.commons){const [x,y]=c.point;body+=`<path d="M${x-260} ${y-230}q230-95 490-25q90 160 25 340q-250 90-490 5q-70-140-25-320Z" fill="#87AA75" opacity=".32"/><path d="M${x-180} ${y+240}q180 55 370-5" fill="none" stroke="#C6D99E" stroke-width="21" opacity=".65"/>`;}
 for(const c of layout.communities){if(greens){body+=`<ellipse cx="${c.point[0]}" cy="${c.point[1]}" rx="290" ry="185" fill="#9BBB74" stroke="#6F9066" stroke-width="5"/><ellipse cx="${c.point[0]}" cy="${c.point[1]}" rx="275" ry="170" fill="url(#marsh-grass)"/>`;continue;}body+=`<ellipse cx="${c.point[0]}" cy="${c.point[1]}" rx="470" ry="290" fill="${sand}" stroke="#A18458" stroke-width="5"/><ellipse cx="${c.point[0]}" cy="${c.point[1]}" rx="449" ry="269" fill="url(#road-grain)"/>`;}
 for(const w of waters){body+=`<path d="${path(w.poly)}" fill="#82B7A7" stroke="#617A4E" stroke-width="16"/><path d="${path(w.poly)}" fill="none" stroke="#A8C594" stroke-width="6"/>`;}
-// Pond heads and ripples inside real water, with slate stepping stones off the roads.
 body+=`<g transform="translate(400 300) scale(.9)"><ellipse cx="1700" cy="250" rx="210" ry="130" fill="#82B7A7" stroke="#617A4E" stroke-width="10"/><ellipse cx="6200" cy="5480" rx="220" ry="140" fill="#82B7A7" stroke="#617A4E" stroke-width="10"/>`;
 for(const [x,y]of [[3900,-1600],[3820,-1150],[3000,-750],[2500,-530],[1830,20],[6110,5560],[5830,5880],[5180,6900],[4760,7640]])body+=`<path d="M${x-47} ${y}q45-12 95 0M${x-15} ${y+28}h57" fill="none" stroke="#C7E4C5" stroke-width="5" stroke-linecap="round"/>`;
 body+='</g></g>';

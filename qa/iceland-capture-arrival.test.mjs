@@ -19,7 +19,6 @@ test('island arrival clears the previous capture before throttling and never upl
  const before=clears;time+=1;frame(state('isle-55'));assert.equal(capture,null);assert(clears>before,'invalidation precedes the 60Hz gate');assert.equal(presentation.blend,0);
  time+=20;frame(state('isle-55'));assert.equal(capture,null);assert.equal(game.canvas.style.visibility,'hidden');
  game.arts.set('snow',{ready:true});time+=20;frame(state('isle-55'));assert.equal(capture,'isle-55');
- // The room can change art during nativeTick while the globe reports its last camera.
  switchDuringTick=true;
  time+=20;frame(state('isle-55'));assert.equal(capture,null);assert.equal(game.canvas.style.visibility,'hidden');
  view.destroy();

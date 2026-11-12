@@ -3,7 +3,6 @@ import {createFountainSurface, WATER_STEP} from './water.js';
 
 const ellipse = (p, x, y) => ((x - p.x) / p.rx) ** 2 + ((y - p.y) / p.ry) ** 2;
 
-// The raised island includes its front stone wall, not just its elliptical lawn.
 export function basinContains(layout, x, y) {
   if (ellipse(layout.pool, x, y) >= 1) return false;
   const island = layout.island;
@@ -23,7 +22,6 @@ export function basinMask(layout) {
   return {width, height, data};
 }
 
-// Clip the shared ribbons, foam and droplets too, so they cannot paint the stone or olive island.
 export function basinClip(layout) {
   const {pool, island} = layout;
   const clip = new Graphics({label: 'Fountain basin clip'}).ellipse(pool.x, pool.y, pool.rx, pool.ry).fill(0xffffff);

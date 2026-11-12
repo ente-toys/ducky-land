@@ -1,4 +1,3 @@
-// Rebuild from the protected baseline, then apply the review pass. No shared engine edits.
 import './compose.mjs';
 import fs from 'node:fs';
 import {A,svg,path,el,dpath,ink,grass} from './design.mjs';
@@ -11,7 +10,6 @@ world.water.push(...visualWaters);walk.water.push(...waters);
 const protectedBody=path(old.coast,'black')+old.islets.map(([x,y,rx,ry])=>el(x,y,rx,ry,'black')).join('');
 const wetBody=geo.outlines.map(p=>path(p,'#6EC9DE')).join('');
 let overlay=`<defs><mask id="fix-exterior" maskUnits="userSpaceOnUse" x="-2200" y="-2400" width="12800" height="10400"><rect x="-2200" y="-2400" width="12800" height="10400" fill="white"/>${protectedBody}</mask><mask id="fix-dry" maskUnits="userSpaceOnUse" x="-2200" y="-2400" width="12800" height="10400"><rect x="-2200" y="-2400" width="12800" height="10400" fill="white"/>${protectedBody}${geo.outlines.map(p=>path(p,'black','black',50)).join('')}</mask></defs>`;
-// Six deliberately composed, low planted commons leave open grass between their beds.
 const commons=[
  ['bell-herbs',3650,-1220,550,130,'#A7BD50'],['north-picnic',850,30,440,230,'#A8BD4C'],
  ['olive-nursery',-860,2820,240,310,'#AFBE54'],['potters-garden',8950,2120,240,270,'#B5C16A'],
@@ -26,7 +24,6 @@ for(const [id,x,y,rx,ry,color]of commons){
  world.zones[id]={x,y,rx,ry,name:id.split('-').join(' ')};
 }
 overlay+=`<g clip-path="url(#extension-land)" mask="url(#fix-dry)">${garden}</g>`;
-// Raised green banks and a dark ink lip surround real blue channel polygons.
 overlay+=`<g clip-path="url(#extension-land)" mask="url(#fix-exterior)">${geo.outlines.map(p=>path(p,'none','#687D35',38)).join('')}${geo.outlines.map(p=>path(p,'none','#435E38',13)).join('')}${wetBody}${geo.outlines.map(p=>path(p,'none','#B3DDD0',4)).join('')}</g>`;
 const edgeScenes=[[2750,625],[3230,720],[620,3050],[870,3580],[6970,2890],[7530,3400],[3890,5290],[4360,5430],[1320,1620],[6180,4780],[1910,280],[1760,630],[7260,4160],[6880,4910],[6570,5790]];
 let ripples='';
@@ -34,7 +31,6 @@ for(const [x,y]of edgeScenes){
  if(waters.some(o=>inShape(x,y,o,-20)))ripples+=`<path d="M${x-35} ${y}q35 -10 70 0m-44 23q23 -6 46 0" stroke="#D3EEE0" stroke-width="3" fill="none"/>`;
 }
 overlay+=ripples;
-// Chosen bank corners use the existing theme reeds and lily artwork, clipped off the heart.
 const accents=[[2770,590],[3270,850],[605,3070],[820,3610],[7040,2820],[7530,3420],[3850,5350],[4400,5460],[1300,1620],[6290,4770],[1960,330],[1800,650],[7260,4200],[6890,4930],[6600,5820]];
 let bankArt='';
 function stamp(src,x,y,w,h){const text=fs.readFileSync(A+src,'utf8'),box=text.match(/viewBox="([^"]+)"/)[1].split(/[ ,]+/).map(Number),inner=text.replace(/^.*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');return `<g transform="translate(${x-w/2} ${y-h}) scale(${w/box[2]} ${h/box[3]}) translate(${-box[0]} ${-box[1]})">${inner}</g>`;}
@@ -58,7 +54,6 @@ function collision(points,width,id){
  samples.push(points.at(-1));
  for(const [x,y]of samples)bridgeSegments.push({id,x,y,w:width,h:width});
 }
-// Four straight retained piers need one rectangle each, rather than repeated samples.
 for(const [id,x,y,w,h]of [['west-pier',770,3330,760,147],['east-pier',7235,3150,730,147],['south-pier',4100,5280,147,720],['north-pier',3000,760,124,760]])bridgeSegments.push({id,x,y,w,h});
 for(const i of [4,5]){const b=old.walkways[i];collision([b.a,b.b],b.w-18,'retained-deck-'+i);}
 for(const c of geo.crossings){

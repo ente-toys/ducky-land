@@ -36,8 +36,6 @@ for c in plan['crossings']:
    elif op=='lineTo':
     for p in pts:d+='L'+emit(p);last=p
    elif op in ['qCurveTo','curveTo']:
-    # Source paths use explicit quadratic/cubic segments. Sample the nonlinear
-    # camera reprojection so the original arch and rail curves stay intact.
     a=last
     for i in range(1,25):
      t=i/24;u=1-t
@@ -52,7 +50,6 @@ for c in plan['crossings']:
   if 'stroke-width' in attrs:a['stroke-width']=str(round(float(attrs['stroke-width'])*max(.7,heightScale),3))
   path=E.Element('path',a)
   layers['front' if group=='near-railing' else 'back'].append(E.tostring(path,encoding='unicode'))
- # Tight layer bounds avoid transparent margins being mistaken for tall props.
  c['viewports']={}
  for layer,paths in layers.items():
   pts=bounds[layer];x=min(p[0] for p in pts)-4;y=min(p[1] for p in pts)-4

@@ -20,7 +20,6 @@ test('every Fair art layer supplies at least one texel per device pixel at defau
   for(const {p,kind}of layers(art)){
    const own=tiles.filter(t=>t.id===(p.id??p.src)&&t.kind===kind);
    assert(own.length,`${kind} ${p.src} has no streamed art`);
-   // The new tiles are authored in world units, hence sprite scale = 1.
    const anchor=layers(art).find(l=>l.p===p).anchor;
    const {visible}=allocation(own,{x:p.x+p.width*(p.scale??1)*(.5-anchor.x),y:p.y+p.height*(p.scale??1)*(.5-anchor.y),zoom},width,height);
    assert(visible.length,`${kind} ${p.src} no visible crop`);
@@ -105,8 +104,6 @@ test('retina zoom/pan swaps count old and pending Fair textures within each hard
   const stream=pool.create(tiles.filter(t=>(t.kind==='ground')===(kind==='ground')),{addChild(){}});
   for(const [x,y,zoom]of [[3500,2400,.6],[7762.1,2639.25,1.44],[7762.1,2639.25,1.8],[3500,2400,1.8],[3500,2400,.6]]){
    const view=[{stream,camera:{x,y,zoom},width:2560,height:1440}];
-   // The first overview has deliberately large world coverage; only the normal
-   // and maximum play views must retain the density floor under the budget.
    pool.update(view,2);while(pool.stats().pendingTiles)await flush();
    pool.update(view,2);while(pool.stats().pendingTiles)await flush();
    assert(pool.stats().peakBytes<=pool.stats().budgetBytes,`${kind} peak must include old + pending decodes`);

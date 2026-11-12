@@ -15,14 +15,11 @@ def upsert(old,new,key='id'):
 def ellipse(o,margin=0):
     if o.get('poly'):return Polygon(o['poly']).buffer(margin)
     return affinity.scale(Point(o['x'],o['y']).buffer(1,32),o.get('rx',0)+margin,o.get('ry',0)+margin)
-# Retire all old centre layers, including both offset paving discs.
 removed={p['id'] for cat in ['props','flats','decks'] for p in a[cat] if p['src'].startswith('centre/') or p.get('id') in ['pink-close-plaza','pink-close-court']}
-# The approved circle is open paving. Retire the small old rim ornaments inside it.
 plaza=ellipse(C['plaza'])
 for p in a['props']:
     if not p['id'].startswith('rosy-') and plaza.contains(Point(p['x'],p['y'])):
         removed.add(p['id'])
-# Clear the full floor, including rim props whose padded bases cross its edge.
 oldrim=[o for o in w['obstacles'] if not o.get('poly') and not o.get('name','').startswith('rosy-') and plaza.intersects(ellipse(o,16))]
 for p in a['props']:
     if any(abs(p['x']-o['x'])<2 and abs(p['y']-o['y'])<20 for o in oldrim):removed.add(p['id'])
@@ -30,10 +27,9 @@ removedpoints=[(p['x'],p['y']) for p in a['props'] if p['id'] in removed]
 for cat in ['props','flats','decks']:a[cat]=[p for p in a[cat] if p.get('id') not in removed and not p['src'].startswith('ribbon-centre/')]
 for replacement in B['planting']['replacements']:
     p=next((p for p in a['props'] if p['id']==replacement['id']),None)
-    if p is None:continue # retired rim ornament under the approved new floor
+    if p is None:continue
     assert p['src'] in [replacement['fromSrc'],replacement.get('src',replacement.get('toSrc'))],replacement
     for k in ['src','width','height']:p[k]=replacement.get(k,replacement.get('toSrc') if k=='src' else p[k])
-# Use the final actual travel union, water polygons, bridge decks and retained keep-list.
 rings=[]
 surface=(S/'path-surface.svgfrag').read_text()
 for s in re.findall(r'<path d="([^"]+)" fill="#FBE6C8"',surface)[0].split('M')[1:]:
@@ -55,7 +51,6 @@ for p in B['planting']['props']:
     if reason:dropped.append({'id':p['id'],'reason':reason})
     else:accepted.append(p)
 a['props']=upsert(a['props'],accepted+B['hill']['props']);a['flats']=upsert(a['flats'],[B['hill']['mound']]);a['kites']=B['kites']
-# Strip only exact reviewed baked contact ellipses. Repeated application is safe.
 stripped=[]
 for item in H['bakedDuplicateShadowsToStrip']:
     f=Path(item['file']);text=f.read_text();count=text.count(item['exactXML']);assert count<=1,str(f)
@@ -71,10 +66,9 @@ a['flats']+=floors
 props=[]
 for p in C['props']:
     p=dict(p,src='ribbon-centre/'+p['src'],wind=False)
-    if p['id']=='rosy-music-box':p['contact']=False # tight ground blocker owns sleep clearance; lid is elevated
+    if p['id']=='rosy-music-box':p['contact']=False
     if p['id'] in ['rosy-dancer','rosy-wind-key']:
         kind='spin' if p['id']=='rosy-dancer' else 'wind'
-        # centre-motion pivot coordinates are absolute SVG-local coordinates.
         ax=p['anchor']['x']*p['width']+p['pivot'][0];ay=p['anchor']['y']*p['height']+p['pivot'][1]
         p['centrePiece']={'id':p['id'],'x':0,'y':0,'width':p['width'],'height':p['height'],'anchor':p['anchor'],'animate':{'kind':kind,'period':4.8 if kind=='spin' else 1.6,'pivot':[ax,ay]}}
     props.append(p)

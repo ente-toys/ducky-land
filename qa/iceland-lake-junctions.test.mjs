@@ -52,13 +52,11 @@ test('actual composed pixels have no snow band across any mouth, and both lips f
  const walk=geometry(world).walkable;
  for(const l of landings){
   const x=l.center[0]-300,y=l.center[1]-300,W=600;
-  // Raster the same terrain + separately placed lake used in the real scene.
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${W}" viewBox="${x} ${y} ${W} ${W}">${terrain}<g transform="translate(${lake.x} ${lake.y})">${lakeSVG}</g></svg>`;
   const {data}=await sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({resolveWithObject:true});
   for(let depth=0;depth<=160;depth+=2)for(const side of [-l.width/2+10,0,l.width/2-10]){
    const p=point(l,depth,side),i=(Math.floor(p[1]-y)*W+Math.floor(p[0]-x))*4;
    assert.deepEqual([...data.subarray(i,i+3)],[166,222,236],l.id+' snow gap at '+p);
-   // Beyond the open mouth, the ice navigator routes around dry jetty posts.
    if(depth<=100)assert.ok(walk(...p),l.id+' blocked mouth corridor '+p);
   }
   const outer=new Path2D(blue).op(new Path2D(blue).stroke({width:20,join:StrokeJoin.Round}),PathOp.Union);
@@ -73,6 +71,3 @@ test('actual composed pixels have no snow band across any mouth, and both lips f
   assert.ok(sides.every(n=>n>50),l.id+' both flared edge lips checked');
  }
 });
-
-// boss 11 Nov: the paths are ice too, so a Ducky starts sliding on the path itself, not at the mouth;
-// qa/iceland-rink-slide.test.mjs checks that every path start reaches the heart.

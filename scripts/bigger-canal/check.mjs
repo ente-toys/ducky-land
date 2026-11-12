@@ -23,7 +23,6 @@ for(const p of art.props.slice(old.props.length)){
  if(!/reeds/.test(p.name)&&(!map.landAt(p.x,p.y)||world.water.some(o=>inShape(p.x,p.y,o))))fails.push('prop off dry land '+p.id+' '+p.x+','+p.y);
 }
 for(const b of map.boatSpots())assert.ok(map.shoreFor(b.x,b.y,260),'boat has boardable shore');
-// Original coastal dry interiors remain walkable exactly as before. Rivers never make water walkable away from a deck.
 const before=geometry(oldWalk),after=geometry(map.baseWalk);let originalSamples=0,changed=0;
 for(let y=700;y<5300;y+=23)for(let x=600;x<7550;x+=23)if(before.walkable(x,y)){originalSamples++;if(!after.walkable(x,y))changed++;}
 assert.equal(changed,0,'original walking interior preserved');

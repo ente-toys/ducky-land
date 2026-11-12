@@ -15,7 +15,6 @@ function fixture(options={}){
   const a=arena.join({id:'a',name:'A',team:'privacy'}),b=arena.join({id:'b',name:'B',team:'google'});
   advance(arena,RULES.spawnShield+.1);return {arena,a,b};
 }
-// Collision fixtures set the actor's authoritative facing before the trigger.
 const shot=(arena,id='a',seq=0,extra={})=>{arena.state.players.get(id).facing=(extra.ax??1)>0?Math.PI/2:-Math.PI/2;return arena.input(id,{seq,x:0,y:0,ax:1,ay:0,fire:true,...extra});};
 test('only gun C Popper uses review range and projectile speed',()=>{
   assert.equal(RULES.range,10*D);assert.equal(RULES.shotSpeed,28*D);

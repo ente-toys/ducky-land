@@ -34,7 +34,6 @@ for(const p of [...a.ground.tiles,...a.flats,...a.decks,...a.props,...(a.floatin
 const report={benches:benches.length,trees:a.props.filter(p=>/tree/i.test(p.name)).length,svgFiles:vectors,rasterFiles:0,problems};
 fs.writeFileSync(D+'ten-clearance.json',JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));if(problems.length)process.exitCode=1;
-// Exercise the real theme loader against these files even if the shared generated registry is stale.
 const {loadThemeArt}=await import('../../src/pixi/theme-art.js');
 const {Texture}=await import('pixi.js');
 const originalFetch=globalThis.fetch;let acquired=0,released=0;

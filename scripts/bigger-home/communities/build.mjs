@@ -1,5 +1,3 @@
-// Home's five authored neighbourhoods. Coordinates use the original B drawing frame.
-// Repeated shapes describe construction and surface texture, never scattered buildings.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {inPoly} from '../../../assets/world/island-geometry.mjs';
 import {finishProps,finishGround} from '../review-fix/fix.mjs';
@@ -13,7 +11,6 @@ const D='public/pixi-art/home-communities';mkdirSync(D,{recursive:true});
 const K=.18,at=([x,y])=>[(x-278)/K,(y-204)/K],px=([x,y])=>[x*K+278,y*K+204];
 const old=read('src/pixi/home-original-world.json').coast.map(px);
 E.props=[];E.obstacles=[];E.decks=structuredClone(B.decks);E.walkways=structuredClone(B.walkways);
-// Keep the working southern pier, its walkways and the east swan-cove harbour.
 E.decks.push(...C.decks.slice(B.decks.length));E.walkways.push(...C.walkways.slice(B.walkways.length));
 E.places=[];E.communities=[];E.version='communities';
 const assets=read('assets/manifest.json').assets;
@@ -27,8 +24,6 @@ function plant(kind,x,y,zone,s=1){const dim={'tree-3':[300,380],'tree-4':[200,28
 const bench=(x,y,z)=>kit('bench-wood',x,y,.18,z,[70,24,10]);
 const lamp=(x,y,z)=>kit('lamp-lantern',x,y,.113,z,[13,13,5]);
 const planter=(x,y,z)=>kit('planter-flowers',x,y,.13,z,[38,19,8]);
-// Five distinct Home families: pitched bakery row, gardeners' cottages, low farmhouses,
-// skylit makers' studios, and weatherboard fishing cottages. Fronts face the walking lanes.
 const homes={townhouse:['#f16e4b','#fff0c7',610,610],cottage:['#ffcf50','#fff0c7',540,510],farmhouse:['#d58b49','#f9e8b2',640,470],studio:['#b2b7dc','#f9e8b2',590,490],'fisher-cottage':['#6ec9de','#b5d9d0',570,470]};
 for(const [type,[roof,wall,w,h]]of Object.entries(homes)){
  const tall=type==='townhouse',top=tall?210:170,bottom=h-55,doorX=w*.5;
@@ -59,7 +54,6 @@ for(const c of P.communities){
  const homeIds=[];
  for(const [i,[x,y,type]]of c.homes.entries()){
   const[, ,w,h]=homes[type],home=custom(type,x,y,w,h,c.id,[w*.40,48,45]);home.communityRole='home';homeIds.push(home.id);
-  // Separate garden furniture preserves the lane through the gate's centre.
   const gate=custom('garden-gate',x,y+18,390,120,c.id);for(const dx of [-118,118])E.obstacles.push({x:gate.x+dx,y:gate.y-12,rx:64,ry:12});
   custom('mailbox',x+43,y+15,105,170,c.id,[20,13,4]);
   custom('herb-box',x-44,y-5,260,125,c.id,[95,25,12],.8);
@@ -73,24 +67,20 @@ for(const c of P.communities){
  planter(cx-76,cy-2,c.id);planter(cx+80,cy+11,c.id);
 }
 const work=(id,p)=>{p.communityRole='workplace';E.communities.find(c=>c.id===id).workplaces.push(p.id);return p;};
-// Bakers live above the warm market lane. Bread goes from ovens to counter to delivery bicycle.
 work('butterbill',kit('bakery',156,185,.27,'butterbill',[188,64,42]));work('butterbill',kit('cafe',269,195,.27,'butterbill',[177,62,40]));
 for(const[x,y]of [[146,256],[231,293],[164,309]]){kit('umbrella-cafe',x,y,.17,'butterbill',[14,13,12]);kit('picnic-table',x,y+12,.14,'butterbill',[75,30,14]);}
 kit('sign-bakery',111,224,.13,'butterbill',[30,15,8]);kit('cycle-rack',334,272,.18,'butterbill',[69,19,5]);kit('bin-recycling',99,279,.12,'butterbill',[25,20,8]);reuse('flour-sacks',127,197,'butterbill',[83,26]);
-// Gardeners share a nursery, potting tables and children's green, with the gazebo as their meeting place.
 work('lanternleaf',reuse('gazebo',790,170,'lanternleaf'));work('lanternleaf',reuse('pergola',903,188,'lanternleaf'));
 for(const[x,y]of [[761,163],[819,163],[875,187],[930,187]]){const[wx,wy]=at([x,y]);E.obstacles.push({x:wx,y:wy,rx:13,ry:13});}
 work('lanternleaf',reuse('garden-workbench',671,208,'lanternleaf',[130,33]));reuse('garden-wheelbarrow',697,245,'lanternleaf',[97,34]);reuse('garden-water-butt',927,222,'lanternleaf',[53,25]);
 reuse('sandbox',843,240,'lanternleaf',[130,45,22]);
 for(const[x,y]of [[738,203],[761,218],[849,213],[869,201],[885,218]]){custom('herb-box',x,y,260,125,'lanternleaf',[95,25,12],.8);flowers(x-12,y-5,'lanternleaf');}
-// Farmers have a true hamlet: mill court, orchard beside the cider shed, allotments and their own market.
 work('clovercrust',reuse('windmill',1340,126,'clovercrust',[105,55,28]));
 work('clovercrust',kit('stall-fruit',1260,259,.22,'clovercrust',[148,38,12]));work('clovercrust',kit('stall-bread',1372,265,.22,'clovercrust',[148,38,12]));
 work('clovercrust',reuse('glasshouse',1447,233,'clovercrust',[180,68,37]));
 for(const[n,x,y]of [['raised-bed-1179',1185,195],['raised-bed-1208',1217,223],['raised-bed-1254',1250,206]])work('clovercrust',reuse(n,x,y,'clovercrust',[115,28,15]));
 for(const[n,x,y]of [['apple-tree-1589',1514,242],['apple-tree-1696',1570,266],['apple-tree-1664',1517,296],['apple-tree-1558',1575,320]])reuse(n,x,y,'clovercrust',[31,22,9]);
 reuse('orchard-ladder',1537,275,'clovercrust',[48,17,6]);reuse('flour-sacks',1383,142,'clovercrust',[83,26]);reuse('garden-wheelbarrow',1460,283,'clovercrust',[97,34]);kit('bunting',1322,271,.31,'clovercrust');
-// Makers' studios circle the pottery yard. The pond and bandstand are shared work and gathering places.
 work('petalpatch',custom('pottery-bench',116,881,410,300,'petalpatch',[155,39,20]));
 work('petalpatch',custom('easel',218,879,220,300,'petalpatch',[60,28,8]));custom('easel',266,925,220,300,'petalpatch',[60,28,8]);
 work('petalpatch',reuse('gazebo',234,963,'petalpatch',[158,58,34]));
@@ -98,16 +88,13 @@ reuse('amphi-inner',237,998,'petalpatch',[280,22,40]);reuse('amphi-middle',238,1
 work('petalpatch',reuse('garden-workbench',25,595,'petalpatch',[130,33]));
 for(const[x,y]of [[-7,558],[11,567],[32,580],[52,596],[73,609]]){custom('herb-box',x,y,260,125,'petalpatch',[95,25,12]);flowers(x,y-4,'petalpatch');}
 for(const[x,y,s]of [[285,856,.22],[403,847,.2],[378,867,.13]])kit('lily-pad-flower',x,y,s,'petalpatch');
-// Reedwhistle's boats are built in the central yard, repaired under hanging nets, then launched from the pier.
 work('reedwhistle',custom('boat-mender',1365,1020,650,410,'reedwhistle',[225,60,34]));
 work('reedwhistle',custom('net-rack',1182,1006,400,300,'reedwhistle',[14,12]));
 work('reedwhistle',reuse('lighthouse-point',1494,934,'reedwhistle',[101,52,33]));
 work('reedwhistle',reuse('fishing-tackle',1054,1185,'reedwhistle',[95,28,12]));
 kit('pond-house',972,1181,.22,'reedwhistle',[134,46,24]);kit('buoy-red',1022,1193,.16,'reedwhistle',[17,15,5]);kit('bollard',1041,1200,.14,'reedwhistle',[22,18,5]);
 kit('rowboat',1012,1277,.22,'reedwhistle');kit('rowboat',1150,1267,.19,'reedwhistle');
-// Keep the two leisure swans and the working harbour in the same inlet.
 for(const p of B.props.filter(p=>p.asset.startsWith('swan-')))E.props.push(structuredClone(p));
-// Fixed tree groups frame the homes and lanes. Commons between communities remain clear.
 for(const[z,list]of [
 ['butterbill',[['tree-3',-3,145],['tree-4',397,235],['tree-3',176,96],['tree-4',45,408],['bush-2',197,410]]],
 ['lanternleaf',[['tree-3',523,164],['tree-4',630,74],['tree-3',916,66],['tree-4',1038,190],['tree-3',676,272],['bush-2',875,251]]],
@@ -121,17 +108,13 @@ for(const[x,y]of [[-58,332],[387,103],[1052,44],[1577,374],[1602,713],[1512,1056
 for(const[x,y]of [[388,244],[1168,280],[1527,749],[759,1106],[505,1089],[-31,718]])bench(x,y,'commons');
 finishProps({E,D,svg,custom,kit,reuse,plant,bench,flowers,at});
 sharedGardens({E,D,svg,custom,kit,reuse,plant,bench,flowers,at});
-// Original dry land is covered by the untouched original SVGs. New terrain has no old expansion ring.
 const coast=C.coast.map(px),cd=curve(coast);
 let g=`<defs><clipPath id="community-land"><path d="${cd}"/></clipPath><pattern id="home-grass" width="149" height="123" patternUnits="userSpaceOnUse"><g fill="none" stroke="#4d963c" stroke-width=".8" opacity=".6"><path d="M8 18l-3-3m3 3l2-5m-2 5l5-2 M68 8l-2-4m2 4l3-3 M118 30l-3-2m3 2l1-5m-1 5l4-1 M39 49l-2-3m2 3l2-5m-2 5l5-2 M95 62l-2-2m2 2l3-4 M14 95l-2-3m2 3l1-5m-1 5l5-2 M60 112l-3-2m3 2l1-4m-1 4l4-1 M131 101l-2-3m2 3l2-4 M88 17l-2-3m2 3l3-2 M139 52l-3-1m3 1l1-4 M59 71l-2-2m2 2l1-4 M106 114l-3-2m3 2l2-4 M25 111l-2-2m2 2l2-3 M76 91l-2-2m2 2l3-3"/></g><g fill="#c1d949" opacity=".5"><ellipse cx="49" cy="16" rx="1.3" ry=".7"/><ellipse cx="115" cy="83" rx="1.8" ry="1"/></g><g fill="#fff0c7" opacity=".7"><circle cx="84" cy="37" r=".8"/><circle cx="85.5" cy="39" r=".8"/><circle cx="83" cy="39" r=".8"/></g></pattern></defs><path d="${cd}" fill="#6ec9de" stroke="#97dce5" stroke-width="25"/><path d="${cd}" fill="#93b72f" stroke="#fde48c" stroke-width="16"/><g clip-path="url(#community-land)"><path d="${cd}" fill="url(#home-grass)"/>`;
 for(const[cx,cy,rx,ry]of [[424,173,92,56],[1071,192,85,71],[728,1064,105,62],[500,1053,122,77],[-35,541,65,101],[1430,786,98,101]])g+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#b6ce43" opacity=".19"/>`;
-// Catmull-Rom centerlines sampled into authored, irregular-width earthen road outlines.
 function sample(p){const out=[];for(let i=0;i<p.length-1;i++){const b=p[i],c=p[i+1],a=p[i-1]??b,e=p[i+2]??c;const steps=Math.max(4,Math.ceil(Math.hypot(c[0]-b[0],c[1]-b[1])/6));for(let j=0;j<steps;j++){const t=j/steps,u=1-t;out.push([0,1].map(k=>u**3*b[k]+3*u*u*t*(b[k]+(c[k]-a[k])/6)+3*u*t*t*(c[k]-(e[k]-b[k])/6)+t**3*c[k]));}}out.push(p.at(-1));return out;}
 const roads=villageRoads();
-// Preserve the review pass's exact river and bridge construction independently of roads.
 const bridgeRoadPlan=structuredClone(bridgePlan.roads);bridgeRoadPlan[6][0]=[695,905];bridgeRoadPlan[8][0]=[876,895];
 const bridgeRoads=[{p:bridgePlan.coastWalk,w:24},...bridgeRoadPlan.map(p=>({p,w:36})),...bridgePlan.lanes.map(p=>({p,w:16}))];
-// Each heart connection runs underneath original art and meets an existing sandy path.
 bridgeRoads.push({p:[[330,540],[419,593],[488,632]],w:34},{p:[[695,905],[692,893]],w:34},{p:[[876,895],[876,875],[876,816],[838,782]],w:34},{p:[[1045,804],[1063,770],[1078,727]],w:34});
 const regions=[];let edgeDecor='',pebbles='',ruts='';
 for(const [ri,{p,w}]of roads.entries()){
@@ -140,21 +123,15 @@ for(const [ri,{p,w}]of roads.entries()){
   const base=w*.5*(1+.20*Math.sin(t*9+ri)+.105*Math.sin(t*22+ri*.6));
   const lbank=base+1.2*Math.sin(i*1.3+ri),rbank=base+.9*Math.cos(i*1.7+ri);
   left.push([a[i][0]+n[0]*lbank,a[i][1]+n[1]*lbank]);right.push([a[i][0]-n[0]*rbank,a[i][1]-n[1]*rbank]);
-  // Texture is part of the drawn verge, never a world prop scatter.
   if(i%3===1){const side=i%6===1?1:-1,off=(side===1?lbank:rbank)+1.2,x=a[i][0]+n[0]*off*side,y=a[i][1]+n[1]*off*side;edgeDecor+=`<path d="M${x-3},${y+1}q-5-5-1-4q1-6 3-3q5-5 3 1l3-1q1 4-8 7Z" fill="#7fb138" stroke="#477f35" stroke-width=".65"/><path d="M${x-1},${y}l1-3m-1 3l4-2" stroke="#b3d34d" stroke-width=".65" fill="none"/>`;}
   if(i%13===4){const side=i%2?1:-1,x=a[i][0]+n[0]*(base-2)*side,y=a[i][1]+n[1]*(base-2)*side;pebbles+=`<ellipse cx="${x}" cy="${y}" rx="1.8" ry="1.1" fill="#b5b390" stroke="#928d65" stroke-width=".45"/><ellipse cx="${x+3.7}" cy="${y+1.8}" rx=".8" ry=".6" fill="#e4d296"/>`;}
  }
  regions.push('M'+[...left,...right.reverse()].map(v=>v.map(n=>n.toFixed(2)).join(',')).join('L')+'Z');
- // Broken worn wheel-ruts follow the road direction and stop at irregular intervals.
  for(const off of [-.22,.24]){const q=a.map((v,i)=>{const b=a[Math.max(0,i-1)],c=a[Math.min(a.length-1,i+1)],dx=c[0]-b[0],dy=c[1]-b[1],l=Math.hypot(dx,dy)||1;return[v[0]-dy/l*w*off,v[1]+dx/l*w*off];});ruts+=`<path d="M${q.map(v=>v.join(',')).join('L')}" fill="none" stroke="#d4b66b" stroke-opacity=".34" stroke-width="1.25" stroke-dasharray="17 11 6 18 23 16" stroke-linecap="round"/><path d="${curve(p,false)}" fill="none" stroke="#fff0ba" stroke-width="2.2" opacity=".2" stroke-dasharray="23 47 10 33"/>`;}
 }
-// Squares widen the streets organically. The surrounding green remains usable lawn.
 for(const c of P.communities){const[cx,cy,rx,ry]=c.green;const ring=[];for(let i=0;i<40;i++){const t=i*Math.PI/20,r=1+.04*Math.sin(i*2.3);ring.push([cx+Math.cos(t)*rx*r*.70,cy+Math.sin(t)*ry*r*.68]);}regions.push(curve(ring));}
-// Layer the combined sand fill after all bank outlines so junctions merge into one worn surface.
 g+=`<g fill="none" stroke-linejoin="round">${regions.map(d=>`<path d="${d}" stroke="#477f35" stroke-width="7"/><path d="${d}" transform="translate(0 1.5)" stroke="#8c743c" stroke-opacity=".65" stroke-width="5"/>`).join('')}</g><g fill="#f4df91">${regions.map(d=>`<path d="${d}"/>`).join('')}</g>${ruts}${pebbles}<defs><mask id="verge-only" maskUnits="userSpaceOnUse" x="-300" y="-200" width="2200" height="1700"><rect x="-300" y="-200" width="2200" height="1700" fill="white"/>${regions.map(d=>`<path d="${d}" fill="black"/>`).join('')}</mask></defs><g mask="url(#verge-only)">${edgeDecor}</g>`;
-// A calm enclosed pond belongs to the makers' green, retaining B's walkable timber jetty.
 const pond=B.water.poly.map(px);g+=`<path d="${curve(pond)}" fill="#6ec9de" stroke="#fde48c" stroke-width="10"/><path d="M267 845Q290 838 310 843 M375 860Q402 865 420 854" fill="none" stroke="#c1e8df" stroke-width="1.5"/>`;
-// Small vegetable patches are drawn only in the farm's garden, not repeated around the island.
 for(const[x,y]of [[1177,171],[1205,191],[1235,176]])g+=`<path d="M${x-16},${y-5}l29-6 11 10-30 7Z" fill="#a27b40" stroke="#c88941" stroke-width="1.3"/>`;
 g+=finishGround({E,D,svg,at,px,curve,sample,roads:bridgeRoads,old})+gardenGround(curve)+'</g>';
 E.paths=roads.map(({p})=>curve(p,false));E.roads=roads.map(({p,w,id,kind})=>({id,kind,points:p.map(at),width:w/K}));

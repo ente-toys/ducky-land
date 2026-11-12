@@ -1,5 +1,3 @@
-// Pointer samples and display frames have independent cadences. Estimate velocity
-// by elapsed time, and integrate exponential friction exactly between frames.
 export function sampleGlobeSpin(previous, dx, dy, elapsedMs) {
   const gap = Math.max(1, elapsedMs), alpha = -Math.expm1(-gap / 24);
   return {

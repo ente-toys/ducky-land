@@ -1,23 +1,18 @@
-# Executed by goldmine-build.py, sharing its geometry and placement helpers.
-# Existing Home vector assets only. No new paid generations.
 import xml.etree.ElementTree as ET
 flats=[]; floating=[]; extra_flats=[]
 more=['nature--tree-pine','nature--rock-boulder','nature--rock-flat','nature--rock-upright','nature--reeds','nature--cattails','nature--lily-pad-flower','nature--lily-pad-small','nature--lily-pad-large','nature--log','nature--mushroom-cluster','street--picnic-blanket','street--picnic-basket','street--signpost-three-way','beach--towel-striped','beach--towel-sun','beach--shell-conch','beach--starfish-orange','beach--beach-ball','buildings--cottage','buildings--kiosk','street--planter-flowers','street--bunting']
 for name in more:shutil.copyfile(ROOT/'public/pixi-art/detail'/f'{name}.svg',ART/'reuse'/f'{name}.svg')
-# Match Home's flat-colour rule even for older detail library assets.
 for file in (ART/'reuse').glob('*.svg'):
     txt=file.read_text()
     for m in re.finditer(r'<linearGradient[^>]*id="([^"]+)"[^>]*>(.*?)</linearGradient>',txt,re.S):
         colors=re.findall(r'stop-color="([^"]+)"',m[2])
         if colors:txt=txt.replace('url(#'+m[1]+')',colors[min(1,len(colors)-1)])
     file.write_text(txt)
-# Warm timber cabins, cream highlights and evergreen roofs keep the village in the mining palette.
 for name in ['buildings--cottage','buildings--kiosk']:
     file=ART/'reuse'/f'{name}.svg';txt=file.read_text()
     for old,new in {'#f1504a':'#6A813C','#cc3e39':'#465D30','#fff5c8':'#E9BB78','#f6e5ac':'#D49E54','#94d873':'#D5A05B','#74c558':'#B87C3C','#232323':'#39472D','#FFFFFF':'#FFF0C7'}.items():txt=txt.replace(old,new)
     txt=re.sub(r'<path id="032-lettering-HELLO"[^>]*/>', '<g stroke="#39472D" fill="none" stroke-width="19" stroke-linecap="round"><path d="M680 674L842 566M724 565L870 675"/><path d="M783 563Q849 544 903 595M648 597Q705 546 765 568" stroke-width="26"/></g>',txt)
     file.write_text(txt)
-# Replace the temporary mine and nugget with the locked layered centre, at the existing plaza's size.
 removed=[p for p in props if p['id'] in ['egg-mine','centre-placeholder']]
 props[:]=[p for p in props if p not in removed]
 obstacles[:]=[o for o in obstacles if not (o.get('poly')==[[3630,1400],[4470,1400],[4470,1585],[3630,1585]] or o.get('x')==4100 and o.get('y')==2898)]
@@ -27,7 +22,6 @@ centre_solids=[]
 for part in cc['pieces']:
     if part['id'].startswith('bench-'):continue
     x=CX+part['x']*CK;y=CY+part['y']*CK;w=part['width']*CK;h=part['height']*CK
-    # The locked mine belongs IN the plaza. Its threshold faces the south yard.
     mine_offset=556 if part['id'] in ['back-cliff','mine-landmark'] or part['id'].startswith(('bank-','cliff-')) else 0
     y+=mine_offset
     if part['layer']=='decal':extra_flats.append(dict(src='centre/'+part['file'],x=x,y=y,width=w,height=h,topLeft=True));continue
@@ -38,7 +32,6 @@ for part in cc['pieces']:
 for ob in cc['blocked']:
     if ob['name'].startswith('bench-'):continue
     if ob['name']=='quarry ledges':
-        # Ground footprints only; the supplied broad polygon also included the vertical rock faces.
         for local in [[[-1450,-1080],[1450,-1080],[1450,-990],[-1450,-990]],[[-1450,-830],[-700,-830],[-700,-630],[-1450,-630]],[[700,-830],[1450,-830],[1450,-630],[700,-630]]]:
             poly=[[CX+x*CK,CY+y*CK+556] for x,y in local]
             obstacles.append(dict(poly=poly));centre_solids.append(Polygon(poly))
@@ -49,16 +42,13 @@ for ob in cc['blocked']:
         e=ob['ellipse'];o=dict(x=CX+e['x']*CK,y=CY+e['y']*CK+(556 if ob['name'].startswith('bank-') else 0),rx=e['rx']*CK,ry=e['ry']*CK);centre_solids.append(Polygon(ell(**o)))
     obstacles.append(o)
 centre_clear=unary_union(centre_solids).buffer(65)
-# Remove old furniture which overlaps the new cliff and centre furnishings.
 for p in list(props):
     if p['id'].startswith('gold-centre-'):continue
     if centre_clear.contains(Point(p['x'],p['y'])):
         props.remove(p)
         obstacles[:]=[o for o in obstacles if not ('x' in o and abs(o['x']-p['x'])<1 and abs(o['y']-p['y'])<32)]
-# Home-size cabins form a working village behind the mine, with the north trail still open.
 for name,src,x,y,h in [('Assay cabin','buildings--cottage',2700,1530,490),('Tool workshop','buildings--kiosk',5510,1480,460),('Panning cabin','buildings--cottage',1210,3590,430)]:
     put(name,'reuse/'+src+'.svg',x,y,h,dict(poly=[[x-150,y-145],[x+150,y-145],[x+150,y-12],[x-150,y-12]]))
-# Ground-contact clearance; canopies may overlap in groves, trunks never block paths or reserved lawns.
 held_file=ART/'goldmine-original-sleepers.json'
 if not held_file.exists():shutil.copyfile(ART/'sleepers-validated.json',held_file)
 held_beds=json.loads(held_file.read_text())
@@ -71,7 +61,6 @@ def free(x,y,r=45,gap=95,allow_edge=False):
     if reserved.buffer(r+20).contains(pt) or centre_clear.buffer(r).contains(pt) or path_geom.buffer(r).contains(pt):return False
     if any(LineString([a,b]).buffer(w/2+r).contains(pt) for a,b,w in decks.values()):return False
     return all(math.hypot(x-p['x'],(y-p['y'])*1.25)>gap for p in props)
-# Clusters of 3-7. Choose seed locations in the outer groves and between paths.
 clusters=[(1500,1280),(2330,1100),(2740,1440),(5210,1220),(5920,1370),(6590,1840),(6800,2350),(6800,3200),(6460,3910),(5260,4100),(4730,4470),(3390,4440),(2640,4380),(1540,4180),(1120,3420),(1070,2840),(2680,2900),(2770,3450),(5080,2160),(5420,3700),(2000,5230),(5840,5260)]
 for ci,(cx,cy) in enumerate(clusters):
     if cy>4900:continue
@@ -87,7 +76,6 @@ for ci,(cx,cy) in enumerate(clusters):
         put('Tree',src,x,y,rnd.randrange(455,590),'tree',pid=f'gold-grove-{ci}-{n}',flip=n%2==0)
         n+=1
         if n==3:break
-# Guarantee 70+ trees while keeping the naturally irregular cluster spacing.
 for i in range(10000):
     if sum(p['name']=='Tree' for p in props)>=66:break
     x,y=rnd.uniform(750,7250),rnd.uniform(780,4780)
@@ -96,7 +84,6 @@ for i in range(10000):
     if canopy.intersects(reserved.buffer(-160)) or canopy.intersects(sleep_canopy):continue
     if min(math.hypot(x-p['x'],y-p['y']) for p in props if p['name']=='Tree')>520:continue
     put('Tree',f'reuse/tree-{1+i%5}.svg',round(x),round(y),rnd.randrange(460,570),'tree',pid=f'gold-fill-tree-{i}')
-# Bushes and flowers beneath the outer side of each grove.
 for i,p in enumerate(list(props)):
     if p['name']!='Tree':continue
     for j,(dx,dy) in enumerate([(-85,35),(105,50)]):
@@ -104,7 +91,6 @@ for i,p in enumerate(list(props)):
         if not free(x,y,25,60):continue
         put('Bush',f'reuse/bush-{1+(i+j)%3}.svg',x,y,90+10*(i%3),'small')
         if free(x+52,y+37,12,22):put('Flowers',f'reuse/flower-{1+i%2}.svg',x+52,y+37,55,None)
-# Decorated open edges, with broad gaps where a trail enters. Nothing occupies the zone interiors.
 for zi,z in enumerate(zone_geoms):
     edge=z.buffer(95).exterior
     for j in range(int(edge.length/125)):
@@ -115,19 +101,16 @@ for zi,z in enumerate(zone_geoms):
         elif j%7==3:put('Wood bench','reuse/street--bench-wood.svg',x,y,90)
         elif j%2:put('Flowers',f'reuse/flower-{1+j%2}.svg',x,y,65,None)
         else:put('Low hedge',f'reuse/bush-{1+j%3}.svg',x,y,70,'small')
-# Ore shoulders, weathered boulders, timber and carts, outside the trails.
 for i,(cx,cy) in enumerate([(2820,1680),(4970,1500),(5400,1750),(2600,2760),(2630,3500),(6600,3670),(3500,4020),(5760,4390)]):
     for j in range(5):
         x=cx+rnd.randint(-200,200);y=cy+rnd.randint(-100,100)
         if free(x,y,40,100):put('Rocky outcrop' if j%2 else 'Gold ore rocks','reuse/nature--rock-boulder.svg' if j%2 else 'detail/ore-rock.svg',x,y,135+j*24)
-# Small communal places beside the paths and beaches.
 for x,y in [(2500,1260),(5350,1470),(1420,3970),(5300,4240)]:
     if free(x,y,55,80):put('Picnic blanket','reuse/street--picnic-blanket.svg',x,y,90,None)
 for i,(x,y) in enumerate([(6220,3870),(6440,4000),(6720,3680),(6080,4080)]):
     if free(x,y,25,65):put('Beach towel','reuse/beach--towel-'+('striped' if i%2 else 'sun')+'.svg',x,y,95,None)
 for x,y in [(1310,2670),(5300,2740),(3030,3970),(5450,1640)]:
     if free(x,y,25,60):put('Mine trail signpost','reuse/street--signpost-three-way.svg',x,y,160)
-# Pond plants are above the water but outside the bridge lane; reeds/rocks stay on shore.
 for i in range(18):
     a=math.tau*i/18;x=pond['x']+math.cos(a)*(pond['rx']+60);y=pond['y']+math.sin(a)*(pond['ry']+65)
     if abs(y-3180)<145:continue
@@ -139,7 +122,6 @@ for i in range(13):
     if not pond_poly.buffer(-35).contains(Point(x,y)):continue
     src='reuse/nature--lily-pad-'+('flower' if i%4==0 else 'small')+'.svg'
     floating.append(dict(src=src,x=x,y=y,width=60 if i%4 else 85,height=43 if i%4 else 66,phase=i*1.4))
-# In-world crates and barrels share the traced mine's ochre palette and ink.
 (ART/'detail/supply-crates.svg').write_text('''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 130" stroke="#39472D" stroke-width="2.6" stroke-linejoin="round"><ellipse cx="80" cy="119" rx="76" ry="9" fill="#7C8441" opacity=".22"/><path d="M8 55L70 44L78 113L14 121Z" fill="#C88A42"/><path d="M8 55L25 40L85 32L70 44Z" fill="#F4CB7C"/><path d="M70 44L85 32L93 103L78 113Z" fill="#A76731"/><path d="M17 60L65 53L71 107L23 114ZM20 61L69 106M66 54L23 113" fill="none" stroke="#F4CB7C" stroke-width="7"/><path d="M92 45Q115 34 146 44L151 109Q124 128 94 113Z" fill="#BE7D38"/><ellipse cx="119" cy="44" rx="27" ry="11" fill="#E7B669"/><path d="M95 64Q122 76 148 63M96 99Q123 111 150 98" fill="none" stroke="#6A6854" stroke-width="9"/><path d="M106 54L108 115M131 54L134 114" fill="none" stroke="#8F592D" stroke-width="2"/></svg>''')
 for x,y in [(3030,1490),(4820,1500),(2750,1790),(5260,1790),(1300,3610),(5540,2990),(6400,3000)]:
     if free(x,y,35,80):put('Supply crates and barrel','detail/supply-crates.svg',x,y,135)
@@ -148,7 +130,6 @@ for i,(x,y) in enumerate([(6280,3890),(6530,3870),(6750,3780)]):
 for x,y in [(3470,3790),(1650,2750),(5650,4240)]:
     if not reserved.contains(Point(x,y)) and not pond_poly.contains(Point(x,y)):
         put('Picnic blanket','reuse/street--picnic-blanket.svg',x,y,100,None)
-# Enough lived-in detail without filling the activity floors. Scatter by path verges / tree groves.
 for i in range(6000):
     if len(props)>=365:break
     x,y=rnd.uniform(950,7050),rnd.uniform(1000,4600)
@@ -160,7 +141,6 @@ for i in range(6000):
     elif i%6==3:put('Mushrooms','reuse/nature--mushroom-cluster.svg',x,y,45,None)
     elif i%6==4:put('Mining timber','reuse/nature--log.svg',x,y,80)
     else:put('Flowers','reuse/flower-1.svg',x,y,60,None)
-# Keep complete solid footprints outside the reserved open rows, water, and bridge landings.
 for p in list(props):
     if p['id'].startswith('gold-centre-'):continue
     if not all_land.buffer(-40).contains(Point(p['x'],p['y'])) or pond_poly.contains(Point(p['x'],p['y'])):
@@ -173,14 +153,12 @@ for p in list(props):
     if any(z.intersects(footprint) for z in zone_geoms):
         props.remove(p)
         obstacles[:]=[o for o in obstacles if not ('x' in o and abs(o['x']-p['x'])<1 and abs(o['y']-p['y'])<32)]
-# Leave a walking gap between the north grove and the coast.
 for p in list(props):
     if p['name']=='Bush' and abs(p['x']-3836)<2 and abs(p['y']-955)<2:
         props.remove(p)
         obstacles[:]=[o for o in obstacles if not ('x' in o and abs(o['x']-p['x'])<1 and abs(o['y']-p['y'])<32)]
 for x,y in [(1310,2740),(6870,3000),(3250,4380)]:
     put('Mine trail signpost','reuse/street--signpost-three-way.svg',x,y,160)
-# A clear footprint is not enough: low front borders must not hide future market stalls.
 for p in list(props):
     if p['name']!='Tree':continue
     W=p['width']*p['scale'];H=p['height']*p['scale']
@@ -191,7 +169,6 @@ for p in list(props):
     put('Low hedge','reuse/bush-1.svg',p['x'],p['y'],105,'small',pid=p['id']+'-hedge')
 print('Enriched props',len(props),'trees',sum(p['name']=='Tree' for p in props))
 
-# Clear the complete ground footprint from every painted route, not just the anchor.
 shifted=[];removed_on_path=[]
 for p in list(props):
     if p['id'].startswith('gold-centre-') or p['name']=='Timber support':continue
@@ -220,7 +197,6 @@ for p in list(props):
         props.remove(p);obstacles[:]=[o for o in obstacles if not any(o is v for v in own)];removed_on_path.append(p['id'])
 print('Path verge correction',len(shifted),'moved',removed_on_path,'removed')
 
-# Enlarge clear existing ore seams, retaining their ground anchors and updating solids.
 large_ore=0
 for p in props:
     if p['name']!='Gold ore rocks':continue
@@ -235,7 +211,6 @@ for p in props:
     if large_ore==8:break
 print('Enlarged ore seams',large_ore)
 
-# Replace ring furniture with actual arcs; accept only collision-clear footprints.
 for p in list(props):
     if p['name']=='Wood bench' and centre.buffer(150).contains(Point(p['x'],p['y'])):
         props.remove(p)
@@ -257,4 +232,3 @@ for i,(x,y) in enumerate([(3460,3080),(4760,3080)]):
     put('Mine cart','detail/mine-cart.svg',x,y,155,flip=bool(i),pid=f'gold-yard-cart-{i}')
 for i,(x,y) in enumerate([(3380,2920),(4850,3270)]):
     put('Gold ore rocks','detail/ore-rock.svg',x,y,135,pid=f'gold-yard-ore-{i}')
-# Paving is generated by goldmine-centre-refine.mjs. The giant egg is the landmark.

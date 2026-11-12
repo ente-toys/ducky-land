@@ -1,6 +1,4 @@
 #!/bin/bash
-# Vectorise every Tickytown prop sheet (concepts/themes/neon-gen/*.png) into public/pixi-art/themes/neon/.
-# PY = a python3.11 with vtracer numpy pillow
 PY=${PY:-python3.11}; G="$(cd "$(dirname "$0")/../../.." && pwd)/concepts/themes/neon-gen"; T="$(dirname "$0")/neon-trace.py"
 "$PY" "$T" "$G/shops1.png" shop-noodle,shop-boba,shop-cat thin=1
 "$PY" "$T" "$G/shops2.png" shop-arcade,shop-cupcake,shop-star thin=1

@@ -1,4 +1,3 @@
-// Read-only Home reference renderer. The Vite SSR loader resolves the same placement modules as the game.
 import {createServer} from 'vite';
 import sharp from 'sharp';
 import {readFileSync,writeFileSync} from 'node:fs';

@@ -12,8 +12,6 @@ import {HIDE_BUSHES,BUSH_REVEAL_SECONDS,updateBushPresence,isBushHidden,isCombat
 const idle=()=>({x:0,y:0,ax:1,ay:0,fire:false});
 const unit=(x,y)=>{const n=Math.hypot(x,y);return n>0?{x:x/n,y:y/n}:{x:0,y:0};};
 export const spawnPads=team=>BOG_COMBAT.pads(team);
-// Earliest segment/circle contact, rather than testing the endpoint, prevents
-// a fast paintball crossing a duck between server ticks without tagging it.
 export function circleHit(from,to,centre,radius){
   const dx=to.x-from.x,dy=to.y-from.y,fx=from.x-centre.x,fy=from.y-centre.y;
   const a=dx*dx+dy*dy,c=fx*fx+fy*fy-radius*radius;if(c<=0)return 0;if(!a)return null;
@@ -21,8 +19,6 @@ export function circleHit(from,to,centre,radius){
   const t=(-b-Math.sqrt(disc))/(2*a);return t>=0&&t<=1?t:null;
 }
 export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bounds,pads=spawnPads,navigation=blockers===getBogBlockers()&&bounds===BOG_COMBAT.bounds?BOG_COMBAT.navigation:navigationFor(blockers,bounds),pickupSpots=null,hideBushes=HIDE_BUSHES,onStats=()=>{},onOut=()=>{},isBonusZone=()=>false}={}){
-  // The island's existing navigation object is shared with walkStep. Combat does
-  // not own a map or transform controls. Ability movement wraps the same controller.
   const movementNav=navigation,living=[];prepareShotIndex(blockers);
   const shotSlots=Array.from({length:RULES.maxShots},()=>({})),shotPool=[...shotSlots],ownedShots=new WeakSet(shotSlots);
   const splatSlots=Array.from({length:RULES.maxSplats},()=>({})),splatPool=[...splatSlots];
@@ -63,8 +59,6 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     const p=state.players.get(id);if(!m||!p||!Number.isSafeInteger(m.seq)||m.seq<=p.seq||![m.x,m.y].every(Number.isFinite)||typeof m.fire!=='boolean')return false;
     if(Math.max(Math.abs(m.x),Math.abs(m.y),Math.abs(m.facing??0))>1e6)return false;
     if(m.facing!==undefined&&!Number.isFinite(m.facing))return false;
-    // Old direction packets remain accepted during local preview upgrades, but
-    // cannot aim the weapon: only movement changes the authoritative facing.
     if((m.ax!==undefined&&!Number.isFinite(m.ax))||(m.ay!==undefined&&!Number.isFinite(m.ay)))return false;
     if(m.dodge!==undefined&&(!Number.isSafeInteger(m.dodge)||m.dodge<0))return false;
     const v=unit(m.x,m.y);p.seq=m.seq;p.inputAt=state.time;
@@ -87,8 +81,6 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     p.lives=Math.max(0,p.lives-1);p.out=p.lives===0;p.comebackReady=true;p.lastTaggedBy=shot.owner;p.alive=false;p.pace=0;p.heading=null;p.path=[];p.travel=0;p.respawnAt=state.time+RULES.respawnDelay;p.input=idle();p.action=0;p.streak=0;
     const owner=state.players.get(shot.owner);state.scores[shot.team]+=RULES.tagPoints;
     let medals=[];
-    // Bot tags remain visible combat events, but never farm saved human totals.
-    // Bots keep session tags for the local showcase and cannot earn medals.
     if(owner&&(owner.bot||!p.bot)){owner.stats.tags++;owner.stats.score+=RULES.tagScore;owner.streak++;owner.stats.bestStreak=Math.max(owner.stats.bestStreak,owner.streak);
       if(!owner.bot){owner.stats.medals++;
       medals=tagMedals({owner,victim:p,players:state.players.values(),time:state.time,distance:RULES.range-shot.left+Math.hypot(point.x-shot.x,point.y-shot.y),scores:state.scores,inBonusZone:isBonusZone(p)});save(owner);}
@@ -104,7 +96,6 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     const shot=shotPool.pop();if(!shot)return;
     p.ammo--;if(p.ammo===0)p.reloadAt=state.time+RULES.reloadSeconds;
     p.nextFire=state.time+RULES.fireDelay;p.shieldUntil=state.time;
-    // Concealment ends on an actual shot, including shots fired before entry.
     p.bushRevealUntil=state.time+BUSH_REVEAL_SECONDS;
     const id=++nextShot;
     shot.id=id;shot.owner=p.id;shot.team=p.team;shot.bot=p.bot;shot.x=p.x;shot.y=p.y;shot.dx=p.input.ax;shot.dy=p.input.ay;shot.left=RULES.range;shot.colour=p.team==='privacy'?0:id%4;
@@ -129,8 +120,6 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     for(const s of state.shots){
       const distance=Math.min(s.left,RULES.shotSpeed*dt);to.x=s.x+s.dx*distance;to.y=s.y+s.dy*distance;
       const wall=traceShot(s,to,blockers,wallResult);let fraction=wall.fraction,victim=null;
-      // Bush concealment deliberately does NOT protect against paint. Only
-      // the existing respawn shield and dodge protection prevent a tag.
       for(const p of state.players.values())if(p.alive&&p.team!==s.team&&p.shieldUntil<=state.time&&p.dodgeProtectedUntil<=state.time){
         const t=circleHit(s,to,p,DUCK_RADIUS+RULES.shotRadius);if(t!==null&&t<fraction){fraction=t;victim=p;}
       }
@@ -151,5 +140,4 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
   return {state,join,leave,input,step,snapshot};
 }
 
-// Transport name retained for compatibility with the working arena protocol.
 export const createArena=createBogCombat;

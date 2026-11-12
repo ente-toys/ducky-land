@@ -12,7 +12,6 @@ const dry=(x,y)=>inPoly(x,y,world.coast)||world.islets.some(([cx,cy,rx,ry])=>((x
 let compared=0,changed=0;
 for(let y=0;y<1330;y++)for(let x=0;x<1764;x++){
  const wx=(x+.5-336)/.14,wy=(y+.5-322)/.14;
- // Erode the original coast by 40 world units to exclude the replaced exterior surf.
  if(![[0,0],[-40,0],[40,0],[0,-40],[0,40]].every(([dx,dy])=>dry(wx+dx,wy+dy)))continue;
  compared++;const at=(y*1764+x)*4;
  if([0,1,2,3].some(c=>before[at+c]!==after[at+c]))changed++;

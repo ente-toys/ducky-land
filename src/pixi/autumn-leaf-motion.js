@@ -1,4 +1,3 @@
-// Pure, seek-safe leaf cycle shared by the renderer and CPU tests. World units.
 export const LEAVES_PER_TREE=3,LEAF_POOL_LIMIT=96,MOBILE_LEAF_POOL_LIMIT=48;
 export function autumnLeafPose(tree,time,index,out={}){
  const period=7.8+(index%3)*.9,age=((time+index*2.731)%period+period)%period;
@@ -14,8 +13,6 @@ export function autumnLeafPose(tree,time,index,out={}){
  out.settled=age>=falling;
  return out;
 }
-// A fixed pool: tree selection occurs at most three times per second. A whole
-// island fit deliberately shows no falling leaves, keeping phone overview cheap.
 export function createAutumnLeafPool(trees,makeSprite,{mobile=false,maxSprites=LEAF_POOL_LIMIT}={}){
  const limit=Math.min(mobile?MOBILE_LEAF_POOL_LIMIT:LEAF_POOL_LIMIT,maxSprites);
  const slots=Array.from({length:limit},(_,i)=>({sprite:makeSprite(i),tree:null,index:i,pose:{}}));

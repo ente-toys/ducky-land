@@ -1,5 +1,3 @@
-// Home vs library, same in-game zoom, plus both coasts drawn at the same scale with their areas.
-// node scripts/themes/library-compare-big.mjs home9.png lib9.png home5.png lib5.png out.png
 import sharp from 'sharp'; import {readFileSync} from 'node:fs';
 const [,, h9, l9, h5, l5, out] = process.argv;
 const area = p => Math.abs(p.reduce((s, a, i) => {const b = p[(i + 1) % p.length]; return s + a[0] * b[1] - b[0] * a[1];}, 0) / 2);

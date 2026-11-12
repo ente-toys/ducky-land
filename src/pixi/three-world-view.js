@@ -27,7 +27,6 @@ const ease=x=>{x=clamp(x,0,1);return x*x*(3-2*x);};
 const out=x=>1-Math.pow(1-clamp(x,0,1),3);
 const HEART='<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.5 4 19 17.3"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>';
 
-// The globe owns the perspective camera. Pixi supplies the live island scene.
 export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null,pirateFleet=null,pirateProjection=()=>null,initialIsland='home',isletProjection=()=>null,isletCapture=()=>false}={}) {
   const renderer=new WebGLRenderer();
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
@@ -59,7 +58,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       .replace('#include <opaque_fragment>','vec3 sunlight=normalize(vec3(-.35,.45,1.));float daylight=clamp(dot(normalize(planetNormal),sunlight)/sunlight.z,0.,1.);outgoingLight*=mix(1.-planetShade,1.,daylight);\n#include <opaque_fragment>');
   }
 
-  // Small water marks rotate with the sphere, giving the eye an unambiguous 3D reference.
   const wavePositions=[];
   for(let k=0;k<460;k++) {
     const y=1-2*(k+.5)/460,lon=k*2.399963229728653,frame=sphereFrame(lon,Math.asin(y));
@@ -76,8 +74,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   const loader=new Globe.TextureLoader(), patches=[], cleanups=[()=>renderer.domElement.removeEventListener('webglcontextrestored',redraw)],isletStanding=[],assetState={disposed:false};
   const assetStart=performance.now();
   async function patch(frame,width,height,url,island=false) {
-    // Islets use the ground-only split directly. Loading the full SVG here as
-    // well would decode/rasterize it twice and reintroduce baked upright props.
     const standing=!island?await createIsletStanding(scene,frame,await(await fetch(url)).text()):null;
     const texture=standing?standing.ground:await loader.loadAsync(url);
     texture.colorSpace=Globe.SRGBColorSpace;
@@ -95,7 +91,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     }
     const mesh=new Globe.Mesh(geometry,
       new Globe.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true}));
-    // The atlas remains under the live capture, including its feathered edge.
     mesh.material.onBeforeCompile=planetLighting;
     mesh.name=frame.name??frame.art; mesh.userData={id:frame.id,island,frame,width,height,texture};
     globe.add(mesh); patches.push(mesh); return mesh;
@@ -104,8 +99,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     ...WORLD_ISLANDS.map(i=>()=>patch(i,i.width,i.height,globePreviewUrl(i),true)),
     ...ISLETS.map(i=>()=>patch(i,i.width,i.width,`/pixi-art/islets/${i.art}.svg`))
   ];
-  // The current Home view can be used immediately. Other atlas/islet work is
-  // bounded and yields between jobs instead of holding up the first frame.
   const first=Math.max(0,WORLD_ISLANDS.findIndex(i=>i.id===initialIsland));
   await assetTasks.splice(first,1)[0]();
 
@@ -120,8 +113,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   let width=1,height=1,pixelRatio=1,selected='home',active=true,destroyed=false,raf=0,transition=null,last=performance.now(),due=0,seed=7;
   let targetAltitude=EARTH_DISTANCE-1,zoomAnchor=null,live=null,detailId=null;
   const events=[], random=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
-  // Collision maps also contain detached/legacy coast pieces that the preview
-  // does not draw. Check the actual displayed art once while building locations.
   let heartLocation;
   function refreshHeartLocations(){
     const heartMasks=new Map(patches.map(p=>{
@@ -207,8 +198,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   listen('keydown',e=>{if(e.key==='0'||e.key==='Escape'){e.preventDefault();onInteract();world();}else if(['+','=','-'].includes(e.key)){e.preventDefault();wheel({preventDefault(){},clientX:renderer.domElement.getBoundingClientRect().left+width/2,clientY:renderer.domElement.getBoundingClientRect().top+height/2,deltaY:e.key==='-'?160:-160,deltaMode:0});}});listen('pointerdown',down);listen('pointermove',move);listen('pointerup',up);listen('pointercancel',()=>{drag=null;pinch=null;pointers.clear();});listen('wheel',wheel,{passive:false});
 
   function activity(time,dt) {
-    // Surface anchors are occluded below; the rising heart itself is free to
-    // cross the planet silhouette, without a circular cookie-cutter edge.
     ctx.clearRect(0,0,width,height);ctx.save();
     const px=Math.min(1.5,Math.max(1,globeRadius()/240));
     for(due-=dt;due<0;due+=HEART_ACTIVITY_INTERVAL*(.8+random()*.4)) {
@@ -256,8 +245,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       renderer.domElement.dataset.approachHeadingDeg=(angle*180/Math.PI).toFixed(3);
       if(Math.abs(angle-(reduced?0:remaining))>1e-5){moving=true;demand.invalidate();}
     }
-    // After a close drag, settle the heading at the same gentle angular rate
-    // used during zoom. The centre anchor stays fixed throughout this twist.
     if(!zoomAnchor?.island&&!drag&&!transition&&camera.position.z<1.5){
       const frame=WORLD_ISLANDS.find(i=>i.id===selected),anchor=surfaceUnderPointer(camera,width/2,height/2,width,height)?.applyQuaternion(globe.quaternion.clone().invert());
       if(anchor){const angle=alignIslandNorth(globe.quaternion,frame,anchor,camera,reduced?1:1-Math.exp(-14*dt),reduced?Infinity:2.4*dt);if(Math.abs(angle)>1e-5){moving=true;demand.invalidate();}}
@@ -312,7 +299,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   }).then(async()=>{
     if(assetState.disposed)return;
     try{refreshHeartLocations();}catch(error){console.warn('World activity mask failed',error);}
-    // Prepare offscreen materials before the first zoom or rotation reveals them.
     await renderer.compileAsync(scene,camera);
     if(!assetState.disposed)renderer.domElement.dataset.assetsReadyMs=(performance.now()-assetStart).toFixed(1);
   });
@@ -321,9 +307,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   function createCapture(geometry,texture){
       const material=new Globe.MeshBasicMaterial({map:texture,transparent:true,alphaTest:0,depthWrite:false,depthTest:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
       material.onBeforeCompile=shader=>{planetLighting(shader);liveCaptureEdgeShader(shader,liveFeather);liveCaptureProjection(shader,liveCaptureBlend,liveCaptureScale);
-        // The independently tessellated atlas and live surface intersect even
-        // with polygon offset. Live detail owns this coverage; only reject
-        // the back hemisphere instead of depth-testing against the old atlas.
         shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <project_vertex>','#include <project_vertex>\ncaptureWorldPoint=(modelMatrix*vec4(transformed,1.)).xyz;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(liveCaptureBlend<.001&&dot(captureWorldPoint,cameraPosition-captureWorldPoint)<=0.)discard;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
@@ -369,8 +352,6 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     live.mesh.geometry=live.patch.geometry;
     live=null;
     renderer.domElement.dataset.liveIsland='';
-    // Keep the compiled material across approaches, releasing the old canvas
-    // texture and custom geometry as soon as their capture is off screen.
     demand.invalidate();
   }
   function setPresentation(blend,value){

@@ -1,5 +1,3 @@
-// Authored farm composition. Repetition below describes planted crop beds and material texture,
-// never a random placement rule. Every building, tree and piece of furniture has a fixed coordinate.
 export const bounds={width:12000,height:8400,origin:{x:-2000,y:-1400}};
 export const coast=Array.from({length:180},(_,i)=>{const a=i*Math.PI/90,r=1+.022*Math.sin(5*a)+.014*Math.cos(9*a);return [Math.round(4000+5500*r*Math.cos(a)),Math.round(2800+3700*r*Math.sin(a))]});
 import {communities} from './communities.mjs';

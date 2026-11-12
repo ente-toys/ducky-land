@@ -1,6 +1,5 @@
 """One opaque union; round organic forks are computed before any tile is cut."""
 import json,sys,math,os
-# Same local Shapely dependency used by Home's approved union builder.
 sys.path.insert(0,os.environ.get('BELLOVO_PYTHON_DEPS','/private/tmp/ducky-community-python'))
 from shapely.geometry import LineString,Point,Polygon,mapping
 from shapely.ops import unary_union
@@ -11,7 +10,6 @@ data=json.loads((p/'paths-input.json').read_text())
 shapes=[LineString(r['samples']).buffer(r['width']/2,quad_segs=12) for r in data['routes']]
 for c in data['courts']:
  shapes.append(affinity.scale(Point(c['x'],c['y']).buffer(1,quad_segs=64),c['rx'],c['ry']))
-# Close the inside of forks without thickening the 128/104 straight runs.
 union=unary_union(shapes).buffer(72,quad_segs=16).buffer(-72,quad_segs=16)
 polys=list(union.geoms) if hasattr(union,'geoms') else [union]
 union=unary_union([Polygon(q.exterior,[r for r in q.interiors if Polygon(r).area>24000]) for q in polys])

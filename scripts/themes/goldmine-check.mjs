@@ -1,7 +1,3 @@
-// Nuggetnook: is the walk map valid? Builds the same map the game and the room server build (island-maps.js
-// makeMap), then flood-fills the walkable ground from the plaza spawn on a 20-unit grid and checks every zone spawn,
-// both islets, every pier end and the harbor landing are reachable, and every boat spot is open sea.
-//   node scripts/themes/goldmine-check.mjs
 import {readFileSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
@@ -23,7 +19,6 @@ while (queue.length) {
     if (rr >= 0 && rr < H && cc >= 0 && cc < W && ok[j] && !seen[j]) {seen[j] = 1; queue.push(j);}
   }
 }
-// a point counts as reached when a reached cell lies within 30 of it (the grid snaps)
 const reached = (x, y) => {for (let dy = -40; dy <= 40; dy += G) for (let dx = -40; dx <= 40; dx += G) if (seen[cell(x + dx, y + dy)]) return true; return false;};
 const fails = [];
 const want = (label, x, y) => {const w = nav.walkable(x, y), r = reached(x, y); if (!w || !r) fails.push(`${label} (${Math.round(x)},${Math.round(y)}) walkable=${w} reached=${r}`);};
@@ -39,7 +34,6 @@ map.boatSpots().forEach((s, i) => {
 const area = seen.reduce((a, b) => a + b, 0) * G * G, all = ok.reduce((a, b) => a + b, 0) * G * G;
 console.log(`walkable ${(all / 1e6).toFixed(2)}M units², reached from the plaza ${(area / 1e6).toFixed(2)}M (${(100 * area / all).toFixed(1)}%), ${walk.obstacles.length} obstacles, ${map.boatSpots().length} boats`);
 console.log(fails.length ? 'FAIL\n  ' + fails.join('\n  ') : 'PASS: every zone, islet, pier, the harbor and every boat is reachable');
-// unreached walkable pockets (islands of walkable cells cut off by props)
 const pockets = [];
 const mark = new Uint8Array(W * H);
 for (let i = 0; i < W * H; i++) if (ok[i] && !seen[i] && !mark[i]) {
@@ -59,7 +53,6 @@ if(art.props.filter(p=>p.name==='Curved timber bench'&&p.id.includes('arc-plaza-
 if(art.props.filter(p=>p.id.startsWith('gold-centre-cliff-')).length!==4)fails.push('quarry foreground ledges need independent depth layers');
 if(!art.flats.some(p=>p.src==='detail/yard-tracks.svg'))fails.push('plaza track spur must render above the paving');
 for(const p of art.props)if(!terrain.walkable(p.x,p.y))fails.push(`prop base off land ${p.id}`);
-// The route must stay visually clear across each prop footprint, not merely navigable.
 const segmentDistance=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);};
 for(const p of art.props){
  if(p.id.startsWith('gold-centre-')||p.name==='Timber support'||p.name==='Curved timber bench')continue;
@@ -87,10 +80,8 @@ for(const [name,z]of Object.entries(world.zones)){
 }
 const boats=map.boatSpots();
 for(let i=0;i<boats.length;i++)for(let j=i+1;j<boats.length;j++)if(Math.hypot(boats[i].x-boats[j].x,boats[i].y-boats[j].y)<300)fails.push(`boats ${i},${j} less than 300 apart`);
-// A spatial capacity check, not a network load test: 100 separate player positions in gathering zones.
 const crowd=[];
 for(const z of [world.zones.centre,...Object.entries(world.zones).filter(([k])=>k.startsWith('activity-')).map(([,v])=>v)]){
- // Staggered rows keep >=150 separation while using the real open area.
  let row=0;
  for(let y=z.y-z.ry+90;y<z.y+z.ry-90;y+=135,row++)for(let x=z.x-z.rx+90+(row%2)*77.5;x<z.x+z.rx-90;x+=155){
   if(crowd.length>=100)break;

@@ -8,7 +8,6 @@ export async function createPirateView(objects,fleet,{load=url=>Assets.load({src
   const root=new Container({label:'Ambient pirate '+ship.id,eventMode:'none'}),wake=new Graphics(),sprite=new Sprite(textures[ship.art]);
   sprite.anchor.set(.5,.89);sprite.width=sprite.height=ship.width;root.addChild(wake,sprite);objects.addChild(root);
   const rings=Array.from({length:4},()=>{const g=new Graphics().ellipse(0,0,1,.24).stroke({color:0xd5f3f7,width:.024,alpha:.65});g.visible=false;root.addChildAt(g,0);return{g,at:-10,p:null};});
-  // Reused strokes, transforms only each frame. No particle allocation or blur.
   wake.moveTo(-12,5).quadraticCurveTo(-70,17,-110,10).moveTo(-5,11).quadraticCurveTo(-75,28,-135,18).stroke({color:0xc7f0f5,width:2.5,alpha:.6});
   return{ship,root,sprite,wake,lastX:0,lastY:0,checkAt:0,clear:true,rings,nextRipple:0,flip:{flip:1,flipAge:0}};
  });

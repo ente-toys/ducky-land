@@ -1,4 +1,3 @@
-// Resolve the boss's next twenty against the same prop, path and spacing rules as the game.
 import {createServer} from 'vite';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';

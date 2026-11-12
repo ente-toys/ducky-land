@@ -1,4 +1,3 @@
-// Read-only evidence for the shared-code stop condition in BIGGER-THEME.md.
 import {readFileSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 

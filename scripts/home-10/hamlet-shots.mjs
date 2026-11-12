@@ -1,4 +1,3 @@
-// Hamlet proof: one headless shot per hamlet at game zoom .7, centred on its blueprint frame. Usage: node <this> <base url> <out dir>
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 const [base, out] = process.argv.slice(2); mkdirSync(out, {recursive: true});

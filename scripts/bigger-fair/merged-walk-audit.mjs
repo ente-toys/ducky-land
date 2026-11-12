@@ -1,4 +1,3 @@
-// Read back the fully integrated production map, never a worker's old snapshot.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {mapFor} from '../../src/pixi/island-maps.js';

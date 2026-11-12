@@ -50,9 +50,6 @@ test('Pagepond has one Home Honeywood arch per crossing and flush physical banks
   for(const [i,other]of plan.crossings.entries())if(other!==c)assert(Math.hypot(other.x-c.x,other.y-c.y)>250,c.id+' duplicated crossing '+i);
   const dx=(c.bankB[0]-c.bankA[0])/c.length,dy=(c.bankB[1]-c.bankA[1])/c.length;
   for(let t=-20;t<=c.length+20;t+=4){const p=[c.bankA[0]+dx*t,c.bankA[1]+dy*t];assert(geo.walkable(...p),c.id+' continuous deck/bank '+t);}
-  // A straight deck encloses the complete curved-bank cross section. Measure
-  // its shortest landing across that width, rather than requiring a diagonal
-  // bank to meet every plank at the same longitudinal station.
   assert(/^\/pixi-art\/home-expansion-c\/bridges\/bridge-(ew|ns|ne|nw)\.svg$/.test(c.homeSource),c.id+' authored source direction');
   for(const side of [-1,1]){let shortest=Infinity;for(let j=-12;j<=12;j++){const v=c.width/2*j/12;let dryRun=0;for(let t=c.length/2;t>0;t-=1){const x=c.x+dx*t*side-dy*v,y=c.y+dy*t*side+dx*v;if(wet(x,y))break;dryRun++;}shortest=Math.min(shortest,dryRun);}assert(shortest<(c.homeSource.match(/-(ne|nw)\.svg$/)?90:75),c.id+' bank throat across full deck '+shortest);}
   const deck=art.decks.find(d=>d.id===c.id),back=fs.readFileSync(A+deck.src,'utf8'),front='';
@@ -66,7 +63,6 @@ test('Pagepond river mouths are open to the sea and preserve navigable original 
  const water=world.water.slice(old.water.length),dry=even(new Path2D(plan.dry)),wet=p=>water.some(w=>inShape(...p,w));
  for(const ch of plan.channels){
   for(const end of [ch.points.at(-1)]){assert(!map.landAt(end[0],end[1]),ch.id+' open end');assert(!world.coastRings.some(r=>inPoly(...end.slice(0,2),r)),ch.id+' reaches sea');}
-  // No blind pocket anywhere on the river spine, except exact preserved jetty decks.
   for(const line of contours(curve(ch.points)))for(const p of line){if(old.coastRings.some(r=>inPoly(...p,r)))continue;assert(!dry.isPointInPath(...p),ch.id+' no water stub at '+p);}
  }
  for(const [x,y]of [[-650,2520],[8600,2900],[5900,5380],[5870,7080]]){assert(wet([x,y]),'river painted wet '+x+','+y);assert(!geo.walkable(x,y),'river blocks walking '+x+','+y);assert(!map.landAt(x,y),'boat water '+x+','+y);}

@@ -30,8 +30,6 @@ function assertViewport(mesh,width,height){
   assert.ok(shader.vertexShader.includes('gl_Position=vec4(position.xy,0.,1.);'));
   assert.ok(shader.vertexShader.includes('vMapUv=vec2(.5)+(uv-vec2(.5))/detailCaptureScale;'),'screen capture must bypass the spherical atlas UV transform');
   const scale=shader.uniforms.detailCaptureScale.value;
-  // Use the actual plane triangles and UVs. Every viewport corner, edge and
-  // interior pixel must have a triangle and sample the same capture location.
   const {position,uv}=mesh.geometry.attributes,indices=mesh.geometry.indices;
   for(const sx of [0,.01,.25,.5,.75,.99,1])for(const sy of [0,.01,.5,.99,1]){
     const x=sx*2-1,y=1-sy*2;
@@ -53,13 +51,10 @@ test('Campfire handoff covers every viewport edge throughout zoom-out, even afte
     scene.add(globe,viewport);globe.quaternion.copy(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),heading).multiply(focusQuaternion(frame)));
     assert.ok(Math.max(size.width,size.height)<=1536);
     assert.ok(Math.abs(size.width/size.height-width/height)<.003);
-    // The same texture has a nonidentity atlas matrix for the spherical mesh.
-    // The viewport plane must still sample the complete, untransformed image.
     for(const altitude of [.16,.17,.18,.20,.23,.26,.30,.35,.36]){
       const camera=detailCamera(frame,map,{fov:35,altitude,radius:WORLD_GEO.Rw,point:{x:900,y:-400},width,height},size.width,size.height,1,{x:0,y:0},scale);
       const t=atlasTransform(frame.width,frame.height,flatRigid(frame.id,frame.id),cameraMatrix(camera,size.width,size.height),size.width,size.height);
       texture.matrixAutoUpdate=false;texture.matrix=new Matrix3().set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
-      // Rotating the world does not parent, rotate or rescale the viewport.
       assert.equal(viewport.parent,scene);assert.deepEqual(viewport.quaternion.toArray(),[0,0,0,1]);
       viewport.material.opacity=detailBlend(altitude);assertViewport(viewport,width,height);
     }
@@ -94,8 +89,6 @@ test('single capture projection ends at exact overscan UV positions with constan
 test('combined camera pan and zoom-out cannot escape the cached live surface, in either axis',()=>{
   for(const [width,height]of sizes){
     let bounds={x:0,y:0,width,height},cached=liveSurfaceBounds(bounds),rebuilds=0;
-    // Each change passes the old separate pan and scale thresholds, but their
-    // combined extent exceeds the old mesh, exposing the static globe at left.
     const panned={x:-width*.35,y:height*.35,width:width*1.4,height:height*1.4};
     assert.ok(liveSurfaceNeedsUpdate(cached,panned));
     for(let step=0;step<=120;step++){
@@ -142,8 +135,6 @@ test('live capture tapers its own edges without changing texture coordinates or 
     assert.ok(shader.fragmentShader.includes('diffuseColor.a*=captureFade.x*captureFade.y;'),'a rotated capture edge must fade to the unchanged atlas');
     assert.ok(!shader.fragmentShader.includes('discard;'),'alpha-zero boundary keeps the underlying island available');
     assert.ok(shader.fragmentShader.includes('#include <map_fragment>'),'the actual atlas mapping remains unchanged');
-    // All four edges have zero coverage, the centre has full coverage, and
-    // crossing a corner cannot create a hard rectangular cut at any aspect.
     const smooth=x=>{const t=Math.max(0,Math.min(1,x));return t*t*(3-2*t);};
     const coverage=(u,v)=>smooth(Math.min(u,1-u)/feather.x)*smooth(Math.min(v,1-v)/feather.y);
     for(const [u,v]of [[0,.5],[1,.5],[.5,0],[.5,1],[0,0],[1,1],[-.1,.5]])assert.equal(coverage(u,v),0);
@@ -152,9 +143,6 @@ test('live capture tapers its own edges without changing texture coordinates or 
   }
 });
 
-// Run the real bridge, world, cameras, events and render-demand code. Only the
-// GPU and decorative backdrop are replaced for Node execution. Real art and
-// canvas pixels keep heart-location initialization in the handoff path.
 const {outputFiles:[bundle]}=await build({
   entryPoints:[fileURLToPath(new URL('../src/pixi/three-game-view.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,
   plugins:[{name:'headless-decoration',setup(b){
@@ -255,8 +243,6 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     }
     assert.ok(game.player.x-game.externalCamera.x<.001,'the camera catches up after the player stops');
     assertFollowCentre();
-    // A short manual drag must discard follow history even though it is too
-    // short to trigger the elapsed-time or teleport reset in the smoother.
     for(const [type,x]of [['pointerdown',box.width/2],['pointermove',box.width/2+24],['pointerup',box.width/2+24]])
       renderer.domElement.dispatchEvent(new window.MouseEvent(type,{clientX:x,clientY:box.height/2,button:0}));
     step(1000/120);
@@ -310,11 +296,9 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     assert.equal(renderer.scene.getObjectByName('Live island detail').material,oldMaterial,'resize keeps the compiled capture shader');
     assert.notEqual(oldMaterial.map,oldTexture,'the new canvas size gets a fresh texture');
     assert.ok(released,'resize releases the old GPU texture');
-    // A single large zoom-in returns ownership; no persistent second draw loop.
     wheel(-1400);for(let i=0;i<4;i++)step();assert.equal(renderer.domElement.dataset.presentation,'native-pixi','return to close view: '+renderer.camera.position.z);
     const after=renderer.renders;for(let i=0;i<4;i++)step();assert.equal(renderer.renders,after);assert.equal(nativeProps.at(-1),true,'return to direct native restores upright islet props');assert.equal(canvas.style.visibility,'visible');
   }catch(error){
-    // Bundled data-URL stack traces otherwise print the entire source bundle.
     throw new Error(error.message);
   }finally{
     view?.destroy();if(view)await settle();globals.__wideQA.water.dispose();dom.window.close();

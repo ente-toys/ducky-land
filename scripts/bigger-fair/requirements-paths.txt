@@ -1,2 +1,1 @@
-# Geometry dependency shared with scripts/home-review/paths.py.
 shapely>=2.0,<3

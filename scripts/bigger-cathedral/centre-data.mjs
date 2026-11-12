@@ -1,6 +1,4 @@
-// Authored against B2-loggia, 1750x1350 camera, x1150/y450, k .3.
 export const point=([x,y])=>[1150+x/.3,450+y/.3];
-// World dimensions: duck height 130. Garden dimensions follow the scale brief.
 export const FEATURES=[
  ["fountain", "fountain-3tier.svg", 885.0, 1164.0, 90.0, 96.0],
  ["parterre-nw", "hedge-parterre.svg", 675.0, 1068.0, 168.0, 69.0],
@@ -16,7 +14,6 @@ export const FEATURES=[
  ["balustrade-w", "balustrade-curve.svg", 510.0, 1005.0, 33.0, 165.0],
  ["balustrade-e", "balustrade-curve.svg", 1260.0, 1005.0, 33.0, 165.0, true]
 ];
-// Explicit world-coordinate curves, each ends at an arrival or a garden destination.
 export const LANES=[
  ['M4100 3400 L4100 3970 M4100 4550 L4100 5050',128],
  ['M3000 865 Q2900 1170 2850 1400',128],
@@ -33,7 +30,6 @@ export const LANES=[
  ['M2140 3990 Q2460 3750 2350 3400',104,'butt'],
  ['M5850 3370 Q5990 3490 6150 3480',104],
 ];
-// Pixel coordinates, not scatter. Trees overlap at mixed heights; bush feet close each clump.
 export const CLUMPS=[
  [[425,160,1],[395,190,3],[355,205,4],[465,208,4],[435,224,'b2']],
  [[1460,140,3],[1520,175,1],[1560,210,4],[1490,340,'b1']],
@@ -45,11 +41,8 @@ export const CLUMPS=[
  [[1590,900,3],[1600,845,4],[1600,800,'b1']],
  [[100,1065,1],[195,1100,3],[225,1160,4],[155,1180,'b2']],
  [[1550,1080,1],[1620,1040,4],[1535,1115,3],[1490,1150,4],[1490,1165,'b2']],
- // Small garden-facing groves between the paths and the two side destinations.
  [[1380,930,1],[1400,960,4],[1370,985,'b1']],
 ];
-// Replacement rest points on open lawn, away from the new hedge beds and railings.
-// Array indices identify the same approved residents and preserve pose and flip.
 export const REST={
  chair:{0:[6200,3250],1:[3000,3850]},
  hammock:{1:[2750,3000],2:[2500,4120],3:[5450,4600]},
@@ -64,7 +57,6 @@ export const NOD_COMPANIONS=[
  [[6410,2050,4],[6500,2090,'b1']],[[2030,3050,4],[2150,2920,'b2']],
  [[1710,4300,4],[1900,4450,'b1']],[[6300,3760,4],[6490,3910,'b2']],
 ];
-// Paths arrive at the paved circle, without a second loop on the lawn.
 
 CLUMPS.push(
 [[510.0, 960.0, 1], [450.0, 984.0, 4], [486.0, 996.0, "b2"]],

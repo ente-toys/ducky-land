@@ -27,8 +27,6 @@ function intersects(a,br){
 const overlap=(a,b)=>boundsOverlap(a,b)&&pathRings(a).some(r=>intersects(r,pathRings(b)))?2:0;
 
 const hit=(a,b)=>boundsOverlap(a,b)&&pathRings(a).some(r=>intersects(r,pathRings(b)));
-// Flood the actual painted floor plus the preserved centre and all bridge decks.
-// This catches paths clipped off by the coast, or cut in half by a tree contact.
 function paintedRoutes(plan,world,old){
  const cell=12,W=934,H=700,ox=-1600,oy=-1200,canvas=createCanvas(W,H),ctx=canvas.getContext('2d');
  ctx.scale(1/cell,1/cell);ctx.translate(-ox,-oy);ctx.fillStyle='#fff';ctx.fill(new Path2D(plan.floor));ctx.fill(new Path2D(ring(old.coast)));
@@ -71,7 +69,6 @@ export function auditCampfire(){
   const accessible=route(p,140),other=plan.links.find(k=>k.id!==l.id&&k.points.slice(1).some((b,i)=>dist(p,k.points[i],b)<(k.width+l.width)/2+8)),court=plan.courts.find(c=>new Path2D(c.d).isPointInPath(...p)),door=l.kind==='door'&&end==='start',bridge=plan.crossings.find(b=>dist(p,b.a,b.b)<b.w/2+40),nearBuilding=shapes.find(sh=>sh.kind==='building'&&dist(p,...(()=>{const b=sh.shape.getBounds();return [[b[0],b[3]],[b[2],b[3]]];})())<100),jetty=l.kind==='jetty'&&end==='end',originalPath=read('scripts/bigger-community/baseline/world.json').paths.some(line=>line.slice(1).some((q,i)=>dist(p,line[i],q)<100)),oldCentre=new Path2D(ring(read('scripts/bigger-community/baseline/world.json').coast)).isPointInPath(...p),goal=door||nearBuilding?'building door':jetty?'harbour landing':bridge?'bridge':court?'square':other?'joined lane':originalPath?'original path':oldCentre?'centre approach':null;
   const paintedDistance=painted.distance(p);pathEnds.push({id:l.id,end,point:p,accessible,goal,paintedDistance});if(paintedDistance>90)issues.push({type:'painted-path-end',id:l.id,end,point:p,paintedDistance});if(!accessible||!goal)issues.push({type:'path-end',id:l.id,end,point:p,accessible,goal});
  }
- // Audit unchanged centre path ends for access without changing their drawn design.
  const original=read('scripts/bigger-community/baseline/world.json');
  for(const [i,line]of original.paths.entries())for(const point of [line[0],line.at(-1)]){const accessible=route(point,150);pathEnds.push({id:'centre-'+i,point,accessible,goal:'preserved centre'});if(!accessible)issues.push({type:'path-end-access',id:'centre-'+i,point});}
  const sleepers=[];

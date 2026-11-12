@@ -10,7 +10,6 @@ const bridge=assets.bridge.replace(/<svg[^>]*>/,'').replace('</svg>','');writeFi
 const tiles=[],TW=1280,TH=1300;
 for(let row=0;row<8;row++)for(let col=0;col<10;col++){
  const x=bounds.x+col*TW,y=bounds.y+row*TH;
- // Omit fully covered dry-heart tiles. All original ground tiles remain intact above this layer.
  const corners=[[x,y],[x+TW,y],[x+TW,y+TH],[x,y+TH]];
  const covered=corners.every(p=>inPoly(...p,w.coast))&&!w.coast.some(([px,py])=>px>=x&&px<=x+TW&&py>=y&&py<=y+TH);
  if(covered)continue;

@@ -1,13 +1,3 @@
-// Fair island (theme id `fair`, "Waddlewish Fair"): builds the whole island from the approved concept
-// (concepts/themes/concepts/04-fair.png) in one pass, following concepts/themes/THEME-CONTRACT.md. Same build as
-// scripts/themes/library-world.mjs (its helpers and checks), with the fair's own coast, places and props:
-//   public/pixi-art/themes/fair/  ground.svg, ground-rN-cN.svg tiles, deck SVGs, reuse/ (home props copied in), art.json
-//   assets/world/themes/fair/         world.json, walk-world.json, harbor.json, placements.json, paths.json
-// The layout is written in CONCEPT pixels (1536x1024 picture) and mapped to world units by T().
-// Run:  node scripts/themes/fair-world.mjs   (then node scripts/themes/fair-preview.mjs)
-// Boss 6 Nov: BIG and spacious (land ~1.8x home), wide paths, a big round centre plaza (zones.centre) whose landmark is a
-// The base pass reserves stable prop ids; fair-centre and fair-finish install locked Fair 5, 40 sleepers and clear activity areas
-// (activity-N) and open stall rows (stalls-N) left empty for later.
 import {readFileSync, writeFileSync, mkdirSync, copyFileSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
 
@@ -18,7 +8,6 @@ const r1 = v => Math.round(v * 10) / 10;
 const T = ([x, y]) => [r1(OX + (x - 60) * S), r1(OY + (y - 35) * S)];
 const TS = v => v * S;
 
-// ---------- geometry helpers (as library-world.mjs) ----------
 function catmull(pts, closed, n = 10) {
   const out = [], N = pts.length, P = i => pts[closed ? (i + N) % N : Math.max(0, Math.min(N - 1, i))];
   for (let i = 0; i < (closed ? N : N - 1); i++) {
@@ -32,7 +21,7 @@ function catmull(pts, closed, n = 10) {
   return out.map(([x, y]) => [r1(x), r1(y)]);
 }
 const area = p => p.reduce((s, a, i) => {const b = p[(i + 1) % p.length]; return s + a[0] * b[1] - b[0] * a[1];}, 0) / 2;
-function offset(p, d) {   // d > 0 moves a closed polygon INWARD
+function offset(p, d) {
   const sgn = area(p) > 0 ? 1 : -1, N = p.length;
   return p.map((a, i) => {
     const pr = p[(i - 1 + N) % N], nx = p[(i + 1) % N], tx = nx[0] - pr[0], ty = nx[1] - pr[1], l = Math.hypot(tx, ty) || 1;
@@ -46,44 +35,39 @@ const lineDist = (x, y, l) => Math.min(...l.slice(1).map((b, i) => segDist(x, y,
 const inPolyF = (x, y, p) => {let c = false; for (let i = 0, j = p.length - 1; i < p.length; j = i++) if ((p[i][1] > y) !== (p[j][1] > y) && x < (p[j][0] - p[i][0]) * (y - p[i][1]) / (p[j][1] - p[i][1]) + p[i][0]) c = !c; return c;};
 let seed = 404; const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
 
-// ---------- coast (concept px): the round-cornered fair island of the concept, a beach cove in the south-east ----------
 const COAST_C = [[150,100],[280,72],[420,80],[560,55],[700,42],[860,58],[1000,45],[1150,68],[1300,80],[1410,108],[1462,200],[1478,330],[1462,460],
   [1480,580],[1450,700],[1360,770],[1240,805],[1100,818],[960,812],[820,822],[680,815],[540,818],[400,805],[262,786],[160,744],[108,640],[72,520],[62,400],[78,282],[102,170]];
-const EDGE = catmull(COAST_C.map(T), true, 8);   // where the land ends (sand)
-const GRASS = offset(EDGE, 95);                  // the lawn starts inside a sand shore, like home
-const WALK_COAST = offset(EDGE, 35);              // the walk map: inset 35 like home
+const EDGE = catmull(COAST_C.map(T), true, 8);
+const GRASS = offset(EDGE, 95);
+const WALK_COAST = offset(EDGE, 35);
 
-// ---------- pond (west garden) ----------
 const POND = {x: T([292, 446])[0], y: T([292, 446])[1], rx: TS(78), ry: TS(36)};
 
-// ---------- paths (concept px) ----------
-const MAIN = 220, MINOR = 186;   // boss 6 Nov: home's paths are ~120 wide; these are 1.5x to 1.8x
+const MAIN = 220, MINOR = 186;
 const PATHS_C = [
-  [[655,500],[590,430],[530,350],[488,284]],                                          // 0 centre -> teacup garden
-  [[865,500],[930,430],[1000,350],[1052,276]],                                        // 1 centre -> carousel
-  [[508,190],[600,140],[700,118],[820,118],[930,135],[1010,176]],                     // 2 north walk behind the castle
-  [[1168,196],[1260,170],[1360,176],[1462,214]],                                      // 3 carousel -> north-east pier
-  [[336,202],[250,168],[170,160],[90,170]],                                           // 4 teacup garden -> north-west pier
-  [[612,566],[500,548],[400,530],[300,536],[200,548],[96,560]],                      // 5 centre -> pond garden -> west lookout
-  [[910,566],[1010,520],[1080,460],[1128,420]],                                       // 6 centre -> parade square
-  [[160,700],[320,692],[480,690],[640,696],[760,702],[880,696],[1040,690],[1180,700],[1280,694]],   // 7 the fair lane (stalls)
-  [[760,610],[760,702]],                                                             // 8 centre -> fair lane
-  [[512,690],[512,812]],                                                             // 9 fair lane -> west islet bridge
-  [[1000,690],[1000,812]],                                                           // 10 fair lane -> east islet bridge
-  [[210,548],[192,620],[160,700]],                                                   // 11 pond garden -> fair lane
-  [[1290,452],[1310,530],[1320,600]],                                                // 12 parade square -> beach
-  [[160,700],[176,735]],                                                             // 13 fair lane -> harbor jetty
+  [[655,500],[590,430],[530,350],[488,284]],
+  [[865,500],[930,430],[1000,350],[1052,276]],
+  [[508,190],[600,140],[700,118],[820,118],[930,135],[1010,176]],
+  [[1168,196],[1260,170],[1360,176],[1462,214]],
+  [[336,202],[250,168],[170,160],[90,170]],
+  [[612,566],[500,548],[400,530],[300,536],[200,548],[96,560]],
+  [[910,566],[1010,520],[1080,460],[1128,420]],
+  [[160,700],[320,692],[480,690],[640,696],[760,702],[880,696],[1040,690],[1180,700],[1280,694]],
+  [[760,610],[760,702]],
+  [[512,690],[512,812]],
+  [[1000,690],[1000,812]],
+  [[210,548],[192,620],[160,700]],
+  [[1290,452],[1310,530],[1320,600]],
+  [[160,700],[176,735]],
 ];
 const PATHS = PATHS_C.map((l, i) => ({line: catmull(l.map(T), false, 8), w: [0, 1, 7, 8, 13].includes(i) ? MAIN : MINOR}));
-// plazas [cx, cy, rx, ry] concept px
 const CENTRE_C = [760, 550, 180, 90];
 const PLAZAS = [
-  {id: 'centre', c: CENTRE_C, pave: 'centre'},     // the big round centre plaza (landmark: placeholder)
+  {id: 'centre', c: CENTRE_C, pave: 'centre'},
   {id: 'teacups', c: [425, 232, 100, 52], pave: 'rings'},
   {id: 'carousel', c: [1092, 226, 96, 50], pave: 'rings'},
   {id: 'castle-steps', c: [760, 452, 70, 22], pave: 'tiles'},
 ].map(p => ({...p, x: T(p.c)[0], y: T(p.c)[1], rx: TS(p.c[2]), ry: TS(p.c[3])}));
-// boss 6 Nov: OPEN areas for later activities (30+ Duckies each), nothing placed on them
 const ACT = [
   {id: 'activity-1', name: 'West lawn', c: [226, 318, 86, 56], kind: 'lawn'},
   {id: 'activity-2', name: 'Parade square', c: [1236, 406, 104, 54], kind: 'tiles'},
@@ -92,7 +76,6 @@ const ACT = [
 ].map(a => ({...a, x: T(a.c)[0], y: T(a.c)[1], rx: TS(a.c[2]), ry: TS(a.c[3])}));
 for (const a of ACT) if (a.kind !== 'lawn') PLAZAS.push({id: a.id, c: a.c, pave: a.kind, x: a.x, y: a.y, rx: a.rx, ry: a.ry, open: true});
 const LAWNS = ACT.filter(a => a.kind === 'lawn');
-// open stall rows: paved bands along the fair lane, left empty for later stalls
 const STALL_ROWS = [
   {id: 'stalls-1', name: 'Fair lane stall row (north-west)', path: 7, t: [.12, .4], side: -1},
   {id: 'stalls-2', name: 'Fair lane stall row (north-east)', path: 7, t: [.6, .9], side: -1},
@@ -103,11 +86,9 @@ const STALL_ROWS = [
   const inner = off(PATHS[r.path].w / 2 - 6), outer = off(PATHS[r.path].w / 2 + 200), mid = off(PATHS[r.path].w / 2 + 100);
   return {...r, poly: [...inner, ...outer.reverse()], mid, x: mid[mid.length >> 1][0], y: mid[mid.length >> 1][1]};
 });
-// the south-east beach (sand over the lawn, clipped to the land)
 const BEACH = catmull([[1200,560],[1290,522],[1420,500],[1520,540],[1520,800],[1380,840],[1250,850],[1170,780],[1160,650]].map(T), true, 8);
 const BEACH_BB = {x0: Math.min(...BEACH.map(p => p[0])), x1: Math.max(...BEACH.map(p => p[0])), y0: Math.min(...BEACH.map(p => p[1])), y1: Math.max(...BEACH.map(p => p[1]))};
 
-// ---------- islets, jetties, bridges ----------
 const BB = {x0: Math.min(...EDGE.map(p => p[0])), x1: Math.max(...EDGE.map(p => p[0])), y0: Math.min(...EDGE.map(p => p[1])), y1: Math.max(...EDGE.map(p => p[1]))};
 const MIDX = (BB.x0 + BB.x1) / 2, MIDY = (BB.y0 + BB.y1) / 2;
 const coastBotAt = x => Math.max(...EDGE.filter(p => Math.abs(p[0] - x) < 40 && p[1] > MIDY).map(p => p[1]));
@@ -131,26 +112,21 @@ function deck(name, J, at, sx, sy) {
   arches.push({a: [r1(at[0]), r1(at[1])], b: [r1(b[0]), r1(b[1])], r: r1(70 * Math.abs(sy)), w: J.w});
   return {a: at, b};
 }
-// two south islets, each joined by an arched wooden bridge from the end of a path (foot on the coast, arch out to the islet)
 for (const [i, cx] of [[1, 512], [2, 1000]]) {
   const fx = T([cx, 0])[0], fy = coastBotAt(fx) - 40;
   const br = deck(`islet-bridge-${i}`, {...JETTY1, a: JETTY1.b, b: JETTY1.a}, [fx, fy], 1, -.75);
   islets.push([r1(fx), r1(br.b[1] + ISLET_RY * .45), ISLET_RX, ISLET_RY]);
 }
-// north-west + north-east piers (home jetty 5, 70%), south-east pier off the beach (home jetty 1, flipped south)
 const nwy = T([0, 172])[1], ney = T([0, 212])[1];
 const west = deck('jetty-northwest', JETTY5, [coastLeftAt(nwy) + 40, nwy], -.7, 1);
 const east = deck('jetty-northeast', JETTY5, [coastRightAt(ney) - 40, ney], .7, 1);
 const sx = T([1380, 0])[0], sFoot = [sx, coastBotAt(sx) - 30];
 const south = deck('jetty-southeast', {...JETTY1, a: JETTY1.b, b: JETTY1.a}, sFoot, 1, -.8);
-// the harbor jetty (drawn by the engine) runs south from the fair lane's west end
 const hx = T([190, 0])[0], hFoot = [hx, coastBotAt(hx) - 40], hTip = [hx, hFoot[1] + 360];
 
-// ---------- inland water ----------
 const water = [{x: POND.x, y: POND.y, rx: POND.rx, ry: POND.ry}];
 const bridges = [];
 
-// ---------- props ----------
 const onPath = (n, t) => {const l = PATHS[n].line; return l[Math.round(t * (l.length - 1))];};
 const SPAWNS_C = {plaza: [760, 650], teacups: [425, 270], carousel: [1092, 262], 'pond-garden': [300, 506], 'fair-lane': [640, 696], beach: [1330, 640], castle: [760, 470], 'north-walk': [760, 118]};
 const warn = [], props = [], obstacles = [];
@@ -173,7 +149,6 @@ for (const [dir, list] of Object.entries(REUSE)) for (const n of list) {
   if (dir === 'detail') {const a = manifest.assets.find(x => x.name === key); asset(key, `reuse/${n}.svg`, a.size.width, a.size.height, a.anchor.y / a.size.height);}
   else {const [w, h] = svgSize(`public/pixi-art/${dir}/${n}.svg`); asset(key, `reuse/${n}.svg`, w, h, 1);}
 }
-// world size of each kind (one Ducky = 130 tall)
 const SCALE = {castle: 1.12, 'centre-placeholder': 1, 'teacup-ride': 1.12, carousel: 1.18, 'goose-float': .92, 'stall-pink': 1, 'stall-blue': 1, 'stall-yellow': 1, 'stall-mint': 1,
   'ticket-booth': .9, 'ribbon-arch': .85, 'wish-flag': .5, bunting: .62, 'fair-lamp': .46, 'tulip-planter': .44, balloons: .5,
   tree: 1.265, bush: 1.3, flower: 1.6, 'bench-wood': .18, 'bench-park': .18, 'umbrella-garden': .29, 'umbrella-cafe': .29, 'towel-striped': .26, 'towel-sun': .26,
@@ -192,7 +167,7 @@ function put(name, cp, zone, {flip = false, world = false, mult = 1, nudge = tru
     x: r1(x), y: r1(y), width: a.w, height: a.h, anchor: {x: .5, y: r1(a.ay * 1000) / 1000}, scale: s, flip, zone};
   props.push(p);
   const f = FOOT[k] ?? (k === 'tree' ? 'trunk' : k === 'bush' ? 'bush' : 'base');
-  if (nudge && !['none', 'arch', 'hall'].includes(f)) {   // keep the walking line and the spawns clear
+  if (nudge && !['none', 'arch', 'hall'].includes(f)) {
     const rad = f === 'trunk' ? 31 : f === 'pole' ? 18 : Math.min(150, w * .42);
     for (let it = 0; it < 12; it++) {
       let moved = false;
@@ -213,17 +188,15 @@ function put(name, cp, zone, {flip = false, world = false, mult = 1, nudge = tru
   else if (f === 'low') obstacles.push({x: p.x, y: r1(p.y - h * .3), rx: r1(w * .4), ry: r1(h * .28)});
   else if (f === 'pole') obstacles.push({x: p.x, y: r1(p.y - 8), rx: 18, ry: 12});
   else if (f === 'arch') {for (const sx of [-1, 1]) obstacles.push({x: r1(p.x + sx * w * .37), y: r1(p.y - 12), rx: r1(Math.max(22, w * .08)), ry: 18});}
-  else if (f === 'hall') {   // the castle: its base polygon, the front steps stay walkable
+  else if (f === 'hall') {
     const L = p.x - w * .44, R = p.x + w * .44, top = p.y - h * .3, base = p.y - h * .1;
     obstacles.push({poly: [[L, top], [R, top], [R, base], [p.x + w * .14, base], [p.x + w * .14, p.y - h * .06], [p.x - w * .14, p.y - h * .06], [p.x - w * .14, base], [L, base]].map(q => q.map(r1))});
   }
   return p;
 }
 
-// the egg-top castle (north of the centre plaza) and the centre plaza's placeholder landmark
 const castle = put('castle', [760, 450], 'castle');
 const placeholder = put('centre-placeholder', [760, 532], 'plaza', {nudge: false});
-// lamps and wish flags round the centre plaza rim, between the paths that leave it
 const C0 = PLAZAS[0];
 const rim = (ang, pad) => [r1(C0.x + Math.cos(ang) * (C0.rx + pad)), r1(C0.y + Math.sin(ang) * (C0.ry + pad * .55))];
 const pathClear = (x, y, m) => PATHS.every(p => lineDist(x, y, p.line) > p.w / 2 + m);
@@ -232,11 +205,10 @@ const pathClear = (x, y, m) => PATHS.every(p => lineDist(x, y, p.line) > p.w / 2
   let n = 0;
   for (let a = 0; a < Math.PI * 2; a += Math.PI / 14) {
     const [x, y] = rim(a, 70);
-    if (Math.abs(x - castle.x) < 560 && y < C0.y) continue;   // the castle side
+    if (Math.abs(x - castle.x) < 560 && y < C0.y) continue;
     if (!pathClear(x, y, 50)) continue;
     put(kinds[n++ % kinds.length], [x, y], 'plaza', {world: true, nudge: false});
   }
-  // the fair stalls stand round the plaza, just outside its rim
   const st = ['stall-pink', 'stall-blue', 'ticket-booth', 'stall-yellow', 'stall-mint'];
   let k = 0;
   for (const a of [Math.PI * .62, Math.PI * .38, Math.PI * .7, Math.PI * .3, Math.PI * .76, Math.PI * .24]) {
@@ -245,44 +217,35 @@ const pathClear = (x, y, m) => PATHS.every(p => lineDist(x, y, p.line) > p.w / 2
     put(st[k++ % st.length], [x, y], 'plaza', {world: true, flip: x > C0.x});
   }
 }
-// ribbon arches over the paths (the posts stand either side of the walk)
 put('ribbon-arch', onPath(8, .55), 'plaza', {world: true});
 put('ribbon-arch', onPath(0, .5), 'teacups', {world: true});
 put('ribbon-arch', onPath(1, .5), 'carousel', {world: true});
 put('ribbon-arch', onPath(11, .5), 'pond-garden', {world: true});
-// teacup garden
 put('teacup-ride', [418, 226], 'teacups');
 put('tulip-planter', [340, 262], 'teacups'); put('tulip-planter', [510, 262], 'teacups', {flip: true});
 put('stall-pink', [535, 215], 'teacups'); put('balloons', [330, 205], 'teacups');
 put('fair-lamp', [372, 290], 'teacups'); put('fair-lamp', [478, 292], 'teacups'); put('bench-wood', [430, 300], 'teacups');
-// carousel
 put('carousel', [1094, 222], 'carousel');
 put('stall-blue', [990, 222], 'carousel'); put('ticket-booth', [1188, 238], 'carousel', {flip: true});
 put('tulip-planter', [1030, 282], 'carousel'); put('tulip-planter', [1160, 282], 'carousel', {flip: true});
 put('fair-lamp', [1012, 182], 'carousel'); put('fair-lamp', [1176, 182], 'carousel'); put('balloons', [1130, 290], 'carousel');
-// parade square (open, activity-2): the goose float waits at its north rim, wish flags round it
 put('goose-float', [1230, 336], 'parade');
 for (const c of [[1120, 380], [1350, 380], [1130, 452], [1345, 455]]) put('wish-flag', c, 'parade');
 put('bunting', [1300, 338], 'parade'); put('bunting', [1165, 340], 'parade', {flip: true});
-// pond garden (west)
 put('reeds', [222, 440], 'pond-garden'); put('cattails', [362, 432], 'pond-garden'); put('reeds', [340, 476], 'pond-garden'); put('cattails', [236, 478], 'pond-garden');
 put('lily-pad-flower', [280, 446], 'pond-garden'); put('lily-pad-large', [312, 456], 'pond-garden'); put('lily-pad-large', [262, 432], 'pond-garden');
 put('bench-park', [292, 398], 'pond-garden'); put('tulip-planter', [196, 400], 'pond-garden'); put('tulip-planter', [392, 404], 'pond-garden', {flip: true});
 put('fair-lamp', [178, 510], 'pond-garden'); put('fair-lamp', [410, 500], 'pond-garden');
-// the fair lane: wish flags and lamps along it, a few stalls between the open stall rows, the ticket booth at the harbor end
 for (const t of [.05, .45, .55, .95]) {const [x, y] = onPath(7, t); put('fair-lamp', [x, y - 150], 'fair-lane', {world: true});}
 for (const t of [.05, .2, .35, .5, .95]) {const [x, y] = onPath(7, t); put('wish-flag', [x, y + 150], 'fair-lane', {world: true});}
 put('stall-yellow', [690, 650], 'fair-lane'); put('stall-mint', [836, 650], 'fair-lane', {flip: true});
 put('ticket-booth', [242, 650], 'fair-lane'); put('balloons', [300, 652], 'fair-lane');
-// beach (south-east)
 put('umbrella-garden', [1250, 680], 'beach', {mult: .6}); put('umbrella-cafe', [1420, 620], 'beach', {mult: .6});
 put('picnic-blanket', [1215, 720], 'beach'); put('picnic-blanket', [1400, 680], 'beach', {flip: true}); put('beach-ball', [1320, 700], 'beach');
 put('sandcastle-small', [1380, 700], 'beach'); put('bucket', [1402, 712], 'beach');
 put('shell-scallop', [1260, 770], 'beach'); put('starfish-orange', [1330, 742], 'beach'); put('towel-striped', [1440, 560], 'beach'); put('balloons', [1370, 560], 'beach');
-// north walk: lamps behind the castle, bunting at the north-west pier foot
 for (const t of [.12, .45, .78]) {const [x, y] = onPath(2, t); put('fair-lamp', [x, y - 135], '', {world: true});}
 for (const [n, t] of [[4, .5], [3, .5], [5, .35], [5, .75], [6, .5], [12, .5], [11, .2]]) {const [x, y] = onPath(n, t); put('fair-lamp', [x + 125, y + 30], '', {world: true});}
-// islets: a tree, balloons and tulips on each
 islets.forEach(([cx, cy], i) => {
   const sd = i ? 1 : -1;
   put(i ? 'tree-2' : 'tree-1', [cx + sd * 200, cy - 20], 'islets', {world: true});
@@ -291,7 +254,6 @@ islets.forEach(([cx, cy], i) => {
   put('flower-2', [cx - sd * 260, cy + 50], 'islets', {world: true});
 });
 
-// ---------- scatter trees, bushes, flowers on free lawn ----------
 const SLEEPERS = [];
 const PLZ = (x, y, pad) => [...PLAZAS, ...LAWNS].some(p => ((x - p.x) / (p.rx + pad)) ** 2 + ((y - p.y) / (p.ry + pad)) ** 2 < 1)
   || STALL_ROWS.some(r => inPolyF(x, y, r.poly) || lineDist(x, y, r.mid) < 100 + pad);
@@ -322,15 +284,14 @@ for (let tries = 0; tries < 30000 && bushes < 58; tries++) {
   put(`bush-${1 + bushes % 6}`, [x, y], '', {world: true, flip: rnd() < .5}); bushes++;
 }
 
-// ---------- sleeping Duckies (boss 6 Nov): 40 spots, home's poses (src/pixi/sleep-spots.js SLEEP_SPOTS shape) ----------
 seed = 2026;
 const POSES = JSON.parse(readFileSync('src/pixi/sleep-poses.json', 'utf8')).poses;
 const SR = Object.fromEntries(Object.entries(POSES).map(([n, p]) => [n, (p.box[2] - p.box[0]) * p.k * .81 * (.88 * .24 * 3) / 3 / 2]));
 const sleepAvoid = [...PLAZAS, ...LAWNS].map(p => ({x: r1(p.x), y: r1(p.y), rx: r1(p.rx + 110), ry: r1(p.ry + 80)}));
 for (const r of STALL_ROWS) for (let i = 0; i < r.mid.length; i += 3) sleepAvoid.push({x: r.mid[i][0], y: r.mid[i][1], rx: 240, ry: 180});
-sleepAvoid.push({x: r1(castle.x), y: r1(castle.y + 40), rx: 360, ry: 150});   // the castle's front steps
+sleepAvoid.push({x: r1(castle.x), y: r1(castle.y + 40), rx: 360, ry: 150});
 const sleepSpots = {nod: [], hammock: [], rock: [], leaf: [], book: [], chair: [], wing: [], box: []};
-const SLEEP_N = {nod: 6, hammock: 3, rock: 4, leaf: 6, book: 6, chair: 3, wing: 7, box: 5};   // 40
+const SLEEP_N = {nod: 6, hammock: 3, rock: 4, leaf: 6, book: 6, chair: 3, wing: 7, box: 5};
 {
   const geoS = geometry({coast: WALK_COAST, obstacles, walkways, bridges, islets, water});
   const coastD = (x, y) => Math.min(...EDGE.map((a, i) => segDist(x, y, a, EDGE[(i + 1) % EDGE.length])));
@@ -410,7 +371,6 @@ for (let tries = 0; tries < 8000 && flowers < 190; tries++) {
   put(`flower-${1 + flowers % 3}`, [x, y], '', {world: true}); flowers++;
 }
 
-// ---------- flats (ground decals) ----------
 const flats = [];
 for (let n = 0, tries = 0; n < 1100 && tries < 60000; tries++) {
   const x = RX(), y = RY();
@@ -420,20 +380,18 @@ for (let n = 0, tries = 0; n < 1100 && tries < 60000; tries++) {
   const [w, h] = svgSize(`public/pixi-art/decals/${k}.svg`);
   flats.push({src: `reuse/${k}.svg`, x: r1(x), y: r1(y), width: w, height: h, flip: rnd() < .5}); n++;
 }
-for (let n = 0, tries = 0; n < 220 && tries < 16000; tries++) {   // sand specks on the beach and round the shore
+for (let n = 0, tries = 0; n < 220 && tries < 16000; tries++) {
   const x = RX(), y = RY();
   if (!inPolyF(x, y, offset(EDGE, 20)) || (inPolyF(x, y, offset(GRASS, -20)) && !inPolyF(x, y, BEACH))) continue;
   const k = ['sand-speck-1', 'sand-speck-2'][n % 2], [w, h] = svgSize(`public/pixi-art/decals/${k}.svg`);
   flats.push({src: `reuse/${k}.svg`, x: r1(x), y: r1(y), width: w, height: h}); n++;
 }
 
-// Short grass within the reserved lawns is flat paint, never a standing obstacle.
 for (const lawn of LAWNS) for(let i=0;i<26;i++) {
   const a=rnd()*Math.PI*2,r=Math.sqrt(rnd())*.91,k=`grass-tuft-${1+i%3}`;
   const [w,h]=svgSize(`public/pixi-art/decals/${k}.svg`);
   flats.push({src:`reuse/${k}.svg`,x:r1(lawn.x+Math.cos(a)*r*lawn.rx),y:r1(lawn.y+Math.sin(a)*r*lawn.ry),width:w*.8,height:h*.8,flip:rnd()<.5});
 }
-// Home-like small pebbles sit beside curved lanes, leaving the whole walking width clear.
 for (const path of PATHS) for(let i=3;i<path.line.length-2;i+=5){
  const p=path.line[i],q=path.line[i+1],len=Math.hypot(q[0]-p[0],q[1]-p[1]),side=i%2?-1:1;
  const x=p[0]-(q[1]-p[1])/len*(path.w/2+28)*side,y=p[1]+(q[0]-p[0])/len*(path.w/2+28)*side;
@@ -442,14 +400,12 @@ for (const path of PATHS) for(let i=3;i<path.line.length-2;i+=5){
  flats.push({src:'reuse/pebble-1.svg',x:r1(x),y:r1(y),width:w*1.2,height:h*1.2,flip:rnd()<.5});
 }
 
-// ---------- ground SVG ----------
 const C = {ink: '#39472D', grass: '#9CC63E', grassShade: '#90BD38', grassDeep: '#7FAE31', sand: '#FDE48C', sandShade: '#E4C567', sandLip: '#D9B85A',
   water: '#6EC9DE', waterHi: '#C9F1EE', halo: '#A6E3DE', pave: '#FBE8BA', paveLine: '#E6CB8A', pink: '#F6C9D2', aqua: '#BFE8E4', mint: '#C8E7A5'};
 const g = [];
 g.push(`<path d="${dz(EDGE)}" fill="${C.halo}" stroke="${C.halo}" stroke-width="130" stroke-linejoin="round" opacity=".6"/>`);
 g.push(`<path d="${dz(EDGE)}" fill="none" stroke="${C.waterHi}" stroke-width="46" stroke-linejoin="round" opacity=".8"/>`);
 for (const [cx, cy, rx, ry] of islets) g.push(`<ellipse cx="${cx}" cy="${cy + 10}" rx="${rx + 80}" ry="${ry + 70}" fill="${C.halo}" opacity=".6"/>`);
-// sand shore with a soft lip on its south edges, then the lawn
 const shift = (p, dy) => p.map(([x, y]) => [x, r1(y + dy)]);
 g.push(`<path d="${dz(shift(EDGE, 18))}" fill="${C.sandLip}"/>`);
 g.push(`<path d="${dz(EDGE)}" fill="${C.sand}" stroke="${C.sandShade}" stroke-width="6" stroke-linejoin="round"/>`);
@@ -460,10 +416,8 @@ for (let n = 0, tries = 0; n < 40 && tries < 2000; tries++) {
   if (!inPolyF(x, y, offset(GRASS, 180))) continue;
   g.push(`<ellipse cx="${r1(x)}" cy="${r1(y)}" rx="${r1(90 + rnd() * 220)}" ry="${r1(40 + rnd() * 90)}" fill="${C.grassShade}" opacity=".7"/>`); n++;
 }
-// beach over the lawn in the south-east cove
 g.push(`<clipPath id="land"><path d="${dz(offset(EDGE, -2))}"/></clipPath>`);
 g.push(`<g clip-path="url(#land)"><path d="${dz(BEACH)}" fill="${C.sandShade}"/><path d="${dz(offset(BEACH, 14))}" fill="${C.sand}"/></g>`);
-// paths: grass-deep rim, sand-shade rim, sand
 const pathLayer = (extra, color) => PATHS.map(p => `<path d="${d(p.line)}" fill="none" stroke="${color}" stroke-width="${p.w + extra}" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
 const plazaLayer = (extra, color) => PLAZAS.map(p => `<ellipse cx="${p.x}" cy="${p.y}" rx="${r1(p.rx + extra / 2)}" ry="${r1(p.ry + extra / 2)}" fill="${color}"/>`).join('');
 g.push(pathLayer(10, '#627847') + plazaLayer(10, '#627847'));
@@ -474,10 +428,9 @@ PLAZAS.forEach((p, i) => {
   g.push(`<clipPath id="pz${i}"><ellipse cx="${p.x}" cy="${p.y}" rx="${ix}" ry="${iy}"/></clipPath>`);
   g.push(`<ellipse cx="${p.x}" cy="${p.y}" rx="${ix}" ry="${iy}" fill="${C.pave}" stroke="${C.paveLine}" stroke-width="5"/>`);
   const lines = [];
-  if (p.pave === 'centre') {   // pastel rings and spokes: a fairground compass under the landmark
+  if (p.pave === 'centre') {
     for (const [k, col] of [[.86, C.pink], [.7, C.pave], [.56, C.aqua], [.42, C.pave], [.24, C.pink]]) g.push(`<ellipse cx="${p.x}" cy="${p.y}" rx="${r1(ix * k)}" ry="${r1(iy * k)}" fill="${col}" stroke="${C.paveLine}" stroke-width="5"/>`);
     for (let a = 0; a < Math.PI * 2; a += Math.PI / 12) lines.push(`M${r1(p.x + Math.cos(a) * ix * .24)} ${r1(p.y + Math.sin(a) * iy * .24)} L${r1(p.x + Math.cos(a) * ix)} ${r1(p.y + Math.sin(a) * iy)}`);
-    // a scalloped pink border inside the rim
     const sc = []; for (let a = 0; a < Math.PI * 2; a += Math.PI / 40) sc.push(`<circle cx="${r1(p.x + Math.cos(a) * ix * .95)}" cy="${r1(p.y + Math.sin(a) * iy * .95)}" r="16" fill="${C.pink}" stroke="${C.paveLine}" stroke-width="3"/>`);
     g.push(sc.join(''));
   } else if (p.pave === 'tiles') {
@@ -489,13 +442,13 @@ PLAZAS.forEach((p, i) => {
   }
   g.push(`<path d="${lines.join(' ')}" stroke="${C.paveLine}" stroke-width="4" fill="none" clip-path="url(#pz${i})"/>`);
 });
-LAWNS.forEach((a, i) => {   // open lawns: a mown oval with light stripes
+LAWNS.forEach((a, i) => {
   g.push(`<clipPath id="lawn${i}"><ellipse cx="${a.x}" cy="${a.y}" rx="${r1(a.rx)}" ry="${r1(a.ry)}"/></clipPath>`);
   g.push(`<ellipse cx="${a.x}" cy="${a.y}" rx="${r1(a.rx)}" ry="${r1(a.ry)}" fill="#A6CE48" stroke="${C.grassDeep}" stroke-width="3" opacity=".95"/>`);
   const st = []; for (let x = a.x - a.rx; x < a.x + a.rx; x += 110) st.push(`M${r1(x)} ${r1(a.y - a.ry)} L${r1(x + 70)} ${r1(a.y + a.ry)}`);
   g.push(`<path d="${st.join(' ')}" stroke="#AED053" stroke-width="42" fill="none" clip-path="url(#lawn${i})" opacity=".7"/>`);
 });
-STALL_ROWS.forEach((r, i) => {   // open stall rows: candy-striped paving
+STALL_ROWS.forEach((r, i) => {
   g.push(`<path d="${dz(r.poly)}" fill="${C.sandShade}" stroke="#627847" stroke-width="8" stroke-linejoin="round"/>`);
   g.push(`<path d="${dz(r.poly)}" fill="${C.pave}" stroke="${C.paveLine}" stroke-width="5" stroke-linejoin="round"/>`);
   g.push(`<clipPath id="stall${i}"><path d="${dz(r.poly)}"/></clipPath>`);
@@ -504,13 +457,11 @@ STALL_ROWS.forEach((r, i) => {   // open stall rows: candy-striped paving
   for (let y = Math.min(...ys); y < Math.max(...ys); y += 64) L.push(`M${Math.min(...xs)} ${r1(y)} L${Math.max(...xs)} ${r1(y)}`);
   g.push(`<g clip-path="url(#stall${i})">${B.join('')}</g><path d="${L.join(' ')}" stroke="${C.paveLine}" stroke-width="4" fill="none" clip-path="url(#stall${i})"/>`);
 });
-// pond: sand bank, ink edge, water, highlight
 g.push(`<ellipse cx="${POND.x}" cy="${POND.y}" rx="${r1(POND.rx + 26)}" ry="${r1(POND.ry + 22)}" fill="${C.sandShade}"/>`);
 g.push(`<ellipse cx="${POND.x}" cy="${POND.y}" rx="${r1(POND.rx + 14)}" ry="${r1(POND.ry + 12)}" fill="${C.sand}"/>`);
 g.push(`<ellipse cx="${POND.x}" cy="${POND.y}" rx="${r1(POND.rx + 3)}" ry="${r1(POND.ry + 3)}" fill="${C.ink}" opacity=".55"/>`);
 g.push(`<ellipse cx="${POND.x}" cy="${POND.y}" rx="${POND.rx}" ry="${POND.ry}" fill="${C.water}"/>`);
 g.push(`<path d="M${r1(POND.x - POND.rx * .7)} ${r1(POND.y - POND.ry * .35)} Q${POND.x} ${r1(POND.y - POND.ry * .8)} ${r1(POND.x + POND.rx * .6)} ${r1(POND.y - POND.ry * .45)}" fill="none" stroke="${C.waterHi}" stroke-width="8" stroke-linecap="round"/>`);
-// islets: sand oval, lawn on top
 for (const [cx, cy, rx, ry] of islets) {
   g.push(`<ellipse cx="${cx}" cy="${cy + 16}" rx="${rx}" ry="${ry}" fill="${C.sandLip}"/>`);
   g.push(`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${C.sand}" stroke="${C.sandShade}" stroke-width="6"/>`);
@@ -535,11 +486,9 @@ for (let r = 0; r < TR; r++) for (let c = 0; c < TC; c++) {
   tiles.push({src: `ground-r${r}-c${c}.svg`, x, y, width: w, height: h});
 }
 
-// ---------- data ----------
 const zones = {};
 for (const [k, c] of Object.entries(SPAWNS_C)) {const [x, y] = T(c); zones[k] = {x: r1(x), y: r1(y), spawn: [r1(x), r1(y)]};}
 zones.islets = {x: islets[0][0], y: islets[0][1], spawn: [islets[0][0], r1(islets[0][1] - 40)]};
-// boss 6 Nov: the centre plaza (its landmark is a placeholder the boss will swap: replace the 'centre-placeholder' prop)
 zones.centre = {name: 'Centre plaza', x: r1(C0.x), y: r1(C0.y), rx: r1(C0.rx), ry: r1(C0.ry), landmark: placeholder.id, placeholder: true, spawn: zones.plaza.spawn};
 for (const a of ACT) zones[a.id] = {name: a.name, kind: a.kind === 'lawn' ? 'lawn' : 'paved', x: r1(a.x), y: r1(a.y), rx: r1(a.rx), ry: r1(a.ry), spawn: [r1(a.x), r1(a.y)]};
 for (const r of STALL_ROWS) zones[r.id] = {name: r.name, kind: 'stall-row', x: r.x, y: r.y, poly: r.poly, line: r.mid, spawn: [r.x, r.y]};
@@ -562,7 +511,6 @@ writeFileSync(DATA + 'placements.json', JSON.stringify(props, null, 0));
 writeFileSync(DATA + 'paths.json', JSON.stringify(PATHS.map(p => p.line)));
 writeFileSync(ART + 'art.json', JSON.stringify(art, null, 1));
 
-// ---------- checks ----------
 for (const p of props) {
   const inA = ACT.find(a => ((p.x - a.x) / a.rx) ** 2 + ((p.y - a.y) / a.ry) ** 2 < 1), inS = STALL_ROWS.find(r => inPolyF(p.x, p.y, r.poly));
   if (inA || inS) warn.push(`${p.asset} ${p.id} stands on open area ${(inA || inS).id}`);
@@ -600,7 +548,6 @@ console.log(`walkable cells ${total}, reachable from plaza ${reach} (${(100 * re
 if (warn.length) console.log('placement warnings:\n  ' + warn.join('\n  '));
 console.log(errs.length ? 'PROBLEMS:\n  ' + errs.join('\n  ') : 'walk map OK');
 
-// Install the locked centre and final sleeper/clearance corrections after the retained base builder.
 await import('./fair-centre.mjs');
 await import('./fair-polish.mjs');
 await import('./fair-finish.mjs');

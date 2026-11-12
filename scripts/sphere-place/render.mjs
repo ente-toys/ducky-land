@@ -1,5 +1,3 @@
-// Headless native OpenGL proof using production GLSL and production island previews.
-// These are not browser captures or measurements of the live Pixi engine.
 import sharp from 'sharp';
 import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';

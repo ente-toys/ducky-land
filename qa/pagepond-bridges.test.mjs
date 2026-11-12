@@ -16,7 +16,6 @@ function posts(doc){return paths(doc).flatMap(p=>[...p.getAttribute('d').matchAl
  if(!/Z/.test(sub)||/Q/.test(sub))return[];const n=nums(sub);if(n.length!==8)return[];
  const xs=n.filter((_,i)=>i%2===0),ys=n.filter((_,i)=>i%2===1),w=Math.max(...xs)-Math.min(...xs),h=Math.max(...ys)-Math.min(...ys);
  if(w<5||w>7||h<40||h>43)return[];
- // Both long edges must be vertical and both short edges horizontal.
  near(n[0],n[6],'left post upright');near(n[2],n[4],'right post upright');near(n[1],n[3],'level post top');near(n[5],n[7],'level post foot');return [[w,h]];
 }));}
 
@@ -64,8 +63,6 @@ test('every Pagepond bridge crosses the local water flow rather than following i
   const centre=d.a.map((v,k)=>(v+d.b[k])/2);let best={distance:Infinity};
   for(const ps of channels){let station=0;for(let i=1;i<ps.length;i++){const a=ps[i-1],b=ps[i],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy);if(!l)continue;const t=Math.max(0,Math.min(1,((centre[0]-a[0])*dx+(centre[1]-a[1])*dy)/(l*l))),distance=Math.hypot(centre[0]-a[0]-dx*t,centre[1]-a[1]-dy*t);if(distance<best.distance)best={distance,ps,station:station+t*l};station+=l;}}
   const a=at(best.ps,best.station-60),b=at(best.ps,best.station+60),flow=[b[0]-a[0],b[1]-a[1]],deck=[d.b[0]-d.a[0],d.b[1]-d.a[1]];
-  // Four authored camera directions bound the angular fit. This catches the
-  // old EW spans on the two diagonal bends without rotating their uprights.
   assert(Math.abs(flow[0]*deck[0]+flow[1]*deck[1])/Math.hypot(...flow)/Math.hypot(...deck)<.56,d.id+' crosses the local river spine');
  }
 });

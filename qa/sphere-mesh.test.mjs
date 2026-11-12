@@ -10,8 +10,6 @@ import {isletPlacement} from '../src/pixi/islet-view.js';
 import {ISLETS} from '../src/pixi/islets.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 
-// boss 8 Nov ("I don't want any skew"): a neighbour is its true flat art laid down rigidly, centred where the sphere
-// puts its centre. Same placement for the snapshot copy and the animated live copy.
 test('neighbour meshes are rigid: true size, right angles, centre on the sphere',()=>{
  for(const [from,to]of [['home','isle-55'],['isle-55','home'],['sunset','isle-170'],['home','isle-251'],['home','isle-176']]){
   const m=mapOf(to),geometry=patchGeometry(from,to,{...m.origin,width:m.width,height:m.height}),p=geometry.positions;
@@ -32,7 +30,6 @@ test('rigid placements undo each other both ways and match the chart rotation',(
   const mb=mapOf(b),p={x:mb.cx+900,y:mb.cy-700},there=placeRigid(a,b,p),back=unplaceRigid(a,b,there),round=placeRigid(b,a,there);
   assert.ok(Math.hypot(back.x-p.x,back.y-p.y)<1e-6);
   assert.ok(Math.hypot(round.x-p.x,round.y-p.y)<1e-3,'b in a, then a in b, is the identity');
-  // the rotation is the polar part of the chart derivative at the centre
   const f=flatRigid(a,b),P=(x,y)=>mapPoint(b,a,{x:mb.cx+x,y:mb.cy+y}),e=P(1,0),w=P(-1,0),n=P(0,1),s=P(0,-1);
   const q=polar((e.x-w.x)/2,(e.y-w.y)/2,(n.x-s.x)/2,(n.y-s.y)/2);
   assert.ok(Math.abs(f.a-q.cos)<1e-4&&Math.abs(f.b-q.sin)<1e-4);

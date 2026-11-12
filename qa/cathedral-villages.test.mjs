@@ -8,9 +8,6 @@ const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.
 test('Village replacement preserves water, crossing and arrival-port geometry exactly',()=>{
  for(const k of ['coast','water','boatWater','riverMouths','walkways','bridges','islets'])assert.deepEqual(world[k],before[k],k);
  assert.deepEqual(world.arches,before.arches.map(a=>({...a,r:24})),'Home crown replaces legacy rise; all bridge anchors and widths stay exact');
- // The bridge fix deliberately replaces the old affine sprite bounds. Keep
- // crossing identity/direction and genuine docks fixed; the dedicated bridge
- // suite checks the physical deck endpoints and every rigid source part.
  const crossing=d=>({id:d.id,src:d.src,overBoats:d.overBoats,homeBridge:d.homeBridge});
  assert.deepEqual(art.decks.map(crossing),oldArt.decks.map(crossing));
  assert.deepEqual(art.decks.filter(d=>d.id.startsWith('bellovo-port-')),oldArt.decks.filter(d=>d.id.startsWith('bellovo-port-')));

@@ -44,8 +44,6 @@ test('Sunflower communities and the coast loop remain reachable across negative 
  assert.ok(area(map.world.coast)/area(old.coast)>3);assert.equal(shoreOf(map.world).length,1,'surf follows the new sea coast, former islets are inland gardens');
  for(const t of art.ground.tiles){assert.ok(t.width<=1536&&t.height<=1536,t.src)}
 });
-// boss 8 Nov: the old 23 cottages are gone; each community is its GPT hamlet. Every hamlet home's door is clear and
-// reachable from spawn, and its base is solid like the old foundations.
 test('every Sunflower hamlet home has a reachable door and a solid base',()=>{
  const nav=map.nav();assert.equal(communities.length,5);assert.equal(houses.length,0);
  assert.equal(new Set(communities.map(c=>c.kind)).size,5);
@@ -59,12 +57,9 @@ test('every Sunflower hamlet home has a reachable door and a solid base',()=>{
   assert.ok(!nav.walkable(h.footprint.x,h.footprint.y),h.id+' foundation');
  }
  const originalWalk=read(B+'walk-world.json'),before=geometry(originalWalk).walkable,after=geometry(map.baseWalk).walkable;
- // boss 8 Nov (inner island): the flower stall and tree-73 are gone and moved props took their footprints along; only those
- // footprints changed
  const owner=(o,p)=>o.name===p.id||(o.x===p.x&&p.y-o.y>=0&&p.y-o.y<60);
  const changed=[...originalWalk.obstacles.filter(o=>originalArt.props.some(p=>(REMOVE_PROPS.includes(p.id)||MOVE_PROPS[p.id]||!art.props.some(q=>q.id===p.id))&&owner(o,p))),...map.baseWalk.obstacles.filter(o=>/^centre-fill-|^bloom-|^sunbob-outer-/.test(o.name??'')||art.props.some(p=>MOVE_PROPS[p.id]&&owner(o,p)))].map(o=>o.poly&&o.x===undefined?{...o,x:o.poly.reduce((s,q)=>s+q[0],0)/o.poly.length,y:o.poly.reduce((s,q)=>s+q[1],0)/o.poly.length,rx:200,ry:120}:o);
  for(const m of moves)for(const [x,y] of [m.fromPoint,m.to])changed.push({x,y,rx:250,ry:160});
- // and the sunflower fields are solid, as the centre's fields always were
  for(let y=0;y<5600;y+=37)for(let x=0;x<8000;x+=37){if(!inShape(x,y,{x:3880,y:2608.5,rx:1750,ry:1100})&&inPoly(x,y,originalWalk.coast)&&!changed.some(o=>inShape(x,y,o,24))&&!FIELDS.some(f=>inPoly(x,y,f.poly)||f.poly.some((q,k)=>{const a=f.poly[(k+1)%f.poly.length],dx=a[0]-q[0],dy=a[1]-q[1],t=Math.max(0,Math.min(1,((x-q[0])*dx+(y-q[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-q[0]-t*dx,y-q[1]-t*dy)<40;})))assert.equal(after(x,y),before(x,y),'original walking terrain '+x+','+y);}
 });
 test('bigger Sunflower boats float, board and land through the production registry',()=>{
@@ -88,12 +83,9 @@ test('Sunflower canals block walking, every retained and new crossing spans real
   const route=nav.route(map.spawn.x,map.spawn.y,...p);assert.deepEqual(route.at(-1),p,b.id+' reachable');
   let previous=[map.spawn.x,map.spawn.y];for(const q of route){assert.ok(nav.clearLine(previous,q),b.id+' route clearance');previous=q;}
  }
- // No new dry-land prop is left standing in the canal. Reeds/lilies live in water.
  for(const p of art.props.slice(originalArt.props.length))if(!/pond-reeds|pond-lily/.test(p.id))assert.ok(!map.world.water.slice(old.water.length).some(w=>inShape(p.x,p.y-8,w)),p.id+' has dry footing');
- // boss 8 Nov: every hamlet home is its own GPT drawing
  for(const c of communities){const homes=art.props.filter(p=>p.zone===c.id&&p.communityRole==='home');assert.equal(new Set(homes.map(p=>p.src)).size,homes.length,c.id+' house art');}
 });
-// Boss 9 Nov: restore main sunflower artwork and authored density, trimming only plaza/path edges.
 test('the original sunflower fence follows both bank rows at main density, preserving bridge openings and sleepers',async()=>{
  const {FENCE}=await import('../scripts/bigger-sunflower/centre-data.mjs');
  const flowers=art.props.filter(p=>p.id.startsWith('ring-fence-'));assert.equal(flowers.length,448);
@@ -106,13 +98,11 @@ test('the original sunflower fence follows both bank rows at main density, prese
    assert.ok(flowers.some(f=>Math.hypot(f.x-x,f.y-y)<140),`a nearby flower at ${Math.round(x)},${Math.round(y)}`);
   }
  }
- // every opening is at a bridge: near the inner end of one of the ring's 14 arches
  const ends=map.world.arches.flatMap(a=>[a.a,a.b]);
  for(const [gx,gy] of FENCE.gaps)assert.ok(ends.some(e=>Math.hypot(e[0]-gx,e[1]-gy)<450),`opening ${gx},${gy} is at a bridge`);
  assert.equal(map.sleepers.length,90);
 });
 
-// Fingerprint of exact ente/main placements after the 70 plaza/path-edge trims.
 test('Sunbob field art, positions, rows, density and arrangement retain main data',()=>{
  const fields=art.props.filter(p=>/^detail\/field-(flower|row-short)\.svg$/.test(p.pathOriginalSrc??p.src)).map(canonical);
  assert.equal(fields.length,1050);

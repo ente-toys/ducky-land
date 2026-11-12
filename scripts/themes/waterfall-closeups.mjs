@@ -1,7 +1,6 @@
 import sharp from 'sharp';
 import {copyFileSync} from 'node:fs';
 const A='../concepts/themes/work/waterfall/',K=+(process.env.K||.65);
-// Both are fresh vector renders at the same game-scale sampling, not enlarged overview crops.
 const home=A+'waterfall-home-detail-source.png',fall=A+'waterfall-detail-source.png';
 const rows=[
  ['Plaza',[2820,2370],[3900,3800]],

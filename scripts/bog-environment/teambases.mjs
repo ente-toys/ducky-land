@@ -1,5 +1,3 @@
-// BUILD7, after colour.mjs: the approved E1 / G1 base-yard art only.
-// Read the delivered Home-derived pieces; never rebuild geometry or blockers.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
@@ -51,12 +49,8 @@ function building(svg, team, id) {
     '#d3a955': p.gold, '#93729e': evil ? '#a86c78' : '#c5bca1',
     '#d9b8df': p.trim, '#81c1c6': p.window,
   });
-  // Existing board paths remain on the small cover cottages. They become gold
-  // shutters for G1 and burnt orange shutters for E1, at the same window bounds.
   svg = recolor(svg, {'#dfac4b': evil ? '#db8434' : '#e9b737', '#c28b36': evil ? '#aa542f' : '#c39024'});
   if (evil && id.endsWith('-hall')) {
-    // Home's curved hall roof shares seam paths with a straight-roof cottage.
-    // Keep the seam paths but clip their loose ends to the existing roof fill.
     const roof = svg.match(/<path d="([^"]+)" fill="#f13e43"\/>/)[1];
     svg = svg.replace('</title>', `</title><defs><clipPath id="team-roof-seams"><path d="${roof}"/></clipPath></defs>`)
       .replace('<g fill="none" stroke="#a32536"', '<g clip-path="url(#team-roof-seams)" fill="none" stroke="#a32536"');
@@ -89,7 +83,6 @@ function yardPiece(svg, team, kind) {
   });
   let detail = '';
   if (kind === 'porch') {
-    // Fascia and post shoes read as the same gold band as the G1 roofs.
     if (!evil) svg = svg.replace('d="M10 69H630V84H10Z" fill="#229bca"', 'd="M10 69H630V84H10Z" fill="#ffd132"');
     if (evil) {
       detail = horn(34, 40, false, .8) + horn(606, 40, true, .8)
@@ -110,8 +103,6 @@ function yardPiece(svg, team, kind) {
   } else if (kind === 'lantern') {
     detail = evil ? horn(12, 73, false, .4) + horn(53, 73, true, .4) : halo(32, 43, 13, 3.5);
   } else {
-    // Keep every crate and sack path and the full stone contact beneath it.
-    // E1 uses cracked rose stone; G1 uses pale clean stone and a low flower lip.
     if (evil) detail = cracks(p);
     else detail = `<g transform="translate(17 113) scale(.7)">${hedge(0, 0, 68)}</g><g transform="translate(194 113) scale(.7)">${hedge(0, 0, 68)}</g>`;
   }
@@ -131,7 +122,6 @@ for (const prop of art.props) {
   else if (kind.startsWith('yard-return')) source = 'home/p2-yard-wall.svg';
   else if (kind === 'lamp-0') source = 'home/lantern.svg';
   else if (kind.startsWith('wall-')) {
-    // These two supplies differ by yard. Infer from the unchanged semantic name.
     source = `home/${prop.name}.svg`;
   } else throw Error(`Unexpected base piece: ${prop.id}`);
   const target = source.includes(`wz-${base}`)
@@ -149,8 +139,6 @@ for (const prop of art.props) {
 }
 for (const [file, svg] of sources) fs.writeFileSync(root + file, svg);
 
-// Match ground.py's existing seven-point court, using its exact curve samples.
-// The tint is clipped to paving and inserted BEFORE all original ground detail.
 function courtPath({x, y}) {
   const rx = 620, ry = 420;
   const points = [[x-rx,y-110],[x-rx*.65,y-ry],[x+rx*.4,y-ry*.9],

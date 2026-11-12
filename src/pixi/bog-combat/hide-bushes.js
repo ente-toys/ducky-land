@@ -3,8 +3,6 @@ import fallback from './hide-bushes.json' with {type:'json'};
 
 export const BUSH_REVEAL_SECONDS=2;
 
-// The cover builder owns the manifest. Once marked props arrive, they replace
-// this pass's temporary lane clumps. No walk or projectile blockers are added.
 export function buildHideBushes(manifest,temporary=fallback){
   const marked=manifest.props.filter(p=>p.hideBush===true);
   const records=marked.length?marked.map(p=>({id:p.id,x:p.x,y:p.y,
@@ -17,7 +15,6 @@ export function buildHideBushes(manifest,temporary=fallback){
 }
 export const HIDE_BUSHES=buildHideBushes(art);
 export function hideBushAt(p,bushes=HIDE_BUSHES){
-  // Retain the occupied clump across overlapping circles to avoid entry chatter.
   let found=null;
   for(const bush of bushes)if((p.x-bush.x)**2+(p.y-bush.y)**2<=bush.radius*bush.radius){
     if(bush.id===p.bushId)return bush;
@@ -28,7 +25,6 @@ export function hideBushAt(p,bushes=HIDE_BUSHES){
 export const isBushHidden=(p,time)=>!!(p?.alive&&p.bushId&&!(p.bushRevealUntil>time));
 export const isCombatHidden=(p,time)=>!!(p?.alive&&(p.shieldUntil>time||isBushHidden(p,time)));
 
-// Only the authority sets these fields. Clients submit movement and fire only.
 export function updateBushPresence(p,time,bushes=HIDE_BUSHES){
   const id=p.alive?hideBushAt(p,bushes)?.id??null:null;
   if(id&&id!==p.bushId){p.bushEntry=(p.bushEntry??0)+1;p.bushEnteredAt=time;}

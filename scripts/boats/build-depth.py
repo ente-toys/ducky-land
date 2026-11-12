@@ -16,17 +16,11 @@ spec=importlib.util.spec_from_file_location('front',CONCEPT/'build-front.py');mo
 mod.SPIN=str(CONCEPT/'spin48-work/rasters')+'/'
 mod.grow=lambda seed,allowed,limit=10**6:ndi.binary_propagation(seed&allowed,mask=allowed)
 mod.fill_holes=ndi.binary_fill_holes
-# Only the stern seats needed correcting. Keep the forward bench seats and blend
-# the correction through their neighbours, including the 0/48 wrap.
 targets={27:[-46,-64.4],30:[-34,-48],33:[-16,-25],36:[0,-18],39:[18,-18],42:[37,-32],45:[42,-56],48:[42.9,-59.5]}
-# Evenly sample the seat arc through neighbouring views, including the wrap.
-# Coordinates are in drawn game units, anchor relative.
 for n,f in enumerate(meta['frames']):
  if 27<=n<=47:
   keys=sorted(targets);i=next((j for j in range(len(keys)-1) if keys[j]<=n<=keys[j+1]),len(keys)-2);a,b=keys[i:i+2];u=(n-a)/(b-a)
   f['riderSeat']=[round(targets[a][k]+(targets[b][k]-targets[a][k])*u,1) for k in range(2)]
-# Near-rim boundary: lowest cream hull stripe, sampled from the bottom upward.
-# A column's lowest stripe is separated from sail/mast by the deck and ink.
 proof=Image.new('RGB',(8*256,6*224),'#c4e2f5');boundaries=[]
 for n,f in enumerate(meta['frames']):
  src=(SPIN/Path(f['file']).name).read_text()
@@ -38,7 +32,6 @@ for n,f in enumerate(meta['frames']):
   if len(yy)==0:continue
   bottom=yy[-1]
   if bottom<350:continue
-  # The near stripe is in the bottom ~60 pixels. Require at least 4 cream px.
   runs=ndi.label(light[max(300,bottom-70):bottom+1,x])[0]
   for label in range(runs.max(),0,-1):
    ys=np.flatnonzero(runs==label)
@@ -53,13 +46,11 @@ for n,f in enumerate(meta['frames']):
  sizes=np.bincount(labels.ravel());sizes[0]=0
  mask=ndi.binary_fill_holes(labels==sizes.argmax())
  if 5<=n<=19:
-  # Reuse the approved duck-head extraction, discard its old feet-height half-plane.
   old=mod.front_mask(n,f['riderSeat'][1],meta)
   head=old[::2,::2].copy()
   cutoff=meta['anchor'][1]*560+f['riderSeat'][1]*640/meta['drawWidth']+2
   head[yy.repeat(640,1)>cutoff-3]=False
   mask|=head
- # Trace only the selected region; the original SVG supplies identical colours.
  tf,d=mod.potrace_path(mask)
  head,rest=src.split('>',1);inner=rest.rsplit('</svg>',1)[0]
  out=f'{head}><defs><clipPath id="front" clipPathUnits="userSpaceOnUse"><path transform="{tf}" d="{d}"/></clipPath></defs><g clip-path="url(#front)">{inner}</g></svg>'

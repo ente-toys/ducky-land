@@ -22,7 +22,6 @@ for f in S.glob('*.svg'):
  for e in root.iter():
   d=e.get('d')
   if d in replace:e.set('d',replace[d])
- # The coloured spine pillars keep their curved tops and meet the same base.
  if f.name=='print-hall.svg':
   for e in list(root)[4:22]:
    if e.get('d') and 'Z' in e.get('d'):

@@ -1,4 +1,3 @@
-// Last readback pass: clear path centre lines and bring the coastal court furniture onto land.
 import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
 const A='public/pixi-art/themes/snow/',D='assets/world/themes/snow/',j=p=>JSON.parse(readFileSync(p)),out=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
@@ -32,7 +31,6 @@ function relocate(id,convert=false){
 }
 for(const p of [...props])if(!bare.walkable(p.x,p.y-4)&&!/bridge|snow-ducky/.test(p.name))relocate(p.id,p.asset==='arc-bench');
 for(const id of ['snow-275','snow-11','snow-266','snow-37','snow-247'])relocate(id);
-// The south-east footpath ends at the shoreline. It is not an unregistered jetty.
 while(w.paths[13].length>2&&!bare.walkable(...w.paths[13].at(-1)))w.paths[13].pop();paths[13].line=w.paths[13];
 w.props=props.map(({id,name,x,y,zone})=>({id,name,x,y,zone}));
 out(A+'art.json',art);out(D+'world.json',w);out(D+'walk-world.json',walk);out(D+'placements.json',props);out(D+'paths.json',paths);

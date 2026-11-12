@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-// Sail from Home to its nearest neighbour in a real browser and measure the hop: the drawn jetty and island on screen
-// just before and just after switchIsland (must not move), plus the frame-by-frame motion around it.
-// Usage: node scripts/hop-check.mjs <url> [--out dir]
 const S=new URL('../src/pixi/',import.meta.url).href;
 const {destinationsFor}=await import(S+'islands.js');
 const fs=await import('node:fs');
@@ -31,7 +28,6 @@ await page.evaluate(()=>{const e=globalThis.__duckyEngine;globalThis.__hopLog=[]
  globalThis.__hopLog.push({t:performance.now(),island:e.islandId,mode:e.room?.player?.mode,jetty:scr(J),player:sc,dest:pick(globalThis.__hopDest),cam:{x:e.camera.x,y:e.camera.y,zoom:e.camera.zoom}});requestAnimationFrame(step);};requestAnimationFrame(step);});
 const {harborOf}=await import(S+'islands.js');
 await page.evaluate(([id,a,b])=>{globalThis.__hopDest=id;globalThis.__jetty={home:a,[id]:b};
- // the coordinate switch itself: the drawn jetty and the player's boat on screen just before and just after switchIsland
  const e=globalThis.__duckyEngine,orig=e.switchIsland.bind(e);
  const look=()=>{const q=e.camera.basis??{a:1,b:0,c:0,d:1},z=e.camera.zoom,J=globalThis.__jetty[e.islandId],r=globalThis.__duckyRigid?.()??[],isl=r.find(k=>k.kind==='island'&&k.id===id);
   return {island:e.islandId,jetty:{x:e.width/2+q.a*z*(J.x-e.camera.x)+q.c*z*(J.y-e.camera.y),y:e.height/2+q.b*z*(J.x-e.camera.x)+q.d*z*(J.y-e.camera.y)},islandCentre:isl&&{x:isl.x,y:isl.y,a:isl.a,b:isl.b}};};
@@ -44,7 +40,6 @@ for(let k=0;k<240&&!hopped;k++){await sleep(250);
 await page.screenshot({path:`${OUT}/hop-moment.png`});await sleep(1500);
 const log=await page.evaluate(()=>globalThis.__hopLog);
 const h=await page.addStyleTag({content:'body *{visibility:hidden!important}canvas{visibility:visible!important}'});await page.screenshot({path:`${OUT}/hop-after.png`});await h.evaluate(e=>e.remove());
-// per-frame screen jump of the destination island's drawn centre, and at the hop frame
 let maxStep=0,hopStep=null,hopAt=-1;const steps=[];
 for(let i=1;i<log.length;i++){const a=log[i-1].player,b=log[i].player;if(!a||!b)continue;const s=Math.hypot(b.x-a.x,b.y-a.y);steps.push(s);
  if(log[i].island!==log[i-1].island){hopStep=s;hopAt=i;}else if(i>40)maxStep=Math.max(maxStep,s);}

@@ -1,4 +1,3 @@
-// Authored planning drawing. Run before composing the production layers.
 import fs from 'node:fs';
 import sharp from 'sharp';
 const {communities}=JSON.parse(fs.readFileSync('scripts/bigger-neon/communities.json'));
@@ -8,7 +7,6 @@ let b='<rect width="1764" height="1330" fill="#6ec9de"/><g transform="translate(
 const roads=['M-550 2320Q-1100 -750 3500 -100Q7600 -650 8310 2600Q8800 5500 3900 5750Q-1000 6400 -550 2320','M-550 2320H1450M3750 -100V1200M8310 2600H6500M3900 5750V4100'];
 for(const d of roads)b+=`<path d="${d}" fill="none" stroke="#6d713c" stroke-width="390"/><path d="${d}" fill="none" stroke="#f8dea1" stroke-width="350"/>`;
 b+='</g>';
-// Keep the original centre visible in the planning image, at the same coordinates.
 const now=await sharp(out+'neon-now.png').png().toBuffer();
 const inner=await sharp(now).extract({left:410,top:390,width:950,height:575}).png().toBuffer();
 for(const [i,c] of communities.entries()){

@@ -1,6 +1,3 @@
-// Exact maximum viewport residency, independently derived as weighted rectangle
-// overlap in CAMERA space. Sweeping every tile edge covers every camera position,
-// including narrow peaks a regular screenshot grid can miss.
 import {tileResolution} from '../../src/pixi/ground-stream.js';
 export function rasterPeak(tiles,{width,height,zoom,dpr=2,tilt=1}){
  const rectangles=tiles.map(t=>{

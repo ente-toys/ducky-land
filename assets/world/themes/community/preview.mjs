@@ -16,7 +16,6 @@ const sorted=new Container();sorted.sortableChildren=true;camera.addChild(sorted
 for(const p of art.props){p.sprite.visible=true;p.sprite.zIndex=p.sortY??p.y;sorted.addChild(p.sprite)}
 const world=await fetch('./world.json').then(r=>r.json());
 const harbor=await fetch('./harbor.json').then(r=>r.json());
-// Preview the engine-owned harbor with the existing home wooden jetty source.
 const jetty=await fetch('/pixi-art/themes/community/harbor-preview.json').then(r=>r.json());
 const deck=new Sprite(await acquire('/pixi-art/themes/community/harbor-preview.svg',1));deck.position.set(jetty.x,jetty.y);deck.width=jetty.width;deck.height=jetty.height;art.decks.addChild(deck);
 for(const b of harbor.boats){const s=new Sprite(await acquire('/pixi-art/boat-sail.svg',1));s.anchor.set(.5,.82);s.position.set(b.x,b.y);s.width=188;s.height=188;s.zIndex=b.y;sorted.addChild(s)}

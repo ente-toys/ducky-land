@@ -4,8 +4,6 @@ sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import shape,box
 p=json.load(sys.stdin)
 land=shape(p['land'])
-# A convex corner where river and coastline meet needs an actual sand shoulder,
-# not an opaque water fan. Cut back the dry bank gently within each mouth only.
 rounded=land.buffer(-65,quad_segs=16).buffer(65,quad_segs=16)
 for rect in p['mouths']:
     window=box(*rect)

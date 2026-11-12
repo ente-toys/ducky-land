@@ -10,10 +10,6 @@ import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART
 import {ISLETS} from './islets.js';
 import {cloudState,CLOUD_SHADER} from './globe-clouds.js';
 
-// boss 5 Nov: the zoom-out story, "like Google Earth". Zooming out past the home island the flat world curls into a globe
-// floating in space; drag spins it, and it turns slowly when left alone. Style (boss ref, a cartoon Earth): flat blue sea
-// with a glowing rim, a pin on where you are, and Ducky activity as ripples and hearts.
-// Each island occupies a separate local patch, packed in an atlas without geographic distortion.
 import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text, Texture} from 'pixi.js';
 import {PALETTE} from './palette.js';
 
@@ -38,18 +34,11 @@ out vec4 finalColor;
 uniform sampler2D uScene;
 uniform sampler2D uWorld;
 uniform sampler2D uIslets;
-// Rigid placements at the flat end, blended into each island's sphere chart below.
-// uIsl: screen centre xy, cos/s, sin/s.  uIslFlat: where the sticker sits in this island's flat chart (the live scene
-// render): centre xy, cos, sin.  uIslInfo: map width, height, mode (0 hidden, 1 atlas, 2 live scene), atlas cell.
 uniform vec4 uIsl[13];
 uniform vec4 uIslFlat[13];
 uniform vec4 uIslInfo[13];
 uniform vec4 uIt[22];
 uniform vec4 uItInfo[22];
-// boss 8 Nov ("it's not a 3D globe"): on the ball every island and islet is PAINTED ON THE SPHERE through its own chart (the
-// inverse azimuthal lookup about its own centre), so it curves, foreshortens toward the rim and turns with the ball. On the
-// way down to an island it blends into its rigid sticker by uPaint (0 rigid .. 1 on the sphere), in coordinates, never
-// colours. uIslC/E/N: each island's own sphere frame; uIslAux.x: 1 when the sticker is valid (else sphere only).
 uniform vec3 uIslC[13];
 uniform vec3 uIslE[13];
 uniform vec3 uIslN[13];
@@ -89,7 +78,6 @@ vec2 screenDelta(vec2 p){return mat2(uBasis.x,uBasis.y,uBasis.z,uBasis.w)*p;}
 vec2 chartDelta(vec2 p){return inverse(mat2(uBasis.x,uBasis.y,uBasis.z,uBasis.w))*p;}
 vec2 sceneUV(vec2 g){return (screenDelta((g-uCam)*uZoom)+uRes*.5)/uRes;}
 vec2 cellUV(int i,vec2 uv){vec2 cell=vec2(float(i%4),float(i/4));return (cell+(vec2(1.)+uv*1022.)/1024.)/4.;}
-// Is flat-chart point g on some island's land (other than skip)? Its true art's alpha, laid down rigidly.
 bool land(vec2 g,int skip){
  for(int i=0;i<13;i++){
   if(i==skip||uIslInfo[i].z<.5)continue;
@@ -107,13 +95,10 @@ vec2 chartQ(vec3 c,vec3 e,vec3 n,vec3 p){
  return s>1e-9?vec2(x,-y)*(atan(s,z)*uSph.z/s):vec2(0.);
 }
 vec2 stickQ(vec4 S,vec2 X){vec2 d=X-S.xy;return vec2(S.z*d.x+S.w*d.y,-S.w*d.x+S.z*d.y);}
-// island/islet-local position at screen pixel X (sphere point P): the sticker's, the sphere's, or a blend of the two
 vec2 placeQ(vec4 S,vec3 c,vec3 e,vec3 n,float k,vec2 X,vec3 P){
  vec2 b=chartQ(c,e,n,P);if(k>.9999)return b;
  return mix(stickQ(S,X),b,k);
 }
-// Transparent padding never owns a pixel. Among opaque pieces of art, choose the
-// closest local centre; retain a soft fringe only when no opaque coast covers it.
 bool owns(float alpha,float distance,float bestAlpha,float bestDistance){
  if(alpha<=.001)return false;
  bool opaque=alpha>.5,bestOpaque=bestAlpha>.5;
@@ -132,12 +117,9 @@ vec3 islands(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
   if(!owns(alpha,distance,bestAlpha,bestDistance))continue;
   vec4 c;
   if(info.z>1.5){
-   // The scene includes sea and other islands. Its rectangle/alpha cannot be a
-   // coverage mask: ownership always comes from this island's own atlas art.
    vec4 f=uIslFlat[i];vec2 g=f.xy+vec2(f.z*q.x-f.w*q.y,f.w*q.x+f.z*q.y);
    c=textureLod(uScene,sceneUV(g),0.);
   }else{
-   // Mip level from the true footprint one pixel across and down, biased sharp (x.6).
    vec2 qx=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(0.,1.),P2);
    vec2 dx=(qx-q)/info.xy*(.6*1022./4096.),dy=(qy-q)/info.xy*(.6*1022./4096.);
    c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
@@ -165,15 +147,12 @@ vec3 islets(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
  }
  return over(under,best);
 }
-// Open sea. Close in, the live scene's water (boats, wakes) still shows, read through the sphere chart; anything that
-// lands on an island there is skipped, because the island itself comes only from its rigid sticker.
 vec3 sea(vec3 p,vec3 ocean){
  if(uLive<.5)return ocean;
  vec2 g=local(p),suv=sceneUV(g);
  if(length(g-uSph.xy)>uSph.z*1.25||any(lessThan(suv,vec2(0.)))||any(greaterThan(suv,vec2(1.)))||land(g,-1))return ocean;
  return over(ocean,textureLod(uScene,suv,0.));
 }
-// The sphere point drawn at screen uv (the lens, morphing from the flat chart near ball 0).
 vec3 surfaceAt(vec2 uv){
  vec2 px=chartDelta((uv-.5)*uRes);float Rp=uR*uRes.y,d=length(px)/Rp,ball=uBall;
  float theta=min(1.57079632679,d);
@@ -181,8 +160,6 @@ vec3 surfaceAt(vec2 uv){
  else for(int it=0;it<7;it++)theta=clamp(theta-((1.-ball)*theta+ball*sin(theta)-d)/max(.00001,1.-ball+ball*cos(theta)),0.,1.57079632679);
  vec2 dir=d>0.?px/length(px):vec2(0.);
  vec3 p=uFocus*cos(theta)+(uViewEast*dir.x-uViewNorth*dir.y)*sin(theta);
- // Near the flat end retain the exact local chart, then morph coordinates,
- // never colours. No antipodal log-map interpolation on the sphere's limb.
  return normalize(mix(surface(uCam+px/uZoom),p,smoothstep(0.,.25,ball)));
 }
 vec3 planet(vec2 uv){
@@ -191,8 +168,6 @@ vec3 planet(vec2 uv){
  vec2 sp=uv*uRes;vec3 space=vec3(.07,.09,.22);
  float st=hash(floor(sp/2.)),tw=.5+.5*sin(uTime*1.7+st*40.);
  space+=vec3(1.,.95,.8)*step(.9975,st)*tw*step(1.03,d);
- // The flat chart's horizon starts beyond the viewport, then contracts
- // continuously to the orthographic disc. Never sample the far hemisphere.
  float horizon=mix(1.57079632679,1.,ball),edge=d/horizon;
  float air=exp(-max(edge-1.,0.)*Rp*horizon/7.)*step(1.,edge);
  space=mix(space,vec3(.36,.68,1.),air*.7);
@@ -214,7 +189,6 @@ vec3 planet(vec2 uv){
 void main(){finalColor=vec4(planet(vUV),1.);}
 `;
 
-// Thirteen separate images in a padded atlas. Packing is unrelated to placement.
 function buildWorldTexture(app,islands,bounds,arch){
  const box=new Container();
  WORLD_ISLANDS.forEach((island,k)=>{
@@ -224,7 +198,6 @@ function buildWorldTexture(app,islands,bounds,arch){
  app.renderer.render({container:box,target:rt,clear:true});box.destroy({children:true});rt.source.updateMipmaps();return rt;
 }
 
-// the 'you are here' pin: a sun-yellow drop with an ink outline and a cream dot, a 'You' tag above it
 function makePin() {
   const pin = new Container({label: 'You are here'});
   const shadow = new Graphics().ellipse(0, 0, 9, 3.5).fill({color: 0x000000, alpha: .25});
@@ -271,8 +244,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
   const mesh = new Mesh({geometry, shader, label: 'World view'});
   mesh.visible = false;
   app.stage.addChildAt(mesh, app.stage.getChildIndex(scene) + 1);
-  // boss 5 Nov (ref: Kaspersky cybermap): the world is busy. A Ducky doing something shows as a soft warm glow that
-  // blooms and fades with one thin ring easing out; now and then a rounded heart pops up and drifts away.
   const life = new Container({label: 'Ducky activity'}), rings = new Graphics();
   const glowCanvas = document.createElement('canvas'); glowCanvas.width = glowCanvas.height = 64;
   const gc = glowCanvas.getContext('2d'), grad = gc.createRadialGradient(32, 32, 0, 32, 32, 32);
@@ -291,41 +262,37 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
   life.visible = pin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
-  const out = x => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);   // ease-out: quick start, soft landing
+  const out = x => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);
   let seed = 7;
   const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const heartLocation = createHeartLocations(WORLD_ISLANDS, mapOf, rand, ISLETS);
   const ripples = [];
   let lastT = 0, rippleDue = 0, hover = false, hoverK = 1;
   return {
-    // Compile and warm the globe pipeline while the loading screen is present.
-    // Its first visible frame can then use the same shader and GPU buffers.
     prepare() {
       mesh.visible = true; mesh.scale.set(2);
       try {app.renderer.render({container: mesh, clear: false});}
       finally {mesh.visible = false;}
     },
-    pinIn: 0,   // 0..1, how far the 'You' pin has come in (engine.js fades the name tags out by the same amount)
-    // t: 0 at the island, 1 fully zoomed out. cam: the camera's world point. me: where the player is (world units).
+    pinIn: 0,
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me, reduced=false) {
       const on = t > .001;
       mesh.visible = on;
-      if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {   // rebuilt when a themed island's snapshot arrives
+      if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {
         const old = worldTex; worldVersion = arch.version;
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize, shoreTextures);
         shader.resources.uWorld = worldTex.source;
-        if (old) setTimeout(() => old.destroy(true), 0);   // unbound first, then freed (no 'destroyed while bound' warning)
+        if (old) setTimeout(() => old.destroy(true), 0);
       }
       if (!on) {scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;}
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       const live=t < .97 && cam.zoom > .065;
-      if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}   // the real islands round the camera (not needed once it is all globe)
+      if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}
       scene.visible = false;
       const id=arch.current,m=mapOf(id),anchor=worldIsland(id),view=viewFrame(id,cam);
       const Rw=WORLD_GEO.Rw,R=Rw*cam.zoom/h,Rp=Rw*cam.zoom,ball=globeBall(t,cam.zoom,h);
       u.uBall=ball;
       const clouds=cloudState(ball,time,reduced);u.uCloudPhase=clouds.phase;u.uCloudFade=clouds.fade;
-      // The mask is a white disc: only draw it while it is actually masking, or it shows as a white ball mid-zoom.
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
       pin.mask=masking?sphereMask:null;
       const basis=cam.basis??{a:1,b:0,c:0,d:1};u.uBasis.set([basis.a,basis.b,basis.c,basis.d]);
@@ -344,8 +311,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       };
       this.debug={ball,horizon,atlasSize:4096,source:live?'live':'atlas',colourBlends:0};
       this.globe={w,h,Rp,Rw,ball,view,id,basis,camera:{x:cam.x,y:cam.y}};
-      // boss 8 Nov: rigid stickers placed by the sphere (globe-screen.js). Islands, islets, glows and the pin all use the
-      // one projection, so they stay put on the ball while it turns.
       const G=globeScreen({id,cam,ball,w,h,basis}),stickerOf=G.sticker;
       const project=(x,y)=>{
         const p=spherePoint(id,{x,y}),vz=dot(p,view.center);
@@ -354,19 +319,15 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         return {x:s.x,y:s.y,face:ball>.5?vz:1};
       };
       const isl=u.uIsl,flat=u.uIslFlat,info=u.uIslInfo,it=u.uIt,itInfo=u.uItInfo;
-      // boss 8 Nov ("it's not a 3D globe"): rigid sticker on the way down, painted on the sphere by ball .6 (paintWeight)
       const paint=paintWeight(ball);u.uPaint=paint;
-      const facing=(c,r)=>paint>0&&dot(c,view.center)>-Math.sin(r/Rw);   // any part still on the front: it wraps round the rim
+      const facing=(c,r)=>paint>0&&dot(c,view.center)>-Math.sin(r/Rw);
       const stickers=[];
       WORLD_ISLANDS.forEach((island,k)=>{
         const mi=mapOf(island.id),S=(x,y)=>spherePoint(island.id,{x:mi.cx+x,y:mi.cy+y});
         let st=stickerOf(S,ball>=.25?4:16);
         if(st&&ball>.5&&st.depth<=0)st=null;
         if(!st&&!facing(island.center,Math.hypot(mi.width,mi.height)/2))return;
-        // the live scene only if every on-screen part of this sticker was rendered into it this frame
         const F=flatRigid(id,island.id);let mode=worldTex?1:0;
-        // Once painted, every island (including the anchor) uses the same atlas
-        // colour path. The live framebuffer also contains sea and neighbours.
         if(live&&st&&paint===0){
           let inside=true;
           for(let gy=0;gy<=8&&inside;gy++)for(let gx=0;gx<=8;gx++){
@@ -399,8 +360,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         frames(u.uItC,u.uItE,u.uItN,u.uItAux,islet,st,n);
       });
       u.uLive=live?1:0;
-      // QA readback: the matrix actually drawn at each centre (local units -> screen pixels): the inverse of the blended
-      // screen->local map, i.e. the rigid sticker at paint 0 and the true sphere projection's Jacobian at paint 1.
       const drawn=({st,S})=>{
         const C=G.screenOf(S(0,0)),e=2,xp=G.screenOf(S(e,0)),xm=G.screenOf(S(-e,0)),yp=G.screenOf(S(0,e)),ym=G.screenOf(S(0,-e));
         const J=C&&xp&&xm&&yp&&ym?[(xp.x-xm.x)/(2*e),(xp.y-xm.y)/(2*e),(yp.x-ym.x)/(2*e),(yp.y-ym.y)/(2*e)]:null;
@@ -420,7 +379,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         for (rippleDue -= dt; rippleDue < 0; rippleDue += HEART_ACTIVITY_INTERVAL*(.8+rand()*.4)) {
           if(ripples.length<HEART_ACTIVITY_LIMIT)ripples.push({...pick(), at: time, heart: rand() < HEART_ACTIVITY_CHANCE, dur: 2 + rand() * .8});
         }
-        const px = Math.min(1.5, Math.max(1, Rp / 240));   // hearts and ripples stay a friendly size at every zoom   // sizes follow the globe
+        const px = Math.min(1.5, Math.max(1, Rp / 240));
         for (const c of glows.children) c.visible = false;
         for (const c of hearts.children) c.visible = false;
         rings.clear();
@@ -429,15 +388,13 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
           if (age >= 1) {ripples.splice(i, 1); continue;}
           const p = project(r.x, r.y);
           if (p.face < .08) continue;
-          const f = ease(p.face / .3), sq = .45 + .55 * p.face;   // everything flattens toward the rim
+          const f = ease(p.face / .3), sq = .45 + .55 * p.face;
           const fade = ease(age / .12) * (1 - ease((age - .35) / .65));
           const g = sprite(glows, glowTex);
           g.position.set(p.x, p.y); g.scale.set((.14 + out(age) * .18) * px, (.14 + out(age) * .18) * px * sq); g.alpha = fade * .85 * f;
           const k = out(age), rr = (2.5 + k * 11) * px;
           rings.ellipse(p.x, p.y, rr, rr * sq).stroke({color: 0xFFF3C4, width: 1.1 * px, alpha: (1 - k) * .55 * f});
           if (r.heart) {
-            // the pop: a damped spring from nothing up past full size and back, a little tilt that settles, a burst of
-            // four sparkles, then a slow rise that shrinks and fades away
             const sec = (time - r.at), spring = 1 - Math.exp(-sec * 9) * Math.cos(sec * 22);
             const hs = sprite(hearts, heartTex), lift = out((sec - .35) / 1.4), gone = ease((sec - 1.1) / .6);
             hs.position.set(p.x + Math.sin(sec * 4 + r.x) * 1.5 * px * lift, p.y - (8 + lift * 22) * px);
@@ -452,7 +409,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
           }
         }
       } else ripples.length = 0;
-      // the pin: the player's world point projected onto the globe the same way the shader bends the map
       this.pinIn = me ? ease((t - .12) / .15) : 0;
       if (me) {
         const p = project(me.x, me.y);
@@ -460,24 +416,20 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         pin.alpha = this.pinIn * ease(p.face / .25);
         pin.visible = pin.alpha > .01;
         pin.body.y = -Math.abs(Math.sin(time * 3)) * 6;
-        hoverK += ((hover && pin.visible ? 1.05 : 1) - hoverK) * (1 - Math.exp(-dt * 18));   // boss 6 Nov: a small lift on hover, never past 1.05
+        hoverK += ((hover && pin.visible ? 1.05 : 1) - hoverK) * (1 - Math.exp(-dt * 18));
         pin.scale.set((.8 + .2 * p.face) * hoverK);
       } else pin.visible = false;
     },
-    // boss 6 Nov: the 'You' pin is a button. Hit box covers the drop and the tag with room for a finger (at least 64 x 96 px).
     pinAt(point) {
       if (!pin.visible || pin.alpha < .35) return false;
       const k = pin.scale.x, dx = point.x - pin.x, dy = point.y - pin.y;
       return Math.abs(dx) < Math.max(32, 26 * k) && dy > -Math.max(90, 84 * k) && dy < 16;
     },
     hoverPin(on) {hover = on;},
-    pinPoint() {return pin.visible ? {x: pin.x, y: pin.y, alpha: pin.alpha, scale: pin.scale.x} : null;},   // QA readback
-    // grab-drag on the ball: how far to move the camera so the spot under the finger stays under the finger
+    pinPoint() {return pin.visible ? {x: pin.x, y: pin.y, alpha: pin.alpha, scale: pin.scale.x} : null;},
     grab(from, to, camera, aim) {
       const g = this.globe;
       if (!g || g.ball < .3) return null;
-      // boss 8 Nov: a north-up ball spun about the pole and the screen's horizontal axis (globe-look.js); the grabbed spot
-      // stays under the cursor and the view never rolls
       const centre=aim??spherePoint(g.id,camera),o=p=>({x:p.x-g.w/2,y:p.y-g.h/2});
       const before=lonLat(centre),next=globeDrag(g.id,centre,o(from),o(to),g.ball,g.Rp);
       let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));

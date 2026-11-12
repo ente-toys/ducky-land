@@ -1,8 +1,6 @@
 import {DOMAdapter, ImageSource, Texture} from 'pixi.js';
 import {cropFairSVG} from './fair-raster.js';
 
-// Same SVG -> Image -> canvas -> ImageSource pipeline as Pixi's loadSVG parser,
-// with a small cropped viewport. Leases are owned by the shared 128 MiB pool.
 export function createFairRasterLoader() {
   const originals=new Map(),leases=new Map();
   let disposed=false;

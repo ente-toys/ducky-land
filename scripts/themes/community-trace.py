@@ -1,15 +1,10 @@
-# Campfire Commons (community): cut the GPT prop sheets (2x2, pieces on white) into single pieces and vectorise each one with
-# vtracer, palette-snapped so every piece comes out as flat fills with the ink outline (the home prop look).
-# Needs a python3.11 venv with: vtracer cairosvg pillow numpy scipy
-# usage: python scripts/themes/community-trace.py <sheet.png> <name-tl> <name-tr> <name-bl> <name-br>   (a name of "-" skips that piece)
-# writes public/pixi-art/themes/community/detail/<name>.svg and prints each piece's size and anchor (bottom-centre of its base)
 import sys, os, io, numpy as np, vtracer, cairosvg
 from PIL import Image, ImageFilter
 from scipy import ndimage
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 OUT = os.path.join(ROOT, 'public/pixi-art/themes/community/detail')
-INK = (57, 71, 45)   # home ink #39472D
+INK = (57, 71, 45)
 
 def kmeans(px, k, it=12, seed=3):
     rng = np.random.default_rng(seed)
@@ -27,33 +22,28 @@ def piece(im, box, name, k=13):
     lab, _ = ndimage.label(white)
     border = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
     bg = np.isin(lab, list(border))
-    # big pure-white pockets enclosed by the piece (between swing legs, inside an arch) are background too
     pure = q.min(-1) > 244
     for i in np.unique(lab[pure]):
         if i and i not in border and (lab == i).sum() > 5000: bg |= lab == i
     fg = ndimage.binary_opening(~bg, iterations=1)
-    # keep the biggest blobs only (drop specks), but keep everything over 2% of the biggest
     fl, n = ndimage.label(fg)
     if n > 1:
         sizes = ndimage.sum(fg, fl, range(1, n + 1))
-        edge = set(np.unique(np.concatenate([fl[0], fl[-1], fl[:, 0], fl[:, -1]])))   # a neighbour piece poking over the cut line
+        edge = set(np.unique(np.concatenate([fl[0], fl[-1], fl[:, 0], fl[:, -1]])))
         keep = [i + 1 for i, s in enumerate(sizes) if s > .05 * sizes.max() and (i + 1 not in edge or s == sizes.max())]
         fg = np.isin(fl, keep)
     ys, xs = np.where(fg)
     y0, y1, x0, x1 = max(0, ys.min() - 6), min(q.shape[0], ys.max() + 7), max(0, xs.min() - 6), min(q.shape[1], xs.max() + 7)
     q, fg = q[y0:y1, x0:x1], fg[y0:y1, x0:x1]
-    # upscale 2x for smoother curves, median to kill JPEG-ish noise, then snap to a small palette
     UP = 2
     img = Image.fromarray(q.astype(np.uint8)).resize((q.shape[1] * UP, q.shape[0] * UP), Image.LANCZOS).filter(ImageFilter.MedianFilter(5))
     rgb = np.array(img).astype(float)
     m = np.array(Image.fromarray((fg * 255).astype(np.uint8)).resize(img.size, Image.LANCZOS)) > 127
     px = rgb[m]
     pal = kmeans(px[::max(1, len(px) // 40000)], k)
-    # the darkest cluster is the outline: pull it to home ink
     d = pal.sum(1).argmin(); pal[d] = INK
     labs = np.argmin(((rgb[..., None, :] - pal[None, None]) ** 2).sum(-1), -1).astype(np.uint8)
     labs = np.array(Image.fromarray(labs).filter(ImageFilter.ModeFilter(7)))
-    # a 2px ring just inside the silhouette is always ink, so the outline is closed and even like home
     ring = m & ~ndimage.binary_erosion(m, iterations=3)
     labs[ring] = d
     out = np.zeros(labs.shape + (4,), np.uint8); out[..., :3] = pal[labs].astype(np.uint8); out[..., 3] = np.where(m, 255, 0)
@@ -71,10 +61,9 @@ def piece(im, box, name, k=13):
     s = s.replace(head, f'<svg xmlns="http://www.w3.org/2000/svg" width="{W // UP}" height="{H // UP}" viewBox="0 0 {W} {H}">'
                         f'<title>Campfire Commons: {name}</title><desc>Original Ducky Land vector artwork (community theme).</desc>', 1)
     open(dst, 'w').write(s)
-    # anchor: bottom of the silhouette, centred on the lowest 6% of rows
     rows = np.where(fg.any(1))[0]; base = rows.max(); band = fg[max(0, base - int(.06 * fg.shape[0])):base + 1]
     bx = np.where(band.any(0))[0]
-    ax, ay = .5, (base + 1) / fg.shape[0]   # centred: wide pieces (swings) have uneven feet
+    ax, ay = .5, (base + 1) / fg.shape[0]
     print(f'{name}: {W // UP}x{H // UP} anchor=({ax:.3f},{ay:.3f}) {os.path.getsize(dst) // 1024}KB')
     return W // UP, H // UP, ax, ay
 

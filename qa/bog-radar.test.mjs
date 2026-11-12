@@ -10,7 +10,7 @@ import {worldIsland, WORLD_GEO} from '../src/pixi/world-map.js';
 
 const close = (a,b) => assert.ok(Math.abs(a-b)<1e-7, `${a} != ${b}`);
 const bog = mapOf(BOG_RADAR_ISLAND);
-const radius = (500 + 2 * 1000 / (132 - 8)) * 8; // Mobile outline centre, including half the 4 px border.
+const radius = (500 + 2 * 1000 / (132 - 8)) * 8;
 
 test('Bog badge preserves the true in-range terrain position, using caller-owned storage', () => {
   const out = {x:0,y:0,visible:false};
@@ -35,7 +35,6 @@ test('out-of-range Bog stays centred on the outline in its projected direction, 
     assert.equal(out.visible,true);
     if (id==='home') assert.ok(!terrain.some(i=>i.id===BOG_RADAR_ISLAND));
   }
-  // All quadrants and exact axes, without any new output object.
   for (const [x,y] of [[10000,0],[-10000,0],[0,10000],[0,-10000],[9000,-7000],[-9000,7000]]) {
     placeBogRadar(out,'home',x,y,radius);
     close(Math.hypot(out.x,out.y),radius);

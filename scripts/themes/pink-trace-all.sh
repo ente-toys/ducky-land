@@ -1,6 +1,4 @@
 #!/bin/bash
-# Vectorise every pink prop sheet (concepts/themes/pink-gen/sheet-*.png) into public/pixi-art/themes/pink/detail/.
-# PY = a python3.11 with vtracer cairosvg pillow numpy scipy
 PY=${PY:-python3.11}; G="$(cd "$(dirname "$0")/../../.." && pwd)/concepts/themes/pink-gen"; T="$(dirname "$0")/pink-trace.py"
 while read -r sheet a b c d; do [ -f "$G/$sheet.png" ] && "$PY" "$T" "$G/$sheet.png" $a $b $c $d; done <<'L'
 sheet-a dollhouse-pink dollhouse-lilac cottage-pink teacup-cafe

@@ -7,7 +7,6 @@ shore=read(P/'shore.json')
 shore['crossings']=[c for c in shore['crossings'] if c['id'] not in ['rosewater-garden','rosewater-shore']]
 for c in shore['crossings']:
  if c['id']=='willow-lane':c['a']=[7440,2650];c['b']=[7840,2430]
-# The only western crossing is the promenade. Its ends are road vertices.
 roads=[
  {'id':'promenade','points':[[-350,650],[1100,610],[2600,350],[4000,560],[5750,500],[7100,850],[8360,1780],[8650,2300],[8200,3250],[7870,3550],[7470,3860],[7170,4100],[6500,4000],[5740,4150],[5350,4800],[4840,5690],[4000,6100],[2600,5370],[1850,4900],[1440,4590],[1280,4510],[-450,3690],[-1640,2820],[-1450,1660],[-350,650]]},
  {'id':'marina','points':[[8650,2300],[9040,2470],[9350,2670],[9600,2850]]},
@@ -30,7 +29,6 @@ def segments(points):
  n=len(points);closed=points[0]==points[-1];p=points[:-1] if closed else points;n=len(p);out=[]
  for i in range(n if closed else n-1):
   b=p[i];c=p[(i+1)%n];a=p[(i-1)%n] if closed or i else b;z=p[(i+2)%n] if closed or i+2<n else c
-  # Bridge sills land exactly on the road, so the deck span stays straight.
   if (tuple(b),tuple(c)) in bridgePairs:out.append([b,b,c,c])
   else:out.append([b,[b[k]+(c[k]-a[k])/6 for k in range(2)],[c[k]-(z[k]-b[k])/6 for k in range(2)],c])
  return out
@@ -42,8 +40,6 @@ for r in roads:
   for j in range(12):
    t=j/12;r['sampled'].append([round((1-t)**3*a[k]+3*(1-t)**2*t*b[k]+3*(1-t)*t*t*c[k]+t**3*d[k],2) for k in range(2)])
  r['sampled'].append(segs[-1][-1])
-# Paint old and new lanes together: all shoulders first, then one shared cream surface.
-# This prevents the old round end caps from remaining visible inside a joined road.
 root=E.fromstring(subprocess.check_output(['git','show','96f36ed5:public/pixi-art/themes/pink/expansion/tiles/original-r2-c2.svg'],text=True));ns='{http://www.w3.org/2000/svg}'
 core=next(e for e in root.iter() if e.get('data-name')=='Continuous footpaths')
 corepaths=[e.get('d') for i,e in enumerate(core) if i not in [14,15]]

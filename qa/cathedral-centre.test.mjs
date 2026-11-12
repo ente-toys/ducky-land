@@ -26,8 +26,6 @@ test('Home clump roots stay dry, clear of paths, and use solid shallow trunks',(
  for(const p of art.props.filter(p=>/^b2-(clump|nod)/.test(p.id))){
   assert.ok(map.landAt(p.x,p.y),p.id+' dry');
   if(p.name!=='Home garden tree')continue;
-  // Keep the fixed east bridge axis. Its Home-width throat has 26 units from
-  // paved edge to root; the full 16-unit walking envelope is checked by paths QA.
   const fixedThroat=world.walkways.some(b=>b.id==='east-main-1'&&[b.a,b.b].some(q=>Math.hypot(p.x-q[0],p.y-q[1])<200));
   for(const [i,line]of world.paths.entries())for(let j=1;j<line.length;j++)assert.ok(segmentDistance(p.x,p.y,line[j-1],line[j])>(world.pathWidths[i]/2+(fixedThroat?24:40)),p.id+' clears lane '+i);
   assert.ok(walk.obstacles.some(o=>o.id===p.id&&o.rx===18&&o.ry===12),'trunk '+p.id);
@@ -59,6 +57,5 @@ test('Garden fits the duck scale brief and all residents rest off the beds and f
   assert.ok(Math.hypot(bed.x-4100,bed.y-4250)>390+bed.r,'resident off plaza');
   for(const p of art.props.filter(p=>/^b2-parterre/.test(p.id)))assert.ok(Math.abs(bed.x-p.x)>p.width/2+bed.r||foot.y+foot.ry<p.y-p.height||foot.y-foot.ry>p.y,'resident off '+p.id);
  }
- // Four connected paved arrivals and diagonal walking room around the basin.
  for(const [x,y]of [[4100,3910],[4100,4590],[3760,4250],[4440,4250],[3950,4120],[4250,4120],[3950,4410],[4250,4410]])assert.ok(map.nav().walkable(x,y),'plaza walking '+x+','+y);
 });

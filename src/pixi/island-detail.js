@@ -1,5 +1,3 @@
-// Choose detail by how large an island appears, not by how many islands are nearby.
-// A bounded closest-first set keeps exploration sharp without drawing the whole world live.
 export function detailedIslands(islands, camera, width, height, tilt = 1, limit = 12) {
   const hw=width/(2*camera.zoom),hh=height/(2*camera.zoom*tilt);
   return islands.filter(i=>!i.home && i.width*camera.zoom>=400 &&

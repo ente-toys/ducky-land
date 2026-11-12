@@ -1,6 +1,3 @@
-// boss 6 Nov ("room for 100 Duckies on every island"): the real room server (worker/index.js IslandRoom) run straight in node,
-// with node:sqlite standing in for the Durable Object's storage and counting sockets standing in for the players. Used by
-// qa/load.test.mjs and scripts/load-room.mjs to time the server tick and measure what each player is sent.
 import {DatabaseSync} from 'node:sqlite';
 
 globalThis.WebSocketRequestResponsePair ??= class {constructor(request, response) {this.request = request; this.response = response;}};
@@ -33,7 +30,6 @@ export async function makeRoom() {
   return room;
 }
 
-// a signed-in player who can play, standing at (x, y) on islandId, connected through a counting socket
 export function addPlayer(room, n, {islandId = 'home', x, y, mode = 'walking'} = {}) {
   const account = `load-${n}`, now = Date.now();
   room.sql.exec('INSERT OR REPLACE INTO sessions (digest,account,login,expires,can_play,github_token) VALUES(?,?,?,?,1,?)', account, account, account, now + 86400000, 'fixture');
@@ -45,7 +41,6 @@ export function addPlayer(room, n, {islandId = 'home', x, y, mode = 'walking'} =
   return {socket, actor, account, seq: 0};
 }
 
-// every player walks somewhere new now and then (a click every ~2 s), like a busy plaza
 export function wander(room, players, nav, rnd, {spawn, radius = 1400} = {}) {
   for (const p of players) {
     if (rnd() > .025) continue;
@@ -53,7 +48,7 @@ export function wander(room, players, nav, rnd, {spawn, radius = 1400} = {}) {
       const x = spawn.x + (rnd() * 2 - 1) * radius, y = spawn.y + (rnd() * 2 - 1) * radius * .7;
       if (!nav.walkable(x, y)) continue;
       p.lastSent = Date.now();
-      const info = room.connections.get(p.socket); info.lastDestination = -Infinity;   // the 400 ms click cooldown is per player; the harness clicks for many
+      const info = room.connections.get(p.socket); info.lastDestination = -Infinity;
       room.webSocketMessage(p.socket, JSON.stringify({type: 'destination', seq: ++p.seq, x, y}));
       break;
     }

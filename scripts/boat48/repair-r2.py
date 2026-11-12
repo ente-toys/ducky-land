@@ -47,7 +47,6 @@ def trace(mask):
 
 
 def flag(x, y, width):
-    # Signed width passes through an edge-on flag before showing its other face.
     return f'''<path data-part="flag" data-width="{width:.3f}" d="M{x} {y+12}
       C{x+width*.29} {y+5} {x+width*.50} {y+44} {x+width} {y+24}
       Q{x+width*.84} {y+68} {x+width*.40} {y+54}
@@ -57,9 +56,6 @@ def flag(x, y, width):
 
 
 repairs = {}
-# One mast, one deck projection and a gradually narrowing sail throughout 33-40.
-# The foot is on the inner deck at y=400, beyond the belly and behind the toes
-# at y=416. No compressed foot layer or change of mast source at view 39.
 for n in range(33, 41):
     yaw = (n - 36) * math.pi / 24
     hx = 320 + 115 * math.sin(yaw)
@@ -94,32 +90,23 @@ for n in range(33, 41):
     (SPIN / f'rig-front/boat-{n:02d}.svg').write_text(svg(rig))
     repairs[n] = {'mastTop': [316, 112], 'mastFoot': [316, foot_y], 'sailWidth': width}
 
-# Remove only each old flag's painted silhouette. Preserve its mast cap and
-# pole; replace the flag with the same four contours at signed, narrow widths.
 for n, width in {18: 58, 19: 9, 20: -9, 21: -58, 43: -58, 44: -9, 45: 9, 46: 58}.items():
     src = (ORIG / f'boat-{n:02d}.svg').read_text()
     a = pixels(src).astype(int)
     r, g, b, alpha = [a[..., k] for k in range(4)]
     yy = np.arange(560)[:, None]
     orange = (r > 225) & (g < 155) & (r-g > 95) & (b < 100) & (alpha > 100) & (yy < 245)
-    # Ink ring belongs to the flag; mast cap brown remains untouched.
     dark = (r < 180) & (g < 160) & (alpha > 0)
     cut = ndi.binary_fill_holes(orange | (ndi.binary_dilation(orange, iterations=25) & dark))
-    # Find the round brown mast cap among the topmost brown connected pixels.
     brown = (r > 135) & (r < 225) & (g > 80) & (g < 180) & (b < 100) & (alpha > 100) & (yy < 126)
     labels, _ = ndi.label(brown)
     sizes = np.bincount(labels.ravel()); sizes[0] = 0
     cy, cx = np.where(labels == sizes.argmax())
     x, y = float(cx.mean()), float(cy.mean())
-    # Keep the entire cap and the thin pole join, even at the old flag root.
     xx = np.arange(640)[None, :]
     cut = ndi.binary_dilation(cut, iterations=3)
     cut &= ~(((xx-x)**2/22**2 + (yy-y)**2/19**2) < 1)
     cut &= ~((abs(xx-x) < 11) & (yy > y))
-    # The flattened flag can hide the top corner of the sail. Replacing only
-    # orange pixels leaves ink flecks and cuts holes in that corner. Clear the
-    # complete upper strip beside the pole and reconstruct the sail corner,
-    # meeting its unchanged contour at y=250. The lower sail stays approved art.
     strip = np.broadcast_to((yy >= y+12) & (yy <= 250), (560, 640)).copy()
     strip &= ~(((xx-x)**2/22**2 + (yy-y)**2/19**2) < 1)
     cut |= strip
@@ -164,16 +151,12 @@ for n, width in {18: 58, 19: 9, 20: -9, 21: -58, 43: -58, 44: -9, 45: 9, 46: 58}
 
 manifest = json.loads((WORK / 'views-original.json').read_text())
 meta = json.loads((ORIG / 'frames.json').read_text())
-# A fixed projected deck depth across the repaired range. Horizontal position
-# tapers smoothly between the approved 32 and 41 seats. Ducky's world pin stays.
 for n in range(33, 41):
     u = (n - 32) / 9
     seat = [round(-22 + (30.7+22)*u, 3), round(-30 + 2.7*u, 3)]
     manifest['views'][f'f{n:02d}']['seat'] = seat
     meta['frames'][n]['riderSeat'] = seat
 
-# Rebuild affected foregrounds from the final source, unioning the near hull
-# below the feet with the exact rig. One source guarantees identical edges.
 affected = sorted(repairs)
 for n in affected:
     src = (SPIN / f'boat-{n:02d}.svg').read_text()
@@ -185,7 +168,6 @@ for n in affected:
     else:
         old = (ORIG / f'front/boat-{n:02d}.svg').read_text()
         paths = re.search(r'<clipPath[^>]*>(.*?)</clipPath>', old, re.S).group(1)
-        # Only rear flags occlude Ducky. Include their narrow replacement.
         if n >= 24:
             paths += trace(pixels((SPIN / f'rig-front/boat-{n:02d}.svg').read_text())[..., 3] > 20)
     front = f'<defs><clipPath id="front" clipPathUnits="userSpaceOnUse">{paths}</clipPath></defs><g clip-path="url(#front)">{inner(src)}</g>'

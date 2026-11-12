@@ -1,4 +1,3 @@
-// Cathedral-only geometry, using HOME's exact curved slat/backrest drawing.
 import {writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 const ART='public/pixi-art/themes/cathedral/';
@@ -28,7 +27,6 @@ export function ring(z,inner,outer,{steps=64,color='#E8D29D',edge='#A58C5B'}={})
 }
 export function roseFloor(){
  const z={x:4100,y:2680,rx:1,ry:.766};let s=ring(z,184,204,{steps:48})+ring(z,432,460,{steps:64})+ring(z,544,600,{steps:80});
- // Eight olive/terracotta compass petals echo the cathedral rose window. Flat stone inlay only.
  const p=(a,r)=>[z.x+Math.cos(a)*r,z.y+Math.sin(a)*r*.766];
  for(let i=0;i<8;i++){const a=i*Math.PI/4,pts=[p(a,215),p(a-.13,315),p(a,420),p(a+.13,315)];s+=`<path d="${poly(pts)}" fill="${i%2?'#D8C088':'#A4B46A'}" stroke="#9C9863" stroke-width="2"/>`;}
  return `<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="1040" viewBox="3450 2160 1300 1040"><title>Olive cloister rose-window stone inlay</title>${s}</svg>`;

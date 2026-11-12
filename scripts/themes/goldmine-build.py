@@ -35,7 +35,6 @@ def catmull(pts,closed=False):
     return out
 def rounded(g):return [[round(x,1),round(y,1)] for x,y in g.exterior.coords[:-1]]
 
-# A broad rocky cove, with beaches, not a literal egg-shaped island.
 raw=[(790,1780),(1170,1120),(2220,900),(3010,680),(4000,710),(4850,730),(5660,930),(6530,1050),(7060,1530),(7250,2210),(7120,2860),(7300,3400),(6850,3970),(5900,4270),(5200,4690),(4140,4780),(3290,4640),(2560,4750),(1740,4440),(1050,4000),(680,3330),(820,2580)]
 land=Polygon(catmull(raw,True))
 land=scale_geom(land,xfact=math.sqrt(19_450_000/land.area),yfact=math.sqrt(19_450_000/land.area),origin=(4000,2800))
@@ -67,7 +66,6 @@ path_defs=[
 ]
 paths=[(catmull(p),w) for p,w in path_defs]
 path_geom=unary_union([LineString(p).buffer(w/2) for p,w in paths])
-# A single union removes stroke seams. Closing rounds the inside of each Y junction.
 path_geom=path_geom.buffer(95,quad_segs=12).buffer(-95,quad_segs=12)
 beach=Polygon(catmull([(6280,3530),(6980,3240),(7160,3520),(6770,3990),(6050,4250),(5970,3900)],True)).intersection(land)
 green=land.buffer(-115).difference(beach)
@@ -81,7 +79,6 @@ decks={
  'bridge-pond':([1260,3180],[2540,3180],190),
 }
 
-# Reuse the exact home assets and their normal world sizes.
 copies={}
 for kind in ['tree-1','tree-2','tree-3','tree-4','tree-5','bush-1','bush-2','bush-3','flower-1','flower-2']:
     copies[kind]=f'plants/{kind}.svg'
@@ -101,7 +98,6 @@ def put(name,src,x,y,h,foot='small',pid=None,flip=False):
     prop_obstacles[p['id']]=obstacles[ob_start:]
     return p
 put('Golden egg mine hall','detail/egg-mine.svg',4050,1670,960,dict(poly=[[3630,1400],[4470,1400],[4470,1585],[3630,1585]]),pid='egg-mine')
-# Placeholder stays intentionally small; the real centre is a later choice.
 (ART/'detail/centre-placeholder.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="100" viewBox="0 0 180 100"><ellipse cx="90" cy="72" rx="84" ry="24" fill="#C99B53" stroke="#39472D" stroke-width="2.6"/><path d="M6 52V72Q90 106 174 72V52" fill="#D9B578" stroke="#39472D" stroke-width="2.6"/><ellipse cx="90" cy="52" rx="84" ry="24" fill="#F5E3BC" stroke="#39472D" stroke-width="2.6"/><path d="M62 52L72 29L101 23L121 42L113 60L79 65Z" fill="#F6C53F" stroke="#39472D" stroke-width="2.6"/><path d="M72 29L79 47L62 52M79 47L101 23M79 47L113 60" fill="none" stroke="#FFF0C7" stroke-width="3"/></svg>')
 put('Temporary nugget plinth','detail/centre-placeholder.svg',4100,2910,100,dict(x=4100,y=2898,rx=80,ry=27),pid='centre-placeholder')
 
@@ -129,16 +125,13 @@ for x,y in [(1800,3830),(2880,1910)]:put('Supply stall','reuse/buildings--stall-
 for x,y in [(3580,3910),(4550,3910)]:put('Picnic table','reuse/street--picnic-table.svg',x,y,160)
 for x,y in [(6340,3740),(6570,3640)]:put('Beach umbrella','reuse/street--umbrella-garden.svg',x,y,260)
 put('Sandcastle','reuse/beach--sandcastle-small.svg',6500,3750,105)
-# Clustered planting beside furniture, leaving the activity interiors empty.
 for i,(x,y) in enumerate([(1200,1820),(1660,1210),(2560,1130),(3260,1120),(4830,1180),(5500,1270),(6490,1510),(6800,2120),(6780,3030),(6780,3410),(5690,4400),(5130,4360),(4640,4460),(2650,4360),(1430,3800),(1090,3100),(2850,3430),(3140,1560),(4810,2100),(5250,3730),(3160,3890),(1540,2290),(6520,2520),(1840,5170),(6040,5230)]):
     if reserved.buffer(40).contains(Point(x,y)) or path_geom.buffer(40).contains(Point(x,y)) or pond_poly.buffer(60).contains(Point(x,y)):continue
     put('Bush',f'reuse/bush-{1+i%3}.svg',x,y,105,foot='small')
     put('Flowers',f'reuse/flower-{1+i%2}.svg',x+80,y+35,45,foot=None)
 
-# Home-quality planting, mining village and approved centre. This file only writes goldmine.
 exec((ROOT/'scripts/themes/goldmine-enrich.py').read_text())
 
-# Ground: home-style flat ochre, cream paths, restrained green patches, pale shallows.
 INK='#39472D'; CREAM='#F5E3BC'; SEA='#8FCAC7'
 ld=shp(all_land); gd=shp(green)
 g=[f'<defs><clipPath id="land"><path d="{ld}"/></clipPath><clipPath id="grass"><path d="{gd}"/></clipPath></defs>']
@@ -154,7 +147,6 @@ for p in props:
     if p['name']=='Tree':g.append(f'<ellipse cx="{p["x"]}" cy="{p["y"]-15}" rx="185" ry="100" fill="#B3C579" clip-path="url(#land)"/>')
 for pad,col in [(18,'#B98F53'),(12,INK),(8,'#E5C98F'),(0,CREAM)]:
     for p,w in paths:g.append(f'<path d="{bez(p[::3]+[p[-1]])}" fill="none" stroke="{col}" stroke-width="{w+pad}" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#land)"/>')
-# A simple visible rail spur in the mine forecourt, entirely walkable.
 for x in [3985,4115]:g.append(f'<path d="M{x} 1630L{x+90} 2020" stroke="#39472D" stroke-width="12"/><path d="M{x-2} 1630L{x+88} 2020" stroke="#D0CEC0" stroke-width="5"/>')
 for t in range(0,390,35):g.append(f'<path d="M{3960+t*.23} {1640+t}h180" stroke="#936538" stroke-width="10"/>')
 for i,a in enumerate(activities):
@@ -172,7 +164,6 @@ g.append(paved(centre,'plaza'))
 g.append(f'<ellipse cx="4100" cy="2910" rx="895" ry="645" fill="none" stroke="#D9B578" stroke-width="12"/><ellipse cx="4100" cy="2910" rx="260" ry="190" fill="#F5E3BC" stroke="#D9B578" stroke-width="5"/>')
 g.append(f'<path d="{shp(pond_poly)}" fill="#80BEBB" stroke="#B98F53" stroke-width="30"/><path d="{shp(pond_poly)}" fill="none" stroke="#F5E3BC" stroke-width="8"/>')
 for x,y in [(1630,3020),(1910,2920),(2160,3050),(2180,3340),(1700,3410)]:g.append(f'<path d="M{x-30} {y}q30 12 60 0" fill="none" stroke="#F5E3BC" stroke-width="4"/>')
-# Tiny home-scale pebbles and tufts, never filling a plaza.
 for i in range(500):
     x,y=rnd.uniform(750,7300),rnd.uniform(800,4800)
     if not green.contains(Point(x,y)) or reserved.buffer(40).contains(Point(x,y)) or pond_poly.buffer(50).contains(Point(x,y)) or path_geom.contains(Point(x,y)):continue
@@ -187,14 +178,13 @@ for r in range(4):
         name=f'ground-r{r}-c{c}.svg'; x,y=c*1600,r*1500
         (ART/name).write_text(svg(f'{x} {y} 1600 1500',1600,1500));tiles.append(dict(src=name,x=x,y=y,width=1600,height=1500))
 
-# DECK_HELPERS inserted below from the already approved sunflower builder.
 
 def deck_svg(name, a, b, w, rails):
     dx, dy = b[0]-a[0], b[1]-a[1]; L = math.hypot(dx, dy); ux, uy = dx/L, dy/L; nx, ny = -uy, ux
     hw = w / 2
     corner = lambda t, s: (a[0] + ux*t + nx*s, a[1] + uy*t + ny*s)
     body = [corner(0, -hw), corner(L, -hw), corner(L, hw), corner(0, hw)]
-    side = 16   # the deck's visible thickness, dropped straight down (3/4 view)
+    side = 16
     xs = [p[0] for p in body]; ys = [p[1] for p in body]
     pad = 40; x0, y0, x1, y1 = min(xs)-pad, min(ys)-pad, max(xs)+pad, max(ys)+pad+side+30
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0:.1f} {y0:.1f} {x1-x0:.1f} {y1-y0:.1f}" width="{x1-x0:.1f}" height="{y1-y0:.1f}" stroke-linejoin="round" stroke-linecap="round">',
@@ -203,18 +193,15 @@ def deck_svg(name, a, b, w, rails):
     s.append(f'<path d="{polyd(sh)}" fill="#2E7F93" fill-opacity=".28"/>')
     low = [(p[0], p[1]+side) for p in body]
     s.append(f'<path d="{polyd(low)}" fill="#8B5A2E" stroke="#39472D" stroke-width="3"/>')
-    # posts under the deck
     for t in np.arange(30, L, 150):
         for sgn in (-1, 1):
             px, py = corner(t, sgn*(hw-8))
             s.append(f'<rect x="{px-7:.1f}" y="{py:.1f}" width="14" height="{side+34}" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2.5"/>')
             s.append(f'<ellipse cx="{px:.1f}" cy="{py+side+34:.1f}" rx="14" ry="5" fill="none" stroke="#FFF0C7" stroke-width="2.5" stroke-opacity=".8"/>')
     s.append(f'<path d="{polyd(body)}" fill="#C8893F" stroke="#39472D" stroke-width="3.2"/>')
-    # planks across the deck
     for t in np.arange(26, L, 26):
         p, q = corner(t, -hw+4), corner(t, hw-4)
         s.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="#39472D" stroke-width="1.6" stroke-opacity=".55"/>')
-    # a lit edge and a few grain ticks
     p, q = corner(4, -hw+6), corner(L-4, -hw+6)
     s.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="#E9B46A" stroke-width="5" stroke-opacity=".8"/>')
     for i, t in enumerate(np.arange(40, L, 95)):
@@ -228,21 +215,21 @@ def deck_svg(name, a, b, w, rails):
                 s.append(f'<rect x="{px-6:.1f}" y="{py-36:.1f}" width="12" height="38" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.5"/>')
             s.append(f'<path d="M {" L ".join(f"{x:.1f} {y:.1f}" for x, y in tops)}" fill="none" stroke="#39472D" stroke-width="10"/>')
             s.append(f'<path d="M {" L ".join(f"{x:.1f} {y:.1f}" for x, y in tops)}" fill="none" stroke="#C8893F" stroke-width="5"/>')
-    else:   # jetties: two mooring bollards at the tip
+    else:
         for sgn in (-1, 1):
             px, py = corner(L-14, sgn*(hw-10))
             s.append(f'<rect x="{px-9:.1f}" y="{py-30:.1f}" width="18" height="32" rx="6" fill="#7A4E28" stroke="#39472D" stroke-width="2.5"/><ellipse cx="{px:.1f}" cy="{py-30:.1f}" rx="9" ry="4" fill="#B97A3A" stroke="#39472D" stroke-width="2"/>')
     s.append('</svg>')
     open(f'{ART}/{name}.svg', 'w').write('\n'.join(s))
     return dict(src=f'{name}.svg', x=round(x0, 1), y=round(y0, 1), width=round(x1-x0, 1), height=round(y1-y0, 1))
-ARCH_RISE = 64   # islet bridges hump like home's footbridges (home R = 70); listed in world.json `arches` for the engine's deckY
+ARCH_RISE = 64
 def arch_svg(name, a, b, w, R=ARCH_RISE):
     """a humped footbridge in home's look: planked deck rising R at mid-span, side boards, railings on posts, stone footings"""
     dx, dy = b[0]-a[0], b[1]-a[1]; L = math.hypot(dx, dy); ux, uy = dx/L, dy/L; nx, ny = -uy, ux
     hw = w / 2; lift = lambda t: R * 4 * (t/L) * (1 - t/L)
     P = lambda t, sd, extra=0: (a[0] + ux*t + nx*sd, a[1] + uy*t + ny*sd - lift(t) - extra)
     ts = np.linspace(0, L, 28)
-    vis = 1 if ny > 0 else -1          # the deck edge nearer the camera (lower on screen) shows its side boards
+    vis = 1 if ny > 0 else -1
     left = [P(t, -hw) for t in ts]; right = [P(t, hw) for t in ts]
     deck = left + right[::-1]
     side = 20
@@ -253,8 +240,7 @@ def arch_svg(name, a, b, w, R=ARCH_RISE):
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0:.1f} {y0:.1f} {x1-x0:.1f} {y1-y0:.1f}" width="{x1-x0:.1f}" height="{y1-y0:.1f}" stroke-linejoin="round" stroke-linecap="round">',
          f'<title>Nuggetnook {name}, humped footbridge</title>']
     flat = [(a[0] + ux*t + nx*sd + 16, a[1] + uy*t + ny*sd + 34) for t, sd in [(0, -hw), (L, -hw), (L, hw), (0, hw)]]
-    o.append(f'<path d="{polyd(flat)}" fill="#2E7F93" fill-opacity=".26"/>')   # shadow on the water
-    # the open arch under the span: the side boards hang over a dark gap down to the waterline
+    o.append(f'<path d="{polyd(flat)}" fill="#2E7F93" fill-opacity=".26"/>')
     under = [(x, y + side) for x, y in near] + [(a[0] + ux*t + nx*vis*hw, a[1] + uy*t + ny*vis*hw + side + 8) for t in ts[::-1]]
     o.append(f'<path d="{polyd(under)}" fill="#3F8FA0" fill-opacity=".55"/>')
     o.append(f'<path d="{polyd(band)}" fill="#8B5A2E" stroke="#39472D" stroke-width="3"/>')
@@ -264,10 +250,10 @@ def arch_svg(name, a, b, w, R=ARCH_RISE):
         o.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>')
     lit = [P(t, -vis*(hw - 7)) for t in ts]
     o.append(f'<path d="M {" L ".join(f"{x:.1f} {y:.1f}" for x, y in lit)}" fill="none" stroke="#E9B46A" stroke-width="5" stroke-opacity=".8"/>')
-    for t in (6, L - 6):   # cream stone footings where the arch meets land
+    for t in (6, L - 6):
         for sd in (-hw, hw):
             x, y = P(t, sd); o.append(f'<ellipse cx="{x:.1f}" cy="{y + side + 4:.1f}" rx="16" ry="9" fill="#FFF0C7" stroke="#39472D" stroke-width="2.4"/>')
-    for sgn in (-1, 1):   # railings: posts, then a rail that follows the hump
+    for sgn in (-1, 1):
         posts = np.linspace(14, L - 14, max(3, int(L // 70) + 1)); tops = []
         for t in posts:
             x, y = P(t, sgn*(hw - 6)); tops.append((x, y - 36))
@@ -279,7 +265,6 @@ def arch_svg(name, a, b, w, R=ARCH_RISE):
     o.append('</svg>')
     open(f'{ART}/{name}.svg', 'w').write('\n'.join(o))
     return dict(src=f'{name}.svg', x=round(x0, 1), y=round(y0, 1), width=round(x1-x0, 1), height=round(y1-y0, 1))
-# The main south harbor is drawn by the engine. Other piers and all bridges are theme art.
 deck_entries=[arch_svg(k,a,b,w,70) if k.startswith('bridge') else deck_svg(k,a,b,w,False) for k,(a,b,w) in decks.items() if k!='jetty-s']
 preview_harbor=deck_svg('harbor-preview',*decks['jetty-s'],False)
 walkways=[dict(a=a,b=b,w=w) for a,b,w in decks.values()]
@@ -290,15 +275,12 @@ for r in rows:
     x,y=(r['x0']+r['x1'])/2,(r['y0']+r['y1'])/2
     zones[r['id']]={k:v for k,v in r.items() if k!='id'}|dict(x=x,y=y,kind='reserved-stall-row',spawn=[x,y],slots=[[r['x0']+150+i*300,r['y0']+110] for i in range(int((r['x1']-r['x0'])/300))])
 for i,isl in enumerate(islets):zones[f'islet-{i+1}']=dict(x=isl[0],y=isl[1],spawn=[isl[0],isl[1]+100])
-# Boats are beside piers, never on the land or under the timber decks.
 boats=[dict(x=2930,y=5020,turn=0),dict(x=3250,y=5260,turn=0),dict(x=2930,y=5380,turn=0),dict(x=520,y=2420,turn=-math.pi/2),dict(x=520,y=2740,turn=-math.pi/2),dict(x=7510,y=2610,turn=math.pi/2),dict(x=7510,y=2930,turn=math.pi/2),dict(x=6900,y=4370,turn=2.3),dict(x=7260,y=4270,turn=2.3),dict(x=6370,y=5230,turn=math.pi/2)]
-# An engine berth need not be on the coast if it is within stepping distance of a pier.
 harbor=dict(jetty=dict(foot=decks['jetty-s'][0],tip=decks['jetty-s'][1],width=128),boats=boats,spawn=[4100,3280])
 water=[pond]
 world=dict(width=WIDTH,height=HEIGHT,coast=coast,islets=islets,water=water,walkways=walkways,bridges=[dict(x=1900,y=3180,w=1280,h=190)],arches=arches,obstacles=obstacles,zones=zones,paths=[[[round(x,1),round(y,1)] for x,y in p] for p,w in paths],pathWidths=[w for p,w in paths],props=props,sleepSpots={},sleepAvoid=[dict(**plaza,name='centre plaza')]+[{k:a[k] for k in ['x','y','rx','ry']} for a in activities]+[dict(x=(r['x0']+r['x1'])/2,y=(r['y0']+r['y1'])/2,rx=(r['x1']-r['x0'])/2+40,ry=(r['y1']-r['y0'])/2+40,name=r['id']) for r in rows],ambient=dict(birds=[[1950,1800],[5800,2500],[4100,4200]],butterflies=[[1930,1900],[6020,2180],[4050,4230]]))
 world['railPaths']=[[[round(x,1),round(y,1)] for x,y in route.coords] for route in rail_tracks]
 world['centrePlacement']=dict(origin=[4100,2910],scale=.82,landmarkScale=1.34,landmarkOffsetY=556,access=[dict(name='mine threshold',point=[4100,3060])])
-# Walking is inset from the drawn sand by 35, with full solid prop footprints.
 walk={k:world[k] for k in ['width','height','islets','water','walkways','bridges','arches','obstacles','paths','zones']};walk['coast']=rounded(land.buffer(-35))
 art=dict(previewHarbor=preview_harbor,width=WIDTH,height=HEIGHT,sea=SEA,ground=dict(tiles=tiles),decks=deck_entries,flats=extra_flats,props=props,floating=floating)
 for path,value in [(DATA/'world.json',world),(DATA/'walk-world.json',walk),(DATA/'harbor.json',harbor),(ART/'art.json',art)]:path.write_text(json.dumps(value,separators=(',',':'))+'\n')

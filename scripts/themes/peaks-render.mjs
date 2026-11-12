@@ -1,4 +1,3 @@
-// Faithful offline assembly. World pixels are multiplied by k on BOTH islands.
 import sharp from 'sharp';
 import {readFileSync,existsSync} from 'node:fs';
 const ROOT='public/pixi-art/themes/peaks/';
@@ -17,7 +16,6 @@ export async function render(art,{k=.3,x=0,y=0,width=2400,height=1800,home=false
  if(!home){const h=JSON.parse(readFileSync('assets/world/themes/peaks/harbor.json')).jetty;await add('/pixi-art/bridge-jetty-1.svg',h.foot[0]-97.6,h.foot[1]-30,229.2,Math.hypot(h.tip[0]-h.foot[0],h.tip[1]-h.foot[1])+60);}
  for(const f of art.floating||[]){const a=f.anchor||{x:.5,y:.5};await add(f.src,f.x-f.width*a.x,f.y-f.height*a.y,f.width,f.height,f.flip)}
  const things=art.props.map(p=>({...p}));
- // Same simple contact ellipse that loadThemeArt draws, all shadows below standing props.
  for(const p of art.props){if(/bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i.test(p.name||p.asset||'')||p.shadow===false)continue;let rx=Math.max(8,Math.min(300,p.width*p.scale*.36)),ry=rx*.3;await add(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${rx*2+4}" height="${ry*2+4}"><ellipse cx="${rx+2}" cy="${ry+2}" rx="${rx}" ry="${ry}" fill="#3c5a2a" opacity=".15"/></svg>`),p.x-rx,p.y-ry,rx*2+4,ry*2+4)}
  if(!home&&sleepers){const world=JSON.parse(readFileSync('assets/world/themes/peaks/world.json')),poses=JSON.parse(readFileSync('src/pixi/sleep-poses.json'));
  for(const [pose,list]of Object.entries(world.sleepSpots))for(const spot of list){const p=poses.poses[pose],tree=pose==='nod'?art.props.find(q=>q.id===spot[0]):null;const [sx,sy,flip]=tree?[tree.x+spot[1],tree.y+14,spot[2]]:spot;

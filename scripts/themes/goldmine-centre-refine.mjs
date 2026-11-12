@@ -1,5 +1,3 @@
-// Locked concept 1, rebuilt as clean, flat SVG at Home's line weight.
-// No generated bitmap or paid service. Writes only Goldmine centre assets.
 import {writeFileSync,readFileSync} from 'node:fs';
 const A='public/pixi-art/themes/goldmine/centre/';
 const ink='#39472D',gold='#FFD324',cream='#FFF0B1',wood='#C88941',dark='#885931';
@@ -29,7 +27,6 @@ function rock(x,y,w,h){return `<g transform="translate(${x} ${y})">`+path(`M0 ${
 function nugget(x,y,w,h){return `<g transform="translate(${x} ${y})">`+path(`M0 ${h*.6}L${w*.25} ${h*.15}L${w*.59} 0L${w*.95} ${h*.24}L${w} ${h*.8}L${w*.52} ${h}L${w*.1} ${h*.92}Z`,gold)+path(`M0 ${h*.6}L${w*.52} ${h*.54}L${w*.95} ${h*.24}M${w*.52} ${h*.54}L${w*.59} 0M${w*.52} ${h*.54}L${w*.52} ${h}`,cream,3)+'</g>';}
 let s='<g transform="translate(-670 -1335)">';
 s+=ellipse(645,601,536,37,'#79633D','none').replace('/>',' opacity=".20"/>');
-// Egg rises above the terraced quarry, with the same unmistakable cracked shell.
 s+=path('M423 390C425 213 529 16 651 7C778 -2 881 211 892 391L858 464L463 464Z',gold,3.4);
 s+=path('M429 364C458 194 550 40 653 15C552 36 456 198 442 373Z','#FFF095',0);
 s+=path('M766 89C824 188 863 291 868 392L841 447L857 462L891 390C880 269 827 141 766 89Z','#F4AF18',0);
@@ -37,7 +34,6 @@ s+=ellipse(617,68,26,25,'#FFF0A3','none')+ellipse(551,140,28,43,'#FFF0A3','none'
 s+=path('M723 55L747 96L724 148L749 177L730 221L699 243L711 282L682 305','none',3);
 s+=path('M724 148L685 155L666 180M749 177L782 177L799 193M711 282L751 291L764 315','none',2.4);
 s+=tower(187)+tower(917);
-// Broken lower shell and timber entrance. Clear cream edge, one shaded timber face.
 s+=path('M415 344L459 374L503 342L549 375L603 340L650 372L706 334L756 370L809 338L855 372L891 352L898 449L861 486L450 486L411 448Z','#F5BC16',3);
 s+=path('M426 350L460 379L504 347L550 380L604 345L650 377L706 339L756 375L809 343L855 377L885 357L883 384L855 401L809 370L756 401L706 368L651 403L604 371L550 405L504 371L460 404L426 378Z',gold,2.5);
 s+=path('M470 418L838 418L839 577Q646 609 469 577Z','#53452D',3.4);
@@ -49,7 +45,6 @@ s+=path('M521 433L553 433L519 472M798 433L763 433L798 472',wood,9);
 s+=path('M484 449V576M811 451V577M499 404L795 404','none',2);
 s+=circle(483,414,5,'#EBC88B')+circle(827,414,5,'#EBC88B');
 s+=lantern(541,446,.85)+lantern(766,446,.85);
-// Crane, suspended ore bucket.
 s+=path('M1100 262L1254 188L1266 206L1107 286Z',wood,3);
 s+=path('M1118 277L1150 373L1134 380L1101 283Z',wood,3);
 s+=circle(1260,199,12,'#EABD6B')+circle(1260,199,5,dark);
@@ -57,10 +52,8 @@ s+=path('M1261 213L1228 324M1261 213L1299 324','none',3);
 s+=path('M1210 330L1307 330L1294 378Q1263 392 1222 375Z','#9F9C72',3)+ellipse(1258,329,49,14,'#605A40');
 for(const [x,y,w,h]of [[1224,307,28,24],[1248,297,29,28],[1270,309,25,23]])s+=nugget(x,y,w,h);
 s+=path('M1210 330Q1255 352 1307 330','none',3);
-// Golden ore and rock shoulders, intentionally irregular.
 for(const [x,y,w,h]of [[68,526,89,60],[140,505,99,83],[252,548,85,52],[359,504,100,89],[849,503,90,85],[1031,518,100,75],[1110,549,79,49]])s+=rock(x,y,w,h);
 for(const [x,y,w,h]of [[292,481,56,88],[336,544,45,42],[204,556,43,37],[892,479,60,91],[945,532,47,60],[999,564,42,35]])s+=nugget(x,y,w,h);
-// Short cart rails run out of the doorway, with the front cart separated clearly.
 for(let y=588;y<647;y+=13)s+=path(`M${628-(y-588)*.32} ${y}L${699+(y-588)*.32} ${y}`,'none',9);
 s+=path('M633 577L606 653M695 577L724 653','none',7)+path('M633 577L606 653M695 577L724 653','#D1C69A',3);
 s+=ellipse(661,579,67,12,'#987334','none');
@@ -71,7 +64,6 @@ s+=circle(631,575,10,dark)+circle(690,575,10,dark)+circle(631,575,4,'#D8BE75')+c
 s+=circle(659,556,8,'#F6D276');
 s+='</g>';
 writeFileSync(A+'mine-landmark.svg',wrap('-670 -1335 1339.8 656.7',1339.8,656.7,s,'Locked cracked golden egg mine, clean vector'));
-// Soft, tiered quarry rocks. Distinct curved silhouettes replace the box wall.
 let cliff='';
 function ledge(x,y,w,h,i){return `<g transform="translate(${x} ${y})">`+path(`M0 ${h*.28}Q${w*.01} ${h*.1} ${w*.2} ${h*.04}L${w*.64} 0Q${w*.87} ${h*.04} ${w*.98} ${h*.25}L${w*.91} ${h*.96}Q${w*.54} ${h*1.04} ${w*.06} ${h*.94}Z`,i%2?'#D69539':'#E6A23F',3)+path(`M0 ${h*.28}Q${w*.01} ${h*.1} ${w*.2} ${h*.04}L${w*.64} 0Q${w*.87} ${h*.04} ${w*.98} ${h*.25}L${w*.73} ${h*.39}L${w*.15} ${h*.42}Z`,'#FFD67A',2.8)+path(`M${w*.73} ${h*.39}L${w*.67} ${h*.96}L${w*.91} ${h*.96}L${w*.98} ${h*.25}Z`,'#C68835',0)+path(`M${w*.15} ${h*.42}L${w*.2} ${h*.78}M${w*.48} ${h*.8}L${w*.44} ${h*.95}`,'none',2.4)+'</g>';}
 for(let i=0;i<9;i++)cliff+=ledge(-1390+i*307,-1425+Math.sin(i*1.7)*24,355,376,i);
@@ -86,7 +78,6 @@ for(const layer of cliffLayers){
  const [x,y,w,h]=layer.box;
  writeFileSync(A+layer.id+'.svg',wrap(layer.box.join(' '),w,h,layer.ledges.map(([i,x,y,w,h])=>ledge(x,y,w,h,i)).join(''),'Depth sorted sandstone ledge'));
 }
-// Paving uses Home's ellipse and quiet alternating stone bands, no centre badge.
 const k=360/470;let paving=ellipse(0,0,1151,1151*k,'#FFE692','#8D854A');
 const pp=(r,a)=>[r*Math.cos(a),r*k*Math.sin(a)];
 const d=ps=>'M'+ps.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join('L')+'Z';

@@ -1,4 +1,3 @@
-// Follow the actual painted contour, with screen-upright bench legs and backs.
 export const ids = {
  court: ['close-arc-2--120','close-arc-2--60','lib-41','lib-40','close-arc-2-148'],
  bookstore: ['arc-bookstore-48','arc-bookstore-76','arc-bookstore-105','arc-bookstore-134'],
@@ -37,7 +36,6 @@ export function benchGeometry(points,distance,length=178) {
  const {at}=measure(points),centre=at(distance);
  const ground=(a,s)=>{
   const t=(a-90)*length/12,p=at(distance+t),before=at(distance+t-2),after=at(distance+t+2),dx=after[0]-before[0],dy=after[1]-before[1],len=Math.hypot(dx,dy);
-  // Positive radius is OUTWARD. The backrest stays on the paving's outer side.
   return [p[0]+dy/len*s,p[1]-dx/len*s];
  };
  const poly=[...Array.from({length:25},(_,i)=>ground(84+i*.5,-24)),...Array.from({length:25},(_,i)=>ground(96-i*.5,28))].map(p=>p.map(round));

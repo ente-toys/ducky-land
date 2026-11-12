@@ -92,7 +92,6 @@ test('all eight sleeper poses attach head/back/bed snow to their own moving and 
     try {
       rig.trackSnow(80, 'snow', 7, 0, true); rig.update(0, {time: 80, reducedMotion: true});
       const snow = caps(rig); assert.equal(snow.length, 3);
-      // Nod and wing sleep directly on the snow and have no bedding surface.
       for(const c of snow)assert.equal(c.visible,c.label!=='Snow on bed'||!['nod','wing'].includes(pose),pose+' '+c.label);
       const head = snow.find(c => c.label === 'Snow on head or hat'), back = snow.find(c => c.label === 'Snow on back'), bed = snow.find(c => c.label === 'Snow on bed');
       assert.equal(head.parent.label, 'duck'); assert.equal(back.parent.label, 'duck');
@@ -160,7 +159,6 @@ test('real engine tracks offscreen remote motion and frees local, remote and sle
     local.trackSnow(0, 'snow', 0, 0); local.trackSnow(10, 'snow', 0, 0); local.update(0);
     sleeper.trackSnow(90, 'snow', 7, 0, true); sleeper.update(0, {reducedMotion: true});
     const oldCaps = [...caps(remote), ...caps(local), ...caps(sleeper)]; assert.ok(oldCaps.length >= 7);
-    // Drawing another island's snapshot while on Iceland must not clear snow.
     PixiIsland.prototype.showArt.call(game, 'home'); assert.ok(caps(remote).length);
     game.artShown = 'home'; PixiIsland.prototype.showArt.call(game, 'home');
     assert.ok(oldCaps.every(c => c.destroyed));

@@ -1,14 +1,3 @@
-// Neon island (theme id `neon`, "Tickytown"): a city at dusk, built in one pass from the approved concept
-// (concepts/themes/concepts/05-neon.png), following concepts/themes/THEME-CONTRACT.md and the library build
-// (scripts/themes/library-world.mjs):
-//   public/pixi-art/themes/neon/  ground.svg, ground-rN-cN.svg tiles, deck SVGs, reuse/ (home art copied in), art.json
-//   assets/world/themes/neon/          world.json, walk-world.json, harbor.json, placements.json, paths.json
-// Layout is written in CONCEPT pixels (the 1536x1024 picture) and mapped to world units by T().
-// Props come from scripts/themes/neon-gen.sh + neon-trace-all.sh.
-// Rebuild: node scripts/themes/neon-world.mjs, then node scripts/themes/neon-finish.mjs.
-// Finish installs the locked centre, flattens inherited gradients, and resolves all 40 sleepers with engine rules.
-// boss 6 Nov: big and spacious (~1.8x home's land), wide paths, a round centre plaza (zones.centre) whose landmark is a
-// placeholder clock tower, 4 open activity areas, 3 open stall rows, 40 sleepers, 4 jetties, arched bridges.
 import {readFileSync, writeFileSync, mkdirSync, copyFileSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
 
@@ -19,7 +8,6 @@ const r1 = v => Math.round(v * 10) / 10;
 const T = ([x, y]) => [r1(OX + (x - 78) * S), r1(OY + (y - 60) * S)];
 const TS = v => v * S;
 
-// ---------- geometry helpers ----------
 function catmull(pts, closed, n = 10) {
   const out = [], N = pts.length, P = i => pts[closed ? (i + N) % N : Math.max(0, Math.min(N - 1, i))];
   for (let i = 0; i < (closed ? N : N - 1); i++) {
@@ -32,7 +20,6 @@ function catmull(pts, closed, n = 10) {
   if (!closed) out.push(pts[N - 1]);
   return out.map(([x, y]) => [r1(x), r1(y)]);
 }
-// rounded blocky outline: densify the corners, then chaikin (city blocks with soft corners, like the concept's quay)
 function chaikin(p, it) {
   for (let k = 0; k < it; k++) p = p.flatMap((a, i) => {const b = p[(i + 1) % p.length]; return [[.75 * a[0] + .25 * b[0], .75 * a[1] + .25 * b[1]], [.25 * a[0] + .75 * b[0], .25 * a[1] + .75 * b[1]]];});
   return p.map(([x, y]) => [r1(x), r1(y)]);
@@ -57,43 +44,38 @@ const lineDist = (x, y, l) => Math.min(...l.slice(1).map((b, i) => segDist(x, y,
 const inPolyF = (x, y, p) => {let c = false; for (let i = 0, j = p.length - 1; i < p.length; j = i++) if ((p[i][1] > y) !== (p[j][1] > y) && x < (p[j][0] - p[i][0]) * (y - p[i][1]) / (p[j][1] - p[i][1]) + p[i][0]) c = !c; return c;};
 let seed = 11; const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
 
-// ---------- the blocky city coast (concept px), harbour basin cut into the south quay ----------
 const COAST_C = [[110,170],[200,170],[200,110],[330,110],[330,70],[620,70],[620,95],[1000,95],[1000,60],[1300,60],[1300,110],[1420,110],[1420,250],[1460,250],
   [1460,560],[1430,560],[1430,620],[1475,650],[1478,745],[1400,785],[1250,790],[1150,765],[1080,745],[1080,850],[500,850],[500,745],[390,745],[390,700],
   [230,700],[230,650],[110,650],[110,500],[78,500],[78,300],[110,300]];
-const EDGE = chaikin(densify(COAST_C.map(T), 400), 3);   // the quay top edge = where land ends
-const GRASS = offset(EDGE, 80);                            // lawn inside the stone quay band
+const EDGE = chaikin(densify(COAST_C.map(T), 400), 3);
+const GRASS = offset(EDGE, 80);
 const WALK_COAST = offset(EDGE, 35);
 
-// ---------- inland water: the harbour basin (a stone-walled canal pool) and the park pond ----------
-const BASIN_C = [548, 700, 1032, 782];   // x0 y0 x1 y1 concept px
+const BASIN_C = [548, 700, 1032, 782];
 const BASIN = chaikin(densify([[BASIN_C[0], BASIN_C[1]], [BASIN_C[2], BASIN_C[1]], [BASIN_C[2], BASIN_C[3]], [BASIN_C[0], BASIN_C[3]]].map(T), 300), 3);
 const POND = {x: T([1300, 300])[0], y: T([1300, 300])[1], rx: TS(62), ry: TS(34)};
 
-// ---------- paths (concept px) ----------
-const MAIN = 250, MINOR = 200;   // home's paths are ~120 wide: these are 1.7x to 2x
+const MAIN = 250, MINOR = 200;
 const CEN = [768, 400];
 const PATHS_C = [
-  [CEN, [620, 320], [480, 250], [330, 205], [250, 205]],                           // 0 NW diagonal -> flower park
-  [CEN, [920, 320], [1080, 250], [1180, 190], [1240, 130], [1240, 80]],            // 1 NE diagonal -> north pier
-  [CEN, [560, 410], [380, 420], [220, 402], [92, 400]],                            // 2 west avenue -> west pier
-  [CEN, [980, 410], [1180, 420], [1340, 410], [1450, 402]],                        // 3 east avenue -> east pier
-  [CEN, [768, 560], [768, 700]],                                                   // 4 south steps -> basin bridge
-  [[768, 775], [768, 812], [780, 845]],                                            // 5 basin bridge -> harbor jetty
-  [[510, 655], [768, 655], [1060, 655]],                                           // 6 north quay
-  [[535, 655], [535, 740], [545, 815], [768, 815], [1030, 815], [1040, 740], [1040, 655]],   // 7 side + south quays
-  [[380, 420], [345, 540], [312, 700]],                                            // 8 west -> SW islet bridge
-  [[1180, 420], [1215, 560], [1280, 690], [1300, 770]],                            // 9 east -> beach -> SE islet bridge
-  [[250, 205], [170, 290], [165, 402]],                                            // 10 flower park loop
-  [[480, 250], [560, 152], [768, 140], [960, 152], [1080, 250]],                   // 11 north street
-  [[560, 410], [585, 540], [525, 655]],                                            // 12 west -> quay
-  [[980, 410], [955, 540], [1055, 655]],                                           // 13 east -> quay
+  [CEN, [620, 320], [480, 250], [330, 205], [250, 205]],
+  [CEN, [920, 320], [1080, 250], [1180, 190], [1240, 130], [1240, 80]],
+  [CEN, [560, 410], [380, 420], [220, 402], [92, 400]],
+  [CEN, [980, 410], [1180, 420], [1340, 410], [1450, 402]],
+  [CEN, [768, 560], [768, 700]],
+  [[768, 775], [768, 812], [780, 845]],
+  [[510, 655], [768, 655], [1060, 655]],
+  [[535, 655], [535, 740], [545, 815], [768, 815], [1030, 815], [1040, 740], [1040, 655]],
+  [[380, 420], [345, 540], [312, 700]],
+  [[1180, 420], [1215, 560], [1280, 690], [1300, 770]],
+  [[250, 205], [170, 290], [165, 402]],
+  [[480, 250], [560, 152], [768, 140], [960, 152], [1080, 250]],
+  [[560, 410], [585, 540], [525, 655]],
+  [[980, 410], [955, 540], [1055, 655]],
 ];
 const PATHS = PATHS_C.map((l, i) => ({line: catmull(l.map(T), false, 8), w: [0, 1, 2, 3, 4, 5, 6].includes(i) ? MAIN : MINOR}));
-// plazas: the round centre (the landmark goes here), paved squares
 const PLAZAS = [{c: [...CEN, 178, 108], pave: 'crossing'}].map(p => ({...p, x: T(p.c)[0], y: T(p.c)[1], rx: TS(p.c[2]), ry: TS(p.c[3])}));
 const CENTRE = PLAZAS[0];
-// boss 6 Nov: OPEN room for later activities and stalls. Nothing is placed on any of them.
 const ACT = [
   {id: 'activity-1', name: 'Lantern square', c: [462, 548, 68, 52], kind: 'tiles'},
   {id: 'activity-2', name: 'Pond park lawn', c: [1112, 330, 70, 46], kind: 'lawn'},
@@ -115,7 +97,6 @@ const STALL_ROWS = [
 const BEACH = catmull([[1185,640],[1300,598],[1440,585],[1510,640],[1510,800],[1300,815],[1150,790],[1120,705]].map(T), true, 8);
 const BEACH_BB = {x0: Math.min(...BEACH.map(p => p[0])), x1: Math.max(...BEACH.map(p => p[0])), y0: Math.min(...BEACH.map(p => p[1])), y1: Math.max(...BEACH.map(p => p[1]))};
 
-// ---------- islets, jetties, bridges ----------
 const BB = {x0: Math.min(...EDGE.map(p => p[0])), x1: Math.max(...EDGE.map(p => p[0])), y0: Math.min(...EDGE.map(p => p[1])), y1: Math.max(...EDGE.map(p => p[1]))};
 const MIDX = (BB.x0 + BB.x1) / 2, MIDY = (BB.y0 + BB.y1) / 2;
 const coastTopAt = x => Math.min(...EDGE.filter(p => Math.abs(p[0] - x) < 60 && p[1] < MIDY).map(p => p[1]));
@@ -141,28 +122,23 @@ function deck(name, J, at, sx, sy) {
   return {a: at, b};
 }
 const FLIP1 = {...JETTY1, a: JETTY1.b, b: JETTY1.a};
-// two south islets joined by arched wooden bridges (foot on the coast, running south)
 for (const [i, cx] of [[1, 312], [2, 1300]]) {
   const fx = T([cx, 0])[0], fy = coastBotAt(fx) - 40;
   const br = deck(`islet-bridge-${i}`, FLIP1, [fx, fy], 1, -.8);
   islets.push([r1(fx), r1(br.b[1] + ISLET_RY * .55), ISLET_RX, ISLET_RY]);
 }
-// three piers: west + east (home jetty 5, 70%), north (home jetty 1 running north)
 const wy = T([0, 400])[1], ey = T([0, 402])[1], nx = T([1240, 0])[0];
 const west = deck('jetty-west', JETTY5, [coastLeftAt(wy) + 40, wy], -.7, 1);
 const east = deck('jetty-east', JETTY5, [coastRightAt(ey) - 40, ey], .7, 1);
 const north = deck('jetty-north', JETTY1, [nx, coastTopAt(nx) + 40 - 411 * .85], 1, .85);
-// the arched bridge over the harbour basin (on the south steps' line)
 const bx = T([768, 0])[0], by0 = T([0, BASIN_C[1]])[1] - 70, by1 = T([0, BASIN_C[3]])[1] + 70;
 deck('basin-bridge', JETTY1, [bx, by0], 1.25, (by1 - by0) / 411);
-// the harbor jetty (drawn by the engine) runs south from the south quay
 const hx = T([780, 0])[0], hFoot = [hx, coastBotAt(hx) - 40], hTip = [hx, hFoot[1] + 380];
 
 const water = [{x: POND.x, y: POND.y, rx: POND.rx, ry: POND.ry}];
 {const xs = BASIN.map(p => p[0]), ys = BASIN.map(p => p[1]); water.push({x: r1((Math.min(...xs) + Math.max(...xs)) / 2), y: r1((Math.min(...ys) + Math.max(...ys)) / 2), rx: r1((Math.max(...xs) - Math.min(...xs)) / 2), ry: r1((Math.max(...ys) - Math.min(...ys)) / 2), poly: BASIN});}
 const bridges = [{x: bx, y: r1((by0 + by1) / 2), w: 150, h: r1(by1 - by0)}];
 
-// ---------- props ----------
 const SPAWNS_C = {plaza: [768, 505], 'lantern-square': [462, 548], 'pond-park': [1112, 330], 'flower-park': [312, 312], 'arcade-square': [1098, 560],
   'north-street': [768, 152], quay: [640, 662], beach: [1330, 690], 'west-avenue': [220, 402], 'east-avenue': [1340, 410]};
 const warn = [];
@@ -170,7 +146,6 @@ const props = [], obstacles = [];
 let pid = 0;
 const ASSET = {};
 const svgSize = f => {const s = readFileSync(f, 'utf8').slice(0, 800), m = s.match(/viewBox="([\d.\s-]+)"/); const v = m[1].trim().split(/\s+/).map(Number); return [v[2], v[3]];};
-// Tickytown's own props: world height in Ducky heights (1 Ducky = 130)
 const OWN = {'clock-tower': 7.4, 'shop-noodle': 3.7, 'shop-boba': 3.7, 'shop-cat': 3.7, 'shop-arcade': 3.6, 'shop-cupcake': 3.7, 'shop-star': 3.6,
   'noodle-kiosk': 2.3, 'vending-pink': 1.45, 'vending-mint': 1.45, 'capsule-seat': 1.15, 'neon-lamp': 2.0, 'lantern-arch': 1.9, 'sign-board': 1.4, 'planter-box': .8};
 const SCALE = {};
@@ -230,9 +205,7 @@ const near = (p, list, r) => list.some(q => Math.hypot(q[0] - p[0], q[1] - p[1])
 const inOpen = (x, y, pad = 0) => [...PLAZAS, ...LAWNS].some(p => ((x - p.x) / (p.rx + pad)) ** 2 + ((y - p.y) / (p.ry + pad)) ** 2 < 1)
   || STALL_ROWS.some(r => inPolyF(x, y, r.poly) || lineDist(x, y, r.mid) < 95 + pad);
 
-// the centre landmark (placeholder: the boss is still choosing it)
 const tower = put('clock-tower', [CEN[0], CEN[1] - 2], 'centre', {nudge: false});
-// shop blocks round the centre, as in the concept (nudged off the paths)
 const SHOPS = [['shop-noodle', [560, 370], false], ['shop-boba', [985, 370], true], ['shop-cupcake', [640, 545], false], ['shop-arcade', [900, 545], true],
   ['shop-star', [700, 250], false], ['shop-cat', [845, 250], true], ['shop-noodle', [420, 352], true], ['shop-star', [1350, 525], true],
   ['shop-cat', [235, 565], false], ['shop-boba', [1060, 120], false], ['shop-arcade', [430, 150], false], ['shop-cupcake', [1360, 220], true]];
@@ -241,7 +214,6 @@ for (const [n, c, f] of SHOPS) {
   if (inOpen(x, y, 60)) warn.push(`${n} on an open area at ${c}`);
   put(n, c, 'shops', {flip: f});
 }
-// vending cabinets and planters beside the shop doors, lamps along every path, capsule seats round the centre
 for (const s of props.filter(p => /^shop-/.test(p.asset))) {
   const side = s.flip ? -1 : 1, w = s.width * s.scale;
   const v = [s.x + side * (w * .62), s.y + 6];
@@ -261,22 +233,18 @@ PATHS.forEach((q, n) => {
     LAMPS.push([x, y]); put('neon-lamp', [x, y], 'lamps', {world: true, nudge: false});
   }
 });
-// the centre's ring: capsule seats and lamps on its rim, between the four roads
 for (const ang of [.5, 2.64, 3.64, 5.78]) {
   const x = CENTRE.x + Math.cos(ang) * (CENTRE.rx + 70), y = CENTRE.y + Math.sin(ang) * (CENTRE.ry + 60);
   put('capsule-seat', [x, y], 'centre', {world: true, flip: Math.cos(ang) > 0});
 }
-// the noodle kiosk corner (west) with lantern strings, sign boards
 put('noodle-kiosk', [300, 480], 'kiosk');
 put('lantern-arch', [215, 470], 'kiosk');
 put('noodle-kiosk', [1000, 230], 'kiosk', {flip: true});
 put('lantern-arch', [400, 625], 'lanterns'); put('lantern-arch', [1160, 625], 'lanterns', {flip: true});
 put('lantern-arch', [880, 210], 'lanterns'); put('lantern-arch', [195, 250], 'lanterns');
 put('sign-board', [680, 600], 'signs'); put('sign-board', [860, 600], 'signs', {flip: true}); put('sign-board', [1240, 480], 'signs');
-// basin quay: cafe tables and benches on the quay corners, capsule seats looking at the water
 for (const [c, n, f] of [[[690, 612], 'bench-wood', false], [[850, 612], 'bench-wood', true], [[1100, 700], 'capsule-seat', true],
   [[478, 690], 'umbrella-cafe', false], [[1060, 805], 'umbrella-cafe', true], [[600, 830], 'capsule-seat', false]]) put(n, c, 'quay', {flip: f, nudge: !(n === 'capsule-seat' && c[0] === 600)});
-// islets: a lantern string and a bench each, trees round the back
 islets.forEach(([cx, cy, rx, ry], i) => {
   put('lantern-arch', [cx - rx * .3, cy - ry * .05], 'islets', {world: true, nudge: false, flip: i === 1});
   put('bench-park', [cx + rx * .35, cy + ry * .25], 'islets', {world: true, nudge: false});
@@ -284,14 +252,11 @@ islets.forEach(([cx, cy, rx, ry], i) => {
   put('tree-2', [cx - rx * .62, cy - ry * .4], 'islets', {world: true, nudge: false});
   put('planter-box', [cx + rx * .05, cy + ry * .55], 'islets', {world: true, nudge: false});
 });
-// the beach: palms, towels, a sandcastle
 for (const [c, n, f] of [[[1240, 650], 'tree-palm', false], [[1430, 625], 'tree-coconut-palm', true], [[1435, 735], 'tree-palm', true], [[1180, 740], 'tree-coconut-palm', false],
   [[1350, 760], 'towel-striped', false], [[1405, 700], 'towel-sun', false], [[1270, 755], 'sandcastle-small', false], [[1320, 640], 'beach-ball', false], [[1450, 690], 'shell-scallop', false], [[1220, 700], 'starfish-orange', false],
   [[1380, 650], 'umbrella-cafe', false], [[1385, 735], 'bucket', false]]) put(n, c, 'beach', {flip: f, nudge: !/towel|shell|starfish/.test(n)});
-// the pond: reeds and lilies
 for (const [dx, dy, n] of [[-58, 22, 'reeds'], [55, 26, 'reeds'], [-20, -5, 'lily-pad-flower'], [22, 6, 'lily-pad-large'], [-34, 10, 'lily-pad-large']]) put(n, [1300 + dx, 300 + dy], 'pond', {nudge: false});
 
-// ---------- scatter trees, bushes, flowers on free lawn ----------
 const SLEEPERS = [];
 function free(x, y, room, pathPad = 90) {
   if (!inPolyF(x, y, offset(GRASS, 60)) || !inPolyF(x, y, WALK_COAST)) return false;
@@ -306,7 +271,6 @@ function free(x, y, room, pathPad = 90) {
   return !props.some(p => Math.hypot(p.x - x, (p.y - y) * 1.5) < room + Math.min(240, p.width * p.scale * .5));
 }
 const behindDeck = (x, y) => walkways.some(w => {const t = Math.max(0, Math.min(1, ((x - w.a[0]) * (w.b[0] - w.a[0]) + (y - w.a[1]) * (w.b[1] - w.a[1])) / ((w.b[0] - w.a[0]) ** 2 + (w.b[1] - w.a[1]) ** 2))), px = w.a[0] + t * (w.b[0] - w.a[0]), py = w.a[1] + t * (w.b[1] - w.a[1]); return Math.abs(x - px) < 230 && y - py > -60 && y - py < 520;});
-// a tall thing standing in front of a shop hides it: keep trees off the shop fronts
 const shopFront = (x, y) => props.some(p => FOOT[p.asset] === 'bldg' && Math.abs(x - p.x) < p.width * p.scale * .7 && y > p.y - p.height * p.scale && y < p.y + 330);
 let trees = 0;
 for (let tries = 0; tries < 25000 && trees < 58; tries++) {
@@ -321,7 +285,6 @@ for (let tries = 0; tries < 25000 && bushes < 60; tries++) {
   put(`bush-${1 + bushes % 6}`, [x, y], '', {world: true, flip: rnd() < .5, nudge: false}); bushes++;
 }
 
-// ---------- sleeping Duckies (boss 6 Nov): 40 on every themed island, home's poses ----------
 seed = 2026;
 const POSES = JSON.parse(readFileSync('src/pixi/sleep-poses.json', 'utf8')).poses;
 const SR = Object.fromEntries(Object.entries(POSES).map(([n, p]) => [n, (p.box[2] - p.box[0]) * p.k * .81 * (.88 * .24 * 3) / 3 / 2]));
@@ -408,7 +371,6 @@ for (let tries = 0; tries < 8000 && planters < 18; tries++) {
   put(['planter-box', 'bin-litter', 'planter-box'][planters % 3], [x, y], '', {world: true, flip: rnd() < .5, nudge: false}); planters++;
 }
 
-// ---------- flats (ground decals) ----------
 const flats = [];
 for (let n = 0, tries = 0; n < 600 && tries < 40000; tries++) {
   const x = RX(), y = RY();
@@ -425,7 +387,6 @@ for (let n = 0, tries = 0; n < 70 && tries < 8000; tries++) {
   flats.push({src: `reuse/${k}.svg`, x: r1(x), y: r1(y), width: w, height: h}); n++;
 }
 
-// ---------- ground SVG ----------
 const C = {ink: '#2B2F4F', quayTop: '#DCD5EC', quayLine: '#C3BADB', quaySide: '#8F90B8', quayDark: '#5D6190', grass: '#86B064', grassShade: '#79A35A', grassDeep: '#5F8A4E',
   sand: '#F6D894', sandShade: '#DDB873', pave: '#CDBCD9', paveLine: '#B19FC2', paveRim: '#8A84AE', asphalt: '#6E7099', stripe: '#F6EFDC',
   water: '#5B83B8', waterHi: '#9DBDE6', basinWall: '#9A9CC0', halo: '#5A78A8', light: '#FFE08A', lightPink: '#FFB6CF'};
@@ -433,7 +394,6 @@ const g = [];
 g.push(`<path d="${dz(EDGE)}" fill="${C.halo}" stroke="${C.halo}" stroke-width="130" stroke-linejoin="round" opacity=".6"/>`);
 g.push(`<path d="${dz(EDGE)}" fill="none" stroke="${C.waterHi}" stroke-width="40" stroke-linejoin="round" opacity=".55"/>`);
 for (const [cx, cy, rx, ry] of islets) g.push(`<ellipse cx="${cx}" cy="${cy + 14}" rx="${rx + 110}" ry="${ry + 90}" fill="${C.halo}" opacity=".6"/>`);
-// the stone quay: dark foot, block side with joints, cream-lavender top with a curb line
 const shift = (p, dy) => p.map(([x, y]) => [x, r1(y + dy)]);
 g.push(`<path d="${dz(shift(EDGE, 52))}" fill="${C.quayDark}" stroke="${C.ink}" stroke-width="5" stroke-linejoin="round"/>`);
 g.push(`<path d="${dz(shift(EDGE, 30))}" fill="${C.quaySide}" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/>`);
@@ -449,24 +409,18 @@ for (let n = 0, tries = 0; n < 40 && tries < 3000; tries++) {
   if (!inPolyF(x, y, offset(GRASS, 200))) continue;
   g.push(`<ellipse cx="${r1(x)}" cy="${r1(y)}" rx="${r1(90 + rnd() * 230)}" ry="${r1(40 + rnd() * 90)}" fill="${C.grassShade}" opacity=".7"/>`); n++;
 }
-// beach over the quay in the south-east cove
 g.push(`<clipPath id="land"><path d="${dz(offset(EDGE, -2))}"/></clipPath><clipPath id="beachclip"><path d="${dz(BEACH)}"/></clipPath>`);
 g.push(`<g clip-path="url(#beachclip)"><path d="${dz(offset(EDGE, -90))}" fill="${C.water}"/><path d="${dz(offset(EDGE, -20))}" fill="${C.waterHi}" opacity=".8"/><path d="${dz(EDGE)}" fill="${C.sandShade}"/><path d="${dz(offset(EDGE, 12))}" fill="${C.sand}"/>`
   + `<path d="${dz(offset(EDGE, -40))}" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="70 50" opacity=".7"/></g>`);
 g.push(`<g clip-path="url(#land)"><path d="${dz(BEACH)}" fill="none" stroke="${C.sandShade}" stroke-width="16"/></g>`);
-// the basin quay apron (paved), under the paths
 {const ap = offset(BASIN, -150); g.push(`<path d="${dz(ap)}" fill="${C.paveRim}"/><path d="${dz(offset(ap, 8))}" fill="${C.pave}"/>`);}
-// paths and plazas: rim, paving
 const pathLayer = (extra, color) => PATHS.map(p => `<path d="${d(p.line)}" fill="none" stroke="${color}" stroke-width="${p.w + extra}" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
 const plazaLayer = (extra, color) => PLAZAS.map(p => `<ellipse cx="${p.x}" cy="${p.y}" rx="${r1(p.rx + extra / 2)}" ry="${r1(p.ry + extra / 2)}" fill="${color}"/>`).join('');
 g.push(pathLayer(16, C.grassDeep) + plazaLayer(16, C.grassDeep));
 g.push(pathLayer(8, C.paveRim) + plazaLayer(8, C.paveRim));
 g.push(pathLayer(0, C.pave) + plazaLayer(0, C.pave));
-// paving joints along the paths (a light centre dash, like a city pavement)
 g.push(PATHS.map(p => `<path d="${d(p.line)}" fill="none" stroke="${C.paveLine}" stroke-width="5" stroke-dasharray="40 60"/>`).join(''));
 g.push(`<g clip-path="url(#land)"><path d="${dz(offset(BEACH, 70))}" fill="${C.sand}"/></g>`);
-// Locked centre pieces are installed by neon-finish.mjs after the base map.
-// open activity squares and lawns, stall rows
 PLAZAS.forEach((p, i) => {
   if (p.pave !== 'tiles') return;
   g.push(`<clipPath id="pz${i}"><ellipse cx="${p.x}" cy="${p.y}" rx="${r1(p.rx - 26)}" ry="${r1(p.ry - 20)}"/></clipPath>`);
@@ -493,21 +447,17 @@ STALL_ROWS.forEach((r, i) => {
   g.push(`<path d="${L.join(' ')}" stroke="${C.paveLine}" stroke-width="4" fill="none" clip-path="url(#stall${i})"/>`);
   g.push(`<path d="${d(r.mid)}" fill="none" stroke="${['#FFB937', '#F29BB7', '#6FD8C4'][i]}" stroke-width="8" stroke-dasharray="30 70" opacity=".85"/>`);
 });
-// harbour basin: stone wall, water, highlights
 g.push(`<path d="${dz(offset(BASIN, -22))}" fill="${C.basinWall}" stroke="${C.ink}" stroke-width="5"/>`);
 g.push(`<path d="${dz(shift(BASIN, 10))}" fill="${C.quayDark}"/>`);
 g.push(`<path d="${dz(offset(BASIN, 4))}" fill="${C.water}" stroke="${C.ink}" stroke-width="4" opacity="1"/>`);
 {const xs = BASIN.map(p => p[0]), ys = BASIN.map(p => p[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), L = [];
   for (let k = 0; k < 7; k++) {const y = y0 + 80 + k * (y1 - y0 - 160) / 6, x = x0 + 140 + ((k * 397) % (x1 - x0 - 500)); L.push(`M${r1(x)} ${r1(y)} L${r1(x + 160 + (k % 3) * 60)} ${r1(y)}`);}
   g.push(`<path d="${L.join(' ')}" stroke="${C.waterHi}" stroke-width="8" stroke-linecap="round"/>`);
-  // warm sign reflections lying flat on the water (flat shapes, no glow)
   for (const [fx, col] of [[.18, C.lightPink], [.42, C.light], [.7, '#6FD8C4'], [.88, C.light]]) g.push(`<rect x="${r1(x0 + (x1 - x0) * fx)}" y="${r1(y0 + 40)}" width="34" height="${r1((y1 - y0) * .42)}" rx="14" fill="${col}" opacity=".45"/>`);
 }
-// pond
 g.push(`<ellipse cx="${POND.x}" cy="${POND.y}" rx="${r1(POND.rx + 24)}" ry="${r1(POND.ry + 20)}" fill="${C.quayTop}" stroke="${C.ink}" stroke-width="4"/>`);
 g.push(`<ellipse cx="${POND.x}" cy="${POND.y}" rx="${POND.rx}" ry="${POND.ry}" fill="${C.water}" stroke="${C.ink}" stroke-width="4"/>`);
 g.push(`<path d="M${r1(POND.x - POND.rx * .6)} ${r1(POND.y - POND.ry * .35)} Q${POND.x} ${r1(POND.y - POND.ry * .75)} ${r1(POND.x + POND.rx * .5)} ${r1(POND.y - POND.ry * .4)}" fill="none" stroke="${C.waterHi}" stroke-width="8"/>`);
-// islets: rounded stone blocks with a lawn top and a little paved round
 for (const [cx, cy, rx, ry] of islets) {
   const blk = chaikin([[cx - rx - 40, cy - ry - 30], [cx + rx + 40, cy - ry - 30], [cx + rx + 40, cy + ry + 30], [cx - rx - 40, cy + ry + 30]], 4);
   g.push(`<path d="${dz(shift(blk, 46))}" fill="${C.quayDark}" stroke="${C.ink}" stroke-width="5"/><path d="${dz(shift(blk, 26))}" fill="${C.quaySide}" stroke="${C.ink}" stroke-width="4"/>`);
@@ -515,7 +465,6 @@ for (const [cx, cy, rx, ry] of islets) {
   g.push(`<ellipse cx="${cx}" cy="${cy}" rx="${rx - 10}" ry="${ry - 12}" fill="${C.grass}" stroke="${C.grassDeep}" stroke-width="6"/>`);
   g.push(`<ellipse cx="${cx}" cy="${r1(cy + ry * .12)}" rx="${r1(rx * .5)}" ry="${r1(ry * .42)}" fill="${C.pave}" stroke="${C.paveRim}" stroke-width="6"/>`);
 }
-// flat warm light pools under every lamp and in front of every shop and kiosk (flat shapes, no glow)
 for (const p of props) {
   if (p.asset === 'neon-lamp') g.push(`<ellipse cx="${p.x}" cy="${r1(p.y + 6)}" rx="96" ry="40" fill="${C.light}" opacity=".35"/>`);
   else if (/^shop-|kiosk/.test(p.asset)) g.push(`<ellipse cx="${p.x}" cy="${r1(p.y + 34)}" rx="${r1(p.width * p.scale * .42)}" ry="70" fill="${p.asset === 'shop-cat' || p.asset === 'shop-noodle' ? C.lightPink : C.light}" opacity=".32"/>`);
@@ -526,7 +475,6 @@ const FO = offset(EDGE, -95);
 for (let i = 0; i < FO.length; i += 9) if (rnd() < .6) {const o = FO[i], o2 = FO[(i + 3) % FO.length]; foam.push(`M${o[0]} ${o[1]} L${o2[0]} ${o2[1]}`);}
 g.push(`<path d="${foam.join(' ')}" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".45" fill="none"/>`);
 
-// ---------- map size: every piece of land and every mooring with 400+ of open sea round it ----------
 const harborBoats = () => [
   {x: hTip[0] - 150, y: hTip[1] - 60, turn: Math.PI}, {x: hTip[0] + 150, y: hTip[1] - 40, turn: Math.PI}, {x: hTip[0] - 480, y: hTip[1] + 10, turn: Math.PI},
   {x: west.b[0] - 40, y: west.b[1] + 160, turn: -Math.PI / 2}, {x: east.b[0] + 40, y: east.b[1] + 160, turn: Math.PI / 2},
@@ -549,11 +497,9 @@ for (let r = 0; r < TR; r++) for (let c = 0; c < TC; c++) {
   tiles.push({src: `ground-r${r}-c${c}.svg`, x, y, width: w, height: h});
 }
 
-// ---------- data ----------
 const zones = {};
 for (const [k, c] of Object.entries(SPAWNS_C)) {const [x, y] = T(c); zones[k] = {x: r1(x), y: r1(y), spawn: [r1(x), r1(y)]};}
 zones.islets = {x: islets[0][0], y: islets[0][1], spawn: [islets[0][0], r1(islets[0][1] + 40)]};
-// boss 6 Nov: the centre plaza; its landmark (now the placeholder clock tower, prop id below) is swapped when the boss picks one
 zones.centre = {name: 'Centre crossing', x: r1(CENTRE.x), y: r1(CENTRE.y), rx: r1(CENTRE.rx), ry: r1(CENTRE.ry), spawn: zones.plaza.spawn, landmark: tower.id, placeholder: true};
 for (const a of ACT) zones[a.id] = {name: a.name, kind: a.kind === 'lawn' ? 'lawn' : 'paved', x: r1(a.x), y: r1(a.y), rx: r1(a.rx), ry: r1(a.ry), spawn: [r1(a.x), r1(a.y)]};
 for (const r of STALL_ROWS) zones[r.id] = {name: r.name, kind: 'stall-row', x: r.x, y: r.y, poly: r.poly, line: r.mid, spawn: [r.x, r.y]};
@@ -570,7 +516,6 @@ writeFileSync(DATA + 'placements.json', JSON.stringify(props, null, 0));
 writeFileSync(DATA + 'paths.json', JSON.stringify(PATHS.map(p => p.line)));
 writeFileSync(ART + 'art.json', JSON.stringify(art, null, 1));
 
-// ---------- checks ----------
 for (const p of props) {
   const inA = ACT.find(a => ((p.x - a.x) / a.rx) ** 2 + ((p.y - a.y) / a.ry) ** 2 < 1), inS = STALL_ROWS.find(r => inPolyF(p.x, p.y, r.poly));
   if (inA || inS) warn.push(`${p.asset} ${p.id} stands on open area ${(inA || inS).id}`);

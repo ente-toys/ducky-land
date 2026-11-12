@@ -17,7 +17,6 @@ def base(path):return subprocess.check_output(['git','show',BASE+':'+str(path)],
 def baseline(path):return json.loads(base(path))
 def write(path,data):Path(path).write_text(json.dumps(data,indent=1)+'\n')
 def curve(pts,closed=True):
-    # Catmull-Rom joins keep every authored point, with round continuous edges.
     pts=[list(p) for p in pts]
     if pts[0]==pts[-1]:pts=pts[:-1]
     d=f'M{pts[0][0]:.2f} {pts[0][1]:.2f}'
@@ -34,7 +33,6 @@ def inside(x,y,poly):
         if (a[1]>y)!=(b[1]>y) and x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0]:hit=not hit
     return hit
 
-# Gate every individual referenced piece, even terrain pieces we will deliberately omit.
 kits={};audit={}
 for h in HAMLETS:
     L=read(SRC/'svg'/h/'layout.json');P=read(SRC/'plan'/f'{h}.json')
@@ -58,7 +56,6 @@ for data in [A,D,*worlds]:
     data['props']=[p for p in data.get('props',[]) if not owned(p)]
     if 'flats' in data:data['flats']=[p for p in data['flats'] if not owned(p) and not any(str(p.get('src','')).startswith('hamlets/'+h+'/paths-') for h in HAMLETS)]
     if 'obstacles' in data:data['obstacles']=[o for o in data['obstacles'] if not owned(o)]
-# Exact IDs only. Centre objects and shore-fixer decks/boats are never rectangle-deleted.
 for data in [A,D,*worlds]:
     data['props']=[p for p in data.get('props',[]) if p.get('id') not in remove]
     if 'obstacles' in data:data['obstacles']=[o for o in data['obstacles'] if not any(o.get('name','')==i or o.get('name','').startswith(i+'-') for i in remove)]
@@ -67,7 +64,6 @@ for data in [D,*worlds]:
     for L,P in kits.values():
         explicit.extend(o.get('value',o) for o in P['remove'].get('obstacles',[]))
     if 'obstacles' in data:data['obstacles']=[o for o in data['obstacles'] if not any(all(o.get(k)==v for k,v in f.items() if k!='index') for f in explicit)]
-# Planned obsolete flat decals, matched as complete records rather than shifting indices.
 flatkeys={(f['src'],f['x'],f['y']) for L,P in kits.values() for f in P['remove'].get('flats',[])}
 A['flats']=[f for f in A['flats'] if (f['src'],f['x'],f['y']) not in flatkeys]
 oldpaths=[r['points'] for L,P in kits.values() for r in P['remove']['paths'] if r['action']!='replace subpolyline only']
@@ -96,8 +92,6 @@ for h,(L,P) in kits.items():
         pathshapes.append({'id':h+'-'+path['id'],'poly':poly})
     for join in P['pathJoins']:
         points=join.get('connectorWorldPoints',join.get('connectorPoints'))
-        # The optional north approach at Tutu would cross its tailor pavilion.
-        # Bend around the eastern wall, then enter the east edge of the square.
         if h=='tutu-tides' and join['id']=='north-to-centre':
             points=[[4000,4900],[4670,5220],[4800,5580],W([1050,600])]
         pathshapes.append({'id':h+'-'+join['id'],'points':points,'width':join.get('width',join.get('widthWorld',160))})
@@ -107,7 +101,6 @@ for h,(L,P) in kits.items():
         if o['id'] in omit:continue
         s=(SRC/'svg'/h/o['file']).read_text();vb=[float(v) for v in re.search(r'viewBox="([^"]+)"',s)[1].split()]
         x,y=W([o['x'],o['y']]);w=round(o['width']*k,2);height=round(w*vb[3]/vb[2],2)
-        # Set a real rasterization size, preserving vector viewBox and aspect ratio.
         s=re.sub(r'<svg\b[^>]*>',lambda m: re.sub(r'\s(?:width|height)="[^"]*"','',m[0]).replace('<svg',f'<svg width="{math.ceil(w)}" height="{math.ceil(height)}"'),s,count=1)
         (dest/o['file']).write_text(s)
         p={'id':f'hamlet-{h}-{o["id"]}','name':o['id'],'src':f'hamlets/{h}/{o["file"]}','x':x,'y':y,'width':w,'height':height,'scale':1,'anchor':{'x':.5,'y':1},'resolution':1.5,'zone':P['existingCommunityId'],'hamlet':h,'order':o['drawOrder'],'wind':False}
@@ -125,7 +118,6 @@ for h,(L,P) in kits.items():
         else:fp={'x':x,'y':round(y-min(18,w*.08),2),'rx':round(max(8,w*.30),2),'ry':round(max(7,min(28,w*.12)),2)}
         if fp:
             p['footprint']=fp;footprints.append(dict(fp,name=p['id']))
-        # Respect authored order for overlapping upright sprites.
         p['z']=y
         for other in placed:
             if other['z']>=p['z'] and abs(other['x']-x)<(other['width']+w)/2 and y>other['y']-other['height'] and other['y']>y-height:p['z']=round(other['z']+.1,2)
@@ -133,7 +125,6 @@ for h,(L,P) in kits.items():
     A['props']+=placed;A['flats']+=flats;D['props']+=placed;D['obstacles']+=footprints
     for data in worlds:
         data['props']+=placed;data['obstacles']+=footprints
-    # Use an unobstructed authored court point. Navigation checks it after placement.
     square=[W(v) for v in L['square']]
     candidates=[W([u,v]) for v in range(430,810,15) for u in range(500,1010,15)]
     def clearance(pt):return min(math.hypot(pt[0]-f['x'],(pt[1]-f['y'])*1.8)-f['rx'] for f in footprints)
@@ -143,7 +134,6 @@ for h,(L,P) in kits.items():
         if 'zones' in data:data['zones']['bigger-'+P['existingCommunityId']]['spawn']=arrival
     for bed in L['sleepers']:sleepbeds.append({'hamlet':h,'point':W([bed['x'],bed['y']])})
     report['hamlets'][h]={'map':m,'frame':frame,'arrival':arrival,'props':len(placed),'flats':len(flats),'buildings':[p['id'] for p in placed if buildingpattern.search(p['name'])],'sleepers':[W([b['x'],b['y']]) for b in L['sleepers']],'omitted':[o['id'] for o in L['objects'] if o['id'] in omit]}
-# Reassign six approved sleeping poses to the six blueprint beds, keeping the existing island total.
 slots=[('wing',0),('wing',1),('wing',2),('box',0)]
 for bed,(pose,i) in zip(sleepbeds,slots):
     bed.update(pose=pose,slot=i)
@@ -151,8 +141,6 @@ for bed,(pose,i) in zip(sleepbeds,slots):
         if 'sleepSpots' not in data:data['sleepSpots']=copy.deepcopy(worlds[0]['sleepSpots'])
         data['sleepSpots'][pose][i]=bed['point']+[False]
 report['sleepers']=sleepbeds
-# Only the hamlets' old decorative ground is removed. Coast outlines, sea, water,
-# bridge/deck layers and the original-centre overlay are retained without edits.
 frames=[r['frame'] for r in report['hamlets'].values()]
 def local(x,y):return any(a-200<x<c+200 and b-150<y<d+150 for a,b,c,d in frames)
 def firstpoint(e):
@@ -171,8 +159,6 @@ for tile in A['ground']['tiles']:
             n=counts[e.get('fill')];counts[e.get('fill')]+=1
             if n in {1,2,3,4,5,6,10,11,12}:oldRoadD.add(e.get('d'))
     roadindex={color:0 for color in ['#72993e','#b09d68','#f3d79f']}
-    # Ground recipe has the main loop first, followed by the old local routes.
-    # Remove only Ribbonwick (1..3), Chirrup (4..6), Petalpatch (10..12).
     for i,e in enumerate(list(g)):
         fill=e.get('fill')
         if fill in roadindex:
@@ -184,12 +170,9 @@ for tile in A['ground']['tiles']:
                 if local(*firstpoint(detail)):e.remove(detail)
         elif i>=10 and local(*firstpoint(e)):g.remove(e)
     out=ET.tostring(r,encoding='unicode')
-    # Unchanged geometry and paint outside the three hamlets stays intact.
     f.write_text(out);changed+=1
 decalStart=len(A['flats'])-sum(v['flats'] for v in report['hamlets'].values())
 newPathFlats=[]
-# Independent, bounded SVG path tiles, composited above ground and below every prop.
-# Their land clip prevents path paint touching the sea while preserving the coast data.
 coast=worlds[0]['coast'];coastd=curve(coast)
 for h,info in report['hamlets'].items():
     shapes=[p for p in pathshapes if p['id'].startswith(h+'-')]
@@ -200,14 +183,12 @@ for h,info in report['hamlets'].items():
         if 'poly' in p:body+=f'<path d="{curve(p["poly"])}" fill="#FBE6C8" stroke="#FBE6C8" stroke-width="5" stroke-linejoin="round"/>'
         else:body+=f'<path d="{curve(p["points"],False)}" fill="none" stroke="#FBE6C8" stroke-width="{p["width"]}" stroke-linecap="round" stroke-linejoin="round"/>'
     body+='</g>'
-    # Tiles are at most 1200 world units. No enormous textures or rectangular lawn patches.
     for row,y in enumerate(range(y0,y1,1100)):
         for col,x in enumerate(range(x0,x1,1100)):
             w=min(1104,x1-x+2);ht=min(1104,y1-y+2);name=f'hamlets/{h}/paths-{row}-{col}.svg'
             (ART/name).write_text(f'<svg xmlns="{NS}" width="{w}" height="{ht}" viewBox="{x-2} {y-2} {w} {ht}">{body}</svg>')
             newPathFlats.append({'id':f'hamlet-{h}-paths-{row}-{col}','hamlet':h,'src':name,'x':x-2,'y':y-2,'width':w,'height':ht,'topLeft':True,'resolution':1})
 A['flats'][decalStart:decalStart]=newPathFlats
-# Protect every shore-owned field against accidental changes by the placer.
 for path,data,original in zip([worldpath,walkpath],worlds,protectedInputs):
     for key in ['coast','water','bridges','islets','walkways','arches','jetties']:assert data.get(key)==original.get(key),key
     write(path,data)

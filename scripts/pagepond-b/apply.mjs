@@ -17,7 +17,7 @@ const additions=[...B.planting.add.filter(p=>F.accepted.includes(p.id)),...B.hil
 for(const p of additions)if(!art.props.some(q=>q.id===p.id))art.props.push(p);
 if(!art.flats.some(p=>p.id===B.hill.ground.id))art.flats.push(B.hill.ground);
 art.kites=B.kites;
-for(const p of S.stripBakedGroundShadows){let svg=fs.readFileSync(p.file,'utf8');const n=svg.split(p.exactElement).length-1;if(n===0&&!svg.includes(p.exactElement)) { // XML-normalised Inkleaf sources preserve the same exact attributes with spacing.
+for(const p of S.stripBakedGroundShadows){let svg=fs.readFileSync(p.file,'utf8');const n=svg.split(p.exactElement).length-1;if(n===0&&!svg.includes(p.exactElement)) {
  const equivalent=p.exactElement.replace('/>',' />');assert.equal(svg.split(equivalent).length-1,1,p.file+' exact selector');svg=svg.replace(equivalent,'');
  }else{assert.equal(n,1,p.file);svg=svg.replace(p.exactElement,'');}fs.writeFileSync(p.file,svg);}
 for(const f of ['world.json','walk-world.json']){const w=read(D+f);for(const o of w.obstacles){const m=B.planting.moves.find(m=>m.id===o.name);if(m)translate(o,m.delta);}for(const p of additions)if(!w.obstacles.some(o=>o.name===p.id))w.obstacles.push(p.footprint);if(w.props)w.props=art.props;if(f==='world.json'){w.sleepTotal=250;w.sleepSpots=B.sleepers.mergedSleepSpots;}write(D+f,w);}

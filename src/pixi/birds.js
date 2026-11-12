@@ -4,8 +4,6 @@ export function birdPose(x,y,phase,time,reduced=false){
   return {x:x+(reduced?0:90*Math.sin(time*Math.PI/6+phase)),y:y+(reduced?0:28*Math.sin(time*Math.PI/3+phase*.7)),
     rotation:reduced?0:.13*Math.cos(time*Math.PI/6+phase),flap:reduced?.4:.4+.7*Math.sin(time*Math.PI*4+phase)};
 }
-// boss 5 Nov: three picked birds off the design sheet (concepts/birds): a seagull with grey wing tips, a bluebird and a
-// pink crested bird. Seen from above, head up, round chubby body like the Ducky, scalloped wings that flap at the shoulder.
 export const BIRD_KINDS=[
   {body:0xFBF5E8,tip:0x9A9A96,beak:0xF29A38},
   {body:0x6FA4DA,beak:0xF6C744},
@@ -27,8 +25,8 @@ export function createBird(kind=0){
   }
   const body=new Graphics();
   for(const tx of [-4,0,4])body.circle(tx,15,3.4);
-  body.fill(k.body).stroke(ink);   // the scalloped tail
-  body.ellipse(0,3,11.5,12).circle(0,-7,9).stroke({...ink,width:2.8}).ellipse(0,3,11.5,12).circle(0,-7,9).fill(k.body);   // one outline round head + body: the fill hides the inner half and the crossing
+  body.fill(k.body).stroke(ink);
+  body.ellipse(0,3,11.5,12).circle(0,-7,9).stroke({...ink,width:2.8}).ellipse(0,3,11.5,12).circle(0,-7,9).fill(k.body);
   body.circle(-3.4,-8,1.5).circle(3.4,-8,1.5).fill(PALETTE.ink);
   if(k.beak)body.poly([-3,-14.5,0,-20,3,-14.5]).fill(k.beak).stroke({...ink,width:1.1});
   if(k.crest)body.moveTo(-1.5,-15).bezierCurveTo(-2,-22,1,-26,4.5,-24).bezierCurveTo(6.5,-22.5,5,-20,3,-21).bezierCurveTo(2,-19,1.5,-17,1.5,-15).closePath().fill(PALETTE.cream).stroke({...ink,width:1.1})

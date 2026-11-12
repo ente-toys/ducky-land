@@ -4,7 +4,6 @@ import {Application} from 'pixi.js';
 import {createDuck, getDuckWardrobe} from './duck.js';
 import {OUTFIT_OPTIONS, randomOutfit, sameOutfit} from './outfits.js';
 
-// boss 11 Nov: accessories removed; only hats, glasses and shoes
 const outfitRows = {cap:'Hats', shades:'Glasses', shoes:'Shoes'};
 
 export function OutfitItems({wardrobe, outfit, disabled, onChange}) {

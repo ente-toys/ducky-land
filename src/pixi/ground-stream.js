@@ -14,8 +14,6 @@ export function tileResolution(tile, zoom, dpr = 1) {
   const ratio=Math.max((tile.width??size[0])/size[0],(tile.height??size[1])/size[1]);
   return Math.min(tile.resolution ?? 1, ratio*Math.max(.0625, 2 ** Math.ceil(Math.log2(zoom*dpr))));
 }
-// A single pool for Home and live neighbours, including pending decodes. Far tiles
-// have no texture lease. New crops get a cheap preview before refinement.
 export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES, concurrency = 64, utilization = .9,
   makeSprite = () => new Sprite(Texture.EMPTY),
   schedule = globalThis.requestAnimationFrame?.bind(globalThis), now = () => performance.now(),
@@ -25,8 +23,6 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   let desired=new Map(), disposed=false, reserved=0, peak=0, failures=new Map(), deferred=new Set();
   let scheduled=false,lastPlan=-Infinity,lastSignature='',plans=0,started=0,streamId=0,zooming=false;
   const zooms=new Map(),allocations=new Map();
-  // Count shared GPU sources once, including pending decodes and cached previews.
-  // A thousand placements of a pine must neither decode nor reserve it a thousand times.
   const retain=need=>{
     let sources=allocations.get(need.acquire);
     if(!sources)allocations.set(need.acquire,sources=new Map());
@@ -61,7 +57,6 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   };
   const pump=() => {
     if(disposed)return;
-    // Empty visible crops first, then visible refinements, then the walking ring.
     const jobs=[...desired].filter(([tile,target])=>!zooming||target.visible&&!resident.has(tile)).sort(([a,an],[b,bn])=>
       (an.visible?0:2)-(bn.visible?0:2)||
       Number(resident.has(a))-Number(resident.has(b))||
@@ -72,7 +67,6 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       if(pending.size>=concurrency||(schedule&&(now()-began>=frameBudgetMs||zooming&&submitted>=2)))break;
       const held=resident.get(tile);
       if(held?.resolution>=target.resolution||pending.has(tile)||deferred.has(tile))continue;
-      // Keep previously decoded crop+resolution leases in the SAME pool budget.
       const versions=cache.get(tile);
       const cached=versions&&[...versions.values()].find(e=>e.resolution>=target.resolution);
       if(cached){versions.delete(cached.src);if(!versions.size)cache.delete(tile);if(held)remember(tile,held);show(tile,cached);continue;}
@@ -84,10 +78,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         for(const [src,entry] of entries){if(reserved+extraBytes(need)<=budget)break;discard(entry);entries.delete(src);}
         if(!entries.size)cache.delete(t);
       }
-      // Ring crops may be evicted to fund a visible refinement. Never evict a
-      // visible resident, even when its replacement is already in flight.
       for(const [t] of resident) {if(reserved+extraBytes(need)<=budget)break;if(!desired.get(t)?.visible&&target.visible)drop(t);}
-      // drop() caches, so reclaim those leases too before reserving a decode.
       for(const [t,entries] of cache){
         for(const [src,entry] of entries){if(reserved+extraBytes(need)<=budget)break;discard(entry);entries.delete(src);}
         if(!entries.size)cache.delete(t);
@@ -105,7 +96,6 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       }).catch(error=>{discard(need);failures.set(need.src,String(error));})
         .finally(()=>{pending.delete(tile);deferred.clear();requestPump();});
     }
-    // A synchronous submission can consume the budget before concurrency fills.
     if(!pending.size&&jobs.some(([tile,n])=>!deferred.has(tile)&&!failures.has(n.src)&&(!resident.has(tile)||resident.get(tile).resolution<n.resolution)))requestPump();
   };
   return {
@@ -118,10 +108,6 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       streams.add(stream);return stream;
     },
     update(views,dpr=1,fastZoom=false) {
-      // boss 8 Nov (a hard rectangle of missing terrace on Rosybutton Bay): when everything in view cannot fit the budget at full
-      // sharpness, the whole view steps down a sharpness level together. A slightly softer ground beats a tile that never draws.
-      // Keep filling holes during zoom, but let existing tiles cover the
-      // transition before refining them or decoding outside the viewport.
       zooming=fastZoom;
       const time=now();
       const active=views.filter(v=>streams.has(v.stream));
@@ -156,10 +142,8 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         if(total<=budget*utilization||step>=16)break;
         if(prefetch&&ringStep<8)ringStep*=2;else step*=2;
       } while(true);
-      // Load standing props before decorative floor crops,
-      // so the centre of the view cannot sit behind thousands of off-centre decals.
       desired=new Map([...next].sort(([a,an],[b,bn])=>(b.priority??0)-(a.priority??0)||an.distance-bn.distance));deferred.clear();
-      for(const tile of [...resident.keys()]) if(!desired.has(tile))drop(tile);   // only tiles that left the view; a resolution change swaps on load
+      for(const tile of [...resident.keys()]) if(!desired.has(tile))drop(tile);
       requestPump();
     },
     stats(){return {budgetBytes:budget,reservedBytes:reserved,peakBytes:peak,residentTiles:resident.size,cachedTiles:cache.size,refiningTiles:[...desired].filter(([t,n])=>n.visible&&(resident.get(t)?.resolution??0)<n.resolution).length,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size,failures:[...failures].slice(0,8),desiredTiles:desired.size,missingTiles:[...desired.keys()].filter(t=>!resident.has(t)).length,plans,started,sharedSources:[...allocations.values()].reduce((n,s)=>n+s.size,0)};},

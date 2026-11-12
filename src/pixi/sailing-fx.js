@@ -1,6 +1,3 @@
-// boss 5 Nov: getting in, sailing and getting out. Client-only feel on top of the server's instant mode switch:
-// Ducky walks to the jetty end, squashes, hops into the boat (dip + cream ring); boats turn, heel, bob and leave a
-// foam V; at a dock Ducky stands, hops onto the jetty with dust, and the empty boat rocks. Server flow is untouched.
 import {AlphaFilter, Assets, Container, Graphics, Sprite} from 'pixi.js';
 import {blendBoatViews, boatPin} from './boat-blend.js';
 import {HARBOR, boardingPoint} from './islands.js';
@@ -9,23 +6,20 @@ import {LEGACY_SEAT, loadBoatViews} from './boat-views.js';
 
 const PUFF='/pixi-art/detail/fx--puff-small.svg';
 export const DUCK_SCALE=.88*.24*3, SEAT_SCALE=.8;
-const SEAT=LEGACY_SEAT;   // boss 5 Nov: feet on the bench between the mast and the duck head; each boat view carries its own seat (boat-views.js)
-const FADE=.08;   // opt-in aligned artwork only; the current illustrated spin uses opaque key changes
-const RIDER={x:0,y:-50};   // boss 7 Nov: where the Ducky sits relative to the boat anchor in every view, so he never slides fore and aft
+const SEAT=LEGACY_SEAT;
+const FADE=.08;
+const RIDER={x:0,y:-50};
 const HOLD=.6;
-const WAKE=1.1;   // seconds a foam point lives: the V is about 400 units long at full sail   // the most a boarding or landing holds back the steering, in seconds
+const WAKE=1.1;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), lerp=(a,b,u)=>a+(b-a)*u, smooth=u=>u*u*(3-2*u);
 const angleDiff=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
-const clock=()=>performance.now()/1000/(globalThis.__duckySailSlow||1);   // QA: ?sailslow=4 plays the hops 4x slower for frame grabs
+const clock=()=>performance.now()/1000/(globalThis.__duckySailSlow||1);
 if (globalThis.location) globalThis.__duckySailSlow=Number(new URLSearchParams(location.search).get('sailslow'))||1;
 const phaseOf=id=>{let h=7;for (const c of String(id)) h=(h*31+c.charCodeAt(0))>>>0;return h%6283/1000;};
-// the jetty end a Ducky stands on beside a boat: the sea end of the harbor pier, as close to the boat as it reaches
-export function standFor(boat) {   // boss 5 Nov: the jetty deck beside that boat, the same point the server boards from
+export function standFor(boat) {
   return boat ? boardingPoint(boat) : {x:HARBOR.land.x,y:HARBOR.land.y};
 }
 
-// a Ducky (or its dust) on the jetty deck draws over the deck, which lies flat and sorts by its far (land) end
-// boss 6 Nov: the pier of the island you are on (engine.js setSailingHarbor on every island switch)
 let PIER=HARBOR.pier;
 export const setSailingHarbor=harbor => {PIER=harbor.pier;};
 const onPier=(x,y)=>{const p=PIER; return p && x>=p.x-10 && x<=p.x+p.width+10 && y>=p.y-30 && y<=p.y+p.height;};
@@ -53,21 +47,15 @@ export async function createSailingFX({water,objects}) {
       dust.push({sprite,x:x+side*14,y,vx:side*(34+i%2*26),vy:-(10+i%2*12),born:clock(),scale:.075+.03*(i%2)});
     }
   }
-  // the transform a boat is drawn with this frame: anchor position, roll, flip and the seat in world space
-  // Each view is translated by its own seat. The root sits on RIDER itself,
-  // making that pin the shared rotation origin for boat, foreground and rider.
   function seatOf(s) {
     return {...boatPin(s.x,s.y,s.bob,RIDER),roll:s.roll,heading:s.heading};
   }
-  // Near-rim occlusion comes from the frame's hull-only foreground. A generic
-  // parabola cannot follow 48 different hull openings and can cut into the rider.
 
   return Object.assign(fx,{
     standFor,
     dispose() {this.reset(); wakes.destroy(); rings.destroy();},
     reset() {ducks.clear(); boats.clear(); splashes.length=0; for (const d of dust.splice(0)) d.sprite.destroy();},
-    forget(id) {boats.delete(id);},   // boss 6 Nov: an id re-minted at its mooring starts fresh (no glide back from the old boat)
-    // boss 5 Nov: landing on a neighbour moves every coordinate by its offset; the hops, boats, wakes and rings move with it
+    forget(id) {boats.delete(id);},
     shift(dx,dy,reframe=null) {
       const at=p=>{if(p)Object.assign(p,reframe?reframe(p):{x:p.x+dx,y:p.y+dy});};
       for (const s of boats.values()) {at(s); s.trail.forEach(at); at(s.emit); at(s.bow); if (s.glide) {const p=reframe?reframe({x:s.glide.fx,y:s.glide.fy}):{x:s.glide.fx+dx,y:s.glide.fy+dy};s.glide.fx=p.x;s.glide.fy=p.y;}}
@@ -75,8 +63,6 @@ export async function createSailingFX({water,objects}) {
       splashes.forEach(at);
       for(const d of dust){const y=d.sprite.y;at(d);at(d.sprite);d.sprite.zIndex+=d.sprite.y-y;}
     },
-    // boss 5 Nov: one boat sprite per frame. Smooth heading (no snapping), the turntable view nearest it, heel into turns,
-    // bob and roll out of phase, the dip of a landing Ducky, the rock of an emptied boat, a foam V and bow ripples
     boat(entry,boat,reduced) {
       const now=clock();
       let s=boats.get(boat.id);
@@ -87,7 +73,7 @@ export async function createSailingFX({water,objects}) {
       }
       const dt=clamp(now-s.last,0,.1); s.last=now; s.seen=now;
       const jump=Math.hypot(boat.x-s.x,boat.y-s.y);
-      if (s.occupant && !boat.occupant) {   // emptied: the boat rocks, and slides to its berth instead of popping there
+      if (s.occupant && !boat.occupant) {
         s.rockV+=reduced?0:.55; s.dipV+=reduced?0:28;
         if (jump>20 && jump<600 && !reduced) s.glide={fx:s.x,fy:s.y,start:now};
         s.trail.length=0;
@@ -109,18 +95,12 @@ export async function createSailingFX({water,objects}) {
       const want=views.pick(s.heading,s.view);
       s.view=want.key;
       const turnRate=dt?Math.abs(angleDiff(s.heading,previousHeading))/dt:0;
-      // Illustrated silhouettes have different contours. Clean 7.5-degree key
-      // changes keep one opaque outline. Aligned artwork can opt into blending;
-      // fast steering always cuts so previous sectors cannot trail behind.
       const fadeTime=want.transition==='blend' && turnRate<1.5 ? FADE : 0;
       const weights=blendBoatViews(s,want.key,now,fadeTime,reduced);
       if (!entry.front) {
         const front=entry.front=new Container({label:'Boat front'});
         objects.addChild(front);
         entry.layers=new Map();
-        // Each view's complete foreground is accumulated on transparent black.
-        // Additive premultiplied pixels retain alpha=1 wherever both sails cover
-        // the rider. Source-over complementary fades would leave alpha=.75.
         entry.boatFilter=new AlphaFilter({alpha:1});
         entry.frontFilter=new AlphaFilter({alpha:1});
         entry.boatFilters=[entry.boatFilter]; entry.frontFilters=[entry.frontFilter];
@@ -173,8 +153,7 @@ export async function createSailingFX({water,objects}) {
       root.position.set(s.x+RIDER.x,s.y+s.bob+RIDER.y);
       root.pivot.set(0,0);
       root.rotation=s.roll;
-      sprite.skew.x=0;   // boss 5 Nov: no skew, the sprite kept its shape; the heel is a small roll only
-      // foam V: points dropped at the stern spread sideways and fade; the bow pushes small crescents ahead
+      sprite.skew.x=0;
       if (moving && !reduced) {
         const dx=Math.sin(s.heading), dy=Math.cos(s.heading), stern={x:s.x-dx*70,y:s.y-dy*24-4};
         if (!s.emit || Math.hypot(stern.x-s.emit.x,stern.y-s.emit.y)>12) {
@@ -186,8 +165,6 @@ export async function createSailingFX({water,objects}) {
       while (s.trail.length && now-s.trail[0].born>WAKE) s.trail.shift();
       return seatOf(s);
     },
-    // per frame, after the travel view has placed a boat (or one drifting away): its front cut-out follows it,
-    // one step above the seated Ducky (boat y+2, Ducky y+14, front y+16) so the Ducky's z never changes while it turns
     front(entry) {
       const front=entry.front;
       if (!front) return;
@@ -196,7 +173,6 @@ export async function createSailingFX({water,objects}) {
       front.visible=root.visible && !root.destroyed && entry.hasFront;
       front.zIndex=root.zIndex+14;
     },
-    // per frame, after every boat: wakes, rings, dust; boats and Duckies not seen for a while are forgotten
     draw(reduced) {
       const now=clock(); last=now;
       wakes.clear(); rings.clear();
@@ -212,7 +188,7 @@ export async function createSailingFX({water,objects}) {
             .stroke({color:PALETTE.cream,width:12*fade+2,alpha,cap:'round'});
         }
         for (let i=0;i<t.length;i+=3) {
-          const p=t[i], age=now-p.born, alpha=.7*(1-age/.8);   // churned foam down the middle
+          const p=t[i], age=now-p.born, alpha=.7*(1-age/.8);
           if (alpha>0) wakes.circle(p.x+Math.sin(i*2.3)*6,p.y+Math.cos(i*1.7)*3,7*(1-age/.8)+1).fill({color:PALETTE.cream,alpha});
         }
         if (s.bow) for (let k=0;k<2;k++) {
@@ -230,8 +206,8 @@ export async function createSailingFX({water,objects}) {
           if (v<=0 || v>=1) continue;
           rings.ellipse(r.x,r.y+6,(50+e*90*grow)*r.size,(18+e*34*grow)*r.size).stroke({color:PALETTE.cream,width:9*(1-v)+2,alpha:.95*(1-v)});
         }
-        if (u<.4) for (let k=0;k<5;k++) {   // a few droplets thrown up and out
-          const a=Math.PI*(k<2?.8+k*.12:.2-(k-2)*.1), d=70+u*110;   // droplets thrown out past both ends of the hull
+        if (u<.4) for (let k=0;k<5;k++) {
+          const a=Math.PI*(k<2?.8+k*.12:.2-(k-2)*.1), d=70+u*110;
           rings.circle(r.x+Math.cos(a)*d,r.y-10-Math.sin(a)*30*(1-u/.4)+u*u*40,6*(1-u/.4)).fill({color:PALETTE.cream,alpha:.95});
         }
       }
@@ -244,9 +220,7 @@ export async function createSailingFX({water,objects}) {
       }
       for (const [id,d] of ducks) if (now-d.seen>3) ducks.delete(id);
     },
-    // true while a Ducky's own boarding or landing should hold the steering back (at most HOLD seconds)
     holding(id) {const d=ducks.get(id); return Boolean(d?.anim && clock()-d.anim.start<HOLD);},
-    // boss 5 Nov: how to draw a live Ducky this frame. Mode changes start a hop; seated Duckies ride their boat's seat
     duck(pose,reduced) {
       const now=clock(), sailing=pose.mode==='sailing';
       let d=ducks.get(pose.id);
@@ -269,10 +243,10 @@ export async function createSailingFX({water,objects}) {
       const seat=found?seatOf(found.s):{x:pose.x+SEAT.x,y:pose.y+SEAT.y,roll:0};
       const out={x:pose.x,y:pose.y,scale:sailing?DUCK_SCALE*SEAT_SCALE:DUCK_SCALE,sx:1,sy:1,rotation:0,alpha:1,mask:null,
         speed:pose.travel,turn:pose.turn,deck:!sailing};
-      const seated=()=>{Object.assign(out,{x:seat.x,y:seat.y,rotation:seat.roll*.8,mask:null,deck:false,...(seat.heading!==undefined?{turn:seat.heading}:{})});};   // faces the way the boat heads   // boss 5 Nov: never cut by the hull
+      const seated=()=>{Object.assign(out,{x:seat.x,y:seat.y,rotation:seat.roll*.8,mask:null,deck:false,...(seat.heading!==undefined?{turn:seat.heading}:{})});};
       if (sailing) seated();
       const a=d.anim;
-      if (a && reduced) {   // reduced motion: no arcs, the Ducky fades out where it was and in where it is
+      if (a && reduced) {
         const u=(now-a.start)/.45;
         if (u>=1) d.anim=null;
         else if (u<.45) Object.assign(out,{x:a.from.x,y:a.from.y,alpha:1-u/.45,mask:null,deck:a.kind==='board',
@@ -302,7 +276,7 @@ export async function createSailingFX({water,objects}) {
       } else if (a?.kind==='land') {
         const stand=a.stand, tr=.16, th=.4, tl=.24, walk=Math.hypot(pose.x-stand.x,pose.y-stand.y), tw=clamp(walk/320,0,.75);
         const e=now-a.start, from=a.from;
-        if (e<tr) {   // stands up out of the seat
+        if (e<tr) {
           const u=e/tr, k=Math.sin(Math.PI*u*.5);
           Object.assign(out,{x:from.x,y:from.y-10*k,scale:DUCK_SCALE*SEAT_SCALE,sx:1-.06*k,sy:1+.1*k,mask:a.mask??null,deck:false,speed:0,
             turn:Math.atan2(stand.x-from.x,stand.y-from.y)});
@@ -323,7 +297,7 @@ export async function createSailingFX({water,objects}) {
             turn:Math.atan2(pose.x-stand.x,pose.y-stand.y)});
         } else d.anim=null;
       }
-      out.z=out.deck?deckZ(out.x,out.y):(found?found.s.y:out.y)+14;   // fixed rider depth between the boat base and its per-view foregrounds
+      out.z=out.deck?deckZ(out.x,out.y):(found?found.s.y:out.y)+14;
       if (sailing && !d.anim) d.mask=out.mask;
       d.x=out.x; d.y=out.y;
       return out;

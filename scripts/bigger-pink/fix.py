@@ -7,8 +7,6 @@ from shapely.ops import unary_union,split
 p=Path('scripts/bigger-pink/communities.py')
 g=runpy.run_path(str(p));S=g['S'];A=g['A'];X=g['X'];old=g['old'];w=g['w'];props=g['props'];obstacles=g['obstacles'];kit=g['kit'];custom=g['custom'];curve=g['curve'];sample=g['sample']
 layout=json.loads((S/'layout.json').read_text());ground=g['ground'];inner=g['inner']
-# House variants keep the same visual language, but each street has a mixed roofline,
-# facade palette, width, porch treatment and domestic use.
 styles=[('#cbb6df','#b09ecf',.90,.94,'scallop'),('#f5a3c7','#e18eb2',1.03,.88,'awning'),('#f6d4e2','#cbadcf',.94,1.06,'dormer'),('#fcebd6','#ed9db5',1.08,.95,'porch'),('#e4c9e6','#b7a0cf',.86,1.02,'awning'),('#f9c3d5','#d393ba',1,.93,'scallop')]
 for i,h in enumerate(p for p in props if p.get('household')):
  pale,roof,sx,sy,porch=styles[i%len(styles)];text=(A/h['src']).read_text();import xml.etree.ElementTree as ET
@@ -24,7 +22,6 @@ for i,h in enumerate(p for p in props if p.get('household')):
      target=['#b99bd0','#ed9fa8','#f2bb94','#c2a6d4','#d9ace0','#efb3cc'][i%6]
      tr,tg,tb=[int(target[k:k+2],16)/255 for k in [1,3,5]];th,tl,ts=colorsys.rgb_to_hls(tr,tg,tb)
      rgb=colorsys.hls_to_rgb(th,light,max(.16,sat*.74));el.set(attr,'#'+''.join(f'{round(v*255):02x}' for v in rgb))
- # A porch/canopy is drawn in each house's own source coordinate system.
  ns='{http://www.w3.org/2000/svg}';layer=ET.SubElement(root,ns+'g',{'transform':f'translate({xx+ww*.5} {yy+hh*.78}) scale({ww/500})','stroke':'#805c72','stroke-width':'3','stroke-linejoin':'round'})
  if porch in ['awning','scallop']:
   ET.SubElement(layer,ns+'path',{'d':'M-76 8L-63-32H63L76 8Q57 24 38 8Q19 24 0 8Q-19 24-38 8Q-57 24-76 8Z','fill':roof})
@@ -38,14 +35,10 @@ for i,h in enumerate(p for p in props if p.get('household')):
  for o in obstacles:
   if o['name']==h['id']:o['rx']*=sx;o['ry']*=sx
  h['variant']=porch
-# Composed commons: a rose orchard for the tailors, nursery beds west of town,
-# a picnic grove on the south-west walk, and a willow fishing green to the east.
 for src,x,y,sc in [('tree-cherry',2880,-90,.78),('tree-cherry',3260,-260,.9),('tree-cherry',3560,-40,.72),('tree-cherry',3030,220,.66),('tree-cherry',430,3530,.8),('tree-cherry',810,3700,.9),('tree-cherry',1640,3960,.72),('tree-willow',7560,3400,.85),('tree-willow',7900,3630,.7),('tree-cherry',6740,4400,.76)]:kit(src,x,y,'commons',sc)
 kit('picnic-blanket',600,3910,'commons',1.3,solid=False);custom('tea-table',850,4120,'commons',170,148,68,22)
 for x,y in [(2770,120),(3330,170),(970,3510),(1260,3750),(7470,3640),(7770,3860)]:kit('flowers-pink',x,y,'commons',1.3,solid=False)
 for x,y in [(390,3340),(590,3480),(790,3600)]:custom('potting-bench',x,y,'commons',185,124,72,19)
-# Additional directional wear is visible even at island overview. Keep junctions
-# open; darker swathes, pale sandbars and edge vegetation share the road clip.
 ground=ground[:-4]+'<g clip-path="url(#pink-roads)">'
 for ri,(points,width,phase) in enumerate(g['roadsets']):
  s=sample(points)
@@ -56,8 +49,6 @@ for ri,(points,width,phase) in enumerate(g['roadsets']):
    off=side*width*(.22+.035*math.sin(j*.41));pts.append([x-dy/d*off,y+dx/d*off])
   ground+=f'<path d="{curve(pts,False)}" fill="none" stroke="#c7a975" stroke-width="13" opacity=".32" stroke-dasharray="80 32 130 55 25 35" stroke-linecap="round"/>'
 ground+='</g>'
-# Water occupies ONLY the former sea side of the original coastline. The six old
-# decks retain every source pixel and cross this canal instead of new lawn.
 mainland=Polygon(w['coast']).buffer(0)
 islets=[Point(x,y).buffer(1,resolution=40) for x,y,rx,ry in []]
 from shapely.affinity import scale
@@ -74,10 +65,6 @@ def polys(shape):return [shape] if shape.geom_type=='Polygon' else [p for p in s
 waterArt=''
 for shape in polys(river):
  d=svgPoly(shape);waterArt+=f'<path d="{d}" fill="#6ec9de" fill-rule="evenodd" stroke="#659b72" stroke-width="22"/><path d="{d}" fill="none" stroke="#c4e3b3" stroke-width="8"/>'
-# Split holes into simple polygons so the existing walking engine needs no changes.
-# Tile collision water spatially. A single long canal polygon has a huge
-# bounding box and forces unrelated lawn steps to scan hundreds of vertices.
-# Small exact pieces let the engine's existing shape index reject them cheaply.
 xmin,ymin,xmax,ymax=river.bounds
 pieces=[]
 for x in range(math.floor(xmin/512)*512,math.ceil(xmax/512)*512,512):
@@ -88,7 +75,6 @@ waters=[]
 for piece in pieces:
  if piece.interiors:raise RuntimeError('Water polygon still has a hole')
  waters.append(dict(name='Rosybutton canal / streams',poly=[[round(x,2),round(y,2)] for x,y in piece.exterior.coords]))
-# Reeds, terraced rose beds and flower commons fill the walking greens.
 for cx,cy,rx,ry in [(3240,-80,540,260),(4540,70,300,190),(6350,4350,330,180)]:
  d=curve([[cx-rx,cy],[cx-rx*.7,cy-ry],[cx+rx*.55,cy-ry*.8],[cx+rx,cy+40],[cx+rx*.4,cy+ry],[cx-rx*.8,cy+ry*.6]])
  ground+=f'<path d="{d}" fill="#adcb62" stroke="#7caa43" stroke-width="5"/>'
@@ -97,8 +83,6 @@ for cx,cy,rx,ry in [(3240,-80,540,260),(4540,70,300,190),(6350,4350,330,180)]:
   for t in [-.58,-.35,-.12,.13,.36,.58]:
    x=cx+rx*t;y=cy+dy+8
    ground+=f'<path d="M{x} {y+12}v-27m0 12q-21-13-28-3m28 3q18-18 28-7" fill="none" stroke="#668d3c" stroke-width="4"/><path d="M{x-12} {y-12}q-12-15 1-19q9-13 19 0q18 3 10 17q-7 13-18 6Z" fill="#f5a3c7" stroke="#cd7ca6" stroke-width="3"/>'
-# Crossings use actual old deck axes, with small walking rectangles following the
-# slanted planks. These stay inside the deck's visible width.
 oldAxes=[('jetty-harbor.svg',[1074,1300],[703,1084],104)]+[(d['src'],b['a'],b['b'],b['w']) for d,b in zip([old['decks'][4],old['decks'][5],old['decks'][1],old['decks'][2],old['decks'][3]],w['walkways'])]
 bridges=[];decks=[];audit=[]
 def support(name,a,b,width):
@@ -108,13 +92,9 @@ def support(name,a,b,width):
 for name,a,b,width in oldAxes:
  support(name,a,b,width);mid=LineString([a,b]).interpolate(.55,normalized=True)
  audit.append(dict(name=name,before='dry expansion lawn beneath the offshore deck',after='old-shore canal',a=a,b=b,waterUnder=river.intersects(LineString([a,b])),sample=[mid.x,mid.y]))
-# Move the music mending rack onto its dry workcourt bank; the canal now
-# occupies its former position. Its footprint moves with the visible object.
 rack=next(p for p in props if p['id']=='community-pink-100');rack['x']=5530;rack['y']=360
 for o in obstacles:
  if o['name']==rack['id']:o['x']=5530;o['y']=354.6
-# Recompose the old expansion's bank furniture and flower beds now that its
-# former grass strip is a canal. Groups move together, footprints with them.
 placements={53:(1850,350),95:(5800,400),96:(5680,370),97:(6700,400),98:(6580,370),375:(7290,3400),385:(8080,3860),388:(490,3670)}
 for group in [range(287,290),range(290,293),range(293,296),range(296,299),range(299,302),range(302,305),range(305,308)]:
  for i in group:
@@ -123,8 +103,6 @@ for i,(x,y) in placements.items():
  prop=next(p for p in props if p['id']==f'community-pink-{i}');dx,dy=x-prop['x'],y-prop['y'];prop['x']=x;prop['y']=y
  for o in obstacles:
   if o['name']==prop['id']:o['x']+=dx;o['y']+=dy
-# Only authored road centerlines crossing real water receive a new timber bridge.
-# Closely meeting lanes share one crossing, rather than stacking duplicate decks.
 newCross=[]
 for ri,points in enumerate(layout['paths']+[layout['shoreWalk']+[layout['shoreWalk'][0]]]):
  line=LineString(sample(points));wet=line.intersection(river)
@@ -136,10 +114,8 @@ for ri,points in enumerate(layout['paths']+[layout['shoreWalk']+[layout['shoreWa
   if any(Point(c['mid']).distance(mid)<220 for c in newCross):continue
   near=line.project(mid);half=segment.length/2+65
   a=list(line.interpolate(max(0,near-half)).coords)[0];b=list(line.interpolate(min(line.length,near+half)).coords)[0]
-  # A deck follows a straight crossing; excessively long tangent contacts are rerouted by walking round.
   if math.dist(a,b)>700:continue
   width=190 if ri==0 else 145 if ri<7 else 125
-  # Center the straight deck on the wet midpoint, using the local road tangent.
   pa=line.interpolate(max(0,near-35));pb=line.interpolate(min(line.length,near+35));tx,ty=pb.x-pa.x,pb.y-pa.y;td=math.hypot(tx,ty) or 1
   a=(mid.x-tx/td*half,mid.y-ty/td*half);b=(mid.x+tx/td*half,mid.y+ty/td*half)
   name=f'river-crossing-{len(newCross)+1:02}' 
@@ -152,11 +128,9 @@ for ri,points in enumerate(layout['paths']+[layout['shoreWalk']+[layout['shoreWa
   (X/(name+'.svg')).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{ww}" height="{hh}" viewBox="{x0} {y0} {ww} {hh}">{body}</svg>')
   decks.append(dict(src=f'expansion/{name}.svg',x=x0,y=y0,width=ww,height=hh));support(name,a,b,width)
   newCross.append(dict(name=name,road=ri,mid=[mid.x,mid.y],a=a,b=b,width=width))
-# Deliberate reed/stone/lily compositions at bends, never across a bridge.
 for x,y in [(770,3010),(1500,4540),(7610,3500),(7600,2550),(3800,610),(850,2250),(6100,3710)]:
  for dx,dy in [(-28,12),(0,-4),(23,15)]:waterArt+=f'<path d="M{x+dx} {y+dy}q-18-29-12-49m12 49q4-38 15-43m-15 43q-2-45-6-61" fill="none" stroke="#65933f" stroke-width="5" stroke-linecap="round"/>'
  for dx,dy in [(44,45),(61,66)]:waterArt+=f'<ellipse cx="{x+dx}" cy="{y+dy}" rx="16" ry="8" fill="#86b94b" stroke="#659b72" stroke-width="2"/>'
-# Ground finishes above new roads but below the protected original layer.
 ground+=waterArt+'</g>'
 combined=ground+inner;(S/'ground-body.svg').write_text(combined)
 (X/'ground-source.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="13200" height="9800" viewBox="-2600 -1900 13200 9800">{combined}</svg>')

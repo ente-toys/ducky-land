@@ -45,7 +45,6 @@ def courses(g, cx, cy, ratio, radii, count, lavender=False):
             color = '#D7CAE8' if lavender and row == len(radii)-2 and i%8 == 3 else colors[(i+row*2)%6]
             sector(g,cx,cy,ratio,inner,outer,t0,t1,color)
             if (i+row)%3==0:
-                # A restrained sliver, rather than a uniformly embossed tile.
                 sector(g,cx,cy,ratio,inner+1,min(inner+8,outer-1),t0+.004,t1-.004,'#DDBD70',ink='none',line=0)
 
 def lozenge(g,x,y,rx,ry,fill):
@@ -99,7 +98,6 @@ for g in root:
         cx,cy,rx,ry=(4000,1800,640,220) if name.startswith('Stage') else (2700,1880,430,200)
         for c in list(g):
             if c.get('clip-path'):g.remove(c)
-        # A narrow broken stone rim stays outside the entire reserved activity zone.
         rim=element('g',data_name='Dressed open lawn edge')
         courses(rim,cx,cy,ry/rx,[rx+18,rx+38],48,True)
         lawn_marks(rim,cx,cy,rx-14,ry-12,cx,135)
@@ -112,20 +110,16 @@ for g in root:
                 path(g,f'M{x} {3560+side*122-7}v14',fill='none',stroke='#948A63',stroke_width=1)
         lawn_marks(g,cx,3560,355,84,cx+1,60)
     elif name=='Hash path tiles':
-        # Replace repeated printed hash marks with unobtrusive natural sand chips.
         g.set('d','');g.set('data-name','Soft path sand grain')
 
-# Tiny sand scuffs and grass-edge pebbles use existing path geometry.
 grain=element('g',data_name='Community path-edge craft')
 for i,(pts,width) in enumerate(zip(w['paths'],w['pathWidths'])):
     for j in range(8,len(pts)-2,20):
         x,y=pts[j]
         ellipse(grain,round(x+width*.15,1),round(y+3,1),3.8,2,fill='#D7B967',fill_opacity='.6')
         ellipse(grain,round(x+width*.15+7,1),round(y,1),1.6,1,fill='#FFF0C7')
-# Before paving/lawns so no scuff floats across a plaza's new ring.
 root.insert(next(i for i,g in enumerate(root) if g.get('data-name')=='Game lawn with dressed stone rim'),grain)
 
-# Main floor is a separately loaded decal. Preserve its exact 1800x1440 bounds.
 floor=E.parse(S/'decal-paving.svg').getroot();floor.clear()
 floor.attrib.update({'width':'1800','height':'1440','viewBox':'3100 1920 1800 1440'})
 g=element('g',data_name='Campfire commons Home stone ring pattern')
@@ -137,14 +131,12 @@ ellipse(g,4000,2640,240,240*628/820,fill='#E9CD8C',stroke='#8D8057',stroke_width
 ellipse(g,4000,2640,233,233*628/820,fill='none',stroke='#FFF0C7',stroke_width=4)
 ellipse(g,4000,2640,804,804*628/820,fill='none',stroke='#FFF0C7',stroke_width=3)
 lights(g,4000,2640,810,628/820,[-165,-135,-105,-75,-45,-15,15,45,75,105,135,165])
-# Four small campfire-spark inlays, flush stone, never an obstacle to players.
 for deg in [62,118,242,298]:
     x,y=point(4000,2640,535,628/820,math.radians(deg))
     lozenge(g,x,y,16,12,'#B7A1D8')
     lozenge(g,x,y-27,6,5,'#FFF0C7')
 (A/'centre/decal-paving.svg').write_text(E.tostring(floor,encoding='unicode'))
 
-# Home's actual flower pot, theme palette only. One source and small real footprints.
 pot=(R/'public/pixi-art/detail/street--planter-flowers.svg').read_text()
 pot=pot.replace('#F27E45','#AE8ED5').replace('#F9AC55','#D7CAE8').replace('#ED6A43','#B7A1D8')
 (A/'detail/community-rim-planter.svg').write_text(pot)
@@ -174,8 +166,6 @@ for label,x,y in locations:
         centre['blocked'].append({'ellipse':{'x':x-4000,'y':y-2640-5,'rx':36,'ry':17}})
 if 'centre' in globals():(A/'centre/centre.json').write_text(json.dumps(centre,indent=2)+'\n')
 
-# Two game-rim lamps were almost coincident with the original lamps. Space the
-# existing pair on the northern shoulders, without adding a new lamp or obstacle.
 for pid,x,y in [('lamp-typing-80',5480,2438),('lamp-typing-81',6120,2438)]:
     p=next(p for p in a['props'] if p['id']==pid);ox,oy=p['x'],p['y']
     for data in [w,walk]:

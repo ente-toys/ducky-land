@@ -127,7 +127,6 @@ test('coalescing sends the latest release and queued emote, and resumes after ba
 test('reconnect replaces a stale profile slot, saves totals and ignores delayed old socket events',()=>{
   const {room,connect,data,logs}=fixture(),old=connect(),oldId=old.messages[0].id;
   const player=room.arena.state.players.get(oldId);player.stats.tags=7;player.stats.score=70;
-  // A real close handshake can finish after the replacement is already active.
   old.close=function(code,reason){this.code=code;this.reason=reason;};
   const fresh=connect(token,'google'),id=fresh.messages[0].id;
   assert.equal(fresh.messages[0].type,'arena-welcome');assert.equal(old.code,4001);

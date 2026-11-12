@@ -5,7 +5,6 @@ import './combat.css';
 import DodgePip from './DodgePip.jsx';
 import BogTutorial from './Tutorial.jsx';
 
-// Fixed public files so every bundler (Vite and the Node test builds) resolves the HUD icon.
 const popperIcon=team=>`/pixi-art/themes/bog-arena/hud/${team==='privacy'?'privacy-padlock':'google-rainbow'}-popper.svg`;
 
 export default function BogGame({engine,team,name='Ducky',profile,accountId,navigation,blockers,onLeave=()=>{},returnLabel='Back to boat',...options}) {
@@ -26,7 +25,6 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
   const {self,snapshot,status,error}=state;
   return <aside className="bog-combat-hud" aria-label="Bog paint game">
     {self&&<BogTutorial identity={accountId??profile??'local'} self={self} engine={engine}/>}
-    {/* Personal score only (boss 11 Nov): no team totals in the real game. */}
     <div className="bog-combat-score"><span>SCORE {self?.stats.score??0}</span><span>{self?.stats.tags??0} TAGS</span></div>
     <p>Team {(self?.team??team)==='privacy'?'PRIVACY':'GOOGLE'} · {self?.stats.tags??0} kills · {self?.stats.medals??0} medals{self&&` · ${self.karma??0} feathers`}</p>
     <div className="bog-combat-lives" role="img" aria-label={`${self?.lives??RULES.lives} lives left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<(self?.lives??RULES.lives)?'':'lost'}>♥</span>)}</div>

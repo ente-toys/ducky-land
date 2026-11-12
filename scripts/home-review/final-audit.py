@@ -5,7 +5,6 @@ from shapely.ops import unary_union
 from pathlib import Path
 O=Path('/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/home-review');E=json.load(open('src/pixi/home-expansion.json'));R=json.load(open('src/pixi/home-routes.json'))
 lines=[LineString(r['samples']) for r in R]
-# Dead ends mean an unserved grass tip, not a doorway, a bench or a destination court.
 courts=[Polygon(r['rings'][0],r['rings'][1:]).buffer(0) for r in E['roads'] if r.get('rings')]
 known=[(2820,2370,520,390),(4775,2750,470,600),(2920,1620,150,150),(4130,1537,720,460),(3500,1420,100,100),(4070,5365,150,150)]
 ends=[]

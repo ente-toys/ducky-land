@@ -1,4 +1,3 @@
-// AC-2 assembly: deterministic blueprint data, existing castle, untouched outer hamlets.
 import fs from 'node:fs';
 import {applyFairBridges} from './bridges.mjs';
 import {inPoly,geometry} from '../../assets/world/island-geometry.mjs';
@@ -15,10 +14,8 @@ const goneIds=new Set(gone.map(p=>p.id));
 art.props=art.props.filter(p=>!mine(p)&&!goneIds.has(p.id)&&p.id!=='fair-0');
 art.flats=art.flats.filter(p=>!inside(p));art.floating=(art.floating??[]).filter(p=>!inside(p));
 for(const w of [world,walk]){
- // Legacy centre polygons have no x/y. Clear those too before adding landmark bases.
  w.obstacles=w.obstacles.filter(o=>!mine(o)&&!inside(o)&&!o.poly?.some(([x,y])=>inside({x,y})));
  w.water=w.water.filter(o=>o.id!=='ac2-lagoon'&&(o.poly||!inside(o)));
- // The islet is dry; the lagoon is an annulus made of convex strips.
  const outer=layout.polygons.lagoon.map(P),islet=layout.polygons.islet.map(P);
  w.water.push(...outer.map((p,i)=>({id:'ac2-lagoon',poly:[p,outer[(i+1)%outer.length],islet[(i+1)%islet.length],islet[i]]})));
  w.islets=[];
@@ -26,7 +23,6 @@ for(const w of [world,walk]){
 art.decks=art.decks.filter(d=>d.id!=='ac2-lagoon-bridge');
 const inline=file=>fs.readFileSync(A+'ac2/'+file,'utf8').replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
 const flat=o=>/castle-islet-ground|lagoon-lily|plaza-ground/.test(o.file);
-// Directional seats keep their legs upright. Other authored rotations are baked.
 function place(o,id='ac2-'+o.id,at=P([o.x,o.y]),scale=sx){
  if(BENCH_COURTS[o.id]){const p=placeBench(o,at,scale);art.props.push(p);return p;}
  const a=(o.rotation??0)*Math.PI/180,c=Math.cos(a),s=Math.sin(a),corners=[[-o.width/2,-o.height],[o.width/2,-o.height],[-o.width/2,0],[o.width/2,0]].map(([x,y])=>[x*c-y*s,x*s+y*c]);
@@ -46,7 +42,6 @@ for(const w of [world,walk])w.obstacles.push({name:'ac2-castle',x:castle.x,y:cas
 const bridge={id:'ac2-lagoon-bridge',a:[3570,1441],b:[3570,1757.4],w:112,boatPassUnder:true};
 for(const w of [world,walk]){w.walkways=w.walkways.filter(x=>x.id!==bridge.id);w.walkways.push(bridge);w.bridges=w.bridges.filter(b=>b.id!==bridge.id);w.bridges.push({id:bridge.id,x:cx,y:(bridge.a[1]+bridge.b[1])/2,w:bridge.w,h:bridge.b[1]-bridge.a[1]+80});}
 world.arches=world.arches.filter(x=>x.id!==bridge.id);world.arches.push({...bridge,r:80});
-// Six hand-authored round clumps reuse the centre's existing tree art.
 const nod=ow.sleepSpots.nod.flatMap(([id,,flip],i)=>{
  if(i===1)return [];
  const p={...old.props.find(p=>p.id===id),x:SLEEP_TREES[i][0],y:SLEEP_TREES[i][1]};
@@ -59,11 +54,8 @@ for(const [i,clump] of TREE_CLUMPS.entries())for(const [j,t] of clump.entries())
 for(const p of art.props.filter(p=>/^ac2-tree-clump-/.test(p.id)||nod.some(([id])=>id===p.id)))
  for(const w of [world,walk])w.obstacles.push({name:'ac2-'+p.id,x:p.x,y:p.y-9,rx:31,ry:22});
 world.sleepSpots={...structuredClone(SLEEP_POINTS),nod};
-// Seven nod sleepers cannot share six small clumps (same-pose spacing is 900).
-// Keep this resident at its original foot, resting on a leaf on the open lawn.
 world.sleepSpots.leaf.push([...SLEEP_TREES[1],ow.sleepSpots.nod[1][2]]);
 world.sleepAvoid=[];
-// New landmarks replace the obsolete activity destinations and path graph in the heart.
 world.zones.plaza={...world.zones.plaza,x:cx,y:P([768,791])[1],spawn:P([768,925])};
 const h=read(D+'harbor.json');h.spawn=world.zones.plaza.spawn;save(D+'harbor.json',h);
 const placements=read(D+'placements.json').filter(p=>!goneIds.has(p.id)&&!mine(p)&&p.id!=='fair-0');placements.push(...art.props.filter(p=>mine(p)||p.id==='fair-0'||SLEEP_TREES.some(q=>p.x===q[0]&&p.y===q[1])));save(D+'placements.json',placements);
@@ -71,7 +63,6 @@ const metadata=read('scripts/bigger-fair/centre-source/outer-props.json');world.
 save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);
 const nav=geometry(walk),beds=resolveSleepSpots(world,art.props,(x,y)=>nav.walkable(x,y),sleepHalfWidths(),{spots:world.sleepSpots,warn:false});console.log('Fair AC-2:',art.props.length,'props; sleepers',beds.length,JSON.stringify(beds.bad));
 
-// Bridge geometry precedes the single authoritative terrain/path union.
 applyFairBridges();
 const {rebuildFairSurface}=await import('./paths.mjs');
 rebuildFairSurface();

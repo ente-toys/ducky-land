@@ -1,4 +1,3 @@
-// Geometry shared by terrain generation, navigation and the junction regression.
 import {Path2D,PathOp,StrokeCap,StrokeJoin} from '@napi-rs/canvas';
 import {lakeOutline} from './lake.mjs';
 import {inPoly} from '../../assets/world/island-geometry.mjs';
@@ -14,8 +13,6 @@ export function shoreDistance(p,poly){
  }
  return inPoly(...p,poly)?-d:d;
 }
-// The authored terrain uses absolute M/L/Q/C commands. Flatten at <=4 units,
-// including control-polygon length, so collision checks cannot skip a cove.
 export function pathSamples(d,spacing=4){
  const tokens=d.match(/[MLQCZ]|-?\d*\.?\d+(?:e[-+]?\d+)?/gi),out=[];let at=0,p;
  while(at<tokens.length){
@@ -63,13 +60,8 @@ export function prepareLakeJunctions(terrain,world){
   }
   return `<path d="${d}" fill="none" stroke="#a6deec" stroke-width="${route.width}" stroke-linecap="round" stroke-linejoin="round"${d!==source?` data-source-d="${source}"`:''}/>`;
  });
- // The old rink's rectangular knockout and its three butt-capped gate stubs
- // must disappear, rather than cutting new routes underneath the lake sprite.
  terrain=terrain.replace(/<rect\b[^>]*x="6399\.252236043941"[^>]*\/>/g,'');
  for(let i=0;i<originals.length;i++)terrain=terrain.replace(originals[i],paths[i]??'');
- // Build one surface before outlining: the snow lips follow only its exterior.
- // The short lake extensions end at the mouths, so ordinary paths remain dry
- // walking while the exact same visible ice immediately activates the slide.
  const lake=new Path2D(lakeOutline().d).transform({a:1,b:0,c:0,d:1,e:ice.x,f:ice.y});
  let mouths=new Path2D(lake);
  for(const l of landings){
@@ -89,7 +81,6 @@ export function prepareLakeJunctions(terrain,world){
   const d=paths[i].match(/\bd="([^"]+)"/)[1];
   union=union.op(new Path2D(d).stroke({width:routes[i].width,cap:StrokeCap.Round,join:StrokeJoin.Round}),PathOp.Union);
  }
- // Closing fills concave forks and gives every path/lake shoulder a soft flare.
  const unionD=close(union).toSVGString();
  return {terrain,paths,landings,unionD,lakeD};
 }

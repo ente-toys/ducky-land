@@ -9,13 +9,10 @@ import legacy from './legacy-raster-art.json' with {type:'json'};
 const root=new URL('../public/pixi-art/',import.meta.url);
 
 test('Pixi art rejects new rasters, with frozen legacy exceptions in exactly two active theme folders',()=>{
- // These existing Library and Bog assets must
- // be redrawn. Exact path+content hashes prevent adding rasters inside them.
  assert.deepEqual([...legacy.folders].sort(),['themes/library/','themes/bog/'].sort());
  const violations=[],activeThemes=new Set(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean));
  function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){
   const file=path.join(dir,entry.name);if(entry.isDirectory()){
-   // Retired theme art stays on disk, outside the active world raster guard.
    if(path.relative(fileURLToPath(root),dir)==='themes'&&entry.name==='goldmine'&&!activeThemes.has(entry.name))continue;
    scan(file);continue;
   }
@@ -37,7 +34,6 @@ test('every globe preview and fallback is a bounded, self-contained vector match
    assert.equal(manifest[id].quality.paletteDistance,0,`${id} must preserve native source colours`);
    assert.doesNotMatch(svg,/<(?:image|linearGradient|radialGradient|filter)\b|data:/i,id+suffix);
    assert.doesNotMatch(svg,/<style\b|\bclass=/,id+suffix+' has unresolved CSS');
-   // Exact source colours take precedence over the former palette-merged 600 KB cap.
    assert.ok(Buffer.byteLength(svg)<1_500_000,`${id}${suffix} exceeds 1.5 MB`);
    assert.match(svg,/<svg[^>]*width="1024"/);
    const ids=new Set([...svg.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));

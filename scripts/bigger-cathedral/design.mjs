@@ -1,4 +1,3 @@
-// Explicit site plan and original vector drawings for Bellovo's working neighbourhoods.
 import fs from 'node:fs';
 import sharp from 'sharp';
 export const A='public/pixi-art/themes/cathedral/';
@@ -25,13 +24,11 @@ export function house(kind,variant=0){let shutter={bell:'#7D9A54',olive:'#6F8D3C
  b+=`<path d="M196 339h87l17 13l-8 13H182l-4 -12Z" fill="#DDD1A0" stroke="${ink}" stroke-width="3"/><path d="M52 326v47m16 -43v43m-26 -20h52" stroke="${ink}" stroke-width="4"/><path d="M40 326l13 -10h26v20H40Z" fill="${shutter}" stroke="${ink}" stroke-width="3"/>`;
  if(kind==='bell')b+=`<path d="M358 100v30m-14 0q0 -24 14 -24t14 24Z" fill="#E7B745" stroke="${ink}" stroke-width="3"/>${el(358,134,5,4,ink)}`;
  if(kind==='mosaic')b+=`<path d="M182 210l16 -12l16 12l-16 12Zm80 0l16 -12l16 12l-16 12Z" fill="#54A99A" stroke="${ink}" stroke-width="2"/>`;
- // Masonry, porch vines and daily-use objects give every facade a human scale.
  b+=`<path d="M81 298h26m18 17h30m195 -10h35m-287 -91h17m235 0h27M82 310h13m273 12h22" stroke="#B3A674" stroke-width="2.5" fill="none"/>`;
  if(kind==='bell')b+=el(240,178,23,23,'#F8D782',ink,3)+`<path d="M240 161v17l12 7" stroke="${ink}" stroke-width="3" fill="none"/>`;
  if(kind==='mosaic')b+=`<path d="M113 154v-31h251v31m-200 -31v22m46 -22v22m46 -22v22m46 -22v22" stroke="${ink}" stroke-width="4" fill="none"/><path d="M92 190h298" stroke="#77A39A" stroke-width="12"/>`;
  if(kind==='harbour')b+=`<path d="M84 285h104m108 0h98M84 301h104m108 0h98M84 317h104m108 0h98" stroke="#8F805A" stroke-width="3"/>${el(355,311,19,23,'#DFCC91',ink,3)}${el(355,311,9,13,'#6A927F',ink,2)}`;
  if(variant===2||kind==='olive'){b+=`<path d="M75 315v-40m330 40v-40M72 275q167 -45 335 0" fill="none" stroke="#727B3B" stroke-width="6"/>`;for(const [x,y]of [[80,279],[100,265],[126,262],[156,256],[186,255],[215,253],[246,256],[278,259],[310,266],[343,270],[372,280]])b+=el(x,y,13,6,'#6F973D',ink,1);}
- // Five visibly different domestic silhouettes in each neighbourhood, still using its kit.
  if(variant===1)b+=`<path d="M61 280h128v-79H61Z" fill="#D6CD99" stroke="${ink}" stroke-width="4"/><path d="M47 203l76 -37l77 37Z" fill="#A85638" stroke="${ink}" stroke-width="4"/><path d="M86 277v-43h43v43" fill="${shutter}" stroke="${ink}" stroke-width="3"/>`;
  if(variant===3)b+=`<path d="M162 297h157l25 30H141Z" fill="${shutter}" stroke="${ink}" stroke-width="4"/><path d="M154 327v37m175 -37v37" stroke="${ink}" stroke-width="5"/>`;
  if(variant===4)b+=`<path d="M225 65V15h41v50m-49 -50h58v12h-58Z" fill="#D4B68A" stroke="${ink}" stroke-width="3"/><path d="M75 318q20 -55 30 -105m270 105q-15 -45 -9 -103" fill="none" stroke="#698C3A" stroke-width="7"/>`;
@@ -72,7 +69,6 @@ export async function draw(){
  for(let r of plan.roads)body+=path(roadShape(r).poly,sand,'#748837',10);
  body+=`<path d="${dpath(JSON.parse(fs.readFileSync('scripts/bigger-cathedral/baseline/world.json')).coast)}" fill="#B2BD51" stroke="#647738" stroke-width="6"/>`;
  for(const c of plan.communities){body+=el(c.x,c.y,390,220,'#F7DC88','#8B9751',12);for(const [i,[x,y]]of c.homes.entries())body+=`<g transform="translate(${x-180} ${y-285}) scale(.75)">${house(c.kind,i%3).replace(/^.*?<svg[^>]*>/,'').replace('</svg>','')}</g>`;let [x,y]=c.work.flat();body+=`<g transform="translate(${x-200} ${y-300}) scale(.85)">${workshop(c.kind).replace(/^.*?<svg[^>]*>/,'').replace('</svg>','')}</g>`;}
- // The heart is drawn from its actual assets, preserving the original composition.
  const art=JSON.parse(fs.readFileSync('scripts/bigger-cathedral/baseline/art.json'));
  const {render}=await import('./render.mjs');let old=await render(art,{x:0,y:0,k,width:960,height:720});
  const world=JSON.parse(fs.readFileSync('scripts/bigger-cathedral/baseline/world.json'));

@@ -26,7 +26,6 @@ def home(file,x,y,w,name,solid=True):
   shutil.copyfile(R+'/public/pixi-art/plants/'+kind+'.svg',A+'/'+dst);w=280
  else:shutil.copyfile(R+'/public/pixi-art/detail/'+file+'.svg',A+'/'+dst)
  return prop(dst,x,y,w,name,solid)
-# Round centre stays simple until the boss picks the actual landmark.
 zones={'plaza':dict(x=3900,y=3800,rx=720,ry=560,spawn=[3900,4100]),'centre':dict(x=3900,y=3800,rx=720,ry=560,spawn=[3900,4100],name='Reserved centre plaza')}
 for i,(x,y,rx,ry) in enumerate([(1730,2600,580,430),(6100,2600,580,430),(3900,4630,620,260)],1):zones[f'activity-{i}']=dict(x=x,y=y,rx=rx,ry=ry,spawn=[x,y],name=['Fern games lawn','Lagoon gathering lawn','South picnic green'][i-1],kind='activity')
 for i,(x,y) in enumerate([(1800,3490),(6000,3490),(2300,1400)],1):zones[f'stalls-{i}']=dict(x=x,y=y,rx=620,ry=170,x0=x-620,x1=x+620,y0=y-170,y1=y+170,spawn=[x,y+80],slots=[[x-440+j*290,y-60] for j in range(4)],kind='stalls')
@@ -54,16 +53,12 @@ body+=poly(list(lagoon.buffer(45).exterior.coords),'#DFF3E8','#729583',4)+poly(l
 for i in range(38):
  x=r.uniform(2830,4970);y=r.uniform(1950,2970)
  if lagoon.buffer(-50).contains(Point(x,y)):body+=f'<path d="M{x:.1f} {y:.1f} q 40 16 85 0" stroke="#DFF3E8" stroke-width="5" fill="none"/>'
-# generated three-step waterfall, a grounded obstacle footprint beneath the cliff face
 if os.path.exists(A+'/detail/ribbonfall.svg'):
  p=prop('detail/ribbonfall.svg',3900,2240,1700,'Three step waterfall amphitheatre',False)
  obs.append({'poly':[[3060,1250],[4740,1250],[4740,2220],[3060,2220]]})
-# Small temporary cairn in the reserved central circle.
 home('nature--rock-round',3900,3770,120,'Centre placeholder cairn')
-# A fern fan is a small code-native detail, paired with the generated cliff ferns.
 fern='<path d="M100 130 Q50 30 15 55 Q35 95 100 130 M100 130 Q70 0 48 15 Q45 70 100 130 M100 130 Q100 -10 115 12 Q137 75 100 130 M100 130 Q160 8 180 40 Q170 85 100 130 M100 130 Q202 65 195 90 Q150 120 100 130" fill="#579858" stroke="#39472D" stroke-width="3" stroke-linejoin="round"/>'
 open(A+'/detail/fern-fan.svg','w').write(svg(fern,210,140))
-# Four jetties. The primary north jetty is drawn by the engine.
 jet=[([2200,1350],[2200,650]),([1050,2850],[340,2850]),([6800,2850],[7460,2850]),([3900,4750],[3900,5320])]
 def deck(a,b,w,name,arch=0):
  walkways.append(dict(a=a,b=b,w=w));dx=b[0]-a[0];dy=b[1]-a[1];L=math.hypot(dx,dy);nx=-dy/L;ny=dx/L
@@ -89,13 +84,11 @@ for i,(a,b) in enumerate(jet):
 islets=[[1450,4780,370,240],[6330,4770,370,240]]
 for x,y,rx,ry in islets:body+=poly(ellipse(x,y,rx,ry),'#EAD2A1',ink,4)+poly(ellipse(x,y-20,rx-60,ry-65),'#A8D39A','#71945B',3)
 deck([1940,4220],[1550,4650],180,'bridge-west',65);deck([5850,4220],[6240,4640],180,'bridge-east',65)
-# Stepping stones form one continuous walkable causeway across the eastern lagoon rim.
 a=[5000,2030];b=[5000,2850];walkways.append(dict(a=a,b=b,w=170))
 stone=''
 for i in range(9):
  t=i/8;x=a[0]+(b[0]-a[0])*t;y=a[1]+(b[1]-a[1])*t;stone+=ell(x,y,115,62,'#B3BCAB',ink,4)+ell(x-12,y-10,82,35,'#DFF3E8','none')
 open(A+'/stepping-stones.svg','w').write(svg(stone,W,H));decks.append(dict(src='stepping-stones.svg',x=0,y=0,width=W,height=H))
-# Perimeter plant pockets leave all activity and stall zones untouched.
 reserved=unary_union([avoid,pathgeom,lagoon.buffer(100),Polygon([[2950,1050],[4850,1050],[4850,2240],[2950,2240]])]+[LineString([a,b]).buffer(220) for a,b in jet])
 plantpoints=[]
 for _ in range(1400):
@@ -110,12 +103,10 @@ for x,y in [(2720,2400),(5100,2360),(2920,2900),(4920,2970),(1450,4790),(6330,47
  home('nature--rock-boulder',x,y,160,'Lagoon rock');prop('detail/fern-fan.svg',x-130,y+30,140,'Fern fan')
 for x,y in [(3040,3520),(4740,3520),(1500,1910),(6300,1900),(2780,4270),(5180,4270)]:home('street--bench-wood',x,y,220,'Lookout bench')
 for x,y in [(3050,3220),(4650,3220),(2750,3940),(5050,3940)]:home('street--lamp-lantern',x,y,70,'Lookout lamp')
-# Extra ground flecks, all same native home decals.
 for _ in range(650):
  x=r.randint(600,7200);y=r.randint(950,4800)
  if not grass.contains(Point(x,y)) or reserved.contains(Point(x,y)):continue
  body+=f'<path d="M{x-13} {y} l-5 -14 M{x} {y} l3 -20 M{x+13} {y} l7 -12" stroke="#7BAA70" stroke-width="3" stroke-linecap="round"/>'
-# Choose open nap pockets before creating pose-adjacent decor, then resolver validates exact rules.
 spots={k:[] for k in ['nod','hammock','rock','leaf','book','chair','wing','box']}; taken=[]
 for p in [p for p in props if p['name']=='Tree']:
  if len(spots['nod'])>=5:break
@@ -134,7 +125,6 @@ for round_ in range(5):
     props.remove(p)
     obs[:]=[o for o in obs if o.get('x')!=p['x'] or o.get('y')!=p['y']-12]
    spots[pose].append([x,y,round_%2==0]);taken.append((x,y,pose));break
-# Restore lush border pockets wherever their whole silhouettes clear the sleeping Duckies.
 for j in range(4000):
  if sum(p['name']=='Tree' for p in props)>=30:break
  x=r.randint(850,6950);y=r.randint(1120,4700);pt=Point(x,y)

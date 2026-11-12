@@ -1,4 +1,3 @@
-// Production GLSL in the existing native, windowless OpenGL harness.
 import sharp from 'sharp';
 import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -34,8 +33,6 @@ for(const [name,lon,lat,zoom,ball]of [
  if(!result.endsWith('GL error: 0'))throw Error(result);
  const label=Buffer.from(`<svg width="${W}" height="${H}"><g fill="#fff0c7" font-family="Arial"><text x="24" y="35" font-size="22">${name} | 22 decorative islets | 11 approved artworks</text><text x="24" y="976" font-size="15">Production globe shader | native offscreen OpenGL | static previews | no browser timing claim</text></g></svg>`);
  await sharp(pixels,{raw:{width:W,height:H,channels:4}}).flip().composite([{input:label,left:0,top:0}]).png().toFile(`${out}/ingame-${name}.png`);
- // Independently render with islets disabled, so the comparison finds actual
- // rendered islet pixels and catches any drawing outside the sphere.
  job.uniforms.uIsletSizes=ISLETS.flatMap(i=>[i.width,i.width,2,i.artIndex]);job.output=`${tmp}/without.rgba`;writeFileSync(`${tmp}/job.json`,JSON.stringify(job));
  execFileSync(`${tmp}/offscreen`,[`${tmp}/job.json`]);const without=readFileSync(job.output);let changed=0,exterior=0;
  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const k=(y*W+x)*4,delta=Math.abs(pixels[k]-without[k])+Math.abs(pixels[k+1]-without[k+1])+Math.abs(pixels[k+2]-without[k+2]);if(delta>8){changed++;if(ball===1&&Math.hypot(x-W/2,y-H/2)>R*zoom+2)exterior++;}}

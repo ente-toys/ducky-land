@@ -1,6 +1,3 @@
-// boss 6 Nov ("room for 100 Duckies, and stalls"): load test of the real room server. N players walk round ONE island (a
-// click every ~2 s each), the server ticks 20 times a second, and this prints what one tick costs and what each player is sent.
-//   node scripts/load-room.mjs [players=100] [island=blossom] [seconds=20]
 import {performance} from 'node:perf_hooks';
 import {fileURLToPath} from 'node:url';
 import {makeRoom, addPlayer, wander, seeded} from '../qa/room-harness.mjs';
@@ -14,11 +11,11 @@ export async function loadTest({players: N = 100, island = 'blossom', seconds = 
     if (nav.walkable(x, y)) spots.push({x, y});
   }
   const players = spots.map((p, n) => addPlayer(room, n, {islandId: island, ...p}));
-  room.timer = 'manual';   // the harness drives the 50 ms tick itself
+  room.timer = 'manual';
   room.broadcast();
   for (const p of players) {p.socket.sent = 0; p.socket.bytes = 0;}
   const steps = seconds * 20, times = [];
-  let commandMs = 0;   // the clicks: each one plans a walking route on the server (the costly part on a big island)
+  let commandMs = 0;
   for (let i = 0; i < steps; i++) {
     room.timer = 'manual';
     const c0 = performance.now();

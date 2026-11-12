@@ -1,5 +1,3 @@
-// New children may be sized after insertion. Apply the tilt correction once, at the next frame,
-// rather than walking every loaded island's thousands of children on every frame.
 export function trackUpright(layers, tilt) {
   const pending = new Set();
   const listeners = layers.map(([layer, standingOnly = false]) => {

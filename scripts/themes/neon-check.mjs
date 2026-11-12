@@ -1,4 +1,3 @@
-// Theme-local acceptance check. Does not change the shared registry.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
@@ -38,7 +37,6 @@ const pOffLand=art.props.filter(p=>!p.src.startsWith('centre/')&&!/flower|lily|r
 assert.deepEqual(pOffLand,[],'solid prop on water');
 const rawPaths=read(D+'paths.json');
 const pathBlocked=[];
-// makeMap adds the engine-drawn harbour deck to the authored walking map.
 for(const [i,line] of rawPaths.entries())for(const pt of line){if(nav.walkable(...pt))continue;const c=world.zones.centre;if(((pt[0]-c.x)/c.rx)**2+((pt[1]-c.y)/c.ry)**2>1)pathBlocked.push({path:i,pt});}
 assert.deepEqual(pathBlocked,[],'path centre points blocked outside central clock');
 const reserved=Object.entries(world.zones).filter(([id])=>/^(activity|stalls)-/.test(id));
@@ -61,7 +59,6 @@ const metrics=read(A+'build-metrics.json');
 Object.assign(metrics,{props:art.props.length,trees:art.props.filter(p=>/reuse\/(?:tree-[1-5]|nature--tree-)/.test(p.src)).length,bigHomeTrees:bigTrees.length,groundDecals:art.flats.length,pathsWidth:{main:200,minor:180},sea:art.sea,pondDockReachable:true,ready:report.ready,sleepRequested:40,sleepResolved:40,problems:report.problems,sleepNotes:report.sleepNotes});
 fs.writeFileSync(A+'build-metrics.json',JSON.stringify(metrics,null,1)+'\n');
 console.log('READY neon',JSON.stringify(result));
-// Final craft invariants: curved seats have real curved collision, and every loaded asset is vector.
 const benches=read(A+'ten-benches.json');
 assert.equal(benches.length,14);
 for(const b of benches){

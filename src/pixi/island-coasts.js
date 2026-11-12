@@ -1,7 +1,5 @@
-// Pure geometry shared by placement and live-copy ownership. Map rectangles
-// include transparent sea; they are only useful as a broad-phase bound.
-export const SHORE_BAND = 160; // conservative outer beach/surf envelope, in world units
-export const SEA_CHANNEL = 300; // open water beyond both shore envelopes (boat diameter: 92)
+export const SHORE_BAND = 160;
+export const SEA_CHANNEL = 300;
 
 const ellipse = (x, y, rx, ry) => Array.from({length:48}, (_, i) => {
   const a = i * Math.PI / 24, k = 1 / Math.cos(Math.PI / 48);
@@ -45,7 +43,6 @@ function segmentGap(a,b,c,d) {
   if(boxGap(box([a,b]),box([c,d]))===0 && cross(a,b,c)*cross(a,b,d)<=0 && cross(c,d,a)*cross(c,d,b)<=0)return 0;
   return Math.min(pointSegment(a,c,d),pointSegment(b,c,d),pointSegment(c,a,b),pointSegment(d,a,b));
 }
-// Exact polygon edge distances, including crossing edges and complete containment.
 export function coastGap(A,B) {
   let best=Infinity;
   for(const a of A)for(const b of B) {

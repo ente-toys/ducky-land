@@ -1,17 +1,12 @@
-// Pass 2: deliberately placed, static pond/grove life. No gameplay geometry changes.
-// Run from the repository root. Safe to reapply after merging other builders' art.
 import fs from 'node:fs';
 
 const base = 'public/pixi-art/themes/bog-arena/';
 let ground = fs.readFileSync(base + 'ground.svg', 'utf8');
 ground = ground.replace(/\s*<g id="midnight-soil"[\s\S]*?<\/g>/, '');
 fs.writeFileSync(base + 'ground.svg', ground);
-// The old fallback still had 108 translucent grove ovals and the previous palette.
-// Keep the actual floor and its loading fallback identical, including the shore.
 fs.writeFileSync('public/pixi-art/globe/bog-arena-ground.svg',
   ground.replace('width="8400" height="8200"', 'width="1024" height="1000"'));
 
-// Reuse the existing Home stone paths beneath a small, quiet frog silhouette.
 const rock = fs.readFileSync(base + 'home/rock.svg', 'utf8')
   .replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '')
   .replaceAll('#E4C567', '#ba92bf').replaceAll('#39472D', '#342d35');
@@ -27,8 +22,6 @@ fs.writeFileSync(base + 'home/pond-frog.svg', `<svg xmlns="http://www.w3.org/200
   <g fill="#342d35"><circle cx="30" cy="18" r="2"/><circle cx="50" cy="18" r="2"/></g>
 </svg>\n`);
 
-// No firefly system exists. Three tiny winged specks per authored grove pocket,
-// with no ring, pulse, trail or bright pickup-sized centre.
 fs.writeFileSync(base + 'home/firefly-glints.svg', `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="72" viewBox="0 0 128 72">
   <title>Three still dusk fireflies</title>
   <g fill="#fff0c7" opacity=".42">
@@ -54,23 +47,18 @@ function prop(id, name, x, y, width, height, extra = {}) {
   art.props.push({id: 'ground-life-' + id, name, src: `home/${name}.svg`, x, y, width, height,
     scale: 1, anchor: {x: .5, y: 1}, shadow: false, wind: false, ...extra});
 }
-// All four frogs sit inside existing non-walkable water, including the cove.
 for (const [id, x, y] of [['west-pool', 2165, 2700], ['east-pool', 6500, 2680],
   ['willow-pool', 5800, 3530], ['cove', 4745, 7210]]) prop(id, 'pond-frog', x, y, 80, 64);
-// Composed grove feet, away from the courts, cover and lane junctions.
 for (const [id, x, y] of [['nw', 1160, 2100], ['ne', 7140, 2050],
   ['west-pool', 2470, 3060], ['site-b', 7110, 4210], ['mid', 5050, 1740],
   ['sw', 1110, 6120], ['se', 7130, 6050], ['cove', 3510, 6660]]) {
   prop('fireflies-' + id, 'firefly-glints', x, y, 128, 72);
 }
-// Pass 1 already supplied six moths; finish the two southern base gardens.
 for (const [id, x, y] of [['sw', 2530, 5710], ['se', 7170, 5780]]) {
   prop('moth-' + id, 'cream-moth', x, y, 32, 24,
     {homeSource: '/pixi-art/themes/community/detail/garden-butterfly.svg'});
 }
 for (const p of art.props.filter(p => p.name === 'lantern')) {
-  // Flat sprites use a bottom-centre anchor in theme-art.js. Offset half the
-  // decal height so its centre lands beneath the lantern, not behind it.
   art.flats.push({id: 'ground-life-glow-' + p.id, src: 'home/lantern-ground-glow.svg',
     x: p.x, y: p.y + 22, width: 110, height: 44});
 }

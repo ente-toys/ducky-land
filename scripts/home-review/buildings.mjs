@@ -11,7 +11,6 @@ function cottage({roof='#d9a94c',wall='#fff0c7',doorColor='#c78a56',type='gable'
  s+=`<path d="M267 58V14H291V67" fill="#f3ddb1"/><path d="M263 13L267 8H294V17H263Z" fill="#fff0c7"/>`;
  if(type==='curved')s+=`<path d="M18 131Q38 89 70 90Q110 90 130 58Q180 4 230 58Q250 90 290 90Q322 89 342 131Q307 144 274 134Q180 100 86 134Q53 144 18 131Z" fill="${roof}"/><path d="M18 131Q54 150 93 135Q180 108 267 135Q306 150 342 131V140Q302 158 266 143Q180 117 94 143Q57 158 18 140Z" fill="#fff0c7"/>`;
  else s+=`<path d="M20 130L57 67L180 25L303 67L340 130L322 140H38Z" fill="${roof}"/><path d="M38 130L180 48L322 130L317 139L180 61L43 139Z" fill="#fff0c7"/><path d="M72 110L180 49L288 110" fill="none" stroke-width="1.2"/>`;
- // Upright centred façade, matched eaves and base. No oblique side slab.
  s+=`<path d="M72 134L180 72L288 134V${base}H72Z" fill="${wall}"/><path d="M67 134L180 66L293 134L287 143L180 79L73 143Z" fill="#ffe6a2"/>`;
  if(type==='dormer')s+=`<path d="M151 105V69L180 43L209 69V105Z" fill="${wall}"/><path d="M143 72L180 34L217 72L212 78L180 47L148 78Z" fill="${roof}"/>${win(168,66,24,30)}`;
  else s+=win(164,99,32,35,true);
@@ -36,7 +35,6 @@ const cases={
 const audit=JSON.parse(readFileSync('scripts/home-review/building-audit.json'));
 for(const p of E.props){let art=cases[p.id]?cottage(cases[p.id]):p.id==='hamlet-butterbill-bakery'?bakery():p.id==='hamlet-clovercrust-barn'?barn():null;
  if(!art)continue;
- // Occupational details distinguish the studio/shop and maritime homes.
  if(p.id.includes('art-studio'))art+=`<path d="M231 254H278V274H231Z" fill="#bd894d"/><path d="M237 253L232 224L243 226L247 253M250 252L255 216L263 219L258 252" fill="#eee7bb"/>`;
  if(p.id.includes('pottery-shop'))art+=`<path d="M81 254Q74 239 88 230V219H99V230Q112 239 105 254Z M111 254Q105 237 118 230V222H130V231Q144 240 137 254Z" fill="#c59967"/>`;
  if(p.id.includes('netmaker'))art+=`<path d="M90 155L130 155L140 232L82 232Z" fill="none" stroke="#526e60"/><path d="M90 170L135 205M88 188L139 224M95 155L136 189M126 156L84 213M134 174L97 232M140 198L117 232" fill="none" stroke-width="1"/>`;

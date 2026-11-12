@@ -7,7 +7,6 @@ if(theme==='fair'){
  const [world,walk,harbor]=await Promise.all(['world','walk-world','harbor'].map(n=>load('/assets/world/themes/fair/'+n+'.json')));
  const sleepers=await load('/assets/world/themes/fair/sleepers-resolved.json');
  registerMap('fair',{world,walk,harbor,sleepers,art:'/pixi-art/themes/fair/art.json',sea:'#7FD3D6'});
- // Runtime-only preview binding, never writes the shared registry.
  THEME_OF.set('isle-170','fair');
  Object.assign(worldIsland('isle-170'),{theme:'fair',name:'Waddlewish Fair',width:7250,height:4850});
 }

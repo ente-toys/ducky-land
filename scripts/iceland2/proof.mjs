@@ -11,7 +11,6 @@ for(const p of art.props.toSorted((a,b)=>a.y-b.y))svg+=nested(p,[.5,1]);
 svg+='</svg>';
 await sharp(Buffer.from(svg)).png().toFile(out+'/proof.png');
 
-// Native-size asset compositions for close-up inspection, not browser captures.
 for (const name of ['rink','plaza','bakery','lodge','workshop','harbour','snowman','sledHill']) {
  let {x,y}=w.zones[name];
  if(name==='rink'){const rink=art.flats.find(p=>p.id==='rink');x=rink.x+rink.width/2;y=rink.y+rink.height/2;}

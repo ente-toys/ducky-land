@@ -1,4 +1,3 @@
-// Asset assembly at native game scale. Deliberately labelled as offline, not browser proof.
 import {render} from './neon-render.mjs';
 import sharp from 'sharp';import fs from 'node:fs';
 const A='public/pixi-art/themes/neon/',O='../concepts/themes/work/neon/';

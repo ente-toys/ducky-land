@@ -1,4 +1,3 @@
-// Home's actual curved seating construction, on the three Canal activity rings.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 const A='public/pixi-art/themes/canal/',D='assets/world/themes/canal/',rd=p=>JSON.parse(readFileSync(p));

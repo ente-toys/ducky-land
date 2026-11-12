@@ -1,4 +1,3 @@
-// Complete Tickytown after neon-world.mjs. Only writes neon assets and map files.
 import fs from 'node:fs';
 import {geometry, inPoly} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -9,7 +8,6 @@ const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const art=read(A+'art.json'), world=read(D+'world.json'), walk=read(D+'walk-world.json'), harbor=read(D+'harbor.json');
 const placements=read(D+'placements.json');
-// Some inherited beach props contain old gradient definitions. Flatten only Neon copies.
 for(const file of fs.readdirSync(A+'reuse').filter(f=>f.endsWith('.svg'))){
  let source=fs.readFileSync(A+'reuse/'+file,'utf8');
  const fills=new Map();
@@ -39,13 +37,10 @@ for(let x=-rx+34;x<rx-24;x+=64) if(Math.abs(x)>265) floor.push(`<path d="M${x} -
 floor.push('</g>');
 const floorPiece={...svg('decal-floor',[-rx-4,-ry-4,2*rx+8,2*ry+8],floor.join('')),layer:'decal',note:'Flat pink paving, cream ring and four zebra crossings. No glow.'};
 
-// Separate front step lip for correct y sorting around the landmark.
 const tower=fs.readFileSync(A+'centre/tower.svg','utf8');
 const box=tower.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number);
 const th=900, tw=+(th*box[2]/box[3]).toFixed(1), top=-820, left=-tw/2;
-// The locked pick has a shaded back wall behind the pendulum, not a view through the paving.
 const faces=[];
-// Restore clean clock markings at source-pixel coordinates after tracing small details.
 for(const [cx,angle,hour] of [[232,-14,0],[413,14,2]]){
  const cy=505;
  faces.push(`<g transform="rotate(${angle} ${cx} ${cy})"><ellipse cx="${cx}" cy="${cy}" rx="65" ry="74" fill="#FFF0C7" stroke="#B86F22" stroke-width="4"/>`);
@@ -70,18 +65,15 @@ art.props=art.props.filter(p=>p.id!=='neon-0'&&!p.id.startsWith('neon-centre-'))
 art.flats=art.flats.filter(p=>!p.src.startsWith('centre/'));
 art.flats.push({src:'centre/decal-floor.svg',x:ox+floorPiece.x,y:oy+floorPiece.y,width:floorPiece.width,height:floorPiece.height,topLeft:true});
 for(const p of [body,front]) art.props.push({id:'neon-centre-'+p.id,name:front===p?'Clock tower front step':'Twin clock tower',src:'centre/'+p.file,x:ox+p.at[0],y:oy+p.sortY,width:p.width,height:p.height,anchor:p.anchor,scale:1,shadow:false,sortY:oy+p.sortY});
-// The old placeholder is the first obstacle produced by neon-world.mjs.
 const old=placements.find(p=>p.id==='neon-0');
 walk.obstacles=walk.obstacles.filter(o=>!o.neonCentre && !(old && o.x===old.x && Math.abs(o.y-(old.y-old.width*old.scale*.2))<1));
 walk.obstacles.push({x:ox,y:oy+8,rx:tw*.47,ry:83,neonCentre:true});
 world.paths=read(D+'paths.json'); walk.paths=world.paths;
 world.zones.centre={...c,name:'Clock crossing',landmark:'neon-centre-tower-body',placeholder:false,lockedConcept:centre.concept};
 world.ambient={birds:[[ox-1000,oy-1000],[ox+1500,oy-900],[ox-2100,oy],[ox+1700,oy+600],[ox-1200,oy+1300],[ox+800,oy+1500]],butterflies:[[world.zones['flower-park'].x,world.zones['flower-park'].y],[world.zones['pond-park'].x,world.zones['pond-park'].y]]};
-// Match solid obstacles in both maps. makeMap still uses walk-world as its detailed walking map.
 world.obstacles=walk.obstacles;
 world.props=art.props.map(({id,name,x,y,width,height,anchor,scale,src})=>({id,name,x,y,width,height,anchor,scale,src}));
 
-// Resolve against the actual engine rules, including 900-unit same-pose spacing.
 const nav=geometry(walk), sizes=sleepHalfWidths(), out=[], spots={};
 let seed=5215; const rnd=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
 const counts={nod:6,hammock:3,rock:4,leaf:6,book:6,chair:3,wing:7,box:5};
@@ -126,7 +118,6 @@ const map=makeMap('neon',{world,walk,harbor,art:'/pixi-art/themes/neon/art.json'
 const n=map.nav();
 const routes=Object.entries(world.zones).map(([name,z])=>({name,walkable:n.walkable(...z.spawn),reachable:!!n.route(map.spawn.x,map.spawn.y,...z.spawn).length||n.clearLine([map.spawn.x,map.spawn.y],z.spawn)}));
 const land=Math.abs(world.coast.reduce((s,p,i)=>{const q=world.coast[(i+1)%world.coast.length];return s+p[0]*q[1]-q[0]*p[1]},0))/2;
-// Preview only. The game draws this deck itself with drawJetty in harbor.js.
 const [hx,hy]=harbor.jetty.foot, [,ty]=harbor.jetty.tip, hw=harbor.jetty.width;
 const harborParts=[`<rect x="${hx-hw/2}" y="${hy}" width="${hw}" height="${ty-hy}" fill="#C99548" stroke="#55513B" stroke-width="3"/>`];
 for(let y=hy+24;y<ty;y+=26)harborParts.push(`<path d="M${hx-hw/2} ${y} h${hw}" stroke="#987336" stroke-width="2"/>`);

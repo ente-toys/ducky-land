@@ -1,5 +1,3 @@
-// Run against the baseline first, then the changed worktree. Headless only.
-// PERF_URL=http://127.0.0.1:5317 node scripts/globe-perf/benchmark.mjs before|after
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const tag=process.argv[2]??'after',out='../concepts/themes/world-map/spread';mkdirSync(out,{recursive:true});
@@ -64,7 +62,6 @@ try{
   const start=harborOf('home').water,to=destinationsFor('home')[0].dock,route=sailRoute('home',start,to);
   if(!route?.length)throw Error('No sailing benchmark route');
   const actor={...start,islandId:'home',mode:'sailing',sailTarget:route[0],sailRoute:route.slice(1)};
-  // Exercise the same boat motion and detailed-copy views used on a voyage.
   const original=game.tick;game.benchmarkSailOriginal=original;
   game.tick=function(now){sailStep(actor,1/60,{x:0,y:0});reviewCamera(actor.x,actor.y,.5);return original.call(this,now);};
  });

@@ -33,11 +33,9 @@ def transform_shape(o, scale, origin=(0,0), target=(0,0)):
     if 'poly' in p:p['poly']=[[(x-origin[0])*scale+target[0],(y-origin[1])*scale+target[1]] for x,y in p['poly']]
     return p
 
-# One calm shoreline per map, authored independently of the discarded cells.
 coast = [[600,2400],[760,1500],[1450,850],[2700,580],[4100,650],[5350,580],
          [6700,950],[7350,1800],[7420,3000],[7000,4050],[6200,4870],
          [4900,5210],[4000,5260],[2800,5150],[1650,4700],[850,3700]]
-# Periodic Catmull-Rom samples are shared by the drawing and collision outline.
 knots=coast;coast=[]
 for i,p1 in enumerate(knots):
     p0,p2,p3=knots[i-1],knots[(i+1)%len(knots)],knots[(i+2)%len(knots)]
@@ -46,7 +44,6 @@ for i,p1 in enumerate(knots):
         coast.append([round(.5*((2*p1[k])+(-p0[k]+p2[k])*u+(2*p0[k]-5*p1[k]+4*p2[k]-p3[k])*u*u+(-p0[k]+3*p1[k]-3*p2[k]+p3[k])*u*u*u),2) for k in [0,1]])
 def outline():return 'M'+'L'.join(f'{x},{y}' for x,y in coast)+'Z'
 def ground(theme, snowy, paths):
-    # Soft parallel path edges and small, individually placed banks give the set pieces a shared ground.
     land = '#F4FAFC' if snowy else '#B4CC88'; edge='#B8E1EB' if snowy else '#87AA75'
     sand='#D8EEF2' if snowy else '#E2D29D'; lane='#E5EFEA' if snowy else '#DED2AF'
     body=f'<path d="{outline()}" fill="{sand}" stroke="{edge}" stroke-width="65" stroke-linejoin="round"/><path d="{outline()}" fill="{land}" stroke="{sand}" stroke-width="145" stroke-linejoin="round"/>'
@@ -60,7 +57,6 @@ def ground(theme, snowy, paths):
         body+='<ellipse cx="4000" cy="2750" rx="1120" ry="760" fill="#92D7EC" stroke="#C9EBF5" stroke-width="70"/><ellipse cx="4000" cy="2750" rx="1020" ry="660" fill="#B9EAF5"/><path d="M3200 2540Q3410 2200 3830 2220M3210 2620Q3450 2330 3750 2330M4270 3170Q4650 3210 4830 2880" fill="none" stroke="#ECFAFF" stroke-width="22" stroke-linecap="round"/>'
     else:
         body+='<ellipse cx="6300" cy="3900" rx="470" ry="300" fill="#82B7A7" stroke="#A8C594" stroke-width="45"/><path d="M5980 3900Q6150 3850 6270 3910M6450 4030L6590 4030" fill="none" stroke="#C7E4C5" stroke-width="14" stroke-linecap="round"/>'
-    # Render the same authored vector into modest tiles, with transparent sea.
     tiles=[]
     for row in range(3):
         for col in range(4):
@@ -111,7 +107,6 @@ for district,name,at in areas:
                 q=port_item(p,b,district,.78,(3555,2478),at,district+'-')
                 a[layer].append(q)
                 if layer=='props':
-                    # Base ellipses, small lamps and tree trunks, not whole sprite rectangles.
                     if 'snow-fir' in p['id']:rx,ry=82,45
                     elif 'bench' in p['id']:rx,ry=58,25
                     elif 'lamp' in p['id']:rx,ry=15,12
@@ -119,13 +114,11 @@ for district,name,at in areas:
                     else:continue
                     w['obstacles'].append({'x':q['x'],'y':q['y']-8,'rx':rx,'ry':ry,'prop':q['id']})
     w['zones'][district]={'name':name,'x':at[0],'y':at[1],'spawn':[at[0],at[1]+350]}
-# Distinct, explicitly composed neighbourhood landmarks from the chosen B build.
 sites=[('lodge',1700,1520,830,560,'Snowbob lodge'),('greenhouse',1240,3600,600,470,'Snow garden greenhouse'),('observatory',6350,1500,720,600,'Waddlefrost observatory'),('market-stall-0',5600,3650,350,310,'Cocoa stall'),('market-stall-1',6150,3800,350,310,'Winter makers stall'),('campfire',5000,4500,380,310,'Flurryfluff campfire')]
 for i,(asset,x,y,width,height,name) in enumerate(sites):
     src=f'/pixi-art/iceland/build-b/{asset}.svg';copy_asset(b,'public'+src)
     a['props'].append({'id':f'ice-site-{i}','name':name,'src':src,'x':x,'y':y,'width':width,'height':height,'anchor':{'x':.5,'y':1},'shadow':False})
     w['obstacles'].append({'x':x,'y':y-35,'rx':width*.30,'ry':45,'prop':f'ice-site-{i}'})
-# Small authored groves frame the lodges and three courts; no random filler.
 groves=[(1100,1550),(1350,1750),(2350,1390),(2550,1620),(1000,2850),(1280,3060),(6750,1650),(6970,1890),(6900,2900),(6600,3100),(2700,4380),(2850,4620),(5400,4500),(5660,4660)]
 for i,(x,y) in enumerate(groves):
     src=f'/pixi-art/themes/snow/detail/pine-{i%3+1}.svg';copy_asset(b,'public'+src)

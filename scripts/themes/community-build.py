@@ -1,14 +1,3 @@
-# Campfire Commons (theme id `community`): the Ente community hangout island, mellowed Discord purples, no logo.
-# Builds the whole island from one layout, in the home island's formats (concepts/themes/THEME-CONTRACT.md).
-#   <venv python3.11 with scipy> scripts/themes/community-build.py
-# Writes
-#   public/pixi-art/themes/community/ground.svg + ground-rN-cN.svg (5 x 4 tiles), jetty-*.svg, bridge-islet-*.svg,
-#   lights-*.svg (the plaza string lights), art.json
-#   assets/world/themes/community/world.json, walk-world.json, harbor.json
-# Props are the traced GPT pieces in public/pixi-art/themes/community/detail/ (scripts/themes/community-trace-all.sh) plus
-# home's own plants and ground decals at their home paths. Deterministic.
-# Concept: concepts/themes/concepts/21-community-discord-d2.png. LOCKED centre: concepts/themes/community-centre/community-centre-3.png
-# (campfire circle, log seats, string lights, big event notice board on a lavender flagstone plaza).
 import json, math, os, re
 import numpy as np
 from scipy.spatial import Voronoi
@@ -17,19 +6,17 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ART = os.path.join(ROOT, 'public/pixi-art/themes/community')
 DATA = os.path.join(ROOT, 'assets/world/themes/community')
 GEN = os.path.join(ROOT, '..', 'concepts/themes/community-gen')
-W, H = 8000, 5800                              # boss 6 Nov: ~1.8x home's land (home is 5800 x 4400)
-TW, TH = [1600] * 5, [1450] * 4                # 5 x 4 tiles, each about home's tile size
+W, H = 8000, 5800
+TW, TH = [1600] * 5, [1450] * 4
 
-# ---------------------------------------------------------------- palette: home ink, cream and sea; mint grass, lavender stone
 INK, CREAM, SEA = '#39472D', '#FFF0C7', '#6EC9DE'
-GRASS, LEAF = '#94C978', '#4FA65A'               # a mellow mint-leaning lawn, home's leaf washes
-SAND, SAND_SHADE = '#F7E2B2', '#E3C68B'          # soft sand
-PATH, PATH_SHADE = '#D3CEF4', '#A9A2E2'          # lavender flagstone paths
-PAVE, PAVE_JOINT, KERB = '#C4BFF0', '#9C95DC', '#8A82CF'   # plaza paving (centre-3)
+GRASS, LEAF = '#94C978', '#4FA65A'
+SAND, SAND_SHADE = '#F7E2B2', '#E3C68B'
+PATH, PATH_SHADE = '#D3CEF4', '#A9A2E2'
+PAVE, PAVE_JOINT, KERB = '#C4BFF0', '#9C95DC', '#8A82CF'
 BLURPLE, LAVENDER, MINT, ONLINE = '#6F78D8', '#C9C3F2', '#8FE0B0', '#5BC48A'
 WOOD, DARK_WOOD = '#C88941', '#885931'
 
-# ---------------------------------------------------------------- helpers
 def halton(i, b):
     f, r = 1, 0
     while i > 0:
@@ -101,11 +88,8 @@ def area_of(p): return abs(sum(p[i][0] * p[(i + 1) % len(p)][1] - p[(i + 1) % le
 def towards(p, q, d):
     L = math.hypot(q[0] - p[0], q[1] - p[1]); return (p[0] + (q[0] - p[0]) / L * d, p[1] + (q[1] - p[1]) / L * d)
 
-# ---------------------------------------------------------------- the island outline: a speech bubble with its tail to the south
-# A rounded superellipse body (the chat bubble) and a soft tail at the bottom, a little left of centre, where the harbor jetty
-# runs out. Land ~1.8x home's (home's coast 11.09M units^2).
 CX, CY, RX, RY, NSE = 4000, 2560, 3080, 1880, 2.5
-T0 = math.pi / 2 + .085                        # where the tail leaves the bubble (screen angle, y down)
+T0 = math.pi / 2 + .085
 def coast_line(n=260):
     pts = []
     for k in range(n):
@@ -113,17 +97,17 @@ def coast_line(n=260):
         c, s = math.cos(t), math.sin(t)
         x = CX + RX * math.copysign(abs(c) ** (2 / NSE), c)
         y = CY + RY * math.copysign(abs(s) ** (2 / NSE), s)
-        w = 1 + .010 * math.sin(5 * t + 1.3) + .007 * math.sin(9 * t + .4)          # a hand-drawn wobble
+        w = 1 + .010 * math.sin(5 * t + 1.3) + .007 * math.sin(9 * t + .4)
         x, y = CX + (x - CX) * w, CY + (y - CY) * w
         dt = math.atan2(math.sin(t - T0), math.cos(t - T0))
         tail = 560 * math.exp(-(dt / .11) ** 2)
-        y += tail; x += -tail * .28                                                 # the tail leans a touch west
+        y += tail; x += -tail * .28
         pts.append((x, y))
     return pts
 
-COAST = coast_line()                 # the grass edge
-SAND_EDGE = offset(COAST, 78)        # the sand rim's outer edge (the drawn shoreline)
-WALK_COAST = offset(COAST, 42)       # inset ~35 from the sand edge, like home's walk coast
+COAST = coast_line()
+SAND_EDGE = offset(COAST, 78)
+WALK_COAST = offset(COAST, 42)
 
 def coast_point(origin, direction):
     ox, oy = origin; dx, dy = direction; L = math.hypot(dx, dy); dx, dy = dx / L, dy / L
@@ -131,18 +115,16 @@ def coast_point(origin, direction):
     while in_poly(ox + dx * r, oy + dy * r, COAST): r += 4
     return (ox + dx * r, oy + dy * r), (dx, dy)
 
-# ---------------------------------------------------------------- the layout (world coordinates, one Ducky = 130)
-PLAZA = (4000, 2640, 820, 628)                   # the campfire commons (centre-3), ry = rx * .766 like home's ring camera
-SQUARE = (1820, 2760, 560, 400)                  # member wall square (west)
-POND = (1980, 1430, 470, 270)                    # the lily pond (north-west)
-PLAY = (6080, 1520, 560, 330)                    # playground sand (north-east)
-VOICE = (4000, 3780, 330, 250)                   # the voice circle (green ring, mic, cushions), south of the plaza
-BEACH = (6560, 3380, 760, 760)                   # sand beach (east-south-east, clipped to the coast sand)
+PLAZA = (4000, 2640, 820, 628)
+SQUARE = (1820, 2760, 560, 400)
+POND = (1980, 1430, 470, 270)
+PLAY = (6080, 1520, 560, 330)
+VOICE = (4000, 3780, 330, 250)
+BEACH = (6560, 3380, 760, 760)
 STAGE_AT = (4000, 1290)
-COVE = (900, 3150, 380, 330)                     # a small sand cove on the west coast                          # the events stage, north, facing the stage lawn
-PATH_W, MAIN_W = 160, 190                        # home's footpath core is 105: 1.5x, the main promenade 1.8x
+COVE = (900, 3150, 380, 330)
+PATH_W, MAIN_W = 160, 190
 
-# piers: (name, ray origin, ray direction, length). The first is the harbor jetty in harbor.json (drawn by the engine).
 PIER_RAYS = [('harbor', (3640, 3900), (0, 1), 430), ('nw', (1300, 1500), (-.9, -.44), 380),
              ('ne', (6700, 1500), (.8, -.6), 380), ('e', (6900, 3100), (1, .1), 400)]
 PIERS = []
@@ -152,7 +134,6 @@ for name, o, d, L in PIER_RAYS:
     tip = (foot[0] + dx * L, foot[1] + dy * L)
     PIERS.append({'name': name, 'foot': foot, 'tip': tip, 'dir': (dx, dy), 'length': L, 'width': 104})
 
-# islet bridges: home's diagonal footbridge (bridge-jetty-2.svg) and its mirror, so the arch art is home's own (R = 70)
 BR2 = {'vb': (870.0355, 2996.0389, 337.9679, 475.3502), 'a': (1137.84, 3066.05), 'b': (940.19, 3417.43)}
 ARCH_R = 70
 def bridge_at(a_world, mirror):
@@ -174,7 +155,6 @@ for br, (rx, ry) in zip(BRIDGES, [(470, 290), (470, 290)]):
 
 hp = PIERS[0]
 
-# ---------------------------------------------------------------- open ground: activity areas and stall rows (boss 6 Nov)
 ACTIVITY = [
     {'id': 'activity-1', 'name': 'Stage lawn', 'kind': 'lawn', 'c': (4000, 1800), 'rx': 640, 'ry': 220},
     {'id': 'activity-2', 'name': 'Game square', 'kind': 'square', 'c': (5800, 2700), 'rx': 470, 'ry': 300},
@@ -200,39 +180,27 @@ def in_stall(x, y, s, pad=0):
 def in_open(x, y, pad=0):
     return any(in_ell(x, y, *A['c'], A['rx'] + pad, A['ry'] + pad) for A in ACTIVITY) or any(in_stall(x, y, s, pad) for s in STALLS)
 
-# ---------------------------------------------------------------- footpaths (centre lines, smoothed)
 px, py, prx, pry = PLAZA
 def on_plaza(deg, out=-30):
     a = math.radians(deg); return (px + math.cos(a) * (prx + out), py + math.sin(a) * (pry + out))
 PATHS = [
-    # plaza north -> stage lawn
     {'pts': [on_plaza(-90), (4000, 1900)], 'w': MAIN_W},
-    # plaza south -> voice circle -> the tail -> harbor jetty
     {'pts': [on_plaza(90), (4000, 3420), (4000, 3560)], 'w': MAIN_W},
     {'pts': [(3980, 4010), (3880, 4180), (hp['foot'][0] + 20, hp['foot'][1] - 260), towards(hp['foot'], (hp['foot'][0], hp['foot'][1] - 300), -40)], 'w': MAIN_W},
-    # plaza west -> member square -> north-west pier (round the pond)
     {'pts': [on_plaza(180), (2900, 2700), (SQUARE[0] + SQUARE[2] - 20, SQUARE[1] - 20)], 'w': MAIN_W},
     {'pts': [(SQUARE[0] - 120, SQUARE[1] - SQUARE[3] + 30), (1600, 2100), (1450, 1780), (1350, 1560)] + [towards(PIERS[1]['foot'], (1350, 1560), -40)], 'w': PATH_W},
-    # plaza east -> game square -> beach -> east pier
     {'pts': [on_plaza(0), (5150, 2690), (5340, 2700)], 'w': MAIN_W},
     {'pts': [(6260, 2760), (6500, 2900), (6700, 3050)] + [towards(PIERS[3]['foot'], (6700, 3050), -40)], 'w': PATH_W},
-    # plaza north-west -> meadow lawn -> pond
     {'pts': [on_plaza(-135), (3200, 2140), (3020, 1990)], 'w': PATH_W},
     {'pts': [(2400, 1760), (2250, 1640), (POND[0] + 260, POND[1] + POND[3] + 60)], 'w': PATH_W},
-    # plaza north-east -> playground -> north-east pier
     {'pts': [on_plaza(-45), (5000, 2130), (5350, 1880), (PLAY[0] - PLAY[2] + 60, PLAY[1] + 80)], 'w': PATH_W},
     {'pts': [(PLAY[0] + 260, PLAY[1] - PLAY[3] + 40), (6420, 1080)] + [towards(PIERS[2]['foot'], (6420, 1080), -40)], 'w': PATH_W},
-    # stage lawn ends -> the two round pavilions -> meadow (west) and playground (east)
     {'pts': [(3370, 1760), (3180, 1560), (2930, 1430)], 'w': PATH_W},
     {'pts': [(4630, 1760), (4820, 1560), (5070, 1430)], 'w': PATH_W},
-    # member square south -> market row -> west islet bridge
     {'pts': [(SQUARE[0] + 120, SQUARE[1] + SQUARE[3] - 20), (2000, 3300), (2060, 3560), (BRIDGES[0]['a'][0] + 60, BRIDGES[0]['a'][1] - 140), towards(BRIDGES[0]['a'], (2060, 3560), -30)], 'w': PATH_W},
-    # voice circle west -> hangout corner -> market row
     {'pts': [(3670, 3800), (3350, 3760), (3010, 3640)], 'w': PATH_W},
-    # voice circle east -> hangout corner -> beach stalls -> east islet bridge
     {'pts': [(4330, 3800), (4650, 3760), (4930, 3640)], 'w': PATH_W},
     {'pts': [(5910, 3600), (6000, 3800), (BRIDGES[1]['a'][0] - 60, BRIDGES[1]['a'][1] - 140), towards(BRIDGES[1]['a'], (6000, 3800), -30)], 'w': PATH_W},
-    # game square south -> beach stalls
     {'pts': [(5800, 3000), (5700, 3260), (5640, 3430)], 'w': PATH_W},
 ]
 for br, isl in zip(BRIDGES, ISLETS):
@@ -274,7 +242,6 @@ def hides_deck(x, y, w, h):
                 if y > py_ - 10 and y - h * .95 < py_ and abs(px_ - x) < w / 2 + 10: return True
     return False
 
-# ---------------------------------------------------------------- flagstones (centre-3's irregular lavender stones)
 def flagstone_lines(cx, cy, rx, ry, seed, step=118):
     r = rnd(seed); pts = []
     y = cy - ry - step
@@ -291,7 +258,7 @@ def flagstone_lines(cx, cy, rx, ry, seed, step=118):
         a, b = vor.vertices[i], vor.vertices[j]
         ia, ib = inside(a), inside(b)
         if not ia and not ib: continue
-        if not (ia and ib):   # clip to the ellipse by bisection
+        if not (ia and ib):
             p, q = (a, b) if ia else (b, a)
             for _ in range(20):
                 m = (p + q) / 2
@@ -310,7 +277,6 @@ def hash_mark(x, y, dx, dy, s=15):
         d.append(f'M {f(a[0])} {f(a[1])} L {f(b[0])} {f(b[1])}')
     return ' '.join(d)
 
-# ---------------------------------------------------------------- ground SVG
 def paved(name, cx, cy, rx, ry, seed, kerb=KERB):
     g = [f'<g data-name="{name}">',
          f'<ellipse cx="{f(cx)}" cy="{f(cy)}" rx="{f(rx + 30)}" ry="{f(ry + 26)}" fill="{LEAF}" fill-opacity="0.32"/>',
@@ -381,7 +347,6 @@ def ground_svg():
         add('</g>')
         add(f'<path d="{smooth_d(offset(lb, -14))}" fill="none" stroke="{CREAM}" stroke-width="12" stroke-opacity="0.9" stroke-dasharray="1 30" stroke-linecap="round"/>')
         add(f'<path d="{smooth_d(lb)}" fill="none" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.25"/></g>')
-    # footpaths: home's four-stroke recipe (leaf halo, ink, shade, core), lavender stone with faint hash tiles
     for col, extra, op in [(LEAF, 34, .35), (INK, 18, .6), (PATH_SHADE, 14, 1), (PATH, 0, 1)]:
         add('<g data-name="Footpaths" fill="none" stroke-linecap="round" stroke-linejoin="round">')
         for p in PATHS:
@@ -396,11 +361,10 @@ def ground_svg():
             if in_ell(x, y, PLAZA[0], PLAZA[1], PLAZA[2] + 30, PLAZA[3] + 30): continue
             hashes.append(hash_mark(x, y, (b[0] - a[0]) / L, (b[1] - a[1]) / L))
     add(f'<path data-name="Hash path tiles" d="{" ".join(hashes)}" fill="none" stroke="{PATH_SHADE}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.8"/>')
-    # paved squares: the game square (open), stall rows, the member wall square, the campfire plaza, the voice circle
     for A in [A for A in ACTIVITY if A['kind'] == 'square']:
         g.extend(paved(f'{A["name"]} (open paved square)', *A['c'], A['rx'], A['ry'], 5))
         cx, cy = A['c']
-        for k in range(4):   # a checker border of game tiles round the rim (mellow, like the game tables)
+        for k in range(4):
             pass
     for s in STALLS:
         add(f'<g data-name="{s["name"]} (open stall row)">')
@@ -417,15 +381,14 @@ def ground_svg():
         add('</g>')
     g.extend(paved('Member wall square', *SQUARE, 3))
     g.extend(paved('Campfire commons', *PLAZA, 1))
-    cx, cy, rx, ry = PLAZA   # an inner ring round the fire, like centre-3
+    cx, cy, rx, ry = PLAZA
     add(f'<ellipse cx="{f(cx)}" cy="{f(cy + 10)}" rx="{f(rx * .5)}" ry="{f(ry * .5)}" fill="none" stroke="{PAVE_JOINT}" stroke-width="7" stroke-opacity="0.8"/>')
-    add(f'<ellipse cx="{f(cx)}" cy="{f(cy + 22)}" rx="150" ry="104" fill="{KERB}" fill-opacity="0.35"/>')   # scorched hearth patch under the fire
+    add(f'<ellipse cx="{f(cx)}" cy="{f(cy + 22)}" rx="150" ry="104" fill="{KERB}" fill-opacity="0.35"/>')
     g.extend(paved('Voice circle', *VOICE, 7))
     cx, cy, rx, ry = VOICE
     add(f'<ellipse cx="{f(cx)}" cy="{f(cy)}" rx="{f(rx * .72)}" ry="{f(ry * .72)}" fill="none" stroke="{INK}" stroke-width="24" stroke-opacity="0.55"/>')
     add(f'<ellipse cx="{f(cx)}" cy="{f(cy)}" rx="{f(rx * .72)}" ry="{f(ry * .72)}" fill="none" stroke="{ONLINE}" stroke-width="18"/>')
     add(f'<ellipse cx="{f(cx)}" cy="{f(cy - 3)}" rx="{f(rx * .72)}" ry="{f(ry * .72)}" fill="none" stroke="{MINT}" stroke-width="5"/>')
-    # the lily pond (home's lake recipe)
     cx, cy, rx, ry = POND
     pb = blob(cx, cy, rx, ry, 31, 18, .05)
     add(f'<g data-name="Lake water"><path d="{smooth_d(pb)}" fill="{SEA}"/>'
@@ -436,7 +399,6 @@ def ground_svg():
     for i in range(7):
         x, y = cx - rx * .6 + halton(i + 1, 2) * rx * 1.2, cy - ry * .5 + halton(i + 1, 3) * ry
         add(f'<path d="M {f(x)} {f(y)} q 14 -6 28 0" fill="none" stroke="{CREAM}" stroke-width="2.4" stroke-opacity="0.7" stroke-linecap="round"/>')
-    # stepping stones from the voice circle to the hangout corners (concept), grey-lavender
     for k in range(5):
         for sg in (-1, 1):
             x, y = VOICE[0] + sg * (VOICE[2] + 70 + k * 70), VOICE[1] + 150 + k * 22
@@ -448,7 +410,6 @@ def svg_doc(body, vb, title):
     return (f"<?xml version='1.0' encoding='utf-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{w}\" height=\"{h}\" viewBox=\"{x} {y} {w} {h}\">\n"
             f"<title>{title}</title>\n<desc>Original Ducky Land vector artwork: Campfire Commons ground (scripts/themes/community-build.py).</desc>\n" + '\n'.join(body) + '\n</svg>\n')
 
-# ---------------------------------------------------------------- jetties (home's drawJetty, src/pixi/harbor.js, as SVG)
 def jetty_svg(p, moorings=()):
     x, y = p['foot']; L = p['length']; hw = p['width'] / 2; dx, dy = p['dir']; nx, ny = -dy, dx
     at = lambda t, side=0: (x + dx * t + nx * side, y + dy * t + ny * side)
@@ -490,7 +451,6 @@ def jetty_svg(p, moorings=()):
         out.append(f'<path d="{dd}" fill="none" stroke="{INK}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>')
         out.append(f'<path d="{dd}" fill="none" stroke="{WOOD}" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>')
         for a, b in tops: out.append(f'<rect x="{f(a - 6.5)}" y="{f(b - 5.5)}" width="13" height="5" rx="1.7" fill="{DARK_WOOD}" {ol}/>')
-    # typing-dot lamps at the tip (the community's lamp, three dots), cream glow
     for side in (-hw + 6, hw - 6):
         lx, ly = at(L - 10, side)
         out.append(f'<rect x="{f(lx - 3.5)}" y="{f(ly - 52)}" width="7" height="52" fill="#5B6178" {ol}/>')
@@ -510,7 +470,6 @@ def jetty_svg(p, moorings=()):
     x0, y0, x1, y1 = math.floor(min(xs) - 30), math.floor(min(ys) - 90), math.ceil(max(xs) + 30), math.ceil(max(ys) + 50)
     return svg_doc(out, (x0, y0, x1 - x0, y1 - y0), f'Campfire Commons pier {p["name"]}'), (x0, y0, x1 - x0, y1 - y0)
 
-# ---------------------------------------------------------------- the plaza string lights (centre-3), drawn as props in home style
 def lights_svg(posts, name, hgt=200, sag=46, bulbs=7):
     """posts: [(x, y)] ground points (world). One wire between each pair of neighbours. Returns svg, box, anchor (the lowest post)."""
     out = []; ol = f'stroke="{INK}" stroke-width="2.6" stroke-linejoin="round"'
@@ -521,7 +480,7 @@ def lights_svg(posts, name, hgt=200, sag=46, bulbs=7):
         wires.append(pts)
     for x, y in posts:
         out.append(f'<ellipse cx="{f(x)}" cy="{f(y)}" rx="20" ry="7" fill="{INK}" fill-opacity="0.18"/>')
-    for x, y in posts:   # posts: wood, two brass bands, a round cap
+    for x, y in posts:
         out.append(f'<rect x="{f(x - 9)}" y="{f(y - hgt)}" width="18" height="{hgt}" rx="4" fill="{WOOD}" {ol}/>')
         out.append(f'<rect x="{f(x + 2)}" y="{f(y - hgt + 6)}" width="5" height="{hgt - 14}" fill="{DARK_WOOD}" fill-opacity="0.45"/>')
         out.append(f'<rect x="{f(x - 13)}" y="{f(y - 14)}" width="26" height="14" rx="4" fill="{WOOD}" {ol}/>')
@@ -543,7 +502,6 @@ def lights_svg(posts, name, hgt=200, sag=46, bulbs=7):
     ax, ay = max(posts, key=lambda p: p[1])
     return doc, vb, (ax, ay)
 
-# ---------------------------------------------------------------- boats: three at the harbor, one at each other pier, one off each islet
 def berth(p, t, side):
     x, y = p['foot']; dx, dy = p['dir']; return (x + dx * t - dy * side, y + dy * t + dx * side)
 BOATS = []
@@ -556,7 +514,6 @@ for p in PIERS[1:]:
 for (cx, cy, rx, ry), sgn in zip(ISLETS, (-1, 1)):
     BOATS.append({'x': round(cx + sgn * (rx + 150)), 'y': round(cy + 40), 'turn': sgn * 1.5708})
 
-# ---------------------------------------------------------------- props
 DET = 'detail/'
 SIZES = {}
 for fn in os.listdir(os.path.join(ART, 'detail')):
@@ -567,7 +524,6 @@ for fn in os.listdir(os.path.join(ART, 'detail')):
 HOME_PLANTS = {'tree-1': (260, 360), 'tree-3': (300, 380), 'tree-4': (200, 280), 'bush-2': (168, 110), 'bush-5': (170, 110),
                'bush-1': (130, 100), 'flower-1': (48, 36), 'flower-2': (48, 36), 'flower-3': (44, 36)}
 
-# world height of each kind, in world units (one Ducky = 130). Width follows the art.
 TALL = {'notice-board': 400, 'campfire': 150, 'log-seat': 66, 'lights-span': 230, 'stage': 560, 'pavilion': 470, 'member-wall': 330,
         'bubble-sculpture': 330, 'tree-wisteria': 470, 'tree-lilac': 450, 'cushions': 92, 'game-table': 118, 'lamp-typing': 230,
         'boost-crystal': 190, 'emoji-sign': 170, 'badge-buoy': 110, 'canopy-sofa': 300, 'lavender-stall': 300, 'sofa': 105, 'speaker': 190,
@@ -637,7 +593,6 @@ def put_raw(pid, name, src, vb, anchor_pt, zone, foot=()):
          'anchor': {'x': round((ax - x0) / w0, 4), 'y': round((ay - y0) / h0, 4)}, 'scale': 1, 'flip': False, 'zone': zone, 'kind': 'lights'}
     PROPS.append(p); FOOT.extend(foot); return p
 
-# ---- the campfire commons (LOCKED centre-3): fire in the middle, three log seats, string lights in a U, notice board behind
 pp = lambda u, v: (px + u * prx, py + v * pry)
 put('campfire', *pp(0, .02), 'plaza', pid='campfire', scale_k=1.3)
 put('log-seat', *pp(-.34, .05), 'plaza', pid='log-west', scale_k=1.25)
@@ -649,17 +604,16 @@ put('bush-lavender', *pp(.34, -.83), 'plaza', scale_k=1.0, flip=True, pid='board
 for u, v in [(-.74, -.52), (.74, -.52), (-.86, .44), (.86, .44)]:
     put('lamp-typing', *pp(u, v), 'plaza')
 LIGHT_POSTS = [pp(-.55, .22), pp(-.38, -.34), pp(.38, -.34), pp(.55, .22)]
-LIGHTS = []   # (file, svg, vb, anchor) written in main()
+LIGHTS = []
 for name, posts in [('back', LIGHT_POSTS[1:3]), ('west', LIGHT_POSTS[0:2]), ('east', LIGHT_POSTS[2:4])]:
     doc, vb, anc = lights_svg(posts, name)
     LIGHTS.append((f'lights-{name}.svg', doc))
     put_raw(f'lights-{name}', 'String lights', f'lights-{name}.svg', vb, anc, 'plaza',
             foot=[{'x': round(x), 'y': round(y - 4), 'rx': 16, 'ry': 12} for x, y in posts if (x, y) == anc] if name == 'back' else
                  [{'x': round(x), 'y': round(y - 4), 'rx': 16, 'ry': 12} for x, y in posts if (x, y) == anc])
-for u, v in [(-.18, .62), (.18, .62)]:   # a reaction sign each side of the south entry
+for u, v in [(-.18, .62), (.18, .62)]:
     pass
 
-# ---- the events stage and its lawn (north)
 sx, sy = STAGE_AT
 put('stage', sx, sy, 'stage', pid='events-stage')
 put('speaker', sx - 600, sy + 40, 'stage', pid='speaker-w'); put('speaker', sx + 600, sy + 40, 'stage', flip=True, pid='speaker-e')
@@ -667,51 +621,43 @@ put('lights-span', sx - 860, sy + 230, 'stage', scale_k=.9); put('lights-span', 
 put('emoji-sign', sx - 380, sy + 170, 'stage'); put('emoji-sign', sx + 380, sy + 170, 'stage', flip=True)
 for u in (-1, 1): put('lamp-typing', 4000 + u * 720, 1960, 'stage')
 
-# ---- round pavilions (server-icon pavilions) either side of the stage
 put('pavilion', 2860, 1330, 'pavilions', pid='pavilion-west')
 put('pavilion', 5140, 1330, 'pavilions', flip=True, pid='pavilion-east')
 put('boost-crystal', 2560, 1360, 'pavilions', scale_k=.9); put('boost-crystal', 5440, 1360, 'pavilions', scale_k=.9)
 
-# ---- member wall square (west)
 mx, my, mrx, mry = SQUARE
 put('member-wall', mx, my - mry * .62, 'member-wall', pid='member-wall', scale_k=1.05)
 put('bench-lavender', mx - mrx * .45, my + mry * .55, 'member-wall'); put('bench-lavender', mx + mrx * .45, my + mry * .55, 'member-wall', flip=True)
 put('lamp-typing', mx - mrx * .92, my - mry * .3, 'member-wall'); put('lamp-typing', mx + mrx * .92, my - mry * .3, 'member-wall')
 put('bush-lavender', mx - mrx * .6, my - mry * .72, 'member-wall', scale_k=.9); put('bush-lavender', mx + mrx * .6, my - mry * .72, 'member-wall', scale_k=.9, flip=True)
 
-# ---- pond (north-west): picnic, benches, wisteria
 pdx, pdy, prx_, pry_ = POND
 put('tree-wisteria', pdx + prx_ + 150, pdy - 60, 'pond', pid='pond-wisteria')
 put('tree-wisteria', pdx - prx_ - 20, pdy - 170, 'pond', flip=True, scale_k=.88, pid='pond-wisteria-2')
 put('picnic-blanket', pdx - 120, pdy + pry_ + 210, 'pond', solid=False, pid='pond-picnic')
 put('bench-lavender', pdx + 230, pdy + pry_ + 140, 'pond', flip=True)
 
-# ---- playground (north-east)
 plx, ply, plrx, plry = PLAY
 put('play-frame', plx + .35 * plrx, ply - .05 * plry, 'playground', pid='slide-tower')
 put('swing-set', plx - .35 * plrx, ply - .18 * plry, 'playground', pid='swing-set')
 put('bench-lavender', plx - .62 * plrx, ply + .72 * plry, 'playground'); put('bench-lavender', plx + .62 * plrx, ply + .75 * plry, 'playground', flip=True)
 put('lamp-typing', plx - .98 * plrx, ply - .2 * plry, 'playground')
 
-# ---- game square (open) gets game tables round its rim, outside it
 gx, gy = ACTIVITY[1]['c']; grx, gry = ACTIVITY[1]['rx'], ACTIVITY[1]['ry']
 for u, v in [(-.62, -1.25), (.0, -1.32), (.62, -1.25)]:
     put('game-table', gx + u * grx, gy + v * gry, 'game-square')
 put('lamp-typing', gx - grx - 70, gy + 60, 'game-square'); put('lamp-typing', gx + grx + 70, gy - 40, 'game-square')
 
-# ---- the voice circle: mic in the middle, cushions round the green ring
 vx, vy, vrx, vry = VOICE
 put('mic-voice', vx, vy + 10, 'voice', pid='voice-mic')
 for u, v in [(-.55, -.35), (.55, -.35), (-.62, .42), (.62, .42)]:
     put('cushions', vx + u * vrx, vy + v * vry, 'voice', scale_k=.85, flip=u > 0)
 
-# ---- hangout corners: canopies with sofas, cushions, a reaction sign, either side of the voice circle
 for k, (hx, hy) in enumerate([(3200, 4110), (4800, 4110)]):
     put('canopy-sofa', hx, hy, 'hangout', flip=k == 1, pid=f'hangout-canopy-{k + 1}')
     put('cushions', hx + (200 if k == 0 else -200), hy + 70, 'hangout', scale_k=.85, flip=k == 1)
     put('emoji-sign', hx + (-230 if k == 0 else 230), hy - 20, 'hangout', flip=k == 1)
 
-# ---- beach (east-south-east): parasols, loungers, cocoa cart, chat bubble sculpture by the beach path
 for x, y in [(6420, 3330), (6900, 3500), (6560, 3760)]:
     put('parasol', x, y, 'beach')
 for x, y, fl in [(6520, 3400, False), (6800, 3570, True), (6680, 3830, False)]:
@@ -719,7 +665,6 @@ for x, y, fl in [(6520, 3400, False), (6800, 3570, True), (6680, 3830, False)]:
 put('picnic-blanket', 6280, 3600, 'beach', solid=False)
 put('bubble-sculpture', 5260, 3120, 'east', pid='chat-bubble')
 
-# ---- islets: crystal gazebo (west), boost crystal picnic (east)
 (lx, ly, lrx, lry), (ex, ey, erx, ery) = ISLETS
 put('gazebo-crystal', lx - 300, ly + 150, 'islets', pid='islet-gazebo')
 put('tree-wisteria', lx - 420, ly - 40, 'islets', pid='islet-wisteria-1'); put('bush-lavender', lx + 120, ly + 230, 'islets')
@@ -728,10 +673,8 @@ put('boost-crystal', ex + 220, ey - 20, 'islets', pid='islet-crystal')
 put('picnic-blanket', ex + 40, ey + 170, 'islets', solid=False)
 put('tree-lilac', ex + 380, ey - 80, 'islets', flip=True, pid='islet-lilac-1'); put('bush-lavender', ex - 280, ey + 170, 'islets')
 
-# ---- harbor foot: a signpost beside the landing (clear of the engine's own sign and flag)
 put('signpost', hp['foot'][0] + 240, hp['foot'][1] - 330, 'harbor', pid='harbor-signpost')
 
-# ---- open-ground edges: a lamp at each end of every stall row and a pair at each activity lawn, nothing inside them
 for s in STALLS:
     (sx_, sy_), L = s['c'], s['len']
     for sg in (-1, 1): put('lamp-typing', sx_ + sg * (L / 2 + 50), sy_ + 10, 'stalls')
@@ -740,18 +683,15 @@ for A in ACTIVITY:
     (ax, ay), rx, ry = A['c'], A['rx'], A['ry']
     for sg in (-1, 1): put('lamp-typing', ax + sg * (rx + 60), ay + ry * .25, 'activity', quiet=True)
 
-# ---- red badge buoys out at sea (no text, an exclamation shape), clear of every pier and boat
 for bx, by in [(700, 900), (7350, 820), (520, 3500), (7550, 4300), (2600, 5250), (5400, 5300), (1100, 4700), (6900, 5150)]:
     if any(math.hypot(bx - b['x'], by - b['y']) < 420 for b in BOATS) or any(seg_dist(bx, by, p['foot'], p['tip']) < 420 for p in PIERS): continue
     if in_poly(bx, by, offset(SAND_EDGE, 200)) or any(in_ell(bx, by, c[0], c[1], c[2] + 300, c[3] + 300) for c in ISLETS): continue
     put('badge-buoy', bx, by, 'sea', solid=False)
 
-# ---- stall carts beside each stall row (outside it: the row itself stays open)
 for k, s in enumerate(STALLS):
     (sx_, sy_), L = s['c'], s['len']
     put('lavender-stall' if k == 0 else 'cocoa-cart', sx_ + (L / 2 + 250) * (-1 if k == 0 else 1), sy_ + 30, 'stalls', flip=k == 1, pid=f'stall-cart-{k + 1}')
 
-# ---------------------------------------------------------------- sleeper props: nod trees, placed before the scatter
 SLEEP_TREES = [('nod-tree-1', 'tree-lilac', (2750, 4180)), ('nod-tree-2', 'tree-1', (3300, 920)),
                ('nod-tree-3', 'tree-wisteria', (6500, 2200)), ('nod-tree-4', 'tree-3', (4950, 4300)),
                ('nod-tree-5', 'tree-lilac', (1250, 2200)), ('nod-tree-6', 'tree-wisteria', (4700, 920))]
@@ -759,7 +699,6 @@ for pid, kind, (x, y) in SLEEP_TREES: put(kind, x, y, 'woods', pid=pid, flip=pid
 put('lounger', 6250, 3950, 'beach', pid='lounger-south'); put('lounger', 6960, 3380, 'beach', flip=True, pid='lounger-east'); put('lounger', 6620, 3000, 'beach', flip=True, pid='lounger-north')
 put('lounger', 1130, 3060, 'cove', pid='lounger-cove'); put('parasol', 1260, 3330, 'cove')
 
-# ---------------------------------------------------------------- scatter: trees, bushes, flowers (spread out, not crowded)
 KEEP_OUT = [(PLAZA[0], PLAZA[1], PLAZA[2] + 100, PLAZA[3] + 90), (SQUARE[0], SQUARE[1], SQUARE[2] + 80, SQUARE[3] + 70),
             (POND[0], POND[1], POND[2] + 170, POND[3] + 170), (PLAY[0], PLAY[1], PLAY[2] + 60, PLAY[3] + 60),
             (BEACH[0] + 100, BEACH[1], BEACH[2], BEACH[3]), (VOICE[0], VOICE[1], VOICE[2] + 120, VOICE[3] + 100),
@@ -811,7 +750,6 @@ for (cx, cy, rx, ry), seed in zip(ISLETS, (3, 9)):
         a = halton(k + seed, 2) * 6.28; x, y = cx + math.cos(a) * rx * .72, cy + math.sin(a) * ry * .64
         if not occupied(x, y, 30): put('flowers-purple' if k % 2 else 'flower-3', x, y, 'islets', solid=False, quiet=True)
 
-# ---------------------------------------------------------------- ground decals (flats): home's tufts, flower dots, pebbles, sand specks
 DEC = {'grass-tuft-1': (44, 26), 'grass-tuft-2': (34, 22), 'grass-tuft-3': (56, 24), 'flower-dot-1': (20, 18), 'flower-dot-2': (26, 18),
        'flower-dot-3': (22, 16), 'pebble-1': (22, 14), 'pebble-2': (34, 16), 'pebble-3': (28, 18), 'sand-speck-1': (16, 8), 'sand-speck-2': (22, 10)}
 def on_sand(x, y):
@@ -834,10 +772,6 @@ for k in range(10):
     vb = re.search(r'viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"', open(os.path.join(ROOT, f'public/pixi-art/lily-0{k % 8}.svg')).read(800)).groups()
     FLATS.append({'src': f'/pixi-art/lily-0{k % 8}.svg', 'x': round(x), 'y': round(y), 'width': round(float(vb[2])), 'height': round(float(vb[3])), 'flip': False})
 
-# ---------------------------------------------------------------- 40 sleeping Duckies (boss 6 Nov: 40 on every themed island)
-# Home's poses (src/pixi/sleep-spots.js SLEEP_SPOTS), 12 more than home's 28: nod 6 (tree prop ids), hammock 3, rock 5, leaf 6,
-# book 5, chair 3, wing 7, box 5. Each lies beside a prop that suits it, found by a deterministic search with the engine's own
-# rules (resolveSleepSpots): off every path, deck and bridge, out of the plazas and open ground (sleepAvoid).
 SLEEP_WANT = {'nod': 6, 'hammock': 3, 'rock': 5, 'leaf': 6, 'book': 5, 'chair': 3, 'wing': 7, 'box': 5}
 NAP_R = {'nod': 41.8, 'leaf': 73.8, 'wing': 60.0, 'hammock': 70.7, 'rock': 46.6, 'book': 63.9, 'chair': 73.7, 'box': 49.7}
 SLEEP_AVOID = [{'x': round(PLAZA[0]), 'y': round(PLAZA[1]), 'rx': PLAZA[2] + 60, 'ry': PLAZA[3] + 50, 'name': 'plaza'},
@@ -912,7 +846,6 @@ def sleep_spots():
     return spots, placed
 SLEEP, SLEEP_PLACED = sleep_spots()
 
-# ---------------------------------------------------------------- write everything
 def main():
     os.makedirs(ART, exist_ok=True); os.makedirs(DATA, exist_ok=True)
     body = ground_svg()
@@ -929,7 +862,7 @@ def main():
     for k, p in enumerate(PIERS):
         moor = [(b['x'], b['y']) for b in (BOATS[:3] if k == 0 else BOATS[2 + k:3 + k])]
         svg, (x0, y0, w0, h0) = jetty_svg(p, moor)
-        if k == 0:   # the harbor jetty is drawn by the engine (THEME-CONTRACT 3): this copy is for the preview picture only
+        if k == 0:
             open(os.path.join(GEN, 'harbor-jetty-preview.svg'), 'w').write(svg)
             json.dump({'x': x0, 'y': y0, 'width': w0, 'height': h0}, open(os.path.join(GEN, 'harbor-jetty-preview.json'), 'w')); continue
         fn = f'jetty-{p["name"]}.svg'; open(os.path.join(ART, fn), 'w').write(svg)

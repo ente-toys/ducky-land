@@ -36,8 +36,6 @@ for(const [i,b]of world.walkways.entries()){
  for(let t=0;t<=1;t+=.025){const p=[b.a[0]+(b.b[0]-b.a[0])*t,b.a[1]+(b.b[1]-b.a[1])*t];if(!geo.walkable(...p)){problems.push(`deck ${i} blocked at ${p}`);break;}}
  if(!seen[cell(b.a)]||!seen[cell(b.b)])problems.push(`deck ${i} disconnected`);
 }
-// A floating canal point must remain both undrawn and nonsolid. Compare single
-// polygon compatibility encoding with the two actual shore rings across the map.
 let coastChecks=0;
 for(let y=400;y<5200;y+=43)for(let x=400;x<7600;x+=43){const actual=world.coastRings.some(r=>inPoly(x,y,r));if(inPoly(x,y,world.coast)!==actual)problems.push(`coast seam mismatch ${x},${y}`);coastChecks++;}
 for(const y of [1100,1500,3000,3500,4400,4800]){let wet=0;for(let x=3500;x<4600;x+=20)if(!map.landAt(x,y))wet++;if(!wet)problems.push(`canal closed at ${y}`);}
@@ -49,8 +47,6 @@ for(const b of world.walkways.slice(0,2))for(const p of art.props){if(/bridge/.t
 for(const p of art.props){if(!p.asset||/lily|reeds|cattails/.test(p.asset))continue;if(!world.coastRings.some(r=>inPoly(p.x,p.y-4,r)))problems.push(`prop ${p.id} ${p.asset} off land`);}
 const freeCount=ok.reduce((a,b)=>a+b,0),metrics={ready:report.ready,sleepers:report.sleepers.length,trees:art.props.filter(p=>/^tree-/.test(p.asset??'')).length,props:art.props.length,groundDetails:art.flats.filter(p=>/grass-tuft|flower-dot|pebble|sand-speck/.test(p.src)).length,openAreas,walkableCells:freeCount,reachableCells:queue.length,reachablePercent:queue.length/freeCount*100,coastChecks,problems,checkerNotes:report.sleepNotes};
 writeFileSync('public/pixi-art/themes/library/library-check.json',JSON.stringify(metrics,null,2));console.log(metrics);assert.equal(problems.length,0,'Library geometry checks');
-// Curved benches have the same ground geometry in art and collision, and each
-// seat is visible instead of being hidden under a foreground tree canopy.
 const landmarkArcs=json('public/pixi-art/themes/library/arc-benches.json');
 const courtArcs=json('public/pixi-art/themes/library/library-closeup-benches.json');
 assert.equal(landmarkArcs.length,8);assert.equal(courtArcs.length,6);

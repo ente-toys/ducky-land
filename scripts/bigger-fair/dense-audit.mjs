@@ -1,4 +1,3 @@
-// Measure the actual rendered sandy polygons over new dry land, including squares.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import assert from 'node:assert/strict';

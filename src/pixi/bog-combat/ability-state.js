@@ -1,4 +1,3 @@
-// Relative timers survive a room clock reset on reconnect or hibernation.
 export const ABILITY_TIMERS=Object.freeze({dodgeLeft:'dodgeUntil',dodgeProtectLeft:'dodgeProtectedUntil',
   dodgeCooldownLeft:'dodgeReadyAt',speedLeft:'speedUntil',hitShieldLeft:'hitShieldUntil',bushRevealLeft:'bushRevealUntil'});
 export function saveAbilityTimers(p,time){

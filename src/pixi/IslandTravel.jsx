@@ -1,10 +1,8 @@
-// boss 5 Nov: the travel panel is gone; this keeps only the boat notice and the touch steering pad
 
 import {useEffect, useState} from 'react';
 
 export default function IslandTravel({travel,playing,room,island,notice}) {
   const sailing=playing && travel.mode==='sailing';
-  // boss 5 Nov: near a boat a "Take boat" button appears; sailing near a shore a "Dock" button appears (Enter does the same)
   const [options,setOptions]=useState({});
   useEffect(() => {
     if (!playing) {setOptions({}); return;}
@@ -20,7 +18,6 @@ export default function IslandTravel({travel,playing,room,island,notice}) {
     if (island.current) island.current.touchInput={x,y};
   }
   function stop() { island.current?.stopInput(); }
-  // boss 5 Nov: no travel panel; tap a boat to board, tap an island or the harbor to dock. Only a short notice and, on touch screens, the steering pad stay
   const touch=typeof matchMedia==='function' && matchMedia('(pointer: coarse)').matches;
   return <>
     {notice && <p className="pixi-travel-notice" role="status">{notice}</p>}

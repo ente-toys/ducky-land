@@ -1,6 +1,3 @@
-// Resolve SVG paint, instances and clipping before reducing geometry. All
-// output paths have explicit solid paint in overview pixels, with no CSS or
-// inherited paint dependencies. This is geometry compilation, not tracing.
 import {Path2D,PathOp,FillType} from '@napi-rs/canvas';
 export const I=[1,0,0,1,0,0];
 export const mul=(a,b)=>[a[0]*b[0]+a[2]*b[1],a[1]*b[0]+a[3]*b[1],a[0]*b[2]+a[2]*b[3],a[1]*b[2]+a[3]*b[3],a[0]*b[4]+a[2]*b[5]+a[4],a[1]*b[4]+a[3]*b[5]+a[5]];
@@ -42,8 +39,6 @@ export function compile(root,{matrix=I,clip=null,minSize=.35,minStroke=.35}={}){
  const ref=(n,value)=>{const id=value?.match(/^url\(['"]?#([^)'" ]+)['"]?\)$/)?.[1];if(!id)return null;const target=lookup(n,id);if(!target)throw Error(`Unresolved SVG paint reference #${id}`);return target;};
  function colour(n,value){if(!value||value==='none')return null;if(value==='currentColor')throw Error('Unresolved currentColor');const target=ref(n,value);if(target){
   if(target.localName==='pattern'){
-   // Texture patterns can own the only opaque lawn/paving base. Preserve that
-   // base; omit only transparent subpixel grain above it.
    const w=parseFloat(target.getAttribute('width')),h=parseFloat(target.getAttribute('height')),x=parseFloat(target.getAttribute('x')||0),y=parseFloat(target.getAttribute('y')||0);
    for(const child of elements(target)){const style=paint(child,{fill:'black'}),p=shape(child);if(!p||style.fill==='none'||style.fill?.startsWith('url(')||parseFloat(style.opacity??1)<.99||parseFloat(style['fill-opacity']??1)<.99)continue;const b=p.computeTightBounds();if(b[0]<=x&&b[1]<=y&&b[2]>=x+w&&b[3]>=y+h&&p.isPointInPath(x+w*.1,y+h*.1)&&p.isPointInPath(x+w*.9,y+h*.9))return style.fill??'black';}
    return null;
@@ -60,8 +55,6 @@ export function compile(root,{matrix=I,clip=null,minSize=.35,minStroke=.35}={}){
  }
  function emit(n,p,m,fill,opacity,activeClip){if(!fill||opacity<=.015)return;let path=transformed(p,m).asWinding(),b=path.computeTightBounds();if(!b.every(Number.isFinite)||Math.max(b[2]-b[0],b[3]-b[1])<minSize)return;if(activeClip){const cb=activeClip.computeTightBounds();if(!intersects(b,cb))return;const relation=clipRelation(activeClip,b);if(relation<0)return;if(relation===0){path.op(activeClip,PathOp.Intersect);}}
   b=path.computeTightBounds();if(Math.max(b[2]-b[0],b[3]-b[1])<minSize)return;
-  // Skia boolean operations return even-odd paths. Convert after clipping,
-  // before serialising/merging, so stroke rings retain their interior holes.
   path=path.asWinding();
   records.push({path,fill,opacity:Math.round(opacity*100)/100});
  }
@@ -93,15 +86,11 @@ export function pathData(path,tolerance=.3,{minArea=.18,quantum=.5}={}){const ca
  for(const part of parts){const v=(part.slice(1).match(number)??[]).map(Number),end=v.slice(-2),tag=part[0];if(tag==='M'){flush(false);points=[end];}if(tag==='L')points.push(end);if(tag==='C')curve(at,v.slice(0,2),v.slice(2,4),end);if(tag==='Q'){const b=v.slice(0,2);curve(at,at.map((v,i)=>v+(b[i]-v)*2/3),end.map((v,i)=>v+(b[i]-v)*2/3),end);}if(tag==='Z'){flush(true);continue;}at=end;}flush(false);return out.replace(/L(?=-)/g,'L').replace(/([\d.]) -/g,'$1-').replace(/(^|[ML ])0\./g,'$1.');
 }
 export function markup(records,{tolerance=.3,paletteDistance=38,minArea=.18,quantum=.5}={}){
- // Trace-derived source SVGs sometimes encode dozens of nearly identical
- // shades. Collapse only close shades to an actual colour from that source.
  const rgb=c=>{const h=c.match(/^#([\da-f]{6}|[\da-f]{3})$/i)?.[1];if(!h)return null;const v=h.length===3?h.split('').map(c=>c+c).join(''):h;return [0,2,4].map(i=>parseInt(v.slice(i,i+2),16));},distance=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
  const hue=a=>{const max=Math.max(...a),min=Math.min(...a),d=max-min;if(d<18)return null;return ((max===a[0]?(a[1]-a[2])/d:max===a[1]?(a[2]-a[0])/d+2:(a[0]-a[1])/d+4)*60+360)%360;};
  const sameHue=(a,b)=>{const x=hue(a),y=hue(b);return x==null||y==null||Math.min(Math.abs(x-y),360-Math.abs(x-y))<16;};
  const weights=new Map();for(const r of records){const key=r.fill.toLowerCase(),b=r.path.computeTightBounds();weights.set(key,(weights.get(key)??0)+(b[2]-b[0])*(b[3]-b[1])*r.opacity);}
  const palette=[],colours=new Map();for(const [colour]of [...weights].sort((a,b)=>b[1]-a[1])){const value=rgb(colour);if(!value){colours.set(colour,colour);continue;}let nearest=palette.filter(p=>sameHue(value,p.rgb)).map(p=>({...p,d:distance(value,p.rgb)})).sort((a,b)=>a.d-b.d)[0];if(nearest&&nearest.d<paletteDistance)colours.set(colour,nearest.colour);else{palette.push({colour,rgb:value});colours.set(colour,colour);}}
- // Merge same-colour shapes only across disjoint intervening paint, preserving
- // the original painter's result for overlapping walls, windows and crowns.
  const batches=[];
  for(const original of records){const r={...original,fill:colours.get(original.fill.toLowerCase())},b=r.path.computeTightBounds(),expanded=[b[0]-.25,b[1]-.25,b[2]+.25,b[3]+.25];let target=null;
   if(r.opacity===1)for(let i=batches.length-1;i>=Math.max(0,batches.length-100);i--){const batch=batches[i];if(batch.fill===r.fill&&batch.opacity===1){target=batch;break;}if(batch.bounds.some(v=>intersects(v,expanded)))break;}

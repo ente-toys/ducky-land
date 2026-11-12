@@ -22,7 +22,6 @@ def read(path):
     return json.loads(Path(path).read_bytes())
 
 def save(path, data):
-    # Keep the existing formatting convention for the runtime manifests.
     old = Path(path).read_text()
     match = re.search(r'\n([ \t]+)"', old)
     indent = match[1] if match else None
@@ -37,7 +36,6 @@ changed = []
 for theme, svgs in FILES.items():
     base = Path(f'public/pixi-art/themes/{theme}')
     data = Path(f'assets/world/themes/{theme}')
-    # These frozen inputs also let the checks prove non-centre data is unchanged.
     for path in [base / 'art.json', data / 'world.json', data / 'walk-world.json',
                  *sorted((base / 'centre').glob('*'))]:
         if path.is_file():
@@ -51,7 +49,6 @@ for theme, svgs in FILES.items():
     path = base / 'centre/centre.json'
     current, fixed = read(path), json.loads(source(path))
     if theme == 'pink':
-        # Dancer and lower plaza definitions remain byte-for-byte equivalent.
         for field in ['pieces', 'depthRatio', 'outerEdge', 'stairs', 'blocked', 'walkable']:
             current[field] = fixed[field]
     else:

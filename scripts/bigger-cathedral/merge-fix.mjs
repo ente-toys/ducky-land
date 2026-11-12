@@ -1,4 +1,3 @@
-// Run from the repo root after water.mjs. Nudges green-lane planting that the water lane left with its roots in water or on a bridge deck to the nearest dry spot.
 import fs from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';

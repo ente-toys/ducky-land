@@ -1,5 +1,3 @@
-// Theme-independent sparse crop plans. Sources stay vector and read-only.
-// node scripts/globe-perf/raster-bounds.mjs cathedral
 import {readFileSync,writeFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {cropSVG,RASTER_TILE_SIZE,RASTER_GROUND_TILE_SIZE} from '../../src/pixi/theme-raster.js';

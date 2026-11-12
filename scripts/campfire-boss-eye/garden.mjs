@@ -1,5 +1,3 @@
-// Hand-composed planting rooms. Coordinates are world units, not random scatter.
-// Each named bed has a deliberately staggered canopy, understory, and open front.
 import {Path2D,PathOp,ring} from '../pagepond/geometry.mjs';
 export function plantOuter({art,world,props,shapes,floor,dry,locked,ellipse,contactPoly}) {
  const added=[],declined=[],beds=[],old=art.props,all=()=>[...old,...props];
@@ -27,13 +25,11 @@ export function plantOuter({art,world,props,shapes,floor,dry,locked,ellipse,cont
   p.footprint={poly:contactPoly(shape)};props.push(p);added.push(p);
   shapes.push({id,kind,outerGarden:room,solid:kind==='tree'||kind==='bush'||kind==='table'||kind==='sign',shape});return p;
  }
- // Activity pockets use exactly the centre game tables, reaction signs and pots.
  for(const [i,[x,y]]of [[1280,260],[2450,-260],[4150,-250],[5900,-200],[-850,2250],[120,2450],[8650,2250],[8800,4670],[2070,5280],[4710,5990],[5900,6000],[6380,5260]].entries()){
   put('detail/game-table.svg',x,y,190,123,'table','games-'+i);
   for(const [dx,dy]of [[-150,20],[140,45]]){put('detail/bush-lavender.svg',x+dx,y+dy,105,84,'bush','games-'+i);put('/pixi-art/plants/flower-1.svg',x+dx-35,y+dy+55,48,36,'flower','games-'+i);}
  }
  for(const [i,[x,y]]of [[1100,1280],[2170,250],[3810,180],[6240,480],[7440,1630],[8100,2730],[-350,2670],[290,3920],[1510,6180],[3850,6300],[5500,5780],[8140,5910]].entries())put('detail/emoji-sign.svg',x,y,110,118,'sign','fork-'+i,i%2===1);
- // Loose mixed groves between the hamlets, along the coast, and below the moat.
  const rooms=[
  ['north-story',1350,-90,0],['north-library',2000,-350,1],['north-west',2670,-360,2],['north-crown',3350,-300,0],['north-heart',4100,-370,1],['north-east',4780,-350,2],['north-lilac',5550,-240,0],['north-quilt',6200,-70,1],
  ['crown-coast-a',2250,-790,1],['crown-coast-b',3000,-850,0],['crown-coast-c',3850,-880,2],['crown-coast-d',4700,-830,1],['crown-coast-e',5450,-740,0],['crown-coast-f',6100,-560,2],
@@ -47,17 +43,14 @@ export function plantOuter({art,world,props,shapes,floor,dry,locked,ellipse,cont
  ['story-back',950,-230,1],['story-south',1190,1120,2],['patch-back',7570,60,0],['patch-south',8700,1810,2],['sprout-south',600,6020,0],['sprout-east',1730,5060,2],['loaf-south',7560,5990,1],['loaf-west',6550,5550,2]
  ];
  const palettes=[['detail/tree-wisteria.svg',330,357],['/pixi-art/plants/tree-1.svg',280,388],['/pixi-art/plants/tree-3.svg',290,367],['/pixi-art/plants/tree-4.svg',180,252],['detail/tree-lilac.svg',300,320],['/pixi-art/plants/tree-2.svg',135,270]];
- // Five to seven trees: tall back row, smaller foreground, flowering counterpoint.
  const motifs=[[[0,-95,0,1],[-230,-10,1,.94],[215,15,2,.85],[-105,130,3,.85],[150,180,4,.9],[315,150,5,.76]],[[0,-90,2,1],[-205,25,0,.88],[205,55,1,.82],[-310,135,5,.8],[-65,160,3,.9],[200,235,4,.84]],[[0,-70,4,1],[-200,45,2,.85],[225,35,0,.85],[-100,170,1,.78],[140,205,3,.9]]];
  for(const [room,cx,cy,m]of rooms){
   for(const [dx,dy,t,k]of motifs[m]){const [src,w,h]=palettes[t];put(src,cx+dx,cy+dy,w*k,h*k,'tree',room,dx<0);}
   for(const [dx,dy,t,k]of [[-255,200,0,1],[-145,240,1,.8],[20,255,0,.8],[120,300,2,1],[280,240,0,.9],[-300,290,2,.8]]){const src=t===0?'detail/bush-lavender.svg':t===1?'/pixi-art/plants/bush-1.svg':'/pixi-art/plants/bush-2.svg';put(src,cx+dx,cy+dy,125*k,(t===0?100:82)*k,'bush',room);}
-  // Small flower beds and ground details follow each room's open edge.
   for(const [dx,dy,t]of [[-200,340,1],[-55,310,2],[70,380,3],[270,335,1],[-320,360,3]])put('/pixi-art/plants/flower-'+t+'.svg',cx+dx,cy+dy,48,36,'flower',room);
   for(const [dx,dy,t]of [[-310,45,1],[-130,335,2],[25,370,3],[330,155,2],[150,90,1],[-75,-170,3],[315,345,1]])put('/pixi-art/decals/grass-tuft-'+t+'.svg',cx+dx,cy+dy,56,31,'detail',room);
   for(const [dx,dy,t]of [[-180,115,1],[230,325,2],[-30,280,1]])put('/pixi-art/decals/pebble-'+t+'.svg',cx+dx,cy+dy,38,24,'detail',room);
  }
- // Low path/moat borders, deliberately broken at every crossing and doorway.
  const borders=[
  [1250,710],[1470,580],[2200,410],[2500,345],[3200,270],[3450,275],[4350,265],[5200,320],[5500,375],[6040,560],[6360,720],
  [470,1500],[355,1860],[310,2140],[290,2580],[260,2790],[7740,1790],[7850,2270],[7910,2500],[7950,2860],
@@ -66,7 +59,6 @@ export function plantOuter({art,world,props,shapes,floor,dry,locked,ellipse,cont
  [1000,6080],[1600,6190],[2050,5940],[3000,5880],[3600,6040],[4330,6080],[5180,5820],[5760,5950],[6730,6050],[7390,6110]
  ];
  for(const [i,[x,y]]of borders.entries())for(const [dx,dy,t]of [[-62,0,0],[55,28,1],[145,13,2]])put(t===0?'detail/bush-lavender.svg':'/pixi-art/plants/bush-'+(t===1?1:2)+'.svg',x+dx,y+dy,105,t===0?84:69,'bush','border-'+i);
- // Hamlet flower beds: use the blueprint's lawn pockets, never the small squares.
  for(const p of props.filter(p=>p.hamlet&&p.kind==='building'&&/cottage/.test(p.blueprintId))){for(const [dx,dy]of [[-p.width*.55,-15],[p.width*.55,10]]){put('detail/bush-lavender.svg',p.x+dx,p.y+dy,110,88,'bush',p.hamlet+'-door');put('/pixi-art/plants/flower-3.svg',p.x+dx-45,p.y+dy+45,48,36,'flower',p.hamlet+'-door');}}
  for(const p of props.filter(p=>p.hamlet&&/bench/.test(p.blueprintId)&&!p.parent))for(const dx of [-p.width*.7,p.width*.7])put('detail/flowers-purple.svg',p.x+dx,p.y+15,65,41,'flower',p.hamlet+'-bench');
  return {added:added.length,counts:Object.fromEntries(['tree','bush','flower','detail','table','sign'].map(k=>[k,added.filter(p=>p.kind===k).length])),rooms:rooms.map(r=>r[0]),sleepRooms,declined};

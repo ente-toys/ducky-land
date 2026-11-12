@@ -1,4 +1,3 @@
-// Run with the Neon Vite server on 5266. Optional PLAYWRIGHT_MODULE = absolute index.mjs path.
 import fs from 'node:fs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 const browser=await chromium.launch({headless:true});

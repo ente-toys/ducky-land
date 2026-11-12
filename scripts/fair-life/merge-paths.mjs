@@ -1,6 +1,3 @@
-// Run in the merged tree. This invokes the paths worker's ONE canonical Home
-// union implementation, adding the two feature approaches to its normal input.
-// No decal, overlay, local path SVG or additional painter is introduced.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -13,7 +10,6 @@ const {fairRoutes}=await import('../bigger-fair/paths.mjs');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 walk.obstacles.push(...mapFor('fair').sleepers.map(sleeperFootprint));
 const routes=fairRoutes(art,world);
-// fairRoutes includes the two feature approaches for every regeneration.
 const result=JSON.parse(execFileSync('python3',['scripts/bigger-fair/paths.py'],{input:JSON.stringify({art,world,walk,layout:read('scripts/bigger-fair/centre-source/layout.json'),routes}),maxBuffer:32*1024*1024,encoding:'utf8'}));
 world.paths=result.routes.map(r=>r.samples);
 world.fairLife.routes=layout.routes.map(r=>({...r,samples:result.routes.find(q=>q.id===r.id).samples}));

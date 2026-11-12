@@ -1,12 +1,8 @@
-// boss 5 Nov: the 8 approved sleeping Duckies (sleeping-variants/svg, split by scripts/sleep-sprites.mjs) with the
-// review page's motion (sleeping-variants/sleep-preview/template.html), same timings and amplitudes. The Ducky is ONE rigid
-// piece: it breathes from its bottom contact point and bobs with a tiny whole-figure tilt; head and body never move apart.
 import {Assets, Container, Graphics, Sprite} from 'pixi.js';
 import data from './sleep-poses.json';
 
 export const SLEEP_POSES = Object.keys(data.poses);
-export const PORTABLE = ['wing', 'nod'];   // a sleep emote out on the path: no hammock or chair out of thin air
-// tilt: degrees at full bob; zAnchor / zDir: where the floating z's start (svg units) and which way they drift
+export const PORTABLE = ['wing', 'nod'];
 const MOTION = {
   nod: {tilt: -.5, nod: true, bubble: {tip: [211, 463], dir: [-.97, .24], R: 28}, cap: [325, 78, 0, 450]},
   leaf: {tilt: .5, zAnchor: [120, 120], zDir: -1, blanket: 586},
@@ -16,11 +12,9 @@ const MOTION = {
   book: {tilt: .5, zAnchor: [230, 150], zDir: -1},
   chair: {tilt: .5, ownZ: true},
   box: {tilt: .3, zAnchor: [250, 100], zDir: -1, cap: [377, 92, 0, 408]},
-};   // cap: head-top centre x, y, angle, head width (svg units); only nod, rock and box keep their cap
-import {SLEEP_SIZE} from './sleep-spots.js';   // boss 5 Nov: sleepers 10% smaller, then 10% more (.9 x .9); the only size knob, do not stack another
+};
+import {SLEEP_SIZE} from './sleep-spots.js';
 export {SLEEP_SIZE};
-// Hand-seated snow surfaces, in each pose's original SVG coordinates.
-// Head and back ride the duck; bedding rides its own cloth/prop, never the Zs.
 export const SLEEP_SNOW_SURFACES = {
   nod: [[342, 79, 290, .03], [594, 382, 165, .75], [338, 950, 0, 0]],
   leaf: [[274, 66, 215, -.2], [680, 265, 190, .8], [630, 171, 300, -.06]],
@@ -31,19 +25,17 @@ export const SLEEP_SNOW_SURFACES = {
   chair: [[393, 165, 180, -.12], [518, 346, 100, .9], [586, 90, 210, .17]],
   box: [[376, 92, 250, .02], [533, 314, 110, .95], [367, 410, 670, 0]],
 };
-const POKE = .6, POKE_COOL = .8;   // boss 5 Nov: a poke wobbles .6 s; spam taps do not stack
+const POKE = .6, POKE_COOL = .8;
 const Z_SRC = '/pixi-duck/sleep/z.svg', Z_H = 105, Z_SIZES = [.72, .86, 1], STAND_HEAD = 285, INK = 0x232323;
 export const SLEEP_ASSETS = [Z_SRC, ...Object.values(data.poses).flatMap(p => p.layers.map(l => l.src))];
 const TAU = Math.PI * 2, DEG = Math.PI / 180;
 const clamp01 = x => Math.min(1, Math.max(0, x)), io = x => .5 - .5 * Math.cos(Math.PI * clamp01(x)), outCubic = x => 1 - (1 - clamp01(x)) ** 3;
 const mod = (a, b) => ((a % b) + b) % b;
 const hash = n => {let h = (Math.abs(n | 0) + 0x9e3779b9) >>> 0; h = Math.imul(h ^ (h >>> 16), 0x45d9f3b) >>> 0; return (Math.imul(h ^ (h >>> 16), 0x45d9f3b) ^ (h >>> 16)) >>> 0;};
-// breath: inhale, short hold, exhale, short hold
 export function breath(t, P) {
   const u = mod(t, P) / P;
   return u < .42 ? io(u / .42) : u < .5 ? 1 : u < .92 ? 1 - io((u - .5) / .42) : 0;
 }
-// nod bubble: grows on the inhale, holds, shrinks on the exhale; every third breath it swells bigger and pops
 const POP_U = .44, POP_LEN = .3;
 export function bubbleState(t, P) {
   const k = mod(Math.floor(t / P), 3), u = mod(t, P) / P, b = breath(t, P);
@@ -53,30 +45,26 @@ export function bubbleState(t, P) {
   if (tu < 0) return {s: .4 + 1.05 * b + .05 * clamp01((u - .42) / .02)};
   return {s: tu < .05 ? 1.5 * (1 + .06 * tu / .05) : 0, pop: tu < POP_LEN ? tu / POP_LEN : null};
 }
-// nod: the head sinks across the cycle, then jerks back when the bubble pops
 function droop(t, P) {
   const tc = mod(t, 3 * P), tp = (2 + POP_U) * P;
   return tc < tp ? io(tc / tp) : 1 - outCubic((tc - tp) / .4);
 }
-// world half width of each pose (rootScale = the rig root's world scale; the art inside is 1/3 of it)
 export const sleepHalfWidths = rootScale => Object.fromEntries(SLEEP_POSES.map(n => {const p = data.poses[n]; return [n, (p.box[2] - p.box[0]) * p.k * SLEEP_SIZE * rootScale / 3 / 2];}));
 export function sleepLook(sleep, seed) {
   const h = hash(seed);
   return {pose: SLEEP_POSES.includes(sleep?.pose) ? sleep.pose : PORTABLE[h % PORTABLE.length], flip: sleep ? !!sleep.flip : (h >> 3) % 2 === 1};
 }
 
-/** Rig-unit container, ground contact at (0, 0). update(t) animates it; setCap(entry, frontView) dresses nod, rock and box. */
 export function createSleeper(sleep, seed = 0) {
   const {pose: name, flip} = sleepLook(sleep, seed), pose = data.poses[name], m = MOTION[name], h = hash(seed + 7);
   const P = 3.6 + (h % 8) * .07, off = (h % 8) * .61 + (h >> 4) % 97 * .37, dir = flip ? -1 : 1;
   const root = new Container({label: `Sleeping Ducky (${name})`}), [x0, , x1, y1] = pose.box;
   root.visible = false; root.scale.set(SLEEP_SIZE);
-  // boss 5 Nov: the shadow is this pose's own shape squashed flat under it, plain black and very faint (was a dark oval)
   const shade = new Container({label: 'Shadow'});
   shade.pivot.set((x0 + x1) / 2, y1); shade.scale.set(pose.k * dir, pose.k * .3); shade.position.set(0, 3);
   for (const layer of pose.layers) if (layer.id !== 'zz') {const s = new Sprite(Assets.get(layer.src)); s.scale.set(1 / data.F); s.tint = 0x000000; shade.addChild(s);}
   shade.cacheAsTexture(true); shade.alpha = .07; root.addChild(shade);
-  const bed = new Container();   // svg units, mirrored as one piece
+  const bed = new Container();
   bed.pivot.set((x0 + x1) / 2, y1); bed.scale.set(pose.k * dir, pose.k); root.addChild(bed);
   const sprite = src => {const s = new Sprite(Assets.get(src)); s.scale.set(1 / data.F); return s;};
   const at = (node, [x, y]) => {node.pivot.set(x, y); node.position.set(x, y); return node;};
@@ -87,19 +75,16 @@ export function createSleeper(sleep, seed = 0) {
     if (layer.id === 'duck') duck = at(node, layer.pivot);
     if (layer.id === 'cloth') cloth = at(node, [0, m.swing.knotY]);
     if (layer.id === 'prop') prop = node;
-    if (layer.id === 'zz') {zz = at(node, layer.pivot); zz.scale.x = dir;}   // a drawn z never reads backwards
+    if (layer.id === 'zz') {zz = at(node, layer.pivot); zz.scale.x = dir;}
   }
   if (m.blanket) at(prop, [duck.pivot.x, m.blanket]);
   const hat = new Container({label: 'Sleep cap'});
   if (m.cap) {hat.position.set(m.cap[0], m.cap[1]); hat.rotation = m.cap[2]; hat.scale.set(m.cap[3] / STAND_HEAD); duck.addChild(hat);}
-  // the floating z's: the hammock's drawn z at its on-screen size, so every pose's z's match
   const zH = Z_H * data.poses.hammock.k / pose.k, zs = m.zAnchor ? Z_SIZES.map(() => {const z = new Sprite(Assets.get(Z_SRC)); z.anchor.set(.5); bed.addChild(z); return z;}) : [];
-  // boss 5 Nov: a poke (tap or bump) puffs 4 of the hammock's z's out of the head; only the Ducky moves, never the prop
   const puffAt = m.zAnchor || (zz && [zz.pivot.x, zz.pivot.y]) || [m.cap[0], m.cap[1] - 40];
   const puff = [0, 1, 2, 3].map(() => {const z = new Sprite(Assets.get(Z_SRC)); z.anchor.set(.5); z.visible = false; bed.addChild(z); return z;});
   let pokedAt = -1e9, now = 0;
   function poke() {if (now - pokedAt < POKE_COOL) return false; pokedAt = now; return true;}
-  // the nod bubble: white outline, faint white fill, a highlight tick, its tail at the beak; a few short lines when it pops
   const bubble = m.bubble ? new Graphics() : null, burst = m.bubble ? new Graphics() : null;
   if (bubble) duck.addChild(bubble, burst);
   let last = null;
@@ -127,7 +112,6 @@ export function createSleeper(sleep, seed = 0) {
     const t = (reduced ? 1.2 : time) + off, b = breath(t, P), pt = time - pokedAt, on = pt < POKE && !reduced;
     let tilt = m.tilt * breath(t - .35, P);
     if (m.nod) tilt += -1.1 * droop(t, P);
-    // poke: a quick squash from the ground point, then 2-3 soft damped wobbles back into the breath
     const damp = on ? Math.exp(-5.5 * pt) : 0, w = damp * Math.cos(TAU * 4.2 * pt);
     duck.rotation = (tilt + 4 * damp * Math.sin(TAU * 4.2 * pt)) * DEG + shiver;
     duck.scale.set(1 + .008 * b + .1 * w, 1 + .025 * b - .16 * w); duck.x = duck.pivot.x;
@@ -139,14 +123,14 @@ export function createSleeper(sleep, seed = 0) {
       z.rotation = (-14 + k * 9) * DEG * dir; z.scale.set(sc * dir, sc);
     });
     let sway = 0;
-    if (m.swing) {   // the cloth sways with its ends pinned at the knots; the Ducky rides a beat late
+    if (m.swing) {
       sway = 1.1 * Math.sin(TAU * t / 5.4); cloth.skew.x = sway * DEG;
       duck.x += Math.tan(1.1 * Math.sin(TAU * (t - .25) / 5.4) * DEG) * (duck.pivot.y - m.swing.knotY) * .9;
     }
     if (bubble) drawBubble(reduced ? {s: .8} : bubbleState(t, P));
     if (zz) {zz.position.set(zz.pivot.x + (m.swing ? Math.tan(sway * DEG) * 120 : 0), zz.pivot.y - 6 * Math.sin(TAU * t / 3.2)); zz.rotation = 2.5 * DEG * Math.sin(TAU * (t - .4) / 3.2);}
-    if (m.blanket) {const bl = breath(t - .05, P); prop.scale.set(1 + .006 * bl, 1 + .026 * bl);}   // the leaf rises with the breath
-    zs.forEach((z, k) => {   // three z's, staggered: rise and drift away from the face, then fade
+    if (m.blanket) {const bl = breath(t - .05, P); prop.scale.set(1 + .006 * bl, 1 + .026 * bl);}
+    zs.forEach((z, k) => {
       const u = reduced ? .3 : mod(t - k * 4.8 / 3, 4.8) / 4.8, sc = (reduced ? 1 : .6 + .4 * io(Math.min(1, u * 1.6))) * Z_SIZES[k] * zH / 210;
       z.visible = !reduced || k === 2;
       z.alpha = reduced ? 1 : u < .15 ? u / .15 : u > .62 ? Math.max(0, 1 - (u - .62) / .38) : 1;

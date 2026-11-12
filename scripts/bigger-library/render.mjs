@@ -9,7 +9,6 @@ export async function render({old=false,built=false,crop=null,label=false}={}){
  else layers.push({input:await sharp(Buffer.from(svg(ox,oy,W/k,H/k))).resize(W,H).png().toBuffer(),left:0,top:0});
  for(const p of a.flats)await add(p,'flat');for(const p of a.decks)await add(p,'ground');for(const p of a.floating??[])await add({...p,x:p.x-p.width/2,y:p.y-p.height/2},'ground');
  const things=old||built?[...a.props]:[...a.props,...props];
- // Include the actual resolved sleep poses and the centre's animated back layer at rest.
  const poses=read('src/pixi/sleep-poses.json'),beds=read(ART+'resolved-sleepers.json');
  for(const b of beds){const p=poses.poses[b.pose],u=p.k*.81*(.88*.24*3)/3,[x0,,x1,y1]=p.box;for(const l of p.layers){const m=await sharp('public'+l.src).metadata(),w=m.width/poses.F*u,h=m.height/poses.F*u;things.push({src:'public'+l.src,raw:true,x:b.x,y:b.y,width:w,height:h,scale:1,anchor:{x:b.flip?1-(x0+x1)/2*u/w:(x0+x1)/2*u/w,y:y1*u/h},flip:b.flip});}}
  if(!old){const j=harbor.jetty;await add({src:'public/pixi-art/bridge-jetty-1.svg',raw:true,x:j.foot[0]-95,y:j.foot[1]-30,width:190,height:j.tip[1]-j.foot[1]+60},'ground');}

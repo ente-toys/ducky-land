@@ -1,15 +1,11 @@
-// Walk up to a stargazing telescope and a "Look through the telescope" button appears. The Ducky walks to the eyepiece,
-// then the night sky opens: one star for everyone who starred ente/ente (stargaze-sky.js draws it, /api/stars feeds it).
 
 import {useEffect, useRef, useState} from 'react';
 import {createStargazeSky, skyCounts} from './stargaze-sky.js';
 
 const REFRESH_MS = 30_000;
-// dev only (?dev=1 or ?offline): there is no room server to ask, so the sky shows this fixture
 const OFFLINE_SKY = {total:30_000, me:{accountId:'1',login:'you',starred:true}, online:['1','2','3','4'], friends:['2','6'],
   players:[['1','you'],['2','mallard'],['3','pekin'],['4','teal'],['5','eider'],['6','wigeon'],['7','pintail'],['8','gadwall']]};
 const STAR = 'M0 -7.2L2.2 -2.5 7.3 -2 3.5 1.5 4.5 6.6 0 4.1 -4.5 6.6 -3.5 1.5 -7.3 -2 -2.2 -2.5Z';
-// every star is gold; how bright it is says who it is, so the key shows each one on a patch of night
 const Star = ({level}) => <svg width="20" height="20" viewBox="-11 -11 22 22" aria-hidden="true">
   <circle r="11" fill="#16323c"/>{level === 1 && <circle r="8.6" fill="none" stroke="#ffb937" strokeWidth="1.2" opacity=".55"/>}
   <path d={STAR} fill="#ffb937" opacity={level} transform={level === 1 ? undefined : 'scale(.8)'}/></svg>;
@@ -25,7 +21,6 @@ export default function IslandStargaze({island, playing, offline = false}) {
   const dialog = useRef(null), stage = useRef(null), lens = useRef(null), canvas = useRef(null), tag = useRef(null), view = useRef(null);
   const active = playing || offline;
 
-  // the boat button owns the same place on screen, so the telescope waits its turn
   useEffect(() => {
     if (!active) {setNear(false); setWalking(false); return;}
     const id = setInterval(() => {
@@ -40,7 +35,6 @@ export default function IslandStargaze({island, playing, offline = false}) {
     setWalking(true);
   }
 
-  // Enter looks through the telescope you are next to, like Enter takes the boat you are next to
   useEffect(() => {
     if (!near || open || walking) return;
     const key = event => {
@@ -52,7 +46,6 @@ export default function IslandStargaze({island, playing, offline = false}) {
     return () => window.removeEventListener('keydown', key);
   });
 
-  // the sky opens once the Ducky is at the eyepiece, or after a few seconds if something is in its way
   useEffect(() => {
     if (!walking) return;
     const started = performance.now();
@@ -72,7 +65,6 @@ export default function IslandStargaze({island, playing, offline = false}) {
     const stars = createStargazeSky({stage:stage.current, lens:lens.current, canvas:canvas.current, tag:tag.current, onNews:setNews});
     view.current = stars;
     stars.start();
-    // the island must not hear walking keys while you stargaze; Escape still closes the dialog
     const quiet = event => {if (event.key !== 'Escape') event.stopPropagation();};
     element.addEventListener('keydown', quiet);
     return () => {

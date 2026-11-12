@@ -1,5 +1,3 @@
-// Final bench pass shared by every Fair surface rebuild. No redrawn or rotated
-// bench wrappers: use the exact Home view and its original duck-relative scale.
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {homeBench,placeBench,benchFeet,BENCH_COURTS} from './furniture.mjs';
@@ -7,8 +5,6 @@ import {FIT} from './centre-data.mjs';
 const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 export const isBench=p=>/bench/i.test([p.id,p.name,p.asset,p.src].join(' '))||/^fair-life-picnic-seat-/.test(p.id);
-// The two commons seats move from isolated grass to the existing loop edge.
-// The other outer seats retain their authored places and get small paved pads.
 export const OUTER_BENCHES={
  'fair-community-180':{at:[1360,-510],look:'back'},
  'fair-community-181':{at:[-1530,4300],look:'right'},
@@ -38,8 +34,6 @@ export function applyFairBenches(){
   if(world.props)for(const p of world.props){const b=changed.get(p.id);if(b)Object.assign(p,{x:b.x,y:b.y});}
   save(D+file,world);
  }
- // The retained hill mound is itself a ground overlay. Its seat pad must be
- // above that artwork, using the same authoritative paved pad geometry.
  const hill=changed.get('fair-life-hill-bench');
  art.flats=art.flats.filter(p=>p.id!=='fair-bench-hill-paving');
  if(hill)art.flats.push({id:'fair-bench-hill-paving',src:'bigger/bench-hill-paving.svg',x:hill.x-120,y:hill.y-130,width:400,height:260,topLeft:true,resolution:2});

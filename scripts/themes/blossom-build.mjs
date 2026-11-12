@@ -1,5 +1,3 @@
-// Cherry Blossom Hill. Standalone reproducible SVG/data build, no shared registry mutation.
-// The approved 14-blossom concept supplies the plan. All units are Home world units.
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
@@ -44,7 +42,6 @@ const props=[],flats=[],decks=[],floating=[],obstacles=[],walkways=[],arches=[],
 const manifest=JSON.parse(readFileSync('assets/manifest.json'));
 function asset(n,src,w,h,ay=1){assets[n]={src,w,h,ay};}
 function own(n,body,w,h,ay=1){save(n+'.svg',body,[0,0,w,h],n.replaceAll('-',' '));asset(n,n+'.svg',w,h,ay);}
-// Home plants, with blossom foliage as a second flat-colour palette. Never import raster art.
 for(let i=1;i<=5;i++){
  const src=`plants/tree-${i}.svg`,s=readFileSync('public/pixi-art/'+src,'utf8'),v=s.match(/viewBox="([^"]+)/)[1].split(' ').map(Number);
  copyFileSync('public/pixi-art/'+src,A+`reuse/tree-${i}.svg`);asset('tree-'+i,`reuse/tree-${i}.svg`,v[2],v[3]);
@@ -64,19 +61,16 @@ own('stone-lantern',el(53,177,43,12,'#9AAB72')+line('M20 175 L28 157 H77 L86 175
 own('basket',line('M18 37 Q6 0 38 0 Q69 0 59 37',C.ink,4)+line('M6 31 H72 L63 67 Q37 76 15 66Z',C.ink,2,C.wood)+line('M20 35 L25 65 M36 35 V67 M52 35 L49 65 M11 45 H68 M14 56 H65',C.woodShade,2)+el(51,31,11,7,C.cream,C.ink,1.5)+el(48,25,5,5,C.pink,C.ink,1.5),80,78);
 own('tea-set',el(70,63,67,17,C.woodShade,C.ink)+el(70,52,67,17,C.wood,C.ink)+line('M28 64 V88 M112 64 V88',C.ink,6)+line('M44 40 Q38 12 60 12 Q82 12 77 39Z',C.ink,2,C.cream)+el(59,12,15,5,C.wood,C.ink)+line('M76 21 Q93 12 88 29 L77 33',C.ink,2,C.cream)+line('M45 21 L33 15 L38 30 L47 33Z',C.ink,2,C.cream)+el(100,37,12,5,C.cream,C.ink)+line('M89 37 L91 49 Q99 54 109 49 L111 37',C.ink,2,C.pink),140,95);
 own('gate',el(295,422,275,27,'#7FAE31')+line('M69 407 V117 H101 V407Z',C.ink,4,C.wood)+line('M481 407 V117 H513 V407Z',C.ink,4,C.wood)+line('M60 403 H109 V434 H60Z',C.ink,3,'#D5D1AE')+line('M473 403 H522 V434 H473Z',C.ink,3,'#D5D1AE')+line('M54 178 H528 V211 H54Z',C.ink,4,C.wood)+line('M30 111 Q285 145 553 111 L570 70 Q290 105 14 70Z',C.ink,4,C.woodShade)+line('M14 70 Q293 115 570 70 L587 34 Q290 77 0 34Z',C.ink,4,C.wood)+line('M80 126 V395 M491 126 V395','#EABF77',5)+line('M115 215 Q288 257 468 215',C.ink,3)+line('M178 235 l-11 21 19 10 -8 22 M280 245 l-11 21 19 10 -8 22 M385 237 l-11 21 19 10 -8 22',C.cream,10)+line('M82 18 V55 M505 18 V55',C.ink,5),590,450);
-// Compact tea kiosk, front plus top, no oblique skew. It sits outside both future stall zones.
 let kiosk=line('M23 119 H255 V251 H23Z',C.ink,3,C.wood)+line('M16 119 L39 58 H235 L266 119Z',C.ink,3,C.cream);
 for(let i=0;i<6;i++)kiosk+=line(`M${30+i*37} 117 L${45+i*31} 59 H${62+i*31} L${49+i*37} 117Z`,'none',0,i%2?C.cream:C.pinkDeep);
 kiosk+=line('M12 118 H268 V137 Q248 151 227 137 Q205 151 183 137 Q161 151 139 137 Q117 151 95 137 Q73 151 51 137 Q30 151 12 137Z',C.ink,2,C.blush)+line('M39 163 H241 V179 H39Z',C.ink,2,C.cream)+line('M40 211 H239 V234 H40Z',C.woodShade,2)+line('M61 183 V247 M221 183 V247',C.woodShade,3);
 for(let i=0;i<6;i++)kiosk+=el(63+i*29,163,11,7,i%2?C.pink:C.cream,C.ink,1.7);
 kiosk+=line('M96 35 H184 V61 H96Z',C.ink,2,C.cream)+blossom(140,48,10,C.pink);
 own('tea-stall',kiosk,280,260);
-// Ceramic blossom planters use the Home pot scale and a dark ink rim.
 let planter=el(66,119,48,11,C.deep)+line('M24 63 L33 113 Q66 128 99 113 L108 63Z',C.ink,2.6,C.wood)+el(66,63,44,12,C.cream,C.ink,2.6)+el(66,61,35,8,C.woodShade,C.ink,1.5);
 for(const [x,y]of [[39,45],[61,29],[87,41],[53,58],[81,61]])planter+=line(`M66 64 Q${x} 60 ${x} ${y}`,C.deep,4)+blossom(x,y,10,C.blush);
 planter+=line('M40 78 L45 107',C.cream,3);
 own('blossom-planter',planter,132,135);
-// Heart of the approved concept: ancient branching sakura, hand-authored layered SVG.
 const pieces=[],blocked=[];const cx=centre.x,cy=centre.y;
 function piece(id,body,box,layer,sortY){save('centre/'+id+'.svg',body,box,'Cherry Blossom Hill '+id);pieces.push({id,file:id+'.svg',layer,x:box[0],y:box[1],width:box[2],height:box[3],anchor:{x:0,y:0},at:box.slice(0,2),...(sortY==null?{}:{sortY})});}
 let hill=el(0,-30,510,322,'#77AA39',C.ink,3)+el(0,-56,510,304,C.grass,C.deep,4);
@@ -84,7 +78,6 @@ for(let i=0;i<160;i++){let x=(rnd()-.5)*950,y=(rnd()-.5)*550-50;if((x/465)**2+((
 hill+=el(12,-75,205,65,'#80AF37');for(let i=0;i<85;i++){const a=rnd()*Math.PI*2,r=Math.sqrt(rnd()),x=Math.cos(a)*440*r,y=Math.sin(a)*255*r-50;if(Math.hypot(x,y+70)<210)continue;hill+=line(`M${f(x-5)} ${f(y)} l3 -10 4 8 5 -8`,C.deep,2);if(i%5===0)hill+=blossom(x+5,y-7,5,C.blush);}piece('hill-garden',hill,[-520,-370,1040,685],'decal');
 let trunk=line('M-175 -70 Q-111 -139 -102 -251 L-110 -369 Q-129 -454 -192 -508 Q-290 -563 -349 -651 L-411 -792 L-373 -810 Q-302 -662 -233 -626 Q-158 -603 -97 -545 Q-106 -700 -143 -1010 L-105 -1026 Q-63 -787 -37 -661 Q27 -812 64 -1030 L106 -1021 Q100 -848 51 -666 Q127 -740 228 -736 L330 -802 L355 -773 Q269 -669 183 -656 Q91 -610 53 -508 Q92 -566 193 -584 Q306 -611 399 -753 L437 -728 Q337 -530 205 -512 Q108 -463 83 -342 L84 -251 Q96 -142 181 -77 Q81 -58 5 -88 Q-72 -42 -175 -70Z',C.ink,5,C.wood);
 trunk+=line('M-8 -91 Q-48 -249 -30 -424 Q-13 -548 51 -666 Q38 -496 48 -345 Q45 -179 113 -75Z','none',0,C.woodShade)+line('M-132 -91 Q-76 -177 -83 -306 M-75 -384 Q-87 -473 -168 -524 M-55 -508 Q-54 -597 -80 -702 M56 -424 Q81 -513 187 -544 M-135 -564 Q-233 -596 -296 -674 M35 -618 Q74 -678 135 -705',C.woodShade,7)+line('M-107 -115 Q-81 -174 -79 -220 M-63 -441 Q-55 -493 -63 -538 M91 -541 Q149 -575 203 -578','#EABE79',6);
-// Individual scalloped blossom masses overlap a branching skeleton, not a circle canopy.
 const crowns=[[-470,-866,220,138],[-280,-1030,240,161],[-65,-1167,231,164],[170,-1116,225,169],[390,-981,234,158],[492,-795,223,142],[-484,-795,232,146],[-258,-775,253,169],[-30,-933,249,177],[227,-872,255,166],[-20,-790,240,140],[275,-795,197,124]];
 let canopy='';for(const [i,[x,y,rx,ry]]of crowns.entries()){
  const contour=[];for(let j=0;j<144;j++){const a=j*Math.PI*2/144,r=1+Math.sin(a*18+i)*.042+Math.sin(a*7+i*.3)*.018;contour.push([x+Math.cos(a)*rx*r,y+Math.sin(a)*ry*r]);}
@@ -97,7 +90,6 @@ let canopy='';for(const [i,[x,y,rx,ry]]of crowns.entries()){
 piece('ancient-trunk',trunk,[-345,-1040,695,1010],'sorted',-45);
 piece('blossom-canopy',canopy,[-755,-1355,1520,870],'sorted',-44);
 blocked.push({name:'Ancient blossom tree trunk',ellipse:{x:0,y:-122,rx:153,ry:92}});
-// Low retaining wall front, broken at the broad stair entrance.
 for(const [side,a,b]of [['west',.58,1.32],['east',1.83,2.56]]){
  const arc=(r,dy)=>Array.from({length:25},(_,i)=>{const t=a+(b-a)*i/24;return[Math.cos(t)*r,Math.sin(t)*r*.65+dy]});const top=arc(525,-15),bot=arc(525,21),inner=arc(490,-15);
  const s=line(path([...top,...bot.reverse()],true),C.ink,2.5,'#C3B486')+line(path([...top,...inner.reverse()],true),C.ink,2.5,C.cream);
@@ -114,11 +106,9 @@ for(const b of blocked){if(b.ellipse)obstacles.push({...b.ellipse,x:cx+b.ellipse
 function put(n,x,y,scale=1,opts={}){const a=assets[n];if(!a)throw Error(n);const id='blossom-'+pid++;const p={id,name:n.replaceAll('-',' '),asset:n,src:a.src,x:f(x),y:f(y),width:a.w,height:a.h,scale:f(scale*1000)/1000,anchor:{x:.5,y:a.ay},flip:false,...opts};props.push(p);
  if(opts.solid!==false){let rx=/tree/.test(n)?30:/lantern/.test(n)?17:/bush/.test(n)?a.w*scale*.31:Math.min(140,a.w*scale*.36),ry=/tree/.test(n)?22:/lantern/.test(n)?13:Math.min(48,a.w*scale*.15);obstacles.push({name:id,x:p.x,y:f(p.y-9),rx:f(rx),ry:f(ry)});}return p;}
 function place(n,c,scale=1,opts={}){return put(n,...T(c),scale,opts);}
-// Gate collisions only on the posts, entry remains open.
 const gate=place('gate',[738,808],1,{solid:false,zone:'gate'});for(const s of [-1,1])obstacles.push({name:'Gate post',x:f(gate.x+s*206),y:gate.y-26,rx:24,ry:34});
 place('tea-stall',[1020,208],1.15,{zone:'tea-market'});place('tea-stall',[1200,235],1.05,{zone:'tea-market',flip:true});
 place('stone-lantern',[210,397],1);place('stone-lantern',[365,408],1);place('stone-lantern',[647,820],1);place('stone-lantern',[838,845],1);
-// Exact Home arc benches, each drawn on the receiving plaza's own ellipse.
 const benchRecords=[];
 for(const z of plazas)for(const deg of z.id==='centre'?[-146,-35,35,145]:[-143,-37,42,138]){
  const radius=z.rx+(z.id==='centre'?-60:30),k=z.ry/z.rx,span=z.id==='centre'?15:26,ground=(a,s)=>[z.x+Math.cos(a*Math.PI/180)*s,z.y+Math.sin(a*Math.PI/180)*s*k];
@@ -129,60 +119,47 @@ for(const z of plazas)for(const deg of z.id==='centre'?[-146,-35,35,145]:[-143,-
  props.push({id:`blossom-bench-${z.id}-${deg}`,name:'Curved cherrywood bench',src,x:f(x),y:f(y),width:w,height:h,scale:1,anchor:{x:(x-x0)/w,y:(y-y0)/h},shadow:false,wind:false,zone:z.id});obstacles.push({name:'Curved bench',poly:footprint});benchRecords.push({plaza:z.id,deg,span,radius,ratio:k});
 }
 for(const z of plazas){for(const a of (z.id==='centre'?[-114,-66,66,114]:[-114,-66,66,114,0,180])){const t=a*Math.PI/180,x=z.x+Math.cos(t)*(z.rx+32),y=z.y+Math.sin(t)*(z.ry+26);if(z.id!=='centre'&&paths.some(p=>dist(x,y,p.line)<p.w/2+32))continue;put('lantern',x,y,z.id==='centre'?1.1:.9,{zone:z.id});put('blossom-planter',x+Math.cos(t)*78,y+Math.sin(t)*48,z.id==='centre'?.95:.8,{zone:z.id});}}
-// Koi pond bridge: planked deck and rear/front rails are separate for proper Ducky sorting.
 const pond=water[0],bridgeY=pond.y+6,bridgeX=pond.x;
 let bridge=line('M-620 0 Q0 -105 620 0 V85 Q0 -20 -620 85Z',C.ink,3,C.wood);
 for(let x=-610;x<620;x+=36){const y=-100*(1-(x/620)**2);bridge+=line(`M${x} ${y+3} V${y+81}`,C.woodShade,2);}
 const bridgeBox=[bridgeX-640,bridgeY-110,1280,220];save('koi-bridge-deck.svg',`<g transform="translate(${bridgeX} ${bridgeY})">${bridge}</g>`,bridgeBox,'Arched koi garden bridge planked deck');decks.push({src:'koi-bridge-deck.svg',x:bridgeBox[0],y:bridgeBox[1],width:1280,height:220});
 for(const [name,dy,sortY]of [['back',0,bridgeY-60],['front',85,bridgeY+87]]){let b='';for(const t of [0,1])b+=line(`M-620 ${dy-t*42} Q0 ${dy-110-t*42} 620 ${dy-t*42}`,C.ink,12)+line(`M-620 ${dy-t*42} Q0 ${dy-110-t*42} 620 ${dy-t*42}`,'#E68B59',7);for(let x=-620;x<=620;x+=124){const y=dy-100*(1-(x/620)**2);b+=line(`M${x} ${y+1} V${y-63}`,C.ink,13)+line(`M${x} ${y+1} V${y-63}`,'#E68B59',8)+el(x,y-66,9,6,C.cream,C.ink,2);}save('koi-rail-'+name+'.svg',b,[-640,-180,1280,320],'Koi bridge '+name+' railing');props.push({id:'blossom-koi-rail-'+name,name:'Arched koi bridge '+name+' rail',src:'koi-rail-'+name+'.svg',x:bridgeX,y:sortY,width:1280,height:320,scale:1,anchor:{x:.5,y:(sortY-bridgeY+180)/320},shadow:false,wind:false});}
 walkways.push({a:[pond.x-625,bridgeY+37],b:[pond.x+625,bridgeY+37],w:88});arches.push({a:[pond.x-625,bridgeY+37],b:[pond.x+625,bridgeY+37],r:100,w:88});
-// Water walk-through overrides use bridges over inland ponds. Match visual bridge approach.
 const bridges=[{x:pond.x,y:bridgeY+37,w:1250,h:88}];
-// Pond life, rocks and stepping stones crossing the southern pool.
 for(let i=0;i<12;i++){const a=i*Math.PI*2/12,x=pond.x+Math.cos(a)*(pond.rx+27),y=pond.y+Math.sin(a)*(pond.ry+20);put(i%3?'rock-round':'reeds',x,y,i%3?.13:.2,{solid:i%3!==0});}
 for(const [dx,dy]of [[-300,-180],[-30,-255],[235,-150],[-220,230],[60,230],[320,170]]){const n=rnd()<.5?'lily-pad-flower':'lily-pad-large',a=assets[n];floating.push({src:a.src,x:pond.x+dx,y:pond.y+dy,width:a.w*.17,height:a.h*.17,anchor:{x:.5,y:1},phase:rnd()*6});}
 for(let i=0;i<9;i++){const x=pond.x-490+i*120,y=pond.y+240+Math.sin(i*.4)*50;save(`stone-${i}.svg`,el(52,30,49,26,'#B6BCA0',C.ink,2)+line('M22 18 Q47 8 77 16',C.cream,3),[0,0,104,60],'Koi pond stepping stone');decks.push({src:`stone-${i}.svg`,x:x-52,y:y-30,width:104,height:60});bridges.push({x,y,w:164,h:98});}
-// Koi are flat SVG markings under the water highlights, deliberately visible at close zoom.
 function koi(x,y,a){return `<g transform="translate(${f(x)} ${f(y)}) rotate(${a})">${line('M-32 0 Q-12 -18 20 -7 Q37 -3 34 3 Q16 15 -15 10 L-38 20 L-31 2 L-43 -9Z',C.ink,1.7,'#FFF3D4')}${line('M-15 -8 Q0 -13 9 -8 L4 7 Q-8 13 -14 6Z','none',0,'#EC8354')}${el(24,-2,2,2,C.ink)}${line('M-2 -10 L-9 -22 L9 -12',C.ink,1.5,C.cream)}</g>`;}
 let fish='';for(const [x,y,a]of [[-260,-225,23],[30,-190,140],[260,-245,10],[-250,155,-15],[105,140,165],[355,275,210]])fish+=koi(pond.x+x,pond.y+y,a);
 save('koi.svg',fish,[pond.x-pond.rx,pond.y-pond.ry,pond.rx*2,pond.ry*2],'Six koi in blossom pond');flats.push({src:'koi.svg',x:pond.x-pond.rx,y:pond.y-pond.ry,width:pond.rx*2,height:pond.ry*2,topLeft:true});
-// Home wooden jetties relocated without altering their source art.
 function homeDeck(id,at,sx,sy){const J={file:'public/pixi-art/bridge-jetty-5.svg',vb:[5004.9592,1492.5089,494.0617,277.2587],a:[5034.08,1638.41],b:[5469.9,1681.99]};const inner=readFileSync(J.file,'utf8').replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');const map=([x,y])=>[f(at[0]+(x-J.a[0])*sx),f(at[1]+(y-J.a[1])*sy)],a=map(J.vb),b=map([J.vb[0]+J.vb[2],J.vb[1]+J.vb[3]]),x=Math.min(a[0],b[0]),y=Math.min(a[1],b[1]),w=Math.abs(a[0]-b[0]),h=Math.abs(a[1]-b[1]);save(id+'.svg',`<g transform="translate(${at}) scale(${sx} ${sy}) translate(${-J.a[0]} ${-J.a[1]})">${inner}</g>`,[x,y,w,h],'Home wooden blossom '+id);decks.push({src:id+'.svg',x,y,width:w,height:h});const tip=map(J.b);walkways.push({a:at,b:tip,w:90});arches.push({a:at,b:tip,r:55,w:90});return tip;}
 homeDeck('east-pier',T([1423,538]),.9,1);
-// Two small blossom islets, joined by hand-drawn arched planked bridges.
 function islandBridge(id,a,b){const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),nx=-dy/L*52,ny=dx/L*52,points=(side,z)=>Array.from({length:33},(_,i)=>{const t=i/32;return[a[0]+dx*t+nx*side,a[1]+dy*t+ny*side-65*4*t*(1-t)-z]});const foot=[...points(-1,0),...points(1,0).reverse()];let s=line(path(foot,true),C.ink,3,C.wood);for(let i=0;i<=32;i++){const t=i/32;if(i%2===0)s+=line(path([points(-1,0)[i],points(1,0)[i]]),C.woodShade,2);}const all=[...points(-1,65),...points(1,0)],x=Math.min(...all.map(p=>p[0]))-10,y=Math.min(...all.map(p=>p[1]))-10,w=Math.max(...all.map(p=>p[0]))-x+10,h=Math.max(...all.map(p=>p[1]))-y+15;save(id+'.svg',s,[x,y,w,h],id);decks.push({src:id+'.svg',x,y,width:w,height:h});for(const side of [-1,1]){let rail=line(path(points(side,54)),C.ink,10)+line(path(points(side,54)),C.wood,6);for(let i=0;i<=32;i+=4)rail+=line(path([points(side,0)[i],points(side,62)[i]]),C.ink,9)+line(path([points(side,0)[i],points(side,62)[i]]),C.wood,5);const sy=Math.max(a[1],b[1])+ny*side;save(id+'-rail-'+side+'.svg',rail,[x,y,w,h],id+' separate rail');props.push({id:id+'-rail-'+side,name:'Wooden blossom bridge rail',src:id+'-rail-'+side+'.svg',x,y:sy,width:w,height:h,scale:1,anchor:{x:0,y:(sy-y)/h},shadow:false,wind:false});}walkways.push({a,b,w:104});arches.push({a,b,w:104,r:65});}
 islandBridge('islet-bridge-1',T([985,902]),[islets[0][0]-220,islets[0][1]-25]);islandBridge('islet-bridge-2',[islets[0][0]+250,islets[0][1]-18],[islets[1][0]-200,islets[1][1]-20]);
 for(const [i,[x,y]]of islets.entries()){put('blossom-tree-'+(i+2),x,y-35,1.1);put('bush-2',x+160,y+18,1.1);put('flower-2',x-160,y+30,1.3,{solid:false});put('rock-round',x-80,y+80,.12);}
-// Picnic groups and beach life sit outside the reserved open spaces.
 for(const c of [[340,295],[455,260],[510,670],[1005,620],[900,150],[250,752]]){const [x,y]=T(c);put('picnic-blanket',x,y,.26,{solid:false});put('basket',x-58,y-25,.9);put('tea-set',x+95,y-20,.9);}
 for(const c of [[1250,660],[1335,619]]){place('umbrella-garden',c,.3);place('towel-striped',[c[0]-25,c[1]+20],.25,{solid:false});place('beach-ball',[c[0]+35,c[1]+20],.19);}
 place('sandcastle-small',[1375,603],.22);place('shell-scallop',[1230,700],.16,{solid:false});place('starfish-orange',[1295,682],.17,{solid:false});
-// Keep the entry, all path surfaces, landmark sightlines and open areas clear of forest.
 const land=geometry({coast:grass,water,walkways:[],bridges:[],islets,obstacles:[]});
 const open=(x,y,pad=0)=>plazas.some(z=>((x-z.x)/(z.rx+pad))**2+((y-z.y)/(z.ry+pad))**2<1);
 const onPath=(x,y,rad=0)=>paths.some(p=>dist(x,y,p.line)<p.w/2+rad);
 function canPlant(x,y,w,h){return land.walkable(x,y)&&!water.some(q=>inShape(x,y,q,w*.28))&&land.walkable(x-w*.25,y)&&!open(x,y,w*.5+20)&&!onPath(x,y,w*.48+15)&&!walkways.some(b=>seg(x,y,b.a,b.b)<b.w/2+w*.55)&&!props.some(p=>p.id?.startsWith('blossom-bench-')&&y>p.y&&x+w/2>p.x-p.width*p.anchor.x-20&&x-w/2<p.x+p.width*(1-p.anchor.x)+20&&y-h<p.y+8)&&!props.some(p=>Math.abs(x-p.x)<(w+p.width*p.scale)*.40&&Math.abs(y-p.y)<Math.min(h,p.height*p.scale)*.58)&&Math.hypot(x-gate.x,y-gate.y)>500&&!(x>cx-900&&x<cx+900&&y>cy-1650&&y<cy+550);}
 let trees=0;const clusters=[[220,140],[450,160],[620,115],[960,140],[1240,150],[1390,270],[1370,420],[1390,535],[1140,555],[1000,660],[870,675],[540,680],[380,705],[320,825],[555,880],[875,885],[200,610],[135,480],[345,375],[490,450],[500,570],[985,405],[1060,365],[1180,620],[1040,730]];
 for(const [ci,c]of clusters.entries())for(let j=0;j<6;j++)for(let tries=0;tries<70;tries++){const [a,b]=T(c),x=a+(rnd()-.5)*620,y=b+(rnd()-.5)*440,n=ci%3===0?'tree-'+(1+trees%5):'blossom-tree-'+(1+trees%5),s=1.05+rnd()*.30,v=assets[n];if(!canPlant(x,y,v.w*s,v.h*s))continue;put(n,x,y,s,{flip:rnd()<.5});trees++;break;}
-// More natural forest only where the actual silhouettes fit.
 for(let t=0;trees<85&&t<20000;t++){const x=600+rnd()*6400,y=720+rnd()*3900,n=t%4?'blossom-tree-'+(1+trees%5):'tree-'+(1+trees%5),s=1.02+rnd()*.23,v=assets[n];if(canPlant(x,y,v.w*s,v.h*s)){put(n,x,y,s);trees++;}}
 const treeProps=props.filter(p=>/tree/.test(p.asset||''));
 for(const [i,t]of treeProps.entries()){for(let j=0;j<2;j++){const x=t.x+(j?1:-1)*(75+rnd()*70),y=t.y+10+rnd()*40;if(!land.walkable(x,y)||open(x,y,32)||onPath(x,y,50))continue;put('bush-'+(1+(i+j)%6),x,y,.8);}}
-// Understorey flowers and shrubs follow the same keep-clear rules as the trees.
 for(let n=0,t=0;n<160&&t<15000;t++){const x=600+rnd()*6400,y=720+rnd()*3900;if(!land.walkable(x,y)||open(x,y,45)||onPath(x,y,48)||props.some(p=>Math.hypot(x-p.x,(y-p.y)*1.4)<95))continue;put(n%3?'flower-'+(1+n%3):'bush-'+(1+n%6),x,y,n%3?1.1:1.05,{solid:n%3===0});n++;}
-// Home tufts/pebbles/small blooms, with scattered flat petals. Texture lies under props, never occludes players.
 let nFlat=0;for(let t=0;nFlat<2300&&t<50000;t++){
  const x=570+rnd()*6500,y=600+rnd()*4180;if(!inPoly(x,y,grass)||water.some(q=>inShape(x,y,q,22)))continue;
  if(plazas.some(z=>z.kind==='paved'&&inShape(x,y,z,8)))continue;
  const paved=onPath(x,y,0);if(paved&&rnd()<.72)continue;const name=paved?'petals':['grass-tuft-1','grass-tuft-2','grass-tuft-3','flower-dot-1','flower-dot-2','pebble-1','petals'][nFlat%7];
  const a=assets[name],s=name==='petals'?.45:1;flats.push({src:a.src,x:f(x),y:f(y),width:f(a.w*s),height:f(a.h*s),flip:rnd()<.5});nFlat++;
 }
-// Soft coastline, saturated lawn and warm sand use Home's exact palette.
 let g=`<defs><clipPath id="grass"><path d="${path(grass,true)}"/></clipPath><clipPath id="land"><path d="${path(coast,true)}"/></clipPath></defs>`;
 g+=line(path(offset(coast,-53),true),'#D8F4E6',14)+line(path(offset(coast,-26),true),'#FFF5D3',7)+line(path(coast,true),'#C4AC63',6,C.sand)+line(path(offset(coast,12),true),'none',0,C.sand);
 g+=line(path(grass,true),C.deep,7,C.grass);
 let patches='';for(let i=0;i<160;i++){const x=600+rnd()*6400,y=650+rnd()*4050;patches+=el(x,y,85+rnd()*170,40+rnd()*70,i%2?'#A6CD45':C.shade);}g+=`<g clip-path="url(#grass)" opacity=".40">${patches}</g>`;
-// SE cove is a proper sand beach, not a rectangle. Same broad shore treatment as home.
 const beach=curve([[1170,617],[1270,557],[1450,547],[1535,580],[1470,690],[1270,743],[1160,735],[1105,701]].map(T),true);
 g+=`<g clip-path="url(#land)">${line(path(beach,true),C.sandShade,6,C.sand)}</g>`;
 for(const p of paths)g+=line(path(p.line),C.deep,p.w+12);for(const p of paths)g+=line(path(p.line),C.sandShade,p.w+5);for(const p of paths)g+=line(path(p.line),C.sand,p.w);
@@ -192,7 +169,6 @@ function pattern(z){const {x,y,rx,ry}=z,k=ry/rx;
  const ring=(r0,r1,num)=>{let out='';for(let i=0;i<num;i++){const a=i*2*Math.PI/num,b=(i+1)*2*Math.PI/num,pts=[];for(let j=0;j<=3;j++)pts.push([x+Math.cos(a+(b-a)*j/3)*r0,y+Math.sin(a+(b-a)*j/3)*r0*k]);for(let j=3;j>=0;j--)pts.push([x+Math.cos(a+(b-a)*j/3)*r1,y+Math.sin(a+(b-a)*j/3)*r1*k]);out+=line(path(pts,true),'#B6A578',1.7,['#FDE48C','#FFF0C7','#F8DF98','#F4D783'][i%4]);}return out;};
  for(let r=80;r<rx-45;r+=100)s+=ring(r,Math.min(r+100,rx-45),Math.max(14,Math.round(r/11)));
  s+=ring(rx-38,rx-4,64);
- // Five petal stone inlay, with fine stems. Open and walkable, flat artwork only.
  if(z.id!=='centre'){
    const size=rx*.52;
    s+=`<g transform="translate(${x} ${y}) scale(${size/100} ${size/100*k})">`;
@@ -204,16 +180,13 @@ function pattern(z){const {x,y,rx,ry}=z,k=ry/rx;
  return s;
 }
 for(const z of plazas)g+=pattern(z);for(let a=15;a<360;a+=30){const t=a*Math.PI/180,x=centre.x+Math.cos(t)*(centre.rx-80),y=centre.y+Math.sin(t)*(centre.ry-55);g+=`<g transform="translate(${f(x)} ${f(y)}) scale(1 .683)">${blossom(0,0,15,'#E7B8AC')}</g>`;}
-// Koi pool: visible stone bank, ink edge, turquoise water, soft cream ripple arcs.
 g+=el(pond.x,pond.y,pond.rx+32,pond.ry+25,C.deep)+el(pond.x,pond.y,pond.rx+20,pond.ry+17,C.sand,C.ink,3)+el(pond.x,pond.y,pond.rx,pond.ry,C.water,C.ink,3);
 g+=el(pond.x+12,pond.y+20,pond.rx-20,pond.ry-19,'none','#82DADE',7);
 for(const dy of [-200,-80,120,295])g+=line(`M${pond.x-350} ${pond.y+dy} q95 -13 186 0 m150 0 q80 -12 155 -3`,'#D4F4DF',4);
 for(const [x,y,rx,ry]of islets){g+=el(x,y+14,rx+8,ry+10,'#FFF2CC',C.cream,6)+el(x,y,rx,ry,C.sand,C.sandShade,3)+el(x,y-4,rx-65,ry-48,C.grass,C.deep,3);for(let i=0;i<45;i++){const a=rnd()*6.28,r=Math.sqrt(rnd());g+=petal(x+Math.cos(a)*(rx-90)*r,y+Math.sin(a)*(ry-70)*r,4,rnd()*360);}}
-// A few soft cobbles on path margins avoid geometric junction slabs.
 for(const p of paths)for(let i=3;i<p.line.length;i+=9){const [x,y]=p.line[i];if(!open(x,y,20)&&!inShape(x,y,pond,60))g+=el(x-70,y+55,9,6,'#E2C994','#B2A16F',1.5);}
 const tiles=[];save('ground.svg',g,[0,0,W,H],'Cherry Blossom Hill ground');
 for(let r=0;r<4;r++)for(let c=0;c<6;c++){const x=c*Math.ceil(W/6),y=r*1350,w=Math.min(Math.ceil(W/6),W-x),h=Math.min(1350,H-y),src=`ground-r${r}-c${c}.svg`;save(src,g,[x,y,w,h],`Blossom ground tile ${r} ${c}`);tiles.push({src,x,y,width:w,height:h});}
-// Real docking pier on the SW coast, with clear landing and an unbroken path back to the hill.
 const foot=T([192,822]),tip=[foot[0]-70,foot[1]+480];
 const zones={plaza:{x:cx,y:cy+600,spawn:[cx,cy+600]},centre:{...centre,landmark:'blossom-centre-ancient-trunk',placeholder:false},gate:{x:gate.x,y:gate.y,spawn:[gate.x,gate.y-110]},pond:{x:pond.x,y:pond.y,spawn:[pond.x,bridgeY+37]}};
 for(const z of [...activities,...stalls])zones[z.id]={...z};

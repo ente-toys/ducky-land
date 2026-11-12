@@ -1,5 +1,3 @@
-// Applies the hand-written homes patch (homes.json) to src/pixi/home-expansion.json. Places nothing itself. Idempotent.
-// Run from the repo root: node <this> <path-to-homes.json>
 import {readFileSync, writeFileSync} from 'node:fs';
 import {applyHamlets} from './hamlets-apply.mjs';
 const FILE = 'src/pixi/home-expansion.json';
@@ -17,11 +15,8 @@ for (const a of P.addProps) {
   if (a.scale && p.footprint) {const k = a.scale / p.scale; p.footprint.rx *= k; p.footprint.ry *= k; p.footprint.y = p.y - (p.y - p.footprint.y) * k;}
   Object.assign(p, {id: a.id, zone: a.zone, scale: a.scale ?? p.scale}); moveTo(p, a.x, a.y);
   const i = E.props.findIndex(q => q.id === a.id); if (i >= 0) E.props[i] = p; else E.props.push(p);}
-// boss 8 Nov: the old flat plank pier into the south-west pond (pond-jetty.svg) led nowhere and is not the centre's style; it goes, with its walkway
 E.decks = (E.decks ?? []).filter(d => !String(d.src).endsWith('/pond-jetty.svg'));
 E.walkways = (E.walkways ?? []).filter(w => !(Math.abs(w.a[0] - 361.1) < 1 && Math.abs(w.a[1] - 3964.4) < 1));
-// boss 8 Nov (trees by hand): the groves are literal entries in homes.json addTrees, drawn with the centre's plant art at its
-// sizes (placements.js PLANTS). A tree-* asset gets the centre's solid trunk (placements.js obstaclesFor).
 const PLANT_SIZE = {'tree-1': [260, 360], 'tree-2': [180, 360], 'tree-3': [300, 380], 'tree-4': [200, 280], 'tree-5': [150, 380], 'bush-2': [168, 110], 'bush-4': [140, 100]};
 E.props = E.props.filter(p => !String(p.id).startsWith('grove-'));
 for (const t of P.addTrees ?? []) {
@@ -29,19 +24,17 @@ for (const t of P.addTrees ?? []) {
   E.props.push({id: t.id, name: t.kind.startsWith('bush') ? 'Bush' : 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, x: t.x, y: t.y, width, height, scale: t.scale,
     anchor: {x: .5, y: 1}, resolution: 1.5, zone: 'groves', flip: t.flip, tint: t.tint});
 }
-// boss 8 Nov (apple trees): the old expansion apple art is swapped for the centre's plant art at the same spot, by hand
 for (const t of P.swapTrees ?? []) {
   const p = byId.get(id(t.id)); if (!p || !E.props.includes(p)) throw Error(`swapTrees: missing ${t.id}`);
   const [width, height] = PLANT_SIZE[t.kind];
   Object.assign(p, {name: t.kind.startsWith('bush') ? 'Bush' : 'Tree', asset: t.kind, src: `/pixi-art/plants/${t.kind}.svg`, width, height, scale: t.scale, anchor: {x: .5, y: 1}, resolution: 1.5, flip: t.flip ?? false, tint: t.tint ?? 0xffffff});
 }
-// boss 8 Nov (benches): each expansion bench sits beside a path facing it, placed by hand; look picks the centre's facing art
 const BENCH_ART = {front: 'street--bench-wood', back: 'street--bench-wood-back', left: 'street--bench-wood-left', right: 'street--bench-wood-right'};
 for (const [n, s] of Object.entries(P.setProps ?? {})) {
   const p = byId.get(id(isNaN(n) ? n : +n)); if (!p || !E.props.includes(p)) throw Error(`setProps: missing ${n}`);
   moveTo(p, s.x, s.y);
   if (s.look) Object.assign(p, {asset: s.look === 'front' ? 'bench-wood' : `bench-wood-${s.look}`, src: `/pixi-art/detail/${BENCH_ART[s.look]}.svg`});
-  if (/left|right/.test(s.look ?? '')) Object.assign(p, {scale: .28, resolution: 1.4});   // the centre's side benches: drawn narrow, .28 matches the front bench's length
+  if (/left|right/.test(s.look ?? '')) Object.assign(p, {scale: .28, resolution: 1.4});
 }
 const dead = new Set(P.removeObstacles.map(o => o.join(',')));
 E.obstacles = E.obstacles.filter(o => !dead.has([o.x, o.y, o.rx, o.ry].join(',')) && !String(o.id ?? '').startsWith('homes-')).concat(P.addObstacles);
@@ -49,9 +42,9 @@ E.decks = E.decks.filter(d => !String(d.id ?? '').startsWith('homes-')).concat(P
 for (const c of E.communities) Object.assign(c, P.communities[c.id] ?? {});
 for (const p of E.places) if (P.places[p.id]) p.point = P.places[p.id];
 const goneRoads = new Set(P.removeRoads), set = new Map(P.setRoads.map(r => [r.id, r]));
-E.roads = E.roads.filter(r => !goneRoads.has(r.id)).map(r => set.get(r.id) ?? r);   // a reset road keeps its draw order
+E.roads = E.roads.filter(r => !goneRoads.has(r.id)).map(r => set.get(r.id) ?? r);
 E.roads = E.roads.concat(P.setRoads.filter(r => !E.roads.includes(r)));
-const hamlets = applyHamlets(E, P);   // boss 8 Nov: the five hamlets from GPT's blueprints
+const hamlets = applyHamlets(E, P);
 for (const [h, r] of Object.entries(hamlets)) console.log(h, JSON.stringify(r));
 writeFileSync(FILE, JSON.stringify(E, null, 2));
 console.log(`homes patch: ${E.props.length} props, ${E.obstacles.length} obstacles, ${E.decks.length} decks, ${E.roads.length} roads`);

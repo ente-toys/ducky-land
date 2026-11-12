@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {read,write} from './design.mjs';
 const S='scripts/bigger-fair/',D='assets/world/themes/fair/',A='public/pixi-art/themes/fair/';
-// The previous committed Fair fix is the input to this densification round.
 const before=p=>JSON.parse(execFileSync('git',['show','85119e0c:'+p],{maxBuffer:20*1024*1024}).toString());
 const world=read(D+'world.json'),walk=read(D+'walk-world.json');
 for(const [file,keys]of [[D+'world.json',['coast','water','bridges','walkways','sleepSpots','sleepAvoid']],[D+'walk-world.json',['coast','water','bridges','walkways']],[A+'art.json',['decks','flats','floating']]])for(const key of keys)assert.deepEqual(read(file)[key],before(file)[key],file+':'+key);

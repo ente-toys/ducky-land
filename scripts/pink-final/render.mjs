@@ -1,4 +1,3 @@
-// Static proof assembled from production art, at its actual placement and scale.
 import sharp from 'sharp';
 import {fileURLToPath} from 'node:url';
 import {dirname} from 'node:path';

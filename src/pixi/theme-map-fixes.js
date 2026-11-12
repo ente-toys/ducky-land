@@ -1,6 +1,3 @@
-// Corrections to authored map snapshots. Keep these with the client/server code
-// so already-generated theme indexes get the same fix without regeneration.
-// Cathedral's olive-14 was moved beyond the coast during the polish pass.
 export const TREE_RELOCATIONS = {cathedral: {'olive-14': {from: [6670, 4030], to: [6400, 3870]}}};
 export function fixThemeWorld(id, world) {
   const moves = TREE_RELOCATIONS[id];

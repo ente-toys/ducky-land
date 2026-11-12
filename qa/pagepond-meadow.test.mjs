@@ -34,8 +34,6 @@ test('Pagepond meadow assets use flat vector fills and the approved outline ink'
   for (const name of Object.keys(placement.assetManifest)) {
     const svg = fs.readFileSync(base+'pagepond/meadow/'+name, 'utf8');
     assert(!/<(?:image|foreignObject|filter|linearGradient|radialGradient)\b|data:image/i.test(svg),name);
-    // Colored ripple, page-line and highlight strokes are paint details. The
-    // filled silhouettes use the common ink; the rim also has light stone seams.
     for (const [tag] of svg.matchAll(/<[^>]+\bfill="(?!none")[^"]+"[^>]*\bstroke="#[a-f\d]+"[^>]*>/gi)) {
       const stroke = tag.match(/\bstroke="([^"]+)"/)[1].toLowerCase();
       assert(stroke === '#39472d' || /^(stone-rim|island-grass)-floor\.svg$/.test(name) && stroke === '#938b57',name+' outline ink');

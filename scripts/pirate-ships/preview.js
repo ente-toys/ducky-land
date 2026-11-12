@@ -1,4 +1,3 @@
-// Local QA only. Real room boat, real game render path; never loaded in production.
 import {pirateLocal} from '../../src/pixi/pirate-fleet.js';
 import {canSail} from '../../src/pixi/islands.js';
 export async function piratePreview(game){

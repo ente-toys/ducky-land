@@ -1,9 +1,6 @@
 import {stepRink} from './rink-slide.js';
 export const WALK_SPEED = 245;
-// boss 6 Nov: hold Shift with the arrow keys / WASD to run. The input only carries a yes/no run flag; the speed comes
-// from here on the server, so a client can never ask for more than RUN_SPEED. Taps, routes and sailing never run.
 export const RUN_FACTOR = 1.7, RUN_SPEED = WALK_SPEED * RUN_FACTOR;
-// boss 5 Nov: the museum door at the top of its steps (home island); out = a few steps down. Walking into it opens the room.
 export const MUSEUM_DOOR = {x0: 2850, x1: 2990, y: 1215, out: {x: 2920, y: 1340}};
 export const atMuseumDoor = (x, y) => x > MUSEUM_DOOR.x0 && x < MUSEUM_DOOR.x1 && y < MUSEUM_DOOR.y;
 export const JUMP_SECONDS = .6;
@@ -15,11 +12,6 @@ export function startJump(actor) {
   return true;
 }
 
-// boss 6 Nov ("the jump is just up and down"): the same 0.6 s (the server only counts jumpLeft down), split into a crouch,
-// the flight and a landing. Crouch 0.08 s: squash down and wide. Flight 0.38 s: a parabola (fast off the ground, hangs at
-// the top, falls faster: ease-out up, ease-in down), stretched tall on the way up, a little on the way down, leaning into
-// the way it is walking. Landing 0.14 s: squash flat, one small rebound, settle. The ground shadow shrinks and fades with
-// height. Every client draws it from jumpLeft and turn alone, so remote Duckies jump the same.
 export const JUMP_CROUCH = .08, JUMP_LAND = .14, JUMP_AIR = JUMP_SECONDS - JUMP_CROUCH - JUMP_LAND, JUMP_RISE = 85;
 const REST = Object.freeze({lift:0, sx:1, sy:1, rotation:0, shadow:0, shadowScale:1, phase:'ground'});
 const clamp01 = v => Math.max(0, Math.min(1, v));
@@ -27,7 +19,7 @@ const clamp01 = v => Math.max(0, Math.min(1, v));
 export function jumpPose(left = 0, reduced = false, {turn = 0, moving = false} = {}) {
   if (!(left > 0)) return REST;
   const t = JUMP_SECONDS - Math.min(left, JUMP_SECONDS), rise = reduced ? 15 : JUMP_RISE;
-  const lean = moving ? Math.max(-1, Math.min(1, Math.sin(turn) * 1.6)) : (Math.sin(turn) < 0 ? -.4 : .4);   // + leans right
+  const lean = moving ? Math.max(-1, Math.min(1, Math.sin(turn) * 1.6)) : (Math.sin(turn) < 0 ? -.4 : .4);
   if (t < JUMP_CROUCH) {
     const k = 1 - (1 - t / JUMP_CROUCH) ** 2;
     return reduced ? {...REST, phase:'crouch'} : {lift:0, sx:1 + .2 * k, sy:1 - .24 * k, rotation:-lean * .05 * k, shadow:.26 * k, shadowScale:1, phase:'crouch'};
@@ -36,7 +28,7 @@ export function jumpPose(left = 0, reduced = false, {turn = 0, moving = false} =
     const u = (t - JUMP_CROUCH) / JUMP_AIR, h = 4 * u * (1 - u), lift = h * rise;
     if (reduced) return {...REST, lift, phase:'air'};
     const up = u < .5 ? (1 - u / .5) ** 2 : 0, down = u > .5 ? ((u - .5) / .5) ** 2 : 0;
-    const pop = clamp01((t - JUMP_CROUCH) / .03);   // the crouch springs into the stretch over two frames, not one
+    const pop = clamp01((t - JUMP_CROUCH) / .03);
     const sy = 1 - .24 * (1 - pop) + (.26 * up + .1 * down) * pop, sx = 1 + .2 * (1 - pop) - (.16 * up + .06 * down) * pop;
     return {lift, sx, sy, rotation:lean * (.05 + .13 * u) * Math.sin(Math.PI * u), shadow:.26 * (1 - .7 * h), shadowScale:1 - .45 * h, phase:'air'};
   }
@@ -48,7 +40,6 @@ export function jumpHeight(left = 0, reduced = false) {
   return jumpPose(left, reduced).lift;
 }
 export const DURATIONS = {2:1.3,3:6,4:1.5,5:1.55,6:1.55,7:2.3,8:1.5,9:1.75};
-// boss 5 Nov: walking feel. Speed ramps up in 0.1 s and down in 0.12 s; ducks keep a 22 px personal space.
 export const EASE_IN = .1, EASE_OUT = .12, DUCK_RADIUS = 22;
 const BRAKE = WALK_SPEED / EASE_OUT, CREEP = 30, SIDE = Math.PI / 18;
 
@@ -76,17 +67,13 @@ export function playEmote(actor, action, now) {
   actor.emoteVersion++;
 }
 
-// boss 5 Nov: glide along walls. A blocked step is turned toward the wall tangent in 10 degree steps, shrinking to its
-// projection (cos, up to 70 degrees), so a shallow hit on a curved coast keeps nearly full speed and a square hit stops. When both sides
-// open at the same angle the side with more open ground around the duck wins; a tie stops (no flip-flop jitter).
-// Every candidate is checked with clearLine (3 px samples), so it never tunnels through a footprint.
 export function slideStep(nav, x, y, vx, vy) {
   const s = Math.hypot(vx, vy), from = [x, y];
   if (!s || nav.clearLine(from, [x+vx, y+vy])) return [x+vx, y+vy];
   let ox = 0, oy = 0;
   const r = Math.max(10, s+4);
   for (let i = 0; i < 16; i++) {const a = i*Math.PI/8, c = Math.cos(a), n = Math.sin(a); if (nav.walkable(x+c*r, y+n*r)) {ox += c; oy += n;}}
-  const open = Math.hypot(ox, oy);   // a clear wall: walking within 10 degrees of straight into it just stops
+  const open = Math.hypot(ox, oy);
   if (open > 1.5 && Math.abs(vx*oy-vy*ox) < Math.sin(SIDE)*s*open && vx*ox+vy*oy < 0) return from;
   for (let k = 1; k <= 7; k++) {
     const len = Math.cos(k*SIDE);
@@ -100,7 +87,6 @@ export function slideStep(nav, x, y, vx, vy) {
   return from;
 }
 
-// Used by both the server and local prediction, with time measured in seconds.
 export function walkStep(actor, nav, dt, now, input) {
   actor.jumpLeft = Math.max(0, (actor.jumpLeft ?? 0) - dt);
   actor.previousX = actor.x;
@@ -125,13 +111,13 @@ export function walkStep(actor, nav, dt, now, input) {
   }
   const before = actor.pace || 0, top = manual && input.run === true ? RUN_SPEED : WALK_SPEED;
   let pace;
-  if (coast) pace = Math.max(0, before - (before > WALK_SPEED ? RUN_SPEED/EASE_OUT : BRAKE)*dt);   // a run stops in the same 0.12 s
-  else if (before > top) pace = Math.max(top, before - (RUN_SPEED-WALK_SPEED)/EASE_OUT*dt);   // let go of Shift: ease back down to a walk in 0.12 s
-  else pace = Math.min(top, before + top/EASE_IN*dt);   // walk or run, top speed in the same 0.1 s ease
-  if (next) {   // brake into the last point so arrival is soft and never overshoots
+  if (coast) pace = Math.max(0, before - (before > WALK_SPEED ? RUN_SPEED/EASE_OUT : BRAKE)*dt);
+  else if (before > top) pace = Math.max(top, before - (RUN_SPEED-WALK_SPEED)/EASE_OUT*dt);
+  else pace = Math.min(top, before + top/EASE_IN*dt);
+  if (next) {
     let left = distance;
     for (let i = 1; i < actor.path.length; i++) left += Math.hypot(actor.path[i][0]-actor.path[i-1][0], actor.path[i][1]-actor.path[i-1][1]);
-    pace = Math.min(pace, Math.max(CREEP, Math.sqrt((BRAKE*dt)**2 + 2*BRAKE*left) - BRAKE*dt));   // still on the curve after this step
+    pace = Math.min(pace, Math.max(CREEP, Math.sqrt((BRAKE*dt)**2 + 2*BRAKE*left) - BRAKE*dt));
   }
   const step = (pace > before ? (before + pace) / 2 : pace) * dt;
   const origin = [actor.x, actor.y];
@@ -140,13 +126,12 @@ export function walkStep(actor, nav, dt, now, input) {
     [actor.x, actor.y] = slideStep(nav, actor.x, actor.y, dx/distance*step, dy/distance*step);
   } else {
     actor.heading = null;
-    let left = step;   // carry the step through close points (rounded corners) so corners do not slow the walk
+    let left = step;
     while (left > 1e-9 && actor.path.length) {
       const [px, py] = actor.path[0], gap = Math.hypot(px-actor.x, py-actor.y);
       if (gap <= left && nav.clearLine([actor.x, actor.y], [px, py])) { actor.x = px; actor.y = py; actor.path.shift(); left -= gap; continue; }
       const t = Math.min(1, left/(gap || 1)), wish = [(px-actor.x)*t, (py-actor.y)*t];
       const [x, y] = slideStep(nav, actor.x, actor.y, ...wish);
-      // pushed off line of sight and no real progress along the wall: give up the route like before
       if (Math.hypot(x-actor.x, y-actor.y) < left*.25) actor.path = [];
       actor.x = x; actor.y = y;
       break;
@@ -161,10 +146,6 @@ export function walkStep(actor, nav, dt, now, input) {
   actor.action = actor.travel > .001 ? 1 : 0;
 }
 
-// boss 5 Nov: ducks no longer stack. Shared by the offline sim and the socket server, run after every actor has stepped.
-// Overlapping pairs ease apart (at most 260 px/s), ducks walking into each other also step to their own right so a
-// head-on meeting resolves, sleepers never move, and a nudge into a blocked spot is dropped. A duck whose last path
-// point sits inside another duck's space counts as arrived. Returns whether anything moved.
 export function separateActors(actors, nav, dt) {
   const space = DUCK_RADIUS*2, most = 260*dt;
   let moved = false;

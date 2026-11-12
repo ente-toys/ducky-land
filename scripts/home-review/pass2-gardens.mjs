@@ -4,10 +4,7 @@ const file='src/pixi/home-expansion.json';
 const E=JSON.parse(fs.readFileSync(file));
 const sizes={'tree-1':[260,360],'tree-2':[180,360],'tree-3':[300,380],'tree-4':[200,280],'tree-5':[150,380],'bush-1':[130,100],'bush-2':[168,110],'bush-3':[116,104],'bush-4':[140,100],'flower-1':[48,36],'flower-2':[48,36],'flower-3':[44,36]};
 E.props=E.props.filter(p=>!String(p.id).startsWith('p2-garden-'));
-// These are individual authored positions. Heights step down towards clearings;
-// the open side of each crescent faces the useful lawn or the main route.
 const groups={
-  // The north rim is three unequal groves, with long views into the villages.
   'northwest':[
     ['tree-4',-1060,-510,1.15],['tree-2',-1190,-570,1.04],['tree-5',-910,-450,.92],
     ['bush-2',-1240,-475,1.15],['bush-1',-1085,-365,1.1],['bush-4',-925,-340,1],
@@ -34,7 +31,6 @@ const groups={
     ['flower-3',6730,-300,1.7],['flower-1',6980,-205,1.6],
     ['bush-2',6150,-90,1.15],['bush-4',6300,-30,1.1],['flower-3',6210,45,1.7],
   ],
-  // Two diagonal understory edges make Ciderbasket a clearing, not a forest.
   'cider-west':[
     ['tree-4',-1725,1030,1.05],['tree-5',-1580,1150,1.02],['tree-2',-1830,1300,1],
     ['bush-2',-1820,1430,1.2],['bush-4',-1660,1490,1.1],['bush-3',-1500,1520,1.05],
@@ -53,7 +49,6 @@ const groups={
     ['tree-4',-1810,2960,1.0],['tree-5',-1645,3020,.96],
     ['bush-2',-1865,3050,1.1],['bush-4',-1695,3125,1.1],['flower-3',-1800,3150,1.7],
   ],
-  // Extend the eastern groves in low layers; the reading lawn stays open.
   'east-upland':[
     ['tree-4',7050,690,1.1],['tree-2',7310,810,.98],['tree-5',7400,940,1],
     ['bush-2',6930,800,1.2],['bush-4',7105,870,1.1],['bush-1',7320,1000,1.1],
@@ -90,7 +85,6 @@ const groups={
     ['bush-2',345,5420,1.15],['bush-4',530,5440,1.1],['flower-3',425,5490,1.7],
     ['bush-2',2800,5010,1.1],['bush-4',2980,5060,1.0],['flower-3',2890,5140,1.7],
   ],
-  // Low framing only at narrow banks and destination arrivals.
   'river-garden':[
     ['bush-4',2070,3980,1.15],['bush-2',2200,3980,1.15],['bush-3',2360,4010,1.1],
     ['flower-1',2100,4030,1.75],['flower-3',2290,4090,1.75],
@@ -115,8 +109,6 @@ for(const [group,plants] of Object.entries(groups))plants.forEach(([asset,x,y,sc
   E.props.push({id:`p2-garden-${group}-${i}`,name:asset,asset,src:`/pixi-art/plants/${asset}.svg`,x,y,width,height,scale,anchor:{x:.5,y:1},resolution:1.5,zone:'authored-garden'});
 });
 
-// Keep little marks at planting feet and edges. Open lawns receive quiet space,
-// rather than a uniform repeated pebble/tuft texture competing with landmarks.
 if(!E.pass2TextureEdited){
   const quiet=[[-1050,1750,520,430],[-600,-580,650,300],[1950,-1130,800,220],
     [4200,-1150,850,180],[6820,500,600,520],[6800,3080,650,500],
@@ -131,8 +123,6 @@ if(!E.pass2TextureEdited){
 fs.writeFileSync(file,JSON.stringify(E,null,2)+'\n');
 console.log('Pass 2 authored plants:',Object.values(groups).reduce((n,g)=>n+g.length,0));
 
-// Material depth belongs inside the existing beach kiosk, not in extra props
-// around it. A shaded serving hatch and joinery ground its simple front view.
 const kiosk='public/pixi-art/home-review/beach-kiosk.svg';
 let svg=fs.readFileSync(kiosk,'utf8').replace(/<g id="p2-kiosk-joinery"[\s\S]*?<\/g>/,'');
 svg=svg.replace('</g></svg>',`<g id="p2-kiosk-joinery" stroke="#39472d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">

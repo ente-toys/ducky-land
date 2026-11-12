@@ -1,6 +1,3 @@
-// boss 6 Nov: little dust puffs at a Ducky's feet, a ring of them on a jump landing and one now and then while running.
-// Pooled cream puffs with the island's ink outline, drawn in the world (they stay where they were kicked up), grow and
-// fade in about a third of a second. Cheap: at most POOL puffs ever exist; the oldest is reused when they run out.
 import {Container, Graphics} from 'pixi.js';
 import {PALETTE} from './palette.js';
 import {JUMP_LAND, RUN_SPEED, WALK_SPEED} from './player-motion.js';
@@ -15,7 +12,7 @@ export function createDust(parent) {
     puffs.push({g, age: LIFE, x: 0, y: 0, vx: 0, vy: 0, size: 1});
   }
   let next = 0;
-  const seen = new WeakMap();   // per Ducky: last jumpLeft and time since the last running puff
+  const seen = new WeakMap();
 
   function puff(x, y, {vx = 0, vy = 0, size = 1, front = false, z = y} = {}) {
     const p = puffs[next]; next = (next + 1) % POOL;
@@ -29,7 +26,6 @@ export function createDust(parent) {
     p.g.scale.set((.55 + .75 * grow) * p.size, (.45 + .6 * grow) * p.size);
     p.g.alpha = (1 - k) ** 1.4 * .95;
   }
-  // a ring of six round the feet, the ones in front drawn over the toes
   function land(x, y, size = 1, z = y) {
     for (let i = 0; i < 6; i++) {
       const a = (i + .5) / 6 * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
@@ -39,7 +35,6 @@ export function createDust(parent) {
   return {
     land,
     puff,
-    // call once a frame for each Ducky on land: kicks up the landing ring and the running puffs
     track(key, {x, y, z = y, jumpLeft = 0, travel = 0, turn = 0, onLand = true, reduced = false, dt = 0}) {
       const last = seen.get(key) ?? {jumpLeft: 0, run: 0};
       if (onLand && !reduced) {
@@ -48,7 +43,7 @@ export function createDust(parent) {
         last.run = running ? last.run + dt : RUN_EVERY * .7;
         if (running && last.run >= RUN_EVERY) {
           last.run = 0;
-          const side = Math.random() < .5 ? -1 : 1, bx = -Math.sin(turn), by = -Math.cos(turn);   // kicked out behind the feet
+          const side = Math.random() < .5 ? -1 : 1, bx = -Math.sin(turn), by = -Math.cos(turn);
           puff(x + bx * 14 + side * 8, y + by * 6, {vx: bx * 34 + side * 10, vy: by * 8, size: .55 + Math.min(1, (travel - WALK_SPEED) / (RUN_SPEED - WALK_SPEED)) * .25, z});
         }
       }

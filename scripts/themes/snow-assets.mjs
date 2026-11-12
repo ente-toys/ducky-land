@@ -1,4 +1,3 @@
-// Snowdrift's native vector parts. Flat home palette, rounded ink, no raster dependencies.
 import {writeFileSync,mkdirSync} from 'node:fs';
 export const A='public/pixi-art/themes/snow/';
 mkdirSync(A+'detail',{recursive:true});mkdirSync(A+'centre',{recursive:true});
@@ -10,7 +9,6 @@ export function save(name,w,h,body,folder='detail/'){
 const path=(d,fill,stroke=INK,sw=2.5)=>`<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
 const ellipse=(x,y,rx,ry,f,s=INK,sw=2.5)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" stroke="${s}" stroke-width="${sw}"/>`;
 const rect=(x,y,w,h,f,r=0,s=INK,sw=2.5)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${f}" stroke="${s}" stroke-width="${sw}"/>`;
-// Three hand-shaped pines, all at the scale of home's broadleaf trees.
 for(let v=0;v<3;v++){
  const shift=v===1?-10:v===2?12:0;
  let b=path('M136 322 L165 322 L174 415 Q151 422 128 414 Z','#C88941')+path('M154 330 L165 322 L174 415 L154 418 Z','#885931','none');
@@ -22,7 +20,6 @@ for(let v=0;v<3;v++){
  }
  save('pine-'+(v+1),300,425,b);
 }
-// Snow berries retain the green and red accent visible in the approved drawing.
 let bush=path('M6 103 Q-1 69 30 70 Q24 35 61 42 Q74 10 103 38 Q139 15 149 55 Q187 42 193 78 Q215 99 189 111 Q99 133 6 103Z','#3D8B47');
 bush+=path('M9 81 Q21 53 40 65 Q46 30 70 49 Q92 16 113 50 Q144 33 153 65 Q184 54 194 82 Q177 98 153 83 Q129 105 106 83 Q77 103 60 82 Q28 101 9 81Z','#FBFCF3');
 for(const [x,y]of [[45,81],[56,74],[120,70],[132,77],[164,86]])bush+=ellipse(x,y,5,6,'#D45137',INK,1.6);
@@ -32,7 +29,6 @@ for(const [x,y]of [[84,39],[43,59],[116,38],[129,85],[22,92],[53,85],[101,63]])b
 berry+=path('M32 139 Q46 121 63 132 Q85 115 111 131 Q140 123 147 141 Q92 155 32 139Z','#FAFCF4');
 save('winter-berries',170,160,berry);
 save('snow-rock',170,115,path('M10 85 L31 46 L67 31 L93 12 L136 27 L162 78 L141 105 L51 110 Z','#99B7BC')+path('M12 77 L31 46 L67 31 L93 12 L136 27 L150 53 Q130 72 113 58 Q91 82 74 62 Q49 86 12 77Z','#FAFCF2')+path('M113 63 L115 96 L141 105 L162 78 L150 53Z','#7599A4'));
-// Cabin has a frontal roof, stacked round logs, amber panes, snow cushions and wood grain.
 for(const [name,color]of [['cabin','#B8793B'],['cabin-small','#AC6840']]){
  let b=ellipse(450,650,390,44,'#D5E3DD','none');
  b+=rect(122,292,656,320,color,15);
@@ -50,7 +46,6 @@ for(const [name,color]of [['cabin','#B8793B'],['cabin-small','#AC6840']]){
  b+=path('M229 285 Q450 383 673 285','none','#3F8546',8);for(let x=250;x<670;x+=49)b+=ellipse(x,291+Math.sin((x-229)/444*Math.PI)*48,5,7,['#F5CB65','#E26C42','#F5E6B1'][Math.floor(x/49)%3]);
  save(name,900,700,b);
 }
-// Igloo courses follow the dome's curvature. Door glow is solid amber, no gradient.
 let ig=ellipse(220,285,205,30,'#CEE1E2','none');
 ig+=path('M20 259 C18 108 91 28 220 24 C351 26 421 111 422 259 Q219 316 20 259Z','#C0E4E9');
 ig+=path('M31 233 C35 105 106 36 220 30 C306 32 369 82 395 162 C277 111 128 166 31 233Z','#F7FCF7','none');
@@ -60,7 +55,6 @@ ig+=path('M157 284 L157 219 Q221 132 284 219 L284 284 Q220 306 157 284Z','#EFFAF
 ig+=path('M177 285 L177 225 Q222 169 264 225 L264 285Z','#73A7B4');ig+=path('M191 286 L191 230 Q221 193 252 230 L252 286Z','#FFD56B');
 ig+=path('M160 247 L179 250 M262 250 L281 247 M182 192 L193 208 M251 194 L242 209','none','#8BB5BE',2.3)+path('M180 279 Q220 264 260 279','none','#FFF4BF',5);
 save('igloo',440,320,ig);
-// Copper lamps, dressed planters, logs and the tiny life of a winter village.
 save('lamp',100,250,ellipse(50,237,35,9,'#B5C7C2','none')+rect(43,77,14,157,'#95683A',4)+path('M32 229 L68 229 L76 240 H24Z','#756F4F')+path('M24 43 H76 L70 91 Q50 109 30 91Z','#FFE19A')+path('M50 12 L18 43 H82Z','#8B693D')+path('M21 37 Q32 19 47 25 Q59 13 77 35 L85 43 H15Z','#F8FBF0')+path('M50 44 V99 M25 49 H76','none','#8B693D',4)+ellipse(50,16,7,8,'#D6B469'));
 save('planter',150,150,path('M25 94 H126 L116 140 Q74 155 36 140Z','#C59860')+ellipse(75,94,59,22,'#88623C')+path('M14 85 Q23 54 48 67 Q49 32 79 51 Q104 34 115 65 Q143 58 140 87 Q122 107 100 93 Q76 115 55 96 Q32 110 14 85Z','#398148')+path('M17 77 Q28 48 48 64 Q58 37 82 54 Q109 39 118 70 Q132 61 139 79 Q116 91 99 82 Q73 101 54 84 Q30 94 17 77Z','#FAFCF3')+ellipse(48,86,6,7,'#D6503C')+ellipse(94,82,6,7,'#D6503C')+ellipse(112,88,5,6,'#D6503C'));
 save('sled',230,150,path('M19 111 Q7 141 49 140 H203 Q223 137 220 114 M34 110 Q22 133 57 131 H204','none','#885931',8)+path('M41 104 L52 133 M184 103 L191 132','none','#885931',6)+rect(27,61,182,48,'#B8783C',10)+[37,67,97,127,157,187].map(x=>path(`M${x} 63 V107`,'none','#F4C579',3)).join('')+path('M206 67 Q247 41 213 11 Q198 4 190 18','none','#966A38',3));
@@ -73,7 +67,6 @@ s+=path('M14 128 H288 V146 Q266 162 244 146 Q220 161 198 146 Q174 161 152 146 Q1
 s+=rect(77,183,145,32,'#F7E5AA',5)+`<text x="150" y="205" font-family="sans-serif" font-weight="700" font-size="18" text-anchor="middle" fill="${INK}" stroke="none">${name==='cocoa-stall'?'HOT COCOA':'ICE SKATES'}</text>`;
 for(const x of [60,218])s+=rect(x,113,25,25,'#F6D790',4)+path(`M${x+25} 117 Q${x+42} 112 ${x+29} 133`,'none','#885931',3);
 save(name,305,285,s);}
-// The statue can be replaced independently of the island ground.
 save('plinth',630,250,path('M50 113 L315 27 L580 113 L580 181 L315 236 L50 181Z','#B8CCCC')+path('M50 113 L315 27 L580 113 L315 190Z','#F7FCF3')+path('M93 105 L315 45 L538 105 L315 163Z','#DCEBEC')+path('M92 171 Q315 223 539 171 L579 180 L315 236 L50 181Z','#ECF4E9')+path('M51 114 Q87 134 123 123 Q169 147 202 137 Q255 158 315 160 Q367 158 423 138 Q461 150 505 125 Q548 134 580 112','none','#FAFCF2',16),'centre/');
 let duck=path('M117 355 Q76 306 108 254 Q90 219 108 171 Q113 112 174 99 Q222 88 261 118 Q307 158 291 218 Q330 261 316 307 Q307 363 246 378 Q160 395 117 355Z','#D4E8E4');
 duck+=path('M117 342 Q80 298 118 259 Q106 209 121 171 Q125 123 176 110 Q222 100 255 130 Q288 160 277 216 Q260 249 229 251 Q263 292 241 335 Q196 377 117 342Z','#FBFCF1');
@@ -84,7 +77,6 @@ duck+=path('M117 248 Q194 278 279 232 L286 263 Q207 307 117 277Z','#D85B42')+pat
 for(let y=298;y<358;y+=18)duck+=path(`M187 ${y} L224 ${y-3}`,'none','#FFF0C9',8);
 duck+=path('M117 139 Q127 50 224 56 Q259 25 286 51 Q309 87 274 108 L275 142Z','#D85B42')+path('M135 106 Q174 66 220 72','none','#F09C6D',11)+ellipse(287,55,25,25,'#F9F9E9')+path('M114 135 Q193 111 279 134 L280 157 Q201 140 114 159Z','#FFF8E2');
 save('snow-ducky',380,405,duck,'centre/');
-// Small ground marks are clean vectors, deliberately quieter than the standing art.
 save('snow-tuft',60,35,path('M5 28 Q14 23 20 27 L19 13 L31 24 L39 8 L42 25 Q52 21 56 28','none','#BAD5D3',2)+path('M8 26 L16 26 M30 28 L36 28','none','#FFFFFF',3));
 save('pebbles',60,32,ellipse(14,20,9,5,'#B5CBC8',INK,1.2)+ellipse(40,12,6,4,'#D2DFD9',INK,1)+ellipse(52,25,4,2,'#93B6B8','none'));
 save('iceberg',170,110,path('M6 55 L41 24 L100 8 L158 34 L164 74 L128 100 L40 104 L6 82Z','#6ABBD0')+path('M6 55 L41 24 L100 8 L158 34 L119 70 L43 78Z','#F6FCF3')+path('M43 78 L40 104 M119 70 L128 100 M158 34 L164 74','none','#4F9FB7',2));

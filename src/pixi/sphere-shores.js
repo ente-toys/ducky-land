@@ -2,13 +2,9 @@ import {WORLD_GEO,WORLD_ISLANDS,worldIsland} from './world-map.js';
 import {mapOf} from './island-maps.js';
 import {coastPolygons,coastDistance} from './island-coasts.js';
 import {expMap,logMap,angle,arcDistance,unit} from './sphere.js';
-// boss 8 Nov (islands closer, smaller globe): spacing is measured between the real coasts on the sphere, never the map
-// rectangles with their transparent sea margins. Open water a boat channel needs between any two islands' shores.
 export const BOAT_CHANNEL=600;
-const SHORE_STEP=400;   // shores are sampled at least this often, world units
-// All land rings, islets and jetties. Subdivide the authored straight edges
-// before wrapping; a local straight line is not a great-circle arc.
-const SHORES=new WeakMap();   // per map object, so a re-registered map gets fresh rings
+const SHORE_STEP=400;
+const SHORES=new WeakMap();
 const shoresOf=m=>{
  if(!SHORES.has(m))SHORES.set(m,coastPolygons(m.world,m.walk,{foot:[m.JETTY.foot.x,m.JETTY.foot.y],tip:[m.JETTY.tip.x,m.JETTY.tip.y],width:m.JETTY.width}));
  return SHORES.get(m);
@@ -30,13 +26,11 @@ export function sphereShoreGap(A,B,R=WORLD_GEO.Rw){
  let best=Infinity;
  for(const a of A)for(const b of B){
   if((angle(a.center,b.center)-a.radius-b.radius)*R>=best)continue;
-  if(a.local&&b.local&&(within(a.points[0],b,R)||within(b.points[0],a,R)))return 0;   // one shore wholly inside the other
+  if(a.local&&b.local&&(within(a.points[0],b,R)||within(b.points[0],a,R)))return 0;
   best=Math.min(best,ringPairGap(a.points,b.points,R));
  }
  return best;
 }
-// Same answer as ringGap, fast enough to check a whole layout in a test: the nearest pair of shore points bounds the gap,
-// then only edges with an end within that bound (plus one shore step) can come closer.
 function ringPairGap(A,B,R){
  let c=-2;
  for(const p of A)for(const q of B){const d=p[0]*q[0]+p[1]*q[1]+p[2]*q[2];if(d>c)c=d;}
@@ -47,21 +41,12 @@ function ringPairGap(A,B,R){
  }
  return best*R;
 }
-// Every pair of islands with the open water between their shores (world units), narrowest first. Pass a layoutWorld()
-// result's islands and Rw to check a layout before it ships.
 export function coastGaps(islands=WORLD_ISLANDS,R=WORLD_GEO.Rw){
  const shores=islands.map(i=>sphereShores(i,R)),out=[];
  for(let a=0;a<islands.length;a++)for(let b=a+1;b<islands.length;b++)out.push({a:islands[a].id,b:islands[b].id,gap:sphereShoreGap(shores[a],shores[b],R)});
  return out.sort((p,q)=>p.gap-q.gap);
 }
 
-// boss 5 Nov ("I went to another island, but I am going under the island"): the live copy a point stands in (a point in
-// the current island's local coordinates; copies as archipelago.js places them, centre x/y). The copies are drawn after
-// the real island, so a boat, Ducky or name board out in a neighbour's waters is drawn again inside that copy's pass,
-// sorted among its jetty, sign and trees, instead of hidden under the whole copy. On the real island: none.
-// boss 6 Nov: each map has its own size (here = the real island's map, a copy's own width/height when it carries them).
-// boss 8 Nov (islands closer): map rectangles carry a transparent sea margin and can now overlap, so water that more than one
-// map covers belongs to the island whose real coast (jetty included) is nearest, the real island you are on among them.
 export function copyHolding(x, y, copies, pad = 300, here = mapOf('home')) {
   if (here.landAt?.(x,y)) return null;
   if(!copies.some(c=>c.from)&&Math.abs(x-(here.origin?.x??0)-here.width/2)<here.width/2&&Math.abs(y-(here.origin?.y??0)-here.height/2)<here.height/2)return null;

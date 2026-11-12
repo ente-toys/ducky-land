@@ -27,7 +27,6 @@ test('holding WASD into shore stays aboard until Dock is explicitly requested',a
 
 test('restoring the room frees a stranded sailor and removes blocked parked boats', async t => {
   const room = await makeRoom();
-  // Positions observed in saved Home boats in production.
   const stranded = {x:4052.81, y:6034.56};
   const blockedParking = {x:3044.54, y:4215.79};
   assert.ok(!canSail(stranded.x, stranded.y));

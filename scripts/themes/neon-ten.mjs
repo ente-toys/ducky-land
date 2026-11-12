@@ -1,4 +1,3 @@
-// Final craft pass. Idempotent from the integrated Neon snapshot; no shared files written.
 import fs from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
@@ -14,27 +13,21 @@ const seg=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((
 const pathDist=(x,y)=>Math.min(...paths.map(l=>Math.min(...l.slice(1).map((b,i)=>seg(x,y,l[i],b)))));
 const reserved=(x,y,pad=0)=>Object.entries(world.zones).some(([id,z])=>/^(activity|stalls)-/.test(id)&&(z.poly?inPoly(x,y,z.poly):((x-z.x)/(z.rx+pad))**2+((y-z.y)/(z.ry+pad))**2<1));
 const bare=geometry({...walk,obstacles:[]});
-// Keep junctions and path mouths pinned. Bow only the two ruler-straight runs.
 for(const [i,amp,axis]of [[4,75,0],[6,-65,1]]){
  const old=paths[i],fresh=old.map((p,j)=>{const q=[...p],t=j/(old.length-1);q[axis]=r(q[axis]+amp*Math.sin(2*Math.PI*t)**3);return q});
  ground=ground.split(d(old)).join(d(fresh));paths[i]=fresh;
 }
-// A single cream fill and fine olive ink edge, exactly the home path vocabulary.
 ground=ground.replace(/stroke="#718B2C" stroke-width="(216|196)"/g,(_,w)=>`stroke="#718B2C" stroke-width="${+w-8}"`)
  .replace(/stroke="#B89A55" stroke-width="(208|188)"/g,(_,w)=>`stroke="#6F7338" stroke-width="${+w-4}"`)
  .replace(/stroke="#FDE48C" stroke-width="(200|180)"/g,'stroke="#FFF0B3" stroke-width="$1"');
-// Reclaim the broad rectangular canal apron as lawn. The 180-wide quay loop stays.
 ground=ground.replace(/<path d="M2947\.1 3494\.1[^>]+\/>/,'').replace(/<path d="M2947\.5 3502\.1[^>]+\/>/,'');
-// Remove uniform mowing bars and yellow/pink glow puddles. Grass gets small source SVG tufts.
 ground=ground.replace(/<path[^>]*clip-path="url\(#lawn[01]\)"[^>]*\/>/g,'')
  .replace(/<ellipse[^>]*fill="#(?:FFE08A|FFB6CF)"[^>]*\/>/g,'');
-// Match every circular gathering place with its own ring geometry.
 const rings=[{id:'clock',...world.zones.centre,s:754,k:world.zones.centre.ry/world.zones.centre.rx,angles:[-110,-70,68,112],span:17},
  ...[1,2,3,4].map(i=>{const z=world.zones['activity-'+i];return{id:'lawn-'+i,...z,s:z.rx+38,k:z.ry/z.rx,angles:i===1?[-95,60]:i===2?[-90,-25]:i===3?[-75,160]:[-40,120],span:27}}),
  ...world.islets.map(([x,y],i)=>({id:'islet-'+i,x,y:y+25.2,rx:235,ry:88.2,s:202,k:88.2/235,angles:[48],span:38}))];
 const removedIds=new Set(['neon-49','neon-50','neon-51','neon-52','neon-70','neon-75','neon-polish-65','neon-polish-72']);
 function removeProp(p){
- // Existing manifests use anonymous footprints. Remove only the unique nearest matching base.
  const candidates=walk.obstacles.map((o,i)=>({o,i,dist:o.poly?Infinity:Math.hypot(o.x-p.x,o.y-p.y)})).sort((a,b)=>a.dist-b.dist);
  if(candidates[0]?.dist<80)walk.obstacles.splice(candidates[0].i,1);
 }
@@ -70,7 +63,6 @@ for(const ring of rings)for(const desired of ring.angles){
  const p={id:'neon-ten-'+src.slice(0,-4),name:'Curved timber bench',src,x:r(anchor[0]),y:r(anchor[1]),width:box.w,height:box.h,scale:1,anchor:{x:(r(anchor[0])-box.x)/box.w,y:(r(anchor[1])-box.y)/box.h},shadow:false,wind:false,flip:false};
  art.props.push(p);walk.obstacles.push({poly:footprint,neonTen:true});benchRecords.push({...p,ring:ring.id,deg,radius:sIn,footprint});
 }
-// Break the bare paving into smaller places: planted crescent beds on the canal banks.
 let seed=5266;const rnd=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
 const sample=src=>art.props.find(p=>p.src===src);
 let added=0;
@@ -87,7 +79,6 @@ for(const [cx,cy]of [[3230,3560],[4490,3560],[3280,4030],[4520,4030]])for(let j=
  const a=j*2.4,dd=35+Math.sqrt(j)*52;
  small(j%4===0?'reuse/nature--rock-round.svg':j%3===0?'reuse/flower-2.svg':`reuse/bush-${1+j%6}.svg`,cx+Math.cos(a)*dd,cy+Math.sin(a)*dd*.45,.65);
 }
-// Give the added large crowns air. Original sleeper trees remain pinned.
 const bigTree=p=>/^reuse\/tree-[1-5]\.svg$/.test(p.src);
 const crown=p=>({x:p.x,y:p.y-p.height*p.scale*.64,rx:p.width*p.scale*.45,ry:p.height*p.scale*.29});
 const crownsTouch=(p,q)=>{const a=crown(p),b=crown(q);return ((a.x-b.x)/(a.rx+b.rx+16))**2+((a.y-b.y)/(a.ry+b.ry+12))**2<1};
@@ -112,10 +103,8 @@ for(const t of art.props.filter(p=>bigTree(p)&&p.id.startsWith('neon-polish-')))
  fixedTrees.push(t);
 }
 
-// Companion plants at grove feet, with gaps rather than an even perimeter fence.
 const trees=art.props.filter(p=>/^reuse\/tree-[1-5]\.svg$/.test(p.src));
 for(const [i,t]of trees.entries())for(const side of [-1,1])small(i%4===0?'reuse/nature--rock-round.svg':`reuse/bush-${1+i%6}.svg`,t.x+side*(t.width*t.scale*.43+25),t.y+23,.6);
-// Tiny lawn details, limited to actual grass, including the reclaimed canal banks.
 let tufts=0;
 for(let i=0;i<650;i++){
  const x=2850+rnd()*2200,y=3440+rnd()*810;
@@ -123,7 +112,6 @@ for(let i=0;i<650;i++){
  const t=art.flats.find(p=>p.src==='reuse/'+(tufts%4?'grass-tuft-1':'flower-dot-2')+'.svg');
  art.flats.push({...t,x:r(x),y:r(y),flip:rnd()<.5});tufts++;
 }
-// The three reserved market lawns get low, broken flower borders outside their footprints.
 for(const [id,z]of Object.entries(world.zones).filter(([id])=>id.startsWith('stalls'))){
  const l=z.line;
  for(let i=1;i<l.length-1;i+=2){
@@ -133,7 +121,6 @@ for(const [id,z]of Object.entries(world.zones).filter(([id])=>id.startsWith('sta
   }
  }
 }
-// Eliminate grass stamps on the newly curved roads.
 art.flats=art.flats.filter(p=>p.src.startsWith('centre/')||!/(grass|flower-dot|pebble)/.test(p.src)||pathDist(p.x,p.y)>112);
 world.paths=paths;walk.paths=paths;world.obstacles=walk.obstacles;world.props=art.props;
 fs.writeFileSync(A+'ground.svg',ground);

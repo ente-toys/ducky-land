@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// Real mouse drags on the full globe (horizontal, vertical, diagonal): does the island under the cursor stay under it, and
-// does north stay up? Usage: node scripts/globe-drag-check.mjs <url> --out <dir>
-// Drift = distance between the cursor and where the page now draws the sphere spot first grabbed (read back through the
-// page's own camera, basis and ball). Roll = screen angle of world north.
 import fs from 'node:fs';
 import path from 'node:path';
 import {viewFrame} from '../src/pixi/sphere-coordinates.js';
@@ -20,9 +16,8 @@ const page=await browser.newPage({viewport:{width:W,height:H}});const errors=[];
 await page.goto(`${BASE}/__test/login?account=boss`);await page.goto(`${BASE}/?qa=1`);
 await page.waitForFunction(()=>globalThis.__duckyEngine?.ready,null,{timeout:90000});await sleep(2500);
 await page.mouse.move(W/2,H/2);for(let i=0;i<45;i++){await page.mouse.wheel(0,400);await sleep(40);}
-await page.mouse.move(5,5);await sleep(6000);   // left alone, the ball turns away from Home on its own (the boss's case)
+await page.mouse.move(5,5);await sleep(6000);
 await page.evaluate(()=>{globalThis.__duckyEngine.quietAt=Infinity;});
-// turn the ball well round the back first (the further from Home, the more the old drag rolled)
 for(let n=0;n<4;n++){await page.mouse.move(W/2-220,H/2+60);await page.mouse.down();for(let k=1;k<=12;k++){await page.mouse.move(W/2-220+440*k/12,H/2+60-60*k/12);await sleep(20);}await sleep(200);await page.mouse.up();await sleep(500);}
 const state=()=>page.evaluate(()=>{const e=globalThis.__duckyEngine;e.quietAt=Infinity;return {id:e.islandId,cam:{x:e.camera.x,y:e.camera.y,zoom:e.camera.zoom},basis:e.camera.basis??{a:1,b:0,c:0,d:1},ball:e.worldView.debug.ball,st:e.worldView.stickers.filter(s=>s.kind==='island')};});
 const frameOf=s=>{const T=viewFrame(s.id,s.cam),c=s.basis.a,si=s.basis.b;return {center:T.center,east:T.east.map((v,k)=>v*c+T.north[k]*si),north:T.north.map((v,k)=>v*c-T.east[k]*si)};};
@@ -32,7 +27,6 @@ const shot=async name=>{const h=await page.addStyleTag({content:'body *{visibili
 const results=[];
 for(const [name,dx,dy]of [['horizontal',300,0],['vertical',0,240],['diagonal',260,-200]]){
  let s=await state();
- // press on the ball so the drag runs through its middle, and note the island nearest the cursor
  const g0={x:W/2-dx/2,y:H/2-dy/2},near=s.st.map(k=>({k,d:Math.hypot(k.x-g0.x,k.y-g0.y)})).sort((a,b)=>a.d-b.d)[0].k;
  await page.mouse.move(g0.x,g0.y);await page.mouse.down();await sleep(100);s=await state();
  const Rp=s2=>WORLD_GEO.Rw*s2.cam.zoom,spot=unlens(frameOf(s),{x:g0.x-W/2,y:g0.y-H/2},s.ball,Rp(s));
@@ -43,9 +37,9 @@ for(const [name,dx,dy]of [['horizontal',300,0],['vertical',0,240],['diagonal',26
   for(let j=1;j<=4;j++){await page.mouse.move(g0.x+dx*(k-1+j/4)/10,g0.y+dy*(k-1+j/4)/10);await sleep(16);}
   await sleep(260);s=await state();const q=lensOffset(frameOf(s),spot,s.ball,Rp(s));
   const lat=Math.asin(spherePoint(s.id,s.cam)[1])*180/Math.PI,e=Math.hypot(q.x+W/2-cx,q.y+H/2-cy);
-  for(const d of s.st){const m=lensOffset(frameOf(s),worldIsland(d.id).center,s.ball,Rp(s));drawn=Math.max(drawn,Math.hypot(m.x+W/2-d.x,m.y+H/2-d.y));}   // the drawn islands follow that same ball
+  for(const d of s.st){const m=lensOffset(frameOf(s),worldIsland(d.id).center,s.ball,Rp(s));drawn=Math.max(drawn,Math.hypot(m.x+W/2-d.x,m.y+H/2-d.y));}
 
-  if(Math.abs(lat)>88.2)clamped=true;else drift=Math.max(drift,e);   // past the pole limit the ball stops tilting by designroll=Math.max(roll,Math.abs(rollOf(s)));
+  if(Math.abs(lat)>88.2)clamped=true;else drift=Math.max(drift,e);
   if(name==='horizontal'&&k%2===0)frames.push(await shot(`rotate-${k/2+1}.png`));
  }
  if(name!=='horizontal')frames.push(await shot(`drag-${name}-end.png`));

@@ -1,6 +1,3 @@
-// Raster evidence fallback when macOS sandbox refuses Chromium launch.
-// Uses production home placements + SVG assets, default top-down projection and upright props.
-// Animation, foam and GPU rendering still need the separate browser capture.
 import sharp from 'sharp';
 import {createServer} from 'vite';
 import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';

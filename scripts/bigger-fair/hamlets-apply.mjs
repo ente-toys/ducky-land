@@ -1,5 +1,3 @@
-// Run after either Fair builder's regeneration: node scripts/bigger-fair/hamlets-apply.mjs.
-// Idempotent. Only the four outer communities change; centre, coast and water stay intact.
 import fs from 'node:fs';
 import {fitContact} from './furniture.mjs';
 import {A,S,D,read,config,layouts,objects,grounds,mapper,HOME,r} from './hamlets.mjs';
@@ -30,7 +28,6 @@ for(const [h,c]of Object.entries(config)){
   if(o.decal){p.shadow=false;p.asset='grass-decal';p.z=r(o.y-4000);}else p.z=o.y;
   if(f){p.footprint=f;p.footprints=[f];walk.obstacles.push({...f,name:p.id});}
   if(/^(tree-|bush-|flower)/.test(o.file))p.wind=true;
-  // Blueprint draw order wins only for overlapping standing drawings.
   for(const q of placed)if(!o.decal&&q.z>=p.z&&q.asset!=='grass-decal'&&Math.abs(p.x-q.x)<(p.width+q.width)/2&&p.y>q.y-q.height&&q.y>p.y-p.height)p.z=r(q.z+.5);
   placed.push(fitContact(p));
  }
@@ -46,6 +43,5 @@ exp.homes=homes.filter(p=>p.role==='home');exp.places=exp.places.map(p=>config[p
 const communities=read(S+'communities.json');communities.homes=exp.homes;communities.communities=communities.communities.map(p=>config[p.id]?{...p,homes:report[p.id].homes,work:p.id==='waddleshow'?'Teacup-float workshop and rehearsal yard':p.work,hamlet:report[p.id]}:p);
 save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);save(D+'placements.json',art.props);save(S+'expansion.json',exp);save(S+'communities.json',communities);save(S+'hamlets-report.json',report);console.log(report);
 
-// Routes and ground have one owner, after all fixed scene feet are available.
 const {rebuildFairSurface}=await import('./paths.mjs');
 rebuildFairSurface();

@@ -1,4 +1,3 @@
-// Fixed, authored neighbourhood plan. No random placement or prop scatter.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 const read=p=>JSON.parse(readFileSync(p));
 export const original={world:read('scripts/bigger-bog/original-world.json'),walk:read('scripts/bigger-bog/original-walk.json'),art:read('scripts/bigger-bog/original-art.json'),harbor:read('scripts/bigger-bog/original-harbor.json')};
@@ -20,7 +19,6 @@ export const rivers=[
  {id:'reedrun',points:[[6200,5480],[5900,5850],[5400,6150],[5100,6500],[5200,7100],[4600,8000]],width:220}
 ];
 export const bridges=[{id:'kettle-crossing',x:2150,y:-350,w:560,h:340},{id:'reed-crossing',x:5350,y:6200,w:580,h:360},{id:'north-coast-crossing',x:4000,y:-1250,w:520,h:340},{id:'south-coast-crossing',x:4960,y:7420,w:560,h:380}];
-// Each centreline has an authored width profile; broad junctions and pinched lanes.
 export const roads=[
  {id:'north-high-road',pts:[[350,250],[1350,-100],[2150,-350],[3500,-350],[5900,-350],[7900,300]],widths:[390,250,280,350,260,400]},
  {id:'west-road',pts:[[350,250],[-500,1450],[-750,3200],[-450,4750],[350,6450]],widths:[380,300,340,260,420]},
@@ -36,7 +34,6 @@ export const props=[],obstacles=[];
 function svg(w,h,body){return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><g stroke="${ink}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${body}</g></svg>`;}
 function save(name,w,h,body){writeFileSync(`${base}/${name}.svg`,svg(w,h,body));}
 function add(asset,x,y,w,h,name,solid=null,extra={}){let id=`community-${props.length}-${asset}`;props.push({id,name,src:`communities/${asset}.svg`,x,y,width:w,height:h,scale:1,anchor:{x:.5,y:1},shadow:false,wind:false,community:true,...extra});if(solid)obstacles.push({x,y:y-solid[2],rx:solid[0],ry:solid[1],prop:id,community:true});return id;}
-// Four genuinely different silhouettes, all using Bog's own violet/lime/ochre kit.
 const houseBodies=[
  `<path d="M80 400V190Q180 125 280 190V400Q180 438 80 400Z" fill="#C6AB77"/><path d="M240 177L280 190V400L240 409Z" fill="#A18458" stroke="none"/><path d="M35 205Q42 118 125 110Q144 65 202 103Q285 98 323 205Q184 247 35 205Z" fill="#A15AAC"/><path d="M202 103Q285 98 323 205L278 214Q257 136 202 103" fill="#7E438C" stroke="none"/><path d="M68 183Q89 139 127 142" fill="none" stroke="#C187CA" stroke-width="9"/><path d="M145 411V325Q180 280 213 325V411" fill="#885931"/><circle cx="198" cy="365" r="4" fill="#E2D29D"/><circle cx="107" cy="275" r="25" fill="#BDEB59"/><path d="M84 275H130M107 252V298"/><path d="M238 261Q259 244 276 264V298H238Z" fill="#BDEB59"/><path d="M119 423Q180 405 239 423L251 438H108Z" fill="#E5B36D"/>`,
  `<path d="M65 410V217L180 142L297 217V410Q180 438 65 410Z" fill="#C88941"/><path d="M253 190L297 217V410L253 419Z" fill="#A66E38" stroke="none"/><path d="M30 235L173 87Q182 79 190 93L330 235L297 245L180 139L66 245Z" fill="#8F70C2"/><path d="M182 92L330 235L297 245L180 139Z" fill="#7E438C" stroke="none"/><path d="M252 157V87H279V184" fill="#A18458"/><path d="M148 416V333Q178 299 209 333V416" fill="#A15AAC"/><path d="M80 281H130V323H80Z M237 281H281V323H237Z" fill="#BDEB59"/><path d="M106 281V323M80 301H130M259 281V323M237 301H281"/><path d="M44 369L316 369L323 382H37Z" fill="#E5B36D"/><path d="M51 380V422M309 380V422" stroke-width="9"/><path d="M147 427H215V440H147Z" fill="#E5B36D"/>`,
@@ -55,8 +52,6 @@ save('training-yard',660,390,`<path d="M30 332Q320 274 625 332L609 369Q320 317 4
 save('sign',300,200,`<path d="M145 190V56" stroke="#A66E38" stroke-width="13"/><path d="M27 27L240 21L278 58L242 90L27 97Z" fill="#C88941"/><path d="M50 53L202 49M50 72L173 69" stroke="#E2D29D" stroke-width="5"/><path d="M117 192L123 173L132 191M164 192L171 174L177 192" fill="#87AA75"/>`);
 for(const c of communities){
  for(const [i,[x,y,v]]of c.houses.entries()){
-  // A settlement shares a building tradition, with two neighbouring roof types,
-  // six individual proportions and domestic additions, rather than recoloured clones.
   const variant=`home-${v}-${i}`;let house=houseBodies[i===2?(v+1)%4:i===5?(v+3)%4:v];if(i%3===1)house=house.replaceAll('#C6AB77','#B49AD7').replaceAll('#C88941','#C6AB77').replaceAll('#87AA75','#A8C594');if(i%3===2)house=house.replaceAll('#A15AAC','#8F70C2').replaceAll('#B49AD7','#C6AB77');
   const additions=[`<path d="M119 318L180 291L238 318L232 331H124Z" fill="#8F70C2"/><path d="M125 330V421M232 330V421" stroke="#C88941" stroke-width="7"/>`,`<path d="M92 157V67H119V145" fill="#A18458"/><path d="M84 65H127V79H84Z" fill="#C6AB77"/>`,`<path d="M76 407H133V431H76Z" fill="#885931"/><path d="M88 406l-7-24 15 9 8-22 8 24 13-12-4 25" fill="#87AA75"/>`,`<path d="M212 199L247 168L280 203V231H212Z" fill="#C6AB77"/><circle cx="246" cy="205" r="14" fill="#BDEB59"/>`,`<path d="M80 381H133V397H80Z" fill="#C88941"/><g fill="#B49AD7"><circle cx="90" cy="376" r="9"/><circle cx="107" cy="372" r="10"/><circle cx="123" cy="376" r="8"/></g>`,`<path d="M125 315L180 292L236 315L230 337H132Z" fill="#E2D29D"/><path d="M133 322H229" stroke="#8F70C2" stroke-width="8"/>`][i];
   save(variant,360,460,house+additions+`<path d="M45 441l7-21 5 20 12-12M291 442l8-19 7 17 12-10" fill="none" stroke="#617A4E" stroke-width="2"/>`);
@@ -66,7 +61,6 @@ for(const c of communities){
  }
  add(`${c.type==='kettle'?'kettle':c.type==='lantern'?'lantern':c.type==='grower'?'grower':'fisher'}-workshop`,...c.work,730,584,c.name+' workplace',[245,90,38],{neighbourhood:c.id});
  add('sign',c.point[0]-410,c.point[1]+180,210,140,c.name+' wayfinding', [12,12,8],{neighbourhood:c.id});
- // Each shared green has a different arrangement, specified here rather than generated positions.
  const lanes={
  croakettle:[[[350,250],[-450,170],[-850,-300],[-300,-850],[550,-1000],[1400,-480],[1400,380],[900,730],[350,250]]],
  wickwaddle:[[[7900,300],[7250,250],[6600,-50],[6650,-650],[7400,-1150],[8250,-1050],[9120,-450],[9100,850],[7900,300]],[[7250,250],[7700,650],[8800,850]]],
@@ -79,8 +73,6 @@ add('training-yard',945,120,670,396,'Brewers boxing club, neighbours train for r
 add('allotment',-100,6640,760,370,'Sporebutton community mushroom beds',null,{neighbourhood:'sporebutton'});
 add('allotment',650,6860,680,330,'Sporebutton soup garden',null,{neighbourhood:'sporebutton'});
 add('net-rack',8520,6600,550,356,'Reedwhistle net mending yard',[170,22,24],{neighbourhood:'reedwhistle'});
-// Purposeful commons between the settlements. Each is an authored little place,
-// with a work surface, seating or growing beds and a clear walking side.
 save('herb-bed',540,285,`<path d="M23 126Q258 84 518 132L496 255Q263 288 39 252Z" fill="#885931"/><path d="M32 135Q265 100 510 140M40 250Q263 282 498 253" fill="none" stroke="#C88941" stroke-width="14"/><path d="M93 164Q260 137 450 165M94 213Q267 193 448 218" fill="none" stroke="#A18458" stroke-width="18"/><g fill="#87AA75"><path d="M112 162l-22-38 28 12 15-44 10 44 27-16-13 42Z M254 150l-25-40 30 16 16-46 12 45 23-20-9 45Z M397 162l-20-40 25 12 15-37 10 40 24-15-13 43Z M164 218l-20-35 23 9 17-38 10 39 26-17-14 43Z M330 216l-23-34 26 11 18-44 10 43 26-15-14 42Z"/></g><path d="M459 84V170M437 80H491V112H437Z" fill="#E2D29D"/><path d="M451 96h26"/>`);
 save('picnic-table',470,260,`<path d="M83 197L116 93M356 197L331 93" stroke="#885931" stroke-width="13"/><path d="M53 85Q232 56 413 85L400 119Q233 97 66 119Z" fill="#C88941"/><path d="M69 95Q234 71 400 96" fill="none" stroke="#E5B36D" stroke-width="5"/><path d="M22 155Q231 123 446 155L433 184Q232 155 35 184Z" fill="#C6AB77"/><path d="M47 180V224M423 180V224" stroke="#885931" stroke-width="11"/><path d="M174 88V52H200V88Z" fill="#B49AD7"/><path d="M171 53h31" stroke-width="7"/><ellipse cx="262" cy="85" rx="29" ry="11" fill="#E2D29D"/><path d="M249 80l8-17 14 17" fill="#BDEB59"/>`);
 save('dye-rack',480,360,`<path d="M44 316V40M435 316V40M35 55H448" fill="none" stroke="#A66E38" stroke-width="14"/><path d="M67 65Q239 110 413 65" fill="none" stroke-width="3"/><path d="M103 74L158 86L169 224L96 211Z" fill="#A15AAC"/><path d="M210 95H274L284 245L203 238Z" fill="#B49AD7"/><path d="M328 84L382 74L395 217L321 228Z" fill="#C6AB77"/><ellipse cx="248" cy="304" rx="63" ry="25" fill="#885931"/><path d="M185 302L198 342Q248 363 298 342L311 302" fill="#C88941"/><ellipse cx="248" cy="304" rx="51" ry="17" fill="#A15AAC"/>`);
@@ -97,12 +89,9 @@ export const commons=[
  {id:'netweavers-green',name:'Netweavers green',point:[6550,6910],pieces:[['reed-bundles',6300,6820,430,273],['picnic-table',6860,6930,380,210],['herb-bed',7330,7040,430,227]]}
 ];
 for(const c of commons)for(const [asset,x,y,w,h]of c.pieces)add(asset,x,y,w,h,c.name+' '+asset,asset==='picnic-table'?[w*.34,24,30]:asset==='dye-rack'||asset==='net-rack'?[w*.37,18,20]:null,{common:c.id});
-// Reuse only Bog's existing kit at exact, composed sites.
 export const reuse=[['green-lantern',-210,190,85,313],['green-lantern',650,260,85,313],['green-lantern',7540,370,85,313],['green-lantern',8300,430,85,313],['green-lantern',-80,6600,85,313],['green-lantern',7600,6690,85,313],['green-lantern',8260,6810,85,313],['bench',980,420,210,136],['bench',7350,240,210,136],['bench',-370,6440,210,136],['bench',7440,6480,210,136],['bog-bush',-1010,-210,300,241],['bog-bush',1430,150,300,241],['bog-bush',6680,-150,300,241],['bog-bush',9170,230,300,241],['bog-bush',-1030,6550,300,241],['bog-bush',1410,6900,300,241],['bog-bush',6680,6570,300,241],['bog-bush',9190,6970,300,241],['bare-tree',-1420,1950,325,495],['bare-tree',-1150,4380,325,495],['bare-tree',9350,2020,325,495],['bare-tree',9400,4600,325,495],['reeds',1750,70,185,244],['reeds',2040,-100,185,244],['reeds',3700,-1400,185,244],['reeds',6090,5620,185,244],['reeds',5040,6870,185,244],['reeds',4850,7460,185,244],['rock',1680,400,210,135],['rock',6300,5450,210,135],['mushrooms',-400,6170,160,116],['mushrooms',1080,6620,160,116],['mushrooms',1380,6460,160,116]];
 reuse.push(['bog-bush',-1330,2520,270,217],['reeds',-1340,2890,160,211],['mushrooms',-1350,3140,150,109],['bare-tree',-1290,4090,300,456],['bog-bush',-1340,4580,250,201],['rock',-1340,4770,155,100],['bog-bush',5190,-900,280,225],['bare-tree',6860,-910,280,427],['green-lantern',5380,-670,75,276],['bog-bush',9220,2390,240,193],['reeds',9600,2960,170,224],['rock',9520,3320,170,109],['green-lantern',9130,4190,75,276],['bog-bush',9520,4500,250,201],['bare-tree',2040,7000,310,472],['bog-bush',3130,7200,280,225],['mushrooms',2500,7130,170,123],['reeds',6070,7100,180,237],['bog-bush',7530,7160,270,217]);
 for(const [asset,x,y,w,h] of reuse){const id=`community-reuse-${props.length}`;props.push({id,name:'Bog '+asset,src:`reuse/${asset}.svg`,x,y,width:w,height:h,scale:1,anchor:{x:.5,y:1},shadow:false,community:true});if(!['reeds','mushrooms'].includes(asset))obstacles.push({x,y:y-12,rx:asset==='bare-tree'?48:w*.3,ry:asset==='bare-tree'?30:22,prop:id,community:true});}
-// Tighten the authored outer plan around the unchanged heart: 3.24x original land,
-// keeping buildings at full Home scale and removing oversized empty margins.
 export const fitted=p=>[4000+(p[0]-4000)*.9,3000+(p[1]-3000)*.9];
 for(let i=0;i<coast.length;i++)coast[i]=fitted(coast[i]);
 for(const c of communities){c.point=fitted(c.point);c.crop=fitted(c.crop);c.work=fitted(c.work);c.houses=c.houses.map(([x,y,v])=>[...fitted([x,y]),v]);}
@@ -110,7 +99,6 @@ for(const c of commons)c.point=fitted(c.point);
 for(const r of rivers)r.points=r.points.map(fitted);
 for(const b of bridges)[b.x,b.y]=fitted([b.x,b.y]);
 for(const r of roads)r.pts=r.pts.map(p=>{
- // Road links meet the original paths exactly at their preserved endpoints.
  const inside=original.world.coast.reduce((hit,a,i)=>{let b=original.world.coast[(i+1)%original.world.coast.length];return (a[1]>p[1])!==(b[1]>p[1])&&p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]?!hit:hit;},false);
  return inside?p:fitted(p);
 });

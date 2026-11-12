@@ -1,5 +1,4 @@
 import {mapPoint} from '../src/pixi/sphere-coordinates.js';
-// Find real shore water independently of island size, placement or harbor links.
 import {WORLD_ISLANDS,offsetOf} from '../src/pixi/world-map.js';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {originOffset,canSail,landingSpot,destinationsFor} from '../src/pixi/islands.js';

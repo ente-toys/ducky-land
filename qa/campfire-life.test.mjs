@@ -55,7 +55,6 @@ test('Eight Campfire groves use the unmodified Home SVG family, with overlapping
    assert.doesNotMatch(svg,/<(?:image|linearGradient|radialGradient|filter)\b|data:|rotate\(|skew\(/i);
   }
  }
- // Explicit lawn openings between the four north groves and between the south groves.
  for(const [x,y]of [[2950,-140],[4030,-80],[5260,-120],[3220,5520],[4720,5500]])assert(plants.every(p=>!(x>p.x-p.width/2&&x<p.x+p.width/2&&y>p.y-p.height&&y<p.y)),'open lawn '+x+','+y);
 });
 

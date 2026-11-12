@@ -1,5 +1,3 @@
-// Scoped update for review 6/7/11/12. Does not run any terrain/path painter.
-// Safe to run again after merging the other Fair work items.
 import fs from 'node:fs';
 import {BENCH_COURTS,placeBench,fitContact} from './furniture.mjs';
 import {FIT} from './centre-data.mjs';
@@ -24,8 +22,6 @@ for(const p of art.props){
  }
  if(JSON.stringify(p)!==before)changed.set(p.id,p);
 }
-// Replace only the embedded court asset, retaining every surrounding terrain
-// byte. New path authority can freely rebuild these tiles from plaza-ground.svg.
 let tiles=0;
 const oldCourt=/<title>Checkered balloon plaza and entry steps<\/title>[\s\S]*?<path d="M145 166H215M142 178H218M139 184H221"[^>]*>\s*<\/g>/g;
 for(const t of art.ground.tiles){

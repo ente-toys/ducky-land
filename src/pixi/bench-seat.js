@@ -1,6 +1,3 @@
-// Seat detection uses the same authored world positions as bench art and rails.
-// Walk onto the seat from its open front and pause to sit; movement stands up.
-// Pure presentation: multiplayer and walking coordinates remain authoritative.
 export function benchSeatAt(props,pose) {
   if (!pose || pose.mode==='sailing' || pose.action!==0 || pose.travel>3 || pose.jumpLeft>0) return null;
   for (const p of props ?? []) {

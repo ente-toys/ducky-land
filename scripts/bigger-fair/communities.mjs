@@ -1,4 +1,3 @@
-// Four authored neighbourhoods. Coordinates are a scene plan, never generated scenery.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {buildTiles,original,bounds,coast,smooth,read,write} from './design.mjs';
@@ -50,8 +49,6 @@ export const places=[
  {id:'waddleshow',name:'Waddleshow Yard',x:8030,y:3110,point:[7860,3250],floor:[340,240],kind:'paved',people:'Parade puppeteers, musicians and float builders',homes:5,work:'Goose-float workshop, prop yard and rehearsal stage'},
  {id:'sugarspoon',name:'Sugarspoon Harbour',x:2450,y:5150,point:[2420,5330],floor:[420,200],kind:'paved',people:'Bakers and harbour delivery families',homes:6,work:'Communal bread oven, morning market, flour store and delivery jetty'}
 ];
-// One wandering main street visits the four greens. Short feeders keep the
-// preserved bridges and original heart connected. No parallel coast boulevard.
 const lane=(pts,w=125,widths)=>({line:smooth(pts,false,9),w,widths});
 const ring=smooth([[-1500,780],[-700,-350],[1700,-650],[2800,-310],[3950,-240],[5200,-210],[7750,-170],[8460,1080],[8500,1700],[8500,2540],[8230,3200],[8000,4010],[7480,5300],[5600,5520],[3540,5450],[2420,5330],[1000,5410],[-530,5190],[-1420,4140],[-1550,3340],[-1460,2540],[-750,1740]],true,9);
 export const paths=[{line:[...ring,ring[0]],w:190,widths:[.95,1.06,.92,1.08,.96,1.02]},
@@ -63,7 +60,6 @@ export const paths=[{line:[...ring,ring[0]],w:190,widths:[.95,1.06,.92,1.08,.96,
  lane([[7750,-170],[7040,30],[6610,630],[6500,950]],165),
  lane([[3490,-290],[3500,-70],[3570,480],[3570,800]],175),
  lane([[-1500,780],[-350,90],[300,670],[680,920]],165),
- // Small working lanes serve the green and the retained brook crossing.
  lane([[-750,1740],[-400,1870],[-180,1930]],115),
  lane([[3950,-240],[4070,-80],[4520,40],[4890,100]],115),
  lane([[8460,1080],[7900,1460],[7790,1650],[7760,2120]],125),
@@ -81,8 +77,6 @@ function home(type,x,y){
  const profiles=[{w:490,h:495,roof:pink,wall:cream},{w:580,h:475,roof:blue,wall:'#FFF4C5'},{w:450,h:535,roof:yellow,wall:'#F5D9AF'},{w:560,h:510,roof:mint,wall:'#FFEAB2'},{w:510,h:465,roof:'#DAB5D9',wall:'#FFF5D0'},{w:545,h:525,roof:'#F2BF7B',wall:cream}];
  const v=profiles[i],kind={'bobbin-cottage':'costume','balloon-caravan':'caravan','parade-home':'performer','sugar-cottage':'baker'}[type];
  let body=house(kind,v.roof).replaceAll('fill="'+cream+'"','fill="'+v.wall+'"');
- // Dormers, scalloped porch canopies, roof vents and side window bays make
- // neighbours differ in silhouette as well as paint and proportions.
  if(i===1||i===4)body+=p('M115 201V153L159 119L204 153V201Z',v.wall)+p('M102 155L159 108L216 155Z',v.roof)+r(141,155,37,36,blue,8)+p('M160 156v34');
  if(i===2||i===5)body+=r(302,50,36,81,'#D1A372')+r(293,46,55,15,v.wall)+p('M303 77h34M303 96h34');
  if(i===3||i===5)body+=p('M170 303L153 271H285L303 303Q287 322 268 304Q250 324 231 305Q212 324 193 305Q180 319 170 303Z',v.roof)+p('M165 306v72M290 306v72','none','stroke-width="5"');
@@ -139,7 +133,6 @@ function compose(){
  custom('neighbour-sign',2700,5750,145,175,20,12);kit('fair-lamp.svg',1870,5270,.5);kit('fair-lamp.svg',3090,5480,.5);
  custom('shared-well',2670,5230,180,185,65,25);custom('garden-cart',3930,5640,240,170,85,25);
  tree('tree-1',-950,4530);tree('tree-4',-700,5410);tree('tree-3',770,5060);tree('tree-2',4620,5560);tree('tree-3',5780,5120);tree('bush-3',5700,5730,1.1);
- // Authored commons occupy the broad spaces between inhabited lanes.
  community='commons';
  for(const [src,x,y,k]of [
  ['tree-3',900,50,1.05],['tree-4',1240,-30,.95],['tree-2',1520,110,1.05],['tree-1',1120,300,.9],
@@ -163,18 +156,15 @@ function compose(){
  for(const [src,x,y,k]of [['tree-3',8190,4670,1.1],['tree-4',8470,4900,1],['tree-2',7650,4770,1.1],['bush-2',8440,5050,1]])tree(src,x,y,k);
  community='sugarspoon';
  for(const [src,x,y,k]of [['tree-3',4870,5220,1.1],['tree-4',5320,5260,1],['tree-2',5020,4770,1.1],['bush-3',5470,5310,1]])tree(src,x,y,k);
- // A few authored groups frame open commons; no isolated attraction sites.
  community='commons';
  for(const [src,x,y,k]of [['tree-3',7600,650,1.15],['tree-4',7470,1050,1.1],['bush-2',7420,1180,1],['tree-1',5900,4680,1.15],['tree-2',6210,4800,1.1],['bush-3',6080,4930,1],['tree-3',-1000,3800,1.1],['tree-4',-590,3830,1.1],['bush-2',-690,3970,1]])tree(src,x,y,k);
  return props;
 }
 const d=pts=>'M'+pts.map(q=>q.map(v=>Math.round(v*10)/10).join(' ')).join('L');
-// Ground is delegated; no nested original tiles or alternate road painter.
 async function tiles(){return buildTiles();}
 makeAssets();compose();
 const art={...original,...bounds,ground:{tiles:await tiles()},props:[...original.props,...props]};
 write(S+'design.json',{...bounds,coast,places,paths,newProps:props,homes});write(S+'proposed-art.json',art);
-// Freeze a labelled design plate before changing the production manifests.
 const png=await render(art,{k:.13,x:-2500,y:-1800,width:1560,height:1066,home:true,sleepers:false});
 const labels=[[-800,1190,'BOBBINBELL GREEN'],[3950,-1050,'CLOUDPOP MEWS'],[7900,3000,'WADDLESHOW YARD'],[2550,5760,'SUGARSPOON HARBOUR'],[3600,1800,'FAIRGROUND HEART, PRESERVED']];
 const text=labels.map(([x,y,t])=>`<g transform="translate(${(x+2500)*.13} ${(y+1800)*.13})"><rect x="-130" y="-22" width="260" height="34" rx="14" fill="#FFF4CA" stroke="#A88A46" stroke-width="1.5"/><text text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7D673E">${t}</text></g>`).join('');

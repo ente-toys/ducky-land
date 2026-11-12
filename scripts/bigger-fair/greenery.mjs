@@ -1,5 +1,3 @@
-// Run LAST: boats -> centre -> hamlets-apply -> greenery -> theme-index -> source-sizes.
-// Idempotent additions only. Reuse the island's existing SVGs, sort at each foot.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {FIT} from './centre-data.mjs';
@@ -39,8 +37,6 @@ for(const [g,p]of Object.entries(OUTER_GROVES))place(g,p,false);
 for(const [g,p]of Object.entries(BANK_BUSHES))place('bank-'+g,p,true);
 const planting=applyPlants(art,world,walk);problems.push(...planting.problems);
 const nav=geometry(walk),beds=resolveSleepSpots(world,art.props,(x,y)=>nav.walkable(x,y),sleepHalfWidths(),{spots:world.sleepSpots,warn:false});
-// The life pass adds fifty to the original forty. Validate whichever complete
-// source set is present, including a rerun after the life pass.
 const authoredBeds=Object.values(world.sleepSpots).reduce((n,spots)=>n+spots.length,0);
 if(beds.length!==authoredBeds)problems.push(...beds.bad.map(p=>JSON.stringify(p)));
 assert.equal(problems.length,0,problems.join('\n'));

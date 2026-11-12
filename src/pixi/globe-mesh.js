@@ -1,6 +1,5 @@
 import {Quaternion,Vector2,Vector3} from './globe-math.js';
 
-// The globe scene only needs one group transform, indexed surfaces and cards.
 export class Group {
   children=[];
   position=new Vector3();

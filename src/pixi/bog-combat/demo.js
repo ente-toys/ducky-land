@@ -1,4 +1,3 @@
-// Loaded only by the DEV + bots URL branch in BogReview.
 import {createBogCombat} from './sim.js';
 import {BogCombatRoom} from './room.js';
 import {createBotBrain,createBotController} from './bot-brain.js';

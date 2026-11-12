@@ -1,6 +1,3 @@
-// Crop oversized SVG decorations into independently streamed world-space tiles.
-// Original manifests and artwork stay untouched. Nested SVGs preserve their
-// viewBox, filters, gradients, and authored draw order inside each decoration.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import sizes from '../../src/pixi/art-source-sizes.json' with {type:'json'};
@@ -19,8 +16,6 @@ for(const {theme} of WORLD_ISLANDS.filter(i=>i.theme&&(!selected||i.theme===sele
   const start=original.indexOf('<svg'),end=original.indexOf('>',start),root=original.slice(start,end+1);
   const viewBox=root.match(/viewBox\s*=\s*["']([^"']+)["']/)?.[1]??`0 0 ${iw} ${ih}`;
   const body=original.slice(end+1,original.lastIndexOf('</svg>'));
-  // Keep namespace declarations and root presentation attributes, while mapping
-  // the original viewBox onto precisely the authored world-space rectangle.
   const attrs=root.replace(/^<svg/,'').replace(/>$/,'').replace(/\s(?:width|height|viewBox|preserveAspectRatio|x|y)\s*=\s*(["']).*?\1/g,'');
   const tiles=[];
   for(let y=0;y<p.height;y+=512)for(let x=0;x<p.width;x+=512){

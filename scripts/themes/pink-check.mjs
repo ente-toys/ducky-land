@@ -1,7 +1,3 @@
-// Pink Dollhouse Town: is the walk map valid? Builds the same map the game and the room server build (island-maps.js
-// makeMap), then flood-fills the walkable ground from the plaza spawn on a 20-unit grid and checks every zone spawn,
-// both islets, every pier end and the harbor landing are reachable, and every boat spot is open sea.
-//   node scripts/themes/pink-check.mjs
 import {readFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 
@@ -21,7 +17,6 @@ while (queue.length) {
     if (rr >= 0 && rr < H && cc >= 0 && cc < W && ok[j] && !seen[j]) {seen[j] = 1; queue.push(j);}
   }
 }
-// a point counts as reached when a reached cell lies within 30 of it (the grid snaps)
 const reached = (x, y) => {for (let dy = -40; dy <= 40; dy += G) for (let dx = -40; dx <= 40; dx += G) if (seen[cell(x + dx, y + dy)]) return true; return false;};
 const fails = [];
 const want = (label, x, y) => {const w = nav.walkable(x, y), r = reached(x, y); if (!w || !r) fails.push(`${label} (${Math.round(x)},${Math.round(y)}) walkable=${w} reached=${r}`);};
@@ -37,7 +32,6 @@ map.boatSpots().forEach((s, i) => {
 const area = seen.reduce((a, b) => a + b, 0) * G * G, all = ok.reduce((a, b) => a + b, 0) * G * G;
 console.log(`walkable ${(all / 1e6).toFixed(2)}M units², reached from the plaza ${(area / 1e6).toFixed(2)}M (${(100 * area / all).toFixed(1)}%), ${walk.obstacles.length} obstacles, ${map.boatSpots().length} boats`);
 console.log(fails.length ? 'FAIL\n  ' + fails.join('\n  ') : 'PASS: every zone, islet, pier, the harbor and every boat is reachable');
-// unreached walkable pockets (islands of walkable cells cut off by props)
 const pockets = [];
 const mark = new Uint8Array(W * H);
 for (let i = 0; i < W * H; i++) if (ok[i] && !seen[i] && !mark[i]) {

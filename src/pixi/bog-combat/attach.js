@@ -12,8 +12,6 @@ import {createBogSounds} from './sounds.js';
 import {createBogReadability} from './readability.js';
 import {loadBushRustleArt,createBushRustle} from './bush-rustle-view.js';
 
-// Call after choosing a team, on an already-mounted Home-system Bog island.
-// No RAF, application, camera, map, player rig or movement listener is created.
 export async function attachBogCombat(engine,{onLeave=()=>{},onSnapshot=()=>{},onStatus=()=>{},loadGun=loadGunC,loadGhosts=loadKnockoutArt,loadPickups=loadPickupArt,loadLeaves=loadBushRustleArt,signal,Room=BogCombatRoom,blockers=getBogBlockers(),navigation=engine.room?.navHere()??engine.sim?.nav,...options}={}) {
   if(import.meta.env?.DEV&&engine.bogCombat?.room.demoSpectator)engine.bogCombat.leave(false);
   if(engine.bogCombat)throw new Error('Bog combat is already attached');
@@ -40,8 +38,6 @@ export async function attachBogCombat(engine,{onLeave=()=>{},onSnapshot=()=>{},o
   engine.renderLiveDucks=function(poses,dt,time,reducedMotion,visible) {
     feel.beginFrame(reducedMotion);
     render.call(this,poses,dt,time,reducedMotion,visible);
-    // An offline island may already have a locally-rendered player. Its existing
-    // rig resumes automatically after leaving; only the combat participant draws.
     this.rigs?.forEach((rig,i)=>{if(this.localDucks?.[i]?.player)rig.root.visible=false;});
     const ids=new Set(poses.map(p=>p.id));
     for(const [id,entry]of attachments)if(!ids.has(id)||this.liveRigs.get(id)?.rig!==entry.rig){entry.gun.dispose();entry.marker.dispose();entry.knockout.dispose();entry.ability.dispose();entry.readability.dispose();attachments.delete(id);}
@@ -69,8 +65,6 @@ export async function attachBogCombat(engine,{onLeave=()=>{},onSnapshot=()=>{},o
     if(disposed)return lastTotals;disposed=true;
     unbind();room.dispose();effects.dispose();pickups.dispose();feel.dispose();bushRustle.dispose();
     for(const {gun,marker,knockout,ability,readability}of attachments.values()){gun.dispose();marker.dispose();knockout.dispose();ability.dispose();readability.dispose();}attachments.clear();
-    // Offline island ticks do not call renderLiveDucks. Remove these rigs now,
-    // including pending rig loads, rather than leaving frozen combat ghosts.
     for(const [id,entry]of engine.liveRigs??[]){
       entry.rig?.dispose();entry.nameplate?.remove();entry.seatMask?.destroy();
       engine.liveRigs.delete(id);engine.removeChat?.(id);

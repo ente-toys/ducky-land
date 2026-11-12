@@ -48,7 +48,6 @@ test('showcase stars Ducky, Privacy wins at thirty, then restarts without resett
  const tick=demo.sim.state.tick;room.step(1/60,{x:0,y:0},demo.match.restartAt-1);assert.equal(demo.match.winner,'privacy');
  room.step(1/60,{x:0,y:0},demo.match.restartAt+1);assert.equal(demo.match.winner,null);assert.deepEqual(demo.sim.state.scores,{privacy:0,google:0});
  room.step(1/60,{x:0,y:0},demo.match.restartAt+20);assert.ok(demo.sim.state.tick>tick);assert.equal(demo.sim.state.players.size,10);
- // PixiIsland calls room.step with no clock argument.
  demo.match.winner='privacy';demo.match.restartAt=-1;room.step(1/60,{x:0,y:0});assert.equal(demo.match.winner,null);
  room.dispose();
 });

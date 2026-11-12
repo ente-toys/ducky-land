@@ -1,10 +1,6 @@
 import {DOMAdapter, ImageSource, Texture, Rectangle} from 'pixi.js';
 import {cropSVG} from './theme-raster.js';
 
-// SVG image decoding and ImageBitmap preparation run asynchronously. The pool
-// submits work under a 5ms animation-frame budget, without waiting for idle.
-// Leases are shared by crop+resolution; the pool retains cached leases under its
-// hard cap, so there is no second, unaccounted bitmap cache here.
 export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.bind(globalThis),
   now=()=>performance.now(),frameBudgetMs=5,concurrency=64,prepareSVG=cropSVG,exactFrame=false}={}) {
   const originals=new Map(),leases=new Map();
@@ -21,7 +17,6 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
       queue.sort((a,b)=>Number(Boolean(b.order.visible))-Number(Boolean(a.order.visible))||(b.order.priority??0)-(a.order.priority??0)||(a.order.distance??0)-(b.order.distance??0));
       const {run,resolve,reject}=queue.shift();inFlight++;
       run().then(resolve,reject).finally(()=>{inFlight--;request();});
-      // Invoke preparation synchronously so its cost counts against this frame.
     }
     request();
   };
@@ -47,7 +42,7 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
           await image.decode();
           let resource;
           if(bitmap){
-            try{resource=await createImageBitmap(image,{premultiplyAlpha:'premultiply'});}catch{ /* Canvas fallback for browsers without SVG bitmap support. */ }
+            try{resource=await createImageBitmap(image,{premultiplyAlpha:'premultiply'});}catch{  }
           }
           if(!resource){
             resource=adapter.createCanvas(Math.ceil(crop[4]*resolution),Math.ceil(crop[5]*resolution));

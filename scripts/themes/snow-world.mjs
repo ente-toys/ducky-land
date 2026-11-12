@@ -1,4 +1,3 @@
-// Rebuild only Snowdrift. All input dimensions are in the approved concept's coordinate space.
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {specs,save,A,INK} from './snow-assets.mjs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
@@ -46,7 +45,6 @@ const paths=[
  [[522,316],[560,337],[596,376]],
  [[960,224],[897,231],[843,237],[793,224],[715,209]],
 ].map(l=>({line:smooth(l.map(T)),w:220}));
-// Bridges cross open sea to the two quiet southern snow islets.
 const walkways=[{a:T([550,790]),b:T([550,909]),w:142},{a:T([920,789]),b:T([920,891]),w:142},{a:T([641,941]),b:T([813,935]),w:145}];
 const props=[],flats=[],decks=[],obstacles=[];let pid=0;
 function put(name,cp,zone='',scale=1,{world=false,flip=false,foot='base',shadow=true}={}){
@@ -60,7 +58,6 @@ function put(name,cp,zone='',scale=1,{world=false,flip=false,foot='base',shadow=
 const pathClear=(x,y,pad)=>paths.every(p=>lineDist(x,y,p.line)>p.w/2+pad);
 const inside=(x,y,e,pad=0)=>((x-e.x)/(e.rx+pad))**2+((y-e.y)/(e.ry+pad*.7))**2<1;
 const reserved=(x,y,pad=0)=>[...rings,ice].some(e=>inside(x,y,e,pad));
-// Large, readable secondary landmarks stay outside future activity and stall zones.
 put('cabin',[350,250],'lodge',1.12,{foot:'building'});
 put('cabin-small',[704,174],'north-cabin',.63,{foot:'building'});
 put('igloo',[997,196],'igloos',1.2,{foot:'building'});
@@ -76,7 +73,6 @@ put('snowman',[301,638],'garden',.72);
 put('sled',[322,521],'sled',.8);
 put('sled',[353,498],'sled',.78,{flip:true});
 put('sled',[1332,466],'skating',.75);
-// Centre's floor and plinth are independent layers, while the Ducky sorts with players.
 const cx=centre.x,cy=centre.y;
 flats.push({src:specs.plinth.src,x:cx-315,y:cy-100,width:630,height:250,topLeft:true});
 const statue=put('snow-ducky',[cx,cy+5],'centre',1.2,{world:true,foot:'none',shadow:false});
@@ -84,7 +80,6 @@ obstacles.push({x:cx,y:cy+12,rx:248,ry:133});
 const pieces=[{id:'plinth',file:'plinth.svg',layer:'decal',x:-315,y:-100,width:630,height:250,anchor:{x:0,y:0},at:[-315,-100]},{id:'snow-ducky',file:'snow-ducky.svg',layer:'sorted',x:-228,y:-481,width:456,height:486,anchor:{x:.5,y:1},at:[0,5],sortY:5}];
 json(A+'centre/centre.json',{theme:'snow',name:'Snowdrift snow Ducky',concept:'concepts/themes/concepts/11-snow.png',origin:'snowflake plaza centre',placement:{x:cx,y:cy,scale:1},depthRatio:centre.ry/centre.rx,pieces,outerEdge:{x:0,y:0,rx:centre.rx,ry:centre.ry},walkable:[{ellipse:{x:0,y:0,rx:centre.rx,ry:centre.ry}}],blocked:[{name:'Snow Ducky plinth',ellipse:{x:0,y:12,rx:248,ry:133}}],spawn:[0,centre.ry-80]});
 statue.id='snow-centre-snow-ducky';
-// Draw each seat in its own plaza's ellipse, using exactly home's slats and spindle construction.
 const benchRecords=[];
 function bench(e,deg,span=25){
  const radius=e.rx-45,k=e.ry/e.rx,ground=(a,s)=>[e.x+Math.cos(a*Math.PI/180)*s,e.y+Math.sin(a*Math.PI/180)*s*k];
@@ -102,7 +97,6 @@ for(const e of [centre,...activity,iglooPlaza,cabinPlaza]){
  for(const deg of e===centre?[-100,-70,60,130]:[-140,-37,46,135]){
   const angle=deg*Math.PI/180,x=e.x+Math.cos(angle)*(e.rx-64),y=e.y+Math.sin(angle)*(e.ry-45);
   if(!pathClear(x,y,48))continue;
-  // Activity cores remain fully empty. Furniture is on a separate outer ring.
   const target=activity.includes(e)?{...e,rx:e.rx+100,ry:e.ry+75}:e;
   bench(target,deg,e===centre?23:27);
  }
@@ -112,14 +106,12 @@ for(const e of [centre,...activity,iglooPlaza,cabinPlaza]){
   put(i%2?'planter':'lamp',[x,y],e.id,i%2?.68:.75,{world:true,foot:i%2?'base':'pole'});
  }
 }
-// Rink rail posts and warmly lit benches occupy the bank, not the skating surface.
 for(const deg of [-154,-116,-78,-40,24,65,109,153]){
  const a=deg*Math.PI/180,x=ice.x+Math.cos(a)*(ice.rx+82),y=ice.y+Math.sin(a)*(ice.ry+72);
  if(!pathClear(x,y,25))continue;
  put('lamp',[x,y],'skating',.74,{world:true,foot:'pole'});
  put('snow-rock',[x+65,y+35],'skating',.5,{world:true});
 }
-// Natural groves, planted to frame sight lines and leave the full path and plaza crowns clear.
 const clusters=[[267,148],[530,151],[838,96],[1236,199],[1343,361],[1405,568],[1301,723],[1038,764],[844,688],[632,668],[366,736],[174,669],[142,531],[133,378],[386,445],[665,289],[827,334],[1005,650],[544,418],[734,779]];
 let trees=0;
 const treeAllowed=(x,y)=>inPoly(x,y,offset(snowEdge,100))&&pathClear(x,y,135)&&!reserved(x,y,100)&&!reserved(x,y-210,35)&&!props.some(p=>Math.hypot((p.x-x),(p.y-y)*1.5)<(p.asset?.includes('cabin')?540:p.asset==='igloo'?290:195))&&!walkways.some(b=>seg(x,y,b.a,b.b)<200);
@@ -134,12 +126,10 @@ for(let c=0;c<clusters.length;c++){
 for(let tries=0;trees<66&&tries<20000;tries++){
  const x=700+rnd()*6000,y=700+rnd()*3500;if(!treeAllowed(x,y))continue;put('pine-'+(1+trees%3),[x,y],'edge-grove',.92+rnd()*.18,{world:true,foot:'tree',flip:rnd()<.5});trees++;
 }
-// Islet grove anchors, placed away from bridge arrivals.
 for(const [i,[x,y]]of islets.entries()){
  for(const [dx,dy]of [[-240,-10],[0,110],[240,-35]]){put('pine-'+(1+i),[x+dx,y+dy],'islets',.85,{world:true,foot:'tree'});trees++}
  put('snowman',[x-220,y+140],'islets',.65,{world:true});put('sled',[x+215,y+140],'islets',.65,{world:true});
 }
-// Bushes and rocks gather at the groves' feet; berry stems interrupt the snow banks.
 let small=0;
 const trunks=props.filter(p=>p.asset?.startsWith('pine'));
 for(const [i,p]of trunks.entries()){
@@ -154,17 +144,14 @@ for(let tries=0;small<165&&tries<15000;tries++){
  if(!inPoly(x,y,offset(snowEdge,80))||!pathClear(x,y,70)||reserved(x,y,70)||props.some(p=>Math.hypot(p.x-x,(p.y-y)*1.4)<160))continue;
  put(['snow-bush','winter-berries','snow-rock'][small%3],[x,y],'snowbank',.6+rnd()*.23,{world:true});small++;
 }
-// Every empty stall frontage has a finished perimeter and broad pedestrian access.
 for(const e of stalls)for(const side of [-1,1]){
  put('lamp',[e.x+side*(e.rx+70),e.y+25],e.id,.74,{world:true,foot:'pole'});
  put('planter',[e.x+side*(e.rx+70),e.y+112],e.id,.72,{world:true});
 }
-// Ground: transparent ocean, home sand lip, ice facets, snowy texture, soft inked path network.
 const g=[],tag=(d,f,s=INK,w=3)=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"/>`;
 const ell=(e,f,s=INK,w=3)=>`<ellipse cx="${e.x}" cy="${e.y}" rx="${e.rx}" ry="${e.ry}" fill="${f}" stroke="${s}" stroke-width="${w}"/>`;
 g.push(`<defs><clipPath id="land"><path d="${dz(snowEdge)}"/></clipPath></defs>`);
 g.push(tag(dz(offset(coast,-62)),'#A4E0DE','none'),tag(dz(coast.map(([x,y])=>[x,y+36])),'#6BBACE','#458CA3',4),tag(dz(coast),'#EAD8AC','#566B56',3.5),tag(dz(offset(coast,31)),'#DAEDF0','#8EBCC4',3),tag(dz(snowEdge),'#F3F9F1','#91B7B7',3));
-// The ice rim has visible individual facets, without changing the navigation coast.
 for(let i=0;i<coast.length;i+=3){const a=coast[i],b=coast[(i+3)%coast.length];if(b[0]<a[0])g.push(tag(`M${a[0]} ${a[1]+8} L${b[0]} ${b[1]+8} L${b[0]+12} ${b[1]+37} L${a[0]+8} ${a[1]+35} Z`,i%2?'#81C8D8':'#BDE6EA','#7FAEB9',1.5));}
 let marks='';
 for(let i=0;i<2400;i++){
@@ -174,10 +161,8 @@ for(let i=0;i<2400;i++){
 }
 g.push(`<g clip-path="url(#land)">${marks}</g>`);
 g.push('<g clip-path="url(#land)">');
-// Draw all outer path strokes together, then all fills, so every junction is a clean rounded union.
 for(const [c,w]of [[INK,228],['#D3D7BB',221],['#F9E9BD',215]])for(const p of paths)g.push(tag(d(p.line),'none',c,w));
 for(const p of paths){const l=p.line;for(let i=5;i<l.length;i+=8){const a=l[i-1],b=l[i+1],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);g.push(tag(`M${l[i][0]-dy/len*90} ${l[i][1]+dx/len*90} L${l[i][0]+dy/len*90} ${l[i][1]-dx/len*90}`,'none','#DACCA8',1.5));}}
-// Paving rings, radial joints, tiny snowflake inlays and a dressed outside band.
 function pave(e,index){
  g.push(`<clipPath id="p${index}"><ellipse cx="${e.x}" cy="${e.y}" rx="${e.rx}" ry="${e.ry}"/></clipPath>`,ell({...e,rx:e.rx+25,ry:e.ry+19},'#D8E7DE','#ADC6BC',2),ell(e,'#F7E9C8',INK,3));
  const band=stalls.includes(e)?'#C7DADD':'#B2CAC4';
@@ -197,22 +182,17 @@ if(e===centre){
 }
 
  for(let r=90;r<e.rx-45;r+=72){g.push(ell({...e,rx:r,ry:r*k},'none','#C7BDA0',1.7));for(let a=0;a<360;a+=18){const ang=(a+(Math.floor(r/72)%2)*9)*Math.PI/180;g.push(tag(`M${e.x+(r-72)*Math.cos(ang)} ${e.y+(r-72)*k*Math.sin(ang)} L${e.x+r*Math.cos(ang)} ${e.y+r*k*Math.sin(ang)}`,'none','#CCC4AA',1.3));}}
- // Airy, repeating snowflakes instead of an empty slab. Flat blue stone inlays.
  let pat='';for(let y=e.y-e.ry+60,row=0;y<e.y+e.ry;y+=115,row++)for(let x=e.x-e.rx+60+(row%2)*65;x<e.x+e.rx;x+=140){if(!inside(x,y,{...e,rx:e.rx-54,ry:e.ry-42}))continue;pat+=`<g transform="translate(${x} ${y}) scale(1 .7)" stroke="#9BBBBC" stroke-width="2" fill="none">`;for(const a of [0,60,120])pat+=`<path transform="rotate(${a})" d="M-14 0 H14 M-8 -4 L-4 0 L-8 4 M8 -4 L4 0 L8 4"/>`;pat+='</g>'}
  g.push(`<g clip-path="url(#p${index})">${pat}</g>`);
 }
 rings.forEach(pave);
-// Frozen pond: scalloped snow bank, bright solid ice, two etched skating loops.
 g.push(ell({...ice,rx:ice.rx+53,ry:ice.ry+39},'#B3CED2','#699CA9',3),ell({...ice,rx:ice.rx+31,ry:ice.ry+23},'#FAFCF2',INK,3),ell(ice,'#83D3E2','#5D97AC',3),ell({...ice,rx:ice.rx-32,ry:ice.ry-25},'none','#D3F2EE',7));
 for(let i=0;i<8;i++){const x=ice.x-ice.rx*.7+i*180,y=ice.y+Math.sin(i*2)*ice.ry*.38;g.push(tag(`M${x} ${y} C${x+250} ${y-180} ${x+490} ${y+95} ${x+210} ${y+149} S${x-50} ${y-15} ${x+240} ${y-130}`,'none',i%2?'#DAF5F0':'#B8EBEC',2));}
-// Sled tracks stay on the activity surface, with timber start posts outside its open core.
 const sled=activity[0];let tracks='';for(const dx of [-170,-80,60,150])tracks+=`M${sled.x-130+dx} ${sled.y-sled.ry*.8} C${sled.x+30+dx} ${sled.y-110} ${sled.x-15+dx} ${sled.y+150} ${sled.x+170+dx} ${sled.y+sled.ry*.8} `;
 g.push(`<clipPath id="sled"><ellipse cx="${sled.x}" cy="${sled.y}" rx="${sled.rx-45}" ry="${sled.ry-34}"/></clipPath><ellipse cx="${sled.x}" cy="${sled.y}" rx="${sled.rx-47}" ry="${sled.ry-34}" fill="#F4FAF4"/><path d="${tracks}" fill="none" stroke="#B4D4D8" stroke-width="7" clip-path="url(#sled)"/><path d="${tracks}" fill="none" stroke="#FFFFFF" stroke-width="2" clip-path="url(#sled)"/>`);
 g.push('</g>');
-// Snow islets with the same warm sand footing and turquoise ice lip.
 for(const [x,y,rx,ry]of islets){g.push(ell({x,y:y+24,rx:rx+15,ry:ry+5},'#72BFD0','#6B9AAB',3),ell({x,y,rx,ry},'#E7D4A6',INK,3),ell({x,y:y-8,rx:rx-25,ry:ry-20},'#F4FAF3','#9BBFC1',3));for(let i=0;i<70;i++){const px=x+(rnd()*2-1)*rx*.9,py=y+(rnd()*2-1)*ry*.8;if(((px-x)/rx)**2+((py-y)/ry)**2<.7)g.push(tag(`M${px} ${py} q10 -5 19 0 l5 -8 5 8`,'none','#C2D9D4',2));}}
 const foam=offset(coast,-96);for(let i=0;i<foam.length;i+=7){const s=foam.slice(i,i+4);g.push(tag(d(s),'none','#EDF9E9',5))}
-// Small ice floes are shoreline life, and never marked as walkable islands.
 for(const [i,[x,y]]of coast.filter((_,i)=>i%18===0).entries()){
  const c=[W/2,2600],dx=x-c[0],dy=y-c[1],len=Math.hypot(dx,dy),px=x+dx/len*170,py=y+dy/len*170;
  flats.push({src:specs.iceberg.src,x:px,y:py,width:100+(i%3)*25,height:68+(i%3)*15,topLeft:false});
@@ -220,7 +200,6 @@ for(const [i,[x,y]]of coast.filter((_,i)=>i%18===0).entries()){
 const body=g.join('\n'),head=(w,h,vb)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${vb}"><title>Snowdrift snowy coastline and patterned village ground</title>${body}</svg>`;
 writeFileSync(A+'ground.svg',head(W,H,`0 0 ${W} ${H}`));
 const tiles=[];for(let row=0;row<4;row++)for(let col=0;col<5;col++){const x=col*1500,y=row*1375,src=`ground-r${row}-c${col}.svg`;writeFileSync(A+src,head(1500,1375,`${x} ${y} 1500 1375`));tiles.push({src,x,y,width:1500,height:1375})}
-// Arched plank bridges, with deck and rails split for correct Ducky occlusion.
 for(const [i,w]of walkways.entries()){
  const horizontal=Math.abs(w.b[0]-w.a[0])>Math.abs(w.b[1]-w.a[1]),minX=Math.min(w.a[0],w.b[0]),minY=Math.min(w.a[1],w.b[1]),len=Math.hypot(w.b[0]-w.a[0],w.b[1]-w.a[1]);
  if(horizontal){
@@ -236,14 +215,12 @@ for(const [i,w]of walkways.entries()){
  }
 }
 const foot=T([186,729]),tip=T([186,826]);
-// Jetty is generated by the engine using this map's actual docking axis.
 const harbor={jetty:{foot,tip,width:104},boats:[{x:tip[0]-170,y:tip[1]+30,turn:Math.PI},{x:tip[0]+175,y:tip[1]+30,turn:Math.PI},{x:tip[0]-450,y:tip[1]+90,turn:Math.PI},{x:6900,y:1760,turn:Math.PI/2},{x:6560,y:4430,turn:Math.PI}],spawn:[cx,cy+centre.ry-75]};
 const zones={plaza:{name:'Snowdrift square',x:cx,y:cy+centre.ry-75,spawn:harbor.spawn},centre:{...centre,centre:'centre/centre.json',landmark:statue.id,spawn:harbor.spawn},skating:{...ice,kind:'ice',spawn:[ice.x,ice.y]},lodge:{x:T([355,290])[0],y:T([355,290])[1],spawn:T([355,290])},igloos:{...iglooPlaza,spawn:T([1016,249])},isletWest:{spawn:T([555,949]),x:T([555,949])[0],y:T([555,949])[1]},isletEast:{spawn:T([978,964]),x:T([978,964])[0],y:T([978,964])[1]}};
 for(const e of [...activity,...stalls])zones[e.id]={...e,kind:stalls.includes(e)?'stall-row':'paved',spawn:[e.x,e.y]};
 const world={width:W,height:H,theme:'snow',name:'Snowdrift',coast,water:[],bridges:[],obstacles:[],islets,walkways,arches:walkways.slice(0,2).map(w=>({a:w.a,b:w.b,w:w.w,lift:28})),paths:paths.map(p=>p.line),zones,ambient:{birds:[T([230,210]),T([700,200]),T([1200,250]),T([400,650]),T([950,720]),T([1300,690])],butterflies:[]},sleepSpots:{},sleepAvoid:[...rings,ice].map(e=>({...e,rx:e.rx+85,ry:e.ry+70})),props:[]};
 const walk={width:W,height:H,coast:walking,water:[],bridges:[],obstacles,islets,walkways};
 const art={width:W,height:H,sea:'#8CC8CD',ground:{tiles},flats,decks,props};
-// Sleepers use all eight existing home poses, each paired with a winter prop.
 const counts={chair:2,hammock:3,book:6,leaf:6,wing:7,box:4,rock:4,nod:8};
 const base=makeMap('snow',{world,walk,harbor,sleepers:[]}).walk,geo=geometry(base),sizes=sleepHalfWidths(),spots=Object.fromEntries(Object.keys(counts).map(k=>[k,[]]));
 seed=110640;
@@ -261,7 +238,6 @@ for(const [pose,n]of Object.entries(counts)){
  console.log('sleepers',pose,spots[pose].length+'/'+n);
  
 }
-// Resolve any crowded last pose with a fitting smaller pose instead of weakening clearance.
 for(const pose of ['nod','rock','box','wing','leaf','book','chair','hammock']){
  const near=pose==='nod'?trunks:companions;
  for(let i=0;Object.values(spots).reduce((s,v)=>s+v.length,0)<40&&i<8000;i++){
@@ -277,7 +253,6 @@ for(const pose of Object.keys(counts))counts[pose]=spots[pose].length;
 world.sleepSpots=spots;world.props=props.map(({id,name,x,y,zone})=>({id,name,x,y,zone}));
 const beds=resolveSleepSpots(base,props,geo.walkable,sizes,{spots,avoid:world.sleepAvoid,warn:false});
 if(beds.length!==40)throw Error('Expected 40 sleepers');
-// Complete the groves without moving the already valid sleeper beds.
 let extraTrees=0;
 for(let tries=0;trees<68&&tries<30000;tries++){
  const near=trunks[Math.floor(rnd()*trunks.length)],a=rnd()*Math.PI*2,r=250+rnd()*340;
@@ -290,7 +265,6 @@ for(let tries=0;trees<68&&tries<30000;tries++){
 }
 console.log('Completed groves',extraTrees,'additional pines');
 world.props=props.map(({id,name,x,y,zone})=>({id,name,x,y,zone}));
-// Decals soften every tree bank and path edge. No standing obstacle is introduced.
 for(let i=0;i<900;i++){
  const x=650+rnd()*6200,y=650+rnd()*3550;if(!inPoly(x,y,snowEdge)||reserved(x,y,8)||!pathClear(x,y,4))continue;
  const s=specs[i%6?'snow-tuft':'pebbles'];flats.push({src:s.src,x,y,width:s.w*(.6+rnd()*.4),height:s.h*(.6+rnd()*.4),flip:rnd()<.5});

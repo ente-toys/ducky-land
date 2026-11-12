@@ -1,5 +1,3 @@
-// Preserve the authored Bezier network, round its lake landings, then paint all
-// outer lips, all shadows and all blue surfaces in shared passes.
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {prepareLakeJunctions} from './lake-junctions.mjs';
@@ -15,8 +13,6 @@ export function groundArtwork(root,art,world,clusters,lakeFiles){
  let terrain=readFileSync(path.join(root,'public/pixi-art/themes/snow',art.ground.vector),'utf8');
  terrain=stripGroup(stripGroup(stripGroup(terrain,'snow-lip'),'snow-grain'),'lake-landings');
  const prepared=prepareLakeJunctions(terrain,world);terrain=prepared.terrain;
- // The separately streamed lake must use the SAME exterior as the terrain.
- // Otherwise its old snowy lip paints a dam across each joined mouth.
  const rink=art.flats.find(p=>p.id==='rink'),file=path.join('public/pixi-art/themes/snow',rink.src);
  const source=lakeFiles.get(file);
  const originalX=rink.x+30,originalY=rink.y+30,ice=world.iceland2.rink,pad=30;
@@ -33,11 +29,8 @@ export function groundArtwork(root,art,world,clusters,lakeFiles){
  terrain=terrain.replace(paths[0],lip+paths[0]);
  terrain=terrain.replace(paths.at(-1),paths.at(-1)+`<g id="lake-landings">${junction('#a6deec')}</g>`);
  const marks=()=>'<g id="snow-grain"></g>';
- // Detail is baked before the courts and paths, never painted over the lane.
  const insertion=terrain.indexOf('<g clip-path="url(#snow-coast)">')+'<g clip-path="url(#snow-coast)">'.length;
  const shell=terrain.slice(0,insertion)+'GROUND_CLUSTERS'+terrain.slice(insertion);
- // Game detail is streamed separately at its actual placed size. Baking tiny
- // motifs into the low-resolution globe fallback produced the green/grey haze.
  const full=shell.replace('GROUND_CLUSTERS',marks([]));
  const files=new Map([[path.join('public/pixi-art/themes/snow',art.ground.vector),full]]);
  for(const t of art.ground.tiles){
@@ -47,9 +40,6 @@ export function groundArtwork(root,art,world,clusters,lakeFiles){
  files.set('public/pixi-art/globe/snow-ground.svg',full.replace(/width="[^"]+" height="[^"]+"/,`width="1024" height="${1024*world.height/world.width}"`));
  return {files,landings:prepared.landings,paths:paths.slice(0,world.iceland2.routes.length).map((p,i)=>({route:world.iceland2.routes[i].id,d:p.match(/\bd="([^"]+)"/)[1],width:world.iceland2.routes[i].width,sides:[-1,1],band:12,shadow:2}))};
 }
-// Standing drawings use small shared SVG crops in the existing bounded pool.
-// Crop keys depend on source + display size, never placement id, so 536 pines
-// reuse exactly the same three sets of source textures.
 export function streamArtwork(root,art,files){
  const cache=new Map();
  for(const p of [...art.props,...art.flats]){

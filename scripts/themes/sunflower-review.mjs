@@ -1,4 +1,3 @@
-// Offline art.json render and collision evidence for the sunpink pass.
 import sharp from 'sharp';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -23,7 +22,6 @@ for(const theme of ['sunflower']) {
    props.push({src,x:b.x,y:b.y,width,height,scale:1,anchor:{x:b.flip?1-cx/width:cx/width,y:y1*u/height},flip:b.flip});
   }
  }
- // The actual game Ducky parts, at 130 world units tall, mark the verified spawn.
  const parts=['shadow-0','tail-0','foot-0','foot-1','toe-0','toe-1','body-0','eye-0','eye-1','beak-0'];
  const duckLayers=[];
  for(const part of parts){
@@ -62,7 +60,6 @@ for(const theme of ['sunflower']) {
  if(theme==='pink')for(const [i,a]of world.arches.entries()){
   await render([(a.a[0]+a.b[0])/2-650,(a.a[1]+a.b[1])/2-650,1300,1300],.65,OUT+`sunpink-bridge-${i+1}.png`);
  }
- // Flood fill with the actual padded obstacles and all 40 sleeper footprints installed.
  const G=20,W=Math.ceil(world.width/G),H=Math.ceil(world.height/G),ok=new Uint8Array(W*H),seen=new Uint8Array(W*H);
  for(let y=0;y<H;y++)for(let x=0;x<W;x++)ok[y*W+x]=geo.walkable(x*G,y*G);
  const cell=(x,y)=>Math.round(y/G)*W+Math.round(x/G),start=cell(map.spawn.x,map.spawn.y),q=[start];seen[start]=1;

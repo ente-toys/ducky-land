@@ -1,7 +1,4 @@
 #!/bin/bash
-# Centre plaza landmark pieces: one GPT image per call through the Codex CLI.
-# usage: scripts/themes/centre-gen.sh <id> <subject-ref.png> "<what to draw>"
-# Output: concepts/themes/centre-variations/gen/<id>.png (plain white background, traced later by centre-trace.py)
 D="/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/centre-variations/gen"
 CODEX=$(find /Applications/ChatGPT.app/Contents/Resources -maxdepth 4 -name codex -type f -perm -u+x 2>/dev/null | head -1)
 id="$1"; ref="$2"; desc="$3"

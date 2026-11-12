@@ -1,4 +1,3 @@
-// Local real-engine review on the job's private port. No registry changes.
 import {PixiIsland} from '/src/pixi/engine.js';
 import {THEME_OF,registerMap} from '/src/pixi/island-maps.js';
 const theme=new URLSearchParams(location.search).get('theme')||'neon';

@@ -13,7 +13,6 @@ for(const id of ['bakery','final-grove-0-tree-0','bakery-yard-bench-5','lake-war
  const actual=await sharp(base+tile.src).ensureAlpha().raw().toBuffer();
  assert.equal(actual.length,expected.length);let sum=0;
  for(let i=0;i<actual.length;i++)sum+=Math.abs(actual[i]-expected[i]);
- // A fractional final tile dimension rounds to the nearest native raster pixel.
  const tolerance=tile.width%1||tile.height%1?2:.2;
  assert.ok(sum/actual.length<tolerance,`mean channel error ${sum/actual.length}`);
 });

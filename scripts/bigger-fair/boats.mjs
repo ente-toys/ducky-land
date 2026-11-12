@@ -1,4 +1,3 @@
-// Run after the expansion builder, before centre.mjs. Source data stays in-repo.
 import fs from 'node:fs';
 import {inner,outer,streams,crossings,pathD,ribbon} from './fix-geometry.mjs';
 import {smooth,coast} from './design.mjs';
@@ -6,7 +5,6 @@ import {archBridge} from './arch.mjs';
 const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,1)+'\n');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
-// Widen the two existing channels. Their bends and endpoints are hand authored.
 export const CHANNELS=[
  {id:'ribbon-run',line:smooth([[560,3200],[-300,3350],[-800,3500],[-1300,3370],[-1800,3320],[-2200,3420]],false,16),width:230},
  {id:'wishwater',line:smooth([[6910,1980],[7340,1840],[7820,1930],[8240,1810],[8680,1620],[9230,1730]],false,16),width:230}
@@ -17,7 +15,6 @@ const mouths=[
  {id:'wishwater-mouth',left:[[8660,1520],[8910,1520],[9030,1390],[9480,1430]],right:[[8660,1750],[8910,1750],[8980,2010],[9480,2070]]}
 ].map(m=>({...m,poly:[...curve(m.left),...curve(m.right).reverse()]}));
 const ring=inner.map((p,i)=>({id:'heart-canal-'+i,poly:[p,inner[(i+1)%inner.length],outer[(i+1)%outer.length],outer[i]]}));
-// Old bridge endpoints retained; new crossings use their original centre lines.
 const old=read('scripts/bigger-fair/original-world.json');
 const bridges=[...crossings.map(b=>({id:b.id,w:Math.min(b.horizontal?b.h:b.w,140),a:b.horizontal?[b.x-b.w/2,b.y]:[b.x,b.y-b.h/2],b:b.horizontal?[b.x+b.w/2,b.y]:[b.x,b.y+b.h/2]}))];
 art.decks=art.decks.filter(d=>!old.walkways.some((_,i)=>d.src===read('scripts/bigger-fair/original-art.json').decks[i]?.src)&&!/^bigger\/(crossing-|arch-)/.test(d.src));
@@ -36,6 +33,5 @@ save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk)
 save('scripts/bigger-fair/centre-source/sailing.json',{ring:inner.map((p,i)=>p.map((v,k)=>(v+outer[i][k])/2)),channels:CHANNELS.map(s=>s.line),bridges});
 console.log('Fair: 11 arched crossings, two sea mouths, sailable ring.');
 
-// One union for ring, tributaries and mouths, with the shared path surface.
 const {rebuildFairSurface}=await import('./paths.mjs');
 rebuildFairSurface();

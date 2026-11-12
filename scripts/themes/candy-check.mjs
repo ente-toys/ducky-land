@@ -1,4 +1,3 @@
-// Check Candy Coast directly even before the integrator adds it to FINISHED_THEMES.
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,existsSync,readdirSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
@@ -15,7 +14,6 @@ const inside=(x,y,p)=>{let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if(
 for(const [id,z]of Object.entries(world.zones)){if(!z.spawn)continue;assert(nav.walkable(...z.spawn),'blocked spawn '+id);assert(route(...z.spawn),'unreachable '+id)}
 for(const [id,z]of open)for(const p of props)assert(!(z.poly?inside(p.x,p.y,z.poly):((p.x-z.x)/z.rx)**2+((p.y-z.y)/z.ry)**2<1),'standing prop '+p.id+' occupies '+id);
 const paths=world.paths.map((l,i)=>({i,blocked:l.filter(p=>!nav.walkable(...p))}));
-// Sleeper collision may block an individual path sample, but no path may run into sea.
 const bare=makeMap('candy',{world,walk:{...walk,obstacles:[]},harbor,sleepers:[]}).nav();
 const offshore=world.paths.flatMap((l,i)=>l.filter(p=>!bare.walkable(...p)).map(p=>({path:i,p})));assert.equal(offshore.length,0,'path centres off land '+JSON.stringify(offshore.slice(0,10)));
 const crowd=[];for(let y=800;y<world.height-400&&crowd.length<100;y+=200)for(let x=650;x<world.width-350&&crowd.length<100;x+=200)if(nav.walkable(x,y)&&route(x,y))crowd.push([x,y]);assert.equal(crowd.length,100);
@@ -30,7 +28,6 @@ for(const src of new Set(all.map(p=>p.src))){assert(src.endsWith('.svg'),'not SV
 assert(!readdirSync(A,{recursive:true}).some(p=>/\.(png|webp|jpe?g)$/i.test(p)),'raster file under public candy');
 const area=Math.abs(world.coast.reduce((s,a,i)=>{const b=world.coast[(i+1)%world.coast.length];return s+a[0]*b[1]-b[0]*a[1]},0)/2);
 assert(area/11090000>1.7&&area/11090000<2,'land size out of brief');
-// Exercise the real theme loader and generic centre motion, including resource cleanup.
 const originalFetch=globalThis.fetch;let acquired=0,released=0,animated=0;
 try{
  globalThis.fetch=async url=>({ok:true,json:async()=>j('public'+url)});

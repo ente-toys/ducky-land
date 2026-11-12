@@ -1,5 +1,3 @@
-// Same axes and angle convention as the island player: zero faces down,
-// +PI/2 faces right. The old arena's isometric conversion is deliberately gone.
 export function snapFacing(angle) {
   return Math.round(Math.atan2(Math.sin(angle),Math.cos(angle))/(Math.PI/4))*Math.PI/4;
 }

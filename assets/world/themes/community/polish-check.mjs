@@ -18,7 +18,6 @@ for(const p of a.props.filter(p=>p.id.startsWith('polish-'))){
  }
 }
 assert.equal(new Set(a.props.map(p=>p.id)).size,a.props.length,'duplicate prop ids');
-// All tile bounds cover the entire map with no holes. No dependence on rounded screenshot edges.
 assert.equal(a.ground.tiles.reduce((v,t)=>v+t.width*t.height,0),a.width*a.height);
 for(const t of a.ground.tiles)assert(fs.readFileSync(A+t.src,'utf8').includes(`viewBox="${t.x} ${t.y} ${t.width} ${t.height}"`));
 const map=makeMap('community',{world:w,walk,harbor:h,sleepers:checked.sleepers}),nav=map.nav();

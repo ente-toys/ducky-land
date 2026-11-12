@@ -7,8 +7,6 @@ const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-community/baselin
 test('community expansion preserves the centre records and the safe lawn relocation of one sleeper',()=>{
  const centre=oldArt.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(outsideStageProps(art.props.slice(0,centre.length)),outsideStageProps(centre));
  assert.deepEqual(outsideStageFlats(art.flats),outsideStageFlats(oldArt.flats));
- // Crossings now use Honeywood art. Genuine docks retain their original art
- // and placement; campfire-bridges.test.mjs checks every replacement anchor.
  for(const d of oldArt.decks.filter(d=>d.src==='detail/pond-dock.svg'))assert.deepEqual(art.decks.find(p=>p.src===d.src),d);
  for(const [pose,spots]of Object.entries(old.sleepSpots))assert.deepEqual(world.sleepSpots[pose].slice(0,spots.length),spots.map(p=>pose==='wing'&&p[0]===5800&&p[1]===3676?[6190,3700,p[2]]:p));assert.deepEqual(world.sleepAvoid,old.sleepAvoid);
  assert.deepEqual(outsideStageObstacles(world.obstacles).slice(0,outsideStageObstacles(old.obstacles).length),outsideStageObstacles(old.obstacles));

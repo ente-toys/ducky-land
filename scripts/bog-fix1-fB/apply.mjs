@@ -1,5 +1,3 @@
-// fB only: idempotent patch, safe to run after the other fix1 workers' patches.
-// Coordinates are authored planting pockets, never random/area scatter.
 import fs from 'node:fs';
 import {inPoly} from '../../assets/world/island-geometry.mjs';
 const root='public/pixi-art/themes/bog-arena/';
@@ -13,11 +11,9 @@ data.world.obstacles=data.world.obstacles.filter(p=>!p.id.startsWith('fb-'));
 fs.copyFileSync('scripts/bog-fix1-fB/moon-hall.svg',root+'home/fb-moon-hall.svg');
 Object.assign(art.props.find(p=>p.id==='mid-hall'),{name:'moon-hall',src:'home/fb-moon-hall.svg',x:4200,y:1730,width:740,height:520,homeSource:'/pixi-art/home-hamlets/lanternleaf/house-yellow.svg',shadowSize:[245,26],shadowOffset:[0,-18]});
 Object.assign(blockers.find(p=>p.id==='mid-hall'),{x:3934,y:1512,width:532,height:198});
-// A small, flat court seal, leaving the whole centre walkable.
 fs.writeFileSync(root+'home/fb-moon-seal.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="220" height="126" viewBox="0 0 220 126"><ellipse cx="110" cy="63" rx="104" ry="56" fill="#b591c0" stroke="#93729e" stroke-width="3"/><ellipse cx="110" cy="63" rx="87" ry="44" fill="#a578b3"/><path d="M120 31C73 24 61 78 107 94C126 101 148 93 159 78C133 88 103 68 120 31Z" fill="#f5e277"/><path d="M170 49l3 7 10 2-9 3-3 7-3-7-9-2 9-3Z" fill="#f5e277"/></svg>`);
 art.flats.push({id:'fb-mid-moon-seal',src:'home/fb-moon-seal.svg',x:4200,y:2110,width:220,height:126,anchor:{x:.5,y:.5}});
 const trees=[[260,360],[180,360],[300,380],[200,280],[150,380]],bushes=[[130,100],[168,110],[116,104],[140,100]];
-// [name, colour, origin, individual tree type/x/y offsets, individual bush x/y offsets].
 const banks=[
  ['moon-west','orchid',3330,1460,[[3,-110,-80],[1,60,-25],[5,180,90],[4,-60,130]],[[-160,170],[-30,215],[135,210]]],
  ['moon-east','sage',5100,1470,[[2,-105,-90],[3,65,-15],[5,180,100],[4,-50,150]],[[-170,170],[10,225],[170,210]]],
@@ -59,13 +55,10 @@ for(const [key,colour,x,y,ts,bs] of banks){
   const n=[1,3,2,4][i], [width,height]=bushes[n-1];
   add({id:`fb-${key}-bush-${i}`,name:`bush-${n}-${colour}`,src:`home/bush-${n}-${colour}.svg`,x:x+dx,y:y+dy,width,height,homeSource:`/pixi-art/plants/bush-${n}.svg`,shadowSize:[width*.28,10]});
  }
- // Small authored details at each bank's feet, never on the walking lane.
  for(const [i,[dx,dy]] of [[-195,215],[15,290],[150,275]].entries())art.flats.push({id:`fb-${key}-grass-${i}`,src:'home/fb-tuft.svg',x:x+dx,y:y+dy,width:42,height:30,homeSource:'/pixi-art/detail/nature--grass-tuft-three.svg'});
  add({id:`fb-${key}-flowers`,name:'flowers',src:'home/flowers.svg',x:x-110,y:y+240,width:95,height:70,shadow:false,wind:false,homeSource:'/pixi-art/plants/flower-1.svg'});
 }
-// Grass uses the real Home path geometry, recoloured to sage instead of neon green.
 fs.writeFileSync(root+'home/fb-tuft.svg',fs.readFileSync('public/pixi-art/detail/nature--grass-tuft-three.svg','utf8').replaceAll('#85c864','#9dbca7').replaceAll('#65b549','#708e82').replaceAll('#232323','#39472d'));
-// Validation trims are explicit reviewed instances, not random rejection sampling.
 const omit=new Set([
   "fb-west-junction-back-tree-2",
   "fb-west-junction-back-bush-1",
@@ -92,7 +85,6 @@ const omit=new Set([
 art.props=art.props.filter(p=>!omit.has(p.id));
 art.flats=art.flats.filter(p=>!omit.has(p.id));
 blockers=blockers.filter(p=>!omit.has(p.id.replace(/-trunk$/,'')));
-// Keep all six decorations clear of fA's new cottage door lanes.
 const siteLaneMoves={"fb-west-pond-bend-bush-0":[2580,3340],"fb-west-pond-bend-flowers":[2610,3480],"fb-west-pond-bend-grass-0":[2580,3455],"fb-east-pond-bend-bush-1":[6660,3400],"fb-east-pond-bend-bush-2":[7000,3450],"fb-east-pond-bend-grass-1":[6720,3500]};
 for(const p of [...art.props,...art.flats]){
  const at=siteLaneMoves[p.id];if(at)[p.x,p.y]=at;
@@ -100,12 +92,10 @@ for(const p of [...art.props,...art.flats]){
 for(const p of art.props.filter(p=>p.id.startsWith('fb-'))){
  if(!inPoly(p.x,p.y,data.world.coast)||data.world.water.some(w=>inPoly(p.x,p.y,w.poly)))throw Error('Plant root outside dry land: '+p.id);
 }
-// Replace only fB's blockers. Other workers' cover/site footprints remain byte-for-byte.
 for(const b of blockers.filter(b=>b.id.startsWith('fb-')||b.id==='mid-hall')){
  const obstacle={id:b.id,poly:[[b.x,b.y],[b.x+b.width,b.y],[b.x+b.width,b.y+b.height],[b.x,b.y+b.height]]};
  const i=data.world.obstacles.findIndex(p=>p.id===b.id);if(i<0)data.world.obstacles.push(obstacle);else data.world.obstacles[i]=obstacle;
 }
 write(root+'art.json',art);write('src/pixi/bog-blockers.json',blockers);
-// Preserve the original compact serialization for the shared map file.
 fs.writeFileSync('src/pixi/bog-environment.json',JSON.stringify(data)+'\n');
 console.log(JSON.stringify({banks:banks.length,newTrees:art.props.filter(p=>p.id.startsWith('fb-')&&p.name.startsWith('tree-')).length,newBushes:art.props.filter(p=>p.id.startsWith('fb-')&&p.name.startsWith('bush-')).length,totalTrees:art.props.filter(p=>p.name.startsWith('tree-')).length,blockers:blockers.length}));

@@ -1,5 +1,3 @@
-// Geometry follows the authored road centre lines. These marks are material
-// texture and bank contours, not generated scenery or building placements.
 export function roadArt(lanes, communities, homes) {
  const paths=[],ruts=[],dressing=[];
  const polygon=p=>'M'+p.map(([x,y])=>`${x.toFixed(1)} ${y.toFixed(1)}`).join('L')+'Z';
@@ -11,7 +9,6 @@ export function roadArt(lanes, communities, homes) {
    for(let j=0;j<steps;j++){const t=j/steps,t2=t*t,t3=t2*t;out.push([0,1].map(k=>.5*(2*b[k]+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-d[k])*t2+(-a[k]+3*b[k]-3*c[k]+d[k])*t3)));}
   }out.push(p.at(-1));return out;
  };
- // Porch lanes are explicitly tied to each address and its community lane.
  const porches=homes.map(h=>{const c=communities.find(c=>c.id===h.community);let best=c.lane[0],dist=Infinity;
   for(const q of sampled(c.lane)){const d=Math.hypot(q[0]-h.x,q[1]-(h.y+200));if(d<dist){best=q;dist=d}}
   return [[h.x,h.y+90],[h.x+12,h.y+220],best];
@@ -40,12 +37,9 @@ export function roadArt(lanes, communities, homes) {
    ruts.push(`<path d="M${pts.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join('L')}" fill="none" stroke="#BB9455" stroke-width="${i<lanes.length?9:4}" opacity=".43" stroke-dasharray="91 31 49 77 130 55" stroke-linecap="round"/>`);
   }
  }
- // Shared courts have irregular outlines and widen the lane, rather than
- // repeating circular attraction pads around the old centre.
  for(const c of communities){const [x,y,w,h]=c.green;
   paths.push(`M${x-w*.52} ${y-h*.19}Q${x-w*.32} ${y-h*.62} ${x+w*.05} ${y-h*.48}Q${x+w*.56} ${y-h*.39} ${x+w*.49} ${y+h*.12}Q${x+w*.31} ${y+h*.56} ${x-w*.15} ${y+h*.46}Q${x-w*.57} ${y+h*.31} ${x-w*.52} ${y-h*.19}Z`);
  }
  const shapes=paths.map(d=>`<path d="${d}"/>`).join('');
- // All banks first, then all sand: at a junction the earth becomes one court.
  return `<defs><pattern id="sand-grain" width="127" height="103" patternUnits="userSpaceOnUse"><path d="M14 22l21 -2m42 49l12 2m-55 14l6 -1" stroke="#D4B465" stroke-width="2" opacity=".35"/><ellipse cx="78" cy="24" rx="14" ry="4" fill="#FCE9AE" opacity=".58"/><ellipse cx="20" cy="65" rx="3.8" ry="2.2" fill="#C2A260"/><circle cx="104" cy="90" r="1.4" fill="#B59B60"/></pattern><clipPath id="roads">${shapes}</clipPath></defs><g fill="#E3C881" stroke="#4F7133" stroke-width="31" stroke-linejoin="round">${shapes}</g><g fill="#E3C881" stroke="#83A33F" stroke-width="25" stroke-linejoin="round">${shapes}</g><g fill="#E4C980" stroke="#B6AD65" stroke-width="13">${shapes}</g><g fill="#F4DC94">${shapes}</g><g clip-path="url(#roads)"><rect x="-2000" y="-1400" width="12000" height="8400" fill="url(#sand-grain)"/>${ruts.join('')}</g>${dressing.join('')}`;
 }

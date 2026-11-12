@@ -1,4 +1,3 @@
-// Ambient only. No player physics, room messages or pathfinding on the render loop.
 import {WORLD_ISLANDS,WORLD_GEO} from './world-map.js';
 import {mapOf,mapsVersion} from './island-maps.js';
 import {ISLETS} from './islets.js';
@@ -48,7 +47,6 @@ export function createPirateFleet({count=PIRATE_COUNT,seed=713913}={}){
     s.rate+=(s.wantedRate-s.rate)*(1-Math.exp(-2*dt));s.dir=turn(s.p,s.dir,s.rate*dt);
     s.velocity+=((s.brake?0:s.speed)-s.velocity)*(1-Math.exp(-3*dt));
     const next=advance(s.p,s.dir,s.velocity*dt);
-    // Cheap boat-distance guard every frame; stationary player boats never get hit.
     if(boats.every(b=>distance(next,b)>PIRATE_BOAT_GAP))s.p=next;
     const along=dot(s.dir,s.p);s.dir=unit(s.dir.map((v,k)=>v-s.p[k]*along));
    }
@@ -57,7 +55,6 @@ export function createPirateFleet({count=PIRATE_COUNT,seed=713913}={}){
  };
 }
 export function pirateMotion(ship,t,reduced=false){return{bob:reduced?0:Math.sin(t*1.15+ship.phase)*2.3,roll:reduced?0:Math.sin(t*.73+ship.phase)*.012};}
-// Hold orientation through nearly vertical travel. Never flip on a one-frame sign change.
 export function pirateFacing(ship,horizontal,dt){const next=horizontal>.18?1:horizontal<-.18?-1:ship.flip;if(next!==ship.flip){ship.flipAge+=dt;if(ship.flipAge>.8){ship.flip=next;ship.flipAge=0;}}else ship.flipAge=0;return ship.flip;}
 export const pirateLocal=(id,p)=>{const f=WORLD_ISLANDS.find(i=>i.id===id),m=mapOf(id),q=logMap(f,p,R);return{x:q.x+m.cx,y:q.y+m.cy};};
 export const pirateBoatPoint=(boat,id)=>{const f=WORLD_ISLANDS.find(i=>i.id===(boat.islandId??id)),m=mapOf(f.id);return expMap(f,boat.x-m.cx,boat.y-m.cy,R);};

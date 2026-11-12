@@ -1,4 +1,3 @@
-// Equal 1600 x 1000 world-unit crops, rendered at one output pixel per world unit.
 import {homeLayers} from '../globe-perf/snapshot.mjs';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';

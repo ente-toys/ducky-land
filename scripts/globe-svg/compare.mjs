@@ -1,5 +1,3 @@
-// Review artifacts only, never game art. Originals must be saved before removal.
-// node scripts/globe-svg/compare.mjs [old-png-directory] [output-directory]
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';

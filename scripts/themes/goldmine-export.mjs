@@ -1,4 +1,3 @@
-// Working PNGs belong outside public. Preserve their relative folders when archiving.
 import {readdirSync,mkdirSync,renameSync} from 'node:fs';
 import {join,dirname} from 'node:path';
 const source='public/pixi-art/themes/goldmine',work='../concepts/themes/work/goldmine';

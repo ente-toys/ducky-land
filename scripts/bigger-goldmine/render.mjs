@@ -1,4 +1,3 @@
-// Static production SVG assembly, same placement and painter order as theme-art.js.
 import sharp from 'sharp';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 const A='public/pixi-art/themes/goldmine/',O='../concepts/themes/world-map/bigger/';

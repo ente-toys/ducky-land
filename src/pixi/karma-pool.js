@@ -7,7 +7,6 @@ export const KARMA_RESPAWN_MIN=30_000;
 export const KARMA_RESPAWN_MAX=60_000;
 export const KARMA_SITES=sites;
 
-// The room owns this pool. Clients never award Karma or choose respawn points.
 export class KarmaPool {
   constructor(saved=null,random=Math.random){
     this.random=random;this.version=1;
@@ -20,8 +19,6 @@ export class KarmaPool {
       const regions=[...new Set(sites.map(s=>s.region))],major=regions.filter(r=>!r.startsWith('sea-')),small=regions.filter(r=>r.startsWith('sea-'));
       this.slots=[];
       const add=region=>{const site=this.choose(region);this.slots.push({id:`karma-${this.slots.length}`,siteId:site.id,readyAt:0});};
-      // Two on every landmass, then a third on the main islands and four islets.
-      // A five-feather journey visits at least two landmasses instead of one loop.
       for(const region of regions)for(let n=0;n<2;n++)add(region);
       for(const region of major)add(region);
       const shuffled=[...small];
@@ -62,8 +59,6 @@ export class KarmaPool {
     if(!pickup)return null;
     const {slot,site:from}=pickup;
     const counts=new Map();for(const current of this.slots){const region=this.sites.get(current.siteId).region;counts.set(region,(counts.get(region)??0)+1);}
-    // Collected feathers move to another landmass, keeping every region at no more than three
-    // reservations and avoiding a quick refill at the same farming spot.
     const regions=[...new Set(sites.map(s=>s.region))].filter(r=>r!==from.region&&(counts.get(r)??0)<KARMA_PER_REGION);
     const minimum=Math.min(...regions.map(r=>counts.get(r)??0));
     const choices=regions.filter(r=>(counts.get(r)??0)===minimum);

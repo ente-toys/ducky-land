@@ -14,7 +14,6 @@ export async function render(art,file,{cx,cy,k=K,w=W,h=H,baseline=false,labels=f
  const oldWorld=read(S+'baseline/world.json'),poses=read('src/pixi/sleep-poses.json');
  for(const[pose,list]of Object.entries(oldWorld.sleepSpots)){for(const s of list){const tree=pose==='nod'?art.props.find(p=>p.id===s[0]):null;const[x,y,flip]=tree?[tree.x+s[1],tree.y+14,s[2]]:s;const pp=poses.poses[pose],u=pp.k*.81*(.88*.24*3)/3,[x0,,x1,y1]=pp.box;for(const l of pp.layers){const m=await sharp('public'+l.src).metadata(),width=m.width/poses.F*u,height=m.height/poses.F*u;things.push({src:l.src,x,y:y+.01,width,height,scale:1,flip,anchor:{x:flip?1-(x0+x1)/2*u/width:(x0+x1)/2*u/width,y:y1*u/height}});}}}
  for(const p of things.sort((a,b)=>a.y-b.y))await add(p,'prop');
- // The same physical jetty as the map, rendered as a timber deck.
  const harbor=baseline?read(S+'baseline/harbor.json'):plan.harbor;
  const [hx,hy]=harbor.jetty.foot,[,tip]=harbor.jetty.tip,jw=harbor.jetty.width;
  let dock=`<path d="M${hx-jw/2} ${hy}H${hx+jw/2}V${tip}H${hx-jw/2}Z" fill="#bd9155" stroke="#80673e" stroke-width="8"/>`;

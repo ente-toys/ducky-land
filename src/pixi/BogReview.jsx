@@ -8,7 +8,6 @@ import {combatForBogEnvironment} from './bog-combat/environment.js';
 import BogEntry from './bog-combat/BogEntry.jsx';
 import {setBogReviewCamera,waitForBogArt,paintBogFrame} from './bog-review-camera.js';
 
-// Dev shortcut to the same island and combat used by normal boat entry.
 export default function BogReview(){
  const host=useRef(null);
  const [ready,setReady]=useState(null),[visit,setVisit]=useState(0),[error,setError]=useState('');
@@ -30,14 +29,11 @@ export default function BogReview(){
    const dock=installation.map.HARBOR.land;
    camera(dock.x,dock.y-90,.65);
    game.canvas.dataset.state='loading';
-   // Use the very same simulation and player motion module as Home, now with Bog's map.
-   // Remove the Home NPC rigs from this isolated environment review.
    const sim=createSimulation(installation.map.walk,8612,{npcCount:0});
    const duck=sim.player;
    Object.assign(duck,{x:dock.x,y:dock.y,previousX:dock.x,previousY:dock.y,outfit:{}});
    game.rigs.slice(1).forEach(r=>r.dispose());game.rigs=game.rigs.slice(0,1);
    game.sim=sim;game.localDucks=sim.ducks;
-   // Rig 0 is the existing real player, recreated without an outfit for this map.
    const {createDuck}=await import('./duck.js');
    const rig=await createDuck({outfit:{},seed:21,isPlayer:true});
    if(cancelled){rig.dispose();return;}
@@ -45,8 +41,6 @@ export default function BogReview(){
    game.rigs[0].dispose();game.rigs[0]=rig;game.objects.addChild(rig.root);
    camera(dock.x,dock.y-90,.65);
    if(!await waitForBogArt(game,{cancelled:()=>cancelled}))return;
-   // Paint this local camera before exposing the picker/readiness. mount() only
-   // reports the initial Home renderer ready, not the lazy Bog theme.
    const area=new URLSearchParams(location.search).get('area');
    const focus=inspect&&BOG_AREAS[area]?BOG_AREAS[area]:null;
    paintBogFrame(game,focus?.x??dock.x,focus?(area==='mid'?2050:focus.y):dock.y-90,.65);

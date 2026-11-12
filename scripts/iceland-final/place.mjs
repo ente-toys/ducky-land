@@ -1,6 +1,3 @@
-// Iceland final integration. Reads authored final/ SVGs and rebuilds shared crops.
-// node scripts/iceland-final/place.mjs --dry-run [--out /private/tmp/iceland-final]
-// node scripts/iceland-final/place.mjs --write   (requires all six manifests)
 import {readFileSync, existsSync, mkdirSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -25,8 +22,6 @@ export function bounds(p) {const a=p.topLeft?{x:0,y:0}:(p.anchor??{x:.5,y:1});re
 export const overlaps = (a,b,pad=0) => a.x0<b.x1+pad && a.x1>b.x0-pad && a.y0<b.y1+pad && a.y1>b.y0-pad;
 const segDist = (x,y,a,b) => {const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);};
 export function pathClearance(w,x,y) {let d=Infinity;for(const r of w.iceland2.routes)for(let i=1;i<r.samples.length;i++)d=Math.min(d,segDist(x,y,r.samples[i-1],r.samples[i])-r.width/2);return d;}
-// Sprite rectangles, rather than their bottom-centre anchors, must clear the
-// raised twelve-unit snow lip. Trees retain their existing trunk footprints.
 export function propPathClearance(w,p) {
  const b=bounds(p),point=(x,y)=>Math.hypot(Math.max(b.x0-x,0,x-b.x1),Math.max(b.y0-y,0,y-b.y1));
  let clearance=Infinity;
@@ -50,11 +45,9 @@ export function landViews(w,{width=1440,height=900,stride=240}={}) {
  return views;
 }
 export const viewDetails=(view,clusters)=>clusters.filter(c=>c.role!=='shade-cluster'&&overlaps(bounds(c),view)).length;
-// Coverage counts complete authored places, never a quota of separate small marks.
 export const viewCoverage = (view,art,report=art.icelandFinal) => composedCoverage(view,art,report);
 function coastDistance(w,x,y) {let d=Infinity;for(let i=0;i<w.coast.length;i++)d=Math.min(d,segDist(x,y,w.coast[i],w.coast[(i+1)%w.coast.length]));return d;}
 const halton = (i,b) => {let n=0,f=1;while(i){f/=b;n+=f*(i%b);i=Math.floor(i/b);}return n;};
-// These are DRY-RUN stand-ins, never a fallback for a production write.
 const PLACEHOLDERS = {
  bakery:[360,374,'bakery'], workshop:[360,279,'sled-workshop'], lodge:[360,428,'lodge'], gallery:[400,394,'ice-duck-gallery'], 'cocoa-hut':[360,360,'cocoa-hut'],
  'cottage-1':[400,463,'bakery-store'],'cottage-2':[400,487,'lodge-west'],'cottage-3':[400,456,'workshop-store'],'cottage-4':[400,455,'fishing-west'],
@@ -105,7 +98,6 @@ export function loadCatalog(root=ROOT,{dryRun=false,manifestDir=path.join(root,A
    if(variations.length)return variations[variant%variations.length];
   }
   let a=[role,...(ALIASES[role]??[])].map(norm).map(k=>assets.get(k)).find(Boolean);
-  // Numbered ground variations and optional prefixed worker naming.
   if(!a)a=[...assets.entries()].find(([k])=>[role,...(ALIASES[role]??[])].some(s=>k===norm(s)||k.startsWith(norm(s)+'-')))?.[1];
   if(a)return a;
   if(!dryRun)throw Error(`No piece for ${role}; available: ${[...new Set([...assets.values()].map(a=>a.key))].join(', ')}`);
@@ -117,8 +109,6 @@ export function loadCatalog(root=ROOT,{dryRun=false,manifestDir=path.join(root,A
 
 export function piece(catalog,role,id,x,y,extra={}) {
  const a=catalog.get(role,Number(id.match(/(\d+)$/)?.[1]??0));
- // Source dimensions differ between workers. Home-sized furniture uses one uniform scale,
- // preserving the manifest aspect ratio; buildings and ground marks use their authored size.
  const fitWidth=(!/^(bakery|workshop|lodge|gallery|cocoa-hut|cottage-|tuft|pebbles|footprints|drift|berry-shrub|snowbank-edge)/.test(role))?PLACEHOLDERS[role]?.[0]:null;
  const k=(a.worldWidth??a.displayWidth??a.placement?.width??fitWidth??a.width)/a.width;
  return {id,name:id,src:a.src,x:round(x),y:round(y),width:round(a.width*k),height:round(a.height*k),resolution:2,shadow:false,wind:false,
@@ -139,7 +129,6 @@ export async function homeDensity(){
  return {count,area:area(world.coast),perMillion:count/area(world.coast)*1e6};
 }
 
-// Regenerate whole groups and camps from the approved composition.
 export async function integrate({root=ROOT,dryRun=true,catalog=loadCatalog(root,{dryRun}),inputArt=json(path.join(root,ART,'art.json')),inputWorld=json(path.join(root,WORLD,'world.json')),density=null}={}) {
  const art=clone(inputArt),w=clone(inputWorld),report=clone(art.icelandFinal);
  if(!report?.sourceLayout)throw Error('Iceland final approved composition is required');

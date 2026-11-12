@@ -1,6 +1,5 @@
 import {DUCK_LENGTH as D} from './rules.js';
 
-// Free-play achievements. Every condition is evaluated by the simulation.
 export const MEDALS=Object.freeze([
   {id:'first-splat',name:'First Splat',detail:'Tag your first opponent.'},
   {id:'double-splat',name:'Double Splat',detail:'Tag two opponents within four seconds.'},

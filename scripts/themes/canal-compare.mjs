@@ -1,6 +1,3 @@
-// The Home reference camera is 2900,2100,.25 at 1600x1100.
-// Fountain centre (2820,2370) maps to (780,617.5), confirming .25 px/world unit.
-// Preserve those pixels, pad the smaller Home capture. Canal is 8000x6000 at .25.
 import sharp from 'sharp';
 import {copyFileSync,writeFileSync} from 'node:fs';
 const root='../concepts/themes/work/canal/', round=process.env.ROUND||'1';

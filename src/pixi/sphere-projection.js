@@ -3,8 +3,6 @@ import {unit} from './sphere.js';
 import {WORLD_GEO} from './world-map.js';
 
 export const horizonRatio=ball=>(1-ball)*Math.PI/2+ball;
-// Inverse of r = (1-ball)*angle + ball*sin(angle), on the FRONT hemisphere.
-// Both terms are monotone here, so islands cannot fold into a ribbon or repeat.
 export function lensAngle(radius,ball){
  const max=horizonRatio(ball),r=Math.max(0,Math.min(max,radius));
  if(ball<1e-6)return r;

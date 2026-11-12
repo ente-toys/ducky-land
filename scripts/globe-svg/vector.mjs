@@ -1,4 +1,3 @@
-// Input normalisation only. Geometry and paint are resolved in compile.mjs.
 import {DOMParser,XMLSerializer} from '@xmldom/xmldom';
 const parser=new DOMParser(),serializer=new XMLSerializer();
 export const num=n=>String(Math.round(n*1000)/1000);

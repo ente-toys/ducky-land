@@ -1,5 +1,3 @@
-// Close-up floor and rim pass. Only Pink inputs and outputs are written.
-// Uses the saved close-round-0 inputs so rerunning never accumulates details.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -35,12 +33,10 @@ for(const ring of rings){
   }
  }
  body.push(ellipse(.985,ink,2.2),ellipse(.91,ink,1.5),ellipse(.8,cream,3));
- // Hearts alternate with bow knots in the outer inlay band, leaving the crowd floor flat.
  for(let i=0;i<20;i++){const a=(i+.5)*Math.PI/10,[hx,hy]=pos(.855,a);body.push(i%2?bow(round(hx),round(hy),14):heart(hx,hy,30));}
  if(id==='festival'){body.push(`<ellipse cx="${x}" cy="${y}" rx="78" ry="48" fill="${cream}" stroke="${joint}" stroke-width="2"/>`,heart(x,y+4,75));}
  floor(id,x-rx-4,y-ry-4,rx*2+8,ry*2+8,body);
 }
-// The three future stall rows retain their full usable footprint and pitch divisions.
 for(const [id,x,y,w,h] of [['market',4820,3730,780,180],['harbor',1560,1660,660,170],['road',5800,2730,660,170]]){
  const body=[`<defs><clipPath id="row"><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}"/></clipPath></defs><g clip-path="url(#row)">`];
  for(let j=0;j<4;j++)for(let i=-1;i<13;i++){
@@ -51,10 +47,7 @@ for(const [id,x,y,w,h] of [['market',4820,3730,780,180],['harbor',1560,1660,660,
  for(const dx of [-w*.29,0,w*.29])body.push(heart(x+dx,y,25));
  floor(id,x-w/2-3,y-h/2-3,w+6,h+6,body);
 }
-// Add the finish below the untouched layered centre and below the existing edge decals.
 art.flats.unshift(...floors.filter(f=>f.id!=='pink-close-court'));
-// The lower court is a ground finish. The original locked centre SVGs, transforms,
-// deck, stair art and all sorting stay untouched above this decal.
 art.flats.push(floors.find(f=>f.id==='pink-close-court'));
 const seg=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t);};
 const pathDist=(x,y)=>Math.min(...world.paths.map((p,i)=>Math.min(...p.slice(1).map((b,j)=>seg(x,y,p[j],b)))-world.pathWidths[i]/2));
@@ -81,7 +74,6 @@ for(const ring of [...rings.filter(r=>r.id!=='court'),{id:'picnic',x:2580,y:1030
    if(placed)break;
   }
  }
- // Soft tufts and small stones feather the hard edge without occupying activity floors.
  for(let i=0;i<42;i++){
   const a=(i+.31)*2*Math.PI/42,x=ring.x+(ring.rx+40+(i%3)*16)*Math.cos(a),y=ring.y+(ring.ry+35+(i%3)*12)*Math.sin(a);
   if(!safe(x,y,9)||art.flats.some(f=>Math.hypot(x-f.x,y-f.y)<23))continue;

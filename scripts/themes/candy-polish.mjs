@@ -1,4 +1,3 @@
-// Candy-only craft pass. Run between candy-centre and candy-finish; no shared files written.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
@@ -23,9 +22,8 @@ function treeClear(p,x,y){
  if(!land.walkable(x,y)||pathGap(x,y)<w*.40+24||reserved(x,y,110))return false;
  if(((x-3570)/1050)**2+((y-2737.5)/640)**2<1)return false;
  if(x>5550&&y>2850)return false;
- if(y<1150&&grown.filter(q=>q.y<1150).length>=10)return false; // beach sight line
+ if(y<1150&&grown.filter(q=>q.y<1150).length>=10)return false;
  if(walk.walkways.some(b=>seg(x,y,b.a,b.b)<320))return false;
- // Protect the complete silhouette, not only the trunk, at paths and landmarks.
  const samples=[[0,.16],[0,.42],[0,.72],[-.34,.42],[.34,.42],[-.38,.68],[.38,.68],[0,.95]];
  if(samples.some(([u,v])=>{const xx=x+u*w,yy=y-v*h;return world.water.some(q=>((xx-q.x)/(q.rx+22))**2+((yy-q.y)/(q.ry+18))**2<1)||reserved(xx,yy,8)}))return false;
  if(landmark.some(q=>Math.abs(x-q.x)<w*.45+q.width*q.scale*.5+40&&y>q.y-q.height*q.scale-30&&y-h<q.y+65))return false;
@@ -74,7 +72,6 @@ for(const r of rings)for(const target of r.angles){
  const prop={id,name:'Curved wood bench',asset:'arc-bench',src,x:f(x),y:f(y),width,height,anchor:{x:(f(x)-x0)/width,y:(f(y)-y0)/height},scale:1,flip:false,shadow:false,wind:false,zone:r.id,footprint:{poly:footprint},ring:{x:r.x,y:r.y,rx:r.rx,ry:r.ry,deg,span}};
  props.push(prop);furniture.push(prop);
 }
-// Small gardens at the outside edge of each open area. Everything is physically outside the reservation.
 const added=[];
 for(const p of props.filter(p=>/flower|tulip|lamp|balloon|bunting|lollipop-tree|bush/.test(p.asset))){
  const near=furniture.find(b=>Math.hypot(p.x-b.x,(p.y-b.y)*1.8)<160);if(!near)continue;
@@ -99,7 +96,6 @@ for(const [id,z]of zones){
  place(i%3===0?planter:bushes[i%bushes.length],x,y,`${id}-${i}`,id,i%3===0?.9:.65);
  }
 }
-// Reuse home shore rocks to ground clusters and break the otherwise clean beach band.
 const rock=props.find(p=>p.asset==='rock-round')||{name:'Coast rock',asset:'rock-round',src:'reuse/nature--rock-round.svg',width:818,height:563,anchor:{x:.5,y:1},scale:.11,flip:false};
 for(const [i,t]of grown.entries()){
  const side=i%2?1:-1,x=t.x+side*(t.width*t.scale*.48+60),y=t.y+28;

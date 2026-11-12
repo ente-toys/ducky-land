@@ -1,8 +1,3 @@
-// boss 6 Nov ("room for 100 Duckies"): the live load test. The real room server (worker/index.js) in its own local
-// Miniflare (port 8941 by default, NEVER 8890, which the boss plays on), 100 real WebSocket players placed on ONE themed island
-// and walking about (a click every ~2 s each). Prints what each player receives (snapshots a second, bytes, the gap between
-// ticks) so a slow server tick shows up as late or bunched snapshots.
-//   node scripts/load-live.mjs [players=100] [island=blossom] [seconds=20] [port=8941]
 import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {mkdtempSync} from 'node:fs';
@@ -50,7 +45,7 @@ const {outputFiles: [bundle]} = await build({stdin: {resolveDir: root, contents:
   }};
 `}, bundle: true, format: 'esm', write: false});
 const assets = mkdtempSync(join(tmpdir(), 'ducky-load-'));
-const INSPECT = process.env.LOAD_PROFILE ? Number(port) + 1 : undefined;   // LOAD_PROFILE=out.cpuprofile: profile the room while it runs
+const INSPECT = process.env.LOAD_PROFILE ? Number(port) + 1 : undefined;
 const mf = new Miniflare(convertV4MiniflareOptions({host: '127.0.0.1', port: Number(port), ...(INSPECT ? {inspectorPort: INSPECT} : {}), modules: [{type: 'ESModule', path: 'index.js', contents: bundle.text}],
   compatibilityDate: '2026-11-02', durableObjects: {ISLAND: {className: 'LoadRoom', useSQLite: true}}}));
 const base = String(await mf.ready).replace(/\/$/, '');
@@ -62,8 +57,6 @@ const bots = [];
 for (let n = 0; n < N; n++) {
   const account = `bot-${n}`, ws = new WebSocket(`${base.replace('http', 'ws')}/api/room?play=1`, {headers: {Cookie: `test_user=${account}`}});
   const bot = {account, ws, seq: 0, welcome: null, msgs: 0, bytes: 0, gaps: [], last: 0, players: 0};
-  // one node process stands in for 100 browsers: only a few bots parse every snapshot (JSON.parse of 3,000 x 30 KB a second
-  // would make THIS process the bottleneck); the rest read the message type from its first bytes and count its size
   const sample = n < 5;
   ws.on('message', data => {
     const text = data.toString(); if (text === 'pong') return;
@@ -81,7 +74,7 @@ const playing = bots.filter(b => b.welcome?.id).length;
 for (const bot of bots) await fetch(`${base}/__test/pose`, {method: 'POST', body: JSON.stringify({account: bot.account, pose: {islandId: island, mode: 'walking', ...spot()}})});
 const counts = await (await fetch(`${base}/__test/count`)).json();
 let profiler = null;
-if (INSPECT) {   // the room's isolate over the inspector: start the V8 profiler for the measured stretch
+if (INSPECT) {
   const targets = await (await fetch(`http://127.0.0.1:${INSPECT}/json/list`)).json();
   const cdp = new WebSocket(targets.find(t => /core:user/.test(t.id) || /index/.test(t.title ?? '')).webSocketDebuggerUrl ?? targets[0].webSocketDebuggerUrl);
   await new Promise(ok => cdp.once('open', ok));

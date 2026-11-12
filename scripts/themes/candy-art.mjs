@@ -1,4 +1,3 @@
-// Candy Coast: original flat vector artwork, drawn from approved 12-candy.png.
 import {writeFileSync,mkdirSync} from 'node:fs';
 const A='public/pixi-art/themes/candy/';mkdirSync(A+'centre',{recursive:true});
 const I='#39472D',cream='#FFF3CB',pink='#F48FA9',blue='#77CFE0',gold='#F4C05C',mint='#A9DDAD',choc='#995632';
@@ -16,18 +15,15 @@ for(let x=180;x<820;x+=64)b+=line(`M${x} 482 v300`,'#E9819B',4);
 b+=P('M120 459 Q90 325 210 306 Q208 190 335 177 Q385 68 510 112 Q654 76 702 193 Q842 194 821 314 Q930 344 880 466 Q850 518 797 466 Q745 530 690 475 Q626 539 569 482 Q502 536 440 480 Q369 532 313 474 Q246 531 198 469 Q145 505 120 459Z',cream,5)+sprinkles(230,225,550,210,38)+cherry(510,104,47);
 for(const x of [230,695]){b+=R(x,555,92,164,43,blue,5)+line(`M${x+46} 564 v145 M${x+3} 631 h85`,cream,7)+R(x-15,715,122,28,10,gold,4);}
 b+=R(419,594,164,250,77,'#B86E3F',5)+R(435,610,132,222,66,'#D99452',3)+R(459,626,83,82,30,blue,3)+line('M500 628 v79 M462 665 h78',cream,5)+E(551,754,7,7,gold)+R(400,829,200,29,7,cream)+R(381,856,238,28,7,cream)+R(361,883,278,25,7,cream);
-// scalloped shop sign and icing highlights
 b+=R(364,486,272,69,28,cream,4)+`<text x="500" y="533" text-anchor="middle" font-family="Georgia,serif" font-size="40" font-weight="bold" fill="${choc}">Sugar House</text>`+line('M194 381 Q174 340 222 334 M379 187 Q431 131 484 145', '#FFFCDE',12);
 return b;}
 svg('cupcake',1000,950,cake());
-// Tiny cake stalls, symmetric front and top, with stocked shelves and fabric scallops.
 for(const [name,c]of [['pink',pink],['blue',blue],['yellow',gold],['mint',mint]]){
 let b=E(152,328,135,13,'#7DAD46',0)+R(33,114,14,206,5,'#B87C46')+R(257,114,14,206,5,'#B87C46')+R(35,207,235,110,8,'#D99452')+R(42,217,220,21,4,cream)+R(55,246,195,52,8,'#E9B66C');
 b+=P('M17 103 L50 28 H252 L286 103Z',c,4);for(let i=0;i<7;i++)if(i%2===0)b+=P(`M${50+i*28.8} 29 H${78.8+i*28.8} L${17+(i+1)*38.4} 102 H${17+i*38.4}Z`,cream,0);
 for(let i=0;i<7;i++)b+=P(`M${17+i*38.4} 102 h38.4 v17 q-19.2 32 -38.4 0Z`,i%2?c:cream,3);
 for(let i=0;i<6;i++){const x=62+i*35;b+=R(x-12,184,25,26,4,gold,2)+scoop(x,179,17,[pink,cream,mint,blue][i%4]);if(i%2===0)b+=E(x,157,4,4,'#F16F65',1)}
 b+=R(77,60,149,27,10,cream,2)+`<text x="152" y="80" text-anchor="middle" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="${choc}">CAKES &amp; CONES</text>`+E(66,321,19,19,choc)+E(238,321,19,19,choc)+E(66,321,7,7,gold,2)+E(238,321,7,7,gold,2);svg('stall-'+name,304,348,b);}
-// Lollipop canopy and gumdrops. Large, clean silhouettes with hand-drawn spiral paths.
 let b=E(132,487,72,12,'#709B3B',0)+R(120,207,24,278,10,cream,5)+E(132,136,119,122,pink,5)+E(109,101,67,60,'#FFBCD0',0);
 let pts=[];for(let i=0;i<110;i++){let t=i/109*Math.PI*4.9,r=92*(1-i/116);pts.push([132+Math.cos(t)*r,136+Math.sin(t)*r]);}b+=line('M'+pts.map(p=>p.join(' ')).join(' L'),cream,16)+line('M59 69 Q73 42 105 35','#FFE0DF',9);svg('lollipop-tree',264,514,b);
 const gum=(x,y,r,c)=>P(`M${x-r} ${y} Q${x-r*.9} ${y-r*1.5} ${x} ${y-r*1.65} Q${x+r*.9} ${y-r*1.5} ${x+r} ${y} Q${x} ${y+r*.34} ${x-r} ${y}Z`,c,3)+E(x-r*.25,y-r*1.03,r*.22,r*.13,cream,0);
@@ -35,21 +31,16 @@ b=E(232,300,218,20,'#6C9B37',0)+gum(115,278,96,pink)+gum(329,278,96,mint)+gum(23
 for(let i=0;i<65;i++){const x=50+rnd()*370,y=160+rnd()*135;b+=E(x,y,1.8,2,'#FFF5C9',0)}svg('gumdrop-planter',464,324,b);
 b=R(76,99,26,389,12,cream,5)+P('M89 165 V90 C89 8 182 17 179 89','none',31,I)+P('M89 165 V90 C89 8 182 17 179 89','none',24,cream);for(let y=200;y<480;y+=54)b+=P(`M77 ${y} l24 -17 v22 l-24 17Z`,pink,0);
 b+=E(91,483,34,14,choc)+E(177,100,30,39,cream,4)+R(148,125,58,12,5,gold)+E(173,88,10,19,'#FFFCDD',0);svg('candy-lamp',220,508,b);
-// Chocolate waterfall on a wafer bluff, a second unmistakable landmark.
 b=E(230,516,207,26,choc,4)+P('M46 482 L79 179 Q102 68 210 63 Q327 67 359 192 L413 485Z',gold,5);
 for(let x=100;x<360;x+=47)b+=line(`M${x} 205 l-28 247`,'#DBA34E',4);
 b+=scoop(217,164,151,cream)+P('M193 172 Q246 138 280 189 C290 312 230 422 312 487 Q334 512 366 500 Q264 551 205 492 C140 438 243 271 193 172Z',choc,4)+line('M237 199 C259 302 199 393 259 478','#C3844C',12)+line('M265 207 C282 315 224 402 284 478',cream,5)+E(283,500,86,16,'#C58D52',0)+E(289,496,54,8,cream,0)+sprinkles(110,95,220,72,16)+cherry(210,40,24);svg('falls',448,552,b);
-// Playground with frosting turrets, slide and swings.
 b=E(258,513,247,20,gold,0)+R(30,195,150,230,25,gold,4)+R(334,195,150,230,25,pink,4)+scoop(106,193,88,cream)+scoop(409,193,88,cream)+R(69,249,72,123,32,blue)+R(373,250,72,121,32,blue)+line('M106 253 v113 M72 305 h65 M409 255 v111 M376 306 h65',cream,6)+cherry(106,90,22)+cherry(409,90,22);
 b+=P('M116 385 Q200 341 220 393 C235 453 216 473 308 486 L302 516 C169 512 184 439 169 424 Q143 406 116 427Z',pink,4)+line('M132 394 Q176 377 193 413 C208 481 209 488 296 501',cream,5)+line('M242 432 L259 242 H317 L335 432',choc,10)+line('M270 253 v114 M305 253 v114',I,3)+R(261,367,25,10,4,blue)+R(297,367,25,10,4,blue);svg('sugar-playground',516,540,b);
-// Sundae and wafer kiosk.
 b=E(216,491,184,25,gold)+R(110,310,214,160,34,pink,4)+R(137,355,158,103,18,blue)+P('M91 333 L127 250 H308 L342 333Z',cream,4)+scoop(216,231,106,mint)+scoop(217,151,80,pink)+cherry(217,61,24)+R(146,295,144,39,14,gold,3)+`<text x="218" y="322" text-anchor="middle" font-family="Georgia,serif" font-size="25" font-weight="bold" fill="${choc}">SUNDAES</text>`+R(178,383,74,77,11,cream,3);svg('sundae-kiosk',432,528,b);
-// Free-standing candy arch, bakery kiosk, bunting, pots and candy bouquets.
 b=E(72,480,42,12,gold)+E(452,480,42,12,gold)+P('M72 472 V208 C72 -22 452 -22 452 208 V472','none',51,I)+P('M72 472 V208 C72 -22 452 -22 452 208 V472','none',43,cream)+P('M72 472 V208 C72 -22 452 -22 452 208 V472','none',42,pink).replace('stroke-width="42"','stroke-width="42" stroke-dasharray="31 32"');svg('candy-arch',524,500,b);
 b=E(134,374,120,15,gold,0)+R(35,154,198,215,22,'#E9B879',4)+R(61,189,145,114,16,blue,4)+line('M132 194 v105 M65 248 h135',cream,7)+R(54,321,161,39,8,cream)+scoop(134,147,126,cream)+cherry(134,26,20)+sprinkles(62,64,145,60,18);svg('bakery-kiosk',268,400,b);
 b=line('M14 20 Q264 218 522 20',I,5);for(let i=0;i<10;i++){const x=25+i*49,y=28+Math.sin(i/9*Math.PI)*91;b+=P(`M${x} ${y} l43 12 -29 61Z`,[pink,cream,mint,blue,gold][i%5],3)}svg('bunting',536,200,b);
 b=E(162,462,132,19,'#82AC40',0);for(let i=0;i<5;i++){const x=55+i*51,y=165+Math.sin(i)*55;b+=line(`M162 451 Q${x} 325 ${x} ${y}`,choc,8)+E(x,y,44,48,[pink,blue,mint,gold,cream][i%5],4)+E(x-12,y-17,12,9,cream,0)}b+=R(98,403,130,69,20,gold);svg('bouquets',324,488,b);
-// Centre: ice-cream cone fountain, separate floor / basin / cone / water / front lip.
 const pieces=[],blocked=[];const save=(id,body,box,layer,sortY,extra={})=>{const [x,y,width,height]=box;writeFileSync(A+'centre/'+id+'.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="${box.join(' ')}" stroke-linecap="round" stroke-linejoin="round"><title>Candy Coast ice-cream fountain ${id}</title>${body}</svg>`);pieces.push({id,file:id+'.svg',layer,x,y,width,height,...(sortY==null?{}:{sortY}),...extra});};
 let floor=E(0,0,680,405,cream,4,'#CBA66A');
 for(const [r,c]of [[.94,pink],[.84,cream],[.67,'#FADBB8'],[.40,cream]])floor+=E(0,0,680*r,405*r,c,3,'#D4B079');

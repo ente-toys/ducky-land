@@ -1,5 +1,3 @@
-// Transparent crop gutters cost GPU memory without contributing any pixels.
-// Rebuild only after Fair sources or their dimensions change. Artwork is read-only.
 import {readFileSync,writeFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {cropFairSVG,FAIR_TILE_SIZE} from '../../src/pixi/fair-raster.js';

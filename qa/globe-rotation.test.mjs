@@ -9,11 +9,8 @@ import {turnLongitude} from '../src/pixi/sphere-camera.js';
 import {dot,angle,expMap,sphereFrame} from '../src/pixi/sphere.js';
 import {ISLETS} from '../src/pixi/islets.js';
 
-// boss 8 Nov: "try rotating the globe: all the positions are changing instead of the globe rotating". On the ball every
-// island must sit where the sphere puts it, whichever way the ball has been turned.
 const W=1440,H=900,id='home',Rw=WORLD_GEO.Rw,zoom=.0329;
 const island=i=>{const m=mapOf(i.id);return (x,y)=>spherePoint(i.id,{x:m.cx+x,y:m.cy+y});};
-// A run of drags: turns east/west and tilts north/south, ending up far round the back of the world from Home.
 function drags(){
  const out=[],cam={...localPoint(id,spherePoint(id,{x:mapOf(id).cx,y:mapOf(id).cy})),zoom};
  const tilt=(c,rad)=>{const v=viewFrame(id,c),p=v.center.map((x,k)=>x*Math.cos(rad)+v.north[k]*Math.sin(rad));return Object.assign(c,localPoint(id,p));};
@@ -24,7 +21,6 @@ function drags(){
  return out;
 }
 const lensOf=(p,view,ball,Rp)=>{
- // independent of globe-screen.js: azimuthal angle a from the view centre, lens radius ((1-ball)a+ball sin a)*Rp
  const a=angle(p,view.center),e=dot(p,view.east),n=dot(p,view.north),s=Math.hypot(e,n),r=((1-ball)*a+ball*Math.sin(a))*Rp;
  return s<1e-12?{x:W/2,y:H/2,a}:{x:W/2+e/s*r,y:H/2-n/s*r,a};
 };
@@ -36,7 +32,7 @@ test('dragging the ball: every island centre is the sphere projection of its tru
   for(const i of WORLD_ISLANDS){
    const st=G.sticker(island(i),4),truth=lensOf(i.center,view,ball,Rp);
    if(dot(i.center,view.center)<=0){assert.equal(st,null,`${i.id} on the far side is hidden`);continue;}
-   if(!st)continue;   // tucked behind the limb by its fade
+   if(!st)continue;
    seen++;maxErr=Math.max(maxErr,Math.hypot(st.x-truth.x,st.y-truth.y));
    assert.ok(shearOf({a:st.cos,b:st.sin,c:-st.sin,d:st.cos}).shearDeg<1e-9,'rigid: no shear');
   }
@@ -67,7 +63,6 @@ test('a turned ball keeps the islands in one rigid layout: unprojected centres g
 });
 
 test('the same island seen from two turns of the ball moves like a point on a turning sphere',()=>{
- // Turn the ball about its view axis' north by a known angle: the drawn island must follow exactly that rotation.
  const cam={...localPoint(id,sphereFrame(.2,.1).center),zoom},a=globeScreen({id,cam,ball:1,w:W,h:H});
  const turned=turnLongitude(id,{...cam},.3),b=globeScreen({id,cam:turned,ball:1,w:W,h:H});
  for(const i of WORLD_ISLANDS){

@@ -1,6 +1,3 @@
-// boss 8 Nov: "we should allow them to go on boat in centre", the same as Home. Sunbob's two brooks open to the sea through
-// smooth mouths, a boat sails in from the harbour up Willowcup Run, all the way round the ring canal under every arched bridge,
-// and out down Millseed Brook, never leaving the water. Walkers still cross every bridge; the centre pond stays closed to boats.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mapFor} from '../src/pixi/island-maps.js';
@@ -16,8 +13,6 @@ function sail(actor, to, seen) {
   }
   assert.ok(Math.hypot(actor.x - to[0], actor.y - to[1]) < 2, `arrived at ${to} (at ${Math.round(actor.x)},${Math.round(actor.y)})`);
 }
-// Hand-checked waypoints down the middle of the water. A river is only a little wider than a boat and the tap-to-sail planner
-// joins the open-sea grid only near the sea, so a long river trip is a chain of straight legs, as a player steers it.
 const IN_WEST = [[-1400, 1480], [-1050, 1340], [-700, 1280], [-350, 1300], [0, 1500], [300, 1510], [700, 1450], [1090, 1470]];
 const RING = [[1220, 1467], [1619, 1301], [2013, 1173], [2452, 1196], [2779, 1047], [3107, 974], [3455, 952], [3804, 869], [4229, 670], [4756, 530],
   [5288, 541], [5649, 655], [6077, 729], [6493, 698], [6972, 517], [7223, 383], [7373, 322], [7534, 345], [7587, 481], [7567, 652], [7491, 947],
@@ -32,12 +27,10 @@ test('a boat sails from Sunbob\'s harbour in through Willowcup Run, round the wh
   for (const p of [...IN_WEST, ...RING, ...OUT_NORTH]) sail(actor, p, seen);
   assert.ok(seen.some(p => p.x < -1000 && p.y > 1250 && p.y < 1500), 'in through the west mouth');
   assert.ok(seen.some(p => p.y < -750 && p.x > 4100 && p.x < 4400), 'out through the north mouth');
-  // under every arched bridge on the way: the two the island had and the twelve that replace the flat planks
   for (const {a, b} of map.world.arches) {
     const dx = b[0] - a[0], dy = b[1] - a[1], seg = p => {const t = Math.max(0, Math.min(1, ((p.x - a[0]) * dx + (p.y - a[1]) * dy) / (dx * dx + dy * dy))); return Math.hypot(p.x - a[0] - t * dx, p.y - a[1] - t * dy);};
     assert.ok(seen.some(p => seg(p) < 40), `under the bridge ${a} - ${b}`);
   }
-  // and the full circle: every ring waypoint was reached, back where the loop began
   assert.deepEqual(RING[0], RING.at(-1));
   sail(actor, [harbour.x, harbour.y], seen);
 });
@@ -49,7 +42,6 @@ test('Sunbob\'s bridges carry walkers and let boats under, its pond stays closed
   for (const {a, b} of map.world.arches) {
     const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
     assert.ok(nav.walkable(...m), `the deck at ${m} is walkable`);
-    // the old north-west arch spans the pinch beside its islet, so the channel under it is off the deck's middle
     assert.ok([0, 15, -15, 30, -30].some(dx => [0, 15, -15, 30, -30].some(dy => canSail(m[0] + dx, m[1] + dy, id))), `a boat fits under the deck at ${m}`);
     assert.deepEqual(nav.route(map.spawn.x, map.spawn.y, ...m).at(-1), m, `the deck at ${m} is reachable on foot`);
   }

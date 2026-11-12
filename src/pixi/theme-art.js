@@ -1,7 +1,3 @@
-// boss 6 Nov: a themed island's own art (concepts/themes/THEME-CONTRACT.md, section 4), loaded only when that island or
-// its copy comes near (engine.js ensureArt), so start-up stays as fast as before. Builds, in the island map's own local
-// coordinates: the ground (tiles + flats), the decks Duckies walk over, the contact shadows, and the standing props (sorted
-// with the Duckies by y). Everything starts hidden; the engine shows one island's art at a time (showArt).
 import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from './art-resolution.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
@@ -32,10 +28,9 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   ]);
   const base = map.art.slice(0, map.art.lastIndexOf('/') + 1);
   const url = src => /^(\/|https?:|data:)/.test(src) ? src : base + src;
-  // Iceland's separate smoke art is leased and pooled by its life lifecycle.
   const props = (manifest.props ?? []).filter(p => !(map.id === 'snow' && manifest.icelandFinal && p.finalKind === 'smoke'));
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [];
-  const floating = manifest.floating ?? [];   // boss 6 Nov: lily pads and other floating things that bob on the water, like home's
+  const floating = manifest.floating ?? [];
   const iceland=map.id==='snow'&&Boolean(manifest.icelandFinal);
   const fair=map.id==='fair',crisp=fair||manifest.raster?.enabled===true;
   const makeTiles=fair?fairTiles:rasterTiles,groundTileSize=fair?FAIR_GROUND_TILE_SIZE:RASTER_GROUND_TILE_SIZE;
@@ -46,8 +41,6 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     ...flats.filter(p=>(!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
-  // Repeated flowers, tiles and props share one lease per theme, at the highest
-  // requested resolution. Fair alone places over 1,900 sprites from 108 sources.
   const resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
   const kiteSource=src=>fair?src+'?fairRaster='+FAIR_KITE_RESOLUTION:src;
@@ -96,8 +89,6 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     groundStreams.push(groundPool.create(set.map(t=>({...t,x:x+(p.flip?p.width-t.x-t.width:t.x),y:t.y+y,flip:p.flip})),container));
     return true;
   };
-  // Authored standing pieces keep their depth-sort anchor; their SVG crops
-  // share the ground pool and are culled in map coordinates.
   const streamedPiece=(p,layer,anchor)=>{
     if(!p.tiles?.length||p.preload)return null;
     const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);
@@ -108,8 +99,6 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
   catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
   const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
-  // boss 8 Nov (sailable rivers, as home's engine.js bridgeOver): a deck marked overBoats is a river bridge a boat passes under. A copy
-  // above the Duckies is shown only while a boat is beneath it, so the deck is drawn over the hull.
   const overLayer = new Container({label: `Theme ${map.id} - bridges over boats`}), bridgeOver = [];
   for (const deck of decks) {
     if(crisp){
@@ -132,7 +121,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     if(streamedPiece(flat,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
     if(!flat.preload&&tiled(flat,2,ground,flat.topLeft?{x:0,y:0}:{x:.5,y:1}))continue;
     const s = new Sprite(textures[k++]); s.position.set(flat.x, flat.y);
-    if (!flat.topLeft) s.anchor.set(.5, 1);   // decals sit on their base point, like home's
+    if (!flat.topLeft) s.anchor.set(.5, 1);
     s.width = flat.width; s.height = flat.height; if (flat.flip) s.scale.x *= -1;
     ground.addChild(s);
   }
@@ -146,18 +135,17 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     }
     if(!crisp&&!iceland&&prop.tiles?.length&&prop.flip)sprite.scale.x *= -1;
     if (prop.tint) sprite.tint = prop.tint;
-    sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true; // Keep authored depth order for overlapping hamlet objects.
+    sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true;
     sprite.themeArt = map.id;
     let shadow = null;
     if (!NO_SHADOW.test(name) && prop.shadow !== false) {
-      const [rx, ry] = prop.shadowSize ?? (r => [r, r * .3])(Math.max(8, Math.min(300, prop.width * scale * .36)));   // boss 8 Nov: a hamlet building's base shadow fits its footprint
-      shadow = new Graphics().ellipse(rx * .06, ry * .1, rx, ry).fill({color: manifest.shadowColor ?? 0x3c5a2a, alpha: manifest.shadowAlpha ?? .15});   // boss 11 Nov: dark islands (Bog) set their own ground shadow
+      const [rx, ry] = prop.shadowSize ?? (r => [r, r * .3])(Math.max(8, Math.min(300, prop.width * scale * .36)));
+      shadow = new Graphics().ellipse(rx * .06, ry * .1, rx, ry).fill({color: manifest.shadowColor ?? 0x3c5a2a, alpha: manifest.shadowAlpha ?? .15});
       shadow.position.set(prop.x + (prop.shadowOffset?.[0] ?? 0), prop.y + (prop.shadowOffset?.[1] ?? 0)); shadows.addChild(shadow);
     }
     const centrePiece = typeof prop.centrePiece === 'object' ? prop.centrePiece : centre.pieces.find(p => prop.id?.endsWith(p.id) && prop.src.includes('centre/'));
     return {...prop, centrePiece, id: prop.id ?? `${map.id}-${i}`, name, scale, sprite, shadow, deck: prop.deck ?? /bridge|deck/i.test(name), wind: prop.wind ?? (!prop.src.includes('centre/') && WIND.test(name))};
   });
-  // Theme fountains share Home's water ribbons, landing rings and spray.
   const fountainWaters = standing.filter(p=>p.fountainWater).map(p=>{
     const layer=new Container({label:'Theme fountain water'});
     const fx=createFountainWater(p,layer,null,p.fountainWater);
@@ -176,8 +164,6 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const kiteLayer = manifest.kites?.length ? new Container({label: `Theme ${map.id} - kites`}) : null;
   const kites = kiteLayer ? createHomeKites(kiteLayer, Object.fromEntries(KITE_ASSETS.map(src => [src, bySource.get(kiteSource(src))])), manifest.kites) : null;
   const autumnLeaves = manifest.autumn ? createAutumnLeaves(props, manifest.autumn.leaves.map(src => bySource.get(url(src))), manifest.autumn) : null;
-  // The loader owns effects even before the engine mounts them. Keeping their
-  // roots here also makes show/hide and unload use the same island lifecycle.
   const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : []), ...(autumnLeaves ? [autumnLeaves.layer] : []), ...fountainWaters.map(f=>f.root)];
   const icelandLife = createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt});
   for (const group of groups) group.visible = false;

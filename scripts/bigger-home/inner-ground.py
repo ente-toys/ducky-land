@@ -1,4 +1,3 @@
-# Remove only old ocean decoration from derivative tiles. All original art files stay untouched.
 import xml.etree.ElementTree as E
 import json
 from pathlib import Path

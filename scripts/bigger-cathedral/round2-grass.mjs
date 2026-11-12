@@ -1,6 +1,3 @@
-// Home's vector lawn vocabulary, baked into the existing ground textures.
-// An authored material swatch, admitted against the actual painted floor and
-// buildings. No runtime props, navigation changes, gradients or raster streaming.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render.mjs';
@@ -16,7 +13,6 @@ function homeSvg(file,x,y,w,h,amber=false){
  if(!src){src=fs.readFileSync(`public/pixi-art/decals/${file}.svg`,'utf8');bodyCache.set(file,src);}
  const box=src.match(/viewBox="([^"]+)"/)[1];
  let body=src.slice(src.indexOf('>')+1,src.lastIndexOf('</svg>'));
- // Keep Home's grass green. Warm variants use the same drawn blades and veins.
  if(amber)body=body.replaceAll('#4AA539','#b28a37').replaceAll('#2B7A37','#826530').replaceAll('#89C332','#dfb552');
  return `<svg x="${x}" y="${y}" width="${w}" height="${h}" viewBox="${box}" fill="none" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
 }
@@ -29,14 +25,10 @@ function rectGood(data,x,y,w,h){
 }
 function patchBody(p){
  const {x,y,width:w,height:h}=p;
- // Irregular low-contrast colour fields, as in Home's painted ground. Two flat
- // translucent shapes soften the boundary without filters or gradients.
  const shape=(a,b,c,d)=>`M${a+c*.08} ${b+d*.51}C${a-c*.08} ${b+d*.12} ${a+c*.29} ${b-d*.07} ${a+c*.53} ${b+d*.07}C${a+c*.8} ${b-d*.04} ${a+c*1.06} ${b+d*.28} ${a+c*.93} ${b+d*.63}C${a+c*.82} ${b+d*1.02} ${a+c*.59} ${b+d*.8} ${a+c*.38} ${b+d*.94}C${a+c*.12} ${b+d*1.05} ${a-c*.04} ${b+d*.75} ${a+c*.08} ${b+d*.51}Z`;
  return `<path d="${shape(x+12,y+8,w-24,h-16)}" fill="#6d9236" opacity=".07"/><path d="${shape(x+26,y+18,w-52,h-36)}" fill="#6d9236" opacity=".09"/>`;
 }
 function leafBody(p){const {x,y,amber}=p,c=amber?'#b77c3d':'#c6a64b';return `<path d="M${x+2} ${y+10}Q${x+8} ${y+1} ${x+19} ${y+4}Q${x+16} ${y+14} ${x+2} ${y+10}Z" fill="${c}"/><path d="M${x+4} ${y+10}l12 -5" fill="none" stroke="#947443" stroke-width="1" stroke-linecap="round"/>`;}
-// Reuse the exact Home paths within each SVG rather than repeating their data.
-// These symbols are resolved while the existing tile texture is decoded.
 function packSymbols(fragment){
  const symbols=new Map();
  const body=fragment.replace(/<svg x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)" viewBox="([^"]+)"[^>]*>([\s\S]*?)<\/svg>/g,(_,x,y,w,h,box,paths)=>{
@@ -50,15 +42,12 @@ export async function applyGrass(){
  const art=JSON.parse(fs.readFileSync(A+'art.json'));
  const tiles=art.ground.tiles.filter(t=>t.src.startsWith('communities/'));
  const sources=new Map(tiles.map(t=>[t.src,strip(fs.readFileSync(A+t.src,'utf8'))]));
- // render() reads these same files; clear only our own previous decoration.
  for(const t of tiles)fs.writeFileSync(A+t.src,sources.get(t.src));
  const buildings=art.props.filter(p=>p.door||p.id==='cathedral-hall'||p.id==='campanile'||/colonnade|gazebo|arbour|olive-mill/.test(p.id??''));
  const floor={...art,props:buildings,floating:[],flats:art.flats.filter(p=>!/shadow|litter/.test(p.id??''))};
  const {data}=await sharp(await render(floor,{x:X,y:Y,k,width:W,height:H})).ensureAlpha().raw().toBuffer({resolveWithObject:true});
  const features=[];
  function admit(p){if(rectGood(data,p.x,p.y,Math.max(32,p.width),Math.max(19,p.height)))features.push(p);}
- // Matching Home's differently sized fan silhouettes, with staggered rows and
- // alternate material phases so neighbouring lawns don't read as a grid.
  for(let row=0;row<27;row++)for(let col=0;col<22;col++){
   const bx=X+col*600+(row%2?79:0),by=Y+row*400;
   for(const [i,[dx,dy,kind]] of SWATCH.entries()){
@@ -70,8 +59,6 @@ export async function applyGrass(){
   }
   for(const [i,[dx,dy]]of [[188,134],[397,303],[52,365]].entries())admit({x:bx+dx,y:by+dy,width:22,height:16,type:'leaf',amber:(row+col+i)%2===0});
  }
- // Broad Home-like ground patches, only where their entire rectangular envelope
- // is clear lawn. Their spacing is deliberately much wider than the small tufts.
  for(let row=0;row<28;row++)for(let col=0;col<25;col++){
   const width=[190,290,360][(row+col)%3],height=[110,160,210][(row*2+col)%3];
   admit({x:X+col*530+(row%2?190:90),y:Y+row*390+65,width,height,type:'patch'});
@@ -81,8 +68,6 @@ export async function applyGrass(){
  for(const t of tiles){
   const source=sources.get(t.src),view=source.match(/viewBox="([^"]+)"/)[1].split(/[ ,]+/).map(Number),[vx,vy,vw,vh]=view;
   const local=features.filter(p=>p.x+p.width>=t.x&&p.x<=t.x+t.width&&p.y+p.height>=t.y&&p.y<=t.y+t.height);
-  // Source viewBoxes are world coordinates. Emit matching geometry on both sides
-  // of a seam, letting each existing tile viewport clip its own half.
   if(Math.abs(vx-t.x)>4||Math.abs(vy-t.y)>4||Math.abs(vw-t.width)>8||Math.abs(vh-t.height)>8)throw Error('unexpected tile frame '+t.src);
   const fragment=local.map(p=>{used.set(`${p.type}:${p.x},${p.y}`,p);return p.type==='tuft'?markBody(p.x,p.y,p.kind,p.amber):p.type==='flower'?homeSvg(p.file,p.x,p.y,p.width,p.height):p.type==='leaf'?leafBody(p):patchBody(p);}).join('');
   fs.writeFileSync(A+t.src,source.replace('</svg>',`<g data-bellovo-grass="r2">${packSymbols(fragment)}</g><!--bellovo-grass-end--></svg>`));perTile[t.src]=local.length;

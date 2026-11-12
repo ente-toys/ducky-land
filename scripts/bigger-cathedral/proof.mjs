@@ -6,7 +6,6 @@ const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-cathedral/baselin
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 const before=read(B+'art.json'),old=read(B+'world.json'),oldWalk=read(B+'walk-world.json'),oldHarbor=read(B+'harbor.json');
 fs.mkdirSync(OUT+'/cathedral-crops',{recursive:true});
-// Production layers at their actual map coordinates and scale. No pixels are restored after rendering.
 if(!process.env.PRESERVE_ONLY){
 await sharp(await render(art,{x:-2200,y:-2400,k:.12,width:1536,height:1248,world,walk,harbor})).toFile(OUT+'/cathedral-built.png');
 for(const [name,x,y]of plan.crops){const size=plan.communities.some(c=>c.id===name)?2000:1400,h=size===2000?2000:1000;await sharp(await render(art,{x:x-size/1.6,y:y-h/1.6,k:.8,width:size,height:h,world,walk,harbor})).toFile(OUT+'/cathedral-crops/'+name+'.png');}
@@ -22,7 +21,6 @@ fs.writeFileSync('scripts/bigger-cathedral/preservation.json',JSON.stringify({co
 await sharp(oldImg).toFile(OUT+'/cathedral-original-preservation-before.png');await sharp(newImg).toFile(OUT+'/cathedral-original-preservation-after.png');
 const drawing=await sharp(OUT+'/cathedral-communities.png').png().toBuffer(),built=await sharp(OUT+'/cathedral-built.png').png().toBuffer();
 await sharp({create:{width:3072,height:1298,channels:4,background:'#F7EAC2'}}).composite([{input:drawing,left:0,top:50},{input:built,left:1536,top:50},{input:Buffer.from(svg(3072,50,'<text x="768" y="34" text-anchor="middle" font-family="Georgia" font-size="25" fill="#515332">DRAWING</text><text x="2304" y="34" text-anchor="middle" font-family="Georgia" font-size="25" fill="#515332">BUILT FROM PRODUCTION ART</text>')),left:0,top:0}]).png().toFile(OUT+'/cathedral-vs-communities.png');
-// Two requested path details are shown beside the studied reference, never used as game artwork.
 const ref=await sharp(OUT+'/../cursor-camp-paths-ref.jpg').resize(700,500,{fit:'contain',background:'#F7EAC2'}).png().toBuffer();
 const junction=await sharp(OUT+'/cathedral-crops/road-junction.png').resize(700,500).png().toBuffer(),lane=await sharp(OUT+'/cathedral-crops/lane.png').resize(700,500).png().toBuffer();
 await sharp({create:{width:2100,height:550,channels:4,background:'#F7EAC2'}}).composite([{input:ref,left:0,top:50},{input:junction,left:700,top:50},{input:lane,left:1400,top:50},{input:Buffer.from(svg(2100,50,'<g font-family="Georgia" font-size="22" fill="#515332" text-anchor="middle"><text x="350" y="32">CURSOR CAMP, LOOK ONLY</text><text x="1050" y="32">BELLOVO ROAD JUNCTION</text><text x="1750" y="32">TESSERA LANE</text></g>')),left:0,top:0}]).png().toFile(OUT+'/cathedral-paths-vs-reference.png');

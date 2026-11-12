@@ -1,5 +1,3 @@
-// Azimuthal equidistant island charts. Screen/map y points down, sphere Y north.
-// No longitude division, pole singularity or duplicate map bands.
 export const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 export const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
 export const unit=a=>{const d=Math.hypot(...a)||1;return a.map(v=>v/d);};
@@ -18,7 +16,6 @@ export function logMap(frame,p,R){
  if(s<1e-12)return a<1?{x:0,y:0}:{x:Math.PI*R,y:0};
  return {x:e*a*R/s,y:-n*a*R/s};
 }
-// Parallel transport gives a stable camera/radar orientation even at a pole.
 export function transport(frame,p){
  const v=cross(frame.center,p),c=dot(frame.center,p),s=Math.hypot(...v);
  const axis=s>1e-10?v.map(x=>x/s):frame.north;

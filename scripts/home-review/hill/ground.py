@@ -11,7 +11,6 @@ rings=[]
 for part in d.split('M')[1:]:
  pts=[tuple(map(float,q.split(','))) for q in part.rstrip('Z ').split('L')]
  rings.append(Polygon(pts))
-# Even-odd rings preserve the existing holes as well as the outer paths.
 base=rings[0]
 for p in rings[1:]:base=base.symmetric_difference(p)
 def sample(p):
@@ -41,8 +40,6 @@ def path(g):
 new=f'<g data-name="Home unified paths"><path d="{path(merged)}" fill="#e4c567" transform="translate(0 3)" fill-rule="evenodd"/><path d="{path(merged)}" fill="#fde48c" fill-rule="evenodd"/></g>'
 m=Path('scripts/home-review/hill/mound.svgfrag').read_text()
 mounds='<g data-name="Home stargazing hills">'+''.join(f'<g transform="translate({s["x"]-350} {s["y"]-270})">{m}</g>' for s in E['stargazingHills'])+'</g>'
-# Every ground tile, streaming fallback, and the canonical source use the same
-# contour. Mounds go under the merged path, never over a join.
 files=set(Path('public/pixi-art').glob('ground-r*-c*.svg'))|set(Path('public/pixi-art/home-expansion').glob('ground-r*-c*.svg'))|set(Path('public/pixi-art/home-expansion-g').glob('ground-*.svg'))|{Path('public/pixi-art/globe/home-ground.svg'),Path('scripts/home-review/continuous-ground.svgfrag')}
 for f in files:
  text=f.read_text();assert previous in text,str(f)
@@ -52,7 +49,6 @@ f=Path('public/pixi-art/home-review/path-network.svg');f.write_text(f.read_text(
 Path('src/pixi/home-routes.json').write_text(json.dumps(routes))
 Path('scripts/home-review/sampled-routes.json').write_text(json.dumps(audit))
 E['routeSystem']['routes']=len(routes)
-# Remove only lawn microtexture under the two authored mounds and new trails.
 from shapely.geometry import Point
 E['groundDecals']=[d for d in E['groundDecals'] if not any(((d['x']-s['x'])/340)**2+((d['y']-s['y'])/145)**2<1 for s in E['stargazingHills']) and not any(g.contains(Point(d['x'],d['y'])) for g in shapes[1:])]
 Path('src/pixi/home-expansion.json').write_text(json.dumps(E,indent=2)+'\n')

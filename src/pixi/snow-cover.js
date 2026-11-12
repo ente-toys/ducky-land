@@ -9,8 +9,6 @@ export function createSnowCoverState(seed = 0, sleeping = false) {
     stage: 0, idleSince: null, cycle: null, burstAt: -Infinity, shiver: 0,
     time: 0, lastTime: null, version: undefined, active: false, reduced: false};
 }
-// Scalar bookkeeping also runs for culled remote players. No draw work, random
-// calls, server messages or allocations. Motion is measured from each actor.
 export function updateSnowCover(s, time, theme, action = 0, speed = 0, reduced = false, version, moving = false) {
   if (theme !== 'snow') {
     s.stage = 0; s.active = false; s.idleSince = null; s.cycle = null;
@@ -44,8 +42,6 @@ export function updateSnowCover(s, time, theme, action = 0, speed = 0, reduced =
   return s;
 }
 
-// Shared immutable vector geometry. Acquire only on a visible Iceland duck;
-// release when its last visual leaves, including the source contexts.
 let geometry = null, owners = 0;
 function acquireGeometry() {
   if (!geometry) {
@@ -63,11 +59,6 @@ function releaseGeometry() {
   geometry.flake.destroy(true); geometry = null;
 }
 
-// Sample the decoded texture only on first use. Some hats have substantial
-// transparent padding; seating snow on a frame rectangle makes it float.
-// The profile follows the opaque crown instead, including asymmetric caps.
-// region: [left, right, optional crown floor, optional exposed x intervals], all
-// normalised to the sprite frame. The floor seats snow around a protruding tuft.
 export function snowCrownProfile(pixels, w, h, sourceWidth, sourceHeight, region = null) {
   const tops = new Float32Array(w); tops.fill(-1);
   let left = w, right = -1;
@@ -77,8 +68,6 @@ export function snowCrownProfile(pixels, w, h, sourceWidth, sourceHeight, region
   if (right - left < 3) return null;
   const x0 = Math.max(left, Math.ceil(region ? region[0] * w : left + (right - left) * .18));
   const x1 = Math.min(right, Math.floor(region ? region[1] * w : right - (right - left) * .18));
-  // A broad median removes individual tuft spikes and alpha stair steps. The
-  // second, triangular filter leaves a gently curved roof, not a traced rim.
   const radius = Math.max(2, Math.round((right - left) * .035)), median = [];
   for (let x = left; x <= right; x++) {
     const values = [];
@@ -101,7 +90,6 @@ export function snowCrownProfile(pixels, w, h, sourceWidth, sourceHeight, region
   for (let x = x0; x <= x1; x += step) {
     const y = smooth(x), before = smooth(Math.max(left, x - 2)), after = smooth(Math.min(right, x + 2));
     const slope = (after - before) / (Math.min(right, x + 2) - Math.max(left, x - 2)) / dx;
-    // Snow only rests on upward-facing slopes. A cliff or side terminates a cap.
     if (tops[x] < 0 || (region?.[3] && !region[3].some(([a, b]) => x / w >= a && x / w <= b)) || Math.abs(slope) > .95 || (run.length && Math.abs(y - run.at(-1)[1]) > dx * step * 1.4)) {finish(); continue;}
     run.push([x * dx, y + sourceHeight / h * .35]);
   }
@@ -118,8 +106,6 @@ function surfaceY(points, x) {
   }
   return points.at(-1)[1];
 }
-// Cubic Hermite paths have horizontal tangents at a lobe/drip extremum and
-// continuous tangents along the roof. No per-pixel line segments or sharp teeth.
 function curve(g, points, move = false) {
   if (move) g.moveTo(...points[0]);
   for (let i = 1; i < points.length; i++) {
@@ -138,7 +124,6 @@ export function drawSnowCap(profile, stage, ink = 8, depthWidth = profile.width)
     const width = x1 - x0, base = x => surfaceY(points, x), seat = ink * .42;
     const top = [[0, .38], [.12, .9], [.28, 1.04], [.43, .87], [.60, 1.12], [.78, .94], [.91, .84], [1, .34]]
       .map(([u, rise]) => [x0 + u * width, base(x0 + u * width) - depth * rise]);
-    // Short round overhangs, separated by a mostly level seated underside.
     const bottom = [[0, 0], [.12, .02], [.22, .02], [.27, .33], [.32, .04], [.53, .01], [.64, .02], [.70, .23], [.76, .02], [.9, .01], [1, 0]]
       .map(([u, drip]) => [x0 + u * width, base(x0 + u * width) + seat + depth * drip]);
     curve(g, top, true);
@@ -164,7 +149,7 @@ function acquireCrown(texture, region = null, key = '', ink = 8, depthWidth) {
     ctx.drawImage(resource, f.x * r, f.y * r, f.width * r, f.height * r, 0, 0, 192, 192);
     sampled = texture.width > 2 && texture.height > 2;
     profile = snowCrownProfile(ctx.getImageData(0, 0, 192, 192).data, 192, 192, texture.width, texture.height, region);
-  } catch { /* Headless rigs use the authored attachment as a fallback. */ }
+  } catch {  }
   const caps = [];
   if (profile) for (let stage = 1; stage <= 4; stage++) caps.push(drawSnowCap(profile, stage, ink, depthWidth));
   const entry = {profile, sampled, caps, users: 1, texture, key};
@@ -177,9 +162,6 @@ function releaseCrown(entry) {
   if (!variants.size) crownCache.delete(entry.texture);
 }
 
-// Each surface is a reusable {parent,x,y,width,rotation} in the original rig's
-// coordinates. Parenting to the actual hat/bed makes facing, flip, breathing
-// and outfit transformations apply without copying world transforms.
 export function createSnowCover(seed = 0, sleeping = false) {
   const state = createSnowCoverState(seed, sleeping);
   let visual = null, destroyed = false;
@@ -242,7 +224,6 @@ export function createSnowCover(seed = 0, sleeping = false) {
         p.y = -4 - (18 + i % 4 * 5) * u + 70 * u * u;
         p.alpha = (1 - u) * .95; p.scale.set(1.2 + i % 3 * .45);
       } else {
-        // Three staggered tiny flakes drift down onto the cap and dissolve.
         const u = (state.time * .24 + i * .337 + state.phase) % 1;
         p.visible = state.stage > 0 && i < 3;
         if (!p.visible) continue;

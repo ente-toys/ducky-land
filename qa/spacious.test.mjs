@@ -3,9 +3,6 @@ import {mapPoint} from '../src/pixi/sphere-coordinates.js';
 import homeExtra from '../assets/world/home-sleep-extra.json' with {type:'json'};
 import homeOuter from '../assets/world/home-sleep-outer.json' with {type:'json'};
 import {THEMED_ISLANDS} from '../src/pixi/world-map.js';
-// boss 6 Nov: "Every island has to be BIGGER and SPACIOUS, with room for 100 Duckies to walk around, and stalls. The same
-// sleeping Duckies as home, and every home feature (bridges and the rest) must work on these islands."
-// a) sleepers on every map, b) home features per map, c) bigger maps spaced on the globe, d) 100 Duckies on one island.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import homeWorld from '../assets/world/world.json' with {type: 'json'};
@@ -24,7 +21,6 @@ const themedIslands = () => [...THEME_OF].filter(([, theme]) => readyThemes().in
 const area = ring => ring.reduce((a, p, i) => {const q = ring[(i + 1) % ring.length]; return a + p[0] * q[1] - q[0] * p[1];}, 0) / 2;
 const sizes = sleepHalfWidths();
 
-// ---------- a) sleepers ----------
 test('a) sleepers: Home keeps its forty beds plus forty outer residents; every theme keeps its own approved count', () => {
   assert.equal(SLEEP_TOTAL, 40);
   assert.deepEqual(SLEEP_COUNTS, {nod: 4, hammock: 2, rock: 3, leaf: 4, book: 4, chair: 2, wing: 5, box: 4});
@@ -59,7 +55,6 @@ test('a) sleepers: the bed rules (ground, decks, paths, avoid zones, water, prop
   assert.match(why['wing@2000,2560'], /^prop hut/);
   assert.match(why['wing@800,2150'], /^near wing/);
   assert.equal(why['wizard@1000,1000'], 'unknown pose');
-  // the resolved beds go into the map: solid for the room server and the game alike
   const map = makeMap('fixture', {world, harbor: {jetty: {foot: [2500, 600], tip: [2500, 150]}}, sleepers: beds});
   assert.equal(map.sleepers.length, 3);
   for (const bed of map.sleepers) {
@@ -82,7 +77,6 @@ test('a) sleepers on the themed islands: each bed is on its land, off decks and 
       const f = sleeperFootprint(bed);
       assert.equal(map.nav().walkable(f.x, f.y), false, `${map.id} ${bed.pose} at ${bed.x},${bed.y} is solid for walkers`);
     }
-    // a Ducky sent straight through a bed walks round it (the server's own walking)
     const bed = beds.find(b => !b.tree);
     if (!bed) continue;
     const f = sleeperFootprint(bed), from = map.nav().nearest(bed.x - 260, bed.y, 200), to = map.nav().nearest(bed.x + 260, bed.y, 200);
@@ -96,7 +90,6 @@ test('a) sleepers on the themed islands: each bed is on its land, off decks and 
   }
 });
 
-// ---------- b) home features per map ----------
 test('b) birds and butterflies: home keeps its spots, a themed island gets its own, all on its land', () => {
   assert.deepEqual(ambientOf(HOME_MAP).butterflies, [[2230, 2280], [3420, 2270]]);
   assert.equal(ambientOf(HOME_MAP).birds.length, 6);
@@ -114,7 +107,6 @@ test('b) surf: every themed coast and islet gets the beach surf, each ring turne
     const map = mapOf(id), rings = shoreOf(map.world), runs = surfRuns(rings);
     assert.equal(rings.length, (map.world.shoreRings?.length ?? map.world.coastRings?.length ?? 1) + (map.world.surfIslets ?? map.world.islets ?? []).length);
     assert.ok(runs.length > 20, `${map.id}: ${runs.length} surf runs`);
-    // the crest starts out at sea: 120 out along each normal is never this island's land
     const out = runs.flatMap(r => r.points).filter((p, i) => i % 7 === 0).filter(p => map.landAt(p.x + p.nx * 120, p.y + p.ny * 120));
     assert.ok(out.length / runs.length < .1, `${map.id}: the surf normals point out to sea (${out.length} inland)`);
   }
@@ -133,11 +125,9 @@ test('b) bridges, islets, decks and harbors work from each map\'s own data', () 
   }
 });
 
-// ---------- c) bigger maps on the globe ----------
 test('c) every island keeps a boat channel between its real coasts (not its map rectangle), home never moves', () => {
   for (const {a, b, gap} of coastGaps()) assert.ok(gap >= BOAT_CHANNEL, `${a}/${b}: ${Math.round(gap)} between coasts`);
   for (const id of themedIslands()) assert.deepEqual(sizeOfTheme(mapOf(id).id), {width: mapOf(id).width, height: mapOf(id).height});
-  // at the 8000 x 6000 limit every theme still fits, home stays put, the same three islands are themed, few islands move
   const plain = layoutWorld(() => ({width: homeWorld.width, height: homeWorld.height})), big = layoutWorld(t => t ? {width: 8000, height: 6000} : {width: homeWorld.width, height: homeWorld.height});
   assert.deepEqual(big.islands.filter(i => i.theme).map(i => i.id).sort(), THEMED_ISLANDS.map(([id])=>id).sort());
   assert.deepEqual([big.islands[0].x, big.islands[0].y], [plain.islands[0].x, plain.islands[0].y]);
@@ -153,21 +143,18 @@ test('c) in every themed island\'s sea: the neighbours fit the camera and sailin
       assert.ok(d.offset.x + m.origin.x >= b.x0 && d.offset.y + m.origin.y >= b.y0 && d.offset.x + m.origin.x + m.width <= b.x1 && d.offset.y + m.origin.y + m.height <= b.y1, `${id}: ${d.destination}'s whole map is inside the sea bounds`);
       assert.ok(canSail(d.dock.x, d.dock.y, id), `${id}: ${d.destination}'s dock is open water`);
     }
-    // Shore separation uses full sphere geometry, not translated map boxes.
     for(const other of WORLD_ISLANDS.filter(i=>i.id!==id)){
       const m=mapOf(other.id);
       for(const [x,y]of m.walk.coast.filter((_,k)=>k%3===0)){
         const p=mapPoint(other.id,id,{x,y});assert.equal(here.landAt(p.x,p.y),false,`${id}/${other.id}: coasts never overlap`);
       }
     }
-    // a copy of a bigger neighbour holds what is in its waters, by its own size
     const copies = WORLD_ISLANDS.filter(i => i.id !== id).map(i => ({from:id,id: i.id, x: here.cx + offsetOf(id, i.id).x, y: here.cy + offsetOf(id, i.id).y, width: mapOf(i.id).width, height: mapOf(i.id).height}));
     for (const d of destinationsFor(id)) assert.equal(copyHolding(d.dock.x, d.dock.y, copies, 300, here)?.id, d.destination, `${id}: at ${d.destination}'s jetty`);
     assert.equal(copyHolding(here.spawn.x, here.spawn.y, copies, 300, here), null);
   }
 });
 
-// ---------- d) 100 Duckies on one island ----------
 test('d) 100 players walk about one themed island: the server tick stays far inside its 50 ms', async () => {
   const islands = themedIslands();
   for (const island of islands.length ? islands : ['home']) {
@@ -198,7 +185,7 @@ test('d) an island holds 100: a boat cannot land a 101st (it waits at the harbor
   room.step();
   assert.equal(sailor.actor.islandId, 'home', 'the full island turns the boat away');
   assert.ok(sailor.socket.notes.some(n => n.type === 'travel-notice' && /full/.test(n.text)), 'and says why');
-  room.connections.delete(crowd[0].socket);   // someone leaves
+  room.connections.delete(crowd[0].socket);
   room.step();
   assert.equal(sailor.actor.islandId, target, 'now it sails in');
   clearInterval(room.timer); room.timer = null;

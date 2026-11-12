@@ -1,4 +1,3 @@
-// fA ownership: the two landmark courts. No combat, cover walls or other districts.
 import fs from 'node:fs';
 import {writeArcadeModules} from './arcade-modules.mjs';
 export function buildSites({root,write,reuse,add,building,rect,flats,sources,areas}) {
@@ -20,12 +19,10 @@ export function buildSites({root,write,reuse,add,building,rect,flats,sources,are
  <path d="M157 178Q165 167 171 146Q181 159 191 162L186 178Q205 180 202 186Q175 196 148 186Q143 181 157 178Z" fill="#bc88ce"/>
  <path d="M83 258V279M267 258V279M95 223V245M255 223V245" fill="none" stroke="#93729e"/>`);
  svg('site-a-glow',440,220,'<ellipse cx="220" cy="110" rx="195" ry="87" fill="none" stroke="#d0e967" stroke-width="12"/><ellipse cx="220" cy="110" rx="180" ry="77" fill="none" stroke="#b6d93b" stroke-width="3"/>');
- // The small chapel preserves Home's approved domed shop geometry and front-facing camera.
  reuse('site-b-chapel','/pixi-art/home-hamlets/petalpatch/house-domed-pottery-shop.svg',{'#fff0c7':'#d9b8df','#e1c58d':'#b591c0','#e1bb4b':'#168f98','#b08cba':'#168f98','#f4d3c7':'#d9b8df','#f1dbc6':'#d9b8df','#75bfc5':'#f5e277','#70a645':'#b6d93b','#6a9d3d':'#a1c238'});
  const chapelFile=`${root}/home/site-b-chapel.svg`;
  let chapel=fs.readFileSync(chapelFile,'utf8').replace('</svg>','<g stroke="#39472d" stroke-width="1.8" stroke-linejoin="round"><path d="M158 82V54Q180 22 202 54V82Z" fill="#d9b8df"/><path d="M165 76V56Q180 34 195 56V76Z" fill="#654569"/><path d="M170 67Q175 63 175 54Q180 45 185 54Q185 63 190 67Z" fill="#f5e277"/><circle cx="180" cy="70" r="3" fill="#d9a94c"/><path d="M149 47L180 18L211 47Z" fill="#168f98"/></g></svg>');
  fs.writeFileSync(chapelFile,chapel);
- // The horseshoe uses three drawn straight modules, never a bowed lintel.
  writeArcadeModules(root);
  fs.copyFileSync(`${root}/home/site-b-arcade-front.svg`,`${root}/home/site-b-arcade.svg`);
  svg('site-bed',250,110,'<path d="M12 30Q38 4 103 14Q199 0 238 31L234 77Q177 112 33 86L12 65Z" fill="#93729e"/><path d="M12 30Q42 4 103 14Q199 0 238 31Q242 74 130 79Q26 79 12 30Z" fill="#b6d93b"/><path d="M19 53Q90 90 235 51" fill="none" stroke="#78962d"/>');
@@ -51,7 +48,6 @@ export function buildSites({root,write,reuse,add,building,rect,flats,sources,are
  for(const [i,x,y] of [[0,1750,3950],[1,2360,3940],[2,6160,4030],[3,6530,4030]])add(`site-seat-${i}`,'bench',x,y,147.24,83.34,{anchor:{x:.5,y:451/463},homeSource:sources.bench,shadowSize:[65,12]});
  for(const [i,x,y] of [[0,1770,3510],[1,2310,3500],[2,6120,3500],[3,6570,3500]])add(`site-lantern-${i}`,'lantern',x,y,65,155,{homeSource:sources.lantern,shadowSize:[14,8]});
  for(const [i,x,y] of [[0,5650,3430],[1,5850,3340]]){
-  // boss 11 Nov: no willows; the Bog uses only our recoloured tree kit.
   add(`site-b-willow-${i}`,i?'tree-2-lime':'tree-4-lime',x,y,i?180:200,i?360:280,{shadowSize:[i?39.6:44,17]});
   rect(`site-b-willow-${i}`,'tree',x-14,y-23,28,22);
  }

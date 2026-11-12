@@ -1,6 +1,4 @@
 #!/bin/bash
-# Fair island (Waddlewish Fair) prop sheets: one GPT image per call through the Codex CLI (same form as library-gen.sh).
-# usage: scripts/themes/fair-gen.sh <id> "<what to draw>"
 D="/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/fair-gen"
 CODEX=$(find /Applications/ChatGPT.app/Contents/Resources -maxdepth 4 -name codex -type f -perm -u+x 2>/dev/null | head -1)
 id="$1"; desc="$2"

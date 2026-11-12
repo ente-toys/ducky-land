@@ -1,7 +1,5 @@
 import {easeCamera} from '../../assets/world/island-camera.mjs';
 
-// A critically damped spring in log scale gives equal perceived speed in both
-// directions. Translation follows inverse scale so the cursor anchor stays fixed.
 export function easeZoomCamera(camera, target, motion, dt, reduced = false, panRate = 14) {
   const error=Math.log(camera.zoom/target.zoom);
   if(reduced || Math.abs(error)<1e-6) {
@@ -11,7 +9,7 @@ export function easeZoomCamera(camera, target, motion, dt, reduced = false, panR
   }
   const omega=16, maxSpeed=4.5;
   let velocity=motion.velocity ?? 0;
-  if(velocity*error>0) velocity=0; // a reversal responds immediately
+  if(velocity*error>0) velocity=0;
   const decay=Math.exp(-omega*dt), c=velocity+omega*error;
   const nextError=(error+c*dt)*decay;
   let step=nextError-error;

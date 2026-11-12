@@ -1,5 +1,3 @@
-// Home-only final composition. All coordinates are authored in the B drawing frame.
-// Household blocks are built by communities/build.mjs; no generated prop scattering.
 export function tightenPlan(P) {
  const homes={
   butterbill:[[110,135],[230,128],[342,239],[122,340],[247,342]],
@@ -9,7 +7,6 @@ export function tightenPlan(P) {
   reedwhistle:[[1140,982],[1255,936],[1397,973],[1167,1124],[1290,1124],[1372,1070]]
  };
  for(const c of P.communities)c.homes=c.homes.map((p,i)=>[...homes[c.id][i],p[2]]);
- // Greens retain their location and identity; compact sandy meeting courts sit in lawn.
  for(const c of P.communities){c.green[2]*=.71;c.green[3]*=.68;}
 }
 export function villageRoads() {
@@ -21,7 +18,6 @@ export function villageRoads() {
  [295,676],[330,540],[299,434],[303,322]];
  const roads=[{id:'village-loop',kind:'main',p:main,w:23}];
  const lane=(id,p,w=10)=>roads.push({id,kind:'lane',p,w});
- // Short links replace the former uninterrupted second coastal loop.
  lane('bakery-square',[[303,322],[263,291],[208,266]],15);
  lane('bakery-doors',[[110,153],[177,171],[192,217],[208,266],[183,316],[170,359],[122,359]],10);
  lane('bakery-north',[[230,146],[315,160],[391,204],[393,264],[342,258]],10);
@@ -48,7 +44,6 @@ export function villageRoads() {
  lane('heart-makers',[[695,905],[650,916],[577,912]],16);
  lane('heart-reed',[[876,875],[876,895],[875,936],[875,966]],16);
  lane('heart-east',[[1045,804],[1063,770],[1078,727]],18);
- // Retained coastal bridge has a useful path to the pier and hay common, no duplicate ring.
  lane('quay-pier',[[1254,1028],[1166,1076],[1058,1110],[1010,1162],[946,1152],[894,1157],[874,1187],
  [834.8988261373296,1193.4478416726026],[760,1183],[699,1164]],13);
  lane('west-orchard',[[303,322],[215,397],[137,474]],9);
@@ -57,7 +52,6 @@ export function villageRoads() {
  return roads;
 }
 export function sharedGardens({E,svg,custom,kit,reuse,plant,bench,flowers,at}) {
- // Bigger family homes and compact cottages share the same street, with every doorway clear.
  const sizes={butterbill:[.93,1.08,.83,1.04,.89],lanternleaf:[1.04,.90,1.09,.87,.95,.93],
  clovercrust:[.90,1.08,.86,1.02,.95],petalpatch:[.87,.97,1.05,.86,.93,.83],reedwhistle:[.87,1.07,.89,.95,.86,.91]};
  for(const c of E.communities)for(const[i,id]of c.homes.entries()){
@@ -65,8 +59,6 @@ export function sharedGardens({E,svg,custom,kit,reuse,plant,bench,flowers,at}) {
   p.footprint.rx*=s;p.footprint.ry*=s;p.footprint.y=p.y-45*s;
   p.houseVariant.householdScale=s;
  }
- // Workplaces sit on the outside of the residential courts. Move each existing workshop
- // as a deliberate block, rather than letting it crowd a relocated household.
  const shifts=[['butterbill','bakery',-54,8],['butterbill','cafe',9,-1],
  ['lanternleaf','garden-workbench',-123,-15],['lanternleaf','garden-wheelbarrow',-134,2],
  ['clovercrust','windmill',-4,-2],['clovercrust','glasshouse',100,-23],
@@ -82,13 +74,10 @@ export function sharedGardens({E,svg,custom,kit,reuse,plant,bench,flowers,at}) {
  kit('bucket',836,229,.10,'lanternleaf',[17,14,6]);
  const quayHerbs=E.props.find(p=>p.zone==='reedwhistle'&&p.asset==='herb-box'&&Math.abs(p.x-(1328-278)/.18)<1);
  quayHerbs.x=(1425-278)/.18;quayHerbs.y=(1048-204)/.18;quayHerbs.footprint.x=quayHerbs.x;quayHerbs.footprint.y=quayHerbs.y-12;
- // Shared street furniture uses the existing village kit and occupies reclaimed verge.
  bench(313,294,'butterbill');flowers(309,280,'butterbill');
  bench(1403,328,'clovercrust');flowers(1444,317,'clovercrust');
  bench(138,930,'petalpatch');flowers(53,900,'petalpatch');
  bench(1331,1083,'reedwhistle');flowers(1326,1091,'reedwhistle');
- // The abandoned outer road becomes useful ground. These are individual authored groves,
- // orchard rows, home-grown vegetable plots and a shared laundry, not scattered filler.
  for(const[x,y]of [[32,107],[69,81],[112,69],[390,54],[454,36]])reuse('apple-tree-1589',x,y,'butterbill',[31,22,9]);
  for(const[x,y]of [[546,78],[573,48],[608,22],[925,22],[990,48]])plant('tree-4',x,y,'lanternleaf',1.08);
  for(const[x,y]of [[686,36],[721,42],[754,33]])reuse('raised-bed-1179',x,y,'lanternleaf',[115,28,15]);
@@ -97,7 +86,6 @@ export function sharedGardens({E,svg,custom,kit,reuse,plant,bench,flowers,at}) {
  for(const[x,y]of [[-50,721],[-51,781],[-34,935],[27,1044],[74,1092]])plant('tree-4',x,y,'petalpatch',1.03);
  for(const[x,y]of [[-6,705],[22,691],[53,702]])custom('herb-box',x,y,260,125,'petalpatch',[95,25,12],.9);
  for(const[x,y]of [[1540,930],[1550,972],[1490,1025],[1450,1060]])plant('tree-4',x,y,'reedwhistle',1.06);
- // Low hedge seams touch neighbouring gardens without obstructing the house-gate centre.
  for(const[z,x,y]of [['butterbill',182,335],['lanternleaf',799,112],['lanternleaf',901,132],
  ['clovercrust',1302,180],['petalpatch',124,1022],['reedwhistle',1202,952],['reedwhistle',1356,954]]){
   plant('bush-2',x,y,z,1.18);flowers(x+12,y+4,z);
@@ -110,7 +98,6 @@ export function gardenGround(curve) {
  [1492,1112,64,70],[379,88,48,39]]){
   g+=`<path d="${curve([[cx-rx,cy],[cx-rx*.5,cy-ry],[cx+rx*.5,cy-ry*.8],[cx+rx,cy],[cx+rx*.4,cy+ry],[cx-rx*.7,cy+ry*.6]])}" fill="#b1c944" opacity=".46"/>`;
  }
- // A tiny kitchen garden behind the gardeners' row and the farm's outlying beds.
  for(const [x,y,w]of [[658,20,109],[1485,383,98],[-34,690,84]]){
   g+=`<path d="M${x},${y}q${w*.4}-10 ${w} -4l9 29q-${w*.5} 12 -${w+6} 3Z" fill="#a27b40" stroke="#b1c944" stroke-width="3"/>`;
   for(const dy of [7,15,23])g+=`<path d="M${x+5},${y+dy}q${w*.4}-7 ${w-8} -3" fill="none" stroke="#e0b66e" stroke-width="1.2"/>`;

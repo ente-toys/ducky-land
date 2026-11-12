@@ -43,9 +43,7 @@ export class RoomClient {
     this.nav = nav;
     this.world = world;
   }
-  // boss 6 Nov: the walking map of the island you are on. Home keeps the engine's own (with its sleepers); a themed island
-  // walks its theme's map, the same one the room server walks (island-maps.js)
-  navHere() { const map = mapOf(this.islandId); return navOf(this.islandId, map.home ? this.nav : map.nav()); }   // boss 8 Nov: plus its sea islets
+  navHere() { const map = mapOf(this.islandId); return navOf(this.islandId, map.home ? this.nav : map.nav()); }
   worldHere() { const map = mapOf(this.islandId); return map.home ? this.world : map.walk; }
 
   reset() {
@@ -296,8 +294,7 @@ export class RoomClient {
       const text=spot&&!spot.islet&&bogLandingNotice(spot.islandId,getPlayerKarma({room:this}));
       if(text)this.onNotice(text);
     }
-    // The client balance is only a notice hint. The server decides admission.
-    return this.send({type:'disembark'});   // boss 5 Nov: the server docks at the harbor or hops you onto the nearest shore
+    return this.send({type:'disembark'});
   }
 
   watch(islandId) {
@@ -338,19 +335,15 @@ export class RoomClient {
     if (!this.player) return;
     const now = nowSeconds();
     const {x,y,turn}=this.player;
-    // Save the corrected position so the correction itself is interpolated
-    // between steps, along with the movement.
     this.prev = {x:x+this.offsetX, y:y+this.offsetY, turn};
     if (this.input.x !== input.x || this.input.y !== input.y || Boolean(this.input.run) !== Boolean(input.run) || this.input.reducedMotion!==input.reducedMotion || (moving(input) && now-this.lastInput >= .1)) {
-      if (this.send({type:'input',x:input.x,y:input.y,reducedMotion:input.reducedMotion===true,...(input.run ? {run:true} : {})}, now)) {   // boss 6 Nov: Shift held = run (the server caps the speed)
+      if (this.send({type:'input',x:input.x,y:input.y,reducedMotion:input.reducedMotion===true,...(input.run ? {run:true} : {})}, now)) {
         this.input = input;
         this.lastInput = now;
       }
     }
     if (this.player.mode === 'sailing') sailStep(this.player,dt,input);
     else walkStep(this.player, this.navHere(), dt, now, input);
-    // Critically damp the visual correction. Snapshots change its destination,
-    // but preserve its velocity so every update cannot kick the duck's speed.
     const omega = 12, decay = Math.exp(-omega * dt);
     const settle = (offset, velocity) => {
       const c = velocity + omega * offset;
@@ -361,7 +354,6 @@ export class RoomClient {
     const dx = this.player.x - x, dy = this.player.y - y;
     const distance2 = dx * dx + dy * dy;
     const backward = (this.offsetX - offsetX) * dx + (this.offsetY - offsetY) * dy;
-    // Keep at least half the forward step even during a large correction.
     if (backward > distance2 / 2 && distance2 > 0) {
       const scale = distance2 / (2 * backward);
       offsetX = this.offsetX + (offsetX - this.offsetX) * scale;
@@ -375,9 +367,6 @@ export class RoomClient {
     this.correctionY = velocityY;
   }
 
-  // The own Ducky steps at a fixed 60 Hz but the screen draws at 60-120 Hz: drawn as is, it moves on every other frame
-  // and stands still on the rest (boss 5 Nov, "very blurry and shaky" at sailing speed). The engine passes how far the
-  // frame is into the next step (0-1) and the own pose, its boat and the camera are drawn at that point.
   setAlpha(alpha) { this.alpha = Math.max(0, Math.min(1, alpha)); }
   view() {
     const p = this.player;
@@ -405,10 +394,6 @@ export class RoomClient {
   }
 }
 
-// boss 6 Nov ("I took the boat already. Every island should have all the boats"): the ?offline mode keeps the same boats
-// the room server does (concepts/feel/boats-spec.md). Every island holds its ten moorings; a boat you take leaves a fresh
-// one at its mooring once you are MOORING_CLEAR away; the boat you step off ties back up beside its own empty mooring or is
-// parked at the landing point. Same helpers as worker/index.js, so offline and live never disagree.
 export class OfflineFleet {
   constructor(boats = createBoats()) {
     this.list = boats;
@@ -422,7 +407,6 @@ export class OfflineFleet {
     boat.occupant = actorId; boat.departure = boat.islandId;
     return boat;
   }
-  // the sailor's pose each step; returns whether the boat list changed (a mooring refilled)
   sail(actorId, {x, y, turn, islandId}) {
     const boat = this.boatOf(actorId);
     if (!boat) return false;

@@ -27,14 +27,12 @@ def smooth(p,n=12):
    out.append([.5*(2*b[k]+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-d[k])*t*t+(-a[k]+3*b[k]-3*c[k]+d[k])*t*t*t) for k in [0,1]])
  return out+[p[-1]]
 wet=unary_union([canal]+[LineString(smooth(s['points'])).buffer(s['width']/2,quad_segs=12) for s in streams]).difference(protected)
-# Cut closed rings into simple, hole-free collision polygons. Shared borders are wet.
 parts=list(split(wet,LineString([[-3000,2800],[11000,2800]])).geoms)
 parts2=[]
 for p in parts:
  if p.interiors: parts2.extend(split(p,LineString([[4100,-3000],[4100,9000]])).geoms)
  else: parts2.append(p)
 polys=[]
-# Small spatial pieces keep the existing geometry index local to each Ducky.
 for x in range(-2048,10752,512):
  for y in range(-2048,8192,512):
   clipped=wet.intersection(box(x,y,x+512,y+512))
@@ -43,7 +41,6 @@ for x in range(-2048,10752,512):
    if p.geom_type=='Polygon' and p.area>1:
     assert not p.interiors
     polys.append([[round(x,2),round(y,2)] for x,y in p.exterior.coords])
-# New roads that cross water get a deck that follows their actual curve. All are reviewed.
 crossings=[]
 old_decks=[LineString([j['foot'],j['tip']]).buffer(j['width']/2) for j in json.loads((base/'baseline/harbor.json').read_text())['jetties']]
 for r in plan['roads']:

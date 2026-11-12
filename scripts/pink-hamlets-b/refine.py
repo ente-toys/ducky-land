@@ -8,7 +8,6 @@ for name,file in [('teacup','square-and-lane.svg'),('tutu-tides','dance-square.s
  if name=='teacup':s=re.sub(r'<path[^>]*d="M906-10[^"]*"[^>]*/>','',s);(A/'hamlets'/name/file).write_text(s)
  vb=list(map(float,re.search('viewBox="([^"]+)"',s)[1].split()));w=o['width']*k
  art['flats'].insert(2,dict(id='hamlet-'+name+'-court',src=f'hamlets/{name}/{file}',x=at[0]+(o['x']-bp[0])*k,y=at[1]+(o['y']-bp[1])*k,width=w,height=w*vb[3]/vb[2],anchor={'x':.5,'y':1},resolution=1.5))
-# The tailor's tools are part of its open stage. Register their SVG pieces inside the stage's vector coordinate system.
 L=json.load(open(R/'tutu-tides/layout.json'));stage=next(o for o in L['objects'] if o['id']=='tutu-tailor-workshop');stageSvg=(R/'tutu-tides'/stage['file']).read_text();extras=[];ids=[]
 for o in L['objects']:
  if o['id'] not in ['sewing-machine-table','tutu-dress-form','ribbon-spools']:continue
@@ -18,7 +17,6 @@ for o in L['objects']:
 (A/'hamlets/tutu-tides/tutu-tailor-workshop.svg').write_text(stageSvg.replace('</svg>',''.join(extras)+'</svg>'))
 for d in [art,world]:d['props']=[p for p in d['props'] if p.get('id') not in ids]
 for d in [world,walk]:d['obstacles']=[p for p in d['obstacles'] if p.get('name') not in ids]
-# Keep the approved short, south-facing dock registered to the court.
 p=next(p for p in art['props'] if p['id']=='hamlet-teacup-quay-dock')
 p['shadow']=False
 for d in [world,walk]:d['obstacles']=[o for o in d['obstacles'] if o.get('name')!=p['id']]

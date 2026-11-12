@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-// boss 8 Nov ("it's not a 3D globe, it still moves the islands"): islands are painted ON the ball. During a real mouse drag
-// on the full globe, every sampled point of an island's own map must be drawn where the orthographic projection of its
-// sphere point lands: its land pixels are land on screen (less the art's own ponds and moats, ~4%), its sea pixels are sea,
-// and the same test 25px off scores far lower. Near the rim each island is squashed by exactly 1/cos (orthographic).
-// Usage: node scripts/ball-paint-check.mjs <url> --out <dir>   (writes ball-1..6.png and ball-paint.json)
 import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -24,7 +19,6 @@ await page.goto(`${BASE}/__test/login?account=boss`);await page.goto(`${BASE}/?q
 await page.waitForFunction(()=>globalThis.__duckyEngine?.ready,null,{timeout:90000});await sleep(2500);
 await page.mouse.move(W/2,H/2);for(let i=0;i<45;i++){await page.mouse.wheel(0,400);await sleep(40);}
 await page.mouse.move(5,5);await sleep(2500);await page.evaluate(()=>{globalThis.__duckyEngine.quietAt=Infinity;});
-// turn the ball away from Home first
 for(let n=0;n<2;n++){await page.mouse.move(W/2-220,H/2+60);await page.mouse.down();for(let k=1;k<=12;k++){await page.mouse.move(W/2-220+440*k/12,H/2+60-60*k/12);await sleep(20);}await sleep(250);await page.mouse.up();await sleep(600);}
 const state=()=>page.evaluate(()=>{const e=globalThis.__duckyEngine;e.quietAt=Infinity;return {id:e.islandId,cam:{x:e.camera.x,y:e.camera.y,zoom:e.camera.zoom},basis:e.camera.basis??{a:1,b:0,c:0,d:1},ball:e.worldView.debug.ball,st:e.worldView.stickers};});
 const frameOf=s=>{const T=viewFrame(s.id,s.cam),c=s.basis.a,si=s.basis.b;return {center:T.center,east:T.east.map((v,k)=>v*c+T.north[k]*si),north:T.north.map((v,k)=>v*c-T.east[k]*si)};};
@@ -43,11 +37,11 @@ for(let f=1;f<=6;f++){
   const m=mapOf(island.id);
   for(let x=m.origin.x+40;x<m.origin.x+m.width;x+=120)for(let y=m.origin.y+40;y<m.origin.y+m.height;y+=120){
    const ring=[0,1,2,3,4,5,6,7].map(k=>m.landAt(x+Math.cos(k*Math.PI/4)*90,y+Math.sin(k*Math.PI/4)*90));
-   const here=m.landAt(x,y);if(ring.some(v=>v!==here))continue;   // well inside land or well out at sea only
-   const P=spherePoint(island.id,{x,y});if(dot(P,F.center)<.35)continue;   // keep off the dimmed rim
+   const here=m.landAt(x,y);if(ring.some(v=>v!==here))continue;
+   const P=spherePoint(island.id,{x,y});if(dot(P,F.center)<.35)continue;
    const o=lensOffset(F,P,s.ball,Rp),sx=W/2+o.x,sy=H/2+o.y;if(sx<2||sy<2||sx>W-3||sy>H-3)continue;
    const isBlue=blue(...px(sx,sy));
-   if(here){fl++;if(!isBlue)flh++;if(sx+25<W-3&&!blue(...px(sx+25,sy)))shifted++;}   // control: the same test 25px off
+   if(here){fl++;if(!isBlue)flh++;if(sx+25<W-3&&!blue(...px(sx+25,sy)))shifted++;}
    else if(!WORLD_ISLANDS.some(o2=>o2.id!==island.id&&dot(o2.center,P)>Math.cos(Math.hypot(mapOf(o2.id).width,mapOf(o2.id).height)/2/WORLD_GEO.Rw))){fs++;if(isBlue)fsh++;}
   }
  }

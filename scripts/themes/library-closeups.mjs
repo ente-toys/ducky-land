@@ -1,4 +1,3 @@
-// Equal-scale asset evidence when sandbox denies Chromium. Never labelled as live screenshots.
 import sharp from 'sharp';
 const R='../concepts/themes/work/library/',round=process.argv[2]||'final',K=.65,W=1400,H=800;
 const home=R+'library-home-reference.png',lib=R+'library-detail-full.png';

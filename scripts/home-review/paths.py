@@ -28,7 +28,6 @@ road('mill-west',[[5100,950],[4950,1240],[4930,1480],[4930,1650],[5450,1690],[56
 road('quay-west',[[4065,5270],[3750,5370],[3420,5290],[3245,5497],[2950,5497],[2670,5440],[2339,5333]],end='Cloverhay work pad'),
 road('willowrest',[[5456,2567],[5900,2760],[6428,3011]],end='reading picnic'),
 road('seedshare',[[3839,500],[4100,310],[4272,150]],end='seed nursery')]
-# Keep the five distinctive destination courts, replace every access polygon.
 squares=[r for r in E['roads'] if r.get('rings') and r['id'].endswith('-square')]
 def sample(p):
  out=[]
@@ -42,7 +41,6 @@ def sample(p):
 shapes=[LineString(sample(r['points'])).buffer(r['width']/2,quad_segs=10) for r in R]
 for s in squares:
  q=Polygon(s['rings'][0],s['rings'][1:]);shapes.append(q.buffer(0))
-# Old hamlet entrances now have clean lanes in the same camera. Endpoints meet actual doorstep ground.
 for id,p in [
  ('butterbill-doors',[[-900,680],[-1180,650],[-1230,560]]),
  ('butterbill-east-door',[[-650,590],[-450,590],[-450,450]]),
@@ -53,7 +51,6 @@ for id,p in [
  ('petalpatch-shop',[[-1300,3900],[-1420,3950],[-1530,3930],[-1570,3900]]),
  ('reedwhistle-west',[[3600,5290],[3540,5370]])]:
  r=road(id,p,end='doorstep');R.append(r);shapes.append(LineString(sample(p)).buffer(52,quad_segs=10))
-# Destination paving and sand take part in the same fill, below their retained detail.
 from shapely import affinity
 for x,y,rx,ry in [(2820,2370,480,365)]:
  shapes.append(affinity.scale(Point(x,y).buffer(1,quad_segs=40),rx,ry))
@@ -63,11 +60,8 @@ merged=unary_union(shapes).buffer(85,quad_segs=12).buffer(-85,quad_segs=12)
 def path(g):
  polys=[g] if g.geom_type=='Polygon' else list(g.geoms)
  return ' '.join('M'+'L'.join(f'{x:.1f},{y:.1f}' for x,y in ring.coords)+'Z' for po in polys for ring in [po.exterior,*po.interiors])
-# exterior-only lower contact edge; union prevents every stroke-through seam.
 svg=f'<g data-name="Home unified paths"><path d="{path(merged)}" fill="#e4c567" transform="translate(0 3)" fill-rule="evenodd"/><path d="{path(merged)}" fill="#fde48c" fill-rule="evenodd"/></g>'
-# Water always paints over sand, including where core tiles overlap expansion rivers.
 wet=unary_union([Polygon(w['poly']).buffer(0) for w in E['riverWater']]+[Polygon(E['water']['poly']).buffer(0)])
-# One water contour eliminates bank shards and joins new navigable links flush.
 W=json.load(open('assets/world/world.json'))
 for w in W['water']:
  if abs(w.get('x',0)-1640)<2:

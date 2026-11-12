@@ -1,6 +1,4 @@
 import {readFileSync,writeFileSync} from 'node:fs';
-// Authored composition, validated separately against the real sailing coasts.
-// Preserve each island's size, art identity, local outline and north frame.
 const authored={
  'odyssey':{lon:135,lat:-54,region:'Southern passage',reason:'Separate the horse from the Rosybutton-side cluster and give the southern sea a clear landmark.'},
  'tree-and-rowboat':{lon:-33,lat:20,region:'Home passage',reason:'Open a wider channel beside Home while keeping a recognisable nearby stop.'},

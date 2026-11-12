@@ -33,8 +33,6 @@ test('integrated defaults use all real Bog footprints without globally replacing
   }
 });
 
-// Exercise the actual protocol/client/server without claiming a real TCP socket
-// or browser playtest. All player movement below is submitted as control input.
 test('real-map lobby -> both clients walk to mid -> shoot/tag -> respawn -> saved re-entry',async()=>{
   const file=join(mkdtempSync(join(tmpdir(),'bog2-flow-')),'profiles.json'),profiles=createArenaProfiles(file);
   let now=0;
@@ -80,7 +78,6 @@ test('real-map lobby -> both clients walk to mid -> shoot/tag -> respawn -> save
     };
     await walk(a,[4000,3270]);await walk(b,[4320,3270]);
     const owner=room.arena.state.players.get(a.id),victim=room.arena.state.players.get(b.id);
-    // A short move faces east. No aim/position/reward packet is accepted.
     for(let i=0;i<2;i++)await step({[a.id]:{x:1,y:0}});
     for(let i=0;i<90&&victim.alive;i++)await step({[a.id]:{x:0,y:0,fire:true}});
     assert.equal(victim.alive,false);assert.equal(owner.stats.tags,1);assert.equal(owner.stats.score,10);assert.equal(owner.stats.medals,1);assert.ok(owner.medalCase['first-splat']);

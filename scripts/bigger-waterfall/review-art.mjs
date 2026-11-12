@@ -1,4 +1,3 @@
-// Second-pass art. Commons are composed as individual places, with explicit prop positions.
 import {inPoly} from '../../assets/world/island-geometry.mjs';
 const smooth=p=>{const out=[];for(let i=0;i<p.length;i++){const a=p[(i+p.length-1)%p.length],b=p[i],c=p[(i+1)%p.length];for(let j=0;j<12;j++){const t=j/12,u=1-t;out.push([0,1].map(k=>u*u*(a[k]+b[k])/2+2*u*t*b[k]+t*t*(b[k]+c[k])/2));}}return out};
 const poly=p=>'M'+p.map(([x,y])=>`${x},${y}`).join(' L')+' Z';
@@ -6,7 +5,6 @@ const poly=p=>'M'+p.map(([x,y])=>`${x},${y}`).join(' L')+' Z';
 export function roadDetails(roads,ribbon){
  const shapes=roads.map(r=>ribbon(r.p,r.w));let body='';
  for(const [ri,q] of shapes.entries()){
-  // Edge texture follows the authored road. Skip junction interiors so grass never divides a square.
   for(const [side,edge]of [[0,q.l],[1,q.r]])for(let i=3;i<edge.length-2;i+=7){
    const [x,y]=edge[i],a=q.c[i],dx=x-a[0],dy=y-a[1],len=Math.hypot(dx,dy)||1,nx=dx/len,ny=dy/len;
    if(shapes.some((s,j)=>j!==ri&&inPoly(x,y,s.poly)))continue;
@@ -20,7 +18,6 @@ export function roadDetails(roads,ribbon){
  return body;
 }
 
-// Lower, broad ground shapes give each common a boundary without filling its walking green.
 export function commonsGround(){
  let s='';
  for(const [p,fill]of [
@@ -32,9 +29,7 @@ export function commonsGround(){
   [[[650,5100],[1230,4950],[1990,5250],[2160,5660],[1600,5990],[870,5680]],'#A9C34D'],
   [[[-1200,3680],[-710,3510],[-70,3950],[120,4480],[-330,4750],[-940,4440]],'#9CBD40']
  ])s+=`<path d="${poly(smooth(p))}" fill="${fill}" stroke="#8DAA39" stroke-width="6" stroke-linejoin="round"/>`;
- // The flour field has shaped beds, open headlands and a small access gap.
  for(const [x,y,w]of [[4410,-270,620],[4350,-110,790],[4440,55,850],[4630,220,590]])s+=`<path d="M${x} ${y}q${w/2} -40 ${w} 45l-20 70q-${w/2} -40 -${w} -25Z" fill="#C1C367" stroke="#82984A" stroke-width="5"/><path d="M${x+45} ${y+35}q${w/2} -14 ${w-100} 39" stroke="#E2D68A" stroke-width="14" stroke-dasharray="5 20" fill="none"/>`;
- // Nursery's southern green: a real garden with foot-wide passages between beds.
  for(const [x,y]of [[-1070,3880],[-620,3950],[-910,4100],[-460,4180]])s+=`<path d="M${x} ${y}h300l40 100h-310Z" fill="#7E8340" stroke="#4F7431" stroke-width="6"/><path d="M${x+30} ${y+30}h235m-215 42h240" stroke="#B4C669" stroke-width="15" stroke-dasharray="8 21"/>`;
  return s;
 }
@@ -42,7 +37,6 @@ export function commonsGround(){
 export const commonEntrances=[[-400,850],[4780,420],[6840,1260],[7820,3960],[6300,5190],[1410,5520],[-500,4380]];
 
 export function composeCommons({prop,svg,water,groundPath}){
- // Spring garden has real water, never a blue walkable decal.
  const pond=smooth([[6490,780],[6740,630],[7050,720],[7170,950],[7020,1130],[6710,1140],[6490,1010]]);
  water.push({poly:pond,communityWater:'spring-garden-pond'});
  groundPath(`<path d="${poly(pond)}" fill="#6EC9DE" stroke="#5D793B" stroke-width="16"/><path d="M6590 870q80-24 160 0m100 127q65 21 135-2" fill="none" stroke="#BAE6DF" stroke-width="6"/>`);
@@ -50,7 +44,6 @@ export function composeCommons({prop,svg,water,groundPath}){
  const hive=svg('orchard-hive',180,190,`<path d="M35 164v-25h110v25m-95 0v18m80-18v18" fill="#B79555"/><path d="M30 137q-5-26 18-32q-8-29 17-37q0-34 28-33q32-3 32 33q27 13 16 37q25 17 10 32Z" fill="#E3C46E"/><path d="M50 105h90M65 73h62M39 132h108" stroke="#AF8D44" stroke-width="4"/><ellipse cx="94" cy="126" rx="16" ry="12" fill="#5D6837"/>`);
  const rack=svg('drying-rack',360,210,`<path d="M30 190V35m295 155V35M22 50h310M22 100h310" stroke="#967747" stroke-width="12"/><path d="M53 44l35 118m10-118l36 118m10-118l36 118m10-118l36 118m10-118l36 118" stroke="#BDAC66" stroke-width="13"/><path d="M45 158h260" stroke="#7A8946" stroke-width="8"/>`);
  const picnic=svg('picnic-table',370,240,`<path d="M75 65h235l40 61H36Z" fill="#DCBA75"/><path d="M95 123l-18 80m195-80l25 80" stroke="#9B7C43" stroke-width="16"/><path d="M24 152h120v28H12Zm220 0h112l12 28H244Z" fill="#CDA76B"/><path d="M92 87h214m-197 20h218" stroke="#AE8A51" stroke-width="4"/><path d="M163 72v-25h55v25" fill="#F0DFAC"/><ellipse cx="190" cy="46" rx="28" ry="9" fill="#C9D99A"/>`);
- // Each tuple is a deliberate location inside a named scene. No generated/scattered positions.
  const pieces=[
   ['orchard',orchard,-650,620,310,385,36],['orchard',orchard,-120,430,300,370,36],['orchard',orchard,420,630,320,395,36],['orchard',orchard,-470,1070,300,370,36],['orchard',orchard,210,1120,310,390,36],
   ['orchard',hive,550,990,160,170,22],['orchard','reuse/street--picnic-basket.svg',-100,860,105,100,0],['orchard','reuse/street--bench-wood.svg',-530,1370,230,155,24],
@@ -63,7 +56,6 @@ export function composeCommons({prop,svg,water,groundPath}){
   ['nursery-green',picnic,-1050,2440,330,210,25],['nursery-green','detail/fern-fan.svg',-1370,2210,190,130,0],['nursery-green','detail/fern-fan.svg',-1390,2380,160,110,0],['nursery-green','detail/fern-fan.svg',-610,2170,180,120,0],['nursery-green','reuse/street--planter-flowers.svg',-680,2440,115,150,0]
  ];
  for(const [i,[c,src,x,y,w,h,solid]]of pieces.entries())prop(`common-${c}-${i}`,src,x,y,w,h,solid,'common-'+c);
- // Border clumps are hand-positioned beside paths and picnic spaces, keeping their central lawn clear.
  for(const [i,[x,y,size]]of [[-810,800,170],[490,1180,190],[-300,250,150],[4050,380,180],[5410,-200,170],[6180,1100,180],[7380,1360,190],[7190,560,155],[7670,4440,180],[8230,3910,150],[5830,5160,185],[6990,4770,170],[1600,5160,190],[810,5590,170],[-1080,4320,175],[-330,3630,160]].entries()){
   prop('common-border-'+i,'reuse/bush-'+(i%4+1)+'.svg',x,y,size,size*.65,0,'commons');
   prop('common-flower-'+i,'reuse/flower-'+(i%3+1)+'.svg',x+55,y+34,95,70,0,'commons');
@@ -72,7 +64,6 @@ export function composeCommons({prop,svg,water,groundPath}){
 }
 
 export function varyHome(body,{w,h,i,reed,fish,mill}){
- // Different silhouettes inside each neighbourhood: dormer, low hip, porch, longhouse and gable.
  const walls=['#F8E6B1','#E7D69C','#DBD5AE','#F4D6A1','#D8DFC0'];
  body=body.replaceAll(reed?'#D8C589':mill?'#F5DCA0':'#F8E6B1',walls[i]);
  if(i===0)body+=`<path d="M${w*.58} ${h-161}v-56l35-32 36 32v56Z" fill="#F2DFAD"/><path d="M${w*.58-8} ${h-216}l43-43 45 43" fill="none" stroke="#71884E" stroke-width="13"/><rect x="${w*.58+22}" y="${h-211}" width="27" height="35" rx="8" fill="#B5DFCE"/>`;

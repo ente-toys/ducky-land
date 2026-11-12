@@ -1,11 +1,3 @@
-// boss 6 Nov: the first THEMED islands (Sunflower, Pink dollhouse, Library), each with its own coastline and layout.
-// The island-map registry: everything the game and the room server know about ONE island map, in that map's own local
-// coordinates. mapFor(theme) gives the map a theme plays on; mapOf(islandId) the map an island plays on. 'home' is the
-// hand-drawn home island (world.json + walk-world.json); a theme falls back to home until its art agent delivers a complete
-// set of files (concepts/themes/THEME-CONTRACT.md), so the game never breaks. Pure data (no pixi): the game, the room server
-// (worker/) and the tests all share it.
-//
-// A map: {id, width, height, world, walk, JETTY, HARBOR, spawn, landAt(x,y), nav(), boatSpots(), field(), art, sea, home}.
 import expansion from './home-expansion.json' with {type:'json'};
 import homeWorld from '../../assets/world/world.json' with {type: 'json'};
 import homeWalk from '../../assets/world/walk-world.json' with {type: 'json'};
@@ -18,7 +10,6 @@ import {fixThemeWorld, fixThemeBed} from './theme-map-fixes.js';
 
 export {FINISHED_THEMES};
 export const THEME_IDS = ['home', ...FINISHED_THEMES];
-// Placement can change as maps grow. Save IDs always retain their explicit theme.
 export {TEST_THEMES};
 export const THEME_OF = new Map(WORLD_ISLANDS.filter(i => i.theme).map(i => [i.id,i.theme]));
 export const themeOfIsland = id => THEME_OF.get(id) ?? 'home';
@@ -27,10 +18,8 @@ const near = (a, b, r) => Math.hypot(a.x - b.x, a.y - b.y) <= r;
 const BOAT_RADIUS = 46;
 export const FIELD_RES = 25, FIELD_PAD = 700;
 
-// The home island's harbor: a real wooden jetty, its foot on the north lawn, the deck out over the water (boss 5 Nov).
 const HOME_JETTY = expansion.jetty;
-// round 4: the east islet (3930, 3830), its jetty and stub path are gone from the ground art
-const trimHome = w => ({...w, islets: w.islets.filter(a => ![3930, 3340, 2290, 5450].includes(a[0])), walkways: w.walkways.filter(b => ![3940, 3320, 2320, 5050].includes(b.a[0]))});   // + jetty 5 and its islet (boss 8 Nov)   // boss 8 Nov: the centre jetties' pads and walkways are gone (placements.js trimWorld)
+const trimHome = w => ({...w, islets: w.islets.filter(a => ![3930, 3340, 2290, 5450].includes(a[0])), walkways: w.walkways.filter(b => ![3940, 3320, 2320, 5050].includes(b.a[0]))});
 
 export function makeMap(id, {world, walk = null, harbor, art = null, sea = null, centre = null, addJetty = true, sleepers = null}) {
   world = fixThemeWorld(id, world);
@@ -40,7 +29,6 @@ export function makeMap(id, {world, walk = null, harbor, art = null, sea = null,
   const JETTY_W = harbor.jetty.width ?? 104, AXIS = Math.hypot(TIP.x - FOOT.x, TIP.y - FOOT.y);
   const DIR = {x: (TIP.x - FOOT.x) / AXIS, y: (TIP.y - FOOT.y) / AXIS};
   const along = (t, side = 0) => ({x: FOOT.x + DIR.x * t - DIR.y * side, y: FOOT.y + DIR.y * t + DIR.x * side});
-  // art: the island art already draws this jetty's deck (home: the south fishing dock, 8 Nov), so harbor.js adds bollards only
   const JETTY = {foot: FOOT, tip: TIP, width: JETTY_W, length: AXIS, angle: Math.atan2(DIR.x, -DIR.y), wetFrom: .14, dir: DIR, along, art: harbor.jetty.art ?? null,
     walkway: {a: [Math.round(along(-55).x), Math.round(along(-55).y)], b: [Math.round(along(AXIS - 44).x), Math.round(along(AXIS - 44).y)], w: JETTY_W}};
   let moorings;
@@ -54,14 +42,12 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
     const t = Math.max(0, Math.min(AXIS, (x - FOOT.x) * DIR.x + (y - FOOT.y) * DIR.y)), p = along(t);
     return Math.hypot(x - p.x, y - p.y) < JETTY_W / 2 + pad;
   };
-  // land, for boats: the drawn coast, the walking coast, islets, walkways and the jetty deck (this map's own coordinates)
   const islets = world.islets ?? [], walkways = (id === 'home' ? walking.walkways : world.walkways) ?? world.walkways ?? [];
   let coastTests=null;
   const coastContains=(x,y)=>{
     coastTests??=(world.boatCoast?[world.boatCoast]:[...new Set([walking.coast,world.coast])]).map(poly=>({contains:polygonIndex(poly),index:coastIndex(poly)}));
     return coastTests.some(({contains,index})=>{const side=index(x,y);return side===1||side===2&&contains(x,y);});
   };
-  // boss 8 Nov (sailable rivers): home's rivers that reach the sea are water for boats, though they lie inside the coast
   const boatWater=(world.boatWater??[]).map(poly=>({poly,x0:Math.min(...poly.map(p=>p[0])),x1:Math.max(...poly.map(p=>p[0])),y0:Math.min(...poly.map(p=>p[1])),y1:Math.max(...poly.map(p=>p[1]))}));
   let waterNear=null;
   const riverAt=(x,y)=>{
@@ -70,8 +56,7 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
   };
   const solidDecks=walkways.filter(w=>!w.boatPassUnder).map(({a,b,w})=>({a,b,w,dx:b[0]-a[0],dy:b[1]-a[1],l2:(b[0]-a[0])**2+(b[1]-a[1])**2,x0:Math.min(a[0],b[0])-w/2,x1:Math.max(a[0],b[0])+w/2,y0:Math.min(a[1],b[1])-w/2,y1:Math.max(a[1],b[1])+w/2}));
   function landAt(x, y) {
-    if (x < (world.origin?.x ?? 0) - 600 || y < (world.origin?.y ?? 0) - 600 || x > (world.origin?.x ?? 0) + W + 600 || y > (world.origin?.y ?? 0) + H + 600) return false;   // nowhere near this island
-    // Expanded canal maps can supply dry-bank contours, keeping painted waterways open to boats.
+    if (x < (world.origin?.x ?? 0) - 600 || y < (world.origin?.y ?? 0) - 600 || x > (world.origin?.x ?? 0) + W + 600 || y > (world.origin?.y ?? 0) + H + 600) return false;
     if (onJetty(x, y, 4) || coastContains(x,y) && !riverAt(x,y)) return true;
     if (islets.some(([cx, cy, rx, ry]) => inShape(x, y, {x: cx, y: cy, rx, ry}))) return true;
     return solidDecks.some(({a,w,dx,dy,l2,x0,x1,y0,y1})=>{
@@ -80,12 +65,7 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
       return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)<w/2;
     });
   }
-  // the walking map (the same one the room server walks): home's walk-world already carries its jetty deck
   const baseWalk = {...world, ...walking, walkways: [...(walking.walkways ?? []), ...(addJetty ? [JETTY.walkway] : [])]};
-  // boss 6 Nov: the same 28 sleeping Duckies as home. Home's lie in its walk-world.json already (the engine places them); a
-  // themed island's are its world.json "sleepSpots", resolved by scripts/theme-index.mjs against its art props (written into
-  // assets/world/themes/index.js), or here against world.props when the index carries none. Each one is solid ground for the
-  // room server and the game alike, exactly like home's.
   const beds = id === 'home' ? [] : (sleepers ?? (world.sleepSpots ? resolveSleepSpots(baseWalk, world.props ?? [], geometry(baseWalk).walkable, sleepHalfWidths(),
     {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false}) : [])).map(bed => fixThemeBed(id, bed)).map(({x, y, pose, r, flip, tree}) => ({x, y, pose, r, flip: Boolean(flip), tree}));
   const walkMap = beds.length ? {...baseWalk, obstacles: [...(baseWalk.obstacles ?? []), ...beds.map(sleeperFootprint)]} : baseWalk;
@@ -93,8 +73,6 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
   const nav = () => NAV ??= createNavigation(walkMap, {cellSize: walking.navigationCellSize ?? 32});
   const shoreFor = (x, y, reach = 280) => {const p = nav().nearest(x, y, reach); return p ? {x: Math.round(p[0]), y: Math.round(p[1])} : null;};
   const localWet = (x, y) => !landAt(x, y) && Array.from({length: 16}, (_, i) => i * Math.PI / 8).every(a => !landAt(x + Math.cos(a) * BOAT_RADIUS, y + Math.sin(a) * BOAT_RADIUS));
-  // Every island has the same real boats (boss 5 Nov): three at the harbor jetty, one off each islet, and a few moored off
-  // the beaches; a theme can list its own spots (harbor.json boats). Fixed spots, so every player sees the same boats.
   let SPOTS = null;
   const boatSpots = () => SPOTS ??= (() => {
     if (harbor.boats?.length) return harbor.boats.map(({x, y, turn}) => ({x: Math.round(x), y: Math.round(y), turn: turn ?? Math.PI}));
@@ -104,7 +82,6 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
       const a = Math.atan2(cy - c.y, cx - c.x);
       spots.push({x: Math.round(cx + Math.cos(a) * (rx * 1.25 + 70)), y: Math.round(cy + Math.sin(a) * (ry * 1.25 + 55)), turn: Math.cos(a) < 0 ? -Math.PI / 2 : Math.PI / 2});
     }
-    // four boats off the west and north-west beaches: walk out from the island's middle to the first open water, then a bit more
     for (const deg of [150, 175, 200, 225]) {
       const a = deg * Math.PI / 180;
       for (let r = 600; r < 5000; r += 20) {
@@ -118,7 +95,6 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
     }
     return spots;
   })();
-  // how far each point is from this map's nearest land, on a 25-unit grid (worked out once per map: boss 5 Nov "fix the freeze")
   let FIELD = null;
   const field = () => FIELD ??= landDistance(landAt, W, H, world.origin);
   const spawn = harbor.spawn ?? world.zones?.plaza?.spawn ?? [W / 2, H / 2];
@@ -135,12 +111,12 @@ function coastCentre(coast) {
 function landDistance(landAt, W, H, origin = {x:0,y:0}) {
   const RES = FIELD_RES, PAD = FIELD_PAD, X0 = origin.x - PAD, Y0 = origin.y - PAD, FW = Math.ceil((W + 2 * PAD) / RES), FH = Math.ceil((H + 2 * PAD) / RES);
   const d = new Float32Array(FW * FH).fill(1e9);
-  const h = RES / 2, subs = [[0, 0], [-h, -h], [h, -h], [-h, h], [h, h]];   // the centre and four corners, so land smaller than a sample is still seen
+  const h = RES / 2, subs = [[0, 0], [-h, -h], [h, -h], [-h, h], [h, h]];
   for (let r = 0; r < FH; r++) for (let c = 0; c < FW; c++) {
     const x = X0 + c * RES, y = Y0 + r * RES;
     if (subs.some(([u, v]) => landAt(x + u, y + v))) d[r * FW + c] = 0;
   }
-  const D = RES, DD = RES * Math.SQRT2;   // two-pass chamfer distance, in world units
+  const D = RES, DD = RES * Math.SQRT2;
   for (let r = 0; r < FH; r++) for (let c = 0; c < FW; c++) {
     const i = r * FW + c; let v = d[i];
     if (c > 0) v = Math.min(v, d[i - 1] + D);
@@ -156,12 +132,10 @@ function landDistance(landAt, W, H, origin = {x:0,y:0}) {
   return {d, FW, FH, X0, Y0};
 }
 
-// ---- the registry ----
 const MAPS = new Map();
 let VERSION = 0;
 export const mapsVersion = () => VERSION;
 MAPS.set('home', makeMap('home', {world: {...trimHome(homeWorld), boatWater: expansion.boatWater ?? []}, walk: homeWalk, harbor: {jetty: HOME_JETTY, boats: expansion.boats, water: expansion.harborWater}, art: null, centre: {x: 2980, y: 2005}, addJetty: false}));
-// a theme's files: {world, walk?, harbor, art (url of its art.json), sea?}. A broken set is skipped (that theme plays home).
 export function registerMap(theme, data) {
   if (!theme || theme === 'home') throw Error('home is fixed');
   try {
@@ -180,12 +154,8 @@ export const HOME_MAP = MAPS.get('home');
 export const mapFor = theme => MAPS.get(theme) ?? HOME_MAP;
 export const mapOf = islandId => mapFor(themeOfIsland(islandId));
 export const readyThemes = () => [...MAPS.keys()].filter(id => id !== 'home');
-// does this island draw its own art, or the home island's (theme not delivered yet)
 export const artOf = islandId => mapOf(islandId).id;
 
-// boss 6 Nov ("every home feature works on the themed islands"): where an island's birds circle and its butterflies flutter.
-// Home keeps its hand-placed spots; a themed island lists its own in world.json "ambient": {"birds":[[x,y],..], "butterflies":
-// [[x,y],..]}, or they are spread over its own zones (on its land, never out at sea).
 const HOME_AMBIENT = {birds: [[2419, 1928], [3185, 1897], [3427, 2126], [1500, 2600], [4200, 1700], [3900, 2900]], butterflies: [[2230, 2280], [3420, 2270]]};
 export function ambientOf(map) {
   if (!map || map.home) return HOME_AMBIENT;

@@ -1,7 +1,5 @@
 import {createFountainWater} from '../fountain.js';
 
-// Keep the original SVGs as the still/reduced-motion illustration. Each animated
-// jet uses Home's fountain component, registered to its own authored depth anchor.
 export function libraryFountainLayout(props) {
   const globe = props.find(p => p.centrePiece?.id === 'globe');
   if (!globe) return null;
@@ -22,7 +20,6 @@ export function createLibraryFountain(art, objects) {
   if (!layout) return null;
   const {origin, scale, jets} = layout, roots = [];
   const common = {centre: {x: 0, y: 0}, spray: null, cleanArtwork: false};
-  // Pool marks stay flat on the ground, beneath the globe and every front rim.
   const pool = createFountainWater({...origin, scale}, art.ground, null, {...common,
     pool: {x: 0, y: -20, rx: 485, ry: 365}, minPoolY: -Infinity, spills: []});
   roots.push(pool.root);

@@ -19,7 +19,6 @@ import {ISLET_META} from '../src/pixi/islets.js';
 import {makeRoom,addPlayer} from './room-harness.mjs';
 import {fileURLToPath} from 'node:url';
 const inRing=(x,y,p)=>{let inside=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if((p[i][1]>y)!==(p[j][1]>y)&&x<(p[j][0]-p[i][0])*(y-p[i][1])/(p[j][1]-p[i][1])+p[i][0])inside=!inside;return inside;};
-// Every authored scene is three times its original world size; no SVG coordinates are rewritten.
 test('11 stable islets use each of the eleven approved artworks once, without adding islands',()=>{
  assert.equal(ISLET_SEED,831511);assert.equal(ISLETS.length,11);assert.equal(ISLANDS.length,9);
  assert.equal(new Set(ISLETS.map(i=>i.id)).size,11);
@@ -56,7 +55,6 @@ test('all enlarged islet ground, prop bases and jetties leave a 600-unit boat ch
  assert.equal(sectors.size,6,'islets span all six longitude sectors');
  assert.ok(ISLETS.some(i=>i.lat>.6)&&ISLETS.some(i=>i.lat<-.6),'both hemispheres retain islets');
 });
-// boss 8 Nov ("the perspective of the islets is bad", "wtf is that docking port"): hand-drawn SVG, jetty drawn in the art
 const PUBLIC=f=>fileURLToPath(new URL(`../public/pixi-art/islets/${f}`,import.meta.url));
 test('every islet is hand-drawn flat SVG with its jetty in the art, and no raster islet ships',()=>{
  const files=readdirSync(PUBLIC(''));
@@ -71,7 +69,6 @@ test('every islet is hand-drawn flat SVG with its jetty in the art, and no raste
   for(const [,c]of svg.matchAll(/(?:fill|stroke)="([^"]+)"/g))assert.match(c,/^(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})|none)$/,`${art}: flat colour ${c}`);
   assert.match(svg,/stroke="#39472[dD]"/,`${art}: our ink`);
   assert.match(svg,/id="jetty"|jetty/i,`${art}: the jetty is part of the drawing`);
-  // the artists' own words: never traced (the old art was ~2000 potrace layers per islet)
   assert.ok((svg.match(/<path/g)??[]).length<400,`${art}: hand-drawn, not traced`);
   const m=ISLET_META[art];
   assert.equal(m.art,art);assert.ok(m.land.length>=12);
@@ -79,7 +76,6 @@ test('every islet is hand-drawn flat SVG with its jetty in the art, and no raste
   assert.ok(!inRing(...m.jetty.tip,m.land),`${art}: jetty tip out in the water`);
   for(const b of m.blocked)assert.ok(b.polygon.length>=3&&b.what,`${art}: footprint ${b.what}`);
  }
- // no code-drawn dock any more
  const view=readFileSync(fileURLToPath(new URL('../src/pixi/islet-view.js',import.meta.url)),'utf8');
  assert.doesNotMatch(view,/drawJetty|roundRect|\.webp|\.png/);
 });
@@ -91,7 +87,6 @@ test('the islet SVGs build into Pixi geometry, transforms and inherited styles i
   const b=ctx.bounds;assert.ok(b.minX>=-1&&b.minY>=-1&&b.maxX<=1025&&b.maxY<=1025,`${art}: inside its viewBox`);
   ctx.destroy();
  }
- // a kit piece placed with translate+scale lands where a browser puts it, its pen scaled with it
  const ctx=svgContext('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#ff0000" fill-opacity=".5"><g transform="translate(10 20) scale(2)"><path d="M0 0 L10 0 L10 10 Z" stroke="#39472D" stroke-width="1.5"/><path d="M0 0 L5 5" fill="none" stroke="#39472D"/></g></svg>',parse);
  const [fill,stroke,line]=ctx.instructions;
  assert.equal(fill.action,'fill');assert.equal(fill.data.style.alpha,.5);
@@ -113,23 +108,17 @@ test('boat collision agrees in different island charts and covers every islet\'s
   assert.ok(navOf(i.home).walkable(w.land.x,w.land.y),`${i.id} jetty end is walkable`);
   assert.ok(canSail(w.water.x,w.water.y,i.home),`${i.id} dock water is open`);
   assert.ok(Math.hypot(w.water.x-w.tip.x,w.water.y-w.tip.y)<150*ISLET_SCALE,`${i.id} the boat ties up beside the jetty tip`);
-  // the drawn jetty faces open sea: straight out from its tip there is no land and no other islet for the docking reach
   for(let t=0;t<=420;t+=50){const l=placeIslet(i.home,i,[i.jetty.tip[0]+i.jetty.dir[0]*(t+72),i.jetty.tip[1]+i.jetty.dir[1]*(t+72)]);
    assert.ok(canSail(l.x,l.y,i.home),`${i.id} open sea ${t} out from its jetty`);}
-  // On the continuous globe, match the large islands' geographic north rather
-  // than counter-rotating the art for a different island's flat chart.
   const north=sphereFrame(i.lon,i.lat).north;
   assert.ok(Math.hypot(...north.map((v,k)=>v-i.north[k]))<1e-10,`${i.id} follows geographic north`);
-  // its props stand on the ground: walked round, never through
   for(const b of i.blocked){const cx=b.reduce((s,q)=>s+q[0],0)/b.length,cy=b.reduce((s,q)=>s+q[1],0)/b.length,q=placeIslet(i.home,i,[cx,cy]);
    assert.equal(navOf(i.home).walkable(q.x,q.y),false,`${i.id} prop footprint is solid`);}
  }
 });
-// boss 8 Nov ("I should be able to dock here"): sail up, dock, walk about, take the boat and sail off, on all 22
 test('every islet: sail up, dock at its jetty, walk its land, board and sail away',()=>{
  for(const i of ISLETS){
   const w=isletWalk(i.id),nav=navOf(i.home),id=i.home;
-  // Approach through the 600-unit channel outside the enlarged jetty.
   const start=placeIslet(id,i,[i.jetty.water[0]+i.jetty.dir[0]*120,i.jetty.water[1]+i.jetty.dir[1]*120]);
   assert.ok(canSail(start.x,start.y,id),`${i.id} start at sea`);
   const actor={...start,islandId:id,mode:'sailing',turn:0,path:[]};
@@ -141,27 +130,22 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   assert.ok(setSailDestination(actor,approach.x,approach.y),`${i.id} has a route to its jetty`);
   for(let k=0;k<4000&&actor.sailTarget;k++){sailStep(actor,.05,{x:0,y:0});assert.ok(canSail(actor.x,actor.y,id));}
   assert.ok(Math.hypot(actor.x-approach.x,actor.y-approach.y)<14,`${i.id} reached the jetty`);
-  // hop out (worker/index.js): onto the jetty end, walking on the islet's own ground
   Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',path:[],travel:0,pace:0,heading:null});
   const boat={id:`${id}-0`,islandId:id,x:approach.x,y:approach.y,turn:0};
   assert.ok(nav.walkable(actor.x,actor.y));
-  // walk to the far side of the land and back
   const aim=placeIslet(id,i,i.landCentre),near=nav.nearest(aim.x,aim.y,300*ISLET_SCALE),goal={x:near[0],y:near[1]};
   assert.ok(setWalkDestination(actor,nav,goal.x,goal.y),`${i.id} can walk inland`);
   let walked=0;
   for(let k=0;k<1200&&actor.path.length;k++){const x=actor.x,y=actor.y;walkStep(actor,nav,.05,k*.05,{x:0,y:0});walked+=Math.hypot(actor.x-x,actor.y-y);assert.ok(nav.walkable(actor.x,actor.y),`${i.id} stays on land`);}
   assert.ok(walked>100,`${i.id} traversed inland from its shorter dock`);
   assert.ok(Math.hypot(actor.x-goal.x,actor.y-goal.y)<45,`${i.id} reached the inland destination`);
-  // the walk area is the islet itself, never the sea round it
   assert.equal(nav.walkable(w.water.x,w.water.y),false);
-  // back to the boat: board from the jetty
   const deck=boardingPoint(boat,nav);
   assert.ok(Math.hypot(deck.x-w.tip.x,deck.y-w.tip.y)<90*ISLET_SCALE,`${i.id} boards from the jetty tip`);
   assert.ok(setWalkDestination(actor,nav,deck.x,deck.y));
   for(let k=0;k<1200&&actor.path.length;k++)walkStep(actor,nav,.05,k*.05,{x:0,y:0});
   assert.ok(Math.hypot(actor.x-deck.x,actor.y-deck.y)<45,`${i.id} reached the boat`);
   Object.assign(actor,{x:boat.x,y:boat.y,mode:'sailing',sailTarget:null,sailRoute:null});
-  // Larger islets sit in tighter seas: depart through a planned water route.
   let away;
   for(let n=0;n<24&&!away;n++){
    const a=Math.atan2(i.jetty.dir[1],i.jetty.dir[0])+n*Math.PI/12;

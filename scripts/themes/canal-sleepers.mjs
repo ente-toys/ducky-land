@@ -1,4 +1,3 @@
-// Choose 40 deliberate, validated resting spots using the game's actual resolver.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
@@ -21,8 +20,6 @@ for(const pose of ['box','hammock','chair','book','leaf','wing','rock']){
  const choices=pool.map(p=>({...p,d:Math.min(...props.map(q=>Math.hypot(q.x-p.x,(q.y-p.y)*1.1)))})).sort((a,b)=>(Math.abs(a.d-260)+a.j*100)-(Math.abs(b.d-260)+b.j*100));
  for(const p of choices){spots[pose].push([p.x,p.y,spots[pose].length%2===0]);if(resolve().bad.length)spots[pose].pop();if(spots[pose].length===5)break;}
 }
-// Finish deliberate resting clearings by clearing small vegetation from a sleeper's footprint.
-// Buildings, all 82 trees, furniture, paths and reserved areas remain intact.
 const cleared=[];
 for(const pose of Object.keys(spots).slice(1)){
  if(spots[pose].length>=5)continue;
@@ -42,8 +39,6 @@ for(const pose of Object.keys(spots).slice(1)){
   else cleared.push({pose,x:p.x,y:p.y,removed:removed.map(q=>q.id)});
  }
 }
-// Use an additional tree-rest pose when a portable pose has no safe free footprint.
-// The contract is 40 residents using all eight Home poses, not five of each pose.
 for(const tree of trees){
  if(resolve().length>=40)break;
  if(spots.nod.some(s=>s[0]===tree.id)||!clearReservation(tree.x,tree.y+14)||!clearPath(tree.x,tree.y+14))continue;

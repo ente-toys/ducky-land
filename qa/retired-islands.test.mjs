@@ -4,8 +4,6 @@ import {makeRoom,fakeSocket} from './room-harness.mjs';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {IslandRoom} from '../worker/index.js';
 
-// Exercise the real join and hibernation paths with SQLite and in-memory sockets.
-// Node's Response disallows the Cloudflare-only 101 status.
 const NativeResponse=globalThis.Response;
 globalThis.Response=class extends NativeResponse {
   constructor(body,options) {

@@ -66,7 +66,6 @@ def polish_svg(text,name):
     def walk(parent,context):
         for node in list(parent):
             tag=node.tag.split('}')[-1]
-            # Mask luminance and clipping geometry must remain exact.
             if tag in ('defs','mask','clipPath','linearGradient','pattern'):continue
             label=(context+' '+node.get('id','')+' '+node.get('data-name','')).lower()
             rgb=pigment(node.get('fill',''))

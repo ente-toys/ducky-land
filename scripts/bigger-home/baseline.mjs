@@ -1,4 +1,3 @@
-// One-time pre-build capture. The saved original is now in concepts/themes/world-map/bigger/work/original-composition.json.
 import {createServer} from 'vite';
 import {writeFileSync,readFileSync} from 'node:fs';
 const vite=await createServer({configFile:false,cacheDir:'/private/tmp/ducky-bigger-home-vite',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,watch:null},appType:'custom',logLevel:'error'});

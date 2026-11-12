@@ -1,5 +1,3 @@
-// Hand-composed feet, not scatter rules. Inner coordinates use the AC-2 drawing.
-// t1 = round, t2 = clipped topiary, t3 = broad oak, t4 = small round tree.
 export const INNER_GROVES = {
  'northwest-bank': [['t3',157,139],['t4',174,181],['b2',144,195],['b3',135,210],['b2',198,187]],
  'north-bank': [['t1',1090,125],['t4',1164,220],['b3',1057,166],['b2',1145,240],['b3',1190,218]],
@@ -11,7 +9,6 @@ export const INNER_GROVES = {
  'southwest-entrance': [['t4',405,945],['t1',450,948],['b2',397,913],['b3',447,927],['b2',480,950]],
  'southeast-entrance': [['t1',1190,893],['t4',1155,918],['b2',1179,933],['b3',1216,911],['b2',1128,931]],
 };
-// World feet in the open outer lawns between the four approved hamlets.
 export const OUTER_GROVES = {
  'northwest-road': [['t3',-480,-210],['t1',-250,-300],['t4',-570,-160],['t2',-80,-190],['t1',-370,-95],['t4',-120,-20],['b2',-600,-50],['b3',-460,-65],['b2',-230,-105],['b3',-60,-45]],
  'pond-east': [['t3',1640,-130],['t4',1810,-10],['t1',1650,170],['t2',1960,160],['t4',1850,265],['b2',1780,350],['b3',1680,300],['b2',1910,310]],
@@ -21,7 +18,6 @@ export const OUTER_GROVES = {
  'southeast-road': [['t3',5620,4720],['t1',5810,4820],['t4',5480,4910],['t2',5980,4970],['t1',5710,5070],['t4',5920,5200],['b2',5410,5050],['b3',5570,5160],['b2',5790,5270],['b3',6070,5180]],
  'south-east-bank': [['t1',6700,4190],['t3',6510,4230],['t4',6550,4340],['t2',6590,4520],['t1',6780,4500],['b2',6450,4490],['b3',6630,4600],['b2',6890,4630]],
 };
-// Short, irregular bank hugs and fork clusters. These never close a bridge mouth.
 export const BANK_BUSHES = {
  'west-bank': [['b2',153,365],['b3',139,392],['b2',118,418]],
  'east-bank': [['b3',1375,358],['b2',1380,390],['b3',1414,423]],

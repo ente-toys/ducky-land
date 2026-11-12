@@ -17,7 +17,6 @@ test('rear 33-40 mast length and deck projection remain continuous through 38-39
     const source=readFileSync(new URL(v.file,base),'utf8');
     assert.match(source,/data-part="mast" data-top="112" data-foot="400"/);
     assert.doesNotMatch(source,/scale\(1 \.4\)/);
-    // The mast foot is on the inner deck, 10-14 game units behind the toes.
     const footY=(400-manifest.anchor[1]*560)*manifest.width/640-v.seat[1];
     assert.ok(footY < -8 && footY > -15,`view ${n}: ${footY}`);
     if(previous){assert.ok(Math.abs(footY-previous.y)<.4);assert.ok(Math.abs(v.seat[0]-previous.x)<6);}

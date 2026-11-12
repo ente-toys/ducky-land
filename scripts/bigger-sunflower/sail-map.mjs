@@ -1,5 +1,3 @@
-// Proof (boss 8 Nov, sailable rivers): every point a boat can sail on and around Sunbob, flood-filled from the harbour. Blue =
-// reached from the sea, red = sailable but cut off, green = land. node scripts/bigger-sunflower/sail-map.mjs <out.png>
 import sharp from 'sharp';
 import {mapFor} from '../../src/pixi/island-maps.js';
 import {canSail, harborOf} from '../../src/pixi/islands.js';

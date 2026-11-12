@@ -48,31 +48,24 @@ def svg(body, vb):
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="{vb[2]}" height="{vb[3]}" viewBox="{" ".join(map(str,vb))}" stroke-linejoin="round" stroke-linecap="round">{body}</svg>'
 
 def ripple_motif(x,y,scale=1):
-    # All pieces are flush stone inlay. No new solid object in the crowd space.
     return f'''<g transform="translate({x} {y}) scale({scale})">
       <path d="M0 -68 C-13 -42 -42 -19 -42 4 C-42 52 42 52 42 4 C42 -19 13 -42 0 -68Z" fill="{TEAL}" stroke="#658F74" stroke-width="3"/>
       <path d="M-23 4 Q-29 23 -11 29" fill="none" stroke="#C8E3CB" stroke-width="5"/>
       <path d="M-78 65 Q-52 52 -26 65 T26 65 T78 65 M-61 84 Q-35 71 -9 84 T43 84" fill="none" stroke="#6A9E8B" stroke-width="5"/>
     </g>'''
 
-# Home's paving language, fitted to the locked viewing deck's own ellipse.
 K = 360/470
 floor = [ellipse(0,16,1150,1150*K,'#C88941',INK,4.6), ellipse(0,0,1150,1150*K,'#F4CF80',INK,4.6)]
 palette = [CREAM, GOLD, '#F9E5AB', '#FFF5D5', '#F6DE99']
 floor.append(ellipse(0,0,1130,1130*K,CREAM,'#A9985F',3.0))
-# Home's actual hand-shaped stone courses carry their small uneven joints and
-# shaded tile corners into this floor. These are copied vector paths, not raster.
 home_paving = (R/'public/pixi-art/decals/plaza-paving.svg').read_text()
 home_body = re.sub(r'^.*?<svg[^>]*>','',home_paving,flags=re.S).rsplit('</svg>',1)[0]
 floor.append(f'<g transform="scale(2.4) translate(-2820 -2370)">{home_body}</g>')
-# The lookout has a walkable centre instead of Home's fountain. Keep its original
-# fitted flagstones in that area, trimmed under the surrounding stone courses.
 old_floor = src['paving'].split('<g clip-path="url(#floor)">',1)[1].rsplit('</g>',1)[0]
 floor.append('<defs><clipPath id="inner-flags"><ellipse rx="530" ry="405.96"/></clipPath></defs><g clip-path="url(#inner-flags)">'+old_floor+'</g>')
 for r in [1130,1082]:
     floor.append(ellipse(0,0,r,r*K,'none','#A9985F',3.0))
     floor.append(ellipse(0,-2,r-6,(r-6)*K,'none','#FFF5D5',3.4))
-# Repeating stream-wave tesserae around the inner rim band, inside the rail.
 for j in range(28):
     t=j*math.tau/28; x=1105*math.cos(t); y=1105*K*math.sin(t)
     floor.append(f'<g transform="translate({x:.2f} {y:.2f}) rotate({j*360/28})"><path d="M-15 -11 Q0 -23 15 -11 Q0 -1 -15 -11Z" fill="#6DA891" stroke="#678F72" stroke-width="2.4"/></g>')
@@ -95,7 +88,6 @@ def polygon_svg(poly,fill,stroke='none',sw=2.2):
     return f'<path d="{d}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" fill-rule="evenodd" stroke-linejoin="round"/>'
 
 s=src['ground']
-# One union for the trails removes the dark overlap seams at branch joins.
 pat=r'<path\b[^>]*stroke="#(?:897F46|FFE9A1)"[^>]*stroke-width="(?:305|300)"[^>]*/>'
 matches=list(re.finditer(pat,s)); assert len(matches)==10,len(matches)
 first=matches[0].start(); s=re.sub(pat,'',s)
@@ -106,7 +98,6 @@ activity_counts={}
 for key,z in w['zones'].items():
     if not key.startswith('activity'):continue
     x,y,rx,ry=[z[k] for k in ('x','y','rx','ry')]
-    # Open grass field with a crafted stone perimeter. Entrances remain open.
     chunks=[]
     for j in range(64):
         deg=j*360/64
@@ -116,17 +107,12 @@ for key,z in w['zones'].items():
         t=j*math.tau/32
         xx=x+rx*.944*math.cos(t); yy=y+ry*.944*math.sin(t)
         chunks.append(ellipse(xx,yy,3.7,2.9,'#82A77D','none'))
-    # Small water emblem set flush in a central lawn rosette.
-    # The south zone reaches the beach. Set the whole rosette on real grass,
-    # between the lookout bridge and shore, rather than clipping half of it.
     emblem_y = y-125 if key=='activity-3' else y
     chunks += [ellipse(x,emblem_y,100,76.6,'#D7D5A0','#92A351',2),ellipse(x,emblem_y,87,66.6,CREAM,'#B8A86B',1.5),ripple_motif(x,emblem_y-5,.65)]
-    # Clip the south rim to grass, away from the sand and primary jetty.
     clipid=key+'-grass-clip'
     finish += [f'<defs><clipPath id="{clipid}">{polygon_svg(grass,"white")}</clipPath></defs>',f'<g clip-path="url(#{clipid})">'+''.join(chunks)+'</g>']
     activity_counts[key]=len(chunks)
 
-# Market lanes get a fitted double edging and wave stones, never a solid stall.
 for key,z in w['zones'].items():
     if not key.startswith('stalls'):continue
     x,y,rx=z['x'],z['y'],z['rx']
@@ -136,13 +122,11 @@ for key,z in w['zones'].items():
     for side in [-1,1]:
         finish.append(ripple_motif(x+side*(rx-75),y-17,.35))
 
-# Flush roundels turn the broad, softly joined intersections into deliberate places.
 for x,y in [(1200,3750),(2600,4000),(5350,4000),(6600,3750),(1100,2850),(6800,2850)]:
     if wet.buffer(25).contains(Point(x,y)):continue
     for j in range(16):finish.append(sector(x,y,90,69,.78,j*22.5,(j+1)*22.5,palette[j%4],1.3))
     finish.append(ripple_motif(x,y-5,.45))
 
-# Ground flecks follow the verge. A fresh seed makes loose groups, not a dotted grid.
 verge=paths.buffer(92).difference(paths.buffer(10)).intersection(grass).difference(wet.buffer(25)).difference(decks)
 flecks=0
 for _ in range(2400):
@@ -184,8 +168,6 @@ for key,z in w['zones'].items():
         for scale in [1.01,1.1,1.18]:
             if put('reuse/street--planter-flowers.svg',x+rx*scale*math.cos(t),y+ry*scale*math.sin(t),80,'Activity rim flower pot'):break
 
-# The real southeast junction was hidden by crowns, despite clear tree bases.
-# Move only the three trees seen in the close-up. Nod sleeper trunks stay fixed.
 move_ids={'waterfall-4','waterfall-polish-84','waterfall-polish-119'}
 trees=[p for p in a['props'] if 'tree' in p['name'].lower() and not p['src'].startswith('centre/')]
 reserved=unary_union([affinity.scale(Point(z['x'],z['y']).buffer(z['rx']+20),1,(z['ry']+20)/(z['rx']+20),origin=(z['x'],z['y'])) for z in w['zones'].values()])

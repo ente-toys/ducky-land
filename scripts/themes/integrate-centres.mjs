@@ -1,4 +1,3 @@
-// Idempotent placement of the two centres not installed by the theme builders.
 import {readFileSync,writeFileSync,existsSync,mkdirSync} from 'node:fs';
 const read=p=>JSON.parse(readFileSync(p,'utf8')), save=(p,v)=>writeFileSync(p,JSON.stringify(v,null,2)+'\n');
 for (const [theme,origin,k,clear] of [['waterfall',[3900,3800],.48,[-780,-650,780,640]],['canal',[4000,3320],.85,[-1060,-875,1060,810]]]) {

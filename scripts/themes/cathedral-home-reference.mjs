@@ -1,5 +1,3 @@
-// Offline Home reference from the SAME placement functions used by PixiIsland.
-// The only transform replaces Vite's asset URL glob with its local filesystem map.
 import {build} from 'esbuild';
 import {readFileSync,writeFileSync} from 'node:fs';
 const result=await build({stdin:{contents:`export * from './src/pixi/placements.js';`,resolveDir:process.cwd()},bundle:true,write:false,format:'esm',platform:'node',plugins:[{name:'local-assets',setup(b){b.onLoad({filter:/placements\.js$/},async a=>{let s=readFileSync(a.path,'utf8');const lib=JSON.parse(readFileSync('assets/manifest.json'));const urls=Object.fromEntries(lib.assets.map(a=>['../../'+a.file,'/'+a.file]));s=s.replace(/import\.meta\.glob\([^;]+\)/,JSON.stringify(urls));return{contents:s,loader:'js'}})}}]});

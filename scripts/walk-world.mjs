@@ -1,6 +1,3 @@
-// boss 5 Nov: one walking map for everyone. Builds assets/world/walk-world.json from exactly what the game walks on offline
-// (restyled coast, moved props' footprints, lake shapes, museum, sleepers), so the socket server blocks the same places.
-// Run after any change to placements or sleepers:  node scripts/walk-world.mjs
 import {createServer} from 'vite';
 import {writeFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
@@ -11,7 +8,6 @@ try {
   const world = (await load('/assets/world/world.json')).default;
   const {geometry} = await load('/assets/world/island-geometry.mjs');
   const P = await load('/src/pixi/placements.js'), {sleepHalfWidths} = await load('/src/pixi/sleeper.js'), {harborClear, harborWorld} = await load('/src/pixi/islands.js');
-  // boss 5 Nov: the server is the live game, so it walks the live harbor: the jetty deck, and the lawn at its foot cleared
   const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable).filter(harborClear), local = harborWorld(P.walkWorld(tw, props));
   const beds = P.sleepSpots(local, props, geometry(local).walkable, sleepHalfWidths(.88 * .24 * 3));
   assert.equal(beds.length, HOME_SLEEP_TOTAL, 'all approved Home sleepers must resolve before writing the server map');

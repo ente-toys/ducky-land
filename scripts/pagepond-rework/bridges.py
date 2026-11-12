@@ -10,17 +10,13 @@ for c in plan['crossings']:
  ns=c['direction']=='ns';L,W,H=c['length'],c['width'],c['rise'];cx,cy=c['x'],c['y'];layers={'back':[],'front':[]};bounds={'back':[],'front':[]}
  def point(t,side=0,lift=0):
   crown=H*4*t*(1-t)
-  # End-on NS perspective is drawn directly, with both ends centred on x.
   if ns:return [cx+side*(W/2*(.90+.10*t)+12*4*t*(1-t)),cy-L/2+t*L-crown-lift]
   return [cx-L/2+t*L,cy+side*W/2-crown-lift]
  def path(points,fill='none',stroke=INK,width=2.5,layer='back',closed=False):
   bounds[layer].extend(points);d='M'+'L'.join(f'{x:.3f} {y:.3f}' for x,y in points)+('Z' if closed else '')
   layers[layer].append(f'<path d="{d}" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>')
  ts=[i/40 for i in range(41)]
- # The dark timber rim follows the deck's actual elevated side profile.
  if ns:
-  # Paired visible arch cheeks give the end-on view depth, without leaning
-  # the bridge sideways. The centre of both landings stays on the NS axis.
   for side in [-1,1]:
    inner=[point(t,side) for t in ts]
    outer=[[x+side*(8+9*math.sin(math.pi*t)),y+12*math.sin(math.pi*t)] for t,(x,y) in zip(ts,inner)]
@@ -32,7 +28,6 @@ for c in plan['crossings']:
   path(left+right[::-1],WOOD,closed=True)
  else:path([point(t,-1) for t in ts]+[point(t,1) for t in ts[::-1]],WOOD,closed=True)
  if ns:
-  # Flat painted bands and convex board seams describe the raised crown.
   for ta,tb,color in [(.17,.30,'#d79a4c'),(.30,.43,'#e4b35e'),(.43,.56,'#d99e4e'),(.78,1,'#bc7c38')]:
    band=[]
    for t,order in [(ta,range(17)),(tb,range(16,-1,-1))]:
@@ -44,7 +39,6 @@ for c in plan['crossings']:
   for j in range(17):
    side=j/8-1;x,y=point(t,side);board.append([x,y+(10*math.sin(math.pi*t)*(1-side*side) if ns else 0)])
   path(board,width=1.7)
- # Two hand-drawn upright balustrades. Posts remain vertical in the camera.
  for side in [-1,1]:
   layer='front' if ns or side==1 else 'back'
   def rail(t,top):

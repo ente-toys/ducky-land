@@ -1,6 +1,3 @@
-// Fair-only Pixi pouring-water component. Inject Pixi constructors; no global state or shared renderer edits.
-// const fx = createFairWater({Graphics, Container}, art.props, objects, {x:3570,y:2737.5});
-// fx.update(seconds, prefersReducedMotion, art.ground.visible); fx.destroy() when art is released.
 export function waterPoint(t) {
  const u=1-t;
  return {x:u*u*u*-170+3*u*u*t*-217+3*u*t*t*-265+t*t*t*-263,

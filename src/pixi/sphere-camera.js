@@ -2,8 +2,6 @@ import {mapPoint,localPoint,spherePoint} from './sphere-coordinates.js';
 import {flatRigid} from './rigid.js';
 
 export const IDENTITY_BASIS=Object.freeze({a:1,b:0,c:0,d:1});
-// Match the derivative at the camera, rather than at a distant island centre.
-// Polar decomposition keeps a near-180 degree landing from collapsing halfway.
 export function landingBasis(from,to,point,prior=IDENTITY_BASIS){
  const p=mapPoint(to,from,point),x=mapPoint(to,from,{x:point.x+1,y:point.y}),y=mapPoint(to,from,{x:point.x,y:point.y+1});
  const a=prior.a*(x.x-p.x)+prior.c*(x.y-p.y),b=prior.b*(x.x-p.x)+prior.d*(x.y-p.y);
@@ -11,8 +9,6 @@ export function landingBasis(from,to,point,prior=IDENTITY_BASIS){
  const angle=Math.atan2(b-c,a+d),co=Math.cos(angle),si=Math.sin(angle);
  return {angle,xx:co*a+si*b,xy:co*c+si*d,yx:-si*a+co*b,yy:-si*c+co*d};
 }
-// boss 8 Nov (rigid islands): the island you sail onto was drawn as a rigid sticker, so the view after the hop must show it
-// exactly there: the camera moves through the same rigid placement and the basis starts as the sticker's pure turn.
 export function rigidLandingBasis(from,to,prior=IDENTITY_BASIS,r=flatRigid(from,to)){
  const a=prior.a*r.a+prior.c*r.b,b=prior.b*r.a+prior.d*r.b,c=prior.a*r.c+prior.c*r.d,d=prior.b*r.c+prior.d*r.d;
  const angle=Math.atan2(b-c,a+d),co=Math.cos(angle),si=Math.sin(angle);
@@ -34,8 +30,6 @@ export function cameraMatrix(camera,width,height,tilt=1){
  return {a,b,c,d,tx:width/2-a*camera.x-c*camera.y,ty:height/2-b*camera.x-d*camera.y};
 }
 
-// Conservative axis-aligned bounds of a rotated/stretched viewport, used by
-// culling and ground streaming during the landing settle.
 export function cameraSpan(camera,width,height){
  const b=camera.basis;if(!b)return {width,height};
  const det=Math.abs(b.a*b.d-b.b*b.c);

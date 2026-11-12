@@ -1,10 +1,3 @@
-// requestAnimationFrame times jitter by about a millisecond while the display
-// still shows frames at a fixed rate. Moving by the raw times makes steady
-// motion step unevenly (3.0 px, 3.5 px, 3.0 px...), which reads as judder.
-// Advance by whole measured refresh intervals instead, easing toward the real
-// clock and staying within half a frame of it. When the cadence changes (a
-// 120 Hz display, a moved window, a long frame) follow real time and relearn.
-// Time always moves forward: a zero step reads as a teleport downstream.
 export function createFrameClock() {
   let raw = null, smooth = 0, interval = 0, samples = 0;
   return now => {

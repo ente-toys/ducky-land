@@ -26,7 +26,6 @@ test('twenty minutes of wandering remain on open water, spread around the world 
 });
 test('stationary player boats are avoided without modifying player state or adding collisions',()=>{
  const f=createPirateFleet(),s=f.ships[0],boat=[...s.p];let min=Infinity;
- // Start the obstacle safely ahead, then hold it still for the whole run.
  const d=800/WORLD_GEO.Rw;for(let k=0;k<3;k++)boat[k]=s.p[k]*Math.cos(d)+s.dir[k]*Math.sin(d);
  const saved=[...boat];for(let k=0;k<1800;k++){f.update(1/30,[boat]);min=Math.min(min,distance(s.p,boat));}
  assert.deepEqual(boat,saved);assert.ok(min>=PIRATE_BOAT_GAP,'boat clearance '+min);

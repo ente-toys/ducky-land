@@ -1,7 +1,3 @@
-// Bellovo Piazza: is the walk map valid? Builds the same map the game and the room server build (island-maps.js
-// makeMap), then flood-fills the walkable ground from the plaza spawn on a 20-unit grid and checks every zone spawn,
-// both islets, every pier end and the harbor landing are reachable, and every boat spot is open sea.
-//   node scripts/themes/cathedral-check.mjs
 import {readFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 
@@ -21,14 +17,11 @@ while (queue.length) {
     if (rr >= 0 && rr < H && cc >= 0 && cc < W && ok[j] && !seen[j]) {seen[j] = 1; queue.push(j);}
   }
 }
-// a point counts as reached when a reached cell lies within 30 of it (the grid snaps)
 const reached = (x, y) => {for (let dy = -40; dy <= 40; dy += G) for (let dx = -40; dx <= 40; dx += G) if (seen[cell(x + dx, y + dy)]) return true; return false;};
 const fails = [];
 if(map.sleepers.length!==40)fails.push('Expected 40 resolved sleepers, got '+map.sleepers.length);
 for(const [name,z] of Object.entries(world.zones).filter(([n])=>/^(activity|stalls)-/.test(n))){for(let yy=z.y-z.ry*.55;yy<=z.y+z.ry*.55;yy+=65)for(let xx=z.x-z.rx*.65;xx<=z.x+z.rx*.65;xx+=65)if(!nav.walkable(xx,yy))fails.push(name+' blocked at '+xx+','+yy);}
-// A real 100-person arrangement with 160-unit separation inside the centre plaza.
 let crowd=[];for(let yy=world.zones.centre.y-500;yy<=world.zones.centre.y+500;yy+=165)for(let xx=world.zones.centre.x-900;xx<=world.zones.centre.x+900;xx+=165)if(nav.walkable(xx,yy))crowd.push([xx,yy]);
-// More open spaces complete the crowd if the central placeholder takes a row.
 for(const [n,z] of Object.entries(world.zones).filter(([n])=>/^activity-/.test(n)))for(let yy=z.y-z.ry*.65;yy<=z.y+z.ry*.65;yy+=165)for(let xx=z.x-z.rx*.65;xx<=z.x+z.rx*.65;xx+=165)if(nav.walkable(xx,yy))crowd.push([xx,yy]);
 if(crowd.length<100)fails.push('Only '+crowd.length+' spacious crowd positions');
 console.log('resolved sleepers',map.sleepers.length,'spaced crowd positions',crowd.length);
@@ -45,7 +38,6 @@ map.boatSpots().forEach((s, i) => {
 const area = seen.reduce((a, b) => a + b, 0) * G * G, all = ok.reduce((a, b) => a + b, 0) * G * G;
 console.log(`walkable ${(all / 1e6).toFixed(2)}M units², reached from the plaza ${(area / 1e6).toFixed(2)}M (${(100 * area / all).toFixed(1)}%), ${walk.obstacles.length} obstacles, ${map.boatSpots().length} boats`);
 console.log(fails.length ? 'FAIL\n  ' + fails.join('\n  ') : 'PASS: every zone, islet, pier, the harbor and every boat is reachable');
-// unreached walkable pockets (islands of walkable cells cut off by props)
 const pockets = [];
 const mark = new Uint8Array(W * H);
 for (let i = 0; i < W * H; i++) if (ok[i] && !seen[i] && !mark[i]) {

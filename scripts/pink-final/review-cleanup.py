@@ -14,7 +14,6 @@ def owns(o,p):
 for p in art['props'][:]:
  if p['src']=='detail/pink-car.svg':retire(p)
 art['flats']=[p for p in art['flats'] if p['src'] not in ['detail/pink-close-road.svg','detail/pink-close-market.svg'] and not ('pink-bed-' in p['src'] and (p['y']>3600 or p.get('id')=='pink-garden-bed-3'))]
-# Retain the original inner routes, except the obsolete picnic cul-de-sac.
 inner=world['paths'][:16];inner=[p[:14] if i==12 else p for i,p in enumerate(inner) if i not in [14,15]]
 roads=read(S/'roads.json');world['paths']=inner+[r['sampled'] for r in roads];world['pathWidths']=[160]*len(world['paths'])
 for key in ['stalls-1','stalls-3']:world['zones'].pop(key,None)
@@ -38,7 +37,6 @@ def fpof(p):
  if p.get('footprint'):return p['footprint']
  found=[o for o in world['obstacles'] if owns(o,p)]
  if found:return found[0]
- # Non-solid decorative props still have a small ground contact for the visual audit.
  w=p['width']*p.get('scale',1);return dict(x=p['x'],y=p['y']-8,rx=min(32,w*.24),ry=12)
 def ellipse(f):
  if f.get('poly'):
@@ -73,7 +71,6 @@ def setfp(p,f):
  for d in [world,walk]:
   d['obstacles']=[o for o in d['obstacles'] if not owns(o,p)];d['obstacles'].append(dict(f,name=p['id']))
  p['footprint']=f
-# Replace every authored hamlet plant with the existing inner-land library.
 vegetation=lambda src:src.startswith('hamlets/') and re.search(r'(?:tree|oak|cherry|blossom|shrub|bush)',Path(src).stem,re.I)
 for i,p in enumerate(art['props']):
  if not vegetation(p['src']):continue
@@ -86,13 +83,9 @@ for i,p in enumerate(art['props']):
  p['name']=t['name'];p['asset']=Path(target).stem;p.pop('z',None);p.pop('order',None)
  w=p['width']*p.get('scale',1);f=dict(x=p['x'],y=p['y']-(9 if tree else 12),rx=31 if tree else round(w*.36,2),ry=22 if tree else 24);setfp(p,f)
  swaps.append(dict(id=p['id'],old=src,new=target))
-# Preserve one original lounger, now on the sand at Tutu's southeast beach.
 p=copy.deepcopy(next(p for p in og['props'] if p['src']=='detail/lounger.svg'));p.update(id='tutu-sand-lounger',x=4500,y=6660,zone='tutu',shadow=True)
 art['props'].append(p);setfp(p,dict(x=p['x'],y=p['y']-26,rx=round(p['width']*p['scale']*.38),ry=30))
-# Move the picnic blanket out of the old bridge approach and onto grass.
 p=next(p for p in art['props'] if p['id']=='picnic-blanket-71');shift(p,2240,4640)
-# Existing props must clear the travel lanes, using their actual ground contacts.
-# Place buildings first, then move small plants and furniture away from their gates.
 def isbuilding(p):return bool(p.get('household') or re.search(r'cottage|house-|cafe|workshop|gazebo|conservatory',p['src']))
 def occupied(p,x,y):
  for other in art['props']:
@@ -111,7 +104,6 @@ for p in sorted(art['props'],key=lambda p:not isbuilding(p)):
   if found:break
  if not found:raise ValueError('Cannot clear road: '+p['id'])
  moved.append(dict(id=p['id'],fromPoint=before,toPoint=[p['x'],p['y']]))
-# Deliberate loose groves on the cleared marina and southern lawns. Only OG assets.
 clusters=[(8520,2020),(9290,2170),(9060,3190),(8620,3470),(9400,3440),(3180,4330),(4560,4500),(4880,4900),(2820,4580),(5160,4150),(4360,5110)]
 for ci,(cx,cy) in enumerate(clusters):
  for j,(dx,dy) in enumerate([(-120,-100),(90,-140),(0,75),(180,60),(-170,150)]):
@@ -121,22 +113,18 @@ for ci,(cx,cy) in enumerate(clusters):
   if not dry(t['x'],t['y'],100) or not roadclear(t) or occupied(t,t['x'],t['y']):continue
   if any(math.hypot(p['x']-t['x'],p['y']-t['y'])<115 for p in art['props']):continue
   art['props'].append(t);isTree=j<4;setfp(t,dict(x=t['x'],y=t['y']-(9 if isTree else 12),rx=31 if isTree else round(t['width']*t['scale']*.36),ry=22 if isTree else 24))
-  # Small existing flowers follow the outside edge of each group.
   if j in [0,2]:
    f=copy.deepcopy(next(p for p in og['props'] if p['src']=='/pixi-art/plants/flower-3.svg'));f.update(id=f'og-grove-flowers-{ci}-{j}',x=t['x']+80,y=t['y']+50,zone='restored-grove',hamlet='restored',shadow=False)
    if roadclear(f) and dry(f['x'],f['y'],20):art['props'].append(f)
-# Keep every prop list, collision list and saved court arrival consistent.
 world['props']=art['props'];walk['props']=art['props']
 baseids={p['id'] for p in og['props']};layout['props']=[p for p in art['props'] if p['id'] not in baseids]
 base=read('scripts/bigger-pink/original-world.json')['obstacles'];layout['baseObstacles']=[o for o in world['obstacles'] if o in base];layout['obstacles']=[o for o in world['obstacles'] if o not in base]
 layout['paths']=[r['sampled'] for r in roads];layout['pathWidths']=[160]*len(roads);layout['shoreWalk']=roads[0]['sampled'];layout['coast']=world['coast']
 layout['decks']=art['decks'];layout['riverCrossings']=read('scripts/pink-fix/shore.json')['crossings']
-# Replaced tree SVGs are not retained as an unused alternative art library.
 used={p['src'] for k in ['props','flats','decks'] for p in art.get(k,[])};removed=[]
 for f in (A/'hamlets').rglob('*.svg'):
  rel=str(f.relative_to(A))
  if vegetation(rel) and rel not in used:f.unlink();removed.append(rel)
-# Remove baked garden beds and stepping stones in the marina/bridge areas; they have no collisions.
 art['flats']=[f for f in art['flats'] if not ((8100<f['x']<9700 and 1700<f['y']<3700) and re.search('bed|pebble|stepp|pad',f['src']))]
 for f,d in [(A/'art.json',art),(D/'world.json',world),(D/'walk-world.json',walk),(Path('scripts/bigger-pink/layout.json'),layout)]:write(f,d)
 previous={p['id']:p for p in originalProps}

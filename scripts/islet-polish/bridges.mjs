@@ -29,12 +29,10 @@ for(const i of ISLETS){
  landing.setAttribute('d',`M${foot[0]-dx*82/k} ${foot[1]-dy*82/k} L${foot[0]+dx*8/k} ${foot[1]+dy*8/k}`);
  landing.setAttribute('fill','none');landing.setAttribute('stroke','#fde48c');landing.setAttribute('stroke-width',String(128/k));landing.setAttribute('stroke-linecap','round');
  root.appendChild(landing);root.appendChild(g);
- // Preserve depth selection for the native Home tree replacements in the study.
  for(const [piece,point]of (i.art==='tree-and-rowboat'?[['oak',[503,553]]]:i.art==='04-small-mountain'?[['west-tree',[340,546]],['east-tree',[690,572]]]:[])){
   const node=Array.from(root.childNodes).find(n=>n.nodeType===1&&n.getAttribute('transform')?.startsWith(`translate(${point[0]- (piece==='oak'?245:piece==='west-tree'?112:106)/2}`));
   if(node)node.setAttribute('data-piece',piece);
  }
- // Native study plants are decorative, so retain original collision footprints.
  const text=new XMLSerializer().serializeToString(doc);
  if(/<(linearGradient|radialGradient|image|filter|pattern)\b/i.test(text))throw Error('Flat art only');
  writeFileSync(`public/pixi-art/islets/${i.art}.svg`,text);

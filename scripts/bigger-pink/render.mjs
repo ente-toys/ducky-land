@@ -1,4 +1,3 @@
-// Static proof assembled from production art, at its actual placement and scale.
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
 import READY from '../../assets/world/themes/index.js';

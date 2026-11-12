@@ -231,9 +231,6 @@ class Board:
                 current = multiply(matrix, transform(child))
                 alpha = opacity*attr(child, 'opacity', 1)
                 self.transforms[child], self.opacity[child] = current, alpha
-                # Imported SVG masks can belong to a Node, not only a Shape.
-                # Their source geometry remains in artboard coordinates while
-                # every descendant drawable inherits the same intersection.
                 current_clips = (*ancestor_clips, *(c.get('sourceId') for c in child.findall('ClippingShape')))
                 self.clips[child] = current_clips
                 if child.get('id'):
@@ -290,8 +287,6 @@ class Board:
         parts = [f'<g data-name={quoteattr(node.get("name", "Shape"))} opacity="{number(self.opacity[node])}">']
         for sid in clips:
             parts.append(f'<g clip-path="url(#clip-{sid.replace(":", "-")})">')
-        # A native Shape's fill under stroke is preserved; sibling order is
-        # reversed separately. Most shapes have one paint, cobbles have both.
         for paint in sorted(paints, key=lambda p: p.tag == 'Stroke'):
             rgb, alpha = color(paint)
             common = f'd={quoteattr(d)} transform={quoteattr(matrix_svg(matrix))}'
@@ -448,7 +443,6 @@ def exports():
         file='detail/'+asset['file'].removeprefix('assets/').replace('/','--')
         output[OUTPUT/file]=polish_svg((ROOT/asset['file']).read_text(),asset['name'])
         enhanced_assets[asset['file']]='/pixi-art/'+file
-    # The Racing Lake boat draws its oars separately so they can move.
     rowboat = ET.parse(ROOT/'assets/water/rowboat.svg').getroot()
     for path in list(rowboat):
         if '-oar-' in path.get('id',''):
@@ -506,7 +500,6 @@ def exports():
     ground_box = [0, 0, width, height]
     output[OUTPUT/'ground.svg'] = ground.svg(ground_box, 'Ducky Land — original island ground')
     tiles = []
-    # Each texture is comfortably below WebGL's common 4096 px ceiling.
     for row in range(3):
         for col in range(4):
             x, y = round(col*width/4), round(row*height/3)

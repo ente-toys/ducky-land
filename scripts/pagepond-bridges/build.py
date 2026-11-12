@@ -28,9 +28,6 @@ bridges=[{'id':c['id'],'a':c['bankA'],'b':c['bankB'],'src':'pagepond/'+c['id']+'
 for i,w in enumerate(source['walkways'][:5]):
  name=['pagepond-canal-0','pagepond-canal-1','pagepond-west','pagepond-east','pagepond-south'][i]
  bridges.append(dict(w,id=name,src=('pagepond/'+name+'-home.svg' if i<2 else ['jetty-west.svg','jetty-east.svg','jetty-south.svg'][i-2])))
-# The south oblique bank uses the matching authored NW source.
-# The east crossing sits above the river fork, on its straight reach.
-# Fit the whole width, including both rail feet, to the actual dry-bank contour.
 for c in bridges:
  if c['id']=='pagepond-south':c['a'][0]=c['b'][0]=6932
  ns=abs(c['b'][1]-c['a'][1])>abs(c['b'][0]-c['a'][0]);cx,cy=[sum(q[k] for q in [c['a'],c['b']])/2 for k in (0,1)]
@@ -48,11 +45,8 @@ for c in bridges:
  lo=min(q[0]for q in cuts)-30;hi=max(q[1]for q in cuts)+30
  c.update(a=point(lo),b=point(hi),w=112,direction=direction,r=24,length=hi-lo)
  if direction=='ew':c['squash']=.62
-# Throats join a real existing path, with a straight approach out of each end.
 routes=read('scripts/pagepond-ground/sampled-routes.json');baseRoutes=[r for r in routes if not r['id'].startswith('honeywood-')]
 baseNetwork=unary_union([LineString(r['samples']).buffer(r['width']/2-12)for r in baseRoutes])
-# Route new approaches around fixed contacts and resolved sleepers. Landscape
-# can be cleared locally, but residents and functional objects stay fixed.
 from shapely.prepared import prep
 beds=read('scripts/pagepond-ground/data/current-sleepers.json')
 def landscape(p):return bool(re.search(r'tree|bush|flower|grass|reeds|pebble|rock|mushroom',p.get('kind','')+' '+p['src'],re.I))
@@ -95,8 +89,6 @@ def route(a,b):
   while j>i+1 and not pr.covers(LineString([out[i],out[j]])):j-=1
   out2.append(out[j]);i=j
  return out2
-# The old west-south bridge sat behind the cottage roof. Its new approach
-# reaches the same trunk destinations from the open south side of that house.
 retired=next(r for r in baseRoutes if r['id']=='west-south-heart')
 priorReport=read(S/'report.json')if (S/'report.json').exists()else{}
 retired=priorReport.get('retiredRoute',retired)
@@ -130,7 +122,6 @@ for c in bridges:
  u=[(c['b'][k]-c['a'][k])/c['length'] for k in (0,1)]
  for side,p in [(-1,c['a']),(1,c['b'])]:
   q=safe([p[k]+side*u[k]*100 for k in (0,1)])
-  # Connect on the same bank, avoiding a false nearest point across the river.
   local=baseNetwork.intersection(region).intersection(Point(q).buffer(650)).difference(LineString([c['a'],c['b']]).buffer(10))
   target=nearest_points(Point(q),local)[1] if not local.is_empty else nearest_points(Point(q),baseNetwork)[1]
   pts=[p,*route(q,[target.x,target.y])]
@@ -138,8 +129,6 @@ for c in bridges:
   extra.append(throat);landings.append({'id':c['id'],'end':'a'if side<0 else'b','point':p,'shape':svg(throat),'route':pts})
   routesId='honeywood-'+c['id']+('-a'if side<0 else'-b')
   baseRoutes.append({'id':routesId,'width':104,'samples':pts})
-# Clear the landing and its sightline. Only landscape props may be lifted out;
-# a building, sleeper or functional prop in a throat is a failing build.
 throats=unary_union(extra+changedPieces+[LineString(r['samples']).buffer(r['width']/2)for r in baseRoutes if r['id'] in ['west-south-heart','centre-11']]);beds=read('scripts/pagepond-ground/data/current-sleepers.json')
 removed=[];remaining=[]
 prior=read(S/'report.json') if (S/'report.json').exists() else {}
@@ -148,7 +137,6 @@ for p in art['props']:
  if p['id'] in retiredBridgeParts:continue
  k=p.get('scale',1);w=p['width']*k;h=p['height']*k;a=p.get('anchor',{'x':.5,'y':1})
  landscape=bool(re.search(r'tree|bush|flower|grass|reeds|pebble|rock|mushroom',p.get('kind','')+' '+p['src'],re.I))
- # Full plant silhouette near deck landings, so canopies cannot cover the rails.
  visible=box(p['x']-w*a['x'],p['y']-h*a['y'],p['x']+w*(1-a['x']),p['y']+h*(1-a['y']))
  contact=shape(p['footprint']) if p.get('footprint') else Point(p['x'],p['y']).buffer(min(20,w*.15))
  hit=contact.intersects(throats.buffer(16)) or (landscape and visible.intersects(unary_union([Point(l['point']).buffer(70)for l in landings])))
@@ -165,7 +153,6 @@ def clearedObstacle(o):
  if o.get('name') or 'poly'in o:return False
  return any(abs(o['x']-p['x'])<2 and abs(o['y']-p['y'])<40 for p in clearedProps)
 world['obstacles']=[o for o in world['obstacles']if not clearedObstacle(o)]
-# Widen the existing single opaque painter, preserving inlays and terrain ordering.
 courts=[path(c['d'])for c in read('scripts/pagepond-ground/surface.json')['courts']]
 merged=unary_union([throats,*courts,*[LineString(r['samples']).buffer(r['width']/2,quad_segs=12)for r in baseRoutes]])
 contacts=unary_union([shape(o)for o in world['obstacles']]).union(hard)
@@ -184,7 +171,6 @@ f.write_text(ET.tostring(root,encoding='unicode'))
 s=read('scripts/pagepond-ground/surface.json');s.update(d=svg(surface),rings=[list(r.coords)for p in ([surface]if surface.geom_type=='Polygon'else surface.geoms)for r in [p.exterior,*p.interiors]])
 save('scripts/pagepond-ground/surface.json',s);save('scripts/pagepond-ground/sampled-routes.json',baseRoutes)
 Path('scripts/pagepond-ground/path-surface.svgfrag').write_text('<path data-pagepond-paths="home-system" fill="#FFF0C7" fill-rule="evenodd" d="'+s['d']+'"/>')
-# Absolute M/L/Q/Z are the complete vocabulary of these approved source paths.
 def commands(d):
  tokens=re.findall(r'[MLQZ]|[-+]?(?:\d*\.\d+|\d+)',d);out=[];i=0
  while i<len(tokens):
@@ -194,7 +180,6 @@ def stations(d):return re.findall(r'M[^M]+',d)
 def fmt(v):return f'{v:.4f}'.rstrip('0').rstrip('.') or '0'
 for c in bridges:
  ns=c['direction']=='ns';diag=c['direction'] in ['ne','nw'];root=ET.parse('public/pixi-art/home-expansion-c/bridges/bridge-'+c['direction']+'.svg').getroot();g=next(e for e in root if e.tag.endswith('g'));paths=[e for e in g.iter()if e.tag.endswith('path')]
- # Retire the source wrapper's end sills, leaving no slab over the path join.
  for e in paths[:2]:g.remove(e)
  L=c['length'];delta=L-(math.hypot(297,184)if diag else 260 if ns else 420);allpoints=[]
  for idx,e in enumerate(paths[2:],2):
@@ -230,8 +215,6 @@ for c in bridges:
       elif idx in [10,11]:t=0 if op=='M' else (1 if op=='L' else (.5 if pair==0 else (1 if j==1 else 0)))
       else:t=(66-x)/6 if x<120 else (x-174)/6
       y+=delta*t
-      # Keep rail ribbons and deck edge on the same 24-unit source crown as
-      # the boards/post stations. The old NS control was 12 units too flat.
       if idx in [3,10,11] and op=='Q' and pair==0:y-=24
      new.extend([x,y]);allpoints.append([x,y])
     out.append(op+' '.join(fmt(v)for v in new))
@@ -240,15 +223,12 @@ for c in bridges:
  x0=min(p[0]for p in allpoints)-3;y0=min(p[1]for p in allpoints)-3;x1=max(p[0]for p in allpoints)+3;y1=max(p[1]for p in allpoints)+3
  sx,sy=([388.5,292]if c['direction']=='nw'else[91.5,292])if diag else([120,50]if ns else[30,169.2])
  tx=c['a'][0]-sx;ty=c['a'][1]-sy
- # Art is one source unit per world unit, translation only, in both renderer
- # placement and SVG wrapper. Span changes are already in path coordinates.
  root=ET.Element('{'+NS+'}svg',{'data-home-source':'/pixi-art/home-expansion-c/bridges/bridge-'+c['direction']+'.svg','width':fmt(x1-x0),'height':fmt(y1-y0),'viewBox':' '.join(map(fmt,[x0,y0,x1-x0,y1-y0]))})
  root.append(g);(A/c['src']).write_text('\n'.join(line.rstrip()for line in ET.tostring(root,encoding='unicode').splitlines())+'\n')
  d=next((d for d in art['decks']if d.get('id')==c['id'] or d['src']==c['src']),None)
  if d is None:d={};art['decks'].append(d)
  d.update(id=c['id'],bridgeId=c['id'],src=c['src'],homeSource=root.get('data-home-source'),a=c['a'],b=c['b'],x=x0+tx,y=y0+ty,width=x1-x0,height=y1-y0,resolution=1.5,overBoats=True)
  c['transform']=[1,0,0,1,tx,ty];c['crossDeckScale']=1
-# Retain only the two genuine docks. All 17 crossings now share art + physics.
 retained=source['walkways'][5:];pier=next(w for w in world['walkways']if w.get('id')=='hamlet-paperboat-south-jetty')
 arches=[{k:c[k]for k in ['id','a','b','w','r',*(['squash']if 'squash'in c else[])]}for c in bridges]
 rects=[]

@@ -1,4 +1,3 @@
-// Authored village plan, drawn before the production composition.
 import {readFileSync,writeFileSync} from 'node:fs';
 import sharp from 'sharp';
 const P=JSON.parse(readFileSync(new URL('./plan.json',import.meta.url))),E=JSON.parse(readFileSync(new URL('./baseline-C.json',import.meta.url)));

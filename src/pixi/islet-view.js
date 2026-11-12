@@ -6,19 +6,14 @@ import {svgLayerContexts} from './svg-context.js';
 import {isletPlacement,placeIslet} from './islet-placement.js';
 export {isletPlacement};
 
-// boss 8 Nov ("the perspective of the islets is bad", "wtf is that docking port, not even our design quality"): every islet
-// is hand-drawn SVG (public/pixi-art/islets/<art>.svg) with its wooden jetty drawn in the art, in the Home centre's style.
-// Close up it is drawn as real Pixi geometry, so it stays sharp at any zoom. The globe shader samples a small atlas that is
-// rendered at start-up from the very same geometry, so no raster islet art ships at all.
 export {ISLET_VIEWBOX};
-export const ATLAS_CELL=512;   // world-view.js samples 4x3 cells of 512, each islet drawn 2px inside its cell
+export const ATLAS_CELL=512;
 const svgOf=art=>`/pixi-art/islets/${art}.svg`;
-const contexts=new Map();   // art -> full, ground and tall-piece contexts, shared by both placements
+const contexts=new Map();
 export function loadIsletArt(art){
  if(!contexts.has(art))contexts.set(art,fetch(svgOf(art)).then(r=>{if(!r.ok)throw Error(`${art}: ${r.status}`);return r.text();}).then(svgLayerContexts).catch(error=>{contexts.delete(art);throw error;}));
  return contexts.get(art);
 }
-// the 11 islets into one 2048x1536 atlas for the globe, straight from their vector art
 function bakeAtlas(renderer,arts){
  const atlas=RenderTexture.create({width:4*ATLAS_CELL,height:3*ATLAS_CELL,antialias:true,autoGenerateMipmaps:true,label:'Islet globe atlas'});
  const sheet=new Container(),k=(ATLAS_CELL-4)/ISLET_VIEWBOX;
@@ -31,11 +26,10 @@ export async function createIsletView(app,scene,objects){
  if(!objects?.sortableChildren)throw Error('Islet props need the shared depth-sorted object layer');
  const started=performance.now();
  const arts=await Promise.all(ISLET_ART.map(loadIsletArt));
- const loadMs=Math.round(performance.now()-started);   // QA readback: fetch + parse of all eleven
+ const loadMs=Math.round(performance.now()-started);
  const atlas=bakeAtlas(app.renderer,arts);
  const layer=new Container({label:'Sea islet ground'});
  if(objects.parent===scene)scene.addChildAt(layer,scene.getChildIndex(objects));else scene.addChild(layer);
- // Caller positions this above the ocean and below boats.
  const views=ISLETS.map(i=>{
   const root=new Container({label:`Islet ${i.id}`}),art=new Graphics({context:arts[i.artIndex].ground,label:`Islet art ${i.art}`}),k=i.width/ISLET_VIEWBOX;
   art.scale.set(k);art.position.set(-i.width/2,-i.width/2);root.addChild(art);root.visible=false;layer.addChild(root);
@@ -43,7 +37,6 @@ export async function createIsletView(app,scene,objects){
    const context=arts[i.artIndex].pieces.get(piece.id);
    if(!context)throw Error(`${i.art}: missing tall piece ${piece.id}`);
    const sprite=new Container({label:`${i.id}/${piece.id}`}),visual=new Graphics(context);
-   // Keep the exact original artwork offsets; only the depth anchor moves.
    visual.scale.set(k);visual.position.set(-piece.foot[0]*k,-piece.foot[1]*k);
    sprite.addChild(visual);sprite.upright=true;sprite.visible=false;objects.addChild(sprite);
    return {piece,sprite,visual};

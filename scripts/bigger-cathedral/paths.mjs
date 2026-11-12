@@ -1,4 +1,3 @@
-// Sole Bellovo road painter. Rebuildable from checked-in terrain and authored controls.
 import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
@@ -21,7 +20,6 @@ export function rebuildPaths(){
   courts.push({id:v.id+'-court',x:v.square[0],y:v.square[1],rx:415,ry:205});
   for(const o of v.pieces.filter(o=>/building|house|workplace/.test(o.role))){
    const p=art.props.find(p=>p.id===v.id+'-'+o.id),door=[p.x,p.y+40],s=v.square;
-   // South-facing homes are served around the side, never through their footprint.
    let points;
    if(o.id.includes('house-south')){
     if(v.id==='olivello')points=[door,[p.x+200,p.y+100],[s[0]-300,s[1]+190]];
@@ -33,8 +31,6 @@ export function rebuildPaths(){
    routes.push({id:p.id+'-door',width:104,points,terminal:'doorstep'});
   }
  }
- // Approach each end along the physical bridge tangent. Curves branch on dry ground,
- // 160 units back from the water, so their rounded shoulders cannot pinch the channel.
  for(const b of bridges)for(const side of ['a','b']){
   const end=b[side],dx=b.b[0]-b.a[0],dy=b.b[1]-b.a[1],len=Math.hypot(dx,dy),sign=side==='a'?-1:1;
   const back=b.id==='south-east-0'&&side==='b'?80:160;
@@ -46,8 +42,6 @@ export function rebuildPaths(){
  save(S+'paths-input.json',{routes,courts,bridges});
  execFileSync('python3',[S+'paths-geometry.py'],{stdio:'inherit'});
  const surface=fs.readFileSync(S+'path-surface.svgfrag','utf8');
- // Keep the original perimeter, islets and coast camera, remove ALL inherited roads,
- // route edging, old floor pads and obsolete forecourt replicas at their source.
  const native=dom(fs.readFileSync(S+'baseline/ground.svg','utf8'));
  const old=read(S+'baseline/world.json');
  const outline='M'+old.coast.map(p=>p.join(',')).join('L')+'Z';
@@ -59,8 +53,6 @@ export function rebuildPaths(){
  const fore=native.querySelector('[clip-path="url(#close-forecourt)"]');
  const mosaics=fore?fore.previousElementSibling.outerHTML+fore.outerHTML:'';
  const layer=`<defs><clipPath id="paths-current-coast"><path d="${coast}"/></clipPath></defs><g clip-path="url(#paths-current-coast)">${surface}</g>`;
- // Identical global surface in both support grids, with full world-sized viewBoxes.
- // Nothing is clipped to a tile in geometry, so adjacent textures meet on the same contour.
  for(const t of art.ground.tiles.filter(t=>t.src.startsWith('communities/'))){
   const ground=t.src.includes('preserved-')?original:extension;
   fs.writeFileSync(A+t.src,`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${t.width}" height="${t.height}" viewBox="${t.x} ${t.y} ${t.width} ${t.height}">${ground}${layer}</svg>`);
@@ -68,7 +60,6 @@ export function rebuildPaths(){
  world.paths=routes.map(r=>r.samples);world.pathWidths=routes.map(r=>r.width);
  world.pathSystem={version:1,color:'#F7DC88',mainWidth:128,laneWidth:104,painter:S+'paths.mjs',routes:routes.map(({id,width,terminal})=>({id,width,terminal}))};
  save(D+'world.json',world);
- // walk-world has an independently traced water mask. Only reconcile route fields.
  const walk=read(D+'walk-world.json');walk.paths=world.paths;walk.pathWidths=world.pathWidths;walk.pathSystem=world.pathSystem;save(D+'walk-world.json',walk);
  console.log('Bellovo sole gold painter:',routes.length,'routes,',bridges.length,'fixed bridges');
 }

@@ -103,7 +103,6 @@ test('bot combat grants no bot medals and cannot farm saved human tags, medals o
 
 test('shared normal brain cannot see hidden opponents, lead targets, or bypass eight-direction facing and reaction time',()=>{
  const packets=[],sim=createBogCombat(BOG_COMBAT),a=sim.join({id:'bot-a',team:'privacy'}),b=sim.join({id:'bot-b',team:'google'});a.bot=b.bot=true;
- // Use a clear area and a stationary enemy, outside the exact eight-way line.
  const combat={...BOG_COMBAT,blockers:[],navigation:{walkable:()=>true,route:()=>[]}};
  Object.assign(a,{x:1000,y:1000,shieldUntil:0});Object.assign(b,{x:1200,y:1025,shieldUntil:7});
  sim.input=(id,m)=>{packets.push({...m});return true;};

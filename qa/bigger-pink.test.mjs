@@ -28,11 +28,10 @@ test('bigger Pink reaches every new court and completes both promenade loops wit
  assert.equal(map.width,13200);assert.equal(map.height,9800);
  const nav=map.nav(),from=map.spawn;
  for(const p of layout.places){const point=map.world.zones['bigger-'+p.id].spawn;assert.ok(nav.walkable(...point),p.id+' arrival');assert.ok(nav.route(from.x,from.y,...point).length,p.id+' route');}
- // Current path metadata is the exact sampled drawn network, without nearest fallbacks.
  for(const r of read('scripts/rosy-ground/sampled-routes.json'))for(const p of r.samples)assert.ok(nav.walkable(...p),r.id+' exact point '+p);
  for(const prop of layout.props.filter(p=>!p.id.startsWith('rosy-b-'))){
   assert.ok(inPoly(prop.x,prop.y,layout.coast),prop.id+' on land');
-  if(prop.hamlet||read('scripts/pink-final/review-changes.json').movedProps.some(p=>p.id===prop.id))continue; // Approved hamlet canopies may overlap the former islet lawns.
+  if(prop.hamlet||read('scripts/pink-final/review-changes.json').movedProps.some(p=>p.id===prop.id))continue;
   const w=prop.width*prop.scale,h=prop.height*prop.scale,a=prop.anchor??{x:.5,y:1};
   for(let y=0;y<=6;y++)for(let x=0;x<=6;x++){
    const px=prop.x-a.x*w+w*x/6,py=prop.y-a.y*h+h*y/6;

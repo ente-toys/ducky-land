@@ -3,7 +3,6 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {inCentre,centreClip,centre} from './centre-lock.mjs';
 const A='public/pixi-art/themes/pink/',ref='7c2a28ec',git=p=>execFileSync('git',['show',ref+':'+p],{encoding:'utf8'}),read=p=>JSON.parse(readFileSync(p)),write=(p,v)=>writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const base=JSON.parse(git(A+'art.json')),art=read(A+'art.json');
-// Preserve original tile placement/raster scale, SVG content, and original layer order.
 const folder='expansion/locked-centre/';mkdirSync(A+folder,{recursive:true});
 art.ground.tiles=art.ground.tiles.filter(t=>!t.src.startsWith(folder));
 for(const [i,t]of base.ground.tiles.entries()){
@@ -15,7 +14,6 @@ const touches=p=>{const w=p.width*(p.scale??1),h=p.height*(p.scale??1),a=p.ancho
 const restored=[];
 for(const key of ['flats','decks','props']){
  const ids=new Set(base[key].filter(p=>p.id&&((key==='props'?(touches(p)||touches(art.props.find(v=>v.id===p.id)??p)):inCentre(p.x,p.y))||['pink-close-plaza','pink-close-court','centre-back','centre-decal-plaza'].includes(p.id))).map(p=>p.id));
- // Restore complete original sprites, not cut-out sprite fragments.
  art[key]=art[key].filter(p=>!p.id||!ids.has(p.id)||base[key].some(b=>b.id===p.id));
  for(const b of base[key].filter(p=>ids.has(p.id))){const i=art[key].findIndex(p=>p.id===b.id);if(i>=0){if(JSON.stringify(art[key][i])!==JSON.stringify(b))restored.push(b.id);art[key][i]=b;}else art[key].push(b);if(!b.src.startsWith('/'))writeFileSync(A+b.src,git(A+b.src));}
 }

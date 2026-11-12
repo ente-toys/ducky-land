@@ -1,4 +1,3 @@
-// Theme-only QA harness. Uses the actual production art loader, sleepers, surf and floating layers.
 import {Application,Assets,Container,Sprite} from 'pixi.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
 import {createSleeper,SLEEP_ASSETS} from '../../src/pixi/sleeper.js';
@@ -17,7 +16,6 @@ const water=new Container(),objects=new Container({sortableChildren:true});
 scene.addChild(art.ground,water,art.floatLayer,art.decks,art.shadows,objects);
 for(const p of art.props){p.sprite.visible=true;objects.addChild(p.sprite)}
 const surf=createBeachSurf(water,shoreOf(world));
-// The primary jetty is supplied by the game harbor, not art.json.
 const jetty=new Sprite(await acquire('/pixi-art/bridge-jetty-1.svg',1.5));jetty.position.set(2102.4,620);jetty.width=229.2;jetty.height=760;art.decks.addChild(jetty);
 const boats=[];for(const b of harbor.boats){const boat=new Sprite(await acquire('/pixi-art/boat-sail.svg',2));boat.anchor.set(.5,.82);boat.position.set(b.x,b.y+30);boat.width=188;boat.height=216;boat.zIndex=b.y;objects.addChild(boat);boats.push({boat,y:boat.y})}
 await Assets.load(SLEEP_ASSETS);

@@ -1,4 +1,3 @@
-// Deliverable checks for Mossnap Peaks. No shared source or registry mutations.
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,readdirSync,existsSync,statSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
@@ -26,7 +25,6 @@ for(const file of files.filter(p=>p.endsWith('.svg')))assert(!/<image\b|data:ima
 for(const p of [...art.ground.tiles,...art.decks,...art.props,...art.flats,...art.floating])assert(p.src.endsWith('.svg')&&existsSync(A+p.src),'missing SVG '+p.src);
 for(const p of centre.pieces)assert(existsSync(A+'centre/'+p.file));
 const origin=centre.placement;for(const b of centre.blocked)assert(!nav.walkable(origin.x+b.ellipse.x,origin.y+b.ellipse.y),'unblocked centre '+b.name);
-// Node-side load of the actual theme-art module, including centre metadata and lifecycle.
 const originalFetch=globalThis.fetch;let acquired=0,released=0;
 try{
  globalThis.fetch=async url=>({ok:true,json:async()=>read('public'+url)});

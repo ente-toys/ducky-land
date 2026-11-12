@@ -1,8 +1,6 @@
 import {unplaceRigid} from '../src/pixi/rigid.js';
 import {reframeIslet} from '../src/pixi/islet-placement.js';
 import {ISLETS} from '../src/pixi/islets.js';
-// boss 6 Nov: every island walks its own map (src/pixi/island-maps.js): home's is the walking map the game uses offline
-// (scripts/walk-world.mjs); a themed island's comes from its theme folder, or home's until that theme is delivered
 import {mapOf} from '../src/pixi/island-maps.js';
 import {BOG_ISLAND,bogLandingNotice} from '../src/pixi/bog-combat/entry.js';
 import {getPlayerKarma} from '../src/pixi/bog-combat/karma.js';
@@ -14,13 +12,10 @@ import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDoc
 import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
 import {RoomKarma} from './karma.js';
 
-// boss 6 Nov ("room for 100 Duckies on every island, and stalls"): ONE room (this Durable Object) runs all 300 islands, so
-// the old 16 was a cap on the whole world. Now each island holds up to ISLAND_LIMIT players, and the room as a whole up to
-// PLAYER_LIMIT (scripts/load-room.mjs: 100 walking on one themed island cost ~5-8 ms of each 50 ms tick, see qa/load.test.mjs).
 export const ISLAND_LIMIT = 100;
 export const PLAYER_LIMIT = 200;
 const SPECTATOR_LIMIT = 64;
-const STARGAZER_LIMIT = 5000;   // the most named stars one telescope sky is sent
+const STARGAZER_LIMIT = 5000;
 const RESUME_MS = 15_000;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
@@ -35,9 +30,6 @@ function publicPose(actor) {
   return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked,karma:actor.karma??0,
     ice:mode==='walking'?actor.ice??null:null,reducedMotion:actor.reducedMotion===true};
 }
-// boss 6 Nov (100 Duckies on one island): what goes on the wire each tick. The same pose, with positions to a hundredth of a
-// unit and angles to a thousandth (a full double is ~18 digits), so a 100-Ducky snapshot is far smaller. Saved poses keep
-// full precision (publicPose).
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
 function wirePose(actor) {
   const pose = publicPose(actor);
@@ -45,7 +37,6 @@ function wirePose(actor) {
   pose.x = r2(pose.x); pose.y = r2(pose.y); pose.turn = r3(pose.turn); pose.travel = r2(pose.travel); pose.jumpLeft = r3(pose.jumpLeft);
   return pose;
 }
-// Removed island saves and hibernated sockets return to the Home plaza.
 function recoverIsland(actor) {
   if (actor && !islandFor(actor.islandId)) {
     const [x,y] = mapOf('home').world.zones.plaza.spawn;
@@ -54,7 +45,6 @@ function recoverIsland(actor) {
   }
   return actor;
 }
-// how many players stand (or sail) on each island right now
 const islandCounts = connections => {
   const counts = new Map();
   for (const info of connections.values()) if (info.actor) counts.set(info.actor.islandId, (counts.get(info.actor.islandId) ?? 0) + 1);
@@ -63,8 +53,6 @@ const islandCounts = connections => {
 
 export class IslandRoom {
   getPlayerKarma(actor,account) {
-    // Refresh from the signed-in account, including after socket hibernation.
-    // Landing packets never supply this balance.
     if(!actor||!account)return 0;
     actor.karma=this.karma.balance(account);
     return getPlayerKarma(actor);
@@ -114,8 +102,6 @@ export class IslandRoom {
     this.sql.exec(`INSERT OR IGNORE INTO accounts (account,login)
       SELECT account,login FROM sessions WHERE expires>? ORDER BY expires DESC`, Date.now());
     this.migrateFriends();
-    // The telescope sky names everyone who starred ente/ente and has signed in here, for longer than the week a session lasts.
-    // An account is in stargazers while GitHub's last answer for it was "starred".
     if (!this.sql.exec("SELECT 1 FROM sqlite_master WHERE type='table' AND name='stargazers'").toArray().length) {
       this.sql.exec('CREATE TABLE stargazers (account TEXT PRIMARY KEY)');
       this.sql.exec('INSERT OR IGNORE INTO stargazers SELECT account FROM sessions WHERE can_play=1 AND expires>?', Date.now());
@@ -124,7 +110,6 @@ export class IslandRoom {
     this.sql.exec('CREATE TABLE IF NOT EXISTS outfits (account TEXT PRIMARY KEY, outfit TEXT NOT NULL)');
     this.sql.exec('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY, state TEXT NOT NULL)');
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
-    // keep saved boats (position, occupant), then fill every mooring on every island (300 islands, boss 6 Nov: all the boats)
     this.sql.exec('CREATE TABLE IF NOT EXISTS boat_states (id TEXT PRIMARY KEY, state TEXT NOT NULL)');
     const rows = this.sql.exec('SELECT id,state FROM boat_states').toArray();
     const boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : createBoats();
@@ -137,7 +122,7 @@ export class IslandRoom {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
-      if(info.bog)continue; // Restored after the world actors below.
+      if(info.bog)continue;
       const actor = recoverIsland(info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null);
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()};
@@ -153,7 +138,7 @@ export class IslandRoom {
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
   }
 
-  navFor(islandId='home') { return navOf(islandId); }   // the island's ground plus its sea islets (boss 8 Nov: dock at any islet)
+  navFor(islandId='home') { return navOf(islandId); }
 
   saveBoats() {
     const next = new Map(this.boats.map(boat => [String(boat.id), JSON.stringify(boat)]));
@@ -170,8 +155,6 @@ export class IslandRoom {
     this.legacyBoats = false;
   }
 
-  // boss 6 Nov: the sailor stepped off. The boat ties back up if it is still beside its own empty mooring, otherwise it
-  // stays parked at its landing position; the original moorings stay full (islands.js fillMoorings)
   parkBoat(boat) {
     retireBoat(this.boats,boat);
     this.saveBoats();
@@ -194,8 +177,6 @@ export class IslandRoom {
     const boat = this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
     if (!boat || canSail(actor.x, actor.y, actor.islandId)) return false;
 
-    // A saved sailing position can be inside the current coast. Find nearby
-    // water first, with the current island's harbor as a safe fallback.
     let position = harborOf(actor.islandId).water;
     search: for (const distance of [16, 32, 64, 128, 256]) {
       for (let i = 0; i < 16; i++) {
@@ -274,7 +255,6 @@ export class IslandRoom {
     if (pathname === '/session/access') {
       this.sql.exec('UPDATE sessions SET can_play=? WHERE digest=?', data.canPlay === true ? 1 : 0, data.digest);
       const checked = this.session(data.digest, now);
-      // play access is also withdrawn when GitHub could not be asked; only a real answer changes who has starred
       if (checked && typeof data.starred === 'boolean') this.stargazer(checked.account, data.starred);
       if (!data.canPlay) {
         const user = this.session(data.digest);
@@ -333,8 +313,6 @@ export class IslandRoom {
     else this.sql.exec('DELETE FROM stargazers WHERE account=?', account);
   }
 
-  // The telescope's night sky: one star for everyone who starred ente/ente. GitHub only says how many there are, so the
-  // named stars are the people who signed in here with a star. Signed-in viewers already see these usernames above the Duckies.
   stars(data, now) {
     const user = this.session(data.digest, now);
     if (!user) return reply({error:'Please sign in again to look through the telescope.'},401);
@@ -342,7 +320,7 @@ export class IslandRoom {
     const named = new Map(this.sql.exec('SELECT account,login FROM accounts WHERE account IN (SELECT account FROM stargazers) ORDER BY account LIMIT ?', STARGAZER_LIMIT)
       .toArray().map(row => [row.account,row.login]));
     const playing = [...this.connections.values()].filter(info => info.actor && info.account && info.expires > now);
-    for (const info of playing) if (info.login) named.set(info.account, info.login);   // whoever is playing is always named
+    for (const info of playing) if (info.login) named.set(info.account, info.login);
     const players = [...named], online = [...new Set(playing.map(info => info.account))];
     const friends = this.sql.exec('SELECT friend_account_id AS account FROM friends WHERE owner_account_id=?', user.account)
       .toArray().map(row => row.account);
@@ -399,7 +377,6 @@ export class IslandRoom {
       return reply({error:'That friend request is no longer available.'},409);
     }
     const mutate = () => {
-      // Sending a reciprocal request also expresses consent from both people.
       if ((data.method === 'PATCH' && data.action === 'accept') || (data.method === 'POST' && incoming)) {
         this.sql.exec(`INSERT OR IGNORE INTO friends VALUES(?,?,?),(?,?,?)`,user.account,account,now,account,user.account,now);
         this.sql.exec('DELETE FROM friend_requests WHERE (sender_account_id=? AND receiver_account_id=?) OR (sender_account_id=? AND receiver_account_id=?)',user.account,account,account,user.account);
@@ -456,9 +433,6 @@ export class IslandRoom {
       if (!savedOutfit) this.sql.exec('INSERT INTO outfits (account,outfit) VALUES(?,?)',user.account,JSON.stringify(outfit));
       info.actor = {id:crypto.randomUUID(), x,y,turn:0,emoteVersion:0,
         islandId:'home',mode:'walking',boatId:null,...from,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
-      // boss 6 Nov ("I can go to the museum from the beginning, restrict that"): a Ducky that left while inside the museum
-      // is held at its door, and a game that opens there walked straight back in. Every new game starts on the plaza.
-      // Retired islands cannot retain a saved walking or sailing session.
       recoverIsland(info.actor);
       if (this.recoverSailingPosition(info.actor)) this.saveBoats();
       if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
@@ -495,9 +469,6 @@ export class IslandRoom {
     try { socket.send(JSON.stringify(message)); } catch { socket.close(1011, 'Connection lost'); }
   }
 
-  // Share full snapshots and movement patches between viewers with the same
-  // island and name visibility. Full snapshots also serve legacy clients and
-  // periodically renew the baseline for clients that opt into deltas.
   broadcast() {
     const now = Date.now();
     this.karma.broadcast(now);
@@ -505,8 +476,6 @@ export class IslandRoom {
       info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
     const groups = new Map();
-    // Combat uses its own team-filtered poses. Do not expose the parked world
-    // actor at the harbour to other viewers while that account is fighting.
     const combatAccounts=new Set([...(this.bog?.arena.state.players.values()??[])].map(p=>p.profile));
     for (const info of this.connections.values()) {
       if (!info.actor||combatAccounts.has(info.account)) continue;
@@ -675,23 +644,22 @@ export class IslandRoom {
         break;
       case 'input':
         if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
-        if (command.x || command.y) {info.boarding = null; info.landing = null;}   // steering away cancels a dock
+        if (command.x || command.y) {info.boarding = null; info.landing = null;}
         else if (command.stop === true) info.boarding = null;
-        // boss 5 Nov: a stop from the window losing focus must not strand a Ducky in a boat that is sailing in to land
         if (command.stop === true && !info.landing) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
-        info.input = {x:command.x,y:command.y,run:command.run === true};   // boss 6 Nov: Shift runs; the speed itself is capped in walkStep
+        info.input = {x:command.x,y:command.y,run:command.run === true};
         if (typeof command.reducedMotion==='boolean') actor.reducedMotion=command.reducedMotion;
         info.inputExpires = now+350;
         break;
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
         if (actor.mode === 'sailing' ? !canSail(command.x,command.y,actor.islandId)
-          : !canWalkTo(actor.islandId,command.x,command.y)) return;   // the island map, or one of its sea islets
+          : !canWalkTo(actor.islandId,command.x,command.y)) return;
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;
           info.boarding = null;
-          info.landing = null;   // a new course cancels a dock in progress
+          info.landing = null;
           if (actor.mode === 'sailing') setSailDestination(actor,command.x,command.y);
           else setWalkDestination(actor, this.navFor(actor.islandId), command.x, command.y);
         }
@@ -700,28 +668,25 @@ export class IslandRoom {
         if (actor.mode !== 'walking' || typeof command.boatId !== 'string') break;
         info.boarding=null; actor.path=[]; info.input=ZERO;
         const boat = this.boats.find(boat => boat.id === command.boatId && boat.islandId === actor.islandId);
-        if (!boat || boat.occupant) {   // boss 5 Nov: any boat, wherever it is moored
+        if (!boat || boat.occupant) {
           this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           break;
         }
         info.input=ZERO;
-        const nav=this.navFor(actor.islandId), deck=boardingPoint(boat,nav);   // the jetty deck beside a harbor boat, or the nearest sand for a beach or islet boat
+        const nav=this.navFor(actor.islandId), deck=boardingPoint(boat,nav);
         if (near(actor,deck,45) || setWalkDestination(actor,nav,deck.x,deck.y)) info.boarding=boat.id;
         break;
       }
       case 'disembark':
         if (actor.mode === 'sailing') {
           info.input=ZERO; info.landing=null;
-          if (canDock(actor)) {if(!this.allowLanding(socket,info,actor.islandId))break;const {water}=harborOf(actor.islandId); setSailDestination(actor,water.x,water.y); actor.docking=true; break;}   // at the harbor: sail in to the jetty
-          // boss 5 Nov: anywhere else, hop out onto the nearest shore within reach (this island's or a neighbour's)
+          if (canDock(actor)) {if(!this.allowLanding(socket,info,actor.islandId))break;const {water}=harborOf(actor.islandId); setSailDestination(actor,water.x,water.y); actor.docking=true; break;}
           const spot=landingSpot(actor,this.navFor(actor.islandId));
           if (!spot) {this.send(socket,{type:'travel-notice',text:'Sail closer to the shore to dock.'}); break;}
           if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) break;
           if (spot.islandId !== actor.islandId && (islandCounts(this.connections).get(spot.islandId) ?? 0) >= ISLAND_LIMIT) {this.send(socket,{type:'travel-notice',text:`That island is full (${ISLAND_LIMIT} Duckies). Try another one.`}); break;}
-          // boss 5 Nov ("dock fix"): sail in to the water beside the sand first; the hop out happens when the boat arrives
           spot.approach=landingApproach(actor,spot);
           info.landing=spot;
-          // no open-water route to that water (or already there): hop out from where the boat is now instead of waiting forever
           if (!near(actor,spot.approach,14) && !setSailDestination(actor,spot.approach.x,spot.approach.y)) info.landing={...spot,approach:{x:actor.x,y:actor.y}};
         }
         break;
@@ -739,7 +704,6 @@ export class IslandRoom {
     }
     info.ack = command.seq;
     this.attach(socket, info);
-    // The tick acknowledges every valid command, including rejected cooldown repeats.
     if (!this.timer) this.timer = setInterval(() => this.step(),50);
   }
 
@@ -748,7 +712,7 @@ export class IslandRoom {
     let active = false;
     this.expire(now);
     const counts = islandCounts(this.connections), roomOn = id => (counts.get(id) ?? 0) < ISLAND_LIMIT;
-    const full = (socket, info) => {   // told once a minute at most, so a boat waiting at a full harbor does not spam
+    const full = (socket, info) => {
       if (now-(info.fullNotice ?? -Infinity) < 60_000) return;
       info.fullNotice = now; this.send(socket,{type:'travel-notice',text:`That island is full (${ISLAND_LIMIT} Duckies). Try another one.`});
     };
@@ -759,27 +723,27 @@ export class IslandRoom {
       if (actor.mode === 'sailing') {
         sailStep(actor,.05,info.input);
         const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
-        if (!boat) info.landing=null;   // the boat is gone (released or restored): nothing to sail in
+        if (!boat) info.landing=null;
         if (boat) {
           const from=actor.islandId;
-          if (crossIsland(actor,id=>roomOn(id)&&this.allowLanding(socket,info,id))) {info.input=ZERO; info.inputExpires=0; info.landing=null; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}   // sailed into a neighbour's harbor: its jetty docking takes over
-          else if (destinationsFor(actor.islandId).some(d => !roomOn(d.destination) && Math.abs(actor.x-d.dock.x)<=65 && Math.abs(actor.y-d.dock.y)<=50)) full(socket,info);   // waiting at a full island's harbor mouth
+          if (crossIsland(actor,id=>roomOn(id)&&this.allowLanding(socket,info,id))) {info.input=ZERO; info.inputExpires=0; info.landing=null; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}
+          else if (destinationsFor(actor.islandId).some(d => !roomOn(d.destination) && Math.abs(actor.x-d.dock.x)<=65 && Math.abs(actor.y-d.dock.y)<=50)) full(socket,info);
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
-          if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {   // reached the shore: hop out onto the sand
+          if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {
             const spot=info.landing; info.landing=null;
             if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) continue;
-            if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}   // that island filled up while you sailed in: stay aboard
+            if (spot.islandId !== actor.islandId && !roomOn(spot.islandId)) {full(socket,info); actor.sailTarget=null; actor.sailRoute=null;}
             else {
             if(!spot.islet&&!this.chargeBogLanding(socket,info,spot.islandId))continue;
             if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,spot.islet?reframeIslet(actor.islandId,spot.islandId,ISLETS.find(i=>i.id===spot.islet),actor):unplaceRigid(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
             Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
-            this.parkBoat(boat);   // Keep the boat in the arrival island's coordinate frame, beside the landing.
+            this.parkBoat(boat);
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
             }
           } else if (actor.docking && near(actor,harborOf(actor.islandId).water,12)) {
             if (!this.allowLanding(socket,info,actor.islandId)||!this.chargeBogLanding(socket,info,actor.islandId)) continue;
-            this.parkBoat(boat);   // Keep the arrival boat beside the jetty, available to board again.
+            this.parkBoat(boat);
             Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
@@ -789,7 +753,7 @@ export class IslandRoom {
         const nav=this.navFor(actor.islandId);
         walkStep(actor, nav, .05, now/1000, info.input);
         const boat=info.boarding && this.boats.find(boat => boat.id === info.boarding && boat.islandId === actor.islandId);
-        const aboard=boat && near(actor,boardingPoint(boat,nav),45);   // boss 5 Nov: step in from the deck beside the boat (the jetty end for the tip berths)
+        const aboard=boat && near(actor,boardingPoint(boat,nav),45);
         if (info.boarding && (aboard || !actor.path.length)) {
           info.boarding=null;
           actor.path=[];
@@ -804,7 +768,7 @@ export class IslandRoom {
       }
       active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || info.landing || actor.jumpLeft > 0 || actor.until > now/1000 || (actor.ice && actor.ice.phase!=='drift'));
     }
-    const walking = new Map();   // boss 6 Nov: each island's walkers, gathered in one pass (was 300 passes over every player)
+    const walking = new Map();
     for (const info of this.connections.values()) {
       const actor = info.actor;
       if (actor?.mode !== 'walking') continue;
@@ -814,8 +778,6 @@ export class IslandRoom {
     for (const [islandId, walkers] of walking) if (walkers.length > 1 && separateActors(walkers,this.navFor(islandId),.05)) active=true;
     this.karma.update(now);
     for (const [socket,info] of this.connections) if (info.actor) this.attach(socket,info);
-    // a sailor clear of the jetty leaves a fresh boat at the mooring (boss 6 Nov); with nobody sailing no boat moves, so the
-    // 1,800 boats are only re-checked and re-saved while someone is aboard
     if (this.boats.some(boat => boat.occupant) || this.boatsDirty) {
       this.boatsDirty = false;
       if (fillMoorings(this.boats)) active=true;

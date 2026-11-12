@@ -9,22 +9,18 @@ import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import S from '../scripts/home-10/shore.json' with {type:'json'};
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
 test('Home communities keep C coast, map coordinates, working harbour and both piers',()=>{
- // 8 Nov (shore lane): the old north-east harbour inlet is land; C's coast with that stretch replaced by the new east beach
  const near=(p,q)=>Math.round(p[0])===q[0]&&Math.round(p[1])===q[1],i=C.coast.findIndex(p=>near(p,S.coast.after)),j=C.coast.findIndex(p=>near(p,S.coast.before));
  assert.deepEqual(E.coast,[...C.coast.slice(0,i+1),...S.coast.points,...C.coast.slice(j)]);assert.deepEqual(E.origin,C.origin);
  assert.equal(E.width,C.width);assert.equal(E.height,C.height);
- // boss 8 Nov: C's flat plank pier into the south-west pond is gone, with its walkway
  const pier=C.decks.filter(d=>!d.src.endsWith('/pond-jetty.svg')),pierWalks=C.walkways.slice(1);
  assert.ok(!E.decks.some(d=>d.src.endsWith('/pond-jetty.svg')));assert.deepEqual(E.decks.slice(0,pier.length),pier);assert.deepEqual(E.walkways.slice(0,pierWalks.length),pierWalks);
- // the harbour is the south fishing dock now: its jetty, docking water and the three jetty boats; the other boats are C's
  assert.deepEqual(E.jetty,S.harbour.jetty);assert.deepEqual(E.harborWater,S.harbour.harborWater);assert.deepEqual(E.boats,[...S.harbour.boats012,...C.boats.slice(3)]);
  for(const b of E.boats.slice(0,3))assert.ok(canSail(b.x,b.y,'home'),`jetty boat ${b.x},${b.y} afloat`);
  assert.ok(canSail(E.harborWater.x,E.harborWater.y,'home'));for(const p of [[6050,1778],[5956,1756],[5789,1700]])assert.equal(canSail(...p,'home'),false,'the old bay is land');
  assert.ok(canSail(6150,1856,'home'),'Millrill Pond now joins the sea');
- const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2.05,`land ratio ${ratio}`);   // 8 Nov: +the filled-in old harbour inlet (2.017)
+ const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2.05,`land ratio ${ratio}`);
 });
 test('five Home communities have distinct homes, meaningful workplaces and reachable front doors',()=>{
- // boss 8 Nov: each hamlet is GPT's blueprint copied object by object (scripts/home-10/hamlets-apply.mjs): three or four homes each
  const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);let homes=0;
  for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=3,c.id);assert.ok(c.workplaces.length>=2,c.id);
   for(const id of c.workplaces){const p=E.props.find(p=>p.id===id);assert.equal(p.zone,c.id);assert.equal(p.communityRole,'workplace');}

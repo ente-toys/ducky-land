@@ -8,7 +8,6 @@ sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import Polygon,LineString,Point,box,mapping
 from shapely.ops import unary_union,triangulate
 from shapely import affinity
-# Reuse the actual approved Home sampler and union contour writer, not a new spline.
 home=Path('scripts/home-review/paths.py').read_text()
 for fn in ast.parse(home).body:
  if isinstance(fn,ast.FunctionDef) and fn.name in ('sample','path'):
@@ -23,15 +22,12 @@ def poly(p):return Polygon(p).buffer(0)
 wet=unary_union([poly(w['poly']) if 'poly' in w else affinity.scale(Point(w['x'],w['y']).buffer(1,quad_segs=60),w['rx'],w['ry']) for w in W['water']])
 land=poly(W['coast']);sand=land.difference(wet)
 grass=land.buffer(-155,quad_segs=12).difference(wet.buffer(24,quad_segs=12))
-# Main=128, every lane=104. Same buffer and fork fillet as Home paths.py.
 roads=[LineString(sample(r['points'])).buffer(r['width']/2,quad_segs=10) for r in R]
-# Retain destination courts, round any old square tips before they join the union.
 courts=[poly(p).buffer(-16,quad_segs=12).buffer(16,quad_segs=12) for p in data['hamlets']]
 roads+=courts
 barn=poly([[4180,1454],[4260,1220],[4560,1150],[4880,1210],[5180,1420],[5360,1720],[5050,1790],[4700,1580],[4420,1399]]).buffer(-65,quad_segs=12).buffer(65,quad_segs=12)
 beach=poly([[5520,3160],[5800,2990],[6190,2980],[6660,3220],[6670,3590],[6360,3770],[5870,3760],[5580,3550]]).buffer(-80,quad_segs=12).buffer(80,quad_segs=12)
 roads += [barn,beach]
-# Widen only the bridge throats, meeting the exact Home deck endpoints.
 bridge_clear=[]
 for b in W['arches']:
  axis=LineString([b['a'],b['b']]);vx=b['b'][0]-b['a'][0];vy=b['b'][1]-b['a'][1];length=math.hypot(vx,vy)
@@ -41,17 +37,13 @@ for b in W['arches']:
  bridge_clear.append(axis.buffer(85,quad_segs=10))
 merged=unary_union(roads).buffer(85,quad_segs=12).buffer(-85,quad_segs=12)
 surface=merged.difference(wet).intersection(land)
-# Home polish-ground.py uses preserve-topology simplification at .5 world units.
 surface=surface.simplify(.5,preserve_topology=True)
-# Keep the approved bloom paving as a destination. No second lane palette.
 ET.register_namespace('','http://www.w3.org/2000/svg')
 root=ET.parse('scripts/sunbob-ground/plaza-source.svg').getroot();serial=lambda e:ET.tostring(e,encoding='unicode')
-# Old pale lawn smudges read as ghost paths. Home keeps cream at destinations.
 for parent in root[46].iter():
  for child in list(parent):
   if child.get('fill','').lower()=='#fff0c7':parent.remove(child)
 centre=json.loads((A/'bloom/centre-placements.json').read_text())
-# Field edges share the road clearance, so both art and physics use the same cut.
 fieldBase=json.loads(Path('scripts/sunbob-ground/field-baseline.json').read_text())
 fieldShapes=[];fieldObs=[]
 for f in fieldBase:
@@ -63,7 +55,6 @@ for f in fieldBase:
   for j,t in enumerate(pieces):
    if t.geom_type=='Polygon' and t.area>1:fieldObs.append(dict(name=f['name']+'-trim-'+str(i)+'-'+str(j),poly=list(t.exterior.coords)))
 fields=unary_union(fieldShapes)
-# Preserve every fence position. Only a bridge landing cuts a gap through it.
 fenceMask=unary_union(bridge_clear)
 (A/'path-trim').mkdir(exist_ok=True)
 trimmed=[];fence=[];fieldVisual=[]
@@ -76,7 +67,6 @@ for p in art['props']:
  bounds=box(x,y,x+w,y+h)
  isFence=p['id'].startswith('ring-fence-')
  cut=fenceMask if isFence else merged.buffer(14,quad_segs=10)
- # The bloom's former ellipse is no longer a path surface; preserve its petal floor.
  visible=bounds.difference(cut)
  if not isFence:fieldVisual.append(visible)
  else:fence.append(dict(id=p['id'],x=p['x'],y=p['y'],width=p['width'],height=p['height'],scale=s))
@@ -87,8 +77,6 @@ for p in art['props']:
  target='path-trim/'+p['id']+'.svg'
  (A/target).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{vb[2]}" height="{vb[3]}" viewBox="{vb[0]} {vb[1]} {vb[2]} {vb[3]}"><defs><clipPath id="lane-clear"><path d="{path(local)}" fill-rule="evenodd"/></clipPath></defs><g clip-path="url(#lane-clear)">{inner}</g></svg>')
  p['src']=target;p['pathOriginalSrc']=src;trimmed.append(p['id'])
-# No lamp/planter/tree/scarecrow standing in a field, or any solid blocking a lane.
-# Retain the scene's existing objects, moving only offending feet to nearby margins.
 allCrops=unary_union(fieldVisual).union(fields)
 relocated=[]
 routeLines=unary_union([LineString(sample(q["points"])) for q in R])
@@ -108,7 +96,7 @@ def owned(o,p):return o.get('name')==p.get('id') or (abs(o.get('x',1e9)-p['x'])<
 obstacles=[o for o in W['obstacles'] if not o.get('name','').startswith('centre-field-')]
 for p in art['props']:
  if 'field-' in p.get('pathOriginalSrc',p['src']) or p['id'].startswith('ring-fence-'):continue
- if re.search('bloom-(bench)',p['id']):continue # destination seats
+ if re.search('bloom-(bench)',p['id']):continue
  matches=[o for o in obstacles if owned(o,p)]
  isTall=bool(re.search(r'tree|scarecrow|lamp|lantern|planter',p['src']))
  pt=Point(p['x'],p['y']);r=max([o.get('rx',0) for o in matches]+[12])
@@ -118,7 +106,6 @@ for p in art['props']:
  cropHit=isTall and crop25.contains(pt)
  laneHit=bool(matches) and corridor.contains(pt) and not (p.get('communityRole')=='home')
  if not cropHit and not laneHit:continue
- # Local, deterministic nearest margin search, never a scatter/fill operation.
  origin=[p['x'],p['y']];found=None
  pavingMargin=plazaClear.buffer(min(r,110)+25)
  for dist in range(80,2401,40):
@@ -134,19 +121,16 @@ for p in art['props']:
  p['x']+=dx;p['y']+=dy
  for o in matches:o['x']+=dx;o['y']+=dy
  relocated.append(dict(id=p['id'],fromPoint=origin,to=[p['x'],p['y']]))
-# Ground: only lawns, the new Home surface, water and retained destination details.
 defs=f'<defs><clipPath id="sun-dry"><path d="{path(sand)}" fill-rule="evenodd"/></clipPath><clipPath id="sun-grass"><path d="{path(grass)}" fill-rule="evenodd"/></clipPath></defs>'
 g=defs+''.join(serial(e) for e in root if e.tag.split('}')[-1]=='defs')
 g+=f'<g fill-rule="evenodd"><path d="{path(sand)}" fill="#fde48c"/><path d="{path(grass)}" fill="#93b72f"/></g>'
 tones=[(1300,200,1500,680,'#a5bf3e'),(4000,-180,1600,570,'#a6bd37'),(7200,450,1400,750,'#9fb935'),(8450,2600,660,1350,'#a7c344'),(7900,4350,1000,720,'#a3bc38'),(4800,5660,1800,700,'#a7bf41'),(1500,5300,1600,740,'#9dbb38'),(-400,2800,800,1600,'#a4c045')]
 g+='<g clip-path="url(#sun-grass)">'+''.join(f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" fill="{c}"/>' for x,y,rx,ry,c in tones)+''.join(serial(root[i]) for i in [46,50,52,54,56])+'</g>'
-# Exact Home exterior-only lower contact edge. No internal edges or worn lane stripe.
 svg=f'<g data-name="Sunbob unified paths" fill-rule="evenodd"><path d="{path(surface)}" fill="#e4c567" transform="translate(0 3)"/><path d="{path(surface)}" fill="#fde48c"/></g>'
 g+=f'<g clip-path="url(#sun-dry)">{svg}</g>'
 g+=f'<path d="{path(wet.intersection(land))}" fill="{art["sea"]}" fill-rule="evenodd"/>'
 g+=''.join(serial(root[i]) for i in [62,64,65,66,67,68,69])
 g+=''.join(serial(root[i]) for i in range(80,len(root)))
-# Only bloom paving remains: no old ellipse, ghost strips or separate join painter.
 for tile in centre['groundTiles']:
  if tile['src']!='plaza-bloom-ground.svg':continue
  e=ET.parse(A/'bloom'/tile['src']).getroot()

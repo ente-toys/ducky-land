@@ -29,7 +29,6 @@ for(const islet of ISLETS){
   if(!p||points.some(q=>Math.hypot(p[0]-q.x,p[1]-q.y)<120)||!walk.nav.route(walk.land.x,walk.land.y,...p)?.length)continue;
   points.push({x:p[0],y:p[1]});
  }
- // Walk.land is an object; route from that exact authored dock for validation.
  if(!points.length){const p=walk.nav.nearest(walk.land.x,walk.land.y,120);if(p)points.push({x:p[0],y:p[1]});}
  points.forEach((p,k)=>sites.push({id:`${islet.id}-${k}`,region:islet.id,islandId:islet.home,...p}));
 }

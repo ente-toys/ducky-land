@@ -26,7 +26,6 @@ test('all eight courts and the Home dock connect with the actual padded island n
  for(let y=7560;y<=8400;y+=20)assert.equal(map.landAt(4450,y),false,`open sea mouth ${y}`);
 });
 test('exported building/wall rectangles match movement obstacles exactly',()=>{
- // Colonnades and headstones have individual feet rather than a broad box.
  const facades=art.props.filter(p=>p.homeSource?.includes('home-hamlets')&&p.name!=='home-planting-bed');
  assert.equal(facades.length,20);
  for(const p of facades)assert.ok(BOG_SOLIDS.some(b=>b.id===p.id||b.prop===p.id),p.id+' physical footprint');
@@ -57,5 +56,5 @@ test('Home plant geometry is kept at source size and every root is on dry land',
   assert.deepEqual(recolour,original,p.id+' exact Home paths');
  }
  assert.ok(art.props.filter(p=>p.name.startsWith('tree-')).length>=250);
- assert.equal(art.raster.enabled,false); // boss 10 Nov: streaming off, static artassert.equal(art.sea,'#6EC9DE');
+ assert.equal(art.raster.enabled,false);
 });

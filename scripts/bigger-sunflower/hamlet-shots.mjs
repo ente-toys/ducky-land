@@ -1,5 +1,3 @@
-// Proof shots: each hamlet close up (k .5) beside GPT's blueprint, and the whole island at k .14.
-// node scripts/bigger-sunflower/hamlet-shots.mjs [out-dir] [hamlet ...]
 import sharp from 'sharp';
 import {readFileSync, mkdirSync} from 'node:fs';
 import {render, A} from './render.mjs';

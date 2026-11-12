@@ -6,7 +6,6 @@ out=pathlib.Path('public/pixi-duck/float'); temp=pathlib.Path('/tmp/pond-duckies
 for name in ['f4_ring','g1_donut','g4_paperboat','g6_lounger','g3_snorkel_c','g2_padhat','f6_peek']:
  im=Image.open(source/(name+'.png')).convert('RGBA'); alpha=im.getchannel('A').point(lambda v:255 if v>40 else 0); box=alpha.getbbox(); im=im.crop(box)
  a=np.array(im); rgb=a[:,:,:3].astype(float)/255; hi=rgb.max(2);lo=rgb.min(2); sat=(hi-lo)/np.maximum(hi,.001)
- # Deliberately flatten painted lighting into the same small palette as native Duckies.
  pal=['#232323','#ffcf23','#ffdf65','#ff884a','#fafbf7','#bdbfba','#f8293a','#ef83b2','#f3bd48','#689d43','#25d9de','#81cce1','#b3e9f0','#83da57']
  from PIL import ImageColor
  p=np.array([ImageColor.getrgb(c) for c in pal]); d=((a[:,:,:3,None].transpose(0,1,3,2).astype(float)-p)**2).sum(3); idx=d.argmin(2)

@@ -1,4 +1,3 @@
-// Snow's authored community plan. Every building and garden has a fixed address.
 export const bounds={x:-2400,y:-2100,width:12800,height:10400};
 export function smooth(p,closed=false,n=10){const q=[],N=p.length,P=i=>p[closed?(i+N)%N:Math.max(0,Math.min(N-1,i))];for(let i=0;i<(closed?N:N-1);i++)for(let k=0;k<n;k++){const a=P(i-1),b=P(i),c=P(i+1),d=P(i+2),t=k/n;q.push([0,1].map(j=>+(.5*(2*b[j]+(-a[j]+c[j])*t+(2*a[j]-5*b[j]+4*c[j]-d[j])*t*t+(-a[j]+3*b[j]-3*c[j]+d[j])*t*t*t)).toFixed(2)))}if(!closed)q.push(p.at(-1));return q}
 export const coast=smooth([[-1730,1800],[-1500,500],[-600,-500],[950,-1140],[2600,-1500],[4400,-1410],[6200,-1320],[7900,-700],[9100,400],[9610,2000],[9550,3600],[8860,5210],[7700,6500],[6200,7090],[4400,7310],[2800,7130],[1100,6450],[-220,5460],[-1440,3800]],true);
@@ -12,8 +11,6 @@ export const rivers=[
  {id:'aurora-run',name:'Aurora Run',width:145,line:smooth([[500,-1350],[1250,-1050],[1580,-560],[2050,-70],[3000,300],[3900,280],[4900,0],[5950,-500],[7200,-650],[8400,-350],[9000,-410]])},
  {id:'snowmelt',name:'Snowmelt Beck',width:160,line:smooth([[-1200,5450],[-100,5500],[1400,5520],[2650,5660],[3500,5500],[4500,5500],[5700,5480],[7100,5320],[8400,5600],[9200,5780]])}
 ];
-// One main loop matches the preserved heart's 122-unit main path.
-// All other streets are narrow branches and short doorstep lanes.
 export const roads=[
  {id:'coast-walk',w:122,line:smooth([[-1300,2500],[-1050,1000],[400,-320],[2000,-900],[2520,-1230],[3200,-1310],[4000,-1230],[6400,-850],[6750,-1000],[6909,-930],[6909,-653],[6909,-380],[7500,-180],[8000,100],[8860,1300],[9000,2900],[8450,4450],[8000,5030],[7788,5150],[7788,5439],[7788,5740],[7400,6020],[5900,6580],[4300,6870],[2750,6490],[1300,5900],[858,5800],[858,5505],[858,5200],[300,4920],[-400,4400],[-1200,3900],[-1470,3250],[-1300,2500]])},
  {id:'cocoa-heart',w:92,line:smooth([[-1270,2500],[-950,2520],[-620,2550],[250,2570],[750,2670],[1200,2700],[1850,2700]])},
@@ -31,7 +28,6 @@ export const roads=[
  {id:'net-menders-lane',w:70,line:smooth([[4600,6350],[5010,6370],[5260,6390],[5260,6660],[5490,6700]])}
 ];
 
-// Small greens replace the old paved ovals. The sandy centre is a modest court.
 export const courts=[[-620,2550,220,145],[2900,-450,210,130],[8400,2870,230,150],[4600,6350,230,145]];
 export const bridges=[
  {id:'aurora-west',x:1455,y:-772,w:560,h:330,axis:'h'},
@@ -43,7 +39,6 @@ export const bridges=[
 ];
 export const extraTrees=[[-770,550],[-400,120],[600,-650],[900,-750],[5900,-1040],[6350,-1000],[7460,-280],[7950,260],[8390,760],[9180,1160],[9320,1750],[9100,4020],[8580,4610],[7970,5220],[7410,6150],[6810,6450],[2250,6370],[1900,6290],[1250,5850],[400,5050],[-200,4260],[-970,3840]];
 
-// Four hand-composed commons. Fixed addresses, no placement scatter.
 export const commons=[
  {id:'nursery',name:'Little Fir Nursery',at:[-50,850],beds:[[-310,670],[-20,600],[300,600]],props:[['pine-1',-360,1040,220],['pine-2',-80,1130,270],['pine-3',300,1080,200],['rack',-140,850,170],['sled',100,1160,145],['sign',-500,900,110]]},
  {id:'winter-garden',name:'Snowdrop Conservatory Green',at:[7780,900],beds:[[7530,700],[7840,730],[8090,980]],props:[['pine-2',7440,1190,230],['pine-1',8110,650,210],['table',7760,1110,200],['lamp',7860,1090,85],['fence',7590,1300,230],['sign',8210,1150,110]]},

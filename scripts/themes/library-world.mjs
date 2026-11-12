@@ -1,5 +1,3 @@
-// Pagepond: locked two-landmass layout. Existing library/home SVGs, locked centre art.
-// Run node scripts/themes/library-world.mjs. Only writes library-owned files.
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {libraryArcBenches} from './library-arc-benches.mjs';
 import {libraryCourtPaving,libraryCloseupFurniture,libraryPathInlays} from './library-closeup-detail.mjs';
@@ -22,7 +20,6 @@ function catmull(pts, closed, n = 10) {
   return out.map(([x, y]) => [r1(x), r1(y)]);
 }
 const area = p => p.reduce((s, a, i) => {const b = p[(i + 1) % p.length]; return s + a[0] * b[1] - b[0] * a[1];}, 0) / 2;
-// offset a closed polygon: d > 0 moves it INWARD
 function offset(p, d) {
   const sgn = area(p) > 0 ? 1 : -1, N = p.length;
   return p.map((a, i) => {
@@ -30,7 +27,6 @@ function offset(p, d) {
     return [r1(a[0] - sgn * ty / l * d), r1(a[1] + sgn * tx / l * d)];
   });
 }
-// a strip polygon around an open polyline (stream water)
 function strip(line, w) {
   const L = [], R = [];
   line.forEach((a, i) => {
@@ -46,12 +42,9 @@ const lineDist = (x, y, l) => Math.min(...l.slice(1).map((b, i) => segDist(x, y,
 let seed = 7; const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
 
 
-// Both banks follow the locked reference. Their only joining seam is zero-width,
-// beneath the upper bridge, so the engine's single-polygon contract keeps the canal wet.
 const LEFT_C=[[695,385],[725,320],[780,260],[768,210],[740,165],[752,120],[710,85],[630,65],[550,62],[465,90],[380,68],[295,67],[210,70],[140,100],[130,160],[95,220],[50,275],[38,330],[68,390],[45,455],[42,520],[65,590],[45,660],[58,720],[47,780],[88,835],[115,885],[205,902],[300,935],[390,920],[480,931],[565,912],[645,910],[680,865],[668,810],[688,765],[704,725],[700,670],[685,625],[713,575],[739,530],[744,480],[718,435]];
 const RIGHT_C=[[835,385],[840,440],[870,485],[858,535],[820,585],[800,630],[830,680],[820,730],[780,795],[775,850],[770,900],[825,927],[900,940],[995,920],[1075,925],[1170,897],[1270,905],[1360,875],[1430,860],[1480,815],[1470,755],[1490,690],[1474,630],[1495,565],[1478,500],[1490,440],[1470,375],[1480,310],[1460,245],[1410,195],[1405,135],[1380,90],[1305,72],[1220,90],[1135,70],[1050,61],[960,82],[895,110],[850,150],[834,200],[850,255],[825,310]];
 let rings=[catmull(LEFT_C.map(T),true,7),catmull(RIGHT_C.map(T),true,7)];
-// Ensure consistent winding, and preserve the reference's first points at the bridge.
 rings=rings.map(p=>area(p)>0?p:[p[0],...p.slice(1).reverse()]);
 const joinRings=([a,b])=>[...a,a[0],...b,b[0],a[0]];
 const EDGE=joinRings(rings), WALK_COAST=joinRings(rings.map(p=>offset(p,35)));
@@ -85,13 +78,12 @@ const POND=oval([915,565,72,40]);
 const BEACH=catmull([[1055,835],[1150,805],[1240,825],[1350,795],[1455,790],[1485,900],[1350,960],[1110,965],[980,935],[990,890]].map(T),true,8);
 const water=[POND],walkways=[],arches=[],bridges=[],decks=[],props=[],obstacles=[],flats=[],floating=[];
 const islets=[];let pid=0;
-const ASSET = {};   // name -> {src, w, h, ax, ay}
+const ASSET = {};
 function asset(name, src, w, h, ay = 1) {ASSET[name] = {src, w, h, ax: .5, ay};}
 const svgSize = f => {const s = readFileSync(f, 'utf8').slice(0, 600), m = s.match(/viewBox="([\d.\s-]+)"/); const v = m[1].trim().split(/\s+/).map(Number); return [v[2], v[3]];};
 for (const n of ['hall', 'tower-1', 'tower-2', 'tower-3', 'tower-4', 'pencil-lamp', 'inkwell-planter', 'reading-cushion', 'shelf-arch', 'book-stall-red', 'book-stall-blue', 'book-pile', 'open-book', 'book-bench', 'book-slide', 'toy-blocks', 'book-climber', 'block-steps', 'lantern-tree']) {
   const [w, h] = svgSize(ART + n + '.svg'); asset(n, n + '.svg', w, h, (h - 6) / h);
 }
-// home art reused as is (copied in, so the theme folder is self-contained)
 const REUSE = {plants: ['tree-1', 'tree-2', 'tree-3', 'tree-4', 'tree-5', 'bush-1', 'bush-2', 'bush-3', 'bush-4', 'bush-5', 'bush-6', 'flower-1', 'flower-2', 'flower-3'],
   detail: ['street--bench-wood', 'street--bench-park', 'street--umbrella-garden', 'street--umbrella-cafe', 'beach--towel-striped', 'beach--towel-sun', 'beach--beach-ball',
     'beach--shell-scallop', 'beach--starfish-orange', 'beach--sandcastle-small', 'beach--bucket', 'nature--reeds', 'nature--cattails', 'nature--lily-pad-flower', 'nature--lily-pad-large',
@@ -104,13 +96,11 @@ for (const [dir, list] of Object.entries(REUSE)) for (const n of list) {
   if (dir === 'detail') {const a = manifest.assets.find(x => x.name === key); asset(key, `reuse/${n}.svg`, a.size.width, a.size.height, a.anchor.y / a.size.height);}
   else {const [w, h] = svgSize(`public/pixi-art/${dir}/${n}.svg`); asset(key, `reuse/${n}.svg`, w, h, 1);}
 }
-// world size of each kind: [scale] (H = one Ducky = 130)
 const SCALE = {'book-slide': .63, 'toy-blocks': .47, 'book-climber': .78, 'block-steps': .45, 'lantern-tree': .74, hall: .78, 'tower-1': .8, 'tower-2': .78, 'tower-3': .66, 'tower-4': .76, 'pencil-lamp': .44, 'inkwell-planter': .32, 'reading-cushion': .46,
   'shelf-arch': .74, 'book-stall-red': 1.25, 'book-stall-blue': 1.25, 'book-pile': .62, 'open-book': .6, 'book-bench': .62,
   tree: 1.265, bush: 1.3, flower: 1.6, 'bench-wood': .18, 'bench-park': .18, 'umbrella-garden': .29, 'umbrella-cafe': .29, 'towel-striped': .26, 'towel-sun': .26,
   'beach-ball': .2, 'shell-scallop': .19, 'starfish-orange': .19, 'sandcastle-small': .24, bucket: .17, reeds: .24, cattails: .24, 'lily-pad-flower': .2, 'lily-pad-large': .2,
   'rock-round': .2, 'rock-boulder': .17, 'picnic-blanket': .3, 'planter-flowers': .17, 'signpost-three-way':.18};
-// footprint kinds: 'trunk' (tree), 'base' (oval at the base), 'none' (flat / in water), 'hall', 'arch'
 const FOOT = {hall: 'hall', 'shelf-arch': 'arch', 'reading-cushion': 'low', 'open-book': 'none', 'towel-striped': 'none', 'towel-sun': 'none', 'picnic-blanket': 'none',
   'lily-pad-flower': 'none', 'lily-pad-large': 'none', 'shell-scallop': 'none', 'starfish-orange': 'none', 'beach-ball': 'low', reeds: 'none', cattails: 'none', flower: 'none', 'umbrella-garden': 'pole', 'umbrella-cafe': 'pole'};
 const kindOf0 = n => /^tree-/.test(n) ? 'tree' : /^bush-/.test(n) ? 'bush' : /^flower-/.test(n) ? 'flower' : n;
@@ -131,8 +121,6 @@ function put(name,cp,zone='',{world=false,mult=1,flip=false}={}){
  return p;
 }
 const CENTRE=JSON.parse(readFileSync(ART+'centre/centre.json'));
-// Rebase each piece to its authored sortY using its anchor. This works with the
-// existing renderer (which sorts on prop.y) without flattening the front rims.
 function centre(spec,cp,scale,label){
  const [ox,oy]=T(cp);
  for(const p of spec.pieces){
@@ -163,7 +151,6 @@ for(const c of [[1010,610],[1400,600],[1060,755],[1375,755]])put('pencil-lamp',c
 for(const c of [[1100,570],[1310,570],[1080,770],[1360,770]])put('planter-flowers',c,'square');
 put('book-bench',[1030,810],'square');put('book-bench',[1430,732],'square',{flip:true});
 for(const [n,c] of [['umbrella-cafe',[1140,863]],['umbrella-garden',[1370,850]],['picnic-blanket',[1100,885]],['towel-striped',[1350,875]],['beach-ball',[1270,870]],['sandcastle-small',[1050,915]],['bucket',[1080,920]],['starfish-orange',[1220,900]],['shell-scallop',[1400,842]]])put(n,c,'beach');
-// Four docks: one engine harbor, three existing home decks. Library SVG copies only.
 const J5={file:'public/pixi-art/bridge-jetty-5.svg',vb:[5004.9592,1492.5089,494.0617,277.2587],a:[5034.08,1638.41],b:[5469.9,1681.99]};
 const J1={file:'public/pixi-art/bridge-jetty-1.svg',vb:[3222.39,3276.877,229.2164,476.233],a:[3320,3319],b:[3320,3730]};
 function deck(name,J,at,sx,sy,{split=false,width=115}={}){
@@ -210,12 +197,9 @@ for(let n=0,t=0;n<55&&t<18000;t++){
  const x=500+rnd()*6900,y=600+rnd()*4300;
  if(!fits(x,y,80))continue;put(`bush-${1+n%6}`,[x,y],'garden',{world:true,flip:rnd()<.5});n++;
 }
-// A few quiet reading nooks, reusing every family of the original book props.
 for(const [n,c] of [['tower-1',[255,180]],['tower-2',[1050,110]],['tower-3',[590,865]],['tower-4',[1450,685]],['shelf-arch',[180,270]],['book-stall-red',[250,680]],['book-stall-blue',[660,570]]]){
  const [x,y]=T(c);if(fits(x,y,50))put(n,c,'reading');
 }
-// Forty beds are checked against the SAME resolver the index/server use.
-// All eight poses survive; every bed gets a nearby fitting garden/book prop.
 const sleepSpots={nod:[],hammock:[],rock:[],leaf:[],book:[],chair:[],wing:[],box:[]};
 const counts={nod:6,hammock:4,rock:4,leaf:6,book:6,chair:3,wing:6,box:5};
 const walkBase={width:W,height:HH,coast:WALK_COAST,obstacles,water,bridges,islets,walkways:[...walkways,{a:hFoot,b:hTip,w:120}],paths:PATHS.map(p=>p.line)};
@@ -238,8 +222,6 @@ for(const pose of ['chair','hammock','book','rock','leaf','wing','box']){
   if(checkBeds().bad.length)sleepSpots[pose].pop();
  }
 }
-// One original leaf bed sat behind the reading hall roof. Keep its pose and
-// neighbourhood, but move it onto the visible north lawn.
 let leafPlaced=false;
 for(let y=710;y<=810&&!leafPlaced;y+=25)for(let x=1900;x<=2600;x+=35){
  sleepSpots.leaf[1]=[x,y,sleepSpots.leaf[1][2]];
@@ -248,15 +230,10 @@ for(let y=710;y<=810&&!leafPlaced;y+=25)for(let x=1900;x<=2600;x+=35){
 if(!leafPlaced)throw Error('no visible north-lawn leaf bed');
 const beds=checkBeds();
 for(const [p,n] of Object.entries(counts))if(sleepSpots[p].length!==n)throw Error(`sleep ${p}: ${sleepSpots[p].length}/${n}`);
-// Add the small pond dock after beds are resolved, retaining the other 39 beds
-// and all tree ids without changing the generator's original garden seed.
 const pondDock=deck('pond-reading-dock',J1,T([915,590]),.65,.4,{width:90});
 walkBase.walkways.push(walkways.at(-1));
-// Internal water uses bridges for the water override (walkways cover sea only).
 bridges.push({x:pondDock.a[0],y:(pondDock.a[1]+pondDock.b[1])/2,w:90,h:Math.abs(pondDock.b[1]-pondDock.a[1])+40});
 const bedNear=(x,y,room=60)=>beds.some(b=>Math.hypot(x-b.x,(y-b.y)*1.5)<b.r+room+110||(y>b.y-20&&y<b.y+300&&Math.abs(x-b.x)<b.r+room));
-// The shared resolver intentionally exempts nod poses from prop overlap. Give
-// those Duckies the same visible clearance as every other pose here.
 const hidesBed=(p,x=p.x,y=p.y)=>beds.some(b=>p.id!==b.tree&&y>b.y-20&&y-b.y<p.height*p.scale*.95&&Math.abs(x-b.x)<p.width*p.scale*.45+b.r*.6);
 for(const p of props.filter(p=>(/^tree-/.test(p.asset??'')||p.asset==='lantern-tree')&&hidesBed(p))){
  const ox=p.x,oy=p.y;let moved=false;
@@ -269,8 +246,6 @@ for(const p of props.filter(p=>(/^tree-/.test(p.asset??'')||p.asset==='lantern-t
  }
  if(!moved)throw Error(`could not reveal sleeper behind ${p.id}`);
 }
-// Home-quality gardens: build small groves around existing trees, keeping every
-// original sleeper, landmark, bridge sightline and activity interior clear.
 const treeSeeds=props.filter(p=>/^tree-/.test(p.asset??''));
 let addedTrees=0;
 for(let t=0;t<140000&&treeSeeds.length+addedTrees<66;t++){
@@ -279,7 +254,6 @@ for(let t=0;t<140000&&treeSeeds.length+addedTrees<66;t++){
  if(!fits(x,y,45,380,true)||!land(x,y-240,65)||bedNear(x,y,80))continue;
  const treeName=`tree-${1+t%5}`,tw=ASSET[treeName].w*SCALE.tree,th=ASSET[treeName].h*SCALE.tree;
  if(pathNear(x,y-th*.57,tw*.46))continue;
- // Crown clearance is measured in screen space, not just between trunks.
  if(props.filter(q=>/^tree-/.test(q.asset??'')).some(q=>{
   const qw=q.width*q.scale,qh=q.height*q.scale;
   return Math.hypot((x-q.x)/(tw*.38+qw*.38),(y-th*.58-(q.y-qh*.58))/(th*.28+qh*.28))<1;
@@ -288,8 +262,6 @@ for(let t=0;t<140000&&treeSeeds.length+addedTrees<66;t++){
  if(checkBeds().bad.length||hidesBed(p)){props.pop();obstacles.pop();pid--;continue;}
  addedTrees++;
 }
-// Decorated edges, with openings wherever a path enters. The six reserved
-// activity/stall zones retain their complete walkable interiors.
 for(const [zi,z] of [...ACT,...STALL_ROWS].entries()){
  const N=zi<3?30:16;
  for(let i=0;i<N;i++){
@@ -303,7 +275,6 @@ for(const [zi,z] of [...ACT,...STALL_ROWS].entries()){
   put(zi%2?'pencil-lamp':'bench-wood',[x,y],'activity-border',{world:true});
  }
 }
-// Bushes and rocks under the groves, quiet picnic nooks and path-side seats.
 for(let n=0,t=0;n<60&&t<14000;t++){
  const tree=props.filter(p=>/^tree-/.test(p.asset??''))[t%(treeSeeds.length+addedTrees)];
  const x=tree.x+(rnd()-.5)*470,y=tree.y+40+rnd()*145;
@@ -325,20 +296,15 @@ for(let n=0,t=0;n<2600&&t<80000;t++){
  const k=['grass-tuft-1','grass-tuft-2','grass-tuft-3','flower-dot-1','flower-dot-2','flower-dot-3','pebble-1'][n%7],a=ASSET[k];
  flats.unshift({src:a.src,x,y,width:a.w*1.5,height:a.h*1.5,flip:rnd()<.5});n++;
 }
-// Sand specks and pebbles continue the same small detail across shore and beach.
 for(let n=0,t=0;n<320&&t<30000;t++){
  const x=500+rnd()*7000,y=600+rnd()*4400;
  if(!land(x,y,20)||(!inPoly(x,y,BEACH)&&land(x,y,105))||bedNear(x,y,40))continue;
  const k=['sand-speck-1','sand-speck-2','pebble-1','pebble-2'][n%4],a=ASSET[k];
  flats.unshift({src:a.src,x,y,width:a.w*1.5,height:a.h*1.5,flip:rnd()<.5});n++;
 }
-// Keep beds and existing placement IDs stable. The ring seats use HOME's drawing and footprints.
 libraryArcBenches({artDir:ART,props,obstacles,plaza,market});
 libraryCloseupFurniture({artDir:ART,props,obstacles,ACT,STALL_ROWS,plaza,market,put,fits,bedNear,pathNear,land,PATHS,flats,ASSET});
-// Reuse the original ground palette, shore treatment, paved squares and grass decals.
-// Draw each landmass separately: no book cover, page band, spine, or painted canal land.
 const g=[];
-// Subtle short ripples, at the same scale and turquoise as home's shared sea.
 g.push('<defs><pattern id="sea-ripples" width="210" height="144" patternUnits="userSpaceOnUse"><path d="M12 28q18 9 36 0m74 60q18 8 36 0M66 129q14 7 28 0" fill="none" stroke="#D5F3EC" stroke-width="2" stroke-dasharray="3 6" opacity=".25"/></pattern></defs><rect width="8000" height="5600" fill="url(#sea-ripples)"/>');
 for(const ring of rings){
  for(const [distance,width,col,alpha] of [[-115,18,C.halo,.35],[-75,22,C.waterHi,.3],[-38,12,C.waterHi,.55]])g.push(`<path d="${dz(offset(ring,distance))}" fill="none" stroke="${col}" stroke-width="${width}" opacity="${alpha}"/>`);
@@ -355,16 +321,11 @@ for(let n=0;n<40;n++){
  g.push(`<ellipse cx="${x}" cy="${y}" rx="${70+rnd()*160}" ry="${30+rnd()*70}" fill="${C.grassShade}" opacity=".5"/>`);
 }
 g.push(`<path d="${dz(BEACH)}" fill="${C.sand}" stroke="${C.sandShade}" stroke-width="7"/>`);
-// Paint the network in three passes. Later segment outlines must never cut
-// across an earlier segment's fill at a junction.
-// Close the former green gap between the north court approach and its rim.
-// This is a surface join on already walkable grass, not a change to routing.
 const visualPaths=PATHS.map((p,i)=>i===7?{...p,line:[...p.line,[p.line.at(-1)[0],ACT[2].y-ACT[2].ry*.67]]}:p);
 for(const [colour,pad]of [['#69753E',9],[C.sandShade,5],[C.sand,0]])for(const p of visualPaths)
  g.push(`<path d="${d(p.line)}" fill="none" stroke="${colour}" stroke-width="${p.w+pad}"/>`);
 g.push(libraryPathInlays(visualPaths));
 for(const [i,z] of [...ACT,...STALL_ROWS].entries()){
- // Stall reservations are ordinary textured lawns, not painted slot-shaped ovals.
  if(i>=3)continue;
  const paved=z.kind==='paved';
  const profile=paved?[[-.9,-.38],[-.7,-.72],[0,-.74],[.70,-.72],[.9,-.38],[.9,.38],[.7,.72],[0,.74],[-.7,.72],[-.9,.38]]:[[-.95,-.20],[-.76,-.69],[-.24,-.96],[.42,-.9],[.84,-.56],[.98,.10],[.72,.71],[.14,.98],[-.56,.82],[-.94,.34]];

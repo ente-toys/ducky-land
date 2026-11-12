@@ -1,4 +1,3 @@
-// Shared demo/live AI. No browser, renderer, timer or transport dependency.
 import {traceShot} from './physics.js';
 import {movementFacing,facingVector} from './facing.js';
 import {RULES} from './rules.js';
@@ -41,10 +40,8 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
       const dx=enemy.x-p.x+(enemy.input?.x??0)*(enemy.pace??0)*lead,dy=enemy.y-p.y+(enemy.input?.y??0)*(enemy.pace??0)*lead,d=Math.hypot(dx,dy);
       b.point.x=dx;b.point.y=dy;const angle=movementFacing(b.point),aim=facingVector(angle,b.aim);
       const cross=dx*aim.y-dy*aim.x;
-      // Step sideways into a firing lane, then turn with movement and hold Space.
       if(Math.abs(cross)>(hero?16:24)){x=Math.sign(cross)*aim.y;y=-Math.sign(cross)*aim.x;}
       else if(p.facing!==angle||d>330){x=aim.x;y=aim.y;}
-      // Never shoot while stepping sideways, which turns the movement-aimed gun.
       fire=Math.abs(cross)<(hero?22:showcase&&p.team==='privacy'?30:19);
       if(fire){x=aim.x;y=aim.y;}
       if(hero&&d<190&&!fire)run=true;
@@ -57,7 +54,6 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
         b.planAt=sim.state.time+(hero?.4:1.5)+random()*(hero?.2:1);
         let target;
         if(b.retreat){
-          // Break sight behind real cover while emptying the last paint to reload.
           let hidden=null;
           for(let i=0;i<12;i++){const a=random()*Math.PI*2,r=180+random()*220,xx=p.x+Math.cos(a)*r,yy=p.y+Math.sin(a)*r;
             b.point.x=xx;b.point.y=yy;
@@ -75,7 +71,6 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
       if(b.path.length){x=b.path[0][0]-p.x;y=b.path[0][1]-p.y;run=hero||(!showcase&&b.path.length>2)||Math.hypot(x,y)>260;}
       fire=b.retreat&&p.ammo>0;
     }
-    // The hero reads incoming paint and makes a short perpendicular Shift dash.
     let dodging=false;
     if(hero)for(const shot of sim.state.shots){
       if(shot.team===p.team)continue;
@@ -85,9 +80,6 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
         if(nav.walkable(p.x+ex*55,p.y+ey*55)){x=ex;y=ey;run=true;fire=false;dodging=true;break;}
       }
     }
-    // The actual sim moves, collides, turns, shoots, tags and respawns every bot.
-    // Live routing uses the island's native path follower between reactions,
-    // so a coarse waypoint cannot be overshot by a held manual direction.
     if(router)p.path=b.path;
     const packet=b.packet;packet.seq=++b.seq;packet.x=x;packet.y=y;packet.run=run;packet.fire=fire;sim.input(p.id,packet);
     if(router&&b.path.length||fire&&!b.retreat&&!dodging){packet.seq=++b.seq;packet.x=packet.y=0;packet.run=false;sim.input(p.id,packet);}

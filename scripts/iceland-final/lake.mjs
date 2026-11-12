@@ -1,8 +1,6 @@
 import path from 'node:path';
 import {LAKE_ASSETS} from './lake-assets.mjs';
 const round=n=>Math.round(n*100)/100;
-// Periodic cubic outline, authored as an asymmetric chain of shallow coves.
-// Rendering and skating use this same curve, sampled to less than .2 world px.
 const knots=[[12,330],[75,250],[200,190],[355,155],[400,100],[480,30],[640,8],[740,65],[720,100],[880,130],[900,170],[1050,205],[1090,290],[1030,320],[1080,420],[1020,490],[960,550],[820,615],[650,630],[550,670],[400,650],[340,590],[180,570],[100,520],[15,480],[40,410]];
 export function lakeOutline(){
  let d=`M${knots[0].join(' ')}`,poly=[];
@@ -22,7 +20,6 @@ export function composeLake(root,art,w,report){
  const retiredIds=new Set([...art.props,...art.flats].filter(retired).map(p=>p.id));
  art.props=art.props.filter(p=>!retired(p));art.flats=art.flats.filter(p=>!retired(p));
  w.obstacles=w.obstacles.filter(o=>!retiredIds.has(o.prop));
- // Existing lane nodes retain their exact joins, now named shore approaches.
  const rename=s=>typeof s==='string'?s.replace('-gate','-shore'):s;
  const shores=w.iceland2.shores??w.iceland2.gates;
  w.iceland2.shores=Object.fromEntries(Object.entries(shores).map(([k,v])=>[rename(k),v]));delete w.iceland2.gates;
@@ -49,7 +46,6 @@ export function composeLake(root,art,w,report){
  for(const [i,px,py,pw]of [[1,6430,5330,85],[2,7490,5140,90],[1,7315,4955,74]])add('reeds-'+i,`reeds-${px}`,px,py,pw,false);
  const bench=add('bench-skates','bench-skates',7360,5535,265);solid(bench,105,24,0,-38);
  const lamp=add('lantern-post','lantern-post',7550,5440,120);solid(lamp,12,12,29,-10);
- // Reuse the approved three pine drawings at their existing Home scale.
  for(const [i,px,py,pw,role]of [[0,6240,4955,210,'pine-large'],[1,6630,4760,195,'pine-medium'],[2,7130,4750,210,'pine-large'],[3,7355,4820,195,'pine-medium'],[4,7530,4930,210,'pine-large']]){
   const source=art.props.find(p=>p.finalRole===role),p={id:'lake-bank-pine-'+i,name:'snowy bank pine',src:source.src,x:px,y:py,width:pw,height:round(pw*source.height/source.width),finalKind:'lake',finalRole:role,scene:'rink-scene',lakePart:true,resolution:4,shadow:false,wind:false};art.props.push(p);solid(p,14,12);
  }

@@ -6,7 +6,6 @@ const anchors=[['mid','paint',BOG_AREAS.mid.x,BOG_AREAS.mid.y+110],
   ['site-a','speed',BOG_AREAS['site-a'].x+180,BOG_AREAS['site-a'].y+200],
   ['site-b','shield',BOG_AREAS['site-b'].x-180,BOG_AREAS['site-b'].y+200],
   ['west-lane','shield',3000,4400],['east-lane','paint',5400,2900]];
-// Resolve each hand-placed landmark to its nearest clear floor once at setup.
 export function createPickupSpots(nav){
   const spots=[];
   for(const [id,kind,x,y]of anchors){

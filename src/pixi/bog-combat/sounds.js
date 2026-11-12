@@ -1,5 +1,3 @@
-// Short, deterministic mono buffers, generated once on the island's existing
-// AudioContext. Playback shares M mute, unlock, suspend and disposal with quack.
 export const BOG_SOUNDS=Object.freeze({shot:.075,splat:.13,tag:.22,ghost:.42,respawn:.3,pickup:.18,rustle:.16});
 const volumes={shot:.055,splat:.085,tag:.075,ghost:.045,respawn:.065,pickup:.065,rustle:.035};
 const gaps={shot:100,splat:90,tag:100,ghost:300,respawn:250,pickup:100,rustle:400};
@@ -35,8 +33,6 @@ export function synthesizeBogSound(context,name){
 export function createBogSounds(audio,{now=()=>performance.now()}={}){
   const last=Object.create(null);
   for(const name of Object.keys(BOG_SOUNDS))audio?.register?.('bog-'+name,context=>synthesizeBogSound(context,name));
-  // Public hook: engine.bogCombat.playSound('pickup'). No new audio context,
-  // unlock handler, asset request or oscillator is created by this adapter.
   return function playSound(name){
     if(!Object.hasOwn(BOG_SOUNDS,name))return false;
     const time=now();if(time-(last[name]??-Infinity)<gaps[name])return false;

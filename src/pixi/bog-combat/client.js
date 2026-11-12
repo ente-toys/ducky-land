@@ -6,7 +6,6 @@ import {BOG_COMBAT} from './config.js';
 import {combatWalkStep} from './mechanics.js';
 
 export const ARENA_INPUT_INTERVAL=1000/30;
-// Refresh held controls well inside the server's 350 ms input timeout.
 export const ARENA_INPUT_KEEPALIVE=100;
 export const ARENA_REPLACED=4001;
 export function arenaCloseDetails(event={}){
@@ -23,8 +22,6 @@ export function arenaURL({team,name,profile},base=globalThis.location?.href||'ht
   const url=new URL('/arena-room',base);url.protocol=url.protocol==='https:'?'wss:':'ws:';
   for(const [k,v]of Object.entries({team,name,profile})){if(v!=null)url.searchParams.set(k,v);}return url;
 }
-// The client submits directions and trigger state, never positions, tags or
-// rewards. Local walking is predicted; all gameplay state comes from snapshots.
 export class ArenaClient{
   constructor({team,name,profile=profileToken(),onSnapshot=()=>{},onStatus=()=>{},onExit=()=>{},Socket=WebSocket,url,schedule=setTimeout,cancel=clearTimeout,navigation,blockers=getBogBlockers(),bounds=BOG_COMBAT.bounds}={}){
     Object.assign(this,{id:null,snapshot:null,seq:0,lastSend:-Infinity,onSnapshot,onStatus,onExit});
@@ -59,13 +56,11 @@ export class ArenaClient{
       }
       this.self=self;this.snapshot=m;this.receivedAt=now;this.onSnapshot(m);
     };
-    // WebSocket errors are followed by close, which carries the useful reason.
     socket.onerror=()=>{};
     socket.onclose=event=>{if(active())this.connectionClosed(event);};
   }
   connectionClosed(event){
     this.closeDetails=arenaCloseDetails(event);this.socket=null;this.id=null;this.snapshot=null;this.self=null;this.predicted=null;
-    // A replaced tab must stay retired, or two tabs would steal the slot back.
     if(this.closeDetails.code!==1000&&this.closeDetails.code!==ARENA_REPLACED&&this.retries===0){
       this.retries++;this.onStatus('reconnecting',this.closeDetails);
       this.retryTimer=this.schedule(()=>{this.retryTimer=null;if(!this.closed)this.connect();},250);
@@ -83,8 +78,6 @@ export class ArenaClient{
     const run=vector.run===true,held=!!fire;
     const changed=this.lastControl.dodge!==this.dodgeSerial||this.lastControl.x!==vector.x||this.lastControl.y!==vector.y||this.lastControl.run!==run||this.lastControl.fire!==held||this.lastControl.facing!==facing;
     const elapsed=now-this.lastSend;
-    // Coalesce to the latest controls. Changes and emotes share the hard 30 Hz
-    // ceiling; held fire is one flag, with shots scheduled by the simulation.
     const send=this.id&&!this.closed&&this.socket.readyState===1&&elapsed+1e-7>=ARENA_INPUT_INTERVAL&&(changed||this.queuedEmote||elapsed>=ARENA_INPUT_KEEPALIVE)&&this.socket.bufferedAmount<=4096;
     if(send){this.lastSend=now;Object.assign(this.lastControl,{x:vector.x,y:vector.y,run,fire:held,facing,dodge:this.dodgeSerial});this.socket.send(JSON.stringify({type:'arena-input',seq:this.seq++,x:vector.x,y:vector.y,run,facing,fire:held,...(this.dodgeSerial?{dodge:this.dodgeSerial}:{}),...(this.queuedEmote?{emote:this.queuedEmote}:{})}));this.queuedEmote=null;}
     if(self?.alive&&this.predicted&&dt>0){
@@ -100,7 +93,6 @@ export class ArenaClient{
   dispose(){if(this.closed)return;this.closed=true;if(this.retryTimer!==null)this.cancel(this.retryTimer);this.socket?.close();this.tracks.clear();}
 }
 
-// Observing the dock never creates a fighter or changes practice/headcounts.
 export class ArenaLobbyClient{
   constructor({profile=profileToken(),onSnapshot=()=>{},onStatus=()=>{},Socket=WebSocket,url}={}){
     this.closed=false;

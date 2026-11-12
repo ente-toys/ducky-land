@@ -1,12 +1,9 @@
-// Same live heart animation, with roughly twice as many hearts and a bounded
-// event pool. Visit the whole shoreline instead of a small centre-radius circle.
 export const HEART_ACTIVITY_INTERVAL = .022;
 export const HEART_ACTIVITY_CHANCE = .85;
 export const HEART_ACTIVITY_LIMIT = 160;
 
 import {inPoly} from '../../assets/world/island-geometry.mjs';
 
-// Use the same UV rectangle as the visible patch, with a small opaque margin.
 export function heartArtContains(frame,x,y,image) {
   const u=Math.floor((.5+x/frame.width)*image.width),v=Math.floor((.5+y/(frame.height??frame.width))*image.height);
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
@@ -43,8 +40,6 @@ export function createHeartLocations(islands, mapOf, random = Math.random, islet
   ];
   const pools = sources.map(({island,map,weight}) => {
     const points = [], grid = 12;
-    // One sample per cell spreads activity across villages, lawns and coast.
-    // Check actual dry land, including the map's expanded/negative origin.
     for (let row = 0; row < grid; row++) for (let col = 0; col < grid; col++) {
       for (let attempt = 0; attempt < 6; attempt++) {
         const x = map.origin.x + (col + .1 + random() * .8) * map.width / grid;
@@ -57,8 +52,6 @@ export function createHeartLocations(islands, mapOf, random = Math.random, islet
   });
   let islandBag = [];
   return () => {
-    // Shuffled rounds keep all islands alive, rather than repeatedly drawing
-    // the same random island. Each island has its own non-repeating land bag.
     if (!islandBag.length) islandBag = shuffle(pools.flatMap(pool => Array(pool.weight).fill(pool)));
     const pool = islandBag.pop();
     if (!pool.bag.length) pool.bag = shuffle([...pool.points]);

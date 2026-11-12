@@ -17,7 +17,6 @@ assert(new Set(samples.map(s=>s.y)).size>1);
 updateCommunityCentre(art,0,true);const reduced=[flame.sprite.scale.x,flame.sprite.scale.y,flame.sprite.skew.x,flame.sprite.alpha];
 updateCommunityCentre(art,2,true);assert.deepEqual([flame.sprite.scale.x,flame.sprite.scale.y,flame.sprite.skew.x,flame.sprite.alpha],reduced);
 assert.equal(flame.sprite.skew.x,0);assert.equal(flame.sprite.alpha,1);
-// The game makes props upright after loading. The fire must remain attached through that correction.
 base.sprite.scale.y/=.78;updateCommunityCentre(art,0,true);
 assert.equal(flame.sprite.y,base.sprite.y+(flame.anchor.y-base.anchor.y)*base.sprite.height);
 assert.equal(flame.sprite.height,base.sprite.height);

@@ -1,4 +1,3 @@
-// Actual Pixi evidence. Run with Vite on 5297. Only writes Library work images.
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync} from 'node:fs';
 import sharp from 'sharp';

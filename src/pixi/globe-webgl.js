@@ -1,8 +1,6 @@
 import {Quaternion,Vector3,transformMatrix} from './globe-math.js';
 import {LineSegments,Sprite,Color,LinearFilter,RepeatWrapping,SRGBColorSpace} from './globe-mesh.js';
 
-// The island, standing art and live capture share one textured shader. The
-// atmosphere supplies its own shader, with the same perspective and colour space.
 const vertex=`
 #include <common>
 void main(){

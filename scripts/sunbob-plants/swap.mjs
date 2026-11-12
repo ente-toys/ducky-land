@@ -1,5 +1,3 @@
-// Keep Sunbob's authored planting boxes, base points, shadows and collision records.
-// Always load the shared Home originals, including for newly integrated outer planting.
 import {readFileSync, writeFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 const read = f => JSON.parse(readFileSync(f));
@@ -19,11 +17,11 @@ for (const file of ['public/pixi-art/themes/sunflower/art.json','assets/world/th
   let changed = 0;
   for (const [i,p] of doc.props.entries()) {
     const old = before.props[i];
-    assert.deepEqual({...p,src:old.src},old); // only the source changes; sunflowers remain untouched
+    assert.deepEqual({...p,src:old.src},old);
     if (plant(p)) {assert.match(p.src,/^\/pixi-art\/plants\/(tree-[1-5]|bush-[1-4])\.svg$/);assert.ok(readFileSync('public'+p.src).length);}
     if(p.src !== old.src) changed++;
   }
-  assert.deepEqual({...doc,props:before.props},before); // includes all walk blockers
+  assert.deepEqual({...doc,props:before.props},before);
   if(changed) writeFileSync(file,JSON.stringify(doc,null,1)+'\n');
   console.log(file,{plants:doc.props.filter(plant).length,changed});
 }

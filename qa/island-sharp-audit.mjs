@@ -1,6 +1,3 @@
-// Read-only audit of the live island paths and the proposed manifest-only opt-in.
-// node qa/island-sharp-audit.mjs --write-report
-// node qa/island-sharp-audit.mjs --json  (includes every placement/source)
 import {readFileSync, writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -107,8 +104,6 @@ export function budgetStep(bytes, kind) {
   return step;
 }
 
-// Exercise the actual loader + animation integration with real placement metadata.
-// No server or browser is needed and no source/manifest is changed.
 export async function motionCompatibility(theme, art = manifest(theme)) {
   const centre = read(`public/pixi-art/themes/${theme}/centre/centre.json`);
   const props = art.props.filter(p => {
@@ -119,7 +114,6 @@ export async function motionCompatibility(theme, art = manifest(theme)) {
   const oldFetch = globalThis.fetch;
   const errors = [];
   try {
-    // Pagepond's procedural jets need the globe record as their layout anchor.
     const samples = theme === 'library' ? [{id: 'library-fountain', props: art.props}]
       : props.map(prop => ({id: prop.id, props: [prop]}));
     for (const sampleProps of samples) {
@@ -169,7 +163,6 @@ export async function auditIsland(theme, art, homeResolutions) {
       } else if (e.kind === 'ground') densities.push(tileResolution({...p, src: e.src}, zoom, 2) / (scale * zoom * 2));
       else densities.push(shared / (scale * zoom * 2));
     }
-    // Home's fountain is replaced by a fixed 960x960 canvas by cleanArtwork().
     if (theme === 'home' && p.asset === 'fountain-wishing') {
       densities[0] = 960 / (p.width * p.scale * .6 * 2);
       densities[1] = 960 / (p.width * p.scale * 1.8 * 2);
@@ -194,7 +187,6 @@ export async function auditIsland(theme, art, homeResolutions) {
       for (const [kind, tiles] of Object.entries(layers)) {
         const peak = rasterPeak(tiles, {width, height, zoom}), step = budgetStep(peak.bytes, kind);
         const at = visibleAllocation(tiles, peak.camera, width, height);
-        // Recompute rounded allocations at each divisor, exactly as GroundPool.
         const threshold = kind === 'ground' ? GROUND_BUDGET_BYTES * .9 : RASTER_ART_BUDGET_BYTES * RASTER_ART_UTILIZATION;
         let exactStep = 1, actualBytes;
         do {

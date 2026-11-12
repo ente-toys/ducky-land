@@ -1,4 +1,3 @@
-// Actual Pixi scene, duck rig and sailing FX, using Pixi's software CanvasRenderer.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import path from 'node:path';
 import {JSDOM} from 'jsdom';
@@ -31,7 +30,6 @@ for(let n=0;n<48;n++){
  duck.root.position.set(look.x,look.y);duck.root.scale.set(look.scale);duck.root.rotation=look.rotation;duck.root.zIndex=look.z;
  for(let k=0;k<60;k++)duck.update(.1,{turn:look.turn,time:0,reducedMotion:false,action:0,speed:0,sailing:true});
  fx.front(entry);renderer.render(stage);writeFileSync(`${out}/frame-${String(n).padStart(2,'0')}.png`,output.toBuffer('image/png'));
- // Isolate the actual rig to verify the white fringe is gone in every direction.
  root.visible=false;entry.front.visible=false;renderer.render(stage);
  const pixels=output.getContext('2d').getImageData(0,0,480,440).data;let tuftHighlightPixels=0,whiteEdgePixels=0;
  for(let i=0;i<pixels.length;i+=4)if(pixels[i]>248&&pixels[i+1]>248&&pixels[i+2]>248&&pixels[i+3]>200){if(Math.floor(i/4/480)<look.y-85)tuftHighlightPixels++;else whiteEdgePixels++;}
@@ -41,7 +39,6 @@ for(let n=0;n<48;n++){
  proof.push({frame:n,seat:v.seat,pin:[look.x,look.y],pivot:[root.pivot.x,root.pivot.y],z:[root.zIndex,duck.root.zIndex,entry.front.zIndex],mask:look.mask,tuftHighlightPixels,whiteEdgePixels});
 }
 if(process.env.BOAT_PROOF==='mast') {
- // Render a real continuous turn, including the 80 ms view/foreground fades.
  const originalNow=performance.now;let now=10000;performance.now=()=>now;
  try {
   fx.forget('review');

@@ -1,8 +1,3 @@
-// boss 5 Nov: draws the three curved plaza benches (style B: slatted arc seat, backrest rails on the outer side) as SVGs in
-// the house bench style: planks #C88941, shade #885931, outline #39472D, round joins. Drawn straight in world units, the
-// ground seen top-down with height lifted up the screen, so each arc lies exactly on its paving ring.
-// The drawing itself lives in scripts/arc-bench-draw.mjs (shared with the museum's benches).
-// Run after changing src/pixi/plaza-benches.js:  node scripts/plaza-bench-arc.mjs
 import {writeFileSync} from 'node:fs';
 import {ARC, PLAZA_BENCHES, ground, benchBox, benchFile} from '../src/pixi/plaza-benches.js';
 

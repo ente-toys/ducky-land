@@ -1,5 +1,3 @@
-// Fair waterways expose the SAME live sea plane as Home. No independent water
-// painter, mouth fan, texture phase, or tint can form a seam at either outlet.
 import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {PALETTE} from '../../src/pixi/palette.js';
@@ -13,8 +11,6 @@ export function applyFairWater({land:currentLand}={}){
  for(const tile of art.ground.tiles){
   const file=base+tile.src,svg=fs.readFileSync(file,'utf8');
   let next=svg.replace(/<g data-name="Fair water union">[\s\S]*?<\/g>/g,'');
-  // Retained islet decorations and shoreline shading must stop at the real
-  // dry bank too, rather than cover any part of the navigable lagoon/sea.
   if(next.includes('id="fair-dry-banks"'))next=next.replace(/(<clipPath id="fair-dry-banks"><path d=")[^"]+/,`$1${dry}`);
   else next=next.replace(/(<svg\b[^>]*>)/,`$1<defs><clipPath id="fair-dry-banks"><path d="${dry}" clip-rule="evenodd"/></clipPath></defs><g clip-path="url(#fair-dry-banks)">`).replace(/<\/svg>\s*$/,'</g></svg>');
   if(next!==svg)fs.writeFileSync(file,next);

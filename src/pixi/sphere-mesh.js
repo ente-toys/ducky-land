@@ -2,17 +2,12 @@ import {Mesh,MeshGeometry,RenderTexture,Matrix} from 'pixi.js';
 import {cameraMatrix,cameraSpan} from './sphere-camera.js';
 import {mapOf} from './island-maps.js';
 import {placeRigid,unplaceRigid} from './rigid.js';
-// boss 8 Nov ("I don't want any skew"): a neighbour is its own flat art laid down rigidly in this island's chart, centred
-// where the sphere puts its centre and turned by the chart's rotation there (rigid.js). Never warped through the chart,
-// so no shear, no squash and no seam lines between mesh cells. One quad: the art is flat, so two triangles are exact.
 export function patchGeometry(from,to,box){
  const positions=[],uvs=[];
  for(const [u,v]of [[0,0],[1,0],[1,1],[0,1]]){const p=placeRigid(from,to,{x:box.x+u*box.width,y:box.y+v*box.height});positions.push(p.x,p.y);uvs.push(u,v);}
  return new MeshGeometry({positions:new Float32Array(positions),uvs:new Float32Array(uvs),indices:new Uint32Array([0,1,2,0,2,3])});
 }
 export const overviewPatch=(from,to,texture)=>{const m=mapOf(to);return new Mesh({texture,geometry:patchGeometry(from,to,{...m.origin,width:m.width,height:m.height})});};
-// Only visible live neighbours get a bounded render target. Their animation is
-// drawn in the original flat map, then laid down rigidly exactly like the snapshot.
 export function createLivePatches(renderer){
  const entries=new Map();
  const drop=e=>{setTimeout(()=>{e.mesh.geometry.destroy();e.mesh.destroy();e.texture.destroy(true);},0);};

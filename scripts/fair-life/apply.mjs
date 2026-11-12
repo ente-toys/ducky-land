@@ -1,6 +1,3 @@
-// Apply AFTER the Fair ground/plant/bridge passes, BEFORE source-size refresh.
-// Owns only fair-life-* additions, the listed recompositions and extra beds.
-// routes are INPUT to the one Home path union, never a separate path painter.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
@@ -40,7 +37,6 @@ export function featureProps(art) {
  prop('fair-life-picnic-table','life/tea-table.svg',5030,4550,208,173.6,64,25,{shadowSize:[65,20],shadowOffset:[0,-5]});
  for(const [i,x,y,n]of [[0,4760,4790,2],[1,5080,4840,3],[2,5350,4780,4]]) {
   const model=art.props.find(p=>p.src===`reuse/bush-${n}.svg`);
-  // Full Home family, no new plant drawing.
   const sizes={2:[168,110],3:[116,104],4:[140,100]};
   const [w,h]=model?[model.width,model.height]:sizes[n];
   prop(`fair-life-picnic-bush-${i}`,`reuse/bush-${n}.svg`,x,y,w,h,32,16,{wind:true,shadowSize:[w*.3,12]});
@@ -69,8 +65,6 @@ export function applyFeatures(art,world,walk) {
  world.props.push(...props.map(({id,name,x,y})=>({id,name,x,y,zone:'fair-life'})));
  art.kites=layout.kites;
  world.fairLife={hill:layout.hill,picnic:layout.picnic,routes:layout.routes.map(r=>({...r,samples:previousRoutes.find(p=>p.id===r.id)?.samples??sample(r.points)}))};
- // Add exact samples to the shared route data. Ground painter must union these
- // lanes with its canonical path surface after all workers have been merged.
  for(const r of world.fairLife.routes)if(!world.paths.some(p=>JSON.stringify(p)===JSON.stringify(r.samples)))world.paths.push(r.samples);
 }
 export function clearance(world,walk,art) {
@@ -78,7 +72,6 @@ export function clearance(world,walk,art) {
  const roads=world.paths.flatMap(p=>p.slice(1).map((b,i)=>[p[i],b]));
  return (x,y,pose,tree)=>{
   const r=sleepHalfWidths()[pose],f=sleeperFootprint({x,y,r});
-  // Test the full ground contact ellipse, not just the pose's centre point.
   for(let i=0;i<24;i++){const a=i*Math.PI/12,xx=f.x+Math.cos(a)*(f.rx+16),yy=f.y+Math.sin(a)*(f.ry+16);
    if(!nav.walkable(xx,yy)&&!(tree&&walk.obstacles.some(o=>(o.name===tree||o.id===tree)&&inShape(xx,yy,o,16))))return false;
    if(world.water.some(w=>inShape(xx,yy,w,35)))return false;
@@ -86,7 +79,6 @@ export function clearance(world,walk,art) {
   if(world.walkways.some(b=>segmentDistance(x,y,b.a,b.b)<b.w/2+r+70))return false;
   if(world.bridges.some(b=>Math.abs(x-b.x)<b.w/2+r+70&&Math.abs(y-b.y)<b.h/2+100))return false;
   if(roads.some(([a,b])=>segmentDistance(x,y,a,b)<90+r))return false;
-  // All central rides, checker court, moat entrances and hamlet courts stay free.
   if(Math.hypot((x-3570)/1050,(y-3350)/620)<1)return false;
   return true;
  };
@@ -105,7 +97,6 @@ export function apply() {
  const clear=clearance(world,walk,art);
  for(const s of report.sleepers.filter(s=>!original.beds.some(b=>b.x===s.x&&b.y===s.y&&b.pose===s.pose)))assert(clear(s.x,s.y,s.pose,s.tree),`bad footprint ${JSON.stringify(s)}`);
  save(D+'sleepers-resolved.json',report.sleepers);
- // Update ONLY Fair's registry line, leaving the other four workers' themes.
  const file='assets/world/themes/index.js',src=fs.readFileSync(file,'utf8'),line=src.split('\n').find(l=>l.startsWith('  fair:'));
  assert(line,'Fair missing from actual registry');
  fs.writeFileSync(file,src.replace(line,line.replace(/sleepers: \[.*\]/,'sleepers: '+JSON.stringify(report.sleepers))));

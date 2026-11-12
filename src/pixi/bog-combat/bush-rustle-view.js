@@ -6,8 +6,6 @@ export function loadBushRustleArt(){
   return import.meta.env?.BASE_URL?Assets.load(LEAF_TEXTURE):Promise.resolve(Texture.EMPTY);
 }
 const LIFE=.28,CAP=9;
-// Reuse Home's SVG leaf, tinted lime. Three small leaves, nine fixed slots,
-// transform/opacity only, updated by the island's existing frame loop.
 export function createBushRustle(objects,texture,{tilt=1,playSound=()=>{}}={}){
   const leaves=Array.from({length:CAP},()=>{
     const sprite=new Sprite(texture);sprite.anchor.set(.5);sprite.visible=false;

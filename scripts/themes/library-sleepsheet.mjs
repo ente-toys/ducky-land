@@ -1,4 +1,3 @@
-// Contact sheet of all 40 library beds. K must match the source preview render.
 import sharp from 'sharp'; import {readFileSync} from 'node:fs';
 const [,, inp, out] = process.argv, K = +(process.env.K||.3);
 const w = JSON.parse(readFileSync('assets/world/themes/library/world.json', 'utf8')), art = JSON.parse(readFileSync('public/pixi-art/themes/library/art.json', 'utf8'));

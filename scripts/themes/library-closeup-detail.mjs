@@ -1,4 +1,3 @@
-// Pagepond close-up craft. Flat paving stays walkable; furniture has real footprints.
 import {writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {inShape} from '../../assets/world/island-geometry.mjs';
@@ -18,7 +17,6 @@ export function libraryPathInlays(paths){
   for(const [x,y]of [p.line[0],p.line.at(-1)])out.push(`<circle cx="${x}" cy="${y}" r="${(p.w-14)/2}"/>`);
  }
  out.push('</clipPath><g clip-path="url(#path-joint-inlays)">');
- // The two three-way joins get fan-laid stones rather than an unworked sand bulb.
  for(const index of [2,3]){
   const [x,y]=paths[index].line.at(-1),k=.78;
   for(const radius of [50,108]){
@@ -38,13 +36,11 @@ export function libraryCourtPaving(z,border){
  const scaled=(sx,sy=sx)=>border.map(([x,y])=>[z.x+(x-z.x)*sx,z.y+(y-z.y)*sy]);
  out.push(`<clipPath id="reading-court"><path d="${path(border)}"/></clipPath><g clip-path="url(#reading-court)">`);
  out.push(`<path d="${path(border)}" fill="${pave}"/>`);
- // Large, slightly irregular cream flagstones, with staggered rather than slab joints.
  for(let row=-6;row<7;row++)for(let col=-9;col<10;col++){
   const x=z.x+col*112+(row%2?56:0),y=z.y+row*76;
   const q=[[x,y],[x+112,y],[x+112,y+76],[x,y+76]];
   out.push(`<path d="${path(q)}" fill="${(col+row)%4===0?'#FFF0C7':(col-row)%5===0?'#F5DC94':pave}" stroke="${line}" stroke-width="2.2"/>`);
  }
- // Wide cream rim with inked edges and inset terracotta book-spine blocks.
  out.push(`<path d="${path(scaled(.965,.94))}" fill="none" stroke="#F9EDBC" stroke-width="44"/>`);
  for(const [sx,sy]of [[.99,.985],[.94,.89],[.87,.76]])out.push(`<path d="${path(scaled(sx,sy))}" fill="none" stroke="#BDA266" stroke-width="2.6"/>`);
  for(const side of [-1,1])for(let i=-6;i<=6;i++){
@@ -52,8 +48,6 @@ export function libraryCourtPaving(z,border){
   if(Math.abs(i)===6)continue;
   out.push(`<path d="M${x-16} ${y-16}h32v32h-32Z" fill="${i%3===0?'#C68F65':'#E4C567'}" stroke="#BDA266" stroke-width="2"/><path d="M${x-8} ${y-10}v20m16-20v20" stroke="#F9EDBC" stroke-width="2"/>`);
  }
- // A compass of page corners surrounds the open-book medallion, all flush inlay.
- // Bookplate rules occupy the broad blank field without adding raised objects.
  for(const [scale,width,colour]of [[.76,20,'#C49B75'],[.76,12,'#E5BB91'],[.66,3,'#BDA266']])
   out.push(`<path d="${path(scaled(scale,scale))}" fill="none" stroke="${colour}" stroke-width="${width}"/>`);
  for(const side of [-1,1])for(const dx of [-.53,0,.53]){
@@ -84,7 +78,6 @@ export function libraryCloseupFurniture({artDir,props,obstacles,ACT,STALL_ROWS,p
    const pw=p.width*(p.scale??1),ph=p.height*(p.scale??1),left=p.x-pw*p.anchor.x,top=p.y-ph*p.anchor.y;
    return left<x+w&&left+pw>x-w&&top<y+30&&top+ph>y-h;
   });
- // Seats follow each green's own ellipse and the court's rounded rim.
  for(const [zi,z]of ACT.entries()){
   const radius=z.rx*(zi===2?.91:1.08),ratio=z.ry/z.rx*(zi===2?.82:1);
   const targets=zi===2?[-120,-60,32,148]:[-135,-45,45,135];
@@ -113,13 +106,10 @@ export function libraryCloseupFurniture({artDir,props,obstacles,ACT,STALL_ROWS,p
   const rx=z.rx+(z===ACT[2]?25:85),ry=z.ry+(z===ACT[2]?-30:75);
   const x=z.x+Math.cos(a)*rx,y=z.y+Math.sin(a)*ry;
   if(!clear(x,y,72,160))continue;
-  // Tall lamps stay outside the playing interior; low pots keep the rim readable.
   const name=i%3===0?'pencil-lamp':'inkwell-planter';
   put(name,[x,y],'closeup-rim',{world:true,mult:name==='pencil-lamp'?.82:1.1});
   if(name==='pencil-lamp')lamps++;else planters++;
  }
- // Home's little grass and pebble contacts, concentrated beside paths and green rims.
- // Small paired reading lights and ink pots sit on the outer court band.
  for(const z of [ACT[2],market])for(const side of [-1,1])for(const dx of [-.28,.28]){
   const y=z.y+side*z.ry*(z===market?1.04:.84),x=z.x+dx*z.rx;
   for(const offset of [0,-45,45,-90,90,-135,135]){
@@ -146,11 +136,9 @@ export function libraryCloseupFurniture({artDir,props,obstacles,ACT,STALL_ROWS,p
   const a=i/72*Math.PI*2;
   let x,y;
   if(z.kind==='paved'){
-   // The court's long sides are shallow, unlike the oval activity reservation.
    const side=i<36?-1:1,t=(i%36)/35;
    x=z.x+(t*1.6-.8)*z.rx;y=z.y+side*(z.ry*.83+12+(i%4)*7);
   }else{x=z.x+Math.cos(a)*(z.rx+34);y=z.y+Math.sin(a)*(z.ry+28);}
-  // Jitter each contact instead of stamping a row of equally spaced tufts.
   x+=Math.sin(i*17.31+z.x)*21;y+=Math.sin(i*9.73+z.y)*24;
   if(!land(x,y,120)||pathNear(x,y,20)||bedNear(x,y,25)||STALL_ROWS.some(s=>inShape(x,y,s,20)))continue;
   const key=i%5===0?'pebble-1':i%5===1?'flower-dot-1':`grass-tuft-${1+(i*7)%3}`,asset=ASSET[key],size=1.1+(Math.sin(i*5.1)+1)*.2;

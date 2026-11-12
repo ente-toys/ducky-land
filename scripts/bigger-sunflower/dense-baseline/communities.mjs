@@ -1,4 +1,3 @@
-// Fixed neighbourhood layouts. Each tuple is an authored address, never a scatter rule.
 export const communities=[
  {id:'pollenpatch',name:'Pollenpatch Row',who:'Seed growers and beekeeping families',x:1740,y:440,point:[1780,600],kind:'grower',colour:'#E7BD61',roof:'#789044',homes:[[890,300],[1450,120],[2030,70],[2600,190]],work:'Seed nursery, cold frames, apiary and honey stall',green:[1760,530,820,300],lane:[[650,700],[1180,640],[1780,600],[2370,540],[2900,410]]},
  {id:'hayhello',name:'Hayhello Hamlet',who:'Sunflower harvesters and seed sorters',x:6700,y:130,point:[6750,450],kind:'harvester',colour:'#E9C87D',roof:'#BE633F',homes:[[5520,240],[6220,20],[6840,180],[5070,120]],work:'Cooperative barn, harvest carts, drying yard and crop beds',green:[6610,270,870,350],lane:[[5670,360],[6130,340],[6750,450],[7210,180],[7790,120]]},
@@ -13,13 +12,11 @@ export function homeSVG(h){
  const n=h.address,kind=h.kind,base=[h.colour,'#F0D894','#DFBB78','#EAC994','#D6C593'][n-1],roof=[h.roof,'#8E9B50','#B17A49','#BD8C52','#77976A'][n-1];
  const gambrel=kind==='harvester'&&n!==2,round=kind==='miller'&&n%3!==0,low=kind==='florist'||n===2;
  let s=`<ellipse cx="180" cy="290" rx="157" ry="21" fill="#7B973A" opacity=".38" stroke="none"/><path d="M57 126V275Q180 292 303 275V126Z" fill="${base}"/>`;
- // Stone foundations and a single dark side shape keep the kit's flat lighting.
  s+=`<path d="M57 246Q180 259 303 246V275Q180 292 57 275Z" fill="#C7AD74"/><path d="M275 132H303V275L275 279Z" fill="#BFA363" stroke="none"/>`;
  s+=`<path d="${gambrel?'M31 141L67 65L180 18L293 65L329 141L303 148L268 86L180 48L92 86L57 148Z':round?'M35 141Q48 20 180 15Q308 20 325 141L296 147Q180 98 64 147Z':low?'M25 131L88 54H270L335 131L309 147H51Z':'M28 142L67 83L180 13L292 83L332 142L307 155L180 53L53 155Z'}" fill="${roof}"/>`;
  s+=`<path d="M42 139L180 ${round?'103':low?'131':'46'}L318 139" fill="none" stroke="${cream}" stroke-width="10"/>`;
  if(!round&&!low)s+=`<path d="M180 23V48M78 88L98 91M262 87L282 91" fill="none" stroke="#E8BE74" stroke-width="5"/>`;
  if(round)s+=`<path d="M73 99Q180 52 287 99M97 63Q180 28 264 63" fill="none" stroke="#E5BC70" stroke-width="5"/>`;
- // Chimney, exposed planks, sunflower attic medallion, shutters and flower boxes.
  s+=`<path d="M254 62V24H279V87" fill="#E7D59C"/><path d="M248 23H285V36H248Z" fill="#D0B67A"/><path d="M72 170H288M72 202H288M72 231H288" stroke="#B69A60" stroke-width="2" opacity=".65"/>`;
  if(!round&&!low)s+=`<circle cx="180" cy="105" r="23" fill="${cream}"/>${flower(180,105).replace('r="8"','r="6"')}`;
  for(const x of [94,239])s+=`<rect x="${x-22}" y="157" width="44" height="48" rx="5" fill="#B8D3A0"/><path d="M${x} 158V204M${x-21} 181H${x+21}" stroke="${cream}" stroke-width="5"/><path d="M${x-34} 158H${x-25}V207H${x-34}ZM${x+25} 158H${x+34}V207H${x+25}Z" fill="${roof}"/><path d="M${x-31} 211H${x+31}L${x+27} 226H${x-27}Z" fill="${timber}"/><path d="M${x-20} 210l-7 -12m19 12v-17m16 17l8 -15" stroke="#548A38" stroke-width="5"/><circle cx="${x-25}" cy="199" r="6" fill="#F5D241"/><circle cx="${x+16}" cy="198" r="6" fill="#E48659"/>`;
@@ -32,6 +29,5 @@ export function homeSVG(h){
  return `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="312" viewBox="0 0 360 312"><g stroke="${ink}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">${s}</g></svg>`;
 }
 export function yardSVG(h){
- // Porch to gate is deliberately left open. Beds and washing line sit to either side.
  return `<svg xmlns="http://www.w3.org/2000/svg" width="510" height="370" viewBox="0 0 510 370"><g stroke="${ink}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 55Q240 21 495 61L482 337Q245 365 25 330Z" fill="${['#ADC150','#BCCB68','#9FBC55','#B5C057','#AAC76A'][h.address-1]}" stroke="#8FA63F"/><path d="M220 129Q264 180 244 343H287Q297 210 280 124Z" fill="#F7DF91" stroke="none"/><g fill="#94733F"><path d="M42 180L160 171L165 256L45 265Z"/><path d="M350 190L458 198L453 279L346 272Z"/></g><path d="M53 206L150 198M53 232L151 224M360 219L448 226M359 247L446 253" stroke="#70963F" stroke-width="10"/>${h.address%2?flower(72,230)+flower(122,222):'<path d="M62 228q18 -30 34 0m20 -8q18 -30 34 0" stroke="#5E9140" stroke-width="12" fill="none"/>'}${flower(382,245)}${h.address>2?flower(426,252):'<ellipse cx="430" cy="255" rx="23" ry="13" fill="#8CAA48"/>'}<path d="M31 93V170M183 88V163M31 105Q110 143 183 101" fill="none" stroke="#966B3D" stroke-width="5"/><path d="M58 116L78 124L73 148L53 143ZM101 125L126 126L126 152L104 152Z" fill="${cream}"/><path d="M143 119L162 111L171 135L151 142Z" fill="${h.roof}"/><path d="M20 321H198M304 328H485M25 305V340M78 309V345M139 309V347M193 309V347M309 309V347M367 309V347M426 309V347M480 309V340" stroke="#AC7C42" stroke-width="8"/><path d="M308 286V331" stroke="#845B34" stroke-width="7"/><path d="M293 272Q308 258 326 272V291H293Z" fill="${h.roof}"/><path d="M300 277H321" stroke="${cream}" stroke-width="3"/></g></svg>`;
 }

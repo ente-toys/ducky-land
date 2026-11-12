@@ -1,4 +1,3 @@
-// Boss-picked Olive Fountain Piazza. Authored world positions, upright SVG only.
 import fs from 'node:fs';
 import {oliveSVGBody} from './round2-olive.mjs';
 import {segmentedArcades} from './centre-arcade.mjs';
@@ -12,19 +11,16 @@ const E=(x,y,rx,ry,fill,stroke=ink,w=4.5)=>`<ellipse cx="${x}" cy="${y}" rx="${r
 const shadow=(x,y,rx,ry)=>`<ellipse data-contact-shadow="base" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${ink}" opacity=".16"/>`;
 function svg(src,w,h,b){fs.writeFileSync(A+src,`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" stroke-linejoin="round" stroke-linecap="round">${b}</svg>\n`);}
 const art=read(A+'art.json');
-// Retire both central mosaics and the freestanding wishing well, keep village mosaics.
 art.flats=art.flats.filter(p=>!['detail/piazza-mosaic.svg','detail/rose-inlay.svg','centre-A/paving.svg'].includes(p.src));
 art.props=art.props.filter(p=>p.id!=='centre-wishing-well'&&!p.id.startsWith('centre-A-'));
 fs.mkdirSync(A+'centre-A',{recursive:true});
 let floor=E(1160,850,1160,850,'#f7dc88','none')+E(1160,850,1124,823,'none','#e4c567',4);
-// Three quiet courses and a few short joints, no high-contrast radial medallion.
 for(const [rx,ry]of [[930,680],[700,510]])floor+=E(1160,850,rx,ry,'none','#d8b96f',2.5);
 for(let i=0;i<20;i++){const a=i*Math.PI/10;floor+=P(`M${1160+934*Math.cos(a)} ${850+683*Math.sin(a)}L${1160+1122*Math.cos(a)} ${850+821*Math.sin(a)}`,'none','#d8b96f',2.5);}
 svg('centre-A/paving.svg',2320,1700,floor);
 art.flats.unshift({id:'centre-A-paving',name:'Quiet round stone piazza',src:'centre-A/paving.svg',x:2940,y:1640,width:2320,height:1700,topLeft:true});
 const solids=[];
 function prop(id,name,src,x,y,width,height,extra={}){let p={id:'centre-A-'+id,name,src:'centre-A/'+src,x,y,width,height,scale:1,anchor:{x:.5,y:1},shadow:false,wind:false,flip:false,...extra};art.props.push(p);return p;}
-// Big round stone basin. The raised island is part of this one grounded structure.
 let b=shadow(480,589,451,23)+P('M28 300Q480 640 932 300V367C932 693 28 693 28 367Z',shade)+E(480,300,452,284,cream)+E(480,300,415,250,'#67bcc3');
 b+=P('M28 300C28 677 932 677 932 300','none',ink)+P('M29 348C100 660 860 660 931 348','none','#ad874b',3);
 for(const x of [100,240,390,570,720,860]){const y=367+Math.sqrt(Math.max(0,1-((x-480)/452)**2))*250;b+=P(`M${x} ${y-23}v35`,'none','#ad874b',3);}
@@ -34,12 +30,10 @@ svg('centre-A/fountain.svg',960,650,b);
 const water={centre:{x:480,y:300},pool:{x:480,y:300,rx:395,ry:234},minPoolY:405,minDropY:245,spray:null,cleanArtwork:false,sprayRate:18,spills:[{start:118,x:160,bottom:345,w:10,jet:{y:345,cx:135,cy:120}},{start:842,x:800,bottom:345,w:10,jet:{y:345,cx:825,cy:120}},{start:460,x:500,bottom:514,w:12,jet:{y:514,cx:480,cy:310}}]};
 prop('fountain','Olive island stone fountain','fountain.svg',4100,2720,960,650,{anchor:{x:.5,y:300/650},sortY:2730,fountainWater:water,contact:false});
 solids.push({id:'centre-A-fountain',x:4100,y:2720,rx:452,ry:284});
-// Enlarge the original olive by authoring its coordinates at the actual placed size.
 let olive=oliveSVGBody().replace(/<ellipse[^>]*data-contact-shadow="olive"\/>/,'');
 olive=olive.replace(/d="([^"]+)"/g,(_,d)=>'d="'+d.replace(/-?\d*\.?\d+/g,n=>+(Number(n)*1.7).toFixed(2))+'"').replace(/\b(cx|rx)="([^"]+)"/g,(_,k,n)=>`${k}="${+(Number(n)*1.7).toFixed(2)}"`).replace(/\b(cy|ry)="([^"]+)"/g,(_,k,n)=>`${k}="${+(Number(n)*1.7).toFixed(2)}"`);
 svg('centre-A/olive.svg',714,765,shadow(357,748,78,12)+olive);
 Object.assign(art.props.find(p=>p.id==='cloister-olive-well'),{src:'centre-A/olive.svg',x:4100,y:2700,width:714,height:765,trunk:[357,748],anchor:{x:.5,y:748/765},sortY:2740,shadow:false,contact:false,rasterPool:undefined});
-// Upright cafe sets, broad umbrella canopy, two chairs and a small round table.
 for(const [i,tone]of ['#d9753d',green].entries()){
  let s=shadow(150,270,128,17);
  for(const x of [46,254])s+=P(`M${x-21} 258v-74q21 -28 42 0v74M${x-24} 230h48v15h-48Z`,'#d3a459')+P(`M${x-18} 245v29M${x+18} 245v29`,'none',ink,5);
@@ -68,10 +62,8 @@ let lights=P('M8 14Q230 153 452 14','none',ink,4);
 for(let i=0;i<9;i++){const x=20+i*52,y=14+69.5*(1-((x-230)/222)**2);lights+=P(`M${x} ${y}v12`,'none',ink,3)+E(x,y+18,7,9,'#f4d270',ink,2.5);}
 svg('centre-A/lights.svg',460,115,lights);
 prop('lights-left','Cafe string lights','lights.svg',3470,2220,460,115,{contact:false,sortY:3350});prop('lights-right','Cafe string lights','lights.svg',4730,2220,460,115,{contact:false,sortY:3350});
-// Keep Home's authored directional bench artwork. Never rotate sprites.
 const benchPositions=[[3520,2800],[4680,2800],[3820,3160],[4380,3160]],oldBench=[];
 for(const [i,[x,y]]of benchPositions.entries()){let p=art.props.find(p=>p.id==='cloister-bench-'+(i+1));oldBench.push([p.id,x-p.x,y-p.y]);const dx=x-p.x,dy=y-p.y;p.x=x;p.y=y;p.bench.target=[4100,2720];p.bench.seat.x+=dx;p.bench.seat.y+=dy;}
-// Bring a few existing Home autumn trees inward as a composed lawn frame.
 const trees=[['b2-clump-13-1',5180,3370],['life-inner-north-east-shade-tree-0',5430,1800],['life-inner-north-east-shade-tree-1',5350,2490]];
 const moved=[];for(const [id,x,y]of trees){const p=art.props.find(p=>p.id===id);moved.push([id,x-p.x,y-p.y]);p.x=x;p.y=y;const shadow=art.flats.find(f=>f.id==='life-'+id+'-shadow');if(shadow){shadow.x=x-shadow.width/2;shadow.y=y-16;}}
 for(const file of ['world.json','walk-world.json']){const w=read(D+file);w.obstacles=w.obstacles.filter(o=>!['centre-olive-trunk','centre-well-solid'].includes(o.id)&&!o.id?.startsWith('centre-A-'));for(const [id,dx,dy]of [...oldBench,...moved]){const o=w.obstacles.find(o=>o.id===id);if(o){o.x+=dx;o.y+=dy;}}w.obstacles.push(...solids);if(file==='world.json')w.props=art.props;save(D+file,w);}

@@ -1,16 +1,10 @@
-// Offline boats (the ?offline dev mode): the ten moorings of the island, drawn from the offline fleet in room-client.js.
-// Each boat bobs and rocks at its mooring, nose out. The boat is the wooden sailboat the boss picked.
 import {Container, Sprite, Texture} from 'pixi.js';
 import {loadBoatViews} from './boat-views.js';
 import {OfflineFleet} from './room-client.js';
 
 
-// boss 5 Nov: the picked design is the wooden sailboat off the boat sheet (concepts/boats, design 1), cut out to public/pixi-art
-const BOAT_W = 188;   // boss 5 Nov: 50% bigger again (was 125)
-// boss 5 Nov ("very blurry and shaky"): the sailboat SVG is rasterised once at 1.5x (sharp when zoomed in on a 2x screen) with
-// mipmaps, so drawn small, rolling and moving it is smoothed down instead of sparkling. The live boats load the same asset.
+const BOAT_W = 188;
 export const BOAT_ART = {src: '/pixi-art/boat-sail.svg', data: {resolution: 1.5, autoGenerateMipmaps: true}};
-// boss 5 Nov: moored boats show the turntable view for their mooring heading (boat-views.js), drawn at BOAT_W/255 of the live size
 let boatViews = null;
 const viewsReady = loadBoatViews().then(v => (boatViews = v)).catch(() => null);
 function drawBoat(heading) {
@@ -22,10 +16,6 @@ function drawBoat(heading) {
   return {root, boat};
 }
 
-// boss 6 Nov ("I took the boat already. Every island should have all the boats"): offline shows the same ten moorings
-// the room server fills (3 harbor, 3 islet, 4 beach; islands.js boatSpots), kept by the offline fleet in room-client.js.
-// Each frame it follows the fleet: a refilled mooring's boat fades and bobs in over 0.4 s, a boat that leaves the list
-// drifts astern and fades. The old arguments (islets, centre, coast) are unused now and kept for the engine's call.
 const BORN = .4, BOB_PX = 10, DRIFT = .9, DRIFT_PX = 36;
 const smooth = u => u * u * (3 - 2 * u);
 const bobIn = k => k >= 1 ? 0 : (1 - k) ** 2 * Math.cos(k * Math.PI * 1.5);

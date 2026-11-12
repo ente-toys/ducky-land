@@ -1,7 +1,3 @@
-// Package the hand-authored Rosybutton shore drawings and explicit placements.
-// Run from the repo root: node scripts/pink-fix/shore-apply.mjs
-// Art source: scripts/pink-fix/art. Collision contours are sampled from the same pen curves.
-// Base: the saved pre-shore build; rerunning does not accumulate patches.
 import {execFileSync} from 'node:child_process';
 import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
 const BASE = '96f36ed5';
@@ -10,8 +6,7 @@ const git = p => execFileSync('git', ['show', `${BASE}:${p}`], {encoding: 'utf8'
 const P = JSON.parse(readFileSync('scripts/pink-fix/shore.json', 'utf8'));
 const r1 = v => Math.round(v * 10) / 10;
 
-// ---------- geometry helpers (curves through the hand-picked points) ----------
-const bez = pts => pts.slice(0, -1).map((p, i) => {   // Catmull-Rom through the points, as cubic Bezier segments
+const bez = pts => pts.slice(0, -1).map((p, i) => {
   const a = pts[Math.max(0, i - 1)], b = pts[i + 1], c = pts[Math.min(pts.length - 1, i + 2)];
   return [p, [p[0] + (b[0] - a[0]) / 6, p[1] + (b[1] - a[1]) / 6], [b[0] - (c[0] - p[0]) / 6, b[1] - (c[1] - p[1]) / 6], b];
 });
@@ -24,7 +19,6 @@ const at = (s, t) => [0, 1].map(k => (1 - t) ** 3 * s[0][k] + 3 * (1 - t) ** 2 *
 const sample = (segs, n = 8) => [...segs.flatMap(s => Array.from({length: n}, (_, i) => at(s, i / n))), segs.at(-1)[3]];
 const box = pts => pts.reduce((b, [x, y]) => [Math.min(b[0], x), Math.min(b[1], y), Math.max(b[2], x), Math.max(b[3], y)], [Infinity, Infinity, -Infinity, -Infinity]);
 const waterEntry = (name, poly) => {const b = box(poly); return {name, x: r1((b[0] + b[2]) / 2), y: r1((b[1] + b[3]) / 2), rx: r1((b[2] - b[0]) / 2), ry: r1((b[3] - b[1]) / 2), poly: poly.map(p => p.map(r1))};};
-// a brook's water for walking: overlapping strips along the same curve the art draws, each a simple polygon
 function brookWater(b) {
   const pts = sample(bez(b.centre), 6), out = [], step = 6;
   const side = (i, s) => {const p = pts[i], q = pts[Math.min(pts.length - 1, i + 1)], o = pts[Math.max(0, i - 1)], dx = q[0] - o[0], dy = q[1] - o[1], l = Math.hypot(dx, dy) || 1; return [p[0] - dy / l * b.half * s, p[1] + dx / l * b.half * s];};
@@ -40,19 +34,16 @@ function brookWater(b) {
   return out;
 }
 
-// Package the authored SVGs and retire superseded art layers.
 const base = {art: JSON.parse(git(A + 'art.json')), world: JSON.parse(git(D + 'world.json')), walk: JSON.parse(git(D + 'walk-world.json')), harbor: JSON.parse(git(D + 'harbor.json'))};
 execFileSync('python3', ['scripts/pink-fix/prepare-ground.py']);
 const INK = '#39472D', CREAM = '#FFF0C7';
 const content = p => readFileSync('scripts/pink-fix/art/' + p, 'utf8').replace(/<svg[^>]*>/, '').replace('</svg>', '');
 const coastD = content('coast.svg').match(/ d="([^"]+)"/)[1];
-// Sample the authored cubic pen contour for walking, sailing and surf. The drawing is the source.
 const nums = coastD.match(/-?\d+(?:\.\d+)?/g).map(Number), coastSegs=[];
 let cursor=nums.slice(0,2);
 for(let i=2;i<nums.length;i+=6){const end=nums.slice(i+4,i+6);coastSegs.push([cursor,nums.slice(i,i+2),nums.slice(i+2,i+4),end]);cursor=end;}
 const contour=sample(coastSegs,18).slice(0,-1);
 const winding=Math.sign(contour.reduce((v,p,i)=>{const q=contour[(i+1)%contour.length];return v+p[0]*q[1]-q[0]*p[1];},0));
-// Collision and surf follow the outside of the 92-unit sand stroke, not its centreline.
 const coast=contour.map((p,i)=>{const a=contour[(i+contour.length-1)%contour.length],b=contour[(i+1)%contour.length],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy);return [r1(p[0]+winding*dy/l*46),r1(p[1]-winding*dx/l*46)];});
 let SRC = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2600 -1900 13200 9800"><defs><path id="pink-coast" d="${coastD}"/></defs>${content('paths.svg')}${content('shore.svg')}</svg>`;
 mkdirSync(OUT, {recursive: true});
@@ -65,8 +56,6 @@ for(let r=2;r<8;r++)for(let c=0;c<10;c++){
  shoreTiles.push({src,x,y,width,height,resolution:1});
 }
 
-// ---------- 3. bridges and the marina pier ----------
-// Place the hand-drawn diagonal arched bridges in the centre palette.
 const decks = [], bridges = [], arches = [];
 const support = (name, a, b, width) => {
   const length = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.ceil(length / (width * .65));
@@ -84,11 +73,9 @@ for (const c of P.crossings) {
   decks.push({src,x:tx,y:ty,width:W,height:H});
   support(c.id, a, b, c.width); arches.push({a: c.a, b: c.b, r: c.rise ?? 40, w: c.width});
 }
-// The marina pier is a fixed pen drawing, with rounded rope-banded posts.
 writeFileSync(OUT+'marina-pier.svg',readFileSync('scripts/pink-fix/art/marina-pier.svg'));
 decks.push({src:'expansion/shore/marina-pier.svg',x:9560,y:2730,width:880,height:240});
 
-// ---------- 4. data ----------
 const dropDeck = new Set(P.removeDecks.src);
 const water = [base.world.water[0], ...P.brooks.flatMap(brookWater), ...P.ponds.map(p => waterEntry(p.name, sample(closedBez(p.poly), 4)))];
 for (const target of [base.world, base.walk]) {
@@ -96,14 +83,11 @@ for (const target of [base.world, base.walk]) {
 }
 base.world.jetties = [{name: 'marina', foot: P.harbour.jetty.foot, tip: P.harbour.jetty.tip, width: P.harbour.jetty.width}];
 base.world.arches = arches;
-// Keep bathers on their real beach; both chair poses now face the southeast sea.
 base.world.sleepSpots.chair=[[6150,5410,false],[7480,4640,false]];
-// These paths connect the original endpoints; keep the navigation metadata in the same style.
 base.world.pathWidths=base.world.pathWidths.map(()=>160);
 base.world.paths.push([[1043,1275],[570,1240]],[[1124,2736],[900,2780]],[[6865,2778],[7000,2700]],[[4000,3907],[4000,4900]],[[3060,1050],[2600,350]],[[4930,1120],[5750,500]],[[6362,894],[7100,850]]);
 
 base.world.pathWidths=base.world.paths.map(()=>160);
-// moved props (art.json by id; world.json props and their obstacles by their old spot)
 for (const m of P.moveProps ?? []) {
   const p = base.art.props.find(q => q.id === m.id); if (!p) throw Error('no prop ' + m.id);
   const [ox, oy] = [p.x, p.y], dx = m.x - ox, dy = m.y - oy; p.x = m.x; p.y = m.y; if (m.flip !== undefined) p.flip = m.flip;

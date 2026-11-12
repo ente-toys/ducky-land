@@ -1,6 +1,3 @@
-# Library island: the round bookstore tower and its ring of book stalls (boss lock, concepts/themes/library-base/
-# library-two-isles-3.png, right landmass). Called by centre-build.py, which passes its helpers in `ns`.
-# Origin (0,0) = centre of the tower's base on the ground. Everything in world units, screen = walk coordinates.
 import math
 import numpy as np
 
@@ -9,11 +6,10 @@ def build(ns):
         ('K', 'Piece', 'entry', 'traced', 'ell', 'fill', 'gd', 'box', 'shape_json', 'unary_union'))
     T = 'library'
     PAVE, LINE, SHADE, GRASS_D = '#F7E6AF', '#E2CC8C', '#E4C567', '#7DAE30'
-    CR = 1080                                    # forecourt radius (plan)
+    CR = 1080
     out = dict(name='Round bookstore tower', concept='concepts/themes/library-base/library-two-isles-3.png',
                origin='centre of the tower base on the ground', folder='bookstore/', pieces=[])
 
-    # decal: round forecourt, ring paving (the island's tower-garden style) with radial joints
     d = Piece(T, 'bookstore/decal-forecourt', 'Bookstore forecourt paving')
     rx, ry = CR, CR * K
     d.add(f'<ellipse cx="0" cy="0" rx="{rx + 12}" ry="{ry + 12:.1f}" fill="{GRASS_D}"/>', ell(0, 0, rx + 14, ry + 14))
@@ -31,21 +27,19 @@ def build(ns):
     d.write()
     out['pieces'].append(entry(d, 'decal', id='bookstore-decal-forecourt'))
 
-    # tower: base front edge measured from the art
     w, h, im = traced(T, 'bookstore/tower')
     al = im[..., 3] > 0
     bottom = np.where(al.any(1))[0].max()
     bw = max(np.ptp(np.where(al[y])[0]) for y in range(int(h * .82), bottom))
     base_rx = bw / 2; base_ry = base_rx * K
     ay = (bottom + 1) / h
-    at = (0, base_ry)                            # front edge of the base; base centre = origin
+    at = (0, base_ry)
     out['pieces'].append(dict(id='bookstore-tower', file='bookstore/tower.svg', layer='sorted', width=round(w, 1), height=round(h, 1),
                               anchor=dict(x=.5, y=round(ay, 4)), at=[0, round(at[1], 1)], x=round(-w / 2, 1), y=round(at[1] - ay * h, 1),
                               sortY=round(at[1], 1), note='landmark, sorted by its base front edge'))
-    # stalls: a ring round the forecourt, leaving the door lane (front) and the back clear
     stalls = []
     ring_r = CR * .80
-    angles = [200, 240, 300, 340, 25, 155]                      # screen degrees, 90 = front (the door lane)
+    angles = [200, 240, 300, 340, 25, 155]
     colours = ['red', 'green', 'blue', 'yellow', 'red', 'blue']
     for i, (a, c) in enumerate(zip(angles, colours)):
         t = math.radians(a)

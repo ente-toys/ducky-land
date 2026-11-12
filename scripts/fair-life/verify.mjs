@@ -1,4 +1,3 @@
-// Fresh-process readback of the exact map used by the game and room server.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {mapFor,mapOf} from '../../src/pixi/island-maps.js';

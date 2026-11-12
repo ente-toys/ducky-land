@@ -44,7 +44,6 @@ def legal(p,x,y):
   if q['width']*q['scale']>200 and abs(x-q['x'])<(ww+q['width']*q['scale'])*.4 and y>q['y']-30 and y-h*.8<q['y']:return False
  return True
 moves=[];unresolved=[]
-# Fixed sleeper trees keep their roots, all candidates are deterministic.
 for p in trees:
  if p['id'].startswith('nod-tree') or 'islet' in p['id']:continue
  bad=masksplaza(p,p['x'],p['y']) or any(overlap(p,p['x'],p['y'],q)<.95 for q in trees if q!=p)
@@ -78,13 +77,11 @@ for p in trees:
   for o in data['obstacles']:
    if o.get('x')==ox and abs(o.get('y',-9999)-oy)<30:o['x']+=x-ox;o['y']+=y-oy
  p.update(x=x,y=y);moves.append(dict(id=p['id'],before=[ox,oy],after=[x,y]))
-# Small bushes and stones ground relocated trees without filling their walking lanes.
 for i,m in enumerate(moves):
  x,y=m['after'];xx,yy=x-70,y+30
  if pathdist(xx,yy)>60 and all(math.hypot(xx-b['x'],yy-b['y'])>170 for b in beds):
   a['props'].append(dict(id=f'ten-root-bush-{i}',name='Low root bush',src='/pixi-art/plants/bush-2.svg',x=xx,y=yy,width=95,height=62,scale=1,anchor=dict(x=.5,y=1),zone='grove',flip=False))
   a['flats'].append(dict(src='detail/shore-rock.svg',x=x+62,y=y+19,width=42,height=27))
-# Keep the centre collision contract in sync with its new ring seating.
 c=json.loads((A/'centre/centre.json').read_text());c['blocked']=[]
 for o in w['obstacles']:
  xx=sum(v[0]for v in o['poly'])/len(o['poly'])if'poly'in o else o['x'];yy=sum(v[1]for v in o['poly'])/len(o['poly'])if'poly'in o else o['y']

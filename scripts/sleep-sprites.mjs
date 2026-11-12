@@ -1,13 +1,7 @@
-// The 8 approved sleeping Duckies, split into SVG layers for Pixi.
-// Run: node scripts/sleep-sprites.mjs -> public/pixi-duck/sleep/<pose>-<group>.svg + src/pixi/sleep-poses.json
-// Rasterise in memory only to measure the existing boxes. SVG texture dimensions
-// match the former PNGs, so F, pivots, pose scale and ground contact stay identical.
 import sharp from 'sharp';
 import {readFileSync, writeFileSync} from 'node:fs';
 const SRC = new URL('../../sleeping-variants/svg/', import.meta.url), OUT = new URL('../public/pixi-duck/sleep/', import.meta.url);
-const POSES = ['nod', 'leaf', 'wing', 'hammock', 'rock', 'book', 'chair', 'box'], F = .75;   // texture px per svg unit
-// rig units per svg unit: the body's yellow area matched to a standing Ducky's, checked against head and tuft widths
-// (the leaf, box and hammock hide yellow, the chair sits far back, so area alone over-sizes those four)
+const POSES = ['nod', 'leaf', 'wing', 'hammock', 'rock', 'book', 'chair', 'box'], F = .75;
 const K = {nod: .65, leaf: .95, wing: .78, hammock: .92, rock: .72, book: .78, chair: 1.15, box: .8};
 const yellow = (r, g, b) => r > 230 && g > 185 && b < 140;
 async function raster(svg, file) {
@@ -23,9 +17,8 @@ async function raster(svg, file) {
   return {area: area / F / F, box: [x0 / F, y0 / F, (x1 + 1) / F, (y1 + 1) / F]};
 }
 const only = (s, keep, clip = '') => s.replace(/<g id="(duck|prop|zz)"[^>]*>.*?<\/g>/gs, m => m.startsWith(`<g id="${keep}"`) ? (clip ? `<g clip-path="url(#${clip})">${m}</g>` : m) : '');
-// the standing Ducky's yellow, in rig units, sets every pose's size: the sleeper's body reads as big as a standing one
 const stand = readFileSync(new URL('../public/pixi-duck/view-9-body-0.svg', import.meta.url), 'utf8');
-const standArea = (await raster(stand.replace(/<svg([^>]*)>/, '<svg$1>'))).area * 1;   // svg units = rig units for the parts
+const standArea = (await raster(stand.replace(/<svg([^>]*)>/, '<svg$1>'))).area * 1;
 const out = {standArea, F, poses: {}};
 for (const name of POSES) {
   let s = readFileSync(new URL(`${name}.svg`, SRC), 'utf8');
@@ -45,10 +38,10 @@ for (const name of POSES) {
     }
   }
   pose.box = box.map(Math.round);
-  pose.k = K[name];   // area-only would be +Math.sqrt(standArea / pose.area).toFixed(3)   // rig units per svg unit
+  pose.k = K[name];
   out.poses[name] = pose;
   console.log(name, pose.k, pose.box);
 }
 const z = readFileSync(new URL('z-symbol.svg', SRC), 'utf8');
-writeFileSync(new URL('z.svg', OUT), z.replace(/\bwidth="[^"]*"/, 'width="200"').replace(/\bheight="[^"]*"/, 'height="210"'));   // same 200 x 210 texture
+writeFileSync(new URL('z.svg', OUT), z.replace(/\bwidth="[^"]*"/, 'width="200"').replace(/\bheight="[^"]*"/, 'height="210"'));
 writeFileSync(new URL('../src/pixi/sleep-poses.json', import.meta.url), JSON.stringify(out, null, 1) + '\n');

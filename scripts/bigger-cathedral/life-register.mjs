@@ -1,4 +1,3 @@
-// Use the production registry validator, replacing only our generated theme row.
 import fs from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 const report=checkTheme('cathedral');

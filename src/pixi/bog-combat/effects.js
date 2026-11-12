@@ -27,8 +27,6 @@ export function createTeamMarker(objects,pose,{tilt=1}={}) {
   },dispose(){root.removeFromParent();root.destroy({children:true});}};
 }
 
-// Only paint is drawn here. These pooled, bounded graphics live in the island
-// scene; the island retains its renderer, terrain, props and depth ordering.
 export function createCombatEffects(objects,{blockers=[],muzzleFor=()=>null,tilt=1}={}) {
   const active=new Map(),pool=[],kept=new Set();let flashUntil=0,lastFlash=-Infinity;
   function graphic(key,colour,kind) {
@@ -54,7 +52,6 @@ export function createCombatEffects(objects,{blockers=[],muzzleFor=()=>null,tilt
         node.position.set(end.x,end.y-34);node.zIndex=end.y+.2;
       }
       for(const splat of snapshot.splats){
-        // Knockout owns the approved puddle, including its fade before respawn.
         if(splat.kind==='tag')continue;
         const node=graphic(`splat-${splat.id}`,PAINT[splat.team][splat.colour%PAINT[splat.team].length],'splat');
         node.position.set(splat.x,splat.y-(splat.kind==='wall'?16:0));node.zIndex=splat.y-.2;

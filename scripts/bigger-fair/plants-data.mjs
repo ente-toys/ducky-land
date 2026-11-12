@@ -1,7 +1,3 @@
-// Authored world-space feet and heights, in small nested groves with low skirts.
-// No random/scatter pass. Open gaps separate each grove and leave coast views.
-// [Home model, x, y, scale]. The NE hill, south rest place and kite pockets
-// remain unplanted, for the separate life/feature composition.
 export const OUTER_PLANTING = {
  'northwest-coast': [
   ['tree-3',-910,-690,.92],['tree-1',-660,-785,.86],['tree-5',-420,-830,.9],
@@ -76,7 +72,6 @@ export const OUTER_PLANTING = {
  ],
 };
 
-// Whole visible bases are kept outside these reserved feature/flight envelopes.
 export const PLANT_RESERVES = [
  {name:'NE hill and entrance',x0:7070,y0:800,x1:7960,y1:1530},
  {name:'south picnic and entrance',x0:4520,y0:4160,x1:5460,y1:4930},

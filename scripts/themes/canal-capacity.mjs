@@ -1,4 +1,3 @@
-// Spatial capacity, not a multiplayer or rendering load test.
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -14,7 +13,6 @@ for(const [id,z] of reserved){
  const bounds='x0'in z?[z.x0,z.y0,z.x1,z.y1]:[z.x-z.rx,z.y-z.ry,z.x+z.rx,z.y+z.ry];
  for(let y=bounds[1];y<=bounds[3];y+=20)for(let x=bounds[0];x<=bounds[2];x+=20)if(inside(x,y))assert.ok(nav.walkable(x,y),`${id}: blocked reservation ${x},${y}`);
 }
-// Check each resting sprite's footprint against full path widths, not centre lines.
 const distance=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)};
 for(const bed of report.sleepers)for(const [dx,dy] of [[0,0],[bed.r,0],[-bed.r,0],[0,30],[0,-30]]){
  assert.ok(world.paths.every((line,i)=>line.slice(1).every((b,j)=>distance(bed.x+dx,bed.y+dy,line[j],b)>=world.pathWidths[i]/2)),`sleeper ${bed.pose} at ${bed.x},${bed.y} touches a path`);

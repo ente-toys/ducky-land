@@ -9,7 +9,7 @@ function checkLayout(m){
  const ice=m.islands.find(i=>i.theme==='snow');assert.deepEqual(ice.center,[0,1,0]);
  const longs=m.islands.filter(i=>i!==ice).map(i=>i.lon).sort((a,b)=>a-b);
  const gaps=longs.map((x,k)=>(longs[(k+1)%longs.length]-x+2*Math.PI)%(2*Math.PI));
- assert.ok(Math.max(...gaps)-Math.min(...gaps)>20*RAD,'unequal gaps');   // boss 8 Nov: islands cluster, open ocean between groups is fine
+ assert.ok(Math.max(...gaps)-Math.min(...gaps)>20*RAD,'unequal gaps');
  assert.ok(new Set(m.islands.map(i=>i.lat)).size===9,'varied heights, no rows');
  for(const i of m.islands){assert.ok(Math.abs(Math.hypot(...i.center)-1)<1e-12);}
  assert.deepEqual([m.islands[0].x,m.islands[0].y],[2900,2200]);

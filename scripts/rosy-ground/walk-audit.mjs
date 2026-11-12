@@ -1,5 +1,3 @@
-// Audit the current drawn routes. No nearest-target fallback or protected-lamp
-// exclusions: an exact authored target must be walkable and actually reached.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {mapOf} from '../../src/pixi/island-maps.js';
 import {inShape} from '../../assets/world/island-geometry.mjs';

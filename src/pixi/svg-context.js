@@ -1,10 +1,4 @@
 import {GraphicsContext,GraphicsPath,Matrix} from 'pixi.js';
-// boss 8 Nov (hand-drawn islets): our hand-written SVG, drawn as real Pixi geometry so it stays sharp at any zoom. Pixi's own
-// SVG parser drops what our art leans on (an inherited fill-opacity, fill="none" under a filled group, round joins, and
-// placing a kit piece with translate/scale), so this reads the same file the way a browser does. It understands exactly
-// what the islet art uses: <g>, <path>, <circle>, <ellipse>, <rect>, <line>, <polyline>, <polygon>; fill, stroke and their
-// opacities, stroke-width, -linecap, -linejoin, -miterlimit, fill-rule, opacity, and transform with translate / scale /
-// matrix / rotate, plus local <use> references. Definitions only draw when referenced.
 const INHERITED=['fill','stroke','stroke-width','fill-opacity','stroke-opacity','stroke-linecap','stroke-linejoin','stroke-miterlimit','fill-rule'];
 const ROOT={fill:'#000','stroke':'none','stroke-width':'1','fill-opacity':'1','stroke-opacity':'1','stroke-linecap':'butt','stroke-linejoin':'miter','stroke-miterlimit':'4','fill-rule':'nonzero',opacity:1};
 const num=(el,name,fallback=0)=>{const v=parseFloat(el.getAttribute(name));return Number.isFinite(v)?v:fallback;};
@@ -17,7 +11,7 @@ function transformOf(text){
   else if(op==='rotate'){if(a.length>2)t.translate(-a[1],-a[2]);t.rotate((a[0]??0)*Math.PI/180);if(a.length>2)t.translate(a[1],a[2]);}
   else if(op==='matrix')t.set(...a);
   else throw Error(`svg-context: transform ${op} is not drawn`);
-  m.append(t);   // SVG applies the list right to left: m = m * t
+  m.append(t);
  }
  return m;
 }
@@ -41,7 +35,7 @@ function draw(ctx,el,style,matrix,refs,stack=new Set(),target=null,active=true){
  if(!active)return;
  const fill=color(s.fill),stroke=color(s.stroke);
  if(!fill&&!stroke)return;
- const scale=Math.sqrt(Math.abs(m.a*m.d-m.b*m.c));   // geometry is transformed point by point, so the pen is scaled here
+ const scale=Math.sqrt(Math.abs(m.a*m.d-m.b*m.c));
  ctx.setTransform(m);ctx.beginPath();
  switch(tag){
   case 'path':ctx.path(new GraphicsPath(el.getAttribute('d'),s['fill-rule']==='evenodd'));break;
@@ -55,7 +49,6 @@ function draw(ctx,el,style,matrix,refs,stack=new Set(),target=null,active=true){
  if(fill&&tag!=='line'&&tag!=='polyline')ctx.fill({color:fill,alpha:s.opacity*parseFloat(s['fill-opacity'])});
  if(stroke)ctx.stroke({color:stroke,alpha:s.opacity*parseFloat(s['stroke-opacity']),width:parseFloat(s['stroke-width'])*scale,cap:s['stroke-linecap'],join:s['stroke-linejoin'],miterLimit:parseFloat(s['stroke-miterlimit'])});
 }
-// text: an SVG document. Returns a GraphicsContext in viewBox units.
 export function svgContext(text,parse=t=>new DOMParser().parseFromString(t,'image/svg+xml'),target=null){
  const root=parse(text).documentElement,ctx=new GraphicsContext();
  const refs=new Map();
@@ -65,8 +58,6 @@ export function svgContext(text,parse=t=>new DOMParser().parseFromString(t,'imag
  return ctx;
 }
 
-// Each selected document retains ancestor styles, transforms and shared definitions.
-// Used for source-art equivalence checks as well as independent SVG exports.
 export function svgLayerDocuments(text,parse=t=>new DOMParser().parseFromString(t,'image/svg+xml'),serialize=n=>new XMLSerializer().serializeToString(n)){
  const root=parse(text).documentElement;
  const ids=[...new Set(Array.from(root.getElementsByTagName('*')).map(e=>e.getAttribute('data-piece')).filter(Boolean))];
