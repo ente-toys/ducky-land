@@ -1,4 +1,3 @@
-// Real Skia vector boolean union. Only the resulting outside boundary is stroked.
 import {centreClip,inCentre} from './centre-lock.mjs';
 import {Path2D,PathOp,StrokeCap,StrokeJoin} from '@napi-rs/canvas';
 import {execFileSync} from 'node:child_process';
@@ -14,7 +13,6 @@ const d=all.toSVGString();if(!d||/nan|infinity/i.test(d))throw Error('Invalid me
 const body=`<defs><clipPath id="outside-locked-centre"><path clip-rule="evenodd" d="M-3000 -2200H11000V8200H-3000Z M4930 2850A930 760 0 1 0 3070 2850A930 760 0 1 0 4930 2850Z"/></clipPath></defs><g clip-path="url(#outside-locked-centre)" data-floor-union="true" fill-rule="evenodd"><path d="${d}" fill="#FBE6C8"/></g>`;
 const root=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2600 -1900 13200 9800">${body}</svg>`;
 mkdirSync(A+'expansion/merged',{recursive:true});writeFileSync(A+'expansion/merged/unified-paths.svg',root);
-// Keep decorative paving only inside its own inset and outside the merged travel corridors.
 const corridors=new Path2D(roads).op(new Path2D(roads).stroke({width:28,cap:StrokeCap.Round,join:StrokeJoin.Round}),PathOp.Union);
 for(const decor of input.decorations){
  const p=decor.prop,floor=shape(decor.shape),rim=new Path2D(floor).stroke({width:64,cap:StrokeCap.Round,join:StrokeJoin.Round});let mask=new Path2D(floor).op(rim,PathOp.Difference).op(corridors,PathOp.Difference);
@@ -24,12 +22,10 @@ for(const decor of input.decorations){
  const flat=art.flats.find(f=>f.id===p.id);flat.src=src;
 }
 art.flats=art.flats.filter(p=>!(p.src.startsWith('hamlets/')&&/\/paths/.test(p.src)));
-// The union replaces the entire old path group before brook water and bridge decks are drawn.
 const shore=readFileSync('scripts/pink-fix/art/shore.svg','utf8').replace(/<svg\b[^>]*>/,'').replace(/<\/svg>\s*$/,'');
 const source=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2600 -1900 13200 9800"><defs><path id="pink-coast" d="${coastD}"/></defs>${body}${shore}</svg>`;
 writeFileSync(A+'expansion/shore/shore-source.svg',source);
 for(const t of art.ground.tiles.filter(t=>t.src.startsWith('expansion/shore/')))writeFileSync(A+t.src,source.replace('viewBox="-2600 -1900 13200 9800"',`width="${t.width}" height="${t.height}" viewBox="${t.x} ${t.y} ${t.width} ${t.height}"`));
-// Catalog every overlap between independently authored shapes for close-up inspection.
 const joins=[];
 for(let i=0;i<pieces.length;i++)for(let j=i+1;j<pieces.length;j++){
  const a=pieces[i],b=pieces[j];if(!a.stroke&&!b.stroke)continue;

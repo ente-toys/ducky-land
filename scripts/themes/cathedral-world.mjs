@@ -1,5 +1,3 @@
-// Bellovo Piazza. Generated props traced with cathedral-trace.py; assembly follows library-world.mjs.
-// Only writes the cathedral theme's folders. node scripts/themes/cathedral-world.mjs
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {addArc,arcGeometry,ring,roseFloor} from './cathedral-craft.mjs';
 import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
@@ -17,9 +15,7 @@ const path=(p,fill,stroke='none',sw=0)=>`<path d="${dpath(p)}" fill="${fill}" st
 const svg=(w,h,body,vb=`0 0 ${w} ${h}`)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${vb}">${body}</svg>`;
 const segdist=(x,y,a,b)=>{let dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)};
 let seed=2246; const rnd=()=>((seed=(1664525*seed+1013904223)>>>0)/4294967296);
-// A rounded piazza headland, two quiet garden islets, no hard corners or home-island outline reuse.
 let coast=smooth([[2050,1150],[2750,820],[3800,690],[4650,750],[5500,1100],[6200,1400],[6700,2000],[7080,2800],[7010,3540],[6630,4090],[6000,4560],[5200,4920],[4290,5130],[3460,4980],[2610,4930],[1800,4550],[1100,4060],[880,3320],[1120,2500],[1530,1850]]);
-// Scale the footprint, not props or paths, to exactly ~20M, centred on the main landmass.
 const factor=Math.sqrt(20_000_000/area(coast));coast=coast.map(([x,y])=>[r(4000+(x-4000)*factor),r(2950+(y-2950)*factor)]);
 const walkCoast=offset(coast,35), lawn=offset(coast,130);
 const islets=[[920,1280,420,295],[6640,5080,430,290]];
@@ -59,7 +55,6 @@ copyFileSync('public/pixi-art/themes/sunflower/detail/barrel-seeds.svg',ART+'reu
 copyFileSync('public/pixi-art/themes/goldmine/detail/supply-crates.svg',ART+'reuse/supply-crates.svg');
 const sizes=new Map();
 function put(name,src,x,y,h,foot='small',id=null,flip=false){let wh=sizes.get(src);if(!wh){let s=readFileSync(ART+src,'utf8'),m=s.match(/<svg[^>]*width="([\d.]+)"[^>]*height="([\d.]+)"/);if(m)wh=[+m[1],+m[2]];else{m=s.match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/);wh=[+m[1],+m[2]]}sizes.set(src,wh)}let[w,hh]=wh,scale=h/hh;
- // Fixed legacy furniture used to sit on the soft paths. Move its entire footprint to the nearest clear verge.
  const margin=foot==='tree'?145:foot==='bench'?w*scale*.5:foot&&typeof foot==='object'?(foot.rx||w*scale*.22):foot==='small'?w*scale*.28+14:24;
  if(!/Arcade|Lily/.test(name)&&pathDist(x,y)<margin){
   const ox=x,oy=y;let chosen=null;
@@ -68,7 +63,7 @@ function put(name,src,x,y,h,foot='small',id=null,flip=false){let wh=sizes.get(sr
    if(pathDist(nx,ny)<margin||onDeck(nx,ny,30)||!inPoly(nx,ny,walkCoast)||water.some(z=>inShape(nx,ny,z,margin))||[...activities,...stalls].some(z=>inShape(nx,ny,z,40))||props.some(q=>Math.hypot(nx-q.x,(ny-q.y)*1.3)<margin+45))continue;
    chosen=[nx,ny];break;
   }
-  if(!chosen)return null; // no decoration is preferable to furniture blocking a path
+  if(!chosen)return null;
   [x,y]=chosen;
   if(foot&&typeof foot==='object')foot=foot.poly?{...foot,poly:foot.poly.map(([px,py])=>[px+x-ox,py+y-oy])}:{...foot,x:foot.x+x-ox,y:foot.y+y-oy};
  }
@@ -76,10 +71,8 @@ function put(name,src,x,y,h,foot='small',id=null,flip=false){let wh=sizes.get(sr
  if(foot==='tree')obstacles.push({x,y:y-9,rx:31,ry:22});else if(foot==='small')obstacles.push({x,y:y-10,rx:r(width*.28),ry:20});else if(foot==='bench')obstacles.push({x,y:y-20,rx:r(width*.44),ry:30});else if(foot&&typeof foot==='object')obstacles.push(foot);return p;}
 put('Cathedral hall','detail/cathedral.svg',3990,1640,1120,{poly:[[3570,1430],[4410,1430],[4410,1620],[3570,1620]]},'cathedral-hall');
 put('Bell tower','detail/bell-tower.svg',4800,1570,1180,{x:4800,y:1530,rx:130,ry:90},'campanile');
-// Arcades sit at the rear of their courtyards. Only columns block walking.
 function arcade(x,y,w){let p=put('Arcade','detail/arcade.svg',x,y,w*.49,null);let pw=p.width*p.scale;for(let t=0;t<6;t++)obstacles.push({x:r(x-pw*.47+t*pw*.188),y:y-16,rx:22,ry:22});}
 arcade(2870,1740,900);arcade(5450,1680,900);arcade(4840,3650,1100);
-// Approved olive cloister. Encode authored sortY in the anchor so the existing renderer interleaves Duckies.
 const centreSpec=JSON.parse(readFileSync(ART+'centre/centre.json'));const centreScale=.83;
 for(const p of centreSpec.pieces){const x=centre.x+p.x*centreScale,y=centre.y+p.y*centreScale,w=p.width*centreScale,h=p.height*centreScale;
  if(p.layer==='decal'||p.layer==='back')flats.push({src:'centre/'+p.file,x,y,width:w,height:h,topLeft:true});
@@ -105,13 +98,11 @@ for(const [zi,z]of [...activities,...stalls].entries()){
   arcBenches.push(addArc(z,deg,'rim-'+zi+'-extra-'+count,props,obstacles,{span}));count++;
  }
 }
-// Fixed trees frame the architecture; extra trees/bushes spread evenly in garden pockets.
 const treepts=[[2300,1240],[2640,1070],[3320,960],[5340,1180],[5920,1370],[6500,1920],[1570,2350],[2770,2370],[2060,2880],[1250,4020],[1780,4390],[3010,4740],[4700,4850],[5720,4540],[6670,4030],[6810,2690],[5550,3360],[650,1240],[6500,5110]];
 for(const [i,[x,y]] of treepts.entries())put(i%3?'Olive tree':'Garden tree',i%3?'detail/olive-tree.svg':'reuse/tree-5.svg',x,y,i%3?465:510,'tree',`olive-${i}`);
 const avoidZones=[centre,...activities,...stalls,plazaNorth].map(z=>({...z,rx:z.rx+90,ry:z.ry+90}));
 const avoid=(x,y,pad=0)=>avoidZones.some(e=>((x-e.x)/(e.rx+pad))**2+((y-e.y)/(e.ry+pad))**2<1);
 const baseGeo=geometry({coast:walkCoast,islets,walkways,water,bridges,obstacles:[]});const geo=()=>({walkable:(x,y)=>baseGeo.walkable(x,y)&&!obstacles.some(o=>inShape(x,y,o,16))});
-// Loose olive groves: three to seven full-sized trees, mixed with broadleaf and poplar silhouettes.
 const reserves=Object.entries(JSON.parse(readFileSync(ART+'cathedral-sleep-reserve.json'))).filter(([p])=>p!=='nod').flatMap(([,v])=>v);
 const bedKeep=(x,y,w=140,h=150)=>reserves.some(([bx,by])=>Math.hypot(x-bx,(y-by)*1.6)<w*.4+95||(y>by-20&&y-by<h*.9&&Math.abs(x-bx)<w/2+60));
 function canopyClear(x,y,h,src){
@@ -128,14 +119,12 @@ while(treeCount()<64&&attempts++<30000){let cx=r(1150+rnd()*5700),cy=r(1000+rnd(
  put(src.includes('olive')?'Olive grove tree':'Garden tree',src,x,y,h,'tree',`grove-${grove}-${j}`,rnd()<.5);planted++;
  }if(planted)grove++;
 }
-// Slender companions complete the olive clusters without filling the open lawns.
 attempts=0;
 while(treeCount()<64&&attempts++<24000){const ts=props.filter(p=>/tree/i.test(p.name)),t=ts[attempts%ts.length],a=rnd()*Math.PI*2,x=r(t.x+Math.cos(a)*(150+rnd()*140)),y=r(t.y+Math.sin(a)*(100+rnd()*100));
  if(bedKeep(x,y,205,470)||!geo().walkable(x,y)||avoid(x,y,35)||onDeck(x,y,100)||pathDist(x,y)<100||props.some(p=>Math.hypot(x-p.x,y-p.y)<135))continue;
  const h=450+rnd()*60;if(!canopyClear(x,y,h,'reuse/tree-5.svg'))continue;
  put('Grove poplar tree','reuse/tree-5.svg',x,y,h,'tree',`grove-poplar-${attempts}`);
 }
-// Decorate the rims, leaving the complete reserved zone interiors and all path openings clear.
 for(const [zi,z]of [...activities,...stalls].entries())for(let i=0;i<18;i++){
  const t=i*Math.PI*2/18,x=r(z.x+(z.rx+85)*Math.cos(t)),y=r(z.y+(z.ry+80)*Math.sin(t));
  if(bedKeep(x,y,190,250)||!geo().walkable(x,y)||onDeck(x,y,90)||pathDist(x,y)<90||props.some(p=>Math.hypot(x-p.x,y-p.y)<130))continue;
@@ -144,12 +133,10 @@ for(const [zi,z]of [...activities,...stalls].entries())for(let i=0;i<18;i++){
  else if(i%3===0)put('Rim flower pot','detail/terracotta-pot.svg',x,y,145,'small');
  else put('Rim flowering bush',`reuse/bush-${1+i%3}.svg`,x,y,105,'small');
 }
-// Low flower ribbons on the activity rims, with gaps where the walking paths arrive.
 for(const z of [...activities,...stalls])for(let i=0;i<42;i++){let a=i*Math.PI/21,x=r(z.x+(z.rx+18)*Math.cos(a)),y=r(z.y+(z.ry+18)*Math.sin(a));
  if(!baseGeo.walkable(x,y)||onDeck(x,y,30)||pathDist(x,y)<25)continue;
  put('Daisy flower border',`reuse/flower-${1+i%3}.svg`,x,y,46+i%3*9,null);
 }
-// Understory, flower gardens and rocks tied to trees, never scattered onto the playing lawns.
 for(const [i,t]of props.filter(p=>/tree/i.test(p.name)).entries()){
  for(let j=0;j<2;j++){let x=t.x+(j?105:-110),y=t.y+35+j*35;
  if(bedKeep(x,y,120,120)||!geo().walkable(x,y)||avoid(x,y,35)||onDeck(x,y,60)||pathDist(x,y)<55||props.some(p=>Math.hypot(x-p.x,y-p.y)<70))continue;
@@ -161,23 +148,19 @@ const extras=[['Flower border','reuse/street--planter-flowers.svg',115,'small'],
 while(props.length<365&&attempts++<25000){let x=r(1100+rnd()*5800),y=r(1050+rnd()*3900);if(bedKeep(x,y,180,250)||!geo().walkable(x,y)||avoid(x,y,70)||onDeck(x,y,80)||pathDist(x,y)<70||props.some(p=>Math.hypot(x-p.x,y-p.y)<135))continue;let a=extras[details++%extras.length];put(a[0],a[1],x,y,a[2],a[3]);}
 for(const [x,y]of [[2450,1350],[1440,2570],[3130,3990],[5200,4390]]){if(geo().walkable(x,y)&&!avoid(x,y,30)){flats.push({src:'reuse/street--picnic-blanket.svg',x,y,width:210,height:130});put('Picnic basket','reuse/street--picnic-basket.svg',x+100,y+30,100,'small');}}
 for(const [x,y]of [[2800,2850],[5750,2440],[4440,4370]])if(geo().walkable(x,y)&&!avoid(x,y,20))put('Wayfinding sign','reuse/street--signpost-three-way.svg',x,y,190,'small');
-// Beach: open sun terrace in the southeast, small items outside its walking lane.
 for(const [x,y,fl] of [[6500,3540,false],[6580,3800,true],[6100,4420,false]]){put('Cafe umbrella','reuse/street--umbrella-cafe.svg',x,y,250,{x,y:y-10,rx:20,ry:15});flats.push({src:'reuse/beach--towel-striped.svg',x:x+160,y:y+20,width:180,height:130,flip:fl});}
 put('Sandcastle','reuse/beach--sandcastle-small.svg',6680,3650,140,'small');put('Beach ball','reuse/beach--beach-ball.svg',6350,3830,80,null);
 for(const [x,y] of [[1600,3250],[1950,3450],[1950,3220]])put('Lily pads','reuse/nature--lily-pad-flower.svg',x,y,60,null);
 for(const [x,y] of [[1510,3080],[2030,3490]])put('Pond reeds','reuse/nature--reeds.svg',x,y,145,'small');
-// Pond rim stones, a small timber fishing deck and dockside supplies.
 for(let i=0;i<12;i++){let a=i*Math.PI/6,x=r(pond.x+(pond.rx+42)*Math.cos(a)),y=r(pond.y+(pond.ry+34)*Math.sin(a));
  if(onDeck(x,y,40)||pathDist(x,y)<35||!geo().walkable(x,y)||bedKeep(x,y,90,80))continue;put('Pond rim rock',`reuse/nature--rock-${i%2?'flat':'round'}.svg`,x,y,65+i%3*12,'small');}
 for(const [x,y]of [[2180,3120],[1990,3020],[1470,3440]])if(geo().walkable(x,y)&&!onDeck(x,y,30))put('Pond cattails','reuse/nature--cattails.svg',x,y,120,null);
 for(const [x,y]of [[1980,1570],[5530,4160],[4320,4860],[6600,3240]]){if(!geo().walkable(x,y)||avoid(x,y,15)||bedKeep(x,y,160,125))continue;put('Supply crates','reuse/supply-crates.svg',x,y,100,'small');put('Olive barrel','reuse/barrel-seeds.svg',x+130,y+20,110,'small');}
-// Bridge/jetties: deck, plank joins and arched railings in one crop. Rendered beneath the Duckies.
 function deck(a,b,w,lift,name){let dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len;let minx=Math.min(a[0],b[0])-w,maxx=Math.max(a[0],b[0])+w,miny=Math.min(a[1],b[1])-w-lift,maxy=Math.max(a[1],b[1])+w;let body='';const pt=(t,side,up=0)=>[r(a[0]+dx*t+nx*side),r(a[1]+dy*t+ny*side-up-lift*4*t*(1-t))];let l=[],rr=[];for(let t=0;t<=1.001;t+=.025){l.push(pt(t,-w/2));rr.push(pt(t,w/2))}body+=path([...l,...rr.reverse()],'#D9A56A',INK,3);for(let i=1;i<len/30;i++){let t=i/(len/30);body+=`<path d="M${pt(t,-w/2)} L${pt(t,w/2)}" fill="none" stroke="#A7794D" stroke-width="2"/>`;}for(const side of [-1,1]){for(let i=0;i<=8;i++){let t=i/8;body+=`<path d="M${pt(t,side*w/2)} L${pt(t,side*w/2,65)}" stroke="${INK}" stroke-width="7"/><path d="M${pt(t,side*w/2)} L${pt(t,side*w/2,65)}" stroke="#E6BD88" stroke-width="4"/>`}let rail=[];for(let i=0;i<=40;i++)rail.push(pt(i/40,side*w/2,65));body+=`<path d="${dpath(rail,false)}" fill="none" stroke="${INK}" stroke-width="11"/><path d="${dpath(rail,false)}" fill="none" stroke="#F8DEBB" stroke-width="6"/>`}
  let src=`deck-${name}.svg`;writeFileSync(ART+src,svg(r(maxx-minx),r(maxy-miny),body,`${r(minx)} ${r(miny)} ${r(maxx-minx)} ${r(maxy-miny)}`));return{src,x:r(minx),y:r(miny),width:r(maxx-minx),height:r(maxy-miny)};}
 for(const [i,j]of jetties.entries()){let d=deck(j.foot,j.tip,j.width,0,'jetty-'+i);if(i)decks.push(d)}
 for(const [i,a]of arches.entries())decks.push(deck(a.a,a.b,a.w,a.r,'arch-'+i));
 decks.push(deck([1290,3270],[1510,3270],140,0,'pond-dock'));
-// Ground uses the exact HOME palette and its grass, pebble and flower artwork.
 let ground='<defs><pattern id="watergrain" width="180" height="120" patternUnits="userSpaceOnUse"><path d="M10 35q12 -5 24 0m65 55q12 -5 24 0" fill="none" stroke="#B5E7F7" stroke-width="1.5" opacity=".5"/></pattern></defs><path d="M0 0H8000V6000H0Z" fill="url(#watergrain)"/>';
 for(const [d,c,sw]of [[-86,'#82D3E4',55],[-60,'#A1E1EA',20],[-28,'#D6F5E9',9]])ground+=path(offset(coast,d),'none',c,sw);
 ground+=path(coast,SAND,INK,4)+path(offset(coast,15),'none','#FFF3C3',10)+path(lawn,'#93B72F','#7DAE30',6);
@@ -191,12 +174,10 @@ function paving(z){let str=softCourt(z,'#F9E7B0','#B79B60');let id='p'+z.x+z.y;s
 ground+=paving(plazaNorth)+paving(centre)+ring(centre,centre.rx-10,centre.rx+86,{steps:96});
 for(const z of activities){ground+=softCourt(z,'#99BE37','#7DAE30');for(let i=0;i<20;i++){let a=i*2.4,t=.3+(i%4)*.12;ground+=ellipse(r(z.x+Math.cos(a)*z.rx*t),r(z.y+Math.sin(a)*z.ry*t),60+(i%3)*22,28+(i%4)*10,i%2?'#96BB35':'#9CC13B');}}
 for(const z of stalls){ground+=paving(z)+ring(z,z.rx-32,z.rx+12,{steps:64});}
-// Lawn rims stay green and playable. Only short stone pads sit under the curved benches.
 for(const b of arcBenches.filter(b=>b.id.startsWith('rim-'))){const z={x:b.centre[0],y:b.centre[1],rx:b.radius,ry:b.radius*b.k};let a0=(b.deg-b.span/2-4)*Math.PI/180,a1=(b.deg+b.span/2+4)*Math.PI/180;let pts=[];for(let i=0;i<=24;i++){let a=a0+(a1-a0)*i/24;pts.push([z.x+Math.cos(a)*(b.radius-40),z.y+Math.sin(a)*(b.radius-40)*b.k]);}for(let i=24;i>=0;i--){let a=a0+(a1-a0)*i/24;pts.push([z.x+Math.cos(a)*(b.radius+45),z.y+Math.sin(a)*(b.radius+45)*b.k]);}ground+=path(pts,'#E9D9A3','#9D9D62',2);}
 ground+=ellipse(pond.x,pond.y,pond.rx+34,pond.ry+28,SAND,INK,3)+ellipse(pond.x,pond.y,pond.rx,pond.ry,'#62BDD0',INK,3)+ellipse(pond.x,pond.y,pond.rx-16,pond.ry-14,'none','#8FD6E6',18);
 for(let i=0;i<13;i++){const a=i*.75;let x=pond.x+Math.cos(a)*(pond.rx-65),y=pond.y+Math.sin(a)*(pond.ry-60);ground+=`<path d="M${x-22} ${y}q22 8 44 0" fill="none" stroke="#B5E7F7" stroke-width="3"/>`;}
 for(let i=0;i<coast.length;i+=5){const a=offset(coast,-50)[i],b=offset(coast,-50)[(i+2)%coast.length];ground+=`<path d="M${a}L${b}" fill="none" stroke="#FFF9DE" stroke-width="5" stroke-linecap="round"/>`;}
-// Bake thousands of existing HOME decals into the ground, no extra runtime texture or collision objects.
 const decals=['grass-tuft-1','grass-tuft-2','grass-tuft-3','pebble-1','pebble-2','flower-dot-1','flower-dot-2','flower-dot-3'];let decalCount=0;
 ground+='<defs>';
 for(const key of [...decals,'sand-speck-1','sand-speck-2']){let raw=readFileSync(ART+'reuse/'+key+'.svg','utf8');let vb=raw.match(/viewBox="([^"]+)"/)[1];ground+=`<symbol id="${key}" viewBox="${vb}" fill="none" stroke-linecap="round" stroke-linejoin="round">${raw.replace(/^.*?<svg[^>]*>/s,'').replace(/<\/svg>\s*$/,'')}</symbol>`;}ground+='</defs>';
@@ -210,7 +191,6 @@ zones.garden={x:2240,y:2200,spawn:[2240,2200]};zones.beach={x:6400,y:3750,spawn:
 const boats=[{x:3160,y:400,turn:Math.PI},{x:2840,y:580,turn:Math.PI},{x:3160,y:720,turn:Math.PI},...[[610,3170,-Math.PI/2],[900,3500,-Math.PI/2],[7330,2980,Math.PI/2],[7510,3320,Math.PI/2],[3920,5350,0],[4290,5490,0],[3920,5660,0]].map(([x,y,turn])=>({x,y,turn}))];
 const world={centrePlacement:{source:'/pixi-art/themes/cathedral/centre/centre.json',origin:[centre.x,centre.y],scale:centreScale},width:W,height:H,coast,water,bridges,obstacles,islets,walkways,arches,zones,paths:PATHS.map(p=>p.line),pathWidths:PATHS.map(p=>p.w),props,sleepSpots:{nod:[],hammock:[],rock:[],leaf:[],book:[],chair:[],wing:[],box:[]},sleepAvoid:avoidZones,ambient:{birds:[[4100,2680],[2240,2200],[6050,2910],[2560,4100],[1770,3310],[5430,4610]],butterflies:[[2100,2670],[5600,4500]]}};
 const walk={width:W,height:H,coast:walkCoast,obstacles,islets,walkways,water,bridges,arches};
-// Choose 40 beds using the engine's own resolver, off all reserved activity/stall areas and off the full path width.
 const sizesNap=sleepHalfWidths();const counts={chair:4,nod:6,hammock:4,rock:5,leaf:5,book:5,wing:6,box:5};
 const fullWalk={...world,...walk,walkways:[...walkways,{a:jetties[0].foot,b:jetties[0].tip,w:jetties[0].width}]};
 const walkable=geometry(fullWalk).walkable;

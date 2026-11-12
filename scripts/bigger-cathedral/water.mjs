@@ -1,4 +1,3 @@
-// Run from the repo root. Rebuild only this lane, preserving current greenery and communities.
 import fs from 'node:fs';
 import {honeywoodBridge} from './bridges.mjs';
 import {rebuildWaterArt} from './water-art.mjs';
@@ -9,7 +8,6 @@ const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.
 const path=p=>'M'+p.map(q=>q.join(' ')).join('L')+'Z';
 const waterShapes=polys=>polys.map((poly,i)=>{const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]);return {id:'bellovo-water-'+i,poly,x:(Math.min(...xs)+Math.max(...xs))/2,y:(Math.min(...ys)+Math.max(...ys))/2,rx:(Math.max(...xs)-Math.min(...xs))/2,ry:(Math.max(...ys)-Math.min(...ys))/2};});
 const water=waterShapes(geo.polys);
-// Art is generated from the continuous dry/sea contour, including both mouths.
 rebuildWaterArt(art);
 art.decks=art.decks.filter(d=>!/^deck-(jetty|arch|pond)/.test(d.src)&&!d.src.startsWith('communities/river-bridge-')&&!d.src.startsWith('bridges/'));
 const arches=[],walkways=[],rects=[];
@@ -20,7 +18,6 @@ for(const b of geo.bridges){
  const len=Math.hypot(b.b[0]-b.a[0],b.b[1]-b.a[1]),n=Math.ceil(len/20);
  for(let i=0;i<=n;i++){const t=i/n;rects.push({id:'bellovo-'+b.id,x:b.a[0]+(b.b[0]-b.a[0])*t,y:b.a[1]+(b.b[1]-b.a[1])*t,w:b.w,h:b.w});}
 }
-// Reuse the rope-wrapped quay for the stem and detailed fishing dock for the T head.
 fs.copyFileSync('public/pixi-art/themes/sunflower/hamlets/seedwake/timber-fishing-dock.svg',A+'bridges/port-head.svg');
 art.decks.push({id:'bellovo-port-stem',src:'bridges/port-dock.svg',x:4479,y:7070,width:242,height:600},{id:'bellovo-port-head',src:'bridges/port-head.svg',x:4380,y:7460,width:440,height:260});
 const portWalk={id:'bellovo-port',a:port.foot,b:port.tip,w:port.width};
@@ -30,7 +27,6 @@ for(const m of [world,walk]){m.water=water;m.bridges=rects;m.walkways=[...walkwa
 walk.water=waterShapes(geo.collisionPolys);
 world.arches=arches;world.boatWater=geo.polys;
 world.riverMouths=[{x:1030,y:-800,rx:420,ry:420},{x:6200,y:6700,rx:400,ry:500}];
-// No movement of the original residents: makeMap resolves the approved 40 from their original data.
 world.sleepSpots=source.sleepSpots;
 const harbor={...read(S+'harbor.json'),jetty:{...port,boats:undefined,art:true},boats:port.boats,water:{x:4780,y:7570}};
 art.props=art.props.filter(p=>!p.id?.startsWith('bellovo-port-'));

@@ -17,13 +17,11 @@ for(const b of centre.blocked)if(b.ellipse)assert(!nav.walkable(cx+b.ellipse.x,c
 for(const [x,y]of [[0,370],[-565,0],[565,0],[0,180]])assert(route(cx+x,cy+y),'centre gate/floor unreachable '+x+','+y);
 const inPoly=(x,y,p)=>{let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if((p[i][1]>y)!==(p[j][1]>y)&&x<(p[j][0]-p[i][0])*(y-p[i][1])/(p[j][1]-p[i][1])+p[i][0])c=!c;return c};
 for(const [id,z]of Object.entries(world.zones).filter(([id])=>/^(activity|stalls)-/.test(id)))for(const p of [...art.props.filter(p=>!p.id.startsWith('fair-centre-')),...centre.blocked.filter(b=>b.ellipse).map(b=>({id:b.name,x:cx+b.ellipse.x,y:cy+b.ellipse.y}))])assert(!(z.poly?inPoly(p.x,p.y,z.poly):((p.x-z.x)/z.rx)**2+((p.y-z.y)/z.ry)**2<1),'prop '+p.id+' occupies '+id);
-// 100 distinct accessible player positions, 170 units apart, on free land including sleeper collision.
 const crowd=[];for(let y=850;y<world.height-400&&crowd.length<100;y+=210)for(let x=650;x<world.width-350&&crowd.length<100;x+=210)if(nav.walkable(x,y)&&route(x,y))crowd.push([x,y]);assert.equal(crowd.length,100);
 for(const p of centre.pieces)assert(existsSync(A+'centre/'+p.file));
 assert.deepEqual(waterPoint(0),{x:-170,y:-276});assert.deepEqual(waterPoint(1),{x:-263,y:-76});assert.notDeepEqual(waterFrame(0),waterFrame(.25));assert.deepEqual(waterFrame(0,true),waterFrame(10,true));
 const objects=new Container(),fallback={id:'fair-centre-water',sprite:{alpha:1}};
 const fx=createFairWater({Graphics,Container},[fallback],objects);assert.equal(fallback.sprite.alpha,0);fx.update(1,false,true);assert(fx.root.visible);fx.update(2,true,false);assert(!fx.root.visible);fx.destroy();assert.equal(fallback.sprite.alpha,1);assert.equal(objects.children.length,0);objects.destroy();
-// Validate the deliverable that the renderer will actually load.
 const props=json(D+'placements.json'),benches=props.filter(p=>p.asset==='arc-bench');
 assert(benches.length>=12,'curved seats missing');
 for(const zone of ['centre','teacups','carousel','activity-2'])assert(benches.some(p=>p.zone===zone),'missing bench ring '+zone);

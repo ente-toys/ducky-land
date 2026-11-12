@@ -43,7 +43,6 @@ test('Generic SVG crops preserve root styles, nonzero viewBoxes and world placem
   for(const zoom of [.6,1.8])assert.ok(tiles.every(t=>tileResolution(t,zoom,2)/(zoom*2*(t.rasterDensity??1))>=1));
  }
 });
-// boss 10 Nov: Bellovo's raster streaming is off (it redrew too slowly), so this budget only applies if it is switched back on.
 const bellovoRaster=JSON.parse(readFileSync(new URL('../public/pixi-art/themes/cathedral/art.json',import.meta.url),'utf8')).raster?.enabled===true;
 test('Every Bellovo viewport retains >=1 texel per device pixel at default and maximum zoom within unchanged caps',{skip:!bellovoRaster&&'Bellovo raster streaming is off'},()=>{
  const layers=rasterLayers();
@@ -66,8 +65,6 @@ test('Cropped streams release through their own loader and account for pending r
  assert.equal(releases.length,1);pool.destroy();assert.equal(releases.length,2);assert.equal(pool.stats().reservedBytes,0);
 });
 
-// An explicit raster opt-in fixture keeps module coverage independent of the
-// production islands that deliberately use static standing art.
 const rasterFixture={raster:{enabled:true},ground:{tiles:[{src:'floor.svg',x:3500,y:600,width:1000,height:1000}]},
  decks:[{src:'deck.svg',x:3900,y:950,width:200,height:100,overBoats:true}],
  flats:[{src:'paving.svg',x:4000,y:1200,width:300,height:200}],

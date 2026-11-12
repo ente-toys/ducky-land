@@ -1,6 +1,3 @@
-// Render the production islet layers without a browser. No game art is generated.
-// node scripts/islets/shadow-check.mjs before|after [output directory]
-// Use the same explicit output directory for both runs to generate comparisons.
 import fs from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';

@@ -1,5 +1,3 @@
-// Real SVG decode + canvas raster workload, without a GPU or local web server.
-// The 16ms submission cadence matches the runtime pool. This is not an in-game FPS benchmark.
 import fs from 'node:fs';
 import {performance} from 'node:perf_hooks';
 import {DOMAdapter,Texture,ImageSource} from 'pixi.js';

@@ -46,7 +46,7 @@ for(const karma of [0,4,5,6])test(`normal boat harbour arrival with ${karma} kar
  try{
   const d=destinationsFor(from).find(d=>d.destination===BOG_ISLAND);assert.ok(d);
   const p=aboard(room,7000+karma,from,d.dock);balance(room,p,karma);
-  p.actor.karma=karma<5?999:0; // Stale actor state must not override the account balance.
+  p.actor.karma=karma<5?999:0;
   room.step();
   if(karma<5){
    assert.equal(p.actor.mode,'sailing');assert.equal(p.actor.islandId,from);
@@ -59,7 +59,6 @@ for(const karma of [0,4,5,6])test(`normal boat harbour arrival with ${karma} kar
    assert.deepEqual([p.actor.x,p.actor.y],[bog.HARBOR.land.x,bog.HARBOR.land.y]);assert.equal(p.boat.occupant,null);
    assert.equal(room.karma.balance(p.account),karma-5);assert.equal(p.actor.karma,karma-5);
    room.step();assert.equal(room.karma.balance(p.account),karma-5,'one charge per landing');
-   // The same normal board command returns to the same arrival vessel.
    room.webSocketMessage(p.socket,JSON.stringify({type:'board',seq:1,islandId:BOG_ISLAND,boatId:p.boat.id}));room.step();
    assert.equal(p.actor.mode,'sailing');assert.equal(p.actor.boatId,p.boat.id);assert.equal(p.boat.occupant,p.actor.id);
   }
@@ -72,7 +71,6 @@ test('Dock, forged karma packets and pending beach landings cannot bypass the ga
   const p=aboard(room,7100,BOG_ISLAND,bog.HARBOR.water);balance(room,p,4);p.actor.karma=999;
   room.webSocketMessage(p.socket,JSON.stringify({type:'disembark',seq:1,karma:999}));room.step();
   assert.equal(p.actor.mode,'sailing');assert.match(p.socket.notes.find(n=>n.type==='travel-notice').text,/You need 5 karma to land on Booquack Bog/);
-  // Find actual open water beside a non-harbour Bog shore.
   let beach;
   for(let y=700;y<7400&&!beach;y+=80)for(let x=400;x<8000;x+=80){
    const q={islandId:BOG_ISLAND,mode:'sailing',x,y};
@@ -81,7 +79,6 @@ test('Dock, forged karma packets and pending beach landings cannot bypass the ga
   assert.ok(beach);Object.assign(p.actor,beach.q);Object.assign(p.boat,beach.q);
   const info=room.connections.get(p.socket);info.landing={...beach.spot,approach:beach.q};
   room.step();assert.equal(p.actor.mode,'sailing');assert.equal(info.landing,null);
-  // Enough karma uses exactly the same shore path.
   balance(room,p,5);info.landing={...beach.spot,approach:beach.q};room.step();
   assert.equal(p.actor.mode,'walking');assert.ok(bog.nav().walkable(p.actor.x,p.actor.y));
   balance(room,p,0);

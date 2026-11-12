@@ -16,8 +16,6 @@ source=json.loads(snapshot.read_text())
 if 'centreSvg' not in source:
  source['centreSvg']={p.name:p.read_text() for p in (A/'centre').glob('*.svg') if not p.name.startswith('bench-')}
  snapshot.write_text(json.dumps(source))
-# The centre is installed at .48 scale. Restore procedural edge weight at that
-# size; leave traced silhouettes and the separately drawn world-size benches alone.
 for name,text in source['centreSvg'].items():
  def ink(m):
   v=float(m[1]);return f'stroke-width="{v*1.6 if v<=3 else v:g}"'
@@ -40,10 +38,7 @@ def curve(d,col,width):return f'<path d="{d}" fill="none" stroke="{col}" stroke-
 def organic(x,y,rx,ry,seed):
  return Polygon([(x+rx*(1+.022*math.sin(t*5+seed)+.035*math.sin(t*3+seed))*math.cos(t),y+ry*(1+.035*math.sin(t*4+seed))*math.sin(t)) for t in [i*math.tau/180 for i in range(180)]])
 
-# Replace the anonymous sand ovals and ruled grid with open meadow markets.
-# Slots remain unobstructed; a curved 90-unit promenade runs south of the slots.
 s=re.sub(r'<path\b[^>]*fill="#(?:EBD497|F8E5AC)"[^>]*/>','',s)
-# Remove the hard oval rims of the three activity greens. Lawn shape is visual only.
 s=re.sub(r'<path\b[^>]*fill="#98BE39"[^>]*/>','',s)
 decor=[]
 for i,(key,z) in enumerate(w['zones'].items()):
@@ -52,36 +47,29 @@ for i,(key,z) in enumerate(w['zones'].items()):
  g=organic(x,y,rx,ry,i).intersection(land.buffer(-105))
  decor.append(path(g,'#96BA35'))
  if key.startswith('stalls'):
-  # No enclosing pale slab. Individual flagstones sit in a curved grass lane.
   d=f'M{x-rx+65} {y+95} C{x-290} {y+126} {x+220} {y+65} {x+rx-65} {y+100}'
   decor.extend([curve(d,'#7B9037',96),curve(d,'#F8E1A0',90)])
   for j in range(13):
    xx=x-rx+100+j*(2*rx-200)/12; yy=y+96+9*math.sin(j*.55)
    stone=organic(xx,yy,34,22,j).buffer(-2).buffer(2)
    decor.append(path(stone,'#FFECC0','#C9B179',1.8))
-  # Two discontinuous low stone kerbs frame the empty seller pitches.
   for side in [-1,1]:
    for j in range(8):
     xx=x+side*(95+j*58);yy=y-ry+22+17*math.cos(j*.35)
     decor.append(path(organic(xx,yy,24,13,j),'#D7DBAD','#7C9053',2))
  else:
-  # A mown edge is broken at the east and west entrances, open lawn in the middle.
   for start,end in [(25,150),(207,326)]:
    points=[(x+(rx-18)*math.cos(t),y+(ry-18)*math.sin(t)) for t in [math.radians(start+(end-start)*j/70) for j in range(71)]]
    d='M'+' L'.join(f'{xx:.1f} {yy:.1f}' for xx,yy in points)
-   # South lawn is clipped by the real coast, not painted over the beach.
    if key!='activity-3':decor.extend([curve(d,'#799D32',9),curve(d,'#B2CC53',3)])
- # Sparse tiny tufts keep the protected space legible as usable lawn.
  for j in range(75 if key.startswith('activity') else 42):
   xx=rng.uniform(x-rx,x+rx);yy=rng.uniform(y-ry,y+ry)
   if not g.buffer(-22).contains(Point(xx,yy)):continue
   if key.startswith('stalls') and yy>y+48:continue
   decor.append(f'<use href="#grass-tuft-{j%3+1}" x="{xx:.1f}" y="{yy:.1f}" width="27" height="18"/>')
-# Insert before water and existing ground tufts, preserving paths and shore finishes.
 idx=s.find('<use href=');s=s[:idx]+''.join(decor)+s[idx:]
 s=s.replace('stroke="#A28A45" stroke-width="308"','stroke="#897F46" stroke-width="305"')
 
-# Natural canopy spacing, while preserving the five exact sleeper anchor trees.
 trees=[p for p in a['props'] if 'tree' in p.get('name','').lower() and not p['src'].startswith('centre/')]
 fixed={b[0] for b in w['sleepSpots']['nod']};oldtrees=copy.deepcopy(trees)
 def crown(p,x=None,y=None):
@@ -101,8 +89,6 @@ for p in sorted([p for p in trees if p['id'] not in fixed],key=lambda p:-p['widt
  candidates=[(ox,oy)]+[(ox+rad*math.cos(t),oy+rad*.72*math.sin(t)) for rad in [80,160,240,340,450,580,730,900,1150] for t in [j*math.tau/40 for j in range(40)]]
  spot=next(((x,y) for x,y in candidates if valid(x,y)),None)
  if spot is None:
-  # Thin congested crowns first, retaining 60 landscape trees plus centre trees.
-  # Never remove a trunk that carries a sleeping Ducky.
   if len(thinned)<9:
    thinned.append(p['id']);a['props'].remove(p)
    w['obstacles']=[o for o in w['obstacles'] if 'poly' in o or not(abs(o.get('x',-999)-ox)<.1 and abs(o.get('y',-999)-oy)<45)]
@@ -115,7 +101,6 @@ for p in sorted([p for p in trees if p['id'] not in fixed],key=lambda p:-p['widt
     o['x']=p['x'];o['y']=p['y']-10
  accepted.append(p)
 
-# Clear inherited fern/rock/lamp bases from the 300-unit trails too.
 moved_small=[]
 for p in a['props']:
  if p['src'].startswith('centre/') or p in trees or not paths.contains(Point(p['x'],p['y'])):continue
@@ -129,7 +114,6 @@ for p in a['props']:
   for o in w['obstacles']:
    if 'poly' not in o and abs(o.get('x',-999)-ox)<.1 and abs(o.get('y',-999)-oy)<45:o['x']+=p['x']-ox;o['y']+=p['y']-oy
   moved_small.append({'id':p['id'],'from':[ox,oy],'to':spot})
-# Every market gets restrained flowers and two lanterns outside the protected slots.
 def prop(src,x,y,ww,name):
  text=(A/src).read_text();vb=list(map(float,re.search(r'viewBox="([^"]+)"',text)[1].split()));hh=ww*vb[3]/vb[2]
  if not land.buffer(-40).contains(Point(x,y)) or paths.contains(Point(x,y)) or wet.contains(Point(x,y)):return

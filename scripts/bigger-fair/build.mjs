@@ -27,16 +27,12 @@ for(const data of [world,walk]){
 for(const b of crossings){
  const horizontal=b.horizontal,src='bigger/crossing-'+b.id+'.svg';
  const W=horizontal?b.w:b.w*1.8,H=horizontal?b.h*2.2:b.h;
- // Reuse Fair's illustrated humped timber bridge, with its arch, piers,
- // bowed rails and dark side face. Walking width is the actual deck.
  const source=fs.readFileSync(A+(horizontal?'jetty-northwest.svg':'islet-bridge-1.svg'),'utf8');
  fs.writeFileSync(A+src,source.replace(/width="[^"]+"/,`width="${W}"`).replace(/height="[^"]+"/,`height="${H}"`));
  art.decks.push({src,x:b.x-W/2,y:b.y-H/2,width:W,height:H});
 }
 
 for(const p of plan.places)world.zones[p.id]={name:p.name,x:p.x,y:p.y,spawn:p.point,kind:p.kind,rx:p.floor[0],ry:p.floor[1]};
-// The two old islet gardens are now inland. Their art, decks and walkways stay fixed,
-// but they must not emit beach surf across the new lawn.
 world.islets=[];
 world.props.push(...plan.newProps.map(p=>({id:p.id,name:p.name,x:p.x,y:p.y,zone:plan.places.reduce((best,z)=>Math.hypot(p.x-z.x,p.y-z.y)<Math.hypot(p.x-best.x,p.y-best.y)?z:best).id})));
 const harbor={jetty:{foot:[1005,5650],tip:[1005,6170],width:120},water:{x:1160,y:6190},spawn:originalWorld.zones.plaza.spawn,boats:[{x:850,y:6110,turn:Math.PI},{x:1160,y:6110,turn:Math.PI},{x:1160,y:6290,turn:Math.PI}]};
@@ -49,5 +45,4 @@ write(A+'art.json',art);write(D+'world.json',world);write(D+'walk-world.json',wa
 write(S+'expansion.json',{...plan,newProps:plan.newProps,harbor,groundBeforeBytes:read(S+'original-art.json').ground.tiles.reduce((s,t)=>s+t.width*t.height*4,0),groundAfterBytes:art.ground.tiles.reduce((s,t)=>s+t.width*t.height*4*(t.resolution??1)**2,0)});
 console.log('Built Fair:',plan.newProps.length,'new props and',obstacles.length,'visible matching footprints.');
 
-// Apply the four approved outer hamlets after regenerating base Fair assets.
 await import('./hamlets-apply.mjs');

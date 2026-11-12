@@ -1,5 +1,3 @@
-// Sunflower-only finishing pass. The baseline is retained with the working art,
-// so rerunning is deterministic and never stacks furniture or collision shapes.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {drawArcBench} from '../arc-bench-draw.mjs';
@@ -39,7 +37,6 @@ function arc(id,ring,deg,span){
  art.props.push({id,name:'Curved wood bench',src:`detail/${id}.svg`,x:f(ax),y:f(ay),width:w,height:h,scale:1,anchor:{x:(ax-x0)/w,y:(ay-y0)/h},shadow:false,wind:false});
  foot({poly:footprint,name:id});benchRecords.push({id,ring,deg,span,footprint});
 }
-// Radius follows the existing outer flagstone ring. Uneven gaps leave all five approaches open.
 for(const [id,wanted,span]of [['northwest',-128,14],['northeast',-73,12],['east',-33,12],['south',73,8],['west',173,8],['southwest',141,12]]){
  const ring={x:3880,y:2608.5,rx:1063,ry:610};
  const band=deg=>[ring.rx-47,ring.rx+5].flatMap(r=>Array.from({length:17},(_,i)=>{const a=(deg-span/2+i*span/16)*Math.PI/180;return [ring.x+Math.cos(a)*r,ring.y+Math.sin(a)*r*ring.ry/ring.rx]}));
@@ -53,7 +50,6 @@ for(const [id,wanted,span]of [['northwest',-128,14],['northeast',-73,12],['east'
  console.log('arc',id,chosen);
  arc(`ten-plaza-bench-${id}`,ring,chosen,span);
 }
-// Meadows retain their complete playable lawn. Seating hugs a separate rim outside it.
 for(const [key,angles]of [['activity-1',[115,20]],['activity-2',[150,55]],['activity-3',[25,145]]]){
  const z=world.zones[key];
  for(const [i,deg]of angles.entries()){
@@ -64,8 +60,6 @@ for(const [key,angles]of [['activity-1',[115,20]],['activity-2',[150,55]],['acti
   arc(`ten-${key}-bench-${i}`,ring,deg,22);
  }
 }
-// Restrained underplanting: short shrubs and stone companions at existing tree feet.
-// A foreground crown is never allowed to cover another tree's crown.
 const trees=art.props.filter(p=>p.name==='Tree');
 const canopy=p=>({x:p.x,y:p.y-p.height*p.scale*.66,rx:p.width*p.scale*.44,ry:p.height*p.scale*.25});
 const overlaps=(p,q)=>{const a=canopy(p),b=canopy(q);return ((a.x-b.x)/(a.rx+b.rx+8))**2+((a.y-b.y)/(a.ry+b.ry+8))**2<1};
@@ -100,20 +94,16 @@ function addCompanion(x,y,kind,scale=1){
 for(const [i,t]of trees.entries()){
  for(const [j,dx,dy]of [[0,-100,18],[1,95,35],[2,-135,75]])addCompanion(t.x+dx,t.y+dy,['bush','rock','flower'][(i+j)%3],.85+(i%3)*.12);
 }
-// Garden borders follow the oval edges, with wide entrances and an unoccupied centre.
 for(const [key,z]of Object.entries(world.zones).filter(([k])=>k.startsWith('activity'))){
  for(let d=0;d<360;d+=13){
-  // Four broad breaks; the border reads as a garden, never a fence around the players.
   if([0,90,180,270].some(a=>Math.abs(d-a)<22))continue;
   const a=d*Math.PI/180,x=z.x+Math.cos(a)*(z.rx+45),y=z.y+Math.sin(a)*(z.ry+35);
   addCompanion(x,y,d%3===0?'bush':'flower',.8);
  }
 }
-// Frame the two flagstone markets with planted corners, leaving the whole apron and slots free.
 for(const z of zones.filter(z=>z.kind==='stalls'))for(const x of [z.x0-75,z.x1+75])for(const y of [z.y0+30,z.y1-20]){
  addCompanion(x,y,'bush',1);addCompanion(x+45,y+60,'flower',1);addCompanion(x-45,y+40,'rock',.9);
 }
-// Low ground detail brings the lawns to home's texture density without blocking activity space.
 let seed=1106;const rnd=()=>((seed=(seed*1664525+1013904223)>>>0)/2**32);
 let flats=0;
 for(const z of zones.filter(z=>z.kind==='lawn'))for(let i=0;i<52;i++){

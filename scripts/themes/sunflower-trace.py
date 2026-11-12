@@ -1,7 +1,3 @@
-# Sunflower island: cut a GPT prop sheet into items and vectorise each with vtracer.
-# venv: python3.11 -m venv vt && vt/bin/pip install vtracer cairosvg pillow numpy scipy
-# usage: python sunflower-trace.py <sheet.png> <outdir> name1,name2,... [colors=20]
-# Items are found as connected non-white blobs, ordered row by row (top to bottom, left to right).
 import sys, os, io, numpy as np, vtracer, cairosvg
 from PIL import Image, ImageFilter
 from scipy import ndimage as nd
@@ -11,21 +7,17 @@ opts = dict(a.split('=') for a in sys.argv[4:]); NC = int(opts.get('colors', 14)
 os.makedirs(out, exist_ok=True)
 im = Image.open(sheet).convert('RGB'); a = np.array(im).astype(int)
 white = (a.min(-1) > 232)
-# background = white connected to the border
 lab, n = nd.label(white); border = set(np.unique(np.r_[lab[0], lab[-1], lab[:, 0], lab[:, -1]])) - {0}
 bg = np.isin(lab, list(border))
 sizes = nd.sum(white, lab, range(n + 1)); big = sizes > 3000; big[0] = False
-bg |= big[lab]   # large enclosed white (fence gaps) is background too
+bg |= big[lab]
 fg = ~bg
 fgd = nd.binary_dilation(fg, iterations=14)
 blobs, nb = nd.label(fgd)
 objs = nd.find_objects(blobs)
 items = [(s, i + 1) for i, s in enumerate(objs) if (s[0].stop - s[0].start) * (s[1].stop - s[1].start) > 4000]
-# row-major order: group by row centre
 items.sort(key=lambda t: ((t[0][0].start + t[0][0].stop) // 2 // 200, t[0][1].start))
 if len(items) != len(names): print('WARNING found', len(items), 'items, names', len(names), [ (s[0].start,s[1].start) for s,_ in items])
-# lines=name:px,...  thins the ink outlines of those items to about px source pixels (home's line is ~2.6 world units, so
-# px = 2.6 / the prop's placed scale). Blobs (eyes, seed centres) keep their shape; only line-like ink is thinned.
 MODE = {k: int(v) for k, v in (t.split(':') for t in opts.get('mode', '').split(',') if t)}
 LINES = {k: float(v) for k, v in (t.split(':') for t in opts.get('lines', '').split(',') if t)}
 from skimage.morphology import skeletonize, disk
@@ -38,7 +30,7 @@ def thin_lines(c, px):
     r = max(1, int(round((px - 1) / 2)))
     keep = (nd.binary_dilation(skeletonize(line), structure=disk(r)) & line) | blob
     removed = dark & ~keep
-    fill = a & ~dark   # non-ink colour to grow into the freed pixels
+    fill = a & ~dark
     d_fill, idx = nd.distance_transform_edt(~fill, return_indices=True)
     d_clear = nd.distance_transform_edt(a)
     out = c.copy()
@@ -64,7 +56,7 @@ for (sl, idx), name in zip(items, names):
     q = rgbb.quantize(colors=NC, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
     q = q.filter(ImageFilter.ModeFilter(MODE.get(name, 5))).convert('RGB')
     qa = np.dstack([np.array(q), np.where(alpha >= 128, 255, 0).astype(np.uint8)])
-    if name in LINES:   # on the flat quantised colours (no grey fringe), then re-smoothed so the thinner ink stays a clean line
+    if name in LINES:
         qa = thin_lines(qa, LINES[name] * UP)
         al = np.array(Image.fromarray(qa[..., 3]).filter(ImageFilter.GaussianBlur(2.2))) >= 128
         sm = np.array(Image.fromarray(qa[..., :3]).quantize(colors=NC, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).filter(ImageFilter.ModeFilter(7)).convert('RGB'))

@@ -1,4 +1,3 @@
-// Host-side decisions only. All art, poses, names and speech are native Rive.
 export const POSE = Object.freeze({idle:0, walk:1, quack:2, dance:3, sit:4, wave:5, look:6, preen:7, sleep:8});
 const NAMES = ['quackers','mo','aya_22','bread_boy','pip','lulu','nori','miso','toto','sunny','peep','boba'];
 const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
@@ -93,7 +92,6 @@ export class CrowdBrain {
     const seats=this.layout.seats.filter(s=>!this.claims.has('bench:'+s.id));
     const ring=this.layout.ring.filter(s=>!this.claims.has('fountain:'+s.id));
     const stalls=this.layout.stalls.filter(s=>!this.claims.has('stall:'+s.id));
-    // Individual preferences plus continuity, with a short memory against repeats.
     const options=[['bench',seats.length&&d.lastGoal!=='bench'?.21:0],['fountain',ring.length?.24:0],
       ['stall',stalls.length&&d.lastGoal!=='stall'?.23:0],['follow',this.distance(d,this.player)<390&&d.lastGoal!=='follow'?.16*d.social:0],
       ['look',.12],['preen',.09],['sleep',d.energy<.55?.12:.035]];
@@ -127,8 +125,6 @@ export class CrowdBrain {
     const size=Math.min(3+Math.floor(this.random()*4),candidates.length+1);
     if(size<3)return false;
     const members=[leader,...candidates.slice(0,size-1)],ends=this.time+this.range(14,18);
-    // NPCs make room in a forecourt before gathering. A fountain-edge leader
-    // otherwise funnels all its guests through the same narrow gap.
     const centers=leader.player?[{x:leader.x,y:leader.y}]:[
       {x:520,y:785},{x:1080,y:785},{x:800,y:865}
     ].filter(p=>this.distance(p,this.player)>170).sort((a,b)=>this.distance(a,leader)-this.distance(b,leader));
@@ -156,7 +152,6 @@ export class CrowdBrain {
   }
   endParty(){if(!this.party)return;for(const id of this.party.members){const d=this.ducks[id];if(d.goal?.kind==='dance'){this.release(d);d.poseUntil=0;d.action=0;if(!d.player)d.nextThink=this.time+this.range(.3,2);}}this.emit('party-end',null);this.party=null;}
   tap(x,y){if(!this.clear(x,y))return false;if(this.player.goal?.kind==='dance')this.endParty();this.player.poseUntil=0;this.player.tapping=true;this.destination(this.player,{x,y});return true;}
-  // Steering is acceleration-limited; a short look-ahead chooses a side around neighbours.
   move(d,dt,speed=100,ignore=null) {
     while(d.path.length&&this.distance(d,d.path[0])<6)d.path.shift();
     if(!d.path.length){d.vx=d.vy=0;return !d.routeFailed;}
@@ -166,10 +161,8 @@ export class CrowdBrain {
       if(o===d)continue;
       const ox=d.x-o.x,oy=(d.y-o.y)*this.scale,dist=Math.hypot(ox,oy)||.1;
       if(dist<105){const force=(1-dist/105)*105;vx+=ox/dist*force;vy+=oy/dist*force;
-        // Stable handedness avoids two ducks repeatedly mirroring each other.
         if(dist<92&&dx*(o.x-d.x)+dy*(o.y-d.y)*this.scale>0){vx+=-dy/l*28;vy+=dx/l*28;}}
     }
-    // Circle repulsion keeps corners soft; the route supplies the large-scale detour.
     for(const o of this.layout.obstacles){if(o.name===ignore)continue;const ox=d.x-o.x,oy=(d.y-o.y)*this.scale,dist=Math.hypot(ox,oy),edge=dist-o.radius-R;
       if(edge<42&&dist){vx+=ox/dist*(42-edge)*2.7;vy+=oy/dist*(42-edge)*2.7;}}
     const limit=Math.hypot(vx,vy);if(limit>speed){vx*=speed/limit;vy*=speed/limit;}
@@ -185,7 +178,6 @@ export class CrowdBrain {
   arrived(d){
     const g=d.goal;if(!g)return;
     if(g.kind==='bench'&&g.phase==='dock'){
-      // Last few ground units settle exactly on the seat, never below its top.
       d.x=g.place.x;d.y=g.place.y;
     }
     if(g.kind==='bench'&&g.phase==='approach'){
@@ -228,7 +220,6 @@ export class CrowdBrain {
     }
     if(g.deadline&&this.time>g.deadline&&!d.settled){
       this.emit('replan',d,{goal:g.kind});
-      // Never abandon an occupied bench while the root is still inside its collider.
       if(g.kind==='bench'&&g.phase!=='approach'){
         g.phase='leave';g.ends=0;g.deadline=this.time+8;
         this.destination(d,{x:g.place.x,y:g.place.approachY},g.place.prop);
@@ -278,8 +269,6 @@ export class CrowdBrain {
     }
   }
   renderSlots(){
-    // A nested state machine belongs to its placement. Pin a short gesture to
-    // that placement until it ends, instead of restarting it on a y-sort swap.
     const previous=this.renderOrder??Array(32).fill(null),order=Array(32).fill(null);
     for(const offset of [0,16]){
       const actors=this.ducks.filter(d=>(d.y<610)===(offset===0)).sort((a,b)=>a.y-b.y);

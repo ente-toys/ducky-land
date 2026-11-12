@@ -21,14 +21,10 @@ world = read(S / 'original-world.json')
 props, obstacles = layout['props'], layout['obstacles']
 before = subprocess.check_output(['git', 'show', 'a9aa0f8a:scripts/bigger-pink/ground-body.svg'], text=True)
 inner = before[before.index('<ns0:g'):]
-# Reuse the exact proven curve and scalloped road geometry, without executing
-# either earlier generator (which would overwrite the retained river data).
 tree = ast.parse((S / 'communities.py').read_text())
 functions = ast.Module(body=[n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in ('curve', 'sample', 'ribbon')], type_ignores=[])
 exec(compile(functions, 'pink-road-functions', 'exec'))
 
-# Move each seven-object household composition together, including its mailbox,
-# washing and fence-post collision footprints. Each position is hand-authored.
 addresses = {
     'ribbonwick': [(-200, 40), (330, -15), (880, -10), (1430, 50), (1970, 120), (50, 980), (570, 1000)],
     'melody': [(5500, -50), (6020, -150), (6550, -90), (7060, 70), (7340, 660)],
@@ -51,7 +47,6 @@ for zone, points in addresses.items():
             if any(o['name'] == name or o['name'].startswith(name+'-') for name in ids):
                 o['x'] += dx
                 o['y'] += dy
-        # A larger family house anchors each green, beside the existing cottages.
         if start in (7, 73, 108, 163, 226):
             home['width'] *= 1.12
             home['height'] *= 1.08
@@ -61,8 +56,6 @@ for zone, points in addresses.items():
                     o['ry'] *= 1.12
         movements.append(dict(id=home['id'], zone=zone, before=[x-dx,y-dy], after=[x,y]))
 
-# One through road. Sand is 160 wide, its raised turf bank takes 192 in total.
-# Residential lanes are 72-104 wide including banks, rather than extra circuits.
 main = copy.deepcopy(baseline['paths'][0])
 main[-4:-1] = [[-450,3690],[-1640,2820],[-1450,1660]]
 lanes = [
@@ -100,8 +93,6 @@ def denseRibbon(pts,width,phase=0,inset=0):
 roadArt = [denseRibbon(*r) for r in roadsets]
 layout['paths'], layout['pathWidths'] = paths, widths
 
-# Existing peripheral river crossings stay in place as pedestrian green paths.
-# Short stepping-stone approaches replace the removed continuous shore road.
 greenWalks = [
     [[8200,3250],[8550,3710],baseline['riverCrossings'][9]['mid'],[7980,4320],[7680,4470]],
     [[1280,4510],[1020,4950],baseline['riverCrossings'][10]['mid'],[1800,5480],[2200,5560]],
@@ -124,15 +115,12 @@ def kit(name,x,y,zone,k=1,solid=False):
         obstacles.append(dict(name=p['id'],x=x,y=y-8,rx=16,ry=13))
     return p
 
-# Small shared well, broad rim and heart spindle in Pink's existing drawing kit.
 (X/'shared-well.svg').write_text('''<svg xmlns="http://www.w3.org/2000/svg" width="180" height="190" viewBox="0 0 180 190"><g stroke="#805c72" stroke-width="3" stroke-linejoin="round"><ellipse cx="90" cy="171" rx="75" ry="15" fill="#81ad3c" opacity=".3"/><path d="M22 128V153Q90 190 158 153V128" fill="#e9a9bc"/><path d="M25 140Q90 173 155 140M60 149v23m57-23v23" fill="none"/><ellipse cx="90" cy="125" rx="71" ry="25" fill="#fff0c7"/><ellipse cx="90" cy="125" rx="48" ry="14" fill="#6ec9de"/><path d="M36 116V53M144 116V53" stroke="#a37a59" stroke-width="9"/><path d="M12 54L90 10L168 54Z" fill="#cbb6df"/><path d="M21 54H159M47 38l43-24 43 24" fill="none" stroke="#fff0c7" stroke-width="5"/><path d="M39 80H146M91 80v42" stroke="#a37a59" stroke-width="5"/><path d="M74 117l5 23h24l5-23Z" fill="#f5a3c7"/><path d="M84 8q-15-20-23-6q-6 10 23 24q29-14 23-24q-8-14-23 6Z" fill="#f5a3c7"/></g></svg>''')
 newprop('expansion/shared-well.svg',1160,470,'ribbonwick',155,164,48,22)
 newprop('expansion/shared-well.svg',-320,3050,'petalpatch',145,153,43,20)
 newprop('expansion/washing-line.svg',6650,10,'melody',240,107)
 newprop('expansion/washing-line.svg',8870,1610,'quay',240,107)
 
-# Planted edges and shared orchard/work gardens occupy former road shoulders.
-# Each tuple is an authored scene placement, not generated land fill.
 for name,x,y,zone,k in [
     ('heart-hedge',-50,340,'ribbonwick',.7),('heart-hedge',490,310,'ribbonwick',.7),
     ('heart-hedge',1040,330,'ribbonwick',.7),('heart-hedge',1600,380,'ribbonwick',.7),
@@ -152,7 +140,6 @@ for name,x,y,zone,k in [
     ('flowers-pink',4650,6380,'tutu',1.2),
 ]: kit(name,x,y,zone,k)
 
-# Keep all water art byte-for-byte. Only the ground that preceded it changes.
 waterStart = re.search(r'<path d="[^"]+" fill="#6ec9de"', before).start()
 waterArt = before[waterStart:before.index('<ns0:g')]
 assert waterArt.endswith('</g>')
@@ -163,7 +150,6 @@ clip = ''.join(f'<path d="{d}"/>' for d,*_ in roadArt)
 defs = defs.replace('</defs>',f'<clipPath id="pink-roads">{clip}</clipPath></defs>')
 D = curve(layout['coast'])
 ground = defs + f'<path d="{D}" fill="#8fc63c" stroke="#ade0e3" stroke-width="135"/><path d="{D}" fill="#8fc63c" stroke="#f9d3dc" stroke-width="82"/><g clip-path="url(#new-land)">'
-# Broad irregular commons and a subtle botanical surface, under every garden.
 for x,y,rx,ry in [(-450,300,1100,630),(1230,-70,1200,400),(6160,-250,1200,430),
                   (8860,2030,720,1020),(-790,2700,740,820),(3880,5900,1190,430),
                   (3000,-60,490,230),(6500,4430,700,270),(730,3820,620,430)]:
@@ -185,8 +171,6 @@ for p in [p for p in props if p.get('household')]:
             gardenArt += f'<path d="M{x+dx+ox} {y+oy}v-10m0 5q-12-7-13-2m13 0q11-9 13-4" stroke="#60843d" stroke-width="2" fill="none"/><circle cx="{x+dx+ox}" cy="{y+oy-11}" r="4" fill="#f5a3c7"/>'
 ground += gardenArt
 
-# Work gardens: growing roses for the tailors, herbs for the quay's bakers,
-# nursery propagation rows and seaside costume-dye flowers. No new attractions.
 for x,y,rx,ry,flower in [(2810,-80,480,220,'#f5a3c7'),(9100,1050,230,170,'#fcebd6'),
                         (-1390,1750,250,200,'#ec6fa8'),(1930,4800,280,170,'#cbb6df'),
                         (4780,6410,330,170,'#f5a3c7')]:
@@ -198,7 +182,6 @@ for x,y,rx,ry,flower in [(2810,-80,480,220,'#f5a3c7'),(9100,1050,230,170,'#fcebd
             xx=x+rx*t; yy=y+dy
             ground += f'<path d="M{xx} {yy+8}v-22m0 12q-18-12-23-4m23 4q15-14 24-6" fill="none" stroke="#668d3c" stroke-width="3"/><circle cx="{xx}" cy="{yy-17}" r="8" fill="{flower}" stroke="#cd7ca6" stroke-width="2"/>'
 
-# Paint complete layers across the whole network, so junctions merge cleanly.
 for inset,color,stroke,sw in [(0,'#72993e','#496d31',6),(7,'#b09d68','none',0),(16,'#f3d79f','none',0)]:
     for pts,width,phase in roadsets:
         rd=denseRibbon(pts,width,phase,inset)[0]
@@ -221,8 +204,6 @@ for rd,s,left,right in roadArt:
             x,y=side[i]
             ground += f'<path d="M{x-9:.1f} {y:.1f}q-5-10 0-14q8 2 9 9q0-15 7-17q7 8 3 15q12-8 16-3l-10 11" fill="#8fc63c" stroke="#6d9b3c" stroke-width="1.6"/>'
 
-# Civic greens stay at their existing named centres, with a small paved apron
-# beside each workplace and a common lawn rather than a fully paved square.
 for p in layout['places']:
     x,y=p['x'],p['y']
     pts=[[x-320,y],[x-200,y-145],[x+160,y-170],[x+350,y+15],[x+130,y+195],[x-230,y+150]]
@@ -240,8 +221,6 @@ combined=ground+inner
 (S/'ground-body.svg').write_text(combined)
 (X/'ground-source.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="13200" height="9800" viewBox="-2600 -1900 13200 9800">{combined}</svg>')
 
-# Area is a geometric union of complete road corridors, including turf banks,
-# court aprons and household approaches, clipped to new dry land only.
 protected=unary_union([Polygon(world['coast']).buffer(0)]+[scale(Point(x,y).buffer(1,40),rx,ry,origin=(x,y)) for x,y,rx,ry in world['islets']])
 water=unary_union([Polygon(o['poly']).buffer(0) for o in layout['water']])
 newDry=Polygon(layout['coast']).buffer(0).difference(protected).difference(water)
@@ -251,7 +230,6 @@ def areaMetric(data,sets,oldCourts=False):
         _,_,left,right=ribbon(*r)
         corridors.append(Polygon(left+right[::-1]).buffer(0).buffer(3 if not oldCourts else 5))
         if not oldCourts and r[0][0]!=r[0][-1]:
-            # Include rounded lane caps in the conservative corridor measure.
             for point in (r[0][0],r[0][-1]):corridors.append(Point(point).buffer(r[1]*.65+3))
     for p in data['props']:
         if p.get('household'):

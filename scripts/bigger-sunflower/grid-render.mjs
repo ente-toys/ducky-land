@@ -1,5 +1,3 @@
-// Measuring aid (places nothing): a static render with a 250-unit world grid, and optional outlines (a JSON list of polygons).
-// node scripts/bigger-sunflower/grid-render.mjs x0 y0 k width height out.png [polygons.json]
 const R='../../';
 const {render}=await import('./render.mjs');const {readFileSync}=await import('node:fs');
 const sharp=(await import('sharp')).default;

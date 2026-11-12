@@ -1,5 +1,3 @@
-// Iceland v2 replaces the old river expansion. These assertions cover the
-// approved B2 contract rather than preserving the retired island snapshot.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFileSync,existsSync} from 'node:fs';

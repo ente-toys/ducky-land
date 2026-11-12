@@ -60,8 +60,6 @@ test('SUNBOB stone base ellipse is within 4 px of the innermost disc centre',()=
   const disc=[tile.x+tx,tile.y+ty];
   const svg=readFileSync(new URL('../public/pixi-art/themes/sunflower/centre/clock.svg',import.meta.url),'utf8');
   assert.match(svg,/viewBox="0 0 817 1434"/);
-  // The lower stone rim ellipse is centred at (407.5, 1306) in this SVG.
-  // Its centre, not the flower head or the sprite bottom, is the ground anchor.
   for(const data of [centre,read('public/pixi-art/themes/sunflower/art.json'),map.world]){
     const clock=data.props.find(p=>p.id==='centre-clock'),scale=clock.scale??1;
     const base=[clock.x+(407.5/817-clock.anchor.x)*clock.width*scale,clock.y+(1306/1434-clock.anchor.y)*clock.height*scale];

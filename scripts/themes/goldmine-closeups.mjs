@@ -1,4 +1,3 @@
-// Fixed .8 world scale source renders, never enlarged crops of the whole-island preview.
 import sharp from 'sharp';
 const A='../concepts/themes/work/goldmine/';const k=.8,ww=1000,hh=800;
 const pairs=[['Plaza and locked landmark',2820,2370,4100,2660],['Curved bench ring',2820,2720,4090,3430],['Path junction',2400,2950,3050,3800],['Tree cluster',2050,2040,2670,2900]];

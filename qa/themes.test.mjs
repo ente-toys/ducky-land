@@ -1,6 +1,4 @@
 import {mapPoint} from '../src/pixi/sphere-coordinates.js';
-// boss 6 Nov: the first themed islands (Sunflower, Pink dollhouse, Library), each on its own map (src/pixi/island-maps.js).
-// The registry, each theme's own moorings, landing on a themed island, sailing round one, and maps of a different size.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import READY from '../src/pixi/delivered-themes.js';
@@ -44,7 +42,7 @@ test('registry: a broken theme never breaks the game, it plays home', () => {
 
 test('per-theme moorings: every themed island holds its own map\'s boats, and refills them there', () => {
   const islands = themedIslands();
-  if (!islands.length) return;   // nothing delivered yet: covered by the size test below
+  if (!islands.length) return;
   const boats = createBoats();
   for (const id of islands) {
     const spots = boatSpots(id), mine = boats.filter(b => b.islandId === id);
@@ -55,14 +53,12 @@ test('per-theme moorings: every themed island holds its own map\'s boats, and re
       assert.ok(canSail(spot.x, spot.y, id), `${id} mooring ${slot} (${spot.x},${spot.y}) floats`);
     }
     for (const boat of mine) {const deck = boardingPoint(boat); assert.ok(mapOf(id).nav().walkable(deck.x, deck.y) || mapOf(id).nav().nearest(deck.x, deck.y, 30), `${boat.id} is boarded from ${id}'s own ground`);}
-    // take one and sail clear: a fresh boat appears at THIS map's spot
     const spot = spots[0], boat = mine.find(b => b.x === spot.x && b.y === spot.y);
     boat.occupant = 'duck'; Object.assign(boat, {x: spot.x + 420, y: spot.y + 420});
     assert.equal(fillMoorings(boats), true);
     assert.ok(boats.some(b => b !== boat && !b.occupant && b.islandId === id && b.x === spot.x && b.y === spot.y), `${id} mooring 0 refilled at its own spot`);
     retireBoat(boats, boat);
   }
-  // an old save from before the theme: boats sitting on the HOME spots of a now-themed island are dropped and refilled
   const old = createBoats().map(b => islands.includes(b.islandId) ? {...b, x: HOME_MAP.boatSpots()[0].x, y: HOME_MAP.boatSpots()[0].y} : b);
   fillMoorings(old);
   for (const id of islands) for (const spot of boatSpots(id)) assert.ok(old.some(b => b.islandId === id && !b.occupant && b.x === spot.x && b.y === spot.y), `${id} refilled from an old save`);
@@ -93,7 +89,6 @@ test('landing on a themed island: sail from home to its jetty, dock, and step on
     const land = harborOf(id).land;
     assert.ok(mapOf(id).nav().walkable(land.x, land.y), 'the jetty end you step onto is walkable');
     assert.ok(mapOf(id).nav().route(land.x, land.y, mapOf(id).spawn.x, mapOf(id).spawn.y).length, 'and it leads to the plaza');
-    // or hop out on a beach: from just off its coast, the landing is on that island's own sand
     const spot = landingSpot({islandId: id, ...harborOf(id).water});
     assert.ok(spot && spot.islandId === id && mapOf(id).nav().walkable(spot.x, spot.y), 'Dock lands you on its ground');
   }
@@ -102,7 +97,6 @@ test('landing on a themed island: sail from home to its jetty, dock, and step on
 test('sailing round a themed island: never on its land, coast to coast in its own coordinates', () => {
   for (const id of themedIslands()) {
     const m = mapOf(id), b = seaBoundsFor(id);
-    // two points of open sea on opposite sides of the island, just off its coast
     const off = (x, y) => {for (let r = 0; r < 1500; r += 25) for (const [dx, dy] of [[0, -r], [0, r], [-r, 0], [r, 0]]) if (canSail(x + dx, y + dy, id)) return {x: x + dx, y: y + dy}; return null;};
     const west = off(m.origin.x - 250, m.cy), east = off(m.origin.x + m.width + 250, m.cy);
     assert.ok(west && east, `${id}: sea on both sides`);
@@ -120,7 +114,6 @@ test('sailing round a themed island: never on its land, coast to coast in its ow
 });
 
 test('maps of another size: a small themed island lines up round its centre, sails, docks and refills', () => {
-  // a 3000 x 2400 round island with a south jetty, standing in for library (its real files are restored after)
   const keep = READY.library ?? null, W = 3000, H = 2400, cx = W / 2, cy = H / 2;
   const coast = Array.from({length: 48}, (_, i) => [Math.round(cx + Math.cos(i / 48 * Math.PI * 2) * 1000), Math.round(cy + Math.sin(i / 48 * Math.PI * 2) * 650)]);
   const world = {width: W, height: H, coast, water: [], bridges: [], obstacles: [], islets: [], walkways: [], zones: {plaza: {x: cx, y: cy, spawn: [cx, cy]}}};
@@ -128,35 +121,29 @@ test('maps of another size: a small themed island lines up round its centre, sai
   try {
     const id = [...THEME_OF].find(([, t]) => t === 'library')[0], m = mapOf(id);
     assert.equal(m.width, W);
-    // drawn and solid at the same place: the island's centre sits where the world map puts it
     const o = originOffset('home', id), c = offsetOf('home', id);
     assert.ok(Math.hypot(o.x + W / 2 - c.x - HOME_MAP.cx, o.y + H / 2 - c.y - HOME_MAP.cy) < 1e-6);
     assert.deepEqual(islandOffset('home', id), o);
     assert.equal(canSail(o.x + cx, o.y + cy, 'home'), false, 'its middle is land, seen from home');
     assert.equal(canSail(o.x + cx + 1300, o.y + cy, 'home'), true, 'beside it is sea');
-    // and back: home seen from the small island
     const back = originOffset(id, 'home');
     const homeCentre=mapPoint('home',id,{x:HOME_MAP.cx,y:HOME_MAP.cy});
     const roundTrip=mapPoint(id,'home',homeCentre);assert.ok(Math.hypot(roundTrip.x-HOME_MAP.cx,roundTrip.y-HOME_MAP.cy)<1e-8);
     const plaza=mapPoint('home',id,{x:2820,y:2400});
     assert.equal(canSail(plaza.x,plaza.y,id), false, 'home\'s plaza is land, seen from it');
-    // its own jetty berths first (no boats listed: three along the jetty), then boats off its own beaches
     assert.ok(boatSpots(id).length >= 3);
     for (const s of boatSpots(id).slice(0, 3)) assert.ok(Math.abs(s.x - cx) <= 160 && s.y > cy + 560, `berth ${s.x},${s.y} beside the south jetty`);
     for (const s of boatSpots(id)) assert.ok(canSail(s.x, s.y, id), `berth ${s.x},${s.y} floats`);
     const boats = createBoats();
     assert.equal(boats.filter(b => b.islandId === id).length, boatSpots(id).length);
-    // dock at its jetty from home
     const dock = destinationsFor('home').find(d => d.destination === id)?.dock ?? mapPoint(id,'home',m.HARBOR.water);
     assert.ok(canSail(dock.x, dock.y, 'home'));
     const a = {islandId: 'home', mode: 'sailing', ...dock, path: []};
     if (destinationsFor('home').some(d => d.destination === id)) {assert.ok(crossIsland(a)); assert.equal(a.islandId, id); assert.deepEqual({x: a.x, y: a.y}, m.HARBOR.water);}
-    // landing from its sea onto its sand
     const spot = landingSpot({islandId: id, x: cx, y: cy - 760});
     assert.ok(spot && spot.islandId === id && m.nav().walkable(spot.x, spot.y));
     const approach = landingApproach({islandId: id, x: cx, y: cy - 1000}, spot);
     assert.ok(canSail(approach.x, approach.y, id));
-    // sail round it, west to east
     const s = {islandId: id, mode: 'sailing', x: cx - 1300, y: cy, path: []};
     assert.ok(setSailDestination(s, cx + 1300, cy));
     for (let i = 0; i < 4000 && s.sailTarget; i++) {sailStep(s, .05, ZERO); assert.ok(!m.landAt(s.x, s.y));}

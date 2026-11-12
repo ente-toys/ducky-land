@@ -1,15 +1,11 @@
 import {flatRigid, unplaceRigid} from './rigid.js';
 
-// A live neighbour is rendered in its own chart and then rotated onto the map.
-// Move visitors into that chart, but undo its turn on their artwork. Otherwise
-// a boat and its rider tip sideways as soon as they enter the neighbour's pass.
 export function withRigidVisitors(from, to, objects, draw) {
   if (!objects.length) return draw();
   const frame = flatRigid(from, to);
   const angle = Math.atan2(frame.b, frame.a);
   const actors = new Set(objects);
   const masks = objects.map(o => o.mask).filter(mask => mask?.position && !actors.has(mask));
-  // A mask below an actor already inherits the actor's correction.
   for (const mask of masks) {
     let parent = mask.parent;
     while (parent && !actors.has(parent)) parent = parent.parent;

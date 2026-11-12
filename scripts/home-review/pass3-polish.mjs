@@ -1,7 +1,5 @@
 import fs from 'node:fs';
 
-// The plaza's former rings used different wobbly contours for adjacent stones.
-// Seat all stones on shared ellipses so the square reads as a single floor.
 const cx=2820,cy=2370;
 const pt=(rx,ry,a)=>[cx+rx*Math.cos(a),cy+ry*Math.sin(a)].map(n=>n.toFixed(2)).join(' ');
 const sector=(ro,yo,ri,yi,a,b)=>`M${pt(ro,yo,a)}A${ro} ${yo} 0 0 1 ${pt(ro,yo,b)}L${pt(ri,yi,b)}A${ri} ${yi} 0 0 0 ${pt(ri,yi,a)}Z`;
@@ -15,7 +13,6 @@ for(const [ring,[ro,yo,ri,yi,n]] of [[454,348,377,289,32],[377,289,300,230,28],[
     svg+=`<path d="${sector(ro,yo,ri,yi,a,b)}" fill="${colors[(i+ring*2)%colors.length]}" stroke="#39472d" stroke-opacity=".4" stroke-width=".85"/>`;
   }
 }
-// A narrow, calm rim unifies the silhouette without drawing across arrivals.
 svg+='<ellipse cx="2820" cy="2370" rx="460" ry="352" fill="none" stroke="#fff0c7" stroke-width="6"/>';
 svg+='</svg>';
 fs.writeFileSync('public/pixi-art/decals/plaza-paving.svg',svg);
@@ -23,8 +20,6 @@ fs.writeFileSync('public/pixi-art/decals/plaza-paving.svg',svg);
 const file='src/pixi/home-expansion.json',E=JSON.parse(fs.readFileSync(file));
 E.props=E.props.filter(p=>!String(p.id).startsWith('p3-garden-'));
 const sizes={'tree-1':[260,360],'tree-2':[180,360],'tree-3':[300,380],'tree-4':[200,280],'tree-5':[150,380],'bush-1':[130,100],'bush-2':[168,110],'bush-3':[116,104],'bush-4':[140,100],'flower-1':[48,36],'flower-2':[48,36],'flower-3':[44,36]};
-// Literal planted scenes. Low crescents frame the pond without screening its
-// approved bridge, resident bench, sleeping Duckies, or either landing.
 const scenes={
   'pond-north':[
     ['bush-4',1540,2305,1.08],['bush-2',1685,2300,1.08],
@@ -38,17 +33,14 @@ const scenes={
     ['flower-3',1010,2915,1.7],['flower-1',1040,2985,1.7],
     ['flower-3',945,2975,1.5],
   ],
-  // A short planted skirt around existing trees, leaving the south lawn open.
   'pond-south':[
     ['bush-4',2190,3280,1.05],['bush-3',2070,3310,.98],
     ['flower-1',2180,3330,1.65],['flower-3',2040,3350,1.7],
   ],
-  // Different sized shoulders turn the repeating south bridges into arrivals.
   'south-bank':[
     ['bush-2',1650,4250,1.1],['bush-4',1780,4290,1.0],
     ['flower-1',1645,4315,1.7],['flower-3',1755,4350,1.6],
   ],
-  // The crop enclosure remains a working plot, with a low flowering margin.
   'farm-border':[
     ['bush-4',4670,-865,.95],['bush-2',4805,-880,.94],
     ['bush-1',4955,-870,.94],['bush-4',5090,-850,.9],
@@ -59,7 +51,6 @@ const scenes={
     ['bush-2',3640,220,1.0],['bush-4',3760,245,.92],
     ['flower-3',3635,280,1.6],['flower-1',3745,300,1.55],
   ],
-  // Complete two outer clearings with mixed low borders, not more tall trees.
   'cider-clearing':[
     ['bush-2',-780,1675,1.1],['bush-4',-630,1710,1],
     ['bush-3',-505,1740,.96],['flower-1',-775,1740,1.75],

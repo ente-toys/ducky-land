@@ -1,4 +1,3 @@
-// HOME's actual bench construction, fitted to Pagepond's two paving ellipses.
 import {writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {inShape} from '../../assets/world/island-geometry.mjs';
@@ -9,7 +8,6 @@ export function libraryArcBenches({artDir,props,obstacles,plaza,market}) {
   ['bookstore',market,[48,76,105,134],900],
  ]) for(const target of angles){
   let deg=target;
-  // Select a clear piece of the same paving ring, with no foreground canopy.
   const clear=a=>{
    const x=z.x+Math.cos(a*Math.PI/180)*radius,y=z.y+Math.sin(a*Math.PI/180)*radius*z.ry/z.rx;
    return !props.some(p=>{

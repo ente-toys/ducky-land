@@ -1,4 +1,3 @@
-// Written by scripts/theme-index.mjs: the themes whose files are complete (concepts/themes/THEME-CONTRACT.md). Do not edit.
 import sunflowerWorld from './sunflower/world.json' with {type: 'json'};
 import sunflowerHarbor from './sunflower/harbor.json' with {type: 'json'};
 import sunflowerWalk from './sunflower/walk-world.json' with {type: 'json'};

@@ -1,4 +1,3 @@
-// Read-only snapshot of the actual Home placement code, rendered at the same .65 game zoom as Library.
 import {build} from 'esbuild';
 import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import sharp from 'sharp';

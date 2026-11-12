@@ -9,7 +9,6 @@ world.props=a.props;world.landArea=area(p.coast);world.expansionPlaces=p.places;
 for(const s of p.places)world.zones['bigger-'+s.id]={name:s.name,x:s.x,y:s.y,rx:s.rx,ry:s.ry,spawn:s.point};
 world.paths.push(p.loop,...p.links,...p.lanes);world.pathWidths.push(p.roadWidths?.main??335,...p.links.map(()=>p.roadWidths?.link??285),...p.lanes.map(()=>p.roadWidths?.lane??195));
 world.rivers=p.reviewRivers;world.reviewCommons=p.reviewCommons;world.communities=p.communities;world.residentialPlots=p.homes;
-// Small water gardens preserve the original offshore marker buoys in their original coordinates.
 const old=read(S+'baseline/world.json');const originalArea=area(old.coast);
 for(const [path,data]of [[D+'world.json',world],[D+'walk-world.json',walk],[D+'harbor.json',p.harbor],[A+'art.json',a]])fs.writeFileSync(path,JSON.stringify(data,null,2)+'\n');
 const before=read(S+'baseline/art.json').ground.tiles.reduce((n,t)=>n+t.width*t.height*4,0),after=a.ground.tiles.reduce((n,t)=>n+t.width*t.height*4,0);

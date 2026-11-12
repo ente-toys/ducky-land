@@ -62,8 +62,6 @@ def headgear(n,angle,m,part,out):
         k=x+math.cos(a)*-165
         if rear or angle<=0:elements.extend([path(f'M{k} {y+19} L{k-50} {y-3} L{k-29} {y+31} L{k-56} {y+50} L{k-3} {y+37}Z','#58BF43'),ellipse(k,y+26,13,12,'#58BF43')])
     elif n==8:
-        # Seat the rear opening below the skull crown, so it reveals the head
-        # rather than the background. The former yellow patch floated above it.
         rim=m['headY']+88
         elements=[path(f'M{x-175} {rim+8} C{x-191} {rim-171} {x+191} {rim-171} {x+175} {rim+8} C{x+100} {rim-5} {x+67} {rim-10} {x+45} {rim+2} C{x+48} {rim-48} {x-48} {rim-48} {x-45} {rim+2} C{x-85} {rim-10} {x-125} {rim-3} {x-175} {rim+8}Z' if rear else f'M{x-175} {rim+8} C{x-191} {rim-171} {x+191} {rim-171} {x+175} {rim+8} C{x+80} {rim-12} {x-80} {rim-12} {x-175} {rim+8}Z','#4794D8')]
         elements.extend([path(f'M{x} {rim-120} C{x-18} {rim-84} {x-18} {rim-50} {x-15} {rim-18}','none','#3471B8',3),ellipse(x,rim-124,13,6,'#3471B8',width=3)])
@@ -76,8 +74,6 @@ def headgear(n,angle,m,part,out):
         else:
             elements.extend([path(f'M{x-49} {rim+4} Q{x} {rim+15} {x+49} {rim+4} L{x+47} {rim+17} Q{x} {rim+28} {x-47} {rim+17}Z','#3471B8'),ellipse(x+25,rim+12,3,3,'#F4D93B',width=0)])
     elif n==9:
-        # The fish is a hood around the head, not a shallow cap with a corner
-        # missing. Keep the face opening inside the actual head silhouette.
         y=m['headY']+50
         side=1 if angle>0 else -1
         outer=path('M-195 35 C-232 -109 -132 -182 25 -165 C170 -155 225 -43 200 80 C90 159 -125 148 -195 35Z','#EF8DB7')
@@ -101,8 +97,6 @@ def headgear(n,angle,m,part,out):
     elif n==11:
         rim=m['headY']+82
         gold='#D7A35D'
-        # Preserve the tall red brush and gold cheek guards from the front
-        # design. Rear views have a closed shell, never a front visor cutout.
         if profile or abs(angle)==135:
             crest=[path('M-91 -113 C-122 -243 72 -291 133 -148 L105 -125 C67 -211 -26 -194 -36 -111Z','#E55B51'),path('M-36 -111 C-23 -180 68 -202 105 -125 L115 -85 L-38 -85Z','#A94D46')]
             for cx,cy in [(-70,-170),(-35,-202),(9,-211),(51,-197),(87,-171)]:crest.append(path(f'M{cx} {cy-15} L{cx+9} {cy+20}','none','#8F4240',3))
@@ -209,7 +203,6 @@ def build_frames(views,wardrobe,out,write_svg,root):
     for view in views:
         m=measurements[str(view['angle'])];view['attachments']={**m,'eyes':[p['pivot'] for p in view['parts'] if p['role']=='eye']}
         for part in view['parts']:
-            # Keep the animated hinge inside the shoulder.
             if part['role']=='wing':part['pivot'][0]-=part['side']*35
     for entry in wardrobe:
         slot,n=entry['slot'],entry['sourceNumber'];entry['frames']={}

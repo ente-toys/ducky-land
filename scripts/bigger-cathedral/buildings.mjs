@@ -1,4 +1,3 @@
-// PACKAGE buildings. Re-runnable, surgical patch: never rebuild paths/trees/centre.
 import fs from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import {VILLAGES} from './villages-data.mjs';
@@ -34,7 +33,6 @@ function door(x,b,work){
  s+=path(`M${x-w/2} ${b}V${y+18}Q${x} ${y-12} ${x+w/2} ${y+18}V${b}Z`,wood);
  s+=path(`M${x-14} ${y+15}V${b-3}M${x+5} ${y+11}V${b-3}M${x+22} ${y+22}V${b-3}`,'none','#986e43',1.1);
  s+=oval(x+17,b-36,3,3,'#dfbd66');
- // The bottom edge is the shared path door anchor, never a raised slab.
  s+=rect(x-w/2-9,b,w+18,8,'#eed6a0',2);
  return `<g data-door-width="${w}" data-door-height="${h}" data-threshold-y="${b+8}">${s}</g>`;
 }
@@ -65,7 +63,6 @@ export function buildingSVG(id,W,H,s){
   if(s.village==='tessera')body+=path(`M${X+11} ${peak-12}l6 6 -6 6 -6 -6Z`,glass,ink,1);
   if(s.village==='crumbbell')body+=rect(X+3,peak-27,16,9,s.roofColor,1)+path(`M${X+2} ${peak-3}h19m-10 0v8`,'none',s.roofColor,2);
  }
- // The right return is drawn explicitly. Every wall edge remains upright.
  body+=path(`M${R} ${wallTop}L${R+side} ${wallTop-20}V${b-21}L${R} ${b}Z`,'#dfc48f');
  body+=rect(L,wallTop,R-L,b-wallTop,s.wall,2);
  body+=path(`M${L+1} ${b-9}H${R-1}V${b}H${L+1}Z`,'#ecd29b','none');
@@ -81,7 +78,6 @@ export function buildingSVG(id,W,H,s){
   body+=path(`M${c} ${peak+24}L${c+side} ${peak}L${R+side+13} ${roofEnd-24}`,'none','#e5a573',1.3);
   for(const t of [.2,.4,.6,.8,.95]){const X=c+(R+7-c)*t,Y=peak+24+(roofEnd+1-peak-24)*t,xx=c+side+(R+13-c)*t,yy=peak+(roofEnd-24-peak)*t;body+=path(`M${n(X)} ${n(Y)}L${n(xx)} ${n(yy)}`,'none','#965b3e',1);}
  }else{
-  // Sparse tile rows, kept in their own roof plane rather than a texture grid.
   body+=`<defs><clipPath id="${id}-roof">${path(roof,'#fff','none')}</clipPath></defs><g clip-path="url(#${id}-roof)">`;
   for(let row=0;row<3;row++){const yy=peak+42+row*23,xx=L+25-row*10,ww=R-xx+row*7;body+=path(`M${xx} ${yy}Q${c} ${yy-4} ${xx+ww} ${yy}`,'none','#975e40',1.2);for(let j=0;j<6;j++){const X=xx+8+j*(ww-12)/6;body+=path(`M${n(X)} ${yy}q4 6 3 15`,'none','#975e40',.9);}}
   body+='</g>';
@@ -91,7 +87,6 @@ export function buildingSVG(id,W,H,s){
  if(s.loft==='dormer'){
   const yy=peak+42;body+=rect(c-20,yy,40,38,s.wall,1)+path(`M${c-27} ${yy+2}L${c} ${yy-23}L${c+27} ${yy+2}l-4 6 -23 -20 -23 20Z`,s.roofColor)+rect(c-10,yy+8,20,24,glass,1)+path(`M${c} ${yy+8}v24`,'none',ink,1.1);
  }else body+=badge(s.loft,c,s.roof==='gable'?peak+70:peak+67);
- // Doors are centred on the preserved path anchor; workshop machinery has its own bay.
  body+=door(c,b,work);
  if(work){body+=windowAt(c-112,wallTop+38,'arch',s);body+=craft(s.work,c+112,b-10);body+=rect(c-43,wallTop+5,86,22,cream,3)+badge(s.work==='bread'?'shell':s.work==='tile'?'diamond':s.work,c,wallTop+16);}
  else{
@@ -111,7 +106,6 @@ function pavingSVG(v,o){
 }
 export function applyBuildings(art,world,walk){
  const doors=[];
- // The flower inlay lies in the paving. Preserve its drawing, retire its cast shadow.
  const mosaic=fs.readFileSync('scripts/bigger-cathedral/buildings-source/flower-mosaic.svg','utf8')
   .replace(/<ellipse\b[^>]*opacity="0.24"[^>]*\/>/,'');
  fs.writeFileSync(A+'villages/tessera/flower-mosaic.svg',mosaic);
@@ -123,13 +117,11 @@ export function applyBuildings(art,world,walk){
   if(p.x!==x||p.y!==y)throw Error('Door anchor moved for '+id);
   p.src=p.src.replace(/(?:-r2)?\.svg$/,'-r2.svg');
   fs.writeFileSync(A+p.src,buildingSVG(id,W,H,style));
-  // Canvas extends 56 units below the old art origin. Threshold is exactly y+40.
   Object.assign(p,{anchor:{x:.5,y:1-56/H},rasterMargin:16,shadow:false,flip:false,wind:false,door:[x,y+40]});
   const solid={id,x,y:y-12,rx:W*.365,ry:32};
   for(const m of [world,walk]){const i=m.obstacles.findIndex(q=>q.id===id);if(i<0)throw Error('Missing collision '+id);m.obstacles[i]={...solid};}
   doors.push({id,src:p.src,door:[x,y+40],width:style.work?68:60,height:92});
  }
- // Only replace the corresponding props in world.props, preserve all other packages.
  if(world.props)for(const p of art.props.filter(p=>BUILDING_STYLES[p.id])){const i=world.props.findIndex(q=>q.id===p.id);if(i>=0)world.props[i]={...p};}
  return doors;
 }

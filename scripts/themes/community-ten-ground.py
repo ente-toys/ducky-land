@@ -14,7 +14,6 @@ def ring(g,cx,cy,rx,ry,depth,count):
   path(g,'M '+' L '.join(f'{x:.1f} {y:.1f}' for x,y in pts)+' Z',fill=['#F7E2AF','#D6C5E6','#EDCF8B','#F9E9B7'][i%4],stroke='#9D946A',stroke_width=2.2,stroke_linejoin='round')
 def lawn(g,cx,cy,rx,ry,seed):
  ellipse(g,cx,cy,rx,ry,fill='#93B72F',stroke='#6C9435',stroke_width=3)
- # Broken small clover / grass marks, no synthetic mowing stripes.
  rng=random.Random(seed)
  for i in range(95):
   x=cx+rng.uniform(-rx+15,rx-15);y=cy+rng.uniform(-ry+12,ry-12)
@@ -32,7 +31,6 @@ for g in root:
   ellipse(g,5800,2700,488,313,fill='#A89ACF',stroke='#39472D',stroke_width=3)
   ring(g,5800,2700,479,305,57,36);lawn(g,5800,2700,420,265,7)
  if name=='Member wall square':
-  # Keep the original paving as the broad promenade; fit a planted centre into it.
   ring(g,1820,2760,544,385,60,40)
   lawn(g,1820,2785,333,200,31)
   ellipse(g,1820,2785,346,211,fill='none',stroke='#FFF0C7',stroke_width=8)
@@ -40,7 +38,6 @@ for g in root:
  if name in ['Market row (open stall row)','Beach stalls (open stall row)']:
   cx=2520 if name.startswith('Market') else 5420;cy=3560
   g.clear();g.set('data-name',name.replace('open stall row','open grass pitches'))
-  # Soft lawn, dressed stone end aprons and subtle markers for the future stalls.
   path(g,f'M{cx-300} {cy-118}Q{cx-440} {cy-118} {cx-440} {cy}Q{cx-440} {cy+118} {cx-300} {cy+118}H{cx+300}Q{cx+440} {cy+118} {cx+440} {cy}Q{cx+440} {cy-118} {cx+300} {cy-118}Z',fill='#A8BF49',stroke='#6C9435',stroke_width=3)
   for side in [-1,1]:
    path(g,f'M{cx-305} {cy+side*122}Q{cx} {cy+side*139} {cx+305} {cy+side*122}',fill='none',stroke='#F9E9B7',stroke_width=18,stroke_linecap='round')
@@ -50,15 +47,12 @@ for g in root:
   for i in range(40):
    x=cx+rng.uniform(-350,350);y=cy+rng.uniform(-88,88)
    path(g,f'M{x:.1f} {y:.1f}l-4 -7m4 7 5 -9',fill='none',stroke='#7B9E39',stroke_width=2,stroke_linecap='round')
- # Pale white ellipse highlights are a cheap plastic sheen. Keep only stone texture.
  if name in ['Member wall square','Voice circle']:
   for e in list(g):
    if e.get('fill')=='#FFFFFF':g.remove(e)
- # Home ink edge: thin, visible, without widening the existing walking surface.
  if name=='Footpaths':
   for e in g:
    if e.get('stroke')=='#39472D':e.set('stroke-opacity','.85')
-# Small path-edge cobbles use the real HOME SVGs, clear lane is unchanged.
 def distseg(x,y,p,q):
  dx=q[0]-p[0];dy=q[1]-p[1];t=max(0,min(1,((x-p[0])*dx+(y-p[1])*dy)/(dx*dx+dy*dy or 1)));return math.hypot(x-p[0]-t*dx,y-p[1]-t*dy)
 def pathdist(x,y):return min(distseg(x,y,p,q)-ww/2 for pts,ww in zip(w['paths'],w['pathWidths']) for p,q in zip(pts,pts[1:]))
@@ -69,7 +63,6 @@ for i,(pts,ww) in enumerate(zip(w['paths'],w['pathWidths'])):
   if pathdist(x,y)<14:continue
   if any(((x-z['x'])/z.get('rx',1))**2+((y-z['y'])/z.get('ry',1))**2<1 for z in w['zones'].values() if 'rx' in z):continue
   a['flats'].append(dict(src='/pixi-art/decals/pebble-1.svg',x=round(x),y=round(y),width=32,height=20))
-# Paving-free activity interiors are grass, but retain all original zone contracts.
 ground=E.tostring(root,encoding='unicode');(A/'ground.svg').write_text(ground)
 for t in a['ground']['tiles']:
  root.set('width',str(t['width']));root.set('height',str(t['height']));root.set('viewBox',f"{t['x']} {t['y']} {t['width']} {t['height']}")

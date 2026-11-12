@@ -1,5 +1,3 @@
-// Review proof uses the same production SVG manifest and 0.8 px/unit crops.
-// proof.mjs includes the static sea jetty/boats and reference comparison.
 import './proof.mjs';
 import {copyFileSync,writeFileSync} from 'node:fs';
 import {output,j,json} from './scene.mjs';

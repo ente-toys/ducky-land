@@ -1,4 +1,3 @@
-// Load the real Neon runtime without writing the shared generated registry.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Texture} from 'pixi.js';

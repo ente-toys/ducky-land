@@ -68,8 +68,6 @@ test('real rigs share red textures, morph in red, keep every emote and restore y
  const original={fetch:globalThis.fetch,document:globalThis.document,DOMParser:globalThis.DOMParser,load:Assets.load,get:Assets.get,unload:Assets.unload,fill:Graphics.prototype.fill};
  const dom=new JSDOM('<body></body>'),rigs=[],owned=[];
  const fills=new Map();
- // Synthetic sampling exercises the real morph renderer in Node. Art fidelity
- // is checked against the original SVG paths above, independently of sampling.
  dom.window.SVGElement.prototype.getTotalLength=()=>100;
  dom.window.SVGElement.prototype.getPointAtLength=function(at){const a=at/100*Math.PI*2;return {x:300+180*Math.sin(a),y:350-260*Math.cos(a)};};
  globalThis.document=dom.window.document;globalThis.DOMParser=dom.window.DOMParser;
@@ -116,7 +114,6 @@ test('real rigs share red textures, morph in red, keep every emote and restore y
    for(let frame=0;frame<40;frame++)rig.update(1/60,{action,speed:action===1?275:0,turn:Math.PI/2,time:6+frame/60});
    if(action===7){const sleep=descendants(rig.root).find(n=>n.label?.startsWith('Sleeping Ducky'));assert.ok(sleep.visible);if(rig===privacy)assert.ok(descendants(sleep).find(n=>n.label==='Sleeping Privacy sunglasses').visible);else assert.ok(descendants(sleep).some(n=>n instanceof Sprite&&[look.textures.get('nod-duck.svg'),look.textures.get('wing-duck.svg')].includes(n.texture)));}
   }
-  // All intermediate turns keep each lens on the same articulated eye joint.
   for(let angle=-180;angle<=180;angle+=5){
    for(let frame=0;frame<90;frame++)privacy.update(1/60,{turn:angle*Math.PI/180,action:3,time:7+frame/60});
    const nodes=descendants(direction(privacy));
@@ -132,17 +129,15 @@ test('real rigs share red textures, morph in red, keep every emote and restore y
    for(let i=0;i<180;i++)google.update(1/60,{turn:angle*Math.PI/180});
    const now=direction(google),old=bodies.get(angle);assert.equal(now,old.view);assert.equal(descendants(now).length,old.count);assert.equal(descendants(now).find(n=>n.label==='Google devil horns'),old.horns);
   }
-  // Reusing a rig for the other team must hide the previous team's decorations.
   google.setAppearance(privateLook);google.update(1/60,{turn:0,reducedMotion:true});
   assert.equal(descendants(direction(google)).find(n=>n.label==='Google devil horns').visible,false);
   assert.ok(descendants(direction(google)).find(n=>n.label==='Privacy sunglasses').visible);
   google.setAppearance(look);
-  // Reset on leaving combat does not allocate replacement artwork or mutate peers.
   google.setAppearance(null);google.update(1/60,{turn:Math.PI/4});
   assert.equal(descendants(direction(google)).find(n=>n.label==='Google devil horns').visible,false);
   assert.equal(descendants(direction(google)).find(n=>n.label==='tail-0').children[0].visible,true);
   assert.ok(descendants(direction(peer)).find(n=>n.label==='Google devil horns').visible);
-  google.dispose();google.setAppearance(null); // engine may dispose before attachment cleanup
+  google.dispose();google.setAppearance(null);
  }finally{
   for(const rig of rigs)rig.dispose();await disposeDuckAssets();for(const t of owned)t.destroy(true);
   globalThis.fetch=original.fetch;globalThis.document=original.document;globalThis.DOMParser=original.DOMParser;Assets.load=original.load;Assets.get=original.get;Assets.unload=original.unload;Graphics.prototype.fill=original.fill;dom.window.close();

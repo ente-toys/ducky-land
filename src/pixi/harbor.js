@@ -1,9 +1,3 @@
-// boss 5 Nov: the harbor is a real wooden jetty in the bridge-jetty art (wood deck, ink planks, pilings in the water with a cream
-// ring, posts and a rail on the landward run, bollards where boats tie up). Drawn in code so every island can reuse it:
-//   drawJetty(container, {x, y, length, angle})   x,y = its foot on land, angle = the way it runs out (0 = north, radians clockwise)
-// Optional: width (deck, world px), scale (detail size, e.g. .13 on a distant island), wetFrom (0-1, where the water starts),
-// railTo (0-1, where the rails stop and the open mooring deck starts), moorings ([{x,y}] boats to tie up: a bollard each).
-// Returns {root, ties} where ties[i] is the rope point on the bollard for moorings[i].
 import {Container, Graphics, Text} from 'pixi.js';
 import {PALETTE} from './palette.js';
 import {islandFor, near} from './islands.js';
@@ -18,10 +12,8 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
   root.addChild(g);
   const corners = [at(0, -hw), at(length, -hw), at(length, hw), at(0, hw)], flat = pts => pts.flatMap(p => [p.x, p.y]);
   const wet0 = length * wetFrom, outline = {color: ink, width: 2.22 * s};
-  if (!art) {   // art: the island art already draws this deck (home's south fishing dock), so only its bollards are added below
-  // its shadow on the water
+  if (!art) {
   g.poly(flat([at(wet0, -hw), at(length, -hw), at(length, hw), at(wet0, hw)].map(p => ({x: p.x + 7 * s, y: p.y + 16 * s})))).fill({color: ink, alpha: .14});
-  // pilings: only the water run, both edges and the tip; the deck hides their tops
   const pile = p => {
     g.ellipse(p.x, p.y + 34 * s, 12 * s, 4.6 * s).fill({color: ink, alpha: .12});
     g.rect(p.x - 4.5 * s, p.y - 6 * s, 9 * s, 40 * s).fill(darkWood).stroke(outline);
@@ -29,12 +21,10 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
   };
   const piles = Math.max(1, Math.round((length - wet0) / (72 * s)));
   for (let i = 0; i <= piles; i++) for (const side of [-hw + 6 * s, hw - 6 * s]) pile(at(wet0 + (length - wet0 - 8 * s) * i / piles, side));
-  // the side boards you see: any edge that faces down the screen shows its thickness
   const T = 11 * s, face = (a, b) => g.poly(flat([a, b, {x: b.x, y: b.y + T}, {x: a.x, y: a.y + T}])).fill(darkWood).stroke(outline);
   if (-n.y > .05) face(corners[0], corners[1]);
   if (n.y > .05) face(corners[3], corners[2]);
   if (d.y > .05) face(corners[1], corners[2]);
-  // the deck, its edge beams and planks
   g.poly(flat(corners)).fill(wood).stroke(outline);
   for (const side of [-hw + 7 * s, hw - 7 * s]) {const a = at(4 * s, side), b = at(length - 4 * s, side); g.moveTo(a.x, a.y).lineTo(b.x, b.y);}
   g.stroke({color: darkWood, width: 1.6 * s, alpha: .8});
@@ -43,7 +33,6 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({color: ink, width: 1.11 * s});
     if (i % 3 === 1) {const c = at(t + 11 * s, (i % 2 ? -1 : 1) * hw * .3), e = at(t + 11 * s, (i % 2 ? -1 : 1) * hw * .3 + 18 * s); g.moveTo(c.x, c.y).lineTo(e.x, e.y).stroke({color: i % 6 === 1 ? darkWood : ink, width: 1.11 * s});}
   }
-  // rails on the landward run: posts, a top rail, caps (bridge-jetty far/near railing)
   const railEnd = length * railTo, posts = Math.max(1, Math.round(railEnd / (66 * s))), H = 30 * s;
   for (const side of [-hw + 3 * s, hw - 3 * s]) {
     const tops = [];
@@ -57,11 +46,10 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
     for (const p of tops) g.roundRect(p.x - 6.5 * s, p.y - 5.5 * s, 13 * s, 5 * s, 1.7 * s).fill(darkWood).stroke(outline);
   }
   }
-  // a bollard on the deck edge beside each berth; tip berths tie to the tip corners
   const ties = moorings.map(m => {
-    if (!m) return null;   // not moored along this jetty
+    if (!m) return null;
     const along = (m.x - x) * d.x + (m.y - y) * d.y, lateral = (m.x - x) * n.x + (m.y - y) * n.y;
-    if (Math.abs(lateral) > hw + 260 * s) return null;   // anchored out: no rope
+    if (Math.abs(lateral) > hw + 260 * s) return null;
     const tip = along > length - 30 * s, side = Math.sign(lateral || 1) * (hw - 10 * s);
     const p = at(tip ? length - 10 * s : Math.max(wet0 + 10 * s, Math.min(length - 30 * s, along)), side);
     g.ellipse(p.x, p.y + 1 * s, 9 * s, 3.5 * s).fill({color: ink, alpha: .2});
@@ -73,16 +61,11 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
   return {root, ties, foot: at(0), tip: at(length)};
 }
 
-// The home harbor: the jetty (flat, under the Duckies), a signpost with the island's name and the island's flag on a pole at its
-// foot (standing, sorted with the Duckies), and mooring ropes from each berthed boat to its bollard.
-// boss 6 Nov: every island map has its own jetty (island-maps.js); each is drawn once, the first time it is needed, and the
-// engine shows the one of the map on screen (show), so a themed island and its copies get their own.
 export function createHarbor(decks, objects) {
   const jetties = new Map();
   const jettyFor = mapId => {
     if (!jetties.has(mapId)) {
       const {JETTY, HARBOR} = mapFor(mapId);
-      // a bollard and rope only for a boat moored along the jetty (a theme lists its beach boats as moorings too)
       const alongside = m => {const t = (m.x - JETTY.foot.x) * JETTY.dir.x + (m.y - JETTY.foot.y) * JETTY.dir.y, p = JETTY.along(Math.max(0, Math.min(JETTY.length, t)));
         return t > 0 && t < JETTY.length + 60 && Math.hypot(m.x - p.x, m.y - p.y) < 260;};
       const built = drawJetty(decks, {x: JETTY.foot.x, y: JETTY.foot.y, length: JETTY.length, angle: JETTY.angle, width: JETTY.width,
@@ -99,15 +82,13 @@ export function createHarbor(decks, objects) {
   decks.addChild(ropes);
   const flowers = new Graphics({label: 'Harbor flowers'});
   decks.addChild(flowers);
-  // signpost, right of the foot, its arrow pointing up the jetty
   const sign = new Container({label: 'Harbor signpost'}), board = new Graphics(), name = new Text({text: '', style: {
     fontFamily: 'system-ui, sans-serif', fontSize: 23, fontWeight: '800', fill: ink, letterSpacing: .3}});
-  name.anchor.set(.5); name.position.set(0, -104); name.resolution = 3;   // crisp when zoomed in
+  name.anchor.set(.5); name.position.set(0, -104); name.resolution = 3;
   sign.addChild(board, name);
   const placeSign = () => {sign.position.set(JETTY().foot.x + 100, JETTY().foot.y + 44); sign.zIndex = sign.y;};
   placeSign();
   objects.addChild(sign);
-  // the accent flag, left of the foot
   const flag = new Container({label: 'Harbor flag'}), pole = new Graphics(), cloth = new Graphics();
   flag.addChild(pole, cloth);
   const placeFlag = () => {flag.position.set(JETTY().foot.x - 104, JETTY().foot.y + 46); flag.zIndex = flag.y;};
@@ -132,8 +113,7 @@ export function createHarbor(decks, objects) {
       jetties.clear();
       for (const node of [ropes, flowers, sign, flag]) node.destroy({children: true});
     },
-    transient: () => [sign, flag, flowers],   // this island's own name and colours (kept out of the copies' snapshot)
-    // the jetty of one map only (the engine draws one island's art at a time: the real one, then each copy)
+    transient: () => [sign, flag, flowers],
     show(mapId) {jettyFor(mapId); for (const [id, j] of jetties) j.root.visible = id === mapId;},
     switchIsland(id) {
       const island = islandFor(id);
@@ -147,7 +127,6 @@ export function createHarbor(decks, objects) {
         .roundRect(-w / 2, top, w, h, 7).fill(wood).stroke({color: ink, width: 3})
         .moveTo(-w / 2 + 8, top + h / 2).lineTo(w / 2 - 8, top + h / 2).stroke({color: darkWood, width: 1.4, alpha: .55})
         .circle(-w / 2 + 11, top + 10, 2.4).fill(ink).circle(w / 2 - 11, top + 10, 2.4).fill(ink)
-        // the arrow plank under it, pointing out along the jetty
         .poly([70, -70, -18, -70, -18, -78, -44, -60, -18, -42, -18, -50, 70, -50]).fill(sandShade).stroke({color: ink, width: 2.6, join: 'round'});
       flowers.clear();
       if (id !== 'home') for (const [fx, fy] of [[-150, 70], [-118, 92], [150, 100], [184, 80], [60, 120]]) {

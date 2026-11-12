@@ -1,4 +1,3 @@
-// Read-only assembly of Home's production SVG layers. No game files are written.
 import {createRequire} from 'node:module';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import path from 'node:path';
@@ -74,7 +73,6 @@ try {
  for(const p of flats)await add(p,'flat');
  for(const p of art.floating??[])await add({...p,scale:1},'prop');
  for(const p of decks)await add(p,'deck');
- // Match engine.js contactShadow, including explicit footprint overrides and ground tint.
  const patterns=[[/bench-wood-(left|right)/,.1,2.4],[/fountain/,.25,.82],[/^tree-/,.3,.3],[/^(bush|flower)-/,.4,.32],[/lamp|pole/,.4,.34],[/lighthouse/,.3,.32],[/umbrella/,.32,.4],[/library/,.44,.26],[/boat/,.36,.3]];
  for(const p of grounded){const n=p.asset||p.name||'';if(/bunting|banner|flag|bridge|blanket|lily|shell|reeds/i.test(n)||p.noShadow)continue;
  const [,share,depth]=patterns.find(([re])=>re.test(n))??[null,.38,.3];

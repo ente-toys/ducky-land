@@ -1,5 +1,3 @@
-// Headless proof shots for the shore lane (same framing as home-check/REPORT.html). Never opens a visible browser.
-// Usage: node scripts/home-10/shore-shots.mjs [base-url] [out-dir]
 import fs from 'node:fs';
 import path from 'node:path';
 const RUNTIME='/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules';
@@ -7,8 +5,6 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE ?? `${RUNTIME}/playw
 const BASE=(process.argv[2]||'http://boss.localhost:8897').replace(/\/$/,'');
 const OUT=path.resolve(process.argv[3]||'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/home-fix/shore');
 const ONLY=process.env.SHOTS?.split(',');
-// FILL_PREVIEW=<old home-expansion.json>: paint the filled-in inlet flat grass at runtime, standing in for the ground lane's
-// repainted tiles (preview only, never committed art): the land between the old coast and the new one
 let FILL=null;
 if(process.env.FILL_PREVIEW){
   const old=JSON.parse(fs.readFileSync(process.env.FILL_PREVIEW,'utf8')).coast, lane=JSON.parse(fs.readFileSync(new URL('./shore.json',import.meta.url),'utf8')).coast;
@@ -17,7 +13,6 @@ if(process.env.FILL_PREVIEW){
 }
 fs.mkdirSync(OUT,{recursive:true});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-// [name, x, y, zoom]: the report's spots, plus the new harbour
 const SPOTS=[['close-bay-6150-1800',6150,1800,.9],['harbor-boats',5600,1750,.9],['wave-5450-1680',5450,1680,.9],
   ['bay-wide',6400,1700,.35],['south-boats',4300,5500,.45],['new-harbour',4080,5750,.9],['overview',2600,1900,.13],['millhead',6200,1050,.9]];
 const browser=await chromium.launch({headless:true,args:['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist']});

@@ -1,4 +1,3 @@
-// Render real production layers headlessly, preserving world coordinates and exact crop scale.
 import sharp from 'sharp';import fs from 'node:fs';
 const A='public/pixi-art/themes/waterfall/',OUT='../concepts/themes/world-map/bigger';
 const art=JSON.parse(fs.readFileSync(A+'art.json')),plan=JSON.parse(fs.readFileSync('scripts/bigger-waterfall/plan.json'));

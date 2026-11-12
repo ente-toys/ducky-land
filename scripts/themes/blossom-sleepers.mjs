@@ -1,4 +1,3 @@
-// Goldmine-only pose placement. Uses the engine's validator, five of each exact Home pose.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
@@ -50,8 +49,6 @@ for(let attempt=0;attempt<120;attempt++){
  if(chosen.length>best.length)best=chosen;
  if(best.length===40)break;
 }
-// Repair the complete arrangement as a constraint problem when a greedy order
-// paints itself into a corner. The exact same clearance and pose spread apply.
 if(best.length!==40){
  for(let restart=0;restart<24 && best.length!==40;restart++){
   const assigned=poses.flatMap(p=>Array.from({length:5},()=>candidates[p][Math.floor(rnd()*candidates[p].length)]));

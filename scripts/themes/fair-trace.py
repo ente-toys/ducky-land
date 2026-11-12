@@ -1,11 +1,8 @@
-# Fair island (Waddlewish Fair): GPT sheet PNG -> one clean SVG per isolated piece (vtracer, palette snap like concepts/boat-turntable).
-# usage: python3 scripts/themes/fair-trace.py <sheet.png> <name1,name2,...> [order=lr|grid] [colors=18]
-# Pieces are the sheet's separate blobs (white background flood-filled from the edge), sorted left-right (lr) or row-major (grid).
 import sys, os, io, numpy as np, vtracer
 from PIL import Image, ImageFilter
 from collections import deque
 OUT = os.path.join(os.path.dirname(__file__), '../../public/pixi-art/themes/fair')
-INK = (57, 71, 45)   # #39472D, the house outline colour
+INK = (57, 71, 45)
 src, names = sys.argv[1], sys.argv[2].split(',')
 opts = dict(a.split('=') for a in sys.argv[3:]); order = opts.get('order', 'lr'); K = int(opts.get('colors', 18))
 im = Image.open(src).convert('RGB'); a = np.array(im).astype(int); H, W = a.shape[:2]
@@ -18,7 +15,6 @@ while q:
     if 0 <= y < H and 0 <= x < W and white[y, x] and not bg[y, x]:
         bg[y, x] = True; q += [(y+1, x), (y-1, x), (y, x+1), (y, x-1)]
 fg = ~bg
-# blobs: label foreground on a 4x downsample, dilated so a piece's loose bits (petals, tips) join it
 small = Image.fromarray((fg * 255).astype(np.uint8)).resize((W // 4, H // 4)).filter(ImageFilter.MaxFilter(int(opts.get('dil', 9))))
 s = np.array(small) > 0; lab = np.zeros(s.shape, int); n = 0; boxes = []
 for y0 in range(s.shape[0]):
@@ -45,19 +41,16 @@ for (x0, y0, x1, y1, k), name in zip(boxes, names):
     rgb = Image.fromarray(crop.astype(np.uint8)).resize(((x1-x0)*up, (y1-y0)*up), Image.LANCZOS).filter(ImageFilter.MedianFilter(5))
     mk2 = np.array(Image.fromarray((mk*255).astype(np.uint8)).resize(rgb.size, Image.LANCZOS)) > 127
     px = np.array(rgb).reshape(-1, 3).astype(float); sel = px[mk2.reshape(-1)]
-    # k-means palette (ink pinned) then snap: flat fills, no AA bands
     rng = np.random.default_rng(1); sel = sel[rng.choice(len(sel), min(len(sel), 60000), replace=False)]; C = sel[rng.choice(len(sel), K, replace=False)]; C[0] = INK
     for _ in range(12):
         idx = np.argmin(((sel[:, None] - C[None])**2).sum(-1), 1)
         for j in range(1, K):
             if (idx == j).any(): C[j] = sel[idx == j].mean(0)
     C[0] = INK
-    dark = sel.sum(1) < 260   # every near-black pixel is outline
-    lab2 = np.concatenate([np.argmin(((px[i:i+200000, None] - C[None])**2).sum(-1), 1) for i in range(0, len(px), 200000)]); lab2[px.max(1) < int(opts.get('ink', 90))] = 0   # near-black only: deep leaf greens and ink blues stay fills
+    dark = sel.sum(1) < 260
+    lab2 = np.concatenate([np.argmin(((px[i:i+200000, None] - C[None])**2).sum(-1), 1) for i in range(0, len(px), 200000)]); lab2[px.max(1) < int(opts.get('ink', 90))] = 0
     lab2 = lab2.reshape(mk2.shape)
     lab2 = np.array(Image.fromarray(lab2.astype(np.uint8)).filter(ImageFilter.ModeFilter(5)))
-    # thin=n: home's outline weight. Each pass hands outline pixels next to a fill to that fill (interior lines lose n px a side),
-    # and the silhouette shrinks n px, so every line loses about n/2 source px (we trace at 2x).
     n = int(opts.get('thin', 0))
     for _ in range(n):
         ink = (lab2 == 0) & mk2

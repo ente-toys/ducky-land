@@ -4,14 +4,12 @@ import {RULES} from './rules.js';
 const EMPTY=Object.freeze([]);
 let loading;
 export function loadPickupArt(){
-  // Direct Node consumers do not have Vite's asset transform.
   if(!import.meta.env?.BASE_URL)return Promise.resolve({});
   const urls=import.meta.glob('./assets/pickups/*.svg',{query:'?url',import:'default',eager:true});
   return loading??=Promise.all(['paint','speed','shield'].map(async kind=>[kind,await Assets.load(urls[`./assets/pickups/${kind}.svg`])]))
     .then(Object.fromEntries).catch(error=>{loading=null;throw error;});
 }
 const colours={paint:0x08c225,speed:0xffd94f,shield:0x7ab9ff};
-// Five stable nodes, built once. Frame updates only change transforms/visibility.
 export function createPickupsView(objects,art,{tilt=1}={}){
   const nodes=new Map();
   return {update(snapshot,time,reduced=false){
@@ -21,8 +19,6 @@ export function createPickupsView(objects,art,{tilt=1}={}){
         const root=new Container({label:`Bog ${spot.kind} pickup`}),ring=new Graphics(),icon=new Sprite(art[spot.kind]??Texture.EMPTY);
         root.upright=true;ring.ellipse(0,0,42,27).fill({color:colours[spot.kind],alpha:.12}).stroke({color:colours[spot.kind],alpha:.5,width:2});
         icon.anchor.set(.5,1);icon.width=64;icon.height=64;icon.scale.y/=tilt;
-        // Paint-only glints suggest the swirl catching the light. Draw once;
-        // frame updates only change opacity, never geometry or textures.
         let shimmer;
         if(spot.kind==='paint'){
           shimmer=[new Graphics({label:'Paint swirl glint A'}),new Graphics({label:'Paint swirl glint B'})];
@@ -53,7 +49,6 @@ export function createAbilityView(objects,rig,{tilt=1}={}){
   bubble.scale.y=1/tilt;objects.addChild(bubble);
   let art;
   return {update(p,time,reduced=false){
-    // The island resets its rig transform before every combat render pass.
     const left=Math.max(0,(p.dodgeUntil??0)-time);
     if(p.alive&&left>0&&!reduced){
       const u=1-Math.min(1,left/RULES.dodgeSeconds),lift=Math.sin(Math.PI*u);

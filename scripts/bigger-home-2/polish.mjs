@@ -1,5 +1,3 @@
-// Final review corrections: dress the working scenes, replace printed flower
-// stripes with Home's actual flowering plants, and fit equipment collision.
 import {readFileSync,writeFileSync} from 'node:fs';
 const D='public/pixi-art/home-expansion-c',E=JSON.parse(readFileSync('src/pixi/home-expansion.json'));
 const at=([x,y])=>[(796+(x-796)*.88-278)/.18,(580+(y-580)*.88-204)/.18];
@@ -13,11 +11,9 @@ add('flour-sacks',1279,-9,230,170,`<path d="M28 146Q5 90 43 38L35 17H98L90 41Q13
 add('garden-water-butt',1459,74,150,200,`<path d="M25 31Q71 11 125 31L119 170Q71 191 30 170Z" fill="#c88941"/><ellipse cx="75" cy="31" rx="51" ry="19" fill="#e4c567"/><path d="M25 70Q74 93 123 70 M29 144Q74 166 120 144 M48 45V173 M79 48V178 M108 44V174" fill="none" stroke="#885931" stroke-width="4"/><path d="M116 119H141V136H126" fill="none" stroke="#e4c567" stroke-width="9"/>`,[53,25]);
 dress('lighthouse-point',`<path d="M233 245L252 343H229L216 245 M255 402L264 487H238L229 402" fill="#d65b42" stroke="none"/><path d="M120 298V266H146V298Z M191 444V411H216V444Z" fill="#6ec9de"/><path d="M132 268V298 M204 413V443" stroke="#fff0c7" stroke-width="5"/><circle cx="248" cy="535" r="33" fill="#fff0c7"/><circle cx="248" cy="535" r="18" fill="#f16e4b"/><path d="M248 505V517 M248 553V565 M219 535H231 M265 535H278" stroke="#f16e4b" stroke-width="9"/><path d="M66 591Q169 630 276 592 M81 608Q166 644 260 611" fill="none" stroke="#b1934b" stroke-width="3"/>`);
 for(const name of ['amphi-inner','amphi-middle','amphi-outer']){const p=E.props.find(p=>p.name===name),w=p.width,h=p.height;dress(name,`<path d="M25 42Q${w/2} ${h-4} ${w-23} 42 M77 77V111 M${w-77} 77V111" fill="none" stroke="#885931" stroke-width="4"/>`);}
-// A real stepped, planted hill replaces the flat repeating flower texture.
 const rows=[ [[-175,448],[-162,442],[-147,439],[-132,437],[-116,436],[-100,438]], [[-172,478],[-156,472],[-140,468],[-123,466],[-106,466],[-88,470]], [[-164,508],[-149,501],[-134,498],[-119,497],[-102,500],[-86,504]], [[-151,541],[-138,536],[-123,533],[-108,532],[-92,534],[-78,537]], [[-119,568],[-105,563],[-91,559],[-78,558],[-65,560],[-52,564]] ];
 let i=0;for(const row of rows)for(const [x,y]of row){const[wx,wy]=at([x,y]),kind=i++%3?'flower-1':'flower-2';E.props.push({id:`bigger-C-terrace-flower-${i}`,name:kind,asset:kind,src:`/pixi-art/plants/${kind}.svg`,x:wx,y:wy,width:48,height:36,scale:1.5,anchor:{x:.5,y:1},resolution:2,zone:'flower-lookout'});}
 for(const t of E.tiles){const p='public'+t.src;let s=readFileSync(p,'utf8').replaceAll('fill="url(#flowersC)"','fill="#81b33c"');s=s.replace(/(fill="#81b33c" stroke="#77a23b" stroke-width="4"\/>)<path[^>]*fill="#81b33c"\/>/g,'$1');writeFileSync(p,s);}
-// Legs, seed bags and baskets stay solid where their bases actually meet the floor.
 const tower=E.props.find(p=>p.name==='play-tower');E.obstacles.push({x:tower.x-42,y:tower.y-180,rx:40,ry:33});
 const swing=E.props.find(p=>p.name==='swings');for(const dx of [-90,0,90])E.obstacles.push({x:swing.x+dx,y:swing.y-80,rx:34,ry:16});
 writeFileSync('src/pixi/home-expansion.json',JSON.stringify(E,null,2));console.log('Final art review: working garden, planted terraces, lighthouse and bandstand detailed.');

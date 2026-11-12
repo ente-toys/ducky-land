@@ -1,5 +1,3 @@
-// boss 4 Nov: real damped height fields, bank reflections and interpolated GPU light, in the island's flat palette.
-// RG/BA pack previous/current signed heights into ordinary RGBA8. No float textures, readbacks, filters or render targets.
 import {BufferImageSource, Container, GlProgram, Graphics, Mesh, MeshGeometry, Shader} from 'pixi.js';
 import {PALETTE} from './palette.js';
 import {TILT} from './camera.js';
@@ -9,7 +7,6 @@ export const WATER_STEP = 1 / 60;
 const LIMIT = 4, clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 const rgb = n => new Float32Array([n >> 16 & 255, n >> 8 & 255, n & 255].map(v => v / 255));
 
-// Renderer-independent solver, also used by qa/water.test.mjs. Dry neighbours mirror the wet cell (zero normal flux).
 export function createWaveField({width, height, cols, rows, wet, damping = .991, open = false}) {
   const count = cols * rows, active = [], neighbours = new Int32Array(count * 4), distance = new Float32Array(count);
   const dx = width / (cols - 1), dy = height / (rows - 1), speed = Math.min(dx, dy) * .47;
@@ -23,7 +20,6 @@ export function createWaveField({width, height, cols, rows, wet, damping = .991,
       if (j >= 0 && !wet[j]) distance[i] = Math.min(distance[i], k < 2 ? dx / 2 : dy / 2);
     }
   }
-  // Two chamfer sweeps measure the real bank, including every islet. Used by the shore foam shader.
   for (let pass = 0; pass < 2; pass++) for (let k = 0; k < count; k++) {
     const i = pass ? count - k - 1 : k, x = i % cols, y = Math.floor(i / cols);
     if (!wet[i]) continue;
@@ -42,7 +38,6 @@ export function createWaveField({width, height, cols, rows, wet, damping = .991,
       for (let x0 = Math.max(0, Math.floor(gx - rx)); x0 <= Math.min(cols - 1, Math.ceil(gx + rx)); x0++) {
         const i = y0 * cols + x0, d = ((x0 - gx) / rx) ** 2 + ((y0 - gy) / ry) ** 2;
         if (!wet[i] || d >= 1) continue;
-        // Queue the force for the NEXT fixed step. An event cannot rewrite an already interpolated frame.
         kicks[i] = clamp(kicks[i] + clamp(strength, -1.5, 1.5) * (1 - d) ** 2 * (1 - 4 * d), -1.5, 1.5); hit = true;
       }
     }
@@ -54,7 +49,6 @@ export function createWaveField({width, height, cols, rows, wet, damping = .991,
       let value = h + (h - previous[i]) * damping + cx * (current[neighbours[n]] + current[neighbours[n + 1]] - 2 * h)
         + cy * (current[neighbours[n + 2]] + current[neighbours[n + 3]] - 2 * h) - h * .0002 + kicks[i];
       kicks[i] = 0;
-      // Absorb at the edge of the open sea, reflect at the coast. Closed pools have reflective outer boundaries.
       if (open) {
         const x = i % cols, y = (i / cols) | 0, edge = Math.min(x, y, cols - 1 - x, rows - 1 - y);
         if (edge < 8) value *= .88 + edge * .014;
@@ -75,7 +69,6 @@ export function createWaveField({width, height, cols, rows, wet, damping = .991,
     get current() {return current;}, get previous() {return previous;}, get steps() {return steps;}};
 }
 
-// boss 5 Nov: shared, interpolated sampling keeps plants attached to the displayed wave.
 export function waveHeight(f, x, y, mix = 1) {
   if (!Number.isFinite(x + y) || x < 0 || y < 0 || x > f.dx * (f.cols - 1) || y > f.dy * (f.rows - 1)) return 0;
   const gx = x / f.dx, gy = y / f.dy, ix = Math.floor(gx), iy = Math.floor(gy), u = gx - ix, v = gy - iy;
@@ -126,7 +119,6 @@ void main() {
   float bands = smoothstep(-.7, .8, swell + h * .35);
   vec3 color = mix(uWater, mix(uWater, uInk, .17), .10 + .24 * bands);
   color = mix(color, uCream, max(0., light - .80) * 1.1);
-  // Light is evaluated once per grid vertex, then smoothly interpolated. Retina pixels only sample the mask.
   float caustic = sin(p.x * .032 + sin(p.y * .018 - uTime * .22) + h * .8)
     + sin(p.y * .037 - p.x * .009 + uTime * .18 + h * .65);
   color = mix(color, uCream, smoothstep(1.65, 1.95, caustic) * (.035 + .045 * motion));
@@ -163,7 +155,6 @@ void main() {
   if (coverage < .008 && (uSea < .5 || mask.b < .004 || mask.a < .5)) discard;
   vec3 color = vLight;
   if (uSea > .5) {
-    // boss 5 Nov: coast-wide flat surf, including a sand-only retreating wet band.
     vec2 p = uOrigin + vUV * uSize;
     float d = (mask.g - mask.b) * 240.;
     vec3 surf = coastSurf(p, d, uTime, uCalm);
@@ -174,7 +165,6 @@ void main() {
     coverage = max(coverage, surf.x * .88 * mask.a);
     if (uCalm > .5 && d < 0.) coverage = 0.;
   }
-  // boss 5 Nov: one inset shape and rim, four quiet glints, no reflection or caustic noise.
   if (uInland > .5) {
     vec2 p = vUV * uSize;
     float depth = mask.g * 240., aa = max(fwidth(depth), .65);
@@ -188,7 +178,6 @@ void main() {
       float dash = length(vec2(max(abs(q.x) - 10. - k * 2., 0.), q.y));
       color = mix(color, uCream, (1. - smoothstep(.8, 1.8, dash)) * .72 * smoothstep(18., 26., depth));
     }
-    // boss 5 Nov: only real contacts create thin expanding cream rings, clipped by the bank.
     ${Array.from({length: RINGS}, (_, i) => `{
       vec4 ring = uRing${i}; float age = uTime - ring.z;
       float radius = 8. + age * 19.;
@@ -198,7 +187,6 @@ void main() {
       color = mix(color, uCream, ink * smoothstep(2., 8., depth));
     }`).join('\n')}
   }
-  // A standalone fountain supplies its own water base, matching Home's overlay over PALETTE.water.
   if (uSolid > .5) color = mix(uWater, color, .46);
   float alpha = coverage * (uInland > .5 ? 1. : mix(.46, 1., max(uSea, uSolid)));
   finalColor = vec4(color * alpha, alpha) * uColor;
@@ -244,7 +232,6 @@ async function groundMask(tiles, rect, scale, sea = false) {
   }
   const pixels = ctx.getImageData(0, 0, width, height).data, data = new Uint8Array(width * height * 4), wet = new Uint8Array(width * height);
   for (let i = 0; i < wet.length; i++) wet[i] = (sea && pixels[i * 4 + 3] < 128) || isBlue(pixels[i * 4], pixels[i * 4 + 1], pixels[i * 4 + 2]) ? 1 : 0;
-  // Keep only border-connected sea. Inland blue water must never get an ocean foam band.
   if (sea) {
     const queue = new Int32Array(wet.length), reached = new Uint8Array(wet.length); let start = 0, end = 0;
     const visit = i => {if (wet[i] && !reached[i]) {reached[i] = 1; queue[end++] = i;}};
@@ -266,7 +253,6 @@ export function maskGrid(mask, cols, rows, shape) {
     const u = x / (cols - 1), v = y / (rows - 1), i = (Math.round(v * (mask.height - 1)) * mask.width + Math.round(u * (mask.width - 1))) * 4;
     wet[y * cols + x] = shape ? Number(shape(u, v)) : Number(mask.data[i] > 100);
   }
-  // Fill enclosed dry marks (old painted glints/reeds), while leaving the outer bank shape intact.
   const dry = new Uint8Array(wet.length), queue = new Int32Array(wet.length); let a = 0, b = 0;
   const visit = i => {if (!wet[i] && !dry[i]) {dry[i] = 1; queue[b++] = i;}};
   for (let x = 0; x < cols; x++) {visit(x); visit((rows - 1) * cols + x);}
@@ -275,7 +261,6 @@ export function maskGrid(mask, cols, rows, shape) {
     const i = queue[a++], x = i % cols, y = (i / cols) | 0;
     if (x) visit(i - 1); if (x < cols - 1) visit(i + 1); if (y) visit(i - cols); if (y < rows - 1) visit(i + cols);
   }
-  // The sea must retain enclosed islands as dry cells.
   if (!mask.sea && !shape) for (let i = 0; i < wet.length; i++) if (!dry[i]) wet[i] = 1;
   return wet;
 }
@@ -283,7 +268,6 @@ function source(data, width, height) {
   return new BufferImageSource({resource: data, width, height, format: 'rgba8unorm', alphaMode: 'no-premultiply-alpha', scaleMode: 'linear', autoGenerateMipmaps: false, addressMode: 'clamp-to-edge'});
 }
 function waterGeometry(width, height, cols, rows, sea, wet) {
-  // One vertex per simulated sample. A padded outer ring continues the sea beyond the world without repeating it.
   const nx = cols + (sea ? 2 : 0), ny = rows + (sea ? 2 : 0), positions = new Float32Array(nx * ny * 2), uvs = new Float32Array(positions.length);
   const indices = [];
   for (let y = 0; y < ny; y++) for (let x = 0; x < nx; x++) {
@@ -298,7 +282,6 @@ function waterGeometry(width, height, cols, rows, sea, wet) {
   }
   return new MeshGeometry({positions, uvs, indices: new Uint32Array(indices)});
 }
-// High-resolution shore distance avoids grid-shaped foam when the camera is close to the coast.
 export function shoreDistance(mask, worldWidth, worldHeight) {
   const {width, height, data} = mask, d = new Float32Array(width * height), dx = worldWidth / width, dy = worldHeight / height, diagonal = Math.hypot(dx, dy);
   for (let i = 0; i < d.length; i++) d[i] = data[i * 4] ? 1e6 : 0;
@@ -316,7 +299,6 @@ export function shoreDistance(mask, worldWidth, worldHeight) {
     data[i * 4 + 1] = Math.round(Math.min(1, d[i] / 240) * 255);
   }
 }
-// boss 5 Nov: dry-side distances reference only connected ocean, never inland blue.
 export function coastDistance(mask, width, height) {
   shoreDistance(mask, width, height);
   const inverse = {width: mask.width, height: mask.height, data: new Uint8Array(mask.data.length)};
@@ -324,7 +306,6 @@ export function coastDistance(mask, width, height) {
   shoreDistance(inverse, width, height);
   for (let i = 0; i < mask.data.length; i += 4) mask.data[i + 2] = mask.data[i] ? 0 : inverse.data[i + 1];
 }
-// boss 5 Nov: smooth the signed distance, never the land mask; contour bands stay clean at close zoom.
 export function smoothDistance(mask, worldWidth, worldHeight, sea = false) {
   const {width, height, data} = mask, a = new Float32Array(width * height), b = new Float32Array(a.length);
   const rx = Math.max(1, Math.round(10 * width / worldWidth)), ry = Math.max(1, Math.round(10 * height / worldHeight));
@@ -351,7 +332,6 @@ export function smoothDistance(mask, worldWidth, worldHeight, sea = false) {
 }
 function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zIndex, solid = false}) {
   mask.sea = sea;
-  // boss 5 Nov: erase enclosed painted highlights before measuring depth, retaining the true outer bank.
   if (id === 'pond' || id === 'cove') {
     const filled = maskGrid(mask, mask.width, mask.height);
     for (let i = 0; i < filled.length; i++) if (filled[i]) mask.data[i * 4] = 255;
@@ -385,12 +365,10 @@ function makeBody({id, rect, cols, rows, mask, parent, sea = false, shape, zInde
 }
 const empty = reason => ({active: false, reason, stats: {cpuMs: 0, cells: 0, steps: 0}, update() {}, splash() {return false;}, edge() {}, lily() {}, fountainSplash() {}, pause() {}, dispose() {}});
 
-// Home and themed fountains use the same masked mesh, palette, shader and closed height field.
 export function createFountainSurface(options) {
   return makeBody(options);
 }
 
-// Masks come from the CURRENT tiled art, not the older world polygon or ground.svg. All setup is recoverable.
 export async function createWater({app, world, art, layer, objects, props, motion}) {
   const gl = app.renderer.gl;
   if (!gl || gl.isContextLost() || gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS) < 2 || gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS) < 1) return empty('WebGL unavailable');
@@ -399,7 +377,7 @@ export async function createWater({app, world, art, layer, objects, props, motio
   const stats = {cpuMs: 0, cells: 0, steps: 0, splashes: 0, droppedTime: 0}, samples = [];
   try {
     const pond = world.water[0], rect = {x: pond.x - pond.rx - 35, y: pond.y - pond.ry - 35, width: pond.rx * 2 + 70, height: pond.ry * 2 + 70};
-    const sea = null;   // boss 5 Nov: the beach goes back to the original surf (surf.js createBeachSurf); only the ponds and fountain are simulated
+    const sea = null;
     bodies.push(makeBody({id: 'pond', rect, cols: 97, rows: 65, mask: await groundMask(art.ground.tiles, rect, 1.2), parent: layer}));
     const coveRect = {x: 3560, y: 1210, width: 1140, height: 650};
     bodies.push(makeBody({id: 'cove', rect: coveRect, cols: 121, rows: 73,
@@ -407,7 +385,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
     const fountain = props.find(p => p.asset === 'fountain-wishing');
     let fountainRoot;
     if (fountain) {
-      // Same standing transform as the prop. One root keeps both surfaces registered even with ?tilt=.
       fountainRoot = new Container({label: 'Water - fountain surfaces'}); fountainRoot.position.set(fountain.x - 240 * fountain.scale, fountain.y - 300 * fountain.scale);
       fountainRoot.scale.set(fountain.scale); fountainRoot.zIndex = fountain.y + .5; objects.addChild(fountainRoot); roots.push(fountainRoot);
       const fountainRect = {x: 0, y: 0, width: 480, height: 480};
@@ -421,7 +398,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
         body.fountain = fountain; bodies.push(body);
       }
     }
-    // Compile, link and upload BEFORE claiming success. Pixi's lazy compilation otherwise fails on the first game frame.
     const program = bodies[0].shader.glProgram;
     const compiled = [];
     try {
@@ -439,14 +415,13 @@ export async function createWater({app, world, art, layer, objects, props, motio
       const dx = b.b[0] - b.a[0], dy = b.b[1] - b.a[1], len = Math.hypot(dx, dy);
       sea?.sources.push({x: b.a[0] + dx * t - dy / len * b.w * .52 * side, y: b.a[1] + dy * t + dx / len * b.w * .52 * side, strength: .06, radius: 36, phase: t + side});
     }
-    // boss 5 Nov: pads seed gentle rings into their own connected pond.
     for (const p of art.floating || []) if (/lily|pad/i.test(p.src || p.asset || '')) {
       for (const b of [pondBody, cove]) if (b.contains(p.x, p.y)) b.sources.push({x:p.x, y:p.y, strength:.065, radius:14, phase:p.x*.017});
     }
     const fall = new Graphics({label: 'Water - spring flow'}); layer.addChild(fall); roots.push(fall);
 
     function splashBody(b, x, y, strength, radius) {
-      if (!b) return false;   // boss 5 Nov: the sea body is off
+      if (!b) return false;
       if (!b.mesh.visible) return false;
       const hit = b.field.impulse(x - b.rect.x, y - b.rect.y, strength, radius); b.dirty ||= hit;
       if (hit) {
@@ -495,13 +470,11 @@ export async function createWater({app, world, art, layer, objects, props, motio
               splashBody(b, s.x, s.y, s.strength * (.8 + .2 * Math.sin(time * 2 + s.phase)), s.radius);
             }
           }
-          // Incoming ocean swell is injected at the OPEN outer boundary, then travels and reflects off the painted coast.
           if (steps % 6 === 0) for (let i = 0; i < 14; i++) {
             const x = (i + .5) * world.width / 14;
             splashBody(sea, x, 130, Math.sin(time * .9 - x * .002) * .025, 110);
             splashBody(sea, x, world.height - 130, Math.sin(time * .8 + x * .0015) * .025, 110);
           }
-          // boss 5 Nov: invisible bodies do no solver work, upload or ambient catch-up.
           for (const b of bodies) if (b.mesh.visible) {
             b.field.step(); b.dirty = true;
           }
@@ -515,7 +488,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
       }
       fall.clear();
       if (!reduced && cove.mesh.visible) {
-        // Cream streaks accelerate along the existing shelf ribbon. Impact comes from the cove height field.
         for (let i = 0; i < 4; i++) {
           const u = (time * 1.25 + i / 4) % 1, y = 1203 + 145 * u * u, x = y < 1260 ? 4479 + Math.sin(u * 7) * 8 : 4497;
           fall.moveTo(x, y).lineTo(x + 1, y + 5 + u * 6).stroke({color: PALETTE.cream, width: 2.5, alpha: .65 * Math.sin(u * Math.PI), cap: 'round'});
@@ -558,7 +530,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
     }
     function lily(item, pose) {
       if (disposed || reduced || document.hidden || !item.sprite.visible) return;
-      // boss 5 Nov: reeds stay rooted; floating pads bob and tip on the local field.
       const reed = /reeds|cattails/i.test(item.asset || item.name || item.src || '');
       for (const b of bodies) {
         if (b.sea || b.fountain || !b.mesh.visible) continue;
@@ -570,7 +541,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
         break;
       }
     }
-    // Seed calm water immediately, avoiding a flat first second and a burst when returning to the tab.
     if (!reduced) for (const b of bodies) for (const s of b.sources) splashBody(b, s.x, s.y, s.strength, s.radius);
     return {active: true, stats, update, splash, edge, lily, fountainSplash,
       pause() {accumulator = 0;},

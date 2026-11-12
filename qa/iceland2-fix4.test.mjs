@@ -53,7 +53,6 @@ test('FIX4 actual theme loader renders complete lake and heart before terrain de
 
  const pixel=(x,y)=>ctx.getImageData(Math.round(x-x0),Math.round(y-y0),1,1).data;
  const blue=p=>Math.abs(p[0]-166)<8&&Math.abs(p[1]-222)<8&&Math.abs(p[2]-236)<8;
- // Every interior sample is painted before any streamed terrain arrives.
  const r=world.iceland2.rink;
  for(let y=r.y+12;y<r.y+r.height-10;y+=17)for(let x=r.x+12;x<r.x+r.width-10;x+=17){
   if(onRink(r,x,y)){const p=pixel(x,y);assert.ok(p[3]>240&&p[2]>220,'missing lake at '+x+','+y);}

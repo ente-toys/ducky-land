@@ -1,5 +1,3 @@
-// Proof helper: the GPT blueprint laid over the world at its hamlet mapping, with roads (red), water (blue), coast (black) and
-// props of other zones (magenta dots). Usage: node scripts/home-10/hamlet-overlay.mjs <hamlet> <out.png>
 import {readFileSync, writeFileSync} from 'node:fs';
 import sharp from 'sharp';
 const [h, out] = process.argv.slice(2);
@@ -7,7 +5,7 @@ const E = JSON.parse(readFileSync('src/pixi/home-expansion.json'));
 const P = JSON.parse(readFileSync('scripts/home-10/homes.json'));
 const M = P.hamlets?.[h]?.map ?? {at: E.communities.find(c => c.id === h).center, bp: [768, 512], k: 1.34};
 const BP = `../concepts/themes/work/hamlets/gpt/${h}.png`;
-const W = 1536, Hh = 1024, s = 1 / M.k;   // output in blueprint pixels, padded
+const W = 1536, Hh = 1024, s = 1 / M.k;
 const pad = 300, toPx = ([x, y]) => [(x - M.at[0]) / M.k + M.bp[0] + pad, (y - M.at[1]) / M.k + M.bp[1] + pad];
 const pl = pts => pts.map(p => toPx(p).map(v => v.toFixed(1)).join(',')).join(' ');
 let g = '';

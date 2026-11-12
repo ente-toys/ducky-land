@@ -1,5 +1,3 @@
-// Faithful manifest assembly in the supplied boss-worst-centre framing.
-// Live water is sampled directly from Home's Graphics commands, never drawn into game SVGs.
 import fs from 'node:fs';
 import path from 'node:path';
 import {Container} from 'pixi.js';
@@ -24,7 +22,6 @@ for(const ins of fx.root.children[0].context.instructions){
  if(ins.action==='fill'){ctx.fillStyle=color;ctx.fill();}else{ctx.strokeStyle=color;ctx.lineWidth=s.width;ctx.stroke();}
 }
 fs.writeFileSync('/tmp/centre-A-home-water.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="960" height="650"><image width="960" height="650" href="data:image/png;base64,${canvas.toBuffer('image/png').toString('base64')}"/></svg>`);
-// Evidence-only layer. The game assets remain pure vector and use live Home water.
 const water={...p,id:'evidence-home-water',src:path.relative(A,'/tmp/centre-A-home-water.svg'),sortY:2730.5};
 try{fs.writeFileSync('/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/round3/centre-A-after.png',await render({...art,props:[...art.props,water]},{x:1850,y:540,k:.4,width:1538,height:1262,world,walk,harbor}));}
 finally{parent.destroy({children:true});}

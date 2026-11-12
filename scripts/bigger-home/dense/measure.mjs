@@ -1,5 +1,3 @@
-// Road union measured from the actual production sand outline, including its raised bank lip.
-// Count raster coverage at one drawing pixel = 1/.18 world units. Same dry-land mask both times.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import sharp from 'sharp';
 import assert from 'node:assert/strict';

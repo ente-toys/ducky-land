@@ -1,15 +1,11 @@
 import {Container,Sprite} from 'pixi.js';
 
-// Separate SVG lenses ride the real, glided eye seats. The joints themselves
-// blink/squint, so glasses share their position and tilt, never their blink scale.
 export function createPrivacyShades(view,art){
  const root=new Container({label:'Privacy sunglasses'}),eyes=view.parts.filter(p=>p.role==='eye');
  const bridge=new Sprite({texture:art.bridge,label:'Privacy shades bridge'});
  bridge.anchor.set(0,.5);root.addChild(bridge);
  const lenses=eyes.map(eye=>{
   const sprite=new Sprite({texture:art.lens,label:`Privacy lens ${eye.id}`});
-  // The original eye centre is only a few units above the beak. Seat the
-  // bold frame above that centre so its lower rim clears the bill.
   sprite.anchor.set(.5,56/72);root.addChild(sprite);return {eye,sprite};
  });
  const [left,right]=[...lenses].sort((a,b)=>a.eye.joint.rest.x-b.eye.joint.rest.x);
@@ -23,7 +19,6 @@ export function createPrivacyShades(view,art){
    const far=eyes.length>1&&eye!==near;
    sprite.visible=!back&&(!far||degrees<=52);
    sprite.position.copyFrom(eye.joint.position);sprite.rotation=eye.joint.rotation;
-   // Side view uses one narrow lens; the far lens tucks behind the head.
    const k=1-.45*Math.sin(degrees*Math.PI/180)**2;
    sprite.scale.set((eyes.length===1?side:eye===near?side:-side)*k,1);
    if(eyes.length===1)sprite.scale.x*=eye.joint.scale.x;

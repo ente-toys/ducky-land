@@ -167,7 +167,6 @@ test('pooled shots and splats recycle across long firing sessions and demo reset
   const {sim,p,e}=fixture();sim.leave(e.id);const seen=new Set(),marks=new Set();
   for(let i=0;i<300;i++){
     p.nextFire=0;p.ammo=12;const shot=fire(sim,p);assert.ok(shot);seen.add(shot);
-    // Showcase restarts clear the live arrays. The pool recovers those slots.
     if(i%2===0)sim.state.shots.length=0;else{advance(sim,.4);for(const mark of sim.state.splats)marks.add(mark);}
   }
   assert.ok(seen.size<=RULES.maxShots);assert.ok(marks.size<=RULES.maxSplats);assert.ok(sim.state.splats.length<=RULES.maxSplats);

@@ -1,4 +1,3 @@
-// Runtime data only. Source island art is read, never changed. Raster masks stay in memory.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {inShape} from '../../assets/world/island-geometry.mjs';
@@ -41,7 +40,6 @@ async function paint(p,art,b){
   layers.push({input:await image.extract({left:l,top:t,width,height}).png().toBuffer(),left:Math.max(x,0),top:Math.max(y,0)});
  }
  const pix=await sharp({create:{width:W,height:H,channels:4,background:'#6ec9de'}}).composite(layers).raw().toBuffer();
- // Green pixels include every baked lily pad and dry island. Cream waterline marks remain open.
  const sums=new Uint32Array((W+1)*(H+1));
  for(let y=0;y<H;y++){let row=0;for(let x=0;x<W;x++){const k=(y*W+x)*4,r=pix[k],g=pix[k+1],bl=pix[k+2];row+=g>bl*1.2&&g>r*.80&&bl<170?1:0;sums[(y+1)*(W+1)+x+1]=sums[y*(W+1)+x+1]+row;}}
  return (x,y,r,ry)=>{for(let yy=Math.max(0,Math.floor(y-y0-ry));yy<Math.min(H,Math.ceil(y-y0+ry));yy++){
@@ -57,14 +55,12 @@ for(const p of inventory){
  const pair=p.pair.map(i=>assets[i]),radius=Math.max(...pair.map(a=>a.width/2))+10,radiusY=Math.max(...pair.map(a=>a.width*.17))+8,step=16;
  const origin=[Math.ceil(b[0]/step)*step,Math.ceil(b[1]/step)*step],cols=Math.ceil((b[2]-origin[0])/step)+1,rows=Math.ceil((b[3]-origin[1])/step)+1;
  const greenFree=await paint(p,art,b);
- // Deck tips/supports are solid. The middle of each bridge remains navigable underneath.
  const blockers=[];
  const walkways=p.island==='home'?[...(home.walkways??[]),...(exp.walkways??[]),...(exp.homeArches??[])]:w.walkways??[];
  for(const d of walkways){if(!d.a||!d.b)continue;const bridge=d.boatPassUnder||Math.hypot(d.b[0]-d.a[0],d.b[1]-d.a[1])>300;
   if(bridge){for(const v of [d.a,d.b])blockers.push({x:v[0],y:v[1],rx:d.w/2+12,ry:d.w/2+12});}
   else{const n=Math.ceil(Math.hypot(d.b[0]-d.a[0],d.b[1]-d.a[1])/16);for(let k=0;k<=n;k++)blockers.push({x:d.a[0]+(d.b[0]-d.a[0])*k/n,y:d.a[1]+(d.b[1]-d.a[1])*k/n,rx:d.w/2,ry:d.w/2});}
  }
- // Authored floating pads and decorative boat hulls also reserve their full water footprint.
  for(const f of [...art.floating??[],...(art.props??[]).filter(q=>/paper-boat|lily-pad|pond-dock/.test(q.src))]){
   const s=f.scale??1;blockers.push({x:f.x,y:f.y,rx:f.width*s/2+5,ry:f.height*s/3+5});
  }

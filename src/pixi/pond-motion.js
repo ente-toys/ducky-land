@@ -1,5 +1,3 @@
-// Absolute UTC seconds, a stable pond seed, and baked safe routes. No simulation,
-// network messages or frame-rate-dependent random numbers in the render loop.
 export function samplePondDucky(pond, index, seconds, reduced, out) {
   const motion=pond.motion,track=motion.tracks[index];
   const time=reduced?0:((seconds%motion.period)+motion.period)%motion.period;

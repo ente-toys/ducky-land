@@ -1,4 +1,3 @@
-// Compatibility entry point: audit the current surface, without legacy exceptions.
 export {auditRosy as auditPink} from '../rosy-ground/walk-audit.mjs';
 import {auditRosy} from '../rosy-ground/walk-audit.mjs';
 import {writeFileSync} from 'node:fs';

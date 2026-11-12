@@ -1,7 +1,6 @@
 import {inShape} from '../../assets/world/island-geometry.mjs';
 
 export const PLANT_COOLDOWN = .9, PLANT_SWAY = .32, LEAF_LIFE = 1.2, LEAF_CAP = 12;
-// Walking pads blockers by 16. Six more units catch the last moving step before a wall stops it.
 const CONTACT_PAD = 22, RELEASE_PAD = 30, CELL = 256;
 const key = (x, y) => x * 65536 + y;
 const word = name => new RegExp(`(?:^|[\\s/_-])${name}(?:$|[\\s/_.-]|[0-9])`, 'i');
@@ -22,7 +21,6 @@ function bounds(o) {
   return [x0,y0,x1,y1];
 }
 
-// Bind only actual tree/bush blockers, never a canopy overlap or an unrelated nearby building.
 export function plantBlocker(prop, obstacles) {
   if (prop.footprint) return prop.footprint;
   let best = null, distance = Infinity;
@@ -35,15 +33,12 @@ export function plantBlocker(prop, obstacles) {
   return best;
 }
 
-// One index per loaded map. Actor histories are retained once per rig, never allocated per frame.
 export function createPlantContacts(props, obstacles, onBump,{snow=false}={}) {
   const plants=[], cells=new Map(), actors=new WeakMap();
   let time=0, reduced=false;
   for (const prop of props) {
     const kind=plantKind(prop,snow);
     if (!kind) continue;
-    // Iceland's soft decorative shrubs deliberately have no walking blocker.
-    // Give them a contact region only, keeping the authored collision map intact.
     const blocker=plantBlocker(prop,obstacles)??(snow&&kind==='bush'?{
       x:prop.x,y:prop.y-8,rx:Math.max(8,prop.width*(prop.scale??1)*.18),
       ry:Math.max(6,prop.height*(prop.scale??1)*.06),
@@ -73,7 +68,6 @@ export function createPlantContacts(props, obstacles, onBump,{snow=false}={}) {
       for (const plant of nearby) {
         if (!inShape(x,y,plant.blocker,RELEASE_PAD)) continue;
         const entering=!last.contacts.has(plant);
-        // Hysteresis prevents re-entry chatter when sliding along a curved trunk.
         if (inShape(x,y,plant.blocker,CONTACT_PAD)) {
           if (entering && moving && !reduced && plant.prop.sprite?.visible !== false &&
               dx*(plant.x-x)+dy*(plant.y-y)>0 && time-plant.lastAt>=PLANT_COOLDOWN) {
@@ -87,8 +81,6 @@ export function createPlantContacts(props, obstacles, onBump,{snow=false}={}) {
   };
 }
 
-// Select the dominant painted foliage from the source SVG, preserving each tree's palette.
-// Path length weights broad canopy silhouettes over short trunk/highlight marks. Runs once per source.
 export function foliageColour(svg, fallback=0x63ae45) {
   const weights=new Map();
   for (const match of svg.matchAll(/<(?:path|ellipse|circle|polygon)\b[^>]*>/gi)) {

@@ -1,8 +1,6 @@
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
 import {inPoly,inShape} from '../../assets/world/island-geometry.mjs';
-// Measure the union of actual road/court silhouettes at 5 world units per pixel.
-// Exclude the preserved heart/islets and all real water from the new dry-land denominator.
 export async function roadCoverage(svg,world){
  const original=JSON.parse(readFileSync('scripts/bigger-sunflower/baseline/world.json'));
  const shapes=svg.match(/<clipPath id="roads">([\s\S]*?)<\/clipPath>/)[1];

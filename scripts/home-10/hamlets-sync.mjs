@@ -1,6 +1,3 @@
-// Copies GPT's hamlet SVG kits into the repo: the layout to scripts/home-10/hamlets/<h>.json and each SVG to
-// public/pixi-art/home-hamlets/<h>/, its width/height set to the largest world size it is drawn at (crisp rasters).
-// Usage: node scripts/home-10/hamlets-sync.mjs <hamlet...>
 import {readFileSync, writeFileSync, mkdirSync, existsSync} from 'node:fs';
 const SRC = '../concepts/themes/work/hamlets/svg-codex', K = JSON.parse(readFileSync('scripts/home-10/homes.json')).hamlets ?? {};
 for (const h of process.argv.slice(2)) {

@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-// Zoom sweep from Home out to the globe, with a shear number per visible island at each step.
-// Usage: node scripts/rigid-sweep.mjs <url> --out <dir> [--tag before|after]
-// Shear = |angle between the island's drawn east and north axes - 90 deg|, ratio = |east|/|north| (1 = no squash).
-// "after": the island matrices the page actually draws with (globalThis.__duckyRigid). Otherwise: the true sphere
-// chart the old pipeline drew each island through, differentiated at the island centre.
 import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -24,7 +19,6 @@ const BASE=(args[0]||'http://boss.localhost:8890').replace(/\/$/,'');
 const W=1440,H=900;fs.mkdirSync(OUT,{recursive:true});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
-// old pipeline: screen pixel of a sphere point (world-view.js project(), same Newton inverse of pixelChart)
 function screenOf(state,p){
  const {id,cam,ball,basis}=state,view=viewFrame(id,cam),Rp=WORLD_GEO.Rw*cam.zoom,vz=dot(p,view.center);
  if(ball>.5&&vz<=0)return null;

@@ -3,7 +3,6 @@ import sharp from 'sharp';
 import {communities} from './plan.mjs';
 import {j,output,renderArt,base} from './scene.mjs';
 mkdirSync(output+'/ground-crops/snow',{recursive:true});const a=j('public/pixi-art/themes/snow/art.json'),h=j('assets/world/themes/snow/harbor.json');
-// Faithful static surrogate for the procedural runtime jetty and the three moored boats.
 const b=j('scripts/bigger-snow/baseline/art.json');
 const preview=structuredClone(a);preview.decks.push({src:'/pixi-art/bridge-jetty-1.svg',x:h.jetty.foot[0]-100,y:h.jetty.foot[1]-30,width:220,height:h.jetty.tip[1]-h.jetty.foot[1]+60});
 for(const v of h.boats)preview.props.push({src:'/pixi-art/boat-sail.svg',x:v.x,y:v.y+20,width:188,height:216,anchor:{x:.5,y:.82},scale:1});

@@ -7,7 +7,6 @@ export function communityArt(){
  for(const [index,[name,wall,roof,trim]]of themes.entries()){
   let b=`<ellipse cx="200" cy="447" rx="184" ry="18" fill="#6e863d" opacity=".35"/><g stroke="${ink}" stroke-width="4"><path d="M38 158H362V396Q200 446 38 396Z" fill="${wall}"/><path d="M39 160Q200 210 361 160V188Q200 240 39 188Z" fill="${trim}"/><path d="M28 104Q200 27 372 104L366 162Q200 215 34 162Z" fill="${roof}"/><ellipse cx="200" cy="104" rx="172" ry="49" fill="${trim}"/><path d="M66 96Q200 50 334 96M76 117Q201 77 324 117" fill="none" stroke="#fff2c8" stroke-width="6"/><path d="M300 77V28L338 25V82" fill="${wall}"/><ellipse cx="319" cy="27" rx="19" ry="7" fill="#8b8297"/><path d="M157 422V306Q200 272 243 306V422" fill="${roof}"/><path d="M172 414V313Q200 295 228 313V414" fill="#fff0c1"/><path d="M184 320H216V360H184Z" fill="#9cdbd7"/><circle cx="218" cy="382" r="4" fill="${ink}"/><path d="M140 427Q200 444 260 427L270 442Q200 460 130 442Z" fill="${trim}"/>`;
   for(const x of [67,267])b+=`<rect x="${x}" y="240" width="65" height="85" rx="20" fill="#98ccc9"/><path d="M${x+8} 275H${x+57}M${x+32} 244V316" stroke="#f4ffe5" stroke-width="5"/><path d="M${x-8} 324Q${x+32} 337 ${x+73} 324V344Q${x+32} 357 ${x-8} 344Z" fill="${roof}"/><path d="M${x+4} 323l5 -18 13 16 14 -23 11 24 14 -15 0 20" fill="#6eae68" stroke="#688158" stroke-width="3"/>`;
-  // The roof crest and household work identify the residents without relying on labels.
   if(index===0)b+=`<path d="M161 141Q200 161 239 141L230 168Q200 185 170 168Z" fill="#fff0bd"/><path d="M183 131Q173 115 185 105M201 131Q190 115 202 103M219 131Q209 115 220 108" fill="none" stroke="#fff0bd" stroke-width="5"/><path d="M45 208Q200 254 355 208" fill="none"/><g fill="#ed8cb1"><ellipse cx="53" cy="229" rx="15" ry="21"/><ellipse cx="347" cy="229" rx="15" ry="21"/></g><path d="M53 213V245M347 213V245" stroke="#ffe8a6" stroke-width="3"/>`;
   if(index===1)b+=`<circle cx="200" cy="151" r="28" fill="#fff0bd"/><path d="M200 130V151L216 159" fill="none"/><path d="M43 370H133V399H43Z" fill="#8e91ae"/><circle cx="70" cy="375" r="16" fill="#ffe4ac"/><circle cx="112" cy="373" r="12" fill="#a0dcd5"/><path d="M70 353V397M48 375H92" stroke="#fff0c1" stroke-width="5"/>`;
   if(index===2)b+=`<path d="M160 137Q183 128 200 141Q218 128 241 137V174Q218 165 200 177Q182 165 160 174Z" fill="#fff0bd"/><path d="M200 142V176"/><path d="M272 377H350V402H272Z" fill="#f3d0a3"/><path d="M279 377V352H290V377M299 377V343H312V377M323 377V354H338V377" fill="${roof}"/><path d="M64 207l12 -20 15 23m217 0 15 -23 12 20" fill="${wall}"/>`;
@@ -26,7 +25,6 @@ export function communityArt(){
    b=`<g transform="translate(0 74) scale(1 .835)">${b}</g>`;
   }
   fs.writeFileSync(dir+name+'.svg',wrap(400,470,b));
-  // Seven authored household treatments per trade, including roof changes and lived-in porches.
   for(let v=0;v<7;v++){
    let home=b;
    const tones=[wall,trim,'#eec6b2',wall,'#b8d7cf','#dcc4de',trim];

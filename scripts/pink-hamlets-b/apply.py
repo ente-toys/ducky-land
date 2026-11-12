@@ -34,11 +34,9 @@ for name in ['teacup','tutu-tides']:
   building=bool(re.search(r'house|cottage|cafe|workshop|cake-stall',file));tree=bool(re.search(r'oak|blossom',file))
   rx=w*(.39 if building else .085 if tree else .27);ry=min(65,w*.13) if building else 13 if tree else min(24,w*.12)
   fp=dict(name=p['id'],x=x,y=round(y-ry-8,2),rx=round(rx,2),ry=round(ry,2))
-  # Objects within the workshop stay visible in blueprint order; their small contact areas do not cover the open square.
   p['footprint']=fp
   for d in [world,walk]:d['obstacles'].append(fp)
   art['props'].append(p);world['props'].append(p);placed.append(p)
- # Soft cream paths use the same flat material as the original centre. No blueprint terrain is imported.
  shapes=[]
  for path in L['paths']:
   if name=='teacup' and path['id']=='north-lane':continue
@@ -46,19 +44,16 @@ for name in ['teacup','tutu-tides']:
  for join in plan['pathJoins']:
   if name=='tutu-tides' and join['id']=='north-to-centre':continue
   pts=join.get('connectorWorldPoints',join.get('connectorPoints'));pts=[[6700+(q[0]-8480),4740+(q[1]-1840)] for q in pts] if name=='teacup' else pts;width=join.get('width',join.get('widthWorld',160))
-  # Snap to the actual delivered west lane, below its rounded upper edge.
   if name=='tutu-tides' and join['id']=='west-to-main-loop':pts=[W(20,415),*pts[1:]]
   if name=='tutu-tides' and join['id']=='north-to-centre':pts=[[4000,4900],[4670,5220],[4800,5580],W(1050,600)]
   if name=='teacup':pts=[W(900,330),[7060,4230],[7100,4070]]
   world['paths'].append(pts);world['pathWidths'].append(width)
   d='M'+' L'.join(f'{x},{y}' for x,y in pts);shapes.append(f'<path d="{d}" fill="none" stroke="#FBE6C8" stroke-width="{width}" stroke-linecap="round" stroke-linejoin="round"/>')
  frame=W(0,0)+W(1536,1024);x0,y0,x1,y1=frame
- # Preserve connected round caps outside the blueprint frame.
  x0-=500;y0-=500;x1+=500;y1+=500
  svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0} {y0} {x1-x0} {y1-y0}"><g fill="#FBE6C8" stroke="#FBE6C8" stroke-width="3" stroke-linejoin="round">'+''.join(shapes)+'</g></svg>'
  (dest/'paths.svg').write_text(svg)
  art['flats'].insert(0,dict(id='hamlet-'+name+'-paths',src=f'hamlets/{name}/paths.svg',x=x0,y=y0,width=x1-x0,height=y1-y0,topLeft=True,resolution=1))
- # Approved game rig, replacing an existing wing spot so the island resident count stays fixed.
  sx,sy=W(L['sleepers'][0]['x'],L['sleepers'][0]['y']);world['sleepSpots']['wing'][-1 if name=='teacup' else -2]=[sx,sy,False]
  report[name]={'props':len(placed),'sleep':[sx,sy],'map':cfg}
 write(A/'art.json',art);write(D/'world.json',world);write(D/'walk-world.json',walk);write('scripts/pink-hamlets-b/placement.json',report)

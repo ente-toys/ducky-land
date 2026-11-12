@@ -1,11 +1,9 @@
-// Proofs are written outside the repository, including all raster comparisons.
 import fs from 'node:fs';
 import sharp from 'sharp';
 const out='/tmp/pond-duckies';fs.mkdirSync(out,{recursive:true});
 export async function renderIsland(id,view,k=.6,duckies=[]){
  const {render}=await import('../pagepond/render.mjs');
  const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/'+id+'/art.json'));
- // Float Duckies belong above flats, below bridge decks.
  art.floating=[...(art.floating??[]),...duckies];
  await render(art,view,k,out+'/'+id+'.png',{sleepers:false,resolveSource:s=>s.startsWith('/')?'public'+s:'public/pixi-art/themes/'+id+'/'+s});
 }

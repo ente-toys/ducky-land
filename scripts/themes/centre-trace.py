@@ -1,9 +1,3 @@
-# Centre plazas: vectorise one GPT piece (plain white background) into a game SVG sized in world units.
-# venv: python3.11 -m venv vt && vt/bin/pip install vtracer cairosvg pillow numpy scipy scikit-image shapely
-# usage: python centre-trace.py <src.png> <dst.svg> <world-height> [colors=16] [ink=2.6] [flip=1] [title=...]
-#   world-height = drawn height in world units (one Ducky = 130). The SVG gets width/height in world units and a
-#   viewBox in source pixels, so the engine can place it at its natural size.
-#   ink = target outline weight in world units (home's line is ~2.2-2.6); thicker GPT ink is thinned to it.
 import sys, os, numpy as np, vtracer
 from PIL import Image, ImageFilter
 from scipy import ndimage as nd
@@ -34,10 +28,9 @@ H, W = y1 - y0 + 2 * pad, x1 - x0 + 2 * pad
 rgba = np.zeros((H, W, 4), np.uint8)
 rgba[pad:-pad, pad:-pad, :3] = np.array(im)[y0:y1, x0:x1]
 rgba[pad:-pad, pad:-pad, 3] = np.where(fg[y0:y1, x0:x1], 255, 0)
-scale = WH / H                 # world units per source pixel
-ink_px = INK / scale           # wanted ink width in source pixels
+scale = WH / H
+ink_px = INK / scale
 
-# strip the light anti-alias fringe round the silhouette (it reads as a white halo on grass)
 al0 = rgba[..., 3] > 0
 for _ in range(3):
     lumf = rgba[..., :3].astype(float) @ [.3, .59, .11]
@@ -47,7 +40,6 @@ for _ in range(3):
 rgba[..., 3] = np.where(al0, 255, 0)
 MED = int(opts.get('median', 5)); MODE = int(opts.get('mode', 7))
 sm = np.array(Image.fromarray(rgba[..., :3]).filter(ImageFilter.MedianFilter(MED))).astype(int)
-# palette = the image's own dominant flat colours (GPT art is flat), greedy by frequency, at least 22 apart
 px = sm[rgba[..., 3] > 0]
 keys, counts = np.unique((px // 6) * 6 + 3, axis=0, return_counts=True)
 order = np.argsort(-counts); pal = []
@@ -63,8 +55,6 @@ for i, c in enumerate(pal):
 q = Image.fromarray(pal[best].reshape(sm.shape).astype(np.uint8)).filter(ImageFilter.ModeFilter(MODE))
 qa = np.dstack([np.array(q), rgba[..., 3]])
 
-# thin the ink to home's weight, keeping the silhouette: an outer outline keeps its outer ink_px, an inner line keeps
-# ink_px round its skeleton, eyes and other solid dark blobs keep their shape; freed pixels take the nearest fill colour
 alpha = qa[..., 3] > 0
 lum = qa[..., :3].astype(float) @ [.3, .59, .11]
 dark = alpha & (lum < 80)

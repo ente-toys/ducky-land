@@ -14,9 +14,6 @@ test('landing preserves nearby landmarks through large turns and never collapses
   const to='isle-55',m=mapOf(to),at={...m.HARBOR.water,zoom:.7},old=mapPoint(to,from,at);
   const start=landingBasis(from,to,at),basis=easeLandingBasis(start,0),matrix=cameraMatrix({...at,basis},1440,900);
   for(const [x,y]of [[0,0],[20,0],[0,20],[-20,-20]]){
-   // Hold the pre-landing screen neighbourhood fixed. Equal offsets in the
-   // destination chart can cover much more screen space after a large turn;
-   // the affine camera matches the local derivative, not finite chart curvature.
    const p={x:old.x+x,y:old.y+y},q=mapPoint(from,to,p);
    const before={x:720+(p.x-old.x)*at.zoom,y:450+(p.y-old.y)*at.zoom};
    const after={x:matrix.a*q.x+matrix.c*q.y+matrix.tx,y:matrix.b*q.x+matrix.d*q.y+matrix.ty};

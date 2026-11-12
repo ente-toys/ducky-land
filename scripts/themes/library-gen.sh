@@ -1,6 +1,4 @@
 #!/bin/bash
-# Library island hero pieces: one GPT image per call through the Codex CLI (same exec form as concepts/themes/concepts/gen-one.sh).
-# usage: scripts/themes/library-gen.sh <id> "<what to draw>"
 D="/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/library-gen"
 C="/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/concepts/03-library.png"
 CODEX=$(find /Applications/ChatGPT.app/Contents/Resources -maxdepth 4 -name codex -type f -perm -u+x 2>/dev/null | head -1)

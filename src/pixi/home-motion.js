@@ -1,10 +1,8 @@
-// Home's boat bob, shared by themed upright boats with fixed waterline depth anchors.
 export function homePropY(prop,time,reduced=false,index=0){
  if(reduced||!prop.boat)return prop.y;
  const bob=prop.animation?.type==='bob'?prop.animation:null;
  return prop.y+Math.sin(time*(bob?Math.PI*2/bob.periodSeconds:1.5)+(bob?.phaseRadians??index))*(bob?.translateYWorld??3);
 }
-// Rotate only the hub-pivoted sail sprite; the tower and its ground footprint stay fixed.
 export function homePropRotation(prop,time,reduced=false,index=0){
  if(reduced)return 0;
  if(prop.sweepPeriod)return Math.sin(time*Math.PI*2/prop.sweepPeriod)*(prop.sweepAngle??.16);

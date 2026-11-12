@@ -2,9 +2,6 @@ import {Assets,Container,Graphics,Sprite} from 'pixi.js';
 import {ART_TEXTURE} from './art-texture.js';
 
 export const SNOW_CLUMP_CAP=80,SNOW_PILE_CAP=10,SNOW_SHED_LIFE=1.25,SNOW_REFILL=4.6;
-// Make a transparent, cap-only film from the existing SVG. Canopy-coloured
-// edges cover the shed snow; an eroded white inset leaves a visibly thinner
-// cap. Fading this film reveals the untouched original as snow refills.
 export function thinSnowSVG(svg,colour='#448238') {
   const snow=/#(?:fffdf4|fffdf5|fffaf0|ffffff|fff|f7f4ed|f9f6ee)\b/gi;
   const pieces=[];
@@ -13,7 +10,6 @@ export function thinSnowSVG(svg,colour='#448238') {
     if (!/fill=["']#(?:fffdf4|fffdf5|fffaf0|ffffff|fff|f7f4ed|f9f6ee)["']/i.test(opening)) return group;
     pieces.push(group);return '';
   });
-  // Some older pines paint snow directly on paths rather than in colour groups.
   for (const tag of strip.matchAll(/<(?:path|ellipse|polygon)\b[^>]*\/?\s*>/gi))
     if (/fill=["']#(?:fffdf4|fffdf5|fffaf0|ffffff|fff|f7f4ed|f9f6ee)["']/i.test(tag[0])) pieces.push(tag[0]);
   if (!pieces.length) return null;
@@ -60,8 +56,6 @@ export function createPlantSnow(parent,{load=src=>Assets.load({src,data:ART_TEXT
       if (!texture || destroyed || s.destroyed || plant.snowRemoved || plant.snowCap) return;
       const film=new Sprite(texture);film.label='Thinned tree snow cap';
       const anchor=p.anchor??{x:.5,y:1};film.anchor.set(anchor.x,anchor.y);
-      // Ordinary sprites use source-pixel coordinates; streamed crop containers
-      // use authored world dimensions. Both inherit the exact sway/upright basis.
       film.width=s instanceof Sprite?s.texture.orig.width:p.width;
       film.height=s instanceof Sprite?s.texture.orig.height:p.height;
       film.alpha=0;s.addChild(film);plant.snowCap=film;caps.add(plant);

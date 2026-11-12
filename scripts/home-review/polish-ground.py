@@ -22,8 +22,6 @@ def contours(g):
     for p in polygons:
         for ring in [p.exterior,*p.interiors]:
             q=list(ring.coords)[:-1]
-            # Local quadratic corners cannot overshoot a bank and create the
-            # little cream hooks that an unconstrained Catmull spline can.
             import math
             corners=[]
             for i,b in enumerate(q):
@@ -47,14 +45,10 @@ pond = next(w for w in W['water'] if abs(w['x']-1640)<2)
 water.append(affinity.scale(Point(pond['x'],pond['y']).buffer(1,quad_segs=80),pond['rx'],pond['ry']))
 water.append(Polygon(json.loads(Path('src/pixi/walk-shapes.json').read_text())['lake']).buffer(0))
 wet = soften(unary_union(water),35)
-# Rounded inlet corners, no box clips crossing the sea and no pale strip across
-# connected water. Shore and river bank are both boundaries of the same land.
 sand = land.buffer(46,quad_segs=12).difference(wet).buffer(-24,quad_segs=12).buffer(24,quad_segs=12)
 grass = land.difference(wet.buffer(26,quad_segs=12)).buffer(-20,quad_segs=12).buffer(20,quad_segs=12)
 sd, gd, wd = map(contours,[sand,grass,wet])
 
-# Keep the centre's familiar two-tone lawns. These are flat green shapes, with
-# all former roads, hidden masks, sand pads and separate coasts excluded.
 ET.register_namespace('', 'http://www.w3.org/2000/svg')
 source=ET.parse('public/pixi-art/home-expansion/ground-r0-c0.svg').getroot()
 lawns=next((ET.tostring(g,encoding='unicode') for g in source.iter() if g.get('data-name')=='Round 4 two-tone lawns'),'')
@@ -69,8 +63,6 @@ g=f'''<defs><clipPath id="home-dry"><path d="{sd}" fill-rule="evenodd"/></clipPa
 <path d="{gd}" fill="#93b72f"/>
 </g><g clip-path="url(#home-grass)">{lawns}{outer}</g>
 <g clip-path="url(#home-dry)">{surface}</g>'''
-# Only water carries wavelets. The exact same connected water silhouette clips
-# every one, including the harbour and east outlet.
 wavefrag=Path('scripts/home-review/water-surface.svgfrag').read_text()
 waves=re.search(r'<g fill="none" stroke="#bde8e6"[\s\S]*?</g>',wavefrag)
 if waves:
@@ -80,16 +72,12 @@ if waves:
 def svg(box,w,h):
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="'+ ' '.join(str(v) for v in box)+'">'+g+'</svg>'
 
-# Keep all existing tile identifiers. Art is identical in overlapping core tiles
-# too, so either texture can load first without exposing an obsolete rectangle.
 tiles=E['tiles'][:]
 original=json.loads(Path('src/pixi/art-manifest.json').read_text())
 for t in original['ground']['tiles']:
     tiles += [dict(t,src=t['src']),dict(t,src=t['src'].replace('/pixi-art/','/pixi-art/home-expansion/'))]
 sizes=json.loads(Path('src/pixi/art-source-sizes.json').read_text())
 for t in tiles:
-    # Bleed is real adjacent artwork, not a stretched copy of the tile. This
-    # keeps shoreline geometry aligned at every zoom as Pixi overlaps tiles.
     w=t['width']+t.get('bleed',0);h=t['height']+t.get('bleed',0)
     Path('public'+t['src']).write_text(svg([t['x'],t['y'],w,h],w,h))
     sizes[t['src']]=[w,h]
@@ -103,8 +91,6 @@ manifest['home']['groundBytes']=len(fallback.encode())
 manifestPath.write_text(json.dumps(manifest,separators=(',',':'))+'\n')
 Path('scripts/home-review/continuous-ground.svgfrag').write_text(g)
 
-# The race lake keeps its spring, stones, reeds, lilies and boat. Remove its old
-# separate ground/path/water background, now supplied by the continuous drawing.
 lake=Path('public/pixi-art/lake-race.svg')
 r=ET.parse(lake).getroot()
 if len(r)>1 and r[0].tag.endswith('path'):

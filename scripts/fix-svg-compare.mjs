@@ -1,5 +1,3 @@
-// Compare approved raster exports with the SVG layers at their actual world size.
-// Originals and review images stay outside public/.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';

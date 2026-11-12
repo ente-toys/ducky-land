@@ -4,8 +4,6 @@ import fs from 'node:fs';
 import sharp from 'sharp';
 import {mapFor} from '../src/pixi/island-maps.js';
 
-// Sample the current source sprites directly. No screenshot baseline or local
-// external file is required, so island rebuilds keep their own reference art.
 async function sourcePatch(theme,cx,cy,{props=false}={}){
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),base=`public/pixi-art/themes/${theme}/`,art=JSON.parse(fs.readFileSync(base+'art.json'));
  const entries=[...art.ground.tiles.map(p=>[p,'tile']),...(art.floating??[]).map(p=>[{...p,x:p.x-p.width/2,y:p.y-p.height/2,topLeft:true},'flat']),...(art.flats??[]).map(p=>[p,'flat']),...(art.decks??[]).map(p=>[p,'deck']),...[...(props?art.props:art.props.filter(p=>p.deck||/bridge|jetty|boardwalk/i.test(p.src+' '+p.name)))].sort((a,b)=>a.y-b.y).map(p=>[p,'prop'])];

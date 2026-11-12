@@ -158,7 +158,6 @@ test('settling between planning ticks still upgrades a stationary viewport',asyn
  const stream=pool.create([{src:'/settle',x:0,y:0,width:64,height:64,screenResolution:true,resolution:4}],container);
  const views=z=>[{stream,camera:{x:32,y:32,zoom:z},width:100,height:100}];
  pool.update(views(1));frames.splice(0).forEach(f=>f());await flush();
- // The 116ms settle deadline bypasses the planner throttle at 128ms.
  for(time=16;time<=192;time+=16){pool.update(views(1.2));frames.splice(0).forEach(f=>f());await flush();}
  assert.deepEqual(requests,[.5,1,1.25]);assert(stream.entries[0].sprite.visible);pool.destroy();
 });

@@ -36,8 +36,6 @@ for p in sorted(trees,key=lambda p:p['id'].startswith('canal-polish'),reverse=Tr
   for o in w['obstacles']:
    if 'poly'not in o and abs(o['x']-x0)<1 and abs(o['y']-y0)<25:o['x']+=p['x']-x0;o['y']+=p['y']-y0
   moved.append(dict(id=p['id'],old=[x0,y0],new=[p['x'],p['y']]))
-# Where the narrow canal bank offers no honest room, thin the duplicated crown.
-# Never remove a sleeper's tree or reduce the island below 60 large trees.
 thinned=[]
 while len(trees)>60:
  choices=[(sum(conflict(p,q) for q in trees if q is not p),p) for p in trees if p['id'] not in protected]

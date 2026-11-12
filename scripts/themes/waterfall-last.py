@@ -12,9 +12,6 @@ if not backup.exists():
     backup.write_text(json.dumps({'art':a,'paving':(A/'centre/decal-paving.svg').read_text()},indent=2))
 else:
     a=json.loads(backup.read_text())['art']
-# Retain the locked pool, supports, bridge access, rail, furnishings and deck footprint.
-# Golden timber replaces the stone disc and drop badge. Fine seams run through the
-# floor, with staggered board ends, flat highlights and a thicker wooden outer rim.
 body=['<title>Locked waterfall lookout, golden timber deck over the pool</title>',
 '<defs><clipPath id="deck"><ellipse rx="1150" ry="880.851"/></clipPath></defs>',
 '<ellipse cy="16" rx="1150" ry="880.851" fill="#C88941" stroke="#39472D" stroke-width="4.6"/>',
@@ -27,8 +24,6 @@ for i,y in enumerate(range(-920,920,82)):
         body.append(f'<path d="M{x} {y}v82" stroke="#B7894E" stroke-width="2.3"/><path d="M{x+22} {y+24}h135" stroke="#E5B56C" stroke-width="2.5" stroke-linecap="round"/>')
 body+=['</g>','<ellipse rx="1126" ry="862.47" fill="none" stroke="#B7894E" stroke-width="4"/>','<ellipse rx="1146" ry="877.79" fill="none" stroke="#FFE7AC" stroke-width="5"/>']
 (A/'centre/decal-paving.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" width="2310" height="1789.702" viewBox="-1155 -885.851 2310 1789.702">'+''.join(body)+'</svg>')
-# Widen the existing fall and its foam/ripples as one coherent feature. No new
-# geometry or access changes: this is the existing locked fall, on the back rim.
 for p in a['flats']+a['props']:
     if not p.get('centrePiece'):continue
     pid=p['centrePiece']['id']
@@ -39,8 +34,6 @@ for p in a['flats']+a['props']:
         cp['x']*=1.9;cp['width']*=1.9
         if 'at' in cp:cp['at'][0]*=1.9
         if cp.get('animate',{}).get('pivot'):cp['animate']['pivot'][0]*=1.9
-# A continuous planted rim gives each activity green its own visible edge.
-# East/west gates and the south bridge stay open. The lawns stay clear.
 ink='#39472D'
 land=Polygon(w['coast']).buffer(-115)
 def poly(p):

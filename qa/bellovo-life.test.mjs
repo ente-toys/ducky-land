@@ -26,7 +26,6 @@ test('Bellovo has Fair-level Home autumn groves, all five trees and four bushes,
   assert.equal(p.wind,false);assert.equal(p.shadow,false);
   assert.equal(art.flats.filter(f=>f.id==='life-'+p.id+'-shadow').length,1,p.id+' one shadow');
   const svg=plantFile(p);assert.doesNotMatch(svg,/<(?:image|linearGradient|radialGradient)\b/);
-  // Paths, not just the silhouette, must be the exact approved Home source.
   const home=fs.readFileSync('public/pixi-art/plants/'+p.src.match(/(tree-\d|bush-\d)/)[1]+'.svg','utf8');
   assert.deepEqual([...svg.matchAll(/\bd="([^"]+)"/g)].map(m=>m[1]),[...home.matchAll(/\bd="([^"]+)"/g)].map(m=>m[1]));
   const box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number);assert.ok(box[2]>=p.width&&box[3]>=p.height);

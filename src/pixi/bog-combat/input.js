@@ -1,8 +1,6 @@
 const shootKey=e=>e.code==='Space'||e.code==='KeyJ'||e.key===' '||e.key?.toLowerCase()==='j';
 const guarded=e=>e.defaultPrevented||e.isComposing||e.metaKey||e.ctrlKey||e.altKey||e.target?.isContentEditable||/^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(e.target?.tagName??'');
 
-// Capture only combat's controls. WASD/arrows, Shift, emotes, camera and all
-// other island controls keep flowing to the island engine's existing listeners.
 export function bindCombatInput(canvas,{onFire=()=>{},onDodge=()=>{},onLeave=()=>{},keyboard=globalThis.window,document=globalThis.document}={}) {
   const keys=new Set(),removers=[];let pointer=false,lastShift=-Infinity;
   const listen=(target,event,fn,options)=>{target.addEventListener(event,fn,options);removers.push(()=>target.removeEventListener(event,fn,options));};

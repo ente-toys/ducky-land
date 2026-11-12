@@ -1,5 +1,3 @@
-// BUILD4 overlay on the delivered arena. Explicit compositions, never scatter.
-// Run this LAST after older overlays. It is idempotent and does not rebuild ground.
 import fs from 'node:fs';
 const root='public/pixi-art/themes/bog-arena/';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
@@ -19,7 +17,6 @@ const removed=new Set(art.props.filter(p=>
  p.id.startsWith('label-')||(p.name==='lantern'&&!keepLamp(p))).map(p=>p.id));
 art.props=art.props.filter(p=>!removed.has(p.id));
 art.flats=art.flats.filter(p=>!p.src.includes('site-bed.svg'));
-// The only lantern glows kept must belong to one of the four remaining lamps.
 const lamps=art.props.filter(p=>p.name==='lantern');
 art.flats=art.flats.filter(p=>!p.src.includes('lantern-ground-glow.svg')||lamps.some(l=>Math.abs(p.x-l.x)<2&&Math.abs(p.y-l.y)<25));
 blockers=blockers.filter(b=>!removed.has(b.id)&&!removed.has(b.prop));
@@ -34,23 +31,17 @@ const courses=`<path d="M12 76H248M12 105H248M12 132H248M66 48V76M176 48V76M112 
 svg('wz-wall',260,160,'Lilac brick firing wall',`<path d="M8 45H252V153H8Z" fill="${stone}"/>${courses}<path d="M8 45L23 31H237L252 45V58H8Z" fill="${cap}"/><path d="M8 45H252" fill="none"/><path d="M18 60V148H26V60Z" fill="#c9a7d0" stroke="none"/>`);
 svg('wz-ruin',260,160,'Broken lilac wall with a high left shoulder',`<path d="M8 32H69V54H101V78H140V59H188V82H224V101H252V153H8Z" fill="${stone}"/>${courses}<path d="M8 32L18 23H74L69 32ZM69 54l9-8h29l-6 8ZM101 78l9-9h35l-5 9ZM140 59l9-9h44l-5 9ZM188 82l9-9h33l-6 9Z" fill="${cap}"/><path d="M36 42l10 18-8 11 13 14M176 91l-8 20 9 9" fill="none" stroke="${side}" stroke-width="2"/>`);
 svg('wz-planks',260,160,'Honeywood braced plank barricade',`${base}<path d="M15 35H31V107H15ZM229 35H245V107H229Z" fill="#9f713e"/><path d="M10 38L250 35V57L10 61ZM10 66L250 63V85L10 89ZM10 94L250 91V111L10 115Z" fill="#d9a762"/><path d="M30 102L215 29L226 46L42 119Z" fill="#b77e43"/><path d="M23 49h57m53-3h65M51 76h66m49-2h57M55 105h55m62-3h46" fill="none" stroke="#a87838" stroke-width="1.5"/><g fill="${ink}" stroke="none"><circle cx="22" cy="49" r="2.2"/><circle cx="238" cy="47" r="2.2"/><circle cx="22" cy="78" r="2.2"/><circle cx="238" cy="75" r="2.2"/><circle cx="42" cy="106" r="2.2"/><circle cx="214" cy="40" r="2.2"/></g>`);
-// The two arms are real separate footprints. The inside corner is open.
 svg('wz-corner',260,180,'L shaped brick wall with open inner corner',`<path d="M8 54L50 45V112H252V173H8Z" fill="${stone}"/><path d="M8 54L20 42L50 35L60 45L50 54V112H252V126H38V61Z" fill="${cap}"/><path d="M8 145H252M8 112H38M8 83H38M75 126V145M175 126V145M126 145V173M227 145V173" fill="none" stroke="${side}" stroke-width="1.8"/>`);
-// Home supply drawings keep their authored geometry and individual normal sizes.
 function inner(file){return fs.readFileSync('public'+file,'utf8').replace(/^[\s\S]*?<svg\b[^>]*>/,'').replace(/<\/svg>\s*$/,'').replace(/<title>[\s\S]*?<\/title>/g,'').replace(/<ellipse\b[^>]*stroke="none"[^>]*\/>/g,'');}
 function instance(file,x,y,w,h,box){return `<svg x="${x}" y="${y}" width="${w}" height="${h}" viewBox="${box}" overflow="visible">${inner(file)}</svg>`;}
 const sack='/pixi-art/home-hamlets/clovercrust/grain-sack.svg',barrel='/pixi-art/home-hamlets/clovercrust/water-barrel.svg',crate='/pixi-art/home-hamlets/clovercrust/apple-crate.svg';
-// Packing crates reuse Home's basket/plank paths with the apple contents removed.
 function packing(x,y,w=84,h=73){let s=instance(crate,x,y,w,h,'0 0 62 54');s=s.replace(/<(?:path)\b[^>]*fill="#(?:e55f3f|78a543)"[^>]*\/>/g,'').replace(/<path fill="none" d="M19 11[^>]*\/>/g,'');return s;}
 svg('wz-crates',260,160,'Stacked Home packing crates on solid brick cover',`${base}${packing(25,34)}${packing(143,29)}${packing(91,2,70,61)}`);
 svg('wz-sacks',260,160,'Home grain sacks stacked as a sandbag barricade',`${base}${instance(sack,24,35,54,66,'0 0 40 49')}${instance(sack,177,35,54,66,'0 0 40 49')}${instance(sack,75,27,54,66,'0 0 40 49')}${instance(sack,125,29,54,66,'0 0 40 49')}${instance(sack,102,0,54,66,'0 0 40 49')}`);
 svg('wz-barrels',260,160,'Home oak barrels and supply crate barricade',`${base}${instance(barrel,26,16,61,80,'0 0 45 59')}${instance(barrel,171,16,61,80,'0 0 45 59')}${packing(88,27,80,70)}`);
-// Reskin all 30 existing defensive plinths in place, preserving their hitboxes.
 const oldTypes={'cover-planter':'wz-wall','cover-crates':'wz-crates','cover-harvest':'wz-sacks'};
 for(const p of art.props){if(oldTypes[p.name]){p.name=oldTypes[p.name];p.src=`home/${p.name}.svg`;p.coverSources=p.name==='wz-crates'?[crate]:p.name==='wz-sacks'?[sack]:[];}}
 
-// Four lean Home facades and the existing halls/annexes, recoloured from sources.
-// Strip garden pots/flowers/vines, keep architecture, roof lines and warm glazing.
 const paints={'#fff0c7':'#d9b8df','#e1c58d':'#b591c0','#f3ddb1':'#c9a7d0','#ffe6a2':'#edceea','#ffe8b5':'#edceea','#75bfc5':'#ffe45e','#729aa7':'#168f98','#7399ad':'#168f98','#e1bb4b':'#168f98','#b08cba':'#168f98','#d1b26b':'#168f98','#d9a94c':'#168f98','#ce91a4':'#168f98','#f4d3c7':'#d9b8df','#9dbeb4':'#d9b8df','#f1dbc6':'#d9b8df'};
 function facade(name,source,boarded=false){
  let s=fs.readFileSync('public'+source,'utf8');
@@ -72,36 +63,28 @@ function cover(id,name,x,y,area){
  art.props.push(p);
  for(const [i,[fx,fy,width,height]]of feet.entries())blockers.push({id:p.id+'-foot-'+i,prop:p.id,author:owner,kind:'cover',type:'rect',x:x-130+fx,y:y-h+fy,width,height});
 }
-// Staggered pockets along each of the existing paths. The path-side face is
-// always exposed. Deliberately placed stations, no random or procedural fill.
 const stations=[
- // North rotation, short stations between the original large supply bunkers.
  ['north-1','wz-planks',2610,2260,'north-loop'],['north-2','wz-wall',3330,2140,'north-loop'],
  ['north-3','wz-sacks',3680,2170,'north-loop'],['north-4','wz-ruin',4770,2180,'north-loop'],
  ['north-5','wz-barrels',5050,2100,'north-loop'],['north-6','wz-planks',5880,1950,'north-loop'],
- // West outer lane: wall shoulders stay outside the 128-wide painted route.
  ['west-1','wz-sacks',1470,2470,'west-loop'],['west-2','wz-planks',1050,2720,'west-loop'],
  ['west-3','wz-ruin',1430,3060,'west-loop'],['west-4','wz-barrels',1430,3430,'west-loop'],
  ['west-5','wz-wall',1060,3970,'west-loop'],['west-6','wz-planks',1120,4290,'west-loop'],
  ['west-7','wz-sacks',1570,4580,'west-loop'],['west-8','wz-ruin',1380,5000,'west-loop'],
  ['west-9','wz-wall',1630,5200,'west-loop'],
- // East outer lane is staggered rather than a mirrored wall corridor.
  ['east-1','wz-planks',6900,2510,'east-loop'],['east-2','wz-sacks',7380,2820,'east-loop'],
  ['east-3','wz-ruin',6940,3120,'east-loop'],['east-4','wz-barrels',6990,3560,'east-loop'],
  ['east-5','wz-wall',7410,4150,'east-loop'],['east-6','wz-planks',7290,4290,'east-loop'],
  ['east-7','wz-sacks',6810,4580,'east-loop'],['east-8','wz-ruin',6980,5090,'east-loop'],
  ['east-9','wz-wall',6990,5310,'east-loop'],
- // Mid spine: alternate shoulders, leave a broad continuous central strafe lane.
  ['spine-1','wz-planks',4410,2670,'spine'],['spine-2','wz-barrels',4410,3220,'spine'],
  ['spine-3','wz-ruin',3990,3550,'spine'],['spine-4','wz-sacks',3990,4230,'spine'],
  ['spine-5','wz-wall',4410,4510,'spine'],['spine-6','wz-planks',4410,5060,'spine'],
  ['spine-7','wz-barrels',3990,5450,'spine'],['spine-8','wz-sacks',3990,6090,'spine'],
- // Cross-map site approaches, cover on both angles but never spanning a lane.
  ['cross-a-1','wz-planks',2780,4130,'west-mid'],['cross-a-2','wz-wall',3570,3780,'west-mid'],
  ['cross-a-3','wz-sacks',3860,3280,'west-mid'],
  ['cross-b-1','wz-ruin',5630,3740,'west-mid'],['cross-b-2','wz-barrels',4860,3750,'west-mid'],
  ['cross-b-3','wz-planks',4740,3400,'west-mid'],
- // Southern flanks. These cover the turns into the base courts and the cove.
  ['south-w-1','wz-planks',2460,5440,'south-west'],['south-w-2','wz-sacks',3480,5250,'south-west'],
  ['south-w-3','wz-ruin',3780,5470,'south-west'],
  ['south-e-1','wz-sacks',5950,5440,'south-west'],['south-e-2','wz-planks',4930,5260,'south-west'],
@@ -110,12 +93,10 @@ const stations=[
  ['cove-w-3','wz-barrels',3710,6300,'west-loop'],
  ['cove-e-1','wz-planks',5940,6170,'east-loop'],['cove-e-2','wz-sacks',5510,6130,'east-loop'],
  ['cove-e-3','wz-ruin',4620,6290,'east-loop'],
- // Site courts: corner pockets, flanks and contested front cover.
  ['site-a-west','wz-corner',1640,3850,'site-a'],['site-a-east','wz-ruin',2620,3820,'site-a'],
  ['site-a-front-west','wz-sacks',1810,4030,'site-a'],['site-a-front-east','wz-planks',2590,4200,'site-a'],
  ['site-b-west','wz-ruin',5660,4250,'site-b'],['site-b-east','wz-corner',6990,3860,'site-b'],
  ['site-b-front','wz-barrels',6430,4210,'site-b'],
- // Mid's roofed bays remain open; separate shoulders protect both approaches.
  ['mid-west','wz-ruin',3490,2180,'mid'],['mid-east','wz-planks',4910,2180,'mid'],
 ];
 for(const args of stations)cover(...args);
@@ -134,8 +115,6 @@ for(const [key,x,y,source]of [
  blockers.push({id,kind:'building',type:'rect',x:x-129.6,y:y-134.4,width:259.2,height:121.6,author:owner,prop:id});
  layout.routes.push({id:id+'-door',width:104,points:[[x,y-12],[x,y+160]],author:owner});
 }
-// Dense, walkable clumps from the existing kit. Each member is marked, so the
-// hiding implementation can union them without mistaking any tree for a bush.
 const clumps=[
  ['nw-flank',1190,2180,'lime'],['ne-flank',7100,2280,'sage'],
  ['sw-flank',1090,6120,'orchid'],['se-flank',7170,6140,'teal'],
@@ -154,14 +133,11 @@ for(const [id,x,y,colour]of clumps)for(const [n,dx,dy,w,h]of shapes){
  const p={id:`hide-${id}-${n}`,name:`bush-${n}-${colour}`,src:`home/bush-${n}-${colour}.svg`,x:x+dx,y:y+dy,width:w,height:h,scale:1,anchor:{x:.5,y:1},shadow:true,shadowSize:[w*.3,8],shadowOffset:[0,-4],wind:true,homeSource:`/pixi-art/plants/bush-${n}.svg`,hideBush:true,hideClump:id,author:owner,area:id};
  art.props.push(p);
 }
-// Existing site planting bushes also provide hiding, but the decorative beds go.
 for(const p of art.props.filter(p=>p.id.startsWith('site-bed-')&&p.name.startsWith('bush-'))){
  const positions={'site-bed-a-west-bush':[1470,3765],'site-bed-a-east-bush':[2590,3500],'site-bed-b-west-bush':[5800,3870],'site-bed-b-east-bush':[6780,3810]};
  if(positions[p.id])[p.x,p.y]=positions[p.id];
  p.hideBush=true;p.hideClump=p.id;
 }
-// Authored canopy clearance. Move each existing tree together with its trunk.
-// No plant is scaled, redrawn or scattered; these edits open specific cover faces.
 const plantingMoves=[
  ['mid-shrub-east',4870,2010],['mid-bed-plant-sw',3400,2550],['mid-bed-plant-se',4980,2580],['grove-27-tree-3',3060,4140],['fb-west-pond-bend-tree-1',2740,2970],
  ['grove-17-tree-0',800,3100],['grove-17-tree-1',1160,2590],
@@ -187,7 +163,6 @@ for(const [id,x,y]of plantingMoves){
  const b=blockers.find(b=>ids.includes(b.id));
  if(b){b.x=+(b.x+dx).toFixed(2);b.y=+(b.y+dy).toFixed(2);}
 }
-// Single source of truth for the authority, local prediction and island walk mesh.
 map.world.obstacles=blockers.map(b=>({id:b.id,poly:poly(b)}));
 map.sleepers=[];
 layout.blockers=blockers;

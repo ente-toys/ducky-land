@@ -1,4 +1,3 @@
-// Install only the boss-picked meadow pieces. Existing Pagepond entries stay intact.
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -27,9 +26,6 @@ art.props = upsert(art.props, props);
 write(artPath, art);
 for (const name of ['world.json', 'walk-world.json']) {
   const dest = 'assets/world/themes/library/' + name, world = read(dest);
-  // The padded, overlapping treads have a narrow neck between 32-unit grid
-  // centres. A 24-unit grid resolves the visible walking route without
-  // widening its water collision or adding an invisible bridge.
   world.navigationCellSize = 24;
   world.water = upsert(world.water, placement.waterRegions);
   world.obstacles = upsert(world.obstacles, placement.solidFootprints);

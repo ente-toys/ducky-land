@@ -1,4 +1,3 @@
-// Walking-scale preservation check, in addition to the complete-island overview.
 import {render} from './render.mjs';import fs from 'node:fs';import sharp from 'sharp';
 import {original} from './model.mjs';import {inShape} from '../../assets/world/island-geometry.mjs';
 const checks=[];

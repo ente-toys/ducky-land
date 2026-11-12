@@ -1,5 +1,3 @@
-// Canal-only integration verification. Registers the map in this process, never
-// rewrites the shared generated theme index while other owners are editing it.
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,existsSync,readdirSync} from 'node:fs';
 import {Texture} from 'pixi.js';

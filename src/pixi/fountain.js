@@ -1,12 +1,8 @@
-// Living water for the wishing-bowls fountain (boss 3 Nov: "make the fountain water more lively"). The stone, bowls and
-// statue are one static SVG (public/pixi-art/fountain-wishing.svg); this layer animates the water on top of it:
-// boss 5 Nov: curved spills, landing foam and rings, gravity-driven splash droplets, and pool shimmer.
 import {Container, Graphics, ImageSource, Texture} from 'pixi.js';
 import {ART_TEXTURE} from './art-texture.js';
 import {PALETTE} from './palette.js';
 import {basinClip, createBasinWater} from './fountain-basin.js';
 
-// boss 5 Nov: coordinates match the current 480 x 480 SVG; each mouth follows the round outer lip.
 const CENTRE = {x: 240, y: 300};
 const RIM = {x: 240, y: 223, rx: 112, ry: 85.787234};
 const SPILLS = [
@@ -15,9 +11,7 @@ const SPILLS = [
   {start: 322, x: 350, bottom: 358, w: 14},
 ];
 const rimY = x => RIM.y + RIM.ry * Math.sqrt(Math.max(0, 1 - ((x - RIM.x) / RIM.rx) ** 2));
-// boss 5 Nov: outward velocity first, gravity second. Across the mouth, sample the actual rim, not a flat cap.
 export const fountainPoint = (sp, u, side = 0, width = 1) => {
-  // An authored jet can share Home's flow, foam, rings and spray without borrowing its bowl geometry.
   if (sp.jet) {
     const {y, cx, cy} = sp.jet, v = 1 - u;
     const dx = 2 * (v * (cx - sp.start) + u * (sp.x - cx));
@@ -30,7 +24,6 @@ export const fountainPoint = (sp, u, side = 0, width = 1) => {
   return {x: sp.start + (sp.x - sp.start) * u + offset * (1 - .24 * u),
     y: top + 14 * u + (sp.bottom - top - 14) * u * u};
 };
-// boss 5 Nov: replace only the baked water marks, never paint patches over the statue or stone.
 async function cleanArtwork(prop, root) {
   if (!prop.sprite || typeof document === 'undefined') return;
   let url;
@@ -53,8 +46,8 @@ async function cleanArtwork(prop, root) {
   } catch (error) {console.warn('Fountain artwork cleanup failed', error);}
   finally {if (url) URL.revokeObjectURL(url);}
 }
-const POOL = {x: 240, y: 290, rx: 180, ry: 137.87234};       // lower pool water
-const SPRAY = {x: 240, y: 213};                        // the bubbler at the statue's feet
+const POOL = {x: 240, y: 290, rx: 180, ry: 137.87234};
+const SPRAY = {x: 240, y: 213};
 const WATER = PALETTE.water, HI = PALETTE.cream, WHITE = PALETTE.cream, GRAVITY = 520;
 const fract = v => v - Math.floor(v);
 
@@ -66,7 +59,7 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
   const s = prop.scale;
   root.position.set(prop.x - centre.x * s, prop.y - centre.y * s);
   root.scale.set(s);
-  root.zIndex = prop.y + 1;                           // just in front of the fountain sprite
+  root.zIndex = prop.y + 1;
   root.visible = false;
   const surface = layout.surface ? createBasinWater(layout.surface, root) : null;
   water = surface ?? water;
@@ -80,7 +73,7 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
   if (layout.cleanArtwork !== false) cleanArtwork(prop, root);
   let last = null, seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const drops = [];                                   // {x, y, vx, vy, floor, r, life}
+  const drops = [];
   const spawn = (x, y, vx, vy, floor, r) => {if (drops.length < 90) drops.push({x, y, vx, vy, floor, r, life: 1});};
   const glints = Array.from({length: pool ? 9 : 0}, (_, i) => {
     const a = i * 2.39 + .6, r = .4 + .5 * fract(i * .618);
@@ -99,7 +92,6 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
     if (reduced) {drops.length = 0; splashAcc = impactAcc = 0; return;}
     t += layout.phase ?? 0;
 
-    // boss 4 Nov: the falling ribbons drive the actual pool field, and the bubbler drives the upper bowl.
     impactAcc += dt;
     while (impactAcc >= .14) {
       impactAcc -= .14;
@@ -110,14 +102,12 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
       }
     }
 
-    // boss 5 Nov: fallback shimmer stays on the visible front of the lower pool
     for (let i = 0; i < (!pool || water?.active ? 0 : 2); i++) {
       const a = t * .45 + i * Math.PI;
       const x = pool.x + Math.cos(a) * pool.rx * .78, y = pool.y + 4 + Math.sin(a) * pool.ry * .7;
-      if (y < minPoolY) continue;   // boss 5 Nov: rear pool marks must not overlay the statue or bowl
+      if (y < minPoolY) continue;
       g.ellipse(x, y, 30, 4).fill({color: WHITE, alpha: .35 + .25 * Math.sin(a)});
     }
-    // glints winking on the pool
     for (const p of water?.active ? [] : glints) {
       const a = Math.max(0, Math.sin(t * 2.2 + p.phase * 6));
       if (a < .05 || p.y < minPoolY) continue;
@@ -125,7 +115,6 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
     }
 
     for (const [k, sp] of spills.entries()) {
-      // boss 5 Nov: a tapered, curved sheet with a rim-shaped mouth and a lighter centre flow.
       const wob = 1 + .035 * Math.sin(t * 5 + k * 1.7);
       const curve = sp.jet ? {...sp, jet: {...sp.jet, cy: sp.jet.cy + Math.sin(t * 3 + k) * 3}} : sp;
       const ribbon = (from, to, width, color, alpha) => {
@@ -143,20 +132,17 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
         const u = fract(t * 1.25 + i / 3 + k * .21);
         ribbon(u, Math.min(1, u + .09), .16, HI, .8 * Math.sin(u * Math.PI));
       }
-      // foam: a cluster of bubbles churning where the ribbon lands
       for (let i = 0; i < 6; i++) {
         const u = fract(t * 1.8 + i / 6 + k * .13), a = i * 1.05 + t * 2;
         const x = sp.x + Math.cos(a) * sp.w * (.35 + .5 * u), y = sp.bottom + 2 + Math.sin(a) * 4;
         g.circle(x, y, (2.8 + 2.2 * Math.sin(u * Math.PI)) * (1 - u * .4)).fill({color: WHITE, alpha: .9 * (1 - u)});
       }
-      // boss 5 Nov: keep small landing rings even when the pool simulation is active
       for (let i = 0; i < 3; i++) {
         const u = fract(t * 1.05 + i / 3 + k * .33), rx = sp.w * .55 + 30 * u;
         g.ellipse(sp.x, sp.bottom + 3, rx, rx * .3).stroke({color: WHITE, width: 2.6 * (1 - u) + .5, alpha: .85 * (1 - u)});
       }
     }
 
-    // boss 5 Nov: spray only at the lower landings; no particles originate under the statue's belly.
     splashAcc += dt * (spills.length ? layout.sprayRate ?? 30 : 0);
     while (splashAcc >= 1) {
       splashAcc--;
@@ -167,7 +153,7 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
       const d = drops[i];
       d.vy += GRAVITY * dt; d.x += d.vx * dt; d.y += d.vy * dt;
       if (d.vy > 0 && d.y >= d.floor) {water?.fountainSplash(d.x, d.floor, .035, d.floor < 250 ? 'bowl' : 'pool'); drops.splice(i, 1); continue;}
-      if (d.y - d.r < minDropY) continue;   // boss 5 Nov: keep the full droplet safely in front of the bowl and statue
+      if (d.y - d.r < minDropY) continue;
       g.circle(d.x, d.y, d.r).fill({color: HI, alpha: .95});
     }
   }

@@ -1,4 +1,3 @@
-// Cathedral-only close-up craft. Repeatable from the close-cathedral snapshot.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {inShape,geometry} from '../../assets/world/island-geometry.mjs';
 import {addArc,ring} from './cathedral-craft.mjs';
@@ -13,7 +12,6 @@ function paving(z,id,{base=true,rosette=true}={}){
  if(base)s+=ellipse(z,1,'#F9E7B0','#9B925C',3.5);
  const courses=base?[.25,.53,.79,.94]:[.63,.77,.94];
  for(const [i,r]of courses.entries())s+=ring(z,z.rx*r-12,z.rx*r+12,{steps:base?Math.max(36,Math.round(z.rx/16)):88,color:i%2?'#F5DEA6':'#E7CD94',edge:'#AE996D'});
- // Broad, lightly alternating stone sectors use home's paving cadence.
  const edges=base?[0,.25,.53,.79,.94]:[.61,.77,.94];
  for(let c=0;c<edges.length-1;c++){
   const r0=z.rx*edges[c]+(c?12:0),r1=z.rx*edges[c+1]-12,n=base?(12+c*8):48;
@@ -25,11 +23,8 @@ function paving(z,id,{base=true,rosette=true}={}){
  }
  for(const [i,r]of courses.entries())s+=ring(z,z.rx*r-12,z.rx*r+12,{steps:base?Math.max(36,Math.round(z.rx/16)):88,color:i%2?'#F5DEA6':'#E7CD94',edge:'#AE996D'});s+=ellipse(z,.985,'none','#706B43',2.3)+'</g>';return s;
 }
-// Activity lawns become finished, empty courtyards. Stall rows retain all usable floor.
 let finishing='';for(const [name,z]of zones)finishing+=paving(z,name,{rosette:!name.startsWith('stalls')});
-// The cathedral forecourt gets an olive/cream mosaic that joins the existing soft paths.
 finishing+=paving({x:4100,y:1670,rx:1240,ry:455},'forecourt',{rosette:false});
-// Main inlay is above the locked paving decal, below the well and all sorted centre art.
 writeFileSync(ROOT+'detail/piazza-mosaic.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="2180" height="1700" viewBox="3010 1830 2180 1700"><title>Bellovo rose-window mosaic, full piazza paving</title>${paving(world.zones.plaza,'piazza',{base:false})}</svg>`);
 art.flats.splice(2,0,{src:'detail/piazza-mosaic.svg',x:3010,y:1830,width:2180,height:1700,topLeft:true});
 writeFileSync(ROOT+'detail/olive-pot.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="140" height="193" viewBox="0 0 140 193"><title>Olive tree in a terracotta piazza pot</title><g stroke="#39472D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="70" cy="181" rx="46" ry="9" fill="#6E7636" opacity=".18" stroke="none"/><path d="M38 142L46 178Q70 193 94 178L102 142Z" fill="#C98950"/><path d="M81 147L77 181Q90 181 94 175L101 144Z" fill="#AA693D" stroke="none"/><ellipse cx="70" cy="142" rx="35" ry="12" fill="#DDA96A"/><ellipse cx="70" cy="140" rx="28" ry="7" fill="#6A633E"/><path d="M67 140Q73 103 61 79L70 75Q83 111 76 140Z" fill="#AD7841"/><path d="M69 112L44 88M73 100L93 78" fill="none" stroke="#AD7841" stroke-width="7"/><path d="M18 70Q8 52 29 45Q21 25 42 23Q44 7 65 15Q82 2 94 21Q115 18 116 38Q137 45 123 63Q135 83 114 90Q110 109 90 100Q75 113 60 100Q40 108 33 93Q12 90 18 70Z" fill="#8FAD56"/><path d="M28 42Q24 35 35 30M47 23Q58 16 64 22M91 25Q105 23 108 36" fill="none" stroke="#D5DC8C" stroke-width="5"/><path d="M28 77Q38 94 55 89M88 91Q107 98 118 78" fill="none" stroke="#73994C" stroke-width="6"/><g fill="#605A4A" stroke-width="1.6"><ellipse cx="39" cy="56" rx="4" ry="6"/><ellipse cx="75" cy="39" rx="4" ry="6"/><ellipse cx="99" cy="64" rx="4" ry="6"/><ellipse cx="62" cy="82" rx="4" ry="6"/><ellipse cx="83" cy="71" rx="4" ry="6"/></g><path d="M46 155L49 173" fill="none" stroke="#F4C381" stroke-width="3"/></g></svg>`);
@@ -40,10 +35,8 @@ const geo=geometry(walk),safe=(x,y,clear=65)=>geo.walkable(x,y)&&!walk.obstacles
 let added=0;
 const lamp=art.props.find(p=>p.id==='cloister-lamp-1');
 function prop(kind,x,y,id){const p=kind==='olive'?{name:'Potted olive tree',src:'detail/olive-pot.svg',width:140,height:193,scale:.85,anchor:{x:.5,y:.94}}:{...lamp,name:'Courtyard lantern',scale:1};if(kind==='olive'&&art.props.some(q=>/tree/i.test(q.name)&&crowns({...p,x,y},q)))return;art.props.push({...p,id:'close-'+id,x:f(x),y:f(y),wind:false});walk.obstacles.push({name:'close-'+id,x:f(x),y:f(y),rx:kind==='olive'?32:16,ry:kind==='olive'?22:12});added++;}
-// Distributed rim furniture, alternating lanterns and olives, outside all activity footprints.
 for(const [index,[name,z]]of zones.entries()){
  let count=0;for(const offset of [95,130,170])for(let i=0;i<64&&count<6;i++){const a=((i%4)*90+Math.floor(i/4)*5.625+11.25)*Math.PI/180,x=z.x+Math.cos(a)*(z.rx+offset),y=z.y+Math.sin(a)*(z.ry+offset*.77);if(safe(x,y,32)){prop(count%2?'olive':'lamp',x,y,`${name}-${count}`);count++}}
- // Complete each ring with more actual slatted arcs, following that area's own ellipse.
  for(const deg of [-140,-40,40,140]){
   const rad=deg*Math.PI/180,x=z.x+Math.cos(rad)*(z.rx+80),y=z.y+Math.sin(rad)*(z.rx+80)*z.ry/z.rx;
   if(!safe(x,y,105))continue;
@@ -51,20 +44,16 @@ for(const [index,[name,z]]of zones.entries()){
   const ob=walk.obstacles.at(-1);if(ob.poly.some(p=>pd(...p)<20||zones.some(([,q])=>inShape(...p,q)))){art.props.pop();walk.obstacles.pop();continue}arcs.push(arc);
  }
 }
-// Olive pots flank the piazza entrances, with generous access through the arcade rim.
 for(let i=0;i<24;i++){const a=(i*15+7.5)*Math.PI/180,x=4100+Math.cos(a)*1170,y=2680+Math.sin(a)*900;if(safe(x,y,85))prop(i%3?'olive':'lamp',x,y,'piazza-'+i)}
-// Home-scale tufts, flowers and pebbles soften every courtyard edge and path verge.
 let detailCount=0;const tiny=['grass-tuft-1','grass-tuft-2','pebble-1','flower-dot-1','flower-dot-2'];
 for(const [idx,[name,z]]of zones.entries())for(let i=0;i<70;i++){
  const a=i*2*Math.PI/70,r=1.03+(i%3)*.025,x=z.x+Math.cos(a)*z.rx*r,y=z.y+Math.sin(a)*z.ry*r;if(pd(x,y)<12||!geo.walkable(x,y)||zones.some(([,q])=>inShape(x,y,q)))continue;
  const id=tiny[(i+idx)%tiny.length],size=20+(i%5)*3;finishing+=`<use href="#${id}" x="${f(x-size/2)}" y="${f(y-9)}" width="${size}" height="${f(size*.68)}"/>`;detailCount++;
 }
-// Extra verge life sits just beyond the curved path edges, never on the walk surface.
 for(const [pi,path]of world.paths.entries())for(let i=2;i<path.length-2;i+=2){const [x,y]=path[i],a=path[i-1],b=path[i+1],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);for(const side of [-1,1]){const d=world.pathWidths[pi]/2+24+(i%3)*9,px=x-dy/len*d*side,py=y+dx/len*d*side;if(pd(px,py)<14||!geo.walkable(px,py)||zones.some(([,q])=>inShape(px,py,{...q,rx:q.rx+20,ry:q.ry+20}))||inShape(px,py,world.zones.plaza))continue;const size=24+i%5*3,id=tiny[(pi+i+(side===1?2:0))%tiny.length];finishing+=`<use href="#${id}" x="${f(px-size/2)}" y="${f(py-10)}" width="${size}" height="${f(size*.68)}"/>`;detailCount++}}
 ground=ground.replace('</svg>',`<g id="cathedral-closeup-finish">${finishing}</g></svg>`);
 writeFileSync(ROOT+'ground.svg',ground);
 for(const t of art.ground.tiles){let svg=ground.replace('width="8000" height="6000" viewBox="0 0 8000 6000"',`width="${t.width}" height="${t.height}" viewBox="${t.x} ${t.y} ${t.width} ${t.height}"`);writeFileSync(ROOT+t.src,svg)}
-// Recover the single legacy olive anchor that drifted onto the beach path.
 const tree=art.props.find(p=>p.id==='olive-14'),trees=art.props.filter(p=>/tree/i.test(p.name)&&p!==tree);
 function crowns(p,q){const ph=p.height*p.scale,qh=q.height*q.scale;return((p.x-q.x)/(.43*(p.width*p.scale+q.width*q.scale)))**2+((p.y-ph*.61-(q.y-qh*.61))/(.28*(ph+qh)))**2<1}
 if(pd(tree.x,tree.y)<50){let moved=false;for(let r=40;r<=700&&!moved;r+=20)for(let d=0;d<360&&!moved;d+=12){const a=d*Math.PI/180,x=tree.x+Math.cos(a)*r,y=tree.y+Math.sin(a)*r,p={...tree,x,y};if(pd(x,y)<70||!safe(x,y,48)||trees.some(q=>crowns(p,q)))continue;const old=walk.obstacles.find(o=>o.x&&Math.hypot(o.x-tree.x,o.y-(tree.y-30))<70);if(old){old.x+=x-tree.x;old.y+=y-tree.y}else walk.obstacles.push({name:'olive-14-trunk',x:f(x),y:f(y-20),rx:38,ry:25});tree.x=f(x);tree.y=f(y);moved=true;console.log('Relocated path-side olive',tree.x,tree.y)}if(!moved)throw Error('No clear olive placement')}

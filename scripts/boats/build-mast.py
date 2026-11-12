@@ -22,8 +22,6 @@ outdir = SPIN / 'rig-front'
 outdir.mkdir(exist_ok=True)
 proof = Image.new('RGB', (6 * 320, 4 * 280), '#c4e2f5')
 for n, view in enumerate(manifest['views'].values()):
-    # cos(heading) < 0 means the mast is nearer than the bow-side rider.
-    # Include the west broadside endpoint so the silhouette enters unchanged.
     near = 24 <= n <= 47
     if not near:
         view.pop('rigFront', None)
@@ -38,16 +36,13 @@ for n, view in enumerate(manifest['views'].values()):
         y, x = np.where(labels == label)
         if len(x) > 80:
             pieces.append((label, x.min(), y.min(), x.max(), y.max()))
-    # Flag, finial, sail, and shaft have a fill reaching above the duck head.
     upper = [p for p in pieces if p[2] < 220]
     knob = min(upper, key=lambda p: p[2])
     mast_x = (knob[1] + knob[3]) / 2
     chosen = [p[0] for p in upper]
-    # The collar and exposed mast foot are separate fills below the sail.
     chosen += [p[0] for p in pieces if p[2] >= 300 and p[4] < 425
                and p[3] - p[1] < 42 and abs((p[1] + p[3]) / 2 - mast_x) < 16]
     fill = np.isin(labels, chosen)
-    # Restore the ink around these fills, without following ink into the hull.
     mask = ndi.binary_fill_holes(ndi.binary_dilation(fill, iterations=6) & solid)
     mask = ndi.binary_dilation(mask, iterations=1)
     transform, path = trace.potrace_path(mask)

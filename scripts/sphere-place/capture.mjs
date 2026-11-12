@@ -1,4 +1,3 @@
-// Real Pixi browser proof and timing. Never opens a visible browser.
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const out='../concepts/themes/world-map/sphere';mkdirSync(out,{recursive:true});

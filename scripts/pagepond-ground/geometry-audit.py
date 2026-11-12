@@ -19,8 +19,6 @@ for r in routes:
 rests=unary_union([affinity.scale(Point(b['x'],b['y']-6).buffer(1,24),b.get('r',90),40) for b in read(S/'data/current-sleepers.json')])
 for r in routes:
  if LineString(r['samples']).buffer(r['width']/2).intersection(rests).area>.5:issues.append({'type':'full-lane-sleeper-overlap','id':r['id']})
-# True interior X intersections are forbidden. A shared corridor is a pair of
-# flared forks; crossings under bridge decks have no painted road in water.
 for i,r in enumerate(routes):
  a=LineString(r['samples'])
  for q in routes[i+1:]:
@@ -28,13 +26,11 @@ for i,r in enumerate(routes):
   ps=[hit] if hit.geom_type=='Point' else [p for p in getattr(hit,'geoms',[]) if p.geom_type=='Point']
   for p in ps:
    if min(p.distance(Point(v)) for t in [r,q] for v in [t['samples'][0],t['samples'][-1]])<100:continue
-   # Touching parallel tangents/rejoined curves form a shared corridor, not an X.
    if a.intersection(p.buffer(100)).buffer(16).intersection(b.intersection(p.buffer(100)).buffer(16)).area>3500:continue
    if any(LineString([w['a'],w['b']]).distance(p)<w['w']/2 for w in world['walkways']):continue
    issues.append({'type':'interior-X','routes':[r['id'],q['id']],'point':[p.x,p.y]})
 report={'issues':issues,'fullLaneRadius':True,'routeWidths':sorted(set(r['width'] for r in routes)),'routes':len(routes)}
 (S/'geometry-audit.json').write_text(json.dumps(report,indent=2)+'\n');print(report)
-# Every visible route tip must serve a court, another lane, a real pier or door.
 import re
 courts=[]
 for c in surface['courts']:

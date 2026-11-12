@@ -6,13 +6,10 @@ import {artOf} from './island-maps.js';
 
 export async function createKarmaView(game){
   const texture=await Assets.load({src:'/pixi-art/karma/golden-feather.svg',data:ART_TEXTURE});
-  // One shared small glow texture, no per-frame blur or whole-screen bloom.
   const glowCanvas=document.createElement('canvas');glowCanvas.width=glowCanvas.height=128;
   const gc=glowCanvas.getContext('2d'),gradient=gc.createRadialGradient(64,64,0,64,64,64);
   gradient.addColorStop(0,'rgba(255,255,212,.95)');gradient.addColorStop(.25,'rgba(255,232,104,.75)');gradient.addColorStop(.58,'rgba(255,191,45,.28)');gradient.addColorStop(1,'rgba(255,176,35,0)');gc.fillStyle=gradient;gc.fillRect(0,0,128,128);
   const glowTexture=Texture.from(glowCanvas);
-  // Local colour study: one live palette switch without rebuilding or resetting
-  // the room. The chosen production palette can later be baked into the SVG.
   const preview=location.hostname==='127.0.0.1'&&new URLSearchParams(location.search).has('qa');
   const previewFilter=new ColorMatrixFilter(),hues={gold:0,mint:90,sky:155,lilac:235,rose:290};
   let palette='gold';

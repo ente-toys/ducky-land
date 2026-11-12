@@ -23,12 +23,10 @@ def smooth(points,step=12):
    t=j/n;out.append([.5*(2*b[k]+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-d[k])*t*t+(-a[k]+3*b[k]-3*c[k]+d[k])*t*t*t) for k in range(2)])
  return out+[points[-1]]
 old=unary_union([clean(r) for r in p['oldCoast']]);expanded=unary_union([clean(r) for r in p['expandedCoast']])
-# Fit Paperboat's wider composition, then give its beach one curved open edge.
 apron=Polygon([(7040,5300),(9790,5010),(10000,5710),(10000,6510),(9750,6990),(9000,7180),(8100,7080),(7250,6780)]).buffer(130).buffer(-130)
 expanded=expanded.union(apron)
 shorecut=Polygon(p['shoreLine']+[[11200,8500],[6500,8500]]).buffer(0)
 expanded=expanded.difference(shorecut).buffer(-100).buffer(100,quad_segs=12).union(old)
-# 340-wide continuous moats preserve every inch of the original centre land.
 wet=old.buffer(340,quad_segs=12).difference(old)
 for ch in p['channels']:
  samples=ch['samples'];parts=[]
@@ -37,9 +35,6 @@ for ch in p['channels']:
 wet=wet.difference(old).buffer(0)
 dry=expanded.difference(wet).buffer(-85).buffer(85,quad_segs=12).union(old).buffer(0)
 wet=wet.union(expanded.difference(dry)).difference(old).buffer(0)
-# Keep the established organic, continuous water geometry. Crossings use
-# separate NS/EW art fitted around the actual water across the full deck width;
-# do not carve rectangular dry-bank shoulders into a sailable channel.
 crossings=[]
 for spec in p['straightBridges']:
  c=dict(spec);ns=c['direction']=='ns';cx,cy=c['x'],c['y']
@@ -54,7 +49,6 @@ for spec in p['straightBridges']:
  c.update(x=(A[0]+B[0])/2,y=(A[1]+B[1])/2,angle=math.pi/2 if ns else 0,length=math.dist(A,B),bankA=A,bankB=B,waterA=list(point(lo,0)),waterB=list(point(hi,0)),channel='continuous-moat',centreSource='canal-bridge-north.svg',rise=65)
  crossings.append(c)
 bridgeKeepOut=unary_union([LineString([c['bankA'],c['bankB']]).buffer(c['width']/2+45) for c in crossings])
-# Keep all contact polygons simple and parented accessories together.
 byid={q['id']:q for q in props};shape_by={s['id']:s for s in shapes}
 def root_id(s):
  r=s.get('parent') or s['id'];seen=set()
@@ -94,7 +88,6 @@ for rid,ss in order:
   if not sg.is_empty:
    if any(sg.intersection(t).area>1 for t in accepted if sg.bounds[0]<t.bounds[2] and sg.bounds[2]>t.bounds[0] and sg.bounds[1]<t.bounds[3] and sg.bounds[3]>t.bounds[1]):return False
    if any(sg.intersection(b).area>.5 for b in blocked_beds):return False
-   # Match the production sleep resolver's full visible-canopy guard.
    for s in ss:
     q=byid.get(s['id'])
     if not q or q.get('contact') is False or q.get('parent'):continue
@@ -111,7 +104,6 @@ for rid,ss in order:
     if fits(dx,dy):found=(dx,dy);break
    if found:break
   if not found:
-   # Flat petals can sit by the wall of their own cottage, but never in water.
    if solid.is_empty:
     for r in range(12,493,12):
      for n in range(24):
@@ -128,13 +120,10 @@ byid={q['id']:q for q in props}
 for s in shapes:
  if s['id'] in byid:byid[s['id']]['footprint']={'poly':s['poly']}
 bridge_surfaces=[LineString([c['bankA'],c['bankB']]).buffer(c['width']/2-13) for c in crossings]
-# Original centre decks/jetties are raised, and remain exactly where they were.
 bridge_surfaces.extend(LineString([w['a'],w['b']]).buffer(w['w']/2-12) for w in p['oldWalkways'])
 surface=dry.buffer(-25).union(unary_union(bridge_surfaces));forbidden=unary_union(legacy).buffer(17).union(unary_union(accepted[len(legacy):]).buffer(45)).union(unary_union(blocked_beds).buffer(25))
 json.dump({'crossings':crossings,'dry':rings(dry),'wet':rings(wet)},open('/tmp/pagepond-geometry-debug.json','w'))
 free=prep(surface.difference(forbidden));dryPrep=prep(dry)
-# Short path-finding joins the authored endpoints. The final lane is a smooth
-# spline, checked at 6-unit samples, never a grid stair-step or square elbow.
 def nearest_free(a,rmax=180):
  if free.covers(Point(a)):return list(a)
  for r in range(15,rmax+1,15):
@@ -213,13 +202,11 @@ for e in p['entrances']:
  target=road_union.interpolate(road_union.project(Point(start))) if road_union.geom_type=='LineString' else min((g.interpolate(g.project(Point(start))) for g in road_union.geoms),key=lambda q:q.distance(Point(start)))
  if e.get('goal') is not None:target=Point(e['goal'])
  line=soft_line(route(start,[target.x,target.y]));entranceChecks.append({'id':e['id'],'hamlet':e['hamlet'],'requested':requested,'point':line[0],'source':lane['source']});floor_parts.append(LineString(line).buffer(e['width']/2,quad_segs=8));links.append({'id':e['id'],'points':line,'width':e['width'],'kind':'entrance'})
-# Doors connect to their widened squares. Source buildings keep their dimensions.
 for q in props:
  if q.get('kind')=='building' and q.get('hamlet'):
   court=next(c for c in courts if c['hamlet']==q['hamlet']);g=clean(court['poly']);a=Point(q['x'],q['y']+32);b=g.exterior.interpolate(g.exterior.project(a))
   if a.distance(g)>15:
    line=soft_line(route([a.x,a.y],[b.x,b.y]));floor_parts.append(LineString(line).buffer(38,quad_segs=8));links.append({'id':q['id']+'-door-path','points':line,'width':76,'kind':'door'})
-# Every bridge gets a connected dry-bank apron, including when its route was rounded.
 for c in crossings:
  ux=(c['bankB'][0]-c['bankA'][0])/c['length'];uy=(c['bankB'][1]-c['bankA'][1])/c['length']
  for sign,bank in [(-1,c['bankA']),(1,c['bankB'])]:
@@ -228,19 +215,14 @@ for c in crossings:
  for bank in [c['bankA'],c['bankB']]:
   lines=[LineString(r['points']) for r in roads];line=min(lines,key=lambda l:l.distance(Point(bank)));q=line.interpolate(line.project(Point(bank)));pts=[bank,[q.x,q.y]]
   floor_parts.append(LineString(pts).buffer(c['width']/2,quad_segs=8));links.append({'id':c['id']+'-landing-'+str(len(links)),'points':pts,'width':c['width'],'kind':'bridge'})
-# Preserve the short Paperboat landing and its open approach.
 dock=next(s for s in shapes if s.get('dock'));db=clean(dock['poly']).bounds;a=[(db[0]+db[2])/2,db[1]+14];b=[a[0],a[1]-100];floor_parts.append(LineString([a,b]).buffer(40));links.append({'id':'paperboat-jetty-approach','points':[a,b],'width':80,'kind':'jetty'})
 for s in shapes:
  s['poly']=[[round(x,2),round(y,2)] for x,y in s['poly']]
  if s['id'] in byid:byid[s['id']]['footprint']={'poly':s['poly']}
 all_contacts=unary_union(legacy+[clean(s['poly']) for s in shapes if not s.get('parent') and not s.get('boat') and not s.get('dock')])
-# Round the inside of merged turns as well as their outside stroke. A round
-# line cap alone still leaves a square concave corner at an L or T join.
 joined_floor=unary_union(floor_parts).buffer(65,quad_segs=10).buffer(-65,quad_segs=10)
 floor=joined_floor.intersection(dry).difference(all_contacts.buffer(3,quad_segs=6)).difference(unary_union(blocked_beds)).buffer(0)
 centreLandings=floor.intersection(old).intersection(unary_union([LineString([c['bankA'],c['bankB']]).buffer(c['width']/2+2).buffer(270) for c in crossings]))
-# Boat water polygons cannot carry holes. Split centre islands out, then overlap
-# each partition by two units, so even an exact grid line remains open water.
 def noholes(g):
  result=[]
  for poly in polygons(g):
@@ -255,17 +237,12 @@ for q in noholes(wet.intersection(expanded.buffer(1300))):
  water_polys.extend(noholes(q.buffer(2).intersection(wet)))
 boatWater=[list(q.simplify(3,preserve_topology=True).exterior.coords)[:-1] for q in water_polys]
 walkWet=wet.difference(old.buffer(21,quad_segs=12)).intersection(expanded.buffer(1300));water=[]
-# Spatially local walking-water pieces keep centre clicks cheap. A single
-# no-hole moat polygon has a bounding box over the whole dry centre, defeating
-# the game's shape index and testing thousands of bank edges for every step.
 C=512;b=walkWet.bounds
 for x in range(math.floor(b[0]/C)*C,math.ceil(b[2]/C)*C,C):
  for y in range(math.floor(b[1]/C)*C,math.ceil(b[3]/C)*C,C):
   patch=walkWet.intersection(box(x,y,x+C,y+C))
   for q in noholes(patch):
    if q.area>.1:water.append({'name':'Pagepond open moats and rivers','poly':list(q.simplify(.1,preserve_topology=True).exterior.coords)[:-1]})
-# Navigation coasts retain the original inner-land vertices. Visible surf uses
-# the actual dry banks separately, so no crest can cross an open mouth.
 coastRings=[]
 for q in sorted(polygons(expanded),key=lambda q:q.centroid.x):
  rr=list(orient(q,1).exterior.coords)[:-1];reference=p['expandedCoast'][len(coastRings)][0];index=min(range(len(rr)),key=lambda i:math.dist(rr[i],reference));rr=rr[index:]+rr[:index];coastRings.append(rr)

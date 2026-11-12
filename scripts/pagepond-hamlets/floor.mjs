@@ -2,8 +2,6 @@ import fs from 'node:fs';
 import {Path2D,PathOp,even,ring,curve,stroke,union,simplifyLine} from '../pagepond/geometry.mjs';
 import {sites} from './design.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
-// Capsule unions avoid self-intersecting outlines when a routed lane doubles
-// back at a main-loop junction. Only the shared outer edge receives an outline.
 export function lane(points,width){const p=simplifyLine(points,8);return union(p.slice(1).map((b,i)=>stroke(`M${p[i].join(' ')}L${b.join(' ')}`,width)));}
 export function composeFloor(ground,links){
  const roads=structuredClone(ground.roads);

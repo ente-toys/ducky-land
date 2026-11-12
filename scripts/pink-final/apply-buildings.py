@@ -24,7 +24,6 @@ for manifest in sorted(ROOT.glob('*/sizes.json')):
    if building and (width>520 or p.get('household') and not 420<=width<=480):report['skipped'].append({'file':str(source),'reason':'width outside the approved building range'});continue
    old=copy.deepcopy(p);oldw=p['width']*p.get('scale',1);k=width/oldw;x,y=p['x'],p['y']
    p.update(width=width,height=round(width*vb[3]/vb[2],3),scale=1,anchor={'x':.5,'y':1},redrawn=True)
-   # Automatic base shadows use the rendered width, so they scale with the sprite.
    if building:p['shadow']=True
    def scaled(f):
     f=copy.deepcopy(f)
@@ -44,7 +43,6 @@ for manifest in sorted(ROOT.glob('*/sizes.json')):
    p['baseSpot']=[x,y]
    record={'id':p['id'],'hamlet':hamlet,'src':ref,'width':width,'oldWidth':oldw,'height':p['height'],'base':[x,y],'footprintScale':k,'door':p.get('door'),'shadowWidth':width*.36}
    report['buildings' if building else 'supportingPieces'].append(record)
-# Synchronize the gameplay and saved expansion manifests, keeping the authored base fixed.
 world['props']=art['props'];walk['props']=art['props'];byid={p['id']:p for p in art['props']}
 layout['props']=[byid.get(p['id'],p) for p in layout['props']];base=read('scripts/bigger-pink/original-world.json')['obstacles'];layout['baseObstacles']=[o for o in world['obstacles'] if o in base];layout['obstacles']=[o for o in world['obstacles'] if o not in base]
 for path,data in [(A/'art.json',art),(D/'world.json',world),(D/'walk-world.json',walk),(Path('scripts/bigger-pink/layout.json'),layout)]:write(path,data)

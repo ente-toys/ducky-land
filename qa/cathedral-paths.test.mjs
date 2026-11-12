@@ -65,8 +65,6 @@ test('The dry walking corridor stays clear across its width with a 16-unit Ducky
   const q=line[j],a=line[Math.max(0,j-1)],b=line[Math.min(line.length-1,j+1)],len=Math.hypot(b[0]-a[0],b[1]-a[1])||1;
   for(const off of [world.pathWidths[i]/2-16,16-world.pathWidths[i]/2]){
    const x=q[0]-(b[1]-a[1])/len*off,y=q[1]+(b[0]-a[0])/len*off;
-   // The authoritative water layer covers the union at bridge apron corners.
-   // Supported deck centres are tested above; wet bank pixels are never a road.
    if(walk.water.some(o=>inShape(x,y,o,20)))continue;
    samples++;assert.ok(map.nav().walkable(x,y),world.pathSystem.routes[i].id+' shoulder '+[x,y]);
   }

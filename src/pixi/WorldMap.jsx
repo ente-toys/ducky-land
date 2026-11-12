@@ -35,7 +35,6 @@ export default function WorldMap({island}) {
         if (Math.hypot(dx, dy) > 1) heading = nearbyHeading(engine.islandId,player,dx,dy);
       }
       movement.current = player ? {x: player.x, y: player.y, islandId: engine.islandId, heading} : null;
-      // The SVG fills the content box; the 4 px CSS border's centre is 2 px beyond it.
       const outlineRadius = width / 2 + 2 * iconSize / BOG_RADAR_SIZE_PX;
       const islands = nearbyMapFrame(engine.islandId, engine.player ?? engine.camera, radar.current,
         outlineRadius / scale).map(item => ({

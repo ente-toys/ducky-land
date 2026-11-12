@@ -33,9 +33,7 @@ for(const [name,p]of [...places.map(p=>[p.id,p.point]),...Object.entries(oldWorl
  const r=nav.route(map.spawn.x,map.spawn.y,...p);assert.deepEqual(r.at(-1),p,name+' reachable');
  let prev=[map.spawn.x,map.spawn.y];for(const next of r){assert.ok(nav.clearLine(prev,next),name+' route segment');prev=next}routes.push({name,point:p,steps:r.length});
 }
-// Actual coast points sampled inside the shore must all connect, so the walk is a loop.
 for(let i=0;i<world.coast.length;i+=5){const p=world.coast[i],dx=4000-p[0],dy=2800-p[1],r=Math.hypot(dx,dy),q=[Math.round(p[0]+dx/r*180),Math.round(p[1]+dy/r*180)];assert.ok(nav.walkable(...q),'coast walk '+i);assert.deepEqual(nav.route(map.spawn.x,map.spawn.y,...q).at(-1),q,'coast route '+i)}
-// Boarding uses the production map's nearest clear walking point within a short hop.
 const boatChecks=[];
 for(const p of map.boatSpots()){
  for(let i=0;i<16;i++){const a=i*Math.PI/8;assert.ok(!map.landAt(p.x+Math.cos(a)*46,p.y+Math.sin(a)*46),'boat afloat '+JSON.stringify(p))}

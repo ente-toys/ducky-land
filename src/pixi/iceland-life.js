@@ -5,9 +5,6 @@ export const ICELAND_SMOKE = '/pixi-art/themes/snow/final/buildings/smoke.svg';
 export const BIRD_FLEE_RADIUS = 120;
 const INK = 0x39472d, WARM = 0xffd27a;
 const allVisible = () => true;
-// SVG-local fractions, measured against the approved facade art. Placement,
-// size, flip and depth always come from the current manifest, never world sites.
-// Windows: [centre x, centre y, ellipse radius x, ellipse radius y].
 const FACADES = {
   bakery: {chimney: [.764, .018], windows: [[.37, .69, .22, .09], [.755, .7, .065, .075]]},
   workshop: {chimney: [.59, .018], windows: [[.16, .63, .066, .085], [.565, .63, .066, .085]]},
@@ -22,7 +19,6 @@ const FACADES = {
 
 function halo(x, y, rx, ry) {
   const g = new Graphics();
-  // Geometry is built once. Concentric translucent fills need no filter pass.
   g.ellipse(0, 0, rx * 1.8, ry * 1.8).fill({color: WARM, alpha: .025})
     .ellipse(0, 0, rx * 1.35, ry * 1.35).fill({color: WARM, alpha: .045})
     .ellipse(0, 0, rx, ry).fill({color: WARM, alpha: .075});
@@ -54,8 +50,6 @@ function birdFrame(blue, peck) {
   return g;
 }
 
-// Hand-selected yard and grove roles; their coordinates follow art.json as the
-// placement worker refines it. Search nearby open snow only during construction.
 export function icelandBirdSites(manifest, walkable = allVisible) {
   const yards = manifest.icelandFinal?.yards ?? [], groves = manifest.icelandFinal?.groves ?? [];
   const choices = [yards[0], groves[0], yards[1], groves[3], yards[2], groves[6], yards[4], groves[9]];
@@ -65,7 +59,6 @@ export function icelandBirdSites(manifest, walkable = allVisible) {
     const x = source.door?.[0] ?? source.x, y = source.door?.[1] ?? source.y;
     search: for (const dy of [140, 200, 260, 320, 80]) for (const dx of [-150, 150, -230, 230, 0]) {
       const bx = x + dx, by = y + dy;
-      // A clear landing patch also leaves space for normal little hops.
       if (walkable(bx, by) && walkable(bx - 28, by) && walkable(bx + 28, by) && walkable(bx, by - 24) && walkable(bx, by + 24)) {
         sites.push({id: source.id, x: bx, y: by, blue: i % 2 === 1, phase: i * 1.731});
         break search;
@@ -87,7 +80,6 @@ export function createIcelandLife(manifest, texture, {tilt = 1, walkable = allVi
     const root = standingRoot('Iceland life ' + p.id, p.x, p.y, (p.z ?? p.sortY ?? p.y) + .02, tilt);
     const localX = u => (u - ax) * w * flip, localY = v => (v - ay) * h;
     const existing = smokeProps.get(p.id);
-    // The five separately authored smoke sites are already chimney-mouth anchors.
     const sx = existing ? existing.x - p.x : localX(facade.chimney[0]);
     const sy = existing ? existing.y - p.y : localY(facade.chimney[1]);
     const chimney = {root, x: p.x, y: p.y, pad: h + 180, sx, sy, phase: chimneys.length * .713, puffs: []};
@@ -172,7 +164,6 @@ export function createIcelandLife(manifest, texture, {tilt = 1, walkable = allVi
           dx = Math.cos(angle) * 22 + (b.site.x - b.x) * .18;
           dy = Math.sin(angle) * 14 + (b.site.y - b.y) * .18;
         }
-        // Try a short fan of directions, keeping the entire hop over dry snow.
         let found = false;
         for (let turn = 0; turn < 5; turn++) {
           const angle = turn === 0 ? 0 : (turn % 2 ? 1 : -1) * Math.ceil(turn / 2) * .55;
@@ -202,8 +193,6 @@ export function createIcelandLife(manifest, texture, {tilt = 1, walkable = allVi
   };
 }
 
-// The theme loader owns this lease. Leaving an island releases all life even
-// when its static art stays cached. A pending acquire is also safe to cancel.
 export function createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt = 1}) {
   if (map.id !== 'snow' || !manifest.icelandFinal) return null;
   let current = null, pending = null, generation = 0, disposed = false, ownedGroups = null;

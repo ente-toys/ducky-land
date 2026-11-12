@@ -11,7 +11,6 @@ export function crossingArt(b,protectedShape){
 }
 export function crossingCollision(b){
  const dx=b.b[0]-b.a[0],dy=b.b[1]-b.a[1],len=Math.hypot(dx,dy),out=[];
- // An inscribed chain follows angled decks, without making invisible walkable corners.
  const half=(b.w/2-10)/(Math.abs(dx/len)+Math.abs(dy/len));
  for(let t=0;t<=len;t+=24)out.push({name:b.id,x:b.a[0]+dx*t/len,y:b.a[1]+dy*t/len,w:half*2+16,h:half*2+24});
  return out;

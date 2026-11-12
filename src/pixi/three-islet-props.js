@@ -10,9 +10,6 @@ async function raster(svg){
  canvas.getContext('2d').drawImage(image,0,0,512,512);return canvas;
 }
 function texture(canvas){const t=new Globe.CanvasTexture(canvas);t.colorSpace=Globe.SRGBColorSpace;return t;}
-// Cards keep their full base in front of the ocean. A normal depth test would
-// cut that base in half where the upright card intersects the curved water.
-// Clip against the actual planet silhouette instead, then cull back anchors.
 export function isletCardMaterial(map){
  const material=new Globe.MeshBasicMaterial({map,transparent:true,depthWrite:false,depthTest:false,opacity:0});
  const flatBlend={value:0};material.userData.flatBlend=flatBlend;
@@ -60,9 +57,6 @@ export async function createIsletStanding(scene,frame,source,_blend,{rasterize=r
    const facing=mesh.position.dot(sight)/SURFACE_RADIUS;
    const flat=project(frame,piece),blend=flat?clamp(flat.blend,0,1):0;
    mesh.visible=facing>.25||blend>.001;
-   // Zoom never crossfades two displaced versions of the same drawing. Only
-   // the limb fades a card, on top of the ground-only islet texture. Fade
-   // before grazing angles make its broad base overhang compressed ground.
    mesh.material.opacity=lerp(smoothstep(facing,.25,.55),1,blend);
    mesh.scale.setScalar(1);mesh.material.userData.flatBlend.value=blend;
    if(blend>0&&flat.width>0&&flat.height>0&&Number.isFinite(flat.pixelsPerUnit)){
@@ -74,8 +68,6 @@ export async function createIsletStanding(scene,frame,source,_blend,{rasterize=r
     const scale=flat.pixelsPerUnit*2*depth*Math.tan(camera.fov*Math.PI/360)/flat.height;
     mesh.scale.setScalar(lerp(1,scale,blend));
    }
-   // All upright scenery stays above the live surface (100) and flat handoff
-   // (101), while retaining its foot-based order amongst other scenery.
    mesh.renderOrder=10000-mesh.position.y*1000;
   }
  }};

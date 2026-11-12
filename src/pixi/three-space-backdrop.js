@@ -5,7 +5,6 @@ export const SPACE_LOOKS=Object.freeze({
   deepspace:{name:'Deep space',stars:620,shade:.46,star:'#CDDBF4',cross:4}
 });
 
-// Cached space layer. Star twinkle never forces the globe to redraw.
 export function createSpaceBackdrop(host,initial='starlight'){
   const base=document.createElement('canvas'),fx=document.createElement('canvas');
   base.className='space-backdrop';fx.className='space-effects';base.setAttribute('aria-hidden','true');fx.setAttribute('aria-hidden','true');

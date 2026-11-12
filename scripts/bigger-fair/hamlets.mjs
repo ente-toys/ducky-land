@@ -1,5 +1,3 @@
-// The approved GPT pictures, in blueprint pixels. Mapping and all site adjustments
-// live in hamlets.json. SVGs stay at cottage scale, spacing may fit the outer ring.
 import fs from 'node:fs';
 import {homePlant} from './plant-kit.mjs';
 export const A='public/pixi-art/themes/fair/', S='scripts/bigger-fair/', D='assets/world/themes/fair/';

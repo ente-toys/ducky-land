@@ -25,7 +25,6 @@ test('FIX1 route graph has no empty-snow endpoints, exact joins and every door o
  assert.ok(nodes[n],r.id+' unknown node');const end=i?r.samples.at(-1):r.samples[0];assert.ok(Math.hypot(end[0]-nodes[n][0],end[1]-nodes[n][1])<.02,r.id+' endpoint drift');
  if(!adj.has(n))adj.set(n,new Set());adj.get(n).add(r.ends[1-i]);}
  assert.ok([104,128].includes(r.width));}
- // The unpainted, walkable ice connects the three terminal gate landings.
  const gates=Object.keys(w.iceland2.shores);for(const g of gates)for(const other of gates)if(g!==other)adj.get(g).add(other);
  const reached=new Set(['harbour']);for(let last=-1;last!==reached.size;){last=reached.size;for(const n of reached)for(const next of adj.get(n)??[])reached.add(next);}
  assert.equal(reached.size,adj.size,'disconnected path network');
@@ -42,7 +41,7 @@ test('FIX1 groves use Home plant height and comparable authored density',()=>{
  const trees=a.props.filter(p=>p.id.includes('-tree-')),bushes=a.props.filter(p=>p.finalKind==='shrub');
  const ht=home.filter(p=>/plants\/tree/.test(p.src));assert.ok(trees.length>=ht.length*.9,trees.length+' trees');
  for(const p of trees)assert.ok(p.height>=180&&p.height<=400,p.id);
- assert.ok(bushes.length>=20&&bushes.length<80,'Q3 retires scattered shrub pairs');assert.ok(a.props.some(p=>p.id==='bakery-yard-woodpile-3')); // FIX3 replaces loose filler with authored court scenes.
+ assert.ok(bushes.length>=20&&bushes.length<80,'Q3 retires scattered shrub pairs');assert.ok(a.props.some(p=>p.id==='bakery-yard-woodpile-3'));
  assert.ok(!a.props.some(p=>/snow-crates|snow-fence|snow-pile/.test(p.id)));
 });
 test('FIX1 snow coast clips sand paths to land and sled sits over a shaded hill',()=>{

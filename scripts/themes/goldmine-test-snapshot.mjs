@@ -1,5 +1,3 @@
-// Test preload: use current Goldmine files before the integration owner regenerates
-// the shared themes/index.js. Does not edit the registry or any other theme.
 import {readFileSync} from 'node:fs';
 import {registerMap} from '../../src/pixi/island-maps.js';
 import {checkTheme} from '../theme-index.mjs';

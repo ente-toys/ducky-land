@@ -3,8 +3,6 @@ import {PAINT,RULES} from './rules.js';
 
 export const HIT_SHAKE_MS=150,HIT_STOP_MS=40,HIT_VIGNETTE_MS=240;
 
-// Only authoritative snapshot events cause a hit or a tag. Seeding the first
-// snapshot prevents old kill-feed entries replaying on entry or reconnect.
 export function createCombatFeedback({onHit=()=>{},onTag=()=>{},onGhost=()=>{},onRespawn=()=>{},onPickup=()=>{}}={}){
   let previous=null,identity=null,lastEvent=0,alive;
   return {observe(snapshot,self){
@@ -24,8 +22,6 @@ export function createCombatFeedback({onHit=()=>{},onTag=()=>{},onGhost=()=>{},o
       if(id&&event.actorId===id)onTag(event);
       onGhost(event,snapshot);
     }
-    // Authority identifies the collector, so nearby ducks and predicted motion
-    // cannot trigger a local pickup chime. Seeded snapshots never replay it.
     if(id)for(const spot of snapshot.pickups??[]){
       const before=previous.pickups?.find(p=>p.id===spot.id);
       const age=snapshot.time-(spot.readyAt-RULES.pickupRespawn);
@@ -36,7 +32,6 @@ export function createCombatFeedback({onHit=()=>{},onTag=()=>{},onGhost=()=>{},o
   }};
 }
 
-// Reusable output, no random numbers, objects or timers on the render path.
 export function createHitFeelState(){
   let hitAt=-Infinity,stopUntil=0,presentTag=false;
   return {colour:PAINT.privacy[0],
@@ -56,8 +51,6 @@ export function createHitFeelState(){
   };
 }
 
-// Flat, ink-edged corner splats leave the centre and HUD readable. Inline SVG
-// avoids textures, requests and raster art, and the overlay never takes input.
 function paintEdge(canvas){
   const document=canvas?.ownerDocument;if(!document?.body)return null;
   const node=document.createElement('div');node.setAttribute('aria-hidden','true');
@@ -91,7 +84,6 @@ export function createBogFeel(engine,{playSound=()=>{},now=()=>performance.now()
     onPickup(){playSound('pickup');},
   });
   const app=engine.app,render=app?.render;
-  // Holding presentation never pauses the room, input, simulation or network.
   function present(){
     const time=now();if(state.shouldHold(time,reduced))return;
     state.sample(time,reduced,output);
@@ -109,8 +101,6 @@ export function createBogFeel(engine,{playSound=()=>{},now=()=>performance.now()
     observe:feedback.observe,
     beginFrame(reducedMotion){
       restore();reduced=!!reducedMotion;frameTime=now();
-      // WAAPI handles opacity off the render loop. A non-animated fallback for
-      // older browsers clears at the same deadline, with no per-frame strings.
       if(edge&&!edgeAnimation&&edge.style.opacity!=="0"){state.sample(frameTime,reduced,output);if(!output.alpha)edge.style.opacity='0';}
       pending.forEach(expire);
     },

@@ -2,8 +2,6 @@ import {smoothstep} from './globe-math.js';
 import * as Globe from './globe-mesh.js';
 import {PALETTE} from './palette.js';
 
-// Water stays below the island surface. Only its lighting normals move, so
-// shorelines, island artwork and the zoom/picking sphere remain unchanged.
 export function createGlobeAtmosphere(globe,scene,planetShade){
   const time={value:0};
   const water=new Globe.ShaderMaterial({

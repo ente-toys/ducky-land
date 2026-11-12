@@ -1,4 +1,3 @@
-// Exact pop, drift, tilt and fade sampled from the existing live world-view.js.
 const ease=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
 const out=x=>1-Math.pow(1-Math.max(0,Math.min(1,x)),3);
 export function heartPose(sec,seed=0){

@@ -1,5 +1,3 @@
-// Nuggetnook static art-manifest preview. Writes only public/pixi-art/themes/goldmine/.
-// Actual in-game screenshots are produced separately by goldmine-ingame.mjs.
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
@@ -17,7 +15,6 @@ async function raster(src, w, h, flip) {
   const buf = await img.png().toBuffer(); cache.set(key, buf); return buf;
 }
 const comps = [];
-// Same turquoise water and wave lattice used beneath Home.
 const water=readFileSync('public/pixi-art/water-texture.svg','utf8').replace(/<\?xml[^>]*>/,'');
 const inner=water.slice(water.indexOf('>')+1).replace('</svg>','');
 const sea=Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${art.width} ${art.height}"><defs><pattern id="sea" width="256" height="160" patternUnits="userSpaceOnUse">${inner}</pattern></defs><rect width="100%" height="100%" fill="url(#sea)"/></svg>`);
@@ -26,23 +23,19 @@ async function add(src, x, y, w, h, flip = false) {
   const L = Math.round(x * K), T = Math.round(y * K), ww = Math.round(w * K), hh = Math.round(h * K);
   if (ww < 1 || hh < 1 || L > W || T > H || L + ww < 0 || T + hh < 0) return;
   const buf = await raster(src, ww, hh, flip);
-  // crop anything that hangs off the canvas
   const cl = Math.max(0, -L), ct = Math.max(0, -T), cw = Math.min(ww - cl, W - Math.max(0, L)), ch = Math.min(hh - ct, H - Math.max(0, T));
   if (cw <= 0 || ch <= 0) return;
   const input = cl || ct || cw < ww || ch < hh ? await sharp(buf).extract({left: cl, top: ct, width: cw, height: ch}).toBuffer() : buf;
   comps.push({input, left: Math.max(0, L), top: Math.max(0, T)});
 }
-// ground: the full ground SVG (the tiles are crops of it)
 comps.push({input: await sharp(ART + 'ground.svg', {density: 72 * K}).resize(W, H).png().toBuffer(), left: 0, top: 0});
 for (const f of art.flats) await add(ART + f.src, f.topLeft ? f.x : f.x - f.width / 2, f.topLeft ? f.y : f.y - f.height, f.width, f.height, f.flip);
 {const dk=art.previewHarbor; await add(ART+dk.src,dk.x,dk.y,dk.width,dk.height);}
 for (const f of art.floating ?? []) await add(ART+f.src,f.x-f.width/2,f.y-f.height/2,f.width,f.height);
 for (const dk of art.decks) await add(ART + dk.src, dk.x, dk.y, dk.width, dk.height);
-// boats (bottom layer of the standing things), then props and Duckies sorted by y
 const things = art.props.map(p => ({...p, kind: 'prop'}));
 for (const b of harbor.boats) things.push({src: 'public/pixi-art/boat-sail.svg', x: b.x, y: b.y + 30, width: 188, height: 188 * 1.15, anchor: {x: .5, y: .82}, scale: 1, raw: true});
 const geo = geometry(walk);
-// The 40 sleeping Duckies (world.json sleepSpots), drawn from the game's own pose sprites at the game's size
 {
   const world = JSON.parse(readFileSync(DATA + 'world.json', 'utf8')), poses = JSON.parse(readFileSync('src/pixi/sleep-poses.json', 'utf8'));
   for (const [pose, list] of Object.entries(world.sleepSpots ?? {})) for (const spot of list) {

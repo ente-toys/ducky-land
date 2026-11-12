@@ -1,17 +1,13 @@
-// BUILD8: run LAST after colour.mjs and teambases.mjs, then rebuild the Bog globe.
-// Only explicit fill colours change. Every path, stroke and placement stays exact.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {applyGoogleGlow} from './glow.mjs';
 
 const root = 'public/pixi-art/themes/bog-arena/';
 const common = {
-  // Cream-amber window panes and small lamps instead of lemon yellow.
   '#ffe02b': '#e6cda0', '#ffe22b': '#e6cda0', '#ffe52a': '#e6cda0',
   '#ffad24': '#dfbf93', '#ffb525': '#dfbf93', '#ffdf52': '#e9d7b6',
   '#ffe36b': '#e9d7b6', '#e6b719': '#b49d77', '#fff6b0': '#eee2c7',
   '#e5b527': '#ad9471', '#f8cb37': '#d3bb91',
-  // Yellow-green foliage becomes sage, retaining separate light/shade shapes.
   '#b8de24': '#91b5a1', '#8dab29': '#668d7b', '#d5eb67': '#bdd4c1',
   '#a9cb33': '#91b5a1', '#78962d': '#668d7b', '#d0e967': '#bdd4c1',
   '#b6d93b': '#91b5a1', '#bde713': '#91b5a1', '#53622d': '#526b5c',
@@ -46,8 +42,6 @@ const withoutFills = svg => svg.replace(fills, 'fill="COLOUR"');
 let changed = 0;
 function repaint(file, palette) {
   const before = fs.readFileSync(file, 'utf8');
-  // BUILD7's fixed yellow paint marks are paint too. Leave them, like all live
-  // paint effects and player art, at their original saturated team colours.
   const paint = [];
   const protectedSVG = before.replace(/<g\b[^>]*data-detail="yellow-paint"[^>]*>[\s\S]*?<\/g>/g,
     g => `__BOG_PAINT_${paint.push(g) - 1}__`);
@@ -66,7 +60,6 @@ for (const name of fs.readdirSync(root + 'home').filter(n => n.endsWith('.svg'))
   repaint(root + 'home/' + name, palette);
 }
 repaint(root + 'ground.svg', ground);
-// This review fallback is the same ground SVG, with only its root size changed.
 const fallback = fs.readFileSync(root + 'ground.svg', 'utf8')
   .replace('width="8400" height="8200"', 'width="1024" height="1000"');
 const fallbackFile = 'public/pixi-art/globe/bog-arena-ground.svg';
@@ -74,5 +67,4 @@ if (fs.readFileSync(fallbackFile, 'utf8') !== fallback) {
   fs.writeFileSync(fallbackFile, fallback); changed++;
 }
 console.log(`BUILD8: ${changed} SVGs repainted, fills only; palette C floor, sea, strokes, geometry and paint preserved.`);
-// BUILD10 is the final, Google-only light pass after the scenery palette.
 applyGoogleGlow();

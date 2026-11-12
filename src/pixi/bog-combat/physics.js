@@ -19,8 +19,6 @@ export function overlaps(p,r,poly) {
   return false;
 }
 const navigations=new WeakMap();
-// Adapt arena polygons to the island navigation contract. Index static footprints
-// once; a 3px clearLine never scans the whole map or allocates candidate lists.
 export function createCombatNavigation(blockers,bounds,r=DUCK_RADIUS){
   const cell=256,cols=Math.ceil(bounds.width/cell)+1,buckets=new Map(),point={x:0,y:0},onLand=bounds.contains??null;
   for(const b of blockers)if(b.blocksWalk){
@@ -43,11 +41,7 @@ export function createCombatNavigation(blockers,bounds,r=DUCK_RADIUS){
 export function navigationFor(blockers,bounds){let entry=navigations.get(blockers);if(!entry||entry.bounds!==bounds){entry={bounds,nav:createCombatNavigation(blockers,bounds)};navigations.set(blockers,entry);}return entry.nav;}
 export function canWalk(p,blockers,bounds,r=DUCK_RADIUS){return r===DUCK_RADIUS?navigationFor(blockers,bounds).walkable(p.x,p.y):createCombatNavigation(blockers,bounds,r).walkable(p.x,p.y);}
 export function walkingActor(p){return {until:0,pace:0,turn:0,action:0,travel:0,emoteVersion:0,...p,path:p.path?.map(point=>[...point])??[],heading:p.heading?[...p.heading]:null};}
-// Compatibility for tools that ask for a single step. Gameplay calls walkStep
-// directly with a persistent actor, exactly as the islands do.
 export function movePlayer(p,vector,dt,blockers,bounds){const actor=walkingActor(p);walkStep(actor,navigationFor(blockers,bounds),Math.min(.1,Math.max(0,dt)),0,vector);return actor;}
-// Shots share a static spatial broad phase, like walking. Adding groves must
-// not turn every short paint trajectory into a scan of the entire forest.
 const shotIndices=new WeakMap();
 export function prepareShotIndex(blockers){
   let index=shotIndices.get(blockers);if(index)return index;

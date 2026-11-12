@@ -1,4 +1,3 @@
-// Evidence is always compared with immutable git HEAD, never a previous build.
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -17,12 +16,10 @@ for(const t of tiles){const name=path.basename(t.src,'.svg'),original=old(A+t.sr
  await sharp({create:{width:1400,height:700,channels:4,background:art.sea}}).composite([{input:before,left:0,top:0},{input:after,left:700,top:0}]).png().toFile(`${OUT}/tiles/${name}-comparison.png`);
  beforeGround.set(t.src,before);afterGround.set(t.src,after);
  sizes.push({src:t.src,before:original.length,after:current.length,embeddedImage:/<image\b/i.test(original.toString())});
- // Separate geometric recovery from the intentional lawn/ink palette change.
  const reference=await sharp(original).resize(700,700).ensureAlpha().raw().toBuffer(),recovered=await sharp(Buffer.from(tileSvg(t,{style:false}))).resize(700,700).ensureAlpha().raw().toBuffer();
  let changed=0,large=0,error=0;for(let i=0;i<reference.length;i+=4){let max=0;for(let c=0;c<4;c++){const d=Math.abs(reference[i+c]-recovered[i+c]);max=Math.max(max,d);error+=d;}if(max)changed++;if(max>32)large++;}geometry.push({src:t.src,pixels:490000,changed,large,meanChannelError:error/reference.length});
  console.log(name);
 }
-// Runtime placement rules, with exactly the same non-ground layers in both views.
 const scale=.2,W=2240,H=1680,ox=-1600,oy=-1200,overlays=[],cache=new Map();
 const source=s=>s.startsWith('/')?'public'+s:A+s;
 async function add(layers,p,kind){const sc=kind==='prop'?(p.scale??1):1,w=Math.max(1,Math.round(p.width*sc*scale)),h=Math.max(1,Math.round(p.height*sc*scale)),anchor=kind==='prop'?(p.anchor??{x:.5,y:1}):kind==='flat'&&!p.topLeft?{x:.5,y:1}:{x:0,y:0},x=Math.round((p.x-ox)*scale-anchor.x*w),y=Math.round((p.y-oy)*scale-anchor.y*h);if(x>=W||y>=H||x+w<=0||y+h<=0)return;
@@ -38,16 +35,12 @@ for(const p of things.sort((a,b)=>(a.sortY??a.y)-(b.sortY??b.y)))await add(overl
 for(const version of ['before','after']){const ground=[];for(const t of tiles){const input=await sharp((version==='before'?beforeGround:afterGround).get(t.src)).resize(280,280).png().toBuffer();ground.push({input,left:Math.round((t.x-ox)*scale),top:Math.round((t.y-oy)*scale)});}const options={create:{width:W,height:H,channels:4,background:art.sea}};await sharp(options).composite(ground).png().toFile(`${OUT}/ground-${version}.png`);await sharp(options).composite([...ground,...overlays]).png().toFile(`${OUT}/island-${version}.png`);}
 await sharp({create:{width:W*2,height:H,channels:4,background:art.sea}}).composite([{input:`${OUT}/island-before.png`,left:0,top:0},{input:`${OUT}/island-after.png`,left:W,top:0}]).png().toFile(`${OUT}/island-comparison.png`);
 }
-// Every adjoining pair: render a 64-unit-wide strip at native world resolution
-// and compare both independently cropped tiles with one continuous vector view.
 const seams=[],canonicalTiles=new Map();
 async function canonical(t){if(!canonicalTiles.has(t.src))canonicalTiles.set(t.src,await png(Buffer.from(tileSvg(t,{cull:false})),t.width,t.height));return canonicalTiles.get(t.src);}
 for(const a of tiles)for(const b of tiles){const vertical=a.y===b.y&&a.x+a.width===b.x,horizontal=a.x===b.x&&a.y+a.height===b.y;if(!vertical&&!horizontal)continue;
  const region=vertical?{x:b.x-32,y:a.y,width:64,height:a.height}:{x:a.x,y:b.y-32,width:a.width,height:64};
  const actualParts=[],expectedParts=[];for(const [t,index]of [[a,0],[b,1]]){const im=sharp(fs.readFileSync(A+t.src));const crop=vertical?{left:index?0:a.width-32,top:0,width:32,height:a.height}:{left:0,top:index?0:a.height-32,width:a.width,height:32};actualParts.push({input:await im.extract(crop).png().toBuffer(),left:vertical?index*32:0,top:horizontal?index*32:0});expectedParts.push({input:await sharp(await canonical(t)).extract(crop).png().toBuffer(),left:vertical?index*32:0,top:horizontal?index*32:0});}
  const actual=await sharp({create:{width:region.width,height:region.height,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(actualParts).png().toBuffer(),expected=await sharp({create:{width:region.width,height:region.height,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(expectedParts).png().toBuffer();
- // Match full-tile rasterisation viewports in the reference. A narrow SVG
- // viewport changes librsvg's pattern sampling and gives false seam alarms.
  const ar=await sharp(actual).ensureAlpha().raw().toBuffer(),er=await sharp(expected).ensureAlpha().raw().toBuffer();let changed=0,large=0,max=0,joinLarge=0,alphaGaps=0;for(let i=0;i<ar.length;i+=4){let delta=0;for(let c=0;c<4;c++)delta=Math.max(delta,Math.abs(ar[i+c]-er[i+c]));max=Math.max(max,delta);if(delta)changed++;if(delta>32){large++;const x=i/4%region.width,y=Math.floor(i/4/region.width);if(vertical?Math.abs(x-31.5)<1:Math.abs(y-31.5)<1)joinLarge++;}if(er[i+3]>250&&ar[i+3]<250)alphaGaps++;}
  const id=`${vertical?'v':'h'}-${b.x}-${b.y}`;fs.writeFileSync(`${OUT}/seams/${id}.png`,actual);seams.push({id,pixels:region.width*region.height,changed,large,max,joinLarge,alphaGaps});
 }

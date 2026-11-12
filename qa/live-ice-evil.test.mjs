@@ -20,8 +20,6 @@ test('adding two live themes preserves Home and all six earlier island identitie
 
 for(const theme of ['bog','snow'])test(`${theme}: full live contract, unique art and onshore residents`,()=>{
   const result=checkTheme(theme);assert.equal(result.ready,true,result.problems.join('\n'));
-  // The communities expansion raised the shared live contract to 16000x12000.
-  // checkTheme above validates that cap and the origin-aware sea margin.
   const m=mapFor(theme);assert.equal(m.id,theme);
   assert.deepEqual([m.width,m.height],[delivered[theme].world.width,delivered[theme].world.height]);
   assert.equal(m.sleepers.length,theme==='bog'?0:theme==='snow'?60:40);

@@ -1,4 +1,3 @@
-// Equal-scale static assemblies of actual runtime SVGs, not browser screenshots.
 import sharp from 'sharp';
 import fs from 'node:fs';
 import {createServer} from 'vite';

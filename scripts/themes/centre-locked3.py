@@ -64,7 +64,6 @@ def floor(b):
   s+=poly([(x,y-27),(x+30,y),(x,y+27),(x-30,y)],'#F8D97E','#C8A464',2)
  b.add('floor',s,(-1060,-680,2120,1375),'decal')
 def bench(b,idx,a):
- # Arc bench, ground footprint follows plaza's ellipse.
  r=925; lo=a-13;hi=a+13
  s=''
  for aa in [lo+2,hi-2]:
@@ -100,7 +99,6 @@ def furnishings(b):
  for i,a in enumerate([70,110,250,290]):flower(b,i,965*math.cos(math.radians(a)),965*K*math.sin(math.radians(a)),b.t=='snow')
 def peaks():
  b=Build('peaks','Summit compass cairn lookout',2);floor(b)
- # Faceted cairn, stacked natural stones and warm stone highlights.
  s=ellipse(0,28,155,77,'#CCAE72')
  for x,y,rx,ry in [(-78,0,74,48),(63,3,79,48),(0,-12,99,54),(0,-76,78,45),(0,-132,56,32),(0,-178,35,23)]:
   s+=path(f'M{x-rx} {y+ry*.25} Q{x-rx} {y-ry*.6} {x-rx*.4} {y-ry} Q{x+rx*.7} {y-ry*1.1} {x+rx} {y} Q{x+rx*.8} {y+ry} {x} {y+ry} Q{x-rx*.8} {y+ry} {x-rx} {y+ry*.25}Z','#C4AD87')
@@ -108,12 +106,10 @@ def peaks():
   s+=line(f'M{x+rx*.42} {y+ry*.1} l{-rx*.15} {ry*.7}','#A48F6C',3)
  for x in [-145,-120,120,145]:s+=path(f'M{x} 28 q-15 -35 -24 -42 q25 8 25 25 q4 -29 18 -37 q-7 35 -19 54Z','#45953A','#456D2D',2)
  b.add('cairn',s,(-190,-210,380,295),sort=66);b.block('summit cairn',0,12,162,80)
- # Telescope at the back, tripod and separate slow glint.
  x,y=130,-490
  tripod=path('M-15 -125 L-76 0 L-57 6 L0 -94 L38 8 L57 1 L14 -130Z','#D7A34D')+line('M-46 -21 L35 -21','#756D58',9)+rect(-17,-143,36,24,'#B18D4D')
  b.add('telescope-tripod',group(tripod,x,y), (x-90,y-160,185,178),sort=y+10)
  tube=group(group(rect(-95,-26,185,52,'#666D69',16)+rect(43,-32,28,64,'#B7B9AC',8)+ellipse(77,0,13,33,'#3F514F')+ellipse(77,-2,8,25,'#A5D9D1')+line('M-80 -13 L34 -13','#DDD8C4',8)+rect(-121,-12,27,23,'#ADA58F'),0,0),x,y-171)
- # rotate only the authored tube in SVG, base remains planted.
  tube=f'<g transform="rotate(-20 {x} {y-171})">{tube}</g>'
  b.add('telescope',tube,(x-145,y-245,280,145),sort=y+11)
  b.block('telescope stand',x,y,85,40)
@@ -138,7 +134,6 @@ def snow():
  b.add('snow-fir',s,(-245,-540,490,630),sort=98)
  st=star(0,-540,48,'#FFDE70')+star(-3,-544,27,'#FFF3BA')
  b.add('star-glimmer',st,(-55,-595,110,108),'anim',99,dict(kind='foam',period=3.8,phase=.2))
- # Individual snow drifts at the bed perimeter.
  for i in range(12):
   a=i*math.pi/6;x=239*math.cos(a);y=146*math.sin(a)
   ss=ellipse(x,y,39,21,'#FBFEFF','#7397A1',2)
@@ -149,7 +144,6 @@ def candy():
  b=Build('candy','Cupcake pavilion chocolate moat',3);floor(b)
  s=ellipse(0,10,470,301,'#C5A166')+ellipse(0,0,470,301,'#FFE5A0')+ellipse(0,-4,446,280,'#885127')+ellipse(0,-9,412,257,'#A46731','none')+ellipse(0,-3,302,190,'#FFE8AD')
  b.add('chocolate-moat',s,(-480,-310,960,632),'decal');b.block('chocolate moat',0,0,455,287)
- # Chocolate current highlights, distinct movable pieces using the supported foam motion.
  for i in range(8):
   a=math.pi*(i+.3)/4;x=375*math.cos(a);y=235*math.sin(a)
   s=line(f'M{x-17} {y+4} q20 -14 42 0','#FFE5AD',3)+line(f'M{x-10} {y+14} q15 -6 25 -1','#DDA05E',2)
@@ -159,7 +153,6 @@ def candy():
   s=ellipse(x,y+3,39,21,'#6C431F')+path(f'M{x-38} {y} q1 -39 38 -39 q37 0 38 39 q-12 12 -22 0 q-12 14 -24 0 q-16 14 -30 0Z','#FFDC8E','#6C492A',2)
   for xx in [-14,8,22]:s+=ellipse(x+xx,y-18+abs(xx)/4,3,2,'#EE8C95','none')
   b.add(f'floating-biscuit-{i}',s,(x-45,y-45,90,75),'anim',y+27,dict(kind='foam',period=4.5,phase=i/5))
- # Central platform and rear candy columns.
  s=ellipse(0,0,286,178,'#D4AE67')+ellipse(0,-18,286,178,'#FFEBC0')
  for r in [265,225]:s+=ellipse(0,-18,r,r*.62,'none','#D0AD6C',2)
  b.add('pavilion-platform',s,(-294,-204,588,392),'decal')
@@ -169,7 +162,6 @@ def candy():
   for yy in range(-height+5,-15,42):ss+=path(f'M{x-13} {y+yy+8} l26 -16 v21 l-26 16Z','#F68EAA','none')
   return ss+ellipse(x,y,26,11,'#FFE3A0')+ellipse(x,y-height,23,9,'#FFF0BF')
  b.add('pavilion-back-pillars',col(-135,-65)+col(135,-65),(-170,-285,340,240),sort=-38)
- # Flowerbeds round pavilion.
  for i,a in enumerate([.35,2.8,3.55,5.95]):flower(b,10+i,220*math.cos(a),123*math.sin(a)-18)
  s=''
  for x in [-77,77]:s+=col(x,67)
@@ -179,7 +171,6 @@ def candy():
  for x,y in [(-110,-340),(-70,-389),(-25,-413),(30,-414),(85,-382),(126,-339),(-57,-313),(0,-337),(55,-314)]:roof+=ellipse(x,y,6,4,'#FFF0BA','none')
  roof+=ellipse(0,-462,32,32,'#FFE6A0')+ellipse(-10,-473,10,8,'#FFFFE5','none')
  b.add('cupcake-roof',roof,(-214,-505,428,305),sort=92)
- # Arched bridge, floor and two independent rails.
  deck=path('M-88 365 L-88 188 Q0 131 88 188 L88 365Z','#FFEDBA')
  for yy in range(200,365,28):deck+=path(f'M-85 {yy} Q0 {yy-31} 85 {yy} v15 Q0 {yy-16} -85 {yy+15}Z','#F78DA8','none')
  b.add('bridge-deck',deck,(-95,148,190,223),'decal')
@@ -187,11 +178,9 @@ def candy():
   x=side*91;s=line(f'M{x} 350 Q{x*.75} 220 {x} 157','#8D5740',15)+line(f'M{x} 350 Q{x*.75} 220 {x} 157','#FFF0C2',10)
   for yy in [173,330]:s+=rect(x-12,yy-25,24,65,'#F394A7')+ellipse(x,yy-27,22,20,'#FFF1B4')+ellipse(x,yy+41,22,9,'#E9BC6C')
   b.add(f'bridge-rail-{side}',s,(x-28,yy-220,56,300),'front',375)
- # Moat blocks except the walkable bridge and centre, supplied as polygons to integrator.
  b.d['blocked']=[dict(name='chocolate moat west',poly=[[-455,-287],[-302,-190],[-302,190],[-110,287],[-455,287]]),dict(name='chocolate moat east',poly=[[455,-287],[302,-190],[302,190],[110,287],[455,287]]),dict(name='chocolate moat back',poly=[[-455,-287],[455,-287],[302,-190],[-302,-190]])]
  b.d['walkable'].append(dict(poly=[[-88,365],[-88,160],[88,160],[88,365]]))
  furnishings(b)
- # capacity uses ellipses only in finish, calculate custom moat polygons separately.
  for bl in b.d['blocked']:
   if 'ellipse' not in bl:bl['areaNote']='solid chocolate, keep Duckies out'
  b.d['capacity']=dict(duckies=340,note='Main plaza and bridge; chocolate ring excluded.')

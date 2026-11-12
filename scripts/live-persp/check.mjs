@@ -27,7 +27,6 @@ assert(box.includes('A275 210.65'),'Box base uses .766 ground ratio');
 assert(!box.includes('gradient'),'Flat colour artwork');
 for(const p of c.pieces){
  const file=fs.readFileSync(A+'centre/'+p.file,'utf8'),vb=file.match(/viewBox="([^"]+)"/)[1].split(' ').map(Number);
- // The untouched dancer was traced at a different internal resolution.
  if(p.id!=='dancer')assert.deepEqual(vb,[p.x,p.y,p.width,p.height].map((v,i)=>p.id==='wind-key'&&i<2?0:p.id.startsWith('terrace-lamp-')&&i<2?[-38,-212][i]:v),p.id+' authored SVG bounds match placement');
 }
 const map=makeMap('pink',{world:w,walk,harbor,sleepers:[]}),nav=map.nav(),{origin:[ox,oy],scale:k}=w.centrePlacement;
@@ -37,7 +36,6 @@ for(const p of [[0,-440],[-400,-800],[400,-800],[0,-1180]])assert(nav.route(map.
 assert(!nav.walkable(...point(0,-810)),'Box footprint must block');
 for(const x of [-329,329])assert(!nav.walkable(...point(x,-180)),'Rail footprint must block');
 for(const p of c.blocked.filter(p=>p.name.startsWith('terrace heart lamp')))assert(!nav.walkable(...point(p.ellipse.x,p.ellipse.y)),'Lamp footprint must block');
-// Exercise the real animation code through the whole winding cycle, using authored placement anchors.
 const p=c.pieces.find(p=>p.id==='wind-key'),entry=art.props.find(p=>p.id==='centre-wind-key'),s=new Sprite(Texture.EMPTY);
 s.anchor.set(entry.anchor.x,entry.anchor.y);s.position.set(entry.x,entry.y);s.width=entry.width;s.height=entry.height;
 const pivot=()=>[s.x+(p.anchor.x-s.anchor.x)*s.texture.width*s.scale.x,s.y+(p.anchor.y-s.anchor.y)*s.texture.height*s.scale.y],rest=pivot();
@@ -47,7 +45,6 @@ const report={stairSamples:samples,terraceRoutes:4,ratio:.766,stairWidthFraction
 fs.writeFileSync('../concepts/themes/work/live-persp/pink-validation.json',JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));
 
-// Additional readback and navigation checks for the two other live repairs.
 const evidence='../concepts/themes/work/live-persp/';
 const port=read(evidence+'port-files.json');
 const {execFileSync}=await import('node:child_process');
@@ -90,7 +87,6 @@ for(const theme of ['waterfall','fair']) {
  }
  additional[theme]={stairSamples:samples,entranceRoutes:routes,blockedFootprints:blockers,worldAndWalkingBytesUnchanged:true,nonCentreArtUnchanged:true};
 }
-// Exercise both original Pink animation contracts through their complete cycles.
 const motion={};
 for(const id of ['dancer','wind-key']) {
  const p=c.pieces.find(p=>p.id===id),entry=art.props.find(p=>p.id==='centre-'+id),s=new Sprite(Texture.EMPTY);

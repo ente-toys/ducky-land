@@ -1,8 +1,3 @@
-// The five hamlets, copied from GPT's blueprints (scripts/home-10/hamlets/<h>.json, art in public/pixi-art/home-hamlets/<h>/).
-// Called by homes-apply.mjs with the expansion E and the homes patch P. Places nothing by taste: every object sits where the
-// blueprint drew it (map: blueprint pixel bp -> world point at, k world units per pixel), back to front by the layout's order.
-// Hand fixes per hamlet live in homes.json: skip (files not placed), drop (ids left out), nudge ({id: [dx, dy]} world units),
-// connect (hand lanes joining the hamlet lane to the main loop), roads (base road ids this hamlet replaces).
 import {readFileSync, existsSync} from 'node:fs';
 import {inPoly} from '../../assets/world/island-geometry.mjs';
 const DECAL = /^(grass|pebble|path-stone|sand-specks|flowers?-tiny|flower-single|meadow|wild-pink|flowers-(daisy|pink)\.)/;
@@ -33,7 +28,6 @@ export function applyHamlets(E, P) {
     const file = `scripts/home-10/hamlets/${h}.json`;
     const {at, bp, k} = cfg.map, W = ([px, py]) => [at[0] + (px - bp[0]) * k, at[1] + (py - bp[1]) * k];
     const rect = [W([0, 0]), W([1536, 1024])];
-    // 1. clear the old hamlet: every expansion prop of this hamlet, the verges and any other zone's prop inside the frame
     const inRect = p => p.x > rect[0][0] && p.x < rect[1][0] && p.y > rect[0][1] && p.y < rect[1][1];
     const before = E.props.length;
     E.props = E.props.filter(p => !(p.zone === h || (inRect(p) && p.zone !== 'commons')));
@@ -42,21 +36,18 @@ export function applyHamlets(E, P) {
     const com = E.communities.find(c => c.id === h);
     if (!existsSync(file)) {report[h] = {cleared: before - E.props.length, placed: 0}; if (com) {com.homes = []; com.workplaces = [];} continue;}
     const L = JSON.parse(readFileSync(file));
-    // 2. the square and the lane, painted by ground.mjs as the centre's paths
-    // a plain ring, or GeoJSON (Polygon / MultiPolygon with holes): kept as a flat list of rings, painted even-odd
     const rings = g => Array.isArray(g) ? [g] : g.type === 'Polygon' ? g.coordinates : g.coordinates.flat();
     const sqR = rings(L.square).map(r => r.map(W)), laneR = rings(L.lane).map(r => r.map(W));
     const inRings = (x, y, R) => R.filter(r => inPoly(x, y, r)).length % 2 === 1;
     const square = sqR[0], lane = laneR.flat();
     E.roads.push({id: `hamlet-${h}-square`, kind: 'lane', rings: sqR, width: 0}, {id: `hamlet-${h}-lane`, kind: 'lane', rings: laneR, width: 0});
-    for (const c of cfg.connect ?? []) if (c.bp) c.points = c.bp.map(q => W(q).map(Math.round));   // drawn in blueprint pixels
+    for (const c of cfg.connect ?? []) if (c.bp) c.points = c.bp.map(q => W(q).map(Math.round));
     for (const c of cfg.connect ?? []) E.roads.push({kind: 'lane', width: 80, ...Object.fromEntries(Object.entries(c).filter(([k]) => k !== 'bp')), id: `hamlet-${h}-${c.id}`});
     const lines = E.roads.filter(r => r.points && !String(r.id).startsWith(`hamlet-${h}-`)).map(r => ({p: r.points, w: Math.max(r.width ?? 56, r.kind === 'main' ? 128 : 104)}));
     const conn = (cfg.connect ?? []).map(c => ({p: c.points, w: c.width ?? 80}));
     const onWater = (x, y, pad) => !inPoly(x, y, E.coast) || water.some(w => inPoly(x, y, w)) || water.some(w => {for (let i = 0; i < w.length; i++) if (segDist(x, y, w[i], w[(i + 1) % w.length]) < pad) return true; return false;});
     const onRoad = (x, y, pad) => [...lines, ...conn].some(l => lineDist(x, y, l.p) < l.w / 2 + pad) || inRings(x, y, laneR);
     const kept = E.props.filter(p => p.footprint && inRect(p));
-    // 3. the objects, back to front
     const objs = [...L.objects].sort((a, b) => a.drawOrder - b.drawOrder), decals = [], placed = [], dropped = [];
     objs.forEach((o, i) => {
       if ((cfg.skip ?? []).includes(o.file) || (cfg.drop ?? []).includes(o.id)) return;
@@ -74,8 +65,6 @@ export function applyHamlets(E, P) {
       if (bad && !n) {dropped.push(`${o.id}:${bad}`); return;}
       const p = {id: `hamlet-${h}-${o.id}`, name, asset: name, src, x: r1(x), y: r1(y), width: r1(w), height: r1(hgt), scale: 1, anchor: {x: .5, y: 1},
         resolution: 1.5, zone: h, order: o.drawOrder};
-      // boss 8 Nov ("base has to have shadow"): buildings, workplaces, trees and the larger props get the engine's one soft
-      // contact shadow, sized to the footprint; flat beds, fences, flowers, pebbles and the small bits stay without
       if (FLAT.test(name) || (w < 60 && !/lamp/.test(name))) p.noShadow = true;
       else if (fp && (BUILDING.test(name) || WORK.test(name))) p.shadowSize = [r1(fp.rx * 1.05), r1(Math.min(70, fp.rx * .3))];
       if (fp) p.footprint = {x: r1(fp.x), y: r1(fp.y), rx: r1(fp.rx), ry: r1(fp.ry)};
@@ -83,7 +72,6 @@ export function applyHamlets(E, P) {
       else if (WORK.test(o.file)) p.communityRole = 'workplace';
       placed.push(p);
     });
-    // draw order follows the layout: a later-drawn object that overlaps an earlier one with a lower base still draws over it
     for (let i = 0; i < placed.length; i++) {
       const p = placed[i]; p.z = p.y;
       for (let j = 0; j < i; j++) {
@@ -97,7 +85,6 @@ export function applyHamlets(E, P) {
     if (com) {
       com.homes = placed.filter(p => p.communityRole === 'home').map(p => p.id);
       com.workplaces = placed.filter(p => p.communityRole === 'workplace').map(p => p.id);
-      // the hamlet's place: the open spot on its square or lane farthest from every footprint and the frame edge
       const fps = E.props.filter(p => p.footprint).map(p => p.footprint);
       let c = cfg.place, best = -1;
       if (!c) for (let px = 0; px <= 1536; px += 16) for (let py = 0; py <= 1024; py += 16) {

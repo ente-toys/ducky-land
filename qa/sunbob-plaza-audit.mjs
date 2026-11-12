@@ -8,8 +8,6 @@ const svg=readFileSync(new URL('plaza-bloom-ground.svg',base),'utf8');
 const tile=centre.groundTiles.find(t=>t.src==='plaza-bloom-ground.svg');
 const {x:cx,y:cy,rx,ry}=centre.plaza,sy=ry/rx;
 const ctx=createCanvas(1,1).getContext('2d');
-// Read the actual paving outline, including all ten rotated petals, rather than
-// assuming a small plaza ellipse that misses the petal tips and sides.
 const petal=new Path2D(svg.match(/id="petal" d="([^"]+)"/)[1]);
 const angles=[...svg.matchAll(/<g transform="rotate\(([-\d.]+)\)"><use href="#petal"/g)].map(m=>Number(m[1])*Math.PI/180);
 const discRadius=Number(svg.match(/<circle r="([\d.]+)" fill="#fff0b4"/)[1]);
@@ -25,8 +23,6 @@ const nearBase=point=>{
   const k=1/Math.sqrt((dx/(statue.rx+22))**2+(dy/(statue.ry+22))**2);
   return [statue.x+dx*k,statue.y+dy*k];
 };
-// Check all ten drawn approaches, exceeding the requested eight. Three end at
-// benches; begin 100 units inward on their clear lane, keeping benches solid.
 export const bloomApproaches=[...svg.matchAll(/<path d="M([-\d.]+) ([-\d.]+) L([-\d.]+) ([-\d.]+)" fill="none" stroke="#f5dfa1"/g)].map((m,i)=>{
   const a=Math.atan2(Number(m[4]),Number(m[3]));
   const petalAngle=angles.reduce((best,b)=>Math.abs(Math.atan2(Math.sin(b-a),Math.cos(b-a)))<Math.abs(Math.atan2(Math.sin(best-a),Math.cos(best-a)))?b:best,angles[0]);

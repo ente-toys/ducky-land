@@ -1,9 +1,6 @@
-// The camera remains in the original artwork's world coordinates.
 export {fitZoom, zoomAt, easeCamera, clamp} from '../../assets/world/island-camera.mjs';
 
-// Boss 3 Nov, Cursor Camp look: the ground is seen at a tilt, so screen y is world y squashed by TILT.
-// Trees, stalls and Duckies stay upright (engine.js counter-scales them); only the ground plane foreshortens.
-export const TILT = Math.min(1, Math.max(.4, Number(new URLSearchParams(globalThis.location?.search).get('tilt')) || 1));   // boss 3 Nov: top-down (A); ?tilt= still compares angles   // ?tilt= to compare angles
+export const TILT = Math.min(1, Math.max(.4, Number(new URLSearchParams(globalThis.location?.search).get('tilt')) || 1));
 
 export function screenToWorld(camera, point, width, height) {
   const b=camera.basis??{a:1,b:0,c:0,d:1},det=b.a*b.d-b.b*b.c,x=point.x-width/2,y=point.y-height/2;
@@ -23,7 +20,6 @@ export function movePinch(camera, before, after, minZoom, maxZoom, width, height
   camera.y = anchor.y - (next.y - height / 2) / (camera.zoom * TILT);
 }
 
-// Any multi-touch, cancelled, or dragged gesture is permanently ineligible for a tap.
 export class Gestures {
   pointers = new Map();
   down(id, point) {
@@ -36,8 +32,6 @@ export class Gestures {
     const before = [...this.pointers.values()].map(p => ({x: p.x, y: p.y}));
     const was = pointer.consumed;
     if (Math.hypot(point.x - pointer.start.x, point.y - pointer.start.y) > 6) pointer.consumed = true;
-    // the first drag step counts from the press, so the few pixels of tap slop are not lost (boss 8 Nov: the grabbed spot
-    // on the globe stays exactly under the cursor)
     const from = pointer.consumed && !was && this.pointers.size === 1 ? pointer.start : pointer;
     const dx = point.x - from.x, dy = point.y - from.y;
     Object.assign(pointer, point);

@@ -1,5 +1,3 @@
-// Surgical rebuild in dependency order. Legacy source snapshots never replace
-// another package's current outputs. No build, commit or publishing side effect.
 import {execFileSync} from 'node:child_process';
 for(const script of ['buildings','paths','water-art','bridges','centre-art','life','round2-grass','life-register'])
  execFileSync(process.execPath,[`scripts/bigger-cathedral/${script}.mjs`],{stdio:'inherit'});

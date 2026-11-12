@@ -1,8 +1,5 @@
 import {normalizeBogBlockers} from './blockers.js';
 
-// Merge adapter for installBogEnvironment(), BOG_BLOCKERS and BOG_AREAS from
-// the environment branch. Pass the same result to the server's combat option
-// and to BogEntry/attachBogCombat. No map art or environment is imported here.
 export function combatForBogEnvironment({map,islandId},records,areas) {
   const navigation=map.nav(),blockers=normalizeBogBlockers(records);
   const bases={privacy:['privacy-nw','privacy-sw'],google:['google-ne','google-se']};

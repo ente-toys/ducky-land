@@ -1,4 +1,3 @@
-// Native offscreen validation of the production fragment shader. No windows.
 #import <Foundation/Foundation.h>
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/gl3.h>
@@ -15,7 +14,6 @@ int main(int argc,char **argv){@autoreleasepool{
  GLuint tex[4];glGenTextures(4,tex);
  for(int i=0;i<3;i++){NSDictionary *im=job[i==0?@"atlas":i==1?@"scene":@"islets"];if(!im)continue;NSData *data=[NSData dataWithContentsOfFile:im[@"path"]];glActiveTexture(GL_TEXTURE0+i);glBindTexture(GL_TEXTURE_2D,tex[i]);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,[im[@"width"] intValue],[im[@"height"] intValue],0,GL_RGBA,GL_UNSIGNED_BYTE,data.bytes);glUniform1i(glGetUniformLocation(p,i==0?"uWorld":i==1?"uScene":"uIslets"),i);}
  GLuint fb;glGenFramebuffers(1,&fb);glBindFramebuffer(GL_FRAMEBUFFER,fb);glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,tex[3]);glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,W,H,0,GL_RGBA,GL_UNSIGNED_BYTE,0);glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,tex[3],0);if(glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE)return 4;
- // Output allocation must not replace the shader's atlas binding.
  glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,tex[1]);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,tex[0]);
  float verts[]={-1,1,0,0,1,1,1,0,1,-1,1,1,-1,1,0,0,1,-1,1,1,-1,-1,0,1};GLuint vao,vbo;glGenVertexArrays(1,&vao);glBindVertexArray(vao);glGenBuffers(1,&vbo);glBindBuffer(GL_ARRAY_BUFFER,vbo);glBufferData(GL_ARRAY_BUFFER,sizeof(verts),verts,GL_STATIC_DRAW);glEnableVertexAttribArray(0);glEnableVertexAttribArray(1);glVertexAttribPointer(0,2,GL_FLOAT,0,4*sizeof(float),0);glVertexAttribPointer(1,2,GL_FLOAT,0,4*sizeof(float),(void*)(2*sizeof(float)));glViewport(0,0,W,H);glDrawArrays(GL_TRIANGLES,0,6);glFinish();
  NSMutableData *pixels=[NSMutableData dataWithLength:W*H*4];glReadPixels(0,0,W,H,GL_RGBA,GL_UNSIGNED_BYTE,pixels.mutableBytes);[pixels writeToFile:job[@"output"] atomically:YES];printf("Renderer: %s, GL error: %u\n",glGetString(GL_RENDERER),glGetError());CGLSetCurrentContext(NULL);CGLDestroyContext(ctx);

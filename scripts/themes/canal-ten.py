@@ -20,12 +20,9 @@ zones=[z for n,z in world['zones'].items() if n.startswith(('activity-','stalls-
 reserved=unary_union([box(z['x0'],z['y0'],z['x1'],z['y1']) if 'x0' in z else ellipse(z['x'],z['y'],z['rx'],z['ry']) for z in zones])
 beds=read(A/'resolved-sleepers.json');sleep=unary_union([ellipse(b['x'],b['y'],b['r']+35,65) for b in beds])
 
-# The paved reservations become useful lawn courts with stone edging and tufts.
-# Keep their exact reserved dimensions, entrances and collision-free interiors.
 NS='http://www.w3.org/2000/svg'; ET.register_namespace('',NS)
 ground=ET.fromstring((A/'ground.svg').read_text())
-if True:  # Rebuild this one tagged layer from the unchanged routes.
- # Buffer the smooth centre lines once, so junctions have one continuous edge.
+if True:
  route=unary_union([LineString(p).buffer(width/2,quad_segs=24) for p,width in zip(world['paths'],world['pathWidths'])]).buffer(45,quad_segs=16).buffer(-45,quad_segs=16).intersection(land)
  def shape(q):
   polys=list(q.geoms) if hasattr(q,'geoms') else [q]
@@ -45,8 +42,6 @@ if ground.get('data-canal-ten')!='1':
    joints.set('stroke','none');rim.set('stroke','#E5CB8C');rim.set('stroke-width','13')
  ground.set('data-canal-ten','1')
 
-# Ground-level ornamental ring separates a generous walk from the fountain.
-# It is above the integrated paving decal, and below every standing object.
 art['flats']=[p for p in art['flats'] if not p.get('id','').startswith('canal-ten-')]
 ring=['<svg xmlns="http://www.w3.org/2000/svg" width="1860" height="1440" viewBox="-930 -720 1860 1440" stroke-linejoin="round">']
 for rx,ry in [(480,368),(830,637)]:
@@ -57,7 +52,6 @@ for rx,ry in [(480,368),(830,637)]:
 ring.append('</svg>');(A/'detail/fountain-rings.svg').write_text(''.join(ring))
 art['flats'].append(dict(id='canal-ten-fountain-rings',src='detail/fountain-rings.svg',x=3070,y=2600,width=1860,height=1440,topLeft=True))
 
-# Grass detail on the formerly empty market lawns. Floor decals never obstruct play.
 for j,z in enumerate(zones):
  if 'x0' not in z:continue
  for i in range(80):
@@ -67,7 +61,6 @@ for j,z in enumerate(zones):
   w,h={'grass-tuft-1':(44,26),'grass-tuft-2':(34,22),'flower-dot-1':(20,18),'flower-dot-2':(26,18),'pebble-1':(22,14)}[name]
   art['flats'].append(dict(id=f'canal-ten-lawn-{j}-{i}',src=f'reuse/{name}.svg',x=round(x,1),y=round(y,1),width=w*1.5,height=h*1.5))
 
-# Move physical props out of full-width paths. Preserve the actual obstacle shape.
 def footprint(p):
  w=p['width']*p['scale'];h=p['height']*p['scale']
  return box(p['x']-w*.42,p['y']-65,p['x']+w*.42,p['y']+12) if 'townhouse' in p['name'].lower() else ellipse(p['x'],p['y'],min(w*.4,90),max(20,min(h*.2,40)))
@@ -80,8 +73,6 @@ def obstacles_for(p):
    if abs(c.x-p['x'])<2 and abs(c.y-(p['y']-42.5))<5:out.append(o)
   elif abs(o['x']-p['x'])<1 and abs(o['y']-p['y'])<25:out.append(o)
  return out
-# Three duplicated houses stood directly in the route; their neighbours retain
-# the terrace rhythm while these gaps become the walking entrances.
 duplicates=[p for p in art['props'] if p['id'] in ['canal-1','canal-6','canal-polish-0138']]
 for p in duplicates:
  for o in obstacles_for(p):world['obstacles'].remove(o)
@@ -92,7 +83,6 @@ for p in art['props']:
  f=footprint(p)
  if not paths.intersects(f):continue
  if 'tree' in p['name'].lower() or 'townhouse' in p['name'].lower():continue
- # Low flat shells/towels also stay away from the promenade.
  obs=obstacles_for(p);x0,y0=p['x'],p['y'];found=None
  for radius in range(60,1501,30):
   for i in range(40):
@@ -110,7 +100,6 @@ for p in art['props']:
   else:o['x']+=dx;o['y']+=dy
  changes.append(dict(id=p['id'],name=p['name'],old=[x0,y0],new=[p['x'],p['y']]))
 
-# A finished planted edge, but clear slots and walk-in gaps for future activities.
 art['props']=[p for p in art['props'] if not p['id'].startswith('canal-ten-edge-')]
 world['obstacles']=[o for o in world['obstacles'] if not o.get('canalTenEdge')]
 for j,z in enumerate(zones):

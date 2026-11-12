@@ -1,4 +1,3 @@
-// Real Pixi islet sprites, boat views, duck rig and sailing FX, windowless.
 import {readFileSync,writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {JSDOM} from 'jsdom';
@@ -47,7 +46,6 @@ for(const [n,i]of [ISLETS[0],ISLETS.find(i=>i.art==='07-pink-blossom')].entries(
  for(let k=0;k<60;k++)duck.update(.1,{turn:look.turn,time:0,reducedMotion:false,action:0,speed:0,sailing:true});fx.front(entry);renderer.render(scene);
  const d=output.getContext('2d').getImageData(0,0,W,H).data;let ink=0;for(let k=0;k<d.length;k+=4)if(d[k]<100&&d[k+1]<100&&d[k+2]<100)ink++;
  const file=`ingame-close-${n+1}.png`;writeFileSync(`${out}/${file}`,output.toBuffer('image/png'));
- // Assert that the flat layer is excluded before the globe's scene capture.
  isletView.update(id,camera,W,H,true);if(isletView.layer.visible)throw Error('Double draw at globe transition');
  renderer.render(scene);const without=output.getContext('2d').getImageData(0,0,W,H).data;let changed=0;for(let k=0;k<d.length;k+=4)if(Math.abs(d[k]-without[k])+Math.abs(d[k+1]-without[k+1])+Math.abs(d[k+2]-without[k+2])>8)changed++;
  if(changed<20000)throw Error(`Missing Pixi islet sprite: ${changed} islet pixels`);

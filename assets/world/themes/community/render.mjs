@@ -1,4 +1,3 @@
-// Offline manifest render when the sandbox cannot open Chromium. All art is the actual SVG data.
 import sharp from 'sharp';import fs from 'node:fs';
 const ART='public/pixi-art/themes/community/',DATA='assets/world/themes/community/';
 const a=JSON.parse(fs.readFileSync(ART+'art.json')),h=JSON.parse(fs.readFileSync(DATA+'harbor.json'));
@@ -13,7 +12,6 @@ async function add(s,x,y,w,hh,flip=false){
 }
 for(const t of a.ground.tiles)await add(t.src,t.x,t.y,t.width,t.height);
 for(const f of a.flats)await add(f.src,f.topLeft?f.x:f.x-f.width/2,f.topLeft?f.y:f.y-f.height,f.width,f.height,f.flip);
-// Contact shadows use the shared theme loader's footprint recipe.
 const shadows=a.props.filter(p=>p.shadow!==false&&!/bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i.test(p.name)).map(p=>{const rx=Math.max(8,Math.min(300,p.width*(p.scale??1)*.36)),ry=rx*.3;return `<ellipse cx="${p.x+rx*.06}" cy="${p.y+ry*.1}" rx="${rx}" ry="${ry}"/>`}).join('');
 layers.push({input:await sharp(Buffer.from(`<svg width="${W}" height="${H}" viewBox="0 0 ${a.width} ${a.height}"><g fill="#3c5a2a" opacity=".15">${shadows}</g></svg>`)).png().toBuffer(),left:0,top:0});
 for(const d of a.decks)await add(d.src,d.x,d.y,d.width,d.height);

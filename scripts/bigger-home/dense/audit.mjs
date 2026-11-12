@@ -18,7 +18,6 @@ const legacy=[
 const bridges=legacy.map(([id,point,before])=>({id,point,before,after:wet(...point)?'water underneath':'sea or dry',walkable:n.walkable(...point)}));
 for(const c of E.crossings){const p=[(c.x-278)/.18,(c.y-204)/.18];bridges.push({id:c.id,point:p,before:'new road crossing',after:wet(...p)?'water underneath':'dry',walkable:n.walkable(...p)});}
 const destinations=[...E.places,...E.commons].map(p=>{const target=n.nearest(...p.point,180);const r=target?n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...target):[];return{id:p.id,requested:p.point,target,reached:JSON.stringify(r.at(-1))===JSON.stringify(target),walkable:target&&n.walkable(...target)};});
-// Check every sampled centreline point that is unambiguously inside the actual water.
 let blockedWater=0,leakedWater=0;const leak=[];
 for(const w of E.riverWater){let x0=Math.min(...w.poly.map(p=>p[0])),x1=Math.max(...w.poly.map(p=>p[0])),y0=Math.min(...w.poly.map(p=>p[1])),y1=Math.max(...w.poly.map(p=>p[1]));for(let x=x0;x<x1;x+=29)for(let y=y0;y<y1;y+=29){if(!inShape(x,y,w,-12))continue;const deck=HOME_MAP.walk.bridges.some(b=>Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);if(deck)continue;if(n.walkable(x,y)){leakedWater++;if(leak.length<10)leak.push([x,y]);}else blockedWater++;}}
 const original=JSON.parse(readFileSync(O+'/work/original-walk-world.json'));let changedOriginalDry=0;

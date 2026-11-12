@@ -1,4 +1,3 @@
-// Actual Pixi engine, actual globe shader, actual theme snapshots.
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const tag=process.argv[2]??'after',out='../concepts/themes/world-map/spread';mkdirSync(out,{recursive:true});

@@ -2,8 +2,6 @@ import {ArenaClient} from './client.js';
 import {BOG_ISLAND} from './entry.js';
 import {movementFacing} from './facing.js';
 
-// Implements the small RoomClient surface consumed by PixiIsland. The engine
-// still collects island movement, advances at 60 Hz, follows, and draws Ducky.
 export class BogCombatRoom {
   constructor({islandId=BOG_ISLAND,onSnapshot=()=>{},onStatus=()=>{},...options}={}) {
     this.islandId=islandId;this.mode='walking';this.boats=[];this.alpha=1;this.fire=false;this.facing=0;
@@ -40,12 +38,11 @@ export class BogCombatRoom {
   stopInput(){
     this.fire=false;this.queuedEmote=null;
     if(this.player)Object.assign(this.player,{path:[],heading:null,pace:0,travel:0});
-    // The normal step sends the coalesced release inside the 30 Hz ceiling.
     this.client.control({x:0,y:0,run:false},this.facing,false,0);
   }
   boatPoses(){return [];}
   destination(){return null;}
-  jump(){return false;} // Space is captured as shoot only while attached.
+  jump(){return false;}
   board(){return false;}
   disembark(){return false;}
   chat(){}

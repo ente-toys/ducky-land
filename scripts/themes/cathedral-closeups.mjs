@@ -1,4 +1,3 @@
-// Same world-to-screen scale on both sides, no resized comparison crops.
 import {render} from './cathedral-render.mjs';
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';

@@ -25,7 +25,6 @@ for(const [i,z]of zones.entries())assert.ok(arcs.some(b=>b.id.startsWith('rim-'+
 const ts=art.props.filter(p=>/tree/i.test(p.name));let crownOverlaps=0;
 for(let i=0;i<ts.length;i++)for(let j=i+1;j<ts.length;j++){const p=ts[i],q=ts[j],ph=p.height*p.scale,qh=q.height*q.scale;if(((p.x-q.x)/(.43*(p.width*p.scale+q.width*q.scale)))**2+((p.y-ph*.61-(q.y-qh*.61))/(.28*(ph+qh)))**2<1)crownOverlaps++;}
 assert.equal(crownOverlaps,0,'no overlapping tree crown envelopes');
-// Exercise the real theme loader directly, independent of the other job's generated registry.
 const original=globalThis.fetch;let acquired=0,released=0,loaded;
 try{globalThis.fetch=async url=>({ok:true,json:async()=>read('public'+url)});loaded=await loadThemeArt(map,{acquire:async()=>{acquired++;return Texture.EMPTY},release:()=>released++});assert.equal(loaded.props.length,art.props.length);assert.ok(loaded.props.every(p=>!p.centrePiece||!p.wind));loaded.destroy();assert.equal(acquired,released);}finally{globalThis.fetch=original;}
 const result={ready:true,dimensions:[8000,6000],sleepers:map.sleepers.length,props:art.props.length,trees:ts.length,arcBenches:arcs.length,openZones:6,pathAnchorOverlaps:0,treeCrownOverlaps:0,rasterFiles:0,svgManifestEntries:entries.length,loadedTextures:acquired,releasedTextures:released,centrePieces:art.props.filter(p=>p.src.startsWith('centre/')).length,liveBrowserVerified:false};

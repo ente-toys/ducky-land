@@ -67,11 +67,9 @@ def shape(s):
     else:g=box(s['x'],s['y'],s['x']+s['width'],s['y']+s['height']).buffer(-s.get('rx',0)).buffer(s.get('rx',0),quad_segs=12)
     a,b,c,d,x,y=s['matrix'];return affinity.affine_transform(g,[a,c,b,d,x,y])
 
-# One continuous water contour: generously clear the full 92-unit hull, including bends.
 waters=[]; sailing=[]
 for b in shore['brooks']:
     p=b['centre'][:]
-    # Extend the final centreline through the coast and flare into the sea.
     a,z=p[-2:];v=[z[k]-a[k] for k in (0,1)];l=math.hypot(*v)
     p += [[z[k]+v[k]/l*180 for k in (0,1)],[z[k]+v[k]/l*420 for k in (0,1)]]
     pts=smooth(p);wet=LineString(pts).buffer(94,quad_segs=16)
@@ -80,7 +78,6 @@ for b in shore['brooks']:
 for p in shore['ponds']:waters.append(Polygon(smooth(p['poly'],True)).buffer(0))
 pond={'x':5654.35,'y':1877.36,'rx':570,'ry':320}
 waters.append(ellipse(pond['x'],pond['y'],pond['rx'],pond['ry']))
-# An intentional eastern outflow, below the north pond walk, joining Willow Spring.
 link=smooth([[6160,1877],[6500,1900],[6790,2000],[7070,2160],[7380,2250]])
 waters.append(LineString(link).buffer(94,quad_segs=16));sailing.append({'id':'pond-outflow','samples':link})
 wet=unary_union(waters).buffer(35,quad_segs=12).buffer(-35,quad_segs=12)
@@ -91,17 +88,16 @@ for i,p in enumerate(wetpolys):
     waterdata.append({'name':'Rosy continuous water '+str(i),'x':(x0+x1)/2,'y':(y0+y1)/2,'rx':(x1-x0)/2,'ry':(y1-y0)/2,'poly':list(p.exterior.coords)})
 coast=Polygon(world['coast']).buffer(0)
 
-# Retain the authored hamlet courts, replacing every travel corridor at Home widths.
 routes=[];courts=[]
 for s in source['pieces']:
     if not s.get('stroke'):
-        if s['id']=='pink-close-harbor':continue # obsolete isolated oblong pad
+        if s['id']=='pink-close-harbor':continue
         courts.append(shape(s));continue
     if s['role']!='road':
         pts=curve(s['d']);a,b,c,d,x,y=s['matrix'];pts=[[a*q[0]+c*q[1]+x,b*q[0]+d*q[1]+y] for q in pts]
     else:pts=curve(s['d'])
-    if s['id'] in ['tutu-west','hamlet-tutu-tides-paths-29','hamlet-teacup-paths-30']:continue # redundant duplicate/stub paint
-    if s['id'] in ['centre-0','centre-3']:continue # obsolete rear terrace stub and redundant garden diagonal
+    if s['id'] in ['tutu-west','hamlet-tutu-tides-paths-29','hamlet-teacup-paths-30']:continue
+    if s['id'] in ['centre-0','centre-3']:continue
     if s['id']=='centre-6':pts=smooth([[1956,1834],[1835,2330],[1780,2670],[1680,2930],[1646,3191]])
     if s['id']=='centre-2':pts=list(reversed(smooth([pts[0],[3440,2720],[3470,2860]])))[:-1]+pts
     if s['id']=='centre-7':pts=list(reversed(smooth([pts[0],[4590,2830],[4520,2930]])))[:-1]+pts
@@ -111,7 +107,6 @@ for s in source['pieces']:
     width=128 if s['id']=='promenade' else 104
     routes.append({'id':s['id'],'width':width,'samples':pts})
 
-# Approved ribbon centre replaces the old offset terrace and its road tips.
 B=read(S/'data/population.json'); C=read(S/'data/centre.json')
 for join in C['pathJoins']:
     if join['id']=='ribbon-join-north-loop':continue
@@ -125,10 +120,9 @@ lines=[LineString(r['samples']).buffer(r['width']/2,quad_segs=12) for r in route
 for b in shore['crossings']:
     for p in [b['a'],b['b']]:lines.append(ellipse(*p,82,68))
 merged=unary_union(lines+courts).buffer(85,quad_segs=12).buffer(-85,quad_segs=12).intersection(coast)
-# Keep the existing heart lamps clear without moving or disabling their collisions.
 lampcuts=[]
 for p in art['props']:
-    if False: # old terrace lamps retired by ribbon centre
+    if False:
 
         f=p.get('footprint') or next((o for o in world['obstacles'] if o.get('name')==p['id'] or abs(o.get('x',1e9)-p['x'])<2 and abs(o.get('y',1e9)-p['y'])<20),None)
         if f and not f.get('poly'):lampcuts.append(ellipse(f['x'],f['y'],f.get('rx',18)+20,f.get('ry',18)+20))
@@ -138,7 +132,6 @@ pathfrag=f'<g data-name="Rosy unified paths"><path d="{svg(surface)}" fill="#FBE
 waterfrag=f'<g data-name="Rosy unified water"><defs><clipPath id="rosy-bank-land"><path d="{svg(coast)}"/></clipPath></defs><path d="{svg(wet)}" fill="#F9D3DC" stroke="#E9A9BC" stroke-width="28" stroke-linejoin="round" clip-path="url(#rosy-bank-land)"/><path d="{svg(wet)}" fill="#6EC9DE"/></g>'
 (S/'path-surface.svgfrag').write_text(pathfrag);(S/'water-surface.svgfrag').write_text(waterfrag)
 write(S/'sampled-routes.json',routes);write(S/'sailing-routes.json',sailing)
-# Exact destination throats, including the actual marina deck, never zone boxes.
 court=unary_union(courts);unserved=[];crossings=[];ends=[]
 for r in routes:
     line=LineString(r['samples'])
@@ -162,8 +155,6 @@ for i,r in enumerate(routes):
                 crossings.append({'type':'interior-X-crossing','routes':[r['id'],q['id']],'point':[p.x,p.y]})
 write(S/'throat-report.json',{'unserved':unserved,'crossings':crossings,'ends':ends})
 
-# Strip legacy travel paint, including the old protected centre, before replaying
-# the SAME union on all overlapping ground crops. Landmark sprites are untouched.
 def remove_groups(text,names):
     pattern=r'<g\b[^>]*data-name="(?:'+'|'.join(re.escape(n) for n in names)+r')"[^>]*>'
     while (m:=re.search(pattern,text)):
@@ -185,12 +176,7 @@ for t in art['ground']['tiles']:
         text=opening+f'<defs><path id="pink-coast" d="{svg(coast)}"/><clipPath id="beach-land"><use href="#pink-coast"/></clipPath></defs>'+beach+'</svg>'
     else:
         text=remove_groups(text,names)
-        # Legacy cream paint at 12% alpha reads as ghost roads in the grass.
-        # Remove that overlay only; retain every green lawn/meadow contour.
         text=re.sub(r'<path\b(?=[^>]*data-name="Lawn Cream")[^>]*/>', '', text)
-    # Crop the shared vector to each existing overlap/bleed rectangle. Geometry
-    # outside the viewport cannot affect it, and no whole-island path is parsed
-    # 176 times at duck zoom. The crop is outside the visible edge.
     crop=box(t['x']-20,t['y']-20,t['x']+t['width']+20,t['y']+t['height']+20)
     localpath=svg(surface.intersection(crop));localwet=svg(wet.intersection(crop))
     pf=f'<g data-name="Rosy unified paths"><path d="{localpath}" fill="#FBE6C8" fill-rule="evenodd"/></g>'
@@ -198,11 +184,8 @@ for t in art['ground']['tiles']:
     text=text.replace('</svg>',pf+wf+'</svg>')
     f.write_text(text)
 (A/'expansion/merged/unified-paths.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2600 -1900 13200 9800">'+pathfrag+'</svg>')
-# Remove only the unused floor pad; keep all decorated destination overlays.
 retired={'pink-close-harbor','path-joins','hamlet-tutu-tides-court','hamlet-teacup-court','pink-close-cafe','pink-close-festival'}
 art['flats']=[p for p in art['flats'] if p.get('id') not in retired]
-# The travel union already owns every court and all six plaza throats. Do not
-# replay the old yellow join painter or the inset multicolour court duplicates.
 C['floorTiles']=[p for p in C['floorTiles'] if p['id']!='path-joins']
 write(S/'data/centre.json',C)
 write(A/'ribbon-centre/placements.json',C)
@@ -212,7 +195,6 @@ for p in source['pieces']:
     if p['id'] in retired and f.exists():
         opening=re.search(r'<svg\b[^>]*>',f.read_text()).group()
         f.write_text(opening+'<title>Court is part of the opaque unified surface</title></svg>')
-# Keep the workshop's authored doorstep silhouette, with no second inset shade.
 f=A/'hamlets/ribbonwick/workshop-apron.svg';text=f.read_text()
 outer=re.search(r'<path\b[^>]*/>',text).group()
 outer=re.sub(r'fill="[^"]+"','fill="#FBE6C8"',outer)

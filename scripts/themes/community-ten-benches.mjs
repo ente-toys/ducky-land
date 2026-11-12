@@ -1,9 +1,7 @@
-// Draw Community's benches with HOME's exact slats, spindle backs and curve geometry.
 import fs from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 const A='public/pixi-art/themes/community/',D='assets/world/themes/community/',read=p=>JSON.parse(fs.readFileSync(p));
 const a=read(A+'art.json'),w=read(D+'world.json'),walk=read(D+'walk-world.json');
-// Re-running is safe, ground pass restores the input and these tagged additions replace themselves.
 a.props=a.props.filter(p=>!p.id.startsWith('ten-arc-'));
 for(const data of [w,walk])data.obstacles=data.obstacles.filter(o=>!o.communityArc);
 const defs=[

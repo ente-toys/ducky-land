@@ -8,7 +8,6 @@ const A='public/pixi-art/themes/cathedral/';
 const art=JSON.parse(fs.readFileSync(A+'art.json'));
 const bays=art.props.filter(p=>p.id.startsWith('centre-colonnade-'));
 const doc=p=>new JSDOM(fs.readFileSync(A+p.src,'utf8'),{contentType:'image/svg+xml'}).window.document;
-// Normalise each pier to world coordinates to verify one solid support per station.
 function worldPier(p,element){
  const x0=p.x-p.width*p.anchor.x,y0=p.y-p.height*p.anchor.y;
  return [...element.querySelectorAll('path')].map(el=>el.getAttribute('d').replace(/([MLVHZ])([^MLVHZ]*)/g,(_,command,args)=>{

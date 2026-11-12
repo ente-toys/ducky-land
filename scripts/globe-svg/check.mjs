@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// Read-only guard. Never silently regenerate art during a test or build.
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {mapFor} from '../../src/pixi/island-maps.js';

@@ -1,4 +1,3 @@
-// Reapply only the plaza bench correction to the current Pagepond composition.
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {drawArcBench} from '../arc-bench-draw.mjs';
@@ -10,8 +9,6 @@ export function applyBenches(){
  const old=read('scripts/bigger-library/original/world.json'),oldArt=read('scripts/bigger-library/original/art.json');
  const source=fs.readFileSync('scripts/pagepond-ground/data/centre-ground.svg','utf8');
  const records=[];
- // Authored rim offsets leave the full bench base inside the paving. Distances
- // are measured along the contour, rather than spaced by ellipse angle.
  const settings={court:{inset:60,phase:.032},bookstore:{inset:245,phase:.12,start:.12,end:.38}};
  for(const [court,list] of Object.entries(ids)){
   const config=settings[court],border=contour(court,world,source),points=rim(border,config.inset),m=measure(points);

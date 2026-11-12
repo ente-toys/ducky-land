@@ -41,7 +41,6 @@ const realtime = createServer((req, res) => {
 });
 const wss = new WebSocketServer({ server: realtime, path: '/room', maxPayload: 2048 });
 wss.on('connection', (ws, req) => {
-  // Local-only build: refuse browser connections from other origins.
   if (req.headers.origin && !['http://127.0.0.1:8800', 'http://localhost:8800'].includes(req.headers.origin)) { ws.close(1008, 'Local page only'); return; }
   if (players.size >= SLOTS) { ws.close(1013, 'Plaza full (16 players)'); return; }
   const id = randomUUID(), now = performance.now();
@@ -77,7 +76,6 @@ wss.on('connection', (ws, req) => {
     } else if (m.type === 'state') {
       if (!Number.isSafeInteger(m.seq) || m.seq <= player.ack || !(walkable(m.x,m.y)||(player.activity==='race'&&((m.x-4140)/660)**2+((m.y-1520)/350)**2<=1.3))
         || ![-1, 1].includes(m.facing) || ![0, 1].includes(m.action)) return;
-      // One second of bounded movement credit handles jitter, never unlimited teleports.
       const elapsed = Math.min(1000, now - player.lastState);
       const distance = Math.hypot(m.x - player.x, m.y - player.y);
       if (distance <= SPEED * elapsed / 1000 + 4) { player.x = m.x; player.y = m.y; }

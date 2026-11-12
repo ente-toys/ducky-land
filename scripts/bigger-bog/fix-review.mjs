@@ -1,4 +1,3 @@
-// Static production-asset evidence. No browser window, pixel replacement or AI art.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import sharp from 'sharp';
 import {inPoly,inShape} from '../../assets/world/island-geometry.mjs';

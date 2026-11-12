@@ -24,7 +24,6 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
  const {build}=await import('esbuild');
  const {fileURLToPath}=await import('node:url');
  const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/engine.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../src/pixi/engine.js',import.meta.url).href)}});
- // Vite's asset catalogue is irrelevant to the offscreen simulation path.
  let code=bundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
  for(const name of ['pixi.js'])code=code.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name)));
  let Engine;
@@ -43,8 +42,6 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
   Engine.prototype.tick.call(game,200);assert.equal(roomSteps,before,'background RAF stays paused');
   Engine.prototype.tick.call(game,200,{forceRender:true});assert.ok(roomSteps>before,'initial paint can prepare a hidden pane before focus');
   globalThis.document.hidden=false;
-  // The same real tick must reach screen-space snow once the bridge exposes
-  // Iceland detail. Stop at that call so later GPU work needs no mock renderer.
   const reachedSnow=new Error('reached snowfall'),snowCalls=[];
 
   Object.assign(game,{externalDetailVisible:true,artShown:'snow',sim:{time:2,step(){}},room:null,

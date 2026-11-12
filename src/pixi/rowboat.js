@@ -1,8 +1,8 @@
 import {Container, Graphics} from 'pixi.js';
 import {PALETTE} from './palette.js';
 
-const ink = 0x232323;   // the rowing Ducky keeps its own colours (boss: never change the Duckies)
-const {ink: worldInk, wood, darkWood, cream} = PALETTE;   // boss 3 Nov: oars and water marks in the world palette
+const ink = 0x232323;
+const {ink: worldInk, wood, darkWood, cream} = PALETTE;
 const strokePeriod = 1.55;
 
 export function rowboatPose(lake, time, reduced = false) {
@@ -36,7 +36,6 @@ export function createRowboat(prop, lake, objects, water) {
   root.addChild(deck);
   objects.addChild(root);
   prop.sprite.position.set(0,0);
-  // Depth-sort the boat as a unit. Its old world z-index would cover the rower.
   prop.sprite.zIndex = 0;
 
   const farOar = makeOar(), nearOar = makeOar();
@@ -55,7 +54,6 @@ export function createRowboat(prop, lake, objects, water) {
     .ellipse(0,-37,8,4.5).fill(0xff814a).stroke({color:ink,width:1.5});
   const wings = new Graphics();
 
-  // The seated silhouette ends just above the hull's front lip.
   deck.addChild(farOar,prop.sprite,duck,nearOar,wings);
 
   const wake = Array.from({length:3}, () => {

@@ -1,4 +1,3 @@
-// Authored channels follow the former shoreline and divide the new commons.
 import {original,pathRing,read} from './model.mjs';
 import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const channels=[
@@ -10,10 +9,7 @@ function distance(x,y){let d=Infinity;for(const poly of original.world.coastRing
 function samples(points){const out=[];for(let i=0;i<points.length-1;i++){const a=points[Math.max(0,i-1)],b=points[i],c=points[i+1],d=points[Math.min(i+2,points.length-1)],steps=Math.max(10,Math.ceil(Math.hypot(c[0]-b[0],c[1]-b[1])/25));for(let j=0;j<steps;j++){const t=j/steps;out.push([0,1,2].map(k=>.5*((2*b[k])+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-d[k])*t*t+(-a[k]+3*b[k]-3*c[k]+d[k])*t*t*t)));}}out.push(points.at(-1));return out;}
 for(const c of channels){c.samples=samples(c.points);const l=[],r=[];for(let i=0;i<c.samples.length;i++){const p=c.samples[i],a=c.samples[Math.max(0,i-1)],b=c.samples[Math.min(i+1,c.samples.length-1)],len=Math.hypot(b[0]-a[0],b[1]-a[1]),nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len,half=Math.max(2,Math.min(p[2]/2,distance(p[0],p[1])-30));l.push([p[0]+nx*half,p[1]+ny*half]);r.push([p[0]-nx*half,p[1]-ny*half]);}c.banks=[l,r];const end=c.samples.at(-1),a=c.samples.at(-2),angle=Math.atan2(end[1]-a[1],end[0]-a[0]),cap=c.id==='paperboat-cut'?Array.from({length:17},(_,j)=>{const t=angle+Math.PI/2-j*Math.PI/16;return [end[0]+Math.cos(t)*end[2]/2,end[1]+Math.sin(t)*end[2]/2]}):[];c.poly=[...l,...cap,...[...r].reverse()];}
 export const water=channels.map(c=>({name:c.id,poly:c.poly}));
-// Densify changes approaches only. Every existing bridge retains its exact deck.
 export const crossings=read('scripts/bigger-library/fixed-crossings.json');
-// Water under an original jetty is crossed only by its exact visible deck strip.
-// Horizontal slices of each rotated deck keep walkable water inside visible wood.
 function deckSlices(c){const cs=Math.cos(c.angle),sn=Math.sin(c.angle),L=c.length/2,W=c.width/2,poly=[[-L,-W],[L,-W],[L,W],[-L,W]].map(([x,y])=>[c.x+x*cs-y*sn,c.y+x*sn+y*cs]),min=Math.min(...poly.map(p=>p[1])),max=Math.max(...poly.map(p=>p[1])),n=Math.ceil((max-min)/24),step=(max-min)/n,result=[];
 function interval(y){const xs=[];for(let i=0;i<4;i++){const a=poly[i],b=poly[(i+1)%4];if((a[1]<=y&&b[1]>y)||(b[1]<=y&&a[1]>y))xs.push(a[0]+(b[0]-a[0])*(y-a[1])/(b[1]-a[1]));}return xs.sort((a,b)=>a-b);}
 for(let i=0;i<n;i++){const y=min+(i+.5)*step,a=interval(y-step/2+.01),b=interval(y+step/2-.01);if(a.length<2||b.length<2)continue;const left=Math.max(a[0],b[0]),right=Math.min(a.at(-1),b.at(-1));if(right-left>12)result.push({name:c.id,x:(left+right)/2,y,w:right-left+16,h:step+24.2});}return result;}

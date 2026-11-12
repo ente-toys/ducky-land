@@ -34,7 +34,6 @@ test('Fair mouths have no water overlay polygons on the sea, including fallback 
  }
  for(const p of mouths)assert.equal((await pixel(terrain,...p))[3],0,'no offshore overlay at '+p);
  const fallback=fs.readFileSync('public/pixi-art/globe/fair-ground.svg','utf8');
- // Fallbacks also include the visible arch and rail above each underpass.
  for(const p of [...sites,...mouths].filter(([x,y])=>!art.decks.some(d=>x>d.x-30&&x<d.x+d.width+30&&y>d.y-30&&y<d.y+d.height+30))){
   const k=1024/art.width;
   assert.equal((await pixel(fallback,(p[0]-art.origin.x)*k,(p[1]-art.origin.y)*k))[3],0,'fallback water transparent at '+p);

@@ -1,4 +1,3 @@
-// Keep accepted proposals; move only residents rejected by the new path corridor.
 import{readFileSync,writeFileSync}from'node:fs';
 import{resolveSleepSpots,sleepHalfWidths}from'../../src/pixi/sleep-spots.js';
 import{geometry}from'../../assets/world/island-geometry.mjs';

@@ -19,8 +19,6 @@ const grass=read('scripts/bigger-cathedral/round2-grass.json');
 const strip=s=>s.replace(/<g data-bellovo-grass="r2">[\s\S]*?<\/g><!--bellovo-grass-end-->/g,'');
 
 test('Bellovo lawn detail stays entirely on painted grass, including its antialias margin',async()=>{
- // Recompose the actual floor without its new texture. This tests visual
- // surfaces, including destination paving that navigation calls walkable.
  const X=-2200,Y=-2400,k=.25,width=3200,height=2600,layers=[];
  for(const [type,parts]of [['ground',art.ground.tiles],['flat',art.flats],['deck',art.decks]])for(const p of parts){
   if(type==='flat'&&/shadow|litter/.test(p.id??''))continue;
@@ -44,7 +42,6 @@ test('Bellovo lawn detail stays entirely on painted grass, including its antiali
    assert.ok(data[i+3]===255&&colors.has(`${data[i]},${data[i+1]},${data[i+2]}`),`lawn-only mark at ${p.x},${p.y}, floor pixel ${x},${y}`);
   }
  }
- // Every substantial connected lawn, including coastal pockets, gets texture.
  const seen=new Uint8Array(width*height),queue=new Int32Array(width*height),centres=new Set(grass.marks.map(p=>Math.floor((p.y+9-Y)*k)*width+Math.floor((p.x+16-X)*k)));
  let lawns=0;
  for(let start=0;start<seen.length;start++){
@@ -71,8 +68,6 @@ test('All four village trades have distinct roofs, porches, shutters, signs and 
   assert.equal(doc.querySelectorAll('[data-contact-shadow]').length,1);
   assert.equal(p.shadow,false);assert.equal(p.flip,false);
   assert.doesNotMatch(doc.documentElement.outerHTML,/<image\b|Gradient\b|\btransform=|<filter\b/i);
-  // A prior interrupted run left see-through gables. Every opaque point of
-  // the authored front wall must also be opaque in the shipped SVG.
   const W=p.width,H=p.height,work=!!s.work,c=W/2,L=work?28:29,R=W-(work?58:53),peak=work?48:39,roofEnd=H-(work?173:169)+10;
   const d=frontGable(s.roof,{L,R,c,peak,roofEnd});if(!d)continue;
   const mask=await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><path d="${d}" fill="white"/></svg>`)).ensureAlpha().raw().toBuffer();

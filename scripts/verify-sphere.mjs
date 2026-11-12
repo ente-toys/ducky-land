@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// Fast headless check of the globe: frame times on Home and on the full globe, six globe views, ghost islands off the sphere.
-// Usage: node scripts/verify-sphere.mjs [url] [--out dir] [--frames 240]
-//   url defaults to http://boss.localhost:8890 (logs in via /__test/login?account=boss)
-//   PLAYWRIGHT_MODULE overrides where Playwright is loaded from (it is not in this repo's node_modules).
 import fs from 'node:fs';
 import sharp from 'sharp';
 import path from 'node:path';
@@ -35,7 +31,6 @@ async function frameStats(n=FRAMES){
     const step=t=>{d.push(t-last);last=t;if(d.length<n)requestAnimationFrame(step);else{d.sort((a,b)=>a-b);const q=p=>+d[Math.min(d.length-1,Math.floor(p*d.length))].toFixed(2);res({frames:n,medianMs:q(.5),p95Ms:q(.95),maxMs:+d[d.length-1].toFixed(2),fpsMedian:+(1000/q(.5)).toFixed(1)});}};
     requestAnimationFrame(t=>{last=t;requestAnimationFrame(step);});}),n);
 }
-// drag across the middle of the globe; hold still before release so the globe does not keep flicking
 async function drag(dx,dy,steps=3){
   for(let i=0;i<steps;i++){
     await page.mouse.move(CX-dx/2,CY-dy/2);await page.mouse.down();
@@ -44,7 +39,6 @@ async function drag(dx,dy,steps=3){
   }
   await page.mouse.move(5,5);await page.evaluate(()=>{globalThis.__duckyEngine.quietAt=Infinity;});await sleep(700);
 }
-// screenshot of the canvas only (DOM HUD hidden for the shot), plus the off-sphere ghost count
 async function shot(name){
   await page.addStyleTag({content:'body *{visibility:hidden!important}canvas{visibility:visible!important;outline:none!important;box-shadow:none!important}'}).then(h=>h.evaluate(e=>e.id='__vs_hide'));
   const buf=await page.screenshot();
@@ -54,19 +48,18 @@ async function shot(name){
 }
 function ghosts(png){
   const {width:w,height:h,data}=png,px=i=>[data[i],data[i+1],data[i+2]];
-  const blue=(r,g,b)=>b>110&&b>r+35&&b>=g-10;   // the sea-blue disc
+  const blue=(r,g,b)=>b>110&&b>r+35&&b>=g-10;
   const xs=[],ys=[];
   for(let y=0;y<h;y+=2)for(let x=0;x<w;x+=2){const[r,g,b]=px((y*w+x)*4);if(blue(r,g,b)){xs.push(x);ys.push(y);}}
   if(xs.length<500)return {sphere:null,offSpherePixels:null,offSphereClustered:null,note:'no blue disc found'};
   xs.sort((a,b)=>a-b);ys.sort((a,b)=>a-b);const pc=(a,p)=>a[Math.floor(p*(a.length-1))];
   const x0=pc(xs,.002),x1=pc(xs,.998),y0=pc(ys,.002),y1=pc(ys,.998);
-  const cx=(x0+x1)/2,cy=(y0+y1)/2,r=Math.max(x1-x0,y1-y0)/2,rr=(r*1.1+4)**2;   // skip the disc and its glow halo;
-  // sky colour = median of the pixels well outside the disc; ghosts are faint patches that differ from it (stars are bright specks)
+  const cx=(x0+x1)/2,cy=(y0+y1)/2,r=Math.max(x1-x0,y1-y0)/2,rr=(r*1.1+4)**2;
   const sky=[[],[],[]];for(let y=8;y<h-8;y+=3)for(let x=8;x<w-8;x+=3){if((x-cx)**2+(y-cy)**2<=rr)continue;const p=px((y*w+x)*4);for(let c=0;c<3;c++)sky[c].push(p[c]);}
   const S=sky.map(a=>a.sort((p,q)=>p-q)[a.length>>1]);
   const off=new Uint8Array(w*h);let count=0;
   for(let y=6;y<h-6;y++)for(let x=6;x<w-6;x++){if((x-cx)**2+(y-cy)**2<=rr)continue;const[R,G,B]=px((y*w+x)*4);if(Math.abs(R-S[0])+Math.abs(G-S[1])+Math.abs(B-S[2])>18){off[y*w+x]=1;count++;}}
-  let clustered=0;   // stars are single specks; a ghost island is a solid patch (>=12 of its 5x5 neighbours also off-sphere)
+  let clustered=0;
   for(let y=2;y<h-2;y++)for(let x=2;x<w-2;x++){if(!off[y*w+x])continue;let n=0;for(let j=-2;j<=2;j++)for(let i=-2;i<=2;i++)n+=off[(y+j)*w+x+i];if(n>=12)clustered++;}
   return {sphere:{cx:Math.round(cx),cy:Math.round(cy),r:Math.round(r)},sky:S,offSpherePixels:count,offSphereClustered:clustered,offSpherePct:+(100*clustered/(w*h-Math.PI*rr)).toFixed(2)};
 }
@@ -94,18 +87,16 @@ const images=new Map();
 for(const theme of ['home','sunflower','pink','library','community','fair','neon','cathedral','canal','waterfall','goldmine','bog','snow'])images.set(theme,PNG.sync.read(await sharp(fileURLToPath(new URL(`../public/pixi-art/globe/${theme}.svg`,import.meta.url))).png().toBuffer()));
 const bog=mapOf('isle-249'),focus=mapPoint('isle-249','home',{x:bog.cx,y:bog.cy});
 await page.evaluate(focus=>{const e=globalThis.__duckyEngine;e.follow=false;e.spin=null;e.fly=null;Object.assign(e.camera,focus,{zoom:e.birdZoom()});Object.assign(e.target,e.camera);},focus);
-// Reproduce the boss's middle zoom with real wheel events, centred on Bog.
 for(let k=0;k<2;k++){await page.mouse.move(CX,CY);await page.mouse.wheel(0,-150);await sleep(650);}
 await page.evaluate(()=>{globalThis.__duckyEngine.quietAt=Infinity;});await sleep(400);
 const midState=await page.evaluate(()=>{const e=globalThis.__duckyEngine;return {camera:{x:e.camera.x,y:e.camera.y,zoom:e.camera.zoom,basis:e.camera.basis},islandId:e.islandId,ball:e.worldView.debug.ball,render:e.worldView.debug,stickers:e.worldView.stickers};});
 const midShot=await shot('mid-zoom-bog'),midPNG=PNG.sync.read(fs.readFileSync(midShot.file));
 midZoom.push({shot:midShot.file,...midState,...midZoomQuality(midPNG,midState,images),frames:await frameStats()});
-// Restore the full globe for the six off-sphere ghost checks.
 for(let k=0;k<5;k++){await page.mouse.move(CX,CY);await page.mouse.wheel(0,400);await sleep(50);}
 await sleep(1800);await page.evaluate(()=>{globalThis.__duckyEngine.quietAt=Infinity;});
 const views=[];
 views.push(await shot('front'));
-const R=views[0].sphere?.r||300, q=R*Math.PI/2/3;   // three drags of a third of a quarter turn each
+const R=views[0].sphere?.r||300, q=R*Math.PI/2/3;
 await drag(q,0);views.push(await shot('left'));
 await drag(q,0);views.push(await shot('back'));
 await drag(q,0);views.push(await shot('right'));

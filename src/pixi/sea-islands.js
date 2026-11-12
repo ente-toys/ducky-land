@@ -1,5 +1,3 @@
-// boss 5 Nov: the islands you can sail to are real copies of ours now (archipelago.js draws them at their true places),
-// so the sea only adds each neighbour's name board: it stands on that island's jetty and pops up once as you sail close.
 import {Assets, Sprite} from 'pixi.js';
 import {ART_TEXTURE} from './art-texture.js';
 import {HARBOR} from './islands.js';
@@ -26,10 +24,9 @@ function releaseSign(name) {
   }).catch(() => {});
 }
 const smooth = (a, b, x) => {const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t);};
-const SIGN = {dx: 150, dy: 30, rest: 1.3, big: 2.3};   // on the neighbour's jetty deck, just east of where you land
+const SIGN = {dx: 150, dy: 30, rest: 1.3, big: 2.3};
 
 async function signTexture(name, entry) {
-  // The home wayfinding board (prop-82, LITTLE ISLE) with this island's name, centred, in its own Gilroy.
   boardSource ??= fetch('/pixi-art/prop-82.svg').then(response => {
     if (!response.ok) throw Error(`Island sign: HTTP ${response.status}`);
     return response.text();
@@ -40,7 +37,7 @@ async function signTexture(name, entry) {
   return Assets.load({src: entry.src, data: {resolution: 3, ...ART_TEXTURE}});
 }
 
-const revealed = new Set();   // a name pops once per visit to the page; after that the sign just stands there
+const revealed = new Set();
 const easeBack = p => 1 + 2.2 * (p - 1) ** 3 + 1.2 * (p - 1) ** 2;
 
 export async function createSea(water, objects) {
@@ -64,8 +61,8 @@ export async function createSea(water, objects) {
       const built = await Promise.all(destinations.map(async destination => {
         if (!signs.has(destination.name)) signs.set(destination.name, acquireSign(destination.name));
         const sprite = new Sprite(await signs.get(destination.name));
-        sprite.anchor.set(129 / 258, 120 / 129);   // prop-82's post foot
-        const land = destination.land ?? {x: HARBOR.land.x + destination.offset.x, y: HARBOR.land.y + destination.offset.y};   // that island's own jetty
+        sprite.anchor.set(129 / 258, 120 / 129);
+        const land = destination.land ?? {x: HARBOR.land.x + destination.offset.x, y: HARBOR.land.y + destination.offset.y};
         const x = land.x + SIGN.dx, y = land.y + SIGN.dy;
         sprite.position.set(x, y); sprite.zIndex = y; sprite.visible = false;
         return {sprite, x, y, id: destination.destination, revealAt: revealed.has(destination.destination) ? -1 : null};
@@ -82,7 +79,6 @@ export async function createSea(water, objects) {
         const b = board.sprite;
         b.visible = visible(board.x, board.y - 100, 400) && board.revealAt !== null;
         if (!b.visible) continue;
-        // first time: pops (scale + fade, .4 s), holds big, then settles on its post
         const age = board.revealAt < 0 ? 99 : t - board.revealAt, k = SIGN.rest;
         let scale = k, alpha = 1;
         if (reduced) alpha = Math.min(1, age / .4);

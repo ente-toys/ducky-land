@@ -1,4 +1,3 @@
-// Ground lane proof: headless shots at the report's spots (boss 8 Nov: plus the arched centre bridges and three hand groves). Usage: node scripts/home-10/ground-shots.mjs <base url> <out dir> [login]
 import {chromium} from '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import {mkdirSync, writeFileSync} from 'node:fs';
 const [base, out, login] = process.argv.slice(2); mkdirSync(out, {recursive: true});
@@ -15,7 +14,6 @@ try {
   await page.waitForFunction(() => window.__duckyEngine?.ready || window.__duckyEngine?.initialized, null, {timeout: 120000});
   await page.addStyleTag({content: 'body *{visibility:hidden!important}canvas{visibility:visible!important}'});
   for (const [name, x, y, zoom] of SPOTS) {
-    // the camera is held at the spot: a walking player who leaves the screen would otherwise pull it back (engine follow)
     await page.evaluate(([x, y, zoom]) => {const e = window.__duckyEngine; clearInterval(window.__hold); const hold = () => {e.follow = false; e.fitMode = false; e.fly = null; Object.assign(e.camera, {x, y, zoom}); Object.assign(e.target, e.camera); e.quietAt = Infinity;}; hold(); window.__hold = setInterval(hold, 10);}, [x, y, zoom]);
     await page.waitForTimeout(2500);
     await page.screenshot({path: `${out}/${name}.png`});

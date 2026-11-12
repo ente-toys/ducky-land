@@ -1,4 +1,3 @@
-// Read-only assembly of Home's production SVG layers. No game files are written.
 import {createRequire} from 'node:module';
 import {readFileSync,writeFileSync} from 'node:fs';
 import path from 'node:path';

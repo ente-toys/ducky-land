@@ -1,7 +1,5 @@
 import {readFile,writeFile} from 'node:fs/promises';
 
-// Project a rigid lens plane edge-on at a true +/-90 degree profile.
-// Coordinates use the same ground-relative frame as duck.js and the manifest.
 const root=new URL('../',import.meta.url);
 const manifestURL=new URL('public/pixi-duck/manifest.json',root);
 const manifest=JSON.parse(await readFile(manifestURL,'utf8'));
@@ -40,12 +38,8 @@ for(const entry of manifest.wardrobe){
       case 16:
         art+=rect(cx-24,cy-29,48,58,13,'#FFFFFF66');
         art+=path(`M ${n(cx-12)} ${n(cy-6)} L ${n(cx-3)} ${n(cy-20)}`,'none','#FFFFFF',4);
-        // A small wrap of tape at the near hinge retains this item's identity.
         art+=rect(cx-sign*23-5,cy-7,10,14,2,'#ECE2BD',ink,2);break;
     }
-    // The lens is in front of the eye, perpendicular to the viewing direction.
-    // Its face projects to almost zero width; only glass/frame thickness remains.
-    // The far lens is occluded. Do not paste a frontal lens outline on the cheek.
     const halfHeight=entry.sourceNumber===13?36:entry.sourceNumber===15?23:30;
     art=temple+`<g transform="translate(${cx} ${cy}) scale(.10 1) translate(${-cx} ${-cy})">${art.slice(temple.length)}</g>`;
     art+=path(`M ${cx} ${n(cy-halfHeight)} Q ${n(cx+sign*3)} ${cy} ${cx} ${n(cy+halfHeight)}`,'none',arm,entry.sourceNumber===14?6:5);

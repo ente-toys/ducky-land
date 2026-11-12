@@ -1,5 +1,3 @@
-// Fair shares Home's actual SVGs. Old blueprint filenames identify a size class,
-// never a licence to introduce another plant drawing.
 import {readFileSync} from 'node:fs';
 
 export const HAMLET_PLANTS = {
@@ -25,7 +23,5 @@ export function homePlant(p) {
  const name=HAMLET_PLANTS[p.src?.split('/').at(-1)];
  if(!p.src?.startsWith('hamlets/')||!name)return {};
  const model=PLANT_MODELS[name];
- // Preserve the authored height class and foot. Use the source aspect ratio,
- // rather than stretching a Home tree into the old custom silhouette.
  return {src:model.src,width:+(p.height*model.width/model.height).toFixed(1),height:p.height};
 }

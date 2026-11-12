@@ -1,5 +1,3 @@
-// Detect broad non-sky patches outside the known sphere, ignoring caption rows
-// and isolated two-pixel stars. Input is the offscreen production-shader proof.
 import sharp from 'sharp';
 import {writeFileSync} from 'node:fs';
 const out='../concepts/themes/world-map/sphere',results=[];

@@ -1,5 +1,3 @@
-// The globe's camera faces down -Z. Keep its projection and camera math in
-// double precision, including the ray used to hold the ground under the cursor.
 export class Vector2 {
   constructor(x=0,y=0){this.set(x,y);}
   set(x,y){this.x=x;this.y=y;return this;}

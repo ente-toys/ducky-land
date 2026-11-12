@@ -8,15 +8,12 @@ from pathlib import Path
 try:
     import shapely
 except ModuleNotFoundError:
-    # Same local geometry dependency used by the approved Home script.
     sys.path.insert(0, os.environ.get('DUCKY_GEOMETRY_PYTHON', '/private/tmp/ducky-community-python'))
     import shapely
 from shapely.geometry import LineString, Polygon, Point, box, mapping
 from shapely.ops import unary_union, nearest_points
 from shapely import affinity, contains_xy
 
-# Reuse the actual Home sampler and union SVG serializer, without executing
-# Home's top-level writer or altering any Home source/data.
 source = ast.parse(Path('scripts/home-review/paths.py').read_text())
 for node in source.body:
     if isinstance(node, ast.FunctionDef) and node.name in ('sample', 'path'):
@@ -39,12 +36,8 @@ def svgpath(g):
     pp=polygons(g)
     return path(unary_union(pp)) if pp else ''
 coast=Polygon(world['coast']).buffer(0)
-# Exact production water, unioned before banking. Mouths merge with tributaries
-# and the ring in one operation; no rounded tributary end is stamped on a ring.
 wet=unary_union([shape(s) for s in world['water']]).buffer(65,quad_segs=12).buffer(-65,quad_segs=12)
 decks=unary_union([LineString([b['a'],b['b']]).buffer(b['w']/2+4,quad_segs=12) for b in world['walkways']])
-# Colliders often stop slightly above the illustrated root/flower foot.
-# Include the visible contact patches as well, without altering any prop.
 contacts=[]
 for p in art['props']:
     name=p.get('src','').split('/')[-1]
@@ -58,24 +51,17 @@ for p in art['props']:
 solids=unary_union([shape(s) for s in walk['obstacles']]).buffer(0)
 plant_contacts=unary_union(contacts)
 bench_ids={p['id'] for p in art['props'] if p.get('pavingFeet')}
-# Seating is solid to walking but stands ON paving, so its own footprint must
-# never punch a grass hole through the paved pad beneath its legs.
 paint_solids=unary_union([shape(s) for s in walk['obstacles'] if s.get('name',s.get('id')) not in bench_ids]).buffer(0)
 paint_obstacles=unary_union([paint_solids,plant_contacts])
 obstacles=unary_union([solids,plant_contacts])
-# New authored groves and residents keep the larger review clearance from
-# route centrelines. These reserves guide paths without moving fixed scenery.
 route_reserves=unary_union([
     Point(s['x'],s['y']+(6 if s.get('sleeper') else 8)).buffer((s['rx']/.9 if s.get('sleeper') else s['rx'])+100)
     for s in walk['obstacles']
     if str(s.get('name','')).startswith('fair-plant-') or s.get('sleeper')
 ])
-# Kite stakes need a quiet flight/approach pocket, not a lane through the string.
 kite_reserves=unary_union([Point(k['x'],k['y']).buffer(165) for k in art.get('kites',[])])
 dry=coast.difference(wet.buffer(20)).union(decks)
 
-# Navigation detours are geometry, not procedural scenery. Authored routes
-# remain the plan; a local A* only bends their corridors around fixed feet.
 allowed={}
 contact_mode=True
 def space(width):
@@ -121,13 +107,11 @@ def detour(a,b,width):
     q=[end]
     while q[-1]!=start:q.append(prev[q[-1]])
     q=[list(map(lambda v:v*step,c)) for c in reversed(q)]
-    # Greedy visibility simplifies grid staircases before the Home curve pass.
     compact=[q[0]];i=0
     while i<len(q)-1:
         j=len(q)-1
         while j>i+1 and not area.covers(LineString([q[i],q[j]])):j-=1
         compact.append(q[j]);i=j
-    # Keep all authored endpoints. Each is an actual junction or destination.
     return [a,*compact,b]
 
 def fit(points,width):
@@ -139,13 +123,10 @@ def fit(points,width):
         leg=detour(a,b,width)
         q.extend(leg[:-1])
     q.append(points[-1])
-    # Rounded corners use the Home sampler. Shrink overshoot near obstacles.
     for _ in range(5):
         trial=sample(q)
         if space(width).covers(LineString(trial)):return trial
         q=[p for a,b in zip(q,q[1:]) for p in [a,[(a[0]+b[0])/2,(a[1]+b[1])/2]]]+[q[-1]]
-    # Keep the verified visibility polyline when a narrow approach cannot
-    # accommodate a smooth curve without cutting a reserved foot.
     return q
 
 def fit_bridged(points,width):
@@ -155,7 +136,6 @@ def fit_bridged(points,width):
         if not isinstance(p,dict):pending.append(p);continue
         b=next(b for b in world['walkways'] if b['id']==p['bridge'])
         a,z=b['a'],b['b']
-        # Orient the approved drawing along the authored route, never rotate art.
         if pending and math.dist(pending[-1],z)<math.dist(pending[-1],a):a,z=z,a
         length=math.dist(a,z);u=[(z[k]-a[k])/length for k in (0,1)]
         def bank(end,sign):
@@ -168,8 +148,6 @@ def fit_bridged(points,width):
         pending.append(before)
         if len(pending)>1:chunks.extend(ground(pending))
         else:chunks.extend(pending)
-        # Walking on an existing deck uses its exact axis and width, rather
-        # than asking a 128-unit land road to fit inside a 112-unit bridge.
         chunks.extend([before,a,z,after]);pending=[after]
     if len(pending)>1:chunks.extend(ground(pending))
     return chunks if chunks else ground(pending)
@@ -193,26 +171,19 @@ for r in routes:
     try:
         fitted=LineString(fit_bridged(points,r['width']))
     except ValueError:
-        # A fixed decorative patch can leave less than a full lane beside a
-        # doorstep. Keep the solid-safe route; the union trims that patch out.
         contact_mode=False
         fitted=LineString(fit_bridged(points,r['width']))
     resolved.append(dict(id=r['id'],width=r['width'],samples=[[round(x,1),round(y,1)] for x,y in fitted.coords]))
 
 pads=[Polygon([P(p) for p in c['points']]).buffer(0) for c in layout['polygons']['clearings']]
-# Existing approved court assets remain intact, including the other worker's
-# future flattening of the balloon base. Their approaches belong to this union.
 pads.append(ellipse(*P([768,840]),780,360))
 shapes=[LineString(r['samples']).buffer(r['width']/2,quad_segs=10) for r in resolved]+pads
-# Flares have no separate paint. Both bridge endpoints join the same union.
 for b in world['walkways']:
     dx=b['b'][0]-b['a'][0];dy=b['b'][1]-b['a'][1];length=math.hypot(dx,dy)
     for end,sign in ((b['a'],-1),(b['b'],1)):
         beyond=[end[0]+sign*dx/length*100,end[1]+sign*dy/length*100]
         shapes.append(LineString([end,beyond]).buffer(b['w']/2+12,quad_segs=12))
 merged=unary_union(shapes).buffer(65,quad_segs=12).buffer(-65,quad_segs=12)
-# Compact rounded seat pads connect to the nearest edge of existing paving.
-# Pads share the same union/fill, with no outline or separate ground shadow.
 bench_pads=[]
 hill_pad=None
 for p in art['props']:
@@ -226,29 +197,18 @@ for p in art['props']:
     bench_pads.append(pad)
     if p['id']=='fair-life-hill-bench':hill_pad=pad
 merged=unary_union([merged,*bench_pads])
-# Keep plants/buildings on grass; bench feet deliberately belong on paving.
 surface=merged.intersection(coast).difference(wet).difference(paint_obstacles.buffer(7))
-# Reject tiny disconnected crumbs from geometric clipping.
 surface=unary_union([p for p in polygons(surface) if p.area>120])
 
-# Redraw only this small pad above the retained hill mound overlay. The
-# geometry still comes from the same union and clears the same fixed solids.
 if hill_pad is not None:
     flat=next(p for p in art['flats'] if p.get('id')=='fair-bench-hill-paving')
     (A/flat['src']).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{flat["width"]}" height="{flat["height"]}" viewBox="{flat["x"]} {flat["y"]} {flat["width"]} {flat["height"]}"><path d="{svgpath(hill_pad.intersection(surface))}" fill="#F6DE95" fill-rule="evenodd"/></svg>')
 
-# Continuous terrain replaces all nested generations of bank/path art.
-# Keep Fair's coast and lawn palette. Shore sand is coast, not a second road.
 land=coast.difference(wet)
 lawn=coast.buffer(-95).difference(wet.buffer(17))
 terrain=f'<defs><pattern id="fair-lawn-grain" width="177" height="139" patternUnits="userSpaceOnUse"><path d="M17 29l4 -7 5 8 M105 101l4 -8 5 7 M149 49l3 -6 5 7" fill="none" stroke="#729F39" stroke-width="2.6" opacity=".5"/><ellipse cx="67" cy="51" rx="10" ry="3" fill="#C3DE65" opacity=".7"/></pattern></defs>'
 terrain+=f'<g data-name="Fair continuous terrain"><path d="{svgpath(land.buffer(24).intersection(coast.buffer(24)))}" fill="#A6E3DE"/><path d="{svgpath(land)}" fill="#FFF0AE"/><path d="{svgpath(lawn)}" fill="#9CC63E"/><path d="{svgpath(lawn)}" fill="url(#fair-lawn-grain)"/></g>'
-# One opaque surface, one fill, no stroke, lower edge, worn stripe or ghosts.
 terrain+=f'<g data-name="Fair unified paths"><path d="{svgpath(surface)}" fill="#F6DE95" fill-rule="evenodd"/></g>'
-# Water is a hole in the dry terrain, exposing the engine's single Home sea
-# colour and moving water-texture.svg. Painting wet here hides those waves and
-# stamps the mouth's offshore polygon over the sea with a visible straight cap.
-# Only retained destination ground assets. No checkerboard connector.
 for o in layout['objects']:
     if not any(n in o['file'] for n in ('castle-islet-ground','plaza-ground','lagoon-lily')):continue
     content=(A/'ac2'/o['file']).read_text().split('>',1)[1].rsplit('</svg>',1)[0]
@@ -257,6 +217,5 @@ for o in layout['objects']:
 terrain=f'<defs><clipPath id="fair-dry-banks"><path d="{svgpath(land)}" clip-rule="evenodd"/></clipPath></defs><g clip-path="url(#fair-dry-banks)">{terrain}</g>'
 for t in art['ground']['tiles']:
     (A/t['src']).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{t["width"]}" height="{t["height"]}" viewBox="{t["x"]} {t["y"]} {t["width"]} {t["height"]}">{terrain}</svg>')
-# Geometry evidence is separate from visual verification.
 audit={'routes':resolved,'fill':'#F6DE95','widths':[128,104], 'surface':mapping(surface),'water':mapping(wet), 'land':mapping(land), 'tileCount':len(art['ground']['tiles']), 'propOverlapArea':round(surface.intersection(paint_obstacles).area,6)}
 json.dump(audit,sys.stdout,separators=(',',':'))

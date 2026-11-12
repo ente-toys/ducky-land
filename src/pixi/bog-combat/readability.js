@@ -6,9 +6,6 @@ export const BOG_TEAM_COLOURS=Object.freeze({
   google:Object.freeze({body:0xEF5144,ring:0xEF5144,rim:0x23182F}),
 });
 
-// A flat white silhouette behind the composited, articulated rig. Sampling in
-// filter pixels keeps the border at 3 CSS px at every zoom and renderer DPR.
-// Opaque source pixels pass through unchanged, including the original ink.
 const fragment=`
 in vec2 vTextureCoord;
 out vec4 finalColor;
@@ -27,7 +24,6 @@ void main() {
   finalColor=source+vec4(vec3(border),border);
 }`;
 
-// Owned by the combat attachment, never by the shared Home rig or textures.
 export function createBogReadability(rig) {
   const root=rig.root,previous=root.filters;
   const outline=new Filter({
@@ -36,11 +32,7 @@ export function createBogReadability(rig) {
   });
   const filters=[outline];
   return {outline,update(){
-    // Respawn/bush concealment is communicated by the marker's eye-slash icon.
-    // No alpha fade, colour tint or darkening filter touches the living Ducky.
     root.alpha=1;root.tint=0xFFFFFF;
-    // The white sticker shader failed to compile in Chrome and hid the whole rig; keep the Ducky unfiltered
-    // (its own ink outline + the team ring carry readability) until a working outline is made.
     if(root.filters?.includes(outline))root.filters=null;
   },dispose(){
     if(!root.destroyed&&root.filters?.includes(outline))root.filters=previous;

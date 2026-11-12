@@ -31,7 +31,6 @@ for(const [i,p] of json(P+'plants/placements.json').entries()){
 }
 world.props=art.props;
 world.sleepTotal=90;
-// Resolve original proposals in pose order, then refill only rejected residents near their authored clearing.
 const proposed=json(P+'sleep/spots.json'),spots=Object.fromEntries(Object.keys(proposed).map(k=>[k,[]])),sizes=sleepHalfWidths();let occupied=[],droppedBeds=[];
 const opts={avoid:[...(world.sleepAvoid??[]),{x:3880,y:2608.5,rx:1700,ry:1050,name:'bloom centre'}],warn:false};
 function attempt(pose,s){let b=resolveSleepSpots(walk,art.props,dry,sizes,{...opts,spots:{[pose]:[s]},occupied});if(b.length&&(!b[0].tree&&pathGap(b[0].x,b[0].y)<sizes[pose]+22||b[0].tree&&pathGap(b[0].x,b[0].y)<90))return false;if(!b.length)return false;spots[pose].push(s);occupied.push(b[0]);return true;}

@@ -4,8 +4,6 @@ import fs from 'node:fs';
 import {DOMParser} from '@xmldom/xmldom';
 import {mapFor} from '../src/pixi/island-maps.js';
 import {canSail} from '../src/pixi/islands.js';
-// placements.js imports browser-only Home JSON. Execute its actual deckY
-// implementation without loading the unrelated browser asset pipeline.
 const deckY=Function('return '+fs.readFileSync('src/pixi/placements.js','utf8').match(/export (function deckY[\s\S]*?\n})/)[1])();
 const A='public/pixi-art/themes/community/',D='assets/world/themes/community/';
 const read=p=>JSON.parse(fs.readFileSync(p)),art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
@@ -78,8 +76,6 @@ test('all Campfire bridge collision is shared by client and server, follows the 
  const map=mapFor('community'),nav=map.nav();
  for(const key of ['walkways','bridges','arches'])assert.deepEqual(world[key],walk[key],key+' authoritative collision');
  assert.equal(world.arches.length,12);assert.equal(world.bridges.length,13);
- // The older diagonal anchors are asymmetric about the river spine. These
- // stations follow the actual wet channel, preserving both fixed landings.
  const stations={'campfire-west-islet':.35,'campfire-east-islet':.35,'campfire-northwest':.6,'campfire-northeast':.55,'campfire-east':.575,'arched-0':.275,'arched-1':.275,'arched-2':.425,'arched-3':.425,'arched-4':.4,'arched-5':.45,'arched-6':.425};
  for(const d of bridges){
   const way=world.walkways.find(w=>w.id===d.id),arch=world.arches.find(w=>w.id===d.id);

@@ -6,10 +6,8 @@ import {localPoint} from '../src/pixi/sphere-coordinates.js';
 import {WORLD_GEO,WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import {dot} from '../src/pixi/sphere.js';
 
-// boss 8 Nov ("still the globe rotation is same, islands are moving"): a drag on the ball spins a north-up globe. The spot
-// under the cursor stays under it, north never rolls on screen, and a sideways drag spins the ball sideways.
 const id='home',W=1440,H=900,zoom=.0329,Rp=WORLD_GEO.Rw*zoom;
-const VIEWS=[[0,0],[1.2,.3],[2.6,-.4],[-2.9,.7],[3.1,.1],[-1.4,-1.1]];   // round the back of the world from Home too
+const VIEWS=[[0,0],[1.2,.3],[2.6,-.4],[-2.9,.7],[3.1,.1],[-1.4,-1.1]];
 const DRAGS=[[[-150,0],[150,0]],[[0,-120],[0,120]],[[-100,-80],[110,90]],[[60,-200],[-40,-170]],[[-220,140],[-160,150]]];
 const northRoll=F=>Math.abs(Math.atan2(dot([0,1,0],F.east),dot([0,1,0],F.north)))*180/Math.PI;
 
@@ -18,7 +16,6 @@ test('the grabbed spot stays under the cursor, and north stays up (no roll) on a
  for(const ball of [1,.8])for(const [lon,lat]of VIEWS)for(const [a,b]of DRAGS){
   const c=centreOf(lon,lat),from={x:a[0],y:a[1]},to={x:b[0],y:b[1]};
   const p=unlens(screenFrame(id,c,uprightFade(ball)),from,ball,Rp);
-  // sweep the cursor in 10 steps like a real drag, each step from the previous view
   let cur=c,F;
   for(let k=1;k<=10;k++){
    const f={x:from.x+(to.x-from.x)*(k-1)/10,y:from.y+(to.y-from.y)*(k-1)/10},t={x:from.x+(to.x-from.x)*k/10,y:from.y+(to.y-from.y)*k/10};

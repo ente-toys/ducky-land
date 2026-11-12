@@ -18,7 +18,6 @@ for(let i=0;i<buildings.length;i++){
 }
 const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${columns*cellW}" height="${rows*rowH}"><rect width="100%" height="100%" fill="#8fc63c"/>${parts.join('')}</svg>`;
 await sharp(Buffer.from(svg)).png().toFile(out+'/buildings-vs-og.png');console.log('Building comparison:',buildings.length);
-// Inspect every independent geometric join with unobstructed production ground and paving details.
 const floorArt={...art,props:[],decks:[],flats:art.flats.filter(p=>p.src.startsWith('expansion/merged/'))};
 for(const j of union.joins){
  const w=Math.min(1100,Math.max(700,j.bounds[2]-j.bounds[0]+220)),h=Math.min(850,Math.max(550,j.bounds[3]-j.bounds[1]+220));

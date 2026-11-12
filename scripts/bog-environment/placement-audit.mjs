@@ -1,4 +1,3 @@
-// Offline placement audit only. Never substitute this for a real runtime capture.
 import fs from 'node:fs';
 import sharp from 'sharp';
 const base='public/pixi-art/themes/bog-arena/',a=JSON.parse(fs.readFileSync(base+'art.json')),z=.16;

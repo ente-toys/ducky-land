@@ -5,7 +5,6 @@ import {runtimeManifest} from './scripts/globe-svg/runtime-manifest.mjs';
 import {productionProxy,productionSignIn} from './scripts/vite-production-proxy.mjs';
 
 export default defineConfig({
-  // Serve the homepage directly and let removed routes return 404.
   appType: 'mpa',
   plugins: [react(), productionSignIn(), {
     name: 'share-theme-walk-data',
@@ -20,8 +19,6 @@ export default defineConfig({
       const world = JSON.parse(readFileSync(id.replace('walk-world.json', 'world.json'), 'utf8'));
       const walk = JSON.parse(readFileSync(id, 'utf8'));
       const overrides = Object.fromEntries(Object.entries(walk).filter(([key, value]) => JSON.stringify(value) !== JSON.stringify(world[key])));
-      // Geometry exports remain synchronous for navigation. Shared fields occupy
-      // the bundle once instead of repeating each island's world in its walk map.
       const removed = Object.keys(world).filter(key => !(key in walk));
       return {code: `import world from './world.json'; const walk = {...world, ...${JSON.stringify(overrides)}}; ${removed.map(key => `delete walk[${JSON.stringify(key)}];`).join('')} export default walk;`, map: null};
     },

@@ -1,5 +1,3 @@
-// Moorings are rendered by the same live/offline fleet and approved SVG views
-// as Home, so these replacements can actually be boarded and sailed.
 import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {paperboatMoorings, retiredBoatIds} from './config.mjs';

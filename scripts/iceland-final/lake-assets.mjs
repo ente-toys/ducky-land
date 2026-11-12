@@ -1,5 +1,3 @@
-// Hand-authored flat vector parts traced from the approved option-1 reference.
-// Kept separate so the hut, furniture and shoreline can be depth sorted.
 export const LAKE_ASSETS = new Map();
 const svg=(name,w,h,body)=>LAKE_ASSETS.set(name,{width:w,height:h,svg:`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none" stroke="#39472d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><title>${name.replaceAll('-',' ')}</title>${body}</svg>\n`});
 const snow='#fffcef',wood='#efc052',dark='#cb9340',teal='#168e88';

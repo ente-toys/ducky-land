@@ -2,10 +2,6 @@ import {surfaceCoordinates} from './three-globe-math.js';
 import {Mesh,MeshBasicMaterial,PlaneGeometry} from './globe-mesh.js';
 import {DETAIL_BLEND_START} from './three-detail-budget.js';
 
-// A handoff is a viewport image, not an island patch. Morphing the curved
-// patch into atlas UVs moves the capture boundary inside the screen after a
-// rotation (and can collapse it at a half turn). Composite the full capture
-// in clip space instead, sharing the live texture and its single upload.
 export const DETAIL_CAPTURE_SCALE=1.5;
 
 export function detailViewport(texture,captureScale=1){
@@ -24,14 +20,9 @@ export function detailViewport(texture,captureScale=1){
   return mesh;
 }
 
-// Blend into the native viewport only in the final close approach, after the island's heading has
-// largely settled. Hysteresis prevents mode changes at a single wheel boundary.
 export function detailBlend(altitude,heading=0){
   const ease=t=>t*t*t*(t*(t*6-15)+10);
   const t=altitude<=.160001?1:Math.max(0,Math.min(1,Math.log(DETAIL_BLEND_START/altitude)/Math.log(DETAIL_BLEND_START/.16)));
-  // A rapid wheel/pinch can outrun the deliberately capped globe rotation.
-  // Interpolating opposite screen orientations collapses the live surface.
-  // Keep its curved projection until north is close, then flatten smoothly.
   const angle=Number.isFinite(heading)?Math.abs(Math.atan2(Math.sin(heading),Math.cos(heading))):Math.PI;
   const north=Math.max(0,Math.min(1,(70*Math.PI/180-angle)/(60*Math.PI/180)));
   return ease(t)*ease(north);
@@ -43,8 +34,6 @@ export function detailSize(width,height,dpr=1,highDensity=false){
   return {width:Math.max(1,Math.round(width*density)),height:Math.max(1,Math.round(height*density))};
 }
 
-// Both projections share the same grabbed point. This makes flattening and the
-// final canvas swap preserve the cursor anchor, rather than recentering it.
 export function detailCamera(frame,map,state,width,height,tilt=1,offset={x:0,y:0},captureScale=1){
   const scale=Math.max(1,Number(captureScale)||1);
   const span=2*Math.tan(state.fov*Math.PI/360)*state.altitude*state.radius;

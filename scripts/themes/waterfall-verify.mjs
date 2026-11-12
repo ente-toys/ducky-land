@@ -1,4 +1,3 @@
-// Independent production-loader check, useful while the shared registry is stale.
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
 import {Texture} from 'pixi.js';

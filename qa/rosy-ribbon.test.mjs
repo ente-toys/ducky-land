@@ -25,7 +25,6 @@ test('Rosy box SVG base centre matches the actual paving circle within four pixe
  const svg=readFileSync('public/pixi-art/themes/pink/ribbon-centre/music-box.svg','utf8');
  assert.match(svg,/viewBox="-270 -720 540 965"/);
  assert.match(svg,/scale\(\.9\) translate\(0 815\)/);
- // Source base centre (0,-815) maps to local (0,0), texture coordinate (270,720).
  const base=[p.x+(270/540-p.anchor.x)*p.width,p.y+(720/965-p.anchor.y)*p.height];
  const floor=art.flats.find(p=>p.id==='plaza-floor');
  const circle=[floor.x+782,floor.y+562];

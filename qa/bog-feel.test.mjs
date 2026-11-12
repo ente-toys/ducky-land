@@ -18,7 +18,6 @@ test('real authoritative tags provide shooter colour, one local tag pop, ghost a
   assert.equal(victim.alive,false);assert.equal(hits.length,1);assert.equal(hits[0],PAINT.google[1]);
   assert.deepEqual(calls,[['tag','other'],['ghost']]);
   const last=observe();selfFeedback.observe(last,last.players[0]);assert.equal(calls.length,2);
-  // Rejoining never replays a kill-feed history or an already-risen ghost.
   let replayed=0;createCombatFeedback({onTag:()=>replayed++,onGhost:()=>replayed++}).observe(last,last.players[0]);assert.equal(replayed,0);
   sim.input(shooter.id,{seq:2,x:0,y:0,fire:false});
   for(let i=0;i<190;i++){sim.step(1/60);observe();}
@@ -38,7 +37,6 @@ test('shake stays within six screen pixels, ends at 150 ms, and reduced motion i
 
 test('tag holds only presentation for 40 ms, flashes one rendered frame, and restores filters/camera/DOM on leave',()=>{
   const dom=new JSDOM('<canvas/>'),scene=new Container(),root=new Container(),ghost=new Container(),calls=[];let time=100;
-  // A confirmed tag has already replaced the living rig with its ghost.
   root.visible=false;scene.position.set(70,80);const originalFilters=[];ghost.filters=originalFilters;
   const engine={canvas:dom.window.document.querySelector('canvas'),scene,app:{render(){calls.push({x:scene.x,y:scene.y,filters:ghost.filters});}}};
   const render=engine.app.render,previousDocument=globalThis.document;globalThis.document=dom.window.document;
@@ -79,7 +77,6 @@ test('authoritative pickups chime once for the local collector, without replay o
     const replay=[];createCombatFeedback({onPickup:p=>replay.push(p.id)}).observe(collected,collected.players[0]);assert.deepEqual(replay,[]);
     self.x=900;sim.step(1/60);const delayed=sim.snapshot();delayed.time+=1;
     feel.observe(delayed,delayed.players[0]);assert.deepEqual(sounds,['pickup'],'stale collections stay silent');
-    // A reset authority clock seeds its history just like a new connection.
     feel.observe({...collected,tick:0},collected.players[0]);assert.deepEqual(sounds,['pickup']);
     feel.observe({...collected,tick:1},collected.players.find(p=>p.id==='bot'));assert.deepEqual(sounds,['pickup']);
   }finally{feel.dispose();scene.destroy();}

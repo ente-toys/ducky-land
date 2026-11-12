@@ -26,7 +26,6 @@ def sector(r0,r1,start,end,k=.766):
  pts=[(r1*math.cos(start+(end-start)*i/12),r1*k*math.sin(start+(end-start)*i/12)) for i in range(13)]
  pts += [(r0*math.cos(start+(end-start)*i/12),r0*k*math.sin(start+(end-start)*i/12)) for i in range(12,-1,-1)]
  return Polygon(pts)
-# Alternate large warm limestone voussoirs, with staggered radial joints like Home.
 floor=[f'<ellipse rx="914" ry="700.1" fill="#FFF0C7" stroke="#AB916D" stroke-width="3"/>']
 for j,(r0,r1,n) in enumerate([(0,295,24),(295,455,28),(455,600,36),(600,735,44),(735,900,52),(900,914,76)]):
  for i in range(n):
@@ -34,21 +33,17 @@ for j,(r0,r1,n) in enumerate([(0,295,24),(295,455,28),(455,600,36),(600,735,44),
   fill=['#FFE598','#FFF1CA','#FCE5A4','#FFF1CA'][(i+2*j)%4]
   floor.append(path(sector(r0,r1,start,end),fill,'#B7A16E',.85))
   if i%4==0 and j<5:floor.append(path(sector(r0,r1,start,start+.013),'#E9CE87'))
-# Thin teal-and-cream shell mosaic bands support the fountain, leaving the walking ring clear.
 for r,sw in [(291,10),(303,4),(600,8),(735,10),(899,9)]:
  floor += [f'<ellipse rx="{r}" ry="{r*.766:.2f}" fill="none" stroke="#B89C69" stroke-width="{sw+3}"/>',f'<ellipse rx="{r}" ry="{r*.766:.2f}" fill="none" stroke="{"#86BBB1" if r in [291,735] else "#FFF6D9"}" stroke-width="{sw}"/>']
-# Eight shell medallions in the generous outer walking band.
 for i in range(8):
  ang=(i+.5)*math.tau/8;x=665*math.cos(ang);y=665*.766*math.sin(ang)
  floor.append(f'<g transform="translate({x:.2f} {y:.2f}) scale(1 .766)"><path d="M-38 21 Q-58-3-36-27 Q-20-43-7-31 Q0-48 10-31 Q30-41 43-20 Q56 4 33 23 L10 35 L-10 35Z" fill="#C3D8BD" stroke="#A58D62" stroke-width="1.5"/><path d="M-8 29 L-31-18 M0 28 L-6-27 M8 29 L29-21 M-29 26 L29 26" fill="none" stroke="#9DAD8D" stroke-width="2"/></g>')
-# Existing Home arc benches sit on these two seating bands.
 for r in [480,830]:
  floor += [f'<ellipse rx="{r}" ry="{r*.766:.2f}" fill="none" stroke="#B29968" stroke-width="44"/>',f'<ellipse rx="{r}" ry="{r*.766:.2f}" fill="none" stroke="#E4C381" stroke-width="40"/>']
  for i in range(80 if r>500 else 48):
   t=i*math.tau/(80 if r>500 else 48)
   floor.append(f'<path d="M{(r-20)*math.cos(t):.1f} {(r-20)*.766*math.sin(t):.1f} L{(r+20)*math.cos(t):.1f} {(r+20)*.766*math.sin(t):.1f}" stroke="#AC9467" stroke-width="1.4"/>')
 (A/'detail/fountain-rings.svg').write_text(svg(floor,[-930,-720,1860,1440]))
-# Same locked fountain art and water animation, enlarged as one assembly around its ground origin.
 for p in a['props']:
  if p['id'] in ['integrated-centre-fountain','integrated-centre-fountain-jets']:
   factor=1.45;p['x']=4000+(p['x']-4000)*factor;p['y']=3320+(p['y']-3320)*factor
@@ -58,13 +53,11 @@ for o in w['obstacles']:
  q=Polygon(o['poly'])
  if abs(q.centroid.x-4000)<2 and abs(q.centroid.y-3320)<2 and 340<q.bounds[2]-q.bounds[0]<350:
   o['poly']=[[4000+(x-4000)*1.45,3320+(y-3320)*1.45] for x,y in o['poly']]
-# Keep a full Ducky lane between the larger basin and the north seating corners.
 for p in a['props']:
  if p['id'] in ['canal-ten-planter-1','canal-ten-planter-2']:
   oldy=p['y'];p['y']=3000
   for o in w['obstacles']:
    if o.get('canalTenPlanter') and abs(o['x']-p['x'])<1 and abs(o['y']-(oldy-8))<1:o['y']=2992
-# Ground detail follows every curved route, plus stone-edged lawn courts.
 edge=[]
 edge.append(path(route.buffer(9).difference(route).intersection(land).difference(ellipse(4000,3320,1020,800)),'#87AB31'))
 for name,z in zones.items():
@@ -78,8 +71,6 @@ for name,z in zones.items():
  else:
   for x in range(z['x0']+35,z['x1'],58):
    for y in [z['y0'],z['y1']]:edge.append(path(box(x-1,y-13,x+1,y+13).intersection(rim),'#A78E60'))
-# Three broad joins get fan-laid limestone, clipped to the existing path. The
-# fan follows the turn rather than leaving a flat sand bulb or a square patch.
 for cx,cy,turn in [(1370,3020,20),(6480,4000,-35),(1600,2200,35)]:
  for row in range(5):
   r0=35+row*32;r1=r0+32;n=10+row*4
@@ -89,7 +80,6 @@ for cx,cy,turn in [(1370,3020,20),(6480,4000,-35),(1600,2200,35)]:
    from shapely.affinity import translate
    q=translate(q,cx,cy).intersection(route.buffer(-10))
    if not q.is_empty:edge.append(path(q,['#FFE59B','#FFF0BF','#F8DF9B'][(i+row)%3],'#C1AA70',1.0))
-# Worn little stone sets on junction aprons, each cluster reads as a join, never another sand disc.
 for p in w['paths']:
  for x,y in [p[0],p[-1]]:
   for j in range(2):
@@ -97,8 +87,6 @@ for p in w['paths']:
     xx=x+i*43+rng.uniform(-12,12);yy=y+(j-.5)*53+rng.uniform(-8,8)
     stone=ellipse(xx,yy,rng.uniform(3,7),rng.uniform(2,4))
     if route.buffer(-20).contains(stone) and not ellipse(4000,3320,1050,830).intersects(stone):edge.append(path(stone,'#ECCB7C','none',.8))
-# Put the joined paths above the lawn fills. They were previously painted over by
-# the courts, leaving hidden route fragments and green cuts through the junctions.
 NS='http://www.w3.org/2000/svg';ET.register_namespace('',NS)
 ground=ET.fromstring((A/'ground.svg').read_text())
 for e in list(ground):
@@ -110,7 +98,6 @@ body=ET.tostring(ground,encoding='unicode');(A/'ground.svg').write_text(body)
 for t in a['ground']['tiles']:
  tile=re.sub(r'<svg\b[^>]*>',f'<svg xmlns="{NS}" width="{t["width"]}" height="{t["height"]}" viewBox="{t["x"]} {t["y"]} {t["width"]} {t["height"]}" stroke-linecap="round" stroke-linejoin="round">',body,count=1)
  (A/t['src']).write_text(tile)
-# Tufts and little stones outside full-width paths. Home's actual reusable assets.
 edgeDetail=0
 for p,v in zip(w['paths'],w['pathWidths']):
  line=LineString(p)
@@ -122,9 +109,7 @@ for p,v in zip(w['paths'],w['pathWidths']):
    if any(math.hypot(x-b['x'],y-b['y'])<80 for b in beds):continue
    src,ww,hh=rng.choice([('grass-tuft-1',44,26),('grass-tuft-2',34,22),('pebble-1',22,14),('flower-dot-1',20,18)])
    a['flats'].append(dict(id=f'canal-close-edge-{edgeDetail}',src=f'reuse/{src}.svg',x=round(x,1),y=round(y,1),width=ww*1.35,height=hh*1.35));edgeDetail+=1
-# Floor plants follow the visible grass after the paths are restored above the lawns.
 a['flats']=[p for p in a['flats'] if not ('reuse/' in p['src'] and any(t in p['src'] for t in ['grass-tuft','flower-dot','pebble','edge-stone']) and route.buffer(8).contains(Point(p['x'],p['y'])))]
-# Rim furnishings are outside all play reservations and full-width paths.
 newprops=[]
 def safe(x,y,rx=45,ry=25):
  f=ellipse(x,y,rx+8,ry+8)
@@ -142,7 +127,6 @@ for j,(name,z) in enumerate(zones.items()):
   src='reuse/lamp-lantern.svg' if i%3==0 else 'reuse/street--planter-flowers.svg';template=next(p for p in a['props'] if p['src']==src);h=180 if i%3==0 else 100
   p={**template,'id':f'canal-close-rim-{j}-{i}','name':'Court rim lantern' if i%3==0 else 'Court rim flower planter','x':round(x,2),'y':round(y,2),'scale':h/template['height'],'flip':False};newprops.append(p)
   w['obstacles'].append(dict(x=p['x'],y=p['y']-8,rx=16 if i%3==0 else 36,ry=14 if i%3==0 else 22,canalClose=True))
-# Upgrade the already-authored border flowers in place, keeping the same safe anchors.
 upgraded=0
 for p in a['props']:
  if p.get('name')!='Garden border flowers':continue
@@ -152,7 +136,6 @@ for p in a['props']:
  template=next(q for q in a['props'] if q['src']==src)
  p.update(src=src,width=template['width'],height=template['height'],scale=(175 if upgraded%3==0 else 92)/template['height'],anchor=template['anchor'],name='Court rim lantern' if upgraded%3==0 else 'Court rim flower planter')
  w['obstacles'].append(dict(x=x,y=y-8,rx=14 if upgraded%3==0 else 32,ry=12 if upgraded%3==0 else 20,canalClose=True));upgraded+=1
-# Long lawn courts have room for furniture at the short ends and the outside edge.
 for j,(name,z) in enumerate(zones.items()):
  candidates=[]
  if 'x0' in z:
@@ -164,8 +147,6 @@ for j,(name,z) in enumerate(zones.items()):
   template=next(p for p in a['props'] if p['src']=='reuse/lamp-lantern.svg');p={**template,'id':f'canal-close-court-{j}-{i}','name':'Market court rim lantern','x':x,'y':y,'scale':175/template['height']};newprops.append(p)
   w['obstacles'].append(dict(x=x,y=y-8,rx=14,ry=12,canalClose=True))
 a['props']+=newprops
-# Find genuine curved seating positions outside each activity reservation. Reject paths,
-# sleeper silhouettes, buildings and tree crowns; draw them with Home's bench function.
 benchSpecs=[]
 for name,z in zones.items():
  if 'x0' in z:continue
@@ -179,8 +160,6 @@ for name,z in zones.items():
   nearby=[]
   for p in a['props']:
    if math.hypot(p['x']-x,(p['y']-y)*1.25)<(210 if 'tree' in p.get('name','').lower() else 135):nearby.append(p)
-  # Nearby low flowers can sit behind the seat. Keep every solid footprint,
-  # tree crown, lamp and sleeping Ducky out of the bench silhouette.
   solid=[p for p in nearby if any(v in p.get('name','').lower() for v in ['tree','house','lamp','lantern','bench','planter','bush','rock'])]
   if solid or any(Polygon(b['footprint']).distance(footprint)<50 for b in benchSpecs):continue
   benchSpecs.append(dict(zone=name,deg=deg,r=rx,ratio=ry/rx,span=span,cx=z['x'],cy=z['y'],footprint=list(footprint.exterior.coords)));count+=1

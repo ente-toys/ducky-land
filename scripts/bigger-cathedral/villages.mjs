@@ -14,7 +14,6 @@ const removed=art.props.filter(p=>retired(p)||p.id?.startsWith('green-')&&nearVi
 art.props=art.props.filter(p=>!removed.includes(p));
 art.flats=art.flats.filter(p=>!p.src.startsWith('communities/'));
 for(const m of [world,walk])m.obstacles=m.obstacles.filter(o=>o.id?.startsWith('b2-')||!removed.some(p=>Math.abs(p.x-o.x)<Math.max(p.width*.55,40)&&Math.abs(p.y-o.y)<Math.max(p.height*.3,85)));
-// Retained outer groves use the same Home plant kit as the inner island.
 const sizes={1:[260,360],2:[180,360],3:[300,380],4:[200,280],5:[150,380],b1:[130,100],b2:[168,110],b3:[116,104],b4:[140,100]};
 for(const p of art.props.filter(p=>p.id?.startsWith('green-'))){const b=/bush/.test(p.src),type=b?'b2':/tree-5/.test(p.src)?5:1;[p.width,p.height]=sizes[type];p.src='/pixi-art/plants/'+(b?'bush-2':'tree-'+type)+'.svg';p.scale=1;}
 function addSolid(p,rx,ry,y=p.y-25){for(const m of [world,walk])m.obstacles.push({id:p.id,x:p.x,y,rx,ry});}
@@ -36,10 +35,7 @@ for(const v of VILLAGES){
  }
  const c=world.communities.find(c=>c.id===v.id);c.homes=3;c.square=v.square;const work=art.props.find(p=>p.id.startsWith(v.id)&&/foundry|olive-workshop|mosaic-workshop|bakery/.test(p.id));c.workplace=[work.x,work.y];
 }
-// Every route is authored centrally in paths-data.mjs.
 for(const [pose,entries]of Object.entries(VILLAGE_REST))for(const [i,[x,y]]of Object.entries(entries))world.sleepSpots[pose][i]=[x,y,world.sleepSpots[pose][i][2]];
-// Ground roads are generated exclusively by paths.mjs after placement.
-// Explicit shared flat contact shadows make offline proofs and runtime agree.
 fs.writeFileSync(A+'villages/plant-shadow.svg','<svg xmlns="http://www.w3.org/2000/svg" width="300" height="90" viewBox="0 0 300 90"><ellipse cx="150" cy="45" rx="145" ry="38" fill="#39472d" opacity=".15"/></svg>');
 for(const p of art.props.filter(p=>p.src.startsWith('/pixi-art/plants/'))){
  const width=p.width*.72,height=width*.3;p.shadow=false;

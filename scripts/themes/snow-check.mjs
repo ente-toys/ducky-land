@@ -1,4 +1,3 @@
-// Targeted data, navigation and delivered-art checks. Writes only the snow validation report.
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';

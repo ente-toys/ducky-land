@@ -2,12 +2,10 @@ import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {checkTheme} from '../theme-index.mjs';
 const run=(exe,args)=>execFileSync(exe,args,{stdio:'inherit'});
-// Resolve the current population before touching ground. Other authored work survives.
 fs.writeFileSync('scripts/pagepond-ground/data/current-sleepers.json',JSON.stringify(checkTheme('library').sleepers)+'\n');
 const python=process.env.PAGEPOND_PYTHON??'python3';
 run(python,['scripts/pagepond-ground/surfaces.py']);
 run(python,['scripts/pagepond-ground/buildings.py']);
-// Preserve integrated planting-job terrain and single-shadow ownership on rebuilds.
 if(JSON.parse(fs.readFileSync('public/pixi-art/themes/library/art.json')).props.some(p=>p.id==='page-b-hill-telescope')){
  run(python,['scripts/pagepond-b/ground.py']);
  const shadows=JSON.parse(fs.readFileSync('scripts/pagepond-b/shadows.json'));

@@ -23,7 +23,6 @@ def geometry(e):
  if tag in ['ellipse','circle']:return {'kind':'ellipse','cx':float(a.get('cx',0)),'cy':float(a.get('cy',0)),'rx':float(a.get('rx',a.get('r',0))),'ry':float(a.get('ry',a.get('r',0)))}
  if tag=='rect':return {'kind':'rect','x':float(a.get('x',0)),'y':float(a.get('y',0)),'width':float(a['width']),'height':float(a['height']),'rx':float(a.get('rx',0))}
  return None
-# All centre and expansion roads are authored in world coordinates in this file.
 r=E.parse('scripts/pink-fix/art/paths.svg').getroot();lanes=next(e for e in r.iter() if e.get('id')=='lanes')
 for i,e in enumerate(lanes):out['pieces'].append(dict(geometry(e),id=e.get('data-route','road-'+str(i)),role='road',stroke=160,matrix=[1,0,0,1,0,0]))
 seen=set()

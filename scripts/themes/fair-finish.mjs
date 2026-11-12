@@ -1,4 +1,3 @@
-// Run after fair-world.mjs and fair-centre.mjs. Only fair data/art are written.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
@@ -11,7 +10,6 @@ const inPoly=(x,y,p)=>{let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if(
 const open=Object.entries(world.zones).filter(([id])=>/^(activity|stalls)-/.test(id));
 const removed=[];
 props=props.filter(p=>{const frontage=p.y>3100&&p.y<3240&&Math.abs(p.x-3570)<500&&['ribbon-arch','stall-yellow','stall-mint'].includes(p.asset);const centreIntrusion=((p.x-centre.placement.x)/700)**2+((p.y-centre.placement.y)/420)**2<1;const hit=frontage||centreIntrusion||p.asset==='centre-placeholder'||open.some(([,z])=>z.poly?inPoly(p.x,p.y,z.poly):((p.x-z.x)/z.rx)**2+((p.y-z.y)/z.ry)**2<1);if(hit)removed.push(p.id);return !hit});
-// Rebuild existing prop footprints using the original fair builder's rules, so removed decorations leave no invisible blocks.
 const obstacles=[];
 for(const p of props){
  if(p.footprint){obstacles.push(p.footprint);continue;}
@@ -38,7 +36,6 @@ world.zones.centre={name:centre.name,x:cx,y:cy,rx:680,ry:405,landmark:'fair-cent
 world.zones.plaza={x:cx,y:cy+450,spawn:[cx,cy+450]};harbor.spawn=[cx,cy+450];
 world.sleepAvoid=world.sleepAvoid.filter(z=>z.name!=='teapot garden');world.sleepAvoid.push({name:'teapot garden',x:cx,y:cy,rx:820,ry:515});
 art.props=props.map(({asset,zone,...p})=>p);
-// Keep every valid existing bed, then fill missing poses beside fitting foliage and fair props.
 const counts={nod:7,hammock:3,rock:4,leaf:6,book:6,chair:2,wing:7,box:5};
 const base=makeMap('fair',{world,walk,harbor,sleepers:[]}).walk,geo=geometry(base),sizes=sleepHalfWidths();
 const options=spots=>({spots,avoid:world.sleepAvoid,warn:false});

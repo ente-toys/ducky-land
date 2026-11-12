@@ -1,4 +1,3 @@
-// Actual Pixi renderer captures only. Run `npm run bog:dev`, then `npm run bog:capture`.
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';

@@ -1,4 +1,3 @@
-// SVG source renders at game detail scale, saved outside public.
 import {readFileSync,mkdirSync} from 'node:fs';
 import {render} from './blossom-render.mjs';
 const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/blossom/';mkdirSync(OUT,{recursive:true});

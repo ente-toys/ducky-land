@@ -1,4 +1,3 @@
-// Authored composition from the four approved SIMPLE layouts. All offsets are world units.
 export const VILLAGES=[
   {
     "id": "bellpeep",
@@ -709,21 +708,18 @@ export const VILLAGES=[
     ]
   }
 ];
-// Two independent cream arrivals per square, meeting retained outer-road points.
 export const ARRIVALS={
  bellpeep:[[[3420,-620],[3200,-400],[3300,180]],[[4180,-620],[4480,-420],[4600,140]]],
  olivello:[[[80,2460],[110,2450],[120.96,2559.55]],[[-300,2660],[-360,2830],[-407,3020.58]]],
  tessera:[[[8020,2550],[8030,2750],[8050,2970]],[[8780,2430],[9060,2430],[8970,1960],[8380,1800],[7700,1880]]],
  crumbbell:[[[3840,6770],[3770,6860],[3450,6660],[3350,5950]],[[4600,6760],[5000,6690],[4950,6380]]]
 };
-// Edge groves: explicit roots, mixed Home tree sizes and bushes at their feet.
 export const GROVES={
  bellpeep:[[[2980,-990,1],[3100,-920,4],[3040,-880,'b2']],[[4550,-1060,3],[4670,-970,4],[4590,-920,'b1']],[[2900,-300,1],[3020,-230,4],[2940,-190,'b3']]],
  olivello:[[[-980,2050,1],[-860,2120,4],[-950,2160,'b2']],[[260,1900,3],[390,1980,4],[340,2030,'b1']],[[-600,3260,1],[-480,3330,4],[-550,3380,'b3']]],
  tessera:[[[7700,2090,1],[7820,2160,4],[7750,2210,'b2']],[[9130,2120,3],[9250,2200,4],[9190,2240,'b1']],[[9070,3070,1],[9190,3140,4],[9110,3190,'b3']]],
  crumbbell:[[[3500,6260,1],[3620,6330,4],[3550,6380,'b2']],[[4840,6060,3],[4960,6130,4],[4900,6180,'b1']],[[3540,6920,1],[3660,6990,4],[3600,7030,'b3']]]
 };
-// Residents moved from empty lawns to village frontage or existing garden groves.
 export const VILLAGE_REST={
   "hammock": {
     "0": [

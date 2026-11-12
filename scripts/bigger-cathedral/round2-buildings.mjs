@@ -1,4 +1,3 @@
-// Authored silhouettes and joinery. Coordinates are drawn directly in the Home camera.
 const ink='#39472d',stone='#dbbd85',cream='#fff0cd',olive='#839953';
 const P=(d,fill='none',stroke=ink,w=1.8)=>`<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${w}"/>`;
 const rect=(x,y,w,h,fill)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${ink}" stroke-width="1.8"/>`;
@@ -34,7 +33,6 @@ export function villageDetails(s,{L,R,c,b,wallTop:t,work}){
  const width=work?130:s.porchWidth??108,y=b-116,sign=s.sign??s.identity.sign;
  let out=`<g data-village-vocabulary="${s.village}" data-porch="${s.identity.porches}" data-shutters="${s.identity.shutters}">`;
  if(s.village==='bellpeep'){
-  // Stone corbels and a little exposed timber hood, foundry ironwork stays upright.
   out+=P(`M${c-width/2} ${y+16}L${c-width/2+13} ${y-3}H${c+width/2-13}L${c+width/2} ${y+16}Z`,s.roofColor);
   for(const x of [c-width/2+9,c+width/2-9])out+=P(`M${x-5} ${y+17}v20h10v-20Z`,stone);
   out+=P(`M${L+13} ${b-17}v-42m0 12h12m-12 12h9`,'none','#836b43',2);
@@ -56,7 +54,6 @@ export function villageDetails(s,{L,R,c,b,wallTop:t,work}){
   for(const x of [c-width/2,c+width/2])out+=P(`M${x} ${y+23}v13`,'none',ink,2);
   out+=P(`M${R+8} ${b-20}q14 -5 14 -18q0 -9 -7 -10q-11 5 -5 17q14 12 7 20`,'none','#b98955',3);
  }
- // Each resident has a different hanging sign silhouette and fixing height.
  const x=s.signSide==='left'?L+23:R-30,sy=t+12+(s.signDrop??0);
  out+=P(`M${x-10} ${sy-13}v-9h26v15`,'none',ink,2.5);
  const shape=s.signShape??'board';

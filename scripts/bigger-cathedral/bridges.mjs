@@ -1,5 +1,3 @@
-// Fit the approved Honeywood source at its longitudinal stations. Each post and
-// cross-board is a rigid source shape, never an affine/skewed copy of the bridge.
 import fs from 'node:fs';
 import {JSDOM} from 'jsdom';
 const A='public/pixi-art/themes/cathedral/';
@@ -20,7 +18,7 @@ export function honeywoodBridge(b){
  const delta=z.map((n,k)=>n-a[k]-far[k]+near[k]),offset=a.map((n,k)=>n-near[k]);
  const homeSource=HOME+`bridge-${dir}.svg`,source=fs.readFileSync('public'+homeSource,'utf8');
  const doc=new JSDOM(source,{contentType:'image/svg+xml'}).window.document,root=doc.documentElement,paths=[...root.querySelectorAll('path')],points=[];
- paths[0].remove();paths[1].remove(); // Only the source bank sills obstructing the path throats.
+ paths[0].remove();paths[1].remove();
  for(const [idx,e]of paths.entries()){
   if(idx<2)continue;
   e.setAttribute('data-home-path',idx);
@@ -66,7 +64,6 @@ export function honeywoodBridge(b){
 }
 export function rebuildBridges(art,geo){
  for(const b of geo.bridges){const fitted=honeywoodBridge(b);fs.writeFileSync(A+fitted.deck.src,fitted.svg);const deck=art.decks.find(d=>d.id===fitted.deck.id);if(!deck)throw Error('Missing crossing '+b.id);Object.assign(deck,fitted.deck);}
- // This custom silhouette is retired; every active crossing reads the Home family.
  if(fs.existsSync(A+'bridges/ns-arch.svg'))fs.unlinkSync(A+'bridges/ns-arch.svg');
 }
 export function rebuildBridgePhysics(world,walk,geo){

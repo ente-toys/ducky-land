@@ -23,7 +23,6 @@ test('all 17 authored ponds have two or three distinct Duckies, roughly half hav
 test('ten minutes of continuous travel, arbitrary UTC offsets and cycle boundaries stay in water and clear of shores, props and each other',()=>{
  for(const p of PONDS){
   const cells=new Set(p.cells),positions=p.duckies.map(pose),visited=p.duckies.map(()=>new Set());
-  // Includes current real-time phase, rather than only the beginning of the tour.
   for(const offset of [0,1794326400])for(let tick=0;tick<=1200;tick++){
    const time=offset+tick*.5;
    positions.forEach((v,i)=>samplePondDucky(p,i,time,false,v));
@@ -35,7 +34,6 @@ test('ten minutes of continuous travel, arbitrary UTC offsets and cycle boundari
     const cell=Math.round((v.y-p.origin[1])/p.step)*p.cols+Math.round((v.x-p.origin[0])/p.step);
     assert(cells.has(cell),`${p.id}: open-water region at ${time}`);visited[i].add(cell);
     assert(p.shapes.some(s=>inShape(v.x,v.y,s)),p.id+' above water');
-    // Independent footprint checks against the source shapes, including inner islets/treads.
     if(tick%4===0)for(let k=0;k<16;k++){
      const angle=k*Math.PI/8,x=v.x+Math.cos(angle)*p.radius,y=v.y+Math.sin(angle)*p.radiusY;
      assert(p.shapes.some(s=>inShape(x,y,s)),p.id+' clears painted shore');

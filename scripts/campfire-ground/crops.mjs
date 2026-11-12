@@ -1,4 +1,3 @@
-// Ground-package evidence only. PNGs never enter the repository.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from '../pagepond/render.mjs';

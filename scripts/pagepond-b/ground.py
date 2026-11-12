@@ -4,7 +4,6 @@ A=Path('public/pixi-art/themes/library');S=Path('scripts/pagepond-ground')
 def svg(g):
  ps=[g]if g.geom_type=='Polygon'else list(g.geoms)
  return ''.join('M'+'L'.join(f'{x:.2f} {y:.2f}'for x,y in r.coords)+'Z'for p in ps for r in [p.exterior,*p.interiors])
-# The entire final network remains one painter. The mound is terrain below it.
 routes=read(S/'sampled-routes.json');routes=[q for q in routes if q['id']!=r['id']]+[{'id':r['id'],'width':104,'samples':r['points']}];s['courts']=[q for q in s['courts']if q['id']!=apron['id']]+[{'id':apron['id'],'d':svg(shape(apron))}];merged=unary_union([LineString(q['samples']).buffer(q['width']/2,quad_segs=12) for q in routes]+[path(c['d']) for c in s['courts']])
 fillet=merged.buffer(65,quad_segs=12).buffer(-65,quad_segs=12).difference(merged)
 rests=unary_union([affinity.scale(Point(p['x'],p['y']-6).buffer(1,24),p['r']+18,58)for p in read(S/'data/current-sleepers.json')]);contacts=unary_union([shape(o)for o in w['obstacles']]).union(rests)

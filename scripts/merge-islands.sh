@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Join the latest locally committed island work, then verify the complete game.
 set -euo pipefail
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$ROOT"
@@ -8,9 +7,6 @@ die() { printf '%s\n' "$*" >&2; exit 1; }
 git rev-parse --is-inside-work-tree >/dev/null
 [[ -z "$(git ls-files -u)" ]] || die 'Resolve the existing merge before running this command.'
 
-# The sandbox integration is stored in a bundle because this linked worktree's
-# common .git is read-only there. Adopt it without checking out or deleting files.
-# A separate index proves the files still exactly match the prepared commit first.
 BUNDLE=${ISLAND_INTEGRATION_BUNDLE:-"$ROOT/../concepts/themes/codex-builds/integrate.bundle"}
 BASE=c34d300fa5b7fbb9764e3186ddfc33cb1e58e72d
 if [[ -f "$BUNDLE" ]] && [[ $(git rev-parse HEAD) == $(git rev-parse "$BASE") ]]; then
@@ -25,7 +21,6 @@ if [[ -f "$BUNDLE" ]] && [[ $(git rev-parse HEAD) == $(git rev-parse "$BASE") ]]
     rm -f "$proof_index"
     die 'Working files differ from the prepared integration. Save those edits before adopting the bundle.'
   fi
-  # Also protect files tracked at the old tip but removed by the integration.
   while IFS= read -r -d '' file; do
     if [[ -e "$file" ]]; then
       rm -f "$proof_index"
@@ -40,8 +35,6 @@ fi
 
 [[ -z "$(git status --porcelain)" ]] || die 'Commit or save working changes before merging island branches.'
 
-# Default: current local branches in the common repository. An isolated Git
-# directory can explicitly read the same branches from the original repository.
 prefix=refs/heads/
 if [[ -n ${ISLAND_SOURCE_REPO:-} ]]; then
   git fetch --no-tags "$ISLAND_SOURCE_REPO" \
@@ -53,8 +46,6 @@ fi
 
 branches=(big-limits spread-islands big-pink big-neon big-sunflower big-community big-fair live-boat big-library big-cathedral big-canal big-waterfall big-goldmine big-bog big-snow)
 tips=()
-# Snapshot all refs before mutating anything; concurrent island commits wait for
-# the next invocation, rather than making the verification target move mid-run.
 for branch in "${branches[@]}"; do
   tip=$(git rev-parse --verify "${prefix}${branch}^{commit}") || die "Missing island branch: $branch"
   tips+=("$tip")
@@ -69,7 +60,6 @@ done
 
 port=${DUCKY_WS_PORT:-19300}
 log_dir=$(mktemp -d "${TMPDIR:-/tmp}/ducky-island-checks.XXXXXX")
-# Refuse to reuse or stop an unrelated server. This process owns its fixture.
 DUCKY_WS_PORT="$port" node --input-type=module - <<'JS'
 import net from 'node:net';
 const port=Number(process.env.DUCKY_WS_PORT);

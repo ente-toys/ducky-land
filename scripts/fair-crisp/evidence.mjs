@@ -1,5 +1,3 @@
-// Software texture proof: rasterise each SVG at the production sampling rate,
-// then linearly scale those bitmaps into a DPR-2 canvas. Not a browser capture.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import sharp from 'sharp';
@@ -42,7 +40,6 @@ async function render(tag,zoom){
  }
  const all=layers(art);
  for(const kind of ['ground','flats','decks','floating'])for(const l of all.filter(l=>l.kind===kind))await add(l.p,l.src,l.kind,l.anchor);
- // Same contact shadows, deliberately soft and outside the art-density requirement.
  for(const p of art.props){if(p.shadow===false||/bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i.test(p.name??p.asset??p.src))continue;const [rx,ry]=p.shadowSize??(r=>[r,r*.3])(Math.max(8,Math.min(300,p.width*(p.scale??1)*.36)));ctx.fillStyle='rgba(60,90,42,0.15)';ctx.beginPath();ctx.ellipse(sx(p.x+(p.shadowOffset?.[0]??0)+rx*.06),sy(p.y+(p.shadowOffset?.[1]??0)+ry*.1),rx*k,ry*k,0,0,Math.PI*2);ctx.fill();}
  const standing=all.filter(l=>l.kind==='props');
  for(const bed of mapFor('fair').sleepers){const pose=poses.poses[bed.pose],u=pose.k*.81*(.88*.24*3)/3,[x0,,x1,y1]=pose.box;
@@ -51,7 +48,6 @@ async function render(tag,zoom){
  }
  standing.sort((a,b)=>(a.p.z??a.p.y)-(b.p.z??b.p.y));for(const l of standing)await add(l.p,l.src,l.kind,l.anchor);
  const full=canvas.toBuffer('image/png'),name=zoom===.6?tag:tag+'-max';
- // No resampling of the final crop: native device pixels are preserved.
  const crop=await sharp(full).extract({left:0,top:0,width:2000,height:1200}).png().toBuffer();writeFileSync(`${OUT}/${name}.png`,crop);
  console.log(name+' rendered');
 }

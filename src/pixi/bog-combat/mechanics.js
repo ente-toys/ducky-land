@@ -5,8 +5,6 @@ import {RULES} from './rules.js';
 import {isCombatHidden} from './hide-bushes.js';
 
 const sight={point:{x:0,y:0},fraction:1,blocker:null};
-// Called on the authority at fire time for every participant, including bots.
-// Reuses the caller's shot as the result and never changes Ducky's facing.
 export function assistShot(shot,player,players,blockers,time){
   let nearest=RULES.range*RULES.range,target=null;
   const cosine=Math.cos(RULES.aimCone);
@@ -35,8 +33,6 @@ export function startDodge(p,serial,time,input){
   p.dodgeProtectedUntil=time+RULES.dodgeInvulnerable;p.dodgeReadyAt=time+RULES.dodgeCooldown;
   p.until=0;p.action=1;return true;
 }
-// Sweeps every 3 units, so neither a hop nor a speed pickup can cross cover.
-// Scratch-free: these new movement paths allocate no objects per tick.
 function advance(p,nav,dx,dy){
   const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/3)),sx=dx/steps,sy=dy/steps;
   for(let i=0;i<steps;i++){
@@ -52,7 +48,6 @@ export function combatWalkStep(p,nav,dt,time,input){
     const x=p.x,y=p.y;p.previousX=x;p.previousY=y;
     advance(p,nav,p.dodgeX*RULES.dodgeDistance*left/RULES.dodgeSeconds,p.dodgeY*RULES.dodgeDistance*left/RULES.dodgeSeconds);
     p.pace=0;p.travel=Math.hypot(p.x-x,p.y-y)/dt;p.action=p.travel>.001?1:0;
-    // Finish a partial final hop tick before normal movement resumes next tick.
     return;
   }
   const x=p.x,y=p.y;

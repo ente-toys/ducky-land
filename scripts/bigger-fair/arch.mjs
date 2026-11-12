@@ -1,7 +1,6 @@
 import {readFileSync} from 'node:fs';
 const ROOT='public/pixi-art/home-expansion-c/bridges/';
 const fmt=v=>+v.toFixed(4);
-// Exact deck surface centres after removing Home's raised bank-sill wrapper.
 export const BRIDGE_SILLS={ns:[[120,310],[120,50]],ew:[[30,169.2],[450,169.2]],ne:[[91.5,292],[388.5,108]],nw:[[388.5,292],[91.5,108]]};
 export function archBridge({a,b}){
  const [near,far]=a[1]>=b[1]?[a,b]:[b,a],v=far.map((x,i)=>x-near[i]);
@@ -10,8 +9,6 @@ export function archBridge({a,b}){
  const [W,H]=source.match(/viewBox="0 0 (\d+) (\d+)"/).slice(1).map(Number);
  let [n,f]=BRIDGE_SILLS[dir];if(dir==='ew'&&v[0]<0)[n,f]=[f,n];
  const u=f.map((x,i)=>x-n[i]);
- // Fair's crossings are square cardinal spans. Never shear a bridge to chase a path.
- // A diagonal must use its approved source bearing; a new bearing needs a landing remap.
  const sx=dir==='ns'?1:v[0]/u[0],sy=dir==='ew'?1:v[1]/u[1];
  if(dir!=='ns'&&dir!=='ew'&&Math.abs(sx-sy)>1e-5)throw Error('Bridge must use the Honeywood '+dir+' bearing');
  const x=near[0]-sx*n[0],y=near[1]-sy*n[1];

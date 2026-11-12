@@ -1,4 +1,3 @@
-// Local reading-pond finish. Reapply after a ground rebuild without repainting paths.
 import fs from 'node:fs';
 import {contours} from '../pagepond/geometry.mjs';
 
@@ -20,14 +19,11 @@ function replacePond(file){
  if(!after.includes(pondMarkup))throw Error('Missing reading pond in '+file);
  if(after!==before)fs.writeFileSync(file,after);
 }
-// Only the tile whose viewBox intersects this pond needs a runtime edit. The
-// authoring master keeps future ground rebuilds consistent with that tile.
 replacePond('scripts/pagepond-ground/data/centre-ground.svg');
 replacePond(A+'ground.svg');
 const art=JSON.parse(fs.readFileSync(A+'art.json'));
 for(const t of art.ground.tiles)if(t.src.includes('original-ground-')&&t.x<5065&&t.x+t.width>4390&&t.y<3360&&t.y+t.height>2920)replacePond(A+t.src);
 
-// The exact SVG bank drives water collision on both client and server.
 const pond={name:'Pagepond reading pond',poly:contours(waterPath,4)[0]};
 for(const file of ['world.json','walk-world.json']){
  const path='assets/world/themes/library/'+file,w=JSON.parse(fs.readFileSync(path));

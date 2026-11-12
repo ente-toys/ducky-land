@@ -1,7 +1,3 @@
-// Fair island preview: ground tiles + decks + flats + props (y-sorted) + moored boats + a few Duckies for scale,
-// rendered from art.json exactly as the engine places them, then put beside the concept.
-//   node scripts/themes/fair-preview.mjs [--walk]     (--walk overlays the walk map: blocked = red, obstacles = outlines)
-// Writes ../public/pixi-art/themes/fair/fair-preview.png (and public/pixi-art/themes/fair/preview.png, the globe picture).
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
 import {geometry} from '../../assets/world/island-geometry.mjs';
@@ -24,23 +20,19 @@ async function add(src, x, y, w, h, flip = false) {
   const L = Math.round(x * K), T = Math.round(y * K), ww = Math.round(w * K), hh = Math.round(h * K);
   if (ww < 1 || hh < 1 || L > W || T > H || L + ww < 0 || T + hh < 0) return;
   const buf = await raster(src, ww, hh, flip);
-  // crop anything that hangs off the canvas
   const cl = Math.max(0, -L), ct = Math.max(0, -T), cw = Math.min(ww - cl, W - Math.max(0, L)), ch = Math.min(hh - ct, H - Math.max(0, T));
   if (cw <= 0 || ch <= 0) return;
   const input = cl || ct || cw < ww || ch < hh ? await sharp(buf).extract({left: cl, top: ct, width: cw, height: ch}).toBuffer() : buf;
   comps.push({input, left: Math.max(0, L), top: Math.max(0, T)});
 }
-// ground: the full ground SVG (the tiles are crops of it)
 comps.push({input: await sharp(ART + 'ground.svg', {density: 72 * K}).resize(W, H).png().toBuffer(), left: 0, top: 0});
 for (const f of art.flats) await add(ART + f.src, f.topLeft ? f.x : f.x - f.width / 2, f.topLeft ? f.y : f.y - f.height, f.width, f.height, f.flip);
-// the engine's harbor jetty, stood in for by home's jetty 1 so the preview shows a pier there
 {
   const {foot, tip} = harbor.jetty, len = Math.hypot(tip[0] - foot[0], tip[1] - foot[1]);
   await add('public/pixi-art/bridge-jetty-1.svg', foot[0] - 97.6, foot[1] - 30, 229.2, len + 60);
 }
 for(const f of art.floating??[])await add(ART+f.src,f.x-f.width/2,f.y-f.height/2,f.width,f.height);
 for (const dk of art.decks) await add(ART + dk.src, dk.x, dk.y, dk.width, dk.height);
-// boats (bottom layer of the standing things), then props and Duckies sorted by y
 const things = art.props.map(p => ({...p, kind: 'prop'}));
 for (const b of harbor.boats) things.push({src: 'public/pixi-art/boat-sail.svg', x: b.x, y: b.y + 30, width: 188, height: 188 * 1.15, anchor: {x: .5, y: .82}, scale: 1, raw: true});
 const duckManifest=JSON.parse(readFileSync('public/pixi-duck/manifest.json','utf8'));
@@ -55,7 +47,6 @@ for (let n = 0, tries = 0; n < +(process.env.DUCKS || 100) && tries < 50000; tri
   if (!geo.walkable(x, y)|| things.some(t=>Math.hypot(t.x-x,t.y-y)<160)) continue;
   things.push({buf: Buffer.from(duckSvg), x, y, width: 126.72, height: 140.66, anchor: {x: view.ground[0]/600, y: view.ground[1]/666}, scale: 1, flip: rnd() < .5}); n++;
 }
-// the 40 sleeping Duckies (world.json sleepSpots), drawn from the game's own pose sprites at the game's size
 {
   const world = JSON.parse(readFileSync(DATA + 'world.json', 'utf8')), poses = JSON.parse(readFileSync('src/pixi/sleep-poses.json', 'utf8'));
   for (const [pose, list] of Object.entries(world.sleepSpots ?? {})) for (const spot of list) {
@@ -74,7 +65,7 @@ for (const t of things) {
   const w = t.width * t.scale, h = t.height * t.scale;
   await add(t.buf ?? (t.raw ? t.src : ART + t.src), t.x - w * t.anchor.x, t.y - h * t.anchor.y, w, h, t.flip);
 }
-if (process.env.GRID) {   // concept-pixel grid (the builder's T() mapping), for picking places
+if (process.env.GRID) {
   const S = 4.5, OX = 800, OY = 1000, L = [];
   for (let c = 0; c <= 1550; c += 50) {const x = OX + (c - 65) * S; L.push(`<path d="M${x} 0 V${art.height}" stroke="#000" stroke-width="${c % 100 ? 2 : 5}" opacity=".35"/>`, c % 100 ? '' : `<text x="${x + 8}" y="${OY - 300}" font-size="70">${c}</text>`);}
   for (let c = 0; c <= 1000; c += 50) {const y = OY + (c - 120) * S; L.push(`<path d="M0 ${y} H${art.width}" stroke="#000" stroke-width="${c % 100 ? 2 : 5}" opacity=".35"/>`, c % 100 ? '' : `<text x="250" y="${y - 8}" font-size="70">${c}</text>`);}

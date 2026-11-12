@@ -1,11 +1,9 @@
-// Final screen-space check: a valid tree bed must also be visible below surrounding crowns.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 const A='public/pixi-art/themes/snow/',D='assets/world/themes/snow/',j=p=>JSON.parse(readFileSync(p)),out=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
 const art=j(A+'art.json'),world=j(D+'world.json'),walk=j(D+'walk-world.json'),harbor=j(D+'harbor.json'),props=j(D+'placements.json');
-// Seven lower crowns were hiding neighbouring residents. Keep their planted banks, with low snow shrubs.
 for(const id of ['snow-113','snow-76','snow-90','snow-91','snow-100','snow-102','snow-78']){
  const p=props.find(p=>p.id===id);if(!p||p.asset==='snow-bush')continue;
  const idx=walk.obstacles.findIndex(o=>o.x===p.footprint?.x&&o.y===p.footprint?.y);
@@ -30,7 +28,6 @@ for(let k=0;k<3000;k++){
 }
 spots.nod=best.slice(0,40-n).map(p=>[p.id,0,p.x>world.width/2]);
 let count=Object.values(spots).flat().length;
-// Complete the forty with a different home pose on a visible snow bank.
 for(const pose of ['rock','box','leaf','wing','book','chair','hammock']){
  for(let y=750;y<4400&&count<40;y+=70)for(let x=650;x<6850&&count<40;x+=70){
   if(!geo.walkable(x,y)||pathDist(x,y)<122+sizes[pose]||Math.min(...props.map(p=>Math.hypot(p.x-x,p.y-y)))>365)continue;

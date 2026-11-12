@@ -1,6 +1,3 @@
-// Sprite animation for centre.json pieces. SVG/SMIL alone does not animate Pixi textures.
-// records = [{piece, sprite}], with sprites at their final placement and SVG natural size. Any sprite anchor is supported.
-// Call once per ticker with elapsed seconds. No allocations, filters, or texture uploads per frame.
 export function animateCentre(records, seconds, reducedMotion = false) {
   for (const {piece:p, sprite:s} of records) {
     const a = p.animate;

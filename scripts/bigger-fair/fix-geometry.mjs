@@ -1,5 +1,3 @@
-// The former shoreline is a canal around Fair's preserved heart. These banks
-// use the old coast, outside its dry pixels; two authored tributaries reach sea.
 import {read,smooth} from './design.mjs';
 const old=read('scripts/bigger-fair/original-world.json');
 const expand=(xk,yk)=>old.coast.map(([x,y])=>[+(3600+(x-3600)*xk).toFixed(1),+(2300+(y-2300)*yk).toFixed(1)]);
@@ -11,7 +9,6 @@ export const streams=[
 ].map(s=>({...s,poly:ribbon(s.line,s.width)}));
 export const water=[...inner.map((a,i)=>({id:'heart-canal-'+i,poly:[a,inner[(i+1)%inner.length],outer[(i+1)%outer.length],outer[i]]})),...streams.map(s=>({id:s.id,poly:s.poly})),{id:'wish-orchard-pond',x:950,y:-310,rx:300,ry:130}];
 export const pathD=pts=>'M'+pts.map(q=>q.map(v=>Math.round(v*10)/10).join(' ')).join('L')+'Z';
-// The locations below are the planned road/canal crossings, not prop scatter.
 export const crossings=[
  {id:'west-heart',x:370,y:2830,w:420,h:180,horizontal:true},
  {id:'northwest-heart',x:520,y:780,w:290,h:400},

@@ -11,8 +11,6 @@ export function loadGunC() {
 }
 const delta=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 
-// Attach to the actual island Ducky's original wing joint. No duplicate duck
-// rig, outfit, new player renderer, or floating weapon sprite is created.
 export function attachGunC(rig,items,team,objects) {
   rig.setAppearance?.((team==='google'?items.googleLook:team==='privacy'?items.privacyLook:null)??null);
   const equipment=new Map(),a=new Point(),b=new Point(),pa=new Point(),pb=new Point(),muzzle=new Point(),out=new Point();
@@ -38,8 +36,6 @@ export function attachGunC(rig,items,team,objects) {
       }
       wing.position.set(...spec.wingPose.pivot);wing.rotation=spec.wingPose.rotationDegrees*Math.PI/180;wing.scale.set(1);
       entry.mount.position.set(...spec.grip);entry.mount.visible=true;
-      // Compensate body sway/lean and rig scaling. Gun C's barrel follows the
-      // authoritative last movement direction even during Ducky's smooth turn.
       a.set(pose.x,pose.y);b.set(pose.x+Math.sin(pose.facing??0)*100,pose.y+Math.cos(pose.facing??0)*100);
       objects.toGlobal(a,pa);objects.toGlobal(b,pb);body.toLocal(pa,undefined,a);body.toLocal(pb,undefined,b);
       entry.mount.rotation=Math.atan2(b.y-a.y,b.x-a.x)-Math.atan2(spec.aimScreenVector[1],spec.aimScreenVector[0]);

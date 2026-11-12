@@ -13,11 +13,9 @@ art=json.loads((ROOT/'art.json').read_text())
 data=json.loads(Path('src/pixi/bog-environment.json').read_text())
 blocks=json.loads(Path('src/pixi/bog-blockers.json').read_text())
 ground=(ROOT/'ground.svg').read_text()
-# Remove only this pass's baked layer when rerunning.
 ground=re.sub(r'<g id="qa-home-ground"[\s\S]*?</svg><!-- qa-home-ground-end --></g>','',ground)
 ground=re.sub(r'<defs id="qa-home-clips">[\s\S]*?</defs>','',ground)
 pathD=re.search(r'<path d="([^"]+)" fill="#cea2d0"',ground)[1]
-# The existing Home recipe outputs linear polygon contours, including holes.
 surface=Polygon()
 for ring in re.findall(r'M([^MZ]+)Z',pathD):
     points=[tuple(map(float,p.split(','))) for p in ring.split('L')]
@@ -41,7 +39,6 @@ def recolour(s):
 
 def nested(src,x,y,w,h,idx):
     s=recolour(Path('public'+src).read_text())
-    # Namespace Home source defs so repeated botanical details never share ids.
     ids=re.findall(r'\bid="([^"]+)"',s)
     for id in ids:s=s.replace('id="'+id+'"','id="qa'+str(idx)+'-'+id+'"').replace('#'+id, '#qa'+str(idx)+'-'+id)
     start=s.index('<svg');end=s.index('>',start)
@@ -49,8 +46,6 @@ def nested(src,x,y,w,h,idx):
     tag=re.sub(r'\s(?:width|height|x|y)="[^"]*"','',tag)
     return s[:start]+tag+f' x="{x-w/2:.2f}" y="{y-h:.2f}" width="{w}" height="{h}"'+s[end:]
 
-# Keep Home's broad meadow silhouettes, with subdued purple variations. All
-# lawn planes and botanical details share one dry-lawn clip, never a road mask.
 meadow=recolour(Path('scripts/home-review/outer-meadows.svgfrag').read_text())
 layers=[f'<g transform="translate(1700 1800) scale(.84 1.02)">{meadow}</g>']
 E=json.loads(Path('src/pixi/home-expansion.json').read_text())
@@ -62,16 +57,12 @@ for i,p in enumerate(E['groundDecals']):
     if not lawn.contains(box(x-w/2,y-h,x+w/2,y)):continue
     layers.append(nested(p['src'],x,y,w,h,i))
     marks.append(dict(x=round(x,2),y=round(y,2),width=w,height=h,homeSource=p['src']))
-# Authored grass-and-flower crescents at each named existing grove. This fills
-# planting feet and keeps the calm fighting clearings without a repeated grid.
 clumps=defaultdict(list)
 for p in art['props']:
     if not re.match(r'^(tree|bush)-',p['name']):continue
     key=re.sub(r'-(tree|bush)-\d+$','',p['id'])
     if key==p['id']:continue
     clumps[key].append(p)
-# Compact existing plants towards their group's tree roots. Retain original
-# Home cameras/sizes, match every relocated trunk collider, leave cover alone.
 fixed=unary_union([box(b['x']-22,b['y']-22,b['x']+b['width']+22,b['y']+b['height']+22) for b in blocks if b['kind']!='tree'])
 moves=[]
 for key,ps in clumps.items():
@@ -89,23 +80,18 @@ for key,ps in clumps.items():
             ob=next(o for o in world['obstacles'] if o['id']==b['id'])
             ob['poly']=[[b['x'],b['y']],[b['x']+b['width'],b['y']],[b['x']+b['width'],b['y']+b['height']],[b['x'],b['y']+b['height']]]
         moves.append(p['id'])
-    # Each crescent has unequal spacing and short/long Home grass variants.
     for j,(dx,dy,n) in enumerate([[-210,110,1],[-135,170,2],[-45,210,3],[55,235,1],[155,180,2],[220,115,3],[-260,205,2],[110,285,3]]):
         x=cx+dx;y=cy+dy;w=39 if n==1 else 45;h=27 if n==1 else 30
         if not lawn.contains(box(x-w/2,y-h,x+w/2,y)):continue
         src=f'/pixi-art/decals/grass-tuft-{n}.svg'
         layers.append(nested(src,x,y,w,h,10000+len(marks)))
         marks.append(dict(x=round(x,2),y=round(y,2),width=w,height=h,homeSource=src))
-# Home's cottage planting border replaces all four pieces using the neon pad
-# asset, including the two nearest the Mid hall. Positions stay unchanged.
 bedSrc='/pixi-art/home-hamlets/petalpatch/cottage-flowerbed.svg'
 (ROOT/'home/qa-home-planting-bed.svg').write_text(recolour(Path('public'+bedSrc).read_text()))
 for p in art['props']:
     if p['name']=='site-bed':
         p.update(name='home-planting-bed',src='home/qa-home-planting-bed.svg',homeSource=bedSrc,height=round(p['width']*124/291,2),shadow=False)
-# Patch-only audit metadata is outside runtime manifests.
 clip=f'<defs id="qa-home-clips"><clipPath id="qa-home-lawn"><path d="{contours(lawn)}" fill-rule="evenodd"/></clipPath></defs>'
-# Final nested svg acts only as a closing sentinel for idempotent layer removal.
 layer='<g id="qa-home-ground" clip-path="url(#qa-home-lawn)">'+''.join(layers)+'<svg width="0" height="0"></svg><!-- qa-home-ground-end --></g>'
 ground=ground.replace('</svg>',clip+layer+'</svg>')
 (ROOT/'ground.svg').write_text(ground)

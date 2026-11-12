@@ -1,4 +1,3 @@
-// Keep every working/reference raster outside public. Only Canal paths are touched.
 import {copyFileSync,existsSync,mkdirSync,readdirSync,renameSync,writeFileSync} from 'node:fs';
 import {dirname,join} from 'node:path';
 const art='public/pixi-art/themes/canal',work='../concepts/themes/work/canal';

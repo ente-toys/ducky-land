@@ -5,8 +5,6 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import React, {act} from 'react';
 
-// Exercise the real page, toolbar components and RoomClient. Only the GPU
-// renderer and the WebSocket transport are replaced, so no server is needed.
 const {outputFiles:[bundle]} = await build({
   entryPoints:[fileURLToPath(new URL('../src/pixi/PixiPage.jsx',import.meta.url))],
   bundle:true, packages:'external', jsx:'automatic', format:'esm', write:false,
@@ -30,7 +28,6 @@ const code = ['react','react/jsx-runtime','react-dom','pixi.js'].reduce((text,na
   text.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name))),bundle.text);
 const {default:PixiPage} = await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 
-// IDs are scoped by item type, including accounts whose IDs match an island.
 for (const accountId of ['42','home']) test(`five reconnects and map reloads retain one toolbar and clean up listeners (account ${accountId})`,async t=>{
   const dom = new JSDOM('<div id="root"></div>',{url:'http://localhost/'});
   const originals = Object.fromEntries(['window','document','location','history','fetch','WebSocket',
@@ -56,8 +53,6 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
   t.mock.method(console,'error',(...args)=>warnings.push(args.join(' ')));
   const add = window.addEventListener.bind(window), remove = window.removeEventListener.bind(window);
   t.mock.method(window,'addEventListener',(type,fn,...args)=>{
-    // React also registers a native browser event dispatcher. Count the
-    // component's shortcut subscription, which must follow its lifetime.
     if (type === 'keydown' && fn.name === 'shortcut') keydowns.add(fn);
     return add(type,fn,...args);
   });
@@ -71,7 +66,6 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     const id = schedule(fn,delay,...args); intervals.set(id,delay); return id;
   });
   t.mock.method(globalThis,'clearInterval',id=>{intervals.delete(id); cancel(id);});
-  // React detects input/focus support on import, after the DOM is available.
   const {createRoot} = await import('react-dom/client');
   let root = createRoot(document.getElementById('root'));
   const mount = ()=>act(async()=>root.render(React.createElement(React.StrictMode,null,React.createElement(PixiPage))));
@@ -108,14 +102,13 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
       assert.equal(sockets.length,total+1,'one automatic reconnect');
       await welcome();
       counts(true);
-      // A new server/map epoch and an island change each force UI updates.
       await map(`restart-${i}`,'home');
       await map(`island-${i}`,'blossom');
       counts(true);
       assert.equal(client.onFriendsChanged,friendsChanged,'friend subscription survives reconnects');
       assert.equal(client.onNearby,nearby,'nearby subscription survives reconnects');
       await act(async()=>old.receive({type:'role',id:null,reason:'expired'}));
-      counts(true); // Old connections cannot alter the active session.
+      counts(true);
       const engine = engines.at(-1), stops = engine.stops ?? 0;
       await act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:'c',cancelable:true})));
       assert.equal(engine.stops,stops+1,'C invokes exactly one Chat handler');
@@ -141,7 +134,6 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     const total = sockets.length;
     await act(async()=>t.mock.timers.tick(10000));
     assert.equal(sockets.length,total,'unmount cancels reconnects');
-    // Full page/HMR remount also starts with a single toolbar.
     root = createRoot(document.getElementById('root'));
     await mount(); await welcome(); counts(true);
     assert.equal(warnings.length,0,warnings.join('\n'));

@@ -8,7 +8,6 @@ const pieces=[...data.pieces].sort((a,b)=>((a.layer==='decal'?-2000:a.layer==='b
 const comps=[];
 for(const p of pieces){const buf=await sharp(D+p.file).resize(Math.round(p.width),Math.round(p.height)).png().toBuffer();comps.push({input:buf,left:Math.round(ox+p.x),top:Math.round(oy+p.y)});}
 await sharp({create:{width:W,height:H,channels:4,background:'#94C557'}}).composite(comps).png().toFile(OUT+'fair-centre-preview.png');
-// Filmstrip uses the same coordinates and time function as the Pixi component.
 const frames=[];
 for(const [i,t]of [0,.24,.48].entries()){
  const f=waterFrame(t);const marks=f.flecks.map(p=>`<ellipse cx="${p.x}" cy="${p.y}" rx="2.1" ry="4" fill="#FFF8D8"/>`).join('')+f.rings.map(q=>`<ellipse cx="-263" cy="-70" rx="${8+q*35}" ry="${3+q*10}" fill="none" stroke="#FFF8D8" stroke-width="2.4" opacity="${1-q}"/>`).join('');

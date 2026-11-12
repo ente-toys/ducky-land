@@ -6,8 +6,6 @@ const flush=()=>new Promise(setImmediate);
 const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
 const container={addChild(){}};
 
-// Deterministic two-frame async decode latency, real Bellovo crop geometry,
-// 2x DPR, 60Hz camera, and unchanged production byte limits.
 test('Bellovo 2x walking never exposes an empty visible crop and refines within 18 frames (300ms) after settle',async t=>{
  for(const [kind,tiles] of Object.entries(rasterLayers())){
   let time=0,frame=0;const frames=[],decodes=[];
@@ -28,7 +26,6 @@ test('Bellovo 2x walking never exposes an empty visible crop and refines within 
   };
   const visible=()=>stream.entries.filter(t=>tileInView(t,camera,1400,1000,1,0));
   for(let i=0;i<240;i++){await tick();if(!pool.stats().missingTiles&&!pool.stats().pendingTiles)break;}
-  // At least one viewport beyond the visible bounds is already prefetched.
   const ring=stream.entries.filter(t=>tileInView(t,camera,1400,1000,1,1000)&&!tileInView(t,camera,1400,1000,1,0));
   assert(ring.length>0&&ring.every(t=>t.sprite.visible),kind+' prefetched viewport ring '+JSON.stringify(pool.stats())+' ringMissing='+ring.filter(t=>!t.sprite.visible).length);
   for(let i=0;i<360;i++){
@@ -36,7 +33,6 @@ test('Bellovo 2x walking never exposes an empty visible crop and refines within 
    assert(visible().every(t=>t.sprite.visible),kind+' empty walking crop at frame '+frame);
   }
   camera={...camera,zoom:1.8};
-  // 100ms settle, then a measured maximum of 18 frames for visible full res.
   for(let i=0;i<7;i++){await tick();assert(visible().every(t=>t.sprite.visible));}
   let completed;
   for(let i=1;i<=18;i++){

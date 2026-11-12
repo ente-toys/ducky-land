@@ -2,9 +2,6 @@ import {Quaternion,Vector3} from './globe-math.js';
 import {transport} from './sphere.js';
 import {SURFACE_RADIUS} from './three-globe-math.js';
 
-// Twist the whole globe around the grabbed surface normal. Rotation about this
-// axis cannot move the grabbed ground point, including away from screen centre.
-// The desired tangent projects vertically through the perspective camera.
 export function alignIslandNorth(quaternion,frame,anchor,camera,amount=1,maxStep=Infinity,remaining=0){
   const local=anchor.clone().normalize(),normal=local.clone().applyQuaternion(quaternion);
   const ray=normal.clone().multiplyScalar(SURFACE_RADIUS).sub(camera.position),denominator=ray.dot(normal);
@@ -17,8 +14,6 @@ export function alignIslandNorth(quaternion,frame,anchor,camera,amount=1,maxStep
   return angle;
 }
 
-// Use perceived zoom distance, not a late altitude threshold. The complete
-// approach shares one smooth progress curve, even across repeated wheel events.
 export function approachProgress(startAltitude,altitude){
   if(startAltitude<=.14)return 1;
   const t=Math.max(0,Math.min(1,Math.log(startAltitude/altitude)/Math.log(startAltitude/.14)));

@@ -1,5 +1,3 @@
-// One finished coastline, including both estuaries. No clipping a water stroke
-// against the old coast: that was the source of the knife-cut sand/foam ends.
 import fs from 'node:fs';
 const A='public/pixi-art/themes/cathedral/';
 export function rebuildWaterArt(art){

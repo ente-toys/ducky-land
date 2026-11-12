@@ -1,37 +1,28 @@
 import {overviewPatch} from './sphere-mesh.js';
 import {flatRigid} from './rigid.js';
-// boss 5 Nov: 300 islands (30k stars = 300 islands), every one an exact copy of the home island (world-map.js); themes
-// come later. You stand on one island at a time: it is the real, playable scene, and the other 299 are drawn round it as
-// copies at their true places, so you can sail across to the next one. The ones on screen up close are the live island
-// drawn again (engine.js renderLiveCopies); far away a snapshot of it stands in.
-// 30,000 Duckies (100 per island) show as tiny yellow dots once you zoom far out.
 import {Container, Graphics, Rectangle, Sprite} from 'pixi.js';
 import {MAP_BOUNDS, WORLD_ISLANDS, worldIsland} from './world-map.js';
 import {artOf, mapFor, mapOf} from './island-maps.js';
 
 export const ISLAND_COUNT = WORLD_ISLANDS.length;
-// boss 8 Nov: each copy's centre and its RIGID turn in the current island's chart (rigid.js), as overviewPatch draws it
 const placement=(from,to)=>{const r=flatRigid(from,to);return {a:r.a,b:r.b,c:r.c,d:r.d,x:r.x,y:r.y};};
 
 export function createArchipelago(app, scene, layer, world) {
-  // boss 6 Nov: every island is drawn by its own map (its theme's art, or home's until that theme is delivered), placed by
-  // its centre, so maps of any size line up. cx, cy: the centre of the current island's map in its local coordinates.
   let cx = world.width / 2, cy = world.height / 2;
   const SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0;
   const wrap = v => v - SX * Math.round(v / SX);
   const root = new Container({label: 'Archipelago'}), copies = new Container({label: 'Island copies'});
   const people = new Container({label: '30,000 Duckies'});
   const peopleTextures = new Map();
-  layer.addChildAt(root, 0);   // under the real island's water and ground
+  layer.addChildAt(root, 0);
   root.addChild(copies, people);
   let destroyed=false;
   let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
   const textures = new Map();
-  const leasedPreviews=new Set();   // map id -> snapshot of that map's art
+  const leasedPreviews=new Set();
   const textureOf = id => textures.get(artOf(id)) ?? textures.get('home');
   const sizeOf = id => mapFor(textures.has(artOf(id)) ? artOf(id) : 'home');
   const sprites = new Map();
-  // every island in the current island's local coordinates: the current one sits where the real scene is drawn
   const place = () => {
     const here = worldIsland(current), m = mapOf(current);
     cx = m.cx; cy = m.cy;
@@ -48,7 +39,6 @@ export function createArchipelago(app, scene, layer, world) {
       s.tint=island.map==='home'?island.tint:0xffffff;
       copies.addChild(s);
     }
-    // Share a small raster of 100 dots instead of uploading 30,000 rectangles.
     people.removeChildren().forEach(child => child.destroy());
     for (const island of islands) {
       const key = `${island.width}x${island.height}`;
@@ -77,8 +67,6 @@ export function createArchipelago(app, scene, layer, world) {
   place();
   return {
     async loadPreviews(acquire) {
-      // Small vector previews, never the source maps. Publish all thirteen in
-      // one revision so the globe atlas is built once rather than thirteen times.
       const loaded=await Promise.all(WORLD_ISLANDS.map(async island=>{
         const id=artOf(island.id),texture=await acquire(`/pixi-art/globe/${id}.svg`);
         return [id,texture];
@@ -89,8 +77,6 @@ export function createArchipelago(app, scene, layer, world) {
     },
     get current(){return current;}, get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return textures.get('home') ?? null;},
     get version() {return version;}, has: mapId => textures.has(mapId), textureOf, sizeOf,
-    // snapshot the real island as it is drawn now (ground, props, everything), once per map, sharp enough not to go blocky.
-    // The engine shows that map's art (and only it) in the scene before calling this.
     build(mapId = 'home') {
       if (textures.has(mapId)) return;
       const m = mapFor(mapId), keep = {x: scene.position.x, y: scene.position.y, sx: scene.scale.x, sy: scene.scale.y};
@@ -101,15 +87,12 @@ export function createArchipelago(app, scene, layer, world) {
       textures.set(mapId, texture); version++;
       place(); draw();
     },
-    // arrived on another island by boat: it becomes the real scene, everything else is redrawn round it
     setCurrent(id) {
       if (id === current || !worldIsland(id)) return;
       current = id; place(); draw();
     },
-    // the copies drawn live this frame (engine.js) hide their snapshot so it does not show through
     showLive(ids) {for (const [id, s] of sprites) s.visible = !ids.has(id);},
     root,
-    // the dots only show when zoomed far out (they would cover the islands up close)
     update(zoom) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;

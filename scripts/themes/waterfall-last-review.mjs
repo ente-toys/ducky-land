@@ -10,7 +10,6 @@ for(const [i,[name,home,fall]] of rows.entries())for(const [j,file,xy] of [[0,'w
  composite.push({input:title,left:j*W,top:i*(H+head)});
 }
 await sharp({create:{width:W*2,height:rows.length*(H+head),channels:4,background:'#6EC9DE'}}).composite(composite).png().toFile(d+'last-waterfall-round-1-vs-home.png');
-// Keep the reusable centre placement metadata in step with the delivered manifest.
 const path='public/pixi-art/themes/waterfall/centre/centre.json';
 const c=JSON.parse(readFileSync(path)),a=JSON.parse(readFileSync('public/pixi-art/themes/waterfall/art.json'));
 for(const p of c.pieces){const q=[...a.flats,...a.props].find(q=>q.centrePiece?.id===p.id);if(q && (p.id==='water-sheet'||p.id==='foam'||p.id.startsWith('flow-')||p.id.startsWith('impact-ripple-')))Object.assign(p,q.centrePiece);}

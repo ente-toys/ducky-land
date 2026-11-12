@@ -1,4 +1,3 @@
-// Goldmine-only pose placement. Uses the engine's validator, five of each exact Home pose.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
@@ -6,7 +5,6 @@ import {makeMap} from '../../src/pixi/island-maps.js';
 const D='assets/world/themes/goldmine/',A='public/pixi-art/themes/goldmine/';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const world=read(D+'world.json'),art=read(A+'art.json');
-// Include the engine's added harbor landing, rather than only the authored deck.
 const walk=makeMap('goldmine',{world,walk:read(D+'walk-world.json'),harbor:read(D+'harbor.json'),sleepers:[]}).walk;
 const geo=geometry(walk),sizes=sleepHalfWidths(),poses=Object.keys(sizes),old=[...read(A+'sleepers-validated.json'),...read(A+'goldmine-original-sleepers.json')];
 const nearTypes={hammock:/Tree/,rock:/ore rocks|outcrop|rock/i,leaf:/Tree|Bush/,book:/bench|stall|cabin|workshop/i,chair:/umbrella|Sandcastle|bench|Tree|towel/i,wing:/Bush|bench|flower/i,box:/cart|support|stall|ore rocks|crate/i};
@@ -51,8 +49,6 @@ for(let attempt=0;attempt<120;attempt++){
  if(chosen.length>best.length)best=chosen;
  if(best.length===40)break;
 }
-// Repair the complete arrangement as a constraint problem when a greedy order
-// paints itself into a corner. The exact same clearance and pose spread apply.
 if(best.length!==40){
  for(let restart=0;restart<24 && best.length!==40;restart++){
   const assigned=poses.flatMap(p=>Array.from({length:5},()=>candidates[p][Math.floor(rnd()*candidates[p].length)]));

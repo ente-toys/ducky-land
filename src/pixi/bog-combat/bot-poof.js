@@ -1,5 +1,3 @@
-// Reuse the island's bounded ink-outline dust pool. Never treat a hidden enemy
-// omitted from a snapshot as a departing bot, or reveal its hidden position.
 export function createBotPoofs(dust){
  let seen=0;
  return function update(snapshot,reducedMotion=false){

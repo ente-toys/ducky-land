@@ -51,7 +51,6 @@ test('local or remote bumps shed white clumps and flakes, a fading trunk pile an
   fx.update(.65);assert.ok(falling.y>start.y);assert.notEqual(falling.x,start.x);
   fx.update(3.7);assert.ok(pile.alpha<.7&&pile.alpha>0);assert.ok(cap.alpha<.6&&cap.alpha>0);
   fx.update(.1+SNOW_REFILL+.01);assert.equal(pile.visible,false);assert.equal(cap.alpha,0);
-  // A separate remote actor uses the same contact throttle and snow variant.
   await bump(0,6,{});assert.ok(clumps.some(g=>g.visible));assert.ok(cap.alpha>.9);
   fx.begin('snow',7);fx.track(who,ps[0].x-46,ps[0].y-18);fx.update(7.5);
   assert.ok([...clumps,...flakes].every(g=>!g.visible),'holding a trunk cannot repeatedly shed snow');

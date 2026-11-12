@@ -1,8 +1,5 @@
-// Approved AC-2 blueprint coordinates are fixed in centre-source/layout.json.
-// Fit the blueprint into the original heart, leaving all outer communities alone.
 export const FIT={cx:3570,cy:2220,sx:4.3,sy:3.8};
 const P=([x,y])=>[3570+(x-768)*4.3,2220+(y-520)*3.8];
-// Blueprint feet at moat-side wedge corners. No procedural scattering.
 export const TREE_CLUMPS=[
  [{nod:0,at:P([120,140])},{model:3,at:P([110,190])}],
  [{nod:2,at:P([1120,140])},{model:3,at:P([1120,203])}],

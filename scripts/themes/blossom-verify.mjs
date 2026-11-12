@@ -1,4 +1,3 @@
-// Scope-local verification of the actual game data and art-loader contract.
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
 import {Texture} from 'pixi.js';
@@ -15,31 +14,26 @@ const reachable=p=>nav.clearLine(s,p)||nav.route(...s,...p).length>0;
 for(const [id,z]of Object.entries(world.zones)){assert(nav.walkable(...z.spawn),'Blocked '+id);assert(reachable(z.spawn),'Unreachable '+id);}
 const open=Object.entries(world.zones).filter(([id])=>/^(activity|stalls)-/.test(id));
 for(const [id,z]of open)for(const p of art.props)assert(!inShape(p.x,p.y,z,0),p.id+' occupies '+id);
-// All eight poses use the exact Home sleeper resolver, including physical bed collision.
 for(const b of check.sleepers){assert(map.landAt(b.x,b.y));assert(!nav.walkable(b.x,b.y-6),'Sleeper is not solid '+b.pose);}
 const benchProps=art.props.filter(p=>p.id.startsWith('blossom-bench-'));assert.equal(benchProps.length,24);
 for(const p of benchProps)assert(!nav.walkable(p.x,p.y),'Bench is not solid '+p.id);
 const [cx,cy]=[centre.placement.x,centre.placement.y];
 assert(!nav.walkable(cx,cy-122),'Tree is not solid');
 for(const p of [[cx,cy+465],[cx-700,cy],[cx+700,cy],[cx,cy-460]])assert(reachable(p),'Hill entry unreachable '+p);
-// Every pier/arched bridge and stepping stone joins the mainland navigation component.
 for(const [i,b]of world.bridges.entries()){assert(nav.walkable(b.x,b.y)||nav.nearest(b.x,b.y,38),'Blocked bridge '+i);const p=nav.nearest(b.x,b.y,38);assert(p&&reachable(p),'Unreachable bridge/stone '+i);}
 for(const [i,b]of world.walkways.entries()){
  const p=[(b.a[0]+b.b[0])/2,(b.a[1]+b.b[1])/2];assert(nav.walkable(...p),'Blocked deck '+i);assert(reachable(p),'Unreachable deck '+i);
 }
 for(const [i,b]of world.arches.entries())assert(world.walkways.some(w=>w.a.every((v,j)=>Math.abs(v-b.a[j])<1)),'Arch without walkway '+i);
 for(const [i,[x,y]]of world.islets.entries()){const p=nav.nearest(x+150,y+30,250);assert(p&&reachable(p),'Unreachable islet '+i);}
-// 100 player-sized, separated positions, not merely 100 points in one patch.
 const crowd=[];for(let y=850;y<world.height-400;y+=210)for(let x=650;x<world.width-350;x+=210){if(!nav.walkable(x,y)||!reachable([x,y]))continue;if(![[-50,0],[50,0],[0,-36],[0,36]].every(([dx,dy])=>nav.walkable(x+dx,y+dy)))continue;crowd.push([x,y]);}
 assert(crowd.length>=100,'Insufficient crowd space: '+crowd.length);
-// Move a real actor with the shared motion implementation from the harbor into each open area.
 let walkingChecks=0;
 for(const [id,z]of [['plaza',world.zones.plaza],...open]){
  const a={id:'probe',x:map.HARBOR.land.x,y:map.HARBOR.land.y,turn:0,action:0,travel:0,path:[],until:0,jumpLeft:0};assert(setWalkDestination(a,nav,...z.spawn),'No walking route '+id);
  for(let tick=0;tick<5000&&a.path.length;tick++){walkStep(a,nav,.05,tick*.05,{x:0,y:0});assert(nav.walkable(a.x,a.y),'Actor crossed solid ground '+id);}
  assert(Math.hypot(a.x-z.spawn[0],a.y-z.spawn[1])<15,'Actor did not arrive '+id);walkingChecks++;
 }
-// No raster, embedded image or missing asset anywhere in the delivered public folder.
 const files=readdirSync(A,{recursive:true}).filter(p=>typeof p==='string');assert(!files.some(p=>/\.(png|jpe?g|webp)$/i.test(p)));
 const entries=[...art.ground.tiles,...art.props,...art.decks,...art.flats,...art.floating];
 for(const src of new Set(entries.map(p=>p.src))){assert(src.endsWith('.svg'));assert(existsSync(A+src));assert(!/<image\b|data:image\/(png|jpe?g|webp)|<foreignObject\b/.test(readFileSync(A+src,'utf8')),'Embedded raster '+src);}

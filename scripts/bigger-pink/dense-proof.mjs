@@ -31,7 +31,6 @@ for(const c of layout.riverCrossings){
  assert.ok(wet&&deck&&blockedWithoutDeck,c.name);
  validation.crossings.push({name:c.name,wet,deck,blockedWithoutDeck});
 }
-// Compare production ground layers at the same resolution and protected mask.
 const k=.25,w=2000,h=1450,oldWorld=read('scripts/bigger-pink/original-world.json');
 const original=await sharp(A+'ground.svg').resize(w,h).ensureAlpha().raw().toBuffer();
 const outer=await sharp(A+'expansion/outer-ground.svg').resize(3300,2450).extract({left:650,top:475,width:w,height:h}).png().toBuffer();

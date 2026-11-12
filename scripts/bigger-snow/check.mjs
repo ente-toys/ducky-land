@@ -11,7 +11,6 @@ const result=checkTheme('snow');assert.ok(result.ready,result.problems.join('\n'
 const map=makeMap('snow',{world:w,walk,harbor:h,sleepers:result.sleepers}),nav=map.nav(),route=(x,y)=>nav.walkable(x,y)&&(nav.clearLine([map.spawn.x,map.spawn.y],[x,y])||nav.route(map.spawn.x,map.spawn.y,x,y).length>0);
 const dests=[];for(const c of communities)for(const [type,x,y]of [...c.homes,...c.work]){assert.ok(route(x,y+65));dests.push({community:c.id,type,x,y:y+65,reachable:true})}
 const pathSweep=[];for(const r of roads){let solid=0,water=0,offshore=0;for(const [x,y]of r.line){if(inPoly(x,y,ow.coast))continue;if(!inPoly(x,y,w.coast))offshore++;else if(!nav.walkable(x,y)){if(w.water.some(v=>inShape(x,y,v,20)))water++;else solid++}}pathSweep.push({road:r.id,solidSamples:solid,waterSamples:water,offshoreSamples:offshore});}
-// An actual rendered pixel comparison, with the full original ground, decals and standing art.
 const opts={k:.2,x:0,y:0,width:1600,height:1200};
 const before=await renderArt(old,opts),after=await renderArt(a,opts);writeFileSync(output+'/work/snow/original-before.png',before);writeFileSync(output+'/work/snow/original-after.png',after);
 const b0=await sharp(before).raw().toBuffer(),b1=await sharp(after).raw().toBuffer();let samples=0,changed=0;const seg=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)};

@@ -6,7 +6,6 @@ import {TREE_CLUMPS,FIT} from '../scripts/bigger-fair/centre-data.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const layout=read('scripts/bigger-fair/centre-source/layout.json');
 const art=read('public/pixi-art/themes/fair/art.json');
-// Boss simplified the centre: clean walkable lawn replaces flowers and fence.
 test('Fair centre has open lawns, no flower fields or fence, and six small tree clumps',()=>{
  assert(!art.props.some(p=>/^ac2-flower-|^ring-fence-/.test(p.id)||p.src==='ac2/flower-box.svg'||/placed-ac2-flower-box/.test(p.src)));
  assert(!('flowerRows' in layout));
@@ -19,7 +18,6 @@ test('Fair centre has open lawns, no flower fields or fence, and six small tree 
   for(const t of clump)assert(art.props.some(p=>p.x===t.at[0]&&p.y===t.at[1]&&/^reuse\/tree-/.test(p.src)));
  }
  const nav=mapFor('fair').nav();
- // Sample each former planting area away from retained ride/bench footprints.
  for(const [x,y] of [[440,240],[1090,240],[310,365],[1230,365],[240,455],[240,625],[1285,475],[1285,625],[410,800],[1120,800],[640,550],[895,550]])
   assert(nav.walkable(FIT.cx+(x-768)*FIT.sx,FIT.cy+(y-520)*FIT.sy),`lawn ${x},${y}`);
  assert.equal(mapFor('fair').sleepers.length,90);

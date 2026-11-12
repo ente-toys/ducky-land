@@ -1,6 +1,3 @@
-// Measuring aid only (places nothing): headless shots of Home with a world-coordinate grid drawn over them, so each
-// hand-written entry in scripts/home-10/ground.json can be read off the picture.
-// Usage: node scripts/home-10/grid-shots.mjs <dev base url> <out dir> x,y,zoom[,step] ...
 import {mkdirSync} from 'node:fs';
 const RUNTIME = '/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules';
 const {chromium} = await import(`${RUNTIME}/playwright/index.mjs`);

@@ -15,8 +15,6 @@ import {TILT} from './camera.js';
 import {cameraMatrix as atlasCameraMatrix} from './sphere-camera.js';
 import {surfacePoint,surfaceCoordinates} from './three-globe-math.js';
 
-// One live game/room supplies the detail texture. The globe never creates a
-// second player, connection or simulation, and the same camera handles every zoom.
 export async function createThreeGameView(game,host,{createWorld=createThreeWorld}={}){
   let disposed=false,world=null,last=0,view=null,following=true,shown=game.artShown,direct=false,blend=0,flatFrames=0;
   const flatOffset={x:0,y:0};
@@ -50,8 +48,6 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
   game.liveCopies=()=>{retainDetailArt(game,game.externalDetailVisible===false?null:game.artShown);return[];};
   game.resize=()=>{
     if(game.interior?.active)return nativeResize();
-    // Keep one capture size across orbit and approach, so the first live
-    // frame can use it without resizing the canvas in the middle of a zoom.
     const size=direct?{width:Math.max(1,host.clientWidth),height:Math.max(1,host.clientHeight)}:detailSize(host.clientWidth,host.clientHeight,devicePixelRatio||1,true);
     const resolution=direct?Math.min(globalThis.devicePixelRatio||1,2):1;
     if(game.width!==size.width||game.height!==size.height||game.app.renderer.resolution!==resolution){
@@ -79,8 +75,6 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
   function update(state){
     if(disposed||!world||!game.ready||game.interior?.active)return;
     if(view?.id!==state.id){
-      // The incoming camera may still be waiting for art. Invalidate before the
-      // frame-rate gate, including copies that share the same theme/map id.
       world.clearLiveCanvas();direct=false;flatFrames=0;
       world.setPresentation(0,false);game.canvas.style.visibility='hidden';
     }
@@ -88,13 +82,9 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     const {now,id}=state,mapId=artOf(id);
     const work=detailWork(state.altitude,game.externalDetailVisible===true,state.landing);
     if(shown!==mapId||game.artShown!==mapId){flatFrames=0;direct=false;}
-    // Decide the owner before sizing and drawing: never expose an overscan
-    // capture as the native viewport for one frame during takeover.
     const nextBlend=detailBlend(state.altitude,state.heading);
     const sameArt=shown===mapId&&game.artShown===mapId;
     const nextDirect=nextBlend===1&&sameArt&&directDetail(state.altitude,direct,game.artReady(mapId))&&(direct||flatFrames>=2);
-    // The native scene follows the browser's paint clock. Throttle only
-    // offscreen simulation and the captures that the globe uploads.
     if(!direct&&!nextDirect&&now-last<1000/work.hz-.5)return;
     last=now;direct=nextDirect;
     const map=mapOf(id);
@@ -118,7 +108,6 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     game.minZoom=.00001;game.zoomAnchor=null;game.zoomMotion.velocity=0;game.spin=null;game.globeAim=null;game.fly=null;game.follow=false;game.fitMode=false;game.landingView=null;game.globeT=0;
     game.externalCamera=camera;
     Object.assign(game.camera,game.externalCamera);delete game.camera.basis;Object.assign(game.target,game.camera);
-    // Follow the pose produced by this tick, before the camera and duck draw.
     const smoothFollow=direct&&following&&!state.flying&&view.id===game.islandId;
     if(!smoothFollow)followPositionState=null;
     nativeTick(now,{followCamera:smoothFollow?followCamera:undefined});
@@ -131,8 +120,6 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     flatFrames=blend===1&&ready?flatFrames+1:0;
     world.setPresentation(ready?blend:0,direct);
     game.canvas.style.visibility=direct?'visible':'hidden';
-    // Native takeover pauses uploads but keeps this island's dormant handoff.
-    // Island-id changes and unready/mismatched art invalidate it above.
     if(!direct&&detailVisible&&ready)world.setLiveCanvas(id,game.canvas,flatRigid(id,id),atlasCameraMatrix(game.camera,game.width,game.height,TILT),game.width,game.height,{x:game.camera.x-map.cx,y:game.camera.y-map.cy,width:game.width/zoom,height:game.height/(zoom*TILT)},captureScale());
     home.hidden=!p||state.altitude<.5;
     if(game.nameLayer)game.nameLayer.style.opacity=state.altitude>.5?'0':'';

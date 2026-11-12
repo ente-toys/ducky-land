@@ -1,4 +1,3 @@
-// The telescope's night sky: where a Ducky stands to look, where each star goes, and what the server says about who starred.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {telescopeSpot, telescopeNear, telescopePeerAt} from '../src/pixi/telescope.js';
@@ -37,7 +36,6 @@ test('every star keeps its place', () => {
   assert.equal(many.constellation, 15, 'the Great Duck borrows the first fifteen');
   assert.equal(anonymousStars(3).constellation, 0);
   assert.equal(anonymousStars(-5).count, 0);
-  // the stars nobody has lit yet have their own places, which never move a stargazer's, and reach past the stargazers
   const waiting = waitingStars();
   assert.equal(waiting.count, 10_000);
   assert.equal(waitingStars(3).x[2], waiting.x[2]);
@@ -56,7 +54,6 @@ test('the sky names the people who played and counts everyone else', () => {
   assert.equal(sky.named.find(star => star.login === 'aswin').online, true);
   assert.equal(sky.named.find(star => star.login === 'prag').online, false);
   assert.equal(sky.me.online, true, 'whoever is looking through the telescope is here');
-  // a count GitHub could not give us never hides the people we do know, and you always have your own star
   const unknown = readSky({total:null, me:{accountId:'7', login:'antara', starred:true}, players:[['3','prag']], online:[], friends:[]});
   assert.equal(unknown.total, 2);
   assert.equal(unknown.me.login, 'antara');
@@ -88,10 +85,8 @@ test('the room remembers who starred and answers the telescope', async () => {
   assert.deepEqual(sky.me, {accountId:'7', login:'antara', starred:true});
   assert.equal(sky.total, null);
   assert.deepEqual(sky.online, []);
-  // someone who removes their star is no longer named; someone who adds one is
   await post(room, '/session/access', {digest:'d-prag', canPlay:false, starred:false});
   await post(room, '/session/access', {digest:'d-guest', canPlay:true, starred:true});
-  // play access withdrawn because GitHub could not be asked says nothing about the star
   await post(room, '/session/access', {digest:'d-antara', canPlay:false});
   await post(room, '/stars/count', {count:30_048});
   await post(room, '/stars/count', {count:'many'});
@@ -123,7 +118,6 @@ test('the telescope asks GitHub for the star count at most every ten minutes', a
   assert.deepEqual(asked, [['https://api.github.com/repos/ente/ente', 'Bearer secret-token']]);
   await stars({request:request(`__Host-ducky_session=${token}`), env}, github);
   assert.equal(asked.length, 1, 'the count is remembered');
-  // GitHub being down keeps the last count
   room.sql.exec('UPDATE star_count SET checked=0');
   const down = await stars({request:request(`__Host-ducky_session=${token}`), env}, async () => {throw new Error('offline');});
   assert.equal((await down.json()).total, 30_048);

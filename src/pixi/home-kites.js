@@ -5,7 +5,6 @@ export const KITE_COLOURS = ['red', 'yellow', 'blue', 'purple', 'mint', 'orange'
 const DIR = '/pixi-art/home-kites/';
 export const KITE_ASSETS = [DIR + 'stake.svg', ...KITE_COLOURS.flatMap(c => ['body', 'tail-a', 'tail-b'].map(p => `${DIR}${c}-${p}.svg`))];
 
-// Mutable pose supplied by the caller. No frame allocations, geometry rebuilds or particles.
 export function kitePose(site, seconds, reduced, pose) {
   const phase = seconds * Math.PI * 2 / site.period + site.phase;
   pose.x = site.lean + (reduced ? 0 : Math.sin(phase) * 13);
@@ -20,7 +19,6 @@ export function createHomeKites(parent, textures, siteList = sites) {
   const entries = siteList.map(site => {
     const root = new Container({label: site.id, eventMode: 'none'});
     root.position.set(site.x, site.y); root.zIndex = site.y; root.standing = true;
-    // The path is drawn once. Independent x/y scaling keeps its endpoints exactly at the stake and knot.
     const string = new Graphics().moveTo(0, 0).quadraticCurveTo(74, -65, 100, -200).stroke({color: 0x39472d, width: 1.8});
     string.y = -17;
     const stake = new Sprite(textures[DIR + 'stake.svg']);
@@ -44,5 +42,5 @@ export function createHomeKites(parent, textures, siteList = sites) {
     }
   }
   update(0, true, () => true);
-  return {entries, update}; // Scene owns roots; the engine leases and releases all textures.
+  return {entries, update};
 }

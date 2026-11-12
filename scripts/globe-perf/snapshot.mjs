@@ -1,5 +1,3 @@
-// Static proof from production SVGs and the globe's longitude/latitude mapping.
-// This does not claim to be an in-game browser capture. No game art is written.
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';

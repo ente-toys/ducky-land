@@ -54,7 +54,6 @@ test('standing ducks attach only their current direction and dispose cached dire
 test('steady walking reuses body geometry and turning invalidates it', async () => {
   const originals = {fetch: globalThis.fetch, document: globalThis.document, DOMParser: globalThis.DOMParser,
     load: Assets.load, get: Assets.get, unload: Assets.unload};
-  // A circular SVG outline makes sampling deterministic without a browser layout engine.
   globalThis.document = {
     body: {appendChild() {}},
     createElementNS() {return {style: {}, appendChild() {}, remove() {}, setAttribute() {},

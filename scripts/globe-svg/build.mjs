@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-// node scripts/globe-svg/build.mjs [home|theme|island-id]
-// Compose the current island's own SVG contours and authored placements, without
-// loading the game or baking pixels. Safe to rerun after another island rebuild.
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -15,7 +12,7 @@ import {compile,markup,rectClip,crop} from './compile.mjs';
 import {createSourceTracker} from './sources.mjs';
 const ROOT=fileURLToPath(new URL('../../',import.meta.url));
 process.chdir(ROOT);
-const MAX_VECTOR_BYTES=1_500_000; // Keep current source colours instead of palette-merging to satisfy an arbitrary 600 KB cap.
+const MAX_VECTOR_BYTES=1_500_000;
 const OUT='public/pixi-art/globe';fs.mkdirSync(OUT,{recursive:true});
 const selected=process.argv[2],ids=[...new Set(WORLD_ISLANDS.map(i=>mapOf(i.id).id))];
 const id=selected&&(ids.includes(selected)?selected:WORLD_ISLANDS.some(i=>i.id===selected)?mapOf(selected).id:null);
@@ -27,8 +24,6 @@ function recordBundle(result){for(const file of Object.keys(result.metafile?.inp
 function read(file){if(!files.has(file))files.set(file,fs.readFileSync(file,'utf8'));if(!file.startsWith('@'))activeSources?.record(file,files.get(file));return files.get(file);}
 const source=(src,base)=>src.startsWith('/pixi-art/')?'public'+src:src.startsWith('/assets/')?'.'+src:path.join(base,src);
 
-// Bog's old generator only kept PNG crops. Evaluate its authored terrain with
-// filesystem writes disabled to recover the vector, without rebuilding the map.
 async function bogTerrain(){
  activeSources.recordCode('scripts/bigger-bog/densify.mjs');
  for(const file of ['scripts/bigger-bog/evidence/dense/before-art.json','scripts/bigger-bog/evidence/dense/before-world.json','scripts/bigger-bog/plan.json','assets/world/themes/bog/harbor.json'])record(file);
@@ -43,11 +38,7 @@ for(const theme of selected?[id]:ids){
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),W=Math.round(map.width*K),H=Math.round(map.height*K),base=map.art?path.dirname('public'+map.art):`public/pixi-art/themes/${theme}`;
  const art=map.home?homeLayers():JSON.parse(read(base+'/art.json'));
  let tiles=map.home?art.tiles:art.ground.tiles;
- // A sparse runtime ground stream can retain a complete vector master for the globe.
  if(!map.home && art.ground.vector)tiles=[{src:art.ground.vector,x:map.origin.x,y:map.origin.y,width:map.width,height:map.height}];
- // These generators embedded cropped original SVGs in every tile. Recover
- // one vector master and its unchanged dry-land clip instead of duplicating
- // the entire original drawing dozens of times.
  if(theme==='community'||theme==='goldmine'){
   const root=inline(read(source(tiles[0].src,base)));
   let old=Array.from(root.getElementsByTagName('g')).find(n=>n.getAttribute('data-name')==='Unchanged original tile sources'||n.getAttribute('clip-path')==='url(#originalIsland)');
@@ -55,11 +46,8 @@ for(const theme of selected?[id]:ids){
   root.setAttribute('viewBox',`${map.origin.x} ${map.origin.y} ${map.width} ${map.height}`);
   files.set('@'+theme,serialize(root));tiles=[{src:'@'+theme,x:map.origin.x,y:map.origin.y,width:map.width,height:map.height}];
  }
- // Restore exact vectors where legacy ground tiles embedded raster crops.
  if(theme==='library'&&tiles.some(t=>t.src.startsWith('bigger/ground-')&&/<image/.test(read(source(t.src,base))))){
   activeSources.recordCode('scripts/bigger-library/ground.mjs');
-  // Original bridge orientations are present in the current world, while an
-  // old untracked fixed-crossings.json is absent in clean checkouts.
   for(const file of ['scripts/bigger-library/original/world.json','scripts/bigger-library/original/walk-world.json','scripts/bigger-library/original/art.json','scripts/bigger-library/original/harbor.json','scripts/bigger-library/original/ground.svg','scripts/bigger-library/plan.json'])record(file);
   const libraryBundle=await build({metafile:true,entryPoints:['scripts/bigger-library/ground.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'current-crossings',setup(b){b.onLoad({filter:/waterways\.mjs$/},a=>({contents:read(a.path).replace("read('scripts/bigger-library/fixed-crossings.json')",JSON.stringify(JSON.parse(read('scripts/bigger-library/plan.json')).crossings)),loader:'js'}));}}]});
   recordBundle(libraryBundle);
@@ -83,8 +71,6 @@ for(const theme of selected?[id]:ids){
  const defs=[],paint=[],groups=new Map(),tileOrder=[],symbolCache=new Map();let serial=0;
  function position(p,kind){const s=kind==='prop'?(p.scale??1):1,w=p.width*s,h=p.height*s,a=kind==='prop'?(p.anchor??{x:.5,y:1}):kind==='flat'&&!p.topLeft?{x:.5,y:1}:{x:0,y:0};return {w,h,x:p.x-a.x*w,y:p.y-a.y*h};}
  function document(p){const file=p.src.startsWith('@')?p.src:source(p.src,base),root=inline(read(file));for(const tag of ['title','desc','metadata'])for(const n of Array.from(root.getElementsByTagName(tag)))n.parentNode.removeChild(n);return root;}
- // Preserve the source viewport as well as its body. Original crop SVGs can
- // share geometry while their clipping depends on the authored viewport.
  for(const p of tiles){
   const root=document(p),v=(root.getAttribute('viewBox')||`0 0 ${root.getAttribute('width')} ${root.getAttribute('height')}`).split(/[ ,]+/).map(Number),s=position(p,'ground');
   const sx=s.w/v[2],sy=s.h/v[3],tx=s.x-v[0]*sx,ty=s.y-v[1]*sy;
@@ -97,23 +83,14 @@ for(const theme of selected?[id]:ids){
  const terrain=[],terrainCache=new Map(),runs=[];
  for(const {group:g,rect}of tileOrder){
   const matrix=[g.sx*K,0,0,g.sy*K,(g.tx-map.origin.x)*K,(g.ty-map.origin.y)*K];
-  // The original tile viewport remains the exact paint boundary. Geometry is
-  // clipped during generation, so runtime SVGs need no masks or large surfaces.
-  // Resolve shared source geometry once, then crop each original viewport
-  // separately. Combining viewports before resolving source clips changes
-  // their paint, notably Canal's original ring geometry.
   const key=createHash('sha256').update(serialize(g.root)+matrix.map(v=>+v.toFixed(6)).join(',')).digest('hex');
   if(g.root.getElementsByTagName('svg').length){
-   // Literal nested SVGs inherit the parent's clipping viewport. Resolve them
-   // in that exact viewport, rather than treating the parent as an atlas.
    const localKey=key+'|'+rect.join(','),local=terrainCache.get(localKey)??{records:compile(g.root,{matrix,clip:rectClip([rect])})};
    terrainCache.set(localKey,local);runs.push({key:localKey,records:local.records,rects:null});continue;
   }
   let entry=terrainCache.get(key);if(!entry){entry={records:compile(g.root,{matrix})};terrainCache.set(key,entry);}
   let run=runs.at(-1);if(!run||run.key!==key){run={key,records:entry.records,rects:[]};runs.push(run);}run.rects.push(rect);
  }
- // Only adjacent copies can combine viewports. A later overlay tile must
- // retain its authored painter order even when an earlier tile shares its SVG.
  for(const {records,rects}of runs)terrain.push(...(rects?crop(records,rects):records));
  
  const sizes=new Map();
@@ -135,10 +112,7 @@ for(const theme of selected?[id]:ids){
  for(const p of art.decks??[])add(p,'deck');
  const bridgeStart=paint.length,bridgeDetails=art.props.filter(p=>p.deck||/bridge|jetty|boardwalk/i.test(p.src+' '+p.name));
  for(const p of [...bridgeDetails].sort((a,b)=>a.y-b.y))add(p,'prop');
- // Fallbacks include the complete ground composition: paths, plazas, garden
- // decals, water and bridges. Standing scenery is added only to the globe.
  const groundDefsCount=defs.length,groundPaint=[...paint];
- // The globe still draws each bridge detail once in the prop's true Y order.
  paint.splice(bridgeStart);
  for(const p of [...art.props].sort((a,b)=>a.y-b.y))add(p,'prop');
  let globe,ground,quality;
@@ -146,12 +120,9 @@ for(const theme of selected?[id]:ids){
   quality={tolerance:+(.2+level*.1).toFixed(2),minArea:+(.12+level*.04).toFixed(2),paletteDistance:0,quantum:level<2?.25:.5};
   const terrainText=markup(terrain,quality),symbols=defs.map(({name,size,records})=>`<symbol id="${name}" viewBox="0 0 ${num(size.w)} ${num(size.h)}" preserveAspectRatio="none">${markup(records,quality)}</symbol>`);
   const wrap=(groundOnly)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${symbols.slice(0,groundOnly?groundDefsCount:symbols.length).join('')}</defs>${terrainText}${(groundOnly?groundPaint:paint).join('')}</svg>\n`;
-  ground=dropSeaBox(wrap(true),W,H);globe=dropSeaBox(wrap(false),W,H);   // boss 9 Nov ('why blue box'): no full-canvas sea shape
+  ground=dropSeaBox(wrap(true),W,H);globe=dropSeaBox(wrap(false),W,H);
   if(Buffer.byteLength(globe)<MAX_VECTOR_BYTES&&Buffer.byteLength(ground)<MAX_VECTOR_BYTES)break;
  }
- // Sunbob's tiles are viewports onto one continuous authored world drawing.
- // Retain that exact drawing for the fallback, so no recompilation changes its
- // seam bleed, paint order or colours. Only the root viewport is resized.
  if(theme==='sunflower'){
   let drawing;
   for(const tile of art.ground.tiles){

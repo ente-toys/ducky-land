@@ -3,7 +3,6 @@ const S='scripts/bigger-community/',A='public/pixi-art/themes/community/expansio
 const originalCoast=JSON.parse(fs.readFileSync(S+'baseline/world.json')).coast;
 const p=JSON.parse(fs.readFileSync(S+'plan.json')),base=JSON.parse(fs.readFileSync(S+'baseline/art.json'));
 const write=(name,w,h,body)=>fs.writeFileSync(A+name+'.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><title>Campfire Commons ${name}</title><g stroke="#65564D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${body}</g></svg>`);
-// Reuse the theme's detailed leaf drawing for the new orchard, with a distinct sage canopy.
 let orchardSource=fs.readFileSync('public/pixi-art/themes/community/detail/tree-lilac.svg','utf8');
 const foliage={'#D9B4F8':'#B6CC89','#F6EFD7':'#E5EDC5','#D6C5E6':'#BCD088','#A89ACF':'#91AE63','#7F79BB':'#718F56','#E6D9F0':'#D8E2AD','#B6A0CF':'#A2BE77'};
 for(const [from,to] of Object.entries(foliage))orchardSource=orchardSource.replaceAll(from,to);
@@ -12,7 +11,6 @@ const fruit=[[250,420],[570,220],[880,460],[440,740],[790,750]].map(([x,y])=>`<g
 fs.writeFileSync(A+'orchard-tree.svg',orchardSource.replace('</svg>',fruit+'</svg>'));
 function kit(src,x,y,scale,zone){const ref=base.props.find(b=>b.src===src);if(!ref)throw Error(src);const q={...ref,id:`review-${p.props.length}`,x,y,sortY:y,scale,zone};delete q.centrePiece;p.props.push(q);if(!/flower|blanket|cushion|reeds|lily/.test(src)){const w=q.width*scale,h=q.height*scale;p.obstacles.push({id:q.id,x,y:y-Math.min(30,h*.07),rx:w*(/tree/.test(src)?.12:/bench/.test(src)?.43:.38),ry:Math.max(8,Math.min(h*.11,w*.2))});}}
 function orchard(x,y,scale=1){const id=`review-orchard-${p.props.length}`;p.props.push({id,name:'Shared fruit tree',src:'expansion/orchard-tree.svg',width:310,height:440,x,y,scale,anchor:{x:.5,y:1},zone:'commons'});p.obstacles.push({id,x,y:y-10,rx:25*scale,ry:18*scale});}
-// Fixed individual compositions, each with an open arrival and working/sitting space.
 for(const [x,y,s]of [[3200,-260,.85],[3560,-410,1],[3900,-280,.9],[4610,-280,1],[4850,-390,.85],[-160,2050,.9],[-460,2290,1],[90,2400,.88],[2700,5310,.9],[3020,5410,1],[3260,5380,.85]])orchard(x,y,s);
 for(const [src,x,y,s]of [
  ['bench-lavender',3460,-120,.30],['picnic-blanket',4410,-420,.38],['cushions',4230,-380,.22],['community-crate',4720,-70,1],['signpost',3100,-20,.35],
@@ -23,7 +21,6 @@ for(const [src,x,y,s]of [
  ['signpost',-610,3090,.35],['flowers-purple',-700,3160,.18],['signpost',8580,3380,.35],['flowers-purple',8660,3450,.18]
 ])kit(`detail/${src}.svg`,x,y,s,'commons');
 p.reviewCommons=[{name:'Bookmark Orchard',point:[3460,-10]},{name:'Butterfly Rest',point:[-200,2630]},{name:'Harvest Picnic Meadow',point:[2890,5760]},{name:'Lilywatch Pond',point:[5350,5510]},{name:'Riverbend Picnic',point:[8800,4700]}];
-// Vertical bridges across the two streams, and the new north/south canal crossings.
 p.reviewDecks=[
  {name:'North welcome bridge',x:3840,y:270,width:320,height:410,axis:'y'},
  {name:'West welcome bridge',x:610,y:2720,width:360,height:200,axis:'x'},

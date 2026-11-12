@@ -6,9 +6,6 @@ export const PONDS=data.ponds;
 
 const WATER=0xb3e9f0, WAKE_LIFE=2, WAKE_INTERVAL=.4;
 
-// Like the rowboat/sailing water FX: outlines only, expanding on the water.
-// Geometry and particle storage are built once. Updates only change transforms
-// and alpha, without allocating Graphics, paths, arrays or particle objects.
 function ripplePool(parent,count,radius,label){
  return Array.from({length:count},()=>{
   const graphic=new Graphics({label}).ellipse(0,0,radius,radius*.32)
@@ -26,7 +23,6 @@ function animate(pool,seconds){
   if(!r.active){g.visible=false;continue;}
   const u=Math.max(0,(seconds-r.born)/r.life);
   if(u>=1){r.active=false;g.visible=false;continue;}
-  // Sailing's expanding ease-out ring, with a soft arrival instead of a pop.
   const growth=1-(1-u)**2.4,arrival=Math.min(1,u/.12);
   g.visible=true;g.position.set(r.x+r.vx*u,r.y+r.vy*u);
   g.scale.set(1+growth*.85);g.alpha=r.alpha*arrival*(1-u);
@@ -38,9 +34,6 @@ function resetRipples(e){
  e.idleCursor=e.trailCursor=0;
 }
 
-// Lives below all bridge decks. All pond water is also below ALL Ducky bodies,
-// so even a neighbouring Ducky can never get tinted by a ripple. The art loader
-// owns this layer, its SVG leases and load-completing-after-leave cleanup.
 export async function loadPondDuckies(mapId,{tilt=1,acquire,release}={}){
  const ponds=PONDS.filter(p=>p.island===mapId),names=[...new Set(ponds.flatMap(p=>p.duckies.map(d=>d.name)))];
  const root=new Container({label:`Pond Duckies ${mapId}`});root.visible=false;
@@ -59,7 +52,6 @@ export async function loadPondDuckies(mapId,{tilt=1,acquire,release}={}){
   const d=pond.duckies[index],scale=1;
   const duck=new Container({label:d.name}),body=new Sprite(assets.get(d.name));
   body.anchor.set(.5,.92);body.width=d.width;
-  // The scene itself scales Y by tilt. Keep the existing upright art size.
   body.height=d.height/tilt;body.alpha=1;body.tint=0xffffff;
   const bodyRoot=new Container();bodyRoot.addChild(body);bodyRoot.scale.set(scale);
   duck.addChild(bodyRoot);bodies.addChild(duck);
@@ -88,7 +80,6 @@ export async function loadPondDuckies(mapId,{tilt=1,acquire,release}={}){
     if(e.last===null||seconds-e.last>.25||seconds<e.last||e.reduced!==reduced){
      resetRipples(e);e.nextIdle=seconds;e.nextWake=seconds;e.emitX=p.x;e.emitY=p.y;
      if(!reduced&&!p.moving){
-      // Begin with two ages of the same concentric pulse, then keep 2-3 alive.
       emit(e.idle[0],p.x,p.y+3,seconds-e.interval,e.interval*2.6,.24);
       e.idleCursor=1;
      }
@@ -106,7 +97,6 @@ export async function loadPondDuckies(mapId,{tilt=1,acquire,release}={}){
     if(p.moving&&seconds>=e.nextWake&&Math.hypot(p.x-e.emitX,p.y-e.emitY)>=2){
      const len=Math.hypot(p.dx,p.dy)||1,dx=p.dx/len,dy=p.dy/len;
      const width=e.pond.duckies[e.index].width,stern=width*.28,spread=width*.09;
-     // Points stay where the stern passed, spreading sideways into a soft V.
      for(let side=-1;side<=1;side+=2){
       emit(e.trail[e.trailCursor],p.x-dx*stern-dy*spread*side,p.y+3-dy*stern+dx*spread*side,
        seconds,WAKE_LIFE,.22,-dy*width*.22*side,dx*width*.22*side);

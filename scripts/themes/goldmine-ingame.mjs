@@ -1,7 +1,3 @@
-// Run with the user's own Vite on 5281. No src, registry, or world map files are changed.
-// Screenshot runner is prepared but could not be executed in the restricted builder sandbox.
-// npx vite --port 5281 --strictPort --host 127.0.0.1
-// node scripts/themes/goldmine-ingame.mjs
 import {readFileSync,writeFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
 const pw=process.env.PLAYWRIGHT_MODULE || '/Users/pragadees.xd/Documents/Framer 2/node_modules/playwright/index.mjs';

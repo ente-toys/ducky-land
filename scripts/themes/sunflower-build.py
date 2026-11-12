@@ -1,11 +1,3 @@
-# Sunflower island (theme `sunflower`): builds the whole island from one layout.
-#   ground tiles + jetty decks + art.json   -> public/pixi-art/themes/sunflower/
-#   world.json + walk-world.json + harbor.json -> assets/world/themes/sunflower/
-#   preview.png (globe) + a full preview beside the concept -> concepts/themes/sunflower-preview.png
-# Follows concepts/themes/THEME-CONTRACT.md. Layout is written in the CONCEPT's pixel space (01-sunflower.png,
-# 1536x1024) and mapped to world units by T(), so it can be read against the concept image directly.
-# venv: python3.11 -m venv vt && vt/bin/pip install vtracer cairosvg pillow numpy scipy shapely
-# usage: vt/bin/python scripts/themes/sunflower-build.py [--no-preview]
 import json, math, os, sys, io, random, re
 import numpy as np
 from shapely.geometry import Polygon, Point, LineString, MultiPolygon
@@ -16,16 +8,15 @@ ART = os.path.join(ROOT, 'public/pixi-art/themes/sunflower')
 DATA = os.path.join(ROOT, 'assets/world/themes/sunflower')
 CONCEPTS = os.path.abspath(os.path.join(ROOT, '..', 'concepts/themes'))
 os.makedirs(DATA, exist_ok=True)
-WIDTH, HEIGHT = 8000, 5600   # boss 6 Nov: bigger and spacious, ~1.8x home's land
+WIDTH, HEIGHT = 8000, 5600
 TCOLS, TROWS = 6, 4
 TW, TH = 1334, 1400
-H = 130   # one standing Ducky
+H = 130
 
 SX, SY, OX, OY = 5.0, 5.55, 120, 0
 def T(p): return (round(OX + p[0] * SX, 1), round(OY + p[1] * SY, 1))
 def TL(ps): return [T(p) for p in ps]
 
-# ---------------------------------------------------------------- layout (concept pixels)
 COAST = [(300,250),(380,232),(470,236),(540,208),(600,196),(670,192),(745,176),(830,140),(930,116),(1030,118),(1100,138),
          (1190,152),(1280,146),(1380,112),(1468,78),(1452,165),(1424,240),(1402,330),(1392,420),(1376,485),(1338,545),(1322,600),
          (1296,655),(1190,668),(1102,684),(1052,712),(1000,738),(940,756),(860,774),(780,800),(700,816),(620,836),(530,856),
@@ -35,32 +26,29 @@ BEACH = [(985,712),(1000,648),(1070,592),(1170,560),(1270,556),(1330,600),(1330,
 YARD = [(812,262),(845,205),(930,182),(1060,186),(1180,196),(1238,232),(1226,290),(1120,312),(990,318),(880,306)]
 POND = (292,402,94,50)
 PLAZA = (752,470,228,120)
-# fields: curved bands like the concept. Each field is a spine curve; its rows run parallel to it (offset by ROW_GAP),
-# clipped clear of paths, plaza, yard and shore. The bed is the union of its rows.
 FIELDS = {
   'north': dict(spine=[(436,384),(510,334),(596,302),(706,290)], rows=5),
   'west':  dict(spine=[(352,496),(446,514),(530,550),(600,602)], rows=4),
   'south': dict(spine=[(570,752),(656,722),(748,676),(846,632)], rows=4),
   'tip':   dict(spine=[(1256,286),(1318,246),(1372,198),(1406,160)], rows=3),
 }
-MAIN_W, SIDE_W = 210, 165   # path widths in world units (home: 105; boss 6 Nov: at least 1.5x)
-PATHS = [   # (points, width)
-  ([(738,372),(722,318),(748,268),(800,246),(860,252)], MAIN_W),                                  # plaza -> farm
-  ([(884,388),(930,336),(990,306)], SIDE_W),                                                      # plaza -> farm east gate
-  ([(944,458),(1020,446),(1110,452),(1200,458),(1290,444),(1350,386),(1402,330)], MAIN_W),        # plaza -> market -> east jetty
-  ([(904,556),(950,602),(992,654),(1022,736)], MAIN_W),                                           # plaza -> beach -> SE bridge
-  ([(558,452),(482,432),(404,426),(336,456),(232,458),(160,462),(98,466)], MAIN_W),               # plaza -> pond -> west jetty
-  ([(296,264),(360,300),(420,352),(470,410),(486,432)], SIDE_W),                                  # NW bridge -> pond path
-  ([(360,300),(450,258),(560,240),(660,244),(748,268)], SIDE_W),                                  # top lane over the north field
-  ([(642,572),(600,624),(540,668),(460,704),(380,742),(300,772),(276,800)], MAIN_W),              # plaza -> south-west harbor
-  ([(850,578),(872,642),(900,700),(960,736),(1022,736)], SIDE_W),                                 # plaza -> south lane
-  ([(1180,300),(1250,316),(1302,346),(1340,388)], SIDE_W),                                        # farm -> east
-  ([(640,740),(700,790),(702,812)], SIDE_W),                                                      # south jetty spur
+MAIN_W, SIDE_W = 210, 165
+PATHS = [
+  ([(738,372),(722,318),(748,268),(800,246),(860,252)], MAIN_W),
+  ([(884,388),(930,336),(990,306)], SIDE_W),
+  ([(944,458),(1020,446),(1110,452),(1200,458),(1290,444),(1350,386),(1402,330)], MAIN_W),
+  ([(904,556),(950,602),(992,654),(1022,736)], MAIN_W),
+  ([(558,452),(482,432),(404,426),(336,456),(232,458),(160,462),(98,466)], MAIN_W),
+  ([(296,264),(360,300),(420,352),(470,410),(486,432)], SIDE_W),
+  ([(360,300),(450,258),(560,240),(660,244),(748,268)], SIDE_W),
+  ([(642,572),(600,624),(540,668),(460,704),(380,742),(300,772),(276,800)], MAIN_W),
+  ([(850,578),(872,642),(900,700),(960,736),(1022,736)], SIDE_W),
+  ([(1180,300),(1250,316),(1302,346),(1340,388)], SIDE_W),
+  ([(640,740),(700,790),(702,812)], SIDE_W),
   ([(540,668),(640,740)], SIDE_W),
 ]
-# jetties and islet bridges (concept coords): foot on land, tip
 DECKS_C = {
-  'jetty-sw':  ((276,792),(270,884), 112),   # the harbor
+  'jetty-sw':  ((276,792),(270,884), 112),
   'jetty-w':   ((106,466),(52,466), 104),
   'jetty-e':   ((1396,330),(1488,330), 104),
   'jetty-s':   ((702,806),(702,872), 104),
@@ -68,7 +56,6 @@ DECKS_C = {
   'bridge-se': ((1022,730),(1052,786), 112),
 }
 
-# ---------------------------------------------------------------- helpers
 def catmull(pts, closed=False, n=10):
     P = list(pts); out = []
     if closed: P = [P[-1]] + P + [P[0], P[1]]
@@ -118,8 +105,6 @@ pond_pts = [(pcx + pond['rx']*math.cos(t)*(1 + .06*math.sin(3*t)), pcy + pond['r
 plx, ply = T(PLAZA[:2]); plaza = dict(x=plx, y=ply, rx=round(PLAZA[2]*SX), ry=round(PLAZA[3]*SY))
 paths = [(catmull(TL(p), False, 10), w) for p, w in PATHS]
 PATH_GEOM = unary_union([LineString(p).buffer(w/2, cap_style=1) for p, w in paths])
-# boss 6 Nov: room for 100 Duckies and for activities later. Three big open areas (lawns, 30+ Duckies each) and two stall
-# rows (paved aprons; stalls stand on the back edge, Duckies browse in front), world units. Nothing decorative goes inside.
 OPEN_AREAS = [
   dict(id='activity-1', kind='lawn', name='West meadow', x=1180, y=3010, rx=470, ry=330),
   dict(id='activity-2', kind='lawn', name='Windmill green', x=5700, y=2070, rx=560, ry=270),
@@ -148,11 +133,9 @@ for k, v in FIELDS.items():
     bed = unary_union([r.buffer(ROW_GAP / 2 + 8, cap_style=1) for r in rows]).buffer(18).buffer(-18).intersection(_room.buffer(40))
     fields[k] = dict(poly=bed if bed.geom_type == 'Polygon' else max(bed.geoms, key=lambda g: g.area), rows=rows, spine=spine)
 decks = {k: (T(a), T(b), w) for k, (a, b, w) in DECKS_C.items()}
-# extend each deck 50 into the land so the plank meets the sand
 for k, (a, b, w) in list(decks.items()):
     dx, dy = b[0]-a[0], b[1]-a[1]; L = math.hypot(dx, dy); ux, uy = dx/L, dy/L
     decks[k] = ((round(a[0]-ux*60, 1), round(a[1]-uy*60, 1)), b, w)
-# islet bridges land on the islet: tip pushed 40 into it
 for k in ('bridge-nw', 'bridge-se'):
     a, b, w = decks[k]; dx, dy = b[0]-a[0], b[1]-a[1]; L = math.hypot(dx, dy)
     decks[k] = (a, (round(b[0]+dx/L*70, 1), round(b[1]+dy/L*70, 1)), w)
@@ -160,7 +143,6 @@ for k in ('bridge-nw', 'bridge-se'):
 GRASS = LAND.buffer(-105, join_style=1).buffer(20, join_style=1).buffer(-20, join_style=1).difference(beach_w.buffer(10))
 GRASS = GRASS.simplify(1.5)
 
-# ---------------------------------------------------------------- props
 props = []; obstacles = []
 def prop(name, src, x, y, w, h, scale, ax=.5, ay=.97, flip=False, foot=None, pid=None):
     p = dict(id=pid or f'{name.lower().replace(" ", "-")}-{len(props)}', name=name, src=src, x=round(x, 1), y=round(y, 1), width=w, height=h,
@@ -171,7 +153,7 @@ def prop(name, src, x, y, w, h, scale, ax=.5, ay=.97, flip=False, foot=None, pid
     elif foot == 'wide': obstacles.append(dict(x=round(x, 1), y=round(y-12, 1), rx=round(w*scale*.46), ry=round(min(46, h*scale*.2))))
     elif isinstance(foot, dict): obstacles.append(foot)
     return p
-SVG = {}   # file -> (w,h)
+SVG = {}
 def svgsize(rel):
     if rel not in SVG:
         s = open(os.path.join(ART, rel)).read(3000); import re
@@ -182,7 +164,6 @@ def put(name, rel, cpt, height_world=None, scale=None, foot='small', ay=.97, fli
     s = scale if scale else height_world / h
     return prop(name, rel, x, y, w, h, s, ay=ay, flip=flip, foot=foot, **kw)
 
-# home plants at home's sizes (placements.js: PLANTS x PLANT_SCALE, trees x1.1)
 PLANTS = {'tree-1': (260, 360), 'tree-2': (180, 360), 'tree-3': (300, 380), 'tree-4': (200, 280), 'tree-5': (150, 380),
           'bush-1': (130, 100), 'bush-2': (168, 110), 'bush-3': (116, 104), 'bush-4': (140, 100), 'bush-5': (170, 110), 'bush-6': (120, 96),
           'flower-1': (48, 36), 'flower-2': (48, 36), 'flower-3': (44, 36)}
@@ -192,19 +173,16 @@ def plant(kind, cpt, world=False, flip=False):
     name = {'tree': 'Tree', 'bush': 'Bush', 'flower': 'Flowers'}[kind.split('-')[0]]
     return prop(name, f'reuse/{kind}.svg', x, y, w, h, s, ay=1, flip=flip, foot='trunk' if name == 'Tree' else ('small' if name == 'Bush' else None))
 
-# landmarks ------------------------------------------------------
 put('Sunflower sundial', 'detail/sundial.svg', (plx, ply + 200), scale=1.24, ay=.86, world=True,
     foot=dict(x=plx, y=ply + 20, rx=300, ry=150))
 put('Red barn', 'detail/barn.svg', (950, 236), height_world=560, foot=None)
 bx, by = T((950, 236)); obstacles.append(dict(poly=[[bx-290, by-150], [bx+290, by-150], [bx+290, by-4], [bx-290, by-4]]))
 put('Windmill', 'detail/windmill.svg', (1140, 248), height_world=735, foot=dict(x=T((1140, 248))[0], y=T((1140, 248))[1]-50, rx=200, ry=70))
-# farm yard
 put('Hay bale', 'detail/hay-round.svg', (1032, 252), height_world=150, foot='wide')
 put('Hay stack', 'detail/hay-stack.svg', (1072, 262), height_world=165, foot='wide', flip=True)
 put('Seed barrel', 'detail/barrel-seeds.svg', (858, 244), height_world=150, foot='wide')
 put('Seed cart', 'detail/seed-cart.svg', (905, 262), height_world=175, foot='wide')
 put('Hay bale', 'detail/hay-round.svg', (1205, 262), height_world=140, foot='wide', flip=True)
-# fence round the yard's lower rim (each segment ~180 wide)
 def fence_run(cpts, gap=None):
     pts = catmull(TL(cpts), False, 30); line = LineString(pts); L = line.length
     seg = 495 * .37; n = max(1, int(L // (seg - 6)))
@@ -214,16 +192,12 @@ def fence_run(cpts, gap=None):
         put('Fence', 'detail/fence.svg', (m.x, m.y), scale=.37, world=True, foot=dict(x=round(m.x, 1), y=round(m.y-8, 1), rx=round(seg/2), ry=14), ay=.95)
 fence_run([(1236,236),(1232,290)])
 fence_run([(1190,306),(1120,316)])
-# market --------------------------------------------------------
 _m = STALL_ROWS[0]
 put('Honey stall', 'detail/stall-honey.svg', (_m['x1'] - 620, _m['y0'] + 110), height_world=330, foot='wide', world=True, pid='stall-honey')
 put('Flower stall', 'detail/stall-flowers.svg', (_m['x1'] - 230, _m['y0'] + 110), height_world=330, foot='wide', world=True, pid='stall-flowers')
 put('Seed barrel', 'detail/barrel-seeds.svg', (_m['x1'] + 70, _m['y0'] + 90), height_world=150, foot='wide', flip=True, world=True)
-put('Seed cart', 'detail/seed-cart.svg', (6250, 2010), height_world=200, foot='wide', world=True)   # by the windmill green's edge
+put('Seed cart', 'detail/seed-cart.svg', (6250, 2010), height_world=200, foot='wide', world=True)
 put('Sunflower planter', 'detail/planter.svg', (_m['x0'] - 70, _m['y0'] + 40), height_world=130, foot='wide', world=True)
-# plaza ---------------------------------------------------------
-# boss 6 Nov (spacious): every plaza piece stands on the rim of the paving, the middle stays open for a crowd.
-# Angles in degrees on screen (0 = east, 90 = south); a piece that would stand on a path into the plaza moves along the rim.
 def rim(deg, inset=80):
     t = math.radians(deg); return (plx + (plaza['rx'] - inset) * math.cos(t), ply + (plaza['ry'] - inset * .7) * math.sin(t))
 _entries = PATH_GEOM.buffer(70)
@@ -246,17 +220,15 @@ for deg in (100, 80, -90):
 for deg in (180, 0, -100, 125, 55, -128, -52):
     (x, y), d = rim_free(deg, 90)
     c = math.cos(math.radians(d)); sn = math.sin(math.radians(d))
-    if abs(c) > .8:   # side of the ring: a bench seen side-on, facing the middle
+    if abs(c) > .8:
         art = 'reuse/street--bench-wood-right.svg' if c < 0 else 'reuse/street--bench-wood-left.svg'
         put('Bench', art, (x, y), scale=.28, foot=dict(x=round(x, 1), y=round(y-30, 1), rx=30, ry=62), ay=451/463, world=True)
     else:
         art = 'reuse/street--bench-wood.svg' if sn < 0 else 'reuse/street--bench-wood-back.svg'
         put('Bench', art, (x, y), scale=.18, foot=dict(x=round(x, 1), y=round(y-10, 1), rx=70, ry=24), ay=451/463, world=True)
-# pond ----------------------------------------------------------
 put('Bench', 'reuse/street--bench-wood.svg', (378, 392), scale=.18, foot=dict(x=T((378, 392))[0], y=T((378, 392))[1]-10, rx=70, ry=24), ay=451/463)
 for c, k in [((214, 386), 'cattails'), ((362, 380), 'reeds'), ((246, 430), 'reeds')]:
     put('Pond reeds', f'reuse/{k}.svg', c, scale=.24*.6, foot='small', ay=.984)
-# garden + picnic (south-west) -----------------------------------
 put('Picnic', 'detail/picnic.svg', (236, 664), height_world=160, foot='wide')
 put('Garden arch', 'detail/arch.svg', (346, 616), height_world=330, foot=None)
 ax_, ay_ = T((346, 616)); obstacles += [dict(x=ax_-118, y=ay_-8, rx=26, ry=18), dict(x=ax_+118, y=ay_-8, rx=26, ry=18)]
@@ -265,12 +237,10 @@ put('Stump', 'reuse/nature--stump.svg', (330, 690), scale=.24, foot='small')
 put('Stump', 'reuse/nature--stump.svg', (352, 700), scale=.2, foot='small')
 put('Sunflower banner', 'detail/banner.svg', (690, 2900), height_world=260, foot='small', world=True)
 fence_run([(170,700),(232,716)])
-# beach ---------------------------------------------------------
 put('Beach umbrella', 'reuse/umbrella-garden.svg', (1166, 612), scale=.24*.78, foot=dict(x=T((1166, 612))[0], y=T((1166, 612))[1]-8, rx=22, ry=14), ay=.993)
 put('Sandcastle', 'reuse/sandcastle-turrets.svg', (1135, 640), scale=.13, foot='small')
 for c, s in [((1286, 574), .24*.65), ((1312, 590), .24*.5), ((1270, 664), .24*.55)]:
     put('Coast rock', 'reuse/rock-boulder.svg', c, scale=s, foot='small')
-# islets --------------------------------------------------------
 put('Sunflower arch', 'detail/arch.svg', (232, 140), height_world=330, foot=None)
 a2 = T((232, 140)); obstacles += [dict(x=a2[0]-118, y=a2[1]-8, rx=26, ry=18), dict(x=a2[0]+118, y=a2[1]-8, rx=26, ry=18)]
 put('Bench', 'reuse/street--bench-wood.svg', (236, 196), scale=.18, foot=dict(x=T((236, 196))[0], y=T((236, 196))[1]-10, rx=70, ry=24), ay=451/463)
@@ -282,7 +252,6 @@ put('Picnic table', 'reuse/picnic-table.svg', (1146, 876), scale=.24*.6, foot='w
 put('Sunflowers', 'detail/sunflower-tall.svg', (1010, 856), height_world=280, foot='small')
 put('Sunflowers', 'detail/sunflower-tall.svg', (1216, 852), height_world=280, foot='small', flip=True)
 put('Sunflower planter', 'detail/planter.svg', (1090, 892), height_world=110, foot='wide')
-# trees: the island's rim, the lawns
 TREES = [((160,166),'tree-3'),((1192,810),'tree-1'),((1060,520),'tree-2'),((1340,300),'tree-4'),((1330,560),'tree-3'),((960,330),'tree-1'),((200,330),'tree-1'),((300,316),'tree-3'),((402,272),'tree-2'),((520,232),'tree-4'),((612,218),'tree-1'),((764,200),'tree-3'),
          ((880,168),'tree-2'),((1094,166),'tree-1'),((1278,186),'tree-4'),((1238,342),'tree-3'),((1320,380),'tree-1'),((1186,360),'tree-2'),
          ((960,588),'tree-3'),((1068,548),'tree-4'),((902,620),'tree-1'),((178,520),'tree-3'),((150,586),'tree-2'),((418,684),'tree-1'),
@@ -298,7 +267,6 @@ for i, c in enumerate(FLOWERS): plant(f'flower-{i % 3 + 1}', c)
 TALL = [(340,580),(1046,500),(980,520),(860,322),(1000,330),(1160,320),(590,700),(320,340),(1400,400),(150,420),(700,410),(830,412)]
 for i, c in enumerate(TALL): put('Sunflowers', 'detail/sunflower-tall.svg', c, height_world=240 + 30*(i % 3), foot='small', flip=i % 2 == 1)
 
-# clearance: decor never stands on a path, a deck landing, the plaza, a field bed or the shore
 LANDINGS = unary_union([Point(a).buffer(170) for a, b, w in decks.values()] + [LineString([a, b]).buffer(190) for k, (a, b, w) in decks.items() if k.startswith('bridge')])
 KEEP_OUT = unary_union([PATH_GEOM.buffer(25), LANDINGS, ZONE_GEOM.buffer(40), Polygon(ell_pts(plx, ply, plaza['rx'] + 50, plaza['ry'] + 50))] + [f['poly'].buffer(20) for f in fields.values()])
 INNER = unary_union([LAND.buffer(-80)] + [Polygon(ell_pts(x, y, rx - 110, ry - 90)) for x, y, rx, ry in islets])
@@ -314,7 +282,6 @@ for p in list(props):
         for o in list(obstacles):
             if 'x' in o and abs(o['x'] - p['x']) < 1 and abs(o['y'] - p['y']) < 20: obstacles.remove(o); break
 print('decor dropped (path/shore clearance):', len(dropped))
-# fill the open lawns evenly (Halton points, like home's replant): trees first, then bushes, never crowding a prop
 def halton(i, b):
     f, r = 1, 0
     while i > 0: f /= b; r += f * (i % b); i //= b
@@ -327,7 +294,7 @@ for i in range(1, 8000):
     x, y = LB[0] + halton(i % 4000 + 1, 2 if kind == 'Tree' else 3) * (LB[2] - LB[0]), LB[1] + halton(i % 4000 + 1, 3 if kind == 'Tree' else 5) * (LB[3] - LB[1])
     if sum(1 for q in props if q['name'] == kind) >= want[kind]: continue
     if not OPEN.contains(Point(x, y)) or crowded(x, y, 185 if kind == 'Tree' else 220): continue
-    if kind == 'Tree' and (TALLCLEAR.contains(Point(x, y)) or BRIDGE_CLEAR.contains(Point(x, y)) or any(f['poly'].buffer(30).contains(Point(x, y - 200)) for f in fields.values())): continue   # no crown parked over a field
+    if kind == 'Tree' and (TALLCLEAR.contains(Point(x, y)) or BRIDGE_CLEAR.contains(Point(x, y)) or any(f['poly'].buffer(30).contains(Point(x, y - 200)) for f in fields.values())): continue
     if kind == 'Tree': plant(['tree-1', 'tree-3', 'tree-2', 'tree-4', 'tree-1', 'tree-5'][i % 6], (x, y), world=True, flip=i % 2 == 0)
     else: plant(f'bush-{i % 6 + 1}', (x, y), world=True, flip=i % 2 == 1)
 for i in range(1, 600):
@@ -338,7 +305,6 @@ for p in props:
     if p['name'] not in ('Honey stall', 'Flower stall') and ZONE_GEOM.contains(Point(p['x'], p['y'])): print('  WARNING prop inside an open zone:', p['id'], p['x'], p['y'])
 print('trees', sum(1 for q in props if q['name'] == 'Tree'), 'bushes', sum(1 for q in props if q['name'] == 'Bush'), 'flowers', sum(1 for q in props if q['name'] == 'Flowers'))
 
-# field rows: short row pieces walked along each CURVED row, so the band bends like the concept's -----------------
 PIECE = ('detail/field-row-short.svg', 597, 252); PIECE_SCALE = .5; STEP = 108
 furrows = []
 for fname, f in fields.items():
@@ -351,10 +317,9 @@ for fname, f in fields.items():
             pt = r.interpolate(min(r.length - 40, 40 + j * (r.length - 80) / max(1, n)))
             prop('Sunflower row', PIECE[0], pt.x + rnd.uniform(-6, 6), pt.y + rnd.uniform(-4, 4), PIECE[1], PIECE[2], PIECE_SCALE * rnd.uniform(.94, 1.06), ay=.9, flip=rnd.random() > .5)
     mid = f['rows'][len(f['rows']) // 2] if f['rows'] else None
-    if mid is not None:   # one scarecrow standing in each field
+    if mid is not None:
         pt = mid.interpolate(.42, normalized=True); put('Scarecrow', 'detail/scarecrow.svg', (pt.x, pt.y + 6), height_world=270, foot=None, world=True, flip=fname in ('west', 'tip'))
 
-# ---------------------------------------------------------------- ground SVG
 C = dict(sand='#FDE48C', sandEdge='#E4C567', cream='#FFF0C7', grass='#93B72F', leaf='#4AA539', ink='#39472D', water='#6EC9DE',
          deep='#5FB2C6', bed='#7FA62C', furrow='#5E8E24', dirt='#F0D27E', stone='#FFF3D2', joint='#E9D49A')
 g = []
@@ -364,29 +329,23 @@ g.append(f'<defs><clipPath id="land"><path d="{landD} {isleD}"/></clipPath>'
          f'<clipPath id="grass"><path d="{shp_d(GRASS)}"/></clipPath>'
          f'<clipPath id="plaza"><ellipse cx="{plx}" cy="{ply}" rx="{plaza["rx"]}" ry="{plaza["ry"]}"/></clipPath>'
          f'<clipPath id="pond"><path d="{bez(pond_pts, True)}"/></clipPath></defs>')
-# sea: shallows and foam round every shore (engine paints the sea itself)
 for d in (landD, isleD):
     g.append(f'<path d="{d}" fill="none" stroke="#8FD6E4" stroke-width="190" stroke-opacity=".55" stroke-linejoin="round"/>')
     g.append(f'<path d="{d}" fill="none" stroke="{C["cream"]}" stroke-width="80" stroke-opacity=".14" stroke-linejoin="round"/>')
     g.append(f'<path d="{d}" fill="none" stroke="{C["cream"]}" stroke-width="18" stroke-opacity=".55" stroke-linejoin="round"/>')
-# offshore wave ticks
 for i in range(140):
     x, y = rnd.uniform(380, WIDTH - 380), rnd.uniform(380, HEIGHT - 380)
     if ALL_LAND.buffer(220).contains(Point(x, y)): continue
     L = rnd.uniform(28, 52); a = rnd.uniform(-.5, .5)
     g.append(f'<path d="M {x:.0f} {y:.0f} L {x+L*math.cos(a):.0f} {y+L*math.sin(a):.0f}" fill="none" stroke="{C["cream"]}" stroke-width="3" stroke-opacity=".45" stroke-linecap="round"/>')
-# land = sand
 g.append(f'<path d="{landD} {isleD}" fill="{C["sand"]}" stroke="{C["ink"]}" stroke-width="2.4" stroke-opacity=".6"/>')
 g.append(f'<g clip-path="url(#land)"><path d="{landD} {isleD}" fill="none" stroke="{C["sandEdge"]}" stroke-width="16"/></g>')
-# grass, with the home recipe's darker rim
 g.append(f'<path d="{shp_d(GRASS)}" fill="{C["grass"]}" fill-rule="evenodd"/>')
 g.append(f'<g clip-path="url(#grass)"><path d="{shp_d(GRASS)}" fill="none" stroke="{C["leaf"]}" stroke-width="30" stroke-opacity=".55"/></g>')
 g.append(f'<path d="{shp_d(GRASS)}" fill="none" stroke="{C["ink"]}" stroke-width="2.2" stroke-opacity=".55"/>')
-# islet grass
 for (x, y, rx, ry) in islets:
     gi = ell_pts(x, y - 6, rx - 70, ry - 56, 48)
     g.append(f'<path d="{bez(gi, True)}" fill="{C["grass"]}" stroke="{C["ink"]}" stroke-width="2.2" stroke-opacity=".55"/>')
-# lawn mottling (two tones, like home's Lawn Leaf / Lawn Cream)
 mott = []
 for i in range(150):
     x, y = rnd.uniform(LB[0], LB[2]), rnd.uniform(LB[1], LB[3])
@@ -396,17 +355,14 @@ for i in range(150):
     fill, op = (C['leaf'], .16) if i % 3 else (C['cream'], .12)
     mott.append(f'<path d="{bez(pts, True)}" fill="{fill}" fill-opacity="{op}"/>')
 g.append(f'<g clip-path="url(#grass)">{"".join(mott)}</g>')
-# farm yard: packed dirt
 g.append(f'<path d="{bez(yard_w, True)}" fill="{C["dirt"]}" stroke="{C["sandEdge"]}" stroke-width="14"/>')
 g.append(f'<path d="{bez(yard_w, True)}" fill="none" stroke="{C["ink"]}" stroke-width="2.2" stroke-opacity=".5"/>')
-# fields: tilled beds with furrows
 for f in fields.values():
     d = shp_d(f['poly'].simplify(2))
     g.append(f'<path d="{d}" fill="none" stroke="{C["leaf"]}" stroke-width="34" stroke-opacity=".35" stroke-linejoin="round"/>')
     g.append(f'<path d="{d}" fill="{C["bed"]}" stroke="{C["ink"]}" stroke-width="2.4" stroke-opacity=".55"/>')
 g.append('<g fill="none" stroke-linecap="round">' + ''.join(
     f'<path d="{bez(fr[::2] + [fr[-1]])}" stroke="{C["furrow"]}" stroke-width="30" stroke-opacity=".5"/>' for fr in furrows) + '</g>')
-# pond
 pd = bez(pond_pts, True)
 g.append(f'<path d="{pd}" fill="none" stroke="{C["ink"]}" stroke-width="58" stroke-opacity=".5"/><path d="{pd}" fill="none" stroke="{C["sandEdge"]}" stroke-width="54"/><path d="{pd}" fill="none" stroke="{C["sand"]}" stroke-width="40"/>')
 g.append(f'<path d="{pd}" fill="{C["water"]}"/>')
@@ -415,11 +371,9 @@ g.append(f'<path d="{pd}" fill="none" stroke="{C["cream"]}" stroke-width="5" str
 for i in range(6):
     x, y = pcx + rnd.uniform(-.6, .4)*pond['rx'], pcy + rnd.uniform(-.5, .5)*pond['ry']
     g.append(f'<path d="M {x-22:.0f} {y:.0f} Q {x:.0f} {y+5:.0f} {x+22:.0f} {y:.0f}" fill="none" stroke="{C["cream"]}" stroke-width="3" stroke-linecap="round"/>')
-# footpaths: home's four-stroke recipe, clipped to land
 for wpad, col, op in [(34, C['leaf'], .35), (18, C['ink'], .6), (14, C['sandEdge'], 1), (0, C['sand'], 1)]:
     g.append(f'<g clip-path="url(#land)" fill="none" stroke-linecap="round" stroke-linejoin="round">' + ''.join(
         f'<path d="{bez(p[::2] + [p[-1]])}" stroke="{col}" stroke-opacity="{op}" stroke-width="{w + wpad}"/>' for p, w in paths) + '</g>')
-# open areas: a freshly mown lawn (lighter, with mowing stripes) so the space reads as a place, not leftover grass
 from scipy.spatial import Voronoi
 for i, ar in enumerate(OPEN_AREAS):
     e = f'cx="{ar["x"]}" cy="{ar["y"]}" rx="{ar["rx"]}" ry="{ar["ry"]}"'
@@ -428,7 +382,6 @@ for i, ar in enumerate(OPEN_AREAS):
     stripes = ''.join(f'<rect x="{ar["x"] - ar["rx"] + k:.0f}" y="{ar["y"] - ar["ry"]}" width="70" height="{2 * ar["ry"]}" fill="{C["cream"]}" fill-opacity=".09"/>' for k in range(0, 2 * ar['rx'], 140))
     g.append(f'<g clip-path="url(#lawn{i})">{stripes}</g>')
     g.append(f'<ellipse {e} fill="none" stroke="{C["ink"]}" stroke-width="2" stroke-opacity=".25" stroke-dasharray="2 16"/></g>')
-# stall rows: a paved apron in the plaza's cream flagstones
 def flagstones(poly, n, cid):
     x0, y0, x1, y1 = poly.bounds
     pts = [(rnd.uniform(x0, x1), rnd.uniform(y0, y1)) for _ in range(n)]
@@ -443,8 +396,6 @@ def flagstones(poly, n, cid):
 for i, r in enumerate(STALL_ROWS):
     pr = row_poly(r)
     g.append(flagstones(pr, int(pr.area / 9000), f'row{i}'))
-# beach cove: the sand stays (no grass), a darker wet line at the water
-# plaza: cream flagstones (voronoi) inside a paved ring
 pts = []
 for i in range(420):
     t = rnd.uniform(0, 2*math.pi); r = math.sqrt(rnd.uniform(0, 1))
@@ -460,7 +411,6 @@ g.append(f'<ellipse {pe} fill="none" stroke="{C["leaf"]}" stroke-width="40" stro
 g.append(f'<g clip-path="url(#plaza)"><path d="{" ".join(joints)}" fill="none" stroke="{C["joint"]}" stroke-width="7" stroke-linejoin="round"/>'
          f'<ellipse cx="{plx}" cy="{ply+20}" rx="{plaza["rx"]*.52:.0f}" ry="{plaza["ry"]*.52:.0f}" fill="{C["cream"]}" stroke="{C["joint"]}" stroke-width="10"/>'
          f'<ellipse {pe} fill="none" stroke="{C["sand"]}" stroke-width="60" stroke-opacity=".5"/></g>')
-# beach towels and the picnic rug lie FLAT, so they are painted into the ground (a sprite stands up)
 def towel(c, w, h, ang, cols):
     cx, cy = T(c); ca, sa = math.cos(ang), math.sin(ang)
     R = lambda x, y: (cx + x*ca - y*sa, cy + x*sa + y*ca)
@@ -471,7 +421,7 @@ def towel(c, w, h, ang, cols):
         x0, x1 = -w/2 + i*w/n, -w/2 + (i+1)*w/n
         out.append(f'<path d="{polyd([R(x0, -h/2+2), R(x1, -h/2+2), R(x1, h/2-2), R(x0, h/2-2)])}" fill="{cols[1]}"/>')
     out.append(f'<path d="{polyd(body)}" fill="none" stroke="{C["ink"]}" stroke-width="2.6"/>')
-    for sx in (-1, 1):   # fringe
+    for sx in (-1, 1):
         for k in np.linspace(-h/2+8, h/2-8, 6):
             p, q = R(sx*w/2, k), R(sx*(w/2+10), k)
             out.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="{cols[0]}" stroke-width="3"/>')
@@ -489,13 +439,12 @@ for r in range(TROWS):
         write_svg(f'{ART}/ground-r{r}-c{c}.svg', f'{x} {y} {TW} {TH}', TW, TH, f'Sunflower island ground tile {r}, {c}')
         tiles.append(dict(src=f'ground-r{r}-c{c}.svg', x=x, y=y, width=TW, height=TH))
 
-# ---------------------------------------------------------------- decks (jetties + islet bridges), drawn in world units
 def deck_svg(name, a, b, w, rails):
     dx, dy = b[0]-a[0], b[1]-a[1]; L = math.hypot(dx, dy); ux, uy = dx/L, dy/L; nx, ny = -uy, ux
     hw = w / 2
     corner = lambda t, s: (a[0] + ux*t + nx*s, a[1] + uy*t + ny*s)
     body = [corner(0, -hw), corner(L, -hw), corner(L, hw), corner(0, hw)]
-    side = 16   # the deck's visible thickness, dropped straight down (3/4 view)
+    side = 16
     xs = [p[0] for p in body]; ys = [p[1] for p in body]
     pad = 40; x0, y0, x1, y1 = min(xs)-pad, min(ys)-pad, max(xs)+pad, max(ys)+pad+side+30
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0:.1f} {y0:.1f} {x1-x0:.1f} {y1-y0:.1f}" width="{x1-x0:.1f}" height="{y1-y0:.1f}" stroke-linejoin="round" stroke-linecap="round">',
@@ -504,18 +453,15 @@ def deck_svg(name, a, b, w, rails):
     s.append(f'<path d="{polyd(sh)}" fill="#2E7F93" fill-opacity=".28"/>')
     low = [(p[0], p[1]+side) for p in body]
     s.append(f'<path d="{polyd(low)}" fill="#8B5A2E" stroke="#39472D" stroke-width="3"/>')
-    # posts under the deck
     for t in np.arange(30, L, 150):
         for sgn in (-1, 1):
             px, py = corner(t, sgn*(hw-8))
             s.append(f'<rect x="{px-7:.1f}" y="{py:.1f}" width="14" height="{side+34}" rx="3" fill="#7A4E28" stroke="#39472D" stroke-width="2.5"/>')
             s.append(f'<ellipse cx="{px:.1f}" cy="{py+side+34:.1f}" rx="14" ry="5" fill="none" stroke="#FFF0C7" stroke-width="2.5" stroke-opacity=".8"/>')
     s.append(f'<path d="{polyd(body)}" fill="#C8893F" stroke="#39472D" stroke-width="3.2"/>')
-    # planks across the deck
     for t in np.arange(26, L, 26):
         p, q = corner(t, -hw+4), corner(t, hw-4)
         s.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="#39472D" stroke-width="1.6" stroke-opacity=".55"/>')
-    # a lit edge and a few grain ticks
     p, q = corner(4, -hw+6), corner(L-4, -hw+6)
     s.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="#E9B46A" stroke-width="5" stroke-opacity=".8"/>')
     for i, t in enumerate(np.arange(40, L, 95)):
@@ -529,21 +475,21 @@ def deck_svg(name, a, b, w, rails):
                 s.append(f'<rect x="{px-6:.1f}" y="{py-36:.1f}" width="12" height="38" rx="3" fill="#B97A3A" stroke="#39472D" stroke-width="2.5"/>')
             s.append(f'<path d="M {" L ".join(f"{x:.1f} {y:.1f}" for x, y in tops)}" fill="none" stroke="#39472D" stroke-width="10"/>')
             s.append(f'<path d="M {" L ".join(f"{x:.1f} {y:.1f}" for x, y in tops)}" fill="none" stroke="#C8893F" stroke-width="5"/>')
-    else:   # jetties: two mooring bollards at the tip
+    else:
         for sgn in (-1, 1):
             px, py = corner(L-14, sgn*(hw-10))
             s.append(f'<rect x="{px-9:.1f}" y="{py-30:.1f}" width="18" height="32" rx="6" fill="#7A4E28" stroke="#39472D" stroke-width="2.5"/><ellipse cx="{px:.1f}" cy="{py-30:.1f}" rx="9" ry="4" fill="#B97A3A" stroke="#39472D" stroke-width="2"/>')
     s.append('</svg>')
     open(f'{ART}/{name}.svg', 'w').write('\n'.join(s))
     return dict(src=f'{name}.svg', x=round(x0, 1), y=round(y0, 1), width=round(x1-x0, 1), height=round(y1-y0, 1))
-ARCH_RISE = 64   # islet bridges hump like home's footbridges (home R = 70); listed in world.json `arches` for the engine's deckY
+ARCH_RISE = 64
 def arch_svg(name, a, b, w, R=ARCH_RISE):
     """a humped footbridge in home's look: planked deck rising R at mid-span, side boards, railings on posts, stone footings"""
     dx, dy = b[0]-a[0], b[1]-a[1]; L = math.hypot(dx, dy); ux, uy = dx/L, dy/L; nx, ny = -uy, ux
     hw = w / 2; lift = lambda t: R * 4 * (t/L) * (1 - t/L)
     P = lambda t, sd, extra=0: (a[0] + ux*t + nx*sd, a[1] + uy*t + ny*sd - lift(t) - extra)
     ts = np.linspace(0, L, 28)
-    vis = 1 if ny > 0 else -1          # the deck edge nearer the camera (lower on screen) shows its side boards
+    vis = 1 if ny > 0 else -1
     left = [P(t, -hw) for t in ts]; right = [P(t, hw) for t in ts]
     deck = left + right[::-1]
     side = 20
@@ -554,8 +500,7 @@ def arch_svg(name, a, b, w, R=ARCH_RISE):
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0:.1f} {y0:.1f} {x1-x0:.1f} {y1-y0:.1f}" width="{x1-x0:.1f}" height="{y1-y0:.1f}" stroke-linejoin="round" stroke-linecap="round">',
          f'<title>Sunflower island {name}, humped footbridge</title>']
     flat = [(a[0] + ux*t + nx*sd + 16, a[1] + uy*t + ny*sd + 34) for t, sd in [(0, -hw), (L, -hw), (L, hw), (0, hw)]]
-    o.append(f'<path d="{polyd(flat)}" fill="#2E7F93" fill-opacity=".26"/>')   # shadow on the water
-    # the open arch under the span: the side boards hang over a dark gap down to the waterline
+    o.append(f'<path d="{polyd(flat)}" fill="#2E7F93" fill-opacity=".26"/>')
     under = [(x, y + side) for x, y in near] + [(a[0] + ux*t + nx*vis*hw, a[1] + uy*t + ny*vis*hw + side + 8) for t in ts[::-1]]
     o.append(f'<path d="{polyd(under)}" fill="#3F8FA0" fill-opacity=".55"/>')
     o.append(f'<path d="{polyd(band)}" fill="#8B5A2E" stroke="#39472D" stroke-width="3"/>')
@@ -565,10 +510,10 @@ def arch_svg(name, a, b, w, R=ARCH_RISE):
         o.append(f'<path d="M {p[0]:.1f} {p[1]:.1f} L {q[0]:.1f} {q[1]:.1f}" stroke="#39472D" stroke-width="1.5" stroke-opacity=".5"/>')
     lit = [P(t, -vis*(hw - 7)) for t in ts]
     o.append(f'<path d="M {" L ".join(f"{x:.1f} {y:.1f}" for x, y in lit)}" fill="none" stroke="#E9B46A" stroke-width="5" stroke-opacity=".8"/>')
-    for t in (6, L - 6):   # cream stone footings where the arch meets land
+    for t in (6, L - 6):
         for sd in (-hw, hw):
             x, y = P(t, sd); o.append(f'<ellipse cx="{x:.1f}" cy="{y + side + 4:.1f}" rx="16" ry="9" fill="#FFF0C7" stroke="#39472D" stroke-width="2.4"/>')
-    for sgn in (-1, 1):   # railings: posts, then a rail that follows the hump
+    for sgn in (-1, 1):
         posts = np.linspace(14, L - 14, max(3, int(L // 70) + 1)); tops = []
         for t in posts:
             x, y = P(t, sgn*(hw - 6)); tops.append((x, y - 36))
@@ -582,7 +527,6 @@ def arch_svg(name, a, b, w, R=ARCH_RISE):
     return dict(src=f'{name}.svg', x=round(x0, 1), y=round(y0, 1), width=round(x1-x0, 1), height=round(y1-y0, 1))
 deck_entries = [arch_svg(k, a, b, w) if k.startswith('bridge') else deck_svg(k, a, b, w, False) for k, (a, b, w) in decks.items()]
 
-# ---------------------------------------------------------------- flats (ground decals)
 flats = []
 DEC = {'grass-tuft-1': (44, 26), 'grass-tuft-2': (34, 22), 'grass-tuft-3': (56, 24), 'flower-dot-1': (20, 18), 'flower-dot-2': (26, 18),
        'flower-dot-3': (22, 16), 'pebble-1': (22, 14), 'pebble-2': (34, 16), 'sand-speck-1': (16, 8), 'sand-speck-2': (22, 10)}
@@ -602,11 +546,10 @@ for c, k in [((262, 396), 'lily-pad-flower'), ((316, 414), 'lily-pad-small'), ((
     x, y = T(c); w, h = (632, 308) if 'large' in k or 'flower' in k else (396, 199)
     flats.append(dict(src=f'reuse/{k}.svg', x=x, y=y, width=round(w*.24*.6), height=round(h*.24*.6), flip=False))
 
-# ---------------------------------------------------------------- data files
 def walkway(a, b, w): return dict(a=[a[0], a[1]], b=[b[0], b[1]], w=w)
 walkways = [walkway(a, b, w) for k, (a, b, w) in decks.items()]
 zones = {
-  'plaza':  dict(x=plx, y=ply, rx=plaza['rx'], ry=plaza['ry'], spawn=[plx, ply + 400]),   # boss 6 Nov: on open paving in front of the sundial, not on its dial
+  'plaza':  dict(x=plx, y=ply, rx=plaza['rx'], ry=plaza['ry'], spawn=[plx, ply + 400]),
   'farm':   dict(x=T((1020, 270))[0], y=T((1020, 270))[1], spawn=list(T((990, 296)))),
   'market': dict(x=T((1180, 460))[0], y=T((1180, 460))[1], spawn=list(T((1180, 460)))),
   'beach':  dict(x=T((1180, 630))[0], y=T((1180, 630))[1], spawn=list(T((1140, 650)))),
@@ -617,11 +560,10 @@ zones = {
   'islet-se': dict(x=islets[1][0], y=islets[1][1], spawn=[islets[1][0] - 60, islets[1][1] - 30]),
   'harbor': dict(x=T((276, 792))[0], y=T((276, 792))[1], spawn=list(T((300, 772)))),
 }
-# boss 6 Nov: the open areas and stall rows, kept free for activities and stalls later (zones activity-n, stalls-n)
 for ar in OPEN_AREAS:
     zones[ar['id']] = dict(x=ar['x'], y=ar['y'], rx=ar['rx'], ry=ar['ry'], kind=ar['kind'], name=ar['name'], spawn=[ar['x'], ar['y']])
 for r in STALL_ROWS:
-    n = int((r['x1'] - r['x0']) // 320)   # stall slots along the back edge, ~320 apart; Duckies browse on the paving in front
+    n = int((r['x1'] - r['x0']) // 320)
     slots = [[round(r['x0'] + (i + .5) * (r['x1'] - r['x0']) / n), r['y0'] + 110] for i in range(n)]
     zones[r['id']] = dict(x=(r['x0'] + r['x1']) / 2, y=(r['y0'] + r['y1']) / 2, x0=r['x0'], y0=r['y0'], x1=r['x1'], y1=r['y1'], kind='stalls', name=r['name'],
                           slots=slots, spawn=[(r['x0'] + r['x1']) / 2, r['y1'] - 90])
@@ -629,7 +571,6 @@ coast_out = [[round(x), round(y)] for x, y in coast_smooth[::2]]
 world = dict(width=WIDTH, height=HEIGHT, coast=coast_out, water=[dict(pond, poly=[[round(x), round(y)] for x, y in pond_pts])],
              bridges=[], obstacles=obstacles, islets=[list(i) for i in islets], walkways=walkways, zones=zones, theme='sunflower',
              arches=[dict(a=list(a), b=list(b), r=ARCH_RISE, w=w) for k, (a, b, w) in decks.items() if k.startswith('bridge')])
-# walk map: coast traced 35 inside the sand edge, every prop footprint
 walk_coast = [[round(x), round(y)] for x, y in list(LAND.buffer(-35, join_style=1).simplify(4).exterior.coords)[:-1]]
 walk = dict(width=WIDTH, height=HEIGHT, coast=walk_coast, obstacles=obstacles, walkways=walkways, bridges=[], islets=[list(i) for i in islets], water=world['water'])
 sw = decks['jetty-sw']
@@ -637,7 +578,6 @@ harbor = dict(jetty=dict(foot=list(sw[0]), tip=list(sw[1]), width=104),
               boats=[dict(x=round(sw[1][0] - 160), y=round(sw[1][1] - 60), turn=3.14159), dict(x=round(sw[1][0] + 160), y=round(sw[1][1] - 40), turn=3.14159),
                      dict(x=round(sw[1][0] + 170), y=round(sw[1][1] - 230), turn=1.5708)],
               spawn=zones['plaza']['spawn'])
-# the rest of the moorings: by the other jetties, the beach and the islets
 for k, off in [('jetty-w', (0, 150)), ('jetty-e', (0, -150)), ('jetty-s', (160, -20))]:
     tip = decks[k][1]; harbor['boats'].append(dict(x=round(tip[0] + off[0]), y=round(tip[1] + off[1]), turn=1.5708 if off[1] else 3.14159))
 for c, t in [((1236, 690), 1.5708), ((88, 196), 3.14159), ((1300, 840), 3.14159), ((1398, 506), 3.14159)]:
@@ -649,7 +589,6 @@ art = dict(width=WIDTH, height=HEIGHT, sea='#6EC9DE', ground=dict(tiles=tiles), 
 json.dump(art, open(f'{ART}/art.json', 'w'), indent=0, separators=(',', ':'))
 print('props', len(props), 'obstacles', len(obstacles), 'flats', len(flats), 'decks', len(deck_entries))
 
-# ---------------------------------------------------------------- validation (same walk rules as island-geometry.mjs)
 def in_poly(x, y, p):
     inside = False; j = len(p) - 1
     for i in range(len(p)):
@@ -690,7 +629,6 @@ for i in range(1, n + 1):
     if i != root and sizes[i] > 4:
         ys, xs = np.where(lab == i); print('  pocket', i, int(sizes[i]), 'cells near', int(xs.mean() * step), int(ys.mean() * step))
 print('walkable area main component', int(main / 1e6 * 100) / 100, 'M units^2; other components', sorted([int(s) for i, s in enumerate(sizes) if i not in (0, root) and s > 4])[-6:])
-# harbor checks
 LANDALL = unary_union([LAND] + ISLET_POLYS + [LineString([w['a'], w['b']]).buffer(w['w']/2) for w in walkways])
 tip = Point(sw[1]); near = LAND.union(unary_union(ISLET_POLYS)).distance(tip)
 print('harbor tip distance to land', round(near))
@@ -710,10 +648,6 @@ print('VALID' if not bad else 'PROBLEMS:\n  ' + '\n  '.join(bad))
 json.dump(dict(grid_step=step), open(os.devnull, 'w'))
 np.save('/tmp/sunflower-walkgrid.npy', (lab == root)) if '--grid' in sys.argv else None
 
-# ---------------------------------------------------------------- sleepers (boss 6 Nov): the same 28 as home, by the props they belong to
-# Same shape and counts as SLEEP_SPOTS (src/pixi/sleep-spots.js). Each pose has a hand-picked anchor beside its prop; the spot is
-# the nearest point to it that passes the game's rules (resolveSleepSpots) plus ours: clear of the path EDGE (paths are 1.5x
-# home's width), off the plaza, the open activity areas and the stall rows (they stay free for later).
 SLEEP_R = {'nod': 41.8, 'leaf': 73.8, 'wing': 60.0, 'hammock': 70.7, 'rock': 46.6, 'book': 63.8, 'chair': 73.7, 'box': 49.7}
 SLEEP_ANCHORS = {
   'hammock': [((2420, 3720), False, 'between two oaks in the south-west wood'), ((6650, 2050), True, 'under the east trees')],
@@ -734,7 +668,7 @@ SOLID = [p for p in props if not re.search(r'lily|bunting|boat|flag|grass|tuft|p
 BUILDING = re.compile(r'library|lighthouse|stall|hall|house|barn|windmill|tower|cafe|shop|kiosk|shelf|castle|cottage|museum|bakery|greenhouse', re.I)
 WALK_OK = OK.buffer(-6)
 COAST_LINE = Polygon(walk_coast).exterior
-SOFT = ('Flowers', 'Bush', 'Sunflowers', 'Stump'); soft = []   # small decor that steps aside for a sleeper (keeps it uncluttered)
+SOFT = ('Flowers', 'Bush', 'Sunflowers', 'Stump'); soft = []
 def sleep_problem(x, y, pose, taken):
     r = SLEEP_R[pose]
     if not all(WALK_OK.contains(Point(x + dx, y)) for dx in (-r * .9, 0, r * .9)): return 'not ground'
@@ -755,7 +689,7 @@ def sleep_problem(x, y, pose, taken):
             if p['name'] in SOFT and p.get('id', '').find('nod') < 0: soft.append(p); continue
             return 'prop ' + p['id']
     return None
-taken = []   # (x, y, pose)
+taken = []
 def drop_prop(q):
     if q in props: props.remove(q)
     if q in SOLID: SOLID.remove(q)
@@ -764,13 +698,12 @@ def drop_prop(q):
     sleep_notes.append(f"   (moved aside: {q['id']})")
 sleep_spots = {k: [] for k in ('nod', 'hammock', 'rock', 'leaf', 'book', 'chair', 'wing', 'box')}
 sleep_notes = []
-# nod: four trees whose trunk front is free, spread over the island
 cands = [p for p in props if p['name'] == 'Tree' and LAND.buffer(-120).contains(Point(p['x'], p['y']))]
 def nod_ok(t):
     x, y = t['x'], t['y'] + 14
     if path_edge(x, y) < 90 or not WALK_OK.buffer(30).contains(Point(x, y)): return False
     if any(((x - a['x']) / a['rx']) ** 2 + ((y - a['y']) / a['ry']) ** 2 < 1 for a in SLEEP_AVOID): return False
-    return not any(q is not t and q['y'] > y - 10 and q['y'] - y < q['height'] * q['scale'] * .9 + 20 and abs(q['x'] - x) < q['width'] * q['scale'] / 2 + 40 for q in SOLID)   # no crown in front of the napper
+    return not any(q is not t and q['y'] > y - 10 and q['y'] - y < q['height'] * q['scale'] * .9 + 20 and abs(q['x'] - x) < q['width'] * q['scale'] / 2 + 40 for q in SOLID)
 cands = [t for t in cands if nod_ok(t)]
 NOD_AT = [(1200, 1900), (5300, 3300), (3300, 1150), (2200, 4000)]
 for i, (ax, ay) in enumerate(NOD_AT):
@@ -800,9 +733,9 @@ world['paths'] = [[list(p) for p in l] for l in PATH_LINES]
 world['pathWidths'] = [round(w) for p, w in paths]
 json.dump(world, open(f'{DATA}/world.json', 'w'), separators=(',', ':'))
 json.dump(walk, open(f'{DATA}/walk-world.json', 'w'), separators=(',', ':'))
-art['props'] = props   # nod tree ids renamed
+art['props'] = props
 json.dump(art, open(f'{ART}/art.json', 'w'), indent=0, separators=(',', ':'))
-if '--sleepmap' in sys.argv:   # debug: where each size of sleeper could still lie (green), with the placed ones (red)
+if '--sleepmap' in sys.argv:
     from PIL import Image, ImageDraw
     base = Image.open(os.path.join(CONCEPTS, 'sunflower-work', 'sunflower-render-walk.png')).convert('RGB'); kk = base.width / WIDTH
     dr = ImageDraw.Draw(base, 'RGBA')
@@ -813,6 +746,5 @@ if '--sleepmap' in sys.argv:   # debug: where each size of sleeper could still l
     for x, y, pose in taken: dr.ellipse([x*kk-6, y*kk-6, x*kk+6, y*kk+6], fill=(255, 0, 0, 255)); dr.text((x*kk+7, y*kk-6), pose, fill=(120, 0, 0))
     base.save('/private/tmp/claude-501/-Users-pragadees-xd/b23a44ff-1b85-4260-8c84-c6c2b8035916/scratchpad/sunbig/sleepmap.png')
 
-# Apply the locked centre and 40-bed layout after writing the base map.
 import subprocess
 subprocess.run(['node', 'scripts/themes/sunflower-centres.mjs', 'sunflower'], cwd=ROOT, check=True)

@@ -1,6 +1,4 @@
 export const DELAY = 100;
-// Ordered, bounded snapshots. Discrete actions/facing change at the earlier sample;
-// positions blend linearly, with no extrapolation through plaza obstacles on a stall.
 export function sample(history, time) {
   if (!history.length) return null;
   while (history.length > 2 && history[1].time <= time) history.shift();

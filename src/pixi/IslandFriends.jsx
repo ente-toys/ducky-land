@@ -19,7 +19,6 @@ export default function IslandFriends({room, island, status, indoors, notificati
   function applyState(result) {
     const friends = result.friends ?? [], incoming = result.incoming ?? [], outgoing = result.outgoing ?? [];
     setFriends(friends); setIncoming(incoming); setOutgoing(outgoing);
-    // Pending connections also suppress the nearby invitation prompt.
     room.current?.setFriends([...friends, ...incoming, ...outgoing]);
   }
 

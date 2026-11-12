@@ -1,5 +1,3 @@
-// boss 5 Nov: walking feel. Wall glide, ease in/out, sea clicks, rounded routes and duck spacing, on the live walking map
-// (world.json + walk-world.json, exactly what the socket server loads) at the server tick (0.05 s) and a 60 fps frame.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -10,7 +8,6 @@ const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 const world = {...read('../assets/world/world.json'), ...read('../assets/world/walk-world.json')};
 const nav = createNavigation(world);
 const ZERO = {x:0, y:0}, DIRS = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]], TICKS = [1/60, .05];
-// the first spot (50 px scan) with open ground 240 px all round, so ease and spacing checks are not bent by a wall
 const OPEN = (() => {
   for (let y = 200; y < world.height; y += 50) for (let x = 200; x < world.width; x += 50) {
     let ok = true;
@@ -20,7 +17,6 @@ const OPEN = (() => {
 })();
 const duck = (x, y) => ({x, y, previousX:x, previousY:y, turn:0, path:[], until:0, action:0, travel:0, emoteVersion:0});
 
-// Holds one keyboard direction and records every step; fails on a frame off walkable ground or a step that cuts a corner.
 function hold(x, y, input, seconds, dt) {
   const a = duck(x, y), steps = [];
   for (let t = 0; t < seconds; t += dt) {
@@ -34,7 +30,6 @@ function hold(x, y, input, seconds, dt) {
   return {a, distance:Math.hypot(a.x-x, a.y-y), flips};
 }
 
-// Every 8-way key held at 10-50 degrees into a straight run of shoreline, starting 30 px inland, away from props.
 function shallowHits(edges) {
   const out = [];
   for (const [a, b] of edges) {
@@ -42,7 +37,6 @@ function shallowHits(edges) {
     if (length < 150) continue;
     const tx = (b[0]-a[0])/length, ty = (b[1]-a[1])/length, mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
     const start = [[mid[0]-ty*30, mid[1]+tx*30], [mid[0]+ty*30, mid[1]-tx*30]].find(p => nav.walkable(...p));
-    // a prop beside the shore makes a real dead-end wedge; those are covered by the footprint test below
     if (!start || world.obstacles.some(o => !o.poly && Math.hypot(o.x-start[0], o.y-start[1]) < Math.max(o.rx, o.ry)+150)) continue;
     for (const d of DIRS) {
       const l = Math.hypot(...d), along = Math.abs(d[0]/l*tx + d[1]/l*ty);
@@ -69,7 +63,6 @@ test('keyboard walking glides along curved coast at shallow angles instead of st
   const coast = world.coast.filter((_,i)=>i%4===0), hits = shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]));
   assert.ok(hits.length >= 12, `${hits.length} coast scenarios`);
   glides(hits);
-  // an axis key into a slanted shore was a dead stop before (about 49 px in a second); it now keeps most of its speed
   assert.ok(hits.filter(h => !h.input.x || !h.input.y).length >= 4);
 });
 
@@ -79,7 +72,7 @@ test('keyboard walking glides around pond and lake edges and stops on a square h
   const hits = shallowHits(rings.flatMap(ring => ring.map((p, i) => [p, ring[(i+4)%ring.length]]).filter((_, i) => i % 2 === 0)));
   assert.ok(hits.length >= 6, `${hits.length} lake scenarios`);
   glides(hits);
-  const top = [pond.x, pond.y-pond.ry-45];   // straight down into the pond's north shore
+  const top = [pond.x, pond.y-pond.ry-45];
   for (const dt of TICKS) {
     const {distance, flips} = hold(...top, {x:0, y:1}, 1.5, dt);
     assert.ok(distance < 40 && flips === 0, `a square hit should stop, moved ${distance}`);
@@ -92,7 +85,7 @@ test('walking into prop footprints from every direction never tunnels or leaves 
   for (const o of props) for (const d of DIRS) {
     const l = Math.hypot(...d), start = [o.x-d[0]/l*(Math.max(o.rx, o.ry)+60), o.y-d[1]/l*(Math.max(o.rx, o.ry)+60)];
     if (!nav.walkable(...start)) continue;
-    for (const dt of TICKS) hold(...start, {x:d[0], y:d[1]}, 1.2, dt);   // every frame on walkable ground, every step clear
+    for (const dt of TICKS) hold(...start, {x:d[0], y:d[1]}, 1.2, dt);
   }
 });
 
@@ -148,7 +141,6 @@ test('click-to-move eases in and brakes into the exact target without overshooti
       travel.push(a.travel);
       assert.ok(nav.walkable(a.x, a.y));
       assert.equal(a.action, a.travel > .001 ? 1 : 0);
-      // every position lies on the route polyline (no overshoot past a point, no cut corner)
       const on = points.some((p, i) => {const q = i ? points[i-1] : [x, y], dx = p[0]-q[0], dy = p[1]-q[1], k = Math.max(0, Math.min(1, ((a.x-q[0])*dx+(a.y-q[1])*dy)/(dx*dx+dy*dy||1))); return Math.hypot(a.x-q[0]-dx*k, a.y-q[1]-dy*k) < 1e-6;});
       assert.ok(on, 'left the route');
       assert.ok(a.path.length <= left);
@@ -172,7 +164,6 @@ test('a click far out at sea (or mid-pond) walks to the nearest shore toward the
     const path = nav.route(x, y, tx, ty);
     assert.ok(path.length, `walks toward ${tx},${ty}`);
     const end = path.at(-1);
-    // the shore search on top of the normal route to that shore point (best of 3, to keep timer noise out)
     const time = f => Math.min(...[0, 1, 2].map(() => {const t = performance.now(); f(); return performance.now()-t;}));
     if (tx === world.origin.x-500 || tx === ponds[0][0]) {
       const extra = time(() => nav.route(x, y, tx, ty)) - time(() => nav.route(x, y, ...end));
@@ -180,7 +171,6 @@ test('a click far out at sea (or mid-pond) walks to the nearest shore toward the
     }
     assert.ok(nav.walkable(...end));
     assert.ok(Math.hypot(end[0]-tx, end[1]-ty) < Math.hypot(x-tx, y-ty), 'ends closer to the click');
-    // the end is on the shore: a little further toward the click is water
     const l = Math.hypot(tx-end[0], ty-end[1]);
     assert.ok(!nav.walkable(end[0]+(tx-end[0])/l*30, end[1]+(ty-end[1])/l*30), 'stops at the water line');
     const a = duck(x, y);
@@ -240,7 +230,6 @@ test('a duck pressed against the shore is never pushed into the sea', () => {
     const l = Math.hypot(q[0]-p[0], q[1]-p[1]), nx = -(q[1]-p[1])/l, ny = (q[0]-p[0])/l, mid = [(p[0]+q[0])/2, (p[1]+q[1])/2];
     const sign = [1, -1].find(s => nav.walkable(mid[0]+nx*s*30, mid[1]+ny*s*30) && !nav.walkable(mid[0]-nx*s*60, mid[1]-ny*s*60));
     if (!sign) continue;
-    // hug the waterline, then a second duck shoves it from inland
     let edge = 30; while (edge > 1 && nav.walkable(mid[0]+nx*sign*(edge-1), mid[1]+ny*sign*(edge-1))) edge--;
     const shore = duck(mid[0]+nx*sign*edge, mid[1]+ny*sign*edge), pusher = duck(shore.x+nx*sign*10, shore.y+ny*sign*10);
     if (!nav.walkable(pusher.x, pusher.y)) continue;

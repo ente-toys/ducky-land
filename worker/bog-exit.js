@@ -1,8 +1,6 @@
 import {ISLETS} from '../src/pixi/islets.js';
 import {isletWalk} from '../src/pixi/islet-walk.js';
 
-// Boss 11 Nov: out of lives sends the duck to a RANDOM islet. The existing
-// islet walking chart supplies the exact dock landing and owning island ID.
 let pick=Math.random;
 export function setBogExitRandom(random=Math.random){pick=random;}
 export function bogExitIslet(){

@@ -1,4 +1,3 @@
-// Read-only snapshot of the actual Home placement code, rendered with the same .24 scale as Community.
 import {build} from 'esbuild';
 import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import sharp from 'sharp';

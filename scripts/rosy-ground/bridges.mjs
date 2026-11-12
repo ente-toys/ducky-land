@@ -1,4 +1,3 @@
-// Home endpoint fitting and transverse width, recoloured only for Rosybutton.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 const F='public/pixi-art/themes/pink/art.json',E=JSON.parse(readFileSync(F));
 const W=JSON.parse(readFileSync('assets/world/themes/pink/world.json'));
@@ -12,7 +11,6 @@ for(const r of bridges){
  let s=readFileSync('public/pixi-art/home-expansion-c/bridges/bridge-'+dir+'.svg','utf8');
  s=s.replace(/#885931/gi,'#b66787').replace(/#c88941/gi,'#e9a9bc').replace(/#e4c567/gi,'#f9d3dc');
  const [W,H]=s.match(/viewBox="0 0 (\d+) (\d+)"/).slice(1).map(Number);let [n,f]=S[dir];if(dir==='ew'&&v[0]<0)[n,f]=[f,n];
- // Map longitudinal axis to the required span; keep the transverse plank width at source scale.
  const u=[f[0]-n[0],f[1]-n[1]],cross=dir==='ew'?[0,1]:dir==='ns'?[1,0]:[1,dir==='ne'?.62:-.62];
  const depth=.62,gv=[v[0],v[1]/depth],sg=Math.sign(cross[0]*u[1]-cross[1]*u[0])||1;
  let q=[gv[1],-gv[0]*depth],ql=Math.hypot(q[0],q[1]/depth),cl=Math.hypot(cross[0],cross[1]/depth);q=q.map(x=>x*cl/ql);
@@ -21,7 +19,6 @@ for(const r of bridges){
  const A=(v[0]*cross[1]-q[0]*u[1])/det,C=(q[0]*u[0]-v[0]*cross[0])/det,B=(v[1]*cross[1]-q[1]*u[1])/det,D=(q[1]*u[0]-v[1]*cross[0])/det;
  const X=a[0]-A*n[0]-C*n[1],Y=a[1]-B*n[0]-D*n[1];
  let inner=s.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
- // Keep the approved structure, remove only the raised sand end-sill slabs.
  const start=inner.indexOf('<g stroke=');const head=inner.slice(0,start),body=inner.slice(start);
  const pos=body.indexOf('<!-- '+(dir==='ew'?'Far handrail':dir==='ns'?'The arch':'Back rail'));
  if(pos>0){const gend=body.indexOf('>')+1;inner=head+body.slice(0,gend)+body.slice(pos);}
@@ -31,7 +28,6 @@ for(const r of bridges){
  writeFileSync('public'+src,`<svg data-home-source="/pixi-art/home-expansion-c/bridges/bridge-${dir}.svg" xmlns="http://www.w3.org/2000/svg" width="${box[2]}" height="${box[3]}" viewBox="${box.join(' ')}"><g transform="matrix(${[A,B,C,D,X,Y].map(fmt).join(' ')})">${inner}</g></svg>`);
  const deck=E.decks.find(d=>d.src===r.src);Object.assign(deck,{homeSource:'/pixi-art/home-expansion-c/bridges/bridge-'+dir+'.svg',bridgeId:r.id,a:r.a,b:r.b,x:box[0],y:box[1],width:box[2],height:box[3],resolution:1.5,overBoats:true}); arches[bridges.indexOf(r)].r=+Math.abs(D*24).toFixed(3); arches[bridges.indexOf(r)].squash=dir==='ew'?.62:undefined;
 }
-// The same deck axes and crowns serve both client and room walking data.
 const rects=[];
 for(const r of arches){
  const dx=r.b[0]-r.a[0],dy=r.b[1]-r.a[1],len=Math.hypot(dx,dy),half=(r.w/2-10)/(Math.abs(dx/len)+Math.abs(dy/len));

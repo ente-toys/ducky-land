@@ -1,4 +1,3 @@
-// Home's exact slatted arc recipe, fitted to Goldmine's own plaza and lawn rims.
 import {writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 const A='public/pixi-art/themes/goldmine/';

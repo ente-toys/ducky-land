@@ -21,9 +21,6 @@ function resolveFile(root,file){
  throw Error(`Missing globe source: ${file}`);
 }
 
-// Track files actually consumed by one theme, including cached reads. Code
-// imports are followed, but the all-island registry is a boundary: its current
-// per-theme result is fingerprinted by modelHash rather than every other map.
 export function createSourceTracker(root,theme,{codeEntries=['scripts/globe-svg/build.mjs','scripts/globe-svg/vector.mjs','scripts/globe-svg/compile.mjs','scripts/globe-svg/sources.mjs','src/pixi/island-maps.js',...(theme==='home'?['src/pixi/placements.js','scripts/globe-perf/snapshot.mjs']:[])]}={}){
  root=path.resolve(root);const files=new Map(),visited=new Set();
  function record(file,consumed){

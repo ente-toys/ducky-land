@@ -1,5 +1,3 @@
-// Vegetation-only application. Safe after path/life merges; never paints ground.
-// node scripts/bigger-fair/plants-apply.mjs [--check]
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
@@ -39,7 +37,6 @@ export function applyPlants(art,world,walk) {
   if(coast.some(([a,b])=>segmentDistance(x,y,a,b)<rx+75))complain('coast margin');
   if(roads.some(([a,b])=>segmentDistance(x,y,a,b)<90+rx))complain('path clearance');
   if(PLANT_RESERVES.some(r=>x+rx>r.x0&&x-rx<r.x1&&y+ry>r.y0&&y-ry<r.y1))complain('reserved feature/flight site');
-  // Do not hide retained props behind a new tree canopy or skirt a doorstep.
   for(const q of art.props){
    if(q.asset==='grass-decal'||/tree-|bush-/.test(q.src))continue;
    const qw=q.width*(q.scale??1),qh=q.height*(q.scale??1);
@@ -51,7 +48,6 @@ export function applyPlants(art,world,walk) {
  }
  const nav=geometry(walk),beds=resolveSleepSpots(world,art.props,nav.walkable,sleepHalfWidths(),{spots:world.sleepSpots,warn:false});
  if(beds.length!==before.length||beds.bad.length)problems.push(...beds.bad.map(p=>'sleeper '+JSON.stringify(p)));
- // Keep independent feature passes in their existing draw/data order.
  for(const [i,list]of [art.props,world.props,world.obstacles,walk.obstacles].entries())
   list.sort((a,b)=>(order[i].get(a)??order[i].get(a.id??a.name)??1e9)-(order[i].get(b)??order[i].get(b.id??b.name)??1e9));
  return {replaced,added:additions.length,trees:additions.filter(p=>p.name==='Tree').length,

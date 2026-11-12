@@ -1,7 +1,6 @@
 import {DOMParser,XMLSerializer} from '@xmldom/xmldom';
 import {DEPTH_LAYOUT} from './depth-layout.mjs';
 const children=n=>Array.from(n.childNodes).filter(c=>c.nodeType===1);
-// Annotate in place: no geometry, paint order, colour or existing transform changes.
 export function applyDepth(svg,meta){
  const spec=DEPTH_LAYOUT[meta.art];if(!spec)throw Error(`No depth layout: ${meta.art}`);
  const doc=new DOMParser().parseFromString(svg,'image/svg+xml'),root=doc.documentElement;

@@ -10,7 +10,6 @@ WORK=ROOT.parent/'concepts/themes/work/cathedral'
 (WORK/'detail').mkdir(parents=True,exist_ok=True)
 PAL=np.array([[57,71,45],[255,244,210],[248,222,187],[232,205,170],[206,169,111],[183,135,73],[200,120,69],[230,151,77],[250,186,103],[141,168,95],[104,127,67],[174,186,119],[103,160,132],[62,114,94],[248,195,61],[242,154,108]],dtype=float)
 def warm_palette(text,name):
- # Keep the HOME-quality palette when rebuilding from the retained image_gen source sheets.
  def pop(m):
   hx=m.group();rgb=[int(hx[i:i+2],16)/255 for i in (1,3,5)];h,s,v=colorsys.rgb_to_hsv(*rgb)
   if name=='olive-tree' and .16<h<.3 and .1<s<.65 and v>.3:
@@ -29,7 +28,6 @@ def trace(src,box,name):
  mask=np.array(Image.fromarray(m.astype('uint8')*255).resize((w*2,h*2)))>127
  px=rgb.reshape(-1,3); ids=np.concatenate([np.argmin(((px[i:i+30000,None]-PAL[None])**2).sum(2),1) for i in range(0,len(px),30000)]).reshape(mask.shape)
  ids[rgb.max(2)<105]=0
- # Thin internal ink by 2 source pixels, preserving closed outlines.
  for _ in range(2):
   ink=(ids==0)&mask
   for dy,dx in [(0,1),(0,-1),(1,0),(-1,0)]:

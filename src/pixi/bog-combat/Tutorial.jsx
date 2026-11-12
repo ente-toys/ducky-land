@@ -9,8 +9,6 @@ export default function BogTutorial({identity,self,engine}){
     const tutorial=visit.current.tutorial;controller.current=tutorial;tutorial.start();
     return()=>{tutorial.dispose();if(controller.current===tutorial)controller.current=null;};
   },[identity]);
-  // Use confirmed actions, including Space, J and left click, so the combat
-  // capture listener never has to give up the shoot key to a tutorial listener.
   useEffect(()=>{
     const before=previous.current;previous.current=self;
     if(!self)return;

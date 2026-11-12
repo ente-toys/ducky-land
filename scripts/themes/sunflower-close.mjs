@@ -1,4 +1,3 @@
-// Close-up craft pass. Sunflower only, replayed from the retained close-baseline.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -20,7 +19,6 @@ function flat(id,file,x,y,w,h,body,before=false){
  const idx=art.flats.findIndex(p=>p.id==='centre-decal-floor');
  art.flats.splice(idx+(before?0:1),0,p);
 }
-// Hand-sized masonry, cream highlights and the same alternating courses as Home.
 const C=[3880,2608.5],k=666/1140,pt=(r,a)=>[C[0]+r*Math.cos(rad(a)),C[1]+r*k*Math.sin(rad(a))];
 let paving=`<defs><clipPath id="plaza"><ellipse cx="3880" cy="2608.5" rx="1130" ry="656"/></clipPath></defs>`;
 paving+=E(...C,1130,656,'fill="#FFF0C7" stroke="#AA955C" stroke-width="2.2"');
@@ -36,15 +34,12 @@ for(let row=1;row<rings.length;row++){
  }
 }
 for(const r of [1099,1126])paving+=E(...C,r,r*k,'fill="none" stroke="#9D8A51" stroke-width="2"');
-// Tiny seed diamonds in a narrow border, deliberately smaller than a Ducky.
 for(let a=0;a<360;a+=5){const [x,y]=pt(1112,a);paving+=`<path d="M${f(x-5)} ${f(y)} l5 -4 l5 4 l-5 4 Z" fill="#D3AD4E"/>`;}
 paving+='</g>';
 flat('plaza-courses','close-plaza-courses.svg',2738,1930,2284,1360,paving,true);
-// An inlaid sunflower rosette on the sunken floor. Decorative only, no new obstacle.
 const [cx,cy]=[3880,2709.9],ky=.765957;
 const pp=(r,a)=>[f(cx+r*Math.cos(rad(a))),f(cy+r*ky*Math.sin(rad(a)))];
 let rosette='<defs><clipPath id="floor"><ellipse cx="3880" cy="2709.9" rx="565" ry="431"/></clipPath></defs><g clip-path="url(#floor)">';
-// A pair of thin inset rings ends the hexagonal floor cleanly against the lowest riser.
 rosette+=E(cx,cy,541,541*ky,'fill="none" stroke="#B6A16B" stroke-width="2"');
 rosette+=E(cx,cy,524,524*ky,'fill="none" stroke="#D9BB67" stroke-width="4"');
 for(let i=0;i<18;i++){
@@ -56,7 +51,6 @@ for(const r of [178,194])rosette+=E(cx,cy,r,r*ky,'fill="none" stroke="#BDA568" s
 for(let a=0;a<360;a+=10){const p=pp(507,a);rosette+=`<path d="M${p[0]-5} ${p[1]} l5 -5 l5 5 l-5 5 Z" fill="#C4A157"/>`;}
 rosette+='</g>';
 flat('sunflower-rosette','close-sunflower-inlay.svg',3300,2265,1160,890,rosette);
-// Small sunflower inlay badges give the two finished market aprons their own identity.
 function medallion(x,y,r=25){let s=E(x,y,r*1.65,r*1.1,'fill="#FFECB0" stroke="#B09B65" stroke-width="1.5"');
  for(let a=0;a<360;a+=45){const t=rad(a);s+=E(x+Math.cos(t)*r*.8,y+Math.sin(t)*r*.56,r*.42,r*.29,'fill="#F4CD69" stroke="#B39A58" stroke-width="1.4"');}
  return s+E(x,y,r*.36,r*.25,'fill="#B39756" stroke="#947B45" stroke-width="1.4"');}
@@ -86,14 +80,12 @@ function prop(id,template,x,y){
  world.obstacles.push({...o});walk.obstacles.push({...o});
 }
 const planter=art.props.find(p=>p.id==='sunflower-planter-28'),lamp=art.props.find(p=>p.id==='lamp-20');
-// Planter pockets in the masonry rim, found between paths, benches and residents.
 for(const [i,a] of [-161,-139,-111,-48,-12,22,44,112,154].entries()){
  search:for(const r of [1090,1160,1210])for(const delta of [0,4,-4,8,-8,12,-12,16,-16]){
   const [x,y]=pt(r,a+delta);
   if(clear(x,y,62)){prop('rim-planter-'+i,planter,x,y);break search;}
  }
 }
-// Actual slatted arc benches, using the same drawing routine as Home and the prior Sunflower pass.
 const benches=[];
 for(const [key,z] of activities){
  let count=art.props.filter(p=>p.id.includes(key+'-bench')).length;
@@ -111,7 +103,6 @@ for(const [key,z] of activities){
   const o2={name:id,poly:foot.map(p=>p.map(f))};world.obstacles.push(structuredClone(o2));walk.obstacles.push(structuredClone(o2));benches.push({id,footprint:o2.poly});count++;
  }
 }
-// Lamps and planters belong to the edge of each open meadow, never its playable centre.
 for(const [key,z] of activities)for(const [i,wanted] of [35,145,220,310].entries()){
  for(const offset of [0,...Array.from({length:12},(_,i)=>10+i*10).flatMap(d=>[d,-d])]){
   const a=rad(wanted+offset),x=z.x+Math.cos(a)*(z.rx+145),y=z.y+Math.sin(a)*(z.ry+125);

@@ -1,4 +1,3 @@
-// Run from the worktree root: node scripts/boats/render-depth.mjs
 import {build} from 'esbuild';
 import {execFileSync} from 'node:child_process';
 import {unlinkSync} from 'node:fs';

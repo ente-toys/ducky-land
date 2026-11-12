@@ -8,7 +8,6 @@ function sail(actor,to){assert.ok(setSailDestination(actor,...to),'route to '+to
 test('Fair boats sail in from each sea mouth and all the way round the moat',()=>{
  const west=plan.channels[0],east=plan.channels[1],actor={islandId:id,mode:'sailing',x:west.at(-1)[0],y:west.at(-1)[1],turn:0};
  for(const p of west.toReversed())sail(actor,p);
- // Join the ring at its western bank and visit every authored centreline point.
  let start=plan.ring.reduce((best,p,i)=>Math.hypot(p[0]-actor.x,p[1]-actor.y)<Math.hypot(plan.ring[best][0]-actor.x,plan.ring[best][1]-actor.y)?i:best,0);
  const ring=[...plan.ring.slice(start),...plan.ring.slice(0,start),plan.ring[start]];
  for(const p of ring)sail(actor,p);
@@ -20,7 +19,6 @@ test('Fair moat bridges carry walkers, boats fit below, and the castle lagoon is
  for(const br of plan.bridges){const m=br.a.map((v,i)=>(v+br.b[i])/2);assert.ok(nav.walkable(...m),'walkable bridge '+br.id);assert.ok(canSail(...m,id),'sail under '+br.id);assert.ok(nav.route(map.spawn.x,map.spawn.y,...m).length||nav.clearLine([map.spawn.x,map.spawn.y],m),'reachable bridge '+br.id);}
  assert.equal(canSail(3570,1250,id),false,'castle islet stays dry');assert.ok(canSail(3570,1575,id),'lagoon underpass is wet');assert.equal(map.world.riverMouths.length,2);
 });
-// The boss removed flower fields, so residents may now use the open lawns.
 test('Fair resolves 90 residents and the castle islet has a walking entrance',()=>{
  assert.equal(map.sleepers.length,90);
  const b=map.world.walkways.find(b=>b.id==='ac2-lagoon-bridge');assert.ok(map.nav().route(map.spawn.x,map.spawn.y,...b.a).length,'castle islet reachable');
@@ -37,7 +35,6 @@ test('Fair sails from the real harbour through the lagoon outlet, around the cas
  const route=[];for(let i=from;i!==to;i=(i+1)%plan.ring.length)route.push(plan.ring[i]);route.push(plan.ring[to]);
  for(const p of route)sail(actor,p);
  for(const p of plan.lagoonChannel.toReversed())sail(actor,p);
- // Every segment of the lagoon, including the south bridge underpass.
  let start=plan.lagoon.reduce((best,p,i)=>Math.hypot(p[0]-actor.x,p[1]-actor.y)<Math.hypot(plan.lagoon[best][0]-actor.x,plan.lagoon[best][1]-actor.y)?i:best,0);
  for(const p of [...plan.lagoon.slice(start),...plan.lagoon.slice(0,start),plan.lagoon[start]])sail(actor,p);
  for(const p of plan.lagoonChannel)sail(actor,p);

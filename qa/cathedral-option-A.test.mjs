@@ -10,7 +10,6 @@ const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 const map=makeMap('cathedral',{world,walk,harbor:read(D+'harbor.json')});
 const basin=art.props.find(p=>p.id==='centre-A-fountain');
-// Exercise real meshes without requiring a browser GPU for Pixi's precision probe.
 DOMAdapter.set({...DOMAdapter.get(),createCanvas:()=>({getContext:()=>null})});
 test('Option A replaces the old centre with a smaller quiet piazza and a raised olive fountain island',()=>{
  assert.equal(art.raster.enabled,false);

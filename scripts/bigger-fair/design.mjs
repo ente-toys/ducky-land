@@ -1,5 +1,4 @@
 import {rebuildFairSurface} from './paths.mjs';
-// Authored Waddlewish extension: fixed scenes, not a prop scatter generator.
 import fs from 'node:fs';
 import {render} from './render-core.mjs';
 const A='public/pixi-art/themes/fair/', O='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/';
@@ -21,7 +20,6 @@ const round=v=>Math.round(v*10)/10;
 export function smooth(pts,closed=true,n=12){const out=[],N=pts.length,P=i=>pts[closed?(i+N)%N:Math.max(0,Math.min(N-1,i))];for(let i=0;i<(closed?N:N-1);i++)for(let k=0;k<n;k++){const t=k/n,t2=t*t,t3=t2*t;out.push([0,1].map(j=>round(.5*(2*P(i)[j]+(-P(i-1)[j]+P(i+1)[j])*t+(2*P(i-1)[j]-5*P(i)[j]+4*P(i+1)[j]-P(i+2)[j])*t2+(-P(i-1)[j]+3*P(i)[j]-3*P(i+1)[j]+P(i+2)[j])*t3))));}if(!closed)out.push(pts.at(-1));return out;}
 export const coast=smooth([[-1670,-490],[-850,-1080],[1050,-1190],[3200,-1370],[5400,-1230],[7300,-1100],[8500,-600],[8870,600],[9060,2300],[8760,3850],[8530,4870],[7470,5670],[5680,5840],[3600,6030],[1630,5780],[-220,5690],[-1440,5050],[-1850,3780],[-2050,2290],[-1930,800]]);
 export const loop=smooth([[-1270,-290],[600,-770],[3370,-950],[5800,-770],[7850,-500],[8390,950],[8530,2540],[8170,4220],[7510,5300],[5580,5430],[3540,5630],[1370,5370],[-450,5290],[-1330,4290],[-1510,2650],[-1440,1050]]);
-// Connections land at existing promenades, without changing a single old pixel.
 export const paths=[{line:loop,w:285},
  {line:smooth([[-1250,2650],[-620,2790],[0,2830],[560,2840]],false),w:340},
  {line:smooth([[-400,5290],[200,4690],[670,3900],[1005,3666]],false),w:340},
@@ -39,7 +37,6 @@ const rect=(x,y,w,h,c,r=8)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" 
 const path=(s,c='none',extra='')=>`<path d="${s}" fill="${c}" ${extra}/>`;
 const egg=(x,y,s=1,c=yellow)=>`<g transform="translate(${x} ${y}) scale(${s})">${path('M0 -30 C-24 -30 -29 8 -20 20 C-9 36 16 30 23 15 C31 -2 17 -30 0 -30Z',c)}${path('M-15 5 Q0 -10 20 2','none','stroke="#FFF4CC" stroke-width="8"')}</g>`;
 export function assets(){fs.mkdirSync(A+'bigger',{recursive:true});
- // The balloon tower is a garden sculpture, with tether ropes and a basket at ground level.
  fs.writeFileSync(A+'bigger/balloon.svg',svg(450,650,
  e(225,600,144,37,cream)+path('M110 210 Q225 475 340 210','none')+path('M155 250 L177 530 M295 250 L273 530')+
  e(225,180,164,160,cream)+path('M225 20 C110 45 105 255 225 340 C345 255 340 45 225 20Z',pink)+path('M225 20 C180 80 180 260 225 340 C270 260 270 80 225 20Z',yellow)+
@@ -67,7 +64,6 @@ export const newProps=[];
 function prop(src,x,y,scale=1,name){const t=templates.get(src);if(!t)throw Error(src);newProps.push({...t,id:'fair-bigger-'+newProps.length,x,y,scale,name:name??t.name});}
 function custom(src,x,y,w,h,rx,ry){newProps.push({id:'fair-bigger-'+newProps.length,name:src.replaceAll('-',' '),src:'bigger/'+src+'.svg',x,y,width:w,height:h,scale:1,anchor:{x:.5,y:1},shadow:false,footprint:{x,y:y-ry,rx,ry}});}
 function kit(id,rows){const p=places.find(p=>p.id===id);for(const [src,dx,dy,k]of rows)prop(src,p.x+dx,p.y+dy,k);}
-// Each tuple is deliberately placed within one scene. No random or evenly distributed props.
 export function composeProps(){newProps.length=0;
  custom('balloon',-740,-30,450,650,140,42);custom('wish-sign',-240,140,120,171,24,14);
  kit('balloon-garden',[
@@ -93,7 +89,6 @@ export function composeProps(){newProps.length=0;
  custom('duck-booth',-1250,2180,500,420,210,42);
  kit('duckling-pond',[
  ['ticket-booth.svg',-350,90,.75],['stall-blue.svg',350,90,.9],['balloons.svg',300,310,.55],['tulip-planter.svg',-350,420,.48],['tulip-planter.svg',350,470,.48],['reuse/street--bench-park.svg',-370,310,.23],['reuse/street--bench-park.svg',470,400,.23],['fair-lamp.svg',-510,440,.48],['fair-lamp.svg',520,470,.48],['reuse/tree-3.svg',-570,-150,1.1],['reuse/tree-4.svg',620,-180,1.1],['reuse/bush-2.svg',-520,170,1.1],['reuse/bush-3.svg',530,160,1.1],['reuse/flower-2.svg',-300,480,2],['reuse/flower-3.svg',300,520,2]]);
- // Deliberate scenic groups frame the large free lawns between the places.
  for(const [src,x,y,k]of [
  ['reuse/tree-1.svg',700,-430,1.2],['reuse/tree-4.svg',1030,-380,1.1],['reuse/bush-2.svg',880,-260,1.1],['tulip-planter.svg',880,-80,.5],
  ['reuse/tree-3.svg',5620,-470,1.18],['reuse/tree-2.svg',5970,-400,1.13],['reuse/bush-3.svg',5790,-260,1.1],['tulip-planter.svg',5750,-60,.48],
@@ -106,7 +101,6 @@ export function composeProps(){newProps.length=0;
  ])prop(src,x,y,k);
  return newProps;
 }
-// Repeating tiny ground marks provide texture only. All scenery above is hand placed.
 export function buildTiles(){
  const tiles=[],xx=[-2500,-1250,0,1450,2900,4350,5800,7250,8375,9500],yy=[-1800,-900,0,1213,2426,3639,4850,5625,6400];
  for(let r=0;r<yy.length-1;r++)for(let c=0;c<xx.length-1;c++)tiles.push({src:`bigger/ground-${r}-${c}.svg`,x:xx[c],y:yy[r],width:xx[c+1]-xx[c],height:yy[r+1]-yy[r]});
@@ -115,7 +109,6 @@ export function buildTiles(){
 }
 export async function design(){assets();composeProps();const art={...original,...bounds,ground:{tiles:buildTiles()},props:[...original.props,...newProps]};write('scripts/bigger-fair/design.json',{...bounds,coast,places,paths,newProps});write('scripts/bigger-fair/proposed-art.json',art);
  const png=await render(art,{k:.13,x:-2500,y:-1800,width:1560,height:1066,home:true,sleepers:false});
- // The design plate is frozen before any production world/art manifest is changed.
  fs.writeFileSync(O+'fair-bigger.png',png);fs.writeFileSync(O+'fair-design-notes.md','# Waddlewish expansion drawing\n\nEight fixed fairground compositions around the untouched original. Wide 285-350 unit promenades, coast loop and open textured lawns. The drawing uses existing fair art plus new vector balloon, bandstand, prize tent, duck booth and tea tables. Authored locally without paid image generation.\n');
  console.log('Drawing locked: fair-bigger.png. '+newProps.length+' authored outer props; production manifests unchanged.');
 }

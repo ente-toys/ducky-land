@@ -1,7 +1,5 @@
 import {CrowdBrain} from './crowd-brain.mjs';
 
-// The crowd team's social brain remains in plaza-local coordinates. The adapter
-// supplies the island's actual benches, counters, fountain and collision checks.
 export function createIslandBrain(world,walkable){
  const ox=2020,oy=1780,scale=1.65,local=p=>({x:p.x-ox,y:p.y-oy});
  const benches=world.props.filter(p=>p.zone==='plaza'&&p.name==='Plaza bench');
@@ -16,7 +14,6 @@ export function createIslandBrain(world,walkable){
   if(ignore?.startsWith('bench-')){const p=layout.obstacles.find(o=>o.name===ignore);if(p&&Math.hypot(x-p.x,(y-p.y)*scale)<125)return true;}
   return walkable(x+ox,y+oy);
  };
- // Replace constructor paths, which were built for the original plaza, once.
  brain.claims.clear();
  for(const [i,d]of brain.ducks.entries()){
   brain.release(d);let p=layout.ring[i%layout.ring.length];

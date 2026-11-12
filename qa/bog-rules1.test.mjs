@@ -27,7 +27,7 @@ function landed(room,n,balance=10){
 function peer(){const socket=fakeSocket();socket.serializeAttachment=value=>socket.saved=value;socket.deserializeAttachment=()=>socket.saved;return socket;}
 function stop(room){clearInterval(room.timer);room.bog?.dispose();}
 
-setBogExitRandom(()=>.25); // deterministic islet for position assertions
+setBogExitRandom(()=>.25);
 
 test('seven-second hiding is omitted from enemies, visible to allies, untaggable, and firing reveals immediately',()=>{
  const sim=createBogCombat({blockers:[],bounds:{width:1000,height:1000},pads:team=>[{x:team==='privacy'?200:600,y:300}]}),p=sim.join({id:'p',team:'privacy'});

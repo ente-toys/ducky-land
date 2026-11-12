@@ -1,5 +1,3 @@
-// BUILD10. Run after teambases.mjs and pop-env.mjs, before the Bog globe.
-// All light is flat orange paint. No filters, gradients or gameplay changes.
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
@@ -9,8 +7,6 @@ const halo = (x, y, rx, ry) => `<g data-detail="ember-halo" fill="#ff8a2b" strok
 const highlight = (x, y, w, h) => `<path data-detail="ember-highlight" d="M${x} ${y}h${w}v${h}h-${w}Z" fill="#ffc15a" stroke="none"/>`;
 
 export function glowGoogleSvg(svg, name) {
-  // Strip only our added light shapes before repainting. This also handles a
-  // teambases rebuild using an already-lit wz source plus newly-added pumpkins.
   svg = svg.replace(/ data-build="google-ember"/, '')
     .replace(/<g data-detail="ember-halo"[^>]*>[\s\S]*?<\/g>/g, '')
     .replace(/<path data-detail="ember-highlight"[^>]*\/>/g, '')
@@ -23,7 +19,6 @@ export function glowGoogleSvg(svg, name) {
       + `<path d="${d}" fill="#ff8a2b"/>` + highlight(x + 2, y + 2, Math.max(2, w * .3), h - 4));
     panes++;
   };
-  // All eight Home-derived hall/annex sources share these pane bounds.
   if (/^(?:wz-google-(?:ne|se)-(?:hall|annex)|google-(?:ne|se)-(?:hall|annex)-team)\.svg$/.test(name)) {
     pane('M169 129V107H191V129Z', 169, 107, 22, 22);
     pane('M92 227V178H129V227Z', 92, 178, 37, 49);
@@ -35,7 +30,6 @@ export function glowGoogleSvg(svg, name) {
   } else if (name === 'google-yard-gate.svg') {
     pane('M105 106l15-12 15 12v31l-15 6-15-6Z', 105, 106, 30, 31);
   } else if (name === 'google-lantern.svg') {
-    // Keep the halo within the original viewport so runtime and globe agree.
     svg = svg.replace('<path d="M13 78H52V134Q32 147 13 134Z"', halo(32.5, 108, 31.5, 40) + '<path d="M13 78H52V134Q32 147 13 134Z"');
     svg = svg.replace('fill="#dfbf93"', 'fill="#ff8a2b"')
       .replace('fill="#b49d77"', 'fill="#e67b28"')
@@ -53,8 +47,6 @@ export function glowGoogleSvg(svg, name) {
     for (const [x, c] of [[88, 127], [200, 239], [312, 351]]) pane(`M${x} 359V289Q${c}.0 257 ${x + 78} 289V359Z`, x, 280, 78, 79);
     svg = svg.replace(/stroke="#fff2ad"/g, 'stroke="#ffc15a"');
   }
-  // The lit carving retains its original dark ink edge. Ground light is behind
-  // the pumpkin, inside the same local transform, never over the silhouette.
   svg = svg.replace(/(<g data-detail="pumpkin"[^>]*>)/g,
     '$1<ellipse data-detail="pumpkin-glow-pool" cx="0" cy="15" rx="31" ry="7" fill="#ff8a2b" opacity="0.18" stroke="none"/>')
     .replace(/fill="#(?:dfc9a6|ffe438)"/g, 'fill="#ffb23a"');
@@ -78,8 +70,6 @@ export function applyGoogleGlow() {
     width: 300, height: 100,
   }));
   assert.equal(flats.length, 2);
-  // Flats use bottom-centre anchoring in both Pixi and the globe compiler.
-  // Centre is y + 100: clear of the hall steps and underneath the open porch.
   for (const file of [root + 'art.json', 'scripts/bog-environment/layout.json']) {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
     data.flats = [...data.flats.filter(p => !/^google-(ne|se)-hall-door-glow$/.test(p.id ?? '')), ...flats];

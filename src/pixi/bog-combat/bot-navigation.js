@@ -1,6 +1,3 @@
-// Live bots share a coarse, static walking graph and advance a bounded amount
-// of A* work each tick. Native navigation still decides every walkable point
-// and edge; the normal sim still moves/collides each duck at 60 Hz.
 const CELL=96,WORK=8,MAX_SEARCH=512;
 const DX=[-1,0,1,-1,1,-1,0,1],DY=[-1,-1,-1,0,0,1,1,1];
 

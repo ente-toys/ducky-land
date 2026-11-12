@@ -148,7 +148,6 @@ export async function outfit({request,env}) {
   }
 }
 
-// The telescope's sky. The room knows who has played here; GitHub knows how many people starred the repository.
 const starCountAge = 10 * 60 * 1000;
 export async function stars({request,env}, fetchGitHub = fetch) {
   const key = await digest(cookie(request,sessionCookie));
@@ -174,7 +173,6 @@ export async function stars({request,env}, fetchGitHub = fetch) {
         sky.total = count;
       }
     } catch {
-      // GitHub is unreachable: keep the last count the room saw.
     }
   }
   const {checked, ...body} = sky;

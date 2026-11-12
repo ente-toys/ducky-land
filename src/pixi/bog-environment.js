@@ -2,8 +2,6 @@ import data from './bog-environment.json' with {type:'json'};
 import {registerMap,THEME_OF,mapFor} from './island-maps.js';
 
 export const BOG_MAP_ID='bog-arena';
-// The dev shortcut temporarily aliases the same delivered map for inspection.
-// Normal travel uses the stable 'bog' theme and its existing world identity.
 export const BOG_REVIEW_ISLAND='isle-249';
 export const BOG_AREAS=Object.freeze({
  'privacy-nw':{x:1900,y:1850},'google-ne':{x:6500,y:1850},

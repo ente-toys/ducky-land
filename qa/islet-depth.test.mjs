@@ -73,7 +73,6 @@ test('production islet props sort with Duckies by their foot, preserve the compl
   for(const v of view.views){
    const i=v.i,k=i.width/1024,p=placeIslet(i.home,i,[0,0]),camera={...p,zoom:1/k};
    view.update(i.home,camera,1024,1024,false);
-   // Compare this drawing alone; enlarged neighbours can enter the viewport.
    for(const other of view.views)if(other!==v){other.root.visible=false;for(const p of other.props)p.sprite.visible=false;}
    for(const {piece,sprite}of v.props){
     assert.equal(sprite.parent,objects,'same sorted layer as Duckies and boats');
@@ -84,12 +83,9 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     assert.ok(objects.getChildIndex(sprite)<objects.getChildIndex(duck),`${i.art}/${piece.id} is behind a Ducky in front`);
    }
    duck.visible=false;
-   // Compare in the islet's own north-up frame, undoing its chart rotation.
    const r=isletPlacement(i.home,i),co=r.cos,si=r.sin;
    scene.setFromMatrix(new Matrix(co/k,-si/k,si/k,co/k,512-(co*p.x+si*p.y)/k,512-(-si*p.x+co*p.y)/k));
    duck.rotation=Math.atan2(si,co);
-   // Test lossless split artwork in its own frame, preserving its source depth
-   // order. Chart-space foot sorting was checked above, before this comparison.
    for(const {piece,sprite}of v.props){
     assert.equal(sprite.rotation,0,'props stay screen-upright in a level gameplay camera');
     sprite.rotation=Math.atan2(si,co);sprite.zIndex=(piece.foot[1]-512)*k;
@@ -106,9 +102,8 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     writeFileSync(`/tmp/islet-depth-art/${i.art}-split.png`,c.toBuffer('image/png'));
     writeFileSync(`/tmp/islet-depth-art/${i.art}-full.png`,output.toBuffer('image/png'));
    }
-   assert.ok(changed<(i.art==='broken-shipwreck'?1024:512),`${i.art}: split preserves the picture (${changed} changed pixels)`);   // 8 Nov: the shipwreck split drops the soft hull shadows (964 px); on the Home to-dofull.destroy();
+   assert.ok(changed<(i.art==='broken-shipwreck'?1024:512),`${i.art}: split preserves the picture (${changed} changed pixels)`);
    for(const {sprite}of v.props)sprite.zIndex=sprite.y;objects.sortChildren();
-   // An opaque Ducky body behind the oak is covered by the actual production tree.
    if(i.art==='tree-and-rowboat'){
     const oak=v.props.find(p=>p.piece.id==='oak');
     duck.visible=true;duck.position.set(oak.sprite.x,oak.sprite.y-1);duck.zIndex=duck.y;

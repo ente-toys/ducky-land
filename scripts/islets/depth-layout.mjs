@@ -1,5 +1,3 @@
-// Hand-picked existing SVG nodes and ground contacts, in the original 1024 viewBox.
-// This is a layer/collision map, not an art generator. Node paths count element children.
 const seq=(parent,a,b)=>Array.from({length:b-a+1},(_,k)=>`${parent}.${a+k}`);
 const piece=(id,nodes,foot,base)=>({id,nodes:nodes.map(String),foot,base});
 export const DEPTH_LAYOUT={

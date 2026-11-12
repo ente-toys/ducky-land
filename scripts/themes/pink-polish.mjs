@@ -1,6 +1,3 @@
-// Pink-only craft pass. Reuses Home's actual arc drawer and existing traced plants.
-// node scripts/themes/pink-polish.mjs [--from-build]
-// --from-build refreshes the clean input after pink-build.py, then applies this pass.
 import {readFileSync,writeFileSync,existsSync,mkdirSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -23,7 +20,6 @@ const onLand=(x,y)=>inShape(x,y,{poly:world.coast},0);
 const clear=(x,y,rad=25,h=0)=>onLand(x,y)&&coastDist(x,y)>rad+25&&pathDist(x,y)>rad+22&&deckDist(x,y)>rad+110&&bedClear(x,y,rad,h)&&!world.water.some(o=>inShape(x,y,o,rad+35))&&!world.obstacles.some(o=>inShape(x,y,o,rad+15));
 const addObstacle=o=>{world.obstacles.push(o);walk.obstacles.push(structuredClone(o))};
 function removeProp(p){art.props=art.props.filter(q=>q.id!==p.id);for(const d of [world,walk])d.obstacles=d.obstacles.filter(o=>!(o.x===p.x&&Math.abs(o.y-p.y)<40));}
-// Replace each straight plaza/cafe bench, keeping its former location open.
 for(const p of [...art.props])if(/bow-bench/.test(p.id)&&['plaza','cafe','pond'].includes(p.zone))removeProp(p);
 const benches=[];
 function bench(ring,deg,span=20){
@@ -49,7 +45,6 @@ const rings=[{id:'plaza',x:4000,y:2833.66,rx:760,ry:542,angles:[160,25,55,125,-1
 {id:'picnic',x:2580,y:1030,rx:635,ry:286,angles:[-130,140,-45]},
 {id:'meadow',x:5420,y:1000,rx:595,ry:296,angles:[-145,-45,35]}];
 for(const ring of rings){let n=0;for(const angle of ring.angles){for(const off of [0,-8,8,-16,16])if(bench(ring,angle+off,ring.id==='plaza'?19:22)){n++;break;}if(n>= (ring.id==='plaza'?4:2))break;}}
-// Small plant groups frame the activity grounds. The footprint and full sprite must keep paths, beds and entrances open.
 let seq=0;
 function plant(kind,x,y,scale=1,zone='garden-edge'){
  const sizes={'bush-1':[130,100],'bush-2':[168,110],'bush-5':[170,110],'flower-1':[48,36],'flower-2':[48,36],'flower-3':[44,36],'tree-1':[260,360],'tree-2':[180,360],'tree-3':[300,380],'tree-4':[200,280]};
@@ -75,7 +70,6 @@ for(const id of ['stalls-1','stalls-2','stalls-3']){
  const z=world.zones[id];
  for(const side of [-1,1])for(let i=-1;i<=1;i++)flowerbed(z.x+i*(z.length*.27),z.y+side*(z.depth/2+52),62,24);
 }
-// The eastern bank had touching crowns. Relocate non-sleeper trees into clear spaces before adding companion groves.
 const nod=new Set(world.sleepSpots.nod.map(s=>s[0]));
 for(const p of art.props)if(p.x>6200&&/tree/i.test(p.name)&&!nod.has(p.id)&&!p.id.includes('willow'))p.scale*=.85;
 const trees=art.props.filter(p=>/tree/i.test(p.name)),moved=[];
@@ -99,14 +93,12 @@ for(const [x,y]of candidates){
  const kind=newTrees%3===0?'tree-2':'tree-4',w=kind==='tree-2'?180:200,h=kind==='tree-2'?360:280,scale=1.15;
  const t={x,y,width:w,height:h,scale};
  if(noTree(x,y,h*scale,w*scale)||art.props.filter(p=>/tree/i.test(p.name)).some(p=>overlaps(p,t))||art.props.some(p=>/house|cafe|gazebo|cart|arch|tower/i.test(p.name)&&Math.hypot(x-p.x,y-p.y)<450))continue;
- // Companion tree, within a loose grove but with separate crowns.
  if(!art.props.some(p=>/tree/i.test(p.name)&&Math.hypot(x-p.x,y-p.y)<620))continue;
  if(plant(kind,x,y,scale,'grove'))newTrees++;
 }
 for(const [i,t]of art.props.filter(p=>/tree/i.test(p.name)).entries()){
  for(const side of [-1,1])plant(i%2?'bush-1':'bush-5',t.x+side*(t.width*t.scale*.35+50),t.y+28,.65,'grove-understory');
 }
-// Pebbles and shells use Home's traced ground art, beside the shore and trunks.
 for(let i=0;i<300;i++){
  const [cx,cy]=world.coast[i%world.coast.length],x=cx+(4000-cx)*.022,y=cy+(2800-cy)*.022;
  if(!clear(x,y,15)||i%3)continue;
@@ -117,7 +109,6 @@ for(const [i,f]of floor.entries()){
  writeFileSync(A+`detail/${name}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><title>Rose border soil and soft ink edging</title><ellipse cx="${rx+4}" cy="${ry+4}" rx="${rx}" ry="${ry}" fill="#679F37" stroke="${ink}" stroke-width="2.2"/><ellipse cx="${rx+4}" cy="${ry+2}" rx="${rx-5}" ry="${ry-5}" fill="#729F40"/></svg>`);
  art.flats.push({id:`pink-garden-bed-${i}`,src:`detail/${name}.svg`,x:r(x-rx-4),y:r(y-ry-4),width:w,height:h,topLeft:true});
 }
-// Home's flat inked rocks add weight beneath the groves, without creating a new art style.
 for(const [i,t]of art.props.filter(p=>/tree/i.test(p.name)).entries()){
  if(i%2)continue;
  for(const side of [-1,1]){

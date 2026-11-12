@@ -6,8 +6,6 @@ export function snowVisible(theme, reduced, flat = true) {
   return theme === 'snow' && !reduced && flat;
 }
 const wrap = (x, span) => ((x % span) + span) % span;
-// Reuse `out` in the renderer. Wrap beyond every edge, including the sway
-// envelope: recycling a flake is never visible inside the view.
 export function snowPose(index, time, width, height, out = {}) {
   const depth = index % 12, layer = depth === 0 ? 2 : depth < 5 ? 1 : 0;
   const size = layer === 2 ? 8 : layer === 1 ? 5 : 2.5;
@@ -17,8 +15,6 @@ export function snowPose(index, time, width, height, out = {}) {
   out.x = wrap(index * 137.57 + wind + sway, Math.max(1, width + pad * 2)) - pad;
   out.y = wrap(index * 83.31 + time * speed, Math.max(1, height + pad * 2)) - pad;
   out.size = size;
-  // Only a few foreground flakes have arms. Their slow spin and small rocking
-  // motion stay continuous through recycling; round flakes need no rotation.
   out.rotation = index % 24 === 0
     ? index * .7 + time * (index % 48 === 0 ? .06 : -.06) + Math.sin(time * .4 + index) * .12 : 0;
   return out;
@@ -26,7 +22,6 @@ export function snowPose(index, time, width, height, out = {}) {
 
 function silhouette(g, shaped, x, y, scale, color, alpha) {
   if (!shaped) return g.circle(x, y, .46 * scale).fill({color, alpha});
-  // One solid six-arm silhouette with rounded tips, never stroked linework.
   const step = Math.PI / 3;
   g.moveTo(x + Math.cos(-step / 2) * .14 * scale, y + Math.sin(-step / 2) * .14 * scale);
   for (let arm = 0; arm < 6; arm++) {
@@ -41,8 +36,6 @@ function silhouette(g, shaped, x, y, scale, color, alpha) {
 
 function flakeTemplate(color, shaped = false) {
   const g = new Graphics();
-  // Two faint offset fills soften the tiny shadow without a filter or an
-  // outline. The opaque cool-white body covers the shadow at its centre.
   silhouette(g, shaped, .055, .10, 1.06, 0xc9d6e6, .08);
   silhouette(g, shaped, .035, .065, 1, 0xc9d6e6, .12);
   silhouette(g, shaped, 0, 0, 1.04, color, .16);
@@ -51,8 +44,6 @@ function flakeTemplate(color, shaped = false) {
 
 export function createSnowfall(stage) {
   const root = new Container({label: 'Iceland snowfall', eventMode: 'none'});
-  // Six immutable contexts shared by the entire pool. All geometry is built
-  // once; updates only change visibility and transforms using the same pose.
   const templates = [flakeTemplate(0xffffff), flakeTemplate(0xf5f8fd),
     flakeTemplate(0xedf3fb), flakeTemplate(0xe8f0fa),
     flakeTemplate(0xffffff, true), flakeTemplate(0xedf3fb, true)];

@@ -1,8 +1,6 @@
 import {placeRigid} from './rigid.js';
 import {boatSpots} from './islands.js';
 
-// Local Vite previews have no room snapshots. Show moored boats without inventing
-// player sessions or replacing an authoritative (even empty) server boat list.
 export function previewMoorings(islands, camera, width, height, tilt = 1) {
   const hw=width/(2*camera.zoom),hh=height/(2*camera.zoom*tilt),boats=[];
   for(const island of islands) {

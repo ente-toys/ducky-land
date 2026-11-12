@@ -1,5 +1,3 @@
-// Pink-only SVG placement renders. --baseline renders the saved pre-polish inputs.
-// These are static art checks, not live Pixi screenshots.
 import sharp from 'sharp';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
@@ -24,7 +22,6 @@ for(const theme of ['pink']) {
    props.push({src,x:b.x,y:b.y,width,height,scale:1,anchor:{x:b.flip?1-cx/width:cx/width,y:y1*u/height},flip:b.flip});
   }
  }
- // The actual game Ducky parts, at 130 world units tall, mark the verified spawn.
  const parts=['shadow-0','tail-0','foot-0','foot-1','toe-0','toe-1','body-0','eye-0','eye-1','beak-0'];
  const duckLayers=[];
  for(const part of parts){

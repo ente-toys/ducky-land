@@ -1,6 +1,3 @@
-// boss 5 Nov: catches a moved prop or sleeper without a regenerated walking map. Rebuilds the map exactly the way
-// scripts/walk-world.mjs does (keep the two in step) and compares it with the committed assets/world/walk-world.json,
-// which the socket server walks on. Fix a failure with:  node scripts/walk-world.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -28,7 +25,6 @@ test('assets/world/walk-world.json matches a fresh build from the current placem
     const walk = {...local, obstacles: [...local.obstacles, ...beds.map(P.sleeperFootprint)]};
     const fresh = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
     const saved = JSON.parse(readFileSync(new URL('../assets/world/walk-world.json', import.meta.url)));
-    // through JSON, as the script writes it, so -0 and undefined compare the way the file stores them
     const built = JSON.parse(JSON.stringify(fresh));
     for (const key of Object.keys(built)) assert.deepEqual(saved[key], built[key], `walk-world.json "${key}" is stale: run node scripts/walk-world.mjs`);
     assert.deepEqual(Object.keys(saved).sort(), Object.keys(built).sort());

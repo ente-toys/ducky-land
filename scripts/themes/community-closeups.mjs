@@ -1,4 +1,3 @@
-// Same-scale SVG asset comparisons. These are not browser screenshots.
 import sharp from 'sharp';import fs from 'node:fs';
 const R='../concepts/themes/work/community/',round=process.argv[2]||'final',K=.65,W=1100,H=850;
 const files=[R+'community-home-reference.png',R+'community-detail-full.png'];

@@ -15,7 +15,6 @@ const islandId=WORLD_ISLANDS.find(i=>i.theme==='snow').id;
 const zero={x:0,y:0},[cx,cy]=rink.heart;
 const actor=(x,y)=>({x,y,turn:0,path:[],until:0,pace:0,travel:0,action:0,emoteVersion:0,mode:'walking'});
 const inward=name=>({x:name==='west-shore'?1:0,y:name==='north-shore'?1:name==='south-shore'?-1:0});
-// Find an actual open boundary crossing, independent of former gate positions.
 function shore(angle) {
  const ux=Math.cos(angle),uy=Math.sin(angle);let lo=0,hi=1300;
  for(let i=0;i<30;i++){const m=(lo+hi)/2;if(onRink(rink,cx+ux*m,cy+uy*m))lo=m;else hi=m;}
@@ -29,8 +28,6 @@ function enter(name,reduced=false,dt=1/60) {
  assert.equal(a.ice?.phase,'glide',name);return a;
 }
 
-// boss 11 Nov: stepping on any ice (lake or blue path) sends the Ducky spinning straight on in the direction it was going,
-// with no steering and no pull to a centre, until it crashes out onto land (or into a rock), then it walks normally.
 function slide(a,first,steps=600,dt=1/60,input=zero){
  walkStep(a,nav,dt,0,first);const phases=[a.ice?.phase??'none'];
  for(let i=1;i<steps;i++){walkStep(a,nav,dt,i*dt,input);const p=a.ice?.phase??'none';if(phases.at(-1)!==p)phases.push(p);assert.ok(nav.walkable(a.x,a.y),'collision-safe');}
@@ -106,7 +103,6 @@ test('normal room input drives the authority, snapshots carry glide poses and se
   assert.ok(Math.hypot(client.player.x-before[0],client.player.y-before[1])>1);assert.ok(Math.hypot(client.player.x-p.actor.x,client.player.y-p.actor.y)<2);
   client.snapshot(JSON.parse(p.socket.last));assert.equal(client.player.ice.phase,'glide');
   assert.notEqual(client.player.ice,packet.self.ice,'momentum is owned by prediction');
-  // A delta must explicitly clear ice so a departing remote never keeps the pose.
   p.actor.x=cx;p.actor.y=rink.y-100;p.actor.ice=null;room.broadcast();
   assert.equal(JSON.parse(watcher.socket.last).players.find(a=>a.id===p.actor.id).ice,null);
   client.dispose();

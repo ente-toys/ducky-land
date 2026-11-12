@@ -1,5 +1,3 @@
-// Local verification fixture. This imports the real Home island navigation,
-// solely to exercise combat on an existing island before the Bog merge lands.
 import {mapOf} from '../island-maps.js';
 export const map=mapOf('home');
 export const navigation=map.nav();

@@ -1,4 +1,3 @@
-// Allocation estimates derived from authored SVG dimensions, not a GPU reading.
 import sharp from 'sharp';
 import {readFileSync,writeFileSync} from 'node:fs';
 import sizes from '../../src/pixi/art-source-sizes.json' with {type:'json'};

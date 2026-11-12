@@ -11,7 +11,6 @@ test('Home former shoreline jetties cross real water and retain walking access',
  for(const p of [[3320,3524.5],[1039.015,3241.74],[2304.895,3561.995],[5251.99,1660.2],[4082,5584.44]]){
   assert.ok(wet(p),'painted water has a matching water collision shape');
   assert.ok(n.walkable(...p),'duck can stand on the deck over water');
-  // boss 8 Nov (sailable rivers): a boat passes under the arched bridges on the sea-joined canal; Millrill and the fishing deck stay closed
   assert.equal(canSail(...p,'home'),p[1]<5000,'boats pass under the canal bridges only');
   assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p).at(-1),p,'deck is reachable from Home');
  }
@@ -26,7 +25,7 @@ test('Home rivers block walking between crossings and the new crossing decks rem
  for(const c of E.crossings){const p=at([c.x,c.y]);assert.ok(wet(p));assert.ok(n.walkable(...p));assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p).at(-1),p);}
 });
 test('Home households vary within every neighbourhood and all six useful commons are accessible',()=>{
- for(const c of E.communities){const homes=E.props.filter(p=>c.homes.includes(p.id));assert.equal(new Set(homes.map(p=>p.src)).size,homes.length,c.id);}   // boss 8 Nov: every blueprint house is its own drawing
+ for(const c of E.communities){const homes=E.props.filter(p=>c.homes.includes(p.id));assert.equal(new Set(homes.map(p=>p.src)).size,homes.length,c.id);}
  const n=HOME_MAP.nav();assert.equal(E.commons.length,6);
  for(const c of E.commons){assert.ok(n.walkable(...c.point),c.id);assert.deepEqual(n.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...c.point).at(-1),c.point,c.id);}
 });

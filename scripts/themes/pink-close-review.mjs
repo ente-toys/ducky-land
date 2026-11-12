@@ -1,4 +1,3 @@
-// Comparison sheets use equal 0.7 world zoom, without resizing the close-ups.
 import sharp from 'sharp';
 import {copyFileSync} from 'node:fs';
 const R='../concepts/themes/work/pink/',tag=process.argv[2]??'close-round-2',base=process.argv.includes('--baseline')?'close-base-':'';

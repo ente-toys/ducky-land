@@ -17,7 +17,7 @@ export function createPlantReactions(parent, texture,options={}) {
     if (plant.snow) {snow?.bump(plant,time);return;}
     if (plant.kind!=='tree') return;
     const leaf=leaves.find(l=>time-l.at>=LEAF_LIFE);
-    if (!leaf) return; // Full pool: keep the sway, never allocate or replace a visible leaf.
+    if (!leaf) return;
     const p=plant.prop, height=p.height*(p.scale??1);
     leaf.at=time; leaf.direction=plant.direction; leaf.phase=(p.x+p.y)*.017;
     leaf.x=p.x; leaf.y=p.y-height*.66; leaf.fall=height*.62;
@@ -31,7 +31,6 @@ export function createPlantReactions(parent, texture,options={}) {
       const s=plant.prop.sprite;
       if (s.destroyed || !plant.sx) continue;
       s.scale.x/=plant.sx; s.scale.y/=plant.sy;
-      // The next frame's ambient pass overwrites skew. Clear only our contribution on handoff.
       s.skew.x-=plant.skew;
       plant.sx=plant.sy=1; plant.skew=0;
     }
@@ -56,8 +55,6 @@ export function createPlantReactions(parent, texture,options={}) {
     },
     begin(id,time,reduce=false,visible=true) {
       const map=maps.get(id);
-      // begin runs before the engine's ambient sway pass. Clear our previous
-      // contribution here so repeated contacts and handoffs cannot accumulate skew.
       restore(current);
       if (map!==current) {
         current=map;
@@ -71,7 +68,6 @@ export function createPlantReactions(parent, texture,options={}) {
     update(time) {
       for (const plant of current?.plants??EMPTY) {
         const s=plant.prop.sprite;
-        // Undo last frame's multipliers, so deferred textures and upright correction stay intact.
         if (plant.sx) {s.scale.x/=plant.sx; s.scale.y/=plant.sy;}
         plant.sx=plant.sy=1; plant.skew=0;
         if (reduced || !shown) plant.lastAt=-Infinity;
@@ -81,7 +77,6 @@ export function createPlantReactions(parent, texture,options={}) {
         plant.sx=1+.035*Math.sin(Math.PI*u)*decay;
         plant.sy=1-.045*Math.sin(Math.PI*u)*decay;
         plant.skew=plant.direction*.035*wave;
-        // Shear/squash about the ground anchor. The trunk base never rotates or translates.
         s.scale.x*=plant.sx; s.scale.y*=plant.sy; s.skew.x+=plant.skew;
       }
       for (const l of leaves) {

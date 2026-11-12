@@ -1,4 +1,3 @@
-// Pixel proof of locked interior ground, with original source hashes and collision checks in qa/pagepond-ground.test.mjs.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render.mjs';

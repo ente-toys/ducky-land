@@ -1,29 +1,19 @@
-# Pink Dollhouse Town (theme id `pink`): builds the whole island from one layout, in the home island's formats
-# (concepts/themes/THEME-CONTRACT.md).
-#   python3 scripts/themes/pink-build.py
-# Writes
-#   public/pixi-art/themes/pink/ground.svg + ground-rN-cN.svg (5 x 4 tiles of home's tile size), jetty-*.svg, bridge-*.svg, art.json
-#   assets/world/themes/pink/world.json, walk-world.json, harbor.json
-# The props it places are the traced GPT pieces in public/pixi-art/themes/pink/detail/ (scripts/themes/pink-trace.py) plus
-# home's own plants and ground decals, referenced at their home paths. Pure python, no dependencies; deterministic.
 import json, math, os, re
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ART = os.path.join(ROOT, 'public/pixi-art/themes/pink')
 DATA = os.path.join(ROOT, 'assets/world/themes/pink')
-W, H = 8000, 5800                              # boss 6 Nov: ~1.8x home's land (home is 5800 x 4400)
-TW, TH = [1600] * 5, [1450] * 4                # 5 x 4 tiles, each about home's tile size
+W, H = 8000, 5800
+TW, TH = [1600] * 5, [1450] * 4
 
-# ---------------------------------------------------------------- palette (home ink and water, pink sand, cream paths)
 INK, CREAM, SEA, LEAF = '#39472D', '#FFF0C7', '#6EC9DE', '#4AA539'
 GRASS = '#8FC63C'
-SAND, SAND_SHADE = '#F9D3DC', '#E9A9BC'          # pink sand (beaches, banks, islets)
-PATH, PATH_SHADE = '#FBE6C8', '#E6C59D'          # cream paths
-ROAD, ROAD_SHADE = '#F6BED0', '#DE8FAA'          # the pink road
-PAVE, PAVE_JOINT = '#FCEBD6', '#E9CDA9'          # plaza paving
+SAND, SAND_SHADE = '#F9D3DC', '#E9A9BC'
+PATH, PATH_SHADE = '#FBE6C8', '#E6C59D'
+ROAD, ROAD_SHADE = '#F6BED0', '#DE8FAA'
+PAVE, PAVE_JOINT = '#FCEBD6', '#E9CDA9'
 PINK, HOT = '#F5A3C7', '#EC6FA8'
 
-# ---------------------------------------------------------------- helpers
 def halton(i, b):
     f, r = 1, 0
     while i > 0:
@@ -98,31 +88,25 @@ def heart_pts(cx, cy, sx, sy, n=64):
         out.append((cx + sx * hx / 16, cy + sy * (hy + 2) / 15))
     return out
 
-# ---------------------------------------------------------------- the big island (boss 6 Nov: bigger and spacious)
-# The approved layout is kept in its DESIGN coordinates (the first 5800 x 4400 island) and spread out by T(): every place
-# moves apart (x 1.345, y 1.46, so the land is ~2x the first one and ~1.8x home's) while the art keeps its own size.
-# Plazas grow more than that, paths are 1.5x home's width, and the freed land is left open: three activity areas and
-# three stall rows (world.json zones) for the activities and stalls that come later.
 SX, SY = 1.345, 1.46
-CX, CY = 4000, 2657          # where the design centre (2900, 1864) lands
+CX, CY = 4000, 2657
 def T(x, y): return (CX + (x - 2900) * SX, CY + (y - 1864) * SY)
 def D(*pts): return [T(*p) for p in pts]
 
-# ---------------------------------------------------------------- the island outline: a heart with a soft point
 def coast_line(n=220):
     pts = []
     for k in range(n):
         t = 2 * math.pi * k / n
         hx = 16 * math.sin(t) ** 3; hy = -(13 * math.cos(t) - 5 * math.cos(2 * t) - 2 * math.cos(3 * t) - math.cos(4 * t))
-        hy -= 4 * math.exp(-(hx / 4) ** 2) * max(0, math.cos(t)) ** 2       # a shallow notch, not a deep cleft
-        hy -= 1.6 * math.exp(-((t - math.pi) / .4) ** 2)                     # the point rounded off into the beach
-        w = 1 + .012 * math.sin(5 * t + 1.3) + .008 * math.sin(9 * t)          # a hand-drawn wobble
+        hy -= 4 * math.exp(-(hx / 4) ** 2) * max(0, math.cos(t)) ** 2
+        hy -= 1.6 * math.exp(-((t - math.pi) / .4) ** 2)
+        w = 1 + .012 * math.sin(5 * t + 1.3) + .008 * math.sin(9 * t)
         pts.append((CX + 150 * SX * hx * w, CY + 112 * SY * hy * w))
     return pts
 
-COAST = coast_line()                 # the grass edge
-SAND_EDGE = offset(COAST, 78)        # the sand rim's outer edge (the drawn shoreline)
-WALK_COAST = offset(COAST, 42)       # inset ~35 from the sand edge, like home's walk coast
+COAST = coast_line()
+SAND_EDGE = offset(COAST, 78)
+WALK_COAST = offset(COAST, 42)
 
 def coast_point(origin, direction):
     """Where a ray from origin leaves the grass coast."""
@@ -131,16 +115,14 @@ def coast_point(origin, direction):
     while in_poly(ox + dx * r, oy + dy * r, COAST): r += 4
     return (ox + dx * r, oy + dy * r), (dx, dy)
 
-# ---------------------------------------------------------------- the layout (world coordinates)
-PLAZA = (*T(2900, 1985), 780, 560)               # the ribbon square, 1.55x
-SQUARE = (*T(1560, 2330), 600, 370)              # cafe square (west)
-POND = (*T(4130, 1330), 560, 310)                # the lily pond (north-east)
-PLAY = (*T(4330, 2270), 640, 400)                # playground sand pit (east)
-GARDEN = T(2900, 1040)                           # heart garden (north, below the notch)
-BEACH = (*T(2900, 3080), 900 * SX, 470 * SY)     # pink-sand beach (the heart's point)
-PATH_W, ROAD_W = 160, 190                        # home's footpath core is 105: 1.5x
+PLAZA = (*T(2900, 1985), 780, 560)
+SQUARE = (*T(1560, 2330), 600, 370)
+POND = (*T(4130, 1330), 560, 310)
+PLAY = (*T(4330, 2270), 640, 400)
+GARDEN = T(2900, 1040)
+BEACH = (*T(2900, 3080), 900 * SX, 470 * SY)
+PATH_W, ROAD_W = 160, 190
 
-# piers: (name, ray origin, ray direction, length). The first is the harbor jetty in harbor.json.
 PIER_RAYS = [('harbor', T(1500, 1350), (-.86, -.5), 430), ('ne', T(4150, 1250), (.62, -.78), 360),
              ('w', T(1500, 1900), (-1, .06), 380), ('e', T(4300, 1900), (1, .06), 380)]
 PIERS = []
@@ -150,7 +132,6 @@ for name, o, d, L in PIER_RAYS:
     tip = (foot[0] + dx * L, foot[1] + dy * L)
     PIERS.append({'name': name, 'foot': foot, 'tip': tip, 'dir': (dx, dy), 'length': L, 'width': 104})
 
-# islet bridges: home's diagonal footbridge (bridge-jetty-2.svg) and its mirror, so the arch art is home's own (R = 70)
 BR2 = {'vb': (870.0355, 2996.0389, 337.9679, 475.3502), 'a': (1137.84, 3066.05), 'b': (940.19, 3417.43)}
 ARCH_R = 70
 def bridge_at(a_world, mirror):
@@ -176,14 +157,11 @@ hp = PIERS[0]
 def towards(p, q, d):
     L = math.hypot(q[0] - p[0], q[1] - p[1]); return (p[0] + (q[0] - p[0]) / L * d, p[1] + (q[1] - p[1]) / L * d)
 
-# ---------------------------------------------------------------- open ground for later: activity areas and stall rows
-# kind 'lawn' = a mown games lawn, 'square' = a paved square. Each holds 30+ Duckies with room to run.
 ACTIVITY = [
     {'id': 'activity-1', 'name': 'Picnic lawn', 'kind': 'lawn', 'c': (2580, 1030), 'rx': 560, 'ry': 220},
     {'id': 'activity-2', 'name': 'Festival square', 'kind': 'square', 'c': (3150, 3730), 'rx': 430, 'ry': 260},
     {'id': 'activity-3', 'name': 'Rose meadow', 'kind': 'lawn', 'c': (5420, 1000), 'rx': 520, 'ry': 230},
 ]
-# stall rows: a paved market strip with empty pitches marked, centre, length, depth, angle (radians)
 STALLS = [
     {'id': 'stalls-1', 'name': 'Market row', 'c': (4820, 3730), 'len': 820, 'depth': 220, 'ang': .0},
     {'id': 'stalls-2', 'name': 'Harbour stalls', 'c': (1560, 1660), 'len': 700, 'depth': 210, 'ang': .0},
@@ -192,7 +170,7 @@ STALLS = [
 def stall_poly(s, pad=0):
     (cx, cy), L, Dp, a = s['c'], s['len'] / 2 + pad, s['depth'] / 2 + pad, s['ang']
     ca, sa = math.cos(a), math.sin(a); out = []
-    for k in range(40):   # a stadium: straight sides, round ends
+    for k in range(40):
         t = 2 * math.pi * k / 40; ex, ey = math.cos(t), math.sin(t)
         x = (L - Dp) * (1 if ex >= 0 else -1) + Dp * ex; y = Dp * ey
         out.append((cx + x * ca - y * sa, cy + x * sa + y * ca))
@@ -205,38 +183,22 @@ def in_stall(x, y, s, pad=0):
 def in_open(x, y, pad=0):
     return any(in_ell(x, y, *A['c'], A['rx'] + pad, A['ry'] + pad) for A in ACTIVITY) or any(in_stall(x, y, s, pad) for s in STALLS)
 
-# footpaths: centre lines, smoothed. width = the cream core (home is 105; here 1.5x)
 PATHS = [
-    # plaza -> heart garden (north)
     {'pts': D((2900, 1660), (2905, 1480), (2900, 1330)), 'w': PATH_W},
-    # the heart path round the garden
     {'pts': heart_pts(*GARDEN, 470 * SX, 400 * SY, 44), 'w': PATH_W, 'closed': True},
-    # plaza (west) -> dollhouse lane -> harbour stalls -> harbor
     {'pts': D((2420, 1830), (2250, 1640), (2050, 1470), (1720, 1400), (1380, 1300), (1150, 1250)) + [towards(hp['foot'], T(1150, 1250), -40)], 'w': PATH_W},
-    # garden -> lane
     {'pts': D((2440, 1180), (2300, 1330), (2150, 1500)), 'w': PATH_W},
-    # garden -> picnic lawn
     {'pts': D((2470, 960), (2300, 870)) + [(3060, 1050)], 'w': PATH_W},
-    # plaza (south-west) -> cafe square -> west pier
     {'pts': D((2420, 2110), (2150, 2230), (1900, 2310), (1560, 2330), (1150, 2230), (900, 2080)) + [towards(PIERS[2]['foot'], T(900, 2080), -40)], 'w': PATH_W},
-    # lane -> cafe square (north-south link through the houses)
     {'pts': D((1380, 1300), (1290, 1640), (1330, 2000), (1460, 2200)), 'w': PATH_W},
-    # plaza (east) -> the pink road -> east pier
     {'pts': D((3400, 1900), (3700, 1800), (4050, 1760), (4450, 1790), (4800, 1880)) + [towards(PIERS[3]['foot'], T(4800, 1880), -40)], 'w': ROAD_W, 'road': True},
-    # road -> pond stalls -> round the pond (west and north) -> north-east pier
     {'pts': D((3700, 1795), (3660, 1560), (3700, 1250), (3800, 1000), (4100, 940), (4450, 990)) + [towards(PIERS[1]['foot'], T(4450, 990), -40)], 'w': PATH_W},
-    # garden -> rose meadow
     {'pts': D((3330, 1000), (3500, 920)) + [(4930, 1120)], 'w': PATH_W},
-    # plaza (south-east) -> playground
     {'pts': D((3380, 2130), (3650, 2230), (3950, 2270)), 'w': PATH_W},
-    # plaza (south) -> beach
     {'pts': D((2900, 2360), (2895, 2560), (2900, 2720)), 'w': PATH_W},
-    # plaza -> festival square -> west islet bridge
     {'pts': D((2160, 2240)) + [(3060, 3360), (3150, 3730), (2700, 3700), (BRIDGES[0]['a'][0] + 40, BRIDGES[0]['a'][1] - 120), towards(BRIDGES[0]['a'], (2700, 3700), -30)], 'w': PATH_W},
-    # playground -> east islet bridge (the market row stays open beside it)
     {'pts': [(5420, 3400), (5440, 3620), (BRIDGES[1]['a'][0] - 30, BRIDGES[1]['a'][1] - 130), towards(BRIDGES[1]['a'], (5440, 3620), -30)], 'w': PATH_W},
 ]
-# islet paths (bridge end -> islet middle)
 for br, isl in zip(BRIDGES, ISLETS):
     PATHS.append({'pts': [towards(br['b'], (isl[0], isl[1]), -20), (isl[0] + (br['b'][0] - isl[0]) * .35, isl[1] + (br['b'][1] - isl[1]) * .35), (isl[0], isl[1] + 20)], 'w': PATH_W - 10})
 
@@ -266,8 +228,6 @@ def path_dist(x, y):
             if d < best: best = d
     return best
 
-# every deck a Ducky walks over (islet bridges, piers, the harbor jetty), as centre lines with a half width, plus 80 of
-# landing at each end: nothing tall may stand in front of these (it would hide a Ducky on the deck)
 DECK_LINES = [(towards(b['a'], b['b'], -80), towards(b['b'], b['a'], -80), 42 + 20) for b in BRIDGES] + \
              [(towards(p['foot'], p['tip'], -80), p['tip'], p['width'] / 2 + 20) for p in PIERS]
 def hides_deck(x, y, w, h):
@@ -280,13 +240,11 @@ def hides_deck(x, y, w, h):
                 if y > py - 10 and y - h * .95 < py and abs(px - x) < w / 2 + 10: return True
     return False
 
-# ---------------------------------------------------------------- ground SVG
 def ground_svg():
     r = rnd(11); g = []
     def heart_path(x, y, s):
         return f'M {f(x)} {f(y + s * .35)} C {f(x - s * .1)} {f(y + s * .2)} {f(x - s * .55)} {f(y)} {f(x - s * .5)} {f(y - s * .3)} C {f(x - s * .45)} {f(y - s * .6)} {f(x - s * .05)} {f(y - s * .55)} {f(x)} {f(y - s * .3)} C {f(x + s * .05)} {f(y - s * .55)} {f(x + s * .45)} {f(y - s * .6)} {f(x + s * .5)} {f(y - s * .3)} C {f(x + s * .55)} {f(y)} {f(x + s * .1)} {f(y + s * .2)} {f(x)} {f(y + s * .35)} Z'
     add = g.append
-    # sea ripples and offshore ticks (cream, like home)
     ring_out = offset(SAND_EDGE, 260)
     for i in range(320):
         x, y = 150 + halton(i + 1, 2) * (W - 300), 150 + halton(i + 1, 3) * (H - 300)
@@ -305,7 +263,6 @@ def ground_svg():
             x, y = o[i]; nx, ny = o[(i + 1) % len(o)][0] - x, o[(i + 1) % len(o)][1] - y; L = math.hypot(nx, ny) or 1
             add(f'<path d="M {f(x)} {f(y)} l {f(nx / L * 44)} {f(ny / L * 44)}" fill="none" stroke="{CREAM}" stroke-width="3" stroke-opacity="0.45" stroke-linecap="round"/>')
     add('</g>')
-    # pink-sand rim, the islets' sand, then grass
     add(f'<g data-name="Sandy coast"><path d="{smooth_d(SAND_EDGE)}" fill="{SAND}"/><path d="{smooth_d(SAND_EDGE)}" fill="none" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/></g>')
     for k, (cx, cy, rx, ry) in enumerate(ISLETS):
         sb = blob(cx, cy, rx + 62, ry + 56, 40 + k, 16, .05)
@@ -314,7 +271,6 @@ def ground_svg():
     for k, (cx, cy, rx, ry) in enumerate(ISLETS):
         add(f'<path d="{smooth_d(blob(cx, cy, rx, ry, 50 + k, 16, .06))}" fill="{GRASS}"/>')
     add('</g>')
-    # two-tone lawns and meadow patches (home's leaf and cream washes)
     add('<g data-name="Round 4 two-tone lawns">')
     inner = offset(COAST, -120)
     for i in range(130):
@@ -325,17 +281,14 @@ def ground_svg():
         fill, op = (LEAF, .16) if kind == 0 else (CREAM, .12) if kind == 1 else (LEAF, .25)
         add(f'<path data-name="{"Lawn Leaf" if kind == 0 else "Lawn Cream" if kind == 1 else "Meadow patch"}" d="{smooth_d(b)}" fill="{fill}" fill-opacity="{op}"/>')
     add('</g>')
-    # the pink-sand beach at the heart's point, clipped to the island's sand
     bb = blob(*BEACH, 7, 18, .07)
     add(f'<defs><clipPath id="sand-clip"><path d="{smooth_d(SAND_EDGE)}"/></clipPath></defs>')
     add(f'<g data-name="Pink beach" clip-path="url(#sand-clip)"><path d="{smooth_d(bb)}" fill="{SAND}"/>'
         f'<path d="{smooth_d(bb)}" fill="none" stroke="{SAND_SHADE}" stroke-width="14"/><path d="{smooth_d(bb)}" fill="none" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/></g>')
-    # sand pits: playground and the pond bank
     for name, (cx, cy, rx, ry), seed in [('Playground sand', PLAY, 21), ('Pond bank', (POND[0], POND[1], POND[2] + 80, POND[3] + 70), 22)]:
         b = blob(cx, cy, rx, ry, seed, 16, .06)
         add(f'<g data-name="{name}"><path d="{smooth_d(b)}" fill="{SAND}"/><path d="{smooth_d(b)}" fill="none" stroke="{SAND_SHADE}" stroke-width="14"/>'
             f'<path d="{smooth_d(b)}" fill="none" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/></g>')
-    # open ground for later (boss 6 Nov): mown games lawns, a paved festival square, paved market rows with empty pitches
     for A in ACTIVITY:
         cx, cy = A['c']; rx, ry = A['rx'], A['ry']
         if A['kind'] == 'lawn':
@@ -343,21 +296,19 @@ def ground_svg():
             add(f'<g data-name="{A["name"]} (open lawn)"><defs><clipPath id="clip-{A["id"]}"><path d="{smooth_d(lb)}"/></clipPath></defs>')
             add(f'<path d="{smooth_d(lb)}" fill="{LEAF}" fill-opacity="0.22"/>')
             add(f'<g clip-path="url(#clip-{A["id"]})">')
-            for k in range(-12, 13, 2):   # mown stripes, gently diagonal
+            for k in range(-12, 13, 2):
                 x0 = cx + k * 70
                 add(f'<path d="M {f(x0 - 120)} {f(cy - ry - 60)} L {f(x0 + 70 - 120)} {f(cy - ry - 60)} L {f(x0 + 70 + 120)} {f(cy + ry + 60)} L {f(x0 + 120)} {f(cy + ry + 60)} Z" fill="{CREAM}" fill-opacity="0.20"/>')
             add('</g>')
             add(f'<path d="{smooth_d(offset(lb, -14))}" fill="none" stroke="{CREAM}" stroke-width="12" stroke-opacity="0.9" stroke-dasharray="1 30" stroke-linecap="round"/>')
             add(f'<path d="{smooth_d(lb)}" fill="none" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.25"/>')
             add('</g>')
-    # footpaths: home's four-stroke recipe (leaf halo, ink, shade, core). The road is pink.
     for layer, (col, extra, op) in enumerate([(LEAF, 34, .35), (INK, 18, .6), ('shade', 14, 1), ('core', 0, 1)]):
         add(f'<g data-name="Continuous footpaths" fill="none" stroke-linecap="round" stroke-linejoin="round">')
         for p in PATHS:
             c = col if col not in ('shade', 'core') else ((ROAD_SHADE if p.get('road') else PATH_SHADE) if col == 'shade' else (ROAD if p.get('road') else PATH))
             add(f'<path d="{smooth_d(p["pts"], p.get("closed", False))}" stroke="{c}" stroke-width="{p["w"] + extra}" stroke-opacity="{op}"/>')
         add('</g>')
-    # road dashes (cream) down the pink road
     road = next(p for p in PATHS if p.get('road'))
     s = path_samples(road, 12)
     for i in range(6, len(s) - 8, 9):
@@ -385,23 +336,22 @@ def ground_svg():
         add(f'<path d="{smooth_d(stall_poly(s, -18))}" fill="{PAVE}" stroke="{PAVE_JOINT}" stroke-width="8"/>')
         (cx, cy), L, Dp, a = s['c'], s['len'], s['depth'], s['ang']; ca, sa = math.cos(a), math.sin(a)
         n = max(3, round((L - Dp) / 200))
-        for k in range(n + 1):   # pitch joints across the row, one pitch per stall
+        for k in range(n + 1):
             u = -(L - Dp) / 2 + (L - Dp) * k / n
             for v0, v1 in [(-(Dp / 2 - 22), Dp / 2 - 22)]:
                 add(f'<path d="M {f(cx + u * ca - v0 * sa)} {f(cy + u * sa + v0 * ca)} L {f(cx + u * ca - v1 * sa)} {f(cy + u * sa + v1 * ca)}" stroke="{PAVE_JOINT}" stroke-width="6" stroke-linecap="round"/>')
         add(f'<path d="M {f(cx - (L / 2 - 30) * ca)} {f(cy - (L / 2 - 30) * sa)} L {f(cx + (L / 2 - 30) * ca)} {f(cy + (L / 2 - 30) * sa)}" stroke="{PAVE_JOINT}" stroke-width="4" stroke-dasharray="18 22" stroke-linecap="round"/>')
         add('</g>')
-    # squares: cream paving with a scalloped pink kerb and stone joints
     for name, (cx, cy, rx, ry) in [('Ribbon plaza', PLAZA), ('Cafe square', SQUARE)]:
         add(f'<g data-name="{name}">')
         add(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx + 30}" ry="{ry + 26}" fill="{LEAF}" fill-opacity="0.35"/>')
         n = int(2 * math.pi * math.sqrt((rx * rx + ry * ry) / 2) / 70)
-        for k in range(n):   # scallops round the edge
+        for k in range(n):
             t = 2 * math.pi * k / n
             add(f'<ellipse cx="{f(cx + math.cos(t) * (rx + 4))}" cy="{f(cy + math.sin(t) * (ry + 3))}" rx="40" ry="32" fill="{PINK}" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/>')
         add(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="{PINK}" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/>')
         add(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx - 22}" ry="{ry - 18}" fill="{PAVE}" stroke="{PAVE_JOINT}" stroke-width="10"/>')
-        for k in range(1, 4):   # rings of flagstones
+        for k in range(1, 4):
             q = k / 4
             add(f'<ellipse cx="{cx}" cy="{cy}" rx="{f((rx - 22) * q)}" ry="{f((ry - 18) * q)}" fill="none" stroke="{PAVE_JOINT}" stroke-width="5"/>')
         for k in range(24):
@@ -409,7 +359,6 @@ def ground_svg():
             add(f'<path d="M {f(cx + math.cos(t) * (rx - 22) * q0)} {f(cy + math.sin(t) * (ry - 18) * q0)} L {f(cx + math.cos(t) * (rx - 26))} {f(cy + math.sin(t) * (ry - 22))}" stroke="{PAVE_JOINT}" stroke-width="5" stroke-linecap="round"/>')
         add(f'<ellipse cx="{cx - rx * .25}" cy="{cy - ry * .35}" rx="{rx * .4}" ry="{ry * .22}" fill="#FFFFFF" fill-opacity="0.18"/>')
         add('</g>')
-    # the lily pond: water, shade, cream edge line (home's lake recipe)
     cx, cy, rx, ry = POND
     pb = blob(cx, cy, rx, ry, 31, 18, .05)
     add(f'<g data-name="Lake water"><path d="{smooth_d(pb)}" fill="{SEA}"/>'
@@ -417,10 +366,9 @@ def ground_svg():
         f'<path d="{smooth_d(blob(cx - 10, cy - 8, rx * .9, ry * .84, 31, 18, .05))}" fill="{SEA}"/>'
         f'<path d="{smooth_d(offset(pb, -16))}" fill="none" stroke="{CREAM}" stroke-width="2.5"/>'
         f'<path d="{smooth_d(pb)}" fill="none" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/></g>')
-    for i in range(7):   # little ripples on the pond
+    for i in range(7):
         x, y = cx - rx * .6 + halton(i + 1, 2) * rx * 1.2, cy - ry * .5 + halton(i + 1, 3) * ry
         add(f'<path d="M {f(x)} {f(y)} q 14 -6 28 0" fill="none" stroke="{CREAM}" stroke-width="2.4" stroke-opacity="0.7" stroke-linecap="round"/>')
-    # hopscotch hearts in the playground and a heart drawn in the beach sand
     for k, (hx, hy) in enumerate([(PLAY[0] - 300 + 90 * j, PLAY[1] + 230 + 50 * (j % 2)) for j in range(6)]):
         add(f'<path d="{heart_path(hx, hy, 70)}" fill="{PINK if k % 2 else HOT}" stroke="{INK}" stroke-width="2.22" stroke-opacity="0.6"/>')
     add(f'<path d="{heart_path(*T(2620, 3180), 170)}" fill="none" stroke="{SAND_SHADE}" stroke-width="9" stroke-linecap="round"/>')
@@ -431,7 +379,6 @@ def svg_doc(body, vb, title):
     return (f"<?xml version='1.0' encoding='utf-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{w}\" height=\"{h}\" viewBox=\"{x} {y} {w} {h}\">\n"
             f"<title>{title}</title>\n<desc>Original Ducky Land vector artwork: Pink Dollhouse Town ground (scripts/themes/pink-build.py).</desc>\n" + '\n'.join(body) + '\n</svg>\n')
 
-# ---------------------------------------------------------------- jetties (home's drawJetty, src/pixi/harbor.js, as SVG)
 WOOD, DARK_WOOD = '#C88941', '#885931'
 def jetty_svg(p, moorings=()):
     x, y = p['foot']; L = p['length']; hw = p['width'] / 2; dx, dy = p['dir']; nx, ny = -dy, dx
@@ -474,7 +421,7 @@ def jetty_svg(p, moorings=()):
         out.append(f'<path d="{dd}" fill="none" stroke="{INK}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>')
         out.append(f'<path d="{dd}" fill="none" stroke="{WOOD}" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>')
         for a, b in tops: out.append(f'<rect x="{f(a - 6.5)}" y="{f(b - 5.5)}" width="13" height="5" rx="1.7" fill="{DARK_WOOD}" {ol}/>')
-    for m in moorings:   # a bollard beside each berth
+    for m in moorings:
         along = (m[0] - x) * dx + (m[1] - y) * dy; lat = (m[0] - x) * nx + (m[1] - y) * ny
         if abs(lat) > hw + 260: continue
         tip = along > L - 30; side = (1 if lat >= 0 else -1) * (hw - 10)
@@ -487,7 +434,6 @@ def jetty_svg(p, moorings=()):
     x0, y0, x1, y1 = math.floor(min(xs) - 20), math.floor(min(ys) - 40), math.ceil(max(xs) + 20), math.ceil(max(ys) + 50)
     return svg_doc(out, (x0, y0, x1 - x0, y1 - y0), f'Pink pier {p["name"]}'), (x0, y0, x1 - x0, y1 - y0)
 
-# ---------------------------------------------------------------- boats: three at the harbor, one at each other pier, one off each islet
 def berth(p, t, side):
     x, y = p['foot']; dx, dy = p['dir']; return (x + dx * t - dy * side, y + dy * t + dx * side)
 BOATS = []
@@ -500,9 +446,8 @@ for p in PIERS[1:]:
 for (cx, cy, rx, ry), sgn in zip(ISLETS, (-1, 1)):
     BOATS.append({'x': round(cx + sgn * (rx + 150)), 'y': round(cy + 40), 'turn': sgn * 1.5708})
 
-# ---------------------------------------------------------------- props
 DET = 'detail/'
-SIZES = {}   # name -> (w, h, anchor y) from the traced SVGs
+SIZES = {}
 for fn in os.listdir(os.path.join(ART, 'detail')):
     if fn.endswith('.svg'):
         s = open(os.path.join(ART, 'detail', fn)).read(2000)
@@ -511,7 +456,6 @@ for fn in os.listdir(os.path.join(ART, 'detail')):
 HOME_PLANTS = {'tree-1': (260, 360), 'tree-3': (300, 380), 'tree-4': (200, 280), 'bush-2': (168, 110), 'bush-5': (170, 110),
                'bush-1': (130, 100), 'flower-1': (48, 36), 'flower-2': (48, 36), 'flower-3': (44, 36)}
 
-# world height of each kind, in world units (one Ducky = 130). Width follows the art.
 TALL = {'dollhouse-pink': 560, 'dollhouse-lilac': 520, 'cottage-pink': 400, 'teacup-cafe': 470, 'ribbon-plinth': 560, 'gazebo': 470,
         'heart-arch': 400, 'heart-hedge': 150, 'bow-bench': 140, 'parasol': 290, 'tree-cherry': 430, 'tree-willow': 500,
         'play-tower': 420, 'swing-set': 290, 'candy-cart': 310, 'pink-car': 175, 'lamp-heart': 230, 'bush-pink': 125,
@@ -524,7 +468,7 @@ NAMES = {'dollhouse-pink': 'Pink dollhouse', 'dollhouse-lilac': 'Lilac dollhouse
          'picnic-blanket': 'Picnic blanket', 'sandcastle-pink': 'Sandcastle', 'mailbox': 'Heart mailbox', 'swim-ring': 'Swim ring',
          'tree-1': 'Oak tree', 'tree-3': 'Round tree', 'tree-4': 'Bushy tree', 'bush-1': 'Green bush', 'bush-2': 'Green bush', 'bush-5': 'Green bush',
          'flower-1': 'Flower', 'flower-2': 'Flower', 'flower-3': 'Flower'}
-PLANT_SCALE = {'tree': 1.27, 'bush': 1.3, 'flower': 1.6}   # home: PLANT_SCALE x the tree row of the scale sheet
+PLANT_SCALE = {'tree': 1.27, 'bush': 1.3, 'flower': 1.6}
 
 PROPS = []; FOOT = []; WARN = []
 def footprint_for(kind, x, y, w):
@@ -532,7 +476,7 @@ def footprint_for(kind, x, y, w):
     if kind in ('dollhouse-pink', 'dollhouse-lilac', 'cottage-pink', 'teacup-cafe'):
         return {'poly': [[round(x - w * .43), round(y - w * .3)], [round(x + w * .43), round(y - w * .3)], [round(x + w * .43), round(y - 6)], [round(x - w * .43), round(y - 6)]]}
     if kind in ('ribbon-plinth', 'gazebo'): return {'x': x, 'y': round(y - w * .17), 'rx': round(w * .42), 'ry': round(w * .17)}
-    if kind == 'heart-arch': return None   # the two pots are added below, so Duckies walk under the arch
+    if kind == 'heart-arch': return None
     if kind == 'swing-set': return None
     if kind == 'play-tower': return {'x': x, 'y': y - 30, 'rx': round(w * .3), 'ry': 40}
     if kind in ('bush-pink', 'heart-hedge') or kind.startswith('bush-'): return {'x': x, 'y': y - 12, 'rx': round(w * .36), 'ry': 24}
@@ -570,10 +514,9 @@ def put(kind, x, y, zone, flip=False, scale_k=1, solid=True, pid=None, quiet=Fal
         if kind == 'swing-set':
             for s in (-1, 1): FOOT.append({'x': round(x + s * w0 * sc * .42), 'y': y - 10, 'rx': 26, 'ry': 18})
     return p
-def putd(kind, dx, dy, zone, **kw):   # at a DESIGN point
+def putd(kind, dx, dy, zone, **kw):
     return put(kind, *T(dx, dy), zone, **kw)
 
-# landmarks and furniture, by zone. The plaza furniture keeps its share of the (much bigger) plaza.
 px_, py_, prx, pry = PLAZA
 pp = lambda u, v: (px_ + u * prx, py_ + v * pry)
 put('ribbon-plinth', px_, py_ + 40, 'plaza', pid='ribbon-sculpture')
@@ -585,7 +528,6 @@ for u, v in [(-.36, -.66), (.36, -.66)]:
     put('heart-hedge', *pp(u, v), 'plaza', scale_k=.9)
 put('candy-cart', *pp(.60, -.80), 'plaza', pid='plaza-candy-cart')
 
-# heart garden: the arch swing in the middle of the heart path, heart hedges round it
 gx, gy = GARDEN
 put('heart-arch', gx, gy + 40, 'heart-garden', pid='heart-arch')
 for dx, dy in [(-260, -120), (260, -120), (-200, 170), (200, 170), (0, 300)]:
@@ -595,7 +537,6 @@ for dx, dy in [(-520, 120), (520, 120), (-430, -250), (430, -250)]:
 put('bow-bench', gx - 200, gy + 640, 'heart-garden'); put('bow-bench', gx + 200, gy + 640, 'heart-garden', flip=True)
 put('lamp-heart', gx - 200, gy + 860, 'heart-garden'); put('lamp-heart', gx + 200, gy + 860, 'heart-garden')
 
-# dollhouse street: two rows facing the lane
 putd('dollhouse-pink', 1520, 1240, 'dollhouses', pid='dollhouse-1')
 putd('dollhouse-lilac', 2020, 1290, 'dollhouses', pid='dollhouse-2')
 putd('cottage-pink', 1060, 1080, 'dollhouses', flip=True, pid='dollhouse-3')
@@ -607,7 +548,6 @@ for x, y in [(1340, 1320), (1780, 1340), (2260, 1400), (1215, 1830), (1860, 1820
 for x, y in [(1600, 1500), (2400, 1520)]:
     putd('lamp-heart', x, y, 'dollhouses')
 
-# cafe square
 cx_, cy_, crx, cry = SQUARE
 putd('teacup-cafe', 1400, 2130, 'cafe', pid='teacup-cafe')
 for u, v in [(.0, .25), (.5, .02), (.38, .62)]:
@@ -616,7 +556,6 @@ put('candy-cart', cx_ + .78 * crx, cy_ - .55 * cry, 'cafe', pid='cafe-candy-cart
 put('bow-bench', cx_ - .55 * crx, cy_ + .6 * cry, 'cafe'); put('bow-bench', cx_ + .8 * crx, cy_ + .45 * cry, 'cafe', flip=True)
 put('lamp-heart', cx_ - .95 * crx, cy_ + .2 * cry, 'cafe'); put('lamp-heart', cx_ + .95 * crx, cy_ - .2 * cry, 'cafe')
 
-# pond: willow, benches on the south bank, the pink car in its own parking bay on the road
 pdx, pdy, prx_, pry_ = POND
 put('tree-willow', pdx + prx_ + 130, pdy - 40, 'pond', pid='pond-willow')
 put('tree-willow', pdx - prx_ - 90, pdy + 190, 'pond', flip=True, scale_k=.85, pid='pond-willow-2')
@@ -626,14 +565,12 @@ road_y = lambda x: min((p for p in path_samples(next(q for q in PATHS if q.get('
 CAR_X = T(4700, 0)[0]
 put('pink-car', CAR_X, road_y(CAR_X) - ROAD_W / 2 - 60, 'road', pid='pink-car')
 
-# playground
 plx, ply, plrx, plry = PLAY
 put('play-tower', plx + .35 * plrx, ply - .05 * plry, 'playground', pid='slide-tower')
 put('swing-set', plx - .35 * plrx, ply - .18 * plry, 'playground', pid='swing-set')
 put('bow-bench', plx - .72 * plrx, ply + .55 * plry, 'playground'); put('bow-bench', plx + .62 * plrx, ply + .62 * plry, 'playground', flip=True)
 put('lamp-heart', plx - .95 * plrx, ply - .3 * plry, 'playground')
 
-# beach: parasols, loungers, sandcastle, swim ring
 for x, y in [(2560, 2930), (3160, 2880), (2840, 3260), (3380, 3170)]:
     putd('parasol', x, y, 'beach')
 for x, y, fl in [(2650, 2990, False), (3060, 2950, True), (2940, 3330, False), (3290, 3240, True)]:
@@ -642,7 +579,6 @@ putd('sandcastle-pink', 2700, 3420, 'beach', pid='sandcastle')
 putd('swim-ring', 3120, 3440, 'beach', solid=False)
 putd('swim-ring', 2420, 3140, 'beach', solid=False, scale_k=.9)
 
-# islets: picnic (west) and the gazebo (east). Trees stand on the far side, never in front of the bridge or its landing.
 (lx, ly, lrx, lry), (ex, ey, erx, ery) = ISLETS
 put('picnic-blanket', lx - 40, ly + 90, 'islets', solid=False)
 put('tree-cherry', lx - 320, ly + 30, 'islets', pid='islet-cherry-1'); put('bush-pink', lx - 110, ly + 250, 'islets')
@@ -651,25 +587,18 @@ put('gazebo', ex + 230, ey + 210, 'islets', pid='islet-gazebo')
 put('tree-cherry', ex + 330, ey - 60, 'islets', flip=True, pid='islet-cherry-3'); put('bush-pink', ex - 300, ey + 150, 'islets')
 put('bow-bench', ex - 200, ey + 230, 'islets')
 
-# open-ground edges: a lamp at each end of every stall row, nothing inside them
 for s in STALLS:
     (sx, sy), L = s['c'], s['len']
     for sg in (-1, 1): put('lamp-heart', sx + sg * (L / 2 + 50), sy + 10, 'stalls')
 
-# ---------------------------------------------------------------- sleeper props (boss 6 Nov: home's 28 sleeping Duckies)
-# The four 'nod' trees a Ducky dozes against (sleepSpots.nod names them), hammock trees, a rock bush or two: standing where
-# the sleepers lie, away from paths. Placed BEFORE the scatter so the scatter keeps clear of them.
 SLEEP_TREES = [('nod-tree-1', 'tree-cherry', (1140, 2160)), ('nod-tree-2', 'tree-1', T(3420, 620)),
                ('nod-tree-3', 'tree-cherry', T(4730, 1560)), ('nod-tree-4', 'tree-3', T(2280, 1960))]
 for pid, kind, (x, y) in SLEEP_TREES: put(kind, x, y, 'woods', pid=pid, flip=pid.endswith(('2', '4')))
-# a starter stall cart beside each stall row (outside it: the row itself stays open), where a Ducky naps over its book
-for k, s in enumerate(STALLS[:2]):   # (the road stalls keep clear of the pink car: no cart there)
+for k, s in enumerate(STALLS[:2]):
     (sx, sy), L = s['c'], s['len']
     put('candy-cart', sx + (L / 2 + 230) * (1 if k == 2 else -1), sy + 60, 'stalls', flip=k != 2, pid=f'stall-cart-{k + 1}')
-# two more loungers at the beach ends, so the deck-chair sleepers lie far apart like home's
 putd('lounger', 2330, 3010, 'beach', pid='lounger-west'); putd('lounger', 3470, 3010, 'beach', flip=True, pid='lounger-east')
 
-# ---------------------------------------------------------------- scatter: trees, bushes, flowers (spread out, not crowded)
 KEEP_OUT = [(PLAZA[0], PLAZA[1], PLAZA[2] + 100, PLAZA[3] + 90), (SQUARE[0], SQUARE[1], SQUARE[2] + 80, SQUARE[3] + 70),
             (POND[0], POND[1], POND[2] + 170, POND[3] + 170), (PLAY[0], PLAY[1], PLAY[2] + 60, PLAY[3] + 60),
             (BEACH[0], BEACH[1], BEACH[2] + 60, BEACH[3] + 60), (GARDEN[0], GARDEN[1] + 60, 740, 640), (CAR_X, road_y(CAR_X) - 170, 300, 170)]
@@ -681,14 +610,14 @@ def occupied(x, y, r):
 def free(x, y, r, pad=20, coast_in=140, h=0):
     if not in_poly(x, y, COAST_IN[coast_in]): return False
     if any(in_ell(x, y, *k) for k in KEEP_OUT) or in_open(x, y, 90): return False
-    for _, _, (nx, ny) in SLEEP_TREES:   # nor in front of a nod tree, where a Ducky dozes against the trunk
+    for _, _, (nx, ny) in SLEEP_TREES:
         if h and y > ny - 10 and y - h * .95 < ny + 14 and abs(x - nx) < r + 90: return False
-    for t in (.35, .7, .95):   # the sprite must not stand over open ground or a square either (the camera looks down at 3/4)
+    for t in (.35, .7, .95):
         if h and (in_open(x, y - h * t, 30) or any(in_ell(x, y - h * t, *k) for k in KEEP_OUT[:2] + KEEP_OUT[-1:])): return False
     if path_dist(x, y) < r * .5 + pad: return False
     if any(math.hypot(x - p['foot'][0], y - p['foot'][1]) < 300 for p in PIERS): return False
     if any(seg_dist(x, y, b['a'], towards(b['a'], b['b'], -240)) < 220 or math.hypot(x - b['b'][0], y - b['b'][1]) < 260 for b in BRIDGES): return False
-    for p in PROPS:   # never stand in front of a building's door side
+    for p in PROPS:
         if p['kind'] in BUILDINGS and 0 < y - p['y'] < 340 and abs(x - p['x']) < p['width'] * p['scale'] * .55 + r * .5: return False
     return not occupied(x, y, r)
 BUILDINGS = {'dollhouse-pink', 'dollhouse-lilac', 'cottage-pink', 'teacup-cafe', 'gazebo', 'play-tower', 'candy-cart'}
@@ -700,7 +629,6 @@ X0, XW, Y0, YH = 700, W - 1400, 560, H - 1100
 for i in range(1, 14000):
     x, y = X0 + halton(i, 2) * XW, Y0 + halton(i, 3) * YH
     d_coast = poly_dist(x, y, COAST)
-    # trees ring the coast (groves, with gaps) and dot the lawns; they need room round them
     if n_tree < 40 and (d_coast < 760 or halton(i, 5) < .16) and free(x, y, 110, 46, h=470) \
             and not any(p['kind'] in BUILDINGS and math.hypot(x - p['x'], (y - p['y']) * 1.3) < 430 for p in PROPS):
         k = kinds_tree[i % len(kinds_tree)]
@@ -708,7 +636,7 @@ for i in range(1, 14000):
 for i in range(1, 16000):
     x, y = X0 + halton(i + 17000, 2) * XW, Y0 + halton(i + 17000, 3) * YH
     pd = path_dist(x, y)
-    if n_bush < 26 and 40 < pd < 260 and free(x, y, 80, 30, 90, h=150):   # bushes line the paths, in small clumps with gaps
+    if n_bush < 26 and 40 < pd < 260 and free(x, y, 80, 30, 90, h=150):
         k = ['bush-pink', 'bush-2', 'bush-pink', 'heart-hedge', 'bush-pink', 'bush-5'][i % 6]
         if put(k, x, y, 'gardens', flip=bool(i % 2), scale_k=.85 + .3 * halton(i, 7), quiet=True): n_bush += 1
 for i in range(1, 12000):
@@ -716,13 +644,11 @@ for i in range(1, 12000):
     if n_flower < 130 and free(x, y, 40, 14, 60):
         k = ['flowers-pink', 'flower-1', 'flowers-pink', 'flower-2', 'flower-3'][i % 5]
         if put(k, x, y, 'gardens', flip=bool(i % 2), solid=False, scale_k=.85 + .3 * halton(i, 7), quiet=True): n_flower += 1
-# flowers on the islets too
 for (cx, cy, rx, ry), seed in zip(ISLETS, (3, 9)):
     for k in range(6):
         a = halton(k + seed, 2) * 6.28; x, y = cx + math.cos(a) * rx * .72, cy + math.sin(a) * ry * .64
         if not occupied(x, y, 30): put('flowers-pink' if k % 2 else 'flower-3', x, y, 'islets', solid=False, quiet=True)
 
-# ---------------------------------------------------------------- ground decals (flats): home's tufts, flower dots, pebbles, sand specks
 DEC = {'grass-tuft-1': (44, 26), 'grass-tuft-2': (34, 22), 'grass-tuft-3': (56, 24), 'flower-dot-1': (20, 18), 'flower-dot-2': (26, 18),
        'flower-dot-3': (22, 16), 'pebble-1': (22, 14), 'pebble-2': (34, 16), 'pebble-3': (28, 18), 'sand-speck-1': (16, 8), 'sand-speck-2': (22, 10)}
 def on_sand(x, y):
@@ -745,20 +671,14 @@ for k in range(10):
     vb = re.search(r'viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"', open(os.path.join(ROOT, f'public/pixi-art/lily-0{k % 8}.svg')).read(800)).groups()
     FLATS.append({'src': f'/pixi-art/lily-0{k % 8}.svg', 'x': round(x), 'y': round(y), 'width': round(float(vb[2])), 'height': round(float(vb[3])), 'flip': False})
 
-# ---------------------------------------------------------------- sleeping Duckies (boss 6 Nov: the same 28 as home)
-# world.json sleepSpots has EXACTLY home's shape (src/pixi/placements.js SLEEP_SPOTS): nod 4 (tree prop ids), hammock 2,
-# rock 3, leaf 4, book 4, chair 2, wing 5, box 4. Each spot lies beside a prop that suits it (hammock between trees, chair by
-# the beach loungers, book by a stall cart or the cafe, box by a dollhouse, rock by a bush, leaf by the flowers), found by a
-# deterministic search round its anchor with the engine's own sleepSpots rules (why()), plus: off every path and out of the
-# plazas, squares and the open activity / stall ground (sleepAvoid). scripts/themes/pink-sleep-check.mjs re-checks them.
-NAP_R = {'nod': 41.8, 'leaf': 73.8, 'wing': 60.0, 'hammock': 70.7, 'rock': 46.6, 'book': 63.9, 'chair': 73.7, 'box': 49.7}   # sleepHalfWidths(.6336)
+NAP_R = {'nod': 41.8, 'leaf': 73.8, 'wing': 60.0, 'hammock': 70.7, 'rock': 46.6, 'book': 63.9, 'chair': 73.7, 'box': 49.7}
 SLEEP_AVOID = [{'x': round(PLAZA[0]), 'y': round(PLAZA[1]), 'rx': PLAZA[2] + 60, 'ry': PLAZA[3] + 50},
                {'x': round(SQUARE[0]), 'y': round(SQUARE[1]), 'rx': SQUARE[2] + 50, 'ry': SQUARE[3] + 40},
                {'x': round(PLAY[0]), 'y': round(PLAY[1]), 'rx': PLAY[2] + 20, 'ry': PLAY[3] + 20},
                {'x': round(POND[0]), 'y': round(POND[1]), 'rx': POND[2] + 90, 'ry': POND[3] + 80}] + \
               [{'x': round(A['c'][0]), 'y': round(A['c'][1]), 'rx': A['rx'] + 50, 'ry': A['ry'] + 40} for A in ACTIVITY] + \
               [{'x': round(s['c'][0]), 'y': round(s['c'][1]), 'rx': round(s['len'] / 2 + 60), 'ry': round(s['depth'] / 2 + 60)} for s in STALLS] + \
-              [{'x': round(p['foot'][0]), 'y': round(p['foot'][1]), 'rx': 340, 'ry': 260} for p in PIERS]   # the jetty feet: signpost, flag, the way off the boat
+              [{'x': round(p['foot'][0]), 'y': round(p['foot'][1]), 'rx': 340, 'ry': 260} for p in PIERS]
 _WCOAST = [(round(x), round(y)) for x, y in WALK_COAST]
 _ISLETS = [(round(cx), round(cy), rx + 40, ry + 40) for cx, cy, rx, ry in ISLETS]
 def _in_shape(x, y, o, pad):
@@ -800,7 +720,6 @@ def nap_search(anchor, pose, placed, sides=(1, -1)):
 def sleep_spots():
     placed = []; spots = {k: [] for k in ('nod', 'hammock', 'rock', 'leaf', 'book', 'chair', 'wing', 'box')}
     byid = {p['id']: p for p in PROPS}
-    # nod: in front of the four nod trees' trunks (the engine skips the ground checks for a nod; ours still hold)
     for k, (pid, _, _) in enumerate(SLEEP_TREES):
         t = byid[pid]; spots['nod'].append([pid, 0, k % 2 == 1])
         placed.append({'x': t['x'], 'y': t['y'] + 14, 'pose': 'nod', 'r': NAP_R['nod']})
@@ -812,9 +731,7 @@ def sleep_spots():
             ('wing', lambda p: p['kind'] in ('lamp-heart', 'flowers-pink', 'bush-pink') and p['zone'] not in ('islets', 'pond', 'plaza'), 5)]
     for pose, ok, n in want:
         cands = [p for p in PROPS if ok(p)]
-        # spread them: walk the candidates in a fixed scrambled order so the picks fall all over the island
         cands.sort(key=lambda p: halton(sum(map(ord, p['id'])) + 3, 2))
-        # then, if those run out, any lamp or flower bed on quiet ground (never the islets, pond bank or plaza)
         cands += sorted([p for p in PROPS if p not in cands and p['kind'] in ('lamp-heart', 'flowers-pink') and p['zone'] not in ('islets', 'pond', 'plaza', 'beach')],
                         key=lambda p: halton(sum(map(ord, p['id'])) + 5, 3))
         for p in cands:
@@ -826,7 +743,6 @@ def sleep_spots():
     return spots, placed
 SLEEP, SLEEP_PLACED = sleep_spots()
 
-# ---------------------------------------------------------------- write everything
 def main():
     os.makedirs(ART, exist_ok=True); os.makedirs(DATA, exist_ok=True)
     body = ground_svg()
@@ -873,7 +789,6 @@ def main():
         'beach': {'x': round(BEACH[0]), 'y': round(BEACH[1]), 'spawn': [round(BEACH[0]), round(BEACH[1])]},
         'islets': {'x': round(ISLETS[0][0]), 'y': round(ISLETS[0][1]), 'spawn': [round(ISLETS[0][0]) + 120, round(ISLETS[0][1]) - 60]},
     }
-    # boss 6 Nov: open ground kept free for the activities and stalls that come later (each holds 30+ Duckies)
     for A in ACTIVITY:
         zones[A['id']] = {'name': A['name'], 'kind': A['kind'], 'x': round(A['c'][0]), 'y': round(A['c'][1]), 'rx': A['rx'], 'ry': A['ry'],
                           'spawn': [round(A['c'][0]), round(A['c'][1])]}
@@ -885,7 +800,7 @@ def main():
     world = {'width': W, 'height': H, 'theme': 'pink', 'coast': R(WALK_COAST[::2]), 'water': water, 'bridges': [], 'obstacles': FOOT,
              'islets': islets, 'walkways': walkways, 'zones': zones,
              'arches': [{'a': [round(v, 2) for v in b['a']], 'b': [round(v, 2) for v in b['b']], 'r': ARCH_R, 'w': 84} for b in BRIDGES],
-             'paths': [[[round(x), round(y)] for x, y in path_samples(p, 60)] for p in PATHS],   # footpath centre lines (sleep-spots.js keeps beds off them)
+             'paths': [[[round(x), round(y)] for x, y in path_samples(p, 60)] for p in PATHS],
              'pathWidths': [p['w'] for p in PATHS],
              'sleepSpots': SLEEP, 'sleepAvoid': SLEEP_AVOID,
              'props': [{'name': p['name'], 'x': p['x'], 'y': p['y'], 'zone': p['zone']} for p in PROPS if p['zone'] not in ('gardens', 'woods')],
@@ -905,7 +820,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # The locked terrace and 40-bed layout are the final placement pass.
     import subprocess
     subprocess.run(['node', 'scripts/themes/sunflower-centres.mjs', 'pink'], cwd=ROOT, check=True)
     subprocess.run(['node', 'scripts/themes/pink-polish.mjs', '--from-build'], cwd=ROOT, check=True)

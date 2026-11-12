@@ -19,8 +19,6 @@ export function MedalCase({medals={}}) {
   return <ul className="bog-combat-medals">{MEDALS.map(m=><li key={m.id}><strong>{m.name}</strong><span>{medals[m.id]?'Earned':m.detail}</span></li>)}</ul>;
 }
 
-// Render at dockArrival(travel,status). Choosing a side attaches gameplay to
-// engine's existing island. It never mounts another canvas or swaps the scene.
 export default function BogDock({engine,name='Ducky',profile:providedProfile,onLeave=()=>{},onReturnToDock=()=>{},initialPanel='teams',leaveLabel='Back to boat',...options}) {
   const [profile]=useState(()=>providedProfile??profileToken()),[team,setTeam]=useState(null),[panel,setPanel]=useState(initialPanel);
   const [data,setData]=useState(null),[status,setStatus]=useState('connecting'),[attempt,setAttempt]=useState(0),[lastVisit,setLastVisit]=useState(null);

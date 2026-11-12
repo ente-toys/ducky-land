@@ -37,8 +37,6 @@ test('Open arch holes are genuinely transparent, so the actual piazza paving can
  for(const portal of metrics.portals){
   const p=pieces.find(p=>p.id===`centre-colonnade-${portal.side}-${portal.bay}`),x0=p.x-p.width*p.anchor.x,y0=p.y-p.height*p.anchor.y;
   const {data,info}=await sharp(A+p.src).ensureAlpha().raw().toBuffer({resolveWithObject:true});
-  // End bays recede almost edge-on. Sample the opening below the intrados,
-  // where upright near/far piers can overlap in this camera.
   let clear=0;
   for(let dx=-35;dx<=35;dx+=5)for(let rise=60;rise<=150;rise+=5){
    const x=Math.round(portal.front[0]-x0+dx),y=Math.round(portal.front[1]-rise-y0);
@@ -62,7 +60,6 @@ test('Duckies can traverse every colonnade bay and follow the covered arm; only 
  }
  for(const o of centreSolids(walk).filter(o=>o.id.startsWith('centre-pier-')))assert.equal(ground.walkable(o.x,o.y),false,o.id+' solid foot');
  for(const p of [[4020,1760],[4500,1740]])assert.equal(ground.walkable(...p),false,'building base solid');
- // The steps and the former dividing arcade remain on open, connected ground.
  for(const p of [[4020,1900],[4020,1960],[4100,2150],[3800,2172],[4400,2172]])assert.ok(ground.walkable(...p),'steps and central axis '+p);
 });
 test('The new footprint leaves the existing garden lanes clear and both sides of the piazza reachable',()=>{

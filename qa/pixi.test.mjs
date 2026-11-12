@@ -139,7 +139,6 @@ test('all 47 wearables cover eight measured directions without missing or clippe
         for (const frame of frames) {
           const foot = feet.find(part => part.side === frame.side);
           assert.ok(foot);
-          // boss 4 Nov: shoes were refit to sit snug on the foot, a few units above the joint; they stay pinned to that foot
           const pin = foot.pivot.map((value, i) => value - view.ground[i]);
           assert.ok(frame.anchor.every((value, i) => Math.abs(value - pin[i]) <= 10), 'shoe stays pinned to its foot');
           assert.equal(frame.layer, 'feet');
@@ -153,7 +152,6 @@ test('all 47 wearables cover eight measured directions without missing or clippe
         assert.ok(frame.rect[0] + frame.rect[2] >= right, 'neckwear reaches the right silhouette');
         if (entry.sourceNumber === 9) assert.ok(frame.rect[3] >= 90, 'scarf retains its fabric width');
       }
-      // shades show wherever eyes show; from behind they are hidden or a separate back drawing (just the arms), never the lenses
       if (entry.slot === 'shades') {
         if (view.parts.some(part => part.role === 'eye')) assert.ok(frames[0].visible, 'shades show over the eyes');
         else assert.ok(!frames[0].visible || frames[0].url !== entry.frames['0'][0].url, 'lenses never show from behind');

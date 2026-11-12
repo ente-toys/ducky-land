@@ -1,6 +1,3 @@
-// Authored against the Bellovo overview. Each member is a literal [x, y, art,
-// size] placement, not a grid, random scatter or generated offset pattern.
-// o = Bellovo olive, p = poplar, g = broad garden tree, b = garden bush.
 export const CLUMPS = [
  ['north-shore',[[2790,-1220,'o',1],[2990,-1175,'p',.9],[3150,-1270,'o',.85],[2880,-1120,'b',1],[3100,-1170,'b',.9]]],
  ['bell-east',[[4700,-1030,'o',1],[4890,-930,'p',.9],[5070,-850,'o',.9],[4800,-900,'b',1]]],
@@ -36,8 +33,6 @@ export const CLUMPS = [
  ['inner-east-bank', [[6610,3440,'p',.85],[6750,3340,'o',.9],[6830,3510,'g',.85],[6700,3590,'b',1]]],
  ['inner-northeast', [[5470,2320,'g',.85],[5620,2440,'p',.8],[5260,2470,'o',.85],[5320,2580,'b',1]]],
 ];
-// Finish open road ends at actual front steps or existing junctions. Bridge
-// endpoints and the harbour lane retain their exact positions.
 export const LINKS = [
  [[3150,-600],[3150,-380]], [[3560,-850],[3560,-625]],
  [[4000,-850],[4000,-625]], [[4430,-600],[4430,-380]],
@@ -52,7 +47,6 @@ export const LINKS = [
  [[5240,6470],[5190,6420],[4950,6380]], [[3900,6600],[3900,6410],[3800,6410]],
  [[5750,1080],[5610,1330],[5360,1670]],
  [[1680,2080],[1810,2150]], [[6380,1740],[6050,1740],[5900,1950]],
- // Cafes and pergolas meet the existing inner paths without crossing pads.
  [[1830,1590],[1710,1660],[1500,1710]],
  [[3291,4150],[3291,4340],[3450,4490]],
  [[5596,4300],[5750,4240],[5864,4121]],

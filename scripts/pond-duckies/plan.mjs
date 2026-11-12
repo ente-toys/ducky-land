@@ -1,4 +1,3 @@
-// Build-time route planning. Runtime only samples the baked, closed itineraries.
 export const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return h>>>0;};
 export class PondCapacityError extends Error {}
 export function planPond(p){
@@ -8,7 +7,6 @@ export function planPond(p){
  const seeds=p.duckies.map((_,k)=>hash(p.island+'/'+p.id+'/'+k)),states=seeds.slice(),random=k=>((states[k]=Math.imul(states[k],1664525)+1013904223>>>0)/4294967296);
  const cells=new Set(p.cells),point=i=>[p.origin[0]+(i%p.cols)*p.step,p.origin[1]+Math.floor(i/p.cols)*p.step];
  const nodes=new Map(p.cells.map(i=>[i,point(i)]));
- // The two widest Duckies set a conservative clearance for every pair.
  const widths=p.duckies.map(d=>d.width).sort((a,b)=>b-a),gapX=(widths[0]+widths[1])/2+18,gapY=(widths[0]+widths[1])*.17+14;
  const near=(a,b)=>Math.hypot((a[0]-b[0])/gapX,(a[1]-b[1])/gapY);
  const distSegment=(p,a,b)=>{const dx=(b[0]-a[0])/gapX,dy=(b[1]-a[1])/gapY,x=(p[0]-a[0])/gapX,y=(p[1]-a[1])/gapY,t=Math.max(0,Math.min(1,(x*dx+y*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-dx*t,y-dy*t);};
@@ -17,8 +15,6 @@ export function planPond(p){
   if(cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0)return 0;
   return Math.min(distSegment(a,c,d),distSegment(b,c,d),distSegment(c,a,b),distSegment(d,a,b));
  }
- // Reserve whole routes, not sampled positions. All pairs are separated even
- // with different holds, arbitrary UTC phases and between rendered frames.
  function clearLine(a,b,reserves){
   for(const path of reserves){
    if(path.length===1){if(distSegment(path[0],a,b)<=1.18)return false;}
@@ -57,10 +53,8 @@ export function planPond(p){
   const result=[path[0]];let i=0;while(i<path.length-1){let j=path.length-1;while(j>i+1&&!line(path[i],path[j],reserves))j--;result.push(path[j]);i=j;}return result;
  }
  const length=path=>{let n=0;for(let i=1;i<path.length;i++)n+=Math.hypot(path[i][0]-path[i-1][0],path[i][1]-path[i-1][1]);return n;};
- // Each Ducky stays in a connected pocket of the eroded open-water grid.
  let components=[],seen=new Set();for(const c of p.cells){if(seen.has(c))continue;const q=[c];seen.add(c);for(let i=0;i<q.length;i++)for(const d of offsets){const n=q[i]+d;if(cells.has(n)&&!seen.has(n)&&Math.abs(n%p.cols-q[i]%p.cols)<=1&&line(nodes.get(q[i]),nodes.get(n),[])){q.push(n);seen.add(n);}}components.push(q);}
  components.sort((a,b)=>b.length-a.length);const pool=components.filter(c=>c.length>=8).flat();if(!pool.length)throw new PondCapacityError(p.id+' no connected swimming lanes');
- // Try seeded starts before falling back to two in a crowded small pond.
  let starts=null,bestGap=0;
  const first=Math.floor(rnd()*pool.length);
  for(let attempt=0;attempt<Math.min(pool.length,64);attempt++){
@@ -73,7 +67,6 @@ export function planPond(p){
  let at=[...starts],time=0;const tracks=p.duckies.map(()=>[]);
  function append(paths,ends){
   const lens=paths.map(length),holds=paths.map((_,k)=>2+random(k)*4);
-  // 6-8 px/s average at normal game zoom; smoothstep peaks at 9-12 px/s.
   const duration=Math.max(...lens)/((6+rnd()*2)/.65)+Math.max(...holds);
   for(let k=0;k<count;k++){const path=paths[k],cum=[0];for(let i=1;i<path.length;i++)cum.push(cum.at(-1)+Math.hypot(path[i][0]-path[i-1][0],path[i][1]-path[i-1][1]));tracks[k].push({at:time,hold:holds[k],duration:duration-holds[k],path,cum,length:lens[k]});}
   time+=duration;at=ends;
@@ -95,7 +88,6 @@ export function planPond(p){
   if(!best)throw new PondCapacityError(p.id+' cannot plan '+count+' paddlers at round '+round);
   append(best.paths,best.ends);
  }
- // Retrace with fresh holds. All tracks close with zero endpoint velocity.
  const forward=tracks.map(t=>t.slice());
  for(let i=forward[0].length-1;i>=0;i--)append(forward.map(t=>t[i].path.toReversed()),starts);
  const round=v=>Math.round(v*1000)/1000;

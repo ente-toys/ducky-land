@@ -14,8 +14,6 @@ const mask=await sharp(dryMask).ensureAlpha().raw().toBuffer();
 let dryPixels=0;for(let i=3;i<mask.length;i+=4)dryPixels+=mask[i]/255;
 async function measure(file){
  const source=fs.readFileSync(file,'utf8');
- // Measure the union of actual sand-bed polygons, including squares, excluding bank shadows,
- // original ground and water. This is geometry coverage, independent of decorative wear colour.
  const surfaces=[...source.matchAll(/<path\b[^>]*fill="#f4dda0"[^>]*\/>/g)].map(m=>m[0].replace(/stroke(?:-width)?="[^"]*"/g,'').replace('fill="#f4dda0"','fill="white"')).join('');
  const raw=await sharp(svg(surfaces)).ensureAlpha().raw().toBuffer();
  let covered=0;for(let i=3;i<raw.length;i+=4)covered+=raw[i]/255*mask[i]/255;

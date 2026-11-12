@@ -15,7 +15,6 @@ export async function createThreePirates(scene,fleet,{load=url=>new Globe.Textur
    const sign=pirateFacing(flip,ahead.x/Math.hypot(ahead.x,ahead.y),dt),motion=pirateMotion(ship,fleet.time,reduced);let size=ship.width/WORLD_GEO.Rw;
    const screen=project(ship);if(screen&&viewport){const depth=sprite.position.clone().project(camera).z;sprite.position.set(screen.x/viewport.width*2-1,1-screen.y/viewport.height*2,depth).unproject(camera);const viewDepth=-sprite.position.clone().applyMatrix4(camera.matrixWorldInverse).z;size=screen.width*2*viewDepth*Math.tan(camera.fov*Math.PI/360)/viewport.height;}
    sprite.scale.set(size,size,1);sprite.material.rotation=motion.roll;sprite.material.opacity=opacity;sprite.renderOrder=210-sprite.position.y*1000;
-   // Texture UV mirroring keeps the flat waterline horizontal.
    sprite.material.map=textures[ship.art];sprite.userData.flip=sign;
    sprite.userData.flipUniform.value=sign;sprite.scale.x=size;sprite.position.y+=motion.bob*size/ship.width;
   }return shown;

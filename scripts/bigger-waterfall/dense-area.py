@@ -10,7 +10,6 @@ original=json.loads((root/'original/world.json').read_text())
 land=Polygon(after['coast']).buffer(0).difference(Polygon(original['coast']).buffer(0))
 water=unary_union([Polygon(w['poly']).buffer(0) for w in after['water'] if 'poly' in w])
 land=land.difference(water)
-# The two original canal islets were already there, so do not call them new land.
 from shapely.geometry import Point
 from shapely.affinity import scale
 for x,y,rx,ry in original['islets']:
@@ -19,8 +18,6 @@ for x,y,rx,ry in original['islets']:
 def area(plan,extra=False):
  shapes=[Polygon(r['poly']).buffer(0).buffer(18) for r in plan['roads']]
  if extra:
-  # Sand at each front gate. The rectangular envelope deliberately overcounts
-  # the curved 50-80 unit footpath, so the final percentage is conservative.
   for c in plan['communities']:
    for x,y,_ in c['homes']:
     shapes.append(Polygon([(x-50,y+20),(x+55,y+20),(x+55,y+180),(x-50,y+180)]))

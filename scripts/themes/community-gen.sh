@@ -1,7 +1,4 @@
 #!/bin/bash
-# Community Island (theme id `community`, Campfire Commons): GPT prop sheets through the Codex CLI, 2x2 pieces on white.
-# usage: scripts/themes/community-gen.sh <id> "<four pieces description>"
-# writes concepts/themes/community-gen/<id>.png; scripts/themes/community-trace.py cuts and vectorises it.
 D="/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/community-gen"
 CODEX=$(find /Applications/ChatGPT.app/Contents/Resources -maxdepth 4 -name codex -type f -perm -u+x 2>/dev/null | head -1)
 id="$1"; desc="$2"

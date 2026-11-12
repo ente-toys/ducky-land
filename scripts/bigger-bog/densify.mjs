@@ -1,5 +1,3 @@
-// The review baseline is immutable. Every new coordinate below is authored.
-// Run after compose.mjs to reproduce this final, Bog-only density pass.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import sharp from 'sharp';
 import {original,plan,base,out} from './design.mjs';
@@ -73,7 +71,6 @@ for(const c of world.communities){
  }
  move(c.workplace,...spec.work);
 }
-// Relocate the three working yards out of the shared walking greens.
 const training=art.props.find(p=>p.id==='community-56-training-yard');
 const trainingDelta=[-620-training.x,1290-training.y];
 move(training.id,-620,1290);
@@ -81,7 +78,6 @@ for(const data of [world,walk])for(const o of data.obstacles.filter(o=>o.prop===
 move('community-57-allotment',250,7040,760,370);
 move('community-58-allotment',1120,7070,680,330);
 move('community-59-net-rack',8930,6420,430,278);
-// Existing seating now faces its green, clear of the lanes and garden gates.
 for(const [id,x,y]of [['community-reuse-91',1020,720],['community-reuse-92',7740,780],['community-reuse-93',970,6280],['community-reuse-94',7790,6300]])move(id,x,y);
 function asset(name,w,h,body){writeFileSync(`${base}/${name}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><g stroke="#39472D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${body}</g></svg>`);}
 asset('shared-well',280,300,'<path d="M60 269V111M221 269V111" stroke="#885931" stroke-width="12"/><path d="M31 115L136 38L248 115L231 132L137 70L49 132Z" fill="#8F70C2"/><path d="M140 70L231 132L248 115L136 38" fill="#7E438C" stroke="none"/><path d="M65 158H217" stroke="#C88941" stroke-width="10"/><path d="M144 160V232"/><path d="M59 228Q140 196 221 228V271Q139 305 59 271Z" fill="#A18458"/><ellipse cx="140" cy="228" rx="81" ry="27" fill="#885931"/><ellipse cx="140" cy="230" rx="62" ry="17" fill="#82B7A7"/><path d="M60 250Q140 277 220 250M96 240V276M166 250V285" fill="none"/><path d="M173 206L178 240Q198 253 215 238L222 206Z" fill="#C88941"/><path d="M177 207Q196 182 218 207" fill="none"/>');
@@ -90,7 +86,6 @@ function add(id,src,x,y,width,height,extra={},contact=null){
  art.props.push(p);for(const data of[world,walk]){data.props.push(p);if(contact)data.obstacles.push({x,y:y-contact[2],rx:contact[0],ry:contact[1],prop:id,community:true});}
 }
 for(const c of world.communities){const [x,y]=c.point;add(c.id+'-shared-well','communities/shared-well.svg',x+150,y-35,250,268,{neighbourhood:c.id},[73,28,24]);}
-// Named cultivation plots replace the removed perimeter road. No random positions.
 const plots=[
  {id:'bottle-herb-garden',owner:'croakettle',x:-550,y:-360,w:780,h:420,pieces:[['herb-bed',-680,-300,400,211],['herb-bed',-210,-350,400,211],['bog-bush',-850,-460,250,201],['bog-bush',-420,-640,250,201]]},
  {id:'brewers-training-green',owner:'croakettle',x:-590,y:1150,w:680,h:520,pieces:[['bog-bush',-950,1170,260,209],['mushrooms',-890,1430,165,120],['reeds',-320,1330,160,211]]},
@@ -107,13 +102,11 @@ for(const plot of plots)for(const [i,[asset,x,y,w,h]]of plot.pieces.entries()){
 }
 const layout={...plan,roads,communities:world.communities,plots};
 let terrain=makeTerrain(layout,{junctions:false,greens:true});
-// Deliberately shaped cultivation ground, integrated below the props and roads.
 let patches='';for(const p of plots)patches+=`<path d="M${p.x-p.w/2} ${p.y-p.h/2}q${p.w*.48} ${-p.h*.25} ${p.w} 0l${-p.w*.04} ${p.h}q${-p.w*.5} ${p.h*.18} ${-p.w*.94} 0Z" fill="#87AA75" opacity=".32"/><path d="M${p.x-p.w*.4} ${p.y+p.h*.45}q${p.w*.4} ${p.h*.18} ${p.w*.8} 0" fill="none" stroke="#C6D99E" stroke-width="13"/>`;
 const marker='<path d="'+path(ribbon(roads[0].pts,roads[0].widths,true).poly)+'" transform=';
 if(!terrain.includes(marker))throw Error('Road layer marker missing');terrain=terrain.replace(marker,patches+marker);
 const svg=(x,y,w,h)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}"><defs>${terrainDefs}</defs>${terrain}</svg>`;
 writeFileSync(`${base}/terrain-master.svg`,svg(plan.origin.x,plan.origin.y,plan.width,plan.height));
-// Repaint only the new ground tiles, preserving manifests, texture budgets and old art.
 for(const t of art.ground.tiles.filter(t=>t.community)){
  const [w,h]=t.nativePixels;await sharp(Buffer.from(svg(t.x,t.y,t.width,t.height))).resize(w,h).png().toFile(`public/pixi-art/themes/bog/${t.src}`);
 }
@@ -124,8 +117,6 @@ for(const data of[world,walk]){
 }
 for(const [file,data]of[['public/pixi-art/themes/bog/art.json',art],['assets/world/themes/bog/world.json',world],['assets/world/themes/bog/walk-world.json',walk]])writeFileSync(file,JSON.stringify(data));
 writeFileSync('scripts/bigger-bog/dense-plan.json',JSON.stringify(layout,null,2));
-// Geometric area: union of road polygons, sandy squares and their entire banks,
-// clipped to new dry land, excluding the coast beach, water and unchanged heart.
 const k=.1,W=Math.round(plan.width*k),H=Math.round(plan.height*k);
 const raster=async body=>sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${plan.origin.x} ${plan.origin.y} ${plan.width} ${plan.height}">${body}</svg>`)).ensureAlpha().raw().toBuffer();
 const newland=await raster(`<path d="${path(world.coast)}" fill="white"/><path d="${path(original.world.coast)}" fill="black"/>`);

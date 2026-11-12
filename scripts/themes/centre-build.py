@@ -1,16 +1,3 @@
-# Centre plazas for the three themed islands (boss picks 6 Nov, concepts/themes/centre-variations/PICKS.md).
-# Builds every procedural layer (paving decals, step rings, terrace, pool rim, jets, clock hands), measures the traced
-# landmark SVGs (scripts/themes/centre-trace.py), and writes public/pixi-art/themes/<theme>/centre/centre.json.
-#
-# Coordinates: world units (one standing Ducky = 130). Every piece is authored in CENTRE-LOCAL coordinates, origin (0,0)
-# = the centre's ground point (sunflower: plaza centre at the top-ring level; pink: lower plaza centre; library: pool
-# centre). The engine is a flat 2D walker, so walk coordinates = screen coordinates; raised and sunken levels are drawn
-# shifted on screen and the footprints in centre.json are in those same screen coordinates.
-# Camera: home's ring projection, ry = rx * 36/47 (fountain-wishing.svg data-depth-ratio 0.765957).
-# Style: home's ink #39452F at 2.6, flat fills, one darker band lower-right, one cream highlight upper-left.
-#
-# venv: python3.11 -m venv vt && vt/bin/pip install vtracer cairosvg pillow numpy scipy shapely scikit-image
-# usage: vt/bin/python scripts/themes/centre-build.py
 import json, math, os, io, re
 import numpy as np
 from shapely.geometry import Polygon, Point, box, MultiPolygon, LineString
@@ -24,7 +11,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ART = os.path.join(ROOT, 'public/pixi-art/themes')
 K = 36 / 47
 INK = '#39452F'; SW = 2.6
-DUCK_AREA = 80 * 80 * K   # ground one standing Ducky needs in a crowd (80 x 61 on screen)
+DUCK_AREA = 80 * 80 * K
 
 def ell(cx, cy, rx, ry=None, n=220):
     ry = rx * K if ry is None else ry
@@ -123,18 +110,17 @@ def capacity(walk, blocked):
     a = walk.difference(blocked).area
     return round(a), int(a / DUCK_AREA)
 
-# =============================================================================================== SUNFLOWER
 def sunflower():
     T = 'sunflower'
     STONE, JOINT, RISER, RISER_SH, CREAM, EDGE = '#FFF3D2', '#E9D49A', '#EBD49C', '#DCC084', '#FFFBEC', '#E4C567'
-    h = 52                                     # one step ring, screen height
-    OUT = 1150                                 # plaza outer edge (the island's plaza zone is rx 1140)
-    FLOOR_R, FLOOR_DZ = 880, 3 * h             # sunken floor: plan radius 880, drawn 156 lower
-    LV = [('s1', 880, 970, 2 * h), ('s2', 970, 1060, h), ('top', 1060, OUT, 0)]   # (name, r_in, r_out, depth)
-    SH = 95                                    # stair half width (plan)
-    STEPS, DROP = 6, h * 3 / 6                 # 6 steps of 26 drop
-    RUN = (OUT - FLOOR_R) / (STEPS - 1)        # the last riser lands exactly on the floor edge
-    def chan(dz):                              # the four stair channels, on screen at a level drawn dz lower
+    h = 52
+    OUT = 1150
+    FLOOR_R, FLOOR_DZ = 880, 3 * h
+    LV = [('s1', 880, 970, 2 * h), ('s2', 970, 1060, h), ('top', 1060, OUT, 0)]
+    SH = 95
+    STEPS, DROP = 6, h * 3 / 6
+    RUN = (OUT - FLOOR_R) / (STEPS - 1)
+    def chan(dz):
         return unary_union([box(-SH, -3000, SH, 0), box(-SH, 0, SH, 3000),
                             box(0, dz - SH * K, 3000, dz + SH * K), box(-3000, dz - SH * K, 0, dz + SH * K)])
     CH = unary_union([chan(dz) for _, _, _, dz in LV])
@@ -143,7 +129,6 @@ def sunflower():
     out = dict(theme=T, name='Sunflower clock plaza', concept='concepts/themes/centre-variations/sunflower-combo-a.png',
                origin='plaza centre at the outer (top ring) ground level', depthRatio=round(K, 6), pieces=[])
 
-    # decal: the sunken floor, cream flagstones (the island's own plaza stone and joint colours)
     floor = ell(0, FLOOR_DZ, FLOOR_R)
     d = Piece(T, 'decal-floor', 'Sunflower plaza floor paving')
     d.add(flagstones(floor, 7, 92, STONE, JOINT, 6), floor)
@@ -152,13 +137,12 @@ def sunflower():
     d.write()
     out['pieces'].append(entry(d, 'decal', note='flat on the ground, under everything'))
 
-    # back: step rings (risers + faces), the four staircases. Drawn under every Ducky.
     b = Piece(T, 'back', 'Sunflower plaza step rings and stairs')
     faces = {}; face_els = {}
     def stair_treads(axis):
         """treads (screen polygons) and risers for one staircase; axis = 'N','S','E','W'."""
         tr, rs = [], []
-        for i in range(STEPS - 1):            # the last step is the floor itself
+        for i in range(STEPS - 1):
             ra, rb, z = OUT - RUN * i, OUT - RUN * (i + 1), DROP * (i + 1)
             if axis in 'NS':
                 sg = -1 if axis == 'N' else 1
@@ -166,21 +150,20 @@ def sunflower():
                 tr.append(box(-SH, min(ya, yb), SH, max(ya, yb)))
                 if axis == 'N':
                     rs.append(box(-SH, -ra * K + z - DROP, SH, -ra * K + z))
-                    if i == STEPS - 2: rs.append(box(-SH, -rb * K + z, SH, -rb * K + z + DROP))   # last riser down to the floor
+                    if i == STEPS - 2: rs.append(box(-SH, -rb * K + z, SH, -rb * K + z + DROP))
             else:
                 sg = 1 if axis == 'E' else -1
                 xa, xb = sorted((sg * ra, sg * rb))
                 tr.append(box(xa, -SH * K + z, xb, SH * K + z))
         return tr, rs
-    # east/west treads first: the ring faces south of the channel overlap them
     for ax in 'EW':
         tr, _ = stair_treads(ax)
         ux0, ux1 = (FLOOR_R - 10, OUT) if ax == 'E' else (-OUT, -FLOOR_R + 10)
         under = box(ux0, -SH * K, ux1, -SH * K + FLOOR_DZ).intersection(ell(0, 0, OUT).union(ell(0, FLOOR_DZ, OUT)))
-        b.add(fill(under, RISER, None), under)                               # wall underlay, fills seams between levels
+        b.add(fill(under, RISER, None), under)
         for i, t in enumerate(tr):
             x0, _, x1, _ = t.bounds; z = DROP * (i + 1)
-            for _, ri, ro, dzl in LV:                                       # the channel's north wall, per ring level
+            for _, ri, ro, dzl in LV:
                 lo, hi = max(abs(x0), ri), min(abs(x1), ro)
                 if abs(x0) > abs(x1): lo, hi = max(abs(x1), ri), min(abs(x0), ro)
                 if hi - lo > .5 and dzl < z:
@@ -188,7 +171,7 @@ def sunflower():
                     cheek = box(cx0, -SH * K + dzl, cx1, -SH * K + z)
                     b.add(fill(cheek, RISER, INK, SW), cheek)
             b.add(fill(t, STONE, INK, SW), t)
-            xin = x0 if ax == 'E' else x1                                     # the drop to the next step down
+            xin = x0 if ax == 'E' else x1
             sh_ = box(min(xin, xin + (10 if ax == 'E' else -10)), -SH * K + z, max(xin, xin + (10 if ax == 'E' else -10)), SH * K + z)
             b.add(fill(sh_, RISER_SH, None))
             b.add(line([(x0 + 4, -SH * K + z + 5), (x1 - 4, -SH * K + z + 5)], CREAM, 3))
@@ -198,7 +181,6 @@ def sunflower():
         face = ell(0, dz, ro).difference(ell(0, dz, ri)).difference(CHL[name])
         faces[name] = face
         b.add(fill(riser, RISER, INK, SW), riser)
-        # block joints on the risers and a darker band on the right
         js = []
         for a in range(184, 360, 8):
             t = math.radians(a); x = ri * math.cos(t); y = ri * K * math.sin(t)
@@ -208,7 +190,6 @@ def sunflower():
               f'<path d="{gd(riser.intersection(box(ri * .35, -3000, 3000, 3000)))}" fill="{RISER_SH}" fill-opacity=".55"/></g>')
         n0 = len(b.els)
         b.add(fill(face, STONE, INK, SW), face)
-        # joints across the faces, a cream lip on the outer edge
         js = []
         for a in range(0, 360, 6 if name == 'top' else 7):
             t = math.radians(a + (3 if name == 's2' else 0))
@@ -221,7 +202,6 @@ def sunflower():
               + f'<path d="{gd(face.intersection(ell(0, dz, ro).difference(ell(0, dz - 6, ro - 4))).intersection(box(0, 0, 3000, 3000)))}" fill="{EDGE}" fill-opacity=".5"/></g>')
         b.add(fill(face, 'none', INK, SW))
         face_els[name] = b.els[n0:]
-    # outer edge of the plaza against the island ground
     b.add(fill(ell(0, 0, OUT), 'none', INK, SW, '.7'))
     for ax in 'NS':
         tr, rs = stair_treads(ax)
@@ -235,8 +215,6 @@ def sunflower():
     b.write()
     out['pieces'].append(entry(b, 'back', note='behind every Ducky'))
 
-    # front: the inner step lips (s1 + s2 faces, front half) in 20 wedges. sortY = lowest point of the wedge: a Ducky
-    # on the floor is always above it (behind), a Ducky on the top ring or outside is below it (in front).
     lip = unary_union([faces['s1'], faces['s2']]).intersection(box(-3000, 0, 3000, 3000))
     for k in range(20):
         a0, a1 = k * 9, (k + 1) * 9
@@ -247,7 +225,6 @@ def sunflower():
         f.write()
         out['pieces'].append(entry(f, 'front', sortY=round(seg.bounds[3], 1), note='in front of Duckies on the floor; sort by sortY so Duckies outside pass in front'))
 
-    # landmark: the sunflower clock, planter centred on the floor
     w, hh, im = traced(T, 'clock')
     al = im[..., 3] > 0
     rows = np.where(al.any(1))[0]; bottom = rows.max()
@@ -257,13 +234,12 @@ def sunflower():
     lab = brown[: int(hh * .55)]
     fy, fx = np.where(lab); fcx, fcy = fx.mean(), fy.mean(); fR = math.sqrt(lab.sum() / math.pi)
     pry = prx * K
-    base_cy = FLOOR_DZ                             # planter footprint centre = floor centre
-    at = (0, base_cy + pry)                        # anchor = front-bottom of the planter
+    base_cy = FLOOR_DZ
+    at = (0, base_cy + pry)
     ay = (bottom + 1) / hh
     e = sorted_entry(T, 'clock', at, (w / 2) / w, ay, note='sort with Duckies by its base y')
     out['pieces'].append(e)
     pivot = (round(e['x'] + fcx, 1), round(e['y'] + fcy, 1))
-    # animated: clock hands (pointing to 12, pivot at the clock centre)
     for nm, L, wd in [('hour', fR * .55, 11), ('minute', fR * .8, 8)]:
         p = Piece(T, f'clock-hand-{nm}', f'Sunflower clock {nm} hand')
         tail = L * .18
@@ -277,7 +253,6 @@ def sunflower():
                                   at=list(pivot), x=round(pivot[0] + x0, 1), y=round(pivot[1] + y0, 1), parent='clock', drawAbove='clock',
                                   animate=dict(kind='rotate', period=43200 if nm == 'hour' else 3600, note='rotate about the anchor; real time or sped up')))
 
-    # footprints (screen = walk coordinates, centre-local)
     planter = ell(0, base_cy, prx + 14)
     stairs_geo = unary_union(sum((stair_treads(a)[0] for a in 'NSEW'), []))
     blocked_rings = unary_union([faces['s1'], faces['s2'],
@@ -298,18 +273,16 @@ def sunflower():
     out['capacity'] = dict(floorArea=area, duckies=n, note=f'floor only, at {round(DUCK_AREA)} units per Ducky; the top ring adds more')
     return out
 
-# =============================================================================================== PINK
 def pink():
     T = 'pink'
     PINK, HOT, PAVE, JOINT, CREAM, LEAF = '#F5A3C7', '#EC6FA8', '#FCEBD6', '#E9CDA9', '#FFF0C7', '#4AA539'
     WALL, WALL_SH, COPE, COPE_HI = '#F39CC2', '#E07FAA', '#F9C3DA', '#FFE3EF'
-    LR = 960                                   # lower plaza radius (plan)
-    TR, TC, H, CURB = 680, -800, 150, 12       # terrace radius, screen centre of its floor, wall height, raised coping
-    ST0, ST1 = 300, 610                        # grand stair half width at the top and at the bottom
+    LR = 960
+    TR, TC, H, CURB = 680, -800, 150, 12
+    ST0, ST1 = 300, 610
     out = dict(theme=T, name='Music box terrace', concept='concepts/themes/centre-variations/pink-centre-5.png',
                origin='centre of the lower plaza on the ground', depthRatio=round(K, 6), pieces=[])
 
-    # decal: lower plaza, the island's own recipe (scalloped pink kerb, cream paving, ring + radial joints)
     lower = ell(0, 0, LR)
     d = Piece(T, 'decal-plaza', 'Pink lower plaza paving')
     rx, ry = LR, LR * K
@@ -332,9 +305,8 @@ def pink():
     d.write()
     out['pieces'].append(entry(d, 'decal'))
 
-    # the grand stair (plan: top edge Y0 at the terrace front, 9 risers, run 34, flares ST0 -> ST1)
     N, RUN, DROP = 9, 34, H / 9
-    Y0 = TC + H + TR * K * math.sqrt(1 - (ST0 / TR) ** 2)    # plan y where the stair meets the terrace edge at |x| = ST0
+    Y0 = TC + H + TR * K * math.sqrt(1 - (ST0 / TR) ** 2)
     def hw(Y): return ST0 + (ST1 - ST0) * (Y - Y0) / (RUN * (N - 1))
     treads, risers = [], []
     for i in range(N - 1):
@@ -344,11 +316,10 @@ def pink():
     Yl = Y0 + RUN * (N - 1)
     risers.append(Polygon([(-hw(Yl), Yl - DROP), (hw(Yl), Yl - DROP), (hw(Yl), Yl), (-hw(Yl), Yl)]))
     stair = unary_union(treads + risers)
-    cut = box(-ST0, Y0 - H - 1, ST0, 3000)    # where the stair is cut into the terrace
+    cut = box(-ST0, Y0 - H - 1, ST0, 3000)
 
-    # back: terrace floor, coping, wall, stair. Under every Ducky.
     b = Piece(T, 'back', 'Pink terrace, wall and grand stair')
-    top_out = ell(0, TC - CURB, TR)                         # coping top
+    top_out = ell(0, TC - CURB, TR)
     sweep = unary_union([ell(0, TC - CURB, TR), ell(0, TC + H, TR), box(-TR, TC - CURB, TR, TC + H)])
     wall = sweep.difference(top_out).difference(cut)
     b.add(fill(wall, WALL, INK, SW), wall)
@@ -378,7 +349,6 @@ def pink():
     b.add(fill(inner_riser, WALL_SH, INK, SW), inner_riser)
     b.add(fill(coping, COPE, INK, SW), coping)
     b.add(fill(coping.intersection(box(-3000, -3000, 3000, TC - 20)), 'none', COPE_HI, 4))
-    # stair, top step first so lower ones overlap correctly (they are nearer)
     for t, r in zip(treads, risers):
         b.add(fill(t, '#FFF6EE', INK, SW), t)
         b.add(fill(r, '#F0D3BE', INK, SW), r)
@@ -389,7 +359,6 @@ def pink():
     b.write()
     out['pieces'].append(entry(b, 'back', note='behind every Ducky'))
 
-    # front: the raised coping in front of the terrace floor, 8 wedges (ducks on the terrace stand behind it)
     cop_front = coping.intersection(box(-3000, TC, 3000, 3000))
     cop_front = unary_union([cop_front, top_out.difference(ell(0, TC - CURB, TR - 30)).intersection(box(-3000, TC, 3000, 3000)).difference(cut)])
     k = 0
@@ -405,13 +374,11 @@ def pink():
         f.write()
         out['pieces'].append(entry(f, 'front', sortY=round(seg.bounds[3], 1), note='in front of Duckies on the terrace; sort by sortY'))
 
-    # sorted: music box on the terrace, dancer + key animated, balustrades
     w, hh, im = traced(T, 'music-box')
     al = im[..., 3] > 0; bottom = np.where(al.any(1))[0].max()
     box_at = (0, TC + 80)
     e = sorted_entry(T, 'music-box', box_at, .5, (bottom + 1) / hh)
     out['pieces'].append(e)
-    # turntable: the pale disc inside the open box (largest cream blob in the middle band)
     cream = al & (im[..., 0] > 240) & (im[..., 1] > 220) & (im[..., 2] > 180)
     band = np.zeros_like(cream); band[int(hh * .55):int(hh * .72), int(w * .3):int(w * .7)] = True
     from scipy import ndimage as nd
@@ -432,7 +399,6 @@ def pink():
     out['pieces'].append(dict(id='wind-key', file='wind-key.svg', layer='anim', parent='music-box', drawAbove='music-box', width=round(kw, 1), height=round(kh, 1),
                               anchor=dict(x=0.05, y=.5), at=[round(kat[0], 1), round(kat[1], 1)], x=round(kat[0] - .05 * kw, 1), y=round(kat[1] - .5 * kh, 1),
                               animate=dict(kind='wind', note='turn about the shaft: scaleY cos(t) on the loop, 1.6 s a turn, only while the music plays')))
-    # balustrades: map the art's newel base and top-post base onto the stair's outer corners
     bw, bh, bim = traced(T, 'balustrade-left')
     bal = bim[..., 3] > 0
     cols = np.where(bal.any(0))[0]; rowsb = np.where(bal.any(1))[0]
@@ -442,8 +408,8 @@ def pink():
     top_y = np.where(bal[:, int(top_x)])[0].max()
     Ytop = Y0
     for side, nm in ((-1, 'balustrade-left'), (1, 'balustrade-right')):
-        A = (side * (hw(Yl) + 18), Yl + 4)               # newel base on the ground, outside the bottom step
-        B = (side * (ST0 + 14), Ytop - H)               # top post on the terrace edge
+        A = (side * (hw(Yl) + 18), Yl + 4)
+        B = (side * (ST0 + 14), Ytop - H)
         sx = abs(B[0] - A[0]) / abs(top_x - newel_x); sy = abs(A[1] - B[1]) / abs(newel_y - top_y)
         W2, H2 = bw * sx, bh * sy
         ax = (newel_x / bw) if side < 0 else 1 - newel_x / bw
@@ -451,7 +417,6 @@ def pink():
                                   at=[round(A[0], 1), round(A[1], 1)], x=round(A[0] - ax * W2, 1), y=round(A[1] - newel_y / bh * H2, 1),
                                   sortY=round((A[1] + B[1]) / 2, 1), stretch=round(sy / sx, 3), note='drawn stretched to width x height; sortY is the middle of the rail'))
 
-    # footprints
     terrace_walk = ell(0, TC, TR - 44)
     stair_walk = unary_union(treads + risers).buffer(-6)
     bal_lines = unary_union([LineString([(s * (hw(Yl) + 10), Yl), (s * (ST0 + 6), Ytop - H)]).buffer(26) for s in (-1, 1)])
@@ -470,13 +435,12 @@ def pink():
     out['capacity'] = dict(lowerArea=a1, terraceArea=a2, duckies=n1 + n2, note=f'at {round(DUCK_AREA)} units per Ducky')
     return out
 
-# =============================================================================================== LIBRARY
 def library(bookstore=None):
     T = 'library'
     PAVE, LINE, SAND, SHADE, GRASS_D, CREAM = '#F7E6AF', '#E2CC8C', '#FDE48C', '#E4C567', '#7DAE30', '#FFF6DA'
     WATER, WATER_HI, WATER_DK = '#6EC9DE', '#B5E7F7', '#4FB3CC'
     STONE, STONE_SIDE, STONE_SH = '#FBEAC0', '#E8D095', '#D9BC7B'
-    PR, RO, RI, RH, WZ = 1150, 540, 452, 40, 16     # paving radius, rim outer/inner, rim height, water drop
+    PR, RO, RI, RH, WZ = 1150, 540, 452, 40, 16
     out = dict(theme=T, name='Globe fountain plaza', concept='concepts/themes/centre-variations/library-centre-2.png',
                origin='pool centre on the ground', depthRatio=round(K, 6), pieces=[])
 
@@ -490,14 +454,13 @@ def library(bookstore=None):
     d.write()
     out['pieces'].append(entry(d, 'decal'))
 
-    # compass rose inlay (its own decal, on top of the paving)
     c = Piece(T, 'decal-compass', 'Library compass rose inlay')
     def P(r, deg): t = math.radians(deg); return (r * math.cos(t), r * math.sin(t) * K)
     cols = {'NS': ('#F6A58F', '#E2826A'), 'EW': ('#A9B0E6', '#8790D2'), 'D': ('#F7CF72', '#E6B550')}
     pts = [(-90, PR * .93, 'NS'), (90, PR * .93, 'NS'), (0, PR * .86, 'EW'), (180, PR * .86, 'EW'),
            (-45, PR * .72, 'D'), (45, PR * .72, 'D'), (135, PR * .72, 'D'), (-135, PR * .72, 'D')]
     for deg, L, kind in sorted(pts, key=lambda p: p[2] != 'D'):
-        wb, rb = (150, RO + 40) if kind == 'D' else (215, RO + 70)      # half width of the point where it leaves the rim
+        wb, rb = (150, RO + 40) if kind == 'D' else (215, RO + 70)
         t = math.radians(deg); ux, uy = math.cos(t), math.sin(t); vx, vy = -uy, ux
         Q = lambda u, v: (u * ux + v * vx, (u * uy + v * vy) * K)
         tip, l, r, c0 = Q(L, 0), Q(rb, -wb), Q(rb, wb), Q(rb * .55, 0)
@@ -509,7 +472,6 @@ def library(bookstore=None):
     c.write()
     out['pieces'].append(entry(c, 'decal', note='draw above decal-paving'))
 
-    # pool: water, back inner wall, rim blocks (back half here, front half in front pieces)
     b = Piece(T, 'back', 'Library pool water and back rim')
     inner_wall = ell(0, -RH, RI).difference(ell(0, -WZ, RI))
     water = ell(0, -WZ, RI)
@@ -547,7 +509,6 @@ def library(bookstore=None):
         f.write()
         out['pieces'].append(entry(f, 'front', sortY=round(unary_union(f.geo).bounds[3], 1), note='front rim; sort by sortY so the globe base sits behind it'))
 
-    # globe, standing in the water
     w, hh, im = traced(T, 'globe')
     al = im[..., 3] > 0; bottom = np.where(al.any(1))[0].max()
     bw = max(np.ptp(np.where(al[y])[0]) for y in range(int(hh * .85), bottom))
@@ -555,7 +516,6 @@ def library(bookstore=None):
     at = (0, -WZ + base_ry)
     out['pieces'].append(sorted_entry(T, 'globe', at, .5, (bottom + 1) / hh, note='base front edge; base centre sits on the water at the pool centre'))
 
-    # water jets: four arcs from round the globe base out into the pool, each its own piece (animate the stream)
     for nm, sgn in (('jet-back', -1), ('jet-front', 1)):
         p = Piece(T, nm, 'Library fountain water jet')
         r0, r1 = 150, 360
@@ -584,7 +544,6 @@ def library(bookstore=None):
                                       sortY=round(ep[1] if sgn > 0 else -WZ - 40, 1),
                                       animate=dict(kind='jet', note='scale about the anchor 0.92-1.0 and slide the dash offset; back jets draw behind the globe, front jets in front')))
 
-    # footprints
     pool = ell(0, -RH / 2, RO + 10)
     walk = pave.buffer(-20).difference(pool)
     out['outerEdge'] = dict(x=0, y=0, rx=PR, ry=round(PR * K, 1))

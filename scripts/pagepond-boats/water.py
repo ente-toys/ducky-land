@@ -17,8 +17,6 @@ source = read('scripts/pagepond-ground/data/keep.json')['boatWater']
 source += [w['poly'] for w in world['water'] if w.get('name') == 'Pagepond rounded mouth banks']
 polygons = []
 for points in source:
-    # Five hundredths of a unit closes rounding cracks without a visible bank
-    # change. Keep each tile separate so the centre islands remain dry holes.
     shape = Polygon(points).buffer(0).buffer(.05, quad_segs=1, join_style=2)
     for polygon in [shape] if shape.geom_type == 'Polygon' else shape.geoms:
         assert not polygon.interiors, 'Boat-water tile unexpectedly contains land'

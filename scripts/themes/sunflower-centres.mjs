@@ -1,5 +1,3 @@
-// Sunpink placement pass. Run after either base builder. Only the two theme folders change.
-// Source centre SVGs/JSON stay locked. Anchors encode sortY for the existing y-sorted renderer.
 import {readFileSync, writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {geometry, inShape} from '../../assets/world/island-geometry.mjs';
@@ -25,14 +23,12 @@ for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
   const shape=o=>o.ellipse ? shape(o.ellipse) : o.poly ? {poly:o.poly.map(point)} :
     {x:round(origin[0]+o.x*scale),y:round(origin[1]+o.y*scale),rx:round(o.rx*scale),ry:round(o.ry*scale)};
 
-  // Remove just the replaced landmark's collision, never a broad patch of plaza geometry.
   const old=theme==='sunflower' ? {x:3880,y:2628.5,rx:300,ry:150} : {x:4000,y:2775,rx:244,ry:99};
   for(const data of [world,walk]) data.obstacles=data.obstacles.filter(o=>o.centre!=='locked' && !Object.entries(old).every(([k,v])=>o[k]===v));
   art.props=art.props.filter(p=>!p.id.startsWith('centre-') && !['sunflower-sundial-0','ribbon-sculpture'].includes(p.id));
   art.flats=art.flats.filter(p=>!p.id?.startsWith('centre-'));
   art.decks=art.decks.filter(p=>!p.id?.startsWith('centre-'));
 
-  // Pink's old furniture was inside the new terrace. Keep it around the edge, with matching footprints.
   const moves=theme==='pink' ? {
     'heart-hedge-9':[3450,2450], 'heart-hedge-10':[4550,2450],
     'lamp-heart-24':[3530,2290], 'lamp-heart-25':[4470,2290],
@@ -54,7 +50,6 @@ for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
     } else {
       const parent=centre.pieces.find(q=>q.id===p.parent);
       const sortY=p.sortY ?? parent?.sortY ?? p.at[1];
-      // Position at sortY, offset the anchor by the same amount: pixels stay at the source x/y.
       const [x,y]=point([p.x+p.width/2,sortY]);
       art.props.push({...entry,name:`Centre ${p.id}`,x,y:round(y+(p.layer==='anim' ? .01 : 0)),
         anchor:{x:.5,y:(sortY-p.y+(p.layer==='anim' ? .01/scale : 0))/p.height},
@@ -65,7 +60,6 @@ for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
   for(const data of [world,walk]) data.obstacles.push(...structuredClone(blocked));
   const stairs=centre.stairs.map(s=>({...s,top:point(s.top),bottom:point(s.bottom),
     ...(s.width?{width:round(s.width*scale)}:{widthTop:round(s.widthTop*scale),widthBottom:round(s.widthBottom*scale)})}));
-  // Stairs are open corridors between the blocked polygons. They stay on land, not sea walkways.
   world.centrePlacement={source:`/pixi-art/themes/${theme}/centre/centre.json`,origin,scale,stairs,
     walkable:centre.walkable.map(shape),blocked};
   plaza.spawn=point(centre.spawn);harbor.spawn=[...plaza.spawn];
@@ -73,7 +67,6 @@ for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
   world.sleepAvoid.push(theme==='sunflower' ? {name:'locked centre',x:origin[0],y:origin[1],rx:850,ry:680} :
     {name:'locked centre',x:origin[0],y:origin[1]-170,rx:720,ry:860});
 
-  // Base Pink builder rounded the walkways but kept subpixel arch endpoints. Keep both maps exact.
   for(const a of world.arches)for(const data of [world,walk]){
     const w=data.walkways.find(w=>Math.hypot(w.a[0]-a.a[0],w.a[1]-a.a[1])<1 && Math.hypot(w.b[0]-a.b[0],w.b[1]-a.b[1])<1);
     if(!w)throw Error(`${theme}: arch missing its walkable deck`);
@@ -83,7 +76,6 @@ for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
   const map=makeMap(theme,{world,walk,harbor,sleepers:[]}), geo=geometry(map.baseWalk), sizes=sleepHalfWidths();
   let spots=structuredClone(world.sleepSpots);
   const resolve=()=>resolveSleepSpots(map.baseWalk,art.props,geo.walkable,sizes,{spots,avoid:world.sleepAvoid,warn:false});
-  // Keep all previously valid beds; move only beds invalidated by the new centre footprint.
   const valid=resolve();
   for(const pose of Object.keys(spots)) spots[pose]=spots[pose].filter(s=>valid.some(b=>b.pose===pose && (pose==='nod'?b.tree===s[0]:b.x===s[0]&&b.y===s[1])));
   const want={nod:8,hammock:4,rock:5,leaf:6,book:5,chair:2,wing:6,box:4};
@@ -115,7 +107,6 @@ for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
   if(beds.length!==40||beds.bad.length)throw Error(`${theme}: invalid beds ${JSON.stringify(beds.bad)}`);
   if(!geo.walkable(...plaza.spawn))throw Error(`${theme}: blocked plaza spawn`);
   world.sleepSpots=spots;
-  // Full props also let makeMap resolve the same 40 beds before the shared index is regenerated.
   world.props=art.props;
   save(A+'art.json',art);save(D+'world.json',world);save(D+'walk-world.json',walk);save(D+'harbor.json',harbor);
   console.log(`${theme}: ${centre.pieces.length} locked pieces, ${blocked.length} footprints, ${stairs.length} stairs, ${beds.length} valid sleepers; spawn ${plaza.spawn}`);

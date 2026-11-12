@@ -27,8 +27,6 @@ test('all revised cover belongs to a connected lane or court structure, with few
   const route=layout.routes.find(r=>r.id===g.route);
   if(route){const b=feet[0],x=b.x+b.width/2,y=b.y+b.height/2;
    assert.ok(Math.min(...route.points.slice(1).map((p,i)=>distance(x,y,route.points[i],p)))<=335,g.id+' belongs to its lane');
-   // A 2-diameter floor strip remains along the authored route centre.
-   // Both players can traverse it with their real 22-unit collision radius.
    for(let i=1;i<route.points.length;i++){
     const a=route.points[i-1],b=route.points[i],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/8);
     for(let j=0;j<=n;j++){const x=a[0]+(b[0]-a[0])*j/n,y=a[1]+(b[1]-a[1])*j/n;

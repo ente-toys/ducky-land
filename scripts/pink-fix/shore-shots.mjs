@@ -1,6 +1,3 @@
-// Headless proof shots for the pink shore lane, one browser for a whole batch (framing as pink-check/shot.mjs).
-// Usage: node scripts/pink-fix/shore-shots.mjs <out-dir> name:x:y:zoom [name:x:y:zoom ...]   (zoom may be "fit")
-// Env: DUCKY_URL (default http://boss.localhost:8901). Never opens a visible browser.
 import fs from 'node:fs';
 import path from 'node:path';
 const RUNTIME='/Users/pragadees.xd/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules';
