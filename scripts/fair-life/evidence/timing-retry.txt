@@ -1,9 +1,0 @@
-✔ d) 100 players walk about one themed island: the server tick stays far inside its 50 ms (5018.568458ms)
-ℹ tests 1
-ℹ suites 0
-ℹ pass 1
-ℹ fail 0
-ℹ cancelled 0
-ℹ skipped 0
-ℹ todo 0
-ℹ duration_ms 5449.941416

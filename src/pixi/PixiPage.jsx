@@ -91,7 +91,6 @@ export default function PixiPage() {
       const {createThreeGameView}=await import('./three-game-view.js');
       if(cancelled)return;
       earth=await createThreeGameView(game,host.current);
-      if(import.meta.env.DEV&&new URLSearchParams(location.search).has('pirates')){const {piratePreview}=await import('../../scripts/pirate-ships/preview.js');await piratePreview(game);}
       if(cancelled)earth?.destroy();
     }).catch(error=>{console.error('Could not initialize world',error);setError(true);});
     if (offline) {

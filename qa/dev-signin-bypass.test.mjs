@@ -10,7 +10,6 @@ for (const dev of [true,false]) test(`signup bypass is ${dev?'enabled in develop
     loader:{'.css':'empty'},define:{'import.meta.env.DEV':String(dev)},
     plugins:[{name:'headless',setup(build){
       build.onLoad({filter:/\/src\/pixi\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
-      build.onLoad({filter:/\/scripts\/pirate-ships\/preview\.js$/},()=>({contents:'export async function piratePreview(){}'}));
       build.onLoad({filter:/\/src\/pixi\/engine\.js$/},()=>({contents:`
         export class PixiIsland {
           constructor(options){globalThis.devEngines.push(options);}
