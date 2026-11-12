@@ -61,7 +61,7 @@ def write_svg(name,elements,defs=()):
 
 views=[]
 for number,angle in ANGLES.items():
-    path=ROOT/f'duck-spin/clean/spin_{number}.svg';svg=E.parse(path).getroot()
+    path=ROOT/f'assets/duck-spin/clean/spin_{number}.svg';svg=E.parse(path).getroot()
     duck=next(g for g in svg.iter(NS+'g') if g.get('id','').startswith('Duck Spin'))
     while len(duck)<=2 and any(e.tag==NS+'g' for e in duck):duck=next(e for e in duck if e.tag==NS+'g')
     classified=[]

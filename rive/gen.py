@@ -134,7 +134,7 @@ def shoe_side(name, left):
 # ================= morph turn rig (official views as key shapes, continuous motion) =================
 import math
 import morph as MO
-SPIN = os.path.join(HERE, '..', 'duck-spin')
+SPIN = os.path.join(HERE, '..', 'assets', 'duck-spin', 'clean')
 V = MO.load(SPIN)
 VA = sorted(V)                                 # -135 .. 180
 REST = {}
