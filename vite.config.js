@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import {readFileSync} from 'node:fs';
-import {runtimeManifest} from './scripts/globe-svg/runtime-manifest.mjs';
 import {productionProxy,productionSignIn} from './scripts/vite-production-proxy.mjs';
 
 export default defineConfig({
@@ -11,10 +10,6 @@ export default defineConfig({
     apply: 'build',
     enforce: 'post',
     transform(code, id) {
-      if (/\/pixi-art\/globe\/manifest\.json(?:\?|$)/.test(id)) {
-        const manifest=JSON.parse(readFileSync(id.split('?')[0],'utf8'));
-        return {code:`export default ${JSON.stringify(runtimeManifest(manifest))};`,map:null};
-      }
       if (!/\/assets\/world\/themes\/[^/]+\/walk-world\.json$/.test(id)) return;
       const world = JSON.parse(readFileSync(id.replace('walk-world.json', 'world.json'), 'utf8'));
       const walk = JSON.parse(readFileSync(id, 'utf8'));

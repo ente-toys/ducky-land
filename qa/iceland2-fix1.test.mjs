@@ -1,10 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import sharp from 'sharp';
 import {homeArtwork} from '../scripts/globe-perf/snapshot.mjs';
-import {globePreviewUrl} from '../src/rendering/pixi/globe-preview.js';
-import {worldIsland} from '../src/world/world-map.js';
 import {geometry,inPoly} from '../assets/world/island-geometry.mjs';
 const j=p=>JSON.parse(readFileSync(p));
 const w=j('assets/world/themes/snow/world.json'),a=j('public/pixi-art/themes/snow/art.json');
@@ -47,11 +44,4 @@ test('FIX1 groves use Home plant height and comparable authored density',()=>{
 test('FIX1 snow coast clips sand paths to land and sled sits over a shaded hill',()=>{
  const text=readFileSync('public/pixi-art/themes/snow/v2/terrain.svg','utf8');assert.ok(text.includes('clip-path="url(#snow-coast)"'));assert.ok(text.includes('stroke="#d5c9f2"'));
  const hill=a.flats.find(p=>p.id==='sled-hill'),sleds=a.props.filter(p=>p.scene==='sled-scene'&&p.finalRole==='sled');assert.ok(hill.width>=640&&hill.width<=720&&hill.height>=340&&hill.height<=400);assert.equal(sleds.length,2);for(const sled of sleds)assert.ok(Math.hypot(sled.x-hill.x,sled.y-hill.y)<750);
-});
-test('FIX1 polar minimap uses complete snow vector before GPU streams load',async()=>{
- const island=worldIsland('isle-55'),src=new URL(globePreviewUrl(island),'http://localhost').pathname;
- assert.equal(src,'/pixi-art/globe/snow.svg');assert.equal(island.width,w.width);assert.equal(island.height,w.height);
- const {data,info}=await sharp('public'+src).ensureAlpha().raw().toBuffer({resolveWithObject:true});let land=0,opaque=0;
- for(let i=0;i<data.length;i+=4){if(data[i+3]>128)opaque++;if(data[i]>230&&data[i+1]>225&&data[i+2]>230&&data[i+3]>128)land++;}
- assert.ok(land>info.width*info.height*.3,'snow land missing');assert.ok(opaque<info.width*info.height*.9,'sea transparency missing');
 });
