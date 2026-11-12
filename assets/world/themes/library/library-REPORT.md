@@ -47,21 +47,18 @@ Attempted the required `npx vite --port 5221 --strictPort --host 127.0.0.1`. Bin
 
 Attempted headless Playwright. Chromium failed with `bootstrap_check_in ... Permission denied (1100)`. No browser verification is claimed.
 
-Ready for an environment that permits local servers and headless Chromium:
+To open the review page locally, start Vite:
 
 ```sh
 npx vite --port 5221 --strictPort --host 127.0.0.1
-node scripts/themes/library-capture.mjs
 ```
 
-Review URL: `http://127.0.0.1:5221/pixi-art/themes/library/review.html`. The page uses the actual PixiIsland renderer, registers only library at runtime, and passes the 40 resolved beds. It does not edit the shared theme index. The capture script also takes a home reference at the same play zoom.
+Review URL: `http://127.0.0.1:5221/pixi-art/themes/library/review.html`. The page uses the actual PixiIsland renderer, registers only library at runtime, and passes the 40 resolved beds. It does not edit the shared theme index.
 
 ## Files
 
 - `scripts/themes/library-world.mjs`: reproducible new layout and map/art generator.
 - `scripts/themes/library-check.mjs`: readiness, routes, canal geometry, decks and sleepers checks.
-- `scripts/themes/library-preview.mjs`: static render using the real Ducky assets.
-- `scripts/themes/library-capture.mjs`: headless capture on port 5221.
 - `assets/world/themes/library/{world,walk-world,harbor,placements,paths}.json`.
 - `public/pixi-art/themes/library/{art,build-metrics,resolved-sleepers,library-check}.json`.
 - Library ground SVG and 24 tiles, three repositioned jetty SVGs, two canal bridge SVGs and two front rail SVGs.

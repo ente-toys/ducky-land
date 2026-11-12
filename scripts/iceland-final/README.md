@@ -28,5 +28,3 @@ The natural lake build is left at `/tmp/lake-dist`. The local travel fixture can
 The former fence, gates and centre tree are removed from art and collision data. The three existing path nodes now identify shore approaches, with their coordinates preserved. The cubic lake outline is sampled for shared skating geometry. Every shore remains ordinary walkable land except solid prop footprints; the jetty deck is dry, with separate post collisions.
 
 Automatic entry uses a cached ice-only navigation graph to reach the open heart without crossing the wooden jetty or snowy coves. Drift uses ordinary navigation, so it can leave anywhere on the shore and restores walking on snow. Authority and prediction run the same motion code. QA covers dense perimeter entry, centre arrival, twirl, dry deck, rock/post collisions, momentum, reduced motion and reconciliation.
-
-`node scripts/iceland-final/lake-proof.mjs` writes the SVG scene, PNG scene and reference comparison into `concepts/themes/work/iceland-final/check/` beside the approved painting. No git writes, publication or credit use.

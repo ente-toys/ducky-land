@@ -6,7 +6,7 @@ Rebuild from the repository root with `node scripts/bigger-pink/build.mjs`. The 
 
 Teacup's complete kit is registered at [6700,4740], scale 1.68. Its short original south-facing jetty meets the new sandy cove. One existing game sailboat is moored beside it. Superseded beach furniture and its collision contacts are retired. Tutu's shore uses curved coves and headlands. The navigation coast is sampled from the same authored drawing. The minimum spherical island channel remains above 600 units.
 
-`node scripts/pink-final/render.mjs` renders the whole island and all five hamlets from production SVG manifests into ../concepts/themes/work/pink-fix/final. These are static SVG composites including approved sleeper layers and boats. Chromium browser capture is unavailable in this sandbox (MachPort bootstrap_check_in permission denied). `shots.mjs` remains available for an environment with Chromium access.
+`node scripts/pink-final/render.mjs` renders the whole island and all five hamlets from production SVG manifests into ../concepts/themes/work/pink-fix/final. These are static SVG composites including approved sleeper layers and boats.
 
 No commits or pushes belong to this integration task.
 
@@ -23,5 +23,3 @@ Building and join pass
 apply-buildings.py validates all supplied SVGs, copies the valid files, applies sizes.json widths, and scales footprint coordinates, blockers, doors and automatic contact shadows about the unchanged ground base. The report is building-report.json.
 
 union-inputs.py extracts the authored road/plaza geometry and placement transforms. union-paths.mjs expands strokes into vector surfaces, unions the 52 surfaces through Skia PathOp.Union, and outlines only the resulting boundary. Decorative paving is clipped to an inset outside the travel corridors, with even-odd fill and clip rules retained. The report catalogs 50 independent joins.
-
-`PINK_RENDER_OUT=scripts/pink-final/renders node scripts/pink-final/building-proofs.mjs` renders buildings-vs-og.png at actual game scale, including all 19 replacements and the two unchanged hamlet buildings for context. It also renders every cataloged join under renders/joins, with index.png and index.json.

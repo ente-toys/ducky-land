@@ -39,16 +39,6 @@ are consumed directly. Single-island builds preserve all other manifest entries.
 
 The old `scripts/globe-perf/build-previews.mjs` delegates to this generator.
 
-For review, save old PNGs outside game art before removing them, then run:
-
-```sh
-node scripts/globe-svg/compare.mjs /path/to/old-pngs /path/to/review
-```
-
-Sheets show old PNGs left and new SVGs right, overview above and ground below.
-Old previews may predate current island layouts. CPU raster timings and sizes
-are saved beside the sheets. These timings are not browser/GPU measurements.
-
 The raster guard freezes only the existing violations in `themes/library`,
 `themes/community`, `themes/goldmine`, `themes/bog` and `themes/cathedral`.
 Those assets must be redrawn. Exact path and content hashes reject new rasters,

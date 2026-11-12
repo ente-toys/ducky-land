@@ -14,8 +14,6 @@ npm test
 npm run build -- --configLoader runner
 ```
 
-`proof.mjs` optionally writes a static composition to the concepts `work/iceland2/fix1` folder. It is an artwork inspection aid, not an in-game screenshot. The harbour is drawn by the existing runtime dock system, and residents by the approved runtime Ducky rigs, so neither appears in that static proof.
-
 The renderer streams authored `tiles` for standing props through the existing 128 MiB pool, retaining their original depth-sort anchors. Terrain streams only near coast edges and paths; `ground.vector` retains complete homogeneous snow for the globe and low-resolution fallback. Iceland's 32-unit preload margin keeps representative 1440x900 and 390x844 views sharp at 2x DPR, including maximum 1.8x zoom. The global pool may still reduce quality under combined neighbouring-island pressure or on larger viewports.
 
 Snowfall is a separate screen-space canvas layer with 144 reused outlined flakes, capped at 72 on phones. It is hidden on other islands, inside interiors, in globe view, and for reduced motion. HTML UI remains above the canvas.
@@ -26,17 +24,9 @@ FIX1 uses Home-measured facades (bakery 496 × 394 world units), a 1,105 × 691 
 
 FIX2 uses the rink rounded rectangle as the fence baseline, with arc-length-spaced posts and three 160-unit gate openings. Paths terminate at those openings, with a snow apron masking their rounded caps and no painted route across the ice. All Iceland paths use the rink fill `#a6deec`. The coast expands uniformly to 118% of Home, retaining the inland placements and harbour. Extra coastal groves are explicitly authored in `build.py`; path clearance filtering remains the final safeguard. `qa/iceland2-fix2.test.mjs` checks rim alignment, gate landings, rendered paving pixels under the ice, density and snowfall sizes.
 
-The proof script accepts an optional output directory; FIX2 writes `rink-after.png` there. This is an SVG composition, not an in-game screenshot.
-
 FIX3 matches the approved `targets3` scenes with baked snow-grain terrain, outlined drifts and rock caps, footprint pairs, packed door courts, snowy roof planes and side walls, and occupational carts/racks/logs/fish crates. Loose fence, crate and ground-cloud instances are removed. Coastal tree chains are compact groves; the sled hill has a cleared footprint, six-step stair, platform, run groove and contact shadow. The rink keeps the existing rim fence and three open gate approaches, with four additional Home benches and a cocoa cart outside the walking lanes. The snowman lane ends in its normal rounded cap.
 
 Snow explicitly sets `raster.enabled: false`; it keeps authored SVG crops through the existing bounded ground pool. This disables the generic raster-worker path without turning on eager whole-building texture decoding. All authored pieces remain vector art. Regenerate with the commands above. FIX3 checks also cover every zone's ground tile, all courts and vignettes, the clear hill, static raster setting, and maximum-zoom desktop/phone texture demand. Runtime frame-rate verification requires a working local browser session.
-
-Equal-scale ground comparison:
-
-```sh
-node scripts/iceland2/ground-compare.mjs /path/to/output
-```
 
 FIX4 makes the rounded ice, decorated pine, rim fence, cocoa cart and four rink benches available before the island is shown. These pieces set `preload: true`; `theme-art.js` loads their complete static SVG textures and excludes their retained crop metadata from the streaming queue. Other landmarks and plants still stream. This removes partial ice assembly and missing rink furniture while terrain crops are pending. The static rink allocation is tested below 72 MiB (about 67.51 MiB, with 3.625x ice and 4x standing pieces), in addition to the bounded shared pool. There is no raster worker.
 
