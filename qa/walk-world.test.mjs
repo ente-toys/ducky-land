@@ -26,7 +26,7 @@ test('assets/world/walk-world.json matches a fresh build from the current placem
     const fresh = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
     const saved = JSON.parse(readFileSync(new URL('../assets/world/walk-world.json', import.meta.url)));
     const built = JSON.parse(JSON.stringify(fresh));
-    for (const key of Object.keys(built)) assert.deepEqual(saved[key], built[key], `walk-world.json "${key}" is stale: run node scripts/walk-world.mjs`);
+    for (const key of Object.keys(built)) assert.deepEqual(saved[key], built[key], `walk-world.json "${key}" is stale`);
     assert.deepEqual(Object.keys(saved).sort(), Object.keys(built).sort());
   } finally { await vite.close(); }
 });

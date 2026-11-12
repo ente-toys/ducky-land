@@ -8,10 +8,6 @@
     "build": "node scripts/globe-svg/check.mjs && vite build",
     "dev": "vite",
     "preview": "vite preview",
-    "globe:assets": "node scripts/globe-perf/refresh.mjs",
-    "bog:dev": "vite --config scripts/bog-environment/vite.config.mjs --configLoader native --port 8897 --strictPort",
-    "bog:build": "vite build --config scripts/bog-environment/vite.config.mjs --configLoader native",
-    "bog:capture": "node scripts/bog-environment/capture.mjs",
     "globe:check": "node scripts/globe-svg/check.mjs"
   },
   "dependencies": {
