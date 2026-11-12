@@ -4,11 +4,6 @@ function nearEdge(x,y,p,pad){for(let i=0,j=p.length-1;i<p.length;j=i++){const a=
  if(x<Math.min(a[0],b[0])-pad||x>Math.max(a[0],b[0])+pad||y<Math.min(a[1],b[1])-pad||y>Math.max(a[1],b[1])+pad)continue;
  const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));if(Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)<pad)return true;}return false;}
 export const inShape=(x,y,o,pad=0)=>o.poly?(pad<0?inPoly(x,y,o.poly)&&edgeDist(x,y,o.poly)>-pad:inPoly(x,y,o.poly)||pad>0&&nearEdge(x,y,o.poly,pad)):((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;
-// Visibility polygons already contain the displayed body. Their front plane
-// ends exactly at the prop's sort line, where Ducky draws on top of the art.
-export const blocksFoot=(x,y,o,pad=16)=>(o.frontY===undefined||y<o.frontY)&&inShape(x,y,o,pad);
-// test only tries the few shapes near it instead of every traced outline on a big island. Exactly the same answers: a shape
-// is listed in every cell its padded box reaches. Built on first use (the shape lists are fixed by then).
 export function shapeIndex(list,pad,CELL=256){
  const cells=new Map(),key=(c,r)=>c*65536+r;
  for(const o of list){
@@ -68,7 +63,7 @@ export function geometry(world){
   bridgeNear??=shapeIndex(world.bridges.map(b=>({...b,rx:Math.max(0,b.w/2-8),ry:Math.max(0,b.h/2-12)})),0);
   const bridge=bridgeNear(x,y).some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
   waterNear??=shapeIndex(world.water,20);solidNear??=shapeIndex(world.obstacles,16);
-  return (bridge||!waterNear(x,y).some(o=>inShape(x,y,o,20)))&&!solidNear(x,y).some(o=>blocksFoot(x,y,o,16));
+  return (bridge||!waterNear(x,y).some(o=>inShape(x,y,o,20)))&&!solidNear(x,y).some(o=>inShape(x,y,o,16));
  }
  return {walkable,inPoly:(x,y,p=world.coast)=>inPoly(x,y,p),ellipse};
 }

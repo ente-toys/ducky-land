@@ -23,10 +23,8 @@ test('assets/world/walk-world.json matches a fresh build from the current placem
     const residents = createSimulation(local, 8612, {sleepingNpcs:true,npcCount:beds.length});
     assert.equal(residents.ducks.filter(d=>d.sleeping).length,HOME_SLEEP_TOTAL, 'Home allocates 100 actual NPCs');
     const walk = {...local, obstacles: [...local.obstacles, ...beds.map(P.sleeperFootprint)]};
-    const fresh = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk', 'navigationClearCorners', 'homeBuildingRoutes'].filter(k => k in walk).map(k => [k, walk[k]]));
-    assert.equal(walk.homeBuildingRoutes,true,'Home route safety is serialized for every client and server');
+    const fresh = Object.fromEntries(['width', 'height', 'origin', 'coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water', 'boardwalk'].filter(k => k in walk).map(k => [k, walk[k]]));
     const saved = JSON.parse(readFileSync(new URL('../assets/world/walk-world.json', import.meta.url)));
-    // through JSON, as the script writes it, so -0 and undefined compare the way the file stores them
     const built = JSON.parse(JSON.stringify(fresh));
     for (const key of Object.keys(built)) assert.deepEqual(saved[key], built[key], `walk-world.json "${key}" is stale`);
     assert.deepEqual(Object.keys(saved).sort(), Object.keys(built).sort());

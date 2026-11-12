@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {inShape} from '../assets/world/island-geometry.mjs';
 import {createNavigation} from '../src/world/navigation.js';
 import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/gameplay/player-motion.js';
 
@@ -18,13 +17,12 @@ const OPEN = (() => {
 })();
 const duck = (x, y) => ({x, y, previousX:x, previousY:y, turn:0, path:[], until:0, action:0, travel:0, emoteVersion:0});
 
-// Holds one keyboard direction and records every step; fails on a frame off walkable ground or a step that cuts a corner.
-function hold(x, y, input, seconds, dt, walking = nav) {
+function hold(x, y, input, seconds, dt) {
   const a = duck(x, y), steps = [];
   for (let t = 0; t < seconds; t += dt) {
-    walkStep(a, walking, dt, t, input);
-    assert.ok(walking.walkable(a.x, a.y), `off walkable ground at ${a.x},${a.y}`);
-    assert.ok(walking.clearLine([a.previousX, a.previousY], [a.x, a.y]), 'a step crossed a blocked spot');
+    walkStep(a, nav, dt, t, input);
+    assert.ok(nav.walkable(a.x, a.y), `off walkable ground at ${a.x},${a.y}`);
+    assert.ok(nav.clearLine([a.previousX, a.previousY], [a.x, a.y]), 'a step crossed a blocked spot');
     steps.push([a.x-a.previousX, a.y-a.previousY]);
   }
   const moving = steps.filter(s => Math.hypot(...s) > .01);
@@ -32,18 +30,14 @@ function hold(x, y, input, seconds, dt, walking = nav) {
   return {a, distance:Math.hypot(a.x-x, a.y-y), flips};
 }
 
-// Every 8-way key held at 10-50 degrees into a straight run of shoreline, starting 30 px inland.
-// Check three locations per edge, clear of all padded solid shapes for the full one-second travel radius.
 function shallowHits(edges) {
   const out = [];
-  for (const [a, b] of edges) for (const fraction of [.25,.5,.75]) {
+  for (const [a, b] of edges) {
     const length = Math.hypot(b[0]-a[0], b[1]-a[1]);
     if (length < 150) continue;
-    const tx = (b[0]-a[0])/length, ty = (b[1]-a[1])/length, mid = [a[0]+(b[0]-a[0])*fraction, a[1]+(b[1]-a[1])*fraction];
+    const tx = (b[0]-a[0])/length, ty = (b[1]-a[1])/length, mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
     const start = [[mid[0]-ty*30, mid[1]+tx*30], [mid[0]+ty*30, mid[1]-tx*30]].find(p => nav.walkable(...p));
-    // Canopies now have polygon blockers too. A nearby solid makes a real dead-end wedge,
-    // which is tested separately; this fixture measures uninterrupted water-edge glide.
-    if (!start || world.obstacles.some(o => inShape(...start, o, WALK_SPEED+16) && (o.frontY === undefined || start[1]-(WALK_SPEED+16) < o.frontY))) continue;
+    if (!start || world.obstacles.some(o => !o.poly && Math.hypot(o.x-start[0], o.y-start[1]) < Math.max(o.rx, o.ry)+150)) continue;
     for (const d of DIRS) {
       const l = Math.hypot(...d), along = Math.abs(d[0]/l*tx + d[1]/l*ty);
       if (nav.walkable(start[0]+d[0]/l*60, start[1]+d[1]/l*60) || along < Math.cos(50*Math.PI/180) || along > Math.cos(10*Math.PI/180)) continue;
@@ -244,24 +238,4 @@ test('a duck pressed against the shore is never pushed into the sea', () => {
     checked++;
   }
   assert.ok(checked >= 10);
-});
-
-
-test('Home flat canopy fronts glide sideways, stop squarely and never reverse in real pond-side wedges', () => {
-  const world = {width:1000,height:1000,coast:[[0,0],[1000,0],[1000,1000],[0,1000]],water:[],bridges:[],walkways:[],islets:[],
-    homeBuildingRoutes:true,obstacles:[{poly:[[150,100],[850,100],[850,450],[150,450]],frontY:400}]};
-  const front = createNavigation(world);
-  assert.ok(front.walkable(500,400));assert.equal(front.walkable(500,399.999),false);
-  for (const dt of TICKS) {
-    for (const x of [-1,1]) {
-      const result=hold(500,420,{x,y:-1},1,dt,front);
-      assert.equal(result.flips,0);assert.ok(Math.abs(result.a.x-500)>100,'slides along the flat front');
-    }
-    const square=hold(500,430,{x:0,y:-1},1.5,dt,front);
-    assert.equal(square.flips,0);assert.ok(square.distance<40,'square hit stops');
-    for (const [x,y,input] of [[1525.1326546280545,2348.4840545651086,{x:-1,y:1}],
-      [1754.8673453719455,2348.4840545651086,{x:1,y:1}],[1862.5220220099156,2375.862817683461,{x:1,y:1}]]) {
-      assert.equal(hold(x,y,input,2,dt).flips,0,'canopy/pond wedge stops without alternating tangents');
-    }
-  }
 });

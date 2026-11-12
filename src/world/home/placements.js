@@ -1,11 +1,4 @@
-import {homeDecisionParts} from './home-decisions.js';
-import {homeOcclusionProp} from './home-occlusion.js';
-import {isHomeGroundProp,homeLayerProp} from './home-layer.js';
-import {fitHomeProp} from './home-prop-bases.js';
 import homeRoutes from './home-routes.json';
-import {homePathProp} from './home-path-fixes.js';
-import {fitHomeBuilding} from './home-building-bases.js';
-import {fitHomeBush} from './home-bushes.js';
 import homeOriginalWorld from './home-original-world.json';
 import expansion from './home-expansion.json';
 import {geometry} from '../../../assets/world/island-geometry.mjs';
@@ -20,7 +13,6 @@ import homeSleepExtra from '../../../assets/world/home-sleep-extra.json';
 import homeSleepOuter from '../../../assets/world/home-sleep-outer.json';
 import homeSleepMore from '../../../assets/world/home-sleep-more.json';
 import homeExtraProps from '../../../assets/world/home-extra-props.json';
-import {homeGroundCloth, isHomeGroundCloth, homeClothFlat} from './home-ground-cloth.js';
 const SLEEP_SPOTS = Object.fromEntries(Object.entries(BASE_SLEEP_SPOTS).map(([pose, spots]) => [pose, [...spots, ...(homeSleepExtra[pose] ?? [])]]));
 import {PLAZA_BENCHES, benchFootprint, benchAnchor, benchBox, benchFile} from './plaza-benches.js';
 const footpaths = rawPaths.filter(l => !(l[0][0] === 3940 && l[0][1] === 3260));
@@ -81,7 +73,7 @@ export const JETTIES = expansion.homeArches ? [] : [
   [2, 870.0355, 2996.0389, 337.9679, 475.3502],
 ].map(([n, x, y, width, height]) => ({src: `/pixi-art/bridge-jetty-${n}.svg`, x, y, width, height, resolution: 1.5}));
 const ARCHES = expansion.homeArches ?? [
-  {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},   // pond: the deck top is drawn 72 deep for 112 of walkway
+  {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},
   {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
   ...(expansion.arches ?? []),
 ];
@@ -106,14 +98,8 @@ const trimWith = (w, jetty, pad) => ({...w, islets: w.islets.filter(a => !pad.ha
 export const trimWorld = w => trimWith(w, OLD_JETTY, OLD_PAD);
 const placeWorld = w => trimWith(w, new Set([3940, 3320, 2320]), new Set([3930, 3340, 2290]));
 const archMid = ARCHES.map(({a, b}) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
-const underArch = w => {
-  // This original west jetty is now the longer approved Home bridge. Its old
-  // midpoint is too far from the new arch for the proximity fallback below.
-  const west=ARCHES.find(a=>a.id==='home-west-bridge');
-  if(west&&w.a[0]===1130&&w.a[1]===3080&&w.b[0]===950&&w.b[1]===3400)return {...w,a:west.a,b:west.b,w:west.w,boatPassUnder:true};
-  return archMid.some(([x, y]) => Math.hypot((w.a[0] + w.b[0]) / 2 - x, (w.a[1] + w.b[1]) / 2 - y) < 60) ? {...w, boatPassUnder: true} : w;
-};
-export const walkWorld = (world, props) => ({...world, homeBuildingRoutes: true, navigationClearCorners:true, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
+const underArch = w => archMid.some(([x, y]) => Math.hypot((w.a[0] + w.b[0]) / 2 - x, (w.a[1] + w.b[1]) / 2 - y) < 60) ? {...w, boatPassUnder: true} : w;
+export const walkWorld = (world, props) => ({...world, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
   water: [...world.water, ...(expansion.riverWater ?? [])], bridges: [...world.bridges, ...(expansion.riverBridges ?? [])],
   walkways: [...world.walkways.map(underArch), ...(expansion.walkways ?? []).map(underArch), {a: [1165, 3000], b: [1095, 3098], w: 120, boatPassUnder: true}, {a: [1092, 3060], b: [942, 3405], w: 110, boatPassUnder: true}]});
 
@@ -243,11 +229,10 @@ function consolidate(out, world, walkable) {
     && roomy(x, y, H * .6, furniture().filter(p => !/fountain/i.test(p.name)));
   for (const b of PLAZA_BENCHES) seats.push(arcBench(b));
   const pond = world.water[0];
-  let pondSeatId = 3;   // keep existing pond IDs stable when the plaza bench count changes
   for (const degs of [[-62, -48, -76, -118, -104, -132], [64, 50, 78, 116, 102, 130, 36, 144, 24, 156]]) {
     const spot = first(degs.flatMap(d => [45, 70, 95, 120].map(k => {const a = d * Math.PI / 180; return [pond.x + Math.cos(a) * (pond.rx + k), pond.y + Math.sin(a) * (pond.ry + k * .8)];})),
       (x, y) => seatOk(x, y, 100) && seats.every(s => Math.hypot(s.x - x, s.y - y) > 4 * H));
-    if (spot) seats.push(bench(`seat-pond-${pondSeatId++}`, spot[0], spot[1], facingOf(pond.x - spot[0], pond.y - spot[1]), 'pond'));
+    if (spot) seats.push(bench(`seat-pond-${seats.length}`, spot[0], spot[1], facingOf(pond.x - spot[0], pond.y - spot[1]), 'pond'));
   }
   const beachSeat = first(around(5040, 2560, 40, 9), (x, y) => seatOk(x, y) && coastDist(x, y) > 140 && seats.every(s => Math.hypot(s.x - x, s.y - y) > 6 * H));
   if (beachSeat) seats.push(bench('seat-beach', ...beachSeat, 'right', 'lighthouse-beach'));
@@ -270,9 +255,7 @@ function consolidate(out, world, walkable) {
     const [ex, ey] = ENTRIES[e], dx = ex - RING.x, dy = (ey - RING.y) / .77, len = Math.hypot(dx, dy), tx = -dy / len, ty = dx / len * .77;
     for (const [asset, s, kind] of [[lampAsset, 1, 'lamp'], [planterAsset, -1, 'planter']]) {
       if (!asset) continue;
-      // The west and southwest pots need more verge: their broad bases otherwise intrude into the painted entries.
-      const verge = kind === 'planter' && (e === 0 || e === 4) ? 160 : 112;
-      const at = k => [ex - dx / len * (20 + k) + tx * s * verge, ey - dy / len * (20 + k) + ty * s * verge];
+      const at = k => [ex - dx / len * (20 + k) + tx * s * 112, ey - dy / len * (20 + k) + ty * s * 112];
       const free = (x, y) => seats.every(b => b.footprint?.poly
         ? b.footprint.poly.every(([u, v]) => Math.hypot(u - x, (v - y) * 1.3) > 70 && !(Math.abs(u - x) < 40 && v < y && v > y - 230))
         : Math.hypot(b.x - x, (b.y - y) * 1.3) > half(b) + 60);
@@ -420,9 +403,6 @@ export function obstaclesFor(props, world) {
   const byProp = world.props.map(o => world.obstacles.find(b => b.x === o.x && o.y - b.y >= 0 && o.y - b.y < 30));
   const used = new Set(byProp.filter(Boolean)), out = [...world.obstacles.filter(b => !used.has(b) && !(b.x === 2820 && b.y === 2312)), ...SCENERY];
   for (const p of props) {
-    if (isHomeGroundProp(p)) continue;
-    out.push(...(p.occlusionBlockers??[]));
-    if(p.blockers){out.push(...p.blockers);continue;}
     const i = typeof p.id === 'number' ? p.id : -1, src = byProp[i], orig = world.props[i];
     const m = p.grow || 1;
     if (p.footprint || FOOTPRINTS[i]) out.push(p.footprint || FOOTPRINTS[i]);
@@ -450,28 +430,16 @@ export function sleepSpots(world, props, walkable, sizes) {
 }
 
 export const HOME_ORIGIN = expansion.origin;
-export const HOME_TILES = [{src:expansion.tiles[0].src,...expansion.origin,width:expansion.width,height:expansion.height,resolution:.65}];
-function resolvedHomePlacements() {
-  const base=placeWorld(homeOriginalWorld);
-  const resolved=[...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable).filter(p=>!(expansion.homeArches && p.id === 16)), ...expansion.props].map(p=>{const edit=expansion.reviewProps?.[p.id];if(!edit)return p;const q={...p,...edit};if(p.footprint&&!edit.footprint&&(edit.x!==undefined||edit.y!==undefined)){const dx=q.x-p.x,dy=q.y-p.y;q.footprint=p.footprint.poly?{poly:p.footprint.poly.map(([x,y])=>[x+dx,y+dy])}:{...p.footprint,x:p.footprint.x+dx,y:p.footprint.y+dy};}return q;}).map(fitHomeBush).map(homePathProp).map(fitHomeBuilding).map(fitHomeProp).map(homeGroundCloth).flatMap(homeDecisionParts).map(homeLayerProp);
-  for(const [child,parent]of [['windmill-sails','windmill'],['oven-smoke','bread-oven']]){const owner=resolved.find(p=>p.asset===parent);for(const p of resolved.filter(p=>p.asset===child))if(owner){p.sortFootY=owner.sortFootY;p.z=owner.z;}}
-  return resolved.map(homeOcclusionProp);
-}
-let groundCloths;
+export const HOME_TILES = [...expansion.tiles, ...original.ground.tiles.map(t=>({...t,src:t.src.replace('/pixi-art/','/pixi-art/home-expansion/')}))];
 export function createPlacements() {
-  const props=resolvedHomePlacements();
-  groundCloths=props.filter(isHomeGroundCloth);
-  return props.filter(p=>!isHomeGroundCloth(p));
-}
-export function homeGroundCloths() {
-  if (!groundCloths) createPlacements();
-  return groundCloths;
+  const base=placeWorld(homeOriginalWorld);
+  return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable).filter(p=>!(expansion.homeArches && p.id === 16)), ...expansion.props].map(p=>{const edit=expansion.reviewProps?.[p.id];if(!edit)return p;const q={...p,...edit};if(p.footprint&&!edit.footprint&&(edit.x!==undefined||edit.y!==undefined)){const dx=q.x-p.x,dy=q.y-p.y;q.footprint=p.footprint.poly?{poly:p.footprint.poly.map(([x,y])=>[x+dx,y+dy])}:{...p.footprint,x:p.footprint.x+dx,y:p.footprint.y+dy};}return q;});
 }
 export function homeDecals(props) {
   const base=placeWorld(homeOriginalWorld), old=geometry({...base,obstacles:[]}).walkable;
-  const cloths=homeGroundCloths(), originalProps=[...props.filter(p=>!String(p.id).startsWith('bigger-')), ...cloths];
+  const originalProps=props.filter(p=>!String(p.id).startsWith('bigger-'));
   const grown={...base,coast:shapes.coast};
-  return [...decalsFor(base,originalProps,old), ...decalsFor(grown,originalProps,geometry({...grown,obstacles:[]}).walkable).filter(d=>!old(d.x,d.y))].filter(d => !/grass|flower/.test(d.src) || reviewPathClear(d.x,d.y,8)).filter(d=>!(expansion.riverWater??[]).some(w=>inShape(d.x,d.y,w))).concat(cloths.map(homeClothFlat));
+  return [...decalsFor(base,originalProps,old), ...decalsFor(grown,originalProps,geometry({...grown,obstacles:[]}).walkable).filter(d=>!old(d.x,d.y))].filter(d => !/grass|flower/.test(d.src) || reviewPathClear(d.x,d.y,8)).filter(d=>!(expansion.riverWater??[]).some(w=>inShape(d.x,d.y,w)));
 }
 
 export const HOME_DECKS = expansion.decks ?? [];

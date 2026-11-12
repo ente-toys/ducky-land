@@ -1,5 +1,5 @@
 export const ARC = {x: 2820, y: 2370, k: .766, sIn: 402, sOut: 442, back: 446, seat: 17, top: 47};
-export const PLAZA_BENCHES = [{deg: -10, span: 22}, {deg: 80, span: 30}];
+export const PLAZA_BENCHES = [{deg: -132, span: 26}, {deg: -10, span: 22}, {deg: 80, span: 30}];
 export const ground = (deg, s) => {const a = deg * Math.PI / 180; return [ARC.x + Math.cos(a) * s, ARC.y + Math.sin(a) * s * ARC.k];};
 const arcPts = (b, s, n = 12) => Array.from({length: n + 1}, (_, i) => ground(b.deg - b.span / 2 + b.span * i / n, s));
 export const benchFootprint = b => ({poly: [...arcPts(b, ARC.sIn - 4), ...arcPts(b, ARC.back + 4).reverse()].map(([x, y]) => [Math.round(x), Math.round(y)])});

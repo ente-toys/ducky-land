@@ -343,15 +343,3 @@ test('a refilled boat appears at its mooring, never slides in from the sailing o
   assert.equal(fresh.travel,0);
   room.dispose();
 });
-
-
-test('Home wall-glide direction survives snapshots and resets on travel',()=>{
-  const {room}=setup();
-  room.snapshot(packet(1));
-  room.player.wallGlide={x:1,y:1,step:[2,-1]};
-  room.snapshot(packet(2));
-  assert.deepEqual(room.player.wallGlide,{x:1,y:1,step:[2,-1]});
-  room.snapshot(packet(3,'blossom'));
-  assert.equal(room.player.wallGlide,null);
-  room.dispose();
-});
