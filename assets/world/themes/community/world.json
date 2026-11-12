@@ -75764,8 +75764,9 @@
       "rx": 30.7,
       "ry": 21.8,
       "name": "life-south-lilac-2"
-    }
-  ],
+    },
+  {"x":3450,"y":-115.7,"rx":19.5,"ry":13.9,"name":"life-north-crown-4"}
+ ],
   "islets": [],
   "walkways": [
     {

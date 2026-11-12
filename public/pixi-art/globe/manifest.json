@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "43a9d2b2f115f72425768fed4301e9576dc2c86b128a9126e5de9e3e321ec26c",
+      "modelSha256": "a5ae89a5ef22af43367ddca15bbb74c668e938588d5f0d98f25f3d55e52b6479",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -1087,7 +1087,7 @@
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "8684d591663465797c080ca3e0d7b67099351b2c04ed6e41f8002d0d4ac06e25"
+          "sha256": "9f26a8d53c1e21b1233c7df0c2625c5db3343565c05672b860d9ff6ec640687c"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1134,11 +1134,11 @@
           "sha256": "46b255c73cb26fbe258412408ef50075b8f699a44f2b0a1de58f4c8378442162"
         }
       ],
-      "sha256": "0ae1e3c367ff5d1d7868047aba53b27ff6e1b19af0c0fc1f2e185238aa3ad141"
+      "sha256": "8f816de255905a0899b1aa01ac4347589e783eae43877ece5017d9b190df8013"
     },
     "groundSha256": "0a48b9d96e8f766362276d1d3a892fc659e5e4362d023ae78ffd4638cc80d465",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "69b84fa80ac6981861499a3c8ca909da5f828fcf4c1fce13e96240af1b81198b",
+    "sha256": "76d420a23b049f2f70880c53b9d31a7944681aa6a2813bbf4a733fa6b9628a4e",
     "width": 1024,
     "height": 768,
     "bytes": 1176863,
@@ -5695,7 +5695,7 @@
     "sources": {
       "version": 1,
       "theme": "library",
-      "modelSha256": "d763664addabd15d4ab4f8e1859f47667c8c73c62eb7f399818c495c1e3dfaae",
+      "modelSha256": "1410f419d3ec2b2ced3cb8699ed18f13166ca9b3fc8f8227206b06652c2fb361",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -8190,7 +8190,7 @@
           "sha256": "46b255c73cb26fbe258412408ef50075b8f699a44f2b0a1de58f4c8378442162"
         }
       ],
-      "sha256": "554b779810f7c468d8c2c25979d807fd2e0b8a1ca9ad407fbe862280df87b4ce"
+      "sha256": "5367863e98afecb57bb801507a7c4cc3b0a4f6c2ff5d02a5f39a39d5d12e00d3"
     },
     "groundSha256": "49772cf6bc3cf5c87500a7d28cbd8431eebdd8cc78f54890e261372cae601b3e",
     "src": "/pixi-art/globe/library.svg",
@@ -8215,7 +8215,7 @@
     "sources": {
       "version": 1,
       "theme": "community",
-      "modelSha256": "3187de5fa42fe40d3d6566f6728e76209f5a853f45ba11ac1949ffaef3ac6b38",
+      "modelSha256": "6454ebed5680b6abe92bc5e0798b8329ac036aa404466490a884238175b47407",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -8375,7 +8375,7 @@
         },
         {
           "path": "public/pixi-art/themes/community/art.json",
-          "sha256": "c59e6ee1fa5b72fc6fc0763ac6948ab7e5eb763881a1f84c16ee15476b60f56f"
+          "sha256": "b650683ddb1e0c0c77636a3e4067a342594fb1230a28f2639ca100f11d1be95c"
         },
         {
           "path": "public/pixi-art/themes/community/bridge-islet-1.svg",
@@ -9214,11 +9214,11 @@
           "sha256": "46b255c73cb26fbe258412408ef50075b8f699a44f2b0a1de58f4c8378442162"
         }
       ],
-      "sha256": "f2120aaaae596d85b7963266b3e6d60121cb57dbc6836fd2ca307f93ac74f504"
+      "sha256": "29ef5b77fb4d9afefe2f13a406dd0a4061412b847611396a4cf4eebef6ec7972"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
-    "sha256": "9ca38618162ac107168cd11e464ef4d6b3ed42be4792735904d436682e5a89cb",
+    "sha256": "149c2fbbb9f48a0467bcc7850bac9555173884b2b8c30865df545235730495c2",
     "width": 1024,
     "height": 768,
     "bytes": 740695,

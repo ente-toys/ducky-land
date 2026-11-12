@@ -6746,7 +6746,7 @@
       "name": "bush-round",
       "asset": "bush-round",
       "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
-      "x": 5438.2,
+      "x": 5538.2,
       "y": -422.3,
       "width": 111.2,
       "height": 66.3,
@@ -6759,7 +6759,7 @@
       "zone": "clovercrust",
       "order": 40,
       "footprint": {
-        "x": 5438.2,
+        "x": 5538.2,
         "y": -431.2,
         "rx": 33.4,
         "ry": 13.3
@@ -6771,7 +6771,7 @@
       "name": "grain-silo",
       "asset": "grain-silo",
       "src": "/pixi-art/home-hamlets/clovercrust/grain-silo.svg",
-      "x": 5360.5,
+      "x": 5460.5,
       "y": -394.2,
       "width": 147.4,
       "height": 292.1,
@@ -6788,7 +6788,7 @@
         17.7
       ],
       "footprint": {
-        "x": 5360.5,
+        "x": 5460.5,
         "y": -438.2,
         "rx": 59,
         "ry": 26
@@ -6910,7 +6910,7 @@
       "name": "bush-round",
       "asset": "bush-round",
       "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
-      "x": 5317.6,
+      "x": 5417.6,
       "y": -362,
       "width": 103.2,
       "height": 61.5,
@@ -6923,7 +6923,7 @@
       "zone": "clovercrust",
       "order": 46,
       "footprint": {
-        "x": 5317.6,
+        "x": 5417.6,
         "y": -370.3,
         "rx": 31,
         "ry": 12.4
