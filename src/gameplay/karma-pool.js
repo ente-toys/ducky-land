@@ -1,6 +1,6 @@
 import sites from './karma-sites.json' with {type:'json'};
 
-export const KARMA_ACTIVE=50;
+export const KARMA_ACTIVE=38;
 export const KARMA_RADIUS=65;
 export const KARMA_PER_REGION=3;
 export const KARMA_RESPAWN_MIN=30_000;

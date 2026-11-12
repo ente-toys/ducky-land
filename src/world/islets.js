@@ -5,20 +5,16 @@ import odyssey from '../../public/pixi-art/islets/odyssey.meta.json' with {type:
 import treeAndRowboat from '../../public/pixi-art/islets/tree-and-rowboat.meta.json' with {type:'json'};
 import brokenShipwreck from '../../public/pixi-art/islets/broken-shipwreck.meta.json' with {type:'json'};
 import smallMountain from '../../public/pixi-art/islets/04-small-mountain.meta.json' with {type:'json'};
-import lighthouseRock from '../../public/pixi-art/islets/05-lighthouse-rock.meta.json' with {type:'json'};
 import palmTreasure from '../../public/pixi-art/islets/06-palm-treasure.meta.json' with {type:'json'};
 import pinkBlossom from '../../public/pixi-art/islets/07-pink-blossom.meta.json' with {type:'json'};
-import snowIgloo from '../../public/pixi-art/islets/08-snow-igloo.meta.json' with {type:'json'};
-import spookyPurple from '../../public/pixi-art/islets/09-spooky-purple.meta.json' with {type:'json'};
-import volcano from '../../public/pixi-art/islets/11-volcano.meta.json' with {type:'json'};
 import coralAtoll from '../../public/pixi-art/islets/12-coral-atoll.meta.json' with {type:'json'};
 import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {sphereFrame,expMap,logMap,angle} from './sphere.js';
 import {placeIslet,unplaceIslet} from './islet-placement.js';
 import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const ISLET_SEED=data.seed;
-export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','05-lighthouse-rock','06-palm-treasure','07-pink-blossom','08-snow-igloo','09-spooky-purple','11-volcano','12-coral-atoll'];
-export const ISLET_META=Object.fromEntries([odyssey,treeAndRowboat,brokenShipwreck,smallMountain,lighthouseRock,palmTreasure,pinkBlossom,snowIgloo,spookyPurple,volcano,coralAtoll].map(m=>[m.art,m]));
+export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','06-palm-treasure','07-pink-blossom','12-coral-atoll'];
+export const ISLET_META=Object.fromEntries([odyssey,treeAndRowboat,brokenShipwreck,smallMountain,palmTreasure,pinkBlossom,coralAtoll].map(m=>[m.art,m]));
 export const ISLET_VIEWBOX=1024;
 const BOAT_ROOM=46+26;
 export function layoutIslet(i){

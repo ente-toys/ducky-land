@@ -35,7 +35,7 @@ test('every tall islet piece has a solid ground footprint shared by navigation a
   }
   const w=isletWalk(i.id);assert.ok(nav.walkable(w.land.x,w.land.y),`${i.id} jetty stays accessible`);
  }
- for(const [art,p]of [['tree-and-rowboat',[503,547]],['09-spooky-purple',[402,574]]]){
+ for(const [art,p]of [['tree-and-rowboat',[503,547]]]){
   const i=ISLETS.find(i=>i.art===art),k=i.width/1024,q=placeIslet(i.home,i,p.map(v=>(v-512)*k));
   assert.equal(navOf(i.home).walkable(q.x,q.y),false,`${art}: reported trunk base is blocked`);
  }

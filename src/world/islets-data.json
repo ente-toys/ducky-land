@@ -35,17 +35,9 @@
       "width": 3072
     },
     {
-      "id": "sea-5-1",
-      "art": "05-lighthouse-rock",
-      "artIndex": 4,
-      "lon": 0.5759586531581288,
-      "lat": -0.3839724354387525,
-      "width": 3072
-    },
-    {
       "id": "sea-6-1",
       "art": "06-palm-treasure",
-      "artIndex": 5,
+      "artIndex": 4,
       "lon": 1.5533430342749535,
       "lat": -0.8726646259971648,
       "width": 3072
@@ -53,39 +45,15 @@
     {
       "id": "sea-7-1",
       "art": "07-pink-blossom",
-      "artIndex": 6,
+      "artIndex": 5,
       "lon": -2.1467549799530254,
       "lat": -0.8552113334772214,
       "width": 3072
     },
     {
-      "id": "sea-8-1",
-      "art": "08-snow-igloo",
-      "artIndex": 7,
-      "lon": 0.24434609527920614,
-      "lat": 1.064650843716541,
-      "width": 3072
-    },
-    {
-      "id": "sea-9-1",
-      "art": "09-spooky-purple",
-      "artIndex": 8,
-      "lon": -0.5061454830783556,
-      "lat": -0.9599310885968813,
-      "width": 3072
-    },
-    {
-      "id": "sea-10-1",
-      "art": "11-volcano",
-      "artIndex": 9,
-      "lon": -1.5707963267948966,
-      "lat": -0.6457718232379019,
-      "width": 3072
-    },
-    {
       "id": "sea-11-1",
       "art": "12-coral-atoll",
-      "artIndex": 10,
+      "artIndex": 6,
       "lon": 2.6354471705114375,
       "lat": -0.12217304763960307,
       "width": 3072

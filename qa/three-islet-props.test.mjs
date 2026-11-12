@@ -13,10 +13,10 @@ test('one upright islet drawing stays opaque across zoom ownership and disappear
  globalThis.document={createElement:tag=>{assert.equal(tag,'canvas');return createCanvas(1,1);}};
  globalThis.DOMParser=DOMParser;globalThis.XMLSerializer=XMLSerializer;
  const rasterize=async svg=>{const c=createCanvas(512,512);c.getContext('2d').drawImage(await loadImage(Buffer.from(svg)),0,0,512,512);return c;};
- const scene=new Scene(),frame=ISLETS.find(i=>i.art==='05-lighthouse-rock'),blend={value:0};
+ const scene=new Scene(),frame=ISLETS.find(i=>i.art==='odyssey'),blend={value:0};
  let view;
  try{
-  view=await createIsletStanding(scene,frame,readFileSync(new URL('../public/pixi-art/islets/05-lighthouse-rock.svg',import.meta.url),'utf8'),blend,{rasterize});
+  view=await createIsletStanding(scene,frame,readFileSync(new URL('../public/pixi-art/islets/odyssey.svg',import.meta.url),'utf8'),blend,{rasterize});
   assert.equal(view.props.length,ISLET_META[frame.art].tallPieces.length,'every source piece has exactly one upright owner');
   const p=view.props[0];p.anchor.set(0,0,1.001);
   const camera=new THREE.PerspectiveCamera(35,1,.01,20);camera.position.z=3;camera.updateMatrixWorld(true);

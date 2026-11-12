@@ -193,8 +193,8 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
       return new CanvasTexture(await loadImage(fileURLToPath(path)));
     }},water:new MeshBasicMaterial()}};
   for(const [key,value]of Object.entries(globals))Object.defineProperty(globalThis,key,{value,writable:true,configurable:true});
-  const isletProp={visible:true},isletFrame=ISLETS.find(i=>i.art==='05-lighthouse-rock');
-  assert.ok(isletFrame,'exercise the lighthouse reported in the double-scenery screenshot');
+  const isletProp={visible:true},isletFrame=ISLETS.find(i=>i.art==='odyssey');
+  assert.ok(isletFrame,'exercise an islet with upright scenery');
   const game={isletView:{views:[{i:isletFrame,root:{visible:true},props:[{sprite:isletProp}]}],update(){}},canvas,width,height,artShown:'community',islandId:frame.id,ready:true,arts:new Map([['home',{ready:true}],['community',{ready:true}]]),
     camera:{x:map.cx,y:map.cy,zoom:1},target:{},zoomMotion:{velocity:0},player:{x:map.cx,y:map.cy},rigs:[],localDucks:[],liveRigs:new Map(),ocean:{alpha:1,visible:true},keys:new Set(),touchInput:{x:0,y:0},
     app:{render(){nativeRenders++;nativeProps.push(isletProp.visible);},renderer:{resolution:1,background:{alpha:1},resize(w,h,resolution=this.resolution){this.resolution=resolution;canvas.width=Math.round(w*resolution);canvas.height=Math.round(h*resolution);}}},
@@ -263,10 +263,10 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
       assert.equal(canvas.style.visibility,'hidden','overscan native canvas is captured, not displayed as a second layer');
       assert.equal(nativeProps.at(-1),false,'capture omits upright islet props that are rendered once by the globe');
       assert.equal(isletProp.visible,true,'temporary capture suppression restores native ownership');
-      const lighthouse=renderer.scene.getObjectByName('Standing 05-lighthouse-rock/lighthouse');
-      assert.ok(lighthouse?.visible,'the globe lighthouse remains the visible scenery owner');
-      assert.equal(lighthouse.material.userData.flatBlend.value,viewport.material.opacity,'the single lighthouse follows the same projection morph as its captured ground');
-      assert.ok(lighthouse.renderOrder>surface.renderOrder,'upright lighthouse draws above the captured surface');
+      const horse=renderer.scene.getObjectByName('Standing odyssey/wooden-horse');
+      assert.ok(horse?.visible,'the globe wooden horse remains the visible scenery owner');
+      assert.equal(horse.material.userData.flatBlend.value,viewport.material.opacity,'the single wooden horse follows the same projection morph as its captured ground');
+      assert.ok(horse.renderOrder>surface.renderOrder,'upright wooden horse draws above the captured surface');
       const isletGround=globe.children.find(p=>p.userData?.id===isletFrame.id);
       assert.equal(isletGround?.visible,false,'captured native ground replaces the old static ground instead of doubling its footprint');
       assert.equal(viewport.material.map,surface.material.map,'one capture and texture upload for both planes');
