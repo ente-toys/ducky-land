@@ -50,7 +50,7 @@ export default function PixiPage() {
   const [indoors,setIndoors] = useState(false);
   const [notificationHost,setNotificationHost] = useState(null);
   const params = new URLSearchParams(location.search);
-  const offline = import.meta.env.DEV && (params.get('dev') === '1' || params.has('offline'));
+  const offline = params.has('offline') || (import.meta.env.DEV && params.get('dev') === '1');
 
   useEffect(() => {setTravelNotice('');},[travel.islandId,travel.mode]);
 
@@ -145,7 +145,8 @@ export default function PixiPage() {
       <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>
     </div>
     {!error && <aside className="pixi-live" aria-label="Live island">
-      <div role="status">{notice || arrival || (offline ? 'Local development · Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
+      <div role="status">{notice || arrival || (offline ? 'Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
+      {offline && <a href={location.pathname}>Back to live</a>}
       {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
       {(status === 'playing' || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
       {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}
@@ -159,10 +160,11 @@ export default function PixiPage() {
     </aside>}
     {!error && guest && <aside className="pixi-guest-play" aria-labelledby="pixi-guest-heading">
       <h2 id="pixi-guest-heading">Your duck is waiting</h2>
-      <p>Sign in to walk, quack, and explore.</p>
+      <p>Explore on your own or sign in to play online.</p>
       {session.signInAvailable
         ? <a href="/auth/github/start">Play with GitHub <span aria-hidden="true">→</span></a>
         : <><button disabled>Play with GitHub</button><small>Sign-in is unavailable right now.</small></>}
+      <a className="pixi-guest-offline" href="?offline">Continue as guest</a>
     </aside>}
     {!error && <div className="pixi-bottom-hud">
       <IslandTravel travel={travel} playing={status==='playing' || offline} room={room} island={island} notice={travelNotice}/>

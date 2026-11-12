@@ -287,9 +287,8 @@
 .pixi-guest-play :is(a, button):focus-visible { outline: 3px solid #332b23; outline-offset: 4px; }
 .pixi-guest-play button:disabled { opacity: .65; cursor: default; box-shadow: none; }
 .pixi-guest-play small { display: block; margin-top: 10px; }
-@media (max-width: 600px) {
-  .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 240px); max-height: calc(100svh - 340px); }
-}
+.pixi-guest-play .pixi-guest-offline { margin-top: 10px; background: #fff9df; }
+.pixi-guest-play .pixi-guest-offline:hover { background: #fff0b8; }
 
 .pixi-page { --world-map-width: 200px; --world-map-height: 208px; }
 .pixi-world-map {
@@ -315,7 +314,7 @@
 @media (max-width: 600px) {
   .pixi-page { --world-map-width: 132px; --world-map-height: 140px; }
   .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
-  .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height) + 180px); }
+  .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height) + 236px); max-height: max(0px, calc(100svh - 440px)); }
   .pixi-notifications { bottom: auto; }
 }
 .pixi-world-map svg { overflow: visible; }
