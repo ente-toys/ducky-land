@@ -1,6 +1,8 @@
 // Render the production islet layers without a browser. No game art is generated.
 // node scripts/islets/shadow-check.mjs before|after [output directory]
+// Use the same explicit output directory for both runs to generate comparisons.
 import fs from 'node:fs';
+import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {JSDOM} from 'jsdom';
 import {Canvas,createCanvas,loadImage} from '@napi-rs/canvas';
@@ -9,7 +11,11 @@ import {CanvasRenderer} from '../../node_modules/pixi.js/lib/rendering/renderers
 import {createIsletView} from '../../src/pixi/islet-view.js';
 import {ISLET_ART,ISLET_SCALE} from '../../src/pixi/islets.js';
 import {placeIslet} from '../../src/pixi/islet-placement.js';
-const phase=process.argv[2]??'after',out=path.resolve(process.argv[3]??'shadow-check');fs.mkdirSync(out,{recursive:true});
+const [phase = 'after', outputDirectory] = process.argv.slice(2);
+const out = outputDirectory === undefined
+  ? fs.mkdtempSync(path.join(tmpdir(), 'ducky-islet-shadows-'))
+  : path.resolve(outputDirectory);
+fs.mkdirSync(out, {recursive: true});
 const dom=new JSDOM('<body></body>',{url:'http://localhost/'});
 Object.assign(globalThis,{window:dom.window,document:dom.window.document,DOMParser:dom.window.DOMParser,requestAnimationFrame:()=>0,cancelAnimationFrame:()=>{},HTMLCanvasElement:Canvas});
 Object.defineProperty(globalThis,'navigator',{value:dom.window.navigator,configurable:true});
