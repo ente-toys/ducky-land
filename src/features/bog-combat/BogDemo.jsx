@@ -48,7 +48,7 @@ export default function BogDemo({engine,combat,count}){
  const focused=snapshot?.players.find(p=>p.id===(mode==='action'||mode==='area'?demo.heroId:mode));
  return <>
   <aside className="bog-combat-hud" aria-label="Local autoplay demo" style={picker?{left:'auto',right:16}:undefined}>
-   <div className="bog-combat-score"><span>PRIVACY {snapshot?.scores.privacy??0}</span><span>GOOGLE {snapshot?.scores.google??0}</span></div>
+   <div className="bog-combat-score"><span>KARMA {snapshot?.scores.privacy??0}</span><span>EVIL {snapshot?.scores.google??0}</span></div>
    <p>LOCAL DEMO · {count} bots · {mode==='action'?'Following Ducky':mode==='area'?'Area camera':snapshot?.players.find(p=>p.id===mode)?.name}</p>
    {focused&&<><div className="bog-combat-lives" role="img" aria-label={`${focused.lives} lives left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<focused.lives?'':'lost'}>♥</span>)}</div>{focused.alive&&focused.shieldUntil>snapshot.time&&<p>Hidden {Math.ceil(focused.shieldUntil-snapshot.time)}s</p>}</>}
    <small>1–0 follow a bot · Tab cycles · WASD + Shift + Space when playing</small>
@@ -56,7 +56,7 @@ export default function BogDemo({engine,combat,count}){
    <div aria-label="Kill feed" style={{marginTop:8}}>{snapshot?.events.slice(-4).map(e=><div key={e.id}>{e.actor} tagged {e.victim}{e.medals.length?' · Medal!':''}</div>)}</div>
    {error&&<p role="alert">{error}</p>}
   </aside>
-  {demo.match.winner&&<div className="bog-demo-winner" role="status"><strong>Team PRIVACY wins!</strong><span>New match in a few seconds</span></div>}
+  {demo.match.winner&&<div className="bog-demo-winner" role="status"><strong>Team KARMA wins!</strong><span>New match in a few seconds</span></div>}
   {picker&&<BogDock engine={engine} {...combat} Room={demo.Room} Socket={demo.Socket} leaveLabel="Spectate" returnLabel="Spectate" onLeave={()=>{setPicker(false);setMode(demo.heroId);}} onReturnToDock={()=>{setPicker(false);setMode(demo.heroId);}}/>}
  </>;
 }

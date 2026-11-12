@@ -13,7 +13,7 @@ export function createDemo(combat,count,{random=Math.random}={}){
   const {think}=createBotController(sim,combat,{random,showcase:true,heroId});
   const metrics={cpuMs:0,maxCpuMs:0};
   for(let i=0;i<count;i++){
-    const team=i%2?'google':'privacy',p=sim.join({id:`bot-${i}`,name:i===0?'Ducky':`${team==='privacy'?'Privacy':'Google'} ${Math.floor(i/2)+1}`,team});
+    const team=i%2?'google':'privacy',p=sim.join({id:`bot-${i}`,name:i===0?'Ducky':`${team==='privacy'?'Karma':'Evil'} ${Math.floor(i/2)+1}`,team});
     p.bot=true;brains.set(p.id,createBotBrain(i));
   }
   class LocalSocket{

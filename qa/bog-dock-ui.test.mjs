@@ -37,13 +37,13 @@ test('strict-mode dock chooses either side, returns with totals/medal case and r
   const render=async options=>{await act(async()=>root.render(React.createElement(React.StrictMode,null,React.createElement(BogEntry,{...props,...options}))));};
   try{
     await render();assert.match(document.body.textContent,/Pick your side/);assert.equal(document.querySelector('.bog-combat-google').disabled,false);
-    await click('Team GOOGLE');assert.equal(engine.bogCombat.room.client.self.team,'google');assert.match(document.querySelector('aside').textContent,/5 kills/);
+    await click('Team EVIL');assert.equal(engine.bogCombat.room.client.self.team,'google');assert.match(document.querySelector('aside').textContent,/5 kills/);
     const googleIcon=document.querySelector('.bog-combat-popper-icon').getAttribute('src');
     assert.doesNotMatch(decodeURIComponent(googleIcon),/privacy-padlock/);
     assert.equal(sockets.filter(s=>s.url.searchParams.has('team')&&s.readyState===1).length,1,'strict effects leave exactly one participant');
     await click('Back to boat');assert.equal(engine.room,oldRoom);assert.equal(engine.bogCombat,undefined);assert.equal(returns,1);
     assert.match(document.body.textContent,/Back at the dock/);assert.match(document.querySelector('dl').textContent,/Score50/);assert.match(document.querySelector('ul').textContent,/Earned/);
-    await click('Pick a team');await click('Team PRIVACY');assert.equal(engine.bogCombat.room.client.self.team,'privacy');
+    await click('Pick a team');await click('Team KARMA');assert.equal(engine.bogCombat.room.client.self.team,'privacy');
     const privacyIcon=document.querySelector('.bog-combat-popper-icon').getAttribute('src');
     assert.notEqual(privacyIcon,googleIcon);assert.match(decodeURIComponent(privacyIcon),/privacy-padlock/);
     await click('Back to boat');await click('Back to boat');assert.equal(closed,1);
