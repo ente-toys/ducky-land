@@ -85,7 +85,13 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     const nextBlend=detailBlend(state.altitude,state.heading);
     const sameArt=shown===mapId&&game.artShown===mapId;
     const nextDirect=nextBlend===1&&sameArt&&directDetail(state.altitude,direct,game.artReady(mapId))&&(direct||flatFrames>=2);
-    if(!direct&&!nextDirect&&now-last<1000/work.hz-.5)return;
+    const movement=detailMovement(game.keys,game.touchInput);
+    const settling=following&&followPositionState&&Math.hypot(followPositionState.x-followPositionState.target.x,followPositionState.y-followPositionState.target.y)>.01;
+    // A moving capture must match the globe's animation-frame cadence. A fixed
+    // 60/30 Hz gate repeats frames on 75/120/144 Hz displays, and can leave the
+    // detailed outlines behind while the globe camera advances underneath.
+    const fullRate=work.visible&&(state.moving||state.flying||movement||game.player?.travel>0||settling);
+    if(!direct&&!nextDirect&&!fullRate&&now-last<1000/work.hz-.5)return;
     last=now;direct=nextDirect;
     const map=mapOf(id);
     const detailVisible=work.visible;
@@ -102,13 +108,13 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     if(shown!==mapId||game.artShown!==mapId){world.clearLiveCanvas();shown=mapId;game.wantedArts=new Set(['home',mapId]);game.artShown=mapId;game.showArt(mapId);game.applyMapAmbience(mapId);}
     game.ensureArt(mapId);
     blend=nextBlend;
-    if(detailMovement(game.keys,game.touchInput))following=true;
+    if(movement)following=true;
     if(following)flatOffset.x=flatOffset.y=0;
     const camera=detailCamera(WORLD_ISLANDS.find(i=>i.id===id),map,{...state,radius:WORLD_GEO.Rw},game.width,game.height,TILT,flatOffset,captureScale()),zoom=camera.zoom;
     game.minZoom=.00001;game.zoomAnchor=null;game.zoomMotion.velocity=0;game.spin=null;game.globeAim=null;game.fly=null;game.follow=false;game.fitMode=false;game.landingView=null;game.globeT=0;
     game.externalCamera=camera;
     Object.assign(game.camera,game.externalCamera);delete game.camera.basis;Object.assign(game.target,game.camera);
-    const smoothFollow=direct&&following&&!state.flying&&view.id===game.islandId;
+    const smoothFollow=following&&state.altitude<.55&&!state.flying&&view.id===game.islandId;
     if(!smoothFollow)followPositionState=null;
     nativeTick(now,{followCamera:smoothFollow?followCamera:undefined});
     cancelAnimationFrame(game.raf);

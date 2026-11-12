@@ -7,6 +7,7 @@ import {libraryFountainLayout} from '../src/rendering/pixi/environment/centre-mo
 import {fountainPoint, createFountainWater} from '../src/rendering/pixi/environment/fountain.js';
 import {trackUpright} from '../src/rendering/shared/upright.js';
 import {TILT} from '../src/rendering/shared/camera.js';
+import {fountainDrawing as drawing} from './fountain-drawing.mjs';
 
 const manifest = JSON.parse(readFileSync('public/pixi-art/themes/library/art.json'));
 const centre = JSON.parse(readFileSync('public/pixi-art/themes/library/centre/centre.json'));
@@ -25,8 +26,6 @@ function fixture() {
     for (const p of props) p.sprite.destroy();
   }}};
 }
-const drawing = root => JSON.stringify(root.children[0].context.instructions.map(({action, data}) =>
-  ({action, style: {...data.style, texture: undefined}, path: data.path.instructions})));
 
 test('all Pagepond fountain jets reuse Home flow with fixed mouths, landings and correct upright depth', async () => {
   const {art, objects} = fixture(), layout = libraryFountainLayout(art.props);
@@ -47,7 +46,7 @@ test('all Pagepond fountain jets reuse Home flow with fixed mouths, landings and
     }
     assert.equal(root.zIndex, prop.sprite.zIndex + .000001);
     assert.equal(prop.sprite.alpha, 0, 'no static jet drawn over the flowing replacement');
-    assert.ok(root.children[0].context.instructions.length >= 15, 'flow, highlights, foam and landing rings');
+    assert.ok(root.children.find(c => c.label === 'Fountain flow').children[0].children.length >= 15, 'flow, highlights, foam and landing rings');
     assert.equal(root.zIndex < art.props.find(p => p.centrePiece.id === 'globe').sprite.zIndex, prop.centrePiece.id.includes('back'));
   }
   const before = roots.map(drawing), shimmer = drawing(art.ground.children[0]);
@@ -65,7 +64,7 @@ test('Pagepond reduced motion restores still SVG jets, clears spray, hides with 
   const still = roots.map(drawing);
   art.updateCentre(123, true);
   assert.deepEqual(roots.map(drawing), still);
-  assert.ok(roots.every(r => r.children[0].context.instructions.length === 0));
+  assert.ok(roots.every(r => !r.children.find(c => c.label === 'Fountain flow').visible && r.children.at(-1).context.instructions.length === 0));
   assert.ok(jets.every(p => p.sprite.alpha === 1));
   art.ground.visible = false; art.updateCentre(124, false);
   assert.ok(roots.every(r => !r.visible));
@@ -82,7 +81,7 @@ test('Home fountain still uses its bowl lips and suppresses all moving water wit
   assert.deepEqual(fountainPoint(spill, 0), {x: 240, y: 308.787234});
   assert.deepEqual(fountainPoint(spill, 1), {x: 240, y: 395});
   assert.deepEqual([fx.root.x, fx.root.y], [2568, 2055]);
-  fx.update(.2, false, true); assert.ok(fx.root.children[0].context.instructions.length > 0);
-  fx.update(.3, true, true); assert.equal(fx.root.children[0].context.instructions.length, 0);
+  fx.update(.2, false, true); assert.equal(fx.flow.visible, true); assert.equal(fx.streams.length, 3);
+  fx.update(.3, true, true); assert.equal(fx.flow.visible, false); assert.equal(fx.droplets.context.instructions.length, 0);
   parent.destroy({children: true});
 });

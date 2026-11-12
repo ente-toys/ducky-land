@@ -41,9 +41,9 @@ test('The olive fountain runs Home water, shares its jet curves and honours visi
  try{
   assert.deepEqual([fx.root.x,fx.root.y],[3620,2420]);
   for(const sp of basin.fountainWater.spills){assert.deepEqual(fountainPoint(sp,0),{x:sp.start,y:sp.jet.y});assert.deepEqual(fountainPoint(sp,1),{x:sp.x,y:sp.bottom});}
-  fx.update(1,false,true);const g=fx.graphics;assert.ok(g.context.instructions.length>0);
-  fx.update(2,false,true);assert.ok(g.context.instructions.length>0);
-  fx.update(3,true,true);assert.equal(g.context.instructions.length,0);
+  fx.update(1,false,true);assert.ok(fx.flow.visible);assert.ok(fx.streams.length>0);
+  fx.update(2,false,true);assert.ok(fx.flow.visible);
+  fx.update(3,true,true);assert.equal(fx.flow.visible,false);assert.equal(fx.droplets.context.instructions.length,0);
   fx.update(4,false,false);assert.equal(fx.root.visible,false);
  }finally{parent.destroy({children:true});}
 });

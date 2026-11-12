@@ -2,6 +2,7 @@ import {Container, Graphics, ImageSource, Texture} from 'pixi.js';
 import {ART_TEXTURE} from '../art/art-texture.js';
 import {PALETTE} from '../../shared/palette.js';
 import {basinClip, createBasinWater} from './fountain-basin.js';
+import {createFountainStream} from './fountain-stream.js';
 
 const CENTRE = {x: 240, y: 300};
 const RIM = {x: 240, y: 223, rx: 112, ry: 85.787234};
@@ -11,18 +12,20 @@ const SPILLS = [
   {start: 322, x: 350, bottom: 358, w: 14},
 ];
 const rimY = x => RIM.y + RIM.ry * Math.sqrt(Math.max(0, 1 - ((x - RIM.x) / RIM.rx) ** 2));
-export const fountainPoint = (sp, u, side = 0, width = 1) => {
+export const fountainPoint = (sp, u, side = 0, width = 1, out = {}) => {
   if (sp.jet) {
     const {y, cx, cy} = sp.jet, v = 1 - u;
     const dx = 2 * (v * (cx - sp.start) + u * (sp.x - cx));
     const dy = 2 * (v * (cy - y) + u * (sp.bottom - cy));
     const offset = side * sp.w * width / 2 * (1 - .24 * u), length = Math.hypot(dx, dy) || 1;
-    return {x: v * v * sp.start + 2 * v * u * cx + u * u * sp.x - dy / length * offset,
-      y: v * v * y + 2 * v * u * cy + u * u * sp.bottom + dx / length * offset};
+    out.x = v * v * sp.start + 2 * v * u * cx + u * u * sp.x - dy / length * offset;
+    out.y = v * v * y + 2 * v * u * cy + u * u * sp.bottom + dx / length * offset;
+    return out;
   }
   const offset = side * sp.w * width / 2, top = rimY(sp.start + offset);
-  return {x: sp.start + (sp.x - sp.start) * u + offset * (1 - .24 * u),
-    y: top + 14 * u + (sp.bottom - top - 14) * u * u};
+  out.x = sp.start + (sp.x - sp.start) * u + offset * (1 - .24 * u);
+  out.y = top + 14 * u + (sp.bottom - top - 14) * u * u;
+  return out;
 };
 async function cleanArtwork(prop, root) {
   if (!prop.sprite || typeof document === 'undefined') return;
@@ -65,8 +68,11 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
   water = surface ?? water;
   const g = new Graphics();
   root.addChild(g);
+  const flow = new Container({label: 'Fountain flow'}); root.addChild(flow);
+  const streams = spills.map(sp => createFountainStream(flow, Boolean(sp.jet)));
+  const droplets = new Graphics(); root.addChild(droplets);
   if (surface) {
-    const clip = basinClip(layout.surface); root.addChild(clip); g.mask = clip;
+    const clip = basinClip(layout.surface); root.addChild(clip); g.mask = flow.mask = droplets.mask = clip;
     root.once('destroyed', () => surface.dispose());
   }
   parent.addChild(root);
@@ -88,7 +94,7 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
     const dt = last === null || !wasVisible ? 0 : Math.min(.05, Math.max(0, t - last)); last = t;
     surface?.update(dt, reduced, visible);
     if (!visible) return;
-    g.clear();
+    g.clear(); droplets.clear(); flow.visible = !reduced;
     if (reduced) {drops.length = 0; splashAcc = impactAcc = 0; return;}
     t += layout.phase ?? 0;
 
@@ -117,14 +123,9 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
     for (const [k, sp] of spills.entries()) {
       const wob = 1 + .035 * Math.sin(t * 5 + k * 1.7);
       const curve = sp.jet ? {...sp, jet: {...sp.jet, cy: sp.jet.cy + Math.sin(t * 3 + k) * 3}} : sp;
-      const ribbon = (from, to, width, color, alpha) => {
-        const p = fountainPoint(curve, from, -1, width); g.moveTo(p.x, p.y);
-        for (let j = 1; j <= 12; j++) {const p = fountainPoint(curve, from + (to - from) * j / 12, -1, width); g.lineTo(p.x, p.y);}
-        for (let j = 0; j <= 12; j++) {const p = fountainPoint(curve, to, -1 + 2 * j / 12, width); g.lineTo(p.x, p.y);}
-        for (let j = 11; j >= 0; j--) {const p = fountainPoint(curve, from + (to - from) * j / 12, 1, width); g.lineTo(p.x, p.y);}
-        for (let j = 11; j >= 0; j--) {const p = fountainPoint(curve, from, -1 + 2 * j / 12, width); g.lineTo(p.x, p.y);}
-        g.closePath().fill({color, alpha});
-      };
+      const stream = streams[k]; let ribbonIndex = 0;
+      const ribbon = (from, to, width, color, alpha) =>
+        stream.ribbons[ribbonIndex++].update(curve, from, to, width, color, alpha, fountainPoint);
       if (sp.jet) ribbon(0, 1, wob * 1.3, PALETTE.ink, 1);
       ribbon(0, 1, wob, surface ? WATER : sp.jet ? 0xB5E7F7 : WATER, 1);
       ribbon(0, 1, .3 * wob, HI, .48);
@@ -135,11 +136,13 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
       for (let i = 0; i < 6; i++) {
         const u = fract(t * 1.8 + i / 6 + k * .13), a = i * 1.05 + t * 2;
         const x = sp.x + Math.cos(a) * sp.w * (.35 + .5 * u), y = sp.bottom + 2 + Math.sin(a) * 4;
-        g.circle(x, y, (2.8 + 2.2 * Math.sin(u * Math.PI)) * (1 - u * .4)).fill({color: WHITE, alpha: .9 * (1 - u)});
+        const foam = stream.foam[i]; foam.position.set(x, y);
+        foam.scale.set((2.8 + 2.2 * Math.sin(u * Math.PI)) * (1 - u * .4) / 5);
+        foam.tint = WHITE; foam.alpha = .9 * (1 - u);
       }
       for (let i = 0; i < 3; i++) {
         const u = fract(t * 1.05 + i / 3 + k * .33), rx = sp.w * .55 + 30 * u;
-        g.ellipse(sp.x, sp.bottom + 3, rx, rx * .3).stroke({color: WHITE, width: 2.6 * (1 - u) + .5, alpha: .85 * (1 - u)});
+        stream.rings[i].update(sp.x, sp.bottom + 3, rx, rx * .3, 2.6 * (1 - u) + .5, WHITE, .85 * (1 - u));
       }
     }
 
@@ -154,8 +157,8 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
       d.vy += GRAVITY * dt; d.x += d.vx * dt; d.y += d.vy * dt;
       if (d.vy > 0 && d.y >= d.floor) {water?.fountainSplash(d.x, d.floor, .035, d.floor < 250 ? 'bowl' : 'pool'); drops.splice(i, 1); continue;}
       if (d.y - d.r < minDropY) continue;
-      g.circle(d.x, d.y, d.r).fill({color: HI, alpha: .95});
+      droplets.circle(d.x, d.y, d.r).fill({color: HI, alpha: .95});
     }
   }
-  return {root, update, graphics: g, surface};
+  return {root, update, graphics: g, surface, flow, streams, droplets};
 }

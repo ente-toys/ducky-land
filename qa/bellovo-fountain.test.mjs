@@ -11,13 +11,12 @@ import {createFountainWater} from '../src/rendering/pixi/environment/fountain.js
 import {trackUpright} from '../src/rendering/shared/upright.js';
 import {TILT} from '../src/rendering/shared/camera.js';
 import {PALETTE} from '../src/rendering/shared/palette.js';
+import {fountainDrawing as drawing} from './fountain-drawing.mjs';
 
 DOMAdapter.set({...DOMAdapter.get(), createCanvas: () => ({getContext: () => null})});
 const manifest = JSON.parse(readFileSync('public/pixi-art/themes/cathedral/art.json'));
 const prop = manifest.props.find(p => p.id === 'centre-A-fountain');
 const layout = prop.fountainWater.surface;
-const drawing = g => JSON.stringify(g.context.instructions.map(({action, data}) =>
-  ({action, style: {...data.style, texture: undefined}, path: data.path.instructions})));
 
 test('Bellovo mounts one Home fountain effect with the same surface shader, colours and upright registration', async t => {
   const oldFetch = globalThis.fetch; t.after(() => globalThis.fetch = oldFetch);
@@ -86,18 +85,18 @@ test('Home impacts move Bellovo waves and jets, hidden islands do no work, reduc
   try {
     let uploads = 0; surface.heights.on('update', () => uploads++);
     fx.update(0, false, true);
-    const before = drawing(fx.graphics);
+    const before = drawing(fx.flow);
     for (let i = 1; i <= 60; i++) fx.update(i / 60, false, true);
-    assert.notEqual(drawing(fx.graphics), before, 'shared flow, landing rings and spray evolve');
-    assert.ok(fx.graphics.context.instructions.some(i => i.data.style?.color === PALETTE.water), 'jet ribbons use Home water colour');
+    assert.notEqual(drawing(fx.flow), before, 'shared flow, landing rings and spray evolve');
+    assert.ok(fx.streams.every(s => s.ribbons.some(r => r.mesh.tint === PALETTE.water)), 'jet ribbons use Home water colour');
     assert.ok(surface.field.current.some(h => Math.abs(h) > .00001), 'Home jet impacts drive the actual height field');
     assert.ok(surface.uniforms.uTime > .99);
     assert.ok(uploads > 0);
-    const steps = surface.field.steps, upload = uploads, hidden = drawing(fx.graphics);
+    const steps = surface.field.steps, upload = uploads, hidden = drawing(fx.flow);
     fx.update(2, false, false); fx.update(3, false, false);
     assert.equal(fx.root.visible, false); assert.equal(surface.mesh.visible, false);
     assert.equal(surface.field.steps, steps); assert.equal(uploads, upload);
-    assert.equal(drawing(fx.graphics), hidden, 'no hidden redraw');
+    assert.equal(drawing(fx.flow), hidden, 'no hidden redraw');
     fx.update(100, false, true); assert.equal(surface.field.steps, steps, 'no catch-up on returning');
     fx.update(101, true, true);
     const frozen = [...surface.field.packed], reducedSteps = surface.field.steps;
@@ -105,7 +104,8 @@ test('Home impacts move Bellovo waves and jets, hidden islands do no work, reduc
     assert.deepEqual([...surface.field.packed], frozen);
     assert.equal(surface.field.steps, reducedSteps);
     assert.equal(surface.uniforms.uTime, 0); assert.equal(surface.uniforms.uCalm, 1);
-    assert.equal(fx.graphics.context.instructions.length, 0, 'Home suppresses jets and spray with reduced motion');
+    assert.equal(fx.flow.visible, false, 'Home suppresses jets with reduced motion');
+    assert.equal(fx.droplets.context.instructions.length, 0, 'Home suppresses spray with reduced motion');
     fx.update(201, false, true); assert.ok(surface.field.steps > reducedSteps);
   } finally {parent.destroy({children: true});}
 });
