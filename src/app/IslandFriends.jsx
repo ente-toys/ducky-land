@@ -1,7 +1,9 @@
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 
-export default function IslandFriends({room, island, status, indoors, notificationHost}) {
+// The friends list inside the profile panel, plus the nearby/request prompt. visible says whether the panel is
+// open (the list refreshes when it opens); onRequests reports the incoming request count for the badge.
+export default function IslandFriends({room, status, indoors, notificationHost, visible = false, onRequests}) {
   const [friends, setFriends] = useState([]);
   const [incoming, setIncoming] = useState([]);
   const [outgoing, setOutgoing] = useState([]);
@@ -11,8 +13,6 @@ export default function IslandFriends({room, island, status, indoors, notificati
   const [pending, setPending] = useState(null);
   const [candidate, setCandidate] = useState(null);
   const [feedback, setFeedback] = useState(null);
-  const [open, setOpen] = useState(false);
-  const dialog = useRef(null);
   const requests = useRef(null);
   const refresh = useRef(() => {});
 
@@ -60,13 +60,8 @@ export default function IslandFriends({room, island, status, indoors, notificati
     };
   }, [room]);
 
-  useEffect(() => {
-    if (!open) return;
-    const element = dialog.current;
-    island.current?.stopInput();
-    element.showModal();
-    return () => element.close();
-  }, [open, island]);
+  useEffect(() => {onRequests?.(incoming.length);}, [incoming.length, onRequests]);
+  useEffect(() => {if (visible) refresh.current();}, [visible]);
 
   async function change(method, target, action) {
     if (pending || !requests.current || requests.current.signal.aborted) return;
@@ -100,45 +95,40 @@ export default function IslandFriends({room, island, status, indoors, notificati
   }
 
   const request = incoming[0];
-  const showPrompt = !open && !loading && !loadError && (request || status === 'playing' && !indoors);
+  const showPrompt = !loading && !loadError && (request || status === 'playing' && !indoors);
+  const body = <>
+    <p>Walk near someone to send a friend request.</p>
+    {loading && <p role="status">Loading friends…</p>}
+    {loadError && <div role="alert"><p>{loadError}</p><button type="button" onClick={() => refresh.current()}>Try again</button></div>}
+    {actionError && <p role="alert">{actionError}</p>}
+    {feedback && <p role={feedback.error ? 'alert' : 'status'}>{feedback.text}</p>}
+    {!loading && !loadError && incoming.length > 0 && <section aria-label="Friend requests">
+      <h3>Friend requests</h3>
+      <ul className="pixi-friends-list">{incoming.map(request => <li key={request.accountId}>
+        <span>@{request.login}</span>
+        <div className="pixi-friend-actions">
+          <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'accept')}>Accept</button>
+          <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'decline')}>Decline</button>
+        </div>
+      </li>)}</ul>
+    </section>}
+    {!loading && !loadError && outgoing.length > 0 && <section aria-label="Sent requests">
+      <h3>Sent requests</h3>
+      <ul className="pixi-friends-list">{outgoing.map(request => <li key={request.accountId}>
+        <span>@{request.login}</span>
+        <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'cancel')}>Cancel</button>
+      </li>)}</ul>
+    </section>}
+    {!loading && !loadError && (friends.length ? <ul className="pixi-friends-list">
+      {friends.map(friend => <li key={friend.accountId}>
+        <span>@{friend.login}</span>
+        <button type="button" disabled={pending !== null} aria-label={`Remove @${friend.login}`}
+          onClick={() => change('DELETE',friend)}>{pending === friend.accountId ? 'Removing…' : 'Remove'}</button>
+      </li>)}
+    </ul> : <p className="pixi-friends-empty">No friends yet. Your next friend could be a few waddles away.</p>)}
+  </>;
   return <>
-    <button type="button" onClick={() => {setOpen(true); refresh.current();}}>Friends{incoming.length ? ` (${incoming.length})` : ''}</button>
-    {open && <dialog ref={dialog} className="pixi-friends-dialog" aria-labelledby="friends-title"
-      onClose={() => setOpen(false)} onCancel={() => setOpen(false)} onKeyDown={event => event.stopPropagation()}>
-      <div className="pixi-friends-heading">
-        <h2 id="friends-title">Your friends</h2>
-        <button type="button" onClick={() => setOpen(false)} aria-label="Close friends">×</button>
-      </div>
-      <p>Walk near someone to send a friend request.</p>
-      {loading && <p role="status">Loading friends…</p>}
-      {loadError && <div role="alert"><p>{loadError}</p><button type="button" onClick={() => refresh.current()}>Try again</button></div>}
-      {actionError && <p role="alert">{actionError}</p>}
-      {feedback && <p role={feedback.error ? 'alert' : 'status'}>{feedback.text}</p>}
-      {!loading && !loadError && incoming.length > 0 && <section aria-label="Friend requests">
-        <h3>Friend requests</h3>
-        <ul className="pixi-friends-list">{incoming.map(request => <li key={request.accountId}>
-          <span>@{request.login}</span>
-          <div className="pixi-friend-actions">
-            <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'accept')}>Accept</button>
-            <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'decline')}>Decline</button>
-          </div>
-        </li>)}</ul>
-      </section>}
-      {!loading && !loadError && outgoing.length > 0 && <section aria-label="Sent requests">
-        <h3>Sent requests</h3>
-        <ul className="pixi-friends-list">{outgoing.map(request => <li key={request.accountId}>
-          <span>@{request.login}</span>
-          <button type="button" disabled={pending !== null} onClick={() => change('PATCH',request,'cancel')}>Cancel</button>
-        </li>)}</ul>
-      </section>}
-      {!loading && !loadError && (friends.length ? <ul className="pixi-friends-list">
-        {friends.map(friend => <li key={friend.accountId}>
-          <span>@{friend.login}</span>
-          <button type="button" disabled={pending !== null} aria-label={`Remove @${friend.login}`}
-            onClick={() => change('DELETE',friend)}>{pending === friend.accountId ? 'Removing…' : 'Remove'}</button>
-        </li>)}
-      </ul> : <p className="pixi-friends-empty">No friends yet. Your next friend could be a few waddles away.</p>)}
-    </dialog>}
+    {visible && <div className="pixi-friends-inline">{body}</div>}
     {notificationHost && showPrompt && (request || candidate || feedback) && createPortal(
       <aside className="pixi-friend-prompt" aria-label={request ? "Friend request" : "Nearby friend"}>
         {actionError && <p role="alert">{actionError}</p>}

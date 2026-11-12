@@ -6,9 +6,8 @@ import IslandPresence from './IslandPresence.jsx';
 import StarDialog from './StarDialog.jsx';
 import IslandTravel from './IslandTravel.jsx';
 import IslandStargaze from './IslandStargaze.jsx';
-import IslandFriends from './IslandFriends.jsx';
+import IslandProfile from './IslandProfile.jsx';
 import WorldMap from './WorldMap.jsx';
-import IslandOutfit from './IslandOutfit.jsx';
 import BogEntry from '../features/bog-combat/BogEntry.jsx';
 import {BOG_COMBAT} from '../features/bog-combat/config.js';
 import './pixi.css';
@@ -31,6 +30,7 @@ const authNotices = {
 
 export default function PixiPage() {
   const host = useRef(null);
+  const page = useRef(null);
   const room = useRef(null);
   const island = useRef(null);
   const chatLayer = useRef(null);
@@ -110,6 +110,23 @@ export default function PixiPage() {
     };
   }, []);
 
+  // action prompts (Take boat, Dock, telescope) float above Ducky's head instead of sitting at the bottom
+  useEffect(() => {
+    if (typeof requestAnimationFrame !== 'function') return;   // headless renders have no frames to follow
+    let frame;
+    const tick = () => {
+      const game = island.current, pose = game?.player, el = page.current;
+      if (game && pose && el && game.width) {
+        const at = game.duckLabelPosition(pose);
+        el.style.setProperty('--duck-x', `${Math.round(at.x)}px`);
+        el.style.setProperty('--duck-y', `${Math.round(at.y)}px`);
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   async function logout() {
     setSigningOut(true);
     setNotice('');
@@ -129,27 +146,33 @@ export default function PixiPage() {
   const retryLive = status === 'spectators-full';
   const starRequired = session?.user && !session.user.canPlay;
   const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
-  return <main className={`pixi-page${guest ? ' pixi-page--guest' : ''}`}>
+  return <main ref={page} className={`pixi-page${guest ? ' pixi-page--guest' : ''}`}>
     <div className="pixi-host" ref={host}/>
     <img className="pixi-ente-logo" src="/ente-wordmark-white.svg" alt="Ente" width="844" height="264"/>
     <div className="pixi-chat-layer">
       <div ref={nameLayer}/>
       <div ref={chatLayer} aria-live="polite" aria-relevant="additions text"/>
     </div>
-    {!error && <aside className="pixi-live" aria-label="Live island">
-      <div role="status">{notice || arrival || (offline ? 'Playing without sign-in' : notices[status]) || (status === 'playing' ? 'You’re playing' : 'Watching live')}</div>
-      {offline && <a href={location.pathname}>Back to live</a>}
-      {status === 'playing' && <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>}
-      {(status === 'playing' || offline) && <IslandOutfit key={`outfit:${session?.user?.accountId ?? 'local'}`} island={island} offline={offline}/>}
-      {session?.user && <IslandFriends key={`friends:${session.user.accountId}`} room={room} island={island}
-        status={status} indoors={indoors} notificationHost={notificationHost}/>}
-      {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
-      {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
-      {retryPlay && <button onClick={() => room.current?.connect()}>
-        {status === 'taken-over' ? 'Take control' : 'Join island'}
-      </button>}
-      {(session?.user || status === 'playing') && <button onClick={logout} disabled={signingOut}>Sign out</button>}
-    </aside>}
+    {/* status and the odd action stay top right, but only when there is something to say; the profile button
+        takes over outfit, friends and sign out */}
+    {!error && (() => {
+      const message = notice || arrival || (offline ? 'Playing without sign-in' : notices[status]) || (status === 'playing' ? '' : 'Watching live');
+      const actions = offline || starRequired || retryLive || retryPlay;
+      return (message || actions) && <aside className="pixi-live" aria-label="Live island">
+        {message && <div role="status">{message}</div>}
+        {offline && <a href={location.pathname}>Back to live</a>}
+        {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
+        {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
+        {retryPlay && <button onClick={() => room.current?.connect()}>
+          {status === 'taken-over' ? 'Take control' : 'Join island'}
+        </button>}
+      </aside>;
+    })()}
+    {!error && (session?.user || status === 'playing' || offline) && <IslandProfile session={session} room={room} island={island}
+      status={status} indoors={indoors} notificationHost={notificationHost} offline={offline} onSignOut={logout} signingOut={signingOut}/>}
+    {!error && status === 'playing' && <div className="pixi-chat-dock">
+      <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>
+    </div>}
     {!error && guest && <aside className="pixi-guest-play" aria-labelledby="pixi-guest-heading">
       <h2 id="pixi-guest-heading">Your duck is waiting</h2>
       <p>Explore on your own or sign in to play online.</p>

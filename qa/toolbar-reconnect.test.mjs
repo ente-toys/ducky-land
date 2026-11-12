@@ -47,8 +47,6 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
       receive(message) {this.onmessage({data:JSON.stringify(message)});}
     },
   });
-  dom.window.HTMLDialogElement.prototype.showModal = function () {this.open = true;};
-  dom.window.HTMLDialogElement.prototype.close = function () {this.open = false;};
   t.mock.method(console,'error',(...args)=>warnings.push(args.join(' ')));
   const add = window.addEventListener.bind(window), remove = window.removeEventListener.bind(window);
   t.mock.method(window,'addEventListener',(type,fn,...args)=>{
@@ -74,18 +72,13 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     current().receive({type:'welcome',id:'self'});
   });
   const map = (epoch,islandId)=>act(async()=>current().receive({type:'snapshot',epoch,tick:1,islandId,players:[],boats:[]}));
-  const buttons = text=>[...document.querySelectorAll('.pixi-live button')].filter(button=>button.textContent.trim() === text);
+  const chatButtons = ()=>[...document.querySelectorAll('.pixi-chat-dock button')].filter(button=>button.textContent.trim() === 'Chat C');
   const counts = playing=>{
-    for (const name of ['Change outfit','Chat C','Friends','Sign out']) {
-      assert.equal(buttons(name).length,playing || ['Friends','Sign out'].includes(name) ? 1 : 0,name);
-    }
+    assert.equal(document.querySelectorAll('.pixi-profile-button').length,1,'one profile button');
+    assert.equal(chatButtons().length,playing ? 1 : 0,'Chat C');
     assert.equal(keydowns.size,playing ? 1 : 0,'one live Chat shortcut');
-    assert.deepEqual([...intervals.values()].sort((a,b)=>a-b),playing ? [80,250,250,5000] : [80],
-      'one minimap timer, one travel timer, one telescope timer and one connection heartbeat');
-  };
-  const click = async text=>{
-    assert.equal(buttons(text).length,1,text);
-    await act(async()=>buttons(text)[0].click());
+    assert.deepEqual([...intervals.values()].sort((a,b)=>a-b),playing ? [80,250,250,500,500,5000] : [80,500,500],
+      'one minimap timer, one travel timer, one telescope timer, the profile outfit and feather-chip watchers and one connection heartbeat');
   };
   try {
     await mount();
@@ -115,14 +108,14 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
       await act(async()=>document.querySelector('.pixi-chat').dispatchEvent(new window.Event('submit',{bubbles:true,cancelable:true})));
       counts(true);
     }
-    await click('Change outfit');
-    assert.match(document.querySelector('.pixi-live').textContent,/Your duck is still arriving/,
-      'the retained Outfit button has a working handler');
     await act(async()=>client.onNearby({id:'peer',accountId:'99',login:'friend'}));
     assert.equal(document.querySelectorAll('.pixi-friend-prompt').length,1,'one friend notification portal');
-    await click('Friends');
-    assert.equal(document.querySelectorAll('dialog[open]').length,1);
-    await act(async()=>document.querySelector('[aria-label="Close friends"]').click());
+    await act(async()=>document.querySelector('.pixi-profile-button').click());
+    assert.equal(document.querySelector('.pixi-profile-panel').hidden,false,'profile opens');
+    assert.equal(document.querySelectorAll('.pixi-friends-inline').length,1,'friends list sits in the profile panel');
+    assert.equal([...document.querySelectorAll('.pixi-profile-signout')].length,1,'sign out sits in the profile panel');
+    await act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape'})));
+    assert.equal(document.querySelector('.pixi-profile-panel').hidden,true,'Escape closes the profile');
     await act(async()=>root.unmount());
     assert.equal(keydowns.size,0);
     assert.equal(intervals.size,0);
