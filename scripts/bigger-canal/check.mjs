@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {checkTheme} from '../theme-index.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/canal/',D='rive/web/themes/canal/';
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/canal/',D='assets/world/themes/canal/';
 const world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json'),art=read(A+'art.json'),old=read('scripts/bigger-canal/original-art.json');
 const original=read('scripts/bigger-canal/original-world.json'),oldWalk=read('scripts/bigger-canal/original-walk.json');
 const ready=checkTheme('canal');assert.equal(ready.ready,true,ready.problems.join('\n'));

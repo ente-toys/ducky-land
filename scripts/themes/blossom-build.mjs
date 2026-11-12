@@ -1,9 +1,9 @@
 // Cherry Blossom Hill. Standalone reproducible SVG/data build, no shared registry mutation.
 // The approved 14-blossom concept supplies the plan. All units are Home world units.
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
-import {geometry,inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/blossom/',D='rive/web/themes/blossom/';
+const A='public/pixi-art/themes/blossom/',D='assets/world/themes/blossom/';
 for(const p of [A,A+'reuse',A+'centre',D])mkdirSync(p,{recursive:true});
 const W=7600,H=5400,S=4.5, f=n=>Math.round(n*10)/10,T=([x,y])=>[f(400+(x-40)*S),f(500+(y-40)*S)];
 const C={ink:'#39472D',grass:'#93B72F',deep:'#7FAE31',shade:'#8CAF2D',cream:'#FFF0C7',sand:'#FDE48C',sandShade:'#E4C567',pink:'#F6A6B8',pinkDeep:'#DB7695',blush:'#FFD0D5',sea:'#8CC8CD',water:'#6EC9DE',wood:'#C88941',woodShade:'#885931'};

@@ -6,7 +6,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
 const pw=process.env.PLAYWRIGHT_MODULE || '/Users/pragadees.xd/Documents/Framer 2/node_modules/playwright/index.mjs';
 const {chromium}=await import(pathToFileURL(pw));
-const A='public/pixi-art/themes/goldmine/',D='rive/web/themes/goldmine/';
+const A='public/pixi-art/themes/goldmine/',D='assets/world/themes/goldmine/';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const data={world:read(D+'world.json'),walk:read(D+'walk-world.json'),harbor:read(D+'harbor.json'),art:'/pixi-art/themes/goldmine/art.json',sea:read(A+'art.json').sea};
 const browser=await chromium.launch({headless:true});

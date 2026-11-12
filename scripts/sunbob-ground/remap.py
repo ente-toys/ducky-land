@@ -13,7 +13,7 @@ home=Path('scripts/home-review/paths.py').read_text()
 for fn in ast.parse(home).body:
  if isinstance(fn,ast.FunctionDef) and fn.name in ('sample','path'):
   exec(ast.get_source_segment(home,fn),globals())
-A=Path('public/pixi-art/themes/sunflower');D=Path('rive/web/themes/sunflower')
+A=Path('public/pixi-art/themes/sunflower');D=Path('assets/world/themes/sunflower')
 W=json.loads((D/'world.json').read_text());art=json.loads((A/'art.json').read_text())
 data=json.loads(Path('/private/tmp/sunbob-ground-data.json').read_text())
 R=json.loads(Path('scripts/sunbob-ground/routes.json').read_text())

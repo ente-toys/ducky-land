@@ -2,7 +2,7 @@ import fs from 'node:fs';import assert from 'node:assert/strict';
 import {checkTheme} from '../../../../scripts/theme-index.mjs';
 import {makeMap} from '../../../../src/pixi/island-maps.js';
 import {inPoly} from '../../island-geometry.mjs';
-const A='public/pixi-art/themes/community/',D='rive/web/themes/community/',j=p=>JSON.parse(fs.readFileSync(p));
+const A='public/pixi-art/themes/community/',D='assets/world/themes/community/',j=p=>JSON.parse(fs.readFileSync(p));
 const a=j(A+'art.json'),w=j(D+'world.json'),walk=j(D+'walk-world.json'),h=j(D+'harbor.json'),old=j(D+'polish-source/world.json'),oldArt=j(D+'polish-source/art.json');
 const checked=checkTheme('community');assert(checked.ready,checked.problems.join('\n'));assert.equal(checked.sleepers.length,40);
 for(const k of ['width','height','coast','islets','arches','pathWidths','paths','sleepSpots'])assert.deepEqual(w[k],old[k],`${k} changed`);

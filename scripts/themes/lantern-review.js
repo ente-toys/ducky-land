@@ -4,8 +4,8 @@ import {worldIsland} from '/src/pixi/world-map.js';
 const load=p=>fetch(p).then(r=>r.json());
 const theme=new URLSearchParams(location.search).get('theme')||'lantern';
 if(theme==='lantern'){
- const [world,walk,harbor]=await Promise.all(['world','walk-world','harbor'].map(n=>load('/rive/web/themes/lantern/'+n+'.json')));
- const sleepers=await load('/rive/web/themes/lantern/sleepers-resolved.json');
+ const [world,walk,harbor]=await Promise.all(['world','walk-world','harbor'].map(n=>load('/assets/world/themes/lantern/'+n+'.json')));
+ const sleepers=await load('/assets/world/themes/lantern/sleepers-resolved.json');
  registerMap('lantern',{world,walk,harbor,sleepers,art:'/pixi-art/themes/lantern/art.json',sea:'#7FD3D6'});
  // Runtime-only preview binding, never writes the shared registry.
  THEME_OF.set('isle-170','lantern');

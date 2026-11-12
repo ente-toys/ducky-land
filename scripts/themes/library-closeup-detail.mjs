@@ -1,7 +1,7 @@
 // Pagepond close-up craft. Flat paving stays walkable; furniture has real footprints.
 import {writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 
 const n=v=>Math.round(v*10)/10;
 const path=p=>'M'+p.map(([x,y])=>`${n(x)} ${n(y)}`).join(' L')+' Z';

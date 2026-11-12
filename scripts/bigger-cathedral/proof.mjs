@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import sharp from 'sharp';
 import {A,OUT,plan,svg,el,path} from './design.mjs';
 import {render} from './render.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-cathedral/baseline/',D='rive/web/themes/cathedral/';
+const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-cathedral/baseline/',D='assets/world/themes/cathedral/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 const before=read(B+'art.json'),old=read(B+'world.json'),oldWalk=read(B+'walk-world.json'),oldHarbor=read(B+'harbor.json');
 fs.mkdirSync(OUT+'/cathedral-crops',{recursive:true});

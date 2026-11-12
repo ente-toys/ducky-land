@@ -1,12 +1,12 @@
 import {execFileSync} from 'node:child_process';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 execFileSync('python3',['scripts/pink-final/finish.py'],{stdio:'inherit'});
 execFileSync('python3',['scripts/pink-final/review-cleanup.py'],{stdio:'inherit'});
 execFileSync('python3',['scripts/pink-final/apply-buildings.py'],{stdio:'inherit'});
-const read=p=>JSON.parse(readFileSync(p)),world=read('rive/web/themes/pink/world.json'),walk=read('rive/web/themes/pink/walk-world.json'),harbor=read('rive/web/themes/pink/harbor.json'),art=read('public/pixi-art/themes/pink/art.json');
+const read=p=>JSON.parse(readFileSync(p)),world=read('assets/world/themes/pink/world.json'),walk=read('assets/world/themes/pink/walk-world.json'),harbor=read('assets/world/themes/pink/harbor.json'),art=read('public/pixi-art/themes/pink/art.json');
 const map=makeMap('pink',{world,walk,harbor,sleepers:[]}),valid=geometry(map.walk).walkable;
 const resolve=()=>resolveSleepSpots(map.walk,art.props,valid,sleepHalfWidths(),{spots:world.sleepSpots,avoid:world.sleepAvoid,warn:false});
 const seg=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));return [x-a[0]-t*dx,y-a[1]-t*dy];};
@@ -44,8 +44,8 @@ for(let pass=0;pass<8;pass++){
  if(!changed)break;
 }
 const beds=resolve();if(beds.length!==40||beds.bad.length||beds.some(b=>!strict(b.x,b.y,b.pose)))throw Error('Sleeper overlap remains '+JSON.stringify(beds.bad));
-writeFileSync('rive/web/themes/pink/world.json',JSON.stringify(world,null,1)+'\n');
-const file='rive/web/themes/index.js';let src=readFileSync(file,'utf8');const line=src.split('\n').find(l=>l.startsWith('  pink:'));
+writeFileSync('assets/world/themes/pink/world.json',JSON.stringify(world,null,1)+'\n');
+const file='assets/world/themes/index.js';let src=readFileSync(file,'utf8');const line=src.split('\n').find(l=>l.startsWith('  pink:'));
 const sleepers=beds.map(({x,y,pose,r,flip,tree})=>({x:Math.round(x),y:Math.round(y),pose,r:Math.round(r*10)/10,flip,...(tree?{tree}:{})}));
 writeFileSync(file,src.replace(line,line.replace(/sleepers: \[.*\]/,'sleepers: '+JSON.stringify(sleepers))));
 writeFileSync('scripts/pink-final/sleeper-adjustments.json',JSON.stringify(adjustments,null,1)+'\n');

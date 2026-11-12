@@ -5,7 +5,7 @@ sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import Polygon,Point,box
 from shapely import affinity
 from shapely.ops import unary_union
-S=Path('scripts/rosy-ground'); A=Path('public/pixi-art/themes/pink'); D=Path('rive/web/themes/pink')
+S=Path('scripts/rosy-ground'); A=Path('public/pixi-art/themes/pink'); D=Path('assets/world/themes/pink')
 read=lambda p:json.loads(Path(p).read_text())
 def write(p,v):Path(p).write_text(json.dumps(v,indent=1)+'\n')
 B=read(S/'data/population.json');C=read(S/'data/centre.json');H=read(S/'data/shadows.json')

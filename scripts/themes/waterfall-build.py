@@ -2,7 +2,7 @@
 import math,json,os,random,shutil,re
 from shapely.geometry import Point,Polygon,LineString
 from shapely.ops import unary_union
-R=os.path.abspath(os.path.join(os.path.dirname(__file__),'../..')); A=R+'/public/pixi-art/themes/waterfall'; D=R+'/rive/web/themes/waterfall'
+R=os.path.abspath(os.path.join(os.path.dirname(__file__),'../..')); A=R+'/public/pixi-art/themes/waterfall'; D=R+'/assets/world/themes/waterfall'
 os.makedirs(A+'/reuse',exist_ok=True);os.makedirs(D,exist_ok=True)
 r=random.Random(81); W,H=7800,5800; ink='#39472D'
 def ellipse(x,y,rx,ry,n=100):return [(round(x+rx*math.cos(t*2*math.pi/n),1),round(y+ry*math.sin(t*2*math.pi/n),1)) for t in range(n)]

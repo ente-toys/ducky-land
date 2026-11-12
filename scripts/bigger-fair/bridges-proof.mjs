@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import {render} from './render-core.mjs';
 const out='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/fair-review/fix/bridges';
 fs.mkdirSync(out,{recursive:true});
-const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/fair/art.json')),world=JSON.parse(fs.readFileSync('rive/web/themes/fair/world.json'));
+const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/fair/art.json')),world=JSON.parse(fs.readFileSync('assets/world/themes/fair/world.json'));
 const parts=[];
 for(const [i,b] of world.walkways.entries()){
  const x=(b.a[0]+b.b[0])/2,y=(b.a[1]+b.b[1])/2;

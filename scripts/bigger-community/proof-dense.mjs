@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {render,OUT} from './render.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/';
-const a=read('public/pixi-art/themes/community/art.json'),h=read('rive/web/themes/community/harbor.json');
+const a=read('public/pixi-art/themes/community/art.json'),h=read('assets/world/themes/community/harbor.json');
 if(!process.argv.includes('--crops-only'))await render(a,h,OUT+'/community-dense.png');
 for(const [id,x,y]of [['storynest',550,580],['patchwing',8040,1400],['sproutshare',980,5510],['lanternloaf',7550,5510]]){
  await render(a,h,OUT+'/community-crops/dense-'+id+'.png',{crop:[x,y,.48]});console.log('Rendered',id);

@@ -4,7 +4,7 @@ import {pathToFileURL} from 'node:url';
 import {VILLAGES} from './villages-data.mjs';
 import {roofProfile,frontGable,villageDetails} from './round2-buildings.mjs';
 import {BUILDING_STYLES} from './buildings-data.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const ink='#39472d',cream='#fff0cd',stone='#dbbd85',olive='#839953',deepOlive='#667e42',glass='#a5d3d2',wood='#b98955';
 const n=v=>+v.toFixed(2);
 const path=(d,fill='none',stroke=ink,w=1.9,attrs='')=>`<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${w}" ${attrs}/>`;

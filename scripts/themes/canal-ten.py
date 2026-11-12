@@ -9,7 +9,7 @@ from shapely.geometry import Point, Polygon, LineString, box
 from shapely.affinity import scale, translate
 from shapely.ops import unary_union
 
-ROOT=Path(__file__).resolve().parents[2]; A=ROOT/'public/pixi-art/themes/canal'; D=ROOT/'rive/web/themes/canal'
+ROOT=Path(__file__).resolve().parents[2]; A=ROOT/'public/pixi-art/themes/canal'; D=ROOT/'assets/world/themes/canal'
 read=lambda p:json.loads(p.read_text())
 art=read(A/'art.json');world=read(D/'world.json');walk=read(D/'walk-world.json');rng=random.Random(5268)
 def ellipse(x,y,rx,ry):return scale(Point(x,y).buffer(1,quad_segs=48),rx,ry)

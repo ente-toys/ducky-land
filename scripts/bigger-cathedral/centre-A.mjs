@@ -4,7 +4,7 @@ import {oliveSVGBody} from './round2-olive.mjs';
 import {segmentedArcades} from './centre-arcade.mjs';
 import {rebuildPaths} from './paths.mjs';
 import {applyGrass} from './round2-grass.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n');
 const ink='#39472d',stone='#ebcb87',cream='#fff0c7',shade='#c59b59',green='#70813b';
 const P=(d,fill='none',stroke=ink,w=4.5)=>`<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${w}"/>`;

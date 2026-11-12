@@ -4,11 +4,11 @@ import sharp from 'sharp';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const poses=read('src/pixi/sleep-poses.json');
 for(const theme of ['pink']) {
- const before=process.argv.includes('--baseline'),closeBefore=process.argv.includes('--close-baseline');const R='../concepts/themes/work/pink/',O=R+(closeBefore?'close-base-':before?'before-':'');const A=`public/pixi-art/themes/${theme}/`,D=`rive/web/themes/${theme}/`;
+ const before=process.argv.includes('--baseline'),closeBefore=process.argv.includes('--close-baseline');const R='../concepts/themes/work/pink/',O=R+(closeBefore?'close-base-':before?'before-':'');const A=`public/pixi-art/themes/${theme}/`,D=`assets/world/themes/${theme}/`;
  const input=closeBefore?{art:read(R+'close-base-art.json'),world:read(R+'close-base-world.json'),walk:read(R+'close-base-walk.json')}:before?read('scripts/themes/pink-polish-base.json'):{art:read(A+'art.json'),world:read(D+'world.json'),walk:read(D+'walk-world.json')};
  const {art,world,walk}=input,harbor=read(D+'harbor.json');
  const base=makeMap(theme,{world,walk,harbor,sleepers:[]});

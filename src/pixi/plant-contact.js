@@ -1,4 +1,4 @@
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 
 export const PLANT_COOLDOWN = .9, PLANT_SWAY = .32, LEAF_LIFE = 1.2, LEAF_CAP = 12;
 // Walking pads blockers by 16. Six more units catch the last moving step before a wall stops it.

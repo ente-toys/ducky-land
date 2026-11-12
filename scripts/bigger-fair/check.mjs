@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {read,write} from './design.mjs';
-const D='rive/web/themes/fair/',S='scripts/bigger-fair/',a=read('public/pixi-art/themes/fair/art.json'),w=read(D+'world.json'),walk=read(D+'walk-world.json'),h=read(D+'harbor.json'),e=read(S+'expansion.json');
+const D='assets/world/themes/fair/',S='scripts/bigger-fair/',a=read('public/pixi-art/themes/fair/art.json'),w=read(D+'world.json'),walk=read(D+'walk-world.json'),h=read(D+'harbor.json'),e=read(S+'expansion.json');
 const check=checkTheme('fair');assert(check.ready,check.problems.join('\n'));
 const map=makeMap('fair',{world:w,walk,harbor:h,sleepers:check.sleepers}),n=map.nav();
 const failures=[];

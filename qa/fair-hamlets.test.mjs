@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {config,objects,A,layouts} from '../scripts/bigger-fair/hamlets.mjs';
 import {outer,streams} from '../scripts/bigger-fair/fix-geometry.mjs';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
 import {makeMap} from '../src/pixi/island-maps.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const art=read(A+'art.json'),world=read('rive/web/themes/fair/world.json'),walk=read('rive/web/themes/fair/walk-world.json');
-const checked=checkTheme('fair'),map=makeMap('fair',{world,walk,harbor:read('rive/web/themes/fair/harbor.json'),sleepers:checked.sleepers}),nav=map.nav();
+const art=read(A+'art.json'),world=read('assets/world/themes/fair/world.json'),walk=read('assets/world/themes/fair/walk-world.json');
+const checked=checkTheme('fair'),map=makeMap('fair',{world,walk,harbor:read('assets/world/themes/fair/harbor.json'),sleepers:checked.sleepers}),nav=map.nav();
 const placed=art.props.filter(p=>p.id.startsWith('hamlet-'));
 test('Fair uses all four approved SVG hamlets with 17 homes, workplaces, shadows and solid bases',()=>{
  assert.deepEqual(Object.keys(config),['bobbinbell','cloudpop','sugarspoon','waddleshow']);

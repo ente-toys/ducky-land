@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import E from '../src/pixi/home-expansion.json' with {type: 'json'};
 import {HOME_MAP} from '../src/pixi/island-maps.js';
 import {canSail, harborOf, setSailDestination, sailStep} from '../src/pixi/islands.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 
 const clover = E.riverWater.find(w => w.id === 'clover-run').poly, canal = E.riverWater.find(w => w.id === 'old-shore-canal').poly;
 function sail(actor, to) {

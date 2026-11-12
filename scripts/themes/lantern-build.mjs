@@ -1,10 +1,10 @@
 // Lantern Lake. Original SVG festival art, home plants/ink, and data-only integration.
 // Rebuild: node scripts/themes/lantern-build.mjs
 import fs from 'node:fs';
-import {geometry,inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/lantern/',D='rive/web/themes/lantern/';
+const A='public/pixi-art/themes/lantern/',D='assets/world/themes/lantern/';
 const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/lantern/';
 for(const p of [A+'reuse',A+'centre',D,OUT])fs.mkdirSync(p,{recursive:true});
 const W=8000,H=6000,INK='#39472D',SEA='#7FD3D6';

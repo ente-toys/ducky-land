@@ -5,7 +5,7 @@ import sharp from 'sharp';
 import {DOMParser} from '@xmldom/xmldom';
 import {Path2D} from '@napi-rs/canvas';
 const A='public/pixi-art/themes/community/',read=p=>JSON.parse(fs.readFileSync(p));
-const art=read(A+'art.json'),world=read('rive/web/themes/community/world.json'),plan=read('scripts/campfire-ground/ground-plan.json');
+const art=read(A+'art.json'),world=read('assets/world/themes/community/world.json'),plan=read('scripts/campfire-ground/ground-plan.json');
 const parser=new DOMParser();
 const tiles=art.ground.tiles.map(t=>({...t,svg:fs.readFileSync(A+t.src,'utf8')}));
 const group=(root,kind)=>Array.from(root.getElementsByTagName('*')).find(n=>n.getAttribute('data-ground')===kind);

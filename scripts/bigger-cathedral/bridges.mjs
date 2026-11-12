@@ -75,7 +75,7 @@ export function rebuildBridgePhysics(world,walk,geo){
 if(process.argv[1]?.endsWith('/bridges.mjs')){
  const art=JSON.parse(fs.readFileSync(A+'art.json')),geo=JSON.parse(fs.readFileSync('scripts/bigger-cathedral/water-geometry.json'));
  rebuildBridges(art,geo);fs.writeFileSync(A+'art.json',JSON.stringify(art,null,2)+'\n');
- const D='rive/web/themes/cathedral/',world=JSON.parse(fs.readFileSync(D+'world.json')),walk=JSON.parse(fs.readFileSync(D+'walk-world.json'));
+ const D='assets/world/themes/cathedral/',world=JSON.parse(fs.readFileSync(D+'world.json')),walk=JSON.parse(fs.readFileSync(D+'walk-world.json'));
  rebuildBridgePhysics(world,walk,geo);
  for(const [name,map]of [['world',world],['walk-world',walk]])fs.writeFileSync(D+name+'.json',JSON.stringify(map,null,2)+'\n');
  console.log('13 Honeywood spans, rigid upright posts, fixed path anchors, Home 24-unit crown.');

@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {j,base,output,renderArt,json,area} from './scene.mjs';
-import {inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {roads,communities,bridges} from './plan.mjs';
 import sharp from 'sharp';
-const a=j('public/pixi-art/themes/snow/art.json'),w=j('rive/web/themes/snow/world.json'),walk=j('rive/web/themes/snow/walk-world.json'),h=j('rive/web/themes/snow/harbor.json'),old=j(base+'art.json'),ow=j(base+'world.json');
+const a=j('public/pixi-art/themes/snow/art.json'),w=j('assets/world/themes/snow/world.json'),walk=j('assets/world/themes/snow/walk-world.json'),h=j('assets/world/themes/snow/harbor.json'),old=j(base+'art.json'),ow=j(base+'world.json');
 const result=checkTheme('snow');assert.ok(result.ready,result.problems.join('\n'));
 const map=makeMap('snow',{world:w,walk,harbor:h,sleepers:result.sleepers}),nav=map.nav(),route=(x,y)=>nav.walkable(x,y)&&(nav.clearLine([map.spawn.x,map.spawn.y],[x,y])||nav.route(map.spawn.x,map.spawn.y,x,y).length>0);
 const dests=[];for(const c of communities)for(const [type,x,y]of [...c.homes,...c.work]){assert.ok(route(x,y+65));dests.push({community:c.id,type,x,y:y+65,reachable:true})}

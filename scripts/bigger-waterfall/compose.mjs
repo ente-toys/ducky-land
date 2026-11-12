@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import {execFileSync}from 'node:child_process';
 import {roadDetails,commonsGround,composeCommons,varyHome,commonEntrances} from './review-art.mjs';
 import {denseGround,composeDense} from './dense-art.mjs';
-const A='public/pixi-art/themes/waterfall/',D='rive/web/themes/waterfall/',O='scripts/bigger-waterfall/original/';
+const A='public/pixi-art/themes/waterfall/',D='assets/world/themes/waterfall/',O='scripts/bigger-waterfall/original/';
 const OUT='../concepts/themes/world-map/bigger';
 fs.mkdirSync(A+'community',{recursive:true});fs.mkdirSync(OUT+'/waterfall-crops',{recursive:true});
 const read=p=>JSON.parse(fs.readFileSync(p));

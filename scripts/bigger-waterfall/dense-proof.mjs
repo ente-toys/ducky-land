@@ -1,5 +1,5 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync}from 'node:child_process';import {createHash}from 'node:crypto';import {render}from './render.mjs';import {inPoly}from '../../rive/web/island-geometry.mjs';
-const OUT='../concepts/themes/world-map/bigger/',A='public/pixi-art/themes/waterfall/',D='rive/web/themes/waterfall/',BASE='a7bb5f54';
+import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync}from 'node:child_process';import {createHash}from 'node:crypto';import {render}from './render.mjs';import {inPoly}from '../../assets/world/island-geometry.mjs';
+const OUT='../concepts/themes/world-map/bigger/',A='public/pixi-art/themes/waterfall/',D='assets/world/themes/waterfall/',BASE='a7bb5f54';
 const read=p=>JSON.parse(fs.readFileSync(p)),before=p=>JSON.parse(execFileSync('git',['show',BASE+':'+p],{maxBuffer:20*1024*1024}));
 const art=read(A+'art.json'),oldArt=before(A+'art.json'),world=read(D+'world.json'),oldWorld=before(D+'world.json'),walk=read(D+'walk-world.json'),oldWalk=before(D+'walk-world.json'),plan=read('scripts/bigger-waterfall/plan.json'),original=read('scripts/bigger-waterfall/original/world.json');
 fs.mkdirSync(OUT+'waterfall-dense-proof',{recursive:true});

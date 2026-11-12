@@ -2,7 +2,7 @@
 // live in hamlets.json. SVGs stay at cottage scale, spacing may fit the outer ring.
 import fs from 'node:fs';
 import {homePlant} from './plant-kit.mjs';
-export const A='public/pixi-art/themes/fair/', S='scripts/bigger-fair/', D='rive/web/themes/fair/';
+export const A='public/pixi-art/themes/fair/', S='scripts/bigger-fair/', D='assets/world/themes/fair/';
 export const read=p=>JSON.parse(fs.readFileSync(p));
 export const config=read(S+'hamlets.json');
 export const layouts=Object.fromEntries(Object.keys(config).map(h=>[h,read(S+`hamlets/${h}.json`)]));

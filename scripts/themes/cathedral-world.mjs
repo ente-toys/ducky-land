@@ -2,9 +2,9 @@
 // Only writes the cathedral theme's folders. node scripts/themes/cathedral-world.mjs
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {addArc,arcGeometry,ring,roseFloor} from './cathedral-craft.mjs';
-import {geometry,inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const ART='public/pixi-art/themes/cathedral/', DATA='rive/web/themes/cathedral/';
+const ART='public/pixi-art/themes/cathedral/', DATA='assets/world/themes/cathedral/';
 const W=8000,H=6000,INK='#39472D',SAND='#FDE48C',CREAM='#FFE7A0',SEA='#6EC9DE';
 const r=n=>Math.round(n*10)/10;
 const save=(p,o)=>writeFileSync(p,JSON.stringify(o,null,2)+'\n');

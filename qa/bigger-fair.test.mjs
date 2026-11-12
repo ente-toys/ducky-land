@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {makeMap,THEME_OF} from '../src/pixi/island-maps.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 import {canSail,boardingPoint,landingSpot} from '../src/pixi/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const S='scripts/bigger-fair/',D='rive/web/themes/fair/',w=read(D+'world.json'),walk=read(D+'walk-world.json'),h=read(D+'harbor.json'),a=read('public/pixi-art/themes/fair/art.json'),e=read(S+'expansion.json');
+const S='scripts/bigger-fair/',D='assets/world/themes/fair/',w=read(D+'world.json'),walk=read(D+'walk-world.json'),h=read(D+'harbor.json'),a=read('public/pixi-art/themes/fair/art.json'),e=read(S+'expansion.json');
 const checked=checkTheme('fair'),map=makeMap('fair',{world:w,walk,harbor:h,sleepers:checked.sleepers}),nav=map.nav();
 test('AC-2 preserves retained outer scenery, keeps castle art and resolves 90 approved sleepers',()=>{
  const old=read(S+'original-art.json'),ow=read(S+'original-world.json');
@@ -52,7 +52,7 @@ test('Fair communities have inhabited homes and theme-specific workplaces outsid
 });
 
 test('Fair inland decks cross actual blocked water and connect to the heart',async()=>{
- const {inShape}=await import('../rive/web/island-geometry.mjs');
+ const {inShape}=await import('../assets/world/island-geometry.mjs');
  const wet=(x,y)=>w.water.some(shape=>inShape(x,y,shape));
  assert.equal(a.decks.length,12);
  for(const b of w.bridges){

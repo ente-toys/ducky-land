@@ -29,8 +29,8 @@ async function render(art,source,center) {
 const vite=await createServer({configLoader:'native',cacheDir:'/private/tmp/ducky-live-persp-ssr-cache',server:{middlewareMode:true},appType:'custom',logLevel:'error'});
 let home;
 try {
-  const load=p=>vite.ssrLoadModule(p),P=await load('/src/pixi/placements.js'),{geometry}=await load('/rive/web/island-geometry.mjs');
-  const w=P.trimWorld((await load('/rive/web/world.json')).default),manifest=(await load('/src/pixi/art-manifest.json')).default;
+  const load=p=>vite.ssrLoadModule(p),P=await load('/src/pixi/placements.js'),{geometry}=await load('/assets/world/island-geometry.mjs');
+  const w=P.trimWorld((await load('/assets/world/world.json')).default),manifest=(await load('/src/pixi/art-manifest.json')).default;
   const geo=geometry({...w,obstacles:[]}),props=P.createPlacements(w,geo.walkable),flats=P.decalsFor(w,props,geo.walkable);
   home=await render({...manifest,props,flats:[{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...flats],decks:[...P.JETTIES,{src:'/pixi-art/library-steps.svg',x:2780,y:1370,width:280,height:260}]},s=>s.startsWith('/pixi')?'public'+s:s.startsWith('/assets')?s.slice(1):s,[2900,1450]);
 } finally {await vite.close();}

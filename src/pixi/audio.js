@@ -1,4 +1,4 @@
-const urls=Object.fromEntries(['quack','pop','splash','step'].map(n=>[n,new URL(`../../rive/web/audio/${n}.wav`,import.meta.url).href]));
+const urls=Object.fromEntries(['quack','pop','splash','step'].map(n=>[n,new URL(`../../assets/world/audio/${n}.wav`,import.meta.url).href]));
 export function createAudio(){
  let context,muted=false,disposed=false,loading;const buffers=new Map(),sources=new Set(),generators=new Map();
  async function unlock(){

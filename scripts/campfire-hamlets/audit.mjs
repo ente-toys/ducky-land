@@ -5,8 +5,8 @@ import {Path2D,PathOp,ring,stroke,curve,dist,contours} from '../pagepond/geometr
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {canSail} from '../../src/pixi/islands.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='rive/web/themes/community/',S='scripts/campfire-hamlets/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='assets/world/themes/community/',S='scripts/campfire-hamlets/';
 const ellipse=(x,y,rx,ry)=>{const p=new Path2D();p.ellipse(x,y,rx,ry,0,0,Math.PI*2);return p;};
 const polygonCache=new WeakMap();
 const pathRings=p=>{if(!polygonCache.has(p))polygonCache.set(p,contours(p.toSVGString(),6));return polygonCache.get(p);};

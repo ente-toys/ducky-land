@@ -6,12 +6,12 @@ import {mapFor,makeMap} from '../src/pixi/island-maps.js';
 import {shoreOf} from '../src/pixi/surf.js';
 import {boardingPoint,canSail,originOffset,seaBoundsFor,destinationsFor} from '../src/pixi/islands.js';
 import {THEME_OF} from '../src/pixi/island-maps.js';
-import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths,SUNBOB_SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
 import {communities,houses} from '../scripts/bigger-sunflower/communities.mjs';
 import {REMOVE_PROPS,REMOVE_FLATS,LIFT_FLATS,MOVE_PROPS,FIELDS,FIELD_KEEP} from '../scripts/bigger-sunflower/centre-data.mjs';
-import {inShape} from '../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url))),B='scripts/bigger-sunflower/baseline/',D='rive/web/themes/sunflower/';
+import {inShape} from '../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url))),B='scripts/bigger-sunflower/baseline/',D='assets/world/themes/sunflower/';
 const canonical=p=>{const {pathOriginalSrc,...q}=p;return pathOriginalSrc?{...q,src:pathOriginalSrc}:q;};
 const moves=read('scripts/sunbob-ground/path-report.json').relocated;
 const old=read(B+'world.json'),originalArt=read(B+'art.json'),art=read('public/pixi-art/themes/sunflower/art.json'),extension=read(D+'bigger-sunflower.json'),map=mapFor('sunflower');
@@ -76,7 +76,7 @@ test('bigger Sunflower boats float, board and land through the production regist
 
 test('Sunflower canals block walking, every retained and new crossing spans real water and stays reachable',async()=>{
  const {waterways}=await import('../scripts/bigger-sunflower/water.mjs');
- const {inShape}=await import('../rive/web/island-geometry.mjs');
+ const {inShape}=await import('../assets/world/island-geometry.mjs');
  const nav=map.nav();
  assert.equal(waterways.courses.length,2);
  for(const w of map.world.water)for(const key of ['x','y','rx','ry'])assert.ok(Number.isFinite(w[key]),'runtime ripple '+key);

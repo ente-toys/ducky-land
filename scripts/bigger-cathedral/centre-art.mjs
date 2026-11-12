@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {oliveSVGBody} from './round2-olive.mjs';
 import {polishCentre} from './centre-polish.mjs';
 import {CATHEDRAL,TOWER,PIAZZA,RETIRED_CENTRE,isOldCentreSolid} from './centre-art-data.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const ink='#39472d',stone='#EBCB87',light='#FFF0C7',shade='#C59B59',terra='#BA542F',roofLight='#D9753D',olive='#70813B';
 const f=n=>Math.round(n*100)/100;
 const P=(d,fill='none',stroke=ink,w=3)=>`<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${w}"/>`;

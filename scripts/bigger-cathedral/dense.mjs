@@ -3,7 +3,7 @@ import './fix.mjs';
 import fs from 'node:fs';
 import {A,svg,path,el,ink,grass} from './design.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,x)=>fs.writeFileSync(p,JSON.stringify(x,null,2)+'\n');
-const D='rive/web/themes/cathedral/',art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read('scripts/bigger-cathedral/baseline/world.json'),water=read('scripts/bigger-cathedral/fix-water.json');
+const D='assets/world/themes/cathedral/',art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read('scripts/bigger-cathedral/baseline/world.json'),water=read('scripts/bigger-cathedral/fix-water.json');
 const protectedBody=path(old.coast,'black')+old.islets.map(([x,y,rx,ry])=>el(x,y,rx,ry,'black')).join('');
 let body=`<defs><mask id="dense-dry" maskUnits="userSpaceOnUse" x="-2200" y="-2400" width="12800" height="10400"><rect x="-2200" y="-2400" width="12800" height="10400" fill="white"/>${protectedBody}${water.outlines.map(p=>path(p,'black','black',25)).join('')}</mask></defs>`;
 // Four hand-placed domestic plots reclaim the removed domestic loop ends.

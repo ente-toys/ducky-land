@@ -26,7 +26,7 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
  const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/engine.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../src/pixi/engine.js',import.meta.url).href)}});
  // Vite's asset catalogue is irrelevant to the offscreen simulation path.
  let code=bundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
- for(const name of ['pixi.js','@rive-app/webgl2-advanced'])code=code.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name)));
+ for(const name of ['pixi.js'])code=code.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name)));
  let Engine;
  try{Engine=(await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'))).PixiIsland;}catch(error){throw new Error('Engine import: '+error.message);}
  const prior={document:globalThis.document,requestAnimationFrame:globalThis.requestAnimationFrame};

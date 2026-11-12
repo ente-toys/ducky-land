@@ -1,7 +1,7 @@
 // Last readback pass: clear path centre lines and bring the coastal court furniture onto land.
 import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/snow/',D='rive/web/themes/snow/',j=p=>JSON.parse(readFileSync(p)),out=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/snow/',D='assets/world/themes/snow/',j=p=>JSON.parse(readFileSync(p)),out=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
 const art=j(A+'art.json'),w=j(D+'world.json'),walk=j(D+'walk-world.json'),props=j(D+'placements.json'),paths=j(D+'paths.json');
 const T=([x,y])=>[Math.round((450+(x-60)*4.5)*10)/10,Math.round((420+(y-35)*4.9)*10)/10];
 function smooth(p,n=10){const q=[],P=i=>p[Math.max(0,Math.min(p.length-1,i))];for(let i=0;i<p.length-1;i++)for(let k=0;k<n;k++){const a=P(i-1),b=P(i),c=P(i+1),e=P(i+2),t=k/n,t2=t*t,t3=t2*t;q.push([0,1].map(j=>Math.round(.5*(2*b[j]+(-a[j]+c[j])*t+(2*a[j]-5*b[j]+4*c[j]-e[j])*t2+(-a[j]+3*b[j]-3*c[j]+e[j])*t3)*10)/10))}q.push(p.at(-1));return q}

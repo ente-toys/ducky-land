@@ -16,8 +16,8 @@ const W=crop?1800:1600,H=crop?1500:1200,k=crop?.[2]??(process.env.HOME_PRESERVE?
 try {
  const load=p=>vite.ssrLoadModule(p);
  const P=await load('/src/pixi/placements.js');
- const {geometry}=await load('/rive/web/island-geometry.mjs');
- const world=P.trimWorld(JSON.parse(readFileSync(root+'/rive/web/world.json')));
+ const {geometry}=await load('/assets/world/island-geometry.mjs');
+ const world=P.trimWorld(JSON.parse(readFileSync(root+'/assets/world/world.json')));
  const art=JSON.parse(readFileSync(root+'/src/pixi/art-manifest.json'));
  const before=JSON.parse(readFileSync(root+'/scripts/bigger-home/dense/before.json'));
  const baseProps=P.createPlacements(world,geometry({...world,obstacles:[]}).walkable);
@@ -56,6 +56,6 @@ try {
  const transparent=await sharp({create:{width:W,height:H,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(layers).png().toBuffer();
  if(!crop&&stage==='after')await sharp(transparent).toFile(out+'/home-dense-work/home-built-layers.png');
  await sharp({create:{width:W,height:H,channels:4,background:'#6EC9DE'}}).composite([{input:transparent}]).png().toFile(crop?out+'/home-dense-crops/'+process.env.HOME_CROP_NAME+'.png':out+(process.env.HOME_PRESERVE?'/home-dense-work/preservation-frame.png':stage==='before'?'/home-dense-before.png':'/home-dense.png'));
- if(!crop&&stage==='after')writeFileSync(out+'/home-dense-work/home-built-render.json',JSON.stringify({source:root,world:'rive/web/world.json',walkWorld:'rive/web/walk-world.json',placement:'src/pixi/placements.js',layers:'public/pixi-art and production asset references',width:W,height:H,worldScale:k,offset,projection:1,counts:{ground:P.HOME_TILES.length,flats:flats.length,decks:decks.length,standingAndSleeperLayers:props.length,sleepers:beds.length},note:'Static real-art assembly. No live players, animated water, or procedural harbour overlay. Original SVG art and production placement preserved.'},null,2));
+ if(!crop&&stage==='after')writeFileSync(out+'/home-dense-work/home-built-render.json',JSON.stringify({source:root,world:'assets/world/world.json',walkWorld:'assets/world/walk-world.json',placement:'src/pixi/placements.js',layers:'public/pixi-art and production asset references',width:W,height:H,worldScale:k,offset,projection:1,counts:{ground:P.HOME_TILES.length,flats:flats.length,decks:decks.length,standingAndSleeperLayers:props.length,sleepers:beds.length},note:'Static real-art assembly. No live players, animated water, or procedural harbour overlay. Original SVG art and production placement preserved.'},null,2));
  console.log('Home rendered from production SVG layers, '+layers.length+' layers, '+beds.length+' sleepers.');
 } finally {await vite.close();}

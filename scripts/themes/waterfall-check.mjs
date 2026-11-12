@@ -1,7 +1,7 @@
 import {readFileSync,writeFileSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-const read=p=>JSON.parse(readFileSync(p));const d='rive/web/themes/waterfall/';
+const read=p=>JSON.parse(readFileSync(p));const d='assets/world/themes/waterfall/';
 const world=read(d+'world.json'),walk=read(d+'walk-world.json'),harbor=read(d+'harbor.json');
 const report=checkTheme('waterfall');const map=makeMap('waterfall',{world,walk,harbor,sleepers:report.sleepers});const nav=map.nav();
 let failures=[];

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {IslandRoom} from '../worker/index.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
 import sharp from 'sharp';
 import {Path2D,createCanvas} from '@napi-rs/canvas';

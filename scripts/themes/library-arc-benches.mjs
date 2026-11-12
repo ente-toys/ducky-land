@@ -1,7 +1,7 @@
 // HOME's actual bench construction, fitted to Pagepond's two paving ellipses.
 import {writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 export function libraryArcBenches({artDir,props,obstacles,plaza,market}) {
  const records=[];
  for(const [name,z,angles,radius] of [

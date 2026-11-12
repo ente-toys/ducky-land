@@ -3,14 +3,14 @@
 #   python3 scripts/themes/pink-build.py
 # Writes
 #   public/pixi-art/themes/pink/ground.svg + ground-rN-cN.svg (5 x 4 tiles of home's tile size), jetty-*.svg, bridge-*.svg, art.json
-#   rive/web/themes/pink/world.json, walk-world.json, harbor.json
+#   assets/world/themes/pink/world.json, walk-world.json, harbor.json
 # The props it places are the traced GPT pieces in public/pixi-art/themes/pink/detail/ (scripts/themes/pink-trace.py) plus
 # home's own plants and ground decals, referenced at their home paths. Pure python, no dependencies; deterministic.
 import json, math, os, re
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ART = os.path.join(ROOT, 'public/pixi-art/themes/pink')
-DATA = os.path.join(ROOT, 'rive/web/themes/pink')
+DATA = os.path.join(ROOT, 'assets/world/themes/pink')
 W, H = 8000, 5800                              # boss 6 Nov: ~1.8x home's land (home is 5800 x 4400)
 TW, TH = [1600] * 5, [1450] * 4                # 5 x 4 tiles, each about home's tile size
 

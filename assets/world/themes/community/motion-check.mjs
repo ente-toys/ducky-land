@@ -21,5 +21,5 @@ assert.equal(flame.sprite.skew.x,0);assert.equal(flame.sprite.alpha,1);
 base.sprite.scale.y/=.78;updateCommunityCentre(art,0,true);
 assert.equal(flame.sprite.y,base.sprite.y+(flame.anchor.y-base.anchor.y)*base.sprite.height);
 assert.equal(flame.sprite.height,base.sprite.height);
-fs.writeFileSync('rive/web/themes/community/motion-validation.json',JSON.stringify({tested:'actual Pixi Sprite transforms, offline',samples,reducedMotionStable:true,hearthStable:true,anchorStable:true},null,2));
+fs.writeFileSync('assets/world/themes/community/motion-validation.json',JSON.stringify({tested:'actual Pixi Sprite transforms, offline',samples,reducedMotionStable:true,hearthStable:true,anchorStable:true},null,2));
 console.log('PASS: flame changes, hearth and anchor stay fixed, reduced motion is stable');

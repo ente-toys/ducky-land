@@ -1,6 +1,6 @@
 // Offline manifest render when the sandbox cannot open Chromium. All art is the actual SVG data.
 import sharp from 'sharp';import fs from 'node:fs';
-const ART='public/pixi-art/themes/community/',DATA='rive/web/themes/community/';
+const ART='public/pixi-art/themes/community/',DATA='assets/world/themes/community/';
 const a=JSON.parse(fs.readFileSync(ART+'art.json')),h=JSON.parse(fs.readFileSync(DATA+'harbor.json'));
 const OUT='../concepts/themes/work/community/';fs.mkdirSync(OUT,{recursive:true});
 const K=Number(process.env.K||.25),W=Math.round(a.width*K),H=Math.round(a.height*K);const layers=[],cache=new Map();

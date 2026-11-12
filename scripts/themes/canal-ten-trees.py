@@ -4,7 +4,7 @@ import json,math
 from shapely.geometry import Point,Polygon,LineString,box
 from shapely.affinity import scale,translate
 from shapely.ops import unary_union
-R=Path(__file__).resolve().parents[2];A=R/'public/pixi-art/themes/canal';D=R/'rive/web/themes/canal'
+R=Path(__file__).resolve().parents[2];A=R/'public/pixi-art/themes/canal';D=R/'assets/world/themes/canal'
 read=lambda p:json.loads(p.read_text())
 a=read(A/'art.json');w=read(D/'world.json');walk=read(D/'walk-world.json');beds=read(A/'resolved-sleepers.json')
 def ell(x,y,rx,ry):return scale(Point(x,y).buffer(1,quad_segs=16),rx,ry)

@@ -9,7 +9,7 @@ from shapely import affinity
 from fontTools.pens.basePen import BasePen
 from fontTools.svgLib.path import parse_path
 import xml.etree.ElementTree as ET
-S=Path('scripts/pagepond-ground'); A=Path('public/pixi-art/themes/library'); D=Path('rive/web/themes/library')
+S=Path('scripts/pagepond-ground'); A=Path('public/pixi-art/themes/library'); D=Path('assets/world/themes/library')
 read=lambda f:json.loads(Path(f).read_text())
 def save(f,v):Path(f).write_text(json.dumps(v,separators=(',',':'))+'\n')
 source=read(S/'data/source.json');art=read(A/'art.json');world=read(D/'world.json');plan=read('scripts/pagepond-hamlets/placement.json')

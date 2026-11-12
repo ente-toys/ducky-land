@@ -7,7 +7,7 @@ import {loadThemeArt} from '../src/pixi/theme-art.js';
 import {createGroundPool,tileInView,tileResolution} from '../src/pixi/ground-stream.js';
 import {icelandPieceTile,icelandPieceSVG} from '../src/pixi/iceland-art-stream.js';
 const art=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
-const world=JSON.parse(readFileSync('rive/web/themes/snow/world.json'));
+const world=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
 const flush=()=>new Promise(setImmediate);
 const finish=async pools=>{for(let i=0;i<300&&pools.some(p=>p.stats().pendingTiles);i++)await flush();};

@@ -1,7 +1,7 @@
 // Install a replacement layered centre after its SVGs and centre.json have been supplied.
 // Reads the same centre contract as Sunflower/Fair/Library; no shared code changes.
 import {readFileSync,writeFileSync,existsSync} from 'node:fs';
-const A='public/pixi-art/themes/blossom/',D='rive/web/themes/blossom/',J=f=>JSON.parse(readFileSync(f));
+const A='public/pixi-art/themes/blossom/',D='assets/world/themes/blossom/',J=f=>JSON.parse(readFileSync(f));
 const c=J(A+'centre/centre.json'),art=J(A+'art.json'),world=J(D+'world.json'),walk=J(D+'walk-world.json');
 const {x:cx,y:cy,scale:s=1}=c.placement??{x:world.zones.centre.x,y:world.zones.centre.y,scale:1};
 art.props=art.props.filter(p=>!p.id?.startsWith('blossom-centre-'));art.flats=art.flats.filter(p=>!p.src.startsWith('centre/'));

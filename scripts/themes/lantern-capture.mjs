@@ -7,7 +7,7 @@ const round=process.env.ROUND||'final';
 const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1600,height:1100},deviceScaleFactor:1});
 const errors=[];page.on('pageerror',e=>errors.push(String(e)));
-const base='http://127.0.0.1:5304/rive/web/themes/lantern/review.html';
+const base='http://127.0.0.1:5304/assets/world/themes/lantern/review.html';
 await page.goto(base);
 await page.waitForFunction(()=>window.reviewReady&&window.__duckyThemeArt?.includes('lantern'),null,{timeout:180000});
 const views=[['plaza',[1980,2700,.65],[2820,2370,.65]],['bench-ring',[4180,4530,.8],[2890,2660,.8]],['path-junction',[2740,4050,.8],[2280,2290,.8]],['tree-cluster',[1310,2500,.65],[3530,3040,.65]]];

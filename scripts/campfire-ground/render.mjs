@@ -6,7 +6,7 @@ import sharp from 'sharp';
 import {tileSvg} from './build.mjs';
 const OUT=process.env.CAMPFIRE_RENDER_OUT??'../concepts/themes/work/campfire-check',A='public/pixi-art/themes/community/';
 fs.mkdirSync(OUT+'/tiles',{recursive:true});fs.mkdirSync(OUT+'/seams',{recursive:true});
-const old=file=>execFileSync('git',['show',`HEAD:${file}`],{maxBuffer:32*1024*1024}),art=JSON.parse(old(A+'art.json')),harbor=JSON.parse(old('rive/web/themes/community/harbor.json'));
+const old=file=>execFileSync('git',['show',`HEAD:${file}`],{maxBuffer:32*1024*1024}),art=JSON.parse(old(A+'art.json')),harbor=JSON.parse(old('assets/world/themes/community/harbor.json'));
 const onlySeams=process.argv.includes('--seams-only'),prior=onlySeams?JSON.parse(fs.readFileSync(OUT+'/report.json')):null;
 const tiles=art.ground.tiles,geometry=prior?.geometry??[],sizes=prior?.sizes??[];
 const png=async(svg,w=700,h=700)=>sharp(svg,{limitInputPixels:false}).resize(w,h,{fit:'fill'}).png().toBuffer();
@@ -51,5 +51,5 @@ for(const a of tiles)for(const b of tiles){const vertical=a.y===b.y&&a.x+a.width
  const ar=await sharp(actual).ensureAlpha().raw().toBuffer(),er=await sharp(expected).ensureAlpha().raw().toBuffer();let changed=0,large=0,max=0,joinLarge=0,alphaGaps=0;for(let i=0;i<ar.length;i+=4){let delta=0;for(let c=0;c<4;c++)delta=Math.max(delta,Math.abs(ar[i+c]-er[i+c]));max=Math.max(max,delta);if(delta)changed++;if(delta>32){large++;const x=i/4%region.width,y=Math.floor(i/4/region.width);if(vertical?Math.abs(x-31.5)<1:Math.abs(y-31.5)<1)joinLarge++;}if(er[i+3]>250&&ar[i+3]<250)alphaGaps++;}
  const id=`${vertical?'v':'h'}-${b.x}-${b.y}`;fs.writeFileSync(`${OUT}/seams/${id}.png`,actual);seams.push({id,pixels:region.width*region.height,changed,large,max,joinLarge,alphaGaps});
 }
-const report={baseline:execFileSync('git',['rev-parse','HEAD']).toString().trim(),sizes,geometry,seams,unmodifiedSceneRecords:['public/pixi-art/themes/community/art.json','rive/web/themes/community/world.json','rive/web/themes/community/walk-world.json','rive/web/themes/community/harbor.json',A+'resolved-sleepers.json'].map(file=>({file,unchanged:old(file).equals(fs.readFileSync(file))}))};
+const report={baseline:execFileSync('git',['rev-parse','HEAD']).toString().trim(),sizes,geometry,seams,unmodifiedSceneRecords:['public/pixi-art/themes/community/art.json','assets/world/themes/community/world.json','assets/world/themes/community/walk-world.json','assets/world/themes/community/harbor.json',A+'resolved-sleepers.json'].map(file=>({file,unchanged:old(file).equals(fs.readFileSync(file))}))};
 fs.writeFileSync(`${OUT}/report.json`,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({tiles:tiles.length,seams:seams.length,seamLargePixels:seams.reduce((s,v)=>s+v.large,0),joinLargePixels:seams.reduce((s,v)=>s+v.joinLarge,0),alphaGaps:seams.reduce((s,v)=>s+v.alphaGaps,0),geometryLargePixels:geometry.reduce((s,v)=>s+v.large,0)}));

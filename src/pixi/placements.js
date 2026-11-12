@@ -1,18 +1,18 @@
 import homeRoutes from './home-routes.json';
 import homeOriginalWorld from './home-original-world.json';
 import expansion from './home-expansion.json';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import library from '../../assets/manifest.json';
 import original from './art-manifest.json';
 import layout from './layout.json';
 import rawPaths from './paths.json';   // footpath centre lines, sampled from the painted curves in the ground tiles (boss 3 Nov: the old corner-only lines missed the bends by up to 85)
 import shapes from './walk-shapes.json';   // boss 4 Nov: the client's coast and race-lake outlines, traced from the art (walk-map overlay)
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 import {SLEEP_SPOTS as BASE_SLEEP_SPOTS, resolveSleepSpots, sleeperFootprint} from './sleep-spots.js';
-import homeSleepExtra from '../../rive/web/home-sleep-extra.json';
-import homeSleepOuter from '../../rive/web/home-sleep-outer.json';
-import homeSleepMore from '../../rive/web/home-sleep-more.json';
-import homeExtraProps from '../../rive/web/home-extra-props.json';
+import homeSleepExtra from '../../assets/world/home-sleep-extra.json';
+import homeSleepOuter from '../../assets/world/home-sleep-outer.json';
+import homeSleepMore from '../../assets/world/home-sleep-more.json';
+import homeExtraProps from '../../assets/world/home-extra-props.json';
 const SLEEP_SPOTS = Object.fromEntries(Object.entries(BASE_SLEEP_SPOTS).map(([pose, spots]) => [pose, [...spots, ...(homeSleepExtra[pose] ?? [])]]));
 import {PLAZA_BENCHES, benchFootprint, benchAnchor, benchBox, benchFile} from './plaza-benches.js';
 const footpaths = rawPaths.filter(l => !(l[0][0] === 3940 && l[0][1] === 3260));   // round 4: the east jetty's stub path went with its islet

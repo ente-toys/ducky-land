@@ -14,7 +14,7 @@ from shapely.geometry import Point, LineString, Polygon, box
 from shapely.ops import unary_union
 from shapely import affinity
 
-S=Path('scripts/rosy-ground'); A=Path('public/pixi-art/themes/pink'); D=Path('rive/web/themes/pink')
+S=Path('scripts/rosy-ground'); A=Path('public/pixi-art/themes/pink'); D=Path('assets/world/themes/pink')
 read=lambda p:json.loads(Path(p).read_text())
 def write(p,v): Path(p).write_text(json.dumps(v,indent=1)+'\n')
 art=read(A/'art.json'); world=read(D/'world.json'); walk=read(D/'walk-world.json')

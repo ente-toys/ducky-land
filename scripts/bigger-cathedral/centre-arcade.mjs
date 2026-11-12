@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import {LEFT,RIGHT} from './centre-art-data.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const ink='#39472d',stone='#EBCB87',light='#FFF0C7',shade='#C59B59',roof='#D9753D',terra='#BA542F';
 const n=v=>Math.round(v*100)/100;
 const pt=q=>q.map(n).join(' ');

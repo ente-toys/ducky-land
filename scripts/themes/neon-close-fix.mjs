@@ -1,7 +1,7 @@
 // Close-up craft pass, repeatable from the Neon-only snapshot in concepts/work.
 import fs from 'node:fs';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/neon/',D='rive/web/themes/neon/',B='../concepts/themes/work/neon/close-source/';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/neon/',D='assets/world/themes/neon/',B='../concepts/themes/work/neon/close-source/';
 const read=n=>JSON.parse(fs.readFileSync(B+n+'.json'));
 const art=read('art'),world=read('world'),walk=read('walk-world'),paths=world.paths;
 const beds=JSON.parse(fs.readFileSync(A+'resolved-sleepers.json'));

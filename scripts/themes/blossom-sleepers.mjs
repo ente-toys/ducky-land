@@ -1,9 +1,9 @@
 // Goldmine-only pose placement. Uses the engine's validator, five of each exact Home pose.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const D='rive/web/themes/blossom/',A='public/pixi-art/themes/blossom/';
+const D='assets/world/themes/blossom/',A='public/pixi-art/themes/blossom/';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const world=read(D+'world.json'),walkRaw=read(D+'walk-world.json'),art=read(A+'art.json');
 const walk=makeMap('blossom',{world,walk:walkRaw,harbor:read(D+'harbor.json'),sleepers:[]}).baseWalk;

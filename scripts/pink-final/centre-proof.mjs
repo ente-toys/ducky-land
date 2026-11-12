@@ -6,7 +6,7 @@ import {inCentre} from './centre-lock.mjs';
 const A='public/pixi-art/themes/pink/',out='scripts/pink-final/renders',tmp='/private/tmp/pink-centre-reference',git=p=>execFileSync('git',['show','7c2a28ec:'+p]);
 mkdirSync(tmp,{recursive:true});mkdirSync(out,{recursive:true});
 const baseline=JSON.parse(git(A+'art.json')),current=JSON.parse(readFileSync(A+'art.json'));
-const line=git('rive/web/themes/index.js').toString().split('\n').find(l=>l.startsWith('  pink:')),beds=JSON.parse(line.match(/sleepers: (\[.*\])/)[1]);
+const line=git('assets/world/themes/index.js').toString().split('\n').find(l=>l.startsWith('  pink:')),beds=JSON.parse(line.match(/sleepers: (\[.*\])/)[1]);
 const resolver=src=>{const path=src.startsWith('/')?'public'+src:A+src,local=tmp+'/'+path; if(!existsSync(local)){mkdirSync(local.slice(0,local.lastIndexOf('/')),{recursive:true});writeFileSync(local,git(path));}return local;};
 const view=[3000,2050,2000,1600],scale=.8;
 await render(baseline,view,scale,out+'/centre-baseline.png',{beds,resolveSource:resolver});

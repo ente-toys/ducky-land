@@ -32,8 +32,8 @@ const views=[
 try {
  const load=p=>vite.ssrLoadModule(p);
  const P=await load('/src/pixi/placements.js');
- const {geometry}=await load('/rive/web/island-geometry.mjs');
- const world=P.trimWorld(JSON.parse(readFileSync(root+'/rive/web/world.json')));
+ const {geometry}=await load('/assets/world/island-geometry.mjs');
+ const world=P.trimWorld(JSON.parse(readFileSync(root+'/assets/world/world.json')));
  const art=JSON.parse(readFileSync(root+'/src/pixi/art-manifest.json'));
  const props=P.createPlacements(world,geometry({...world,obstacles:[]}).walkable);
  const local=P.walkWorld(world,props);

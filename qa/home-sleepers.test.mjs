@@ -2,14 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'vite';
 import {readFileSync} from 'node:fs';
-import {geometry,inShape,inPoly} from '../rive/web/island-geometry.mjs';
+import {geometry,inShape,inPoly} from '../assets/world/island-geometry.mjs';
 import {HOME_MAP} from '../src/pixi/island-maps.js';
 import {HOME_SLEEP_TOTAL,sleepHalfWidths,sleeperFootprint} from '../src/pixi/sleep-spots.js';
 import originalBeds from './fixtures/home-original-sleepers.json' with {type:'json'};
 import eightyBeds from './fixtures/home-eighty-sleepers.json' with {type:'json'};
-import more from '../rive/web/home-sleep-more.json' with {type:'json'};
+import more from '../assets/world/home-sleep-more.json' with {type:'json'};
 import routes from '../src/pixi/home-routes.json' with {type:'json'};
-import outer from '../rive/web/home-sleep-outer.json' with {type:'json'};
+import outer from '../assets/world/home-sleep-outer.json' with {type:'json'};
 import originalWorld from '../src/pixi/home-original-world.json' with {type:'json'};
 import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
 
@@ -17,7 +17,7 @@ test('Home adds sixty outer sleepers without moving the first eighty, and the ro
  const vite=await createServer({configFile:false,cacheDir:'/private/tmp/home-sleepers-test',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
  try{
   const P=await vite.ssrLoadModule('/src/pixi/placements.js');
-  const props=P.createPlacements(),world=P.walkWorld(P.trimWorld(JSON.parse(readFileSync('rive/web/world.json'))),props);
+  const props=P.createPlacements(),world=P.walkWorld(P.trimWorld(JSON.parse(readFileSync('assets/world/world.json'))),props);
   const beds=P.sleepSpots(world,props,geometry(world).walkable,sleepHalfWidths());
   assert.equal(beds.length,HOME_SLEEP_TOTAL);assert.deepEqual(beds.bad,[]);
   assert.deepEqual(JSON.parse(JSON.stringify(beds.slice(0,40))),originalBeds,'original positions, poses, flips, trees and animation order survive');

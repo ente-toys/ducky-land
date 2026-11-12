@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import {inner,outer,streams,crossings,pathD,ribbon} from './fix-geometry.mjs';
 import {smooth,coast} from './design.mjs';
 import {archBridge} from './arch.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,1)+'\n');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 // Widen the two existing channels. Their bends and endpoints are hand authored.

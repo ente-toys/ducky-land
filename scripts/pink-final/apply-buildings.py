@@ -1,7 +1,7 @@
 """Validate and register the approved OG-scale building redraws without moving their bases."""
 from pathlib import Path
 import json,re,math,xml.etree.ElementTree as E,copy
-ROOT=Path('../concepts/themes/work/pink-fix/buildings');A=Path('public/pixi-art/themes/pink');D=Path('rive/web/themes/pink')
+ROOT=Path('../concepts/themes/work/pink-fix/buildings');A=Path('public/pixi-art/themes/pink');D=Path('assets/world/themes/pink')
 read=lambda p:json.loads(Path(p).read_text())
 def write(p,d):Path(p).write_text(json.dumps(d,indent=1)+'\n')
 art=read(A/'art.json');world=read(D/'world.json');walk=read(D/'walk-world.json');layout=read('scripts/bigger-pink/layout.json')

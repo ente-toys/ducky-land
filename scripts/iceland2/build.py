@@ -14,7 +14,7 @@ for i,b in enumerate(anchors):
  for k in range(6):
   t=k/6
   curve.append([.5*((2*b[j])+(-a[j]+c[j])*t+(2*a[j]-5*b[j]+4*c[j]-d[j])*t*t+(-a[j]+3*b[j]-3*c[j]+d[j])*t*t*t) for j in (0,1)])
-home=json.loads((ROOT/'rive/web/world.json').read_text()); S=math.sqrt(area(home['coast'])/area(curve))
+home=json.loads((ROOT/'assets/world/world.json').read_text()); S=math.sqrt(area(home['coast'])/area(curve))
 def pt(x,y):return [round(600+x*S,2),round(600+y*S,2)]
 coast=[pt(400+(p[0]-400)*math.sqrt(1.18),543+(p[1]-543)*math.sqrt(1.18)) for p in curve]; W=math.ceil((1448*S+1200)/256)*256; H=math.ceil((1086*S+1200)/256)*256
 props=[]; obstacles=[]; doors=[]
@@ -285,7 +285,7 @@ for p in props+flats:
  p['tiles']=arr
 world=dict(width=W,height=H,coast=coast,water=[],bridges=[],obstacles=obstacles,islets=[],walkways=[],paths=paths,props=props,zones={name:dict(x=pt(x,y)[0],y=pt(x,y)[1],spawn=pt(x,y)) for name,x,y in [('plaza',831,725),('rink',800,585),('bakery',310,345),('lodge',1100,300),('workshop',290,785),('harbour',1090,868),('snowman',254,940),('sledHill',476,184)]},sleepTotal=60,sleepSpots={},sleepAvoid=[dict(x=rinkX,y=rinkY,rx=rw*.6,ry=rh*.6,name='rink')],iceland2=dict(rink=dict(x=rx0,y=ry0,width=rw-16,height=rh-16,radius=radius,posts=fencePosts,rails=fenceRuns,gateWidth=gateWidth),traceScale=S,nodes={name:pt(*p) for name,p in nodes.items()},routes=routes,gates={name:pt(*nodes[name]) for name in ['north-gate','west-gate','south-gate']},doors=doors,reference='B2 whole-source.png',pathWidths=[128,104],snowfall=True))
 harbor=dict(jetty=dict(foot=pt(1090,866),tip=pt(1090,1010),width=140),spawn=pt(831,725),boats=[dict(x=pt(1090,960)[0]+170,y=pt(1090,960)[1],turn=math.pi),dict(x=pt(1090,990)[0]-170,y=pt(1090,990)[1],turn=math.pi),dict(x=pt(1090,1020)[0]+170,y=pt(1090,1020)[1],turn=math.pi)])
-base=ROOT/'rive/web/themes/snow';dump(base/'world.json',world);dump(base/'walk-world.json',world);dump(base/'harbor.json',harbor)
+base=ROOT/'assets/world/themes/snow';dump(base/'world.json',world);dump(base/'walk-world.json',world);dump(base/'harbor.json',harbor)
 art=dict(raster=dict(enabled=False),width=W,height=H,sea='#6EC9DE',ground=dict(tiles=tiles,vector='v2/terrain.svg'),props=props,flats=flats,decks=[],floating=[]);dump(OUT.parent/'art.json',art)
 # Low-resolution globe fallback contains the same coast and path graph.
 (ROOT/'public/pixi-art/globe/snow-ground.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="{1024*H/W}" viewBox="0 0 {W} {H}">{terrain}</svg>')

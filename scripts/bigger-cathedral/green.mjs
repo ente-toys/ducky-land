@@ -6,7 +6,7 @@ import {rebuildPaths} from './paths.mjs';
 import {JSDOM} from 'jsdom';
 import {CLUMPS,LINKS} from './green-data.mjs';
 import {smooth} from './design.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',B='scripts/bigger-cathedral/green-source/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',B='scripts/bigger-cathedral/green-source/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n');
 const art=read(B+'art.json'),world=read(B+'world.json'),walk=read(B+'walk-world.json');
 const dom=s=>new JSDOM(s,{contentType:'image/svg+xml'}).window.document.documentElement;

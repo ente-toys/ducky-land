@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
-import {geometry} from './rive/web/island-geometry.mjs';
-export const world=JSON.parse(readFileSync(new URL('./rive/web/world.json',import.meta.url)));
+import {geometry} from './assets/world/island-geometry.mjs';
+export const world=JSON.parse(readFileSync(new URL('./assets/world/world.json',import.meta.url)));
 export const {walkable}=geometry(world);
 export const W=world.width,H=world.height,SLOTS=16,SPEED=245,HZ=12;
 export const CITIES=['Kochi','Chennai','Bengaluru','London','Mumbai','Delhi','Hyderabad','Pune','Other'];

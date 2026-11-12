@@ -44,15 +44,15 @@ for p in sorted(art['props'], key=lambda p: p['y']):
     blit(raster(p['src'], w, h, p.get('flip', False)), x, y)
 if '--walk' in sys.argv:
     dr = ImageDraw.Draw(img, 'RGBA')
-    walk = json.load(open(os.path.join(ROOT, 'rive/web/themes/sunflower/walk-world.json')))
+    walk = json.load(open(os.path.join(ROOT, 'assets/world/themes/sunflower/walk-world.json')))
     dr.polygon([((x - ox) * K, (y - oy) * K) for x, y in walk['coast']], outline=(255, 0, 0, 255))
     for o in walk['obstacles']:
         if 'poly' in o: dr.polygon([((x - ox) * K, (y - oy) * K) for x, y in o['poly']], outline=(255, 0, 255, 255))
         else: dr.ellipse([((o['x'] - o['rx']) - ox) * K, ((o['y'] - o['ry']) - oy) * K, ((o['x'] + o['rx']) - ox) * K, ((o['y'] + o['ry']) - oy) * K], outline=(255, 0, 255, 255))
     for w in walk['walkways']: dr.line([((w['a'][0] - ox) * K, (w['a'][1] - oy) * K), ((w['b'][0] - ox) * K, (w['b'][1] - oy) * K)], fill=(255, 0, 0, 255), width=2)
-    hb = json.load(open(os.path.join(ROOT, 'rive/web/themes/sunflower/harbor.json')))
+    hb = json.load(open(os.path.join(ROOT, 'assets/world/themes/sunflower/harbor.json')))
     for b in hb['boats']: dr.ellipse([(b['x'] - 46 - ox) * K, (b['y'] - 46 - oy) * K, (b['x'] + 46 - ox) * K, (b['y'] + 46 - oy) * K], outline=(0, 0, 255, 255), width=2)
-    wd = json.load(open(os.path.join(ROOT, 'rive/web/themes/sunflower/world.json')))
+    wd = json.load(open(os.path.join(ROOT, 'assets/world/themes/sunflower/world.json')))
     for k, z in wd['zones'].items(): s = z['spawn']; dr.ellipse([(s[0] - 25 - ox) * K, (s[1] - 25 - oy) * K, (s[0] + 25 - ox) * K, (s[1] + 25 - oy) * K], fill=(255, 0, 0, 255))
 name = 'sunflower-render' + ('-walk' if '--walk' in sys.argv else '') + ('-crop' if crop else '')
 out = os.path.join(CONCEPTS, 'work/sunflower', name + '.png'); img.convert('RGB').save(out); print(out)

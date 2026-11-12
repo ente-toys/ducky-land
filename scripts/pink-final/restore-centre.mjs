@@ -21,14 +21,14 @@ for(const key of ['flats','decks','props']){
 }
 write(A+'art.json',art);
 for(const file of ['world.json','walk-world.json']){
- const path='rive/web/themes/pink/'+file,world=read(path),old=JSON.parse(git(path));
+ const path='assets/world/themes/pink/'+file,world=read(path),old=JSON.parse(git(path));
  world.obstacles=world.obstacles.filter(o=>!inCentre(o.x??-1e9,o.y??-1e9)).concat(old.obstacles.filter(o=>inCentre(o.x??-1e9,o.y??-1e9)));
  if(world.props)world.props=art.props;
  write(path,world);
 }
-const layout=read('scripts/bigger-pink/layout.json'),world=read('rive/web/themes/pink/world.json'),original=read('scripts/bigger-pink/original-world.json');layout.baseObstacles=world.obstacles.filter(o=>original.obstacles.some(b=>JSON.stringify(b)===JSON.stringify(o)));layout.obstacles=world.obstacles.filter(o=>!layout.baseObstacles.includes(o));write('scripts/bigger-pink/layout.json',layout);
-const path='rive/web/themes/index.js',index=readFileSync(path,'utf8'),line=index.split('\n').find(l=>l.startsWith('  pink:')),oldLine=git(path).split('\n').find(l=>l.startsWith('  pink:')),beds=JSON.parse(line.match(/sleepers: (\[.*\])/)[1]),oldBeds=JSON.parse(oldLine.match(/sleepers: (\[.*\])/)[1]);
+const layout=read('scripts/bigger-pink/layout.json'),world=read('assets/world/themes/pink/world.json'),original=read('scripts/bigger-pink/original-world.json');layout.baseObstacles=world.obstacles.filter(o=>original.obstacles.some(b=>JSON.stringify(b)===JSON.stringify(o)));layout.obstacles=world.obstacles.filter(o=>!layout.baseObstacles.includes(o));write('scripts/bigger-pink/layout.json',layout);
+const path='assets/world/themes/index.js',index=readFileSync(path,'utf8'),line=index.split('\n').find(l=>l.startsWith('  pink:')),oldLine=git(path).split('\n').find(l=>l.startsWith('  pink:')),beds=JSON.parse(line.match(/sleepers: (\[.*\])/)[1]),oldBeds=JSON.parse(oldLine.match(/sleepers: (\[.*\])/)[1]);
 const occurrence=new Map();for(const b of oldBeds){const n=occurrence.get(b.pose)??0;occurrence.set(b.pose,n+1);if(!inCentre(b.x,b.y))continue;const current=beds.filter(c=>c.pose===b.pose)[n];Object.keys(current).forEach(k=>delete current[k]);Object.assign(current,b);}
-const worldPath='rive/web/themes/pink/world.json',w=read(worldPath),ow=JSON.parse(git(worldPath));const occurrences=new Map();for(const b of oldBeds){const n=occurrences.get(b.pose)??0;occurrences.set(b.pose,n+1);if(inCentre(b.x,b.y))w.sleepSpots[b.pose][n]=ow.sleepSpots[b.pose][n];}write(worldPath,w);
+const worldPath='assets/world/themes/pink/world.json',w=read(worldPath),ow=JSON.parse(git(worldPath));const occurrences=new Map();for(const b of oldBeds){const n=occurrences.get(b.pose)??0;occurrences.set(b.pose,n+1);if(inCentre(b.x,b.y))w.sleepSpots[b.pose][n]=ow.sleepSpots[b.pose][n];}write(worldPath,w);
 writeFileSync(path,index.replace(line,line.replace(/sleepers: \[.*\]/,'sleepers: '+JSON.stringify(beds))));
 write('scripts/pink-final/centre-lock-report.json',{ref,centre,restored,protectedProps:base.props.filter(p=>touches(p)||restored.includes(p.id)).map(p=>p.id),groundTiles:art.ground.tiles.filter(t=>t.src.startsWith(folder)).length});console.log('Restored locked centre:',restored);

@@ -30,7 +30,7 @@ for(const t of art.ground.tiles)if(t.src.includes('original-ground-')&&t.x<5065&
 // The exact SVG bank drives water collision on both client and server.
 const pond={name:'Pagepond reading pond',poly:contours(waterPath,4)[0]};
 for(const file of ['world.json','walk-world.json']){
- const path='rive/web/themes/library/'+file,w=JSON.parse(fs.readFileSync(path));
+ const path='assets/world/themes/library/'+file,w=JSON.parse(fs.readFileSync(path));
  const i=w.water.findIndex(q=>q.name===pond.name||(q.x===4692&&q.y===3138));
  if(i<0)throw Error('Missing pond collision in '+path);
  w.water[i]=pond;fs.writeFileSync(path,JSON.stringify(w)+'\n');

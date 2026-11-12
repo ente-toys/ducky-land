@@ -38,8 +38,8 @@ test('Three readable masonry bays per arm have one chunky pier per station and a
    assert.equal(piers[0][0],`M${x-26} ${y-166}L${x+26} ${y-166}L${x+26} ${y-18}L${x-26} ${y-18}Z`,'one full width pier at its authored station');
   }
  }
- const world=JSON.parse(fs.readFileSync('rive/web/themes/cathedral/world.json'));
- const walk=JSON.parse(fs.readFileSync('rive/web/themes/cathedral/walk-world.json'));
+ const world=JSON.parse(fs.readFileSync('assets/world/themes/cathedral/world.json'));
+ const walk=JSON.parse(fs.readFileSync('assets/world/themes/cathedral/walk-world.json'));
  const feet=w=>w.obstacles.filter(o=>o.id?.startsWith('centre-pier-'));
  assert.equal(feet(world).length,6,'three unique pier supports per arm');
  assert.deepEqual(feet(world),feet(walk));
@@ -47,9 +47,9 @@ test('Three readable masonry bays per arm have one chunky pier per station and a
 });
 
 test('End pavilion footprints match both navigation manifests and removed bays leave open ground',()=>{
- const world=JSON.parse(fs.readFileSync('rive/web/themes/cathedral/world.json'));
- const walk=JSON.parse(fs.readFileSync('rive/web/themes/cathedral/walk-world.json'));
- const harbor=JSON.parse(fs.readFileSync('rive/web/themes/cathedral/harbor.json'));
+ const world=JSON.parse(fs.readFileSync('assets/world/themes/cathedral/world.json'));
+ const walk=JSON.parse(fs.readFileSync('assets/world/themes/cathedral/walk-world.json'));
+ const harbor=JSON.parse(fs.readFileSync('assets/world/themes/cathedral/harbor.json'));
  const nav=makeMap('cathedral',{world,walk,harbor}).nav();
  const ends=art.props.filter(p=>p.id.startsWith('centre-end-pavilion-'));
  assert.equal(ends.length,2);

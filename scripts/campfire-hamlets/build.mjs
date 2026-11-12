@@ -4,7 +4,7 @@ import {plantOuter} from '../campfire-boss-eye/garden.mjs';
 import {DOMParser,XMLSerializer} from '@xmldom/xmldom';
 import {Path2D,PathOp,ring,curve,stroke,union,contours} from '../pagepond/geometry.mjs';
 import {tileSvg,source} from '../campfire-ground/build.mjs';
-const A='public/pixi-art/themes/community/',D='rive/web/themes/community/',S='scripts/campfire-hamlets/';
+const A='public/pixi-art/themes/community/',D='assets/world/themes/community/',S='scripts/campfire-hamlets/';
 const read=p=>JSON.parse(fs.readFileSync(p)),write=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n');
 const art=read(S+'baseline/art.json'),world=read(S+'baseline/world.json'),walk=read(S+'baseline/walk-world.json'),original=read('scripts/bigger-community/baseline/world.json'),originalArt=read('scripts/bigger-community/baseline/art.json'),previous=read('scripts/bigger-community/plan.json');
 const sites={storynest:{at:[-950,-530],sx:1.5,sy:1.5},patchwing:{at:[7050,300],sx:1.25,sy:1.5},sproutshare:{at:[-550,4500],sx:1.5,sy:1.5},lanternloaf:{at:[6450,4500],sx:1.25,sy:1.3}};

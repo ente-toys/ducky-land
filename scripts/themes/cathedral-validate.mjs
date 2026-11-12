@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
 import {Texture} from 'pixi.js';
-const ROOT='public/pixi-art/themes/cathedral/',DATA='rive/web/themes/cathedral/';
+const ROOT='public/pixi-art/themes/cathedral/',DATA='assets/world/themes/cathedral/';
 const read=p=>JSON.parse(readFileSync(p));const art=read(ROOT+'art.json'),world=read(DATA+'world.json'),walk=read(DATA+'walk-world.json'),harbor=read(DATA+'harbor.json'),arcs=read(ROOT+'arc-benches.json');
 const files=(p)=>readdirSync(p,{withFileTypes:true}).flatMap(d=>d.isDirectory()?files(p+d.name+'/'):[p+d.name]);
 const pngs=files(ROOT).filter(p=>/\.(png|jpg|webp)$/i.test(p));assert.equal(pngs.length,0,'all raster work lives outside public');

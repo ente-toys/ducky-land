@@ -1,5 +1,5 @@
-import fs from 'node:fs';import sharp from 'sharp';import {render,OUT} from './render.mjs';import {inPoly} from '../../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='rive/web/themes/community/',B='scripts/bigger-community/baseline/',a=read(A+'art.json'),h=read(D+'harbor.json'),p=read('scripts/bigger-community/plan.json');
+import fs from 'node:fs';import sharp from 'sharp';import {render,OUT} from './render.mjs';import {inPoly} from '../../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='assets/world/themes/community/',B='scripts/bigger-community/baseline/',a=read(A+'art.json'),h=read(D+'harbor.json'),p=read('scripts/bigger-community/plan.json');
 await render(a,h,OUT+'/community-built.png');
 for(const id of ['reading','cinema','makers','games','picnic','allotment']){const s=p.places.find(p=>p.id===id);await render(a,h,OUT+'/community-crops/'+id+'.png',{crop:[s.x,s.y,.8]});}
 await render(a,h,OUT+'/community-crops/open-promenade.png',{crop:[5700,0,.8]});

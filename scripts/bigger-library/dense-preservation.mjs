@@ -1,6 +1,6 @@
 import fs from 'node:fs';import assert from 'node:assert/strict';import sharp from 'sharp';import {createHash}from'node:crypto';
-import {OUT,original,origin,read}from'./model.mjs';import {inShape,geometry}from'../../rive/web/island-geometry.mjs';
-const baseline=read('scripts/bigger-library/dense-baseline.json'),world=read('rive/web/themes/library/world.json');
+import {OUT,original,origin,read}from'./model.mjs';import {inShape,geometry}from'../../assets/world/island-geometry.mjs';
+const baseline=read('scripts/bigger-library/dense-baseline.json'),world=read('assets/world/themes/library/world.json');
 for(const[k,h]of Object.entries(baseline.preservedWorldHashes))assert.equal(createHash('sha256').update(JSON.stringify(world[k])).digest('hex'),h,k+' unchanged from fix pass');
 const [A,B]=await Promise.all(['library-now.png','library-dense.png'].map(f=>sharp(OUT+'/'+f).ensureAlpha().raw().toBuffer({resolveWithObject:true})));let checked=0,changed=0;const examples=[];
 for(let y=0;y<A.info.height;y++)for(let x=0;x<A.info.width;x++){const wx=origin.x+(x+.5)/.11,wy=origin.y+(y+.5)/.11;if(!original.world.coastRings.some(p=>inShape(wx,wy,{poly:p},-12)))continue;checked++;const i=(y*A.info.width+x)*4;if(!A.data.subarray(i,i+4).equals(B.data.subarray(i,i+4))){changed++;if(examples.length<10)examples.push([wx,wy]);}}

@@ -1,5 +1,5 @@
 // Second-pass art. Commons are composed as individual places, with explicit prop positions.
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const smooth=p=>{const out=[];for(let i=0;i<p.length;i++){const a=p[(i+p.length-1)%p.length],b=p[i],c=p[(i+1)%p.length];for(let j=0;j<12;j++){const t=j/12,u=1-t;out.push([0,1].map(k=>u*u*(a[k]+b[k])/2+2*u*t*b[k]+t*t*(b[k]+c[k])/2));}}return out};
 const poly=p=>'M'+p.map(([x,y])=>`${x},${y}`).join(' L')+' Z';
 

@@ -5,7 +5,7 @@ import {Container, DOMAdapter} from 'pixi.js';
 import {createFountainWater,fountainPoint} from '../src/pixi/fountain.js';
 import {makeMap,mapFor} from '../src/pixi/island-maps.js';
 import {JSDOM} from 'jsdom';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 const map=makeMap('cathedral',{world,walk,harbor:read(D+'harbor.json')});

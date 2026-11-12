@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import {readFileSync,writeFileSync,copyFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const out='../concepts/themes/world-map/bigger',A='public/pixi-art/themes/pink/';
 const W=1980,H=1470,parts=[];
 for(const [i,name]of ['pink-bigger.png','pink-built.png'].entries()){

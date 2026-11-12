@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {A,OUT,plan,coast,svg,el,path,dpath,roadShape,ink,cream,sand,grass,house,garden,workshop,furniture,smooth} from './design.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,x)=>fs.writeFileSync(p,JSON.stringify(x,null,2)+'\n');
-const baseline='scripts/bigger-cathedral/baseline/',D='rive/web/themes/cathedral/';
+const baseline='scripts/bigger-cathedral/baseline/',D='assets/world/themes/cathedral/';
 let art=read(baseline+'art.json'),world=read(baseline+'world.json'),walk=read(baseline+'walk-world.json');
 const oldWorld=structuredClone(world),oldWalk=structuredClone(walk),oldArt=structuredClone(art);
 // This pier was originally drawn by the engine from harbor.json, rather than the art manifest.

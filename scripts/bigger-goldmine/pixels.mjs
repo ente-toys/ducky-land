@@ -1,4 +1,4 @@
-import sharp from 'sharp';import {readFileSync,writeFileSync} from 'node:fs';import {inPoly} from '../../rive/web/island-geometry.mjs';
+import sharp from 'sharp';import {readFileSync,writeFileSync} from 'node:fs';import {inPoly} from '../../assets/world/island-geometry.mjs';
 const A='public/pixi-art/themes/goldmine/',k=.25;
 const old=JSON.parse(readFileSync('scripts/bigger-goldmine/original/world.json'));
 const source=await sharp(A+'ground.svg',{density:18}).ensureAlpha().raw().toBuffer();

@@ -4,9 +4,9 @@
 import {readFileSync,writeFileSync,existsSync,mkdirSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const A='public/pixi-art/themes/pink/',D='rive/web/themes/pink/';
+const A='public/pixi-art/themes/pink/',D='assets/world/themes/pink/';
 const read=p=>JSON.parse(readFileSync(p,'utf8')),save=(p,v)=>writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const base='scripts/themes/pink-polish-base.json';
 if(!existsSync(base)||process.argv.includes('--from-build'))save(base,{art:read(A+'art.json'),world:read(D+'world.json'),walk:read(D+'walk-world.json')});

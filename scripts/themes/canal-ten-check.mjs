@@ -7,7 +7,7 @@ import {checkTheme} from '../theme-index.mjs';
 import {registerMap,mapFor} from '../../src/pixi/island-maps.js';
 import {canSail} from '../../src/pixi/islands.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
-const A='public/pixi-art/themes/canal/',D='rive/web/themes/canal/',read=p=>JSON.parse(readFileSync(p,'utf8'));
+const A='public/pixi-art/themes/canal/',D='assets/world/themes/canal/',read=p=>JSON.parse(readFileSync(p,'utf8'));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 const check=checkTheme('canal');assert.ok(check.ready,check.problems.join('\n'));assert.equal(check.sleepers.length,40);
 assert.equal(new Set(art.props.map(p=>p.id)).size,art.props.length);

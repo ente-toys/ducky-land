@@ -106,6 +106,6 @@ E.openSpaces=[{id:'north-meadow',point:at([414,164]),radius:350},{id:'south-mead
 E.boats=[[1350,520],[1385,538],[1320,510],[1785,399],[1801,830],[-272,761],[-258,1040],[281,1335],[1258,1340],[1771,1105]].map(p=>{const[x,y]=p[0]<1400&&p[1]>490&&p[1]<550?[(p[0]-278)/K,(p[1]-204)/K]:at(p);return{x:Math.round(x),y:Math.round(y),turn:Math.PI/2};});
 E.version='C';E.paths=[...B.paths,...[prom,loop,...routes].map(p=>curve(p,false))];
 writeFileSync('src/pixi/home-expansion.json',JSON.stringify(E,null,2));
-const world=JSON.parse(readFileSync('rive/web/world.json'));Object.assign(world,{origin:E.origin,width:E.width,height:E.height,coast:E.coast});writeFileSync('rive/web/world.json',JSON.stringify(world));
+const world=JSON.parse(readFileSync('assets/world/world.json'));Object.assign(world,{origin:E.origin,width:E.width,height:E.height,coast:E.coast});writeFileSync('assets/world/world.json',JSON.stringify(world));
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
 console.log(JSON.stringify({places:destinations.length,newProps:E.props.length-B.props.length,tiles:E.tiles.length,size:[E.width,E.height],landAreaRatio:area(E.coast)/area(B.coast)},null,2));

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,existsSync,writeFileSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
-const read=p=>JSON.parse(readFileSync(p,'utf8')),A='public/pixi-art/themes/pink/',D='rive/web/themes/pink/';
+const read=p=>JSON.parse(readFileSync(p,'utf8')),A='public/pixi-art/themes/pink/',D='assets/world/themes/pink/';
 const {world:before,art:old}=read('scripts/themes/pink-polish-base.json'),w=read(D+'world.json'),a=read(A+'art.json'),walk=read(D+'walk-world.json');
 assert.deepEqual(w.coast,before.coast);assert.deepEqual(w.zones,before.zones);assert.deepEqual(w.sleepSpots,before.sleepSpots);assert.deepEqual(w.centrePlacement,before.centrePlacement);assert.deepEqual(w.arches,before.arches);assert.deepEqual(w.paths,before.paths);assert.deepEqual(w.pathWidths,before.pathWidths);
 assert.deepEqual(a.props.filter(p=>p.id.startsWith('centre-')),old.props.filter(p=>p.id.startsWith('centre-')));

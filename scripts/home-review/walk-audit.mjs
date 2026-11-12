@@ -1,11 +1,11 @@
 import {createServer} from 'vite';import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {HOME_MAP} from '../../src/pixi/island-maps.js';
 import assert from 'node:assert/strict';
 import {HOME_SLEEP_TOTAL} from '../../src/pixi/sleep-spots.js';
 const out=process.env.HOME_REVIEW_OUT||'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/home-review/fix';
 const v=await createServer({configFile:false,cacheDir:'/tmp/home-review-audit-vite',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
-try {const P=await v.ssrLoadModule('/src/pixi/placements.js'),props=P.createPlacements(),world=JSON.parse(readFileSync('rive/web/world.json')),E=JSON.parse(readFileSync('src/pixi/home-expansion.json')),local=P.walkWorld(P.trimWorld(world),props);
+try {const P=await v.ssrLoadModule('/src/pixi/placements.js'),props=P.createPlacements(),world=JSON.parse(readFileSync('assets/world/world.json')),E=JSON.parse(readFileSync('src/pixi/home-expansion.json')),local=P.walkWorld(P.trimWorld(world),props);
 const beds=P.sleepSpots(local,props,geometry(local).walkable,(await v.ssrLoadModule('/src/pixi/sleep-spots.js')).sleepHalfWidths());
 const obstacles=local.obstacles;
 assert.equal(beds.length,HOME_SLEEP_TOTAL);assert.deepEqual(beds.bad,[]);

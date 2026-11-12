@@ -101,10 +101,17 @@ test('frame time budget starts several decodes and retains crops through zoom se
  assert(stream.entries.every(t=>t.sprite.visible));pool.destroy();
 });
 
-test('live surface PlaneGeometry has finite vertices and sphere at every island and rejects invalid viewport bounds',()=>{
+test('live surface mesh has valid vertices and triangles at every island and rejects invalid viewport bounds',()=>{
  for(const frame of WORLD_ISLANDS){
    const geometry=liveSurfaceGeometry(frame,{x:1,y:-9,width:1000,height:700},frame.width,frame.height,WORLD_GEO.Rw);
-   assert(geometry);assert([...geometry.attributes.position.array].every(Number.isFinite));assert(Number.isFinite(geometry.boundingSphere.radius));geometry.dispose();
+   assert(geometry);
+   const {position,uv}=geometry.attributes;
+   assert(position.array.every(Number.isFinite));
+   assert.equal(uv.count,position.count);
+   assert(uv.array.every(Number.isFinite));
+   assert(geometry.indices.length>0 && geometry.indices.length%3===0);
+   assert(geometry.indices.every(index=>index<position.count));
+   geometry.dispose();
    for(const bounds of [{x:NaN,y:0,width:10,height:10},{x:0,y:0,width:Infinity,height:10},{x:0,y:0,width:0,height:10}])assert.equal(liveSurfaceGeometry(frame,bounds,frame.width,frame.height,WORLD_GEO.Rw),null);
  }
 });

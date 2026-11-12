@@ -16,7 +16,7 @@ export default defineConfig({
         const manifest=JSON.parse(readFileSync(id.split('?')[0],'utf8'));
         return {code:`export default ${JSON.stringify(runtimeManifest(manifest))};`,map:null};
       }
-      if (!/\/rive\/web\/themes\/[^/]+\/walk-world\.json$/.test(id)) return;
+      if (!/\/assets\/world\/themes\/[^/]+\/walk-world\.json$/.test(id)) return;
       const world = JSON.parse(readFileSync(id.replace('walk-world.json', 'world.json'), 'utf8'));
       const walk = JSON.parse(readFileSync(id, 'utf8'));
       const overrides = Object.fromEntries(Object.entries(walk).filter(([key, value]) => JSON.stringify(value) !== JSON.stringify(world[key])));

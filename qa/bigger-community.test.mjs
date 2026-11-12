@@ -1,9 +1,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
 import {outsideStageProps,outsideStageFlats,outsideStageObstacles} from './campfire-stage-scope.mjs';
 import {mapFor} from '../src/pixi/island-maps.js';
-import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../assets/world/island-geometry.mjs';
 import {canSail,boardingPoint} from '../src/pixi/islands.js';
-const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-community/baseline/',D='rive/web/themes/community/',A='public/pixi-art/themes/community/',old=read(B+'world.json'),oldArt=read(B+'art.json'),world=read(D+'world.json'),art=read(A+'art.json'),plan=read('scripts/bigger-community/plan.json');
+const read=p=>JSON.parse(fs.readFileSync(p)),B='scripts/bigger-community/baseline/',D='assets/world/themes/community/',A='public/pixi-art/themes/community/',old=read(B+'world.json'),oldArt=read(B+'art.json'),world=read(D+'world.json'),art=read(A+'art.json'),plan=read('scripts/bigger-community/plan.json');
 test('community expansion preserves the centre records and the safe lawn relocation of one sleeper',()=>{
  const centre=oldArt.props.filter(p=>!p.src.includes('badge-buoy'));assert.deepEqual(outsideStageProps(art.props.slice(0,centre.length)),outsideStageProps(centre));
  assert.deepEqual(outsideStageFlats(art.flats),outsideStageFlats(oldArt.flats));

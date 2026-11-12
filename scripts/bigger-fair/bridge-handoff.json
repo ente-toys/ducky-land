@@ -29,7 +29,7 @@
       "world.json and walk-world.json: 12 matching bridges/walkways; diagonal deck polygons; connected lagoon boatWater.",
       "art.json: 12 overBoats decks; removes only ac2-islet-bridge blueprint sprite.",
       "centre.mjs: skip old blueprint islet bridge, invoke finalizer at end.",
-      "rive/web/island-geometry.mjs: honor bridge.poly for real diagonal footprints.",
+      "assets/world/island-geometry.mjs: honor bridge.poly for real diagonal footprints.",
       "expansion.json, paths.json and world.paths: only the wishwater-coast bridge approach is rerouted."
     ]
   },

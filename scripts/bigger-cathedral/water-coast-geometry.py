@@ -8,7 +8,7 @@ from shapely.geometry import Polygon, box
 from shapely.ops import unary_union
 from shapely.affinity import scale
 P=Path('scripts/bigger-cathedral')
-world=json.loads(Path('rive/web/themes/cathedral/world.json').read_text())
+world=json.loads(Path('assets/world/themes/cathedral/world.json').read_text())
 geo=json.loads((P/'water-geometry.json').read_text())
 land=Polygon(world['coast']).buffer(0)
 wet=unary_union([Polygon(p).buffer(0) for p in geo['polys']])

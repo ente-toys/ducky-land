@@ -44,7 +44,7 @@ import {createButterfly,butterflyPose} from './butterflies.js';
 import {loadPondDuckies} from './pond-duckies.js';
 import {floatingPose} from './floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Texture, Matrix} from 'pixi.js';
-import rawWorld from '../../rive/web/world.json';
+import rawWorld from '../../assets/world/world.json';
 import art from './art-manifest.json';
 import {createSimulation} from './simulation.js';
 import {startJump,jumpHeight,jumpPose,JUMP_SECONDS,MUSEUM_DOOR,atMuseumDoor} from './player-motion.js';
@@ -60,7 +60,7 @@ import {sleepHalfWidths} from './sleeper.js';
 import {createInterior} from './interior.js';
 const napWidths = sleepHalfWidths(.88 * .24 * 3);   // world half width per sleeping pose
 const world = trimWorld(rawWorld);   // round 4: the east islet and its jetty are gone
-import {geometry, inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry, inShape} from '../../assets/world/island-geometry.mjs';
 import {PALETTE} from './palette.js';
 import {clamp, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from './camera.js';
 import {CHAT_DURATION} from './chat.js';

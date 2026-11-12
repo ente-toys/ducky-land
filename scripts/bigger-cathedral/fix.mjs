@@ -2,9 +2,9 @@
 import './compose.mjs';
 import fs from 'node:fs';
 import {A,svg,path,el,dpath,ink,grass} from './design.mjs';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,x)=>fs.writeFileSync(p,JSON.stringify(x,null,2)+'\n');
-const D='rive/web/themes/cathedral/',art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read('scripts/bigger-cathedral/baseline/world.json'),geo=read('scripts/bigger-cathedral/fix-water.json');
+const D='assets/world/themes/cathedral/',art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read('scripts/bigger-cathedral/baseline/world.json'),geo=read('scripts/bigger-cathedral/fix-water.json');
 const waters=geo.polys.map((poly,i)=>{const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);return {id:'bellovo-channel-'+i,poly,x:(x0+x1)/2,y:(y0+y1)/2,rx:(x1-x0)/2,ry:(y1-y0)/2};});
 const visualWaters=geo.outlines.map((poly,i)=>{const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);return {id:'bellovo-channel-'+i,poly,x:(x0+x1)/2,y:(y0+y1)/2,rx:(x1-x0)/2,ry:(y1-y0)/2};});
 world.water.push(...visualWaters);walk.water.push(...waters);

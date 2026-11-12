@@ -1,9 +1,9 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import {createServer} from 'vite';import {geometry,inShape} from '../../../rive/web/island-geometry.mjs';
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createServer} from 'vite';import {geometry,inShape} from '../../../assets/world/island-geometry.mjs';
 const out='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/home-review/hill/result';
 const before=JSON.parse(fs.readFileSync('scripts/home-review/hill/before.json')),E=JSON.parse(fs.readFileSync('src/pixi/home-expansion.json')),K=JSON.parse(fs.readFileSync('src/pixi/home-kites.json'));
 const v=await createServer({configFile:false,cacheDir:'/tmp/home-hill-audit',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
 try{
- const P=await v.ssrLoadModule('/src/pixi/placements.js'),S=await v.ssrLoadModule('/src/pixi/sleep-spots.js');const props=P.createPlacements(),local=P.walkWorld(P.trimWorld(JSON.parse(fs.readFileSync('rive/web/world.json'))),props),beds=P.sleepSpots(local,props,geometry(local).walkable,S.sleepHalfWidths());
+ const P=await v.ssrLoadModule('/src/pixi/placements.js'),S=await v.ssrLoadModule('/src/pixi/sleep-spots.js');const props=P.createPlacements(),local=P.walkWorld(P.trimWorld(JSON.parse(fs.readFileSync('assets/world/world.json'))),props),beds=P.sleepSpots(local,props,geometry(local).walkable,S.sleepHalfWidths());
  assert.deepEqual(JSON.parse(JSON.stringify(beds)),before.beds,'all 100 sleepers stay at their approved positions');
  const hills=props.filter(p=>String(p.id).startsWith('home-hill-'));assert.equal(hills.length,6);assert.equal(local.obstacles.length-before.local.obstacles.length,6);
  const dry=geometry({...local,obstacles:[]}),walk=geometry(local);let samples=0;
@@ -16,6 +16,6 @@ try{
   for(const [x,y] of r.samples){assert.ok(walk.walkable(x,y),`${s.id} trail walks on dry unobstructed lawn: ${x},${y}`);assert.ok(!beds.some(b=>inShape(x,y,P.sleeperFootprint(b),25)),'trail clears residents');assert.ok(K.every(k=>Math.hypot(k.x-x,k.y-y)>180),'trail clears kite anchors');}
   for(const p of owned){assert.ok(!walk.walkable(p.footprint.x,p.footprint.y),'each solid prop blocks');assert.ok(dry.walkable(p.footprint.x,p.footprint.y),'prop stands on land');}
  }
- const server=JSON.parse(fs.readFileSync('rive/web/walk-world.json'));for(const p of hills)assert.ok(server.obstacles.some(o=>JSON.stringify(o)===JSON.stringify(p.footprint)));
+ const server=JSON.parse(fs.readFileSync('assets/world/walk-world.json'));for(const p of hills)assert.ok(server.obstacles.some(o=>JSON.stringify(o)===JSON.stringify(p.footprint)));
  const report={hills:2,separation:Math.hypot(E.stargazingHills[0].x-E.stargazingHills[1].x,E.stargazingHills[0].y-E.stargazingHills[1].y),solidBlockers:6,moundSamples:samples,sleepersUnchanged:beds.length,trails:'connected, dry, no obstacle/sleeper/kite intersections',serverFootprints:true};fs.writeFileSync(out+'/hill-audit.json',JSON.stringify(report,null,2));console.log(report);
 }finally{await v.close()}

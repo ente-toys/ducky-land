@@ -1,11 +1,11 @@
 // AC-2 assembly: deterministic blueprint data, existing castle, untouched outer hamlets.
 import fs from 'node:fs';
 import {applyFairBridges} from './bridges.mjs';
-import {inPoly,geometry} from '../../rive/web/island-geometry.mjs';
+import {inPoly,geometry} from '../../assets/world/island-geometry.mjs';
 import {FIT,SLEEP_TREES,SLEEP_POINTS,TREE_CLUMPS} from './centre-data.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {BENCH_COURTS,placeBench,fitContact} from './furniture.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,1)+'\n');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read('scripts/bigger-fair/original-art.json'),ow=read('scripts/bigger-fair/original-world.json'),layout=read('scripts/bigger-fair/centre-source/layout.json');
 const {cx,cy,sx,sy}=FIT,P=([x,y])=>[cx+(x-768)*sx,cy+(y-520)*sy],poly=p=>'M'+p.map(q=>q.join(' ')).join('L')+'Z',inner=ow.coast;

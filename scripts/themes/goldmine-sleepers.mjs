@@ -1,9 +1,9 @@
 // Goldmine-only pose placement. Uses the engine's validator, five of each exact Home pose.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {makeMap} from '../../src/pixi/island-maps.js';
-const D='rive/web/themes/goldmine/',A='public/pixi-art/themes/goldmine/';
+const D='assets/world/themes/goldmine/',A='public/pixi-art/themes/goldmine/';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const world=read(D+'world.json'),art=read(A+'art.json');
 // Include the engine's added harbor landing, rather than only the authored deck.

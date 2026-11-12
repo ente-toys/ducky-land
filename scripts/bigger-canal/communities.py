@@ -4,7 +4,7 @@ from pathlib import Path
 from shapely.geometry import Polygon, Point, LineString
 from shapely.ops import unary_union
 from shapely.affinity import scale
-A=Path('public/pixi-art/themes/canal'); S=Path('scripts/bigger-canal'); D=Path('rive/web/themes/canal')
+A=Path('public/pixi-art/themes/canal'); S=Path('scripts/bigger-canal'); D=Path('assets/world/themes/canal')
 OUT=Path('/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger'); OUT.mkdir(parents=True,exist_ok=True)
 E=A/'communities'; E.mkdir(exist_ok=True)
 read=lambda p:json.loads(Path(p).read_text())

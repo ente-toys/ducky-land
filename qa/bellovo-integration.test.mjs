@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {A,D,read} from '../scripts/bigger-cathedral/final-model.mjs';
 import {makeMap,mapFor} from '../src/pixi/island-maps.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {sleeperFootprint} from '../src/pixi/sleep-spots.js';
 import {LEFT,RIGHT,PIAZZA} from '../scripts/bigger-cathedral/centre-art-data.mjs';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');

@@ -1,9 +1,9 @@
 // Run after candy-world.mjs and candy-centre.mjs. Only candy data/art are written.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {makeMap} from '../../src/pixi/island-maps.js';
-const A='public/pixi-art/themes/candy/',D='rive/web/themes/candy/';
+const A='public/pixi-art/themes/candy/',D='assets/world/themes/candy/';
 const read=p=>JSON.parse(readFileSync(p,'utf8')),write=(p,d)=>writeFileSync(p,JSON.stringify(d,null,1)+'\n');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json'),centre=read(A+'centre/centre.json');
 let props=read(D+'placements.json').filter(p=>!p.id.startsWith('candy-centre-'));

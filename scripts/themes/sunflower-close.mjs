@@ -1,10 +1,10 @@
 // Close-up craft pass. Sunflower only, replayed from the retained close-baseline.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/sunflower/',D='rive/web/themes/sunflower/',B='../concepts/themes/work/sunflower/close-baseline/';
+const A='public/pixi-art/themes/sunflower/',D='assets/world/themes/sunflower/',B='../concepts/themes/work/sunflower/close-baseline/';
 const read=p=>JSON.parse(readFileSync(p,'utf8')),save=(p,v)=>writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const art=read(B+'art.json'),world=read(B+'world.json'),walk=read(B+'walk-world.json'),harbor=read(D+'harbor.json');
 const geo=geometry(makeMap('sunflower',{world,walk,harbor,sleepers:[]}).baseWalk),sizes=sleepHalfWidths();

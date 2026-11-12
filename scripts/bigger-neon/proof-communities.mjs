@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const O='../concepts/themes/world-map/bigger/',S='scripts/bigger-neon/';
 const base=read(S+'baseline/art.json'),world=read(S+'baseline/world.json'),plan=read(S+'plan.json');

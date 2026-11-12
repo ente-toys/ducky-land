@@ -2,7 +2,7 @@
 // (concepts/themes/concepts/05-neon.png), following concepts/themes/THEME-CONTRACT.md and the library build
 // (scripts/themes/library-world.mjs):
 //   public/pixi-art/themes/neon/  ground.svg, ground-rN-cN.svg tiles, deck SVGs, reuse/ (home art copied in), art.json
-//   rive/web/themes/neon/          world.json, walk-world.json, harbor.json, placements.json, paths.json
+//   assets/world/themes/neon/          world.json, walk-world.json, harbor.json, placements.json, paths.json
 // Layout is written in CONCEPT pixels (the 1536x1024 picture) and mapped to world units by T().
 // Props come from scripts/themes/neon-gen.sh + neon-trace-all.sh.
 // Rebuild: node scripts/themes/neon-world.mjs, then node scripts/themes/neon-finish.mjs.
@@ -10,9 +10,9 @@
 // boss 6 Nov: big and spacious (~1.8x home's land), wide paths, a round centre plaza (zones.centre) whose landmark is a
 // placeholder clock tower, 4 open activity areas, 3 open stall rows, 40 sleepers, 4 jetties, arched bridges.
 import {readFileSync, writeFileSync, mkdirSync, copyFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 
-const ART = 'public/pixi-art/themes/neon/', DATA = 'rive/web/themes/neon/';
+const ART = 'public/pixi-art/themes/neon/', DATA = 'assets/world/themes/neon/';
 mkdirSync(ART + 'reuse', {recursive: true}); mkdirSync(DATA, {recursive: true});
 const S = 4.6, OX = 670, OY = 700;
 const r1 = v => Math.round(v * 10) / 10;

@@ -122,7 +122,7 @@ for(const data of[world,walk]){
  data.gardenPlots=plots.map(({pieces,...p})=>p);
  data.density={mainRoadWidth:[150,175],laneWidth:[90,110],roads:roads.map(({id,widths})=>({id,widths})),sharedGreens:true};
 }
-for(const [file,data]of[['public/pixi-art/themes/bog/art.json',art],['rive/web/themes/bog/world.json',world],['rive/web/themes/bog/walk-world.json',walk]])writeFileSync(file,JSON.stringify(data));
+for(const [file,data]of[['public/pixi-art/themes/bog/art.json',art],['assets/world/themes/bog/world.json',world],['assets/world/themes/bog/walk-world.json',walk]])writeFileSync(file,JSON.stringify(data));
 writeFileSync('scripts/bigger-bog/dense-plan.json',JSON.stringify(layout,null,2));
 // Geometric area: union of road polygons, sandy squares and their entire banks,
 // clipped to new dry land, excluding the coast beach, water and unchanged heart.

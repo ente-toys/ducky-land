@@ -1,7 +1,7 @@
 // Home's actual curved seating construction, on the three Canal activity rings.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/canal/',D='rive/web/themes/canal/',rd=p=>JSON.parse(readFileSync(p));
+const A='public/pixi-art/themes/canal/',D='assets/world/themes/canal/',rd=p=>JSON.parse(readFileSync(p));
 const art=rd(A+'art.json'),world=rd(D+'world.json'),walk=rd(D+'walk-world.json');
 art.props=art.props.filter(p=>!p.id.startsWith('canal-close-bench-'));world.obstacles=world.obstacles.filter(o=>!o.canalCloseBench);
 const specs=rd(A+'close-bench-specs.json');

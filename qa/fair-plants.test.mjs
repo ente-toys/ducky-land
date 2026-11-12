@@ -8,12 +8,12 @@ import {OUTER_PLANTING,PLANT_RESERVES} from '../scripts/bigger-fair/plants-data.
 import {applyPlants} from '../scripts/bigger-fair/plants-apply.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
 import {mapFor} from '../src/pixi/island-maps.js';
-import {inPoly,inShape} from '../rive/web/island-geometry.mjs';
+import {inPoly,inShape} from '../assets/world/island-geometry.mjs';
 import {sleeperFootprint} from '../src/pixi/sleep-spots.js';
 
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read('public/pixi-art/themes/fair/art.json');
-const world=read('rive/web/themes/fair/world.json'),walk=read('rive/web/themes/fair/walk-world.json');
+const world=read('assets/world/themes/fair/world.json'),walk=read('assets/world/themes/fair/walk-world.json');
 const plant=p=>/\/(tree|bush)-/.test(p.src);
 const source=p=>p.src.startsWith('/')?'public'+p.src:'public/pixi-art/themes/fair/'+p.src;
 const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
@@ -62,7 +62,7 @@ test('new grove bases clear paths, coast, water, retained props and every sleepe
   for(const w of [world,walk])assert(w.obstacles.some(f=>f.name===p.id&&f.x===p.x&&f.y===p.y-8),p.id);
   assert(world.props.some(q=>q.id===p.id&&q.x===p.x&&q.y===p.y),p.id);
  }
- assert.deepEqual(read('rive/web/themes/fair/placements.json'),art.props);
+ assert.deepEqual(read('assets/world/themes/fair/placements.json'),art.props);
 });
 
 test('vegetation regeneration is idempotent and does not paint ground or alter routes and residents',()=>{

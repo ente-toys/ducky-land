@@ -1,8 +1,8 @@
 // Repeatable HOME-quality pass. Only Neon files are written.
 // Run after neon-world + neon-finish, or rerun from the saved pre-polish source.
 import fs from 'node:fs';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/neon/',D='rive/web/themes/neon/',B=A+'polish-source/';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/neon/',D='assets/world/themes/neon/',B=A+'polish-source/';
 fs.mkdirSync(B,{recursive:true});
 const files={art:A+'art.json',world:D+'world.json',walk:D+'walk-world.json',placements:D+'placements.json',beds:A+'resolved-sleepers.json'};
 for(const [key,file]of Object.entries(files))if(!fs.existsSync(B+key+'.json'))fs.copyFileSync(file,B+key+'.json');

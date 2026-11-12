@@ -3,11 +3,11 @@
 //   node scripts/bigger-sunflower/centre.mjs
 // Idempotent: it removes what it added last time (ids centre-fill-*, ring-fence-*) and adds it again from centre-data.mjs.
 import {readFileSync, writeFileSync, readdirSync} from 'node:fs';
-import {geometry, inShape, inPoly} from '../../rive/web/island-geometry.mjs';
+import {geometry, inShape, inPoly} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots, sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {REMOVE_PROPS, MOVE_PROPS, SLEEP_MOVES, LIFT_FLATS, FIELDS, FIELD_ROWS, FIELD_KEEP, REMOVE_FLATS, REMOVE_GROUND_GROUPS, FILL, FENCE} from './centre-data.mjs';
 
-const A = 'public/pixi-art/themes/sunflower/', D = 'rive/web/themes/sunflower/';
+const A = 'public/pixi-art/themes/sunflower/', D = 'assets/world/themes/sunflower/';
 const read = p => JSON.parse(readFileSync(p)), save = (p, x) => writeFileSync(p, JSON.stringify(x, null, 1) + '\n');
 const art = read(A + 'art.json'), world = read(D + 'world.json'), walk = read(D + 'walk-world.json');
 const r1 = v => Math.round(v * 10) / 10;

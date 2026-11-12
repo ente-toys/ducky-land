@@ -1,5 +1,5 @@
-import fs from 'node:fs';import sharp from 'sharp';import {render,OUT}from './render.mjs';import{inPoly}from '../../rive/web/island-geometry.mjs';
-const r=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/',a=r('public/pixi-art/themes/community/art.json'),h=r('rive/web/themes/community/harbor.json');
+import fs from 'node:fs';import sharp from 'sharp';import {render,OUT}from './render.mjs';import{inPoly}from '../../assets/world/island-geometry.mjs';
+const r=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/',a=r('public/pixi-art/themes/community/art.json'),h=r('assets/world/themes/community/harbor.json');
 await render(a,h,OUT+'/community-fixed.png');
 for(const [name,x,y]of [['fixed-bridge',1839,4266],['fixed-stream',-470,3285],['fixed-junction',4000,50],['fixed-lane',7800,890],['fixed-community',550,430],['fixed-common',5350,5280]]){
  await render(a,h,OUT+'/community-crops/'+name+'.png',{crop:[x,y,.8]});console.log('Rendered',name);

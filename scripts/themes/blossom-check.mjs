@@ -1,8 +1,8 @@
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/blossom/',D='rive/web/themes/blossom/',J=f=>JSON.parse(readFileSync(f));
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/blossom/',D='assets/world/themes/blossom/',J=f=>JSON.parse(readFileSync(f));
 const r=checkTheme('blossom');const world=J(D+'world.json'),walk=J(D+'walk-world.json'),harbor=J(D+'harbor.json'),art=J(A+'art.json');
 const map=makeMap('blossom',{world,walk,harbor,sleepers:r.sleepers||[]}),nav=map.nav();
 const problems=[...r.problems];

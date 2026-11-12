@@ -2,10 +2,10 @@
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {specs,save,A,INK} from './snow-assets.mjs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const D='rive/web/themes/snow/';mkdirSync(D,{recursive:true});
+const D='assets/world/themes/snow/';mkdirSync(D,{recursive:true});
 const W=7500,H=5500,round=n=>Math.round(n*10)/10;
 const T=([x,y])=>[round(450+(x-60)*4.5),round(420+(y-35)*4.9)];
 const json=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');

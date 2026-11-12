@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-export const ART='public/pixi-art/themes/library/',DATA='rive/web/themes/library/',OUT='../concepts/themes/world-map/bigger';
+export const ART='public/pixi-art/themes/library/',DATA='assets/world/themes/library/',OUT='../concepts/themes/world-map/bigger';
 export const read=f=>JSON.parse(fs.readFileSync(f));
 export const original={world:read('scripts/bigger-library/original/world.json'),walk:read('scripts/bigger-library/original/walk-world.json'),art:read('scripts/bigger-library/original/art.json'),harbor:read('scripts/bigger-library/original/harbor.json')};
 export const origin={x:-3000,y:-2200},width=14000,height=10400;

@@ -12,16 +12,16 @@ const artFile = 'public/pixi-art/themes/library/art.json';
 const art = read(artFile);
 art.props = art.props.filter(p => !retiredBoatIds.has(p.id));
 write(artFile, art);
-const worldFile = 'rive/web/themes/library/world.json', world = read(worldFile);
+const worldFile = 'assets/world/themes/library/world.json', world = read(worldFile);
 world.props = art.props;
 world.boatWater = JSON.parse(execFileSync(process.env.PAGEPOND_PYTHON ?? 'python3',
   ['scripts/pagepond-boats/water.py'], {encoding: 'utf8', maxBuffer: 50 * 1024 * 1024}));
 write(worldFile, world);
-const walkFile = 'rive/web/themes/library/walk-world.json', walk = read(walkFile);
+const walkFile = 'assets/world/themes/library/walk-world.json', walk = read(walkFile);
 walk.boatWater = world.boatWater;
 write(walkFile, walk);
-fs.writeFileSync('rive/web/themes/library/placements.json', JSON.stringify(art.props) + '\n');
-const harborFile = 'rive/web/themes/library/harbor.json', harbor = read(harborFile);
+fs.writeFileSync('assets/world/themes/library/placements.json', JSON.stringify(art.props) + '\n');
+const harborFile = 'assets/world/themes/library/harbor.json', harbor = read(harborFile);
 for (const {x, y, turn} of paperboatMoorings) {
   if (!harbor.boats.some(b => b.x === x && b.y === y)) harbor.boats.push({x, y, turn});
 }

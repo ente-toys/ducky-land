@@ -3,7 +3,7 @@ import {bounds,bridges} from './plan.mjs';
 import {makeAssets,dir,specs} from './assets.mjs';
 import {j,base,output,artDir,groundBody,plannedProps,renderArt,json,assets} from './scene.mjs';
 mkdirSync(base,{recursive:true});mkdirSync(output+'/work/snow',{recursive:true});
-for(const [name,path]of [['art','public/pixi-art/themes/snow/art.json'],['world','rive/web/themes/snow/world.json'],['walk-world','rive/web/themes/snow/walk-world.json'],['harbor','rive/web/themes/snow/harbor.json']])if(!existsSync(base+name+'.json'))copyFileSync(path,base+name+'.json');
+for(const [name,path]of [['art','public/pixi-art/themes/snow/art.json'],['world','assets/world/themes/snow/world.json'],['walk-world','assets/world/themes/snow/walk-world.json'],['harbor','assets/world/themes/snow/harbor.json']])if(!existsSync(base+name+'.json'))copyFileSync(path,base+name+'.json');
 const old=j(base+'art.json');
 writeFileSync(output+'/snow-now.png',await renderArt(old));
 const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${bounds.width}" height="${bounds.height}" viewBox="${bounds.x} ${bounds.y} ${bounds.width} ${bounds.height}">${groundBody()}</svg>`;

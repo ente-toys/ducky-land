@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {easeZoomCamera} from '../src/pixi/zoom-motion.js';
-import {zoomAt} from '../rive/web/island-camera.mjs';
+import {zoomAt} from '../assets/world/island-camera.mjs';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
 test('zoom is symmetric and frame-rate independent in perceived scale',()=>{
   const sample=(hz,start,end)=>{const camera={x:0,y:0,zoom:start},motion={velocity:0};for(let i=0;i<hz/2;i++)easeZoomCamera(camera,{x:0,y:0,zoom:end},motion,1/hz);return camera.zoom;};

@@ -2,11 +2,11 @@
 import {build} from 'esbuild';
 import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import sharp from 'sharp';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 const A='../concepts/themes/work/goldmine/',K=+(process.env.K||.8);
 const result=await build({entryPoints:['src/pixi/placements.js'],bundle:true,write:false,format:'esm',platform:'node',plugins:[{name:'home-svg-urls',setup(b){b.onLoad({filter:/placements\.js$/},args=>({contents:readFileSync(args.path,'utf8').replace(/const urls = import\.meta\.glob\([^;]+;/,"const urls = new Proxy({}, {get: (_, key) => key.replace('../../', '/')});"),loader:'js'}));}}]});
 const {createPlacements,decalsFor,JETTIES,walkWorld,trimWorld,sleepSpots}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
-const w=trimWorld(JSON.parse(readFileSync('rive/web/world.json'))),a=JSON.parse(readFileSync('src/pixi/art-manifest.json'));
+const w=trimWorld(JSON.parse(readFileSync('assets/world/world.json'))),a=JSON.parse(readFileSync('src/pixi/art-manifest.json'));
 const props=createPlacements(w,geometry({...w,obstacles:[]}).walkable);
 const W=Math.round(w.width*K),H=Math.round(w.height*K),comps=[];
 async function add(src,x,y,width,height,flip=false){

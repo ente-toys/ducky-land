@@ -6,7 +6,7 @@ import {makeMap,THEME_OF,mapOf} from '../src/pixi/island-maps.js';
 import {WORLD_ISLANDS,FINISHED_THEMES} from '../src/pixi/world-map.js';
 import {BOG_BLOCKERS,BOG_SOLIDS,bogBlockerPolygons} from '../src/pixi/bog-blockers.js';
 import {installBogEnvironment,BOG_REVIEW_ISLAND,BOG_MAP_ID} from '../src/pixi/bog-environment.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 const map=makeMap(BOG_MAP_ID,data),nav=map.nav();
 const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/bog-arena/art.json'));
 test('private Bog registration restores the existing roster and does not add a world destination',()=>{

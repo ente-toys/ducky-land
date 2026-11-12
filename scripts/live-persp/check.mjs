@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {Sprite,Texture} from 'pixi.js';
 import {animatePieces} from '../../src/pixi/centre-motion.js';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/pink/',D='rive/web/themes/pink/',B='../concepts/themes/work/live-persp/before/',O=B+A;
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/pink/',D='assets/world/themes/pink/',B='../concepts/themes/work/live-persp/before/',O=B+A;
 const c=read(A+'centre/centre.json'),old=read(O+'centre/centre.json'),art=read(A+'art.json'),before=read(B+A+'art.json'),w=read(D+'world.json'),was=read(B+D+'world.json'),walk=read(D+'walk-world.json'),walkWas=read(B+D+'walk-world.json'),harbor=read(D+'harbor.json');
 const omit=(o,keys)=>Object.fromEntries(Object.entries(o).filter(([k])=>!keys.includes(k)));
 assert.deepEqual(omit(art,['props','flats','decks']),omit(before,['props','flats','decks']));
@@ -60,7 +60,7 @@ for(const file of port.files.filter(f=>f.endsWith('.svg'))) {
 }
 const additional={};
 for(const theme of ['waterfall','fair']) {
- const A=`public/pixi-art/themes/${theme}/`,D=`rive/web/themes/${theme}/`;
+ const A=`public/pixi-art/themes/${theme}/`,D=`assets/world/themes/${theme}/`;
  const oldArt=read(evidence+'before/'+A+'art.json'),art=read(A+'art.json');
  const c=read(A+'centre/centre.json'),oldCentre=read(evidence+'before/'+A+'centre/centre.json');
  const file=theme==='fair'?'centre/floor.svg':'centre/decal-paving.svg';
@@ -102,10 +102,10 @@ for(const id of ['dancer','wind-key']) {
  motion[id]={samples:101,fullCycle:true,reducedMotionReset:true};s.destroy();
 }
 const {resolveSleepSpots,sleepHalfWidths}=await import('../../src/pixi/sleep-spots.js');
-const {geometry}=await import('../../rive/web/island-geometry.mjs');
+const {geometry}=await import('../../assets/world/island-geometry.mjs');
 const sleepers={};
 for(const theme of ['pink','waterfall','fair']) {
- const A=`public/pixi-art/themes/${theme}/`,D=`rive/web/themes/${theme}/`;
+ const A=`public/pixi-art/themes/${theme}/`,D=`assets/world/themes/${theme}/`;
  const resolve=(prefix)=>{
   const world=read(prefix+D+'world.json'),walk=read(prefix+D+'walk-world.json'),harbor=read(D+'harbor.json'),art=read(prefix+A+'art.json');
   const map=makeMap(theme,{world,walk,harbor,sleepers:[]});

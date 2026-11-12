@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap,mapFor} from '../../src/pixi/island-maps.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {checkTheme} from '../theme-index.mjs';
 import {places,lanes} from './design.mjs';
 import {communities,houses} from './communities.mjs';
 import {OUT} from './render.mjs';
-const read=p=>JSON.parse(readFileSync(p)),D='rive/web/themes/sunflower/',A='public/pixi-art/themes/sunflower/',B='scripts/bigger-sunflower/baseline/';
+const read=p=>JSON.parse(readFileSync(p)),D='assets/world/themes/sunflower/',A='public/pixi-art/themes/sunflower/',B='scripts/bigger-sunflower/baseline/';
 const world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json'),art=read(A+'art.json'),oldWorld=read(B+'world.json'),oldWalk=read(B+'walk-world.json'),oldArt=read(B+'art.json');
 const base=makeMap('sunflower',{world,walk,harbor,sleepers:[]});
 const beds=resolveSleepSpots(base.baseWalk,art.props,geometry(base.baseWalk).walkable,sleepHalfWidths(),{spots:world.sleepSpots,avoid:world.sleepAvoid,warn:false});

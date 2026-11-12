@@ -36,7 +36,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 changed = []
 for theme, svgs in FILES.items():
     base = Path(f'public/pixi-art/themes/{theme}')
-    data = Path(f'rive/web/themes/{theme}')
+    data = Path(f'assets/world/themes/{theme}')
     # These frozen inputs also let the checks prove non-centre data is unchanged.
     for path in [base / 'art.json', data / 'world.json', data / 'walk-world.json',
                  *sorted((base / 'centre').glob('*'))]:

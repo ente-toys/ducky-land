@@ -4,8 +4,8 @@ import {worldIsland} from '/src/pixi/world-map.js';
 const load=p=>fetch(p).then(r=>r.json());
 const theme=new URLSearchParams(location.search).get('theme')||'snow';
 if(theme==='snow'){
- const [world,walk,harbor]=await Promise.all(['world','walk-world','harbor'].map(n=>load('/rive/web/themes/snow/'+n+'.json')));
- const sleepers=await load('/rive/web/themes/snow/sleepers-resolved.json');
+ const [world,walk,harbor]=await Promise.all(['world','walk-world','harbor'].map(n=>load('/assets/world/themes/snow/'+n+'.json')));
+ const sleepers=await load('/assets/world/themes/snow/sleepers-resolved.json');
  registerMap('snow',{world,walk,harbor,sleepers,art:'/pixi-art/themes/snow/art.json',sea:'#8CC8CD'});
  // Runtime-only preview binding, never writes the shared registry.
  THEME_OF.set('isle-170','snow');

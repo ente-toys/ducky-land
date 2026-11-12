@@ -27,7 +27,7 @@ test('Fair resolves 90 residents and the castle islet has a walking entrance',()
 });
 
 test('Fair sails from the real harbour through the lagoon outlet, around the castle and back',()=>{
- const harbor=JSON.parse(fs.readFileSync('rive/web/themes/fair/harbor.json'));
+ const harbor=JSON.parse(fs.readFileSync('assets/world/themes/fair/harbor.json'));
  const actor={islandId:id,mode:'sailing',x:harbor.water.x,y:harbor.water.y,turn:0};
  sail(actor,[-2450,4000]);sail(actor,plan.channels[0].at(-1));
  for(const p of plan.channels[0].toReversed())sail(actor,p);

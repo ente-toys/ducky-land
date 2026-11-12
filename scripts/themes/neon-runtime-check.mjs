@@ -6,7 +6,7 @@ import {loadThemeArt} from '../../src/pixi/theme-art.js';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {checkTheme} from '../theme-index.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
-const A='public/pixi-art/themes/neon/',D='rive/web/themes/neon/';
+const A='public/pixi-art/themes/neon/',D='assets/world/themes/neon/';
 const checked=checkTheme('neon');assert(checked.ready);
 const map=makeMap('neon',{world:read(D+'world.json'),walk:read(D+'walk-world.json'),harbor:read(D+'harbor.json'),sleepers:checked.sleepers,art:'/pixi-art/themes/neon/art.json'});
 const original=globalThis.fetch;

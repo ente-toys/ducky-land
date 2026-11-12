@@ -1,6 +1,6 @@
 import {Application,Assets,Sprite,Container} from '/node_modules/pixi.js/dist/pixi.mjs';
 import {animateCentre} from './animate.mjs';
-import {geometry} from '/rive/web/island-geometry.mjs';
+import {geometry} from '/assets/world/island-geometry.mjs';
 const theme=new URLSearchParams(location.search).get('theme') || (location.pathname.includes('/goldmine/')?'goldmine':'waterfall');
 if(!['waterfall','goldmine'].includes(theme))throw Error('Unknown centre');
 const folder=`/pixi-art/themes/${theme}/centre/`;

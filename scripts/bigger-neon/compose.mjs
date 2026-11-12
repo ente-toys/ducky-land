@@ -7,7 +7,7 @@ import {reviewFixes} from './review-fixes.mjs';
 import {denseGardens} from './dense-gardens.mjs';
 const layout=JSON.parse(fs.readFileSync('scripts/bigger-neon/communities.json'));
 communityArt();
-const A='public/pixi-art/themes/neon/',D='rive/web/themes/neon/',S='scripts/bigger-neon/',O='../concepts/themes/world-map/bigger/';
+const A='public/pixi-art/themes/neon/',D='assets/world/themes/neon/',S='scripts/bigger-neon/',O='../concepts/themes/world-map/bigger/';
 for(const p of [S+'baseline',A+'bigger',O+'neon-crops'])fs.mkdirSync(p,{recursive:true});
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,2)+'\n');
 for(const [n,p]of Object.entries({art:A+'art.json',world:D+'world.json',walk:D+'walk-world.json',harbor:D+'harbor.json',placements:D+'placements.json',paths:D+'paths.json'}))if(!fs.existsSync(S+'baseline/'+n+'.json'))fs.copyFileSync(p,S+'baseline/'+n+'.json');

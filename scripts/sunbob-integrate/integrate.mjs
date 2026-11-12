@@ -1,7 +1,7 @@
 import {readFileSync as read,writeFileSync as write,copyFileSync as copy,mkdirSync as mkdir,readdirSync as ls} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const root='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/sunbob-review',P=root+'/p/',A='public/pixi-art/themes/sunflower/',D='rive/web/themes/sunflower/';
+const root='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/sunbob-review',P=root+'/p/',A='public/pixi-art/themes/sunflower/',D='assets/world/themes/sunflower/';
 const json=f=>JSON.parse(read(f)),save=(f,o)=>write(f,JSON.stringify(o,null,1)+'\n');
 const art=json(A+'art.json'),world=json(D+'world.json'),walk=json(D+'walk-world.json'),c=json(P+'centre/centre-placements.json');
 function copies(src,dst){mkdir(dst,{recursive:true});for(const f of ls(src,{withFileTypes:true}))if(f.isDirectory())copies(src+'/'+f.name,dst+'/'+f.name);else if(f.name.endsWith('.svg'))copy(src+'/'+f.name,dst+'/'+f.name);}

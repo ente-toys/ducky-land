@@ -1,6 +1,6 @@
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 const F='public/pixi-art/themes/sunflower/art.json',E=JSON.parse(readFileSync(F));
-const W=JSON.parse(readFileSync('rive/web/themes/sunflower/world.json')); const arches=W.arches;
+const W=JSON.parse(readFileSync('assets/world/themes/sunflower/world.json')); const arches=W.arches;
 const bridges=arches.map((r,i)=>({...r,id:r.id??'retained-'+i,w:r.w,src:i===0?'bridge-nw.svg':i===1?'bridge-se.svg':'bigger/arch-'+r.id+'.svg'}));
 const S={ns:[[120,312],[120,53]],ew:[[32,168],[448,168]],ne:[[90,296],[395,104]],nw:[[395,296],[85,104]]};
 
@@ -35,12 +35,12 @@ for(const r of arches){
 }
 W.bridges=rects;
 W.walkways=arches.map((r,i)=>({id:r.id??'retained-'+i,a:r.a,b:r.b,w:r.w,boatPassUnder:true}));
-const walk=JSON.parse(readFileSync('rive/web/themes/sunflower/walk-world.json'));
+const walk=JSON.parse(readFileSync('assets/world/themes/sunflower/walk-world.json'));
 Object.assign(walk,{bridges:rects,walkways:W.walkways,arches});
-writeFileSync('rive/web/themes/sunflower/walk-world.json',JSON.stringify(walk,null,1)+'\n');
+writeFileSync('assets/world/themes/sunflower/walk-world.json',JSON.stringify(walk,null,1)+'\n');
 const sizes=JSON.parse(readFileSync('src/pixi/art-source-sizes.json'));
 for(const d of E.decks)if(d.homeSource)sizes['/pixi-art/themes/sunflower/'+d.src]=[d.width,d.height];
 writeFileSync('src/pixi/art-source-sizes.json',JSON.stringify(sizes)+'\n');
 writeFileSync(F,JSON.stringify(E,null,1)+'\n');
-writeFileSync('rive/web/themes/sunflower/world.json',JSON.stringify(W,null,1)+'\n');
+writeFileSync('assets/world/themes/sunflower/world.json',JSON.stringify(W,null,1)+'\n');
 console.log('All',bridges.length,'crossings reuse Home art, without end sills.');

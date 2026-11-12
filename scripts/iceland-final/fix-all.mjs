@@ -2,7 +2,7 @@
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {bounds,overlaps,propPathClearance,footprint} from './place.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const base='public/pixi-art/themes/snow';
 const round=n=>Math.round(n*100)/100;
 export const isCanopy=p=>p.finalKind==='tree'||p.finalKind==='shrub'||/^(pine-|shrub-)/.test(p.finalRole??'');

@@ -13,7 +13,7 @@ from shapely import affinity
 
 R = Path(__file__).resolve().parents[2]
 A = R / 'public/pixi-art/themes/waterfall'
-D = R / 'rive/web/themes/waterfall'
+D = R / 'assets/world/themes/waterfall'
 O = R.parent / 'concepts/themes/work/waterfall'
 O.mkdir(parents=True, exist_ok=True)
 baseline = O / 'close-waterfall-source.json'

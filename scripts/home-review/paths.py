@@ -68,7 +68,7 @@ svg=f'<g data-name="Home unified paths"><path d="{path(merged)}" fill="#e4c567" 
 # Water always paints over sand, including where core tiles overlap expansion rivers.
 wet=unary_union([Polygon(w['poly']).buffer(0) for w in E['riverWater']]+[Polygon(E['water']['poly']).buffer(0)])
 # One water contour eliminates bank shards and joins new navigable links flush.
-W=json.load(open('rive/web/world.json'))
+W=json.load(open('assets/world/world.json'))
 for w in W['water']:
  if abs(w.get('x',0)-1640)<2:
   wet=wet.union(affinity.scale(Point(w['x'],w['y']).buffer(1,quad_segs=60),w['rx'],w['ry']))

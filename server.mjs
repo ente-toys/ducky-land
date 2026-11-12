@@ -4,7 +4,7 @@ import { performance } from 'node:perf_hooks';
 import { WebSocketServer, WebSocket } from 'ws';
 import { CITIES, NAMES, SLOTS, SPEED, HZ, rnd, pick, outfit, randomSpot, walkable, move } from './server-world.mjs';
 import { world } from './server-world.mjs';
-import { createIslandBrain, CROWD_ACTION } from './rive/web/crowd.js';
+import { createIslandBrain, CROWD_ACTION } from './assets/world/crowd.js';
 
 const HOST = '127.0.0.1';
 const players = new Map(), bots = new Map();

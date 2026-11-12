@@ -1,7 +1,7 @@
 """Package the integrated shore kits, centre-material paths and quay landing."""
 from pathlib import Path
 import json,math,re,xml.etree.ElementTree as E
-A=Path('public/pixi-art/themes/pink');D=Path('rive/web/themes/pink');S=Path('scripts/bigger-pink')
+A=Path('public/pixi-art/themes/pink');D=Path('assets/world/themes/pink');S=Path('scripts/bigger-pink')
 read=lambda p:json.loads(Path(p).read_text())
 def write(p,d):Path(p).write_text(json.dumps(d,indent=1)+'\n')
 art=read(A/'art.json');world=read(D/'world.json');walk=read(D/'walk-world.json');layout=read(S/'layout.json');old=read(S/'original-art.json')

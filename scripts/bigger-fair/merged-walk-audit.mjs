@@ -2,9 +2,9 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {mapFor} from '../../src/pixi/island-maps.js';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p)),out=process.argv[2]??'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/fair-review/fix/merged';
-const world=read('rive/web/themes/fair/world.json'),art=read('public/pixi-art/themes/fair/art.json'),paths=read('scripts/bigger-fair/path-routes.json'),map=mapFor('fair'),nav=map.nav();
+const world=read('assets/world/themes/fair/world.json'),art=read('public/pixi-art/themes/fair/art.json'),paths=read('scripts/bigger-fair/path-routes.json'),map=mapFor('fair'),nav=map.nav();
 const polygons=paths.surface.type==='Polygon'?[paths.surface.coordinates]:paths.surface.coordinates;
 const onSurface=p=>polygons.some(r=>inPoly(...p,r[0])&&!r.slice(1).some(h=>inPoly(...p,h)));
 const onDeck=p=>world.walkways.some(b=>{const [dx,dy]=[b.b[0]-b.a[0],b.b[1]-b.a[1]],t=Math.max(0,Math.min(1,((p[0]-b.a[0])*dx+(p[1]-b.a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(p[0]-b.a[0]-t*dx,p[1]-b.a[1]-t*dy)<b.w/2;});

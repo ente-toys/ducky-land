@@ -22,7 +22,7 @@ test('world: only the 9 delivered identities are placed, with no filler or impli
 test('retired islands cannot load maps, appear as travel targets or retain boats', async () => {
   const {HOME_MAP,mapOf,mapFor,readyThemes} = await import('../src/pixi/island-maps.js');
   const {islandFor,destinationsFor,createBoats,fillMoorings} = await import('../src/pixi/islands.js');
-  const {default:READY} = await import('../rive/web/themes/index.js');
+  const {default:READY} = await import('../assets/world/themes/index.js');
   const {readFileSync} = await import('node:fs');
   const manifest=JSON.parse(readFileSync('public/pixi-art/globe/manifest.json'));
   for(const [id,theme] of [['isle-230','neon'],['isle-93','waterfall'],['isle-56','canal'],['isle-163','goldmine']]) {

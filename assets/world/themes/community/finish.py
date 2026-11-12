@@ -1,5 +1,5 @@
 """Community-only finishing pass. Input is a snapshot of the started Community theme.
-Run: python3 rive/web/themes/community/finish.py /tmp/community-original
+Run: python3 assets/world/themes/community/finish.py /tmp/community-original
 Reuses the original image-generated, traced SVG props. Writes no shared files.
 """
 from pathlib import Path

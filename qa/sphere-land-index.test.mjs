@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import {mapOf} from '../src/pixi/island-maps.js';
-import {inPoly,inShape} from '../rive/web/island-geometry.mjs';
+import {inPoly,inShape} from '../assets/world/island-geometry.mjs';
 // Independent reference to the exact pre-index boat geometry. This protects
 // thin jetties, coast cells and raised crossings while removing cold field cost.
 function original(m,x,y){

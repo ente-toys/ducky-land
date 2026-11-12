@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import {honeywoodBridge} from './bridges.mjs';
 import {rebuildWaterArt} from './water-art.mjs';
 import {port} from './water-data.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',S='scripts/bigger-cathedral/water-source/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',S='scripts/bigger-cathedral/water-source/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,o)=>fs.writeFileSync(p,JSON.stringify(o,null,2)+'\n');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),source=read(S+'world.json'),geo=read('scripts/bigger-cathedral/water-geometry.json');
 const path=p=>'M'+p.map(q=>q.join(' ')).join('L')+'Z';

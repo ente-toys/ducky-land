@@ -1,4 +1,4 @@
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 export function createNavigation(world,{cellSize=32,walkable:customWalkable}={}){
 const walkable=customWalkable??geometry(world).walkable;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));

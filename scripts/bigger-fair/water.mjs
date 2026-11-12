@@ -8,7 +8,7 @@ export function applyFairWater({land:currentLand}={}){
  const art=JSON.parse(fs.readFileSync(base+'art.json'));
  art.sea='#'+PALETTE.water.toString(16).toUpperCase().padStart(6,'0');
  const land=currentLand??JSON.parse(fs.readFileSync('scripts/bigger-fair/path-routes.json')).land;
- const world=JSON.parse(fs.readFileSync('rive/web/themes/fair/world.json'));
+ const world=JSON.parse(fs.readFileSync('assets/world/themes/fair/world.json'));
  const dry=execFileSync('python3',['scripts/bigger-fair/water-banks.py'],{input:JSON.stringify({land,mouths:world.riverMouths}),encoding:'utf8'}).trim();
  for(const tile of art.ground.tiles){
   const file=base+tile.src,svg=fs.readFileSync(file,'utf8');

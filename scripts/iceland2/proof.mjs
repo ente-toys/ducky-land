@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 const out=process.argv[2]??'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/iceland2/fix1';
 const art=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
-const w=JSON.parse(readFileSync('rive/web/themes/snow/world.json'));
+const w=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const nested=(p,anchor)=>{const s=readFileSync('public/pixi-art/themes/snow/'+p.src,'utf8');const root=s.slice(0,s.indexOf('>')+1);const attrs=root.replace(/\s(?:width|height|x|y)="[^"]*"/g,'').replace('<svg','<svg x="'+(p.x-p.width*anchor[0])+'" y="'+(p.y-p.height*anchor[1])+'" width="'+p.width+'" height="'+p.height+'"');return attrs+s.slice(s.indexOf('>')+1);};
 const terrain=readFileSync('public/pixi-art/themes/snow/v2/terrain.svg','utf8');const body=terrain.slice(terrain.indexOf('>')+1,terrain.lastIndexOf('</svg>'));
 let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1448" height="${1448*w.height/w.width}" viewBox="0 0 ${w.width} ${w.height}"><rect width="100%" height="100%" fill="#6EC9DE"/>${body}`;

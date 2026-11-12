@@ -2,7 +2,7 @@ import {PixiIsland} from '/src/pixi/engine.js';
 import {THEME_OF,registerMap} from '/src/pixi/island-maps.js';
 const load=p=>fetch(p).then(r=>r.json());
 const [world,walk,harbor,sleepers,plan]=await Promise.all([
- ...['world','walk-world','harbor'].map(n=>load('/rive/web/themes/neon/'+n+'.json')),
+ ...['world','walk-world','harbor'].map(n=>load('/assets/world/themes/neon/'+n+'.json')),
  load('/pixi-art/themes/neon/resolved-sleepers.json'),load('/scripts/bigger-neon/plan.json')]);
 registerMap('neon',{world,walk,harbor,sleepers,art:'/pixi-art/themes/neon/art.json',sea:'#6ec9de'});
 const game=new PixiIsland({onError:e=>{window.reviewError=String(e);console.error(e)}});window.reviewGame=game;

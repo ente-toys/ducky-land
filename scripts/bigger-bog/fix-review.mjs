@@ -1,7 +1,7 @@
 // Static production-asset evidence. No browser window, pixel replacement or AI art.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import sharp from 'sharp';
-import {inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 process.argv[2]='built';
 const {render}=await import('./render.mjs');
 const {out,plan}=await import('./design.mjs');
@@ -20,7 +20,7 @@ function audit(art,world){
   return {id:p.id,kind:'sea pier',center:[p.x+p.width/2,y],water:!inPoly(p.x+p.width*.6,y,world.coast)?['sea']:[],landApproach:inPoly(p.x,y,world.coast),outerDeckInSea:!inPoly(p.x+p.width-20,y,world.coast)};
  });
 }
-const art=read('public/pixi-art/themes/bog/art.json'),world=read('rive/web/themes/bog/world.json');
+const art=read('public/pixi-art/themes/bog/art.json'),world=read('assets/world/themes/bog/world.json');
 const result={before:audit(read(root+'/before-art.json'),read(root+'/before-world.json')),after:audit(art,world),excludedDeck:{id:'boxing-raised-canvas',reason:'Raised boxing stage. It is neither a bridge nor a jetty and belongs on dry land.'},oldCoastCrossings:0,riverCount:world.water.filter(w=>w.poly).length};
 if(result.after.length!==5||result.after.some(p=>!p.water.length||p.kind==='river bridge'&&!p.endsOnBanks))throw Error('A bridge or pier has no wet span or dry bank landings');
 writeFileSync(root+'/bridge-audit.json',JSON.stringify(result,null,2)+'\n');

@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[2]
 A=R/'public/pixi-art/themes/waterfall'
 O=R.parent/'concepts/themes/work/waterfall'
 a=json.loads((A/'art.json').read_text())
-w=json.loads((R/'rive/web/themes/waterfall/world.json').read_text())
+w=json.loads((R/'assets/world/themes/waterfall/world.json').read_text())
 backup=O/'last-waterfall-source.json'
 if not backup.exists():
     backup.write_text(json.dumps({'art':a,'paving':(A/'centre/decal-paving.svg').read_text()},indent=2))

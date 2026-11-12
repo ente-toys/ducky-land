@@ -28,9 +28,9 @@ import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape, quoteattr
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'rive/island.rml'
-WORLD = ROOT / 'rive/web/world.json'
-FONT = ROOT / 'rive/fonts/Gilroy-Black.ttf'
+SOURCE = ROOT / 'assets/island-source/island.rml'
+WORLD = ROOT / 'assets/world/world.json'
+FONT = ROOT / 'assets/island-source/fonts/Gilroy-Black.ttf'
 OUTPUT = ROOT / 'public/pixi-art'
 MANIFEST = ROOT / 'src/pixi/art-manifest.json'
 IDENTITY = (1., 0., 0., 1., 0., 0.)
@@ -539,10 +539,10 @@ def exports():
                       'stats': stats})
     manifest = {
         'schemaVersion': 1,
-        'source': 'rive/island.rml',
+        'source': 'assets/island-source/island.rml',
         'overrides':{'Prop 34':'assets/library-building.svg'},
         'sourceSha256': hashlib.sha256(source_bytes).hexdigest(),
-        'worldSource': 'rive/web/world.json',
+        'worldSource': 'assets/world/world.json',
         'worldSha256': hashlib.sha256(world_bytes).hexdigest(),
         'exporter': 'scripts/extract-pixi-art.py',
         'world': {'width': width, 'height': height},
@@ -552,7 +552,7 @@ def exports():
         'props': props,
         'floating':floating,
         'enhancedAssets':enhanced_assets,
-        'text': {'method': 'SVG text with embedded original Gilroy Black TrueType font', 'fontSource': 'rive/fonts/Gilroy-Black.ttf'},
+        'text': {'method': 'SVG text with embedded original Gilroy Black TrueType font', 'fontSource': 'assets/island-source/fonts/Gilroy-Black.ttf'},
     }
     output[MANIFEST] = json.dumps(manifest, indent=2, ensure_ascii=False)+'\n'
     return output, manifest

@@ -1,6 +1,6 @@
 # Sunflower island (theme `sunflower`): builds the whole island from one layout.
 #   ground tiles + jetty decks + art.json   -> public/pixi-art/themes/sunflower/
-#   world.json + walk-world.json + harbor.json -> rive/web/themes/sunflower/
+#   world.json + walk-world.json + harbor.json -> assets/world/themes/sunflower/
 #   preview.png (globe) + a full preview beside the concept -> concepts/themes/sunflower-preview.png
 # Follows concepts/themes/THEME-CONTRACT.md. Layout is written in the CONCEPT's pixel space (01-sunflower.png,
 # 1536x1024) and mapped to world units by T(), so it can be read against the concept image directly.
@@ -13,7 +13,7 @@ from shapely.ops import unary_union
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ART = os.path.join(ROOT, 'public/pixi-art/themes/sunflower')
-DATA = os.path.join(ROOT, 'rive/web/themes/sunflower')
+DATA = os.path.join(ROOT, 'assets/world/themes/sunflower')
 CONCEPTS = os.path.abspath(os.path.join(ROOT, '..', 'concepts/themes'))
 os.makedirs(DATA, exist_ok=True)
 WIDTH, HEIGHT = 8000, 5600   # boss 6 Nov: bigger and spacious, ~1.8x home's land

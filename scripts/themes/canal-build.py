@@ -10,7 +10,7 @@ from shapely.geometry import Point, Polygon, LineString, box
 from shapely.ops import unary_union
 from shapely.affinity import scale
 ROOT=Path(__file__).resolve().parents[2]
-ART=ROOT/'public/pixi-art/themes/canal'; DATA=ROOT/'rive/web/themes/canal'
+ART=ROOT/'public/pixi-art/themes/canal'; DATA=ROOT/'assets/world/themes/canal'
 for d in [ART,DATA,ART/'reuse',ART/'detail']: d.mkdir(parents=True,exist_ok=True)
 W,H=8000,6000; rng=random.Random(74)
 INK='#39472D'; CREAM='#FFF2CE'; SAND='#FFE399'; GROUND='#E8C382'; SEA='#6EC9DE'; GRASS='#92B72F'

@@ -4,11 +4,11 @@ import './proof.mjs';
 import {copyFileSync,writeFileSync} from 'node:fs';
 import {output,j,json} from './scene.mjs';
 import {bridges,rivers,commons} from './plan.mjs';
-import {inShape,inPoly} from '../../rive/web/island-geometry.mjs';
-const world=j('rive/web/themes/snow/world.json'),art=j('public/pixi-art/themes/snow/art.json');
+import {inShape,inPoly} from '../../assets/world/island-geometry.mjs';
+const world=j('assets/world/themes/snow/world.json'),art=j('public/pixi-art/themes/snow/art.json');
 copyFileSync(output+'/snow-built.png',output+'/snow-fixed.png');
 for(const [source,target]of [['aurora-bridge','bridge'],['junction','junction'],['lane','lane'],['igloo','community']])copyFileSync(output+'/ground-crops/snow/'+source+'.png',output+'/snow-fixed-'+target+'.png');
-const harbor=j('rive/web/themes/snow/harbor.json');
+const harbor=j('assets/world/themes/snow/harbor.json');
 json(output+'/work/snow/fix-audit.json',{
  authoredDecks:art.decks.length,bridges:bridges.map(b=>({id:b.id,center:[b.x,b.y],waterUnderCenter:world.water.filter(o=>inShape(b.x,b.y,o)).map(o=>o.name),transverseWaterSamples:[-.28,-.14,0,.14,.28].every(k=>world.water.some(o=>inShape(b.x+(b.axis==='v'?b.w*k:0),b.y+(b.axis==='h'?b.h*k:0),o)))})),
  runtimeJetty:{...harbor.jetty,footOnLand:inPoly(...harbor.jetty.foot,world.coast),tipInSea:!inPoly(...harbor.jetty.tip,world.coast)},

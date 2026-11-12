@@ -26,7 +26,7 @@ art.flats = upsert(art.flats, floors);
 art.props = upsert(art.props, props);
 write(artPath, art);
 for (const name of ['world.json', 'walk-world.json']) {
-  const dest = 'rive/web/themes/library/' + name, world = read(dest);
+  const dest = 'assets/world/themes/library/' + name, world = read(dest);
   // The padded, overlapping treads have a narrow neck between 32-unit grid
   // centres. A 24-unit grid resolves the visible walking route without
   // widening its water collision or adding an invisible bridge.

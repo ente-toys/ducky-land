@@ -2,7 +2,7 @@
 import {readFileSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 
-const world = JSON.parse(readFileSync('rive/web/themes/library/world.json'));
+const world = JSON.parse(readFileSync('assets/world/themes/library/world.json'));
 const art = JSON.parse(readFileSync('public/pixi-art/themes/library/art.json'));
 const validator = readFileSync('scripts/theme-index.mjs', 'utf8');
 const limits = validator.match(/const MAX = \{width: (\d+), height: (\d+)\}/);

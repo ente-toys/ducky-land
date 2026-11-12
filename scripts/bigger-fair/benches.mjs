@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {homeBench,placeBench,benchFeet,BENCH_COURTS} from './furniture.mjs';
 import {FIT} from './centre-data.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 export const isBench=p=>/bench/i.test([p.id,p.name,p.asset,p.src].join(' '))||/^fair-life-picnic-seat-/.test(p.id);
 // The two commons seats move from isolated grass to the existing loop edge.

@@ -15,7 +15,7 @@ import coralAtoll from '../../public/pixi-art/islets/12-coral-atoll.meta.json' w
 import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {sphereFrame,expMap,logMap,angle} from './sphere.js';
 import {placeIslet,unplaceIslet} from './islet-placement.js';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const ISLET_SEED=data.seed;
 export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','05-lighthouse-rock','06-palm-treasure','07-pink-blossom','08-snow-igloo','09-spooky-purple','11-volcano','12-coral-atoll'];
 // boss 8 Nov ("the perspective of the islets is bad", "wtf is that docking port"): every islet is hand-drawn SVG with its

@@ -1,15 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {geometry, inPoly} from '../rive/web/island-geometry.mjs';
+import {geometry, inPoly} from '../assets/world/island-geometry.mjs';
 import {mapOf} from '../src/pixi/island-maps.js';
 import {homePropY, homePropRotation} from '../src/pixi/home-motion.js';
 
 const read = p => JSON.parse(fs.readFileSync(p));
 const placement = read('scripts/pagepond-meadow/placements.json');
 const art = read('public/pixi-art/themes/library/art.json');
-const world = read('rive/web/themes/library/world.json');
-const walk = read('rive/web/themes/library/walk-world.json');
+const world = read('assets/world/themes/library/world.json');
+const walk = read('assets/world/themes/library/walk-world.json');
 const base = 'public/pixi-art/themes/library/';
 
 test('Pagepond meadow installs the chosen SVG floors and upright anchors in authored order', () => {

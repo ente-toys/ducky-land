@@ -26,7 +26,7 @@ test('Pagepond replaces every floating paperboat with the approved playable Home
   const boat=fleet.find(b=>b.x===p.x&&b.y===p.y);assert(boat,p.id+' is a real fleet boat');assert(canSail(boat.x,boat.y,id),p.id+' full hull clears the shore');
   const shore=nav.nearest(boat.x,boat.y,280);assert(shore,p.id+' has boarding land');assert(nav.route(map.spawn.x,map.spawn.y,...shore).length,p.id+' boarding land is reachable');
  }
- const props=read('rive/web/themes/library/placements.json');
+ const props=read('assets/world/themes/library/placements.json');
  assert(!props.some(p=>retiredBoatIds.has(p.id)));assert(!map.world.props.some(p=>retiredBoatIds.has(p.id)));
 });
 

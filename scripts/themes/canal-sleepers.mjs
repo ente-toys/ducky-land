@@ -1,9 +1,9 @@
 // Choose 40 deliberate, validated resting spots using the game's actual resolver.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 const root=new URL('../../',import.meta.url),read=p=>JSON.parse(readFileSync(new URL(p,root),'utf8'));
-const world=read('rive/web/themes/canal/world.json'),walk=read('rive/web/themes/canal/walk-world.json'),art=read('public/pixi-art/themes/canal/art.json');
+const world=read('assets/world/themes/canal/world.json'),walk=read('assets/world/themes/canal/walk-world.json'),art=read('public/pixi-art/themes/canal/art.json');
 const base={...world,...walk},sizes=sleepHalfWidths();let geo=geometry(base);
 const spots={nod:[],hammock:[],rock:[],leaf:[],book:[],chair:[],wing:[],box:[]};
 const resolve=()=>resolveSleepSpots(base,art.props,geo.walkable,sizes,{spots,avoid:world.sleepAvoid,warn:false});
@@ -52,8 +52,8 @@ for(const tree of trees){
 const beds=resolve();if(beds.length!==40||beds.bad.length)throw Error(JSON.stringify({count:beds.length,bad:beds.bad,spots}));
 world.sleepSpots=spots;world.props=art.props;world.obstacles=base.obstacles;walk.obstacles=base.obstacles;
 writeFileSync(new URL('public/pixi-art/themes/canal/art.json',root),JSON.stringify(art));
-writeFileSync(new URL('rive/web/themes/canal/walk-world.json',root),JSON.stringify(walk));
-writeFileSync(new URL('public/pixi-art/themes/canal/sleep-clearings.json',root),JSON.stringify(cleared,null,2));writeFileSync(new URL('rive/web/themes/canal/world.json',root),JSON.stringify(world));
+writeFileSync(new URL('assets/world/themes/canal/walk-world.json',root),JSON.stringify(walk));
+writeFileSync(new URL('public/pixi-art/themes/canal/sleep-clearings.json',root),JSON.stringify(cleared,null,2));writeFileSync(new URL('assets/world/themes/canal/world.json',root),JSON.stringify(world));
 writeFileSync(new URL('public/pixi-art/themes/canal/resolved-sleepers.json',root),JSON.stringify(beds,null,2));
 const metrics=read('public/pixi-art/themes/canal/polish-metrics.json');
 metrics.finalProps=art.props.length;metrics.finalCounts=Object.fromEntries([...new Set(art.props.map(p=>p.name))].map(name=>[name,art.props.filter(p=>p.name===name).length]));metrics.sleepClearings=cleared.length;

@@ -10,8 +10,8 @@ import test from 'node:test';
 import {canSail, seaBoundsFor} from '../src/pixi/islands.js';
 import {WORLD_ISLANDS, MAP_BOUNDS, worldIsland, neighboursOf} from '../src/pixi/world-map.js';
 import {createNavigation} from '../src/pixi/navigation.js';
-import world from '../rive/web/world.json' with {type: 'json'};
-import walkWorld from '../rive/web/walk-world.json' with {type: 'json'};
+import world from '../assets/world/world.json' with {type: 'json'};
+import walkWorld from '../assets/world/walk-world.json' with {type: 'json'};
 
 let mapOf = null;
 try {({mapOf} = await import('../src/pixi/island-maps.js'));} catch {/* single-map tree */}

@@ -1,11 +1,11 @@
 // Resolve the boss's next twenty against the same prop, path and spacing rules as the game.
 import {createServer} from 'vite';
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths,sleeperFootprint} from '../../src/pixi/sleep-spots.js';
 const v=await createServer({configFile:false,server:{middlewareMode:true,hmr:false,ws:false,watch:null},optimizeDeps:{noDiscovery:true},logLevel:'error'});
 try{
- const P=await v.ssrLoadModule('/src/pixi/placements.js'),props=P.createPlacements(),world=P.walkWorld(P.trimWorld(JSON.parse(readFileSync('rive/web/world.json'))),props),walkable=geometry(world).walkable;
+ const P=await v.ssrLoadModule('/src/pixi/placements.js'),props=P.createPlacements(),world=P.walkWorld(P.trimWorld(JSON.parse(readFileSync('assets/world/world.json'))),props),walkable=geometry(world).walkable;
  const {harborWorld}=await v.ssrLoadModule('/src/pixi/islands.js'),live=harborWorld(world);
  const beds=JSON.parse(readFileSync('qa/fixtures/home-eighty-sleepers.json')),old=JSON.parse(readFileSync('src/pixi/home-original-world.json')),routes=JSON.parse(readFileSync('src/pixi/home-routes.json'));
 
@@ -31,5 +31,5 @@ try{
    if(!found)throw Error('No valid '+pose+' '+i);
   }
  }
- writeFileSync('rive/web/home-sleep-more.json',JSON.stringify(spots,null,2)+'\n');console.log(JSON.stringify(added));
+ writeFileSync('assets/world/home-sleep-more.json',JSON.stringify(spots,null,2)+'\n');console.log(JSON.stringify(added));
 }finally{await v.close();}

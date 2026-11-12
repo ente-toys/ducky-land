@@ -1,8 +1,8 @@
 // Fair-only craft pass. Run between fair-centre and fair-finish; no shared files written.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(readFileSync(p)),write=(p,x)=>writeFileSync(p,JSON.stringify(x,null,1)+'\n');
 const world=read(D+'world.json'),walk=read(D+'walk-world.json');
 let props=read(D+'placements.json').filter(p=>!p.id.startsWith('fair-craft-')&&!p.id.startsWith('fair-centre-')&&p.asset!=='bench-wood');

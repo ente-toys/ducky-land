@@ -8,7 +8,7 @@ import {neighboursOf} from '../../../../src/pixi/world-map.js';
 const root=new URL('../../../../',import.meta.url);
 const read=f=>JSON.parse(fs.readFileSync(new URL(f,root)));
 const save=(f,d)=>fs.writeFileSync(new URL(f,root),JSON.stringify(d,null,2)+'\n');
-const world=read('rive/web/themes/community/world.json'), walk=read('rive/web/themes/community/walk-world.json'), harbor=read('rive/web/themes/community/harbor.json'), art=read('public/pixi-art/themes/community/art.json');
+const world=read('assets/world/themes/community/world.json'), walk=read('assets/world/themes/community/walk-world.json'), harbor=read('assets/world/themes/community/harbor.json'), art=read('public/pixi-art/themes/community/art.json');
 const baseWalk=makeMap('community',{world,walk,harbor,sleepers:[]}).walk;
 const resolve=()=>resolveSleepSpots(baseWalk,art.props,geometry(baseWalk).walkable,sleepHalfWidths(),{spots:world.sleepSpots,avoid:world.sleepAvoid,warn:false});
 let beds=resolve();
@@ -23,7 +23,7 @@ if(process.argv.includes('--fix-sleeper') && beds.bad.length){
   }
   assert(found,'No valid nearby sleeper site');
  }
- save('rive/web/themes/community/world.json',world);beds=resolve();
+ save('assets/world/themes/community/world.json',world);beds=resolve();
 }
 let report=checkTheme('community');
 console.log(`${report.ready?'READY':'FAIL'} community sleepers ${beds.length}/40`);
@@ -48,4 +48,4 @@ const n=neighboursOf('home').find(n=>!n.island.theme);
 console.log('Registration:', n ? `unassigned neighbour ${n.island.id}` : 'all home neighbours already assigned');
 const area=Math.abs(world.coast.reduce((v,[x,y],i)=>{const [a,b]=world.coast[(i+1)%world.coast.length];return v+x*b-a*y},0))/2;
 const stats={ready:report.ready,sleepers:beds.length,landArea:area,ratioToOriginalHome:area/11.09e6,width:world.width,height:world.height,props:art.props.length,activities:Object.keys(world.zones).filter(k=>k.startsWith('activity-')).length,stallRows:Object.keys(world.zones).filter(k=>k.startsWith('stalls-')).length,crowdPositions:open,boats:map.boatSpots().length,nearestUnthemed:n?.island.id??null,problems};
-save('rive/web/themes/community/validation.json',stats);console.log(JSON.stringify(stats,null,2));assert.equal(problems.length,0,problems.join('\n'));
+save('assets/world/themes/community/validation.json',stats);console.log(JSON.stringify(stats,null,2));assert.equal(problems.length,0,problems.join('\n'));

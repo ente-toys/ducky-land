@@ -7,7 +7,7 @@ import {canSail} from '../src/pixi/islands.js';
 // placements.js imports browser-only Home JSON. Execute its actual deckY
 // implementation without loading the unrelated browser asset pipeline.
 const deckY=Function('return '+fs.readFileSync('src/pixi/placements.js','utf8').match(/export (function deckY[\s\S]*?\n})/)[1])();
-const A='public/pixi-art/themes/community/',D='rive/web/themes/community/';
+const A='public/pixi-art/themes/community/',D='assets/world/themes/community/';
 const read=p=>JSON.parse(fs.readFileSync(p)),art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 const bridges=art.decks.filter(d=>d.homeSource),xml=s=>new DOMParser().parseFromString(s,'image/svg+xml');
 const paths=root=>Array.from(root.getElementsByTagName('path'));

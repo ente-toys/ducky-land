@@ -1,8 +1,8 @@
 // Goldmine-only pose placement. Uses the engine's validator, five of each exact Home pose.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const D='rive/web/themes/peaks/',A='public/pixi-art/themes/peaks/';
+const D='assets/world/themes/peaks/',A='public/pixi-art/themes/peaks/';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const world=read(D+'world.json'),walk=read(D+'walk-world.json'),art=read(A+'art.json');
 const {makeMap}=await import('../../src/pixi/island-maps.js');

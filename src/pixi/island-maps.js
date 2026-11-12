@@ -7,10 +7,10 @@
 //
 // A map: {id, width, height, world, walk, JETTY, HARBOR, spawn, landAt(x,y), nav(), boatSpots(), field(), art, sea, home}.
 import expansion from './home-expansion.json' with {type:'json'};
-import homeWorld from '../../rive/web/world.json' with {type: 'json'};
-import homeWalk from '../../rive/web/walk-world.json' with {type: 'json'};
+import homeWorld from '../../assets/world/world.json' with {type: 'json'};
+import homeWalk from '../../assets/world/walk-world.json' with {type: 'json'};
 import READY from './delivered-themes.js';
-import {geometry, inPoly, inShape, coastIndex, polygonIndex, shapeIndex} from '../../rive/web/island-geometry.mjs';
+import {geometry, inPoly, inShape, coastIndex, polygonIndex, shapeIndex} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots, sleepHalfWidths, sleeperFootprint} from './sleep-spots.js';
 import {createNavigation} from './navigation.js';
 import {FINISHED_THEMES, TEST_THEMES, WORLD_ISLANDS} from './world-map.js';
@@ -84,7 +84,7 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
   const baseWalk = {...world, ...walking, walkways: [...(walking.walkways ?? []), ...(addJetty ? [JETTY.walkway] : [])]};
   // boss 6 Nov: the same 28 sleeping Duckies as home. Home's lie in its walk-world.json already (the engine places them); a
   // themed island's are its world.json "sleepSpots", resolved by scripts/theme-index.mjs against its art props (written into
-  // rive/web/themes/index.js), or here against world.props when the index carries none. Each one is solid ground for the
+  // assets/world/themes/index.js), or here against world.props when the index carries none. Each one is solid ground for the
   // room server and the game alike, exactly like home's.
   const beds = id === 'home' ? [] : (sleepers ?? (world.sleepSpots ? resolveSleepSpots(baseWalk, world.props ?? [], geometry(baseWalk).walkable, sleepHalfWidths(),
     {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false}) : [])).map(bed => fixThemeBed(id, bed)).map(({x, y, pose, r, flip, tree}) => ({x, y, pose, r, flip: Boolean(flip), tree}));

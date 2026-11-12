@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from shapely.geometry import Point,Polygon,LineString,box
 from shapely.affinity import scale
 from shapely.ops import unary_union
-ROOT=Path(__file__).resolve().parents[2]; A=ROOT/'public/pixi-art/themes/canal'; D=ROOT/'rive/web/themes/canal'; W=ROOT.parent/'concepts/themes/work/canal'
+ROOT=Path(__file__).resolve().parents[2]; A=ROOT/'public/pixi-art/themes/canal'; D=ROOT/'assets/world/themes/canal'; W=ROOT.parent/'concepts/themes/work/canal'
 read=lambda p:json.loads(p.read_text())
 a=read(W/'close-start-art.json');w=read(W/'close-start-world.json');walk=read(W/'close-start-walk-world.json');rng=random.Random(5292)
 def ellipse(x,y,rx,ry):return scale(Point(x,y).buffer(1,quad_segs=48),rx,ry)

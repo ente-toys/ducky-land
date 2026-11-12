@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {Texture} from 'pixi.js';
 import {loadPondDuckies,PONDS,samplePondDucky} from '../src/pixi/pond-duckies.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {populatePond,requestedPondCount} from '../scripts/pond-duckies/populate.mjs';
 const assets=JSON.parse(fs.readFileSync('src/pixi/pond-regions.json')).assets;
 const expected={home:5,sunflower:1,pink:3,library:2,community:1,fair:2,cathedral:1,bog:2,snow:0};
@@ -85,7 +85,7 @@ test('every keeper and its archived ripple art is clean flat SVG, with no PNG ad
  const added=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'});
  assert(!/\.png$/im.test(changed+'\n'+added),'no PNG in tracked changes or new files');
  const artChanges=changed.split('\n').filter(p=>p!=='public/pixi-art/globe/manifest.json');
- assert(!artChanges.some(p=>/^(public\/pixi-art|rive\/web\/themes|src\/pixi\/islet)/.test(p)),'source art and islets untouched');
+ assert(!artChanges.some(p=>/^(public\/pixi-art|assets\/world\/themes|src\/pixi\/islet)/.test(p)),'source art and islets untouched');
 });
 
 test('runtime owns every assigned Ducky, pauses hidden layers and releases all water FX and leases on leave',async()=>{

@@ -4,7 +4,7 @@ import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
 import {Texture} from 'pixi.js';
-const A='public/pixi-art/themes/lantern/',D='rive/web/themes/lantern/';
+const A='public/pixi-art/themes/lantern/',D='assets/world/themes/lantern/';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json'),centre=read(A+'centre/centre.json');
 const result=checkTheme('lantern');assert(result.ready,result.problems.join('\n'));assert.equal(result.sleepers.length,40);

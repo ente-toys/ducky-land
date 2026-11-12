@@ -20,7 +20,7 @@ run(process.execPath,['scripts/pagepond-boats/build.mjs']);
 run(process.execPath,['scripts/pagepond-meadow/install.mjs']);
 run(process.execPath,['scripts/theme-index.mjs']);
 const a=JSON.parse(fs.readFileSync('public/pixi-art/themes/library/art.json'));
-fs.writeFileSync('rive/web/themes/library/placements.json',JSON.stringify(a.props)+'\n');
+fs.writeFileSync('assets/world/themes/library/placements.json',JSON.stringify(a.props)+'\n');
 run(process.execPath,['scripts/pagepond-ground/bridges.mjs']);
 run(python,["scripts/pagepond-ground/geometry-audit.py"]);
 const checked=checkTheme('library');if(!checked.ready)throw Error(checked.problems.join('\n'));

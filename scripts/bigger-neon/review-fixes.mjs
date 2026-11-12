@@ -1,6 +1,6 @@
 // Authored canal, two outlets and working commons. All artwork stays outside the original dry land.
 import fs from 'node:fs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const A='public/pixi-art/themes/neon/bigger/';
 const d=ps=>'M'+ps.map(p=>p.map(v=>+v.toFixed(2)).join(',')).join('L')+'Z';
 function smooth(ps){const out=[];for(let i=0;i<ps.length-1;i++){const a=ps[Math.max(0,i-1)],b=ps[i],c=ps[i+1],e=ps[Math.min(ps.length-1,i+2)];for(let j=0;j<12;j++){const t=j/12;out.push([0,1].map(k=>.5*(2*b[k]+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-e[k])*t*t+(-a[k]+3*b[k]-3*c[k]+e[k])*t*t*t)));}}return [...out,ps.at(-1)];}

@@ -1,10 +1,10 @@
 // Complete Tickytown after neon-world.mjs. Only writes neon assets and map files.
 import fs from 'node:fs';
-import {geometry, inPoly} from '../../rive/web/island-geometry.mjs';
+import {geometry, inPoly} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots, sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {checkTheme} from '../theme-index.mjs';
-const A='public/pixi-art/themes/neon/', D='rive/web/themes/neon/';
+const A='public/pixi-art/themes/neon/', D='assets/world/themes/neon/';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const art=read(A+'art.json'), world=read(D+'world.json'), walk=read(D+'walk-world.json'), harbor=read(D+'harbor.json');

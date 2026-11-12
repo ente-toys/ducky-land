@@ -6,7 +6,7 @@ import {makeMap} from '../../src/pixi/island-maps.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
 import {animatePieces} from '../../src/pixi/centre-motion.js';
 import {Texture} from 'pixi.js';
-const A='public/pixi-art/themes/candy/',D='rive/web/themes/candy/',j=p=>JSON.parse(readFileSync(p));
+const A='public/pixi-art/themes/candy/',D='assets/world/themes/candy/',j=p=>JSON.parse(readFileSync(p));
 const art=j(A+'art.json'),world=j(D+'world.json'),walk=j(D+'walk-world.json'),harbor=j(D+'harbor.json'),centre=j(A+'centre/centre.json'),props=j(D+'placements.json');
 const r=checkTheme('candy');assert(r.ready,r.problems.join('\n'));assert.equal(r.sleepers.length,40);
 const map=makeMap('candy',{world,walk,harbor,sleepers:r.sleepers}),nav=map.nav(),route=(x,y)=>nav.clearLine([map.spawn.x,map.spawn.y],[x,y])||nav.route(map.spawn.x,map.spawn.y,x,y).length>0;

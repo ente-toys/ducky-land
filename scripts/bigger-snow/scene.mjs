@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import sharp from 'sharp';
 import {bounds,coast,communities,rivers,roads,bridges,extraTrees,smooth,commons,courts} from './plan.mjs';
 import {makeAssets,specs,dir} from './assets.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const output='../concepts/themes/world-map/bigger';
 export const base='scripts/bigger-snow/baseline/';
 export const artDir='public/pixi-art/themes/snow/';

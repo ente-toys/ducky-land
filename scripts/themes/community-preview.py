@@ -15,7 +15,7 @@ os.makedirs(os.path.dirname(OUT), exist_ok=True)
 S = float(sys.argv[1]) if len(sys.argv) > 1 else .3
 
 art = json.load(open(os.path.join(ART, 'art.json')))
-harbor = json.load(open(os.path.join(ROOT, 'rive/web/themes/community/harbor.json')))
+harbor = json.load(open(os.path.join(ROOT, 'assets/world/themes/community/harbor.json')))
 W, H = int(art['width'] * S), int(art['height'] * S)
 src = lambda s: s if s.startswith('/Users') else os.path.join(ROOT, 'public', s.lstrip('/')) if s.startswith('/') else os.path.join(ART, s)
 cache = {}

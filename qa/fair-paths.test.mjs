@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {mapFor} from '../src/pixi/island-maps.js';
-import {inShape,inPoly} from '../rive/web/island-geometry.mjs';
+import {inShape,inPoly} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const art=read(A+'art.json'),audit=read('scripts/bigger-fair/path-routes.json'),map=mapFor('fair'),nav=map.nav();
 test('Fair ground tiles share one continuous terrain, water and opaque path union',()=>{
  let common;

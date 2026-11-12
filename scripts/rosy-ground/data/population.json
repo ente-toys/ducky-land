@@ -17,9 +17,9 @@
   },
   "sourceHashes": {
     "public/pixi-art/themes/pink/art.json": "5fcf10e8f067a50971da1de4e482f13c4423f578ba3cfd7fc73031f401cb49f3",
-    "rive/web/themes/pink/world.json": "c9fec4285bc82938ac1fbf2cb99e14dd8bdd1b6048ad3327be63b36a93698f83",
-    "rive/web/themes/pink/walk-world.json": "5c116ad2696b8f3aa667fb2e09a5cc0aa30b030208fcb1bb9fe3fe7ac1fb80d0",
-    "rive/web/themes/index.js": "97d3f875b04467f0c0fe869db0282d2c9576d12e6968c7ae07b0a8d92abff8fe"
+    "assets/world/themes/pink/world.json": "c9fec4285bc82938ac1fbf2cb99e14dd8bdd1b6048ad3327be63b36a93698f83",
+    "assets/world/themes/pink/walk-world.json": "5c116ad2696b8f3aa667fb2e09a5cc0aa30b030208fcb1bb9fe3fe7ac1fb80d0",
+    "assets/world/themes/index.js": "97d3f875b04467f0c0fe869db0282d2c9576d12e6968c7ae07b0a8d92abff8fe"
   },
   "planting": {
     "props": [

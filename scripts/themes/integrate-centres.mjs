@@ -2,7 +2,7 @@
 import {readFileSync,writeFileSync,existsSync,mkdirSync} from 'node:fs';
 const read=p=>JSON.parse(readFileSync(p,'utf8')), save=(p,v)=>writeFileSync(p,JSON.stringify(v,null,2)+'\n');
 for (const [theme,origin,k,clear] of [['waterfall',[3900,3800],.48,[-780,-650,780,640]],['canal',[4000,3320],.85,[-1060,-875,1060,810]]]) {
- const artPath=`public/pixi-art/themes/${theme}/art.json`, dir=`rive/web/themes/${theme}`, source=`scripts/themes/integrate-source/${theme}`;
+ const artPath=`public/pixi-art/themes/${theme}/art.json`, dir=`assets/world/themes/${theme}`, source=`scripts/themes/integrate-source/${theme}`;
  mkdirSync(source,{recursive:true});
  for(const [file,path] of [['art',artPath],['world',`${dir}/world.json`],['walk-world',`${dir}/walk-world.json`],['harbor',`${dir}/harbor.json`]]) if(!existsSync(`${source}/${file}.json`)) save(`${source}/${file}.json`,read(path));
  const art=read(`${source}/art.json`),world=read(`${source}/world.json`),walk=read(`${source}/walk-world.json`),harbor=read(`${source}/harbor.json`),c=read(`public/pixi-art/themes/${theme}/centre/centre.json`);

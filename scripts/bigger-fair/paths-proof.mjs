@@ -31,7 +31,7 @@ const summary=[];
 async function render(theme,name,view,k){
  const art=read('public/pixi-art/themes/'+theme+'/art.json'),base=root+'/public/pixi-art/themes/'+theme+'/';
  const beds=mapFor(theme).sleepers;
- const h=read('rive/web/themes/'+theme+'/harbor.json'),poses=read('src/pixi/sleep-poses.json');
+ const h=read('assets/world/themes/'+theme+'/harbor.json'),poses=read('src/pixi/sleep-poses.json');
  const [ox,oy,cw,ch]=view,W=Math.round(cw*k),H=Math.round(ch*k),layers=[],cache=new Map();
  const source=s=>s.startsWith('/pixi-art/')||s.startsWith('/pixi-duck/')?root+'/public'+s:s.startsWith('/assets/')?root+s:path.isAbsolute(s)?s:base+s;
  async function add(p,kind='prop'){

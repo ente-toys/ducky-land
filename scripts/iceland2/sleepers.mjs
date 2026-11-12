@@ -1,8 +1,8 @@
 // Hand-authored resting pockets, separated from the B2 walking corridors.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const file='rive/web/themes/snow/world.json',w=JSON.parse(readFileSync(file)),a=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
+const file='assets/world/themes/snow/world.json',w=JSON.parse(readFileSync(file)),a=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
 const spots=Object.fromEntries(['nod','hammock','rock','leaf','book','chair','wing','box'].map(n=>[n,[]]));
 const trees=a.props.filter(p=>p.id.includes('-tree-'));
 // Tree-backed residents are chosen individually, with spacing checked below.
@@ -23,4 +23,4 @@ for(const [i,p] of pockets.entries()){
 }
 w.sleepSpots=spots;
 console.log('Authored residents',Object.fromEntries(Object.entries(spots).map(([k,v])=>[k,v.length])),Object.values(spots).flat().length);
-for(const p of [file,'rive/web/themes/snow/walk-world.json'])writeFileSync(p,JSON.stringify(w,null,1)+'\n');
+for(const p of [file,'assets/world/themes/snow/walk-world.json'])writeFileSync(p,JSON.stringify(w,null,1)+'\n');

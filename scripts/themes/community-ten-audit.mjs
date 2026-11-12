@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='rive/web/themes/community/';
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='assets/world/themes/community/';
 const a=read(A+'art.json'),w=read(D+'world.json'),beds=read(A+'resolved-sleepers.json'),benches=read(D+'ten-benches.json');
 function seg(x,y,p,q){const dx=q[0]-p[0],dy=q[1]-p[1],t=Math.max(0,Math.min(1,((x-p[0])*dx+(y-p[1])*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-p[0]-t*dx,y-p[1]-t*dy)}
 const pathDist=(x,y)=>Math.min(...w.paths.flatMap((p,i)=>p.slice(1).map((q,j)=>seg(x,y,p[j],q)-w.pathWidths[i]/2)));

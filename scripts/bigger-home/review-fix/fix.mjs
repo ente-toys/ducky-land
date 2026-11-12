@@ -1,6 +1,6 @@
 // Authored Home-only corrections. Surface repetition is brushwork, never prop placement.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {inPoly} from '../../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../../assets/world/island-geometry.mjs';
 export function finishProps({E,D,svg,custom,kit,reuse,plant,bench,flowers,at}) {
  const roofs=['#df7050','#739b6b','#bc7956','#d8a74d','#849bb1','#b97e91'];
  const walls=['#fff0c7','#f4dfb1','#e3eac4','#f5dfce','#d4e4d3','#efe3bc'];

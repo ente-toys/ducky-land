@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render.mjs';
 import {OUT,A} from './design.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),D='rive/web/themes/cathedral/';
+const read=p=>JSON.parse(fs.readFileSync(p)),D='assets/world/themes/cathedral/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 fs.mkdirSync(OUT+'/cathedral-dense-crops',{recursive:true});
 await sharp(await render(art,{x:-2200,y:-2400,k:.12,width:1536,height:1248,world,walk,harbor})).toFile(OUT+'/cathedral-dense.png');

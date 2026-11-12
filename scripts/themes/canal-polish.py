@@ -6,7 +6,7 @@ import json, math, random, re, shutil
 from shapely.geometry import Point, Polygon, LineString, box
 from shapely.affinity import scale
 from shapely.ops import unary_union
-ROOT=Path(__file__).resolve().parents[2]; ART=ROOT/'public/pixi-art/themes/canal'; DATA=ROOT/'rive/web/themes/canal'
+ROOT=Path(__file__).resolve().parents[2]; ART=ROOT/'public/pixi-art/themes/canal'; DATA=ROOT/'assets/world/themes/canal'
 rng=random.Random(5281)
 read=lambda p:json.loads(p.read_text())
 art=read(ART/'art.json'); world=read(DATA/'world.json'); walk=read(DATA/'walk-world.json')

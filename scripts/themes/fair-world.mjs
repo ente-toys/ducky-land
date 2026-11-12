@@ -2,16 +2,16 @@
 // (concepts/themes/concepts/04-fair.png) in one pass, following concepts/themes/THEME-CONTRACT.md. Same build as
 // scripts/themes/library-world.mjs (its helpers and checks), with the fair's own coast, places and props:
 //   public/pixi-art/themes/fair/  ground.svg, ground-rN-cN.svg tiles, deck SVGs, reuse/ (home props copied in), art.json
-//   rive/web/themes/fair/         world.json, walk-world.json, harbor.json, placements.json, paths.json
+//   assets/world/themes/fair/         world.json, walk-world.json, harbor.json, placements.json, paths.json
 // The layout is written in CONCEPT pixels (1536x1024 picture) and mapped to world units by T().
 // Run:  node scripts/themes/fair-world.mjs   (then node scripts/themes/fair-preview.mjs)
 // Boss 6 Nov: BIG and spacious (land ~1.8x home), wide paths, a big round centre plaza (zones.centre) whose landmark is a
 // The base pass reserves stable prop ids; fair-centre and fair-finish install locked Fair 5, 40 sleepers and clear activity areas
 // (activity-N) and open stall rows (stalls-N) left empty for later.
 import {readFileSync, writeFileSync, mkdirSync, copyFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 
-const ART = 'public/pixi-art/themes/fair/', DATA = 'rive/web/themes/fair/';
+const ART = 'public/pixi-art/themes/fair/', DATA = 'assets/world/themes/fair/';
 mkdirSync(ART + 'reuse', {recursive: true}); mkdirSync(DATA, {recursive: true});
 const W = 7250, HH = 4850, S = 4.5, OX = 420, OY = 420;
 const r1 = v => Math.round(v * 10) / 10;

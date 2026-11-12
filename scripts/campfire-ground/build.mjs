@@ -84,7 +84,7 @@ export async function build(){
  for(const tile of art.ground.tiles){if(!tile.src.startsWith('expansion/ground-'))throw Error('Unexpected tile '+tile.src);const svg=tileSvg(tile,{sourceSvg:composed.svg});fs.writeFileSync(A+tile.src,svg);sizes.push(Buffer.byteLength(svg));}
  // Only route widths are updated. Props, stage, water, walk data and manifest
  // are owned by other packages and must remain byte-for-byte untouched.
- const file=rootDir+'rive/web/themes/community/world.json',world=JSON.parse(fs.readFileSync(file));world.pathWidths=composed.report.widths;fs.writeFileSync(file,JSON.stringify(world,null,2)+'\n');
+ const file=rootDir+'assets/world/themes/community/world.json',world=JSON.parse(fs.readFileSync(file));world.pathWidths=composed.report.widths;fs.writeFileSync(file,JSON.stringify(world,null,2)+'\n');
  fs.writeFileSync(dir+'ground-plan.json',JSON.stringify(composed.report,null,2)+'\n');
  console.log(JSON.stringify({tiles:sizes.length,totalBytes:sizes.reduce((a,b)=>a+b),minBytes:Math.min(...sizes),maxBytes:Math.max(...sizes),...composed.report.counts}));
 }

@@ -3,11 +3,11 @@ import sharp from 'sharp';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const poses=read('src/pixi/sleep-poses.json');
 for(const theme of ['sunflower']) {
- const A=`public/pixi-art/themes/${theme}/`,D=`rive/web/themes/${theme}/`;
+ const A=`public/pixi-art/themes/${theme}/`,D=`assets/world/themes/${theme}/`;
  const OUT='../concepts/themes/work/sunflower/legacy-review/';mkdirSync(OUT,{recursive:true});
  const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
  const base=makeMap(theme,{world,walk,harbor,sleepers:[]});

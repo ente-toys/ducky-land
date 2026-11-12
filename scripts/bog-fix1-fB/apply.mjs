@@ -1,7 +1,7 @@
 // fB only: idempotent patch, safe to run after the other fix1 workers' patches.
 // Coordinates are authored planting pockets, never random/area scatter.
 import fs from 'node:fs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const root='public/pixi-art/themes/bog-arena/';
 const read=p=>JSON.parse(fs.readFileSync(p)),write=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n');
 const art=read(root+'art.json'),data=read('src/pixi/bog-environment.json');

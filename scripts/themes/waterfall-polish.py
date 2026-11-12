@@ -4,7 +4,7 @@ from pathlib import Path
 from shapely.geometry import Point, Polygon, LineString, box
 from shapely.ops import unary_union
 from shapely import affinity
-R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/waterfall'; D=R/'rive/web/themes/waterfall'
+R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/waterfall'; D=R/'assets/world/themes/waterfall'
 r=random.Random(5253)
 read=lambda f:json.loads((A/f).read_text())
 a=read('waterfall-base-art.json'); w=read('waterfall-base-world.json'); walk=read('waterfall-base-walk.json'); beds=read('waterfall-sleepers.json')

@@ -1,4 +1,4 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import{mapFor}from'../../src/pixi/island-maps.js';import{geometry,inPoly,inShape}from'../../rive/web/island-geometry.mjs';
+import fs from 'node:fs';import assert from 'node:assert/strict';import{mapFor}from'../../src/pixi/island-maps.js';import{geometry,inPoly,inShape}from'../../assets/world/island-geometry.mjs';
 const p=JSON.parse(fs.readFileSync('scripts/bigger-community/plan.json')),m=mapFor('community'),n=m.nav(),checks=[];
 for(const home of p.homes){const[x,y]=home.door;assert.ok(n.walkable(x,y),`${home.id} door is open`);const r=n.route(m.spawn.x,m.spawn.y,x,y);assert.deepEqual(r.at(-1),[x,y],home.id+' connected');checks.push({id:home.id,community:home.community,door:home.door,connected:true});}
 for(const work of p.workStops){assert.ok(n.walkable(...work.point),work.name+' open approach');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...work.point).at(-1),work.point,work.name+' connected');}
