@@ -1,4 +1,4 @@
-import {Quaternion,Vector3} from 'three';
+import {Quaternion,Vector3} from './globe-math.js';
 import {transport} from './sphere.js';
 import {SURFACE_RADIUS} from './three-globe-math.js';
 

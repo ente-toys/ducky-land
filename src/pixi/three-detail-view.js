@@ -1,5 +1,5 @@
 import {surfaceCoordinates} from './three-globe-math.js';
-import {Mesh,MeshBasicMaterial,PlaneGeometry} from 'three';
+import {Mesh,MeshBasicMaterial,PlaneGeometry} from './globe-mesh.js';
 import {DETAIL_BLEND_START} from './three-detail-budget.js';
 
 // A handoff is a viewport image, not an island patch. Morphing the curved

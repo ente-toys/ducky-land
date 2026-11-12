@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PerspectiveCamera,Quaternion,Vector3} from 'three';
+import {PerspectiveCamera,Quaternion,Vector3} from '../src/pixi/globe-math.js';
 import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import {focusQuaternion,lockSurfaceAnchor} from '../src/pixi/three-globe-math.js';
 import {alignIslandNorth,approachProgress} from '../src/pixi/three-island-approach.js';

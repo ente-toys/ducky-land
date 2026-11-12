@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Quaternion,Vector3,Group,Object3D} from 'three';
+import {Quaternion,Vector3} from '../src/pixi/globe-math.js';
+import {Group,Object3D,Vector3 as ReferenceVector} from 'three';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {ISLETS} from '../src/pixi/islets.js';
 import {focusQuaternion,islandQuaternion,surfacePoint,trackballPoint,visiblePoint} from '../src/pixi/three-globe-math.js';
@@ -25,9 +26,9 @@ test('focusing any island centres its normal and preserves north and east, inclu
 test('island patches have one parent transform and no relative movement during rotation',()=>{
   const globe=new Group();
   const patches=WORLD_ISLANDS.map(frame=>{const patch=new Object3D();patch.position.fromArray(frame.center).multiplyScalar(1.007);patch.quaternion.copy(islandQuaternion(frame));globe.add(patch);return patch;});
-  const before=patches.map(p=>p.getWorldPosition(new Vector3()));
+  const before=patches.map(p=>p.getWorldPosition(new ReferenceVector()));
   globe.quaternion.setFromUnitVectors(trackballPoint(400,300,400,300,250),trackballPoint(540,230,400,300,250));globe.updateMatrixWorld(true);
-  const after=patches.map(p=>p.getWorldPosition(new Vector3()));
+  const after=patches.map(p=>p.getWorldPosition(new ReferenceVector()));
   for(let i=0;i<patches.length;i++)for(let j=0;j<patches.length;j++)assert.ok(Math.abs(before[i].distanceTo(before[j])-after[i].distanceTo(after[j]))<1e-12);
 });
 test('far-side heart anchors are occluded by the sphere and front anchors remain visible',()=>{

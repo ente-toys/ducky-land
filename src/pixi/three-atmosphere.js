@@ -1,12 +1,13 @@
-import * as THREE from 'three';
+import {smoothstep} from './globe-math.js';
+import * as Globe from './globe-mesh.js';
 import {PALETTE} from './palette.js';
 
 // Water stays below the island surface. Only its lighting normals move, so
 // shorelines, island artwork and the zoom/picking sphere remain unchanged.
 export function createGlobeAtmosphere(globe,scene,planetShade){
   const time={value:0};
-  const water=new THREE.ShaderMaterial({
-    uniforms:{seaColor:{value:new THREE.Color(PALETTE.water)},planetShade,time},
+  const water=new Globe.ShaderMaterial({
+    uniforms:{seaColor:{value:new Globe.Color(PALETTE.water)},planetShade,time},
     vertexShader:`
       varying vec3 oceanPoint; varying vec3 oceanNormal; varying vec3 oceanView; varying mat3 oceanBasis;
       void main(){
@@ -38,9 +39,9 @@ export function createGlobeAtmosphere(globe,scene,planetShade){
   });
 
 
-  const layer=new THREE.Group();layer.name='Translucent atmospheric clouds';globe.add(layer);
-  const cloudMap=new THREE.TextureLoader().load('/globe-atmosphere/earth-clouds.png');
-  cloudMap.wrapS=THREE.RepeatWrapping;cloudMap.anisotropy=4;
+  const layer=new Globe.Group();layer.name='Translucent atmospheric clouds';globe.add(layer);
+  const cloudMap=new Globe.TextureLoader().load('/globe-atmosphere/earth-clouds.png');
+  cloudMap.wrapS=Globe.RepeatWrapping;cloudMap.anisotropy=4;
   const cloudShader={
     vertexShader:`
       varying vec3 cloudPoint; varying vec3 cloudNormal; varying vec3 cloudView;
@@ -67,15 +68,15 @@ export function createGlobeAtmosphere(globe,scene,planetShade){
         #include <colorspace_fragment>
       }`
   };
-  const material=new THREE.ShaderMaterial({...cloudShader,uniforms:{cloudMap:{value:cloudMap},opacity:{value:.55},shadow:{value:0}},transparent:true,depthWrite:false});
-  const cloudGeometry=new THREE.SphereGeometry(1,96,64);
-  const clouds=new THREE.Mesh(cloudGeometry,material);clouds.scale.setScalar(1.010);clouds.name='Wispy cloud atmosphere';layer.add(clouds);
-  const shadowMaterial=new THREE.ShaderMaterial({...cloudShader,uniforms:{cloudMap:{value:cloudMap},opacity:{value:.075},shadow:{value:1}},transparent:true,depthWrite:false});
-  const shadows=new THREE.Mesh(cloudGeometry,shadowMaterial);shadows.scale.setScalar(1.0015);shadows.name='Atmospheric cloud shadows';layer.add(shadows);
+  const material=new Globe.ShaderMaterial({...cloudShader,uniforms:{cloudMap:{value:cloudMap},opacity:{value:.55},shadow:{value:0}},transparent:true,depthWrite:false});
+  const cloudGeometry=new Globe.SphereGeometry(1,96,64);
+  const clouds=new Globe.Mesh(cloudGeometry,material);clouds.scale.setScalar(1.010);clouds.name='Wispy cloud atmosphere';layer.add(clouds);
+  const shadowMaterial=new Globe.ShaderMaterial({...cloudShader,uniforms:{cloudMap:{value:cloudMap},opacity:{value:.075},shadow:{value:1}},transparent:true,depthWrite:false});
+  const shadows=new Globe.Mesh(cloudGeometry,shadowMaterial);shadows.scale.setScalar(1.0015);shadows.name='Atmospheric cloud shadows';layer.add(shadows);
   let last=-Infinity,previousFade=-1;
   return {water,cloudCount:1,get phase(){return time.value;},destroy(){cloudMap.dispose();},
     update(t,distance,reduced=false){
-      const fade=THREE.MathUtils.smoothstep(distance,1.7,3.1),changed=Math.abs(fade-previousFade)>.001;
+      const fade=smoothstep(distance,1.7,3.1),changed=Math.abs(fade-previousFade)>.001;
       if(changed){previousFade=fade;layer.visible=fade>.001;material.uniforms.opacity.value=fade*.55;shadowMaterial.uniforms.opacity.value=fade*.075;}
       const interval=distance>1.8?1/30:1/15;
       if(t-last<interval-.0005)return changed;

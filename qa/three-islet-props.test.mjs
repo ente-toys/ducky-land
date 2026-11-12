@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {DOMParser,XMLSerializer} from '@xmldom/xmldom';
 import * as THREE from 'three';
+import {Scene} from '../src/pixi/globe-mesh.js';
 import {createIsletStanding,isletCardMaterial} from '../src/pixi/three-islet-props.js';
 import {ISLETS,ISLET_META} from '../src/pixi/islets.js';
 
@@ -12,7 +13,7 @@ test('one upright islet drawing stays opaque across zoom ownership and disappear
  globalThis.document={createElement:tag=>{assert.equal(tag,'canvas');return createCanvas(1,1);}};
  globalThis.DOMParser=DOMParser;globalThis.XMLSerializer=XMLSerializer;
  const rasterize=async svg=>{const c=createCanvas(512,512);c.getContext('2d').drawImage(await loadImage(Buffer.from(svg)),0,0,512,512);return c;};
- const scene=new THREE.Scene(),frame=ISLETS.find(i=>i.art==='05-lighthouse-rock'),blend={value:0};
+ const scene=new Scene(),frame=ISLETS.find(i=>i.art==='05-lighthouse-rock'),blend={value:0};
  let view;
  try{
   view=await createIsletStanding(scene,frame,readFileSync(new URL('../public/pixi-art/islets/05-lighthouse-rock.svg',import.meta.url),'utf8'),blend,{rasterize});

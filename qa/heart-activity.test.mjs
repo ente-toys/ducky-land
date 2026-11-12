@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {createHeartLocations,heartArtContains} from '../src/pixi/heart-activity.js';
 import sharp from 'sharp';
-import {Quaternion} from 'three';
+import {Quaternion} from '../src/pixi/globe-math.js';
 import {rotateGlobeFromScreen} from '../src/pixi/three-globe-math.js';
 import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import {ISLETS} from '../src/pixi/islets.js';

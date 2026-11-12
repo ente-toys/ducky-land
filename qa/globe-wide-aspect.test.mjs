@@ -5,7 +5,9 @@ import {JSDOM} from 'jsdom';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {fileURLToPath} from 'node:url';
 import {readFile} from 'node:fs/promises';
-import {CanvasTexture,Group,Matrix3,Mesh,MeshBasicMaterial,PerspectiveCamera,PlaneGeometry,Quaternion,Raycaster,Scene,ShaderLib,Vector2,Vector3,Vector4} from 'three';
+import {BufferGeometry,CanvasTexture,Float32BufferAttribute,Matrix3,Mesh,MeshBasicMaterial as ReferenceMaterial,PerspectiveCamera as ReferenceCamera,PlaneGeometry,Raycaster,ShaderLib,Vector2,Vector3,Vector4} from 'three';
+import {PerspectiveCamera,Quaternion} from '../src/pixi/globe-math.js';
+import {Scene,Group as GlobeGroup,MeshBasicMaterial} from '../src/pixi/globe-mesh.js';
 import {DETAIL_CAPTURE_SCALE,detailViewport,detailSize,detailCamera,detailBlend} from '../src/pixi/three-detail-view.js';
 import {liveSurfaceBounds,liveSurfaceNeedsUpdate,liveSurfaceGeometry,captureFeather,liveCaptureEdgeShader,liveCaptureProjection} from '../src/pixi/three-live-geometry.js';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
@@ -30,7 +32,7 @@ function assertViewport(mesh,width,height){
   const scale=shader.uniforms.detailCaptureScale.value;
   // Use the actual plane triangles and UVs. Every viewport corner, edge and
   // interior pixel must have a triangle and sample the same capture location.
-  const {position,uv}=mesh.geometry.attributes,indices=mesh.geometry.index.array;
+  const {position,uv}=mesh.geometry.attributes,indices=mesh.geometry.indices;
   for(const sx of [0,.01,.25,.5,.75,.99,1])for(const sy of [0,.01,.5,.99,1]){
     const x=sx*2-1,y=1-sy*2;
     let hit=false;
@@ -47,8 +49,8 @@ function assertViewport(mesh,width,height){
 
 test('Campfire handoff covers every viewport edge throughout zoom-out, even after a half turn',()=>{
   for(const [width,height]of sizes)for(const heading of [0,.7,Math.PI/2,Math.PI])for(const scale of [1,DETAIL_CAPTURE_SCALE]){
-    const size=detailSize(width,height,2),texture=new CanvasTexture({width:size.width,height:size.height}),viewport=detailViewport(texture,scale),scene=new Scene(),globe=new Group();
-    scene.add(globe,viewport);globe.quaternion.copy(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),heading).multiply(focusQuaternion(frame)));scene.updateMatrixWorld(true);
+    const size=detailSize(width,height,2),texture=new CanvasTexture({width:size.width,height:size.height}),viewport=detailViewport(texture,scale),scene=new Scene(),globe=new GlobeGroup();
+    scene.add(globe,viewport);globe.quaternion.copy(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),heading).multiply(focusQuaternion(frame)));
     assert.ok(Math.max(size.width,size.height)<=1536);
     assert.ok(Math.abs(size.width/size.height-width/height)<.003);
     // The same texture has a nonidentity atlas matrix for the spherical mesh.
@@ -58,7 +60,7 @@ test('Campfire handoff covers every viewport edge throughout zoom-out, even afte
       const t=atlasTransform(frame.width,frame.height,flatRigid(frame.id,frame.id),cameraMatrix(camera,size.width,size.height),size.width,size.height);
       texture.matrixAutoUpdate=false;texture.matrix=new Matrix3().set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
       // Rotating the world does not parent, rotate or rescale the viewport.
-      assert.equal(viewport.parent,scene);assert.ok(viewport.matrixWorld.equals(scene.matrixWorld));
+      assert.equal(viewport.parent,scene);assert.deepEqual(viewport.quaternion.toArray(),[0,0,0,1]);
       viewport.material.opacity=detailBlend(altitude);assertViewport(viewport,width,height);
     }
     viewport.geometry.dispose();viewport.material.dispose();texture.dispose();
@@ -70,7 +72,7 @@ test('single capture projection ends at exact overscan UV positions with constan
   liveCaptureProjection(shader,uniform,DETAIL_CAPTURE_SCALE);
   assert.equal(shader.uniforms.liveCaptureBlend,uniform,'projection uses the same transition state as the bridge');
   assert.ok(shader.vertexShader.includes('float captureW=mix(gl_Position.w,1.,liveCaptureBlend);'),'flat endpoint must stop perspective-distorting capture UVs');
-  const camera=new PerspectiveCamera(35,2560/1080,.001,20);camera.position.z=1.23;camera.updateMatrixWorld();
+  const camera=new ReferenceCamera(35,2560/1080,.001,20);camera.position.z=1.23;camera.updateMatrixWorld();
   const span=2*Math.tan(35*Math.PI/360)*.23*WORLD_GEO.Rw,size=detailSize(2560,1080,2);
   const native=detailCamera(frame,map,{fov:35,altitude:.23,radius:WORLD_GEO.Rw,point:{x:900,y:-400},width:2560,height:1080},size.width,size.height,1,{x:0,y:0},DETAIL_CAPTURE_SCALE);
   const t=atlasTransform(frame.width,frame.height,flatRigid(frame.id,frame.id),cameraMatrix(native,size.width,size.height),size.width,size.height);
@@ -117,9 +119,10 @@ test('independent globe tessellations cross in depth, so live detail must own it
   geometry.computeVertexNormals();geometry.computeBoundingSphere();
   const span=2*Math.tan(35*Math.PI/360)*.381*WORLD_GEO.Rw;
   const capture=liveSurfaceGeometry(frame,{x:900,y:-400,width:span*2560/1080,height:span},frame.width,frame.height,WORLD_GEO.Rw);
-  const material=new MeshBasicMaterial(),atlas=new Mesh(geometry,material),live=new Mesh(capture,material);
+  const captureReference=new BufferGeometry().setIndex([...capture.indices]).setAttribute('position',new Float32BufferAttribute(capture.attributes.position.array,3));
+  const material=new ReferenceMaterial(),atlas=new Mesh(geometry,material),live=new Mesh(captureReference,material);
   atlas.quaternion.copy(focusQuaternion(frame));live.quaternion.copy(atlas.quaternion);atlas.updateMatrixWorld();live.updateMatrixWorld();
-  const camera=new PerspectiveCamera(35,2560/1080,.001,20);camera.position.z=1.381;camera.updateMatrixWorld();
+  const camera=new ReferenceCamera(35,2560/1080,.001,20);camera.position.z=1.381;camera.updateMatrixWorld();
   const ray=new Raycaster();let front=0,behind=0;
   for(let y=-.8;y<=.81;y+=.2)for(let x=-.8;x<=.81;x+=.2){
     ray.setFromCamera(new Vector2(x,y),camera);
@@ -127,7 +130,7 @@ test('independent globe tessellations cross in depth, so live detail must own it
     if(b.distance<a.distance)front++;else behind++;
   }
   assert.ok(front>0&&behind>0,'same-radius meshes cross each other, producing triangular sharp/blur patches if depth-tested');
-  geometry.dispose();capture.dispose();material.dispose();
+  geometry.dispose();capture.dispose();captureReference.dispose();material.dispose();
 });
 
 test('live capture tapers its own edges without changing texture coordinates or cutting the atlas',()=>{
@@ -156,8 +159,8 @@ const {outputFiles:[bundle]}=await build({
   entryPoints:[fileURLToPath(new URL('../src/pixi/three-game-view.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,
   plugins:[{name:'headless-decoration',setup(b){
     b.onLoad({filter:/three-world-view\.js$/},async args=>({contents:(await readFile(args.path,'utf8'))
-      .replace('new THREE.WebGLRenderer(','new globalThis.__wideQA.Renderer(')
-      .replace('new THREE.TextureLoader(','new globalThis.__wideQA.Loader(')}));
+      .replace('new WebGLRenderer(','new globalThis.__wideQA.Renderer(')
+      .replace('new Globe.TextureLoader(','new globalThis.__wideQA.Loader(')}));
     b.onResolve({filter:/three-(space-backdrop|atmosphere)\.js$/},args=>({path:args.path,namespace:'decoration'}));
     b.onLoad({filter:/.*/,namespace:'decoration'},args=>({contents:args.path.includes('space-backdrop')?
       'export const SPACE_LOOKS={starlight:{shade:0}};export const createSpaceBackdrop=()=>({setRotation(){},setActive(){},destroy(){}});':
@@ -189,7 +192,9 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     constructor(){this.domElement=window.document.createElement('canvas');this.capabilities={getMaxAnisotropy:()=>1};this.info={render:{calls:1}};this.renders=0;this.domElement.getBoundingClientRect=()=>box;this.domElement.setPointerCapture=()=>{};this.domElement.hasPointerCapture=()=>false;renderers.push(this);}
     setPixelRatio(){}setSize(){}dispose(){}
     async compileAsync(){}
-    render(scene,camera){this.scene=scene;this.camera=camera;this.renders++;}
+    render(scene,camera){scene.getObjectByName=name=>{
+      let found;scene.traverse(node=>{if(node.name===name)found=node;});return found;
+    };this.scene=scene;this.camera=camera;this.renders++;}
   }
   const globals={window,document:window.document,location:window.location,devicePixelRatio:2,performance:{now:()=>now},
     Image:class{async decode(){this.bitmap=await loadImage(this.src);}},DOMParser:window.DOMParser,XMLSerializer:window.XMLSerializer,
@@ -219,11 +224,11 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
   const wheel=delta=>renderers[0].domElement.dispatchEvent(new window.WheelEvent('wheel',{clientX:box.width*.37,clientY:box.height*.61,deltaY:delta,cancelable:true}));
   try{
     view=await createThreeGameView(game,host);await settle();for(let i=0;i<4;i++)step();
-    assert.equal(renderers.length,1,'handoff uses the existing Three renderer');
+    assert.equal(renderers.length,1,'handoff uses one globe renderer');
     const renderer=renderers[0];assert.equal(renderer.domElement.dataset.presentation,'native-pixi','initial close view');
     const renders=renderer.renders,flat=renderer.scene?.getObjectByName('Live viewport handoff'),version=flat?.material.map.version;
     for(let i=0;i<5;i++)step();
-    assert.equal(renderer.renders,renders,'native close-up skips Three draws');assert.equal(flat?.material.map.version,version,'native close-up skips texture uploads');
+    assert.equal(renderer.renders,renders,'native close-up skips globe draws');assert.equal(flat?.material.map.version,version,'native close-up skips texture uploads');
     assert.ok(nativeRenders>0);assert.equal(nativeProps.at(-1),true,'native close-up draws its own upright islet props');assert.equal(canvas.style.visibility,'visible');
     const beforeWalk=nativeRenders;
     const assertFollowCentre=()=>{
@@ -260,7 +265,7 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
     assert.equal(game.externalCamera.x,game.player.x,'resuming follow starts at the current pose instead of restoring stale pre-pan lag');
     assertFollowCentre();
     wheel(300);for(let i=0;i<3;i++)step();
-    assert.equal(renderer.domElement.dataset.presentation,'three-globe','zoom-out camera: '+renderer.camera.position.z);
+    assert.equal(renderer.domElement.dataset.presentation,'webgl-globe','zoom-out camera: '+renderer.camera.position.z);
     const globe=renderer.scene.getObjectByName('World: ocean, islands, islets and activity anchors');
     globe.quaternion.premultiply(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),.7));
     for(const delta of [80,100,100]){
@@ -270,10 +275,10 @@ for(const [width,height]of sizes)test(`real handoff zoom-out/rotation/resize at 
       assert.equal(viewport.parent,renderer.scene,'handoff must not inherit the globe rotation');
       const surface=renderer.scene.getObjectByName('Live island detail');
       assert.equal(canvas.style.visibility,'hidden','overscan native canvas is captured, not displayed as a second layer');
-      assert.equal(nativeProps.at(-1),false,'capture omits upright islet props that are rendered once by Three');
+      assert.equal(nativeProps.at(-1),false,'capture omits upright islet props that are rendered once by the globe');
       assert.equal(isletProp.visible,true,'temporary capture suppression restores native ownership');
       const lighthouse=renderer.scene.getObjectByName('Standing 05-lighthouse-rock/lighthouse');
-      assert.ok(lighthouse?.visible,'the independent Three lighthouse remains the visible scenery owner');
+      assert.ok(lighthouse?.visible,'the globe lighthouse remains the visible scenery owner');
       assert.equal(lighthouse.material.userData.flatBlend.value,viewport.material.opacity,'the single lighthouse follows the same projection morph as its captured ground');
       assert.ok(lighthouse.renderOrder>surface.renderOrder,'upright lighthouse draws above the captured surface');
       const isletGround=globe.children.find(p=>p.userData?.id===isletFrame.id);

@@ -1,4 +1,5 @@
-import {PlaneGeometry,Vector2} from 'three';
+import {Vector2} from './globe-math.js';
+import {PlaneGeometry} from './globe-mesh.js';
 import {surfacePoint} from './three-globe-math.js';
 
 export function liveSurfaceBounds(bounds){return {...bounds,width:bounds.width*1.8,height:bounds.height*1.8};}
@@ -22,7 +23,6 @@ export function liveSurfaceGeometry(frame,bounds,width,height,radius) {
     const x=bounds.x+pos.getX(k),y=bounds.y-pos.getY(k),p=surfacePoint(frame,x,y,radius);
     pos.setXYZ(k,p.x,p.y,p.z);uv.setXY(k,x/width+.5,.5-y/height);
   }
-  geometry.computeVertexNormals();geometry.computeBoundingSphere();
   return geometry;
 }
 

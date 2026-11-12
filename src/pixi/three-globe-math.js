@@ -1,4 +1,4 @@
-import {Matrix4, Quaternion, Vector3, Vector2, Raycaster, Sphere} from 'three';
+import {Quaternion, Vector3} from './globe-math.js';
 import {expMap, logMap} from './sphere.js';
 
 export const SURFACE_RADIUS=1.001;
@@ -28,8 +28,12 @@ export function surfaceCoordinates(frame,point,radius) {
 
 export function surfaceUnderPointer(camera,x,y,width,height) {
   camera.updateMatrixWorld(true);
-  const ray=new Raycaster();ray.setFromCamera(new Vector2(x/width*2-1,1-y/height*2),camera);
-  return ray.ray.intersectSphere(new Sphere(new Vector3(),SURFACE_RADIUS),new Vector3())?.normalize()??null;
+  const origin=camera.position;
+  const ray=new Vector3(x/width*2-1,1-y/height*2,.5).unproject(camera).sub(origin).normalize();
+  const along=-ray.dot(origin),disc=along*along-origin.lengthSq()+SURFACE_RADIUS*SURFACE_RADIUS;
+  if(disc<0)return null;
+  const root=Math.sqrt(disc),near=along-root,far=along+root;
+  return far<0?null:ray.multiplyScalar(near>=0?near:far).addScaledVector(origin,1).normalize();
 }
 
 // Keep the grabbed surface point under the same screen pixel as the camera approaches.
@@ -79,8 +83,7 @@ export function pickSurfacePatch(camera,quaternion,x,y,width,height,frames,radiu
 
 // One rigid basis for each existing island. No remeshing, bending or changing its UVs.
 export function islandQuaternion(frame) {
-  return new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(
-    new Vector3(...frame.east), new Vector3(...frame.north), new Vector3(...frame.center)));
+  return new Quaternion().setFromBasis(frame.east,frame.north,frame.center);
 }
 export const focusQuaternion = frame => islandQuaternion(frame).invert();
 

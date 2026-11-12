@@ -1,6 +1,8 @@
 import {createFrameClock} from './frame-clock.js';
 import {createThreePirates} from './three-pirates.js';
-import * as THREE from 'three';
+import {WebGLRenderer} from './globe-webgl.js';
+import {PerspectiveCamera,Quaternion,Vector2,Vector3,clamp} from './globe-math.js';
+import * as Globe from './globe-mesh.js';
 import {createIsletStanding} from './three-islet-props.js';
 import {liveSurfaceGeometry,liveSurfaceBounds,liveSurfaceNeedsUpdate,captureFeather,liveCaptureEdgeShader,liveCaptureProjection} from './three-live-geometry.js';
 import {detailViewport,DETAIL_CAPTURE_SCALE} from './three-detail-view.js';
@@ -21,30 +23,30 @@ import {SPACE_LOOKS,createSpaceBackdrop} from './three-space-backdrop.js';
 import {createGlobeAtmosphere} from './three-atmosphere.js';
 import {globePreviewUrl} from './globe-preview.js';
 
-const ease=x=>{x=THREE.MathUtils.clamp(x,0,1);return x*x*(3-2*x);};
-const out=x=>1-Math.pow(1-THREE.MathUtils.clamp(x,0,1),3);
+const ease=x=>{x=clamp(x,0,1);return x*x*(3-2*x);};
+const out=x=>1-Math.pow(1-clamp(x,0,1),3);
 const HEART='<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.5 4 19 17.3"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>';
 
-// Continuous Three.js world. Pixi remains the island renderer and simulation.
+// The globe owns the perspective camera. Pixi supplies the live island scene.
 export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, onTap=()=>{}, onSelect=()=>{}, onReady=()=>{}, onInteract=()=>{},surfaceAtPointer=()=>null,pirateFleet=null,pirateProjection=()=>null,initialIsland='home',isletProjection=()=>null,isletCapture=()=>false}={}) {
-  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  const renderer=new WebGLRenderer();
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.NoToneMapping;
   renderer.domElement.setAttribute('aria-label','Rotating Ducky Land globe');
-  renderer.domElement.dataset.renderer='threejs';
+  renderer.domElement.dataset.renderer='webgl-globe';
   renderer.domElement.style.touchAction='none';renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','application');
   host.append(renderer.domElement);
   renderer.domElement.style.zIndex='1';renderer.domElement.style.position='absolute';renderer.domElement.style.inset='0';
   let spaceStyle=new URLSearchParams(location.search).get('space')??'starlight';
   if(!SPACE_LOOKS[spaceStyle])spaceStyle='starlight';
   const backdrop=createSpaceBackdrop(host,spaceStyle),planetShade={value:SPACE_LOOKS[spaceStyle].shade};
-  const scene=new THREE.Scene(), globe=new THREE.Group();
+  const scene=new Globe.Scene(), globe=new Globe.Group();
   const demand=new RenderDemand();
+  const redraw=()=>demand.invalidate();
+  renderer.domElement.addEventListener('webglcontextrestored',redraw);
   globe.name='World: ocean, islands, islets and activity anchors'; scene.add(globe);
-  const camera=new THREE.PerspectiveCamera(35,1,.2,20); camera.position.set(0,0,EARTH_DISTANCE);
+  const camera=new PerspectiveCamera(35,1,.2,20); camera.position.set(0,0,EARTH_DISTANCE);
   const atmosphere=createGlobeAtmosphere(globe,scene,planetShade);
-  const ocean=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),atmosphere.water);
+  const ocean=new Globe.Mesh(new Globe.SphereGeometry(1,96,64),atmosphere.water);
   ocean.name='Ocean'; globe.add(ocean);
 
   const pirates=pirateFleet?await createThreePirates(scene,pirateFleet):null;const ambientClock=new AmbientDrawClock();
@@ -62,23 +64,23 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   for(let k=0;k<460;k++) {
     const y=1-2*(k+.5)/460,lon=k*2.399963229728653,frame=sphereFrame(lon,Math.asin(y));
     for(let j=0;j<4;j++) for(const t of [j/4,(j+1)/4]) {
-      const p=new THREE.Vector3(...frame.center).multiplyScalar(1.002)
-        .addScaledVector(new THREE.Vector3(...frame.east),(t-.5)*.028)
-        .addScaledVector(new THREE.Vector3(...frame.north),Math.sin(t*Math.PI*2)*.0025).normalize().multiplyScalar(1.002);
-      wavePositions.push(...p);
+      const p=new Vector3(...frame.center).multiplyScalar(1.002)
+        .addScaledVector(new Vector3(...frame.east),(t-.5)*.028)
+        .addScaledVector(new Vector3(...frame.north),Math.sin(t*Math.PI*2)*.0025).normalize().multiplyScalar(1.002);
+      wavePositions.push(p.x,p.y,p.z);
     }
   }
-  const waves=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(wavePositions,3)),new THREE.LineBasicMaterial({color:PALETTE.cream,transparent:true,opacity:.25}));
+  const waves=new Globe.LineSegments(new Globe.BufferGeometry().setAttribute('position',new Globe.Float32BufferAttribute(wavePositions,3)),new Globe.LineBasicMaterial({color:PALETTE.cream,transparent:true,opacity:.25}));
   waves.name='Water marks'; globe.add(waves);
 
-  const loader=new THREE.TextureLoader(), patches=[], cleanups=[],isletStanding=[],assetState={disposed:false};
+  const loader=new Globe.TextureLoader(), patches=[], cleanups=[()=>renderer.domElement.removeEventListener('webglcontextrestored',redraw)],isletStanding=[],assetState={disposed:false};
   const assetStart=performance.now();
   async function patch(frame,width,height,url,island=false) {
     // Islets use the ground-only split directly. Loading the full SVG here as
     // well would decode/rasterize it twice and reintroduce baked upright props.
     const standing=!island?await createIsletStanding(scene,frame,await(await fetch(url)).text()):null;
     const texture=standing?standing.ground:await loader.loadAsync(url);
-    texture.colorSpace=THREE.SRGBColorSpace;
+    texture.colorSpace=Globe.SRGBColorSpace;
     if(assetState.disposed){
       texture.dispose();
       for(const {mesh}of standing?.props??[]){scene.remove(mesh);mesh.geometry.dispose();mesh.material.map.dispose();mesh.material.dispose();}
@@ -86,25 +88,16 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     }
     if(standing)isletStanding.push(standing);
     texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
-    const geometry=new THREE.PlaneGeometry(width,height,island?96:24,island?72:24),positions=geometry.attributes.position;
+    const geometry=new Globe.PlaneGeometry(width,height,island?96:24,island?72:24),positions=geometry.attributes.position;
     for(let k=0;k<positions.count;k++){
       const x=positions.getX(k),y=-positions.getY(k),point=surfacePoint(frame,x,y,WORLD_GEO.Rw);
       positions.setXYZ(k,point.x,point.y,point.z);
     }
-    geometry.computeVertexNormals();geometry.computeBoundingSphere();
-    const mesh=new THREE.Mesh(geometry,
-      new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true,side:THREE.FrontSide}));
-    const atlasUniform={value:0};
-    const atlasMatrix={value:new THREE.Matrix3()};
-    mesh.material.onBeforeCompile=shader=>{
-      planetLighting(shader);
-      shader.uniforms.liveAtlas=atlasUniform;shader.uniforms.atlasMatrix=atlasMatrix;
-      shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform mat3 atlasMatrix; varying vec2 atlasPoint;')
-        .replace('#include <begin_vertex>','#include <begin_vertex>\natlasPoint=(atlasMatrix*vec3(uv,1.)).xy;');
-      // The atlas remains under the live capture, including its feathered edge.
-    };
-    mesh.name=frame.name??frame.art; mesh.userData={id:frame.id,island,frame,width,height,texture,atlasUniform,atlasMatrix};
-    mesh.material.customProgramCacheKey=()=> 'planet-ground';
+    const mesh=new Globe.Mesh(geometry,
+      new Globe.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.04,depthWrite:true}));
+    // The atlas remains under the live capture, including its feathered edge.
+    mesh.material.onBeforeCompile=planetLighting;
+    mesh.name=frame.name??frame.art; mesh.userData={id:frame.id,island,frame,width,height,texture};
     globe.add(mesh); patches.push(mesh); return mesh;
   }
   const assetTasks=[
@@ -152,7 +145,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     demand.invalidate();
   }
   const resizeObserver=new ResizeObserver(resize); resizeObserver.observe(host); resize();
-  const globeRadius=()=>height/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*Math.sqrt(camera.position.z**2-1));
+  const globeRadius=()=>height/(2*Math.tan(camera.fov*Math.PI/360)*Math.sqrt(camera.position.z**2-1));
   function pick(x,y) {
     const hit=pickSurfacePatch(camera,globe.quaternion,x,y,width,height,WORLD_ISLANDS,WORLD_GEO.Rw);
     return hit?patches.find(p=>p.userData.id===hit.id):null;
@@ -181,7 +174,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   }
   function move(e) {
     const p=coordinates(e);if(pointers.has(e.pointerId))pointers.set(e.pointerId,p);
-    if(pinch&&pointers.size>=2){const[a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2;targetAltitude=THREE.MathUtils.clamp(pinch.altitude*pinch.distance/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),.018,7);zoomAnchor=pinch.point?{point:pinch.point,x,y,island:targetAltitude<pinch.altitude?pinch.frame:null,approach:pinch.approach}:null;demand.invalidate();return;}
+    if(pinch&&pointers.size>=2){const[a,b]=[...pointers.values()],x=(a.x+b.x)/2,y=(a.y+b.y)/2;targetAltitude=clamp(pinch.altitude*pinch.distance/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),.018,7);zoomAnchor=pinch.point?{point:pinch.point,x,y,island:targetAltitude<pinch.altitude?pinch.frame:null,approach:pinch.approach}:null;demand.invalidate();return;}
     if(!drag) {const hit=pick(p.x,p.y);renderer.domElement.style.cursor=hit?'pointer':'grab';renderer.domElement.dataset.hoveredIsland=hit?.userData.id??'';return;}
     if(!drag.point||!lockSurfaceAnchor(globe.quaternion,drag.point,camera,p.x,p.y,width,height)){
       drag.point=null;rotateGlobeFromScreen(globe.quaternion,p.x-drag.x,p.y-drag.y,height);
@@ -203,7 +196,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     zoomAnchor=point?{point:point.applyQuaternion(globe.quaternion.clone().invert()),...p}:null;
     transition=null;
     const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?height:1);
-    targetAltitude=THREE.MathUtils.clamp(targetAltitude*Math.exp(delta*.0015),.018,7);
+    targetAltitude=clamp(targetAltitude*Math.exp(delta*.0015),.018,7);
     if(zoomAnchor){
       zoomAnchor.island=delta<0?hit?.userData.frame:null;
       if(zoomAnchor.island)zoomAnchor.approach=previous?.island?.id===zoomAnchor.island.id?previous.approach:null;
@@ -272,10 +265,10 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     const near=Math.max(.001,Math.min(.2,(camera.position.z-1)*.2));
     if(Math.abs(camera.near-near)>1e-7){camera.near=near;camera.updateProjectionMatrix();}
     backdrop.setRotation(globe.quaternion);
-    globe.updateMatrixWorld(true);camera.updateMatrixWorld(true);
-    const centre=new THREE.Vector3(0,0,1).applyQuaternion(globe.quaternion.clone().invert());
+    camera.updateMatrixWorld(true);
+    const centre=new Vector3(0,0,1).applyQuaternion(globe.quaternion.clone().invert());
     if(camera.position.z<2.8&&!transition){
-      const nearest=WORLD_ISLANDS.reduce((a,b)=>new THREE.Vector3(...a.center).dot(centre)>new THREE.Vector3(...b.center).dot(centre)?a:b);
+      const nearest=WORLD_ISLANDS.reduce((a,b)=>new Vector3(...a.center).dot(centre)>new Vector3(...b.center).dot(centre)?a:b);
       if(nearest.id!==selected){selected=nearest.id;onSelect(nearest);}
       if(detailId!==selected){detailId=selected;onDetail(selected);}
     }
@@ -323,10 +316,10 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     await renderer.compileAsync(scene,camera);
     if(!assetState.disposed)renderer.domElement.dataset.assetsReadyMs=(performance.now()-assetStart).toFixed(1);
   });
-  const liveFeather=new THREE.Vector2();
+  const liveFeather=new Vector2();
   let capture=null;
   function createCapture(geometry,texture){
-      const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:0,depthWrite:false,depthTest:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+      const material=new Globe.MeshBasicMaterial({map:texture,transparent:true,alphaTest:0,depthWrite:false,depthTest:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
       material.onBeforeCompile=shader=>{planetLighting(shader);liveCaptureEdgeShader(shader,liveFeather);liveCaptureProjection(shader,liveCaptureBlend,liveCaptureScale);
         // The independently tessellated atlas and live surface intersect even
         // with polygon offset. Live detail owns this coverage; only reject
@@ -334,7 +327,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
         shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <project_vertex>','#include <project_vertex>\ncaptureWorldPoint=(modelMatrix*vec4(transformed,1.)).xyz;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 captureWorldPoint;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(liveCaptureBlend<.001&&dot(captureWorldPoint,cameraPosition-captureWorldPoint)<=0.)discard;');
         shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(any(lessThan(vMapUv,vec2(0.)))||any(greaterThan(vMapUv,vec2(1.))))discard;');};
-      const mesh=new THREE.Mesh(geometry,material);mesh.name='Live island detail';mesh.frustumCulled=false;mesh.renderOrder=100;
+      const mesh=new Globe.Mesh(geometry,material);mesh.name='Live island detail';mesh.frustumCulled=false;mesh.renderOrder=100;
       const viewport=detailViewport(texture,DETAIL_CAPTURE_SCALE);viewport.visible=false;
       return {mesh,viewport};
   }
@@ -344,7 +337,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
     if(bounds&&![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite))return;
     if(live?.id!==id||live.canvasWidth!==canvas.width||live.canvasHeight!==canvas.height){
       clearLiveCanvas();
-      const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;texture.matrixAutoUpdate=false;
+      const texture=new Globe.CanvasTexture(canvas);texture.colorSpace=Globe.SRGBColorSpace;texture.generateMipmaps=false;
       captureFeather(canvas,liveFeather);
       capture??=createCapture(patch.geometry,texture);
       const {mesh,viewport}=capture;
@@ -363,12 +356,12 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       }
     }
     const t=atlasTransform(patch.userData.width,patch.userData.height,placement,matrix,atlasWidth,atlasHeight);
-    const gpuMatrix=patch.userData.atlasMatrix.value;gpuMatrix.set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
-    live.mesh.material.map.matrix.copy(gpuMatrix);patch.userData.atlasUniform.value=1;live.mesh.material.map.needsUpdate=true;demand.invalidate();
+    const texture=live.mesh.material.map;
+    texture.matrix.set(t.a,t.c,t.x,t.b,t.d,t.y,0,0,1);
+    texture.needsUpdate=true;demand.invalidate();
   }
   function clearLiveCanvas(){
     if(!live)return;
-    live.patch.userData.atlasUniform.value=0;
     globe.remove(live.mesh);scene.remove(live.viewport);
     live.mesh.material.map.dispose();
     live.mesh.material.map=live.viewport.material.map=null;
@@ -389,7 +382,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
       for(const c of host.querySelectorAll('.space-backdrop,.space-effects,.heart-overlay'))c.style.visibility=direct?'hidden':'';
       backdrop.setActive(active&&!direct);demand.invalidate();
     }
-    renderer.domElement.dataset.presentation=direct?'native-pixi':'three-globe';
+    renderer.domElement.dataset.presentation=direct?'native-pixi':'webgl-globe';
     renderer.domElement.dataset.detailBlend=blend.toFixed(3);
   }
   function setSpaceStyle(id){spaceStyle=SPACE_LOOKS[id]?id:'starlight';const look=SPACE_LOOKS[spaceStyle];planetShade.value=look.shade;backdrop.setStyle(spaceStyle);renderer.domElement.dataset.spaceStyle=spaceStyle;demand.invalidate();return look;}
@@ -398,7 +391,7 @@ export async function createThreeWorld(host, {onDetail=()=>{}, onFrame=()=>{}, o
   function centreOn(id,x,y,altitude=null,animate=false){
     const frame=WORLD_ISLANDS.find(i=>i.id===id);if(!frame)return;
     const map=mapOf(id),point=surfacePoint(frame,x-map.cx,y-map.cy,WORLD_GEO.Rw).normalize();
-    const to=animate?islandQuaternion(transport(frame,point.toArray())).invert():new THREE.Quaternion().setFromUnitVectors(point.clone().applyQuaternion(globe.quaternion),new THREE.Vector3(0,0,1)).multiply(globe.quaternion);
+    const to=animate?islandQuaternion(transport(frame,point.toArray())).invert():new Quaternion().setFromUnitVectors(point.clone().applyQuaternion(globe.quaternion),new Vector3(0,0,1)).multiply(globe.quaternion);
     selected=id;onSelect(frame);zoomAnchor=null;
     if(altitude!==null)targetAltitude=altitude;
     if(animate)transition={at:performance.now(),duration:reduced?1:600,from:globe.quaternion.clone(),to,z0:camera.position.z,z1:1+targetAltitude};

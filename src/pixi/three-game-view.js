@@ -94,7 +94,7 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     const sameArt=shown===mapId&&game.artShown===mapId;
     const nextDirect=nextBlend===1&&sameArt&&directDetail(state.altitude,direct,game.artReady(mapId))&&(direct||flatFrames>=2);
     // The native scene follows the browser's paint clock. Throttle only
-    // offscreen simulation and the captures that Three uploads.
+    // offscreen simulation and the captures that the globe uploads.
     if(!direct&&!nextDirect&&now-last<1000/work.hz-.5)return;
     last=now;direct=nextDirect;
     const map=mapOf(id);
@@ -136,7 +136,7 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     if(!direct&&detailVisible&&ready)world.setLiveCanvas(id,game.canvas,flatRigid(id,id),atlasCameraMatrix(game.camera,game.width,game.height,TILT),game.width,game.height,{x:game.camera.x-map.cx,y:game.camera.y-map.cy,width:game.width/zoom,height:game.height/(zoom*TILT)},captureScale());
     home.hidden=!p||state.altitude<.5;
     if(game.nameLayer)game.nameLayer.style.opacity=state.altitude>.5?'0':'';
-    const c=layer.querySelector('canvas[data-renderer="threejs"]');if(c){c.dataset.playerIsland=game.islandId;c.dataset.livePlayerCount=String(game.liveRigs.size);c.dataset.gameIntegrated='true';c.dataset.captureSize=game.width+'x'+game.height;}
+    const c=layer.querySelector('canvas[data-renderer="webgl-globe"]');if(c){c.dataset.playerIsland=game.islandId;c.dataset.livePlayerCount=String(game.liveRigs.size);c.dataset.gameIntegrated='true';c.dataset.captureSize=game.width+'x'+game.height;}
   }
   function pickDetail(screen){
     if(!view||blend===0||!world)return null;

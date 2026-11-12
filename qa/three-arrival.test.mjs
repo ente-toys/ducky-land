@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PerspectiveCamera,Quaternion,Vector3} from 'three';
+import {PerspectiveCamera,Quaternion,Vector3} from '../src/pixi/globe-math.js';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
 import {transport} from '../src/pixi/sphere.js';
 import {surfacePoint,focusQuaternion,lockSurfaceAnchor,zoomDistance,SURFACE_RADIUS} from '../src/pixi/three-globe-math.js';

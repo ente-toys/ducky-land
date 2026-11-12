@@ -1,4 +1,4 @@
-import {Quaternion,Euler} from 'three';
+import {Quaternion,transformMatrix,clamp} from './globe-math.js';
 export const SPACE_LOOKS=Object.freeze({
   starlight:{name:'Quiet starlight',stars:240,shade:.20,star:'#E1EBF2',cross:3},
   storybook:{name:'Storybook orbit',stars:145,shade:.10,star:'#FFF0C7',cross:7},
@@ -13,7 +13,7 @@ export function createSpaceBackdrop(host,initial='starlight'){
   host.prepend(base,fx);
   const ctx=base.getContext('2d'),motion=fx.getContext('2d'),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let look=SPACE_LOOKS[initial]?initial:'starlight',width=1,height=1,dpr=1,raf=0,last=0,active=true,destroyed=false;
-  const twinkles=[],field=[],previous=new Quaternion(),delta=new Quaternion(),turn=new Euler(0,0,0,'YXZ');
+  const twinkles=[],field=[],previous=new Quaternion(),delta=new Quaternion(),rotation=new Float64Array(16), origin={x:0,y:0,z:0};
   const offset={x:0,y:0,roll:0};let hasRotation=false;
   const cross=(c,x,y,r,color,alpha=1)=>{
     c.save();c.globalAlpha=alpha;c.fillStyle=color;c.beginPath();
@@ -60,7 +60,7 @@ export function createSpaceBackdrop(host,initial='starlight'){
   return {setStyle(id){look=SPACE_LOOKS[id]?id:'starlight';paint();},
     setRotation(q){
       if(!hasRotation){previous.copy(q);hasRotation=true;return;}
-      if(!reduced){delta.copy(previous).invert().premultiply(q);turn.setFromQuaternion(delta,'YXZ');offset.x+=turn.y*width*.06;offset.y-=turn.x*height*.06;offset.roll+=turn.z*.06;fx.dataset.parallaxX=offset.x.toFixed(2);fx.dataset.parallaxY=offset.y.toFixed(2);fx.dataset.parallaxLayers='2';}
+      if(!reduced){delta.copy(previous).invert().premultiply(q);transformMatrix(rotation,delta,origin);const y=Math.abs(rotation[9])<.9999999?Math.atan2(rotation[8],rotation[10]):Math.atan2(-rotation[2],rotation[0]);const roll=Math.abs(rotation[9])<.9999999?Math.atan2(rotation[1],rotation[5]):0;offset.x+=y*width*.06;offset.y-=Math.asin(clamp(-rotation[9],-1,1))*height*.06;offset.roll+=roll*.06;fx.dataset.parallaxX=offset.x.toFixed(2);fx.dataset.parallaxY=offset.y.toFixed(2);fx.dataset.parallaxLayers='2';}
       previous.copy(q);
     },
     setActive(value){if(active===value)return;active=value;cancelAnimationFrame(raf);if(value&&!reduced&&!document.hidden)raf=requestAnimationFrame(tick);else motion.clearRect(0,0,width,height);},

@@ -1,12 +1,13 @@
-import * as THREE from 'three';
+import {Vector3} from './globe-math.js';
+import * as Globe from './globe-mesh.js';
 import {PIRATE_ART,pirateMotion,pirateFacing} from './pirate-fleet.js';
 import {WORLD_GEO} from './world-map.js';
 import {visiblePoint} from './three-globe-math.js';
-export async function createThreePirates(scene,fleet,{load=url=>new THREE.TextureLoader().loadAsync(url)}={}){
+export async function createThreePirates(scene,fleet,{load=url=>new Globe.TextureLoader().loadAsync(url)}={}){
  const textures=await Promise.all(PIRATE_ART.map(n=>load('/pixi-art/pirate-ships/'+n+'.svg')));
- textures.forEach(t=>{t.colorSpace=THREE.SRGBColorSpace;});
- const entries=fleet.ships.map(ship=>{const material=new THREE.SpriteMaterial({map:textures[ship.art],transparent:true,depthTest:false,depthWrite:false}),sprite=new THREE.Sprite(material);const flipUniform={value:1};material.onBeforeCompile=shader=>{shader.uniforms.pirateFlip=flipUniform;shader.vertexShader='uniform float pirateFlip;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\n#ifdef USE_MAP\nvMapUv.x=pirateFlip<0.?1.-vMapUv.x:vMapUv.x;\n#endif');};sprite.userData.flipUniform=flipUniform;sprite.center.set(.5,.11);sprite.name='Pirate '+ship.id;scene.add(sprite);return{ship,sprite,flip:{flip:1,flipAge:0}};});
- const ahead=new THREE.Vector3(),delta=new THREE.Vector3();
+ textures.forEach(t=>{t.colorSpace=Globe.SRGBColorSpace;});
+ const entries=fleet.ships.map(ship=>{const material=new Globe.SpriteMaterial({map:textures[ship.art],transparent:true,depthTest:false,depthWrite:false}),sprite=new Globe.Sprite(material);const flipUniform={value:1};material.onBeforeCompile=shader=>{shader.uniforms.pirateFlip=flipUniform;shader.vertexShader='uniform float pirateFlip;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\n#ifdef USE_MAP\nvMapUv.x=pirateFlip<0.?1.-vMapUv.x:vMapUv.x;\n#endif');};sprite.userData.flipUniform=flipUniform;sprite.center.set(.5,.11);sprite.name='Pirate '+ship.id;scene.add(sprite);return{ship,sprite,flip:{flip:1,flipAge:0}};});
+ const ahead=new Vector3(),delta=new Vector3();
  return{update(q,camera,t,dt,reduced,opacity,project=()=>null,viewport=null){let shown=0;
   for(const {ship,sprite,flip}of entries){sprite.position.set(...ship.p).multiplyScalar(1.002).applyQuaternion(q);
    sprite.visible=fleet.enabled&&opacity>.001&&visiblePoint(sprite.position,camera.position)&&sprite.position.dot(delta.copy(camera.position).sub(sprite.position))>.12;if(!sprite.visible)continue;shown++;
