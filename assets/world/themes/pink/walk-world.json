@@ -10270,7 +10270,14 @@
    "rx": 24,
    "ry": 17,
    "shape": "ellipse"
-  }
+  },
+  {"x":1078.3,"y":-542.1,"rx":31,"ry":22.7,"name":"hamlet-ribbonwick-tree-blossom-east-back"},
+  {"x":-11.7,"y":-522.6,"rx":31,"ry":22.7,"name":"hamlet-ribbonwick-tree-blossom-left-back"},
+  {"x":5228.4,"y":625.9,"rx":25.7,"ry":18.8,"name":"hamlet-chirrup-cherry-southwest-edge"},
+  {"x":-678.6,"y":-327.1,"rx":35.4,"ry":23.2,"name":"hamlet-ribbonwick-tree-green-west-back"},
+  {"x":2123.5,"y":782.2,"rx":36.3,"ry":23.8,"name":"hamlet-ribbonwick-tree-green-southeast-back"},
+  {"x":-692.3,"y":386.2,"rx":31.7,"ry":22.3,"name":"hamlet-ribbonwick-tree-green-southwest-back"},
+  {"x":3124.6,"y":6503.3,"rx":26.8,"ry":18.8,"name":"hamlet-tutu-tides-oak-west-low"}
  ],
  "walkways": [
   {

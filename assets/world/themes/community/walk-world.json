@@ -73627,6 +73627,181 @@
           1107
         ]
       ]
+    },
+    {
+      "x": 2340,
+      "y": -196.1,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-north-reading-1"
+    },
+    {
+      "x": 3300,
+      "y": -91.1,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-north-crown-3"
+    },
+    {
+      "x": 4860,
+      "y": -156.1,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-north-heart-2"
+    },
+    {
+      "x": 5550,
+      "y": -101.1,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-north-lilac-3"
+    },
+    {
+      "x": 2830,
+      "y": 5403.9,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-south-reading-2"
+    },
+    {
+      "x": 4200,
+      "y": 5593.9,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-south-meadow-3"
+    },
+    {
+      "x": 5080,
+      "y": 5343.9,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-south-lilac-1"
+    },
+    {
+      "x": 4670,
+      "y": 6583.9,
+      "rx": 23.7,
+      "ry": 16.9,
+      "name": "life-south-coast-3"
+    },
+    {
+      "x": 2480,
+      "y": -106.9,
+      "rx": 31.3,
+      "ry": 22.2,
+      "name": "life-north-reading-2"
+    },
+    {
+      "x": 3440,
+      "y": -216.9,
+      "rx": 31.3,
+      "ry": 22.2,
+      "name": "life-north-crown-1"
+    },
+    {
+      "x": 5790,
+      "y": -146.9,
+      "rx": 31.3,
+      "ry": 22.2,
+      "name": "life-north-lilac-2"
+    },
+    {
+      "x": 4300,
+      "y": 5473.1,
+      "rx": 31.3,
+      "ry": 22.2,
+      "name": "life-south-meadow-1"
+    },
+    {
+      "x": 4760,
+      "y": 6493.1,
+      "rx": 31.3,
+      "ry": 22.2,
+      "name": "life-south-coast-1"
+    },
+    {
+      "x": 2250,
+      "y": -70.7,
+      "rx": 19.5,
+      "ry": 13.9,
+      "name": "life-north-reading-3"
+    },
+    {
+      "x": 4680,
+      "y": -85.7,
+      "rx": 19.5,
+      "ry": 13.9,
+      "name": "life-north-heart-3"
+    },
+    {
+      "x": 2700,
+      "y": 5454.3,
+      "rx": 19.5,
+      "ry": 13.9,
+      "name": "life-south-reading-3"
+    },
+    {
+      "x": 5110,
+      "y": 5464.3,
+      "rx": 19.5,
+      "ry": 13.9,
+      "name": "life-south-lilac-3"
+    },
+    {
+      "x": 4790,
+      "y": 6654.3,
+      "rx": 19.5,
+      "ry": 13.9,
+      "name": "life-south-coast-4"
+    },
+    {
+      "x": 3320,
+      "y": -40.9,
+      "rx": 46.9,
+      "ry": 18.4,
+      "name": "life-north-crown-5"
+    },
+    {
+      "x": 5610,
+      "y": -53.9,
+      "rx": 46.9,
+      "ry": 18.4,
+      "name": "life-north-lilac-4"
+    },
+    {
+      "x": 4270,
+      "y": 5621.1,
+      "rx": 46.9,
+      "ry": 18.4,
+      "name": "life-south-meadow-4"
+    },
+    {
+      "x": 4650,
+      "y": 6621.1,
+      "rx": 46.9,
+      "ry": 18.4,
+      "name": "life-south-coast-5"
+    },
+    {
+      "x": 4740,
+      "y": -252.9,
+      "rx": 30.7,
+      "ry": 21.8,
+      "name": "life-north-heart-1"
+    },
+    {
+      "x": 2680,
+      "y": 5332.1,
+      "rx": 30.7,
+      "ry": 21.8,
+      "name": "life-south-reading-1"
+    },
+    {
+      "x": 5220,
+      "y": 5392.1,
+      "rx": 30.7,
+      "ry": 21.8,
+      "name": "life-south-lilac-2"
     }
   ],
   "walkways": [

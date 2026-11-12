@@ -5695,7 +5695,7 @@
     "sources": {
       "version": 1,
       "theme": "library",
-      "modelSha256": "f6e57ab3e19432d2a020f81156932f4bb06e75565ffdef9b931c4026ca3fe599",
+      "modelSha256": "d763664addabd15d4ab4f8e1859f47667c8c73c62eb7f399818c495c1e3dfaae",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -8190,7 +8190,7 @@
           "sha256": "46b255c73cb26fbe258412408ef50075b8f699a44f2b0a1de58f4c8378442162"
         }
       ],
-      "sha256": "4013baa5ea955357cb4ef22b14b370098374b0ab28b4040aeecc2eae733ca676"
+      "sha256": "554b779810f7c468d8c2c25979d807fd2e0b8a1ca9ad407fbe862280df87b4ce"
     },
     "groundSha256": "7fac6cb3bdcbdc99fabed879ab19ed8aa749f985f09520d41b103d8efaea7d34",
     "src": "/pixi-art/globe/library.svg",
@@ -8215,7 +8215,7 @@
     "sources": {
       "version": 1,
       "theme": "community",
-      "modelSha256": "53edf7d1baaa6731a1de23f67e73a5f1927567330cc0d5f5e552f6ef84d04dde",
+      "modelSha256": "3187de5fa42fe40d3d6566f6728e76209f5a853f45ba11ac1949ffaef3ac6b38",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -9214,7 +9214,7 @@
           "sha256": "46b255c73cb26fbe258412408ef50075b8f699a44f2b0a1de58f4c8378442162"
         }
       ],
-      "sha256": "2e8e7215cf2542406b1e63827920785796424bbcc960903ea8ad158219ebf72f"
+      "sha256": "f2120aaaae596d85b7963266b3e6d60121cb57dbc6836fd2ca307f93ac74f504"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
