@@ -8,7 +8,10 @@ const at=([x,y])=>[(x-278)/.18,(y-204)/.18];
 const wet=p=>HOME_MAP.walk.water.some(w=>inShape(...p,w));
 test('Home former shoreline jetties cross real water and retain walking access',()=>{
  const n=HOME_MAP.nav();
- for(const p of [[3320,3524.5],[1039.015,3241.74],[2304.895,3561.995],[5251.99,1660.2],[4082,5584.44]]){
+ // The west bridge now reaches the southern bank. Sample the sailing channel
+ // on its current physical span, rather than the obsolete jetty midpoint.
+ const west=E.homeArches.find(b=>b.id==='home-west-bridge'),channel=west.a.map((v,k)=>v+(west.b[k]-v)*.3);
+ for(const p of [[3320,3524.5],channel,[2304.895,3561.995],[5251.99,1660.2],[4082,5584.44]]){
   assert.ok(wet(p),'painted water has a matching water collision shape');
   assert.ok(n.walkable(...p),'duck can stand on the deck over water');
   assert.equal(canSail(...p,'home'),p[1]<5000,'boats pass under the canal bridges only');

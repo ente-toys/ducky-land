@@ -193,7 +193,7 @@ export class RoomClient {
       if (pose.id === this.id && self) {
         const previous = changed ? null : this.player;
         this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, docking:self.docking, until:now+self.emoteLeft,
-          pace:previous?.pace ?? 0, heading:previous?.heading ?? null,
+          pace:previous?.pace ?? 0, heading:previous?.heading ?? null, wallGlide:previous?.wallGlide ?? null,
           ice:self.ice?structuredClone(self.ice):null,reducedMotion:self.reducedMotion===true};
         this.pending = this.pending.filter(command => command.seq > self.ack);
         for (const command of this.pending) this.predict(command, now);

@@ -19,12 +19,13 @@ const bobIn=k => k>=1 ? 0 : (1-k)**2*Math.cos(k*Math.PI*1.5);
 const driftBy=(heading,d) => ({x:-Math.sin(heading)*d,y:-Math.cos(heading)*d*.45});
 const atMooring=boat => boatSpots(boat.islandId).some(spot => spot.x === boat.x && spot.y === boat.y);
 
-export async function createTravelView(objects,water,air,decks) {
+export async function createTravelView(objects,water,air,decks,homeBoats=objects) {
   const [sea]=await Promise.all([createSea(water,objects,air)]);
   const harbor=createHarbor(decks,objects);
   const vessels=new Map(), leaving=[], fx=await createSailingFX({water,objects});
   const destroyVessel=entry => {entry.front?.destroy({children:true}); entry.root.destroy({children:true});};
   let disposed=false;
+  let islandId='home';
   let settled=false;
   return {
     fx,
@@ -38,6 +39,7 @@ export async function createTravelView(objects,water,air,decks) {
     transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient(), ...sea.transient()],
     showJetty: mapId => harbor.show(mapId),
     switchIsland(id,shift) {
+      islandId=id;
       harbor.switchIsland(id);
       settled=false;
       if (shift) {
@@ -96,6 +98,9 @@ export async function createTravelView(objects,water,air,decks) {
         entry.root.zIndex=boat.y+2;
         entry.root.visible=visible(boat.x,boat.y,260);
         entry.seat=fx.boat(entry,boat,reduced);
+        const surface=islandId==='home'?homeBoats:objects;
+        if(entry.root.parent!==surface)surface.addChild(entry.root);
+        if(entry.front&&entry.front.parent!==surface)surface.addChild(entry.front);
         entry.occupied=Boolean(boat.occupant); entry.heading=boat.turn ?? Math.PI; entry.x=boat.x; entry.y=boat.y;
         if (entry.born) {
           const k=Math.min(1,(now-entry.born)/1000/BORN);

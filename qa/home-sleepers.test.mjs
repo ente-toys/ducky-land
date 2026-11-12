@@ -1,3 +1,4 @@
+const residentsFollowingTrees=(before,props)=>before.map(b=>{if(!b.tree)return b;const p=props.find(p=>p.id===b.tree);if(!p)throw Error('Missing resident tree '+b.tree);return {...b,x:p.x,y:p.y+14};});
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'vite';
@@ -13,17 +14,17 @@ import outer from '../assets/world/home-sleep-outer.json' with {type:'json'};
 import originalWorld from '../src/world/home/home-original-world.json' with {type:'json'};
 import {setWalkDestination,walkStep} from '../src/gameplay/player-motion.js';
 
-test('Home adds sixty outer sleepers without moving the first eighty, and the room walks around all hundred',async()=>{
+test('Home adds sixty outer sleepers preserving every pose and following moved nod trees, and the room walks around all hundred',async()=>{
  const vite=await createServer({configFile:false,cacheDir:'/private/tmp/home-sleepers-test',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
  try{
   const P=await vite.ssrLoadModule('/src/world/home/placements.js');
   const props=P.createPlacements(),world=P.walkWorld(P.trimWorld(JSON.parse(readFileSync('assets/world/world.json'))),props);
   const beds=P.sleepSpots(world,props,geometry(world).walkable,sleepHalfWidths());
   assert.equal(beds.length,HOME_SLEEP_TOTAL);assert.deepEqual(beds.bad,[]);
-  assert.deepEqual(JSON.parse(JSON.stringify(beds.slice(0,40))),originalBeds,'original positions, poses, flips, trees and animation order survive');
+  assert.deepEqual(JSON.parse(JSON.stringify(beds.slice(0,40))),residentsFollowingTrees(originalBeds,props),'original positions, poses, flips, trees and animation order survive');
   const added=beds.slice(40);
   assert.equal(added.length,60);
-  assert.deepEqual(JSON.parse(JSON.stringify(beds.slice(0,80))),eightyBeds);
+  assert.deepEqual(JSON.parse(JSON.stringify(beds.slice(0,80))),residentsFollowingTrees(eightyBeds,props));
   assert.equal(Object.values(more).flat().length,20);
   for(const bed of beds.slice(80))for(const route of routes)for(const point of route.samples)assert.equal(inShape(...point,sleeperFootprint(bed),16),false,'new residents clear every authored route');
   assert.deepEqual(Object.values(outer).map(s=>s.length),Array(8).fill(5),'five of every approved pose');

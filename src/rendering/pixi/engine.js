@@ -1,4 +1,8 @@
+import {createHomeBoatLayer,homeActorLayer} from './home-surfaces.js';
+import {createHomeSeats} from '../../world/home/home-seats.js';
+import {propDepth,homePropContainer,sortHomeChildren} from '../../world/home/home-visibility.js';
 import {ART_TEXTURE} from './art/art-texture.js';
+import {homeGroundTiles,createHomeGroundLoader,createHomeGroundFallback} from './art/home-ground.js';
 import {createPirateFleet,pirateBoatPoint} from '../../gameplay/pirate-fleet.js';
 import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './environment/home-motion.js';
@@ -59,7 +63,8 @@ import {createWater} from './environment/water.js';
 import {createPlacements, homeDecals, HOME_TILES, HOME_DECKS, HOME_MOUTHS, HOME_GROUND_DECALS, HOME_ORIGIN, decalsFor, deckY, deckX, groundAt, H, JETTIES, sleeperFootprint, sleepSpots, trimWorld, walkWorld} from '../../world/home/placements.js';
 import {sleepHalfWidths} from './environment/sleeper.js';
 import {createInterior} from './interior.js';
-const napWidths = sleepHalfWidths(.88 * .24 * 3);
+import {homeBuildingAt, homeBuildingTarget} from '../../world/home/home-buildings.js';
+const napWidths = sleepHalfWidths(.88 * .24 * 3);   // world half width per sleeping pose
 const world = trimWorld(rawWorld);
 import {geometry, inShape} from '../../../assets/world/island-geometry.mjs';
 import {PALETTE} from '../shared/palette.js';
@@ -167,15 +172,19 @@ export class PixiIsland {
       this.ground = new Container();
       this.water = new Container();
       this.objects = new Container({sortableChildren: true});
+      const defaultSortChildren=this.objects.sortChildren;
+      this.objects.sortChildren=function(){return (this.homeDepthSort?sortHomeChildren:defaultSortChildren).call(this);};
+      this.objects.homeDepthSort=true;
       this.dust = createDust(this.objects);
       this.air = new Container();
       this.floatLayer=new Container();
       this.contactShadows=new Container();
       this.decks=new Container();
-      this.upright=trackUpright([[this.objects], [this.air], [this.decks, true]], TILT);
-      this.cleanups.push(() => this.upright.destroy());
       this.overDecks=new Container({label: 'Bridges over boats'});
       this.scene.addChild(this.ground, this.water, this.floatLayer, this.decks, this.contactShadows, this.objects, this.overDecks, this.air);
+      this.homeBoats=createHomeBoatLayer(this.scene,this.decks);
+      this.upright=trackUpright([[this.objects], [this.homeBoats], [this.air], [this.decks, true]], TILT);
+      this.cleanups.push(() => this.upright.destroy());
       this.app.stage.addChild(this.scene);
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       this.snowfall=createSnowfall(this.app.stage);
@@ -196,17 +205,19 @@ export class PixiIsland {
       this.room?.configure(this.sim.nav, walk);
       this.resize(true);
       this.listen(this.canvas, 'webglcontextlost', event => {event.preventDefault(); cancelAnimationFrame(this.raf); this.audio.suspend(); this.onError();});
-      const tiles = HOME_TILES;
+      const tiles = homeGroundTiles(HOME_TILES);
       this.homeGround = new Container({label: 'Home ground'}); this.ground.addChild(this.homeGround);
       this.homeDecks = new Container({label: 'Home decks'}); this.decks.addChild(this.homeDecks);
-      this.homeShadows = new Container({label: 'Home shadows'}); this.contactShadows.addChild(this.homeShadows);
+      this.homeShadows = new Container({label: 'Home shadows'}); this.ground.addChild(this.homeShadows);
       const decals = homeDecals(props);
       const flats = [{src: '/pixi-art/lake-race.svg', x: 3400, y: 1050, width: 1500, height: 950, resolution: 1, topLeft: true},
         {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true}, ...decals.map(d => ({...d, resolution: 2.5})), ...HOME_GROUND_DECALS.map(d => ({...d, resolution: 2.5}))];
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
       this.groundPool=createGroundPool({acquire:acquireGround,release});
-      const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];
+      const homeRaster=createHomeGroundLoader();
+      this.cleanups.push(()=>homeRaster.destroy());
+      const entries = [...decks, ...props.map(p=>p.uprightSrc?{...p,src:p.uprightSrc,resolution:artResolution(p,p.resolution??1)}:p), ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats, ...new Map(props.flatMap(p=>[p.groundShadowSrc].filter(Boolean).map(src=>[src,{src,resolution:artResolution(p,p.resolution??1)}]))).values()];
       const halfWidth = this.width / (2 * this.camera.zoom) + 600;
       const halfHeight = this.height / (2 * this.camera.zoom * TILT) + 600;
       const deferred = [];
@@ -227,11 +238,12 @@ export class PixiIsland {
       this.sceneryPending = deferred.length > 0;
       if (this.disposed) return;
       this.ocean=new TilingSprite({texture:textures[tiles.length + decks.length + props.length + art.floating.length],width:world.width,height:world.height});this.ocean.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);this.scene.addChildAt(this.ocean,0);
-      this.homeGroundStream=this.groundPool.create(tiles,this.homeGround);
+      this.homeGroundStream=this.groundPool.create(tiles,this.homeGround,undefined,homeRaster);
       this.loaded.push('/pixi-art/globe/home-ground.svg');
       const terrain=await acquire('/pixi-art/globe/home-ground.svg');
       if(this.disposed)return;
-      const fallback=new Sprite(terrain);fallback.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);fallback.width=world.width;fallback.height=world.height;this.homeGround.addChildAt(fallback,0);
+      this.homeGroundFallback=createHomeGroundFallback(terrain,this.homeGroundStream);
+      this.homeGround.addChildAt(this.homeGroundFallback.root,0);
       const base = tiles.length + decks.length, flatBase = base + props.length + art.floating.length + 1;
       this.flats = new Container({label: 'Ground detail'}); this.homeGround.addChild(this.flats);
       flats.forEach((d, i) => {
@@ -246,12 +258,6 @@ export class PixiIsland {
         sprite.width = jetty.width;
         sprite.height = jetty.height;
         this.homeDecks.addChild(sprite);
-        if (/river-crossing-|bridge-jetty-/.test(jetty.src)) {
-          const over = new Sprite(textures[tiles.length + i]);
-          over.position.set(jetty.x, jetty.y); over.width = jetty.width; over.height = jetty.height; over.visible = false;
-          this.overDecks.addChild(over);
-          (this.bridgeOver ??= []).push({sprite: over, x0: jetty.x - 20, x1: jetty.x + jetty.width + 20, y0: jetty.y, y1: jetty.y + jetty.height + 40});
-        }
       });
       this.floating=art.floating.map((item,i)=>{
         const sprite=new Sprite(textures[base+props.length+i]);
@@ -262,20 +268,27 @@ export class PixiIsland {
       this.props = props.map((prop, i) => {
         const name=prop.asset||prop.name;
         let shadow;
-        if(!NO_SHADOW.test(name)&&!prop.noShadow){shadow=contactShadow(prop);shadow.position.set(prop.x,prop.y);this.homeShadows.addChild(shadow);}
+        if(prop.groundShadowSrc){
+          shadow=new Sprite(textures[tiles.length+entries.findIndex(e=>e.src===prop.groundShadowSrc)]);
+          shadow.anchor.set(prop.anchor.x,prop.anchor.y);shadow.position.set(prop.x,prop.y);
+          shadow.width=prop.width*prop.scale;shadow.height=prop.height*prop.scale;if(prop.flip)shadow.scale.x*=-1;
+          this.homeShadows.addChild(shadow);
+        }else if(!NO_SHADOW.test(name)&&!prop.noShadow){shadow=contactShadow(prop);shadow.position.set(prop.x,prop.y);this.homeShadows.addChild(shadow);}
 
         const sprite = new Sprite(textures[base + i]);
         sprite.anchor.set(prop.anchor.x, prop.anchor.y);
         sprite.position.set(prop.x, prop.y);
         sprite.width = prop.width * prop.scale;
         sprite.height = prop.height * prop.scale;
-        sprite.zIndex = prop.z ?? prop.y;
+        sprite.zIndex = propDepth(prop);
         sprite.standing = true;
+        sprite.homeSortRole=0;sprite.homeSortId=String(prop.id);
         if (prop.flip) sprite.scale.x *= -1;
         if (prop.tint) sprite.tint = prop.tint;
-        (/bridge/i.test(name) ? this.decks : this.objects).addChild(sprite);
+        homePropContainer(prop,this).addChild(sprite);
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
+      this.homeSeats = createHomeSeats(this.props,this.sim.nav);
       const kiteTextures = await Promise.all(KITE_ASSETS.map(src => {this.loaded.push(src); return acquire(src, 2);}));
       if (this.disposed) return;
       this.homeKites = createHomeKites(this.objects, Object.fromEntries(KITE_ASSETS.map((src, i) => [src, kiteTextures[i]])));
@@ -291,6 +304,7 @@ export class PixiIsland {
         const duck = this.localDucks[i];
         rig.root.scale.set(.88 * .24 * 3);
         rig.root.position.set(duck.x, duck.y);
+        rig.root.homeSortRole=1;rig.root.homeSortId=String(duck.id);
         this.objects.addChild(rig.root);
       });
       globalThis.__duckyInterior = () => this.interior?.debug() ?? {active: false, loading: Boolean(this.interiorPending)};
@@ -326,7 +340,7 @@ export class PixiIsland {
       }
       globalThis.__duckyPin=()=>this.worldView?.pinPoint();globalThis.__duckyRigid=()=>this.rigidReadback();
       if (this.room) {
-        this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
+        this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks,this.homeBoats);
         if (this.disposed) {this.travelView.dispose(); return;}
         this.travelView.fx.waterSplash=(x,y)=>{if (this.artShown === 'home') this.waterFX?.splash(x,y,.85,30);};
         this.switchIsland(this.room.islandId);
@@ -753,7 +767,8 @@ export class PixiIsland {
       this.triggerEmote(6);
     } else {
       this.lastTap = -Infinity;
-      this.setDestination(p);
+      const building = this.artShown === 'home' && mapOf(this.islandId).home ? homeBuildingAt(this.props, point) : null;
+      this.setDestination(building ? homeBuildingTarget(building, p) : p);
     }
   }
 
@@ -1272,8 +1287,10 @@ export class PixiIsland {
     const visible = (x,y,pad=350) => Math.abs(x-this.camera.x)<halfWidth+pad && Math.abs(y-this.camera.y)<halfHeight+pad;
     this.ocean.position.set(this.camera.x-halfWidth-256,this.camera.y-halfHeight-256);this.ocean.width=halfWidth*2+512;this.ocean.height=halfHeight*2+512;
     this.ocean.tilePosition.set(-this.ocean.x+(reduced?0:t*2),-this.ocean.y+(reduced?0:t*.7));
-    const flatVisible = !(this.globeT >= .97);
+    const flatVisible = !(this.globeT >= .97);   // a full globe samples snapshots, not the animated island scene
     const homeShown=this.artShown === 'home';
+    if(this.objects.homeDepthSort!==homeShown)this.objects.sortDirty=true;
+    this.objects.homeDepthSort=homeShown;
     const pondSeconds=Date.now()/1000;
     this.arts?.get(this.artShown)?.pondDuckies?.update(pondSeconds,reduced,visible,flatVisible&&this.scene.visible);
     this.homeKites?.update(t, reduced, visible, homeShown && flatVisible);
@@ -1311,6 +1328,7 @@ export class PixiIsland {
     if (homeShown) this.props.forEach((prop, i) => {
       prop.sprite.visible = visible(prop.x, prop.y, Math.max(prop.width, prop.height) * prop.scale);
       if(prop.shadow)prop.shadow.visible=prop.sprite.visible;
+      
       if (!prop.sprite.visible) return;
       prop.sprite.skew.x = !reduced && prop.wind ? Math.sin(t * 1.3 + i * .7) * (/flag|bunting|banner|umbrella/i.test(prop.asset||prop.name)?.018:.009)*breeze + this.gust * .035 : 0;
       prop.sprite.y = homePropY(prop,t,reduced,i);
@@ -1324,7 +1342,7 @@ export class PixiIsland {
       const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
-      const seat = !homeShown && duck.player ? benchSeatAt(this.artProps(this.artShown), {...duck,x,y}) : null;
+      const seat = duck.player ? benchSeatAt(homeShown?this.homeSeats:this.artProps(this.artShown), {...duck,x,y}) : null;
       const peer = !seat && duck.player ? telescopePeerAt(this.artProps(this.artShown), {...duck,x,y}) : null;
       const hop = jumpPose(renderJumpLeft(duck.jumpLeft, this.accumulator), reduced, {turn: duck.turn, moving: duck.travel > 20});
       rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift - (duck.player ? this.arrivalLift(now) : 0));
@@ -1409,6 +1427,7 @@ export class PixiIsland {
       }
     }
     this.groundPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
+    this.homeGroundFallback?.update();
     for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     const visitors=this.copyVisitors(copies);
@@ -1539,7 +1558,7 @@ export class PixiIsland {
           .finally(() => {entry.outfitLoading = false;});
       }
       const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
-      const seat = this.artShown==='cathedral' ? benchSeatAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;
+      const seat = this.artShown==='home'||this.artShown==='cathedral' ? benchSeatAt(this.artShown==='home'?this.homeSeats:this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;
       const peer = !seat ? telescopePeerAt(scopeProps, {...pose,x,y,action,travel}) : null;
       if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
@@ -1567,12 +1586,21 @@ export class PixiIsland {
       entry.snowX = x; entry.snowY = y;
       if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:seat?.turn ?? peer?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
       this.rinkTrails?.track(entry,x,y,travel,rig.root.visible&&look.deck&&pose.mode!=='sailing'&&!(pose.jumpLeft>0));
+      // Only Home needs surface migration; move its boat passengers back to
+      // the shared actor layer when they travel to another island.
+      if(this.artShown==='home'||rig.root.parent===this.homeBoats){
+        const actorLayer=this.artShown==='home'?homeActorLayer(this,look.deck?'walking':'sailing'):this.objects;
+        if(rig.root.parent!==actorLayer)actorLayer.addChild(rig.root);
+        rig.root.homeSortRole=1;rig.root.homeSortId=String(id);
+      }
       if (pose.mode === 'sailing') sailers.push(look);
     }
     this.updateBridgeOver(sailers);
   }
+  // Home uses separate water actors below the original decks. Other islands
+  // retain their authored boat overlays and existing surface behavior.
   updateBridgeOver(sailers) {
-    for (const b of this.bridgeOver ?? []) b.sprite.visible = this.artShown === 'home' && sailers.some(p => p.x > b.x0 && p.x < b.x1 && p.y > b.y0 && p.y < b.y1);
+    // a themed island's river bridges (theme-art.js overBoats decks: Sunbob's ring river), in that island's own coordinates
     for (const [id, art] of this.arts ?? []) for (const b of art.bridgeOver ?? []) b.sprite.visible = id === this.artShown && sailers.some(p => p.x > b.x0 && p.x < b.x1 && p.y > b.y0 && p.y < b.y1);
   }
 

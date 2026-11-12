@@ -1,8 +1,8 @@
 import {stepRink} from './rink-slide.js';
 export const WALK_SPEED = 245;
 export const RUN_FACTOR = 1.7, RUN_SPEED = WALK_SPEED * RUN_FACTOR;
-export const MUSEUM_DOOR = {x0: 2850, x1: 2990, y: 1215, out: {x: 2920, y: 1340}};
-export const atMuseumDoor = (x, y) => x > MUSEUM_DOOR.x0 && x < MUSEUM_DOOR.x1 && y < MUSEUM_DOOR.y;
+export const MUSEUM_DOOR = {x: 2920, x0: 2850, x1: 2990, y0: 1140, y: 1215, out: {x: 2920, y: 1340}};
+export const atMuseumDoor = (x, y) => x > MUSEUM_DOOR.x0 && x < MUSEUM_DOOR.x1 && y > MUSEUM_DOOR.y0 && y < MUSEUM_DOOR.y;
 export const JUMP_SECONDS = .6;
 
 export function startJump(actor) {
@@ -67,7 +67,9 @@ export function playEmote(actor, action, now) {
   actor.emoteVersion++;
 }
 
-export function slideStep(nav, x, y, vx, vy) {
+// projection (cos, up to 70 degrees), so a shallow hit on a curved coast keeps nearly full speed and a square hit stops. When both sides
+// Every candidate is checked with clearLine (3 px samples), so it never tunnels through a footprint.
+export function slideStep(nav, x, y, vx, vy, previous = null) {
   const s = Math.hypot(vx, vy), from = [x, y];
   if (!s || nav.clearLine(from, [x+vx, y+vy])) return [x+vx, y+vy];
   let ox = 0, oy = 0;
@@ -78,7 +80,7 @@ export function slideStep(nav, x, y, vx, vy) {
   for (let k = 1; k <= 7; k++) {
     const len = Math.cos(k*SIDE);
     const options = [1, -1].map(sign => {const c = Math.cos(sign*k*SIDE), n = Math.sin(sign*k*SIDE), dx = (vx*c-vy*n)*len, dy = (vx*n+vy*c)*len;
-      return {dx, dy, open:nav.clearLine(from, [x+dx, y+dy]), lean:dx*ox+dy*oy};}).filter(o => o.open);
+      return {dx, dy, open:nav.clearLine(from, [x+dx, y+dy]), lean:dx*ox+dy*oy};}).filter(o => o.open && (!previous || o.dx*previous[0]+o.dy*previous[1] >= 0));
     if (!options.length) continue;
     if (options.length === 2 && Math.abs(options[0].lean-options[1].lean) < 1e-6*s) return from;
     const best = options.length === 1 || options[0].lean > options[1].lean ? options[0] : options[1];
@@ -123,14 +125,30 @@ export function walkStep(actor, nav, dt, now, input) {
   const origin = [actor.x, actor.y];
   if (manual || coast) {
     actor.heading = [dx/distance, dy/distance];
-    [actor.x, actor.y] = slideStep(nav, actor.x, actor.y, dx/distance*step, dy/distance*step);
+    // Home canopy fronts can meet a pond/solid in a closed wedge. Keep the
+    // chosen tangent while a key is held, so the next tick cannot reverse it.
+    // A new key direction starts a fresh choice. Other islands keep their glide.
+    const prior = nav.homeBuildingRoutes && actor.wallGlide;
+    const previous = prior && prior.x === dx && prior.y === dy ? prior.step : null;
+    [actor.x, actor.y] = slideStep(nav, actor.x, actor.y, dx/distance*step, dy/distance*step, previous);
+    if (nav.homeBuildingRoutes) {
+      const moved = [actor.x-origin[0], actor.y-origin[1]];
+      actor.wallGlide = {x:dx, y:dy, step:Math.hypot(...moved) > .01 ? moved : previous};
+    }
   } else {
     actor.heading = null;
-    let left = step;
+    actor.wallGlide = null;
+    let left = step;   // carry the step through close points (rounded corners) so corners do not slow the walk
     while (left > 1e-9 && actor.path.length) {
       const [px, py] = actor.path[0], gap = Math.hypot(px-actor.x, py-actor.y);
-      if (gap <= left && nav.clearLine([actor.x, actor.y], [px, py])) { actor.x = px; actor.y = py; actor.path.shift(); left -= gap; continue; }
+      if (gap <= left && nav.clearLine([actor.x, actor.y], [px, py])) {
+        // Home: carrying one tick through a tight corner must also leave the
+        // interpolation from the tick's origin clear of the building wall.
+        if (nav.homeBuildingRoutes && !nav.clearLine(origin, [px, py])) break;
+        actor.x = px; actor.y = py; actor.path.shift(); left -= gap; continue;
+      }
       const t = Math.min(1, left/(gap || 1)), wish = [(px-actor.x)*t, (py-actor.y)*t];
+      if (nav.homeBuildingRoutes && !nav.clearLine(origin, [actor.x+wish[0], actor.y+wish[1]])) break;
       const [x, y] = slideStep(nav, actor.x, actor.y, ...wish);
       if (Math.hypot(x-actor.x, y-actor.y) < left*.25) actor.path = [];
       actor.x = x; actor.y = y;
