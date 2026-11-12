@@ -38,6 +38,7 @@ export function walkNav(id,base){
  if(byBase.has(base))return byBase.get(base);
  const pieceAt=(x,y)=>walks.find(w=>inBox(w,x,y)&&w.nav.walkable(x,y))?.nav ?? null;
  const nav={
+  homeBuildingRoutes:base.homeBuildingRoutes,
   rink:base.rink,icePaths:base.icePaths,
   islets:walks,
   walkable:(x,y)=>Boolean(base.walkable?.(x,y))||walks.some(w=>inBox(w,x,y)&&w.nav.walkable(x,y)),

@@ -48,11 +48,13 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
     versions.set(entry.src,entry);
   };
   const show=(tile,entry)=>{
+    if(!tile.sprite.visible)tile.stream.residencyVersion++;
     resident.set(tile,entry);tile.sprite.texture=entry.texture;
     tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);tile.sprite.visible=tile.render!==false;
   };
   const drop=tile => {
     const entry=resident.get(tile);if (!entry)return;
+    if(tile.sprite.visible)tile.stream.residencyVersion++;
     blank(tile);resident.delete(tile);remember(tile,entry);
   };
   const pump=() => {
@@ -104,7 +106,8 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         tile.sprite.position.set((t.localX??t.x)+(t.flip?t.width:0),t.localY??t.y);if(t.flip)tile.sprite.scale.x=-1;blank(tile);container.addChild(tile.sprite);return tile;});
       let dead=false;
       const resolutionTiles=[...new Map(entries.map(t=>[[t.screenResolution,t.rasterDensity,t.resolution,t.screenResolution?0:tileResolution(t,1)].join('|'),t])).values()];
-      const stream={id:++streamId,entries,resolutionTiles,destroy(){if(dead)return;dead=true;streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
+      const stream={id:++streamId,entries,resolutionTiles,residencyVersion:0,destroy(){if(dead)return;dead=true;streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
+      for(const tile of entries)tile.stream=stream;
       streams.add(stream);return stream;
     },
     update(views,dpr=1,fastZoom=false) {

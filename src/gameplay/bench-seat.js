@@ -1,6 +1,7 @@
 export function benchSeatAt(props,pose) {
   if (!pose || pose.mode==='sailing' || pose.action!==0 || pose.travel>3 || pose.jumpLeft>0) return null;
   for (const p of props ?? []) {
+    if(p.homeSeat){const s=p.homeSeat;if(Math.hypot(pose.x-s.approach.x,pose.y-s.approach.y)<12)return s;continue;}
     if (!p.sittable || !p.bench?.seat) continue;
     const s=p.bench.seat, side=p.bench.view==='east'||p.bench.view==='west';
     if (((pose.x-s.x)/(side?24:84))**2+((pose.y-s.y)/22)**2>1) continue;

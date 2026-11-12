@@ -47,7 +47,7 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
   Object.assign(game,{externalDetailVisible:true,artShown:'snow',sim:{time:2,step(){}},room:null,
     camera:{x:0,y:0,zoom:1},target:{x:0,y:0,zoom:1},zoomMotion:{velocity:0},minZoom:.1,
     width:1200,height:800,gestures:{pointers:new Map()},globeT:0,arts:new Map(),
-    scene:{setFromMatrix(){}},upright:{update(){}},ocean:{position:{set(){}},tilePosition:{set(){}}},
+    objects:new Container(),scene:{setFromMatrix(){}},upright:{update(){}},ocean:{position:{set(){}},tilePosition:{set(){}}},
     weather:{update(){}},snowfall:{update(...args){snowCalls.push(args);throw reachedSnow;}}});
   for(const externalOverview of [true,false]){
     game.externalOverview=externalOverview;

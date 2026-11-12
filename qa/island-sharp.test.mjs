@@ -10,7 +10,7 @@ import {cropSVG, RASTER_ART_BUDGET_BYTES, RASTER_ART_UTILIZATION} from '../src/r
 
 const report = await audit();
 const flush = () => new Promise(setImmediate);
-const counts = {home: [60, 12, 3257, 827, 11], sunflower: [72, 15, 423, 1643, 0],
+const counts = {home: [1, 12, 3287, 833, 11], sunflower: [72, 15, 423, 1643, 0],
   pink: [176, 6, 1321, 1007, 0], library: [104, 19, 3146, 1786, 3]};
 
 test('sharpness audit visits every live static layer, including generated Home decals and floating pads', () => {
@@ -149,7 +149,8 @@ test('engine-owned kite stakes, boats and contact leaves remain explicit sharpne
   assert.equal(report.shared.contactLeaves.max, 1 / (1.2 * 3.6));
   assert(report.shared.sleepers.every(p => p.max >= 1), 'rest-pose result from CRISP.md retained');
   const engine = readFileSync('src/rendering/pixi/engine.js', 'utf8');
-  assert(engine.includes('this.homeGroundStream=this.groundPool.create(tiles,this.homeGround)'));
+  assert(engine.includes('const tiles = homeGroundTiles(HOME_TILES)'));
+  assert(engine.includes('this.homeGroundStream=this.groundPool.create(tiles,this.homeGround,undefined,homeRaster)'));
   assert(!engine.includes('art.raster?.enabled'), 'Home manifest opt-in is not implemented');
   assert.equal(new Container().anchor, undefined, 'generic containers have no Sprite anchor metadata');
 });

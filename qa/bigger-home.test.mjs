@@ -18,7 +18,9 @@ test('bigger Home retains original landmark and save coordinates, every communit
     assert.deepEqual(route.at(-1),point,id+' is reachable');
     let prev=[m.spawn.x,m.spawn.y];for(const p of route){assert.ok(n.clearLine(prev,p),id+' has no blocked route segment');prev=p;}
   }
-  const west=[-544,2033],north=[2900,-77];
+  // New land is north and west of the original frame; a detour must work through negative cells too.
+  // The old [-544,2033] lies behind grove canopies under the no-fade law.
+  const west=[-544,2160],north=[2900,-77];
   for(const point of [west,north])assert.ok(n.walkable(...point));
   assert.deepEqual(n.route(...west,...north).at(-1),north);
 });
