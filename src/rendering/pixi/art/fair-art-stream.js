@@ -1,5 +1,12 @@
 import {DOMAdapter, ImageSource, Texture} from 'pixi.js';
 import {cropFairSVG} from './fair-raster.js';
+import {createRasterLoader} from './theme-art-stream.js';
+import {prepareGroundSVG, rasterizeGroundTile} from './svg-ground-raster.js';
+
+export function createFairGroundLoader() {
+  return createRasterLoader({concurrency:8, frameBudgetMs:2, exactFrame:true,
+    prepareSource:prepareGroundSVG, rasterize:rasterizeGroundTile});
+}
 
 export function createFairRasterLoader() {
   const originals=new Map(),leases=new Map();

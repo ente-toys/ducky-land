@@ -1,7 +1,7 @@
 import expansion from '../../../world/home/home-expansion.json' with {type:'json'};
 import {createRasterLoader} from './theme-art-stream.js';
 import {Container,Graphics,Sprite} from 'pixi.js';
-import {prepareHomeGround,rasterizeHomeGround} from './home-ground-raster.js';
+import {prepareGroundSVG,rasterizeGroundTile} from './svg-ground-raster.js';
 
 const HOME_GROUND_TILE_SIZE = 128;
 const HOME_GROUND_GUTTER = 1;
@@ -44,7 +44,11 @@ export function createHomeGroundFallback(texture,stream){
 
 export function createHomeGroundLoader(options={}){
   const loader=createRasterLoader({concurrency:8,frameBudgetMs:2,...options,
-    prepareSource:prepareHomeGround,rasterize:rasterizeHomeGround});
+    prepareSource:prepareGroundSVG,
+    rasterize:(ground,crop,resolution)=>{
+      const [width,height,x,y,w,h]=crop;
+      return rasterizeGroundTile(ground,[width,height,x+ground.x,y+ground.y,w,h],resolution,true);
+    }});
   return {...loader,async acquire(key,resolution,order){
     const texture=await loader.acquire(key,resolution,order);
     const crop=new URL(key,'https://home.invalid').searchParams.get('rasterCrop').split(',').map(Number);
