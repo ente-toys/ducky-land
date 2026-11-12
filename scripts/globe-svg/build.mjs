@@ -3,7 +3,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {build} from 'esbuild';
 import {WORLD_ISLANDS} from '../../src/pixi/world-map.js';
 import {mapOf,mapFor} from '../../src/pixi/island-maps.js';
 import {homeLayers} from '../globe-perf/snapshot.mjs';
@@ -19,20 +18,9 @@ const id=selected&&(ids.includes(selected)?selected:WORLD_ISLANDS.some(i=>i.id==
 if(selected&&!id)throw Error(`Unknown island ${selected}. Choose ${ids.join(', ')}`);
 const manifest=fs.existsSync(`${OUT}/manifest.json`)?JSON.parse(fs.readFileSync(`${OUT}/manifest.json`)):{};
 const files=new Map();let activeSources;
-function record(file){if(!file.startsWith('@')&&fs.existsSync(file))activeSources?.record(file);}
-function recordBundle(result){for(const file of Object.keys(result.metafile?.inputs??{}))record(file);}
 function read(file){if(!files.has(file))files.set(file,fs.readFileSync(file,'utf8'));if(!file.startsWith('@'))activeSources?.record(file,files.get(file));return files.get(file);}
 const source=(src,base)=>src.startsWith('/pixi-art/')?'public'+src:src.startsWith('/assets/')?'.'+src:path.join(base,src);
 
-async function bogTerrain(){
- activeSources.recordCode('scripts/bigger-bog/densify.mjs');
- for(const file of ['scripts/bigger-bog/evidence/dense/before-art.json','scripts/bigger-bog/evidence/dense/before-world.json','scripts/bigger-bog/plan.json','assets/world/themes/bog/harbor.json'])record(file);
- const result=await build({metafile:true,entryPoints:['scripts/bigger-bog/densify.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'read-only-sources',setup(b){b.onLoad({filter:/densify\.mjs$/},a=>({contents:read(a.path).split('\n').slice(0,read(a.path).split('\n').findIndex(l=>l.startsWith('writeFileSync(`${base}/terrain-master.svg`'))+1).join('\n').replace("import sharp from 'sharp';",'')+'\nexport {svg,plan};',loader:'js'}));b.onResolve({filter:/^node:fs$/},a=>a.namespace==='readonly'?{path:'node:fs',external:true}:({path:'fs',namespace:'readonly'}));b.onLoad({filter:/.*/,namespace:'readonly'},()=>({contents:"import fs from 'node:fs'; export const readFileSync=(p,...args)=>fs.readFileSync(p==='scripts/bigger-bog/original-harbor.json'?'assets/world/themes/bog/harbor.json':p.endsWith('/before-walk.json')?'scripts/bigger-bog/evidence/dense/before-world.json':p.endsWith('/before-plan.json')?'scripts/bigger-bog/plan.json':p,...args); export const writeFileSync=()=>{}, mkdirSync=()=>{};",loader:'js'}));}}]});
- recordBundle(result);
- const module=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
- return module.svg(module.plan.origin.x,module.plan.origin.y,module.plan.width,module.plan.height);
-}
-let bog;
 for(const theme of selected?[id]:ids){
  activeSources=createSourceTracker(ROOT,theme);
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),W=Math.round(map.width*K),H=Math.round(map.height*K),base=map.art?path.dirname('public'+map.art):`public/pixi-art/themes/${theme}`;
@@ -45,28 +33,6 @@ for(const theme of selected?[id]:ids){
   if(old){while(old.firstChild)old.removeChild(old.firstChild);old.appendChild(parse(read(`${base}/${theme==='goldmine'?'community/original-ground.svg':'ground.svg'}`)));}
   root.setAttribute('viewBox',`${map.origin.x} ${map.origin.y} ${map.width} ${map.height}`);
   files.set('@'+theme,serialize(root));tiles=[{src:'@'+theme,x:map.origin.x,y:map.origin.y,width:map.width,height:map.height}];
- }
- if(theme==='library'&&tiles.some(t=>t.src.startsWith('bigger/ground-')&&/<image/.test(read(source(t.src,base))))){
-  activeSources.recordCode('scripts/bigger-library/ground.mjs');
-  for(const file of ['scripts/bigger-library/original/world.json','scripts/bigger-library/original/walk-world.json','scripts/bigger-library/original/art.json','scripts/bigger-library/original/harbor.json','scripts/bigger-library/original/ground.svg','scripts/bigger-library/plan.json'])record(file);
-  const libraryBundle=await build({metafile:true,entryPoints:['scripts/bigger-library/ground.mjs'],bundle:true,platform:'node',format:'esm',write:false,plugins:[{name:'current-crossings',setup(b){b.onLoad({filter:/waterways\.mjs$/},a=>({contents:read(a.path).replace("read('scripts/bigger-library/fixed-crossings.json')",JSON.stringify(JSON.parse(read('scripts/bigger-library/plan.json')).crossings)),loader:'js'}));}}]});
-  recordBundle(libraryBundle);
-  const {extensionBody}=await import('data:text/javascript;base64,'+Buffer.from(libraryBundle.outputFiles[0].text).toString('base64'));
-  const {original,pathRing}=await import('../bigger-library/model.mjs');
-  const old=original.world.coastRings.map(pathRing).join(' '),o=map.origin;
-  files.set('@library',`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${o.x} ${o.y} ${map.width} ${map.height}"><defs><mask id="newonly" maskUnits="userSpaceOnUse" x="${o.x}" y="${o.y}" width="${map.width}" height="${map.height}"><rect x="${o.x}" y="${o.y}" width="${map.width}" height="${map.height}" fill="white"/><path d="${old}" fill="black"/></mask></defs><g mask="url(#newonly)">${extensionBody}</g></svg>`);
-  tiles=[{src:'@library',x:o.x,y:o.y,width:map.width,height:map.height},...tiles.filter(t=>!t.src.startsWith('bigger/ground-'))];
- }
- if(theme==='bog'&&tiles.some(t=>t.src.endsWith('.png'))){
-  bog??=await bogTerrain();files.set('@bog',bog);
-  tiles=[{src:'@bog',x:map.origin.x,y:map.origin.y,width:map.width,height:map.height},...tiles.filter(t=>!t.src.endsWith('.png'))];
- }
- if(theme==='cathedral'&&tiles.some(t=>t.src.endsWith('.png'))){
-  const original=JSON.parse(read('scripts/bigger-cathedral/baseline/art.json')),world=JSON.parse(read('scripts/bigger-cathedral/baseline/world.json'));
-  const d='M'+world.coast.map(p=>p.join(' ')).join('L')+'Z',mask=d+world.islets.map(([x,y,rx,ry])=>`M${x-rx} ${y}a${rx} ${ry} 0 1 0 ${rx*2} 0a${rx} ${ry} 0 1 0 ${-rx*2} 0`).join('');
-  const svg=read('scripts/bigger-cathedral/baseline/ground.svg');
-  files.set('@cathedral',svg.replace(/(<svg[^>]*>)/,`$1<defs><clipPath id="preserved"><path d="${mask}"/></clipPath></defs><g clip-path="url(#preserved)">`).replace('</svg>','</g></svg>'));
-  tiles=[...tiles.filter(t=>!t.src.endsWith('.png')),{...original.ground.tiles[0],src:'@cathedral',x:0,y:0,width:8000,height:6000}];
  }
  const defs=[],paint=[],groups=new Map(),tileOrder=[],symbolCache=new Map();let serial=0;
  function position(p,kind){const s=kind==='prop'?(p.scale??1):1,w=p.width*s,h=p.height*s,a=kind==='prop'?(p.anchor??{x:.5,y:1}):kind==='flat'&&!p.topLeft?{x:.5,y:1}:{x:0,y:0};return {w,h,x:p.x-a.x*w,y:p.y-a.y*h};}
