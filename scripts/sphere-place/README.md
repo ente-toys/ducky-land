@@ -17,11 +17,6 @@ The existing 128 MiB ground-tile budget and two-theme art cap remain in place.
   macOS Command Line Tools and OpenGL are required. The program opens no window.
   These use the actual production fragment shader and static production previews,
   not the live Pixi scene. The available renderer reports Apple Software Renderer.
-- Start `npx vite --config scripts/globe-perf/vite.config.mjs --configLoader native --port 5317`.
-  Then `node scripts/sphere-place/capture.mjs` captures the live engine and frame
-  timings in headless Chromium. No visible browser is opened. This environment
-  currently denies Chromium's MachPortRendezvousServer at startup; the failure is
-  recorded in `browser-validation.json` instead of substituting a timing claim.
 - Start `DUCKY_WS_PORT=19370 node server.mjs` before
   `DUCKY_WS_PORT=19370 npm test`. Build with
   `npx vite build --configLoader native`.

@@ -34,4 +34,4 @@ node scripts/pond-duckies/bake-motion.mjs
 node --test qa/pond-duckies.test.mjs
 ```
 
-`trace.py` needs Pillow, NumPy and potrace. It thresholds alpha above 40 before cropping, flattens the source palette and traces smooth vector paths. No bitmap enters the repository. `proof.mjs` renders read-only themed-island art proofs outside the repository.
+`trace.py` needs Pillow, NumPy and potrace. It thresholds alpha above 40 before cropping, flattens the source palette and traces smooth vector paths. No bitmap enters the repository.

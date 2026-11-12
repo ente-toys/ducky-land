@@ -23,7 +23,7 @@
       "Run node scripts/bigger-fair/bridges.mjs after centre and bank regeneration to get final exact crossing endpoints.",
       "Load scripts/bigger-fair/bridge-landings.json in the ONE approved Home path union. Union all 24 dry throat polygons, connect existing lane ends to their back points, subtract waterCutout. No overlay painter.",
       "Bank/water worker must retain the lagoon outline/outlet and remove the remaining old ring/tributary bank fragments. Outlet contour is available from python3 scripts/bigger-fair/bridge-water.py.",
-      "Rerun scripts/bigger-fair/bridges-proof.mjs after the final path merge, then sail/walk checks."
+      "Run the sailing and walking checks after the final path merge."
     ],
     "runtime": [
       "world.json and walk-world.json: 12 matching bridges/walkways; diagonal deck polygons; connected lagoon boatWater.",

@@ -15810,11 +15810,6 @@
       "width": 240
     }
   ],
-  "animation": {
-    "module": "animate.mjs",
-    "export": "animateCentre",
-    "note": "SVG textures are static in Pixi. Call the supplied module every frame for the flow, foam and ripple pieces. Never animate the stone or rails."
-  },
   "capacity": {
     "floorArea": 2607386,
     "duckies": 531,
@@ -15823,7 +15818,6 @@
   "integration": {
     "coordinates": "Centre-local. Translate every x/y, at, sortY and footprint by the island placement origin.",
     "layers": "decal/back below characters; sorted/front/anim interleave by sortY. Preserve piece array order for ties.",
-    "animationModule": "animate.mjs",
     "sharedCodeChanged": false
   }
 }

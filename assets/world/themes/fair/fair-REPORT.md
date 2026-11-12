@@ -38,8 +38,8 @@ Removed the placeholder, six decorations/stalls occupying reserved stall rows, a
 - public/pixi-art/themes/fair/fair-metrics.json, fair-validation.json: measurements and check results.
 - assets/world/themes/fair/: updated world.json, walk-world.json, harbor.json, placements.json, paths.json, sleepers-resolved.json.
 - scripts/themes/fair-world.mjs: retained original builder, now ends by running fair-centre, fair-finish and fair-check so rebuilding cannot restore the placeholder.
-- scripts/themes/fair-centre.mjs, fair-finish.mjs, fair-check.mjs, fair-centre-preview.mjs, fair-preview.mjs: reproducible final build and checks.
-- scripts/themes/fair-review.js, fair-capture.mjs, fair-register-check.mjs and public/pixi-art/themes/fair/review.html: isolated engine review and registration without shared-file edits.
+- scripts/themes/fair-centre.mjs, fair-finish.mjs, fair-check.mjs: reproducible final build and checks.
+- scripts/themes/fair-review.js, fair-register-check.mjs and public/pixi-art/themes/fair/review.html: isolated engine review and registration without shared-file edits.
 
 ## Exact shared integration still needed
 
@@ -82,16 +82,13 @@ The component accepts an optional origin if centre placement changes. Do not als
 
 ```sh
 node scripts/themes/fair-world.mjs
-node scripts/themes/fair-centre-preview.mjs
-node scripts/themes/fair-preview.mjs
 node scripts/themes/fair-check.mjs
 npx vite --port 5214 --strictPort --host 127.0.0.1
-node scripts/themes/fair-capture.mjs
 ```
 
 Review URL: http://127.0.0.1:5214/pixi-art/themes/fair/review.html
 
-I opened and inspected the full-island render and centre render. These are Sharp composites of the real SVG layers and placements, not browser screenshots. The environment rejected Vite with `listen EPERM 127.0.0.1:5214`. Chromium headless launch failed with `bootstrap_check_in ... Permission denied (1100)`. The review page and capture script are prepared but browser execution is not claimed as passing. No other port or the boss's Chrome was used. dist/ was not touched.
+I opened and inspected the full-island render and centre render. These are Sharp composites of the real SVG layers and placements, not browser screenshots. The environment rejected Vite with `listen EPERM 127.0.0.1:5214`. Chromium headless launch failed with `bootstrap_check_in ... Permission denied (1100)`. Browser execution was not verified. No other port or the boss's Chrome was used. dist/ was not touched.
 
 The team-feed log attempt was blocked at ~/.claude/team/feed.md by the filesystem sandbox. Copying the report to concepts/themes/codex-builds/fair-REPORT.md was also rejected with Operation not permitted. This fair-local report is the saved fallback.
 
