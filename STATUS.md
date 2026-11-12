@@ -64,10 +64,10 @@ The build requires the installed Rive CLI and source SVG converter at `/Users/pr
 ## Verification
 
 - `rive rive --verify`: **0 errors, 0 warnings**. [Build check](qa/verify.log)
-- `rive inspect rive --summary`: **problems: []**. [Inspection](qa/inspect.json)
+- `rive inspect rive --summary`: **problems: []**. [Inspection](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/inspect.json)
 - **3 real socket tests passed**, covering two clients, movement/turns, server identity and outfits, emotes, deduplicated city quacks, invalid positions, social decisions and departures. [Results](qa/network-results.log)
-- The actual integrated host runs against official Rive Canvas2D WASM with a Skia software canvas. It renders two identities from the real socket server, exercises WASD/camera, joystick second-finger ownership/release/cancel, walks to every bread slice through actual island routes, completes all eight race finishes, and exports both native postcards. [Software results](qa/software-results.json)
-- Served runtime bytes match disk exactly, no-store is present, required local files return 200, all eight reports exist, one Ducky artboard is present, and no forbidden accessory or scripts are imported. [Acceptance record](qa/acceptance.json)
+- The actual integrated host runs against official Rive Canvas2D WASM with a Skia software canvas. It renders two identities from the real socket server, exercises WASD/camera, joystick second-finger ownership/release/cancel, walks to every bread slice through actual island routes, completes all eight race finishes, and exports both native postcards. [Software results](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/software-results.json)
+- Served runtime bytes match disk exactly, no-store is present, required local files return 200, all eight reports exist, one Ducky artboard is present, and no forbidden accessory or scripts are imported. [Acceptance record](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/acceptance.json)
 
 Repeat checks with the servers running:
 
@@ -77,7 +77,7 @@ npm run test:software
 npm run test:browser
 ```
 
-**The final command is blocked here.** Headless Chromium/Chrome abort before opening a page with macOS Mach-port permission errors or SIGABRT. The browser connector is unavailable. Rive CLI screenshots fail because Metal is unavailable. [Full browser failure](qa/browser-blocked.txt), [graphics limits](qa/graphics-blocked.txt).
+**The final command is blocked here.** Headless Chromium/Chrome abort before opening a page with macOS Mach-port permission errors or SIGABRT. The browser connector is unavailable. Rive CLI screenshots fail because Metal is unavailable. [Full browser failure](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/browser-blocked.txt), [graphics limits](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/graphics-blocked.txt).
 
 The integrated screenshots below are genuine native Rive software renders, opened and inspected by eye. They are not Chrome screenshots. Upstream lane reports include their own browser evidence, which is separate from integrated verification.
 
