@@ -27,7 +27,8 @@ test('all four Fair communities, home doors and the full coast loop connect to t
   assert(route.length||nav.clearLine([map.spawn.x,map.spawn.y],p),p.join(',')+' unreachable');
   let prev=[map.spawn.x,map.spawn.y];for(const q of route){assert(nav.clearLine(prev,q));prev=q;}
  }
- for(const p of e.newProps.filter(p=>a.props.some(q=>q.id===p.id)))for(const f of p.footprints)assert(!nav.walkable(f.x,f.y),'missing footprint '+p.id);
+ // Footprints follow their prop to where the art stands now, so a moved prop never leaves an invisible wall behind.
+ for(const p of e.newProps.filter(p=>a.props.some(q=>q.id===p.id))){const q=a.props.find(q=>q.id===p.id);for(const f of p.footprints)assert(!nav.walkable(f.x+q.x-p.x,f.y+q.y-p.y),'missing footprint '+p.id);}
 });
 test('expanded Fair has GPU-safe ground tiles, ten usable boats and a sea-facing harbour',()=>{
  assert(w.origin.x<0&&w.origin.y<0);for(const t of a.ground.tiles)assert(t.width<=1536&&t.height<=1536);
