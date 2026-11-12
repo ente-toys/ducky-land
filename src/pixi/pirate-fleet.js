@@ -2,8 +2,7 @@
 import {WORLD_ISLANDS,WORLD_GEO} from './world-map.js';
 import {mapOf,mapsVersion} from './island-maps.js';
 import {ISLETS} from './islets.js';
-import {coastPolygons} from './island-coasts.js';
-import {createCoastDistanceIndex} from './coast-distance-index.js';
+import {coastPolygons,coastDistance} from './island-coasts.js';
 import {sphereFrame,expMap,logMap,dot,unit,cross} from './sphere.js';
 export const PIRATE_COUNT=18,PIRATE_RADIUS=360,PIRATE_BOAT_GAP=560;
 export const PIRATE_ART=['p3_duckhull','p5_raft','p6_treasure'];
@@ -17,12 +16,12 @@ function waterObstacles(){
  if(obstacleVersion===mapsVersion())return obstacles;obstacleVersion=mapsVersion();
  obstacles=WORLD_ISLANDS.map(frame=>{const m=mapOf(frame.id),rings=coastPolygons(m.world,m.walk,{foot:[m.JETTY.foot.x,m.JETTY.foot.y],tip:[m.JETTY.tip.x,m.JETTY.tip.y],width:m.JETTY.width}).map(r=>r.map(([x,y])=>[x-m.cx,y-m.cy]));return{frame,rings};});
  for(const i of ISLETS){const {foot:a,tip:b,width}=i.jetty,dx=b[0]-a[0],dy=b[1]-a[1],n=Math.hypot(dx,dy),x=-dy/n*width/2,y=dx/n*width/2;obstacles.push({frame:i,rings:[i.coast,...i.blocked,[[a[0]+x,a[1]+y],[b[0]+x,b[1]+y],[b[0]-x,b[1]-y],[a[0]-x,a[1]-y]]]});}
- for(const o of obstacles){o.reach=Math.max(...o.rings.flat().map(p=>Math.hypot(...p)))+1700;o.cap=Math.cos(o.reach/R);o.distance=createCoastDistanceIndex(o.rings);}
+ for(const o of obstacles){o.reach=Math.max(...o.rings.flat().map(p=>Math.hypot(...p)))+1700;o.cap=Math.cos(o.reach/R);}
  return obstacles;
 }
 export function pirateClearance(p,limit=1500){
  let best=limit;
- for(const o of waterObstacles()){if(dot(p,o.frame.center)<o.cap)continue;const q=logMap(o.frame,p,R);best=Math.min(best,o.distance(q.x,q.y,best*1.3)/1.3);if(best===0)return 0;}
+ for(const o of waterObstacles()){if(dot(p,o.frame.center)<o.cap)continue;const q=logMap(o.frame,p,R);best=Math.min(best,coastDistance(q.x,q.y,o.rings)/1.3);if(best===0)return 0;}
  return best;
 }
 export function createPirateFleet({count=PIRATE_COUNT,seed=713913}={}){

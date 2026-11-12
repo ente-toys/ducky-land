@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import {retainDetailArt} from '../src/pixi/three-game-budget.js';
 import {Container} from 'pixi.js';
 import {createSnowfall,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
-import {createFrameClock} from '../src/pixi/frame-clock.js';
 
 test('visiting all themes retains Home and only the visible live island, releasing ready GPU art',()=>{
  const destroyed=[],game={arts:new Map([['home',{ready:true}]]),freeArt(id){destroyed.push(id);this.arts.delete(id);}};
@@ -33,7 +32,7 @@ test('the real engine keeps authoritative simulation stepping while offscreen GP
  const prior={document:globalThis.document,requestAnimationFrame:globalThis.requestAnimationFrame};
  let localSteps=0,roomSteps=0,scheduled=0;
  globalThis.document={hidden:false};globalThis.requestAnimationFrame=()=>{scheduled++;return 42;};
- const game={disposed:false,lastFrame:0,frameClock:createFrameClock(),frame:0,frameTimes:[],accumulator:0,islandId:'home',travelMode:'walking',keys:new Set(['d']),touchInput:{x:0,y:0},
+ const game={disposed:false,lastFrame:0,frame:0,frameTimes:[],accumulator:0,islandId:'home',travelMode:'walking',keys:new Set(['d']),touchInput:{x:0,y:0},
   sim:{step(){localSteps++;}},room:{islandId:'home',mode:'walking',step(dt,input){roomSteps++;assert.equal(input.x,1);},setAlpha(){}},player:null,hadPlayer:false,
   externalOverview:true,externalDetailVisible:false,motion:{matches:false},camera:{get x(){throw new Error('Hidden renderer entered visual work');}},tick(){}};
  try{

@@ -135,17 +135,16 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         else if(z.value!==z.input)waiting=true;
         return {...v,camera:{...v.camera,zoom:z.value},cullCamera:v.camera};
       });
-      const signature=JSON.stringify(active.map(v=>v.stream.id).concat(active.map(v=>[v.camera.x,v.camera.y,v.camera.zoom,v.prefetchCamera?.x,v.prefetchCamera?.y,v.width,v.height,v.tilt,dpr]),planned.map(v=>v.camera.zoom)));
+      const signature=JSON.stringify(active.map(v=>v.stream.id).concat(active.map(v=>[v.camera.x,v.camera.y,v.camera.zoom,v.width,v.height,v.tilt,dpr]),planned.map(v=>v.camera.zoom)));
       if(active.length&&((signature===lastSignature&&!waiting&&!settled)||(!settled&&time-lastPlan<planInterval))){requestPump();return;}
       lastSignature=signature;lastPlan=time;plans++;
       let next, step=1, ringStep=1;
       do {
         next=new Map();let total=0;const plannedSources=new Map();
-        for(const {stream,camera,cullCamera,prefetchCamera,width,height,tilt=1} of planned) {
-          for(const tile of stream.entries) if(tile.preload||tileInView(tile,cullCamera,width,height,tilt,tile.prefetchMargin??(prefetch?{x:width/cullCamera.zoom,y:height/(cullCamera.zoom*tilt)}:(tile.viewMargin??192)))||prefetchCamera&&tileInView(tile,prefetchCamera,width,height,tilt,tile.viewMargin??192)) {
+        for(const {stream,camera,cullCamera,width,height,tilt=1} of planned) {
+          for(const tile of stream.entries) if(tile.preload||tileInView(tile,cullCamera,width,height,tilt,tile.prefetchMargin??(prefetch?{x:width/cullCamera.zoom,y:height/(cullCamera.zoom*tilt)}:(tile.viewMargin??192)))) {
             const visible=!tile.preload&&tileInView(tile,cullCamera,width,height,tilt,tile.viewMargin??192);
-            const ahead=!tile.preload&&prefetchCamera&&tileInView(tile,prefetchCamera,width,height,tilt,tile.viewMargin??192);
-            const resolution=Math.max(.0625,visible||ahead?tileResolution(tile,camera.zoom,dpr)/step:Math.min(.5,tileResolution(tile,camera.zoom,dpr))/ringStep);
+            const resolution=Math.max(.0625,visible?tileResolution(tile,camera.zoom,dpr)/step:Math.min(.5,tileResolution(tile,camera.zoom,dpr))/ringStep);
             const src=tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution;
             const size=tile.pixelWidth?[tile.pixelWidth,tile.pixelHeight]:(sourceSizes[tile.src]??[tile.width,tile.height]);
             const bytes=Math.ceil(size[0]*resolution)*Math.ceil(size[1]*resolution)*4;

@@ -1,9 +1,4 @@
 import {ART_TEXTURE} from './art-texture.js';
-import {createFrameClock} from './frame-clock.js';
-import {followPosition} from './follow-camera.js';
-import {createTextureUploadQueue} from './texture-upload-queue.js';
-import {sceneryAhead} from './scenery-ahead.js';
-import {createFrameMetrics} from './frame-metrics.js';
 import {createPirateFleet,pirateBoatPoint} from './pirate-fleet.js';
 import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './home-motion.js';
@@ -103,6 +98,7 @@ function acquire(src, resolution = 1, {mipmaps = true} = {}) {
 }
 // Ground tiles stream at the resolution the current zoom needs, and the pool's
 // byte budget counts their base level only, so they stay without mipmaps.
+const acquireGround = (src, resolution) => acquire(src, resolution, {mipmaps: false});
 function release(src) {
   const entry = textureLeases.get(src);
   if (!entry || --entry.count) return;
@@ -142,7 +138,6 @@ export class PixiIsland {
     this.frame = 0;
     this.frameTimes = [];
     this.zoomMotion={velocity:0};
-    this.frameClock=createFrameClock();
     this.accumulator = 0;
     this.lastTap = -Infinity;
     this.mapSleepers = new Map();   // boss 6 Nov: each themed map's sleeping Duckies ({duck, rig}), made when its art loads
@@ -162,12 +157,6 @@ export class PixiIsland {
         sharedTicker: false});
       if (this.disposed) { this.app.destroy({removeView:true,releaseGlobalResources:false}, {children: true}); return; }
       this.initialized = true;
-      this.textureUploads=createTextureUploadQueue(source=>{
-        const sample=this.frameMetrics?.beginWork();
-        try{this.app.renderer.texture.initSource(source);}finally{this.frameMetrics?.end(sample,'upload');}
-      });
-      this.cleanups.push(()=>this.textureUploads.destroy());
-      if(import.meta.env.DEV&&new URLSearchParams(location.search).has('profile')){this.frameMetrics=createFrameMetrics(this.app.renderer.gl);this.cleanups.push(()=>this.frameMetrics.destroy());}
       this.canvas = this.app.canvas;
       this.canvas.tabIndex = 0;
       this.canvas.setAttribute('role', 'application');
@@ -176,14 +165,14 @@ export class PixiIsland {
       this.canvas.dataset.state = 'loading';
       host.appendChild(this.canvas);
       this.scene = new Container();
-      this.ground = new Container({isRenderGroup:true});
+      this.ground = new Container();
       this.water = new Container();
       this.objects = new Container({sortableChildren: true});
       this.dust = createDust(this.objects);   // boss 6 Nov: landing and running puffs
       this.air = new Container();
       this.floatLayer=new Container();
-      this.contactShadows=new Container({isRenderGroup:true});
-      this.decks=new Container({isRenderGroup:true});
+      this.contactShadows=new Container();
+      this.decks=new Container();   // boss 3 Nov: the arched bridges, over the water and its lily pads, under every Ducky
       this.upright=trackUpright([[this.objects], [this.air], [this.decks, true]], TILT);
       this.cleanups.push(() => this.upright.destroy());
       this.overDecks=new Container({label: 'Bridges over boats'});   // boss 8 Nov: a river bridge drawn over a boat passing under it
@@ -222,11 +211,6 @@ export class PixiIsland {
         {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true}, ...decals.map(d => ({...d, resolution: 2.5})), ...HOME_GROUND_DECALS.map(d => ({...d, resolution: 2.5}))];
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
-      const acquireGround=async(src,resolution)=>{
-        const texture=await acquire(src,resolution,{mipmaps:false});
-        if(!this.disposed)await this.textureUploads.enqueue(texture);
-        return texture;
-      };
       this.groundPool=createGroundPool({acquire:acquireGround,release});
       const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];   // boss 3 Nov: arched jetties right after the tiles
       // Keep collision data complete, but prioritize artwork around the initial camera.
@@ -352,14 +336,7 @@ export class PixiIsland {
         if(this.disposed)return;
         clouds.source.style.addressModeU='repeat';clouds.source.style.maxAnisotropy=4;clouds.source.style.update();
         this.worldView=createWorldView(this.app,this.scene,this.isletView,clouds);
-        const map=this.mapHere(),warmCamera={x:map.cx,y:map.cy,zoom:this.minZoom};
-        const matrix=cameraMatrix(warmCamera,this.width,this.height,TILT);
-        this.scene.setFromMatrix(new Matrix(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty));
-        this.upright.update();
-        this.worldView.prepare(this.width,this.height,this.archipelago,map,this.birdZoom(),warmCamera);
-        this.canvas.dataset.globeWarmed=String(this.worldView.warmed);
-        const initial=cameraMatrix(this.camera,this.width,this.height,TILT);
-        this.scene.setFromMatrix(new Matrix(initial.a,initial.b,initial.c,initial.d,initial.tx,initial.ty));
+        this.worldView.prepare();
       }
       globalThis.__duckyPin=()=>this.worldView?.pinPoint();globalThis.__duckyRigid=()=>this.rigidReadback();
       if (this.room) {
@@ -374,7 +351,7 @@ export class PixiIsland {
       this.observer.observe(host);
       this.ready = true;
       this.canvas.dataset.state = 'ready';
-      this.lastFrame = this.frameClock(performance.now());
+      this.lastFrame = performance.now();
       this.raf = requestAnimationFrame(time => this.tick(time));
       this.loadScenery(deferred);
     } catch (error) {
@@ -395,17 +372,15 @@ export class PixiIsland {
     const worker = async () => {
       while (remaining.length && !this.disposed) {
         let closest = 0, distance = Infinity;
-        const ahead=sceneryAhead(this.camera,this.player);
         for (let i = 0; i < remaining.length; i++) {
           const {x, y} = remaining[i].entry;
-          const d = (x - ahead.x) ** 2 + (y - ahead.y) ** 2;
+          const d = (x - this.camera.x) ** 2 + (y - this.camera.y) ** 2;
           if (d < distance) { closest = i; distance = d; }
         }
         const [{entry, placeholder}] = remaining.splice(closest, 1);
         try {
           this.loaded.push(entry.src);
           const texture = await acquire(entry.src, entry.rasterResolution??artResolution(entry,entry.resolution??1));
-          if (!this.disposed) await this.textureUploads.enqueue(texture);
           if (this.disposed) continue;
           for (const node of targets.get(placeholder)) {
             if (node.destroyed || node.texture !== placeholder) continue;
@@ -646,7 +621,7 @@ export class PixiIsland {
       this.waterFX?.pause();
       cancelAnimationFrame(this.raf);
       if (document.hidden) this.audio.suspend();
-      else {this.audio.resume();this.frameMetrics?.resetCadence(); this.frameClock=createFrameClock();this.followPositionState=null;this.lastFrame=this.frameClock(performance.now());this.raf=requestAnimationFrame(time=>this.tick(time));}
+      else {this.audio.resume(); this.lastFrame = performance.now(); this.raf = requestAnimationFrame(time => this.tick(time));}
     });
   }
 
@@ -936,9 +911,7 @@ export class PixiIsland {
     if (!map.art) return;
     this.arts.set(mapId, {id: mapId, ready: false});
     let pendingArt;
-    const prepareTexture=texture=>this.disposed?Promise.resolve():this.textureUploads.enqueue(texture);
-    const acquirePrepared=async(src,resolution)=>{const texture=await acquire(src,resolution);await prepareTexture(texture);return texture;};
-    loadThemeArt(map, {acquire:acquirePrepared, release, groundPool:this.groundPool, tilt:TILT,prepareTexture}).then(async art => {
+    loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT}).then(async art => {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
       for (const fx of art.fountainWaters??[]) this.objects.addChild(fx.root);
@@ -1190,8 +1163,6 @@ export class PixiIsland {
 
   tick(now,{forceRender=false,followCamera}={}) {
     if (this.disposed || (document.hidden&&!forceRender)) return;
-    const frameSample=this.frameMetrics?.begin(now);
-    now=this.frameClock(now);
     const elapsed = Math.max(0, now - this.lastFrame);
     const dt = Math.min(.1, elapsed / 1000);
     this.frameTimes.push(elapsed);
@@ -1235,7 +1206,6 @@ export class PixiIsland {
     // The sphere has its own previews. Keep room/prediction stepping above,
     // but do not stream, animate or draw a hidden flat island behind the globe.
     if(this.externalOverview&&this.externalDetailVisible===false){
-      this.frameMetrics?.end(frameSample,'globe');
       this.raf=requestAnimationFrame(time=>this.tick(time));return;
     }
     const t = this.sim.time + this.accumulator;
@@ -1283,15 +1253,7 @@ export class PixiIsland {
       }
     } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;   // off the globe, or held still: no flick
     if (this.fly) this.stepFly(now, player);
-    // Native Pixi needs the same continuous follow as the former perspective
-    // wrapper. Keep zoom/drag/globe transitions on their existing camera path.
-    const smoothFollow=this.follow&&player&&!this.fly&&!this.birdEye&&!this.landingView&&!this.externalCamera&&!reduced&&Math.abs(Math.log(this.camera.zoom/this.target.zoom))<1e-6;
-    if(smoothFollow){
-      this.followPositionState??={x:this.camera.x,y:this.camera.y,target:{x:this.target.x,y:this.target.y},now:now-dt*1000};
-      this.followPositionState=followPosition(this.followPositionState,this.target,now);
-    }else this.followPositionState=null;
     easeZoomCamera(this.camera, this.target, this.zoomMotion, dt, reduced, this.birdEye && (this.gestures.pointers.size || this.spin) ? 30 : 14);
-    if(this.followPositionState){this.camera.x=this.followPositionState.x;this.camera.y=this.followPositionState.y;}
     if (this.globeAim) {   // the ball turns toward its aim along the sphere, never across the island chart
       if (!this.birdEye) this.globeAim=null;
       else {
@@ -1465,13 +1427,12 @@ export class PixiIsland {
     // the globe captures the scene only now, after this frame's camera and animations are set (GPT review: no frame lag)
     const copies=this.liveCopies();
     const views=[];
-    const prefetchCamera=this.follow?sceneryAhead(this.camera,player):this.camera;
     if(flatVisible) {
       const streams=this.artShown==='home'?[this.homeGroundStream]:this.arts.get(this.artShown)?.groundStreams??[];
-      for(const stream of streams)views.push({stream,camera:this.camera,prefetchCamera,width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
+      for(const stream of streams)views.push({stream,camera:this.camera,width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       for(const island of copies) {
         const m=mapFor(island.map),streams=island.map==='home'?[this.homeGroundStream]:this.arts.get(island.map)?.groundStreams??[];
-        for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},prefetchCamera:{...prefetchCamera,...unplaceRigid(this.islandId,island.id,prefetchCamera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
+        for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }
     this.groundPool?.update(views,Math.min(devicePixelRatio||1,2),this.externalZooming);
@@ -1489,8 +1450,6 @@ export class PixiIsland {
     this.app.render();
     if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies, visitors);   // flat view: straight onto the screen, after the real island
     for (const {o} of visitors) o.visible=true;
-    this.frameMetrics?.end(frameSample,this.globeT>.001?'globe':player?.travel>1?'moving':'idle');
-    if(this.frameMetrics&&this.frame%60===0)this.canvas.dataset.frameMetrics=JSON.stringify(this.frameMetrics.summary());
     // DOM-only diagnostics make automated acceptance possible without scene overlays.
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;

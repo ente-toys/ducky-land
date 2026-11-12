@@ -37,9 +37,6 @@ for (const dev of [true,false]) test(`signup bypass is ${dev?'enabled in develop
   t.after(async()=>{await act(async()=>root.unmount());Object.assign(globalThis,original);dom.window.close();});
   await act(async()=>root.render(React.createElement(Page)));
   assert.equal(engines[0].room===null,dev);
-  assert.equal(engines[0].renderResolution,undefined,'native Pixi must use device pixel density rather than a 1x capture cap');
-  assert.notEqual(engines[0].externalOverview,true,'Pixi owns the visible map');
-  assert.notEqual(engines[0].transparent,true,'the map draws its own ocean background');
   assert.deepEqual(requests,dev?[]:['/api/session']);
   assert.equal(sockets.length,dev?0:1);
   assert.equal(Boolean(document.querySelector('.pixi-guest-play')),!dev);
