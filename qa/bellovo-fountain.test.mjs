@@ -2,15 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Container, DOMAdapter, Texture} from 'pixi.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {createGroundPool} from '../src/pixi/ground-stream.js';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {createFountainSurface} from '../src/pixi/water.js';
-import {basinContains} from '../src/pixi/fountain-basin.js';
-import {createFountainWater} from '../src/pixi/fountain.js';
-import {trackUpright} from '../src/pixi/upright.js';
-import {TILT} from '../src/pixi/camera.js';
-import {PALETTE} from '../src/pixi/palette.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {createFountainSurface} from '../src/rendering/pixi/environment/water.js';
+import {basinContains} from '../src/rendering/pixi/environment/fountain-basin.js';
+import {createFountainWater} from '../src/rendering/pixi/environment/fountain.js';
+import {trackUpright} from '../src/rendering/shared/upright.js';
+import {TILT} from '../src/rendering/shared/camera.js';
+import {PALETTE} from '../src/rendering/shared/palette.js';
 
 DOMAdapter.set({...DOMAdapter.get(), createCanvas: () => ({getContext: () => null})});
 const manifest = JSON.parse(readFileSync('public/pixi-art/themes/cathedral/art.json'));
@@ -44,7 +44,7 @@ test('Bellovo mounts one Home fountain effect with the same surface shader, colo
     assert.ok(fx.graphics.mask, 'jets, splashes and foam share the basin clip');
     assert.deepEqual([fx.root.x, fx.root.y, fx.root.scale.x, fx.root.scale.y], [3620, 2420, 1, 1 / TILT]);
     assert.equal(fx.root.zIndex, prop.sortY + .5);
-    const engine = readFileSync('src/pixi/engine.js', 'utf8');
+    const engine = readFileSync('src/rendering/pixi/engine.js', 'utf8');
     assert.match(engine, /id===this.artShown&&visible\(fx.x,fx.y,650\)/, 'engine gates the effect by shown island and viewport');
   } finally {
     art.destroy(); home.dispose(); homeParent.destroy(); pool.destroy(); upright.destroy(); objects.destroy();

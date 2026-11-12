@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {telescopeSpot, telescopeNear, telescopePeerAt} from '../src/pixi/telescope.js';
-import {starPlace, anonymousStars, waitingStars, readSky, skyCounts} from '../src/pixi/stargaze-sky.js';
+import {telescopeSpot, telescopeNear, telescopePeerAt} from '../src/rendering/pixi/telescope.js';
+import {starPlace, anonymousStars, waitingStars, readSky, skyCounts} from '../src/rendering/pixi/stargaze-sky.js';
 import {makeRoom, addPlayer} from './room-harness.mjs';
 import {stars} from '../server/pages-auth.js';
 

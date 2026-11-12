@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Container} from 'pixi.js';
-import {trackUpright} from '../src/pixi/upright.js';
-import {visibleWrapOffsets} from '../src/pixi/world-texture-layout.js';
+import {trackUpright} from '../src/rendering/shared/upright.js';
+import {visibleWrapOffsets} from '../src/rendering/shared/world-texture-layout.js';
 
 test('upright correction processes newly added children after sizing and leaves flat decks alone', () => {
   const objects = new Container(), decks = new Container();

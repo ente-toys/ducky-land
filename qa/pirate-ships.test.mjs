@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
-import {createPirateFleet,pirateClearance,pirateMotion,pirateFacing,PIRATE_COUNT,PIRATE_RADIUS,PIRATE_BOAT_GAP,PIRATE_ART,pirateBoatPoint} from '../src/pixi/pirate-fleet.js';
-import {WORLD_GEO,WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {expMap} from '../src/pixi/sphere.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {Scene} from '../src/pixi/globe-mesh.js';
+import {createPirateFleet,pirateClearance,pirateMotion,pirateFacing,PIRATE_COUNT,PIRATE_RADIUS,PIRATE_BOAT_GAP,PIRATE_ART,pirateBoatPoint} from '../src/gameplay/pirate-fleet.js';
+import {WORLD_GEO,WORLD_ISLANDS} from '../src/world/world-map.js';
+import {ISLETS} from '../src/world/islets.js';
+import {expMap} from '../src/world/sphere.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {Scene} from '../src/rendering/pixi/globe-mesh.js';
 const distance=(a,b)=>Math.hypot(...a.map((v,k)=>v-b[k]))*WORLD_GEO.Rw;
 test('18 ambient ships use all three approved flat vector designs, at the requested double size',async()=>{
  const fleet=createPirateFleet();assert.equal(fleet.ships.length,PIRATE_COUNT);assert.equal(PIRATE_COUNT,18);assert.equal(new Set(fleet.ships.map(s=>s.art)).size,3);
@@ -41,7 +41,7 @@ test('mirror hysteresis ignores a brief reversal and vertical motion; bob is sma
 });
 
 test('Pixi water motion reuses four ripple rings per ship, is non-interactive and hides cleanly',async()=>{
- const {Container,Texture}=await import('pixi.js'),{createPirateView}=await import('../src/pixi/pirate-view.js'),{pirateLocal}=await import('../src/pixi/pirate-fleet.js');
+ const {Container,Texture}=await import('pixi.js'),{createPirateView}=await import('../src/rendering/pixi/pirate-view.js'),{pirateLocal}=await import('../src/gameplay/pirate-fleet.js');
  const objects=new Container(),fleet=createPirateFleet(),view=await createPirateView(objects,fleet,{load:async()=>Texture.WHITE});
  const p=pirateLocal('home',fleet.ships[0].p),rings=view.entries.flatMap(e=>e.rings.map(r=>r.g));fleet.ships[0].velocity=20;
  for(let k=0;k<100;k++)view.update('home',{...p},k/30,1/30,false,(x,y)=>Math.hypot(x-p.x,y-p.y)<1000);
@@ -50,7 +50,7 @@ test('Pixi water motion reuses four ripple rings per ship, is non-interactive an
 });
 
 test('Globe sprites share three textures, mirror UVs without turning the waterline and hide the back hemisphere',async()=>{
- const THREE=await import('three'),{createThreePirates}=await import('../src/pixi/three-pirates.js'),fleet=createPirateFleet({count:3}),scene=new Scene(),camera=new THREE.PerspectiveCamera(35,1,.01,20);camera.position.z=3;camera.updateMatrixWorld(true);
+ const THREE=await import('three'),{createThreePirates}=await import('../src/rendering/three/three-pirates.js'),fleet=createPirateFleet({count:3}),scene=new Scene(),camera=new THREE.PerspectiveCamera(35,1,.01,20);camera.position.z=3;camera.updateMatrixWorld(true);
  fleet.ships[0].p=[0,0,1];fleet.ships[0].dir=[-1,0,0];fleet.ships[1].p=[0,0,-1];
  const textures=[];const view=await createThreePirates(scene,fleet,{load:async()=>{const t=new THREE.Texture();textures.push(t);return t;}});
  for(let k=0;k<80;k++)view.update(new THREE.Quaternion(),camera,1,.016,false,1);

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {FINISHED_THEMES, THEME_OF} from '../src/pixi/island-maps.js';
-import {WORLD_ISLANDS, layoutWorld, neighboursOf} from '../src/pixi/world-map.js';
-import {BOAT_CHANNEL, coastGaps} from '../src/pixi/sphere-shores.js';
+import {FINISHED_THEMES, THEME_OF} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS, layoutWorld, neighboursOf} from '../src/world/world-map.js';
+import {BOAT_CHANNEL, coastGaps} from '../src/world/sphere-shores.js';
 
 test('world: placement preserves all saved IDs and their explicit themes regardless of distance', () => {
   assert.deepEqual(WORLD_ISLANDS.filter(i=>i.theme).map(i=>[i.id,i.theme]),[
@@ -20,8 +20,8 @@ test('world: only the 9 delivered identities are placed, with no filler or impli
 });
 
 test('retired islands cannot load maps, appear as travel targets or retain boats', async () => {
-  const {HOME_MAP,mapOf,mapFor,readyThemes} = await import('../src/pixi/island-maps.js');
-  const {islandFor,destinationsFor,createBoats,fillMoorings} = await import('../src/pixi/islands.js');
+  const {HOME_MAP,mapOf,mapFor,readyThemes} = await import('../src/world/island-maps.js');
+  const {islandFor,destinationsFor,createBoats,fillMoorings} = await import('../src/gameplay/islands.js');
   const {default:READY} = await import('../assets/world/themes/index.js');
   const {readFileSync} = await import('node:fs');
   const manifest=JSON.parse(readFileSync('public/pixi-art/globe/manifest.json'));
@@ -39,7 +39,7 @@ test('retired islands cannot load maps, appear as travel targets or retain boats
 });
 
 test('all nine islands retain their authored globe anchors and globe scale', async () => {
-  const {WORLD_GEO} = await import('../src/pixi/world-map.js');
+  const {WORLD_GEO} = await import('../src/world/world-map.js');
   const anchors=[[0,0],[60,28],[-140,-22],[105,-23],[-85,29],[164,24],[-57,-24],[0,-90],[0,90]];
   for(const [k,i] of WORLD_ISLANDS.entries()) {
     assert.equal(i.lon,anchors[k][0]*(Math.PI/180));

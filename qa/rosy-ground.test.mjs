@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {canSail,harborOf,setSailDestination,sailStep} from '../src/pixi/islands.js';
-import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {canSail,harborOf,setSailDestination,sailStep} from '../src/gameplay/islands.js';
+import {setWalkDestination,walkStep} from '../src/gameplay/player-motion.js';
 import {Path2D,createCanvas} from '@napi-rs/canvas';
 const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url)));
 const text=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {canSail, harborOf, setSailDestination, sailStep} from '../src/pixi/islands.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {canSail, harborOf, setSailDestination, sailStep} from '../src/gameplay/islands.js';
 
 const id = 'blossom', map = mapFor('sunflower');
 function sail(actor, to, seen) {

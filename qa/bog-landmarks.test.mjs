@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import data from '../src/pixi/bog-environment.json' with {type:'json'};
-import {makeMap} from '../src/pixi/island-maps.js';
-import {BOG_BLOCKERS} from '../src/pixi/bog-blockers.js';
-import {BOG_AREAS} from '../src/pixi/bog-environment.js';
-import {getBogBlockers} from '../src/pixi/bog-combat/blockers.js';
-import {traceShot} from '../src/pixi/bog-combat/physics.js';
-import {createPickupSpots} from '../src/pixi/bog-combat/pickups.js';
+import data from '../src/features/bog-combat/bog-environment.json' with {type:'json'};
+import {makeMap} from '../src/world/island-maps.js';
+import {BOG_BLOCKERS} from '../src/features/bog-combat/bog-blockers.js';
+import {BOG_AREAS} from '../src/features/bog-combat/bog-environment.js';
+import {getBogBlockers} from '../src/features/bog-combat/blockers.js';
+import {traceShot} from '../src/features/bog-combat/physics.js';
+import {createPickupSpots} from '../src/features/bog-combat/pickups.js';
 
 const root='public/pixi-art/themes/bog-arena/';
 const art=JSON.parse(fs.readFileSync(root+'art.json'));

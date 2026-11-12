@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {Container,Texture} from 'pixi.js';
-import {knockoutPhase,ghostMotion,createKnockout} from '../src/pixi/bog-combat/knockout.js';
-import {createCombatEffects} from '../src/pixi/bog-combat/effects.js';
-import {createArena} from '../src/pixi/bog-combat/sim.js';
-import {RULES} from '../src/pixi/bog-combat/rules.js';
+import {knockoutPhase,ghostMotion,createKnockout} from '../src/features/bog-combat/knockout.js';
+import {createCombatEffects} from '../src/features/bog-combat/effects.js';
+import {createArena} from '../src/features/bog-combat/sim.js';
+import {RULES} from '../src/features/bog-combat/rules.js';
 
 const art=Object.fromEntries(['privacy-body','privacy-wisp','privacy-puddle','privacy-popper','google-body','google-wisp','google-puddle','google-popper','halo','devil-tail'].map(key=>[key,Texture.WHITE]));
 test('ghost holds for two seconds, fades before ground, and respects the authoritative three-second respawn',()=>{
@@ -61,7 +61,7 @@ test('real simulation tag snapshots contain everything needed without adding pro
  assert.ok(knockoutPhase(victim,snapshot.time).age>0);
 });
 test('every ghost SVG is flat vector only and both teams retain the approved colour tokens',()=>{
- const dir=new URL('../src/pixi/bog-combat/assets/ghosts/',import.meta.url);
+ const dir=new URL('../src/features/bog-combat/assets/ghosts/',import.meta.url);
  for(const file of readdirSync(dir)){
   assert.match(file,/\.svg$/);const svg=readFileSync(new URL(file,dir),'utf8');
   assert.doesNotMatch(svg,/<(?:image|filter|linearGradient|radialGradient|foreignObject)\b|data:|https?:\/\/(?!www.w3.org)/i);

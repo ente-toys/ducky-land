@@ -1,6 +1,6 @@
 <!doctype html><html><meta charset="utf-8"><title>Walk overlay</title><style>body{margin:0;background:#222}svg{width:100vw;height:100vh;display:block;background:#80c5dc}</style><script type="module">
 import walk from '../assets/world/walk-world.json';import world from '../assets/world/world.json';import {geometry} from '../assets/world/island-geometry.mjs';
-import art from '../src/pixi/art-manifest.json';import{createPlacements,trimWorld}from '../src/pixi/placements.js';
+import art from '../src/world/home/art-manifest.json';import{createPlacements,trimWorld}from '../src/world/home/placements.js';
 const q=new URLSearchParams(location.search),box=(q.get('box')||'0,0,5800,4400').split(',').map(Number),step=+(q.get('step')||16);
 const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox',box.join(' '));document.body.append(svg);
 const add=(tag,attrs)=>{const el=document.createElementNS(svg.namespaceURI,tag);for(const[k,v]of Object.entries(attrs))el.setAttribute(k,v);svg.append(el);return el;};

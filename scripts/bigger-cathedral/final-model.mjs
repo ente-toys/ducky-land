@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {rasterTiles,RASTER_GROUND_TILE_SIZE} from '../../src/pixi/theme-raster.js';
+import {rasterTiles,RASTER_GROUND_TILE_SIZE} from '../../src/rendering/pixi/art/theme-raster.js';
 export const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 export const read=p=>JSON.parse(fs.readFileSync(p));
 export function rasterLayers(art=read(A+'art.json')){

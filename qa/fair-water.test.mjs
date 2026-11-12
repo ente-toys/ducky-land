@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import sharp from 'sharp';
-import {PALETTE} from '../src/pixi/palette.js';
+import {PALETTE} from '../src/rendering/shared/palette.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const base='public/pixi-art/themes/fair/',art=read(base+'art.json'),plan=read('scripts/bigger-fair/centre-source/sailing.json');
 const sea='#'+PALETTE.water.toString(16).toUpperCase();
@@ -15,7 +15,7 @@ async function pixel(svg,x,y){
 }
 test('Fair inland water colour equals Home sea, sharing its live wave/shimmer plane',async()=>{
  assert.equal(art.sea,sea);
- const engine=fs.readFileSync('src/pixi/engine.js','utf8');
+ const engine=fs.readFileSync('src/rendering/pixi/engine.js','utf8');
  assert.ok(engine.includes("background: '"+sea+"'"));
  assert.ok(engine.includes("src:'/pixi-art/water-texture.svg'"));
  assert.ok(engine.includes('this.ocean.tilePosition.set('),'one world-registered animated texture');

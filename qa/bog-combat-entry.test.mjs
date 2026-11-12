@@ -4,14 +4,14 @@ import {EventEmitter} from 'node:events';
 import {mkdtempSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {createArena} from '../src/pixi/bog-combat/sim.js';
-import {MEDALS,tagMedals,cleanMedalCase} from '../src/pixi/bog-combat/medals.js';
-import {KARMA_REQUIRED,canEnterBog,dockArrival,teamCounts,suggestedTeam} from '../src/pixi/bog-combat/entry.js';
-import {RULES} from '../src/pixi/bog-combat/rules.js';
+import {createArena} from '../src/features/bog-combat/sim.js';
+import {MEDALS,tagMedals,cleanMedalCase} from '../src/features/bog-combat/medals.js';
+import {KARMA_REQUIRED,canEnterBog,dockArrival,teamCounts,suggestedTeam} from '../src/features/bog-combat/entry.js';
+import {RULES} from '../src/features/bog-combat/rules.js';
 import {createArenaSocket} from '../server/arena-socket.mjs';
 import {createArenaProfiles} from '../server/arena-socket.mjs';
-import {ArenaLobbyClient} from '../src/pixi/bog-combat/client.js';
-import {DUCK_LENGTH as D} from '../src/pixi/bog-combat/rules.js';
+import {ArenaLobbyClient} from '../src/features/bog-combat/client.js';
+import {DUCK_LENGTH as D} from '../src/features/bog-combat/rules.js';
 const MAP_SCALE=1;
 
 test('Bog dock entry is walking only, needs five karma, and team sizes remain free',()=>{

@@ -4,10 +4,10 @@ import {readFileSync} from 'node:fs';
 import {Assets, Texture, Container} from 'pixi.js';
 import {build} from 'esbuild';
 import {fileURLToPath} from 'node:url';
-import {createSnowCoverState, updateSnowCover, createSnowCover, snowCrownProfile, drawSnowCap} from '../src/pixi/snow-cover.js';
-import {snowPose, createSnowfall, SNOW_POOL_SIZE, SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
+import {createSnowCoverState, updateSnowCover, createSnowCover, snowCrownProfile, drawSnowCap} from '../src/rendering/pixi/environment/snow-cover.js';
+import {snowPose, createSnowfall, SNOW_POOL_SIZE, SNOW_PHONE_COUNT} from '../src/rendering/pixi/environment/snowfall.js';
 
-const {outputFiles: [bundle]} = await build({entryPoints: [fileURLToPath(new URL('../src/pixi/duck.js', import.meta.url))],
+const {outputFiles: [bundle]} = await build({entryPoints: [fileURLToPath(new URL('../src/rendering/pixi/duck.js', import.meta.url))],
   bundle: true, packages: 'external', format: 'esm', write: false});
 const code = bundle.text.replaceAll('"pixi.js"', JSON.stringify(import.meta.resolve('pixi.js')));
 const {createDuck, disposeDuckAssets} = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));
@@ -136,9 +136,9 @@ test('players snow follows all eight directions and hats, changes outfit safely,
 }));
 
 test('real engine tracks offscreen remote motion and frees local, remote and sleeper cover on leave', async () => withTextures(async () => {
-  const {outputFiles: [engineBundle]} = await build({entryPoints: ['src/pixi/engine.js'], bundle: true, packages: 'external',
+  const {outputFiles: [engineBundle]} = await build({entryPoints: ['src/rendering/pixi/engine.js'], bundle: true, packages: 'external',
     platform: 'node', format: 'esm', write: false, define: {'import.meta.env.DEV': 'false',
-      'import.meta.url': JSON.stringify(new URL('../src/pixi/engine.js', import.meta.url).href)}});
+      'import.meta.url': JSON.stringify(new URL('../src/rendering/pixi/engine.js', import.meta.url).href)}});
   let code = engineBundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
   for (const name of ['pixi.js']) code = code.replaceAll(JSON.stringify(name), JSON.stringify(import.meta.resolve(name)));
   const {PixiIsland} = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createServer} from 'vite';
-import {mapFor,mapOf} from '../src/pixi/island-maps.js';
+import {mapFor,mapOf} from '../src/world/island-maps.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
 import {layout,original,read,A,D,clearance,segmentDistance,sample} from '../scripts/fair-life/apply.mjs';
 import {inShape} from '../assets/world/island-geometry.mjs';
@@ -44,7 +44,7 @@ test('twelve authored kite stakes and flying envelopes clear water, roofs and ro
   for(const p of art.props){const a=p.anchor??{x:.5,y:1},w=p.width*(p.scale??1),h=p.height*(p.scale??1);assert(!(s.x+s.lean+145>p.x-w*a.x-15&&s.x+s.lean-65<p.x+w*(1-a.x)+15&&s.y-s.height+100>p.y-h*a.y-15&&s.y-s.height-120<p.y+h*(1-a.y)+15),s.id+' flight clears '+p.id);}
   for(const p of art.props){const a=p.anchor??{x:.5,y:1},w=p.width*(p.scale??1),h=p.height*(p.scale??1);assert(!(s.x+24>p.x-w*a.x&&s.x-24<p.x+w*(1-a.x)&&s.y>p.y-h*a.y&&s.y-34<p.y+h*(1-a.y)),s.id+' visible stake clears '+p.id);}
   assert(!walk.obstacles.some(o=>o.id===s.id||o.name===s.id),'nonblocking kite');
-  const poses=read('src/pixi/sleep-poses.json').poses;
+  const poses=read('src/world/home/sleep-poses.json').poses;
   for(const bed of mapFor('fair').sleepers){
    const p=poses[bed.pose],h=(p.box[3]-p.box[1])*p.k*.81*(.88*.24*3)/3;
    assert(!(bed.x+bed.r+20>s.x+s.lean-65&&bed.x-bed.r-20<s.x+s.lean+145&&bed.y+20>s.y-s.height-120&&bed.y-h-20<s.y-s.height+100),s.id+' flight clears resident '+bed.pose+' '+bed.x+','+bed.y);
@@ -54,7 +54,7 @@ test('twelve authored kite stakes and flying envelopes clear water, roofs and ro
 test('Fair kites use the actual Home animation, attached strings and reduced-motion stillness without sockets',async()=>{
  const vite=await createServer({configFile:false,cacheDir:'/tmp/fair-life-vite',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
  try{
-  const {createHomeKites,KITE_ASSETS}=await vite.ssrLoadModule('/src/pixi/home-kites.js');
+  const {createHomeKites,KITE_ASSETS}=await vite.ssrLoadModule('/src/rendering/pixi/environment/home-kites.js');
   const {Container,Texture}=await vite.ssrLoadModule('pixi.js'),parent=new Container();
   const kites=createHomeKites(parent,Object.fromEntries(KITE_ASSETS.map(src=>[src,Texture.WHITE])),art.kites);
   assert.equal(kites.entries.length,12);

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Container,Texture,Sprite} from 'pixi.js';
-import {createKarmaQuiver} from '../src/pixi/karma-quiver.js';
+import {createKarmaQuiver} from '../src/rendering/pixi/karma-quiver.js';
 const setup=angle=>{
  const body=new Container(),joint=new Container(),tail=new Container(),wing=new Container();body.addChild(joint,tail,wing);
  const quiver=createKarmaQuiver({spec:{angle},body,bodyPart:{joint},parts:[{role:'tail',joint:tail}]},Texture.WHITE);

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {Texture} from 'pixi.js';
-import {createGroundPool} from '../src/pixi/ground-stream.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
+import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 
 const map = {id: 'test', art: '/themes/test/art.json',origin:{x:0,y:0},width:100,height:100};
 const manifest = {

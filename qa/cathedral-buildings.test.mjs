@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 import {VILLAGES} from '../scripts/bigger-cathedral/villages-data.mjs';
 import {BUILDING_STYLES} from '../scripts/bigger-cathedral/buildings-data.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));

@@ -6,16 +6,16 @@ import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {fileURLToPath} from 'node:url';
 import {readFile} from 'node:fs/promises';
 import {BufferGeometry,CanvasTexture,Float32BufferAttribute,Matrix3,Mesh,MeshBasicMaterial as ReferenceMaterial,PerspectiveCamera as ReferenceCamera,PlaneGeometry,Raycaster,ShaderLib,Vector2,Vector3,Vector4} from 'three';
-import {PerspectiveCamera,Quaternion} from '../src/pixi/globe-math.js';
-import {Scene,Group as GlobeGroup,MeshBasicMaterial} from '../src/pixi/globe-mesh.js';
-import {DETAIL_CAPTURE_SCALE,detailViewport,detailSize,detailCamera,detailBlend} from '../src/pixi/three-detail-view.js';
-import {liveSurfaceBounds,liveSurfaceNeedsUpdate,liveSurfaceGeometry,captureFeather,liveCaptureEdgeShader,liveCaptureProjection} from '../src/pixi/three-live-geometry.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {atlasTransform,focusQuaternion,surfacePoint} from '../src/pixi/three-globe-math.js';
-import {cameraMatrix} from '../src/pixi/sphere-camera.js';
-import {flatRigid} from '../src/pixi/rigid.js';
+import {PerspectiveCamera,Quaternion} from '../src/rendering/shared/globe-math.js';
+import {Scene,Group as GlobeGroup,MeshBasicMaterial} from '../src/rendering/pixi/globe-mesh.js';
+import {DETAIL_CAPTURE_SCALE,detailViewport,detailSize,detailCamera,detailBlend} from '../src/rendering/three/three-detail-view.js';
+import {liveSurfaceBounds,liveSurfaceNeedsUpdate,liveSurfaceGeometry,captureFeather,liveCaptureEdgeShader,liveCaptureProjection} from '../src/rendering/three/three-live-geometry.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {ISLETS} from '../src/world/islets.js';
+import {atlasTransform,focusQuaternion,surfacePoint} from '../src/rendering/three/three-globe-math.js';
+import {cameraMatrix} from '../src/rendering/shared/sphere-camera.js';
+import {flatRigid} from '../src/world/rigid.js';
 
 const sizes=[[2560,1080],[1920,1080],[393,852]];
 const frame=WORLD_ISLANDS.find(i=>i.theme==='community'),map=mapOf(frame.id);
@@ -144,7 +144,7 @@ test('live capture tapers its own edges without changing texture coordinates or 
 });
 
 const {outputFiles:[bundle]}=await build({
-  entryPoints:[fileURLToPath(new URL('../src/pixi/three-game-view.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,
+  entryPoints:[fileURLToPath(new URL('../src/rendering/three/three-game-view.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,
   plugins:[{name:'headless-decoration',setup(b){
     b.onLoad({filter:/three-world-view\.js$/},async args=>({contents:(await readFile(args.path,'utf8'))
       .replace('new WebGLRenderer(','new globalThis.__wideQA.Renderer(')

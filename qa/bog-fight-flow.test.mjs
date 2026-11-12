@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {DUCK_RADIUS,traceShot} from '../src/pixi/bog-combat/physics.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {DUCK_RADIUS,traceShot} from '../src/features/bog-combat/physics.js';
 
 import {groupFeet,shelters,hasWideBypass,shortCrossing} from './bog-wall-layout-helpers.mjs';
 const layout=JSON.parse(fs.readFileSync('scripts/bog-environment/layout.json'));

@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {globeScreen,globeWeight} from '../src/pixi/globe-screen.js';
-import {spherePoint,localPoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {flatRigid,shearOf} from '../src/pixi/rigid.js';
-import {turnLongitude} from '../src/pixi/sphere-camera.js';
-import {dot,angle,expMap,sphereFrame} from '../src/pixi/sphere.js';
-import {ISLETS} from '../src/pixi/islets.js';
+import {globeScreen,globeWeight} from '../src/rendering/shared/globe-screen.js';
+import {spherePoint,localPoint,viewFrame} from '../src/world/sphere-coordinates.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {flatRigid,shearOf} from '../src/world/rigid.js';
+import {turnLongitude} from '../src/rendering/shared/sphere-camera.js';
+import {dot,angle,expMap,sphereFrame} from '../src/world/sphere.js';
+import {ISLETS} from '../src/world/islets.js';
 
 const W=1440,H=900,id='home',Rw=WORLD_GEO.Rw,zoom=.0329;
 const island=i=>{const m=mapOf(i.id);return (x,y)=>spherePoint(i.id,{x:m.cx+x,y:m.cy+y});};
@@ -96,9 +96,9 @@ test('at ball 0 the stickers keep the exact flat placement; between, they blend 
 });
 
 test('islands are rigid stickers at the flat end and painted on the ball from ball .6 (boss 8 Nov, "not a 3D globe")',async()=>{
- const {paintWeight}=await import('../src/pixi/globe-screen.js');
+ const {paintWeight}=await import('../src/rendering/shared/globe-screen.js');
  assert.equal(paintWeight(0),0);assert.equal(paintWeight(.1),0);assert.equal(paintWeight(.6),1);assert.equal(paintWeight(1),1);
- const code=(await import('node:fs')).readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
+ const code=(await import('node:fs')).readFileSync(new URL('../src/rendering/pixi/world-view.js',import.meta.url),'utf8');
  assert.match(code,/vec2 chartQ\(vec3 c,vec3 e,vec3 n,vec3 p\)/,'each island is looked up through its own sphere chart');
  assert.match(code,/return mix\(stickQ\(S,X\),b,k\);/,'blended in coordinates, never colours');
 });

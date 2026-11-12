@@ -1,15 +1,15 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
-import {placeRigid} from '../src/pixi/rigid.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
+import {placeRigid} from '../src/world/rigid.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {canSail, seaBoundsFor} from '../src/pixi/islands.js';
-import {WORLD_ISLANDS, MAP_BOUNDS, worldIsland, neighboursOf} from '../src/pixi/world-map.js';
-import {createNavigation} from '../src/pixi/navigation.js';
+import {canSail, seaBoundsFor} from '../src/gameplay/islands.js';
+import {WORLD_ISLANDS, MAP_BOUNDS, worldIsland, neighboursOf} from '../src/world/world-map.js';
+import {createNavigation} from '../src/world/navigation.js';
 import world from '../assets/world/world.json' with {type: 'json'};
 import walkWorld from '../assets/world/walk-world.json' with {type: 'json'};
 
 let mapOf = null;
-try {({mapOf} = await import('../src/pixi/island-maps.js'));} catch {}
+try {({mapOf} = await import('../src/world/island-maps.js'));} catch {}
 const homeNav = createNavigation({...world, ...walkWorld});
 const sizeAndNav = id => mapOf ? {width: mapOf(id).width, height: mapOf(id).height, cx:mapOf(id).cx, cy:mapOf(id).cy, origin:mapOf(id).origin, nav: mapOf(id).nav()} : {width: world.width, height: world.height, nav: homeNav};
 const SX = MAP_BOUNDS.x1 - MAP_BOUNDS.x0, wrap = v => v - SX * Math.round(v / SX);

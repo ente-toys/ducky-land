@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Texture} from 'pixi.js';
 import {readFileSync} from 'node:fs';
-import {patchGeometry,createLivePatches} from '../src/pixi/sphere-mesh.js';
-import {mapPoint,localPoint} from '../src/pixi/sphere-coordinates.js';
-import {placeRigid,unplaceRigid,flatRigid,polar,shearOf} from '../src/pixi/rigid.js';
-import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/pixi/sphere-camera.js';
-import {isletPlacement} from '../src/pixi/islet-view.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {patchGeometry,createLivePatches} from '../src/rendering/pixi/sphere-mesh.js';
+import {mapPoint,localPoint} from '../src/world/sphere-coordinates.js';
+import {placeRigid,unplaceRigid,flatRigid,polar,shearOf} from '../src/world/rigid.js';
+import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/rendering/shared/sphere-camera.js';
+import {isletPlacement} from '../src/rendering/pixi/islet-view.js';
+import {ISLETS} from '../src/world/islets.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 test('neighbour meshes are rigid: true size, right angles, centre on the sphere',()=>{
  for(const [from,to]of [['home','isle-55'],['isle-55','home'],['sunset','isle-170'],['home','isle-251'],['home','isle-176']]){
@@ -59,7 +59,7 @@ test('sailing onto a rigid copy keeps that island exactly where it was on screen
  assert.ok(shearOf(after.basis).shearDeg<1e-9,'the leftover is a pure turn');
 });
 test('the globe shader draws islands and islets as stickers, never through a sphere chart',()=>{
- const code=readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
+ const code=readFileSync(new URL('../src/rendering/pixi/world-view.js',import.meta.url),'utf8');
  assert.match(code,/uniform vec4 uIsl\[13\]/);
  assert.match(code,/uniform vec4 uIt\[22\]/);
  assert.doesNotMatch(code,/uIsletEasts|uCenters|uEasts/,'no per-island inverse azimuthal lookup left');

@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PerspectiveCamera,Quaternion,Vector3} from '../src/pixi/globe-math.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {transport} from '../src/pixi/sphere.js';
-import {surfacePoint,focusQuaternion,lockSurfaceAnchor,zoomDistance,SURFACE_RADIUS} from '../src/pixi/three-globe-math.js';
-import {alignIslandNorth,approachProgress} from '../src/pixi/three-island-approach.js';
+import {PerspectiveCamera,Quaternion,Vector3} from '../src/rendering/shared/globe-math.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {transport} from '../src/world/sphere.js';
+import {surfacePoint,focusQuaternion,lockSurfaceAnchor,zoomDistance,SURFACE_RADIUS} from '../src/rendering/three/three-globe-math.js';
+import {alignIslandNorth,approachProgress} from '../src/rendering/three/three-island-approach.js';
 
 test('a fly-in distributes magnification across the approach',()=>{
  const orbit=5.2,close=1.12,half=zoomDistance(orbit,close,.5);

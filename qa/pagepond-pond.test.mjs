@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Path2D} from '@napi-rs/canvas';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 import {inShape} from '../assets/world/island-geometry.mjs';
 
 const read=p=>JSON.parse(fs.readFileSync(p));

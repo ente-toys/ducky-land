@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {outsideStageProps,outsideStageFlats} from './campfire-stage-scope.mjs';
 import {auditCampfire} from '../scripts/campfire-hamlets/audit.mjs';
-import {makeMap} from '../src/pixi/island-maps.js';
-import {canSail} from '../src/pixi/islands.js';
+import {makeMap} from '../src/world/island-maps.js';
+import {canSail} from '../src/gameplay/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',D='assets/world/themes/community/',S='scripts/campfire-hamlets/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),plan=read(S+'placement.json'),before=read(S+'baseline/art.json');
 test('Campfire approved hamlets preserve the centre and keep every contact shadow under the piece',()=>{

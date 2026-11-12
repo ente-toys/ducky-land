@@ -4,11 +4,11 @@
 <div id="status">Loading Tickytown…</div>
 <script type="module">
 import {Application,Container,Assets,Sprite,TilingSprite} from 'pixi.js';
-import {loadThemeArt} from '/src/pixi/theme-art.js';
-import {makeMap} from '/src/pixi/island-maps.js';
-import {drawJetty} from '/src/pixi/harbor.js';
-import {createSleeper,SLEEP_ASSETS} from '/src/pixi/sleeper.js';
-import {SLEEP_ROOT} from '/src/pixi/sleep-spots.js';
+import {loadThemeArt} from '/src/rendering/pixi/art/theme-art.js';
+import {makeMap} from '/src/world/island-maps.js';
+import {drawJetty} from '/src/rendering/pixi/harbor.js';
+import {createSleeper,SLEEP_ASSETS} from '/src/rendering/pixi/environment/sleeper.js';
+import {SLEEP_ROOT} from '/src/world/home/sleep-spots.js';
 const json=async url=>(await fetch(url)).json(),base='/pixi-art/themes/neon/';
 const [world,walk,harbor,beds,ducks]=await Promise.all([json('./world.json'),json('./walk-world.json'),json('./harbor.json'),json(base+'resolved-sleepers.json'),json('/pixi-duck/manifest.json')]);
 const map=makeMap('neon',{world,walk,harbor,sleepers:beds,art:base+'art.json'});

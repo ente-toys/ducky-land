@@ -1,0 +1,20 @@
+import {createNavigation} from '../world/navigation.js';
+import {DURATIONS, separateActors, setWalkDestination, slideStep, walkStep} from './player-motion.js';
+export {DURATIONS};
+export function createSimulation(world,seed=8612,{sleepingNpcs=false,npcCount=28}={}){
+ const nav=createNavigation(world),zones=Object.keys(world.zones),ducks=[],responses=[];
+ const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+ const rnd=(a,b)=>a+(b-a)*random();let time=0;
+ for(let i=0;i<=npcCount;i++){const zone=i===0?'plaza':zones[Math.floor((i-1)/4)%zones.length],z=world.zones[zone];const p=nav.nearest(z.spawn[0]+(i?rnd(-250,250):0),z.spawn[1]+(i?rnd(-130,130):0),400)||z.spawn;
+ ducks.push({id:i,x:p[0],y:p[1],previousX:p[0],previousY:p[1],zone,player:i===0,sleeping:i>0&&sleepingNpcs,action:i>0&&sleepingNpcs?7:0,until:0,turn:0,path:[],wait:rnd(.3,3),speed:i?rnd(65,105):245,travel:0,emoteVersion:0,outfit:{cap:i?1+(i-1)%13:8,shades:i%4===0?1+i%3:0,acc:i%3===0?1+i%7:0,shoes:1+i%10}});}
+ const player=ducks[0];
+ const KEPT=new Set([2,3,7]);
+ function emote(action,actor=player){if(!DURATIONS[action]||!KEPT.has(action)||actor.sleeping)return;actor.path=[];actor.pace=0;if(action===3&&actor.action===3){actor.action=0;actor.until=0;return;}actor.action=action;actor.until=time+DURATIONS[action];actor.emoteVersion++;if(actor===player&&action===2)ducks.filter(d=>!d.player&&!d.sleeping&&Math.hypot(d.x-player.x,d.y-player.y)<650).slice(0,3).forEach((d,i)=>responses.push({at:time+.35+i*.26,d}));}
+ function destination(x,y){return setWalkDestination(player,nav,x,y);}
+ function move(d,vx,vy,dt){const len=Math.hypot(vx,vy);if(!len)return false;const dx=vx/len*d.speed*dt,dy=vy/len*d.speed*dt;const oldX=d.x,oldY=d.y;[d.x,d.y]=slideStep(nav,d.x,d.y,dx,dy);const moved=d.x!==oldX||d.y!==oldY;const desired=Math.atan2(vx,vy),delta=Math.atan2(Math.sin(desired-d.turn),Math.cos(desired-d.turn));d.turn+=delta*(1-Math.exp(-13*dt));d.travel=Math.hypot(d.x-oldX,d.y-oldY)/dt;if(moved)d.action=1;return moved;}
+ function step(dt,input={x:0,y:0}){time+=dt;for(let i=responses.length-1;i>=0;i--)if(responses[i].at<=time){const {d}=responses.splice(i,1)[0];emote(2,d);d.turn=Math.atan2(player.x-d.x,player.y-d.y);}
+ for(const d of ducks){d.previousX=d.x;d.previousY=d.y;d.travel=0;if(d.sleeping)continue;if(d.player){walkStep(d,nav,dt,time,input);continue;}
+ if(time<d.until)continue;if(d.action>1)d.action=0;if(d.path.length){const [x,y]=d.path[0];if(Math.hypot(x-d.x,y-d.y)<Math.max(5,d.speed*dt)){d.x=x;d.y=y;d.path.shift();}else if(!move(d,x-d.x,y-d.y,dt))d.path=[];if(!d.path.length)d.action=0;continue;}d.action=0;d.wait-=dt;if(d.wait>0)continue;d.wait=rnd(1.5,4.5);const friend=ducks.find(o=>o!==d&&Math.hypot(o.x-d.x,o.y-d.y)<220);if(friend)d.turn=Math.atan2(friend.x-d.x,friend.y-d.y);const chance=random();if(chance<.12){emote(2,d);continue;}if(chance<.2){emote(3,d);continue;}const z=world.zones[d.zone];for(let i=0;i<12;i++){const x=z.spawn[0]+rnd(-330,330),y=z.spawn[1]+rnd(-210,210);if(nav.walkable(x,y)){d.path=nav.route(d.x,d.y,x,y);if(d.path.length)break;}}}
+ separateActors(ducks,nav,dt);}
+ return {ducks,player,nav,step,emote,destination,get time(){return time;},stopInput(){player.path=[];player.pace=0;if(player.action===1)player.action=0;}};
+}

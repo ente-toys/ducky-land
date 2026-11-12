@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {Container,Sprite,Texture} from 'pixi.js';
-import {createPlantContacts,plantKind,LEAF_CAP} from '../src/pixi/plant-contact.js';
-import {createPlantReactions} from '../src/pixi/plant-reactions.js';
-import {thinSnowSVG,SNOW_CLUMP_CAP,SNOW_PILE_CAP,SNOW_REFILL} from '../src/pixi/plant-snow.js';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {createPlantContacts,plantKind,LEAF_CAP} from '../src/rendering/pixi/environment/plant-contact.js';
+import {createPlantReactions} from '../src/rendering/pixi/environment/plant-reactions.js';
+import {thinSnowSVG,SNOW_CLUMP_CAP,SNOW_PILE_CAP,SNOW_REFILL} from '../src/rendering/pixi/environment/plant-snow.js';
+import {mapFor} from '../src/world/island-maps.js';
 
 const manifest=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json')),map=mapFor('snow');
 const nodes=n=>[n,...n.children.flatMap(nodes)],find=(parent,label)=>nodes(parent).filter(n=>n.label===label);

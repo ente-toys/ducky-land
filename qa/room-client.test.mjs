@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {RoomClient,OfflineFleet} from '../src/pixi/room-client.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {ISLANDS} from '../src/pixi/islands.js';
+import {RoomClient,OfflineFleet} from '../src/multiplayer/room-client.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {ISLANDS} from '../src/gameplay/islands.js';
 const PLAIN=ISLANDS.find(island => island.id!=='home' && mapOf(island.id).home)?.id ?? 'home';
-import {destinationsFor,harborOf,boatSpots,boatHome,boatSlot,MOORING_CLEAR} from '../src/pixi/islands.js';
-import {JUMP_SECONDS,JUMP_CROUCH,JUMP_AIR,JUMP_LAND,JUMP_RISE,jumpHeight,jumpPose,startJump,walkStep} from '../src/pixi/player-motion.js';
+import {destinationsFor,harborOf,boatSpots,boatHome,boatSlot,MOORING_CLEAR} from '../src/gameplay/islands.js';
+import {JUMP_SECONDS,JUMP_CROUCH,JUMP_AIR,JUMP_LAND,JUMP_RISE,jumpHeight,jumpPose,startJump,walkStep} from '../src/gameplay/player-motion.js';
 
 function setup() {
   const events=[],sent=[];

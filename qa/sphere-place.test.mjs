@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORLD_ISLANDS,WORLD_GEO,worldIsland,SPHERE_CIRCUMFERENCE} from '../src/pixi/world-map.js';
-import {sphereFrame,expMap,logMap,dot,angle,cross,transport,arcDistance} from '../src/pixi/sphere.js';
-import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {placeRigid} from '../src/pixi/rigid.js';
-import {sphereShores,sphereShoreGap,coastGaps,BOAT_CHANNEL} from '../src/pixi/sphere-shores.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {canSail,landingSpot,landingApproach,sailRoute,sailStep,SAIL_SPEED,destinationsFor,crossIsland} from '../src/pixi/islands.js';
+import {WORLD_ISLANDS,WORLD_GEO,worldIsland,SPHERE_CIRCUMFERENCE} from '../src/world/world-map.js';
+import {sphereFrame,expMap,logMap,dot,angle,cross,transport,arcDistance} from '../src/world/sphere.js';
+import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/world/sphere-coordinates.js';
+import {placeRigid} from '../src/world/rigid.js';
+import {sphereShores,sphereShoreGap,coastGaps,BOAT_CHANNEL} from '../src/world/sphere-shores.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {canSail,landingSpot,landingApproach,sailRoute,sailStep,SAIL_SPEED,destinationsFor,crossIsland} from '../src/gameplay/islands.js';
 import {readFileSync} from 'node:fs';
 
 test('same small sphere, orthonormal patch frames and the North Pole on Iceland alone',()=>{
@@ -78,7 +78,7 @@ test('sailing to Iceland docks on its own jetty and beach from both hemispheres'
  }
 });
 test('space outside the sphere cannot sample flat land, while hearts can rise beyond the rim',()=>{
- const code=readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
+ const code=readFileSync(new URL('../src/rendering/pixi/world-view.js',import.meta.url),'utf8');
  assert.match(code,/if\(edge>=1\.\)return space;/);
  assert.match(code,/pin.mask=masking\?sphereMask:null/);
  assert.match(code,/if\(masking\)sphereMask\.circle/);

@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Container} from 'pixi.js';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {navOf} from '../src/pixi/islands.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {walkStep,WALK_SPEED,setWalkDestination} from '../src/pixi/player-motion.js';
-import {onRink,onIce,ICE_SPEED,ICE_CRASH} from '../src/pixi/rink-slide.js';
-import {createRinkTrails,RINK_TRAIL_CAP} from '../src/pixi/rink-trails.js';
-import {RoomClient} from '../src/pixi/room-client.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {navOf} from '../src/gameplay/islands.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {walkStep,WALK_SPEED,setWalkDestination} from '../src/gameplay/player-motion.js';
+import {onRink,onIce,ICE_SPEED,ICE_CRASH} from '../src/gameplay/rink-slide.js';
+import {createRinkTrails,RINK_TRAIL_CAP} from '../src/rendering/pixi/environment/rink-trails.js';
+import {RoomClient} from '../src/multiplayer/room-client.js';
 import {makeRoom,addPlayer} from './room-harness.mjs';
 
 const map=mapFor('snow'),nav=map.nav(),rink=nav.rink,gates=map.walk.iceland2.shores;

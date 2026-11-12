@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read('public/pixi-art/themes/fair/art.json'),map=mapFor('fair'),nav=map.nav();
 const P=([x,y])=>[3570+(x-768)*4.3,2220+(y-520)*3.8];

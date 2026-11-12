@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 import {geometry,inShape} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',S='scripts/bigger-cathedral/';

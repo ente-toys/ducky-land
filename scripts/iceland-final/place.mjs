@@ -1,13 +1,13 @@
 import {readFileSync, existsSync, mkdirSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {makeMap} from '../../src/pixi/island-maps.js';
+import {makeMap} from '../../src/world/island-maps.js';
 import {groundArtwork, streamArtwork} from './ground.mjs';
 import {composeLake} from './lake.mjs';
 import {composeQuality3, composedCoverage, quality3Problems} from './quality3.mjs';
 import {isCanopy,isSoftPatch,canopyProblems,fenceProblems,softPatchProblems,snowmanProblems} from './fix-all.mjs';
 import {geometry, inPoly, inShape} from '../../assets/world/island-geometry.mjs';
-import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems} from '../../src/pixi/sleep-spots.js';
+import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems} from '../../src/world/home/sleep-spots.js';
 
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const ART = 'public/pixi-art/themes/snow';
@@ -124,7 +124,7 @@ export function footprint(p,a,{building=false,tree=false}={}) {
 }
 export async function homeDensity(){
  const {homeLayers}=await import('../globe-perf/snapshot.mjs');
- const {mapOf}=await import('../../src/pixi/island-maps.js');
+ const {mapOf}=await import('../../src/world/island-maps.js');
  const h=homeLayers(),world=mapOf('home').world,count=h.flats.filter(p=>/\/decals\//.test(p.src)).length;
  return {count,area:area(world.coast),perMillion:count/area(world.coast)*1e6};
 }

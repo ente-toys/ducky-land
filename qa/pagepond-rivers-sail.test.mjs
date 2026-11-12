@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {canSail,harborOf,createBoats,setSailDestination,sailStep,BOAT_RADIUS} from '../src/pixi/islands.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {canSail,harborOf,createBoats,setSailDestination,sailStep,BOAT_RADIUS} from '../src/gameplay/islands.js';
 import {paperboatMoorings,retiredBoatIds} from '../scripts/pagepond-boats/config.mjs';
-import {deckX} from '../src/pixi/bridge-projection.mjs';
-import {shoreOf} from '../src/pixi/surf.js';
+import {deckX} from '../src/world/home/bridge-projection.mjs';
+import {shoreOf} from '../src/rendering/pixi/environment/surf.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),id='isle-251',map=mapFor('library'),report=read('scripts/pagepond-rework/report.json'),ground=read('scripts/pagepond/layout.json'),art=read('public/pixi-art/themes/library/art.json');
 function sail(actor,p){assert(canSail(...p,id),'open boat waypoint '+p);assert(setSailDestination(actor,...p),'route to '+p);for(let i=0;i<12000&&(actor.sailTarget||actor.sailRoute?.length);i++){sailStep(actor,1/20,{x:0,y:0});assert(canSail(actor.x,actor.y,id),'boat remains in water');}assert(Math.hypot(actor.x-p[0],actor.y-p[1])<2,'arrives at '+p);}
 function sparse(samples){return samples.filter((p,i)=>i%7===0||i===samples.length-1).map(p=>p.slice(0,2));}

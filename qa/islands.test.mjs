@@ -1,13 +1,13 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach,fillMoorings,retireBoat,boatHome,boatSlot,MOORING_CLEAR,SAIL_SPEED} from '../src/pixi/islands.js';
+import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach,fillMoorings,retireBoat,boatHome,boatSlot,MOORING_CLEAR,SAIL_SPEED} from '../src/gameplay/islands.js';
 
-import {createNavigation} from '../src/pixi/navigation.js';
-import {offsetOf} from '../src/pixi/world-map.js';
-import {originOffset} from '../src/pixi/islands.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {createNavigation} from '../src/world/navigation.js';
+import {offsetOf} from '../src/world/world-map.js';
+import {originOffset} from '../src/gameplay/islands.js';
+import {mapOf} from '../src/world/island-maps.js';
 import world from '../assets/world/world.json' with {type:'json'};
 import walkWorld from '../assets/world/walk-world.json' with {type:'json'};
 
@@ -185,7 +185,7 @@ test('docking off a beach sails in to the water beside the sand, and every appro
 });
 
 test('a boat out in a neighbour\'s waters is drawn in that neighbour\'s copy, never under it', async () => {
-  const {WORLD_ISLANDS,offsetOf} = await import('../src/pixi/world-map.js'), {copyHolding} = await import('../src/pixi/sphere-shores.js');
+  const {WORLD_ISLANDS,offsetOf} = await import('../src/world/world-map.js'), {copyHolding} = await import('../src/world/sphere-shores.js');
   const world=(await import('../assets/world/world.json',{with:{type:'json'}})).default;
   const cx=mapOf('home').cx, cy=mapOf('home').cy;
   const copies=WORLD_ISLANDS.filter(island => island.id!=='home').map(island => ({from:'home',id:island.id,x:cx+offsetOf('home',island.id).x,y:cy+offsetOf('home',island.id).y,width:mapOf(island.id).width,height:mapOf(island.id).height}));
@@ -197,7 +197,7 @@ test('a boat out in a neighbour\'s waters is drawn in that neighbour\'s copy, ne
 });
 
 test('where two neighbours\' map rectangles overlap, water belongs to the island with the nearest real coast', async () => {
-  const {copyHolding} = await import('../src/pixi/sphere-shores.js');
+  const {copyHolding} = await import('../src/world/sphere-shores.js');
   const A=mapOf('blossom'), B=mapOf('isle-170'), far=60000, coast=m=>m.world.coast.map(([x,y])=>({x:x-m.cx,y:y-m.cy}));
   const east=coast(A).reduce((p,q)=>q.x>p.x?q:p), west=coast(B).reduce((p,q)=>q.x<p.x?q:p), dx=east.x-west.x+600;
   const copies=[{id:'blossom',x:far,y:far,width:A.width,height:A.height},{id:'isle-170',x:far+dx,y:far+east.y-west.y,width:B.width,height:B.height}];

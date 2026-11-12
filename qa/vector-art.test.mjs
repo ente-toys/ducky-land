@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import legacy from './legacy-raster-art.json' with {type:'json'};
 const root=new URL('../public/pixi-art/',import.meta.url);
 

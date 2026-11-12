@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {WORLD_GEO,WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {landingBasis,easeLandingBasis,cameraMatrix,canonicalCamera,turnLongitude,cameraSpan} from '../src/pixi/sphere-camera.js';
-import {horizonRatio,lensAngle,spherePixel} from '../src/pixi/sphere-projection.js';
-import {nearbyHeading} from '../src/pixi/nearby-map.js';
-import {dot} from '../src/pixi/sphere.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {WORLD_GEO,WORLD_ISLANDS} from '../src/world/world-map.js';
+import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/world/sphere-coordinates.js';
+import {landingBasis,easeLandingBasis,cameraMatrix,canonicalCamera,turnLongitude,cameraSpan} from '../src/rendering/shared/sphere-camera.js';
+import {horizonRatio,lensAngle,spherePixel} from '../src/world/sphere-projection.js';
+import {nearbyHeading} from '../src/app/nearby-map.js';
+import {dot} from '../src/world/sphere.js';
 
 const R=WORLD_GEO.Rw;
 test('landing preserves nearby landmarks through large turns and never collapses during its settle',()=>{

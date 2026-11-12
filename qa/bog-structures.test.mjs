@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import data from '../src/pixi/bog-environment.json' with {type:'json'};
-import {makeMap} from '../src/pixi/island-maps.js';
-import {BOG_BLOCKERS} from '../src/pixi/bog-blockers.js';
+import data from '../src/features/bog-combat/bog-environment.json' with {type:'json'};
+import {makeMap} from '../src/world/island-maps.js';
+import {BOG_BLOCKERS} from '../src/features/bog-combat/bog-blockers.js';
 import {views} from '../scripts/bog-environment/arcade-modules.mjs';
 const root='public/pixi-art/themes/bog-arena/';
 const art=JSON.parse(fs.readFileSync(root+'art.json'));

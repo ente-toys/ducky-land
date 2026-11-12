@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWaveField, createWater, maskGrid, shoreDistance, waveHeight, coastDistance, smoothDistance} from '../src/pixi/water.js';
+import {createWaveField, createWater, maskGrid, shoreDistance, waveHeight, coastDistance, smoothDistance} from '../src/rendering/pixi/environment/water.js';
 const energy = f => f.current.reduce((s, h, i) => s + h * h + (h - f.previous[i]) ** 2, 0);
 function field(cols = 65, rows = 49, wet = new Uint8Array(cols * rows).fill(1)) {
   return createWaveField({width: (cols - 1) * 5, height: (rows - 1) * 5, cols, rows, wet});

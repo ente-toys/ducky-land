@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {DOMParser} from '@xmldom/xmldom';
 import {inPoly} from '../assets/world/island-geometry.mjs';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read('public/pixi-art/themes/library/art.json'),world=read('assets/world/themes/library/world.json'),walk=read('assets/world/themes/library/walk-world.json');
 const ground=read('scripts/pagepond/layout.json'),bridges=art.decks.filter(d=>d.homeSource);

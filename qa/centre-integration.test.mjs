@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Sprite,Texture,Container,Graphics,DOMAdapter} from 'pixi.js';
-import {animatePieces,attachCentreMotion} from '../src/pixi/centre-motion.js';
-import {createGroundPool} from '../src/pixi/ground-stream.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {mapFor,readyThemes,THEME_OF} from '../src/pixi/island-maps.js';
-import {createFairWater} from '../src/pixi/centre-motion/fair.js';
-import {updateCommunityCentre} from '../src/pixi/centre-motion/community.js';
+import {animatePieces,attachCentreMotion} from '../src/rendering/pixi/environment/centre-motion.js';
+import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {mapFor,readyThemes,THEME_OF} from '../src/world/island-maps.js';
+import {createFairWater} from '../src/rendering/pixi/environment/centre-motion/fair.js';
+import {updateCommunityCentre} from '../src/rendering/pixi/environment/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
 test('all eight theme manifests load, release textures and resolve their authored animation pieces', async t=>{

@@ -5,10 +5,10 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import React, {act} from 'react';
 import {createRoot} from 'react-dom/client';
-import {RoomClient} from '../src/pixi/room-client.js';
+import {RoomClient} from '../src/multiplayer/room-client.js';
 
 const {outputFiles:[bundle]} = await build({
-  entryPoints:[fileURLToPath(new URL('../src/pixi/IslandFriends.jsx',import.meta.url))],
+  entryPoints:[fileURLToPath(new URL('../src/app/IslandFriends.jsx',import.meta.url))],
   bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,
 });
 const code = ['react','react/jsx-runtime','react-dom'].reduce((text,name) =>

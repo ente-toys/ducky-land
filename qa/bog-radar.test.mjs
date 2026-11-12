@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {placeBogRadar, BOG_RADAR_ICON, BOG_RADAR_ISLAND, BOG_RADAR_SIZE_PX} from '../src/pixi/bog-radar.js';
-import {nearbyMapFrame} from '../src/pixi/nearby-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {mapPoint, viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {logMap} from '../src/pixi/sphere.js';
-import {worldIsland, WORLD_GEO} from '../src/pixi/world-map.js';
+import {placeBogRadar, BOG_RADAR_ICON, BOG_RADAR_ISLAND, BOG_RADAR_SIZE_PX} from '../src/features/bog-combat/bog-radar.js';
+import {nearbyMapFrame} from '../src/app/nearby-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {mapPoint, viewFrame} from '../src/world/sphere-coordinates.js';
+import {logMap} from '../src/world/sphere.js';
+import {worldIsland, WORLD_GEO} from '../src/world/world-map.js';
 
 const close = (a,b) => assert.ok(Math.abs(a-b)<1e-7, `${a} != ${b}`);
 const bog = mapOf(BOG_RADAR_ISLAND);
@@ -44,8 +44,8 @@ test('out-of-range Bog stays centred on the outline in its projected direction, 
 });
 
 test('minimap uses the border centre for the badge and clips terrain independently', () => {
-  const source = readFileSync(new URL('../src/pixi/WorldMap.jsx',import.meta.url),'utf8');
-  const css = readFileSync(new URL('../src/pixi/pixi.css',import.meta.url),'utf8');
+  const source = readFileSync(new URL('../src/app/WorldMap.jsx',import.meta.url),'utf8');
+  const css = readFileSync(new URL('../src/app/pixi.css',import.meta.url),'utf8');
   assert.match(source,/const outlineRadius = width \/ 2 \+ 2 \* iconSize \/ BOG_RADAR_SIZE_PX/);
   assert.match(source,/outlineRadius \/ scale/);
   assert.match(source,/<g clipPath="url\(#pixi-world-map-terrain-clip\)">/);

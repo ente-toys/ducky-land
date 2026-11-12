@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {IslandRoom} from '../worker/index.js';
-import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
-import {createNavigation} from '../src/pixi/navigation.js';
+import {setWalkDestination,walkStep} from '../src/gameplay/player-motion.js';
+import {createNavigation} from '../src/world/navigation.js';
 import {auditBloom,bloomApproaches,bloomBlockers,bloomFloor} from './sunbob-plaza-audit.mjs';
 
 const map=mapOf('blossom');

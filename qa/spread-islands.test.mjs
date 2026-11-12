@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORLD_ISLANDS,FINISHED_THEMES,THEMED_ISLANDS,ISLAND_COUNT,layoutWorld,sizeOfTheme} from '../src/pixi/world-map.js';
-import {mapOf,themeOfIsland} from '../src/pixi/island-maps.js';
-import {destinationsFor,canSail,sailRoute,crossIsland,SAIL_SPEED,seaBoundsFor,originOffset,BOAT_RADIUS} from '../src/pixi/islands.js';
+import {WORLD_ISLANDS,FINISHED_THEMES,THEMED_ISLANDS,ISLAND_COUNT,layoutWorld,sizeOfTheme} from '../src/world/world-map.js';
+import {mapOf,themeOfIsland} from '../src/world/island-maps.js';
+import {destinationsFor,canSail,sailRoute,crossIsland,SAIL_SPEED,seaBoundsFor,originOffset,BOAT_RADIUS} from '../src/gameplay/islands.js';
 const RAD=Math.PI/180;
 function checkLayout(m){
  assert.equal(m.islands.length,9);assert.equal(new Set(m.islands.map(i=>i.id)).size,9);

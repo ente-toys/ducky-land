@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {Texture,ImageSource} from 'pixi.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {createGroundPool,tileInView,tileResolution} from '../src/pixi/ground-stream.js';
-import {icelandPieceTile,icelandPieceSVG} from '../src/pixi/iceland-art-stream.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {createGroundPool,tileInView,tileResolution} from '../src/rendering/pixi/art/ground-stream.js';
+import {icelandPieceTile,icelandPieceSVG} from '../src/rendering/pixi/art/iceland-art-stream.js';
 const art=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
 const world=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
@@ -83,7 +83,7 @@ for(const id of ['bakery','final-grove-0-tree-0','bakery-yard-bench-5','lake-war
 
 test('raster decode queue uses distance after fetch completion and yields between bounded batches',async t=>{
  const {DOMAdapter}=await import('pixi.js');const {createCanvas,Image}=await import('@napi-rs/canvas');
- const {createRasterLoader}=await import('../src/pixi/theme-art-stream.js');
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
  const old={adapter:DOMAdapter.get(),fetch:globalThis.fetch,location:globalThis.location};
  t.after(()=>{DOMAdapter.set(old.adapter);globalThis.fetch=old.fetch;globalThis.location=old.location;});
  let clock=0,reads=0;const frames=[],waiting=[],started=[];

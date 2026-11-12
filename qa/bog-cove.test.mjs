@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import data from '../src/pixi/bog-environment.json' with {type:'json'};
-import {makeMap} from '../src/pixi/island-maps.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
+import data from '../src/features/bog-combat/bog-environment.json' with {type:'json'};
+import {makeMap} from '../src/world/island-maps.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
 
 const map=makeMap('bog-arena',data),nav=map.nav();
 

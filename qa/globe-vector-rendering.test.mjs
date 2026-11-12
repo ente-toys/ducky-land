@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import sharp from 'sharp';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 
 async function sourcePatch(theme,cx,cy,{props=false}={}){
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),base=`public/pixi-art/themes/${theme}/`,art=JSON.parse(fs.readFileSync(base+'art.json'));

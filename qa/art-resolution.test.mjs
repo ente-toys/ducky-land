@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {artResolution} from '../src/pixi/art-resolution.js';
-import sizes from '../src/pixi/art-source-sizes.json' with {type:'json'};
-import tiled from '../src/pixi/large-art-tiles.json' with {type:'json'};
+import {artResolution} from '../src/rendering/shared/art-resolution.js';
+import sizes from '../src/rendering/shared/art-source-sizes.json' with {type:'json'};
+import tiled from '../src/rendering/pixi/art/large-art-tiles.json' with {type:'json'};
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 

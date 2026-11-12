@@ -1,5 +1,5 @@
 import {readFileSync,writeFileSync} from 'node:fs';
-import {mapOf} from '../../src/pixi/island-maps.js';
+import {mapOf} from '../../src/world/island-maps.js';
 import {inShape} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(p));
 export function auditRosy(){

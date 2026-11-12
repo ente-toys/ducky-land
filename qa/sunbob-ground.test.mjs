@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {canSail,harborOf} from '../src/pixi/islands.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {canSail,harborOf} from '../src/gameplay/islands.js';
 const read=p=>JSON.parse(readFileSync(p)),A='public/pixi-art/themes/sunflower/',art=read(A+'art.json');
 test('Sunbob ground uses one continuous drawing with real neighbouring bleed at every seam',()=>{
  let drawing;

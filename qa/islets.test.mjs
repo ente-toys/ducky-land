@@ -1,21 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ISLETS,ISLET_ART,ISLET_SEED,ISLET_SCALE} from '../src/pixi/islets.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {sphereShores,sphereShoreGap,BOAT_CHANNEL} from '../src/pixi/sphere-shores.js';
-import {angle,sphereFrame} from '../src/pixi/sphere.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {canSail,landingSpot,landingApproach,sailRoute,sailStep,setSailDestination,boardingPoint,navOf,BOAT_RADIUS,ISLANDS,seaBoundsFor} from '../src/pixi/islands.js';
-import {placeIslet,reframeIslet,isletLandingFrame} from '../src/pixi/islet-placement.js';
-import {isletShores,isletHull,flatRingGap} from '../src/pixi/islet-shores.js';
-import {placeRigid} from '../src/pixi/rigid.js';
-import {isletWalk} from '../src/pixi/islet-walk.js';
-import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/pixi/sphere-camera.js';
-import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
+import {ISLETS,ISLET_ART,ISLET_SEED,ISLET_SCALE} from '../src/world/islets.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {sphereShores,sphereShoreGap,BOAT_CHANNEL} from '../src/world/sphere-shores.js';
+import {angle,sphereFrame} from '../src/world/sphere.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {canSail,landingSpot,landingApproach,sailRoute,sailStep,setSailDestination,boardingPoint,navOf,BOAT_RADIUS,ISLANDS,seaBoundsFor} from '../src/gameplay/islands.js';
+import {placeIslet,reframeIslet,isletLandingFrame} from '../src/world/islet-placement.js';
+import {isletShores,isletHull,flatRingGap} from '../src/world/islet-shores.js';
+import {placeRigid} from '../src/world/rigid.js';
+import {isletWalk} from '../src/world/islet-walk.js';
+import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/rendering/shared/sphere-camera.js';
+import {setWalkDestination,walkStep} from '../src/gameplay/player-motion.js';
 import {readFileSync,readdirSync} from 'node:fs';
 import {DOMParser as XMLDOMParser} from '@xmldom/xmldom';
-import {svgContext} from '../src/pixi/svg-context.js';
-import {ISLET_META} from '../src/pixi/islets.js';
+import {svgContext} from '../src/rendering/pixi/art/svg-context.js';
+import {ISLET_META} from '../src/world/islets.js';
 import {makeRoom,addPlayer} from './room-harness.mjs';
 import {fileURLToPath} from 'node:url';
 const inRing=(x,y,p)=>{let inside=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if((p[i][1]>y)!==(p[j][1]>y)&&x<(p[j][0]-p[i][0])*(y-p[i][1])/(p[j][1]-p[i][1])+p[i][0])inside=!inside;return inside;};
@@ -76,7 +76,7 @@ test('every islet is hand-drawn flat SVG with its jetty in the art, and no raste
   assert.ok(!inRing(...m.jetty.tip,m.land),`${art}: jetty tip out in the water`);
   for(const b of m.blocked)assert.ok(b.polygon.length>=3&&b.what,`${art}: footprint ${b.what}`);
  }
- const view=readFileSync(fileURLToPath(new URL('../src/pixi/islet-view.js',import.meta.url)),'utf8');
+ const view=readFileSync(fileURLToPath(new URL('../src/rendering/pixi/islet-view.js',import.meta.url)),'utf8');
  assert.doesNotMatch(view,/drawJetty|roundRect|\.webp|\.png/);
 });
 test('the islet SVGs build into Pixi geometry, transforms and inherited styles included',()=>{

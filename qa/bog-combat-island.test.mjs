@@ -2,17 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {Container,Texture} from 'pixi.js';
-import {walkStep} from '../src/pixi/player-motion.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {walkingActor} from '../src/pixi/bog-combat/physics.js';
-import {movementFacing,facingVector} from '../src/pixi/bog-combat/facing.js';
-import {bindCombatInput} from '../src/pixi/bog-combat/input.js';
-import {BogCombatRoom} from '../src/pixi/bog-combat/room.js';
-import {attachGunC} from '../src/pixi/bog-combat/held-gun.js';
-import {attachBogCombat} from '../src/pixi/bog-combat/attach.js';
-import {normalizeBogBlockers} from '../src/pixi/bog-combat/blockers.js';
-import {combatForBogEnvironment} from '../src/pixi/bog-combat/environment.js';
-import guns from '../src/pixi/bog-combat/assets/guns.json' with {type:'json'};
+import {walkStep} from '../src/gameplay/player-motion.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {walkingActor} from '../src/features/bog-combat/physics.js';
+import {movementFacing,facingVector} from '../src/features/bog-combat/facing.js';
+import {bindCombatInput} from '../src/features/bog-combat/input.js';
+import {BogCombatRoom} from '../src/features/bog-combat/room.js';
+import {attachGunC} from '../src/features/bog-combat/held-gun.js';
+import {attachBogCombat} from '../src/features/bog-combat/attach.js';
+import {normalizeBogBlockers} from '../src/features/bog-combat/blockers.js';
+import {combatForBogEnvironment} from '../src/features/bog-combat/environment.js';
+import guns from '../src/features/bog-combat/assets/guns.json' with {type:'json'};
 
 test('Bog walking, Shift acceleration, braking and sliding are identical to the island player',()=>{
   const nav={walkable:(x,y)=>x>0&&x<500&&y>0&&y<500,clearLine(from,to){return this.walkable(...from)&&this.walkable(...to);}};

@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {KarmaPool,KARMA_SITES,KARMA_ACTIVE,KARMA_RADIUS} from '../src/pixi/karma-pool.js';
+import {KarmaPool,KARMA_SITES,KARMA_ACTIVE,KARMA_RADIUS} from '../src/gameplay/karma-pool.js';
 import {makeRoom,addPlayer,seeded} from './room-harness.mjs';
-import {isletWalk} from '../src/pixi/islet-walk.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {isletWalk} from '../src/world/islet-walk.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 test('50 unique shared feathers cover all safe islands and islets; no Bog farming',()=>{
  const pool=new KarmaPool(null,seeded()),visible=pool.slots.map(s=>pool.sites.get(s.siteId));

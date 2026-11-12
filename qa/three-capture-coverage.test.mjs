@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {captureCoverage} from '../src/pixi/three-capture-coverage.js';
-import {detailSize} from '../src/pixi/three-detail-view.js';
+import {captureCoverage} from '../src/rendering/three/three-capture-coverage.js';
+import {detailSize} from '../src/rendering/three/three-detail-view.js';
 
 test('rolled captures cover every viewport corner from upright through half turn, including ultrawide and portrait',()=>{
  for(const aspect of [.2,.4,9/16,1,16/9,21/9,4,8])for(let step=0;step<=360;step++){

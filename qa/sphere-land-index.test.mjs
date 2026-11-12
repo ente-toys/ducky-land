@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {inPoly,inShape} from '../assets/world/island-geometry.mjs';
 function original(m,x,y){
  const {world:w,walk,JETTY:j}=m,foot=j.foot,dir=j.dir;

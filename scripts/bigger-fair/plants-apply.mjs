@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
-import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
+import {resolveSleepSpots,sleepHalfWidths} from '../../src/world/home/sleep-spots.js';
 import {PLANT_MODELS,homePlant} from './plant-kit.mjs';
 import {OUTER_PLANTING,PLANT_RESERVES} from './plants-data.mjs';
 

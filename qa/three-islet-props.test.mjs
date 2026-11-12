@@ -4,9 +4,9 @@ import {readFileSync} from 'node:fs';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {DOMParser,XMLSerializer} from '@xmldom/xmldom';
 import * as THREE from 'three';
-import {Scene} from '../src/pixi/globe-mesh.js';
-import {createIsletStanding,isletCardMaterial} from '../src/pixi/three-islet-props.js';
-import {ISLETS,ISLET_META} from '../src/pixi/islets.js';
+import {Scene} from '../src/rendering/pixi/globe-mesh.js';
+import {createIsletStanding,isletCardMaterial} from '../src/rendering/three/three-islet-props.js';
+import {ISLETS,ISLET_META} from '../src/world/islets.js';
 
 test('one upright islet drawing stays opaque across zoom ownership and disappears behind the globe',async()=>{
  const saved={document:globalThis.document,DOMParser:globalThis.DOMParser,XMLSerializer:globalThis.XMLSerializer};

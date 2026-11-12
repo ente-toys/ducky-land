@@ -1,17 +1,17 @@
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {originOffset} from '../src/pixi/islands.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {originOffset} from '../src/gameplay/islands.js';
 import assert from 'node:assert/strict';
 import test, {after, before} from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
-import {createNavigation} from '../src/pixi/navigation.js';
+import {createNavigation} from '../src/world/navigation.js';
 import {world} from '../server-world.mjs';
-import {HARBOR,harborOf,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/pixi/islands.js';
-import {DUCK_RADIUS, RUN_SPEED, WALK_SPEED, MUSEUM_DOOR, atMuseumDoor} from '../src/pixi/player-motion.js';
-import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
+import {HARBOR,harborOf,destinationsFor,canSail,boatSpots,landingSpot,landingApproach} from '../src/gameplay/islands.js';
+import {DUCK_RADIUS, RUN_SPEED, WALK_SPEED, MUSEUM_DOOR, atMuseumDoor} from '../src/gameplay/player-motion.js';
+import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
 
 const origin = 'https://island.example';
 const nav = mapOf('home').nav();
@@ -21,7 +21,7 @@ before(async () => {
   const root = fileURLToPath(new URL('../',import.meta.url));
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
     import {IslandRoom} from './worker/index.js';
-    import {createBoats} from './src/pixi/islands.js';
+    import {createBoats} from './src/gameplay/islands.js';
     import {start, callback, session, logout, connect, playAccess, friends, outfit} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
       async fetch(request) {
@@ -995,7 +995,7 @@ test('bigger Home accepts walking destinations west of the original origin and r
 test('whole-globe layout: worker join preserves every saved island ID and local walking pose', async () => {
   await request('/test/expire-session');
   await request('/test/expire-resume');
-  const {WORLD_ISLANDS}=await import('../src/pixi/world-map.js');
+  const {WORLD_ISLANDS}=await import('../src/world/world-map.js');
   for(const [k,island] of WORLD_ISLANDS.entries()){
     const login=await signIn(9400+k),a=await socket(login.session),pose={islandId:island.id,...mapOf(island.id).spawn,turn:.3,mode:'walking',path:[]};
     let resumed;

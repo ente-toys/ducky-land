@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import E from '../src/pixi/home-expansion.json' with {type: 'json'};
-import {HOME_MAP} from '../src/pixi/island-maps.js';
-import {canSail, harborOf, setSailDestination, sailStep} from '../src/pixi/islands.js';
+import E from '../src/world/home/home-expansion.json' with {type: 'json'};
+import {HOME_MAP} from '../src/world/island-maps.js';
+import {canSail, harborOf, setSailDestination, sailStep} from '../src/gameplay/islands.js';
 import {inPoly} from '../assets/world/island-geometry.mjs';
 
 const clover = E.riverWater.find(w => w.id === 'clover-run').poly, canal = E.riverWater.find(w => w.id === 'old-shore-canal').poly;

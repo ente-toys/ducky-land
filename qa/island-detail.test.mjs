@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {detailedIslands} from '../src/pixi/island-detail.js';
+import {detailedIslands} from '../src/rendering/shared/island-detail.js';
 const islands=Array.from({length:20},(_,id)=>({id,width:5800,height:4400,x:(id%5-2)*6500,y:(Math.floor(id/5)-1)*5000}));
 test('small overview islands use snapshots while nearby islands retain live detail',()=>{
   const selected=detailedIslands(islands,{x:0,y:0,zoom:.04},1200,1344);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {easeZoomCamera} from '../src/pixi/zoom-motion.js';
+import {easeZoomCamera} from '../src/rendering/shared/zoom-motion.js';
 import {zoomAt} from '../assets/world/island-camera.mjs';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
 test('zoom is symmetric and frame-rate independent in perceived scale',()=>{

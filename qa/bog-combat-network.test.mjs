@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createArenaProfiles} from '../server/arena-socket.mjs';
 import {createArenaSocket,localArenaOrigin,ARENA_INPUT_BURST} from '../server/arena-socket.mjs';
-import {ArenaClient,arenaURL,profileToken,ARENA_INPUT_INTERVAL,ARENA_INPUT_KEEPALIVE} from '../src/pixi/bog-combat/client.js';
+import {ArenaClient,arenaURL,profileToken,ARENA_INPUT_INTERVAL,ARENA_INPUT_KEEPALIVE} from '../src/features/bog-combat/client.js';
 
 class Socket extends EventEmitter{
   readyState=1;bufferedAmount=0;messages=[];

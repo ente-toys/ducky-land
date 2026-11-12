@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {PALETTE} from '../../src/pixi/palette.js';
+import {PALETTE} from '../../src/rendering/shared/palette.js';
 const base='public/pixi-art/themes/fair/';
 export function applyFairWater({land:currentLand}={}){
  const art=JSON.parse(fs.readFileSync(base+'art.json'));

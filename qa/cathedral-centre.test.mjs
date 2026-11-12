@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {sleeperFootprint} from '../src/pixi/sleep-spots.js';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {sleeperFootprint} from '../src/world/home/sleep-spots.js';
+import {makeMap} from '../src/world/island-maps.js';
 import {inPoly} from '../assets/world/island-geometry.mjs';
 import {CLUMPS,FEATURES,LANES,NOD_COMPANIONS} from '../scripts/bigger-cathedral/centre-data.mjs';
 const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',read=p=>JSON.parse(fs.readFileSync(p));

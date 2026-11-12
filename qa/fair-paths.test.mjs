@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 import {inShape,inPoly} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';

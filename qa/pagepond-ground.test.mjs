@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 import {Path2D,PathOp,even,ring,dist,curve,contours} from '../scripts/pagepond/geometry.mjs';
 import {inPoly,inShape,geometry} from '../assets/world/island-geometry.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 const A='public/pixi-art/themes/library/',D='assets/world/themes/library/';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),plan=read('scripts/pagepond/layout.json');

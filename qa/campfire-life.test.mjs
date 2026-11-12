@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import READY from '../assets/world/themes/index.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
-import {makeMap,mapOf} from '../src/pixi/island-maps.js';
+import {makeMap,mapOf} from '../src/world/island-maps.js';
 import {geometry,inPoly,inShape} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(p)),A='public/pixi-art/themes/community/',D='assets/world/themes/community/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),plants=art.props.filter(p=>p.lifeGrove);

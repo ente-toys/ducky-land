@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {loadWorldAssets} from '../src/pixi/three-asset-queue.js';
+import {loadWorldAssets} from '../src/rendering/three/three-asset-queue.js';
 test('world previews yield and load at bounded concurrency, recovering from a failed preview',async()=>{
  let active=0,max=0,yields=0;const loaded=[],errors=[];
  const tasks=Array.from({length:8},(_,i)=>async()=>{active++;max=Math.max(max,active);await new Promise(r=>setTimeout(r,1));active--;if(i===3)throw Error('preview');return i;});

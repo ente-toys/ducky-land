@@ -1,8 +1,8 @@
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {dot,logMap} from '../src/pixi/sphere.js';
-import {spherePixel,horizonRatio} from '../src/pixi/sphere-projection.js';
-import {paintWeight} from '../src/pixi/globe-screen.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {dot,logMap} from '../src/world/sphere.js';
+import {spherePixel,horizonRatio} from '../src/world/sphere-projection.js';
+import {paintWeight} from '../src/rendering/shared/globe-screen.js';
 const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
 const mix=(a,b,t)=>a.map((v,k)=>v+(b[k]-v)*t);
 const median=a=>a.sort((a,b)=>a-b)[a.length>>1]??null;

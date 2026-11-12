@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import READY from '../assets/world/themes/index.js';
-import delivered from '../src/pixi/delivered-themes.js';
-import {mapFor,makeMap,themeOfIsland} from '../src/pixi/island-maps.js';
-import {WORLD_ISLANDS,FINISHED_THEMES,layoutWorld} from '../src/pixi/world-map.js';
+import delivered from '../src/world/delivered-themes.js';
+import {mapFor,makeMap,themeOfIsland} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS,FINISHED_THEMES,layoutWorld} from '../src/world/world-map.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
 
 test('adding two live themes preserves Home and all six earlier island identities',()=>{

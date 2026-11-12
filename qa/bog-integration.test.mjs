@@ -4,15 +4,15 @@ import {EventEmitter} from 'node:events';
 import {mkdtempSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {getBogBlockers} from '../src/pixi/bog-combat/blockers.js';
-import {BOG_BLOCKERS} from '../src/pixi/bog-blockers.js';
-import {mapOf,THEME_OF} from '../src/pixi/island-maps.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {getBogBlockers} from '../src/features/bog-combat/blockers.js';
+import {BOG_BLOCKERS} from '../src/features/bog-combat/bog-blockers.js';
+import {mapOf,THEME_OF} from '../src/world/island-maps.js';
 import {createArenaSocket,createArenaProfiles} from '../server/arena-socket.mjs';
-import {ArenaClient,ArenaLobbyClient} from '../src/pixi/bog-combat/client.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {traceShot} from '../src/pixi/bog-combat/physics.js';
-import {RULES} from '../src/pixi/bog-combat/rules.js';
+import {ArenaClient,ArenaLobbyClient} from '../src/features/bog-combat/client.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {traceShot} from '../src/features/bog-combat/physics.js';
+import {RULES} from '../src/features/bog-combat/rules.js';
 
 test('integrated defaults use all real Bog footprints without globally replacing the world island',()=>{
   assert.equal(THEME_OF.get('isle-249'),'bog');

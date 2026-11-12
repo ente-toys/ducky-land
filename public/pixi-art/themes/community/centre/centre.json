@@ -312,7 +312,7 @@
       "animate": {
         "kind": "fire",
         "amplitude": 0.045,
-        "module": "src/pixi/centre-motion/community.js"
+        "module": "src/rendering/pixi/environment/centre-motion/community.js"
       }
     }
   ],

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {sampleGlobeSpin, coastGlobeSpin} from '../src/pixi/globe-motion.js';
+import {sampleGlobeSpin, coastGlobeSpin} from '../src/rendering/shared/globe-motion.js';
 import {easeCamera} from '../assets/world/island-camera.mjs';
 
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8, `${a} != ${b}`);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {constrainExploreCamera,zoomToWorldPoint} from '../src/pixi/explore-camera.js';
+import {constrainExploreCamera,zoomToWorldPoint} from '../src/rendering/shared/explore-camera.js';
 const bounds={x0:-100000,x1:100000,y0:-70000,y1:70000};
 test('exploring another island stays there at every zoom level',()=>{
   for(const zoom of [.015,.1,.5,1.8]) {

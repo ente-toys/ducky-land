@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 import {LEFT,RIGHT} from '../scripts/bigger-cathedral/centre-art-data.mjs';
 const A='public/pixi-art/themes/cathedral/';
 const art=JSON.parse(fs.readFileSync(A+'art.json'));

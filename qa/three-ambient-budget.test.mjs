@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {AmbientDrawClock,RenderDemand} from '../src/pixi/three-render-demand.js';
+import {AmbientDrawClock,RenderDemand} from '../src/rendering/three/three-render-demand.js';
 test('independent ambient updates share at most thirty globe draws each second',()=>{
  const clock=new AmbientDrawClock();let draws=0;
  for(let ms=0;ms<1000;ms++)if(clock.update(ms,ms%33===0||ms%50===0))draws++;

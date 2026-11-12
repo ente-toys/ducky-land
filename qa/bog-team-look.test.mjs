@@ -5,9 +5,9 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {Assets,Sprite,Graphics,Texture,TextureSource} from 'pixi.js';
-import {attachGunC} from '../src/pixi/bog-combat/held-gun.js';
-import guns from '../src/pixi/bog-combat/assets/guns.json' with {type:'json'};
-const base=new URL('../src/pixi/bog-combat/assets/google-ducky/',import.meta.url);
+import {attachGunC} from '../src/features/bog-combat/held-gun.js';
+import guns from '../src/features/bog-combat/assets/guns.json' with {type:'json'};
+const base=new URL('../src/features/bog-combat/assets/google-ducky/',import.meta.url);
 const manifest=JSON.parse(fs.readFileSync(new URL('../public/pixi-duck/manifest.json',import.meta.url)));
 const banned=/<(?:image|linearGradient|radialGradient|filter)\b|data:/i;
 
@@ -28,7 +28,7 @@ test('Google Popper has the reference colours, valid muzzle bounds and all eight
  for(const google of guns.filter(g=>g.team==='google')){
   const privacy=guns.find(g=>g.team==='privacy'&&g.rigAngle===google.rigAngle);
   assert.deepEqual(google.grip,privacy.grip);assert.deepEqual(google.wingPose,privacy.wingPose);
-  const svg=fs.readFileSync(new URL('../src/pixi/bog-combat/assets/'+google.file,import.meta.url),'utf8');
+  const svg=fs.readFileSync(new URL('../src/features/bog-combat/assets/'+google.file,import.meta.url),'utf8');
   for(const c of ['#FFD525','#EF5144','#61D94E','#1689F9','#AA65D4','#232323'])assert.ok(svg.includes(c),google.facing+' '+c);
   assert.doesNotMatch(svg,banned);
   const [x,y,w,h]=google.viewBox;
@@ -37,7 +37,7 @@ test('Google Popper has the reference colours, valid muzzle bounds and all eight
 });
 
 test('Privacy alone has flat black shades and white/yellow padlock poppers in every direction, on death and in the HUD',()=>{
- const dir=new URL('../src/pixi/bog-combat/assets/',import.meta.url);
+ const dir=new URL('../src/features/bog-combat/assets/',import.meta.url);
  for(const spec of guns){
   const svg=fs.readFileSync(new URL(spec.file,dir),'utf8');
   assert.doesNotMatch(svg,banned);
@@ -54,12 +54,12 @@ test('Privacy alone has flat black shades and white/yellow padlock poppers in ev
   const svg=fs.readFileSync(new URL('privacy-ducky/'+file,dir),'utf8');
   assert.doesNotMatch(svg,banned);assert.match(svg,/#232323/);
  }
- const hud=fs.readFileSync(new URL('../src/pixi/bog-combat/BogGame.jsx',import.meta.url),'utf8');
+ const hud=fs.readFileSync(new URL('../src/features/bog-combat/BogGame.jsx',import.meta.url),'utf8');
  assert.ok(hud.includes('/pixi-art/themes/bog-arena/hud/'));assert.ok(hud.includes("'privacy-padlock'"));
  assert.ok(fs.readFileSync(new URL('../public/pixi-art/themes/bog-arena/hud/privacy-padlock-popper.svg',import.meta.url),'utf8').includes('id="privacy-padlock"'));
 });
 
-const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/duck.js',import.meta.url))],bundle:true,packages:'external',format:'esm',write:false});
+const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/rendering/pixi/duck.js',import.meta.url))],bundle:true,packages:'external',format:'esm',write:false});
 const {createDuck,disposeDuckAssets}=await import('data:text/javascript;base64,'+Buffer.from(bundle.text.replaceAll('"pixi.js"',JSON.stringify(import.meta.resolve('pixi.js')))).toString('base64'));
 const descendants=node=>[node,...(node.children??[]).flatMap(descendants)];
 const direction=rig=>descendants(rig.root).find(n=>n.label?.startsWith('Direction ')&&n.visible);

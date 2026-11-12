@@ -8,7 +8,7 @@ import {createRoot} from 'react-dom/client';
 
 test('star dialog retries without navigation, explains failures, and confirms verified access', async () => {
   const {outputFiles:[bundle]} = await build({
-    entryPoints:[fileURLToPath(new URL('../src/pixi/StarDialog.jsx',import.meta.url))],
+    entryPoints:[fileURLToPath(new URL('../src/app/StarDialog.jsx',import.meta.url))],
     bundle:true, packages:'external', jsx:'automatic', format:'esm', write:false,
   });
   const code = bundle.text.replaceAll('"react"',JSON.stringify(import.meta.resolve('react')))

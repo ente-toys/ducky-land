@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeRoom,fakeSocket} from './room-harness.mjs';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {IslandRoom} from '../worker/index.js';
 
 const NativeResponse=globalThis.Response;

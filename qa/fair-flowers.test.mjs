@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 import {TREE_CLUMPS,FIT} from '../scripts/bigger-fair/centre-data.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const layout=read('scripts/bigger-fair/centre-source/layout.json');

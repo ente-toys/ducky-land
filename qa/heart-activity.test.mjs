@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
-import {createHeartLocations,heartArtContains} from '../src/pixi/heart-activity.js';
+import {createHeartLocations,heartArtContains} from '../src/rendering/shared/heart-activity.js';
 import sharp from 'sharp';
-import {Quaternion} from '../src/pixi/globe-math.js';
-import {rotateGlobeFromScreen} from '../src/pixi/three-globe-math.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {Quaternion} from '../src/rendering/shared/globe-math.js';
+import {rotateGlobeFromScreen} from '../src/rendering/three/three-globe-math.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {ISLETS} from '../src/world/islets.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {inPoly} from '../assets/world/island-geometry.mjs';
 
 const sampler = () => {

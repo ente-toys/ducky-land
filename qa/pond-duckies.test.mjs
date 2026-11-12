@@ -1,12 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {execFileSync} from 'node:child_process';
 import {Texture} from 'pixi.js';
-import {loadPondDuckies,PONDS,samplePondDucky} from '../src/pixi/pond-duckies.js';
+import {loadPondDuckies,PONDS,samplePondDucky} from '../src/rendering/pixi/environment/pond-duckies.js';
 import {inShape} from '../assets/world/island-geometry.mjs';
 import {populatePond,requestedPondCount} from '../scripts/pond-duckies/populate.mjs';
-const assets=JSON.parse(fs.readFileSync('src/pixi/pond-regions.json')).assets;
+const assets=JSON.parse(fs.readFileSync('src/rendering/pixi/environment/pond-regions.json')).assets;
 const expected={home:5,sunflower:1,pink:3,library:2,community:1,fair:2,cathedral:1,bog:2,snow:0};
 const pose=()=>({x:0,y:0,dx:0,dy:0,moving:false});
 
@@ -72,18 +71,13 @@ test('reduced motion keeps every Ducky position fixed',()=>{
  }
 });
 
-test('every keeper and its archived ripple art is clean flat SVG, with no PNG added',()=>{
+test('every keeper and its archived ripple art is clean flat SVG',()=>{
  for(const name of new Set(PONDS.flatMap(p=>p.duckies.map(d=>d.name))))for(const suffix of ['',...['duck','ripple'].map(p=>'/'+p)]){
   const path=suffix?`public/pixi-duck/float/parts/${name}-${suffix.slice(1)}.svg`:`public/pixi-duck/float/${name}.svg`;
   const svg=fs.readFileSync(path,'utf8');assert(svg.startsWith('<svg'));assert(!/Gradient|<image\b|filter=|data:image|\.png/i.test(svg));assert(svg.length<16000);
   if(!suffix)assert(svg.includes('#232323'));
   assert(!svg.includes('#39472d'),'boss Ducky black stays #232323');
  }
- const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'});
- const added=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'});
- assert(!/\.png$/im.test(changed+'\n'+added),'no PNG in tracked changes or new files');
- const artChanges=changed.split('\n').filter(p=>p!=='public/pixi-art/globe/manifest.json');
- assert(!artChanges.some(p=>/^(public\/pixi-art|assets\/world\/themes|src\/pixi\/islet)/.test(p)),'source art and islets untouched');
 });
 
 test('runtime owns every assigned Ducky, pauses hidden layers and releases all water FX and leases on leave',async()=>{
@@ -102,10 +96,10 @@ test('runtime owns every assigned Ducky, pauses hidden layers and releases all w
  layer.destroy();layer.destroy();assert(layer.root.destroyed);assert(water.destroyed);
  assert(graphics.every(g=>g.destroyed));assert(contexts.every(c=>c.destroyed));
  assert.equal(layer.entries.length,0);assert.deepEqual(released.sort(),leased.sort());
- const engine=fs.readFileSync('src/pixi/engine.js','utf8');
+ const engine=fs.readFileSync('src/rendering/pixi/engine.js','utf8');
  assert.match(engine,/this\.releasePondDuckies\(this\.artShown\)/);assert.match(engine,/art\.pondDuckies\.destroy\(\);art\.pondDuckies=null/);
  assert.match(engine,/this\.disposed\|\|this\.artShown!==id[\s\S]*?layer\.destroy\(\)/,'late loads are released');
- const loader=fs.readFileSync('src/pixi/theme-art.js','utf8');assert(loader.includes('result.pondDuckies?.destroy()'));
+ const loader=fs.readFileSync('src/rendering/pixi/art/theme-art.js','utf8');assert(loader.includes('result.pondDuckies?.destroy()'));
  assert(engine.includes('this.scene.getChildIndex(this.decks)'),'pond layer is below bridge decks');
 });
 

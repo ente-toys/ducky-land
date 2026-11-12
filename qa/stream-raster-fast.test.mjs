@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createGroundPool,tileInView} from '../src/pixi/ground-stream.js';
+import {createGroundPool,tileInView} from '../src/rendering/pixi/art/ground-stream.js';
 import {rasterLayers} from '../scripts/bigger-cathedral/final-model.mjs';
 const flush=()=>new Promise(setImmediate);
 const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
@@ -66,7 +66,7 @@ test('resolution plateaus do not restart settling, sufficient textures do not de
 
 test('SVG loader budgets actual preparation per frame and allows concurrent async decodes without idle',async t=>{
  const {DOMAdapter}=await import('pixi.js');
- const {createRasterLoader}=await import('../src/pixi/theme-art-stream.js');
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
  const adapter=DOMAdapter.get(),old=Object.fromEntries(['fetch','location','createImageBitmap','requestIdleCallback'].map(k=>[k,globalThis[k]]));
  t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,old);});
  const frames=[],decodes=[];let cost=0,started=0,closed=0;

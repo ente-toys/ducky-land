@@ -1,10 +1,10 @@
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {bounds,overlaps,piece,footprint,pathClearance,propPathClearance,landViews,area} from './place.mjs';
-import {makeMap} from '../../src/pixi/island-maps.js';
-import {createNavigation} from '../../src/pixi/navigation.js';
+import {makeMap} from '../../src/world/island-maps.js';
+import {createNavigation} from '../../src/world/navigation.js';
 import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
-import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
+import {resolveSleepSpots,sleepHalfWidths} from '../../src/world/home/sleep-spots.js';
 import {composeFixAll,clearCanopies} from './fix-all.mjs';
 const round=n=>Math.round(n*100)/100;
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);

@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import {applyFairBridges} from './bridges.mjs';
 import {inPoly,geometry} from '../../assets/world/island-geometry.mjs';
 import {FIT,SLEEP_TREES,SLEEP_POINTS,TREE_CLUMPS} from './centre-data.mjs';
-import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
+import {resolveSleepSpots,sleepHalfWidths} from '../../src/world/home/sleep-spots.js';
 import {BENCH_COURTS,placeBench,fitContact} from './furniture.mjs';
 const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,1)+'\n');

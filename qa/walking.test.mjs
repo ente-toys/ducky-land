@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createNavigation} from '../src/pixi/navigation.js';
-import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {createNavigation} from '../src/world/navigation.js';
+import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/gameplay/player-motion.js';
 
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 const world = {...read('../assets/world/world.json'), ...read('../assets/world/walk-world.json')};
