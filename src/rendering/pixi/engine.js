@@ -1152,8 +1152,9 @@ export class PixiIsland {
       this.flyHome();
     }
     if (this.arrival?.id !== actor?.id) this.arrival = null;
-    if (this.arrival && this.artShown === artOf(this.islandId) && this.artReady(this.artShown) &&
-        (!this.externalOverview || this.externalArrivalReady) && this.playerRig()) {
+    const arrivalViewReady = this.externalOverview ? this.externalArrivalReady :
+      this.artShown === artOf(this.islandId) && this.artReady(this.artShown);
+    if (this.arrival && arrivalViewReady && this.playerRig()) {
       if (this.arrival.start === undefined) this.arrival.start = now;
       if (this.motion.matches || now - this.arrival.start >= 520) this.finishArrival();
     }

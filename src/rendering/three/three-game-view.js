@@ -96,8 +96,7 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     const map=mapOf(id);
     const detailVisible=work.visible;
     game.externalDetailVisible=detailVisible;
-    game.externalArrivalReady=detailVisible && !state.flying && state.altitude < .16 &&
-      id === game.islandId;
+    game.externalArrivalReady=false;
     game.resize();
     retainDetailArt(game,work.preload?mapId:null);
     if(work.preload)game.ensureArt(mapId);
@@ -116,6 +115,7 @@ export async function createThreeGameView(game,host,{createWorld=createThreeWorl
     game.minZoom=.00001;game.zoomAnchor=null;game.zoomMotion.velocity=0;game.spin=null;game.globeAim=null;game.fly=null;game.follow=false;game.fitMode=false;game.landingView=null;game.globeT=0;
     game.externalCamera=camera;
     Object.assign(game.camera,game.externalCamera);delete game.camera.basis;Object.assign(game.target,game.camera);
+    game.externalArrivalReady=following && !state.flying && state.altitude < .16 && game.artReady(mapId);
     const smoothFollow=following&&state.altitude<.55&&!state.flying&&view.id===game.islandId;
     if(!smoothFollow)followPositionState=null;
     nativeTick(now,{followCamera:smoothFollow?followCamera:undefined});
