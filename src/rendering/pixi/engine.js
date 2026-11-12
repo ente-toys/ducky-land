@@ -15,6 +15,7 @@ import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from '../shared/zoom-motion.js';
 import {artResolution} from '../shared/art-resolution.js';
 import {createGroundPool} from './art/ground-stream.js';
+import {propZ} from '../shared/flat-props.js';
 import {detailedIslands} from '../shared/island-detail.js';
 import {constrainExploreCamera, zoomToWorldPoint} from '../shared/explore-camera.js';
 import {sampleGlobeSpin, coastGlobeSpin} from '../shared/globe-motion.js';
@@ -269,7 +270,7 @@ export class PixiIsland {
         sprite.position.set(prop.x, prop.y);
         sprite.width = prop.width * prop.scale;
         sprite.height = prop.height * prop.scale;
-        sprite.zIndex = prop.z ?? prop.y;
+        sprite.zIndex = prop.z ?? propZ(prop, prop.y);
         sprite.standing = true;
         if (prop.flip) sprite.scale.x *= -1;
         if (prop.tint) sprite.tint = prop.tint;

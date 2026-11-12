@@ -1,5 +1,6 @@
 import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from '../../shared/art-resolution.js';
+import {propZ} from '../../shared/flat-props.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
 import {rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
 import {createRasterLoader} from './theme-art-stream.js';
@@ -139,7 +140,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     }
     if(!crisp&&!iceland&&prop.tiles?.length&&prop.flip)sprite.scale.x *= -1;
     if (prop.tint) sprite.tint = prop.tint;
-    sprite.zIndex = prop.z ?? ((prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true;
+    sprite.zIndex = prop.z ?? propZ(prop, (prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true;
     sprite.themeArt = map.id;
     let shadow = null;
     if (!NO_SHADOW.test(name) && prop.shadow !== false) {
