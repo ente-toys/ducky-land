@@ -5,6 +5,7 @@ import IslandChat from './IslandChat.jsx';
 import IslandPresence from './IslandPresence.jsx';
 import StarDialog from './StarDialog.jsx';
 import IslandTravel from './IslandTravel.jsx';
+import IslandStargaze from './IslandStargaze.jsx';
 import IslandFriends from './IslandFriends.jsx';
 import WorldMap from './WorldMap.jsx';
 import IslandOutfit from './IslandOutfit.jsx';
@@ -160,6 +161,7 @@ export default function PixiPage() {
     </aside>}
     {!error && <div className="pixi-bottom-hud">
       <IslandTravel travel={travel} playing={status==='playing' || offline} room={room} island={island} notice={travelNotice}/>
+      <IslandStargaze island={island} playing={status==='playing' || offline} offline={offline}/>
       <div className="pixi-notifications" ref={setNotificationHost}>
         <IslandPresence online={online} latestJoin={latestJoin}/>
       </div>

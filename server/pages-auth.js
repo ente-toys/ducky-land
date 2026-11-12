@@ -148,6 +148,39 @@ export async function outfit({request,env}) {
   }
 }
 
+// The telescope's sky. The room knows who has played here; GitHub knows how many people starred the repository.
+const starCountAge = 10 * 60 * 1000;
+export async function stars({request,env}, fetchGitHub = fetch) {
+  const key = await digest(cookie(request,sessionCookie));
+  if (!key) return json({error:'Please sign in again to look through the telescope.'},401);
+  let sky;
+  try {
+    const result = await call(env,'/stars',{digest:key});
+    if (!result.ok) return json({error:'Please sign in again to look through the telescope.'},result.status);
+    sky = await result.json();
+  } catch {
+    return json({error:'The telescope is clouded over. Please try again.'},503);
+  }
+  if (!(Date.now()-sky.checked < starCountAge)) {
+    try {
+      const user = await (await call(env,'/session/get',{digest:key})).json();
+      const repository = await fetchGitHub('https://api.github.com/repos/ente/ente',{
+        headers:{Accept:'application/vnd.github+json','User-Agent':'Ducky Land',
+          ...(user?.githubToken ? {Authorization:'Bearer '+user.githubToken} : {})},
+      });
+      const count = repository.ok ? (await repository.json()).stargazers_count : null;
+      if (Number.isSafeInteger(count) && count >= 0) {
+        await call(env,'/stars/count',{count});
+        sky.total = count;
+      }
+    } catch {
+      // GitHub is unreachable: keep the last count the room saw.
+    }
+  }
+  const {checked, ...body} = sky;
+  return json(body);
+}
+
 export async function friends({request,env}) {
   if (!['GET','POST','PATCH','DELETE'].includes(request.method)) return json({error:'Method not allowed.'},405);
   if (request.method !== 'GET' && request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
@@ -216,7 +249,7 @@ async function checkPlayAccess(env, key, fetchGitHub) {
       'Could not check your GitHub star. Please try again.',status:starred.status === 401 ? 401 : 503};
   }
   const canPlay = starred.status === 204;
-  const saved = await call(env,'/session/access',{digest:key,canPlay});
+  const saved = await call(env,'/session/access',{digest:key,canPlay,starred:canPlay});
   if (!saved.ok) return {error:'Could not update play access. Please try again.',status:503};
   return {canPlay};
 }
