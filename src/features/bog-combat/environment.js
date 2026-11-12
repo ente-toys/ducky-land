@@ -2,7 +2,7 @@ import {normalizeBogBlockers} from './blockers.js';
 
 export function combatForBogEnvironment({map,islandId},records,areas) {
   const navigation=map.nav(),blockers=normalizeBogBlockers(records);
-  const bases={privacy:['privacy-nw','privacy-sw'],google:['google-ne','google-se']};
+  const bases={karma:['karma-nw','karma-sw'],evil:['evil-ne','evil-se']};
   const positions=Object.fromEntries(Object.entries(bases).map(([team,ids])=>[team,ids.map(base=>{
     const area=areas[base];if(!area)throw new Error(`Missing Bog base: ${base}`);
     const pad={x:area.x,y:area.y+240,base};

@@ -8,7 +8,7 @@ import {createTeamMarker} from '../src/features/bog-combat/effects.js';
 import {createBogCombat} from '../src/features/bog-combat/sim.js';
 
 test('solid team rings keep their rims, team-tinted names and hidden icon through both concealment states',()=>{
-  for(const team of ['privacy','google']){
+  for(const team of ['karma','evil']){
     const objects=new Container(),rig={root:new Container()};rig.root.position.set(100,200);rig.root.zIndex=200;
     const marker=createTeamMarker(objects,{team,name:'Ducky'},{tilt:.7});
     const [ring,tag,icon]=marker.root.children;
@@ -38,7 +38,7 @@ test('combat renders self and teammates at full alpha with no filter during hidi
   const objects=new Container(),liveRigs=new Map();
   try{
     const nav={walkable:()=>true,clearLine:()=>true};
-    const players=['privacy','google'].flatMap(team=>['self','ally'].map(id=>({id:team+id,team,name:team+id,alive:true,x:100,y:200,shieldUntil:17})));
+    const players=['karma','evil'].flatMap(team=>['self','ally'].map(id=>({id:team+id,team,name:team+id,alive:true,x:100,y:200,shieldUntil:17})));
     for(const p of players){const root=new Container();objects.addChild(root);liveRigs.set(p.id,{rig:{root,dispose(){root.removeFromParent();root.destroy({children:true});}}});}
     class Room{
       client={snapshot:{tick:1,time:10,players,shots:[],splats:[],events:[]},receivedAt:performance.now()};
@@ -61,12 +61,12 @@ test('combat renders self and teammates at full alpha with no filter during hidi
 });
 
 test('colour accents are exact, and concealment still omits enemies from the authority snapshot',()=>{
-  assert.equal(BOG_TEAM_COLOURS.privacy.body,0xFFD525);assert.equal(BOG_TEAM_COLOURS.google.body,0xEF5144);
+  assert.equal(BOG_TEAM_COLOURS.karma.body,0xFFD525);assert.equal(BOG_TEAM_COLOURS.evil.body,0xEF5144);
   const sim=createBogCombat({blockers:[],bounds:{width:1000,height:1000},pads:()=>[{x:200,y:300}]});
-  const self=sim.join({id:'self',team:'privacy'}),ally=sim.join({id:'ally',team:'privacy'}),enemy=sim.join({id:'enemy',team:'google'});
+  const self=sim.join({id:'self',team:'karma'}),ally=sim.join({id:'ally',team:'karma'}),enemy=sim.join({id:'enemy',team:'evil'});
   for(const p of [self,ally,enemy])p.shieldUntil=7;
-  assert.deepEqual(sim.snapshot('privacy').players.map(p=>p.id).sort(),['ally','self']);
+  assert.deepEqual(sim.snapshot('karma').players.map(p=>p.id).sort(),['ally','self']);
   for(const p of [self,ally,enemy]){p.shieldUntil=0;p.bushId='cover';p.bushRevealUntil=0;}
-  assert.deepEqual(sim.snapshot('privacy').players.map(p=>p.id).sort(),['ally','self']);
-  enemy.bushRevealUntil=2;assert.ok(sim.snapshot('privacy').players.some(p=>p.id==='enemy'));
+  assert.deepEqual(sim.snapshot('karma').players.map(p=>p.id).sort(),['ally','self']);
+  enemy.bushRevealUntil=2;assert.ok(sim.snapshot('karma').players.some(p=>p.id==='enemy'));
 });

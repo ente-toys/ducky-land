@@ -23,8 +23,8 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
   const shotSlots=Array.from({length:RULES.maxShots},()=>({})),shotPool=[...shotSlots],ownedShots=new WeakSet(shotSlots);
   const splatSlots=Array.from({length:RULES.maxSplats},()=>({})),splatPool=[...splatSlots];
   const to={x:0,y:0},point={x:0,y:0},wallResult={point:{x:0,y:0},fraction:1,blocker:null};
-  const state={pickups:(pickupSpots??createPickupSpots(movementNav)).map(p=>({...p,readyAt:p.readyAt??0})),time:0,tick:0,players:new Map(),shots:[],splats:[],scores:{privacy:0,google:0},practice:false,events:[]};
-  const nextBase={privacy:0,google:0};
+  const state={pickups:(pickupSpots??createPickupSpots(movementNav)).map(p=>({...p,readyAt:p.readyAt??0})),time:0,tick:0,players:new Map(),shots:[],splats:[],scores:{karma:0,evil:0},practice:false,events:[]};
+  const nextBase={karma:0,evil:0};
   let nextEvent=0,nextShot=0,nextSplat=0;
   const save=p=>{if(!p.bot)onStats(p.profile,{...p.stats},{...p.medalCase});};
   function spawn(p){
@@ -98,7 +98,7 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     p.nextFire=state.time+RULES.fireDelay;p.shieldUntil=state.time;
     p.bushRevealUntil=state.time+BUSH_REVEAL_SECONDS;
     const id=++nextShot;
-    shot.id=id;shot.owner=p.id;shot.team=p.team;shot.bot=p.bot;shot.x=p.x;shot.y=p.y;shot.dx=p.input.ax;shot.dy=p.input.ay;shot.left=RULES.range;shot.colour=p.team==='privacy'?0:id%4;
+    shot.id=id;shot.owner=p.id;shot.team=p.team;shot.bot=p.bot;shot.x=p.x;shot.y=p.y;shot.dx=p.input.ax;shot.dy=p.input.ay;shot.left=RULES.range;shot.colour=p.team==='karma'?0:id%4;
     assistShot(shot,p,state.players.values(),blockers,state.time);state.shots.push(shot);
   }
   function step(dt){

@@ -103,17 +103,17 @@ test('production lobby and teams use the landed account, keep saved stats, and r
  try{
   const lobby=peer(),participant=peer();
   assert.equal(service.open(lobby,{digest:p.account}),true);assert.equal(lobby.notes.at(-1).type,'arena-lobby');
-  assert.equal(service.open(participant,{digest:p.account,team:'google'}),true);
+  assert.equal(service.open(participant,{digest:p.account,team:'evil'}),true);
   const player=[...service.arena.state.players.values()].find(q=>!q.bot);assert.equal(player.profile,p.account);
-  assert.equal(lobby.notes.at(-1).counts.google,1);
+  assert.equal(lobby.notes.at(-1).counts.evil,1);
   service.message(participant,JSON.stringify({type:'arena-input',seq:0,x:1,y:0,run:true,fire:false}));
   for(let i=0;i<10;i++)service.step();assert.ok(player.x>6500);
   player.stats.tags=3;player.medalCase['first-splat']=true;service.close(participant);
   assert.equal(service.profile(p.account).stats.tags,3);assert.equal(service.profile(p.account).medalCase['first-splat'],true);
   const restored=new LiveBogRoom(room);assert.equal(restored.profile(p.account).stats.tags,3);restored.dispose();
-  p.actor.mode='sailing';assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
-  p.actor.mode='walking';room.karma.endBogEntry(p.account);balance(room,p,4);p.actor.karma=999;assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
-  assert.equal(service.open(peer(),{digest:'untrusted',team:'privacy'}),false);
+  p.actor.mode='sailing';assert.equal(service.open(peer(),{digest:p.account,team:'karma'}),false);
+  p.actor.mode='walking';room.karma.endBogEntry(p.account);balance(room,p,4);p.actor.karma=999;assert.equal(service.open(peer(),{digest:p.account,team:'karma'}),false);
+  assert.equal(service.open(peer(),{digest:'untrusted',team:'karma'}),false);
  }finally{service.dispose();stop(room);}
 });
 
@@ -121,7 +121,7 @@ test('Pages routes the live combat socket through same-origin session auth, igno
  assert.ok(JSON.parse(readFileSync('public/_routes.json')).include.includes('/arena-room'));
  let routed;
  const env={ISLAND:{idFromName:name=>name,get:()=>({fetch:async request=>{routed=request;return Response.json({ok:true});}})}};
- const request=(headers={})=>new Request('https://ducky.example/arena-room?team=privacy&profile=forged',{headers:{Upgrade:'websocket',Origin:'https://ducky.example',Cookie:'__Host-ducky_session='+'a'.repeat(43),...headers}});
+ const request=(headers={})=>new Request('https://ducky.example/arena-room?team=karma&profile=forged',{headers:{Upgrade:'websocket',Origin:'https://ducky.example',Cookie:'__Host-ducky_session='+'a'.repeat(43),...headers}});
  assert.equal((await connectBog({request:request(),env})).status,200);
  assert.equal(new URL(routed.url).pathname,'/bog-room');assert.equal(new URL(routed.url).searchParams.get('profile'),null);
  assert.equal(routed.headers.get('X-Session-Digest').length,43);

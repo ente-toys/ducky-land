@@ -16,7 +16,7 @@ export function createCombatFeedback({onHit=()=>{},onTag=()=>{},onGhost=()=>{},o
       if(event.id<=lastEvent)continue;lastEvent=event.id;
       if(snapshot.time-event.time>.5)continue;
       const splat=snapshot.splats?.find(s=>s.kind==='tag'&&s.victim===event.victimId&&Math.abs(s.born-event.time)<.2);
-      const palette=PAINT[splat?.team??event.team]??PAINT.privacy;
+      const palette=PAINT[splat?.team??event.team]??PAINT.karma;
       const colour=palette[(splat?.colour??0)%palette.length];
       if(id&&event.victimId===id)onHit(colour,event);
       if(id&&event.actorId===id)onTag(event);
@@ -34,7 +34,7 @@ export function createCombatFeedback({onHit=()=>{},onTag=()=>{},onGhost=()=>{},o
 
 export function createHitFeelState(){
   let hitAt=-Infinity,stopUntil=0,presentTag=false;
-  return {colour:PAINT.privacy[0],
+  return {colour:PAINT.karma[0],
     hit(now,colour){hitAt=now;this.colour=colour;},
     tag(){presentTag=true;},
     shouldHold(now,reducedMotion){

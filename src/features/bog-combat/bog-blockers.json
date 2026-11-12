@@ -1,6 +1,6 @@
 [
   {
-    "id": "privacy-nw-hall",
+    "id": "karma-nw-hall",
     "kind": "building",
     "type": "rect",
     "x": 1789.6,
@@ -9,7 +9,7 @@
     "height": 159.6
   },
   {
-    "id": "privacy-nw-annex",
+    "id": "karma-nw-annex",
     "kind": "building",
     "type": "rect",
     "x": 1390.4,
@@ -18,7 +18,7 @@
     "height": 121.6
   },
   {
-    "id": "google-ne-hall",
+    "id": "evil-ne-hall",
     "kind": "building",
     "type": "rect",
     "x": 6389.6,
@@ -27,7 +27,7 @@
     "height": 159.6
   },
   {
-    "id": "google-ne-annex",
+    "id": "evil-ne-annex",
     "kind": "building",
     "type": "rect",
     "x": 5990.4,
@@ -36,7 +36,7 @@
     "height": 121.6
   },
   {
-    "id": "privacy-sw-hall",
+    "id": "karma-sw-hall",
     "kind": "building",
     "type": "rect",
     "x": 1789.6,
@@ -45,7 +45,7 @@
     "height": 159.6
   },
   {
-    "id": "privacy-sw-annex",
+    "id": "karma-sw-annex",
     "kind": "building",
     "type": "rect",
     "x": 1390.4,
@@ -54,7 +54,7 @@
     "height": 121.6
   },
   {
-    "id": "google-se-hall",
+    "id": "evil-se-hall",
     "kind": "building",
     "type": "rect",
     "x": 6389.6,
@@ -63,7 +63,7 @@
     "height": 159.6
   },
   {
-    "id": "google-se-annex",
+    "id": "evil-se-annex",
     "kind": "building",
     "type": "rect",
     "x": 5990.4,
@@ -252,7 +252,7 @@
     "height": 22
   },
   {
-    "id": "privacy-nw-wall-0",
+    "id": "karma-nw-wall-0",
     "kind": "wall",
     "type": "rect",
     "x": 1308,
@@ -261,7 +261,7 @@
     "height": 58
   },
   {
-    "id": "privacy-nw-wall-1",
+    "id": "karma-nw-wall-1",
     "kind": "wall",
     "type": "rect",
     "x": 2248,
@@ -270,7 +270,7 @@
     "height": 58
   },
   {
-    "id": "google-ne-wall-0",
+    "id": "evil-ne-wall-0",
     "kind": "wall",
     "type": "rect",
     "x": 5908,
@@ -279,7 +279,7 @@
     "height": 58
   },
   {
-    "id": "google-ne-wall-1",
+    "id": "evil-ne-wall-1",
     "kind": "wall",
     "type": "rect",
     "x": 6848,
@@ -288,7 +288,7 @@
     "height": 58
   },
   {
-    "id": "privacy-sw-wall-0",
+    "id": "karma-sw-wall-0",
     "kind": "wall",
     "type": "rect",
     "x": 1308,
@@ -297,7 +297,7 @@
     "height": 58
   },
   {
-    "id": "privacy-sw-wall-1",
+    "id": "karma-sw-wall-1",
     "kind": "wall",
     "type": "rect",
     "x": 2248,
@@ -306,7 +306,7 @@
     "height": 58
   },
   {
-    "id": "google-se-wall-0",
+    "id": "evil-se-wall-0",
     "kind": "wall",
     "type": "rect",
     "x": 5908,
@@ -315,7 +315,7 @@
     "height": 58
   },
   {
-    "id": "google-se-wall-1",
+    "id": "evil-se-wall-1",
     "kind": "wall",
     "type": "rect",
     "x": 6848,
@@ -3411,355 +3411,355 @@
     "height": 26
   },
   {
-    "id": "privacy-nw-porch-foot-0",
+    "id": "karma-nw-porch-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 1727,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "privacy-nw-porch",
+    "prop": "karma-nw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-porch-foot-1",
+    "id": "karma-nw-porch-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 1875,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "privacy-nw-porch",
+    "prop": "karma-nw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-porch-foot-2",
+    "id": "karma-nw-porch-foot-2",
     "kind": "landmark",
     "type": "rect",
     "x": 2135,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "privacy-nw-porch",
+    "prop": "karma-nw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-porch-foot-3",
+    "id": "karma-nw-porch-foot-3",
     "kind": "landmark",
     "type": "rect",
     "x": 2283,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "privacy-nw-porch",
+    "prop": "karma-nw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-yard-gate-foot-0",
+    "id": "karma-nw-yard-gate-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 1789,
     "y": 2257,
     "width": 40,
     "height": 20,
-    "prop": "privacy-nw-yard-gate",
+    "prop": "karma-nw-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-yard-gate-foot-1",
+    "id": "karma-nw-yard-gate-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 1971,
     "y": 2257,
     "width": 40,
     "height": 20,
-    "prop": "privacy-nw-yard-gate",
+    "prop": "karma-nw-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-yard-return-west-foot-0",
+    "id": "karma-nw-yard-return-west-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 1427,
     "y": 2246,
     "width": 226,
     "height": 29,
-    "prop": "privacy-nw-yard-return-west",
+    "prop": "karma-nw-yard-return-west",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-nw-yard-return-east-foot-0",
+    "id": "karma-nw-yard-return-east-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 2147,
     "y": 2246,
     "width": 226,
     "height": 29,
-    "prop": "privacy-nw-yard-return-east",
+    "prop": "karma-nw-yard-return-east",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-porch-foot-0",
+    "id": "evil-ne-porch-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6327,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "google-ne-porch",
+    "prop": "evil-ne-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-porch-foot-1",
+    "id": "evil-ne-porch-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 6475,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "google-ne-porch",
+    "prop": "evil-ne-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-porch-foot-2",
+    "id": "evil-ne-porch-foot-2",
     "kind": "landmark",
     "type": "rect",
     "x": 6735,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "google-ne-porch",
+    "prop": "evil-ne-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-porch-foot-3",
+    "id": "evil-ne-porch-foot-3",
     "kind": "landmark",
     "type": "rect",
     "x": 6883,
     "y": 1753,
     "width": 30,
     "height": 16,
-    "prop": "google-ne-porch",
+    "prop": "evil-ne-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-yard-gate-foot-0",
+    "id": "evil-ne-yard-gate-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6389,
     "y": 2257,
     "width": 40,
     "height": 20,
-    "prop": "google-ne-yard-gate",
+    "prop": "evil-ne-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-yard-gate-foot-1",
+    "id": "evil-ne-yard-gate-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 6571,
     "y": 2257,
     "width": 40,
     "height": 20,
-    "prop": "google-ne-yard-gate",
+    "prop": "evil-ne-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-yard-return-west-foot-0",
+    "id": "evil-ne-yard-return-west-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6027,
     "y": 2246,
     "width": 226,
     "height": 29,
-    "prop": "google-ne-yard-return-west",
+    "prop": "evil-ne-yard-return-west",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-ne-yard-return-east-foot-0",
+    "id": "evil-ne-yard-return-east-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6747,
     "y": 2246,
     "width": 226,
     "height": 29,
-    "prop": "google-ne-yard-return-east",
+    "prop": "evil-ne-yard-return-east",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-porch-foot-0",
+    "id": "karma-sw-porch-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 1727,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "privacy-sw-porch",
+    "prop": "karma-sw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-porch-foot-1",
+    "id": "karma-sw-porch-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 1875,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "privacy-sw-porch",
+    "prop": "karma-sw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-porch-foot-2",
+    "id": "karma-sw-porch-foot-2",
     "kind": "landmark",
     "type": "rect",
     "x": 2135,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "privacy-sw-porch",
+    "prop": "karma-sw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-porch-foot-3",
+    "id": "karma-sw-porch-foot-3",
     "kind": "landmark",
     "type": "rect",
     "x": 2283,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "privacy-sw-porch",
+    "prop": "karma-sw-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-yard-gate-foot-0",
+    "id": "karma-sw-yard-gate-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 1789,
     "y": 6057,
     "width": 40,
     "height": 20,
-    "prop": "privacy-sw-yard-gate",
+    "prop": "karma-sw-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-yard-gate-foot-1",
+    "id": "karma-sw-yard-gate-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 1971,
     "y": 6057,
     "width": 40,
     "height": 20,
-    "prop": "privacy-sw-yard-gate",
+    "prop": "karma-sw-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-yard-return-west-foot-0",
+    "id": "karma-sw-yard-return-west-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 1427,
     "y": 6046,
     "width": 226,
     "height": 29,
-    "prop": "privacy-sw-yard-return-west",
+    "prop": "karma-sw-yard-return-west",
     "author": "pass2-landmarks"
   },
   {
-    "id": "privacy-sw-yard-return-east-foot-0",
+    "id": "karma-sw-yard-return-east-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 2147,
     "y": 6046,
     "width": 226,
     "height": 29,
-    "prop": "privacy-sw-yard-return-east",
+    "prop": "karma-sw-yard-return-east",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-porch-foot-0",
+    "id": "evil-se-porch-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6327,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "google-se-porch",
+    "prop": "evil-se-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-porch-foot-1",
+    "id": "evil-se-porch-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 6475,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "google-se-porch",
+    "prop": "evil-se-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-porch-foot-2",
+    "id": "evil-se-porch-foot-2",
     "kind": "landmark",
     "type": "rect",
     "x": 6735,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "google-se-porch",
+    "prop": "evil-se-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-porch-foot-3",
+    "id": "evil-se-porch-foot-3",
     "kind": "landmark",
     "type": "rect",
     "x": 6883,
     "y": 5553,
     "width": 30,
     "height": 16,
-    "prop": "google-se-porch",
+    "prop": "evil-se-porch",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-yard-gate-foot-0",
+    "id": "evil-se-yard-gate-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6389,
     "y": 6057,
     "width": 40,
     "height": 20,
-    "prop": "google-se-yard-gate",
+    "prop": "evil-se-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-yard-gate-foot-1",
+    "id": "evil-se-yard-gate-foot-1",
     "kind": "landmark",
     "type": "rect",
     "x": 6571,
     "y": 6057,
     "width": 40,
     "height": 20,
-    "prop": "google-se-yard-gate",
+    "prop": "evil-se-yard-gate",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-yard-return-west-foot-0",
+    "id": "evil-se-yard-return-west-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6027,
     "y": 6046,
     "width": 226,
     "height": 29,
-    "prop": "google-se-yard-return-west",
+    "prop": "evil-se-yard-return-west",
     "author": "pass2-landmarks"
   },
   {
-    "id": "google-se-yard-return-east-foot-0",
+    "id": "evil-se-yard-return-east-foot-0",
     "kind": "landmark",
     "type": "rect",
     "x": 6747,
     "y": 6046,
     "width": 226,
     "height": 29,
-    "prop": "google-se-yard-return-east",
+    "prop": "evil-se-yard-return-east",
     "author": "pass2-landmarks"
   },
   {
@@ -4853,10 +4853,10 @@
     "height": 244
   },
   {
-    "id": "wl-privacy-nw-wall-0-return-foot-0",
-    "prop": "wl-privacy-nw-wall-0-return",
+    "id": "wl-karma-nw-wall-0-return-foot-0",
+    "prop": "wl-karma-nw-wall-0-return",
     "author": "warzone",
-    "wallLayout": "privacy-nw-wall-0",
+    "wallLayout": "karma-nw-wall-0",
     "kind": "cover",
     "type": "rect",
     "x": 1308,
@@ -4865,10 +4865,10 @@
     "height": 244
   },
   {
-    "id": "wl-privacy-nw-wall-1-return-foot-0",
-    "prop": "wl-privacy-nw-wall-1-return",
+    "id": "wl-karma-nw-wall-1-return-foot-0",
+    "prop": "wl-karma-nw-wall-1-return",
     "author": "warzone",
-    "wallLayout": "privacy-nw-wall-1",
+    "wallLayout": "karma-nw-wall-1",
     "kind": "cover",
     "type": "rect",
     "x": 2434,
@@ -4877,10 +4877,10 @@
     "height": 244
   },
   {
-    "id": "wl-google-ne-wall-0-return-foot-0",
-    "prop": "wl-google-ne-wall-0-return",
+    "id": "wl-evil-ne-wall-0-return-foot-0",
+    "prop": "wl-evil-ne-wall-0-return",
     "author": "warzone",
-    "wallLayout": "google-ne-wall-0",
+    "wallLayout": "evil-ne-wall-0",
     "kind": "cover",
     "type": "rect",
     "x": 5908,
@@ -4889,10 +4889,10 @@
     "height": 244
   },
   {
-    "id": "wl-google-ne-wall-1-return-foot-0",
-    "prop": "wl-google-ne-wall-1-return",
+    "id": "wl-evil-ne-wall-1-return-foot-0",
+    "prop": "wl-evil-ne-wall-1-return",
     "author": "warzone",
-    "wallLayout": "google-ne-wall-1",
+    "wallLayout": "evil-ne-wall-1",
     "kind": "cover",
     "type": "rect",
     "x": 7034,
@@ -4901,10 +4901,10 @@
     "height": 244
   },
   {
-    "id": "wl-privacy-sw-wall-0-return-foot-0",
-    "prop": "wl-privacy-sw-wall-0-return",
+    "id": "wl-karma-sw-wall-0-return-foot-0",
+    "prop": "wl-karma-sw-wall-0-return",
     "author": "warzone",
-    "wallLayout": "privacy-sw-wall-0",
+    "wallLayout": "karma-sw-wall-0",
     "kind": "cover",
     "type": "rect",
     "x": 1308,
@@ -4913,10 +4913,10 @@
     "height": 244
   },
   {
-    "id": "wl-privacy-sw-wall-1-return-foot-0",
-    "prop": "wl-privacy-sw-wall-1-return",
+    "id": "wl-karma-sw-wall-1-return-foot-0",
+    "prop": "wl-karma-sw-wall-1-return",
     "author": "warzone",
-    "wallLayout": "privacy-sw-wall-1",
+    "wallLayout": "karma-sw-wall-1",
     "kind": "cover",
     "type": "rect",
     "x": 2434,
@@ -4925,10 +4925,10 @@
     "height": 244
   },
   {
-    "id": "wl-google-se-wall-0-return-foot-0",
-    "prop": "wl-google-se-wall-0-return",
+    "id": "wl-evil-se-wall-0-return-foot-0",
+    "prop": "wl-evil-se-wall-0-return",
     "author": "warzone",
-    "wallLayout": "google-se-wall-0",
+    "wallLayout": "evil-se-wall-0",
     "kind": "cover",
     "type": "rect",
     "x": 5908,
@@ -4937,10 +4937,10 @@
     "height": 244
   },
   {
-    "id": "wl-google-se-wall-1-return-foot-0",
-    "prop": "wl-google-se-wall-1-return",
+    "id": "wl-evil-se-wall-1-return-foot-0",
+    "prop": "wl-evil-se-wall-1-return",
     "author": "warzone",
-    "wallLayout": "google-se-wall-1",
+    "wallLayout": "evil-se-wall-1",
     "kind": "cover",
     "type": "rect",
     "x": 7034,

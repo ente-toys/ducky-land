@@ -1,18 +1,18 @@
 import {Assets,Container,Point,Sprite} from 'pixi.js';
 import guns from './assets/guns.json' with {type:'json'};
-import {loadGoogleLook,loadPrivacyLook} from './team-look.js';
+import {loadEvilLook,loadKarmaLook} from './team-look.js';
 
 let loading;
 export function loadGunC() {
   const urls=import.meta.glob('./assets/*.svg',{query:'?url',import:'default',eager:true});
   return loading??=Promise.all([
-    Promise.all(guns.map(async spec=>({...spec,texture:await Assets.load(urls[`./assets/${spec.file}`])}))),loadGoogleLook(),loadPrivacyLook(),
-  ]).then(([items,googleLook,privacyLook])=>Object.assign(items,{googleLook,privacyLook})).catch(error=>{loading=null;throw error;});
+    Promise.all(guns.map(async spec=>({...spec,texture:await Assets.load(urls[`./assets/${spec.file}`])}))),loadEvilLook(),loadKarmaLook(),
+  ]).then(([items,evilLook,karmaLook])=>Object.assign(items,{evilLook,karmaLook})).catch(error=>{loading=null;throw error;});
 }
 const delta=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 
 export function attachGunC(rig,items,team,objects) {
-  rig.setAppearance?.((team==='google'?items.googleLook:team==='privacy'?items.privacyLook:null)??null);
+  rig.setAppearance?.((team==='evil'?items.evilLook:team==='karma'?items.karmaLook:null)??null);
   const equipment=new Map(),a=new Point(),b=new Point(),pa=new Point(),pb=new Point(),muzzle=new Point(),out=new Point();
   const candidates=items.filter(item=>item.team===team);
   let current=null;

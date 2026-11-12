@@ -49,8 +49,8 @@ export default function BogDock({engine,name='Ducky',profile:providedProfile,onL
       <h1 id="bog-combat-heading">{panel==='teams'?'Pick your side.':panel==='case'?'Your medal case':'Back at the dock'}</h1>
       {panel==='teams'?<>
         <p>Drop in, make a splash. Any team size, leave whenever you like.</p>
-        <div className="bog-combat-teams">{['privacy','google'].map(id=><button className={`bog-combat-team bog-combat-${id}`} key={id} disabled={!connected} onClick={()=>setTeam(id)}>
-          <strong>Team {id==='privacy'?'KARMA':'EVIL'}</strong>
+        <div className="bog-combat-teams">{['karma','evil'].map(id=><button className={`bog-combat-team bog-combat-${id}`} key={id} disabled={!connected} onClick={()=>setTeam(id)}>
+          <strong>Team {id==='karma'?'KARMA':'EVIL'}</strong>
           <span>{connected?`${data.counts[id]} playing`:'Checking players…'}</span>
           <small>{connected&&data.suggested===id?'Could use a duck':'Any team size welcome'}</small>
         </button>)}</div>

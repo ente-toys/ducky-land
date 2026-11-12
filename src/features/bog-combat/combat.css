@@ -11,8 +11,8 @@
 .bog-combat-teams { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }
 .bog-combat-teams .bog-combat-team { display:grid; gap:8px; text-align:left; padding:24px; }
 .bog-combat-team strong { font-size:21px; }
-.bog-combat-team.bog-combat-privacy { border-top:4px solid var(--bog-green); }
-.bog-combat-team.bog-combat-google { border-top:4px solid #2788d9; border-right:4px solid #fa5452; border-bottom:4px solid #ffe23d; border-left:4px solid #20c75b; }
+.bog-combat-team.bog-combat-karma { border-top:4px solid var(--bog-green); }
+.bog-combat-team.bog-combat-evil { border-top:4px solid #2788d9; border-right:4px solid #fa5452; border-bottom:4px solid #ffe23d; border-left:4px solid #20c75b; }
 .bog-combat-lifetime { display:flex; flex-wrap:wrap; gap:24px; }
 .bog-combat-lifetime dt { font-size:12px; opacity:.7; }
 .bog-combat-lifetime dd { margin:0; font-size:24px; }

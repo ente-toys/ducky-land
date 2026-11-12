@@ -6,7 +6,7 @@ import {OUTFIT_OPTIONS} from '../../gameplay/outfits.js';
 import {createSnowCover} from './environment/snow-cover.js';
 import {createKarmaQuiver} from './karma-quiver.js';
 import {rinkTilt} from '../../gameplay/rink-slide.js';
-import {createPrivacyShades} from './privacy-shades.js';
+import {createKarmaShades} from './karma-shades.js';
 
 export const duckAnimationNames=Object.freeze({0:'idle',1:'walk',2:'quack',3:'dance',4:'heart',5:'laugh',6:'wave',7:'sleep',8:'grumpy',9:'party'});
 const MANIFEST='/pixi-duck/manifest.json', SCALE=1/3, TAU=Math.PI*2, STUMBLE=.35;
@@ -165,7 +165,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       }
       if(next?.horn&&!view.devil){
         const tuft=view.parts.find(p=>p.role==='tuft'),tail=view.parts.find(p=>p.role==='tail');
-        const horns=new Container({label:'Google devil horns'}),left=new Sprite(next.horn),right=new Sprite(next.horn),spade=new Sprite(next.tail);
+        const horns=new Container({label:'Evil devil horns'}),left=new Sprite(next.horn),right=new Sprite(next.horn),spade=new Sprite(next.tail);
         left.anchor.set(.35,.88);right.anchor.set(.35,.88);left.scale.x=-1;horns.addChild(left,right);
         view.body.addChildAt(horns,view.body.getChildIndex(view.bodyPart.joint));
         spade.anchor.set(8/205,210/232);spade.scale.x=tail.side;
@@ -179,8 +179,8 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         view.devil={horns,spade,tuft,tail,tailOffset,positions};
       }
       if(view.devil){view.devil.horns.visible=Boolean(next?.horn);view.devil.spade.visible=Boolean(next?.tail);}
-      if(next?.shades&&!view.privacyShades)view.privacyShades=createPrivacyShades(view,next.shades);
-      if(view.privacyShades)view.privacyShades.root.visible=Boolean(next?.shades);
+      if(next?.shades&&!view.karmaShades)view.karmaShades=createKarmaShades(view,next.shades);
+      if(view.karmaShades)view.karmaShades.root.visible=Boolean(next?.shades);
     }
     if(current.root.visible)renderView(current,elapsed);
   }
@@ -292,7 +292,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         horn.position.set(p.x+(other.x-p.x)*w,p.y+(other.y-p.y)*w);horn.scale.set((i===0?-1:1)*k,k);
       }
     }
-    if(appearance?.shades)view.privacyShades.update(turnAngle);
+    if(appearance?.shades)view.karmaShades.update(turnAngle);
     const morphWeight = Math.round(glide.w * 128) / 128;
     if(view.morph && (view.morphWeight !== morphWeight || view.morphOther !== glide.other || view.morphSailing !== sailing)){
       view.morphWeight = morphWeight;

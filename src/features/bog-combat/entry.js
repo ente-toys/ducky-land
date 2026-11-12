@@ -7,5 +7,5 @@ export function bogLandingNotice(islandId,karma=getPlayerKarma()){
  return islandId===BOG_ISLAND&&!canEnterBog(karma)
   ? `You need ${KARMA_REQUIRED} karma to land on Booquack Bog (you have ${Number.isFinite(karma)?karma:0})` : null;
 }
-export function teamCounts(players){const counts={privacy:0,google:0};for(const p of players)if(!p.bot&&p.team in counts)counts[p.team]++;return counts;}
-export function suggestedTeam(counts){return counts.privacy===counts.google?null:counts.privacy<counts.google?'privacy':'google';}
+export function teamCounts(players){const counts={karma:0,evil:0};for(const p of players)if(!p.bot&&p.team in counts)counts[p.team]++;return counts;}
+export function suggestedTeam(counts){return counts.karma===counts.evil?null:counts.karma<counts.evil?'karma':'evil';}

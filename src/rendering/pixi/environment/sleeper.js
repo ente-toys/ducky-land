@@ -156,13 +156,13 @@ export function createSleeper(sleep, seed = 0) {
       region, crownKey: sprite ? `${name}:${i}` : null};
   });
   update(0);
-  let devil,privacyShades;
+  let devil,karmaShades;
   function setAppearance(appearance=null){
     const replacement=appearance?.textures.get(`${name}-duck.svg`);
     const base=duck.children.find(n=>n instanceof Sprite);
     base.texture=replacement??Assets.get(pose.layers.find(l=>l.id==='duck').src);
     if(replacement&&!devil){
-      devil=new Container({label:'Sleeping Google devil parts'});
+      devil=new Container({label:'Sleeping Evil devil parts'});
       const nod=name==='nod',left=new Sprite(appearance.horn),right=new Sprite(appearance.horn),tail=new Sprite(appearance.tail),k=nod?1.35:1.2;
       for(const [i,horn]of [left,right].entries()){horn.anchor.set(.35,.88);horn.position.set((nod?320:320)+(i===0?-145:145),nod?155:142);horn.scale.set((i===0?-1:1)*k,k);}
       tail.anchor.set(8/205,210/232);tail.position.set(nod?620:710,nod?800:390);tail.scale.set(nod?1:1.1);
@@ -170,11 +170,11 @@ export function createSleeper(sleep, seed = 0) {
     }
     if(devil)devil.visible=Boolean(replacement);
     const shades=appearance?.shades?.sleep.get(`${name}-shades.svg`);
-    if(shades&&!privacyShades){
-      privacyShades=new Sprite({texture:shades,label:'Sleeping Privacy sunglasses'});
-      duck.addChild(privacyShades);
+    if(shades&&!karmaShades){
+      karmaShades=new Sprite({texture:shades,label:'Sleeping Karma sunglasses'});
+      duck.addChild(karmaShades);
     }
-    if(privacyShades)privacyShades.visible=Boolean(shades);
+    if(karmaShades)karmaShades.visible=Boolean(shades);
   }
   return {root, update, setCap, setAppearance, poke, pose: name, flip, snowSurfaces};
 }

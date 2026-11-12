@@ -2,8 +2,8 @@ import {Filter,GlProgram,defaultFilterVert} from 'pixi.js';
 
 export const BOG_OUTLINE_PIXELS=3;
 export const BOG_TEAM_COLOURS=Object.freeze({
-  privacy:Object.freeze({body:0xFFD525,ring:0xFFD525,rim:0xFFFFFF}),
-  google:Object.freeze({body:0xEF5144,ring:0xEF5144,rim:0x23182F}),
+  karma:Object.freeze({body:0xFFD525,ring:0xFFD525,rim:0xFFFFFF}),
+  evil:Object.freeze({body:0xEF5144,ring:0xEF5144,rim:0x23182F}),
 });
 
 const fragment=`

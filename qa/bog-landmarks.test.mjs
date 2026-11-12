@@ -38,7 +38,7 @@ test('landmark feet match rendered pieces, walking obstacles and authoritative p
 });
 
 test('four unchanged base pads reach the front gate and both flank exits',()=>{
- for(const id of ['privacy-nw','google-ne','privacy-sw','google-se']){
+ for(const id of ['karma-nw','evil-ne','karma-sw','evil-se']){
   const {x,y}=BOG_AREAS[id],pad=[x,y+240];
   for(const [dx,dy] of [[0,240],[0,420],[0,520],[-520,420],[520,420]])reachable(x+dx,y+dy,pad);
   assert.equal(traceShot({x,y:y+370},{x,y:y+490},combat).blocker,null,id+' gate opening');

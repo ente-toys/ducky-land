@@ -13,7 +13,7 @@ export function createDemo(combat,count,{random=Math.random}={}){
   const {think}=createBotController(sim,combat,{random,showcase:true,heroId});
   const metrics={cpuMs:0,maxCpuMs:0};
   for(let i=0;i<count;i++){
-    const team=i%2?'google':'privacy',p=sim.join({id:`bot-${i}`,name:i===0?'Ducky':`${team==='privacy'?'Karma':'Evil'} ${Math.floor(i/2)+1}`,team});
+    const team=i%2?'evil':'karma',p=sim.join({id:`bot-${i}`,name:i===0?'Ducky':`${team==='karma'?'Karma':'Evil'} ${Math.floor(i/2)+1}`,team});
     p.bot=true;brains.set(p.id,createBotBrain(i));
   }
   class LocalSocket{
@@ -22,7 +22,7 @@ export function createDemo(combat,count,{random=Math.random}={}){
       queueMicrotask(()=>{if(this.readyState!==1)return;if(!this.lobby)this.emit({type:'arena-welcome',id:this.id??null});this.publish();});
     }
     emit(data){this.onmessage?.({data:JSON.stringify(data)});}
-    publish(){if(this.lobby)this.emit({type:'arena-lobby',counts:{privacy:0,google:0},suggested:null,stats:{},medalCase:{}});else this.emit(sim.snapshot(sim.state.players.get(this.id)?.team??null));}
+    publish(){if(this.lobby)this.emit({type:'arena-lobby',counts:{karma:0,evil:0},suggested:null,stats:{},medalCase:{}});else this.emit(sim.snapshot(sim.state.players.get(this.id)?.team??null));}
     send(data){const m=JSON.parse(data);if(this.id)sim.input(this.id,m);}
     close(){this.readyState=3;sockets.delete(this);if(this.id)sim.leave(this.id);}
   }
@@ -34,11 +34,11 @@ export function createDemo(combat,count,{random=Math.random}={}){
       super.step(dt,input,now);
       if(!match.winner){
         sim.step(dt);
-        if(sim.state.scores.privacy>=30){match.winner='privacy';match.restartAt=now+4200;}
+        if(sim.state.scores.karma>=30){match.winner='karma';match.restartAt=now+4200;}
       }else if(now>=match.restartAt){
         const players=[...sim.state.players.values()].map(p=>({id:p.id,name:p.name,team:p.team,profile:p.profile,bot:p.bot}));
         for(const p of players)sim.leave(p.id);
-        sim.state.shots=[];sim.state.splats=[];sim.state.events=[];sim.state.scores.privacy=sim.state.scores.google=0;
+        sim.state.shots=[];sim.state.splats=[];sim.state.events=[];sim.state.scores.karma=sim.state.scores.evil=0;
         for(const {bot,...p}of players){sim.join(p).bot=bot;const b=brains.get(p.id);if(b)Object.assign(b,{path:[],planAt:0,retreat:false,reactAt:0});}
         match.winner=null;match.round++;
       }

@@ -28,7 +28,7 @@ test('fight areas have no benches, names, planters, flowers, sleepers or lane wi
  assert.ok(!art.flats.some(p=>p.src.includes('site-bed.svg')));
  assert.ok(!fs.readdirSync(root+'home').some(p=>/^label-.*\.svg$/.test(p)));
  const lamps=art.props.filter(p=>p.name==='lantern');assert.equal(lamps.length,4);
- for(const p of lamps)assert.match(p.id,/^(privacy-nw|google-ne|privacy-sw|google-se)-lamp-0$/);
+ for(const p of lamps)assert.match(p.id,/^(karma-nw|evil-ne|karma-sw|evil-se)-lamp-0$/);
 });
 test('arcade uses three independently drawn straight views and exact pier collision',()=>{
  const bays=art.props.filter(p=>p.id.startsWith('site-b-arcade-'));

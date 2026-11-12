@@ -17,18 +17,18 @@ import {walkingActor} from '../src/features/bog-combat/physics.js';
 const advance=(sim,s)=>{for(let i=0;i<Math.round(s*60);i++)sim.step(1/60);};
 const wall={blocksWalk:true,blocksShots:true,polygon:[{x:280,y:100},{x:290,y:100},{x:290,y:900},{x:280,y:900}]};
 function fixture(options={}){
-  const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='privacy'?200:600,y:400}],pickupSpots:[],...options});
-  const p=sim.join({id:'p',team:'privacy'}),e=sim.join({id:'e',team:'google'});p.shieldUntil=e.shieldUntil=0;p.facing=Math.PI/2;
+  const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='karma'?200:600,y:400}],pickupSpots:[],...options});
+  const p=sim.join({id:'p',team:'karma'}),e=sim.join({id:'e',team:'evil'});p.shieldUntil=e.shieldUntil=0;p.facing=Math.PI/2;
   return {sim,p,e};
 }
 function input(sim,p,extra={}){return sim.input(p.id,{seq:p.seq+1,x:0,y:0,fire:false,...extra});}
 function fire(sim,p){input(sim,p,{fire:true});sim.step(1/60);return sim.state.shots.find(s=>s.owner===p.id);}
-function hit(sim,p){sim.state.shots.push({id:999,owner:'e',team:'google',x:p.x,y:p.y,dx:1,dy:0,left:1,colour:0});sim.step(1/60);}
+function hit(sim,p){sim.state.shots.push({id:999,owner:'e',team:'evil',x:p.x,y:p.y,dx:1,dy:0,left:1,colour:0});sim.step(1/60);}
 
 test('aim assist bends at most fourteen degrees toward nearest visible enemy for humans and bots',()=>{
   for(const bot of [false,true]){
     const {sim,p,e}=fixture();p.bot=bot;e.x=560;e.y=470;
-    const nearer=sim.join({id:'near',team:'google'});nearer.x=420;nearer.y=430;nearer.shieldUntil=0;
+    const nearer=sim.join({id:'near',team:'evil'});nearer.x=420;nearer.y=430;nearer.shieldUntil=0;
     const shot=fire(sim,p),angle=Math.atan2(shot.dy,shot.dx);
     assert.ok(Math.abs(angle-Math.atan2(30,220))<1e-9);assert.equal(p.facing,Math.PI/2);
     assert.ok(angle<=RULES.aimCone);advance(sim,.2);assert.equal(nearer.alive,false);assert.equal(e.alive,true);
@@ -64,7 +64,7 @@ test('a hop uses movement direction or last facing while idle, cannot cross wall
 });
 test('hop grants only .15 s tag protection, remains visible, and then a hit costs one life',()=>{
   const {sim,p}=fixture();input(sim,p,{dodge:1});sim.step(1/60);
-  assert.ok(sim.snapshot('google').players.some(q=>q.id===p.id));hit(sim,p);assert.equal(p.lives,5);
+  assert.ok(sim.snapshot('evil').players.some(q=>q.id===p.id));hit(sim,p);assert.equal(p.lives,5);
   advance(sim,.15);hit(sim,p);assert.equal(p.lives,4);assert.equal(p.alive,false);assert.equal(p.dodgeUntil,0);
 });
 test('bad dodge packets cannot inject cooldowns, speed, shields or scoring',()=>{
@@ -79,7 +79,7 @@ test('five pickups occupy walkable Mid, Site A/B and two lane spots, with a twen
   for(const s of spots)assert.ok(BOG_COMBAT.navigation.walkable(s.x,s.y));
   const {sim,p}=fixture({pickupSpots:[{id:'paint',kind:'paint',x:200,y:400}]});p.ammo=2;p.reloadAt=100;sim.step(1/60);
   assert.equal(p.ammo,12);assert.equal(p.reloadAt,0);assert.equal(sim.state.pickups[0].readyAt,sim.state.time+20);
-  const exported=sim.snapshot('privacy').pickups;exported[0].readyAt=0;assert.ok(sim.state.pickups[0].readyAt>0);
+  const exported=sim.snapshot('karma').pickups;exported[0].readyAt=0;assert.ok(sim.state.pickups[0].readyAt>0);
   p.ammo=2;advance(sim,19.9);assert.equal(p.ammo,2);advance(sim,.15);assert.equal(p.ammo,12);
 });
 test('one pickup has one authoritative collector, tagged ducks cannot collect it',()=>{
@@ -129,7 +129,7 @@ test('shared movement replay retains hop timing and movement through reconciliat
 test('ability timers survive authority clock reset without replenishing a consumed shield or restarting the hop',()=>{
   const {sim,p}=fixture();p.speedUntil=5;p.hitShield=1;p.hitShieldUntil=8;input(sim,p,{dodge:1});advance(sim,.1);
   const snap=sim.snapshot().players.find(q=>q.id==='p'),combat={...snap,...saveAbilityTimers(p,sim.state.time)};
-  const fresh=fixture().sim;fresh.leave('p');const restored=fresh.join({id:'p',team:'privacy',combat});
+  const fresh=fixture().sim;fresh.leave('p');const restored=fresh.join({id:'p',team:'karma',combat});
   for(const [left,until]of Object.entries(ABILITY_TIMERS))assert.ok(Math.abs(restored[until]-combat[left])<1e-9);
   assert.equal(restored.hitShield,1);assert.equal(restored.dodgeSerial,1);hit(fresh,restored);assert.equal(restored.hitShield,1,'hop protection survived');
   advance(fresh,.1);hit(fresh,restored);assert.equal(restored.hitShield,0);assert.equal(restored.lives,5);
@@ -186,17 +186,17 @@ test('production transport persists pickup effects and cooldowns, and reconnect 
   try{
     const visitor=addPlayer(room,9901,{islandId:BOG_ISLAND,...mapOf(BOG_ISLAND).HARBOR.land,mode:'walking'});
     room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',visitor.account,10);room.karma.balances.delete(visitor.account);
-    service=room.bog=new LiveBogRoom(room);const socket=peer();assert.ok(service.open(socket,{digest:visitor.account,team:'privacy'}));
+    service=room.bog=new LiveBogRoom(room);const socket=peer();assert.ok(service.open(socket,{digest:visitor.account,team:'karma'}));
     let p=service.arena.state.players.get(service.members.get(socket).id);
     for(const kind of ['speed','shield']){const spot=service.arena.state.pickups.find(s=>s.kind===kind);p.x=spot.x;p.y=spot.y;service.step();}
     service.arena.input(p.id,{seq:0,x:1,y:0,fire:false,dodge:1});service.step();
     assert.equal(p.hitShield,1);assert.ok(p.speedUntil>service.arena.state.time);assert.ok(p.dodgeReadyAt>service.arena.state.time);
     const record=room.karma.bogEntry(visitor.account).combat;assert.ok(record.speedLeft>4.9);assert.ok(record.dodgeCooldownLeft>2.4);assert.equal(record.hitShield,1);
-    service.close(socket);const replacement=peer();assert.ok(service.open(replacement,{digest:visitor.account,team:'privacy'}));
+    service.close(socket);const replacement=peer();assert.ok(service.open(replacement,{digest:visitor.account,team:'karma'}));
     p=service.arena.state.players.get(service.members.get(replacement).id);assert.equal(p.hitShield,1);assert.equal(p.dodgeSerial,1);assert.ok(p.dodgeReadyAt>service.arena.state.time+2.3);
     advance(service.arena,.2);p.shieldUntil=0;hit(service.arena,p);assert.equal(p.hitShield,0);service.step();
     assert.equal(room.karma.bogEntry(visitor.account).combat.hitShield,0,'consumption is saved before a close');
-    service.close(replacement);const again=peer();assert.ok(service.open(again,{digest:visitor.account,team:'privacy'}));
+    service.close(replacement);const again=peer();assert.ok(service.open(again,{digest:visitor.account,team:'karma'}));
     p=service.arena.state.players.get(service.members.get(again).id);assert.equal(p.hitShield,0);assert.ok(p.speedUntil>service.arena.state.time);
   }finally{service?.dispose();clearInterval(room.timer);}
 });

@@ -5,7 +5,7 @@ import './combat.css';
 import DodgePip from './DodgePip.jsx';
 import BogTutorial from './Tutorial.jsx';
 
-const popperIcon=team=>`/pixi-art/themes/bog-arena/hud/${team==='privacy'?'privacy-padlock':'google-rainbow'}-popper.svg`;
+const popperIcon=team=>`/pixi-art/themes/bog-arena/hud/${team==='karma'?'karma-padlock':'evil-rainbow'}-popper.svg`;
 
 export default function BogGame({engine,team,name='Ducky',profile,accountId,navigation,blockers,onLeave=()=>{},returnLabel='Back to boat',...options}) {
   const layer=useRef(null),leave=useRef(onLeave),[state,setState]=useState({status:'connecting'}),[attempt,setAttempt]=useState(0);
@@ -26,7 +26,7 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
   return <aside className="bog-combat-hud" aria-label="Bog paint game">
     {self&&<BogTutorial identity={accountId??profile??'local'} self={self} engine={engine}/>}
     <div className="bog-combat-score"><span>SCORE {self?.stats.score??0}</span><span>{self?.stats.tags??0} TAGS</span></div>
-    <p>Team {(self?.team??team)==='privacy'?'KARMA':'EVIL'} · {self?.stats.tags??0} kills · {self?.stats.medals??0} medals{self&&` · ${self.karma??0} feathers`}</p>
+    <p>Team {(self?.team??team)==='karma'?'KARMA':'EVIL'} · {self?.stats.tags??0} kills · {self?.stats.medals??0} medals{self&&` · ${self.karma??0} feathers`}</p>
     <div className="bog-combat-lives" role="img" aria-label={`${self?.lives??RULES.lives} lives left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<(self?.lives??RULES.lives)?'':'lost'}>♥</span>)}</div>
     <p><img className="bog-combat-popper-icon" src={popperIcon(self?.team??team)} alt="" aria-hidden="true"/>{self?.out?'Out of lives! Paddling to an islet…':self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-snapshot.time))}…`:self?`${self.shieldUntil>snapshot.time?`Hidden ${Math.ceil(self.shieldUntil-snapshot.time)}s · `:self.bushHidden?'Hidden in bush · ':''}Paint ${self.ammo} / 12`:'Entering the bog…'}<DodgePip self={self} time={snapshot?.time}/></p>
     <small>WASD / arrows · Shift to run · Q to hop · Space, J or left click to shoot · Esc to leave</small>

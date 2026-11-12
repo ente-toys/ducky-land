@@ -22,9 +22,9 @@ import {mapOf} from '../src/world/island-maps.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
 
 const bush={id:'lane-bush',x:400,y:400,radius:64};
-const combat={blockers:[],bounds:{width:1000,height:1000},pads:team=>[{x:team==='privacy'?150:700,y:400}],pickupSpots:[],hideBushes:[bush]};
+const combat={blockers:[],bounds:{width:1000,height:1000},pads:team=>[{x:team==='karma'?150:700,y:400}],pickupSpots:[],hideBushes:[bush]};
 function fixture(){
-  const sim=createBogCombat(combat),p=sim.join({id:'p',team:'privacy'}),e=sim.join({id:'e',team:'google'});
+  const sim=createBogCombat(combat),p=sim.join({id:'p',team:'karma'}),e=sim.join({id:'e',team:'evil'});
   p.shieldUntil=e.shieldUntil=0;return {sim,p,e};
 }
 const input=(sim,p,extra={})=>sim.input(p.id,{seq:p.seq+1,x:0,y:0,fire:false,...extra});
@@ -48,25 +48,25 @@ test('temporary clumps match existing walkable bushes; marked art replaces fallb
 });
 
 test('authority derives concealment from position, hides enemies, keeps self/allies, and releases immediately outside',()=>{
-  const {sim,p}=fixture();assert.ok(seen(sim,'google',p.id));enter(sim,p);
+  const {sim,p}=fixture();assert.ok(seen(sim,'evil',p.id));enter(sim,p);
   assert.equal(isBushHidden(p,sim.state.time),true);assert.equal(p.shieldUntil,0);
-  assert.equal(seen(sim,'google',p.id),false);assert.equal(seen(sim,'privacy',p.id),true);
-  const owner=sim.snapshot('privacy').players.find(q=>q.id===p.id);
+  assert.equal(seen(sim,'evil',p.id),false);assert.equal(seen(sim,'karma',p.id),true);
+  const owner=sim.snapshot('karma').players.find(q=>q.id===p.id);
   assert.equal(owner.bushHidden,true);assert.equal(owner.bushId,bush.id);assert.equal(owner.bushEntry,1);
   assert.ok(input(sim,p,{bushHidden:false,bushId:null,bushRevealUntil:999,x:0}));sim.step(1/60);
-  assert.equal(seen(sim,'google',p.id),false,'client cannot reveal itself by injecting flags');
+  assert.equal(seen(sim,'evil',p.id),false,'client cannot reveal itself by injecting flags');
   assert.equal(p.bushEntry,1,'standing still does not repeat entry');
-  p.x=bush.x+bush.radius+1;sim.step(1/60);assert.ok(seen(sim,'google',p.id));assert.equal(p.bushId,null);
-  input(sim,p,{bushHidden:true,bushId:bush.id});sim.step(1/60);assert.ok(seen(sim,'google',p.id),'client cannot hide on open floor');
+  p.x=bush.x+bush.radius+1;sim.step(1/60);assert.ok(seen(sim,'evil',p.id));assert.equal(p.bushId,null);
+  input(sim,p,{bushHidden:true,bushId:bush.id});sim.step(1/60);assert.ok(seen(sim,'evil',p.id),'client cannot hide on open floor');
   assert.equal(hideBushAt({x:464,y:400},[bush]),bush);assert.equal(hideBushAt({x:464.01,y:400},[bush]),null);
 });
 
 test('real movement can enter and leave soft bushes; overlapping clumps do not chatter',()=>{
   const {sim,p}=fixture();p.x=330;p.y=400;input(sim,p,{x:1});
   for(let i=0;i<60&&!p.bushId;i++)sim.step(1/60);
-  assert.equal(p.bushId,bush.id);assert.equal(seen(sim,'google',p.id),false);
+  assert.equal(p.bushId,bush.id);assert.equal(seen(sim,'evil',p.id),false);
   for(let i=0;i<90&&p.x<=464;i++){input(sim,p,{x:1});sim.step(1/60);}
-  assert.ok(p.x>464);assert.ok(seen(sim,'google',p.id));
+  assert.ok(p.x>464);assert.ok(seen(sim,'evil',p.id));
   const overlap={id:'overlap',x:420,y:400,radius:64};
   assert.equal(hideBushAt({x:410,y:400,bushId:overlap.id},[bush,overlap]),overlap);
 });
@@ -75,29 +75,29 @@ test('only actual firing reveals for two seconds, repeated shots extend it, and 
   const {sim,p}=fixture();enter(sim,p);p.facing=-Math.PI/2;
   input(sim,p,{fire:true});sim.step(1/60);input(sim,p);
   const first=p.bushRevealUntil;assert.equal(first,sim.state.time+BUSH_REVEAL_SECONDS);
-  assert.equal(p.ammo,11);assert.ok(seen(sim,'google',p.id));assert.equal(isBushHidden(p,sim.state.time),false);
+  assert.equal(p.ammo,11);assert.ok(seen(sim,'evil',p.id));assert.equal(isBushHidden(p,sim.state.time),false);
   advance(sim,.4);input(sim,p,{fire:true});sim.step(1/60);input(sim,p);assert.ok(p.bushRevealUntil>first);
   const until=p.bushRevealUntil;
-  p.x=500;sim.step(1/60);enter(sim,p);assert.equal(p.bushRevealUntil,until);assert.ok(seen(sim,'google',p.id));
+  p.x=500;sim.step(1/60);enter(sim,p);assert.equal(p.bushRevealUntil,until);assert.ok(seen(sim,'evil',p.id));
   while(sim.state.time+1/60<until-1e-8)sim.step(1/60);
-  assert.ok(seen(sim,'google',p.id));advance(sim,.04);assert.equal(seen(sim,'google',p.id),false);
+  assert.ok(seen(sim,'evil',p.id));advance(sim,.04);assert.equal(seen(sim,'evil',p.id),false);
   p.ammo=0;p.reloadAt=sim.state.time+100;input(sim,p,{fire:true});sim.step(1/60);
-  assert.equal(seen(sim,'google',p.id),false,'an empty trigger does not count as firing');
+  assert.equal(seen(sim,'evil',p.id),false,'an empty trigger does not count as firing');
 });
 
 test('a shot fired before entering a bush still reveals for the remaining two seconds',()=>{
   const {sim,p}=fixture();p.facing=-Math.PI/2;input(sim,p,{fire:true});sim.step(1/60);input(sim,p);
-  const until=p.bushRevealUntil;enter(sim,p);assert.equal(p.bushRevealUntil,until);assert.ok(seen(sim,'google',p.id));
-  advance(sim,2.05);assert.equal(seen(sim,'google',p.id),false);
+  const until=p.bushRevealUntil;enter(sim,p);assert.equal(p.bushRevealUntil,until);assert.ok(seen(sim,'evil',p.id));
+  advance(sim,2.05);assert.equal(seen(sim,'evil',p.id),false);
 });
 
 test('blind paint tags a bush-hidden Ducky, while seven-second respawn hiding stays untaggable',()=>{
   for(const respawnHidden of [false,true]){
     const {sim,p,e}=fixture();enter(sim,p);p.shieldUntil=respawnHidden?sim.state.time+7:0;
-    assert.equal(seen(sim,'google',p.id),false);
+    assert.equal(seen(sim,'evil',p.id),false);
     e.x=650;e.facing=-Math.PI/2;input(sim,e,{fire:true});sim.step(1/60);input(sim,e);advance(sim,.25);
     assert.equal(p.lives,respawnHidden?5:4);assert.equal(p.alive,respawnHidden);
-    if(!respawnHidden){assert.equal(e.stats.tags,1);assert.ok(seen(sim,'google',p.id),'knockout remains visible');
+    if(!respawnHidden){assert.equal(e.stats.tags,1);assert.ok(seen(sim,'evil',p.id),'knockout remains visible');
       advance(sim,3.05);assert.ok(p.alive);assert.equal(p.bushId,null);assert.ok(p.shieldUntil>sim.state.time);}
   }
 });
@@ -125,8 +125,8 @@ test('bots ignore bush occupants when searching or aiming and can target them wh
 
 test('hidden bot departures do not leak a concealment position through poof effects',()=>{
   const sim=createBogCombat(combat),fill=createBogBots(sim,{...combat,navigation:{walkable:()=>true,route:()=>[]}});fill.sync();
-  const bot=[...sim.state.players.values()].find(p=>p.team==='privacy');bot.shieldUntil=0;enter(sim,bot);
-  fill.replace('privacy');assert.equal(fill.visibleDepartures('google').length,0);assert.equal(fill.visibleDepartures('privacy').length,1);
+  const bot=[...sim.state.players.values()].find(p=>p.team==='karma');bot.shieldUntil=0;enter(sim,bot);
+  fill.replace('karma');assert.equal(fill.visibleDepartures('evil').length,0);assert.equal(fill.visibleDepartures('karma').length,1);
 });
 
 test('local transport omits hidden enemies and client drops their tracks and poses immediately',()=>{
@@ -135,10 +135,10 @@ test('local transport omits hidden enemies and client drops their tracks and pos
   const connect=(team,char)=>{const ws=new Peer();wss.emit('connection',ws,{headers:{origin:'http://localhost'},url:`/arena-room?team=${team}&profile=${char.repeat(36)}`});return ws;};
   let client;
   try{
-    const own=connect('privacy','a'),enemy=connect('google','b'),id=own.notes[0].id;
+    const own=connect('karma','a'),enemy=connect('evil','b'),id=own.notes[0].id;
     const p=room.arena.state.players.get(id);p.shieldUntil=0;room.step();room.broadcast();
     class Socket{readyState=1;bufferedAmount=0;send(){}close(){}}
-    client=new ArenaClient({...combat,team:'google',profile:'c'.repeat(36),Socket});
+    client=new ArenaClient({...combat,team:'evil',profile:'c'.repeat(36),Socket});
     client.socket.onmessage({data:JSON.stringify({type:'arena-welcome',id:enemy.notes[0].id})});
     client.socket.onmessage({data:JSON.stringify(enemy.notes.at(-1))});assert.ok(client.tracks.has(id));
     enter(room.arena,p);room.broadcast();const hidden=enemy.notes.at(-1);
@@ -157,18 +157,18 @@ test('live worker snapshots conceal bushes and reconnect preserves the remaining
   try{
     const visitor=addPlayer(owner,9800,{islandId:BOG_ISLAND,...mapOf(BOG_ISLAND).HARBOR.land});
     owner.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',visitor.account,10);owner.karma.balances.delete(visitor.account);
-    service=owner.bog=new LiveBogRoom(owner);const socket=peer();assert.ok(service.open(socket,{digest:visitor.account,team:'privacy'}));
+    service=owner.bog=new LiveBogRoom(owner);const socket=peer();assert.ok(service.open(socket,{digest:visitor.account,team:'karma'}));
     let p=service.arena.state.players.get(service.members.get(socket).id);p.x=HIDE_BUSHES[0].x;p.y=HIDE_BUSHES[0].y;p.shieldUntil=0;service.arena.step(1/60);
-    assert.equal(service.snapshot('google').players.some(q=>q.id===p.id),false);
-    assert.ok(service.snapshot('privacy').players.find(q=>q.id===p.id).bushHidden);
+    assert.equal(service.snapshot('evil').players.some(q=>q.id===p.id),false);
+    assert.ok(service.snapshot('karma').players.find(q=>q.id===p.id).bushHidden);
     p.facing=-Math.PI/2;input(service.arena,p,{fire:true});service.arena.step(1/60);input(service.arena,p);
     service.persist(p);service.dispose();
-    service=owner.bog=new LiveBogRoom(owner);const again=peer();assert.ok(service.open(again,{digest:visitor.account,team:'google'}));
+    service=owner.bog=new LiveBogRoom(owner);const again=peer();assert.ok(service.open(again,{digest:visitor.account,team:'evil'}));
     p=service.arena.state.players.get(service.members.get(again).id);
-    assert.equal(p.team,'privacy');assert.equal(isBushHidden(p,service.arena.state.time),false);
+    assert.equal(p.team,'karma');assert.equal(isBushHidden(p,service.arena.state.time),false);
     assert.ok(p.bushRevealUntil-service.arena.state.time>1.8);assert.ok(p.bushRevealUntil-service.arena.state.time<=2);
-    assert.ok(service.snapshot('google').players.some(q=>q.id===p.id));
-    advance(service.arena,2.05);assert.equal(service.snapshot('google').players.some(q=>q.id===p.id),false);
+    assert.ok(service.snapshot('evil').players.some(q=>q.id===p.id));
+    advance(service.arena,2.05);assert.equal(service.snapshot('evil').players.some(q=>q.id===p.id),false);
     assert.equal(owner.karma.balance(visitor.account),5,'no new fee on reconnect');
   }finally{service?.dispose();clearInterval(owner.timer);}
 });

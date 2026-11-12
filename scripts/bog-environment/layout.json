@@ -16,15 +16,15 @@
     "wood": "#dfac4b"
   },
   "areas": {
-    "privacy-nw": {
+    "karma-nw": {
       "x": 1900,
       "y": 1850,
-      "team": "privacy"
+      "team": "karma"
     },
-    "google-ne": {
+    "evil-ne": {
       "x": 6500,
       "y": 1850,
-      "team": "google"
+      "team": "evil"
     },
     "site-a": {
       "x": 2050,
@@ -42,15 +42,15 @@
         330
       ]
     },
-    "privacy-sw": {
+    "karma-sw": {
       "x": 1900,
       "y": 5650,
-      "team": "privacy"
+      "team": "karma"
     },
-    "google-se": {
+    "evil-se": {
       "x": 6500,
       "y": 5650,
-      "team": "google"
+      "team": "evil"
     },
     "mid": {
       "x": 4200,
@@ -564,7 +564,7 @@
       ]
     },
     {
-      "id": "privacy-nw-hall-door",
+      "id": "karma-nw-hall-door",
       "width": 104,
       "points": [
         [
@@ -582,7 +582,7 @@
       ]
     },
     {
-      "id": "privacy-nw-annex-door",
+      "id": "karma-nw-annex-door",
       "width": 104,
       "points": [
         [
@@ -600,7 +600,7 @@
       ]
     },
     {
-      "id": "google-ne-hall-door",
+      "id": "evil-ne-hall-door",
       "width": 104,
       "points": [
         [
@@ -618,7 +618,7 @@
       ]
     },
     {
-      "id": "google-ne-annex-door",
+      "id": "evil-ne-annex-door",
       "width": 104,
       "points": [
         [
@@ -636,7 +636,7 @@
       ]
     },
     {
-      "id": "privacy-sw-hall-door",
+      "id": "karma-sw-hall-door",
       "width": 104,
       "points": [
         [
@@ -654,7 +654,7 @@
       ]
     },
     {
-      "id": "privacy-sw-annex-door",
+      "id": "karma-sw-annex-door",
       "width": 104,
       "points": [
         [
@@ -672,7 +672,7 @@
       ]
     },
     {
-      "id": "google-se-hall-door",
+      "id": "evil-se-hall-door",
       "width": 104,
       "points": [
         [
@@ -690,7 +690,7 @@
       ]
     },
     {
-      "id": "google-se-annex-door",
+      "id": "evil-se-annex-door",
       "width": 104,
       "points": [
         [
@@ -1221,7 +1221,7 @@
   ],
   "blockers": [
     {
-      "id": "privacy-nw-hall",
+      "id": "karma-nw-hall",
       "kind": "building",
       "type": "rect",
       "x": 1789.6,
@@ -1230,7 +1230,7 @@
       "height": 159.6
     },
     {
-      "id": "privacy-nw-annex",
+      "id": "karma-nw-annex",
       "kind": "building",
       "type": "rect",
       "x": 1390.4,
@@ -1239,7 +1239,7 @@
       "height": 121.6
     },
     {
-      "id": "google-ne-hall",
+      "id": "evil-ne-hall",
       "kind": "building",
       "type": "rect",
       "x": 6389.6,
@@ -1248,7 +1248,7 @@
       "height": 159.6
     },
     {
-      "id": "google-ne-annex",
+      "id": "evil-ne-annex",
       "kind": "building",
       "type": "rect",
       "x": 5990.4,
@@ -1257,7 +1257,7 @@
       "height": 121.6
     },
     {
-      "id": "privacy-sw-hall",
+      "id": "karma-sw-hall",
       "kind": "building",
       "type": "rect",
       "x": 1789.6,
@@ -1266,7 +1266,7 @@
       "height": 159.6
     },
     {
-      "id": "privacy-sw-annex",
+      "id": "karma-sw-annex",
       "kind": "building",
       "type": "rect",
       "x": 1390.4,
@@ -1275,7 +1275,7 @@
       "height": 121.6
     },
     {
-      "id": "google-se-hall",
+      "id": "evil-se-hall",
       "kind": "building",
       "type": "rect",
       "x": 6389.6,
@@ -1284,7 +1284,7 @@
       "height": 159.6
     },
     {
-      "id": "google-se-annex",
+      "id": "evil-se-annex",
       "kind": "building",
       "type": "rect",
       "x": 5990.4,
@@ -1473,7 +1473,7 @@
       "height": 22
     },
     {
-      "id": "privacy-nw-wall-0",
+      "id": "karma-nw-wall-0",
       "kind": "wall",
       "type": "rect",
       "x": 1308,
@@ -1482,7 +1482,7 @@
       "height": 58
     },
     {
-      "id": "privacy-nw-wall-1",
+      "id": "karma-nw-wall-1",
       "kind": "wall",
       "type": "rect",
       "x": 2248,
@@ -1491,7 +1491,7 @@
       "height": 58
     },
     {
-      "id": "google-ne-wall-0",
+      "id": "evil-ne-wall-0",
       "kind": "wall",
       "type": "rect",
       "x": 5908,
@@ -1500,7 +1500,7 @@
       "height": 58
     },
     {
-      "id": "google-ne-wall-1",
+      "id": "evil-ne-wall-1",
       "kind": "wall",
       "type": "rect",
       "x": 6848,
@@ -1509,7 +1509,7 @@
       "height": 58
     },
     {
-      "id": "privacy-sw-wall-0",
+      "id": "karma-sw-wall-0",
       "kind": "wall",
       "type": "rect",
       "x": 1308,
@@ -1518,7 +1518,7 @@
       "height": 58
     },
     {
-      "id": "privacy-sw-wall-1",
+      "id": "karma-sw-wall-1",
       "kind": "wall",
       "type": "rect",
       "x": 2248,
@@ -1527,7 +1527,7 @@
       "height": 58
     },
     {
-      "id": "google-se-wall-0",
+      "id": "evil-se-wall-0",
       "kind": "wall",
       "type": "rect",
       "x": 5908,
@@ -1536,7 +1536,7 @@
       "height": 58
     },
     {
-      "id": "google-se-wall-1",
+      "id": "evil-se-wall-1",
       "kind": "wall",
       "type": "rect",
       "x": 6848,
@@ -4632,355 +4632,355 @@
       "height": 26
     },
     {
-      "id": "privacy-nw-porch-foot-0",
+      "id": "karma-nw-porch-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 1727,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "privacy-nw-porch",
+      "prop": "karma-nw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-porch-foot-1",
+      "id": "karma-nw-porch-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 1875,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "privacy-nw-porch",
+      "prop": "karma-nw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-porch-foot-2",
+      "id": "karma-nw-porch-foot-2",
       "kind": "landmark",
       "type": "rect",
       "x": 2135,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "privacy-nw-porch",
+      "prop": "karma-nw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-porch-foot-3",
+      "id": "karma-nw-porch-foot-3",
       "kind": "landmark",
       "type": "rect",
       "x": 2283,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "privacy-nw-porch",
+      "prop": "karma-nw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-yard-gate-foot-0",
+      "id": "karma-nw-yard-gate-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 1789,
       "y": 2257,
       "width": 40,
       "height": 20,
-      "prop": "privacy-nw-yard-gate",
+      "prop": "karma-nw-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-yard-gate-foot-1",
+      "id": "karma-nw-yard-gate-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 1971,
       "y": 2257,
       "width": 40,
       "height": 20,
-      "prop": "privacy-nw-yard-gate",
+      "prop": "karma-nw-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-yard-return-west-foot-0",
+      "id": "karma-nw-yard-return-west-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 1427,
       "y": 2246,
       "width": 226,
       "height": 29,
-      "prop": "privacy-nw-yard-return-west",
+      "prop": "karma-nw-yard-return-west",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-nw-yard-return-east-foot-0",
+      "id": "karma-nw-yard-return-east-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 2147,
       "y": 2246,
       "width": 226,
       "height": 29,
-      "prop": "privacy-nw-yard-return-east",
+      "prop": "karma-nw-yard-return-east",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-porch-foot-0",
+      "id": "evil-ne-porch-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6327,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "google-ne-porch",
+      "prop": "evil-ne-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-porch-foot-1",
+      "id": "evil-ne-porch-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 6475,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "google-ne-porch",
+      "prop": "evil-ne-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-porch-foot-2",
+      "id": "evil-ne-porch-foot-2",
       "kind": "landmark",
       "type": "rect",
       "x": 6735,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "google-ne-porch",
+      "prop": "evil-ne-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-porch-foot-3",
+      "id": "evil-ne-porch-foot-3",
       "kind": "landmark",
       "type": "rect",
       "x": 6883,
       "y": 1753,
       "width": 30,
       "height": 16,
-      "prop": "google-ne-porch",
+      "prop": "evil-ne-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-yard-gate-foot-0",
+      "id": "evil-ne-yard-gate-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6389,
       "y": 2257,
       "width": 40,
       "height": 20,
-      "prop": "google-ne-yard-gate",
+      "prop": "evil-ne-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-yard-gate-foot-1",
+      "id": "evil-ne-yard-gate-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 6571,
       "y": 2257,
       "width": 40,
       "height": 20,
-      "prop": "google-ne-yard-gate",
+      "prop": "evil-ne-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-yard-return-west-foot-0",
+      "id": "evil-ne-yard-return-west-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6027,
       "y": 2246,
       "width": 226,
       "height": 29,
-      "prop": "google-ne-yard-return-west",
+      "prop": "evil-ne-yard-return-west",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-yard-return-east-foot-0",
+      "id": "evil-ne-yard-return-east-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6747,
       "y": 2246,
       "width": 226,
       "height": 29,
-      "prop": "google-ne-yard-return-east",
+      "prop": "evil-ne-yard-return-east",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-porch-foot-0",
+      "id": "karma-sw-porch-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 1727,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "privacy-sw-porch",
+      "prop": "karma-sw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-porch-foot-1",
+      "id": "karma-sw-porch-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 1875,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "privacy-sw-porch",
+      "prop": "karma-sw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-porch-foot-2",
+      "id": "karma-sw-porch-foot-2",
       "kind": "landmark",
       "type": "rect",
       "x": 2135,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "privacy-sw-porch",
+      "prop": "karma-sw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-porch-foot-3",
+      "id": "karma-sw-porch-foot-3",
       "kind": "landmark",
       "type": "rect",
       "x": 2283,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "privacy-sw-porch",
+      "prop": "karma-sw-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-yard-gate-foot-0",
+      "id": "karma-sw-yard-gate-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 1789,
       "y": 6057,
       "width": 40,
       "height": 20,
-      "prop": "privacy-sw-yard-gate",
+      "prop": "karma-sw-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-yard-gate-foot-1",
+      "id": "karma-sw-yard-gate-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 1971,
       "y": 6057,
       "width": 40,
       "height": 20,
-      "prop": "privacy-sw-yard-gate",
+      "prop": "karma-sw-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-yard-return-west-foot-0",
+      "id": "karma-sw-yard-return-west-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 1427,
       "y": 6046,
       "width": 226,
       "height": 29,
-      "prop": "privacy-sw-yard-return-west",
+      "prop": "karma-sw-yard-return-west",
       "author": "pass2-landmarks"
     },
     {
-      "id": "privacy-sw-yard-return-east-foot-0",
+      "id": "karma-sw-yard-return-east-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 2147,
       "y": 6046,
       "width": 226,
       "height": 29,
-      "prop": "privacy-sw-yard-return-east",
+      "prop": "karma-sw-yard-return-east",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-porch-foot-0",
+      "id": "evil-se-porch-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6327,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "google-se-porch",
+      "prop": "evil-se-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-porch-foot-1",
+      "id": "evil-se-porch-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 6475,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "google-se-porch",
+      "prop": "evil-se-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-porch-foot-2",
+      "id": "evil-se-porch-foot-2",
       "kind": "landmark",
       "type": "rect",
       "x": 6735,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "google-se-porch",
+      "prop": "evil-se-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-porch-foot-3",
+      "id": "evil-se-porch-foot-3",
       "kind": "landmark",
       "type": "rect",
       "x": 6883,
       "y": 5553,
       "width": 30,
       "height": 16,
-      "prop": "google-se-porch",
+      "prop": "evil-se-porch",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-yard-gate-foot-0",
+      "id": "evil-se-yard-gate-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6389,
       "y": 6057,
       "width": 40,
       "height": 20,
-      "prop": "google-se-yard-gate",
+      "prop": "evil-se-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-yard-gate-foot-1",
+      "id": "evil-se-yard-gate-foot-1",
       "kind": "landmark",
       "type": "rect",
       "x": 6571,
       "y": 6057,
       "width": 40,
       "height": 20,
-      "prop": "google-se-yard-gate",
+      "prop": "evil-se-yard-gate",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-yard-return-west-foot-0",
+      "id": "evil-se-yard-return-west-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6027,
       "y": 6046,
       "width": 226,
       "height": 29,
-      "prop": "google-se-yard-return-west",
+      "prop": "evil-se-yard-return-west",
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-se-yard-return-east-foot-0",
+      "id": "evil-se-yard-return-east-foot-0",
       "kind": "landmark",
       "type": "rect",
       "x": 6747,
       "y": 6046,
       "width": 226,
       "height": 29,
-      "prop": "google-se-yard-return-east",
+      "prop": "evil-se-yard-return-east",
       "author": "pass2-landmarks"
     },
     {
@@ -6074,10 +6074,10 @@
       "height": 244
     },
     {
-      "id": "wl-privacy-nw-wall-0-return-foot-0",
-      "prop": "wl-privacy-nw-wall-0-return",
+      "id": "wl-karma-nw-wall-0-return-foot-0",
+      "prop": "wl-karma-nw-wall-0-return",
       "author": "warzone",
-      "wallLayout": "privacy-nw-wall-0",
+      "wallLayout": "karma-nw-wall-0",
       "kind": "cover",
       "type": "rect",
       "x": 1308,
@@ -6086,10 +6086,10 @@
       "height": 244
     },
     {
-      "id": "wl-privacy-nw-wall-1-return-foot-0",
-      "prop": "wl-privacy-nw-wall-1-return",
+      "id": "wl-karma-nw-wall-1-return-foot-0",
+      "prop": "wl-karma-nw-wall-1-return",
       "author": "warzone",
-      "wallLayout": "privacy-nw-wall-1",
+      "wallLayout": "karma-nw-wall-1",
       "kind": "cover",
       "type": "rect",
       "x": 2434,
@@ -6098,10 +6098,10 @@
       "height": 244
     },
     {
-      "id": "wl-google-ne-wall-0-return-foot-0",
-      "prop": "wl-google-ne-wall-0-return",
+      "id": "wl-evil-ne-wall-0-return-foot-0",
+      "prop": "wl-evil-ne-wall-0-return",
       "author": "warzone",
-      "wallLayout": "google-ne-wall-0",
+      "wallLayout": "evil-ne-wall-0",
       "kind": "cover",
       "type": "rect",
       "x": 5908,
@@ -6110,10 +6110,10 @@
       "height": 244
     },
     {
-      "id": "wl-google-ne-wall-1-return-foot-0",
-      "prop": "wl-google-ne-wall-1-return",
+      "id": "wl-evil-ne-wall-1-return-foot-0",
+      "prop": "wl-evil-ne-wall-1-return",
       "author": "warzone",
-      "wallLayout": "google-ne-wall-1",
+      "wallLayout": "evil-ne-wall-1",
       "kind": "cover",
       "type": "rect",
       "x": 7034,
@@ -6122,10 +6122,10 @@
       "height": 244
     },
     {
-      "id": "wl-privacy-sw-wall-0-return-foot-0",
-      "prop": "wl-privacy-sw-wall-0-return",
+      "id": "wl-karma-sw-wall-0-return-foot-0",
+      "prop": "wl-karma-sw-wall-0-return",
       "author": "warzone",
-      "wallLayout": "privacy-sw-wall-0",
+      "wallLayout": "karma-sw-wall-0",
       "kind": "cover",
       "type": "rect",
       "x": 1308,
@@ -6134,10 +6134,10 @@
       "height": 244
     },
     {
-      "id": "wl-privacy-sw-wall-1-return-foot-0",
-      "prop": "wl-privacy-sw-wall-1-return",
+      "id": "wl-karma-sw-wall-1-return-foot-0",
+      "prop": "wl-karma-sw-wall-1-return",
       "author": "warzone",
-      "wallLayout": "privacy-sw-wall-1",
+      "wallLayout": "karma-sw-wall-1",
       "kind": "cover",
       "type": "rect",
       "x": 2434,
@@ -6146,10 +6146,10 @@
       "height": 244
     },
     {
-      "id": "wl-google-se-wall-0-return-foot-0",
-      "prop": "wl-google-se-wall-0-return",
+      "id": "wl-evil-se-wall-0-return-foot-0",
+      "prop": "wl-evil-se-wall-0-return",
       "author": "warzone",
-      "wallLayout": "google-se-wall-0",
+      "wallLayout": "evil-se-wall-0",
       "kind": "cover",
       "type": "rect",
       "x": 5908,
@@ -6158,10 +6158,10 @@
       "height": 244
     },
     {
-      "id": "wl-google-se-wall-1-return-foot-0",
-      "prop": "wl-google-se-wall-1-return",
+      "id": "wl-evil-se-wall-1-return-foot-0",
+      "prop": "wl-evil-se-wall-1-return",
       "author": "warzone",
-      "wallLayout": "google-se-wall-1",
+      "wallLayout": "evil-se-wall-1",
       "kind": "cover",
       "type": "rect",
       "x": 7034,
@@ -6172,9 +6172,9 @@
   ],
   "props": [
     {
-      "id": "privacy-nw-hall",
+      "id": "karma-nw-hall",
       "name": "lodge",
-      "src": "home/privacy-nw-hall-team.svg",
+      "src": "home/karma-nw-hall-team.svg",
       "x": 2020,
       "y": 1650,
       "width": 640,
@@ -6197,9 +6197,9 @@
       ]
     },
     {
-      "id": "privacy-nw-annex",
+      "id": "karma-nw-annex",
       "name": "cottage",
-      "src": "home/privacy-nw-annex-team.svg",
+      "src": "home/karma-nw-annex-team.svg",
       "x": 1520,
       "y": 1700,
       "width": 360,
@@ -6222,9 +6222,9 @@
       ]
     },
     {
-      "id": "google-ne-hall",
+      "id": "evil-ne-hall",
       "name": "hall",
-      "src": "home/google-ne-hall-team.svg",
+      "src": "home/evil-ne-hall-team.svg",
       "x": 6620,
       "y": 1650,
       "width": 640,
@@ -6247,9 +6247,9 @@
       ]
     },
     {
-      "id": "google-ne-annex",
+      "id": "evil-ne-annex",
       "name": "studio",
-      "src": "home/google-ne-annex-team.svg",
+      "src": "home/evil-ne-annex-team.svg",
       "x": 6120,
       "y": 1700,
       "width": 360,
@@ -6272,9 +6272,9 @@
       ]
     },
     {
-      "id": "privacy-sw-hall",
+      "id": "karma-sw-hall",
       "name": "lodge",
-      "src": "home/privacy-sw-hall-team.svg",
+      "src": "home/karma-sw-hall-team.svg",
       "x": 2020,
       "y": 5450,
       "width": 640,
@@ -6297,9 +6297,9 @@
       ]
     },
     {
-      "id": "privacy-sw-annex",
+      "id": "karma-sw-annex",
       "name": "porch",
-      "src": "home/privacy-sw-annex-team.svg",
+      "src": "home/karma-sw-annex-team.svg",
       "x": 1520,
       "y": 5500,
       "width": 360,
@@ -6322,9 +6322,9 @@
       ]
     },
     {
-      "id": "google-se-hall",
+      "id": "evil-se-hall",
       "name": "hall",
-      "src": "home/google-se-hall-team.svg",
+      "src": "home/evil-se-hall-team.svg",
       "x": 6620,
       "y": 5450,
       "width": 640,
@@ -6347,9 +6347,9 @@
       ]
     },
     {
-      "id": "google-se-annex",
+      "id": "evil-se-annex",
       "name": "studio",
-      "src": "home/google-se-annex-team.svg",
+      "src": "home/evil-se-annex-team.svg",
       "x": 6120,
       "y": 5500,
       "width": 360,
@@ -6939,9 +6939,9 @@
       "homeSource": "/pixi-art/prop-17.svg"
     },
     {
-      "id": "privacy-nw-wall-0",
+      "id": "karma-nw-wall-0",
       "name": "wz-wall",
-      "src": "home/privacy-wz-wall.svg",
+      "src": "home/karma-wz-wall.svg",
       "x": 1430,
       "y": 2060,
       "width": 260,
@@ -6964,9 +6964,9 @@
       "coverSources": []
     },
     {
-      "id": "privacy-nw-wall-1",
+      "id": "karma-nw-wall-1",
       "name": "wz-crates",
-      "src": "home/privacy-wz-crates.svg",
+      "src": "home/karma-wz-crates.svg",
       "x": 2370,
       "y": 2060,
       "width": 260,
@@ -6991,9 +6991,9 @@
       ]
     },
     {
-      "id": "privacy-nw-lamp-0",
+      "id": "karma-nw-lamp-0",
       "name": "lantern",
-      "src": "home/privacy-lantern.svg",
+      "src": "home/karma-lantern.svg",
       "x": 1510,
       "y": 2220,
       "width": 65,
@@ -7012,9 +7012,9 @@
       "homeSource": "/pixi-art/detail/street--lamp-lantern.svg"
     },
     {
-      "id": "google-ne-wall-0",
+      "id": "evil-ne-wall-0",
       "name": "wz-sacks",
-      "src": "home/google-wz-sacks.svg",
+      "src": "home/evil-wz-sacks.svg",
       "x": 6030,
       "y": 2060,
       "width": 260,
@@ -7039,9 +7039,9 @@
       ]
     },
     {
-      "id": "google-ne-wall-1",
+      "id": "evil-ne-wall-1",
       "name": "wz-wall",
-      "src": "home/google-wz-wall.svg",
+      "src": "home/evil-wz-wall.svg",
       "x": 6970,
       "y": 2060,
       "width": 260,
@@ -7064,9 +7064,9 @@
       "coverSources": []
     },
     {
-      "id": "google-ne-lamp-0",
+      "id": "evil-ne-lamp-0",
       "name": "lantern",
-      "src": "home/google-lantern.svg",
+      "src": "home/evil-lantern.svg",
       "x": 6110,
       "y": 2220,
       "width": 65,
@@ -7085,9 +7085,9 @@
       "homeSource": "/pixi-art/detail/street--lamp-lantern.svg"
     },
     {
-      "id": "privacy-sw-wall-0",
+      "id": "karma-sw-wall-0",
       "name": "wz-sacks",
-      "src": "home/privacy-wz-sacks.svg",
+      "src": "home/karma-wz-sacks.svg",
       "x": 1430,
       "y": 5860,
       "width": 260,
@@ -7112,9 +7112,9 @@
       ]
     },
     {
-      "id": "privacy-sw-wall-1",
+      "id": "karma-sw-wall-1",
       "name": "wz-wall",
-      "src": "home/privacy-wz-wall.svg",
+      "src": "home/karma-wz-wall.svg",
       "x": 2370,
       "y": 5860,
       "width": 260,
@@ -7137,9 +7137,9 @@
       "coverSources": []
     },
     {
-      "id": "privacy-sw-lamp-0",
+      "id": "karma-sw-lamp-0",
       "name": "lantern",
-      "src": "home/privacy-lantern.svg",
+      "src": "home/karma-lantern.svg",
       "x": 1510,
       "y": 6020,
       "width": 65,
@@ -7158,9 +7158,9 @@
       "homeSource": "/pixi-art/detail/street--lamp-lantern.svg"
     },
     {
-      "id": "google-se-wall-0",
+      "id": "evil-se-wall-0",
       "name": "wz-crates",
-      "src": "home/google-wz-crates.svg",
+      "src": "home/evil-wz-crates.svg",
       "x": 6030,
       "y": 5860,
       "width": 260,
@@ -7185,9 +7185,9 @@
       ]
     },
     {
-      "id": "google-se-wall-1",
+      "id": "evil-se-wall-1",
       "name": "wz-sacks",
-      "src": "home/google-wz-sacks.svg",
+      "src": "home/evil-wz-sacks.svg",
       "x": 6970,
       "y": 5860,
       "width": 260,
@@ -7212,9 +7212,9 @@
       ]
     },
     {
-      "id": "google-se-lamp-0",
+      "id": "evil-se-lamp-0",
       "name": "lantern",
-      "src": "home/google-lantern.svg",
+      "src": "home/evil-lantern.svg",
       "x": 6110,
       "y": 6020,
       "width": 65,
@@ -17057,9 +17057,9 @@
       "wind": false
     },
     {
-      "id": "privacy-nw-porch",
+      "id": "karma-nw-porch",
       "name": "p2-porch",
-      "src": "home/privacy-porch.svg",
+      "src": "home/karma-porch.svg",
       "x": 2020,
       "y": 1775,
       "width": 640,
@@ -17108,9 +17108,9 @@
       ]
     },
     {
-      "id": "privacy-nw-yard-gate",
+      "id": "karma-nw-yard-gate",
       "name": "p2-yard-gate",
-      "src": "home/privacy-yard-gate.svg",
+      "src": "home/karma-yard-gate.svg",
       "x": 1900,
       "y": 2280,
       "width": 240,
@@ -17147,9 +17147,9 @@
       ]
     },
     {
-      "id": "privacy-nw-yard-return-west",
+      "id": "karma-nw-yard-return-west",
       "name": "p2-yard-wall",
-      "src": "home/privacy-yard-wall.svg",
+      "src": "home/karma-yard-wall.svg",
       "x": 1540,
       "y": 2280,
       "width": 240,
@@ -17180,9 +17180,9 @@
       ]
     },
     {
-      "id": "privacy-nw-yard-return-east",
+      "id": "karma-nw-yard-return-east",
       "name": "p2-yard-wall",
-      "src": "home/privacy-yard-wall.svg",
+      "src": "home/karma-yard-wall.svg",
       "x": 2260,
       "y": 2280,
       "width": 240,
@@ -17213,9 +17213,9 @@
       ]
     },
     {
-      "id": "google-ne-porch",
+      "id": "evil-ne-porch",
       "name": "p2-porch",
-      "src": "home/google-porch.svg",
+      "src": "home/evil-porch.svg",
       "x": 6620,
       "y": 1775,
       "width": 640,
@@ -17264,9 +17264,9 @@
       ]
     },
     {
-      "id": "google-ne-yard-gate",
+      "id": "evil-ne-yard-gate",
       "name": "p2-yard-gate",
-      "src": "home/google-yard-gate.svg",
+      "src": "home/evil-yard-gate.svg",
       "x": 6500,
       "y": 2280,
       "width": 240,
@@ -17303,9 +17303,9 @@
       ]
     },
     {
-      "id": "google-ne-yard-return-west",
+      "id": "evil-ne-yard-return-west",
       "name": "p2-yard-wall",
-      "src": "home/google-yard-wall.svg",
+      "src": "home/evil-yard-wall.svg",
       "x": 6140,
       "y": 2280,
       "width": 240,
@@ -17336,9 +17336,9 @@
       ]
     },
     {
-      "id": "google-ne-yard-return-east",
+      "id": "evil-ne-yard-return-east",
       "name": "p2-yard-wall",
-      "src": "home/google-yard-wall.svg",
+      "src": "home/evil-yard-wall.svg",
       "x": 6860,
       "y": 2280,
       "width": 240,
@@ -17369,9 +17369,9 @@
       ]
     },
     {
-      "id": "privacy-sw-porch",
+      "id": "karma-sw-porch",
       "name": "p2-porch",
-      "src": "home/privacy-porch.svg",
+      "src": "home/karma-porch.svg",
       "x": 2020,
       "y": 5575,
       "width": 640,
@@ -17420,9 +17420,9 @@
       ]
     },
     {
-      "id": "privacy-sw-yard-gate",
+      "id": "karma-sw-yard-gate",
       "name": "p2-yard-gate",
-      "src": "home/privacy-yard-gate.svg",
+      "src": "home/karma-yard-gate.svg",
       "x": 1900,
       "y": 6080,
       "width": 240,
@@ -17459,9 +17459,9 @@
       ]
     },
     {
-      "id": "privacy-sw-yard-return-west",
+      "id": "karma-sw-yard-return-west",
       "name": "p2-yard-wall",
-      "src": "home/privacy-yard-wall.svg",
+      "src": "home/karma-yard-wall.svg",
       "x": 1540,
       "y": 6080,
       "width": 240,
@@ -17492,9 +17492,9 @@
       ]
     },
     {
-      "id": "privacy-sw-yard-return-east",
+      "id": "karma-sw-yard-return-east",
       "name": "p2-yard-wall",
-      "src": "home/privacy-yard-wall.svg",
+      "src": "home/karma-yard-wall.svg",
       "x": 2260,
       "y": 6080,
       "width": 240,
@@ -17525,9 +17525,9 @@
       ]
     },
     {
-      "id": "google-se-porch",
+      "id": "evil-se-porch",
       "name": "p2-porch",
-      "src": "home/google-porch.svg",
+      "src": "home/evil-porch.svg",
       "x": 6620,
       "y": 5575,
       "width": 640,
@@ -17576,9 +17576,9 @@
       ]
     },
     {
-      "id": "google-se-yard-gate",
+      "id": "evil-se-yard-gate",
       "name": "p2-yard-gate",
-      "src": "home/google-yard-gate.svg",
+      "src": "home/evil-yard-gate.svg",
       "x": 6500,
       "y": 6080,
       "width": 240,
@@ -17615,9 +17615,9 @@
       ]
     },
     {
-      "id": "google-se-yard-return-west",
+      "id": "evil-se-yard-return-west",
       "name": "p2-yard-wall",
-      "src": "home/google-yard-wall.svg",
+      "src": "home/evil-yard-wall.svg",
       "x": 6140,
       "y": 6080,
       "width": 240,
@@ -17648,9 +17648,9 @@
       ]
     },
     {
-      "id": "google-se-yard-return-east",
+      "id": "evil-se-yard-return-east",
       "name": "p2-yard-wall",
-      "src": "home/google-yard-wall.svg",
+      "src": "home/evil-yard-wall.svg",
       "x": 6860,
       "y": 6080,
       "width": 240,
@@ -22997,7 +22997,7 @@
       ]
     },
     {
-      "id": "wl-privacy-nw-wall-0-return",
+      "id": "wl-karma-nw-wall-0-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 1338,
@@ -23020,8 +23020,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "privacy-nw-wall-0",
-      "area": "privacy-nw",
+      "wallLayout": "karma-nw-wall-0",
+      "area": "karma-nw",
       "coverFootprints": [
         [
           8,
@@ -23032,7 +23032,7 @@
       ]
     },
     {
-      "id": "wl-privacy-nw-wall-1-return",
+      "id": "wl-karma-nw-wall-1-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 2464,
@@ -23055,8 +23055,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "privacy-nw-wall-1",
-      "area": "privacy-nw",
+      "wallLayout": "karma-nw-wall-1",
+      "area": "karma-nw",
       "coverFootprints": [
         [
           8,
@@ -23067,7 +23067,7 @@
       ]
     },
     {
-      "id": "wl-google-ne-wall-0-return",
+      "id": "wl-evil-ne-wall-0-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 5938,
@@ -23090,8 +23090,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "google-ne-wall-0",
-      "area": "google-ne",
+      "wallLayout": "evil-ne-wall-0",
+      "area": "evil-ne",
       "coverFootprints": [
         [
           8,
@@ -23102,7 +23102,7 @@
       ]
     },
     {
-      "id": "wl-google-ne-wall-1-return",
+      "id": "wl-evil-ne-wall-1-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 7064,
@@ -23125,8 +23125,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "google-ne-wall-1",
-      "area": "google-ne",
+      "wallLayout": "evil-ne-wall-1",
+      "area": "evil-ne",
       "coverFootprints": [
         [
           8,
@@ -23137,7 +23137,7 @@
       ]
     },
     {
-      "id": "wl-privacy-sw-wall-0-return",
+      "id": "wl-karma-sw-wall-0-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 1338,
@@ -23160,8 +23160,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "privacy-sw-wall-0",
-      "area": "privacy-sw",
+      "wallLayout": "karma-sw-wall-0",
+      "area": "karma-sw",
       "coverFootprints": [
         [
           8,
@@ -23172,7 +23172,7 @@
       ]
     },
     {
-      "id": "wl-privacy-sw-wall-1-return",
+      "id": "wl-karma-sw-wall-1-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 2464,
@@ -23195,8 +23195,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "privacy-sw-wall-1",
-      "area": "privacy-sw",
+      "wallLayout": "karma-sw-wall-1",
+      "area": "karma-sw",
       "coverFootprints": [
         [
           8,
@@ -23207,7 +23207,7 @@
       ]
     },
     {
-      "id": "wl-google-se-wall-0-return",
+      "id": "wl-evil-se-wall-0-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 5938,
@@ -23230,8 +23230,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "google-se-wall-0",
-      "area": "google-se",
+      "wallLayout": "evil-se-wall-0",
+      "area": "evil-se",
       "coverFootprints": [
         [
           8,
@@ -23242,7 +23242,7 @@
       ]
     },
     {
-      "id": "wl-google-se-wall-1-return",
+      "id": "wl-evil-se-wall-1-return",
       "name": "wz-wall-ns",
       "src": "home/wz-wall-ns.svg",
       "x": 7064,
@@ -23265,8 +23265,8 @@
       ],
       "wind": false,
       "author": "warzone",
-      "wallLayout": "google-se-wall-1",
-      "area": "google-se",
+      "wallLayout": "evil-se-wall-1",
+      "area": "evil-se",
       "coverFootprints": [
         [
           8,
@@ -25434,7 +25434,7 @@
       "homeSource": "/pixi-art/detail/nature--grass-tuft-three.svg"
     },
     {
-      "id": "ground-life-glow-privacy-nw-lamp-0",
+      "id": "ground-life-glow-karma-nw-lamp-0",
       "src": "home/lantern-ground-glow.svg",
       "x": 1510,
       "y": 2242,
@@ -25442,7 +25442,7 @@
       "height": 44
     },
     {
-      "id": "ground-life-glow-google-ne-lamp-0",
+      "id": "ground-life-glow-evil-ne-lamp-0",
       "src": "home/lantern-ground-glow.svg",
       "x": 6110,
       "y": 2242,
@@ -25450,7 +25450,7 @@
       "height": 44
     },
     {
-      "id": "ground-life-glow-privacy-sw-lamp-0",
+      "id": "ground-life-glow-karma-sw-lamp-0",
       "src": "home/lantern-ground-glow.svg",
       "x": 1510,
       "y": 6042,
@@ -25458,7 +25458,7 @@
       "height": 44
     },
     {
-      "id": "ground-life-glow-google-se-lamp-0",
+      "id": "ground-life-glow-evil-se-lamp-0",
       "src": "home/lantern-ground-glow.svg",
       "x": 6110,
       "y": 6042,
@@ -25479,16 +25479,16 @@
       "author": "pass2-landmarks"
     },
     {
-      "id": "google-ne-hall-door-glow",
-      "src": "home/google-door-glow.svg",
+      "id": "evil-ne-hall-door-glow",
+      "src": "home/evil-door-glow.svg",
       "x": 6620,
       "y": 1800,
       "width": 300,
       "height": 100
     },
     {
-      "id": "google-se-hall-door-glow",
-      "src": "home/google-door-glow.svg",
+      "id": "evil-se-hall-door-glow",
+      "src": "home/evil-door-glow.svg",
       "x": 6620,
       "y": 5600,
       "width": 300,
@@ -26178,83 +26178,83 @@
         ]
       },
       {
-        "id": "privacy-nw-wall-0",
-        "label": "privacy-nw-wall-0",
-        "route": "privacy-nw",
+        "id": "karma-nw-wall-0",
+        "label": "karma-nw-wall-0",
+        "route": "karma-nw",
         "axis": "h",
         "members": [
-          "privacy-nw-wall-0",
-          "wl-privacy-nw-wall-0-return"
+          "karma-nw-wall-0",
+          "wl-karma-nw-wall-0-return"
         ]
       },
       {
-        "id": "privacy-nw-wall-1",
-        "label": "privacy-nw-wall-1",
-        "route": "privacy-nw",
+        "id": "karma-nw-wall-1",
+        "label": "karma-nw-wall-1",
+        "route": "karma-nw",
         "axis": "h",
         "members": [
-          "privacy-nw-wall-1",
-          "wl-privacy-nw-wall-1-return"
+          "karma-nw-wall-1",
+          "wl-karma-nw-wall-1-return"
         ]
       },
       {
-        "id": "google-ne-wall-0",
-        "label": "google-ne-wall-0",
-        "route": "google-ne",
+        "id": "evil-ne-wall-0",
+        "label": "evil-ne-wall-0",
+        "route": "evil-ne",
         "axis": "h",
         "members": [
-          "google-ne-wall-0",
-          "wl-google-ne-wall-0-return"
+          "evil-ne-wall-0",
+          "wl-evil-ne-wall-0-return"
         ]
       },
       {
-        "id": "google-ne-wall-1",
-        "label": "google-ne-wall-1",
-        "route": "google-ne",
+        "id": "evil-ne-wall-1",
+        "label": "evil-ne-wall-1",
+        "route": "evil-ne",
         "axis": "h",
         "members": [
-          "google-ne-wall-1",
-          "wl-google-ne-wall-1-return"
+          "evil-ne-wall-1",
+          "wl-evil-ne-wall-1-return"
         ]
       },
       {
-        "id": "privacy-sw-wall-0",
-        "label": "privacy-sw-wall-0",
-        "route": "privacy-sw",
+        "id": "karma-sw-wall-0",
+        "label": "karma-sw-wall-0",
+        "route": "karma-sw",
         "axis": "h",
         "members": [
-          "privacy-sw-wall-0",
-          "wl-privacy-sw-wall-0-return"
+          "karma-sw-wall-0",
+          "wl-karma-sw-wall-0-return"
         ]
       },
       {
-        "id": "privacy-sw-wall-1",
-        "label": "privacy-sw-wall-1",
-        "route": "privacy-sw",
+        "id": "karma-sw-wall-1",
+        "label": "karma-sw-wall-1",
+        "route": "karma-sw",
         "axis": "h",
         "members": [
-          "privacy-sw-wall-1",
-          "wl-privacy-sw-wall-1-return"
+          "karma-sw-wall-1",
+          "wl-karma-sw-wall-1-return"
         ]
       },
       {
-        "id": "google-se-wall-0",
-        "label": "google-se-wall-0",
-        "route": "google-se",
+        "id": "evil-se-wall-0",
+        "label": "evil-se-wall-0",
+        "route": "evil-se",
         "axis": "h",
         "members": [
-          "google-se-wall-0",
-          "wl-google-se-wall-0-return"
+          "evil-se-wall-0",
+          "wl-evil-se-wall-0-return"
         ]
       },
       {
-        "id": "google-se-wall-1",
-        "label": "google-se-wall-1",
-        "route": "google-se",
+        "id": "evil-se-wall-1",
+        "label": "evil-se-wall-1",
+        "route": "evil-se",
         "axis": "h",
         "members": [
-          "google-se-wall-1",
-          "wl-google-se-wall-1-return"
+          "evil-se-wall-1",
+          "wl-evil-se-wall-1-return"
         ]
       }
     ],

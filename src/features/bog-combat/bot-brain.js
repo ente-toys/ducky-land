@@ -24,7 +24,7 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
     if(!p.alive){router?.cancel(b);b.path.length=0;b.planAt=0;return;}
     const hero=showcase&&p.id===heroId;
     if(!hero&&sim.state.time<(b.reactAt??0))return;
-    b.reactAt=sim.state.time+(showcase?(p.team==='privacy'?.055:.19):.20+random()*.10);
+    b.reactAt=sim.state.time+(showcase?(p.team==='karma'?.055:.19):.20+random()*.10);
     let enemy=null,near=null,nearest=Infinity,visible=RULES.range;
     for(const e of sim.state.players.values()){
       if(!e.alive||e.team===p.team||isCombatHidden(e,sim.state.time))continue;
@@ -42,7 +42,7 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
       const cross=dx*aim.y-dy*aim.x;
       if(Math.abs(cross)>(hero?16:24)){x=Math.sign(cross)*aim.y;y=-Math.sign(cross)*aim.x;}
       else if(p.facing!==angle||d>330){x=aim.x;y=aim.y;}
-      fire=Math.abs(cross)<(hero?22:showcase&&p.team==='privacy'?30:19);
+      fire=Math.abs(cross)<(hero?22:showcase&&p.team==='karma'?30:19);
       if(fire){x=aim.x;y=aim.y;}
       if(hero&&d<190&&!fire)run=true;
       if(sim.state.time>b.pause&&random()<.008)b.pause=sim.state.time+.12+random()*.25;

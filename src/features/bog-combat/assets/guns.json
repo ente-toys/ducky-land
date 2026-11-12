@@ -1,8 +1,8 @@
 [
   {
-    "name": "gun-c-privacy-held-n",
-    "file": "gun-c-privacy-held-n.svg",
-    "shadowFile": "gun-c-privacy-held-n-shadow.svg",
+    "name": "gun-c-karma-held-n",
+    "file": "gun-c-karma-held-n.svg",
+    "shadowFile": "gun-c-karma-held-n-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -11,7 +11,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "n",
     "rigAngle": 180,
     "wingPose": {
@@ -74,7 +74,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-n-shadow.svg"
+      "file": "gun-c-karma-held-n-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -87,9 +87,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-ne",
-    "file": "gun-c-privacy-held-ne.svg",
-    "shadowFile": "gun-c-privacy-held-ne-shadow.svg",
+    "name": "gun-c-karma-held-ne",
+    "file": "gun-c-karma-held-ne.svg",
+    "shadowFile": "gun-c-karma-held-ne-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -98,7 +98,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "ne",
     "rigAngle": 135,
     "wingPose": {
@@ -161,7 +161,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-ne-shadow.svg"
+      "file": "gun-c-karma-held-ne-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -174,9 +174,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-e",
-    "file": "gun-c-privacy-held-e.svg",
-    "shadowFile": "gun-c-privacy-held-e-shadow.svg",
+    "name": "gun-c-karma-held-e",
+    "file": "gun-c-karma-held-e.svg",
+    "shadowFile": "gun-c-karma-held-e-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -185,7 +185,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "e",
     "rigAngle": 90,
     "wingPose": {
@@ -248,7 +248,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-e-shadow.svg"
+      "file": "gun-c-karma-held-e-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -261,9 +261,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-se",
-    "file": "gun-c-privacy-held-se.svg",
-    "shadowFile": "gun-c-privacy-held-se-shadow.svg",
+    "name": "gun-c-karma-held-se",
+    "file": "gun-c-karma-held-se.svg",
+    "shadowFile": "gun-c-karma-held-se-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -272,7 +272,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "se",
     "rigAngle": 45,
     "wingPose": {
@@ -335,7 +335,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-se-shadow.svg"
+      "file": "gun-c-karma-held-se-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -348,9 +348,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-s",
-    "file": "gun-c-privacy-held-s.svg",
-    "shadowFile": "gun-c-privacy-held-s-shadow.svg",
+    "name": "gun-c-karma-held-s",
+    "file": "gun-c-karma-held-s.svg",
+    "shadowFile": "gun-c-karma-held-s-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -359,7 +359,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "s",
     "rigAngle": 0,
     "wingPose": {
@@ -422,7 +422,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-s-shadow.svg"
+      "file": "gun-c-karma-held-s-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -435,9 +435,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-sw",
-    "file": "gun-c-privacy-held-sw.svg",
-    "shadowFile": "gun-c-privacy-held-sw-shadow.svg",
+    "name": "gun-c-karma-held-sw",
+    "file": "gun-c-karma-held-sw.svg",
+    "shadowFile": "gun-c-karma-held-sw-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -446,7 +446,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "sw",
     "rigAngle": -45,
     "wingPose": {
@@ -509,7 +509,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-sw-shadow.svg"
+      "file": "gun-c-karma-held-sw-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -522,9 +522,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-w",
-    "file": "gun-c-privacy-held-w.svg",
-    "shadowFile": "gun-c-privacy-held-w-shadow.svg",
+    "name": "gun-c-karma-held-w",
+    "file": "gun-c-karma-held-w.svg",
+    "shadowFile": "gun-c-karma-held-w-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -533,7 +533,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "w",
     "rigAngle": -90,
     "wingPose": {
@@ -596,7 +596,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-w-shadow.svg"
+      "file": "gun-c-karma-held-w-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -609,9 +609,9 @@
     ]
   },
   {
-    "name": "gun-c-privacy-held-nw",
-    "file": "gun-c-privacy-held-nw.svg",
-    "shadowFile": "gun-c-privacy-held-nw-shadow.svg",
+    "name": "gun-c-karma-held-nw",
+    "file": "gun-c-karma-held-nw.svg",
+    "shadowFile": "gun-c-karma-held-nw-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -620,7 +620,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "privacy",
+    "team": "karma",
     "facing": "nw",
     "rigAngle": -135,
     "wingPose": {
@@ -683,7 +683,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-privacy-held-nw-shadow.svg"
+      "file": "gun-c-karma-held-nw-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -696,9 +696,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-n",
-    "file": "gun-c-google-held-n.svg",
-    "shadowFile": "gun-c-google-held-n-shadow.svg",
+    "name": "gun-c-evil-held-n",
+    "file": "gun-c-evil-held-n.svg",
+    "shadowFile": "gun-c-evil-held-n-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -707,7 +707,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "n",
     "rigAngle": 180,
     "wingPose": {
@@ -770,7 +770,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-n-shadow.svg"
+      "file": "gun-c-evil-held-n-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -783,9 +783,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-ne",
-    "file": "gun-c-google-held-ne.svg",
-    "shadowFile": "gun-c-google-held-ne-shadow.svg",
+    "name": "gun-c-evil-held-ne",
+    "file": "gun-c-evil-held-ne.svg",
+    "shadowFile": "gun-c-evil-held-ne-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -794,7 +794,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "ne",
     "rigAngle": 135,
     "wingPose": {
@@ -857,7 +857,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-ne-shadow.svg"
+      "file": "gun-c-evil-held-ne-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -870,9 +870,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-e",
-    "file": "gun-c-google-held-e.svg",
-    "shadowFile": "gun-c-google-held-e-shadow.svg",
+    "name": "gun-c-evil-held-e",
+    "file": "gun-c-evil-held-e.svg",
+    "shadowFile": "gun-c-evil-held-e-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -881,7 +881,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "e",
     "rigAngle": 90,
     "wingPose": {
@@ -944,7 +944,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-e-shadow.svg"
+      "file": "gun-c-evil-held-e-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -957,9 +957,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-se",
-    "file": "gun-c-google-held-se.svg",
-    "shadowFile": "gun-c-google-held-se-shadow.svg",
+    "name": "gun-c-evil-held-se",
+    "file": "gun-c-evil-held-se.svg",
+    "shadowFile": "gun-c-evil-held-se-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -968,7 +968,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "se",
     "rigAngle": 45,
     "wingPose": {
@@ -1031,7 +1031,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-se-shadow.svg"
+      "file": "gun-c-evil-held-se-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -1044,9 +1044,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-s",
-    "file": "gun-c-google-held-s.svg",
-    "shadowFile": "gun-c-google-held-s-shadow.svg",
+    "name": "gun-c-evil-held-s",
+    "file": "gun-c-evil-held-s.svg",
+    "shadowFile": "gun-c-evil-held-s-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -1055,7 +1055,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "s",
     "rigAngle": 0,
     "wingPose": {
@@ -1118,7 +1118,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-s-shadow.svg"
+      "file": "gun-c-evil-held-s-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -1131,9 +1131,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-sw",
-    "file": "gun-c-google-held-sw.svg",
-    "shadowFile": "gun-c-google-held-sw-shadow.svg",
+    "name": "gun-c-evil-held-sw",
+    "file": "gun-c-evil-held-sw.svg",
+    "shadowFile": "gun-c-evil-held-sw-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -1142,7 +1142,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "sw",
     "rigAngle": -45,
     "wingPose": {
@@ -1205,7 +1205,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-sw-shadow.svg"
+      "file": "gun-c-evil-held-sw-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -1218,9 +1218,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-w",
-    "file": "gun-c-google-held-w.svg",
-    "shadowFile": "gun-c-google-held-w-shadow.svg",
+    "name": "gun-c-evil-held-w",
+    "file": "gun-c-evil-held-w.svg",
+    "shadowFile": "gun-c-evil-held-w-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -1229,7 +1229,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "w",
     "rigAngle": -90,
     "wingPose": {
@@ -1292,7 +1292,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-w-shadow.svg"
+      "file": "gun-c-evil-held-w-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [
@@ -1305,9 +1305,9 @@
     ]
   },
   {
-    "name": "gun-c-google-held-nw",
-    "file": "gun-c-google-held-nw.svg",
-    "shadowFile": "gun-c-google-held-nw-shadow.svg",
+    "name": "gun-c-evil-held-nw",
+    "file": "gun-c-evil-held-nw.svg",
+    "shadowFile": "gun-c-evil-held-nw-shadow.svg",
     "category": "held-weapon",
     "footprint": [
       0,
@@ -1316,7 +1316,7 @@
     "blocksWalk": false,
     "blocksShots": false,
     "layer": "held",
-    "team": "google",
+    "team": "evil",
     "facing": "nw",
     "rigAngle": -135,
     "wingPose": {
@@ -1379,7 +1379,7 @@
         "x": 0,
         "y": 0
       },
-      "file": "gun-c-google-held-nw-shadow.svg"
+      "file": "gun-c-evil-held-nw-shadow.svg"
     },
     "shadowKind": "none",
     "muzzleLocal": [

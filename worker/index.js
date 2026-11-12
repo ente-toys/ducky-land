@@ -220,7 +220,7 @@ export class IslandRoom {
       const bog=this.bog??=new LiveBogRoom(this);
       if(!bog.admitted(digest))return reply({error:'Land at the Bog harbour with 5 karma first.'},403);
       const team=params.get('mode')==='lobby'?null:params.get('team');
-      if(team===null&&params.get('mode')!=='lobby'||team!==null&&!['privacy','google'].includes(team))return reply({},400);
+      if(team===null&&params.get('mode')!=='lobby'||team!==null&&!['karma','evil'].includes(team))return reply({},400);
       const [client,socket]=Object.values(new WebSocketPair());
       this.ctx.acceptWebSocket(socket);if(!bog.open(socket,{digest,team}))socket.close(1008,'Bog visit ended');
       return new Response(null,{status:101,webSocket:client});

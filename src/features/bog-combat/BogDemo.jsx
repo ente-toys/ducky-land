@@ -48,7 +48,7 @@ export default function BogDemo({engine,combat,count}){
  const focused=snapshot?.players.find(p=>p.id===(mode==='action'||mode==='area'?demo.heroId:mode));
  return <>
   <aside className="bog-combat-hud" aria-label="Local autoplay demo" style={picker?{left:'auto',right:16}:undefined}>
-   <div className="bog-combat-score"><span>KARMA {snapshot?.scores.privacy??0}</span><span>EVIL {snapshot?.scores.google??0}</span></div>
+   <div className="bog-combat-score"><span>KARMA {snapshot?.scores.karma??0}</span><span>EVIL {snapshot?.scores.evil??0}</span></div>
    <p>LOCAL DEMO · {count} bots · {mode==='action'?'Following Ducky':mode==='area'?'Area camera':snapshot?.players.find(p=>p.id===mode)?.name}</p>
    {focused&&<><div className="bog-combat-lives" role="img" aria-label={`${focused.lives} lives left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<focused.lives?'':'lost'}>♥</span>)}</div>{focused.alive&&focused.shieldUntil>snapshot.time&&<p>Hidden {Math.ceil(focused.shieldUntil-snapshot.time)}s</p>}</>}
    <small>1–0 follow a bot · Tab cycles · WASD + Shift + Space when playing</small>

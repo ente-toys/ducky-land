@@ -44,21 +44,21 @@ export function createKnockout(objects,rig,{tilt=1,art}={}){
   ghost.addChild(tail,wisp,body,halo);root.addChild(ghost);ground.addChild(puddle,popper);
   root.upright=ground.upright=true;root.scale.set(SCALE,SCALE/tilt);ground.scale.set(SCALE,SCALE/tilt);
   root.visible=ground.visible=false;objects.addChild(ground,root);
-  const phase={},motion={};let respawnAt=null,hitX=0,hitY=0,side=1,team='privacy',wasDown=false;
+  const phase={},motion={};let respawnAt=null,hitX=0,hitY=0,side=1,team='karma',wasDown=false;
   return {root,ground,update(p,time,snapshot,reducedMotion){
     knockoutPhase(p,time,phase);
     if(!phase.down){root.visible=ground.visible=false;wasDown=false;return;}
     const inView=rig.root.visible;
     rig.root.visible=false;
     if(!wasDown||respawnAt!==p.respawnAt){
-      wasDown=true;respawnAt=p.respawnAt;hitX=p.x;hitY=p.y;team=p.team==='google'?'google':'privacy';
+      wasDown=true;respawnAt=p.respawnAt;hitX=p.x;hitY=p.y;team=p.team==='evil'?'evil':'karma';
       const facing=p.facing??p.turn??0;side=Math.sin(facing)<-.01?1:-1;
       if(art){body.texture=art[team+'-body'];wisp.texture=art[team+'-wisp'];halo.texture=art.halo;
         tail.texture=art['devil-tail'];puddle.texture=art[team+'-puddle'];popper.texture=art[team+'-popper'];}
-      tail.visible=team==='google';
+      tail.visible=team==='evil';
       const tag=snapshot?.splats?.findLast(s=>s.kind==='tag'&&s.victim===p.id&&Math.abs(s.born-(p.respawnAt-RULES.respawnDelay))<.2);
-      const shooter=tag?.team??(team==='google'?'privacy':'google');
-      if(art)puddle.texture=art[(shooter==='privacy'?'google':'privacy')+'-puddle'];
+      const shooter=tag?.team??(team==='evil'?'karma':'evil');
+      if(art)puddle.texture=art[(shooter==='karma'?'evil':'karma')+'-puddle'];
     }
     root.visible=inView&&phase.ghostAlpha>0;ground.visible=inView&&phase.groundAlpha>0;
     root.position.set(hitX,hitY);ground.position.set(hitX,hitY);

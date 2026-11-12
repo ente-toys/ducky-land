@@ -4,9 +4,9 @@ import {registerMap,THEME_OF,mapFor} from '../../world/island-maps.js';
 export const BOG_MAP_ID='bog-arena';
 export const BOG_REVIEW_ISLAND='isle-249';
 export const BOG_AREAS=Object.freeze({
- 'privacy-nw':{x:1900,y:1850},'google-ne':{x:6500,y:1850},
+ 'karma-nw':{x:1900,y:1850},'evil-ne':{x:6500,y:1850},
  'site-a':{x:2050,y:3770},'site-b':{x:6350,y:3770},
- 'privacy-sw':{x:1900,y:5650},'google-se':{x:6500,y:5650},
+ 'karma-sw':{x:1900,y:5650},'evil-se':{x:6500,y:5650},
  mid:{x:4200,y:2170},'lantern-cove':{x:4200,y:6870},
 });
 export function installBogEnvironment(){
