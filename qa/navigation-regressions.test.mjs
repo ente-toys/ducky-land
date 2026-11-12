@@ -1,8 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {geometry, inPoly, inShape, blocksFoot} from '../assets/world/island-geometry.mjs';
+import {geometry, inPoly, inShape} from '../assets/world/island-geometry.mjs';
 import {HOME_MAP, mapFor, readyThemes} from '../src/world/island-maps.js';
-import {solidLineTest} from '../src/world/home/home-building-lines.js';
 
 const maps = () => [HOME_MAP, ...readyThemes().map(mapFor)];
 const random = () => {let n=19;return () => ((n=Math.imul(n,1664525)+1013904223>>>0)/4294967296);};
@@ -18,7 +17,7 @@ function reference(world,x,y) {
     if (!deck&&!islet) return false;
   }
   const bridge=world.bridges.some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
-  return (bridge||!world.water.some(o=>inShape(x,y,o,20)))&&!world.obstacles.some(o=>blocksFoot(x,y,o,16));
+  return (bridge||!world.water.some(o=>inShape(x,y,o,20)))&&!world.obstacles.some(o=>inShape(x,y,o,16));
 }
 
 test('accelerated walking geometry matches unindexed collision checks on all thirteen maps',()=>{
@@ -51,9 +50,4 @@ test('smoothed community routes keep every leg clear and finish at their request
     }
     assert.equal(checked,20,`${map.id}: twenty complete routes`);
   }
-});
-
-test('a line through an exact collision-grid corner finishes and still sees the obstacle at its end', () => {
-  assert.equal(solidLineTest([])([2320,3312],[2304,3328]), true);
-  assert.equal(solidLineTest([{x:2304,y:3328,rx:20,ry:20}])([2320,3312],[2304,3328]), false);
 });

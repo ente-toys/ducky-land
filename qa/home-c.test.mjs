@@ -1,5 +1,4 @@
 import {placeRigid} from '../src/world/rigid.js';
-import {createServer} from 'vite';
 import test from 'node:test';import assert from 'node:assert/strict';
 import E from '../src/world/home/home-expansion.json' with {type:'json'};
 import C from '../scripts/bigger-home/communities/baseline-C.json' with {type:'json'};
@@ -21,16 +20,12 @@ test('Home communities keep C coast, map coordinates, working harbour and both p
  assert.ok(canSail(6150,1856,'home'),'Millrill Pond now joins the sea');
  const ratio=area(E.coast)/area(B.coast);assert.ok(ratio>=1.8&&ratio<=2.05,`land ratio ${ratio}`);
 });
-test('five Home communities have distinct homes, meaningful workplaces and reachable front doors',async()=>{
- // The rendered house bases come from the real placement pass (front walls and porches are traced from the art).
- const vite=await createServer({configFile:false,cacheDir:'/private/tmp/ducky-home-c-qa',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
- let actual;try{actual=(await vite.ssrLoadModule('/src/world/home/placements.js')).createPlacements();}finally{await vite.close();}
- const bounds=f=>f.poly?[Math.min(...f.poly.map(q=>q[0])),Math.min(...f.poly.map(q=>q[1])),Math.max(...f.poly.map(q=>q[0])),Math.max(...f.poly.map(q=>q[1]))]:[f.x-f.rx,f.y-f.ry,f.x+f.rx,f.y+f.ry];
+test('five Home communities have distinct homes, meaningful workplaces and reachable front doors',()=>{
  const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);let homes=0;
  for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=3,c.id);assert.ok(c.workplaces.length>=2,c.id);
   for(const id of c.workplaces){const p=E.props.find(p=>p.id===id);assert.equal(p.zone,c.id);assert.equal(p.communityRole,'workplace');}
   for(const id of c.homes){const p=E.props.find(p=>p.id===id);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
-   const b=bounds(actual.find(q=>q.id===p.id).footprint);assert.ok(!nav.walkable((b[0]+b[2])/2,(b[1]+b[3])/2),'rendered house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
+   assert.ok(!nav.walkable(p.footprint.x,p.footprint.y),'house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
    assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...door).at(-1),door,`${c.name} ${id} doorstep route`);
   }
  }

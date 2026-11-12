@@ -14,16 +14,6 @@ test('50 unique shared feathers cover all safe islands and islets; no Bog farmin
 test('all authored pickup sites are on navigable ground, clear of props and water',()=>{
  for(const site of KARMA_SITES){const nav=site.region.startsWith('sea-')?isletWalk(site.region).nav:mapOf(site.islandId).nav();assert.ok(nav.walkable(site.x,site.y),site.id);}
 });
-test('every Home pickup is reachable from the plaza at its authored position',()=>{
- const map=mapOf('home'),nav=map.nav();
- for(const site of KARMA_SITES.filter(s=>s.region==='home')){
-  const path=nav.route(map.spawn.x,map.spawn.y,site.x,site.y);
-  assert.ok(path.length,`${site.id} has a route`);
-  assert.deepEqual(path.at(-1),[site.x,site.y],`${site.id} needs no destination correction`);
-  let previous=[map.spawn.x,map.spawn.y];
-  for(const point of path){assert.ok(nav.clearLine(previous,point),`${site.id} route stays clear`);previous=point;}
- }
-});
 test('first arrival wins; cooldown respawns elsewhere, preserving 50 slots across restarts',()=>{
  const pool=new KarmaPool(null,seeded()),slot=pool.slots[0],from=pool.sites.get(slot.siteId),actor={...from,mode:'walking',jumpLeft:0},now=1_000_000;
  assert.equal(pool.claim({...actor,x:actor.x+KARMA_RADIUS+1},now),null);

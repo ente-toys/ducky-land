@@ -1,9 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {geometry} from './assets/world/island-geometry.mjs';
-// The legacy local socket host must use the same generated Home solids and
-// coast as the production room and Pixi client, retaining world.json's zones.
-export const world={...JSON.parse(readFileSync(new URL('./assets/world/world.json',import.meta.url))),
- ...JSON.parse(readFileSync(new URL('./assets/world/walk-world.json',import.meta.url)))};
+export const world=JSON.parse(readFileSync(new URL('./assets/world/world.json',import.meta.url)));
 export const {walkable}=geometry(world);
 export const W=world.width,H=world.height,SLOTS=16,SPEED=245,HZ=12;
 export const CITIES=['Kochi','Chennai','Bengaluru','London','Mumbai','Delhi','Hyderabad','Pune','Other'];
