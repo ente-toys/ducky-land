@@ -79,38 +79,11 @@ npm run test:browser
 
 **The final command is blocked here.** Headless Chromium/Chrome abort before opening a page with macOS Mach-port permission errors or SIGABRT. The browser connector is unavailable. Rive CLI screenshots fail because Metal is unavailable. [Full browser failure](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/browser-blocked.txt), [graphics limits](https://github.com/ente-toys/ducky-land/blob/a9363b0edbec68342e0ab6414c0bd7948de2f9e9/qa/graphics-blocked.txt).
 
-The integrated screenshots below are genuine native Rive software renders, opened and inspected by eye. They are not Chrome screenshots. Upstream lane reports include their own browser evidence, which is separate from integrated verification.
-
 ## Screenshots
 
-[Open the complete native-render gallery](shots/gallery.html).
+The [original Rive Canvas2D captures](https://github.com/ente-toys/ducky-land/tree/d63c24d9d03beb03e2821668d597008caea92b56/shots) are available in the prototype commit. Upstream lane reports include separate browser evidence.
 
-![Integrated island overview](shots/software-overview.png)
-
-| Zone | Capture |
-| --- | --- |
-| Plaza | [Plaza](shots/software-plaza.png) |
-| Lily Pond | [Pond and bridge](shots/software-pond.png) |
-| Bread Woods | [Forest](shots/software-bread-forest.png) |
-| Reading Hill | [Library](shots/software-library.png) |
-| Race lake | [Lake](shots/software-race-lake.png) |
-| Lighthouse beach | [Beach](shots/software-lighthouse-beach.png) |
-| Islets | [Little Isle](shots/software-islets.png) |
-
-| Feature | Capture |
-| --- | --- |
-| Join's native Ducky preview | [Preview](shots/software-join-preview.png) |
-| Native arrival | [Landing](shots/software-landing.png) |
-| Two real socket identities | [Multiplayer](shots/software-multiplayer.png) |
-| Bread hunt, pop and result | [Playing](shots/software-bread-playing.png), [pop](shots/software-bread-pop.png), [result](shots/software-bread-complete.png) |
-| Race countdown, floats and result | [Countdown](shots/software-race-countdown.png), [playing](shots/software-race-playing.png), [result](shots/software-race-complete.png) |
-| Floating joystick | [Joystick](shots/software-joystick.png) |
-| Phone/tablet views | [375](shots/software-viewport-375x812.png), [390](shots/software-viewport-390x844.png), [412](shots/software-viewport-412x915.png), [landscape](shots/software-viewport-844x390.png), [tablet](shots/software-viewport-768x1024.png) |
-| Native photo exports | [1600 x 900](shots/software-photo-wide.png), [1200 x 1200](shots/software-photo-square.png) |
-| Quack, heart, laugh, wave, sleep, angry, party | [Quack](shots/software-pose-2.png), [heart](shots/software-pose-4.png), [laugh](shots/software-pose-5.png), [wave](shots/software-pose-6.png), [sleep](shots/software-pose-7.png), [angry](shots/software-pose-8.png), [party](shots/software-pose-9.png) |
-| Crowd sit, look and preen | [Sit](shots/software-pose-10.png), [look](shots/software-pose-11.png), [preen](shots/software-pose-12.png) |
-
-The join form and photo-dialog browser page captures remain pending; their native preview and generated PNGs are included. Software events are simulated, so trusted phone touches, Safari/Firefox behavior and GPU performance are unverified. No 60 fps claim is made.
+Browser captures of the join form and photo dialog were pending. The software tests simulated input, so trusted phone touches, Safari and Firefox behavior, and GPU performance were unverified.
 
 ## Honest limits
 
