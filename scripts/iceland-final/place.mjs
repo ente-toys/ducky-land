@@ -9,12 +9,12 @@ import {groundArtwork, streamArtwork} from './ground.mjs';
 import {composeLake} from './lake.mjs';
 import {composeQuality3, composedCoverage, quality3Problems} from './quality3.mjs';
 import {isCanopy,isSoftPatch,canopyProblems,fenceProblems,softPatchProblems,snowmanProblems} from './fix-all.mjs';
-import {geometry, inPoly, inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry, inPoly, inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems} from '../../src/pixi/sleep-spots.js';
 
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const ART = 'public/pixi-art/themes/snow';
-export const WORLD = 'rive/web/themes/snow';
+export const WORLD = 'assets/world/themes/snow';
 export const WORKERS = ['b1','b2','b3','p1','p2','p3'];
 const json = file => JSON.parse(readFileSync(file, 'utf8'));
 const clone = v => structuredClone(v);
@@ -215,12 +215,12 @@ async function main(){
  const outIndex=args.indexOf('--out');
  if(outIndex>=0&&(!args[outIndex+1]||args[outIndex+1].startsWith('--')))throw Error('--out requires a directory');
  const out=outIndex<0?null:path.resolve(args[outIndex+1]);
- if(out){if(out===ROOT||['public','rive','src','scripts','qa'].some(d=>out===path.join(ROOT,d)||out.startsWith(path.join(ROOT,d)+path.sep)))throw Error('--out must be outside production/source directories');mkdirSync(out,{recursive:true});writeFileSync(path.join(out,'art.json'),JSON.stringify(result.art,null,1)+'\n');writeFileSync(path.join(out,'world.json'),JSON.stringify(result.world,null,1)+'\n');writeFileSync(path.join(out,'report.json'),JSON.stringify(result.report,null,2)+'\n');}
+ if(out){if(out===ROOT||['public','assets','src','scripts','qa'].some(d=>out===path.join(ROOT,d)||out.startsWith(path.join(ROOT,d)+path.sep)))throw Error('--out must be outside production/source directories');mkdirSync(out,{recursive:true});writeFileSync(path.join(out,'art.json'),JSON.stringify(result.art,null,1)+'\n');writeFileSync(path.join(out,'world.json'),JSON.stringify(result.world,null,1)+'\n');writeFileSync(path.join(out,'report.json'),JSON.stringify(result.report,null,2)+'\n');}
  if(write){
   for(const [file,text] of result.files){const disk=path.join(ROOT,file);mkdirSync(path.dirname(disk),{recursive:true});writeFileSync(disk,text);}
   writeFileSync(path.join(ROOT,ART,'art.json'),JSON.stringify(result.art,null,1)+'\n');
   for(const name of ['world.json','walk-world.json'])writeFileSync(path.join(ROOT,WORLD,name),JSON.stringify(result.world,null,1)+'\n');
-  const indexFile=path.join(ROOT,'rive/web/themes/index.js'),index=readFileSync(indexFile,'utf8');
+  const indexFile=path.join(ROOT,'assets/world/themes/index.js'),index=readFileSync(indexFile,'utf8');
   const harbor=json(path.join(ROOT,WORLD,'harbor.json')),base=makeMap('snow',{world:result.world,walk:result.world,harbor,sleepers:[]}).baseWalk;
   const beds=resolveSleepSpots(base,result.art.props,geometry(base).walkable,sleepHalfWidths(),{spots:result.world.sleepSpots,avoid:result.world.sleepAvoid,warn:false})
    .map(({x,y,pose,r,flip,tree})=>({x:Math.round(x),y:Math.round(y),pose,r:Math.round(r*10)/10,flip,...(tree?{tree}:{})}));

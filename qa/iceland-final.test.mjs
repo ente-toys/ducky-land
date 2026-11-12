@@ -6,7 +6,7 @@ import path from 'node:path';
 import {ROOT,ART,WORLD,WORKERS,loadCatalog,integrate,validate,bounds,overlaps,pathClearance,propPathClearance,landViews,viewCoverage,area,homeDensity} from '../scripts/iceland-final/place.mjs';
 import sharp from 'sharp';
 import {maxSleepersInView,quality3Problems} from '../scripts/iceland-final/quality3.mjs';
-import {geometry,inShape} from '../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../assets/world/island-geometry.mjs';
 import {onRink} from '../src/pixi/rink-slide.js';
 import {makeMap} from '../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/pixi/sleep-spots.js';

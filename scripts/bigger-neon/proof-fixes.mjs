@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render.mjs';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const O='../concepts/themes/world-map/bigger/',work=O+'neon-work/',crops=O+'neon-fixed-crops/';
 fs.mkdirSync(crops,{recursive:true});fs.mkdirSync(work,{recursive:true});
-const art=read('public/pixi-art/themes/neon/art.json'),world=read('rive/web/themes/neon/world.json'),old=read('scripts/bigger-neon/baseline/world.json'),plan=read('scripts/bigger-neon/plan.json');
+const art=read('public/pixi-art/themes/neon/art.json'),world=read('assets/world/themes/neon/world.json'),old=read('scripts/bigger-neon/baseline/world.json'),plan=read('scripts/bigger-neon/plan.json');
 const inventory=art.decks.map((deck,i)=>{
  const q=old.walkways[i];const b=q?null:world.bridges.find(b=>'bigger/'+b.id+'.svg'===deck.src);
  const points=q?[.2,.5,.8].map(t=>[q.a[0]+(q.b[0]-q.a[0])*t,q.a[1]+(q.b[1]-q.a[1])*t]):[[b.x,b.y]];

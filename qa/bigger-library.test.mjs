@@ -1,7 +1,7 @@
 import {changedIds} from '../scripts/pagepond-benches/geometry.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
-import {makeMap} from '../src/pixi/island-maps.js';import {geometry,inPoly,inShape} from '../rive/web/island-geometry.mjs';import {checkTheme} from '../scripts/theme-index.mjs';
-const read=f=>JSON.parse(fs.readFileSync(f));const d='rive/web/themes/library/',a='public/pixi-art/themes/library/',base='scripts/bigger-library/original/';
+import {makeMap} from '../src/pixi/island-maps.js';import {geometry,inPoly,inShape} from '../assets/world/island-geometry.mjs';import {checkTheme} from '../scripts/theme-index.mjs';
+const read=f=>JSON.parse(fs.readFileSync(f));const d='assets/world/themes/library/',a='public/pixi-art/themes/library/',base='scripts/bigger-library/original/';
 const world=read(d+'world.json'),walk=read(d+'walk-world.json'),art=read(a+'art.json'),harbor=read(d+'harbor.json'),old=read(base+'world.json'),oldArt=read(base+'art.json'),plan=read('scripts/bigger-library/plan.json');
 const cleared=new Set([...read('scripts/pagepond-bridges/report.json').clearedLandscape,...read('scripts/pagepond-bridges/report.json').retiredBridgeParts]);
 const meadowWater=read('scripts/pagepond-meadow/placements.json').waterRegions;

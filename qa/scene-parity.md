@@ -1,6 +1,6 @@
 # Original scene and Pixi behavior parity
 
-Compared on 2026-11-03 against the active `/` route: `src/App.jsx` → `rive/web/island.html?scene=1&view=flat`, including `game.js`, `island-host.js`, `life.js`, and the native emote generators.
+Compared on 2026-11-03 against the active `/` route: `src/App.jsx` → `assets/world/island.html?scene=1&view=flat`, including `game.js`, `island-host.js`, `life.js`, and the native emote generators.
 
 ## Restored behavior
 

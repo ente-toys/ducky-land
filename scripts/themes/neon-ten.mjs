@@ -1,8 +1,8 @@
 // Final craft pass. Idempotent from the integrated Neon snapshot; no shared files written.
 import fs from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/neon/',D='rive/web/themes/neon/',B=A+'ten-source/';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/neon/',D='assets/world/themes/neon/',B=A+'ten-source/';
 fs.mkdirSync(B,{recursive:true});
 for(const [name,path]of Object.entries({art:A+'art.json',world:D+'world.json',walk:D+'walk-world.json',placements:D+'placements.json',paths:D+'paths.json'}))if(!fs.existsSync(B+name+'.json'))fs.copyFileSync(path,B+name+'.json');
 if(!fs.existsSync(B+'ground.svg'))fs.copyFileSync(A+'ground.svg',B+'ground.svg');

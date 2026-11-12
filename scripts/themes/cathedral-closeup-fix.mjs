@@ -1,8 +1,8 @@
 // Cathedral-only close-up craft. Repeatable from the close-cathedral snapshot.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {inShape,geometry} from '../../rive/web/island-geometry.mjs';
+import {inShape,geometry} from '../../assets/world/island-geometry.mjs';
 import {addArc,ring} from './cathedral-craft.mjs';
-const ROOT='public/pixi-art/themes/cathedral/',DATA='rive/web/themes/cathedral/',BASE='../concepts/themes/work/cathedral/closeup-base/';
+const ROOT='public/pixi-art/themes/cathedral/',DATA='assets/world/themes/cathedral/',BASE='../concepts/themes/work/cathedral/closeup-base/';
 const read=p=>JSON.parse(readFileSync(p)),art=read(BASE+'art.json'),world=read(BASE+'world.json'),walk=read(BASE+'walk-world.json'),arcs=read(BASE+'arc-benches.json');
 const f=n=>Math.round(n*10)/10,poly=p=>'M'+p.map(q=>q.map(f).join(' ')).join('L')+'Z',zones=Object.entries(world.zones).filter(([n])=>/^(activity|stalls)-/.test(n));
 let ground=readFileSync(BASE+'ground.svg','utf8');

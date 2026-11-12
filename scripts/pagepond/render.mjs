@@ -39,7 +39,7 @@ export async function render(art,view,k,file,{labels=[],boats=[],sleepers=true,b
 
 
 if(process.argv[1]===fileURLToPath(import.meta.url)){
-const art=read(base+'art.json'),harbor=read('rive/web/themes/library/harbor.json');
+const art=read(base+'art.json'),harbor=read('assets/world/themes/library/harbor.json');
 const views=[
  ['northwest-mouth',[2400,-50,2100,1450],.7],
  ['northeast-mouth',[4200,-50,3400,1450],.6],

@@ -1,5 +1,5 @@
 """HOME-quality pass, deterministic from the Community-only polish-source snapshot.
-Run from the repo: python3 rive/web/themes/community/polish.py
+Run from the repo: python3 assets/world/themes/community/polish.py
 Never writes shared art, map registrations, or other themes.
 """
 from pathlib import Path

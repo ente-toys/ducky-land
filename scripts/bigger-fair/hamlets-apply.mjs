@@ -5,7 +5,7 @@ import {fitContact} from './furniture.mjs';
 import {A,S,D,read,config,layouts,objects,grounds,mapper,HOME,r} from './hamlets.mjs';
 import {outer,streams,pathD} from './fix-geometry.mjs';
 import {smooth} from './design.mjs';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 const save=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),exp=read(S+'expansion.json');
 const inPoly=(x,y,poly)=>inShape(x,y,{poly});

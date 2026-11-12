@@ -1,7 +1,7 @@
 // Static proof assembled from production art, at its actual placement and scale.
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
-import READY from '../../rive/web/themes/index.js';
+import READY from '../../assets/world/themes/index.js';
 const out='../concepts/themes/world-map/bigger',base='public/pixi-art/themes/pink/';mkdirSync(out+'/pink-ground-crops',{recursive:true});
 export const read=p=>JSON.parse(readFileSync(p));
 export async function render(art,view,k,file,{labels=[],boats=[],sleepers=true}={}){

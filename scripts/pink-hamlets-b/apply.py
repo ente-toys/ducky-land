@@ -1,7 +1,7 @@
 import json,re,shutil
 from pathlib import Path
 ROOT=Path('/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/pink-fix')
-A=Path('public/pixi-art/themes/pink');D=Path('rive/web/themes/pink')
+A=Path('public/pixi-art/themes/pink');D=Path('assets/world/themes/pink')
 read=lambda p:json.loads(Path(p).read_text())
 def write(p,d):Path(p).write_text(json.dumps(d,indent=2)+'\n')
 art=read(A/'art.json');world=read(D/'world.json');walk=read(D/'walk-world.json');report={}

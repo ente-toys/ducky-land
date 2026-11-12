@@ -39,7 +39,7 @@ for(const w of [world,walk]){
 for(const p of plan.props.filter(p=>p.src==='communities/garden.svg'))for(const [dx,dy,rx,ry]of [[-172,-51,77,10],[172,-51,77,10],[-207,-100,13,12]])for(const w of[world,walk])w.obstacles.push({x:p.x+dx,y:p.y+dy,rx,ry,prop:p.id,community:true});
 // Training equipment is walk-through between its small physical contact points.
 for(const [x,y,rx,ry]of [[712,30,14,12],[1170,30,14,12],[847,0,38,24],[1030,0,38,24]])for(const w of[world,walk])w.obstacles.push({x:fitted([x,y])[0],y:fitted([x,y])[1],rx,ry,prop:'community-training-equipment',community:true});
-for(const [file,data]of [['public/pixi-art/themes/bog/art.json',art],['rive/web/themes/bog/world.json',world],['rive/web/themes/bog/walk-world.json',walk],['rive/web/themes/bog/harbor.json',harbor]])writeFileSync(file,JSON.stringify(data));
+for(const [file,data]of [['public/pixi-art/themes/bog/art.json',art],['assets/world/themes/bog/world.json',world],['assets/world/themes/bog/walk-world.json',walk],['assets/world/themes/bog/harbor.json',harbor]])writeFileSync(file,JSON.stringify(data));
 const area=p=>Math.abs(p.reduce((s,a,i)=>{let b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1]},0)/2);
 const originalBytes=original.art.ground.tiles.reduce((s,t)=>s+Math.ceil(t.width*t.resolution)*Math.ceil(t.height*t.resolution)*4,0);
 let newBytes=0;for(const t of tiles){if(t.nativePixels)newBytes+=t.nativePixels[0]*t.nativePixels[1]*4;else newBytes+=Math.ceil(t.width*t.resolution)*Math.ceil(t.height*t.resolution)*4;}

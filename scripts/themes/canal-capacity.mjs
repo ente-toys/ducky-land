@@ -4,7 +4,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {checkTheme} from '../theme-index.mjs';
 const root=new URL('../../',import.meta.url), read=p=>JSON.parse(readFileSync(new URL(p,root),'utf8'));
-const world=read('rive/web/themes/canal/world.json'),walk=read('rive/web/themes/canal/walk-world.json'),harbor=read('rive/web/themes/canal/harbor.json');
+const world=read('assets/world/themes/canal/world.json'),walk=read('assets/world/themes/canal/walk-world.json'),harbor=read('assets/world/themes/canal/harbor.json');
 const art=read('public/pixi-art/themes/canal/art.json'), report=checkTheme('canal');assert.equal(report.ready,true,report.problems.join('\n'));assert.equal(report.sleepers.length,40);
 const map=makeMap('canal',{world,walk,harbor,sleepers:report.sleepers}),nav=map.nav();
 const reserved=Object.entries(world.zones).filter(([k])=>k.startsWith('activity-')||k.startsWith('stalls-'));

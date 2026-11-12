@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {drawArcBench} from '../arc-bench-draw.mjs';
 import {ids,contour,rim,measure,benchGeometry,round} from './geometry.mjs';
-const A='public/pixi-art/themes/library/',D='rive/web/themes/library/';
+const A='public/pixi-art/themes/library/',D='assets/world/themes/library/';
 const read=p=>JSON.parse(fs.readFileSync(p));
 export function applyBenches(){
  const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');

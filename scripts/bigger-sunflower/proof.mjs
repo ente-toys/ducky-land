@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {render,OUT,A} from './render.mjs';
 import {places} from './design.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(p)),art=read(A+'art.json'),old=read('scripts/bigger-sunflower/baseline/art.json'),world=read('scripts/bigger-sunflower/baseline/world.json');
 await render(art,OUT+'/sunflower-built.png');
 const communityCrops={

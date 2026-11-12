@@ -7,7 +7,7 @@ import {render} from './render.mjs';
 import {OUT,original,read,ART,rings,pathRing,places,commons,homes} from './model.mjs';
 import {roadSamples} from './ground.mjs';
 import {water,crossings} from './waterways.mjs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 const baseline=read('scripts/bigger-library/dense-baseline.json');
 const scale=.05,W=700,H=520;
 const raster=async body=>sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="-3000 -2200 14000 10400" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`)).ensureAlpha().raw().toBuffer();
@@ -24,7 +24,7 @@ const masks=await Promise.all([raster(sand(baseline)),raster(sand({roadSamples,h
 let denominator=0,before=0,after=0;for(let i=0;i<land.length;i+=4)if(land[i]>127&&land[i+3]>127){denominator++;if(masks[0][i]>127&&masks[0][i+3]>127)before++;if(masks[1][i]>127&&masks[1][i+3]>127)after++;}
 const roadArea={method:'Union of sand carriageways, household front walks, square paving, common footpaths and unchanged bridge decks, sampled at 20 world units; excludes raised grassy banks. Denominator is added dry land, excluding original island and rivers.',sampleCellWorldUnits:20,newDryLandArea:denominator/scale**2,beforeArea:before/scale**2,afterArea:after/scale**2,beforePercent:100*before/denominator,afterPercent:100*after/denominator,reductionPercent:100*(before-after)/before};
 const compactness=places.map(p=>{function metric(list){const a=list.filter(h=>h.zone===p.id);let nearest=a.map(h=>Math.min(...a.filter(j=>j!==h).map(j=>Math.hypot(j.x-h.x,j.y-h.y))));return{meanNearestHome:nearest.reduce((s,n)=>s+n,0)/a.length,homeCentreBoundsArea:(Math.max(...a.map(h=>h.x))-Math.min(...a.map(h=>h.x)))*(Math.max(...a.map(h=>h.y))-Math.min(...a.map(h=>h.y)))};}return {community:p.name,before:metric(baseline.homes),after:metric(homes)};});
-const world=read('rive/web/themes/library/world.json'),walk=read('rive/web/themes/library/walk-world.json');
+const world=read('assets/world/themes/library/world.json'),walk=read('assets/world/themes/library/walk-world.json');
 const result={roadArea,compactness,bridges:crossings.length,preserved:{waterMatchesWalk:JSON.stringify(world.water)===JSON.stringify(walk.water),coastRingsMatchAuthoring:JSON.stringify(world.coastRings)===JSON.stringify(rings),originalProps:JSON.stringify(read(ART+'art.json').props.slice(0,original.art.props.length))===JSON.stringify(original.art.props)}};
 fs.mkdirSync(OUT+'/library-dense-crops',{recursive:true});
 fs.writeFileSync(OUT+'/library-dense.png',await render({built:true}));

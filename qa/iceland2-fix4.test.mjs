@@ -10,7 +10,7 @@ import {icelandPieceSVG} from '../src/pixi/iceland-art-stream.js';
 import {createGroundPool} from '../src/pixi/ground-stream.js';
 const base='public/pixi-art/themes/snow/';
 const art=JSON.parse(readFileSync(base+'art.json'));
-const world=JSON.parse(readFileSync('rive/web/themes/snow/world.json'));
+const world=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const terrain=readFileSync(base+'v2/terrain.svg','utf8');
 
 test('FIX4 actual theme loader renders complete lake and heart before terrain decode, with streamed shore props',async t=>{

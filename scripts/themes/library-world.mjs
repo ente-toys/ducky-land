@@ -3,9 +3,9 @@
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {libraryArcBenches} from './library-arc-benches.mjs';
 import {libraryCourtPaving,libraryCloseupFurniture,libraryPathInlays} from './library-closeup-detail.mjs';
-import {geometry,inPoly,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const ART='public/pixi-art/themes/library/', DATA='rive/web/themes/library/';
+const ART='public/pixi-art/themes/library/', DATA='assets/world/themes/library/';
 const W=8000, HH=5600, S=4.8, r1=v=>Math.round(v*10)/10;
 const T=([x,y])=>[r1(300+x*4.8),r1(200+y*5.2)];
 const TS=v=>v*S;
@@ -391,7 +391,7 @@ const art={width:W,height:HH,sea:C.water,ground:{tiles},decks,flats,props,floati
 const dump=(f,v)=>writeFileSync(f,JSON.stringify(v,null,1));
 dump(DATA+'world.json',world);dump(DATA+'walk-world.json',walk);dump(DATA+'harbor.json',harbor);dump(DATA+'placements.json',props);dump(DATA+'paths.json',world.paths);dump(ART+'art.json',art);
 dump(ART+'resolved-sleepers.json',beds);
-const home=JSON.parse(readFileSync('rive/web/world.json'));
+const home=JSON.parse(readFileSync('assets/world/world.json'));
 const metrics={landArea:rings.reduce((s,p)=>s+Math.abs(area(p)),0),homeArea:Math.abs(area(home.coast)),map:[W,HH],landmasses:2,canalBridges:2,jetties:4,sleepers:beds.length,counts,props:props.length,trees:props.filter(p=>/^tree-/.test(p.asset??'')).length,paths:{main:240,minor:190},activityAreas:ACT.length,stallRows:STALL_ROWS.length};
 metrics.ratioToHome=metrics.landArea/metrics.homeArea;dump(ART+'build-metrics.json',metrics);console.log(metrics);
 if(checkBeds().bad.length)throw Error(JSON.stringify(checkBeds().bad));

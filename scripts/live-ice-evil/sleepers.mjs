@@ -1,10 +1,10 @@
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 
 // Only resident placement is resolved here. All scenery and paths are authored in build.py.
 for(const theme of ['bog','snow']) {
-  const data=`rive/web/themes/${theme}/`, art=JSON.parse(readFileSync(`public/pixi-art/themes/${theme}/art.json`));
+  const data=`assets/world/themes/${theme}/`, art=JSON.parse(readFileSync(`public/pixi-art/themes/${theme}/art.json`));
   const world=JSON.parse(readFileSync(data+'world.json')), walk=geometry(world).walkable;
   const trees=art.props.filter(p=>/tree|fir/i.test(p.name??p.id)).filter(p=>inPoly(p.x,p.y+14,world.coast));
   const spots=Object.fromEntries(['nod','hammock','rock','leaf','book','chair','wing','box'].map(p=>[p,[]]));

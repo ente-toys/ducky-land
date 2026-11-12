@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {geometry,inShape} from '../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url)));
-const walk=read('rive/web/themes/cathedral/walk-world.json'),art=read('public/pixi-art/themes/cathedral/art.json');
+const walk=read('assets/world/themes/cathedral/walk-world.json'),art=read('public/pixi-art/themes/cathedral/art.json');
 const geo=read('scripts/bigger-cathedral/fix-water.json'),g=geometry(walk);
 test('Every retained Cathedral deck has water underneath and supports walking',()=>{
  for(const [name,x,y]of [['north pier',3000,700],['west pier',750,3330],['east pier',7250,3150],['south pier',4100,5300],['olive arch',1425,1590],['garden arch',6220,4615],['pond arch',1770,3310]]){

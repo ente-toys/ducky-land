@@ -1,6 +1,6 @@
 // Shore lane apply step. It places nothing itself: it copies the hand-written entries in scripts/home-10/shore.json into
 // src/pixi/home-expansion.json (keys: jetty, harborWater, boats 0-2, coast, riverWater, decks by id; islet sea-9-1's lon/lat in islets-data.json) and the same coast and
-// jetty deck into rive/web/world.json and rive/web/walk-world.json. Idempotent; touches no other key or entry.
+// jetty deck into assets/world/world.json and assets/world/walk-world.json. Idempotent; touches no other key or entry.
 // Run from the repo root:  node scripts/home-10/shore.mjs
 import {readFileSync, writeFileSync} from 'node:fs';
 const P = JSON.parse(readFileSync('scripts/home-10/shore.json', 'utf8'));
@@ -35,7 +35,7 @@ for (const e of P.islets.set) Object.assign(I.placements.find(o => o.id === e.id
 writeFileSync('src/pixi/islets-data.json', JSON.stringify(I, null, 2) + '\n');
 
 // world.json and walk-world.json (compact): the same coast; the server's jetty deck moves with the jetty
-for (const file of ['rive/web/world.json', 'rive/web/walk-world.json']) {
+for (const file of ['assets/world/world.json', 'assets/world/walk-world.json']) {
   const W = JSON.parse(readFileSync(file, 'utf8'));
   patchCoast(W.coast);
   if (file.endsWith('walk-world.json')) {

@@ -4,8 +4,8 @@
 // Writes ../concepts/themes/library-preview.png (and public/pixi-art/themes/canal/preview.png, the globe picture).
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const ART = 'public/pixi-art/themes/canal/', DATA = 'rive/web/themes/canal/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const ART = 'public/pixi-art/themes/canal/', DATA = 'assets/world/themes/canal/';
 const art = JSON.parse(readFileSync(ART + 'art.json', 'utf8')), harbor = JSON.parse(readFileSync(DATA + 'harbor.json', 'utf8'));
 const walk = JSON.parse(readFileSync(DATA + 'walk-world.json', 'utf8'));
 const OUT='../concepts/themes/work/canal/';mkdirSync(OUT,{recursive:true});

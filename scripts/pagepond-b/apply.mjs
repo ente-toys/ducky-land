@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const read=p=>JSON.parse(fs.readFileSync(p)),write=(p,j)=>fs.writeFileSync(p,JSON.stringify(j)+'\n');
-const B=read('scripts/pagepond-b/placements.json'),S=read('scripts/pagepond-b/shadows.json'),F=read('scripts/pagepond-b/filter.json'),A='public/pixi-art/themes/library/',D='rive/web/themes/library/',art=read(A+'art.json');
+const B=read('scripts/pagepond-b/placements.json'),S=read('scripts/pagepond-b/shadows.json'),F=read('scripts/pagepond-b/filter.json'),A='public/pixi-art/themes/library/',D='assets/world/themes/library/',art=read(A+'art.json');
 assert(!art.props.some(p=>p.id.startsWith('page-b-')),'B is already integrated; use verification scripts');
 const shadow=new Map([...S.overrides,...S.newPlantOverrides,...S.newHillOverrides].map(p=>[p.id,p]));
 function update(p){

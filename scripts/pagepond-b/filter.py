@@ -5,7 +5,7 @@ from shapely.geometry import Point,Polygon,LineString
 from shapely import affinity
 from shapely.ops import unary_union
 read=lambda p:json.loads(Path(p).read_text())
-b=read('scripts/pagepond-b/placements.json');w=read('rive/web/themes/library/world.json');s=read('scripts/pagepond-ground/surface.json')
+b=read('scripts/pagepond-b/placements.json');w=read('assets/world/themes/library/world.json');s=read('scripts/pagepond-ground/surface.json')
 def path(d):
  g=Polygon()
  for part in d.split('M')[1:]:

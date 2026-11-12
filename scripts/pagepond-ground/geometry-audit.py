@@ -5,7 +5,7 @@ from shapely.geometry import Point,Polygon,LineString
 from shapely import affinity
 from shapely.ops import unary_union
 S=Path('scripts/pagepond-ground');read=lambda p:json.loads(Path(p).read_text())
-world=read('rive/web/themes/library/world.json');routes=read(S/'sampled-routes.json');surface=read(S/'surface.json');keep=read(S/'data/keep.json')
+world=read('assets/world/themes/library/world.json');routes=read(S/'sampled-routes.json');surface=read(S/'surface.json');keep=read(S/'data/keep.json')
 def shape(o):return Polygon(o['poly']).buffer(0) if o.get('poly') else affinity.scale(Point(o['x'],o['y']).buffer(1,24),o.get('rx',0),o.get('ry',0))
 contactShapes=[shape(o) for o in world['obstacles']]
 for p in read('public/pixi-art/themes/library/art.json')['props']:

@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-const S='scripts/bigger-community/',D='rive/web/themes/community/',A='public/pixi-art/themes/community/';
+const S='scripts/bigger-community/',D='assets/world/themes/community/',A='public/pixi-art/themes/community/';
 const read=p=>JSON.parse(fs.readFileSync(p));
 if(!fs.existsSync('../concepts/themes/world-map/bigger/community-communities.png'))throw Error('Drawing must exist before build');
 const p=read(S+'plan.json'),a=read(S+'design-art.json'),world=read(S+'baseline/world.json'),walk=read(S+'baseline/walk-world.json');

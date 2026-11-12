@@ -7,7 +7,7 @@ import {roadArt} from './roads.mjs';
 import {waterways,waterArt,crossingArt,crossingCollision} from './water.mjs';
 import {applyHamlets,hamletGroundArt,hamletMask} from './hamlets-apply.mjs';
 const read=p=>JSON.parse(readFileSync(p)),save=(p,x)=>writeFileSync(p,JSON.stringify(x,null,1)+'\n');
-const old=read('scripts/bigger-sunflower/baseline/art.json'),world=read('scripts/bigger-sunflower/baseline/world.json'),walk=read('scripts/bigger-sunflower/baseline/walk-world.json'),art=structuredClone(old),D='rive/web/themes/sunflower/';
+const old=read('scripts/bigger-sunflower/baseline/art.json'),world=read('scripts/bigger-sunflower/baseline/world.json'),walk=read('scripts/bigger-sunflower/baseline/walk-world.json'),art=structuredClone(old),D='assets/world/themes/sunflower/';
 mkdirSync(A+'bigger',{recursive:true});
 const line=points=>'M'+points.map(p=>p.join(' ')).join('L')+'Z';
 function smooth(p,closed=false){let q=closed?[p.at(-1),...p,p[0],p[1]]:[p[0],...p,p.at(-1)];let d=`M${p[0].join(' ')}`;for(let i=1;i<q.length-2;i++){const[a,b,c,e]=q.slice(i-1,i+3);d+=`C${[b[0]+(c[0]-a[0])/6,b[1]+(c[1]-a[1])/6,c[0]-(e[0]-b[0])/6,c[1]-(e[1]-b[1])/6,...c].join(' ')}`}return d+(closed?'Z':'')}

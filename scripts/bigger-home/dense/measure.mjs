@@ -3,7 +3,7 @@
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import sharp from 'sharp';
 import assert from 'node:assert/strict';
-import {inPoly} from '../../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../../assets/world/island-geometry.mjs';
 const O='../concepts/themes/world-map/bigger/home-dense-work';mkdirSync(O,{recursive:true});
 const read=p=>JSON.parse(readFileSync(p)),B=read('scripts/bigger-home/dense/before.json'),E=read('src/pixi/home-expansion.json');
 for(const p of E.props.slice(B.props.length))assert.ok(inPoly(p.x,p.y,E.coast),p.id+' new garden prop stays on land');

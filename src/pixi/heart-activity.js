@@ -4,7 +4,7 @@ export const HEART_ACTIVITY_INTERVAL = .022;
 export const HEART_ACTIVITY_CHANCE = .85;
 export const HEART_ACTIVITY_LIMIT = 160;
 
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 
 // Use the same UV rectangle as the visible patch, with a small opaque margin.
 export function heartArtContains(frame,x,y,image) {

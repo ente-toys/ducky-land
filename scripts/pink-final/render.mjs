@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import {fileURLToPath} from 'node:url';
 import {dirname} from 'node:path';
 import {readFileSync,mkdirSync} from 'node:fs';
-import READY from '../../rive/web/themes/index.js';
+import READY from '../../assets/world/themes/index.js';
 const out=process.env.PINK_RENDER_OUT??'../concepts/themes/work/pink-fix/final',base='public/pixi-art/themes/pink/';
 export const read=p=>JSON.parse(readFileSync(p));
 export async function render(art,view,k,file,{labels=[],boats=[],sleepers=true,beds=READY.pink.sleepers,resolveSource}={}){
@@ -34,7 +34,7 @@ export async function render(art,view,k,file,{labels=[],boats=[],sleepers=true,b
 
 
 if(process.argv[1]===fileURLToPath(import.meta.url)){
-const art=read(base+'art.json'),harbor=read('rive/web/themes/pink/harbor.json');
+const art=read(base+'art.json'),harbor=read('assets/world/themes/pink/harbor.json');
 for(const [name,view,k] of [
  ['whole-island',[-2600,-1900,13200,9800],.22],
  ['ribbonwick',[-950,-1150,3300,2300],.65],

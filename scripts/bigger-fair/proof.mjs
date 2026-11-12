@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render-core.mjs';
 import {read,write} from './design.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const O='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger/',A='public/pixi-art/themes/fair/';fs.mkdirSync(O+'fair-ground-crops',{recursive:true});
 const art=read(A+'art.json'),e=read('scripts/bigger-fair/expansion.json');
 const built=await render(art,{k:.13,x:-2500,y:-1800,width:1560,height:1066});fs.writeFileSync(O+'fair-built.png',built);

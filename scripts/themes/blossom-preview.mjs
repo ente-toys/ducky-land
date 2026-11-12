@@ -4,9 +4,9 @@
 // Writes ../public/pixi-art/themes/blossom/blossom-preview.png (and public/pixi-art/themes/blossom/preview.png, the globe picture).
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/blossom/';mkdirSync(OUT,{recursive:true});
-const ART = 'public/pixi-art/themes/blossom/', DATA = 'rive/web/themes/blossom/';
+const ART = 'public/pixi-art/themes/blossom/', DATA = 'assets/world/themes/blossom/';
 const art = JSON.parse(readFileSync(ART + 'art.json', 'utf8')), harbor = JSON.parse(readFileSync(DATA + 'harbor.json', 'utf8'));
 const walk = JSON.parse(readFileSync(DATA + 'walk-world.json', 'utf8'));
 const K = +(process.env.K || .3), WALK = process.argv.includes('--walk');

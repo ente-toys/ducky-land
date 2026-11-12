@@ -1,5 +1,5 @@
 import {readFileSync,writeFileSync} from 'node:fs';
-import {inShape,inPoly} from '../../../rive/web/island-geometry.mjs';
+import {inShape,inPoly} from '../../../assets/world/island-geometry.mjs';
 import {HOME_MAP} from '../../../src/pixi/island-maps.js';
 const E=JSON.parse(readFileSync('src/pixi/home-expansion.json')),O='../concepts/themes/world-map/bigger',n=HOME_MAP.nav();
 const before=JSON.parse(readFileSync(new URL('./before.json',import.meta.url)));

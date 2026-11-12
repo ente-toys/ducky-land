@@ -1,6 +1,6 @@
 // Authored channels follow the former shoreline and divide the new commons.
 import {original,pathRing,read} from './model.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const channels=[
  {id:'quillbrook',name:'Quillbrook',points:[[3850,400,240],[2800,390,240],[1600,330,250],[1050,420,260],[760,760,250],[750,1040,250],[490,1400,230],[290,2120,240],[-100,2440,250],[-1150,2540,270],[-2050,2520,280],[-2500,2440,320]]},
  {id:'inkwater',name:'Inkwater Run',points:[[4390,400,220],[5400,380,240],[6500,410,250],[7070,450,240],[7240,740,240],[7230,1040,240],[7540,1620,230],[7740,2430,250],[8200,2830,260],[9140,2910,280],[10000,2840,280],[10550,2910,320]]},

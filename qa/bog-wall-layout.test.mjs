@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {BOG_BLOCKERS} from '../src/pixi/bog-blockers.js';
 import {DUCK_RADIUS} from '../src/pixi/bog-combat/physics.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 import {groupFeet,shelters} from './bog-wall-layout-helpers.mjs';
 const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/bog-arena/art.json'));
 const layout=JSON.parse(fs.readFileSync('scripts/bog-environment/layout.json'));

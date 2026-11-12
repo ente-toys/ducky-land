@@ -72,7 +72,7 @@ test('SUNBOB stone base ellipse is within 4 px of the innermost disc centre',()=
       assert.deepEqual([p.x,p.y],disc,'body, hands and shadow share a ground anchor for upright rendering');
     }
   }
-  for(const blockers of [centre.walkBlockers,centre.centrePlacementReplacement.blocked,map.world.obstacles,map.world.centrePlacement.blocked,read('rive/web/themes/sunflower/walk-world.json').obstacles]){
+  for(const blockers of [centre.walkBlockers,centre.centrePlacementReplacement.blocked,map.world.obstacles,map.world.centrePlacement.blocked,read('assets/world/themes/sunflower/walk-world.json').obstacles]){
     const bases=blockers.filter(b=>b.name==='clock planter');
     assert.ok(bases.length);
     for(const b of bases)assert.deepEqual([b.x,b.y],disc,'all client and authority footprints follow the stone base');

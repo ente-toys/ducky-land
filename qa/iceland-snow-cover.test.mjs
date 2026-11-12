@@ -141,7 +141,7 @@ test('real engine tracks offscreen remote motion and frees local, remote and sle
     platform: 'node', format: 'esm', write: false, define: {'import.meta.env.DEV': 'false',
       'import.meta.url': JSON.stringify(new URL('../src/pixi/engine.js', import.meta.url).href)}});
   let code = engineBundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
-  for (const name of ['pixi.js', '@rive-app/webgl2-advanced']) code = code.replaceAll(JSON.stringify(name), JSON.stringify(import.meta.resolve(name)));
+  for (const name of ['pixi.js']) code = code.replaceAll(JSON.stringify(name), JSON.stringify(import.meta.resolve(name)));
   const {PixiIsland} = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));
   const remote = await createDuck({outfit: {}, seed: 31}), local = await createDuck({outfit: {}, seed: 32});
   const sleeper = await createDuck({sleep: {pose: 'wing', flip: false}, seed: 33});

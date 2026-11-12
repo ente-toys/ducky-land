@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import {render} from './render.mjs';
 const out='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/bellovo-check/scale';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const art=read('public/pixi-art/themes/cathedral/art.json'),D='rive/web/themes/cathedral/';
+const art=read('public/pixi-art/themes/cathedral/art.json'),D='assets/world/themes/cathedral/';
 const context={world:read(D+'world.json'),walk:read(D+'walk-world.json'),harbor:read(D+'harbor.json')};
 fs.mkdirSync(out,{recursive:true});
 fs.writeFileSync(out+'/after-centre.png',await render(art,{x:1150,y:450,k:.3,width:1750,height:1350,...context}));

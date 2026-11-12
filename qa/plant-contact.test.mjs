@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {Container, Sprite, Texture} from 'pixi.js';
 import {createPlantContacts, plantKind, plantBlocker, foliageColour, PLANT_COOLDOWN, LEAF_CAP} from '../src/pixi/plant-contact.js';
 import {createPlantReactions} from '../src/pixi/plant-reactions.js';
-import {geometry} from '../rive/web/island-geometry.mjs';
+import {geometry} from '../assets/world/island-geometry.mjs';
 import {walkStep} from '../src/pixi/player-motion.js';
 import {createNavigation} from '../src/pixi/navigation.js';
 

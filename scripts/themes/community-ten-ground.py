@@ -1,7 +1,7 @@
 """Ten-community: deterministic lawn/paving craft pass, no shared writes."""
 from pathlib import Path
 import json,math,random,xml.etree.ElementTree as E
-ROOT=Path(__file__).resolve().parents[2];D=ROOT/'rive/web/themes/community';A=ROOT/'public/pixi-art/themes/community';S=D/'ten-source'
+ROOT=Path(__file__).resolve().parents[2];D=ROOT/'assets/world/themes/community';A=ROOT/'public/pixi-art/themes/community';S=D/'ten-source'
 E.register_namespace('', 'http://www.w3.org/2000/svg');ns='{http://www.w3.org/2000/svg}'
 a=json.loads((S/'art.json').read_text());w=json.loads((S/'world.json').read_text());walk=json.loads((S/'walk-world.json').read_text());root=E.fromstring((S/'ground.svg').read_text())
 def el(tag,**attrs):return E.Element(ns+tag,{k.replace('_','-'):str(v) for k,v in attrs.items()})

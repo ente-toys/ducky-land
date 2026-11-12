@@ -4,7 +4,7 @@ import {render} from './render.mjs';
 export const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/round3/bellovo';
 fs.mkdirSync(OUT,{recursive:true});
 const read=p=>JSON.parse(fs.readFileSync(p));
-const art=read('public/pixi-art/themes/cathedral/art.json'),world=read('rive/web/themes/cathedral/world.json'),walk=read('rive/web/themes/cathedral/walk-world.json'),harbor=read('rive/web/themes/cathedral/harbor.json');
+const art=read('public/pixi-art/themes/cathedral/art.json'),world=read('assets/world/themes/cathedral/world.json'),walk=read('assets/world/themes/cathedral/walk-world.json'),harbor=read('assets/world/themes/cathedral/harbor.json');
 for(const p of art.props.filter(p=>p.shadow===true&&p.shadowSize)){
  const [rx,ry]=p.shadowSize,[dx,dy]=p.shadowOffset??[0,0];art.flats.push({src:'villages/plant-shadow.svg',x:p.x+dx-rx,y:p.y+dy-ry,width:rx*2,height:ry*2,topLeft:true});
 }

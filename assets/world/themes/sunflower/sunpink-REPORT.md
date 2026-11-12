@@ -28,13 +28,13 @@ Completed locally on 6 November 2026. No commit, push, publish, credits, dist ch
 
 ## Files
 
-- `rive/web/themes/{sunflower,pink}/{world,walk-world,harbor}.json`
+- `assets/world/themes/{sunflower,pink}/{world,walk-world,harbor}.json`
 - `public/pixi-art/themes/{sunflower,pink}/art.json`
 - `public/pixi-art/themes/{sunflower,pink}/preview.png`, refreshed globe previews
 - `public/pixi-art/themes/{sunflower,pink}/sunpink-centre-review.png`, reviewed offline centre renders
 - `public/pixi-art/themes/{sunflower,pink}/sunpink-centre-walk.png`, collision overlays
 - `public/pixi-art/themes/pink/sunpink-bridge-{1,2}.png`, reviewed bridge crops
-- `rive/web/themes/{sunflower,pink}/sunpink-validation.json`
+- `assets/world/themes/{sunflower,pink}/sunpink-validation.json`
 - `scripts/themes/sunflower-centres.mjs`, idempotent placement pass, accepts `sunflower` or `pink`, defaults to both
 - `scripts/themes/sunflower-review.mjs`, offline rendering and navigation validation
 - `scripts/themes/{sunflower,pink}-build.py`, run their own theme's placement pass after rebuilding

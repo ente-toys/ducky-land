@@ -7,8 +7,8 @@ import {roadCoverage,clusterMetrics} from './dense-metrics.mjs';
 import {roadArt} from './roads.mjs';
 import {lanes,roadWidths} from './design.mjs';
 import {communities,houses} from './communities.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(readFileSync(p)),art=read(A+'art.json'),world=read('rive/web/themes/sunflower/world.json'),old=read('scripts/bigger-sunflower/baseline/art.json'),original=read('scripts/bigger-sunflower/baseline/world.json');
+import {inPoly} from '../../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(readFileSync(p)),art=read(A+'art.json'),world=read('assets/world/themes/sunflower/world.json'),old=read('scripts/bigger-sunflower/baseline/art.json'),original=read('scripts/bigger-sunflower/baseline/world.json');
 const dir=OUT+'/sunflower-dense-crops';mkdirSync(dir,{recursive:true});
 const before=read('scripts/bigger-sunflower/dense-baseline/metrics.json');
 const expected=read('scripts/bigger-sunflower/dense-baseline/preservation.json');
@@ -16,7 +16,7 @@ const hash=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
 // Homes and frontage lanes are the authorized edits; community identities,
 // greens, spawn points and workplaces, plus every original zone, stay fixed.
 const zones=Object.fromEntries(Object.entries(world.zones).map(([id,v])=>[id,Object.fromEntries(Object.entries(v).filter(([k])=>!['homes','lane'].includes(k)))]));
-const preserved={water:world.water,bridges:world.bridges,decks:art.decks,coast:world.coast,origin:world.origin,zones,harbor:read('rive/web/themes/sunflower/harbor.json')};
+const preserved={water:world.water,bridges:world.bridges,decks:art.decks,coast:world.coast,origin:world.origin,zones,harbor:read('assets/world/themes/sunflower/harbor.json')};
 for(const[key,value]of Object.entries(preserved))assert.equal(hash(value),expected[key],key+' unchanged from fix pass');
 const roads=await roadCoverage(roadArt(lanes,communities,houses),world);
 assert.ok(roads.roadPercent<25,'roads occupy less than one quarter of new dry land');

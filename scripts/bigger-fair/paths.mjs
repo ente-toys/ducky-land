@@ -7,7 +7,7 @@ import {sleeperFootprint} from '../../src/pixi/sleep-spots.js';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {applyFairWater} from './water.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const P=([x,y])=>[3570+(x-768)*4.3,2220+(y-520)*3.8];
 export function fairRoutes(art,world){

@@ -6,7 +6,7 @@ const page=await browser.newPage({viewport:{width:1600,height:1100},deviceScaleF
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 try{
  for(const view of ['island','centre']){
-  await page.goto('http://127.0.0.1:5266/rive/web/themes/neon/preview.html?view='+view);
+  await page.goto('http://127.0.0.1:5266/assets/world/themes/neon/preview.html?view='+view);
   await page.waitForFunction(()=>window.__neonReady,null,{timeout:90000});
   const state=await page.evaluate(()=>window.__neonReady);
   if(state.crowd!==100||state.sleepers!==40)throw Error(JSON.stringify(state));

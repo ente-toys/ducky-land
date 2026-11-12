@@ -350,7 +350,7 @@ theme pink: falling back to the home island Cannot read properties of undefined 
 ✔ local travel authority reloads when an imported walking map changes, without restarting the fixture (158.762709ms)
 ✔ Pixi art rejects new rasters, with frozen legacy exceptions in exactly two active theme folders (8154.132583ms)
 ✔ every globe preview and fallback is a bounded, self-contained vector matching its manifest (49.5725ms)
-✔ rive/web/walk-world.json matches a fresh build from the current placements and sleepers (8002.704459ms)
+✔ assets/world/walk-world.json matches a fresh build from the current placements and sleepers (8002.704459ms)
 ✔ keyboard walking glides along curved coast at shallow angles instead of stopping dead (178.086708ms)
 ✔ keyboard walking glides around pond and lake edges and stops on a square hit without creeping (76.081083ms)
 ✔ walking into prop footprints from every direction never tunnels or leaves walkable ground (67.338208ms)

@@ -6,7 +6,7 @@ import sites from '../src/pixi/home-kites.json' with {type:'json'};
 import routes from '../src/pixi/home-routes.json' with {type:'json'};
 import paths from '../src/pixi/paths.json' with {type:'json'};
 import {HOME_MAP} from '../src/pixi/island-maps.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 const segmentDistance=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);};
 test('13 non-blocking Home kites have clear lawn stakes and reachable walking approaches',()=>{
  assert.equal(sites.length,13);assert.equal(new Set(sites.map(s=>s.colour)).size,6);

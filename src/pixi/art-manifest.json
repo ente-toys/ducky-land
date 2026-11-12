@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "source": "rive/island.rml",
+  "source": "assets/island-source/island.rml",
   "overrides": {
     "Prop 34": "assets/library-building.svg"
   },
   "sourceSha256": "bea57803c6180dc6fcb0fc6c452deeed6bc39e2e012fb6e8945ef77c5f310c96",
-  "worldSource": "rive/web/world.json",
+  "worldSource": "assets/world/world.json",
   "worldSha256": "2733884c372152e78bbe2309491568c7278e4b89b9ca490640e743f902eab749",
   "exporter": "scripts/extract-pixi-art.py",
   "world": {
@@ -3687,6 +3687,6 @@
   },
   "text": {
     "method": "SVG text with embedded original Gilroy Black TrueType font",
-    "fontSource": "rive/fonts/Gilroy-Black.ttf"
+    "fontSource": "assets/island-source/fonts/Gilroy-Black.ttf"
   }
 }

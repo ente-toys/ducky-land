@@ -1,7 +1,7 @@
 // Geometry shared by terrain generation, navigation and the junction regression.
 import {Path2D,PathOp,StrokeCap,StrokeJoin} from '@napi-rs/canvas';
 import {lakeOutline} from './lake.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const SHORE_WIDTH=24, LIP_WIDTH=12;
 const round=n=>Math.round(n*100)/100;
 const point=p=>p.map(round);

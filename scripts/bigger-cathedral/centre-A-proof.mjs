@@ -6,7 +6,7 @@ import {Container} from 'pixi.js';
 import {createCanvas} from '@napi-rs/canvas';
 import {createFountainWater} from '../../src/pixi/fountain.js';
 import {render} from './render.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',read=p=>JSON.parse(fs.readFileSync(p));
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',read=p=>JSON.parse(fs.readFileSync(p));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 const p=art.props.find(p=>p.id==='centre-A-fountain'),parent=new Container(),fx=createFountainWater(p,parent,null,p.fountainWater);
 fx.update(7,false,true);

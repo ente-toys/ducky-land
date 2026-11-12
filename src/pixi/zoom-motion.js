@@ -1,4 +1,4 @@
-import {easeCamera} from '../../rive/web/island-camera.mjs';
+import {easeCamera} from '../../assets/world/island-camera.mjs';
 
 // A critically damped spring in log scale gives equal perceived speed in both
 // directions. Translation follows inverse scale so the cursor anchor stays fixed.

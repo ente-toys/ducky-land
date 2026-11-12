@@ -5,7 +5,7 @@
 import {execFileSync} from 'node:child_process';
 import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
 const BASE = '96f36ed5';
-const A = 'public/pixi-art/themes/pink/', D = 'rive/web/themes/pink/', OUT = A + 'expansion/shore/';
+const A = 'public/pixi-art/themes/pink/', D = 'assets/world/themes/pink/', OUT = A + 'expansion/shore/';
 const git = p => execFileSync('git', ['show', `${BASE}:${p}`], {encoding: 'utf8', maxBuffer: 1 << 28});
 const P = JSON.parse(readFileSync('scripts/pink-fix/shore.json', 'utf8'));
 const r1 = v => Math.round(v * 10) / 10;

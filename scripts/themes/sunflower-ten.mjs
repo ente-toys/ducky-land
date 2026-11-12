@@ -3,11 +3,11 @@
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 const WORK=fileURLToPath(new URL('../../../concepts/themes/work/sunflower/',import.meta.url));
-const A='public/pixi-art/themes/sunflower/',D='rive/web/themes/sunflower/';
+const A='public/pixi-art/themes/sunflower/',D='assets/world/themes/sunflower/';
 const read=p=>JSON.parse(readFileSync(p,'utf8')),save=(p,v)=>writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 const art=read(WORK+'baseline/art.json'),world=read(WORK+'baseline/world.json'),walk=read(WORK+'baseline/walk-world.json');
 const harbor=read(D+'harbor.json'),sizes=sleepHalfWidths();

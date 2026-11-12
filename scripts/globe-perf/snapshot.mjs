@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {build} from 'esbuild';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {mapOf} from '../../src/pixi/island-maps.js';
 const root=process.cwd();
 const bundle=await build({entryPoints:[root+'/src/pixi/placements.js'],bundle:true,platform:'node',format:'esm',write:false});

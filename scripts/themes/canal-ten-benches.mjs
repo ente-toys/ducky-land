@@ -1,7 +1,7 @@
 // Home's exact slatted arc construction, drawn in Canal's own ring coordinates.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/canal/',D='rive/web/themes/canal/';
+const A='public/pixi-art/themes/canal/',D='assets/world/themes/canal/';
 const read=p=>JSON.parse(readFileSync(p,'utf8'));
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 const old=art.props.filter(p=>/^integrated-centre-bench-/.test(p.id));

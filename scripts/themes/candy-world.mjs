@@ -2,16 +2,16 @@
 // (concepts/themes/concepts/04-candy.png) in one pass, following concepts/themes/THEME-CONTRACT.md. Same build as
 // scripts/themes/library-world.mjs (its helpers and checks), with the candy's own coast, places and props:
 //   public/pixi-art/themes/candy/  ground.svg, ground-rN-cN.svg tiles, deck SVGs, reuse/ (home props copied in), art.json
-//   rive/web/themes/candy/         world.json, walk-world.json, harbor.json, placements.json, paths.json
+//   assets/world/themes/candy/         world.json, walk-world.json, harbor.json, placements.json, paths.json
 // The layout is written in CONCEPT pixels (1536x1024 picture) and mapped to world units by T().
 // Run:  node scripts/themes/candy-world.mjs   (then node scripts/themes/candy-preview.mjs)
 // Boss 6 Nov: BIG and spacious (land ~1.8x home), wide paths, a big round centre plaza (zones.centre) whose landmark is a
 // The base pass reserves stable prop ids; candy-centre and candy-finish install locked Candy 5, 40 sleepers and clear activity areas
 // (activity-N) and open stall rows (stalls-N) left empty for later.
 import {readFileSync, writeFileSync, mkdirSync, copyFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 
-const ART = 'public/pixi-art/themes/candy/', DATA = 'rive/web/themes/candy/';
+const ART = 'public/pixi-art/themes/candy/', DATA = 'assets/world/themes/candy/';
 mkdirSync(ART + 'reuse', {recursive: true}); mkdirSync(DATA, {recursive: true});
 const W = 7250, HH = 4850, S = 4.5, OX = 420, OY = 420;
 const r1 = v => Math.round(v * 10) / 10;

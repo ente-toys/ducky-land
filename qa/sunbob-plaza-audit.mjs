@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {createCanvas,Path2D} from '@napi-rs/canvas';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 
 const base=new URL('../public/pixi-art/themes/sunflower/bloom/',import.meta.url);
 const centre=JSON.parse(readFileSync(new URL('centre-placements.json',base)));

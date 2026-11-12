@@ -1,5 +1,5 @@
-import fs from 'node:fs';import crypto from 'node:crypto';import {mapFor}from '../../src/pixi/island-maps.js';import{inShape,inPoly}from '../../rive/web/island-geometry.mjs';
-const r=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/',A='public/pixi-art/themes/community/',D='rive/web/themes/community/';
+import fs from 'node:fs';import crypto from 'node:crypto';import {mapFor}from '../../src/pixi/island-maps.js';import{inShape,inPoly}from '../../assets/world/island-geometry.mjs';
+const r=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/',A='public/pixi-art/themes/community/',D='assets/world/themes/community/';
 const old=r(S+'baseline/world.json'),before=r(S+'baseline/art.json'),world=r(D+'world.json'),art=r(A+'art.json'),plan=r(S+'plan.json'),m=mapFor('community'),n=m.nav();
 const dry=(w,x,y)=>inPoly(x,y,w.coast)&&!w.water.some(o=>inShape(x,y,o)),wet=(w,x,y)=>!inPoly(x,y,w.coast)||w.water.some(o=>inShape(x,y,o));
 const expandedBefore={...old,coast:plan.coast,water:[...old.water,...plan.markerBasins]};

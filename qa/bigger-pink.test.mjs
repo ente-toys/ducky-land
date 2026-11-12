@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {mapFor} from '../src/pixi/island-maps.js';
-import {inPoly,inShape,geometry} from '../rive/web/island-geometry.mjs';
+import {inPoly,inShape,geometry} from '../assets/world/island-geometry.mjs';
 import {auditPink} from '../scripts/pink-final/audit.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
 const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url)));

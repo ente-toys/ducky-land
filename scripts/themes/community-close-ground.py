@@ -7,7 +7,7 @@ import json, math, random, xml.etree.ElementTree as E
 
 R = Path(__file__).resolve().parents[2]
 A = R / 'public/pixi-art/themes/community'
-D = R / 'rive/web/themes/community'
+D = R / 'assets/world/themes/community'
 S = R.parent / 'concepts/themes/work/community/close-source'
 N = '{http://www.w3.org/2000/svg}'
 E.register_namespace('', N[1:-1])

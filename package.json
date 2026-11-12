@@ -15,7 +15,6 @@
     "globe:check": "node scripts/globe-svg/check.mjs"
   },
   "dependencies": {
-    "@rive-app/webgl2-advanced": "^2.46.0",
     "pixi.js": "^8.22.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

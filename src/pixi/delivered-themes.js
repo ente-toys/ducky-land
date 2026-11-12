@@ -1,4 +1,4 @@
-import themes from '../../rive/web/themes/index.js';
+import themes from '../../assets/world/themes/index.js';
 import bog from './bog-environment.json' with {type:'json'};
 
 // Keep the saved Bog identity and polar anchor. All clients, navigation and

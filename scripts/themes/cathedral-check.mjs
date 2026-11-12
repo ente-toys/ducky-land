@@ -6,7 +6,7 @@ import {readFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 
 const read = p => JSON.parse(readFileSync(new URL(`../../${p}`, import.meta.url), 'utf8'));
-const world = read('rive/web/themes/cathedral/world.json'), walk = read('rive/web/themes/cathedral/walk-world.json'), harbor = read('rive/web/themes/cathedral/harbor.json');
+const world = read('assets/world/themes/cathedral/world.json'), walk = read('assets/world/themes/cathedral/walk-world.json'), harbor = read('assets/world/themes/cathedral/harbor.json');
 const map = makeMap('cathedral', {world, walk, harbor, art: '/pixi-art/themes/cathedral/art.json'});
 const nav = map.nav(), G = 20, W = Math.ceil(world.width / G), H = Math.ceil(world.height / G);
 const ok = new Uint8Array(W * H), seen = new Uint8Array(W * H);

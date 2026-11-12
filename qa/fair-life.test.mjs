@@ -5,7 +5,7 @@ import {createServer} from 'vite';
 import {mapFor,mapOf} from '../src/pixi/island-maps.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
 import {layout,original,read,A,D,clearance,segmentDistance,sample} from '../scripts/fair-life/apply.mjs';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 test('Fair runtime and server registry resolve 90 residents, retaining the exact original forty',()=>{

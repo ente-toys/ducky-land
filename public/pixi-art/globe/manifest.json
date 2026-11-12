@@ -10,6 +10,26 @@
           "sha256": "dea7f1a4aabf586420741a87a0974c61bb40fe3ba7330ac48899bc24b15b4c24"
         },
         {
+          "path": "assets/world/home-extra-props.json",
+          "sha256": "6cadb0c600d692e31b038c23a7fefe09d9eecf94db619549d1f212d876506500"
+        },
+        {
+          "path": "assets/world/home-sleep-extra.json",
+          "sha256": "0d01d79e694967df4abf64e0be6505b4adb9c0e70788ddad48e11ed9ddc54a4b"
+        },
+        {
+          "path": "assets/world/home-sleep-more.json",
+          "sha256": "09bd3803361978897e16d757600e90511912b2307362bfac56b121b6270db477"
+        },
+        {
+          "path": "assets/world/home-sleep-outer.json",
+          "sha256": "441cde3bbce7c3c3d9b9f8995726aaafda612078e99269630c8df5f3a2ecd312"
+        },
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
+        {
           "path": "public/pixi-art/decals/edge-stone-1.svg",
           "sha256": "cd77601e719dc72e46506065665d1410445341dca5c6c7741c43d5e012a491fe"
         },
@@ -1038,36 +1058,16 @@
           "sha256": "4535f5ff2c9968361b82db7b0910f2c30d79360c1674ba6a59b891bab5f26d4a"
         },
         {
-          "path": "rive/web/home-extra-props.json",
-          "sha256": "6cadb0c600d692e31b038c23a7fefe09d9eecf94db619549d1f212d876506500"
-        },
-        {
-          "path": "rive/web/home-sleep-extra.json",
-          "sha256": "0d01d79e694967df4abf64e0be6505b4adb9c0e70788ddad48e11ed9ddc54a4b"
-        },
-        {
-          "path": "rive/web/home-sleep-more.json",
-          "sha256": "09bd3803361978897e16d757600e90511912b2307362bfac56b121b6270db477"
-        },
-        {
-          "path": "rive/web/home-sleep-outer.json",
-          "sha256": "441cde3bbce7c3c3d9b9f8995726aaafda612078e99269630c8df5f3a2ecd312"
-        },
-        {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -1083,7 +1083,7 @@
         },
         {
           "path": "src/pixi/art-manifest.json",
-          "sha256": "51c4584a2ce94f9066f7f0fa8924d99ea64d1ab5664b6458a55e899fc4dff793"
+          "sha256": "97cb855490b2a1e917f374e5463813d3ee18d8b29e74235e3242e094976a5f60"
         },
         {
           "path": "src/pixi/bridge-projection.mjs",
@@ -1103,7 +1103,7 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/layout.json",
@@ -1115,7 +1115,7 @@
         },
         {
           "path": "src/pixi/placements.js",
-          "sha256": "b2e680ff2debc49d01a7869a0dbda3fe45d632aee3818cb8558d3fe4f8f44180"
+          "sha256": "08ab049ff03c0cd12b0c190cbfb27a266bf3d79e493dfe9eb7ab64de6b1d1849"
         },
         {
           "path": "src/pixi/plaza-benches.js",
@@ -1135,10 +1135,10 @@
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "cd490af49099383855c63e0c0262fdd560ec0eb55816fa72ad9041d28e949d3a"
+      "sha256": "5d81d85b7eda1bc7baa5bb16764d22708a39958d40675b3a05bc06f7b600ce23"
     },
     "groundSha256": "0a48b9d96e8f766362276d1d3a892fc659e5e4362d023ae78ffd4638cc80d465",
     "src": "/pixi-art/globe/home.svg",
@@ -1165,6 +1165,10 @@
       "theme": "sunflower",
       "modelSha256": "70f579341e96f2b8b1283268940edb91d6daec91d54e91a53bf9f33393dafb49",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/home-review/hill/bench.svg",
           "sha256": "affb6c62d37390febe209cbc71225f15356718e969822a4d2da73e5afa9d4f3a"
@@ -2830,20 +2834,16 @@
           "sha256": "bc660b6d4b11f53d6bfcc46293476fa14331f15181a6cd8d34784bff1cdc4b1b"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -2859,14 +2859,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "2532d9eb25a05c84a3b8880cb2a0079ee85f88e892b1ab0798456de3a39e65a9"
+      "sha256": "52ebfa65a929337991716479d11454e7ff1d498e8a3a6f046bac1adedede3429"
     },
     "groundSha256": "93fc36f9e96743bbb13cca5daa13f81f4640d965f1355529d28bbe8ae3c2cc49",
     "src": "/pixi-art/globe/sunflower.svg",
@@ -2893,6 +2893,10 @@
       "theme": "pink",
       "modelSha256": "e8e41f558f9af395faa9a3466e194415b798af25ff5b4178944eb00c5e93bab6",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/decals/flower-dot-1.svg",
           "sha256": "4dac1bb24f7133880425bcff106d2de1c7cc3c17e71d406e54f8132dbe9d46b9"
@@ -5646,20 +5650,16 @@
           "sha256": "0455a1d370ba8eaf8fc3c6b14d0e75588061aa618f4d0734e07ee91751bbe373"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -5675,14 +5675,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "e60d6cceb3eb093a1205cdb08297ac34ace6e2c14682f5c32ec89690832d08b1"
+      "sha256": "a69aead249fae4fdcb7f0f638190c97c926b6f8be0384879f8ee3f6ee566c438"
     },
     "groundSha256": "4a2bfe012c25cde81a98819c586f7730ce716f938aa26be92c03181cb0b11678",
     "src": "/pixi-art/globe/pink.svg",
@@ -5709,6 +5709,10 @@
       "theme": "library",
       "modelSha256": "f6e57ab3e19432d2a020f81156932f4bb06e75565ffdef9b931c4026ca3fe599",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/home-review/hill/bench.svg",
           "sha256": "affb6c62d37390febe209cbc71225f15356718e969822a4d2da73e5afa9d4f3a"
@@ -8170,20 +8174,16 @@
           "sha256": "3f1a037777418ee7d56a25b60a6dfdd56f5b13fd409754a2894a82a3b4cc1ed4"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -8199,14 +8199,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "e0d3413d5f5780221da643c6ed35a19af138bea73ccaa6cc85fc18708b8aeb31"
+      "sha256": "62ffba0952c4ef0c06d00f884f0dabefc6ecf305b46e017dfc3a9a066247b8cf"
     },
     "groundSha256": "7fac6cb3bdcbdc99fabed879ab19ed8aa749f985f09520d41b103d8efaea7d34",
     "src": "/pixi-art/globe/library.svg",
@@ -8233,6 +8233,10 @@
       "theme": "community",
       "modelSha256": "53edf7d1baaa6731a1de23f67e73a5f1927567330cc0d5f5e552f6ef84d04dde",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/decals/flower-dot-1.svg",
           "sha256": "4dac1bb24f7133880425bcff106d2de1c7cc3c17e71d406e54f8132dbe9d46b9"
@@ -9198,20 +9202,16 @@
           "sha256": "760f2ce53bd06dba85955bac251aa5d6262c9ea51139b23edbf9d4e996aa4e31"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -9227,14 +9227,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "d9b1c9d8659ee64c289ab49e79e4213f883c1d8f1185d2e61accbfb74798848b"
+      "sha256": "21f4becba9390363e003038adb5198ce189e38f226b9b891941e2515a82c8bcf"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
@@ -9261,6 +9261,10 @@
       "theme": "fair",
       "modelSha256": "3bd373e49bb38acafa565c525182b13f287d951f5a4eb10cc58dd0e204a2e748",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/detail/street--bench-wood-back.svg",
           "sha256": "91fd4f60cbc74a249dab48cd476930dea69efbfb281e47451bc01820ec59a755"
@@ -10086,20 +10090,16 @@
           "sha256": "1b30801c92d6dc4866171c9473517ebb5f942bb0e0ae4293806b37cbb833f988"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -10115,14 +10115,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "e1fc36999b2654004c1964c2ff8b94e67f66806bc846501a80d08f3761f0e203"
+      "sha256": "1e050bd65ea782f6e5bb32f4cff6e4969dbf6f2ee5a9c90d0a8ac7a17a2623b0"
     },
     "groundSha256": "03e87723df60706c2812cb54af7c84bb70fab81c46415075c2783b48e33783cd",
     "src": "/pixi-art/globe/fair.svg",
@@ -10149,6 +10149,10 @@
       "theme": "cathedral",
       "modelSha256": "fc6f3be52fc118c7f9d2da9b56fa06ac97b875d0e4b929d5e87d6afd60b8da9d",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/themes/cathedral/art.json",
           "sha256": "0d763fe8a4d1e493f9bb98bb69c144a51e0ada9782fd293a0acc3bbb7507c829"
@@ -11178,20 +11182,16 @@
           "sha256": "d7b2984bec17b0a5dadea9b87b747d344d8ae5503cfb90501ba4cb280775fd5a"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -11207,14 +11207,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "f3ca571b76bf7a14421dac7cba8e347e680ce57d0739fc3d1a34ebb8aaa78793"
+      "sha256": "7b9566e56b898f7ffb771a018f4f998dd0d8dd1b86175aec19999bc9f03ac065"
     },
     "groundSha256": "f642c9faba9f629eb003ca70f747f423a5ca56d1d78343b612ebb72cbc38c2e0",
     "src": "/pixi-art/globe/cathedral.svg",
@@ -11241,6 +11241,10 @@
       "theme": "bog",
       "modelSha256": "898e1f9518aa333f6712dae05f56fa5c869c3467bbfc2f01463b9bbb855f4d9e",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/themes/bog-arena/art.json",
           "sha256": "f6e0fe1f0aa096226f3a99a85104c089927e22086f61015d7d3521854a8f492e"
@@ -11674,20 +11678,16 @@
           "sha256": "d007ba55b15a951d02dadc65ba029fa438ff11b4c69aa2a37cc3861490210f17"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -11703,14 +11703,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "a2bae8d4423308cb821edeb27753fd62a9a21d88949ccad013c7ebc3ecc6a4ef"
+      "sha256": "362e5ad60d5f879157977bbd5caf74b750b4e7d1f499fcd91202a86ebcc74770"
     },
     "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
@@ -11737,6 +11737,10 @@
       "theme": "snow",
       "modelSha256": "29c6ccc4660519bf0aafaeb36a561b0108320c17712e96943dc5fc63c1b76133",
       "files": [
+        {
+          "path": "assets/world/island-geometry.mjs",
+          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
+        },
         {
           "path": "public/pixi-art/themes/snow/art.json",
           "sha256": "7b8802c409568cbeddb6ad099c3b2b022c50174992b8a411cd76132515cef5fd"
@@ -13306,20 +13310,16 @@
           "sha256": "81bb16f9ba942ec90760eaad6a78315555d992bcbfc835cff9cb7c3c541c6660"
         },
         {
-          "path": "rive/web/island-geometry.mjs",
-          "sha256": "a0a6d9551fca4667aa5cecb154a7ac482926ea4311a055d52fed30239d05e71a"
-        },
-        {
           "path": "scripts/bigger-library/model.mjs",
-          "sha256": "521c3c71d478fbef63957d08268eaa3864449c531e2a73d481a76d1644f653dd"
+          "sha256": "c54aaa9713b62120dc9fa5b1bdadff914de29cf699913d8ecc0fe714e1da1172"
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "951e65e7e43fdc64b99a42cd693f91090caaffdb8acd5d3da766d0b9dc3440c0"
+          "sha256": "9385abb8a73dad051ec4746f46627183364bbb38b070b2e2056b73f99ec839ee"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
-          "sha256": "06452322c7638a205e2f821519becb7e86f3d43d89da47a29ba29a3434605924"
+          "sha256": "281dc7121cd408e8f0218500dc7d42c848254f4f2142cef090334fec76563947"
         },
         {
           "path": "scripts/globe-svg/compile.mjs",
@@ -13335,14 +13335,14 @@
         },
         {
           "path": "src/pixi/island-maps.js",
-          "sha256": "c6e01fa08d8559922557a0f42b7930a0eb42a897212a5128263b33b89a1f230f"
+          "sha256": "76502b58936856c30c11475d81f558fa598b9788f06ff6d07ea49fd77bcb3cfc"
         },
         {
           "path": "src/pixi/world-map.js",
-          "sha256": "0840fe2daba41f3793bbade96d822b1d43c1950b36c5c0e5bd2cef9e6df36cb0"
+          "sha256": "c6a82bb8fd6bd4c2fc5f3c8848889f5878dc65045415b7d836ccedce30e54d29"
         }
       ],
-      "sha256": "4f173040db24bcc54aa9f23b10f0ae756b2054fb544c5831516dce738b5aa755"
+      "sha256": "95e21649390f0874749d27281df3f76c715ed266e99dc127f1aa32cdd3633cd6"
     },
     "groundSha256": "2fdaf51c505df0bc6703d582052b7ebf887085beafe964d8bbdf50495e6a2790",
     "src": "/pixi-art/globe/snow.svg",

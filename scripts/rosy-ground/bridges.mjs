@@ -1,7 +1,7 @@
 // Home endpoint fitting and transverse width, recoloured only for Rosybutton.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 const F='public/pixi-art/themes/pink/art.json',E=JSON.parse(readFileSync(F));
-const W=JSON.parse(readFileSync('rive/web/themes/pink/world.json'));
+const W=JSON.parse(readFileSync('assets/world/themes/pink/world.json'));
 const crossings=JSON.parse(readFileSync('scripts/rosy-ground/source-shore.json')).crossings;
 const arches=crossings.map(r=>({id:r.id,a:r.a,b:r.b,w:112}));W.arches=arches;
 const bridges=arches.map(r=>({...r,src:'expansion/shore/'+r.id+'.svg'}));
@@ -39,12 +39,12 @@ for(const r of arches){
 }
 W.bridges=rects;
 W.walkways=arches.map((r,i)=>({id:r.id??'retained-'+i,a:r.a,b:r.b,w:r.w,boatPassUnder:true}));
-const walk=JSON.parse(readFileSync('rive/web/themes/pink/walk-world.json'));
+const walk=JSON.parse(readFileSync('assets/world/themes/pink/walk-world.json'));
 Object.assign(walk,{bridges:rects,walkways:W.walkways,arches});
-writeFileSync('rive/web/themes/pink/walk-world.json',JSON.stringify(walk,null,1)+'\n');
+writeFileSync('assets/world/themes/pink/walk-world.json',JSON.stringify(walk,null,1)+'\n');
 const sizes=JSON.parse(readFileSync('src/pixi/art-source-sizes.json'));
 for(const d of E.decks)if(d.homeSource)sizes['/pixi-art/themes/pink/'+d.src]=[d.width,d.height];
 writeFileSync('src/pixi/art-source-sizes.json',JSON.stringify(sizes)+'\n');
 writeFileSync(F,JSON.stringify(E,null,1)+'\n');
-writeFileSync('rive/web/themes/pink/world.json',JSON.stringify(W,null,1)+'\n');
+writeFileSync('assets/world/themes/pink/world.json',JSON.stringify(W,null,1)+'\n');
 console.log('All',bridges.length,'crossings reuse Home art, without end sills.');

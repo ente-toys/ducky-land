@@ -62,7 +62,7 @@ Review URL: `http://127.0.0.1:5221/pixi-art/themes/library/review.html`. The pag
 - `scripts/themes/library-check.mjs`: readiness, routes, canal geometry, decks and sleepers checks.
 - `scripts/themes/library-preview.mjs`: static render using the real Ducky assets.
 - `scripts/themes/library-capture.mjs`: headless capture on port 5221.
-- `rive/web/themes/library/{world,walk-world,harbor,placements,paths}.json`.
+- `assets/world/themes/library/{world,walk-world,harbor,placements,paths}.json`.
 - `public/pixi-art/themes/library/{art,build-metrics,resolved-sleepers,library-check}.json`.
 - Library ground SVG and 24 tiles, three repositioned jetty SVGs, two canal bridge SVGs and two front rail SVGs.
 - `public/pixi-art/themes/library/review.html`, `preview.png`, `library-preview.png`, and `library-detail-{globe,bookstore,bridges}.png`.
@@ -71,6 +71,6 @@ Review URL: `http://127.0.0.1:5221/pixi-art/themes/library/review.html`. The pag
 ## Shared integration handoff
 
 - No `THEME_OF` change is needed: `isle-251` already uses `library`.
-- The integration owner should regenerate `rive/web/themes/index.js` with `node scripts/theme-index.mjs`, or let the existing watcher refresh it. This job deliberately did not write shared index.js. Until refreshed, its cached sleeper list may still contain the old positions.
+- The integration owner should regenerate `assets/world/themes/index.js` with `node scripts/theme-index.mjs`, or let the existing watcher refresh it. This job deliberately did not write shared index.js. Until refreshed, its cached sleeper list may still contain the old positions.
 - The shared count checker needs the already-requested 40-sleeper policy. It currently warns against the original 28-pose distribution but accepts and renders all 40.
 - The engine currently accepts one coast polygon. The two closed shore rings are encoded with a retraced zero-area seam underneath the upper bridge. Walking and sailing equivalence are tested. `coastRings` is also supplied for an eventual shared surf improvement: in `src/pixi/surf.js`, `shoreOf` can use `...(world.coastRings ?? [world.coast])` before the islet rings, to avoid treating that hidden seam as a shoreline. This optional rendering change was not made here.

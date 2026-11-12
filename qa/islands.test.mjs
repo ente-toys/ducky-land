@@ -8,8 +8,8 @@ import {createNavigation} from '../src/pixi/navigation.js';
 import {offsetOf} from '../src/pixi/world-map.js';
 import {originOffset} from '../src/pixi/islands.js';
 import {mapOf} from '../src/pixi/island-maps.js';
-import world from '../rive/web/world.json' with {type:'json'};
-import walkWorld from '../rive/web/walk-world.json' with {type:'json'};
+import world from '../assets/world/world.json' with {type:'json'};
+import walkWorld from '../assets/world/walk-world.json' with {type:'json'};
 
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',...HARBOR.water,turn:0,path:[],action:0});
@@ -193,7 +193,7 @@ test('docking off a beach sails in to the water beside the sand, and every appro
 
 test('a boat out in a neighbour\'s waters is drawn in that neighbour\'s copy, never under it', async () => {
   const {WORLD_ISLANDS,offsetOf} = await import('../src/pixi/world-map.js'), {copyHolding} = await import('../src/pixi/sphere-shores.js');
-  const world=(await import('../rive/web/world.json',{with:{type:'json'}})).default;
+  const world=(await import('../assets/world/world.json',{with:{type:'json'}})).default;
   const cx=mapOf('home').cx, cy=mapOf('home').cy;
   // the copies drawn round home, placed the way archipelago.js places them
   // boss 6 Nov: each copy carries its own map's size (a themed island is bigger), as archipelago.js places them

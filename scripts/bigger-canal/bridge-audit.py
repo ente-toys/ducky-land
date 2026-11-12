@@ -12,7 +12,7 @@ scope={}
 exec(source.split("origin={'x'")[0],scope)
 water,dry,coast=(scope[key] for key in ('water','dry','coast'))
 art=json.loads(Path('public/pixi-art/themes/canal/art.json').read_text())
-world=json.loads(Path('rive/web/themes/canal/world.json').read_text())
+world=json.loads(Path('assets/world/themes/canal/world.json').read_text())
 rows=[]
 specs=[
  ('West heart bridge','bridge-west.svg',[1860,3200],[2600,3200]),

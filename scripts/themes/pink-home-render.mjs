@@ -5,8 +5,8 @@ import {readFileSync,writeFileSync} from 'node:fs';
 const out='../concepts/themes/work/pink/';
 const vite=await createServer({server:{middlewareMode:true},appType:'custom',logLevel:'error'});
 try{
- const load=p=>vite.ssrLoadModule(p),P=await load('/src/pixi/placements.js'),{geometry}=await load('/rive/web/island-geometry.mjs');
- const w=P.trimWorld((await load('/rive/web/world.json')).default),a=(await load('/src/pixi/art-manifest.json')).default;
+ const load=p=>vite.ssrLoadModule(p),P=await load('/src/pixi/placements.js'),{geometry}=await load('/assets/world/island-geometry.mjs');
+ const w=P.trimWorld((await load('/assets/world/world.json')).default),a=(await load('/src/pixi/art-manifest.json')).default;
  const props=P.createPlacements(w,geometry({...w,obstacles:[]}).walkable);
  const decals=P.decalsFor(w,props,geometry({...w,obstacles:[]}).walkable);
  const art={...a,width:5800,height:4400,props,flats:[{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...decals],decks:[...P.JETTIES,{src:'/pixi-art/library-steps.svg',x:2780,y:1370,width:280,height:260}]};

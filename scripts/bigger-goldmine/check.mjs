@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {checkTheme} from '../theme-index.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 const read=p=>JSON.parse(readFileSync(p));
-const base='rive/web/themes/goldmine/',world=read(base+'world.json'),walk=read(base+'walk-world.json'),harbor=read(base+'harbor.json'),art=read('public/pixi-art/themes/goldmine/art.json');
+const base='assets/world/themes/goldmine/',world=read(base+'world.json'),walk=read(base+'walk-world.json'),harbor=read(base+'harbor.json'),art=read('public/pixi-art/themes/goldmine/art.json');
 const map=makeMap('goldmine',{world,walk,harbor}),nav=map.nav();
 const checks=[];const ck=(label,pass,data)=>checks.push({label,pass:!!pass,...(data?{data}:{})});
 const r=checkTheme('goldmine');ck('Theme ready, 40 original sleepers',r.ready,r.problems);

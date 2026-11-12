@@ -5,9 +5,9 @@ import sharp from 'sharp';
 import {homeArtwork} from '../scripts/globe-perf/snapshot.mjs';
 import {globePreviewUrl} from '../src/pixi/globe-preview.js';
 import {worldIsland} from '../src/pixi/world-map.js';
-import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../assets/world/island-geometry.mjs';
 const j=p=>JSON.parse(readFileSync(p));
-const w=j('rive/web/themes/snow/world.json'),a=j('public/pixi-art/themes/snow/art.json');
+const w=j('assets/world/themes/snow/world.json'),a=j('public/pixi-art/themes/snow/art.json');
 const home=homeArtwork();
 const byId=id=>a.props.find(p=>p.id===id);
 test('FIX1 buildings match measured Home facades and 3-4 standing Ducky heights',()=>{

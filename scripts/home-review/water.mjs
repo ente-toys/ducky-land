@@ -5,7 +5,7 @@ const lines=[{id:'lily-outflow',points:[[1640,2820],[1650,3050],[1640,3420]],wid
 const sample=p=>{const out=[];for(let i=0;i<p.length-1;i++){const a=p[i-1]??p[i],b=p[i],c=p[i+1],d=p[i+2]??c,n=Math.ceil(Math.hypot(c[0]-b[0],c[1]-b[1])/24);for(let j=0;j<n;j++){const t=j/n,u=1-t;out.push([0,1].map(k=>u**3*b[k]+3*u*u*t*(b[k]+(c[k]-a[k])/6)+3*u*t*t*(c[k]-(d[k]-b[k])/6)+t**3*c[k]));}}out.push(p.at(-1));return out;};
 for(const l of lines){const p=sample(l.points),L=[],R=[];for(let i=0;i<p.length;i++){const a=p[Math.max(0,i-1)],b=p[Math.min(p.length-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],n=Math.hypot(dx,dy);L.push([p[i][0]-dy/n*l.width/2,p[i][1]+dx/n*l.width/2]);R.push([p[i][0]+dy/n*l.width/2,p[i][1]-dx/n*l.width/2]);}const w={id:l.id,x:l.points[1][0],y:l.points[1][1],rx:1,ry:1,poly:[...L,...R.reverse()]};E.riverWater=E.riverWater.filter(w=>w.id!==l.id).concat(w);E.rivers=E.rivers.filter(r=>r.id!==l.id).concat(l);}
 // Retain Lily and race lake's actual colliders, open their shapes only to boats.
-const W=JSON.parse(readFileSync('rive/web/world.json'));const pond=W.water.find(w=>Math.abs(w.x-1640)<2);
+const W=JSON.parse(readFileSync('assets/world/world.json'));const pond=W.water.find(w=>Math.abs(w.x-1640)<2);
 const ellipse=w=>Array.from({length:80},(_,i)=>[w.x+Math.cos(i*Math.PI/40)*w.rx,w.y+Math.sin(i*Math.PI/40)*w.ry]);
 const lake=JSON.parse(readFileSync('src/pixi/walk-shapes.json')).lake;
 E.boatWater=[...E.riverWater.map(w=>w.poly),E.water.poly,pond.poly??ellipse(pond),lake];

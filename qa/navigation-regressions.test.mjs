@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {geometry, inPoly, inShape} from '../rive/web/island-geometry.mjs';
+import {geometry, inPoly, inShape} from '../assets/world/island-geometry.mjs';
 import {HOME_MAP, mapFor, readyThemes} from '../src/pixi/island-maps.js';
 
 const maps = () => [HOME_MAP, ...readyThemes().map(mapFor)];

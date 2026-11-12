@@ -1,7 +1,7 @@
 // Static proof assembled from production art, at its actual placement and scale.
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
-import READY from '../../rive/web/themes/index.js';
+import READY from '../../assets/world/themes/index.js';
 const out='../concepts/themes/world-map/bigger',base='public/pixi-art/themes/pink/';mkdirSync(out+'/pink-ground-crops',{recursive:true});
 export const read=p=>JSON.parse(readFileSync(p));
 export async function render(art,view,k,file,{labels=[],boats=[],sleepers=true}={}){
@@ -29,7 +29,7 @@ export async function render(art,view,k,file,{labels=[],boats=[],sleepers=true}=
 }
 if(process.argv[1]?.endsWith('render.mjs')){
  const original=process.argv.includes('--now');const art=read(original?'scripts/bigger-pink/original-art.json':base+'art.json');
- const harbor=read(original?'scripts/bigger-pink/original-harbor.json':'rive/web/themes/pink/harbor.json');
+ const harbor=read(original?'scripts/bigger-pink/original-harbor.json':'assets/world/themes/pink/harbor.json');
  await render(art,[-2600,-1900,13200,9800],.15,out+(original?'/pink-now.png':'/pink-built.png'),{boats:harbor.boats});
  if(!original){const plan=read('scripts/bigger-pink/layout.json');for(const p of plan.places.filter(p=>p.crop))await render(art,[p.x-750,p.y-675,1500,1125],.8,out+'/pink-ground-crops/'+p.id+'.png',{boats:harbor.boats});}
 }

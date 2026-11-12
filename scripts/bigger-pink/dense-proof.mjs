@@ -2,13 +2,13 @@ import {mkdirSync,writeFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import {render,read} from './render.mjs';
-import {inPoly,inShape,geometry} from '../../rive/web/island-geometry.mjs';
+import {inPoly,inShape,geometry} from '../../assets/world/island-geometry.mjs';
 import {mapFor} from '../../src/pixi/island-maps.js';
 
 const out='../concepts/themes/world-map/bigger',A='public/pixi-art/themes/pink/';
 mkdirSync(out+'/pink-dense-crops',{recursive:true});
 const art=read(A+'art.json'),layout=read('scripts/bigger-pink/layout.json');
-const before=read('scripts/bigger-pink/dense-before-layout.json'),boats=read('rive/web/themes/pink/harbor.json').boats;
+const before=read('scripts/bigger-pink/dense-before-layout.json'),boats=read('assets/world/themes/pink/harbor.json').boats;
 await render(art,[-2600,-1900,13200,9800],.15,out+'/pink-dense.png',{boats});
 for(const [name,view] of Object.entries({
  ribbonwick:[-1100,-650,3600,2700],melody:[4700,-850,3400,2550],

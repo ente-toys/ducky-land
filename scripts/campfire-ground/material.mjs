@@ -22,7 +22,7 @@ function closedCurve(points){
  return d+'Z';
 }
 export async function composeGround(source){
- const art=read(A+'art.json'),world=read('rive/web/themes/community/world.json'),placement=read('scripts/campfire-hamlets/placement.json');
+ const art=read(A+'art.json'),world=read('assets/world/themes/community/world.json'),placement=read('scripts/campfire-hamlets/placement.json');
  const widths=routeWidths(world,placement),parser=new DOMParser(),serializer=new XMLSerializer(),doc=parser.parseFromString(source,'image/svg+xml'),root=doc.documentElement;
  const node=(tag,attrs={})=>{const n=doc.createElement(tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));return n;};
  const paint=(parent,d,attrs)=>{const n=node('path',{d,...attrs});parent.appendChild(n);return n;};

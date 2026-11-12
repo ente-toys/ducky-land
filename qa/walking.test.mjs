@@ -7,7 +7,7 @@ import {createNavigation} from '../src/pixi/navigation.js';
 import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
 
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
-const world = {...read('../rive/web/world.json'), ...read('../rive/web/walk-world.json')};
+const world = {...read('../assets/world/world.json'), ...read('../assets/world/walk-world.json')};
 const nav = createNavigation(world);
 const ZERO = {x:0, y:0}, DIRS = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]], TICKS = [1/60, .05];
 // the first spot (50 px scan) with open ground 240 px all round, so ease and spacing checks are not bent by a wall

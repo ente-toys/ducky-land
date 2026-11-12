@@ -10,7 +10,7 @@ from shapely.affinity import scale as scale_geom
 
 ROOT = Path(__file__).resolve().parents[2]
 ART = ROOT / 'public/pixi-art/themes/goldmine'
-DATA = ROOT / 'rive/web/themes/goldmine'
+DATA = ROOT / 'assets/world/themes/goldmine'
 WIDTH, HEIGHT = 8000, 6000
 for p in [ART, DATA, ART/'reuse', ART/'detail']: p.mkdir(parents=True, exist_ok=True)
 rnd = random.Random(109)

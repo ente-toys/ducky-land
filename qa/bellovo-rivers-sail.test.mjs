@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {mapFor} from '../src/pixi/island-maps.js';
 import {canSail,setSailDestination,sailStep} from '../src/pixi/islands.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 const g=JSON.parse(fs.readFileSync('scripts/bigger-cathedral/water-geometry.json')),id='isle-176',map=mapFor('cathedral');
 function sail(a,p){assert.ok(setSailDestination(a,...p),'route '+p);for(let i=0;i<20000&&(a.sailTarget||a.sailRoute?.length);i++){sailStep(a,.05,{x:0,y:0});assert.ok(canSail(a.x,a.y,id),'afloat');}assert.ok(Math.hypot(a.x-p[0],a.y-p[1])<2,'arrives '+p);}
 test('Bellovo boats sail from the sea and port through both mouths, the full ring and pond',()=>{

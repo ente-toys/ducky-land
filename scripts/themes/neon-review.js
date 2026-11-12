@@ -5,7 +5,7 @@ const theme=new URLSearchParams(location.search).get('theme')||'neon';
 if(theme==='neon'){
  const load=p=>fetch(p).then(r=>r.json());
  const [world,walk,harbor,sleepers]=await Promise.all([
-  ...['world','walk-world','harbor'].map(n=>load('/rive/web/themes/neon/'+n+'.json')),
+  ...['world','walk-world','harbor'].map(n=>load('/assets/world/themes/neon/'+n+'.json')),
   load('/pixi-art/themes/neon/resolved-sleepers.json')]);
  registerMap('neon',{world,walk,harbor,sleepers,art:'/pixi-art/themes/neon/art.json',sea:'#6EC9DE'});
 }

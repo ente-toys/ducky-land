@@ -1,7 +1,7 @@
 // Home's five authored neighbourhoods. Coordinates use the original B drawing frame.
 // Repeated shapes describe construction and surface texture, never scattered buildings.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
-import {inPoly} from '../../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../../assets/world/island-geometry.mjs';
 import {finishProps,finishGround} from '../review-fix/fix.mjs';
 import {tightenPlan,villageRoads,sharedGardens,gardenGround} from '../dense/compose.mjs';
 const read=p=>JSON.parse(readFileSync(p));

@@ -11,7 +11,7 @@ islet=[P(p) for p in layout['polygons']['islet']]
 line=[[4270,900],[4320,775],[4390,625],[4460,480],[4525.7,358.85]]
 channel=LineString(line).buffer(94,quad_segs=12)
 wet=unary_union([Polygon(lagoon),channel])
-world=json.load(open('rive/web/themes/fair/world.json'))
+world=json.load(open('assets/world/themes/fair/world.json'))
 ring=unary_union([Polygon(w['poly']) for w in world['water'] if w.get('id','').startswith('heart-canal-')])
 banks=wet.boundary.difference(ring.buffer(2))
 banklines=[list(g.coords) for g in getattr(banks,'geoms',[banks])]

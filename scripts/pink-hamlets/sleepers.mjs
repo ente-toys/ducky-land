@@ -1,5 +1,5 @@
 import {readFileSync,writeFileSync} from 'node:fs';
-const file='rive/web/themes/index.js',report=JSON.parse(readFileSync('scripts/pink-hamlets/report.json'));
+const file='assets/world/themes/index.js',report=JSON.parse(readFileSync('scripts/pink-hamlets/report.json'));
 let src=readFileSync(file,'utf8');
 const line=src.split('\n').find(l=>l.startsWith('  pink:'));
 const beds=JSON.parse(line.match(/sleepers: (\[.*\])/)[1]);

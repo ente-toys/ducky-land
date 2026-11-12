@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import {water,crossings,oldDeckBridges} from './fix-geometry.mjs';
 import {read,write} from './design.mjs';
-const S='scripts/bigger-fair/',A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const S='scripts/bigger-fair/',A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const plan=read(S+'design.json'),art=read(S+'proposed-art.json'),world=read(S+'original-world.json'),walk=read(S+'original-walk-world.json'),placements=read(S+'original-placements.json');
 const originalWorld=structuredClone(world);
 const obstacles=[];

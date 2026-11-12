@@ -1,10 +1,10 @@
 // Close-up floor and rim pass. Only Pink inputs and outputs are written.
 // Uses the saved close-round-0 inputs so rerunning never accumulates details.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const A='public/pixi-art/themes/pink/', D='rive/web/themes/pink/', R='../concepts/themes/work/pink/';
+const A='public/pixi-art/themes/pink/', D='assets/world/themes/pink/', R='../concepts/themes/work/pink/';
 const read=p=>JSON.parse(readFileSync(p,'utf8')),save=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
 const art=read(R+'close-base-art.json'),world=read(R+'close-base-world.json'),walk=read(R+'close-base-walk.json');
 const ink='#39472D',cream='#FFF0C7',rose='#F5A3C7',joint='#AF9069',round=n=>Math.round(n*100)/100;

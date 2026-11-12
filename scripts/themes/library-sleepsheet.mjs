@@ -1,7 +1,7 @@
 // Contact sheet of all 40 library beds. K must match the source preview render.
 import sharp from 'sharp'; import {readFileSync} from 'node:fs';
 const [,, inp, out] = process.argv, K = +(process.env.K||.3);
-const w = JSON.parse(readFileSync('rive/web/themes/library/world.json', 'utf8')), art = JSON.parse(readFileSync('public/pixi-art/themes/library/art.json', 'utf8'));
+const w = JSON.parse(readFileSync('assets/world/themes/library/world.json', 'utf8')), art = JSON.parse(readFileSync('public/pixi-art/themes/library/art.json', 'utf8'));
 const meta = await sharp(inp).metadata(), cells = [];
 for (const [pose, list] of Object.entries(w.sleepSpots)) for (const s of list) {
   const t = pose === 'nod' ? art.props.find(p => p.id === s[0]) : null, x = t ? t.x : s[0], y = t ? t.y + 14 : s[1];

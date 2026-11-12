@@ -4,7 +4,7 @@ import {worldIsland} from '/src/pixi/world-map.js';
 const load=p=>fetch(p).then(r=>r.json());
 const theme=new URLSearchParams(location.search).get('theme')||'peaks';
 if(theme==='peaks'){
- const [world,walk,harbor,sleepers]=await Promise.all(['world','walk-world','harbor','sleepers-resolved'].map(n=>load('/rive/web/themes/peaks/'+n+'.json')));
+ const [world,walk,harbor,sleepers]=await Promise.all(['world','walk-world','harbor','sleepers-resolved'].map(n=>load('/assets/world/themes/peaks/'+n+'.json')));
  registerMap('peaks',{world,walk,harbor,sleepers,art:'/pixi-art/themes/peaks/art.json',sea:'#6EC9DE'});
  THEME_OF.set('isle-170','peaks');
  Object.assign(worldIsland('isle-170'),{theme:'peaks',name:'Mossnap Peaks',width:8000,height:5800});

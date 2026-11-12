@@ -4,8 +4,8 @@
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
 const WORK='../concepts/themes/work/neon/';mkdirSync(WORK,{recursive:true});
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const ART = 'public/pixi-art/themes/neon/', DATA = 'rive/web/themes/neon/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const ART = 'public/pixi-art/themes/neon/', DATA = 'assets/world/themes/neon/';
 const art = JSON.parse(readFileSync(ART + 'art.json', 'utf8')), harbor = JSON.parse(readFileSync(DATA + 'harbor.json', 'utf8'));
 const walk = JSON.parse(readFileSync(DATA + 'walk-world.json', 'utf8'));
 const K = +(process.env.K || .3), WALK = process.argv.includes('--walk');

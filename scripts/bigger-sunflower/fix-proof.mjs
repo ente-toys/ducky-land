@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import {render,OUT,A} from './render.mjs';
 import {waterways} from './water.mjs';
 import {mapFor} from '../../src/pixi/island-maps.js';
-import {inShape,inPoly} from '../../rive/web/island-geometry.mjs';
+import {inShape,inPoly} from '../../assets/world/island-geometry.mjs';
 const art=JSON.parse(readFileSync(A+'art.json')),proof=JSON.parse(readFileSync(OUT+'/sunflower-work/proof.json'));
 const dir=OUT+'/sunflower-fixed-crops';mkdirSync(dir,{recursive:true});
 await render(art,OUT+'/sunflower-fixed.png',{x:-2400,y:-1680,k:.13,w:1664,h:1165});

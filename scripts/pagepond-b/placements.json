@@ -18826,9 +18826,9 @@
     "head": "99bf8735095c9767bdc5a49152361ffb5cc06aac",
     "inputsSha256": {
       "public/pixi-art/themes/library/art.json": "177766669407fcf5abfbe9a1285d51a1502b20349076ee43e3d80c5cf6acfa5d",
-      "rive/web/themes/library/world.json": "0b301b748a5fc44ba1d357fc7b6f5ec047a53b566d2ed5d43d8c6a526a6529e5",
-      "rive/web/themes/library/walk-world.json": "4e54b3f4391d819bf3ebd987ae09529b91259a0796acc0ba732b4c823ff2c2fb",
-      "rive/web/themes/library/harbor.json": "d55876ab8e310618cdf83638f29ddd055ae0f62662c633a8b7e60c5700d0b0a0",
+      "assets/world/themes/library/world.json": "0b301b748a5fc44ba1d357fc7b6f5ec047a53b566d2ed5d43d8c6a526a6529e5",
+      "assets/world/themes/library/walk-world.json": "4e54b3f4391d819bf3ebd987ae09529b91259a0796acc0ba732b4c823ff2c2fb",
+      "assets/world/themes/library/harbor.json": "d55876ab8e310618cdf83638f29ddd055ae0f62662c633a8b7e60c5700d0b0a0",
       "scripts/pagepond/layout.json": "96dc85e66e4b493b5d23c8bcac24c6159020799e8417dd0282fd34b6a8857a1d",
       "src/pixi/sleep-spots.js": "17450d8a4c3fb96e9759de7049e087c6f778cc9f61b56e2dc6770cb71ac3fdcc",
       "src/pixi/theme-art.js": "7385c214b29c5147e05d9c7ba86b4ade0dea7712ae35cd4740ec5cb333f27448"

@@ -8,7 +8,7 @@ import {rotateGlobeFromScreen} from '../src/pixi/three-globe-math.js';
 import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
 import {ISLETS} from '../src/pixi/islets.js';
 import {mapOf} from '../src/pixi/island-maps.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 
 const sampler = () => {
   let seed = 7;

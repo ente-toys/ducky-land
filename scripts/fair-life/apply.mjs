@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {checkTheme} from '../theme-index.mjs';
 import {fitContact} from '../bigger-fair/furniture.mjs';
-import {geometry, inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry, inShape} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {sleepHalfWidths, sleeperFootprint} from '../../src/pixi/sleep-spots.js';
 
@@ -14,7 +14,7 @@ export const read = p => JSON.parse(fs.readFileSync(p));
 const save = (p,v) => fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');
 export const layout = read('scripts/fair-life/layout.json');
 export const original = read('qa/fixtures/fair-original-forty-sleepers.json');
-export const A='public/pixi-art/themes/fair/', D='rive/web/themes/fair/';
+export const A='public/pixi-art/themes/fair/', D='assets/world/themes/fair/';
 export function segmentDistance(x,y,a,b) {
  const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));
  return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);
@@ -106,7 +106,7 @@ export function apply() {
  for(const s of report.sleepers.filter(s=>!original.beds.some(b=>b.x===s.x&&b.y===s.y&&b.pose===s.pose)))assert(clear(s.x,s.y,s.pose,s.tree),`bad footprint ${JSON.stringify(s)}`);
  save(D+'sleepers-resolved.json',report.sleepers);
  // Update ONLY Fair's registry line, leaving the other four workers' themes.
- const file='rive/web/themes/index.js',src=fs.readFileSync(file,'utf8'),line=src.split('\n').find(l=>l.startsWith('  fair:'));
+ const file='assets/world/themes/index.js',src=fs.readFileSync(file,'utf8'),line=src.split('\n').find(l=>l.startsWith('  fair:'));
  assert(line,'Fair missing from actual registry');
  fs.writeFileSync(file,src.replace(line,line.replace(/sleepers: \[.*\]/,'sleepers: '+JSON.stringify(report.sleepers))));
  console.log(`Fair life: ${art.kites.length} Home kites, Home hill, picnic, ${report.sleepers.length} resolved residents; 40 retained.`);

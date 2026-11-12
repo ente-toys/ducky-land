@@ -3,7 +3,7 @@ import {render} from '../pagepond/render.mjs';
 import {sites} from './design.mjs';
 import {checkTheme} from '../theme-index.mjs';
 const out=process.env.PAGEPOND_RENDER_OUT??'../concepts/themes/work/pagepond-check/final';
-const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/library/art.json')),harbor=JSON.parse(fs.readFileSync('rive/web/themes/library/harbor.json'));
+const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/library/art.json')),harbor=JSON.parse(fs.readFileSync('assets/world/themes/library/harbor.json'));
 const checked=checkTheme('library');
 fs.mkdirSync(out,{recursive:true});
 await render(art,[-3000,-2200,14000,10400],.25,out+'/whole.png',{beds:checked.sleepers,boats:harbor.boats});

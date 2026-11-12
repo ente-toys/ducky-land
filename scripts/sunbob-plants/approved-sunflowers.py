@@ -8,7 +8,7 @@ src=re.sub(r'height="322" viewBox="0 0 514 322"', 'height="178" viewBox="0 0 514
 src=src.replace('Sunflower island: planter','Sunbob approved original planter blossoms')
 (A/'detail/approved-sunflowers.svg').write_text(src)
 replacements={'detail/field-row-short.svg':(180,180*178/514),'detail/field-flower.svg':(100,100*178/514)}
-for file in [A/'art.json',Path('rive/web/themes/sunflower/world.json'),Path('rive/web/themes/sunflower/walk-world.json')]:
+for file in [A/'art.json',Path('assets/world/themes/sunflower/world.json'),Path('assets/world/themes/sunflower/walk-world.json')]:
  d=json.loads(file.read_text()); kept=[]; boxes=[]; count=0
  for p in d.get('props',[]):
   old=p['src'];outer=p.get('id','').startswith('sunbob-outer-') and old.endswith('/sunflower-three.svg')

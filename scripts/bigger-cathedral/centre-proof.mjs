@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import {render} from './render.mjs';
 const OUT=process.argv[2]??'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/bellovo-check/inner';
-const read=p=>JSON.parse(fs.readFileSync(p)),art=read('public/pixi-art/themes/cathedral/art.json'),D='rive/web/themes/cathedral/';
+const read=p=>JSON.parse(fs.readFileSync(p)),art=read('public/pixi-art/themes/cathedral/art.json'),D='assets/world/themes/cathedral/';
 fs.mkdirSync(OUT,{recursive:true});
 const camera={x:1150,y:450,k:.3,width:1750,height:1350};
 fs.writeFileSync(OUT+'/centre.png',await render(art,camera));

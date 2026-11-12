@@ -12,7 +12,7 @@ function swap(p) {
   const approved = sizes[file] ? file : file === 'bush-5' ? 'bush-2' : file === 'bush-6' ? 'bush-3' : Object.keys(sizes).filter(k => k.startsWith(kind)).sort((a,b) => Math.abs(Math.log((sizes[a][0]/sizes[a][1])/(p.width/p.height))) - Math.abs(Math.log((sizes[b][0]/sizes[b][1])/(p.width/p.height))))[0];
   return {...p, src:`/pixi-art/plants/${approved}.svg`};
 }
-for (const file of ['public/pixi-art/themes/sunflower/art.json','rive/web/themes/sunflower/world.json','rive/web/themes/sunflower/walk-world.json']) {
+for (const file of ['public/pixi-art/themes/sunflower/art.json','assets/world/themes/sunflower/world.json','assets/world/themes/sunflower/walk-world.json']) {
   const doc = read(file), before = structuredClone(doc);
   if (!doc.props) continue;
   doc.props = doc.props.map(swap);

@@ -10,7 +10,7 @@ import {ISLETS,ISLET_META,ISLET_ART} from '../src/pixi/islets.js';
 import {placeIslet,isletPlacement} from '../src/pixi/islet-placement.js';
 import {isletWalk} from '../src/pixi/islet-walk.js';
 import {navOf} from '../src/pixi/islands.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 import {svgContext,svgLayerContexts,svgLayerDocuments} from '../src/pixi/svg-context.js';
 import {createIsletView} from '../src/pixi/islet-view.js';
 const source=art=>readFileSync(new URL(`../public/pixi-art/islets/${art}.svg`,import.meta.url),'utf8');

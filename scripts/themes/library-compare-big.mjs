@@ -3,7 +3,7 @@
 import sharp from 'sharp'; import {readFileSync} from 'node:fs';
 const [,, h9, l9, h5, l5, out] = process.argv;
 const area = p => Math.abs(p.reduce((s, a, i) => {const b = p[(i + 1) % p.length]; return s + a[0] * b[1] - b[0] * a[1];}, 0) / 2);
-const home = JSON.parse(readFileSync('rive/web/world.json', 'utf8')), lib = JSON.parse(readFileSync('rive/web/themes/library/world.json', 'utf8'));
+const home = JSON.parse(readFileSync('assets/world/world.json', 'utf8')), lib = JSON.parse(readFileSync('assets/world/themes/library/world.json', 'utf8'));
 const CW = 1400, CH = 900, k = .17;
 const label = (t, w) => sharp(Buffer.from(`<svg width="${w}" height="60"><rect width="${w}" height="60" fill="#fff"/><text x="16" y="40" font-size="30" font-family="Arial" font-weight="bold" fill="#222">${t}</text></svg>`)).png().toBuffer();
 const coast = (w, title, col) => {

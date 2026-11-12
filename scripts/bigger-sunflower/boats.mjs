@@ -11,11 +11,11 @@
 //    the bridges' walk rectangles, walkways with boatPassUnder and arches. Land walking data is unchanged.
 import {readFileSync, writeFileSync, readdirSync, existsSync} from 'node:fs';
 import {coast} from './design.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 import {crossingCollision, waterways} from './water.mjs';
 import {BRIDGES, KEPT_ARCHES, MOUTHS} from './boats-data.mjs';
 
-const A = 'public/pixi-art/themes/sunflower/', D = 'rive/web/themes/sunflower/';
+const A = 'public/pixi-art/themes/sunflower/', D = 'assets/world/themes/sunflower/';
 const read = p => JSON.parse(readFileSync(p)), save = (p, x) => writeFileSync(p, JSON.stringify(x, null, 1) + '\n');
 const r3 = v => Math.round(v * 1000) / 1000, r2 = v => Math.round(v * 100) / 100;
 const art = read(A + 'art.json'), world = read(D + 'world.json'), walk = read(D + 'walk-world.json');

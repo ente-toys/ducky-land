@@ -3,7 +3,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {render} from './render.mjs';
 import {original,out} from './design.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const art=JSON.parse(readFileSync('public/pixi-art/themes/bog/art.json')),k=.25,opts={x:0,y:0,w:8000,h:6000,k};
 const a=await render(original.art,out+'/bog-original-interior.png',opts),b=await render(art,out+'/bog-built-interior.png',opts);
 const aa=await sharp(a).ensureAlpha().raw().toBuffer(),bb=await sharp(b).ensureAlpha().raw().toBuffer();let checked=0,changed=0,maxDelta=0,examples=[];

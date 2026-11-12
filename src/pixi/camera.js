@@ -1,5 +1,5 @@
 // The camera remains in the original artwork's world coordinates.
-export {fitZoom, zoomAt, easeCamera, clamp} from '../../rive/web/island-camera.mjs';
+export {fitZoom, zoomAt, easeCamera, clamp} from '../../assets/world/island-camera.mjs';
 
 // Boss 3 Nov, Cursor Camp look: the ground is seen at a tilt, so screen y is world y squashed by TILT.
 // Trees, stalls and Duckies stay upright (engine.js counter-scales them); only the ground plane foreshortens.

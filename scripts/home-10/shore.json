@@ -42,7 +42,7 @@
   },
 
   "walkWorld": {
-    "why": "rive/web/walk-world.json (the room server's walking map) carries the old jetty deck and the old coast; swap in the new jetty deck (JETTY.walkway of the new jetty) and the same coast.",
+    "why": "assets/world/walk-world.json (the room server's walking map) carries the old jetty deck and the old coast; swap in the new jetty deck (JETTY.walkway of the new jetty) and the same coast.",
     "oldJettyWalkway": {"a": [5470, 1711], "b": [5991, 1876], "w": 104},
     "newJettyWalkway": {"a": [4094, 5585], "b": [4099, 5868], "w": 262}
   },

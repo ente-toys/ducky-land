@@ -72,13 +72,13 @@ def base(theme, name, paths, spawn):
     return dict(width=8000,height=6000,theme=theme,name=name,coast=coast,water=[],bridges=[],obstacles=[],islets=[],walkways=[],paths=paths,zones={'plaza':{'x':spawn[0],'y':spawn[1],'spawn':spawn}},ambient={'birds':[[1700,1700],[6200,1600],[1800,3900],[6100,4100],[3500,1400],[5000,4600]],'butterflies':[[1600,3300],[6100,3600]]})
 def finish(theme,w,a,spawn):
     w['props']=a['props']
-    save(f'rive/web/themes/{theme}/world.json',w)
-    save(f'rive/web/themes/{theme}/walk-world.json',w)
-    save(f'rive/web/themes/{theme}/harbor.json',{'jetty':{'foot':[4000,5120],'tip':[4000,5650],'width':120},'spawn':spawn})
+    save(f'assets/world/themes/{theme}/world.json',w)
+    save(f'assets/world/themes/{theme}/walk-world.json',w)
+    save(f'assets/world/themes/{theme}/harbor.json',{'jetty':{'foot':[4000,5120],'tip':[4000,5650],'width':120},'spawn':spawn})
     save(f'public/pixi-art/themes/{theme}/art.json',a)
     save(f'public/pixi-art/themes/{theme}/centre/centre.json',{'pieces':[]})
 
-b='build-b-evil'; t='bog';old=read(b,f'public/pixi-art/themes/{t}/art.json');oldw=read(b,f'rive/web/themes/{t}/world.json')
+b='build-b-evil'; t='bog';old=read(b,f'public/pixi-art/themes/{t}/art.json');oldw=read(b,f'assets/world/themes/{t}/world.json')
 paths=[[[4000,5150],[4000,4150],[4000,3650]],[[1500,3200],[2600,3650],[4000,4150],[6000,4400]],[[1800,2100],[3000,1800],[4000,1850],[6000,2300]]]
 w=base(t,'Booquack Bog',paths,[4000,4200]);a=dict(width=8000,height=6000,sea='#6EC9DE',ground=ground(t,False,paths),props=[],flats=[],decks=[])
 for p in old['props']:

@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {archBridge,BRIDGE_SILLS} from '../scripts/bigger-fair/arch.mjs';
-import {geometry,inShape} from '../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const world=read('rive/web/themes/fair/world.json'),art=read('public/pixi-art/themes/fair/art.json');
+const world=read('assets/world/themes/fair/world.json'),art=read('public/pixi-art/themes/fair/art.json');
 test('all 12 Fair decks are unsheared Home Honeywood arches, with matching endpoints and crown',()=>{
  assert.equal(world.walkways.length,12);assert.equal(art.decks.length,12);
  for(const bridge of world.walkways){

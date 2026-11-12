@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import E from '../src/pixi/home-expansion.json' with {type:'json'};
 import {HOME_MAP} from '../src/pixi/island-maps.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {canSail} from '../src/pixi/islands.js';
 const at=([x,y])=>[(x-278)/.18,(y-204)/.18];
 const wet=p=>HOME_MAP.walk.water.some(w=>inShape(...p,w));

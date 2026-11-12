@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {makeMap} from '../src/pixi/island-maps.js';
 import {CLUMPS} from '../scripts/bigger-cathedral/green-data.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',B='scripts/bigger-cathedral/green-source/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',B='scripts/bigger-cathedral/green-source/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),old=read(B+'world.json'),before=read(B+'art.json'),harbor=read(D+'harbor.json');
 const map=makeMap('cathedral',{world,walk,harbor});
 test('Bellovo green retains the coast, islets and dry residents after the approved centre and population replacement',()=>{

@@ -1,9 +1,9 @@
 // Final screen-space check: a valid tree bed must also be visible below surrounding crowns.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
-const A='public/pixi-art/themes/snow/',D='rive/web/themes/snow/',j=p=>JSON.parse(readFileSync(p)),out=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
+const A='public/pixi-art/themes/snow/',D='assets/world/themes/snow/',j=p=>JSON.parse(readFileSync(p)),out=(p,o)=>writeFileSync(p,JSON.stringify(o,null,1)+'\n');
 const art=j(A+'art.json'),world=j(D+'world.json'),walk=j(D+'walk-world.json'),harbor=j(D+'harbor.json'),props=j(D+'placements.json');
 // Seven lower crowns were hiding neighbouring residents. Keep their planted banks, with low snow shrubs.
 for(const id of ['snow-113','snow-76','snow-90','snow-91','snow-100','snow-102','snow-78']){

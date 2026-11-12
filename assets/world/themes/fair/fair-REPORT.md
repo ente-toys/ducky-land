@@ -36,14 +36,14 @@ Removed the placeholder, six decorations/stalls occupying reserved stall rows, a
 - public/pixi-art/themes/fair/art.json: all centre layers placed on the island.
 - public/pixi-art/themes/fair/fair-preview.png, preview.png: full-island render with 100 standing Duckies plus the 40 sleepers, and globe preview.
 - public/pixi-art/themes/fair/fair-metrics.json, fair-validation.json: measurements and check results.
-- rive/web/themes/fair/: updated world.json, walk-world.json, harbor.json, placements.json, paths.json, sleepers-resolved.json.
+- assets/world/themes/fair/: updated world.json, walk-world.json, harbor.json, placements.json, paths.json, sleepers-resolved.json.
 - scripts/themes/fair-world.mjs: retained original builder, now ends by running fair-centre, fair-finish and fair-check so rebuilding cannot restore the placeholder.
 - scripts/themes/fair-centre.mjs, fair-finish.mjs, fair-check.mjs, fair-centre-preview.mjs, fair-preview.mjs: reproducible final build and checks.
 - scripts/themes/fair-review.js, fair-capture.mjs, fair-register-check.mjs and public/pixi-art/themes/fair/review.html: isolated engine review and registration without shared-file edits.
 
 ## Exact shared integration still needed
 
-1. Add `fair` to THEME_IDS in src/pixi/island-maps.js. Run `node scripts/theme-index.mjs` to regenerate rive/web/themes/index.js. Do not hand-edit that generated file.
+1. Add `fair` to THEME_IDS in src/pixi/island-maps.js. Run `node scripts/theme-index.mjs` to regenerate assets/world/themes/index.js. Do not hand-edit that generated file.
 2. Assign an agreed island to fair in src/pixi/world-map.js before `for (const island of out) Object.assign(island, sizeOf(island.theme));`. The review uses isle-170 only in memory. Equivalent permanent assignment, if isle-170 remains free:
 
 ```js
@@ -95,4 +95,4 @@ I opened and inspected the full-island render and centre render. These are Sharp
 
 The team-feed log attempt was blocked at ~/.claude/team/feed.md by the filesystem sandbox. Copying the report to concepts/themes/codex-builds/fair-REPORT.md was also rejected with Operation not permitted. This fair-local report is the saved fallback.
 
-Suggested feed line: GPT completed fair-only art/data at public/pixi-art/themes/fair and rive/web/themes/fair: locked teapot ring plus pouring-water module, 40 sleepers, 1.83x home, READY fair. Integration needs registry assignment and water hook from fair-REPORT.md; port 5214 and Chromium QA blocked by sandbox. Local only.
+Suggested feed line: GPT completed fair-only art/data at public/pixi-art/themes/fair and assets/world/themes/fair: locked teapot ring plus pouring-water module, 40 sleepers, 1.83x home, READY fair. Integration needs registry assignment and water hook from fair-REPORT.md; port 5214 and Chromium QA blocked by sandbox. Local only.

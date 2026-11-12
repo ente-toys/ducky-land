@@ -3,7 +3,7 @@ import {sphereFrame, logMap} from './sphere.js';
 // Pure placement data shared by the live client, room worker and tests.
 // Coordinates here are 'map' coordinates; each island plays in its own local coordinates, and
 // offsetOf(a, b) turns one island's local coordinates into the other's.
-import world from '../../rive/web/world.json' with {type: 'json'};
+import world from '../../assets/world/world.json' with {type: 'json'};
 import READY from './delivered-themes.js';
 
 const W = 5800, H = 4400; // stable world layout, independent of Home's expanding bounds

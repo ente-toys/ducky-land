@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import WebSocket from 'ws';
 import {setTimeout as delay} from 'node:timers/promises';
-import {geometry} from '../rive/web/island-geometry.mjs';
-import {createIslandBrain,CROWD_ACTION} from '../rive/web/crowd.js';
+import {geometry} from '../assets/world/island-geometry.mjs';
+import {createIslandBrain,CROWD_ACTION} from '../assets/world/crowd.js';
 import {world} from '../server-world.mjs';
-import {sample} from '../rive/web/interpolation.js';
+import {sample} from '../assets/world/interpolation.js';
 
 async function client(name,city=0){const socket=new WebSocket(`ws://127.0.0.1:${Number(process.env.DUCKY_WS_PORT)||8810}/room?name=${name}&city=${city}&cap=8&shades=1&acc=7&shoes=2`,{origin:'http://127.0.0.1:8800'}),messages=[];let welcome;
  socket.on('message',bytes=>{const m=JSON.parse(bytes);messages.push(m);if(m.type==='welcome')welcome=m;});

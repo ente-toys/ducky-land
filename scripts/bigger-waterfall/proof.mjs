@@ -1,4 +1,4 @@
-import sharp from 'sharp';import fs from 'node:fs';import {render}from './render.mjs';import {inPoly}from '../../rive/web/island-geometry.mjs';
+import sharp from 'sharp';import fs from 'node:fs';import {render}from './render.mjs';import {inPoly}from '../../assets/world/island-geometry.mjs';
 const OUT='../concepts/themes/world-map/bigger',plan=JSON.parse(fs.readFileSync('scripts/bigger-waterfall/plan.json')),old=JSON.parse(fs.readFileSync('scripts/bigger-waterfall/original/world.json'));
 fs.mkdirSync(OUT+'/waterfall-proof',{recursive:true});
 const summary=[];

@@ -4,8 +4,8 @@
 // Writes working previews only to ../concepts/themes/work/cathedral/.
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const ART = 'public/pixi-art/themes/cathedral/', DATA = 'rive/web/themes/cathedral/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const ART = 'public/pixi-art/themes/cathedral/', DATA = 'assets/world/themes/cathedral/';
 const art = JSON.parse(readFileSync(ART + 'art.json', 'utf8')), harbor = JSON.parse(readFileSync(DATA + 'harbor.json', 'utf8'));
 const walk = JSON.parse(readFileSync(DATA + 'walk-world.json', 'utf8'));
 const K = +(process.env.K || .3), WALK = process.argv.includes('--walk');

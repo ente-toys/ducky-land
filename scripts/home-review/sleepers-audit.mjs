@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 import {HOME_SLEEP_TOTAL,sleeperFootprint} from '../../src/pixi/sleep-spots.js';
 const out=process.env.HOME_REVIEW_OUT||'/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/home-review/sleepers';
 const read=f=>JSON.parse(fs.readFileSync(f));
@@ -18,7 +18,7 @@ const seg=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((
 const margins=added.map(b=>Math.min(...routes.map(r=>Math.min(...r.samples.slice(1).map((p,i)=>seg(b.x,b.y,r.samples[i],p)))-r.width/2)));
 assert.ok(margins.every(m=>m>60),'all new sleepers clear the painted path edges');
 assert.equal(walk.overlaps,0);assert.equal(walk.deadEnds,0);assert.ok(walk.destinations.every(d=>d.reached));
-const server=read('rive/web/walk-world.json');
+const server=read('assets/world/walk-world.json');
 assert.equal(server.obstacles.filter(o=>o.sleeper).length,HOME_SLEEP_TOTAL);
 for(const b of now.sleepers)assert.ok(server.obstacles.some(o=>JSON.stringify(o)===JSON.stringify(sleeperFootprint(b))),'server footprint exists');
 const report={total:HOME_SLEEP_TOTAL,added:40,originalResidentsUnchanged:40,originalAnimationOrderUnchanged:true,approvedPoseCounts:Object.fromEntries(Object.entries(Object.groupBy(added,b=>b.pose)).map(([p,s])=>[p,s.length])),propsUnchanged:now.props.length,polishFilesVerified:Object.keys(hashes).length-allowed.size,serverSleeperFootprints:80,newSleepersOnAuthoredRoutes:0,minimumNewPathEdgeMargin:Math.min(...margins),walk:{samples:walk.sampledRoutePoints,overlaps:walk.overlaps,deadEnds:walk.deadEnds,destinations:walk.destinations.length},contactShadows:'All eighty use the existing sleeper rig shadow; static renders reproduce each flattened pose shadow.'};

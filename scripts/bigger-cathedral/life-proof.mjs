@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import {render} from './render.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const out='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/bellovo-review/fix/life/';
 const read=p=>JSON.parse(fs.readFileSync(p)),before=process.argv.includes('--before');
 const source=before?'scripts/bigger-cathedral/life-source/':null;

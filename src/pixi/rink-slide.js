@@ -1,5 +1,5 @@
 import {createNavigation} from './navigation.js';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 // Ice and dry jetty use the exact authored lake boundary on every peer.
 export function onRink(rink, x, y) {
   return !!rink && x>=rink.x-2 && y>=rink.y-2 && x<=rink.x+rink.width+2 && y<=rink.y+rink.height+2 &&

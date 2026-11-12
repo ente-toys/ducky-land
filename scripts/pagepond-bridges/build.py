@@ -9,7 +9,7 @@ sys.path.insert(0, '/private/tmp/ducky-community-python')
 from shapely.geometry import Point, Polygon, LineString, box
 from shapely.ops import unary_union, nearest_points
 from shapely import affinity
-S=Path('scripts/pagepond-bridges'); A=Path('public/pixi-art/themes/library'); D=Path('rive/web/themes/library')
+S=Path('scripts/pagepond-bridges'); A=Path('public/pixi-art/themes/library'); D=Path('assets/world/themes/library')
 read=lambda p:json.loads(Path(p).read_text())
 def save(p,v):Path(p).write_text(json.dumps(v,separators=(',',':'))+'\n')
 def path(d):

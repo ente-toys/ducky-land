@@ -5,7 +5,7 @@ import {makeMap} from '../../src/pixi/island-maps.js';
 import {waterPoint,waterFrame,createFairWater} from '../../src/pixi/centre-motion/fair.js';
 import {Graphics,Container,Texture} from 'pixi.js';
 import {loadThemeArt} from '../../src/pixi/theme-art.js';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/',json=p=>JSON.parse(readFileSync(p,'utf8'));
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/',json=p=>JSON.parse(readFileSync(p,'utf8'));
 const art=json(A+'art.json'),world=json(D+'world.json'),walk=json(D+'walk-world.json'),harbor=json(D+'harbor.json'),centre=json(A+'centre/centre.json');
 const r=checkTheme('fair');assert(r.ready,r.problems.join('\n'));assert.equal(r.sleepers.length,40);assert(!r.sleepNotes.some(s=>s.includes('dropped')));
 const map=makeMap('fair',{world,walk,harbor,sleepers:r.sleepers}),nav=map.nav();

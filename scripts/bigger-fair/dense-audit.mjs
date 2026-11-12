@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import assert from 'node:assert/strict';
 import {read,write} from './design.mjs';
 import {pathD} from './fix-geometry.mjs';
-const S='scripts/bigger-fair/',world=read('rive/web/themes/fair/world.json'),old=read(S+'original-world.json');
+const S='scripts/bigger-fair/',world=read('assets/world/themes/fair/world.json'),old=read(S+'original-world.json');
 const sample=process.argv[2]||'after',file=process.argv[3]||'public/pixi-art/themes/fair/bigger/ground-0-0.svg';
 const source=fs.readFileSync(file,'utf8');
 const shapes=[...source.matchAll(/<path d="([^"]+)" fill="#F3DF98" stroke="none"\/>/g)].map(m=>m[1]);

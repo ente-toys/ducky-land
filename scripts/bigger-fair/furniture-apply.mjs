@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {BENCH_COURTS,placeBench,fitContact} from './furniture.mjs';
 import {FIT} from './centre-data.mjs';
 import {applyFairBenches} from './benches.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
 const read=f=>JSON.parse(fs.readFileSync(f)),save=(f,v)=>fs.writeFileSync(f,JSON.stringify(v,null,1)+'\n');
 const art=read(A+'art.json'),layout=read('scripts/bigger-fair/centre-source/layout.json');
 const inline=f=>fs.readFileSync(f,'utf8').replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');

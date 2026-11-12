@@ -5,12 +5,12 @@ import sharp from 'sharp';
 import {createServer} from 'vite';
 import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {geometry} from '../../rive/web/island-geometry.mjs';
+import {geometry} from '../../assets/world/island-geometry.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 const WORK=fileURLToPath(new URL('../../../concepts/themes/work/sunflower/',import.meta.url));
 const round=process.argv[2]||'final',OUT=WORK+round;mkdirSync(OUT,{recursive:true});
-const read=p=>JSON.parse(readFileSync(p,'utf8')),A='public/pixi-art/themes/sunflower/',D='rive/web/themes/sunflower/';
+const read=p=>JSON.parse(readFileSync(p,'utf8')),A='public/pixi-art/themes/sunflower/',D='assets/world/themes/sunflower/';
 let art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
 if(round==='before'){art=read(WORK+'baseline/art.json');world=read(WORK+'baseline/world.json');walk=read(WORK+'baseline/walk-world.json');}
 const harbor=read(D+'harbor.json'),base=makeMap('sunflower',{world,walk,harbor,sleepers:[]}).baseWalk;
@@ -25,7 +25,7 @@ theme.props.push(...await sleepers(beds));
 const vite=await createServer({server:{middlewareMode:true},appType:'custom',logLevel:'error'});
 let home;
 try{
- const P=await vite.ssrLoadModule('/src/pixi/placements.js'),W=P.trimWorld((await vite.ssrLoadModule('/rive/web/world.json')).default);
+ const P=await vite.ssrLoadModule('/src/pixi/placements.js'),W=P.trimWorld((await vite.ssrLoadModule('/assets/world/world.json')).default);
  const props=P.createPlacements(W,geometry({...W,obstacles:[]}).walkable),local=P.walkWorld(W,props),B=P.sleepSpots(local,props,geometry(local).walkable,sleepHalfWidths());
  const a=read('src/pixi/art-manifest.json');
  home={sea:'#6EC9DE',ground:a.ground,decks:P.JETTIES,props,flats:[{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...P.decalsFor(W,props,geometry({...W,obstacles:[]}).walkable)]};

@@ -3,7 +3,7 @@ Run after community-ten-ground.py and community-ten-benches.mjs.
 """
 import json,math
 from pathlib import Path
-R=Path(__file__).resolve().parents[2];A=R/'public/pixi-art/themes/community';D=R/'rive/web/themes/community'
+R=Path(__file__).resolve().parents[2];A=R/'public/pixi-art/themes/community';D=R/'assets/world/themes/community'
 a=json.loads((A/'art.json').read_text());w=json.loads((D/'world.json').read_text());walk=json.loads((D/'walk-world.json').read_text());beds=json.loads((A/'resolved-sleepers.json').read_text())
 trees=[p for p in a['props'] if 'tree' in p['name'].lower()]
 def poly(x,y,pp):

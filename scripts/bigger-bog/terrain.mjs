@@ -1,6 +1,6 @@
 import {writeFileSync} from 'node:fs';
 import {plan,original,smooth,base,ink,grass,sand,fitted} from './design.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 export const path=pts=>'M'+pts.map(p=>p.map(v=>v.toFixed(2)).join(',')).join('L')+'Z';
 export function ribbon(points,widths,road=false){let pts=smooth(points),left=[],right=[];for(let i=0;i<pts.length;i++){let a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)],d=Math.hypot(b[0]-a[0],b[1]-a[1])||1,t=i/(pts.length-1)*(widths.length-1),j=Math.min(widths.length-2,Math.floor(t)),f=t-j,w=(widths[j]*(1-f)+widths[j+1]*f)/2;let nx=-(b[1]-a[1])/d,ny=(b[0]-a[0])/d;let scallop=road?11*Math.sin(i*.83)+16*Math.sin(i*.37):3*Math.sin(i*1.3)+5*Math.sin(i*.49);left.push([pts[i][0]+nx*(w+scallop),pts[i][1]+ny*(w+scallop)]);right.push([pts[i][0]-nx*(w-scallop),pts[i][1]-ny*(w-scallop)]);}return {pts,left,right,poly:[...left,...[...right].reverse()]};}
 export const waters=plan.rivers.map(r=>({id:r.id,poly:ribbon(r.points,r.points.map(()=>r.width)).poly,community:true}));

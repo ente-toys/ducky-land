@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {inShape,inPoly} from '../../rive/web/island-geometry.mjs';
+import {inShape,inPoly} from '../../assets/world/island-geometry.mjs';
 export const crossings=[
  {id:'jetty-1.svg',name:'Original west jetty',samples:[[340,2850],[430,2850],[510,2850]]},
  {id:'jetty-2.svg',name:'Original east jetty',samples:[[7290,2850],[7370,2850],[7470,2850]]},
@@ -21,7 +21,7 @@ export const crossings=[
 ];
 export const isWet=(w,p,sea=false)=>w.water.some(q=>inShape(...p,q))||(sea&&!inPoly(...p,w.coast));
 if(process.argv[1]?.endsWith('/review-audit.mjs')){
- const current=JSON.parse(fs.readFileSync('rive/web/themes/waterfall/world.json'));
+ const current=JSON.parse(fs.readFileSync('assets/world/themes/waterfall/world.json'));
  const baselineFile='scripts/bigger-waterfall/review-baseline.json';
  let baseline;
  if(fs.existsSync(baselineFile))baseline=JSON.parse(fs.readFileSync(baselineFile));

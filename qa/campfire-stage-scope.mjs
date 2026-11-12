@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-const layout=JSON.parse(fs.readFileSync(new URL('../rive/web/themes/community/stage-layout.json',import.meta.url)));
+const layout=JSON.parse(fs.readFileSync(new URL('../assets/world/themes/community/stage-layout.json',import.meta.url)));
 export const stageEditedIds=new Set(['events-stage',...Object.keys(layout.treeMoves),...Object.keys(layout.audienceMoves)]);
 export const outsideStageProps=props=>props.filter(p=>!stageEditedIds.has(p.id));
 export const clearedStageFlat=p=>{

@@ -1,15 +1,15 @@
-import homeMore from '../rive/web/home-sleep-more.json' with {type:'json'};
+import homeMore from '../assets/world/home-sleep-more.json' with {type:'json'};
 import {mapPoint} from '../src/pixi/sphere-coordinates.js';
-import homeExtra from '../rive/web/home-sleep-extra.json' with {type:'json'};
-import homeOuter from '../rive/web/home-sleep-outer.json' with {type:'json'};
+import homeExtra from '../assets/world/home-sleep-extra.json' with {type:'json'};
+import homeOuter from '../assets/world/home-sleep-outer.json' with {type:'json'};
 import {THEMED_ISLANDS} from '../src/pixi/world-map.js';
 // boss 6 Nov: "Every island has to be BIGGER and SPACIOUS, with room for 100 Duckies to walk around, and stalls. The same
 // sleeping Duckies as home, and every home feature (bridges and the rest) must work on these islands."
 // a) sleepers on every map, b) home features per map, c) bigger maps spaced on the globe, d) 100 Duckies on one island.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import homeWorld from '../rive/web/world.json' with {type: 'json'};
-import {geometry} from '../rive/web/island-geometry.mjs';
+import homeWorld from '../assets/world/world.json' with {type: 'json'};
+import {geometry} from '../assets/world/island-geometry.mjs';
 import {HOME_MAP, ambientOf, makeMap, mapFor, mapOf, readyThemes, THEME_OF} from '../src/pixi/island-maps.js';
 import {WORLD_GEO, WORLD_ISLANDS, layoutWorld, offsetOf, sizeOfTheme} from '../src/pixi/world-map.js';
 import {BOAT_CHANNEL, coastGaps, copyHolding} from '../src/pixi/sphere-shores.js';

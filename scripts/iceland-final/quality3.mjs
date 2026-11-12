@@ -5,7 +5,7 @@ import path from 'node:path';
 import {bounds,overlaps,piece,footprint,pathClearance,propPathClearance,landViews,area} from './place.mjs';
 import {makeMap} from '../../src/pixi/island-maps.js';
 import {createNavigation} from '../../src/pixi/navigation.js';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {composeFixAll,clearCanopies} from './fix-all.mjs';
 const round=n=>Math.round(n*100)/100;
@@ -114,7 +114,7 @@ export function composeQuality3(root,art,w,report,catalog){
  // Keep activity plants attached to their actual scene, rather than qualifying
  // as additional independent coverage pockets.
  for(const p of art.props.filter(p=>p.finalKind==='shrub'))p.group=p.scene;
- const harbor=read(path.join(root,'rive/web/themes/snow/harbor.json'));
+ const harbor=read(path.join(root,'assets/world/themes/snow/harbor.json'));
  const base=makeMap('snow',{world:w,walk:w,harbor,sleepers:[]}).baseWalk;
  const walk=geometry(base).walkable,sizes=sleepHalfWidths();
  // Retain the count and all eight poses, assigned to one shared camp at a time.

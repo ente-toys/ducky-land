@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url)));
-const B='scripts/bigger-cathedral/dense-before/',D='rive/web/themes/cathedral/';
+const B='scripts/bigger-cathedral/dense-before/',D='assets/world/themes/cathedral/';
 test('Cathedral water upgrade preserves the densified community layout and centre',()=>{
  const world=read(D+'world.json'),old=read(B+'world.json');
  for(const key of ['coast','origin','centrePlacement'])assert.deepEqual(world[key],old[key],key);

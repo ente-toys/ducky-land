@@ -1,8 +1,8 @@
 // Keep accepted proposals; move only residents rejected by the new path corridor.
 import{readFileSync,writeFileSync}from'node:fs';
 import{resolveSleepSpots,sleepHalfWidths}from'../../src/pixi/sleep-spots.js';
-import{geometry}from'../../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(readFileSync(p)),W=read('rive/web/themes/sunflower/world.json'),walk=read('rive/web/themes/sunflower/walk-world.json'),art=read('public/pixi-art/themes/sunflower/art.json');
+import{geometry}from'../../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(readFileSync(p)),W=read('assets/world/themes/sunflower/world.json'),walk=read('assets/world/themes/sunflower/walk-world.json'),art=read('public/pixi-art/themes/sunflower/art.json');
 const spots=Object.fromEntries(Object.keys(W.sleepSpots).map(k=>[k,[]])),sizes=sleepHalfWidths(),dry=geometry(walk).walkable,occupied=[],moves=[];
 const opts={avoid:W.sleepAvoid,warn:false};
 function trySpot(pose,s){const b=resolveSleepSpots(walk,art.props,dry,sizes,{...opts,spots:{[pose]:[s]},occupied});if(!b.length)return false;spots[pose].push(s);occupied.push(b[0]);return true;}
@@ -19,5 +19,5 @@ for(const{pose,s}of rejected){let found=false;
 W.sleepSpots=spots;
 const final=resolveSleepSpots(walk,art.props,dry,sizes,{...opts,spots});
 if(final.length!==90||final.bad.length)throw Error('residents '+final.length);
-writeFileSync('rive/web/themes/sunflower/world.json',JSON.stringify(W,null,1)+'\n');
+writeFileSync('assets/world/themes/sunflower/world.json',JSON.stringify(W,null,1)+'\n');
 writeFileSync('scripts/sunbob-ground/resident-report.json',JSON.stringify({total:final.length,moves},null,2)+'\n');console.log('Residents',final.length,'moved from conflicts',moves.length);

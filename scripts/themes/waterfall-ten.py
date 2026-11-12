@@ -8,7 +8,7 @@ from shapely.geometry import Point, Polygon, LineString, box
 from shapely.ops import unary_union
 from shapely import affinity
 
-R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/waterfall'; D=R/'rive/web/themes/waterfall'
+R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/waterfall'; D=R/'assets/world/themes/waterfall'
 snapshot=R/'scripts/themes/waterfall-ten-source.json'
 if not snapshot.exists():
  snapshot.write_text(json.dumps({'art':json.loads((A/'art.json').read_text()),'world':json.loads((D/'world.json').read_text()),'walk':json.loads((D/'walk-world.json').read_text()),'centre':json.loads((A/'centre/centre.json').read_text()),'ground':(A/'ground.svg').read_text()}))

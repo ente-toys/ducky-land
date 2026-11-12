@@ -4,7 +4,7 @@ import {execFileSync} from 'node:child_process';
 const out='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/bellovo-review/fix/final/';
 function snapshot(){
  const A='public/pixi-art/themes/cathedral/',art=JSON.parse(fs.readFileSync(A+'art.json'));
- const files=new Set([A+'art.json','rive/web/themes/cathedral/world.json','rive/web/themes/cathedral/walk-world.json','rive/web/themes/index.js','src/pixi/art-source-sizes.json','src/pixi/large-art-tiles.json','src/pixi/theme-raster-bounds.json','public/pixi-art/globe/manifest.json','public/pixi-art/globe/cathedral.svg','public/pixi-art/globe/cathedral-ground.svg']);
+ const files=new Set([A+'art.json','assets/world/themes/cathedral/world.json','assets/world/themes/cathedral/walk-world.json','assets/world/themes/index.js','src/pixi/art-source-sizes.json','src/pixi/large-art-tiles.json','src/pixi/theme-raster-bounds.json','public/pixi-art/globe/manifest.json','public/pixi-art/globe/cathedral.svg','public/pixi-art/globe/cathedral-ground.svg']);
  for(const p of [...art.ground.tiles,...art.decks,...art.flats,...art.props,...(art.floating??[])])files.add(p.src.startsWith('/')?'public'+p.src:A+p.src);
  for(const set of Object.values(JSON.parse(fs.readFileSync('src/pixi/large-art-tiles.json')).cathedral))for(const p of set)files.add('public'+p.src);
  return Object.fromEntries([...files].sort().map(file=>[file,createHash('sha256').update(fs.readFileSync(file)).digest('hex')]));

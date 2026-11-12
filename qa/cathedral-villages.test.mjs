@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {makeMap} from '../src/pixi/island-maps.js';
 import {VILLAGES,GROVES} from '../scripts/bigger-cathedral/villages-data.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',S='scripts/bigger-cathedral/villages-source/';
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',S='scripts/bigger-cathedral/villages-source/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),before=read(S+'world.json'),oldArt=read(S+'art.json'),map=makeMap('cathedral',{world,walk,harbor:read(D+'harbor.json')});
 test('Village replacement preserves water, crossing and arrival-port geometry exactly',()=>{
  for(const k of ['coast','water','boatWater','riverMouths','walkways','bridges','islets'])assert.deepEqual(world[k],before[k],k);

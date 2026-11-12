@@ -1,5 +1,5 @@
 // boss 6 Nov: themed islands go live on their own. Checks each theme folder against concepts/themes/THEME-CONTRACT.md
-// and writes rive/web/themes/index.js, listing only the themes whose files are complete. A theme left out plays the home
+// and writes assets/world/themes/index.js, listing only the themes whose files are complete. A theme left out plays the home
 // island in its place, so a half-drawn theme never breaks the game.
 //   node scripts/theme-index.mjs            check and write the index once
 //   node scripts/theme-index.mjs --check    print the report, write nothing
@@ -9,11 +9,11 @@ import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
 import {makeMap, THEME_IDS} from '../src/pixi/island-maps.js';
 import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
-import {geometry} from '../rive/web/island-geometry.mjs';
+import {geometry} from '../assets/world/island-geometry.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const DATA = theme => join(root, 'rive/web/themes', theme), ART = theme => join(root, 'public/pixi-art/themes', theme);
-const INDEX = join(root, 'rive/web/themes/index.js');
+const DATA = theme => join(root, 'assets/world/themes', theme), ART = theme => join(root, 'public/pixi-art/themes', theme);
+const INDEX = join(root, 'assets/world/themes/index.js');
 const MAX = {width: 16000, height: 12000};   // boss 8 Nov: every island grows ~3x round its original (origin may go negative)   // boss 6 Nov: themed islands are BIGGER and spacious (world-map.js spaces every island by its own size)
 const args = new Set(process.argv.slice(2));
 

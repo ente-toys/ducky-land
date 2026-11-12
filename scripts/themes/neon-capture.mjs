@@ -6,7 +6,7 @@ const browser=await chromium.launch({headless:true}),page=await browser.newPage(
 const errors=[];page.on('pageerror',e=>errors.push(String(e)));
 const shots={neon:{plaza:[3844,2110,.6],bench:[4130,2660,.6],junction:[3844,3390,.6],trees:[1600,2850,.6],activity:[2436.4,2944.8,.6],market:[1500,2130,.6]},home:{plaza:[2820,2290,.6],bench:[3230,2300,.6],junction:[2920,1710,.6],trees:[2220,2050,.6],activity:[2820,2290,.6],market:[2920,1710,.6]}};
 for(const theme of ['neon','home']){
- await page.goto('http://127.0.0.1:5291/rive/web/themes/neon/review.html?theme='+theme);
+ await page.goto('http://127.0.0.1:5291/assets/world/themes/neon/review.html?theme='+theme);
  await page.waitForFunction(()=>window.reviewReady,null,{timeout:120000});
  for(const [name,cam]of Object.entries(shots[theme])){
   await page.evaluate(c=>window.reviewCamera(...c),cam);await page.waitForTimeout(700);

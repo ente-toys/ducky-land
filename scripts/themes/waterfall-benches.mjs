@@ -1,7 +1,7 @@
 // Use Home's exact slatted arc construction at each Waterfall ring's own radius.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/waterfall/',D='rive/web/themes/waterfall/';
+const A='public/pixi-art/themes/waterfall/',D='assets/world/themes/waterfall/';
 const read=f=>JSON.parse(readFileSync(f)),art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),centre=read(A+'centre/centre.json');
 const snap=read('scripts/themes/waterfall-ten-source.json');
 const oldBlocks=snap.centre.blocked.filter(b=>b.name?.startsWith('bench-'));

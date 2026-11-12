@@ -5,7 +5,7 @@ from shapely.geometry import Point,Polygon,LineString,box
 from shapely.affinity import scale
 from shapely.ops import unary_union
 R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/canal'; W=R.parent/'concepts/themes/work/canal/last-canal'
-world=json.loads((R/'rive/web/themes/canal/world.json').read_text()); art=json.loads((A/'art.json').read_text())
+world=json.loads((R/'assets/world/themes/canal/world.json').read_text()); art=json.loads((A/'art.json').read_text())
 NS='http://www.w3.org/2000/svg';ET.register_namespace('',NS)
 def ellipse(x,y,rx,ry):return scale(Point(x,y).buffer(1,quad_segs=48),rx,ry)
 def shape(q):

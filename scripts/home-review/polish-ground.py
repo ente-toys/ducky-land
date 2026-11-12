@@ -13,7 +13,7 @@ from shapely.ops import unary_union
 from shapely import affinity
 
 E = json.loads(Path('src/pixi/home-expansion.json').read_text())
-W = json.loads(Path('rive/web/world.json').read_text())
+W = json.loads(Path('assets/world/world.json').read_text())
 
 def contours(g):
     g=g.simplify(1,preserve_topology=True)

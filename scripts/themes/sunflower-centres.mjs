@@ -2,7 +2,7 @@
 // Source centre SVGs/JSON stay locked. Anchors encode sortY for the existing y-sorted renderer.
 import {readFileSync, writeFileSync} from 'node:fs';
 import {makeMap} from '../../src/pixi/island-maps.js';
-import {geometry, inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry, inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots, sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 
 const read = p => JSON.parse(readFileSync(p, 'utf8'));
@@ -16,7 +16,7 @@ const distance = (x, y, a, b) => {
 const requested=process.argv.slice(2);
 if(requested.some(t=>!['sunflower','pink'].includes(t)))throw Error('Only sunflower and pink are supported');
 for (const theme of requested.length ? requested : ['sunflower', 'pink']) {
-  const D=`rive/web/themes/${theme}/`, A=`public/pixi-art/themes/${theme}/`;
+  const D=`assets/world/themes/${theme}/`, A=`public/pixi-art/themes/${theme}/`;
   const world=read(D+'world.json'), walk=read(D+'walk-world.json'), harbor=read(D+'harbor.json'), art=read(A+'art.json'), centre=read(A+'centre/centre.json');
   const plaza=world.zones.plaza;
   const scale=theme==='sunflower' ? .65 : .6;

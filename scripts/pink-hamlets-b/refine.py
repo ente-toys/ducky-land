@@ -1,7 +1,7 @@
 import json,re,shutil
 from pathlib import Path
 A=Path('public/pixi-art/themes/pink');R=Path('/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/work/pink-fix/svg')
-art=json.load(open(A/'art.json'));world=json.load(open('rive/web/themes/pink/world.json'));walk=json.load(open('rive/web/themes/pink/walk-world.json'))
+art=json.load(open(A/'art.json'));world=json.load(open('assets/world/themes/pink/world.json'));walk=json.load(open('assets/world/themes/pink/walk-world.json'))
 for name,file in [('teacup','square-and-lane.svg'),('tutu-tides','dance-square.svg')]:
  L=json.load(open(R/name/'layout.json'));o=next(o for o in L['objects'] if o['file']==file);k=1.68 if name=='teacup' else 1.4;at=[6700,4740] if name=='teacup' else [4050,6000];bp=[768,512] if name=='teacup' else [768,530]
  s=(R/name/file).read_text();s=re.sub(r'#ffe9c7|#ffe8c5|#ffe6be|#ffebcc|#ffe9c8','#FBE6C8',s,flags=re.I);(A/'hamlets'/name/file).write_text(s)
@@ -22,4 +22,4 @@ for d in [world,walk]:d['obstacles']=[p for p in d['obstacles'] if p.get('name')
 p=next(p for p in art['props'] if p['id']=='hamlet-teacup-quay-dock')
 p['shadow']=False
 for d in [world,walk]:d['obstacles']=[o for o in d['obstacles'] if o.get('name')!=p['id']]
-for f,d in [(A/'art.json',art),(Path('rive/web/themes/pink/world.json'),world),(Path('rive/web/themes/pink/walk-world.json'),walk)]:f.write_text(json.dumps(d,indent=1)+'\n')
+for f,d in [(A/'art.json',art),(Path('assets/world/themes/pink/world.json'),world),(Path('assets/world/themes/pink/walk-world.json'),walk)]:f.write_text(json.dumps(d,indent=1)+'\n')

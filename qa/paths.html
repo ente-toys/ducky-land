@@ -1,5 +1,5 @@
 <!doctype html><html><meta charset="utf-8"><title>Island path review</title><style>body{margin:0;background:#fff4d7;font:16px system-ui}header{padding:12px}svg{width:1100px;height:760px;background:#80c5dc;display:block}</style><header id="title"></header><script type="module">
-import {createNavigation} from '../src/three/navigation.js';import world from '../rive/web/world.json';import art from '../src/pixi/art-manifest.json';import{createPlacements}from '../src/pixi/placements.js';
+import {createNavigation} from '../src/three/navigation.js';import world from '../assets/world/world.json';import art from '../src/pixi/art-manifest.json';import{createPlacements}from '../src/pixi/placements.js';
 const regions={nw:[500,500,2600,1900],ne:[2900,500,2600,1900],sw:[500,2200,2700,1950],se:[3000,2200,2600,1950]};
 const region=new URLSearchParams(location.search).get('region')||'nw';document.querySelector('#title').textContent=`Path review: ${region}`;
 const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox',regions[region].join(' '));document.body.append(svg);

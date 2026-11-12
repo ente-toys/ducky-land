@@ -10,7 +10,7 @@ import {Gestures, movePinch, screenToWorld} from '../src/pixi/camera.js';
 import {createSimulation} from '../src/pixi/simulation.js';
 
 test('all 28 NPCs remain asleep through greetings and quacks while the player can move', () => {
-  const world = JSON.parse(readFileSync(new URL('../rive/web/world.json', import.meta.url)));
+  const world = JSON.parse(readFileSync(new URL('../assets/world/world.json', import.meta.url)));
   const sim = createSimulation(world, 8612, {sleepingNpcs: true});
   const sleeping = sim.ducks.filter(duck => !duck.player);
   const positions = sleeping.map(duck => [duck.x, duck.y, duck.turn]);
@@ -76,7 +76,7 @@ test('cancelled, dragged, and multi-touch pointers never become taps', () => {
 
 test('original island art has complete placements, valid clipped SVGs and GPU-safe ground tiles', () => {
   const art = JSON.parse(readFileSync(new URL('../src/pixi/art-manifest.json', import.meta.url)));
-  const world = JSON.parse(readFileSync(new URL('../rive/web/world.json', import.meta.url)));
+  const world = JSON.parse(readFileSync(new URL('../assets/world/world.json', import.meta.url)));
   assert.equal(art.props.length, world.props.length);
   const parser = new (new JSDOM('').window.DOMParser)();
   for (const item of [...art.props, ...art.ground.tiles, ...art.floating]) {

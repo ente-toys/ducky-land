@@ -1,7 +1,7 @@
 """Boss corrections: OG vegetation, retired props, connected roads and open grass."""
 from pathlib import Path
 import json,re,copy,math,subprocess
-A=Path('public/pixi-art/themes/pink');D=Path('rive/web/themes/pink');S=Path('scripts/pink-final')
+A=Path('public/pixi-art/themes/pink');D=Path('assets/world/themes/pink');S=Path('scripts/pink-final')
 read=lambda p:json.loads(Path(p).read_text())
 def write(p,d):Path(p).write_text(json.dumps(d,indent=1)+'\n')
 art=read(A/'art.json');world=read(D/'world.json');walk=read(D/'walk-world.json');layout=read('scripts/bigger-pink/layout.json');og=read('scripts/bigger-pink/original-art.json')

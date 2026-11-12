@@ -4,8 +4,8 @@ import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {archBridge,BRIDGE_SILLS} from './arch.mjs';
 import {crossings} from './fix-geometry.mjs';
-import {inShape} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/',S='scripts/bigger-fair/';
+import {inShape} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/',S='scripts/bigger-fair/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,1)+'\n');
 export function applyFairBridges(){
  const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),plan=read(S+'centre-source/sailing.json');

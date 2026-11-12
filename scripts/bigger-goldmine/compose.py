@@ -4,7 +4,7 @@ import json, math, re, sys, copy, base64
 from shapely.geometry import Polygon, Point, LineString, box
 from shapely.ops import unary_union
 from shapely.affinity import scale as geomscale
-R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/goldmine'; D=R/'rive/web/themes/goldmine'; S=Path(__file__).parent
+R=Path(__file__).resolve().parents[2]; A=R/'public/pixi-art/themes/goldmine'; D=R/'assets/world/themes/goldmine'; S=Path(__file__).parent
 OUT=R.parent/'concepts/themes/world-map/bigger'; OUT.mkdir(parents=True,exist_ok=True)
 def load(n):return json.loads((S/'original'/n).read_text())
 def write(p,d):p.write_text(json.dumps(d,indent=2)+'\n')

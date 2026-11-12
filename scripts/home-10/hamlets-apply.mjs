@@ -4,7 +4,7 @@
 // Hand fixes per hamlet live in homes.json: skip (files not placed), drop (ids left out), nudge ({id: [dx, dy]} world units),
 // connect (hand lanes joining the hamlet lane to the main loop), roads (base road ids this hamlet replaces).
 import {readFileSync, existsSync} from 'node:fs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const DECAL = /^(grass|pebble|path-stone|sand-specks|flowers?-tiny|flower-single|meadow|wild-pink|flowers-(daisy|pink)\.)/;
 const HOME = /^(house|cottage)-(?!flowerbed)/;
 const WORK = /^(bakery|bread-oven|bread-cart|garden-shed|bandstand|harvest-barn|barn|windmill|grain-silo|kiln|pottery-drying-rack|smokehouse|lighthouse|fishing-net-rack|rowing-boat-cradle|drying-fish-rack|bread-rack|seed-stall|vegetable-bed)/;

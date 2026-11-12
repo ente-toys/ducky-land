@@ -1,10 +1,10 @@
 import sharp from 'sharp';
 import {mkdirSync,readFileSync,writeFileSync,copyFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 import {render,read} from './render.mjs';
 const out='../concepts/themes/world-map/bigger',A='public/pixi-art/themes/pink/',S='scripts/bigger-pink/';
-const art=read(A+'art.json'),layout=read(S+'layout.json'),boats=read('rive/web/themes/pink/harbor.json').boats;
+const art=read(A+'art.json'),layout=read(S+'layout.json'),boats=read('assets/world/themes/pink/harbor.json').boats;
 mkdirSync(out+'/pink-community-crops',{recursive:true});
 await render(art,[-2600,-1900,13200,9800],.15,out+'/pink-built.png',{boats});
 const views={ribbonwick:[-350,-480,2400,1800],melody:[5100,-650,2400,1800],quay:[7650,1000,2200,2000],petalpatch:[-1550,1600,2100,2100],tutu:[2850,4950,2500,2000]};

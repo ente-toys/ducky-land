@@ -5,7 +5,7 @@ import {pathToFileURL} from 'node:url';
 import {JSDOM} from 'jsdom';
 import {routes as authored,bridges,destinationCourts} from './paths-data.mjs';
 import {VILLAGES} from './villages-data.mjs';
-const A='public/pixi-art/themes/cathedral/',D='rive/web/themes/cathedral/',S='scripts/bigger-cathedral/';
+const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',S='scripts/bigger-cathedral/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,o)=>fs.writeFileSync(p,JSON.stringify(o,null,2)+'\n');
 const dom=s=>new JSDOM(s,{contentType:'image/svg+xml'}).window.document.documentElement;
 export function sample(points,straight=false,straightStart=false){

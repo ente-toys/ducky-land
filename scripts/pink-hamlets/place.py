@@ -49,7 +49,7 @@ for h in HAMLETS:
     P.setdefault('existingCommunityId',{'tutu-tides':'tutu'}.get(h,h))
     kits[h]=(L,P)
 
-artpath=ART/'art.json';worldpath=Path('rive/web/themes/pink/world.json');walkpath=Path('rive/web/themes/pink/walk-world.json');layoutpath=Path('scripts/bigger-pink/layout.json')
+artpath=ART/'art.json';worldpath=Path('assets/world/themes/pink/world.json');walkpath=Path('assets/world/themes/pink/walk-world.json');layoutpath=Path('scripts/bigger-pink/layout.json')
 A=read(artpath);worlds=[read(worldpath),read(walkpath)];D=read(layoutpath)
 protectedInputs=copy.deepcopy(worlds)
 remove=set().union(*(set(P['remove']['propIds']) for L,P in kits.values()))

@@ -1,7 +1,7 @@
 // Candy-only close-up ground craft and accent gardens, before final sleeper placement.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/candy/',D='rive/web/themes/candy/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/candy/',D='assets/world/themes/candy/';
 const world=JSON.parse(readFileSync(D+'world.json')),art=JSON.parse(readFileSync(A+'art.json')),walk=JSON.parse(readFileSync(D+'walk-world.json'));
 const land=geometry({...walk,obstacles:[]});
 let props=JSON.parse(readFileSync(D+'placements.json'));

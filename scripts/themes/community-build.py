@@ -4,7 +4,7 @@
 # Writes
 #   public/pixi-art/themes/community/ground.svg + ground-rN-cN.svg (5 x 4 tiles), jetty-*.svg, bridge-islet-*.svg,
 #   lights-*.svg (the plaza string lights), art.json
-#   rive/web/themes/community/world.json, walk-world.json, harbor.json
+#   assets/world/themes/community/world.json, walk-world.json, harbor.json
 # Props are the traced GPT pieces in public/pixi-art/themes/community/detail/ (scripts/themes/community-trace-all.sh) plus
 # home's own plants and ground decals at their home paths. Deterministic.
 # Concept: concepts/themes/concepts/21-community-discord-d2.png. LOCKED centre: concepts/themes/community-centre/community-centre-3.png
@@ -15,7 +15,7 @@ from scipy.spatial import Voronoi
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ART = os.path.join(ROOT, 'public/pixi-art/themes/community')
-DATA = os.path.join(ROOT, 'rive/web/themes/community')
+DATA = os.path.join(ROOT, 'assets/world/themes/community')
 GEN = os.path.join(ROOT, '..', 'concepts/themes/community-gen')
 W, H = 8000, 5800                              # boss 6 Nov: ~1.8x home's land (home is 5800 x 4400)
 TW, TH = [1600] * 5, [1450] * 4                # 5 x 4 tiles, each about home's tile size

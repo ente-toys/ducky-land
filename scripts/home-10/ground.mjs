@@ -9,7 +9,7 @@
 // east beach at x 7492-7625) and its Millrill ponds are read from shore.json and painted even before shore.mjs has run.
 import {readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const FILE = 'src/pixi/home-expansion.json', ART = 'public/pixi-art/home-expansion-g', WEB = '/pixi-art/home-expansion-g';
 const E = JSON.parse(readFileSync(FILE, 'utf8'));
 mkdirSync(ART, {recursive: true});

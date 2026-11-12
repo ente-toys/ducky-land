@@ -1,5 +1,5 @@
-import fs from 'node:fs';import sharp from 'sharp';import {render,OUT} from './render.mjs';import {inPoly} from '../../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/',A='public/pixi-art/themes/community/',D='rive/web/themes/community/',a=read(A+'art.json'),h=read(D+'harbor.json'),p=read(S+'plan.json'),B=S+'baseline/';
+import fs from 'node:fs';import sharp from 'sharp';import {render,OUT} from './render.mjs';import {inPoly} from '../../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(fs.readFileSync(p)),S='scripts/bigger-community/',A='public/pixi-art/themes/community/',D='assets/world/themes/community/',a=read(A+'art.json'),h=read(D+'harbor.json'),p=read(S+'plan.json'),B=S+'baseline/';
 await render(a,h,OUT+'/community-built.png');
 await render(a,h,OUT+'/community-built-labelled.png',{labels:p.communities});
 for(const c of p.communities)await render(a,h,OUT+'/community-crops/'+c.id+'.png',{crop:[c.x,c.y,.8]});

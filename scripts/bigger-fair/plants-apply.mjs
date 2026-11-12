@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
-import {geometry,inShape} from '../../rive/web/island-geometry.mjs';
+import {geometry,inShape} from '../../assets/world/island-geometry.mjs';
 import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
 import {PLANT_MODELS,homePlant} from './plant-kit.mjs';
 import {OUTER_PLANTING,PLANT_RESERVES} from './plants-data.mjs';
@@ -59,7 +59,7 @@ export function applyPlants(art,world,walk) {
 }
 
 if(process.argv[1]===fileURLToPath(import.meta.url)){
- const A='public/pixi-art/themes/fair/',D='rive/web/themes/fair/';
+ const A='public/pixi-art/themes/fair/',D='assets/world/themes/fair/';
  const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,d)=>fs.writeFileSync(p,JSON.stringify(d,null,1)+'\n');
  const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json');
  const report=applyPlants(art,world,walk);console.log(JSON.stringify(report,null,2));

@@ -12,7 +12,7 @@ sys.path.insert(0, '/private/tmp/ducky-community-python')
 from shapely.geometry import Polygon
 
 read = lambda path: json.loads(Path(path).read_text())
-world = read('rive/web/themes/library/world.json')
+world = read('assets/world/themes/library/world.json')
 source = read('scripts/pagepond-ground/data/keep.json')['boatWater']
 source += [w['poly'] for w in world['water'] if w.get('name') == 'Pagepond rounded mouth banks']
 polygons = []

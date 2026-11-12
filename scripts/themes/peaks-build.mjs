@@ -1,9 +1,9 @@
 // Mossnap Peaks. Authored SVG, home plant vocabulary, concept 09-peaks.png.
 // Only this theme's folders are written. Regeneration is deterministic.
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-const A='public/pixi-art/themes/peaks/',D='rive/web/themes/peaks/';
+const A='public/pixi-art/themes/peaks/',D='assets/world/themes/peaks/';
 for(const p of [A+'reuse',A+'centre',D])mkdirSync(p,{recursive:true});
 const W=8000,H=5800,S=4.8,INK='#39472D',SEA='#6EC9DE';
 const T=p=>[150+p[0]*S,400+p[1]*S],f=n=>Math.round(n*10)/10;

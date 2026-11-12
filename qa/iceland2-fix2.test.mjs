@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 import {snowPose,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
-const w=JSON.parse(readFileSync('rive/web/themes/snow/world.json'));
+const w=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const art=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
 const r=w.iceland2.rink;
 // Signed distance to the shared irregular ice outline.

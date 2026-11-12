@@ -1,8 +1,8 @@
 // Candy-only craft pass. Run between candy-centre and candy-finish; no shared files written.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {drawArcBench} from '../arc-bench-draw.mjs';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-const A='public/pixi-art/themes/candy/',D='rive/web/themes/candy/';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+const A='public/pixi-art/themes/candy/',D='assets/world/themes/candy/';
 const read=p=>JSON.parse(readFileSync(p)),write=(p,x)=>writeFileSync(p,JSON.stringify(x,null,1)+'\n');
 const world=read(D+'world.json'),walk=read(D+'walk-world.json');
 let props=read(D+'placements.json').filter(p=>!p.id.startsWith('candy-craft-')&&!p.id.startsWith('candy-centre-')&&p.asset!=='bench-wood');
