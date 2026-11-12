@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import {KARMA_REQUIRED} from '../features/bog-combat/entry.js';
+import {BOG_ISLAND, KARMA_REQUIRED} from '../features/bog-combat/entry.js';
 
 // The feather chip next to the profile button is drawn by the game (karma-view.js). Clicking it opens a card that
 // explains golden feathers: the same glowing feather as on the islands, how many you have, and what they unlock.
@@ -31,12 +31,20 @@ export default function IslandFeathers({island}) {
     return () => {clearInterval(id); window.removeEventListener('click', click); window.removeEventListener('keydown', key);};
   }, [island]);
 
-  return count !== null && createPortal(<FeatherCard count={count} onClose={() => setCount(null)}/>, document.body);
+  return count !== null && createPortal(<FeatherCard count={count} island={island} onClose={() => setCount(null)}/>, document.body);
 }
 
-function FeatherCard({count, onClose}) {
+function FeatherCard({count, island, onClose}) {
   const dialog = useRef(null);
+  const [error, setError] = useState('');
   const left = Math.max(0, KARMA_REQUIRED - count);
+  const game = island.current;
+  // the trip needs a live island and a duck that is not already standing on the Bog
+  const canTravel = !left && game?.room && game.player && !(game.islandId === BOG_ISLAND && game.player.mode === 'walking');
+  function travel() {
+    const reason = game.tripTo(BOG_ISLAND);
+    if (reason) setError(reason); else onClose();
+  }
   useEffect(() => {
     const element = dialog.current;
     element.showModal();
@@ -74,6 +82,10 @@ function FeatherCard({count, onClose}) {
       <li>{left ? <><b>{KARMA_REQUIRED} feathers</b> let you land on Booquack Bog, the paint splat arena.</> : <><b>Booquack Bog is open.</b> Sail there for a paint splat match.</>}</li>
       <li>Every feather you hold shows in the quiver on your Ducky's back.</li>
     </ul>
-    <button className="pixi-feather-done" type="button" autoFocus onClick={onClose}>Got it</button>
+    {error && <p className="pixi-feather-error" role="alert">{error}</p>}
+    {canTravel ? <div className="pixi-feather-actions">
+      <button className="pixi-feather-done" type="button" onClick={travel}>Take me to Booquack Bog</button>
+      <button className="pixi-feather-later" type="button" onClick={onClose}>Not now</button>
+    </div> : <button className="pixi-feather-done" type="button" onClick={onClose}>Got it</button>}
   </dialog>;
 }

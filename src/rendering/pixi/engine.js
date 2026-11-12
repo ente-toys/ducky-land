@@ -6,7 +6,7 @@ import {createHomeKites, KITE_ASSETS} from './environment/home-kites.js';
 import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from '../shared/sphere-camera.js';
 import {createSailingCamera} from '../shared/sailing-camera.js';
 import {sailingUpright} from './sailing-upright.js';
-import {WORLD_GEO,WORLD_ISLANDS} from '../../world/world-map.js';
+import {WORLD_GEO,WORLD_ISLANDS,neighboursOf} from '../../world/world-map.js';
 import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
 import {globeBall,uprightFade,northUpRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from '../shared/globe-look.js';
@@ -107,6 +107,20 @@ function release(src) {
     textureLeases.delete(src);
     Assets.unload(src).catch(() => {});
   }).catch(() => textureLeases.delete(src));
+}
+
+// the next island on the fewest-hops sea route from one island to another (null when there is no route)
+function nextIsland(from, to) {
+  const previous=new Map([[from,null]]), queue=[from];
+  while (queue.length) {
+    const id=queue.shift();
+    if (id === to) break;
+    for (const {island} of neighboursOf(id)) if (!previous.has(island.id)) {previous.set(island.id,id); queue.push(island.id);}
+  }
+  if (!previous.has(to) || to === from) return null;
+  let step=to;
+  while (previous.get(step) !== from) step=previous.get(step);
+  return step;
 }
 
 export class PixiIsland {
@@ -587,6 +601,7 @@ export class PixiIsland {
       if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter','shift'].includes(key)) return;
       event.preventDefault();
       this.keys.add(key);
+      if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)) this.trip=null;
       if (event.repeat) return;
       if (!['f','home','0','+','=','-'].includes(key)) this.audio.unlock();
       if (key === ' ') this.jump();
@@ -697,6 +712,45 @@ export class PixiIsland {
     }
     return {take: best?.id ?? null};
   }
+  // "Take me to …": walk to a boat, sail island to island (landing and re-boarding on the way, as a player would),
+  // and dock at the target. Any movement key or tap hands control back. Returns a reason string when it cannot start.
+  tripTo(target) {
+    const me=this.player;
+    if (!this.room || !me) return 'Your duck is still arriving.';
+    if (this.interior?.active) return 'Step outside first.';
+    if (this.islandId === target && me.mode === 'walking') return 'You are already here.';
+    if (!nextIsland(this.islandId, target) && this.islandId !== target) return 'There is no way to sail there from here.';
+    this.trip={target, leg:null, boarded:null, docked:false};
+    this.follow=true; this.fitMode=false;
+    return '';
+  }
+  stepTrip() {
+    const trip=this.trip, me=this.player;
+    if (!trip || !me || !this.room || this.arrival) return;
+    if (me.mode === 'walking') {
+      if (this.islandId === trip.target) {this.trip=null; return;}
+      if (trip.boarded === this.islandId) return;
+      trip.boarded=this.islandId;
+      if (!this.room.returnToBoat()) {this.trip=null; this.room.onNotice('No free boat here right now. Try again in a moment.');}
+      return;
+    }
+    if (me.mode !== 'sailing') return;
+    if (this.islandId === trip.target) {
+      if (canDock(me)) {if (!trip.docked) {trip.docked=true; this.room.disembark();}}
+      else if (trip.leg !== this.islandId && this.setDestination(harborOf(trip.target).water)) trip.leg=this.islandId;
+      return;
+    }
+    if (trip.leg === this.islandId) {
+      // the boat stopped short of the next island (a refused landing, a full island): hand control back once it
+      // has stayed stopped for a moment (the target blinks empty between route waypoints)
+      if (me.sailTarget) trip.idleSince=null;
+      else if ((trip.idleSince ??= performance.now()) < performance.now() - 1500) this.trip=null;
+      return;
+    }
+    const next=nextIsland(this.islandId, trip.target), route=destinationsFor(this.islandId).find(island => island.destination === next);
+    if (route && this.setDestination(route.dock)) {trip.leg=this.islandId; trip.idleSince=null;}
+  }
+
   travelAction() {
     const options=this.travelOptions();
     if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
@@ -718,6 +772,7 @@ export class PixiIsland {
   }
 
   tap(point) {
+    this.trip=null;
     if (this.interior?.active) {this.interior.tap(point); return;}
     if (this.globeT > 0 && this.worldView?.pinAt(point)) {this.flyHome(); return;}
     const p = screenToWorld(this.camera, point, this.width, this.height);
@@ -1152,6 +1207,7 @@ export class PixiIsland {
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
       this.follow=Boolean(this.player); this.fitMode=false;
     }
+    this.stepTrip();
     const actor = this.player;
     const arrivalName = this.room ? this.room.arrival : this.offlineArrival;
     if (actor && actor.id !== this.focusedActor) {
