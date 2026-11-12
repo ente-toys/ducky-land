@@ -170,6 +170,7 @@ export async function createSailingFX({water,objects}) {
       if (!front) return;
       const {root}=entry;
       front.position.copyFrom(root.position); front.pivot.copyFrom(root.pivot); front.rotation=root.rotation; front.alpha=root.alpha;
+      front.scale.copyFrom(root.scale);front.skew.copyFrom(root.skew);
       front.visible=root.visible && !root.destroyed && entry.hasFront;
       front.zIndex=root.zIndex+14;
     },

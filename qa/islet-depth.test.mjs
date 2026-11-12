@@ -87,8 +87,12 @@ test('production islet props sort with Duckies by their foot, preserve the compl
    scene.setFromMatrix(new Matrix(co/k,-si/k,si/k,co/k,512-(co*p.x+si*p.y)/k,512-(-si*p.x+co*p.y)/k));
    duck.rotation=Math.atan2(si,co);
    for(const {piece,sprite}of v.props){
-    assert.equal(sprite.rotation,0,'props stay screen-upright in a level gameplay camera');
-    sprite.rotation=Math.atan2(si,co);sprite.zIndex=(piece.foot[1]-512)*k;
+    for(const angle of [0,.4,-.8]){
+     view.update(i.home,{...camera,basis:{a:Math.cos(angle),b:Math.sin(angle),c:-Math.sin(angle),d:Math.cos(angle)}},1024,1024,false);
+     assert.ok(Math.abs(sprite.rotation-v.root.rotation)<1e-12,'camera turns ground and props as one piece');
+    }
+    assert.ok(Math.abs(sprite.rotation-Math.atan2(si,co))<1e-12,'props share their ground rotation');
+    sprite.zIndex=(piece.foot[1]-512)*k;
    }
    objects.sortChildren();
    renderer.render({container:scene,clear:true});

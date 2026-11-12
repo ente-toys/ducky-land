@@ -8192,13 +8192,13 @@
       ],
       "sha256": "554b779810f7c468d8c2c25979d807fd2e0b8a1ca9ad407fbe862280df87b4ce"
     },
-    "groundSha256": "7fac6cb3bdcbdc99fabed879ab19ed8aa749f985f09520d41b103d8efaea7d34",
+    "groundSha256": "49772cf6bc3cf5c87500a7d28cbd8431eebdd8cc78f54890e261372cae601b3e",
     "src": "/pixi-art/globe/library.svg",
-    "sha256": "300fd871a7843c0c8cf0fbf046b49b495ab5eae1bf515f4d8c2a441deb4e71ba",
+    "sha256": "19eaaeeabe680e850e12ae33f013101a0961319a07c3cbfd31f26989705c2938",
     "width": 1024,
     "height": 761,
-    "bytes": 1150835,
-    "groundBytes": 538101,
+    "bytes": 1144595,
+    "groundBytes": 531861,
     "quality": {
       "tolerance": 0.2,
       "minArea": 0.12,
