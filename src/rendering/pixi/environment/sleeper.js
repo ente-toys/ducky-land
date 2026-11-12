@@ -3,6 +3,8 @@ import data from '../../../world/home/sleep-poses.json';
 
 export const SLEEP_POSES = Object.keys(data.poses);
 export const PORTABLE = ['wing', 'nod'];
+// Drawn size per pose so every sleeping Ducky's head is as wide as the walking Ducky's (footprints keep pose.k).
+const LOOK = {nod: 1.06, wing: 1.03, hammock: 1.19, rock: 1.09, book: 1.06, chair: 1.06, box: 1.16};
 const MOTION = {
   nod: {tilt: -.5, nod: true, bubble: {tip: [211, 463], dir: [-.97, .24], R: 28}, cap: [325, 78, 0, 450]},
   leaf: {tilt: .5, zAnchor: [120, 120], zDir: -1, blanket: 586},
@@ -58,14 +60,14 @@ export function sleepLook(sleep, seed) {
 export function createSleeper(sleep, seed = 0) {
   const {pose: name, flip} = sleepLook(sleep, seed), pose = data.poses[name], m = MOTION[name], h = hash(seed + 7);
   const P = 3.6 + (h % 8) * .07, off = (h % 8) * .61 + (h >> 4) % 97 * .37, dir = flip ? -1 : 1;
-  const root = new Container({label: `Sleeping Ducky (${name})`}), [x0, , x1, y1] = pose.box;
+  const root = new Container({label: `Sleeping Ducky (${name})`}), [x0, , x1, y1] = pose.box, drawK = pose.k * (LOOK[name] ?? 1);
   root.visible = false; root.scale.set(SLEEP_SIZE);
   const shade = new Container({label: 'Shadow'});
-  shade.pivot.set((x0 + x1) / 2, y1); shade.scale.set(pose.k * dir, pose.k * .3); shade.position.set(0, 3);
+  shade.pivot.set((x0 + x1) / 2, y1); shade.scale.set(drawK * dir, drawK * .3); shade.position.set(0, 3);
   for (const layer of pose.layers) if (layer.id !== 'zz') {const s = new Sprite(Assets.get(layer.src)); s.scale.set(1 / data.F); s.tint = 0x000000; shade.addChild(s);}
   shade.cacheAsTexture(true); shade.alpha = .07; root.addChild(shade);
   const bed = new Container();
-  bed.pivot.set((x0 + x1) / 2, y1); bed.scale.set(pose.k * dir, pose.k); root.addChild(bed);
+  bed.pivot.set((x0 + x1) / 2, y1); bed.scale.set(drawK * dir, drawK); root.addChild(bed);
   const sprite = src => {const s = new Sprite(Assets.get(src)); s.scale.set(1 / data.F); return s;};
   const at = (node, [x, y]) => {node.pivot.set(x, y); node.position.set(x, y); return node;};
   let duck, cloth, zz, prop;
@@ -80,7 +82,7 @@ export function createSleeper(sleep, seed = 0) {
   if (m.blanket) at(prop, [duck.pivot.x, m.blanket]);
   const hat = new Container({label: 'Sleep cap'});
   if (m.cap) {hat.position.set(m.cap[0], m.cap[1]); hat.rotation = m.cap[2]; hat.scale.set(m.cap[3] / STAND_HEAD); duck.addChild(hat);}
-  const zH = Z_H * data.poses.hammock.k / pose.k, zs = m.zAnchor ? Z_SIZES.map(() => {const z = new Sprite(Assets.get(Z_SRC)); z.anchor.set(.5); bed.addChild(z); return z;}) : [];
+  const zH = Z_H * data.poses.hammock.k / drawK, zs = m.zAnchor ? Z_SIZES.map(() => {const z = new Sprite(Assets.get(Z_SRC)); z.anchor.set(.5); bed.addChild(z); return z;}) : [];
   const puffAt = m.zAnchor || (zz && [zz.pivot.x, zz.pivot.y]) || [m.cap[0], m.cap[1] - 40];
   const puff = [0, 1, 2, 3].map(() => {const z = new Sprite(Assets.get(Z_SRC)); z.anchor.set(.5); z.visible = false; bed.addChild(z); return z;});
   let pokedAt = -1e9, now = 0;
