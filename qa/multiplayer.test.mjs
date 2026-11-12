@@ -650,7 +650,8 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     clients.push(returned);
     const fresh = await eventually(() => returned.duck());
     assert.notEqual(fresh.id,id);
-    assert.ok(Math.hypot(fresh.x-world.zones.plaza.spawn[0],fresh.y-world.zones.plaza.spawn[1])<=DUCK_RADIUS*2);
+    assert.deepEqual([fresh.islandId,fresh.x,fresh.y],[pose.islandId,pose.x,pose.y]);
+    assert.equal(returned.welcome.arrival,undefined);
     assert.deepEqual(fresh.outfit,before.outfit);
     assert.ok(nav.walkable(fresh.x,fresh.y));
 
@@ -797,8 +798,10 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     const fresh=await socket(captainCookie);
     clients.push(fresh);
     await eventually(() => fresh.duck());
-    assert.equal(fresh.snapshot.islandId,'home');
+    assert.equal(fresh.snapshot.islandId,exit.destination);
     assert.equal(fresh.duck().mode,'walking');
+    assert.equal(fresh.duck().boatId,null);
+    assert.deepEqual([fresh.duck().x,fresh.duck().y],[there.land.x,there.land.y]);
   } finally {
     clients.forEach(client => client.close());
     await request('/test/expire-session');
@@ -1029,5 +1032,41 @@ test('whole-globe layout: worker join preserves every saved island ID and local 
       assert.deepEqual([resumed.duck().x,resumed.duck().y,resumed.duck().turn],[Math.round(pose.x*100)/100,Math.round(pose.y*100)/100,pose.turn],island.id+' keeps its local saved pose on the hundredth-unit wire format');
       assert.equal(resumed.welcome.id,a.welcome.id,'resumed identity passes worker join');
     } finally {a.close();resumed?.close();}
+  }
+});
+
+test('a signed-out duck returns to its saved island after the room restarts', async () => {
+  const account = 9450;
+  const clients = [];
+  const logout = session => request('/auth/logout',{method:'POST',headers:{Origin:origin,Cookie:session}});
+  try {
+    const first = await signIn(account);
+    const duck = await socket(first.session);
+    clients.push(duck);
+    const islandId = 'sunset';
+    const {x,y} = mapOf(islandId).spawn;
+    await position(duck,{islandId,x,y,turn:.3,path:[]});
+    await eventually(() => duck.duck()?.islandId === islandId);
+    await logout(first.session);
+    await request('/test/expire-resume');
+    await request('/test/restore');
+
+    const second = await signIn(account);
+    const returning = await socket(second.session);
+    clients.push(returning);
+    const saved = await eventually(() => returning.duck());
+    assert.deepEqual([saved.islandId,saved.x,saved.y,saved.turn],[islandId,x,y,.3]);
+    assert.equal(returning.welcome.arrival,undefined);
+
+    await position(returning,{x:1e6,y:1e6});
+    await logout(second.session);
+    const third = await signIn(account);
+    const fallback = await socket(third.session);
+    clients.push(fallback);
+    const landed = await eventually(() => fallback.duck());
+    assert.ok(navOf(landed.islandId).walkable(landed.x,landed.y));
+    assert.equal(fallback.welcome.arrival,'Home Island');
+  } finally {
+    clients.forEach(client => client.close());
   }
 });
