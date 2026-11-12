@@ -46,6 +46,7 @@ import {floatingPose} from './environment/floating.js';
 import {Application, Assets, Container, Graphics, Sprite, TilingSprite, Texture, Matrix} from 'pixi.js';
 import rawWorld from '../../../assets/world/world.json';
 import art from '../../world/home/art-manifest.json';
+import {pickWorldSpawn} from '../../gameplay/world-spawn.js';
 import {createSimulation} from '../../gameplay/simulation.js';
 import {startJump,jumpHeight,jumpPose,JUMP_SECONDS,MUSEUM_DOOR,atMuseumDoor} from '../../gameplay/player-motion.js';
 import {createDust} from './environment/dust.js';
@@ -106,11 +107,13 @@ function release(src) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, externalOverview = false} = {}) {
+  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, externalOverview = false, randomArrival = false, onArrival = () => {}} = {}) {
     this.transparent=transparent;this.renderResolution=renderResolution;this.externalOverview=externalOverview;
     this.onInteriorChange = onInteriorChange;
     this.room = room;
     this.islandId = 'home';
+    this.randomArrival = randomArrival;
+    this.onArrival = onArrival;
     this.travelMode = 'walking';
     this.touchInput = {x:0,y:0};
     this.chatLayer = chatLayer;
@@ -328,6 +331,16 @@ export class PixiIsland {
         this.travelView.fx.waterSplash=(x,y)=>{if (this.artShown === 'home') this.waterFX?.splash(x,y,.85,30);};
         this.switchIsland(this.room.islandId);
         this.karmaView=await createKarmaView(this);
+      }
+      if (this.randomArrival && !this.room) {
+        const spawn = pickWorldSpawn({homeNav:this.sim.nav});
+        if (spawn) {
+          const {x,y,islandId,name} = spawn;
+          Object.assign(this.sim.player,{x,y,previousX:x,previousY:y});
+          if (islandId !== 'home') this.sim.setPlayerNav(mapOf(islandId).nav());
+          this.switchIsland(islandId);
+          this.offlineArrival = name;
+        }
       }
       this.bindInput();
       this.observer = new ResizeObserver(() => this.resize());
@@ -744,7 +757,20 @@ export class PixiIsland {
     }
   }
 
+  finishArrival() {
+    if (!this.arrival) return;
+    this.onArrival(this.arrival.name);
+    this.arrival = null;
+  }
+
+  arrivalLift(now) {
+    if (!this.arrival || this.motion.matches) return 0;
+    const t = Math.min(1,(now - (this.arrival.start ?? now)) / 520);
+    return 220 * (1 - t * t);
+  }
+
   setDestination(point) {
+    if (this.arrival) return false;
     const destination = this.room ? this.room.destination(point.x, point.y) : this.sim.destination(point.x, point.y);
     if (destination) {
       this.marker.position.set(...destination);
@@ -755,11 +781,13 @@ export class PixiIsland {
   }
 
   jump() {
+    if (this.arrival) return false;
     if (this.interior?.active) return this.interior.jump();
     return this.room ? this.room.jump() : startJump(this.sim?.player);
   }
 
   triggerEmote(action) {
+    if (this.arrival) return;
     if (this.room) {
       if (!this.room.emote(action)) return;
     } else {
@@ -1116,6 +1144,20 @@ export class PixiIsland {
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
       this.follow=Boolean(this.player); this.fitMode=false;
     }
+    const actor = this.player;
+    const arrivalName = this.room ? this.room.arrival : this.offlineArrival;
+    if (actor && actor.id !== this.focusedActor) {
+      this.focusedActor = actor.id;
+      if (arrivalName) this.arrival = {id:actor.id,name:arrivalName};
+      this.flyHome();
+    }
+    if (this.arrival?.id !== actor?.id) this.arrival = null;
+    const arrivalViewReady = this.externalOverview ? this.externalArrivalReady :
+      this.artShown === artOf(this.islandId) && this.artReady(this.artShown);
+    if (this.arrival && arrivalViewReady && this.playerRig()) {
+      if (this.arrival.start === undefined) this.arrival.start = now;
+      if (this.motion.matches || now - this.arrival.start >= 520) this.finishArrival();
+    }
     const input = {
       reducedMotion:this.motion.matches,
       x: Number(this.keys.has('d') || this.keys.has('arrowright')) - Number(this.keys.has('a') || this.keys.has('arrowleft')) + this.touchInput.x,
@@ -1126,8 +1168,8 @@ export class PixiIsland {
     if (this.travelView?.fx.holding(this.room?.id)) input.x=input.y=0;
     const indoors = this.interior?.active;
     while (this.accumulator >= SIM_STEP) {
-      this.sim.step(SIM_STEP, this.room || indoors ? ZERO : input);
-      this.room?.step(SIM_STEP, indoors ? ZERO : input);
+      this.sim.step(SIM_STEP, this.room || indoors || this.arrival ? ZERO : input);
+      this.room?.step(SIM_STEP, indoors || this.arrival ? ZERO : input);
       this.accumulator -= SIM_STEP;
     }
     this.room?.setAlpha(this.accumulator * 60);
@@ -1285,7 +1327,7 @@ export class PixiIsland {
       const seat = !homeShown && duck.player ? benchSeatAt(this.artProps(this.artShown), {...duck,x,y}) : null;
       const peer = !seat && duck.player ? telescopePeerAt(this.artProps(this.artShown), {...duck,x,y}) : null;
       const hop = jumpPose(renderJumpLeft(duck.jumpLeft, this.accumulator), reduced, {turn: duck.turn, moving: duck.travel > 20});
-      rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift);
+      rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift - (duck.player ? this.arrivalLift(now) : 0));
       rig.root.zIndex = y;
       if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       if (peer) {rig.root.position.set(peer.x,peer.y);rig.root.zIndex=peer.y;}
@@ -1321,7 +1363,7 @@ export class PixiIsland {
     const live = this.room?.poses(now / 1000) ?? [];
     this.arts?.get(this.artShown)?.icelandLife?.current?.update(t, reduced, visible, flatVisible && this.scene.visible, player, live);
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
-    if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible);
+    if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible, now);
     this.karmaView?.update(dt,t,reduced,visible);
     this.plantReactions?.update(t);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
@@ -1427,7 +1469,7 @@ export class PixiIsland {
     player.outfit = {...outfit};
   }
 
-  renderLiveDucks(poses, dt, time, reducedMotion, visible) {
+  renderLiveDucks(poses, dt, time, reducedMotion, visible, now) {
     const ids = new Set(poses.map(pose => pose.id)), sailers = [];
     const scopeProps = this.artShown === 'home' ? this.props : this.arts?.get(this.artShown)?.props;
     for (const [id, entry] of this.liveRigs) {
@@ -1510,7 +1552,7 @@ export class PixiIsland {
       rig.root.scale.set(look.scale*look.sx,look.scale*look.sy/TILT);
       const jumpLeft=isPlayer?renderJumpLeft(pose.jumpLeft,this.accumulator):pose.jumpLeft;
       const hop=look.deck ? jumpPose(jumpLeft,reducedMotion,{turn:look.turn,moving:look.speed>20}) : null;
-      rig.root.position.set(look.deck&&pose.mode!=='sailing'?deckX(look.x,look.y,this.arches):look.x,(look.deck?deckY(look.x,look.y,this.arches):look.y)-(hop?.lift ?? 0));
+      rig.root.position.set(look.deck&&pose.mode!=='sailing'?deckX(look.x,look.y,this.arches):look.x,(look.deck?deckY(look.x,look.y,this.arches):look.y)-(hop?.lift ?? 0)-(isPlayer ? this.arrivalLift(now) : 0));
       rig.root.rotation=look.rotation; rig.root.alpha=look.alpha;
       rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');
       if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:deckX(look.x,look.y,this.arches), y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});

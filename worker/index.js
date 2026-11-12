@@ -10,6 +10,7 @@ import {chatText} from '../src/multiplayer/chat.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
 import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
 import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
+import {pickWorldSpawn} from '../src/gameplay/world-spawn.js';
 import {RoomKarma} from './karma.js';
 
 export const ISLAND_LIMIT = 100;
@@ -86,7 +87,9 @@ export class IslandRoom {
       CREATE TABLE IF NOT EXISTS sessions (
       digest TEXT PRIMARY KEY, account TEXT NOT NULL, login TEXT NOT NULL, expires INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS resumes (
-      account TEXT PRIMARY KEY, pose TEXT NOT NULL, expires INTEGER NOT NULL);`);
+      account TEXT PRIMARY KEY, pose TEXT NOT NULL, expires INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS last_locations (
+      account TEXT PRIMARY KEY, pose TEXT NOT NULL);`);
     if (!this.sql.exec('PRAGMA table_info(sessions)').toArray().some(column => column.name === 'can_play')) {
       this.sql.exec('ALTER TABLE sessions ADD COLUMN can_play INTEGER NOT NULL DEFAULT 0');
       this.sql.exec('DELETE FROM resumes');
@@ -399,6 +402,38 @@ export class IslandRoom {
     return reply(this.friendState(user.account));
   }
 
+  saveLocation(account, actor) {
+    const {islandId, x, y, turn, mode} = actor;
+    this.sql.exec('INSERT OR REPLACE INTO last_locations VALUES(?,?)',
+      account, JSON.stringify({islandId, x, y, turn, mode}));
+  }
+
+  savedLocation(account, counts) {
+    const row = this.sql.exec('SELECT pose FROM last_locations WHERE account=?',account).toArray()[0];
+    if (!row) return null;
+    const {islandId, x, y, turn, mode} = JSON.parse(row.pose);
+    if (!islandFor(islandId) || (counts.get(islandId) ?? 0) >= ISLAND_LIMIT) return null;
+    if (islandId === BOG_ISLAND && !this.karma.bogEntry(account) &&
+        bogLandingNotice(islandId,this.karma.balance(account))) return null;
+
+    const nav = this.navFor(islandId);
+    if (mode === 'sailing') {
+      // The short reservation releases the shared boat. Return on foot at the harbor.
+      const dock = harborOf(islandId).land;
+      const point = nav.nearest(dock.x,dock.y,180);
+      return point ? {islandId, x:point[0], y:point[1], turn:0} : null;
+    }
+    if (!Number.isFinite(x) || !Number.isFinite(y) || !canWalkTo(islandId,x,y) || !nav.walkable(x,y)) return null;
+    return {islandId, x, y, turn};
+  }
+
+  pickSpawn(account, counts, occupied) {
+    return pickWorldSpawn({
+      karma:this.karma.balance(account), boats:this.boats, occupied,
+      hasRoom:id => (counts.get(id) ?? 0) < ISLAND_LIMIT,
+    });
+  }
+
   join(request, now) {
     if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return reply({}, 426);
     const digest = request.headers.get('X-Session-Digest');
@@ -406,15 +441,24 @@ export class IslandRoom {
     const wantsPlayer = new URL(request.url).searchParams.get('play') === '1';
     const previous = user && [...this.connections].find(([,info]) => info.actor && info.account === user.account);
     const resume = user && this.sql.exec('SELECT pose FROM resumes WHERE account=? AND expires>?', user.account, now).toArray()[0];
-    const active = [...this.connections.values()].filter(info => info.actor).length;
-    const held = this.sql.exec('SELECT count(*) AS count FROM resumes WHERE expires>?', now).one().count;
-    const counts = islandCounts(this.connections);
-    for (const row of this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray()) {
-      const pose = JSON.parse(row.pose), islandId = pose.islandId ?? 'home';
-      counts.set(islandId, (counts.get(islandId) ?? 0) + 1);
+    const actors = [...this.connections.values()].flatMap(info => info.actor ? [info.actor] : []);
+    const held = this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray()
+      .map(row => JSON.parse(row.pose));
+    const active = actors.length;
+    const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
+    const canPlay = user?.canPlay && wantsPlayer;
+    let spawn = null, saved = null;
+    if (canPlay && !from && active + held.length < PLAYER_LIMIT) {
+      const occupied = [...actors, ...held];
+      const counts = new Map();
+      for (const pose of occupied) {
+        const id = pose.islandId ?? 'home';
+        counts.set(id, (counts.get(id) ?? 0) + 1);
+      }
+      saved = this.savedLocation(user.account, counts);
+      if (!saved) spawn = this.pickSpawn(user.account, counts, occupied);
     }
-    const playing = !!(user?.canPlay && wantsPlayer && (previous || resume ||
-      (active+held < PLAYER_LIMIT && (counts.get('home') ?? 0) < ISLAND_LIMIT)));
+    const playing = Boolean(canPlay && (from || saved || spawn));
     const spectators = this.connections.size-active;
     const [client, socket] = Object.values(new WebSocketPair());
     if (!playing && spectators >= SPECTATOR_LIMIT) {
@@ -426,13 +470,13 @@ export class IslandRoom {
     const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login,
       input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
-      const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
       const savedOutfit = this.sql.exec('SELECT outfit FROM outfits WHERE account=?',user.account).toArray()[0];
       const outfit = savedOutfit ? JSON.parse(savedOutfit.outfit) : validOutfit(from?.outfit) ? from.outfit : randomOutfit();
       if (!savedOutfit) this.sql.exec('INSERT INTO outfits (account,outfit) VALUES(?,?)',user.account,JSON.stringify(outfit));
-      info.actor = {id:crypto.randomUUID(), x,y,turn:0,emoteVersion:0,
-        islandId:'home',mode:'walking',boatId:null,...from,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
+      const pose = from ?? saved ?? {islandId:spawn.islandId, x:spawn.x, y:spawn.y};
+      info.actor = {id:crypto.randomUUID(), turn:0, emoteVersion:0,
+        islandId:'home',mode:'walking',boatId:null,...pose,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       recoverIsland(info.actor);
       if (this.recoverSailingPosition(info.actor)) this.saveBoats();
       if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
@@ -445,6 +489,7 @@ export class IslandRoom {
     this.connections.set(socket, info);
     this.attach(socket, info);
     this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
+      ...(spawn ? {arrival:spawn.name} : {}),
       reason:user && wantsPlayer && !user.canPlay ? 'star-required' : user && wantsPlayer && !playing ? 'players-full' : null});
     if (playing && !previous && !resume) {
       for (const [viewer,viewerInfo] of this.connections) {
@@ -543,7 +588,10 @@ export class IslandRoom {
 
   demote(socket, info, reason) {
     const wasPlayer = !!info.actor;
-    if (info.actor && reason !== 'taken-over') this.releaseBoat(info.actor.id);
+    if (info.actor && reason !== 'taken-over') {
+      this.saveLocation(info.account,info.actor);
+      this.releaseBoat(info.actor.id);
+    }
     info.islandId = info.actor?.islandId ?? info.islandId ?? 'home';
     info.actor = null;
     info.input = ZERO;
@@ -797,6 +845,7 @@ export class IslandRoom {
     if (!info) return;
     this.connections.delete(socket);
     if (info.actor) {
+      this.saveLocation(info.account,info.actor);
       const now = Date.now();
       if (this.session(info.digest,now)) {
         this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',

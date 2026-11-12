@@ -1,6 +1,6 @@
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import {mapOf} from '../src/world/island-maps.js';
-import {originOffset} from '../src/gameplay/islands.js';
+import {navOf, originOffset} from '../src/gameplay/islands.js';
 import assert from 'node:assert/strict';
 import test, {after, before} from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
@@ -20,10 +20,17 @@ let mf;
 before(async () => {
   const root = fileURLToPath(new URL('../',import.meta.url));
   const {outputFiles:[bundle]} = await build({stdin:{resolveDir:root, contents:`
-    import {IslandRoom} from './worker/index.js';
+    import {IslandRoom, ISLAND_LIMIT} from './worker/index.js';
+    import {mapOf} from './src/world/island-maps.js';
     import {createBoats} from './src/gameplay/islands.js';
     import {start, callback, session, logout, connect, playAccess, friends, outfit} from './server/pages-auth.js';
     export class TestIsland extends IslandRoom {
+      pickSpawn(account, counts, occupied) {
+        if (Number(account) >= 9800) return super.pickSpawn(account, counts, occupied);
+        // Keep Home movement, chat, and docking fixtures on their original map.
+        return (counts.get('home') ?? 0) < ISLAND_LIMIT
+          ? {islandId:'home', ...mapOf('home').spawn, name:'Home Island'} : null;
+      }
       async fetch(request) {
         const path = new URL(request.url).pathname;
         if (path === '/test/reset-boats') {this.boats=createBoats();this.saveBoats();return new Response(null,{status:204});}
@@ -643,7 +650,8 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     clients.push(returned);
     const fresh = await eventually(() => returned.duck());
     assert.notEqual(fresh.id,id);
-    assert.ok(Math.hypot(fresh.x-world.zones.plaza.spawn[0],fresh.y-world.zones.plaza.spawn[1])<=DUCK_RADIUS*2);
+    assert.deepEqual([fresh.islandId,fresh.x,fresh.y],[pose.islandId,pose.x,pose.y]);
+    assert.equal(returned.welcome.arrival,undefined);
     assert.deepEqual(fresh.outfit,before.outfit);
     assert.ok(nav.walkable(fresh.x,fresh.y));
 
@@ -790,8 +798,10 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     const fresh=await socket(captainCookie);
     clients.push(fresh);
     await eventually(() => fresh.duck());
-    assert.equal(fresh.snapshot.islandId,'home');
+    assert.equal(fresh.snapshot.islandId,exit.destination);
     assert.equal(fresh.duck().mode,'walking');
+    assert.equal(fresh.duck().boatId,null);
+    assert.deepEqual([fresh.duck().x,fresh.duck().y],[there.land.x,there.land.y]);
   } finally {
     clients.forEach(client => client.close());
     await request('/test/expire-session');
@@ -969,6 +979,20 @@ test('player and spectator caps still allow watching and an explicit retry', asy
     const retried = await socket();
     spectators.push(retried);
     assert.equal(retried.welcome.reason,null);
+    const {session:worldwideSession} = await signIn(9800);
+    const worldwide = await socket(worldwideSession);
+    players.push(worldwide);
+    const dropped = await eventually(() => worldwide.duck());
+    assert.notEqual(dropped.islandId,'home');
+    assert.notEqual(dropped.islandId,'isle-249','fresh accounts cannot spawn on Booquack Bog');
+    assert.equal(worldwide.snapshot.islandId,dropped.islandId);
+    assert.ok(navOf(dropped.islandId).walkable(dropped.x,dropped.y));
+    assert.ok(worldwide.welcome.arrival);
+    const handoff = await socket(worldwideSession);
+    players.push(handoff);
+    const same = await eventually(() => handoff.duck());
+    assert.equal(handoff.welcome.arrival,undefined);
+    assert.deepEqual([same.id,same.islandId,same.x,same.y],[dropped.id,dropped.islandId,dropped.x,dropped.y]);
   } finally {
     for (const client of [...players,...spectators]) client.close();
   }
@@ -1008,5 +1032,41 @@ test('whole-globe layout: worker join preserves every saved island ID and local 
       assert.deepEqual([resumed.duck().x,resumed.duck().y,resumed.duck().turn],[Math.round(pose.x*100)/100,Math.round(pose.y*100)/100,pose.turn],island.id+' keeps its local saved pose on the hundredth-unit wire format');
       assert.equal(resumed.welcome.id,a.welcome.id,'resumed identity passes worker join');
     } finally {a.close();resumed?.close();}
+  }
+});
+
+test('a signed-out duck returns to its saved island after the room restarts', async () => {
+  const account = 9450;
+  const clients = [];
+  const logout = session => request('/auth/logout',{method:'POST',headers:{Origin:origin,Cookie:session}});
+  try {
+    const first = await signIn(account);
+    const duck = await socket(first.session);
+    clients.push(duck);
+    const islandId = 'sunset';
+    const {x,y} = mapOf(islandId).spawn;
+    await position(duck,{islandId,x,y,turn:.3,path:[]});
+    await eventually(() => duck.duck()?.islandId === islandId);
+    await logout(first.session);
+    await request('/test/expire-resume');
+    await request('/test/restore');
+
+    const second = await signIn(account);
+    const returning = await socket(second.session);
+    clients.push(returning);
+    const saved = await eventually(() => returning.duck());
+    assert.deepEqual([saved.islandId,saved.x,saved.y,saved.turn],[islandId,x,y,.3]);
+    assert.equal(returning.welcome.arrival,undefined);
+
+    await position(returning,{x:1e6,y:1e6});
+    await logout(second.session);
+    const third = await signIn(account);
+    const fallback = await socket(third.session);
+    clients.push(fallback);
+    const landed = await eventually(() => fallback.duck());
+    assert.ok(navOf(landed.islandId).walkable(landed.x,landed.y));
+    assert.equal(fallback.welcome.arrival,'Home Island');
+  } finally {
+    clients.forEach(client => client.close());
   }
 });

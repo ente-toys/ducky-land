@@ -55,6 +55,7 @@ export class RoomClient {
     this.onPresence(null);
     this.id = null;
     this.player = null;
+    this.arrival = null;
     this.friendPlayers = [];
     this.updateNearby();
     this.seq = 0;
@@ -134,6 +135,7 @@ export class RoomClient {
         if (message.type === 'welcome') {this.onFriendsChanged(); socket.send(JSON.stringify({type: 'updates'}));}
         this.failures = 0;
         this.id = message.id;
+        this.arrival = message.arrival ?? null;
         if (!this.id) this.player = null;
         this.updateNearby();
         if (message.type === 'role' || ['players-full','star-required'].includes(message.reason)) this.wantsPlay = false;
