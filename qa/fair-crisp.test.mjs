@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {DOMAdapter} from 'pixi.js';
-import {createCanvas,Image} from '@napi-rs/canvas';
-import {cropFairSVG,FAIR_ART_BUDGET_BYTES,FAIR_MAX_RESOLUTION,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from '../src/rendering/pixi/art/fair-raster.js';
-import {createFairRasterLoader} from '../src/rendering/pixi/art/fair-art-stream.js';
+import {createCanvas,Image,Path2D} from '@napi-rs/canvas';
+import {JSDOM} from 'jsdom';
+import {cropFairSVG,fairGroundTiles,FAIR_GROUND_SOURCE,FAIR_ART_BUDGET_BYTES,FAIR_MAX_RESOLUTION,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from '../src/rendering/pixi/art/fair-raster.js';
+import {createFairGroundLoader,createFairRasterLoader} from '../src/rendering/pixi/art/fair-art-stream.js';
 import {createGroundPool,GROUND_BUDGET_BYTES,tileInView} from '../src/rendering/pixi/art/ground-stream.js';
 import {allocation,planned,layers} from '../scripts/fair-crisp/model.mjs';
 import poses from '../src/world/home/sleep-poses.json' with {type:'json'};
@@ -79,6 +80,52 @@ test('the real Fair SVG loader rasterises at requested dimensions, shares leases
  }finally{loader.destroy();DOMAdapter.set(adapter);globalThis.fetch=oldFetch;if(oldLocation===undefined)delete globalThis.location;else globalThis.location=oldLocation;}
 });
 
+test('Fair ground shares one parsed artwork across viewports and preserves both repeating patterns',async t=>{
+ const base='/pixi-art/themes/fair/',sharedSource=base+FAIR_GROUND_SOURCE;
+ const original=readFileSync('public'+sharedSource,'utf8');
+ const inner=svg=>svg.slice(svg.indexOf('>')+1);
+ const sources=new Map(art.ground.tiles.map(tile=>[tile.src,readFileSync('public'+base+tile.src,'utf8')]));
+ for(const tile of art.ground.tiles){
+  const svg=sources.get(tile.src),viewBox=svg.match(/viewBox="([^"]+)"/)[1].split(' ').map(Number);
+  assert.deepEqual(viewBox,[tile.x,tile.y,tile.width,tile.height]);
+  assert(inner(svg)===inner(original),`${tile.src} must share the canonical ground artwork`);
+ }
+ const {window}=new JSDOM();
+ const previous={DOMParser:globalThis.DOMParser,Path2D:globalThis.Path2D,location:globalThis.location};
+ const adapter=DOMAdapter.get();
+ let parsed=0,fetches=0;
+ globalThis.DOMParser=class extends window.DOMParser {
+  parseFromString(...args){parsed++;return super.parseFromString(...args);}
+ };
+ globalThis.Path2D=Path2D;globalThis.location={href:'https://ducky.test/'};
+ DOMAdapter.set({...adapter,createCanvas,createImage:()=>assert.fail('Fair ground should draw directly onto a canvas')});
+ t.mock.method(globalThis,'fetch',async url=>{
+  assert.equal(url,'https://ducky.test'+sharedSource);fetches++;
+  return new Response(original);
+ });
+ const loader=createFairGroundLoader();
+ t.after(()=>{loader.destroy();DOMAdapter.set(adapter);Object.assign(globalThis,previous);window.close();});
+ for(const [x,y]of [[3570,3352],[3400,1300],[6200,2190]]){
+  const tile=art.ground.tiles.find(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height);
+  const crop=fairGroundTiles(tile,base+tile.src,sharedSource)
+    .find(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height);
+  const resolution=2,key=crop.src+'&groundScale='+resolution;
+  const texture=await loader.acquire(key,resolution),canvas=texture.source.resource;
+  const w=Math.ceil(crop.width*resolution),h=Math.ceil(crop.height*resolution);
+  assert.deepEqual([canvas.width,canvas.height],[w,h]);
+  const actual=canvas.getContext('2d').getImageData(0,0,w,h).data;
+  const expected=await sharp(Buffer.from(cropFairSVG(sources.get(tile.src),
+    [tile.width,tile.height,crop.x-tile.x,crop.y-tile.y,crop.width,crop.height])))
+    .resize(w,h,{fit:'fill'}).ensureAlpha().raw().toBuffer();
+  let error=0;
+  for(let i=0;i<actual.length;i++)error+=Math.abs(actual[i]-expected[i]);
+  assert(error/actual.length<2,`Fair artwork at ${x},${y}: mean difference ${error/actual.length}`);
+  loader.release(key);await flush();assert(texture.destroyed);
+ }
+ assert.equal(fetches,1);
+ assert.equal(parsed,1);
+});
+
 test('the production theme loader wires Fair ground and standing props into their budgeted crop pools',async()=>{
  const {loadThemeArt}=await import('../src/rendering/pixi/art/theme-art.js');
  const oldFetch=globalThis.fetch,manifest={ground:{tiles:[{src:'ground.svg',x:1000,y:2000,width:200,height:200}]},decks:[],flats:[],props:[{id:'lamp',src:'lamp.svg',x:1100,y:2100,width:29,height:82,scale:4.3,anchor:{x:.5,y:1},flip:true,shadow:false}]};
@@ -91,6 +138,7 @@ test('the production theme loader wires Fair ground and standing props into thei
   const floats=acquisitions.filter(([src])=>src.startsWith('/pixi-duck/float/'));const fairVariants=new Set(JSON.parse(readFileSync(new URL('../src/rendering/pixi/environment/pond-regions.json',import.meta.url),'utf8')).ponds.filter(p=>p.island==='fair').flatMap(p=>p.duckies.map(d=>d.name)));assert.equal(floats.length,fairVariants.size,'one texture per Fair pond Ducky design');assert(floats.every(([,r])=>r<1),'tiny runtime Duckies retain a bounded texture budget');
   assert.equal(loaded.rasterPool.stats().budgetBytes,FAIR_ART_BUDGET_BYTES);
   assert(streams[0].entries.every(t=>t.screenResolution&&t.x>=1000&&t.y>=2000&&t.localX===undefined));
+  assert(streams[0].entries.every(t=>t.src.startsWith('/pixi-art/themes/fair/'+FAIR_GROUND_SOURCE+'?rasterCrop=')));
   assert.equal(typeof streams[0].loader.acquire,'function');
   const lamp=loaded.props[0].sprite;assert.equal(lamp.x,1100);assert.equal(lamp.y,2100);assert(lamp.children.length>0);
   const xs=lamp.children.map(s=>s.x);assert(Math.min(...xs)>=-29*4.3/2);assert(Math.max(...xs)<=29*4.3/2);

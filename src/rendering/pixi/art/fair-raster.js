@@ -1,6 +1,7 @@
 import cropBounds from './fair-raster-bounds.json' with {type:'json'};
 export const FAIR_TILE_SIZE = 96;
 export const FAIR_GROUND_TILE_SIZE = 128;
+export const FAIR_GROUND_SOURCE = 'bigger/ground-0-0.svg';
 export const FAIR_MAX_RESOLUTION = 4;
 export const FAIR_ART_BUDGET_BYTES = 80 * 1048576;
 export const FAIR_ART_UTILIZATION = .995;
@@ -18,6 +19,14 @@ export function fairTiles(p, src, anchor = {x: 0, y: 0}, tileSize = FAIR_TILE_SI
       resolution:FAIR_MAX_RESOLUTION,screenResolution:true,viewMargin:tileSize===FAIR_GROUND_TILE_SIZE?0:16});
   }
   return tiles;
+}
+
+export function fairGroundTiles(tile, source, sharedSource) {
+  return fairTiles(tile, source, undefined, FAIR_GROUND_TILE_SIZE).map(({localX,localY,...ground}) => {
+    // The authored ground files share world-space geometry and only differ in their viewport.
+    const crop = [tile.width, tile.height, ground.x, ground.y, ground.width, ground.height];
+    return {...ground,src:sharedSource+'?rasterCrop='+crop.join(',')};
+  });
 }
 
 export function cropFairSVG(original, crop) {
