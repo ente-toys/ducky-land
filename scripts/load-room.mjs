@@ -1,7 +1,7 @@
 import {performance} from 'node:perf_hooks';
 import {fileURLToPath} from 'node:url';
 import {makeRoom, addPlayer, wander, seeded} from '../qa/room-harness.mjs';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 export async function loadTest({players: N = 100, island = 'blossom', seconds = 20, quiet = false} = {}) {
   const room = await makeRoom(), map = mapOf(island), nav = map.nav(), rnd = seeded(11);

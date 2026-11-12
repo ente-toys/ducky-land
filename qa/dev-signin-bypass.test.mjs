@@ -6,18 +6,18 @@ import React, {act} from 'react';
 
 for (const dev of [true,false]) test(`signup bypass is ${dev?'enabled in development':'ignored in production'}`,async t=>{
   const {outputFiles:[bundle]}=await build({
-    entryPoints:['src/pixi/PixiPage.jsx'],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,
+    entryPoints:['src/app/PixiPage.jsx'],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,
     loader:{'.css':'empty'},define:{'import.meta.env.DEV':String(dev)},
     plugins:[{name:'headless',setup(build){
-      build.onLoad({filter:/\/src\/pixi\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
-      build.onLoad({filter:/\/src\/pixi\/engine\.js$/},()=>({contents:`
+      build.onLoad({filter:/\/src\/rendering\/three\/three-game-view\.js$/},()=>({contents:'export async function createThreeGameView(){return {destroy(){}};}'}));
+      build.onLoad({filter:/\/src\/rendering\/pixi\/engine\.js$/},()=>({contents:`
         export class PixiIsland {
           constructor(options){globalThis.devEngines.push(options);}
           mount(){return Promise.resolve();}
           dispose(){}
           clearChat(){}
         }`}));
-      build.onLoad({filter:/\/src\/pixi\/.*\.jsx$/},args=>args.path.endsWith('/PixiPage.jsx')?null:{contents:'export default function Stub(){return null;}'});
+      build.onLoad({filter:/\/src\/(?:app|features\/bog-combat)\/.*\.jsx$/},args=>args.path.endsWith('/PixiPage.jsx')?null:{contents:'export default function Stub(){return null;}'});
     }}],
   });
   const code=['react','react/jsx-runtime','react-dom','pixi.js'].reduce((text,name)=>text.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name))),bundle.text);

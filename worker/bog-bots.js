@@ -1,5 +1,5 @@
-import {createBotBrain,createBotController,resetBotBrain} from '../src/pixi/bog-combat/bot-brain.js';
-import {isCombatHidden} from '../src/pixi/bog-combat/hide-bushes.js';
+import {createBotBrain,createBotController,resetBotBrain} from '../src/features/bog-combat/bot-brain.js';
+import {isCombatHidden} from '../src/features/bog-combat/hide-bushes.js';
 
 export const BOT_FILL=6;
 

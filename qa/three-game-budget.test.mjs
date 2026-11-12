@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {retainDetailArt} from '../src/pixi/three-game-budget.js';
+import {retainDetailArt} from '../src/rendering/three/three-game-budget.js';
 import {Container} from 'pixi.js';
-import {createSnowfall,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
+import {createSnowfall,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/rendering/pixi/environment/snowfall.js';
 
 test('visiting all themes retains Home and only the visible live island, releasing ready GPU art',()=>{
  const destroyed=[],game={arts:new Map([['home',{ready:true}]]),freeArt(id){destroyed.push(id);this.arts.delete(id);}};
@@ -23,7 +23,7 @@ test('a pending old island is no longer wanted when it completes; active and bas
 test('the real engine keeps authoritative simulation stepping while offscreen GPU rendering and streaming are skipped',async()=>{
  const {build}=await import('esbuild');
  const {fileURLToPath}=await import('node:url');
- const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/engine.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../src/pixi/engine.js',import.meta.url).href)}});
+ const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/rendering/pixi/engine.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../src/rendering/pixi/engine.js',import.meta.url).href)}});
  let code=bundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
  for(const name of ['pixi.js'])code=code.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name)));
  let Engine;

@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createArena,circleHit,spawnPads} from '../src/pixi/bog-combat/sim.js';
-import {RULES,emptyStats} from '../src/pixi/bog-combat/rules.js';
-import {DUCK_LENGTH as D} from '../src/pixi/bog-combat/rules.js';
-import {getBogBlockers} from '../src/pixi/bog-combat/blockers.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
+import {createArena,circleHit,spawnPads} from '../src/features/bog-combat/sim.js';
+import {RULES,emptyStats} from '../src/features/bog-combat/rules.js';
+import {DUCK_LENGTH as D} from '../src/features/bog-combat/rules.js';
+import {getBogBlockers} from '../src/features/bog-combat/blockers.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
 const BLOCKERS=getBogBlockers(),BOUNDS=BOG_COMBAT.bounds;
-import {canWalk} from '../src/pixi/bog-combat/physics.js';
+import {canWalk} from '../src/features/bog-combat/physics.js';
 
 const wall={blocksWalk:true,blocksShots:true,polygon:[{x:400,y:50},{x:410,y:50},{x:410,y:900},{x:400,y:900}]};
 const advance=(arena,seconds)=>{for(let i=0;i<Math.round(seconds*60);i++)arena.step(1/60);};

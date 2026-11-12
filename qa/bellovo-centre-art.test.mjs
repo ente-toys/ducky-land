@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import sharp from 'sharp';
 import {geometry,inShape} from '../assets/world/island-geometry.mjs';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json'),metrics=read('scripts/bigger-cathedral/centre-art-metrics.json');
 const nav=makeMap('cathedral',{world,walk,harbor,sleepers:[]}).nav(),ground=geometry(walk);

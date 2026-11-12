@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {Container,Texture} from 'pixi.js';
-import {attachBogCombat} from '../src/pixi/bog-combat/attach.js';
-import {BOG_OUTLINE_PIXELS,BOG_TEAM_COLOURS} from '../src/pixi/bog-combat/readability.js';
-import {createTeamMarker} from '../src/pixi/bog-combat/effects.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
+import {attachBogCombat} from '../src/features/bog-combat/attach.js';
+import {BOG_OUTLINE_PIXELS,BOG_TEAM_COLOURS} from '../src/features/bog-combat/readability.js';
+import {createTeamMarker} from '../src/features/bog-combat/effects.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
 
 test('solid team rings keep their rims, team-tinted names and hidden icon through both concealment states',()=>{
   for(const team of ['privacy','google']){

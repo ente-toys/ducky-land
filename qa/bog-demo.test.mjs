@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createDemo,demoBotCount} from '../src/pixi/bog-combat/demo.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {teamCounts} from '../src/pixi/bog-combat/entry.js';
+import {createDemo,demoBotCount} from '../src/features/bog-combat/demo.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {teamCounts} from '../src/features/bog-combat/entry.js';
 
 test('local autoplay uses ten real fighters, tags, respawns and valid island walking without bot medals',async()=>{
  let seed=97;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);

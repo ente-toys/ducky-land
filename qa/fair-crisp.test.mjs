@@ -4,12 +4,12 @@ import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {DOMAdapter} from 'pixi.js';
 import {createCanvas,Image} from '@napi-rs/canvas';
-import {cropFairSVG,FAIR_ART_BUDGET_BYTES,FAIR_MAX_RESOLUTION,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from '../src/pixi/fair-raster.js';
-import {createFairRasterLoader} from '../src/pixi/fair-art-stream.js';
-import {createGroundPool,GROUND_BUDGET_BYTES,tileInView} from '../src/pixi/ground-stream.js';
+import {cropFairSVG,FAIR_ART_BUDGET_BYTES,FAIR_MAX_RESOLUTION,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from '../src/rendering/pixi/art/fair-raster.js';
+import {createFairRasterLoader} from '../src/rendering/pixi/art/fair-art-stream.js';
+import {createGroundPool,GROUND_BUDGET_BYTES,tileInView} from '../src/rendering/pixi/art/ground-stream.js';
 import {allocation,planned,layers} from '../scripts/fair-crisp/model.mjs';
-import poses from '../src/pixi/sleep-poses.json' with {type:'json'};
-import {SLEEP_ROOT,SLEEP_SIZE} from '../src/pixi/sleep-spots.js';
+import poses from '../src/world/home/sleep-poses.json' with {type:'json'};
+import {SLEEP_ROOT,SLEEP_SIZE} from '../src/world/home/sleep-spots.js';
 const art=JSON.parse(readFileSync('public/pixi-art/themes/fair/art.json'));
 const tiles=planned(art),centres=[{x:3500,y:2700},...layers(art).map(({p})=>({x:p.x,y:p.y-p.height*(p.scale??1)/2}))];
 const fakeSprite=()=>({position:{set(x,y){this.x=x;this.y=y;}},scale:{x:1},destroy(){}});
@@ -80,7 +80,7 @@ test('the real Fair SVG loader rasterises at requested dimensions, shares leases
 });
 
 test('the production theme loader wires Fair ground and standing props into their budgeted crop pools',async()=>{
- const {loadThemeArt}=await import('../src/pixi/theme-art.js');
+ const {loadThemeArt}=await import('../src/rendering/pixi/art/theme-art.js');
  const oldFetch=globalThis.fetch,manifest={ground:{tiles:[{src:'ground.svg',x:1000,y:2000,width:200,height:200}]},decks:[],flats:[],props:[{id:'lamp',src:'lamp.svg',x:1100,y:2100,width:29,height:82,scale:4.3,anchor:{x:.5,y:1},flip:true,shadow:false}]};
  globalThis.fetch=async url=>({ok:!String(url).includes('centre/'),json:async()=>manifest});
  const acquisitions=[],streams=[],fakePool={create(entries,container,url,loader){const stream={entries,loader,destroy(){this.destroyed=true;}};streams.push(stream);return stream;}};
@@ -88,7 +88,7 @@ test('the production theme loader wires Fair ground and standing props into thei
  try{
   loaded=await loadThemeArt({id:'fair',art:'/pixi-art/themes/fair/art.json',origin:{x:0,y:0},width:3000,height:3000},{acquire:async(src,r)=>{acquisitions.push([src,r]);const {Texture}=await import('pixi.js');return Texture.EMPTY;},release(){},groundPool:fakePool});
   assert.deepEqual(acquisitions.filter(([src])=>!src.startsWith('/pixi-duck/float/')),[['/pixi-art/globe/fair-ground.svg',1]],'no fixed-resolution Fair scenery may be eagerly rasterised');
-  const floats=acquisitions.filter(([src])=>src.startsWith('/pixi-duck/float/'));const fairVariants=new Set(JSON.parse(readFileSync(new URL('../src/pixi/pond-regions.json',import.meta.url),'utf8')).ponds.filter(p=>p.island==='fair').flatMap(p=>p.duckies.map(d=>d.name)));assert.equal(floats.length,fairVariants.size,'one texture per Fair pond Ducky design');assert(floats.every(([,r])=>r<1),'tiny runtime Duckies retain a bounded texture budget');
+  const floats=acquisitions.filter(([src])=>src.startsWith('/pixi-duck/float/'));const fairVariants=new Set(JSON.parse(readFileSync(new URL('../src/rendering/pixi/environment/pond-regions.json',import.meta.url),'utf8')).ponds.filter(p=>p.island==='fair').flatMap(p=>p.duckies.map(d=>d.name)));assert.equal(floats.length,fairVariants.size,'one texture per Fair pond Ducky design');assert(floats.every(([,r])=>r<1),'tiny runtime Duckies retain a bounded texture budget');
   assert.equal(loaded.rasterPool.stats().budgetBytes,FAIR_ART_BUDGET_BYTES);
   assert(streams[0].entries.every(t=>t.screenResolution&&t.x>=1000&&t.y>=2000&&t.localX===undefined));
   assert.equal(typeof streams[0].loader.acquire,'function');
@@ -119,7 +119,7 @@ test('retina zoom/pan swaps count old and pending Fair textures within each hard
 });
 
 test('Fair crop pool plus its independent sharp kites fit within the former 88.30 MiB fixed-art allocation',async()=>{
- const {KITE_ASSETS}=await import('../src/pixi/home-kites.js');let kiteBytes=0;
+ const {KITE_ASSETS}=await import('../src/rendering/pixi/environment/home-kites.js');let kiteBytes=0;
  for(const src of KITE_ASSETS){const m=await sharp('public'+src).metadata();kiteBytes+=Math.ceil(m.width*FAIR_KITE_RESOLUTION)*Math.ceil(m.height*FAIR_KITE_RESOLUTION)*4;}
  assert(FAIR_ART_BUDGET_BYTES+kiteBytes<=88.302433014*1048576);
 });
@@ -133,7 +133,7 @@ test('transparent-gutter crop plans retain the original thin ink and silhouettes
  for(const {p,src,anchor}of selected.values()){
   const width=p.width*(p.scale??1),height=p.height*(p.scale??1),W=Math.ceil(width*2),H=Math.ceil(height*2);
   const {data}=await sharp(Buffer.from(cropFairSVG(readFileSync('public'+src,'utf8'),[width,height,0,0,width,height]))).resize(W,H,{fit:'fill'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
-  const covered=new Uint8Array(W*H),{fairTiles}=await import('../src/pixi/fair-raster.js');
+  const covered=new Uint8Array(W*H),{fairTiles}=await import('../src/rendering/pixi/art/fair-raster.js');
   for(const tile of fairTiles(p,src,anchor)){
    const c=new URL(tile.src,'http://test').searchParams.get('fairCrop').split(',').map(Number),x0=Math.max(0,Math.floor(c[2]/width*W)),x1=Math.min(W,Math.ceil((c[2]+c[4])/width*W)),y0=Math.max(0,Math.floor(c[3]/height*H)),y1=Math.min(H,Math.ceil((c[3]+c[5])/height*H));
    for(let y=y0;y<y1;y++)covered.fill(1,y*W+x0,y*W+x1);

@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {BOG_BLOCKERS} from '../src/pixi/bog-blockers.js';
-import {DUCK_RADIUS} from '../src/pixi/bog-combat/physics.js';
+import {BOG_BLOCKERS} from '../src/features/bog-combat/bog-blockers.js';
+import {DUCK_RADIUS} from '../src/features/bog-combat/physics.js';
 import {inPoly} from '../assets/world/island-geometry.mjs';
 import {groupFeet,shelters} from './bog-wall-layout-helpers.mjs';
 const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/bog-arena/art.json'));
 const layout=JSON.parse(fs.readFileSync('scripts/bog-environment/layout.json'));
-const map=JSON.parse(fs.readFileSync('src/pixi/bog-environment.json'));
+const map=JSON.parse(fs.readFileSync('src/features/bog-combat/bog-environment.json'));
 const groups=layout.wallLayout.groups;
 const overlaps=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 const touches=(a,b)=>a.x<=b.x+b.width&&a.x+a.width>=b.x&&a.y<=b.y+b.height&&a.y+a.height>=b.y;

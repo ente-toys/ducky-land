@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 import {CLUMPS} from '../scripts/bigger-cathedral/green-data.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',B='scripts/bigger-cathedral/green-source/';

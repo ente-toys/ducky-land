@@ -1,8 +1,8 @@
 import {existsSync, readFileSync, statSync, writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
-import {makeMap, THEME_IDS} from '../src/pixi/island-maps.js';
-import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
+import {makeMap, THEME_IDS} from '../src/world/island-maps.js';
+import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, SLEEP_TOTAL} from '../src/world/home/sleep-spots.js';
 import {geometry} from '../assets/world/island-geometry.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));

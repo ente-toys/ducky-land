@@ -7,9 +7,9 @@ import {ROOT,ART,WORLD,WORKERS,loadCatalog,integrate,validate,bounds,overlaps,pa
 import sharp from 'sharp';
 import {maxSleepersInView,quality3Problems} from '../scripts/iceland-final/quality3.mjs';
 import {geometry,inShape} from '../assets/world/island-geometry.mjs';
-import {onRink} from '../src/pixi/rink-slide.js';
-import {makeMap} from '../src/pixi/island-maps.js';
-import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/pixi/sleep-spots.js';
+import {onRink} from '../src/gameplay/rink-slide.js';
+import {makeMap} from '../src/world/island-maps.js';
+import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/world/home/sleep-spots.js';
 
 const read = file=>JSON.parse(readFileSync(path.join(ROOT,file)));
 const originalArt=read(ART+'/art.json'),originalWorld=read(WORLD+'/world.json');

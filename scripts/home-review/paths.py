@@ -4,7 +4,7 @@ sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import LineString,Polygon,Point
 from shapely.ops import unary_union
 from pathlib import Path
-E=json.load(open('src/pixi/home-expansion.json'))
+E=json.load(open('src/world/home/home-expansion.json'))
 def road(id,p,main=False,end=None):return dict(id=id,kind='main' if main else 'lane',width=128 if main else 104,points=p,terminal=end)
 loop=[[139,656],[900,594],[1700,545],[2220,530],[2380,350],[2850,340],[3839,500],[4190,650],[4640,533],[4830,540],[5100,950],[5330,1405],[5350,1420],[5600,1420],[5660,1650],[5733,1805],[5772,2070],[5680,2350],[5456,2567],[5200,3250],[5130,3950],[5200,4460],[4800,4680],[4020,4590],[3729,4478],[3487,4350],[3320,4240],[2700,4310],[2060,4110],[1661,3933],[990,4040],[820,3930],[400,4083],[-350,4020],[-900,4336],[-1200,4230],[-850,3950],[-760,3650],[-734,3366],[-355,3200],[-360,2950],[-130,2810],[80,2420],[80,2150],[289,1867],[110,1700],[117,1278],[139,656]]
 R=[road('home-main-loop',loop,True),
@@ -66,7 +66,7 @@ W=json.load(open('assets/world/world.json'))
 for w in W['water']:
  if abs(w.get('x',0)-1640)<2:
   wet=wet.union(affinity.scale(Point(w['x'],w['y']).buffer(1,quad_segs=60),w['rx'],w['ry']))
-wet=wet.union(Polygon(json.load(open('src/pixi/walk-shapes.json'))['lake']).buffer(0)).buffer(35,quad_segs=12).buffer(-35,quad_segs=12)
+wet=wet.union(Polygon(json.load(open('src/world/home/walk-shapes.json'))['lake']).buffer(0)).buffer(35,quad_segs=12).buffer(-35,quad_segs=12)
 def watercurve(g):
  polys=[g] if g.geom_type=='Polygon' else list(g.geoms)
  result=[]
@@ -88,10 +88,10 @@ svg=f'<g data-name="Home unified paths"><path d="{path(surface)}" fill="#e4c567"
 Path('scripts/home-review/path-surface.svgfrag').write_text(svg)
 Path('public/pixi-art/home-review').mkdir(parents=True,exist_ok=True)
 Path('public/pixi-art/home-review/path-network.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{E["width"]}" height="{E["height"]}" viewBox="{E["origin"]["x"]} {E["origin"]["y"]} {E["width"]} {E["height"]}">{svg}</svg>')
-Path('src/pixi/home-routes.json').write_text(json.dumps([dict(id=r['id'],width=r['width'],samples=sample(r['points'])) for r in R]))
+Path('src/world/home/home-routes.json').write_text(json.dumps([dict(id=r['id'],width=r['width'],samples=sample(r['points'])) for r in R]))
 Path('scripts/home-review/sampled-routes.json').write_text(json.dumps([dict(r,samples=sample(r['points'])) for r in R]))
 E['roads']=R+squares
 E['routeSystem']={'main':128,'lane':104,'surface':'/pixi-art/home-review/path-network.svg','routes':len(R)}
-Path('src/pixi/home-expansion.json').write_text(json.dumps(E,indent=2)+'\n')
+Path('src/world/home/home-expansion.json').write_text(json.dumps(E,indent=2)+'\n')
 Path('scripts/home-review/routes.json').write_text(json.dumps(R,indent=2)+'\n')
 print([(tuple(round(v) for v in g.bounds),round(g.area)) for g in (merged.geoms if hasattr(merged,'geoms') else [merged])]);print('Routes',len(R),'surface components',len(merged.geoms) if hasattr(merged,'geoms') else 1)

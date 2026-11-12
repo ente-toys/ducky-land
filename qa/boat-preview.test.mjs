@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {previewMoorings,boatsForView} from '../src/pixi/boat-preview.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {boatSpots} from '../src/pixi/islands.js';
+import {previewMoorings,boatsForView} from '../src/rendering/pixi/boat-preview.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {boatSpots} from '../src/gameplay/islands.js';
 const island=(id,x,y)=>{const map=mapOf(id);return {id,x,y,width:map.width,height:map.height};};
 test('local preview restores the island moorings with stable IDs and authored headings',()=>{
   const map=mapOf('home'),home=island('home',map.width/2,map.height/2);

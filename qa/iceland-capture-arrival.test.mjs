@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createThreeGameView} from '../src/pixi/three-game-view.js';
+import {createThreeGameView} from '../src/rendering/three/three-game-view.js';
 
 test('island arrival clears the previous capture before throttling and never uploads mismatched art',async t=>{
  const old={document:globalThis.document,window:globalThis.window,performance:globalThis.performance,devicePixelRatio:globalThis.devicePixelRatio,cancelAnimationFrame:globalThis.cancelAnimationFrame};

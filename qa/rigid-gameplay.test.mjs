@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {patchGeometry} from '../src/pixi/sphere-mesh.js';
-import {destinationsFor,canSail,landingSpot,BOAT_RADIUS,harborOf} from '../src/pixi/islands.js';
-import {mapPoint,spherePoint} from '../src/pixi/sphere-coordinates.js';
-import {unplaceRigid} from '../src/pixi/rigid.js';
-import {isletClearance} from '../src/pixi/islets.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {patchGeometry} from '../src/rendering/pixi/sphere-mesh.js';
+import {destinationsFor,canSail,landingSpot,BOAT_RADIUS,harborOf} from '../src/gameplay/islands.js';
+import {mapPoint,spherePoint} from '../src/world/sphere-coordinates.js';
+import {unplaceRigid} from '../src/world/rigid.js';
+import {isletClearance} from '../src/world/islets.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 function drawn(from,to){
  const m=mapOf(to),g=patchGeometry(from,to,{...m.origin,width:m.width,height:m.height}),p=g.positions;

@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {BOG_BLOCKERS} from '../src/pixi/bog-blockers.js';
-import {DUCK_RADIUS,traceShot} from '../src/pixi/bog-combat/physics.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {BOG_BLOCKERS} from '../src/features/bog-combat/bog-blockers.js';
+import {DUCK_RADIUS,traceShot} from '../src/features/bog-combat/physics.js';
 import {shelters,hasWideBypass,shortCrossing} from './bog-wall-layout-helpers.mjs';
 const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/bog-arena/art.json'));
 const layout=JSON.parse(fs.readFileSync('scripts/bog-environment/layout.json'));

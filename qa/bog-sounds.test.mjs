@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createAudio} from '../src/pixi/audio.js';
-import {BOG_SOUNDS,synthesizeBogSound,createBogSounds} from '../src/pixi/bog-combat/sounds.js';
+import {createAudio} from '../src/rendering/pixi/audio.js';
+import {BOG_SOUNDS,synthesizeBogSound,createBogSounds} from '../src/features/bog-combat/sounds.js';
 
 const context={sampleRate:48000,createBuffer(channels,length,rate){const data=new Float32Array(length);return {length,sampleRate:rate,numberOfChannels:channels,getChannelData:()=>data};}};
 test('every Bog sound is a finite, short, click-free reusable mono buffer',()=>{

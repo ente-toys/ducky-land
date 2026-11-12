@@ -6,10 +6,10 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import React, {act} from 'react';
 import {createRoot} from 'react-dom/client';
-import {OUTFIT_OPTIONS, validOutfit} from '../src/pixi/outfits.js';
+import {OUTFIT_OPTIONS, validOutfit} from '../src/gameplay/outfits.js';
 
 const {outputFiles:[bundle]} = await build({
-  entryPoints:[fileURLToPath(new URL('../src/pixi/IslandOutfit.jsx',import.meta.url))],
+  entryPoints:[fileURLToPath(new URL('../src/app/IslandOutfit.jsx',import.meta.url))],
   bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,
 });
 const code = ['react','react/jsx-runtime','react-dom','pixi.js'].reduce((text,name) =>

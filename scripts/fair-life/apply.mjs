@@ -4,8 +4,8 @@ import {fileURLToPath} from 'node:url';
 import {checkTheme} from '../theme-index.mjs';
 import {fitContact} from '../bigger-fair/furniture.mjs';
 import {geometry, inShape} from '../../assets/world/island-geometry.mjs';
-import {makeMap} from '../../src/pixi/island-maps.js';
-import {sleepHalfWidths, sleeperFootprint} from '../../src/pixi/sleep-spots.js';
+import {makeMap} from '../../src/world/island-maps.js';
+import {sleepHalfWidths, sleeperFootprint} from '../../src/world/home/sleep-spots.js';
 
 export const read = p => JSON.parse(fs.readFileSync(p));
 const save = (p,v) => fs.writeFileSync(p,JSON.stringify(v,null,1)+'\n');

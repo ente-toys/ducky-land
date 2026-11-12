@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {cloudState,CLOUD_ROTATION_RATE} from '../src/pixi/globe-clouds.js';
+import {cloudState,CLOUD_ROTATION_RATE} from '../src/rendering/pixi/globe-clouds.js';
 
 test('clouds fade away before island detail and reach full coverage on the globe',()=>{
   assert.equal(cloudState(0,10).fade,0);

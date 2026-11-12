@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import data from '../src/pixi/bog-environment.json' with {type:'json'};
-import {makeMap} from '../src/pixi/island-maps.js';
+import data from '../src/features/bog-combat/bog-environment.json' with {type:'json'};
+import {makeMap} from '../src/world/island-maps.js';
 import {inPoly} from '../assets/world/island-geometry.mjs';
 const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/bog-arena/art.json'));
 const nav=makeMap('bog-sites-check',data).nav();

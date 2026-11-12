@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {mapFor} from '../../src/pixi/island-maps.js';
-import {WORLD_ISLANDS} from '../../src/pixi/world-map.js';
+import {mapFor} from '../../src/world/island-maps.js';
+import {WORLD_ISLANDS} from '../../src/world/world-map.js';
 import {homeLayers} from '../globe-perf/snapshot.mjs';
 import {verifySourceSnapshot} from './sources.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));

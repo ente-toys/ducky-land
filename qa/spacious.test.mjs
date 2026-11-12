@@ -1,19 +1,19 @@
 import homeMore from '../assets/world/home-sleep-more.json' with {type:'json'};
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 import homeExtra from '../assets/world/home-sleep-extra.json' with {type:'json'};
 import homeOuter from '../assets/world/home-sleep-outer.json' with {type:'json'};
-import {THEMED_ISLANDS} from '../src/pixi/world-map.js';
+import {THEMED_ISLANDS} from '../src/world/world-map.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import homeWorld from '../assets/world/world.json' with {type: 'json'};
 import {geometry} from '../assets/world/island-geometry.mjs';
-import {HOME_MAP, ambientOf, makeMap, mapFor, mapOf, readyThemes, THEME_OF} from '../src/pixi/island-maps.js';
-import {WORLD_GEO, WORLD_ISLANDS, layoutWorld, offsetOf, sizeOfTheme} from '../src/pixi/world-map.js';
-import {BOAT_CHANNEL, coastGaps, copyHolding} from '../src/pixi/sphere-shores.js';
-import {SLEEP_COUNTS, SLEEP_SPOTS, SLEEP_TOTAL, HOME_SLEEP_TOTAL, resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, sleeperFootprint} from '../src/pixi/sleep-spots.js';
-import {canSail, destinationsFor, harborOf, islandOffset, originOffset, seaBoundsFor} from '../src/pixi/islands.js';
-import {clockwise, shoreOf, surfRuns} from '../src/pixi/surf.js';
-import {setWalkDestination, walkStep} from '../src/pixi/player-motion.js';
+import {HOME_MAP, ambientOf, makeMap, mapFor, mapOf, readyThemes, THEME_OF} from '../src/world/island-maps.js';
+import {WORLD_GEO, WORLD_ISLANDS, layoutWorld, offsetOf, sizeOfTheme} from '../src/world/world-map.js';
+import {BOAT_CHANNEL, coastGaps, copyHolding} from '../src/world/sphere-shores.js';
+import {SLEEP_COUNTS, SLEEP_SPOTS, SLEEP_TOTAL, HOME_SLEEP_TOTAL, resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, sleeperFootprint} from '../src/world/home/sleep-spots.js';
+import {canSail, destinationsFor, harborOf, islandOffset, originOffset, seaBoundsFor} from '../src/gameplay/islands.js';
+import {clockwise, shoreOf, surfRuns} from '../src/rendering/pixi/environment/surf.js';
+import {setWalkDestination, walkStep} from '../src/gameplay/player-motion.js';
 import {addPlayer, makeRoom, seeded, wander} from './room-harness.mjs';
 import {loadTest} from '../scripts/load-room.mjs';
 

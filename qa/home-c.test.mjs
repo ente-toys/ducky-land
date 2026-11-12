@@ -1,11 +1,11 @@
-import {placeRigid} from '../src/pixi/rigid.js';
+import {placeRigid} from '../src/world/rigid.js';
 import test from 'node:test';import assert from 'node:assert/strict';
-import E from '../src/pixi/home-expansion.json' with {type:'json'};
+import E from '../src/world/home/home-expansion.json' with {type:'json'};
 import C from '../scripts/bigger-home/communities/baseline-C.json' with {type:'json'};
 import B from '../scripts/bigger-home-2/baseline-B.json' with {type:'json'};
-import {HOME_MAP} from '../src/pixi/island-maps.js';
-import {canSail,originOffset} from '../src/pixi/islands.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
+import {HOME_MAP} from '../src/world/island-maps.js';
+import {canSail,originOffset} from '../src/gameplay/islands.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import S from '../scripts/home-10/shore.json' with {type:'json'};
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
 test('Home communities keep C coast, map coordinates, working harbour and both piers',()=>{

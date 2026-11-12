@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {followPosition} from '../src/pixi/follow-camera.js';
+import {followPosition} from '../src/rendering/shared/follow-camera.js';
 
 test('Shift-running camera advances steadily at different display refresh rates',()=>{
   const ends=[];

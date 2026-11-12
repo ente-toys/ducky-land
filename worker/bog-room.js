@@ -1,12 +1,12 @@
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {BOG_ISLAND,canEnterBog,teamCounts,suggestedTeam} from '../src/pixi/bog-combat/entry.js';
-import {emptyStats,TEAMS} from '../src/pixi/bog-combat/rules.js';
-import {cleanMedalCase} from '../src/pixi/bog-combat/medals.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {BOG_ISLAND,canEnterBog,teamCounts,suggestedTeam} from '../src/features/bog-combat/entry.js';
+import {emptyStats,TEAMS} from '../src/features/bog-combat/rules.js';
+import {cleanMedalCase} from '../src/features/bog-combat/medals.js';
 import {bogExitIslet} from './bog-exit.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {createBogBots} from './bog-bots.js';
-import {ABILITY_TIMERS,saveAbilityTimers} from '../src/pixi/bog-combat/ability-state.js';
+import {ABILITY_TIMERS,saveAbilityTimers} from '../src/features/bog-combat/ability-state.js';
 
 export class LiveBogRoom {
  constructor(owner){

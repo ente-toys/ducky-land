@@ -3,7 +3,7 @@ import {rebuildPaths} from './paths.mjs';
 import {rebuildBridges,rebuildBridgePhysics} from './bridges.mjs';
 import {JSDOM} from 'jsdom';
 import {inPoly} from '../../assets/world/island-geometry.mjs';
-import {makeMap} from '../../src/pixi/island-maps.js';
+import {makeMap} from '../../src/world/island-maps.js';
 import {point,FEATURES,CLUMPS,REST,NOD_COMPANIONS} from './centre-data.mjs';
 const A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/',S='scripts/bigger-cathedral/centre-source/';
 const read=p=>JSON.parse(fs.readFileSync(p)),save=(p,o)=>fs.writeFileSync(p,JSON.stringify(o,null,2)+'\n');

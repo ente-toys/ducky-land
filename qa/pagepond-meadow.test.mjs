@@ -2,8 +2,8 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {geometry, inPoly} from '../assets/world/island-geometry.mjs';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {homePropY, homePropRotation} from '../src/pixi/home-motion.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {homePropY, homePropRotation} from '../src/rendering/pixi/environment/home-motion.js';
 
 const read = p => JSON.parse(fs.readFileSync(p));
 const placement = read('scripts/pagepond-meadow/placements.json');

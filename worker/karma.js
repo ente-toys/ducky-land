@@ -1,4 +1,4 @@
-import {KarmaPool} from '../src/pixi/karma-pool.js';
+import {KarmaPool} from '../src/gameplay/karma-pool.js';
 
 export class RoomKarma {
   constructor(room){

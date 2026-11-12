@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import expansion from '../src/pixi/home-expansion.json' with {type:'json'};
-import original from '../src/pixi/home-original-world.json' with {type:'json'};
-import {HOME_MAP,mapOf} from '../src/pixi/island-maps.js';
-import {canSail,boardingPoint,originOffset,landingSpot} from '../src/pixi/islands.js';
-import {WORLD_ISLANDS,offsetOf} from '../src/pixi/world-map.js';
-import {MUSEUM_DOOR} from '../src/pixi/player-motion.js';
+import expansion from '../src/world/home/home-expansion.json' with {type:'json'};
+import original from '../src/world/home/home-original-world.json' with {type:'json'};
+import {HOME_MAP,mapOf} from '../src/world/island-maps.js';
+import {canSail,boardingPoint,originOffset,landingSpot} from '../src/gameplay/islands.js';
+import {WORLD_ISLANDS,offsetOf} from '../src/world/world-map.js';
+import {MUSEUM_DOOR} from '../src/gameplay/player-motion.js';
 
 test('bigger Home retains original landmark and save coordinates, every community connects to the plaza',()=>{
   const m=HOME_MAP,n=m.nav();

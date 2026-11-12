@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {canSail,setSailDestination,sailStep} from '../src/pixi/islands.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {canSail,setSailDestination,sailStep} from '../src/gameplay/islands.js';
 const plan=JSON.parse(fs.readFileSync('scripts/bigger-fair/centre-source/sailing.json')),id='isle-170',map=mapFor('fair');
 function sail(actor,to){assert.ok(setSailDestination(actor,...to),'route to '+to);for(let i=0;i<15000&&(actor.sailTarget||actor.sailRoute?.length);i++){sailStep(actor,1/20,{x:0,y:0});assert.ok(canSail(actor.x,actor.y,id),'stays afloat');}assert.ok(Math.hypot(actor.x-to[0],actor.y-to[1])<2,'arrives at '+to);}
 test('Fair boats sail in from each sea mouth and all the way round the moat',()=>{

@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Quaternion,Vector3} from '../src/pixi/globe-math.js';
+import {Quaternion,Vector3} from '../src/rendering/shared/globe-math.js';
 import {Group,Object3D,Vector3 as ReferenceVector} from 'three';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {focusQuaternion,islandQuaternion,surfacePoint,trackballPoint,visiblePoint} from '../src/pixi/three-globe-math.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {ISLETS} from '../src/world/islets.js';
+import {focusQuaternion,islandQuaternion,surfacePoint,trackballPoint,visiblePoint} from '../src/rendering/three/three-globe-math.js';
 
 test('all nine island and eleven islet surface patches stay fixed under a shared globe rotation',()=>{
   for(const frame of [...WORLD_ISLANDS,...ISLETS]){
@@ -39,7 +39,7 @@ test('far-side heart anchors are occluded by the sphere and front anchors remain
 });
 
 test('Earth art coordinates stay on the same sphere and round-trip without changing source maps',async()=>{
-  const {surfacePoint,surfaceCoordinates,SURFACE_RADIUS}=await import('../src/pixi/three-globe-math.js');
+  const {surfacePoint,surfaceCoordinates,SURFACE_RADIUS}=await import('../src/rendering/three/three-globe-math.js');
   for(const frame of [...WORLD_ISLANDS,...ISLETS])for(const [x,y]of [[0,0],[1800,-900],[-1800,900]]){
     const point=surfacePoint(frame,x,y,WORLD_GEO.Rw);
     assert.ok(Math.abs(point.length()-SURFACE_RADIUS)<1e-12);
@@ -49,7 +49,7 @@ test('Earth art coordinates stay on the same sphere and round-trip without chang
 });
 test('continuous approach locks the same ground point under the cursor on every island and both poles',async()=>{
   const {PerspectiveCamera}=await import('three');
-  const {surfaceUnderPointer,lockSurfaceAnchor,SURFACE_RADIUS}=await import('../src/pixi/three-globe-math.js');
+  const {surfaceUnderPointer,lockSurfaceAnchor,SURFACE_RADIUS}=await import('../src/rendering/three/three-globe-math.js');
   let worst=0;
   for(const frame of WORLD_ISLANDS){
     const camera=new PerspectiveCamera(35,1600/900,.001,20);camera.position.z=5.2;camera.updateMatrixWorld(true);
@@ -67,7 +67,7 @@ test('continuous approach locks the same ground point under the cursor on every 
 });
 test('straight zoom introduces no camera roll or heading reset',async()=>{
   const {PerspectiveCamera}=await import('three');
-  const {surfaceUnderPointer,lockSurfaceAnchor}=await import('../src/pixi/three-globe-math.js');
+  const {surfaceUnderPointer,lockSurfaceAnchor}=await import('../src/rendering/three/three-globe-math.js');
   for(const frame of WORLD_ISLANDS){
     const camera=new PerspectiveCamera(35,16/9,.001,20);camera.position.z=5.2;
     const q=new Quaternion().setFromAxisAngle(new Vector3(0,0,1),.7).multiply(focusQuaternion(frame)),before=q.clone();
@@ -76,9 +76,9 @@ test('straight zoom introduces no camera roll or heading reset',async()=>{
   }
 });
 test('live detail atlas cancels each neighbouring chart rotation without changing the camera angle',async()=>{
-  const {atlasUV}=await import('../src/pixi/three-globe-math.js');
-  const {flatRigid}=await import('../src/pixi/rigid.js');
-  const {cameraMatrix}=await import('../src/pixi/sphere-camera.js');
+  const {atlasUV}=await import('../src/rendering/three/three-globe-math.js');
+  const {flatRigid}=await import('../src/world/rigid.js');
+  const {cameraMatrix}=await import('../src/rendering/shared/sphere-camera.js');
   for(const island of WORLD_ISLANDS){
     const placement=flatRigid('home',island.id),matrix=cameraMatrix({x:placement.x,y:placement.y,zoom:.2},1280,1280);
     const center=atlasUV(0,0,placement,matrix,1280,1280);assert.ok(Math.hypot(center.u-.5,center.v-.5)<1e-12);

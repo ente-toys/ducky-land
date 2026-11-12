@@ -6,10 +6,10 @@ import {JSDOM} from 'jsdom';
 import React,{act} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Container} from 'pixi.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
 
 test('strict-mode dock chooses either side, returns with totals/medal case and restores island ownership',async()=>{
-  const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/bog-combat/BogEntry.jsx',import.meta.url))],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,loader:{'.css':'empty','.svg':'dataurl'}});
+  const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/features/bog-combat/BogEntry.jsx',import.meta.url))],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,loader:{'.css':'empty','.svg':'dataurl'}});
   let code=bundle.text;
   for(const name of ['react','react/jsx-runtime','pixi.js'])code=code.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name)));
   const {default:BogEntry}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));

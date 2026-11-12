@@ -5,7 +5,7 @@ import {config,objects,A,layouts} from '../scripts/bigger-fair/hamlets.mjs';
 import {outer,streams} from '../scripts/bigger-fair/fix-geometry.mjs';
 import {inShape} from '../assets/world/island-geometry.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
-import {makeMap} from '../src/pixi/island-maps.js';
+import {makeMap} from '../src/world/island-maps.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read(A+'art.json'),world=read('assets/world/themes/fair/world.json'),walk=read('assets/world/themes/fair/walk-world.json');
 const checked=checkTheme('fair'),map=makeMap('fair',{world,walk,harbor:read('assets/world/themes/fair/harbor.json'),sleepers:checked.sleepers}),nav=map.nav();

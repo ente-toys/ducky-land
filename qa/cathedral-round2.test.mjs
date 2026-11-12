@@ -6,9 +6,9 @@ import {JSDOM} from 'jsdom';
 import {Texture} from 'pixi.js';
 import {BUILDING_STYLES} from '../scripts/bigger-cathedral/buildings-data.mjs';
 import {frontGable} from '../scripts/bigger-cathedral/round2-buildings.mjs';
-import {createAutumnLeaves} from '../src/pixi/autumn-leaves.js';
-import {autumnLeafPose} from '../src/pixi/autumn-leaf-motion.js';
-import {rasterTiles} from '../src/pixi/theme-raster.js';
+import {createAutumnLeaves} from '../src/rendering/pixi/environment/autumn-leaves.js';
+import {autumnLeafPose} from '../src/rendering/pixi/environment/autumn-leaf-motion.js';
+import {rasterTiles} from '../src/rendering/pixi/art/theme-raster.js';
 import {render} from '../scripts/bigger-cathedral/render.mjs';
 
 const A='public/pixi-art/themes/cathedral/';

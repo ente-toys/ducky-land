@@ -1,5 +1,5 @@
-import {ISLETS} from '../src/pixi/islets.js';
-import {isletWalk} from '../src/pixi/islet-walk.js';
+import {ISLETS} from '../src/world/islets.js';
+import {isletWalk} from '../src/world/islet-walk.js';
 
 let pick=Math.random;
 export function setBogExitRandom(random=Math.random){pick=random;}

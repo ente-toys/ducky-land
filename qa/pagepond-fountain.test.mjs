@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Container, Graphics, Sprite, Texture} from 'pixi.js';
-import {attachCentreMotion} from '../src/pixi/centre-motion.js';
-import {libraryFountainLayout} from '../src/pixi/centre-motion/library.js';
-import {fountainPoint, createFountainWater} from '../src/pixi/fountain.js';
-import {trackUpright} from '../src/pixi/upright.js';
-import {TILT} from '../src/pixi/camera.js';
+import {attachCentreMotion} from '../src/rendering/pixi/environment/centre-motion.js';
+import {libraryFountainLayout} from '../src/rendering/pixi/environment/centre-motion/library.js';
+import {fountainPoint, createFountainWater} from '../src/rendering/pixi/environment/fountain.js';
+import {trackUpright} from '../src/rendering/shared/upright.js';
+import {TILT} from '../src/rendering/shared/camera.js';
 
 const manifest = JSON.parse(readFileSync('public/pixi-art/themes/library/art.json'));
 const centre = JSON.parse(readFileSync('public/pixi-art/themes/library/centre/centre.json'));

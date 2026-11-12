@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Container, Texture} from 'pixi.js';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {createIcelandLife, createIcelandLifeLifecycle, ICELAND_SMOKE, BIRD_FLEE_RADIUS} from '../src/pixi/iceland-life.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {createIcelandLife, createIcelandLifeLifecycle, ICELAND_SMOKE, BIRD_FLEE_RADIUS} from '../src/rendering/pixi/environment/iceland-life.js';
 
 const manifest = JSON.parse(readFileSync(new URL('../public/pixi-art/themes/snow/art.json', import.meta.url)));
 const snow = mapFor('snow'), visible = () => true, tilt = .72;

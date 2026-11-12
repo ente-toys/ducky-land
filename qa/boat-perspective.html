@@ -7,14 +7,14 @@
 <main id="view"></main><footer id="status">Loading the game’s boat, Ducky and Bog artwork…</footer>
 <script type="module">
 import {Application,Container,Sprite,Assets,RenderTexture} from 'pixi.js';
-import {createDuck} from '/src/pixi/duck.js';
-import {createSailingFX} from '/src/pixi/sailing-fx.js';
-import {createLivePatches} from '/src/pixi/sphere-mesh.js';
-import {withRigidVisitors} from '/src/pixi/rigid-visitors.js';
-import {unplaceRigid,placeRigid} from '/src/pixi/rigid.js';
-import {mapOf} from '/src/pixi/island-maps.js';
-import {harborOf} from '/src/pixi/islands.js';
-import {PALETTE} from '/src/pixi/palette.js';
+import {createDuck} from '/src/rendering/pixi/duck.js';
+import {createSailingFX} from '/src/rendering/pixi/sailing-fx.js';
+import {createLivePatches} from '/src/rendering/pixi/sphere-mesh.js';
+import {withRigidVisitors} from '/src/rendering/shared/rigid-visitors.js';
+import {unplaceRigid,placeRigid} from '/src/world/rigid.js';
+import {mapOf} from '/src/world/island-maps.js';
+import {harborOf} from '/src/gameplay/islands.js';
+import {PALETTE} from '/src/rendering/shared/palette.js';
 const W=680,H=580,to='isle-249',m=mapOf(to),app=new Application();
 await app.init({width:W*2,height:H,resolution:Math.min(devicePixelRatio,2),background:PALETTE.water,antialias:true});
 document.querySelector('#view').append(app.canvas);app.stop();

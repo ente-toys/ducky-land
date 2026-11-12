@@ -1,5 +1,5 @@
-import {fairTiles,FAIR_GROUND_TILE_SIZE} from '../../src/pixi/fair-raster.js';
-import {tileInView,tileResolution} from '../../src/pixi/ground-stream.js';
+import {fairTiles,FAIR_GROUND_TILE_SIZE} from '../../src/rendering/pixi/art/fair-raster.js';
+import {tileInView,tileResolution} from '../../src/rendering/pixi/art/ground-stream.js';
 export const base='/pixi-art/themes/fair/';
 export const source=p=>p.src.startsWith('/')?p.src:base+p.src;
 export function layers(art){return ['ground','decks','flats','props','floating'].flatMap(kind=>(kind==='ground'?art.ground.tiles:art[kind]??[]).map(p=>({p,kind,src:source(p),anchor:kind==='props'?p.anchor??{x:.5,y:1}:kind==='flats'&&!p.topLeft?{x:.5,y:1}:kind==='floating'?p.anchor??{x:.5,y:.5}:{x:0,y:0}})));}

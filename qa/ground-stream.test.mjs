@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createGroundPool,tileInView,tileResolution} from '../src/pixi/ground-stream.js';
+import {createGroundPool,tileInView,tileResolution} from '../src/rendering/pixi/art/ground-stream.js';
 const flush=()=>new Promise(r=>setImmediate(r));
 const sprite=()=>({position:{set(){}},destroy(){this.destroyed=true;}});
 const container={addChild(){}};

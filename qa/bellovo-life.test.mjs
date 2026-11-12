@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {makeMap,mapFor} from '../src/pixi/island-maps.js';
+import {makeMap,mapFor} from '../src/world/island-maps.js';
 import {geometry,inShape} from '../assets/world/island-geometry.mjs';
-import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/pixi/sleep-spots.js';
+import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/world/home/sleep-spots.js';
 import {BENCHES} from '../scripts/bigger-cathedral/life-data.mjs';
-import {benchSeatAt} from '../src/pixi/bench-seat.js';
+import {benchSeatAt} from '../src/gameplay/bench-seat.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/cathedral/',D='assets/world/themes/cathedral/';
 const art=read(A+'art.json'),world=read(D+'world.json'),walk=read(D+'walk-world.json'),harbor=read(D+'harbor.json');
 const map=makeMap('cathedral',{world,walk,harbor,sleepers:[]}),plants=art.props.filter(p=>p.autumn);

@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Container, Sprite, Texture} from 'pixi.js';
-import {createPlantContacts, plantKind, plantBlocker, foliageColour, PLANT_COOLDOWN, LEAF_CAP} from '../src/pixi/plant-contact.js';
-import {createPlantReactions} from '../src/pixi/plant-reactions.js';
+import {createPlantContacts, plantKind, plantBlocker, foliageColour, PLANT_COOLDOWN, LEAF_CAP} from '../src/rendering/pixi/environment/plant-contact.js';
+import {createPlantReactions} from '../src/rendering/pixi/environment/plant-reactions.js';
 import {geometry} from '../assets/world/island-geometry.mjs';
-import {walkStep} from '../src/pixi/player-motion.js';
-import {createNavigation} from '../src/pixi/navigation.js';
+import {walkStep} from '../src/gameplay/player-motion.js';
+import {createNavigation} from '../src/world/navigation.js';
 
 const prop=(x=0,kind='tree')=>({id:`${kind}-${x}`,name:`${kind}-1`,src:'/tree.svg',x,y:0,width:200,height:280,scale:1,sprite:{visible:true}});
 const obstacle=(x=0)=>({x,y:-9,rx:31,ry:22});

@@ -6,7 +6,7 @@ import {isBench} from '../scripts/bigger-fair/benches.mjs';
 import {inPoly,inShape} from '../assets/world/island-geometry.mjs';
 import sharp from 'sharp';
 import {render} from '../scripts/bigger-fair/render-core.mjs';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 const A='public/pixi-art/themes/fair/';
 const read=f=>JSON.parse(fs.readFileSync(f));
 const art=read(A+'art.json'),layout=read('scripts/bigger-fair/centre-source/layout.json');
@@ -17,7 +17,7 @@ const polygons=audit.surface.type==='Polygon'?[audit.surface.coordinates]:audit.
 const paved=(x,y)=>polygons.some(rings=>inPoly(x,y,rings[0])&&!rings.slice(1).some(h=>inPoly(x,y,h)));
 test('EVERY Fair bench uses an unchanged upright Home view at the exact Home duck scale',()=>{
  assert.equal(benches.length,14);
- const home=fs.readFileSync('src/pixi/placements.js','utf8');
+ const home=fs.readFileSync('src/world/home/placements.js','utf8');
  assert(home.includes('scale: side ? .28 : .18'),'Home scale reference changed');
  for(const p of benches){
   assert.equal(p.src,'/pixi-art/detail/'+HOME_BENCH_ART[p.look]+'.svg',p.id);

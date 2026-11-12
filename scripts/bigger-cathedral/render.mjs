@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import {readFileSync,mkdirSync} from 'node:fs';
-import {makeMap} from '../../src/pixi/island-maps.js';
+import {makeMap} from '../../src/world/island-maps.js';
 export const OUT='/Users/pragadees.xd/Downloads/Ducky Land/concepts/themes/world-map/bigger';
 export const A='public/pixi-art/themes/cathedral/';
 export async function render(art,{x=-2200,y=-2000,k=.14,width=1680,height=1330,original=false,world=null,walk=null,harbor=null,nativeGround=false}={}){
@@ -19,7 +19,7 @@ export async function render(art,{x=-2200,y=-2000,k=.14,width=1680,height=1330,o
  for(const p of art.decks??[])await add(p,'deck');
  if(original)await add({src:'deck-jetty-0.svg',x:2860,y:250,width:280,height:1020},'deck');
  let props=[...art.props];
- if(world&&harbor){const beds=makeMap('cathedral',{world,walk,harbor}).sleepers,poses=JSON.parse(readFileSync('src/pixi/sleep-poses.json'));
+ if(world&&harbor){const beds=makeMap('cathedral',{world,walk,harbor}).sleepers,poses=JSON.parse(readFileSync('src/world/home/sleep-poses.json'));
   for(const bed of beds){let pose=poses.poses[bed.pose],u=pose.k*.81*(.88*.24*3)/3,[x0,,x1,y1]=pose.box;
    for(const l of pose.layers){const metadata=await sharp('public'+l.src).metadata(),w=metadata.width/poses.F*u,h=metadata.height/poses.F*u;
     props.push({src:l.src,x:bed.x,y:bed.y+.01,width:w,height:h,scale:1,anchor:{x:bed.flip?1-(x0+x1)/2*u/w:(x0+x1)/2*u/w,y:y1*u/h},flip:bed.flip});}

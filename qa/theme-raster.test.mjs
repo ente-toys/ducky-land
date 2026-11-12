@@ -2,14 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
-import {cropSVG,rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from '../src/pixi/theme-raster.js';
-import {tileInView,tileResolution,GROUND_BUDGET_BYTES,createGroundPool} from '../src/pixi/ground-stream.js';
+import {cropSVG,rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from '../src/rendering/pixi/art/theme-raster.js';
+import {tileInView,tileResolution,GROUND_BUDGET_BYTES,createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
 import {rasterPeak} from '../scripts/globe-perf/raster-peak.mjs';
 import {rasterLayers} from '../scripts/bigger-cathedral/final-model.mjs';
 import {DOMAdapter,ImageSource,Texture} from 'pixi.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 import {createCanvas,Image} from '@napi-rs/canvas';
-import {createRasterLoader} from '../src/pixi/theme-art-stream.js';
+import {createRasterLoader} from '../src/rendering/pixi/art/theme-art-stream.js';
 test('The real crop loader produces device-sized canvases, shares leases, fetches each vector once and destroys released textures',async()=>{
  const adapter=DOMAdapter.get(),fetch=globalThis.fetch,location=globalThis.location;
  let reads=0;const decoded=[];

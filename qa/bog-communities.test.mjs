@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {makeMap,mapFor} from '../src/pixi/island-maps.js';
+import {makeMap,mapFor} from '../src/world/island-maps.js';
 import {geometry,inPoly,inShape} from '../assets/world/island-geometry.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
 const read=p=>JSON.parse(readFileSync(p));

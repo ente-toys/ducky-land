@@ -1,14 +1,14 @@
 import {randomUUID} from 'node:crypto';
-import {createArena} from '../src/pixi/bog-combat/sim.js';
-import {teamCounts,suggestedTeam} from '../src/pixi/bog-combat/entry.js';
-import {TEAMS} from '../src/pixi/bog-combat/rules.js';
+import {createArena} from '../src/features/bog-combat/sim.js';
+import {teamCounts,suggestedTeam} from '../src/features/bog-combat/entry.js';
+import {TEAMS} from '../src/features/bog-combat/rules.js';
 import {createServer} from 'node:http';
 import {WebSocketServer} from 'ws';
 import {dirname} from 'node:path';
 import {readFileSync,mkdirSync,writeFileSync,renameSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {cleanMedalCase} from '../src/pixi/bog-combat/medals.js';
-import {emptyStats} from '../src/pixi/bog-combat/rules.js';
+import {cleanMedalCase} from '../src/features/bog-combat/medals.js';
+import {emptyStats} from '../src/features/bog-combat/rules.js';
 
 export const ARENA_INPUT_BURST=90,ARENA_INPUT_PER_MS=.09;
 
@@ -59,7 +59,7 @@ export function createArenaSocket(wss,profiles,{now=()=>performance.now(),combat
   return {arena,step,broadcast,heartbeat,close};
 }
 
-export function installArenaSocket(server,{profiles=createArenaProfiles(new URL('../src/pixi/bog-combat/.local/profiles.json',import.meta.url)),combat,...options}={}) {
+export function installArenaSocket(server,{profiles=createArenaProfiles(new URL('../src/features/bog-combat/.local/profiles.json',import.meta.url)),combat,...options}={}) {
   const wss=new WebSocketServer({noServer:true,maxPayload:2048});
   const room=createArenaSocket(wss,profiles,{combat,...options});
   const upgrade=(request,socket,head)=>{

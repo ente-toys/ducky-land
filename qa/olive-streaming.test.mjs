@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Container,DOMAdapter,ImageSource,Texture} from 'pixi.js';
-import {createGroundPool,tileInView} from '../src/pixi/ground-stream.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {rasterTiles,cropSVG} from '../src/pixi/theme-raster.js';
-import {liveSurfaceGeometry} from '../src/pixi/three-live-geometry.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
+import {createGroundPool,tileInView} from '../src/rendering/pixi/art/ground-stream.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {rasterTiles,cropSVG} from '../src/rendering/pixi/art/theme-raster.js';
+import {liveSurfaceGeometry} from '../src/rendering/three/three-live-geometry.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
 import sharp from 'sharp';
 const flush=()=>new Promise(setImmediate);
 const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
@@ -118,7 +118,7 @@ test('live surface mesh has valid vertices and triangles at every island and rej
 
 test('browser raster path uses frame budget instead of idle, temporary blob URLs, and closes the bitmap on release',async t=>{
  const {DOMAdapter}=await import('pixi.js');
- const {createRasterLoader}=await import('../src/pixi/theme-art-stream.js');
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
  const adapter=DOMAdapter.get(),originals=Object.fromEntries(['fetch','location','createImageBitmap','requestIdleCallback'].map(k=>[k,globalThis[k]]));
  t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,originals);});
  let idle,decode=0,closed=0,canvas=0,objectURL;const frames=[];

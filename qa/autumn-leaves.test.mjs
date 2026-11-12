@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {autumnLeafPose,createAutumnLeafPool} from '../src/pixi/autumn-leaf-motion.js';
+import {autumnLeafPose,createAutumnLeafPool} from '../src/rendering/pixi/environment/autumn-leaf-motion.js';
 const tree={x:100,y:500,width:260,height:360,scale:1};
 const sprite=()=>({visible:false,position:{set(x,y){this.x=x;this.y=y;}},scale:{set(v){this.x=this.y=v;}},destroy(){this.destroyed=true;}});
 test('SVG leaf cycle sways and spins, settles, fades and restarts without drifting beyond its grove',()=>{
@@ -32,8 +32,8 @@ test('The real theme loader acquires four SVG leaves once and disposes the entir
  const adapter=DOMAdapter.get();
  DOMAdapter.set({...adapter,createCanvas:()=>({getContext:()=>null})});
  t.after(()=>DOMAdapter.set(adapter));
- const {loadThemeArt}=await import('../src/pixi/theme-art.js');
- const {createGroundPool}=await import('../src/pixi/ground-stream.js');
+ const {loadThemeArt}=await import('../src/rendering/pixi/art/theme-art.js');
+ const {createGroundPool}=await import('../src/rendering/pixi/art/ground-stream.js');
  const manifest=JSON.parse(readFileSync('public/pixi-art/themes/cathedral/art.json'));
  const original=globalThis.fetch;globalThis.fetch=async url=>({ok:true,json:async()=>url.endsWith('art.json')?manifest:{pieces:[]}});
  t.after(()=>{globalThis.fetch=original;});

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {detailWork,detailMovement} from '../src/pixi/three-detail-budget.js';
+import {detailWork,detailMovement} from '../src/rendering/three/three-detail-budget.js';
 
 test('a settled island selection and the next wider zoom keep live detail',()=>{
   assert.deepEqual(detailWork(1.2),{visible:false,preload:false,hz:20});

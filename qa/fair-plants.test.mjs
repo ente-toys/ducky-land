@@ -7,9 +7,9 @@ import {PLANT_MODELS,HAMLET_PLANTS} from '../scripts/bigger-fair/plant-kit.mjs';
 import {OUTER_PLANTING,PLANT_RESERVES} from '../scripts/bigger-fair/plants-data.mjs';
 import {applyPlants} from '../scripts/bigger-fair/plants-apply.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
 import {inPoly,inShape} from '../assets/world/island-geometry.mjs';
-import {sleeperFootprint} from '../src/pixi/sleep-spots.js';
+import {sleeperFootprint} from '../src/world/home/sleep-spots.js';
 
 const read=p=>JSON.parse(fs.readFileSync(p));
 const art=read('public/pixi-art/themes/fair/art.json');

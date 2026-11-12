@@ -1,4 +1,4 @@
-import {createDuck} from '../src/pixi/duck.js';
+import {createDuck} from '../src/rendering/pixi/duck.js';
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
 const descendants=node=>[node,...node.children.flatMap(descendants)];
 export async function verifyWardrobe(wardrobe){

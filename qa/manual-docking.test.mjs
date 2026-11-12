@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeRoom,addPlayer} from './room-harness.mjs';
-import {boatSpots, canSail, sailStep} from '../src/pixi/islands.js';
+import {boatSpots, canSail, sailStep} from '../src/gameplay/islands.js';
 import {IslandRoom} from '../worker/index.js';
 
 test('holding WASD into shore stays aboard until Dock is explicitly requested',async()=>{

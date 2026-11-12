@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {tileInView,tileResolution,GROUND_BUDGET_BYTES} from '../src/pixi/ground-stream.js';
+import {tileInView,tileResolution,GROUND_BUDGET_BYTES} from '../src/rendering/pixi/art/ground-stream.js';
 const a=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
 const w=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const terrain=readFileSync('public/pixi-art/themes/snow/v2/terrain.svg','utf8');

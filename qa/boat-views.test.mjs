@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync, readdirSync} from 'node:fs';
 import {Assets, Sprite, Texture, TextureSource} from 'pixi.js';
-import {loadBoatViews} from '../src/pixi/boat-views.js';
+import {loadBoatViews} from '../src/rendering/pixi/boat-views.js';
 import sharp from 'sharp';
 
 const base = new URL('../public/pixi-art/boat/', import.meta.url);

@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PerspectiveCamera,Vector3,Vector2,Matrix3} from 'three';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {flatRigid} from '../src/pixi/rigid.js';
-import {cameraMatrix} from '../src/pixi/sphere-camera.js';
-import {atlasTransform,atlasUV,pickSurfacePatch,focusQuaternion} from '../src/pixi/three-globe-math.js';
-import {RenderDemand} from '../src/pixi/three-render-demand.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {flatRigid} from '../src/world/rigid.js';
+import {cameraMatrix} from '../src/rendering/shared/sphere-camera.js';
+import {atlasTransform,atlasUV,pickSurfacePatch,focusQuaternion} from '../src/rendering/three/three-globe-math.js';
+import {RenderDemand} from '../src/rendering/three/three-render-demand.js';
 
 test('stationary globe avoids redraws while every camera frame and new texture still draws',()=>{
   const demand=new RenderDemand();assert.equal(demand.consume(),true);

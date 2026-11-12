@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import E from '../src/pixi/home-expansion.json' with {type:'json'};
-import {HOME_MAP} from '../src/pixi/island-maps.js';
+import E from '../src/world/home/home-expansion.json' with {type:'json'};
+import {HOME_MAP} from '../src/world/island-maps.js';
 import {inShape} from '../assets/world/island-geometry.mjs';
-import {canSail} from '../src/pixi/islands.js';
+import {canSail} from '../src/gameplay/islands.js';
 const at=([x,y])=>[(x-278)/.18,(y-204)/.18];
 const wet=p=>HOME_MAP.walk.water.some(w=>inShape(...p,w));
 test('Home former shoreline jetties cross real water and retain walking access',()=>{

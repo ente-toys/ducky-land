@@ -1,11 +1,11 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import READY from '../src/pixi/delivered-themes.js';
-import {HOME_MAP, THEME_OF, TEST_THEMES, mapFor, mapOf, mapsVersion, readyThemes, registerMap, themeOfIsland} from '../src/pixi/island-maps.js';
+import READY from '../src/world/delivered-themes.js';
+import {HOME_MAP, THEME_OF, TEST_THEMES, mapFor, mapOf, mapsVersion, readyThemes, registerMap, themeOfIsland} from '../src/world/island-maps.js';
 import {ISLANDS, boatSpots, canSail, createBoats, crossIsland, destinationsFor, fillMoorings, harborOf, islandOffset, landingApproach,
-  landingSpot, originOffset, retireBoat, sailRoute, sailStep, seaBoundsFor, setSailDestination, boardingPoint} from '../src/pixi/islands.js';
-import {offsetOf, worldIsland} from '../src/pixi/world-map.js';
+  landingSpot, originOffset, retireBoat, sailRoute, sailStep, seaBoundsFor, setSailDestination, boardingPoint} from '../src/gameplay/islands.js';
+import {offsetOf, worldIsland} from '../src/world/world-map.js';
 
 const ZERO = {x: 0, y: 0};
 const themedIslands = () => [...THEME_OF].filter(([, theme]) => readyThemes().includes(theme)).map(([id]) => id);

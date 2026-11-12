@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {globeDrag,screenFrame,lensOffset,unlens,centreOf,lonLat,northUpRoll,rollBasis,uprightFade,globeBall} from '../src/pixi/globe-look.js';
-import {globeScreen} from '../src/pixi/globe-screen.js';
-import {localPoint} from '../src/pixi/sphere-coordinates.js';
-import {WORLD_GEO,WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {dot} from '../src/pixi/sphere.js';
+import {globeDrag,screenFrame,lensOffset,unlens,centreOf,lonLat,northUpRoll,rollBasis,uprightFade,globeBall} from '../src/rendering/shared/globe-look.js';
+import {globeScreen} from '../src/rendering/shared/globe-screen.js';
+import {localPoint} from '../src/world/sphere-coordinates.js';
+import {WORLD_GEO,WORLD_ISLANDS} from '../src/world/world-map.js';
+import {dot} from '../src/world/sphere.js';
 
 const id='home',W=1440,H=900,zoom=.0329,Rp=WORLD_GEO.Rw*zoom;
 const VIEWS=[[0,0],[1.2,.3],[2.6,-.4],[-2.9,.7],[3.1,.1],[-1.4,-1.1]];

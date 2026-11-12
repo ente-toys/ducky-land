@@ -3,16 +3,16 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {Container,Texture} from 'pixi.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {RULES} from '../src/pixi/bog-combat/rules.js';
-import {combatWalkStep} from '../src/pixi/bog-combat/mechanics.js';
-import {createPickupSpots} from '../src/pixi/bog-combat/pickups.js';
-import {createPickupsView,createAbilityView} from '../src/pixi/bog-combat/pickups-view.js';
-import {saveAbilityTimers,ABILITY_TIMERS} from '../src/pixi/bog-combat/ability-state.js';
-import {bindCombatInput} from '../src/pixi/bog-combat/input.js';
-import {ArenaClient,ARENA_INPUT_INTERVAL} from '../src/pixi/bog-combat/client.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {walkingActor} from '../src/pixi/bog-combat/physics.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {RULES} from '../src/features/bog-combat/rules.js';
+import {combatWalkStep} from '../src/features/bog-combat/mechanics.js';
+import {createPickupSpots} from '../src/features/bog-combat/pickups.js';
+import {createPickupsView,createAbilityView} from '../src/features/bog-combat/pickups-view.js';
+import {saveAbilityTimers,ABILITY_TIMERS} from '../src/features/bog-combat/ability-state.js';
+import {bindCombatInput} from '../src/features/bog-combat/input.js';
+import {ArenaClient,ARENA_INPUT_INTERVAL} from '../src/features/bog-combat/client.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {walkingActor} from '../src/features/bog-combat/physics.js';
 
 const advance=(sim,s)=>{for(let i=0;i<Math.round(s*60);i++)sim.step(1/60);};
 const wall={blocksWalk:true,blocksShots:true,polygon:[{x:280,y:100},{x:290,y:100},{x:290,y:900},{x:280,y:900}]};
@@ -146,7 +146,7 @@ test('Q and double-tap Shift request once, leave island Shift listeners active a
 });
 test('pickup SVGs use flat vector paths only and pooled display nodes bob without growing',()=>{
   for(const kind of ['paint','speed','shield']){
-    const svg=readFileSync(new URL(`../src/pixi/bog-combat/assets/pickups/${kind}.svg`,import.meta.url),'utf8');
+    const svg=readFileSync(new URL(`../src/features/bog-combat/assets/pickups/${kind}.svg`,import.meta.url),'utf8');
     assert.ok(svg.includes('#232323'));assert.doesNotMatch(svg,/<image|gradient|data:image|filter=/i);
   }
   const objects=new Container(),art={paint:Texture.WHITE,speed:Texture.WHITE,shield:Texture.WHITE},view=createPickupsView(objects,art);
@@ -179,8 +179,8 @@ test('a request received while tagged never becomes an automatic hop on respawn'
 test('production transport persists pickup effects and cooldowns, and reconnect never restores a spent shield',async()=>{
   const {makeRoom,addPlayer,fakeSocket}=await import('./room-harness.mjs');
   const {LiveBogRoom}=await import('../worker/bog-room.js');
-  const {BOG_ISLAND}=await import('../src/pixi/bog-combat/entry.js');
-  const {mapOf}=await import('../src/pixi/island-maps.js');
+  const {BOG_ISLAND}=await import('../src/features/bog-combat/entry.js');
+  const {mapOf}=await import('../src/world/island-maps.js');
   const room=await makeRoom();let service;
   const peer=()=>{const s=fakeSocket();s.serializeAttachment=v=>s.saved=v;s.deserializeAttachment=()=>s.saved;return s;};
   try{

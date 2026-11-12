@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {surfacePoint,surfaceCoordinates} from '../src/pixi/three-globe-math.js';
-import {DETAIL_CAPTURE_SCALE,detailBlend,directDetail,detailSize,detailCamera,detailScreen} from '../src/pixi/three-detail-view.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {surfacePoint,surfaceCoordinates} from '../src/rendering/three/three-globe-math.js';
+import {DETAIL_CAPTURE_SCALE,detailBlend,directDetail,detailSize,detailCamera,detailScreen} from '../src/rendering/three/three-detail-view.js';
 
 test('handoff preserves the grabbed world point on desktop and portrait screens, on every island including poles',()=>{
  for(const frame of WORLD_ISLANDS)for(const [width,height]of [[1512,827],[393,852]])for(const altitude of [.36,.23,.16,.12,.05]){

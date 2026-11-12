@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Container, Graphics, Matrix} from 'pixi.js';
-import {withRigidVisitors} from '../src/pixi/rigid-visitors.js';
-import {flatRigid, placeRigid} from '../src/pixi/rigid.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {cameraMatrix} from '../src/pixi/sphere-camera.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {withRigidVisitors} from '../src/rendering/shared/rigid-visitors.js';
+import {flatRigid, placeRigid} from '../src/world/rigid.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {cameraMatrix} from '../src/rendering/shared/sphere-camera.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 const matrix = o => {o.updateLocalTransform(); return o.localTransform.clone();};
 const equalMatrix = (a, b) => {

@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PerspectiveCamera,Quaternion,Vector3} from '../src/pixi/globe-math.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {focusQuaternion,lockSurfaceAnchor} from '../src/pixi/three-globe-math.js';
-import {alignIslandNorth,approachProgress} from '../src/pixi/three-island-approach.js';
-import {detailBlend,directDetail} from '../src/pixi/three-detail-view.js';
+import {PerspectiveCamera,Quaternion,Vector3} from '../src/rendering/shared/globe-math.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {focusQuaternion,lockSurfaceAnchor} from '../src/rendering/three/three-globe-math.js';
+import {alignIslandNorth,approachProgress} from '../src/rendering/three/three-island-approach.js';
+import {detailBlend,directDetail} from '../src/rendering/three/three-detail-view.js';
 
 test('heading gate keeps rapid all-island approaches curved until north is safe for a non-collapsing morph',()=>{
  let cases=0,unsafeWithoutGate=0;

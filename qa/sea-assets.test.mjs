@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {Assets, Container, Texture} from 'pixi.js';
-import {createSea} from '../src/pixi/sea-islands.js';
+import {createSea} from '../src/rendering/pixi/sea-islands.js';
 
 test('island signs share fetched artwork and release generated textures after the final sea closes', async t => {
   const originalFetch = globalThis.fetch, load = Assets.load, unload = Assets.unload;

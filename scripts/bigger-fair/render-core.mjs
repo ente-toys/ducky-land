@@ -17,7 +17,7 @@ export async function render(art,{k=.3,x=0,y=0,width=2400,height=1800,home=false
  for(const f of art.floating||[]){const a=f.anchor||{x:.5,y:.5};await add(f.src,f.x-f.width*a.x,f.y-f.height*a.y,f.width,f.height,f.flip)}
  const things=art.props.map(p=>({...p}));
  for(const p of art.props){if(/bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i.test(p.name||p.asset||'')||p.shadow===false)continue;let [rx,ry]=p.shadowSize??(r=>[r,r*.3])(Math.max(8,Math.min(300,p.width*p.scale*.36)));await add(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${rx*2+4}" height="${ry*2+4}"><ellipse cx="${rx+2}" cy="${ry+2}" rx="${rx}" ry="${ry}" fill="#3c5a2a" opacity=".15"/></svg>`),p.x-rx,p.y-ry,rx*2+4,ry*2+4)}
- if(!home&&sleepers){const world=JSON.parse(readFileSync('assets/world/themes/fair/world.json')),poses=JSON.parse(readFileSync('src/pixi/sleep-poses.json'));
+ if(!home&&sleepers){const world=JSON.parse(readFileSync('assets/world/themes/fair/world.json')),poses=JSON.parse(readFileSync('src/world/home/sleep-poses.json'));
  for(const [pose,list]of Object.entries(world.sleepSpots))for(const spot of list){const p=poses.poses[pose],tree=pose==='nod'?art.props.find(q=>q.id===spot[0]):null;const [sx,sy,flip]=tree?[tree.x+spot[1],tree.y+14,spot[2]]:spot;
  const u=p.k*.81*(.88*.24*3)/3,[x0,,x1,y1]=p.box;
  for(const layer of p.layers){const m=await sharp('public'+layer.src).metadata(),w=m.width/poses.F*u,h=m.height/poses.F*u,cx=(x0+x1)/2*u,left=flip?sx-(w-cx):sx-cx;things.push({src:layer.src,x:sx,y:sy+.01,width:w,height:h,anchor:{x:(sx-left)/w,y:y1*u/h},scale:1,flip})}}

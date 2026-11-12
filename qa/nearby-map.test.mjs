@@ -1,10 +1,10 @@
-import {angle,dot} from '../src/pixi/sphere.js';
-import {spherePoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
+import {angle,dot} from '../src/world/sphere.js';
+import {spherePoint,viewFrame} from '../src/world/sphere-coordinates.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nearbyMapFrame} from '../src/pixi/nearby-map.js';
-import {WORLD_GEO, offsetOf} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {nearbyMapFrame} from '../src/app/nearby-map.js';
+import {WORLD_GEO, offsetOf} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 const home = mapOf('home');
 const centre = {x: home.cx, y: home.cy};

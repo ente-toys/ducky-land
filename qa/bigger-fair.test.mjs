@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {makeMap,THEME_OF} from '../src/pixi/island-maps.js';
+import {makeMap,THEME_OF} from '../src/world/island-maps.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
 import {inPoly} from '../assets/world/island-geometry.mjs';
-import {canSail,boardingPoint,landingSpot} from '../src/pixi/islands.js';
+import {canSail,boardingPoint,landingSpot} from '../src/gameplay/islands.js';
 const read=p=>JSON.parse(fs.readFileSync(p));
 const S='scripts/bigger-fair/',D='assets/world/themes/fair/',w=read(D+'world.json'),walk=read(D+'walk-world.json'),h=read(D+'harbor.json'),a=read('public/pixi-art/themes/fair/art.json'),e=read(S+'expansion.json');
 const checked=checkTheme('fair'),map=makeMap('fair',{world:w,walk,harbor:h,sleepers:checked.sleepers}),nav=map.nav();

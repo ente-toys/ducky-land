@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {Container} from 'pixi.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {PAINT} from '../src/pixi/bog-combat/rules.js';
-import {createBogFeel,createCombatFeedback,createHitFeelState} from '../src/pixi/bog-combat/feel.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {PAINT} from '../src/features/bog-combat/rules.js';
+import {createBogFeel,createCombatFeedback,createHitFeelState} from '../src/features/bog-combat/feel.js';
 
 test('real authoritative tags provide shooter colour, one local tag pop, ghost and respawn feedback',()=>{
   const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='privacy'?100:300,y:300}]});

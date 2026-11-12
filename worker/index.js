@@ -1,15 +1,15 @@
-import {unplaceRigid} from '../src/pixi/rigid.js';
-import {reframeIslet} from '../src/pixi/islet-placement.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {BOG_ISLAND,bogLandingNotice} from '../src/pixi/bog-combat/entry.js';
-import {getPlayerKarma} from '../src/pixi/bog-combat/karma.js';
+import {unplaceRigid} from '../src/world/rigid.js';
+import {reframeIslet} from '../src/world/islet-placement.js';
+import {ISLETS} from '../src/world/islets.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {BOG_ISLAND,bogLandingNotice} from '../src/features/bog-combat/entry.js';
+import {getPlayerKarma} from '../src/features/bog-combat/karma.js';
 import {LiveBogRoom} from './bog-room.js';
-import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/pixi/player-motion.js';
-import {chatText} from '../src/pixi/chat.js';
-import {FRIEND_RADIUS} from '../src/pixi/friends.js';
-import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/pixi/islands.js';
-import {randomOutfit, validOutfit} from '../src/pixi/outfits.js';
+import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/gameplay/player-motion.js';
+import {chatText} from '../src/multiplayer/chat.js';
+import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
+import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
+import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
 import {RoomKarma} from './karma.js';
 
 export const ISLAND_LIMIT = 100;
