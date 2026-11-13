@@ -207,7 +207,7 @@ export class RoomClient {
         const previous = changed ? null : this.player;
         const owned = (self.ownBoats ?? []).join();
         if (owned !== this.ownedKey) {this.ownedKey = owned; this.ownBoats = new Set(self.ownBoats ?? []);}
-        this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, docking:self.docking, until:now+self.emoteLeft,
+        this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, sailDestination:self.sailDestination ?? null, docking:self.docking, until:now+self.emoteLeft,
           pace:previous?.pace ?? 0, heading:previous?.heading ?? null,
           ice:self.ice?structuredClone(self.ice):null,reducedMotion:self.reducedMotion===true};
         this.pending = this.pending.filter(command => command.seq > self.ack);

@@ -36,13 +36,13 @@ export async function createKarmaView(game){
   game.room.onKarmaPickup=pickup;
   const remove=item=>{item.sprite.destroy();item.text.destroy({children:true});item.spark.destroy();};
   return {
-    update(dt,time,reduced,visible){
+    update(dt,time,reduced,visible,terrainReady){
       const nextPalette=preview?(document.documentElement.dataset.karmaColor??'gold'):'gold';
       if(nextPalette!==palette&&Object.hasOwn(hues,nextPalette)){palette=nextPalette;previewFilter.reset();previewFilter.hue(hues[palette],false);}
       const room=game.room,balance=room.karma??0;counter.style.display=room.player?'flex':'none';
       if(count!==balance){count=balance;counter.querySelector('span').textContent=String(balance);counter.dataset.karma=String(balance);if(!reduced)counter.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:260});}
       const wanted=new Set();
-      for(const feather of room.featherIsland===game.islandId&&game.artShown===artOf(game.islandId)?room.feathers:[]){
+      for(const feather of terrainReady&&room.featherIsland===game.islandId&&game.artShown===artOf(game.islandId)?room.feathers:[]){
         wanted.add(feather.id);let item=spots.get(feather.id);
         if(!item){
           const root=new Container({label:'Golden Karma feather'});root.upright=true;
@@ -74,6 +74,7 @@ export async function createKarmaView(game){
       for(let i=flights.length-1;i>=0;i--){
         const f=flights[i];f.age+=dt;const u=Math.min(1,f.age/.6),e=1-(1-u)**3;
         if(f.event.islandId!==game.islandId||f.age>1.5){remove(f);flights.splice(i,1);continue;}
+        f.sprite.visible=f.text.visible=f.spark.visible=terrainReady;
         const entry=game.liveRigs.get(f.event.playerId),rig=entry?.rig;
         const from=mapPoint(f.event.islandId,game.islandId,f.event);
         let target={x:from.x,y:from.y-90};

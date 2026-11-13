@@ -114,7 +114,7 @@ test('Campfire static art preserves the existing animated hearth and releases it
  globalThis.fetch=async url=>({ok:true,json:async()=>read('public'+url)});
  let loaded;
  try{
-  loaded=await loadThemeArt({...map,art:'/pixi-art/themes/community/art.json'},{groundPool,acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
+  loaded=await loadThemeArt({...map,art:'/pixi-art/themes/community/art.json'},{groundPool,acquire:async()=>{acquired++;return Texture.WHITE;},release:()=>released++});
   await attachCentreMotion(loaded, objects);
   const flame=loaded.props.find(p=>p.id==='campfire-flame').sprite;
   const rest=[flame.x,flame.y,flame.scale.x,flame.scale.y];

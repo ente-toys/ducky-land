@@ -103,9 +103,16 @@ test('runtime owns every assigned Ducky, pauses hidden layers and releases all w
  assert(engine.includes('this.scene.getChildIndex(this.decks)'),'pond layer is below bridge decks');
 });
 
-test('a failed sprite acquisition releases successful and failed leases',async()=>{
+test('a failed sprite acquisition retries and balances all leases on destruction',async()=>{
  const leased=[],released=[];
- await assert.rejects(loadPondDuckies('pink',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return Texture.EMPTY;},release:src=>released.push(src)}),/fixture/);
+ const layer=await loadPondDuckies('pink',{acquire:async src=>{
+  leased.push(src);
+  if(leased.length===2)throw Error('fixture');
+  return Texture.WHITE;
+ },release:src=>released.push(src)});
+ assert.equal(leased.filter(src=>src===leased[1]).length,2);
+ assert(layer.entries.every(entry=>entry.body.children[0].texture===Texture.WHITE));
+ layer.destroy();
  assert.deepEqual(leased.sort(),released.sort());
 });
 

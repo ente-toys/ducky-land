@@ -123,7 +123,7 @@ export async function motionCompatibility(theme, art = manifest(theme)) {
       globalThis.fetch = async src => ({ok: true, json: async () => String(src).includes('centre/centre.json') ? centre : sample});
       try {
         loaded = await loadThemeArt({id: theme, art: `/pixi-art/themes/${theme}/art.json`, origin: {x: 0, y: 0}, width: art.width, height: art.height},
-          {acquire: async () => Texture.EMPTY, release() {}, groundPool: {create() {return {destroy() {}};}}});
+          {acquire: async () => Texture.WHITE, release() {}, groundPool: {create() {return {destroy() {}};}}});
         await attachCentreMotion(loaded, objects);
         loaded.ground.visible = true;
         for (const prop of loaded.props) prop.sprite.visible = true;

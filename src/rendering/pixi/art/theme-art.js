@@ -17,7 +17,7 @@ import {createIcelandLifeLifecycle} from '../environment/iceland-life.js';
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-async function buildThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader, prepare=false, dpr=2, defaultZoom=.65, cancelled=()=>false}) {
+async function buildThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader, prepare=false, dpr=2, defaultZoom=.65, landingPoint, cancelled=()=>false}) {
   const [manifest, centre] = await Promise.all([
     recoverArt(async()=>{
       const response=await fetch(map.art);
@@ -53,6 +53,14 @@ async function buildThemeArt(map, {acquire, release, groundPool, tilt=1, rasterL
   const artPlan=prepare?planIslandArt([...entries.map(e=>({...e,src:url(e.src)})),...tiles.map(e=>({...e,src:url(e.src),mipmaps:false})),...(manifest.kites?.length?KITE_ASSETS.map(src=>({src,resolution:2})):[])],{dpr,defaultZoom}):null;
   if(artPlan)resolutions=artPlan.resolutions;
   const uniqueSources = [...new Set([...sources,...(manifest.kites?.length?KITE_ASSETS:[])])];
+  if(landingPoint){
+    const distances=new Map();
+    entries.forEach((entry,i)=>{
+      const distance=Math.hypot(entry.x-landingPoint.x,entry.y-landingPoint.y);
+      if(Number.isFinite(distance))distances.set(sources[i],Math.min(distance,distances.get(sources[i])??Infinity));
+    });
+    uniqueSources.sort((a,b)=>(distances.get(a)??Infinity)-(distances.get(b)??Infinity));
+  }
   const loaded=new Array(uniqueSources.length),leased=new Set();let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
     while(cursor<uniqueSources.length&&!cancelled()){const i=cursor++,src=uniqueSources[i];leased.add(src);
@@ -101,8 +109,7 @@ async function buildThemeArt(map, {acquire, release, groundPool, tilt=1, rasterL
     const stream=groundPool.create(p.tiles.map(t=>({...t,x:p.x-p.width*anchor.x+t.x,y:p.y-p.height*anchor.y+t.y,localX:t.x-p.width*anchor.x,localY:t.y-p.height*anchor.y})),node,url);
     groundStreams.push(stream);return node;
   };
-  // Prepared scenes reveal all at once. Their loading view is sea + Duck, so
-  // allocating a low-density whole-island underlay only wastes texture memory.
+  // The engine owns the temporary preview for prepared boat arrivals.
   if(!prepare||manifest.degraded){
     let terrain;
     terrain=await acquireArt(acquire,release,`/pixi-art/globe/${map.id}-ground.svg`,1);
@@ -193,7 +200,7 @@ async function buildThemeArt(map, {acquire, release, groundPool, tilt=1, rasterL
     groups.push(result.pondDuckies.root);
   } catch(error) {console.warn(`theme ${map.id}: optional life unavailable`,error);}
   if(prepare) {
-    try {await Promise.all(groundStreams.map(stream=>stream.prepare({zoom:1.8,dpr,resolutions})));}
+    try {await Promise.all(groundStreams.map(stream=>stream.prepare({zoom:1.8,dpr,resolutions,landingPoint,cancelled})));}
     catch(error){console.warn(`theme ${map.id}: ground preparation degraded`,error);}
   }
   return result;
@@ -215,12 +222,14 @@ async function previewArt(map, options) {
 }
 export function loadThemeArt(map, options) {
   let pending,abandoned=false;
+  const cancelled=()=>abandoned||options.cancelled?.();
   // Bound the whole theme too: hundreds of individually timed-out props must
   // not keep even its ground off the scene for minutes. The preview is authored
   // SVG and works for dynamically registered maps without a prerender tier.
-  return recoverArt(()=>pending??=buildThemeArt(map,{...options,cancelled:()=>abandoned}),{
-    label:`theme ${map.id}`,timeoutMs:8000,
-    fallback:()=>{abandoned=true;return previewArt(map,options);},
+  return recoverArt(()=>pending??=buildThemeArt(map,{...options,cancelled}),{
+    label:`theme ${map.id}`,timeoutMs:options.landingPoint?30000:8000,
+    cancelled,
+    fallback:()=>{if(cancelled())return null;abandoned=true;return previewArt(map,options);},
     late:art=>art?.destroy(),
   });
 }

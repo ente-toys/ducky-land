@@ -21,7 +21,7 @@ test('all six theme manifests load, release textures and resolve their authored 
   for(const theme of readyThemes()) {
    let acquired=0,released=0;
    const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
-   const art=await loadThemeArt(mapFor(theme),{groundPool,acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
+   const art=await loadThemeArt(mapFor(theme),{groundPool,acquire:async()=>{acquired++;return Texture.WHITE;},release:()=>released++});
    const records=art.props.filter(p=>p.centrePiece?.animate);
    assert.equal(records.length,animated[theme]??0,theme+' animated layers');
    assert.ok(art.props.every(p=>!p.centrePiece||!p.wind),theme+' centre layers have no wind');

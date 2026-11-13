@@ -18,7 +18,7 @@ test('1440x900 Iceland arrivals acquire bounded unique shared pieces at full dev
  const acquired=[],released=[];
  const loader={acquire:async(src,r)=>{acquired.push(src);const c=new URL(src,'https://test').searchParams.get('rasterCrop').split(',').map(Number);return new Texture({source:new ImageSource({width:Math.ceil(c[4]*r)/r,height:Math.ceil(c[5]*r)/r,resolution:r})});},release:src=>released.push(src),destroy(){}};
  const ground=createGroundPool({acquire:async()=>Texture.EMPTY,release(){}});
- const loaded=await loadThemeArt({id:'snow',art:'/pixi-art/themes/snow/art.json',origin:{x:0,y:0},width:world.width,height:world.height},{groundPool:ground,icelandRasterLoaderFactory:()=>loader,acquire:async()=>Texture.EMPTY,release(){}});
+ const loaded=await loadThemeArt({id:'snow',art:'/pixi-art/themes/snow/art.json',origin:{x:0,y:0},width:world.width,height:world.height},{groundPool:ground,icelandRasterLoaderFactory:()=>loader,acquire:async()=>Texture.WHITE,release(){}});
  try{
   for(const zoom of [.6,1,1.8])for(const name of ['plaza','rink','bakery','lodge','workshop','harbour']){
    const camera={...world.zones[name],zoom},before=acquired.length;

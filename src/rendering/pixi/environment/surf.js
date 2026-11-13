@@ -9,19 +9,22 @@ const near = (a, b, pad) => a[0] - pad < b[2] && b[0] - pad < a[2] && a[1] - pad
 export const clockwise = ring => {let a = 0; for (let i = 0; i < ring.length; i++) {const p = ring[i], q = ring[(i + 1) % ring.length]; a += p[0] * q[1] - q[0] * p[1];} return a >= 0 ? ring : [...ring].reverse();};
 export const isletRing = ([cx, cy, rx, ry], n = 28) => Array.from({length: n}, (_, i) => [cx + Math.cos(i / n * 2 * Math.PI) * rx, cy + Math.sin(i / n * 2 * Math.PI) * ry]);
 export const shoreOf = world => [...(world.shoreRings ?? world.coastRings ?? [world.coast]), ...(world.surfIslets ?? world.islets ?? []).map(a => isletRing(a))].map(clockwise);
-export const surfRuns = (SHORE) => SHORE.flatMap((ring, r) => {
-  const perimeter = ring.reduce((s, p, i) => s + Math.hypot(ring[(i + 1) % ring.length][0] - p[0], ring[(i + 1) % ring.length][1] - p[1]), 0);
-  const pts = sampleRing(ring, Math.min(30, perimeter / 96)), out = [];
-  const set = p => .11 * Math.sin(p.along * .42 + r * 2.1) + .05 * Math.sin(p.along * 1.13 + r * .7);
-  for (let i = 0; i < pts.length; i += RUN) {
-    const run = Array.from({length: Math.min(RUN, pts.length - i) + 1}, (_, k) => pts[(i + k) % pts.length]);
-    const b = boxOf(run.map(p => [p.x, p.y]));
-    const others = SHORE.filter((o, k) => k !== r && near(boxOf(o), b, 200)).map(o => ({ring: o, box: boxOf(o)}));
-    if (run.every(p => others.some(o => inRing(p.x, p.y, o.ring)))) continue;
-    out.push({points: run.map(p => ({...p, set: set(p)})), set: set(run[RUN >> 1] || run[0]), box: b, start: r ? 125 : 175, others});
-  }
-  return out;
-});
+export function surfRuns(rings) {
+  const bounds = rings.map(ring => ({ring, box: boxOf(ring)}));
+  return rings.flatMap((ring, r) => {
+    const perimeter = ring.reduce((s, p, i) => s + Math.hypot(ring[(i + 1) % ring.length][0] - p[0], ring[(i + 1) % ring.length][1] - p[1]), 0);
+    const pts = sampleRing(ring, Math.min(30, perimeter / 96)), out = [];
+    const set = p => .11 * Math.sin(p.along * .42 + r * 2.1) + .05 * Math.sin(p.along * 1.13 + r * .7);
+    for (let i = 0; i < pts.length; i += RUN) {
+      const run = Array.from({length: Math.min(RUN, pts.length - i) + 1}, (_, k) => pts[(i + k) % pts.length]);
+      const b = boxOf(run.map(p => [p.x, p.y]));
+      const others = bounds.filter((other, k) => k !== r && near(other.box, b, 200));
+      if (run.every(p => others.some(o => inRing(p.x, p.y, o.ring)))) continue;
+      out.push({points: run.map(p => ({...p, set: set(p)})), set: set(run[RUN >> 1] || run[0]), box: b, start: r ? 125 : 175, others});
+    }
+    return out;
+  });
+}
 const HOME_RUNS = surfRuns(SHORE);
 
 export function createBeachSurf(layer, rings = null, calm = []) {

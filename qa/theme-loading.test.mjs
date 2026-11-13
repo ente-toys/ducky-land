@@ -23,7 +23,7 @@ test('theme art shares source leases at the highest resolution and releases them
   t.after(()=>groundPool.destroy());
   const art = await loadThemeArt(map, {
     groundPool,
-    acquire: async (src, resolution) => {acquired.push([src, resolution]); return Texture.EMPTY;},
+    acquire: async (src, resolution) => {acquired.push([src, resolution]); return Texture.WHITE;},
     release: src => released.push(src),
   });
   assert.deepEqual(acquired.sort(), [['/themes/test/shared.svg', 2], ['/themes/test/other.svg', 2],['/pixi-art/globe/test-ground.svg',1]].sort());
@@ -33,18 +33,27 @@ test('theme art shares source leases at the highest resolution and releases them
   assert.deepEqual(released.sort(), acquired.map(([src]) => src).sort());
 });
 
-test('a failed texture releases every lease after pending textures settle', async t => {
+test('a failed texture retries while other theme textures finish and releases every lease', async t => {
   mockFetch(t);
-  const released = [];
-  let finish, settled = false;
-  const pending = new Promise(resolve => {finish = () => {settled = true; resolve(Texture.EMPTY);};});
+  const acquired = [], released = [];
+  const groundPool=createGroundPool({acquire:async()=>Texture.WHITE,release:()=>{}});
+  t.after(()=>groundPool.destroy());
+  let finish;
+  const pending = new Promise(resolve => {finish = () => resolve(Texture.WHITE);});
   const loading = loadThemeArt(map, {
-    acquire: src => src.endsWith('shared.svg') ? Promise.reject(new Error('broken texture')) : pending,
-    release: src => {assert.ok(settled); released.push(src);},
+    groundPool,
+    acquire: async src => {
+      acquired.push(src);
+      if(src.endsWith('shared.svg')&&acquired.filter(key=>key===src).length===1)throw Error('broken texture');
+      return pending;
+    },
+    release: src => released.push(src),
   });
   await new Promise(resolve => setImmediate(resolve));
-  assert.equal(released.length, 0);
+  assert.deepEqual(released, ['/themes/test/shared.svg']);
   finish();
-  await assert.rejects(loading, /broken texture/);
-  assert.deepEqual(released.sort(), ['/themes/test/shared.svg', '/themes/test/other.svg'].sort());
+  const art=await loading;
+  assert.equal(art.props[0].sprite.texture,Texture.WHITE);
+  art.destroy();
+  assert.deepEqual(released.sort(), acquired.sort());
 });
