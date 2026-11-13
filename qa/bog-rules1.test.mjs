@@ -9,8 +9,9 @@ import {angle} from '../src/world/sphere.js';
 import {worldIsland} from '../src/world/world-map.js';
 import {isletWalk} from '../src/world/islet-walk.js';
 import {LiveBogRoom} from '../worker/bog-room.js';
-import {boatForExit,bogExitIslet,setBogExitRandom} from '../worker/bog-exit.js';
-import {boardingPoint,canSail,createBoats,fillMoorings} from '../src/gameplay/islands.js';
+import {bogExitIslet,setBogExitRandom} from '../worker/bog-exit.js';
+import {createBoats} from '../src/gameplay/islands.js';
+import {buildSpot,strandedIslet} from '../src/gameplay/boat-build.js';
 import {makeRoom,addPlayer,fakeSocket} from './room-harness.mjs';
 import {createDemo} from '../src/features/bog-combat/demo.js';
 import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
@@ -110,8 +111,8 @@ test('fifth tag keeps visible knockout then exits to the nearest world islet doc
   const dest=bogExitIslet();assert.ok(ISLETS.some(i=>i.id===dest.islet));
   assert.deepEqual([p.actor.x,p.actor.y],[isletWalk(dest.islet).land.x,isletWalk(dest.islet).land.y]);
   assert.equal(p.actor.mode,'walking');assert.equal(p.actor.boatId,null);assert.ok(room.navFor(p.actor.islandId).walkable(p.actor.x,p.actor.y));
-  // the paddled-out Duck finds a free boat at its islet's dock, so it can sail away again
-  const exitDock=isletWalk(dest.islet).water;assert.ok(room.boats.some(b=>!b.occupant&&b.islandId===dest.islandId&&Math.hypot(b.x-exitDock.x,b.y-exitDock.y)<=150),'boat waiting at the islet dock');
+  // the paddled-out Duck finds no boat at its islet: it gathers materials and builds one to sail away
+  assert.equal(strandedIslet(p.actor.islandId,p.actor,room.boats),isletWalk(dest.islet),'stranded, no boat added');
   assert.equal(room.karma.bogEntry(p.account),null);assert.equal(room.karma.balance(p.account),10);
   assert.equal(p.socket.notes.findLast(m=>m.type==='travel-notice').text,`Out of lives! Paddled to ${dest.name}`);
   assert.equal(socket.notes.findLast(m=>m.type==='arena-exit').destination.islet,dest.islet);
@@ -145,28 +146,14 @@ test('out of lives picks a random islet, every islet reachable',()=>{
  const seen=new Set();for(let i=0;i<ISLETS.length;i++){setBogExitRandom(()=>(i+.5)/ISLETS.length);seen.add(bogExitIslet().islet);}
  setBogExitRandom(()=>.25);assert.equal(seen.size,ISLETS.length);
 });
-test('every Bog drop-off gets a boardable boat even when the fleet is occupied',t=>{
+test('a Bog drop-off adds no boat: the duck is stranded on its islet and can build one from the shore',t=>{
  t.after(()=>setBogExitRandom(()=>.25));
  for(const [index,islet] of ISLETS.entries()){
   setBogExitRandom(()=>(index+.5)/ISLETS.length);
-  const destination=bogExitIslet();
-  const boats=createBoats().map((boat,i)=>({...boat,occupant:`sailor-${i}`}));
-  const original=structuredClone(boats);
-  assert.equal(boatForExit(boats,destination),true,islet.id);
-  const waiting=boats.at(-1);
-  assert.deepEqual(boats.slice(0,-1),original,'occupied boats stay with their sailors');
-  assert.deepEqual(boardingPoint(waiting),{x:destination.x,y:destination.y});
-  assert.ok(canSail(waiting.x,waiting.y,waiting.islandId));
-  assert.equal(boatForExit(boats,destination),false,'reuse the waiting boat on another drop-off');
-  waiting.occupant='first-arrival';
-  assert.equal(boatForExit(boats,destination),true,'replace a boat that has just been boarded');
-  const replacement=boats.at(-1);
-  assert.equal(replacement.occupant,null);
-  assert.deepEqual({x:replacement.x,y:replacement.y},destination.dock);
-  assert.equal(new Set(boats.map(boat=>boat.id)).size,boats.length);
-  const restored=JSON.parse(JSON.stringify(boats));
-  fillMoorings(restored);
-  assert.deepEqual(restored.find(boat=>boat.id===replacement.id),replacement);
+  const destination=bogExitIslet(),walk=isletWalk(islet.id),duck={mode:'walking',x:destination.x,y:destination.y};
+  assert.equal(strandedIslet(destination.islandId,duck,createBoats()),walk,islet.id);
+  const shore=walk.world.coast.map(([x,y])=>walk.nav.nearest(x,y,300)).find(p=>p&&buildSpot(destination.islandId,{x:p[0],y:p[1]}));
+  assert.ok(shore,`${islet.id}: a shore to build from`);
  }
 });
 test('closing the combat socket on the fifth tag cannot postpone the authoritative exit',async()=>{

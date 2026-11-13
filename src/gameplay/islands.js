@@ -97,10 +97,6 @@ function nextBoatId(islandId,slot,ids) {
   while (ids.has(id)) id=`${base}~${(MINT++).toString(36)}`;
   return id;
 }
-export function addParkedBoat(boats,islandId,{x,y}) {
-  const id=nextBoatId(islandId,0,new Set(boats.map(boat=>boat.id)));
-  boats.push({...mooredBoat(islandId,0,id),x,y,parked:true});
-}
 const atMooring = (boat,spot) => boat.islandId === boatHome(boat) && boat.x === spot.x && boat.y === spot.y;
 export function fillMoorings(boats) {
   const SPOTS=new Map(), spotsOf=id => {if (!SPOTS.has(id)) SPOTS.set(id,boatSpots(id)); return SPOTS.get(id);};
