@@ -7,7 +7,7 @@ export const GROUND_BUDGET_BYTES = 128 * 1048576;
 export function groundSpriteBounds(tile, texture) {
   const width=tile.width+(tile.bleed??0),height=tile.height+(tile.bleed??0);
   const padding=texture.groundPadding;
-  const dx=padding?padding.pad*width/padding.width:0,dy=padding?padding.pad*height/padding.height:0;
+  const dx=padding?(padding.padX??padding.pad)*width/padding.width:0,dy=padding?(padding.padY??padding.pad)*height/padding.height:0;
   return {x:(tile.localX??tile.x)+(tile.flip?tile.width+dx:-dx),y:(tile.localY??tile.y)-dy,width:width+2*dx,height:height+2*dy};
 }
 function fitGroundSprite(tile,texture){
