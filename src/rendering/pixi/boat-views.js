@@ -7,7 +7,47 @@ const SECTOR = {s: 0, se: 45, e: 90, ne: 135, n: 180, nw: -135, w: -90, sw: -45}
 const RAD = Math.PI / 180;
 const HYST = 3 * RAD;
 export const LEGACY_SEAT = {x: 45, y: -48};
-const art = (src, resolution = .5) => ({src, data: {resolution, autoGenerateMipmaps: true}});
+const SHARP = 1.25;   // the authored boat drawing scale (views.json resolution)
+const art = (src, resolution = SHARP) => ({src, data: {resolution, autoGenerateMipmaps: true}});
+// The 48-direction atlas is drawn small to stay in budget, so it reads soft up close. Boats on screen use a full-sharpness
+// picture of just the directions in use, loaded on first use; the atlas frame stands in until it arrives.
+const SHARP_KEEP = 12;
+const textureFiles = new WeakMap();
+function createSharpCache({load=file=>Assets.load(art(DIR+file)),unload=file=>Assets.unload(DIR+file),now=()=>performance.now()}={}) {
+  const cache = new Map(), unloading = new Map();
+  let sweptAt = -Infinity;
+  const drop = file => {
+    cache.delete(file);
+    // a reload of the same file waits for this unload, so it never gets the texture being destroyed
+    const done = Promise.resolve().then(()=>unload(file)).catch(()=>{}).finally(()=>{if(unloading.get(file)===done)unloading.delete(file);});
+    unloading.set(file,done);
+  };
+  const sweep = t => {
+    if (cache.size <= SHARP_KEEP || t-sweptAt < 500) return;
+    sweptAt = t;
+    const idle = [...cache].filter(([,e])=>e.texture&&t-e.used>2000).sort((a,b)=>a[1].used-b[1].used);
+    for (const [file] of idle.slice(0,cache.size-SHARP_KEEP)) drop(file);
+  };
+  return {
+    get(texture) {
+      const file = texture && textureFiles.get(texture);
+      if (!file) return texture;
+      const t = now();
+      let entry = cache.get(file);
+      if (!entry) {
+        entry = {texture:null,used:t};cache.set(file,entry);
+        (unloading.get(file)??Promise.resolve()).then(()=>load(file)).then(loaded=>{
+          if (cache.get(file)===entry&&!loaded.destroyed) entry.texture=loaded;
+          else if (cache.get(file)!==entry) drop(file);
+        }).catch(()=>{if(cache.get(file)===entry)cache.delete(file);});
+      }
+      entry.used = t;
+      sweep(t);
+      return entry.texture&&!entry.texture.destroyed ? entry.texture : texture;
+    },
+  };
+}
+
 const diff = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
 
 function fromManifest(m,atlas) {
@@ -16,7 +56,8 @@ function fromManifest(m,atlas) {
     if(!file)return null;
     if(!textures.has(file)){
       const f=atlas.frames.get(file);if(!f)throw Error(`Missing boat atlas frame ${file}`);
-      textures.set(file,new Texture({source:atlas.source,frame:new Rectangle(f.x,f.y,f.w,f.h),orig:new Rectangle(0,0,atlas.width,atlas.height),trim:new Rectangle(f.left,f.top,f.w,f.h)}));
+      const texture=new Texture({source:atlas.source,frame:new Rectangle(f.x,f.y,f.w,f.h),orig:new Rectangle(0,0,atlas.width,atlas.height),trim:new Rectangle(f.left,f.top,f.w,f.h)});
+      textureFiles.set(texture,file);textures.set(file,texture);
     }
     return textures.get(file);
   };
@@ -58,6 +99,7 @@ async function initialViews(){
 export function loadBoatViews() {
   ready ??= initialViews().catch(()=>legacy()).then(initial => {
     let views=initial, byKey=new Map(views.map(v=>[v.key,v]));
+    const sharp=createSharpCache();
     return {
       get views(){return views;},get byKey(){return byKey;},
       replace(next){views=next;byKey=new Map(views.map(v=>[v.key,v]));},
@@ -68,7 +110,10 @@ export function loadBoatViews() {
         if (cur && cur !== best && diff(heading, cur.angle) < bestD + HYST) return cur;
         return best;
       },
+      // the picture to draw for a view: the sharp one once it has loaded, else the atlas frame
+      best(v, texture = v.texture) {return sharp.get(texture);},
       apply(sprite, v, scaleMul = 1, texture = v.texture) {
+        texture = sharp.get(texture);
         sprite.texture = texture;
         sprite.anchor.set(v.anchor[0], v.anchor[1]);
         const k = v.width / texture.width * scaleMul;

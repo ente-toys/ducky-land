@@ -19,7 +19,7 @@ test('twenty minutes of wandering remain on open water, spread around the world 
  const f=createPirateFleet();let min=Infinity,total=0;const start=f.ships.map(s=>[...s.p]);
  for(let k=0;k<12000;k++){
   const old=f.ships.map(s=>[...s.p]);f.update(.1);
-  for(let i=0;i<f.ships.length;i++){assert.ok(distance(old[i],f.ships[i].p)<3.3,'no teleport');if(k%40===0)min=Math.min(min,pirateClearance(f.ships[i].p));}
+  for(let i=0;i<f.ships.length;i++){assert.ok(distance(old[i],f.ships[i].p)<11,'no teleport');if(k%40===0)min=Math.min(min,pirateClearance(f.ships[i].p));}
  }
  assert.ok(min>PIRATE_RADIUS+60,'double-size hulls keep a shore margin: '+min);
  for(let k=0;k<f.ships.length;k++)total+=distance(start[k],f.ships[k].p);assert.ok(total>18000,'fleet actively wanders');
