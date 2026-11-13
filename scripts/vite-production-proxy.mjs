@@ -1,4 +1,4 @@
-export const PRODUCTION_ORIGIN = 'https://ente-ducky-land.pages.dev';
+export const PRODUCTION_ORIGIN = 'https://world.ente.com';
 
 function localOrigin(request) {
   try {

@@ -2,7 +2,7 @@
   "name": "ente-ducky-land",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-11-02",
-  "vars": {"SITE_ORIGIN": "https://ente-ducky-land.pages.dev"},
+  "vars": {"SITE_ORIGIN": "https://world.ente.com"},
   "durable_objects": {"bindings": [{"name": "ISLAND", "class_name": "IslandRoom", "script_name": "ducky-land-room"}]},
   "env": {
     "preview": {
