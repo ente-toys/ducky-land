@@ -603,6 +603,12 @@ export class PixiIsland {
     this.canvas?.focus();
   }
 
+  // zooming in draws the view in toward your own Duck, wherever it is on screen
+  zoomTowardPlayer(prev,next) {
+    const me=this.player;this.target.zoom=next;
+    if(!me||this.globeOpen||!Number.isFinite(me.x+me.y))return;
+    const k=1-prev/next;this.target.x+=(me.x-this.target.x)*k;this.target.y+=(me.y-60-this.target.y)*k;
+  }
   listen(target, name, fn, options) {
     target.addEventListener(name, fn, options);
     this.cleanups.push(() => target.removeEventListener(name, fn, options));
@@ -682,8 +688,9 @@ export class PixiIsland {
         this.zoomAnchor={...p,focus:this.globeT>0 && this.worldView?.worldAt?.(p)};
       }
       this.zoomAnchor.at=stamp;
-      const focus=this.zoomAnchor.focus;
+      const focus=this.zoomAnchor.focus,prev=this.target.zoom;
       if (focus) zoomToWorldPoint(this.target,next,{x:focus[0],y:focus[1]});
+      else if (next>prev) this.zoomTowardPlayer(prev,next);
       else zoomAt(this.target, next, p.x, this.height / 2 + (p.y - this.height / 2) / TILT, this.width, this.height);
       this.follow = false;this.fitMode=false;this.constrain(this.target);
     }, {passive: false});
@@ -711,7 +718,7 @@ export class PixiIsland {
       if (key === '0') this.fit();
       if (['+','=','-'].includes(key)) {
         if (this.zoomPastLimit(key === '-' ? .8 : 1.25)) return;
-        this.fly=null; this.target.zoom = clamp(this.target.zoom * (key === '-' ? .8 : 1.25), this.zoomFloor(), this.zoomCeiling());this.fitMode=false;this.follow=false;this.constrain(this.target);
+        this.fly=null; {const prev=this.target.zoom,next=clamp(prev * (key === '-' ? .8 : 1.25), this.zoomFloor(), this.zoomCeiling()); if(next>prev)this.zoomTowardPlayer(prev,next); else this.target.zoom=next;}this.fitMode=false;this.follow=false;this.constrain(this.target);
       }
     });
     this.listen(window, 'keyup', event => this.keys.delete(event.key.toLowerCase()));
