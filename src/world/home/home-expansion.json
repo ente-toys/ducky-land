@@ -10331,26 +10331,6 @@
       "contact": false
     },
     {
-      "id": "home-lighthouse-beam",
-      "name": "Lighthouse lamplight",
-      "asset": "lighthouse-beam",
-      "src": "/pixi-art/home-review/beam.svg",
-      "x": 4927.6,
-      "y": 2083.9,
-      "width": 360,
-      "height": 230,
-      "scale": 1.3,
-      "anchor": {
-        "x": 0,
-        "y": 0.5
-      },
-      "z": 2599,
-      "noShadow": true,
-      "contact": false,
-      "sweepPeriod": 12,
-      "sweepAngle": 0.16
-    },
-    {
       "id": "polish-orchard-birch",
       "name": "tree-5",
       "asset": "tree-5",

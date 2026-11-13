@@ -225,7 +225,7 @@ test('boarding and island changes clear prediction and boat interpolation withou
   room.snapshot(packet(2,'home','sailing'));
   assert.equal(room.pending.length,0);
   assert.equal(room.offsetX,0);
-  assert.equal(room.emote(3),false);
+  assert.ok(room.emote(3),'dance is allowed on a boat');assert.equal(room.emote(4),false,'other emotes still wait for land');
   room.destination(3960,6500);
   assert.deepEqual(room.player.sailTarget,{x:3960,y:6500});
   room.snapshot(packet(3,'blossom','sailing'));

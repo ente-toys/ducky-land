@@ -1,4 +1,5 @@
 import {placeRigid,unplaceRigid,flatRigid} from '../world/rigid.js';
+import {SAIL_EMOTES} from './player-motion.js';
 import {placeIslet,unplaceIslet} from '../world/islet-placement.js';
 import {isletClearance,isletLocalClearance,ISLETS} from '../world/islets.js';
 import {walkNav,isletWalks,inWalkArea} from '../world/islet-walk.js';
@@ -332,7 +333,7 @@ export function setSailDestination(actor,x,y) {
   return [x,y];
 }
 
-export function sailStep(actor,dt,input) {
+export function sailStep(actor,dt,input,now=null) {
   const manual=Boolean(input.x || input.y);
   if (manual) {actor.sailTarget=null; actor.sailRoute=null; actor.docking=false;}
   const target=actor.sailTarget;
@@ -351,7 +352,7 @@ export function sailStep(actor,dt,input) {
     if (target && near(actor,target,1)) actor.sailTarget=actor.sailRoute?.shift() ?? null;
   }
   actor.travel=Math.hypot(actor.x-ox,actor.y-oy)/dt;
-  actor.action=0;
+  if (!(now !== null && SAIL_EMOTES.has(actor.action) && now < actor.until)) {actor.action=0; if (now !== null) actor.until=0;}
   return actor.travel>0;
 }
 

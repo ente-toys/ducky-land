@@ -52,6 +52,16 @@ export function setWalkDestination(actor, nav, x, y) {
   return actor.path.at(-1);
 }
 
+// Quack and dance work on a boat too: they only play the animation and never touch the course or heading.
+export const SAIL_EMOTES = new Set([2, 3]);
+export function playSailEmote(actor, action, now) {
+  if (!SAIL_EMOTES.has(action)) return false;
+  if (action === 3 && actor.action === 3) {actor.action = 0; actor.until = 0; return true;}
+  actor.action = action;
+  actor.until = now + DURATIONS[action];
+  actor.emoteVersion = (actor.emoteVersion ?? 0) + 1;
+  return true;
+}
 export function playEmote(actor, action, now) {
   actor.path = [];
   actor.travel = 0;
