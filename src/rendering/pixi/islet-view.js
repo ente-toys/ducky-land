@@ -1,8 +1,6 @@
 import {createArtQueue, nextArtFrame} from './art/island-preparation.js';
 import {Container,Graphics,Matrix,RenderTexture} from 'pixi.js';
 import {ISLETS,ISLET_ART,ISLET_META,ISLET_VIEWBOX} from '../../world/islets.js';
-import {dot} from '../../world/sphere.js';
-import {localPoint,viewFrame} from '../../world/sphere-coordinates.js';
 import {svgLayerContexts} from './art/svg-context.js';
 import {isletPlacement,placeIslet} from '../../world/islet-placement.js';
 export {isletPlacement};
@@ -71,9 +69,9 @@ export async function createIsletView(app,scene,objects){
      root.setFromMatrix(new Matrix(r.cos,r.sin,-r.sin,r.cos,r.x,r.y));return r;
     });
    }
-   const view=viewFrame(id,camera),hw=width/(2*camera.zoom),hh=height/(2*camera.zoom);
-   for(const v of views){const {i}=v,p=localPoint(id,i.center);
-    v.root.visible=dot(view.center,i.center)>.1&&Math.abs(p.x-camera.x)<hw+i.width&&Math.abs(p.y-camera.y)<hh+i.width;
+   const hw=width/(2*camera.zoom),hh=height/(2*camera.zoom);
+   for(const v of views){const {i}=v,p=isletPlacement(id,i);
+    v.root.visible=Math.abs(p.x-camera.x)<hw+i.width&&Math.abs(p.y-camera.y)<hh+i.width;
     for(const prop of v.props)prop.sprite.visible=v.root.visible;
    }
   },

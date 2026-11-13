@@ -16,12 +16,8 @@ export function flatRigid(from,to){
  const key=from+'>'+to;let r=cache.get(key);
  if(!r){
   const m=mapOf(to);
-  if(from===to)r=rigidMatrix(1,0,1,m.cx,m.cy);
-  else{
-   const h=4,P=(x,y)=>mapPoint(to,from,{x:m.cx+x,y:m.cy+y}),c=P(0,0),xp=P(h,0),xm=P(-h,0),yp=P(0,h),ym=P(0,-h);
-   const q=polar((xp.x-xm.x)/(2*h),(xp.y-xm.y)/(2*h),(yp.x-ym.x)/(2*h),(yp.y-ym.y)/(2*h));
-   r=rigidMatrix(q.cos,q.sin,1,c.x,c.y);
-  }
+  const c=mapPoint(to,from,{x:m.cx,y:m.cy});
+  r={a:1,b:0,c:0,d:1,x:c.x,y:c.y};
   r.cx=m.cx;r.cy=m.cy;cache.set(key,r);
  }
  return r;

@@ -1,19 +1,8 @@
-import {mapPoint,localPoint,spherePoint} from '../../world/sphere-coordinates.js';
-import {flatRigid} from '../../world/rigid.js';
+import {localPoint,spherePoint} from '../../world/sphere-coordinates.js';
 
 export const IDENTITY_BASIS=Object.freeze({a:1,b:0,c:0,d:1});
-export function landingBasis(from,to,point,prior=IDENTITY_BASIS){
- const p=mapPoint(to,from,point),x=mapPoint(to,from,{x:point.x+1,y:point.y}),y=mapPoint(to,from,{x:point.x,y:point.y+1});
- const a=prior.a*(x.x-p.x)+prior.c*(x.y-p.y),b=prior.b*(x.x-p.x)+prior.d*(x.y-p.y);
- const c=prior.a*(y.x-p.x)+prior.c*(y.y-p.y),d=prior.b*(y.x-p.x)+prior.d*(y.y-p.y);
- const angle=Math.atan2(b-c,a+d),co=Math.cos(angle),si=Math.sin(angle);
- return {angle,xx:co*a+si*b,xy:co*c+si*d,yx:-si*a+co*b,yy:-si*c+co*d};
-}
-export function rigidLandingBasis(from,to,prior=IDENTITY_BASIS,r=flatRigid(from,to)){
- const a=prior.a*r.a+prior.c*r.b,b=prior.b*r.a+prior.d*r.b,c=prior.a*r.c+prior.c*r.d,d=prior.b*r.c+prior.d*r.d;
- const angle=Math.atan2(b-c,a+d),co=Math.cos(angle),si=Math.sin(angle);
- return {angle,xx:co*a+si*b,xy:co*c+si*d,yx:-si*a+co*b,yy:-si*c+co*d};
-}
+export function landingBasis(){return {angle:0,xx:1,xy:0,yx:0,yy:1};}
+export const rigidLandingBasis=landingBasis;
 export function easeLandingBasis(start,progress){
  if(progress>=1)return {...IDENTITY_BASIS};
  const k=Math.pow(1-Math.max(0,Math.min(1,progress)),3),a=start.angle*k,co=Math.cos(a),si=Math.sin(a);

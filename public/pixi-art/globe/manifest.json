@@ -1131,10 +1131,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "7d8ba94090946a2c6b768967c7d6ad0b742a3a9144fd33a5bfeace612ca2faf7"
+      "sha256": "6bf14fde3bafce6fff0257f6a9f05271f28b3c04ced9f0df93d647ccbbf12220"
     },
     "groundSha256": "0a48b9d96e8f766362276d1d3a892fc659e5e4362d023ae78ffd4638cc80d465",
     "src": "/pixi-art/globe/home.svg",
@@ -2219,10 +2219,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "206af1a618ca2a1099adad511179abfb34e88314d73e72c1f523ad6fe38b85c0"
+      "sha256": "8cf9bbb2ba0869b6871c5de0ed7eb112852d5e3f2a1d88cb8ce13782998a11af"
     },
     "groundSha256": "93fc36f9e96743bbb13cca5daa13f81f4640d965f1355529d28bbe8ae3c2cc49",
     "src": "/pixi-art/globe/sunflower.svg",
@@ -5031,10 +5031,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "82d8b63de2d57c296aa799fbd33773f03a27ef802b2826762d23edacdd6cf468"
+      "sha256": "3b293f8b42acef9ffc3c2253d4c8e05304f47ebbfb6aeca611149f5a9f6a3813"
     },
     "groundSha256": "4a2bfe012c25cde81a98819c586f7730ce716f938aa26be92c03181cb0b11678",
     "src": "/pixi-art/globe/pink.svg",
@@ -7551,10 +7551,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "3dc920c901b9883e07b46f247b430f37786af9c7ced3232a495e77123a90d631"
+      "sha256": "33500303de5573118ebde8096a240395b044618997f1e3a22eaf8f1286078b99"
     },
     "groundSha256": "49772cf6bc3cf5c87500a7d28cbd8431eebdd8cc78f54890e261372cae601b3e",
     "src": "/pixi-art/globe/library.svg",
@@ -8575,10 +8575,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "039203607b7e9536b4a9173de09724403ce7d907e2a70d6331f717fc71b92cb3"
+      "sha256": "7ceb98e86047832e1abfd3b9756a2d9cd214a5121bc20fab310ba9030d5162a2"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
@@ -9067,10 +9067,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "debb40b3feeadb8dac588d2a48e17f1882565ddeb146dec5a93f6c36388dae11"
+      "sha256": "d8fe1dd950e82edded4869bf049bc24926bdfe7feb56ff4829477bc8f5018b95"
     },
     "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
@@ -10695,10 +10695,10 @@
         },
         {
           "path": "src/world/world-map.js",
-          "sha256": "5725ba5b8d05523b8de21e2a111e13829c0e6b6e28c63a083c887823ab9933b9"
+          "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "a5e4bd9b1d68c84f8f7b7297470177fdf6d5284c4ba909d2f58adbc524b6e9df"
+      "sha256": "fbcc925031fe21d6f91c49bb9ae3ef099d5d0bc55e66d5eb160ed42df683451e"
     },
     "groundSha256": "2fdaf51c505df0bc6703d582052b7ebf887085beafe964d8bbdf50495e6a2790",
     "src": "/pixi-art/globe/snow.svg",

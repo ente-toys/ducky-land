@@ -5,7 +5,7 @@ import {createPirateFleet,pirateBoatPoint} from '../../gameplay/pirate-fleet.js'
 import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './environment/home-motion.js';
 import {createHomeKites, KITE_ASSETS} from './environment/home-kites.js';
-import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from '../shared/sphere-camera.js';
+import {easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from '../shared/sphere-camera.js';
 import {createSailingCamera} from '../shared/sailing-camera.js';
 import {sailingUpright} from './sailing-upright.js';
 import {WORLD_GEO,WORLD_ISLANDS,neighboursOf} from '../../world/world-map.js';
@@ -39,7 +39,7 @@ import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
 import {isletWalks} from '../../world/islet-walk.js';
-import {reframeIslet,isletLandingFrame} from '../../world/islet-placement.js';
+import {reframeIslet} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from '../../world/island-maps.js';
 import {loadThemeArt} from './art/theme-art.js';
 import {telescopeNear,telescopePeerAt} from './telescope.js';
@@ -349,7 +349,7 @@ export class PixiIsland {
       // Globe and open-sea scenery are prepared on demand, outside walking.
       globalThis.__duckyPin=()=>this.worldView?.pinPoint();globalThis.__duckyRigid=()=>this.rigidReadback();
       if (this.room) {
-        this.travelView=await createTravelView(this.objects,this.water,this.air,this.decks);
+        this.travelView=await createTravelView(this.objects,this.water,this.decks);
         if (this.disposed) {this.travelView.dispose(); return;}
         this.travelView.fx.waterSplash=(x,y)=>{if (this.artShown === 'home') this.waterFX?.splash(x,y,.85,30);};
         this.switchIsland(this.room.islandId);
@@ -476,15 +476,11 @@ export class PixiIsland {
     const accent=islandFor(id).accent;
     for (const prop of this.props) if (/flower|flag|bunting/i.test(prop.asset || prop.name)) prop.sprite.tint=id==='home'?(prop.tint ?? 0xffffff):accent;
     this.travelView?.switchIsland(id, hop && reframe);
+    this.landingView=null;
+    delete this.camera.basis;
+    if(this.sailingCamera)this.sailingCamera.active=false;
     if (hop) {
       for (const c of [this.camera, this.target]) Object.assign(c,reframe(c));
-      const basis=rigidLandingBasis(previousIsland,id,this.camera.basis,landed?isletLandingFrame(previousIsland,id,landed):undefined);
-      // Sailing has already levelled the destination before Dock becomes
-      // available. Keep the old landing animation for non-sailing travel.
-      this.landingView=this.sailingCamera?.active?null:{at:performance.now(),basis};
-      if(this.landingView)this.camera.basis=easeLandingBasis(basis,0);
-      else delete this.camera.basis;
-      if(this.sailingCamera)this.sailingCamera.active=false;
     } else {
       const player=this.player;
       const focus=player ?? harborOf(id).land;
@@ -740,8 +736,12 @@ export class PixiIsland {
     if (trip.leg === this.islandId) {
       // the boat stopped short of the next island (a refused landing, a full island): hand control back once it
       // has stayed stopped for a moment (the target blinks empty between route waypoints)
-      if (me.sailTarget) trip.idleSince=null;
-      else if ((trip.idleSince ??= performance.now()) < performance.now() - 1500) this.trip=null;
+      if (me.sailTarget) {trip.idleSince=null; return;}
+      if ((trip.idleSince ??= performance.now()) >= performance.now() - 1500) return;
+      // long legs can stop partway (the sea route is planned in pieces): re-send the leg while the boat still gains ground
+      const moved=!trip.stoppedAt || Math.hypot(me.x-trip.stoppedAt.x, me.y-trip.stoppedAt.y) > 200;
+      trip.stoppedAt={x:me.x, y:me.y}; trip.leg=null; trip.idleSince=null;
+      if (!moved) this.trip=null;
       return;
     }
     const next=nextIsland(this.islandId, trip.target), route=destinationsFor(this.islandId).find(island => island.destination === next);
@@ -1227,7 +1227,7 @@ export class PixiIsland {
     return atFloor ? this.openGlobe() : this.closeGlobe();
   }
   landOnPlayer(zoom) {
-    Object.assign(this.camera,localPoint(this.islandId,spherePoint(this.islandId,this.camera))); delete this.camera.basis;
+    delete this.camera.basis;
     this.globeAim=null; this.spin=null; this.zoomAnchor=null; this.fly=null; this.zoomMotion.velocity=0;
     const me=this.room?.view() ?? this.player;
     if (me) {

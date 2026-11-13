@@ -39,10 +39,10 @@ test('retired islands cannot load maps, appear as travel targets or retain boats
 
 test('all seven islands retain their authored globe anchors and globe scale', async () => {
   const {WORLD_GEO} = await import('../src/world/world-map.js');
-  const anchors=[[0,0],[60,28],[-140,-22],[105,-23],[-85,29],[0,-90],[0,90]];
+  const anchors=[[0,0],[67,8],[-142.7,-8],[140.8,-8],[-68.9,8],[0,-90],[0,90]];
   for(const [k,i] of WORLD_ISLANDS.entries()) {
     assert.equal(i.lon,anchors[k][0]*(Math.PI/180));
     assert.equal(i.lat,anchors[k][1]*(Math.PI/180));
   }
-  assert.equal(WORLD_GEO.Rw,74000/(2*Math.PI));
+  assert.equal(WORLD_GEO.Rw,80000/(2*Math.PI));
 });

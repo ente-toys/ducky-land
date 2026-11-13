@@ -32,16 +32,24 @@ export function ghostMotion(age,reducedMotion,out={}){
   return out;
 }
 
-export function createKnockout(objects,rig,{tilt=1,art}={}){
-  const ground=new Container({label:'Shooter paint puddle and dropped popper'});
-  const root=new Container({label:'Tagged Ducky rising ghost'}),ghost=new Container();
-  const body=new Sprite(),wisp=new Sprite(),halo=new Sprite(),tail=new Sprite(),puddle=new Sprite(),popper=new Sprite();
-  function place(sprite,part,px=512,py=970){const [x,y,w,h]=PARTS[part];sprite.anchor.set((px-x)/w,(py-y)/h);}
+function place(sprite,part,px=512,py=970){const [x,y,w,h]=PARTS[part];sprite.anchor.set((px-x)/w,(py-y)/h);}
+// The rising ghost (body, wisp, halo, devil tail) posed round its feet; the globe reuses it for Bog's pop-ups.
+export function ghostParts(art,team){
+  const ghost=new Container(),body=new Sprite(),wisp=new Sprite(),halo=new Sprite(),tail=new Sprite();
   place(body,'body');place(wisp,'wisp',452,683);wisp.position.set(-60,-287);
   place(halo,'halo',492,94);halo.position.set(-20,-876);
   place(tail,'tail',645,623);tail.position.set(133,-347);
+  ghost.addChild(tail,wisp,body,halo);
+  if(art&&team){body.texture=art[team+'-body'];wisp.texture=art[team+'-wisp'];halo.texture=art.halo;tail.texture=art['devil-tail'];tail.visible=team==='evil';}
+  return {ghost,body,wisp,halo,tail};
+}
+
+export function createKnockout(objects,rig,{tilt=1,art}={}){
+  const ground=new Container({label:'Shooter paint puddle and dropped popper'});
+  const root=new Container({label:'Tagged Ducky rising ghost'});
+  const {ghost,body,wisp,halo,tail}=ghostParts(),puddle=new Sprite(),popper=new Sprite();
   place(puddle,'puddle');place(popper,'popper',650,865);popper.position.set(138,-105);
-  ghost.addChild(tail,wisp,body,halo);root.addChild(ghost);ground.addChild(puddle,popper);
+  root.addChild(ghost);ground.addChild(puddle,popper);
   root.upright=ground.upright=true;root.scale.set(SCALE,SCALE/tilt);ground.scale.set(SCALE,SCALE/tilt);
   root.visible=ground.visible=false;objects.addChild(ground,root);
   const phase={},motion={};let respawnAt=null,hitX=0,hitY=0,side=1,team='karma',wasDown=false;

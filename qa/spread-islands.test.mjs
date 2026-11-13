@@ -7,14 +7,16 @@ const RAD=Math.PI/180;
 function checkLayout(m){
  assert.equal(m.islands.length,7);assert.equal(new Set(m.islands.map(i=>i.id)).size,7);
  const ice=m.islands.find(i=>i.theme==='snow');assert.deepEqual(ice.center,[0,1,0]);
- const longs=m.islands.filter(i=>i!==ice).map(i=>i.lon).sort((a,b)=>a-b);
+ const bog=m.islands.find(i=>i.theme==='bog');assert.ok(Math.abs(bog.center[1]+1)<1e-12,'Bog on the South Pole');
+ const ring=m.islands.filter(i=>i!==ice&&i!==bog);
+ assert.ok(ring.every(i=>Math.abs(i.lat)<=10*RAD),'the other five sit round the equator');
+ const longs=ring.map(i=>i.lon).sort((a,b)=>a-b);
  const gaps=longs.map((x,k)=>(longs[(k+1)%longs.length]-x+2*Math.PI)%(2*Math.PI));
- assert.ok(Math.max(...gaps)-Math.min(...gaps)>20*RAD,'unequal gaps');
- assert.ok(new Set(m.islands.map(i=>i.lat)).size===7,'varied heights, no rows');
+ assert.ok(Math.min(...gaps)>60*RAD,'spread all the way round');
  for(const i of m.islands){assert.ok(Math.abs(Math.hypot(...i.center)-1)<1e-12);}
  assert.deepEqual([m.islands[0].x,m.islands[0].y],[2900,2200]);
 }
-test('7 unique sphere patches, clustered unevenly, with Iceland exactly on the North Pole',()=>{
+test('7 unique sphere patches: Iceland on the North Pole, Bog on the South Pole, five round the equator',()=>{
  assert.equal(ISLAND_COUNT,7);checkLayout(layoutWorld());
  assert.deepEqual(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean),FINISHED_THEMES);
  for(const [id,theme] of THEMED_ISLANDS){assert.equal(themeOfIsland(id),theme);assert.equal(mapOf(id).id,theme);}
