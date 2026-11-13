@@ -73,3 +73,14 @@ test('planning uses the actual responsive walking camera zoom and remains fixed 
     assert.equal(plan.defaultZoom,defaultZoom);
   }
 });
+
+test('preparation before viewport measurement uses a finite walking zoom and texture plan',()=>{
+  for(const [width,height]of [[undefined,undefined],[1440,undefined],[0,0],[1440,0],[-1,900],[NaN,900],[Infinity,900]]){
+    const defaultZoom=walkingZoom(width,height);
+    assert.equal(defaultZoom,.65);
+    const plan=planIslandArt([{src:'/unmeasured.svg',width:20,height:10,mipmaps:false}],{dpr:2,defaultZoom});
+    for(const r of plan.resolutions.values())assert(Number.isFinite(r)&&r>0);
+    assert(Number.isFinite(plan.bytes)&&plan.bytes>0);
+    assert(plan.bytes+SHARED_TEXTURE_ALLOWANCE<=350*1048576);
+  }
+});
