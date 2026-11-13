@@ -5,7 +5,8 @@ import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
 import {teamCounts} from '../src/features/bog-combat/entry.js';
 
 test('local autoplay uses ten real fighters, tags, respawns and valid island walking without bot medals',async()=>{
- let seed=97;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
+ // The open map reaches another round sooner; keep both teams active at the final sample.
+ let seed=98;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
  const demo=createDemo(BOG_COMBAT,10,{random}),room=new demo.Room({...BOG_COMBAT,profile:'demo-test'});
  await new Promise(resolve=>queueMicrotask(resolve));
  assert.equal(room.client.id,null);
