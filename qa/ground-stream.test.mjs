@@ -94,8 +94,7 @@ test('zoom throttling retains shared source leases, priority and distance throug
  await step();
  assert.equal(requests.length,1,'duplicate placements share the pending decode');
  assert.equal(requests[0].src,'/hut.svg?groundScale=0.5');
- assert.equal(typeof requests[0].options.valid,'function');
- assert.deepEqual({...requests[0].options,valid:undefined},{visible:true,priority:9,distance:0,valid:undefined});
+ assert.deepEqual(requests[0].options,{visible:true,priority:9,distance:0});
  for(let i=0;i<8;i++)await step();
  assert.equal(pool.stats().residentTiles,8);
  assert.equal(pool.stats().sharedSources,2);

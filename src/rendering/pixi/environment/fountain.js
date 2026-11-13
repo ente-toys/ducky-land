@@ -39,14 +39,13 @@ async function cleanArtwork(prop, root) {
     if (root.destroyed || prop.sprite.destroyed) return;
     const canvas = document.createElement('canvas'); canvas.width = canvas.height = 960;
     canvas.getContext('2d').drawImage(img, 0, 0, 960, 960);
-    const original = prop.sprite.texture, texture = new Texture({source: new ImageSource({resource: canvas, label: `Fountain artwork: ${prop.src}`, ...ART_TEXTURE})});
+    const original = prop.sprite.texture, texture = new Texture({source: new ImageSource({resource: canvas, ...ART_TEXTURE})});
     const sx = prop.sprite.scale.x, sy = prop.sprite.scale.y;
     prop.sprite.texture = texture;
     prop.sprite.scale.set(sx * original.width / texture.width, sy * original.height / texture.height);
     root.once('destroyed', () => {if (!prop.sprite.destroyed && prop.sprite.texture === texture) {
       prop.sprite.texture = original; prop.sprite.scale.set(sx, sy);
     } texture.destroy(true);});
-    return texture;
   } catch (error) {console.warn('Fountain artwork cleanup failed', error);}
   finally {if (url) URL.revokeObjectURL(url);}
 }
@@ -77,10 +76,7 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
     root.once('destroyed', () => surface.dispose());
   }
   parent.addChild(root);
-  // Native image decode runs independently of animation frames. Expose its
-  // completion so callers measuring residency can include the replacement art.
-  let artworkTexture;
-  const artworkReady = (layout.cleanArtwork !== false ? cleanArtwork(prop, root) : Promise.resolve()).then(texture=>{artworkTexture=texture;});
+  if (layout.cleanArtwork !== false) cleanArtwork(prop, root);
   let last = null, seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   const drops = [];
@@ -97,12 +93,6 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
     root.visible = visible;
     const dt = last === null || !wasVisible ? 0 : Math.min(.05, Math.max(0, t - last)); last = t;
     surface?.update(dt, reduced, visible);
-    // The water and base sprite have different culling bounds. Only retire the
-    // canvas when its sprite is hidden, so a visible base never reuploads each
-    // frame. Keep the CPU canvas for return and retire hidden snapshot uploads.
-    let artworkVisible=Boolean(prop.sprite&&!prop.sprite.destroyed);
-    for(let node=prop.sprite;artworkVisible&&node;node=node.parent)artworkVisible=node.visible&&node.renderable&&node.alpha>0;
-    if(!artworkVisible)artworkTexture?.source?.unload();
     if (!visible) return;
     g.clear(); droplets.clear(); flow.visible = !reduced;
     if (reduced) {drops.length = 0; splashAcc = impactAcc = 0; return;}
@@ -170,5 +160,5 @@ export function createFountainWater(prop, parent, water = null, layout = {}) {
       droplets.circle(d.x, d.y, d.r).fill({color: HI, alpha: .95});
     }
   }
-  return {root, update, graphics: g, surface, flow, streams, droplets, artworkReady};
+  return {root, update, graphics: g, surface, flow, streams, droplets};
 }

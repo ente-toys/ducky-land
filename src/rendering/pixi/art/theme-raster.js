@@ -1,8 +1,5 @@
 import cropBounds from './theme-raster-bounds.json' with {type:'json'};
 export const RASTER_TILE_SIZE = 64;
-// Small uploaded cuts reduce off-screen fringe at high zoom. Source pixels
-// are shared in the CPU cache, so more cuts no longer mean more SVG rasters.
-export const VIEW_RASTER_TILE_SIZE = 256;
 export const RASTER_GROUND_TILE_SIZE = 128;
 export const RASTER_MAX_RESOLUTION = 4;
 export const RASTER_ART_BUDGET_BYTES = 80 * 1048576;
@@ -28,6 +25,6 @@ export function cropSVG(original, crop, density = 1) {
   const viewBox=root.match(/viewBox\s*=\s*["']([^"']+)["']/)?.[1]??`0 0 ${width} ${height}`;
   const attrs=root.replace(/^<svg/,'').replace(/>$/,'')
     .replace(/\s(?:width|height|viewBox|preserveAspectRatio|x|y)\s*=\s*(["']).*?\1/g,'');
-  const pixelsW=crop.pixelWidth??(density===1?w:Math.ceil(w*density)),pixelsH=crop.pixelHeight??(density===1?h:Math.ceil(h*density));
+  const pixelsW=density===1?w:Math.ceil(w*density),pixelsH=density===1?h:Math.ceil(h*density);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${pixelsW}" height="${pixelsH}" viewBox="${x} ${y} ${w} ${h}"><svg ${attrs} width="${width}" height="${height}" preserveAspectRatio="none" viewBox="${viewBox}">${clean.slice(end+1,clean.lastIndexOf('</svg>'))}</svg></svg>`;
 }

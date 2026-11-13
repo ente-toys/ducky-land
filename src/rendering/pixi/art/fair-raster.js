@@ -29,12 +29,12 @@ export function fairGroundTiles(tile, source, sharedSource) {
   });
 }
 
-export function cropFairSVG(original, crop, density=1) {
+export function cropFairSVG(original, crop) {
   const [width,height,x,y,w,h]=crop;
   const clean=original.replace(/<\?xml[^>]*>/g,'').replace(/<!DOCTYPE[^>]*>/g,'');
   const start=clean.indexOf('<svg'),end=clean.indexOf('>',start),root=clean.slice(start,end+1);
   const viewBox=root.match(/viewBox\s*=\s*["']([^"']+)["']/)?.[1]??`0 0 ${width} ${height}`;
   const attrs=root.replace(/^<svg/,'').replace(/>$/,'')
     .replace(/\s(?:width|height|viewBox|preserveAspectRatio|x|y)\s*=\s*(["']).*?\1/g,'');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${crop.pixelWidth??Math.ceil(w*density)}" height="${crop.pixelHeight??Math.ceil(h*density)}" viewBox="${x} ${y} ${w} ${h}"><svg ${attrs} width="${width}" height="${height}" preserveAspectRatio="none" viewBox="${viewBox}">${clean.slice(end+1,clean.lastIndexOf('</svg>'))}</svg></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}"><svg ${attrs} width="${width}" height="${height}" preserveAspectRatio="none" viewBox="${viewBox}">${clean.slice(end+1,clean.lastIndexOf('</svg>'))}</svg></svg>`;
 }

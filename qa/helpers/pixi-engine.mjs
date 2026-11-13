@@ -3,7 +3,7 @@ import {fileURLToPath} from 'node:url';
 const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../../src/rendering/pixi/engine.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../../src/rendering/pixi/engine.js',import.meta.url).href)}});
 let code=bundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
 code=code.replaceAll('"pixi.js"',JSON.stringify(import.meta.resolve('pixi.js')));
-export const {PixiIsland}=await import('data:text/javascript;base64,'+Buffer.from(code+'\n//# sourceURL=ducky-engine-test.mjs').toString('base64'));
+export const {PixiIsland}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 
 // Exercise the real engine through scene placement, stopping before decorations.
 // Art loading and GPU submission are the only boundaries replaced here.

@@ -81,22 +81,19 @@ for(const id of ['bakery','final-grove-0-tree-0','bakery-yard-bench-5','lake-war
  assert(error/n<.6,`mean channel error ${error/n}`);
 });
 
-test('source raster queue honors distance after fetch and gives heavy jobs separate frames',async t=>{
- const {createCanvas}=await import('@napi-rs/canvas');
- const {DOMAdapter}=await import('pixi.js');
+test('raster decode queue uses distance after fetch completion and yields between bounded batches',async t=>{
+ const {DOMAdapter}=await import('pixi.js');const {createCanvas,Image}=await import('@napi-rs/canvas');
  const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
- const old={fetch:globalThis.fetch,location:globalThis.location},adapter=DOMAdapter.get();
- DOMAdapter.set({...adapter,createCanvas});
- t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,old);});
- let clock=0,reads=0,frame=0;const frames=[],started=[];
+ const old={adapter:DOMAdapter.get(),fetch:globalThis.fetch,location:globalThis.location};
+ t.after(()=>{DOMAdapter.set(old.adapter);globalThis.fetch=old.fetch;globalThis.location=old.location;});
+ let clock=0,reads=0;const frames=[],waiting=[],started=[];
+ DOMAdapter.set({...old.adapter,createCanvas,createImage:()=>{const image=new Image(),decode=image.decode.bind(image);image.decode=()=>new Promise(resolve=>waiting.push(async()=>{await decode();resolve();}));return image;}});
  globalThis.location={href:'https://ducky.test/'};
- globalThis.fetch=async url=>{reads++;return {ok:true,text:async()=>new URL(url).pathname};};
- const loader=createRasterLoader({now:()=>clock,schedule:cb=>frames.push(cb),rasterize:(original,c,r)=>{
-  started.push({id:Number(original.match(/kit(\d)/)[1]),frame});clock+=8;return createCanvas(Math.ceil(c[4]*r),Math.ceil(c[5]*r));
- }});
- const keys=[0,1,2].map(i=>'/kit'+i+'.svg?rasterCrop=20,20,0,0,20,20');
- let done=false;const results=Promise.all(keys.map((key,i)=>loader.acquire(key,1,{visible:i!==0,priority:i===0?-2:2,distance:i===1?100:0}))).then(()=>{done=true;});await flush();
- for(let i=0;i<60&&!done;i++){frame++;clock=frame*16;frames.splice(0).forEach(f=>f());await flush();}
- await results;assert.equal(reads,3);assert.deepEqual(started.map(s=>s.id),[2,1,0]);assert.equal(new Set(started.map(s=>s.frame)).size,3);
- keys.forEach(key=>loader.release(key));loader.destroy();
+ globalThis.fetch=async()=>{reads++;return {ok:true,text:async()=>'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" fill="red"/></svg>'};};
+ const loader=createRasterLoader({concurrency:1,now:()=>clock,schedule:cb=>frames.push(cb),prepareSVG:(svg,c)=>{started.push({id:c[2],at:clock});return svg;}});
+ const keys=[0,1,2].map(i=>'/kit.svg?rasterCrop=20,20,'+i+',0,20,20');
+ const results=keys.map((key,i)=>loader.acquire(key,1,{visible:i!==0,priority:i===0?-2:2,distance:i===1?100:0}));await flush();
+ for(let i=0;i<3;i++){clock=i*16;frames.shift()();assert.equal(started.length,i+1);clock+=8;await waiting.shift()();await flush();}
+ await Promise.all(results);assert.equal(reads,1);assert.deepEqual(started,[{id:2,at:0},{id:1,at:16},{id:0,at:32}]);
+ keys.forEach(key=>loader.release(key));await flush();loader.destroy();
 });

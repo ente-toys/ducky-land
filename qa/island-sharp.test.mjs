@@ -149,8 +149,7 @@ test('engine-owned kite stakes, boats and contact leaves remain explicit sharpne
   assert.equal(report.shared.contactLeaves.max, 1 / (1.2 * 3.6));
   assert(report.shared.sleepers.every(p => p.max >= 1), 'rest-pose result from CRISP.md retained');
   const engine = readFileSync('src/rendering/pixi/engine.js', 'utf8');
-  assert(engine.includes('this.homeGroundStream=this.groundPool.create(groundCrops,this.homeGround,undefined,this.homeGroundRaster)'),'Home uses streamed SVG crops at screen density');
-  assert(engine.includes('this.homeGroundRaster?.destroy()'),'Home releases its crop loader on disposal');
+  assert(engine.includes('this.homeGroundStream=this.groundPool.create(tiles,this.homeGround)'));
   assert(!engine.includes('art.raster?.enabled'), 'Home manifest opt-in is not implemented');
   assert.equal(new Container().anchor, undefined, 'generic containers have no Sprite anchor metadata');
 });
