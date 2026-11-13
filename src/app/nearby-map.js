@@ -3,7 +3,7 @@ import {WORLD_ISLANDS} from '../world/world-map.js';
 import {mapOf} from '../world/island-maps.js';
 import {BOG_RADAR_ISLAND, placeBogRadar} from '../features/bog-combat/bog-radar.js';
 
-export const NEARBY_MAP_WIDTH = 8000;
+export const NEARBY_MAP_WIDTH = 10000;
 export const NEARBY_MAP_HEIGHT = NEARBY_MAP_WIDTH;
 
 export function nearbyMapFrame(islandId, point, bogRadar, radarRadius = NEARBY_MAP_WIDTH / 2) {

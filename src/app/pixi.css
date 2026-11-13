@@ -438,12 +438,16 @@
 .pixi-guest-play .pixi-guest-offline { margin-top: 10px; background: #fff9df; }
 .pixi-guest-play .pixi-guest-offline:hover { background: #fff0b8; }
 
-.pixi-page { --world-map-width: 200px; --world-map-height: 208px; }
+.pixi-page {
+  --world-map-width: 220px;
+  --world-map-bottom: calc(max(16px, env(safe-area-inset-bottom)) + 8px);
+  --world-map-height: calc(var(--world-map-width) + 8px);
+}
 .pixi-world-map {
   position: fixed;
   z-index: 4;
   right: max(16px, env(safe-area-inset-right));
-  bottom: max(16px, env(safe-area-inset-bottom));
+  bottom: var(--world-map-bottom);
   box-sizing: border-box;
   width: min(var(--world-map-width), calc(100vw - 32px));
   aspect-ratio: 1;
@@ -467,14 +471,14 @@
 .pixi-world-back:active { translate: 0 2px; box-shadow: 0 1px 0 #56453755; }
 .pixi-world-back:focus-visible { outline: 3px solid #564537; outline-offset: 3px; }
 .pixi-world-map svg { display: block; width: 100%; height: 100%; border-radius: 50%; background: #6ec9de; }
-.pixi-notifications { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
+.pixi-notifications { bottom: calc(var(--world-map-bottom) + var(--world-map-height)); }
 @media (max-width: 900px) {
-  .pixi-page--guest .pixi-guest-play { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
+  .pixi-page--guest .pixi-guest-play { bottom: calc(var(--world-map-bottom) + var(--world-map-height)); }
 }
 @media (max-width: 600px) {
-  .pixi-page { --world-map-width: 132px; --world-map-height: 140px; }
-  .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
-  .pixi-page--guest .pixi-bottom-hud { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height) + 236px); max-height: max(0px, calc(100svh - 440px)); }
+  .pixi-page { --world-map-width: 148px; }
+  .pixi-bottom-hud { bottom: calc(var(--world-map-bottom) + var(--world-map-height)); }
+  .pixi-page--guest .pixi-bottom-hud { bottom: calc(var(--world-map-bottom) + var(--world-map-height) + 236px); max-height: max(0px, calc(100svh - 440px)); }
   .pixi-notifications { bottom: auto; }
 }
 .pixi-world-map svg { overflow: visible; }
