@@ -19,6 +19,7 @@ import {localPoint,spherePoint} from '../../world/sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from '../shared/zoom-motion.js';
 import {planIslandArt} from './art/island-budget.js';
+import {walkingZoom} from './art/texture-footprint.js';
 import {createGroundPool} from './art/ground-stream.js';
 import {propZ} from '../shared/flat-props.js';
 import {constrainExploreCamera, zoomToWorldPoint} from '../shared/explore-camera.js';
@@ -258,9 +259,9 @@ export class PixiIsland {
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
       this.groundPool=createGroundPool({acquire:acquireGround,release});
-      const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats].map(entry=>({...entry}));
+      const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats.map(e=>({...e,ground:true}))].map(entry=>({...entry}));
 
-      this.homeArtPlan=planIslandArt([...entries,...tiles.map(t=>({...t,mipmaps:false}))],{dpr:this.app.renderer.resolution});
+      this.homeArtPlan=planIslandArt([...entries,...tiles.map(t=>({...t,mipmaps:false}))],{dpr:this.app.renderer.resolution,defaultZoom:walkingZoom(this.width,this.height)});
       const sourceResolutions=this.homeArtPlan.resolutions;
       for(const entry of entries)entry.rasterResolution=sourceResolutions.get(entry.src);
       const artTextures = await Promise.all(entries.map(entry => {
@@ -271,9 +272,8 @@ export class PixiIsland {
       if (this.disposed) return;
       // The ocean stays in the arrival scene until the main loop takes over.
       this.homeGroundStream=this.groundPool.create(tiles,this.homeGround);
-      const terrain=await acquireHome('/pixi-art/globe/home-ground.svg');
-      if(this.disposed)return;
-      const fallback=new Sprite(terrain);fallback.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);fallback.width=world.width;fallback.height=world.height;this.homeGround.addChildAt(fallback,0);
+      // Arrival already renders sea + Duck until all final pieces are uploaded.
+      // A whole-island preview is never exposed here, including restored Home.
       const base = tiles.length + decks.length, flatBase = base + props.length + art.floating.length + 1;
       this.flats = new Container({label: 'Ground detail'}); this.homeGround.addChild(this.flats);
       await mapArtInFrames(flats,(d, i) => {
@@ -1099,7 +1099,7 @@ export class PixiIsland {
     if (!map.art) return;
     const pending={id:mapId,ready:false};this.arts.set(mapId,pending);
     let pendingArt;
-    pending.preparation=loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,prepare:true,dpr:this.app.renderer.resolution}).then(async art => {
+    pending.preparation=loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,prepare:true,dpr:this.app.renderer.resolution,defaultZoom:walkingZoom(this.width,this.height)}).then(async art => {
       pendingArt = art;
       if (this.disposed||pending.discarded) {art.destroy(); return;}
       this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows); this.overDecks.addChild(art.overLayer);

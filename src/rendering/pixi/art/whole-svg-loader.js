@@ -1,5 +1,7 @@
-import {DOMAdapter, extensions, ExtensionType, ImageSource, loadSvg, Texture} from 'pixi.js';
+import {DOMAdapter, extensions, ExtensionType, ImageSource, loadSvg, Rectangle, Texture} from 'pixi.js';
 import {createArtQueue} from './island-preparation.js';
+import {textureFootprint} from './texture-footprint.js';
+import sourceSizes from '../../shared/art-source-sizes.json' with {type:'json'};
 
 export const loadedSVGTextures=new Set();
 
@@ -29,6 +31,16 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
   try {image.src = url; await image.decode(); return image;}
   finally {URL.revokeObjectURL(url);}
 }} = {}) {
+  const makeTexture=(resource,src,resolution,options,f)=>{
+    const source=new ImageSource({resource,resolution,...options});
+    source.autoGarbageCollect=false;source.label=src;source._sourceOrigin=src;
+    if(typeof resource.close==='function')source.once('destroy',()=>resource.close());
+    const texture=new Texture({source,label:src,
+      orig:new Rectangle(0,0,f.fullWidth/resolution,f.fullHeight/resolution),
+      trim:new Rectangle(f.x/resolution,f.y/resolution,f.width/resolution,f.height/resolution)});
+    loadedSVGTextures.add(texture);texture.once('destroy',()=>loadedSVGTextures.delete(texture));
+    return texture;
+  };
   return {
     extension: {type: ExtensionType.LoadParser, priority: 100, name: 'wholeIslandSVG'},
     name: 'wholeIslandSVG',
@@ -36,6 +48,14 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
     load(src, asset = {}) {
       return queue.run(async () => {
         const {resolution=1,groundPadding=0,...options}=asset.data??{};
+        const key=asset.src??src;
+        // Fully transparent authored pieces have no ink to decode or upload.
+        const empty=sourceSizes[key]&&textureFootprint(key,resolution,groundPadding);
+        if(empty?.empty)return queue.raster(()=>{
+          const texture=makeTexture(DOMAdapter.get().createCanvas(1,1),src,resolution,options,empty);
+          if(groundPadding)texture.groundPadding={pad:groundPadding,width:empty.fullWidth-2*groundPadding,height:empty.fullHeight-2*groundPadding};
+          return texture;
+        });
         // Pixi passes an absolute fetch URL; asset.src retains the authored key.
         const tier=canDecodeBitmap()?selectPrerenderTier(await getManifest(),asset.src??src,resolution):null;
         if(tier&&(!groundPadding||tier.padding===groundPadding)) {
@@ -53,17 +73,19 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
             bitmap=pad&&!groundPadding
               ?await decodeBitmap(blob,{...decodeOptions,crop:[pad,pad,fullWidth-2*pad,fullHeight-2*pad]})
               :await decodeBitmap(blob,decodeOptions);
-            const source=new ImageSource({resource:bitmap,resolution,...options,alphaMode:'premultiplied-alpha'});
-            source.autoGarbageCollect=false;source.label=src;source._sourceOrigin=src;
-            const owned=bitmap;source.once('destroy',()=>owned.close());
-            const texture=new Texture({source,label:src});
+            const footprint=textureFootprint(key,resolution,groundPadding,{[key]:[tier.w,tier.h]});
+            if(footprint.x||footprint.y||footprint.width!==width||footprint.height!==height){
+              const full=bitmap;
+              try {bitmap=await decodeBitmap(full,{crop:[footprint.x,footprint.y,footprint.width,footprint.height],premultiplyAlpha:'premultiply'});}
+              finally {full.close();}
+            }
+            const texture=makeTexture(bitmap,src,resolution,{...options,alphaMode:'premultiplied-alpha'},footprint);
             if(groundPadding){
               // Resizing the padded picture scales its bleed too. Record the
               // exact inner rectangle so paths stay at authored coordinates.
               const padX=pad*width/fullWidth,padY=pad*height/fullHeight;
               texture.groundPadding={pad:groundPadding,padX,padY,width:width-2*padX,height:height-2*padY};
             }
-            loadedSVGTextures.add(texture);texture.once('destroy',()=>loadedSVGTextures.delete(texture));
             return texture;
           } catch {bitmap?.close(); /* A failed/missing build asset uses the authored SVG. */}
         }
@@ -84,14 +106,15 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
               context.drawImage(canvas,0,pad,canvas.width,1,0,0,canvas.width,pad);
               context.drawImage(canvas,0,pad+height-1,canvas.width,1,0,pad+height,canvas.width,pad);
             }
-            const source=new ImageSource({resource: canvas, resolution,
-              alphaMode: 'premultiply-alpha-on-upload', ...options});
-            // ImageSource overrides this flag in its constructor in Pixi 8.22.
-            source.autoGarbageCollect=false;
-            source.label=src;source._sourceOrigin=src;
-            const texture=new Texture({source,label:src});
+            const footprint=textureFootprint(key,resolution,pad,{[key]:[image.width,image.height]});
+            let resource=canvas;
+            if(footprint.x||footprint.y||footprint.width!==canvas.width||footprint.height!==canvas.height){
+              resource=DOMAdapter.get().createCanvas(footprint.width,footprint.height);
+              resource.getContext('2d').drawImage(canvas,footprint.x,footprint.y,footprint.width,footprint.height,0,0,footprint.width,footprint.height);
+              canvas.width=canvas.height=1;
+            }
+            const texture=makeTexture(resource,src,resolution,{alphaMode:'premultiply-alpha-on-upload',...options},footprint);
             if(pad)texture.groundPadding={pad,width,height};
-            loadedSVGTextures.add(texture);texture.once('destroy',()=>loadedSVGTextures.delete(texture));
             return texture;
           });
         } finally {image.src = '';}
