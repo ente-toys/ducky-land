@@ -288,3 +288,13 @@ test('startup renders and scrolls the same ocean and Duck while the first island
   assert.equal(rendered,2);assert.equal(animated,2);assert.equal(scheduled,2);assert.notEqual(ocean.tilePosition.x,first);
   assert.equal(root.x,-200);assert.equal(root.y,400);assert.equal(root.alpha,1);scene.destroy({children:true});
 });
+
+test('a failed island art load is retried while you stay there, and a failed picture never stays cached',()=>{
+  const lease=engine.slice(engine.indexOf('function acquire('),engine.indexOf('const acquireGround'));
+  assert.match(lease,/entry\.promise\.catch\(\(\) => \{if \(textureLeases\.get\(src\) === entry\) textureLeases\.delete\(src\);\}\)/);
+  const preparation=engine.slice(engine.indexOf('  ensureArt(mapId)'),engine.indexOf('  homeTextureNodes()'));
+  const failure=preparation.slice(preparation.indexOf('art did not load'));
+  assert.match(failure,/tries<4/);assert.match(failure,/this\.artShown===mapId/);assert.match(failure,/this\.ensureArt\(mapId\)/);
+  assert.ok(failure.indexOf('this.ensureArt(mapId)')<failure.indexOf('failed: true'),'retry comes before giving up');
+  assert.match(preparation,/this\.arts\.set\(mapId, art\);this\.artRetries\?\.delete\(mapId\)/,'a success resets the retry count');
+});
