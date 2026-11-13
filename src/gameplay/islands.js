@@ -1,6 +1,6 @@
 import {placeRigid,unplaceRigid,flatRigid} from '../world/rigid.js';
 import {placeIslet,unplaceIslet} from '../world/islet-placement.js';
-import {isletClearance,isletLocalClearance,ISLETS} from '../world/islets.js';
+import {isletClearance,ISLETS} from '../world/islets.js';
 import {walkNav,isletWalks,inWalkArea} from '../world/islet-walk.js';
 import {WORLD_ISLANDS, neighboursOf, offsetOf} from '../world/world-map.js';
 import {HOME_MAP, mapOf, mapsVersion, FIELD_RES, FIELD_PAD} from '../world/island-maps.js';
@@ -17,6 +17,7 @@ export const canWalkTo = (id, x, y) => inWalkArea(mapOf(id), id, x, y);
 export const harborWorld = (w, id='home') => ({...w, walkways:[...w.walkways, jettyOf(id).walkway]});
 export const harborClear = prop => Math.hypot(prop.x-1726-20,prop.y-830-110) > 200;
 export function boardingPoint(boat,nav) {
+  if (boat.landing && (nav ?? navOf(boat.islandId)).walkable(boat.landing.x,boat.landing.y)) return {...boat.landing};
   const dock=isletWalks(boat.islandId ?? 'home').find(w=>near(boat,w.water,150));
   if(dock)return {...dock.land};
   const map=mapOf(boat.islandId ?? 'home'), {HARBOR:harbor,JETTY:jetty}=map, {foot,dir,length,along}=jetty;
@@ -125,10 +126,12 @@ export function fillMoorings(boats) {
   if (changed) boats.splice(0,boats.length,...keep);
   return changed;
 }
-export function retireBoat(boats,boat) {
+export function retireBoat(boats,boat,landing=null) {
   const spot=boatSpot(boat), home=boatHome(boat);
   boat.occupant=null; boat.parked=true;
-  if (boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
+  if (landing) boat.landing={x:landing.x,y:landing.y};
+  else if (boat.landing) boat.landing=null;
+  if (!landing && boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
     Object.assign(boat,{x:spot.x,y:spot.y,turn:spot.turn,departure:home,parked:false});
   if (!canSail(boat.x,boat.y,boat.islandId)) {
     const index=boats.indexOf(boat);
@@ -137,36 +140,63 @@ export function retireBoat(boats,boat) {
   fillMoorings(boats);
 }
 
-const shoreFor=(x,y,nav,reach=280) => {const p=nav.nearest(x,y,reach); return p ? {x:Math.round(p[0]),y:Math.round(p[1])} : null;};
-export function landingSpot(actor,nav=null,reach=420) {
+const shoreFor=(x,y,nav,reach=280) => {
+  const p=nav.nearest(x,y,reach);
+  if (!p) return null;
+  const [rx,ry]=p.map(Math.round);
+  return nav.walkable(rx,ry) ? {x:rx,y:ry} : {x:p[0],y:p[1]};
+};
+export function landingSpot(actor,nav=null,reach=420,target=null) {
+  if (target && !near(actor,target,reach)) return null;
   let best=null;
-  for (const island of WORLD_ISLANDS) {
-    const map=mapOf(island.id),p=unplaceRigid(actor.islandId,island.id,actor),lx=p.x,ly=p.y;
-    if (lx < map.origin.x-reach || ly < map.origin.y-reach || lx > map.origin.x+map.width+reach || ly > map.origin.y+map.height+reach) continue;
-    const shore=shoreFor(lx,ly,island.id===actor.islandId && nav && map.home ? nav : map.nav(),reach);
-    if(shore && (!best||Math.hypot(shore.x-lx,shore.y-ly)<best.d)){
-      const at=placeRigid(actor.islandId,island.id,shore);
-      best={islandId:island.id,offset:{x:at.x-shore.x,y:at.y-shore.y},...shore,d:Math.hypot(shore.x-lx,shore.y-ly)};
+  const consider=(islandId,shore,at,extra={},d=Math.hypot(at.x-actor.x,at.y-actor.y)) => {
+    if (d <= reach && (!best || d < best.d)) {
+      best={islandId,offset:{x:at.x-shore.x,y:at.y-shore.y},...shore,d,...extra};
     }
+  };
+  const findShore=(p,walk)=>target ? (walk.walkable(p.x,p.y) ? p : null) : shoreFor(p.x,p.y,walk,reach);
+  for (const island of WORLD_ISLANDS) {
+    const map=mapOf(island.id),p=unplaceRigid(actor.islandId,island.id,target ?? actor),lx=p.x,ly=p.y;
+    if (lx < map.origin.x-reach || ly < map.origin.y-reach || lx > map.origin.x+map.width+reach || ly > map.origin.y+map.height+reach) continue;
+    const shore=findShore(p,island.id===actor.islandId && nav && map.home ? nav : map.nav());
+    if (shore) consider(island.id,shore,placeRigid(actor.islandId,island.id,shore));
   }
   for (const i of ISLETS) {
-    const q=unplaceIslet(actor.islandId,i,actor),water=i.jetty.water,c=i.landCentre;
+    const q=unplaceIslet(actor.islandId,i,target ?? actor),water=i.jetty.water,c=i.landCentre;
     const cap=Math.max(i.radius,Math.hypot(water[0]-c[0],water[1]-c[1]));
-    if(Math.hypot(q.x-c[0],q.y-c[1])-cap>reach)continue;
-    const d=Math.min(isletLocalClearance(i,q,reach+1),Math.hypot(q.x-water[0],q.y-water[1]));
-    if (d > reach || (best && d >= best.d)) continue;
-    const walk=isletWalks(i.home).find(w => w.islet === i), at=placeIslet(actor.islandId,i,i.jetty.land);
-    best={islandId:i.home,islet:i.id,offset:{x:at.x-walk.land.x,y:at.y-walk.land.y},x:walk.land.x,y:walk.land.y,d:Math.max(0,d)};
+    if (Math.hypot(q.x-c[0],q.y-c[1])-cap>reach) continue;
+    const walk=isletWalks(i.home).find(w => w.islet === i);
+    const jettyDistance=Math.hypot(q.x-water[0],q.y-water[1]);
+    if (!target && jettyDistance <= 240) {
+      consider(i.home,walk.land,placeIslet(actor.islandId,i,i.jetty.land),{islet:i.id,jetty:true},jettyDistance);
+      continue;
+    }
+    const local=placeIslet(i.home,i,[q.x,q.y]);
+    const shore=findShore(local,walk.nav);
+    if (shore) {
+      const point=unplaceIslet(i.home,i,shore);
+      consider(i.home,shore,placeIslet(actor.islandId,i,[point.x,point.y]),{islet:i.id});
+    }
   }
   return best;
 }
+
+export function dockingSpot(actor,target=null) {
+  const spot=landingSpot(actor,null,420,target);
+  if (target) return spot;
+  const {land,water}=harborOf(actor.islandId);
+  if ((!spot || (!spot.islet && spot.islandId===actor.islandId && (near(spot,land,200) || near(actor,water,150)))) && canDock(actor))
+    return {...land,islandId:actor.islandId,harbor:true};
+  return spot;
+}
+
 export function landingApproach(actor,spot) {
-  if (spot.islet) {
+  if (spot.jetty) {
     const i=ISLETS.find(i=>i.id===spot.islet),p=placeIslet(actor.islandId,i,i.jetty.water);
     const q={x:Math.round(p.x),y:Math.round(p.y)};
     if (canSail(q.x,q.y,actor.islandId) && (near(actor,q,14) || sailRoute(actor.islandId,actor,q))) return q;
   }
-  const at=spot.islet?placeIslet(actor.islandId,ISLETS.find(i=>i.id===spot.islet),ISLETS.find(i=>i.id===spot.islet).jetty.land):placeRigid(actor.islandId,spot.islandId,spot);
+  const at={x:spot.x+spot.offset.x,y:spot.y+spot.offset.y};
   const sx=at.x,sy=at.y,len=Math.hypot(actor.x-sx,actor.y-sy)||1;
   for (let t=40;t<len-14;t+=10) {
     const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};

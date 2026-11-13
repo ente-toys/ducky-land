@@ -4,7 +4,7 @@ import {nearbyFriend} from './friends.js';
 import {mapOf} from '../world/island-maps.js';
 import {getPlayerKarma} from '../features/bog-combat/karma.js';
 import {bogLandingNotice} from '../features/bog-combat/entry.js';
-import {islandFor, harborOf, destinationsFor, near, canSail, canDock, landingSpot, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
+import {islandFor, harborOf, destinationsFor, near, canSail, dockingSpot, landingApproach, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
 
 const ZERO = {x:0,y:0};
 const moving = input => input.x !== 0 || input.y !== 0;
@@ -255,8 +255,16 @@ export class RoomClient {
     if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
     if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
       ? setSailDestination(this.player,command.x,command.y) : setWalkDestination(this.player, this.navHere(), command.x, command.y);
-    if (command.type === 'disembark' && this.player.mode === 'sailing' && canDock(this.player)) {
-      const {water} = harborOf(this.islandId); setSailDestination(this.player,water.x,water.y); this.player.docking=true;
+    if (command.type === 'disembark' && this.player.mode === 'sailing') {
+      const spot=dockingSpot(this.player,Number.isFinite(command.x) ? command : null);
+      if (spot && (spot.islet || !bogLandingNotice(spot.islandId,getPlayerKarma({room:this})))) {
+        const approach=spot.harbor ? harborOf(this.islandId).water : landingApproach(this.player,spot);
+        this.player.sailTarget=null; this.player.sailRoute=null; this.player.docking=false;
+        if (!near(this.player,approach,14) || spot.harbor) {
+          const routed=setSailDestination(this.player,approach.x,approach.y);
+          this.player.docking=Boolean(routed && spot.harbor);
+        }
+      }
     }
     if (command.type === 'emote' && this.player.mode !== 'sailing') playEmote(this.player, command.action, now);
     return null;
@@ -299,13 +307,13 @@ export class RoomClient {
     return boat?this.board(boat.id):false;
   }
 
-  disembark() {
+  disembark(target=null) {
     if(this.player?.mode==='sailing'){
-      const spot=canDock(this.player)?{islandId:this.islandId}:landingSpot(this.player,this.navHere());
+      const spot=dockingSpot(this.player,target);
       const text=spot&&!spot.islet&&bogLandingNotice(spot.islandId,getPlayerKarma({room:this}));
       if(text)this.onNotice(text);
     }
-    return this.send({type:'disembark'});
+    return this.send(target ? {type:'disembark',x:target.x,y:target.y} : {type:'disembark'});
   }
 
   watch(islandId) {

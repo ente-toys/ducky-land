@@ -8,7 +8,7 @@ import {LiveBogRoom} from './bog-room.js';
 import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/gameplay/player-motion.js';
 import {chatText} from '../src/multiplayer/chat.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
-import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
+import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, setSailDestination, sailStep, crossIsland, boardingPoint, dockingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
 import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
 import {pickWorldSpawn} from '../src/gameplay/world-spawn.js';
 import {RoomKarma} from './karma.js';
@@ -158,8 +158,8 @@ export class IslandRoom {
     this.legacyBoats = false;
   }
 
-  parkBoat(boat) {
-    retireBoat(this.boats,boat);
+  parkBoat(boat,landing=null) {
+    retireBoat(this.boats,boat,landing);
     this.saveBoats();
   }
 
@@ -727,12 +727,19 @@ export class IslandRoom {
       }
       case 'disembark':
         if (actor.mode === 'sailing') {
-          info.input=ZERO; info.landing=null;
-          if (canDock(actor)) {if(!this.allowLanding(socket,info,actor.islandId))break;const {water}=harborOf(actor.islandId); setSailDestination(actor,water.x,water.y); actor.docking=true; break;}
-          const spot=landingSpot(actor,this.navFor(actor.islandId));
+          const targeted=command.x !== undefined || command.y !== undefined;
+          if (targeted && (!Number.isFinite(command.x) || !Number.isFinite(command.y))) return;
+          const spot=dockingSpot(actor,targeted ? {x:command.x,y:command.y} : null);
           if (!spot) {this.send(socket,{type:'travel-notice',text:'Sail closer to the shore to dock.'}); break;}
           if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) break;
           if (spot.islandId !== actor.islandId && (islandCounts(this.connections).get(spot.islandId) ?? 0) >= ISLAND_LIMIT) {this.send(socket,{type:'travel-notice',text:`That island is full (${ISLAND_LIMIT} Duckies). Try another one.`}); break;}
+          info.input=ZERO; info.landing=null;
+          actor.sailTarget=null; actor.sailRoute=null; actor.docking=false;
+          if (spot.harbor) {
+            const {water}=harborOf(actor.islandId);
+            actor.docking=Boolean(setSailDestination(actor,water.x,water.y));
+            break;
+          }
           spot.approach=landingApproach(actor,spot);
           info.landing=spot;
           if (!near(actor,spot.approach,14) && !setSailDestination(actor,spot.approach.x,spot.approach.y)) info.landing={...spot,approach:{x:actor.x,y:actor.y}};
@@ -774,8 +781,10 @@ export class IslandRoom {
         if (!boat) info.landing=null;
         if (boat) {
           const from=actor.islandId;
-          if (crossIsland(actor,id=>roomOn(id)&&this.allowLanding(socket,info,id))) {info.input=ZERO; info.inputExpires=0; info.landing=null; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}
-          else if (destinationsFor(actor.islandId).some(d => !roomOn(d.destination) && Math.abs(actor.x-d.dock.x)<=65 && Math.abs(actor.y-d.dock.y)<=50)) full(socket,info);
+          if (!info.landing) {
+            if (crossIsland(actor,id=>roomOn(id)&&this.allowLanding(socket,info,id))) {info.input=ZERO; info.inputExpires=0; counts.set(from,(counts.get(from) ?? 1)-1); counts.set(actor.islandId,(counts.get(actor.islandId) ?? 0)+1);}
+            else if (destinationsFor(actor.islandId).some(d => !roomOn(d.destination) && Math.abs(actor.x-d.dock.x)<=65 && Math.abs(actor.y-d.dock.y)<=50)) full(socket,info);
+          }
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
           if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {
             const spot=info.landing; info.landing=null;
@@ -785,7 +794,7 @@ export class IslandRoom {
             if(!spot.islet&&!this.chargeBogLanding(socket,info,spot.islandId))continue;
             if (spot.islandId !== actor.islandId) {counts.set(actor.islandId,(counts.get(actor.islandId) ?? 1)-1); counts.set(spot.islandId,(counts.get(spot.islandId) ?? 0)+1); Object.assign(actor,spot.islet?reframeIslet(actor.islandId,spot.islandId,ISLETS.find(i=>i.id===spot.islet),actor):unplaceRigid(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;}
             Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
-            this.parkBoat(boat);
+            this.parkBoat(boat,spot);
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
             }
@@ -809,6 +818,7 @@ export class IslandRoom {
           else {
             if(actor.islandId===BOG_ISLAND)this.karma.endBogEntry(info.account);
             boat.occupant=actor.id; boat.departure=actor.islandId;
+            if (boat.landing) boat.landing=null;
             Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false,jumpLeft:0});
             info.input=ZERO;
           }

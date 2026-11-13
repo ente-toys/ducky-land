@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeRoom,addPlayer} from './room-harness.mjs';
-import {boatSpots, canSail, sailStep} from '../src/gameplay/islands.js';
+import {boardingPoint, boatSpots, canDock, canSail, sailStep} from '../src/gameplay/islands.js';
+import {isletWalk} from '../src/world/islet-walk.js';
 import {IslandRoom} from '../worker/index.js';
+import {cameraGame} from './helpers/pixi-engine.mjs';
 
 test('holding WASD into shore stays aboard until Dock is explicitly requested',async()=>{
   const room=await makeRoom();
@@ -23,6 +25,62 @@ test('holding WASD into shore stays aboard until Dock is explicitly requested',a
     assert.equal(actor.mode,'walking');assert.equal(boat.occupant,null);assert.equal(boat.parked,true);
     assert.ok(room.boats.includes(boat),'explicit landing still preserves the arrival boat');
   } finally {clearInterval(room.timer);}
+});
+
+test('tapping a nearby beach docks at the selected spot even within harbor range', async t => {
+  const room = await makeRoom();
+  t.after(() => clearInterval(room.timer));
+  const boat = room.boats.find(boat => boat.id === 'home-0');
+  const {actor, socket} = addPlayer(room, 9878, {...boat, mode:'sailing'});
+  actor.boatId = boat.id;
+  boat.occupant = actor.id;
+  assert.ok(canDock(actor));
+
+  const shore = {x:3990, y:5820};
+  const game = cameraGame(actor);
+  Object.assign(game.camera, shore);
+  game.room = {player: actor, disembark: target => {
+    assert.deepEqual(target, shore);
+    room.webSocketMessage(socket, JSON.stringify({type:'disembark', seq:1, ...target}));
+  }};
+  game.tap({x:game.width/2, y:game.height/2});
+  for (let i=0; i<50 && actor.mode==='sailing'; i++) room.step();
+  assert.equal(actor.mode, 'walking');
+  assert.deepEqual({x:actor.x,y:actor.y}, shore);
+  assert.deepEqual(boardingPoint(boat), shore);
+  assert.ok(canSail(boat.x, boat.y, boat.islandId));
+  assert.ok(Math.hypot(boat.x-shore.x, boat.y-shore.y)<150);
+  assert.ok(boat.parked);
+
+  const restored = new IslandRoom(room.ctx);
+  const parked = restored.boats.find(saved => saved.id === boat.id);
+  assert.deepEqual(parked, boat);
+  room.webSocketMessage(socket, JSON.stringify({type:'board', seq:2, boatId:boat.id}));
+  room.step();
+  assert.equal(actor.mode, 'sailing');
+  assert.equal(boat.occupant, actor.id);
+});
+
+test('Dock at the far side of a detached islet leaves the boat by that shore', async t => {
+  const room = await makeRoom();
+  t.after(() => clearInterval(room.timer));
+  const islet = isletWalk('sea-1-1');
+  const {actor, socket} = addPlayer(room, 9879, {islandId:islet.id, x:2586, y:13778, mode:'sailing'});
+  const boat = room.boats.find(boat => boat.islandId === islet.id);
+  Object.assign(boat, {x:actor.x, y:actor.y, occupant:actor.id});
+  actor.boatId = boat.id;
+  assert.ok(canSail(actor.x, actor.y, actor.islandId));
+
+  room.webSocketMessage(socket, JSON.stringify({type:'disembark', seq:1, x:islet.land.x, y:islet.land.y}));
+  room.step();
+  assert.equal(actor.mode, 'sailing', 'the distant jetty is out of reach');
+  room.webSocketMessage(socket, JSON.stringify({type:'disembark', seq:2}));
+  for (let i=0; i<50 && actor.mode==='sailing'; i++) room.step();
+  assert.equal(actor.mode, 'walking');
+  assert.ok(islet.nav.walkable(actor.x, actor.y));
+  assert.ok(Math.hypot(actor.x-islet.land.x, actor.y-islet.land.y)>1000);
+  assert.ok(Math.hypot(actor.x-boat.x, actor.y-boat.y)<150);
+  assert.deepEqual(boardingPoint(boat), {x:actor.x,y:actor.y});
 });
 
 test('restoring the room frees a stranded sailor and removes blocked parked boats', async t => {
