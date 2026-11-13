@@ -38,7 +38,7 @@ import {copyHolding} from '../../world/sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
-import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, landingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
+import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
 import {isletWalks} from '../../world/islet-walk.js';
 import {reframeIslet} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from '../../world/island-maps.js';
@@ -798,7 +798,7 @@ export class PixiIsland {
 
   updateControlLabel() {
     const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home flies back to your Ducky, 0 shows the island.';
-    const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap the harbor to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
+    const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap a nearby shore or press Enter to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
     const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
     this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
   }
@@ -806,8 +806,8 @@ export class PixiIsland {
   travelOptions() {
     const me=this.player;
     if (!this.room || !me) return {};
+    if (me.mode === 'sailing') return {dock:Boolean(dockingSpot(me))};
     const nav=this.room.navHere?.() ?? this.sim.nav;
-    if (me.mode === 'sailing') return {dock: canDock(me) || Boolean(landingSpot(me, nav))};
     let best=null;
     for (const boat of this.room.boatPoses()) {
       if (boat.occupant) continue;
@@ -864,7 +864,13 @@ export class PixiIsland {
     if (this.globeBusy()) return;
     const options=this.travelOptions();
     if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
-    else if (options.dock) {this.keys.clear(); this.touchInput={x:0,y:0}; this.room.disembark();}
+    else if (options.dock) this.dock();
+  }
+
+  dock(target) {
+    this.keys.clear();
+    this.touchInput={x:0,y:0};
+    this.room.disembark(target);
   }
 
   telescopeOptions() {
@@ -893,8 +899,9 @@ export class PixiIsland {
         const destination=destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<mapFor(island.map).width*.42 && Math.abs(p.y-island.y)<mapFor(island.map).height*.4);
         const harbor=harborOf(this.islandId);
         const islet=isletWalks(this.islandId).find(w => w.nav.walkable(p.x,p.y) || near(p,w.land,160));
-        if (destination) this.setDestination(destination.dock);
-        else if (near(p,harbor.water,140) || near(p,harbor.land,120) || (islet && landingSpot(this.player, this.room.navHere())?.islet === islet.islet.id)) this.room.disembark();
+        if (dockingSpot(this.player,p)) this.dock(p);
+        else if ((near(p,harbor.water,140) || near(p,harbor.land,120)) && canDock(this.player)) this.dock();
+        else if (destination) this.setDestination(destination.dock);
         else if (islet) this.setDestination(islet.water);
         else this.setDestination(p);
         return;
