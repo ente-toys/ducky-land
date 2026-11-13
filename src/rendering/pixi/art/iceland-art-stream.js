@@ -1,13 +1,12 @@
 import {createRasterLoader} from './theme-art-stream.js';
 
-export function icelandPieceSVG(original,crop,density=1){
-  const [width,height,x,y,w,h]=crop,pw=crop.pixelWidth??Math.ceil(w*density),ph=crop.pixelHeight??Math.ceil(h*density);
+export function icelandPieceSVG(original,[width,height,_x,_y,w,h],density=1){
   const clean=original.replace(/<\?xml[^>]*>/g,'').replace(/<!DOCTYPE[^>]*>/g,'');
   const inner=clean.replace(/(<svg\b[^>]*?)\swidth="[^"]*"/,'$1')
     .replace(/(<svg\b[^>]*?)\sheight="[^"]*"/,'$1').replace('<svg',`<svg width="${width}" height="${height}"`);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${pw}" height="${ph}" viewBox="${x} ${y} ${pw/density} ${ph/density}">${inner}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.ceil(w*density)}" height="${Math.ceil(h*density)}" viewBox="0 0 ${Math.ceil(w*density)/density} ${Math.ceil(h*density)/density}">${inner}</svg>`;
 }
-export const createIcelandRasterLoader=(options={})=>createRasterLoader({...options,prepareSVG:icelandPieceSVG,exactFrame:true,concurrency:16});
+export const createIcelandRasterLoader=()=>createRasterLoader({prepareSVG:icelandPieceSVG,exactFrame:true,concurrency:16});
 
 export function icelandPieceTile(p,src,anchor={x:.5,y:1}){
   const width=p.width*(p.scale??1),height=p.height*(p.scale??1);

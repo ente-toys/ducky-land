@@ -1,6 +1,3 @@
-import {createAtlasBuild} from './atlas-work.js';
-import {globeAtlasLayout} from './globe-atlas-layout.js';
-import {textureSourceBytes,managedTextureMemory} from './texture-memory.js';
 import {horizonRatio,pixelChart,lensAngle} from '../../world/sphere-projection.js';
 import {spherePoint,localPoint,viewFrame} from '../../world/sphere-coordinates.js';
 import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from '../../world/world-map.js';
@@ -10,12 +7,11 @@ import {globeScreen,paintWeight} from '../shared/globe-screen.js';
 import {globeDrag,lonLat,centreOf,globeBall} from '../shared/globe-look.js';
 import {mapOf} from '../../world/island-maps.js';
 import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from '../shared/heart-activity.js';
-import {ISLETS,ISLET_ART} from '../../world/islets.js';
+import {ISLETS} from '../../world/islets.js';
 import {cloudState,CLOUD_SHADER} from './globe-clouds.js';
 
 import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text, Texture} from 'pixi.js';
 import {PALETTE} from '../shared/palette.js';
-const ISLET_ATLAS_ROWS=Math.ceil(ISLET_ART.length/4);
 
 const VERTEX = `
 #version 300 es
@@ -38,7 +34,6 @@ out vec4 finalColor;
 uniform sampler2D uScene;
 uniform sampler2D uWorld;
 uniform sampler2D uIslets;
-uniform vec4 uWorldUV[13];
 uniform vec4 uIsl[13];
 uniform vec4 uIslFlat[13];
 uniform vec4 uIslInfo[13];
@@ -82,7 +77,7 @@ vec2 local(vec3 p){
 vec2 screenDelta(vec2 p){return mat2(uBasis.x,uBasis.y,uBasis.z,uBasis.w)*p;}
 vec2 chartDelta(vec2 p){return inverse(mat2(uBasis.x,uBasis.y,uBasis.z,uBasis.w))*p;}
 vec2 sceneUV(vec2 g){return (screenDelta((g-uCam)*uZoom)+uRes*.5)/uRes;}
-vec2 cellUV(int i,vec2 uv){return uWorldUV[i].xy+uv*uWorldUV[i].zw;}
+vec2 cellUV(int i,vec2 uv){vec2 cell=vec2(float(i%4),float(i/4));return (cell+(vec2(1.)+uv*1022.)/1024.)/4.;}
 bool land(vec2 g,int skip){
  for(int i=0;i<13;i++){
   if(i==skip||uIslInfo[i].z<.5)continue;
@@ -126,8 +121,7 @@ vec3 islands(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
    c=textureLod(uScene,sceneUV(g),0.);
   }else{
    vec2 qx=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIsl[i],uIslC[i],uIslE[i],uIslN[i],k,X+vec2(0.,1.),P2);
-   vec2 scale=.6*uWorldUV[int(info.w+.5)].zw;
-   vec2 dx=(qx-q)/info.xy*scale,dy=(qy-q)/info.xy*scale;
+   vec2 dx=(qx-q)/info.xy*(.6*1022./4096.),dy=(qy-q)/info.xy*(.6*1022./4096.);
    c=textureGrad(uWorld,cellUV(int(info.w+.5),uv),dx,dy);
   }
   if(c.a<=.001)continue;
@@ -144,10 +138,10 @@ vec3 islets(vec2 X,vec3 P0,vec3 P1,vec3 P2,vec3 under){
   vec2 uv=q/info.x+.5;
   if(any(lessThan(uv,vec2(0.)))||any(greaterThan(uv,vec2(1.))))continue;
   vec2 qx=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(1.,0.),P1),qy=placeQ(uIt[i],uItC[i],uItE[i],uItN[i],k,X+vec2(0.,1.),P2);
-  int c4=int(info.z+.5);vec2 cell=vec2(float(c4%4),float(c4/4)),scale=.6*508./512./vec2(4.,${ISLET_ATLAS_ROWS}.);
-  float alpha=textureLod(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,${ISLET_ATLAS_ROWS}.),0.).a,distance=dot(q,q);
+  int c4=int(info.z+.5);vec2 cell=vec2(float(c4%4),float(c4/4)),scale=.6*508./512./vec2(4.,3.);
+  float alpha=textureLod(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),0.).a,distance=dot(q,q);
   if(!owns(alpha,distance,bestAlpha,bestDistance))continue;
-  vec4 c=textureGrad(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,${ISLET_ATLAS_ROWS}.),(qx-q)/info.x*scale,(qy-q)/info.x*scale);
+  vec4 c=textureGrad(uIslets,(cell+(vec2(2.)+uv*508.)/512.)/vec2(4.,3.),(qx-q)/info.x*scale,(qy-q)/info.x*scale);
   if(c.a<=.001)continue;
   best=c;bestAlpha=alpha;bestDistance=distance;
  }
@@ -195,24 +189,13 @@ vec3 planet(vec2 uv){
 void main(){finalColor=vec4(planet(vUV),1.);}
 `;
 
-function buildWorldTexture(app,arch,workQueue,texture,valid){
- const layout=globeAtlasLayout(arch);
- const build=createAtlasBuild(app.renderer,{width:layout.width,height:layout.height,label:'World globe atlas',items:WORLD_ISLANDS,workQueue,texture,valid,
-  // Leave room for a preview upload and newly visible sleeper caches in the
-  // following main render. At DPR1, those caches must retire before admitting
-  // the world target. The queue rechecks this gate on subsequent game frames.
-  admit:()=>Boolean(texture)||managedTextureMemory(app.renderer).bytes+layout.width*layout.height*4*4/3+(app.renderer.resolution<=1?6:40)*1048576<=(app.renderer.resolution<=1?150:250)*1e6,
-  prepare:island=>app.renderer.texture?.initSource(arch.globeTextureOf(island.id)),
-  retire:island=>arch.retireGlobeUpload?.(island.id),
-  draw:(island,k)=>{
-   const {x,y,width,height}=layout.cells[k],s=new Sprite(arch.globeTextureOf(island.id));
-   s.position.set(x+1,y+1);s.width=width;s.height=height;
-   if(!texture)return s;
-   // Refresh one cell without clearing the other islands between slices.
-   const box=new Container(),erase=new Graphics().rect(x,y,1024,height+2).fill(0xffffff);erase.blendMode='erase';
-   box.addChild(erase,s);return box;
-  }});
- return {...build,layout};
+function buildWorldTexture(app,islands,bounds,arch){
+ const box=new Container();
+ WORLD_ISLANDS.forEach((island,k)=>{
+  const s=new Sprite(arch.globeTextureOf(island.id));s.position.set(k%4*1024+1,Math.floor(k/4)*1024+1);s.width=s.height=1022;box.addChild(s);
+ });
+ const rt=RenderTexture.create({width:4096,height:4096,scaleMode:'linear',autoGenerateMipmaps:true});
+ app.renderer.render({container:box,target:rt,clear:true});box.destroy({children:true});rt.source.updateMipmaps();return rt;
 }
 
 function makePin(text = 'You', color = PALETTE.sun) {
@@ -233,14 +216,13 @@ function makePin(text = 'You', color = PALETTE.sun) {
   return pin;
 }
 
-export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPTY,workQueue) {
+export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPTY) {
   const shoreTextures = new Map();
-  let atlasPending=false,isletsPending=false,captureReady=false,atlasGeneration=0,disposed=false,currentZoom=Infinity;
-  let rt = RenderTexture.create({width: 2, height: 2, resolution: 1,label:'Globe live capture'}), w = 0, h = 0, worldTex = null, worldVersion = -1, lastGlobeTime = -Infinity;
+  let rt = RenderTexture.create({width: 2, height: 2, resolution: 1}), w = 0, h = 0, worldTex = null, worldVersion = -1, lastGlobeTime = -Infinity;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
-    uScene: rt.source, uWorld: blank.source, uIslets:blank.source, uClouds:cloudTexture.source, viewUniforms: {
+    uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, uClouds:cloudTexture.source, viewUniforms: {
       uCloudPhase:{value:0,type:'f32'},uCloudFade:{value:0,type:'f32'},
       uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
       uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},
@@ -249,7 +231,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       uSph: {value: new Float32Array([0, 0, 1]), type: 'vec3<f32>'},
       ...Object.fromEntries(['uAnchor','uEast','uNorth','uFocus','uViewEast','uViewNorth'].map(n=>[n,{value:new Float32Array([0,0,1]),type:'vec3<f32>'}])),
       uLive:{value:0,type:'f32'},
-      uWorldUV:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
       uIsl:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
       uIslFlat:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
       uIslInfo:{value:new Float32Array(13*4),type:'vec4<f32>',size:13},
@@ -298,53 +279,23 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       finally {mesh.visible = false;}
     },
     pinIn: 0,
-    // Set by the engine: the globe can only be reached from the globe button, so a plain zoom-out never
-    // prepares it or reserves memory for it.
+    // Set by the engine: the globe opens only from the globe button.
     globeWanted: true,
-    reservedBytes(arch,width,height,zoom){
-      if(!this.globeWanted||zoom>=.18)return 0;
-      const layout=globeAtlasLayout(arch);
-      // Include one uploaded preview while copying. Islet MSAA work completes
-      // before the world build, so its scratch does not overlap that peak.
-      const wanted=(layout.width*layout.height+2048*512*ISLET_ATLAS_ROWS)*4*4/3+width*height*4+1024*1024*4*4/3;
-      let uploaded=0;
-      for(const source of Object.values(app.renderer.texture?._managedTextures?.items??{}))if(source&&!source.destroyed&&(/globe atlas|Globe live capture|\/pixi-art\/globe\/(?![^/]*-ground\.svg)[^/]+\.svg(?:[?#]|$)/.test(source.label)))uploaded+=textureSourceBytes(source);
-      return Math.max(0,wanted-uploaded);
-    },
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me, reduced=false) {
-      currentZoom=cam.zoom;
       const on = t > .001;
       mesh.visible = on;
-      // Begin before the transition, while the camera is still above .1.
-      // Never build an empty atlas while preview decoding is outstanding.
-      const preparing=on||this.globeWanted&&cam.zoom<.18;
-      arch?.setGlobePreparing?.(preparing,on);
-      if(preparing){lastGlobeTime=time;arch?.setPreviewActive?.(true);}
-      if(preparing&&(width!==w||height!==h)){
-        w=width;h=height;captureReady=false;mesh.scale.set(w,h);
-        const generation=atlasGeneration,resize=()=>{rt.resize(width,height);app.renderer.texture?.initSource(rt);captureReady=true;};
-        if(workQueue)workQueue.enqueue(resize,{priority:3},true,()=>!disposed&&generation===atlasGeneration&&w===width&&h===height,true).catch(()=>{});
-        else resize();
+      if(on)lastGlobeTime=time;
+      // Build the 4096 globe atlas only for the globe, and free it a few seconds after
+      // returning to walking so gameplay does not carry ~90 MB of GPU memory.
+      if (on && arch?.texture && (!worldTex || worldVersion !== arch.version)) {
+        const old = worldTex; worldVersion = arch.version;
+        worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize, shoreTextures);
+        shader.resources.uWorld = worldTex.source;
+        if (old) setTimeout(() => old.destroy(true), 0);
       }
-      if(preparing&&!isletsPending&&shader.resources.uIslets===blank.source){
-        isletsPending=true;const generation=atlasGeneration;
-        if(isletView.prepareAtlas)isletView.prepareAtlas(()=>app.renderer.resolution>1||currentZoom<=.065).then(texture=>{if(!disposed&&generation===atlasGeneration)shader.resources.uIslets=texture.source;}).catch(()=>{}).finally(()=>{if(generation===atlasGeneration)isletsPending=false;});
-        else{shader.resources.uIslets=isletView.atlas.source;isletsPending=false;}
-      }
-      const version=arch?.previewVersion??arch?.version;
-      if (preparing && shader.resources.uIslets!==blank.source && arch?.texture && arch.previewsReady!==false && !atlasPending && (!worldTex || worldVersion !== version)) {
-        const generation=atlasGeneration;worldVersion=version;
-        const build=buildWorldTexture(app,arch,workQueue,worldTex,()=>!disposed&&generation===atlasGeneration);
-        worldTex=build.texture;atlasPending=true;
-        if(!workQueue){shader.resources.uWorld=worldTex.source;u.uWorldUV.set(build.layout.uvs);}
-        build.ready.then(()=>{if(!disposed&&generation===atlasGeneration){shader.resources.uWorld=worldTex.source;u.uWorldUV.set(build.layout.uvs);}}).catch(()=>{if(generation===atlasGeneration)worldVersion=-1;}).finally(()=>{if(generation===atlasGeneration)atlasPending=false;});
-      }
-      if (!on) {
-        if(time-lastGlobeTime>3){arch?.setPreviewActive?.(false);}
-        if(time-lastGlobeTime>3&&(w||worldTex||isletsPending||shader.resources.uIslets!==blank.source)){shader.resources.uWorld=blank.source;shader.resources.uIslets=blank.source;isletView.releaseAtlas?.();atlasGeneration++;atlasPending=isletsPending=captureReady=false;worldTex?.destroy(true);worldTex=null;worldVersion=-1;rt.resize(2,2);w=h=0;}
-        scene.visible=true;life.visible=pin.visible=bogPin.visible=false;this.pinIn=0;this.worldAt=null;return;
-      }
-      const live=captureReady&&t < .97 && cam.zoom > .065;
+      if (!on) {if(worldTex&&time-lastGlobeTime>3){shader.resources.uWorld=blank.source;worldTex.destroy(true);worldTex=null;worldVersion=-1;}scene.visible=true;life.visible=pin.visible=bogPin.visible=false;this.pinIn=0;this.worldAt=null;return;}
+      if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
+      const live=t < .97 && cam.zoom > .065;
       if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}
       scene.visible = false;
       const id=arch.current,m=mapOf(id),anchor=worldIsland(id),view=viewFrame(id,cam);
@@ -367,7 +318,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         const px=(basis.d*x-basis.c*y)/det,py=(-basis.b*x+basis.a*y)/det;
         return Math.hypot(px,py)>horizon?null:gOf(px,py);
       };
-      this.debug={ball,horizon,atlasSize:worldTex?.width??0,atlasHeight:worldTex?.height??0,source:live?'live':'atlas',colourBlends:0};
+      this.debug={ball,horizon,atlasSize:4096,source:live?'live':'atlas',colourBlends:0};
       this.globe={w,h,Rp,Rw,ball,view,id,basis,camera:{x:cam.x,y:cam.y}};
       const G=globeScreen({id,cam,ball,w,h,basis}),stickerOf=G.sticker;
       const project=(x,y)=>{
@@ -501,6 +452,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));
       return {aim:centreOf(next.lon,next.lat),dlon,dlat:next.lat-before.lat};
     },
-    destroy() {disposed=true;atlasGeneration++;for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }

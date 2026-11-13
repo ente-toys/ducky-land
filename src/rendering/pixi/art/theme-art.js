@@ -2,24 +2,23 @@ import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from '../../shared/art-resolution.js';
 import {propZ} from '../../shared/flat-props.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
-import {rasterTiles,VIEW_RASTER_TILE_SIZE,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
+import {rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
 import {createRasterLoader} from './theme-art-stream.js';
 import {createIcelandRasterLoader,icelandPieceTile,icelandWarmupTiles} from './iceland-art-stream.js';
 import {fairGroundTiles,fairTiles,FAIR_GROUND_SOURCE,FAIR_ART_BUDGET_BYTES,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from './fair-raster.js';
 import {createFairGroundLoader,createFairRasterLoader} from './fair-art-stream.js';
-import {createGroundPool,VIEW_POOL_OPTIONS} from './ground-stream.js';
-import {createArtBudget} from './art-budget.js';
+import {createGroundPool} from './ground-stream.js';
 
 import {loadPondDuckies} from '../environment/pond-duckies.js';
 import {createFountainWater} from '../environment/fountain.js';
 import {createAutumnLeaves} from '../environment/autumn-leaves.js';
-import {KITE_ASSETS, createHomeKites,kiteArtEntries} from '../environment/home-kites.js';
+import {KITE_ASSETS, createHomeKites} from '../environment/home-kites.js';
 import {createIcelandLifeLifecycle} from '../environment/iceland-life.js';
 
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, screen, rasterOptions={}, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader}) {
+export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -34,35 +33,32 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [];
   const floating = manifest.floating ?? [];
   const iceland=map.id==='snow'&&Boolean(manifest.icelandFinal);
-  const fair=map.id==='fair',authoredRaster=fair||manifest.raster?.enabled===true,crisp=authoredRaster||Boolean(screen)&&!iceland;
-  const makeTiles=fair?fairTiles:(p,src,anchor)=>rasterTiles(p,src,anchor,manifest.raster?.enabled?64:VIEW_RASTER_TILE_SIZE);
-  const raster=iceland?icelandRasterLoaderFactory(rasterOptions):crisp?(fair?createFairRasterLoader(rasterOptions):rasterLoaderFactory(rasterOptions)):null;
-  const fairGroundRaster=fair ? createFairGroundLoader(rasterOptions) : null;
-  const rasterPool=crisp||iceland?createGroundPool({...raster,poolBudget:groundPool?.poolBudget,...(screen?VIEW_POOL_OPTIONS:{}),budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
+  const fair=map.id==='fair',crisp=fair||manifest.raster?.enabled===true;
+  const makeTiles=fair?fairTiles:rasterTiles;
+  const raster=iceland?icelandRasterLoaderFactory():crisp?(fair?createFairRasterLoader():rasterLoaderFactory()):null;
+  const fairGroundRaster=fair ? createFairGroundLoader() : null;
+  const rasterPool=crisp||iceland?createGroundPool({...raster,budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp||iceland?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
     ...flats.filter(p=>(!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
-  const budgetEntries=[...entries.map(e=>({...e,src:url(e.src)})),...(manifest.kites?.length?kiteArtEntries(manifest.kites,fair?FAIR_KITE_RESOLUTION:2):[])];
-  const budgetSources=new Set(budgetEntries.map(e=>e.src));
-  const artBudget=screen&&budgetEntries.length?createArtBudget(budgetEntries,{acquire,release,...screen}):null;
   const resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
-  const kiteSource=src=>fair&&!screen?src+'?fairRaster='+FAIR_KITE_RESOLUTION:src;
+  const kiteSource=src=>fair?src+'?fairRaster='+FAIR_KITE_RESOLUTION:src;
   if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(kiteSource(src), fair?FAIR_KITE_RESOLUTION:2);
   for (const src of manifest.autumn?.leaves ?? []) resolutions.set(url(src), crisp?3.625:2);
   const uniqueSources = [...resolutions.keys()];
   const loaded=new Array(uniqueSources.length);let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
     while(cursor<uniqueSources.length){const i=cursor++,src=uniqueSources[i];
-      try{loaded[i]={status:'fulfilled',value:await (artBudget&&budgetSources.has(src)?artBudget.acquire({src}):acquire(src,resolutions.get(src)))};}
+      try{loaded[i]={status:'fulfilled',value:await acquire(src,resolutions.get(src))};}
       catch(reason){loaded[i]={status:'rejected',reason};}
     }
   }));
   const failed = loaded.find(result => result.status === 'rejected');
   if (failed) {
-    artBudget?.destroy();uniqueSources.filter(src=>!artBudget||!budgetSources.has(src)).forEach(src => release(src));
+    uniqueSources.forEach(src => release(src));
     rasterPool?.destroy();raster?.destroy();fairGroundRaster?.destroy();
     throw failed.reason;
   }
@@ -74,7 +70,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   let k = 0;
   const groundStream=crisp?groundPool.create(tiles.flatMap(p=>fair
     ? fairGroundTiles(p,url(p.src),url(FAIR_GROUND_SOURCE))
-    : rasterTiles({...p,width:p.width+(p.bleed??0),height:p.height+(p.bleed??0)},url(p.src),undefined,authoredRaster?RASTER_GROUND_TILE_SIZE:VIEW_RASTER_TILE_SIZE).map(({localX,localY,...t})=>t)),
+    : rasterTiles(p,url(p.src),undefined,RASTER_GROUND_TILE_SIZE).map(({localX,localY,...t})=>t)),
   ground,undefined,fairGroundRaster??raster):groundPool.create(iceland?tiles.map(t=>({...t,priority:-1})):tiles,ground,url),groundStreams=[groundStream];
   const icelandSprite=(p,layer,anchor)=>{
     const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);
@@ -106,7 +102,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   };
   let terrain;
   try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
-  catch(error){groundStreams.forEach(s=>s.destroy());rasterPool?.destroy();raster?.destroy();fairGroundRaster?.destroy();artBudget?.destroy();uniqueSources.filter(src=>!artBudget||!budgetSources.has(src)).forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
+  catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();fairGroundRaster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
   const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
   const overLayer = new Container({label: `Theme ${map.id} - bridges over boats`}), bridgeOver = [];
   for (const deck of decks) {
@@ -164,7 +160,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   const floatLayer = new Container({label: `Theme ${map.id} - floating`});
   const floats = floating.map((item, i) => {
     const anchor = item.anchor ?? {x: .5, y: .5};
-    const sprite = iceland?icelandSprite(item,null,anchor):crisp?crispSprite(item,null,anchor):new Sprite(textures[k++]);
+    const sprite = iceland?icelandSprite(prop,null,anchor):crisp?crispSprite(item,null,anchor):new Sprite(textures[k++]);
     if(!crisp){sprite.anchor.set(anchor.x, anchor.y); sprite.position.set(item.x, item.y); sprite.width = item.width; sprite.height = item.height;
     if (item.flip) sprite.scale.x *= -1;}
     floatLayer.addChild(sprite);
@@ -177,7 +173,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   const icelandLife = createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt});
   for (const group of groups) group.visible = false;
   const result = {
-    id: map.id, map, groundStream, groundStreams, rasterPool, artBudget, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
+    id: map.id, map, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     overLayer, bridgeOver, kiteLayer, kites, autumnLeaves, fountainWaters, icelandLife,
     groups,
     destroy() {
@@ -193,7 +189,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
       for (const c of groups) if(!c.destroyed)c.destroy({children: true});
       for (const f of fountainWaters) {if(!f.root.destroyed)f.root.destroy({children:true}); f.layer.destroy();}
       for (const p of standing) p.sprite.destroy();
-      artBudget?.destroy();uniqueSources.filter(src=>!artBudget||!budgetSources.has(src)).forEach(src => release(src));
+      uniqueSources.forEach(src => release(src));
     },
   };
   try {

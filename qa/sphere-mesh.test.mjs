@@ -63,9 +63,7 @@ test('the globe shader draws islands and islets as stickers, never through a sph
  assert.match(code,/uniform vec4 uIsl\[13\]/);
  assert.match(code,/uniform vec4 uIt\[22\]/);
  assert.doesNotMatch(code,/uIsletEasts|uCenters|uEasts/,'no per-island inverse azimuthal lookup left');
- const atlas=readFileSync(new URL('../src/rendering/pixi/atlas-work.js',import.meta.url),'utf8');
- assert.match(atlas,/mipLevelCount:Math.floor\(Math.log2/,'the shared atlas reserves its mip chain so far islands do not shimmer');
- assert.match(atlas,/target.source.updateMipmaps\(\)/,'the completed atlas generates its mip chain once');
+ assert.match(code,/autoGenerateMipmaps:true/,'the world atlas is mipmapped so far islands do not shimmer');
 });
 test('animated neighbour targets are reused, bounded to 1536px and freed when out of view',async()=>{
  const calls=[],renderer={render:options=>calls.push(options)},live=createLivePatches(renderer),m=mapOf('isle-55'),p=mapPoint('isle-55','home',{x:m.cx,y:m.cy}),scene={};

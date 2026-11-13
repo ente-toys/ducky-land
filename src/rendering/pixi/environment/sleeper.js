@@ -65,8 +65,8 @@ export function createSleeper(sleep, seed = 0) {
   const shade = new Container({label: 'Shadow'});
   shade.pivot.set((x0 + x1) / 2, y1); shade.scale.set(drawK * dir, drawK * .3); shade.position.set(0, 3);
   for (const layer of pose.layers) if (layer.id !== 'zz') {const s = new Sprite(Assets.get(layer.src)); s.scale.set(1 / data.F); s.tint = 0x000000; shade.addChild(s);}
-  // Local art is much larger than its placed size. Keep group alpha without
-  // allocating a 1024-square (or larger Retina) target for every sleeper.
+  // Local art is much larger than its placed size; a small cache keeps the group alpha
+  // without a 1024-square (or larger Retina) texture per sleeping Ducky.
   shade.cacheAsTexture({resolution:.25,antialias:false}); shade.alpha = .07; root.addChild(shade);
   const bed = new Container();
   bed.pivot.set((x0 + x1) / 2, y1); bed.scale.set(drawK * dir, drawK); root.addChild(bed);

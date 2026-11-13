@@ -31,9 +31,6 @@ for(const [width,height]of [[2560,1080],[1920,1080],[393,852]])test(`native over
   for(const i of WORLD_ISLANDS)assert.ok(arch.has(i.theme??'home'));
   arch.textureOf=()=>{throw Error('raw live snapshots must not feed the globe atlas');};
   const me={x:m.cx,y:m.cy},cam={...me,zoom:.15};
-  view.update(0,width,height,0,{...cam,zoom:.7},arch,m,.02,true,me);
-  assert.equal(calls.filter(c=>c.target?.source.label==='World globe atlas').length,0,'walking never allocates a globe atlas');
-  await arch.loadPreviews(async()=>Texture.WHITE);
   let captures=0;view.liveCopies=target=>{assert.equal(target.width,width);assert.equal(target.height,height);captures++;};
   view.prepare();assert.equal(stage.children.find(c=>c.label==='World view').visible,false);
   view.update(.4,width,height,1,cam,arch,m,.02,true,me);
@@ -55,14 +52,9 @@ for(const [width,height]of [[2560,1080],[1920,1080],[393,852]])test(`native over
   assert.deepEqual([...u.uRes],[height,width]);assert.equal(mesh.scale.x,height);assert.equal(mesh.scale.y,width);
   view.update(0,height,width,4,{...cam,zoom:.7},arch,m,.02,true,me);
   assert.equal(mesh.visible,false);assert.equal(scene.visible,true);assert.equal(view.pinPoint(),null);
-  const atlas=mesh.shader.resources.uWorld;
-  view.update(0,height,width,8,{...cam,zoom:.7},arch,m,.02,true,me);
-  assert.equal(atlas.destroyed,true,'three seconds back in gameplay destroys the globe GPU source');
-  assert.equal(capture.target.width,2,'full-screen live capture shrinks after leaving the globe');
   // Follow each current island through the same live-to-painted handoff. Both
   // current art and neighbours must use the curved atlas once paint begins.
   view.liveCopies=null;
-  await arch.loadPreviews(async()=>Texture.WHITE);
   for(const island of WORLD_ISLANDS){
    arch.setCurrent(island.id);const current=mapOf(island.id);
    for(const progress of [.002,.1,.4,.7,.969,.97,1]){
