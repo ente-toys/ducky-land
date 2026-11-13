@@ -94,7 +94,8 @@ test('zoom throttling retains shared source leases, priority and distance throug
  await step();
  assert.equal(requests.length,1,'duplicate placements share the pending decode');
  assert.equal(requests[0].src,'/hut.svg?groundScale=0.5');
- assert.deepEqual(requests[0].options,{visible:true,priority:9,distance:0});
+ const {isNeeded,...order}=requests[0].options;
+ assert.deepEqual(order,{visible:true,priority:9,distance:0});assert.equal(typeof isNeeded,'function');
  for(let i=0;i<8;i++)await step();
  assert.equal(pool.stats().residentTiles,8);
  assert.equal(pool.stats().sharedSources,2);
@@ -109,4 +110,14 @@ test('zoom throttling retains shared source leases, priority and distance throug
  pool.destroy();
  assert.equal(pool.stats().reservedBytes,0);
  assert.deepEqual(released.sort(),requests.map(r=>r.src).sort(),'each shared lease releases once');
+});
+
+test('a shared pending raster remains needed until its last visible placement leaves',async()=>{
+ const requests=[],finish=[];
+ const pool=createGroundPool({makeSprite:sprite,acquire:(src,r,order)=>{requests.push(order);return new Promise(resolve=>finish.push(()=>resolve({source:{pixelWidth:100,pixelHeight:100}})));},release(){}});
+ const stream=pool.create([tile(),{...tile(5000),src:tile().src}],container);
+ pool.update([view(stream)]);assert.equal(requests[0].isNeeded(),true);
+ pool.update([view(stream,5050)]);assert.equal(requests.length,1);assert.equal(requests[0].isNeeded(),true);
+ pool.update([]);assert.equal(requests[0].isNeeded(),false);
+ finish.forEach(f=>f());await flush();assert.equal(pool.stats().reservedBytes,0);assert.equal(pool.stats().failedTiles,0);pool.destroy();
 });

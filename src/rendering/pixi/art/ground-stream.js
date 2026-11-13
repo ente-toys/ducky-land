@@ -28,17 +28,19 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
     if(!sources)allocations.set(need.acquire,sources=new Map());
     let allocation=sources.get(need.src);
     if(!allocation){
-      allocation={refs:0,bytes:need.bytes,src:need.src,release:need.release,sources};
+      allocation={refs:0,bytes:need.bytes,src:need.src,release:need.release,sources,needs:new Set()};
       sources.set(need.src,allocation);reserved+=need.bytes;peak=Math.max(peak,reserved);started++;
-      allocation.promise=need.acquire(need.src,need.resolution,{visible:need.visible,priority:need.priority??0,distance:need.distance});
+      allocation.needs.add(need);
+      allocation.promise=need.acquire(need.src,need.resolution,{visible:need.visible,priority:need.priority??0,distance:need.distance,
+        isNeeded:()=>!disposed&&[...allocation.needs].some(n=>desired.has(n.tile)&&(!zooming||!resident.has(n.tile)))});
     }
-    allocation.refs++;need.allocation=allocation;return allocation.promise;
+    allocation.needs.add(need);allocation.refs++;need.allocation=allocation;return allocation.promise;
   };
   const extraBytes=need=>allocations.get(need.acquire)?.has(need.src)?0:need.bytes;
   const requestPump=()=>{if(!schedule){pump();return;}if(scheduled||disposed)return;scheduled=true;schedule(()=>{scheduled=false;pump();});};
   const blank=tile => {tile.sprite.texture=Texture.EMPTY;tile.sprite.visible=false;};
   const discard=entry=>{
-    const a=entry.allocation;if(--a.refs)return;
+    const a=entry.allocation;a.needs.delete(entry.lease??entry);if(--a.refs)return;
     reserved-=a.bytes;a.sources.delete(a.src);a.release(a.src);
   };
   const remember=(tile,entry)=>{
@@ -71,7 +73,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       const cached=versions&&[...versions.values()].find(e=>e.resolution>=target.resolution);
       if(cached){versions.delete(cached.src);if(!versions.size)cache.delete(tile);if(held)remember(tile,held);show(tile,cached);continue;}
       const resolution=progressive&&!held&&!tile.fullResolutionFirst?Math.min(.5,target.resolution):target.resolution;
-      const need={...target,resolution,src:tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution,
+      const need={...target,tile,resolution,src:tile.src+(tile.src.includes('?')?'&':'?')+'groundScale='+resolution,
         bytes:Math.ceil(target.pixelWidth*resolution)*Math.ceil(target.pixelHeight*resolution)*4};
       if(failures.has(need.src))continue;
       for(const [t,entries] of cache){
@@ -92,8 +94,8 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         if(stale?.resolution>=need.resolution||reserved-need.allocation.bytes+bytes>budget){discard(need);deferred.add(tile);return;}
         reserved+=bytes-need.allocation.bytes;need.allocation.bytes=bytes;peak=Math.max(peak,reserved);
         if(stale){resident.delete(tile);remember(tile,stale);}
-        show(tile,{...need,bytes,texture});
-      }).catch(error=>{discard(need);failures.set(need.src,String(error));})
+        show(tile,{...need,bytes,texture,lease:need});
+      }).catch(error=>{discard(need);if(error.name!=='AbortError')failures.set(need.src,String(error));})
         .finally(()=>{pending.delete(tile);deferred.clear();requestPump();});
     }
     if(!pending.size&&jobs.some(([tile,n])=>!deferred.has(tile)&&!failures.has(n.src)&&(!resident.has(tile)||resident.get(tile).resolution<n.resolution)))requestPump();

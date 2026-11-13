@@ -1471,8 +1471,9 @@ export class PixiIsland {
         for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }
-    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2));
-    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2));
+    const fastZoom=Math.abs(Math.log(this.camera.zoom/this.target.zoom))>.015;
+    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2),fastZoom);
+    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2),fastZoom);
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     const visitors=this.copyVisitors(copies);
     for (const {o} of visitors) o.visible=false;

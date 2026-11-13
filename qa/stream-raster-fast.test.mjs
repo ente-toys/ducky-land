@@ -84,3 +84,58 @@ test('SVG loader budgets actual preparation per frame and allows concurrent asyn
  await Promise.all(results);assert.equal(started,8);
  keys.forEach(key=>loader.release(key));await flush();assert.equal(closed,8);loader.destroy();
 });
+
+
+test('raster scheduler skips obsolete queued jobs and spreads a burst over frames',async t=>{
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
+ const old={fetch:globalThis.fetch,location:globalThis.location};t.after(()=>Object.assign(globalThis,old));
+ globalThis.location={href:'https://test/'};globalThis.fetch=async()=>({ok:true,text:async()=>'<svg/>'});
+ const frames=[],finish=[],started=[];let needed=true,delivered=0;
+ const loader=createRasterLoader({concurrency:16,schedule:cb=>frames.push(cb),rasterize:async(_svg,crop)=>{started.push(crop[2]);await new Promise(resolve=>finish.push(resolve));return {width:20,height:20};}});
+ const keys=Array.from({length:13},(_,i)=>'/burst.svg?rasterCrop=20,20,'+i+',0,20,20');
+ const results=keys.map((key,i)=>loader.acquire(key,1,{isNeeded:()=>i!==0||needed}).then(()=>{delivered++;},error=>assert.equal(error.name,'AbortError')));
+ await flush();needed=false;frames.splice(0).forEach(f=>f());await flush();
+ assert(!started.includes(0),'obsolete job never rasterized');assert.equal(started.length,12);
+ finish.forEach(f=>f());await flush();assert.equal(delivered,8);
+ frames.splice(0).forEach(f=>f());await flush();assert.equal(delivered,12);
+ await Promise.all(results);keys.forEach(key=>loader.release(key));await flush();loader.destroy();
+});
+
+test('a raster that becomes obsolete during decode closes its bitmap without uploading it',async t=>{
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
+ const old={fetch:globalThis.fetch,location:globalThis.location};t.after(()=>Object.assign(globalThis,old));
+ globalThis.location={href:'https://test/'};globalThis.fetch=async()=>({ok:true,text:async()=>'<svg/>'});
+ let needed=true,finish,closed=0;
+ const loader=createRasterLoader({schedule:null,rasterize:()=>new Promise(resolve=>finish=()=>resolve({close(){closed++;}}))});
+ const key='/late.svg?rasterCrop=20,20,0,0,20,20';
+ const result=loader.acquire(key,1,{isNeeded:()=>needed});const rejected=assert.rejects(result,{name:'AbortError'});
+ await flush();needed=false;finish();await rejected;
+ assert.equal(closed,1);loader.release(key);await flush();loader.destroy();
+});
+
+
+test('disposing an island with queued rasters releases reservations without poisoning the shared pool',async t=>{
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
+ const old={fetch:globalThis.fetch,location:globalThis.location};t.after(()=>Object.assign(globalThis,old));
+ globalThis.location={href:'https://test/'};globalThis.fetch=async()=>({ok:true,text:async()=>'<svg/>'});
+ const frames=[],loader=createRasterLoader({schedule:cb=>frames.push(cb)});
+ const pool=createGroundPool({makeSprite:sprite});
+ const stream=pool.create([{src:'/disposed.svg?rasterCrop=20,20,0,0,20,20',x:0,y:0,width:20,height:20}],container,undefined,loader);
+ pool.update([{stream,camera:{x:10,y:10,zoom:1},width:100,height:100}]);await flush();
+ assert.equal(pool.stats().pendingTiles,1);stream.destroy();loader.destroy();await flush();
+ assert.equal(pool.stats().pendingTiles,0);assert.equal(pool.stats().reservedBytes,0);assert.equal(pool.stats().failedTiles,0);pool.destroy();
+});
+
+test('disposing a completion backlog settles every lease and closes each bitmap once',async t=>{
+ const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
+ const old={fetch:globalThis.fetch,location:globalThis.location};t.after(()=>Object.assign(globalThis,old));
+ globalThis.location={href:'https://test/'};globalThis.fetch=async()=>({ok:true,text:async()=>'<svg/>'});
+ const frames=[];let closed=0,delivered=0;
+ const loader=createRasterLoader({concurrency:16,schedule:cb=>frames.push(cb),rasterize:async()=>({width:20,height:20,close(){closed++;}})});
+ const keys=Array.from({length:12},(_,i)=>'/dispose-burst.svg?rasterCrop=20,20,'+i+',0,20,20');
+ const results=keys.map(key=>loader.acquire(key,1).then(()=>{delivered++;}));
+ await flush();frames.splice(0).forEach(f=>f());await flush();assert.equal(delivered,8);
+ keys.forEach(key=>loader.release(key));loader.destroy();await Promise.all(results);await flush();
+ assert.equal(delivered,12);assert.equal(closed,12);await assert.rejects(loader.acquire(keys[0],1),{name:'AbortError'});
+ frames.splice(0).forEach(f=>f());assert.equal(closed,12);
+});
