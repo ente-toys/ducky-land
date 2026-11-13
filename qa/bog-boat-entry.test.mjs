@@ -70,7 +70,7 @@ test('Dock, forged karma packets and pending beach landings cannot bypass the ga
  try{
   const p=aboard(room,7100,BOG_ISLAND,bog.HARBOR.water);balance(room,p,4);p.actor.karma=999;
   room.webSocketMessage(p.socket,JSON.stringify({type:'disembark',seq:1,karma:999}));room.step();
-  assert.equal(p.actor.mode,'sailing');assert.match(p.socket.notes.find(n=>n.type==='travel-notice').text,/You need 5 karma to land on Booquack Bog/);
+  assert.equal(p.actor.mode,'sailing');assert.match(p.socket.notes.find(n=>n.type==='travel-notice').text,/You need 5 golden feathers to land on Booquack Bog/);
   let beach;
   for(let y=700;y<7400&&!beach;y+=80)for(let x=400;x<8000;x+=80){
    const q={islandId:BOG_ISLAND,mode:'sailing',x,y};
@@ -135,7 +135,7 @@ test('client reads room karma for the notice while leaving admission to the serv
  client.islandId=BOG_ISLAND;client.player={islandId:BOG_ISLAND,mode:'sailing',...bog.HARBOR.water,karma:999};
  const sent=[];client.send=command=>{sent.push(command);return true;};
  client.karma=4;assert.equal(getPlayerKarma({room:client}),4);client.disembark();
- assert.equal(notes.at(-1),'You need 5 karma to land on Booquack Bog (you have 4)');
+ assert.equal(notes.at(-1),'You need 5 golden feathers to land on Booquack Bog (you have 4)');
  client.karma=5;client.disembark();assert.equal(notes.length,1);
  assert.deepEqual(sent,[{type:'disembark'},{type:'disembark'}],'no client-supplied balance or local admission');
  assert.equal(getPlayerKarma({karma:5}),5);assert.equal(getPlayerKarma({room:{karma:NaN}}),0);client.dispose();
