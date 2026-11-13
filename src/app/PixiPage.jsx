@@ -28,6 +28,8 @@ const authNotices = {
   'star-check':'Could not check your GitHub star. Please sign in again.',
 };
 
+const githubSignInLabel = <><img src="/github-mark.svg" width="18" height="18" alt=""/>Play with GitHub</>;
+
 export default function PixiPage() {
   const host = useRef(null);
   const page = useRef(null);
@@ -177,8 +179,8 @@ export default function PixiPage() {
       <h2 id="pixi-guest-heading">Your duck is waiting</h2>
       <p>Explore on your own or sign in to play online.</p>
       {session.signInAvailable
-        ? <a href="/auth/github/start">Play with GitHub <span aria-hidden="true">→</span></a>
-        : <><button disabled>Play with GitHub</button><small>Sign-in is unavailable right now.</small></>}
+        ? <a href="/auth/github/start">{githubSignInLabel} <span aria-hidden="true">→</span></a>
+        : <><button disabled>{githubSignInLabel}</button><small>Sign-in is unavailable right now.</small></>}
       <a className="pixi-guest-offline" href="?offline">Continue as guest</a>
     </aside>}
     {!error && <div className="pixi-bottom-hud">
