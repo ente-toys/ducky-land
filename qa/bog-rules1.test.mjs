@@ -69,7 +69,7 @@ test('paid landing spends exactly once, shows authoritative balance, and refused
   service.broadcast();assert.equal(enemySocket.notes.findLast(m=>m.type==='arena-snapshot').players.some(q=>q.id===fighter.id),false,'live transport never sends a hidden enemy');
   assert.ok([...service.members].filter(([,m])=>m.account===p.account&&m.team).every(([s])=>s.notes.findLast(m=>m.type==='arena-snapshot').players.some(q=>q.id===fighter.id)),'live transport still sends self');
   const refused=landed(room,8101,4);assert.equal(refused.actor.mode,'sailing');assert.equal(room.karma.balance(refused.account),4);assert.equal(room.karma.bogEntry(refused.account),null);
-  assert.equal(refused.socket.notes.find(m=>m.type==='travel-notice').text,'You need 5 karma to land on Booquack Bog (you have 4)');
+  assert.equal(refused.socket.notes.find(m=>m.type==='travel-notice').text,'You need 5 golden feathers to land on Booquack Bog (you have 4)');
  }finally{stop(room);}
 });
 
