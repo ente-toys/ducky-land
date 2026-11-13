@@ -22,11 +22,14 @@ export function animatePieces(records, seconds, reduced = false) {
     if(a.kind==='ripple') {sx=sy=.82+.32*u;s.alpha=Math.sin(Math.PI*u)*.8;}
     if(a.kind==='foam') {dy=Math.sin(u*Math.PI*2)*2;s.alpha=.92+.08*Math.cos(u*Math.PI*2);}
     const pivot=a.pivot ? [(a.pivot[0]-piece.x)/piece.width,(a.pivot[1]-piece.y)/piece.height] : [piece.anchor?.x??.5,piece.anchor?.y??1];
-    const px=(pivot[0]-s.anchor.x)*s.texture.width*b.sx;
-    const py=(pivot[1]-s.anchor.y)*s.texture.height*b.sy;
+    // Streamed crisp art is a tile Container placed at its anchor, not a Sprite.
+    const ax=s.anchor?.x??piece.anchor?.x??.5,ay=s.anchor?.y??piece.anchor?.y??1;
+    const tw=s.texture?.width??piece.width,th=s.texture?.height??piece.height;
+    const px=(pivot[0]-ax)*tw*b.sx;
+    const py=(pivot[1]-ay)*th*b.sy;
     const cos=Math.cos(angle),sin=Math.sin(angle);
     s.scale.set(b.sx*sx,b.sy*sy);s.rotation=angle;
-    s.position.set(b.x+px-(px*sx*cos-py*sy*sin),b.y+py-(px*sx*sin+py*sy*cos)+dy*Math.abs(b.sy)*s.texture.height/piece.height);
+    s.position.set(b.x+px-(px*sx*cos-py*sy*sin),b.y+py-(px*sx*sin+py*sy*cos)+dy*Math.abs(b.sy)*th/piece.height);
   }
 }
 
@@ -34,7 +37,7 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
   const textureViews=[];
   if(art.id==='pink' && !art.props.some(p=>p.centrePiece?.id==='dancer-stand')) {
     const dancer=art.props.find(p=>p.centrePiece?.id==='dancer' && p.src?.endsWith('centre/dancer.svg'));
-    if(dancer) {
+    if(dancer?.sprite?.texture?.frame) {
       const s=dancer.sprite,texture=s.texture,frame=texture.frame,cut=842/1145;
       const view=(y,h)=>{
         const t=new Texture({source:texture.source,frame:new Rectangle(frame.x,frame.y+frame.height*y,frame.width,frame.height*h)});
