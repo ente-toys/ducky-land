@@ -168,6 +168,159 @@
   padding: 10px 14px;
 }
 .pixi-online-dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: #409447; }
+.pixi-camera {
+  position: fixed;
+  z-index: 6;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) + 48px);
+  color: #332b23;
+  font: 600 14px/1.35 system-ui, sans-serif;
+}
+.pixi-page:has(.bog-combat-dock, .bog-combat-hud) .pixi-camera { display: none; }
+.pixi-camera > button, .pixi-polaroid button, .pixi-polaroid a {
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #564537;
+  border-radius: 12px;
+  background: #fff9df;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pixi-camera > button { width: 44px; padding: 0; box-shadow: 0 3px 0 #56453755; }
+.pixi-camera > button:disabled, .pixi-camera > button[aria-busy="true"] { opacity: .65; cursor: default; }
+.pixi-camera :is(button, a):focus-visible { outline: 3px solid #367969; outline-offset: 3px; }
+.pixi-camera-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 17px;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+}
+.pixi-camera-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  width: 9px;
+  height: 4px;
+  border-radius: 2px 2px 0 0;
+  background: currentColor;
+}
+.pixi-camera-icon::after { content: ''; width: 6px; height: 6px; border: 2px solid; border-radius: 50%; }
+.pixi-camera-error:not(:empty) {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 8px 12px;
+  border: 1px solid #564537;
+  border-radius: 12px;
+  background: #fff9df;
+}
+.pixi-polaroid {
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100svh - 32px);
+  overflow: auto;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: #332b23;
+}
+.pixi-polaroid::backdrop { background: #172b27ad; }
+.pixi-polaroid :is(button, a):focus-visible { outline-color: #fff9df; }
+.pixi-polaroid-printer { margin: 0 auto 8px; width: min(100%, 400px); }
+.pixi-polaroid-camera {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  height: 94px;
+  padding-bottom: 20px;
+  border: 2px solid #293f37;
+  border-radius: 20px 20px 10px 10px;
+  background: linear-gradient(#c5d8bf, #85a891 70%, #4b6b5e 71%, #263e36);
+  box-shadow: inset 0 2px #ffffff80, inset 4px 0 10px #3d5b4840, 0 4px 10px #121a1855;
+}
+.pixi-polaroid-camera::after {
+  content: '';
+  position: absolute;
+  inset: auto 8px 0;
+  height: 8px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(#16251f, #0d1512 65%, #526a5e);
+  box-shadow: 0 -1px #b2c9b366;
+}
+.pixi-polaroid-lens {
+  width: 60px;
+  aspect-ratio: 1;
+  border: 2px solid #22322e;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 40% 37%, #d3f7f4cc, transparent 10%),
+    radial-gradient(ellipse at 62% 62%, #69a1a3, transparent 19%),
+    radial-gradient(circle, #294952 0 29%, #13282f 31% 41%, #5a7777 43% 47%, #1d302e 49% 59%, #809990 61% 65%, #344941 67%);
+  box-shadow: inset 0 1px 2px #e0f5e590, 0 3px 5px #172b276e;
+}
+.pixi-polaroid-shutter {
+  position: absolute;
+  top: 24px;
+  left: 17px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4c3e32;
+  border-radius: 50%;
+  background: linear-gradient(#edab7d, #a4523e);
+  box-shadow: inset 0 1px #fff8, 0 2px 3px #172b2755;
+}
+.pixi-polaroid-flash {
+  position: absolute;
+  inset: 13px 14px auto auto;
+  width: 44px;
+  height: 24px;
+  border: 2px solid #364c42;
+  border-radius: 5px;
+  background:
+    linear-gradient(#fff8 0 15%, transparent 50%, #8e84684d),
+    repeating-linear-gradient(90deg, #f9f3dc 0 3px, #b7b49b 3px 4px);
+  box-shadow: inset 0 0 3px #6e6c58, 0 1px #fff8;
+}
+.pixi-polaroid-output {
+  overflow: hidden;
+  margin-top: -3px;
+  padding: 0 12px 8px;
+}
+.pixi-polaroid-photo {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(52svh, 380px, max(80px, calc(100svh - 240px)));
+  margin: 0 auto;
+  visibility: hidden;
+  box-shadow: 0 2px 8px #332b2333;
+}
+.pixi-polaroid-photo[data-printed="true"] {
+  visibility: visible;
+  animation: pixi-polaroid-print .8s cubic-bezier(.24,.68,.35,1) both;
+}
+@keyframes pixi-polaroid-print {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pixi-polaroid-photo[data-printed="true"] { animation: none; }
+}
+.pixi-polaroid-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.pixi-polaroid-actions :is(a, button) { width: 44px; padding: 0; }
+.pixi-polaroid-actions a { background: #ffda69; }
+.pixi-polaroid-feedback:not(:empty) { margin-top: 8px; color: #fff9df; text-align: center; }
 .pixi-bottom-hud { display: contents; }
 .pixi-notifications {
   position: fixed;
