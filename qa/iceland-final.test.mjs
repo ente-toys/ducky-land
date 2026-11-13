@@ -6,10 +6,10 @@ import path from 'node:path';
 import {ROOT,ART,WORLD,WORKERS,loadCatalog,integrate,validate,bounds,overlaps,pathClearance,propPathClearance,landViews,viewCoverage,area,homeDensity} from '../scripts/iceland-final/place.mjs';
 import sharp from 'sharp';
 import {maxSleepersInView,quality3Problems} from '../scripts/iceland-final/quality3.mjs';
-import {geometry,inShape} from '../rive/web/island-geometry.mjs';
-import {onRink} from '../src/pixi/rink-slide.js';
-import {makeMap} from '../src/pixi/island-maps.js';
-import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/pixi/sleep-spots.js';
+import {geometry,inShape} from '../assets/world/island-geometry.mjs';
+import {onRink} from '../src/gameplay/rink-slide.js';
+import {makeMap} from '../src/world/island-maps.js';
+import {resolveSleepSpots,sleepHalfWidths,sleepShapeProblems} from '../src/world/home/sleep-spots.js';
 
 const read = file=>JSON.parse(readFileSync(path.join(ROOT,file)));
 const originalArt=read(ART+'/art.json'),originalWorld=read(WORLD+'/world.json');
@@ -44,7 +44,6 @@ test('natural lake replaces fence, gates and centre tree with the complete flat 
  for(const name of expected){const source=result.files.get(path.join(ART,'final/rink',name+'.svg'));assert.ok(source?.includes('<svg'));assert.ok(source.includes('stroke="#39472d"'));assert.ok(!/gradient|<image|filter/.test(source));}
  assert.ok(geometry(world).walkable(...r.heart));assert.ok(onRink(r,...r.heart));
  assert.ok(Math.abs(area(r.poly)/(1089.3755*674.8597)-.7)<.2,'similar lake area');
- // All perimeter samples are ordinary walkable land unless a solid prop covers them.
  const walk=geometry(world).walkable;
  for(const [x,y] of r.poly.filter((_,i)=>i%8===0)){
   const blocked=world.obstacles.some(o=>inShape(x,y,o,16));
@@ -204,7 +203,6 @@ test('one continuous soft snow lip follows the original Bezier on both sides of 
  assert.equal((terrain.match(/id="snow-lip"/g)??[]).length,1);
  const lip=terrain.match(/<g id="snow-lip"[^>]*>([\s\S]*?)<\/g>/)[1];
  assert.ok(!/#39472d|#232323|stroke-dasharray/.test(lip));
- // The three retired gate stubs are replaced by one rounded surface union.
  assert.equal((lip.match(/stroke="#eef3f9"/g)??[]).length,world.iceland2.routes.length+1);
  assert.equal((lip.match(/stroke="#d4dfec"/g)??[]).length,world.iceland2.routes.length+1);
  for(const r of world.iceland2.routes){
@@ -212,8 +210,6 @@ test('one continuous soft snow lip follows the original Bezier on both sides of 
   assert.ok(lip.includes(`d="${band.d}" fill="none" stroke="#eef3f9" stroke-width="${r.width+24}"`),r.id+' continuous raised band');
   assert.ok(lip.includes(`d="${band.d}" fill="none" stroke="#d4dfec" stroke-width="${r.width+4}"`),r.id+' thin path-side shadow');
  }
- // All outer strokes precede all shadow strokes, followed by the original blue
- // network. Overlapping routes erase interior seams instead of outlining a fork.
  assert.ok(lip.lastIndexOf('#eef3f9')<lip.indexOf('#d4dfec'));
  assert.ok(terrain.indexOf(lip)<terrain.indexOf('stroke="#a6deec"'));
 });
@@ -246,8 +242,6 @@ test('missing worker manifests use placeholders only for dry-run, without modify
  const c=loadCatalog(ROOT,{dryRun:true,manifestDir:empty});assert.deepEqual(c.missing,WORKERS);
  const before=JSON.stringify({originalArt,originalWorld});
  const preview=await integrate({catalog:c,density,inputArt:originalArt,inputWorld:originalWorld});
- // Stand-ins have different silhouettes. They can check structure and sleep
- // safety, but cannot certify the production artwork's per-view coverage.
  assert.deepEqual(validate(preview).filter(e=>!e.startsWith('blank land view')),[]);assert.equal(preview.report.counts.sleepers,60);
  assert.ok(preview.report.placeholderRoles.length>=3);assert.equal(JSON.stringify({originalArt,originalWorld}),before);
 });

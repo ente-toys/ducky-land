@@ -2,23 +2,22 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {Container} from 'pixi.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {PAINT} from '../src/pixi/bog-combat/rules.js';
-import {createBogFeel,createCombatFeedback,createHitFeelState} from '../src/pixi/bog-combat/feel.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {PAINT} from '../src/features/bog-combat/rules.js';
+import {createBogFeel,createCombatFeedback,createHitFeelState} from '../src/features/bog-combat/feel.js';
 
 test('real authoritative tags provide shooter colour, one local tag pop, ghost and respawn feedback',()=>{
-  const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='privacy'?100:300,y:300}]});
-  const shooter=sim.join({id:'you',team:'google'}),victim=sim.join({id:'other',team:'privacy'});
+  const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='karma'?100:300,y:300}]});
+  const shooter=sim.join({id:'you',team:'evil'}),victim=sim.join({id:'other',team:'karma'});
   const calls=[],hits=[],selfFeedback=createCombatFeedback({onTag:e=>calls.push(['tag',e.victimId]),onGhost:()=>calls.push(['ghost'])});
   const victimFeedback=createCombatFeedback({onHit:c=>hits.push(c),onRespawn:()=>calls.push(['respawn'])});
   const observe=()=>{const snapshot=sim.snapshot();selfFeedback.observe(snapshot,snapshot.players.find(p=>p.id===shooter.id));victimFeedback.observe(snapshot,snapshot.players.find(p=>p.id===victim.id));return snapshot;};
   observe();for(let i=0;i<430;i++)sim.step(1/60);
   shooter.facing=-Math.PI/2;sim.input(shooter.id,{seq:1,x:0,y:0,fire:true});
   for(let i=0;i<12;i++){sim.step(1/60);observe();}
-  assert.equal(victim.alive,false);assert.equal(hits.length,1);assert.equal(hits[0],PAINT.google[1]);
+  assert.equal(victim.alive,false);assert.equal(hits.length,1);assert.equal(hits[0],PAINT.evil[1]);
   assert.deepEqual(calls,[['tag','other'],['ghost']]);
   const last=observe();selfFeedback.observe(last,last.players[0]);assert.equal(calls.length,2);
-  // Rejoining never replays a kill-feed history or an already-risen ghost.
   let replayed=0;createCombatFeedback({onTag:()=>replayed++,onGhost:()=>replayed++}).observe(last,last.players[0]);assert.equal(replayed,0);
   sim.input(shooter.id,{seq:2,x:0,y:0,fire:false});
   for(let i=0;i<190;i++){sim.step(1/60);observe();}
@@ -38,20 +37,19 @@ test('shake stays within six screen pixels, ends at 150 ms, and reduced motion i
 
 test('tag holds only presentation for 40 ms, flashes one rendered frame, and restores filters/camera/DOM on leave',()=>{
   const dom=new JSDOM('<canvas/>'),scene=new Container(),root=new Container(),ghost=new Container(),calls=[];let time=100;
-  // A confirmed tag has already replaced the living rig with its ghost.
   root.visible=false;scene.position.set(70,80);const originalFilters=[];ghost.filters=originalFilters;
   const engine={canvas:dom.window.document.querySelector('canvas'),scene,app:{render(){calls.push({x:scene.x,y:scene.y,filters:ghost.filters});}}};
   const render=engine.app.render,previousDocument=globalThis.document;globalThis.document=dom.window.document;
   let feel;try{feel=createBogFeel(engine,{now:()=>time});}finally{globalThis.document=previousDocument;}
   const self={id:'you',alive:true},snapshot={tick:1,time:1,events:[],players:[self],splats:[]};
   feel.beginFrame(false);feel.observe(snapshot,self);
-  feel.observe({...snapshot,tick:2,time:2,events:[{id:1,time:2,actorId:'you',victimId:'other',team:'privacy'}]},self);
+  feel.observe({...snapshot,tick:2,time:2,events:[{id:1,time:2,actorId:'you',victimId:'other',team:'karma'}]},self);
   feel.flashTarget('other',{root},{root:ghost});assert.equal(ghost.filters.length,1);assert.ok(root.filters==null);
   engine.app.render();assert.equal(calls.length,1);assert.ok(calls[0].filters[0]);
   for(time=110;time<140;time+=10){feel.beginFrame(false);engine.app.render();}
   assert.equal(calls.length,1);assert.deepEqual(ghost.filters,originalFilters);
   time=140;feel.beginFrame(false);engine.app.render();assert.equal(calls.length,2);assert.deepEqual(calls[1].filters,originalFilters);
-  feel.observe({...snapshot,tick:3,time:3,events:[{id:2,time:3,actorId:'other',victimId:'you',team:'google'}]},self);
+  feel.observe({...snapshot,tick:3,time:3,events:[{id:2,time:3,actorId:'other',victimId:'you',team:'evil'}]},self);
   time+=15;feel.beginFrame(false);engine.app.render();assert.notEqual(calls.at(-1).x,70);assert.equal(scene.x,70);assert.equal(scene.y,80);
   const edge=dom.window.document.querySelector('.bog-hit-paint');assert.ok(Number(edge.style.opacity)>0);assert.equal(edge.style.pointerEvents,'none');assert.equal(edge.style.color,'rgb(39, 136, 217)');
   assert.doesNotMatch(edge.innerHTML,/gradient|<image/i);
@@ -65,9 +63,9 @@ test('reduced motion keeps the white confirmation but never holds the display',(
 });
 
 test('authoritative pickups chime once for the local collector, without replay on entry or reconnect',()=>{
-  const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='privacy'?100:600,y:300}],
+  const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='karma'?100:600,y:300}],
     pickupSpots:[{id:'paint',kind:'paint',x:300,y:300},{id:'speed',kind:'speed',x:600,y:300},{id:'shield',kind:'shield',x:900,y:300}]});
-  const self=sim.join({id:'you',team:'privacy'});sim.join({id:'bot',team:'google'}).bot=true;
+  const self=sim.join({id:'you',team:'karma'});sim.join({id:'bot',team:'evil'}).bot=true;
   const scene=new Container(),sounds=[],engine={scene};
   const feel=createBogFeel(engine,{playSound:name=>sounds.push(name)});
   const observe=()=>{const snapshot=sim.snapshot();feel.observe(snapshot,snapshot.players.find(p=>p.id===self.id));return snapshot;};
@@ -79,7 +77,6 @@ test('authoritative pickups chime once for the local collector, without replay o
     const replay=[];createCombatFeedback({onPickup:p=>replay.push(p.id)}).observe(collected,collected.players[0]);assert.deepEqual(replay,[]);
     self.x=900;sim.step(1/60);const delayed=sim.snapshot();delayed.time+=1;
     feel.observe(delayed,delayed.players[0]);assert.deepEqual(sounds,['pickup'],'stale collections stay silent');
-    // A reset authority clock seeds its history just like a new connection.
     feel.observe({...collected,tick:0},collected.players[0]);assert.deepEqual(sounds,['pickup']);
     feel.observe({...collected,tick:1},collected.players.find(p=>p.id==='bot'));assert.deepEqual(sounds,['pickup']);
   }finally{feel.dispose();scene.destroy();}

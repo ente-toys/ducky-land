@@ -2,14 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
-import {cropSVG,rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from '../src/pixi/theme-raster.js';
-import {tileInView,tileResolution,GROUND_BUDGET_BYTES,createGroundPool} from '../src/pixi/ground-stream.js';
+import {cropSVG,rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from '../src/rendering/pixi/art/theme-raster.js';
+import {tileInView,tileResolution,GROUND_BUDGET_BYTES,createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
 import {rasterPeak} from '../scripts/globe-perf/raster-peak.mjs';
-import {rasterLayers} from '../scripts/bigger-cathedral/final-model.mjs';
 import {DOMAdapter,ImageSource,Texture} from 'pixi.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 import {createCanvas,Image} from '@napi-rs/canvas';
-import {createRasterLoader} from '../src/pixi/theme-art-stream.js';
+import {createRasterLoader} from '../src/rendering/pixi/art/theme-art-stream.js';
 test('The real crop loader produces device-sized canvases, shares leases, fetches each vector once and destroys released textures',async()=>{
  const adapter=DOMAdapter.get(),fetch=globalThis.fetch,location=globalThis.location;
  let reads=0;const decoded=[];
@@ -43,19 +42,6 @@ test('Generic SVG crops preserve root styles, nonzero viewBoxes and world placem
   for(const zoom of [.6,1.8])assert.ok(tiles.every(t=>tileResolution(t,zoom,2)/(zoom*2*(t.rasterDensity??1))>=1));
  }
 });
-// boss 10 Nov: Bellovo's raster streaming is off (it redrew too slowly), so this budget only applies if it is switched back on.
-const bellovoRaster=JSON.parse(readFileSync(new URL('../public/pixi-art/themes/cathedral/art.json',import.meta.url),'utf8')).raster?.enabled===true;
-test('Every Bellovo viewport retains >=1 texel per device pixel at default and maximum zoom within unchanged caps',{skip:!bellovoRaster&&'Bellovo raster streaming is off'},()=>{
- const layers=rasterLayers();
- for(const zoom of [.6,1.8])for(const [width,height]of [[390,844],[1400,1000],[1920,1080]]){
-  for(const [kind,tiles]of Object.entries(layers)){
-   assert.ok(tiles.every(t=>tileResolution(t,zoom,2)/(zoom*2*(t.rasterDensity??1))>=1));
-   const peak=rasterPeak(tiles,{width,height,zoom});
-   const cap=kind==='ground'?GROUND_BUDGET_BYTES*.9:RASTER_ART_BUDGET_BYTES*RASTER_ART_UTILIZATION;
-   assert.ok(peak.bytes<=cap,`${kind} ${JSON.stringify(peak.camera)} viewport ${width}x${height}: ${peak.bytes/1048576} MiB`);
-  }
- }
-});
 test('Cropped streams release through their own loader and account for pending replacement textures',async()=>{
  const releases=[],pending=[];const sprite=()=>({position:{set(){}},scale:{x:1},destroy(){}});
  const pool=createGroundPool({budget:250000,makeSprite:sprite,acquire:()=>{throw Error('wrong loader');},release:()=>{throw Error('wrong owner');}});
@@ -66,8 +52,6 @@ test('Cropped streams release through their own loader and account for pending r
  assert.equal(releases.length,1);pool.destroy();assert.equal(releases.length,2);assert.equal(pool.stats().reservedBytes,0);
 });
 
-// An explicit raster opt-in fixture keeps module coverage independent of the
-// production islands that deliberately use static standing art.
 const rasterFixture={raster:{enabled:true},ground:{tiles:[{src:'floor.svg',x:3500,y:600,width:1000,height:1000}]},
  decks:[{src:'deck.svg',x:3900,y:950,width:200,height:100,overBoats:true}],
  flats:[{src:'paving.svg',x:4000,y:1200,width:300,height:200}],

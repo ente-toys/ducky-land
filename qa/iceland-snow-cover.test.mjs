@@ -4,10 +4,10 @@ import {readFileSync} from 'node:fs';
 import {Assets, Texture, Container} from 'pixi.js';
 import {build} from 'esbuild';
 import {fileURLToPath} from 'node:url';
-import {createSnowCoverState, updateSnowCover, createSnowCover, snowCrownProfile, drawSnowCap} from '../src/pixi/snow-cover.js';
-import {snowPose, createSnowfall, SNOW_POOL_SIZE, SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
+import {createSnowCoverState, updateSnowCover, createSnowCover, snowCrownProfile, drawSnowCap} from '../src/rendering/pixi/environment/snow-cover.js';
+import {snowPose, createSnowfall, SNOW_POOL_SIZE, SNOW_PHONE_COUNT} from '../src/rendering/pixi/environment/snowfall.js';
 
-const {outputFiles: [bundle]} = await build({entryPoints: [fileURLToPath(new URL('../src/pixi/duck.js', import.meta.url))],
+const {outputFiles: [bundle]} = await build({entryPoints: [fileURLToPath(new URL('../src/rendering/pixi/duck.js', import.meta.url))],
   bundle: true, packages: 'external', format: 'esm', write: false});
 const code = bundle.text.replaceAll('"pixi.js"', JSON.stringify(import.meta.resolve('pixi.js')));
 const {createDuck, disposeDuckAssets} = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));
@@ -57,7 +57,7 @@ test('local and remote idle snow starts after four seconds, builds in 60-90s and
 test('only Iceland accumulates snow; reduced motion has a static light cap and no burst', () => {
   for (const sleeping of [false, true]) {
     const s = createSnowCoverState(42, sleeping);
-    for (const theme of ['home', 'fair', 'bog', 'sunflower', null]) {
+    for (const theme of ['home', 'library', 'bog', 'sunflower', null]) {
       updateSnowCover(s, 500, theme); assert.equal(s.stage, 0); assert.equal(s.active, false);
     }
     updateSnowCover(s, 0, 'snow', 0, 0, true);
@@ -92,7 +92,6 @@ test('all eight sleeper poses attach head/back/bed snow to their own moving and 
     try {
       rig.trackSnow(80, 'snow', 7, 0, true); rig.update(0, {time: 80, reducedMotion: true});
       const snow = caps(rig); assert.equal(snow.length, 3);
-      // Nod and wing sleep directly on the snow and have no bedding surface.
       for(const c of snow)assert.equal(c.visible,c.label!=='Snow on bed'||!['nod','wing'].includes(pose),pose+' '+c.label);
       const head = snow.find(c => c.label === 'Snow on head or hat'), back = snow.find(c => c.label === 'Snow on back'), bed = snow.find(c => c.label === 'Snow on bed');
       assert.equal(head.parent.label, 'duck'); assert.equal(back.parent.label, 'duck');
@@ -137,11 +136,11 @@ test('players snow follows all eight directions and hats, changes outfit safely,
 }));
 
 test('real engine tracks offscreen remote motion and frees local, remote and sleeper cover on leave', async () => withTextures(async () => {
-  const {outputFiles: [engineBundle]} = await build({entryPoints: ['src/pixi/engine.js'], bundle: true, packages: 'external',
+  const {outputFiles: [engineBundle]} = await build({entryPoints: ['src/rendering/pixi/engine.js'], bundle: true, packages: 'external',
     platform: 'node', format: 'esm', write: false, define: {'import.meta.env.DEV': 'false',
-      'import.meta.url': JSON.stringify(new URL('../src/pixi/engine.js', import.meta.url).href)}});
+      'import.meta.url': JSON.stringify(new URL('../src/rendering/pixi/engine.js', import.meta.url).href)}});
   let code = engineBundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
-  for (const name of ['pixi.js', '@rive-app/webgl2-advanced']) code = code.replaceAll(JSON.stringify(name), JSON.stringify(import.meta.resolve(name)));
+  for (const name of ['pixi.js']) code = code.replaceAll(JSON.stringify(name), JSON.stringify(import.meta.resolve(name)));
   const {PixiIsland} = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));
   const remote = await createDuck({outfit: {}, seed: 31}), local = await createDuck({outfit: {}, seed: 32});
   const sleeper = await createDuck({sleep: {pose: 'wing', flip: false}, seed: 33});
@@ -160,7 +159,6 @@ test('real engine tracks offscreen remote motion and frees local, remote and sle
     local.trackSnow(0, 'snow', 0, 0); local.trackSnow(10, 'snow', 0, 0); local.update(0);
     sleeper.trackSnow(90, 'snow', 7, 0, true); sleeper.update(0, {reducedMotion: true});
     const oldCaps = [...caps(remote), ...caps(local), ...caps(sleeper)]; assert.ok(oldCaps.length >= 7);
-    // Drawing another island's snapshot while on Iceland must not clear snow.
     PixiIsland.prototype.showArt.call(game, 'home'); assert.ok(caps(remote).length);
     game.artShown = 'home'; PixiIsland.prototype.showArt.call(game, 'home');
     assert.ok(oldCaps.every(c => c.destroyed));

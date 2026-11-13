@@ -2,18 +2,12 @@ node_modules/
 dist/
 *.log
 .DS_Store
-# build output and big generated files (rebuild with build.py / pull_rig.py)
-rive/build/
-rive/scene.rml
-# heavy evidence and archives from the build lanes
 incoming/assets/ducky-land-assets.zip
 incoming/**/evidence/*.mp4
 
-# Cloudflare development state and secrets
 .wrangler/
 .dev.vars*
 
-# Local SVG review sheets and measurements, never game assets.
 review/globe-svg/
 
 # Generated telescope review bundle and canvas captures.

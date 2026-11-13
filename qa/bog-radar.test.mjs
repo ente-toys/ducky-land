@@ -1,16 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {placeBogRadar, BOG_RADAR_ICON, BOG_RADAR_ISLAND, BOG_RADAR_SIZE_PX} from '../src/pixi/bog-radar.js';
-import {nearbyMapFrame} from '../src/pixi/nearby-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {mapPoint, viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {logMap} from '../src/pixi/sphere.js';
-import {worldIsland, WORLD_GEO} from '../src/pixi/world-map.js';
+import {placeBogRadar, BOG_RADAR_ICON, BOG_RADAR_ISLAND, BOG_RADAR_SIZE_PX} from '../src/features/bog-combat/bog-radar.js';
+import {nearbyMapFrame} from '../src/app/nearby-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 
 const close = (a,b) => assert.ok(Math.abs(a-b)<1e-7, `${a} != ${b}`);
 const bog = mapOf(BOG_RADAR_ISLAND);
-const radius = (500 + 2 * 1000 / (132 - 8)) * 8; // Mobile outline centre, including half the 4 px border.
+const radius = (500 + 2 * 1000 / (132 - 8)) * 8;
 
 test('Bog badge preserves the true in-range terrain position, using caller-owned storage', () => {
   const out = {x:0,y:0,visible:false};
@@ -25,17 +23,16 @@ test('Bog badge preserves the true in-range terrain position, using caller-owned
 
 test('out-of-range Bog stays centred on the outline in its projected direction, even outside the three nearest islands', () => {
   const out = {x:0,y:0,visible:false};
-  for (const id of ['home','blossom','sunset','isle-251','isle-250','isle-170','isle-176','isle-55']) {
+  for (const id of ['home','blossom','sunset','isle-251','isle-250','isle-55']) {
     const m = mapOf(id), point = {x:m.cx+350,y:m.cy-270};
     const terrain = nearbyMapFrame(id,point,out,radius);
-    const q = logMap(viewFrame(id,point),worldIsland(BOG_RADAR_ISLAND).center,WORLD_GEO.Rw);
+    const c=mapPoint(BOG_RADAR_ISLAND,id,{x:bog.cx,y:bog.cy}),q={x:c.x-point.x,y:c.y-point.y};
     close(Math.hypot(out.x,out.y),radius);
     close(out.x / radius,q.x / Math.hypot(q.x,q.y));
     close(out.y / radius,q.y / Math.hypot(q.x,q.y));
     assert.equal(out.visible,true);
     if (id==='home') assert.ok(!terrain.some(i=>i.id===BOG_RADAR_ISLAND));
   }
-  // All quadrants and exact axes, without any new output object.
   for (const [x,y] of [[10000,0],[-10000,0],[0,10000],[0,-10000],[9000,-7000],[-9000,7000]]) {
     placeBogRadar(out,'home',x,y,radius);
     close(Math.hypot(out.x,out.y),radius);
@@ -45,8 +42,8 @@ test('out-of-range Bog stays centred on the outline in its projected direction, 
 });
 
 test('minimap uses the border centre for the badge and clips terrain independently', () => {
-  const source = readFileSync(new URL('../src/pixi/WorldMap.jsx',import.meta.url),'utf8');
-  const css = readFileSync(new URL('../src/pixi/pixi.css',import.meta.url),'utf8');
+  const source = readFileSync(new URL('../src/app/WorldMap.jsx',import.meta.url),'utf8');
+  const css = readFileSync(new URL('../src/app/pixi.css',import.meta.url),'utf8');
   assert.match(source,/const outlineRadius = width \/ 2 \+ 2 \* iconSize \/ BOG_RADAR_SIZE_PX/);
   assert.match(source,/outlineRadius \/ scale/);
   assert.match(source,/<g clipPath="url\(#pixi-world-map-terrain-clip\)">/);

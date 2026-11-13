@@ -1,7 +1,5 @@
-// Exercise the real canvas renderer without a browser. DOM geometry is explicit;
-// this verifies pixels and input handling, not browser CSS layout.
 import {createCanvas} from '@napi-rs/canvas';
-import {createStargazeSky} from '../../src/pixi/stargaze-sky.js';
+import {createStargazeSky} from '../../src/rendering/pixi/stargaze-sky.js';
 export const fixture = {total:30088,me:{accountId:'1',login:'you',starred:true},online:['1','2'],friends:[],
   players:[['1','you'],['2','mallard'],['3','pekin'],['4','teal'],['5','eider'],['6','wigeon'],['7','pintail'],['8','gadwall']]};
 export function harness({width=1000,height=1000,reduced=true,data=fixture} = {}) {

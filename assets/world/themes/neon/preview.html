@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tickytown local review</title>
+<style>html,body{margin:0;overflow:hidden;background:#6EC9DE}canvas{display:block}#status{position:fixed;left:16px;top:12px;color:#fff0c7;font:14px system-ui}</style>
+<div id="status">Loading Tickytown…</div>
+<script type="module">
+import {Application,Container,Assets,Sprite,TilingSprite} from 'pixi.js';
+import {loadThemeArt} from '/src/rendering/pixi/art/theme-art.js';
+import {makeMap} from '/src/world/island-maps.js';
+import {drawJetty} from '/src/rendering/pixi/harbor.js';
+import {createSleeper,SLEEP_ASSETS} from '/src/rendering/pixi/environment/sleeper.js';
+import {SLEEP_ROOT} from '/src/world/home/sleep-spots.js';
+const json=async url=>(await fetch(url)).json(),base='/pixi-art/themes/neon/';
+const [world,walk,harbor,beds,ducks]=await Promise.all([json('./world.json'),json('./walk-world.json'),json('./harbor.json'),json(base+'resolved-sleepers.json'),json('/pixi-duck/manifest.json')]);
+const map=makeMap('neon',{world,walk,harbor,sleepers:beds,art:base+'art.json'});
+const app=new Application();await app.init({width:innerWidth,height:innerHeight,resolution:1,background:'#6EC9DE',antialias:true});document.body.append(app.canvas);
+const root=new Container(),objects=new Container({sortableChildren:true});app.stage.addChild(root);
+const art=await loadThemeArt(map,{acquire:src=>Assets.load(src),release:()=>{}});
+const seaTexture=await Assets.load('/pixi-art/water-texture.svg');root.addChild(new TilingSprite({texture:seaTexture,width:world.width,height:world.height}));
+root.addChild(art.ground,art.decks,art.shadows,art.floatLayer,objects);
+for(const p of art.props){p.sprite.visible=true;objects.addChild(p.sprite);}
+const j=map.JETTY;drawJetty(art.decks,{x:j.foot.x,y:j.foot.y,length:j.length,angle:j.angle,width:j.width,wetFrom:j.wetFrom});
+await Promise.all(SLEEP_ASSETS.map(src=>Assets.load(src)));
+const sleepers=[];
+for(const [i,bed]of beds.entries()){
+ const s=createSleeper(bed,i),holder=new Container();holder.position.set(bed.x,bed.y);holder.zIndex=bed.y;holder.scale.set(SLEEP_ROOT/3);holder.addChild(s.root);s.root.visible=true;objects.addChild(holder);sleepers.push(s);
+}
+const view=ducks.views[1],ordered=[...view.parts.filter(p=>['foot','toe'].includes(p.role)),...view.parts.filter(p=>!['foot','toe','shadow'].includes(p.role))];
+const textures=await Promise.all(ordered.map(p=>Assets.load(p.url)));
+const nav=map.nav();let seed=100,count=0;const rnd=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296),points=[];
+for(let i=0;i<50000&&count<100;i++){
+ const x=600+rnd()*(world.width-1200),y=600+rnd()*(world.height-1200);
+ if(!nav.walkable(x,y)||points.some(p=>Math.hypot(p[0]-x,p[1]-y)<180))continue;
+ const d=new Container();d.position.set(x,y);d.zIndex=y;d.scale.set(.2112);d.pivot.set(...view.ground);
+ ordered.forEach((p,k)=>{const s=new Sprite(textures[k]);s.position.set(p.rect[0],p.rect[1]);s.width=p.rect[2];s.height=p.rect[3];d.addChild(s)});objects.addChild(d);points.push([x,y]);count++;
+}
+const boatTexture=await Assets.load('/pixi-art/boat-sail.svg');
+for(const b of harbor.boats){const s=new Sprite(boatTexture);s.anchor.set(.5,.82);s.position.set(b.x,b.y+30);s.width=188;s.height=216;objects.addChild(s);s.zIndex=b.y;}
+const c=world.zones.centre,close=new URLSearchParams(location.search).get('view')==='centre';
+const scale=close?Math.min(innerWidth/2200,innerHeight/1800):Math.min(innerWidth/world.width,innerHeight/world.height);
+root.scale.set(scale);root.position.set(innerWidth/2-(close?c.x:world.width/2)*scale,innerHeight/2-(close?c.y-160:world.height/2)*scale);
+app.ticker.add(()=>{for(const s of sleepers)s.update(0,true)});
+document.querySelector('#status').remove();app.render();
+window.__neonReady={theme:map.id,crowd:count,sleepers:beds.length,props:art.props.length};
+</script></html>

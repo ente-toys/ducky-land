@@ -1,20 +1,14 @@
-// boss 6 Nov: themed islands go live on their own. Checks each theme folder against concepts/themes/THEME-CONTRACT.md
-// and writes rive/web/themes/index.js, listing only the themes whose files are complete. A theme left out plays the home
-// island in its place, so a half-drawn theme never breaks the game.
-//   node scripts/theme-index.mjs            check and write the index once
-//   node scripts/theme-index.mjs --check    print the report, write nothing
-//   node scripts/theme-index.mjs --watch    keep checking every 4 s and rewrite when a theme becomes ready or changes
 import {existsSync, readFileSync, statSync, writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
-import {makeMap, THEME_IDS} from '../src/pixi/island-maps.js';
-import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
-import {geometry} from '../rive/web/island-geometry.mjs';
+import {makeMap, THEME_IDS} from '../src/world/island-maps.js';
+import {resolveSleepSpots, sleepHalfWidths, sleepShapeProblems, SLEEP_TOTAL} from '../src/world/home/sleep-spots.js';
+import {geometry} from '../assets/world/island-geometry.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const DATA = theme => join(root, 'rive/web/themes', theme), ART = theme => join(root, 'public/pixi-art/themes', theme);
-const INDEX = join(root, 'rive/web/themes/index.js');
-const MAX = {width: 16000, height: 12000};   // boss 8 Nov: every island grows ~3x round its original (origin may go negative)   // boss 6 Nov: themed islands are BIGGER and spacious (world-map.js spaces every island by its own size)
+const DATA = theme => join(root, 'assets/world/themes', theme), ART = theme => join(root, 'public/pixi-art/themes', theme);
+const INDEX = join(root, 'assets/world/themes/index.js');
+const MAX = {width: 16000, height: 12000};
 const args = new Set(process.argv.slice(2));
 
 const json = file => JSON.parse(readFileSync(file, 'utf8'));
@@ -52,7 +46,7 @@ export function checkTheme(theme) {
       else files.push(join(artDir, item.src));
     }
   }
-  if (!problems.length) {   // the shape is right: now does it play? (the same map object the game and the server build)
+  if (!problems.length) {
     try {
       const map = makeMap(theme, {world, walk, harbor, art: `/pixi-art/themes/${theme}/art.json`});
       const nav = map.nav();
@@ -71,9 +65,6 @@ export function checkTheme(theme) {
       if (edge) problems.push('the coast comes within 300 of the map edge (leave sea round the island)');
     } catch (e) {problems.push(`map: ${e.message}`);}
   }
-  // boss 6 Nov: the same 28 sleeping Duckies as home, at the theme's world.json "sleepSpots", checked against its walking map
-  // and its ART props (nod leans on a tree by its art id). Never blocks the theme: a dropped spot is reported here and simply
-  // has no sleeper. The resolved beds go into the index, so the game and the room server block the very same ground.
   let sleepers = null; const sleepNotes = [];
   if (!problems.length && world?.sleepSpots) {
     try {
@@ -81,8 +72,6 @@ export function checkTheme(theme) {
       sleepers = resolveSleepSpots(base, art.props ?? [], geometry(base).walkable, sleepHalfWidths(), {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false});
       sleepNotes.push(...sleepShapeProblems(world.sleepSpots, world.sleepTotal ?? SLEEP_TOTAL).map(p => `sleepSpots shape: ${p}`), ...sleepers.bad.map(b => `sleeper ${b.pose} ${Math.round(b.x)},${Math.round(b.y)} dropped: ${b.reason}`));
       sleepers = sleepers.map(({x, y, pose, r, flip, tree}) => ({x: Math.round(x), y: Math.round(y), pose, r: Math.round(r * 10) / 10, flip, ...(tree ? {tree} : {})}));
-      // A nod may overlap its own tree, but the tree still has to be on land.
-      // Check the final map's drawn AND walking coasts, as the game does.
       const map = makeMap(theme, {world, walk, harbor, sleepers});
       for (const bed of map.sleepers) if (!map.landAt(bed.x, bed.y)) sleepNotes.push(`sleeper ${bed.pose} ${bed.x},${bed.y} is offshore`);
     } catch (e) {sleepNotes.push(`sleepers: ${e.message}`); sleepers = null;}

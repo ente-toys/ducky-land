@@ -1,11 +1,11 @@
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {atlasReference,midZoomQuality} from '../scripts/sphere-quality.mjs';
-import {WORLD_ISLANDS,WORLD_GEO,worldIsland} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {mapPoint,localPoint} from '../src/pixi/sphere-coordinates.js';
-import {expMap,unit,sphereFrame} from '../src/pixi/sphere.js';
-import {globeScreen} from '../src/pixi/globe-screen.js';
-import {rollBasis} from '../src/pixi/globe-look.js';
+import {WORLD_ISLANDS,WORLD_GEO,worldIsland} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {mapPoint,localPoint} from '../src/world/sphere-coordinates.js';
+import {expMap,unit,sphereFrame} from '../src/world/sphere.js';
+import {globeScreen} from '../src/rendering/shared/globe-screen.js';
+import {rollBasis} from '../src/rendering/shared/globe-look.js';
 import test from 'node:test';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
@@ -39,21 +39,17 @@ test('painted quality reference uses the full curved chart and camera rotation, 
  const camera={...localPoint('home',bog.center),zoom:.04},ball=1;
  const at=basis=>{
   const cam={...camera,basis},G=globeScreen({id:'home',cam,ball,w:width,h:height,basis}),s=G.screenOf(p);
-  // A deliberately wrong centre matrix must not affect a fully painted lookup.
   const stickers=[{kind:'island',id:bog.id,mode:'atlas',onBall:1,a:.001,b:0,c:0,d:.001,x:0,y:0}];
   return atlasReference(s.x,s.y,{camera:cam,islandId:'home',ball,stickers},images,width,height);
  };
  const a=at(rollBasis(0)),b=at(rollBasis(.73));assert.ok(a&&b);
  for(let k=0;k<3;k++)assert.ok(Math.abs(a.colour[k]-b.colour[k])<1e-8,'screen rotation preserves the sampled art and lighting');
- // This point is well away from the centre, with a recognisably different colour.
  assert.ok(a.colour[0]>160&&a.colour[1]>145);
 });
 
 test('overlapping chart rectangles choose opaque art, then the nearest centre',()=>{
  const a=worldIsland('home'),b=worldIsland('blossom'),width=1440,height=900;
  const image=(r,g,alpha)=>({width:2,height:2,data:new Uint8Array([r,g,0,alpha,r,g,0,alpha,r,g,0,alpha,r,g,0,alpha])});
- // The world layout deliberately has open sea between these islands now.
- // Use an explicit overlapping pair to exercise opacity and nearest-centre selection.
  const original={...b};Object.assign(b,sphereFrame(.2,0));
  try{
  const state=k=>({islandId:'home',ball:1,camera:{...localPoint('home',unit(a.center.map((v,i)=>v*(1-k)+b.center[i]*k))),zoom:.04}});

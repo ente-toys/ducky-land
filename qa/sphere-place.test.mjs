@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORLD_ISLANDS,WORLD_GEO,worldIsland,SPHERE_CIRCUMFERENCE} from '../src/pixi/world-map.js';
-import {sphereFrame,expMap,logMap,dot,angle,cross,transport,arcDistance} from '../src/pixi/sphere.js';
-import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {placeRigid} from '../src/pixi/rigid.js';
-import {sphereShores,sphereShoreGap,coastGaps,BOAT_CHANNEL} from '../src/pixi/sphere-shores.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {canSail,landingSpot,landingApproach,sailRoute,sailStep,SAIL_SPEED,destinationsFor,crossIsland} from '../src/pixi/islands.js';
+import {WORLD_ISLANDS,WORLD_GEO,worldIsland,SPHERE_CIRCUMFERENCE} from '../src/world/world-map.js';
+import {sphereFrame,expMap,logMap,dot,angle,cross,transport,arcDistance} from '../src/world/sphere.js';
+import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/world/sphere-coordinates.js';
+import {placeRigid} from '../src/world/rigid.js';
+import {sphereShores,sphereShoreGap,coastGaps,BOAT_CHANNEL} from '../src/world/sphere-shores.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {canSail,landingSpot,landingApproach,sailRoute,sailStep,SAIL_SPEED,destinationsFor,crossIsland} from '../src/gameplay/islands.js';
 import {readFileSync} from 'node:fs';
 
 test('same small sphere, orthonormal patch frames and the North Pole on Iceland alone',()=>{
@@ -17,7 +17,7 @@ test('same small sphere, orthonormal patch frames and the North Pole on Iceland 
   assert.ok(Math.abs(dot(i.center,i.east))+Math.abs(dot(i.east,i.north))+Math.abs(dot(i.center,i.north))<1e-12);
   const pole=localPoint(i.id,[0,1,0]);
   assert.equal(mapOf(i.id).landAt(pole.x,pole.y),i.id==='isle-55',`${i.id}: only Iceland stands on the pole`);
- }   // boss 8 Nov: neighbours may cluster round the cap; their coasts keep a boat channel from Iceland's (coastGaps)
+ }
 });
 test('all actual spherical shores including islets and jetties leave a calm boat channel',()=>{
  const gaps=coastGaps();
@@ -62,14 +62,13 @@ test('island shape is independent of latitude, with no polar wedge or anisotropi
 });
 test('sailing to Iceland docks on its own jetty and beach from both hemispheres',()=>{
  const ice='isle-55',m=mapOf(ice);
- for(const from of ['home','isle-176','isle-170','isle-170']){
-  const target=placeRigid(from,ice,m.HARBOR.water);   // the jetty as drawn (rigid frame)
+ for(const from of ['home','sunset','isle-251','isle-250']){
+  const target=placeRigid(from,ice,m.HARBOR.water);
   assert.ok(canSail(target.x,target.y,from));
   const spot=landingSpot({islandId:from,...target});assert.equal(spot?.islandId,ice);
   const approach=landingApproach({islandId:from,...target},spot);assert.ok(canSail(approach.x,approach.y,from));
   const start=mapOf(from).HARBOR.water,route=sailRoute(from,start,target);assert.ok(route?.length,from);
   let length=0,last=start;for(const q of route){length+=Math.hypot(q.x-last.x,q.y-last.y);last=q;}
-  // Route samples and movement substeps must agree even when their phases differ.
   for(const dt of [1/60,.05,.1]){
    const actor={...start,islandId:from,mode:'sailing',sailTarget:route[0],sailRoute:route.slice(1)};
    for(let k=0;k<Math.ceil(length/(SAIL_SPEED*dt))+route.length+1&&actor.sailTarget;k++)sailStep(actor,dt,{x:0,y:0});
@@ -79,10 +78,10 @@ test('sailing to Iceland docks on its own jetty and beach from both hemispheres'
  }
 });
 test('space outside the sphere cannot sample flat land, while hearts can rise beyond the rim',()=>{
- const code=readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
- assert.match(code,/if\(edge>=1\.\)return space;/);
+ const code=readFileSync(new URL('../src/rendering/pixi/world-view.js',import.meta.url),'utf8');
+ assert.match(code,/if\(edge>=1\.\)\{[^{}]*return mix\(starrySky\(sp\),[^;]+;\s*\}\s*vec2 dir=[^;]+;\s*vec3 p=surfaceAt\(uv\)/);
  assert.match(code,/pin.mask=masking\?sphereMask:null/);
- assert.match(code,/if\(masking\)sphereMask\.circle/);   // the mask disc is only drawn while masking (else it showed as a white ball)
+ assert.match(code,/if\(masking\)sphereMask\.circle/);
  assert.doesNotMatch(code,/life\.mask\s*=/);
  assert.doesNotMatch(code,/texture\(uWorld,\s*fract|1\s*\/\s*Math\.max\(\.3,\s*Math\.cos/);
 });

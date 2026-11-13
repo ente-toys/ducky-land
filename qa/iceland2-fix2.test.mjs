@@ -2,12 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
-import {inPoly} from '../rive/web/island-geometry.mjs';
-import {snowPose,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/pixi/snowfall.js';
-const w=JSON.parse(readFileSync('rive/web/themes/snow/world.json'));
+import {inPoly} from '../assets/world/island-geometry.mjs';
+import {snowPose,SNOW_POOL_SIZE,SNOW_PHONE_COUNT} from '../src/rendering/pixi/environment/snowfall.js';
+const w=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const art=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
 const r=w.iceland2.rink;
-// Signed distance to the shared irregular ice outline.
 function rimDistance(x,y){let d=Infinity;for(let i=0;i<r.poly.length;i++){const a=r.poly[i],b=r.poly[(i+1)%r.poly.length],dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));d=Math.min(d,Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy));}return inPoly(x,y,r.poly)?-d:d;}
 test('FIX2 natural lake has a curved continuous shore without fence posts or rails',()=>{
  assert.equal(r.type,'natural-lake');assert.ok(r.poly.length>200);
@@ -34,7 +33,7 @@ test('FIX2 rendered paths and lake form one continuous ice surface',async()=>{
 });
 test('FIX2 groves fill the expanded land with Home plants at requested density',()=>{
  const trees=art.props.filter(p=>p.id.includes('-tree-')),bushes=art.props.filter(p=>p.finalKind==='shrub');
- assert.ok(trees.length>=510&&trees.length<=560,trees.length);assert.ok(bushes.length>=20&&bushes.length<80,bushes.length); // Q3 counts whole groves and camps, with calm snow between.
+ assert.ok(trees.length>=510&&trees.length<=560,trees.length);assert.ok(bushes.length>=20&&bushes.length<80,bushes.length);
  for(const p of [...trees,...bushes])assert.ok(rimDistance(p.x,p.y)>40,p.id+' crowds lake');
 });
 test('FIX2 visible snowfall has 180/90 pooled flakes and three stable parallax sizes',()=>{

@@ -1,8 +1,7 @@
-// Boss walk-through corrections. Places remain authored compositions, not scatter.
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {bounds,overlaps,propPathClearance,footprint} from './place.mjs';
-import {inPoly} from '../../rive/web/island-geometry.mjs';
+import {inPoly} from '../../assets/world/island-geometry.mjs';
 const base='public/pixi-art/themes/snow';
 const round=n=>Math.round(n*100)/100;
 export const isCanopy=p=>p.finalKind==='tree'||p.finalKind==='shrub'||/^(pine-|shrub-)/.test(p.finalRole??'');
@@ -47,8 +46,6 @@ function add(art,role,id,x,y,width,height,extra={}){
  const p={id,name:id,src:`final/props/${role}.svg`,x,y,width,height,finalKind:'scene',finalRole:role,scene:'snowman-scene',resolution:4,shadow:false,wind:false,fixAllAdded:true,...extra};art.props.push(p);return p;
 }
 function fence(root,art,w,files,id,run,a,b){
- // The two post centres of the picked B rail are (30,156), (264,156).
- // Shear only the rails along the ground plane; posts remain vertical.
  const k=.49,dx=(b[0]-a[0])/234,dy=(b[1]-a[1])/234;
  const e=a[0]-30*dx,f=a[1]-30*dy-156*k;
  const x0=Math.floor(Math.min(a[0],b[0])-24),y0=Math.floor(Math.min(a[1],b[1])-82),width=Math.ceil(Math.max(a[0],b[0])+24-x0),height=Math.ceil(Math.max(a[1],b[1])+4-y0);
@@ -66,8 +63,6 @@ export function composeFixAll(root,art,w,report,catalog,files){
  const retired=new Set(art.props.filter(p=>p.fixAllAdded||p.finalRole==='fence'||p.building&&p.finalRole==='lamp'&&!p.pathLamp||p.scene==='snowman-scene').map(p=>p.id));
  art.props=art.props.filter(p=>!retired.has(p.id));art.flats=art.flats.filter(p=>!p.fixAllAdded);
  w.obstacles=w.obstacles.filter(o=>!retired.has(o.prop));
- // One mailbox at each house's approach. Public buildings retain their path
- // lamp, but no ornamental mailbox or second lamp on either side of a facade.
  for(const p of art.props.filter(p=>p.finalRole==='mailbox'&&p.building)){
   const b=art.props.find(b=>b.id===p.building),lamp=art.props.find(q=>q.building===b.id&&q.pathLamp);
   if(!b.finalRole.startsWith('cottage-')){retired.add(p.id);continue;}
@@ -76,11 +71,8 @@ export function composeFixAll(root,art,w,report,catalog,files){
   if(chosen){p.x=chosen.x;p.y=chosen.y;const o=w.obstacles.find(o=>o.prop===p.id);if(o)Object.assign(o,footprint(p,catalog.get('mailbox')));}
  }
  art.props=art.props.filter(p=>!retired.has(p.id));w.obstacles=w.obstacles.filter(o=>!retired.has(o.prop));
- // The warming hut was sharing the cocoa frontage. Give it its own north bank.
  const lakeMoves={'lake-warming-hut':[6710,4695],'lake-mug-table':[6500,4760],'lake-woodpile':[6470,4670],'lake-sled':[6470,4900]};
  for(const [id,[x,y]]of Object.entries(lakeMoves)){const p=art.props.find(p=>p.id===id);if(!p)continue;const dx=x-p.x,dy=y-p.y;p.x=x;p.y=y;if(id==='lake-warming-hut')p.buildingSilhouette=true;for(const o of w.obstacles.filter(o=>o.prop===id)){o.x+=dx;o.y+=dy;}}
- // Pick B: cabin and shed at the back, a low connected perimeter, work in
- // progress at staggered depths, basket and snowballs within reach.
  const scene=report.scenes.find(s=>s.id==='snowman-scene');scene.x=2550;scene.y=7800;
  const parts=[
   add(art,'snow-cabin','snowman-cabin',2400,7510,300,234.12,{buildingSilhouette:true}),
@@ -98,14 +90,10 @@ export function composeFixAll(root,art,w,report,catalog,files){
  const right=[[2830,7480],[2990,7590],[3070,7710]];
  const front=[[3070,8210],[2910,8310],[2760,8330]];
  for(const [run,points]of [['snowman-west',outline],['snowman-east',right],['snowman-front',front]])for(let i=1;i<points.length;i++)fence(root,art,w,files,run+'-'+i,run,points[i-1],points[i]);
- // Two benches inside the fence, for the wing sleepers. Seat contacts are
- // above the legs and the furniture sorts just behind the sleeping Duckies.
  report.snowmanSeats=[{x:2260,y:8040,pose:'wing',bench:'snowman-bench-west'},{x:2820,y:8140,pose:'wing',bench:'snowman-bench-east'}];
  for(const s of report.snowmanSeats)add(art,'bench',s.bench,s.x,s.y+32,235,152.22,{occupiedBySleeper:true,contact:false,z:s.y-1});
  const patch={id:'snowman-clearing',src:'final/props/camp-snow.svg',x:2550,y:8330,width:1120,height:960,finalKind:'scene-base',finalRole:'camp-snow',scene:scene.id,group:scene.id,fixAllAdded:true,shadow:false};art.flats.push(patch);scene.base=patch.id;
  scene.props=art.props.filter(p=>p.scene===scene.id).map(p=>p.id);
- // A social ring: kiosk behind the shared table, benches open toward the
- // table, and two lights on the outer shoulders rather than in the seating.
  const cocoa=report.scenes.find(s=>s.id==='cocoa-garden');
  cocoa.x=4960;cocoa.y=7900;
  const moves={'cocoa-garden-cocoa-cart-0':[4960,7650],'cocoa-garden-bench-1':[4700,8070],'cocoa-garden-bench-2':[5220,8070],'cocoa-garden-lamp-3':[4520,7970],'cocoa-cart-backing':[4960,7360]};
@@ -114,15 +102,11 @@ export function composeFixAll(root,art,w,report,catalog,files){
  const light=add(art,'lamp','cocoa-garden-ring-lamp',5400,7840,65,159.23,{scene:cocoa.id});w.obstacles.push(footprint(light,catalog.get('lamp')));
  cocoa.props=art.props.filter(p=>p.scene===cocoa.id).map(p=>p.id);
  for(const s of report.scenes)s.props=s.props.filter(id=>art.props.some(p=>p.id===id));
- // Curves stay inside transparent bounds. Every output crop is regenerated
- // from this same rounded master, including the snowman clearing.
  const patchSvg=`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600"><path id="organic-clearing" d="M40 300C24 225 105 155 190 140C250 68 356 97 435 82C542 51 650 111 713 156C804 160 868 240 850 310C891 396 794 470 704 471C627 541 520 512 439 532C340 547 259 509 192 480C94 476 32 403 40 300Z" fill="#eef3f9" opacity=".45"/><path d="M76 300C75 226 147 199 216 172C290 120 368 137 443 120C535 93 625 140 688 186C762 189 830 255 811 315C844 384 769 436 685 437C612 493 522 476 438 494C352 507 277 470 210 450C131 445 64 380 76 300Z" fill="#eef3f9" opacity=".55"/></svg>`;
  files.set(path.join(base,'final/props/camp-snow.svg'),patchSvg);
 }
 export function clearCanopies(art,w,report){
  const plants=art.props.filter(isCanopy);
- // Move an entire offending grove as one group, retaining its authored tree
- // spacing. Cocoa's former front pair becomes a flank grove west of its hut.
  const groups=new Map();for(const p of plants){const key=p.grove??p.id;const g=groups.get(key)??[];g.push(p);groups.set(key,g);}
  for(const [id,parts]of groups){
   if(!parts.some(p=>canopyProblems(p,art,w).length))continue;

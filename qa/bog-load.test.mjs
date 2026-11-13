@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {setBogReviewCamera,waitForBogArt,paintBogFrame} from '../src/pixi/bog-review-camera.js';
+import {setBogReviewCamera,waitForBogArt,paintBogFrame} from '../src/features/bog-combat/bog-review-camera.js';
 
 test('direct Bog entry clears Home landing basis and inertia before the first frame',()=>{
  const game={camera:{x:NaN,y:NaN,zoom:.1,basis:{a:0}},target:{basis:{}},zoomMotion:{velocity:4},landingView:{at:0},fly:{},spin:{},globeAim:{},globeT:1,birdEye:true,scene:{visible:false}};

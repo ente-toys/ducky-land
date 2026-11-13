@@ -2,19 +2,19 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fff7df;color:#302c23;font:15px system-ui,sans-serif}header{padding:20px 28px;display:flex;align-items:center;gap:16px}h1{font-size:20px;margin:0 auto 0 0}button,select{font:inherit;color:inherit;background:#ffda69;border:1px solid #77633d;border-radius:10px;padding:9px 14px;cursor:pointer}.labels{display:grid;grid-template-columns:1fr 1fr;padding:10px 28px;background:#fff1c6;gap:28px}.labels strong{display:block;margin-bottom:3px}.labels span{font-size:13px;color:#655b46}canvas{display:block;width:100%;height:auto}footer{padding:14px 28px;font-size:13px}
 </style>
-<header><h1>Boat perspective</h1><select aria-label="Island approach"><option value="isle-251">Pagepond → Bog</option><option value="sunset">Rosybutton → Bog</option><option value="isle-176">Bellovo → Bog</option><option value="isle-170">Fair → Bog</option></select><button id="turn">Turn boat</button><button id="sail">Pause sailing</button></header>
+<header><h1>Boat perspective</h1><select aria-label="Island approach"><option value="isle-251">Pagepond → Bog</option><option value="sunset">Rosybutton → Bog</option></select><button id="turn">Turn boat</button><button id="sail">Pause sailing</button></header>
 <div class="labels"><div><strong>Before</strong><span>Boat and rider inherit the island’s rotation.</span></div><div><strong>Fixed locally</strong><span>Island keeps its angle. Boat and rider stay upright.</span></div></div>
 <main id="view"></main><footer id="status">Loading the game’s boat, Ducky and Bog artwork…</footer>
 <script type="module">
 import {Application,Container,Sprite,Assets,RenderTexture} from 'pixi.js';
-import {createDuck} from '/src/pixi/duck.js';
-import {createSailingFX} from '/src/pixi/sailing-fx.js';
-import {createLivePatches} from '/src/pixi/sphere-mesh.js';
-import {withRigidVisitors} from '/src/pixi/rigid-visitors.js';
-import {unplaceRigid,placeRigid} from '/src/pixi/rigid.js';
-import {mapOf} from '/src/pixi/island-maps.js';
-import {harborOf} from '/src/pixi/islands.js';
-import {PALETTE} from '/src/pixi/palette.js';
+import {createDuck} from '/src/rendering/pixi/duck.js';
+import {createSailingFX} from '/src/rendering/pixi/sailing-fx.js';
+import {createLivePatches} from '/src/rendering/pixi/sphere-mesh.js';
+import {withRigidVisitors} from '/src/rendering/shared/rigid-visitors.js';
+import {unplaceRigid,placeRigid} from '/src/world/rigid.js';
+import {mapOf} from '/src/world/island-maps.js';
+import {harborOf} from '/src/gameplay/islands.js';
+import {PALETTE} from '/src/rendering/shared/palette.js';
 const W=680,H=580,to='isle-249',m=mapOf(to),app=new Application();
 await app.init({width:W*2,height:H,resolution:Math.min(devicePixelRatio,2),background:PALETTE.water,antialias:true});
 document.querySelector('#view').append(app.canvas);app.stop();

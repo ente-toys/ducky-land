@@ -2,10 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import sharp from 'sharp';
-import {mapFor} from '../src/pixi/island-maps.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
 
-// Sample the current source sprites directly. No screenshot baseline or local
-// external file is required, so island rebuilds keep their own reference art.
+test('every shipped island preview has transparent sea, including Pagepond tiled terrain',async()=>{
+ for(const theme of new Set(WORLD_ISLANDS.map(i=>i.theme??'home')))for(const suffix of ['', '-ground']){
+  const {data,info}=await sharp(`public/pixi-art/globe/${theme}${suffix}.svg`).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+  for(const [u,v]of [[.01,.01],[.99,.01],[.01,.99],[.99,.99]]){
+   const alpha=data[(Math.floor(v*info.height)*info.width+Math.floor(u*info.width))*4+3];
+   assert.equal(alpha,0,`${theme}${suffix} sea at ${u},${v} must not become globe land`);
+  }
+ }
+});
+
 async function sourcePatch(theme,cx,cy,{props=false}={}){
  const map=mapFor(theme),K=1024/Math.max(map.width,map.height),base=`public/pixi-art/themes/${theme}/`,art=JSON.parse(fs.readFileSync(base+'art.json'));
  const entries=[...art.ground.tiles.map(p=>[p,'tile']),...(art.floating??[]).map(p=>[{...p,x:p.x-p.width/2,y:p.y-p.height/2,topLeft:true},'flat']),...(art.flats??[]).map(p=>[p,'flat']),...(art.decks??[]).map(p=>[p,'deck']),...[...(props?art.props:art.props.filter(p=>p.deck||/bridge|jetty|boardwalk/i.test(p.src+' '+p.name)))].sort((a,b)=>a.y-b.y).map(p=>[p,'prop'])];
@@ -21,10 +30,6 @@ async function outputPatch(theme,cx,cy,ground){const {data,info}=await sharp(`pu
 const average=p=>[0,1,2,3].map(c=>p.reduce((sum,v)=>sum+(c<3?v[c]*v[3]/255:v[c]),0)/p.length);
 async function compare(theme,x,y,ground){const [source,output]=await Promise.all([sourcePatch(theme,x,y,{props:!ground}),outputPatch(theme,x,y,ground)]),a=average(source),b=average(output);assert.ok(a.every((v,i)=>Math.abs(v-b[i])<85),`${theme} ${x},${y}: source ${a.map(Math.round)} -> compiled ${b.map(Math.round)}`);}
 
-test('Fair paving keeps its source tile order above older grass backgrounds',async()=>{
- await compare('fair',700,350,true);
- await compare('fair',550,450,true);
-});
 test('Pink houses retain source colour instead of solid black fallback paint',async()=>{
  const map=mapFor('pink'),K=1024/Math.max(map.width,map.height),art=JSON.parse(fs.readFileSync('public/pixi-art/themes/pink/art.json'));
  const homes=art.props.filter(p=>/house|cottage|cafe/i.test(p.src+' '+p.name)&&p.width*(p.scale??1)*K>16).slice(0,4);assert.ok(homes.length>=3);

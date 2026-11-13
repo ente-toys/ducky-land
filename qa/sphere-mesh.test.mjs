@@ -2,18 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Texture} from 'pixi.js';
 import {readFileSync} from 'node:fs';
-import {patchGeometry,createLivePatches} from '../src/pixi/sphere-mesh.js';
-import {mapPoint,localPoint} from '../src/pixi/sphere-coordinates.js';
-import {placeRigid,unplaceRigid,flatRigid,polar,shearOf} from '../src/pixi/rigid.js';
-import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/pixi/sphere-camera.js';
-import {isletPlacement} from '../src/pixi/islet-view.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {patchGeometry,createLivePatches} from '../src/rendering/pixi/sphere-mesh.js';
+import {mapPoint,localPoint} from '../src/world/sphere-coordinates.js';
+import {placeRigid,unplaceRigid,flatRigid,polar,shearOf} from '../src/world/rigid.js';
+import {rigidLandingBasis,easeLandingBasis,cameraMatrix} from '../src/rendering/shared/sphere-camera.js';
+import {isletPlacement} from '../src/rendering/pixi/islet-view.js';
+import {FLAT_ISLETS} from '../src/world/flat-layout.js';
+import {ISLETS} from '../src/world/islets.js';
+import {mapOf} from '../src/world/island-maps.js';
 
-// boss 8 Nov ("I don't want any skew"): a neighbour is its true flat art laid down rigidly, centred where the sphere
-// puts its centre. Same placement for the snapshot copy and the animated live copy.
-test('neighbour meshes are rigid: true size, right angles, centre on the sphere',()=>{
- for(const [from,to]of [['home','isle-55'],['isle-55','home'],['sunset','isle-170'],['home','isle-251'],['home','isle-176']]){
+test('neighbour meshes are rigid: true size, right angles, centre on the flat map',()=>{
+ for(const [from,to]of [['home','isle-55'],['isle-55','home'],['sunset','isle-251'],['home','isle-251'],['home','isle-250']]){
   const m=mapOf(to),geometry=patchGeometry(from,to,{...m.origin,width:m.width,height:m.height}),p=geometry.positions;
   const P=k=>({x:p[k*2],y:p[k*2+1]}),[a,b,c,d]=[0,1,2,3].map(P),len=(u,v)=>Math.hypot(u.x-v.x,u.y-v.y);
   assert.ok(Math.abs(len(a,b)-m.width)<.05&&Math.abs(len(d,c)-m.width)<.05,'width kept');
@@ -22,17 +21,16 @@ test('neighbour meshes are rigid: true size, right angles, centre on the sphere'
   assert.ok(Math.abs(ex.x*ny.x+ex.y*ny.y)/(m.width*m.height)<1e-5,'no shear');
   assert.ok(ex.x*ny.y-ex.y*ny.x>0,'not mirrored');
   const centre=mapPoint(to,from,{x:m.cx,y:m.cy}),mid={x:(a.x+c.x)/2,y:(a.y+c.y)/2};
-  assert.ok(len(centre,mid)<.05,'centre exactly where the sphere puts it');
+  assert.ok(len(centre,mid)<.05,'centre exactly where the flat map puts it');
   assert.ok(Math.abs(placeRigid(from,to,{x:m.cx,y:m.cy}).x-centre.x)<1e-6);
   geometry.destroy();
  }
 });
-test('rigid placements undo each other both ways and match the chart rotation',()=>{
- for(const [a,b]of [['home','isle-55'],['sunset','isle-170'],['isle-249','isle-176']]){
+test('rigid placements undo each other both ways and share north-up axes',()=>{
+ for(const [a,b]of [['home','isle-55'],['sunset','isle-251'],['isle-249','isle-250']]){
   const mb=mapOf(b),p={x:mb.cx+900,y:mb.cy-700},there=placeRigid(a,b,p),back=unplaceRigid(a,b,there),round=placeRigid(b,a,there);
   assert.ok(Math.hypot(back.x-p.x,back.y-p.y)<1e-6);
   assert.ok(Math.hypot(round.x-p.x,round.y-p.y)<1e-3,'b in a, then a in b, is the identity');
-  // the rotation is the polar part of the chart derivative at the centre
   const f=flatRigid(a,b),P=(x,y)=>mapPoint(b,a,{x:mb.cx+x,y:mb.cy+y}),e=P(1,0),w=P(-1,0),n=P(0,1),s=P(0,-1);
   const q=polar((e.x-w.x)/2,(e.y-w.y)/2,(n.x-s.x)/2,(n.y-s.y)/2);
   assert.ok(Math.abs(f.a-q.cos)<1e-4&&Math.abs(f.b-q.sin)<1e-4);
@@ -42,11 +40,11 @@ test('rigid placements undo each other both ways and match the chart rotation',(
  assert.ok(Math.abs(sheared.angle-turn)<1e-12);
  assert.ok(shearOf({a:1,b:0,c:.4,d:1}).shearDeg>20,'the shear measure sees a shear');
 });
-test('islets are rigid stickers centred on the sphere',()=>{
+test('islets are upright at their fixed flat offsets',()=>{
  for(const id of ['home','isle-55','isle-249'])for(const islet of ISLETS.slice(0,8)){
-  const r=isletPlacement(id,islet),c=localPoint(id,islet.center);
+  const r=isletPlacement(id,islet),m=mapOf(islet.home),o=FLAT_ISLETS[islet.id],c=mapPoint(islet.home,id,{x:m.cx+o.x,y:m.cy+o.y});
   assert.ok(Math.hypot(r.x-c.x,r.y-c.y)<1e-6);
-  assert.ok(Math.abs(Math.hypot(r.cos,r.sin)-1)<1e-12,'a pure turn, true size');
+  assert.equal(r.cos,1);assert.equal(r.sin,0);
  }
 });
 test('sailing onto a rigid copy keeps that island exactly where it was on screen',()=>{
@@ -62,7 +60,7 @@ test('sailing onto a rigid copy keeps that island exactly where it was on screen
  assert.ok(shearOf(after.basis).shearDeg<1e-9,'the leftover is a pure turn');
 });
 test('the globe shader draws islands and islets as stickers, never through a sphere chart',()=>{
- const code=readFileSync(new URL('../src/pixi/world-view.js',import.meta.url),'utf8');
+ const code=readFileSync(new URL('../src/rendering/pixi/world-view.js',import.meta.url),'utf8');
  assert.match(code,/uniform vec4 uIsl\[13\]/);
  assert.match(code,/uniform vec4 uIt\[22\]/);
  assert.doesNotMatch(code,/uIsletEasts|uCenters|uEasts/,'no per-island inverse azimuthal lookup left');

@@ -1,15 +1,6 @@
-// boss 8 Nov, Sunbob's inner island (inside the ring canal). Every number is a literal, placed by hand and checked in the proofs
-// (concepts/themes/work/sunbob-check/boats). centre.mjs applies it.
 
-// The inner island keeps three buildings: the red barn, the windmill and the honey stall. The flower stall goes, and so do the two
-// stone pads that held the market and the farm stand (drawn in the original ground tiles as ten-market-0 and ten-market-1, and
-// their inlay decals).
-// tree-73 stood on the north landing of the river-crossing-3 bridge and hid the whole arch; the fence and field fill the bank there.
 export const REMOVE_PROPS = ['stall-flowers', 'tree-73'];
-// moved by hand: the cattails by the old south jetty stood on the new arched deck there, and (below) every tree, lamp, bench,
-// bush, rock and planter that stood on the sunflower fence's line, each moved straight inland off it
 export const MOVE_PROPS = {'bigger-canal-reeds': [3745, 4740],
-  // boss 8 Nov ("two solid layers, no gaps except the bridges"): everything that stood on the fence line, moved inland by hand
   'close-activity-1-lamp-2': [764, 2811],
   'ten-underplant-25': [790, 3252],
   'ten-underplant-36': [1331, 3982],
@@ -44,7 +35,6 @@ export const MOVE_PROPS = {'bigger-canal-reeds': [3745, 4740],
   'tree-nod-3': [3964, 1165], 'tree-nod-4': [3300, 4280],
   'bush-139': [3140, 1500],
   'tree-113': [1788, 1747]};
-// sleeping Duckies moved a little inland off the fence line: {pose: {index in world.sleepSpots[pose]: [x, y, flip]}}
 export const SLEEP_MOVES = {
   nod: {0: ['tree-88', 0, false], 2: ['bigger-shelter-6', 0, false], 3: ['bigger-shelter-19', 0, true], 7: ['bigger-clover-tree-2', 0, true]},
   hammock: {0: [2230, 2236, false], 1: [6828, 2007, true], 3: [1139, 2441, false]},
@@ -55,28 +45,13 @@ export const SLEEP_MOVES = {
   wing: {1: [4983, 1610, false], 3: [3760, 4900, false], 4: [7365, 2314, true], 5: [6137, 1220, false]},
   box: {0: [456, 3812, false]},
 };
-// The plaza (GPT's oval redraw): its step rings (centre/back.svg) are a deck, drawn above the ground, and their new art fills the
-// whole oval, so the floor paving and the sunflower petal inlay (ground decals) were hidden under it. They are lifted to decks,
-// drawn right after the step rings in this order, so the plaza reads as GPT's preview: rings, then floor, then the inlay.
 export const LIFT_FLATS = ['centre-decal-floor', 'close-sunflower-rosette'];
 export const REMOVE_FLATS = ['close-market-inlays', 'close-farm-inlays'];
-// boss 8 Nov (live game): the original tiles also carry the old plaza's crazy-paving stones (<g clip-path="url(#plaza)">) under
-// the plaza's paving decal. Wherever a paving tile was still streaming in, the game showed them as hard-edged rectangles, so they
-// are cut too and the ground under the paving is the plaza's plain cream oval.
-// The three striped lawns (West meadow, Windmill green, South green) are now sunflower fields: their stripes go too.
 export const REMOVE_GROUND_GROUPS = ['<g id="ten-market-0"', '<g id="ten-market-1"', '<g clip-path="url(#plaza)">',
   '<g clip-path="url(#grass)">\n<ellipse cx="1180"', '<g clip-path="url(#grass)">\n<ellipse cx="5700"', '<g clip-path="url(#grass)">\n<ellipse cx="2430"'];
 
-// What fills the freed ground: the centre's own trees and sunflower field rows (detail/field-row-short.svg, the same pieces,
-// scales and flip as the centre fields). [src, x, y, scale, flip]
-// superseded by FIELDS below (boss 8 Nov: the freed pads are now part of whole sunflower fields)
 export const FILL = [];
 
-// The sunflower fence (boss 8 Nov: "two solid layers all the way round the inner island's bank, no gaps except at the bridges"):
-// two rows of single field flowers, 55 and 120 inside the inner island's shore (the old coast), every 62 along the line, the
-// second row half a step on. Where the north path runs on the bank itself (x 2050-3000) both rows close up toward the water
-// (down to 5 outside and 35 inside the shore) so the fence runs on between path and river. Points run clockwise from the
-// north-west.
 export const FENCE = {
   src: 'detail/field-flower.svg', scale: .5, step: 62,
   rows: [
@@ -104,7 +79,6 @@ export const FENCE = {
       [5005, 754], [4854, 758], [4704, 776], [4557, 810], [4414, 856], [4271, 907], [4135, 971], [4000, 1040], [3861, 1096], [3716, 1139], [3568, 1169], [3419, 1189],
       [3268, 1199], [3118, 1210], [2966, 1227], [2806, 1239], [2656, 1279], [2528, 1330], [2401, 1351], [2260, 1363], [2104, 1409], [1953, 1418], [1807, 1453]],
   ],
-  // the only openings, by hand: [x, y, r] where each bridge's deck and its path cross the two rows (14 bridges on the ring)
   gaps: [
       [1595, 1460, 120], [1641, 1510, 120], [5201, 3991, 120], [5172, 3932, 120], [1490, 4282, 120], [1490, 4210, 120], [654, 2586, 120], [722, 2586, 120],
       [7078, 1832, 120], [7012, 1832, 120], [3630, 4472, 120], [3630, 4404, 120], [3250, 1135, 120], [3250, 1200, 120], [6732, 798, 120], [6732, 865, 120],
@@ -113,56 +87,37 @@ export const FENCE = {
       [6611, 839, 100], [6520, 930, 100]],
 };
 
-// boss 8 Nov ("flood the centre with sunflowers"): every wedge of land between the plaza's radial paths is ONE solid sunflower
-// field, edge to edge, up to the paths (30 off their edge), the plaza ring and the fence. The outlines are fixed here; centre.mjs
-// lays the centre field's own row piece (detail/field-row-short.svg, scale .5, flipped as the centre fields) in staggered rows
-// across each one at the old fields' density. Three clearings stay open: the barn and windmill yard, the pond, and the beach
-// with the honey stall. Each field keeps one scarecrow (an existing one by id, or a new one at [x, y]).
 export const FIELD_ROWS = {src: 'detail/field-row-short.svg', scale: .5, stepX: 230, stepY: 62, reach: 120};
 export const FIELDS = [
-  // 1: north of the pond
   {scarecrow: [1561, 1710], poly: [
       [1030, 2421], [980, 2218], [1042, 2051], [1199, 1916], [1444, 1834], [1678, 1828], [1913, 1892], [2109, 2039], [2183, 2222], [2283, 2214], [2083, 1970], [1909, 1803],
       [1564, 1577], [1146, 1836], [995, 2025], [809, 2426]]},
-  // 2: west, the old meadow and garden
   {scarecrow: 'scarecrow-265', poly: [
       [683, 2826], [664, 3213], [697, 3376], [760, 3518], [860, 3666], [1079, 3894], [1249, 4031], [1516, 4190], [2001, 3978], [2716, 3612], [2974, 3418], [3158, 3187],
       [2948, 3051], [2811, 2916], [2727, 2766], [2695, 2583], [2318, 2498], [2147, 2504], [1964, 2611], [1812, 2665], [718, 2714]]},
-  // 3: south-west, the old south green
   {scarecrow: [2752, 4124], poly: [
       [1867, 4325], [1866, 4343], [2262, 4518], [2462, 4575], [2663, 4602], [2856, 4587], [3477, 4405], [2829, 3860], [2115, 4222]]},
-  // 4: south of the plaza
   {scarecrow: 'scarecrow-309', poly: [
       [3433, 3275], [3243, 3529], [3032, 3730], [3580, 4187], [3728, 4348], [3978, 4296], [4356, 4159], [4388, 4074], [4433, 4042], [4513, 4044], [4572, 4101], [4655, 4080],
       [4478, 3875], [4275, 3290], [3851, 3328]]},
-  // 5: south-east, by the beach path
   {scarecrow: [4766, 3631], poly: [
       [5050, 3957], [4973, 3724], [4873, 3555], [4563, 3202], [4498, 3223], [4643, 3692], [4725, 3832], [4876, 3943], [4997, 3982]]},
-  // 6: east, by the market
   {scarecrow: [6590, 2815], poly: [
       [6600, 3000], [6628, 3085], [6677, 2956], [6861, 2635], [6880, 2566], [6818, 2534], [6775, 2477], [6567, 2612], [6240, 2677]]},
-  // 7: east of the plaza
   {scarecrow: [5166, 2983], poly: [
       [4805, 3062], [5168, 3479], [5300, 3150], [5778, 2657], [5302, 2611], [5063, 2635], [4993, 2851]]},
-  // 8: north-east, beyond the barn
   {scarecrow: 'scarecrow-337', poly: [
       [6450, 1300], [6212, 1587], [6382, 1638], [6567, 1731], [6836, 1973], [6984, 1796], [7095, 1294], [7291, 660], [6679, 920], [6527, 1051], [6473, 1051], [6399, 985],
       [6363, 989]]},
-  // 9: north, by the bridge
   {scarecrow: [4192, 1095], poly: [
       [3425, 1221], [3422, 1241], [3810, 1351], [3902, 1295], [4087, 1234], [4307, 1240], [4377, 910], [4221, 961], [3890, 1120]]},
-  // 10: north of the plaza, the old farm gate
   {scarecrow: [4290, 1743], poly: [
       [4342, 1523], [4136, 1500], [3970, 1571], [3872, 1736], [3890, 1885], [4223, 1919], [4511, 1998], [4673, 1802], [4878, 1663], [4700, 1650], [4350, 1550]]},
-  // 11: east, the old windmill green
   {scarecrow: [5675, 2034], poly: [
       [4992, 2364], [5304, 2341], [5993, 2405], [6374, 2385], [6554, 2309], [6681, 2158], [6572, 2021], [6449, 1923], [6298, 1847], [5968, 1765], [5925, 1726], [5901, 1650],
       [5184, 1650], [5177, 1734], [5145, 1782], [4892, 1916], [4722, 2095], [4894, 2238]]},
-  // 12: north-west, the big field
   {scarecrow: 'scarecrow-225', poly: [
       [2786, 2327], [2948, 2165], [3130, 2052], [3349, 1965], [3610, 1906], [3606, 1690], [3655, 1537], [3266, 1448], [2825, 1454], [2502, 1510], [2360, 1556], [2122, 1679],
       [2336, 1915], [2608, 2275]]}
 ];
-// Inside the fields only these stay: the scarecrows above and three tree clumps where a field meets the river fence. Every other
-// tree, bush, bench, lamp, rock, flower, the striped lawns and the old patchy field rows inside a field go.
 export const FIELD_KEEP = ['tree-116', 'tree-121', 'tree-66', 'tree-98', 'tree-nod-4', 'tree-111'];

@@ -10,7 +10,7 @@ function stable(value){
  return value;
 }
 export const modelHash=({map,art})=>sha256(JSON.stringify(stable({map:{id:map.id,home:map.home,art:map.art,width:map.width,height:map.height,origin:map.origin,cx:map.cx,cy:map.cy,world:map.world},art})));
-const boundaries=new Set(['src/pixi/island-maps.js','src/pixi/world-map.js','src/pixi/delivered-themes.js']);
+const boundaries=new Set(['src/world/island-maps.js','src/world/world-map.js','src/world/delivered-themes.js']);
 function relative(root,file){
  const p=path.relative(root,path.resolve(root,file)).split(path.sep).join('/');
  if(p==='..'||p.startsWith('../')||path.isAbsolute(p))throw Error(`Globe source outside repository: ${file}`);
@@ -21,10 +21,7 @@ function resolveFile(root,file){
  throw Error(`Missing globe source: ${file}`);
 }
 
-// Track files actually consumed by one theme, including cached reads. Code
-// imports are followed, but the all-island registry is a boundary: its current
-// per-theme result is fingerprinted by modelHash rather than every other map.
-export function createSourceTracker(root,theme,{codeEntries=['scripts/globe-svg/build.mjs','scripts/globe-svg/vector.mjs','scripts/globe-svg/compile.mjs','scripts/globe-svg/sources.mjs','src/pixi/island-maps.js',...(theme==='home'?['src/pixi/placements.js','scripts/globe-perf/snapshot.mjs']:[])]}={}){
+export function createSourceTracker(root,theme,{codeEntries=['scripts/globe-svg/build.mjs','scripts/globe-svg/vector.mjs','scripts/globe-svg/compile.mjs','scripts/globe-svg/sources.mjs','src/world/island-maps.js',...(theme==='home'?['src/world/home/placements.js','scripts/globe-perf/snapshot.mjs']:[])]}={}){
  root=path.resolve(root);const files=new Map(),visited=new Set();
  function record(file,consumed){
   if(String(file).startsWith('@'))return;

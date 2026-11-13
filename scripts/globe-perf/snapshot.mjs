@@ -1,13 +1,11 @@
-// Static proof from production SVGs and the globe's longitude/latitude mapping.
-// This does not claim to be an in-game browser capture. No game art is written.
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {build} from 'esbuild';
-import {geometry} from '../../rive/web/island-geometry.mjs';
-import {mapOf} from '../../src/pixi/island-maps.js';
+import {geometry} from '../../assets/world/island-geometry.mjs';
+import {mapOf} from '../../src/world/island-maps.js';
 const root=process.cwd();
-const bundle=await build({entryPoints:[root+'/src/pixi/placements.js'],bundle:true,platform:'node',format:'esm',write:false});
+const bundle=await build({entryPoints:[root+'/src/world/home/placements.js'],bundle:true,platform:'node',format:'esm',write:false});
 const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
 export function homeLayers(){
  const world=P.trimWorld(mapOf('home').world),props=P.createPlacements(world,geometry({...world,obstacles:[]}).walkable);
@@ -54,5 +52,5 @@ export function homeArtwork(){
  {src:'/pixi-art/lake-race.svg',width:1500,height:950,resolution:1},
  {src:'/pixi-art/decals/plaza-paving.svg',width:980,height:780,resolution:1},
  {src:'/pixi-art/library-steps.svg',width:280,height:260,resolution:1.5},
- ...JSON.parse(readFileSync('src/pixi/art-manifest.json')).floating];
+ ...JSON.parse(readFileSync('src/world/home/art-manifest.json')).floating];
 }

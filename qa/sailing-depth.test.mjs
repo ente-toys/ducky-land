@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {registerHooks} from 'node:module';
 import {Assets,Container,Sprite,Texture,TextureSource,DOMAdapter} from 'pixi.js';
-import {blendBoatViews} from '../src/pixi/boat-blend.js';
+import {blendBoatViews} from '../src/rendering/pixi/boat-blend.js';
+import {prepareBoatViews} from '../src/rendering/pixi/boat-views.js';
 const adapter=DOMAdapter.get();DOMAdapter.set({...adapter,createCanvas:()=>({getContext:()=>null})});
 const hooks=registerHooks({load(url,context,next){if(url.endsWith('.json'))return {format:'module',source:`export default ${readFileSync(new URL(url),'utf8')}`,shortCircuit:true};return next(url,context);}});
-const {createSailingFX}=await import('../src/pixi/sailing-fx.js');hooks.deregister();
+const {createSailingFX}=await import('../src/rendering/pixi/sailing-fx.js');hooks.deregister();
 const manifest=JSON.parse(readFileSync(new URL('../public/pixi-art/boat/views.json',import.meta.url)));
 
 const pairs=buffer=>Array.from({length:buffer.count},(_,i)=>[buffer.keys[i],buffer.values[i]]);
@@ -50,6 +51,10 @@ test('real sailing rig keeps all seats pinned under roll and bob with one opaque
  const objects=new Container({sortableChildren:true}),water=new Container();
  try{
   const fx=await createSailingFX({water,objects}),root=new Container(),sprite=new Sprite();root.addChild(sprite);objects.addChild(root);root.zIndex=202;
+  // Keep the real bank promotion and sailing geometry, replacing raster/GPU
+  // work only. Pixel fidelity and packing are covered by boat-views.test.
+  await prepareBoatViews(null,{buildAtlas:async()=>({source:new TextureSource({width:320,height:280}),width:320,height:280,
+   frames:new Map(Object.values(manifest.views).flatMap(v=>[v.file,v.front,v.rigFront].filter(Boolean)).map(file=>[file,{x:0,y:0,w:320,h:280,left:0,top:0}]))})});
   const entry={root,sprite},boat={id:'b',x:100,y:200,occupant:'d',travel:0};
   const pose={id:'d',x:100,y:200,mode:'sailing',boatId:'b',travel:0};
   for(const [key,v] of Object.entries(manifest.views)){

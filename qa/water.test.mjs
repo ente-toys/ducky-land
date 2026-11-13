@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWaveField, createWater, maskGrid, shoreDistance, waveHeight, coastDistance, smoothDistance} from '../src/pixi/water.js';
+import {createWaveField, createWater, maskGrid, shoreDistance, waveHeight, coastDistance, smoothDistance} from '../src/rendering/pixi/environment/water.js';
 const energy = f => f.current.reduce((s, h, i) => s + h * h + (h - f.previous[i]) ** 2, 0);
 function field(cols = 65, rows = 49, wet = new Uint8Array(cols * rows).fill(1)) {
   return createWaveField({width: (cols - 1) * 5, height: (rows - 1) * 5, cols, rows, wet});
@@ -78,7 +78,6 @@ test('unavailable WebGL returns a harmless complete API without accessing browse
   }
 });
 
-// boss 5 Nov: plants sample the same interpolated field that is drawn on screen.
 test('plant sampling interpolates space and time and stays still after reset', () => {
   const f = field(); f.impulse(160, 120, .8, 17); f.step();
   assert.equal(waveHeight(f, 160, 120, 0), 0);
@@ -89,7 +88,6 @@ test('plant sampling interpolates space and time and stays still after reset', (
   assert.equal(waveHeight(f, -1, 120), 0); assert.equal(waveHeight(f, NaN, 0), 0);
   f.clear(); assert.equal(waveHeight(f, 160, 120), 0);
 });
-// boss 5 Nov: ocean run-up cannot bridge dry land into an inland pond.
 test('coast distances cover both shore sides, retain islets and keep remote inland water out of run-up', () => {
   const width = 101, height = 81, data = new Uint8Array(width * height * 4);
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
@@ -110,7 +108,6 @@ test('coast distances cover both shore sides, retain islets and keep remote inla
   assert.ok(read(0,0,1) > read(14,40,1), 'shallow band follows the bank');
 });
 
-// boss 5 Nov: smoothing removes raster stairs without changing coverage or bridging inland water.
 test('smoothed signed coast distances retain coverage and a continuous, monotonic bank', () => {
   const width = 81, height = 61, data = new Uint8Array(width * height * 4);
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {

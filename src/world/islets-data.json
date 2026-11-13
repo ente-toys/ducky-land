@@ -1,0 +1,62 @@
+{
+  "seed": 831511,
+  "scale": 3,
+  "placements": [
+    {
+      "id": "sea-1-1",
+      "art": "odyssey",
+      "artIndex": 0,
+      "lon": 2.356194490192345,
+      "lat": -0.9424777960769379,
+      "width": 4800
+    },
+    {
+      "id": "sea-2-1",
+      "art": "tree-and-rowboat",
+      "artIndex": 1,
+      "lon": -0.5759586531581288,
+      "lat": 0.3490658503988659,
+      "width": 4800
+    },
+    {
+      "id": "sea-3-1",
+      "art": "broken-shipwreck",
+      "artIndex": 2,
+      "lon": -0.7330382858376184,
+      "lat": 0.9424777960769379,
+      "width": 4800
+    },
+    {
+      "id": "sea-4-1",
+      "art": "04-small-mountain",
+      "artIndex": 3,
+      "lon": -2.0420352248333655,
+      "lat": 0.19198621771937624,
+      "width": 3072
+    },
+    {
+      "id": "sea-6-1",
+      "art": "06-palm-treasure",
+      "artIndex": 4,
+      "lon": 1.5533430342749535,
+      "lat": -0.8726646259971648,
+      "width": 3072
+    },
+    {
+      "id": "sea-7-1",
+      "art": "07-pink-blossom",
+      "artIndex": 5,
+      "lon": -2.1467549799530254,
+      "lat": -0.8552113334772214,
+      "width": 3072
+    },
+    {
+      "id": "sea-11-1",
+      "art": "12-coral-atoll",
+      "artIndex": 6,
+      "lon": 2.6354471705114375,
+      "lat": -0.12217304763960307,
+      "width": 3072
+    }
+  ]
+}

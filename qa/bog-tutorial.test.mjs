@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {BOG_TIPS,bogTutorialKey,createBogTutorial} from '../src/pixi/bog-combat/tutorial.js';
+import {BOG_TIPS,bogTutorialKey,createBogTutorial} from '../src/features/bog-combat/tutorial.js';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
@@ -43,7 +43,7 @@ test('storage denial never breaks play and remains remembered for this session',
 });
 
 test('mounted StrictMode tips follow real player state, skip returns focus, and another entry stays dismissed',async()=>{
-  const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/bog-combat/Tutorial.jsx',import.meta.url))],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,loader:{'.css':'empty'}});
+  const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/features/bog-combat/Tutorial.jsx',import.meta.url))],bundle:true,packages:'external',jsx:'automatic',format:'esm',write:false,loader:{'.css':'empty'}});
   let code=bundle.text;for(const name of ['react','react/jsx-runtime'])code=code.replaceAll(JSON.stringify(name),JSON.stringify(import.meta.resolve(name)));
   const {default:Tutorial}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
   const dom=new JSDOM('<canvas tabindex="0"></canvas><div id="root"/>',{url:'https://ducky.example'});

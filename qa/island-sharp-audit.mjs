@@ -1,24 +1,21 @@
-// Read-only audit of the live island paths and the proposed manifest-only opt-in.
-// node qa/island-sharp-audit.mjs --write-report
-// node qa/island-sharp-audit.mjs --json  (includes every placement/source)
 import {readFileSync, writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {build} from 'esbuild';
 import sharp from 'sharp';
 import {Container, Graphics, Texture} from 'pixi.js';
-import {artResolution} from '../src/pixi/art-resolution.js';
-import {rasterTiles, RASTER_GROUND_TILE_SIZE, RASTER_ART_BUDGET_BYTES, RASTER_ART_UTILIZATION} from '../src/pixi/theme-raster.js';
-import {tileInView, tileResolution, GROUND_BUDGET_BYTES} from '../src/pixi/ground-stream.js';
+import {artResolution} from '../src/rendering/shared/art-resolution.js';
+import {rasterTiles, RASTER_GROUND_TILE_SIZE, RASTER_ART_BUDGET_BYTES, RASTER_ART_UTILIZATION} from '../src/rendering/pixi/art/theme-raster.js';
+import {tileInView, tileResolution, GROUND_BUDGET_BYTES} from '../src/rendering/pixi/art/ground-stream.js';
 import {rasterPeak} from '../scripts/globe-perf/raster-peak.mjs';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {attachCentreMotion} from '../src/pixi/centre-motion.js';
-import largeArt from '../src/pixi/large-art-tiles.json' with {type: 'json'};
-import poses from '../src/pixi/sleep-poses.json' with {type: 'json'};
-import homeArt from '../src/pixi/art-manifest.json' with {type: 'json'};
-import {HOME_KITES} from '../src/pixi/home-kites.js';
-import {SLEEP_ROOT, SLEEP_SIZE} from '../src/pixi/sleep-spots.js';
-import {harborClear} from '../src/pixi/islands.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {attachCentreMotion} from '../src/rendering/pixi/environment/centre-motion.js';
+import largeArt from '../src/rendering/pixi/art/large-art-tiles.json' with {type: 'json'};
+import poses from '../src/world/home/sleep-poses.json' with {type: 'json'};
+import homeArt from '../src/world/home/art-manifest.json' with {type: 'json'};
+import {HOME_KITES} from '../src/rendering/pixi/environment/home-kites.js';
+import {SLEEP_ROOT, SLEEP_SIZE} from '../src/world/home/sleep-spots.js';
+import {harborClear} from '../src/gameplay/islands.js';
 
 export const THEMES = ['sunflower', 'pink', 'library'];
 export const VIEWPORTS = [[1000, 600], [1400, 1000], [1985, 1180], [2560, 1440]];
@@ -47,7 +44,7 @@ export async function sourceSize(src) {
 let homePromise;
 export function homeModel() {
   return homePromise ??= (async () => {
-    const bundled = await build({entryPoints: [resolve('src/pixi/placements.js')],
+    const bundled = await build({entryPoints: [resolve('src/world/home/placements.js')],
       bundle: true, platform: 'node', format: 'esm', write: false});
     const P = await import('data:text/javascript;base64,' + Buffer.from(bundled.outputFiles[0].text).toString('base64'));
     const props = P.createPlacements().filter(harborClear);
@@ -107,8 +104,6 @@ export function budgetStep(bytes, kind) {
   return step;
 }
 
-// Exercise the actual loader + animation integration with real placement metadata.
-// No server or browser is needed and no source/manifest is changed.
 export async function motionCompatibility(theme, art = manifest(theme)) {
   const centre = read(`public/pixi-art/themes/${theme}/centre/centre.json`);
   const props = art.props.filter(p => {
@@ -119,7 +114,6 @@ export async function motionCompatibility(theme, art = manifest(theme)) {
   const oldFetch = globalThis.fetch;
   const errors = [];
   try {
-    // Pagepond's procedural jets need the globe record as their layout anchor.
     const samples = theme === 'library' ? [{id: 'library-fountain', props: art.props}]
       : props.map(prop => ({id: prop.id, props: [prop]}));
     for (const sampleProps of samples) {
@@ -130,7 +124,7 @@ export async function motionCompatibility(theme, art = manifest(theme)) {
       try {
         loaded = await loadThemeArt({id: theme, art: `/pixi-art/themes/${theme}/art.json`, origin: {x: 0, y: 0}, width: art.width, height: art.height},
           {acquire: async () => Texture.EMPTY, release() {}, groundPool: {create() {return {destroy() {}};}}});
-        await attachCentreMotion(loaded, {Graphics, Container}, objects);
+        await attachCentreMotion(loaded, objects);
         loaded.ground.visible = true;
         for (const prop of loaded.props) prop.sprite.visible = true;
         loaded.updateCentre(1, false);
@@ -169,7 +163,6 @@ export async function auditIsland(theme, art, homeResolutions) {
       } else if (e.kind === 'ground') densities.push(tileResolution({...p, src: e.src}, zoom, 2) / (scale * zoom * 2));
       else densities.push(shared / (scale * zoom * 2));
     }
-    // Home's fountain is replaced by a fixed 960x960 canvas by cleanArtwork().
     if (theme === 'home' && p.asset === 'fountain-wishing') {
       densities[0] = 960 / (p.width * p.scale * .6 * 2);
       densities[1] = 960 / (p.width * p.scale * 1.8 * 2);
@@ -194,7 +187,6 @@ export async function auditIsland(theme, art, homeResolutions) {
       for (const [kind, tiles] of Object.entries(layers)) {
         const peak = rasterPeak(tiles, {width, height, zoom}), step = budgetStep(peak.bytes, kind);
         const at = visibleAllocation(tiles, peak.camera, width, height);
-        // Recompute rounded allocations at each divisor, exactly as GroundPool.
         const threshold = kind === 'ground' ? GROUND_BUDGET_BYTES * .9 : RASTER_ART_BUDGET_BYTES * RASTER_ART_UTILIZATION;
         let exactStep = 1, actualBytes;
         do {
@@ -247,7 +239,7 @@ ${island.candidate.map(v => `| ${v.width}x${v.height} | ${fmt(v.zoom)} | ${v.poo
 
 Animation compatibility: ${island.motion.tested} animated centre pieces exercised through the actual generic loader and attachCentreMotion. ${island.motion.errors.length ? island.motion.errors.map(e => `${e.id}: ${e.message}`).join('; ') : 'No failure in this check.'}
 ` : `
-Home needs engine work. Its ground comes from HOME_TILES and its props/flats/decks from engine.mount(), not loadThemeArt(). src/pixi/art-manifest.json supplies floating pads, but a raster.enabled property there is never read. No manifest-only Home fix exists. The fountain is additionally replaced at runtime by a fixed 960x960 canvas. Home remains unchanged.
+Home needs engine work. Its ground comes from HOME_TILES and its props/flats/decks from engine.mount(), not loadThemeArt(). src/world/home/art-manifest.json supplies floating pads, but a raster.enabled property there is never read. No manifest-only Home fix exists. The fountain is additionally replaced at runtime by a fixed 960x960 canvas. Home remains unchanged.
 `;
     return `## ${island.name} (${island.theme})
 
@@ -265,7 +257,7 @@ ${memory}`;
 
 ## Method
 
-Same texel calculation as fair-review/fix/CRISP.md: raster resolution / (maximum absolute placed sprite-axis scale * camera zoom * DPR). Intrinsic bitmap dimensions, width/height resizing and placement.scale are included. DPR is 2. Reference default is 1000x600 CSS at zoom 0.6; maximum is 1.8. Additional default/max checks use 1400x1000, 1985x1180 and 2560x1440 CSS. The larger defaults are 0.933333, 1.18 and 1.44. Each manifest placement is audited, including legacy large-art tiles, floating pads and Home's generated ground decals. Non-ground shared sources use the expected Home-first URL lease resolution, as in CRISP.md. Shared leases at other travel histories can differ.
+Texel density is raster resolution divided by the product of the maximum absolute sprite-axis scale, camera zoom, and DPR. Intrinsic bitmap dimensions, width/height resizing and placement.scale are included. DPR is 2. Reference default is 1000x600 CSS at zoom 0.6; maximum is 1.8. Additional default/max checks use 1400x1000, 1985x1180 and 2560x1440 CSS. The larger defaults are 0.933333, 1.18 and 1.44. Each manifest placement is audited, including legacy large-art tiles, floating pads and Home's generated ground decals. Non-ground shared sources use the expected Home-first URL lease resolution. Shared leases at other travel histories can differ.
 
 The retained before/after tables show source-request density, before any budget-driven reduction of legacy ground/large-art streams. Thus they are an upper bound for those legacy streams, not a claim that an overloaded pool delivers those values. Per-source numbers, scale, legacy tile counts and requested/Home-first resolutions are emitted by node qa/island-sharp-audit.mjs --json. No bitmap render is saved in the repo.
 
@@ -273,9 +265,9 @@ The hypothetical generic opt-in uses the actual rasterTiles() output, 128-world-
 
 ## Why the manifest switch cannot pass
 
-1. The existing sparse crop metadata covers Bellovo, not these three themes. Their uncropped transparent rectangles and overlapping source extents create the measured demands below. The runtime reads src/pixi/theme-raster-bounds.json; it does not read crop plans, tile sizes or budgets from manifest.raster. Adding such fields to art.json would do nothing. Alpha-only bounds must be added to that excluded src file before the opt-in can be validated. Neither caps nor raster density were lowered or enlarged.
-2. Sunbob's clock hands and Rosybutton's dancer/key fail at runtime: generic crispSprite returns a Container, while animatePieces reads Sprite.anchor/texture. The real loader integration reproduces TypeError on all four pieces. Fixing this needs excluded src/pixi/centre-motion.js (or compatible generic sprite metadata), preserving the original animation. Disabling animation, changing art or moving it into another layer would violate scope.
-3. Non-Fair kites retain a hardcoded 2x lease in theme-art.js. Their fixed-size stake is only 0.556 at maximum zoom even after raster.enabled. Home also loads 2x kites directly. A manifest cannot raise that lease; changing kite sizes would change layout. Generic kite resolution needs engine work.
+1. These themes lack sparse crop metadata. Their uncropped transparent rectangles and overlapping source extents create the measured demands below. The runtime reads src/rendering/pixi/art/theme-raster-bounds.json; it does not read crop plans, tile sizes or budgets from manifest.raster. Adding such fields to art.json would do nothing. Alpha-only bounds must be added to that excluded src file before the opt-in can be validated. Neither caps nor raster density were lowered or enlarged.
+2. The centre animation check exercises tiled clock hands in Sunbob and the tiled dancer and key in Rosybutton through the real theme loader. The render pools still exceed their memory caps at some audited views.
+3. Themed kites retain a hardcoded 2x lease in theme-art.js. Their fixed-size stake is only 0.556 at maximum zoom even after raster.enabled. Home also loads 2x kites directly. A manifest cannot raise that lease; changing kite sizes would change layout. Generic kite resolution needs engine work.
 4. Home bypasses the generic loader. Per instruction, its engine fix is reported without editing src. Shared live boats and contact leaves are also engine-owned undersampled textures, listed below, and are unaffected by any theme manifest.
 
 Enabling a toggle that breaks centre animation or leaves whole pools below 1.0 would not meet the requested outcome. All three manifests are therefore retained as supplied, and no sharpness pass is claimed.
@@ -296,11 +288,11 @@ Sleeper numbers follow CRISP.md's rest-pose method. Breathing, poke stretch, war
 
 ## Required follow-up outside this file scope
 
-Generate sparse alpha crop plans into src/pixi/theme-raster-bounds.json using the existing script, then rerun the exact memory sweeps. Adapt centre-motion to the generic containers, route Home's layers through the generic streams, and supply independent sharp kite leases (the URL cache is Home-first). Shared boats/contact leaves need their own engine-side density fix. Only after those changes pass should these manifests opt in. More alpha cropping may still be insufficient for overlapping opaque art; the measurements must decide, without changing art or exceeding caps.
+Generate sparse alpha crop plans into src/rendering/pixi/art/theme-raster-bounds.json using the existing script, then rerun the exact memory sweeps. Adapt centre-motion to the generic containers, route Home's layers through the generic streams, and supply independent sharp kite leases (the URL cache is Home-first). Shared boats/contact leaves need their own engine-side density fix. Only after those changes pass should these manifests opt in. More alpha cropping may still be insufficient for overlapping opaque art; the measurements must decide, without changing art or exceeding caps.
 
 ## Validation
 
-Run: node --test qa/island-sharp.test.mjs qa/theme-raster.test.mjs qa/fair-crisp.test.mjs qa/ground-stream.test.mjs qa/sunbob-ground.test.mjs qa/rosy-ground.test.mjs qa/pagepond-ground.test.mjs qa/theme-loading.test.mjs
+Run: node --test qa/island-sharp.test.mjs qa/theme-raster.test.mjs qa/ground-stream.test.mjs qa/sunbob-ground.test.mjs qa/rosy-ground.test.mjs qa/pagepond-ground.test.mjs qa/theme-loading.test.mjs
 
 Build: npx vite build --configLoader native --outDir /tmp/r3-$RANDOM, followed by removal of that exact temporary output directory. Final execution results are appended below.
 `;

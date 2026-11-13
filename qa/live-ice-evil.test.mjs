@@ -1,15 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import READY from '../rive/web/themes/index.js';
-import delivered from '../src/pixi/delivered-themes.js';
-import {mapFor,makeMap,themeOfIsland} from '../src/pixi/island-maps.js';
-import {WORLD_ISLANDS,FINISHED_THEMES,layoutWorld} from '../src/pixi/world-map.js';
+import READY from '../assets/world/themes/index.js';
+import delivered from '../src/world/delivered-themes.js';
+import {mapFor,makeMap,themeOfIsland} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS,FINISHED_THEMES,layoutWorld} from '../src/world/world-map.js';
 import {checkTheme} from '../scripts/theme-index.mjs';
 
 test('adding two live themes preserves Home and all six earlier island identities',()=>{
   const before=layoutWorld(undefined,11,FINISHED_THEMES.slice(0,6)).islands;
-  assert.equal(WORLD_ISLANDS.length,9);
+  assert.equal(WORLD_ISLANDS.length,7);
   for(const old of before) {
     const now=WORLD_ISLANDS.find(i=>i.id===old.id);
     assert.deepEqual([now.id,now.theme,now.width,now.height],[old.id,old.theme,old.width,old.height]);
@@ -20,8 +20,6 @@ test('adding two live themes preserves Home and all six earlier island identitie
 
 for(const theme of ['bog','snow'])test(`${theme}: full live contract, unique art and onshore residents`,()=>{
   const result=checkTheme(theme);assert.equal(result.ready,true,result.problems.join('\n'));
-  // The communities expansion raised the shared live contract to 16000x12000.
-  // checkTheme above validates that cap and the origin-aware sea margin.
   const m=mapFor(theme);assert.equal(m.id,theme);
   assert.deepEqual([m.width,m.height],[delivered[theme].world.width,delivered[theme].world.height]);
   assert.equal(m.sleepers.length,theme==='bog'?0:theme==='snow'?60:40);

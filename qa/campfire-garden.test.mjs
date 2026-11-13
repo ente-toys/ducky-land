@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {checkTheme} from '../scripts/theme-index.mjs';
-const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',art=read(A+'art.json'),world=read('rive/web/themes/community/world.json');
+const read=p=>JSON.parse(fs.readFileSync(p)),A='public/pixi-art/themes/community/',art=read(A+'art.json'),world=read('assets/world/themes/community/world.json');
 test('Campfire outer gardens reuse coloured centre art with contact shadows and no retired buoy ponds',()=>{
  const originals=new Set(read('scripts/campfire-hamlets/baseline/art.json').props.map(p=>p.src));
  const plants=art.props.filter(p=>p.outerGarden),tiles=art.ground.tiles.map(t=>fs.readFileSync(A+t.src,'utf8')).join('');

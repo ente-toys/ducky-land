@@ -1,8 +1,6 @@
-// Audit the current drawn routes. No nearest-target fallback or protected-lamp
-// exclusions: an exact authored target must be walkable and actually reached.
 import {readFileSync,writeFileSync} from 'node:fs';
-import {mapOf} from '../../src/pixi/island-maps.js';
-import {inShape} from '../../rive/web/island-geometry.mjs';
+import {mapOf} from '../../src/world/island-maps.js';
+import {inShape} from '../../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(p));
 export function auditRosy(){
  const map=mapOf('sunset'),nav=map.nav(),routes=read('scripts/rosy-ground/sampled-routes.json'),art=read('public/pixi-art/themes/pink/art.json'),remaining=[],pathEnds=[];

@@ -1,16 +1,16 @@
-import {butterflyPose} from '../src/pixi/butterflies.js';
+import {butterflyPose} from '../src/rendering/pixi/environment/butterflies.js';
 import test from 'node:test';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
-import {OUTFIT_OPTIONS} from '../src/pixi/outfits.js';
+import {OUTFIT_OPTIONS} from '../src/gameplay/outfits.js';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {floatingPose} from '../src/pixi/floating.js';
-import {Gestures, movePinch, screenToWorld} from '../src/pixi/camera.js';
-import {createSimulation} from '../src/pixi/simulation.js';
+import {floatingPose} from '../src/rendering/pixi/environment/floating.js';
+import {Gestures, movePinch, screenToWorld} from '../src/rendering/shared/camera.js';
+import {createSimulation} from '../src/gameplay/simulation.js';
 
 test('all 28 NPCs remain asleep through greetings and quacks while the player can move', () => {
-  const world = JSON.parse(readFileSync(new URL('../rive/web/world.json', import.meta.url)));
+  const world = JSON.parse(readFileSync(new URL('../assets/world/world.json', import.meta.url)));
   const sim = createSimulation(world, 8612, {sleepingNpcs: true});
   const sleeping = sim.ducks.filter(duck => !duck.player);
   const positions = sleeping.map(duck => [duck.x, duck.y, duck.turn]);
@@ -75,8 +75,8 @@ test('cancelled, dragged, and multi-touch pointers never become taps', () => {
 });
 
 test('original island art has complete placements, valid clipped SVGs and GPU-safe ground tiles', () => {
-  const art = JSON.parse(readFileSync(new URL('../src/pixi/art-manifest.json', import.meta.url)));
-  const world = JSON.parse(readFileSync(new URL('../rive/web/world.json', import.meta.url)));
+  const art = JSON.parse(readFileSync(new URL('../src/world/home/art-manifest.json', import.meta.url)));
+  const world = JSON.parse(readFileSync(new URL('../assets/world/world.json', import.meta.url)));
   assert.equal(art.props.length, world.props.length);
   const parser = new (new JSDOM('').window.DOMParser)();
   for (const item of [...art.props, ...art.ground.tiles, ...art.floating]) {
@@ -101,10 +101,10 @@ test('original island art has complete placements, valid clipped SVGs and GPU-sa
   assert.equal(area, art.world.width * art.world.height);
 });
 
-test('all 34 wearables cover eight measured directions without missing or clipped artwork', () => {
+test('all 47 wearables cover eight measured directions without missing or clipped artwork', () => {
   const manifest = JSON.parse(readFileSync(new URL('../public/pixi-duck/manifest.json', import.meta.url)));
   const parser = new (new JSDOM('').window.DOMParser)();
-  assert.equal(manifest.wardrobe.length, 34);
+  assert.equal(manifest.wardrobe.length, 47);
   for(const view of manifest.views)for(const wing of view.parts.filter(part=>part.role==='wing')){
     const x=wing.pivot[0]-view.ground[0];
     assert.ok(x>view.attachments.neckTop[0]&&x<view.attachments.neckTop[1], 'wing hinge remains inside the shoulder');
@@ -139,7 +139,6 @@ test('all 34 wearables cover eight measured directions without missing or clippe
         for (const frame of frames) {
           const foot = feet.find(part => part.side === frame.side);
           assert.ok(foot);
-          // boss 4 Nov: shoes were refit to sit snug on the foot, a few units above the joint; they stay pinned to that foot
           const pin = foot.pivot.map((value, i) => value - view.ground[i]);
           assert.ok(frame.anchor.every((value, i) => Math.abs(value - pin[i]) <= 10), 'shoe stays pinned to its foot');
           assert.equal(frame.layer, 'feet');
@@ -153,7 +152,6 @@ test('all 34 wearables cover eight measured directions without missing or clippe
         assert.ok(frame.rect[0] + frame.rect[2] >= right, 'neckwear reaches the right silhouette');
         if (entry.sourceNumber === 9) assert.ok(frame.rect[3] >= 90, 'scarf retains its fabric width');
       }
-      // shades show wherever eyes show; from behind they are hidden or a separate back drawing (just the arms), never the lenses
       if (entry.slot === 'shades') {
         if (view.parts.some(part => part.role === 'eye')) assert.ok(frames[0].visible, 'shades show over the eyes');
         else assert.ok(!frames[0].visible || frames[0].url !== entry.frames['0'][0].url, 'lenses never show from behind');
@@ -188,7 +186,7 @@ test('corrected caps leave both eyes clear in every facing that shows a face', a
 });
 
 test('all eleven extracted lilies drift within their pond positions and respect reduced motion', () => {
-  const art=JSON.parse(readFileSync(new URL('../src/pixi/art-manifest.json',import.meta.url)));
+  const art=JSON.parse(readFileSync(new URL('../src/world/home/art-manifest.json',import.meta.url)));
   assert.equal(art.floating.length,11);
   for(const item of art.floating){
     assert.notDeepEqual(floatingPose(item,0),floatingPose(item,10));
@@ -217,7 +215,7 @@ test('butterflies flutter near their planters and settle under reduced motion',(
 
 test('rendered paths connect every district and mainland bridge approach', async()=>{
   const {createCanvas,loadImage}=await import('@napi-rs/canvas');
-  const world=JSON.parse(readFileSync(new URL('../src/pixi/home-original-world.json',import.meta.url)));
+  const world=JSON.parse(readFileSync(new URL('../src/world/home/home-original-world.json',import.meta.url)));
   const canvas=createCanvas(world.width/4,world.height/4),ctx=canvas.getContext('2d');
   ctx.drawImage(await loadImage(fileURLToPath(new URL('../public/pixi-art/ground.svg',import.meta.url))),0,0,canvas.width,canvas.height);
   const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;
@@ -255,7 +253,7 @@ test('rendered paths connect every district and mainland bridge approach', async
 });
 
 test('detailed asset variants preserve dimensions, anchors, masks, and self-contained paint references',()=>{
-  const art=JSON.parse(readFileSync(new URL('../src/pixi/art-manifest.json',import.meta.url)));
+  const art=JSON.parse(readFileSync(new URL('../src/world/home/art-manifest.json',import.meta.url)));
   const library=JSON.parse(readFileSync(new URL('../assets/manifest.json',import.meta.url)));
   const parser=new (new JSDOM('').window.DOMParser)();
   assert.equal(Object.keys(art.enhancedAssets).length,library.assets.length);
@@ -273,7 +271,7 @@ test('detailed asset variants preserve dimensions, anchors, masks, and self-cont
 });
 
 test('all original emote bubbles appear, expire, and retain feedback under reduced motion',async()=>{
-  const {bubblePose,createDuckFeedback}=await import('../src/pixi/feedback.js');
+  const {bubblePose,createDuckFeedback}=await import('../src/rendering/pixi/feedback.js');
   for(const [action,duration]of [[2,1.3],[4,1.5],[5,1.55],[6,1.55],[7,2.3],[8,1.5],[9,1.75]]){
     assert.equal(bubblePose(action,0).visible,false);
     assert.equal(bubblePose(action,.3).visible,true);
@@ -291,7 +289,7 @@ test('all original emote bubbles appear, expire, and retain feedback under reduc
 });
 
 test('persistent sleep indicators remain visible and stop drifting with reduced motion',async()=>{
-  const {createDuckFeedback}=await import('../src/pixi/feedback.js');
+  const {createDuckFeedback}=await import('../src/rendering/pixi/feedback.js');
   const feedback=createDuckFeedback(false);
   try {
     for(const time of [.1,3,60,600]){
@@ -308,13 +306,10 @@ test('persistent sleep indicators remain visible and stop drifting with reduced 
   } finally {feedback.ring.destroy();feedback.bubble.destroy({children:true});feedback.sleep.destroy({children:true});}
 });
 
-test('clouds drift continuously through the world and wind respects reduced motion',async()=>{
-  const {cloudPose,windStrength}=await import('../src/pixi/weather.js');
-  const cloud={x:2300,y:1850,speed:8,phase:0};
-  assert.ok(cloudPose(cloud,10,5800).x>cloudPose(cloud,0,5800).x);
+test('wind respects reduced motion',async()=>{
+  const {windStrength}=await import('../src/rendering/pixi/environment/weather.js');
   for(let time=0;time<2000;time+=7){
-    const pose=cloudPose(cloud,time,5800);assert.ok(pose.x>=-500&&pose.x<6300);assert.ok(Math.abs(pose.y-cloud.y)<=18);
     assert.ok(windStrength(time)>=.35&&windStrength(time)<=1);
-    assert.equal(windStrength(time,true),0);assert.deepEqual(cloudPose(cloud,time,5800,true),cloudPose(cloud,0,5800,true));
+    assert.equal(windStrength(time,true),0);
   }
 });

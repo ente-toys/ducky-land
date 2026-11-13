@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import E from '../src/pixi/home-expansion.json' with {type:'json'};
-import {homePropRotation} from '../src/pixi/home-motion.js';
+import E from '../src/world/home/home-expansion.json' with {type:'json'};
+import {homePropRotation} from '../src/rendering/pixi/environment/home-motion.js';
 import {readFileSync} from 'node:fs';
 test('windmill sails complete a gentle nine-second turn and stop for reduced motion, the tower stays fixed',()=>{
  const mill=E.props.find(p=>p.id==='hamlet-clovercrust-mill'),sails=E.props.find(p=>p.id==='home-windmill-sails');

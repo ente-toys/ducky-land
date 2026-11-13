@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Path2D} from '@napi-rs/canvas';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {mapFor} from '../src/world/island-maps.js';
+import {inShape} from '../assets/world/island-geometry.mjs';
 
 const read=p=>JSON.parse(fs.readFileSync(p));
 const A='public/pixi-art/themes/library/',map=mapFor('library');
-const art=read(A+'art.json'),world=read('rive/web/themes/library/world.json');
+const art=read(A+'art.json'),world=read('assets/world/themes/library/world.json');
 const tile=fs.readFileSync(A+'bigger/original-ground-r2-c3.svg','utf8');
 const pond=tile.match(/<g id="pagepond-reading-pond"[\s\S]*?<\/g>/)?.[0];
 

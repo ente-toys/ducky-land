@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import data from '../src/pixi/bog-environment.json' with {type:'json'};
-import {makeMap,THEME_OF,mapOf} from '../src/pixi/island-maps.js';
-import {WORLD_ISLANDS,FINISHED_THEMES} from '../src/pixi/world-map.js';
-import {BOG_BLOCKERS,BOG_SOLIDS,bogBlockerPolygons} from '../src/pixi/bog-blockers.js';
-import {installBogEnvironment,BOG_REVIEW_ISLAND,BOG_MAP_ID} from '../src/pixi/bog-environment.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import data from '../src/features/bog-combat/bog-environment.json' with {type:'json'};
+import {makeMap,THEME_OF,mapOf} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS,FINISHED_THEMES} from '../src/world/world-map.js';
+import {BOG_BLOCKERS,BOG_SOLIDS,bogBlockerPolygons} from '../src/features/bog-combat/bog-blockers.js';
+import {installBogEnvironment,BOG_REVIEW_ISLAND,BOG_MAP_ID} from '../src/features/bog-combat/bog-environment.js';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 const map=makeMap(BOG_MAP_ID,data),nav=map.nav();
 const art=JSON.parse(fs.readFileSync('public/pixi-art/themes/bog-arena/art.json'));
 test('private Bog registration restores the existing roster and does not add a world destination',()=>{
@@ -26,7 +26,9 @@ test('all eight courts and the Home dock connect with the actual padded island n
  for(let y=7560;y<=8400;y+=20)assert.equal(map.landAt(4450,y),false,`open sea mouth ${y}`);
 });
 test('exported building/wall rectangles match movement obstacles exactly',()=>{
- assert.equal(BOG_SOLIDS.filter(b=>b.kind==='building').length,16);
+ const facades=art.props.filter(p=>p.homeSource?.includes('home-hamlets')&&p.name!=='home-planting-bed');
+ assert.equal(facades.length,20);
+ for(const p of facades)assert.ok(BOG_SOLIDS.some(b=>b.id===p.id||b.prop===p.id),p.id+' physical footprint');
  assert.equal(BOG_SOLIDS.filter(b=>b.kind==='wall').length,14);
  assert.equal(new Set(BOG_BLOCKERS.map(b=>b.id)).size,BOG_BLOCKERS.length);
  const shapes=bogBlockerPolygons();
@@ -54,5 +56,5 @@ test('Home plant geometry is kept at source size and every root is on dry land',
   assert.deepEqual(recolour,original,p.id+' exact Home paths');
  }
  assert.ok(art.props.filter(p=>p.name.startsWith('tree-')).length>=250);
- assert.equal(art.raster.enabled,false); // boss 10 Nov: streaming off, static artassert.equal(art.sea,'#6EC9DE');
+ assert.equal(art.raster.enabled,false);
 });

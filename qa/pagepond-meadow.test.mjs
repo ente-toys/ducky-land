@@ -1,15 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {geometry, inPoly} from '../rive/web/island-geometry.mjs';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {homePropY, homePropRotation} from '../src/pixi/home-motion.js';
+import {geometry, inPoly} from '../assets/world/island-geometry.mjs';
+import {mapOf} from '../src/world/island-maps.js';
+import {homePropY, homePropRotation} from '../src/rendering/pixi/environment/home-motion.js';
 
 const read = p => JSON.parse(fs.readFileSync(p));
 const placement = read('scripts/pagepond-meadow/placements.json');
 const art = read('public/pixi-art/themes/library/art.json');
-const world = read('rive/web/themes/library/world.json');
-const walk = read('rive/web/themes/library/walk-world.json');
+const world = read('assets/world/themes/library/world.json');
+const walk = read('assets/world/themes/library/walk-world.json');
 const base = 'public/pixi-art/themes/library/';
 
 test('Pagepond meadow installs the chosen SVG floors and upright anchors in authored order', () => {
@@ -34,8 +34,6 @@ test('Pagepond meadow assets use flat vector fills and the approved outline ink'
   for (const name of Object.keys(placement.assetManifest)) {
     const svg = fs.readFileSync(base+'pagepond/meadow/'+name, 'utf8');
     assert(!/<(?:image|foreignObject|filter|linearGradient|radialGradient)\b|data:image/i.test(svg),name);
-    // Colored ripple, page-line and highlight strokes are paint details. The
-    // filled silhouettes use the common ink; the rim also has light stone seams.
     for (const [tag] of svg.matchAll(/<[^>]+\bfill="(?!none")[^"]+"[^>]*\bstroke="#[a-f\d]+"[^>]*>/gi)) {
       const stroke = tag.match(/\bstroke="([^"]+)"/)[1].toLowerCase();
       assert(stroke === '#39472d' || /^(stone-rim|island-grass)-floor\.svg$/.test(name) && stroke === '#938b57',name+' outline ink');

@@ -2,11 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync, readdirSync} from 'node:fs';
 import {Assets, Sprite, Texture, TextureSource} from 'pixi.js';
-import {loadBoatViews} from '../src/pixi/boat-views.js';
+import {loadBoatViews,prepareBoatViews} from '../src/rendering/pixi/boat-views.js';
 import sharp from 'sharp';
+import {createCanvas,Image} from '@napi-rs/canvas';
+import {buildBoatAtlas,BOAT_ATLAS_BUDGET} from '../src/rendering/pixi/boat-atlas.js';
+import {createArtQueue} from '../src/rendering/pixi/art/island-preparation.js';
 
 const base = new URL('../public/pixi-art/boat/', import.meta.url);
 const frames = JSON.parse(readFileSync(new URL('spin/frames.json', base)));
+let atlasPromise;
+const runtimeAtlas=()=>atlasPromise??=buildBoatAtlas(manifest,{createCanvas,queue:createArtQueue({yieldFrame:async()=>{}}),
+  loadImage:async src=>{const image=new Image();image.src=readFileSync(new URL(src.replace('/pixi-art/boat/',''),base));await image.decode();return image;}});
 const manifest = JSON.parse(readFileSync(new URL('views.json', base)));
 const wrap = deg => Math.atan2(Math.sin(deg*Math.PI/180), Math.cos(deg*Math.PI/180))*180/Math.PI;
 
@@ -17,7 +23,6 @@ test('rear 33-40 mast length and deck projection remain continuous through 38-39
     const source=readFileSync(new URL(v.file,base),'utf8');
     assert.match(source,/data-part="mast" data-top="112" data-foot="400"/);
     assert.doesNotMatch(source,/scale\(1 \.4\)/);
-    // The mast foot is on the inner deck, 10-14 game units behind the toes.
     const footY=(400-manifest.anchor[1]*560)*manifest.width/640-v.seat[1];
     assert.ok(footY < -8 && footY > -15,`view ${n}: ${footY}`);
     if(previous){assert.ok(Math.abs(footY-previous.y)<.4);assert.ok(Math.abs(v.seat[0]-previous.x)<6);}
@@ -107,13 +112,20 @@ test('boat selection traverses all 48 views, holds a noisy boundary, and wraps a
   const requested=[];
   globalThis.fetch=async()=>({ok:true,json:async()=>manifest});
   Assets.load=async request=>{
-    requested.push(request.src);
-    return new Texture({source:new TextureSource({width:640,height:560})});
+    requested.push(typeof request==='string'?request:request.src);
+    return new Texture({source:new TextureSource({width:632,height:704})});
   };
   try {
     const bank=await loadBoatViews();
+    assert.equal(bank.views.length,2,'startup uses only the existing small fallback');
+    assert.deepEqual(requested.sort(),[manifest.views.f00.file,manifest.views.f00.front,manifest.views.f24.file,manifest.views.f24.front].map(f=>'/pixi-art/boat/'+f).sort());
+    const uploads=[];
+    const completed=await prepareBoatViews({texture:{bindSource:s=>uploads.push(s)}},{buildAtlas:runtimeAtlas});
+    assert.equal(completed,bank,'all consumers share the same promoted bank');
     assert.equal(bank.views.length,48);
-    assert.equal(requested.length,96);
+    assert.equal(uploads.length,1,'sheet is uploaded in idle time before it can draw');
+    assert.equal(new Set(bank.views.flatMap(v=>[v.texture.source,v.front.source])).size,1);
+    assert(uploads[0].pixelWidth*uploads[0].pixelHeight*4<=BOAT_ATLAS_BUDGET);
     let current;
     for(let n=0;n<=96;n++) {
       const view=bank.pick((90-n*7.5)*Math.PI/180,current);
@@ -131,6 +143,38 @@ test('boat selection traverses all 48 views, holds a noisy boundary, and wraps a
     assert.equal(sprite.anchor.x,manifest.anchor[0]);
     assert.equal(sprite.anchor.y,manifest.anchor[1]);
     sprite.destroy();
-    for(const view of bank.views){view.texture.destroy(true);view.front?.destroy(true);view.rigFront?.destroy(true);}
   } finally {globalThis.fetch=originalFetch;Assets.load=originalLoad;}
+});
+
+test('runtime packed boat frames preserve whole-picture origins, alpha fringes and pixels without raster files',async()=>{
+ const atlas=await runtimeAtlas(),canvas=atlas.source.resource;
+ assert(canvas.width*canvas.height*4<=BOAT_ATLAS_BUDGET);
+ assert.equal(atlas.frames.size,new Set(Object.values(manifest.views).flatMap(v=>[v.file,v.front,v.rigFront].filter(Boolean))).size);
+ assert(!readdirSync(base).some(f=>/^spin-atlas\.(png|json)$/.test(f)));
+ for(const n of [0,12,24,36])for(const file of [manifest.views[`f${String(n).padStart(2,'0')}`].file,manifest.views[`f${String(n).padStart(2,'0')}`].front]){
+  const f=atlas.frames.get(file),image=new Image();image.src=readFileSync(new URL(file,base));await image.decode();
+  const original=createCanvas(atlas.width,atlas.height);original.getContext('2d').drawImage(image,0,0,atlas.width,atlas.height);
+  const expected=original.getContext('2d').getImageData(0,0,atlas.width,atlas.height).data;
+  const restored=createCanvas(atlas.width,atlas.height);
+  restored.getContext('2d').drawImage(canvas,f.x,f.y,f.w,f.h,f.left,f.top,f.w,f.h);
+  const actual=restored.getContext('2d').getImageData(0,0,atlas.width,atlas.height).data;
+  assert.deepEqual(actual,expected,file+': trimming preserves every pixel');
+ }
+ const code=readFileSync(new URL('../src/rendering/pixi/boat-atlas.js',import.meta.url),'utf8');
+ assert(!code.includes('spin-atlas.png'));
+ const engine=readFileSync(new URL('../src/rendering/pixi/engine.js',import.meta.url),'utf8');
+ assert(engine.indexOf('void prepareBoatViews(')>engine.indexOf('this.ready = true'));
+});
+
+test('leaving during runtime atlas preparation releases decoded images and CPU crops',async()=>{
+ let stopped=false,turns=0;const canvases=[],images=[],cleared=new Set();
+ const srcProperty=Object.getOwnPropertyDescriptor(Image.prototype,'src');
+ await assert.rejects(buildBoatAtlas({views:{one:manifest.views.f00}},{
+  queue:createArtQueue({batchSize:1,yieldFrame:async()=>{if(++turns===2)stopped=true;}}),
+  createCanvas:(w,h)=>{const canvas=createCanvas(w,h);canvases.push(canvas);return canvas;},
+  loadImage:async src=>{const image=new Image();image.src=readFileSync(new URL(src.replace('/pixi-art/boat/',''),base));await image.decode();Object.defineProperty(image,'src',{get(){return srcProperty.get.call(image);},set(value){if(value==='')cleared.add(image);srcProperty.set.call(image,value);}});images.push(image);return image;},
+  cancelled:()=>stopped,
+ }),/cancelled/);
+ assert(canvases.length>0);assert(canvases.every(c=>c.width===0&&c.height===0));
+ assert.equal(cleared.size,images.length,'every decoded SVG is released');
 });

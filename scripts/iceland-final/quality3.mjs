@@ -1,12 +1,10 @@
-// Round 3: places own their details. Recorded camp anchors are fitted as whole
-// compositions; nothing fills an uncovered view with an individual small prop.
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {bounds,overlaps,piece,footprint,pathClearance,propPathClearance,landViews,area} from './place.mjs';
-import {makeMap} from '../../src/pixi/island-maps.js';
-import {createNavigation} from '../../src/pixi/navigation.js';
-import {geometry,inPoly} from '../../rive/web/island-geometry.mjs';
-import {resolveSleepSpots,sleepHalfWidths} from '../../src/pixi/sleep-spots.js';
+import {makeMap} from '../../src/world/island-maps.js';
+import {createNavigation} from '../../src/world/navigation.js';
+import {geometry,inPoly} from '../../assets/world/island-geometry.mjs';
+import {resolveSleepSpots,sleepHalfWidths} from '../../src/world/home/sleep-spots.js';
 import {composeFixAll,clearCanopies} from './fix-all.mjs';
 const round=n=>Math.round(n*100)/100;
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
@@ -21,7 +19,6 @@ export function composedCoverage(view,art,report){
   return parts.filter(p=>visible(p,view)&&p.finalRole!=='camp-snow'&&p.finalRole!=='trail').length>=2;
  })};
 }
-// This is an exact sliding rectangle count, independent of the 120-unit audit.
 export function maxSleepersInView(beds,width=1440,height=900){
  let max=0;
  for(const x of beds.map(b=>b.x)){
@@ -35,7 +32,6 @@ const CAMP_ANCHORS=[
  [1800,3550,'cocoa-table'],[3800,3550,'woodpile'],[5900,3550,'mini-snowman'],[8050,3300,'cocoa-table'],[10200,3500,'woodpile'],
  [1800,4850,'mini-snowman'],[4200,5000,'woodpile'],[5900,5850,'cocoa-table'],[8650,4950,'mini-snowman'],
  [10650,6400,'woodpile'],[1700,7750,'mini-snowman'],[3700,7250,'woodpile'],[5500,8050,'cocoa-table'],[7000,7350,'cocoa-table'],[8800,6400,'woodpile'],
- // Alternative clearings, only used if an authored site cannot fit its three beds.
  [3200,4600,'cocoa-table'],[4800,6600,'woodpile'],[7200,3900,'mini-snowman'],[9500,1800,'cocoa-table'],[6500,8350,'woodpile'],[2300,2200,'mini-snowman'],
 ];
 function addFlat(art,clusters,id,role,x,y,width,height,group,extra={}){
@@ -64,8 +60,6 @@ export function composeQuality3(root,art,w,report,catalog){
  for(const p of originalTrees)if(p.q3Original){Object.assign(p,p.q3Original);delete p.q3Original;}
  report.groves=report.groves.filter(g=>!g.q3Added);
  for(const g of report.groves)g.trees=originalTrees.filter(p=>p.grove===g.id).map(p=>p.id);
- // Freeze the approved 536 pines. Retire the many independent coverage fixes,
- // all scattered sleepers' personal nooks, and every freestanding puddle.
  art.props=art.props.filter(p=>!p.q3Added&&!['nook','vignette','vignette-flat'].includes(p.finalKind)&&(p.finalKind!=='shrub'||p.finalKind==='scene'||p.scene&&report.scenes.some(s=>s.id===p.scene)));
  art.flats=art.flats.filter(p=>!p.q3Added&&!['ground','ground-detail','path-edge','vignette-flat'].includes(p.finalKind));
  const retainedIds=new Set(art.props.map(p=>p.id));w.obstacles=w.obstacles.filter(o=>retainedIds.has(o.prop));
@@ -76,8 +70,6 @@ export function composeQuality3(root,art,w,report,catalog){
  const addGroup=(id,kind,parts)=>{const b=boxOf(parts);const g={id,kind,members:parts.map(p=>p.id),...b,x:round((b.x0+b.x1)/2),y:round((b.y0+b.y1)/2)};report.groups.push(g);return g;};
  for(const b of art.props.filter(p=>p.finalKind==='building'))addGroup('yard-'+b.id,'yard',art.props.filter(p=>p.id===b.id||p.building===b.id));
  for(const s of report.scenes){const parts=[...art.props,...art.flats].filter(p=>p.scene===s.id||p.id===s.base);addGroup(s.id,'activity',parts);}
- // Seven broad coastal clearings gain full pine compositions. Trees are
- // transferred from the deepest groves, preserving the exact tree count.
  const fieldAnchors=[[6800,1120],[1190,3740],[11100,4330],[9840,5540],[2080,8370],[2560,8330]];
  for(const [i,[x,y]]of fieldAnchors.entries()){
   const id='field-grove-'+i,donor=report.groves.filter(g=>!g.q3Added).sort((a,b)=>b.trees.length-a.trees.length||a.id.localeCompare(b.id))[0];
@@ -93,9 +85,6 @@ export function composeQuality3(root,art,w,report,catalog){
   report.groves.push({id,x,y,trees:moved.map(p=>p.id),shrubs:[],q3Added:true});
  }
  clearCanopies(art,w,report,catalog);
- // Existing groves are divided into local, connected tree groups of 3-8 trees.
- // Their bases keep a single shrub clump, drift and stone cluster tucked under
- // the canopy. No marks are painted in the snow between these places.
  for(const grove of report.groves){
   const remaining=originalTrees.filter(p=>p.grove===grove.id).sort((a,b)=>a.y-b.y||a.x-b.x);
   let n=0;
@@ -111,13 +100,10 @@ export function composeQuality3(root,art,w,report,catalog){
    addGroup(id,'grove',parts);
   }
  }
- // Keep activity plants attached to their actual scene, rather than qualifying
- // as additional independent coverage pockets.
  for(const p of art.props.filter(p=>p.finalKind==='shrub'))p.group=p.scene;
- const harbor=read(path.join(root,'rive/web/themes/snow/harbor.json'));
+ const harbor=read(path.join(root,'assets/world/themes/snow/harbor.json'));
  const base=makeMap('snow',{world:w,walk:w,harbor,sleepers:[]}).baseWalk;
  const walk=geometry(base).walkable,sizes=sleepHalfWidths();
- // Retain the count and all eight poses, assigned to one shared camp at a time.
  const counts=Object.fromEntries(Object.entries(w.sleepSpots).map(([pose,spots])=>[pose,spots.length]));
  w.sleepSpots=Object.fromEntries(Object.keys(counts).map(pose=>[pose,[]]));report.sleepers=[];
  for(const s of report.snowmanSeats){
@@ -157,7 +143,6 @@ export function composeQuality3(root,art,w,report,catalog){
   cursor=(cursor+3)%poses.length;
   for(const p of parts){p.group=id;p.scene=id;w.obstacles.push(footprint(p,p.finalRole==='cocoa-table'?{width:180,height:145}:catalog.get(p.finalRole)));}
   const patch=addFlat(art,clusters,id+'-snow','camp-snow',x,y+360,900,600,id,{finalKind:'camp-base'});parts.push(patch);
-  // Two shoulders, tucked into the rear edge of the same trodden patch.
   for(const [i,[ox,oy]]of [[-385,35],[385,35]].entries()){
    const p=piece(catalog,'shrub-medium',id+'-shoulder-'+i,x+ox,y+oy,{finalKind:'shrub',q3Added:true,group:id,scene:id,contact:false});
    if(propPathClearance(w,p)>=8&&inPoly(p.x,p.y,w.coast)&&!art.props.some(q=>q.finalKind==='building'&&overlaps(bounds(p),bounds(q)))){art.props.push(p);parts.push(p);}
@@ -167,14 +152,10 @@ export function composeQuality3(root,art,w,report,catalog){
  }
  if(report.sleepers.length!==60)throw Error(`Only ${report.sleepers.length}/60 camp residents fitted; remaining ${JSON.stringify(counts)}`);
  report.camps.push({id:'snowman-scene',x:2550,y:7800,focal:'snowman-cabin',lamp:'snowman-door-lamp',patch:'snowman-clearing',residents:report.snowmanSeats.map(s=>({...s}))});
- // Camps are fitted after planting. Remove any undergrowth detail their
- // furniture now occupies, keeping the rest of its parent grove intact.
  const hidden=new Set(clusters.filter(c=>art.props.some(p=>!['tree','shrub','smoke'].includes(p.finalKind)&&overlaps(bounds(c),bounds(p),8))).map(c=>c.id));
  art.flats=art.flats.filter(p=>!hidden.has(p.id));
  for(let i=clusters.length-1;i>=0;i--)if(hidden.has(clusters[i].id))clusters.splice(i,1);
  for(const g of report.groups)g.members=g.members.filter(id=>!hidden.has(id));
- // Complete the three tight edge groups with compact details at their own
- // tree feet. Every field composition contains 5-12 placed elements.
  const byId=new Map([...art.props,...art.flats].map(p=>[p.id,p]));
  for(const g of report.groups.filter(g=>g.kind==='grove'&&g.members.length<5)){
   const trees=g.members.map(id=>byId.get(id)).filter(p=>p.finalKind==='tree');
@@ -192,9 +173,6 @@ export function composeQuality3(root,art,w,report,catalog){
    report.groups=report.groups.filter(q=>q!==g);
   }
  }
- // One continuous walked connection from each camp to the existing lane.
- // Route around solids using the same navigation as the game. Tight SVG chunks
- // keep diagonal trails from reserving large empty textures.
  const trailWorld={...w,obstacles:[...w.obstacles,...art.props.filter(p=>['building','yard','scene','camp','lake'].includes(p.finalKind)).map(p=>{const b=bounds(p);return {poly:[[b.x0-60,b.y0-60],[b.x1+60,b.y0-60],[b.x1+60,b.y1+60],[b.x0-60,b.y1+60]]};})]};
  const nav=createNavigation(trailWorld);
  for(const camp of report.camps){

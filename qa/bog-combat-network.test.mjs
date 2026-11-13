@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createArenaProfiles} from '../server/arena-socket.mjs';
 import {createArenaSocket,localArenaOrigin,ARENA_INPUT_BURST} from '../server/arena-socket.mjs';
-import {ArenaClient,arenaURL,profileToken,ARENA_INPUT_INTERVAL,ARENA_INPUT_KEEPALIVE} from '../src/pixi/bog-combat/client.js';
+import {ArenaClient,arenaURL,profileToken,ARENA_INPUT_INTERVAL,ARENA_INPUT_KEEPALIVE} from '../src/features/bog-combat/client.js';
 
 class Socket extends EventEmitter{
   readyState=1;bufferedAmount=0;messages=[];
@@ -18,17 +18,17 @@ class Socket extends EventEmitter{
 const token='a'.repeat(36),other='b'.repeat(36);
 function fixture(options={}){const server=new EventEmitter(),data=new Map(),logs=[],profiles={get:id=>data.get(id),set:(id,value)=>data.set(id,value),flush(){}};let time=0;
   const room=createArenaSocket(server,profiles,{now:()=>time,log:message=>logs.push(message),...options});
-  const connect=(profile=token,team='privacy',origin='http://localhost:5173')=>{const ws=new Socket();server.emit('connection',ws,{headers:{origin},url:`/arena-room?profile=${profile}&team=${team}&name=Ducky`});return ws;};
+  const connect=(profile=token,team='karma',origin='http://localhost:5173')=>{const ws=new Socket();server.emit('connection',ws,{headers:{origin},url:`/arena-room?profile=${profile}&team=${team}&name=Ducky`});return ws;};
   return {room,connect,data,logs,advance:(ms)=>{time+=ms;}};
 }
 test('socket transport accepts local clients, rejects unrelated origins and invalid team/profile',()=>{
-  const {room,connect}=fixture();for(const ws of [connect(token,'evil'),connect('short'),connect(token,'privacy','https://evil.example')])assert.equal(ws.code,1008);
+  const {room,connect}=fixture();for(const ws of [connect(token,'nope'),connect('short'),connect(token,'karma','https://evil.example')])assert.equal(ws.code,1008);
   const a=connect();assert.equal(a.messages[0].type,'arena-welcome');assert.equal(a.messages[1].practice,false);
   room.close();
   assert.equal(localArenaOrigin('http://127.0.0.1:8800'),true);assert.equal(localArenaOrigin('http://localhost.evil:8800'),false);
 });
 test('two WebSocket handlers share authoritative movement, snapshots and disconnect cleanup',()=>{
-  const {room,connect}=fixture(),a=connect(),b=connect(other,'google'),id=a.messages[0].id;
+  const {room,connect}=fixture(),a=connect(),b=connect(other,'evil'),id=a.messages[0].id;
   assert.equal(b.messages.at(-1).players.some(p=>p.id===id),false,'hidden enemies are not sent');
   room.arena.state.players.get(id).shieldUntil=0;
   assert.equal(room.arena.state.practice,false);const start=room.arena.state.players.get(id).x;
@@ -51,7 +51,7 @@ test('profile totals survive a server store reload and never accept malformed co
 });
 test('client emits directions only, ignores old snapshots, clears connection and disposes once',()=>{
   let ws;class ClientSocket{readyState=1;bufferedAmount=0;messages=[];constructor(){ws=this;}send(m){this.messages.push(JSON.parse(m));}close(){this.closes=(this.closes||0)+1;}}
-  const statuses=[],client=new ArenaClient({team:'privacy',name:'A',profile:token,Socket:ClientSocket,url:'ws://localhost/arena-room',onStatus:s=>statuses.push(s)});
+  const statuses=[],client=new ArenaClient({team:'karma',name:'A',profile:token,Socket:ClientSocket,url:'ws://localhost/arena-room',onStatus:s=>statuses.push(s)});
   ws.onmessage({data:JSON.stringify({type:'arena-welcome',id:'a'})});
   const snapshot={type:'arena-snapshot',tick:2,players:[{id:'a',x:100,y:100,alive:true,stats:{}}]};ws.onmessage({data:JSON.stringify(snapshot)});
   ws.onmessage({data:JSON.stringify({...snapshot,tick:1,players:[]})});assert.equal(client.snapshot.tick,2);
@@ -62,12 +62,12 @@ test('client emits directions only, ignores old snapshots, clears connection and
 test('browser profile token persists and URL uses the current page WebSocket origin',()=>{
   const values=new Map(),storage={getItem:k=>values.get(k),setItem:(k,v)=>values.set(k,v)};
   const profile=profileToken(storage);assert.equal(profileToken(storage),profile);
-  const url=arenaURL({profile,team:'google',name:'Plain Duck'},'https://game.example/?arena');assert.equal(url.protocol,'wss:');assert.equal(url.pathname,'/arena-room');assert.equal(url.searchParams.get('name'),'Plain Duck');
+  const url=arenaURL({profile,team:'evil',name:'Plain Duck'},'https://game.example/?arena');assert.equal(url.protocol,'wss:');assert.equal(url.pathname,'/arena-room');assert.equal(url.searchParams.get('name'),'Plain Duck');
 });
 
 test('run changes coalesce at 30 Hz and prediction reconciles authoritative momentum without a camera jump',()=>{
   let ws;class ClientSocket{readyState=1;bufferedAmount=0;messages=[];constructor(){ws=this;}send(m){this.messages.push(JSON.parse(m));}close(){}}
-  const client=new ArenaClient({team:'privacy',profile:token,Socket:ClientSocket,url:'ws://localhost/arena-room'});
+  const client=new ArenaClient({team:'karma',profile:token,Socket:ClientSocket,url:'ws://localhost/arena-room'});
   ws.onmessage({data:JSON.stringify({type:'arena-welcome',id:'a'})});
   const receive=(tick,x,extra={})=>ws.onmessage({data:JSON.stringify({type:'arena-snapshot',tick,time:tick/60,players:[{id:'a',x,y:2400,alive:true,pace:0,heading:null,turn:0,ack:-1,...extra}]})});
   receive(1,2040);client.control({x:1,y:0,run:false},0,false,1/60,100);
@@ -87,7 +87,7 @@ test('120 Hz controls and held Space for 30 seconds stay below the server limit,
       send(data){this.sent.push({time,message:JSON.parse(data)});this.peer.emit('message',Buffer.from(data),false);}
       close(){this.peer.close(1000,'Test finished');}
     }
-    const client=new ArenaClient({team:'privacy',profile:token,Socket:ClientSocket,url:'ws://localhost/arena-room'});
+    const client=new ArenaClient({team:'karma',profile:token,Socket:ClientSocket,url:'ws://localhost/arena-room'});
     for(const message of socket.peer.messages)socket.onmessage({data:JSON.stringify(message)});
     const player=room.arena.state.players.get(client.id);
     for(let frame=0;frame<120*30;frame++){
@@ -127,13 +127,12 @@ test('coalescing sends the latest release and queued emote, and resumes after ba
 test('reconnect replaces a stale profile slot, saves totals and ignores delayed old socket events',()=>{
   const {room,connect,data,logs}=fixture(),old=connect(),oldId=old.messages[0].id;
   const player=room.arena.state.players.get(oldId);player.stats.tags=7;player.stats.score=70;
-  // A real close handshake can finish after the replacement is already active.
   old.close=function(code,reason){this.code=code;this.reason=reason;};
-  const fresh=connect(token,'google'),id=fresh.messages[0].id;
+  const fresh=connect(token,'evil'),id=fresh.messages[0].id;
   assert.equal(fresh.messages[0].type,'arena-welcome');assert.equal(old.code,4001);
   assert.match(old.reason,/replaced/);assert.notEqual(id,oldId);
   assert.equal(data.get(token).tags,7);assert.equal(room.arena.state.players.get(id).stats.score,70);
-  assert.equal(room.arena.state.players.get(id).team,'google');
+  assert.equal(room.arena.state.players.get(id).team,'evil');
   assert.equal([...room.arena.state.players.values()].filter(p=>!p.bot).length,1);
   old.emit('message',Buffer.from(JSON.stringify({type:'arena-input',seq:99,x:1,y:0,fire:true})),false);
   old.emit('close',old.code,Buffer.from(old.reason));old.emit('error',new Error('late reset'));

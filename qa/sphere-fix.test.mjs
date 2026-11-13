@@ -1,22 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {WORLD_GEO,WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/pixi/sphere-coordinates.js';
-import {landingBasis,easeLandingBasis,cameraMatrix,canonicalCamera,turnLongitude,cameraSpan} from '../src/pixi/sphere-camera.js';
-import {horizonRatio,lensAngle,spherePixel} from '../src/pixi/sphere-projection.js';
-import {nearbyHeading} from '../src/pixi/nearby-map.js';
-import {dot} from '../src/pixi/sphere.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {WORLD_GEO,WORLD_ISLANDS} from '../src/world/world-map.js';
+import {mapPoint,spherePoint,localPoint,viewFrame} from '../src/world/sphere-coordinates.js';
+import {landingBasis,easeLandingBasis,cameraMatrix,canonicalCamera,turnLongitude,cameraSpan} from '../src/rendering/shared/sphere-camera.js';
+import {horizonRatio,lensAngle,spherePixel} from '../src/world/sphere-projection.js';
+import {nearbyHeading} from '../src/app/nearby-map.js';
+import {dot} from '../src/world/sphere.js';
 
 const R=WORLD_GEO.Rw;
 test('landing preserves nearby landmarks through large turns and never collapses during its settle',()=>{
- for(const from of ['isle-170','isle-250','isle-176','home']){
+ for(const from of ['isle-251','isle-250','isle-55','home']){
   const to='isle-55',m=mapOf(to),at={...m.HARBOR.water,zoom:.7},old=mapPoint(to,from,at);
   const start=landingBasis(from,to,at),basis=easeLandingBasis(start,0),matrix=cameraMatrix({...at,basis},1440,900);
   for(const [x,y]of [[0,0],[20,0],[0,20],[-20,-20]]){
-   // Hold the pre-landing screen neighbourhood fixed. Equal offsets in the
-   // destination chart can cover much more screen space after a large turn;
-   // the affine camera matches the local derivative, not finite chart curvature.
    const p={x:old.x+x,y:old.y+y},q=mapPoint(from,to,p);
    const before={x:720+(p.x-old.x)*at.zoom,y:450+(p.y-old.y)*at.zoom};
    const after={x:matrix.a*q.x+matrix.c*q.y+matrix.tx,y:matrix.b*q.x+matrix.d*q.y+matrix.ty};
@@ -31,13 +28,12 @@ test('landing preserves nearby landmarks through large turns and never collapses
   }
  }
 });
-test('Iceland headings follow the screen across the pole rather than spinning round the island centre',()=>{
+test('flat headings stay north-up on both sides of Iceland',()=>{
  const m=mapOf('isle-55');
- for(const [x,y]of [[0,0],[0,-1],[0,1],[1,0],[-1,0],[2000,-1800]]){
-  const p={x:m.cx+x,y:m.cy+y},v=viewFrame('isle-55',p),q=spherePoint('isle-55',{x:p.x+1,y:p.y});
-  const expected=Math.atan2(dot(q,v.east),dot(q,v.north))*180/Math.PI;
-  assert.ok(Math.abs(nearbyHeading('isle-55',p,1,0)-expected)<1e-7);
-  if(Math.hypot(x,y)<=1)assert.ok(Math.abs(nearbyHeading('isle-55',p,0,-1))<.001);
+ for(const [x,y]of [[0,0],[0,-1],[0,1],[2000,-1800]]){
+  const p={x:m.cx+x,y:m.cy+y};
+  assert.equal(nearbyHeading('isle-55',p,1,0),90);
+  assert.equal(nearbyHeading('isle-55',p,0,-1),0);
  }
 });
 test('idle longitude spin preserves latitude through a full revolution from every island',()=>{

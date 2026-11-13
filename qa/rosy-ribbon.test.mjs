@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {IslandRoom} from '../worker/index.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
-import {setWalkDestination,walkStep} from '../src/pixi/player-motion.js';
+import {inShape} from '../assets/world/island-geometry.mjs';
+import {setWalkDestination,walkStep} from '../src/gameplay/player-motion.js';
 import sharp from 'sharp';
 import {Path2D,createCanvas} from '@napi-rs/canvas';
 const read=p=>JSON.parse(readFileSync(p));
@@ -25,7 +25,6 @@ test('Rosy box SVG base centre matches the actual paving circle within four pixe
  const svg=readFileSync('public/pixi-art/themes/pink/ribbon-centre/music-box.svg','utf8');
  assert.match(svg,/viewBox="-270 -720 540 965"/);
  assert.match(svg,/scale\(\.9\) translate\(0 815\)/);
- // Source base centre (0,-815) maps to local (0,0), texture coordinate (270,720).
  const base=[p.x+(270/540-p.anchor.x)*p.width,p.y+(720/965-p.anchor.y)*p.height];
  const floor=art.flats.find(p=>p.id==='plaza-floor');
  const circle=[floor.x+782,floor.y+562];

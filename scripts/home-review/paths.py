@@ -4,7 +4,7 @@ sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import LineString,Polygon,Point
 from shapely.ops import unary_union
 from pathlib import Path
-E=json.load(open('src/pixi/home-expansion.json'))
+E=json.load(open('src/world/home/home-expansion.json'))
 def road(id,p,main=False,end=None):return dict(id=id,kind='main' if main else 'lane',width=128 if main else 104,points=p,terminal=end)
 loop=[[139,656],[900,594],[1700,545],[2220,530],[2380,350],[2850,340],[3839,500],[4190,650],[4640,533],[4830,540],[5100,950],[5330,1405],[5350,1420],[5600,1420],[5660,1650],[5733,1805],[5772,2070],[5680,2350],[5456,2567],[5200,3250],[5130,3950],[5200,4460],[4800,4680],[4020,4590],[3729,4478],[3487,4350],[3320,4240],[2700,4310],[2060,4110],[1661,3933],[990,4040],[820,3930],[400,4083],[-350,4020],[-900,4336],[-1200,4230],[-850,3950],[-760,3650],[-734,3366],[-355,3200],[-360,2950],[-130,2810],[80,2420],[80,2150],[289,1867],[110,1700],[117,1278],[139,656]]
 R=[road('home-main-loop',loop,True),
@@ -28,7 +28,6 @@ road('mill-west',[[5100,950],[4950,1240],[4930,1480],[4930,1650],[5450,1690],[56
 road('quay-west',[[4065,5270],[3750,5370],[3420,5290],[3245,5497],[2950,5497],[2670,5440],[2339,5333]],end='Cloverhay work pad'),
 road('willowrest',[[5456,2567],[5900,2760],[6428,3011]],end='reading picnic'),
 road('seedshare',[[3839,500],[4100,310],[4272,150]],end='seed nursery')]
-# Keep the five distinctive destination courts, replace every access polygon.
 squares=[r for r in E['roads'] if r.get('rings') and r['id'].endswith('-square')]
 def sample(p):
  out=[]
@@ -42,7 +41,6 @@ def sample(p):
 shapes=[LineString(sample(r['points'])).buffer(r['width']/2,quad_segs=10) for r in R]
 for s in squares:
  q=Polygon(s['rings'][0],s['rings'][1:]);shapes.append(q.buffer(0))
-# Old hamlet entrances now have clean lanes in the same camera. Endpoints meet actual doorstep ground.
 for id,p in [
  ('butterbill-doors',[[-900,680],[-1180,650],[-1230,560]]),
  ('butterbill-east-door',[[-650,590],[-450,590],[-450,450]]),
@@ -53,7 +51,6 @@ for id,p in [
  ('petalpatch-shop',[[-1300,3900],[-1420,3950],[-1530,3930],[-1570,3900]]),
  ('reedwhistle-west',[[3600,5290],[3540,5370]])]:
  r=road(id,p,end='doorstep');R.append(r);shapes.append(LineString(sample(p)).buffer(52,quad_segs=10))
-# Destination paving and sand take part in the same fill, below their retained detail.
 from shapely import affinity
 for x,y,rx,ry in [(2820,2370,480,365)]:
  shapes.append(affinity.scale(Point(x,y).buffer(1,quad_segs=40),rx,ry))
@@ -63,16 +60,13 @@ merged=unary_union(shapes).buffer(85,quad_segs=12).buffer(-85,quad_segs=12)
 def path(g):
  polys=[g] if g.geom_type=='Polygon' else list(g.geoms)
  return ' '.join('M'+'L'.join(f'{x:.1f},{y:.1f}' for x,y in ring.coords)+'Z' for po in polys for ring in [po.exterior,*po.interiors])
-# exterior-only lower contact edge; union prevents every stroke-through seam.
 svg=f'<g data-name="Home unified paths"><path d="{path(merged)}" fill="#e4c567" transform="translate(0 3)" fill-rule="evenodd"/><path d="{path(merged)}" fill="#fde48c" fill-rule="evenodd"/></g>'
-# Water always paints over sand, including where core tiles overlap expansion rivers.
 wet=unary_union([Polygon(w['poly']).buffer(0) for w in E['riverWater']]+[Polygon(E['water']['poly']).buffer(0)])
-# One water contour eliminates bank shards and joins new navigable links flush.
-W=json.load(open('rive/web/world.json'))
+W=json.load(open('assets/world/world.json'))
 for w in W['water']:
  if abs(w.get('x',0)-1640)<2:
   wet=wet.union(affinity.scale(Point(w['x'],w['y']).buffer(1,quad_segs=60),w['rx'],w['ry']))
-wet=wet.union(Polygon(json.load(open('src/pixi/walk-shapes.json'))['lake']).buffer(0)).buffer(35,quad_segs=12).buffer(-35,quad_segs=12)
+wet=wet.union(Polygon(json.load(open('src/world/home/walk-shapes.json'))['lake']).buffer(0)).buffer(35,quad_segs=12).buffer(-35,quad_segs=12)
 def watercurve(g):
  polys=[g] if g.geom_type=='Polygon' else list(g.geoms)
  result=[]
@@ -94,10 +88,10 @@ svg=f'<g data-name="Home unified paths"><path d="{path(surface)}" fill="#e4c567"
 Path('scripts/home-review/path-surface.svgfrag').write_text(svg)
 Path('public/pixi-art/home-review').mkdir(parents=True,exist_ok=True)
 Path('public/pixi-art/home-review/path-network.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{E["width"]}" height="{E["height"]}" viewBox="{E["origin"]["x"]} {E["origin"]["y"]} {E["width"]} {E["height"]}">{svg}</svg>')
-Path('src/pixi/home-routes.json').write_text(json.dumps([dict(id=r['id'],width=r['width'],samples=sample(r['points'])) for r in R]))
+Path('src/world/home/home-routes.json').write_text(json.dumps([dict(id=r['id'],width=r['width'],samples=sample(r['points'])) for r in R]))
 Path('scripts/home-review/sampled-routes.json').write_text(json.dumps([dict(r,samples=sample(r['points'])) for r in R]))
 E['roads']=R+squares
 E['routeSystem']={'main':128,'lane':104,'surface':'/pixi-art/home-review/path-network.svg','routes':len(R)}
-Path('src/pixi/home-expansion.json').write_text(json.dumps(E,indent=2)+'\n')
+Path('src/world/home/home-expansion.json').write_text(json.dumps(E,indent=2)+'\n')
 Path('scripts/home-review/routes.json').write_text(json.dumps(R,indent=2)+'\n')
 print([(tuple(round(v) for v in g.bounds),round(g.area)) for g in (merged.geoms if hasattr(merged,'geoms') else [merged])]);print('Routes',len(R),'surface components',len(merged.geoms) if hasattr(merged,'geoms') else 1)

@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createServer} from 'vite';
-import sites from '../src/pixi/home-kites.json' with {type:'json'};
-import routes from '../src/pixi/home-routes.json' with {type:'json'};
-import paths from '../src/pixi/paths.json' with {type:'json'};
-import {HOME_MAP} from '../src/pixi/island-maps.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import sites from '../src/rendering/pixi/environment/home-kites.json' with {type:'json'};
+import routes from '../src/world/home/home-routes.json' with {type:'json'};
+import paths from '../src/world/home/paths.json' with {type:'json'};
+import {HOME_MAP} from '../src/world/island-maps.js';
+import {inShape} from '../assets/world/island-geometry.mjs';
 const segmentDistance=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);};
 test('13 non-blocking Home kites have clear lawn stakes and reachable walking approaches',()=>{
  assert.equal(sites.length,13);assert.equal(new Set(sites.map(s=>s.colour)).size,6);
@@ -23,7 +23,7 @@ test('13 non-blocking Home kites have clear lawn stakes and reachable walking ap
 test('kite flight keeps both string endpoints attached, independently phased and completely still with reduced motion',async()=>{
  const v=await createServer({configFile:false,cacheDir:'/tmp/home-kites-test-vite',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,hmr:false,ws:false,watch:null},logLevel:'error'});
  try{
-  const {kitePose,createHomeKites,KITE_ASSETS}=await v.ssrLoadModule('/src/pixi/home-kites.js');
+  const {kitePose,createHomeKites,KITE_ASSETS}=await v.ssrLoadModule('/src/rendering/pixi/environment/home-kites.js');
   const {Container,Texture}=await v.ssrLoadModule('pixi.js');
   const parent=new Container(), textures=Object.fromEntries(KITE_ASSETS.map(src=>[src,Texture.WHITE]));
   const kites=createHomeKites(parent,textures), pose={};

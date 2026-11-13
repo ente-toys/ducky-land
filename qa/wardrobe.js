@@ -1,5 +1,5 @@
 import {Application,Text} from 'pixi.js';
-import {createDuck,getDuckWardrobe} from '../src/pixi/duck.js';
+import {createDuck,getDuckWardrobe} from '../src/rendering/pixi/duck.js';
 const params=new URLSearchParams(location.search),group=document.querySelector('#group'),action=document.querySelector('#action'),animate=document.querySelector('#animate'),status=document.querySelector('#status');
 group.value=params.get('group')||'cap';action.value=params.get('action')||'0';let page=Number(params.get('page')||0),rigs=[],labels=[],generation=0;
 const angles=[0,45,90,135,180,-135,-90,-45],cell=150,row=155;

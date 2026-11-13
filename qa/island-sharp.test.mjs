@@ -4,14 +4,14 @@ import {readFileSync} from 'node:fs';
 import {Container, DOMAdapter} from 'pixi.js';
 import {createCanvas, Image} from '@napi-rs/canvas';
 import {audit, entries, manifest, rasterLayers, sourceSize, visibleAllocation, THEMES} from './island-sharp-audit.mjs';
-import {createGroundPool, GROUND_BUDGET_BYTES, tileResolution} from '../src/pixi/ground-stream.js';
-import {createRasterLoader} from '../src/pixi/theme-art-stream.js';
-import {cropSVG, RASTER_ART_BUDGET_BYTES, RASTER_ART_UTILIZATION} from '../src/pixi/theme-raster.js';
+import {createGroundPool, GROUND_BUDGET_BYTES, tileResolution} from '../src/rendering/pixi/art/ground-stream.js';
+import {createRasterLoader} from '../src/rendering/pixi/art/theme-art-stream.js';
+import {cropSVG, RASTER_ART_BUDGET_BYTES, RASTER_ART_UTILIZATION} from '../src/rendering/pixi/art/theme-raster.js';
 
 const report = await audit();
 const flush = () => new Promise(setImmediate);
-const counts = {home: [60, 12, 3257, 827, 11], sunflower: [72, 15, 423, 1643, 0],
-  pink: [176, 6, 1321, 1007, 0], library: [104, 19, 3146, 1786, 3]};
+const counts = {home: [60, 12, 3257, 827, 11], sunflower: [72, 15, 423, 2148, 0],
+  pink: [176, 6, 1321, 1007, 0], library: [104, 19, 3146, 1785, 3]};
 
 test('sharpness audit visits every live static layer, including generated Home decals and floating pads', () => {
   for (const island of report.islands) {
@@ -33,8 +33,6 @@ test('before density includes intrinsic SVG dimensions, placement scale, shared 
   const r = island.records.find(r => r.id === e.id);
   assert.equal(r.spriteScale, scale);
   assert.equal(r.before[1], r.homeFirstResolution / (scale * 1.8 * 2));
-  // Sunbob's four cached plans refer to replaced artwork and are no longer
-  // selected by its manifest. Count only production tileSet() matches.
   const legacyCounts = Object.fromEntries(report.islands.filter(i => THEMES.includes(i.theme))
     .map(i => [i.theme, i.records.filter(r => r.legacyTiles > 0).length]));
   assert.deepEqual(legacyCounts, {sunflower: 0, pink: 3, library: 4});
@@ -88,8 +86,6 @@ test('exact viewport sweep matches actual culling, and real pools lower density 
       const peak = view.pools[kind], allocation = visibleAllocation(tiles, peak.camera, view.width, view.height);
       assert.equal(allocation.bytes / 1048576, peak.peakMiB, theme + ' ' + kind + ' sweep witness');
       const requested = [], released = [], budget = kind === 'ground' ? GROUND_BUDGET_BYTES : RASTER_ART_BUDGET_BYTES;
-      // The audit above reports placement demand. The live pool leases each
-      // identical SVG crop once, including duplicate bridge/deck placements.
       const sources = [...new Map(allocation.visible.map(t => [t.src, t])).values()];
       const threshold = budget * (kind === 'ground' ? .9 : RASTER_ART_UTILIZATION);
       let step = 1, sharedBytes;
@@ -152,7 +148,7 @@ test('engine-owned kite stakes, boats and contact leaves remain explicit sharpne
   assert(report.shared.boats.max < 1);
   assert.equal(report.shared.contactLeaves.max, 1 / (1.2 * 3.6));
   assert(report.shared.sleepers.every(p => p.max >= 1), 'rest-pose result from CRISP.md retained');
-  const engine = readFileSync('src/pixi/engine.js', 'utf8');
+  const engine = readFileSync('src/rendering/pixi/engine.js', 'utf8');
   assert(engine.includes('this.homeGroundStream=this.groundPool.create(tiles,this.homeGround)'));
   assert(!engine.includes('art.raster?.enabled'), 'Home manifest opt-in is not implemented');
   assert.equal(new Container().anchor, undefined, 'generic containers have no Sprite anchor metadata');

@@ -1,27 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="432" height="1837" viewBox="0 0 432 1837" data-detail="1">
-<title>Wooden plaza lantern, high oblique view</title>
-<g stroke-linecap="round" stroke-linejoin="round">
-<path d="M56 1650 C56 1577.54 127.63 1518.8 216 1518.8 C304.37 1518.8 376 1577.54 376 1650 L376 1693.8 C376 1766.26 304.37 1825 216 1825 C127.63 1825 56 1766.26 56 1693.8 Z" fill="#885931" stroke="#39472D" stroke-width="19.6"/>
-<ellipse cx="216" cy="1650" rx="160" ry="131.2" fill="#C88941"/>
-<path d="M349 1577 Q376 1610 376 1650 C376 1722.46 304.37 1781.2 216 1781.2 Q135 1781.2 88 1728 Q214 1772 297 1701 Q347 1658 349 1577 Z" fill="#885931"/>
-<ellipse cx="216" cy="1650" rx="160" ry="131.2" fill="none" stroke="#39472D" stroke-width="19.6"/>
-<path d="M101 1604 C101 1551.92 152.49 1509.7 216 1509.7 C279.51 1509.7 331 1551.92 331 1604 L331 1634 C331 1686.08 279.51 1728.3 216 1728.3 C152.49 1728.3 101 1686.08 101 1634 Z" fill="#885931" stroke="#39472D" stroke-width="19.6"/>
-<ellipse cx="216" cy="1604" rx="115" ry="94.3" fill="#C88941" stroke="#39472D" stroke-width="19.6"/>
-<path d="M151 566 L281 566 L281 1593 Q281 1630 216 1630 Q151 1630 151 1593 Z" fill="#C88941"/>
-<path d="M252 566 L281 566 L281 1593 Q281 1617 252 1625 Z" fill="#885931"/>
-<path d="M151 566 L281 566 L281 1593 Q281 1630 216 1630 Q151 1630 151 1593 Z" fill="none" stroke="#39472D" stroke-width="19.6"/>
-<path d="M61 238 L371 238 L371 615 Q371 639 347 639 L85 639 Q61 639 61 615 Z" fill="#C88941"/>
-<path d="M313 238 L371 238 L371 615 Q371 639 347 639 L85 639 Q61 639 61 615 L313 615 Z" fill="#885931"/>
-<path d="M61 238 L371 238 L371 615 Q371 639 347 639 L85 639 Q61 639 61 615 Z" fill="none" stroke="#39472D" stroke-width="19.6"/>
-<path d="M88 292 L344 292 L344 601 L88 601 Z" fill="#FFF0C7" stroke="#39472D" stroke-width="9.8"/>
-<path d="M216 384 L216 601" fill="none" stroke="#39472D" stroke-width="9.8"/>
-<path d="M18 220 C18 130.33 106.65 57.64 216 57.64 C325.35 57.64 414 130.33 414 220 L414 242 C414 331.67 325.35 404.36 216 404.36 C106.65 404.36 18 331.67 18 242 Z" fill="#885931" stroke="#39472D" stroke-width="19.6"/>
-<ellipse cx="216" cy="220" rx="198" ry="162.36" fill="#C88941"/>
-<path d="M382 132 Q414 171 414 220 C414 309.67 325.35 382.36 216 382.36 Q116 382.36 55 315 Q204 366 307 278 Q377 218 382 132 Z" fill="#885931"/>
-<ellipse cx="216" cy="220" rx="198" ry="162.36" fill="none" stroke="#39472D" stroke-width="19.6"/>
-<path d="M180 46 Q180 19 216 19 Q252 19 252 46 L252 100 Q252 121 216 121 Q180 121 180 100 Z" fill="#C88941"/>
-<path d="M234 24 Q252 30 252 46 L252 100 Q252 117 234 120 Z" fill="#885931"/>
-<path d="M180 46 Q180 19 216 19 Q252 19 252 46 L252 100 Q252 121 216 121 Q180 121 180 100 Z" fill="none" stroke="#39472D" stroke-width="19.6"/>
-<ellipse cx="216" cy="43" rx="36" ry="29.52" fill="#C88941" stroke="#39472D" stroke-width="9.8"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="65" height="155" viewBox="0 0 65 155">
+<title>Bog teal courtyard lantern with warm flat glass</title>
+<g stroke="#39472d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M6 138V146Q32 158 59 146V138Z" fill="#00535d" /><ellipse cx="32.5" cy="138" rx="26.5" ry="9" fill="#63bab4" /><path d="M13 78H52V134Q32 147 13 134Z" fill="#e6cda0" /><path d="M40 79H52V134L40 139Z" fill="#b49d77" stroke="none"/><path d="M22 87V123" fill="none" stroke="#fff6b0" stroke-width="7"/><path d="M12 77V134Q32 146 53 134V77M33 80V140" fill="none" /><path d="M4 74Q12 66 32 52Q51 66 61 74Q33 90 4 74Z" fill="#006b73" /><ellipse cx="32" cy="51" rx="6" ry="6" fill="#fff0c7" />
+</g></svg>

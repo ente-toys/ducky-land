@@ -1,28 +1,30 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORLD_ISLANDS,FINISHED_THEMES,THEMED_ISLANDS,ISLAND_COUNT,layoutWorld,sizeOfTheme} from '../src/pixi/world-map.js';
-import {mapOf,themeOfIsland} from '../src/pixi/island-maps.js';
-import {destinationsFor,canSail,sailRoute,crossIsland,SAIL_SPEED,seaBoundsFor,originOffset,BOAT_RADIUS} from '../src/pixi/islands.js';
+import {WORLD_ISLANDS,FINISHED_THEMES,THEMED_ISLANDS,ISLAND_COUNT,layoutWorld,sizeOfTheme} from '../src/world/world-map.js';
+import {mapOf,themeOfIsland} from '../src/world/island-maps.js';
+import {destinationsFor,canSail,sailRoute,crossIsland,SAIL_SPEED,seaBoundsFor,originOffset,BOAT_RADIUS} from '../src/gameplay/islands.js';
 const RAD=Math.PI/180;
 function checkLayout(m){
- assert.equal(m.islands.length,9);assert.equal(new Set(m.islands.map(i=>i.id)).size,9);
+ assert.equal(m.islands.length,7);assert.equal(new Set(m.islands.map(i=>i.id)).size,7);
  const ice=m.islands.find(i=>i.theme==='snow');assert.deepEqual(ice.center,[0,1,0]);
- const longs=m.islands.filter(i=>i!==ice).map(i=>i.lon).sort((a,b)=>a-b);
+ const bog=m.islands.find(i=>i.theme==='bog');assert.ok(Math.abs(bog.center[1]+1)<1e-12,'Bog on the South Pole');
+ const ring=m.islands.filter(i=>i!==ice&&i!==bog);
+ assert.ok(ring.every(i=>Math.abs(i.lat)<=10*RAD),'the other five sit round the equator');
+ const longs=ring.map(i=>i.lon).sort((a,b)=>a-b);
  const gaps=longs.map((x,k)=>(longs[(k+1)%longs.length]-x+2*Math.PI)%(2*Math.PI));
- assert.ok(Math.max(...gaps)-Math.min(...gaps)>20*RAD,'unequal gaps');   // boss 8 Nov: islands cluster, open ocean between groups is fine
- assert.ok(new Set(m.islands.map(i=>i.lat)).size===9,'varied heights, no rows');
+ assert.ok(Math.min(...gaps)>60*RAD,'spread all the way round');
  for(const i of m.islands){assert.ok(Math.abs(Math.hypot(...i.center)-1)<1e-12);}
  assert.deepEqual([m.islands[0].x,m.islands[0].y],[2900,2200]);
 }
-test('9 unique sphere patches, clustered unevenly, with Iceland exactly on the North Pole',()=>{
- assert.equal(ISLAND_COUNT,9);checkLayout(layoutWorld());
+test('7 unique sphere patches: Iceland on the North Pole, Bog on the South Pole, five round the equator',()=>{
+ assert.equal(ISLAND_COUNT,7);checkLayout(layoutWorld());
  assert.deepEqual(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean),FINISHED_THEMES);
  for(const [id,theme] of THEMED_ISLANDS){assert.equal(themeOfIsland(id),theme);assert.equal(mapOf(id).id,theme);}
  for(const island of WORLD_ISLANDS){
   const map=mapOf(island.id);
   assert.deepEqual([island.width,island.height],[map.width,map.height],island.id+' uses its delivered map size');
  }
- assert.equal(SAIL_SPEED,380);
+ assert.equal(SAIL_SPEED,570);
 });
 test('every real map fits inside each sailing envelope, including negative origins and non-neighbour shores',()=>{
  for(const from of WORLD_ISLANDS){
@@ -51,5 +53,5 @@ test('every island has real boat routes to its neighbours in one connected sea',
    if(!seen.has(b.id)){seen.add(b.id);todo.push(b.id);}
   }
  }
- assert.equal(seen.size,9);
+ assert.equal(seen.size,7);
 });

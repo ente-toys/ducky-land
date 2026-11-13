@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapFor} from '../src/pixi/island-maps.js';
-import {canSail,harborOf,createBoats,setSailDestination,sailStep,BOAT_RADIUS} from '../src/pixi/islands.js';
+import {mapFor} from '../src/world/island-maps.js';
+import {canSail,harborOf,createBoats,setSailDestination,sailStep,BOAT_RADIUS} from '../src/gameplay/islands.js';
 import {paperboatMoorings,retiredBoatIds} from '../scripts/pagepond-boats/config.mjs';
-import {deckX} from '../src/pixi/bridge-projection.mjs';
-import {shoreOf} from '../src/pixi/surf.js';
+import {deckX} from '../src/world/home/bridge-projection.mjs';
+import {shoreOf} from '../src/rendering/pixi/environment/surf.js';
 const read=p=>JSON.parse(fs.readFileSync(p)),id='isle-251',map=mapFor('library'),report=read('scripts/pagepond-rework/report.json'),ground=read('scripts/pagepond/layout.json'),art=read('public/pixi-art/themes/library/art.json');
 function sail(actor,p){assert(canSail(...p,id),'open boat waypoint '+p);assert(setSailDestination(actor,...p),'route to '+p);for(let i=0;i<12000&&(actor.sailTarget||actor.sailRoute?.length);i++){sailStep(actor,1/20,{x:0,y:0});assert(canSail(actor.x,actor.y,id),'boat remains in water');}assert(Math.hypot(actor.x-p[0],actor.y-p[1])<2,'arrives at '+p);}
 function sparse(samples){return samples.filter((p,i)=>i%7===0||i===samples.length-1).map(p=>p.slice(0,2));}
@@ -26,13 +26,11 @@ test('Pagepond replaces every floating paperboat with the approved playable Home
   const boat=fleet.find(b=>b.x===p.x&&b.y===p.y);assert(boat,p.id+' is a real fleet boat');assert(canSail(boat.x,boat.y,id),p.id+' full hull clears the shore');
   const shore=nav.nearest(boat.x,boat.y,280);assert(shore,p.id+' has boarding land');assert(nav.route(map.spawn.x,map.spawn.y,...shore).length,p.id+' boarding land is reachable');
  }
- const props=read('rive/web/themes/library/placements.json');
+ const props=read('assets/world/themes/library/placements.json');
  assert(!props.some(p=>retiredBoatIds.has(p.id)));assert(!map.world.props.some(p=>retiredBoatIds.has(p.id)));
 });
 
 test('Pagepond exported water tiles leave no invisible land seams across a sailing hull',()=>{
- // A rounded tile seam here used to stop the south-moat to Paperboat route
- // between two valid waypoints. Check the exact contact and nearby hulls.
  for(let offset=-10;offset<=10;offset+=.25)assert(canSail(5578.37622480126+offset,7019.081055312963,id),'no hairline land plug at '+offset);
  assert.deepEqual(map.world.boatWater,map.walk.boatWater,'client and authority share the repaired mask');
 });
@@ -43,16 +41,12 @@ test('one harbour boat visits every Pagepond channel, both complete moats and th
   const points=sparse(ch.samples).reverse();for(const p of points)sail(actor,p);for(const p of [...points].reverse())sail(actor,p);visited.add(ch.id);
  }
  for(const tour of report.boatTours){for(const p of tour.points)sail(actor,p);visited.add(tour.id);}
- // The natural sea channel between the two page-shaped halves is not one
- // of the three authored river mouths. Cover it explicitly, end to end.
  for(const p of centralChannel)sail(actor,p);for(const p of [...centralChannel].reverse())sail(actor,p);visited.add('central-canal');
  sail(actor,harbor);assert.equal(visited.size,ground.channels.length+report.boatTours.length+1);
  for(const p of paperboatMoorings){sail(actor,[p.x,p.y]);sail(actor,harbor);}
 });
 
 test('every Pagepond crossing has hull clearance and sails under the raised deck from both sides',()=>{
- // The small reading dock ends in the isolated pond. It is a pier, rather
- // than a bridge between island sections; the other 17 arches cross channels.
  const readingDock=read('scripts/pagepond-ground/data/source.json').walkways.at(-1);
  const arches=map.world.arches.filter(a=>!sameAxis(a,readingDock));assert.equal(arches.length,17);
  const actor=harborActor();
@@ -64,8 +58,6 @@ test('every Pagepond crossing has hull clearance and sails under the raised deck
   for(const p of [sides[0],[x,y],sides[1],[x,y],sides[0]]){assert(canSail(...p,id),'full hull clears the banks under '+(a.id??a.a));sail(actor,p);}
  }
  const harbor=harborOf(id).water;sail(actor,[harbor.x,harbor.y]);
- // Every authored river and moat spine retains the hull plus a 30-unit
- // bank margin, including bends and mouths, with no dry-land plugs.
  for(const ch of [...ground.channels,...report.boatTours])for(const p of ch.samples??ch.points)assert(canSail(p[0],p[1],id,BOAT_RADIUS+30),ch.id+' bank clearance '+p);
  for(const p of centralChannel)assert(canSail(...p,id,BOAT_RADIUS+30),'central canal bank clearance '+p);
 });

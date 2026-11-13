@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import {auditPagepond} from '../scripts/pagepond-hamlets/audit.mjs';
 import {checkTheme} from '../scripts/theme-index.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
-const art=read('public/pixi-art/themes/library/art.json'),world=read('rive/web/themes/library/world.json'),walk=read('rive/web/themes/library/walk-world.json'),plan=read('scripts/pagepond-hamlets/placement.json');
+const art=read('public/pixi-art/themes/library/art.json'),world=read('assets/world/themes/library/world.json'),walk=read('assets/world/themes/library/walk-world.json'),plan=read('scripts/pagepond-hamlets/placement.json');
 
 test('Pagepond approved hamlets use vector pieces, centre-sized houses and bounded workplaces',()=>{
  assert.equal(art.props.filter(p=>p.hamlet&&p.kind==='building').length,20);

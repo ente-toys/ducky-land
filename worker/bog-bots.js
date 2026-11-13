@@ -1,9 +1,8 @@
-import {createBotBrain,createBotController,resetBotBrain} from '../src/pixi/bog-combat/bot-brain.js';
+import {createBotBrain,createBotController,resetBotBrain} from '../src/features/bog-combat/bot-brain.js';
+import {isCombatHidden} from '../src/features/bog-combat/hide-bushes.js';
 
 export const BOT_FILL=6;
 
-// Six reusable slots, with no account, paid entry, SQL, or world actor. The
-// normal authority owns their movement, shots, five lives and hidden respawns.
 export function createBogBots(arena,combat,options={}){
  const controller=createBotController(arena,combat,options);
  const slots=Array.from({length:BOT_FILL},(_,i)=>({id:`bog-bot-${i+1}`,name:`Bog Bot ${i+1}`,brain:createBotBrain(i)}));
@@ -11,7 +10,7 @@ export function createBogBots(arena,combat,options={}){
  const departures=[];let serial=0;
  function remove(slot,poof=true){
   const p=arena.state.players.get(slot.id);if(!p?.bot)return;
-  if(poof){departures.push({id:++serial,x:p.x,y:p.y,team:p.team,hidden:p.alive&&p.shieldUntil>arena.state.time,time:arena.state.time});if(departures.length>BOT_FILL)departures.shift();}
+  if(poof){departures.push({id:++serial,x:p.x,y:p.y,team:p.team,hidden:isCombatHidden(p,arena.state.time),time:arena.state.time});if(departures.length>BOT_FILL)departures.shift();}
   arena.leave(slot.id);resetBotBrain(slot.brain);
  }
  function replace(team){
@@ -19,22 +18,22 @@ export function createBogBots(arena,combat,options={}){
  }
  function sync(active=true){
   if(!active){for(const slot of slots)remove(slot,false);departures.length=0;return;}
-  let privacy=0,google=0;
-  for(const p of arena.state.players.values())if(!p.bot){if(p.team==='privacy')privacy++;else google++;}
-  const count=Math.max(0,BOT_FILL-privacy-google),wantPrivacy=Math.max(0,Math.min(count,BOT_FILL/2-privacy));
-  let leftPrivacy=wantPrivacy,leftGoogle=count-wantPrivacy;
+  let karma=0,evil=0;
+  for(const p of arena.state.players.values())if(!p.bot){if(p.team==='karma')karma++;else evil++;}
+  const count=Math.max(0,BOT_FILL-karma-evil),wantKarma=Math.max(0,Math.min(count,BOT_FILL/2-karma));
+  let leftKarma=wantKarma,leftEvil=count-wantKarma;
   for(const slot of slots){
    const p=arena.state.players.get(slot.id);if(!p?.bot)continue;
-   if(p.team==='privacy'){if(leftPrivacy>0)leftPrivacy--;else remove(slot);}
-   else {if(leftGoogle>0)leftGoogle--;else remove(slot);}
+   if(p.team==='karma'){if(leftKarma>0)leftKarma--;else remove(slot);}
+   else {if(leftEvil>0)leftEvil--;else remove(slot);}
   }
   for(const slot of slots){
-   if(!leftPrivacy&&!leftGoogle)break;
+   if(!leftKarma&&!leftEvil)break;
    if(arena.state.players.has(slot.id))continue;
-   const team=leftPrivacy>leftGoogle?'privacy':'google';
+   const team=leftKarma>leftEvil?'karma':'evil';
    const p=arena.join({id:slot.id,name:slot.name,team});p.bot=true;
    resetBotBrain(slot.brain);slot.brain.reactAt=arena.state.time+Number(slot.id.slice(-1))*.04;
-   if(team==='privacy')leftPrivacy--;else leftGoogle--;
+   if(team==='karma')leftKarma--;else leftEvil--;
   }
  }
  function step(){controller.step();for(const slot of slots){const p=arena.state.players.get(slot.id);if(p?.bot)controller.think(p,slot.brain);}}

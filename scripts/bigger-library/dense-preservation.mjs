@@ -1,8 +1,0 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import sharp from 'sharp';import {createHash}from'node:crypto';
-import {OUT,original,origin,read}from'./model.mjs';import {inShape,geometry}from'../../rive/web/island-geometry.mjs';
-const baseline=read('scripts/bigger-library/dense-baseline.json'),world=read('rive/web/themes/library/world.json');
-for(const[k,h]of Object.entries(baseline.preservedWorldHashes))assert.equal(createHash('sha256').update(JSON.stringify(world[k])).digest('hex'),h,k+' unchanged from fix pass');
-const [A,B]=await Promise.all(['library-now.png','library-dense.png'].map(f=>sharp(OUT+'/'+f).ensureAlpha().raw().toBuffer({resolveWithObject:true})));let checked=0,changed=0;const examples=[];
-for(let y=0;y<A.info.height;y++)for(let x=0;x<A.info.width;x++){const wx=origin.x+(x+.5)/.11,wy=origin.y+(y+.5)/.11;if(!original.world.coastRings.some(p=>inShape(wx,wy,{poly:p},-12)))continue;checked++;const i=(y*A.info.width+x)*4;if(!A.data.subarray(i,i+4).equals(B.data.subarray(i,i+4))){changed++;if(examples.length<10)examples.push([wx,wy]);}}
-let dryChecked=0,lost=0;const before=geometry({...original.world,obstacles:[]}),after=geometry({...world,obstacles:[]});for(let y=450;y<5150;y+=20)for(let x=450;x<7550;x+=20)if(before.walkable(x,y)){dryChecked++;if(!after.walkable(x,y))lost++;}
-const result={worldFieldsUnchanged:Object.keys(baseline.preservedWorldHashes),originalPixels:{checked,changed,examples},originalDryPoints:{checked:dryChecked,lost}};fs.writeFileSync('scripts/bigger-library/dense-preservation.json',JSON.stringify(result,null,2)+'\n');console.log(result);assert.equal(changed,0,'original pixels');assert.equal(lost,0,'original dry land');

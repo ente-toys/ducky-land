@@ -1,20 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
-import {createHeartLocations,heartArtContains} from '../src/pixi/heart-activity.js';
+import {createHeartLocations,heartArtContains} from '../src/rendering/shared/heart-activity.js';
 import sharp from 'sharp';
-import {Quaternion} from 'three';
-import {rotateGlobeFromScreen} from '../src/pixi/three-globe-math.js';
-import {WORLD_ISLANDS} from '../src/pixi/world-map.js';
-import {ISLETS} from '../src/pixi/islets.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
+import {globeDrag,centreOf,lonLat} from '../src/rendering/shared/globe-look.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {ISLETS} from '../src/world/islets.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {inPoly} from '../assets/world/island-geometry.mjs';
 
 const sampler = () => {
   let seed = 7;
   return createHeartLocations(WORLD_ISLANDS,mapOf,()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296),ISLETS);
 };
-test('activity covers all nine islands and eleven islets, on actual dry land',()=>{
+test('activity covers all seven islands and seven islets, on actual dry land',()=>{
   const next=sampler(),counts=new Map(),round=WORLD_ISLANDS.length*3+ISLETS.length;
   for(let i=0;i<round*30;i++){
     const {island,x,y}=next();counts.set(island,(counts.get(island)??0)+1);
@@ -53,10 +52,12 @@ test('heart anchors must also be inside the displayed art, excluding invisible l
   }
 });
 
-test('background screen drags rotate both axes continuously and reverse without drift',()=>{
-  const q=new Quaternion();rotateGlobeFromScreen(q,100,0,800);
-  assert.ok(q.angleTo(new Quaternion())>.3);
-  rotateGlobeFromScreen(q,-100,0,800);assert.ok(q.angleTo(new Quaternion())<1e-7);
-  rotateGlobeFromScreen(q,0,100,800);assert.ok(q.angleTo(new Quaternion())>.3);
-  rotateGlobeFromScreen(q,0,-100,800);assert.ok(q.angleTo(new Quaternion())<1e-7);
+test('native background drags rotate both axes continuously and reverse without drift',()=>{
+ const start=centreOf(.3,.2),Rp=800;
+ for(const to of [{x:100,y:0},{x:0,y:100}]){
+  const next=globeDrag('home',start,{x:0,y:0},to,1,Rp),moved=centreOf(next.lon,next.lat);
+  assert.ok(Math.hypot(...moved.map((v,k)=>v-start[k]))>.1);
+  const back=globeDrag('home',moved,to,{x:0,y:0},1,Rp),original=lonLat(start);
+  assert.ok(Math.abs(back.lon-original.lon)<1e-6);assert.ok(Math.abs(back.lat-original.lat)<1e-6);
+ }
 });

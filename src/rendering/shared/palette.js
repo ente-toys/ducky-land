@@ -1,0 +1,2 @@
+export const PALETTE = {ink: 0x39472D, grass: 0x89C332, leaf: 0x4AA539, deepLeaf: 0x2B7A37, sand: 0xFDE48C, sandShade: 0xE4C567,
+  wood: 0xC88941, darkWood: 0x885931, water: 0x6EC9DE, cream: 0xFFF0C7, coral: 0xF16E4B, sun: 0xFFB937};

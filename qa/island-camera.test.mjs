@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fitZoom, zoomAt, easeCamera } from '../rive/web/island-camera.mjs';
+import { fitZoom, zoomAt, easeCamera } from '../assets/world/island-camera.mjs';
 
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-8, `${a} differs from ${b}`);
 const worldPoint = (camera, x, y, w, h) => [camera.x + (x - w / 2) / camera.zoom, camera.y + (y - h / 2) / camera.zoom];

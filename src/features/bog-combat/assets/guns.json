@@ -1,0 +1,1394 @@
+[
+  {
+    "name": "gun-c-karma-held-n",
+    "file": "gun-c-karma-held-n.svg",
+    "shadowFile": "gun-c-karma-held-n-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "n",
+    "rigAngle": 180,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.622,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.804,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.804,
+      -225.186
+    ],
+    "muzzle": [
+      268.804,
+      -320.947
+    ],
+    "aimWorldVector": [
+      -1,
+      -1
+    ],
+    "aimScreenVector": [
+      0,
+      -0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 80,
+    "h": 163,
+    "viewBox": [
+      229,
+      -348,
+      80,
+      163
+    ],
+    "anchor": {
+      "x": -229,
+      "y": 348
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-n-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      39.804,
+      27.053
+    ],
+    "gripLocal": [
+      39.804,
+      122.814
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-ne",
+    "file": "gun-c-karma-held-ne.svg",
+    "shadowFile": "gun-c-karma-held-ne-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "ne",
+    "rigAngle": 135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        120.047,
+        -345.38
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        188.116,
+        -192.703
+      ],
+      "contactPosed": [
+        236.23,
+        -225.191
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      236.23,
+      -225.191
+    ],
+    "muzzle": [
+      329.23,
+      -301.691
+    ],
+    "aimWorldVector": [
+      0,
+      -1
+    ],
+    "aimScreenVector": [
+      1,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 141,
+    "viewBox": [
+      173,
+      -334,
+      180,
+      141
+    ],
+    "anchor": {
+      "x": -173,
+      "y": 334
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-ne-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      156.23,
+      32.309
+    ],
+    "gripLocal": [
+      63.23,
+      108.809
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-e",
+    "file": "gun-c-karma-held-e.svg",
+    "shadowFile": "gun-c-karma-held-e-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "e",
+    "rigAngle": 90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        43.52,
+        -303.109
+      ],
+      "rotationDegrees": -25,
+      "contactRest": [
+        95.754,
+        -197.627
+      ],
+      "contactPosed": [
+        135.438,
+        -229.585
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      135.438,
+      -229.585
+    ],
+    "muzzle": [
+      266.96,
+      -259.585
+    ],
+    "aimWorldVector": [
+      1,
+      -1
+    ],
+    "aimScreenVector": [
+      1.41421,
+      0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 214,
+    "h": 115,
+    "viewBox": [
+      58,
+      -324,
+      214,
+      115
+    ],
+    "anchor": {
+      "x": -58,
+      "y": 324
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-e-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      208.96,
+      64.415
+    ],
+    "gripLocal": [
+      77.438,
+      94.415
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-se",
+    "file": "gun-c-karma-held-se.svg",
+    "shadowFile": "gun-c-karma-held-se-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "se",
+    "rigAngle": 45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        154.668,
+        -352.735
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        222.737,
+        -200.058
+      ],
+      "contactPosed": [
+        270.85,
+        -232.546
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      270.85,
+      -232.546
+    ],
+    "muzzle": [
+      363.85,
+      -216.046
+    ],
+    "aimWorldVector": [
+      1,
+      0
+    ],
+    "aimScreenVector": [
+      1,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 138,
+    "viewBox": [
+      208,
+      -325,
+      180,
+      138
+    ],
+    "anchor": {
+      "x": -208,
+      "y": 325
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-se-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      155.85,
+      108.954
+    ],
+    "gripLocal": [
+      62.85,
+      92.454
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-s",
+    "file": "gun-c-karma-held-s.svg",
+    "shadowFile": "gun-c-karma-held-s-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "s",
+    "rigAngle": 0,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.623,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.805,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.805,
+      -225.186
+    ],
+    "muzzle": [
+      268.805,
+      -189.425
+    ],
+    "aimWorldVector": [
+      1,
+      1
+    ],
+    "aimScreenVector": [
+      0,
+      0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 82,
+    "h": 150,
+    "viewBox": [
+      228,
+      -312,
+      82,
+      150
+    ],
+    "anchor": {
+      "x": -228,
+      "y": 312
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-s-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      40.805,
+      122.575
+    ],
+    "gripLocal": [
+      40.805,
+      86.814
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-sw",
+    "file": "gun-c-karma-held-sw.svg",
+    "shadowFile": "gun-c-karma-held-sw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "sw",
+    "rigAngle": -45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -136.761,
+        -349.737
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -204.83,
+        -197.06
+      ],
+      "contactPosed": [
+        -252.944,
+        -229.548
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -252.944,
+      -229.548
+    ],
+    "muzzle": [
+      -345.944,
+      -213.048
+    ],
+    "aimWorldVector": [
+      0,
+      1
+    ],
+    "aimScreenVector": [
+      -1,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 132,
+    "viewBox": [
+      -370,
+      -316,
+      180,
+      132
+    ],
+    "anchor": {
+      "x": 370,
+      "y": 316
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-sw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      24.056,
+      102.952
+    ],
+    "gripLocal": [
+      117.056,
+      86.452
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-w",
+    "file": "gun-c-karma-held-w.svg",
+    "shadowFile": "gun-c-karma-held-w-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "w",
+    "rigAngle": -90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -33.421,
+        -314.589
+      ],
+      "rotationDegrees": 25,
+      "contactRest": [
+        -85.223,
+        -209.044
+      ],
+      "contactPosed": [
+        -124.975,
+        -240.825
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -124.975,
+      -240.825
+    ],
+    "muzzle": [
+      -256.497,
+      -270.825
+    ],
+    "aimWorldVector": [
+      -1,
+      1
+    ],
+    "aimScreenVector": [
+      -1.41421,
+      0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 218,
+    "h": 127,
+    "viewBox": [
+      -266,
+      -334,
+      218,
+      127
+    ],
+    "anchor": {
+      "x": 266,
+      "y": 334
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-w-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      9.503,
+      63.175
+    ],
+    "gripLocal": [
+      141.025,
+      93.175
+    ]
+  },
+  {
+    "name": "gun-c-karma-held-nw",
+    "file": "gun-c-karma-held-nw.svg",
+    "shadowFile": "gun-c-karma-held-nw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "karma",
+    "facing": "nw",
+    "rigAngle": -135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        -112.074,
+        -341.045
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -179.588,
+        -188.352
+      ],
+      "contactPosed": [
+        -227.74,
+        -220.651
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -227.74,
+      -220.651
+    ],
+    "muzzle": [
+      -320.74,
+      -297.151
+    ],
+    "aimWorldVector": [
+      -1,
+      0
+    ],
+    "aimScreenVector": [
+      -1,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 180,
+    "h": 148,
+    "viewBox": [
+      -345,
+      -328,
+      180,
+      148
+    ],
+    "anchor": {
+      "x": 345,
+      "y": 328
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-karma-held-nw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      24.26,
+      30.849
+    ],
+    "gripLocal": [
+      117.26,
+      107.349
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-n",
+    "file": "gun-c-evil-held-n.svg",
+    "shadowFile": "gun-c-evil-held-n-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "n",
+    "rigAngle": 180,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.622,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.804,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.804,
+      -225.186
+    ],
+    "muzzle": [
+      240.92399999999998,
+      -355.56600000000003
+    ],
+    "aimWorldVector": [
+      -1,
+      -1
+    ],
+    "aimScreenVector": [
+      0,
+      -0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 145,
+    "h": 201,
+    "viewBox": [
+      169,
+      -363,
+      145,
+      201
+    ],
+    "anchor": {
+      "x": -169,
+      "y": 363
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-n-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      71.92399999999998,
+      7.433999999999969
+    ],
+    "gripLocal": [
+      99.80399999999997,
+      137.814
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-ne",
+    "file": "gun-c-evil-held-ne.svg",
+    "shadowFile": "gun-c-evil-held-ne-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "ne",
+    "rigAngle": 135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        120.047,
+        -345.38
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        188.116,
+        -192.703
+      ],
+      "contactPosed": [
+        236.23,
+        -225.191
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      236.23,
+      -225.191
+    ],
+    "muzzle": [
+      340.37710212003014,
+      -308.43533866636216
+    ],
+    "aimWorldVector": [
+      0,
+      -1
+    ],
+    "aimScreenVector": [
+      1,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 244,
+    "h": 219,
+    "viewBox": [
+      136,
+      -376,
+      244,
+      219
+    ],
+    "anchor": {
+      "x": -136,
+      "y": 376
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-ne-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      204.37710212003014,
+      67.56466133363784
+    ],
+    "gripLocal": [
+      100.22999999999999,
+      150.809
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-e",
+    "file": "gun-c-evil-held-e.svg",
+    "shadowFile": "gun-c-evil-held-e-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "e",
+    "rigAngle": 90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        43.52,
+        -303.109
+      ],
+      "rotationDegrees": -25,
+      "contactRest": [
+        95.754,
+        -197.627
+      ],
+      "contactPosed": [
+        135.438,
+        -229.585
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      135.438,
+      -229.585
+    ],
+    "muzzle": [
+      265.818,
+      -257.46500000000003
+    ],
+    "aimWorldVector": [
+      1,
+      -1
+    ],
+    "aimScreenVector": [
+      1.41421,
+      0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 201,
+    "h": 144,
+    "viewBox": [
+      73,
+      -329,
+      201,
+      144
+    ],
+    "anchor": {
+      "x": -73,
+      "y": 329
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-e-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      192.81799999999998,
+      71.53499999999997
+    ],
+    "gripLocal": [
+      62.43799999999999,
+      99.41499999999999
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-se",
+    "file": "gun-c-evil-held-se.svg",
+    "shadowFile": "gun-c-evil-held-se-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "se",
+    "rigAngle": 45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        154.668,
+        -352.735
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        222.737,
+        -200.058
+      ],
+      "contactPosed": [
+        270.85,
+        -232.546
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      270.85,
+      -232.546
+    ],
+    "muzzle": [
+      399.9337322051079,
+      -199.17492150379314
+    ],
+    "aimWorldVector": [
+      1,
+      0
+    ],
+    "aimScreenVector": [
+      1,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 244,
+    "h": 219,
+    "viewBox": [
+      195,
+      -350,
+      244,
+      219
+    ],
+    "anchor": {
+      "x": -195,
+      "y": 350
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-se-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      204.9337322051079,
+      150.82507849620686
+    ],
+    "gripLocal": [
+      75.85000000000002,
+      117.45400000000001
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-s",
+    "file": "gun-c-evil-held-s.svg",
+    "shadowFile": "gun-c-evil-held-s-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "s",
+    "rigAngle": 0,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        152.623,
+        -345.375
+      ],
+      "rotationDegrees": -20,
+      "contactRest": [
+        220.691,
+        -192.698
+      ],
+      "contactPosed": [
+        268.805,
+        -225.186
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      268.805,
+      -225.186
+    ],
+    "muzzle": [
+      296.685,
+      -94.80600000000001
+    ],
+    "aimWorldVector": [
+      1,
+      1
+    ],
+    "aimScreenVector": [
+      0,
+      0.70711
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 145,
+    "h": 201,
+    "viewBox": [
+      224,
+      -288,
+      145,
+      201
+    ],
+    "anchor": {
+      "x": -224,
+      "y": 288
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-s-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      72.685,
+      193.194
+    ],
+    "gripLocal": [
+      44.80500000000001,
+      62.81399999999999
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-sw",
+    "file": "gun-c-evil-held-sw.svg",
+    "shadowFile": "gun-c-evil-held-sw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "sw",
+    "rigAngle": -45,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -136.761,
+        -349.737
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -204.83,
+        -197.06
+      ],
+      "contactPosed": [
+        -252.944,
+        -229.548
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -252.944,
+      -229.548
+    ],
+    "muzzle": [
+      -382.0277322051079,
+      -196.17692150379315
+    ],
+    "aimWorldVector": [
+      0,
+      1
+    ],
+    "aimScreenVector": [
+      -1,
+      0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 244,
+    "h": 219,
+    "viewBox": [
+      -421,
+      -347,
+      244,
+      219
+    ],
+    "anchor": {
+      "x": 421,
+      "y": 347
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-sw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      38.972267794892105,
+      150.82307849620685
+    ],
+    "gripLocal": [
+      168.056,
+      117.452
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-w",
+    "file": "gun-c-evil-held-w.svg",
+    "shadowFile": "gun-c-evil-held-w-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "w",
+    "rigAngle": -90,
+    "wingPose": {
+      "part": "wing-0",
+      "pivot": [
+        -33.421,
+        -314.589
+      ],
+      "rotationDegrees": 25,
+      "contactRest": [
+        -85.223,
+        -209.044
+      ],
+      "contactPosed": [
+        -124.975,
+        -240.825
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -124.975,
+      -240.825
+    ],
+    "muzzle": [
+      -255.355,
+      -268.705
+    ],
+    "aimWorldVector": [
+      -1,
+      1
+    ],
+    "aimScreenVector": [
+      -1.41421,
+      0
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 201,
+    "h": 145,
+    "viewBox": [
+      -263,
+      -341,
+      201,
+      145
+    ],
+    "anchor": {
+      "x": 263,
+      "y": 341
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-w-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      7.64500000000001,
+      72.29500000000002
+    ],
+    "gripLocal": [
+      138.025,
+      100.17500000000001
+    ]
+  },
+  {
+    "name": "gun-c-evil-held-nw",
+    "file": "gun-c-evil-held-nw.svg",
+    "shadowFile": "gun-c-evil-held-nw-shadow.svg",
+    "category": "held-weapon",
+    "footprint": [
+      0,
+      0
+    ],
+    "blocksWalk": false,
+    "blocksShots": false,
+    "layer": "held",
+    "team": "evil",
+    "facing": "nw",
+    "rigAngle": -135,
+    "wingPose": {
+      "part": "wing-1",
+      "pivot": [
+        -112.074,
+        -341.045
+      ],
+      "rotationDegrees": 20,
+      "contactRest": [
+        -179.588,
+        -188.352
+      ],
+      "contactPosed": [
+        -227.74,
+        -220.651
+      ],
+      "replacementArt": false
+    },
+    "grip": [
+      -227.74,
+      -220.651
+    ],
+    "muzzle": [
+      -331.8871021200302,
+      -303.8953386663622
+    ],
+    "aimWorldVector": [
+      -1,
+      0
+    ],
+    "aimScreenVector": [
+      -1,
+      -0.5
+    ],
+    "occlusion": "Preserve normal rig order. Pose the original gripping wing after body and draw the gun above it; pump lower edge overlaps feather contact. Do not draw the wing over the whole gun.",
+    "scaleToDuckSource": 1,
+    "w": 244,
+    "h": 219,
+    "viewBox": [
+      -371,
+      -372,
+      244,
+      219
+    ],
+    "anchor": {
+      "x": 371,
+      "y": 372
+    },
+    "shadow": {
+      "w": 1,
+      "h": 1,
+      "viewBox": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "file": "gun-c-evil-held-nw-shadow.svg"
+    },
+    "shadowKind": "none",
+    "muzzleLocal": [
+      39.11289787996981,
+      68.10466133363781
+    ],
+    "gripLocal": [
+      143.26,
+      151.349
+    ]
+  }
+]

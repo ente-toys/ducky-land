@@ -1,6 +1,0 @@
-{
-  "command": "node scripts/bigger-pink/build.mjs",
-  "files": 192,
-  "changed": [],
-  "idempotent": true
-}

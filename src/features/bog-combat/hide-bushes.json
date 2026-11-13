@@ -1,0 +1,16 @@
+[
+  {"id":"site-bed-a-west-bush","x":1555,"y":3765,"radius":60},
+  {"id":"site-bed-a-east-bush","x":2455,"y":3755,"radius":60},
+  {"id":"grove-12-bush-2","x":2928.92,"y":1950.46,"radius":48},
+  {"id":"grove-14-bush-0","x":5319.27,"y":1961.08,"radius":48},
+  {"id":"grove-19-bush-2","x":2451.9,"y":3066.57,"radius":60},
+  {"id":"grove-21-bush-0","x":5302.52,"y":3131.46,"radius":60},
+  {"id":"grove-35-bush-1","x":2146.97,"y":4989.57,"radius":54},
+  {"id":"grove-37-bush-0","x":3363.03,"y":4756.12,"radius":60},
+  {"id":"grove-38-bush-2","x":4915.68,"y":4790.07,"radius":54},
+  {"id":"grove-40-bush-2","x":6179.43,"y":4995.12,"radius":48},
+  {"id":"grove-57-bush-1","x":3560.22,"y":3049.96,"radius":48},
+  {"id":"grove-58-bush-2","x":4889.43,"y":3005.12,"radius":54},
+  {"id":"grove-59-bush-1","x":3486.97,"y":5919.57,"radius":54},
+  {"id":"grove-60-bush-2","x":4918.92,"y":5880.46,"radius":48}
+]

@@ -3,20 +3,20 @@ import assert from 'node:assert/strict';
 import {performance} from 'node:perf_hooks';
 import {LiveBogRoom} from '../worker/bog-room.js';
 import {BOT_FILL,createBogBots} from '../worker/bog-bots.js';
-import {createBotBrain,createBotController} from '../src/pixi/bog-combat/bot-brain.js';
-import {createBotPoofs} from '../src/pixi/bog-combat/bot-poof.js';
-import {createBotNavigation} from '../src/pixi/bog-combat/bot-navigation.js';
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {RULES,emptyStats} from '../src/pixi/bog-combat/rules.js';
-import {tagMedals} from '../src/pixi/bog-combat/medals.js';
-import {BOG_ISLAND,teamCounts} from '../src/pixi/bog-combat/entry.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {createBotBrain,createBotController} from '../src/features/bog-combat/bot-brain.js';
+import {createBotPoofs} from '../src/features/bog-combat/bot-poof.js';
+import {createBotNavigation} from '../src/features/bog-combat/bot-navigation.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {RULES,emptyStats} from '../src/features/bog-combat/rules.js';
+import {tagMedals} from '../src/features/bog-combat/medals.js';
+import {BOG_ISLAND,teamCounts} from '../src/features/bog-combat/entry.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {makeRoom,addPlayer,fakeSocket,seeded} from './room-harness.mjs';
 
 const bots=service=>[...service.arena.state.players.values()].filter(p=>p.bot);
 const allCounts=service=>{
- const counts={privacy:0,google:0};for(const p of service.arena.state.players.values())counts[p.team]++;return counts;
+ const counts={karma:0,evil:0};for(const p of service.arena.state.players.values())counts[p.team]++;return counts;
 };
 function peer(){const s=fakeSocket();s.serializeAttachment=value=>s.saved=value;s.deserializeAttachment=()=>s.saved;return s;}
 function visitor(owner,n){
@@ -27,15 +27,15 @@ function visitor(owner,n){
 function join(service,p,team){const socket=peer();assert.ok(service.open(socket,{digest:p.account,team}));return socket;}
 function stop(owner){owner.bog?.dispose();clearInterval(owner.timer);}
 function hit(sim,p,owner='opponent'){
- p.shieldUntil=0;sim.state.shots.push({id:999,owner,team:p.team==='privacy'?'google':'privacy',x:p.x,y:p.y,dx:1,dy:0,left:RULES.range,colour:0});sim.step(1/60);
+ p.shieldUntil=0;sim.state.shots.push({id:999,owner,team:p.team==='karma'?'evil':'karma',x:p.x,y:p.y,dx:1,dy:0,left:RULES.range,colour:0});sim.step(1/60);
 }
 function advance(sim,seconds){for(let i=0;i<Math.ceil(seconds*60);i++)sim.step(1/60);}
 
 test('live lobby starts six balanced, plain-name bots with no accounts, payments or saved profiles',async()=>{
  const owner=await makeRoom();try{
   const p=visitor(owner,9100),service=owner.bog=new LiveBogRoom(owner),lobby=join(service,p,null);
-  assert.equal(BOT_FILL,6);assert.equal(bots(service).length,6);assert.deepEqual(allCounts(service),{privacy:3,google:3});
-  assert.deepEqual(lobby.notes.at(-1).counts,{privacy:0,google:0});assert.ok(service.timer);
+  assert.equal(BOT_FILL,6);assert.equal(bots(service).length,6);assert.deepEqual(allCounts(service),{karma:3,evil:3});
+  assert.deepEqual(lobby.notes.at(-1).counts,{karma:0,evil:0});assert.ok(service.timer);
   const at=service.arena.state.time;service.step();assert.ok(service.arena.state.time>at,'bots run with no human fighter');
   for(const bot of bots(service)){
    assert.match(bot.name,/^Bog Bot [1-6]$/);assert.equal(bot.karma,0);assert.equal(bot.lives,5);assert.equal(owner.karma.bogEntry(bot.profile),null);
@@ -49,23 +49,23 @@ test('live lobby starts six balanced, plain-name bots with no accounts, payments
 test('live joins replace same-team bots, humans may exceed six, disconnects refill and lobby counts stay human-only',async()=>{
  const owner=await makeRoom();try{
   const first=visitor(owner,9200),service=owner.bog=new LiveBogRoom(owner),lobby=join(service,first,null);
-  const before=new Set(bots(service).filter(p=>p.team==='privacy').map(p=>p.id));
-  const sockets=[join(service,first,'privacy')];
+  const before=new Set(bots(service).filter(p=>p.team==='karma').map(p=>p.id));
+  const sockets=[join(service,first,'karma')];
   const removed=[...before].filter(id=>!service.arena.state.players.has(id));assert.equal(removed.length,1);
-  assert.deepEqual(allCounts(service),{privacy:3,google:3});assert.equal(bots(service).length,5);
-  assert.equal(service.snapshot('privacy').botDepartures.length,1);assert.equal(service.snapshot('google').botDepartures.length,0,'hidden poof never leaks');
+  assert.deepEqual(allCounts(service),{karma:3,evil:3});assert.equal(bots(service).length,5);
+  assert.equal(service.snapshot('karma').botDepartures.length,1);assert.equal(service.snapshot('evil').botDepartures.length,0,'hidden poof never leaks');
   const timer=service.timer;
   for(let i=1;i<12;i++){
-   const team=i<6?'privacy':'google',p=visitor(owner,9200+i);sockets.push(join(service,p,team));
+   const team=i<6?'karma':'evil',p=visitor(owner,9200+i);sockets.push(join(service,p,team));
    assert.equal(service.arena.state.players.size,Math.max(BOT_FILL,i+1));
    assert.equal(bots(service).length,Math.max(0,BOT_FILL-i-1));
   }
-  assert.deepEqual(allCounts(service),{privacy:6,google:6});assert.deepEqual(lobby.notes.at(-1).counts,{privacy:6,google:6});
+  assert.deepEqual(allCounts(service),{karma:6,evil:6});assert.deepEqual(lobby.notes.at(-1).counts,{karma:6,evil:6});
   assert.equal(service.timer,timer,'joins never add another simulation loop');
   for(let i=0;i<60;i++)service.step();assert.equal(service.arena.state.players.size,12);
   for(const socket of sockets)service.close(socket);
-  assert.deepEqual(allCounts(service),{privacy:3,google:3});assert.deepEqual(teamCounts(service.arena.state.players.values()),{privacy:0,google:0});
-  for(let i=0;i<25;i++){const socket=join(service,first,'privacy');assert.equal(service.arena.state.players.size,6);service.close(socket);assert.equal(bots(service).length,6);}
+  assert.deepEqual(allCounts(service),{karma:3,evil:3});assert.deepEqual(teamCounts(service.arena.state.players.values()),{karma:0,evil:0});
+  for(let i=0;i<25;i++){const socket=join(service,first,'karma');assert.equal(service.arena.state.players.size,6);service.close(socket);assert.equal(bots(service).length,6);}
   assert.equal(owner.karma.balance(first.account),5,'reconnect churn never spends another feather');
   service.dispose();assert.equal(service.timer,null);assert.equal(service.arena.state.players.size,0);
  }finally{stop(owner);}
@@ -77,9 +77,9 @@ test('bot tags use real five-life knockouts and hidden respawns, then renew with
   let bot=bots(service)[0];const id=bot.id;
   for(let life=4;life>=0;life--){
    hit(service.arena,bot);assert.equal(bot.lives,life);assert.equal(bot.alive,false);
-   assert.ok(service.snapshot(bot.team==='privacy'?'google':'privacy').players.some(q=>q.id===id&&!q.alive),'knockout remains visible');
+   assert.ok(service.snapshot(bot.team==='karma'?'evil':'karma').players.some(q=>q.id===id&&!q.alive),'knockout remains visible');
    if(life){advance(service.arena,3.05);assert.equal(bot.alive,true);assert.ok(bot.shieldUntil-service.arena.state.time>6.9);
-    assert.ok(!service.snapshot(bot.team==='privacy'?'google':'privacy').players.some(q=>q.id===id));}
+    assert.ok(!service.snapshot(bot.team==='karma'?'evil':'karma').players.some(q=>q.id===id));}
   }
   advance(service.arena,3.1);assert.equal(bot.out,true);assert.equal(service.exits.length,0);
   advance(service.arena,2.05);service.bots.step();bot=service.arena.state.players.get(id);
@@ -91,19 +91,18 @@ test('bot tags use real five-life knockouts and hidden respawns, then renew with
 
 test('bot combat grants no bot medals and cannot farm saved human tags, medals or best streak',()=>{
  const saves=[],sim=createBogCombat({...BOG_COMBAT,onStats:(...args)=>saves.push(args)});
- const human=sim.join({id:'human',team:'privacy'}),bot=sim.join({id:'bot',team:'google'});bot.bot=true;
+ const human=sim.join({id:'human',team:'karma'}),bot=sim.join({id:'bot',team:'evil'});bot.bot=true;
  hit(sim,bot,human.id);assert.deepEqual(human.stats,emptyStats());assert.deepEqual(human.medalCase,{});assert.equal(human.streak,0);
  assert.equal(saves.length,0);assert.deepEqual(sim.state.events.at(-1).medals,[]);
  hit(sim,human,bot.id);assert.equal(bot.stats.tags,1);assert.equal(bot.stats.medals,0);assert.deepEqual(bot.medalCase,{});
  sim.leave(bot.id);sim.leave(human.id);assert.ok(saves.every(([id,stats])=>id==='human'&&stats.tags===0&&stats.medals===0));
- const owner={id:'owner',team:'privacy',stats:{tags:1},medalCase:{},lastTagAt:-Infinity,streak:1},victim={id:'victim',team:'google'};
- const medals=tagMedals({owner,victim,players:[{...owner,alive:true},{...victim,alive:false},{id:'extra-bot',bot:true,team:'google',alive:true}],time:0,distance:0});
+ const owner={id:'owner',team:'karma',stats:{tags:1},medalCase:{},lastTagAt:-Infinity,streak:1},victim={id:'victim',team:'evil'};
+ const medals=tagMedals({owner,victim,players:[{...owner,alive:true},{...victim,alive:false},{id:'extra-bot',bot:true,team:'evil',alive:true}],time:0,distance:0});
  assert.ok(!medals.includes('clutch'),'bots cannot satisfy a saved medal condition');
 });
 
 test('shared normal brain cannot see hidden opponents, lead targets, or bypass eight-direction facing and reaction time',()=>{
- const packets=[],sim=createBogCombat(BOG_COMBAT),a=sim.join({id:'bot-a',team:'privacy'}),b=sim.join({id:'bot-b',team:'google'});a.bot=b.bot=true;
- // Use a clear area and a stationary enemy, outside the exact eight-way line.
+ const packets=[],sim=createBogCombat(BOG_COMBAT),a=sim.join({id:'bot-a',team:'karma'}),b=sim.join({id:'bot-b',team:'evil'});a.bot=b.bot=true;
  const combat={...BOG_COMBAT,blockers:[],navigation:{walkable:()=>true,route:()=>[]}};
  Object.assign(a,{x:1000,y:1000,shieldUntil:0});Object.assign(b,{x:1200,y:1025,shieldUntil:7});
  sim.input=(id,m)=>{packets.push({...m});return true;};
@@ -118,13 +117,13 @@ test('shared normal brain cannot see hidden opponents, lead targets, or bypass e
 test('bounded departure poofs are deduplicated, expire, respect hidden enemies and reuse island dust',()=>{
  const sim=createBogCombat(BOG_COMBAT),fill=createBogBots(sim,BOG_COMBAT),calls=[];fill.sync();
  for(const p of sim.state.players.values())p.shieldUntil=0;
- fill.replace('privacy');const visible=fill.visibleDepartures('google');assert.equal(visible.length,1);
+ fill.replace('karma');const visible=fill.visibleDepartures('evil');assert.equal(visible.length,1);
  const update=createBotPoofs({land:(...args)=>calls.push(args)}),snapshot={time:0,botDepartures:visible};
  update(snapshot);update(snapshot);assert.equal(calls.length,1);assert.equal(calls[0][2],1.3);
- fill.sync();for(const p of sim.state.players.values())if(p.team==='google')p.shieldUntil=7;
- fill.replace('google');assert.equal(fill.visibleDepartures('privacy').length,1,'hidden Google departure not sent to Privacy');
- update({time:0,botDepartures:fill.visibleDepartures('google')},true);assert.equal(calls.length,1,'reduced motion');
- sim.state.time=1;assert.equal(fill.visibleDepartures('privacy').length,0);
+ fill.sync();for(const p of sim.state.players.values())if(p.team==='evil')p.shieldUntil=7;
+ fill.replace('evil');assert.equal(fill.visibleDepartures('karma').length,1,'hidden Evil departure not sent to Karma');
+ update({time:0,botDepartures:fill.visibleDepartures('evil')},true);assert.equal(calls.length,1,'reduced motion');
+ sim.state.time=1;assert.equal(fill.visibleDepartures('karma').length,0);
 });
 
 test('live bot paths spread bounded work across ticks, clear actual obstacles and reuse search/waypoint buffers',()=>{
@@ -151,7 +150,7 @@ test('six normal bots play real combat on the live map, stay walkable and keep b
   if(i%60===0)for(const p of sim.state.players.values())assert.ok(BOG_COMBAT.navigation.walkable(p.x,p.y),p.name);
   assert.equal(sim.state.players.size,6);
  }
- assert.ok(tags>0);assert.ok(sim.state.scores.privacy>0&&sim.state.scores.google>0);
+ assert.ok(tags>0);assert.ok(sim.state.scores.karma>0&&sim.state.scores.evil>0);
  assert.ok([...sim.state.players.values()].every(p=>p.stats.medals===0));
  timings.sort((a,b)=>a-b);const mean=timings.reduce((a,b)=>a+b,0)/timings.length;
  console.log(`Bog bot CPU: mean ${mean.toFixed(3)} ms, P95 ${timings[Math.floor(timings.length*.95)].toFixed(3)} ms, P99 ${timings[Math.floor(timings.length*.99)].toFixed(3)} ms, max ${timings.at(-1).toFixed(3)} ms`);
@@ -160,7 +159,7 @@ test('six normal bots play real combat on the live map, stay walkable and keep b
 test('ten ducks run the normal shared brain and real simulation for three minutes without showcase advantages',()=>{
  const sim=createBogCombat(BOG_COMBAT),controller=createBotController(sim,BOG_COMBAT,{random:seeded(97)}),brains=[],ids=[],timings=[];
  for(let i=0;i<10;i++){
-  const id=`stress-bot-${i}`;ids.push(id);sim.join({id,team:i%2?'google':'privacy'}).bot=true;
+  const id=`stress-bot-${i}`;ids.push(id);sim.join({id,team:i%2?'evil':'karma'}).bot=true;
   const brain=createBotBrain(i);brains.push(brain);controller.prepare(brain);
  }
  for(let tick=0;tick<10800;tick++){
@@ -169,7 +168,7 @@ test('ten ducks run the normal shared brain and real simulation for three minute
   timings.push(performance.now()-start);
   if(tick%60===0)for(const p of sim.state.players.values())assert.ok(BOG_COMBAT.navigation.walkable(p.x,p.y));
  }
- assert.equal(sim.state.players.size,10);assert.ok(sim.state.scores.privacy>=10&&sim.state.scores.google>=10,'both teams find real fights');
+ assert.equal(sim.state.players.size,10);assert.ok(sim.state.scores.karma>=10&&sim.state.scores.evil>=10,'both teams find real fights');
  assert.ok([...sim.state.players.values()].every(p=>p.stats.medals===0));
  timings.sort((a,b)=>a-b);
  console.log(`Bog 10-duck AI + sim CPU: mean ${(timings.reduce((a,b)=>a+b,0)/timings.length).toFixed(3)} ms, P95 ${timings[Math.floor(timings.length*.95)].toFixed(3)} ms, P99 ${timings[Math.floor(timings.length*.99)].toFixed(3)} ms, max ${timings.at(-1).toFixed(3)} ms`);

@@ -1,16 +1,15 @@
 import {randomUUID} from 'node:crypto';
-import {createArena} from '../src/pixi/bog-combat/sim.js';
-import {teamCounts,suggestedTeam} from '../src/pixi/bog-combat/entry.js';
-import {TEAMS} from '../src/pixi/bog-combat/rules.js';
+import {createArena} from '../src/features/bog-combat/sim.js';
+import {teamCounts,suggestedTeam} from '../src/features/bog-combat/entry.js';
+import {TEAMS} from '../src/features/bog-combat/rules.js';
 import {createServer} from 'node:http';
 import {WebSocketServer} from 'ws';
 import {dirname} from 'node:path';
 import {readFileSync,mkdirSync,writeFileSync,renameSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {cleanMedalCase} from '../src/pixi/bog-combat/medals.js';
-import {emptyStats} from '../src/pixi/bog-combat/rules.js';
+import {cleanMedalCase} from '../src/features/bog-combat/medals.js';
+import {emptyStats} from '../src/features/bog-combat/rules.js';
 
-// Three times the client's 30 Hz ceiling, plus a second of burst headroom.
 export const ARENA_INPUT_BURST=90,ARENA_INPUT_PER_MS=.09;
 
 export function localArenaOrigin(origin){
@@ -60,9 +59,7 @@ export function createArenaSocket(wss,profiles,{now=()=>performance.now(),combat
   return {arena,step,broadcast,heartbeat,close};
 }
 
-// Reusable upgrade handler for Vite or the local Home server. It claims ONLY
-// /arena-room. The existing island socket and authentication remain untouched.
-export function installArenaSocket(server,{profiles=createArenaProfiles(new URL('../src/pixi/bog-combat/.local/profiles.json',import.meta.url)),combat,...options}={}) {
+export function installArenaSocket(server,{profiles=createArenaProfiles(new URL('../src/features/bog-combat/.local/profiles.json',import.meta.url)),combat,...options}={}) {
   const wss=new WebSocketServer({noServer:true,maxPayload:2048});
   const room=createArenaSocket(wss,profiles,{combat,...options});
   const upgrade=(request,socket,head)=>{
@@ -76,8 +73,6 @@ export function installArenaSocket(server,{profiles=createArenaProfiles(new URL(
   return {...room,close(){if(closed)return;closed=true;loops.forEach(clearInterval);server.off('upgrade',upgrade);room.close();wss.close();}};
 }
 
-// Optional dedicated local backend, compatible with the original /arena-room
-// Vite proxy. Production deployment is intentionally not changed by this port.
 export function startArenaServer({port=8891,host='127.0.0.1',...options}={}) {
   const server=createServer((request,response)=>{
     if(request.url!=='/health'){response.writeHead(404).end();return;}
@@ -87,8 +82,6 @@ export function startArenaServer({port=8891,host='127.0.0.1',...options}={}) {
   return {server,room,close(){room.close();server.close();}};
 }
 
-// Local arena profiles use an unguessable browser-held bearer token. The later
-// authenticated entry flow can supply the account's server-resolved profile ID.
 export function createArenaProfiles(file){
   if(file instanceof URL)file=fileURLToPath(file);
   let records={};try{records=JSON.parse(readFileSync(file,'utf8'));}catch(error){if(error.code!=='ENOENT')throw error;}

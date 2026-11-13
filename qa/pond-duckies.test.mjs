@@ -1,29 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {execFileSync} from 'node:child_process';
 import {Texture} from 'pixi.js';
-import {loadPondDuckies,PONDS,samplePondDucky} from '../src/pixi/pond-duckies.js';
-import {inShape} from '../rive/web/island-geometry.mjs';
+import {loadPondDuckies,PONDS,samplePondDucky} from '../src/rendering/pixi/environment/pond-duckies.js';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {populatePond,requestedPondCount} from '../scripts/pond-duckies/populate.mjs';
-const assets=JSON.parse(fs.readFileSync('src/pixi/pond-regions.json')).assets;
-const expected={home:5,sunflower:1,pink:3,library:2,community:1,fair:2,cathedral:1,bog:2,snow:0};
+const assets=JSON.parse(fs.readFileSync('src/rendering/pixi/environment/pond-regions.json')).assets;
+const expected={home:5,sunflower:1,pink:3,library:2,community:1,bog:0,snow:0};
 const pose=()=>({x:0,y:0,dx:0,dy:0,moving:false});
 
-test('all 17 authored ponds have two or three distinct Duckies, roughly half have three, and all seven variants are used',()=>{
- assert.equal(PONDS.length,17);
+test('all 12 authored ponds have two or three distinct Duckies, roughly half have three, and all seven variants are used',()=>{
+ assert.equal(PONDS.length,12);
  const variants=new Set();
  for(const [island,count] of Object.entries(expected))assert.equal(PONDS.filter(p=>p.island===island).length,count,island);
  for(const p of PONDS){assert([2,3].includes(p.duckies.length));assert.equal(new Set(p.duckies.map(d=>d.name)).size,p.duckies.length);assert.equal(p.motion.tracks.length,p.duckies.length);assert.equal(p.motion.seeds.length,p.duckies.length);assert(p.source);assert(p.cells.length>=8);p.duckies.forEach(d=>variants.add(d.name));}
  const triples=PONDS.filter(p=>p.duckies.length===3).length;
- assert(triples>=6&&triples<=11,`${triples}/17 ponds have three`);
+ assert(triples>=4&&triples<=8,`${triples}/12 ponds have three`);
  assert.equal(variants.size,7);
 });
 
 test('ten minutes of continuous travel, arbitrary UTC offsets and cycle boundaries stay in water and clear of shores, props and each other',()=>{
  for(const p of PONDS){
   const cells=new Set(p.cells),positions=p.duckies.map(pose),visited=p.duckies.map(()=>new Set());
-  // Includes current real-time phase, rather than only the beginning of the tour.
   for(const offset of [0,1794326400])for(let tick=0;tick<=1200;tick++){
    const time=offset+tick*.5;
    positions.forEach((v,i)=>samplePondDucky(p,i,time,false,v));
@@ -35,7 +33,6 @@ test('ten minutes of continuous travel, arbitrary UTC offsets and cycle boundari
     const cell=Math.round((v.y-p.origin[1])/p.step)*p.cols+Math.round((v.x-p.origin[0])/p.step);
     assert(cells.has(cell),`${p.id}: open-water region at ${time}`);visited[i].add(cell);
     assert(p.shapes.some(s=>inShape(v.x,v.y,s)),p.id+' above water');
-    // Independent footprint checks against the source shapes, including inner islets/treads.
     if(tick%4===0)for(let k=0;k<16;k++){
      const angle=k*Math.PI/8,x=v.x+Math.cos(angle)*p.radius,y=v.y+Math.sin(angle)*p.radiusY;
      assert(p.shapes.some(s=>inShape(x,y,s)),p.id+' clears painted shore');
@@ -74,18 +71,13 @@ test('reduced motion keeps every Ducky position fixed',()=>{
  }
 });
 
-test('every keeper and its archived ripple art is clean flat SVG, with no PNG added',()=>{
+test('every keeper and its archived ripple art is clean flat SVG',()=>{
  for(const name of new Set(PONDS.flatMap(p=>p.duckies.map(d=>d.name))))for(const suffix of ['',...['duck','ripple'].map(p=>'/'+p)]){
   const path=suffix?`public/pixi-duck/float/parts/${name}-${suffix.slice(1)}.svg`:`public/pixi-duck/float/${name}.svg`;
   const svg=fs.readFileSync(path,'utf8');assert(svg.startsWith('<svg'));assert(!/Gradient|<image\b|filter=|data:image|\.png/i.test(svg));assert(svg.length<16000);
   if(!suffix)assert(svg.includes('#232323'));
   assert(!svg.includes('#39472d'),'boss Ducky black stays #232323');
  }
- const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'});
- const added=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'});
- assert(!/\.png$/im.test(changed+'\n'+added),'no PNG in tracked changes or new files');
- const artChanges=changed.split('\n').filter(p=>p!=='public/pixi-art/globe/manifest.json');
- assert(!artChanges.some(p=>/^(public\/pixi-art|rive\/web\/themes|src\/pixi\/islet)/.test(p)),'source art and islets untouched');
 });
 
 test('runtime owns every assigned Ducky, pauses hidden layers and releases all water FX and leases on leave',async()=>{
@@ -104,16 +96,16 @@ test('runtime owns every assigned Ducky, pauses hidden layers and releases all w
  layer.destroy();layer.destroy();assert(layer.root.destroyed);assert(water.destroyed);
  assert(graphics.every(g=>g.destroyed));assert(contexts.every(c=>c.destroyed));
  assert.equal(layer.entries.length,0);assert.deepEqual(released.sort(),leased.sort());
- const engine=fs.readFileSync('src/pixi/engine.js','utf8');
- assert.match(engine,/this\.releasePondDuckies\(this\.artShown\)/);assert.match(engine,/art\.pondDuckies\.destroy\(\);art\.pondDuckies=null/);
- assert.match(engine,/this\.disposed\|\|this\.artShown!==id[\s\S]*?layer\.destroy\(\)/,'late loads are released');
- const loader=fs.readFileSync('src/pixi/theme-art.js','utf8');assert(loader.includes('result.pondDuckies?.destroy()'));
+ const engine=fs.readFileSync('src/rendering/pixi/engine.js','utf8');
+ assert.match(engine,/this\.releasePondDuckies\('home'\)/);assert.match(engine,/art\.pondDuckies\.destroy\(\);art\.pondDuckies=null/);
+ assert.match(engine,/if\(this\.disposed\|\|pending\.discarded\)\{art\.destroy\(\);return;\}/,'late preparation is destroyed');
+ const loader=fs.readFileSync('src/rendering/pixi/art/theme-art.js','utf8');assert(loader.includes('result.pondDuckies?.destroy()'));
  assert(engine.includes('this.scene.getChildIndex(this.decks)'),'pond layer is below bridge decks');
 });
 
 test('a failed sprite acquisition releases successful and failed leases',async()=>{
  const leased=[],released=[];
- await assert.rejects(loadPondDuckies('bog',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return Texture.EMPTY;},release:src=>released.push(src)}),/fixture/);
+ await assert.rejects(loadPondDuckies('pink',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return Texture.EMPTY;},release:src=>released.push(src)}),/fixture/);
  assert.deepEqual(leased.sort(),released.sort());
 });
 

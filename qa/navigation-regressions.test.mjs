@@ -1,13 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {geometry, inPoly, inShape} from '../rive/web/island-geometry.mjs';
-import {HOME_MAP, mapFor, readyThemes} from '../src/pixi/island-maps.js';
+import {geometry, inPoly, inShape} from '../assets/world/island-geometry.mjs';
+import {HOME_MAP, mapFor, readyThemes} from '../src/world/island-maps.js';
 
 const maps = () => [HOME_MAP, ...readyThemes().map(mapFor)];
 const random = () => {let n=19;return () => ((n=Math.imul(n,1664525)+1013904223>>>0)/4294967296);};
 
-// Unindexed geometry is the oracle: acceleration must preserve strict bridge
-// edges, padded water/solids, walkways and negative map origins exactly.
 function reference(world,x,y) {
   if (!Number.isFinite(x)||!Number.isFinite(y)) return false;
   if (!inPoly(x,y,world.coast)) {

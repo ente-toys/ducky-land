@@ -1,10 +1,8 @@
-// Independent CPU reference for the actual atlas lookup and lighting. Comparing
-// colours catches see-through land even though the final framebuffer alpha is 1.
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {dot,logMap} from '../src/pixi/sphere.js';
-import {spherePixel,horizonRatio} from '../src/pixi/sphere-projection.js';
-import {paintWeight} from '../src/pixi/globe-screen.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {dot,logMap} from '../src/world/sphere.js';
+import {spherePixel,horizonRatio} from '../src/world/sphere-projection.js';
+import {paintWeight} from '../src/rendering/shared/globe-screen.js';
 const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
 const mix=(a,b,t)=>a.map((v,k)=>v+(b[k]-v)*t);
 const median=a=>a.sort((a,b)=>a-b)[a.length>>1]??null;
@@ -31,8 +29,6 @@ export function atlasReference(x,y,state,images,width,height){
   if(state.stickers&&!st)continue;
   if(dot(p,i.center)<0)continue;
   const m=mapOf(i.id),sphere=logMap(i,p,WORLD_GEO.Rw),k=st?.onBall??paintWeight(ball);
-  // A centre Jacobian only describes an infinitesimal neighbourhood. Painting
-  // uses the inverse sphere chart at EVERY pixel, blended with the rigid map.
   let q=sphere;
   if(st&&k<1){
    const r=st.rigid??st,det=r.a*r.d-r.b*r.c,dx=x-r.x,dy=y-r.y;
@@ -45,8 +41,6 @@ export function atlasReference(x,y,state,images,width,height){
   const opaque=c[3]>127.5,bestOpaque=best?.c[3]>127.5;
   if(!best||(opaque&&!bestOpaque)||(opaque===bestOpaque&&distance<best.distance))best={c,distance,live:st?.mode==='live'};
  }
- // Only test truly opaque interior colours; preserve the original strict
- // opacity/colour thresholds and skip the live scene's animated content.
  if(!best||best.live||best.c[3]<254)return null;
  return {colour:lighting(best.c.slice(0,3).map(c=>c/255)),sea};
 }

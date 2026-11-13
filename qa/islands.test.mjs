@@ -1,30 +1,30 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
+import {placeRigid} from '../src/world/rigid.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach,fillMoorings,retireBoat,boatHome,boatSlot,MOORING_CLEAR,SAIL_SPEED} from '../src/pixi/islands.js';
+import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach,fillMoorings,retireBoat,boatHome,boatSlot,MOORING_CLEAR,SAIL_SPEED} from '../src/gameplay/islands.js';
 
-import {createNavigation} from '../src/pixi/navigation.js';
-import {offsetOf} from '../src/pixi/world-map.js';
-import {originOffset} from '../src/pixi/islands.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import world from '../rive/web/world.json' with {type:'json'};
-import walkWorld from '../rive/web/walk-world.json' with {type:'json'};
+import {createNavigation} from '../src/world/navigation.js';
+import {offsetOf} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import world from '../assets/world/world.json' with {type:'json'};
+import walkWorld from '../assets/world/walk-world.json' with {type:'json'};
 
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',...HARBOR.water,turn:0,path:[],action:0});
 
-test('Home and the eight themed islands (copies removed 8 Nov), the same moored boats each, at least four reachable neighbours and safe harbor positions', () => {
+test('Home and six themed islands retain moorings, ring routes and safe harbor positions', () => {
   const boats=createBoats();
-  assert.equal(ISLANDS.length,9);
-  assert.equal(new Set(ISLANDS.map(island => island.id)).size,9);
+  assert.equal(ISLANDS.length,7);
+  assert.equal(new Set(ISLANDS.map(island => island.id)).size,7);
   const per=boatSpots().length;
   assert.ok(per>=8);
   assert.equal(new Set(boats.map(boat => boat.id)).size,ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0));
   for (const island of ISLANDS) {
-    assert.equal(boats.filter(boat => boat.islandId===island.id).length,boatSpots(island.id).length);   // its own map's moorings
+    assert.equal(boats.filter(boat => boat.islandId===island.id).length,boatSpots(island.id).length);
     assert.ok(boatSpots(island.id).length>=3);
-    assert.ok(destinationsFor(island.id).length>=4);
+    assert.equal(destinationsFor(island.id).length,island.id==='home'?6:3);
   }
   for (const position of [...boats.filter(boat => boat.islandId==='home'),...destinationsFor('home').map(island=>island.dock),HARBOR.water]) assert.ok(canSail(position.x,position.y));
   assert.equal(canSail(HARBOR.land.x,HARBOR.land.y),false);
@@ -42,7 +42,7 @@ test('Home and the eight themed islands (copies removed 8 Nov), the same moored 
 test('every island can be reached from home by boat', () => {
   const seen=new Set(['home']), queue=['home'];
   while (queue.length) for (const next of destinationsFor(queue.shift())) if (!seen.has(next.destination)) {seen.add(next.destination); queue.push(next.destination);}
-  assert.equal(seen.size,ISLANDS.length);   // boss 8 Nov: Home and the finished themes only
+  assert.equal(seen.size,ISLANDS.length);
 });
 
 test('sailing normalizes diagonal speed and cannot tunnel into shore or cross the bounds', () => {
@@ -51,7 +51,7 @@ test('sailing normalizes diagonal speed and cannot tunnel into shore or cross th
   assert.ok(Math.abs(Math.hypot(a.x-2165,a.y+1917)-Math.hypot(b.x-2165,b.y+1917))<1e-9);
   const c={...sailor(),x:2165,y:-1917};
   sailStep(c,10,{x:0,y:1});
-  assert.ok(c.y<-1317);   // the north shore at -1617 (8 Nov: the old north-east bay is land now)
+  assert.ok(c.y<-1317);
   assert.ok(canSail(c.x,c.y));
   assert.ok(c.y>-1917);
   sailStep(c,30,{x:0,y:-1});
@@ -94,8 +94,6 @@ test('a tapped neighbour is reached by sailing round the coasts', () => {
   for (const destination of destinationsFor('home')) {
     const a={...sailor(),...HARBOR.water};
     assert.deepEqual(setSailDestination(a,destination.dock.x,destination.dock.y),[destination.dock.x,destination.dock.y]);
-    // Whole-globe placement intentionally has no voyage time cap. Bound the
-    // simulation by the actual planned distance at the unchanged boat speed.
     const route=[a.sailTarget,...a.sailRoute];
     let distance=0,at=a;
     for(const point of route){distance+=Math.hypot(point.x-at.x,point.y-at.y);at=point;}
@@ -140,12 +138,11 @@ test('any boat can be boarded from nearby sand, and you can land on any shore yo
   const openSea={islandId:'home',x:-8000,y:0};
   assert.ok(canSail(openSea.x,openSea.y,openSea.islandId),'fixture is open navigable water');
   assert.equal(landingSpot(openSea),null,'open sea: nothing to land on');
-  const there=landingSpot({islandId:'home',...destinationsFor('home')[0].dock});   // beside the neighbour's own jetty (its map may be themed)
+  const there=landingSpot({islandId:'home',...destinationsFor('home')[0].dock});
   assert.equal(there.islandId,destinationsFor('home')[0].destination,'a neighbour shore lands you on that island');
 });
 
 test('you can dock at ANY island whose shore you are beside, not only the listed neighbours', () => {
-  // Find an actual non-neighbour shore inside the current sea bounds.
   const {target,...off}=nonNeighbourLanding();
   const boat={...sailor(),...off};
   assert.ok(boat,'there is open water beside a non-neighbour shore');
@@ -162,14 +159,11 @@ test('you can dock at ANY island whose shore you are beside, not only the listed
     for (let k=0;boat.sailTarget && k<400;k++) sailStep(boat,.05,ZERO);
     assert.ok(Math.hypot(boat.x-spot.approach.x,boat.y-spot.approach.y)<=14,'the boat arrives beside the shore');
   }
-  // Every island drawn in this sea is solid, including the non-neighbour.
-  const o=originOffset(boat.islandId,target);
-  const at=mapPoint(target,boat.islandId,mapOf(target).spawn);
+  const at=placeRigid(boat.islandId,target,spot);
   assert.equal(canSail(at.x,at.y,boat.islandId),false,'the target is solid land');
 });
 
 test('docking off a beach sails in to the water beside the sand, and every approach is one the boat can reach', () => {
-  // boss 5 Nov ("dock fix"): the boat sails right up to the shore before the Ducky hops out
   const boat={...sailor(),x:boatSpots()[5].x-170,y:boatSpots()[5].y}, spot=landingSpot(boat); spot.approach=landingApproach(boat,spot); const sand={x:spot.x+spot.offset.x,y:spot.y+spot.offset.y};
   assert.equal(canDock(boat),false,'a beach, not the harbor');
   assert.ok(Math.hypot(spot.approach.x-boat.x,spot.approach.y-boat.y)>200,'the boat starts well out');
@@ -177,11 +171,9 @@ test('docking off a beach sails in to the water beside the sand, and every appro
   assert.ok(setSailDestination(boat,spot.approach.x,spot.approach.y));
   for (let k=0;boat.sailTarget && k<400;k++) sailStep(boat,.05,ZERO);
   assert.ok(Math.hypot(boat.x-spot.approach.x,boat.y-spot.approach.y)<=14,'the boat arrives beside the shore');
-  // a narrow cove: the first open water by the sand has no route in, so the approach backs off to water the boat can reach
   const cove={...sailor(),x:2165,y:-1917}, inlet=landingSpot(cove); inlet.approach=landingApproach(cove,inlet);
   assert.ok(canSail(inlet.approach.x,inlet.approach.y),'the approach is open water');
   assert.ok(setSailDestination({...cove},inlet.approach.x,inlet.approach.y) || Math.hypot(inlet.approach.x-cove.x,inlet.approach.y-cove.y)<=14,'and reachable');
-  // anywhere off a shore: either the boat is already beside the sand (it lands at once) or it has a route in
   for (let x=-500;x<6500;x+=60) for (let y=-500;y<4800;y+=60) {
     const here={...sailor(),x,y};
     if (!canSail(x,y) || canDock(here)) continue;
@@ -192,11 +184,9 @@ test('docking off a beach sails in to the water beside the sand, and every appro
 });
 
 test('a boat out in a neighbour\'s waters is drawn in that neighbour\'s copy, never under it', async () => {
-  const {WORLD_ISLANDS,offsetOf} = await import('../src/pixi/world-map.js'), {copyHolding} = await import('../src/pixi/sphere-shores.js');
-  const world=(await import('../rive/web/world.json',{with:{type:'json'}})).default;
+  const {WORLD_ISLANDS,offsetOf} = await import('../src/world/world-map.js'), {copyHolding} = await import('../src/world/sphere-shores.js');
+  const world=(await import('../assets/world/world.json',{with:{type:'json'}})).default;
   const cx=mapOf('home').cx, cy=mapOf('home').cy;
-  // the copies drawn round home, placed the way archipelago.js places them
-  // boss 6 Nov: each copy carries its own map's size (a themed island is bigger), as archipelago.js places them
   const copies=WORLD_ISLANDS.filter(island => island.id!=='home').map(island => ({from:'home',id:island.id,x:cx+offsetOf('home',island.id).x,y:cy+offsetOf('home',island.id).y,width:mapOf(island.id).width,height:mapOf(island.id).height}));
   for (const d of destinationsFor('home')) {
     assert.equal(copyHolding(d.dock.x,d.dock.y,copies)?.id,d.destination,`at ${d.destination}'s jetty`);
@@ -206,12 +196,10 @@ test('a boat out in a neighbour\'s waters is drawn in that neighbour\'s copy, ne
 });
 
 test('where two neighbours\' map rectangles overlap, water belongs to the island with the nearest real coast', async () => {
-  // boss 8 Nov: islands sit closer than their maps' transparent sea margins
-  const {copyHolding} = await import('../src/pixi/sphere-shores.js');
-  // two islands side by side across a 600 channel: their maps' sea margins (plus the 300 reach) overlap
-  const A=mapOf('blossom'), B=mapOf('isle-170'), far=60000, coast=m=>m.world.coast.map(([x,y])=>({x:x-m.cx,y:y-m.cy}));
+  const {copyHolding} = await import('../src/world/sphere-shores.js');
+  const A=mapOf('blossom'), B=mapOf('sunset'), far=60000, coast=m=>m.world.coast.map(([x,y])=>({x:x-m.cx,y:y-m.cy}));
   const east=coast(A).reduce((p,q)=>q.x>p.x?q:p), west=coast(B).reduce((p,q)=>q.x<p.x?q:p), dx=east.x-west.x+600;
-  const copies=[{id:'blossom',x:far,y:far,width:A.width,height:A.height},{id:'isle-170',x:far+dx,y:far+east.y-west.y,width:B.width,height:B.height}];
+  const copies=[{id:'blossom',x:far,y:far,width:A.width,height:A.height},{id:'sunset',x:far+dx,y:far+east.y-west.y,width:B.width,height:B.height}];
   for (const [copy,at] of [[copies[0],{x:far+east.x+150,y:far+east.y}],[copies[1],{x:far+east.x+450,y:far+east.y}]]) {
     assert.ok(copies.every(c=>Math.abs(at.x-c.x)<c.width/2+300&&Math.abs(at.y-c.y)<c.height/2+300),'both maps reach this water');
     assert.equal(copyHolding(at.x,at.y,copies)?.id,copy.id,`nearer ${copy.id}'s coast`);
@@ -222,13 +210,12 @@ test('where two neighbours\' map rectangles overlap, water belongs to the island
   assert.equal(copyHolding(moored.x,moored.y,over,300,home),null,'a boat moored at home stays with home even inside a huge neighbour map');
 });
 
-// boss 6 Nov: "I took the boat already. Every island should have all the boats."
 const mooredAt=(boats,islandId) => boatSpots(islandId).map((spot,slot) => boats.some(boat => !boat.occupant && boat.islandId===islandId && boatHome(boat)===islandId && boatSlot(boat)===slot && boat.x===spot.x && boat.y===spot.y));
 const countOn=(boats,islandId) => boats.filter(boat => boat.islandId===islandId).length;
 
 test('after taking a boat and sailing clear of the jetty its mooring holds a fresh boat, and two sailors can take from it in turn', () => {
   const boats=createBoats(), per=boatSpots().length;
-  for (const slot of [0,3,per-1]) {   // a harbor berth, an islet and a beach mooring
+  for (const slot of [0,3,per-1]) {
     const spot=boatSpots()[slot], first=boats.find(boat => boat.id===`home-${slot}`);
     first.occupant='duck-a';
     assert.equal(fillMoorings(boats),false,'still beside the jetty: nothing new yet');
@@ -248,18 +235,19 @@ test('after taking a boat and sailing clear of the jetty its mooring holds a fre
 
 test('docking at another island keeps the arrival boat and leaves both islands moorings full', () => {
   const boats=createBoats(), per=boatSpots().length, there=destinationsFor('home')[0].destination, perThere=boatSpots(there).length;
-  const total=ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0);   // boss 6 Nov: a themed island has its own moorings
+  const total=ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0);
   const boat=boats.find(boat => boat.id==='home-3');
   let lowest=Infinity;
   const check=() => {fillMoorings(boats); lowest=Math.min(lowest,...ISLANDS.map(island => countOn(boats,island.id)));};
   boat.occupant='duck';
   check();
-  for (let step=1;step<=8;step++) {Object.assign(boat,{x:boat.x-step*60}); check();}   // sails clear of the islet
-  Object.assign(boat,{islandId:there,x:2400,y:300}); check();   // crosses into the neighbour's waters
+  for (let step=1;step<=8;step++) {Object.assign(boat,{x:boat.x-step*60}); check();}
+  const arrival=harborOf(there).water;
+  Object.assign(boat,{islandId:there,...arrival}); check();
   assert.equal(countOn(boats,there),perThere+1,'the neighbour shows its own boats plus yours');
-  retireBoat(boats,boat); check();   // hops out on the neighbour's shore
+  retireBoat(boats,boat); check();
   assert.ok(boats.includes(boat),'the arrival boat remains parked');
-  assert.deepEqual([boat.islandId,boat.x,boat.y,boat.occupant,boat.parked],[there,2400,300,null,true]);
+  assert.deepEqual([boat.islandId,boat.x,boat.y,boat.occupant,boat.parked],[there,arrival.x,arrival.y,null,true]);
   const restored=JSON.parse(JSON.stringify(boats));fillMoorings(restored);
   assert.deepEqual(restored.find(b=>b.id===boat.id),boat,'parked boat survives reconciliation after reload');
   assert.ok(mooredAt(boats,there).every(Boolean),`all ${perThere} of ${there}'s moorings are full`);
@@ -267,7 +255,6 @@ test('docking at another island keeps the arrival boat and leaves both islands m
   assert.equal(boats.length,total+1,'the fleet includes the parked arrival and all original moorings');
   const fewest=Math.min(...ISLANDS.map(island => boatSpots(island.id).length));
   assert.ok(lowest>=fewest,`no island ever showed fewer than its own boats (lowest ${lowest})`);
-  // stepping straight back off beside your own empty mooring ties the same boat back up
   const quick=boats.find(boat => boat.id==='home-0');
   quick.occupant='duck'; quick.x+=30; retireBoat(boats,quick);
   assert.ok(boats.includes(quick) && quick.x===boatSpots()[0].x && mooredAt(boats,'home')[0]);
@@ -277,8 +264,8 @@ test('docking at another island keeps the arrival boat and leaves both islands m
 test('every island has its full mooring list, even from an old save that only knew a few islands or left boats stranded', () => {
   const total=ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0);
   const saved=createBoats().filter(boat => boat.islandId==='home');
-  Object.assign(saved[2],{x:900,y:1700});   // the old "moored where you left it" boat, off its mooring
-  saved.push({...saved[2],id:'home-2~old'});   // and a spare
+  Object.assign(saved[2],{x:900,y:1700});
+  saved.push({...saved[2],id:'home-2~old'});
   saved.push({id:'nowhere-1',islandId:'nowhere',x:0,y:0,occupant:null});
   fillMoorings(saved);
   assert.equal(saved.length,total);

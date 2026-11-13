@@ -1,8 +1,7 @@
-import {mapPoint} from '../src/pixi/sphere-coordinates.js';
-// Find real shore water independently of island size, placement or harbor links.
-import {WORLD_ISLANDS,offsetOf} from '../src/pixi/world-map.js';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {originOffset,canSail,landingSpot,destinationsFor} from '../src/pixi/islands.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
+import {WORLD_ISLANDS,offsetOf} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {originOffset,canSail,landingSpot,destinationsFor} from '../src/gameplay/islands.js';
 export function nonNeighbourLanding(preferred) {
  const targets=preferred ? [preferred,...WORLD_ISLANDS.map(i=>i.id).filter(id=>id!==preferred)] : WORLD_ISLANDS.map(i=>i.id);
  for(const target of targets) {

@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {mapFor} from '../../src/pixi/island-maps.js';
+import {mapFor} from '../../src/world/island-maps.js';
 import {checkTheme} from '../theme-index.mjs';
-import {canSail} from '../../src/pixi/islands.js';
+import {canSail} from '../../src/gameplay/islands.js';
 import {paperboatMoorings} from '../pagepond-boats/config.mjs';
 const read=p=>JSON.parse(fs.readFileSync(p));
 export function auditPagepond(){

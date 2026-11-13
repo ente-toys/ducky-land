@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="260" viewBox="0 0 240 260"><title>Open lilac arch, two solid gate feet</title><g stroke="#39472d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M14 251V116Q120-51 226 116V251H194V123Q120 4 46 123V251Z" fill="#ddc5a2"/>
+ <path d="M14 116Q120-51 226 116L212 128Q120-13 28 128Z" fill="#fff0d2"/>
+ <path d="M29 122V251H46V123Q120 4 194 123V251H210V122Q120-15 29 122Z" fill="#f5ddb9"/>
+ <path d="M9 237H49V257H9ZM191 237h40v20h-40Z" fill="#e9d1ae"/>
+ <path d="M120 83v12" fill="none"/><path d="M105 106l15-12 15 12v31l-15 6-15-6Z" fill="#e6cda0"/><path d="M102 106l18-12 18 12-18 7Z" fill="#006b73"/><path d="M120 113v27M112 117v12" fill="none"/></g></svg>

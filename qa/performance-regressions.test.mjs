@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeRoom, addPlayer} from './room-harness.mjs';
-import {RoomClient} from '../src/pixi/room-client.js';
+import {RoomClient} from '../src/multiplayer/room-client.js';
 import {IslandRoom} from '../worker/index.js';
 
 test('delta updates preserve poses, remove departed players and reset after island and privacy changes', async () => {
@@ -43,7 +43,7 @@ test('delta updates preserve poses, remove departed players and reset after isla
 test('boat persistence migrates the legacy fleet, writes only changed boats, and restores deletions', async () => {
   const room = await makeRoom();
   const legacy = structuredClone(room.boats);
-  legacy[0].x += 123;
+  legacy[0].x -= 123;
   legacy[0].parked = true;
   room.sql.exec('DELETE FROM boat_states');
   room.sql.exec('INSERT OR REPLACE INTO boats VALUES(1,?)', JSON.stringify(legacy));

@@ -2,15 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import sharp from 'sharp';
-import {onRink} from '../src/pixi/rink-slide.js';
+import {onRink} from '../src/gameplay/rink-slide.js';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {Texture,CanvasSource,Sprite} from 'pixi.js';
-import {loadThemeArt} from '../src/pixi/theme-art.js';
-import {icelandPieceSVG} from '../src/pixi/iceland-art-stream.js';
-import {createGroundPool} from '../src/pixi/ground-stream.js';
+import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {icelandPieceSVG} from '../src/rendering/pixi/art/iceland-art-stream.js';
+import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
 const base='public/pixi-art/themes/snow/';
 const art=JSON.parse(readFileSync(base+'art.json'));
-const world=JSON.parse(readFileSync('rive/web/themes/snow/world.json'));
+const world=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
 const terrain=readFileSync(base+'v2/terrain.svg','utf8');
 
 test('FIX4 actual theme loader renders complete lake and heart before terrain decode, with streamed shore props',async t=>{
@@ -53,7 +53,6 @@ test('FIX4 actual theme loader renders complete lake and heart before terrain de
 
  const pixel=(x,y)=>ctx.getImageData(Math.round(x-x0),Math.round(y-y0),1,1).data;
  const blue=p=>Math.abs(p[0]-166)<8&&Math.abs(p[1]-222)<8&&Math.abs(p[2]-236)<8;
- // Every interior sample is painted before any streamed terrain arrives.
  const r=world.iceland2.rink;
  for(let y=r.y+12;y<r.y+r.height-10;y+=17)for(let x=r.x+12;x<r.x+r.width-10;x+=17){
   if(onRink(r,x,y)){const p=pixel(x,y);assert.ok(p[3]>240&&p[2]>220,'missing lake at '+x+','+y);}

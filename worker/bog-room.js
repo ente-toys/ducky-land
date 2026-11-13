@@ -1,15 +1,13 @@
-import {createBogCombat} from '../src/pixi/bog-combat/sim.js';
-import {BOG_COMBAT} from '../src/pixi/bog-combat/config.js';
-import {BOG_ISLAND,canEnterBog,teamCounts,suggestedTeam} from '../src/pixi/bog-combat/entry.js';
-import {emptyStats,TEAMS} from '../src/pixi/bog-combat/rules.js';
-import {cleanMedalCase} from '../src/pixi/bog-combat/medals.js';
-import {bogExitIslet} from './bog-exit.js';
-import {mapOf} from '../src/pixi/island-maps.js';
+import {createBogCombat} from '../src/features/bog-combat/sim.js';
+import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {BOG_ISLAND,canEnterBog,teamCounts,suggestedTeam} from '../src/features/bog-combat/entry.js';
+import {emptyStats,TEAMS} from '../src/features/bog-combat/rules.js';
+import {cleanMedalCase} from '../src/features/bog-combat/medals.js';
+import {bogExitIslet,boatForExit} from './bog-exit.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {createBogBots} from './bog-bots.js';
-import {ABILITY_TIMERS,saveAbilityTimers} from '../src/pixi/bog-combat/ability-state.js';
+import {ABILITY_TIMERS,saveAbilityTimers} from '../src/features/bog-combat/ability-state.js';
 
-// Production transport for the existing combat simulation. Account identity
-// comes from the same signed-in room that admitted the boat, never a URL token.
 export class LiveBogRoom {
  constructor(owner){
   this.owner=owner;this.members=new Map();this.exits=[];this.saved=new Map();
@@ -34,11 +32,8 @@ export class LiveBogRoom {
   const allowed=this.admitted(digest);
   if(!allowed||team!==null&&!TEAMS.includes(team))return false;
   const {user,info}=allowed;
-  // Existing landed visitors are migrated once. Normal boat landings have
-  // already created this paid entry; opening/restoring sockets never recharges.
   const visit=this.owner.karma.beginBogEntry(user.account);if(!visit)return false;
   info.actor.karma=this.owner.karma.balance(user.account);
-  // One signed-in participant per account, just like the world room.
   if(team)for(const [peer,m]of this.members)if(m.account===user.account&&m.team){this.close(peer);peer.close(4001,'Arena session replaced by reconnect');}
   if(this.owner.karma.bogEntry(user.account)?.id!==visit.id)return false;
   const m={digest,account:user.account,entryId:visit.id,id,team:team?(visit.combat?.team??team):null,tokens:90,tokenAt:Date.now()};
@@ -88,7 +83,7 @@ export class LiveBogRoom {
   for(const p of this.exits.splice(0))this.eject(p);
   for(const p of this.arena.state.players.values()){
    if(p.bot)continue;
-   const key=JSON.stringify([p.lives,p.alive,p.shieldUntil,p.respawnAt,p.out,p.dodgeReadyAt,p.speedUntil,p.hitShield,p.hitShieldUntil,p.ammo,p.reloadAt]);
+   const key=JSON.stringify([p.lives,p.alive,p.shieldUntil,p.respawnAt,p.out,p.dodgeReadyAt,p.speedUntil,p.hitShield,p.hitShieldUntil,p.ammo,p.reloadAt,p.bushRevealUntil]);
    if(this.saved.get(p.id)!==key){this.persist(p);this.saved.set(p.id,key);}
   }
   if(this.arena.state.tick%3===0)this.broadcast();
@@ -111,8 +106,7 @@ export class LiveBogRoom {
  }
  eject(p){
   const destination=bogExitIslet(),text=`Out of lives! Paddled to ${destination.name}`;
-  // Move the real world actor using the same island chart and dock as landing.
-  // Resume records are also moved, so losing the world socket cannot undo exit.
+  if(boatForExit(this.owner.boats,destination))this.owner.saveBoats();
   for(const [socket,info]of this.owner.connections)if(info.account===p.profile&&info.actor){
    Object.assign(info.actor,{islandId:destination.islandId,x:destination.x,y:destination.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,
     action:0,until:0,jumpLeft:0,docking:false,sailTarget:null,sailRoute:null,exitLocked:false});

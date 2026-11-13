@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="160" viewBox="0 0 260 160"><title>Home oak barrels and supply crate barricade</title><g stroke="#39472d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 97L24 84H236L252 97V153H8Z" fill="#ddc5a2"/><path d="M8 97L24 84H236L252 97Z" fill="#f5ddb9"/><path d="M8 97H252V110H8Z" fill="#e9d1ae"/><path d="M8 130H252M64 110V130M173 110V130M115 130V153M222 130V153" fill="none" stroke="#93729e" stroke-width="1.8"/><svg x="26" y="16" width="61" height="80" viewBox="0 0 45 59" overflow="visible">
+
+<g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+
+<path fill="#aa8b67" d="M6 8Q0 29 8 50Q22 61 37 50Q45 29 38 8Z"/>
+<path fill="#927653" stroke="none" d="M30 10L38 8Q45 29 37 50Q31 56 24 56Q35 33 30 10Z"/>
+<path fill="none" stroke-width=".8" d="M13 13Q8 33 14 53M22 14V56M31 13Q36 33 29 54"/>
+<path fill="#beac88" d="M4 18Q22 27 40 18L41 23Q22 32 3 23ZM4 39Q23 48 40 38L39 43Q22 53 5 44Z"/>
+<ellipse fill="#c3a783" cx="22" cy="9" rx="17" ry="8"/>
+<ellipse fill="#957954" cx="22" cy="9" rx="13" ry="5"/>
+<path fill="none" stroke-width=".7" d="M13 7L31 12M20 4L29 8"/>
+</g></svg><svg x="171" y="16" width="61" height="80" viewBox="0 0 45 59" overflow="visible">
+
+<g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+
+<path fill="#aa8b67" d="M6 8Q0 29 8 50Q22 61 37 50Q45 29 38 8Z"/>
+<path fill="#927653" stroke="none" d="M30 10L38 8Q45 29 37 50Q31 56 24 56Q35 33 30 10Z"/>
+<path fill="none" stroke-width=".8" d="M13 13Q8 33 14 53M22 14V56M31 13Q36 33 29 54"/>
+<path fill="#beac88" d="M4 18Q22 27 40 18L41 23Q22 32 3 23ZM4 39Q23 48 40 38L39 43Q22 53 5 44Z"/>
+<ellipse fill="#c3a783" cx="22" cy="9" rx="17" ry="8"/>
+<ellipse fill="#957954" cx="22" cy="9" rx="13" ry="5"/>
+<path fill="none" stroke-width=".7" d="M13 7L31 12M20 4L29 8"/>
+</g></svg><svg x="88" y="27" width="80" height="70" viewBox="0 0 62 54" overflow="visible">
+
+<g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round">
+<path fill="#b3a078" stroke="none" d="M1 46L38 54L61 45L26 37Z"/>
+<path fill="#b0926e" d="M3 20L34 12L58 22L33 34Z"/>
+
+
+
+<path fill="#c0a683" d="M3 23L31 32L58 23V45L32 53L3 44Z"/>
+<path fill="#977b5b" d="M31 32L58 23V45L32 53Z"/>
+<path fill="none" stroke-width=".8" d="M5 33L31 41L57 33M12 27V46M23 30V49M40 30V49M51 26V46"/>
+<path fill="#d1bb98" d="M1 20L6 20L32 28L58 20L61 23L32 33L1 24Z"/>
+</g></svg></g></svg>

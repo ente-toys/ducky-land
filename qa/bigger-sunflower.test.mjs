@@ -2,24 +2,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
-import {mapFor,makeMap} from '../src/pixi/island-maps.js';
-import {shoreOf} from '../src/pixi/surf.js';
-import {boardingPoint,canSail,originOffset,seaBoundsFor,destinationsFor} from '../src/pixi/islands.js';
-import {THEME_OF} from '../src/pixi/island-maps.js';
-import {geometry,inPoly} from '../rive/web/island-geometry.mjs';
-import {resolveSleepSpots,sleepHalfWidths,SUNBOB_SLEEP_TOTAL} from '../src/pixi/sleep-spots.js';
+import {mapFor,makeMap} from '../src/world/island-maps.js';
+import {shoreOf} from '../src/rendering/pixi/environment/surf.js';
+import {boardingPoint,canSail,originOffset,seaBoundsFor,destinationsFor} from '../src/gameplay/islands.js';
+import {THEME_OF} from '../src/world/island-maps.js';
+import {geometry,inPoly} from '../assets/world/island-geometry.mjs';
+import {resolveSleepSpots,sleepHalfWidths,SUNBOB_SLEEP_TOTAL} from '../src/world/home/sleep-spots.js';
 import {communities,houses} from '../scripts/bigger-sunflower/communities.mjs';
 import {REMOVE_PROPS,REMOVE_FLATS,LIFT_FLATS,MOVE_PROPS,FIELDS,FIELD_KEEP} from '../scripts/bigger-sunflower/centre-data.mjs';
-import {inShape} from '../rive/web/island-geometry.mjs';
-const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url))),B='scripts/bigger-sunflower/baseline/',D='rive/web/themes/sunflower/';
-const canonical=p=>{const {pathOriginalSrc,...q}=p;return pathOriginalSrc?{...q,src:pathOriginalSrc}:q;};
+import {inShape} from '../assets/world/island-geometry.mjs';
+const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url))),B='scripts/bigger-sunflower/baseline/',D='assets/world/themes/sunflower/';
 const moves=read('scripts/sunbob-ground/path-report.json').relocated;
 const old=read(B+'world.json'),originalArt=read(B+'art.json'),art=read('public/pixi-art/themes/sunflower/art.json'),extension=read(D+'bigger-sunflower.json'),map=mapFor('sunflower');
 
 test('Sunbob bloom replaces raised plaza, retains untouched props and resolves 90 residents',()=>{
  const centre=read('public/pixi-art/themes/sunflower/bloom/centre-placements.json');
  const retired=new Set(centre.retirePropIds);
- assert.ok(!art.props.some(p=>retired.has(p.id)&&!/^detail\/field-(flower|row-short)\.svg$/.test(p.pathOriginalSrc??p.src)));
+ assert.ok(!art.props.some(p=>retired.has(p.id)&&!/^detail\/field-(flower|row-short)\.svg$/.test(p.src)));
  assert.ok(!art.decks.some(p=>['centre-back','centre-decal-floor','close-sunflower-rosette'].includes(p.id)));
  assert.deepEqual(map.world.centrePlacement.stairs,[]);
  for(const p of centre.props){
@@ -44,8 +43,6 @@ test('Sunflower communities and the coast loop remain reachable across negative 
  assert.ok(area(map.world.coast)/area(old.coast)>3);assert.equal(shoreOf(map.world).length,1,'surf follows the new sea coast, former islets are inland gardens');
  for(const t of art.ground.tiles){assert.ok(t.width<=1536&&t.height<=1536,t.src)}
 });
-// boss 8 Nov: the old 23 cottages are gone; each community is its GPT hamlet. Every hamlet home's door is clear and
-// reachable from spawn, and its base is solid like the old foundations.
 test('every Sunflower hamlet home has a reachable door and a solid base',()=>{
  const nav=map.nav();assert.equal(communities.length,5);assert.equal(houses.length,0);
  assert.equal(new Set(communities.map(c=>c.kind)).size,5);
@@ -59,12 +56,9 @@ test('every Sunflower hamlet home has a reachable door and a solid base',()=>{
   assert.ok(!nav.walkable(h.footprint.x,h.footprint.y),h.id+' foundation');
  }
  const originalWalk=read(B+'walk-world.json'),before=geometry(originalWalk).walkable,after=geometry(map.baseWalk).walkable;
- // boss 8 Nov (inner island): the flower stall and tree-73 are gone and moved props took their footprints along; only those
- // footprints changed
  const owner=(o,p)=>o.name===p.id||(o.x===p.x&&p.y-o.y>=0&&p.y-o.y<60);
  const changed=[...originalWalk.obstacles.filter(o=>originalArt.props.some(p=>(REMOVE_PROPS.includes(p.id)||MOVE_PROPS[p.id]||!art.props.some(q=>q.id===p.id))&&owner(o,p))),...map.baseWalk.obstacles.filter(o=>/^centre-fill-|^bloom-|^sunbob-outer-/.test(o.name??'')||art.props.some(p=>MOVE_PROPS[p.id]&&owner(o,p)))].map(o=>o.poly&&o.x===undefined?{...o,x:o.poly.reduce((s,q)=>s+q[0],0)/o.poly.length,y:o.poly.reduce((s,q)=>s+q[1],0)/o.poly.length,rx:200,ry:120}:o);
  for(const m of moves)for(const [x,y] of [m.fromPoint,m.to])changed.push({x,y,rx:250,ry:160});
- // and the sunflower fields are solid, as the centre's fields always were
  for(let y=0;y<5600;y+=37)for(let x=0;x<8000;x+=37){if(!inShape(x,y,{x:3880,y:2608.5,rx:1750,ry:1100})&&inPoly(x,y,originalWalk.coast)&&!changed.some(o=>inShape(x,y,o,24))&&!FIELDS.some(f=>inPoly(x,y,f.poly)||f.poly.some((q,k)=>{const a=f.poly[(k+1)%f.poly.length],dx=a[0]-q[0],dy=a[1]-q[1],t=Math.max(0,Math.min(1,((x-q[0])*dx+(y-q[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-q[0]-t*dx,y-q[1]-t*dy)<40;})))assert.equal(after(x,y),before(x,y),'original walking terrain '+x+','+y);}
 });
 test('bigger Sunflower boats float, board and land through the production registry',()=>{
@@ -76,7 +70,7 @@ test('bigger Sunflower boats float, board and land through the production regist
 
 test('Sunflower canals block walking, every retained and new crossing spans real water and stays reachable',async()=>{
  const {waterways}=await import('../scripts/bigger-sunflower/water.mjs');
- const {inShape}=await import('../rive/web/island-geometry.mjs');
+ const {inShape}=await import('../assets/world/island-geometry.mjs');
  const nav=map.nav();
  assert.equal(waterways.courses.length,2);
  for(const w of map.world.water)for(const key of ['x','y','rx','ry'])assert.ok(Number.isFinite(w[key]),'runtime ripple '+key);
@@ -88,16 +82,13 @@ test('Sunflower canals block walking, every retained and new crossing spans real
   const route=nav.route(map.spawn.x,map.spawn.y,...p);assert.deepEqual(route.at(-1),p,b.id+' reachable');
   let previous=[map.spawn.x,map.spawn.y];for(const q of route){assert.ok(nav.clearLine(previous,q),b.id+' route clearance');previous=q;}
  }
- // No new dry-land prop is left standing in the canal. Reeds/lilies live in water.
  for(const p of art.props.slice(originalArt.props.length))if(!/pond-reeds|pond-lily/.test(p.id))assert.ok(!map.world.water.slice(old.water.length).some(w=>inShape(p.x,p.y-8,w)),p.id+' has dry footing');
- // boss 8 Nov: every hamlet home is its own GPT drawing
  for(const c of communities){const homes=art.props.filter(p=>p.zone===c.id&&p.communityRole==='home');assert.equal(new Set(homes.map(p=>p.src)).size,homes.length,c.id+' house art');}
 });
-// Boss 9 Nov: restore main sunflower artwork and authored density, trimming only plaza/path edges.
-test('the original sunflower fence follows both bank rows at main density, preserving bridge openings and sleepers',async()=>{
+test('the sunflower fence follows both bank rows, keeping clear of paths, preserving bridge openings and sleepers',async()=>{
  const {FENCE}=await import('../scripts/bigger-sunflower/centre-data.mjs');
- const flowers=art.props.filter(p=>p.id.startsWith('ring-fence-'));assert.equal(flowers.length,448);
- assert.ok(flowers.every(f=>(f.pathOriginalSrc??f.src)==='detail/field-flower.svg'));
+ const flowers=art.props.filter(p=>p.id.startsWith('ring-fence-'));assert.equal(flowers.length,434);
+ assert.ok(flowers.every(f=>f.src==='detail/field-flower.svg'));
  for(const [row,line] of FENCE.rows.entries()){
   const lens=line.slice(1).map((q,k)=>Math.hypot(q[0]-line[k][0],q[1]-line[k][1])),total=lens.reduce((s,v)=>s+v,0);
   for(let s=row*FENCE.step/2;s<total;s+=FENCE.step){let k=0,t=s;while(t>lens[k])t-=lens[k++];
@@ -106,17 +97,16 @@ test('the original sunflower fence follows both bank rows at main density, prese
    assert.ok(flowers.some(f=>Math.hypot(f.x-x,f.y-y)<140),`a nearby flower at ${Math.round(x)},${Math.round(y)}`);
   }
  }
- // every opening is at a bridge: near the inner end of one of the ring's 14 arches
  const ends=map.world.arches.flatMap(a=>[a.a,a.b]);
  for(const [gx,gy] of FENCE.gaps)assert.ok(ends.some(e=>Math.hypot(e[0]-gx,e[1]-gy)<450),`opening ${gx},${gy} is at a bridge`);
  assert.equal(map.sleepers.length,90);
 });
 
-// Fingerprint of exact ente/main placements after the 70 plaza/path-edge trims.
-test('Sunbob field art, positions, rows, density and arrangement retain main data',()=>{
- const fields=art.props.filter(p=>/^detail\/field-(flower|row-short)\.svg$/.test(p.pathOriginalSrc??p.src)).map(canonical);
- assert.equal(fields.length,1050);
- assert.equal(createHash('sha256').update(JSON.stringify(fields)).digest('hex'),'92b3214083df040248e0837acc094d7101839b777fb3b0ee4a1dd8da9c167ce3');
- for(const [name,hash] of Object.entries({"field-flower": "91c7d92214d073a3ad3cef194912d31d03ea85b0b59dd5d8ede4b680f688bc10", "field-row-short": "c1fff6a105775d0cd6d81f0b336ed80ef7aeaf9d8d7ab119ae386534125b3210"}))
+test('Sunbob fields are whole plants in dense staggered rows, with no pre-cut art',()=>{
+ const fields=art.props.filter(p=>/^detail\/field-(flower|row-short)\.svg$/.test(p.src));
+ assert.equal(fields.length,1557);
+ assert.ok(art.props.every(p=>!p.pathOriginalSrc&&!p.src.includes('path-trim/')),'no path-trimmed sprites');
+ assert.equal(createHash('sha256').update(JSON.stringify(fields)).digest('hex'),'818dc1ef41f938aad5ff3e0401adc642330f556efebdc66c0427aa7f15421687');
+ for(const [name,hash] of Object.entries({"field-flower": "06774761a2e2142c3b9e87aba249ae806f75180cc17d7f79a1344573c91500eb", "field-row-short": "e4e881bc151a9ff7468fa1235ae230e705d4a88c896485f2735b5d566ca92227"}))
   assert.equal(createHash('sha256').update(readFileSync(new URL('../public/pixi-art/themes/sunflower/detail/'+name+'.svg',import.meta.url))).digest('hex'),hash);
 });

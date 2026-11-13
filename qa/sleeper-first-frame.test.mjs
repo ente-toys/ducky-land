@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {Assets,Texture} from 'pixi.js';
 import {build} from 'esbuild';
 import {fileURLToPath} from 'node:url';
-const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/pixi/duck.js',import.meta.url))],bundle:true,packages:'external',format:'esm',write:false});
+const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../src/rendering/pixi/duck.js',import.meta.url))],bundle:true,packages:'external',format:'esm',write:false});
 const code=bundle.text.replaceAll('"pixi.js"',JSON.stringify(import.meta.resolve('pixi.js')));
 const {createDuck,disposeDuckAssets}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 
@@ -54,7 +54,6 @@ test('standing ducks attach only their current direction and dispose cached dire
 test('steady walking reuses body geometry and turning invalidates it', async () => {
   const originals = {fetch: globalThis.fetch, document: globalThis.document, DOMParser: globalThis.DOMParser,
     load: Assets.load, get: Assets.get, unload: Assets.unload};
-  // A circular SVG outline makes sampling deterministic without a browser layout engine.
   globalThis.document = {
     body: {appendChild() {}},
     createElementNS() {return {style: {}, appendChild() {}, remove() {}, setAttribute() {},

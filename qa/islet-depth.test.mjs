@@ -6,13 +6,13 @@ import {JSDOM} from 'jsdom';
 import {Canvas,createCanvas} from '@napi-rs/canvas';
 import {Container,Graphics,Matrix,DOMAdapter} from 'pixi.js';
 import {CanvasRenderer} from '../node_modules/pixi.js/lib/rendering/renderers/canvas/CanvasRenderer.mjs';
-import {ISLETS,ISLET_META,ISLET_ART} from '../src/pixi/islets.js';
-import {placeIslet,isletPlacement} from '../src/pixi/islet-placement.js';
-import {isletWalk} from '../src/pixi/islet-walk.js';
-import {navOf} from '../src/pixi/islands.js';
-import {inPoly} from '../rive/web/island-geometry.mjs';
-import {svgContext,svgLayerContexts,svgLayerDocuments} from '../src/pixi/svg-context.js';
-import {createIsletView} from '../src/pixi/islet-view.js';
+import {ISLETS,ISLET_META,ISLET_ART} from '../src/world/islets.js';
+import {placeIslet,isletPlacement} from '../src/world/islet-placement.js';
+import {isletWalk} from '../src/world/islet-walk.js';
+import {navOf} from '../src/gameplay/islands.js';
+import {inPoly} from '../assets/world/island-geometry.mjs';
+import {svgContext,svgLayerContexts,svgLayerDocuments} from '../src/rendering/pixi/art/svg-context.js';
+import {createIsletView} from '../src/rendering/pixi/islet-view.js';
 const source=art=>readFileSync(new URL(`../public/pixi-art/islets/${art}.svg`,import.meta.url),'utf8');
 const parse=t=>new DOMParser().parseFromString(t,'image/svg+xml');
 const serial=n=>new XMLSerializer().serializeToString(n);
@@ -35,7 +35,7 @@ test('every tall islet piece has a solid ground footprint shared by navigation a
   }
   const w=isletWalk(i.id);assert.ok(nav.walkable(w.land.x,w.land.y),`${i.id} jetty stays accessible`);
  }
- for(const [art,p]of [['tree-and-rowboat',[503,547]],['09-spooky-purple',[402,574]]]){
+ for(const [art,p]of [['tree-and-rowboat',[503,547]]]){
   const i=ISLETS.find(i=>i.art===art),k=i.width/1024,q=placeIslet(i.home,i,p.map(v=>(v-512)*k));
   assert.equal(navOf(i.home).walkable(q.x,q.y),false,`${art}: reported trunk base is blocked`);
  }
@@ -56,7 +56,7 @@ test('SVG layer selection preserves each piece exactly once, including inherited
 test('production islet props sort with Duckies by their foot, preserve the complete art and hide from island snapshots',async()=>{
  const dom=new JSDOM('<body></body>',{url:'http://localhost/'});
  globalThis.window=dom.window;globalThis.document=dom.window.document;globalThis.DOMParser=dom.window.DOMParser;
- globalThis.requestAnimationFrame=()=>0;globalThis.cancelAnimationFrame=()=>{};
+ globalThis.requestAnimationFrame=cb=>setTimeout(cb,0);globalThis.cancelAnimationFrame=clearTimeout;
  Object.defineProperty(globalThis,'navigator',{value:dom.window.navigator,configurable:true});
  globalThis.HTMLCanvasElement=Canvas;
  const canvas=(w=1,h=1)=>{const c=createCanvas(w,h);c.style={};c.addEventListener=()=>{};c.removeEventListener=()=>{};return c;};
@@ -73,7 +73,6 @@ test('production islet props sort with Duckies by their foot, preserve the compl
   for(const v of view.views){
    const i=v.i,k=i.width/1024,p=placeIslet(i.home,i,[0,0]),camera={...p,zoom:1/k};
    view.update(i.home,camera,1024,1024,false);
-   // Compare this drawing alone; enlarged neighbours can enter the viewport.
    for(const other of view.views)if(other!==v){other.root.visible=false;for(const p of other.props)p.sprite.visible=false;}
    for(const {piece,sprite}of v.props){
     assert.equal(sprite.parent,objects,'same sorted layer as Duckies and boats');
@@ -84,15 +83,16 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     assert.ok(objects.getChildIndex(sprite)<objects.getChildIndex(duck),`${i.art}/${piece.id} is behind a Ducky in front`);
    }
    duck.visible=false;
-   // Compare in the islet's own north-up frame, undoing its chart rotation.
    const r=isletPlacement(i.home,i),co=r.cos,si=r.sin;
    scene.setFromMatrix(new Matrix(co/k,-si/k,si/k,co/k,512-(co*p.x+si*p.y)/k,512-(-si*p.x+co*p.y)/k));
    duck.rotation=Math.atan2(si,co);
-   // Test lossless split artwork in its own frame, preserving its source depth
-   // order. Chart-space foot sorting was checked above, before this comparison.
    for(const {piece,sprite}of v.props){
-    assert.equal(sprite.rotation,0,'props stay screen-upright in a level gameplay camera');
-    sprite.rotation=Math.atan2(si,co);sprite.zIndex=(piece.foot[1]-512)*k;
+    for(const angle of [0,.4,-.8]){
+     view.update(i.home,{...camera,basis:{a:Math.cos(angle),b:Math.sin(angle),c:-Math.sin(angle),d:Math.cos(angle)}},1024,1024,false);
+     assert.ok(Math.abs(sprite.rotation-v.root.rotation)<1e-12,'camera turns ground and props as one piece');
+    }
+    assert.ok(Math.abs(sprite.rotation-Math.atan2(si,co))<1e-12,'props share their ground rotation');
+    sprite.zIndex=(piece.foot[1]-512)*k;
    }
    objects.sortChildren();
    renderer.render({container:scene,clear:true});
@@ -106,9 +106,8 @@ test('production islet props sort with Duckies by their foot, preserve the compl
     writeFileSync(`/tmp/islet-depth-art/${i.art}-split.png`,c.toBuffer('image/png'));
     writeFileSync(`/tmp/islet-depth-art/${i.art}-full.png`,output.toBuffer('image/png'));
    }
-   assert.ok(changed<(i.art==='broken-shipwreck'?1024:512),`${i.art}: split preserves the picture (${changed} changed pixels)`);   // 8 Nov: the shipwreck split drops the soft hull shadows (964 px); on the Home to-dofull.destroy();
+   assert.ok(changed<(i.art==='broken-shipwreck'?1024:512),`${i.art}: split preserves the picture (${changed} changed pixels)`);
    for(const {sprite}of v.props)sprite.zIndex=sprite.y;objects.sortChildren();
-   // An opaque Ducky body behind the oak is covered by the actual production tree.
    if(i.art==='tree-and-rowboat'){
     const oak=v.props.find(p=>p.piece.id==='oak');
     duck.visible=true;duck.position.set(oak.sprite.x,oak.sprite.y-1);duck.zIndex=duck.y;

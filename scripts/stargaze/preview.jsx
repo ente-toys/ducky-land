@@ -1,7 +1,6 @@
-// Standalone review uses the production React dialog and canvas renderer, with local fixture data.
 import React, {useRef} from 'react';
 import {createRoot} from 'react-dom/client';
-import IslandStargaze from '../../src/pixi/IslandStargaze.jsx';
+import IslandStargaze from '../../src/app/IslandStargaze.jsx';
 function Preview() {
   const island = useRef({
     telescopeOptions:() => ({telescope:true,at:true}),

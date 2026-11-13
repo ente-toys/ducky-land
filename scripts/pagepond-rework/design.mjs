@@ -1,5 +1,3 @@
-// Named, hand-composed reading groves. Each tuple is original tree species,
-// offset from the clearing, and scale. No random or grid placement.
 export const transforms={
  quillwick:{anchor:[-737.5,400],sx:1.35,sy:1.55},
  inkleaf:{anchor:[8738,-300],sx:1.2,sy:1.65},
@@ -39,8 +37,6 @@ export const primaryRoads={
  'east-south-heart':[[9000,4400],[8420,4520],[7900,4390],[7330,4150]],
  'harbour':[[6600,6750],[6600,6970]]
 };
-// Bridge locations are authored in the camera axes. The western compass
-// approach meets the existing clear path below the trees, at y=2740.
 export const straightBridges=[
  ['bridge-0','west-spine','ns',3144,344,110],
  ['bridge-1','west-spine','ns',-1110,2539,170],

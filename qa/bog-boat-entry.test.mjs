@@ -2,17 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {makeRoom,addPlayer} from './room-harness.mjs';
-import {mapOf} from '../src/pixi/island-maps.js';
-import {WORLD_ISLANDS,WORLD_GEO} from '../src/pixi/world-map.js';
-import {BOAT_CHANNEL,coastGaps} from '../src/pixi/sphere-shores.js';
-import {canSail,boardingPoint,destinationsFor,landingSpot,canDock} from '../src/pixi/islands.js';
-import {RoomClient} from '../src/pixi/room-client.js';
-import {getPlayerKarma} from '../src/pixi/bog-combat/karma.js';
-import {BOG_ISLAND,KARMA_REQUIRED,bogLandingNotice} from '../src/pixi/bog-combat/entry.js';
+import {mapOf} from '../src/world/island-maps.js';
+import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
+import {BOAT_CHANNEL,coastGaps} from '../src/world/sphere-shores.js';
+import {canSail,boardingPoint,destinationsFor,landingSpot,canDock} from '../src/gameplay/islands.js';
+import {RoomClient} from '../src/multiplayer/room-client.js';
+import {getPlayerKarma} from '../src/features/bog-combat/karma.js';
+import {BOG_ISLAND,KARMA_REQUIRED,bogLandingNotice} from '../src/features/bog-combat/entry.js';
 import {LiveBogRoom} from '../worker/bog-room.js';
 import {connectBog} from '../server/pages-auth.js';
 
-const bog=mapOf(BOG_ISLAND),from='isle-176';
+const bog=mapOf(BOG_ISLAND),from='isle-251';
 function aboard(room,n,islandId,point){
  const p=addPlayer(room,n,{islandId,...point,mode:'sailing'});
  const boat=room.boats.find(b=>b.islandId===islandId&&!b.occupant);
@@ -25,11 +25,11 @@ function balance(room,player,value){
  room.karma.balances.delete(player.account);
 }
 
-test('Bog uses its approved map at its saved polar slot, with the same afloat and walkable harbour contract as Pagepond/Bellovo',()=>{
+test('Bog uses its approved map at its saved polar slot, with the same afloat and walkable harbour contract as Pagepond/Campfire',()=>{
  assert.equal(getPlayerKarma(),0);assert.equal(KARMA_REQUIRED,5);
  assert.equal(bog.id,'bog');assert.equal(bog.width,8400);assert.equal(bog.height,8200);
  assert.equal(WORLD_ISLANDS.find(i=>i.id===BOG_ISLAND).lat,-Math.PI/2);
- for(const id of [BOG_ISLAND,'isle-176','isle-251']){
+ for(const id of [BOG_ISLAND,'isle-250','isle-251']){
   const m=mapOf(id),n=m.nav();assert.ok(n.walkable(m.HARBOR.land.x,m.HARBOR.land.y));
   assert.ok(n.route(m.spawn.x,m.spawn.y,m.HARBOR.land.x,m.HARBOR.land.y).length);
   assert.ok(canSail(m.HARBOR.water.x,m.HARBOR.water.y,id));assert.ok(m.boatSpots().length>=3);
@@ -46,7 +46,7 @@ for(const karma of [0,4,5,6])test(`normal boat harbour arrival with ${karma} kar
  try{
   const d=destinationsFor(from).find(d=>d.destination===BOG_ISLAND);assert.ok(d);
   const p=aboard(room,7000+karma,from,d.dock);balance(room,p,karma);
-  p.actor.karma=karma<5?999:0; // Stale actor state must not override the account balance.
+  p.actor.karma=karma<5?999:0;
   room.step();
   if(karma<5){
    assert.equal(p.actor.mode,'sailing');assert.equal(p.actor.islandId,from);
@@ -59,7 +59,6 @@ for(const karma of [0,4,5,6])test(`normal boat harbour arrival with ${karma} kar
    assert.deepEqual([p.actor.x,p.actor.y],[bog.HARBOR.land.x,bog.HARBOR.land.y]);assert.equal(p.boat.occupant,null);
    assert.equal(room.karma.balance(p.account),karma-5);assert.equal(p.actor.karma,karma-5);
    room.step();assert.equal(room.karma.balance(p.account),karma-5,'one charge per landing');
-   // The same normal board command returns to the same arrival vessel.
    room.webSocketMessage(p.socket,JSON.stringify({type:'board',seq:1,islandId:BOG_ISLAND,boatId:p.boat.id}));room.step();
    assert.equal(p.actor.mode,'sailing');assert.equal(p.actor.boatId,p.boat.id);assert.equal(p.boat.occupant,p.actor.id);
   }
@@ -72,7 +71,6 @@ test('Dock, forged karma packets and pending beach landings cannot bypass the ga
   const p=aboard(room,7100,BOG_ISLAND,bog.HARBOR.water);balance(room,p,4);p.actor.karma=999;
   room.webSocketMessage(p.socket,JSON.stringify({type:'disembark',seq:1,karma:999}));room.step();
   assert.equal(p.actor.mode,'sailing');assert.match(p.socket.notes.find(n=>n.type==='travel-notice').text,/You need 5 karma to land on Booquack Bog/);
-  // Find actual open water beside a non-harbour Bog shore.
   let beach;
   for(let y=700;y<7400&&!beach;y+=80)for(let x=400;x<8000;x+=80){
    const q={islandId:BOG_ISLAND,mode:'sailing',x,y};
@@ -81,7 +79,6 @@ test('Dock, forged karma packets and pending beach landings cannot bypass the ga
   assert.ok(beach);Object.assign(p.actor,beach.q);Object.assign(p.boat,beach.q);
   const info=room.connections.get(p.socket);info.landing={...beach.spot,approach:beach.q};
   room.step();assert.equal(p.actor.mode,'sailing');assert.equal(info.landing,null);
-  // Enough karma uses exactly the same shore path.
   balance(room,p,5);info.landing={...beach.spot,approach:beach.q};room.step();
   assert.equal(p.actor.mode,'walking');assert.ok(bog.nav().walkable(p.actor.x,p.actor.y));
   balance(room,p,0);
@@ -106,17 +103,17 @@ test('production lobby and teams use the landed account, keep saved stats, and r
  try{
   const lobby=peer(),participant=peer();
   assert.equal(service.open(lobby,{digest:p.account}),true);assert.equal(lobby.notes.at(-1).type,'arena-lobby');
-  assert.equal(service.open(participant,{digest:p.account,team:'google'}),true);
+  assert.equal(service.open(participant,{digest:p.account,team:'evil'}),true);
   const player=[...service.arena.state.players.values()].find(q=>!q.bot);assert.equal(player.profile,p.account);
-  assert.equal(lobby.notes.at(-1).counts.google,1);
+  assert.equal(lobby.notes.at(-1).counts.evil,1);
   service.message(participant,JSON.stringify({type:'arena-input',seq:0,x:1,y:0,run:true,fire:false}));
   for(let i=0;i<10;i++)service.step();assert.ok(player.x>6500);
   player.stats.tags=3;player.medalCase['first-splat']=true;service.close(participant);
   assert.equal(service.profile(p.account).stats.tags,3);assert.equal(service.profile(p.account).medalCase['first-splat'],true);
   const restored=new LiveBogRoom(room);assert.equal(restored.profile(p.account).stats.tags,3);restored.dispose();
-  p.actor.mode='sailing';assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
-  p.actor.mode='walking';room.karma.endBogEntry(p.account);balance(room,p,4);p.actor.karma=999;assert.equal(service.open(peer(),{digest:p.account,team:'privacy'}),false);
-  assert.equal(service.open(peer(),{digest:'untrusted',team:'privacy'}),false);
+  p.actor.mode='sailing';assert.equal(service.open(peer(),{digest:p.account,team:'karma'}),false);
+  p.actor.mode='walking';room.karma.endBogEntry(p.account);balance(room,p,4);p.actor.karma=999;assert.equal(service.open(peer(),{digest:p.account,team:'karma'}),false);
+  assert.equal(service.open(peer(),{digest:'untrusted',team:'karma'}),false);
  }finally{service.dispose();stop(room);}
 });
 
@@ -124,7 +121,7 @@ test('Pages routes the live combat socket through same-origin session auth, igno
  assert.ok(JSON.parse(readFileSync('public/_routes.json')).include.includes('/arena-room'));
  let routed;
  const env={ISLAND:{idFromName:name=>name,get:()=>({fetch:async request=>{routed=request;return Response.json({ok:true});}})}};
- const request=(headers={})=>new Request('https://ducky.example/arena-room?team=privacy&profile=forged',{headers:{Upgrade:'websocket',Origin:'https://ducky.example',Cookie:'__Host-ducky_session='+'a'.repeat(43),...headers}});
+ const request=(headers={})=>new Request('https://ducky.example/arena-room?team=karma&profile=forged',{headers:{Upgrade:'websocket',Origin:'https://ducky.example',Cookie:'__Host-ducky_session='+'a'.repeat(43),...headers}});
  assert.equal((await connectBog({request:request(),env})).status,200);
  assert.equal(new URL(routed.url).pathname,'/bog-room');assert.equal(new URL(routed.url).searchParams.get('profile'),null);
  assert.equal(routed.headers.get('X-Session-Digest').length,43);

@@ -13,7 +13,6 @@ test('the real canvas draws an endless sky after a long pan, with a way back to 
     assert.equal(h.tag.dataset.away,'true');
     const far = Buffer.from(h.pixels());
     assert.notDeepEqual(far,opening);
-    // Cyan points must still be visible long after leaving the finite GitHub population.
     let points=0;
     for(let i=0;i<far.length;i+=4) if(far[i+1]>65 && far[i+2]>65 && far[i+2]>far[i]*1.3) points++;
     assert.ok(points>100,'procedural sky never becomes an empty area');
@@ -67,7 +66,6 @@ const tap = (h,x,y,type='touch') => {
 test('tapping a person reveals their login, refresh updates it, and empty sky dismisses it', () => {
   const h=harness({data:peerSky});
   try {
-    // With one star, the opening camera places it slightly left and below centre.
     const x=h.canvas.width*.38,y=h.canvas.height*.56;
     tap(h,x,y);
     assert.equal(h.nameTag.hidden,false);
