@@ -1,8 +1,23 @@
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 
 // The globe button beside the profile button. Zooming out stops at your own island; this is the only way onto the
 // globe, with your pin, the Booquack Bog pin and hearts. Islands are reached by boat, not by zooming in.
 export default function IslandGlobe({island, open, beside}) {
+  const button = useRef(null);
+  // the feather counter (signed-in players) also sits left of the profile button and changes width with the count:
+  // keep the globe just left of it
+  useEffect(() => {
+    const place = () => {
+      const counter = document.querySelector('.pixi-karma-counter'), el = button.current;
+      if (!el) return;
+      const r = counter?.getBoundingClientRect();
+      el.style.right = r?.width ? `${Math.round(innerWidth - r.left + 10)}px` : '';
+    };
+    place();
+    const id = setInterval(place, 500);
+    addEventListener('resize', place);
+    return () => {clearInterval(id); removeEventListener('resize', place);};
+  }, []);
   useEffect(() => {
     if (!open) return;
     const key = event => {if (event.key === 'Escape') island.current?.closeGlobe();};
@@ -10,7 +25,7 @@ export default function IslandGlobe({island, open, beside}) {
     return () => window.removeEventListener('keydown', key);
   }, [open, island]);
 
-  return <button type="button" className={`pixi-globe-button${beside ? ' pixi-globe-button--beside' : ''}`} aria-pressed={open}
+  return <button ref={button} type="button" className={`pixi-globe-button${beside ? ' pixi-globe-button--beside' : ''}`} aria-pressed={open}
     aria-label={open ? 'Back to your island' : 'Open the globe'} title={open ? 'Back to your island' : 'Globe'}
     onClick={() => {const game = island.current; if (!game) return; if (open) game.closeGlobe(); else game.openGlobe();}}>
     {open
