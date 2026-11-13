@@ -78,13 +78,23 @@ test('prepared theme shares ground/prop resolution, holds pond and life ownershi
     ground:{tiles:[{src:'shared.svg',x:0,y:0,width:100,height:100,resolution:1}]},
     props:[{src:'shared.svg',x:50,y:50,width:50,height:50,resolution:2,shadow:false}]}:{pieces:[]}});
   const requested=[],released=[],root=new Container();
-  const acquire=async(src,r)=>{requested.push([src,r]);return Texture.EMPTY;},release=src=>released.push(src);
+  const acquire=async(src,r)=>{requested.push([src,r]);return new Texture({source:new ImageSource({width:10,height:10})});},release=src=>released.push(src);
   const pool=createGroundPool({acquire,release});
   const art=await loadThemeArt({id:'test',art:'/test/art.json',origin:{x:0,y:0},width:100,height:100},
     {acquire,release,groundPool:pool,prepare:true});
   assert(requested.filter(([src])=>src==='/test/shared.svg').every(([,r])=>r===2));
   assert(art.groundStream.pinned);assert(art.pondDuckies);assert.equal(released.length,0);
+  assert.equal(art.ready,false,'prepared art stays unready until the engine uploads its final textures');
+  assert(!requested.some(([src])=>/\/globe\/.*-ground\.svg$/.test(src)), 'prepared scenes never allocate the low-resolution underlay');
+  await uploadIsland({texture:{bindSource(){}}},[art.ground],{requiredRoots:[art.ground]});
+  art.ready=true;art.ground.visible=true;
+  assert(art.ground.children.every(node=>node.texture?.source===art.groundStream.entries[0].sprite.texture.source), 'only final ground is present after reveal');
   art.destroy();assert.equal(released.length,requested.length);pool.destroy();root.destroy();
+});
+
+test('initial and restored Home never acquire the low-resolution whole-island underlay',()=>{
+  const engine=readFileSync('src/rendering/pixi/engine.js','utf8');
+  assert(!engine.includes('/pixi-art/globe/home-ground.svg'));
 });
 
 test('islet layer preparation parses each source XML only once',()=>{
