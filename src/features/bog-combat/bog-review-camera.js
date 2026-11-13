@@ -1,6 +1,7 @@
 export function setBogReviewCamera(game,x,y,zoom=.65){
  game.follow=false;game.fitMode=false;game.fly=null;game.spin=null;
  game.landingView=null;game.globeAim=null;game.globeT=0;game.birdEye=false;
+ if(game.globeOpen){game.globeOpen=false;game.onGlobeChange?.(false);}
  game.zoomMotion.velocity=0;
  for(const v of [game.camera,game.target]){for(const k of Object.keys(v))if(!["x","y","zoom"].includes(k))delete v[k];Object.assign(v,{x,y,zoom});}
  if(game.scene)game.scene.visible=true;

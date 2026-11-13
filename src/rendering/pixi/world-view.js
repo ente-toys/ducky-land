@@ -215,16 +215,17 @@ function buildWorldTexture(app,arch,workQueue,texture,valid){
  return {...build,layout};
 }
 
-function makePin() {
-  const pin = new Container({label: 'You are here'});
+function makePin(text = 'You', color = PALETTE.sun) {
+  const pin = new Container({label: `${text} pin`});
   const shadow = new Graphics().ellipse(0, 0, 9, 3.5).fill({color: 0x000000, alpha: .25});
   const drop = new Graphics()
     .moveTo(0, 0).bezierCurveTo(-4, -10, -15, -18, -15, -30).arc(0, -30, 15, Math.PI, 0).bezierCurveTo(15, -18, 4, -10, 0, 0)
-    .fill(PALETTE.sun).stroke({color: PALETTE.ink, width: 3, join: 'round'});
+    .fill(color).stroke({color: PALETTE.ink, width: 3, join: 'round'});
   drop.circle(0, -30, 6).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
-  const tag = new Text({text: 'You', style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '700', fill: PALETTE.ink}});
+  const tag = new Text({text, style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '700', fill: PALETTE.ink}});
   tag.anchor.set(.5);
-  const tagBg = new Graphics().roundRect(-20, -11, 40, 22, 11).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
+  const tagWidth = 22 + text.length * 8;   // estimated, so nothing has to measure text
+  const tagBg = new Graphics().roundRect(-tagWidth / 2, -11, tagWidth, 22, 11).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
   const label = new Container(); label.addChild(tagBg, tag); label.position.set(0, -64);
   const body = new Container(); body.addChild(drop, label);
   pin.addChild(shadow, body);
@@ -275,10 +276,13 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
   life.addChild(glows, rings, hearts);
   const sprite = (pool, tex) => {const sp = pool.children.find(c => !c.visible) ?? pool.addChild(new Sprite(tex)); sp.anchor.set(.5); sp.visible = true; return sp;};
   const pin = makePin();
+  // Booquack Bog's pin: always shown on the globe so players know where the Bog is
+  const bogPin = makePin('Booquack Bog', 0xb98cf0), bogIsland = WORLD_ISLANDS.find(island => island.id === 'isle-249');
   app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
   app.stage.addChildAt(pin, app.stage.getChildIndex(life) + 1);
+  app.stage.addChildAt(bogPin, app.stage.getChildIndex(pin));
   const sphereMask=new Graphics();app.stage.addChild(sphereMask);pin.mask=sphereMask;
-  life.visible = pin.visible = false;
+  life.visible = pin.visible = bogPin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
   const ease = x => {x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x);};
   const out = x => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);
@@ -294,8 +298,11 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       finally {mesh.visible = false;}
     },
     pinIn: 0,
+    // Set by the engine: the globe can only be reached from the globe button, so a plain zoom-out never
+    // prepares it or reserves memory for it.
+    globeWanted: true,
     reservedBytes(arch,width,height,zoom){
-      if(zoom>=.18)return 0;
+      if(!this.globeWanted||zoom>=.18)return 0;
       const layout=globeAtlasLayout(arch);
       // Include one uploaded preview while copying. Islet MSAA work completes
       // before the world build, so its scratch does not overlap that peak.
@@ -310,7 +317,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       mesh.visible = on;
       // Begin before the transition, while the camera is still above .1.
       // Never build an empty atlas while preview decoding is outstanding.
-      const preparing=on||cam.zoom<.18;
+      const preparing=on||this.globeWanted&&cam.zoom<.18;
       arch?.setGlobePreparing?.(preparing,on);
       if(preparing){lastGlobeTime=time;arch?.setPreviewActive?.(true);}
       if(preparing&&(width!==w||height!==h)){
@@ -335,7 +342,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       if (!on) {
         if(time-lastGlobeTime>3){arch?.setPreviewActive?.(false);}
         if(time-lastGlobeTime>3&&(w||worldTex||isletsPending||shader.resources.uIslets!==blank.source)){shader.resources.uWorld=blank.source;shader.resources.uIslets=blank.source;isletView.releaseAtlas?.();atlasGeneration++;atlasPending=isletsPending=captureReady=false;worldTex?.destroy(true);worldTex=null;worldVersion=-1;rt.resize(2,2);w=h=0;}
-        scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;
+        scene.visible=true;life.visible=pin.visible=bogPin.visible=false;this.pinIn=0;this.worldAt=null;return;
       }
       const live=captureReady&&t < .97 && cam.zoom > .065;
       if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}
@@ -345,7 +352,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       u.uBall=ball;
       const clouds=cloudState(ball,time,reduced);u.uCloudPhase=clouds.phase;u.uCloudFade=clouds.fade;
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
-      pin.mask=masking?sphereMask:null;
+      pin.mask=masking?sphereMask:null;bogPin.mask=pin.mask;
       const basis=cam.basis??{a:1,b:0,c:0,d:1};u.uBasis.set([basis.a,basis.b,basis.c,basis.d]);
       this.roll=0;
       u.uAnchor.set(anchor.center);u.uEast.set(anchor.east);u.uNorth.set(anchor.north);
@@ -470,6 +477,14 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         hoverK += ((hover && pin.visible ? 1.05 : 1) - hoverK) * (1 - Math.exp(-dt * 18));
         pin.scale.set((.8 + .2 * p.face) * hoverK);
       } else pin.visible = false;
+      if (bogIsland) {
+        const c = localPoint(id, expMap(bogIsland, 0, 0, Rw)), p = project(c.x, c.y);
+        bogPin.position.set(p.x, p.y);
+        bogPin.alpha = ease((t - .12) / .15) * ease(p.face / .25);
+        bogPin.visible = bogPin.alpha > .01;
+        bogPin.body.y = -Math.abs(Math.sin(time * 3 + 1.3)) * 6;
+        bogPin.scale.set(.8 + .2 * Math.max(0, p.face));
+      }
     },
     pinAt(point) {
       if (!pin.visible || pin.alpha < .35) return false;
@@ -486,6 +501,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));
       return {aim:centreOf(next.lon,next.lat),dlon,dlat:next.lat-before.lat};
     },
-    destroy() {disposed=true;atlasGeneration++;for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {disposed=true;atlasGeneration++;for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }

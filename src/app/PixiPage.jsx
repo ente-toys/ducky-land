@@ -8,6 +8,7 @@ import IslandTravel from './IslandTravel.jsx';
 import IslandStargaze from './IslandStargaze.jsx';
 import IslandProfile from './IslandProfile.jsx';
 import WorldMap from './WorldMap.jsx';
+import IslandGlobe from './IslandGlobe.jsx';
 import BogEntry from '../features/bog-combat/BogEntry.jsx';
 import {BOG_COMBAT} from '../features/bog-combat/config.js';
 import './pixi.css';
@@ -50,6 +51,7 @@ export default function PixiPage() {
   const [signingOut, setSigningOut] = useState(false);
   const [starDialogOpen, setStarDialogOpen] = useState(true);
   const [indoors,setIndoors] = useState(false);
+  const [globeOpen,setGlobeOpen] = useState(false);
   const [notificationHost,setNotificationHost] = useState(null);
   const params = new URLSearchParams(location.search);
   const offline = params.has('offline') || (import.meta.env.DEV && params.get('dev') === '1');
@@ -93,7 +95,7 @@ export default function PixiPage() {
         arrivalTimer = setTimeout(() => setArrival(''), 4000);
         if (offline) setTravel({islandId:island.current.islandId,mode:'walking',available:0});
       },
-      onError:() => setError(true),onInteriorChange:setIndoors});
+      onError:() => setError(true),onInteriorChange:setIndoors,onGlobeChange:setGlobeOpen});
     island.current = game;
     game.mount(host.current).catch(error=>{console.error('Could not initialize world',error);setError(true);});
     if (offline) {
@@ -170,6 +172,7 @@ export default function PixiPage() {
         </button>}
       </aside>;
     })()}
+    {!error && !indoors && <IslandGlobe island={island} open={globeOpen} beside={Boolean(session?.user || status === 'playing' || offline)}/>}
     {!error && (session?.user || status === 'playing' || offline) && <IslandProfile session={session} room={room} island={island}
       status={status} indoors={indoors} notificationHost={notificationHost} offline={offline} onSignOut={logout} signingOut={signingOut}/>}
     {!error && status === 'playing' && <div className="pixi-chat-dock">

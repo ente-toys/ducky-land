@@ -157,6 +157,8 @@ for(const dpr of [1,2])test(`mounted Home DPR${dpr}: real Pixi pool sources retu
 for(const dpr of [1,2])test(`mounted globe DPR${dpr}: approach, arrival and return preserve the GPU cap`,async t=>{
  const game=await mountHome(t,dpr,827),{engine,managed}=game;
  engine.follow=false;engine.fly=null;engine.arrival=null;game.prepareAssets();
+ // the globe is only reached from the globe button now
+ assert(engine.openGlobe(),'globe opens from the button');
  const limit=(dpr===1?150:250)*1e6,resolution=engine.app.renderer.resolution,floor=engine.birdZoom();let peak=0,peakInfo;
  const measure=()=>{
   // TextureSource memory plus the four-sample colour buffer for the one
@@ -175,6 +177,7 @@ for(const dpr of [1,2])test(`mounted globe DPR${dpr}: approach, arrival and retu
  t.diagnostic(JSON.stringify({globe:true,dpr,peakMB:peak/1e6,peakInfo,steadyMB:globe.MB,sources:[...managed].filter(s=>/globe atlas/.test(s.label)).map(s=>[s.label,s.pixelWidth,s.pixelHeight,textureSourceBytes(s)])}));
  assert(peak<=limit,`globe DPR${dpr}: ${peak/1e6} MB exceeds ${limit/1e6} MB`);
  assert.equal(engine.app.renderer.resolution,resolution);
+ engine.closeGlobe();engine.fly=null;
  engine.camera.zoom=engine.target.zoom=.8;for(let i=0;i<260;i++)await game.step();
  assert(![...managed].some(s=>/globe atlas/.test(s.label)),'return frees both atlases');
  assert(engine.gpuMemory().bytes<=limit);assert.equal(engine.app.renderer.resolution,resolution);
