@@ -9,7 +9,8 @@ import sizes from '../src/rendering/shared/art-source-sizes.json' with {type:'js
 import {createWholeSVGLoader} from '../src/rendering/pixi/art/whole-svg-loader.js';
 import {textureFootprint} from '../src/rendering/pixi/art/texture-footprint.js';
 import {createSnowCover} from '../src/rendering/pixi/environment/snow-cover.js';
-import {groundSpriteBounds} from '../src/rendering/pixi/art/ground-stream.js';
+import {createGroundPool,groundSpriteBounds} from '../src/rendering/pixi/art/ground-stream.js';
+import {assertFinalTexture,uploadIsland} from '../src/rendering/pixi/art/island-preparation.js';
 
 DOMAdapter.set({...DOMAdapter.get(),createCanvas});
 const decode=async blob=>{const im=new Image();im.src=Buffer.from(await blob.arrayBuffer());await im.decode();return im;};
@@ -53,13 +54,41 @@ test('bitmap trimming matches SVG fallback geometry and retains the same crop on
   loader.unload(texture);
 });
 
-test('empty authored ground allocates one transparent texel without downloading or decoding a tier',async()=>{
+for(const kind of ['webp','svg'])test(`${kind}: native bounds scale to resized decoded pictures before trimming`,async()=>{
+  const src='/pixi-art/home-expansion-g/ground-0-0.svg',resolution=.7,padding=2;
+  const image=createCanvas(20,10);image.getContext('2d').fillRect(0,0,20,10);
+  const f=textureFootprint(src,resolution,padding,{[src]:[20,10]});
+  assert.deepEqual(f,{x:9,y:6,width:9,height:5,fullWidth:18,fullHeight:11});
+  const loader=createWholeSVGLoader({canDecodeBitmap:()=>kind==='webp',
+    getManifest:async()=>({[src]:{w:20,h:10,padding,tiers:[{scale:1,url:'/resized.webp',width:20,height:10}]}}),
+    fetchBlob:async()=>new Blob([image.toBuffer('image/png')]),decode:async()=>image,decodeBitmap:bitmap});
+  const texture=await loader.load(src,{src,data:{resolution,groundPadding:padding}});
+  assertFinalTexture(texture,src);
+  assert.deepEqual([texture.source.pixelWidth,texture.source.pixelHeight],[f.width,f.height]);
+  assert.deepEqual([texture.trim.x,texture.trim.y],[f.x/resolution,f.y/resolution]);
+  const pixels=texture.source.resource.getContext('2d').getImageData(0,0,f.width,f.height).data;
+  assert(pixels.some((v,i)=>i%4===3&&v>0),'resized crop retains visible ink');
+  loader.unload(texture);
+});
+
+test('empty authored ground is final and uploads before readiness without downloading or decoding a tier',async()=>{
   const empty=Object.keys(bounds).find(src=>bounds[src]===null&&src.includes('home-expansion-g/'));
   const loader=createWholeSVGLoader({fetchBlob(){assert.fail('empty ground must never fetch');},getManifest(){assert.fail('empty ground needs no tier');}});
   const texture=await loader.load(empty,{data:{resolution:.7,groundPadding:2}});
   assert.deepEqual([texture.source.pixelWidth,texture.source.pixelHeight],[1,1]);
   assert.equal(texture.source.resource.getContext('2d').getImageData(0,0,1,1).data[3],0);
-  assert(texture.orig.width>1);loader.unload(texture);
+  assert(texture.orig.width>1);assertFinalTexture(texture,empty);
+  let acquired=0;
+  const root=new Container(),pool=createGroundPool({acquire:async()=>{acquired++;return texture;},release(){}});
+  try{
+    const stream=pool.create([{src:empty,x:0,y:0,width:100,height:100}],root);
+    await stream.prepare();assert.equal(stream.prepared,true);
+    const uploads=[];
+    await uploadIsland({texture:{bindSource:source=>uploads.push(source)}},[root],{requiredRoots:[root],yieldFrame:async()=>{}});
+    assert.deepEqual(uploads,[texture.source]);
+    for(const zoom of [.1,.7,1.8])pool.update([{stream,camera:{x:50,y:50,zoom},width:100,height:100}],2);
+    assert.equal(acquired,1,'empty final ground never reloads while walking or zooming');
+  }finally{pool.destroy();root.destroy();loader.unload(texture);}
 });
 
 
