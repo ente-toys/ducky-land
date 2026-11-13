@@ -36,7 +36,7 @@ test('medal collection and totals persist through tag, leave, store reload and o
   const arena=createArena({practice:false,blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='karma'?100:450,y:300}],onStats:(id,s,m)=>store.set(id,s,m)});
   const a=arena.join({id:'a',profile,team:'karma'});arena.join({id:'b',team:'evil'});
   for(let i=0;i<Math.ceil((RULES.spawnShield+.1)*60);i++)arena.step(1/60);
-  a.facing=Math.PI/2;arena.input('a',{seq:1,x:0,y:0,ax:1,ay:0,fire:true});for(let i=0;i<20;i++)arena.step(1/60);
+  arena.state.players.get('b').hits=RULES.hitsPerHeart-1;a.facing=Math.PI/2;arena.input('a',{seq:1,x:0,y:0,ax:1,ay:0,fire:true});for(let i=0;i<20;i++)arena.step(1/60);
   assert.equal(a.medalCase['first-splat'],true);assert.deepEqual(arena.state.events[0].medals,['first-splat']);
   const snap=arena.snapshot();snap.players[0].medalCase.ace=true;snap.events[0].medals.push('ace');assert.equal(a.medalCase.ace,undefined);assert.equal(arena.state.events[0].medals.length,1);
   arena.leave('a');store.flush();const reloaded=createArenaProfiles(file);

@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createDemo,demoBotCount} from '../src/features/bog-combat/demo.js';
 import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
+import {RULES} from '../src/features/bog-combat/rules.js';
 import {teamCounts} from '../src/features/bog-combat/entry.js';
 
 test('local autoplay uses ten real fighters, tags, respawns and valid island walking without bot medals',async()=>{
- let seed=97;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
+ // Allow enough combat time for repeated knockouts under the hits-per-heart rule.
+ let seed=98;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
  const demo=createDemo(BOG_COMBAT,10,{random}),room=new demo.Room({...BOG_COMBAT,profile:'demo-test'});
  await new Promise(resolve=>queueMicrotask(resolve));
  assert.equal(room.client.id,null);
@@ -14,7 +16,7 @@ test('local autoplay uses ten real fighters, tags, respawns and valid island wal
  assert.equal(room.client.snapshot.players.filter(p=>p.team==='karma').length,5);
  demo.sim.state.players.get('bot-0').ammo=2;
  let tagged=false,reloading=false;
- for(let i=0;i<7200;i++){
+ for(let i=0;i<7200*RULES.hitsPerHeart;i++){
   room.step(1/60,{x:0,y:0},i*1000/60);
   for(const p of demo.sim.state.players.values()){
    if(i%60===0)assert.ok(BOG_COMBAT.navigation.walkable(p.x,p.y),p.name);

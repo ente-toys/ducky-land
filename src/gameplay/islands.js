@@ -178,8 +178,11 @@ export function landingSpot(actor,nav=null,reach=420,target=null) {
   return best;
 }
 
+// Islands where a boat may only land at the harbour (the Bog paint fight starts at its dock).
+export const HARBOR_ONLY=new Set(['isle-249']);
 export function dockingSpot(actor,target=null) {
   const spot=landingSpot(actor,null,420,target);
+  if (spot && !spot.islet && HARBOR_ONLY.has(spot.islandId)) return spot.islandId===actor.islandId && canDock(actor) ? {...harborOf(actor.islandId).land,islandId:actor.islandId,harbor:true} : null;
   if (target) return spot;
   const {land,water}=harborOf(actor.islandId);
   if ((!spot || (!spot.islet && spot.islandId===actor.islandId && (near(spot,land,200) || near(actor,water,150)))) && canDock(actor))

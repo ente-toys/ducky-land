@@ -21,7 +21,7 @@ export function assistShot(shot,player,players,blockers,time){
 
 export function resetAbilities(p){
   p.dodgeUntil=0;p.dodgeProtectedUntil=0;p.dodgeReadyAt=0;p.dodgeX=0;p.dodgeY=0;
-  p.dodgeSerial??=0;p.dodgeQueued=0;p.speedUntil=0;p.hitShieldUntil=0;p.hitShield=0;
+  p.dodgeSerial??=0;p.dodgeQueued=0;p.hitShieldUntil=0;p.hitShield=0;
 }
 export function startDodge(p,serial,time,input){
   if(!(serial> (p.dodgeSerial??0)))return false;
@@ -50,10 +50,5 @@ export function combatWalkStep(p,nav,dt,time,input){
     p.pace=0;p.travel=Math.hypot(p.x-x,p.y-y)/dt;p.action=p.travel>.001?1:0;
     return;
   }
-  const x=p.x,y=p.y;
   walkStep(p,nav,dt,time,input);
-  if(p.speedUntil>time){
-    advance(p,nav,(p.x-x)*RULES.speedBonus,(p.y-y)*RULES.speedBonus);
-    p.travel=Math.hypot(p.x-x,p.y-y)/dt;
-  }
 }

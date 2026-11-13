@@ -6,10 +6,10 @@ let loading;
 export function loadPickupArt(){
   if(!import.meta.env?.BASE_URL)return Promise.resolve({});
   const urls=import.meta.glob('./assets/pickups/*.svg',{query:'?url',import:'default',eager:true});
-  return loading??=Promise.all(['paint','speed','shield'].map(async kind=>[kind,await Assets.load(urls[`./assets/pickups/${kind}.svg`])]))
+  return loading??=Promise.all(['paint','shield'].map(async kind=>[kind,await Assets.load(urls[`./assets/pickups/${kind}.svg`])]))
     .then(Object.fromEntries).catch(error=>{loading=null;throw error;});
 }
-const colours={paint:0x08c225,speed:0xffd94f,shield:0x7ab9ff};
+const colours={paint:0x08c225,shield:0x7ab9ff};
 export function createPickupsView(objects,art,{tilt=1}={}){
   const nodes=new Map();
   return {update(snapshot,time,reduced=false){

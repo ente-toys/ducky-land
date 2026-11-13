@@ -2163,7 +2163,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
+          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -2190,7 +2190,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "9519ecaef796826cde8d7982759b7c0fab798942e4b4135764fcdfa492036a8a"
+      "sha256": "6520b1155a7d36203695bef51c861dace970d262e36edeba4c1b272f422b36de"
     },
     "groundSha256": "93fc36f9e96743bbb13cca5daa13f81f4640d965f1355529d28bbe8ae3c2cc49",
     "src": "/pixi-art/globe/sunflower.svg",
@@ -4975,7 +4975,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
+          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -5002,7 +5002,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "2bf56d3a2eba7829d3be9dc9dc2412406e3ff5ac902a9cff6806f60fa428d62f"
+      "sha256": "39c2634d89900e16d52c3d7e289a0c3b6e90fb224f40a4c3e05dee4ec71fddf8"
     },
     "groundSha256": "4a2bfe012c25cde81a98819c586f7730ce716f938aa26be92c03181cb0b11678",
     "src": "/pixi-art/globe/pink.svg",
@@ -7491,7 +7491,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
+          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -7518,7 +7518,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "d5130c82b6eff5688bdaa1977af337c0149fefc3c2a9e46d1e3fc8f1686e57ce"
+      "sha256": "820bf6920be048056efccb0d5508068f5d0f4ca6a6e213e9e89f4c874288261b"
     },
     "groundSha256": "ea61027ea4a464cda5792d4cf4479fedb6bb15ff49fe196529c63104a7a48ee9",
     "src": "/pixi-art/globe/library.svg",
@@ -8515,7 +8515,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
+          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -8542,7 +8542,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "55b613e9bb04611eee81a86b386c95ffe636a0c0866bf7ca71125139e3343c0d"
+      "sha256": "3bce574d032aeafe865b94658b867ac7e228d2d2dbc54c3dd6ea6996757dcde1"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
@@ -8567,7 +8567,7 @@
     "sources": {
       "version": 1,
       "theme": "bog",
-      "modelSha256": "90e16a38df6e7000222625af060f8c13d4307a2e5c6877965e0392d4e98109e0",
+      "modelSha256": "a9a102cf4912268c5840deccc13cc3c05fdc52d1e5e4011c7b85a6338219e14d",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -8575,7 +8575,7 @@
         },
         {
           "path": "public/pixi-art/themes/bog-arena/art.json",
-          "sha256": "389531f32d3e4b0581e3e32441b8d59313df7d6a049f89ffd9286e645468d5d1"
+          "sha256": "0ecfde02c87e1baaae6b7121b30d34a9dfdd2581eceafa5d813e78f31ed75d8b"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/ground.svg",
@@ -8858,24 +8858,12 @@
           "sha256": "4778dccb5ce194f9cb2f1d93e920bd3faa6918ef04b38e4eafbb1409e271ab26"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-2-lime.svg",
-          "sha256": "1587c0c8a6f439ffb41e477b41ff9890ab857bd6937ca6178d40c67944c620ee"
-        },
-        {
           "path": "public/pixi-art/themes/bog-arena/home/tree-2-magenta.svg",
           "sha256": "7cfa2f0849514cbd090623d0008ca2186490a631191dd64c1e4ef00759c874d5"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-2-orchid.svg",
-          "sha256": "dbf5186ac7d806cb669a26668864ec60085d6390c36bb3c82fc755e707e78e1a"
-        },
-        {
           "path": "public/pixi-art/themes/bog-arena/home/tree-2-sage.svg",
           "sha256": "1bc0059372f65bc40e8d945bbeb7989d475a846223f37aef6cab0149e7917239"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-2-teal.svg",
-          "sha256": "f8c7fd5993b881b26a4a12acab298103185666e47be0ff7f7490fbde0d45b028"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-3-lime.svg",
@@ -8886,32 +8874,12 @@
           "sha256": "3c015b337e426e7c253d1770d7fcee5f7551fee9a2ace5b8f60907e33b165c8e"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-3-orchid.svg",
-          "sha256": "ba67f8ab3149a75ddfc3e83eb411b5f950bcc10dcffb406354ee0c5ab1968e4e"
-        },
-        {
           "path": "public/pixi-art/themes/bog-arena/home/tree-3-sage.svg",
           "sha256": "e4945fe5dffffd490807c4b90193b8adc461ed195c633d2fde3b3c502c3167d6"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-3-teal.svg",
-          "sha256": "7d1a1f36e964ec7bc1ecde11c9ef5c4860bd0b3deb1d1b9fa574a2f3ae1b0db6"
-        },
-        {
           "path": "public/pixi-art/themes/bog-arena/home/tree-4-lime.svg",
           "sha256": "15ff7bd068e4503abf9770f5e592b1ffd244a5f928f55da074c798567519875f"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-4-magenta.svg",
-          "sha256": "cb07bd47d72ec9b60217c135480bf45a6c13630b644256ab7ca25681fea4cd8c"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-4-orchid.svg",
-          "sha256": "a217cc8e5bf2a1e356029310f49a2bda1088b7ee34ffb59c9ea92720986c67af"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-4-sage.svg",
-          "sha256": "183f85440536bbdd7fa7265e57ddfea604923d6b6c9c104e381588b26217e779"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-4-teal.svg",
@@ -8922,20 +8890,12 @@
           "sha256": "ce6edc32b4d6bdd9b4883fc9ff6ab8dec641ba5a5ee51aff1060f3cd4a212382"
         },
         {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-5-magenta.svg",
-          "sha256": "d093ecd7f18d4a9c2f68e5c24dedac63be0b40207e2bfdf7e6cc2a8729c92e3f"
-        },
-        {
           "path": "public/pixi-art/themes/bog-arena/home/tree-5-orchid.svg",
           "sha256": "63f0bccdc7c8932d7f019866a38cf4e6973f3a5058fd0431717404bff806d65e"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tree-5-sage.svg",
           "sha256": "c1247895a2a82759c09fd885c60d9681c7347e1228af05c44008917f8304bb99"
-        },
-        {
-          "path": "public/pixi-art/themes/bog-arena/home/tree-5-teal.svg",
-          "sha256": "9d8f3246f4b97cb90261c2b9c9f7894c9515a3731528fa7b3c63d2d71b51cf11"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/home/tuft.svg",
@@ -9007,7 +8967,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
+          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -9034,14 +8994,14 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "0413bf9c368f3f56306b39b43f5929f98f9de5437314c4c58bdb6f2c4e67d6e3"
+      "sha256": "0e0844b458c4f9a27e2e2f0823be973ff78d034917609bd1dc3a5deba3a03179"
     },
     "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
-    "sha256": "d1b1b109e802d5b2190b5c1328e4e3a1edb8fc1e10af32b8a26447273ba91044",
+    "sha256": "316ce125ad488f80fbfcbc37cd3dda6a7a3143eeb5c1f0bd5829b223c2b56800",
     "width": 1024,
     "height": 1000,
-    "bytes": 643213,
+    "bytes": 599779,
     "groundBytes": 398644,
     "quality": {
       "tolerance": 0.2,
@@ -10635,7 +10595,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
+          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -10662,7 +10622,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "45dbd1cc706fed45a7a741ec839c1dcdf0841b3837464b0961ac4c6e0d7d3a34"
+      "sha256": "43daeb5aabef3a3014b1e2fcd1d0d206924d2cfde7716e2cbc8c69c4ebe2408c"
     },
     "groundSha256": "2fdaf51c505df0bc6703d582052b7ebf887085beafe964d8bbdf50495e6a2790",
     "src": "/pixi-art/globe/snow.svg",
