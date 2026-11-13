@@ -4,6 +4,7 @@ import {nearbyFriend} from './friends.js';
 import {mapOf} from '../world/island-maps.js';
 import {getPlayerKarma} from '../features/bog-combat/karma.js';
 import {bogLandingNotice} from '../features/bog-combat/entry.js';
+import {BOAT_UNVEIL} from '../gameplay/boat-build.js';
 import {islandFor, harborOf, destinationsFor, near, canSail, dockingSpot, landingApproach, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
 
 const ZERO = {x:0,y:0};
@@ -121,6 +122,11 @@ export class RoomClient {
         this.onKarmaPickup(message);
       }
       if (message.type === 'travel-notice') this.onNotice(message.text);
+      if (message.type === 'boat-built') {
+        // the new boat stays hidden until the build smoke covers its spot
+        this.unveil = {id: message.boatId, at: nowSeconds() + BOAT_UNVEIL};
+        this.onBoatBuilt?.(message);
+      }
       if (message.type === 'friends-changed') this.onFriendsChanged();
       if (message.type === 'delta') {
         if (message.epoch !== this.epoch || message.baseTick !== this.tick || message.islandId !== this.islandId) {
@@ -199,6 +205,8 @@ export class RoomClient {
     for (const pose of players) {
       if (pose.id === this.id && self) {
         const previous = changed ? null : this.player;
+        const owned = (self.ownBoats ?? []).join();
+        if (owned !== this.ownedKey) {this.ownedKey = owned; this.ownBoats = new Set(self.ownBoats ?? []);}
         this.player = {...pose, path:self.path, sailTarget:self.sailTarget ?? null, docking:self.docking, until:now+self.emoteLeft,
           pace:previous?.pace ?? 0, heading:previous?.heading ?? null,
           ice:self.ice?structuredClone(self.ice):null,reducedMotion:self.reducedMotion===true};
@@ -217,7 +225,7 @@ export class RoomClient {
     this.tracks = tracks;
     this.friendPlayers = players;
     this.updateNearby();
-    const available=boats.filter(boat => !boat.occupant).length;
+    const available=this.usableBoats(boats).length;
     const travelKey=`${islandId}:${mode}:${available}`;
     if (changed || this.travelKey !== travelKey) this.onTravel({islandId,mode,available});
     this.travelKey=travelKey;
@@ -299,9 +307,14 @@ export class RoomClient {
 
   board(boatId) { return this.send({type:'board',boatId}); }
 
+  // free boats this player may take: built boats belong to whoever built them
+  usableBoats(boats=this.boats) { return boats.filter(boat => !boat.occupant && (!boat.built || this.ownBoats?.has(boat.id))); }
+
+  build() { return this.player?.mode === 'walking' && this.send({type:'build'}); }
+
   returnToBoat() {
     if(!this.player||this.player.mode!=='walking')return false;
-    const available=this.boats.filter(b=>!b.occupant);
+    const available=this.usableBoats();
     const boat=available.find(b=>b.id===this.arrivalBoatId)??available.sort((a,b)=>
       Math.hypot(a.x-this.player.x,a.y-this.player.y)-Math.hypot(b.x-this.player.x,b.y-this.player.y))[0];
     return boat?this.board(boat.id):false;
@@ -322,7 +335,8 @@ export class RoomClient {
   }
 
   boatPoses(now=nowSeconds()) {
-    return [...this.boatTracks.values()].map(track => {
+    const hidden = this.unveil?.at > now ? this.unveil.id : null;
+    return [...this.boatTracks.values()].filter(track => track.to.id !== hidden).map(track => {
       const boat=sample(track,now);
       return boat.occupant === this.id && this.player
         ? {...boat,...this.view(),travel:this.player.travel}

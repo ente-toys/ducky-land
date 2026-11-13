@@ -132,7 +132,7 @@ export function retireBoat(boats,boat,landing=null) {
   boat.occupant=null; boat.parked=true;
   if (landing) boat.landing={x:landing.x,y:landing.y};
   else if (boat.landing) boat.landing=null;
-  if (!landing && boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
+  if (!landing && !boat.owner && boat.islandId === home && near(boat,spot,MOORING_CLEAR) && !boats.some(other => other !== boat && !other.occupant && boatHome(other) === home && boatSlot(other) === boatSlot(boat) && atMooring(other,spot)))
     Object.assign(boat,{x:spot.x,y:spot.y,turn:spot.turn,departure:home,parked:false});
   if (!canSail(boat.x,boat.y,boat.islandId)) {
     const index=boats.indexOf(boat);

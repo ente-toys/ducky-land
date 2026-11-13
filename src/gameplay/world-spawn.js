@@ -45,7 +45,7 @@ export function pickWorldSpawn({
     for (const islet of ISLETS) {
       if (islet.home !== island.id || !boats.length) continue;
       const water = placeIslet(island.id, islet, islet.jetty.water);
-      if (boats.some(boat => boat.islandId === island.id && !boat.occupant &&
+      if (boats.some(boat => boat.islandId === island.id && !boat.occupant && !boat.owner &&
         Math.hypot(boat.x - water.x, boat.y - water.y) < 149)) regions.push({island, islet});
     }
   }

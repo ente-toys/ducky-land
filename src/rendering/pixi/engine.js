@@ -38,6 +38,8 @@ import {copyHolding} from '../../world/sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
+import {createBoatBuildView} from './boat-build-view.js';
+import {isletUnder} from '../../gameplay/boat-build.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
 import {isletWalks} from '../../world/islet-walk.js';
 import {reframeIslet} from '../../world/islet-placement.js';
@@ -379,6 +381,7 @@ export class PixiIsland {
         this.travelView.fx.waterSplash=(x,y)=>{if (this.artShown === 'home') this.waterFX?.splash(x,y,.85,30);};
         this.switchIsland(this.room.islandId);
         this.karmaView=await createKarmaView(this);
+        createBoatBuildView(this).then(view => {if (this.disposed) view.destroy(); else this.boatBuild=view;});
       }
       if (this.randomArrival && !this.room) {
         const spawn = this.initialSpawn;
@@ -777,6 +780,11 @@ export class PixiIsland {
     if (!label.hidden) label.style.translate = `${x}px ${y}px`;
   }
 
+  screenPoint(p) {
+    const {zoom,x,y} = this.camera;
+    return {x:this.width / 2 + (p.x - x) * zoom, y:this.height / 2 + (p.y - y) * zoom};
+  }
+
   duckLabelPosition(pose) {
     const {zoom,x,y} = this.camera;
     return {
@@ -810,11 +818,11 @@ export class PixiIsland {
     const nav=this.room.navHere?.() ?? this.sim.nav;
     let best=null;
     for (const boat of this.room.boatPoses()) {
-      if (boat.occupant) continue;
+      if (boat.occupant || (boat.built && !this.room.ownBoats?.has(boat.id))) continue;
       const deck=boardingPoint(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
       if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
     }
-    return {take: best?.id ?? null};
+    return best ? {take: best.id} : this.boatBuild?.options() ?? {};
   }
   // "Take me to …": walk to a boat, sail island to island (landing and re-boarding on the way, as a player would),
   // and dock at the target. Any movement key or tap hands control back. Returns a reason string when it cannot start.
@@ -865,6 +873,8 @@ export class PixiIsland {
     const options=this.travelOptions();
     if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
     else if (options.dock) this.dock();
+    else if (options.collect) this.boatBuild.collect();
+    else if (options.build) this.boatBuild.build();
   }
 
   dock(target) {
@@ -1506,7 +1516,8 @@ export class PixiIsland {
     };
     input.x=Math.sign(input.x); input.y=Math.sign(input.y);
     if(input.x||input.y||Math.abs(this.camera.zoom-this.target.zoom)>.0005||this.gestures.pointers.size||this.player?.travel>1&&this.player.mode!=='sailing')markArtActivity();
-    if(this.player?.mode==='sailing')this.ensureWorldArt();
+    // islets are drawn with the world art: load it to sail, and for a duck that starts out standing on an islet
+    if(this.player&&!this.worldArtPending&&(this.player.mode==='sailing'||isletUnder(this.islandId,this.player)))this.ensureWorldArt();
     if (this.keys.has('shift') && ['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].some(k => this.keys.has(k)) && (input.x || input.y)) input.run=true;
     if (this.travelView?.fx.holding(this.room?.id)) input.x=input.y=0;
     const indoors = this.interior?.active;
@@ -1705,6 +1716,7 @@ export class PixiIsland {
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible, now);
     this.karmaView?.update(dt,t,reduced,visible);
+    this.boatBuild?.update(dt,t,reduced,visible);
     this.plantReactions?.update(t);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
     this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>{wing.rotation=(i?1:-1)*(pose.flap-.4)*.45;wing.scale.y=.75+.25*Math.cos(pose.flap*3);});});
@@ -2012,6 +2024,7 @@ export class PixiIsland {
     this.cleanups.forEach(fn => fn());
     this.snowfall?.destroy();
     this.karmaView?.destroy();
+    this.boatBuild?.destroy();
     this.groundPool?.destroy();
     this.livePatches?.destroy();this.archipelago?.destroy(); this.worldView?.destroy();this.isletView?.destroy();
     this.clearChat();

@@ -11,6 +11,7 @@ import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
 import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, setSailDestination, sailStep, crossIsland, boardingPoint, dockingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
 import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
 import {pickWorldSpawn} from '../src/gameplay/world-spawn.js';
+import {BUILD_COOLDOWN, buildSpot, strandedIslet} from '../src/gameplay/boat-build.js';
 import {RoomKarma} from './karma.js';
 
 export const ISLAND_LIMIT = 100;
@@ -30,6 +31,10 @@ function publicPose(actor) {
   const {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft=0,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
   return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked,karma:actor.karma??0,
     ice:mode==='walking'?actor.ice??null:null,reducedMotion:actor.reducedMotion===true};
+}
+// a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
+function wireBoat({owner, ...boat}) {
+  return owner ? {...boat, built:true} : boat;
 }
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
 function wirePose(actor) {
@@ -537,14 +542,18 @@ export class IslandRoom {
         const group = groups.get(islandId) ?? empty;
         const poses=named?group.named:group.guests;
         const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
-        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId))},"players":${JSON.stringify(players)},"self":`);
+        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(this.boats.filter(boat => boat.islandId === islandId).map(wireBoat))},"players":${JSON.stringify(players)},"self":`);
       }
       return shared.get(key);
     };
+    // built boats by owner, once per broadcast (each player's self block lists theirs)
+    const owned = new Map();
+    for (const boat of this.boats) if (boat.owner) owned.set(boat.owner, [...(owned.get(boat.owner) ?? []), boat.id]);
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
-      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true}) : 'null';
+      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
+        ownBoats:owned.get(info.account) ?? []}) : 'null';
       const named = !!(info.digest && info.expires > now);
       const full = text(islandId, named, info) + self + '}';
       if (!info.deltas) {this.sendText(socket, full); continue;}
@@ -720,9 +729,28 @@ export class IslandRoom {
           this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           break;
         }
+        if (boat.owner && boat.owner !== info.account) {
+          this.send(socket,{type:'travel-notice',text:'Someone else built that boat.'});
+          break;
+        }
         info.input=ZERO;
         const nav=this.navFor(actor.islandId), deck=boardingPoint(boat,nav);
         if (near(actor,deck,45) || setWalkDestination(actor,nav,deck.x,deck.y)) info.boarding=boat.id;
+        break;
+      }
+      case 'build': {
+        // stranded on an islet: the client gathered the materials, the server checks the place and makes the boat
+        if (actor.mode !== 'walking' || !info.account || now-(info.lastBuild ?? -Infinity) < BUILD_COOLDOWN) break;
+        const usable=this.boats.filter(boat => !boat.owner || boat.owner === info.account);
+        const spot=strandedIslet(actor.islandId,actor,usable) && buildSpot(actor.islandId,actor);
+        if (!spot) {this.send(socket,{type:'travel-notice',text:'Walk to the edge of the island to build your boat.'}); break;}
+        info.lastBuild=now;
+        // one built boat per player: an old one left idle somewhere is replaced
+        this.boats=this.boats.filter(boat => boat.owner !== info.account || boat.occupant);
+        const id=`${actor.islandId}-0~built-${now.toString(36)}${Math.floor(Math.random()*1296).toString(36)}`;
+        this.boats.push({id,islandId:actor.islandId,x:spot.x,y:spot.y,turn:spot.turn,occupant:null,departure:actor.islandId,parked:true,owner:info.account});
+        this.saveBoats();
+        this.send(socket,{type:'boat-built',boatId:id,x:spot.x,y:spot.y});
         break;
       }
       case 'disembark':
