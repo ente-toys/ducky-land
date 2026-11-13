@@ -8,6 +8,9 @@ import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, s
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 const world = {...read('../assets/world/world.json'), ...read('../assets/world/walk-world.json')};
 const nav = createNavigation(world);
+// Isolate shoreline sliding from scenery collisions. Other tests use the full map.
+const terrainNav = createNavigation({...world,obstacles:[]});
+const coastNav = createNavigation({...world,obstacles:[],water:[],bridges:[]});
 const ZERO = {x:0, y:0}, DIRS = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]], TICKS = [1/60, .05];
 const OPEN = (() => {
   for (let y = 200; y < world.height; y += 50) for (let x = 200; x < world.width; x += 50) {
@@ -18,12 +21,12 @@ const OPEN = (() => {
 })();
 const duck = (x, y) => ({x, y, previousX:x, previousY:y, turn:0, path:[], until:0, action:0, travel:0, emoteVersion:0});
 
-function hold(x, y, input, seconds, dt) {
+function hold(x, y, input, seconds, dt, navigation = nav) {
   const a = duck(x, y), steps = [];
   for (let t = 0; t < seconds; t += dt) {
-    walkStep(a, nav, dt, t, input);
-    assert.ok(nav.walkable(a.x, a.y), `off walkable ground at ${a.x},${a.y}`);
-    assert.ok(nav.clearLine([a.previousX, a.previousY], [a.x, a.y]), 'a step crossed a blocked spot');
+    walkStep(a, navigation, dt, t, input);
+    assert.ok(navigation.walkable(a.x, a.y), `off walkable ground at ${a.x},${a.y}`);
+    assert.ok(navigation.clearLine([a.previousX, a.previousY], [a.x, a.y]), 'a step crossed a blocked spot');
     steps.push([a.x-a.previousX, a.y-a.previousY]);
   }
   const moving = steps.filter(s => Math.hypot(...s) > .01);
@@ -31,28 +34,28 @@ function hold(x, y, input, seconds, dt) {
   return {a, distance:Math.hypot(a.x-x, a.y-y), flips};
 }
 
-function shallowHits(edges) {
+function shallowHits(edges, navigation = terrainNav) {
   const out = [];
   for (const [a, b] of edges) {
     const length = Math.hypot(b[0]-a[0], b[1]-a[1]);
     if (length < 150) continue;
     const tx = (b[0]-a[0])/length, ty = (b[1]-a[1])/length, mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
-    const start = [[mid[0]-ty*30, mid[1]+tx*30], [mid[0]+ty*30, mid[1]-tx*30]].find(p => nav.walkable(...p));
+    const start = [[mid[0]-ty*30, mid[1]+tx*30], [mid[0]+ty*30, mid[1]-tx*30]].find(p => navigation.walkable(...p));
     if (!start || world.obstacles.some(o => inShape(...start,o,150))) continue;
     for (const d of DIRS) {
       const l = Math.hypot(...d), along = Math.abs(d[0]/l*tx + d[1]/l*ty);
-      if (nav.walkable(start[0]+d[0]/l*60, start[1]+d[1]/l*60) || along < Math.cos(50*Math.PI/180) || along > Math.cos(10*Math.PI/180)) continue;
+      if (navigation.walkable(start[0]+d[0]/l*60, start[1]+d[1]/l*60) || along < Math.cos(50*Math.PI/180) || along > Math.cos(10*Math.PI/180)) continue;
       out.push({start, input:{x:d[0], y:d[1]}});
     }
   }
   return out;
 }
 
-function glides(hits) {
+function glides(hits, navigation = terrainNav) {
   for (const dt of TICKS) {
     let gliding = 0;
     for (const {start, input} of hits) {
-      const {distance, flips} = hold(...start, input, 1, dt);
+      const {distance, flips} = hold(...start, input, 1, dt, navigation);
       assert.equal(flips, 0, 'the duck jittered back and forth along the wall');
       if (distance > 100) gliding++;
     }
@@ -61,9 +64,9 @@ function glides(hits) {
 }
 
 test('keyboard walking glides along curved coast at shallow angles instead of stopping dead', () => {
-  const coast = world.coast.filter((_,i)=>i%4===0), hits = shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]));
+  const coast = world.coast.filter((_,i)=>i%4===0), hits = shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]),coastNav);
   assert.ok(hits.length >= 12, `${hits.length} coast scenarios`);
-  glides(hits);
+  glides(hits,coastNav);
   assert.ok(hits.filter(h => !h.input.x || !h.input.y).length >= 4);
 });
 

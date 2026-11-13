@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "c5c78d6d93e792e336164ca444ef4345f8735cf60e2e5565554e3331007c80c7",
+      "modelSha256": "dca320f54a8b5d6f2fc7feb6c0c67ba267255426b2ac719a46860ba6aee2dc53",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -15,15 +15,15 @@
         },
         {
           "path": "assets/world/home-sleep-extra.json",
-          "sha256": "0d01d79e694967df4abf64e0be6505b4adb9c0e70788ddad48e11ed9ddc54a4b"
+          "sha256": "7cf44c0bf0e6a390fe0ce27de10237c966b85d982ba4dbd69887544c6a53b801"
         },
         {
           "path": "assets/world/home-sleep-more.json",
-          "sha256": "3059cec8f7c1a8d11e6160544627fcfa7507deac24515a885c9c7aabc05a23db"
+          "sha256": "85d2ee101c6b80796828fea7d65305dcc4eeaaa8957f854a5360a24fcde3eb5f"
         },
         {
           "path": "assets/world/home-sleep-outer.json",
-          "sha256": "441cde3bbce7c3c3d9b9f8995726aaafda612078e99269630c8df5f3a2ecd312"
+          "sha256": "97ef3f84705c6fdce506a657df135a2526817d4636e12c56bc9dc3bddcb93728"
         },
         {
           "path": "assets/world/island-geometry.mjs",
@@ -1043,7 +1043,7 @@
         },
         {
           "path": "src/world/home/building-footprints.js",
-          "sha256": "6b4b718122e3e581551c01ea9096f4745563cddf60a1ea56d3660a855c3a5046"
+          "sha256": "f171aef03ddbe23db682d605713adc450b56d90848b1da24773d08f42abbda14"
         },
         {
           "path": "src/world/home/building-silhouettes.json",
@@ -1051,7 +1051,7 @@
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "957b3e9a391e93bf57b9ad1aecfe7fb6089cb059bb4d951ad75fa65bb094f1b5"
+          "sha256": "e0b8319bb223ef2ee362de038c8f16ebb737611deb8c5f3e1e98da0b88250ee6"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1078,12 +1078,8 @@
           "sha256": "d2693b5b501fb9207c60a5ce848a3ab2d521f194b84f86174a46f659e9f57630"
         },
         {
-          "path": "src/world/home/prop-base-silhouettes.json",
-          "sha256": "a79ac96f3f6fbd0ea5e54f07cce356cd6976f3150456ff67034e3cb59429b5e7"
-        },
-        {
           "path": "src/world/home/prop-outline-rules.js",
-          "sha256": "f35da8f61b5523e3e60395b1f9c8860fe1ee7df2493267caa78cb0d590a11787"
+          "sha256": "58098aaed0473a62e6918b6f2ec1cbe5b14ad9654edff76cd31f0a91376700da"
         },
         {
           "path": "src/world/home/sleep-poses.json",
@@ -1091,7 +1087,7 @@
         },
         {
           "path": "src/world/home/sleep-spots.js",
-          "sha256": "7222025e1078dad16c78184c4104f03ee2b0086f4eaee28bcfae924650dd36ec"
+          "sha256": "45028f98609454d8879de242ff458fbf3c876c66596614187b1b912a63a9f80e"
         },
         {
           "path": "src/world/home/walk-shapes.json",
@@ -1106,15 +1102,15 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "eaecb00a70af5b6770c81b9fd60f23a0bec942158be80d042ba5ec3454e3257c"
+      "sha256": "fd88e5139f6400cb7ad29fbb2d2c81836174e58fc7e47862db605d9bf2cb7510"
     },
-    "groundSha256": "b1e7fc18d785f15a0b28ced4bf0f1eec47a16985d0abdd9c0a18723220ef5d5c",
+    "groundSha256": "e5304fbb94cf8634ce2175d0303888302a0938dce7005552dd84cd551cdc2028",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "318a95cc92428549a56e2b0f53969459ce8e57d241d984fe69aea26d96b9a917",
+    "sha256": "321841b7ae1fd17818de5d29ff3ad6db5da3846553b61489c158eb8f9ef07647",
     "width": 1024,
     "height": 768,
-    "bytes": 1169975,
-    "groundBytes": 966010,
+    "bytes": 1171736,
+    "groundBytes": 967778,
     "quality": {
       "tolerance": 0.4,
       "minArea": 0.2,
@@ -1123,7 +1119,7 @@
     },
     "worldPaths": 0,
     "walkways": 1,
-    "flats": 792,
+    "flats": 818,
     "decks": 9,
     "bridgeDetails": 0
   },

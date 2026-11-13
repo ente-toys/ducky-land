@@ -1,5 +1,4 @@
 import silhouettes from './building-silhouettes.json' with {type: 'json'};
-import bases from './prop-base-silhouettes.json' with {type: 'json'};
 import {propOutlineKind} from './prop-outline-rules.js';
 
 // Opaque SVG silhouettes, normalized to the authored view box. Blocking the
@@ -19,8 +18,8 @@ function clearance(poly, pad = 8) {
 
 export function buildingFootprint(prop) {
   const kind = propOutlineKind(prop);
-  if (kind !== 'solid' && kind !== 'base') return null;
-  const outline = kind === 'base' ? bases[prop.src] : silhouettes[prop.src];
+  if (kind !== 'solid') return null;
+  const outline = silhouettes[prop.src];
   if (!outline) return null;
   const w = prop.width * (prop.scale ?? 1), h = prop.height * (prop.scale ?? 1);
   if (prop.spinPeriod) {
@@ -39,7 +38,7 @@ export function solidBuilding(prop) {
   const footprint = buildingFootprint(prop);
   const outlineKind = propOutlineKind(prop);
   if (!footprint) {
-    if (outlineKind === 'solid' || outlineKind === 'base') throw Error(`Missing Home outline: ${prop.src}`);
+    if (outlineKind === 'solid') throw Error(`Missing Home outline: ${prop.src}`);
     const {footprint: oldFootprint, ...rest} = prop;
     return {...rest, outlineKind, z: -100000, sortY: -100000};
   }

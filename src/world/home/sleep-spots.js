@@ -9,9 +9,9 @@ export const SLEEP_SPOTS = {
   hammock: [[900, 1640, false], [3920, 1120, true]],
   rock: [[2150, 1130, false], [1200, 1420, true], [3950, 3260, false]],
   leaf: [[1820, 1500, false], [4790, 1420, true], [1480, 3110, false], [3560, 2480, true]],
-  book: [[2660, 1290, false], [1380, 1850, true], [4320, 3230, false], [2230, 2400, true]],
+  book: [[2560, 1195, false], [1375, 1850, true], [4320, 3230, false], [2230, 2400, true]],
   chair: [[5150, 2875, true], [4575, 2225, true]],
-  wing: [[700, 2250, true], [3080, 3260, false], [3350, 1375, true], [4980, 1850, false], [2300, 2750, true]],
+  wing: [[700, 2250, true], [3080, 3260, false], [3385, 1375, true], [4980, 1850, false], [2300, 2750, true]],
   box: [[780, 2600, false], [2000, 3150, true], [3350, 850, false], [4375, 2000, true]],
 };
 export const SLEEP_COUNTS = Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([pose, list]) => [pose, list.length]));

@@ -7,7 +7,6 @@ import {geometry, inShape} from '../assets/world/island-geometry.mjs';
 import E from '../src/world/home/home-expansion.json' with {type:'json'};
 import routes from '../src/world/home/home-routes.json' with {type:'json'};
 import outlines from '../src/world/home/building-silhouettes.json' with {type:'json'};
-import bases from '../src/world/home/prop-base-silhouettes.json' with {type:'json'};
 import {propOutlineKind} from '../src/world/home/prop-outline-rules.js';
 import pickups from '../src/gameplay/karma-sites.json' with {type:'json'};
 import {atMuseumDoor} from '../src/gameplay/player-motion.js';
@@ -22,12 +21,11 @@ test('every Home prop has a generated outline and every solid outline is blocked
     assert.ok(outlines[p.src]?.length>=3,`${p.id}: art traced`);
     const kind=propOutlineKind(p);
     assert.equal(p.outlineKind,kind);
-    if(kind!=='solid'&&kind!=='base'){
+    if(kind!=='solid'){
       assert.equal(p.footprint,undefined,`${p.id}: walk-over art has no blocker`);
       assert.ok(p.z<HOME_MAP.origin.y-10000,`${p.id}: beneath all Duckies`);
       continue;
     }
-    if(kind==='base')assert.ok(bases[p.src]?.length>=3,`${p.id}: base traced`);
     const poly=p.footprint.poly;
     assert.ok(poly.flat().every(Number.isFinite),`${p.id}: valid geometry`);
     assert.equal(p.z,Math.max(...poly.map(p=>p[1])),`${p.id}: depth uses blocker base`);
@@ -79,16 +77,19 @@ test('classification uses art tokens and size without mistaking neighbourhood na
   assert.equal(propOutlineKind(p('/flowerpot-daisies.svg')),'solid');
   assert.equal(propOutlineKind(p('/wildflowers.svg')),'decal');
   assert.equal(propOutlineKind(p('/wildflowers.svg',300,200)),'solid');
-  assert.equal(propOutlineKind(p('/tree-oak.svg',200,350)),'base');
+  assert.equal(propOutlineKind(p('/tree-oak.svg',200,350)),'solid');
 });
 
-test('base-only props leave their upper drawing outside their own blocker',()=>{
-  for(const p of props.filter(p=>p.outlineKind==='base')){
-    const base=bases[p.src],full=outlines[p.src],fullTop=Math.min(...full.map(q=>q[1])),fullBottom=Math.max(...full.map(q=>q[1]));
-    assert.ok(Math.min(...base.map(q=>q[1]))>=fullTop+(fullBottom-fullTop)*.75,`${p.id}: only the lowest part blocks`);
-    const [u,v]=full.reduce((a,b)=>a[1]<b[1]?a:b),w=p.width*p.scale,h=p.height*p.scale;
-    const x=p.x+(p.flip?p.anchor.x-u:u-p.anchor.x)*w,y=p.y+(v-p.anchor.y)*h;
-    assert.equal(inShape(x,y,p.footprint),false,`${p.id}: canopy/top is outside base blocker`);
+test('trees, lamps and reeds use the full drawing and clear authored route corridors',()=>{
+  const tall=props.filter(p=>/(?<![a-z])(?:tree|oak|birch|palm|lamp|lantern|reeds|cattail)/.test(p.asset+' '+p.src.split('/').at(-1)));
+  assert.ok(tall.length>=260);
+  for(const p of tall){
+    assert.equal(p.outlineKind,'solid',`${p.id}: entire drawing blocks`);
+    for(const [u,v] of outlines[p.src]){
+      const x=p.x+(p.flip?p.anchor.x-u:u-p.anchor.x)*p.width*p.scale,y=p.y+(v-p.anchor.y)*p.height*p.scale;
+      assert.ok(inShape(x,y,p.footprint),`${p.id}: full outline enclosed`);
+    }
+    for(const r of routes)for(const point of r.samples)assert.equal(inShape(...point,p.footprint,r.width/2+16),false,`${p.id}: canopy covers ${r.id}`);
   }
 });
 
