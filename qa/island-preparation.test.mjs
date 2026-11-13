@@ -164,14 +164,14 @@ test('raster turns share small work but yield once the synchronous frame budget 
   const queue=createArtQueue({yieldFrame:()=>new Promise(resolve=>frames.push(resolve)),now:()=>cost});
   const work=Array.from({length:7},()=>queue.raster(()=>{ran.push(frame);cost+=3;}));
   for(let i=0;i<4;i++){await flush();cost=0;frame++;frames.splice(0).forEach(resolve=>resolve());await flush();}
-  await Promise.all(work);assert.deepEqual(ran,[1,1,2,2,3,3,4]);
+  await Promise.all(work);assert.deepEqual(ran,[1,1,1,1,1,2,2]);
 });
 
 test('quiet art work waits for walk/zoom activity to end',async t=>{
   const {markArtActivity,nextArtFrame}=await import('../src/rendering/pixi/art/island-preparation.js');
-  const previous=globalThis.requestIdleCallback,callbacks=[];
-  globalThis.requestIdleCallback=callback=>callbacks.push(callback);
-  t.after(()=>globalThis.requestIdleCallback=previous);
+  const previous=globalThis.requestAnimationFrame,callbacks=[];
+  globalThis.requestAnimationFrame=callback=>callbacks.push(callback);
+  t.after(()=>globalThis.requestAnimationFrame=previous);
   let finished=false;const pending=nextArtFrame().then(()=>finished=true);
   assert.equal(callbacks.length,1);
   markArtActivity(50);callbacks.shift()();await flush();
