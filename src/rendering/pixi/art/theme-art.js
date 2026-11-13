@@ -1,3 +1,4 @@
+import {mapArtInFrames} from './island-preparation.js';
 import {planIslandArt} from './island-budget.js';
 import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from '../../shared/art-resolution.js';
@@ -125,7 +126,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     s.width = flat.width; s.height = flat.height; if (flat.flip) s.scale.x *= -1;
     ground.addChild(s);
   }
-  const standing = props.map((prop, i) => {
+  const standing = await mapArtInFrames(props,(prop, i) => {
     const scale = prop.scale ?? 1, anchor = prop.anchor ?? {x: .5, y: 1}, name = prop.name ?? prop.asset ?? prop.src;
     const sprite = iceland?icelandSprite(prop,null,anchor):crisp?crispSprite(prop,null,anchor):(streamedPiece(prop,null,anchor) ?? new Sprite(textures[k++]));
     if(!crisp&&!iceland&&(prepare||!prop.tiles?.length||prop.preload)){

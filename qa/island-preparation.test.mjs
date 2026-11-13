@@ -4,12 +4,14 @@ import {readFileSync} from 'node:fs';
 import {Assets, Container, DOMAdapter, ImageSource, Sprite, Texture} from 'pixi.js';
 import {createCanvas, Image} from '@napi-rs/canvas';
 import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
-import {createArtQueue, uploadIsland} from '../src/rendering/pixi/art/island-preparation.js';
+import {createArtQueue, uploadIsland, mapArtInFrames} from '../src/rendering/pixi/art/island-preparation.js';
 import {createWholeSVGLoader} from '../src/rendering/pixi/art/whole-svg-loader.js';
 import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 import {svgLayerContexts} from '../src/rendering/pixi/art/svg-context.js';
 import {DOMParser} from '@xmldom/xmldom';
-import {PixiIsland} from './helpers/pixi-engine.mjs';
+import {PixiIsland, cameraGame} from './helpers/pixi-engine.mjs';
+import {RoomClient} from '../src/multiplayer/room-client.js';
+import {artOf} from '../src/world/island-maps.js';
 const flush=()=>new Promise(setImmediate);
 
 test('Blob SVG loading preserves whole-picture dimensions and pixels without text or data URLs',async t=>{
@@ -128,6 +130,7 @@ test('Home departure releases its leases while another prepared scene keeps shar
     const game=Object.assign(Object.create(PixiIsland.prototype),{scene,homeGround:ground,decks,
       artShown:'home',loaded:[],arts:new Map([['home',{groups:[ground]}]]),props:[],homeKites:{entries:[]},
       app:{renderer:{resolution:2,texture:{bindSource(){}}}},
+      prepareHomeWater:async()=>{},
       groundPool:{create:()=>({async prepare(){},destroy(){}})},showArt(){},
       homeRestore:Promise.resolve([{src:'/home-lifecycle.svg',resolution:2,count,nodes:[{node:sprite,width:20,height:30}]}])});
     return {game,sprite};
@@ -161,14 +164,14 @@ test('raster turns share small work but yield once the synchronous frame budget 
   const queue=createArtQueue({yieldFrame:()=>new Promise(resolve=>frames.push(resolve)),now:()=>cost});
   const work=Array.from({length:7},()=>queue.raster(()=>{ran.push(frame);cost+=3;}));
   for(let i=0;i<4;i++){await flush();cost=0;frame++;frames.splice(0).forEach(resolve=>resolve());await flush();}
-  await Promise.all(work);assert.deepEqual(ran,[1,1,2,2,3,3,4]);
+  await Promise.all(work);assert.deepEqual(ran,[1,1,1,1,1,2,2]);
 });
 
 test('quiet art work waits for walk/zoom activity to end',async t=>{
   const {markArtActivity,nextArtFrame}=await import('../src/rendering/pixi/art/island-preparation.js');
-  const previous=globalThis.requestIdleCallback,callbacks=[];
-  globalThis.requestIdleCallback=callback=>callbacks.push(callback);
-  t.after(()=>globalThis.requestIdleCallback=previous);
+  const previous=globalThis.requestAnimationFrame,callbacks=[];
+  globalThis.requestAnimationFrame=callback=>callbacks.push(callback);
+  t.after(()=>globalThis.requestAnimationFrame=previous);
   let finished=false;const pending=nextArtFrame().then(()=>finished=true);
   assert.equal(callbacks.length,1);
   markArtActivity(50);callbacks.shift()();await flush();
@@ -184,4 +187,104 @@ test('ready prepares the standing duck library; unused world pictures stay deman
   const start=engine.slice(engine.indexOf('      this.archipelago ='),engine.indexOf('      this.ready = true;'));
   assert(!start.includes('loadPreviews('));assert(!start.includes('createIsletView('));assert(!start.includes('createWorldView('));
   assert(!ready.includes('loadedSVGTextures'));
+});
+
+
+test('a pending island still renders the ocean and animated player on every native frame',t=>{
+  const previous={document:globalThis.document,requestAnimationFrame:globalThis.requestAnimationFrame,devicePixelRatio:globalThis.devicePixelRatio};
+  let scheduled=0;Object.assign(globalThis,{document:{hidden:false},requestAnimationFrame:()=>++scheduled,devicePixelRatio:1});
+  t.after(()=>Object.assign(globalThis,previous));
+  const player={id:1,player:true,x:0,y:0,previousX:0,previousY:0,turn:0,action:0,travel:0};
+  const game=cameraGame(player),scene=new Container(),ocean=new Sprite(Texture.EMPTY),duck=new Container();
+  // Exercise the real tick and renderScreen, replacing only GPU submission.
+  const ground=new Container(),decks=new Container(),shadows=new Container(),prop=new Sprite(Texture.EMPTY),sleeper=new Container();
+  scene.addChild(ocean,ground,decks,shadows,prop,sleeper,duck);
+  const groups=[ground,decks,shadows];
+  const art={ready:true,groups,props:[{sprite:prop,x:0,y:0,width:10,height:10,scale:1,name:'house'}]};
+  let renders=0,animated=0;
+  Object.assign(game,{scene,ocean,homePrepared:false,arts:new Map([['home',art]]),props:art.props,
+    gust:0,sim:{time:0,player,ducks:[player],step(dt){this.time+=dt;}},localDucks:[player],
+    rigs:[{root:duck,update(){animated++;}}],mapSleepers:new Map(),floating:[],ripples:[],birds:[],crows:[],butterflies:[],leaves:[],droplets:[],splashes:[],
+    marker:new Container(),renderPhotoFrame(){},snowfall:{update(){}},audio:{muted:false},canvas:{dataset:{}},
+    app:{render(){renders++;assert.equal(scene.visible,true);assert.equal(ocean.visible,true);assert.equal(duck.visible,true);for(const node of [...groups,prop])assert.equal(node.visible,false);}},
+  });
+  // TilingSprite's scrolling interface, without needing a browser/GPU.
+  ocean.tilePosition={set(x,y){this.x=x;this.y=y;}};
+  for(const now of [16,32,48])game.tick(now);
+  assert.equal(renders,3);assert.equal(animated,3);assert.equal(scheduled,3);
+  assert.notEqual(ocean.tilePosition.x,0);assert.equal(game.revealMap,null);
+  scene.destroy({children:true});game.marker.destroy();
+});
+
+test('prepared island groups, props and sleepers share one 250ms reveal; sea and player keep full alpha',()=>{
+  const game=Object.create(PixiIsland.prototype),scene=new Container(),ocean=new Container(),duck=new Container();
+  const groups=Array.from({length:5},()=>new Container()),prop=new Sprite(Texture.EMPTY),sleeper=new Container(),nested=new Sprite(Texture.EMPTY);
+  groups[0].addChild(nested);scene.addChild(ocean,duck,...groups,prop,sleeper);
+  const art={ready:false,groups,props:[{sprite:prop}]};
+  Object.assign(game,{globeT:0,rigs:[],localDucks:[],liveRigs:new Map(),artShown:'pink',arts:new Map([['pink',art]]),mapSleepers:new Map([['pink',[{rig:{root:sleeper}}]]])});
+  const nodes=[...groups,prop,sleeper];
+  game.applyIslandReveal(0)();assert(nodes.every(n=>!n.visible));
+  art.ready=true;game.startupPrepared=false;game.showArt('pink');game.applyIslandReveal(50)();
+  assert(nodes.every(n=>!n.visible),'shared startup warmup also gates the whole reveal');
+  game.startupPrepared=true;game.showArt('pink');prop.visible=sleeper.visible=true;
+  prop.alpha=.6;nested.alpha=.4;
+  for(const [now,expected]of [[100,0],[225,.875],[350,1],[600,1]]){
+    const restore=game.applyIslandReveal(now);
+    assert(groups.every(g=>g.visible&&g.alpha===expected));
+    assert.equal(prop.alpha,.6*expected);assert.equal(sleeper.alpha,expected);
+    assert.equal(nested.alpha,.4,'nested nodes receive the envelope once through their group');
+    assert.equal(ocean.alpha,1);assert.equal(duck.alpha,1);
+    restore();assert.equal(prop.alpha,.6,'animation-owned alpha is preserved after rendering');
+  }
+  // A repeat visit must start a fresh fade, without resetting on repeated showArt.
+  art.ready=false;game.applyIslandReveal(700)();art.ready=true;game.showArt('pink');
+  const restore=game.applyIslandReveal(800);assert.equal(groups[0].alpha,0);restore();
+  scene.destroy({children:true});
+});
+
+test('startup keeps rendering before the authoritative saved island arrives and never prepares placeholder Home',async()=>{
+  const room=new RoomClient(()=>{}),prepared=[];
+  let selected=false;
+  const start=room.waitForIsland().then(id=>{selected=true;prepared.push(artOf(id));return id;});
+  await flush();assert.equal(selected,false);assert.deepEqual(prepared,[]);
+  room.id='saved-player';
+  room.snapshot({epoch:'saved',tick:1,islandId:'sunset',players:[],boats:[]});
+  assert.equal(await start,'sunset');assert.deepEqual(prepared,['pink']);
+  assert.equal(await room.waitForIsland(),'sunset');
+  // Mount must use that snapshot before it chooses or acquires Home artwork.
+  assert(engine.indexOf('await this.room.waitForIsland()')<engine.indexOf('const prepareHome='));
+  assert(engine.indexOf('this.renderArrival(this.lastFrame)')<engine.indexOf('await this.room.waitForIsland()'));
+  assert(engine.includes('const prepareHome=artOf(startingIsland)'));
+  assert(engine.includes('if(prepareHome)await this.prepareHomeWater()'));
+  assert(engine.indexOf('this.raf=requestAnimationFrame(time=>this.tick(time))')<engine.indexOf('await this.ensureArt(this.artShown)'));
+  room.dispose();
+});
+
+test('scene and sleeper construction yields at both count and time budgets',async()=>{
+  const visits=[],frames=[];let frame=0,clock=0;
+  const values=await mapArtInFrames([1,2,3,4,5],value=>{visits.push(frame);clock+=3;return value*2;},
+    {now:()=>clock,yieldFrame:async()=>{frames.push(++frame);},frameBudgetMs:5,batchSize:12});
+  assert.deepEqual(visits,[0,0,1,1,2]);assert.deepEqual(frames,[1,2]);assert.deepEqual(values,[2,4,6,8,10]);
+  frame=0;visits.length=0;
+  await mapArtInFrames([1,2,3,4,5],()=>visits.push(frame),{yieldFrame:async()=>{frame++;},batchSize:2});
+  assert.deepEqual(visits,[0,0,1,1,2]);
+  let cancelled=false;visits.length=0;
+  const partial=await mapArtInFrames([1,2,3,4],value=>{visits.push(value);return value;},
+    {batchSize:2,yieldFrame:async()=>{cancelled=true;},cancelled:()=>cancelled});
+  assert.deepEqual(partial,[1,2]);assert.deepEqual(visits,[1,2],'a discarded destination stops constructing rigs at the next yield');
+});
+
+
+test('startup renders and scrolls the same ocean and Duck while the first island is unresolved',t=>{
+  const previous=globalThis.requestAnimationFrame;let scheduled=0;
+  globalThis.requestAnimationFrame=()=>++scheduled;t.after(()=>globalThis.requestAnimationFrame=previous);
+  const game=Object.create(PixiIsland.prototype),scene=new Container(),ocean=new Sprite(Texture.EMPTY),root=new Container();
+  scene.addChild(ocean,root);ocean.tilePosition={set(x,y){this.x=x;this.y=y;}};
+  let rendered=0,animated=0;
+  Object.assign(game,{room:{player:{x:-200,y:400,turn:.5}},host:{clientWidth:1440,clientHeight:900},
+    arrivalScene:scene,ocean,camera:{x:0,y:0,zoom:.6},lastFrame:0,motion:{matches:false},
+    arrivalRig:{root,update(){animated++;}},app:{render(){rendered++;assert(root.visible&&ocean.visible&&scene.visible);}}});
+  game.renderArrival(16);const first=ocean.tilePosition.x;game.renderArrival(32);
+  assert.equal(rendered,2);assert.equal(animated,2);assert.equal(scheduled,2);assert.notEqual(ocean.tilePosition.x,first);
+  assert.equal(root.x,-200);assert.equal(root.y,400);assert.equal(root.alpha,1);scene.destroy({children:true});
 });

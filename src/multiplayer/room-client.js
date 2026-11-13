@@ -39,6 +39,13 @@ export class RoomClient {
     this.reset();
   }
 
+  // The constructor's Home value is only a placeholder. The first snapshot
+  // carries the authoritative saved/random arrival island, including for guests.
+  waitForIsland() {
+    if (this.tick >= 0) return Promise.resolve(this.islandId);
+    return this.initialIsland ??= new Promise(resolve => {this.resolveInitialIsland = resolve;});
+  }
+
   configure(nav, world) {
     this.nav = nav;
     this.world = world;
@@ -214,6 +221,8 @@ export class RoomClient {
     const travelKey=`${islandId}:${mode}:${available}`;
     if (changed || this.travelKey !== travelKey) this.onTravel({islandId,mode,available});
     this.travelKey=travelKey;
+    this.resolveInitialIsland?.(islandId);
+    this.resolveInitialIsland=null;
   }
 
   setFriends(friends) {
@@ -387,6 +396,8 @@ export class RoomClient {
   }
 
   dispose() {
+    this.resolveInitialIsland?.(null);
+    this.resolveInitialIsland=null;
     clearInterval(this.heartbeat);
     clearTimeout(this.retryTimer);
     const socket = this.socket;
