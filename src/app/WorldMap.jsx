@@ -72,7 +72,7 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
       const bogX = radar.current.x * scale, bogY = radar.current.y * scale, bogVisible = radar.current.visible;
       // free boats around the island you are on (the server only sends this island's boats)
       const here = engine.islandId, map = mapOf(here);
-      const boats = (engine.room?.boats ?? []).filter(boat => !boat.occupant && boat.islandId === here)
+      const boats = (engine.room?.boats ?? []).filter(boat => !boat.occupant && (!boat.built || engine.room?.ownBoats?.has(boat.id)) && boat.islandId === here)
         .map(boat => `${Math.round((boat.x - map.cx) * scale)},${Math.round((boat.y - map.cy) * scale)}`).join(' ');
       setFrame(previous => previous.here === here && previous.boats === boats && previous.playing === playing && previous.heading === heading && previous.bogX === bogX && previous.bogY === bogY && previous.bogVisible === bogVisible && islands.every((item, index) => {
         const old = previous.islands[index];

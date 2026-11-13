@@ -56,6 +56,11 @@ export async function createSailingFX({water,objects}) {
     dispose() {this.reset(); wakes.destroy(); rings.destroy();},
     reset() {ducks.clear(); boats.clear(); splashes.length=0; for (const d of dust.splice(0)) d.sprite.destroy();},
     forget(id) {boats.delete(id);},
+    // something dropped into the water: a splash ring, and any boat floating there dips and rocks
+    splash(x,y,size=1) {
+      ring(x,y,size);
+      for (const s of boats.values()) if (Math.hypot(s.x-x,s.y-y) < 80) {s.dipV+=95; s.rockV+=.3;}
+    },
     shift(dx,dy,reframe=null) {
       const at=p=>{if(p)Object.assign(p,reframe?reframe(p):{x:p.x+dx,y:p.y+dy});};
       for (const s of boats.values()) {at(s); s.trail.forEach(at); at(s.emit); at(s.bow); if (s.glide) {const p=reframe?reframe({x:s.glide.fx,y:s.glide.fy}):{x:s.glide.fx+dx,y:s.glide.fy+dy};s.glide.fx=p.x;s.glide.fy=p.y;}}

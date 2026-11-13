@@ -1,5 +1,9 @@
 
 import {useEffect, useState} from 'react';
+import {MATERIAL_NAMES} from '../gameplay/boat-build.js';
+
+const actionLabel = options => options.take ? 'Take boat' : options.dock ? 'Dock'
+  : options.build ? 'Build boat' : options.collect ? `Pick up ${MATERIAL_NAMES[options.collect]}` : null;
 
 export default function IslandTravel({travel,playing,room,island,notice}) {
   const sailing=playing && travel.mode==='sailing';
@@ -8,7 +12,7 @@ export default function IslandTravel({travel,playing,room,island,notice}) {
     if (!playing) {setOptions({}); return;}
     const id=setInterval(() => {
       const next=island.current?.travelOptions?.() ?? {};
-      setOptions(prev => prev.take === next.take && prev.dock === next.dock ? prev : next);
+      setOptions(prev => ['take','dock','collect','build'].every(key => prev[key] === next[key]) ? prev : next);
     }, 250);
     return () => clearInterval(id);
   }, [playing, island]);
@@ -21,8 +25,8 @@ export default function IslandTravel({travel,playing,room,island,notice}) {
   const touch=typeof matchMedia==='function' && matchMedia('(pointer: coarse)').matches;
   return <>
     {notice && <p className="pixi-travel-notice" role="status">{notice}</p>}
-    {(options.take || options.dock) && <button className="pixi-travel-action" onClick={() => island.current?.travelAction()}>
-      {options.take ? 'Take boat' : 'Dock'} <kbd>Enter</kbd>
+    {actionLabel(options) && <button className="pixi-travel-action" onClick={() => island.current?.travelAction()}>
+      {actionLabel(options)} <kbd>Enter</kbd>
     </button>}
     {sailing && touch && <div className="pixi-steering" aria-label="Boat steering">
       {[[0,-1,'↑','North'],[-1,0,'←','West'],[0,1,'↓','South'],[1,0,'→','East']].map(([x,y,arrow,name]) =>

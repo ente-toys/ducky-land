@@ -713,3 +713,9 @@
 .pixi-feather-actions { display: grid; gap: 8px; }
 .pixi-feather-later { min-height: 44px; border: 0; background: transparent; color: #5d5140; font: 600 15px/1.3 system-ui, sans-serif; cursor: pointer; }
 .pixi-feather-dialog .pixi-feather-error { margin: -12px 0 12px; color: #9c3424; font-size: 14px; }
+.pixi-build-kit { position: absolute; z-index: 5; top: calc(max(16px, env(safe-area-inset-top)) + 76px); right: calc(max(16px, env(safe-area-inset-right)) + 68px); display: flex; align-items: center; gap: 6px; height: 40px; box-sizing: border-box; padding: 0 12px 0 8px; border: 1px solid #564537; border-radius: 12px; background: #fff9df; box-shadow: 0 3px 0 #56453755; color: #332b23; font: 700 14px/1 system-ui, sans-serif; pointer-events: none; }
+.pixi-build-kit[hidden] { display: none; }
+.pixi-build-kit img { width: 28px; height: 28px; opacity: .3; filter: grayscale(1); transition: opacity 200ms var(--pixi-ease-out), filter 200ms var(--pixi-ease-out); }
+.pixi-build-kit img.pixi-build-kit-got { opacity: 1; filter: none; animation: pixi-action-pop .25s cubic-bezier(.34,1.56,.64,1); }
+.pixi-build-burst { position: absolute; z-index: 4; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .pixi-build-kit img.pixi-build-kit-got { animation: none; } }
