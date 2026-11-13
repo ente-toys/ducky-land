@@ -107,7 +107,9 @@ export default function IslandStargaze({island, playing, offline = false}) {
           <button className="pixi-stargaze-tag" ref={tag} hidden title="Find your star">Your star</button>
           <div className="pixi-stargaze-tag pixi-stargaze-name" ref={nameTag} role="status" aria-live="polite" aria-atomic="true" hidden/>
           <header className="pixi-stargaze-counts">
-            <h2 id="stargaze-title">{counts ? `${number(counts.total)} stars` : 'Counting the stars…'}</h2>
+            <h2 id="stargaze-title" aria-label={counts ? `${number(counts.total)} stars` : undefined}>
+              {counts ? <>{number(counts.total)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.44 4.61 Q12.00 1.50 13.56 4.61 Q15.12 7.71 18.31 8.31 Q21.51 8.91 19.28 11.27 Q17.04 13.64 17.37 16.74 Q17.70 19.85 14.85 18.57 Q12.00 17.30 8.97 18.82 Q5.95 20.33 6.45 16.99 Q6.96 13.64 5.01 11.37 Q3.06 9.10 5.97 8.40 Q8.88 7.71 10.44 4.61 Z"/></svg></> : 'Counting the stars…'}
+            </h2>
           </header>
         </div>
       </div>
