@@ -36,6 +36,8 @@ export function createPlantReactions(parent, texture,options={}) {
     }
   }
   return {
+    async prepared() {await Promise.all(colours.values());await snow?.prepared();},
+    sources() {return snow?.sources()??[];},
     register(id,props,obstacles,base='') {
       const winter=id==='snow';
       const map=createPlantContacts(props,obstacles,bump,{snow:winter}); maps.set(id,map);

@@ -1,4 +1,5 @@
 import {Assets,Container,Graphics,Sprite} from 'pixi.js';
+import '../art/whole-svg-loader.js';
 import {ART_TEXTURE} from '../art/art-texture.js';
 
 export const SNOW_CLUMP_CAP=80,SNOW_PILE_CAP=10,SNOW_SHED_LIFE=1.25,SNOW_REFILL=4.6;
@@ -19,7 +20,7 @@ export function thinSnowSVG(svg,colour='#448238') {
   return `${open}<defs><filter id="shed-inset" x="-20%" y="-20%" width="140%" height="140%"><feMorphology operator="erode" radius="5"/></filter></defs>${cap.replace(snow,colour)}<g filter="url(#shed-inset)">${cap}</g></svg>`;
 }
 
-export function createPlantSnow(parent,{load=src=>Assets.load({src,data:ART_TEXTURE}),unload=src=>Assets.unload(src)}={}) {
+export function createPlantSnow(parent,{load=src=>Assets.load({src,data:ART_TEXTURE,loadParser:'wholeIslandSVG'}),unload=src=>Assets.unload(src)}={}) {
   const root=new Container({label:'Tree snow clumps, flakes and piles'}),flakes=[],piles=[],caps=new Set(),sources=new Map();
   root.upright=true;root.eventMode='none';
   parent.addChild(root);
@@ -42,7 +43,7 @@ export function createPlantSnow(parent,{load=src=>Assets.load({src,data:ART_TEXT
     if (!ready) {
       ready=fetch(url).then(r=>r.ok?r.text():'').then(svg=>{
         const thin=thinSnowSVG(svg);if (!thin || destroyed) return null;
-        const src=`data:image/svg+xml;charset=utf-8,${encodeURIComponent(thin)}`;
+        const src=URL.createObjectURL(new Blob([thin],{type:'image/svg+xml'}));
         const entry={src,texture:null};ready.entry=entry;
         return load(src).then(texture=>{entry.texture=texture;return texture;});
       }).catch(()=>null);
@@ -64,6 +65,8 @@ export function createPlantSnow(parent,{load=src=>Assets.load({src,data:ART_TEXT
   }
   return {
     prepare,
+    async prepared() {await Promise.all(sources.values());},
+    sources() {return [...sources.values()].map(p=>p.entry?.texture?.source).filter(Boolean);},
     bump(plant,time) {
       const p=plant.prop,h=p.height*(p.scale??1),w=p.width*(p.scale??1);
       cap(plant,time);
@@ -109,7 +112,7 @@ export function createPlantSnow(parent,{load=src=>Assets.load({src,data:ART_TEXT
     destroy() {
       destroyed=true;
       for (const plant of caps) plant.snowCap.destroy();caps.clear();
-      for (const promise of sources.values()) promise.finally(()=>{if (promise.entry) unload(promise.entry.src);});
+      for (const promise of sources.values()) promise.finally(()=>{if (promise.entry) {Promise.resolve(unload(promise.entry.src)).finally(()=>URL.revokeObjectURL(promise.entry.src));}});
       sources.clear();root.destroy({children:true});
     },
   };

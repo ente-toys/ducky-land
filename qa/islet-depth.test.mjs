@@ -56,7 +56,7 @@ test('SVG layer selection preserves each piece exactly once, including inherited
 test('production islet props sort with Duckies by their foot, preserve the complete art and hide from island snapshots',async()=>{
  const dom=new JSDOM('<body></body>',{url:'http://localhost/'});
  globalThis.window=dom.window;globalThis.document=dom.window.document;globalThis.DOMParser=dom.window.DOMParser;
- globalThis.requestAnimationFrame=()=>0;globalThis.cancelAnimationFrame=()=>{};
+ globalThis.requestAnimationFrame=cb=>setTimeout(cb,0);globalThis.cancelAnimationFrame=clearTimeout;
  Object.defineProperty(globalThis,'navigator',{value:dom.window.navigator,configurable:true});
  globalThis.HTMLCanvasElement=Canvas;
  const canvas=(w=1,h=1)=>{const c=createCanvas(w,h);c.style={};c.addEventListener=()=>{};c.removeEventListener=()=>{};return c;};
