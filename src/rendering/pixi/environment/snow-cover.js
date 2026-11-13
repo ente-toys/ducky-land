@@ -146,7 +146,9 @@ function acquireCrown(texture, region = null, key = '', ink = 8, depthWidth) {
     const resource = texture.source.resource, canvas = document.createElement('canvas');
     canvas.width = canvas.height = 192;
     const ctx = canvas.getContext('2d', {willReadFrequently: true}), f = texture.frame, r = texture.source.resolution;
-    ctx.drawImage(resource, f.x * r, f.y * r, f.width * r, f.height * r, 0, 0, 192, 192);
+    const ink=texture.trim??{x:0,y:0,width:texture.width,height:texture.height};
+    ctx.drawImage(resource, f.x * r, f.y * r, f.width * r, f.height * r,
+      ink.x/texture.width*192,ink.y/texture.height*192,ink.width/texture.width*192,ink.height/texture.height*192);
     sampled = texture.width > 2 && texture.height > 2;
     profile = snowCrownProfile(ctx.getImageData(0, 0, 192, 192).data, 192, 192, texture.width, texture.height, region);
   } catch {  }
