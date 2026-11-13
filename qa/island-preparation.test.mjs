@@ -7,6 +7,7 @@ import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
 import {createArtQueue, uploadIsland, mapArtInFrames} from '../src/rendering/pixi/art/island-preparation.js';
 import {createWholeSVGLoader} from '../src/rendering/pixi/art/whole-svg-loader.js';
 import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
+import {createLandingPreviews} from '../src/rendering/pixi/art/landing-preview.js';
 import {svgLayerContexts} from '../src/rendering/pixi/art/svg-context.js';
 import {DOMParser} from '@xmldom/xmldom';
 import {PixiIsland, cameraGame} from './helpers/pixi-engine.mjs';
@@ -97,6 +98,42 @@ test('initial and restored Home never acquire the low-resolution whole-island un
   assert(!engine.includes('/pixi-art/globe/home-ground.svg'));
 });
 
+test('landing terrain stays visible through the detailed reveal and releases the preview afterward',async t=>{
+  const oldFrame=globalThis.requestAnimationFrame;
+  globalThis.requestAnimationFrame=callback=>setImmediate(callback);
+  t.after(()=>{globalThis.requestAnimationFrame=oldFrame;});
+  const ground=new Container(),detail=new Container(),released=[],uploads=[];
+  const texture=new Texture({source:new ImageSource({width:32,height:32})});
+  ground.addChild(detail);
+  const previews=createLandingPreviews(ground,{texture:{bindSource:source=>uploads.push(source)}},{
+    acquire:async()=>texture,release:src=>released.push(src),
+  });
+  const art={ready:false,groups:[detail],props:[]};
+  const game=Object.assign(Object.create(PixiIsland.prototype),{
+    startupPrepared:true,artShown:'pink',arts:new Map([['pink',art]]),landingPreviews:previews,mapSleepers:new Map(),
+  });
+  previews.prepare('pink');
+  assert.equal(game.landingTerrainReady(0),false);
+  await flush();
+  await flush();
+  const preview=ground.children[0];
+  assert.deepEqual(uploads,[texture.source]);
+  assert.equal(preview.visible,false);
+  game.applyIslandReveal(0)();
+  assert(preview.visible);
+  assert(game.landingTerrainReady(1));
+  assert.equal(detail.visible,false);
+  art.ready=detail.visible=true;
+  game.applyIslandReveal(10)();
+  assert(preview.visible);
+  game.applyIslandReveal(260)();
+  assert.deepEqual(ground.children,[detail]);
+  assert(detail.visible);
+  assert(game.landingTerrainReady(260));
+  assert.deepEqual(released,['/pixi-art/globe/pink-ground.svg']);
+  ground.destroy({children:true});texture.destroy(true);
+});
+
 test('islet layer preparation parses each source XML only once',()=>{
   let parses=0;
   const contexts=svgLayerContexts('<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/><g data-piece="a"><circle r="2"/></g><g data-piece="b"><circle r="3"/></g></svg>',text=>{
@@ -121,8 +158,8 @@ test('landing releases the previous island only after destination preparation an
 
 test('destination preloading cannot be driven by walking or zoom and reveal follows warmup',()=>{
   assert(!engine.includes('loadScenery('));assert(!engine.includes('this.buildCopies();'));
-  assert(engine.includes("if(actor?.mode==='sailing')"));
-  const preparation=engine.slice(engine.indexOf('  ensureArt(mapId)'),engine.indexOf('  releaseHomeArt()'));
+  assert(engine.includes("if(this.room && actor?.mode==='sailing'"));
+  const preparation=engine.slice(engine.indexOf('  ensureArt(mapId,'),engine.indexOf('  releaseHomeArt()'));
   assert(preparation.indexOf('await uploadIsland(')<preparation.indexOf('this.arts.set(mapId, art)'));
   assert(!preparation.includes('releasePondDuckies(mapId)'));
   assert(!preparation.includes('icelandLife?.release()'));
@@ -303,7 +340,7 @@ test('startup renders and scrolls the same ocean and Duck while the first island
 test('a failed island art load is retried while you stay there, and a failed picture never stays cached',()=>{
   const lease=engine.slice(engine.indexOf('function acquire('),engine.indexOf('const acquireGround'));
   assert.match(lease,/entry\.promise\.catch\(\(\) => \{if \(textureLeases\.get\(src\) === entry\) textureLeases\.delete\(src\);\}\)/);
-  const preparation=engine.slice(engine.indexOf('  ensureArt(mapId)'),engine.indexOf('  homeTextureNodes()'));
+  const preparation=engine.slice(engine.indexOf('  ensureArt(mapId,'),engine.indexOf('  homeTextureNodes()'));
   const failure=preparation.slice(preparation.indexOf('art did not load'));
   assert.match(failure,/tries<4/);assert.match(failure,/this\.artShown===mapId/);assert.match(failure,/this\.ensureArt\(mapId\)/);
   assert.ok(failure.indexOf('this.ensureArt(mapId)')<failure.indexOf('failed: true'),'retry comes before giving up');

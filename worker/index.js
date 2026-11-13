@@ -552,7 +552,7 @@ export class IslandRoom {
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
-      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
+      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, sailDestination:actor.sailTarget ? actor.sailRoute?.at(-1) ?? actor.sailTarget : null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
         ownBoats:owned.get(info.account) ?? []}) : 'null';
       const named = !!(info.digest && info.expires > now);
       const full = text(islandId, named, info) + self + '}';

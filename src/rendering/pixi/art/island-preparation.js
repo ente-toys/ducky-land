@@ -102,16 +102,18 @@ export async function uploadIsland(renderer, roots, {sources = [], requiredRoots
   let count=0,bytes=0,start=0;
   // Keep the whole-island barrier for healthy pictures, including hidden
   // ground. A failed piece is accepted once and cannot pin readiness forever.
-  let required=await requiredTextureSources(requiredRoots,timeoutMs);
+  const required=await requiredTextureSources(requiredRoots,timeoutMs);
   const pending=new Set([...sources,...textureSources(roots),...required]);
   for (const source of pending) {
     if(cancelled())return;
     if(!source||source===Texture.EMPTY.source||source.destroyed||warmed.has(source))continue;
     const size=(source.pixelWidth??1)*(source.pixelHeight??1)*4;
-    if(!count||bytes+size>batchBytes){await recoverArt(yieldFrame,{label:'Island upload frame',timeoutMs});count=0;bytes=0;start=now();}
-    if(cancelled())return;
-    required=await requiredTextureSources(requiredRoots,timeoutMs);
-    for(const current of required)if(!warmed.has(current))pending.add(current);
+    if(!count||bytes+size>batchBytes){
+      await recoverArt(yieldFrame,{label:'Island upload frame',timeoutMs});
+      count=0;bytes=0;start=now();
+      if(cancelled())return;
+      for(const current of await requiredTextureSources(requiredRoots,timeoutMs))if(!warmed.has(current))pending.add(current);
+    }
     if(source.destroyed||warmed.has(source))continue;
     source.autoGarbageCollect=false;
     await recoverArt(()=>{
@@ -120,7 +122,5 @@ export async function uploadIsland(renderer, roots, {sources = [], requiredRoots
     },{label:source.label||'Island GPU upload',timeoutMs});
     warmed.add(source);count++;bytes+=size;
     if(count>=batchSize||now()-start>=frameBudgetMs)count=0;
-    required=await requiredTextureSources(requiredRoots,timeoutMs);
-    for(const current of required)if(!warmed.has(current))pending.add(current);
   }
 }

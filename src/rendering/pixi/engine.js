@@ -21,6 +21,7 @@ import {easeZoomCamera} from '../shared/zoom-motion.js';
 import {planIslandArt} from './art/island-budget.js';
 import {walkingZoom} from './art/texture-footprint.js';
 import {createGroundPool} from './art/ground-stream.js';
+import {createLandingPreviews} from './art/landing-preview.js';
 import {propZ} from '../shared/flat-props.js';
 import {constrainExploreCamera, zoomToWorldPoint} from '../shared/explore-camera.js';
 import {sampleGlobeSpin, coastGlobeSpin} from '../shared/globe-motion.js';
@@ -195,6 +196,7 @@ export class PixiIsland {
       host.appendChild(this.canvas);
       this.scene = new Container();
       this.ground = new Container();
+      this.landingPreviews = createLandingPreviews(this.ground, this.app.renderer, {acquire, release});
       this.water = new Container();
       this.objects = new Container({sortableChildren: true});
       this.dust = createDust(this.objects);
@@ -277,8 +279,7 @@ export class PixiIsland {
       if (this.disposed) return;
       // The ocean stays in the arrival scene until the main loop takes over.
       this.homeGroundStream=this.groundPool.create(tiles,this.homeGround);
-      // Arrival already renders sea + Duck until all final pieces are uploaded.
-      // A whole-island preview is never exposed here, including restored Home.
+      // The detailed ground owns only final textures. Boat arrivals have a separate preview.
       const base = tiles.length + decks.length, flatBase = base + props.length + art.floating.length + 1;
       this.flats = new Container({label: 'Ground detail'}); this.homeGround.addChild(this.flats);
       await mapArtInFrames(flats,(d, i) => {
@@ -556,15 +557,17 @@ export class PixiIsland {
     const previousArt=this.artShown;
     this.artShown=mapId;
     if(previousArt!==mapId){this.revealMap=null;this.revealWatch={id:mapId,since:performance.now(),forced:false};}
-    this.ensureMapArt(mapId).then(()=>{
+    if(this.player && !this.artReady(mapId))this.landingPreviews?.prepare(mapId);
+    this.landingPreviews?.retain(mapId);
+    this.destinationArt=null;
+    this.ensureMapArt(mapId,{landingPoint:this.player,timeoutMs:30000}).then(()=>{
       if(this.disposed||this.artShown!==mapId||!this.artReady(mapId))return;
       this.showArt(mapId);
-      if(previousArt!==mapId){
+      if(previousArt!==mapId&&previousArt!==this.destinationArt){
         if(previousArt==='home')this.releaseHomeArt();else this.freeArt(previousArt);
       }
-      for(const other of this.arts.keys())if(other!=='home'&&other!==mapId)this.freeArt(other);
-      this.destinationArt=null;
-      if(mapId!=='home')this.releaseHomeArt();
+      for(const other of this.arts.keys())if(other!=='home'&&other!==mapId&&other!==this.destinationArt)this.freeArt(other);
+      if(mapId!=='home'&&this.destinationArt!=='home')this.releaseHomeArt();
     });
     this.showArt(mapId);
     this.arches=mapId === 'home' ? undefined : mapFor(mapId).world.arches ?? [];
@@ -875,6 +878,8 @@ export class PixiIsland {
   }
 
   dock(target) {
+    const spot=this.player?.mode==='sailing' && dockingSpot(this.player,target);
+    if(spot && !spot.islet && spot.islandId!==this.islandId)this.prepareDestination(spot.islandId,spot);
     this.keys.clear();
     this.touchInput={x:0,y:0};
     this.room.disembark(target);
@@ -962,6 +967,10 @@ export class PixiIsland {
     if (this.arrival) return false;
     const destination = this.room ? this.room.destination(point.x, point.y) : this.sim.destination(point.x, point.y);
     if (destination) {
+      if(this.player?.mode==='sailing'){
+        const route=destinationsFor(this.islandId).find(route=>near(route.dock,point,65));
+        this.prepareDestination(route?.destination??this.islandId);
+      }
       this.marker.position.set(...destination);
       this.markerUntil = this.sim.time + 1.5;
       this.audio.play('pop', .045);
@@ -1099,17 +1108,23 @@ export class PixiIsland {
       if (rig.sleeper.poke()) this.playerRig()?.stumble?.({x: player.x-f.x, y: (player.y-f.y)*TILT});
     }
   }
-  ensureArt(mapId) {
+  ensureArt(mapId, landingPoint) {
     if (!this.arts || this.disposed) return;
     if(mapId==='home')return this.ensureHomeArt();
     const existing=this.arts.get(mapId);
-    if(existing?.discarded)return existing.preparation.then(()=>this.ensureArt(mapId));
-    if(existing)return existing.preparation??Promise.resolve(existing);
+    if(existing?.discarded && existing.preparation)return existing.preparation.then(()=>{
+      if(this.artShown===mapId||this.destinationArt===mapId)return this.ensureArt(mapId,landingPoint);
+    });
+    if(existing?.failed && landingPoint)this.arts.delete(mapId);
+    else if(existing)return existing.preparation??Promise.resolve(existing);
     const map=mapFor(mapId);
     if (!map.art) return;
     const pending={id:mapId,ready:false};this.arts.set(mapId,pending);
+    const cancelled=()=>this.disposed||pending.discarded;
     let pendingArt;
-    pending.preparation=loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,prepare:true,dpr:this.app.renderer.resolution,defaultZoom:walkingZoom(this.width,this.height)}).then(async art => {
+    pending.preparation=loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,prepare:true,
+      dpr:this.app.renderer.resolution,defaultZoom:walkingZoom(this.width,this.height),landingPoint,cancelled}).then(async art => {
+      if(!art)return;
       pendingArt = art;
       Object.assign(pending,art);
       if (this.disposed||pending.discarded) {art.destroy(); return;}
@@ -1129,11 +1144,14 @@ export class PixiIsland {
       await recoverArt(()=>sleepers,{label:`theme ${mapId} sleepers`});
       if (this.disposed||pending.discarded) {art.destroy();return;}
       const roots=[...art.groups,...art.props.map(p=>p.sprite),...(this.mapSleepers.get(mapId)??[]).map(s=>s.rig.root)];
-      await uploadIsland(this.app.renderer,roots,{requiredRoots:roots,sources:this.plantReactions.sources(),cancelled:()=>this.disposed||pending.discarded});
+      // A player can already walk on the preview. Keep making bounded upload
+      // progress during that walk so the final scenery can catch up.
+      await uploadIsland(this.app.renderer,roots,{requiredRoots:roots,sources:this.plantReactions.sources(),cancelled,
+        yieldFrame:landingPoint ? () => new Promise(requestAnimationFrame) : nextArtFrame});
       if(this.disposed||pending.discarded){art.destroy();return;}
       art.ready=true;
       this.arts.set(mapId, art);this.artRetries?.delete(mapId);
-      this.scene.addChildAt(art.pondDuckies.root,this.scene.getChildIndex(this.decks));
+      if(art.pondDuckies)this.scene.addChildAt(art.pondDuckies.root,this.scene.getChildIndex(this.decks));
       this.showArt(this.artShown);
       globalThis.__duckyThemeArt = [...this.arts.values()].filter(a => a.ready).map(a => a.id);
     }).catch(error => {
@@ -1258,7 +1276,10 @@ export class PixiIsland {
   freeArt(id) {
     if(id==='home'){this.releaseHomeArt();return;}
     const art=this.arts?.get(id);if(!art)return;
-    if(!art.ready){art.discarded=true;return;}
+    if(!art.ready){
+      if(art.preparation)art.discarded=true;else this.arts.delete(id);
+      return;
+    }
     this.plantReactions?.unregister(id);
     for (const {rig} of this.mapSleepers.get(id) ?? []) rig.dispose();
     this.mapSleepers.delete(id);
@@ -1283,15 +1304,16 @@ export class PixiIsland {
     }
     return this.startupPrepared!==false&&this.artReady(mapId);
   }
-  ensureMapArt(mapId,{timeoutMs=8000}={}) {
+  ensureMapArt(mapId,{timeoutMs=8000,landingPoint}={}) {
     this.mapArtRequests??=new Map();
     if(this.mapArtRequests.has(mapId))return this.mapArtRequests.get(mapId);
-    const request=recoverArt(()=>this.ensureArt(mapId),{
-      label:`Island ${mapId} preparation`,timeoutMs,cancelled:()=>this.disposed,
+    const request=recoverArt(()=>this.ensureArt(mapId,landingPoint),{
+      label:`Island ${mapId} preparation`,timeoutMs,
+      cancelled:()=>this.disposed||Boolean(landingPoint&&this.artShown!==mapId&&this.destinationArt!==mapId),
       valid:()=>!!this.artReady(mapId),
       retry:()=>{const art=this.arts?.get(mapId);if(art?.failed)this.arts.delete(mapId);},
       fallback:()=>{
-        if(this.disposed)return;
+        if(this.disposed||landingPoint&&this.artShown!==mapId&&this.destinationArt!==mapId)return;
         // Retry failure must not keep already mounted pieces hidden. Startup
         // still gates the normal reveal, and the 15s watchdog covers hangs.
         const art=this.arts?.get(mapId);
@@ -1318,6 +1340,25 @@ export class PixiIsland {
     }finally{
       if(!this.disposed){this.startupPrepared=true;this.showArt(this.artShown);}
     }
+  }
+  landingTerrainReady(now) {
+    return this.startupPrepared!==false && (this.landingPreviews?.ready(this.artShown) ||
+      this.revealArtReady(this.artShown) && this.revealMap===this.artShown && now>this.revealAt);
+  }
+
+  prepareDestination(id, point) {
+    const mapId=artOf(id);
+    if(this.destinationArt===mapId)return;
+    if(this.destinationArt)this.freeArt(this.destinationArt);
+    if(mapId===this.artShown){
+      this.destinationArt=null;
+      this.landingPreviews?.retain(this.artShown);
+      return;
+    }
+    this.destinationArt=mapId;
+    this.landingPreviews?.retain(this.artShown,mapId);
+    if(!this.artReady(mapId))this.landingPreviews?.prepare(mapId);
+    void this.ensureMapArt(mapId,{landingPoint:point??harborOf(id).land,timeoutMs:30000});
   }
 
   liveCopies() {
@@ -1562,14 +1603,15 @@ export class PixiIsland {
     }
     this.stepTrip();
     const actor = this.player;
-    if(actor?.mode==='sailing') {
-      const target=actor.sailRoute?.at(-1)??actor.sailTarget??{x:actor.x-Math.sin(actor.turn??0)*4000,y:actor.y-Math.cos(actor.turn??0)*4000};
-      const routes=destinationsFor(this.islandId);
-      const next=target?routes.reduce((best,r)=>!best||Math.hypot(r.dock.x-target.x,r.dock.y-target.y)<Math.hypot(best.dock.x-target.x,best.dock.y-target.y)?r:best,null):null;
-      if(next){
-        const mapId=artOf(next.destination);
-        if(this.destinationArt&&this.destinationArt!==mapId&&this.destinationArt!==this.artShown)this.freeArt(this.destinationArt);
-        this.destinationArt=mapId;void this.ensureMapArt(mapId);
+    if(this.room && actor?.mode==='sailing' && now>=(this.nextShoreCheck??0)) {
+      this.nextShoreCheck=now+250;
+      const target=actor.sailTarget && (actor.sailRoute?.at(-1)??actor.sailDestination??actor.sailTarget);
+      const next=target&&destinationsFor(this.islandId).find(route=>near(route.dock,target,65));
+      if(next)this.prepareDestination(next.destination);
+      else {
+        const spot=dockingSpot(actor);
+        if(spot&&!spot.islet&&spot.islandId!==this.islandId)this.prepareDestination(spot.islandId,spot);
+        else if(!target&&(this.keys.size||this.touchInput.x||this.touchInput.y))this.prepareDestination(this.islandId);
       }
     }
     const arrivalName = this.room ? this.room.arrival : this.offlineArrival;
@@ -1791,7 +1833,7 @@ export class PixiIsland {
     this.arts?.get(this.artShown)?.icelandLife?.current?.update(t, reduced, visible, flatVisible && this.scene.visible, player, live);
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible, now);
-    this.karmaView?.update(dt,t,reduced,visible);
+    this.karmaView?.update(dt,t,reduced,visible,this.landingTerrainReady(now));
     this.boatBuild?.update(dt,t,reduced,visible);
     this.plantReactions?.update(t);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
@@ -1935,6 +1977,9 @@ export class PixiIsland {
     if(!ready){this.revealMap=null;this.revealAt=null;}
     else if(this.revealMap!==this.artShown){this.revealMap=this.artShown;this.revealAt=now;}
     const progress=ready?Math.min(1,Math.max(0,(now-this.revealAt)/250)):0;
+    const showPreview=this.startupPrepared && (progress<1 || !this.artReady(this.artShown) || this.arts?.get(this.artShown)?.degradedReady);
+    this.landingPreviews?.show(showPreview?this.artShown:null);
+    if(!showPreview && progress===1)this.landingPreviews?.retain(null,this.destinationArt);
     if(progress===1)return ()=>{};
     const alpha=1-(1-progress)**3,restore=[];
     const art=this.arts?.get(this.artShown);
@@ -2099,6 +2144,7 @@ export class PixiIsland {
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());
     this.snowfall?.destroy();
+    this.landingPreviews?.retain();
     this.karmaView?.destroy();
     this.boatBuild?.destroy();
     this.groundPool?.destroy();

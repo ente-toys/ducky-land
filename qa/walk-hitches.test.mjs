@@ -49,15 +49,15 @@ test('plant registration awaits worker colour parsing; walking and island return
 });
 
 test('deferred Home reactions and every destination finish registration before upload and reveal',()=>{
-  assert(engine.includes("if(prepareHome)await this.plantReactions.register('home'"));
-  for(const [start,end]of [['  ensureArt(mapId)','  homeTextureNodes()'],['  ensureHomeArt()','  releasePondDuckies(id)']]){
+  assert(engine.includes("if(prepareHome)await settleArtStep(()=>this.plantReactions.register('home'"));
+  for(const [start,end]of [['  ensureArt(mapId,','  homeTextureNodes()'],['  ensureHomeArt()','  releasePondDuckies(id)']]){
     const preparation=engine.slice(engine.indexOf(start),engine.indexOf(end));
-    const register=preparation.indexOf('await this.plantReactions');
+    const register=preparation.search(/await (?:recoverArt|settleArtStep)\(\(\)=>this\.plantReactions\??\.register/);
     assert(register>=0);assert(register<preparation.indexOf('await uploadIsland('));
   }
   const mounted=engine.slice(engine.indexOf('  async mount('),engine.indexOf('  listen('));
-  assert(mounted.indexOf('await this.audio.prepare()')<mounted.indexOf('this.ready = true'));
-  assert(mounted.indexOf('await prepareDuckPortrait(')<mounted.indexOf('this.ready = true'));
+  const startup=mounted.indexOf('await this.prepareStartupArt()');
+  assert(startup>=0 && startup<mounted.indexOf('this.ready = true'));
 });
 
 test('first real movement keydown only resumes prepared audio and performs no asset, texture or sample work',async t=>{

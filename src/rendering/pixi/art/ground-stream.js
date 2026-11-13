@@ -120,7 +120,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       let dead=false;
       const resolutionTiles=[...new Map(entries.map(t=>[[t.screenResolution,t.rasterDensity,t.resolution,t.screenResolution?0:tileResolution(t,1)].join('|'),t])).values()];
       const stream={id:++streamId,entries,resolutionTiles,
-        async prepare({zoom=1.8,dpr=2,resolutions=new Map(),timeoutMs=ART_TIMEOUT_MS}={}) {
+        async prepare({zoom=1.8,dpr=2,resolutions=new Map(),timeoutMs=ART_TIMEOUT_MS,landingPoint,cancelled=()=>false}={}) {
           if(stream.preparing)return stream.preparing;
           if(dead)return;
           stream.pinned=true;
@@ -135,16 +135,34 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
           const fixed=new Map(resolutions);
           for(const tile of entries)if(!resolutions.has(tile.src))fixed.set(tile.src,Math.max(fixed.get(tile.src)??0,tileResolution(tile,zoom,dpr)));
           stream.preparing=(async()=>{
-            const results=await Promise.allSettled([...new Set(entries.map(t=>t.src))].map(async src=>{
-              const tile=entries.find(t=>t.src===src),resolution=fixed.get(src);
+            const bySource=new Map();
+            for(const tile of entries){
+              if(!bySource.has(tile.src))bySource.set(tile.src,[]);
+              bySource.get(tile.src).push(tile);
+            }
+            const groups=[...bySource];
+            if(landingPoint){
+              const distance=tile=>Math.hypot(
+                Math.max(tile.x-landingPoint.x,0,landingPoint.x-tile.x-tile.width),
+                Math.max(tile.y-landingPoint.y,0,landingPoint.y-tile.y-tile.height));
+              const closest=new Map(groups.map(([src,tiles])=>[src,Math.min(...tiles.map(distance))]));
+              groups.sort(([a],[b])=>closest.get(a)-closest.get(b));
+            }
+            const prepareSource=async ([src,tiles])=>{
+              const tile=tiles[0],resolution=fixed.get(src);
               const lease={src,release:tile.release};leases.set(src,lease);
               lease.texture=await acquireArt((src,r)=>tile.acquire(src,r,{priority:-1}),tile.release,src,resolution,{timeoutMs,cancelled:()=>dead||disposed});
               if(dead){if(!lease.released)tile.release(src);leases.delete(src);return;}
-              for(const entry of entries)if(entry.src===src){
+              for(const entry of tiles){
                 entry.sprite.texture=lease.texture;fitGroundSprite(entry,lease.texture);entry.sprite.visible=entry.render!==false;
               }
+            };
+            let cursor=0;
+            const results=await Promise.allSettled(Array.from({length:Math.min(8,groups.length)},async()=>{
+              while(!dead&&!cancelled()&&cursor<groups.length)await prepareSource(groups[cursor++]);
             }));
             const failed=results.find(r=>r.status==='rejected');if(failed)console.warn('Ground preparation: accepting missing piece',failed.reason);
+            if(cancelled())return;
             if(!dead){
               stream.prepared=true;
             }
