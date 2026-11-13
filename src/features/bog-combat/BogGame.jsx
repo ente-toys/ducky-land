@@ -2,7 +2,6 @@ import {useEffect,useRef,useState} from 'react';
 import {RULES} from './rules.js';
 import {attachBogCombat} from './attach.js';
 import './combat.css';
-import DodgePip from './DodgePip.jsx';
 import BogTutorial from './Tutorial.jsx';
 
 const popperIcon=team=>`/pixi-art/themes/bog-arena/hud/${team==='karma'?'karma-padlock':'evil-rainbow'}-popper.svg`;
@@ -23,15 +22,33 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
     return()=>{active=false;abort.abort();clearTimeout(timeout);current?.leave(false);if(layer.current===current)layer.current=null;};
   },[engine,team,name,profile,navigation,blockers,attempt]);
   const {self,snapshot,status,error}=state;
-  return <aside className="bog-combat-hud" aria-label="Bog paint game">
-    {self&&<BogTutorial identity={accountId??profile??'local'} self={self} engine={engine}/>}
-    <div className="bog-combat-score"><span>SCORE {self?.stats.score??0}</span><span>{self?.stats.tags??0} TAGS</span></div>
-    <p>Team {(self?.team??team)==='karma'?'KARMA':'EVIL'} · {self?.stats.tags??0} kills · {self?.stats.medals??0} medals{self&&` · ${self.karma??0} feathers`}</p>
-    <div className="bog-combat-lives" role="img" aria-label={`${self?.lives??RULES.lives} lives left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<(self?.lives??RULES.lives)?'':'lost'}>♥</span>)}</div>
-    <p><img className="bog-combat-popper-icon" src={popperIcon(self?.team??team)} alt="" aria-hidden="true"/>{self?.out?'Out of lives! Paddling to an islet…':self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-snapshot.time))}…`:self?`${self.shieldUntil>snapshot.time?`Hidden ${Math.ceil(self.shieldUntil-snapshot.time)}s · `:self.bushHidden?'Hidden in bush · ':''}Paint ${self.ammo} / 12`:'Entering the bog…'}<DodgePip self={self} time={snapshot?.time}/></p>
-    <small>WASD / arrows · Shift to run · Q to hop · Space, J or left click to shoot · Esc to leave</small>
-    {status!=='connected'&&<p role="status">{error||'Connecting…'}{status==='reconnecting'?' Reconnecting…':''}</p>}
-    {status==='disconnected'&&<button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button>}
-    <button onClick={()=>{if(layer.current)layer.current.leave();else leave.current(null);}}>{returnLabel}</button>
+  const mine=self?.team??team,lives=self?.lives??RULES.lives,ammo=self?.ammo??RULES.ammoCapacity,now=snapshot?.time??0;
+  const note=self?.out?'Out of lives! Paddling to an islet…':self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-now))}…`
+    :self?.shieldUntil>now?`Hidden ${Math.ceil(self.shieldUntil-now)}s`:self?.bushHidden?'Hidden in bush':null;
+  // Game HUD: your score top left, the team race top centre, the way out top right; hearts and paint at the bottom
+  return <aside className="bog-hud" aria-label="Bog paint game">
+    <div className="bog-hud-card bog-hud-me">
+      <small>You · Team {mine==='karma'?'Karma':'Evil'}</small>
+      <b>{self?.stats.tags??0} splats · {self?.stats.score??0} pts</b>
+      {status!=='connected'&&<span role="status">{error||'Connecting…'}{status==='reconnecting'?' Reconnecting…':''}</span>}
+      {status==='disconnected'&&<button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button>}
+    </div>
+    <div className="bog-hud-card bog-hud-race" aria-label={`Evil ${snapshot?.scores.evil??0}, Karma ${snapshot?.scores.karma??0}`}>
+      <span className="bog-hud-evil">Evil {snapshot?.scores.evil??0}</span><span className="bog-hud-karma">Karma {snapshot?.scores.karma??0}</span>
+    </div>
+    <button className="bog-hud-leave" onClick={()=>{if(layer.current)layer.current.leave();else leave.current(null);}}>{returnLabel}</button>
+    <div className="bog-hud-bottom">
+      {self&&<BogTutorial identity={accountId??profile??'local'} self={self} engine={engine}/>}
+      <div className="bog-hud-card bog-hud-bar">
+        <div className="bog-hud-group"><small>Hearts</small>
+          <div className="bog-hud-hearts" role="img" aria-label={`${lives} of ${RULES.lives} hearts left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<lives?'':'lost'}>♥</span>)}</div></div>
+        <span className="bog-hud-sep" aria-hidden="true"/>
+        <div className="bog-hud-group"><small>{note?'Status':`Paint ${ammo}/${RULES.ammoCapacity}`}</small>
+          <div className="bog-hud-ammo"><img className="bog-combat-popper-icon" src={popperIcon(mine)} alt="" aria-hidden="true"/>
+            {note?<span className="bog-hud-note" role="status">{note}</span>
+              :<div className={`bog-hud-paint bog-hud-paint-${mine}`} role="img" aria-label={`Paint ${ammo} of ${RULES.ammoCapacity}`}>{Array.from({length:RULES.ammoCapacity},(_,i)=><i key={i} className={i<ammo?'':'empty'}/>)}</div>}
+          </div></div>
+      </div>
+    </div>
   </aside>;
 }

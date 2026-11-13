@@ -36,14 +36,15 @@ test('strict-mode dock chooses either side, returns with totals/medal case and r
   const click=async text=>{const button=[...document.querySelectorAll('button')].find(b=>b.textContent.includes(text));assert.ok(button,text);await act(async()=>button.click());};
   const render=async options=>{await act(async()=>root.render(React.createElement(React.StrictMode,null,React.createElement(BogEntry,{...props,...options}))));};
   try{
-    await render();assert.match(document.body.textContent,/Pick your side/);assert.equal(document.querySelector('.bog-combat-evil').disabled,false);
-    await click('Team EVIL');assert.equal(engine.bogCombat.room.client.self.team,'evil');assert.match(document.querySelector('aside').textContent,/5 kills/);
+    await render();assert.match(document.body.textContent,/Admit one Ducky.*Booquack Bog/);await click('Enter');
+    assert.match(document.body.textContent,/Pick your side/);assert.equal(document.querySelector('.bog-pick-evil').disabled,false);
+    await click('Evil');assert.equal(engine.bogCombat.room.client.self.team,'evil');assert.match(document.querySelector('aside').textContent,/5 splats/);
     const evilIcon=document.querySelector('.bog-combat-popper-icon').getAttribute('src');
     assert.doesNotMatch(decodeURIComponent(evilIcon),/karma-padlock/);
     assert.equal(sockets.filter(s=>s.url.searchParams.has('team')&&s.readyState===1).length,1,'strict effects leave exactly one participant');
     await click('Back to boat');assert.equal(engine.room,oldRoom);assert.equal(engine.bogCombat,undefined);assert.equal(returns,1);
     assert.match(document.body.textContent,/Back at the dock/);assert.match(document.querySelector('dl').textContent,/Score50/);assert.match(document.querySelector('ul').textContent,/Earned/);
-    await click('Pick a team');await click('Team KARMA');assert.equal(engine.bogCombat.room.client.self.team,'karma');
+    await click('Pick a team');await click('Karma');assert.equal(engine.bogCombat.room.client.self.team,'karma');
     const karmaIcon=document.querySelector('.bog-combat-popper-icon').getAttribute('src');
     assert.notEqual(karmaIcon,evilIcon);assert.match(decodeURIComponent(karmaIcon),/karma-padlock/);
     await click('Back to boat');await click('Back to boat');assert.equal(closed,1);

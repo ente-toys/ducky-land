@@ -3,6 +3,7 @@ import {ArenaLobbyClient,profileToken} from './client.js';
 import {MEDALS} from './medals.js';
 import {emptyStats} from './rules.js';
 import BogGame from './BogGame.jsx';
+import {BogWelcome,BogTeamPick} from './BogEntryScreens.jsx';
 import './combat.css';
 
 export function trapFocus(event) {
@@ -19,7 +20,7 @@ export function MedalCase({medals={}}) {
   return <ul className="bog-combat-medals">{MEDALS.map(m=><li key={m.id}><strong>{m.name}</strong><span>{medals[m.id]?'Earned':m.detail}</span></li>)}</ul>;
 }
 
-export default function BogDock({engine,name='Ducky',profile:providedProfile,onLeave=()=>{},onReturnToDock=()=>{},initialPanel='teams',leaveLabel='Back to boat',...options}) {
+export default function BogDock({engine,name='Ducky',profile:providedProfile,onLeave=()=>{},onReturnToDock=()=>{},initialPanel='welcome',leaveLabel='Back to boat',...options}) {
   const [profile]=useState(()=>providedProfile??profileToken()),[team,setTeam]=useState(null),[panel,setPanel]=useState(initialPanel);
   const [data,setData]=useState(null),[status,setStatus]=useState('connecting'),[attempt,setAttempt]=useState(0),[lastVisit,setLastVisit]=useState(null);
   const dialog=useRef(null),leave=useRef(onLeave);leave.current=onLeave;
@@ -43,22 +44,16 @@ export default function BogDock({engine,name='Ducky',profile:providedProfile,onL
   const back=totals=>{if(totals?.out){leave.current();return;}onReturnToDock();setLastVisit(totals);setTeam(null);setPanel('summary');};
   if(team)return <BogGame {...options} engine={engine} team={team} name={name} profile={profile} onLeave={back}/>;
   const connected=status==='connected'&&data,stats=data?.stats??lastVisit?.stats??emptyStats(),medals=data?.medalCase??lastVisit?.medalCase??{};
+  const statusLine=<p className="bog-entry-status" role="status">{status==='disconnected'?<>The bog is unavailable. <button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button></>:status==='connecting'?'Connecting to the bog…':'Ready to make a splash.'}</p>;
+  if(panel==='welcome')return <BogWelcome dialog={dialog} onEnter={()=>setPanel('teams')} onLeave={onLeave} status={statusLine}/>;
+  if(panel==='teams')return <BogTeamPick dialog={dialog} data={connected?data:null} onPlay={setTeam} onLeave={onLeave} leaveLabel={leaveLabel} status={statusLine}/>;
   return <div className="bog-combat-dock">
     <section ref={dialog} className="bog-combat-card" role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="bog-combat-heading" onKeyDown={trapFocus}>
       <header><small>BOOQUACK BOG · 5 FEATHERS PER ENTRY</small><button onClick={onLeave}>{leaveLabel}</button></header>
-      <h1 id="bog-combat-heading">{panel==='teams'?'Pick your side.':panel==='case'?'Your medal case':'Back at the dock'}</h1>
-      {panel==='teams'?<>
-        <p>Drop in, make a splash. Any team size, leave whenever you like.</p>
-        <div className="bog-combat-teams">{['karma','evil'].map(id=><button className={`bog-combat-team bog-combat-${id}`} key={id} disabled={!connected} onClick={()=>setTeam(id)}>
-          <strong>Team {id==='karma'?'KARMA':'EVIL'}</strong>
-          <span>{connected?`${data.counts[id]} playing`:'Checking players…'}</span>
-          <small>{connected&&data.suggested===id?'Could use a duck':'Any team size welcome'}</small>
-        </button>)}</div>
-        <p>WASD or arrows to walk and turn. Shift to run. Hold Space to shoot forward, or use J or left click.</p>
-        <p>Five lives per entry. Each tag costs a life. Respawn hidden at your base for 7 seconds. Shooting ends hiding.</p>
-      </>:<><p>Your lifetime progress carries over every visit.</p><LifetimeStats stats={stats}/><MedalCase medals={medals}/></>}
-      <footer><span>{Object.keys(medals).length} / {MEDALS.length} medals earned</span><button onClick={()=>setPanel(panel==='teams'?'case':'teams')}>{panel==='teams'?'Medal case':'Pick a team'}</button></footer>
-      <p role="status">{status==='disconnected'?<>The bog is unavailable. <button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button></>:status==='connecting'?'Connecting to the bog…':'Ready to make a splash.'}</p>
+      <h1 id="bog-combat-heading">Back at the dock</h1>
+      <p>Your lifetime progress carries over every visit.</p><LifetimeStats stats={stats}/><MedalCase medals={medals}/>
+      <footer><span>{Object.keys(medals).length} / {MEDALS.length} medals earned</span><button onClick={()=>setPanel('teams')}>Pick a team</button></footer>
+      {statusLine}
     </section>
   </div>;
 }
