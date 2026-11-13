@@ -1,5 +1,6 @@
 import './art/whole-svg-loader.js';
 import {uploadIsland, nextArtFrame, markArtActivity} from './art/island-preparation.js';
+import {renderPolaroid} from '../shared/polaroid.js';
 import {ART_TEXTURE} from './art/art-texture.js';
 import {createPirateFleet,pirateBoatPoint} from '../../gameplay/pirate-fleet.js';
 import {createPirateView} from './pirate-view.js';
@@ -127,7 +128,8 @@ function nextIsland(from, to) {
 }
 
 export class PixiIsland {
-  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, randomArrival = false, onArrival = () => {}, onGlobeChange = () => {}} = {}) {
+  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, randomArrival = false, onArrival = () => {}, onGlobeChange = () => {}, onPhotoReady} = {}) {
+    this.onPhotoReady = onPhotoReady;
     this.onGlobeChange = onGlobeChange; this.globeOpen = false;
     this.transparent=transparent;this.renderResolution=renderResolution;
     this.onInteriorChange = onInteriorChange;
@@ -1392,7 +1394,7 @@ export class PixiIsland {
         Object.assign(this.target, {x: player.x, y: player.y - 90}); Object.assign(this.camera, this.target, {zoom: this.camera.zoom}); this.follow = true;
       }
       if (this.interior?.active && this.globeOpen) this.closeGlobe();   // back to walking zoom indoors
-      if (this.interior?.active) {this.app.render(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}
+      if (this.interior?.active) {this.renderScreen(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}
     }
     if(player?.action===1&&(input.x||input.y)&&!this.fitMode&&!this.birdEye&&!this.gestures.pointers.size){
       const x=this.width/2+(player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(player.y-this.camera.y)*this.camera.zoom*TILT;
@@ -1605,14 +1607,14 @@ export class PixiIsland {
     if (this.worldView) this.worldView.liveCopies=target => this.renderLiveCopies(target, copies, visitors);
     this.isletView?.update(this.islandId,this.camera,this.viewSpan.width,this.viewSpan.height,(this.globeT||0)>.001);
     if (this.worldView) this.worldView.globeWanted=!this.archipelago || !this.walkSolo();
-    this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced);
-    if (this.nameLayer) {
-      const tags=1-(this.worldView?.pinIn ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
-      if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
-    }
-    this.scene.visible=this.artReady(this.artShown)&&!this.interior?.active;
-    this.app.render();
-    if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies, visitors);
+    this.renderScreen(() => {
+      this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced);
+      if (this.nameLayer) {
+        const tags=1-(this.worldView?.pinIn ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
+        if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
+      }
+      this.scene.visible=this.artReady(this.artShown)&&!this.interior?.active;
+    }, copies, visitors);
     for (const {o} of visitors) o.visible=true;
     if (this.frame % 15 === 0) {
       const d = this.canvas.dataset;
@@ -1645,6 +1647,60 @@ export class PixiIsland {
       d.waterSplashes = String(this.waterFX?.stats.splashes || 0);
     }
     this.raf = requestAnimationFrame(time => this.tick(time));
+  }
+
+  capturePhoto() {
+    if (this.disposed || !this.photoReady || this.pendingPhoto) {
+      return Promise.reject(new Error('The camera is unavailable.'));
+    }
+    return new Promise((resolve, reject) => {
+      const request = {resolve, reject};
+      request.timeout = setTimeout(() => {
+        this.finishPhoto(request, new Error('The photo timed out.'));
+      }, 2000);
+      this.pendingPhoto = request;
+    });
+  }
+
+  finishPhoto(request, error, blob) {
+    if (this.pendingPhoto !== request) return;
+    this.pendingPhoto = null;
+    clearTimeout(request.timeout);
+    if (error) request.reject(error);
+    else request.resolve(blob);
+  }
+
+  renderPhotoFrame(request) {
+    if (!this.host.clientWidth || !this.host.clientHeight || this.app.renderer.gl?.isContextLost()) return;
+    if (!this.photoReady) {
+      this.photoReady = true;
+      this.onPhotoReady?.();
+    }
+    if (!request || request.encoding) return;
+    request.encoding = true;
+    clearTimeout(request.timeout);
+    try {
+      renderPolaroid(this.host, [this.canvas], '#86cee6').then(
+        blob => this.finishPhoto(request, null, blob), error => this.finishPhoto(request, error));
+    } catch (error) {
+      this.finishPhoto(request, error);
+    }
+  }
+
+  renderScreen(updateWorld, copies, visitors) {
+    const request = this.pendingPhoto;
+    // The globe can project a texture of this same scene during a handoff.
+    const ring = request && !request.encoding ? this.playerRig()?.playerRing : null;
+    const renderable = ring?.renderable;
+    if (ring) ring.renderable = false;
+    try {
+      updateWorld?.();
+      this.app.render();
+      if (copies && !(this.globeT > 0)) this.renderLiveCopies(undefined, copies, visitors);
+      this.renderPhotoFrame(request);
+    } finally {
+      if (ring) ring.renderable = renderable;
+    }
   }
 
   playerRig() {
@@ -1769,6 +1825,7 @@ export class PixiIsland {
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
+    if (this.pendingPhoto) this.finishPhoto(this.pendingPhoto, new Error('The game view was closed.'));
     cancelAnimationFrame(this.raf);
     this.observer?.disconnect();
     this.cleanups.forEach(fn => fn());

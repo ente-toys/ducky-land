@@ -489,5 +489,5 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
   const stumble=(away={x:-1,y:0})=>{const l=Math.hypot(away.x,away.y)||1;stumbleDir={x:away.x/l,y:away.y/l};stumbleT=0;};
   const sleeper={poke:()=>nap.root.visible&&nap.poke(),bounds:()=>nap.root.getBounds()};
   const showRing=on=>{feedback.ring.visible=Boolean(isPlayer&&on);};
-  return {root,update,dispose,setOutfit,setAppearance,setKarma,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,snowCover,trackSnow:snowCover.track,clearSnow:snowCover.clear,animationNames:duckAnimationNames};
+  return {root,update,dispose,setOutfit,setAppearance,setKarma,playerRing:feedback.ring,karmaTarget:()=>quivers.get(current)?.target??{x:40,y:-110},arrive,stumble,sleeper,showRing,snowCover,trackSnow:snowCover.track,clearSnow:snowCover.clear,animationNames:duckAnimationNames};
 }
