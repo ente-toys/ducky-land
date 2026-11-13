@@ -2,6 +2,7 @@ import {BogCombatRoom} from './room.js';
 import {getBogBlockers} from './blockers.js';
 import {attachGunC,loadGunC} from './held-gun.js';
 import {createCombatEffects,createTeamMarker} from './effects.js';
+import {isBushHidden} from './hide-bushes.js';
 import {bindCombatInput} from './input.js';
 import {createKnockout,loadKnockoutArt} from './knockout.js';
 import {TILT} from '../../rendering/shared/camera.js';
@@ -49,9 +50,9 @@ export async function attachBogCombat(engine,{onLeave=()=>{},onSnapshot=()=>{},o
     for(const pose of poses){
       const rig=this.liveRigs.get(pose.id)?.rig;if(!rig)continue;
       let entry=attachments.get(pose.id);
-      if(!entry){entry={rig,readability:createBogReadability(rig),ability:createAbilityView(this.objects,rig,{tilt:TILT}),gun:attachGunC(rig,guns,pose.team,this.objects),marker:createTeamMarker(this.objects,pose,{tilt:TILT}),knockout:createKnockout(this.objects,rig,{tilt:TILT,art:ghostArt})};attachments.set(pose.id,entry);}
+      if(!entry){entry={rig,readability:createBogReadability(rig),ability:createAbilityView(this.objects,rig,{tilt:TILT}),gun:attachGunC(rig,guns,pose.team,this.objects),marker:createTeamMarker(this.objects,pose,{tilt:TILT,self:pose.id===room.client.self?.id}),knockout:createKnockout(this.objects,rig,{tilt:TILT,art:ghostArt})};attachments.set(pose.id,entry);}
       rig.showRing?.(false);
-      entry.readability.update();
+      entry.readability.update(pose.alive!==false&&isBushHidden(pose,combatTime));
       entry.knockout.update(pose,combatTime,snapshot,reducedMotion);
       entry.ability.update(pose,combatTime,reducedMotion);
       entry.gun.update(pose);entry.marker.update(pose,rig,combatTime);

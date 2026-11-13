@@ -3,13 +3,14 @@ import {PAINT,RULES} from './rules.js';
 import {traceShot} from './physics.js';
 import {isCombatHidden} from './hide-bushes.js';
 import {BOG_TEAM_COLOURS} from './readability.js';
+import {PALETTE} from '../../rendering/shared/palette.js';
 
-export function createTeamMarker(objects,pose,{tilt=1}={}) {
-  const root=new Container({label:'Bog team marker'}),ring=new Graphics({label:'Bog saturated team ring'});
+export function createTeamMarker(objects,pose,{tilt=1,self=false}={}) {
+  // name tag and hidden icon for everyone; only your own Ducky also gets the islands' coral player ring at its feet
+  const root=new Container({label:'Bog team marker'});
+  const ring=self?new Graphics({label:'Your player ring'}).ellipse(0,.55,36.7,8.6).stroke({color:PALETTE.coral,width:2.2}):null;
   root.upright=true;
   const colours=BOG_TEAM_COLOURS[pose.team];
-  ring.circle(0,0,31).stroke({color:colours.rim,width:11});
-  ring.circle(0,0,31).stroke({color:colours.ring,width:7});
   const tag=new Text({label:'Bog team name',text:pose.name,style:{fontFamily:'system-ui',fontSize:14,fontWeight:'700',fill:colours.ring,stroke:{color:0x23182f,width:4}}});
   const hiddenIcon=new Graphics({label:'Bog hidden eye-slash'});
   hiddenIcon.roundRect(-15,-11,30,22,7).fill(0x23182F);
@@ -18,12 +19,12 @@ export function createTeamMarker(objects,pose,{tilt=1}={}) {
   hiddenIcon.moveTo(-10,-8).lineTo(10,8).stroke({color:0x23182F,width:5,cap:'round'});
   hiddenIcon.moveTo(-10,-8).lineTo(10,8).stroke({color:0xFFFFFF,width:2.5,cap:'round'});
   hiddenIcon.y=-220;hiddenIcon.visible=false;
-  tag.anchor.set(.5,1);tag.y=-174;root.addChild(ring,tag,hiddenIcon);objects.addChild(root);
+  tag.anchor.set(.5,1);tag.y=-174;if(ring)root.addChild(ring);root.addChild(tag,hiddenIcon);objects.addChild(root);
   return {root,update(p,rig,time){
     root.position.set(rig.root.x,rig.root.y);root.zIndex=rig.root.zIndex-.1;root.visible=rig.root.visible&&p.alive;
     const hidden=isCombatHidden(p,time);
     tag.text=p.alive&&p.shieldUntil>time?`${p.name} · Hidden ${Math.ceil(p.shieldUntil-time)}s`:hidden?`${p.name} · Hidden in bush`:p.name;
-    tag.scale.y=hiddenIcon.scale.y=1/tilt;ring.alpha=1;hiddenIcon.visible=hidden;
+    tag.scale.y=hiddenIcon.scale.y=1/tilt;hiddenIcon.visible=hidden;
   },dispose(){root.removeFromParent();root.destroy({children:true});}};
 }
 
