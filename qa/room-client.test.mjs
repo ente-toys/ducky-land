@@ -242,7 +242,7 @@ test('sailing prediction uses bounded motion and sends the authoritative island 
   const {room,sent}=setup();
   room.snapshot(packet(1,PLAIN,'sailing'));
   room.step(.05,{x:0,y:1});
-  assert.equal(room.player.y,6419);
+  assert.ok(Math.abs(room.player.y-(6400+570*.05))<1e-6);
   assert.equal(sent.at(-1).islandId,PLAIN);
   room.disembark();
   assert.equal(room.player.docking,true);

@@ -81,11 +81,14 @@ for(const theme of selected?[id]:ids){
  const groundDefsCount=defs.length,groundPaint=[...paint];
  paint.splice(bridgeStart);
  for(const p of [...art.props].sort((a,b)=>a.y-b.y))add(p,'prop');
+ // Pagepond's ground tiles paint their own sea, tile by tile, so no single sea box covers the map: clip that
+ // terrain to the island's coastlines instead, leaving the sea transparent for the globe.
+ const coastClip=theme==='library'?`<clipPath id="coast"><path d="${map.world.coastRings.map(r=>'M'+r.map(([x,y])=>num((x-map.origin.x)*K)+' '+num((y-map.origin.y)*K)).join('L')+'Z').join('')}"/></clipPath>`:'';
  let globe,ground,quality;
  for(let level=0;level<10;level++){
   quality={tolerance:+(.2+level*.1).toFixed(2),minArea:+(.12+level*.04).toFixed(2),paletteDistance:0,quantum:level<2?.25:.5};
-  const terrainText=markup(terrain,quality),symbols=defs.map(({name,size,records})=>`<symbol id="${name}" viewBox="0 0 ${num(size.w)} ${num(size.h)}" preserveAspectRatio="none">${markup(records,quality)}</symbol>`);
-  const wrap=(groundOnly)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${symbols.slice(0,groundOnly?groundDefsCount:symbols.length).join('')}</defs>${terrainText}${(groundOnly?groundPaint:paint).join('')}</svg>\n`;
+  const terrainText=coastClip?`<g clip-path="url(#coast)">${markup(terrain,quality)}</g>`:markup(terrain,quality),symbols=defs.map(({name,size,records})=>`<symbol id="${name}" viewBox="0 0 ${num(size.w)} ${num(size.h)}" preserveAspectRatio="none">${markup(records,quality)}</symbol>`);
+  const wrap=(groundOnly)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${coastClip}${symbols.slice(0,groundOnly?groundDefsCount:symbols.length).join('')}</defs>${terrainText}${(groundOnly?groundPaint:paint).join('')}</svg>\n`;
   ground=dropSeaBox(wrap(true),W,H);globe=dropSeaBox(wrap(false),W,H);
   if(Buffer.byteLength(globe)<MAX_VECTOR_BYTES&&Buffer.byteLength(ground)<MAX_VECTOR_BYTES)break;
  }

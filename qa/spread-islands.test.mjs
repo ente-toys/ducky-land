@@ -24,7 +24,7 @@ test('7 unique sphere patches: Iceland on the North Pole, Bog on the South Pole,
   const map=mapOf(island.id);
   assert.deepEqual([island.width,island.height],[map.width,map.height],island.id+' uses its delivered map size');
  }
- assert.equal(SAIL_SPEED,380);
+ assert.equal(SAIL_SPEED,570);
 });
 test('every real map fits inside each sailing envelope, including negative origins and non-neighbour shores',()=>{
  for(const from of WORLD_ISLANDS){

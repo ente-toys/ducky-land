@@ -969,9 +969,13 @@ export class PixiIsland {
     if (this.archipelago) {
       constrainExploreCamera(camera,this.archipelago.bounds);
       if (this.globeOpen || this.player?.mode === 'sailing') return;
-      // walking view: keep the camera over your own island so zooming out frames it, never a neighbour
-      const m=this.mapHere(), zoom=Math.max(camera.zoom,1e-6), rx=Math.max(0,m.width/2-this.width/(2*zoom)), ry=Math.max(0,m.height/2-this.height/(2*zoom*TILT));
-      camera.x=clamp(camera.x,m.cx-rx,m.cx+rx); camera.y=clamp(camera.y,m.cy-ry,m.cy+ry);
+      // walking view: keep the camera over your own island so zooming out frames it, never a neighbour. A Duck on
+      // an islet stands outside that island's box, so the box grows to take the Duck in (pad: a little sea round it).
+      const m=this.mapHere(), me=this.player, pad=1200, zoom=Math.max(camera.zoom,1e-6);
+      let x0=m.cx-m.width/2,x1=m.cx+m.width/2,y0=m.cy-m.height/2,y1=m.cy+m.height/2;
+      if(me&&Number.isFinite(me.x+me.y)){x0=Math.min(x0,me.x-pad);x1=Math.max(x1,me.x+pad);y0=Math.min(y0,me.y-pad);y1=Math.max(y1,me.y+pad);}
+      const rx=Math.max(0,(x1-x0)/2-this.width/(2*zoom)), ry=Math.max(0,(y1-y0)/2-this.height/(2*zoom*TILT));
+      camera.x=clamp(camera.x,(x0+x1)/2-rx,(x0+x1)/2+rx); camera.y=clamp(camera.y,(y0+y1)/2-ry,(y0+y1)/2+ry);
       return;
     }
     const bounds=this.room?seaBoundsFor(this.islandId):{x0:HOME_ORIGIN.x+100,y0:HOME_ORIGIN.y+100,x1:HOME_ORIGIN.x+world.width-100,y1:HOME_ORIGIN.y+world.height-100};

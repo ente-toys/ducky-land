@@ -3,7 +3,7 @@ import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
 import {BOG_ISLAND,canEnterBog,teamCounts,suggestedTeam} from '../src/features/bog-combat/entry.js';
 import {emptyStats,TEAMS} from '../src/features/bog-combat/rules.js';
 import {cleanMedalCase} from '../src/features/bog-combat/medals.js';
-import {bogExitIslet} from './bog-exit.js';
+import {bogExitIslet,boatForExit} from './bog-exit.js';
 import {mapOf} from '../src/world/island-maps.js';
 import {createBogBots} from './bog-bots.js';
 import {ABILITY_TIMERS,saveAbilityTimers} from '../src/features/bog-combat/ability-state.js';
@@ -106,6 +106,7 @@ export class LiveBogRoom {
  }
  eject(p){
   const destination=bogExitIslet(),text=`Out of lives! Paddled to ${destination.name}`;
+  if(boatForExit(this.owner.boats,destination))this.owner.saveBoats();
   for(const [socket,info]of this.owner.connections)if(info.account===p.profile&&info.actor){
    Object.assign(info.actor,{islandId:destination.islandId,x:destination.x,y:destination.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,
     action:0,until:0,jumpLeft:0,docking:false,sailTarget:null,sailRoute:null,exitLocked:false});
