@@ -69,23 +69,41 @@ export function createArchipelago(app, scene, layer, world) {
     }
   };
   place();
-  return {
+  const api = {
     async loadPreviews(acquire,release=()=>{}) {
+      if(destroyed)return;
       previewAcquire=acquire;previewRelease=release;
       if(previewPending)return previewPending;
       previewActive=true;
       // Many islands share a theme, so each URL needs exactly one lease.
-      previewPending=Promise.all([...new Set(WORLD_ISLANDS.map(i=>artOf(i.id)))].map(async id=>{
-        if(previews.has(id))return;
-        const src=`/pixi-art/globe/${id}.svg`,texture=await acquire(src);
-        if(destroyed||!previewActive){release(src);return;}
-        const old=textures.get(id);
-        if(old&&old!==Texture.EMPTY&&!leasedPreviews.has(old))old.destroy(true);
-        textures.set(id,texture);previews.set(id,texture);leasedPreviews.add(texture);previewKeys.add(src);
-      })).then(()=>{if(!destroyed){version++;place();draw();}}).finally(()=>{previewPending=null;});
+      const ids=[...new Set(WORLD_ISLANDS.map(i=>artOf(i.id)))];
+      const failed=new Set();
+      const loadBatch=batch=>{
+        return Promise.allSettled(batch.map(async id=>{
+          if(previews.has(id))return;
+          const src=`/pixi-art/globe/${id}.svg`;
+          let texture;
+          try{texture=await acquire(src);}catch(error){failed.add(id);release(src);throw error;}
+          if(destroyed||!previewActive){release(src);return;}
+          const old=textures.get(id);
+          if(old&&old!==Texture.EMPTY&&!leasedPreviews.has(old))old.destroy(true);
+          textures.set(id,texture);previews.set(id,texture);leasedPreviews.add(texture);previewKeys.add(src);
+        })).then(results=>{
+          if(!destroyed){version++;place();draw();}
+          const error=results.find(result=>result.status==='rejected');
+          if(error)throw error.reason;
+        }).finally(()=>{
+          // Retry successful previews released during a close/reopen. Waiting for
+          // the entire batch avoids overlapping leases after an early failure.
+          const retry=ids.filter(id=>!previews.has(id)&&!failed.has(id));
+          if(!destroyed&&previewActive&&retry.length)return loadBatch(retry);
+        });
+      };
+      previewPending=loadBatch(ids).finally(()=>{previewPending=null;});
       return previewPending;
     },
     setPreviewActive(active) {
+      if(destroyed)return;
       if(active){
         if(!previewActive){
           previewActive=true;
@@ -123,6 +141,7 @@ export function createArchipelago(app, scene, layer, world) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
     },
-    destroy() {destroyed=true;previewActive=false;for(const src of previewKeys)previewRelease(src);previewKeys.clear();for (const texture of peopleTextures.values()) texture.destroy(true); peopleTextures.clear(); root.destroy({children: true}); for (const t of textures.values()) if(t!==Texture.EMPTY&&!leasedPreviews.has(t))t.destroy(true);},
+    destroy() {if(destroyed)return;destroyed=true;previewActive=false;for(const src of previewKeys)previewRelease(src);previewKeys.clear();for (const texture of peopleTextures.values()) texture.destroy(true); peopleTextures.clear(); root.destroy({children: true}); for (const t of textures.values()) if(t!==Texture.EMPTY&&!leasedPreviews.has(t))t.destroy(true);},
   };
+  return api;
 }

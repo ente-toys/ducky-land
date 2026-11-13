@@ -16,7 +16,7 @@ const flush=()=>new Promise(setImmediate);
 // render groups and TexturePool. Only image decoding and GPU submission are
 // replaced: Node/jsdom has no WebGL context. Unlike the old allocation model,
 // this executes engine.mount/tick, sleeper caches and every runtime producer.
-async function mountHome(t,dpr=2,height=771) {
+async function mountHome(t,dpr=2,height=771,{deferFountainArtwork=false}={}) {
   const dom=new JSDOM('<body><main></main></body>',{url:'http://ducky.test/?qa&cam=2820,2410,0.8',pretendToBeVisual:true});
   const prior={},names=['window','document','HTMLCanvasElement','Image','DOMParser','XMLSerializer','location','devicePixelRatio','requestAnimationFrame','cancelAnimationFrame','matchMedia','ResizeObserver','fetch','performance'];
   for(const name of names)prior[name]=globalThis[name];
@@ -24,8 +24,11 @@ async function mountHome(t,dpr=2,height=771) {
   const adapter=DOMAdapter.get(),assets=new Map(),managed=new Set(),frames=new Map();let nextFrame=0;
   const originals={init:Application.prototype.init,destroy:Application.prototype.destroy,load:Assets.load,get:Assets.get,unload:Assets.unload,compile:GlProgram.from};
   const create=dom.window.document.createElement.bind(dom.window.document);
+  let releaseArtwork;
+  const artworkGate=new Promise(resolve=>{releaseArtwork=resolve;});
+  if(!deferFountainArtwork)releaseArtwork();
   class RasterImage extends Image {
-    set src(value){if(String(value).startsWith('blob:'))this.loading=prior.fetch(value).then(r=>r.arrayBuffer()).then(b=>{super.src=Buffer.from(b);});else super.src=value;}
+    set src(value){if(String(value).startsWith('blob:'))this.loading=prior.fetch(value).then(r=>r.arrayBuffer()).then(async b=>{await artworkGate;super.src=Buffer.from(b);});else super.src=value;}
     async decode(){await this.loading;return super.decode();}
   }
   Object.assign(globalThis,{performance:{now:()=>clockTime},window:dom.window,HTMLCanvasElement:Canvas,Image:RasterImage,document:dom.window.document,DOMParser:dom.window.DOMParser,XMLSerializer:dom.window.XMLSerializer,location:dom.window.location,devicePixelRatio:dpr,
@@ -78,7 +81,7 @@ async function mountHome(t,dpr=2,height=771) {
   const host=create('main');Object.defineProperties(host,{clientWidth:{value:1512},clientHeight:{value:height}});document.body.appendChild(host);
   const errors=[],engine=new PixiIsland({onError:error=>errors.push(error)});
   t.after(async()=>{
-    engine.dispose();await flush();TexturePool.clear(true);TexturePool.removeScreen(1);
+    engine.dispose();releaseArtwork();await settleArtwork();await flush();TexturePool.clear(true);TexturePool.removeScreen(1);
     for(const texture of assets.values())texture.destroy(true);
     Application.prototype.init=originals.init;Application.prototype.destroy=originals.destroy;Assets.load=originals.load;Assets.get=originals.get;Assets.unload=originals.unload;GlProgram.from=originals.compile;
     DOMAdapter.set(adapter);Object.assign(globalThis,prior);dom.window.close();
@@ -89,6 +92,7 @@ async function mountHome(t,dpr=2,height=771) {
   let now=performance.now();
   const step=async(ms=16)=>{now+=ms;clockTime=now;const jobs=[...frames.values()];frames.clear();for(const job of jobs)job(now);await flush();assert.deepEqual(errors,[]);};
   const settle=async()=>{for(let i=0;i<120;i++)await step();};
+  const settleArtwork=()=>Promise.all([engine.fountainWater,...[...engine.arts.values()].flatMap(a=>a.fountainWaters??[])].filter(Boolean).map(fx=>fx.artworkReady));
   await settle();assert.equal(engine.sceneryPending,false);
   const prepareAssets=()=>{
     // Assets are decoded eagerly but uploaded lazily. Upload every held lease,
@@ -97,7 +101,7 @@ async function mountHome(t,dpr=2,height=771) {
     const root=new Container();for(const texture of assets.values())if(!texture.destroyed)root.addChild(new Sprite(texture));
     engine.app.renderer.render({container:root});root.destroy({children:true});
   };
-  return {engine,step,settle,prepareAssets,managed,assets,get views(){return views;},get now(){return now;}};
+  return {engine,step,settle,settleArtwork,releaseArtwork,prepareAssets,managed,assets,get views(){return views;},get now(){return now;}};
 }
 
 for(const dpr of [1,2])test(`mounted Home DPR${dpr}: real Pixi pool sources return to baseline across resolution cycles`,async t=>{
@@ -131,7 +135,8 @@ for(const dpr of [1,2])test(`mounted Home DPR${dpr}: real Pixi pool sources retu
 });
 
 for(const dpr of [1,2])test(`mounted Home DPR${dpr}: whole-island camera route stays bounded and returns without growth`,async t=>{
-  const game=await mountHome(t,dpr,827),{engine,managed,assets}=game;
+  const game=await mountHome(t,dpr,827,{deferFountainArtwork:true}),{engine,managed,assets}=game;
+  let artworkReady=false;engine.fountainWater.artworkReady.then(()=>{artworkReady=true;});
   const maximum=engine.resolutionBudget.maximum,limit=(dpr===1?150:250)*1e6;
   engine.follow=false;engine.fly=null;engine.arrival=null;
   const stops=[[-1293,5017],[2000,3000],[-3000,1000],[500,500],
@@ -141,6 +146,10 @@ for(const dpr of [1,2])test(`mounted Home DPR${dpr}: whole-island camera route s
   for(const [x,y]of stops){
     Object.assign(engine.camera,{x,y,zoom:.8});Object.assign(engine.target,engine.camera);
     for(let frame=0;frame<375;frame++)await game.step();
+    if(!baseline.size){
+      assert.equal(artworkReady,false,'native fountain decode can outlast the old frame-only warm-up');
+      game.releaseArtwork();
+    }
     // Native image decode completion is asynchronous, independently of the
     // simulated camera clock. Do not accept a blank scene as a memory win.
     let stable=0;
@@ -149,10 +158,12 @@ for(const dpr of [1,2])test(`mounted Home DPR${dpr}: whole-island camera route s
       const arts=[...engine.arts.values()];
       const pools=[engine.groundPool,...arts.map(a=>a.rasterPool)].filter(Boolean);
       const settled=!engine.sceneryPending&&arts.every(a=>a.ready||a.failed)&&!engine.homeArtBudget.pending&&arts.every(a=>!a.artBudget?.pending)&&pools.every(p=>{const s=p.stats();return !s.pendingTiles&&!s.missingTiles&&!s.refiningTiles;});
+      if(settled)await game.settleArtwork();
       stable=settled?stable+1:0;
     }
     assert.equal(stable,30,'camera stop fully settles: '+JSON.stringify({island,x,y,ground:engine.groundPool.stats(),rasters:[...engine.arts.values()].map(a=>[a.id,a.rasterPool?.stats()])}));
     game.prepareAssets();
+    assert(artworkReady,'fountain replacement is complete before the first residency baseline');
     assert([...engine.arts.values()].every(a=>a.ready), 'all neighboring theme art loaded');
     const memory=engine.gpuMemory(),pool=engine.poolBudget.stats(),label=`DPR${dpr} ${island} (${x},${y})`;
     assert.equal(engine.app.renderer.resolution,maximum,label+' preserves maximum density');
