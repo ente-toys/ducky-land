@@ -9,3 +9,6 @@ incoming/**/evidence/*.mp4
 .dev.vars*
 
 review/globe-svg/
+
+# Generated telescope review bundle and canvas captures.
+review/stargaze/

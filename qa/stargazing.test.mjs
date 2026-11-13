@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {telescopeSpot, telescopeNear, telescopePeerAt} from '../src/rendering/pixi/telescope.js';
-import {starPlace, anonymousStars, waitingStars, readSky, skyCounts} from '../src/rendering/pixi/stargaze-sky.js';
+import {starPlace, anonymousStars, backgroundTile, SKY_TILE, onlineConstellation, readSky, skyCounts} from '../src/rendering/pixi/stargaze-sky.js';
 import {makeRoom, addPlayer} from './room-harness.mjs';
 import {stars} from '../server/pages-auth.js';
 
@@ -33,15 +33,39 @@ test('every star keeps its place', () => {
   for (const i of [0, 14, 15, 200, 399]) {
     assert.equal(few.x[i], many.x[i]); assert.equal(few.y[i], many.y[i]);
   }
-  assert.equal(many.constellation, 15, 'the Great Duck borrows the first fifteen');
-  assert.equal(anonymousStars(3).constellation, 0);
   assert.equal(anonymousStars(-5).count, 0);
-  const waiting = waitingStars();
-  assert.equal(waiting.count, 10_000);
-  assert.equal(waitingStars(3).x[2], waiting.x[2]);
-  assert.notEqual(waiting.x[0], many.x[0]);
-  assert.ok(Array.from(waiting.x).some((x, i) => Math.hypot(x, waiting.y[i]) > 2600), 'out to the edge of what the telescope can see');
-  assert.equal(waitingStars(-1).count, 0);
+});
+
+test('the faint sky continues indefinitely and regenerates the same tiles', () => {
+  for (const [tx,ty] of [[0,0],[-1,0],[0,-1],[10000,-20000]]) {
+    const tile = backgroundTile(tx,ty);
+    assert.deepEqual(tile,backgroundTile(tx,ty));
+    assert.ok(tile.length > 50);
+    for (const star of tile) {
+      assert.ok(star.x >= tx*SKY_TILE && star.x < (tx+1)*SKY_TILE);
+      assert.ok(star.y >= ty*SKY_TILE && star.y < (ty+1)*SKY_TILE);
+    }
+  }
+  assert.notDeepEqual(backgroundTile(0,0),backgroundTile(1,0));
+});
+
+test('the live constellation connects only online people, once, at their real positions', () => {
+  const data = readSky({total:20,me:{accountId:'1',login:'you',starred:true},
+    online:['2','3','4'],players:[['1','you'],['2','a'],['3','b'],['4','c'],['5','offline']]});
+  const edges = onlineConstellation(data.named);
+  assert.equal(edges.length,3);
+  assert.deepEqual(onlineConstellation([...data.named].reverse()),edges,'presence order does not rearrange the lines');
+  const reachable = new Set(['1']);
+  for (let i = 0; i < edges.length; i++) for (const [a,b] of edges) {
+    assert.ok(a.online && b.online);
+    assert.ok(data.named.includes(a) && data.named.includes(b),'endpoints use actual star coordinates');
+    if (reachable.has(a.accountId) || reachable.has(b.accountId)) {reachable.add(a.accountId);reachable.add(b.accountId);}
+  }
+  assert.equal(reachable.size,4);
+  assert.deepEqual(onlineConstellation([]),[]);
+  assert.deepEqual(onlineConstellation([data.me]),[]);
+  const left = data.named.map(s => ({...s,online:s.accountId==='1'}));
+  assert.deepEqual(onlineConstellation(left),[],'offline people leave the constellation');
 });
 
 test('the sky names the people who played and counts everyone else', () => {
