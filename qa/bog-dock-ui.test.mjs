@@ -38,7 +38,7 @@ test('strict-mode dock chooses either side, returns with totals/medal case and r
   try{
     await render();assert.match(document.body.textContent,/Admit one Ducky.*Booquack Bog/);await click('Enter');
     assert.match(document.body.textContent,/Pick your side/);assert.equal(document.querySelector('.bog-pick-evil').disabled,false);
-    await click('Evil');assert.equal(engine.bogCombat.room.client.self.team,'evil');assert.match(document.querySelector('aside').textContent,/5 kills/);
+    await click('Evil');assert.equal(engine.bogCombat.room.client.self.team,'evil');assert.match(document.querySelector('aside').textContent,/5 splats/);
     const evilIcon=document.querySelector('.bog-combat-popper-icon').getAttribute('src');
     assert.doesNotMatch(decodeURIComponent(evilIcon),/karma-padlock/);
     assert.equal(sockets.filter(s=>s.url.searchParams.has('team')&&s.readyState===1).length,1,'strict effects leave exactly one participant');
