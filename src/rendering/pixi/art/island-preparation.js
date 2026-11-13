@@ -40,8 +40,9 @@ export function createArtQueue({concurrency = 4, yieldFrame = nextArtFrame,
     },error=>{scheduled=false;for(const task of rasters.splice(0))task.reject(error);});
   };
   return {
-    run(job) {return new Promise((resolve, reject) => {waiting.push({job, resolve, reject}); drain();});},
-    raster(job) {return new Promise((resolve,reject)=>{rasters.push({job,resolve,reject});rasterTurn();});},
+    // `urgent` jobs (a picture someone just asked for, like an outfit pick) go ahead of queued background art
+    run(job, {urgent = false} = {}) {return new Promise((resolve, reject) => {waiting[urgent ? 'unshift' : 'push']({job, resolve, reject}); drain();});},
+    raster(job, {urgent = false} = {}) {return new Promise((resolve,reject)=>{rasters[urgent ? 'unshift' : 'push']({job,resolve,reject});rasterTurn();});},
   };
 }
 

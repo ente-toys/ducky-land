@@ -17,14 +17,15 @@ const ownedURLs=new Set(),inFlight=new Set();
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const angleDifference=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 const safe=(n,fallback=0)=>Number.isFinite(n)?n:fallback;
-function loadTexture(url){ownedURLs.add(url);const promise=Assets.load({src:url,data:ART_TEXTURE});inFlight.add(promise);promise.then(()=>inFlight.delete(promise),()=>inFlight.delete(promise));return promise;}
+const URGENT_TEXTURE={...ART_TEXTURE,urgent:true};
+function loadTexture(url,urgent=false){ownedURLs.add(url);const promise=Assets.load({src:url,data:urgent?URGENT_TEXTURE:ART_TEXTURE});inFlight.add(promise);promise.then(()=>inFlight.delete(promise),()=>inFlight.delete(promise));return promise;}
 async function library(){
   if(!libraryPromise)libraryPromise=(async()=>{
     const response=await fetch(MANIFEST);if(!response.ok)throw new Error(`Duck artwork manifest: HTTP ${response.status}`);
     const data=await response.json();
     const sources=new Set(['/pixi-art/karma/golden-feather.svg',...SLEEP_ASSETS,...data.views.flatMap(v=>v.parts.map(p=>p.url))]);
     await Promise.all([
-      Promise.all([...sources].map(loadTexture)),
+      Promise.all([...sources].map(url=>loadTexture(url))),
       Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}})),
     ]);
     return data;
@@ -59,6 +60,17 @@ export async function disposeDuckAssets(){
 export const prepareDuckAssets=()=>library();
 export const duckTextureSources=()=>[...ownedURLs].map(src=>Assets.get(src)?.source).filter(Boolean);
 export async function getDuckWardrobe(){return (await library()).wardrobe;}
+// The frame pictures an outfit needs. `angles` limits them to the views that will be drawn (the outfit
+// editor's duck only ever faces you, so it needs one picture per item instead of nine).
+const outfitFrameURLs=(entries,angles=null)=>[...new Set(entries.flatMap(entry=>Object.entries(entry.frames)
+  .filter(([angle])=>!angles||angles.includes(angle)).flatMap(([,frames])=>frames)).filter(frame=>frame.visible).map(frame=>frame.url))];
+// Warm the texture cache for wardrobe items, so picking one later shows it on the next frame. A few at a time:
+// the art queue is first come first served, so a pick made meanwhile waits behind one small batch, not all of it.
+export async function preloadOutfitFrames(entries,{angles=null,batch=4,urgent=false}={}){
+  await library();
+  const urls=outfitFrameURLs(entries,angles);
+  for(let i=0;i<urls.length;i+=batch)await Promise.allSettled(urls.slice(i,i+batch).map(url=>loadTexture(url,urgent)));
+}
 
 function makeJoint(texture,rect,pivot,ground,label){
   const joint=new Container({label});joint.position.set(pivot[0]-ground[0],pivot[1]-ground[1]);
@@ -110,7 +122,7 @@ function samplePose(action,t,walkPhase,reduced,speed=165){
 async function createSleepingDuck(sleep, seed) {
   liveDucks++;
   try {
-    await Promise.all(SLEEP_ASSETS.map(loadTexture));
+    await Promise.all(SLEEP_ASSETS.map(url=>loadTexture(url)));
     const root = new Container({label: 'Ducky'});
     const art = new Container({label: 'Sleeping rig'});
     art.scale.set(SCALE);
@@ -146,7 +158,7 @@ async function createSleepingDuck(sleep, seed) {
   } catch (error) {liveDucks--; throw error;}
 }
 
-export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,isPlayer=false,sleep=null}={}){
+export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,isPlayer=false,sleep=null,angles=null}={}){
   if (sleep) return createSleepingDuck(sleep, seed);
   liveDucks++;
   let data;
@@ -216,8 +228,10 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     const keep=e=>OUTFIT_OPTIONS[e.slot]?.includes(e.index),swap=(slot,index)=>{const all=data.wardrobe.filter(e=>e.slot===slot),hit=all.find(e=>e.index===Number(index)||e.id===index);if(!hit||keep(hit))return hit;const kept=all.filter(keep);return kept[hit.index%kept.length];};
     const entries=Object.entries(next).filter(([slot])=>slot!=='acc'&&slot!=='accessory').map(([slot,index])=>swap(slot,index))
       .filter(Boolean).sort((a,b)=>slotOrder.indexOf(a.slot)-slotOrder.indexOf(b.slot));
-    const frames=entries.flatMap(entry=>Object.values(entry.frames).flat()).filter(frame=>frame.visible);
-    await Promise.all([...new Set(frames.map(frame=>frame.url))].map(loadTexture));
+    // Only wait for pictures that are not cached yet: a fully cached outfit swaps in this same task.
+    const missing=outfitFrameURLs(entries,angles).filter(url=>!Assets.cache.has(url));
+    // the editor's duck (one angle) is someone waiting on a click, so its pictures skip ahead of background island art
+    if(missing.length)await Promise.all(missing.map(url=>loadTexture(url,Boolean(angles))));
     if(disposed||request!==outfitVersion)return;
     snowCover.clear();
     clothing={...next};
@@ -229,6 +243,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
         if(part.role==='foot'||part.role==='toe')part.joint.visible=!entries.some(e=>e.slot==='shoes');
         if(part.role==='tuft')part.joint.visible=!entries.some(e=>e.slot==='cap'&&![3,12,13].includes(e.sourceNumber));
       }
+      if(angles&&!angles.includes(String(view.spec.angle)))continue;
       for(const entry of entries)for(const frame of entry.frames[String(view.spec.angle)]){
         if(!frame.visible)continue;
         const node=new Container({label:entry.id}),sprite=new Sprite(Assets.get(frame.url));
@@ -318,14 +333,14 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
       node.position.set(garment.baseX,garment.baseY);node.rotation=0;node.alpha=1;garment.sprite.position.copyFrom(garment.spos);garment.sprite.scale.copyFrom(garment.sscale);
       const headish=frame.attachment==='head'||frame.attachment==='eyes',tf=headish&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.other.spec.angle):null;
       const mid=(headish||frame.attachment==='neck')&&glide.other?twinFrame(garment.entry,frame,view.spec.angle,glide.mid):null,inMid=mid&&glide.w>=.25;
-      garment.sprite.texture=inMid?Assets.get(mid.url):garment.tex;
+      garment.sprite.texture=inMid&&Assets.cache.has(mid.url)?Assets.get(mid.url):garment.tex;
       for(const [k,ghost] of garment.ghosts)ghost.visible=!!tf&&!mid&&k===glide.other.spec.angle;garment.sprite.alpha=1;
       if(tf||mid&&headish){const u=glide.lo?glide.w:1-glide.w,hm=view.spec.attachments,ho=glide.other.spec.attachments,hx=(ho.head[0]+ho.head[1]-hm.head[0]-hm.head[1])/2,hy=ho.headY-hm.headY;
         node.x+=hx*glide.w;node.y+=hy*glide.w;
         if(frame.attachment==='head'&&!mid){const w=glide.w,[rx,ry,rw,rh]=frame.rect,[tx,ty,tw,th]=tf.rect,[ax,ay]=frame.anchor;
           garment.sprite.scale.set(1+(tw/rw-1)*w,1+(th/rh-1)*w);garment.sprite.position.set(rx-ax+((tx-hx)-rx)*w,ry-ay+((ty-hy)-ry)*w);}
         if(inMid)garment.sprite.position.set(mid.rect[0]-hx/2-frame.anchor[0],mid.rect[1]-hy/2-frame.anchor[1]);
-        if(tf&&!mid&&tf.url!==frame.url){let ghost=garment.ghosts.get(glide.other.spec.angle);
+        if(tf&&!mid&&tf.url!==frame.url&&(garment.ghosts.has(glide.other.spec.angle)||Assets.cache.has(tf.url))){let ghost=garment.ghosts.get(glide.other.spec.angle);
           if(!ghost){ghost=new Sprite(Assets.get(tf.url));ghost.position.set(tf.rect[0]-hx-frame.anchor[0],tf.rect[1]-hy-frame.anchor[1]);glide.lo?node.addChild(ghost):node.addChildAt(ghost,0);garment.ghosts.set(glide.other.spec.angle,ghost);}
           const top=smooth(.25,.6,u),bottom=1-smooth(.45,.8,u);ghost.alpha=glide.lo?top:bottom;garment.sprite.alpha=glide.lo?bottom:top;}}
       if(frame.attachment==='eyes'&&eyeRest){

@@ -47,8 +47,9 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
     name: 'wholeIslandSVG',
     test: url => /\.svg(?:[?#]|$)/i.test(url) || url.startsWith('blob:') || /^data:image\/svg\+xml[,;]/i.test(url),
     load(src, asset = {}) {
+      const urgent=Boolean(asset.data?.urgent);
       return queue.run(() => recoverArt(async () => {
-        const {resolution=1,groundPadding=0,...options}=asset.data??{};
+        const {resolution=1,groundPadding=0,urgent:_,...options}=asset.data??{};
         const key=asset.src??src;
         // Fully transparent authored pieces have no ink to decode or upload.
         const empty=sourceSizes[key]&&textureFootprint(key,resolution,groundPadding);
@@ -56,7 +57,7 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
           const texture=makeTexture(DOMAdapter.get().createCanvas(1,1),src,resolution,options,empty);
           if(groundPadding)texture.groundPadding={pad:groundPadding,width:empty.fullWidth-2*groundPadding,height:empty.fullHeight-2*groundPadding};
           return texture;
-        });
+        },{urgent});
         // Pixi passes an absolute fetch URL; asset.src retains the authored key.
         const manifest=canDecodeBitmap()?await recoverArt(getManifest,{label:'Island prerender manifest; using SVG',timeoutMs:1000,fallback:()=>({})}):{};
         const tier=canDecodeBitmap()?selectPrerenderTier(manifest,asset.src??src,resolution):null;
@@ -94,7 +95,7 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
         const image = await decode(await fetchBlob(src));
         try {
           return await queue.raster(() => {
-            const {resolution = 1, groundPadding = 0, ...options} = asset.data ?? {};
+            const {resolution = 1, groundPadding = 0, urgent:_, ...options} = asset.data ?? {};
             const width=Math.ceil(image.width*resolution),height=Math.ceil(image.height*resolution),pad=groundPadding;
             const canvas = DOMAdapter.get().createCanvas(width+2*pad,height+2*pad);
             const context = canvas.getContext('2d');
@@ -118,9 +119,9 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
             const texture=makeTexture(resource,src,resolution,{alphaMode:'premultiply-alpha-on-upload',...options},footprint);
             if(pad)texture.groundPadding={pad,width,height};
             return texture;
-          });
+          },{urgent});
         } finally {image.src = '';}
-      },{label:src,valid:texture=>!!finalTextureSource(texture),fallback:artPlaceholder,late:texture=>texture.destroy(!isArtPlaceholder(texture))}));
+      },{label:src,valid:texture=>!!finalTextureSource(texture),fallback:artPlaceholder,late:texture=>texture.destroy(!isArtPlaceholder(texture))}),{urgent});
     },
     unload(texture) {texture.destroy(!isArtPlaceholder(texture));},
   };
