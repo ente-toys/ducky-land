@@ -28,7 +28,7 @@
     {
       "id": "sea-6-1",
       "art": "06-palm-treasure",
-      "artIndex": 4,
+      "artIndex": 3,
       "lon": 1.5533430342749535,
       "lat": -0.8726646259971648,
       "width": 1024
@@ -36,7 +36,7 @@
     {
       "id": "sea-7-1",
       "art": "07-pink-blossom",
-      "artIndex": 5,
+      "artIndex": 4,
       "lon": -2.1467549799530254,
       "lat": -0.8552113334772214,
       "width": 1024
@@ -44,7 +44,7 @@
     {
       "id": "sea-11-1",
       "art": "12-coral-atoll",
-      "artIndex": 6,
+      "artIndex": 5,
       "lon": 2.6354471705114375,
       "lat": -0.12217304763960307,
       "width": 1024
