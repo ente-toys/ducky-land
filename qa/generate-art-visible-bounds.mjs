@@ -30,5 +30,5 @@ await Promise.all(Array.from({length:2},async()=>{
 const sorted=o=>Object.fromEntries(Object.entries(o).sort(([a],[b])=>a.localeCompare(b)));
 const lines=o=>Object.entries(sorted(o)).map(([key,value])=>'  '+JSON.stringify(key)+':'+JSON.stringify(value)).join(',\n');
 await writeFile('src/rendering/shared/art-visible-bounds.json','{\n'+lines(bounds)+'\n}\n');
-await writeFile('src/rendering/shared/art-visible-bounds-hashes.json','{\n'+lines(hashes)+'\n}\n');
+await writeFile('qa/art-visible-bounds-hashes.json','{\n'+lines(hashes)+'\n}\n');
 console.log(`Recorded ${Object.keys(bounds).length} trimmed sources (${Object.values(bounds).filter(v=>v===null).length} empty)`);

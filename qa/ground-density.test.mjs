@@ -7,7 +7,7 @@ import {planIslandArt,ISLAND_ART_BUDGET,SHARED_TEXTURE_ALLOWANCE} from '../src/r
 import {textureFootprint,walkingZoom} from '../src/rendering/pixi/art/texture-footprint.js';
 import sizes from '../src/rendering/shared/art-source-sizes.json' with {type:'json'};
 import bounds from '../src/rendering/shared/art-visible-bounds.json' with {type:'json'};
-import hashes from '../src/rendering/shared/art-visible-bounds-hashes.json' with {type:'json'};
+import hashes from './art-visible-bounds-hashes.json' with {type:'json'};
 import {prerenderSources,collectPlacedArt} from '../scripts/vite-prerender-art.mjs';
 import {selectPrerenderTier} from '../src/rendering/pixi/art/whole-svg-loader.js';
 
