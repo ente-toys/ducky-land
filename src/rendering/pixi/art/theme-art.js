@@ -219,7 +219,7 @@ export function loadThemeArt(map, options) {
   // not keep even its ground off the scene for minutes. The preview is authored
   // SVG and works for dynamically registered maps without a prerender tier.
   return recoverArt(()=>pending??=buildThemeArt(map,{...options,cancelled:()=>abandoned}),{
-    label:`theme ${map.id}`,timeoutMs:8000,
+    label:`theme ${map.id}`,timeoutMs:30000,
     fallback:()=>{abandoned=true;return previewArt(map,options);},
     late:art=>art?.destroy(),
   });

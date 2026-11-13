@@ -16,7 +16,7 @@ test('a synchronous art failure retries once and resolves a fallback at its dead
   t.mock.timers.enable({apis:['setTimeout']});const seen=warnings(t);let attempts=0;
   const pending=recoverArt(()=>{attempts++;throw Error('decode failed');},{fallback:()=>42});
   await flush();assert.equal(attempts,2);
-  t.mock.timers.tick(3999);await flush();assert.equal(seen.length,0);
+  t.mock.timers.tick(29999);await flush();assert.equal(seen.length,0);
   t.mock.timers.tick(1);assert.equal(await pending,42);assert.equal(seen.length,1);
 });
 
@@ -24,8 +24,8 @@ test('late texture work cannot replace a timed-out result',async t=>{
   t.mock.timers.enable({apis:['setTimeout']});warnings(t);
   const finish=[],late=[];
   const pending=recoverArt(()=>new Promise(resolve=>finish.push(resolve)),{fallback:()=>0,late:value=>late.push(value)});
-  t.mock.timers.tick(2000);await flush();assert.equal(finish.length,2);
-  t.mock.timers.tick(2000);assert.equal(await pending,0);
+  t.mock.timers.tick(15000);await flush();assert.equal(finish.length,2);
+  t.mock.timers.tick(15000);assert.equal(await pending,0);
   finish[0](1);finish[1](2);await flush();assert.deepEqual(late,[1,2]);
 });
 
@@ -42,7 +42,7 @@ test('a failed GPU upload retries once and still releases readiness',async t=>{
   let uploads=0;
   const pending=uploadIsland({texture:{bindSource(){uploads++;throw Error('GPU upload failed');}}},[],
     {sources:[Texture.WHITE.source],yieldFrame:async()=>{}});
-  await flush();assert.equal(uploads,2);t.mock.timers.tick(4000);await pending;
+  await flush();assert.equal(uploads,2);t.mock.timers.tick(30000);await pending;
   assert.equal(seen.length,1);assert(!Texture.WHITE.destroyed);
 });
 

@@ -1274,8 +1274,8 @@ export class PixiIsland {
       const now=performance.now();
       if(this.revealWatch?.id!==mapId)this.revealWatch={id:mapId,since:now,forced:false};
       if(this.revealWatch.forced)return true;
-      if(!(this.startupPrepared!==false&&this.artReady(mapId))&&now-this.revealWatch.since>=15000){
-        console.warn(`Island ${mapId}: revealing available art after 15000 ms`);
+      if(!(this.startupPrepared!==false&&this.artReady(mapId))&&now-this.revealWatch.since>=45000){
+        console.warn(`Island ${mapId}: revealing available art after 45000 ms`);
         this.revealWatch.forced=true;
         this.showArt(mapId);
         return true;
@@ -1283,7 +1283,7 @@ export class PixiIsland {
     }
     return this.startupPrepared!==false&&this.artReady(mapId);
   }
-  ensureMapArt(mapId,{timeoutMs=8000}={}) {
+  ensureMapArt(mapId,{timeoutMs=30000}={}) {
     this.mapArtRequests??=new Map();
     if(this.mapArtRequests.has(mapId))return this.mapArtRequests.get(mapId);
     const request=recoverArt(()=>this.ensureArt(mapId),{
@@ -1302,7 +1302,7 @@ export class PixiIsland {
     }).finally(()=>this.mapArtRequests.delete(mapId));
     this.mapArtRequests.set(mapId,request);return request;
   }
-  async prepareStartupArt({timeoutMs=8000,steps}={}) {
+  async prepareStartupArt({timeoutMs=30000,steps}={}) {
     const settle=(label,job)=>settleArtStep(job,{label,timeoutMs,cancelled:()=>this.disposed});
     const jobs=steps??[
       ['Island startup',()=>this.ensureMapArt(this.artShown,{timeoutMs})],

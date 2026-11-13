@@ -1,6 +1,6 @@
 import {Texture} from 'pixi.js';
 
-export const ART_TIMEOUT_MS=4000;
+export const ART_TIMEOUT_MS=30000;
 const placeholderMark=Symbol.for('ducky.art-placeholder');
 export const isArtPlaceholder=texture=>texture?.[placeholderMark]===true;
 export function artPlaceholder() {
@@ -63,7 +63,7 @@ export const acquireArt=(acquire,release,src,resolution,options={})=>recoverArt(
 
 // Scene-mutating startup work runs once. Bound the wait without starting a
 // second concurrent builder when a slow operation misses its deadline.
-export function settleArtStep(job,{label='Island startup',timeoutMs=8000,cancelled=()=>false,fallback}={}) {
+export function settleArtStep(job,{label='Island startup',timeoutMs=30000,cancelled=()=>false,fallback}={}) {
   let promise;
   return recoverArt(()=>promise??=Promise.resolve().then(job),{label,timeoutMs,cancelled,fallback});
 }

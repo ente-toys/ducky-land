@@ -256,7 +256,7 @@ test('registered bog-arena prepares and reveals through SVG when prerender manif
   t.mock.timers.enable({apis:['setTimeout']});
   const startup=game.prepareStartupArt({steps:[['Bog audio',()=>Promise.reject(Error('audio unavailable'))]]});
   await flush();assert.equal(game.startupPrepared,false);
-  t.mock.timers.tick(8000);
+  t.mock.timers.tick(30000);
   for(let i=0;i<20;i++){await flush();t.mock.timers.tick(0);}
   await startup;
   assert.equal(game.startupPrepared,true);assert(warnings.some(args=>args[0].includes('Bog audio')));
@@ -275,7 +275,7 @@ test('shown-map ensureArt retries a rejection once and then reveals available pi
   let attempts=0;game.ensureArt=async()=>{attempts++;throw Error('Bog decode failed');};
   const preparing=game.ensureMapArt(BOG_MAP_ID);await flush();
   assert.equal(attempts,2);assert.equal(game.revealArtReady(BOG_MAP_ID),false);
-  t.mock.timers.tick(8000);await preparing;
+  t.mock.timers.tick(30000);await preparing;
   assert.equal(attempts,2);assert.equal(game.revealArtReady(BOG_MAP_ID),true);assert(group.visible);
   group.destroy();
 });
@@ -288,23 +288,23 @@ test('hard reveal deadline handles hung preparation and resets for the next show
     rigs:[],localDucks:[],liveRigs:new Map(),mapSleepers:new Map(),props:[],globeT:0,
   });
   const warnings=[],warn=console.warn;console.warn=(...args)=>warnings.push(args);t.after(()=>console.warn=warn);
-  group.visible=false;assert.equal(game.revealArtReady(BOG_MAP_ID),false);now=14999;
+  group.visible=false;assert.equal(game.revealArtReady(BOG_MAP_ID),false);now=44999;
   assert.equal(game.revealArtReady(BOG_MAP_ID),false);assert(!group.visible);
-  now=15000;assert.equal(game.revealArtReady(BOG_MAP_ID),true);assert(group.visible);
+  now=45000;assert.equal(game.revealArtReady(BOG_MAP_ID),true);assert(group.visible);
   for(let i=0;i<5;i++)assert(game.revealArtReady(BOG_MAP_ID));assert.equal(warnings.length,1);
   game.artShown='pink';assert.equal(game.revealArtReady('pink'),false);
-  now=29999;assert.equal(game.revealArtReady('pink'),false);
-  now=30000;assert.equal(game.revealArtReady('pink'),true);assert.equal(warnings.length,2);
+  now=89999;assert.equal(game.revealArtReady('pink'),false);
+  now=90000;assert.equal(game.revealArtReady('pink'),true);assert.equal(warnings.length,2);
   group.destroy();
 });
 
-test('a hung startup step completes startup after 8 seconds and ignores disposal',async t=>{
+test('a hung startup step completes startup after 30 seconds and ignores disposal',async t=>{
   t.mock.timers.enable({apis:['setTimeout']});
   const game=Object.assign(Object.create(PixiIsland.prototype),{startupPrepared:false,scene:new Container(),
     app:{renderer:{texture:{bindSource(){}}}},showArt(){}});
   let calls=0;
   const startup=game.prepareStartupArt({steps:[['Hung boat views',()=>{calls++;return new Promise(()=>{});}]]});
-  await flush();t.mock.timers.tick(7999);await flush();assert.equal(game.startupPrepared,false);
+  await flush();t.mock.timers.tick(29999);await flush();assert.equal(game.startupPrepared,false);
   t.mock.timers.tick(1);await startup;assert.equal(game.startupPrepared,true);assert.equal(calls,1);
   game.startupPrepared=false;game.disposed=true;
   await game.prepareStartupArt({steps:[]});assert.equal(game.startupPrepared,false);game.scene.destroy();
