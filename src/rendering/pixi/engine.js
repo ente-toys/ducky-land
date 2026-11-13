@@ -99,6 +99,8 @@ function acquire(src, resolution = 1, {mipmaps = true} = {}) {
   let entry = textureLeases.get(src);
   if (!entry) {
     entry = {count: 0, resolution, promise: Assets.load({src, data: {resolution, ...(mipmaps ? ART_TEXTURE : {groundPadding:2})}})};
+    // a failed load must not stay cached, or every later attempt at this island fails the same way
+    entry.promise.catch(() => {if (textureLeases.get(src) === entry) textureLeases.delete(src);});
     textureLeases.set(src, entry);
   }
   entry.count++;
@@ -1130,7 +1132,7 @@ export class PixiIsland {
       if (this.disposed||pending.discarded) {art.destroy();return;}
       await uploadIsland(this.app.renderer,[...art.groups,...art.props.map(p=>p.sprite),...(this.mapSleepers.get(mapId)??[]).map(s=>s.rig.root)],{sources:this.plantReactions.sources(),cancelled:()=>this.disposed});
       if(this.disposed||pending.discarded){art.destroy();return;}
-      this.arts.set(mapId, art);
+      this.arts.set(mapId, art);this.artRetries?.delete(mapId);
       this.scene.addChildAt(art.pondDuckies.root,this.scene.getChildIndex(this.decks));
       this.showArt(this.artShown);
       globalThis.__duckyThemeArt = [...this.arts.values()].filter(a => a.ready).map(a => a.id);
@@ -1141,6 +1143,14 @@ export class PixiIsland {
       this.mapSleepers.delete(mapId);
       if (this.disposed||pending.discarded) return;
       console.warn(`theme ${mapId}: art did not load`, error);
+      // A dropped picture or decode hiccup used to leave this island on bare sea for good. Try again a few times while
+      // the player is still here; after that, keep it marked failed as before.
+      const tries=(this.artRetries??=new Map()).get(mapId)??0;
+      if(tries<4){
+        this.artRetries.set(mapId,tries+1);this.arts.delete(mapId);
+        setTimeout(()=>{if(!this.disposed&&this.artShown===mapId&&!this.arts.has(mapId))this.ensureArt(mapId);},1500*2**tries);
+        return;
+      }
       this.arts.set(mapId, {id: mapId, ready: false, failed: true});
     }).finally(()=>{if(pending.discarded&&this.arts.get(mapId)===pending)this.arts.delete(mapId);});
     return pending.preparation;
