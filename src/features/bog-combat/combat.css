@@ -50,6 +50,7 @@
 .bog-hud-ammo { display:flex; align-items:center; gap:8px; }
 .bog-hud-hearts { display:flex; gap:4px; color:#ff5f7a; font-size:22px; line-height:1; }
 .bog-hud-hearts .lost { opacity:.25; }
+.bog-hud-hearts .half { background:linear-gradient(90deg,#ff5f7a 50%,rgba(255,95,122,.25) 50%); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .bog-hud-bar .bog-combat-popper-icon { width:34px; height:24px; margin:0; }
 .bog-hud-paint { display:flex; gap:3px; }
 .bog-hud-paint i { width:8px; height:18px; border:1.5px solid var(--line); border-radius:3px; background:#5fd35a; }

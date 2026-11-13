@@ -30,7 +30,7 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
     const had=hadShield.current;hadShield.current=shieldLeft>0;
     if(had&&shieldLeft<=0&&self?.alive&&(self.hitShieldUntil??0)>(snapshot?.time??0)){setBlocked(true);const t=setTimeout(()=>setBlocked(false),900);return()=>clearTimeout(t);}
   },[shieldLeft>0]);
-  const mine=self?.team??team,lives=self?.lives??RULES.lives,ammo=self?.ammo??RULES.ammoCapacity,now=snapshot?.time??0;
+  const mine=self?.team??team,lives=self?.lives??RULES.lives,hurt=self?.alive!==false&&(self?.hits??0)>0,ammo=self?.ammo??RULES.ammoCapacity,now=snapshot?.time??0;
   const note=self?.out?'Out of lives! Paddling to an islet…':self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-now))}…`
     :self?.shieldUntil>now?`Hidden ${Math.ceil(self.shieldUntil-now)}s`:self?.bushHidden?'Hidden in bush':null;
   // Game HUD: your score top left, the team race top centre, the way out top right; hearts and paint at the bottom
@@ -49,7 +49,7 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
       {self&&<BogTutorial identity={accountId??profile??'local'} self={self} engine={engine}/>}
       <div className="bog-hud-card bog-hud-bar">
         <div className="bog-hud-group"><small>Hearts</small>
-          <div className="bog-hud-hearts" role="img" aria-label={`${lives} of ${RULES.lives} hearts left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<lives?'':'lost'}>♥</span>)}</div></div>
+          <div className="bog-hud-hearts" role="img" aria-label={`${lives} of ${RULES.lives} hearts left${hurt?', one hit taken':''}`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i>=lives?'lost':hurt&&i===lives-1?'half':''}>♥</span>)}</div></div>
         {(shieldLeft>0||blocked)&&<><span className="bog-hud-sep" aria-hidden="true"/>
           <div className={`bog-hud-group bog-hud-shield${blocked?' is-blocked':''}`} role="status"><small>Shield</small>
             <div className="bog-hud-ammo"><img src={shieldArt} alt="" aria-hidden="true"/><b>{blocked?'Blocked!':`${Math.ceil(shieldLeft)}s`}</b></div></div></>}

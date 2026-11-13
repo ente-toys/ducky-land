@@ -29,7 +29,7 @@ test('swept collision catches a fast shot even when neither endpoint is inside t
 });
 test('server tags once, scores team and saves medals, score and best streak',()=>{
   const saves=[],{arena,a,b}=fixture({onStats:(profile,stats)=>saves.push({profile,stats})});
-  shot(arena);advance(arena,.3);
+  b.hits=RULES.hitsPerHeart-1;shot(arena);advance(arena,.3);
   assert.equal(b.alive,false);assert.equal(a.stats.tags,1);assert.equal(a.stats.score,10);assert.equal(a.stats.medals,1);assert.equal(a.stats.bestStreak,1);
   assert.equal(arena.state.scores.karma,1);assert.equal(arena.state.splats.at(-1).kind,'tag');assert.ok(saves.some(s=>s.profile==='a'&&s.stats.tags===1));
   advance(arena,.5);assert.equal(a.stats.tags,1);
@@ -39,13 +39,13 @@ test('paint stops at cover before a duck and produces a wall splat',()=>{
   assert.equal(b.alive,true);assert.equal(a.stats.tags,0);assert.equal(arena.state.splats[0].kind,'wall');assert.equal(arena.state.splats[0].x,400);
 });
 test('nearest enemy consumes the shot, friendly fire passes through teammates',()=>{
-  const {arena,a,b}=fixture();b.x=300;
+  const {arena,a,b}=fixture();b.x=300;b.hits=RULES.hitsPerHeart-1;
   const friend=arena.join({id:'friend',team:'karma'});friend.x=200;friend.shieldUntil=0;
   const farther=arena.join({id:'farther',team:'evil'});farther.x=430;farther.shieldUntil=0;
   shot(arena);advance(arena,.3);assert.equal(friend.alive,true);assert.equal(b.alive,false);assert.equal(farther.alive,true);assert.equal(a.stats.tags,1);
 });
 test('tagged duck cannot move or fire and respawns at its own base after three seconds',()=>{
-  const {arena,b}=fixture();shot(arena);advance(arena,.3);const position={x:b.x,y:b.y};
+  const {arena,b}=fixture();b.hits=RULES.hitsPerHeart-1;shot(arena);advance(arena,.3);const position={x:b.x,y:b.y};
   shot(arena,'b',10,{x:-1,ax:-1});advance(arena,.3);assert.equal(b.x,position.x);assert.equal(b.y,position.y);assert.equal(arena.state.shots.length,0);
   advance(arena,2.5);assert.equal(b.alive,false);advance(arena,.3);assert.equal(b.alive,true);assert.equal(b.x,450);assert.equal(b.base,'evil');assert.ok(b.shieldUntil>arena.state.time);
 });
@@ -70,7 +70,7 @@ test('real Bog pads remain distinct and walkable in the delivered environment',(
   for(const team of ['karma','evil']){const pads=spawnPads(team);assert.equal(pads.length,2);for(const p of pads)assert.ok(canWalk(p,BLOCKERS,BOUNDS));}
 });
 test('leave and return preserve lifetime totals but reset live streak and position',()=>{
-  let saved;const {arena}=fixture({onStats:(profile,stats)=>{if(profile==='a')saved=stats;}});shot(arena);advance(arena,.3);arena.leave('a');
+  let saved;const {arena}=fixture({onStats:(profile,stats)=>{if(profile==='a')saved=stats;}});arena.state.players.get('b').hits=RULES.hitsPerHeart-1;shot(arena);advance(arena,.3);arena.leave('a');
   const p=arena.join({id:'again',profile:'a',team:'evil',stats:saved});assert.equal(p.stats.tags,1);assert.equal(p.stats.medals,1);assert.equal(p.stats.bestStreak,1);assert.equal(p.streak,0);assert.equal(p.base,'evil');
   assert.equal(arena.join({id:'duplicate',profile:'a',team:'karma'}),null);
 });

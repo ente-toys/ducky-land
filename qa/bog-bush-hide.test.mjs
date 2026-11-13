@@ -93,7 +93,7 @@ test('a shot fired before entering a bush still reveals for the remaining two se
 
 test('blind paint tags a bush-hidden Ducky, while seven-second respawn hiding stays untaggable',()=>{
   for(const respawnHidden of [false,true]){
-    const {sim,p,e}=fixture();enter(sim,p);p.shieldUntil=respawnHidden?sim.state.time+7:0;
+    const {sim,p,e}=fixture();enter(sim,p);p.hits=RULES.hitsPerHeart-1;p.shieldUntil=respawnHidden?sim.state.time+7:0;
     assert.equal(seen(sim,'evil',p.id),false);
     e.x=650;e.facing=-Math.PI/2;input(sim,e,{fire:true});sim.step(1/60);input(sim,e);advance(sim,.25);
     assert.equal(p.lives,respawnHidden?5:4);assert.equal(p.alive,respawnHidden);

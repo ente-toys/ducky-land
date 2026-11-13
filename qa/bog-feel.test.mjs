@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {Container} from 'pixi.js';
 import {createBogCombat} from '../src/features/bog-combat/sim.js';
-import {PAINT} from '../src/features/bog-combat/rules.js';
+import {PAINT,RULES} from '../src/features/bog-combat/rules.js';
 import {createBogFeel,createCombatFeedback,createHitFeelState} from '../src/features/bog-combat/feel.js';
 
 test('real authoritative tags provide shooter colour, one local tag pop, ghost and respawn feedback',()=>{
@@ -13,7 +13,7 @@ test('real authoritative tags provide shooter colour, one local tag pop, ghost a
   const victimFeedback=createCombatFeedback({onHit:c=>hits.push(c),onRespawn:()=>calls.push(['respawn'])});
   const observe=()=>{const snapshot=sim.snapshot();selfFeedback.observe(snapshot,snapshot.players.find(p=>p.id===shooter.id));victimFeedback.observe(snapshot,snapshot.players.find(p=>p.id===victim.id));return snapshot;};
   observe();for(let i=0;i<430;i++)sim.step(1/60);
-  shooter.facing=-Math.PI/2;sim.input(shooter.id,{seq:1,x:0,y:0,fire:true});
+  victim.hits=RULES.hitsPerHeart-1;shooter.facing=-Math.PI/2;sim.input(shooter.id,{seq:1,x:0,y:0,fire:true});
   for(let i=0;i<12;i++){sim.step(1/60);observe();}
   assert.equal(victim.alive,false);assert.equal(hits.length,1);assert.equal(hits[0],PAINT.evil[1]);
   assert.deepEqual(calls,[['tag','other'],['ghost']]);
