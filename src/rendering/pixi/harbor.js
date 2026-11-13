@@ -1,4 +1,4 @@
-import {Container, Graphics, Text} from 'pixi.js';
+import {Container, Graphics} from 'pixi.js';
 import {PALETTE} from '../shared/palette.js';
 import {islandFor, near} from '../../gameplay/islands.js';
 import {mapFor, mapOf} from '../../world/island-maps.js';
@@ -82,13 +82,6 @@ export function createHarbor(decks, objects) {
   decks.addChild(ropes);
   const flowers = new Graphics({label: 'Harbor flowers'});
   decks.addChild(flowers);
-  const sign = new Container({label: 'Harbor signpost'}), board = new Graphics(), name = new Text({text: '', style: {
-    fontFamily: 'system-ui, sans-serif', fontSize: 23, fontWeight: '800', fill: ink, letterSpacing: .3}});
-  name.anchor.set(.5); name.position.set(0, -104); name.resolution = 3;
-  sign.addChild(board, name);
-  const placeSign = () => {sign.position.set(JETTY().foot.x + 100, JETTY().foot.y + 44); sign.zIndex = sign.y;};
-  placeSign();
-  objects.addChild(sign);
   const flag = new Container({label: 'Harbor flag'}), pole = new Graphics(), cloth = new Graphics();
   flag.addChild(pole, cloth);
   const placeFlag = () => {flag.position.set(JETTY().foot.x - 104, JETTY().foot.y + 46); flag.zIndex = flag.y;};
@@ -111,23 +104,14 @@ export function createHarbor(decks, objects) {
     dispose() {
       for (const {root} of jetties.values()) root.destroy({children: true});
       jetties.clear();
-      for (const node of [ropes, flowers, sign, flag]) node.destroy({children: true});
+      for (const node of [ropes, flowers, flag]) node.destroy({children: true});
     },
-    transient: () => [sign, flag, flowers],
+    transient: () => [flag, flowers],
     show(mapId) {jettyFor(mapId); for (const [id, j] of jetties) j.root.visible = id === mapId;},
     switchIsland(id) {
       const island = islandFor(id);
-      current = mapOf(id); jetty = jettyFor(current.id); this.show(current.id); placeSign(); placeFlag();
+      current = mapOf(id); jetty = jettyFor(current.id); this.show(current.id); placeFlag();
       accent = island.accent;
-      name.text = island.name;
-      const w = Math.max(150, name.width + 40), top = -128, h = 46;
-      board.clear()
-        .ellipse(0, 0, 26, 8).fill({color: ink, alpha: .16})
-        .rect(-5, -136, 10, 136).fill(darkWood).stroke({color: ink, width: 2.6})
-        .roundRect(-w / 2, top, w, h, 7).fill(wood).stroke({color: ink, width: 3})
-        .moveTo(-w / 2 + 8, top + h / 2).lineTo(w / 2 - 8, top + h / 2).stroke({color: darkWood, width: 1.4, alpha: .55})
-        .circle(-w / 2 + 11, top + 10, 2.4).fill(ink).circle(w / 2 - 11, top + 10, 2.4).fill(ink)
-        .poly([70, -70, -18, -70, -18, -78, -44, -60, -18, -42, -18, -50, 70, -50]).fill(sandShade).stroke({color: ink, width: 2.6, join: 'round'});
       flowers.clear();
       if (id !== 'home') for (const [fx, fy] of [[-150, 70], [-118, 92], [150, 100], [184, 80], [60, 120]]) {
         const cx = JETTY().foot.x + fx, cy = JETTY().foot.y + fy;
