@@ -8595,7 +8595,7 @@
     "sources": {
       "version": 1,
       "theme": "bog",
-      "modelSha256": "1b9e48f545124eebea744c4cdaee54a19125fc27ddbc0b7a28fb93365f5fd928",
+      "modelSha256": "a9a102cf4912268c5840deccc13cc3c05fdc52d1e5e4011c7b85a6338219e14d",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -8603,7 +8603,7 @@
         },
         {
           "path": "public/pixi-art/themes/bog-arena/art.json",
-          "sha256": "afd1ef1c54ba14841b360499ce937e94ca8206b6d06a77618810b9b09b37208c"
+          "sha256": "0ecfde02c87e1baaae6b7121b30d34a9dfdd2581eceafa5d813e78f31ed75d8b"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/ground.svg",
@@ -9022,14 +9022,14 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "dda0b9e04d16cf372dd9b805d3e7c86705204e522f8edc0df89836d9330b8882"
+      "sha256": "0e0844b458c4f9a27e2e2f0823be973ff78d034917609bd1dc3a5deba3a03179"
     },
     "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
-    "sha256": "bdb5566170d5ab59a76aefc057184d34146d468f08b234a6793e3bd5622e981a",
+    "sha256": "316ce125ad488f80fbfcbc37cd3dda6a7a3143eeb5c1f0bd5829b223c2b56800",
     "width": 1024,
     "height": 1000,
-    "bytes": 596314,
+    "bytes": 599779,
     "groundBytes": 398644,
     "quality": {
       "tolerance": 0.2,

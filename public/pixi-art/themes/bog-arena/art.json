@@ -11333,6 +11333,1686 @@
           244
         ]
       ]
+    },
+    {
+      "id": "field-cover-north-pond-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 2947,
+      "y": 2865,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-pond-west",
+      "area": "field-north-pond",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-pond-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 2855,
+      "y": 3051,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-pond-west",
+      "area": "field-north-pond",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-pond-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 5453,
+      "y": 2865,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-pond-east",
+      "area": "field-north-pond",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-pond-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 5547,
+      "y": 3051,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-pond-east",
+      "area": "field-north-pond",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-inner-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 3622,
+      "y": 2765,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-inner-west",
+      "area": "field-north-inner",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-inner-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 3716,
+      "y": 2765,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-inner-west",
+      "area": "field-north-inner",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-inner-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 4778,
+      "y": 2765,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-inner-east",
+      "area": "field-north-inner",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-inner-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 4686,
+      "y": 2765,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-inner-east",
+      "area": "field-north-inner",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-outer-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 2772,
+      "y": 1715,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-outer-west",
+      "area": "field-north-outer",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-outer-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 2680,
+      "y": 1715,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-outer-west",
+      "area": "field-north-outer",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-outer-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 5628,
+      "y": 1715,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-outer-east",
+      "area": "field-north-outer",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-outer-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 5722,
+      "y": 1715,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-outer-east",
+      "area": "field-north-outer",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-back-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 3622,
+      "y": 1615,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-back-west",
+      "area": "field-north-back",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-back-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 3530,
+      "y": 1615,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-back-west",
+      "area": "field-north-back",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-back-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 4778,
+      "y": 1615,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-back-east",
+      "area": "field-north-back",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-north-back-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 4872,
+      "y": 1615,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-north-back-east",
+      "area": "field-north-back",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-outer-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 2072,
+      "y": 4515,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-outer-west",
+      "area": "field-middle-outer",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-outer-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 1980,
+      "y": 4515,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-outer-west",
+      "area": "field-middle-outer",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-outer-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 6328,
+      "y": 4515,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-outer-east",
+      "area": "field-middle-outer",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-outer-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 6422,
+      "y": 4515,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-outer-east",
+      "area": "field-middle-outer",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-court-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 2697,
+      "y": 4440,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-court-west",
+      "area": "field-middle-court",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-court-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 2605,
+      "y": 4440,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-court-west",
+      "area": "field-middle-court",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-court-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 5703,
+      "y": 4440,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-court-east",
+      "area": "field-middle-court",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-court-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 5797,
+      "y": 4440,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-court-east",
+      "area": "field-middle-court",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-inner-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 3572,
+      "y": 4415,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-inner-west",
+      "area": "field-middle-inner",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-inner-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 3480,
+      "y": 4601,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-inner-west",
+      "area": "field-middle-inner",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-inner-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 4828,
+      "y": 4415,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-inner-east",
+      "area": "field-middle-inner",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-middle-inner-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 4922,
+      "y": 4601,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-middle-inner-east",
+      "area": "field-middle-inner",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-meadow-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 2322,
+      "y": 4865,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-meadow-west",
+      "area": "field-south-meadow",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-meadow-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 2416,
+      "y": 5051,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-meadow-west",
+      "area": "field-south-meadow",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-meadow-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 6078,
+      "y": 4865,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-meadow-east",
+      "area": "field-south-meadow",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-meadow-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 5986,
+      "y": 5051,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-meadow-east",
+      "area": "field-south-meadow",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-inner-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 3247,
+      "y": 4940,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-inner-west",
+      "area": "field-south-inner",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-inner-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 3341,
+      "y": 5126,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-inner-west",
+      "area": "field-south-inner",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-inner-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 5153,
+      "y": 4940,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-inner-east",
+      "area": "field-south-inner",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-inner-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 5061,
+      "y": 5126,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-inner-east",
+      "area": "field-south-inner",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-back-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 3522,
+      "y": 5665,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-back-west",
+      "area": "field-south-back",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-back-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 3616,
+      "y": 5851,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-back-west",
+      "area": "field-south-back",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-back-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 4878,
+      "y": 5665,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-back-east",
+      "area": "field-south-back",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-back-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 4786,
+      "y": 5851,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-back-east",
+      "area": "field-south-back",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-outer-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 1322,
+      "y": 5165,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-outer-west",
+      "area": "field-south-outer",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-outer-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 1230,
+      "y": 5351,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-outer-west",
+      "area": "field-south-outer",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-outer-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 7078,
+      "y": 5165,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-outer-east",
+      "area": "field-south-outer",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-outer-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 7172,
+      "y": 5351,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-outer-east",
+      "area": "field-south-outer",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-coast-west-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 2872,
+      "y": 6565,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-coast-west",
+      "area": "field-south-coast",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-coast-west-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 2780,
+      "y": 6751,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-coast-west",
+      "area": "field-south-coast",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-coast-east-0",
+      "name": "wz-wall",
+      "src": "home/wz-wall.svg",
+      "x": 5528,
+      "y": 6565,
+      "width": 260,
+      "height": 160,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        105,
+        10
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-coast-east",
+      "area": "field-south-coast",
+      "coverFootprints": [
+        [
+          8,
+          95,
+          244,
+          58
+        ]
+      ]
+    },
+    {
+      "id": "field-cover-south-coast-east-1",
+      "name": "wz-wall-ns",
+      "src": "home/wz-wall-ns.svg",
+      "x": 5622,
+      "y": 6751,
+      "width": 76,
+      "height": 328,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "shadow": true,
+      "shadowSize": [
+        29,
+        12
+      ],
+      "shadowOffset": [
+        0,
+        -5
+      ],
+      "wind": false,
+      "author": "warzone",
+      "wallLayout": "field-cover-south-coast-east",
+      "area": "field-south-coast",
+      "coverFootprints": [
+        [
+          8,
+          77,
+          58,
+          244
+        ]
+      ]
     }
   ],
   "flats": [

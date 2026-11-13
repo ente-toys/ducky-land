@@ -60,19 +60,20 @@ test('Home plant geometry is kept at source size and every root is on dry land',
  assert.equal(art.raster.enabled,false);
 });
 
-test('twenty perimeter trees leave fighting lanes clear and preserve every other prop and blocker',()=>{
+test('twenty perimeter trees leave fighting lanes clear and preserve the original scenery alongside new field cover',()=>{
  const isTree=p=>/^home\/tree-[1-5]-[a-z]+\.svg$/.test(p.src);
  const trees=art.props.filter(isTree);
  const trunkId=p=>p.id.replace('-tree-','-trunk-');
  const trunks=new Set(trees.map(trunkId));
  const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
  assert.equal(trees.length,20);
- assert.equal(art.props.length,426);
- assert.equal(BOG_BLOCKERS.length,280);
+ assert.equal(art.props.length,474);
+ assert.equal(BOG_BLOCKERS.length,328);
  // These fingerprints lock all bushes, walls, ruins, buildings, reeds and
- // unrelated collision to their values before the tree removal.
- assert.equal(hash(art.props.filter(p=>!isTree(p))),'12ca34e77acf855fc150c4f4ecb7a2334bbfff90e8f9756425c9f0a960bfedcd');
- assert.equal(hash(BOG_BLOCKERS.filter(b=>!trunks.has(b.id))),'2d97acdcc19849969075a4af042b956e792a44768486267195506323b533da43');
+ // unrelated collision to their values before the tree removal. New field cover
+ // is verified separately by the field-cover layout checks.
+ assert.equal(hash(art.props.filter(p=>!isTree(p)&&!p.id.startsWith('field-cover-'))),'12ca34e77acf855fc150c4f4ecb7a2334bbfff90e8f9756425c9f0a960bfedcd');
+ assert.equal(hash(BOG_BLOCKERS.filter(b=>!trunks.has(b.id)&&!b.id.startsWith('field-cover-'))),'2d97acdcc19849969075a4af042b956e792a44768486267195506323b533da43');
  for(const p of trees){
   assert.ok(p.x<1400||p.x>6800||p.y<1300||p.y>6300,p.id+' outside fighting lanes');
   assert.ok(BOG_BLOCKERS.some(b=>b.id===trunkId(p)),p.id+' retained trunk');
