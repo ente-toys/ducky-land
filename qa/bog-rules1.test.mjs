@@ -109,6 +109,8 @@ test('fifth tag keeps visible knockout then exits to the nearest world islet doc
   const dest=bogExitIslet();assert.ok(ISLETS.some(i=>i.id===dest.islet));
   assert.deepEqual([p.actor.x,p.actor.y],[isletWalk(dest.islet).land.x,isletWalk(dest.islet).land.y]);
   assert.equal(p.actor.mode,'walking');assert.equal(p.actor.boatId,null);assert.ok(room.navFor(p.actor.islandId).walkable(p.actor.x,p.actor.y));
+  // the paddled-out Duck finds a free boat at its islet's dock, so it can sail away again
+  const exitDock=isletWalk(dest.islet).water;assert.ok(room.boats.some(b=>!b.occupant&&b.islandId===dest.islandId&&Math.hypot(b.x-exitDock.x,b.y-exitDock.y)<=150),'boat waiting at the islet dock');
   assert.equal(room.karma.bogEntry(p.account),null);assert.equal(room.karma.balance(p.account),10);
   assert.equal(p.socket.notes.findLast(m=>m.type==='travel-notice').text,`Out of lives! Paddled to ${dest.name}`);
   assert.equal(socket.notes.findLast(m=>m.type==='arena-exit').destination.islet,dest.islet);

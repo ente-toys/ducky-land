@@ -26,7 +26,7 @@ export function boardingPoint(boat,nav) {
   return {x:Math.round(p.x),y:Math.round(p.y)};
 }
 export const BOAT_RADIUS = 46;
-export const SAIL_SPEED = 380;
+export const SAIL_SPEED = 570;   // 1.5x the old 380
 const MARGIN=1800;
 const DEST=new Map(), BOUNDS=new Map(), OBSTACLES=new Map(), GRIDS=new Map(),CAP=new Map();
 const candidateScratch=[];

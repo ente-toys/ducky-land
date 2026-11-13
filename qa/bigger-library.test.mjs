@@ -3,7 +3,8 @@ import {test} from 'node:test';import assert from 'node:assert/strict';import fs
 import {makeMap} from '../src/world/island-maps.js';import {geometry,inPoly,inShape} from '../assets/world/island-geometry.mjs';import {checkTheme} from '../scripts/theme-index.mjs';
 const read=f=>JSON.parse(fs.readFileSync(f));const d='assets/world/themes/library/',a='public/pixi-art/themes/library/',base='scripts/bigger-library/original/';
 const world=read(d+'world.json'),walk=read(d+'walk-world.json'),art=read(a+'art.json'),harbor=read(d+'harbor.json'),old=read(base+'world.json'),oldArt=read(base+'art.json'),plan=read('scripts/bigger-library/plan.json');
-const cleared=new Set([...read('scripts/pagepond-bridges/report.json').clearedLandscape,...read('scripts/pagepond-bridges/report.json').retiredBridgeParts]);
+// lib-256 is the POND/BREAD/HOME name signpost, removed with the other island name boards
+const cleared=new Set([...read('scripts/pagepond-bridges/report.json').clearedLandscape,...read('scripts/pagepond-bridges/report.json').retiredBridgeParts,'lib-256']);
 const meadowWater=read('scripts/pagepond-meadow/placements.json').waterRegions;
 const inMeadowWater=(x,y)=>meadowWater.some(w=>inShape(x,y,w,20));
 const checked=checkTheme('library'),map=makeMap('library',{world,walk,harbor,sleepers:checked.sleepers}),geo=geometry(map.walk);
