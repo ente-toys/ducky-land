@@ -38,7 +38,7 @@ const hiddenBoxes = walk => walk.world.obstacles.map(({poly}) => {
 
 // Drawn water that the walk data doesn't model (a stream, a pond) and the bridge over it, as boxes in the islet
 // art's 1024 design space, measured from the named SVG layers (04: water + stream-bridge, 07: heart-pond).
-const DRAWN_WATER = {'04-small-mountain': [[443, 452, 605, 779]], '07-pink-blossom': [[288, 617, 417, 710]]};
+const DRAWN_WATER = {'07-pink-blossom': [[288, 617, 417, 710]]};
 const drawnWater = new Map();
 function drawnWaterOf(walk) {
   const {islet} = walk, k = islet.width / 1024;

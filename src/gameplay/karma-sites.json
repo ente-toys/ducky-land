@@ -1113,41 +1113,6 @@
     "y": -5261.22
   },
   {
-    "id": "sea-4-1-0",
-    "region": "sea-4-1",
-    "islandId": "isle-250",
-    "x": -5003.45,
-    "y": -2152.91
-  },
-  {
-    "id": "sea-4-1-1",
-    "region": "sea-4-1",
-    "islandId": "isle-250",
-    "x": -5075.33,
-    "y": -2031.8
-  },
-  {
-    "id": "sea-4-1-2",
-    "region": "sea-4-1",
-    "islandId": "isle-250",
-    "x": -4863.57,
-    "y": -2164.06
-  },
-  {
-    "id": "sea-4-1-3",
-    "region": "sea-4-1",
-    "islandId": "isle-250",
-    "x": -4934.6,
-    "y": -2023.57
-  },
-  {
-    "id": "sea-4-1-4",
-    "region": "sea-4-1",
-    "islandId": "isle-250",
-    "x": -4791.16,
-    "y": -2042.26
-  },
-  {
     "id": "sea-6-1-0",
     "region": "sea-6-1",
     "islandId": "isle-251",

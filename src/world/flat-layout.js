@@ -16,7 +16,6 @@ export const FLAT_ISLETS={
  'sea-1-1':{home:'isle-249',x:0,y:9500},
  'sea-2-1':{home:'home',x:-9500,y:0},
  'sea-3-1':{home:'isle-55',x:0,y:-10000},
- 'sea-4-1':{home:'isle-250',x:-9000,y:-5000},
  'sea-6-1':{home:'isle-251',x:10000,y:1000},
  'sea-7-1':{home:'sunset',x:-9000,y:5500},
  'sea-11-1':{home:'isle-251',x:4500,y:9500},

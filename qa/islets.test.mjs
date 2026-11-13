@@ -19,9 +19,9 @@ import {ISLET_META} from '../src/world/islets.js';
 import {makeRoom,addPlayer} from './room-harness.mjs';
 import {fileURLToPath} from 'node:url';
 const inRing=(x,y,p)=>{let inside=false;for(let i=0,j=p.length-1;i<p.length;j=i++)if((p[i][1]>y)!==(p[j][1]>y)&&x<(p[j][0]-p[i][0])*(y-p[i][1])/(p[j][1]-p[i][1])+p[i][0])inside=!inside;return inside;};
-test('7 stable islets use each of the seven approved artworks once, without adding islands',()=>{
- assert.equal(ISLET_SEED,831511);assert.equal(ISLETS.length,7);assert.equal(ISLANDS.length,7);
- assert.equal(new Set(ISLETS.map(i=>i.id)).size,7);
+test('6 stable islets use each of the six approved artworks once, without adding islands',()=>{
+ assert.equal(ISLET_SEED,831511);assert.equal(ISLETS.length,6);assert.equal(ISLANDS.length,7);
+ assert.equal(new Set(ISLETS.map(i=>i.id)).size,6);
  for(const art of ISLET_ART)assert.equal(ISLETS.filter(i=>i.art===art).length,1);
  for(const i of ISLETS){assert.equal(i.width,ISLET_META[i.art].designWidth,`${i.id} is drawn at its art's own scale`);assert.ok(i.width>=1024&&i.width<=1600);assert.ok(Math.abs(i.lat)<72*Math.PI/180);if(Math.abs(i.lat)>60*Math.PI/180)assert.equal(i.art,'08-snow-igloo');}
  for(const i of ISLETS)for(const j of ISLETS)if(i!==j&&i.art===j.art)assert.ok(angle(i.center,j.center)*WORLD_GEO.Rw>8000);
@@ -52,7 +52,7 @@ test('all islet ground, prop bases and jetties leave a 600-unit boat channel on 
   }
  }
  const sectors=new Set(ISLETS.map(i=>Math.floor((i.lon+Math.PI)/(Math.PI/3))));
- assert.equal(sectors.size,5,'the seven islets span five of the six longitude sectors');
+ assert.equal(sectors.size,4,'the six islets span four of the six longitude sectors');
  assert.ok(ISLETS.some(i=>i.lat>.6)&&ISLETS.some(i=>i.lat<-.6),'both hemispheres retain islets');
 });
 const PUBLIC=f=>fileURLToPath(new URL(`../public/pixi-art/islets/${f}`,import.meta.url));
