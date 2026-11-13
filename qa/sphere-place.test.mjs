@@ -79,7 +79,7 @@ test('sailing to Iceland docks on its own jetty and beach from both hemispheres'
 });
 test('space outside the sphere cannot sample flat land, while hearts can rise beyond the rim',()=>{
  const code=readFileSync(new URL('../src/rendering/pixi/world-view.js',import.meta.url),'utf8');
- assert.match(code,/if\(edge>=1\.\)return space;/);
+ assert.match(code,/if\(edge>=1\.\)\{[^{}]*return mix\(starrySky\(sp\),[^;]+;\s*\}\s*vec2 dir=[^;]+;\s*vec3 p=surfaceAt\(uv\)/);
  assert.match(code,/pin.mask=masking\?sphereMask:null/);
  assert.match(code,/if\(masking\)sphereMask\.circle/);
  assert.doesNotMatch(code,/life\.mask\s*=/);

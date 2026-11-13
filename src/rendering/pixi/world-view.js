@@ -49,7 +49,7 @@ uniform vec3 uItE[22];
 uniform vec3 uItN[22];
 uniform vec4 uItAux[22];
 uniform float uPaint;
-uniform float uTime;
+uniform float uSkyTime;
 uniform vec2 uCam;
 uniform float uZoom;
 uniform vec2 uRes;
@@ -67,6 +67,54 @@ uniform vec3 uViewNorth;
 uniform vec3 uSph;
 ${CLOUD_SHADER}
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+vec3 shootingStar(vec2 px){
+ if(uSkyTime<0.)return vec3(0.);
+ const float interval=11.;
+ float pass=floor(uSkyTime/interval);
+ float delay=1.8+hash(vec2(pass,17.))*3.*step(1.,pass);
+ float progress=(mod(uSkyTime,interval)-delay)/1.2;
+ if(progress<=0.||progress>=1.)return vec3(0.);
+
+ // Follow a diagonal through a corner, where the sky stays visible beside the globe.
+ vec2 side=step(vec2(.5),vec2(hash(vec2(pass,31.)),hash(vec2(pass,53.))))*2.-1.;
+ float offset=hash(vec2(pass,71.));
+ vec2 start=(.5+side*vec2(.44,.30+offset*.07))*uRes;
+ vec2 travel=side*vec2(-.22,.13)*uRes;
+ vec2 direction=normalize(travel);
+ vec2 delta=px-(start+travel*progress);
+ float behind=-dot(delta,direction);
+ float across=abs(dot(delta,vec2(-direction.y,direction.x)));
+ float trailLength=clamp(length(travel)*.44,24.,96.);
+ float trail=(1.-smoothstep(0.,trailLength,behind))*step(0.,behind);
+ float width=mix(.5,1.35,trail);
+ float streak=(1.-smoothstep(0.,width,across))*trail;
+ float head=1.-smoothstep(.25,2.,length(delta));
+ float fade=smoothstep(0.,.2,progress)*(1.-smoothstep(.58,1.,progress));
+ return (vec3(.60,1.,.70)*head*.73+vec3(.22,1.,.42)*streak*.48)*fade;
+}
+vec3 starrySky(vec2 px){
+ vec2 sky=(px-uRes*.5)/min(uRes.x,uRes.y);
+ float bandDistance=dot(sky,vec2(.55,.83))+.16;
+ float haze=exp(-bandDistance*bandDistance*18.);
+ vec3 color=mix(vec3(.038,.05,.105),vec3(.074,.086,.156),haze)+shootingStar(px);
+
+ const float cellSize=18.;
+ vec2 cell=floor(px/cellSize);
+ // Sample density at the cell center so every pixel of a star agrees on its visibility.
+ vec2 cellSky=((cell+.5)*cellSize-uRes*.5)/min(uRes.x,uRes.y);
+ float cellBandDistance=dot(cellSky,vec2(.55,.83))+.16;
+ float density=.16+.29*exp(-cellBandDistance*cellBandDistance*18.);
+ if(hash(cell)>density)return color;
+
+ vec2 center=cell*cellSize+4.+10.*vec2(hash(cell+17.3),hash(cell+51.9));
+ float distanceToStar=length(px-center);
+ float magnitude=pow(hash(cell+89.6),3.);
+ float radius=mix(.45,1.15,magnitude);
+ float core=1.-smoothstep(radius*.3,radius+.55,distanceToStar);
+ float halo=(1.-smoothstep(.3,4.,distanceToStar))*magnitude*magnitude*.16;
+ vec3 tint=mix(vec3(.70,.80,1.),vec3(1.,.90,.75),hash(cell+124.7));
+ return color+tint*(core*mix(.21,.94,magnitude)+halo);
+}
 vec3 surface(vec2 g){
  vec2 q=g-uSph.xy;float d=length(q),a=d/uSph.z;
  return uAnchor*cos(a)+(uEast*q.x-uNorth*q.y)*(d>.001?sin(a)/d:1./uSph.z);
@@ -166,13 +214,12 @@ vec3 surfaceAt(vec2 uv){
 vec3 planet(vec2 uv){
  vec2 px=chartDelta((uv-.5)*uRes);float Rp=uR*uRes.y,d=length(px)/Rp;
  float ball=uBall;
- vec2 sp=uv*uRes;vec3 space=vec3(.07,.09,.22);
- float st=hash(floor(sp/2.)),tw=.5+.5*sin(uTime*1.7+st*40.);
- space+=vec3(1.,.95,.8)*step(.9975,st)*tw*step(1.03,d);
+ vec2 sp=uv*uRes;
  float horizon=mix(1.57079632679,1.,ball),edge=d/horizon;
- float air=exp(-max(edge-1.,0.)*Rp*horizon/7.)*step(1.,edge);
- space=mix(space,vec3(.36,.68,1.),air*.7);
- if(edge>=1.)return space;
+ if(edge>=1.){
+  float air=exp(-(edge-1.)*Rp*horizon/7.);
+  return mix(starrySky(sp),vec3(.36,.68,1.),air*.7);
+ }
  vec2 dir=d>0.?px/length(px):vec2(0.);
  vec3 p=surfaceAt(uv),p1=surfaceAt(uv+vec2(1./uRes.x,0.)),p2=surfaceAt(uv+vec2(0.,1./uRes.y));
  vec3 v=vec3(dir.x*edge,-dir.y*edge,sqrt(max(0.,1.-edge*edge)));
@@ -227,12 +274,14 @@ function makePin(text = 'You', color = PALETTE.sun, icon = null) {
 export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPTY) {
   const shoreTextures = new Map();
   let rt = RenderTexture.create({width: 2, height: 2, resolution: 1}), w = 0, h = 0, worldTex = null, worldVersion = -1, lastGlobeTime = -Infinity;
+  let skyOpenedAt = null;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
     uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, uClouds:cloudTexture.source, viewUniforms: {
       uCloudPhase:{value:0,type:'f32'},uCloudFade:{value:0,type:'f32'},
-      uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
+      uSkyTime:{value:-1,type:'f32'},
+      uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
       uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},
 
       uSea: {value: new Float32Array([0x6E / 255, 0xC9 / 255, 0xDE / 255]), type: 'vec3<f32>'},
@@ -303,6 +352,8 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       const on = t > .001;
       mesh.visible = on;
       if(on)lastGlobeTime=time;
+      if(t>.97)skyOpenedAt??=time;
+      else skyOpenedAt=null;
       // Build the 4096 globe atlas only for the globe, and free it a few seconds after
       // returning to walking so gameplay does not carry ~90 MB of GPU memory.
       if (on && arch?.texture && (!worldTex || worldVersion !== arch.version)) {
@@ -320,13 +371,14 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       const Rw=WORLD_GEO.Rw,R=Rw*cam.zoom/h,Rp=Rw*cam.zoom,ball=globeBall(t,cam.zoom,h);
       u.uBall=ball;
       const clouds=cloudState(ball,time,reduced);u.uCloudPhase=clouds.phase;u.uCloudFade=clouds.fade;
+      u.uSkyTime=reduced||skyOpenedAt===null?-1:time-skyOpenedAt;
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
       pin.mask=masking?sphereMask:null;bogPin.mask=pin.mask;
       const basis=cam.basis??{a:1,b:0,c:0,d:1};u.uBasis.set([basis.a,basis.b,basis.c,basis.d]);
       this.roll=0;
       u.uAnchor.set(anchor.center);u.uEast.set(anchor.east);u.uNorth.set(anchor.north);
       u.uFocus.set(view.center);u.uViewEast.set(view.east);u.uViewNorth.set(view.north);
-      u.uSph.set([m.cx,m.cy,Rw]);u.uR=R;u.uTime=time;u.uZoom=cam.zoom;u.uCam.set([cam.x,cam.y]);u.uRes.set([w,h]);
+      u.uSph.set([m.cx,m.cy,Rw]);u.uR=R;u.uZoom=cam.zoom;u.uCam.set([cam.x,cam.y]);u.uRes.set([w,h]);
       const horizon=Rp*horizonRatio(ball);
       const gOf=(px,py)=>{
         const p=pixelChart(id,cam,px,py,ball);return p?[p.x,p.y]:[NaN,NaN];
