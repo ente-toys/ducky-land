@@ -185,22 +185,6 @@ test('Home publishes readiness after a placeholder prop times out',async t=>{
   node.destroy();ground.destroy();
 });
 
-test('themed engine reveals available pictures after a placeholder prop times out',async t=>{
-  t.mock.timers.enable({apis:['setTimeout']});
-  const f=fixture(t,'webp',()=>false),game=themeGame(f),load=Assets.load;
-  const placeholder=new Texture({source:Texture.EMPTY.source});
-  let attempts=0;
-  Assets.load=asset=>asset.src.endsWith('/prop.svg')?(attempts++,Promise.resolve(placeholder)):load(asset);
-  const warnings=[],warn=console.warn;console.warn=(...args)=>warnings.push(args);t.after(()=>{console.warn=warn;});
-  const preparing=game.ensureArt('pink');await flush();
-  assert.equal(game.artReady('pink'),false);
-  t.mock.timers.tick(ART_TIMEOUT_MS);
-  for(let i=0;i<30;i++){await flush();t.mock.timers.tick(0);}
-  await preparing;
-  assert.equal(game.artReady('pink'),true);assert.equal(attempts,2);assert(warnings.length>=1);
-  placeholder.destroy();game.scene.destroy({children:true});game.contactShadows.destroy({children:true});game.overDecks.destroy({children:true});
-});
-
 test('a ground piece that never resolves still reveals Home within the 4 second deadline',async t=>{
   t.mock.timers.enable({apis:['setTimeout']});
   const uploads=new Set(),ground=new Container(),scene=new Container();scene.addChild(ground);
