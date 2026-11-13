@@ -51,13 +51,14 @@ test('biggest themed-island preparation uses whole pictures within the same memo
  // Exercise every manifest, including the largest island, through the real loader.
  for(const {id,art} of manifests){
   globalThis.fetch=async src=>({ok:true,json:async()=>src.endsWith('/art.json')?art:{pieces:[]}});
-  const resolutions=new Map();let actual=0;
+  const resolutions=new Map(),textures=new Map();let actual=0;
   const acquire=async(src,r=1)=>{
    assert(!src.includes('rasterCrop='),'prepared scenes never subdivide art');
-   if(resolutions.has(src)){assert.equal(r,resolutions.get(src));return Texture.EMPTY;}
+   if(resolutions.has(src)){assert.equal(r,resolutions.get(src));return textures.get(src);}
    resolutions.set(src,r);
    const size=sizes[src]??[512,512];actual+=cost(size,r,!(art.ground?.tiles??[]).some(e=>(e.src.startsWith('/')?e.src:`/pixi-art/themes/${id}/${e.src}`)===src));
-   return Texture.EMPTY;
+   const texture=new Texture({source:new ImageSource({width:size[0],height:size[1],resolution:r})});
+   textures.set(src,texture);return texture;
   };
   const pool=createGroundPool({acquire,release(){}});
   const loaded=await loadThemeArt({id,art:`/pixi-art/themes/${id}/art.json`,origin:{x:0,y:0},width:11000,height:10000},{groundPool:pool,acquire,release(){},prepare:true,dpr:2});
@@ -66,6 +67,7 @@ test('biggest themed-island preparation uses whole pictures within the same memo
   assert(loaded.props.every(p=>p.sprite instanceof Sprite),'prepared props are whole-picture Sprites');
   assert(!loaded.rasterPool);
   loaded.destroy();pool.destroy();
+  for(const texture of textures.values())texture.destroy(true);
  }
 });
 
