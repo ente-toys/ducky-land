@@ -15,3 +15,6 @@ incoming/**/evidence/*.mp4
 
 # Local SVG review sheets and measurements, never game assets.
 review/globe-svg/
+
+# Generated telescope review bundle and canvas captures.
+review/stargaze/

@@ -6,13 +6,8 @@ import {createStargazeSky, skyCounts} from './stargaze-sky.js';
 
 const REFRESH_MS = 30_000;
 // dev only (?dev=1 or ?offline): there is no room server to ask, so the sky shows this fixture
-const OFFLINE_SKY = {total:30_000, me:{accountId:'1',login:'you',starred:true}, online:['1','2','3','4'], friends:['2','6'],
+const OFFLINE_SKY = {total:30_088, me:{accountId:'1',login:'you',starred:true}, online:['1','2'], friends:['2','6'],
   players:[['1','you'],['2','mallard'],['3','pekin'],['4','teal'],['5','eider'],['6','wigeon'],['7','pintail'],['8','gadwall']]};
-const STAR = 'M0 -7.2L2.2 -2.5 7.3 -2 3.5 1.5 4.5 6.6 0 4.1 -4.5 6.6 -3.5 1.5 -7.3 -2 -2.2 -2.5Z';
-// every star is gold; how bright it is says who it is, so the key shows each one on a patch of night
-const Star = ({level}) => <svg width="20" height="20" viewBox="-11 -11 22 22" aria-hidden="true">
-  <circle r="11" fill="#16323c"/>{level === 1 && <circle r="8.6" fill="none" stroke="#ffb937" strokeWidth="1.2" opacity=".55"/>}
-  <path d={STAR} fill="#ffb937" opacity={level} transform={level === 1 ? undefined : 'scale(.8)'}/></svg>;
 const number = value => value.toLocaleString('en');
 
 export default function IslandStargaze({island, playing, offline = false}) {
@@ -21,8 +16,7 @@ export default function IslandStargaze({island, playing, offline = false}) {
   const [open, setOpen] = useState(false);
   const [sky, setSky] = useState(null);
   const [error, setError] = useState('');
-  const [news, setNews] = useState('');
-  const dialog = useRef(null), stage = useRef(null), lens = useRef(null), canvas = useRef(null), tag = useRef(null), view = useRef(null);
+  const dialog = useRef(null), stage = useRef(null), lens = useRef(null), canvas = useRef(null), tag = useRef(null), nameTag = useRef(null), view = useRef(null);
   const active = playing || offline;
 
   // the boat button owns the same place on screen, so the telescope waits its turn
@@ -69,7 +63,7 @@ export default function IslandStargaze({island, playing, offline = false}) {
     const element = dialog.current;
     island.current?.stopInput();
     element.showModal();
-    const stars = createStargazeSky({stage:stage.current, lens:lens.current, canvas:canvas.current, tag:tag.current, onNews:setNews});
+    const stars = createStargazeSky({stage:stage.current, lens:lens.current, canvas:canvas.current, tag:tag.current, nameTag:nameTag.current});
     view.current = stars;
     stars.start();
     // the island must not hear walking keys while you stargaze; Escape still closes the dialog
@@ -84,7 +78,7 @@ export default function IslandStargaze({island, playing, offline = false}) {
   }, [open, island]);
 
   useEffect(() => {
-    if (!open) {setSky(null); setError(''); setNews(''); return;}
+    if (!open) {setSky(null); setError(''); return;}
     let stopped = false, timer = 0;
     const load = async () => {
       try {
@@ -105,43 +99,27 @@ export default function IslandStargaze({island, playing, offline = false}) {
   }, [open, offline]);
 
   useEffect(() => {if (open && sky) view.current?.setData(sky);}, [open, sky]);
-  useEffect(() => {
-    if (!news) return;
-    const id = setTimeout(() => setNews(''), 4200);
-    return () => clearTimeout(id);
-  }, [news]);
-
   const counts = sky ? skyCounts(sky) : null;
   return <>
     {near && !open && <button className="pixi-travel-action" onClick={look} disabled={walking}>
       Look through the telescope <kbd>Enter</kbd>
     </button>}
     {open && <dialog ref={dialog} className="pixi-stargaze" aria-labelledby="stargaze-title" onClose={() => setOpen(false)}>
-      <header className="pixi-stargaze-card">
+      <header className="pixi-stargaze-counts">
         <h2 id="stargaze-title">{counts ? `${number(counts.total)} stars` : 'Counting the stars…'}</h2>
-        <p>One for everyone who starred ente/ente</p>
-        {counts && <ul>
-          <li><Star level={1}/><span><b>{number(counts.online)}</b> online</span></li>
-          <li><Star level={.62}/><span><b>{number(counts.offline)}</b> offline</span></li>
-          <li><Star level={.34}/><span>Not starred yet</span></li>
-        </ul>}
+        {counts && <p>{number(counts.online)} online</p>}
       </header>
+      <button className="pixi-stargaze-close" aria-label="Back to the island" onClick={() => setOpen(false)} autoFocus>
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg>
+      </button>
       <div className="pixi-stargaze-stage" ref={stage}>
         <div className="pixi-stargaze-lens" ref={lens}>
-          <canvas ref={canvas} aria-label="The night sky. Drag to look around, scroll or pinch to zoom, tap a star to see whose it is."/>
-          <div className="pixi-stargaze-tag" ref={tag} hidden/>
-          {news && <p className="pixi-stargaze-news" role="status">{news}</p>}
-          {error && !sky && <p className="pixi-stargaze-news" role="alert">{error}</p>}
+          <canvas ref={canvas} tabIndex={0} aria-label="Night sky. Drag or use arrow keys to explore. Scroll, pinch, or use plus and minus to zoom. Home finds your star. Tap a star, or press Enter for the nearest star, to see its name."/>
+          <button className="pixi-stargaze-tag" ref={tag} hidden title="Find your star">Your star</button>
+          <div className="pixi-stargaze-tag pixi-stargaze-name" ref={nameTag} role="status" aria-live="polite" aria-atomic="true" hidden/>
         </div>
       </div>
-      <div className="pixi-stargaze-actions">
-        <button onClick={() => view.current?.findMe()}>Find my star</button>
-        {sky?.friends?.length > 0 && <button className="pixi-stargaze-quiet" onClick={() => view.current?.constellation()}>My constellation</button>}
-        <button className="pixi-stargaze-quiet" aria-label="Zoom out" onClick={() => view.current?.zoom(1/1.7)}>−</button>
-        <button className="pixi-stargaze-quiet" aria-label="Zoom in" onClick={() => view.current?.zoom(1.7)}>+</button>
-        <button className="pixi-stargaze-quiet" onClick={() => view.current?.whole()}>Whole sky</button>
-        <button className="pixi-stargaze-quiet" onClick={() => setOpen(false)}>Back to the island <kbd>Esc</kbd></button>
-      </div>
+      {error && <p className="pixi-stargaze-news" role="alert">{sky ? 'The sky could not refresh. Trying again…' : error}</p>}
     </dialog>}
   </>;
 }
