@@ -36,7 +36,8 @@ export function layoutIslet(i){
  const jetty={foot,tip,land:at(-26),water,dir,width:m.jetty.width*k};
  return {...i,...frame,radius,home:near.id,coast,lakes,blocked,jetty,landCentre:c,collisionCenter:expMap(frame,c[0],c[1],WORLD_GEO.Rw),cap:Math.cos(i.width*.71/WORLD_GEO.Rw)};
 }
-export const ISLETS=data.placements.map(layoutIslet);
+// artIndex always follows ISLET_ART, so removing an islet's art can never point another islet at the wrong picture
+export const ISLETS=data.placements.map(i=>layoutIslet({...i,artIndex:ISLET_ART.indexOf(i.art)}));
 export function isletClearance(p,limit=Infinity,id=null){
  let best=limit;
  for(const i of ISLETS){
