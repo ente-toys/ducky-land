@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import {losslessSvgBuild} from './scripts/optimize-svg.mjs';
 import {readFileSync} from 'node:fs';
 import {productionProxy,productionSignIn} from './scripts/vite-production-proxy.mjs';
 
 export default defineConfig({
   appType: 'mpa',
-  plugins: [react(), productionSignIn(), {
+  plugins: [react(), productionSignIn(), losslessSvgBuild(), {
     name: 'share-theme-walk-data',
     apply: 'build',
     enforce: 'post',
