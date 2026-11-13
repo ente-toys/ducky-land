@@ -6,16 +6,16 @@ import {loadPondDuckies,PONDS,samplePondDucky} from '../src/rendering/pixi/envir
 import {inShape} from '../assets/world/island-geometry.mjs';
 import {populatePond,requestedPondCount} from '../scripts/pond-duckies/populate.mjs';
 const assets=JSON.parse(fs.readFileSync('src/rendering/pixi/environment/pond-regions.json')).assets;
-const expected={home:5,sunflower:1,pink:3,library:2,community:1,fair:2,cathedral:1,bog:2,snow:0};
+const expected={home:5,sunflower:1,pink:3,library:2,community:1,fair:2,cathedral:1,bog:0,snow:0};
 const pose=()=>({x:0,y:0,dx:0,dy:0,moving:false});
 
-test('all 17 authored ponds have two or three distinct Duckies, roughly half have three, and all seven variants are used',()=>{
- assert.equal(PONDS.length,17);
+test('all 15 authored ponds have two or three distinct Duckies, roughly half have three, and all seven variants are used',()=>{
+ assert.equal(PONDS.length,15);
  const variants=new Set();
  for(const [island,count] of Object.entries(expected))assert.equal(PONDS.filter(p=>p.island===island).length,count,island);
  for(const p of PONDS){assert([2,3].includes(p.duckies.length));assert.equal(new Set(p.duckies.map(d=>d.name)).size,p.duckies.length);assert.equal(p.motion.tracks.length,p.duckies.length);assert.equal(p.motion.seeds.length,p.duckies.length);assert(p.source);assert(p.cells.length>=8);p.duckies.forEach(d=>variants.add(d.name));}
  const triples=PONDS.filter(p=>p.duckies.length===3).length;
- assert(triples>=6&&triples<=11,`${triples}/17 ponds have three`);
+ assert(triples>=6&&triples<=11,`${triples}/15 ponds have three`);
  assert.equal(variants.size,7);
 });
 
@@ -105,7 +105,7 @@ test('runtime owns every assigned Ducky, pauses hidden layers and releases all w
 
 test('a failed sprite acquisition releases successful and failed leases',async()=>{
  const leased=[],released=[];
- await assert.rejects(loadPondDuckies('bog',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return Texture.EMPTY;},release:src=>released.push(src)}),/fixture/);
+ await assert.rejects(loadPondDuckies('pink',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return Texture.EMPTY;},release:src=>released.push(src)}),/fixture/);
  assert.deepEqual(leased.sort(),released.sort());
 });
 
