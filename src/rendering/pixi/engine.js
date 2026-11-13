@@ -19,7 +19,6 @@ import {localPoint,spherePoint} from '../../world/sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from '../shared/zoom-motion.js';
 import {planIslandArt} from './art/island-budget.js';
-import {walkingZoom} from './art/texture-footprint.js';
 import {createGroundPool} from './art/ground-stream.js';
 import {propZ} from '../shared/flat-props.js';
 import {constrainExploreCamera, zoomToWorldPoint} from '../shared/explore-camera.js';
@@ -261,9 +260,9 @@ export class PixiIsland {
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
       this.groundPool=createGroundPool({acquire:acquireGround,release});
-      const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats.map(e=>({...e,ground:true}))].map(entry=>({...entry}));
+      const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats].map(entry=>({...entry}));
 
-      this.homeArtPlan=planIslandArt([...entries,...tiles.map(t=>({...t,mipmaps:false}))],{dpr:this.app.renderer.resolution,defaultZoom:walkingZoom(this.width,this.height)});
+      this.homeArtPlan=planIslandArt([...entries,...tiles.map(t=>({...t,mipmaps:false}))],{dpr:this.app.renderer.resolution});
       const sourceResolutions=this.homeArtPlan.resolutions;
       for(const entry of entries)entry.rasterResolution=sourceResolutions.get(entry.src);
       const artTextures = await Promise.all(entries.map(entry => {
@@ -274,8 +273,9 @@ export class PixiIsland {
       if (this.disposed) return;
       // The ocean stays in the arrival scene until the main loop takes over.
       this.homeGroundStream=this.groundPool.create(tiles,this.homeGround);
-      // Arrival already renders sea + Duck until all final pieces are uploaded.
-      // A whole-island preview is never exposed here, including restored Home.
+      const terrain=await acquireHome('/pixi-art/globe/home-ground.svg');
+      if(this.disposed)return;
+      const fallback=new Sprite(terrain);fallback.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);fallback.width=world.width;fallback.height=world.height;this.homeGround.addChildAt(fallback,0);
       const base = tiles.length + decks.length, flatBase = base + props.length + art.floating.length + 1;
       this.flats = new Container({label: 'Ground detail'}); this.homeGround.addChild(this.flats);
       await mapArtInFrames(flats,(d, i) => {
@@ -352,11 +352,14 @@ export class PixiIsland {
       this.homePondDuckies=await loadPondDuckies(prepareHome?'home':'deferred-home',{tilt:TILT,acquire,release});
       if(this.disposed){this.homePondDuckies.destroy();return;}
       this.scene.addChildAt(this.homePondDuckies.root,this.scene.getChildIndex(this.decks));
-      this.arts = new Map([['home', {id: 'home', ready: false, pondDuckies:this.homePondDuckies, groups: [this.homeGround, this.homeDecks, this.homeShadows, this.floatLayer, this.homePondDuckies.root, ...extras]}]]);
+      this.arts = new Map([['home', {id: 'home', ready: true, pondDuckies:this.homePondDuckies, groups: [this.homeGround, this.homeDecks, this.homeShadows, this.floatLayer, this.homePondDuckies.root, ...extras]}]]);
       this.artShown = 'home';
       this.homeSources=this.loaded.filter(src=>src!==LEAF_TEXTURE&&src!=='/pixi-art/water-texture.svg');
       if(prepareHome){
-        await this.uploadHomeArt();
+        await this.homeGroundStream.prepare({dpr:this.app.renderer.resolution,resolutions:this.homeArtPlan?.resolutions});
+        await this.plantReactions.prepared();
+        await uploadIsland(this.app.renderer,[this.scene],{cancelled:()=>this.disposed});
+        this.homePrepared=true;
       }else{
         const nodes=this.homeTextureNodes();
         this.homeRestore=Promise.resolve([...homeDeferred.values()].map(lease=>{
@@ -1109,7 +1112,7 @@ export class PixiIsland {
     if (!map.art) return;
     const pending={id:mapId,ready:false};this.arts.set(mapId,pending);
     let pendingArt;
-    pending.preparation=loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,prepare:true,dpr:this.app.renderer.resolution,defaultZoom:walkingZoom(this.width,this.height)}).then(async art => {
+    pending.preparation=loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,prepare:true,dpr:this.app.renderer.resolution}).then(async art => {
       pendingArt = art;
       if (this.disposed||pending.discarded) {art.destroy(); return;}
       this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows); this.overDecks.addChild(art.overLayer);
@@ -1125,10 +1128,8 @@ export class PixiIsland {
       this.buildMapAmbience(mapId, art);
       await this.makeSleepers(mapId,{cancelled:()=>this.disposed||pending.discarded});
       if (this.disposed||pending.discarded) {art.destroy();return;}
-      const roots=[...art.groups,...art.props.map(p=>p.sprite),...(this.mapSleepers.get(mapId)??[]).map(s=>s.rig.root)];
-      await uploadIsland(this.app.renderer,roots,{requiredRoots:roots,sources:this.plantReactions.sources(),cancelled:()=>this.disposed||pending.discarded});
+      await uploadIsland(this.app.renderer,[...art.groups,...art.props.map(p=>p.sprite),...(this.mapSleepers.get(mapId)??[]).map(s=>s.rig.root)],{sources:this.plantReactions.sources(),cancelled:()=>this.disposed});
       if(this.disposed||pending.discarded){art.destroy();return;}
-      art.ready=true;
       this.arts.set(mapId, art);
       this.scene.addChildAt(art.pondDuckies.root,this.scene.getChildIndex(this.decks));
       this.showArt(this.artShown);
@@ -1154,7 +1155,6 @@ export class PixiIsland {
   releaseHomeArt() {
     if(!this.homePrepared)return;
     this.homePrepared=false;
-    this.arts.get('home').ready=false;
     const leases=new Map();
     for(const src of this.homeSources??[]) {
       const held=textureLeases.get(src);if(!held)continue;
@@ -1216,20 +1216,12 @@ export class PixiIsland {
       const home=this.arts.get('home');
       home.pondDuckies=await loadPondDuckies('home',{tilt:TILT,acquire,release});home.groups.push(home.pondDuckies.root);
       this.scene.addChildAt(home.pondDuckies.root,this.scene.getChildIndex(this.decks));
-      await this.uploadHomeArt();
+      await uploadIsland(this.app.renderer,[this.scene],{cancelled:()=>this.disposed});
+      this.homePrepared=true;
       if(this.artShown!=='home'&&this.destinationArt!=='home')this.releaseHomeArt();
       this.showArt(this.artShown);
     })().catch(error=>console.warn('Home preparation',error)).finally(()=>{this.homePreparing=null;});
     return this.homePreparing;
-  }
-  async uploadHomeArt() {
-    // Both initial Home and a deferred/restored Home use the same final gate.
-    await this.homeGroundStream.prepare({dpr:this.app.renderer.resolution,resolutions:this.homeArtPlan?.resolutions});
-    await this.plantReactions?.prepared();
-    const roots=this.homeTextureNodes();
-    await uploadIsland(this.app.renderer,[this.scene],{requiredRoots:roots,cancelled:()=>this.disposed});
-    this.arts.get('home').ready=true;
-    this.homePrepared=true;
   }
   releasePondDuckies(id) {
     const art=this.arts?.get(id);if(!art?.pondDuckies)return;

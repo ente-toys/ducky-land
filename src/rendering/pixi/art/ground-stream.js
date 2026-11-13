@@ -1,6 +1,5 @@
 import sourceSizes from '../../shared/art-source-sizes.json' with {type:'json'};
 import {Sprite, Texture} from 'pixi.js';
-import {assertFinalTexture} from './island-preparation.js';
 
 export const GROUND_BUDGET_BYTES = 128 * 1048576;
 // Extruded texels cover both sides of a join. Keep the inner image at its
@@ -122,15 +121,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       const stream={id:++streamId,entries,resolutionTiles,
         async prepare({zoom=1.8,dpr=2,resolutions=new Map()}={}) {
           if(stream.preparing)return stream.preparing;
-          if(dead)throw Error('Ground stream destroyed');
           stream.pinned=true;
-          // Hand ownership to preparation before awaiting any decode. An older
-          // camera request must never overwrite or blank a pinned final sprite.
-          for(const tile of entries){
-            desired.delete(tile);drop(tile);
-            for(const entry of cache.get(tile)?.values()??[])discard(entry);
-            cache.delete(tile);
-          }
           const leases=new Map();pinned.set(stream,leases);
           const fixed=new Map(resolutions);
           for(const tile of entries)if(!resolutions.has(tile.src))fixed.set(tile.src,Math.max(fixed.get(tile.src)??0,tileResolution(tile,zoom,dpr)));
@@ -140,16 +131,11 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
               const lease={src,release:tile.release};leases.set(src,lease);
               lease.texture=await tile.acquire(src,resolution,{priority:-1});
               if(dead){if(!lease.released)tile.release(src);leases.delete(src);return;}
-              assertFinalTexture(lease.texture,src);
               for(const entry of entries)if(entry.src===src){
                 entry.sprite.texture=lease.texture;fitGroundSprite(entry,lease.texture);entry.sprite.visible=entry.render!==false;
               }
             }));
             const failed=results.find(r=>r.status==='rejected');if(failed)throw failed.reason;
-            if(!dead){
-              for(const entry of entries)assertFinalTexture(entry.sprite.texture,entry.src);
-              stream.prepared=true;
-            }
           })();
           return stream.preparing;
         },

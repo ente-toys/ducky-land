@@ -16,7 +16,7 @@ import {createIcelandLifeLifecycle} from '../environment/iceland-life.js';
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader, prepare=false, dpr=2, defaultZoom=.65}) {
+export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader, prepare=false, dpr=2}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -37,14 +37,14 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const rasterPool=crisp||iceland?createGroundPool({...raster,budget:RASTER_ART_BUDGET_BYTES,utilization:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>!prepare&&largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp||iceland?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
-    ...flats.filter(p=>(prepare||!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2,ground:true})), ...props.filter(p=>prepare||!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
+    ...flats.filter(p=>(prepare||!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>prepare||!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
   let resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
   if(prepare)for(const p of tiles){const src=url(p.src);resolutions.set(src,Math.max(resolutions.get(src)??0,p.resolution??1));}
   if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(src, 2);
-  const artPlan=prepare?planIslandArt([...entries.map(e=>({...e,src:url(e.src)})),...tiles.map(e=>({...e,src:url(e.src),mipmaps:false})),...(manifest.kites?.length?KITE_ASSETS.map(src=>({src,resolution:2})):[])],{dpr,defaultZoom}):null;
+  const artPlan=prepare?planIslandArt([...entries.map(e=>({...e,src:url(e.src)})),...tiles.map(e=>({...e,src:url(e.src),mipmaps:false})),...(manifest.kites?.length?KITE_ASSETS.map(src=>({src,resolution:2})):[])],{dpr}):null;
   if(artPlan)resolutions=artPlan.resolutions;
   const uniqueSources = [...new Set([...sources,...(manifest.kites?.length?KITE_ASSETS:[])])];
   const loaded=new Array(uniqueSources.length);let cursor=0;
@@ -96,14 +96,10 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     const stream=groundPool.create(p.tiles.map(t=>({...t,x:p.x-p.width*anchor.x+t.x,y:p.y-p.height*anchor.y+t.y,localX:t.x-p.width*anchor.x,localY:t.y-p.height*anchor.y})),node,url);
     groundStreams.push(stream);return node;
   };
-  // Prepared scenes reveal all at once. Their loading view is sea + Duck, so
-  // allocating a low-density whole-island underlay only wastes texture memory.
-  if(!prepare){
-    let terrain;
-    try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
-    catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
-    const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
-  }
+  let terrain;
+  try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
+  catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
+  const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
   const overLayer = new Container({label: `Theme ${map.id} - bridges over boats`}), bridgeOver = [];
   for (const deck of decks) {
     if(crisp){
@@ -166,7 +162,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const icelandLife = createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt});
   for (const group of groups) group.visible = false;
   const result = {
-    id: map.id, map, artPlan, groundStream, groundStreams, rasterPool, ready: !prepare, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
+    id: map.id, map, artPlan, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     overLayer, bridgeOver, kiteLayer, kites, icelandLife,
     groups,
     destroy() {
@@ -177,7 +173,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
       groundStreams.forEach(s=>s.destroy());
       rasterPool?.destroy();
       raster?.destroy();
-      if(!prepare)release(`/pixi-art/globe/${map.id}-ground.svg`);
+      release(`/pixi-art/globe/${map.id}-ground.svg`);
       for (const c of groups) if(!c.destroyed)c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
