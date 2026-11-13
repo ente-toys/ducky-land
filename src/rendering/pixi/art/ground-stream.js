@@ -2,6 +2,19 @@ import sourceSizes from '../../shared/art-source-sizes.json' with {type:'json'};
 import {Sprite, Texture} from 'pixi.js';
 
 export const GROUND_BUDGET_BYTES = 128 * 1048576;
+// Extruded texels cover both sides of a join. Keep the inner image at its
+// authored coordinates; stretching the whole piece would shift paths/ink.
+export function groundSpriteBounds(tile, texture) {
+  const width=tile.width+(tile.bleed??0),height=tile.height+(tile.bleed??0);
+  const padding=texture.groundPadding;
+  const dx=padding?padding.pad*width/padding.width:0,dy=padding?padding.pad*height/padding.height:0;
+  return {x:(tile.localX??tile.x)+(tile.flip?tile.width+dx:-dx),y:(tile.localY??tile.y)-dy,width:width+2*dx,height:height+2*dy};
+}
+function fitGroundSprite(tile,texture){
+  const b=groundSpriteBounds(tile,texture);
+  tile.sprite.position.set(b.x,b.y);tile.sprite.width=b.width;tile.sprite.height=b.height;
+  if(tile.flip)tile.sprite.scale.x=-Math.abs(tile.sprite.scale.x);
+}
 export function tileInView(tile, camera, width, height, tilt = 1, margin = 192) {
   margin=tile.margin??margin;
   const hw=width/(2*camera.zoom)+(typeof margin==='number'?margin:margin.x), hh=height/(2*camera.zoom*tilt)+(typeof margin==='number'?margin:margin.y);
@@ -19,6 +32,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   schedule = globalThis.requestAnimationFrame?.bind(globalThis), now = () => performance.now(),
   settleMs = schedule ? 100 : 0, planInterval = schedule ? 32 : 0,
   frameBudgetMs = 5, progressive = !!schedule, prefetch = !!schedule} = {}) {
+  const pinned=new Map();
   const streams=new Set(), resident=new Map(), pending=new Map(), cache=new Map();
   let desired=new Map(), disposed=false, reserved=0, peak=0, failures=new Map(), deferred=new Set();
   let scheduled=false,lastPlan=-Infinity,lastSignature='',plans=0,started=0,streamId=0,zooming=false;
@@ -49,7 +63,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
   };
   const show=(tile,entry)=>{
     resident.set(tile,entry);tile.sprite.texture=entry.texture;
-    tile.sprite.width=tile.width+(tile.bleed??0);tile.sprite.height=tile.height+(tile.bleed??0);tile.sprite.visible=tile.render!==false;
+    fitGroundSprite(tile,entry.texture);tile.sprite.visible=tile.render!==false;
   };
   const drop=tile => {
     const entry=resident.get(tile);if (!entry)return;
@@ -104,13 +118,39 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         tile.sprite.position.set((t.localX??t.x)+(t.flip?t.width:0),t.localY??t.y);if(t.flip)tile.sprite.scale.x=-1;blank(tile);container.addChild(tile.sprite);return tile;});
       let dead=false;
       const resolutionTiles=[...new Map(entries.map(t=>[[t.screenResolution,t.rasterDensity,t.resolution,t.screenResolution?0:tileResolution(t,1)].join('|'),t])).values()];
-      const stream={id:++streamId,entries,resolutionTiles,destroy(){if(dead)return;dead=true;streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
+      const stream={id:++streamId,entries,resolutionTiles,
+        async prepare({zoom=1.8,dpr=2,resolutions=new Map()}={}) {
+          if(stream.preparing)return stream.preparing;
+          stream.pinned=true;
+          const leases=new Map();pinned.set(stream,leases);
+          const fixed=new Map(resolutions);
+          for(const tile of entries)if(!resolutions.has(tile.src))fixed.set(tile.src,Math.max(fixed.get(tile.src)??0,tileResolution(tile,zoom,dpr)));
+          stream.preparing=(async()=>{
+            const results=await Promise.allSettled([...new Set(entries.map(t=>t.src))].map(async src=>{
+              const tile=entries.find(t=>t.src===src),resolution=fixed.get(src);
+              const lease={src,release:tile.release};leases.set(src,lease);
+              lease.texture=await tile.acquire(src,resolution,{priority:-1});
+              if(dead){if(!lease.released)tile.release(src);leases.delete(src);return;}
+              for(const entry of entries)if(entry.src===src){
+                entry.sprite.texture=lease.texture;fitGroundSprite(entry,lease.texture);entry.sprite.visible=entry.render!==false;
+              }
+            }));
+            const failed=results.find(r=>r.status==='rejected');if(failed)throw failed.reason;
+          })();
+          return stream.preparing;
+        },
+        destroy(){if(dead)return;dead=true;for(const lease of pinned.get(stream)?.values()??[]){lease.released=true;lease.release(lease.src);}pinned.delete(stream);streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
       streams.add(stream);return stream;
     },
     update(views,dpr=1,fastZoom=false) {
+      const pinnedViews=views.filter(v=>streams.has(v.stream)&&v.stream.pinned);
+      for(const stream of streams)if(stream.pinned){
+        const cameras=pinnedViews.filter(v=>v.stream===stream);
+        for(const tile of stream.entries)tile.sprite.visible=tile.render!==false&&cameras.some(v=>tileInView(tile,v.camera,v.width,v.height,v.tilt??1,tile.viewMargin??192));
+      }
       zooming=fastZoom;
       const time=now();
-      const active=views.filter(v=>streams.has(v.stream));
+      const active=views.filter(v=>streams.has(v.stream)&&!v.stream.pinned);
       let waiting=false,settled=false;
       const planned=active.map(v=>{
         let z=zooms.get(v.stream);
@@ -146,7 +186,10 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       for(const tile of [...resident.keys()]) if(!desired.has(tile))drop(tile);
       requestPump();
     },
-    stats(){return {budgetBytes:budget,reservedBytes:reserved,peakBytes:peak,residentTiles:resident.size,cachedTiles:cache.size,refiningTiles:[...desired].filter(([t,n])=>n.visible&&(resident.get(t)?.resolution??0)<n.resolution).length,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size,failures:[...failures].slice(0,8),desiredTiles:desired.size,missingTiles:[...desired.keys()].filter(t=>!resident.has(t)).length,plans,started,sharedSources:[...allocations.values()].reduce((n,s)=>n+s.size,0)};},
+    stats(){const fixedSources=new Set([...pinned.values()].flatMap(leases=>[...leases.values()].map(l=>l.texture?.source).filter(Boolean)));
+      const fixedBytes=[...fixedSources].reduce((n,s)=>n+s.pixelWidth*s.pixelHeight*4,0);
+      peak=Math.max(peak,reserved+fixedBytes);
+      return {budgetBytes:budget,reservedBytes:reserved+fixedBytes,peakBytes:peak,pinnedBytes:fixedBytes,residentTiles:resident.size+[...streams].filter(s=>s.pinned).reduce((n,s)=>n+s.entries.filter(t=>t.sprite.texture!==Texture.EMPTY).length,0),cachedTiles:cache.size,refiningTiles:[...desired].filter(([t,n])=>n.visible&&(resident.get(t)?.resolution??0)<n.resolution).length,pendingTiles:pending.size,streams:streams.size,failedTiles:failures.size,failures:[...failures].slice(0,8),desiredTiles:desired.size,missingTiles:[...desired.keys()].filter(t=>!resident.has(t)).length,plans,started,sharedSources:[...allocations.values()].reduce((n,s)=>n+s.size,0)};},
     destroy(){disposed=true;desired.clear();for(const stream of [...streams])stream.destroy();},
   };
 }

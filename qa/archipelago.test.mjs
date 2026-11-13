@@ -26,18 +26,12 @@ test('opaque live snapshots never supply the globe atlas, including before previ
  }finally{arch.destroy();scene.destroy({children:true});}
 });
 
-test('Home and theme snapshot capture exclude the ocean and restore its visibility',()=>{
- for(const mapId of ['home','library'])for(const visible of [false,true]){
-  const game=cameraGame();game.artShown=mapId;game.arts.set(mapId,{ready:true});
-  game.ocean.visible=visible;game.scene.visible=false;game.rigs=[];game.localDucks=[];
-  game.mapSleepers=new Map();game.artProps=()=>[];
-  const actor={visible:true};game.transientForCopies=()=>[actor];let captured=false;
-  game.archipelago={has:()=>false,build(id){
-   assert.equal(id,mapId);assert.equal(game.ocean.visible,false,'sea must not be baked into the island');
-   assert.equal(actor.visible,false);assert.equal(game.scene.visible,true);captured=true;
-  }};
-  game.captureArt(mapId);
-  assert.ok(captured);assert.equal(game.ocean.visible,visible);assert.equal(actor.visible,true);assert.equal(game.scene.visible,false);
+test('walking never captures Home or theme snapshots; globe uses authored previews',()=>{
+ const game=cameraGame();
+ for(const mapId of ['home','library']) {
+  game.artShown=mapId;
+  assert.deepEqual(game.liveCopies(),[]);
+  assert.equal(game.captureArt,undefined,'live snapshot capture was removed with prepared whole-island art');
  }
 });
 

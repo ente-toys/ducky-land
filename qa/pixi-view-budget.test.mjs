@@ -22,16 +22,14 @@ test('Iceland weather budget reuses 180 Graphics, exposes 90 on phone and hides 
 
 import {cameraGame} from './helpers/pixi-engine.mjs';
 
-test('native live copies retain Home and current theme and release old GPU art, including pending loads',()=>{
- const game=cameraGame();game.arts=new Map([['home',{ready:true}]]);const released=[];
- game.freeArt=id=>{released.push(id);game.arts.delete(id);};
+test('walking and zoom only use prepared current art and cannot trigger neighbour acquisitions',()=>{
+ const game=cameraGame();let acquired=0,released=0;
+ game.ensureArt=()=>acquired++;game.freeArt=()=>released++;
  for(const id of ['sunflower','pink','library','community','bog','snow']){
-  game.artShown=id;game.arts.set(id,{ready:true});game.liveCopies();
-  assert.deepEqual([...game.arts.keys()],['home',id]);assert.deepEqual([...game.wantedArts],['home',id]);
+  game.artShown=id;game.arts.set(id,{ready:true});
+  for(const zoom of [.05,.6,1.8]){game.camera.zoom=zoom;assert.deepEqual(game.liveCopies(),[]);}
  }
- assert.equal(released.length,5);
- game.arts.set('pending',{ready:false});game.artShown='home';game.liveCopies();
- assert.deepEqual([...game.wantedArts],['home']);assert.ok(game.arts.has('pending'),'loader owns pending disposal');assert.equal(released.length,6);
+ assert.equal(acquired,0);assert.equal(released,0,'landing owns eviction, camera movement cannot release island art');
 });
 
 test('native tick steps prediction before rendering, pauses when hidden, and delivers snow between simulation steps',t=>{

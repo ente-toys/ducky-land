@@ -28,7 +28,7 @@ function uprightVessel(entry,camera,fx){
 }
 
 export async function createTravelView(objects,water,air,decks) {
-  const [sea]=await Promise.all([createSea(water,objects,air)]);
+  const [sea]=await Promise.all([createSea(water,objects)]);
   const harbor=createHarbor(decks,objects);
   const vessels=new Map(), leaving=[], fx=await createSailingFX({water,objects});
   const destroyVessel=entry => {entry.front?.destroy({children:true}); entry.root.destroy({children:true});};

@@ -12,10 +12,11 @@ test('island signs share fetched artwork and release generated textures after th
   Assets.unload = async src => {unloaded.push(src);};
   t.after(() => {globalThis.fetch = originalFetch; Assets.load = load; Assets.unload = unload;});
   const objects = new Container(), otherObjects = new Container();
-  const sea = await createSea(new Container(), objects), other = await createSea(new Container(), otherObjects);
+  const sea = await createSea(new Container(), objects,{preload:['Test A','Test B']}), other = await createSea(new Container(), otherObjects,{preload:['Test A']});
   const destination = name => ({name, destination: name, land: {x: 0, y: 0}});
   await sea.switchIsland([destination('Test A'), destination('Test B')]);
   await other.switchIsland([destination('Test A')]);
+  assert(loaded.every(src=>src.startsWith('blob:')));
   assert.equal(fetched, 1);
   assert.equal(loaded.length, 2);
   sea.dispose(); sea.dispose();

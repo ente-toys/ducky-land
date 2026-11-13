@@ -4,9 +4,10 @@ import {cropSVG} from './theme-raster.js';
 async function rasterizeSVG(svg,crop,resolution) {
   const adapter=DOMAdapter.get(),image=adapter.createImage();
   const bitmap=typeof globalThis.createImageBitmap==='function';
-  const objectURL=bitmap?URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})):null;
+  const blob=new Blob([svg],{type:'image/svg+xml'});
+  const objectURL=URL.createObjectURL(blob);
   try {
-    image.src=objectURL??'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+    image.src=typeof window==='undefined'&&image.constructor.name==='Image'&&typeof Buffer!=='undefined'?Buffer.from(await blob.arrayBuffer()):objectURL;
     await image.decode();
     if(bitmap){
       try{return await createImageBitmap(image,{premultiplyAlpha:'premultiply'});}catch{  }
@@ -17,12 +18,12 @@ async function rasterizeSVG(svg,crop,resolution) {
     context.drawImage(image,0,0,canvas.width,canvas.height);
     return canvas;
   }finally{
-    if(objectURL){URL.revokeObjectURL(objectURL);image.src='';}
+    if(objectURL){URL.revokeObjectURL(objectURL);if(typeof window!=='undefined')image.src='';}
   }
 }
 
 export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.bind(globalThis),
-  now=()=>performance.now(),frameBudgetMs=5,concurrency=64,prepareSVG=cropSVG,exactFrame=false,
+  now=()=>performance.now(),frameBudgetMs=5,concurrency=4,prepareSVG=cropSVG,exactFrame=false,
   prepareSource=text=>text,rasterize=(original,crop,resolution)=>rasterizeSVG(prepareSVG(original,crop,resolution),crop,resolution)}={}) {
   const originals=new Map(),leases=new Map();
   let disposed=false,scheduled=false,inFlight=0;

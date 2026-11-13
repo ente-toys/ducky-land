@@ -3,6 +3,7 @@ import {createPortal} from 'react-dom';
 import IslandFriends from './IslandFriends.jsx';
 import {OutfitEditor} from './IslandOutfit.jsx';
 import {useDuckPortrait} from './DuckPortrait.js';
+import {sameOutfit} from '../rendering/pixi/duck-portrait.js';
 import IslandFeathers from './IslandFeathers.jsx';
 
 // One profile button in place of the old row (Change outfit, Friends, Sign out). It opens a panel with the
@@ -19,11 +20,12 @@ export default function IslandProfile({session, room, island, status, indoors, n
   // the player's outfit arrives with their duck; keep watching so a save from anywhere shows up here
   useEffect(() => {
     const id = setInterval(() => {
-      const current = island.current?.player?.outfit;
-      if (current && JSON.stringify(current) !== JSON.stringify(outfit)) setOutfit({...current});
+      if (!island.current?.ready) return;
+      const current = island.current.player?.outfit;
+      if (current) setOutfit(previous => sameOutfit(current,previous) ? previous : {...current});
     }, 500);
     return () => clearInterval(id);
-  }, [island, outfit]);
+  }, [island]);
 
   useEffect(() => {
     if (!open) return;

@@ -93,7 +93,7 @@ test('raster decode queue uses distance after fetch completion and yields betwee
  const loader=createRasterLoader({concurrency:1,now:()=>clock,schedule:cb=>frames.push(cb),prepareSVG:(svg,c)=>{started.push({id:c[2],at:clock});return svg;}});
  const keys=[0,1,2].map(i=>'/kit.svg?rasterCrop=20,20,'+i+',0,20,20');
  const results=keys.map((key,i)=>loader.acquire(key,1,{visible:i!==0,priority:i===0?-2:2,distance:i===1?100:0}));await flush();
- for(let i=0;i<3;i++){clock=i*16;frames.shift()();assert.equal(started.length,i+1);clock+=8;await waiting.shift()();await flush();}
+ for(let i=0;i<3;i++){clock=i*16;frames.shift()();assert.equal(started.length,i+1);clock+=8;await flush();await waiting.shift()();await flush();}
  await Promise.all(results);assert.equal(reads,1);assert.deepEqual(started,[{id:2,at:0},{id:1,at:16},{id:0,at:32}]);
  keys.forEach(key=>loader.release(key));await flush();loader.destroy();
 });

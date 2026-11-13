@@ -1,6 +1,8 @@
+import './art/whole-svg-loader.js';
 import {Assets, Sprite} from 'pixi.js';
 import {ART_TEXTURE} from './art/art-texture.js';
-import {HARBOR} from '../../gameplay/islands.js';
+import {HARBOR, destinationsFor} from '../../gameplay/islands.js';
+import {WORLD_ISLANDS} from '../../world/world-map.js';
 
 let boardSource;
 const signLeases = new Map();
@@ -20,7 +22,7 @@ function releaseSign(name) {
   entry.promise.finally(() => {
     if (entry.count || signLeases.get(name) !== entry) return;
     signLeases.delete(name);
-    if (entry.src) Assets.unload(entry.src).catch(() => {});
+    if (entry.src) Assets.unload(entry.src).catch(() => {}).finally(()=>URL.revokeObjectURL(entry.src));
   }).catch(() => {});
 }
 const smooth = (a, b, x) => {const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t);};
@@ -33,15 +35,19 @@ async function signTexture(name, entry) {
   }).catch(error => {boardSource = null; throw error;});
   let svg = await boardSource;
   svg = svg.replace(/<text([^>]*?)x="[^"]*"/, '<text$1x="0" text-anchor="middle"').replace(/font-size="22"([^>]*)>LITTLE ISLE</, `font-size="20"$1>${name.toUpperCase()}<`);
-  entry.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  return Assets.load({src: entry.src, data: {resolution: 3, ...ART_TEXTURE}});
+  entry.src = URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+  return Assets.load({src: entry.src, loadParser:'wholeIslandSVG', data: {resolution: 3, ...ART_TEXTURE}});
 }
 
 const revealed = new Set();
 const easeBack = p => 1 + 2.2 * (p - 1) ** 3 + 1.2 * (p - 1) ** 2;
 
-export async function createSea(water, objects) {
+export async function createSea(water, objects, {preload= WORLD_ISLANDS.flatMap(i=>destinationsFor(i.id).map(d=>d.name))}={}) {
   const signs = new Map();
+  // Seven shared direction boards are tiny. Prepare them with travel effects,
+  // before the first reveal, so chart changes only position existing pictures.
+  const names=new Set(preload);
+  await Promise.all([...names].map(name=>{const ready=acquireSign(name);signs.set(name,ready);return ready;}));
   let boards = [], token = 0, disposed = false;
   return {
     transient: () => boards.map(board => board.sprite),

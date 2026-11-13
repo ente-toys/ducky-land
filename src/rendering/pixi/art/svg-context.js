@@ -78,5 +78,6 @@ export function svgLayerDocuments(text,parse=t=>new DOMParser().parseFromString(
 export function svgLayerContexts(text,parse){
  const root=(parse??(t=>new DOMParser().parseFromString(t,'image/svg+xml')))(text).documentElement;
  const ids=[...new Set(Array.from(root.getElementsByTagName('*')).map(e=>e.getAttribute('data-piece')).filter(Boolean))];
- return {full:svgContext(text,parse),ground:svgContext(text,parse,'ground'),pieces:new Map(ids.map(id=>[id,svgContext(text,parse,id)]))};
+ const parsed=()=>({documentElement:root});
+ return {full:svgContext(text,parsed),ground:svgContext(text,parsed,'ground'),pieces:new Map(ids.map(id=>[id,svgContext(text,parsed,id)]))};
 }

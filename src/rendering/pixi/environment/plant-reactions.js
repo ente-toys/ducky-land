@@ -1,12 +1,13 @@
 import {Sprite} from 'pixi.js';
-import {createPlantContacts, foliageColour, PLANT_SWAY, LEAF_LIFE, LEAF_CAP} from './plant-contact.js';
+import {createPlantContacts, PLANT_SWAY, LEAF_LIFE, LEAF_CAP} from './plant-contact.js';
+import {loadFoliageColour} from './foliage-palette.js';
 import {createPlantSnow} from './plant-snow.js';
 
 export const LEAF_TEXTURE = '/pixi-art/fx/contact-leaf.svg';
 const EMPTY=[];
 
 export function createPlantReactions(parent, texture,options={}) {
-  const maps=new Map(), colours=new Map(), leaves=[];
+  const maps=new Map(), leaves=[];
   let current=null, reduced=false, shown=true, snow=null;
   for (let i=0;i<LEAF_CAP;i++) {
     const sprite=new Sprite(texture); sprite.anchor.set(.5); sprite.visible=false;
@@ -36,22 +37,22 @@ export function createPlantReactions(parent, texture,options={}) {
     }
   }
   return {
+    async prepared() {await Promise.all([...maps.values()].map(map=>map.ready));},
+    sources() {return snow?.sources()??[];},
     register(id,props,obstacles,base='') {
       const winter=id==='snow';
       const map=createPlantContacts(props,obstacles,bump,{snow:winter}); maps.set(id,map);
+      const pending=[];
       map.snow=winter;
       if (winter && !snow) snow=createPlantSnow(parent,options.snow);
       for (const plant of map.plants) {
         if (winter) {snow.prepare(plant,base);continue;}
         if (plant.kind!=='tree') continue;
         const src=plant.prop.src, url=/^(\/|https?:|data:)/.test(src)?src:base+src;
-        let colour=colours.get(url);
-        if (!colour) {
-          colour=fetch(url).then(r=>r.ok?r.text():'').then(svg=>foliageColour(svg)).catch(()=>0x63ae45);
-          colours.set(url,colour);
-        }
-        colour.then(value=>{plant.colour=value;});
+        pending.push((options.loadColour??loadFoliageColour)(url).then(value=>{plant.colour=value;}));
       }
+      if (winter) pending.push(snow.prepared());
+      return map.ready=Promise.all(pending);
     },
     begin(id,time,reduce=false,visible=true) {
       const map=maps.get(id);
@@ -92,6 +93,6 @@ export function createPlantReactions(parent, texture,options={}) {
       snow?.update(time,shown&&current?.snow,reduced);
     },
     unregister(id) {const map=maps.get(id); restore(map); if(map?.snow){snow?.remove(map.plants);snow?.destroy();snow=null;} maps.delete(id); if (current===map) {current=null;snow?.reset();}},
-    destroy() {for (const map of maps.values()) restore(map); maps.clear(); colours.clear();snow?.destroy(); for (const l of leaves) l.sprite.destroy();},
+    destroy() {for (const map of maps.values()) restore(map); maps.clear();snow?.destroy(); for (const l of leaves) l.sprite.destroy();},
   };
 }

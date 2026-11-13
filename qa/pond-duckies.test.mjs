@@ -97,8 +97,8 @@ test('runtime owns every assigned Ducky, pauses hidden layers and releases all w
  assert(graphics.every(g=>g.destroyed));assert(contexts.every(c=>c.destroyed));
  assert.equal(layer.entries.length,0);assert.deepEqual(released.sort(),leased.sort());
  const engine=fs.readFileSync('src/rendering/pixi/engine.js','utf8');
- assert.match(engine,/this\.releasePondDuckies\(this\.artShown\)/);assert.match(engine,/art\.pondDuckies\.destroy\(\);art\.pondDuckies=null/);
- assert.match(engine,/this\.disposed\|\|this\.artShown!==id[\s\S]*?layer\.destroy\(\)/,'late loads are released');
+ assert.match(engine,/this\.releasePondDuckies\('home'\)/);assert.match(engine,/art\.pondDuckies\.destroy\(\);art\.pondDuckies=null/);
+ assert.match(engine,/if\(this\.disposed\|\|pending\.discarded\)\{art\.destroy\(\);return;\}/,'late preparation is destroyed');
  const loader=fs.readFileSync('src/rendering/pixi/art/theme-art.js','utf8');assert(loader.includes('result.pondDuckies?.destroy()'));
  assert(engine.includes('this.scene.getChildIndex(this.decks)'),'pond layer is below bridge decks');
 });

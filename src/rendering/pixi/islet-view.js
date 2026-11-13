@@ -1,3 +1,4 @@
+import {createArtQueue, nextArtFrame} from './art/island-preparation.js';
 import {Container,Graphics,Matrix,RenderTexture} from 'pixi.js';
 import {ISLETS,ISLET_ART,ISLET_META,ISLET_VIEWBOX} from '../../world/islets.js';
 import {dot} from '../../world/sphere.js';
@@ -9,9 +10,9 @@ export {isletPlacement};
 export {ISLET_VIEWBOX};
 export const ATLAS_CELL=512;
 const svgOf=art=>`/pixi-art/islets/${art}.svg`;
-const contexts=new Map();
+const contexts=new Map(),parseQueue=createArtQueue();
 export function loadIsletArt(art){
- if(!contexts.has(art))contexts.set(art,fetch(svgOf(art)).then(r=>{if(!r.ok)throw Error(`${art}: ${r.status}`);return r.text();}).then(svgLayerContexts).catch(error=>{contexts.delete(art);throw error;}));
+ if(!contexts.has(art))contexts.set(art,fetch(svgOf(art)).then(r=>{if(!r.ok)throw Error(`${art}: ${r.status}`);return r.text();}).then(text=>parseQueue.raster(()=>svgLayerContexts(text))).catch(error=>{contexts.delete(art);throw error;}));
  return contexts.get(art);
 }
 function bakeAtlas(renderer,arts){
@@ -27,6 +28,7 @@ export async function createIsletView(app,scene,objects){
  const started=performance.now();
  const arts=await Promise.all(ISLET_ART.map(loadIsletArt));
  const loadMs=Math.round(performance.now()-started);
+ await nextArtFrame();
  const atlas=bakeAtlas(app.renderer,arts);
  const layer=new Container({label:'Sea islet ground'});
  if(objects.parent===scene)scene.addChildAt(layer,scene.getChildIndex(objects));else scene.addChild(layer);
@@ -43,6 +45,15 @@ export async function createIsletView(app,scene,objects){
   });
   return {i,root,art,props,loadMs};
  });
+ // Each context has its own GPU geometry. Warming only the full globe atlas
+ // leaves the separate ground and tall-piece contexts cold on first walk.
+ const target=RenderTexture.create({width:1,height:1});
+ try {
+  for(const node of views.flatMap(v=>[v.art,...v.props.map(p=>p.visual)])) {
+   await nextArtFrame();
+   app.renderer.render({container:node,target,clear:true});
+  }
+ } finally {target.destroy(true);}
  let from=null,placed=[];
  return {atlas,layer,views,
   transient(){return [layer,...views.flatMap(v=>v.props.map(p=>p.sprite))];},
