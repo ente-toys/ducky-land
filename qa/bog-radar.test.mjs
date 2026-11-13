@@ -25,7 +25,7 @@ test('Bog badge preserves the true in-range terrain position, using caller-owned
 
 test('out-of-range Bog stays centred on the outline in its projected direction, even outside the three nearest islands', () => {
   const out = {x:0,y:0,visible:false};
-  for (const id of ['home','blossom','sunset','isle-251','isle-250','isle-170','isle-176','isle-55']) {
+  for (const id of ['home','blossom','sunset','isle-251','isle-250','isle-55']) {
     const m = mapOf(id), point = {x:m.cx+350,y:m.cy-270};
     const terrain = nearbyMapFrame(id,point,out,radius);
     const q = logMap(viewFrame(id,point),worldIsland(BOG_RADAR_ISLAND).center,WORLD_GEO.Rw);

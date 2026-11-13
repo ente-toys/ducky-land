@@ -6,7 +6,6 @@ import {geometry, inPoly, inShape, coastIndex, polygonIndex, shapeIndex} from '.
 import {resolveSleepSpots, sleepHalfWidths, sleeperFootprint} from './home/sleep-spots.js';
 import {createNavigation} from './navigation.js';
 import {FINISHED_THEMES, TEST_THEMES, WORLD_ISLANDS} from './world-map.js';
-import {fixThemeWorld, fixThemeBed} from './theme-map-fixes.js';
 
 export {FINISHED_THEMES};
 export const THEME_IDS = ['home', ...FINISHED_THEMES];
@@ -22,8 +21,6 @@ const HOME_JETTY = expansion.jetty;
 const trimHome = w => ({...w, islets: w.islets.filter(a => ![3930, 3340, 2290, 5450].includes(a[0])), walkways: w.walkways.filter(b => ![3940, 3320, 2320, 5050].includes(b.a[0]))});
 
 export function makeMap(id, {world, walk = null, harbor, art = null, sea = null, centre = null, addJetty = true, sleepers = null}) {
-  world = fixThemeWorld(id, world);
-  if (walk) walk = fixThemeWorld(id, walk);
   const W = world.width, H = world.height, walking = walk ?? world;
   const FOOT = {x: harbor.jetty.foot[0], y: harbor.jetty.foot[1]}, TIP = {x: harbor.jetty.tip[0], y: harbor.jetty.tip[1]};
   const JETTY_W = harbor.jetty.width ?? 104, AXIS = Math.hypot(TIP.x - FOOT.x, TIP.y - FOOT.y);
@@ -67,7 +64,7 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
   }
   const baseWalk = {...world, ...walking, walkways: [...(walking.walkways ?? []), ...(addJetty ? [JETTY.walkway] : [])]};
   const beds = id === 'home' ? [] : (sleepers ?? (world.sleepSpots ? resolveSleepSpots(baseWalk, world.props ?? [], geometry(baseWalk).walkable, sleepHalfWidths(),
-    {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false}) : [])).map(bed => fixThemeBed(id, bed)).map(({x, y, pose, r, flip, tree}) => ({x, y, pose, r, flip: Boolean(flip), tree}));
+    {spots: world.sleepSpots, avoid: world.sleepAvoid ?? [], warn: false}) : [])).map(({x, y, pose, r, flip, tree}) => ({x, y, pose, r, flip: Boolean(flip), tree}));
   const walkMap = beds.length ? {...baseWalk, obstacles: [...(baseWalk.obstacles ?? []), ...beds.map(sleeperFootprint)]} : baseWalk;
   let NAV = null;
   const nav = () => NAV ??= createNavigation(walkMap, {cellSize: walking.navigationCellSize ?? 32});

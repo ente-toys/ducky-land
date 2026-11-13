@@ -7,7 +7,7 @@ import {geometry,inShape} from '../assets/world/island-geometry.mjs';
 import {setWalkDestination,walkStep} from '../src/gameplay/player-motion.js';
 import {tileInView} from '../src/rendering/pixi/art/ground-stream.js';
 import {outsideStageProps,clearedStageFlat,stageEditedIds} from './campfire-stage-scope.mjs';
-import {Container,Graphics,ImageSource,Texture} from 'pixi.js';
+import {Container,ImageSource,Texture} from 'pixi.js';
 import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 import {attachCentreMotion} from '../src/rendering/pixi/environment/centre-motion.js';
 import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
@@ -115,7 +115,7 @@ test('Campfire static art preserves the existing animated hearth and releases it
  let loaded;
  try{
   loaded=await loadThemeArt({...map,art:'/pixi-art/themes/community/art.json'},{groundPool,acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
-  await attachCentreMotion(loaded,{Graphics,Container},objects);
+  await attachCentreMotion(loaded, objects);
   const flame=loaded.props.find(p=>p.id==='campfire-flame').sprite;
   const rest=[flame.x,flame.y,flame.scale.x,flame.scale.y];
   loaded.updateCentre(.2,false);const a=flame.scale.y;

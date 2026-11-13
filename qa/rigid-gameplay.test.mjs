@@ -14,7 +14,7 @@ function drawn(from,to){
  return q=>{const u=(q.x-m.origin.x)/m.width,v=(q.y-m.origin.y)/m.height;
   return {x:(1-u)*(1-v)*c[0].x+u*(1-v)*c[1].x+u*v*c[2].x+(1-u)*v*c[3].x,y:(1-u)*(1-v)*c[0].y+u*(1-v)*c[1].y+u*v*c[2].y+(1-u)*v*c[3].y};};
 }
-const PAIRS=['home','sunset','isle-176'].flatMap(from=>destinationsFor(from).map(d=>[from,d.destination,d]));
+const PAIRS=['home','sunset','isle-250'].flatMap(from=>destinationsFor(from).map(d=>[from,d.destination,d]));
 
 test('a neighbour\'s dock target is on its drawn jetty',()=>{
  let worstOld=0;

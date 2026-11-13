@@ -1,24 +1,23 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {Sprite,Texture,Container,Graphics,DOMAdapter} from 'pixi.js';
+import {Sprite,Texture,Container,DOMAdapter} from 'pixi.js';
 import {animatePieces,attachCentreMotion} from '../src/rendering/pixi/environment/centre-motion.js';
 import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
 import {loadThemeArt} from '../src/rendering/pixi/art/theme-art.js';
 import {mapFor,readyThemes,THEME_OF} from '../src/world/island-maps.js';
-import {createFairWater} from '../src/rendering/pixi/environment/centre-motion/fair.js';
 import {updateCommunityCentre} from '../src/rendering/pixi/environment/centre-motion/community.js';
 const json=p=>JSON.parse(readFileSync(p));
 
-test('all eight theme manifests load, release textures and resolve their authored animation pieces', async t=>{
+test('all six theme manifests load, release textures and resolve their authored animation pieces', async t=>{
  const adapter=DOMAdapter.get();
  DOMAdapter.set({...adapter,createCanvas:()=>({getContext:()=>null})});
  t.after(()=>DOMAdapter.set(adapter));
  const original=globalThis.fetch;
  globalThis.fetch=async url=>({ok:true,json:async()=>json('public'+url)});
  try {
-  const animated={sunflower:2,pink:2,library:4,community:1,fair:0};
-  assert.equal(readyThemes().length,8);assert.equal(THEME_OF.size,8);
+  const animated={sunflower:2,pink:2,library:4,community:1};
+  assert.equal(readyThemes().length,6);assert.equal(THEME_OF.size,6);
   for(const theme of readyThemes()) {
    let acquired=0,released=0;
    const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
@@ -27,7 +26,7 @@ test('all eight theme manifests load, release textures and resolve their authore
    assert.equal(records.length,animated[theme]??0,theme+' animated layers');
    assert.ok(art.props.every(p=>!p.centrePiece||!p.wind),theme+' centre layers have no wind');
    const objects=new Container();
-   await attachCentreMotion(art,{Graphics,Container},objects);
+   await attachCentreMotion(art,objects);
    art.updateCentre(.3,false);art.updateCentre(1,true);
    art.destroy();groundPool.destroy();assert.equal(objects.children.length,0,theme+' removes motion objects');
    objects.destroy();assert.equal(released,acquired,theme+' releases all texture references');
@@ -49,15 +48,11 @@ test('centre motion keeps authored pivots fixed and restores a stable reduced-mo
  }
 });
 
-test('fair pour and community fire animate, remain attached, hide and clean up',()=>{
- const objects=new Container(),fallback={id:'fair-centre-water',sprite:new Sprite(Texture.EMPTY)};
- const water=createFairWater({Graphics,Container},[fallback],objects);
- water.update(.3,false,true);assert.equal(fallback.sprite.alpha,0);assert.ok(water.root.visible);
- water.update(1,false,false);assert.equal(water.root.visible,false);water.destroy();assert.equal(fallback.sprite.alpha,1);assert.equal(objects.children.length,0);
+test('community fire animates and stays attached',()=>{
  const a=json('public/pixi-art/themes/community/art.json');
  const props=['campfire','campfire-flame'].map(id=>{const p=a.props.find(p=>p.id===id),sprite=new Sprite(Texture.EMPTY);sprite.position.set(p.x,p.y);sprite.width=p.width*p.scale;sprite.height=p.height*p.scale/.78;return {...p,sprite};});
  const art={id:'community',props};updateCommunityCentre(art,.2);const y=props[1].sprite.scale.y;updateCommunityCentre(art,.8);assert.notEqual(props[1].sprite.scale.y,y);
  updateCommunityCentre(art,1,true);assert.equal(props[1].sprite.y,props[0].sprite.y+(props[1].anchor.y-props[0].anchor.y)*props[0].sprite.height);
  const still=props[1].sprite.scale.y;updateCommunityCentre(art,99,true);assert.equal(props[1].sprite.scale.y,still);
- for(const p of props)p.sprite.destroy();fallback.sprite.destroy();objects.destroy();
+ for(const p of props)p.sprite.destroy();
 });

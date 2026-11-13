@@ -9,7 +9,7 @@ import {checkTheme} from '../scripts/theme-index.mjs';
 
 test('adding two live themes preserves Home and all six earlier island identities',()=>{
   const before=layoutWorld(undefined,11,FINISHED_THEMES.slice(0,6)).islands;
-  assert.equal(WORLD_ISLANDS.length,9);
+  assert.equal(WORLD_ISLANDS.length,7);
   for(const old of before) {
     const now=WORLD_ISLANDS.find(i=>i.id===old.id);
     assert.deepEqual([now.id,now.theme,now.width,now.height],[old.id,old.theme,old.width,old.height]);

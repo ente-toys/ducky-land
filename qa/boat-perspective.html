@@ -2,7 +2,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fff7df;color:#302c23;font:15px system-ui,sans-serif}header{padding:20px 28px;display:flex;align-items:center;gap:16px}h1{font-size:20px;margin:0 auto 0 0}button,select{font:inherit;color:inherit;background:#ffda69;border:1px solid #77633d;border-radius:10px;padding:9px 14px;cursor:pointer}.labels{display:grid;grid-template-columns:1fr 1fr;padding:10px 28px;background:#fff1c6;gap:28px}.labels strong{display:block;margin-bottom:3px}.labels span{font-size:13px;color:#655b46}canvas{display:block;width:100%;height:auto}footer{padding:14px 28px;font-size:13px}
 </style>
-<header><h1>Boat perspective</h1><select aria-label="Island approach"><option value="isle-251">Pagepond → Bog</option><option value="sunset">Rosybutton → Bog</option><option value="isle-176">Bellovo → Bog</option><option value="isle-170">Fair → Bog</option></select><button id="turn">Turn boat</button><button id="sail">Pause sailing</button></header>
+<header><h1>Boat perspective</h1><select aria-label="Island approach"><option value="isle-251">Pagepond → Bog</option><option value="sunset">Rosybutton → Bog</option></select><button id="turn">Turn boat</button><button id="sail">Pause sailing</button></header>
 <div class="labels"><div><strong>Before</strong><span>Boat and rider inherit the island’s rotation.</span></div><div><strong>Fixed locally</strong><span>Island keeps its angle. Boat and rider stay upright.</span></div></div>
 <main id="view"></main><footer id="status">Loading the game’s boat, Ducky and Bog artwork…</footer>
 <script type="module">

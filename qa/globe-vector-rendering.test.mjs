@@ -30,10 +30,6 @@ async function outputPatch(theme,cx,cy,ground){const {data,info}=await sharp(`pu
 const average=p=>[0,1,2,3].map(c=>p.reduce((sum,v)=>sum+(c<3?v[c]*v[3]/255:v[c]),0)/p.length);
 async function compare(theme,x,y,ground){const [source,output]=await Promise.all([sourcePatch(theme,x,y,{props:!ground}),outputPatch(theme,x,y,ground)]),a=average(source),b=average(output);assert.ok(a.every((v,i)=>Math.abs(v-b[i])<85),`${theme} ${x},${y}: source ${a.map(Math.round)} -> compiled ${b.map(Math.round)}`);}
 
-test('Fair paving keeps its source tile order above older grass backgrounds',async()=>{
- await compare('fair',700,350,true);
- await compare('fair',550,450,true);
-});
 test('Pink houses retain source colour instead of solid black fallback paint',async()=>{
  const map=mapFor('pink'),K=1024/Math.max(map.width,map.height),art=JSON.parse(fs.readFileSync('public/pixi-art/themes/pink/art.json'));
  const homes=art.props.filter(p=>/house|cottage|cafe/i.test(p.src+' '+p.name)&&p.width*(p.scale??1)*K>16).slice(0,4);assert.ok(homes.length>=3);

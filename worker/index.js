@@ -411,8 +411,8 @@ export class IslandRoom {
   savedLocation(account, counts) {
     const row = this.sql.exec('SELECT pose FROM last_locations WHERE account=?',account).toArray()[0];
     if (!row) return null;
-    const {islandId, x, y, turn, mode} = JSON.parse(row.pose);
-    if (!islandFor(islandId) || (counts.get(islandId) ?? 0) >= ISLAND_LIMIT) return null;
+    const {islandId, x, y, turn, mode} = recoverIsland(JSON.parse(row.pose));
+    if ((counts.get(islandId) ?? 0) >= ISLAND_LIMIT) return null;
     if (islandId === BOG_ISLAND && !this.karma.bogEntry(account) &&
         bogLandingNotice(islandId,this.karma.balance(account))) return null;
 

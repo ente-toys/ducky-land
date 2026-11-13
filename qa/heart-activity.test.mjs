@@ -13,7 +13,7 @@ const sampler = () => {
   let seed = 7;
   return createHeartLocations(WORLD_ISLANDS,mapOf,()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296),ISLETS);
 };
-test('activity covers all nine islands and eleven islets, on actual dry land',()=>{
+test('activity covers all seven islands and seven islets, on actual dry land',()=>{
   const next=sampler(),counts=new Map(),round=WORLD_ISLANDS.length*3+ISLETS.length;
   for(let i=0;i<round*30;i++){
     const {island,x,y}=next();counts.set(island,(counts.get(island)??0)+1);

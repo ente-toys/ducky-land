@@ -1,3 +1,4 @@
+import {placeRigid} from '../src/world/rigid.js';
 import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import assert from 'node:assert/strict';
@@ -6,7 +7,6 @@ import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,canSail,
 
 import {createNavigation} from '../src/world/navigation.js';
 import {offsetOf} from '../src/world/world-map.js';
-import {originOffset} from '../src/gameplay/islands.js';
 import {mapOf} from '../src/world/island-maps.js';
 import world from '../assets/world/world.json' with {type:'json'};
 import walkWorld from '../assets/world/walk-world.json' with {type:'json'};
@@ -16,8 +16,8 @@ const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'
 
 test('Home and the eight themed islands (copies removed 8 Nov), the same moored boats each, at least four reachable neighbours and safe harbor positions', () => {
   const boats=createBoats();
-  assert.equal(ISLANDS.length,9);
-  assert.equal(new Set(ISLANDS.map(island => island.id)).size,9);
+  assert.equal(ISLANDS.length,7);
+  assert.equal(new Set(ISLANDS.map(island => island.id)).size,7);
   const per=boatSpots().length;
   assert.ok(per>=8);
   assert.equal(new Set(boats.map(boat => boat.id)).size,ISLANDS.reduce((n,island) => n+boatSpots(island.id).length,0));
@@ -159,8 +159,7 @@ test('you can dock at ANY island whose shore you are beside, not only the listed
     for (let k=0;boat.sailTarget && k<400;k++) sailStep(boat,.05,ZERO);
     assert.ok(Math.hypot(boat.x-spot.approach.x,boat.y-spot.approach.y)<=14,'the boat arrives beside the shore');
   }
-  const o=originOffset(boat.islandId,target);
-  const at=mapPoint(target,boat.islandId,mapOf(target).spawn);
+  const at=placeRigid(boat.islandId,target,spot);
   assert.equal(canSail(at.x,at.y,boat.islandId),false,'the target is solid land');
 });
 
@@ -198,9 +197,9 @@ test('a boat out in a neighbour\'s waters is drawn in that neighbour\'s copy, ne
 
 test('where two neighbours\' map rectangles overlap, water belongs to the island with the nearest real coast', async () => {
   const {copyHolding} = await import('../src/world/sphere-shores.js');
-  const A=mapOf('blossom'), B=mapOf('isle-170'), far=60000, coast=m=>m.world.coast.map(([x,y])=>({x:x-m.cx,y:y-m.cy}));
+  const A=mapOf('blossom'), B=mapOf('sunset'), far=60000, coast=m=>m.world.coast.map(([x,y])=>({x:x-m.cx,y:y-m.cy}));
   const east=coast(A).reduce((p,q)=>q.x>p.x?q:p), west=coast(B).reduce((p,q)=>q.x<p.x?q:p), dx=east.x-west.x+600;
-  const copies=[{id:'blossom',x:far,y:far,width:A.width,height:A.height},{id:'isle-170',x:far+dx,y:far+east.y-west.y,width:B.width,height:B.height}];
+  const copies=[{id:'blossom',x:far,y:far,width:A.width,height:A.height},{id:'sunset',x:far+dx,y:far+east.y-west.y,width:B.width,height:B.height}];
   for (const [copy,at] of [[copies[0],{x:far+east.x+150,y:far+east.y}],[copies[1],{x:far+east.x+450,y:far+east.y}]]) {
     assert.ok(copies.every(c=>Math.abs(at.x-c.x)<c.width/2+300&&Math.abs(at.y-c.y)<c.height/2+300),'both maps reach this water');
     assert.equal(copyHolding(at.x,at.y,copies)?.id,copy.id,`nearer ${copy.id}'s coast`);
