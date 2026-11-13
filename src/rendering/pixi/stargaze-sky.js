@@ -102,7 +102,7 @@ export function readSky(data) {
 const ease = t => t*t*(3-2*t);
 const bound = (value, min, max) => Math.max(min, Math.min(max, value));
 
-function inkStar(ctx, x, y, radius, turn = 0, face = false, wink = false) {
+function inkStar(ctx, x, y, radius, turn = 0, bright = false) {
   ctx.save(); ctx.translate(x,y); ctx.rotate(turn);
   const points = Array.from({length:10}, (_, i) => {
     const angle = -Math.PI/2+i*Math.PI/5, r = radius*(i%2 ? .53 : [1.05,1,.97,1.03,.94][i/2]);
@@ -115,20 +115,12 @@ function inkStar(ctx, x, y, radius, turn = 0, face = false, wink = false) {
     ctx.quadraticCurveTo(...p, (p[0]+next[0])/2, (p[1]+next[1])/2);
   }
   ctx.closePath();
-  ctx.fillStyle = face ? '#ffdb80' : PALE;
-  ctx.strokeStyle = INK; ctx.lineWidth = face ? Math.max(1.8,radius*.085) : Math.max(1,radius*.15);
+  ctx.fillStyle = bright ? '#ffdb80' : PALE;
+  ctx.strokeStyle = INK; ctx.lineWidth = bright ? Math.max(1.8,radius*.085) : Math.max(1,radius*.15);
   ctx.lineJoin = ctx.lineCap = 'round'; ctx.fill(); ctx.stroke();
-  if (face) {
+  if (bright) {
     ctx.save(); ctx.clip(); ctx.strokeStyle = '#e8b950'; ctx.lineWidth = radius*.15;
     ctx.beginPath(); ctx.arc(0,-radius*.12,radius*.77,.1,Math.PI*.8); ctx.stroke(); ctx.restore();
-    ctx.strokeStyle = INK; ctx.lineWidth = Math.max(1.6,radius*.07);
-    ctx.beginPath();
-    ctx.moveTo(-radius*.29,0); ctx.quadraticCurveTo(-radius*.2,-radius*.26,-radius*.1,0);
-    if (wink) {ctx.moveTo(radius*.26,-radius*.12); ctx.lineTo(radius*.13,-radius*.04); ctx.lineTo(radius*.27,radius*.02);}
-    else {ctx.moveTo(radius*.09,0); ctx.quadraticCurveTo(radius*.19,-radius*.26,radius*.29,0);}
-    ctx.stroke();
-    ctx.strokeStyle = '#c77a42'; ctx.beginPath(); ctx.moveTo(-radius*.07,radius*.13);
-    ctx.quadraticCurveTo(radius*.03,radius*.27,radius*.14,radius*.12); ctx.stroke();
     ctx.fillStyle = '#fff0c7'; ctx.beginPath(); ctx.ellipse(-radius*.16,-radius*.5,radius*.08,radius*.04,-.7,0,TAU); ctx.fill();
   }
   ctx.restore();
@@ -141,7 +133,7 @@ export function createStargazeSky({stage, lens, canvas, tag, nameTag}) {
   let reduced = motion.matches;
   let sky = readSky(null), anon = anonymousStars(0), edges = [], presence = new Map();
   let cam = {x:0, y:0, z:.6}, size = 400, dpr = 1, raf = 0, running = false, loaded = false, fly = null, dirty = true;
-  let greeting = null, selectedId = null, lastDraw = 0, presenceKey = '';
+  let selectedId = null, lastDraw = 0, presenceKey = '';
   const tiles = new Map(), cleanups = [], pointers = new Map();
   const sx = x => size/2+(x-cam.x)*cam.z, sy = y => size/2+(y-cam.y)*cam.z;
   const zMin = () => size/4800, zMax = 3.2;
@@ -149,6 +141,7 @@ export function createStargazeSky({stage, lens, canvas, tag, nameTag}) {
     target.addEventListener(name, fn, options);
     cleanups.push(() => target.removeEventListener(name, fn, options));
   };
+  const liveRadius = () => bound(size*.030,16,31);
   const visible = (x,y,margin = 40) => (x-size/2)**2+(y-size/2)**2 < (size/2+margin)**2;
 
   function fit() {
@@ -226,21 +219,14 @@ export function createStargazeSky({stage, lens, canvas, tag, nameTag}) {
     if (!visible(x,y,65)) return;
     const state = presence.get(star.accountId);
     const fade = reduced ? 1 : Math.min(1,(now-(state?.since ?? now))/650);
-    const wave = reduced ? .5 : .5+.5*Math.sin(now/1200+star.phase);
-    const r = bound(size*.036,19,37)*(1+wave*.025);
+    const wave = reduced ? .5 : .5+.5*Math.sin(now/620+star.phase);
+    const r = liveRadius();
     ctx.globalAlpha = fade;
-    const halo = ctx.createRadialGradient(x,y,r*.5,x,y,r*2.8);
-    halo.addColorStop(0,`rgba(255,206,100,${.2+wave*.04})`); halo.addColorStop(1,'rgba(255,206,100,0)');
-    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(x,y,r*2.8,0,TAU); ctx.fill();
-    ctx.strokeStyle = '#ffd37d'; ctx.lineWidth = Math.max(2,r*.09); ctx.lineCap = 'round';
-    ctx.beginPath();
-    for (const angle of [-1.25,-.86,-.42,.8]) {
-      const a = angle+star.phase*.12, start = r*1.15, end = start+r*(.2+wave*.06);
-      ctx.moveTo(x+Math.cos(a)*start,y+Math.sin(a)*start); ctx.lineTo(x+Math.cos(a)*end,y+Math.sin(a)*end);
-    }
-    ctx.stroke();
-    const wink = star.me || greeting?.id === star.accountId && now-greeting.at < 1100;
-    inkStar(ctx,x,y,r,Math.sin(star.phase)*.08,true,wink); ctx.globalAlpha = 1;
+    const reach = r*(2.5+wave*.75);
+    const halo = ctx.createRadialGradient(x,y,r*.45,x,y,reach);
+    halo.addColorStop(0,`rgba(255,206,100,${.17+wave*.15})`); halo.addColorStop(1,'rgba(255,206,100,0)');
+    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(x,y,reach,0,TAU); ctx.fill();
+    inkStar(ctx,x,y,r,Math.sin(star.phase)*.08,true); ctx.globalAlpha = 1;
   }
   function selectStar(star) {
     selectedId = star?.accountId ?? null;
@@ -251,7 +237,7 @@ export function createStargazeSky({stage, lens, canvas, tag, nameTag}) {
   const overlaps = (a,b) => a && b && Math.abs(a.x-b.x) < (a.w+b.w)/2+8 && Math.abs(a.y-b.y) < (a.h+b.h)/2+8;
   function labelPosition(element, star, avoid = null) {
     const x = sx(star.x), y = sy(star.y), half = size/2;
-    const radius = star.online ? bound(size*.036,19,37) : 4.2+Math.sqrt(cam.z)*2;
+    const radius = star.online ? liveRadius() : 4.2+Math.sqrt(cam.z)*2;
     if (!visible(x,y,-8)) return null;
     const w = element.offsetWidth || 96, h = element.offsetHeight || 34;
     for (const cy of [y-radius-12-h/2,y+radius+12+h/2]) {
@@ -300,7 +286,7 @@ export function createStargazeSky({stage, lens, canvas, tag, nameTag}) {
       const px = sx(star.x), py = sy(star.y);
       if (!visible(px,py,0)) continue;
       const d = Math.hypot(px-x,py-y);
-      const radius = star.online ? bound(size*.036,19,37)+5 : touch ? 22 : 14;
+      const radius = star.online ? liveRadius()+5 : touch ? 22 : 14;
       if (d < radius && d < distance) {closest = star; distance = d;}
     }
     return closest;
@@ -374,7 +360,6 @@ export function createStargazeSky({stage, lens, canvas, tag, nameTag}) {
     const [x,y] = local(event);
     const star = pickStar(x,y,event.pointerType === 'touch');
     selectStar(star);
-    if (star) greeting = {id:star.accountId,at:performance.now()};
   }
   listen(canvas,'pointerup',release); listen(canvas,'pointercancel',release); listen(canvas,'lostpointercapture',release);
   listen(canvas,'wheel',event => {
