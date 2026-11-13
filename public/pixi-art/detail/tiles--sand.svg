@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="713" height="713" viewBox="0 0 713 713" data-detail="1">
-<defs><linearGradient id="light-30319bb3" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#fff7d2" /><stop offset="32%" stop-color="#fff5c8" /><stop offset="68%" stop-color="#eee4b8" /><stop offset="100%" stop-color="#cfc6a0" /></linearGradient><linearGradient id="light-9b7fc382" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#dfa878" /><stop offset="32%" stop-color="#d7945a" /><stop offset="68%" stop-color="#c7854b" /><stop offset="100%" stop-color="#ad7341" /></linearGradient></defs><title>sand</title>
+<defs></defs><title>sand</title>
 <desc>Ducky Land. Drip ink 7.5 world units. Ground anchor 356.5,713. Hand-built Bezier paths.</desc>
-<path id="000-tile-foundation" d="M0 0H713Q713 0 713 0V713Q713 713 713 713H0Q0 713 0 713V0Q0 0 0 0Z" fill="url(#light-30319bb3)" />
-<path id="001-periodic-detail" d="M30.5 50C30.5 52.485 27.59 54.5 24 54.5C20.41 54.5 17.5 52.485 17.5 50C17.5 47.515 20.41 45.5 24 45.5C27.59 45.5 30.5 47.515 30.5 50Z" fill="url(#light-9b7fc382)" />
-<path id="002-periodic-detail" d="M236.5 120C236.5 122.485 233.59 124.5 230 124.5C226.41 124.5 223.5 122.485 223.5 120C223.5 117.515 226.41 115.5 230 115.5C233.59 115.5 236.5 117.515 236.5 120Z" fill="url(#light-9b7fc382)" />
-<path id="003-periodic-detail" d="M606.5 72C606.5 74.485 603.59 76.5 600 76.5C596.41 76.5 593.5 74.485 593.5 72C593.5 69.515 596.41 67.5 600 67.5C603.59 67.5 606.5 69.515 606.5 72Z" fill="url(#light-9b7fc382)" />
-<path id="004-periodic-detail" d="M388.5 388C388.5 390.485 385.59 392.5 382 392.5C378.41 392.5 375.5 390.485 375.5 388C375.5 385.515 378.41 383.5 382 383.5C385.59 383.5 388.5 385.515 388.5 388Z" fill="url(#light-9b7fc382)" />
-<path id="005-periodic-detail" d="M86.5 560C86.5 562.485 83.59 564.5 80 564.5C76.41 564.5 73.5 562.485 73.5 560C73.5 557.515 76.41 555.5 80 555.5C83.59 555.5 86.5 557.515 86.5 560Z" fill="url(#light-9b7fc382)" />
-<path id="006-periodic-detail" d="M655.5 623C655.5 625.485 652.59 627.5 649 627.5C645.41 627.5 642.5 625.485 642.5 623C642.5 620.515 645.41 618.5 649 618.5C652.59 618.5 655.5 620.515 655.5 623Z" fill="url(#light-9b7fc382)" />
+<path id="000-tile-foundation" d="M0 0H713Q713 0 713 0V713Q713 713 713 713H0Q0 713 0 713V0Q0 0 0 0Z" fill="#efe6bc" />
+<path id="001-periodic-detail" d="M30.5 50C30.5 52.485 27.59 54.5 24 54.5C20.41 54.5 17.5 52.485 17.5 50C17.5 47.515 20.41 45.5 24 45.5C27.59 45.5 30.5 47.515 30.5 50Z" fill="#ca8d58" />
+<path id="002-periodic-detail" d="M236.5 120C236.5 122.485 233.59 124.5 230 124.5C226.41 124.5 223.5 122.485 223.5 120C223.5 117.515 226.41 115.5 230 115.5C233.59 115.5 236.5 117.515 236.5 120Z" fill="#ca8d58" />
+<path id="003-periodic-detail" d="M606.5 72C606.5 74.485 603.59 76.5 600 76.5C596.41 76.5 593.5 74.485 593.5 72C593.5 69.515 596.41 67.5 600 67.5C603.59 67.5 606.5 69.515 606.5 72Z" fill="#ca8d58" />
+<path id="004-periodic-detail" d="M388.5 388C388.5 390.485 385.59 392.5 382 392.5C378.41 392.5 375.5 390.485 375.5 388C375.5 385.515 378.41 383.5 382 383.5C385.59 383.5 388.5 385.515 388.5 388Z" fill="#ca8d58" />
+<path id="005-periodic-detail" d="M86.5 560C86.5 562.485 83.59 564.5 80 564.5C76.41 564.5 73.5 562.485 73.5 560C73.5 557.515 76.41 555.5 80 555.5C83.59 555.5 86.5 557.515 86.5 560Z" fill="#ca8d58" />
+<path id="006-periodic-detail" d="M655.5 623C655.5 625.485 652.59 627.5 649 627.5C645.41 627.5 642.5 625.485 642.5 623C642.5 620.515 645.41 618.5 649 618.5C652.59 618.5 655.5 620.515 655.5 623Z" fill="#ca8d58" />
 </svg>

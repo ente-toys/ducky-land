@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "a5ae89a5ef22af43367ddca15bbb74c668e938588d5f0d98f25f3d55e52b6479",
+      "modelSha256": "8fa98848874a0cbed4d150dd4f22c9d8c84b7cfa61261f99f69047afa91a311b",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -842,10 +842,6 @@
           "sha256": "6daed02c9e6cf3b0bf5027505ced6903283524807a9f1b17fff6dd488a80d701"
         },
         {
-          "path": "public/pixi-art/home-review/beam.svg",
-          "sha256": "e08663bc324f728d1bf62dbce266d0a8369da563d45f05af6008ad1a9a990fb8"
-        },
-        {
           "path": "public/pixi-art/home-review/farm-enclosure.svg",
           "sha256": "20774b1a0e6e3cf3bdbef43e6a979eb937cda688316d0d4d93551755fc5052f5"
         },
@@ -1087,7 +1083,7 @@
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "9f26a8d53c1e21b1233c7df0c2625c5db3343565c05672b860d9ff6ec640687c"
+          "sha256": "ef36509316e3effd1295fb63eaa97353689c6f436eea3f865118d7ed0f35df6e"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1134,15 +1130,15 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "f9016368d63b5fdc1f59f1f08be21378a65ce24fb55b3e92df1429c176414ea5"
+      "sha256": "bc7aa276ee7fbd91d2e27de458f79170a32f39754bbea37733c4239698943a34"
     },
-    "groundSha256": "0a48b9d96e8f766362276d1d3a892fc659e5e4362d023ae78ffd4638cc80d465",
+    "groundSha256": "ba6f673b1f0fed23a0798a50fc41c0d5f15481538ae7d305aeae7cc3fffd9c64",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "76d420a23b049f2f70880c53b9d31a7944681aa6a2813bbf4a733fa6b9628a4e",
+    "sha256": "ef5e3bdb070668c67e8c17dfcabbd2a211a9b32c3263a4728bfed178fc1203da",
     "width": 1024,
     "height": 768,
-    "bytes": 1176863,
-    "groundBytes": 968615,
+    "bytes": 1176968,
+    "groundBytes": 969124,
     "quality": {
       "tolerance": 0.4,
       "minArea": 0.2,
@@ -1151,7 +1147,7 @@
     },
     "worldPaths": 0,
     "walkways": 1,
-    "flats": 786,
+    "flats": 792,
     "decks": 12,
     "bridgeDetails": 0
   },
@@ -7623,7 +7619,7 @@
         },
         {
           "path": "public/pixi-art/detail/beach--beach-ball.svg",
-          "sha256": "d5857ae4162e46ce720ff034764359b17e8adb500b740946d61bf72a4e20bec2"
+          "sha256": "7c7f75c03560be57750db6874a2d6258084352624d308dcfbb707683212e3626"
         },
         {
           "path": "public/pixi-art/detail/beach--bucket.svg",
@@ -7631,23 +7627,23 @@
         },
         {
           "path": "public/pixi-art/detail/beach--sandcastle-small.svg",
-          "sha256": "9694947e3ef75aada83e973d1b24cb3388905406af3accf01182f2d12cf9e846"
+          "sha256": "f57bba0aa76500480da117bc10cb30c3a5a2869ca9498c28458212a9747d2427"
         },
         {
           "path": "public/pixi-art/detail/beach--shell-conch.svg",
-          "sha256": "da4febaba47b48e2f61ac4ca0046a523d0f50061b1abf2cd8848dadceb309910"
+          "sha256": "e19a1806bfcc356458d46e48005471e15e24642fd2052d9b231a9cee7fc667a0"
         },
         {
           "path": "public/pixi-art/detail/beach--towel-striped.svg",
-          "sha256": "5c1c0a49e0532dc1517a72b1c6aecd0220863554404d94715fa74e9a8176eb29"
+          "sha256": "6f1b86590f77c4285f9112ba738af3a041ffbdb12f62775cc4f855555f9848ab"
         },
         {
           "path": "public/pixi-art/detail/beach--towel-sun.svg",
-          "sha256": "291f000567227b1d31b6b8665ea91d3b03eae196e2335a94010e3e71c2c53aef"
+          "sha256": "ea4b26752a15707d102dcc3aa8aca3c5eff4902cc1524d4a64206e3e2d126b3e"
         },
         {
           "path": "public/pixi-art/detail/street--picnic-basket.svg",
-          "sha256": "438984ad2b781f71c1e750dcf2f3aa82a01bb3446cc3150db0d47f5e811ee520"
+          "sha256": "a409d0caaac8ffceb93703448d010e612d1550bb81b1301bef1c8c48b97e2c82"
         },
         {
           "path": "public/pixi-art/lily-00.svg",
@@ -8574,11 +8570,11 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "58b34b89f7c551ce71c6d2fadfa48fa1d05cdb13848becbe9cc587e6cc5e3d6d"
+      "sha256": "3bce574d032aeafe865b94658b867ac7e228d2d2dbc54c3dd6ea6996757dcde1"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
-    "sha256": "149c2fbbb9f48a0467bcc7850bac9555173884b2b8c30865df545235730495c2",
+    "sha256": "fe3128e07a98c6db4fa99b4cdb00e07e83293835cc67919aebbf2db94a31ed31",
     "width": 1024,
     "height": 768,
     "bytes": 740695,

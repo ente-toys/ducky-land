@@ -34,7 +34,7 @@ export function createPirateFleet({count=PIRATE_COUNT,seed=713913}={}){
   const c=waterObstacles().centre;
   let p;for(let attempt=0;attempt<600;attempt++){const a=(k*2.399963+random()*.9)%TAU,r=SEA*Math.sqrt(.04+random()*.9);p=[c.x+Math.cos(a)*r,c.y+Math.sin(a)*r];if(pirateClearance(p)>950&&ships.every(s=>distance(s.p,p)>1800))break;p=null;}
   if(!p)throw Error('No safe pirate sea spawn');const h=random()*TAU;
-  ships.push({id:k,art:k%3,p,dir:[Math.cos(h),Math.sin(h)],speed:9+random()*8,velocity:0,rate:0,wantedRate:0,nextWander:random()*12,nextCheck:k*.2/count,phase:random()*TAU,width:[620,600,600][k%3],flip:1,flipAge:0});
+  ships.push({id:k,art:k%3,p,dir:[Math.cos(h),Math.sin(h)],speed:60+random()*40,velocity:0,rate:0,wantedRate:0,nextWander:random()*12,nextCheck:k*.2/count,phase:random()*TAU,width:[620,600,600][k%3],flip:1,flipAge:0});
  }
  function safe(p,boats,others,ship){return pirateClearance(p)>=PIRATE_RADIUS+80&&boats.every(b=>distance(p,b)>PIRATE_BOAT_GAP)&&others.every(s=>s===ship||distance(p,s.p)>800);}
  return {ships,get enabled(){return enabled;},set enabled(v){enabled=Boolean(v);},get time(){return time;},stats:{cpuMs:0,checks:0},

@@ -1,4 +1,4 @@
-import {DURATIONS, playEmote, startJump, setWalkDestination, walkStep} from '../gameplay/player-motion.js';
+import {DURATIONS, playEmote, playSailEmote, SAIL_EMOTES, startJump, setWalkDestination, walkStep} from '../gameplay/player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
 import {mapOf} from '../world/island-maps.js';
@@ -258,7 +258,7 @@ export class RoomClient {
     if (command.type === 'disembark' && this.player.mode === 'sailing' && canDock(this.player)) {
       const {water} = harborOf(this.islandId); setSailDestination(this.player,water.x,water.y); this.player.docking=true;
     }
-    if (command.type === 'emote' && this.player.mode !== 'sailing') playEmote(this.player, command.action, now);
+    if (command.type === 'emote') {if (this.player.mode === 'sailing') playSailEmote(this.player, command.action, now); else playEmote(this.player, command.action, now);}
     return null;
   }
 
@@ -281,7 +281,7 @@ export class RoomClient {
   }
 
   emote(action) {
-    return this.player?.mode !== 'sailing' && Object.hasOwn(DURATIONS, action) && this.send({type:'emote',action});
+    return (this.player?.mode !== 'sailing' || SAIL_EMOTES.has(action)) && Object.hasOwn(DURATIONS, action) && this.send({type:'emote',action});
   }
 
   jump() {
@@ -353,7 +353,7 @@ export class RoomClient {
         this.lastInput = now;
       }
     }
-    if (this.player.mode === 'sailing') sailStep(this.player,dt,input);
+    if (this.player.mode === 'sailing') sailStep(this.player,dt,input,now);
     else walkStep(this.player, this.navHere(), dt, now, input);
     const omega = 12, decay = Math.exp(-omega * dt);
     const settle = (offset, velocity) => {

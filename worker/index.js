@@ -5,7 +5,7 @@ import {mapOf} from '../src/world/island-maps.js';
 import {BOG_ISLAND,bogLandingNotice} from '../src/features/bog-combat/entry.js';
 import {getPlayerKarma} from '../src/features/bog-combat/karma.js';
 import {LiveBogRoom} from './bog-room.js';
-import {DURATIONS, playEmote, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/gameplay/player-motion.js';
+import {DURATIONS, playEmote, playSailEmote, SAIL_EMOTES, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/gameplay/player-motion.js';
 import {chatText} from '../src/multiplayer/chat.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
 import {islandFor, destinationsFor, harborOf, createBoats, near, canSail, canDock, setSailDestination, sailStep, crossIsland, boardingPoint, landingSpot, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
@@ -739,7 +739,12 @@ export class IslandRoom {
         }
         break;
       case 'emote':
-        if (actor.mode === 'sailing') break;
+        if (actor.mode === 'sailing') {
+          if (SAIL_EMOTES.has(command.action) && (now-info.lastEmote >= 300 || (command.action === 3 && actor.action === 2))) {
+            info.lastEmote = now; playSailEmote(actor, command.action, now/1000);
+          }
+          break;
+        }
         info.boarding=null;
         if (!Number.isInteger(command.action) || !Object.hasOwn(DURATIONS, command.action)) return;
         if (now-info.lastEmote >= 300 || (command.action === 3 && actor.action === 2)) {
@@ -769,7 +774,7 @@ export class IslandRoom {
       if (!actor) continue;
       if (now >= info.inputExpires) info.input = ZERO;
       if (actor.mode === 'sailing') {
-        sailStep(actor,.05,info.input);
+        sailStep(actor,.05,info.input,now/1000);
         const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
         if (!boat) info.landing=null;
         if (boat) {

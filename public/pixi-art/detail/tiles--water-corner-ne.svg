@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="713" height="713" viewBox="0 0 713 713" data-detail="1">
-<defs><linearGradient id="light-bc6b1114" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#a8df8d" /><stop offset="32%" stop-color="#94d873" /><stop offset="68%" stop-color="#85c864" /><stop offset="100%" stop-color="#73ad57" /></linearGradient><linearGradient id="light-14ecc31e" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#9cdbf6" /><stop offset="32%" stop-color="#86d3f4" /><stop offset="68%" stop-color="#77c2e3" /><stop offset="100%" stop-color="#67a8c5" /></linearGradient><linearGradient id="light-d341d3b4" x1="0%" y1="0%" x2="85%" y2="100%"><stop offset="0%" stop-color="#71ade1" /><stop offset="32%" stop-color="#519ada" /><stop offset="68%" stop-color="#428aca" /><stop offset="100%" stop-color="#3a78af" /></linearGradient></defs><title>water corner ne</title>
+<defs></defs><title>water corner ne</title>
 <desc>Ducky Land. Drip ink 7.5 world units. Ground anchor 356.5,713. Hand-built Bezier paths.</desc>
-<path id="000-grass-foundation" d="M0 0H713Q713 0 713 0V713Q713 713 713 713H0Q0 713 0 713V0Q0 0 0 0Z" fill="url(#light-bc6b1114)" />
-<path id="001-corner-water" d="M356.5 713H0V356.5C196.89 356.5 356.5 516.11 356.5 713Z" fill="url(#light-14ecc31e)" />
-<path id="002-corner-water-shade" d="M304.5 713Q304.5 651.015 280.592 594.491Q257.483 539.855 215.314 497.686Q173.145 455.517 118.509 432.408Q61.985 408.5 0 408.5V374.5Q68.88 374.5 131.754 401.094Q192.497 426.786 239.356 473.644Q286.214 520.503 311.906 581.246Q338.5 644.12 338.5 713Z" fill="url(#light-d341d3b4)" />
+<path id="000-grass-foundation" d="M0 0H713Q713 0 713 0V713Q713 713 713 713H0Q0 713 0 713V0Q0 0 0 0Z" fill="#8dcb6f" />
+<path id="001-corner-water" d="M356.5 713H0V356.5C196.89 356.5 356.5 516.11 356.5 713Z" fill="#80c6e4" />
+<path id="002-corner-water-shade" d="M304.5 713Q304.5 651.015 280.592 594.491Q257.483 539.855 215.314 497.686Q173.145 455.517 118.509 432.408Q61.985 408.5 0 408.5V374.5Q68.88 374.5 131.754 401.094Q192.497 426.786 239.356 473.644Q286.214 520.503 311.906 581.246Q338.5 644.12 338.5 713Z" fill="#5092cd" />
 <path id="003-corner-shoreline-ink" d="M352.75 713Q352.75 641.231 325.031 575.695Q298.256 512.392 249.432 463.568Q200.608 414.744 137.305 387.969Q71.769 360.25 0 360.25V352.75Q73.29 352.75 140.227 381.062Q204.877 408.406 254.735 458.265Q304.594 508.123 331.938 572.773Q360.25 639.71 360.25 713Z" fill="#232323" />
 </svg>

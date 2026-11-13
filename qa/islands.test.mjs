@@ -272,3 +272,15 @@ test('every island has its full mooring list, even from an old save that only kn
   for (const island of ISLANDS) assert.ok(mooredAt(saved,island.id).every(Boolean),`${island.id} has all ${boatSpots(island.id).length} boats`);
   assert.equal(fillMoorings(saved),false,'a full set is left alone');
 });
+
+test('quack and dance play on a boat without touching its course, and end on time', async () => {
+  const {playSailEmote} = await import('../src/gameplay/player-motion.js');
+  const {HARBOR:harbor} = (await import('../src/world/island-maps.js')).mapOf('home');
+  const actor = {islandId:'home', mode:'sailing', ...harbor.water, turn:1.2, action:0, until:0, emoteVersion:0, sailTarget:null};
+  assert.equal(playSailEmote(actor, 4, 10), false, 'only quack and dance on a boat');
+  assert.equal(playSailEmote(actor, 2, 10), true);
+  sailStep(actor, .05, {x:0, y:0}, 10.5);
+  assert.equal(actor.action, 2); assert.equal(actor.turn, 1.2);
+  sailStep(actor, .05, {x:0, y:0}, 12);
+  assert.equal(actor.action, 0);
+});

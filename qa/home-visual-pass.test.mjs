@@ -13,11 +13,3 @@ test('all Home crossings reuse the approved bridge family with boat-passable phy
  for(const b of E.homeArches){assert.ok(E.decks.some(d=>d.id===b.id));assert.ok(b.r>0);}
  for(const a of E.arches)assert.ok(E.walkways.some(w=>w.boatPassUnder&&Math.hypot(w.a[0]-a.a[0],w.a[1]-a.a[1])<2&&Math.hypot(w.b[0]-a.b[0],w.b[1]-a.b[1])<2));
 });
-test('the lighthouse beam sweeps slowly within its gentle limits and stops for reduced motion',()=>{
- const beam=E.props.find(p=>p.id==='home-lighthouse-beam');
- assert.equal(homePropRotation(beam,0),0);
- assert.ok(Math.abs(homePropRotation(beam,3)-.16)<1e-12);
- assert.ok(Math.abs(homePropRotation(beam,9)+.16)<1e-12);
- assert.equal(homePropRotation(beam,7,true),0);
- assert.equal(beam.contact,false,'light cannot exclude a sleeper or block a walking route');
-});
