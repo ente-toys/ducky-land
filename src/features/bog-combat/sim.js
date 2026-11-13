@@ -44,7 +44,7 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     if(combat){
       const {shieldLeft=0,respawnLeft=0,nextFireLeft=0,reloadLeft=0,dodgeLeft=0,dodgeProtectLeft=0,dodgeCooldownLeft=0,speedLeft=0,hitShieldLeft=0,bushRevealLeft=0,...saved}=combat;
       Object.assign(p,saved,{id,profile,name,team:combat.team??team,seq:-1,input:idle(),inputAt:state.time,
-        dodgeUntil:state.time+dodgeLeft,dodgeProtectedUntil:state.time+dodgeProtectLeft,dodgeReadyAt:state.time+dodgeCooldownLeft,speedUntil:state.time+speedLeft,hitShieldUntil:state.time+hitShieldLeft,bushRevealUntil:state.time+bushRevealLeft,
+        dodgeUntil:state.time+dodgeLeft,dodgeProtectedUntil:state.time+dodgeProtectLeft,dodgeReadyAt:state.time+dodgeCooldownLeft,hitShieldUntil:state.time+hitShieldLeft,bushRevealUntil:state.time+bushRevealLeft,
         karma,stats:{...emptyStats(),...stats},medalCase:cleanMedalCase(medalCase),shieldUntil:state.time+shieldLeft,respawnAt:state.time+respawnLeft,nextFire:state.time+nextFireLeft,reloadAt:reloadLeft?state.time+reloadLeft:0});
       updateBushPresence(p,state.time,hideBushes);
     }
@@ -76,7 +76,7 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     mark.id=++nextSplat;mark.x=point.x;mark.y=point.y;mark.team=shot.team;mark.colour=shot.colour;mark.kind=kind;mark.victim=victim;mark.born=state.time;mark.expires=state.time+RULES.splatSeconds;state.splats.push(mark);
   }
   function tag(shot,p,point){
-    p.dodgeUntil=0;p.dodgeProtectedUntil=0;p.speedUntil=0;p.hitShield=0;p.hitShieldUntil=0;
+    p.dodgeUntil=0;p.dodgeProtectedUntil=0;p.hitShield=0;p.hitShieldUntil=0;
     p.bushId=null;
     p.lives=Math.max(0,p.lives-1);p.out=p.lives===0;p.comebackReady=true;p.lastTaggedBy=shot.owner;p.alive=false;p.pace=0;p.heading=null;p.path=[];p.travel=0;p.respawnAt=state.time+RULES.respawnDelay;p.input=idle();p.action=0;p.streak=0;
     const owner=state.players.get(shot.owner);state.scores[shot.team]+=RULES.tagPoints;
@@ -135,7 +135,7 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     kept=0;for(const e of state.events)if(state.time-e.time<8)state.events[kept++]=e;state.events.length=kept;
   }
   function snapshot(team=null){return {type:'arena-snapshot',tick:state.tick,time:state.time,practice:state.practice,pickups:state.pickups.map(p=>({...p})),events:structuredClone(state.events),scores:{...state.scores},
-    players:[...state.players.values()].filter(p=>!team||p.team===team||!isCombatHidden(p,state.time)).map(p=>({id:p.id,name:p.name,team:p.team,x:p.x,y:p.y,ax:p.ax??1,ay:p.ay??0,action:p.action,travel:p.travel,pace:p.pace,heading:p.heading?[...p.heading]:null,turn:p.turn,facing:p.facing??0,until:p.until,emoteVersion:p.emoteVersion,alive:p.alive,dodgeUntil:p.dodgeUntil,dodgeProtectedUntil:p.dodgeProtectedUntil,dodgeReadyAt:p.dodgeReadyAt,dodgeX:p.dodgeX,dodgeY:p.dodgeY,dodgeSerial:p.dodgeSerial,speedUntil:p.speedUntil,hitShield:p.hitShield,hitShieldUntil:p.hitShieldUntil,karma:p.karma,lives:p.lives,out:p.out,bot:p.bot,respawnAt:p.respawnAt,shieldUntil:p.shieldUntil,bushId:p.bushId,bushHidden:isBushHidden(p,state.time),bushRevealUntil:p.bushRevealUntil,bushEntry:p.bushEntry??0,bushEnteredAt:p.bushEnteredAt,ack:p.seq,streak:p.streak,ammo:p.ammo,reloadAt:p.reloadAt,medalCase:{...p.medalCase},stats:{...p.stats}})),
+    players:[...state.players.values()].filter(p=>!team||p.team===team||!isCombatHidden(p,state.time)).map(p=>({id:p.id,name:p.name,team:p.team,x:p.x,y:p.y,ax:p.ax??1,ay:p.ay??0,action:p.action,travel:p.travel,pace:p.pace,heading:p.heading?[...p.heading]:null,turn:p.turn,facing:p.facing??0,until:p.until,emoteVersion:p.emoteVersion,alive:p.alive,dodgeUntil:p.dodgeUntil,dodgeProtectedUntil:p.dodgeProtectedUntil,dodgeReadyAt:p.dodgeReadyAt,dodgeX:p.dodgeX,dodgeY:p.dodgeY,dodgeSerial:p.dodgeSerial,hitShield:p.hitShield,hitShieldUntil:p.hitShieldUntil,karma:p.karma,lives:p.lives,out:p.out,bot:p.bot,respawnAt:p.respawnAt,shieldUntil:p.shieldUntil,bushId:p.bushId,bushHidden:isBushHidden(p,state.time),bushRevealUntil:p.bushRevealUntil,bushEntry:p.bushEntry??0,bushEnteredAt:p.bushEnteredAt,ack:p.seq,streak:p.streak,ammo:p.ammo,reloadAt:p.reloadAt,medalCase:{...p.medalCase},stats:{...p.stats}})),
     shots:state.shots.map(s=>({...s})),splats:state.splats.map(s=>({...s}))};}
   return {state,join,leave,input,step,snapshot};
 }

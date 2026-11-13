@@ -83,7 +83,7 @@ export class LiveBogRoom {
   for(const p of this.exits.splice(0))this.eject(p);
   for(const p of this.arena.state.players.values()){
    if(p.bot)continue;
-   const key=JSON.stringify([p.lives,p.alive,p.shieldUntil,p.respawnAt,p.out,p.dodgeReadyAt,p.speedUntil,p.hitShield,p.hitShieldUntil,p.ammo,p.reloadAt,p.bushRevealUntil]);
+   const key=JSON.stringify([p.lives,p.alive,p.shieldUntil,p.respawnAt,p.out,p.dodgeReadyAt,p.hitShield,p.hitShieldUntil,p.ammo,p.reloadAt,p.bushRevealUntil]);
    if(this.saved.get(p.id)!==key){this.persist(p);this.saved.set(p.id,key);}
   }
   if(this.arena.state.tick%3===0)this.broadcast();

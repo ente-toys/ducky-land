@@ -3,6 +3,7 @@ import {RULES} from './rules.js';
 import {attachBogCombat} from './attach.js';
 import './combat.css';
 import BogTutorial from './Tutorial.jsx';
+import shieldArt from './assets/pickups/shield.svg?url';
 
 const popperIcon=team=>`/pixi-art/themes/bog-arena/hud/${team==='karma'?'karma-padlock':'evil-rainbow'}-popper.svg`;
 
@@ -22,6 +23,13 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
     return()=>{active=false;abort.abort();clearTimeout(timeout);current?.leave(false);if(layer.current===current)layer.current=null;};
   },[engine,team,name,profile,navigation,blockers,attempt]);
   const {self,snapshot,status,error}=state;
+  // the shield pickup blocks one splat: show it with a countdown while it lasts, and a short flash when it is used up
+  const shieldLeft=self?.alive&&self.hitShield>0?Math.max(0,(self.hitShieldUntil??0)-(snapshot?.time??0)):0;
+  const hadShield=useRef(false),[blocked,setBlocked]=useState(false);
+  useEffect(()=>{
+    const had=hadShield.current;hadShield.current=shieldLeft>0;
+    if(had&&shieldLeft<=0&&self?.alive&&(self.hitShieldUntil??0)>(snapshot?.time??0)){setBlocked(true);const t=setTimeout(()=>setBlocked(false),900);return()=>clearTimeout(t);}
+  },[shieldLeft>0]);
   const mine=self?.team??team,lives=self?.lives??RULES.lives,ammo=self?.ammo??RULES.ammoCapacity,now=snapshot?.time??0;
   const note=self?.out?'Out of lives! Paddling to an islet…':self?.alive===false?`Respawning in ${Math.max(1,Math.ceil(self.respawnAt-now))}…`
     :self?.shieldUntil>now?`Hidden ${Math.ceil(self.shieldUntil-now)}s`:self?.bushHidden?'Hidden in bush':null;
@@ -42,6 +50,9 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
       <div className="bog-hud-card bog-hud-bar">
         <div className="bog-hud-group"><small>Hearts</small>
           <div className="bog-hud-hearts" role="img" aria-label={`${lives} of ${RULES.lives} hearts left`}>{Array.from({length:RULES.lives},(_,i)=><span key={i} aria-hidden="true" className={i<lives?'':'lost'}>♥</span>)}</div></div>
+        {(shieldLeft>0||blocked)&&<><span className="bog-hud-sep" aria-hidden="true"/>
+          <div className={`bog-hud-group bog-hud-shield${blocked?' is-blocked':''}`} role="status"><small>Shield</small>
+            <div className="bog-hud-ammo"><img src={shieldArt} alt="" aria-hidden="true"/><b>{blocked?'Blocked!':`${Math.ceil(shieldLeft)}s`}</b></div></div></>}
         <span className="bog-hud-sep" aria-hidden="true"/>
         <div className="bog-hud-group"><small>{note?'Status':`Paint ${ammo}/${RULES.ammoCapacity}`}</small>
           <div className="bog-hud-ammo"><img className="bog-combat-popper-icon" src={popperIcon(mine)} alt="" aria-hidden="true"/>

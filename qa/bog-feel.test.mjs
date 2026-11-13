@@ -64,7 +64,7 @@ test('reduced motion keeps the white confirmation but never holds the display',(
 
 test('authoritative pickups chime once for the local collector, without replay on entry or reconnect',()=>{
   const sim=createBogCombat({blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='karma'?100:600,y:300}],
-    pickupSpots:[{id:'paint',kind:'paint',x:300,y:300},{id:'speed',kind:'speed',x:600,y:300},{id:'shield',kind:'shield',x:900,y:300}]});
+    pickupSpots:[{id:'paint',kind:'paint',x:300,y:300},{id:'shield',kind:'shield',x:900,y:300}]});
   const self=sim.join({id:'you',team:'karma'});sim.join({id:'bot',team:'evil'}).bot=true;
   const scene=new Container(),sounds=[],engine={scene};
   const feel=createBogFeel(engine,{playSound:name=>sounds.push(name)});
