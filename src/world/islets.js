@@ -17,7 +17,6 @@ export const ISLET_SEED=data.seed;
 export const ISLET_ART=['odyssey','tree-and-rowboat','broken-shipwreck','04-small-mountain','06-palm-treasure','07-pink-blossom','12-coral-atoll'];
 export const ISLET_META=Object.fromEntries([odyssey,treeAndRowboat,brokenShipwreck,smallMountain,palmTreasure,pinkBlossom,coralAtoll].map(m=>[m.art,m]));
 export const ISLET_VIEWBOX=1024;
-const BOAT_ROOM=46+26;
 // Each islet belongs to a fixed island (flat-layout.js). On the globe it sits beside that island on the same
 // bearing as on the flat sea, pulled in so it stays clear of the neighbours.
 const GLOBE_ISLET_PULL={'sea-2-1':.78,'sea-6-1':.84},PULL=.72;   // these two need more room for a 600-unit boat channel
@@ -32,12 +31,8 @@ export function layoutIslet(i){
  for(const [x,y]of coast){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
  const c=[(x0+x1)/2,(y0+y1)/2];
  const radius=Math.max(...[...coast,...blocked.flat()].map(([x,y])=>Math.hypot(x-c[0],y-c[1])))+i.width*.02;
- const foot=map(m.jetty.foot),tip=map(m.jetty.tip),len=Math.hypot(tip[0]-foot[0],tip[1]-foot[1]),dir=[(tip[0]-foot[0])/len,(tip[1]-foot[1])/len];
- const at=t=>[tip[0]+dir[0]*t,tip[1]+dir[1]*t];
- const out=(tip[0]-c[0])*-dir[1]+(tip[1]-c[1])*dir[0],side=out>=0?[-dir[1],dir[0]]:[dir[1],-dir[0]],across=Math.abs(dir[1])>Math.abs(dir[0]);
- const water=across?[tip[0]-dir[0]*40+side[0]*(m.jetty.width*k/2+BOAT_ROOM-12),tip[1]-dir[1]*40+side[1]*(m.jetty.width*k/2+BOAT_ROOM-12)]:at(BOAT_ROOM);
- const jetty={foot,tip,land:at(-26),water,dir,width:m.jetty.width*k};
- return {...i,...frame,radius,home:near.id,coast,lakes,blocked,jetty,landCentre:c,collisionCenter:expMap(frame,c[0],c[1],WORLD_GEO.Rw),cap:Math.cos(i.width*.71/WORLD_GEO.Rw)};
+ const landing={land:map(m.landing.land),water:map(m.landing.water)};
+ return {...i,...frame,radius,home:near.id,coast,lakes,blocked,landing,landCentre:c,collisionCenter:expMap(frame,c[0],c[1],WORLD_GEO.Rw),cap:Math.cos(i.width*.71/WORLD_GEO.Rw)};
 }
 export const ISLETS=data.placements.map(layoutIslet);
 export function isletClearance(p,limit=Infinity,id=null){

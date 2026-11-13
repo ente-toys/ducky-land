@@ -38,13 +38,12 @@ import {copyHolding} from '../../world/sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
-import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
+import {harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
 import {isletWalks} from '../../world/islet-walk.js';
 import {reframeIslet} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from '../../world/island-maps.js';
 import {loadThemeArt} from './art/theme-art.js';
 import {telescopeNear,telescopePeerAt} from './telescope.js';
-import {setSailingHarbor} from './sailing-fx.js';
 import {createButterfly,butterflyPose} from './environment/butterflies.js';
 import {loadPondDuckies} from './environment/pond-duckies.js';
 import {floatingPose} from './environment/floating.js';
@@ -222,7 +221,7 @@ export class PixiIsland {
       this.plantReactions=createPlantReactions(this.air,leafTexture);
       this.rinkTrails=createRinkTrails(this.decks);
       const props = createPlacements(world, geometry({...world, obstacles: []}).walkable)
-        .filter(prop => !this.room || harborClear(prop)), local = this.room ? harborWorld(walkWorld(world, props)) : walkWorld(world, props);
+        .filter(prop => !this.room || harborClear(prop)), local = walkWorld(world, props);
       globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));
       const beds = sleepSpots(local, props, geometry(local).walkable, napWidths), walk = {...local, obstacles: [...local.obstacles, ...beds.map(sleeperFootprint)]};
       this.sim = createSimulation(walk, 8612, {sleepingNpcs: true, npcCount: beds.length});
@@ -569,7 +568,6 @@ export class PixiIsland {
     this.showArt(mapId);
     this.arches=mapId === 'home' ? undefined : mapFor(mapId).world.arches ?? [];
     this.applyMapAmbience(mapId);
-    setSailingHarbor(harborOf(id));
     this.stopInput();
     this.clearChat();
     this.markerUntil=0;
@@ -597,8 +595,8 @@ export class PixiIsland {
   }
 
   focusHarbor() {
-    const {pier}=harborOf(this.islandId);
-    Object.assign(this.target,{x:pier.x+pier.width/2,y:pier.y+pier.height/2,zoom:.65});
+    const {land,water}=harborOf(this.islandId);
+    Object.assign(this.target,{x:(land.x+water.x)/2,y:(land.y+water.y)/2,zoom:.65});
     this.follow=false; this.fitMode=false;
     this.canvas?.focus();
   }
@@ -1011,7 +1009,6 @@ export class PixiIsland {
       for (const {rig} of this.liveRigs?.values() ?? []) rig?.clearSnow?.();
       for (const list of this.mapSleepers.values()) for (const {rig} of list) rig.clearSnow?.();
     }
-    this.travelView?.showJetty(mapId);
   }
   mapHere() {return mapFor(this.artShown ?? 'home');}
   applyMapAmbience(mapId) {

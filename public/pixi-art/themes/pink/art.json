@@ -1494,13 +1494,6 @@
    "overBoats": true
   },
   {
-   "src": "expansion/shore/marina-pier.svg",
-   "x": 9560,
-   "y": 2730,
-   "width": 880,
-   "height": 240
-  },
-  {
    "id": "hamlet-teacup-quay-dock",
    "src": "hamlets/teacup/quay-dock.svg",
    "x": 6572.32,

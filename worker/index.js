@@ -130,7 +130,7 @@ export class IslandRoom {
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()};
       this.connections.set(socket, restored);
-      if (this.recoverSailingPosition(actor)) this.attach(socket, restored);
+      if (this.recoverSailingPosition(actor) || this.recoverWalkingPosition(actor)) this.attach(socket, restored);
     }
     this.reconcileBoats();
     this.karma=new RoomKarma(this);
@@ -195,6 +195,16 @@ export class IslandRoom {
     const {x, y} = position;
     Object.assign(actor, {x, y, travel:0, sailTarget:null, sailRoute:null, docking:false, exitLocked:false});
     Object.assign(boat, {x, y, islandId:actor.islandId});
+    return true;
+  }
+
+  recoverWalkingPosition(actor) {
+    if (actor?.mode !== 'walking') return false;
+    const nav = this.navFor(actor.islandId);
+    if (nav.walkable(actor.x,actor.y)) return false;
+    const point = nav.nearest(actor.x,actor.y,1200);
+    const position = point ? {x:point[0],y:point[1]} : harborOf(actor.islandId).land;
+    Object.assign(actor,position);
     return true;
   }
 
@@ -479,6 +489,7 @@ export class IslandRoom {
         islandId:'home',mode:'walking',boatId:null,...pose,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       recoverIsland(info.actor);
       if (this.recoverSailingPosition(info.actor)) this.saveBoats();
+      this.recoverWalkingPosition(info.actor);
       if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
@@ -800,8 +811,9 @@ export class IslandRoom {
             }
           } else if (actor.docking && near(actor,harborOf(actor.islandId).water,12)) {
             if (!this.allowLanding(socket,info,actor.islandId)||!this.chargeBogLanding(socket,info,actor.islandId)) continue;
-            this.parkBoat(boat);
-            Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
+            const {land}=harborOf(actor.islandId);
+            this.parkBoat(boat,land);
+            Object.assign(actor,{...land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
         }

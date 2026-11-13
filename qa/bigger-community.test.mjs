@@ -55,7 +55,7 @@ test('community review: every retained bridge crosses real water and every new c
  const contains=(x,y,o)=>o.poly?inPoly(x,y,o.poly):((x-o.x)/o.rx)**2+((y-o.y)/o.ry)**2<1;
  const spans=[['northwest jetty',1113,1408],['northeast jetty',6828,1404],['east jetty',7189,3129],['west islet bridge',1839,4266],['east islet bridge',6155,4264],['pond dock',1965,1640],...plan.reviewDecks.map(d=>[d.name,d.x+d.width/2,d.y+d.height/2])];
  for(const [name,x,y]of spans){assert.ok(water.some(o=>contains(x,y,o)),name+' has water beneath its span');assert.ok(n.walkable(x,y),name+' has a solid deck');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,x,y).at(-1),[x,y],name+' reachable');}
- const dock=art.decks.find(d=>d.src==='expansion/jetty.svg');assert.ok(dock);assert.equal(inPoly(4000,7030,world.coast),false,'harbour deck extends over the sea');
+ assert.ok(!art.decks.some(d=>d.src==='expansion/jetty.svg'));assert.equal(n.walkable(4000,7030),false,'the former harbor deck is open water');
  assert.equal(plan.reviewRivers.length,2);
  for(const [x,y]of [[350,3150],[7800,3400],[3000,490],[800,2500]]){assert.ok(water.some(o=>contains(x,y,o)),'visible water is collision water');assert.equal(n.walkable(x,y),false,'ducks cannot walk through water away from a deck');}
  for(const common of plan.reviewCommons){assert.ok(n.walkable(...common.point),common.name+' open arrival');assert.deepEqual(n.route(m.spawn.x,m.spawn.y,...common.point).at(-1),common.point,common.name+' reachable');}

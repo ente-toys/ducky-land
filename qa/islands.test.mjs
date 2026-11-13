@@ -36,7 +36,7 @@ test('Home and six themed islands retain moorings, ring routes and safe harbor p
   assert.equal(canSail(NaN,200),false);
   assert.equal(canDock(sailor()),true);
   assert.equal(canDock({...sailor(),x:500,y:300}),false);
-  assert.equal(canSail(HARBOR.pier.x+65,HARBOR.pier.y),false);
+  assert.equal(canSail(4100,5912),true,'boats can sail through the former Home jetty');
 });
 
 test('every island can be reached from home by boat', () => {

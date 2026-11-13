@@ -8,23 +8,17 @@ import {HOME_MAP, mapOf, mapsVersion, FIELD_RES, FIELD_PAD} from '../world/islan
 export const ISLANDS = WORLD_ISLANDS.map(({id,name,accent}) => ({id,name,accent}));
 const ISLAND_BY_ID = new Map(ISLANDS.map(island => [island.id,island]));
 export const islandFor = id => ISLAND_BY_ID.get(id);
-export const JETTY = HOME_MAP.JETTY;
 export const HARBOR = HOME_MAP.HARBOR;
 export const harborOf = id => mapOf(id).HARBOR;
-export const jettyOf = id => mapOf(id).JETTY;
 export const navOf = (id, base = mapOf(id).nav()) => walkNav(id, base);
 export const canWalkTo = (id, x, y) => inWalkArea(mapOf(id), id, x, y);
-export const harborWorld = (w, id='home') => ({...w, walkways:[...w.walkways, jettyOf(id).walkway]});
 export const harborClear = prop => Math.hypot(prop.x-1726-20,prop.y-830-110) > 200;
-export function boardingPoint(boat,nav) {
-  if (boat.landing && (nav ?? navOf(boat.islandId)).walkable(boat.landing.x,boat.landing.y)) return {...boat.landing};
-  const dock=isletWalks(boat.islandId ?? 'home').find(w=>near(boat,w.water,150));
-  if(dock)return {...dock.land};
-  const map=mapOf(boat.islandId ?? 'home'), {HARBOR:harbor,JETTY:jetty}=map, {foot,dir,length,along}=jetty;
-  if (!near(boat,harbor.water,600)) return shoreFor(boat.x,boat.y,nav ?? navOf(boat.islandId ?? 'home')) ?? {x:Math.round(boat.x),y:Math.round(boat.y)};
-  const t=Math.max(length*jetty.wetFrom,Math.min(length-44,(boat.x-foot.x)*dir.x+(boat.y-foot.y)*dir.y));
-  const side=Math.sign((boat.x-foot.x)*-dir.y+(boat.y-foot.y)*dir.x)*(t >= length-45 ? 0 : 18), p=along(t,side);
-  return {x:Math.round(p.x),y:Math.round(p.y)};
+export function boardingPoint(boat,nav=navOf(boat.islandId ?? 'home')) {
+  if (boat.landing && nav.walkable(boat.landing.x,boat.landing.y)) return {...boat.landing};
+  const islandId=boat.islandId ?? 'home';
+  const dock=isletWalks(islandId).find(w=>near(boat,w.water,24));
+  if (dock) return {...dock.land};
+  return shoreFor(boat.x,boat.y,nav,420) ?? {x:Math.round(boat.x),y:Math.round(boat.y)};
 }
 export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 570;   // 1.5x the old 380
@@ -162,13 +156,13 @@ export function landingSpot(actor,nav=null,reach=420,target=null) {
     if (shore) consider(island.id,shore,placeRigid(actor.islandId,island.id,shore));
   }
   for (const i of ISLETS) {
-    const q=unplaceIslet(actor.islandId,i,target ?? actor),water=i.jetty.water,c=i.landCentre;
+    const q=unplaceIslet(actor.islandId,i,target ?? actor),water=i.landing.water,c=i.landCentre;
     const cap=Math.max(i.radius,Math.hypot(water[0]-c[0],water[1]-c[1]));
     if (Math.hypot(q.x-c[0],q.y-c[1])-cap>reach) continue;
     const walk=isletWalks(i.home).find(w => w.islet === i);
-    const jettyDistance=Math.hypot(q.x-water[0],q.y-water[1]);
-    if (!target && jettyDistance <= 240) {
-      consider(i.home,walk.land,placeIslet(actor.islandId,i,i.jetty.land),{islet:i.id,jetty:true},jettyDistance);
+    const landingDistance=Math.hypot(q.x-water[0],q.y-water[1]);
+    if (!target && landingDistance <= 150) {
+      consider(i.home,walk.land,placeIslet(actor.islandId,i,i.landing.land),{islet:i.id,shoreLanding:true},landingDistance);
       continue;
     }
     const local=placeIslet(i.home,i,[q.x,q.y]);
@@ -191,8 +185,8 @@ export function dockingSpot(actor,target=null) {
 }
 
 export function landingApproach(actor,spot) {
-  if (spot.jetty) {
-    const i=ISLETS.find(i=>i.id===spot.islet),p=placeIslet(actor.islandId,i,i.jetty.water);
+  if (spot.shoreLanding) {
+    const i=ISLETS.find(i=>i.id===spot.islet),p=placeIslet(actor.islandId,i,i.landing.water);
     const q={x:Math.round(p.x),y:Math.round(p.y)};
     if (canSail(q.x,q.y,actor.islandId) && (near(actor,q,14) || sailRoute(actor.islandId,actor,q))) return q;
   }

@@ -5,11 +5,10 @@ const ellipse = (x, y, rx, ry) => Array.from({length:48}, (_, i) => {
   const a = i * Math.PI / 24, k = 1 / Math.cos(Math.PI / 48);
   return [x + Math.cos(a) * rx * k, y + Math.sin(a) * ry * k];
 });
-export function coastPolygons(world, walk = world, jetty = null) {
+export function coastPolygons(world, walk = world) {
   const polygons = [...new Set([world.coast, walk.coast])].filter(p => p?.length);
   for (const [x,y,rx,ry] of world.islets ?? []) polygons.push(ellipse(x,y,rx,ry));
   const decks = [...(world.walkways ?? []), ...(walk !== world ? walk.walkways ?? [] : [])];
-  if (jetty) decks.push({a:jetty.foot, b:jetty.tip, w:jetty.width ?? 104});
   for (const {a,b,w} of decks) {
     const dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1,nx=-dy/l*w/2,ny=dx/l*w/2;
     polygons.push([[a[0]+nx,a[1]+ny],[b[0]+nx,b[1]+ny],[b[0]-nx,b[1]-ny],[a[0]-nx,a[1]-ny]]);

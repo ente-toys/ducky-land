@@ -8,13 +8,12 @@ import {canSail,originOffset} from '../src/gameplay/islands.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import S from '../scripts/home-10/shore.json' with {type:'json'};
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
-test('Home communities keep C coast, map coordinates, working harbour and both piers',()=>{
+test('Home communities keep C coast, map coordinates, a working shore harbor',()=>{
  const near=(p,q)=>Math.round(p[0])===q[0]&&Math.round(p[1])===q[1],i=C.coast.findIndex(p=>near(p,S.coast.after)),j=C.coast.findIndex(p=>near(p,S.coast.before));
  assert.deepEqual(E.coast,[...C.coast.slice(0,i+1),...S.coast.points,...C.coast.slice(j)]);assert.deepEqual(E.origin,C.origin);
  assert.equal(E.width,C.width);assert.equal(E.height,C.height);
- const pier=C.decks.filter(d=>!d.src.endsWith('/pond-jetty.svg')),pierWalks=C.walkways.slice(1);
- assert.ok(!E.decks.some(d=>d.src.endsWith('/pond-jetty.svg')));assert.deepEqual(E.decks.slice(0,pier.length),pier);assert.deepEqual(E.walkways.slice(0,pierWalks.length),pierWalks);
- assert.deepEqual(E.jetty,S.harbour.jetty);assert.deepEqual(E.harborWater,S.harbour.harborWater);assert.deepEqual(E.boats,[...S.harbour.boats012,...C.boats.slice(3)]);
+ assert.ok(!E.decks.some(d=>d.src.endsWith('/pond-jetty.svg') || d.src.endsWith('/fishing-deck.svg')));
+ assert.deepEqual(E.boats.slice(3),C.boats.slice(3));
  for(const b of E.boats.slice(0,3))assert.ok(canSail(b.x,b.y,'home'),`jetty boat ${b.x},${b.y} afloat`);
  assert.ok(canSail(E.harborWater.x,E.harborWater.y,'home'));for(const p of [[6050,1778],[5956,1756],[5789,1700]])assert.equal(canSail(...p,'home'),false,'the old bay is land');
  assert.ok(canSail(6150,1856,'home'),'Millrill Pond now joins the sea');
@@ -38,9 +37,9 @@ test('Home keeps clear commons and joins every shared green to the original hear
  assert.ok(main[0].width>=120&&main[0].width<=135,'main loop matches original Home path width');
  assert.ok(E.roads.filter(r=>r.kind==='lane').every(r=>r.width<main[0].width),'household lanes stay narrower');
 });
-test('Home fishing pier is walkable above water and solid for sailors in every coordinate frame',()=>{
- const walkway=E.walkways[C.walkways.length-2],p=[walkway.b[0],walkway.b[1]-20];assert.ok(HOME_MAP.nav().walkable(...p));assert.ok(HOME_MAP.landAt(...p));assert.equal(canSail(...p,'home'),false);
- for(const other of WORLD_ISLANDS.filter(i=>i.id!=='home')){const at=placeRigid(other.id,'home',{x:p[0],y:p[1]});assert.equal(canSail(at.x,at.y,other.id),false,other.id);}
+test("Home's former fishing pier is open water in every coordinate frame",()=>{
+ const p=[4100,5912];assert.equal(HOME_MAP.nav().walkable(...p),false);assert.equal(HOME_MAP.landAt(...p),false);assert.equal(canSail(...p,'home'),true);
+ for(const other of WORLD_ISLANDS.filter(i=>i.id!=='home')){const at=placeRigid(other.id,'home',{x:p[0],y:p[1]});assert.equal(canSail(at.x,at.y,other.id),true,other.id);}
 });
 test('Home community ground stays GPU-safe with no texture allocation growth over C',()=>{
  const bytes=t=>Math.ceil(t.width*(t.resolution??1))*Math.ceil(t.height*(t.resolution??1))*4;

@@ -28,8 +28,8 @@ test('Bog streams block walking and all four bridge decks cross real water',()=>
  for(const b of world.bridges){assert.ok(world.water.some(w=>inShape(b.x,b.y,w)),`${b.id} must cross real water`);routeTo([b.x,b.y]);assert.ok(nav.clearLine([b.x-b.w/2+25,b.y],[b.x+b.w/2-25,b.y]),`${b.id} crossing clear`);}
  for(const w of world.water.filter(w=>w.poly)){let blocked=0;for(const [x,y]of w.poly){const p=[x*.99+w.poly[0][0]*.01,y];if(!world.bridges.some(b=>Math.abs(p[0]-b.x)<b.w/2&&Math.abs(p[1]-b.y)<b.h/2)&&!nav.walkable(...p))blocked++;}assert.ok(blocked>10,'river remains water away from bridges');}
 });
-test('Bog sea pier, docking point and all moorings stay usable',()=>{
- routeTo([map.JETTY.foot.x,map.JETTY.foot.y]);routeTo([map.HARBOR.land.x,map.HARBOR.land.y]);assert.equal(map.landAt(map.HARBOR.water.x,map.HARBOR.water.y),false);
+test('Bog shore landing and all moorings stay usable',()=>{
+ routeTo([map.HARBOR.land.x,map.HARBOR.land.y]);assert.equal(map.landAt(map.HARBOR.water.x,map.HARBOR.water.y),false);
  for(const b of map.boatSpots()){assert.equal(map.landAt(b.x,b.y),false,`boat ${b.x},${b.y} afloat`);assert.ok(map.shoreFor(b.x,b.y,320),`boat ${b.x},${b.y} boardable`);}
 });
 test('Bog ground textures stay below 1536 and solid buildings have matching contacts',()=>{

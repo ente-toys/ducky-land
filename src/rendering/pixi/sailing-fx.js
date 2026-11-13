@@ -1,6 +1,5 @@
 import {AlphaFilter, Assets, Container, Graphics, Sprite} from 'pixi.js';
 import {blendBoatViews, boatPin} from './boat-blend.js';
-import {HARBOR, boardingPoint} from '../../gameplay/islands.js';
 import {PALETTE} from '../shared/palette.js';
 import {LEGACY_SEAT, loadBoatViews} from './boat-views.js';
 
@@ -16,15 +15,6 @@ const angleDiff=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 const clock=()=>performance.now()/1000/(globalThis.__duckySailSlow||1);
 if (globalThis.location) globalThis.__duckySailSlow=Number(new URLSearchParams(location.search).get('sailslow'))||1;
 const phaseOf=id=>{let h=7;for (const c of String(id)) h=(h*31+c.charCodeAt(0))>>>0;return h%6283/1000;};
-export function standFor(boat) {
-  return boat ? boardingPoint(boat) : {x:HARBOR.land.x,y:HARBOR.land.y};
-}
-
-let PIER=HARBOR.pier;
-export const setSailingHarbor=harbor => {PIER=harbor.pier;};
-const onPier=(x,y)=>{const p=PIER; return p && x>=p.x-10 && x<=p.x+p.width+10 && y>=p.y-30 && y<=p.y+p.height;};
-const deckZ=(x,y)=>onPier(x,y)?Math.max(y,PIER.y+PIER.height)+1:y;
-
 export async function createSailingFX({water,objects}) {
   const [views]=await Promise.all([loadBoatViews(),Assets.load(PUFF).catch(()=>null)]);
   const wakes=new Graphics({label:'Boat wakes'}), rings=new Graphics({label:'Boarding rings'});
@@ -42,7 +32,7 @@ export async function createSailingFX({water,objects}) {
     if (!texture) return;
     for (let i=0;i<4;i++) {
       const sprite=new Sprite(texture), side=i<2?-1:1;
-      sprite.anchor.set(.5,.9); sprite.tint=PALETTE.cream; sprite.zIndex=deckZ(x,y)+(i%2?2:-1);
+      sprite.anchor.set(.5,.9); sprite.tint=PALETTE.cream; sprite.zIndex=y+(i%2?2:-1);
       objects.addChild(sprite);
       dust.push({sprite,x:x+side*14,y,vx:side*(34+i%2*26),vy:-(10+i%2*12),born:clock(),scale:.075+.03*(i%2)});
     }
@@ -52,7 +42,6 @@ export async function createSailingFX({water,objects}) {
   }
 
   return Object.assign(fx,{
-    standFor,
     dispose() {this.reset(); wakes.destroy(); rings.destroy();},
     reset() {ducks.clear(); boats.clear(); splashes.length=0; for (const d of dust.splice(0)) d.sprite.destroy();},
     forget(id) {boats.delete(id);},
@@ -234,8 +223,7 @@ export async function createSailingFX({water,objects}) {
       if (d.mode!==pose.mode) {
         if (sailing) d.anim={kind:'board',start:now,from:{x:d.x,y:d.y},landed:false};
         else {
-          const b=d.boatId && boats.get(d.boatId);
-          d.anim={kind:'land',start:now,from:{x:d.x,y:d.y},stand:standFor(b||{x:d.x,y:d.y}),landed:false,mask:d.mask};
+          d.anim={kind:'land',start:now,from:{x:d.x,y:d.y},stand:{x:pose.x,y:pose.y},landed:false,mask:d.mask};
         }
         d.mode=pose.mode;
       }
@@ -254,24 +242,20 @@ export async function createSailingFX({water,objects}) {
           scale:a.kind==='board'?DUCK_SCALE:DUCK_SCALE*SEAT_SCALE,speed:0});
         else out.alpha=(u-.45)/.55;
       } else if (a?.kind==='board') {
-        const stand=standFor(found?.s||seat), walk=Math.hypot(stand.x-a.from.x,stand.y-a.from.y), tw=clamp(walk/360,0,.45), tq=.12, th=.4, ts=.34;
+        const stand=a.from, tq=.12, th=.4, ts=.34;
         const e=now-a.start, hop=Math.hypot(seat.x-stand.x,seat.y-stand.y);
-        if (e<tw) {
-          const u=e/tw;
-          Object.assign(out,{x:lerp(a.from.x,stand.x,u),y:lerp(a.from.y,stand.y,u),scale:DUCK_SCALE,mask:null,deck:true,speed:360,
-            turn:Math.atan2(stand.x-a.from.x,stand.y-a.from.y),rotation:0});
-        } else if (e<tw+tq) {
-          const u=(e-tw)/tq, k=Math.sin(Math.PI*u);
+        if (e<tq) {
+          const u=e/tq, k=Math.sin(Math.PI*u);
           Object.assign(out,{x:stand.x,y:stand.y,scale:DUCK_SCALE,mask:null,deck:true,speed:0,sx:1+.14*k,sy:1-.2*k,rotation:0,
             turn:Math.atan2(seat.x-stand.x,seat.y-stand.y)});
-        } else if (e<tw+tq+th) {
-          const u=(e-tw-tq)/th, m=smooth(u), lift=(70+hop*.3)*4*u*(1-u);
+        } else if (e<tq+th) {
+          const u=(e-tq)/th, m=smooth(u), lift=(70+hop*.3)*4*u*(1-u);
           Object.assign(out,{x:lerp(stand.x,seat.x,m),y:lerp(stand.y,seat.y,m)-lift,scale:lerp(DUCK_SCALE,DUCK_SCALE*SEAT_SCALE,m),
             sx:1-.08*Math.sin(Math.PI*u),sy:1+.12*Math.sin(Math.PI*u),deck:false,speed:0,rotation:(seat.x-stand.x>0?1:-1)*.12*Math.sin(Math.PI*u),
             turn:Math.atan2(seat.x-stand.x,seat.y-stand.y),mask:u>.55?out.mask:null});
-        } else if (e<tw+tq+th+ts) {
+        } else if (e<tq+th+ts) {
           if (!a.landed) {a.landed=true; if (found) {found.s.dipV+=95; found.s.rockV+=(seat.x>stand.x?1:-1)*.25;} ring(seat.x,(found?.s.y??seat.y)-2);}
-          const u=(e-tw-tq-th)/ts, k=Math.sin(Math.PI*Math.min(1,u*1.5))*(1-u*.4);
+          const u=(e-tq-th)/ts, k=Math.sin(Math.PI*Math.min(1,u*1.5))*(1-u*.4);
           Object.assign(out,{sx:1+.12*k,sy:1-.16*k,y:out.y+5*k});
         } else d.anim=null;
       } else if (a?.kind==='land') {
@@ -298,7 +282,7 @@ export async function createSailingFX({water,objects}) {
             turn:Math.atan2(pose.x-stand.x,pose.y-stand.y)});
         } else d.anim=null;
       }
-      out.z=out.deck?deckZ(out.x,out.y):(found?found.s.y:out.y)+14;
+      out.z=out.deck?out.y:(found?found.s.y:out.y)+14;
       if (sailing && !d.anim) d.mask=out.mask;
       d.x=out.x; d.y=out.y;
       return out;
