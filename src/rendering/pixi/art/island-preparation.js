@@ -1,4 +1,5 @@
 import {Texture} from 'pixi.js';
+import {recoverArt, finalTextureSource, isArtPlaceholder, ART_TIMEOUT_MS} from './art-recovery.js';
 
 let busyUntil=0;
 export const markArtActivity=(duration=180)=>{busyUntil=performance.now()+duration;};
@@ -51,7 +52,7 @@ export async function mapArtInFrames(items, visit, {yieldFrame=nextArtFrame,
   const results=[];let start=now(),count=0;
   for(let i=0;i<items.length;i++){
     if(cancelled())break;
-    if(count>=batchSize||now()-start>=frameBudgetMs){await yieldFrame();start=now();count=0;}
+    if(count>=batchSize||now()-start>=frameBudgetMs){await recoverArt(yieldFrame,{label:'Island construction frame'});start=now();count=0;}
     if(cancelled())break;
     results.push(await visit(items[i],i));count++;
   }
@@ -69,23 +70,57 @@ export function textureSources(roots) {
   return sources;
 }
 
+export function assertFinalTexture(texture, label = 'Island art') {
+  const source=finalTextureSource(texture);
+  if(!source&&!isArtPlaceholder(texture))console.warn(`${label}: texture is not final; accepting placeholder`);
+  return source;
+}
+
+const acceptedNodes=new WeakSet();
+function requiredNodes(roots) {
+  const nodes=[];
+  const visit=node=>{
+    if(!node||node.destroyed)return;
+    if('texture' in node&&node.renderPipeId!=='graphics')nodes.push(node);
+    for(const child of node.children??[])visit(child);
+  };
+  roots.forEach(visit);return nodes;
+}
+async function requiredTextureSources(roots,timeoutMs) {
+  const nodes=requiredNodes(roots);
+  await Promise.all(nodes.filter(node=>!acceptedNodes.has(node)&&!isArtPlaceholder(node.texture)&&!finalTextureSource(node.texture)).map(node=>
+    recoverArt(()=>node.texture,{label:node.label||'Island texture',timeoutMs,
+      valid:texture=>!!finalTextureSource(texture)||isArtPlaceholder(texture)||node.destroyed,
+      fallback:()=>{acceptedNodes.add(node);}})));
+  return new Set(nodes.map(node=>!node.destroyed&&finalTextureSource(node.texture)).filter(Boolean));
+}
+
 const uploaded=new WeakMap();
-export async function uploadIsland(renderer, roots, {sources = [], yieldFrame = nextArtFrame, cancelled = () => false, batchSize = 4, frameBudgetMs = 5, batchBytes = 16 * 1048576, now = () => performance.now()} = {}) {
+export async function uploadIsland(renderer, roots, {sources = [], requiredRoots = [], yieldFrame = nextArtFrame, cancelled = () => false, batchSize = 4, frameBudgetMs = 5, batchBytes = 16 * 1048576, now = () => performance.now(), timeoutMs=ART_TIMEOUT_MS} = {}) {
+  if(cancelled())return;
   let warmed=uploaded.get(renderer);if(!warmed)uploaded.set(renderer,warmed=new WeakSet());
   let count=0,bytes=0,start=0;
-  for (const source of new Set([...sources, ...textureSources(roots)])) {
-    if (cancelled()) throw Error('Island preparation cancelled');
-    if (source.destroyed||warmed.has(source)) continue;
+  // Keep the whole-island barrier for healthy pictures, including hidden
+  // ground. A failed piece is accepted once and cannot pin readiness forever.
+  let required=await requiredTextureSources(requiredRoots,timeoutMs);
+  const pending=new Set([...sources,...textureSources(roots),...required]);
+  for (const source of pending) {
+    if(cancelled())return;
+    if(!source||source===Texture.EMPTY.source||source.destroyed||warmed.has(source))continue;
     const size=(source.pixelWidth??1)*(source.pixelHeight??1)*4;
-    if(!count||bytes+size>batchBytes){await yieldFrame();count=0;bytes=0;start=now();}
-    if (cancelled()) throw Error('Island preparation cancelled');
-    source.autoGarbageCollect = false;
-    // Pixi 8's GL initSource expects a Texture (it forwards to bind), while
-    // WebGPU expects a TextureSource. bindSource is the explicit GL API.
-    if (renderer.texture.bindSource) renderer.texture.bindSource(source);
-    else renderer.texture.initSource(source);
+    if(!count||bytes+size>batchBytes){await recoverArt(yieldFrame,{label:'Island upload frame',timeoutMs});count=0;bytes=0;start=now();}
+    if(cancelled())return;
+    required=await requiredTextureSources(requiredRoots,timeoutMs);
+    for(const current of required)if(!warmed.has(current))pending.add(current);
+    if(source.destroyed||warmed.has(source))continue;
+    source.autoGarbageCollect=false;
+    await recoverArt(()=>{
+      if(renderer.texture.bindSource)renderer.texture.bindSource(source);
+      else renderer.texture.initSource(source);
+    },{label:source.label||'Island GPU upload',timeoutMs});
     warmed.add(source);count++;bytes+=size;
     if(count>=batchSize||now()-start>=frameBudgetMs)count=0;
-    // initSource uploads mip levels when autoGenerateMipmaps is enabled.
+    required=await requiredTextureSources(requiredRoots,timeoutMs);
+    for(const current of required)if(!warmed.has(current))pending.add(current);
   }
 }

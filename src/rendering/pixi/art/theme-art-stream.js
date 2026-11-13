@@ -1,3 +1,4 @@
+import {recoverArt, artPlaceholder, isArtPlaceholder} from './art-recovery.js';
 import {DOMAdapter, ImageSource, Texture, Rectangle} from 'pixi.js';
 import {cropSVG} from './theme-raster.js';
 
@@ -44,11 +45,11 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
   };
   const dispatch=(run,order)=>new Promise((resolve,reject)=>{if(disposed){reject(Error('Raster loader disposed'));return;}queue.push({run,resolve,reject,order});request();});
   const acquire=(key,resolution,order={})=>{
-    if(disposed)return Promise.reject(Error('Raster loader disposed'));
+    if(disposed){console.warn('Raster loader disposed; accepting placeholder');return Promise.resolve(artPlaceholder());}
     let held=leases.get(key);
-    if(held&&held.resolution!==resolution)throw Error('Raster lease resolution mismatch');
+    if(held&&held.resolution!==resolution)console.warn('Raster lease resolution mismatch; keeping existing picture');
     if(!held){
-      const promise=(async()=>{
+      const promise=recoverArt(async()=>{
         const url=new URL(key,globalThis.location.href),crop=url.searchParams.get('rasterCrop').split(',').map(Number);
         url.searchParams.delete('rasterCrop');url.searchParams.delete('groundScale');
         const src=url.href;
@@ -61,7 +62,7 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
           if(typeof resource.close==='function')source.once('destroy',()=>resource.close());
           return new Texture({source,...(exactFrame?{frame:new Rectangle(0,0,crop[4],crop[5])}:{})});
         },order);
-      })();
+      },{label:key,fallback:artPlaceholder,late:texture=>texture.destroy(!isArtPlaceholder(texture))});
       leases.set(key,held={count:0,promise,resolution});
     }
     held.count++;return held.promise;
@@ -69,7 +70,7 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
   const release=key=>{
     const held=leases.get(key);if(!held||--held.count)return;
     held.promise.then(texture=>{
-      if(!held.count&&leases.get(key)===held){leases.delete(key);texture.destroy(true);}
+      if(!held.count&&leases.get(key)===held){leases.delete(key);texture.destroy(!isArtPlaceholder(texture));}
     }).catch(()=>{if(leases.get(key)===held)leases.delete(key);});
   };
   return {acquire,release,destroy(){if(disposed)return;disposed=true;originals.clear();for(const job of queue.splice(0))job.reject(Error('Raster loader disposed'));}};

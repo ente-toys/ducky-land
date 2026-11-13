@@ -1,3 +1,4 @@
+import {acquireArt} from '../art/art-recovery.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
 import {windStrength} from './weather.js';
 
@@ -207,14 +208,14 @@ export function createIcelandLifeLifecycle(map, manifest, {acquire, release, til
       const request = (async () => {
         let life, leased = true;
         try {
-          const texture = await acquire(ICELAND_SMOKE, 2);
+          const texture = await acquireArt(acquire,release,ICELAND_SMOKE,2);
           if (disposed || version !== generation) {leased = false; release(ICELAND_SMOKE); return null;}
           life = createIcelandLife(manifest, texture, {tilt, walkable});
           if (parent) life.mount(parent);
           for (const root of life.roots) {root.visible = false; groups.push(root);}
           ownedGroups = groups; current = life;
           return life;
-        } catch (error) {life?.destroy(); if (leased) release(ICELAND_SMOKE); throw error;}
+        } catch (error) {life?.destroy(); if (leased) release(ICELAND_SMOKE); console.warn('Iceland life unavailable',error);return null;}
       })();
       pending = request;
       try {return await request;} finally {if (pending === request) pending = null;}

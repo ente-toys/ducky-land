@@ -1,9 +1,9 @@
 import {build} from 'esbuild';
 import {fileURLToPath} from 'node:url';
-const {outputFiles:[bundle]}=await build({entryPoints:[fileURLToPath(new URL('../../src/rendering/pixi/engine.js',import.meta.url))],bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../../src/rendering/pixi/engine.js',import.meta.url).href)}});
+const {outputFiles:[bundle]}=await build({stdin:{contents:"export {PixiIsland} from './src/rendering/pixi/engine.js'; export {installBogEnvironment,BOG_MAP_ID} from './src/features/bog-combat/bog-environment.js'; export {registerMap,mapFor} from './src/world/island-maps.js';",resolveDir:fileURLToPath(new URL('../..',import.meta.url))},bundle:true,packages:'external',platform:'node',format:'esm',write:false,define:{'import.meta.env.DEV':'false','import.meta.url':JSON.stringify(new URL('../../src/rendering/pixi/engine.js',import.meta.url).href)}});
 let code=bundle.text.replaceAll('import.meta.glob(', '(()=>({}))(');
 code=code.replaceAll('"pixi.js"',JSON.stringify(import.meta.resolve('pixi.js')));
-export const {PixiIsland}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+export const {PixiIsland,installBogEnvironment,BOG_MAP_ID,registerMap,mapFor}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 
 // Exercise the real engine through scene placement, stopping before decorations.
 // Art loading and GPU submission are the only boundaries replaced here.

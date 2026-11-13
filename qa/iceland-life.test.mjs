@@ -153,7 +153,7 @@ test('leaving during an acquire never mounts stale life or steals the new visit 
   } finally {owner.destroy(); parent.destroy();}
 });
 
-test('theme loader owns Iceland life and its smoke lease, including failed acquisitions', async () => {
+test('theme loader owns Iceland life and its smoke lease, including failed acquisitions', async t => {
   const fetchBefore = globalThis.fetch, acquired = [], released = [];
   const small = {...manifest, ground:{tiles:[]}, flats:[], decks:[], props:manifest.props.filter(p => p.finalKind === 'building' || p.finalKind === 'smoke')};
   globalThis.fetch = async src => ({ok:true, json:async () => String(src).endsWith('art.json') ? small : {pieces:[]}});
@@ -169,6 +169,9 @@ test('theme loader owns Iceland life and its smoke lease, including failed acqui
     assert.ok(life.roots.every(r => r.destroyed)); assert.equal(released.filter(src => src === ICELAND_SMOKE).length, 1);
     assert.deepEqual(acquired.slice().sort(), released.slice().sort());
     const failed = createIcelandLifeLifecycle(snow, manifest, {acquire:async () => {throw Error('smoke unavailable');}, release:src => released.push(src)});
-    await assert.rejects(failed.ensure(null, []), /smoke unavailable/); assert.equal(failed.current, null); failed.destroy();
+    t.mock.timers.enable({apis:['setTimeout']});
+    const pending=failed.ensure(null, []);await new Promise(setImmediate);
+    t.mock.timers.tick(4000);
+    const degraded=await pending;assert.ok(degraded);assert.equal(failed.current,degraded);failed.destroy();
   } finally {art?.destroy(); globalThis.fetch = fetchBefore;}
 });
