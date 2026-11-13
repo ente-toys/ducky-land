@@ -9,7 +9,8 @@ import {angle} from '../src/world/sphere.js';
 import {worldIsland} from '../src/world/world-map.js';
 import {isletWalk} from '../src/world/islet-walk.js';
 import {LiveBogRoom} from '../worker/bog-room.js';
-import {bogExitIslet,setBogExitRandom} from '../worker/bog-exit.js';
+import {boatForExit,bogExitIslet,setBogExitRandom} from '../worker/bog-exit.js';
+import {boardingPoint,canSail,createBoats,fillMoorings} from '../src/gameplay/islands.js';
 import {makeRoom,addPlayer,fakeSocket} from './room-harness.mjs';
 import {createDemo} from '../src/features/bog-combat/demo.js';
 import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
@@ -143,6 +144,30 @@ test('authoritative exit stops the arena client without reconnecting',()=>{
 test('out of lives picks a random islet, every islet reachable',()=>{
  const seen=new Set();for(let i=0;i<ISLETS.length;i++){setBogExitRandom(()=>(i+.5)/ISLETS.length);seen.add(bogExitIslet().islet);}
  setBogExitRandom(()=>.25);assert.equal(seen.size,ISLETS.length);
+});
+test('every Bog drop-off gets a boardable boat even when the fleet is occupied',t=>{
+ t.after(()=>setBogExitRandom(()=>.25));
+ for(const [index,islet] of ISLETS.entries()){
+  setBogExitRandom(()=>(index+.5)/ISLETS.length);
+  const destination=bogExitIslet();
+  const boats=createBoats().map((boat,i)=>({...boat,occupant:`sailor-${i}`}));
+  const original=structuredClone(boats);
+  assert.equal(boatForExit(boats,destination),true,islet.id);
+  const waiting=boats.at(-1);
+  assert.deepEqual(boats.slice(0,-1),original,'occupied boats stay with their sailors');
+  assert.deepEqual(boardingPoint(waiting),{x:destination.x,y:destination.y});
+  assert.ok(canSail(waiting.x,waiting.y,waiting.islandId));
+  assert.equal(boatForExit(boats,destination),false,'reuse the waiting boat on another drop-off');
+  waiting.occupant='first-arrival';
+  assert.equal(boatForExit(boats,destination),true,'replace a boat that has just been boarded');
+  const replacement=boats.at(-1);
+  assert.equal(replacement.occupant,null);
+  assert.deepEqual({x:replacement.x,y:replacement.y},destination.dock);
+  assert.equal(new Set(boats.map(boat=>boat.id)).size,boats.length);
+  const restored=JSON.parse(JSON.stringify(boats));
+  fillMoorings(restored);
+  assert.deepEqual(restored.find(boat=>boat.id===replacement.id),replacement);
+ }
 });
 test('closing the combat socket on the fifth tag cannot postpone the authoritative exit',async()=>{
  const room=await makeRoom();try{

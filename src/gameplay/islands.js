@@ -89,6 +89,16 @@ export const boatSpot = boat => boatSpots(boatHome(boat))[boatSlot(boat)] ?? boa
 
 export const MOORING_CLEAR=300;
 let MINT=Date.now();
+function nextBoatId(islandId,slot,ids) {
+  const base=`${islandId}-${slot}`;
+  let id=base;
+  while (ids.has(id)) id=`${base}~${(MINT++).toString(36)}`;
+  return id;
+}
+export function addParkedBoat(boats,islandId,{x,y}) {
+  const id=nextBoatId(islandId,0,new Set(boats.map(boat=>boat.id)));
+  boats.push({...mooredBoat(islandId,0,id),x,y,parked:true});
+}
 const atMooring = (boat,spot) => boat.islandId === boatHome(boat) && boat.x === spot.x && boat.y === spot.y;
 export function fillMoorings(boats) {
   const SPOTS=new Map(), spotsOf=id => {if (!SPOTS.has(id)) SPOTS.set(id,boatSpots(id)); return SPOTS.get(id);};
@@ -109,8 +119,7 @@ export function fillMoorings(boats) {
   let changed=keep.length !== boats.length;
   for (const island of ISLANDS) for (let slot=0,spots=spotsOf(island.id);slot<spots.length;slot++) {
     if (held.has(`${island.id}|${slot}`)) continue;
-    let id=`${island.id}-${slot}`;
-    while (ids.has(id)) id=`${island.id}-${slot}~${(MINT++).toString(36)}`;
+    const id=nextBoatId(island.id,slot,ids);
     ids.add(id); keep.push({...mooredBoat(island.id,slot,id),spawnedAt:Date.now()}); changed=true;
   }
   if (changed) boats.splice(0,boats.length,...keep);
