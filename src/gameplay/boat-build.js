@@ -11,8 +11,8 @@ export const MATERIAL_NAMES = {wood: 'wood', rope: 'rope', sail: 'sail cloth'};
 export const PICKUP_RADIUS = 90;
 export const BUILD_COOLDOWN = 5000;
 export const BOAT_UNVEIL = .22;   // seconds into the build smoke when the new boat shows (the big cloud)
-const FREE_BOAT_RADIUS = 600, SHORE_REACH = 200, SPREAD = 700, DOCK_GAP = 500, BOARD_REACH = 260;
-const HIDE_MIN = 350, HIDE_PAD = 60, LAND_MARGIN = 70, SAMPLES = 4000, CANDIDATES = 160;
+const FREE_BOAT_RADIUS = 600, SHORE_REACH = 200, SPREAD = 240, DOCK_GAP = 400, BOARD_REACH = 260;
+const HIDE_MIN = 120, HIDE_PAD = 20, LAND_MARGIN = 24, SAMPLES = 12000, CANDIDATES = 160;
 const BOAT_ROOM = 90;   // more water than a sailing boat needs, so the built boat floats clear of the sand
 
 export const isletUnder = (islandId, p) => isletWalks(islandId).find(w => w.nav.walkable(p.x, p.y)) ?? null;
@@ -38,7 +38,7 @@ const hiddenBoxes = walk => walk.world.obstacles.map(({poly}) => {
 
 // Drawn water that the walk data doesn't model (a stream, a pond) and the bridge over it, as boxes in the islet
 // art's 1024 design space, measured from the named SVG layers (04: water + stream-bridge, 07: heart-pond).
-const DRAWN_WATER = {'04-small-mountain': [[443, 452, 605, 779]], '07-pink-blossom': [[288, 617, 417, 710]]};
+const DRAWN_WATER = {'07-pink-blossom': [[288, 617, 417, 710]]};
 const drawnWater = new Map();
 function drawnWaterOf(walk) {
   const {islet} = walk, k = islet.width / 1024;
@@ -54,13 +54,15 @@ function drawnWaterOf(walk) {
 const FOOTPRINT = [[0, 0], ...Array.from({length: 8}, (_, k) => [Math.cos(k * Math.PI / 4) * LAND_MARGIN, Math.sin(k * Math.PI / 4) * LAND_MARGIN])];
 
 // One of each material on a visible patch of the islet's land (inside the coast, clear of pools, streams and the
-// bridges over them), away from the jetty and spread apart: random among spots SPREAD apart, else the farthest.
+// bridges over them) that a Duck walking from the jetty can reach, away from the jetty and spread apart: random among
+// spots SPREAD apart, else the farthest.
 export function scatterMaterials(walk, random = Math.random) {
   const {x0, y0, x1, y1} = walk.box;
   const water = [...walk.world.water.map(({poly}) => poly), ...drawnWaterOf(walk)], hidden = hiddenBoxes(walk);
   const onLand = (x, y) => FOOTPRINT.every(([dx, dy]) => walk.nav.walkable(x + dx, y + dy) &&
     inPoly(x + dx, y + dy, walk.world.coast) && !water.some(poly => inPoly(x + dx, y + dy, poly)));
   const inView = (x, y) => !hidden.some(b => x > b.x0 && x < b.x1 && y > b.y0 && y < b.y1);
+  const reachable = (x, y) => walk.nav.route(walk.land.x, walk.land.y, x, y).length > 0;
   const land = [];
   for (let tries = 0; tries < SAMPLES && land.length < CANDIDATES; tries++) {
     const x = Math.round(x0 + random() * (x1 - x0)), y = Math.round(y0 + random() * (y1 - y0));
@@ -70,8 +72,8 @@ export function scatterMaterials(walk, random = Math.random) {
   while (spots.length < MATERIALS.length && land.length) {
     const roomy = land.filter(p => gapOf(p) >= SPREAD);
     const pick = roomy.length ? roomy[Math.floor(random() * roomy.length)] : land.reduce((a, b) => gapOf(b) > gapOf(a) ? b : a);
-    spots.push(pick);
     land.splice(land.indexOf(pick), 1);
+    if (reachable(pick.x, pick.y)) spots.push(pick);
   }
   return spots.map((p, i) => ({kind: MATERIALS[i], ...p, taken: false}));
 }

@@ -4,7 +4,9 @@ export const RUN_FACTOR = 1.7, RUN_SPEED = WALK_SPEED * RUN_FACTOR;
 // The door is the short walkable strip in front of the museum wall (y 1140-1215). `top` sits inside the building
 // footprint (blocked y 900-1120), so open ground north of the museum is never the door: Home's north expansion
 // put walkable land there, and an unbounded strip froze any Duck walking through it and sent rejoins to the plaza.
-export const MUSEUM_DOOR = {x0: 2850, x1: 2990, y: 1215, top: 1000, out: {x: 2920, y: 1340}};
+// `x` is the door's centre: the engine preloads the interior once the Duck is within 700 of (x, y). Without it the
+// distance is NaN, the interior never loads, and the door only freezes the Duck instead of opening the museum.
+export const MUSEUM_DOOR = {x: 2920, x0: 2850, x1: 2990, y: 1215, top: 1000, out: {x: 2920, y: 1340}};
 export const atMuseumDoor = (x, y) => x > MUSEUM_DOOR.x0 && x < MUSEUM_DOOR.x1 && y < MUSEUM_DOOR.y && y > MUSEUM_DOOR.top;
 export const JUMP_SECONDS = .6;
 

@@ -413,6 +413,10 @@ export class IslandRoom {
       account, JSON.stringify({islandId, x, y, turn, mode}));
   }
 
+  standable({islandId = 'home', x, y}) {
+    return Number.isFinite(x) && Number.isFinite(y) && canWalkTo(islandId, x, y) && this.navFor(islandId).walkable(x, y);
+  }
+
   savedLocation(account, counts) {
     const row = this.sql.exec('SELECT pose FROM last_locations WHERE account=?',account).toArray()[0];
     if (!row) return null;
@@ -428,7 +432,7 @@ export class IslandRoom {
       const point = nav.nearest(dock.x,dock.y,180);
       return point ? {islandId, x:point[0], y:point[1], turn:0} : null;
     }
-    if (!Number.isFinite(x) || !Number.isFinite(y) || !canWalkTo(islandId,x,y) || !nav.walkable(x,y)) return null;
+    if (!this.standable({islandId, x, y})) return null;
     return {islandId, x, y, turn};
   }
 
@@ -450,7 +454,9 @@ export class IslandRoom {
     const held = this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray()
       .map(row => JSON.parse(row.pose));
     const active = actors.length;
-    const from = previous?.[1].actor ?? (resume ? JSON.parse(resume.pose) : null);
+    // A walking pose kept across a deploy can stand on ground that has since changed (islets returned to 1x): drop it.
+    const resumed = resume ? JSON.parse(resume.pose) : null;
+    const from = previous?.[1].actor ?? (resumed && (resumed.mode !== 'walking' || !islandFor(resumed.islandId) || this.standable(resumed)) ? resumed : null);
     const canPlay = user?.canPlay && wantsPlayer;
     let spawn = null, saved = null;
     if (canPlay && !from && active + held.length < PLAYER_LIMIT) {

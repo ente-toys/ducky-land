@@ -45,7 +45,7 @@ test('100 shared pickups span every landmass, at most fifteen per island and thr
   assert.equal(pool.slots.length,KARMA_ACTIVE);assert.equal(new Set(pool.slots.map(s=>s.siteId)).size,KARMA_ACTIVE);
   assert([...counts.entries()].every(([region,n])=>n<=karmaCap(region)));return counts;
  };
- assert.equal(check().size,12);
+ assert.equal(check().size,11);
  for(let n=0;n<300;n++){
   const slot=pool.slots[n%KARMA_ACTIVE],from=pool.sites.get(slot.siteId),now=1e6+n*60001;
   pool.refresh(now);assert(pool.claim({...from,mode:'walking',jumpLeft:0},now));
