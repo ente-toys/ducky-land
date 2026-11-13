@@ -15,7 +15,7 @@ export function createWholeSVGLoader({queue = createArtQueue(), fetchBlob = asyn
   return {
     extension: {type: ExtensionType.LoadParser, priority: 100, name: 'wholeIslandSVG'},
     name: 'wholeIslandSVG',
-    test: url => /\.svg(?:[?#]|$)/i.test(url) || url.startsWith('blob:'),
+    test: url => /\.svg(?:[?#]|$)/i.test(url) || url.startsWith('blob:') || /^data:image\/svg\+xml[,;]/i.test(url),
     load(src, asset = {}) {
       return queue.run(async () => {
         const image = await decode(await fetchBlob(src));

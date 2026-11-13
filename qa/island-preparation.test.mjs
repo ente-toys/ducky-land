@@ -19,6 +19,8 @@ test('Blob SVG loading preserves whole-picture dimensions and pixels without tex
   const loader=createWholeSVGLoader({queue:createArtQueue({yieldFrame:async()=>{yields++;}}),
     fetchBlob:async()=>{fetched++;return new Blob(['<svg xmlns="http://www.w3.org/2000/svg" width="20" height="10"><rect width="20" height="10" fill="#cb7139"/></svg>'],{type:'image/svg+xml'});},
     decode:async blob=>{decoded++;const image=new Image();image.src=Buffer.from(await blob.arrayBuffer());await image.decode();return image;}});
+  // small SVGs that Vite inlines as data URLs (the Bog ghosts) take the same loader
+  assert.ok(loader.test('/whole.svg')&&loader.test('blob:x')&&loader.test("data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'"));
   const texture=await loader.load('/whole.svg',{data:{resolution:2,autoGenerateMipmaps:true}});
   assert.deepEqual([fetched,decoded,yields],[1,1,1]);
   assert.deepEqual([texture.width,texture.height,texture.source.pixelWidth,texture.source.pixelHeight],[20,10,40,20]);
