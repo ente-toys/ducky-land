@@ -71,8 +71,9 @@ test('authored globe previews release while walking and reacquire once on reopen
   };
   const release=src=>{assert(held.has(src));released.push(src);held.get(src).destroy(true);held.delete(src);};
   try{
-    await arch.loadPreviews(acquire,release);const count=held.size,first=[...held.values()];assert(count>0);
+    await arch.loadPreviews(acquire,release);const count=held.size,first=[...held.values()],version=arch.previewVersion;assert(count>0);
     await arch.loadPreviews(acquire,release);assert.equal(requests.length,count,'loading twice does not retain extra leases');
+    assert.equal(arch.previewVersion,version,'an unchanged preview batch never invalidates the world atlas');
     for(let cycle=0;cycle<3;cycle++){
       arch.setPreviewActive(false);arch.setPreviewActive(false);assert.equal(held.size,0);
       assert.equal(arch.globeTextureOf('home'),Texture.EMPTY);assert(first.every(t=>t.destroyed));
@@ -144,4 +145,13 @@ test('any globe transition disables direct flat live patches',()=>{
   game.globeT=t;
   assert.deepEqual(game.liveCopies(),[],`no flat live patch at globe progress ${t}`);
  }
+});
+
+test('globe prewarming keeps native neighbours until the sphere actually owns the scene',()=>{
+ const scene=new Container(),arch=createArchipelago({renderer:{}},scene,scene,mapFor('home'));
+ try{
+  arch.setGlobePreparing(true,false);assert.equal(arch.root.visible,true);
+  arch.setGlobePreparing(true,true);assert.equal(arch.root.visible,false);
+  arch.setGlobePreparing(false,false);assert.equal(arch.root.visible,true);
+ }finally{arch.destroy();scene.destroy({children:true});}
 });

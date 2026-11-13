@@ -21,13 +21,13 @@ test('The real crop loader produces device-sized canvases, shares leases, fetche
   const [a,b]=await Promise.all([loader.acquire(key,3.625),loader.acquire(key,3.625)]);
   assert.equal(a,b);assert.equal(reads,1);
   assert.deepEqual([a.source.pixelWidth,a.source.pixelHeight],[232,232]);
-  assert.deepEqual([decoded[0].width,decoded[0].height],[232,232],'SVG decoder itself receives physical pixel dimensions');
+  assert.deepEqual([decoded[0].width,decoded[0].height],[725,363],'source is rasterized once at physical pixel density');
   const ctx=a.source.resource.getContext('2d');assert.deepEqual([...ctx.getImageData(116,116,1,1).data],[203,113,57,255]);
   assert.deepEqual([...ctx.getImageData(182,116,1,1).data],[57,71,45,255],'one-world-unit edge is resolved sharply at 3.625x');
   assert.deepEqual([...ctx.getImageData(179,116,1,1).data],[203,113,57,255],'no low-resolution image blur outside the edge');
   loader.release(key);await new Promise(setImmediate);assert.equal(a.destroyed,false);
   loader.release(key);await new Promise(setImmediate);assert.equal(a.destroyed,true);
-  const other=key.replace('50,25','0,0');const c=await loader.acquire(other,3.625);assert.equal(reads,1);
+  const other=key.replace('50,25','0,0');const c=await loader.acquire(other,3.625);assert.equal(reads,1);assert.equal(decoded.length,1,'another crop reuses the source raster');
   loader.release(other);await new Promise(setImmediate);assert.equal(c.destroyed,true);
  }finally{loader.destroy();DOMAdapter.set(adapter);globalThis.fetch=fetch;globalThis.location=location;}
 });
@@ -101,4 +101,42 @@ test('Enabled raster fixture loads visible standing crops through the raster poo
   for(const pool of [groundPool,loaded.rasterPool]){assert.equal(pool.stats().failedTiles,0);assert.equal(pool.stats().missingTiles,0);assert(pool.stats().peakBytes<=pool.stats().budgetBytes);}
  }finally{loaded?.destroy();groundPool.destroy();}
  assert.equal(textures.size,0);
+});
+
+test('cached band cuts preserve thin ink, transparency and root styles across band boundaries at fractional density',async t=>{
+ const adapter=DOMAdapter.get(),prior={fetch:globalThis.fetch,location:globalThis.location};
+ t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,prior);});
+ DOMAdapter.set({...adapter,createCanvas,createImage:()=>new Image()});globalThis.location={href:'https://test/'};
+ const original='<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="10 20 200 100" fill="#cb7139"><defs><clipPath id="c"><rect x="20" y="25" width="170" height="85"/></clipPath></defs><g clip-path="url(#c)"><rect x="10" y="20" width="200" height="100" fill-opacity=".5"/><path d="M 40 20 V 120 M 73 20 V 120 M 110 20 V 120 M 135 20 V 120" stroke="#232323" stroke-width="1"/></g></svg>';
+ globalThis.fetch=async()=>({ok:true,text:async()=>original});
+ const loader=createRasterLoader({maxBandPixels:4096,maxBandSide:100});t.after(()=>loader.destroy());
+ for(const r of [.75,1.625,3.625]){
+  const crop=[200,100,64,32,64,64],key='/seams.svg?rasterCrop='+crop+'&groundScale='+r;
+  const actual=await loader.acquire(key,r),direct=new Image();direct.src=Buffer.from(cropSVG(original,crop,r));await direct.decode();
+  const expected=createCanvas(Math.ceil(64*r),Math.ceil(64*r));expected.getContext('2d').drawImage(direct,0,0);
+  const a=actual.source.resource.getContext('2d').getImageData(0,0,expected.width,expected.height).data,b=expected.getContext('2d').getImageData(0,0,expected.width,expected.height).data;
+  let error=0,n=0;for(let i=0;i<a.length;i++){error+=Math.abs(a[i]-b[i]);n++;}
+  assert(error/n<.6,`${r}: band mean channel error ${error/n}`);
+  const pixel=actual.source.resource.getContext('2d').getImageData(Math.floor(expected.width*.4),Math.floor(expected.height*.4),1,1).data;
+  assert(pixel[3]>=127,'no transparent seams through a translucent field');loader.release(key);
+ }
+});
+
+test('default 4094-pixel source band stays exactly 4094 pixels at density 3.625',async t=>{
+ const adapter=DOMAdapter.get(),prior={fetch:globalThis.fetch,location:globalThis.location};
+ const decoded=[];
+ t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,prior);});
+ DOMAdapter.set({...adapter,createCanvas,createImage:()=>{const image=new Image();decoded.push(image);return image;}});
+ globalThis.location={href:'https://test/'};
+ const original='<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100"><rect width="2000" height="100" fill="#cb7139" fill-opacity=".5"/><path d="M 1100 0 V 100 M 1129 0 V 100 M 1200 0 V 100" stroke="#232323" stroke-width="1"/></svg>';
+ globalThis.fetch=async()=>({ok:true,text:async()=>original});
+ const loader=createRasterLoader();t.after(()=>loader.destroy());
+ const crop=[2000,100,1024,0,512,100],r=3.625,key='/exact.svg?rasterCrop='+crop+'&groundScale='+r;
+ const actual=await loader.acquire(key,r);
+ assert.deepEqual(decoded.map(image=>image.width),[4094,3160],'integer backing dimensions survive the world-unit round trip');
+ const direct=new Image();direct.src=Buffer.from(cropSVG(original,crop,r));await direct.decode();
+ const expected=createCanvas(1856,363);expected.getContext('2d').drawImage(direct,0,0);
+ const a=actual.source.resource.getContext('2d').getImageData(0,0,1856,363).data,b=expected.getContext('2d').getImageData(0,0,1856,363).data;
+ let error=0;for(let i=0;i<a.length;i++)error+=Math.abs(a[i]-b[i]);assert(error/a.length<.6,'default band boundary preserves thin ink and alpha');
+ assert.equal(loader.sourceCache.stats().bytes,(4094+3160)*363*4,'exact physical dimensions also govern cache bytes');loader.release(key);
 });

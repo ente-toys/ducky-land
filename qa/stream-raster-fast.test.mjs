@@ -64,23 +64,23 @@ test('resolution plateaus do not restart settling, sufficient textures do not de
  pool.destroy();assert.equal(pool.stats().reservedBytes,0);
 });
 
-test('SVG loader budgets actual preparation per frame and allows concurrent async decodes without idle',async t=>{
+test('SVG decode completions re-enter the heavy queue and shared crops use one source raster',async t=>{
  const {DOMAdapter}=await import('pixi.js');
  const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
- const adapter=DOMAdapter.get(),old=Object.fromEntries(['fetch','location','createImageBitmap','requestIdleCallback'].map(k=>[k,globalThis[k]]));
+ const adapter=DOMAdapter.get(),old={fetch:globalThis.fetch,location:globalThis.location};
  t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,old);});
- const frames=[],decodes=[];let cost=0,started=0,closed=0;
- DOMAdapter.set({...adapter,createImage:()=>{cost+=2;started++;return {src:'',decode:()=>new Promise(resolve=>decodes.push(resolve))};}});
+ const frames=[],decodes=[],draws=[];let cost=0,frame=0,started=0;
+ DOMAdapter.set({...adapter,createImage:()=>{started++;return {src:'',decode:()=>new Promise(resolve=>decodes.push(resolve))};},
+  createCanvas:(width,height)=>({width,height,getContext:()=>({drawImage(source){if('src' in source){draws.push(frame);cost+=44;}}})})});
  globalThis.location={href:'https://test/'};
- globalThis.fetch=async()=>({ok:true,text:async()=>'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20"/></svg>'});
- globalThis.requestIdleCallback=()=>{throw Error('idle must not gate raster work');};
- globalThis.createImageBitmap=async()=>({width:20,height:20,close(){closed++;}});
- const loader=createRasterLoader({schedule:cb=>frames.push(cb),now:()=>cost,concurrency:4});
+ globalThis.fetch=async()=>({ok:true,text:async()=>'<svg width="100" height="20"><rect width="100" height="20"/></svg>'});
+ const loader=createRasterLoader({schedule:cb=>frames.push(cb),now:()=>cost});
  const keys=Array.from({length:8},(_,i)=>'/budget.svg?rasterCrop=100,20,'+i+',0,20,20&groundScale=1');
- const results=keys.map(key=>loader.acquire(key,1));await flush();
- cost=0;frames.splice(0).forEach(f=>f());assert.equal(started,3,'5ms allows three 2ms submissions, including last indivisible task');
- cost=0;frames.splice(0).forEach(f=>f());assert.equal(started,4,'four decodes remain in flight');
- for(let i=0;i<8;i++){decodes.splice(0).forEach(resolve=>resolve());await flush();cost=0;frames.splice(0).forEach(f=>f());}
- await Promise.all(results);assert.equal(started,8);
- keys.forEach(key=>loader.release(key));await flush();assert.equal(closed,8);loader.destroy();
+ let done=false;const results=Promise.all(keys.map(key=>loader.acquire(key,1))).then(()=>{done=true;});await flush();
+ for(let i=0;i<30&&!started;i++){frame++;frames.splice(0).forEach(f=>f());await flush();}
+ assert.equal(started,1,'all eight crops share the same source decode');assert.equal(draws.length,0);
+ decodes.splice(0).forEach(resolve=>resolve());await flush();assert.equal(draws.length,0,'promise completion cannot draw outside the frame queue');
+ for(let i=0;i<30&&!done;i++){cost=0;frame++;frames.splice(0).forEach(f=>f());await flush();}
+ await results;assert.equal(draws.length,1);assert.equal(loader.workQueue.stats().maxHeavyMs,44);
+ keys.forEach(key=>loader.release(key));loader.destroy();
 });

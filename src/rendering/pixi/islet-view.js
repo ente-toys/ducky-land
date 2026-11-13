@@ -1,4 +1,5 @@
-import {Container,Graphics,Matrix,RenderTexture} from 'pixi.js';
+import {Container,Graphics,Matrix} from 'pixi.js';
+import {createAtlasBuild} from './atlas-work.js';
 import {ISLETS,ISLET_ART,ISLET_META,ISLET_VIEWBOX} from '../../world/islets.js';
 import {dot} from '../../world/sphere.js';
 import {localPoint,viewFrame} from '../../world/sphere-coordinates.js';
@@ -14,20 +15,12 @@ export function loadIsletArt(art){
  if(!contexts.has(art))contexts.set(art,fetch(svgOf(art)).then(r=>{if(!r.ok)throw Error(`${art}: ${r.status}`);return r.text();}).then(svgLayerContexts).catch(error=>{contexts.delete(art);throw error;}));
  return contexts.get(art);
 }
-function bakeAtlas(renderer,arts){
- const atlas=RenderTexture.create({width:4*ATLAS_CELL,height:3*ATLAS_CELL,antialias:true,autoGenerateMipmaps:true,label:'Islet globe atlas'});
- const sheet=new Container(),k=(ATLAS_CELL-4)/ISLET_VIEWBOX;
- arts.forEach(({full},n)=>{const g=new Graphics(full);g.scale.set(k);g.position.set(n%4*ATLAS_CELL+2,Math.floor(n/4)*ATLAS_CELL+2);sheet.addChild(g);});
- renderer.render({container:sheet,target:atlas,clear:true,clearColor:[0,0,0,0]});
- sheet.destroy({children:true});atlas.source.updateMipmaps();
- return atlas;
-}
-export async function createIsletView(app,scene,objects){
+export async function createIsletView(app,scene,objects,workQueue){
  if(!objects?.sortableChildren)throw Error('Islet props need the shared depth-sorted object layer');
  const started=performance.now();
  const arts=await Promise.all(ISLET_ART.map(loadIsletArt));
  const loadMs=Math.round(performance.now()-started);
- let atlas=null;
+ let atlas=null,atlasReady=null,generation=0,disposed=false,admit=()=>true;
  const layer=new Container({label:'Sea islet ground'});
  if(objects.parent===scene)scene.addChildAt(layer,scene.getChildIndex(objects));else scene.addChild(layer);
  const views=ISLETS.map(i=>{
@@ -44,7 +37,18 @@ export async function createIsletView(app,scene,objects){
   return {i,root,art,props,loadMs};
  });
  let from=null,placed=[];
- return {get atlas(){return atlas??=bakeAtlas(app.renderer,arts);},releaseAtlas(){atlas?.destroy(true);atlas=null;},layer,views,
+ return {get atlas(){
+   if(!atlas){
+    const version=++generation,k=(ATLAS_CELL-4)/ISLET_VIEWBOX;
+    const build=createAtlasBuild(app.renderer,{width:4*ATLAS_CELL,height:Math.ceil(arts.length/4)*ATLAS_CELL,label:'Islet globe atlas',items:arts,workQueue,antialias:true,cellSize:ATLAS_CELL,admit:()=>admit(),
+     valid:()=>!disposed&&version===generation,
+     draw:({full})=>{const g=new Graphics(full);g.scale.set(k);g.position.set(2,2);return g;}});
+    atlas=build.texture;atlasReady=build.ready;
+    atlasReady.catch(()=>{if(version===generation){atlas?.destroy(true);atlas=null;}});
+   }
+   return atlas;
+  },prepareAtlas(canAllocate=()=>true){admit=canAllocate;const texture=this.atlas;return atlasReady.then(()=>texture);},
+  releaseAtlas(){generation++;atlas?.destroy(true);atlas=null;atlasReady=null;},layer,views,
   transient(){return [layer,...views.flatMap(v=>v.props.map(p=>p.sprite))];},
   get placed(){return placed;},
   update(id,camera,width,height,onGlobe){
@@ -66,6 +70,6 @@ export async function createIsletView(app,scene,objects){
     for(const prop of v.props)prop.sprite.visible=v.root.visible;
    }
   },
-  destroy(){for(const v of views)for(const p of v.props)p.sprite.destroy({children:true});layer.destroy({children:true});atlas?.destroy(true);},
+  destroy(){disposed=true;generation++;for(const v of views)for(const p of v.props)p.sprite.destroy({children:true});layer.destroy({children:true});atlas?.destroy(true);},
  };
 }

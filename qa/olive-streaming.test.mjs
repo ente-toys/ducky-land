@@ -111,23 +111,25 @@ test('native live patches have valid vertices, UVs and triangles at every island
  }
 });
 
-test('browser raster path uses frame budget instead of idle, temporary blob URLs, and closes the bitmap on release',async t=>{
+test('browser raster path uses queued CPU canvases, temporary blob URLs and bounded retained source pixels',async t=>{
  const {DOMAdapter}=await import('pixi.js');
  const {createRasterLoader}=await import('../src/rendering/pixi/art/theme-art-stream.js');
  const adapter=DOMAdapter.get(),originals=Object.fromEntries(['fetch','location','createImageBitmap','requestIdleCallback'].map(k=>[k,globalThis[k]]));
  t.after(()=>{DOMAdapter.set(adapter);Object.assign(globalThis,originals);});
- let idle,decode=0,closed=0,canvas=0,objectURL;const frames=[];
+ let idle,decode=0,objectURL;const frames=[],canvases=[];
  const image={set src(value){if(value)objectURL=value;},async decode(){decode++;}};
- DOMAdapter.set({...adapter,createImage:()=>image,createCanvas(){canvas++;throw Error('canvas work ran on bitmap path');}});
+ DOMAdapter.set({...adapter,createImage:()=>image,createCanvas(width,height){const canvas={width,height,getContext:(_kind,options)=>{assert.equal(options.willReadFrequently,true);return {drawImage(){}};}};canvases.push(canvas);return canvas;}});
  globalThis.location={href:'https://test/'};
- globalThis.fetch=async()=>({ok:true,text:async()=>'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" fill="green"/></svg>'});
+ globalThis.fetch=async()=>({ok:true,text:async()=>'<svg width="20" height="20"><rect width="20" height="20" fill="green"/></svg>'});
  globalThis.requestIdleCallback=cb=>idle=cb;
- globalThis.createImageBitmap=async()=>({width:80,height:80,close(){closed++;}});
+ globalThis.createImageBitmap=async()=>{throw Error('SVG bitmap conversion must not run outside the queue');};
  const loader=createRasterLoader({schedule:cb=>frames.push(cb)}),key='/tree.svg?rasterCrop=20,20,0,0,20,20&groundScale=4';
- const texturePromise=loader.acquire(key,4);await flush();assert.equal(decode,0,'work queued for the next frame');assert.equal(idle,undefined);frames.shift()();
- const texture=await texturePromise;assert.match(objectURL,/^blob:/);assert.equal(canvas,0);assert.equal(texture.source.pixelWidth,80);
+ let texture;const texturePromise=loader.acquire(key,4).then(t=>{texture=t;});await flush();assert.equal(decode,0);assert.equal(idle,undefined);
+ for(let i=0;i<20&&!texture;i++){frames.splice(0).forEach(cb=>cb());await flush();}
+ await texturePromise;assert.match(objectURL,/^blob:/);assert.equal(canvases.length,2);assert.equal(texture.source.pixelWidth,80);
  await assert.rejects(originals.fetch(objectURL),'temporary URL revoked after decode');
- loader.release(key);await flush();assert.equal(closed,1);loader.destroy();
+ loader.release(key);await flush();assert(texture.destroyed);assert.equal(loader.sourceCache.stats().bytes,80*80*4,'source kept for cheap walking revisits');
+ loader.destroy();assert.equal(loader.sourceCache.stats().bytes,0);assert.equal(canvases[1].width,1,'owned backing is freed');
 });
 
 test('walking streams new crops in the overscan before they enter the screen, with no visible prop gaps',async()=>{

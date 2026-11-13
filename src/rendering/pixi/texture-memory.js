@@ -39,7 +39,7 @@ export function createManagedPoolBudget(renderer) {
     return !renderer||items?.[source?.uid]===source?textureSourceBytes(source):0;
   };
   let retiredHidden=false;
-  const activeSources=stage=>{
+  const activeSources=(stage,forceHidden=false)=>{
     const sources=new Set();
     const visible=root=>{for(let node=root;node;node=node.parent)if(!node.visible||!node.renderable||node.alpha<=0)return false;return true;};
     const visit=group=>{
@@ -52,7 +52,7 @@ export function createManagedPoolBudget(renderer) {
         // by a neighbouring-island pass after the primary render. CPU-only
         // targets need no reclamation.
         const source=group.texture.source;
-        const idle=source._gcLastUsed<0||performance.now()-source._gcLastUsed>=1000;
+        const idle=forceHidden||source._gcLastUsed<0||performance.now()-source._gcLastUsed>=1000;
         if(gpuBytes(source)&&idle&&!visible(group.root)){
           TexturePool.returnTexture(group.texture);group.texture=null;
           retiredHidden=true;
@@ -64,8 +64,8 @@ export function createManagedPoolBudget(renderer) {
     };
     visit(stage?.renderGroup);return sources;
   };
-  const trim=(stage,clear=false)=>{
-    const active=activeSources(stage),textures=idle();
+  const trim=(stage,clear=false,forceHidden=false)=>{
+    const active=activeSources(stage,forceHidden),textures=idle();
     let activeBytes=0,idleBytes=0;
     for(const source of active)activeBytes+=gpuBytes(source);
     for(const texture of textures)idleBytes+=gpuBytes(texture.source);
@@ -94,7 +94,7 @@ export function createManagedPoolBudget(renderer) {
       }
       return Math.max(0,limit-used()+own);
     },
-    configure(width,height,resolution,pools=1,stage,now=0,changed=false,visibleBytes=0){
+    configure(width,height,resolution,pools=1,stage,now=0,changed=false,visibleBytes=0,anticipatedBytes=0){
       // Layered ground, paving and props can cover the viewport several times.
       // Keep their visible crops at device density within the total GPU target.
       let statics=0;for(const c of claims)if(c.kind==='static')statics+=c.source?textureSourceBytes(c.source):c.bytes;
@@ -103,15 +103,15 @@ export function createManagedPoolBudget(renderer) {
       outsideBytes=Math.max(0,managedTextureMemory(renderer).bytes-managedClaims);
       // Leave room for the actor kit, water and other non-pool textures. Grow
       // only when the current view needs it, with the overall GPU targets intact.
-      const target=Math.max(0,(resolution<=1?150:250)*1e6-Math.max(32*1048576,outsideBytes));
+      const target=Math.max(0,(resolution<=1?150:250)*1e6-Math.max(32*1048576,outsideBytes+anticipatedBytes));
       limit=Math.min(target,Math.max(Math.min(128*1048576,width*height*resolution*resolution*4*12),visibleBytes+statics+externalBytes));
       activePools=Math.max(1,pools);
-      if(changed||now-lastSweep>=1000){trim(stage,changed);lastSweep=now;}
+      if(changed||anticipatedBytes||now-lastSweep>=1000){trim(stage,changed);lastSweep=now;}
     },
     reserve(bytes,{kind='pool',owner}={}){if(used()+bytes>limit)return null;const claim={bytes,source:null,kind,owner};claims.add(claim);return claim;},
     commit(claim,source){claim.source=source;return used()<=limit;},
     release(claim){claims.delete(claim);},
-    trim(stage,clear=false){trim(stage,clear);},
+    trim(stage,clear=false,forceHidden=false){trim(stage,clear,forceHidden);},
     stats(){return {bytes:used(),limit,externalBytes,outsideBytes,claims:claims.size};},
   };
 }
