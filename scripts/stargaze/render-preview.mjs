@@ -3,7 +3,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {harness} from './render-harness.mjs';
 const h=harness({width:960,height:960});
 try {
-  const ownX=parseFloat(h.tag.style.left),ownY=parseFloat(h.tag.style.top)+h.tag.offsetHeight/2+Math.max(19,Math.min(37,h.canvas.width*.036))+12;
+  const ownX=parseFloat(h.tag.style.left),ownY=parseFloat(h.tag.style.top)+h.tag.offsetHeight/2+Math.max(16,Math.min(31,h.canvas.width*.030))+12;
   for(const type of ['pointerdown','pointerup']) h.send(type,{pointerId:1,button:0,clientX:h.canvas.width-ownX,clientY:h.canvas.height-ownY});
   const out=createCanvas(1536,1000),ctx=out.getContext('2d'),s=h.canvas.width,x=(1536-s)/2,y=(1000-s)/2;
   ctx.fillStyle='#0c1412';ctx.fillRect(0,0,1536,1000);
