@@ -147,7 +147,7 @@ test('local transport omits hidden enemies and client drops their tracks and pos
     const poses=BogCombatRoom.prototype.poses.call({client,id:client.id,islandId:BOG_ISLAND,view:()=>client.view()});
     assert.ok(poses.every(p=>p.id!==id),'no render or radar consumer receives hidden pose');
     const source=readFileSync(new URL('../src/features/bog-combat/attach.js',import.meta.url),'utf8');
-    assert.match(source,/entry\.readability\.update\(\)/);assert.doesNotMatch(source,/AlphaFilter/);
+    assert.match(source,/entry\.readability\.update\(pose\.alive!==false&&isBushHidden\(pose,combatTime\)\)/,"Duckies fade only while hidden in a bush");assert.doesNotMatch(source,/AlphaFilter/);
   }finally{client?.dispose();room.close();}
 });
 

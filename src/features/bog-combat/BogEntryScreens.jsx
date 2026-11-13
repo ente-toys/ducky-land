@@ -23,7 +23,7 @@ export function BogWelcome({dialog, onEnter, onLeave, status}) {
           <div><dt>Team</dt><dd>Karma or Evil</dd></div>
           <div><dt>Popper</dt><dd>12 splats a load</dd></div>
           <div><dt>Hearts</dt><dd>5, one per splat</dd></div>
-          <div><dt>Needs</dt><dd><img src="/pixi-art/karma/golden-feather.svg" alt=""/>{KARMA_REQUIRED} golden feathers</dd></div>
+          <div><dt>Costs</dt><dd><img src="/pixi-art/karma/golden-feather.svg" alt=""/>{KARMA_REQUIRED} golden feathers</dd></div>
         </dl>
         <div className="bog-ticket-actions">
           <button className="bog-entry-primary" onClick={onEnter} autoFocus>Enter the Bog</button>

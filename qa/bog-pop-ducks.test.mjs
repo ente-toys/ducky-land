@@ -7,17 +7,16 @@ import {BOG_OUTLINE_PIXELS,BOG_TEAM_COLOURS} from '../src/features/bog-combat/re
 import {createTeamMarker} from '../src/features/bog-combat/effects.js';
 import {createBogCombat} from '../src/features/bog-combat/sim.js';
 
-test('solid team rings keep their rims, team-tinted names and hidden icon through both concealment states',()=>{
+test('team markers carry no ring, only a team-tinted name and the hidden icon through both concealment states',()=>{
   for(const team of ['karma','evil']){
     const objects=new Container(),rig={root:new Container()};rig.root.position.set(100,200);rig.root.zIndex=200;
     const marker=createTeamMarker(objects,{team,name:'Ducky'},{tilt:.7});
-    const [ring,tag,icon]=marker.root.children;
-    const strokes=ring.context.instructions.filter(i=>i.action==='stroke').map(i=>i.data.style);
-    assert.deepEqual(strokes.map(s=>[s.color,s.width,s.alpha]),[[BOG_TEAM_COLOURS[team].rim,11,1],[BOG_TEAM_COLOURS[team].ring,7,1]]);
+    assert.equal(marker.root.children.length,2,'no team ring under the Ducky');
+    const [tag,icon]=marker.root.children;
     assert.equal(tag.style.fill,BOG_TEAM_COLOURS[team].ring);
     for(const hidden of [{shieldUntil:17},{bushId:'cover',bushRevealUntil:0},{}]){
       const p={team,name:'Ducky',alive:true,...hidden};marker.update(p,rig,10);
-      assert.equal(icon.visible,!!(p.shieldUntil||p.bushId));assert.equal(ring.alpha,1);
+      assert.equal(icon.visible,!!(p.shieldUntil||p.bushId));
       assert.equal(marker.root.visible,true);assert.equal(marker.root.x,100);assert.equal(marker.root.y,200);
       assert.equal(icon.scale.y,1/.7);
     }
@@ -25,12 +24,20 @@ test('solid team rings keep their rims, team-tinted names and hidden icon throug
     assert.equal(icon.visible,false,'firing reveal clears the hidden indicator');
     marker.update({team,name:'Ducky',alive:false},rig,10);assert.equal(marker.root.visible,false);
     rig.root.visible=false;marker.update({team,name:'Ducky',alive:true},rig,10);assert.equal(marker.root.visible,false);
-    marker.dispose();assert.equal(objects.children.length,0);assert.ok(ring.destroyed&&tag.destroyed&&icon.destroyed);
+    marker.dispose();assert.equal(objects.children.length,0);assert.ok(tag.destroyed&&icon.destroyed);
     objects.destroy();rig.root.destroy();
   }
 });
 
-test('combat renders self and teammates at full alpha with no filter during hiding (outline shader off) and restores on exit',async()=>{
+test('only your own Ducky gets the coral player ring; everyone else has none',()=>{
+  const objects=new Container();
+  const other=createTeamMarker(objects,{team:'evil',name:'Them'}),mine=createTeamMarker(objects,{team:'karma',name:'Me'},{self:true});
+  assert.equal(other.root.children.some(c=>c.label==='Your player ring'),false);
+  assert.equal(mine.root.children.filter(c=>c.label==='Your player ring').length,1);
+  other.dispose();mine.dispose();objects.destroy();
+});
+
+test('combat fades Duckies only while hidden in a bush, never dims or filters them otherwise, and restores on exit',async()=>{
   const dom=new JSDOM('<canvas tabindex="0"/>'),oldWindow=globalThis.window,oldDocument=globalThis.document;
   dom.window.HTMLCanvasElement.prototype.getContext=()=>null;
   globalThis.window=dom.window;globalThis.document=dom.window.document;
@@ -51,7 +58,7 @@ test('combat renders self and teammates at full alpha with no filter during hidi
       for(const p of players)Object.assign(p,state);
       engine.renderLiveDucks(players,1/60,10,false,()=>true);
       for(const {rig}of liveRigs.values()){
-        assert.equal(rig.root.alpha,1);assert.equal(rig.root.tint,0xFFFFFF);assert.ok(rig.root.filters==null||rig.root.filters.length===0,'no filter hides or dims the Ducky');
+        assert.equal(rig.root.alpha,state.bushId?.5:1,'only hiding in a bush fades a Ducky');assert.equal(rig.root.tint,0xFFFFFF);assert.ok(rig.root.filters==null||rig.root.filters.length===0,'no filter hides or dims the Ducky');
       }
     }
     engine.renderLiveDucks([],1/60,10,false,()=>true);

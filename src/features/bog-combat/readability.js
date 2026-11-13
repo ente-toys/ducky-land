@@ -31,8 +31,9 @@ export function createBogReadability(rig) {
     padding:BOG_OUTLINE_PIXELS+1,resolution:'inherit',antialias:'inherit',
   });
   const filters=[outline];
-  return {outline,update(){
-    root.alpha=1;root.tint=0xFFFFFF;
+  // a Ducky fades only while it is hidden in a bush; respawning and everything else stays at full colour
+  return {outline,update(inBush=false){
+    root.alpha=inBush?.5:1;root.tint=0xFFFFFF;
     if(root.filters?.includes(outline))root.filters=null;
   },dispose(){
     if(!root.destroyed&&root.filters?.includes(outline))root.filters=previous;
