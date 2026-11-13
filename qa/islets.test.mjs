@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ISLETS,ISLET_ART,ISLET_SEED,ISLET_SCALE} from '../src/world/islets.js';
+import {ISLETS,ISLET_ART,ISLET_SEED} from '../src/world/islets.js';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
 import {sphereShores,sphereShoreGap,BOAT_CHANNEL} from '../src/world/sphere-shores.js';
 import {angle,sphereFrame} from '../src/world/sphere.js';
@@ -23,10 +23,10 @@ test('7 stable islets use each of the seven approved artworks once, without addi
  assert.equal(ISLET_SEED,831511);assert.equal(ISLETS.length,7);assert.equal(ISLANDS.length,7);
  assert.equal(new Set(ISLETS.map(i=>i.id)).size,7);
  for(const art of ISLET_ART)assert.equal(ISLETS.filter(i=>i.art===art).length,1);
- for(const i of ISLETS){assert.equal(i.width,ISLET_META[i.art].designWidth*ISLET_SCALE,`${i.id} is drawn at its art's own scale`);assert.ok(i.width>=3072&&i.width<=4800);assert.ok(Math.abs(i.lat)<72*Math.PI/180);if(Math.abs(i.lat)>60*Math.PI/180)assert.equal(i.art,'08-snow-igloo');}
+ for(const i of ISLETS){assert.equal(i.width,ISLET_META[i.art].designWidth,`${i.id} is drawn at its art's own scale`);assert.ok(i.width>=1024&&i.width<=1600);assert.ok(Math.abs(i.lat)<72*Math.PI/180);if(Math.abs(i.lat)>60*Math.PI/180)assert.equal(i.art,'08-snow-igloo');}
  for(const i of ISLETS)for(const j of ISLETS)if(i!==j&&i.art===j.art)assert.ok(angle(i.center,j.center)*WORLD_GEO.Rw>8000);
 });
-test('all enlarged islet ground, prop bases and jetties leave a 600-unit boat channel on the globe and in gameplay',()=>{
+test('all islet ground, prop bases and jetties leave a 600-unit boat channel on the globe and in gameplay',()=>{
  const rings=ISLETS.map(i=>isletShores(i));
  const bounds=new Map(ISLET_ART.map(art=>{const c=svgContext(readFileSync(PUBLIC(`${art}.svg`),'utf8'),t=>new XMLDOMParser().parseFromString(t,'image/svg+xml')),b=c.bounds,out=[b.minX,b.minY,b.maxX,b.maxY];c.destroy();return [art,out];}));
  for(const [k,i]of ISLETS.entries()){
@@ -107,7 +107,7 @@ test('boat collision agrees in different island charts and covers every islet\'s
   const w=isletWalk(i.id);
   assert.ok(navOf(i.home).walkable(w.land.x,w.land.y),`${i.id} jetty end is walkable`);
   assert.ok(canSail(w.water.x,w.water.y,i.home),`${i.id} dock water is open`);
-  assert.ok(Math.hypot(w.water.x-w.tip.x,w.water.y-w.tip.y)<150*ISLET_SCALE,`${i.id} the boat ties up beside the jetty tip`);
+  assert.ok(Math.hypot(w.water.x-w.tip.x,w.water.y-w.tip.y)<150,`${i.id} the boat ties up beside the jetty tip`);
   for(let t=0;t<=420;t+=50){const l=placeIslet(i.home,i,[i.jetty.tip[0]+i.jetty.dir[0]*(t+72),i.jetty.tip[1]+i.jetty.dir[1]*(t+72)]);
    assert.ok(canSail(l.x,l.y,i.home),`${i.id} open sea ${t} out from its jetty`);}
   const north=sphereFrame(i.lon,i.lat).north;
@@ -133,7 +133,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',path:[],travel:0,pace:0,heading:null});
   const boat={id:`${id}-0`,islandId:id,x:approach.x,y:approach.y,turn:0};
   assert.ok(nav.walkable(actor.x,actor.y));
-  const aim=placeIslet(id,i,i.landCentre),near=nav.nearest(aim.x,aim.y,300*ISLET_SCALE),goal={x:near[0],y:near[1]};
+  const aim=placeIslet(id,i,i.landCentre),near=nav.nearest(aim.x,aim.y,300),goal={x:near[0],y:near[1]};
   assert.ok(setWalkDestination(actor,nav,goal.x,goal.y),`${i.id} can walk inland`);
   let walked=0;
   for(let k=0;k<1200&&actor.path.length;k++){const x=actor.x,y=actor.y;walkStep(actor,nav,.05,k*.05,{x:0,y:0});walked+=Math.hypot(actor.x-x,actor.y-y);assert.ok(nav.walkable(actor.x,actor.y),`${i.id} stays on land`);}
@@ -141,7 +141,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   assert.ok(Math.hypot(actor.x-goal.x,actor.y-goal.y)<45,`${i.id} reached the inland destination`);
   assert.equal(nav.walkable(w.water.x,w.water.y),false);
   const deck=boardingPoint(boat,nav);
-  assert.ok(Math.hypot(deck.x-w.tip.x,deck.y-w.tip.y)<90*ISLET_SCALE,`${i.id} boards from the jetty tip`);
+  assert.ok(Math.hypot(deck.x-w.tip.x,deck.y-w.tip.y)<90,`${i.id} boards from the jetty tip`);
   assert.ok(setWalkDestination(actor,nav,deck.x,deck.y));
   for(let k=0;k<1200&&actor.path.length;k++)walkStep(actor,nav,.05,k*.05,{x:0,y:0});
   assert.ok(Math.hypot(actor.x-deck.x,actor.y-deck.y)<45,`${i.id} reached the boat`);
@@ -171,7 +171,7 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
   assert.equal(actor.islandId,id);
   assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,'on the jetty end');
   assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<16,'the boat waits beside the jetty');
-  const inland=placeIslet(id,i,i.landCentre),to=navOf(id).nearest(inland.x,inland.y,300*ISLET_SCALE);
+  const inland=placeIslet(id,i,i.landCentre),to=navOf(id).nearest(inland.x,inland.y,300);
   const info=room.connections.get(socket);info.lastDestination=-Infinity;
   room.webSocketMessage(socket,JSON.stringify({type:'destination',seq:2,x:to[0],y:to[1]}));
   assert.ok(actor.path.length,'a click on the islet walks there');
@@ -188,7 +188,7 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
 });
 test('route planner steers round an islet and manual sailing stops at its land',()=>{
  const i=ISLETS[0],id=WORLD_ISLANDS.reduce((a,b)=>angle(i.center,a.center)<angle(i.center,b.center)?a:b).id;
- const a=placeIslet(id,i,[i.landCentre[0]-1000*ISLET_SCALE,i.landCentre[1]]),b=placeIslet(id,i,[i.landCentre[0]+1000*ISLET_SCALE,i.landCentre[1]]);
+ const a=placeIslet(id,i,[i.landCentre[0]-1000,i.landCentre[1]]),b=placeIslet(id,i,[i.landCentre[0]+1000,i.landCentre[1]]);
  const route=sailRoute(id,a,b);assert.ok(route?.length>1,'direct line crosses solid islet');
  let last=a;for(const to of route){const steps=Math.ceil(Math.hypot(to.x-last.x,to.y-last.y)/12);for(let k=0;k<=steps;k++){const p={x:last.x+(to.x-last.x)*k/steps,y:last.y+(to.y-last.y)*k/steps};assert.ok(canSail(p.x,p.y,id));}last=to;}
  const actor={...a,islandId:id,mode:'sailing'},p=placeIslet(id,i,i.landCentre),d=Math.hypot(p.x-a.x,p.y-a.y);
@@ -234,15 +234,14 @@ test('an islet landing keeps its drawn art fixed on screen across rigid charts',
  }
 });
 
-test('3x scales land and prop footprints while Home bridges and boarding clearance stay at player scale',()=>{
- assert.equal(ISLET_SCALE,3);
+test('islets are drawn at their art\'s own width with Home bridges and boarding clearance at player scale',()=>{
  const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
  for(const i of ISLETS){
   const m=ISLET_META[i.art],k=m.designWidth/1024;
-  for(const [n,p]of m.land.entries())for(let a=0;a<2;a++)close(i.coast[n][a],(p[a]-512)*k*3);
-  for(const [n,b]of m.blocked.entries())for(const [j,p]of b.polygon.entries())for(let a=0;a<2;a++)close(i.blocked[n][j][a],(p[a]-512)*k*3);
-  for(const key of ['foot','tip'])for(let a=0;a<2;a++)close(i.jetty[key][a],(m.jetty[key][a]-512)*k*3);
-  close(i.jetty.width,m.jetty.width*k*3);
+  for(const [n,p]of m.land.entries())for(let a=0;a<2;a++)close(i.coast[n][a],(p[a]-512)*k);
+  for(const [n,b]of m.blocked.entries())for(const [j,p]of b.polygon.entries())for(let a=0;a<2;a++)close(i.blocked[n][j][a],(p[a]-512)*k);
+  for(const key of ['foot','tip'])for(let a=0;a<2;a++)close(i.jetty[key][a],(m.jetty[key][a]-512)*k);
+  close(i.jetty.width,m.jetty.width*k);
   close(i.jetty.width,112);close(Math.hypot(i.jetty.tip[0]-i.jetty.foot[0],i.jetty.tip[1]-i.jetty.foot[1]),320);
   assert.match(m.jetty.homeSource,/home-expansion-c\/bridges\/bridge-(ew|ns|ne|nw)\.svg/);
   for(let a=0;a<2;a++)close(i.jetty.land[a],i.jetty.tip[a]-i.jetty.dir[a]*26);

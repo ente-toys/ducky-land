@@ -1,6 +1,4 @@
 import data from './islets-data.json' with {type:'json'};
-import {ISLET_SCALE} from './islet-scale.js';
-export {ISLET_SCALE};
 import odyssey from '../../public/pixi-art/islets/odyssey.meta.json' with {type:'json'};
 import treeAndRowboat from '../../public/pixi-art/islets/tree-and-rowboat.meta.json' with {type:'json'};
 import brokenShipwreck from '../../public/pixi-art/islets/broken-shipwreck.meta.json' with {type:'json'};

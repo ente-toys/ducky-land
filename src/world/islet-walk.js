@@ -1,4 +1,4 @@
-import {ISLETS,ISLET_SCALE} from './islets.js';
+import {ISLETS} from './islets.js';
 import {placeIslet} from './islet-placement.js';
 import {createNavigation} from './navigation.js';
 import {mapsVersion} from './island-maps.js';
@@ -16,7 +16,7 @@ function walkOf(i){
  for(const [x,y]of [...coast,walkway.a,walkway.b]){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
  const box={x0:Math.floor(x0)-64,y0:Math.floor(y0)-64,x1:Math.ceil(x1)+64,y1:Math.ceil(y1)+64};
  const world={origin:{x:box.x0,y:box.y0},width:box.x1-box.x0,height:box.y1-box.y0,coast,walkways:[walkway],islets:[],bridges:[],water:lakes,obstacles:props};
- return {islet:i,id,box,world,walkway,land:at(i.jetty.land),water:at(i.jetty.water),foot,tip,nav:createNavigation(world,{cellSize:8*ISLET_SCALE})};
+ return {islet:i,id,box,world,walkway,land:at(i.jetty.land),water:at(i.jetty.water),foot,tip,nav:createNavigation(world,{cellSize:8})};
 }
 export function isletWalks(id){
  fresh();
