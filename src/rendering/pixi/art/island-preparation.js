@@ -7,7 +7,7 @@ export const nextArtFrame = () => new Promise(resolve => {
     if(performance.now()<busyUntil){setTimeout(check,32);return;}
     if(globalThis.requestIdleCallback)requestIdleCallback(()=>{
       if(performance.now()<busyUntil)check();else resolve();
-    });
+    },{timeout:32});
     else if(globalThis.requestAnimationFrame)requestAnimationFrame(()=>{
       if(performance.now()<busyUntil)check();else resolve();
     });
@@ -45,6 +45,20 @@ export function createArtQueue({concurrency = 4, yieldFrame = nextArtFrame,
     run(job) {return new Promise((resolve, reject) => {waiting.push({job, resolve, reject}); drain();});},
     raster(job) {return new Promise((resolve,reject)=>{rasters.push({job,resolve,reject});rasterTurn();});},
   };
+}
+
+// Scene/rig construction also needs a budget: hundreds of resolved promises
+// otherwise create one uninterrupted microtask train after the last decode.
+export async function mapArtInFrames(items, visit, {yieldFrame=nextArtFrame,
+  now=()=>performance.now(),frameBudgetMs=5,batchSize=12,cancelled=()=>false}={}) {
+  const results=[];let start=now(),count=0;
+  for(let i=0;i<items.length;i++){
+    if(cancelled())break;
+    if(count>=batchSize||now()-start>=frameBudgetMs){await yieldFrame();start=now();count=0;}
+    if(cancelled())break;
+    results.push(await visit(items[i],i));count++;
+  }
+  return results;
 }
 
 export function textureSources(roots) {
