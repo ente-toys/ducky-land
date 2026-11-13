@@ -2,7 +2,7 @@ import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from '../../shared/art-resolution.js';
 import {propZ} from '../../shared/flat-props.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
-import {rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
+import {rasterTiles,VIEW_RASTER_TILE_SIZE,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
 import {createRasterLoader} from './theme-art-stream.js';
 import {createIcelandRasterLoader,icelandPieceTile,icelandWarmupTiles} from './iceland-art-stream.js';
 import {fairGroundTiles,fairTiles,FAIR_GROUND_SOURCE,FAIR_ART_BUDGET_BYTES,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from './fair-raster.js';
@@ -19,7 +19,7 @@ import {createIcelandLifeLifecycle} from '../environment/iceland-life.js';
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, screen, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader}) {
+export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, screen, rasterOptions={}, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader}) {
   const [manifest, centre] = await Promise.all([
     fetch(map.art).then(response => {
       if (!response.ok) throw Error(`theme art ${map.id}: HTTP ${response.status}`);
@@ -35,9 +35,9 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   const floating = manifest.floating ?? [];
   const iceland=map.id==='snow'&&Boolean(manifest.icelandFinal);
   const fair=map.id==='fair',authoredRaster=fair||manifest.raster?.enabled===true,crisp=authoredRaster||Boolean(screen)&&!iceland;
-  const makeTiles=fair?fairTiles:(p,src,anchor)=>rasterTiles(p,src,anchor,manifest.raster?.enabled?64:512);
-  const raster=iceland?icelandRasterLoaderFactory():crisp?(fair?createFairRasterLoader():rasterLoaderFactory()):null;
-  const fairGroundRaster=fair ? createFairGroundLoader() : null;
+  const makeTiles=fair?fairTiles:(p,src,anchor)=>rasterTiles(p,src,anchor,manifest.raster?.enabled?64:VIEW_RASTER_TILE_SIZE);
+  const raster=iceland?icelandRasterLoaderFactory(rasterOptions):crisp?(fair?createFairRasterLoader(rasterOptions):rasterLoaderFactory(rasterOptions)):null;
+  const fairGroundRaster=fair ? createFairGroundLoader(rasterOptions) : null;
   const rasterPool=crisp||iceland?createGroundPool({...raster,poolBudget:groundPool?.poolBudget,...(screen?VIEW_POOL_OPTIONS:{}),budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp||iceland?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
@@ -74,7 +74,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, s
   let k = 0;
   const groundStream=crisp?groundPool.create(tiles.flatMap(p=>fair
     ? fairGroundTiles(p,url(p.src),url(FAIR_GROUND_SOURCE))
-    : rasterTiles({...p,width:p.width+(p.bleed??0),height:p.height+(p.bleed??0)},url(p.src),undefined,authoredRaster?RASTER_GROUND_TILE_SIZE:512).map(({localX,localY,...t})=>t)),
+    : rasterTiles({...p,width:p.width+(p.bleed??0),height:p.height+(p.bleed??0)},url(p.src),undefined,authoredRaster?RASTER_GROUND_TILE_SIZE:VIEW_RASTER_TILE_SIZE).map(({localX,localY,...t})=>t)),
   ground,undefined,fairGroundRaster??raster):groundPool.create(iceland?tiles.map(t=>({...t,priority:-1})):tiles,ground,url),groundStreams=[groundStream];
   const icelandSprite=(p,layer,anchor)=>{
     const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);

@@ -45,7 +45,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         dirty=true;lastSignature='';
       };
       sources.set(need.src,allocation);reserved+=need.bytes;peak=Math.max(peak,reserved);started++;
-      allocation.promise=need.acquire(need.src,need.resolution,{visible:need.visible,priority:need.priority??0,distance:need.distance});
+      allocation.promise=need.acquire(need.src,need.resolution,{visible:need.visible,priority:need.priority??0,distance:need.distance,valid:()=>!disposed&&[...pending.values()].some(n=>n.allocation===allocation&&!n.cancelled)});
     }
     allocation.refs++;need.allocation=allocation;return allocation.promise;
   };
@@ -111,7 +111,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         reserved+=bytes-need.allocation.bytes;need.allocation.bytes=bytes;peak=Math.max(peak,reserved);
         if(stale){resident.delete(tile);remember(tile,stale);}
         show(tile,{...need,bytes,texture});
-      }).catch(error=>{discard(need);failures.set(need.src,String(error));})
+      }).catch(error=>{discard(need);if(!need.cancelled&&!disposed)failures.set(need.src,String(error));})
         .finally(()=>{pending.delete(tile);deferred.clear();requestPump();});
     }
     if(!pending.size&&jobs.some(([tile,n])=>!deferred.has(tile)&&!failures.has(n.src)&&(!resident.has(tile)||resident.get(tile).resolution<n.resolution||!retainCache&&resident.get(tile).resolution!==n.resolution)))requestPump();
@@ -148,7 +148,7 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         if(!z){z={value:v.camera.zoom,input:v.camera.zoom,at:time};zooms.set(v.stream,z);}
         const step=v.stream.resolutionTiles.map(t=>tileResolution(t,v.camera.zoom,dpr)).join(',');
         if(z.step!==step){if(z.step!==undefined)z.at=time;z.step=step;z.input=v.camera.zoom;}
-        if(time-z.at>=settleMs){settled ||= z.value!==z.input;z.value=z.input;}
+        if(!zooming&&time-z.at>=settleMs){settled ||= z.value!==z.input;z.value=z.input;}
         else if(z.value!==z.input){waiting=true;nextSettle=Math.min(nextSettle,z.at+settleMs);}
         return {...v,camera:{...v.camera,zoom:z.value},cullCamera:v.camera};
       });
@@ -175,10 +175,11 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         if(prefetch&&ringStep<8)ringStep*=2;else step*=2;
       } while(true);
       desired=new Map([...next].sort(([a,an],[b,bn])=>(b.priority??0)-(a.priority??0)||an.distance-bn.distance));deferred.clear();
-      // Production never holds two uploaded density versions. Stale in-flight
-      // work can finish decoding, but is released before it reaches a sprite.
+      // Keep current textures scaled throughout active zoom. Once settled,
+      // retire obsolete densities before admitting their replacements, so
+      // uploaded sources and pending reservations obey the same hard cap.
       for(const [tile,need] of pending)if(!desired.has(tile)||!retainCache&&desired.get(tile).resolution!==need.requestedResolution)need.cancelled=true;
-      for(const [tile,entry] of resident)if(!desired.has(tile)||!retainCache&&desired.get(tile).resolution!==entry.resolution)drop(tile);
+      for(const [tile,entry] of resident)if(!desired.has(tile)||!zooming&&!retainCache&&desired.get(tile).resolution!==entry.resolution)drop(tile);
       requestPump();
     },
     get pending(){return pending.size;},

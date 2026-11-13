@@ -52,6 +52,7 @@ async function mountHome(t,dpr=2,height=771,{deferFountainArtwork=false}={}) {
     const box=xml.getAttribute('viewBox')?.split(/[ ,]+/).map(Number);
     const w=parseFloat(xml.getAttribute('width'))||box?.[2]||1,h=parseFloat(xml.getAttribute('height'))||box?.[3]||1;
     const data=typeof request==='string'?{}:request.data??{},r=data.resolution??1;
+    if(data.sourceCache)assert.match(src,/^\/pixi-art\/globe\/(?![^/]*-ground\.svg)[^/]+\.svg$/,'the dedicated CPU cache contains only authored globe previews');
     const source=new TextureSource({width:Math.ceil(w*r)/r,height:Math.ceil(h*r)/r,...data,label:src});
     const texture=new Texture({source,label:src});assets.set(src,texture);return texture;
   };
@@ -60,7 +61,7 @@ async function mountHome(t,dpr=2,height=771,{deferFountainArtwork=false}={}) {
   Application.prototype.init=async function(options){
     this.stage.enableRenderGroup();
     const renderer=this.renderer={canvas:create('canvas'),resolution:options.resolution,screen:new Rectangle(0,0,options.width,options.height),
-      view:{resolution:options.resolution,antialias:false},texture:{_managedTextures:{get items(){return Object.fromEntries([...managed].map(s=>[s.uid,s]));}}},
+      view:{resolution:options.resolution,antialias:false},texture:{initSource:texture=>manage(texture.source),_managedTextures:{get items(){return Object.fromEntries([...managed].map(s=>[s.uid,s]));}}},
       resize(w,h,r=this.resolution){this.resolution=r;this.view.resolution=r;this.screen.width=w;this.screen.height=h;TexturePool.setScreenSize(1,w*r,h*r);},
       generateTexture({target,resolution=1,frame}={}){const b=frame??target.getLocalBounds();const texture=RenderTexture.create({width:Math.max(1,b.width),height:Math.max(1,b.height),resolution});manage(texture.source);return texture;},
       render:({container,target})=>{
@@ -70,7 +71,8 @@ async function mountHome(t,dpr=2,height=771,{deferFountainArtwork=false}={}) {
           if(!node.visible||!node.renderable||node.alpha<=0)return;
           const group=node.renderGroup;
           if(group?.isCachedAsTexture){manage(group.texture.source);if(!group.textureNeedsUpdate)return;group.textureNeedsUpdate=false;}
-          if(node.texture)manage(node.texture.source);
+          if(node.texture?.source)manage(node.texture.source);
+          for(const resource of Object.values(node.shader?.resources??{}))if(resource instanceof TextureSource)manage(resource);
           for(const child of node.children??[])visit(child);
         };
         visit(container);if(target)manage(target.source);
@@ -86,7 +88,12 @@ async function mountHome(t,dpr=2,height=771,{deferFountainArtwork=false}={}) {
     Application.prototype.init=originals.init;Application.prototype.destroy=originals.destroy;Assets.load=originals.load;Assets.get=originals.get;Assets.unload=originals.unload;GlProgram.from=originals.compile;
     DOMAdapter.set(adapter);Object.assign(globalThis,prior);dom.window.close();
   });
-  await engine.mount(host);assert.deepEqual(errors,[]);assert(engine.ready,'the real engine mounts Home');
+  let mounted=false;const mounting=engine.mount(host).then(()=>{mounted=true;});
+  // Upload preparation now also runs during mount; the real browser drives
+  // these rAF callbacks while mount awaits the initial preview leases.
+  for(let i=0;i<3000&&!mounted;i++){clockTime+=16;const jobs=[...frames.values()];frames.clear();for(const job of jobs)job(clockTime);await flush();}
+  assert(mounted,'mount completes with frame-scheduled initial uploads');await mounting;
+  assert.deepEqual(errors,[]);assert(engine.ready,'the real engine mounts Home');
   let views=[];const updateBudgets=engine.updateRasterBudgets;
   engine.updateRasterBudgets=function(next,...args){views=next;return updateBudgets.call(this,next,...args);};
   let now=performance.now();
@@ -94,6 +101,11 @@ async function mountHome(t,dpr=2,height=771,{deferFountainArtwork=false}={}) {
   const settle=async()=>{for(let i=0;i<120;i++)await step();};
   const settleArtwork=()=>Promise.all([engine.fountainWater,...[...engine.arts.values()].flatMap(a=>a.fountainWaters??[])].filter(Boolean).map(fx=>fx.artworkReady));
   await settle();assert.equal(engine.sceneryPending,false);
+  if(!deferFountainArtwork){
+    let artworkReady=false;const artwork=settleArtwork().then(()=>{artworkReady=true;});
+    for(let i=0;i<2000&&!artworkReady;i++)await step();
+    assert(artworkReady,'native initial artwork settles before residency baselines');await artwork;await step();
+  }
   const prepareAssets=()=>{
     // Assets are decoded eagerly but uploaded lazily. Upload every held lease,
     // including the fixed shared actor kit, before measuring. This makes the
@@ -113,6 +125,14 @@ for(const dpr of [1,2])test(`mounted Home DPR${dpr}: real Pixi pool sources retu
   for(const r of [1,1.25,1.5,2,1.5,1.25,1,1.25,1.5,2,1]){
     engine.resolutionBudget=createResolutionBudget({dpr,override:r});engine.resolutionBudget.resize(1512,771);
     await game.settle();
+    let stable=0;
+    for(let i=0;i<2400&&stable<30;i++){
+      await game.step();const arts=[...engine.arts.values()];
+      const ready=!engine.sceneryPending&&!engine.homeArtBudget.pending&&arts.every(a=>(a.ready||a.failed)&&!a.artBudget?.pending)&&
+        [engine.groundPool,...arts.map(a=>a.rasterPool)].filter(Boolean).every(p=>{const s=p.stats();return !s.pendingTiles&&!s.missingTiles&&!s.refiningTiles;});
+      stable=ready?stable+1:0;
+    }
+    assert.equal(stable,30,'each resolution baseline waits for native decodes and queued refinement');
     const memory=engine.gpuMemory(),pool=engine.poolBudget.stats();
     assert.equal(engine.groundPool.stats().missingTiles,0,'all desired Home tiles load');
     assert.equal(engine.groundPool.stats().failedTiles,0);
@@ -132,6 +152,32 @@ for(const dpr of [1,2])test(`mounted Home DPR${dpr}: real Pixi pool sources retu
     assert(shadowTargets.every(t=>t.source.pixelWidth<1024&&t.source.pixelHeight<1024),'no full-size sleeper cache');
     t.diagnostic(JSON.stringify({dpr,resolution:r,MB:memory.MB,count:memory.count,poolMB:pool.bytes/1e6,shadowTargets:shadowTargets.length,fullSize1024AtResolution1:fullSize}));
   }
+});
+
+for(const dpr of [1,2])test(`mounted globe DPR${dpr}: approach, arrival and return preserve the GPU cap`,async t=>{
+ const game=await mountHome(t,dpr,827),{engine,managed}=game;
+ engine.follow=false;engine.fly=null;engine.arrival=null;game.prepareAssets();
+ const limit=(dpr===1?150:250)*1e6,resolution=engine.app.renderer.resolution,floor=engine.birdZoom();let peak=0,peakInfo;
+ const measure=()=>{
+  // TextureSource memory plus the four-sample colour buffer for the one
+  // temporary MSAA cell. The source itself already counts its resolved image.
+  const msaa=[...managed].filter(s=>s.antialias&&!s.destroyed).reduce((n,s)=>n+s.pixelWidth*s.pixelHeight*4*4,0);
+  const bytes=engine.gpuMemory().bytes+msaa;if(bytes>peak){peak=bytes;peakInfo={zoom:engine.camera.zoom,t:engine.globeT,pool:engine.poolBudget.stats(),largest:[...managed].sort((a,b)=>textureSourceBytes(b)-textureSourceBytes(a)).slice(0,12).map(s=>[s.label,textureSourceBytes(s)])};}return bytes;
+ };
+ for(let i=0;i<120;i++){
+  const zoom=.8*Math.pow(floor/.8,i/119);engine.camera.zoom=engine.target.zoom=zoom;
+  engine.rasterWork.update(zoom,game.now,true);await game.step();measure();
+ }
+ for(let i=0;i<270;i++){await game.step();measure();}
+ const globe=engine.gpuMemory();
+ assert([...managed].some(s=>s.label==='World globe atlas'),'world atlas reaches the GPU, rather than accepting a blank globe');
+ assert([...managed].some(s=>s.label==='Islet globe atlas'),'islet atlas reaches the GPU');
+ t.diagnostic(JSON.stringify({globe:true,dpr,peakMB:peak/1e6,peakInfo,steadyMB:globe.MB,sources:[...managed].filter(s=>/globe atlas/.test(s.label)).map(s=>[s.label,s.pixelWidth,s.pixelHeight,textureSourceBytes(s)])}));
+ assert(peak<=limit,`globe DPR${dpr}: ${peak/1e6} MB exceeds ${limit/1e6} MB`);
+ assert.equal(engine.app.renderer.resolution,resolution);
+ engine.camera.zoom=engine.target.zoom=.8;for(let i=0;i<260;i++)await game.step();
+ assert(![...managed].some(s=>/globe atlas/.test(s.label)),'return frees both atlases');
+ assert(engine.gpuMemory().bytes<=limit);assert.equal(engine.app.renderer.resolution,resolution);
 });
 
 for(const dpr of [1,2])test(`mounted Home DPR${dpr}: whole-island camera route stays bounded and returns without growth`,async t=>{
@@ -271,4 +317,35 @@ test('all tile pools share actual-source admission and Pixi idle targets are des
   const idle=TexturePool.getOptimalTexture({width:2048,height:2048});TexturePool.returnTexture(idle);
   assert(textureSourceBytes(idle.source)>budget.limit);budget.trim(root);assert(idle.destroyed);
   pools.forEach(p=>p.destroy());assert.equal(budget.bytes,0);root.destroy({children:true});
+});
+
+for(const theme of ['home','cathedral'])test(`mounted ${theme}: wheel zoom starts zero SVG work, retains scaled residents, and settles at full DPR2 density`,async t=>{
+ const game=await mountHome(t,2,827),{engine}=game;
+ engine.follow=false;engine.fly=null;engine.arrival=null;engine.landingView=null;
+ if(theme==='cathedral')engine.switchIsland('isle-176');
+ Object.assign(engine.camera,{x:theme==='home'?2820:4100,y:theme==='home'?2410:2490,zoom:.8});Object.assign(engine.target,engine.camera);
+ const pools=()=>[engine.groundPool,...[...engine.arts.values()].map(a=>a.rasterPool)].filter(Boolean);
+ const settled=()=>!engine.rasterWork.paused&&!engine.rasterWork.stats().pending&&!engine.sceneryPending&&!engine.homeArtBudget.pending&&[...engine.arts.values()].every(a=>a.ready||a.failed)&&pools().every(p=>{const s=p.stats();return !s.pendingTiles&&!s.missingTiles&&!s.refiningTiles;});
+ let stable=0;
+ for(let i=0;i<3000&&stable<30;i++){await game.step();stable=settled()?stable+1:0;}
+ assert.equal(stable,30,'initial source backings are fully ready');
+ const before=engine.rasterWork.stats().heavyJobs;let peak=engine.gpuMemory().MB;
+ const initialSources=new Set(engine.homeGroundStream.entries.filter(t=>t.sprite.visible).map(t=>t.sprite.texture.source));
+ for(let i=0;i<180;i++){
+  engine.rasterWork.update(engine.camera.zoom,game.now,true);engine.target.zoom=.8+(i+1)/180;
+  await game.step();assert.equal(engine.rasterWork.stats().heavyJobs,before,'no SVG preparation or raster continuation during active wheel input');
+  peak=Math.max(peak,engine.gpuMemory().MB);assert(peak<=250,'zoom preserves the GPU cap');
+  if(theme==='home')assert(engine.homeGroundStream.entries.some(t=>t.sprite.visible&&initialSources.has(t.sprite.texture.source)),'scaled source remains visible while zooming');
+ }
+ const activeHeavyJobs=engine.rasterWork.stats().heavyJobs-before;
+ stable=0;
+ for(let i=0;i<3000&&stable<30;i++){await game.step();stable=settled()?stable+1:0;}
+ assert.equal(stable,30,'final density fully settles');
+ for(const view of game.views)for(const tile of view.stream.entries){
+  if(!tile.screenResolution||!tile.sprite.visible||!tileInView(tile,view.camera,view.width,view.height,view.tilt,0))continue;
+  assert(tile.sprite.texture.source.resolution>=tileResolution(tile,view.camera.zoom,2),'full sharpness after settle: '+JSON.stringify({src:tile.src,actual:tile.sprite.texture.source.resolution,expected:tileResolution(tile,view.camera.zoom,2),zoom:view.camera.zoom}));
+ }
+ assert(engine.gpuMemory().MB<=250);assert.equal(engine.app.renderer.resolution,2);
+ const cache=engine.rasterCache.stats();assert(cache.peakBytes<=cache.budgetBytes);
+ t.diagnostic(JSON.stringify({zoom:theme,activeFrames:180,activeHeavyJobs,peakZoomMB:peak,restMB:engine.gpuMemory().MB,cpuCache:cache}));
 });

@@ -10,7 +10,7 @@ export function createArtBudget(entries, {acquire, release, zoom, dpr, poolBudge
   const bucket=value=>Math.max(.0625,Math.ceil(value*8)/8);
   const sources=new Map(),screen={zoom:bucket(zoom*dpr),dpr:1};
   let disposed=false,lastCheck=-Infinity,settledAt=0,density=screen.zoom,appliedDensity=density,pendingCount=0;
-  let currentViews=views;
+  let currentViews=views,zooming=false;
   for(const entry of entries){
     let source=sources.get(entry.src);
     if(!source)sources.set(entry.src,source={entries:[],texture:null,key:null,pending:null,claim:null,size:sizes[entry.src]});
@@ -41,7 +41,7 @@ export function createArtBudget(entries, {acquire, release, zoom, dpr, poolBudge
     }
     const [w,h]=source.size;
     if(!source.texture)source.texture=new Texture({source:Texture.EMPTY.source,orig:new Rectangle(0,0,w,h),dynamic:true});
-    if(disposed||!wanted(source))return source.texture;
+    if(disposed||!wanted(source)||zooming)return source.texture;
     let resolution=0;
     for(const entry of source.entries)resolution=Math.max(resolution,artResolution(entry,entry.resolution??1,{[entry.src]:source.size},screen));
     // Rounding the backing dimensions up must still respect the pixel ceiling.
@@ -69,8 +69,10 @@ export function createArtBudget(entries, {acquire, release, zoom, dpr, poolBudge
   return {
     get pending(){return pendingCount;},
     acquire(entry){return load(sources.get(entry.src));},
-    update(zoom,dpr,now,visible=true,nextViews){
-      if(disposed||now-lastCheck<250)return;
+    update(zoom,dpr,now,visible=true,nextViews,activeZoom=false){
+      const resuming=zooming&&!activeZoom;zooming=activeZoom;
+      if(resuming){density=bucket(zoom*dpr);settledAt=now-250;lastCheck=-Infinity;}
+      if(disposed||zooming||now-lastCheck<250)return;
       lastCheck=now;
       if(nextViews!==undefined)currentViews=visible?nextViews:[];
       const next=bucket(zoom*dpr);
