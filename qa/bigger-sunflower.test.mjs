@@ -12,14 +12,13 @@ import {communities,houses} from '../scripts/bigger-sunflower/communities.mjs';
 import {REMOVE_PROPS,REMOVE_FLATS,LIFT_FLATS,MOVE_PROPS,FIELDS,FIELD_KEEP} from '../scripts/bigger-sunflower/centre-data.mjs';
 import {inShape} from '../assets/world/island-geometry.mjs';
 const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url))),B='scripts/bigger-sunflower/baseline/',D='assets/world/themes/sunflower/';
-const canonical=p=>{const {pathOriginalSrc,...q}=p;return pathOriginalSrc?{...q,src:pathOriginalSrc}:q;};
 const moves=read('scripts/sunbob-ground/path-report.json').relocated;
 const old=read(B+'world.json'),originalArt=read(B+'art.json'),art=read('public/pixi-art/themes/sunflower/art.json'),extension=read(D+'bigger-sunflower.json'),map=mapFor('sunflower');
 
 test('Sunbob bloom replaces raised plaza, retains untouched props and resolves 90 residents',()=>{
  const centre=read('public/pixi-art/themes/sunflower/bloom/centre-placements.json');
  const retired=new Set(centre.retirePropIds);
- assert.ok(!art.props.some(p=>retired.has(p.id)&&!/^detail\/field-(flower|row-short)\.svg$/.test(p.pathOriginalSrc??p.src)));
+ assert.ok(!art.props.some(p=>retired.has(p.id)&&!/^detail\/field-(flower|row-short)\.svg$/.test(p.src)));
  assert.ok(!art.decks.some(p=>['centre-back','centre-decal-floor','close-sunflower-rosette'].includes(p.id)));
  assert.deepEqual(map.world.centrePlacement.stairs,[]);
  for(const p of centre.props){
@@ -86,10 +85,10 @@ test('Sunflower canals block walking, every retained and new crossing spans real
  for(const p of art.props.slice(originalArt.props.length))if(!/pond-reeds|pond-lily/.test(p.id))assert.ok(!map.world.water.slice(old.water.length).some(w=>inShape(p.x,p.y-8,w)),p.id+' has dry footing');
  for(const c of communities){const homes=art.props.filter(p=>p.zone===c.id&&p.communityRole==='home');assert.equal(new Set(homes.map(p=>p.src)).size,homes.length,c.id+' house art');}
 });
-test('the original sunflower fence follows both bank rows at main density, preserving bridge openings and sleepers',async()=>{
+test('the sunflower fence follows both bank rows, keeping clear of paths, preserving bridge openings and sleepers',async()=>{
  const {FENCE}=await import('../scripts/bigger-sunflower/centre-data.mjs');
- const flowers=art.props.filter(p=>p.id.startsWith('ring-fence-'));assert.equal(flowers.length,448);
- assert.ok(flowers.every(f=>(f.pathOriginalSrc??f.src)==='detail/field-flower.svg'));
+ const flowers=art.props.filter(p=>p.id.startsWith('ring-fence-'));assert.equal(flowers.length,434);
+ assert.ok(flowers.every(f=>f.src==='detail/field-flower.svg'));
  for(const [row,line] of FENCE.rows.entries()){
   const lens=line.slice(1).map((q,k)=>Math.hypot(q[0]-line[k][0],q[1]-line[k][1])),total=lens.reduce((s,v)=>s+v,0);
   for(let s=row*FENCE.step/2;s<total;s+=FENCE.step){let k=0,t=s;while(t>lens[k])t-=lens[k++];
@@ -103,10 +102,11 @@ test('the original sunflower fence follows both bank rows at main density, prese
  assert.equal(map.sleepers.length,90);
 });
 
-test('Sunbob field art, positions, rows, density and arrangement retain main data',()=>{
- const fields=art.props.filter(p=>/^detail\/field-(flower|row-short)\.svg$/.test(p.pathOriginalSrc??p.src)).map(canonical);
- assert.equal(fields.length,1050);
- assert.equal(createHash('sha256').update(JSON.stringify(fields)).digest('hex'),'92b3214083df040248e0837acc094d7101839b777fb3b0ee4a1dd8da9c167ce3');
- for(const [name,hash] of Object.entries({"field-flower": "91c7d92214d073a3ad3cef194912d31d03ea85b0b59dd5d8ede4b680f688bc10", "field-row-short": "c1fff6a105775d0cd6d81f0b336ed80ef7aeaf9d8d7ab119ae386534125b3210"}))
+test('Sunbob fields are whole plants in dense staggered rows, with no pre-cut art',()=>{
+ const fields=art.props.filter(p=>/^detail\/field-(flower|row-short)\.svg$/.test(p.src));
+ assert.equal(fields.length,1557);
+ assert.ok(art.props.every(p=>!p.pathOriginalSrc&&!p.src.includes('path-trim/')),'no path-trimmed sprites');
+ assert.equal(createHash('sha256').update(JSON.stringify(fields)).digest('hex'),'818dc1ef41f938aad5ff3e0401adc642330f556efebdc66c0427aa7f15421687');
+ for(const [name,hash] of Object.entries({"field-flower": "06774761a2e2142c3b9e87aba249ae806f75180cc17d7f79a1344573c91500eb", "field-row-short": "e4e881bc151a9ff7468fa1235ae230e705d4a88c896485f2735b5d566ca92227"}))
   assert.equal(createHash('sha256').update(readFileSync(new URL('../public/pixi-art/themes/sunflower/detail/'+name+'.svg',import.meta.url))).digest('hex'),hash);
 });
