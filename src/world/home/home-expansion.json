@@ -9177,7 +9177,11 @@
         "ry": 24
       },
       "communityRole": "workplace",
-      "z": 5190
+      "z": 5190,
+      "shadowOffset": [
+        8,
+        -16
+      ]
     },
     {
       "id": "hamlet-reedwhistle-east-birch",
