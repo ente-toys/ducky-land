@@ -111,7 +111,9 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
         reserved+=bytes-need.allocation.bytes;need.allocation.bytes=bytes;peak=Math.max(peak,reserved);
         if(stale){resident.delete(tile);remember(tile,stale);}
         show(tile,{...need,bytes,texture});
-      }).catch(error=>{discard(need);if(!need.cancelled&&!disposed)failures.set(need.src,String(error));})
+      }).catch(error=>{discard(need);
+        // A cancelled load (view moved on) is not a failure; the tile must stay retryable.
+        if(!need.cancelled&&!disposed&&!/cancelled|disposed/.test(error?.message??""))failures.set(need.src,String(error));})
         .finally(()=>{pending.delete(tile);deferred.clear();requestPump();});
     }
     if(!pending.size&&jobs.some(([tile,n])=>!deferred.has(tile)&&!failures.has(n.src)&&(!resident.has(tile)||resident.get(tile).resolution<n.resolution||!retainCache&&resident.get(tile).resolution!==n.resolution)))requestPump();
