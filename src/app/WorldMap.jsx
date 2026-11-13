@@ -36,7 +36,7 @@ function islandShape(id) {
   return shape;
 }
 
-export default function WorldMap({island}) {
+export default function WorldMap({island, globeOpen = false, indoors = false}) {
   const movement = useRef(null);
   const svg = useRef(null);
   const radar = useRef(null);
@@ -84,7 +84,19 @@ export default function WorldMap({island}) {
     return () => clearInterval(timer);
   }, [island, iconSize]);
 
-  return <aside className="pixi-world-map" aria-label="Nearby islands">
+  // Click the minimap to open the world view (the globe); on the globe it steps aside for a Back button.
+  useEffect(() => {
+    if (!globeOpen) return;
+    const key = event => {if (event.key === 'Escape') island.current?.closeGlobe();};
+    window.addEventListener('keydown', key);
+    return () => window.removeEventListener('keydown', key);
+  }, [globeOpen, island]);
+  return <>
+  {globeOpen && <button type="button" className="pixi-world-back" onClick={() => island.current?.closeGlobe()}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="#564537" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    Back to island</button>}
+  <button type="button" className={`pixi-world-map${globeOpen ? ' pixi-world-map--hidden' : ''}`} disabled={indoors || globeOpen}
+    aria-label="Open the world view" title="Open the world view" onClick={() => island.current?.openGlobe()}>
     <svg ref={svg} id="pixi-world-map-view" viewBox={`0 0 ${width} ${height}`} role="img"
       aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Paint gun badge: Booquack Bog, pinned to the rim when distant.`}>
       <defs>
@@ -129,5 +141,6 @@ export default function WorldMap({island}) {
           strokeLinejoin="round" transform={`translate(${width / 2} ${height / 2}) rotate(${frame.heading})`}><title>Your duck</title></path>
         : <circle cx={width / 2} cy={height / 2} r="14" fill="#fff" stroke="#20272a" strokeWidth="7"><title>View centre</title></circle>}
     </svg>
-  </aside>;
+  </button>
+  </>;
 }

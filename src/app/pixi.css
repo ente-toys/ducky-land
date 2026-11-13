@@ -299,8 +299,20 @@
   border-radius: 50%;
   background: #6ec9de;
   box-shadow: 0 0 0 1px #ffffff66, 0 3px 10px #10171955;
-  pointer-events: none;
+  padding: 0;
+  cursor: pointer;
+  transition: scale 160ms var(--pixi-ease-out), opacity 180ms ease, box-shadow 160ms ease;
 }
+.pixi-world-map .pixi-world-map:focus-visible { outline: 3px solid #564537; outline-offset: 4px; }
+@media (hover: hover) { .pixi-world-map:not(:disabled):hover { scale: 1.03; box-shadow: 0 0 0 2px #fff9df, 0 5px 14px #10171966; } }
+.pixi-world-map:not(:disabled):active { scale: .98; }
+.pixi-world-map:disabled { cursor: default; pointer-events: none; }
+.pixi-world-map--hidden { opacity: 0; pointer-events: none; }
+.pixi-world-back { position: fixed; z-index: 5; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 2px solid #564537; border-radius: 999px; background: #fff9df; box-shadow: 0 3px 0 #56453755; color: #332b23; font: 700 15px/1.2 system-ui, sans-serif; cursor: pointer; transition: scale 160ms var(--pixi-ease-out), translate 120ms var(--pixi-ease-out), box-shadow 120ms var(--pixi-ease-out); }
+.pixi-world-back svg { width: 18px; height: 18px; }
+@media (hover: hover) { .pixi-world-back:hover { scale: 1.03; } }
+.pixi-world-back:active { translate: 0 2px; box-shadow: 0 1px 0 #56453755; }
+.pixi-world-back:focus-visible { outline: 3px solid #564537; outline-offset: 3px; }
 .pixi-world-map svg { display: block; width: 100%; height: 100%; border-radius: 50%; background: #6ec9de; }
 .pixi-notifications { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--world-map-height)); }
 @media (max-width: 900px) {
@@ -396,13 +408,6 @@
 .pixi-profile-button img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: 50% 50%; background: radial-gradient(circle at 50% 35%, #e3f5fc, #bfe6f5); }
 .pixi-profile-button:active { translate: 0 2px; box-shadow: 0 1px 0 #56453755; }
 .pixi-profile-button:focus-visible, .pixi-profile :is(button, a):focus-visible { outline: 3px solid #564537; outline-offset: 3px; }
-.pixi-globe-button { position: fixed; z-index: 6; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); display: grid; place-items: center; width: 56px; height: 56px; padding: 0; color: #564537; border: 2px solid #564537; border-radius: 50%; background: #fff9df; box-shadow: 0 3px 0 #56453755; cursor: pointer; transition: scale 160ms var(--pixi-ease-out), translate 120ms var(--pixi-ease-out), box-shadow 120ms var(--pixi-ease-out); }
-.pixi-globe-button--beside { right: calc(max(16px, env(safe-area-inset-right)) + 66px); }
-.pixi-globe-button svg { width: 32px; height: 32px; }
-.pixi-globe-button[aria-pressed="true"] svg { width: 24px; height: 24px; }
-.pixi-globe-button:active { translate: 0 2px; box-shadow: 0 1px 0 #56453755; }
-.pixi-globe-button:focus-visible { outline: 3px solid #564537; outline-offset: 3px; }
-@media (hover: hover) { .pixi-globe-button:hover { scale: 1.03; } }
 .pixi-profile-blank { display: block; width: 100%; height: 100%; border-radius: 50%; background: #ffe7a0; }
 .pixi-profile-badge { position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border: 2px solid #fff9df; border-radius: 10px; background: #d9482b; color: #fff; font: 700 11px/16px system-ui, sans-serif; text-align: center; }
 .pixi-profile-count { min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 9px; background: #d9482b; color: #fff; font-size: 11px; line-height: 18px; }

@@ -545,6 +545,8 @@ export class PixiIsland {
       this.fly=null;
       if (movement.after.length > 1) {
         this.spin=null; this.globeAim=null;
+        const span=ps=>Math.max(1,Math.hypot(ps[0].x-ps[1].x,ps[0].y-ps[1].y));
+        if (this.zoomPastLimit(span(movement.after)/span(movement.before))) return;
         movePinch(this.target, movement.before, movement.after, this.zoomFloor(), this.zoomCeiling(), this.width, this.height);
       } else if (movement.drag) {
         const at=movement.after[0], grab=this.birdEye && this.worldView?.grab({x:at.x-movement.dx, y:at.y-movement.dy}, at, this.target, this.globeAim);
@@ -586,6 +588,7 @@ export class PixiIsland {
       const p = point(event);
       const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? this.height : 1);
       this.fly=null; this.spin=null; this.globeAim=null; this.quietAt=performance.now();
+      if (this.zoomPastLimit(Math.exp(-delta * .0018))) return;
       const next=clamp(this.target.zoom * Math.exp(-delta * .0018), this.zoomFloor(), this.zoomCeiling());
       const stamp=performance.now();
       if(!this.zoomAnchor || stamp-this.zoomAnchor.at>180 || Math.hypot(p.x-this.zoomAnchor.x,p.y-this.zoomAnchor.y)>4) {
@@ -601,6 +604,7 @@ export class PixiIsland {
       if (event.defaultPrevented || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || /INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target?.tagName) || event.target?.isContentEditable) return;
       const key = event.key.toLowerCase();
       if (this.globeOpen && ['escape','home','0','f'].includes(key)) {event.preventDefault(); this.closeGlobe(); return;}
+      if (this.globeOpen && ['+','='].includes(key)) {event.preventDefault(); this.closeGlobe(); return;}
       if (this.globeBusy()) return;   // no walking, emotes or travel keys while the globe is up
       if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter','shift'].includes(key)) return;
       event.preventDefault();
@@ -618,6 +622,7 @@ export class PixiIsland {
       if (key === 'home') {if (this.player) this.flyHome(); else this.fit();}
       if (key === '0') this.fit();
       if (['+','=','-'].includes(key)) {
+        if (this.zoomPastLimit(key === '-' ? .8 : 1.25)) return;
         this.fly=null; this.target.zoom = clamp(this.target.zoom * (key === '-' ? .8 : 1.25), this.zoomFloor(), this.zoomCeiling());this.fitMode=false;this.follow=false;this.constrain(this.target);
       }
     });
@@ -1175,6 +1180,21 @@ export class PixiIsland {
     if (!this.globeOpen) return false;
     this.globeOpen=false; this.landOnPlayer(this.globeReturn?.zoom); this.onGlobeChange?.(false);
     return true;
+  }
+  // Keep zooming past a limit to cut between views: out past your island opens the globe, in past the globe's
+  // limit returns to your Ducky. About four wheel notches (or a pinch of the same size) past the limit.
+  zoomPastLimit(factor) {
+    const now=performance.now();
+    if (now-(this.pastLimitAt ?? 0)>500) this.pastLimit=0;
+    this.pastLimitAt=now;
+    const out=factor<1;
+    const atFloor=!this.globeOpen && out && this.target.zoom<=this.zoomFloor()*1.001;
+    const atCeiling=this.globeOpen && !out && this.target.zoom>=this.zoomCeiling()*.999;
+    if (!atFloor && !atCeiling) {this.pastLimit=0; return false;}
+    this.pastLimit=(this.pastLimit ?? 0)+Math.abs(Math.log(factor));
+    if (this.pastLimit<.7) return false;
+    this.pastLimit=0;
+    return atFloor ? this.openGlobe() : this.closeGlobe();
   }
   landOnPlayer(zoom) {
     Object.assign(this.camera,localPoint(this.islandId,spherePoint(this.islandId,this.camera))); delete this.camera.basis;

@@ -8,7 +8,6 @@ import IslandTravel from './IslandTravel.jsx';
 import IslandStargaze from './IslandStargaze.jsx';
 import IslandProfile from './IslandProfile.jsx';
 import WorldMap from './WorldMap.jsx';
-import IslandGlobe from './IslandGlobe.jsx';
 import BogEntry from '../features/bog-combat/BogEntry.jsx';
 import {BOG_COMBAT} from '../features/bog-combat/config.js';
 import './pixi.css';
@@ -172,7 +171,6 @@ export default function PixiPage() {
         </button>}
       </aside>;
     })()}
-    {!error && !indoors && <IslandGlobe island={island} open={globeOpen} beside={Boolean(session?.user || status === 'playing' || offline)}/>}
     {!error && (session?.user || status === 'playing' || offline) && <IslandProfile session={session} room={room} island={island}
       status={status} indoors={indoors} notificationHost={notificationHost} offline={offline} onSignOut={logout} signingOut={signingOut}/>}
     {!error && status === 'playing' && <div className="pixi-chat-dock">
@@ -193,7 +191,7 @@ export default function PixiPage() {
         <IslandPresence online={online} latestJoin={latestJoin}/>
       </div>
     </div>}
-    {!error && <WorldMap island={island}/>}
+    {!error && <WorldMap island={island} globeOpen={globeOpen} indoors={indoors}/>}
     {!error && <BogEntry engine={island} travel={travel} status={status} {...BOG_COMBAT}
       accountId={session?.user?.accountId}
       name={session?.user?.login??'Ducky'}
