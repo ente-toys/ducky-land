@@ -527,7 +527,7 @@
 @font-face { font-family: "Neuton"; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/neuton/neuton-latin-400.woff2') format('woff2'); }
 .pixi-stargaze-counts { position: absolute; z-index: 2; left: 15%; right: 15%; bottom: 5%; color: #fff; opacity: .65; font: 400 16px/1.15 "Neuton", Georgia, serif; text-align: center; pointer-events: none; text-shadow: 0 1px 8px #0c1412; }
 .pixi-stargaze-counts h2 { display: flex; align-items: center; justify-content: center; gap: .2em; margin: 0; font: inherit; font-size: clamp(26px, 2.7vw, 38px); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
-.pixi-stargaze-counts h2 svg { flex: none; width: .75em; height: .75em; fill: currentColor; }
+.pixi-stargaze-counts h2 svg { flex: none; width: .75em; height: .75em; fill: #ffdb80; }
 .pixi-stargaze-close { position: absolute; z-index: 3; top: 0; right: 0; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; color: #fff0c7; background: #0c1412a6; cursor: pointer; }
 .pixi-stargaze-close svg { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; }
 .pixi-stargaze-close:hover { background: #0c1412e6; }
