@@ -12,7 +12,7 @@ import {sailingUpright} from './sailing-upright.js';
 import {WORLD_GEO,WORLD_ISLANDS,neighboursOf} from '../../world/world-map.js';
 import {createLivePatches} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
-import {globeBall,uprightFade,northUpRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from '../shared/globe-look.js';
+import {globeBall,uprightFade,globeRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from '../shared/globe-look.js';
 import {unplaceRigid,flatRigid} from '../../world/rigid.js';
 import {withRigidVisitors} from '../shared/rigid-visitors.js';
 import {localPoint,spherePoint} from '../../world/sphere-coordinates.js';
@@ -1586,7 +1586,7 @@ export class PixiIsland {
     }else if(this.sailingCamera)this.sailingCamera.active=false;
     if(!this.landingView&&!sailing){
       const ball=this.globeT>.001 ? globeBall(this.globeT,this.camera.zoom,this.height) : 0,fade=uprightFade(ball);
-      if(fade>0)this.camera.basis=rollBasis(fade*northUpRoll(this.islandId,spherePoint(this.islandId,this.camera)));
+      if(fade>0)this.camera.basis=rollBasis(globeRoll(this.islandId,spherePoint(this.islandId,this.camera),fade));
       else delete this.camera.basis;
     }
     if(this.landingView){

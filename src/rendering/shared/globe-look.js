@@ -9,13 +9,15 @@ export const lonLat=p=>({lon:Math.atan2(p[0],p[2]),lat:Math.asin(Math.max(-1,Mat
 export const centreOf=(lon,lat)=>sphereFrame(lon,Math.max(-LAT_MAX,Math.min(LAT_MAX,lat)),0).center;
 export const globeBall=(t,zoom,h)=>{const R=WORLD_GEO.Rw*zoom/h;return smooth(t)*smooth((4-R)/3);};
 export const uprightFade=ball=>smooth((ball-.25)/.5);
+const GLOBE_TILT=8*Math.PI/180;
 export function northUpRoll(id,c){
  const T=transport(worldIsland(id),c),{lon,lat}=lonLat(c),D=sphereFrame(lon,lat,0);
  return Math.atan2(dot(D.east,T.north),dot(D.east,T.east));
 }
 export const rollBasis=a=>{const c=Math.cos(a),s=Math.sin(a);return {a:c,b:s,c:-s,d:c};};
+export const globeRoll=(id,c,fade)=>fade*(northUpRoll(id,c)+GLOBE_TILT);
 export function screenFrame(id,c,fade){
- const T=transport(worldIsland(id),c),f=fade*northUpRoll(id,c),co=Math.cos(f),si=Math.sin(f);
+ const T=transport(worldIsland(id),c),f=globeRoll(id,c,fade),co=Math.cos(f),si=Math.sin(f);
  return {center:c,east:T.east.map((v,k)=>v*co+T.north[k]*si),north:T.north.map((v,k)=>v*co-T.east[k]*si)};
 }
 export function lensOffset(F,p,ball,Rp){
