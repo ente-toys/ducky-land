@@ -27,7 +27,7 @@ function visitor(owner,n){
 function join(service,p,team){const socket=peer();assert.ok(service.open(socket,{digest:p.account,team}));return socket;}
 function stop(owner){owner.bog?.dispose();clearInterval(owner.timer);}
 function hit(sim,p,owner='opponent'){
- p.shieldUntil=0;sim.state.shots.push({id:999,owner,team:p.team==='karma'?'evil':'karma',x:p.x,y:p.y,dx:1,dy:0,left:RULES.range,colour:0});sim.step(1/60);
+ p.shieldUntil=0;p.hits=RULES.hitsPerHeart-1;sim.state.shots.push({id:999,owner,team:p.team==='karma'?'evil':'karma',x:p.x,y:p.y,dx:1,dy:0,left:RULES.range,colour:0});sim.step(1/60);
 }
 function advance(sim,seconds){for(let i=0;i<Math.ceil(seconds*60);i++)sim.step(1/60);}
 

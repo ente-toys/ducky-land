@@ -34,12 +34,12 @@ setBogExitRandom(()=>.25);
 test('seven-second hiding is omitted from enemies, visible to allies, untaggable, and firing reveals immediately',()=>{
  const sim=createBogCombat({blockers:[],bounds:{width:1000,height:1000},pads:team=>[{x:team==='karma'?200:600,y:300}]}),p=sim.join({id:'p',team:'karma'});
  assert.equal(p.lives,5);assert.equal(RULES.spawnShield,7);
- advance(sim,7.1);hit(sim,p);sim.step(1/60);assert.equal(p.lives,4);assert.equal(p.alive,false);
+ advance(sim,7.1);p.hits=RULES.hitsPerHeart-1;hit(sim,p);sim.step(1/60);assert.equal(p.lives,4);assert.equal(p.alive,false);
  advance(sim,3.05);assert.equal(p.alive,true);assert.equal(p.x,200);
  const until=p.shieldUntil;
  assert.equal(sim.snapshot('evil').players.some(q=>q.id==='p'),false);
  assert.equal(sim.snapshot('karma').players[0].lives,4);
- hit(sim,p);sim.step(1/60);assert.equal(p.lives,4);sim.state.shots=[];
+ p.hits=RULES.hitsPerHeart-1;hit(sim,p);sim.step(1/60);assert.equal(p.lives,4);assert.equal(p.hits,RULES.hitsPerHeart-1);sim.state.shots=[];
  advance(sim,6.8);assert.ok(sim.state.time<until);assert.equal(sim.snapshot('evil').players.length,0);
  advance(sim,.25);assert.ok(sim.state.time>until);assert.equal(sim.snapshot('evil').players.length,1);
  hit(sim,p);sim.step(1/60);assert.equal(p.lives,3);advance(sim,3.05);
@@ -47,7 +47,7 @@ test('seven-second hiding is omitted from enemies, visible to allies, untaggable
  sim.input(p.id,{seq:0,x:0,y:0,fire:true});sim.step(1/60);
  assert.equal(p.ammo,11);assert.ok(p.shieldUntil<=sim.state.time);
  assert.equal(sim.snapshot('evil').players.length,1);
- hit(sim,p);sim.step(1/60);assert.equal(p.lives,2);
+ p.hits=RULES.hitsPerHeart-1;hit(sim,p);sim.step(1/60);assert.equal(p.lives,2);
 });
 
 test('paid landing spends exactly once, shows authoritative balance, and refused four spends nothing',async()=>{
@@ -79,7 +79,7 @@ test('combat reconnect and hibernated socket restore retain paid entry, lives, h
   const p=landed(room,8200,5),service=room.bog=new LiveBogRoom(room),socket=peer();
   assert.ok(service.open(socket,{digest:p.account,team:'karma'}));
   let fighter=service.arena.state.players.get(service.members.get(socket).id);
-  fighter.shieldUntil=0;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,4);
+  fighter.shieldUntil=0;fighter.hits=RULES.hitsPerHeart-1;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,4);
   for(let i=0;i<185;i++)service.step();assert.equal(fighter.alive,true);
   fighter.stats.tags=9;fighter.medalCase['first-splat']=true;service.close(socket);
   const replacement=peer();assert.ok(service.open(replacement,{digest:p.account,team:'evil'}));
@@ -102,7 +102,7 @@ test('fifth tag keeps visible knockout then exits to the nearest world islet doc
   const fighter=service.arena.state.players.get(service.members.get(socket).id);
   fighter.stats.tags=3;fighter.medalCase['first-splat']=true;
   for(let life=4;life>=0;life--){
-   fighter.shieldUntil=0;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,life);assert.equal(fighter.alive,false);
+   fighter.shieldUntil=0;fighter.hits=RULES.hitsPerHeart-1;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,life);assert.equal(fighter.alive,false);
    if(life)for(let i=0;i<185;i++)service.step();
   }
   assert.ok(service.arena.snapshot('karma').players.some(q=>q.id===fighter.id&&!q.alive&&q.out));
@@ -127,7 +127,7 @@ test('demo bot uses five lives and seven-second hiding and re-enters after a sho
  const demo=createDemo(BOG_COMBAT,2),room=new demo.Room({...BOG_COMBAT,profile:'rule-demo'});await new Promise(queueMicrotask);
  let now=0,p=demo.sim.state.players.get('bot-0');
  for(let life=4;life>=0;life--){
-  p.shieldUntil=0;hit(demo.sim,p);demo.sim.step(1/60);assert.equal(p.lives,life);
+  p.shieldUntil=0;p.hits=RULES.hitsPerHeart-1;hit(demo.sim,p);demo.sim.step(1/60);assert.equal(p.lives,life);
   if(life){advance(demo.sim,3.05);assert.ok(p.shieldUntil-demo.sim.state.time>6.9);}
  }
  advance(demo.sim,5.1);room.step(1/60,{x:0,y:0},now+=17);
@@ -160,7 +160,7 @@ test('closing the combat socket on the fifth tag cannot postpone the authoritati
  const room=await makeRoom();try{
   const p=landed(room,8400,10),service=room.bog=new LiveBogRoom(room),socket=peer();service.open(socket,{digest:p.account,team:'karma'});
   const fighter=service.arena.state.players.get(service.members.get(socket).id);
-  fighter.lives=1;fighter.shieldUntil=0;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,0);
+  fighter.lives=1;fighter.shieldUntil=0;fighter.hits=RULES.hitsPerHeart-1;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,0);
   service.close(socket);
   const dest=bogExitIslet();assert.deepEqual([p.actor.x,p.actor.y],[dest.x,dest.y]);assert.equal(room.karma.bogEntry(p.account),null);
  }finally{stop(room);}

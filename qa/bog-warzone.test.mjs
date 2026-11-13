@@ -14,7 +14,8 @@ const footprint=p=>BOG_BLOCKERS.filter(b=>b.prop===p.id&&b.author==='warzone');
 
 test('all war-zone walls and supply stacks have exact shared paint and movement footprints',()=>{
  assert.equal(cover.length,layout.warzone.coverStations);
- assert.ok(cover.length>0&&layout.wallLayout.groups.reduce((n,g)=>n+g.members.length,0)<=97);
+ assert.equal(cover.length,123);
+ assert.equal(layout.wallLayout.groups.reduce((n,g)=>n+g.members.length,0),131);
  for(const p of cover){
   const feet=footprint(p);assert.equal(feet.length,p.coverFootprints.length,p.id);
   for(const [i,[x,y,w,h]]of p.coverFootprints.entries()){

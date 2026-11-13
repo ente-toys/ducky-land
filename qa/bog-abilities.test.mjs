@@ -28,7 +28,7 @@ function hit(sim,p){sim.state.shots.push({id:999,owner:'e',team:'evil',x:p.x,y:p
 test('aim assist bends at most fourteen degrees toward nearest visible enemy for humans and bots',()=>{
   for(const bot of [false,true]){
     const {sim,p,e}=fixture();p.bot=bot;e.x=560;e.y=470;
-    const nearer=sim.join({id:'near',team:'evil'});nearer.x=420;nearer.y=430;nearer.shieldUntil=0;
+    const nearer=sim.join({id:'near',team:'evil'});nearer.x=420;nearer.y=430;nearer.shieldUntil=0;nearer.hits=RULES.hitsPerHeart-1;
     const shot=fire(sim,p),angle=Math.atan2(shot.dy,shot.dx);
     assert.ok(Math.abs(angle-Math.atan2(30,220))<1e-9);assert.equal(p.facing,Math.PI/2);
     assert.ok(angle<=RULES.aimCone);advance(sim,.2);assert.equal(nearer.alive,false);assert.equal(e.alive,true);
@@ -63,19 +63,19 @@ test('a hop uses movement direction or last facing while idle, cannot cross wall
   const third=fixture();input(third.sim,third.p,{x:0,y:1,dodge:1});advance(third.sim,.25);assert.ok(Math.abs(third.p.y-472)<1e-8);assert.equal(third.p.x,200);
 });
 test('hop grants only .15 s tag protection, remains visible, and then a hit costs one life',()=>{
-  const {sim,p}=fixture();input(sim,p,{dodge:1});sim.step(1/60);
+  const {sim,p}=fixture();p.hits=RULES.hitsPerHeart-1;input(sim,p,{dodge:1});sim.step(1/60);
   assert.ok(sim.snapshot('evil').players.some(q=>q.id===p.id));hit(sim,p);assert.equal(p.lives,5);
   advance(sim,.15);hit(sim,p);assert.equal(p.lives,4);assert.equal(p.alive,false);assert.equal(p.dodgeUntil,0);
 });
-test('bad dodge packets cannot inject cooldowns, speed, shields or scoring',()=>{
+test('bad dodge packets cannot inject cooldowns, shields or scoring',()=>{
   const {sim,p}=fixture();for(const dodge of [true,-1,NaN,Infinity,1.2,'1'])assert.equal(input(sim,p,{dodge}),false);
-  input(sim,p,{dodge:1,dodgeReadyAt:-999,speedUntil:999,hitShield:100,score:999});sim.step(1/60);
-  assert.equal(p.speedUntil,0);assert.equal(p.hitShield,0);assert.equal(p.stats.score,0);assert.ok(p.dodgeReadyAt>2.4);
+  input(sim,p,{dodge:1,dodgeReadyAt:-999,hitShield:100,score:999});sim.step(1/60);
+  assert.equal(p.hitShield,0);assert.equal(p.stats.score,0);assert.ok(p.dodgeReadyAt>2.4);
 });
 test('five pickups occupy walkable Mid, Site A/B and two lane spots, with a twenty-second server timer',()=>{
   const spots=createPickupSpots(BOG_COMBAT.navigation);assert.equal(spots.length,5);
   assert.deepEqual(spots.map(s=>s.id),['mid','site-a','site-b','west-lane','east-lane']);
-  assert.deepEqual(new Set(spots.map(s=>s.kind)),new Set(['paint','speed','shield']));
+  assert.deepEqual(spots.map(s=>s.kind),['paint','paint','shield','shield','paint'],'paint and shield only: one of each per side plus Mid');
   for(const s of spots)assert.ok(BOG_COMBAT.navigation.walkable(s.x,s.y));
   const {sim,p}=fixture({pickupSpots:[{id:'paint',kind:'paint',x:200,y:400}]});p.ammo=2;p.reloadAt=100;sim.step(1/60);
   assert.equal(p.ammo,12);assert.equal(p.reloadAt,0);assert.equal(sim.state.pickups[0].readyAt,sim.state.time+20);
@@ -88,29 +88,19 @@ test('one pickup has one authoritative collector, tagged ducks cannot collect it
   assert.equal(p.hitShield,0);assert.equal(e.hitShield,1);
   p.alive=true;sim.step(1/60);assert.equal(p.hitShield,0);
 });
-test('speed pickup gives exactly thirty percent extra movement, expires after five seconds and dies with its owner',()=>{
-  const base=fixture(),boost=fixture({pickupSpots:[{id:'speed',kind:'speed',x:200,y:400}]});
-  boost.sim.step(1/60);const until=boost.p.speedUntil;assert.equal(until,boost.sim.state.time+5);
-  base.p.pace=boost.p.pace=245;input(base.sim,base.p,{x:1});input(boost.sim,boost.p,{x:1});
-  const bx=base.p.x,sx=boost.p.x;base.sim.step(1/60);boost.sim.step(1/60);
-  assert.ok(Math.abs((boost.p.x-sx)/(base.p.x-bx)-1.3)<1e-9);
-  boost.p.x=800;boost.p.pace=0;boost.p.heading=null;input(boost.sim,boost.p);advance(boost.sim,5.05);
-  assert.ok(boost.sim.state.time>until);boost.p.pace=245;input(boost.sim,boost.p,{x:1});const before=boost.p.x;boost.sim.step(1/60);assert.ok(Math.abs(boost.p.x-before-245/60)<1e-8);
-  boost.p.speedUntil=99;hit(boost.sim,boost.p);assert.equal(boost.p.speedUntil,0);
-});
-test('small shield consumes one hit without score or lives, next hit tags and the bubble also expires at eight seconds',()=>{
+test('small shield consumes one hit without score or lives, next decisive hit tags and the bubble also expires at eight seconds',()=>{
   const {sim,p}=fixture({pickupSpots:[{id:'shield',kind:'shield',x:200,y:400}]});sim.step(1/60);
   assert.equal(p.hitShield,1);assert.equal(p.hitShieldUntil,sim.state.time+8);
-  hit(sim,p);assert.equal(p.alive,true);assert.equal(p.lives,5);assert.equal(p.hitShield,0);assert.equal(sim.state.events.length,0);
-  assert.equal(sim.state.players.get('e').stats.tags,0);hit(sim,p);assert.equal(p.lives,4);assert.equal(sim.state.players.get('e').stats.tags,1);
-  const other=fixture({pickupSpots:[{id:'shield',kind:'shield',x:200,y:400}]});other.sim.step(1/60);other.p.x=800;advance(other.sim,8.05);hit(other.sim,other.p);assert.equal(other.p.lives,4);
+  p.hits=RULES.hitsPerHeart-1;hit(sim,p);assert.equal(p.alive,true);assert.equal(p.lives,5);assert.equal(p.hitShield,0);assert.equal(sim.state.events.length,0);
+  assert.equal(sim.state.players.get('e').stats.tags,0);assert.equal(p.hits,RULES.hitsPerHeart-1);hit(sim,p);assert.equal(p.lives,4);assert.equal(sim.state.players.get('e').stats.tags,1);
+  const other=fixture({pickupSpots:[{id:'shield',kind:'shield',x:200,y:400}]});other.sim.step(1/60);other.p.x=800;advance(other.sim,8.05);other.p.hits=RULES.hitsPerHeart-1;hit(other.sim,other.p);assert.equal(other.p.lives,4);
 });
 test('spawn hiding, hop immunity and one-hit shield are independent; firing reveals but preserves shield',()=>{
   const {sim,p}=fixture({pickupSpots:[{id:'shield',kind:'shield',x:200,y:400}]});p.shieldUntil=7;sim.step(1/60);
   fire(sim,p);assert.ok(p.shieldUntil<=sim.state.time);assert.equal(p.hitShield,1);hit(sim,p);assert.equal(p.lives,5);assert.equal(p.hitShield,0);
 });
-test('client predicts the same hop and boosted path as the authority, and sends the request within the existing rate limit',()=>{
-  const {sim,p}=fixture();p.speedUntil=5;
+test('client predicts the same hop path as the authority, and sends the request within the existing rate limit',()=>{
+  const {sim,p}=fixture();
   let socket;class Socket{readyState=1;bufferedAmount=0;sent=[];constructor(){socket=this;}send(data){const m=JSON.parse(data);this.sent.push(m);sim.input(p.id,m);}close(){}}
   const client=new ArenaClient({Socket,profile:'x'.repeat(36),url:'ws://local',navigation:BOG_COMBAT.navigation});
   client.nav={walkable:()=>true,clearLine:()=>true};
@@ -127,7 +117,7 @@ test('shared movement replay retains hop timing and movement through reconciliat
   for(let i=0;i<8;i++){combatWalkStep(copy,nav,1/60,sim.state.time+1/60,{x:1,y:0,run:false,dodge:1});sim.step(1/60);assert.ok(Math.abs(copy.x-p.x)<1e-7);assert.equal(copy.dodgeReadyAt,p.dodgeReadyAt);}
 });
 test('ability timers survive authority clock reset without replenishing a consumed shield or restarting the hop',()=>{
-  const {sim,p}=fixture();p.speedUntil=5;p.hitShield=1;p.hitShieldUntil=8;input(sim,p,{dodge:1});advance(sim,.1);
+  const {sim,p}=fixture();p.hitShield=1;p.hitShieldUntil=8;input(sim,p,{dodge:1});advance(sim,.1);
   const snap=sim.snapshot().players.find(q=>q.id==='p'),combat={...snap,...saveAbilityTimers(p,sim.state.time)};
   const fresh=fixture().sim;fresh.leave('p');const restored=fresh.join({id:'p',team:'karma',combat});
   for(const [left,until]of Object.entries(ABILITY_TIMERS))assert.ok(Math.abs(restored[until]-combat[left])<1e-9);
@@ -145,11 +135,11 @@ test('Q and double-tap Shift request once, leave island Shift listeners active a
   unbind();key('KeyQ','q');assert.equal(hops,2);dom.window.close();
 });
 test('pickup SVGs use flat vector paths only and pooled display nodes bob without growing',()=>{
-  for(const kind of ['paint','speed','shield']){
+  for(const kind of ['paint','shield']){
     const svg=readFileSync(new URL(`../src/features/bog-combat/assets/pickups/${kind}.svg`,import.meta.url),'utf8');
     assert.ok(svg.includes('#232323'));assert.doesNotMatch(svg,/<image|gradient|data:image|filter=/i);
   }
-  const objects=new Container(),art={paint:Texture.WHITE,speed:Texture.WHITE,shield:Texture.WHITE},view=createPickupsView(objects,art);
+  const objects=new Container(),art={paint:Texture.WHITE,shield:Texture.WHITE},view=createPickupsView(objects,art);
   const snapshot={pickups:[{id:'one',kind:'paint',x:100,y:200,readyAt:0}]};
   view.update(snapshot,0);const node=objects.children[0],icon=node.children[1],before=icon.y;
   for(let i=1;i<60;i++)view.update(snapshot,i/60);assert.equal(objects.children.length,1);assert.notEqual(icon.y,before);
@@ -172,7 +162,7 @@ test('pooled shots and splats recycle across long firing sessions and demo reset
   assert.ok(seen.size<=RULES.maxShots);assert.ok(marks.size<=RULES.maxSplats);assert.ok(sim.state.splats.length<=RULES.maxSplats);
 });
 test('a request received while tagged never becomes an automatic hop on respawn',()=>{
-  const {sim,p}=fixture();hit(sim,p);assert.equal(p.alive,false);input(sim,p,{dodge:1});advance(sim,3.05);
+  const {sim,p}=fixture();p.hits=RULES.hitsPerHeart-1;hit(sim,p);assert.equal(p.alive,false);input(sim,p,{dodge:1});advance(sim,3.05);
   assert.equal(p.alive,true);const x=p.x;input(sim,p,{dodge:1});sim.step(1/60);assert.equal(p.x,x);assert.equal(p.dodgeUntil,0);
 });
 
@@ -188,16 +178,16 @@ test('production transport persists pickup effects and cooldowns, and reconnect 
     room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',visitor.account,10);room.karma.balances.delete(visitor.account);
     service=room.bog=new LiveBogRoom(room);const socket=peer();assert.ok(service.open(socket,{digest:visitor.account,team:'karma'}));
     let p=service.arena.state.players.get(service.members.get(socket).id);
-    for(const kind of ['speed','shield']){const spot=service.arena.state.pickups.find(s=>s.kind===kind);p.x=spot.x;p.y=spot.y;service.step();}
+    for(const kind of ['shield']){const spot=service.arena.state.pickups.find(s=>s.kind===kind);p.x=spot.x;p.y=spot.y;service.step();}
     service.arena.input(p.id,{seq:0,x:1,y:0,fire:false,dodge:1});service.step();
-    assert.equal(p.hitShield,1);assert.ok(p.speedUntil>service.arena.state.time);assert.ok(p.dodgeReadyAt>service.arena.state.time);
-    const record=room.karma.bogEntry(visitor.account).combat;assert.ok(record.speedLeft>4.9);assert.ok(record.dodgeCooldownLeft>2.4);assert.equal(record.hitShield,1);
+    assert.equal(p.hitShield,1);assert.ok(p.dodgeReadyAt>service.arena.state.time);
+    const record=room.karma.bogEntry(visitor.account).combat;assert.ok(record.dodgeCooldownLeft>2.4);assert.equal(record.hitShield,1);
     service.close(socket);const replacement=peer();assert.ok(service.open(replacement,{digest:visitor.account,team:'karma'}));
     p=service.arena.state.players.get(service.members.get(replacement).id);assert.equal(p.hitShield,1);assert.equal(p.dodgeSerial,1);assert.ok(p.dodgeReadyAt>service.arena.state.time+2.3);
     advance(service.arena,.2);p.shieldUntil=0;hit(service.arena,p);assert.equal(p.hitShield,0);service.step();
     assert.equal(room.karma.bogEntry(visitor.account).combat.hitShield,0,'consumption is saved before a close');
     service.close(replacement);const again=peer();assert.ok(service.open(again,{digest:visitor.account,team:'karma'}));
-    p=service.arena.state.players.get(service.members.get(again).id);assert.equal(p.hitShield,0);assert.ok(p.speedUntil>service.arena.state.time);
+    p=service.arena.state.players.get(service.members.get(again).id);assert.equal(p.hitShield,0);
   }finally{service?.dispose();clearInterval(room.timer);}
 });
 

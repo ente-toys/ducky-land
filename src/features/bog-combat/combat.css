@@ -50,12 +50,21 @@
 .bog-hud-ammo { display:flex; align-items:center; gap:8px; }
 .bog-hud-hearts { display:flex; gap:4px; color:#ff5f7a; font-size:22px; line-height:1; }
 .bog-hud-hearts .lost { opacity:.25; }
+.bog-hud-hearts .half { background:linear-gradient(90deg,#ff5f7a 50%,rgba(255,95,122,.25) 50%); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .bog-hud-bar .bog-combat-popper-icon { width:34px; height:24px; margin:0; }
 .bog-hud-paint { display:flex; gap:3px; }
 .bog-hud-paint i { width:8px; height:18px; border:1.5px solid var(--line); border-radius:3px; background:#5fd35a; }
 .bog-hud-paint-evil i { background:#ff5f9a; }
 .bog-hud-paint i.empty { background:#e9e3c8; }
 .bog-hud-note { font-weight:800; }
+.bog-hud-shield img { width:26px; height:26px; }
+.bog-hud-shield b { min-width:56px; font-size:15px; font-weight:900; color:#2f6fb0; }
+.bog-hud-shield.is-blocked b { color:#9c3424; }
+.bog-hud-shield { animation:bog-shield-in 220ms cubic-bezier(.23,1,.32,1); }
+.bog-hud-shield.is-blocked { animation:bog-shield-hit 300ms ease; }
+@keyframes bog-shield-in { from { opacity:0; scale:.8; } }
+@keyframes bog-shield-hit { 30% { scale:1.15; } }
+@media (prefers-reduced-motion:reduce) { .bog-hud-shield,.bog-hud-shield.is-blocked { animation:none; } }
 @media (max-width:640px) {
   .bog-hud-me { top:12px; left:12px; padding:6px 10px; } .bog-hud-me b { font-size:14px; }
   .bog-hud-race { top:auto; bottom:84px; font-size:14px; } .bog-hud-leave { top:64px; right:12px; }

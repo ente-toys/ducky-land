@@ -54,7 +54,7 @@ test('real simulation tag snapshots contain everything needed without adding pro
  const sim=createArena({practice:false,blockers:[],bounds:{width:2000,height:1500},pads:team=>[{x:team==='karma'?100:300,y:300}]});
  const a=sim.join({id:'a',team:'karma'});sim.join({id:'b',team:'evil'});
  for(let i=0;i<430;i++)sim.step(1/60);
- a.facing=Math.PI/2;sim.input(a.id,{seq:1,x:0,y:0,fire:true});
+ sim.state.players.get('b').hits=RULES.hitsPerHeart-1;a.facing=Math.PI/2;sim.input(a.id,{seq:1,x:0,y:0,fire:true});
  for(let i=0;i<30;i++)sim.step(1/60);
  const snapshot=sim.snapshot(),victim=snapshot.players.find(p=>p.id==='b');
  assert.equal(victim.alive,false);assert.equal(snapshot.splats.find(s=>s.victim==='b').team,'karma');

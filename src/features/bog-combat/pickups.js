@@ -1,9 +1,9 @@
 import {BOG_AREAS} from './bog-environment.js';
 import {RULES} from './rules.js';
 
-export const PICKUP_KINDS=Object.freeze(['paint','speed','shield']);
+export const PICKUP_KINDS=Object.freeze(['paint','shield']);
 const anchors=[['mid','paint',BOG_AREAS.mid.x,BOG_AREAS.mid.y+110],
-  ['site-a','speed',BOG_AREAS['site-a'].x+180,BOG_AREAS['site-a'].y+200],
+  ['site-a','paint',BOG_AREAS['site-a'].x+180,BOG_AREAS['site-a'].y+200],
   ['site-b','shield',BOG_AREAS['site-b'].x-180,BOG_AREAS['site-b'].y+200],
   ['west-lane','shield',3000,4400],['east-lane','paint',5400,2900]];
 export function createPickupSpots(nav){
@@ -23,7 +23,6 @@ export function collectPickups(p,spots,time){
   for(const spot of spots){
     if(spot.readyAt>time||(p.x-spot.x)**2+(p.y-spot.y)**2>RULES.pickupRadius**2)continue;
     if(spot.kind==='paint'){p.ammo=RULES.ammoCapacity;p.reloadAt=0;}
-    else if(spot.kind==='speed')p.speedUntil=time+RULES.speedSeconds;
     else if(spot.kind==='shield'){p.hitShield=1;p.hitShieldUntil=time+RULES.hitShieldSeconds;}
     spot.readyAt=time+RULES.pickupRespawn;spot.collectedBy=p.id;
   }

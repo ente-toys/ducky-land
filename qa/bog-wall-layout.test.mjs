@@ -13,9 +13,9 @@ const overlaps=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.
 const touches=(a,b)=>a.x<=b.x+b.width&&a.x+a.width>=b.x&&a.y<=b.y+b.height&&a.y+a.height>=b.y;
 const distance=(x,y,[ax,ay],[bx,by])=>{const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy)));return Math.hypot(x-ax-t*dx,y-ay-t*dy);};
 
-test('all revised cover belongs to a connected lane or court structure, with fewer pieces and real wall returns',()=>{
+test('all revised cover belongs to a connected lane or court structure, with real wall returns',()=>{
  const ids=groups.flatMap(g=>g.members);assert.equal(new Set(ids).size,ids.length);
- assert.ok(ids.length<97,'less than BUILD4’s 97 pieces');
+ assert.equal(ids.length,131,'83 original pieces plus 48 field walls');
  assert.equal(groups.filter(g=>g.shape==='U').length,2);
  for(const g of groups){
   const feet=groupFeet(g);assert.equal(feet.length,g.members.length,g.id);
