@@ -27,6 +27,7 @@ test('Bog uses the island audio unlock, mute, active-source stopping and disposa
   try{
     let now=0;const audio=createAudio(),playSound=createBogSounds(audio,{now:()=>now});
     assert.equal(created,0);playSound('shot');assert.equal(started,0);
+    await audio.prepare();assert.equal(created,1);assert.equal(started,0);
     await audio.unlock();assert.equal(created,1);assert.equal(generated,Object.keys(BOG_SOUNDS).length);
     now=1000;assert.equal(playSound('shot'),true);assert.equal(started,1);assert.equal(playSound('shot'),false);
     playSound('pickup');assert.equal(started,2);assert.equal(playSound('wat'),false);

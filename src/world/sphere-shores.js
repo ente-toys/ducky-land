@@ -1,4 +1,5 @@
-import {WORLD_GEO,WORLD_ISLANDS,worldIsland} from './world-map.js';
+import {unplaceRigid} from './rigid.js';
+import {WORLD_GEO,WORLD_ISLANDS} from './world-map.js';
 import {mapOf} from './island-maps.js';
 import {coastPolygons,coastDistance} from './island-coasts.js';
 import {expMap,logMap,angle,arcDistance,unit} from './sphere.js';
@@ -55,8 +56,8 @@ export function copyHolding(x, y, copies, pad = 300, here = mapOf('home')) {
     const cw = copy.width ?? mapOf(copy.id).width, ch = copy.height ?? mapOf(copy.id).height;
     let q={x:x-copy.x,y:y-copy.y};
     if(copy.from){
-      const p=expMap(worldIsland(copy.from),x-(here.cx??(here.origin?.x??0)+here.width/2),y-(here.cy??(here.origin?.y??0)+here.height/2),WORLD_GEO.Rw);
-      q=logMap(worldIsland(copy.id),p,WORLD_GEO.Rw);
+      const m=mapOf(copy.id),p=unplaceRigid(copy.from,copy.id,{x,y});
+      q={x:p.x-m.cx,y:p.y-m.cy};
     }
     if(Math.abs(q.x)<cw/2+pad&&Math.abs(q.y)<ch/2+pad)held.push({copy,q});
   }

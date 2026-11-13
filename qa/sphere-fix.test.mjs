@@ -28,13 +28,12 @@ test('landing preserves nearby landmarks through large turns and never collapses
   }
  }
 });
-test('Iceland headings follow the screen across the pole rather than spinning round the island centre',()=>{
+test('flat headings stay north-up on both sides of Iceland',()=>{
  const m=mapOf('isle-55');
- for(const [x,y]of [[0,0],[0,-1],[0,1],[1,0],[-1,0],[2000,-1800]]){
-  const p={x:m.cx+x,y:m.cy+y},v=viewFrame('isle-55',p),q=spherePoint('isle-55',{x:p.x+1,y:p.y});
-  const expected=Math.atan2(dot(q,v.east),dot(q,v.north))*180/Math.PI;
-  assert.ok(Math.abs(nearbyHeading('isle-55',p,1,0)-expected)<1e-7);
-  if(Math.hypot(x,y)<=1)assert.ok(Math.abs(nearbyHeading('isle-55',p,0,-1))<.001);
+ for(const [x,y]of [[0,0],[0,-1],[0,1],[2000,-1800]]){
+  const p={x:m.cx+x,y:m.cy+y};
+  assert.equal(nearbyHeading('isle-55',p,1,0),90);
+  assert.equal(nearbyHeading('isle-55',p,0,-1),0);
  }
 });
 test('idle longitude spin preserves latitude through a full revolution from every island',()=>{

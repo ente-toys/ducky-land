@@ -1,10 +1,7 @@
 import {placeRigid,unplaceRigid,flatRigid} from '../world/rigid.js';
 import {placeIslet,unplaceIslet} from '../world/islet-placement.js';
-import {dot} from '../world/sphere.js';
 import {isletClearance,isletLocalClearance,ISLETS} from '../world/islets.js';
 import {walkNav,isletWalks,inWalkArea} from '../world/islet-walk.js';
-import {worldIsland} from '../world/world-map.js';
-import {WORLD_GEO} from '../world/world-map.js';
 import {WORLD_ISLANDS, neighboursOf, offsetOf} from '../world/world-map.js';
 import {HOME_MAP, mapOf, mapsVersion, FIELD_RES, FIELD_PAD} from '../world/island-maps.js';
 
@@ -32,7 +29,7 @@ export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 380;
 const MARGIN=1800;
 const DEST=new Map(), BOUNDS=new Map(), OBSTACLES=new Map(), GRIDS=new Map(),CAP=new Map();
-const sphereScratch=[0,0,0],candidateScratch=[];
+const candidateScratch=[];
 let SEEN=-1;
 const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,OBSTACLES,GRIDS,CAP]) cache.clear();}};
 export function originOffset(from,to) {
@@ -56,6 +53,7 @@ export function seaBoundsFor(id='home') {
   if (!BOUNDS.has(id)) {
     const boxes=WORLD_ISLANDS.map(island => {const B=mapOf(island.id),o=originOffset(id,island.id);
       return {x:o.x+B.origin.x,y:o.y+B.origin.y,w:B.width,h:B.height};});
+    for(const i of ISLETS){const p=placeIslet(id,i,[0,0]);boxes.push({x:p.x-i.width/2,y:p.y-i.width/2,w:i.width,h:i.width});}
     const margin=Math.max(MARGIN,...boxes.map(o=>Math.max(o.w,o.h)/2));
     BOUNDS.set(id,{x0:Math.min(...boxes.map(o=>o.x))-margin,y0:Math.min(...boxes.map(o=>o.y))-margin-1200,
       x1:Math.max(...boxes.map(o=>o.x+o.w))+margin,y1:Math.max(...boxes.map(o=>o.y+o.h))+margin});
@@ -180,13 +178,10 @@ const obstaclesFor=id => {
 export const islandOffset=(from,to) => {const o=obstaclesFor(from).find(o => o.id===to); return o ? {x:o.x,y:o.y} : null;};
 function candidates(id,x,y,pad=0){
  fresh();
- const frame=worldIsland(id),map=mapOf(id),dx=x-map.cx,dy=y-map.cy,d=Math.hypot(dx,dy),a=d/WORLD_GEO.Rw;
- const k=d>1e-10?Math.sin(a)/d:1/WORLD_GEO.Rw,co=Math.cos(a),p=sphereScratch,out=candidateScratch;out.length=0;
- for(let j=0;j<3;j++)p[j]=frame.center[j]*co+(frame.east[j]*dx-frame.north[j]*dy)*k;
+ const out=candidateScratch;out.length=0;
  let caps=CAP.get(pad);
- if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);const reach=Math.hypot(m.width,m.height)/2+pad;return {island,map:m,reach,cos:Math.cos(reach/WORLD_GEO.Rw)};});CAP.set(pad,caps);}
+ if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);return {island,map:m,reach:Math.hypot(m.width,m.height)/2+pad};});CAP.set(pad,caps);}
  for(const c of caps){
-  if(c.island.id===id){if(dot(p,c.island.center)>=c.cos)out.push({map:c.map,x,y});continue;}
   const F=flatRigid(id,c.island.id),ox=x-F.x,oy=y-F.y;
   if(ox*ox+oy*oy>c.reach*c.reach)continue;
   out.push({map:c.map,x:F.cx+F.a*ox+F.b*oy,y:F.cy+F.c*ox+F.d*oy});

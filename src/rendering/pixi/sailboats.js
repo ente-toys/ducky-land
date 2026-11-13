@@ -6,14 +6,16 @@ import {OfflineFleet} from '../../multiplayer/room-client.js';
 const BOAT_W = 188;
 export const BOAT_ART = {src: '/pixi-art/boat-sail.svg', data: {resolution: 1.5, autoGenerateMipmaps: true}};
 let boatViews = null;
-const viewsReady = loadBoatViews().then(v => (boatViews = v)).catch(() => null);
+let viewsReady;
+const prepareViews=()=>viewsReady??=loadBoatViews().then(v=>(boatViews=v)).catch(()=>null);
 function drawBoat(heading) {
   const root = new Container({label: 'Moored boat'}), boat = new Sprite(Texture.EMPTY);
   boat.anchor.set(.5, .82);
-  const fit = v => {const view = v.pick(heading); v.apply(boat, view, BOAT_W / 255);};
-  if (boatViews) fit(boatViews); else viewsReady.then(v => v && fit(v));
+  let applied;
+  const fit = v => {const view = v.pick(heading);if(view!==applied){v.apply(boat, view, BOAT_W / 255);applied=view;}};
+  if (boatViews) fit(boatViews); else prepareViews().then(v => v && !boat.destroyed && fit(v));
   root.addChild(boat);
-  return {root, boat};
+  return {root, boat,refreshViews:()=>boatViews&&fit(boatViews)};
 }
 
 const BORN = .4, BOB_PX = 10, DRIFT = .9, DRIFT_PX = 36;
@@ -55,6 +57,7 @@ export function createMooredBoats(layer, islets, island, {fleet = new OfflineFle
       for (const b of shown.values()) {
         b.root.visible = visible(b.x, b.y, 120);
         if (!b.root.visible) continue;
+        b.refreshViews();
         b.root.y = b.y + (reduced ? 0 : Math.sin(t * 1.4 + b.phase) * 2.5);
         b.boat.rotation = reduced ? 0 : Math.sin(t * 1.1 + b.phase) * .05;
         if (b.born) {

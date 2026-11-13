@@ -2,11 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
 import {createPirateFleet,pirateClearance,pirateMotion,pirateFacing,PIRATE_COUNT,PIRATE_RADIUS,PIRATE_BOAT_GAP,PIRATE_ART,pirateBoatPoint} from '../src/gameplay/pirate-fleet.js';
-import {WORLD_GEO,WORLD_ISLANDS} from '../src/world/world-map.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import {ISLETS} from '../src/world/islets.js';
-import {expMap} from '../src/world/sphere.js';
 import {mapOf} from '../src/world/island-maps.js';
-const distance=(a,b)=>Math.hypot(...a.map((v,k)=>v-b[k]))*WORLD_GEO.Rw;
+import {mapPoint} from '../src/world/sphere-coordinates.js';
+import {placeIslet} from '../src/world/islet-placement.js';
+const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const home=mapOf('home');
 test('18 ambient ships use all three approved flat vector designs, at the requested double size',async()=>{
  const fleet=createPirateFleet();assert.equal(fleet.ships.length,PIRATE_COUNT);assert.equal(PIRATE_COUNT,18);assert.equal(new Set(fleet.ships.map(s=>s.art)).size,3);
  for(const ship of fleet.ships){assert.ok(ship.width>=600);assert.ok(pirateClearance(ship.p)>950);}
@@ -21,17 +23,16 @@ test('twenty minutes of wandering remain on open water, spread around the world 
  }
  assert.ok(min>PIRATE_RADIUS+60,'double-size hulls keep a shore margin: '+min);
  for(let k=0;k<f.ships.length;k++)total+=distance(start[k],f.ships[k].p);assert.ok(total>18000,'fleet actively wanders');
- assert.ok(new Set(start.map(p=>Math.floor((Math.atan2(p[0],p[2])+Math.PI)/(Math.PI/3)))).size>=5);
+ assert.ok(new Set(start.map(p=>Math.floor((Math.atan2(p[1]-home.cy,p[0]-home.cx)+Math.PI)/(Math.PI/3)))).size>=5);
 });
 test('stationary player boats are avoided without modifying player state or adding collisions',()=>{
- const f=createPirateFleet(),s=f.ships[0],boat=[...s.p];let min=Infinity;
- const d=800/WORLD_GEO.Rw;for(let k=0;k<3;k++)boat[k]=s.p[k]*Math.cos(d)+s.dir[k]*Math.sin(d);
+ const f=createPirateFleet(),s=f.ships[0],boat=[s.p[0]+s.dir[0]*800,s.p[1]+s.dir[1]*800];let min=Infinity;
  const saved=[...boat];for(let k=0;k<1800;k++){f.update(1/30,[boat]);min=Math.min(min,distance(s.p,boat));}
  assert.deepEqual(boat,saved);assert.ok(min>=PIRATE_BOAT_GAP,'boat clearance '+min);
 });
 test('all major-island and islet dock tips are excluded by the same read-only sea guard',()=>{
- for(const i of WORLD_ISLANDS){const m=mapOf(i.id),p=expMap(i,m.JETTY.tip.x-m.cx,m.JETTY.tip.y-m.cy,WORLD_GEO.Rw);assert.ok(pirateClearance(p)<1);}
- for(const i of ISLETS)assert.ok(pirateClearance(expMap(i,...i.jetty.tip,WORLD_GEO.Rw))<1);
+ for(const i of WORLD_ISLANDS){const m=mapOf(i.id),q=mapPoint(i.id,'home',m.JETTY.tip);assert.ok(pirateClearance([q.x,q.y])<1);}
+ for(const i of ISLETS){const q=placeIslet('home',i,i.jetty.tip);assert.ok(pirateClearance([q.x,q.y])<1);}
 });
 test('mirror hysteresis ignores a brief reversal and vertical motion; bob is small and reduced motion still',()=>{
  const f={flip:1,flipAge:0};for(let i=0;i<20;i++)pirateFacing(f,-1,.016);assert.equal(f.flip,1);for(let i=0;i<60;i++)pirateFacing(f,-1,.016);assert.equal(f.flip,-1);for(let i=0;i<60;i++)pirateFacing(f,0,.016);assert.equal(f.flip,-1);

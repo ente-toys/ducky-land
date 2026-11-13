@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {patchGeometry} from '../src/rendering/pixi/sphere-mesh.js';
 import {destinationsFor,canSail,landingSpot,BOAT_RADIUS,harborOf} from '../src/gameplay/islands.js';
-import {mapPoint,spherePoint} from '../src/world/sphere-coordinates.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {unplaceRigid} from '../src/world/rigid.js';
 import {isletClearance} from '../src/world/islets.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
@@ -37,7 +37,7 @@ test('a neighbour\'s collision coast is its drawn coast',()=>{
    else if(!ring(x,y,BOAT_RADIUS*3)&&!ring(x,y,BOAT_RADIUS*1.5)&&!m.landAt(x,y,0)){
     const busy=WORLD_ISLANDS.some(i=>{if(i.id===to)return false;const L=i.id===from?q:unplaceRigid(from,i.id,q),mm=mapOf(i.id);
      return [0,1.5,3].some(r=>[...Array(16)].some((_,k)=>mm.landAt(L.x+Math.cos(k*Math.PI/8)*r*BOAT_RADIUS,L.y+Math.sin(k*Math.PI/8)*r*BOAT_RADIUS)));});
-    if(busy||isletClearance(spherePoint(from,q),BOAT_RADIUS*3)<BOAT_RADIUS*2)continue;
+    if(busy||isletClearance(q,BOAT_RADIUS*3,from)<BOAT_RADIUS*2)continue;
     water++;if(canSail(q.x,q.y,from))open++;}
   }
   assert.ok(land>20,`${to}: ${land} ground samples`);

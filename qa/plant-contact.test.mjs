@@ -60,17 +60,16 @@ test('spawn, teleport, sailing, reduced motion, passing outside and leaving a pl
 
 test('pooled leaves cap at twelve, bushes only sway, and transforms settle at the fixed base',async t=>{
   const oldFetch=globalThis.fetch;
-  globalThis.fetch=async()=>({ok:true,text:async()=>'<path fill="#6faf42" d="M0 0L10 0L10 10Z"/>'});
+  globalThis.fetch=()=>assert.fail('plant reactions cannot fetch on the main thread');
   t.after(()=>{globalThis.fetch=oldFetch;});
-  const parent=new Container(),effects=createPlantReactions(parent,Texture.EMPTY),props=[],obstacles=[],actors=[];
+  const parent=new Container(),effects=createPlantReactions(parent,Texture.EMPTY,{loadColour:async()=>0x6faf42}),props=[],obstacles=[],actors=[];
   t.after(()=>{effects.destroy();props.forEach(p=>p.sprite.destroy());parent.destroy();});
   for(let i=0;i<20;i++) {
     const p=prop(i*400,i===0?'bush':'tree');p.sprite=new Sprite(Texture.EMPTY);
     p.sprite.position.set(p.x,p.y);p.sprite.scale.set(-2,3);p.sprite.anchor.set(.5,1);
     props.push(p);obstacles.push(obstacle(p.x));actors.push({});
   }
-  effects.register('home',props,obstacles);
-  await new Promise(resolve=>setImmediate(resolve));
+  await effects.register('home',props,obstacles);
   effects.begin('home',0);actors.forEach((a,i)=>effects.track(a,props[i].x-100,-9));effects.update(0);
   effects.begin('home',.1);actors.forEach((a,i)=>effects.track(a,props[i].x-50,-9));effects.update(.15);
   assert.equal(parent.children.length,LEAF_CAP);assert.equal(parent.children.filter(s=>s.visible).length,LEAF_CAP);

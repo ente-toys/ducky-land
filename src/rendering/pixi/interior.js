@@ -1,3 +1,4 @@
+import {nextArtFrame} from './art/island-preparation.js';
 import {Assets, Container, Graphics, Rectangle, Sprite, Texture} from 'pixi.js';
 import {startJump,jumpPose} from '../../gameplay/player-motion.js';
 import {MUSEUM_BENCHES, benchBox, benchAnchor, benchFootprint, benchFile} from '../../world/home/museum-benches.js';
@@ -30,6 +31,7 @@ export async function createInterior() {
     Promise.all([...PIECE_ART, '/pixi-art/interiors/pieces/arch.svg'].map(src => Assets.load({src, data: {resolution: 2}}))),
     Assets.load({src: MONA.src, data: {resolution: 3}}),
   ]);
+  await nextArtFrame();
   const root = new Container({label: 'Museum interior', visible: false}), room = new Container({sortableChildren: true});
   root.addChild(room);
   room.addChild(new Sprite(texture));

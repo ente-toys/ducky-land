@@ -14,7 +14,7 @@ import walkWorld from '../assets/world/walk-world.json' with {type:'json'};
 const ZERO={x:0,y:0};
 const sailor=(islandId='home') => ({id:'player',islandId,mode:'sailing',boatId:'home-0',...HARBOR.water,turn:0,path:[],action:0});
 
-test('Home and the eight themed islands (copies removed 8 Nov), the same moored boats each, at least four reachable neighbours and safe harbor positions', () => {
+test('Home and six themed islands retain moorings, ring routes and safe harbor positions', () => {
   const boats=createBoats();
   assert.equal(ISLANDS.length,7);
   assert.equal(new Set(ISLANDS.map(island => island.id)).size,7);
@@ -24,7 +24,7 @@ test('Home and the eight themed islands (copies removed 8 Nov), the same moored 
   for (const island of ISLANDS) {
     assert.equal(boats.filter(boat => boat.islandId===island.id).length,boatSpots(island.id).length);
     assert.ok(boatSpots(island.id).length>=3);
-    assert.ok(destinationsFor(island.id).length>=4);
+    assert.equal(destinationsFor(island.id).length,island.id==='home'?6:3);
   }
   for (const position of [...boats.filter(boat => boat.islandId==='home'),...destinationsFor('home').map(island=>island.dock),HARBOR.water]) assert.ok(canSail(position.x,position.y));
   assert.equal(canSail(HARBOR.land.x,HARBOR.land.y),false);

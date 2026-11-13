@@ -1,8 +1,7 @@
 import {Container, Graphics, Sprite, Text} from 'pixi.js';
-import {destinationsFor, boatSpots} from '../../gameplay/islands.js';
+import {boatSpots} from '../../gameplay/islands.js';
 import {createHarbor} from './harbor.js';
 import {createSailingFX} from './sailing-fx.js';
-import {createSea} from './sea-islands.js';
 import {sailingUpright} from './sailing-upright.js';
 import {TILT} from '../shared/camera.js';
 
@@ -27,8 +26,7 @@ function uprightVessel(entry,camera,fx){
   fx.front(entry);
 }
 
-export async function createTravelView(objects,water,air,decks) {
-  const [sea]=await Promise.all([createSea(water,objects,air)]);
+export async function createTravelView(objects,water,decks) {
   const harbor=createHarbor(decks,objects);
   const vessels=new Map(), leaving=[], fx=await createSailingFX({water,objects});
   const destroyVessel=entry => {entry.front?.destroy({children:true}); entry.root.destroy({children:true});};
@@ -39,11 +37,11 @@ export async function createTravelView(objects,water,air,decks) {
     dispose() {
       if (disposed) return;
       disposed=true;
-      sea.dispose(); harbor.dispose(); fx.dispose();
+      harbor.dispose(); fx.dispose();
       for (const entry of [...vessels.values(), ...leaving]) destroyVessel(entry);
       vessels.clear(); leaving.length=0;
     },
-    transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient(), ...sea.transient()],
+    transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient()],
     showJetty: mapId => harbor.show(mapId),
     switchIsland(id,shift) {
       harbor.switchIsland(id);
@@ -60,11 +58,9 @@ export async function createTravelView(objects,water,air,decks) {
         fx.reset();
         for (const entry of leaving.splice(0)) destroyVessel(entry);
       }
-      sea.switchIsland(destinationsFor(id));
     },
     update(boats,t,reduced,visible,player,camera) {
       harbor.update(boats,t,reduced);
-      sea.update(t,reduced,visible,player,camera);
       const now=performance.now(), ids=new Set(boats.map(boat => boat.id));
       for (const boat of boats) {
         const entry=vessels.get(boat.id);

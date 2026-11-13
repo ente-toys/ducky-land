@@ -4,12 +4,18 @@ import {globeScreen,globeWeight} from '../src/rendering/shared/globe-screen.js';
 import {spherePoint,localPoint,viewFrame} from '../src/world/sphere-coordinates.js';
 import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
 import {mapOf} from '../src/world/island-maps.js';
-import {flatRigid,shearOf} from '../src/world/rigid.js';
+import {polar,shearOf} from '../src/world/rigid.js';
 import {turnLongitude} from '../src/rendering/shared/sphere-camera.js';
 import {dot,angle,expMap,sphereFrame} from '../src/world/sphere.js';
 import {ISLETS} from '../src/world/islets.js';
 
 const W=1440,H=900,id='home',Rw=WORLD_GEO.Rw,zoom=.0329;
+// The globe's spherical chart and morph stay independent of gameplay placement.
+function globeChart(from,to){
+ const m=mapOf(to),P=(x,y)=>localPoint(from,spherePoint(to,{x:m.cx+x,y:m.cy+y})),p=P(0,0),e=P(4,0),w=P(-4,0),n=P(0,4),s=P(0,-4);
+ const r=polar((e.x-w.x)/8,(e.y-w.y)/8,(n.x-s.x)/8,(n.y-s.y)/8);
+ return {x:p.x,y:p.y,a:r.cos,b:r.sin};
+}
 const island=i=>{const m=mapOf(i.id);return (x,y)=>spherePoint(i.id,{x:m.cx+x,y:m.cy+y});};
 function drags(){
  const out=[],cam={...localPoint(id,spherePoint(id,{x:mapOf(id).cx,y:mapOf(id).cy})),zoom};
@@ -72,12 +78,12 @@ test('the same island seen from two turns of the ball moves like a point on a tu
  }
 });
 
-test('at ball 0 the stickers keep the exact flat placement; between, they blend smoothly to the sphere',()=>{
+test('globe chart morph retains its original spherical placement independently of flat sailing',()=>{
  for(const cam of drags()){
   const G=globeScreen({id,cam,ball:0,w:W,h:H});
   for(const i of WORLD_ISLANDS){
    const st=G.sticker(island(i),16);if(!st)continue;
-   const F=flatRigid(id,i.id),x=W/2+(F.x-cam.x)*cam.zoom,y=H/2+(F.y-cam.y)*cam.zoom;
+   const F=globeChart(id,i.id),x=W/2+(F.x-cam.x)*cam.zoom,y=H/2+(F.y-cam.y)*cam.zoom;
    assert.ok(Math.hypot(st.x-x,st.y-y)<1e-6,`${i.id} flat placement unchanged`);
    assert.ok(Math.abs(st.cos-F.a)<1e-3&&Math.abs(st.sin-F.b)<1e-3,'flat turn unchanged');
    assert.ok(Math.abs(st.scale-cam.zoom)<1e-12);
@@ -86,7 +92,7 @@ test('at ball 0 the stickers keep the exact flat placement; between, they blend 
   assert.ok(k>=globeWeight(ball)-1e-12&&k<=1,'the sphere never weighs less than the near-anchor morph');
   for(const i of WORLD_ISLANDS){
    const st=B.sticker(island(i),16);if(!st)continue;
-   const F=flatRigid(id,i.id),L=lensOf(i.center,view,ball,Rw*cam.zoom);
+   const F=globeChart(id,i.id),L=lensOf(i.center,view,ball,Rw*cam.zoom);
    const x=(1-k)*(W/2+(F.x-cam.x)*cam.zoom)+k*L.x,y=(1-k)*(H/2+(F.y-cam.y)*cam.zoom)+k*L.y;
    assert.ok(Math.hypot(st.x-x,st.y-y)<1e-6);
   }

@@ -4,9 +4,7 @@ import {readFileSync} from 'node:fs';
 import {placeBogRadar, BOG_RADAR_ICON, BOG_RADAR_ISLAND, BOG_RADAR_SIZE_PX} from '../src/features/bog-combat/bog-radar.js';
 import {nearbyMapFrame} from '../src/app/nearby-map.js';
 import {mapOf} from '../src/world/island-maps.js';
-import {mapPoint, viewFrame} from '../src/world/sphere-coordinates.js';
-import {logMap} from '../src/world/sphere.js';
-import {worldIsland, WORLD_GEO} from '../src/world/world-map.js';
+import {mapPoint} from '../src/world/sphere-coordinates.js';
 
 const close = (a,b) => assert.ok(Math.abs(a-b)<1e-7, `${a} != ${b}`);
 const bog = mapOf(BOG_RADAR_ISLAND);
@@ -28,7 +26,7 @@ test('out-of-range Bog stays centred on the outline in its projected direction, 
   for (const id of ['home','blossom','sunset','isle-251','isle-250','isle-55']) {
     const m = mapOf(id), point = {x:m.cx+350,y:m.cy-270};
     const terrain = nearbyMapFrame(id,point,out,radius);
-    const q = logMap(viewFrame(id,point),worldIsland(BOG_RADAR_ISLAND).center,WORLD_GEO.Rw);
+    const c=mapPoint(BOG_RADAR_ISLAND,id,{x:bog.cx,y:bog.cy}),q={x:c.x-point.x,y:c.y-point.y};
     close(Math.hypot(out.x,out.y),radius);
     close(out.x / radius,q.x / Math.hypot(q.x,q.y));
     close(out.y / radius,q.y / Math.hypot(q.x,q.y));

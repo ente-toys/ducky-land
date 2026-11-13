@@ -1,4 +1,5 @@
-import {sphereFrame, logMap} from './sphere.js';
+import {sphereFrame} from './sphere.js';
+import {flatOffset,FLAT_RING} from './flat-layout.js';
 import world from '../../assets/world/world.json' with {type: 'json'};
 import READY from './delivered-themes.js';
 
@@ -16,11 +17,14 @@ export const THEMED_ISLANDS = [
 export const sizeOfTheme = theme => {const w = theme && theme !== 'home' ? READY?.[theme]?.world : null; return w?.width > 0 && w?.height > 0 ? {width: w.width, height: w.height} : theme === 'home' || !theme ? {width:world.width,height:world.height} : {width:W,height:H};};
 export const ISLAND_COUNT = 1 + FINISHED_THEMES.length;
 
+// Globe picture only (sailing uses the flat chart): Iceland on the north pole, Booquack Bog on the south pole, Home and
+// the other four round the equator in flat-sea order (Sunbob NE, Pagepond SE, Rosybutton SW, Campfire NW), spaced by
+// their widths so neighbours never touch.
 const ANCHORS = [
-  [60, 28], [-140, -22], [105, -23], [-85, 29], [0, -90], [0, 90],
+  [67, 8], [-142.7, -8], [140.8, -8], [-68.9, 8], [0, -90], [0, 90],
 ];
 const RAD=Math.PI/180;
-export const SPHERE_CIRCUMFERENCE=74000;
+export const SPHERE_CIRCUMFERENCE=80000;
 const BASE_SIZES=new Map(['home',...FINISHED_THEMES].map(t=>[t,sizeOfTheme(t)]));
 export function layoutWorld(sizeOf=sizeOfTheme,seed=11,finished=FINISHED_THEMES){
  const out=[{index:0,id:'home',name:'Home Island',accent:0xffda69,tint:0xffffff,lon:0,lat:0,...sizeOf('home')}];
@@ -46,13 +50,14 @@ export const WORLD_GEO = {SX: MAP.SX, Rw: MAP.Rw, wrapd: MAP.wrapd, latOf: y => 
 const byId = new Map(WORLD_ISLANDS.map(island => [island.id, island]));
 export const worldIsland = id => byId.get(id);
 export function offsetOf(a, b) {
-  const A = byId.get(a), B = byId.get(b);
-  return logMap(A,B.center,MAP.Rw);
+  return flatOffset(a,b);
 }
-const nearest = id => WORLD_ISLANDS.filter(island => island.id !== id).map(island => ({island, ...offsetOf(id, island.id)}))
-  .sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y)).slice(0, 4);
 const LINKS = new Map(WORLD_ISLANDS.map(island => [island.id, new Set()]));
-for (const island of WORLD_ISLANDS) for (const {island: other} of nearest(island.id)) {LINKS.get(island.id).add(other.id); LINKS.get(other.id).add(island.id);}
+for(const [k,id]of FLAT_RING.entries()){
+ LINKS.get('home').add(id); LINKS.get(id).add('home');
+ const next=FLAT_RING[(k+1)%FLAT_RING.length];
+ LINKS.get(id).add(next); LINKS.get(next).add(id);
+}
 const NEIGHBOURS = new Map();
 export function neighboursOf(id) {
   if (!NEIGHBOURS.has(id)) NEIGHBOURS.set(id, [...LINKS.get(id)].map(other => ({island: byId.get(other), ...offsetOf(id, other)}))

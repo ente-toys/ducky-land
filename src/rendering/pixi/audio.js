@@ -1,12 +1,18 @@
 const urls=Object.fromEntries(['quack','pop','splash','step'].map(n=>[n,new URL(`../../../assets/world/audio/${n}.wav`,import.meta.url).href]));
 export function createAudio(){
  let context,muted=false,disposed=false,loading;const buffers=new Map(),sources=new Set(),generators=new Map();
- async function unlock(){
+ async function prepare(){
   if(disposed)return;
-  context ||= new AudioContext();await context.resume();
+  context ||= new AudioContext();
   for(const [name,generate]of generators)if(!buffers.has(name))buffers.set(name,generate(context));
   loading ||= Promise.all(Object.entries(urls).map(async([name,url])=>{try{const response=await fetch(url);if(!response.ok)return;const buffer=await context.decodeAudioData(await response.arrayBuffer());if(!disposed)buffers.set(name,buffer);}catch{}}));
   await loading;
+ }
+ async function unlock(){
+  // Preparation owns context creation, synthesis, fetching and decoding.
+  // The user gesture only satisfies the browser's audio resume requirement.
+  if(disposed||!context)return;
+  if(context.state!=='running')await context.resume();
  }
  function play(name,volume=.1){
   if(disposed||!context||muted||context.state!=='running')return;
@@ -15,5 +21,5 @@ export function createAudio(){
   source.onended=()=>{sources.delete(source);source.disconnect();gain.disconnect();};source.start();
  }
  function register(name,generate){if(disposed||generators.has(name))return;generators.set(name,generate);if(context)buffers.set(name,generate(context));}
- return {unlock:()=>unlock().catch(()=>{}),play,register,get muted(){return muted;},toggle(){muted=!muted;if(muted)for(const source of sources)source.stop();},suspend(){context?.suspend().catch(()=>{});},resume(){if(context)context.resume().catch(()=>{});},dispose(){disposed=true;buffers.clear();generators.clear();for(const source of sources)source.stop();sources.clear();context?.close().catch(()=>{});}};
+ return {prepare:()=>prepare().catch(()=>{}),unlock:()=>unlock().catch(()=>{}),play,register,get muted(){return muted;},toggle(){muted=!muted;if(muted)for(const source of sources)source.stop();},suspend(){context?.suspend().catch(()=>{});},resume(){if(context)context.resume().catch(()=>{});},dispose(){disposed=true;buffers.clear();generators.clear();for(const source of sources)source.stop();sources.clear();context?.close().catch(()=>{});}};
 }

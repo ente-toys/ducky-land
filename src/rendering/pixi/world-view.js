@@ -9,8 +9,9 @@ import {mapOf} from '../../world/island-maps.js';
 import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from '../shared/heart-activity.js';
 import {ISLETS} from '../../world/islets.js';
 import {cloudState,CLOUD_SHADER} from './globe-clouds.js';
+import {BOG_RADAR_ICON} from '../../features/bog-combat/bog-radar.js';
 
-import {Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text, Texture} from 'pixi.js';
+import {Assets, Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text, Texture} from 'pixi.js';
 import {PALETTE} from '../shared/palette.js';
 
 const VERTEX = `
@@ -198,13 +199,20 @@ function buildWorldTexture(app,islands,bounds,arch){
  app.renderer.render({container:box,target:rt,clear:true});box.destroy({children:true});rt.source.updateMipmaps();return rt;
 }
 
-function makePin(text = 'You', color = PALETTE.sun) {
+// icon: an image url drawn as a round badge in place of the drop (Bog uses the minimap's paint-gun badge)
+function makePin(text = 'You', color = PALETTE.sun, icon = null) {
   const pin = new Container({label: `${text} pin`});
   const shadow = new Graphics().ellipse(0, 0, 9, 3.5).fill({color: 0x000000, alpha: .25});
-  const drop = new Graphics()
-    .moveTo(0, 0).bezierCurveTo(-4, -10, -15, -18, -15, -30).arc(0, -30, 15, Math.PI, 0).bezierCurveTo(15, -18, 4, -10, 0, 0)
-    .fill(color).stroke({color: PALETTE.ink, width: 3, join: 'round'});
-  drop.circle(0, -30, 6).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
+  let drop;
+  if (icon) {
+    drop = new Sprite(); drop.anchor.set(.5); drop.position.set(0, -24);
+    Assets.load({src: icon, data: {resolution: 4}}).then(tex => {if (!drop.destroyed) {drop.texture = tex; drop.width = drop.height = 42;}}).catch(() => {});
+  } else {
+    drop = new Graphics()
+      .moveTo(0, 0).bezierCurveTo(-4, -10, -15, -18, -15, -30).arc(0, -30, 15, Math.PI, 0).bezierCurveTo(15, -18, 4, -10, 0, 0)
+      .fill(color).stroke({color: PALETTE.ink, width: 3, join: 'round'});
+    drop.circle(0, -30, 6).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2});
+  }
   const tag = new Text({text, style: {fontFamily: 'ui-rounded, system-ui, sans-serif', fontSize: 13, fontWeight: '700', fill: PALETTE.ink}});
   tag.anchor.set(.5);
   const tagWidth = 22 + text.length * 8;   // estimated, so nothing has to measure text
@@ -253,12 +261,22 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
   const glowTex = Texture.from(glowCanvas);
   const heartG = new Graphics().svg('<svg viewBox="0 0 24 24"><path d="M12 21.3c-.4 0-.8-.1-1.1-.4C6.6 17.2 2.5 13.9 2.5 9.4 2.5 6.4 4.8 4 7.7 4c1.8 0 3.3.9 4.3 2.3C13 4.9 14.5 4 16.3 4c2.9 0 5.2 2.4 5.2 5.4 0 4.5-4.1 7.8-8.4 11.5-.3.3-.7.4-1.1.4z" fill="#FF6F8E"/></svg>');
   const heartTex = app.renderer.generateTexture({target: heartG, resolution: 4}); heartG.destroy();
+  // Booquack Bog pops karma and evil ghosts (the knockout art) instead of hearts
+  const ghostTex = {};
+  let disposed = false;
+  import('../../features/bog-combat/knockout.js').then(({loadKnockoutArt, ghostParts}) => loadKnockoutArt().then(art => {
+    if (disposed) return;
+    for (const team of ['karma', 'evil']) {
+      const {ghost} = ghostParts(art, team), holder = new Container(); ghost.scale.set(.05); holder.addChild(ghost);
+      ghostTex[team] = app.renderer.generateTexture({target: holder, resolution: 3}); holder.destroy({children: true});
+    }
+  })).catch(() => {});
   const glows = new Container(), hearts = new Container();
   life.addChild(glows, rings, hearts);
-  const sprite = (pool, tex) => {const sp = pool.children.find(c => !c.visible) ?? pool.addChild(new Sprite(tex)); sp.anchor.set(.5); sp.visible = true; return sp;};
+  const sprite = (pool, tex) => {const sp = pool.children.find(c => !c.visible) ?? pool.addChild(new Sprite(tex)); sp.texture = tex; sp.anchor.set(.5); sp.visible = true; return sp;};
   const pin = makePin();
   // Booquack Bog's pin: always shown on the globe so players know where the Bog is
-  const bogPin = makePin('Booquack Bog', 0xb98cf0), bogIsland = WORLD_ISLANDS.find(island => island.id === 'isle-249');
+  const bogPin = makePin('Booquack Bog', 0xb98cf0, BOG_RADAR_ICON), bogIsland = WORLD_ISLANDS.find(island => island.id === 'isle-249');
   app.stage.addChildAt(life, app.stage.getChildIndex(mesh) + 1);
   app.stage.addChildAt(pin, app.stage.getChildIndex(life) + 1);
   app.stage.addChildAt(bogPin, app.stage.getChildIndex(pin));
@@ -384,9 +402,9 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       const busy = ease((ball - .25) / .4);
       life.visible = busy > .01; life.alpha = busy;
       if (busy > .01) {
-        const pick=()=>{const {island,x,y}=heartLocation();return localPoint(id,expMap(island,x,y,Rw));};
+        const pick=()=>{const {island,x,y}=heartLocation();return {...localPoint(id,expMap(island,x,y,Rw)),bog:island.id===bogIsland.id};};
         for (rippleDue -= dt; rippleDue < 0; rippleDue += HEART_ACTIVITY_INTERVAL*(.8+rand()*.4)) {
-          if(ripples.length<HEART_ACTIVITY_LIMIT)ripples.push({...pick(), at: time, heart: rand() < HEART_ACTIVITY_CHANCE, dur: 2 + rand() * .8});
+          if(ripples.length<HEART_ACTIVITY_LIMIT)ripples.push({...pick(), at: time, heart: rand() < HEART_ACTIVITY_CHANCE, team: rand() < .5 ? 'karma' : 'evil', dur: 2 + rand() * .8});
         }
         const px = Math.min(1.5, Math.max(1, Rp / 240));
         for (const c of glows.children) c.visible = false;
@@ -403,9 +421,10 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
           g.position.set(p.x, p.y); g.scale.set((.14 + out(age) * .18) * px, (.14 + out(age) * .18) * px * sq); g.alpha = fade * .85 * f;
           const k = out(age), rr = (2.5 + k * 11) * px;
           rings.ellipse(p.x, p.y, rr, rr * sq).stroke({color: 0xFFF3C4, width: 1.1 * px, alpha: (1 - k) * .55 * f});
-          if (r.heart) {
+          const popTex = r.bog ? ghostTex[r.team] : heartTex;
+          if (r.heart && popTex) {
             const sec = (time - r.at), spring = 1 - Math.exp(-sec * 9) * Math.cos(sec * 22);
-            const hs = sprite(hearts, heartTex), lift = out((sec - .35) / 1.4), gone = ease((sec - 1.1) / .6);
+            const hs = sprite(hearts, popTex), lift = out((sec - .35) / 1.4), gone = ease((sec - 1.1) / .6);
             hs.position.set(p.x + Math.sin(sec * 4 + r.x) * 1.5 * px * lift, p.y - (8 + lift * 22) * px);
             hs.scale.set(Math.max(0, spring) * (1 - gone * .35) * .9 * px);
             hs.rotation = Math.exp(-sec * 7) * Math.sin(sec * 18) * .35;
@@ -413,7 +432,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
             const burst = ease(sec / .06) * (1 - ease((sec - .1) / .35));
             if (burst > .01) for (let n = 0; n < 4; n++) {
               const a = n * 1.571 + .785, d = (7 + out(sec / .45) * 9) * px;
-              rings.circle(p.x + Math.cos(a) * d, p.y - 8 * px + Math.sin(a) * d, 1.6 * px).fill({color: 0xFF8FA6, alpha: burst * f});
+              rings.circle(p.x + Math.cos(a) * d, p.y - 8 * px + Math.sin(a) * d, 1.6 * px).fill({color: r.bog ? (r.team === 'evil' ? 0xFA5452 : 0xA6E600) : 0xFF8FA6, alpha: burst * f});
             }
           }
         }
@@ -452,6 +471,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));
       return {aim:centreOf(next.lon,next.lat),dlon,dlat:next.lat-before.lat};
     },
-    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); disposed = true; for (const t of Object.values(ghostTex)) t.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }
