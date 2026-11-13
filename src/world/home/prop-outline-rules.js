@@ -6,6 +6,6 @@ export function propOutlineKind(prop) {
   if (/bridge|jetty|boardwalk/.test(name)) return 'walkway';
   if (/towel|blanket|rug|puddle|petals?(?:[ ._-]|$)|sand-speck|path-stone/.test(name)) return 'decal';
   if (!/pot|planter|bed|island|rack/.test(name) && /flower|tulip|grass|pebble|shell|rope-coil|rock-flat|mushroom/.test(name) && w <= 145 && h <= 110) return 'decal';
-  if (/tree|oak|birch|palm|lamp|lantern|sign|reeds|cattail/.test(name) && !/lighthouse|house|bush/.test(name)) return 'base';
+  if (/(?<![a-z])(?:tree|oak|birch|palm|lamp|lantern|sign|reeds|cattail)/.test(name) && !/lighthouse|house|bush/.test(name)) return 'base';
   return 'solid';
 }

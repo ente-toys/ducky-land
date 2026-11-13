@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "3089069057b88c8ea1490853dd677ac0c9736fccf80e0d310acacc4f8e16c462",
+      "modelSha256": "c5c78d6d93e792e336164ca444ef4345f8735cf60e2e5565554e3331007c80c7",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -818,10 +818,6 @@
           "sha256": "6daed02c9e6cf3b0bf5027505ced6903283524807a9f1b17fff6dd488a80d701"
         },
         {
-          "path": "public/pixi-art/home-review/hill/bench.svg",
-          "sha256": "affb6c62d37390febe209cbc71225f15356718e969822a4d2da73e5afa9d4f3a"
-        },
-        {
           "path": "public/pixi-art/home-review/hill/star-sign.svg",
           "sha256": "7bd3a3d615f9de863c4c20f603b0922bf32c7ba156f978451cbaef60275010d5"
         },
@@ -1051,11 +1047,11 @@
         },
         {
           "path": "src/world/home/building-silhouettes.json",
-          "sha256": "2f9efeece33caf2ff7181a565887716557d1c3d2d0885b95e5590015de3c4cab"
+          "sha256": "8b367345a899d7f0eb53aa92faa41df0dbcf71ac9fd6386fbbeebc6dad0c4278"
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "bb0a538b065d7c80d2d7524b5ed0f1b5ae0db95aa48d703e475410bd5583d8ee"
+          "sha256": "957b3e9a391e93bf57b9ad1aecfe7fb6089cb059bb4d951ad75fa65bb094f1b5"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1083,11 +1079,11 @@
         },
         {
           "path": "src/world/home/prop-base-silhouettes.json",
-          "sha256": "543a4c5ffd98a4c8a1805894b69bfbeba524ae603c9aba121e4621fb0e28e343"
+          "sha256": "a79ac96f3f6fbd0ea5e54f07cce356cd6976f3150456ff67034e3cb59429b5e7"
         },
         {
           "path": "src/world/home/prop-outline-rules.js",
-          "sha256": "6121c9007b247e87592b1fe3841395679d55c60002f1810910388aeed337fff7"
+          "sha256": "f35da8f61b5523e3e60395b1f9c8860fe1ee7df2493267caa78cb0d590a11787"
         },
         {
           "path": "src/world/home/sleep-poses.json",
@@ -1110,14 +1106,14 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "71e52f905a2a35005203721e90d18b5aa70e574fb3b9a7017420e3b637e0dd17"
+      "sha256": "eaecb00a70af5b6770c81b9fd60f23a0bec942158be80d042ba5ec3454e3257c"
     },
     "groundSha256": "b1e7fc18d785f15a0b28ced4bf0f1eec47a16985d0abdd9c0a18723220ef5d5c",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "d61cda8e2d1ef1836b0de0841f9e7d2121b27713613491e558bef0ef9aeb16c6",
+    "sha256": "318a95cc92428549a56e2b0f53969459ce8e57d241d984fe69aea26d96b9a917",
     "width": 1024,
     "height": 768,
-    "bytes": 1170393,
+    "bytes": 1169975,
     "groundBytes": 966010,
     "quality": {
       "tolerance": 0.4,

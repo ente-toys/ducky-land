@@ -2180,13 +2180,13 @@
     },
     {
       "id": "bigger-community-543",
-      "name": "Garden bench",
+      "name": "Wooden bench",
       "asset": "garden-bench",
-      "src": "/pixi-art/home-review/hill/bench.svg",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
       "x": -939,
       "y": 1374,
       "width": 200,
-      "height": 130,
+      "height": 113,
       "scale": 0.8,
       "anchor": {
         "x": 0.5,
@@ -15044,13 +15044,13 @@
     },
     {
       "id": "home-hill-northeast-bench",
-      "name": "stargazing-bench",
+      "name": "Wooden bench",
       "asset": "stargazing-bench",
-      "src": "/pixi-art/home-review/hill/bench.svg",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
       "x": 6345,
       "y": 1260,
       "width": 200,
-      "height": 130,
+      "height": 113,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -15113,13 +15113,13 @@
     },
     {
       "id": "home-hill-southwest-bench",
-      "name": "stargazing-bench",
+      "name": "Wooden bench",
       "asset": "stargazing-bench",
-      "src": "/pixi-art/home-review/hill/bench.svg",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
       "x": -605,
       "y": 4510,
       "width": 200,
-      "height": 130,
+      "height": 113,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -17286,7 +17286,7 @@
       "name": "Willowrest Green",
       "point": [
         6427.777777777778,
-        3011.1111111111113
+        3160
       ],
       "use": "shaded east-coast picnic and reading lawn"
     },
@@ -53166,11 +53166,11 @@
       "y": 1900
     },
     "seat-pond-3": {
-      "src": "/pixi-art/home-review/hill/bench.svg",
-      "name": "Garden bench",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
+      "name": "Wooden bench",
       "asset": "garden-bench",
       "width": 200,
-      "height": 130,
+      "height": 113,
       "scale": 0.8,
       "anchor": {
         "x": 0.5,
