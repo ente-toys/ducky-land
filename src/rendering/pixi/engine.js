@@ -2,7 +2,7 @@ import {ART_TEXTURE} from './art/art-texture.js';
 import {createPirateFleet,pirateBoatPoint} from '../../gameplay/pirate-fleet.js';
 import {createPirateView} from './pirate-view.js';
 import {homePropY, homePropRotation} from './environment/home-motion.js';
-import {createHomeKites, KITE_ASSETS} from './environment/home-kites.js';
+import {createHomeKites, KITE_ASSETS,kiteArtEntries} from './environment/home-kites.js';
 import {rigidLandingBasis,easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from '../shared/sphere-camera.js';
 import {createSailingCamera} from '../shared/sailing-camera.js';
 import {sailingUpright} from './sailing-upright.js';
@@ -15,8 +15,12 @@ import {withRigidVisitors} from '../shared/rigid-visitors.js';
 import {localPoint,spherePoint} from '../../world/sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from '../shared/zoom-motion.js';
-import {artResolution} from '../shared/art-resolution.js';
-import {createGroundPool} from './art/ground-stream.js';
+import {createResolutionBudget} from '../shared/resolution-budget.js';
+import {createArtBudget} from './art/art-budget.js';
+import {managedTextureMemory,createManagedPoolBudget} from './texture-memory.js';
+import {createGroundPool,VIEW_POOL_OPTIONS} from './art/ground-stream.js';
+import {rasterTiles} from './art/theme-raster.js';
+import {createRasterLoader} from './art/theme-art-stream.js';
 import {propZ} from '../shared/flat-props.js';
 import {detailedIslands} from '../shared/island-detail.js';
 import {constrainExploreCamera, zoomToWorldPoint} from '../shared/explore-camera.js';
@@ -70,7 +74,7 @@ import {clamp, fitZoom, Gestures, movePinch, screenToWorld, TILT, zoomAt} from '
 import {CHAT_DURATION} from '../../multiplayer/chat.js';
 import {sameOutfit} from '../../gameplay/outfits.js';
 
-const textureLeases = new Map();
+const textureLeases = new Map(), textureUnloads = new Map();
 const ZERO = {x:0,y:0};
 const SIM_STEP = 1 / 60;
 const renderJumpLeft = (left, accumulator) => left > 0
@@ -92,7 +96,9 @@ function contactShadow(prop) {
 function acquire(src, resolution = 1, {mipmaps = true} = {}) {
   let entry = textureLeases.get(src);
   if (!entry) {
-    entry = {count: 0, promise: Assets.load({src, data: {resolution, ...(mipmaps ? ART_TEXTURE : {})}})};
+    entry = {count: 0, texture:null};
+    const load=()=>Assets.load({src, data: {resolution, ...(mipmaps ? ART_TEXTURE : {})}});
+    entry.promise=(textureUnloads.has(src)?textureUnloads.get(src).then(load):load()).then(texture=>{entry.texture=texture;return texture;});
     textureLeases.set(src, entry);
   }
   entry.count++;
@@ -102,11 +108,15 @@ const acquireGround = (src, resolution) => acquire(src, resolution, {mipmaps: fa
 function release(src) {
   const entry = textureLeases.get(src);
   if (!entry || --entry.count) return;
-  entry.promise.then(() => {
-    if (entry.count || textureLeases.get(src) !== entry) return;
+  const retire=()=>{
+    if(entry.count||textureLeases.get(src)!==entry)return;
     textureLeases.delete(src);
-    Assets.unload(src).catch(() => {});
-  }).catch(() => textureLeases.delete(src));
+    entry.texture?.destroy(true);
+    const unloading=Assets.unload(src).catch(()=>{}).finally(()=>{if(textureUnloads.get(src)===unloading)textureUnloads.delete(src);});
+    textureUnloads.set(src,unloading);
+  };
+  if(entry.texture)retire();
+  else entry.promise.then(retire).catch(()=>{if(textureLeases.get(src)===entry)textureLeases.delete(src);});
 }
 
 // the next island on the fewest-hops sea route from one island to another (null when there is no route)
@@ -162,13 +172,17 @@ export class PixiIsland {
   }
 
   get player() { return this.room ? this.room.player : this.sim?.player; }
+  gpuMemory() {return managedTextureMemory(this.app.renderer);}
 
   async mount(host) {
     this.host = host;
     this.app = new Application();
     try {
+      const res = new URLSearchParams(location.search).get('res');
+      this.resolutionBudget=createResolutionBudget({dpr:devicePixelRatio||1,override:res===null?this.renderResolution:Number(res)});
+      this.resolutionBudget.resize(host.clientWidth||1280,host.clientHeight||720);
       await this.app.init({width: host.clientWidth || 1280, height: host.clientHeight || 720,
-        resolution: Math.min(this.renderResolution ?? (devicePixelRatio || 1), 2), autoDensity: true,
+        resolution: this.resolutionBudget.resolution, autoDensity: true,
         antialias: true, background: '#6EC9DE', backgroundAlpha:this.transparent?0:1, preference: 'webgl', autoStart: false,
         sharedTicker: false});
       if (this.disposed) { this.app.destroy({removeView:true,releaseGlobalResources:false}, {children: true}); return; }
@@ -222,19 +236,18 @@ export class PixiIsland {
         {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true}, ...decals.map(d => ({...d, resolution: 2.5})), ...HOME_GROUND_DECALS.map(d => ({...d, resolution: 2.5}))];
       const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
       const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
-      this.groundPool=createGroundPool({acquire:acquireGround,release});
+      this.poolBudget=createManagedPoolBudget(this.app.renderer);
+      this.poolBudget.configure(this.width,this.height,this.resolutionBudget.resolution);
+      this.groundPool=createGroundPool({acquire:acquireGround,release,...VIEW_POOL_OPTIONS,poolBudget:this.poolBudget});
       const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats];
       const halfWidth = this.width / (2 * this.camera.zoom) + 600;
       const halfHeight = this.height / (2 * this.camera.zoom * TILT) + 600;
       const deferred = [];
-      const sourceResolutions=new Map();
-      for(const entry of entries)sourceResolutions.set(entry.src,Math.max(sourceResolutions.get(entry.src)??0,entry.rasterResolution??artResolution(entry,entry.resolution??1)));
-      for(const entry of entries)entry.rasterResolution=sourceResolutions.get(entry.src);
+      this.homeArtBudget=createArtBudget([...entries,...kiteArtEntries()],{acquire,release,poolBudget:this.poolBudget,zoom:this.camera.zoom,dpr:this.resolutionBudget.resolution,views:[{camera:this.camera,width:this.width,height:this.height,tilt:TILT}]});
       const artTextures = await Promise.all(entries.map(entry => {
         const pad = Math.max(entry.width || 0, entry.height || 0) * (entry.scale || 1);
         if (!Number.isFinite(entry.x) || (Math.abs(entry.x - this.camera.x) < halfWidth + pad && Math.abs(entry.y - this.camera.y) < halfHeight + pad)) {
-          this.loaded.push(entry.src);
-          return acquire(entry.src, entry.rasterResolution??artResolution(entry,entry.resolution??1));
+          return this.homeArtBudget.acquire(entry);
         }
         const placeholder = new Texture({source: Texture.EMPTY.source});
         deferred.push({entry, placeholder});
@@ -244,7 +257,9 @@ export class PixiIsland {
       this.sceneryPending = deferred.length > 0;
       if (this.disposed) return;
       this.ocean=new TilingSprite({texture:textures[tiles.length + decks.length + props.length + art.floating.length],width:world.width,height:world.height});this.ocean.position.set(HOME_ORIGIN.x,HOME_ORIGIN.y);this.scene.addChildAt(this.ocean,0);
-      this.homeGroundStream=this.groundPool.create(tiles,this.homeGround);
+      this.homeGroundRaster=createRasterLoader();
+      const groundCrops=tiles.flatMap(p=>rasterTiles({...p,width:p.width+(p.bleed??0),height:p.height+(p.bleed??0)},p.src,undefined,512).map(({localX,localY,...tile})=>tile));
+      this.homeGroundStream=this.groundPool.create(groundCrops,this.homeGround,undefined,this.homeGroundRaster);
       this.loaded.push('/pixi-art/globe/home-ground.svg');
       const terrain=await acquire('/pixi-art/globe/home-ground.svg');
       if(this.disposed)return;
@@ -293,7 +308,7 @@ export class PixiIsland {
         (/bridge/i.test(name) ? this.decks : this.objects).addChild(sprite);
         return {sprite, shadow, ...prop, wind: /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella/i.test(prop.name), boat: /boat/i.test(prop.asset || prop.name)};
       });
-      const kiteTextures = await Promise.all(KITE_ASSETS.map(src => {this.loaded.push(src); return acquire(src, 2);}));
+      const kiteTextures = await Promise.all(KITE_ASSETS.map(src => this.homeArtBudget.acquire({src})));
       if (this.disposed) return;
       this.homeKites = createHomeKites(this.objects, Object.fromEntries(KITE_ASSETS.map((src, i) => [src, kiteTextures[i]])));
       this.plantReactions.register('home',this.props,walk.obstacles);
@@ -325,7 +340,7 @@ export class PixiIsland {
       this.artShown = 'home';
       if (new URLSearchParams(location.search).has('qa')) globalThis.__duckyEngine = this;
       this.archipelago = createArchipelago(this.app, this.scene, this.scene, world);
-      await this.archipelago.loadPreviews((src)=>{this.loaded.push(src);return acquire(src);});
+      await this.archipelago.loadPreviews(acquire,release);
       if(this.disposed)return;
       this.pirateFleet=createPirateFleet();
       this.pirateView=await createPirateView(this.objects,this.pirateFleet);
@@ -390,8 +405,7 @@ export class PixiIsland {
         }
         const [{entry, placeholder}] = remaining.splice(closest, 1);
         try {
-          this.loaded.push(entry.src);
-          const texture = await acquire(entry.src, entry.rasterResolution??artResolution(entry,entry.resolution??1));
+          const texture = await this.homeArtBudget.acquire(entry);
           if (this.disposed) continue;
           for (const node of targets.get(placeholder)) {
             if (node.destroyed || node.texture !== placeholder) continue;
@@ -463,6 +477,7 @@ export class PixiIsland {
   }
 
   switchIsland(id) {
+    this.resolutionGraceUntil=performance.now()+5000;this.resolutionBudget?.reset();
     const previousIsland=this.islandId;
     const landed=this.player?.mode==='walking'?isletWalks(id).find(w=>near(this.player,w.land,100))?.islet:null;
     const reframe=p=>landed?reframeIslet(previousIsland,id,landed,p):unplaceRigid(previousIsland,id,p);
@@ -625,7 +640,7 @@ export class PixiIsland {
       this.waterFX?.pause();
       cancelAnimationFrame(this.raf);
       if (document.hidden) this.audio.suspend();
-      else {this.audio.resume(); this.lastFrame = performance.now(); this.raf = requestAnimationFrame(time => this.tick(time));}
+      else {this.audio.resume(); this.lastFrame = performance.now(); this.resolutionGraceUntil=this.lastFrame+5000; this.resolutionBudget?.reset(); this.raf = requestAnimationFrame(time => this.tick(time));}
     });
   }
 
@@ -967,7 +982,7 @@ export class PixiIsland {
     if (!map.art) return;
     this.arts.set(mapId, {id: mapId, ready: false});
     let pendingArt;
-    loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT}).then(async art => {
+    loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT,screen:{zoom:this.camera.zoom,dpr:this.resolutionBudget?.resolution??1}}).then(async art => {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
       for (const fx of art.fountainWaters??[]) this.objects.addChild(fx.root);
@@ -1159,7 +1174,7 @@ export class PixiIsland {
     if (!this.initialized || this.disposed) return;
     this.width = Math.max(1, this.host.clientWidth);
     this.height = Math.max(1, this.host.clientHeight);
-    this.app.renderer.resize(this.width, this.height);
+    this.app.renderer.resize(this.width, this.height,this.resolutionBudget?.resize(this.width,this.height,devicePixelRatio||1));
     const here = this.mapHere();
     this.minZoom = fitZoom(this.width, this.height, here.width, here.height);
     if (initial) {
@@ -1193,9 +1208,33 @@ export class PixiIsland {
     };
   }
 
+  resolutionSampleReady(now) {
+    let streaming=this.sceneryPending||this.homeArtBudget?.pending||this.groundPool?.pending;
+    for(const art of this.arts.values())if(!art.ready&&!art.failed||art.artBudget?.pending||art.rasterPool?.pending){streaming=true;break;}
+    const contextChanged=this.resolutionIsland!==this.islandId||this.resolutionArt!==this.artShown||this.resolutionActor!==this.focusedActor;
+    if(contextChanged||!this.ready||streaming||this.room&&this.room.islandId!==this.islandId||this.arrival||this.fly||(this.globeT??0)>.001) {
+      this.resolutionIsland=this.islandId;this.resolutionArt=this.artShown;this.resolutionActor=this.focusedActor;this.resolutionGraceUntil=now+5000;return false;
+    }
+    return now>=(this.resolutionGraceUntil??Infinity);
+  }
+
+  updateRasterBudgets(views,now,flatVisible=true,homeShown=this.artShown==='home') {
+    const rasterDpr=this.resolutionBudget?.resolution??Math.min(devicePixelRatio||1,2);
+    const pools=[this.groundPool,...[...this.arts.values()].map(a=>a.rasterPool)].filter(Boolean);
+    const changed=this.rasterDpr!==rasterDpr;
+    const visibleBytes=pools.reduce((bytes,pool)=>bytes+pool.prepare(views,rasterDpr),0);
+    this.poolBudget?.configure(this.width,this.height,rasterDpr,pools.filter(p=>p.hasViews(views)).length,this.app.stage,now,changed,visibleBytes);
+    this.rasterDpr=rasterDpr;
+    this.homeArtBudget?.update(this.camera.zoom,rasterDpr,now,flatVisible,views.filter(v=>v.stream===this.homeGroundStream));
+    for(const pool of pools)pool.update(views,rasterDpr);
+    for(const art of this.arts.values())art.artBudget?.update(this.camera.zoom,rasterDpr,now,flatVisible,views.filter(v=>art.groundStreams?.includes(v.stream)));
+  }
+
   tick(now,{forceRender=false}={}) {
     if (this.disposed || (document.hidden&&!forceRender)) return;
     const elapsed = Math.max(0, now - this.lastFrame);
+    const resolution=this.resolutionBudget?.sample(now,elapsed,this.resolutionSampleReady(now));
+    if(resolution!==undefined&&resolution!==this.app.renderer.resolution)this.app.renderer.resize(this.width,this.height,resolution);
     const dt = Math.min(.1, elapsed / 1000);
     this.frameTimes.push(elapsed);
     if (this.frameTimes.length > 180) this.frameTimes.shift();
@@ -1471,8 +1510,7 @@ export class PixiIsland {
         for(const stream of streams)views.push({stream,camera:{...this.camera,...unplaceRigid(this.islandId,island.id,this.camera)},width:this.viewSpan.width,height:this.viewSpan.height,tilt:TILT});
       }
     }
-    this.groundPool?.update(views,Math.min(devicePixelRatio||1,2));
-    for(const art of this.arts.values())art.rasterPool?.update(views,Math.min(devicePixelRatio||1,2));
+    this.updateRasterBudgets(views,now,flatVisible,homeShown);
     this.archipelago?.showLive(new Set(copies.map(i => i.id)));
     const visitors=this.copyVisitors(copies);
     for (const {o} of visitors) o.visible=false;
@@ -1484,6 +1522,7 @@ export class PixiIsland {
       if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}
     }
     this.app.render();
+    this.poolBudget?.trim(this.app.stage);
     if (!(this.globeT > 0)) this.renderLiveCopies(undefined, copies, visitors);
     for (const {o} of visitors) o.visible=true;
     if (this.frame % 15 === 0) {
@@ -1649,6 +1688,8 @@ export class PixiIsland {
     this.snowfall?.destroy();
     this.karmaView?.destroy();
     this.groundPool?.destroy();
+    this.homeGroundRaster?.destroy();
+    this.homeArtBudget?.destroy();
     this.livePatches?.destroy();this.archipelago?.destroy(); this.worldView?.destroy();this.isletView?.destroy();
     this.clearChat();
     this.keys.clear();

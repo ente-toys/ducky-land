@@ -16,7 +16,8 @@ export function createArchipelago(app, scene, layer, world) {
   const peopleTextures = new Map();
   layer.addChildAt(root, 0);
   root.addChild(copies, people);
-  let destroyed=false;
+  let destroyed=false,previewAcquire,previewRelease,previewPending=null,previewActive=true;
+  const previewKeys=new Set();
   let current = 'home', islands = [], bounds = MAP_BOUNDS, version = 0;
   const textures = new Map();
   // Live snapshots can contain streamed water tiles. Only authored transparent
@@ -69,18 +70,35 @@ export function createArchipelago(app, scene, layer, world) {
   };
   place();
   return {
-    async loadPreviews(acquire) {
-      const loaded=await Promise.all(WORLD_ISLANDS.map(async island=>{
-        const id=artOf(island.id),texture=await acquire(`/pixi-art/globe/${id}.svg`);
-        return [id,texture];
-      }));
-      if(destroyed)return;
-      for(const [id,texture] of loaded){
+    async loadPreviews(acquire,release=()=>{}) {
+      previewAcquire=acquire;previewRelease=release;
+      if(previewPending)return previewPending;
+      previewActive=true;
+      // Many islands share a theme, so each URL needs exactly one lease.
+      previewPending=Promise.all([...new Set(WORLD_ISLANDS.map(i=>artOf(i.id)))].map(async id=>{
+        if(previews.has(id))return;
+        const src=`/pixi-art/globe/${id}.svg`,texture=await acquire(src);
+        if(destroyed||!previewActive){release(src);return;}
         const old=textures.get(id);
-        if(old&&!leasedPreviews.has(old))old.destroy(true);
-        textures.set(id,texture);previews.set(id,texture);leasedPreviews.add(texture);
+        if(old&&old!==Texture.EMPTY&&!leasedPreviews.has(old))old.destroy(true);
+        textures.set(id,texture);previews.set(id,texture);leasedPreviews.add(texture);previewKeys.add(src);
+      })).then(()=>{if(!destroyed){version++;place();draw();}}).finally(()=>{previewPending=null;});
+      return previewPending;
+    },
+    setPreviewActive(active) {
+      if(active){
+        if(!previewActive){
+          previewActive=true;
+          if(!previewPending&&previewAcquire)this.loadPreviews(previewAcquire,previewRelease).catch(()=>{});
+        }
+        return;
       }
-      version++;place();draw();
+      if(!previewActive)return;
+      previewActive=false;
+      for(const [id,texture] of previews)if(textures.get(id)===texture)textures.set(id,Texture.EMPTY);
+      previews.clear();leasedPreviews.clear();
+      for(const src of previewKeys)previewRelease(src);
+      previewKeys.clear();version++;draw();
     },
     get current(){return current;}, get bounds() {return bounds;}, get islands() {return islands;}, count: ISLAND_COUNT, get texture() {return textures.get('home') ?? null;},
     get version() {return version;}, has: mapId => textures.has(mapId), textureOf, sizeOf,
@@ -105,6 +123,6 @@ export function createArchipelago(app, scene, layer, world) {
       const far = Math.max(0, Math.min(1, (.012 - zoom) / .006));
       people.alpha = far; people.visible = far > 0;
     },
-    destroy() {destroyed=true;for (const texture of peopleTextures.values()) texture.destroy(true); peopleTextures.clear(); root.destroy({children: true}); for (const t of textures.values()) if(!leasedPreviews.has(t))t.destroy(true);},
+    destroy() {destroyed=true;previewActive=false;for(const src of previewKeys)previewRelease(src);previewKeys.clear();for (const texture of peopleTextures.values()) texture.destroy(true); peopleTextures.clear(); root.destroy({children: true}); for (const t of textures.values()) if(t!==Texture.EMPTY&&!leasedPreviews.has(t))t.destroy(true);},
   };
 }

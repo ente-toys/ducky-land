@@ -27,7 +27,7 @@ export async function createIsletView(app,scene,objects){
  const started=performance.now();
  const arts=await Promise.all(ISLET_ART.map(loadIsletArt));
  const loadMs=Math.round(performance.now()-started);
- const atlas=bakeAtlas(app.renderer,arts);
+ let atlas=null;
  const layer=new Container({label:'Sea islet ground'});
  if(objects.parent===scene)scene.addChildAt(layer,scene.getChildIndex(objects));else scene.addChild(layer);
  const views=ISLETS.map(i=>{
@@ -44,7 +44,7 @@ export async function createIsletView(app,scene,objects){
   return {i,root,art,props,loadMs};
  });
  let from=null,placed=[];
- return {atlas,layer,views,
+ return {get atlas(){return atlas??=bakeAtlas(app.renderer,arts);},releaseAtlas(){atlas?.destroy(true);atlas=null;},layer,views,
   transient(){return [layer,...views.flatMap(v=>v.props.map(p=>p.sprite))];},
   get placed(){return placed;},
   update(id,camera,width,height,onGlobe){
@@ -66,6 +66,6 @@ export async function createIsletView(app,scene,objects){
     for(const prop of v.props)prop.sprite.visible=v.root.visible;
    }
   },
-  destroy(){for(const v of views)for(const p of v.props)p.sprite.destroy({children:true});layer.destroy({children:true});atlas.destroy(true);},
+  destroy(){for(const v of views)for(const p of v.props)p.sprite.destroy({children:true});layer.destroy({children:true});atlas?.destroy(true);},
  };
 }

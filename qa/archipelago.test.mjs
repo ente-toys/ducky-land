@@ -1,9 +1,49 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Container, RenderTexture, Texture} from 'pixi.js';
+import {Container, RenderTexture, Texture, TextureSource} from 'pixi.js';
 import {createArchipelago} from '../src/rendering/pixi/archipelago.js';
 import {mapFor} from '../src/world/island-maps.js';
 import {cameraGame} from './helpers/pixi-engine.mjs';
+
+test('authored globe previews release while walking and reacquire once on reopening',async()=>{
+  const scene=new Container(),held=new Map(),requests=[],released=[];
+  const arch=createArchipelago({renderer:{generateTexture:()=>RenderTexture.create({width:16,height:16})}},scene,scene,mapFor('home'));
+  const acquire=async src=>{
+    assert(!held.has(src),'one lease per shared preview URL');requests.push(src);
+    const t=new Texture({source:new TextureSource({width:16,height:16})});held.set(src,t);return t;
+  };
+  const release=src=>{assert(held.has(src));released.push(src);held.get(src).destroy(true);held.delete(src);};
+  try{
+    await arch.loadPreviews(acquire,release);const count=held.size,first=[...held.values()];assert(count>0);
+    await arch.loadPreviews(acquire,release);assert.equal(requests.length,count,'loading twice does not retain extra leases');
+    for(let cycle=0;cycle<3;cycle++){
+      arch.setPreviewActive(false);arch.setPreviewActive(false);assert.equal(held.size,0);
+      assert.equal(arch.globeTextureOf('home'),Texture.EMPTY);assert(first.every(t=>t.destroyed));
+      arch.setPreviewActive(true);arch.setPreviewActive(true);await arch.loadPreviews(acquire,release);
+      assert.equal(held.size,count);assert.notEqual(arch.globeTextureOf('home'),Texture.EMPTY);
+    }
+  }finally{arch.destroy();scene.destroy({children:true});}
+  assert.equal(held.size,0);assert.equal(released.length,requests.length);
+});
+
+test('preview loads completing after walking, rapid reopening or disposal keep exactly the desired leases',async()=>{
+  for(const outcome of ['walk','reopen','dispose']){
+    const scene=new Container(),jobs=[],held=new Map();let released=0;
+    const arch=createArchipelago({renderer:{generateTexture:()=>RenderTexture.create({width:16,height:16})}},scene,scene,mapFor('home'));
+    const pending=arch.loadPreviews(src=>new Promise(resolve=>jobs.push(()=>{
+      const t=new Texture({source:new TextureSource({width:16,height:16})});held.set(src,t);resolve(t);
+    })),src=>{held.get(src).destroy(true);held.delete(src);released++;});
+    arch.setPreviewActive(false);
+    if(outcome==='reopen')arch.setPreviewActive(true);
+    if(outcome==='dispose')arch.destroy();
+    jobs.forEach(f=>f());await pending;
+    assert.equal(held.size,outcome==='reopen'?jobs.length:0);
+    assert.equal(released,outcome==='reopen'?0:jobs.length);
+    assert.equal(arch.globeTextureOf('home')!==Texture.EMPTY,outcome==='reopen');
+    if(outcome!=='dispose')arch.destroy();
+    assert.equal(held.size,0);scene.destroy({children:true});
+  }
+});
 
 test('opaque live snapshots never supply the globe atlas, including before previews finish loading',async()=>{
  const scene=new Container();
