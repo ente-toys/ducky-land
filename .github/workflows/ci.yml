@@ -1,18 +1,16 @@
-name: Deploy Ducky Land
+name: Ducky Land CI
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
 permissions:
   contents: read
 
-concurrency:
-  group: ducky-land-production
-  cancel-in-progress: false
-
 jobs:
-  deploy:
+  test-and-build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -37,14 +35,3 @@ jobs:
           done
           npm test
       - run: npm run build
-      - name: Deploy to Cloudflare
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          if [[ -z "$CLOUDFLARE_ACCOUNT_ID" || -z "$CLOUDFLARE_API_TOKEN" ]]; then
-            echo '::error::Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN in GitHub Actions settings.'
-            exit 1
-          fi
-          npx --yes wrangler@4.156.2 deploy --config worker/wrangler.jsonc --env=""
-          npx --yes wrangler@4.156.2 pages deploy dist --project-name ducky-land --branch main
