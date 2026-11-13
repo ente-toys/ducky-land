@@ -13,7 +13,7 @@ globalThis.Response=class extends NativeResponse {
 };
 globalThis.WebSocketPair=class {constructor(){this[0]=fakeSocket();this[1]=fakeSocket();}};
 
-for(const islandId of ['isle-230','isle-93','isle-56','isle-163'])test(`${islandId}: walking and sailing saves, hibernated players and viewers return to Home`,async()=>{
+for(const islandId of ['isle-230','isle-93','isle-56','isle-163','isle-170','isle-176'])test(`${islandId}: walking and sailing saves, hibernated players and viewers return to Home`,async()=>{
   const room=await makeRoom(),now=Date.now(),map=mapOf('home');
   room.sql.exec('INSERT INTO sessions VALUES(?,?,?,?,?,?)','fixture','fixture','fixture',now+86400000,1,'fixture');
   const check=actor=>{
@@ -36,5 +36,12 @@ for(const islandId of ['isle-230','isle-93','isle-56','isle-163'])test(`${island
     check(restored.connections.get(player).actor);
     assert.equal(restored.connections.get(player).islandId,'home');
     assert.equal(restored.connections.get(viewer).islandId,'home');
+    room.sql.exec('INSERT OR REPLACE INTO last_locations VALUES(?,?)','fixture',JSON.stringify(pose));
+    room.join(new Request('https://island.example/api/room?play=1',{headers:{Upgrade:'websocket','X-Session-Digest':'fixture'}}),now);
+    const returning=[...room.connections.values()].find(i=>i.actor);
+    assert.equal(returning.actor.islandId,'home');
+    assert.equal(returning.actor.mode,'walking');
+    assert.deepEqual([returning.actor.x,returning.actor.y],map.world.zones.plaza.spawn);
+    room.connections.clear();
   }
 });

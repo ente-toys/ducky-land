@@ -3,15 +3,13 @@ import world from '../../assets/world/world.json' with {type: 'json'};
 import READY from './delivered-themes.js';
 
 const W = 5800, H = 4400;
-export const FINISHED_THEMES = ['sunflower', 'pink', 'library', 'community', 'fair', 'cathedral', 'bog', 'snow'];
+export const FINISHED_THEMES = ['sunflower', 'pink', 'library', 'community', 'bog', 'snow'];
 export const TEST_THEMES = FINISHED_THEMES.slice(0, 3);
 export const THEMED_ISLANDS = [
   ['blossom', 'sunflower', 'Sunbob Fields', 0xf2c53d],
   ['sunset', 'pink', 'Rosybutton Bay', 0xf29bb7],
   ['isle-251', 'library', 'Pagepond', 0xd9b578],
   ['isle-250', 'community', 'Campfire Commons', 0xb98cf0],
-  ['isle-170', 'fair', 'Waddlewish Fair', 0xf29bb7],
-  ['isle-176', 'cathedral', 'Bellovo Piazza', 0xd9b578],
   ['isle-249', 'bog', 'Booquack Bog', 0xb98cf0],
   ['isle-55', 'snow', 'Iceland', 0x9fd4ff],
 ];
@@ -19,8 +17,7 @@ export const sizeOfTheme = theme => {const w = theme && theme !== 'home' ? READY
 export const ISLAND_COUNT = 1 + FINISHED_THEMES.length;
 
 const ANCHORS = [
-  [60, 28], [-140, -22], [105, -23], [-85, 29], [164, 24],
-  [-57, -24], [0, -90], [0, 90],
+  [60, 28], [-140, -22], [105, -23], [-85, 29], [0, -90], [0, 90],
 ];
 const RAD=Math.PI/180;
 export const SPHERE_CIRCUMFERENCE=74000;

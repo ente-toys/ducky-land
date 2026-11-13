@@ -12,7 +12,7 @@ import {BOG_ISLAND,KARMA_REQUIRED,bogLandingNotice} from '../src/features/bog-co
 import {LiveBogRoom} from '../worker/bog-room.js';
 import {connectBog} from '../server/pages-auth.js';
 
-const bog=mapOf(BOG_ISLAND),from='isle-176';
+const bog=mapOf(BOG_ISLAND),from='isle-251';
 function aboard(room,n,islandId,point){
  const p=addPlayer(room,n,{islandId,...point,mode:'sailing'});
  const boat=room.boats.find(b=>b.islandId===islandId&&!b.occupant);
@@ -25,11 +25,11 @@ function balance(room,player,value){
  room.karma.balances.delete(player.account);
 }
 
-test('Bog uses its approved map at its saved polar slot, with the same afloat and walkable harbour contract as Pagepond/Bellovo',()=>{
+test('Bog uses its approved map at its saved polar slot, with the same afloat and walkable harbour contract as Pagepond/Campfire',()=>{
  assert.equal(getPlayerKarma(),0);assert.equal(KARMA_REQUIRED,5);
  assert.equal(bog.id,'bog');assert.equal(bog.width,8400);assert.equal(bog.height,8200);
  assert.equal(WORLD_ISLANDS.find(i=>i.id===BOG_ISLAND).lat,-Math.PI/2);
- for(const id of [BOG_ISLAND,'isle-176','isle-251']){
+ for(const id of [BOG_ISLAND,'isle-250','isle-251']){
   const m=mapOf(id),n=m.nav();assert.ok(n.walkable(m.HARBOR.land.x,m.HARBOR.land.y));
   assert.ok(n.route(m.spawn.x,m.spawn.y,m.HARBOR.land.x,m.HARBOR.land.y).length);
   assert.ok(canSail(m.HARBOR.water.x,m.HARBOR.water.y,id));assert.ok(m.boatSpots().length>=3);

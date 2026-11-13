@@ -30,7 +30,7 @@ export function animatePieces(records, seconds, reduced = false) {
   }
 }
 
-export async function attachCentreMotion(art, {Graphics,Container}, objects) {
+export async function attachCentreMotion(art, objects) {
   const textureViews=[];
   if(art.id==='pink' && !art.props.some(p=>p.centrePiece?.id==='dancer-stand')) {
     const dancer=art.props.find(p=>p.centrePiece?.id==='dancer' && p.src?.endsWith('centre/dancer.svg'));
@@ -57,14 +57,9 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
   const records=art.props.filter(p=>p.centrePiece?.animate && !['pour','fire'].includes(p.centrePiece.animate.kind)
     && !(art.id==='library' && p.centrePiece.animate.kind==='jet'))
     .map(p=>({piece:p.centrePiece,sprite:p.sprite,flip:p.flip}));
-  let fire=null,water=null,pond=null;
+  let fire=null,pond=null;
   if(art.id==='community') {
     fire=(await import('./centre-motion/community.js')).updateCommunityCentre;
-  }
-  if(art.id==='fair' && art.props.some(p=>p.id==='fair-centre-water')) {
-    water=(await import('./centre-motion/fair.js')).createFairWater({Graphics,Container},art.props,objects);
-    water.root.visible=false;
-    water.root.themeArt=art.id;art.groups.push(water.root);
   }
   if(art.id==='library') {
     pond=(await import('./centre-motion/library.js')).createLibraryFountain(art,objects);
@@ -73,7 +68,7 @@ export async function attachCentreMotion(art, {Graphics,Container}, objects) {
       if(root.parent===objects)art.groups.push(root);
     }
   }
-  art.updateCentre=(t,reduced)=>{animatePieces(records,t,reduced);fire?.(art,t,reduced);water?.update(t,reduced,art.ground.visible);pond?.update(t,reduced,art.ground.visible);};
+  art.updateCentre=(t,reduced)=>{animatePieces(records,t,reduced);fire?.(art,t,reduced);pond?.update(t,reduced,art.ground.visible);};
   const destroy=art.destroy.bind(art);
-  art.destroy=()=>{water?.destroy();pond?.destroy();destroy();textureViews.forEach(t=>t.destroy(false));};
+  art.destroy=()=>{pond?.destroy();destroy();textureViews.forEach(t=>t.destroy(false));};
 }

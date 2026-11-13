@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {Container, Graphics, Sprite, Texture} from 'pixi.js';
+import {Container, Sprite, Texture} from 'pixi.js';
 import {attachCentreMotion} from '../src/rendering/pixi/environment/centre-motion.js';
 import {libraryFountainLayout} from '../src/rendering/pixi/environment/centre-motion/library.js';
 import {fountainPoint, createFountainWater} from '../src/rendering/pixi/environment/fountain.js';
@@ -33,7 +33,7 @@ test('all Pagepond fountain jets reuse Home flow with fixed mouths, landings and
   assert.ok(Math.abs(layout.origin.x - 2412) < 1e-9);
   assert.ok(Math.abs(layout.origin.y - 2566) < 1e-9);
   const upright = trackUpright([[objects]], TILT);
-  await attachCentreMotion(art, {Graphics, Container}, objects);
+  await attachCentreMotion(art, objects);
   upright.update(); art.updateCentre(.3, false);
   const roots = art.groups.slice(1);
   assert.equal(roots.length, 4);
@@ -58,7 +58,7 @@ test('all Pagepond fountain jets reuse Home flow with fixed mouths, landings and
 
 test('Pagepond reduced motion restores still SVG jets, clears spray, hides with the island and releases every FX root', async () => {
   const {art, objects} = fixture();
-  await attachCentreMotion(art, {Graphics, Container}, objects);
+  await attachCentreMotion(art, objects);
   const roots = art.groups.slice(1), jets = art.props.filter(p => p.centrePiece.animate?.kind === 'jet');
   art.updateCentre(.2, false); art.updateCentre(.3, true);
   const still = roots.map(drawing);

@@ -40,7 +40,6 @@ import {isletWalks} from '../../world/islet-walk.js';
 import {reframeIslet,isletLandingFrame} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from '../../world/island-maps.js';
 import {loadThemeArt} from './art/theme-art.js';
-import {benchSeatAt} from '../../gameplay/bench-seat.js';
 import {telescopeNear,telescopePeerAt} from './telescope.js';
 import {setSailingHarbor} from './sailing-fx.js';
 import {createButterfly,butterflyPose} from './environment/butterflies.js';
@@ -928,8 +927,7 @@ export class PixiIsland {
         ripples.push({sprite: ripple, phase, x: ripple.x, y: ripple.y});
       }
     });
-    if (art.autumnLeaves) this.air.addChild(art.autumnLeaves.layer);
-    const leaves=(art.autumnLeaves ? [] : art.props.filter(p => /tree/i.test(p.name)).slice(0, 60)).map((tree, i) => {
+    const leaves=art.props.filter(p => /tree/i.test(p.name)).slice(0, 60).map((tree, i) => {
       const leaf=new Graphics().ellipse(0, 0, 6, 2.5).fill(i % 3 ? PALETTE.grass : PALETTE.sandShade);
       this.air.addChild(leaf); extra.push(leaf);
       return {sprite: leaf, x: tree.x, y: tree.y-150, phase: i*1.93};
@@ -985,7 +983,6 @@ export class PixiIsland {
     loadThemeArt(map, {acquire, release, groundPool:this.groundPool, tilt:TILT}).then(async art => {
       pendingArt = art;
       if (this.disposed) {art.destroy(); return;}
-      for (const fx of art.fountainWaters??[]) this.objects.addChild(fx.root);
       this.ground.addChild(art.ground); this.decks.addChild(art.decks); this.contactShadows.addChild(art.shadows); this.overDecks.addChild(art.overLayer);
       if (art.kiteLayer) {
         this.objects.addChild(art.kiteLayer);
@@ -993,7 +990,7 @@ export class PixiIsland {
       }
       for (const p of art.props) (p.deck ? this.decks : this.objects).addChild(p.sprite);
       art.icelandLife?.current?.mount(this.objects);
-      await attachCentreMotion(art, {Graphics, Container}, this.objects);
+      await attachCentreMotion(art, this.objects);
       if (this.disposed) {art.destroy(); return;}
       this.plantReactions.register(mapId,art.props,map.walk.obstacles,map.art.slice(0,map.art.lastIndexOf('/')+1));
       this.buildMapAmbience(mapId, art);
@@ -1436,7 +1433,6 @@ export class PixiIsland {
       }
     });
     for (const art of this.arts.values()) if (art.ready) art.updateCentre?.(t, reduced);
-    for (const [id, art] of this.arts) if (art.ready) art.autumnLeaves?.update(t, reduced, visible, {x:this.camera.x,y:this.camera.y,zoom:this.camera.zoom,shown:id===this.artShown&&flatVisible});
     if (homeShown) this.props.forEach((prop, i) => {
       prop.sprite.visible = visible(prop.x, prop.y, Math.max(prop.width, prop.height) * prop.scale);
       if(prop.shadow)prop.shadow.visible=prop.sprite.visible;
@@ -1453,18 +1449,16 @@ export class PixiIsland {
       const duck = this.localDucks[i];
       const x = duck.previousX + (duck.x-duck.previousX)*alpha;
       const y = duck.previousY + (duck.y-duck.previousY)*alpha;
-      const seat = !homeShown && duck.player ? benchSeatAt(this.artProps(this.artShown), {...duck,x,y}) : null;
-      const peer = !seat && duck.player ? telescopePeerAt(this.artProps(this.artShown), {...duck,x,y}) : null;
+      const peer = duck.player ? telescopePeerAt(this.artProps(this.artShown), {...duck,x,y}) : null;
       const hop = jumpPose(renderJumpLeft(duck.jumpLeft, this.accumulator), reduced, {turn: duck.turn, moving: duck.travel > 20});
       rig.root.position.set(deckX(x,y,this.arches), deckY(x, y, this.arches) - hop.lift - (duck.player ? this.arrivalLift(now) : 0));
       rig.root.zIndex = y;
-      if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       if (peer) {rig.root.position.set(peer.x,peer.y);rig.root.zIndex=peer.y;}
       rig.root.visible = (homeShown || duck.player) && visible(x, y, 200);
       if (duck.player) this.plantReactions?.track(duck,x,y,rig.root.visible && !(duck.jumpLeft>0));
       rig.trackSnow?.(t, (homeShown || duck.player) && !this.interior?.active ? this.artShown : null,
         duck.action, duck.travel, reduced, duck.emoteVersion, duck.jumpLeft > 0);
-      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, ice:duck.ice, speed: duck.travel, turn: seat?.turn ?? peer?.turn ?? duck.turn, seated:Boolean(seat), time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
+      if (flatVisible && rig.root.visible) rig.update(dt, {action: duck.action, ice:duck.ice, speed: duck.travel, turn: peer?.turn ?? duck.turn, time: t, reducedMotion: reduced, emoteVersion: duck.emoteVersion, persistentSleep: duck.sleeping, jump: hop});
       if (duck.player) this.rinkTrails?.track(duck,x,y,duck.travel,rig.root.visible&&!(duck.jumpLeft>0));
       if (duck.player) {rig.showRing?.(hop.phase !== 'air'); this.dust?.track(duck, {x:deckX(x,y,this.arches), y: deckY(x, y, this.arches), z: y, jumpLeft: duck.jumpLeft, travel: duck.travel, turn: duck.turn, reduced, dt});}
       if (homeShown) this.bumpSleeper(duck, rig, player);
@@ -1522,7 +1516,6 @@ export class PixiIsland {
       sprite.position.set(2820+Math.sin(i*2.4)*65*phase, 2260-100*Math.sin(phase*Math.PI));
       sprite.alpha = Math.sin(phase*Math.PI)*.7;
     });
-    for (const [id, art] of this.arts) for (const fx of art.fountainWaters??[]) fx.update(t,reduced,flatVisible&&id===this.artShown&&visible(fx.x,fx.y,650));
     this.fountainWater?.update(t, reduced, flatVisible && homeShown && this.fountainWater && visible(this.fountainWater.root.x + 250, this.fountainWater.root.y + 240, 400));
     this.splashes.forEach(({sprite,phase})=>{const age=(t*.7+phase)%1;sprite.visible=!reduced;sprite.scale.set(.4+age*1.3,.5+age*.9);sprite.alpha=Math.max(0,1-age*2)*.6;});
     this.marker.visible = this.markerUntil > t;
@@ -1669,8 +1662,7 @@ export class PixiIsland {
           .finally(() => {entry.outfitLoading = false;});
       }
       const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
-      const seat = this.artShown==='cathedral' ? benchSeatAt(this.artProps(this.artShown), {...pose,x,y,action,travel}) : null;
-      const peer = !seat ? telescopePeerAt(scopeProps, {...pose,x,y,action,travel}) : null;
+      const peer = telescopePeerAt(scopeProps, {...pose,x,y,action,travel});
       if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);
       }
@@ -1688,7 +1680,6 @@ export class PixiIsland {
       rig.showRing?.(look.deck && pose.mode !== 'sailing' && hop?.phase !== 'air');
       if (look.deck && pose.mode !== 'sailing') this.dust?.track(entry, {x:deckX(look.x,look.y,this.arches), y:deckY(look.x,look.y,this.arches), z:look.z ?? look.y, jumpLeft:pose.jumpLeft, travel:look.speed, turn:look.turn, reduced:reducedMotion, dt});
       rig.root.zIndex = look.z ?? look.y;
-      if (seat) {rig.root.position.set(seat.x,seat.y-seat.lift);rig.root.zIndex=seat.z;}
       if (peer) {rig.root.position.set(peer.x,peer.y);rig.root.zIndex=peer.y;}
       rig.root.visible = visible(look.x,look.y,200);
       this.plantReactions?.track(entry,x,y,rig.root.visible && look.deck && pose.mode!=='sailing' && !(pose.jumpLeft>0));
@@ -1696,7 +1687,7 @@ export class PixiIsland {
       rig.trackSnow?.(time, !this.interior?.active && pose.mode !== 'sailing' ? this.artShown : null,
         action, travel, reducedMotion, emoteVersion, snowMoved || pose.jumpLeft > 0);
       entry.snowX = x; entry.snowY = y;
-      if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:seat?.turn ?? peer?.turn ?? look.turn, seated:Boolean(seat), time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:peer?.turn ?? look.turn, time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
       this.rinkTrails?.track(entry,x,y,travel,rig.root.visible&&look.deck&&pose.mode!=='sailing'&&!(pose.jumpLeft>0));
       if (pose.mode === 'sailing') sailers.push(look);
     }

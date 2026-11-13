@@ -2,7 +2,7 @@ import sites from './karma-sites.json' with {type:'json'};
 
 export const KARMA_ACTIVE=100;
 export const KARMA_RADIUS=65;
-export const KARMA_PER_ISLAND=13;
+export const KARMA_PER_ISLAND=15;
 export const KARMA_PER_ISLET=3;
 export const karmaCap=region=>region.startsWith('sea-')?KARMA_PER_ISLET:KARMA_PER_ISLAND;
 export const KARMA_RESPAWN_MIN=30_000;

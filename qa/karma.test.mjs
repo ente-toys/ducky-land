@@ -8,7 +8,7 @@ import {mapOf} from '../src/world/island-maps.js';
 test('100 unique shared feathers cover all safe islands and islets; no Bog farming',()=>{
  const pool=new KarmaPool(null,seeded()),visible=pool.slots.map(s=>pool.sites.get(s.siteId));
  assert.equal(pool.slots.length,KARMA_ACTIVE);assert.equal(new Set(pool.slots.map(s=>s.siteId)).size,KARMA_ACTIVE);
- assert.equal(new Set(visible.filter(s=>!s.region.startsWith('sea-')).map(s=>s.islandId)).size,8);
+ assert.equal(new Set(visible.filter(s=>!s.region.startsWith('sea-')).map(s=>s.islandId)).size,6);
  assert.ok(visible.every(s=>s.islandId!=='isle-249'||s.region.startsWith('sea-')));
 });
 test('all authored pickup sites are on navigable ground, clear of props and water',()=>{
@@ -38,14 +38,14 @@ test('real room awards once to one account, persists balance, and publishes shar
  room.karma.balances.clear();assert.equal(room.karma.balance(a.account),1,'reload reads persisted account balance');
 });
 
-test('100 shared pickups span every landmass, at most thirteen per island and three per islet; respawns travel elsewhere',()=>{
+test('100 shared pickups span every landmass, at most fifteen per island and three per islet; respawns travel elsewhere',()=>{
  const pool=new KarmaPool(null,seeded(33));
  const check=()=>{
   const counts=new Map();for(const slot of pool.slots){const region=pool.sites.get(slot.siteId).region;counts.set(region,(counts.get(region)??0)+1);}
   assert.equal(pool.slots.length,KARMA_ACTIVE);assert.equal(new Set(pool.slots.map(s=>s.siteId)).size,KARMA_ACTIVE);
   assert([...counts.entries()].every(([region,n])=>n<=karmaCap(region)));return counts;
  };
- assert.equal(check().size,15);
+ assert.equal(check().size,12);
  for(let n=0;n<300;n++){
   const slot=pool.slots[n%KARMA_ACTIVE],from=pool.sites.get(slot.siteId),now=1e6+n*60001;
   pool.refresh(now);assert(pool.claim({...from,mode:'walking',jumpLeft:0},now));

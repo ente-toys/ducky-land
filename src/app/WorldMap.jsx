@@ -10,7 +10,7 @@ const height = NEARBY_MAP_HEIGHT * scale;
 // A minimal map: each island is its exact coastline in its real ground colour (sampled from its ground art), with a
 // sand rim, its rivers and ponds cut out in sea blue, and a dock dot. No island pictures are loaded for it.
 const GROUND = {home:'#93b72f', sunflower:'#98b933', pink:'#8fc63c', library:'#93b730', community:'#93b72f',
-  fair:'#9cc63e', cathedral:'#f0dc8e', bog:'#815984', snow:'#f7f5fe'};
+  bog:'#815984', snow:'#f7f5fe'};
 const SEA = '#6ec9de', SAND = '#f1e08f', BOAT = '/pixi-art/boat/spin/boat-00.svg';
 const shapes = new Map();
 function islandShape(id) {

@@ -5,13 +5,9 @@ import {Container, Graphics, Sprite} from 'pixi.js';
 import {rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
 import {createRasterLoader} from './theme-art-stream.js';
 import {createIcelandRasterLoader,icelandPieceTile,icelandWarmupTiles} from './iceland-art-stream.js';
-import {fairGroundTiles,fairTiles,FAIR_GROUND_SOURCE,FAIR_ART_BUDGET_BYTES,FAIR_ART_UTILIZATION,FAIR_KITE_RESOLUTION} from './fair-raster.js';
-import {createFairGroundLoader,createFairRasterLoader} from './fair-art-stream.js';
 import {createGroundPool} from './ground-stream.js';
 
 import {loadPondDuckies} from '../environment/pond-duckies.js';
-import {createFountainWater} from '../environment/fountain.js';
-import {createAutumnLeaves} from '../environment/autumn-leaves.js';
 import {KITE_ASSETS, createHomeKites} from '../environment/home-kites.js';
 import {createIcelandLifeLifecycle} from '../environment/iceland-life.js';
 
@@ -33,11 +29,10 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [];
   const floating = manifest.floating ?? [];
   const iceland=map.id==='snow'&&Boolean(manifest.icelandFinal);
-  const fair=map.id==='fair',crisp=fair||manifest.raster?.enabled===true;
-  const makeTiles=fair?fairTiles:rasterTiles;
-  const raster=iceland?icelandRasterLoaderFactory():crisp?(fair?createFairRasterLoader():rasterLoaderFactory()):null;
-  const fairGroundRaster=fair ? createFairGroundLoader() : null;
-  const rasterPool=crisp||iceland?createGroundPool({...raster,budget:fair?FAIR_ART_BUDGET_BYTES:RASTER_ART_BUDGET_BYTES,utilization:fair?FAIR_ART_UTILIZATION:RASTER_ART_UTILIZATION}):null;
+  const crisp=manifest.raster?.enabled===true;
+  const makeTiles=rasterTiles;
+  const raster=iceland?icelandRasterLoaderFactory():crisp?rasterLoaderFactory():null;
+  const rasterPool=crisp||iceland?createGroundPool({...raster,budget:RASTER_ART_BUDGET_BYTES,utilization:RASTER_ART_UTILIZATION}):null;
   const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp||iceland?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
     ...flats.filter(p=>(!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
@@ -45,9 +40,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const sources = entries.map(e => url(e.src));
   const resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
-  const kiteSource=src=>fair?src+'?fairRaster='+FAIR_KITE_RESOLUTION:src;
-  if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(kiteSource(src), fair?FAIR_KITE_RESOLUTION:2);
-  for (const src of manifest.autumn?.leaves ?? []) resolutions.set(url(src), crisp?3.625:2);
+  if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(src, 2);
   const uniqueSources = [...resolutions.keys()];
   const loaded=new Array(uniqueSources.length);let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
@@ -59,7 +52,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const failed = loaded.find(result => result.status === 'rejected');
   if (failed) {
     uniqueSources.forEach(src => release(src));
-    rasterPool?.destroy();raster?.destroy();fairGroundRaster?.destroy();
+    rasterPool?.destroy();raster?.destroy();
     throw failed.reason;
   }
   const bySource = new Map(uniqueSources.map((src, i) => [src, loaded[i].value]));
@@ -68,10 +61,8 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const ground = new Container({label: `Theme ${map.id} - ground`}), deckLayer = new Container({label: `Theme ${map.id} - decks`});
   const shadows = new Container({label: `Theme ${map.id} - shadows`});
   let k = 0;
-  const groundStream=crisp?groundPool.create(tiles.flatMap(p=>fair
-    ? fairGroundTiles(p,url(p.src),url(FAIR_GROUND_SOURCE))
-    : rasterTiles(p,url(p.src),undefined,RASTER_GROUND_TILE_SIZE).map(({localX,localY,...t})=>t)),
-  ground,undefined,fairGroundRaster??raster):groundPool.create(iceland?tiles.map(t=>({...t,priority:-1})):tiles,ground,url),groundStreams=[groundStream];
+  const groundStream=crisp?groundPool.create(tiles.flatMap(p=>rasterTiles(p,url(p.src),undefined,RASTER_GROUND_TILE_SIZE).map(({localX,localY,...t})=>t)),
+  ground,undefined,raster):groundPool.create(iceland?tiles.map(t=>({...t,priority:-1})):tiles,ground,url),groundStreams=[groundStream];
   const icelandSprite=(p,layer,anchor)=>{
     const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);
     groundStreams.push(rasterPool.create([icelandPieceTile(p,url(p.src),anchor)],node,undefined,raster));
@@ -83,7 +74,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   }
   const crispSprite=(p,layer,anchor)=>{
     const container=new Container();container.position.set(p.x,p.y);layer?.addChild(container);
-    const pool=!fair&&p.rasterPool==='ground'?groundPool:rasterPool;
+    const pool=p.rasterPool==='ground'?groundPool:rasterPool;
     groundStreams.push(pool.create(makeTiles(p,url(p.src),anchor).map(t=>({...t,priority:p.rasterPriority??(props.includes(p)?2:0)})),container,undefined,raster));
     return container;
   };
@@ -102,7 +93,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   };
   let terrain;
   try {terrain=await acquire(`/pixi-art/globe/${map.id}-ground.svg`,1);}
-  catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();fairGroundRaster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
+  catch(error){groundStream.destroy();rasterPool?.destroy();raster?.destroy();uniqueSources.forEach(src=>release(src));release(`/pixi-art/globe/${map.id}-ground.svg`);ground.destroy({children:true});deckLayer.destroy();shadows.destroy();throw error;}
   const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
   const overLayer = new Container({label: `Theme ${map.id} - bridges over boats`}), bridgeOver = [];
   for (const deck of decks) {
@@ -151,12 +142,6 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     const centrePiece = typeof prop.centrePiece === 'object' ? prop.centrePiece : centre.pieces.find(p => prop.id?.endsWith(p.id) && prop.src.includes('centre/'));
     return {...prop, centrePiece, id: prop.id ?? `${map.id}-${i}`, name, scale, sprite, shadow, deck: prop.deck ?? /bridge|deck/i.test(name), wind: prop.wind ?? (!prop.src.includes('centre/') && WIND.test(name))};
   });
-  const fountainWaters = standing.filter(p=>p.fountainWater).map(p=>{
-    const layer=new Container({label:'Theme fountain water'});
-    const fx=createFountainWater(p,layer,null,p.fountainWater);
-    fx.root.zIndex=(p.sortY??p.y)+.5;
-    return {...fx,layer,x:p.x,y:p.y};
-  });
   const floatLayer = new Container({label: `Theme ${map.id} - floating`});
   const floats = floating.map((item, i) => {
     const anchor = item.anchor ?? {x: .5, y: .5};
@@ -167,14 +152,13 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     return {...item, phase: item.phase ?? i * 1.7, sprite};
   });
   const kiteLayer = manifest.kites?.length ? new Container({label: `Theme ${map.id} - kites`}) : null;
-  const kites = kiteLayer ? createHomeKites(kiteLayer, Object.fromEntries(KITE_ASSETS.map(src => [src, bySource.get(kiteSource(src))])), manifest.kites) : null;
-  const autumnLeaves = manifest.autumn ? createAutumnLeaves(props, manifest.autumn.leaves.map(src => bySource.get(url(src))), manifest.autumn) : null;
-  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : []), ...(autumnLeaves ? [autumnLeaves.layer] : []), ...fountainWaters.map(f=>f.root)];
+  const kites = kiteLayer ? createHomeKites(kiteLayer, Object.fromEntries(KITE_ASSETS.map(src => [src, bySource.get(src)])), manifest.kites) : null;
+  const groups = [ground, deckLayer, shadows, floatLayer, overLayer, ...(kiteLayer ? [kiteLayer] : [])];
   const icelandLife = createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt});
   for (const group of groups) group.visible = false;
   const result = {
     id: map.id, map, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
-    overLayer, bridgeOver, kiteLayer, kites, autumnLeaves, fountainWaters, icelandLife,
+    overLayer, bridgeOver, kiteLayer, kites, icelandLife,
     groups,
     destroy() {
       if (destroyed) return;
@@ -184,10 +168,8 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
       groundStreams.forEach(s=>s.destroy());
       rasterPool?.destroy();
       raster?.destroy();
-      fairGroundRaster?.destroy();
       release(`/pixi-art/globe/${map.id}-ground.svg`);
       for (const c of groups) if(!c.destroyed)c.destroy({children: true});
-      for (const f of fountainWaters) {if(!f.root.destroyed)f.root.destroy({children:true}); f.layer.destroy();}
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
     },

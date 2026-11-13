@@ -57,7 +57,7 @@ test('local and remote idle snow starts after four seconds, builds in 60-90s and
 test('only Iceland accumulates snow; reduced motion has a static light cap and no burst', () => {
   for (const sleeping of [false, true]) {
     const s = createSnowCoverState(42, sleeping);
-    for (const theme of ['home', 'fair', 'bog', 'sunflower', null]) {
+    for (const theme of ['home', 'library', 'bog', 'sunflower', null]) {
       updateSnowCover(s, 500, theme); assert.equal(s.stage, 0); assert.equal(s.active, false);
     }
     updateSnowCover(s, 0, 'snow', 0, 0, true);

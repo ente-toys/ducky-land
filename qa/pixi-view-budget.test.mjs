@@ -25,13 +25,13 @@ import {cameraGame} from './helpers/pixi-engine.mjs';
 test('native live copies retain Home and current theme and release old GPU art, including pending loads',()=>{
  const game=cameraGame();game.arts=new Map([['home',{ready:true}]]);const released=[];
  game.freeArt=id=>{released.push(id);game.arts.delete(id);};
- for(const id of ['sunflower','pink','library','community','fair','cathedral','bog','snow']){
+ for(const id of ['sunflower','pink','library','community','bog','snow']){
   game.artShown=id;game.arts.set(id,{ready:true});game.liveCopies();
   assert.deepEqual([...game.arts.keys()],['home',id]);assert.deepEqual([...game.wantedArts],['home',id]);
  }
- assert.equal(released.length,7);
+ assert.equal(released.length,5);
  game.arts.set('pending',{ready:false});game.artShown='home';game.liveCopies();
- assert.deepEqual([...game.wantedArts],['home']);assert.ok(game.arts.has('pending'),'loader owns pending disposal');assert.equal(released.length,8);
+ assert.deepEqual([...game.wantedArts],['home']);assert.ok(game.arts.has('pending'),'loader owns pending disposal');assert.equal(released.length,6);
 });
 
 test('native tick steps prediction before rendering, pauses when hidden, and delivers snow between simulation steps',t=>{

@@ -11,7 +11,7 @@ import {ISLETS} from '../src/world/islets.js';
 import {mapOf} from '../src/world/island-maps.js';
 
 test('neighbour meshes are rigid: true size, right angles, centre on the sphere',()=>{
- for(const [from,to]of [['home','isle-55'],['isle-55','home'],['sunset','isle-170'],['home','isle-251'],['home','isle-176']]){
+ for(const [from,to]of [['home','isle-55'],['isle-55','home'],['sunset','isle-251'],['home','isle-251'],['home','isle-250']]){
   const m=mapOf(to),geometry=patchGeometry(from,to,{...m.origin,width:m.width,height:m.height}),p=geometry.positions;
   const P=k=>({x:p[k*2],y:p[k*2+1]}),[a,b,c,d]=[0,1,2,3].map(P),len=(u,v)=>Math.hypot(u.x-v.x,u.y-v.y);
   assert.ok(Math.abs(len(a,b)-m.width)<.05&&Math.abs(len(d,c)-m.width)<.05,'width kept');
@@ -26,7 +26,7 @@ test('neighbour meshes are rigid: true size, right angles, centre on the sphere'
  }
 });
 test('rigid placements undo each other both ways and match the chart rotation',()=>{
- for(const [a,b]of [['home','isle-55'],['sunset','isle-170'],['isle-249','isle-176']]){
+ for(const [a,b]of [['home','isle-55'],['sunset','isle-251'],['isle-249','isle-250']]){
   const mb=mapOf(b),p={x:mb.cx+900,y:mb.cy-700},there=placeRigid(a,b,p),back=unplaceRigid(a,b,there),round=placeRigid(b,a,there);
   assert.ok(Math.hypot(back.x-p.x,back.y-p.y)<1e-6);
   assert.ok(Math.hypot(round.x-p.x,round.y-p.y)<1e-3,'b in a, then a in b, is the identity');
