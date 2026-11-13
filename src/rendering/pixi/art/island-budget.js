@@ -7,6 +7,9 @@ export const SHARED_TEXTURE_ALLOWANCE = 100 * 1048576;
 export const ISLAND_ART_BUDGET = 250 * 1048576;
 export const GROUND_DENSITY = .75;
 export const PROP_DENSITY = .9;
+export const MIN_PROP_DENSITY = .5;
+export const MIN_GROUND_DENSITY = .35;
+let warnedOverBudget=false;
 export function planIslandArt(entries, {dpr=2, defaultZoom=.65, maxZoom=1.8, budget=ISLAND_ART_BUDGET, sourceSizes=sizes}={}) {
   const sources=new Map();
   for(const entry of entries) {
@@ -18,7 +21,7 @@ export function planIslandArt(entries, {dpr=2, defaultZoom=.65, maxZoom=1.8, bud
     const held=sources.get(entry.src);
     sources.set(entry.src,{needed:Math.max(held?.needed??0,needed),desired:Math.max(held?.desired??0,desired),ground:(held?.ground??true)&&ground,mipmaps:(held?.mipmaps??false)||entry.mipmaps!==false});
   }
-  const resolutions=(groundDensity,propScale=0)=>new Map([...sources].map(([src,v])=>[src,!v.ground?v.needed*PROP_DENSITY+(v.desired-v.needed*PROP_DENSITY)*propScale:v.needed*groundDensity]));
+  const resolutions=(groundDensity,propScale=0,propDensity=PROP_DENSITY)=>new Map([...sources].map(([src,v])=>[src,!v.ground?v.needed*propDensity+(v.desired-v.needed*propDensity)*propScale:v.needed*groundDensity]));
   const bytes=rs=>[...sources].reduce((sum,[src,v])=>{
     const f=textureFootprint(src,rs.get(src),v.mipmaps?0:2,sourceSizes);
     return sum+f.width*f.height*4*(v.mipmaps?4/3:1);
@@ -29,10 +32,19 @@ export function planIslandArt(entries, {dpr=2, defaultZoom=.65, maxZoom=1.8, bud
     for(let i=0;i<48;i++){const mid=(lo+hi)/2;if(bytes(make(mid))<=budget)lo=mid;else hi=mid;}
     return lo;
   };
-  if(bytes(resolutions(0))>budget)throw Error('Island props exceed texture allowance at 0.9 density');
-  const groundScale=fit(f=>resolutions(GROUND_DENSITY*f));
-  const groundDensity=GROUND_DENSITY*groundScale;
-  const artScale=groundScale===1?fit(f=>resolutions(groundDensity,f)):0;
-  const fixed=resolutions(groundDensity,artScale);
-  return {resolutions:fixed,bytes:bytes(fixed),budget,artScale,groundScale,groundDensity,defaultZoom,dpr};
+  // Reserve the live ground floor before fitting props. Both densities are
+  // uniform across the island, including sources shared by multiple pieces.
+  const propFit=fit(f=>resolutions(MIN_GROUND_DENSITY,0,MIN_PROP_DENSITY+(PROP_DENSITY-MIN_PROP_DENSITY)*f));
+  const propDensity=MIN_PROP_DENSITY+(PROP_DENSITY-MIN_PROP_DENSITY)*propFit;
+  const groundFit=fit(f=>resolutions(MIN_GROUND_DENSITY+(GROUND_DENSITY-MIN_GROUND_DENSITY)*f,0,propDensity));
+  const groundDensity=MIN_GROUND_DENSITY+(GROUND_DENSITY-MIN_GROUND_DENSITY)*groundFit;
+  const groundScale=groundDensity/GROUND_DENSITY;
+  const artScale=groundFit===1?fit(f=>resolutions(groundDensity,f,propDensity)):0;
+  const fixed=resolutions(groundDensity,artScale,propDensity),total=bytes(fixed);
+  const overBudget=total>budget;
+  if(overBudget&&!warnedOverBudget){
+    warnedOverBudget=true;
+    console.warn('Island art exceeds texture allowance at minimum densities; keeping the island visible');
+  }
+  return {resolutions:fixed,bytes:total,budget,overBudget,propDensity,artScale,groundScale,groundDensity,defaultZoom,dpr};
 }

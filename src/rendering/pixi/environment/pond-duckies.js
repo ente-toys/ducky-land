@@ -1,3 +1,4 @@
+import {acquireArt, artPlaceholder} from '../art/art-recovery.js';
 import {Container, Graphics, Sprite} from 'pixi.js';
 import data from './pond-regions.json' with {type:'json'};
 import {samplePondDucky} from './pond-motion.js';
@@ -43,9 +44,9 @@ export async function loadPondDuckies(mapId,{tilt=1,acquire,release}={}){
  const heights={f4_ring:865,g1_donut:779,g4_paperboat:677,g6_lounger:869,g3_snorkel_c:544,g2_padhat:441,f6_peek:400};
  const results=await Promise.allSettled(sources.map((src,i)=>{
   const name=names[i],height=data.assets.find(d=>d.name===name).height;
-  return acquire(src,Math.min(1,height*3.6/heights[name]));
+  return acquireArt(acquire,release,src,Math.min(1,height*3.6/heights[name]));
  }));
- if(results.some(r=>r.status==='rejected')){sources.forEach(release);root.destroy({children:true});throw results.find(r=>r.status==='rejected').reason;}
+ for(const result of results)if(result.status==='rejected'){console.warn('Pond Ducky: accepting placeholder',result.reason);result.value=artPlaceholder();}
  const assets=new Map(names.map((n,i)=>[n,results[i].value])),entries=[];
  let destroyed=false;
  for(const pond of ponds)for(let index=0;index<pond.duckies.length;index++){

@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Assets, Container, DOMAdapter, ImageSource, Sprite, Texture} from 'pixi.js';
-import {PixiIsland} from './helpers/pixi-engine.mjs';
+import {PixiIsland,installBogEnvironment,BOG_MAP_ID,mapFor} from './helpers/pixi-engine.mjs';
+import {readFileSync} from 'node:fs';
 import {createGroundPool} from '../src/rendering/pixi/art/ground-stream.js';
 import {createWholeSVGLoader} from '../src/rendering/pixi/art/whole-svg-loader.js';
+import {finalTextureSource, isArtPlaceholder, ART_TIMEOUT_MS} from '../src/rendering/pixi/art/art-recovery.js';
 import {assertFinalTexture, uploadIsland} from '../src/rendering/pixi/art/island-preparation.js';
 
 const flush=()=>new Promise(setImmediate);
@@ -33,7 +35,7 @@ function assertReady(game,id,uploads,roots){
 
 // Exercise the real loader, pool and engine readiness methods. Only network,
 // image decoding, the raster canvas and the GPU are replaced; no browser/port.
-function fixture(t,kind,blocked){
+function fixture(t,kind,blocked,{prerenderManifest,themeManifest}={}){
   const old={load:Assets.load,unload:Assets.unload,fetch:globalThis.fetch,adapter:DOMAdapter.get()};
   const waiting=new Map(),requests=[],textures=new Map(),uploads=new Set();
   DOMAdapter.set({...old.adapter,createCanvas:(width,height)=>({width,height,getContext:()=>({drawImage(){}})})});
@@ -43,19 +45,19 @@ function fixture(t,kind,blocked){
     return {width:20,height:10,src:'',close(){}};
   };
   const loader=createWholeSVGLoader({canDecodeBitmap:()=>kind==='webp',
-    getManifest:async()=>new Proxy({}, {get:(_,src)=>({w:20,h:10,padding:2,tiers:[{scale:4,url:src+'.webp',width:80,height:40}]})}),
+    getManifest:async()=>prerenderManifest??new Proxy({}, {get:(_,src)=>({w:20,h:10,padding:2,tiers:[{scale:4,url:src+'.webp',width:80,height:40}]})}),
     queue:{run:job=>job(),raster:async job=>job()},fetchBlob:async src=>new Blob([src]),decode,
-    decodeBitmap:async(blob,options)=>{const image=await decode(blob);return {...image,width:options.resizeWidth,height:options.resizeHeight};}});
+    decodeBitmap:async(blob,options)=>{const image=blob instanceof Blob?await decode(blob):blob;return {...image,width:options.resizeWidth??options.crop[2],height:options.resizeHeight??options.crop[3]};}});
   Assets.load=({src,data})=>{
     requests.push(src);
     if(!textures.has(src))textures.set(src,loader.load(src,{src,data}));
     return textures.get(src);
   };
   Assets.unload=async src=>{const promise=textures.get(src);textures.delete(src);if(promise)loader.unload(await promise);};
-  globalThis.fetch=async src=>({ok:true,json:async()=>src.endsWith('art.json')?{
+  globalThis.fetch=async src=>({ok:true,json:async()=>src.endsWith('art.json')?(themeManifest??{
     ground:{tiles:[tile('ground-a.svg'),tile('ground-b.svg')]},
     decks:[tile('deck.svg')],props:[{...tile('prop.svg'),shadow:false}],floating:[tile('boat.svg')],
-  }:{pieces:[]}});
+  }):{pieces:[]}});
   const renderer={resolution:2,texture:{bindSource:source=>uploads.add(source)}};
   const pool=createGroundPool({acquire:(src,resolution)=>Assets.load({src,data:{resolution,groundPadding:2}}),release(){}});
   t.after(async()=>{
@@ -148,45 +150,78 @@ for(const kind of ['webp','svg']){
   });
 }
 
-test('readiness rejects EMPTY, cloned placeholders and destroyed textures in hidden island nodes',async()=>{
+test('readiness accepts EMPTY, cloned placeholders and destroyed textures after the deadline',async t=>{
+  const warnings=[],warn=console.warn;console.warn=(...args)=>warnings.push(args);t.after(()=>console.warn=warn);
   const placeholder=new Texture({source:Texture.EMPTY.source}),dead=finalTexture();dead.destroy(true);
   for(const texture of [Texture.EMPTY,placeholder,dead]){
     const root=new Container(),node=new Sprite(texture);node.visible=false;root.addChild(node);
-    await assert.rejects(uploadIsland({texture:{bindSource(){assert.fail('placeholder upload');}}},[root],
-      {requiredRoots:[root],yieldFrame:async()=>{}}),/not final/);
+    await uploadIsland({texture:{bindSource(){assert.fail('placeholder upload');}}},[root],
+      {requiredRoots:[root],yieldFrame:async()=>{},timeoutMs:20});
     root.destroy({children:true});
   }
   placeholder.destroy();
   for(const texture of [Texture.EMPTY,new Texture({source:Texture.EMPTY.source})]){
-    const pool=createGroundPool({acquire:async()=>texture,release(){}}),root=new Container();
+    let attempts=0;
+    const pool=createGroundPool({acquire:async()=>{attempts++;return texture;},release(){}}),root=new Container();
     const stream=pool.create([tile('/empty.svg')],root);
-    await assert.rejects(stream.prepare(),/not final/);assert(!stream.prepared);
+    await stream.prepare({timeoutMs:20});assert(stream.prepared);assert.equal(attempts,2);
+    assert(isArtPlaceholder(stream.entries[0].sprite.texture));
     pool.destroy();root.destroy();if(texture!==Texture.EMPTY)texture.destroy();
   }
+  assert.equal(warnings.length,5,'one warning per failed piece');
 });
 
-test('Home final gate cannot publish readiness with a placeholder prop',async()=>{
-  for(const texture of [Texture.EMPTY,new Texture({source:Texture.EMPTY.source})]){
-    const node=new Sprite(texture),ground=new Container(),game=Object.assign(Object.create(PixiIsland.prototype),{
-      scene:ground,homeGroundStream:{async prepare(){}},app:{renderer:{resolution:2,texture:{bindSource(){}}}},
-      arts:new Map([['home',{ready:false,groups:[ground]}]]),props:[{sprite:node}],homeKites:{entries:[]},
-    });
-    await assert.rejects(game.uploadHomeArt(),/not final/);
-    assert(!game.artReady('home'));assert.equal(game.arts.get('home').ready,false);
-    node.destroy();ground.destroy();if(texture!==Texture.EMPTY)texture.destroy();
-  }
+test('Home publishes readiness after a placeholder prop times out',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const node=new Sprite(Texture.EMPTY),ground=new Container(),game=Object.assign(Object.create(PixiIsland.prototype),{
+    scene:ground,homeGroundStream:{async prepare(){}},app:{renderer:{resolution:2,texture:{bindSource(){}}}},
+    arts:new Map([['home',{ready:false,groups:[ground]}]]),props:[{sprite:node}],homeKites:{entries:[]},
+  });
+  const preparing=game.uploadHomeArt();await flush();
+  assert(!game.artReady('home'));
+  t.mock.timers.tick(ART_TIMEOUT_MS-1);await flush();assert(!game.artReady('home'));
+  t.mock.timers.tick(1);await preparing;
+  assert.equal(game.artReady('home'),true);assert.equal(game.arts.get('home').ready,true);
+  node.destroy();ground.destroy();
 });
 
-test('themed engine cannot publish readiness with a placeholder prop',async t=>{
+test('themed engine reveals available pictures after a placeholder prop times out',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
   const f=fixture(t,'webp',()=>false),game=themeGame(f),load=Assets.load;
   const placeholder=new Texture({source:Texture.EMPTY.source});
-  Assets.load=asset=>asset.src.endsWith('/prop.svg')?Promise.resolve(placeholder):load(asset);
-  const warnings=[],warn=console.warn;console.warn=(message,error)=>warnings.push([message,error.message]);
-  t.after(()=>{console.warn=warn;});
-  await game.ensureArt('pink');
-  assert.equal(game.artReady('pink'),false);assert.equal(game.arts.get('pink').failed,true);
-  assert(warnings.some(([,message])=>message.includes('not final')));
+  let attempts=0;
+  Assets.load=asset=>asset.src.endsWith('/prop.svg')?(attempts++,Promise.resolve(placeholder)):load(asset);
+  const warnings=[],warn=console.warn;console.warn=(...args)=>warnings.push(args);t.after(()=>{console.warn=warn;});
+  const preparing=game.ensureArt('pink');await flush();
+  assert.equal(game.artReady('pink'),false);
+  t.mock.timers.tick(ART_TIMEOUT_MS);
+  for(let i=0;i<30;i++){await flush();t.mock.timers.tick(0);}
+  await preparing;
+  assert.equal(game.artReady('pink'),true);assert.equal(attempts,2);assert(warnings.length>=1);
   placeholder.destroy();game.scene.destroy({children:true});game.contactShadows.destroy({children:true});game.overDecks.destroy({children:true});
+});
+
+test('a ground piece that never resolves still reveals Home within the 4 second deadline',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const uploads=new Set(),ground=new Container(),scene=new Container();scene.addChild(ground);
+  let attempts=0,released=0;
+  const good=finalTexture();
+  const pool=createGroundPool({acquire:src=>src==='/stuck.svg'?(attempts++,new Promise(()=>{})):Promise.resolve(good),release(){released++;}});
+  const game=Object.assign(Object.create(PixiIsland.prototype),{scene,homeGround:ground,props:[],homeKites:{entries:[]},
+    arts:new Map([['home',{ready:false,groups:[ground]}]]),app:{renderer:{resolution:2,texture:{bindSource:s=>uploads.add(s)}}},
+    homeGroundStream:pool.create([tile('/good.svg'),tile('/stuck.svg')],ground)});
+  const preparing=game.uploadHomeArt();await flush();assert(!game.artReady('home'));
+  t.mock.timers.tick(ART_TIMEOUT_MS/2);await flush();assert.equal(attempts,2);assert(!game.artReady('home'));
+  t.mock.timers.tick(ART_TIMEOUT_MS/2);
+  for(let i=0;i<30;i++){await flush();t.mock.timers.tick(0);}
+  await preparing;
+  assert.equal(game.artReady('home'),true);assert(game.homeGroundStream.prepared);
+  assert(uploads.has(good.source));assert.equal(game.revealArtReady('home'),true);
+  assert(isArtPlaceholder(game.homeGroundStream.entries[1].sprite.texture));
+  game.artShown='home';game.globeT=0;game.mapSleepers=new Map();game.rigs=[];game.localDucks=[];game.liveRigs=new Map();
+  game.showArt('home');const restore=game.applyIslandReveal(0);restore();
+  assert.equal(ground.visible,true,'the whole-island reveal starts after degraded readiness');
+  pool.destroy();assert.equal(released,3,'retry and both final leases released exactly once');scene.destroy({children:true});good.destroy(true);
 });
 
 test('upload gate rechecks final sources after yields and warms replacements before returning',async()=>{
@@ -200,8 +235,8 @@ test('upload gate rechecks final sources after yields and warms replacements bef
   assert.deepEqual(replacements,[last.source]);
   const next=finalTexture();
   node.texture=next;
-  await assert.rejects(uploadIsland({texture:{bindSource(){}}},[node],
-    {requiredRoots:[node],yieldFrame:async()=>{node.texture=Texture.EMPTY;}}),/not final/);
+  await uploadIsland({texture:{bindSource(){}}},[node],
+    {requiredRoots:[node],timeoutMs:20,yieldFrame:async()=>{node.texture=Texture.EMPTY;}});
   node.destroy();next.destroy(true);last.destroy(true);
 });
 
@@ -218,4 +253,75 @@ test('pinning ground fences older camera requests and eviction cannot blank fina
   pool.update([]);assert.equal(stream.entries[0].sprite.texture,final);
   assert.deepEqual(released,['/handover.svg?groundScale=1']);
   pool.destroy();root.destroy();final.destroy(true);old.destroy(true);
+});
+
+
+test('registered bog-arena prepares and reveals through SVG when prerender manifest has no map',async t=>{
+  const installed=installBogEnvironment();t.after(()=>installed.restore());
+  const map=mapFor(BOG_MAP_ID),manifest=JSON.parse(readFileSync('public'+map.art));
+  const f=fixture(t,'webp',()=>false,{prerenderManifest:{},themeManifest:manifest}),game=themeGame(f);
+  game.artShown=BOG_MAP_ID;game.startupPrepared=false;game.rigs=[];game.localDucks=[];game.liveRigs=new Map();
+  await game.ensureArt(BOG_MAP_ID);
+  assert.equal(game.artReady(BOG_MAP_ID),true);
+  const art=game.arts.get(BOG_MAP_ID);
+  assert(art.groundStreams[0].entries.length>0);assert(art.props.length>0);
+  assert(f.requests.some(src=>src.includes('bog-arena')));
+  assert(f.requests.every(src=>!src.endsWith('.webp')),'missing build tiers use authored SVGs');
+  assert(Number.isFinite(art.artPlan.bytes));
+  const warnings=[],warn=console.warn;console.warn=(...args)=>warnings.push(args);t.after(()=>console.warn=warn);
+  t.mock.timers.enable({apis:['setTimeout']});
+  const startup=game.prepareStartupArt({steps:[['Bog audio',()=>Promise.reject(Error('audio unavailable'))]]});
+  await flush();assert.equal(game.startupPrepared,false);
+  t.mock.timers.tick(8000);
+  for(let i=0;i<20;i++){await flush();t.mock.timers.tick(0);}
+  await startup;
+  assert.equal(game.startupPrepared,true);assert(warnings.some(args=>args[0].includes('Bog audio')));
+  game.showArt=PixiIsland.prototype.showArt;
+  game.showArt(BOG_MAP_ID);game.applyIslandReveal(0)();
+  assert.equal(art.ground.visible,true,'Bog arena reveals despite rejected startup step');
+  game.freeArt(BOG_MAP_ID);game.scene.destroy({children:true});game.contactShadows.destroy();game.overDecks.destroy();
+});
+
+test('shown-map ensureArt retries a rejection once and then reveals available pieces',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const group=new Container(),game=Object.assign(Object.create(PixiIsland.prototype),{
+    artShown:BOG_MAP_ID,startupPrepared:true,arts:new Map([[BOG_MAP_ID,{ready:false,groups:[group]}]]),
+    rigs:[],localDucks:[],liveRigs:new Map(),mapSleepers:new Map(),props:[],globeT:0,
+  });
+  let attempts=0;game.ensureArt=async()=>{attempts++;throw Error('Bog decode failed');};
+  const preparing=game.ensureMapArt(BOG_MAP_ID);await flush();
+  assert.equal(attempts,2);assert.equal(game.revealArtReady(BOG_MAP_ID),false);
+  t.mock.timers.tick(8000);await preparing;
+  assert.equal(attempts,2);assert.equal(game.revealArtReady(BOG_MAP_ID),true);assert(group.visible);
+  group.destroy();
+});
+
+test('hard reveal deadline handles hung preparation and resets for the next shown map',t=>{
+  const old=globalThis.performance;let now=0;
+  globalThis.performance={now:()=>now};t.after(()=>globalThis.performance=old);
+  const group=new Container(),game=Object.assign(Object.create(PixiIsland.prototype),{
+    artShown:BOG_MAP_ID,startupPrepared:false,arts:new Map([[BOG_MAP_ID,{ready:false,groups:[group]}]]),
+    rigs:[],localDucks:[],liveRigs:new Map(),mapSleepers:new Map(),props:[],globeT:0,
+  });
+  const warnings=[],warn=console.warn;console.warn=(...args)=>warnings.push(args);t.after(()=>console.warn=warn);
+  group.visible=false;assert.equal(game.revealArtReady(BOG_MAP_ID),false);now=14999;
+  assert.equal(game.revealArtReady(BOG_MAP_ID),false);assert(!group.visible);
+  now=15000;assert.equal(game.revealArtReady(BOG_MAP_ID),true);assert(group.visible);
+  for(let i=0;i<5;i++)assert(game.revealArtReady(BOG_MAP_ID));assert.equal(warnings.length,1);
+  game.artShown='pink';assert.equal(game.revealArtReady('pink'),false);
+  now=29999;assert.equal(game.revealArtReady('pink'),false);
+  now=30000;assert.equal(game.revealArtReady('pink'),true);assert.equal(warnings.length,2);
+  group.destroy();
+});
+
+test('a hung startup step completes startup after 8 seconds and ignores disposal',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const game=Object.assign(Object.create(PixiIsland.prototype),{startupPrepared:false,scene:new Container(),
+    app:{renderer:{texture:{bindSource(){}}}},showArt(){}});
+  let calls=0;
+  const startup=game.prepareStartupArt({steps:[['Hung boat views',()=>{calls++;return new Promise(()=>{});}]]});
+  await flush();t.mock.timers.tick(7999);await flush();assert.equal(game.startupPrepared,false);
+  t.mock.timers.tick(1);await startup;assert.equal(game.startupPrepared,true);assert.equal(calls,1);
+  game.startupPrepared=false;game.disposed=true;
+  await game.prepareStartupArt({steps:[]});assert.equal(game.startupPrepared,false);game.scene.destroy();
 });

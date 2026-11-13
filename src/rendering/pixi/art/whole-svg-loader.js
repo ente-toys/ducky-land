@@ -1,4 +1,5 @@
 import {DOMAdapter, extensions, ExtensionType, ImageSource, loadSvg, Rectangle, Texture} from 'pixi.js';
+import {recoverArt, artPlaceholder, isArtPlaceholder, finalTextureSource} from './art-recovery.js';
 import {createArtQueue} from './island-preparation.js';
 import {textureFootprint} from './texture-footprint.js';
 import sourceSizes from '../../shared/art-source-sizes.json' with {type:'json'};
@@ -46,7 +47,7 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
     name: 'wholeIslandSVG',
     test: url => /\.svg(?:[?#]|$)/i.test(url) || url.startsWith('blob:') || /^data:image\/svg\+xml[,;]/i.test(url),
     load(src, asset = {}) {
-      return queue.run(async () => {
+      return queue.run(() => recoverArt(async () => {
         const {resolution=1,groundPadding=0,...options}=asset.data??{};
         const key=asset.src??src;
         // Fully transparent authored pieces have no ink to decode or upload.
@@ -57,7 +58,8 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
           return texture;
         });
         // Pixi passes an absolute fetch URL; asset.src retains the authored key.
-        const tier=canDecodeBitmap()?selectPrerenderTier(await getManifest(),asset.src??src,resolution):null;
+        const manifest=canDecodeBitmap()?await recoverArt(getManifest,{label:'Island prerender manifest; using SVG',timeoutMs:1000,fallback:()=>({})}):{};
+        const tier=canDecodeBitmap()?selectPrerenderTier(manifest,asset.src??src,resolution):null;
         if(tier&&(!groundPadding||tier.padding===groundPadding)) {
           let bitmap;
           try {
@@ -87,7 +89,7 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
               texture.groundPadding={pad:groundPadding,padX,padY,width:width-2*padX,height:height-2*padY};
             }
             return texture;
-          } catch {bitmap?.close(); /* A failed/missing build asset uses the authored SVG. */}
+          } catch(error) {bitmap?.close();console.warn(`${src}: prerender unavailable; using SVG`,error.message);}
         }
         const image = await decode(await fetchBlob(src));
         try {
@@ -118,9 +120,9 @@ export function createWholeSVGLoader({queue = createArtQueue(), getManifest=load
             return texture;
           });
         } finally {image.src = '';}
-      });
+      },{label:src,valid:texture=>!!finalTextureSource(texture),fallback:artPlaceholder,late:texture=>texture.destroy(!isArtPlaceholder(texture))}));
     },
-    unload(texture) {texture.destroy(true);},
+    unload(texture) {texture.destroy(!isArtPlaceholder(texture));},
   };
 }
 

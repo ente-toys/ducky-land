@@ -69,7 +69,8 @@ test('planning uses the actual responsive walking camera zoom and remains fixed 
   assert.equal(walkingZoom(1440,650),.65);assert.equal(walkingZoom(1440,900),.9);
   for(const island of islands)for(const defaultZoom of [.6,.65,.9]){
     const plan=planIslandArt([...island.entries,...island.tiles.map(e=>({...e,mipmaps:false}))],{dpr:2,defaultZoom});
-    assert(plan.bytes+SHARED_TEXTURE_ALLOWANCE<=350*1048576);
+    assert(plan.overBudget||plan.bytes+SHARED_TEXTURE_ALLOWANCE<=350*1048576);
+    if(plan.overBudget){assert.equal(plan.propDensity,.5);assert.equal(plan.groundDensity,.35);}
     assert.equal(plan.defaultZoom,defaultZoom);
   }
 });
@@ -83,4 +84,37 @@ test('preparation before viewport measurement uses a finite walking zoom and tex
     assert(Number.isFinite(plan.bytes)&&plan.bytes>0);
     assert(plan.bytes+SHARED_TEXTURE_ALLOWANCE<=350*1048576);
   }
+});
+
+
+test('outage regression: all five viewports return finite plans for Home and every themed island',t=>{
+  for(const [width,height,dpr]of [[1280,720,1],[1523,784,2],[1920,1080,2],[2560,1440,2],[390,844,3]]){
+    for(const island of islands){
+      const entries=[...island.entries,...island.tiles.map(e=>({...e,mipmaps:false}))];
+      let plan;
+      assert.doesNotThrow(()=>{plan=planIslandArt(entries,{dpr,defaultZoom:walkingZoom(width,height)});});
+      assert(plan.groundDensity>=.35&&plan.groundDensity<=.75);
+      assert(plan.propDensity>=.5&&plan.propDensity<=.9);
+      assert(Number.isFinite(plan.bytes)&&plan.bytes>0);
+      for(const r of plan.resolutions.values())assert(Number.isFinite(r)&&r>0);
+      if(plan.overBudget){assert.equal(plan.groundDensity,.35);assert.equal(plan.propDensity,.5);}
+      else assert(plan.bytes<=plan.budget);
+      for(const entry of island.entries)if(!entry.ground&&entry.width&&entry.height){
+        assert(plan.resolutions.get(entry.src)/(ratio(entry)*plan.defaultZoom*dpr)>=plan.propDensity-1e-10);
+      }
+      t.diagnostic(`${width}x${height}@${dpr} ${island.id}: props ${plan.propDensity.toFixed(3)}, ground ${plan.groundDensity.toFixed(3)}, ${(plan.bytes/1048576).toFixed(1)} MiB${plan.overBudget?' (floor override)':''}`);
+    }
+  }
+});
+
+test('impossible cap keeps both density floors and warns only once',async t=>{
+  const {planIslandArt:planFresh}=await import('../src/rendering/pixi/art/island-budget.js?warning-test');
+  const warn=console.warn,warnings=[];console.warn=(...args)=>warnings.push(args);t.after(()=>console.warn=warn);
+  const entries=[{src:'huge-prop.svg',width:4000,height:4000},{src:'huge-ground.svg',width:4000,height:4000,mipmaps:false}];
+  for(let i=0;i<3;i++){
+    const plan=planFresh(entries,{sourceSizes:{'huge-prop.svg':[4000,4000],'huge-ground.svg':[4000,4000]},budget:1});
+    assert.equal(plan.propDensity,.5);assert.equal(plan.groundDensity,.35);assert(plan.overBudget);
+    assert(plan.bytes>plan.budget);
+  }
+  assert.equal(warnings.length,1);
 });

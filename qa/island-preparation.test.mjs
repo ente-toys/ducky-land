@@ -191,8 +191,9 @@ test('quiet art work waits for walk/zoom activity to end',async t=>{
 });
 
 test('ready prepares the standing duck library; unused world pictures stay demand driven',()=>{
-  const ready=engine.slice(engine.indexOf('      await this.ensureArt(this.artShown);'),engine.indexOf('      this.ready = true;'));
-  assert(ready.includes('await prepareDuckAssets()'));
+  const ready=engine.slice(engine.indexOf('  async prepareStartupArt('),engine.indexOf('  liveCopies()'));
+  assert(engine.includes('await this.prepareStartupArt()'));
+  assert(ready.includes('()=>prepareDuckAssets()'));
   assert(ready.includes('sources:duckTextureSources()'));
   const start=engine.slice(engine.indexOf('      this.archipelago ='),engine.indexOf('      this.ready = true;'));
   assert(!start.includes('loadPreviews('));assert(!start.includes('createIsletView('));assert(!start.includes('createWorldView('));
@@ -266,7 +267,7 @@ test('startup keeps rendering before the authoritative saved island arrives and 
   assert(engine.indexOf('this.renderArrival(this.lastFrame)')<engine.indexOf('await this.room.waitForIsland()'));
   assert(engine.includes('const prepareHome=artOf(startingIsland)'));
   assert(engine.includes('if(prepareHome)await this.prepareHomeWater()'));
-  assert(engine.indexOf('this.raf=requestAnimationFrame(time=>this.tick(time))')<engine.indexOf('await this.ensureArt(this.artShown)'));
+  assert(engine.indexOf('this.raf=requestAnimationFrame(time=>this.tick(time))')<engine.indexOf('await this.prepareStartupArt()'));
   room.dispose();
 });
 

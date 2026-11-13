@@ -1,6 +1,6 @@
 import sourceSizes from '../../shared/art-source-sizes.json' with {type:'json'};
 import {Sprite, Texture} from 'pixi.js';
-import {assertFinalTexture} from './island-preparation.js';
+import {acquireArt, ART_TIMEOUT_MS} from './art-recovery.js';
 
 export const GROUND_BUDGET_BYTES = 128 * 1048576;
 // Extruded texels cover both sides of a join. Keep the inner image at its
@@ -120,9 +120,9 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
       let dead=false;
       const resolutionTiles=[...new Map(entries.map(t=>[[t.screenResolution,t.rasterDensity,t.resolution,t.screenResolution?0:tileResolution(t,1)].join('|'),t])).values()];
       const stream={id:++streamId,entries,resolutionTiles,
-        async prepare({zoom=1.8,dpr=2,resolutions=new Map()}={}) {
+        async prepare({zoom=1.8,dpr=2,resolutions=new Map(),timeoutMs=ART_TIMEOUT_MS}={}) {
           if(stream.preparing)return stream.preparing;
-          if(dead)throw Error('Ground stream destroyed');
+          if(dead)return;
           stream.pinned=true;
           // Hand ownership to preparation before awaiting any decode. An older
           // camera request must never overwrite or blank a pinned final sprite.
@@ -138,16 +138,14 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
             const results=await Promise.allSettled([...new Set(entries.map(t=>t.src))].map(async src=>{
               const tile=entries.find(t=>t.src===src),resolution=fixed.get(src);
               const lease={src,release:tile.release};leases.set(src,lease);
-              lease.texture=await tile.acquire(src,resolution,{priority:-1});
+              lease.texture=await acquireArt((src,r)=>tile.acquire(src,r,{priority:-1}),tile.release,src,resolution,{timeoutMs,cancelled:()=>dead||disposed});
               if(dead){if(!lease.released)tile.release(src);leases.delete(src);return;}
-              assertFinalTexture(lease.texture,src);
               for(const entry of entries)if(entry.src===src){
                 entry.sprite.texture=lease.texture;fitGroundSprite(entry,lease.texture);entry.sprite.visible=entry.render!==false;
               }
             }));
-            const failed=results.find(r=>r.status==='rejected');if(failed)throw failed.reason;
+            const failed=results.find(r=>r.status==='rejected');if(failed)console.warn('Ground preparation: accepting missing piece',failed.reason);
             if(!dead){
-              for(const entry of entries)assertFinalTexture(entry.sprite.texture,entry.src);
               stream.prepared=true;
             }
           })();
