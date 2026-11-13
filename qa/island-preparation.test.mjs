@@ -161,3 +161,25 @@ test('raster turns share small work but yield once the synchronous frame budget 
   for(let i=0;i<4;i++){await flush();cost=0;frame++;frames.splice(0).forEach(resolve=>resolve());await flush();}
   await Promise.all(work);assert.deepEqual(ran,[1,1,2,2,3,3,4]);
 });
+
+test('quiet art work waits for walk/zoom activity to end',async t=>{
+  const {markArtActivity,nextArtFrame}=await import('../src/rendering/pixi/art/island-preparation.js');
+  const previous=globalThis.requestIdleCallback,callbacks=[];
+  globalThis.requestIdleCallback=callback=>callbacks.push(callback);
+  t.after(()=>globalThis.requestIdleCallback=previous);
+  let finished=false;const pending=nextArtFrame().then(()=>finished=true);
+  assert.equal(callbacks.length,1);
+  markArtActivity(50);callbacks.shift()();await flush();
+  assert.equal(finished,false);
+  await new Promise(resolve=>setTimeout(resolve,80));
+  assert.equal(callbacks.length,1);callbacks.shift()();await pending;
+});
+
+test('ready prepares the standing duck library; unused world pictures stay demand driven',()=>{
+  const ready=engine.slice(engine.indexOf('      await this.ensureArt(this.artShown);'),engine.indexOf('      this.ready = true;'));
+  assert(ready.includes('await prepareDuckAssets()'));
+  assert(ready.includes('sources:duckTextureSources()'));
+  const start=engine.slice(engine.indexOf('      this.archipelago ='),engine.indexOf('      this.ready = true;'));
+  assert(!start.includes('loadPreviews('));assert(!start.includes('createIsletView('));assert(!start.includes('createWorldView('));
+  assert(!ready.includes('loadedSVGTextures'));
+});

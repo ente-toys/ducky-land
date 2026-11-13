@@ -1,3 +1,4 @@
+import {planIslandArt} from './island-budget.js';
 import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from '../../shared/art-resolution.js';
 import {propZ} from '../../shared/flat-props.js';
@@ -28,20 +29,22 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const props = (manifest.props ?? []).filter(p => !(map.id === 'snow' && manifest.icelandFinal && p.finalKind === 'smoke'));
   const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [];
   const floating = manifest.floating ?? [];
-  const iceland=map.id==='snow'&&Boolean(manifest.icelandFinal);
-  const crisp=manifest.raster?.enabled===true;
+  const iceland=!prepare&&map.id==='snow'&&Boolean(manifest.icelandFinal);
+  const crisp=!prepare&&manifest.raster?.enabled===true;
   const makeTiles=rasterTiles;
   const raster=iceland?icelandRasterLoaderFactory():crisp?rasterLoaderFactory():null;
   const rasterPool=crisp||iceland?createGroundPool({...raster,budget:RASTER_ART_BUDGET_BYTES,utilization:RASTER_ART_UTILIZATION}):null;
-  const tileSet=(p,native)=>largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
+  const tileSet=(p,native)=>!prepare&&largeArtTiles[map.id]?.[[p.src,p.width,p.height,p.resolution??native].join('|')];
   const entries = crisp||iceland?[]:[...decks.filter(p=>!tileSet(p,1.5)).map(d => ({...d, resolution: d.resolution ?? 1.5})),
-    ...flats.filter(p=>(!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
+    ...flats.filter(p=>(prepare||!p.tiles?.length||p.preload)&&!tileSet(p,2)).map(f => ({...f, resolution: f.resolution ?? 2})), ...props.filter(p=>prepare||!p.tiles?.length||p.preload).map(p => ({...p, resolution: p.resolution ?? 2})),
     ...floating.map(f => ({...f, resolution: f.resolution ?? 2}))];
   const sources = entries.map(e => url(e.src));
-  const resolutions = new Map();
+  let resolutions = new Map();
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
   if(prepare)for(const p of tiles){const src=url(p.src);resolutions.set(src,Math.max(resolutions.get(src)??0,p.resolution??1));}
   if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(src, 2);
+  const artPlan=prepare?planIslandArt([...entries.map(e=>({...e,src:url(e.src)})),...tiles.map(e=>({...e,src:url(e.src),mipmaps:false})),...(manifest.kites?.length?KITE_ASSETS.map(src=>({src,resolution:2})):[])],{dpr}):null;
+  if(artPlan)resolutions=artPlan.resolutions;
   const uniqueSources = [...new Set([...sources,...(manifest.kites?.length?KITE_ASSETS:[])])];
   const loaded=new Array(uniqueSources.length);let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
@@ -87,7 +90,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
     return true;
   };
   const streamedPiece=(p,layer,anchor)=>{
-    if(!p.tiles?.length||p.preload)return null;
+    if(prepare||!p.tiles?.length||p.preload)return null;
     const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);
     const stream=groundPool.create(p.tiles.map(t=>({...t,x:p.x-p.width*anchor.x+t.x,y:p.y-p.height*anchor.y+t.y,localX:t.x-p.width*anchor.x,localY:t.y-p.height*anchor.y})),node,url);
     groundStreams.push(stream);return node;
@@ -125,12 +128,12 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const standing = props.map((prop, i) => {
     const scale = prop.scale ?? 1, anchor = prop.anchor ?? {x: .5, y: 1}, name = prop.name ?? prop.asset ?? prop.src;
     const sprite = iceland?icelandSprite(prop,null,anchor):crisp?crispSprite(prop,null,anchor):(streamedPiece(prop,null,anchor) ?? new Sprite(textures[k++]));
-    if(!crisp&&!iceland&&(!prop.tiles?.length||prop.preload)){
+    if(!crisp&&!iceland&&(prepare||!prop.tiles?.length||prop.preload)){
       sprite.anchor.set(anchor.x, anchor.y); sprite.position.set(prop.x, prop.y);
       sprite.width = prop.width * scale; sprite.height = prop.height * scale;
       if (prop.flip) sprite.scale.x *= -1;
     }
-    if(!crisp&&!iceland&&prop.tiles?.length&&prop.flip)sprite.scale.x *= -1;
+    if(!prepare&&!crisp&&!iceland&&prop.tiles?.length&&prop.flip)sprite.scale.x *= -1;
     if (prop.tint) sprite.tint = prop.tint;
     sprite.zIndex = prop.z ?? propZ(prop, (prop.sortY ?? prop.y) + (prop.sortOrder ?? 0) * .00001); sprite.standing = true;
     sprite.themeArt = map.id;
@@ -158,7 +161,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const icelandLife = createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt});
   for (const group of groups) group.visible = false;
   const result = {
-    id: map.id, map, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
+    id: map.id, map, artPlan, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     overLayer, bridgeOver, kiteLayer, kites, icelandLife,
     groups,
     destroy() {

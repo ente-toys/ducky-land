@@ -28,6 +28,7 @@ export async function createIsletView(app,scene,objects){
  const started=performance.now();
  const arts=await Promise.all(ISLET_ART.map(loadIsletArt));
  const loadMs=Math.round(performance.now()-started);
+ await nextArtFrame();
  const atlas=bakeAtlas(app.renderer,arts);
  const layer=new Container({label:'Sea islet ground'});
  if(objects.parent===scene)scene.addChildAt(layer,scene.getChildIndex(objects));else scene.addChild(layer);

@@ -1,8 +1,19 @@
 import {Texture} from 'pixi.js';
 
+let busyUntil=0;
+export const markArtActivity=(duration=180)=>{busyUntil=performance.now()+duration;};
 export const nextArtFrame = () => new Promise(resolve => {
-  if (globalThis.requestAnimationFrame) requestAnimationFrame(resolve);
-  else setTimeout(resolve, 0);
+  const check=()=>{
+    if(performance.now()<busyUntil){setTimeout(check,32);return;}
+    if(globalThis.requestIdleCallback)requestIdleCallback(()=>{
+      if(performance.now()<busyUntil)check();else resolve();
+    });
+    else if(globalThis.requestAnimationFrame)requestAnimationFrame(()=>{
+      if(performance.now()<busyUntil)check();else resolve();
+    });
+    else setTimeout(resolve,0);
+  };
+  check();
 });
 
 // Async decodes overlap, while synchronous raster work uses a small frame

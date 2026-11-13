@@ -8,7 +8,7 @@ import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import legacy from './legacy-raster-art.json' with {type:'json'};
 const root=new URL('../public/pixi-art/',import.meta.url);
 
-test('Pixi art rejects new rasters, with frozen legacy exceptions in exactly two active theme folders',()=>{
+test('Pixi art rejects new rasters except frozen legacy art',()=>{
  assert.deepEqual([...legacy.folders].sort(),['themes/library/','themes/bog/'].sort());
  const violations=[],activeThemes=new Set(WORLD_ISLANDS.map(i=>i.theme).filter(Boolean));
  function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){

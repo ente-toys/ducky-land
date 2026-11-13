@@ -56,6 +56,8 @@ export async function disposeDuckAssets(){
   if(liveDucks)return false;
   await Promise.all([...ownedURLs].map(url=>Assets.unload(url)));ownedURLs.clear();libraryPromise=undefined;return true;
 }
+export const prepareDuckAssets=()=>library();
+export const duckTextureSources=()=>[...ownedURLs].map(src=>Assets.get(src)?.source).filter(Boolean);
 export async function getDuckWardrobe(){return (await library()).wardrobe;}
 
 function makeJoint(texture,rect,pivot,ground,label){
