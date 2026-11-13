@@ -69,16 +69,46 @@ export function textureSources(roots) {
   return sources;
 }
 
+export function assertFinalTexture(texture, label = 'Island art') {
+  const source=texture?.source;
+  // Deferred Home uses a distinct Texture backed by EMPTY's source. Checking
+  // the Texture identity alone lets that placeholder pass preparation.
+  if(!source||texture===Texture.EMPTY||source===Texture.EMPTY.source||texture.destroyed||source.destroyed||
+    !(source.pixelWidth>0&&source.pixelHeight>0))throw Error(`${label}: texture is not final`);
+  return source;
+}
+
+function requiredTextureSources(roots) {
+  const sources=new Set();
+  const visit=node=>{
+    if(!node)return;
+    if(node.destroyed)throw Error('Island art node destroyed during preparation');
+    // Graphics.texture defaults to EMPTY for solid vector fills; it is not an
+    // asynchronously loaded island picture.
+    if('texture' in node&&node.renderPipeId!=='graphics')sources.add(assertFinalTexture(node.texture,node.label||'Island art'));
+    for(const child of node.children??[])visit(child);
+  };
+  for(const root of roots)visit(root);
+  return sources;
+}
+
 const uploaded=new WeakMap();
-export async function uploadIsland(renderer, roots, {sources = [], yieldFrame = nextArtFrame, cancelled = () => false, batchSize = 4, frameBudgetMs = 5, batchBytes = 16 * 1048576, now = () => performance.now()} = {}) {
+export async function uploadIsland(renderer, roots, {sources = [], requiredRoots = [], yieldFrame = nextArtFrame, cancelled = () => false, batchSize = 4, frameBudgetMs = 5, batchBytes = 16 * 1048576, now = () => performance.now()} = {}) {
   let warmed=uploaded.get(renderer);if(!warmed)uploaded.set(renderer,warmed=new WeakSet());
   let count=0,bytes=0,start=0;
-  for (const source of new Set([...sources, ...textureSources(roots)])) {
+  // Ordinary scene roots can contain intentionally empty transient sprites.
+  // Island roots cannot, even when hidden or culled during the arrival fade.
+  let required=requiredTextureSources(requiredRoots);
+  const pending=new Set([...sources,...textureSources(roots),...required]);
+  for (const source of pending) {
     if (cancelled()) throw Error('Island preparation cancelled');
     if (source.destroyed||warmed.has(source)) continue;
     const size=(source.pixelWidth??1)*(source.pixelHeight??1)*4;
     if(!count||bytes+size>batchBytes){await yieldFrame();count=0;bytes=0;start=now();}
     if (cancelled()) throw Error('Island preparation cancelled');
+    required=requiredTextureSources(requiredRoots);
+    for(const current of required)if(!warmed.has(current))pending.add(current);
+    if(source.destroyed||warmed.has(source))continue;
     source.autoGarbageCollect = false;
     // Pixi 8's GL initSource expects a Texture (it forwards to bind), while
     // WebGPU expects a TextureSource. bindSource is the explicit GL API.
@@ -87,5 +117,11 @@ export async function uploadIsland(renderer, roots, {sources = [], yieldFrame = 
     warmed.add(source);count++;bytes+=size;
     if(count>=batchSize||now()-start>=frameBudgetMs)count=0;
     // initSource uploads mip levels when autoGenerateMipmaps is enabled.
+    // Upload yields let restoration finish or replace a source. Include those
+    // final sources too, rather than declaring the original snapshot ready.
+    required=requiredTextureSources(requiredRoots);
+    for(const current of required)if(!warmed.has(current))pending.add(current);
   }
+  if(cancelled())throw Error('Island preparation cancelled');
+  for(const source of requiredTextureSources(requiredRoots))if(!warmed.has(source))throw Error('Island texture was not uploaded');
 }

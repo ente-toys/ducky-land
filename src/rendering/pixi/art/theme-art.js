@@ -162,7 +162,7 @@ export async function loadThemeArt(map, {acquire, release, groundPool, tilt=1, r
   const icelandLife = createIcelandLifeLifecycle(map, manifest, {acquire, release, tilt});
   for (const group of groups) group.visible = false;
   const result = {
-    id: map.id, map, artPlan, groundStream, groundStreams, rasterPool, ready: true, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
+    id: map.id, map, artPlan, groundStream, groundStreams, rasterPool, ready: !prepare, sea: manifest.sea ?? map.sea ?? null, ground, decks: deckLayer, shadows, props: standing, floatLayer, floating: floats,
     overLayer, bridgeOver, kiteLayer, kites, icelandLife,
     groups,
     destroy() {
