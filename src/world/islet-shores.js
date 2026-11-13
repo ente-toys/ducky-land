@@ -1,8 +1,7 @@
 import {WORLD_GEO} from './world-map.js';
 import {expMap,angle,unit} from './sphere.js';
 export function isletHull(i){
- const [a,b]=[i.jetty.foot,i.jetty.tip],w=i.jetty.width/2,n=[-i.jetty.dir[1]*w,i.jetty.dir[0]*w];
- const points=[...i.coast,...i.blocked.flat(),...[a,b].flatMap(p=>[[p[0]+n[0],p[1]+n[1]],[p[0]-n[0],p[1]-n[1]]])].sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ const points=[...i.coast,...i.blocked.flat()].sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
  const turn=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]),chain=p=>{const out=[];for(const q of p){while(out.length>1&&turn(out.at(-2),out.at(-1),q)<=0)out.pop();out.push(q);}return out;};
  return [...chain(points).slice(0,-1),...chain(points.toReversed()).slice(0,-1)];
 }

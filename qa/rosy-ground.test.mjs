@@ -26,7 +26,7 @@ test('Rosy uses Home widths and one unoutlined path surface in its retained pale
   assert.ok(!/opacity|stroke|filter|gradient/.test(travel),t.src);
  }
  assert.ok(!art.flats.some(p=>p.id==='path-joins'||p.src.includes('floor-detail-')));
- assert.ok(map.JETTY.art,'the marina has one authored deck');
+ assert.ok(!art.decks.some(d=>d.src==='expansion/shore/marina-pier.svg'),'the marina shore has no pier');
  for(const r of routes)for(const p of r.samples)assert.ok(map.nav().walkable(...p),r.id+' at '+p);
 });
 function homeBody(s,dir){

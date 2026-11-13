@@ -30,9 +30,9 @@ test('stationary player boats are avoided without modifying player state or addi
  const saved=[...boat];for(let k=0;k<1800;k++){f.update(1/30,[boat]);min=Math.min(min,distance(s.p,boat));}
  assert.deepEqual(boat,saved);assert.ok(min>=PIRATE_BOAT_GAP,'boat clearance '+min);
 });
-test('all major-island and islet dock tips are excluded by the same read-only sea guard',()=>{
- for(const i of WORLD_ISLANDS){const m=mapOf(i.id),q=mapPoint(i.id,'home',m.JETTY.tip);assert.ok(pirateClearance([q.x,q.y])<1);}
- for(const i of ISLETS){const q=placeIslet('home',i,i.jetty.tip);assert.ok(pirateClearance([q.x,q.y])<1);}
+test('all major-island and islet landing shores are excluded by the same read-only sea guard',()=>{
+ for(const i of WORLD_ISLANDS){const m=mapOf(i.id),q=mapPoint(i.id,'home',m.HARBOR.land);assert.ok(pirateClearance([q.x,q.y])<1);}
+ for(const i of ISLETS){const q=placeIslet('home',i,i.landing.land);assert.ok(pirateClearance([q.x,q.y])<1);}
 });
 test('mirror hysteresis ignores a brief reversal and vertical motion; bob is small and reduced motion still',()=>{
  const f={flip:1,flipAge:0};for(let i=0;i<20;i++)pirateFacing(f,-1,.016);assert.equal(f.flip,1);for(let i=0;i<60;i++)pirateFacing(f,-1,.016);assert.equal(f.flip,-1);for(let i=0;i<60;i++)pirateFacing(f,0,.016);assert.equal(f.flip,-1);

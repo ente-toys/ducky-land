@@ -16,7 +16,7 @@ import {cameraGame} from './helpers/pixi-engine.mjs';
 test('sailing remains north-up near every island and islet in every chart',()=>{
  for(const from of WORLD_ISLANDS){
   const cam=createSailingCamera();
-  const docks=[...WORLD_ISLANDS.map(i=>placeRigid(from.id,i.id,mapOf(i.id).HARBOR.water)),...ISLETS.map(i=>placeIslet(from.id,i,i.jetty.water))];
+  const docks=[...WORLD_ISLANDS.map(i=>placeRigid(from.id,i.id,mapOf(i.id).HARBOR.water)),...ISLETS.map(i=>placeIslet(from.id,i,i.landing.water))];
   for(const p of docks)for(const dt of [0,1/144,1/60,1/30,.2])for(const reduced of [false,true]){
    assert.equal(cam.update(from.id,p,dt,reduced,rollBasis(1)),cam.basis);
    assert.deepEqual(cam.basis,{a:1,b:0,c:0,d:1});
@@ -43,7 +43,7 @@ test('boat, sail front and rider keep their normal screen shape in every neighbo
 
 test('the real engine stays north-up sailing and landing, and returns from the globe to the flat player',t=>{
  const prior=globalThis.document;globalThis.document={hidden:false};t.after(()=>globalThis.document=prior);
- const player={id:'me',mode:'sailing',...placeRigid('home','blossom',mapOf('blossom').JETTY.tip),travel:0};
+ const player={id:'me',mode:'sailing',...placeRigid('home','blossom',mapOf('blossom').HARBOR.water),travel:0};
  const game=cameraGame(player);Object.assign(game.camera,player);Object.assign(game.target,game.camera);
  for(let k=1;k<=60;k++)game.frameAt(k*1000/60);
  assert.ok(game.sailingCamera.active);assert.deepEqual(game.camera.basis,{a:1,b:0,c:0,d:1});

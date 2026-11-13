@@ -42,7 +42,6 @@ export async function createTravelView(objects,water,decks) {
       vessels.clear(); leaving.length=0;
     },
     transient: () => [...[...vessels.values(), ...leaving].flatMap(entry => [entry.root, entry.front]), ...harbor.transient()],
-    showJetty: mapId => harbor.show(mapId),
     switchIsland(id,shift) {
       harbor.switchIsland(id);
       settled=false;
@@ -60,7 +59,7 @@ export async function createTravelView(objects,water,decks) {
       }
     },
     update(boats,t,reduced,visible,player,camera) {
-      harbor.update(boats,t,reduced);
+      harbor.update(t,reduced);
       const now=performance.now(), ids=new Set(boats.map(boat => boat.id));
       for (const boat of boats) {
         const entry=vessels.get(boat.id);

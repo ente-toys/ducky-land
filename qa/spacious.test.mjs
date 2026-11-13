@@ -55,7 +55,7 @@ test('a) sleepers: the bed rules (ground, decks, paths, avoid zones, water, prop
   assert.match(why['wing@2000,2560'], /^prop hut/);
   assert.match(why['wing@800,2150'], /^near wing/);
   assert.equal(why['wizard@1000,1000'], 'unknown pose');
-  const map = makeMap('fixture', {world, harbor: {jetty: {foot: [2500, 600], tip: [2500, 150]}}, sleepers: beds});
+  const map = makeMap('fixture', {world, harbor: {land: {x:2500,y:600}, water: {x:2500,y:150}}, sleepers: beds});
   assert.equal(map.sleepers.length, 3);
   for (const bed of map.sleepers) {
     const f = sleeperFootprint(bed);
@@ -120,8 +120,8 @@ test('b) bridges, islets, decks and harbors work from each map\'s own data', () 
     for (const [x, y] of map.world.islets) assert.ok(nav.walkable(x, y) || map.landAt(x, y), `${map.id}: islet ${x},${y} is land`);
     for (const arch of map.world.arches ?? []) assert.ok(map.world.walkways.some(w => Math.hypot(w.a[0] - arch.a[0], w.a[1] - arch.a[1]) < 80 || Math.hypot(w.b[0] - arch.a[0], w.b[1] - arch.a[1]) < 80), `${map.id}: arch has its walkway`);
     const h = harborOf(id);
-    assert.ok(nav.walkable(h.land.x, h.land.y), `${map.id}: jetty end walkable`);
-    assert.ok(canSail(h.water.x, h.water.y, id), `${map.id}: boats dock beside its jetty`);
+    assert.ok(nav.walkable(h.land.x, h.land.y), `${map.id}: landing point walkable`);
+    assert.ok(canSail(h.water.x, h.water.y, id), `${map.id}: boats dock at the shore`);
   }
 });
 

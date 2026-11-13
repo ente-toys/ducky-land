@@ -26,7 +26,7 @@ test('7 stable islets use each of the seven approved artworks once, without addi
  for(const i of ISLETS){assert.equal(i.width,ISLET_META[i.art].designWidth*ISLET_SCALE,`${i.id} is drawn at its art's own scale`);assert.ok(i.width>=3072&&i.width<=4800);assert.ok(Math.abs(i.lat)<72*Math.PI/180);if(Math.abs(i.lat)>60*Math.PI/180)assert.equal(i.art,'08-snow-igloo');}
  for(const i of ISLETS)for(const j of ISLETS)if(i!==j&&i.art===j.art)assert.ok(angle(i.center,j.center)*WORLD_GEO.Rw>8000);
 });
-test('all enlarged islet ground, prop bases and jetties leave a 600-unit boat channel on the globe and in gameplay',()=>{
+test('all enlarged islet ground and prop bases leave a 600-unit boat channel on the globe and in gameplay',()=>{
  const rings=ISLETS.map(i=>isletShores(i));
  const bounds=new Map(ISLET_ART.map(art=>{const c=svgContext(readFileSync(PUBLIC(`${art}.svg`),'utf8'),t=>new XMLDOMParser().parseFromString(t,'image/svg+xml')),b=c.bounds,out=[b.minX,b.minY,b.maxX,b.maxY];c.destroy();return [art,out];}));
  for(const [k,i]of ISLETS.entries()){
@@ -56,7 +56,7 @@ test('all enlarged islet ground, prop bases and jetties leave a 600-unit boat ch
  assert.ok(ISLETS.some(i=>i.lat>.6)&&ISLETS.some(i=>i.lat<-.6),'both hemispheres retain islets');
 });
 const PUBLIC=f=>fileURLToPath(new URL(`../public/pixi-art/islets/${f}`,import.meta.url));
-test('every islet is hand-drawn flat SVG with its jetty in the art, and no raster islet ships',()=>{
+test('every islet is hand-drawn flat SVG with open shoreline, and no raster islet ships',()=>{
  const files=readdirSync(PUBLIC(''));
  assert.deepEqual(files.filter(f=>!/\.(svg|meta\.json)$/.test(f)),[],'only SVG art and its meta: no atlas, no webp, no png');
  for(const art of ISLET_ART){
@@ -68,12 +68,12 @@ test('every islet is hand-drawn flat SVG with its jetty in the art, and no raste
   for(const t of tags)assert.ok(['svg','title','desc','defs','use','g','path','circle','ellipse','rect','line','polyline','polygon'].includes(t),`${art}: <${t}>`);
   for(const [,c]of svg.matchAll(/(?:fill|stroke)="([^"]+)"/g))assert.match(c,/^(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})|none)$/,`${art}: flat colour ${c}`);
   assert.match(svg,/stroke="#39472[dD]"/,`${art}: our ink`);
-  assert.match(svg,/id="jetty"|jetty/i,`${art}: the jetty is part of the drawing`);
+  assert.doesNotMatch(svg,/id="jetty"/,`${art}: no jetty in the drawing`);
   assert.ok((svg.match(/<path/g)??[]).length<400,`${art}: hand-drawn, not traced`);
   const m=ISLET_META[art];
   assert.equal(m.art,art);assert.ok(m.land.length>=12);
-  assert.ok(inRing(...m.jetty.foot,m.land),`${art}: jetty foot on the sand`);
-  assert.ok(!inRing(...m.jetty.tip,m.land),`${art}: jetty tip out in the water`);
+  assert.ok(inRing(...m.landing.land,m.land),`${art}: landing point on the sand`);
+  assert.ok(!inRing(...m.landing.water,m.land),`${art}: boat position out in the water`);
   for(const b of m.blocked)assert.ok(b.polygon.length>=3&&b.what,`${art}: footprint ${b.what}`);
  }
  const view=readFileSync(fileURLToPath(new URL('../src/rendering/pixi/islet-view.js',import.meta.url)),'utf8');
@@ -105,31 +105,34 @@ test('boat collision agrees in different island charts and covers every islet\'s
  for(const i of ISLETS){
   for(const q of i.coast){const p=placeIslet(i.home,i,q);assert.equal(canSail(p.x,p.y,i.home),false,`${i.id} land is solid to boats`);}
   const w=isletWalk(i.id);
-  assert.ok(navOf(i.home).walkable(w.land.x,w.land.y),`${i.id} jetty end is walkable`);
+  assert.ok(navOf(i.home).walkable(w.land.x,w.land.y),`${i.id} landing point is walkable`);
   assert.ok(canSail(w.water.x,w.water.y,i.home),`${i.id} dock water is open`);
-  assert.ok(Math.hypot(w.water.x-w.tip.x,w.water.y-w.tip.y)<150*ISLET_SCALE,`${i.id} the boat ties up beside the jetty tip`);
-  for(let t=0;t<=420;t+=50){const l=placeIslet(i.home,i,[i.jetty.tip[0]+i.jetty.dir[0]*(t+72),i.jetty.tip[1]+i.jetty.dir[1]*(t+72)]);
-   assert.ok(canSail(l.x,l.y,i.home),`${i.id} open sea ${t} out from its jetty`);}
+  assert.deepEqual(w.world.walkways,[],`${i.id} has no offshore walkways`);
+  assert.ok(Math.hypot(w.water.x-w.land.x,w.water.y-w.land.y)<160,`${i.id} the boat waits near the shore`);
   const north=sphereFrame(i.lon,i.lat).north;
   assert.ok(Math.hypot(...north.map((v,k)=>v-i.north[k]))<1e-10,`${i.id} follows geographic north`);
   for(const b of i.blocked){const cx=b.reduce((s,q)=>s+q[0],0)/b.length,cy=b.reduce((s,q)=>s+q[1],0)/b.length,q=placeIslet(i.home,i,[cx,cy]);
    assert.equal(navOf(i.home).walkable(q.x,q.y),false,`${i.id} prop footprint is solid`);}
  }
 });
-test('every islet: sail up, dock at its jetty, walk its land, board and sail away',()=>{
+function offshore(id,i,distance){
+ const {land,water}=i.landing,dx=water[0]-land[0],dy=water[1]-land[1],length=Math.hypot(dx,dy);
+ return placeIslet(id,i,[water[0]+dx*distance/length,water[1]+dy*distance/length]);
+}
+test('every islet: sail up, dock at its shore, walk its land, board and sail away',()=>{
  for(const i of ISLETS){
   const w=isletWalk(i.id),nav=navOf(i.home),id=i.home;
-  const start=placeIslet(id,i,[i.jetty.water[0]+i.jetty.dir[0]*120,i.jetty.water[1]+i.jetty.dir[1]*120]);
+  const start=offshore(id,i,120);
   assert.ok(canSail(start.x,start.y,id),`${i.id} start at sea`);
   const actor={...start,islandId:id,mode:'sailing',turn:0,path:[]};
   const spot=landingSpot(actor,nav);
   assert.equal(spot?.islet,i.id,`${i.id} offers Dock`);
   assert.equal(spot.islandId,i.home);
   const approach=landingApproach(actor,spot);
-  assert.ok(Math.hypot(approach.x-w.water.x,approach.y-w.water.y)<2,`${i.id} sails to the jetty water`);
-  assert.ok(setSailDestination(actor,approach.x,approach.y),`${i.id} has a route to its jetty`);
+  assert.ok(Math.hypot(approach.x-w.water.x,approach.y-w.water.y)<2,`${i.id} sails to the water by the shore`);
+  assert.ok(setSailDestination(actor,approach.x,approach.y),`${i.id} has a route to its landing`);
   for(let k=0;k<4000&&actor.sailTarget;k++){sailStep(actor,.05,{x:0,y:0});assert.ok(canSail(actor.x,actor.y,id));}
-  assert.ok(Math.hypot(actor.x-approach.x,actor.y-approach.y)<14,`${i.id} reached the jetty`);
+  assert.ok(Math.hypot(actor.x-approach.x,actor.y-approach.y)<14,`${i.id} reached the landing`);
   Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',path:[],travel:0,pace:0,heading:null});
   const boat={id:`${id}-0`,islandId:id,x:approach.x,y:approach.y,turn:0};
   assert.ok(nav.walkable(actor.x,actor.y));
@@ -137,19 +140,19 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
   assert.ok(setWalkDestination(actor,nav,goal.x,goal.y),`${i.id} can walk inland`);
   let walked=0;
   for(let k=0;k<1200&&actor.path.length;k++){const x=actor.x,y=actor.y;walkStep(actor,nav,.05,k*.05,{x:0,y:0});walked+=Math.hypot(actor.x-x,actor.y-y);assert.ok(nav.walkable(actor.x,actor.y),`${i.id} stays on land`);}
-  assert.ok(walked>100,`${i.id} traversed inland from its shorter dock`);
+  assert.ok(walked>100,`${i.id} traversed inland from its shore`);
   assert.ok(Math.hypot(actor.x-goal.x,actor.y-goal.y)<45,`${i.id} reached the inland destination`);
   assert.equal(nav.walkable(w.water.x,w.water.y),false);
   const deck=boardingPoint(boat,nav);
-  assert.ok(Math.hypot(deck.x-w.tip.x,deck.y-w.tip.y)<90*ISLET_SCALE,`${i.id} boards from the jetty tip`);
+  assert.ok(Math.hypot(deck.x-w.land.x,deck.y-w.land.y)<2,`${i.id} boards from the shore`);
   assert.ok(setWalkDestination(actor,nav,deck.x,deck.y));
   for(let k=0;k<1200&&actor.path.length;k++)walkStep(actor,nav,.05,k*.05,{x:0,y:0});
   assert.ok(Math.hypot(actor.x-deck.x,actor.y-deck.y)<45,`${i.id} reached the boat`);
   Object.assign(actor,{x:boat.x,y:boat.y,mode:'sailing',sailTarget:null,sailRoute:null});
   let away;
   for(let n=0;n<24&&!away;n++){
-   const a=Math.atan2(i.jetty.dir[1],i.jetty.dir[0])+n*Math.PI/12;
-   const p=placeIslet(id,i,[i.jetty.water[0]+Math.cos(a)*900,i.jetty.water[1]+Math.sin(a)*900]);
+   const a=Math.atan2(i.landing.water[1]-i.landing.land[1],i.landing.water[0]-i.landing.land[0])+n*Math.PI/12;
+   const p=placeIslet(id,i,[i.landing.water[0]+Math.cos(a)*900,i.landing.water[1]+Math.sin(a)*900]);
    if(canSail(p.x,p.y,id)&&setSailDestination(actor,p.x,p.y))away=p;
   }
   assert.ok(away,`${i.id} has open sea to sail into`);
@@ -160,7 +163,7 @@ test('every islet: sail up, dock at its jetty, walk its land, board and sail awa
 test('room server: Dock at an islet lands you on it, you walk, take the boat back and sail off',async()=>{
  const i=ISLETS.find(i=>i.home==='home')??ISLETS[0],id=i.home,w=isletWalk(i.id);
  const room=await makeRoom();
- const start=placeIslet(id,i,[i.jetty.water[0]+i.jetty.dir[0]*120,i.jetty.water[1]+i.jetty.dir[1]*120]);
+ const start=offshore(id,i,120);
  const {actor,socket}=addPlayer(room,4242,{islandId:id,x:start.x,y:start.y,mode:'sailing'});
  const boat=room.boats.find(b=>b.islandId===id&&!b.occupant);
  Object.assign(boat,{x:actor.x,y:actor.y,occupant:actor.id});actor.boatId=boat.id;
@@ -169,8 +172,8 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
   for(let k=0;k<400&&actor.mode==='sailing';k++)room.step();
   assert.equal(actor.mode,'walking','hopped out onto the islet');
   assert.equal(actor.islandId,id);
-  assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,'on the jetty end');
-  assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<16,'the boat waits beside the jetty');
+  assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,'on the shore');
+  assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<16,'the boat waits beside the shore');
   const inland=placeIslet(id,i,i.landCentre),to=navOf(id).nearest(inland.x,inland.y,300*ISLET_SCALE);
   const info=room.connections.get(socket);info.lastDestination=-Infinity;
   room.webSocketMessage(socket,JSON.stringify({type:'destination',seq:2,x:to[0],y:to[1]}));
@@ -196,25 +199,25 @@ test('route planner steers round an islet and manual sailing stops at its land',
  assert.ok(canSail(actor.x,actor.y,id));assert.ok(Math.hypot(actor.x-p.x,actor.y-p.y)>BOAT_RADIUS);
 });
 
-test('room server: docking from another rigid chart keeps every islet boat at its drawn jetty',async()=>{
+test('room server: docking from another rigid chart keeps every islet boat at its shoreline',async()=>{
  const room=await makeRoom();
  try{
   for(const [k,i]of ISLETS.entries()){
    const from=WORLD_ISLANDS.filter(a=>a.id!==i.home).sort((a,b)=>angle(i.center,a.center)-angle(i.center,b.center))[0].id;
-   const water=placeIslet(from,i,i.jetty.water),w=isletWalk(i.id);
+   const water=placeIslet(from,i,i.landing.water),w=isletWalk(i.id);
    assert.ok(canSail(water.x,water.y,from),`${i.id} water in ${from}`);
    const {actor,socket}=addPlayer(room,6000+k,{islandId:from,...water,mode:'sailing'});
    const boat=room.boats.find(b=>b.islandId===from&&!b.occupant);
    Object.assign(boat,{...water,occupant:actor.id});actor.boatId=boat.id;
    const spot=landingSpot(actor);assert.equal(spot?.islet,i.id);
-   const drawn=placeIslet(from,i,i.jetty.land);
+   const drawn=placeIslet(from,i,i.landing.land);
    assert.ok(Math.hypot(spot.x+spot.offset.x-drawn.x,spot.y+spot.offset.y-drawn.y)<1e-6);
    room.webSocketMessage(socket,JSON.stringify({type:'disembark',seq:1}));
    for(let n=0;n<10&&actor.mode==='sailing';n++)room.step();
    assert.equal(actor.mode,'walking',`${i.id} docked from ${from}`);
    assert.equal(actor.islandId,i.home);
-   assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,`${i.id} on the deck end`);
-   assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<2,`${i.id} boat stays at the drawn tip after changing chart`);
+   assert.ok(Math.hypot(actor.x-w.land.x,actor.y-w.land.y)<2,`${i.id} on the shore`);
+   assert.ok(Math.hypot(boat.x-w.water.x,boat.y-w.water.y)<2,`${i.id} boat stays at the landing point after changing chart`);
   }
  }finally{clearInterval(room.timer);}
 });
@@ -223,32 +226,24 @@ test('an islet landing keeps its drawn art fixed on screen across rigid charts',
  const screen=(m,p)=>[m.a*p.x+m.c*p.y+m.tx,m.b*p.x+m.d*p.y+m.ty];
  for(const i of ISLETS){
   const from=WORLD_ISLANDS.find(a=>a.id!==i.home).id,to=i.home;
-  const camera={...placeIslet(from,i,i.jetty.water),zoom:1.8};
+  const camera={...placeIslet(from,i,i.landing.water),zoom:1.8};
   const before=cameraMatrix(camera,1440,900),after={...reframeIslet(from,to,i,camera),zoom:camera.zoom};
   after.basis=easeLandingBasis(rigidLandingBasis(from,to,undefined,isletLandingFrame(from,to,i)),0);
   const matrix=cameraMatrix(after,1440,900);
-  for(const q of [i.jetty.foot,i.jetty.tip,...i.coast]){
+  for(const q of [i.landing.land,...i.coast]){
    const a=screen(before,placeIslet(from,i,q)),b=screen(matrix,placeIslet(to,i,q));
    assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6,`${i.id}: no jump at its landing`);
   }
  }
 });
 
-test('3x scales land and prop footprints while Home bridges and boarding clearance stay at player scale',()=>{
+test('3x scales land, prop footprints and shore landing coordinates',()=>{
  assert.equal(ISLET_SCALE,3);
  const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
  for(const i of ISLETS){
   const m=ISLET_META[i.art],k=m.designWidth/1024;
   for(const [n,p]of m.land.entries())for(let a=0;a<2;a++)close(i.coast[n][a],(p[a]-512)*k*3);
   for(const [n,b]of m.blocked.entries())for(const [j,p]of b.polygon.entries())for(let a=0;a<2;a++)close(i.blocked[n][j][a],(p[a]-512)*k*3);
-  for(const key of ['foot','tip'])for(let a=0;a<2;a++)close(i.jetty[key][a],(m.jetty[key][a]-512)*k*3);
-  close(i.jetty.width,m.jetty.width*k*3);
-  close(i.jetty.width,112);close(Math.hypot(i.jetty.tip[0]-i.jetty.foot[0],i.jetty.tip[1]-i.jetty.foot[1]),320);
-  assert.match(m.jetty.homeSource,/home-expansion-c\/bridges\/bridge-(ew|ns|ne|nw)\.svg/);
-  for(let a=0;a<2;a++)close(i.jetty.land[a],i.jetty.tip[a]-i.jetty.dir[a]*26);
-  const tip=i.jetty.tip,c=i.landCentre,dir=i.jetty.dir;
-  const out=(tip[0]-c[0])*-dir[1]+(tip[1]-c[1])*dir[0],side=out>=0?[-dir[1],dir[0]]:[dir[1],-dir[0]];
-  const water=Math.abs(dir[1])>Math.abs(dir[0])?tip.map((v,a)=>v-dir[a]*40+side[a]*(i.jetty.width/2+60)):tip.map((v,a)=>v+dir[a]*72);
-  for(let a=0;a<2;a++)close(i.jetty.water[a],water[a]);
+  for(const key of ['land','water'])for(let a=0;a<2;a++)close(i.landing[key][a],(m.landing[key][a]-512)*k*3);
  }
 });

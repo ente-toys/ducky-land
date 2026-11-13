@@ -14,8 +14,8 @@ test('assets/world/walk-world.json matches a fresh build from the current placem
     const load = p => vite.ssrLoadModule(p);
     const world = (await load('/assets/world/world.json')).default;
     const {geometry} = await load('/assets/world/island-geometry.mjs');
-    const P = await load('/src/world/home/placements.js'), {sleepHalfWidths} = await load('/src/rendering/pixi/environment/sleeper.js'), {harborClear, harborWorld} = await load('/src/gameplay/islands.js');
-    const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable).filter(harborClear), local = harborWorld(P.walkWorld(tw, props));
+    const P = await load('/src/world/home/placements.js'), {sleepHalfWidths} = await load('/src/rendering/pixi/environment/sleeper.js'), {harborClear} = await load('/src/gameplay/islands.js');
+    const tw = P.trimWorld(world), props = P.createPlacements(tw, geometry({...tw, obstacles: []}).walkable).filter(harborClear), local = P.walkWorld(tw, props);
     const beds = P.sleepSpots(local, props, geometry(local).walkable, sleepHalfWidths(.88 * .24 * 3));
     assert.equal(beds.length, HOME_SLEEP_TOTAL, 'Home resolves all 100 residents');
     assert.equal(beds.bad.length, 0, 'no Home bed is silently dropped');

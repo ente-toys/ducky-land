@@ -16,8 +16,8 @@ const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 let obstacleVersion=-1,obstacles=[];
 function waterObstacles(){
  if(obstacleVersion===mapsVersion())return obstacles;obstacleVersion=mapsVersion();
- obstacles=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id),c=mapPoint(island.id,'home',{x:m.cx,y:m.cy}),rings=coastPolygons(m.world,m.walk,{foot:[m.JETTY.foot.x,m.JETTY.foot.y],tip:[m.JETTY.tip.x,m.JETTY.tip.y],width:m.JETTY.width}).map(r=>r.map(([x,y])=>[x-m.cx,y-m.cy]));return{x:c.x,y:c.y,rings};});
- for(const i of ISLETS){const {foot:a,tip:b,width}=i.jetty,dx=b[0]-a[0],dy=b[1]-a[1],n=Math.hypot(dx,dy),x=-dy/n*width/2,y=dx/n*width/2,c=placeIslet('home',i,[0,0]);obstacles.push({x:c.x,y:c.y,rings:[i.coast,...i.blocked,[[a[0]+x,a[1]+y],[b[0]+x,b[1]+y],[b[0]-x,b[1]-y],[a[0]-x,a[1]-y]]]});}
+ obstacles=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id),c=mapPoint(island.id,'home',{x:m.cx,y:m.cy}),rings=coastPolygons(m.world,m.walk).map(r=>r.map(([x,y])=>[x-m.cx,y-m.cy]));return{x:c.x,y:c.y,rings};});
+ for(const i of ISLETS){const c=placeIslet('home',i,[0,0]);obstacles.push({x:c.x,y:c.y,rings:[i.coast,...i.blocked]});}
  for(const o of obstacles)o.reach=Math.max(...o.rings.flat().map(p=>Math.hypot(...p)))+1700;
  const home=mapOf('home');obstacles.centre={x:home.cx,y:home.cy};
  return obstacles;

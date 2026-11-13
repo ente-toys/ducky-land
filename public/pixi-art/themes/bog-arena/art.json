@@ -19529,15 +19529,6 @@
       "height": 240,
       "homeSource": "/pixi-art/home-expansion-c/bridges/bridge-ew.svg",
       "overBoats": true
-    },
-    {
-      "id": "cove-dock",
-      "src": "home/dock.svg",
-      "x": 3720,
-      "y": 7350,
-      "width": 800,
-      "height": 347.58620689655174,
-      "homeSource": "/pixi-art/home-expansion-c/fishing-deck.svg"
     }
   ]
 }

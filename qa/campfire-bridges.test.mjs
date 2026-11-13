@@ -18,7 +18,7 @@ test('all twelve Campfire crossings use recoloured Home Honeywood vectors at nat
  assert.equal(art.raster.enabled,false);
  assert.equal(bridges.length,12);
  assert.deepEqual(new Set(bridges.map(d=>d.homeBridge)),new Set(['ew','ns','ne','nw']));
- assert.equal(art.decks.filter(d=>!d.homeSource).length,2,'only the pond and harbour docks are retained');
+ assert.equal(art.decks.filter(d=>!d.homeSource).length,1,'the pond dock is retained');
  for(const d of bridges){
   const svg=fs.readFileSync(A+d.src,'utf8'),root=xml(svg).documentElement;
   assert.equal(d.homeSource,`/pixi-art/home-expansion-c/bridges/bridge-${d.homeBridge}.svg`);

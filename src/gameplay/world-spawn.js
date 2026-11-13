@@ -44,7 +44,7 @@ export function pickWorldSpawn({
     // A detached islet is only an arrival option when its dock has a boat to leave in.
     for (const islet of ISLETS) {
       if (islet.home !== island.id || !boats.length) continue;
-      const water = placeIslet(island.id, islet, islet.jetty.water);
+      const water = placeIslet(island.id, islet, islet.landing.water);
       if (boats.some(boat => boat.islandId === island.id && !boat.occupant &&
         Math.hypot(boat.x - water.x, boat.y - water.y) < 149)) regions.push({island, islet});
     }
@@ -61,7 +61,7 @@ export function pickWorldSpawn({
     const point = findPoint({
       nav, exit, home:map.home && !walk, bounds:walk?.world ?? map,
       coast:walk?.world.coast ?? map.walk.coast,
-      fallback:walk ? [walk.foot] : [map.spawn, map.JETTY.foot],
+      fallback:walk ? [walk.land] : [map.spawn, map.HARBOR.land],
     }, occupied.filter(p => p.islandId === island.id), random);
     if (point) return {islandId:island.id, ...point, name:walk ? `an islet near ${island.name}` : island.name};
   }

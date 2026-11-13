@@ -32,7 +32,7 @@ export function checkTheme(theme) {
   }
   if (walk) for (const key of ['coast', 'obstacles', 'walkways', 'bridges', 'islets', 'water']) if (!Array.isArray(walk[key])) problems.push(`walk-world.json: ${key} must be a list`);
   if (harbor) {
-    if (!pt(harbor.jetty?.foot) || !pt(harbor.jetty?.tip)) problems.push('harbor.json: jetty.foot and jetty.tip must be [x,y]');
+    if (![harbor.land, harbor.water].every(p => Number.isFinite(p?.x) && Number.isFinite(p?.y))) problems.push('harbor.json: land and water must be {x,y}');
     if (harbor.boats && !(Array.isArray(harbor.boats) && harbor.boats.every(b => Number.isFinite(b?.x) && Number.isFinite(b?.y)))) problems.push('harbor.json: boats must be [{x,y,turn}]');
     if (harbor.draft) problems.push('harbor.json: draft (held back on purpose)');
   }
@@ -51,12 +51,10 @@ export function checkTheme(theme) {
       const map = makeMap(theme, {world, walk, harbor, art: `/pixi-art/themes/${theme}/art.json`});
       const nav = map.nav();
       if (!nav.walkable(map.spawn.x, map.spawn.y)) problems.push(`spawn ${map.spawn.x},${map.spawn.y} is not walkable`);
-      const {tip, dir} = map.JETTY, past = {x: tip.x + dir.x * 80, y: tip.y + dir.y * 80};
-      if (map.landAt(past.x, past.y)) problems.push('the jetty tip does not reach open sea (80 past the tip is land)');
       const w = map.HARBOR.water, wet = (x, y) => !map.landAt(x, y) && Array.from({length: 16}, (_, i) => i * Math.PI / 8).every(a => !map.landAt(x + Math.cos(a) * 46, y + Math.sin(a) * 46));
-      if (!wet(w.x, w.y)) problems.push(`the docking water ${w.x},${w.y} (beside the jetty tip) is not open sea`);
-      if (!nav.walkable(map.HARBOR.land.x, map.HARBOR.land.y)) problems.push('the jetty end you land on is not walkable');
-      if (!nav.route(map.HARBOR.land.x, map.HARBOR.land.y, map.spawn.x, map.spawn.y).length && !nav.clearLine([map.HARBOR.land.x, map.HARBOR.land.y], [map.spawn.x, map.spawn.y])) problems.push('no walking route from the jetty to the plaza');
+      if (!wet(w.x, w.y)) problems.push(`the docking water ${w.x},${w.y} is not open sea`);
+      if (!nav.walkable(map.HARBOR.land.x, map.HARBOR.land.y)) problems.push('the landing point is not walkable');
+      if (!nav.route(map.HARBOR.land.x, map.HARBOR.land.y, map.spawn.x, map.spawn.y).length && !nav.clearLine([map.HARBOR.land.x, map.HARBOR.land.y], [map.spawn.x, map.spawn.y])) problems.push('no walking route from the shore to the plaza');
       const spots = map.boatSpots();
       if (spots.length < 3) problems.push(`only ${spots.length} boat spots`);
       for (const [i, s] of spots.entries()) if (!wet(s.x, s.y)) problems.push(`boat spot ${i} (${s.x},${s.y}) is not open sea`);

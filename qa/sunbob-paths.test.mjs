@@ -18,7 +18,8 @@ const sourceBody=(s,dir)=>{
  return inner;
 };
 test('every Sunbob river crossing contains the exact approved Home arched SVG, and both deck ends touch the path union',()=>{
- const bridges=art.decks.filter(d=>d.src!=='bigger/landing-pier.svg');
+ assert.ok(!art.decks.some(d=>d.src==='bigger/landing-pier.svg'));
+ const bridges=art.decks;
  assert.equal(bridges.length,14);assert.equal(map.world.arches.length,14);
  for(const d of bridges){
   assert.match(d.homeSource,/^\/pixi-art\/home-expansion-c\/bridges\/bridge-(ew|ns|ne|nw)\.svg$/);

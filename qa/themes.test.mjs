@@ -13,7 +13,7 @@ const themedIslands = () => [...THEME_OF].filter(([, theme]) => readyThemes().in
 test('registry: home is today\'s map, the three islands nearest home carry the three themes, unknown themes fall back to home', () => {
   assert.equal(mapFor('home'), HOME_MAP);
   assert.equal(HOME_MAP.width, 11000); assert.equal(HOME_MAP.height, 8250);
-  assert.ok(HOME_MAP.nav().walkable(HOME_MAP.JETTY.foot.x,HOME_MAP.JETTY.foot.y));
+  assert.ok(HOME_MAP.nav().walkable(HOME_MAP.HARBOR.land.x,HOME_MAP.HARBOR.land.y));
   assert.ok(canSail(HOME_MAP.HARBOR.water.x,HOME_MAP.HARBOR.water.y));
   assert.equal(mapFor('no-such-theme'), HOME_MAP);
   assert.equal(mapOf('home'), HOME_MAP);
@@ -27,7 +27,7 @@ test('registry: home is today\'s map, the three islands nearest home carry the t
     const m = mapFor(theme);
     assert.equal(m.art,READY[theme].art, `${theme} delivered art url`);
     assert.ok(m.nav().walkable(m.spawn.x, m.spawn.y), `${theme} spawn is walkable`);
-    assert.ok(m.nav().walkable(m.HARBOR.land.x, m.HARBOR.land.y), `${theme} jetty end is walkable`);
+    assert.ok(m.nav().walkable(m.HARBOR.land.x, m.HARBOR.land.y), `${theme} shore landing point is walkable`);
   }
 });
 
@@ -64,7 +64,7 @@ test('per-theme moorings: every themed island holds its own map\'s boats, and re
   for (const id of islands) for (const spot of boatSpots(id)) assert.ok(old.some(b => b.islandId === id && !b.occupant && b.x === spot.x && b.y === spot.y), `${id} refilled from an old save`);
 });
 
-test('landing on a themed island: sail from home to its jetty, dock, and step onto its ground', () => {
+test('landing on a themed island: sail from home to its harbor, dock, and step onto its ground', () => {
   for (const id of themedIslands()) {
     const paths = [['home']], seen = new Set(['home']);let path;
     for(let n=0;n<paths.length&&!path;n++) for(const d of destinationsFor(paths[n].at(-1))) {
@@ -84,10 +84,10 @@ test('landing on a themed island: sail from home to its jetty, dock, and step on
       assert.ok(crossed,`reached ${hop}`);assert.equal(a.islandId,hop);
     }
     assert.equal(a.islandId, id);
-    assert.deepEqual({x: a.x, y: a.y}, harborOf(id).water, 'beside that island\'s own jetty');
+    assert.deepEqual({x: a.x, y: a.y}, harborOf(id).water, 'beside that island\'s own shore');
     assert.ok(canSail(a.x, a.y, id));
     const land = harborOf(id).land;
-    assert.ok(mapOf(id).nav().walkable(land.x, land.y), 'the jetty end you step onto is walkable');
+    assert.ok(mapOf(id).nav().walkable(land.x, land.y), 'the shore landing point you step onto is walkable');
     assert.ok(mapOf(id).nav().route(land.x, land.y, mapOf(id).spawn.x, mapOf(id).spawn.y).length, 'and it leads to the plaza');
     const spot = landingSpot({islandId: id, ...harborOf(id).water});
     assert.ok(spot && spot.islandId === id && mapOf(id).nav().walkable(spot.x, spot.y), 'Dock lands you on its ground');
@@ -117,7 +117,7 @@ test('maps of another size: a small themed island lines up round its centre, sai
   const keep = READY.library ?? null, W = 3000, H = 2400, cx = W / 2, cy = H / 2;
   const coast = Array.from({length: 48}, (_, i) => [Math.round(cx + Math.cos(i / 48 * Math.PI * 2) * 1000), Math.round(cy + Math.sin(i / 48 * Math.PI * 2) * 650)]);
   const world = {width: W, height: H, coast, water: [], bridges: [], obstacles: [], islets: [], walkways: [], zones: {plaza: {x: cx, y: cy, spawn: [cx, cy]}}};
-  assert.ok(registerMap('library', {world, harbor: {jetty: {foot: [cx, cy + 560], tip: [cx, cy + 1000], width: 104}}, art: '/pixi-art/themes/library/art.json'}));
+  assert.ok(registerMap('library', {world, harbor: {land: {x:cx,y:cy+620}, water: {x:cx,y:cy+750}, boats: [-150,0,150].map(x=>({x:cx+x,y:cy+750}))}, art: '/pixi-art/themes/library/art.json'}));
   try {
     const id = [...THEME_OF].find(([, t]) => t === 'library')[0], m = mapOf(id);
     assert.equal(m.width, W);

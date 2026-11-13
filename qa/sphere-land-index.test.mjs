@@ -4,9 +4,7 @@ import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import {mapOf} from '../src/world/island-maps.js';
 import {inPoly,inShape} from '../assets/world/island-geometry.mjs';
 function original(m,x,y){
- const {world:w,walk,JETTY:j}=m,foot=j.foot,dir=j.dir;
- const t=Math.max(0,Math.min(j.length,(x-foot.x)*dir.x+(y-foot.y)*dir.y));
- if(Math.hypot(x-foot.x-dir.x*t,y-foot.y-dir.y*t)<j.width/2+4)return true;
+ const {world:w,walk}=m;
  if((w.boatCoast?inPoly(x,y,w.boatCoast):inPoly(x,y,walk.coast)||inPoly(x,y,w.coast))&&!(w.boatWater??[]).some(p=>inPoly(x,y,p)))return true;
  if(w.islets.some(([cx,cy,rx,ry])=>inShape(x,y,{x:cx,y:cy,rx,ry})))return true;
  return (m.home?walk.walkways:w.walkways).some(({a,b,w,boatPassUnder})=>{if(boatPassUnder)return false;const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)<w/2;});

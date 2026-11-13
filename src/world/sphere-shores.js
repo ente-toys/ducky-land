@@ -7,7 +7,7 @@ export const BOAT_CHANNEL=600;
 const SHORE_STEP=400;
 const SHORES=new WeakMap();
 const shoresOf=m=>{
- if(!SHORES.has(m))SHORES.set(m,coastPolygons(m.world,m.walk,{foot:[m.JETTY.foot.x,m.JETTY.foot.y],tip:[m.JETTY.tip.x,m.JETTY.tip.y],width:m.JETTY.width}));
+ if(!SHORES.has(m))SHORES.set(m,coastPolygons(m.world,m.walk));
  return SHORES.get(m);
 };
 export function sphereShores(island,R=WORLD_GEO.Rw){
@@ -61,7 +61,7 @@ export function copyHolding(x, y, copies, pad = 300, here = mapOf('home')) {
     }
     if(Math.abs(q.x)<cw/2+pad&&Math.abs(q.y)<ch/2+pad)held.push({copy,q});
   }
-  const own=here.world&&here.JETTY?coastDistance(x,y,shoresOf(here)):Infinity;
+  const own=here.world?coastDistance(x,y,shoresOf(here)):Infinity;
   if(held.length<2&&own===Infinity)return held[0]?.copy ?? null;
   let best=null,distance=own;
   for(const {copy,q}of held){const m=mapOf(copy.id),d=coastDistance(q.x+m.cx,q.y+m.cy,shoresOf(m));if(d<distance){distance=d;best=copy;}}

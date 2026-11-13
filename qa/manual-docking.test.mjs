@@ -13,7 +13,7 @@ test('holding WASD into shore stays aboard until Dock is explicitly requested',a
   const boat=room.boats.find(b=>b.id==='home-5');
   Object.assign(boat,{x:actor.x,y:actor.y,occupant:actor.id});actor.boatId=boat.id;
   try {
-    room.webSocketMessage(socket,JSON.stringify({type:'input',seq:1,x:1,y:0}));
+    room.webSocketMessage(socket,JSON.stringify({type:'input',seq:1,x:0,y:-1}));
     room.step();
     assert.ok(actor.travel>0,'starts in water and sails toward the shore');
     for(let i=0;i<50;i++)room.step();
@@ -36,7 +36,7 @@ test('tapping a nearby beach docks at the selected spot even within harbor range
   boat.occupant = actor.id;
   assert.ok(canDock(actor));
 
-  const shore = {x:3990, y:5820};
+  const shore = {x:3990, y:5680};
   const game = cameraGame(actor);
   Object.assign(game.camera, shore);
   game.room = {player: actor, disembark: target => {
@@ -73,7 +73,7 @@ test('Dock at the far side of a detached islet leaves the boat by that shore', a
 
   room.webSocketMessage(socket, JSON.stringify({type:'disembark', seq:1, x:islet.land.x, y:islet.land.y}));
   room.step();
-  assert.equal(actor.mode, 'sailing', 'the distant jetty is out of reach');
+  assert.equal(actor.mode, 'sailing', 'the distant landing point is out of reach');
   room.webSocketMessage(socket, JSON.stringify({type:'disembark', seq:2}));
   for (let i=0; i<50 && actor.mode==='sailing'; i++) room.step();
   assert.equal(actor.mode, 'walking');
@@ -85,7 +85,7 @@ test('Dock at the far side of a detached islet leaves the boat by that shore', a
 
 test('restoring the room frees a stranded sailor and removes blocked parked boats', async t => {
   const room = await makeRoom();
-  const stranded = {x:4052.81, y:6034.56};
+  const stranded = {x:4000, y:5400};
   const blockedParking = {x:3044.54, y:4215.79};
   assert.ok(!canSail(stranded.x, stranded.y));
   assert.ok(!canSail(blockedParking.x, blockedParking.y));
@@ -120,4 +120,21 @@ test('restoring the room frees a stranded sailor and removes blocked parked boat
   restored.step();
   assert.ok(sailor.travel > 0, 'steering moves the recovered boat');
   assert.deepEqual([recovered.x, recovered.y], [sailor.x, sailor.y]);
+});
+
+
+test('a hibernated walker on the former Home jetty returns to dry shore', async t => {
+  const room = await makeRoom();
+  const formerJetty = {x:4100,y:5840};
+  const {socket} = addPlayer(room,9880,formerJetty);
+  assert.ok(!room.navFor('home').walkable(formerJetty.x,formerJetty.y));
+  socket.deserializeAttachment = () => room.connections.get(socket);
+
+  const restored = new IslandRoom({...room.ctx, getWebSockets:() => [socket]});
+  t.after(() => {clearInterval(room.timer); clearInterval(restored.timer);});
+  const walker = restored.connections.get(socket).actor;
+  assert.equal(walker.islandId,'home');
+  assert.equal(walker.mode,'walking');
+  assert.ok(restored.navFor('home').walkable(walker.x,walker.y));
+  assert.ok(Math.hypot(walker.x-formerJetty.x,walker.y-formerJetty.y)<250);
 });

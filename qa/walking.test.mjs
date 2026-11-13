@@ -60,7 +60,10 @@ function glides(hits) {
 }
 
 test('keyboard walking glides along curved coast at shallow angles instead of stopping dead', () => {
-  const coast = world.coast.filter((_,i)=>i%4===0), hits = shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]));
+  const hits = [0, 1, 2, 3].flatMap(offset => {
+    const coast = world.coast.filter((_, i) => i%4 === offset);
+    return shallowHits(coast.map((p, i) => [p, coast[(i+1)%coast.length]]));
+  });
   assert.ok(hits.length >= 12, `${hits.length} coast scenarios`);
   glides(hits);
   assert.ok(hits.filter(h => !h.input.x || !h.input.y).length >= 4);
