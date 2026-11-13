@@ -4,6 +4,14 @@ export {default as HOME_KITES} from './home-kites.json' with {type:'json'};
 export const KITE_COLOURS = ['red', 'yellow', 'blue', 'purple', 'mint', 'orange'];
 const DIR = '/pixi-art/home-kites/';
 export const KITE_ASSETS = [DIR + 'stake.svg', ...KITE_COLOURS.flatMap(c => ['body', 'tail-a', 'tail-b'].map(p => `${DIR}${c}-${p}.svg`))];
+export function kiteArtEntries(siteList=sites,resolution=2){
+  return KITE_ASSETS.map(src=>{
+    const stake=src.endsWith('/stake.svg'),body=src.endsWith('-body.svg'),tailA=src.endsWith('-tail-a.svg');
+    const colour=src.slice(DIR.length).split('-')[0];
+    const scale=stake?1:Math.max(.01,...siteList.filter(s=>s.colour===colour).map(s=>s.size));
+    return {src,width:stake?38:body?112:tailA?88:94,height:stake?34:body?120:tailA?82:62,scale,resolution};
+  });
+}
 
 export function kitePose(site, seconds, reduced, pose) {
   const phase = seconds * Math.PI * 2 / site.period + site.phase;

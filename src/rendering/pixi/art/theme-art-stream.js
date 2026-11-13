@@ -56,20 +56,20 @@ export function createRasterLoader({schedule=globalThis.requestAnimationFrame?.b
         return dispatch(async()=>{
           if(disposed)throw Error('Raster loader disposed');
           const resource=await rasterize(original,crop,resolution);
-          const source=new ImageSource({resource,resolution,alphaMode:'premultiply-alpha-on-upload'});
+          const source=new ImageSource({resource,resolution,label:key,alphaMode:'premultiply-alpha-on-upload'});
           if(typeof resource.close==='function')source.once('destroy',()=>resource.close());
           return new Texture({source,...(exactFrame?{frame:new Rectangle(0,0,crop[4],crop[5])}:{})});
         },order);
       })();
-      leases.set(key,held={count:0,promise,resolution});
+      leases.set(key,held={count:0,promise:promise.then(texture=>{held.texture=texture;return texture;}),resolution});
     }
     held.count++;return held.promise;
   };
   const release=key=>{
     const held=leases.get(key);if(!held||--held.count)return;
-    held.promise.then(texture=>{
-      if(!held.count&&leases.get(key)===held){leases.delete(key);texture.destroy(true);}
-    }).catch(()=>{if(leases.get(key)===held)leases.delete(key);});
+    const retire=()=>{if(!held.count&&leases.get(key)===held){leases.delete(key);held.texture.destroy(true);}};
+    if(held.texture)retire();
+    else held.promise.then(retire).catch(()=>{if(leases.get(key)===held)leases.delete(key);});
   };
   return {acquire,release,destroy(){if(disposed)return;disposed=true;originals.clear();for(const job of queue.splice(0))job.reject(Error('Raster loader disposed'));}};
 }

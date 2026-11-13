@@ -217,11 +217,11 @@ function makePin() {
 
 export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPTY) {
   const shoreTextures = new Map();
-  let rt = RenderTexture.create({width: 2, height: 2, resolution: 1}), w = 0, h = 0, worldTex = null, worldVersion = -1;
+  let rt = RenderTexture.create({width: 2, height: 2, resolution: 1}), w = 0, h = 0, worldTex = null, worldVersion = -1, lastGlobeTime = -Infinity;
   const geometry = new MeshGeometry({positions: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])});
   const blank = RenderTexture.create({width: 2, height: 2});
   const shader = new Shader({glProgram: GlProgram.from({vertex: VERTEX, fragment: FRAGMENT, name: 'ducky-world-view', preferredFragmentPrecision: 'highp'}), resources: {
-    uScene: rt.source, uWorld: blank.source, uIslets:isletView.atlas.source, uClouds:cloudTexture.source, viewUniforms: {
+    uScene: rt.source, uWorld: blank.source, uIslets:blank.source, uClouds:cloudTexture.source, viewUniforms: {
       uCloudPhase:{value:0,type:'f32'},uCloudFade:{value:0,type:'f32'},
       uTime: {value: 0, type: 'f32'},uBall:{value:0,type:'f32'},uBasis:{value:new Float32Array([1,0,0,1]),type:'vec4<f32>'}, uZoom: {value: 1, type: 'f32'}, uR: {value: .43, type: 'f32'},
       uCam: {value: new Float32Array([0, 0]), type: 'vec2<f32>'}, uRes: {value: new Float32Array([1, 1]), type: 'vec2<f32>'},
@@ -278,13 +278,21 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
     update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me, reduced=false) {
       const on = t > .001;
       mesh.visible = on;
-      if (arch?.texture && (!worldTex || worldVersion !== arch.version)) {
+      if(on){lastGlobeTime=time;arch?.setPreviewActive?.(true);}
+      // Start the atlas on the first zoom-out frame, before painted islands
+      // blend in. Keep it briefly for a reversal, then free gameplay GPU memory.
+      if (on && arch?.texture && (!worldTex || worldVersion !== arch.version)) {
+        shader.resources.uIslets=isletView.atlas.source;
         const old = worldTex; worldVersion = arch.version;
         worldTex = buildWorldTexture(app, arch.islands, arch.bounds, arch, worldSize, shoreTextures);
         shader.resources.uWorld = worldTex.source;
         if (old) setTimeout(() => old.destroy(true), 0);
       }
-      if (!on) {scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;}
+      if (!on) {
+        if(time-lastGlobeTime>3){arch?.setPreviewActive?.(false);}
+        if(worldTex&&time-lastGlobeTime>3){shader.resources.uWorld=blank.source;shader.resources.uIslets=blank.source;isletView.releaseAtlas?.();worldTex.destroy(true);worldTex=null;worldVersion=-1;rt.resize(2,2);w=h=0;}
+        scene.visible=true;life.visible=pin.visible=false;this.pinIn=0;this.worldAt=null;return;
+      }
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       const live=t < .97 && cam.zoom > .065;
       if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}
