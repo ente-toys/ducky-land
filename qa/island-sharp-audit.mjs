@@ -1,3 +1,4 @@
+import {readyTexture} from './ready-texture.mjs';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -49,7 +50,7 @@ export function homeModel() {
     const P = await import('data:text/javascript;base64,' + Buffer.from(bundled.outputFiles[0].text).toString('base64'));
     const props = P.createPlacements().filter(harborClear);
     const art = {ground: {tiles: P.HOME_TILES}, props: props.filter(p => p.asset !== 'rowboat'),
-      decks: [...P.JETTIES, {src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}, ...P.HOME_DECKS],
+      decks: [...P.JETTIES, ...P.HOME_DECKS],
       flats: [{src: '/pixi-art/lake-race.svg', x: 3400, y: 1050, width: 1500, height: 950, resolution: 1, topLeft: true},
         {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true},
         ...[...P.homeDecals(props), ...P.HOME_GROUND_DECALS].map(p => ({...p, resolution: 2.5}))],
@@ -123,7 +124,7 @@ export async function motionCompatibility(theme, art = manifest(theme)) {
       globalThis.fetch = async src => ({ok: true, json: async () => String(src).includes('centre/centre.json') ? centre : sample});
       try {
         loaded = await loadThemeArt({id: theme, art: `/pixi-art/themes/${theme}/art.json`, origin: {x: 0, y: 0}, width: art.width, height: art.height},
-          {acquire: async () => Texture.EMPTY, release() {}, groundPool: {create() {return {destroy() {}};}}});
+          {acquire: async () => readyTexture(), release() {}, groundPool: {create() {return {destroy() {}};}}});
         await attachCentreMotion(loaded, objects);
         loaded.ground.visible = true;
         for (const prop of loaded.props) prop.sprite.visible = true;

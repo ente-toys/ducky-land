@@ -1752,29 +1752,6 @@
       }
     },
     {
-      "id": "bigger-community-514",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 611,
-      "y": 582,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 611,
-        "y": 572,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-515",
       "name": "bench-wood",
       "asset": "bench-wood-left",
@@ -1793,52 +1770,6 @@
       "footprint": {
         "x": 5190,
         "y": 530,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-517",
-      "name": "bench-wood",
-      "asset": "bench-wood-back",
-      "src": "/pixi-art/detail/street--bench-wood-back.svg",
-      "x": 2702,
-      "y": 4481,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2702,
-        "y": 4471,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-518",
-      "name": "bench-wood",
-      "asset": "bench-wood-back",
-      "src": "/pixi-art/detail/street--bench-wood-back.svg",
-      "x": 1121,
-      "y": 4197,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 1121,
-        "y": 4187,
         "rx": 70,
         "ry": 24
       }
@@ -2249,17 +2180,17 @@
     },
     {
       "id": "bigger-community-543",
-      "name": "bench-wood",
-      "asset": "bench-wood-back",
-      "src": "/pixi-art/detail/street--bench-wood-back.svg",
+      "name": "Garden bench",
+      "asset": "garden-bench",
+      "src": "/pixi-art/home-review/hill/bench.svg",
       "x": -939,
       "y": 1374,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
+      "width": 200,
+      "height": 130,
+      "scale": 0.8,
       "anchor": {
         "x": 0.5,
-        "y": 0.9740820734341252
+        "y": 1
       },
       "resolution": 1.25,
       "zone": "commons",
@@ -2267,8 +2198,9 @@
         "x": -939,
         "y": 1364,
         "rx": 70,
-        "ry": 24
-      }
+        "ry": 19
+      },
+      "noShadow": true
     },
     {
       "id": "bigger-community-545",
@@ -4345,7 +4277,7 @@
       "name": "house-honeyroof",
       "asset": "house-honeyroof",
       "src": "/pixi-art/home-hamlets/butterbill/house-honeyroof.svg",
-      "x": -387.6,
+      "x": -407.6,
       "y": 452.3,
       "width": 337.7,
       "height": 369.8,
@@ -4361,14 +4293,14 @@
         18.5735
       ],
       "footprint": {
-        "x": -387.6,
+        "x": -407.6,
         "y": 387,
         "rx": 135.1,
         "ry": 47.3
       },
       "communityRole": "home",
       "door": [
-        -387.6,
+        -407.6,
         492.3
       ],
       "z": 452.3,
@@ -4839,54 +4771,6 @@
       "z": 538
     },
     {
-      "id": "hamlet-butterbill-square-west-bench",
-      "name": "bench-left",
-      "asset": "bench-left",
-      "src": "/pixi-art/home-hamlets/butterbill/bench-left.svg",
-      "x": -894.8,
-      "y": 588.9,
-      "width": 116.6,
-      "height": 99.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -894.8,
-        "y": 579.6,
-        "rx": 35,
-        "ry": 14
-      },
-      "z": 588.9
-    },
-    {
-      "id": "hamlet-butterbill-square-east-bench",
-      "name": "bench-right",
-      "asset": "bench-right",
-      "src": "/pixi-art/home-hamlets/butterbill/bench-right.svg",
-      "x": -730,
-      "y": 625,
-      "width": 116.6,
-      "height": 99.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -730,
-        "y": 615.7,
-        "rx": 35,
-        "ry": 14
-      },
-      "z": 625
-    },
-    {
       "id": "hamlet-butterbill-south-west-lamp",
       "name": "lamp",
       "asset": "lamp",
@@ -4989,8 +4873,8 @@
       "name": "house-petaldoor",
       "asset": "house-petaldoor",
       "src": "/pixi-art/home-hamlets/butterbill/house-petaldoor.svg",
-      "x": -310.5,
-      "y": 779.2,
+      "x": -270.5,
+      "y": 819.2,
       "width": 365.8,
       "height": 340.4,
       "scale": 1,
@@ -5005,17 +4889,17 @@
         20.119
       ],
       "footprint": {
-        "x": -310.5,
-        "y": 710,
+        "x": -270.5,
+        "y": 750,
         "rx": 146.3,
         "ry": 51.2
       },
       "communityRole": "home",
       "door": [
-        -310.5,
-        819.2
+        -270.5,
+        859.2
       ],
-      "z": 779.2,
+      "z": 819.2,
       "shadowOffset": [
         0,
         -8
@@ -5659,53 +5543,53 @@
     },
     {
       "id": "hamlet-lanternleaf-bench-west",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bench.svg",
-      "x": 2593.2,
-      "y": -385.3,
-      "width": 107.2,
-      "height": 73.7,
-      "scale": 1,
+      "name": "Gazebo bench",
+      "asset": "bench-wood-right",
+      "src": "/pixi-art/detail/street--bench-wood-right.svg",
+      "x": 2585,
+      "y": -355,
+      "width": 818,
+      "height": 463,
+      "scale": 0.28,
       "anchor": {
         "x": 0.5,
-        "y": 1
+        "y": 0.9740820734341252
       },
-      "resolution": 1.5,
+      "resolution": 1.4,
       "zone": "lanternleaf",
       "order": 48,
       "footprint": {
-        "x": 2593.2,
-        "y": -393.9,
-        "rx": 32.2,
-        "ry": 12.9
+        "x": 2585,
+        "y": -385,
+        "rx": 30,
+        "ry": 62
       },
-      "z": -385.3
+      "z": -355
     },
     {
       "id": "hamlet-lanternleaf-bench-east",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bench.svg",
-      "x": 3200,
-      "y": -330,
-      "width": 107.2,
-      "height": 73.7,
-      "scale": 1,
+      "name": "Gazebo bench",
+      "asset": "bench-wood-left",
+      "src": "/pixi-art/detail/street--bench-wood-left.svg",
+      "x": 3185,
+      "y": -355,
+      "width": 818,
+      "height": 463,
+      "scale": 0.28,
       "anchor": {
         "x": 0.5,
-        "y": 1
+        "y": 0.9740820734341252
       },
-      "resolution": 1.5,
+      "resolution": 1.4,
       "zone": "lanternleaf",
       "order": 49,
       "footprint": {
-        "x": 3200,
-        "y": -338.59999999999997,
-        "rx": 32.2,
-        "ry": 12.9
+        "x": 3185,
+        "y": -385,
+        "rx": 30,
+        "ry": 62
       },
-      "z": -330
+      "z": -355
     },
     {
       "id": "hamlet-lanternleaf-bandstand",
@@ -6124,13 +6008,13 @@
     },
     {
       "id": "hamlet-lanternleaf-garden-shed",
-      "name": "garden-shed",
-      "asset": "garden-shed",
-      "src": "/pixi-art/home-hamlets/lanternleaf/garden-shed.svg",
+      "name": "Seedshare greenhouse",
+      "asset": "seedshare-greenhouse",
+      "src": "/pixi-art/themes/community/hamlets/sproutshare/greenhouse.svg",
       "x": 2238.1,
       "y": -90.5,
       "width": 327,
-      "height": 284.1,
+      "height": 301,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -6692,7 +6576,7 @@
       "asset": "windmill",
       "src": "/pixi-art/home-hamlets/clovercrust/windmill.svg",
       "x": 5766.5,
-      "y": -496,
+      "y": -536,
       "width": 241.2,
       "height": 364.5,
       "scale": 1.23,
@@ -6709,12 +6593,12 @@
       ],
       "footprint": {
         "x": 5766.5,
-        "y": -547.8,
+        "y": -587.8,
         "rx": 96.5,
         "ry": 33.8
       },
       "communityRole": "workplace",
-      "z": -496
+      "z": -536
     },
     {
       "id": "hamlet-clovercrust-mill-right-flowers",
@@ -7326,7 +7210,7 @@
       "asset": "cottage-gold-roof",
       "src": "/pixi-art/home-hamlets/clovercrust/cottage-gold-roof.svg",
       "x": 5595.6,
-      "y": 36,
+      "y": 56,
       "width": 392.6,
       "height": 377.9,
       "scale": 1,
@@ -7343,16 +7227,16 @@
       ],
       "footprint": {
         "x": 5595.6,
-        "y": -37,
+        "y": -17,
         "rx": 157,
         "ry": 55
       },
       "communityRole": "home",
       "door": [
         5595.6,
-        76
+        96
       ],
-      "z": 48.5,
+      "z": 68.5,
       "shadowOffset": [
         0,
         -8
@@ -7522,31 +7406,6 @@
         0,
         -8
       ]
-    },
-    {
-      "id": "hamlet-clovercrust-reading-bench",
-      "name": "reading-bench",
-      "asset": "reading-bench",
-      "src": "/pixi-art/home-hamlets/clovercrust/reading-bench.svg",
-      "x": 4623.5,
-      "y": 96.3,
-      "width": 101.8,
-      "height": 65.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 72,
-      "footprint": {
-        "x": 4623.5,
-        "y": 88.1,
-        "rx": 30.6,
-        "ry": 12.2
-      },
-      "z": 154.4
     },
     {
       "id": "hamlet-clovercrust-blue-cottage-pink-pot",
@@ -8105,8 +7964,8 @@
       "name": "house-pottery-cottage",
       "asset": "house-pottery-cottage",
       "src": "/pixi-art/home-hamlets/petalpatch/house-pottery-cottage.svg",
-      "x": -1031.6,
-      "y": 3470.4,
+      "x": -1071.6,
+      "y": 3450.4,
       "width": 562.8,
       "height": 423.4,
       "scale": 1,
@@ -8122,17 +7981,17 @@
         24
       ],
       "footprint": {
-        "x": -1031.6,
-        "y": 3382.4,
+        "x": -1071.6,
+        "y": 3362.4,
         "rx": 225.1,
         "ry": 70
       },
       "communityRole": "home",
       "door": [
-        -1031.6,
-        3510.4
+        -1071.6,
+        3490.4
       ],
-      "z": 3470.4,
+      "z": 3450.4,
       "shadowOffset": [
         0,
         -8
@@ -8300,8 +8159,8 @@
       "name": "pottery-drying-rack",
       "asset": "pottery-drying-rack",
       "src": "/pixi-art/home-hamlets/petalpatch/pottery-drying-rack.svg",
-      "x": -680,
-      "y": 3840,
+      "x": -660,
+      "y": 3920,
       "width": 178.2,
       "height": 206.4,
       "scale": 1,
@@ -8317,13 +8176,13 @@
         16
       ],
       "footprint": {
-        "x": -680,
-        "y": 3828,
+        "x": -660,
+        "y": 3908,
         "rx": 53.5,
         "ry": 21.4
       },
       "communityRole": "workplace",
-      "z": 3840
+      "z": 3920
     },
     {
       "id": "hamlet-petalpatch-brush-pot",
@@ -8964,8 +8823,8 @@
       "name": "cottage-fishers",
       "asset": "cottage-fishers",
       "src": "/pixi-art/home-hamlets/reedwhistle/cottage-fishers.svg",
-      "x": 4148.6,
-      "y": 4960.3,
+      "x": 4308.6,
+      "y": 4600.3,
       "width": 345.7,
       "height": 377.9,
       "scale": 1,
@@ -8981,17 +8840,17 @@
         19.0135
       ],
       "footprint": {
-        "x": 4148.6,
-        "y": 4893.9,
+        "x": 4308.6,
+        "y": 4533.9,
         "rx": 138.3,
         "ry": 48.4
       },
       "communityRole": "home",
       "door": [
-        4148.6,
-        5000.3
+        4308.6,
+        4640.3
       ],
-      "z": 4960.3,
+      "z": 4600.3,
       "shadowOffset": [
         0,
         -8
@@ -9238,8 +9097,8 @@
       "name": "fishing-net-rack",
       "asset": "fishing-net-rack",
       "src": "/pixi-art/home-hamlets/reedwhistle/fishing-net-rack.svg",
-      "x": 3777.4,
-      "y": 5288.6,
+      "x": 3857.4,
+      "y": 5268.6,
       "width": 321.6,
       "height": 166.2,
       "scale": 1,
@@ -9255,21 +9114,21 @@
         28.9
       ],
       "footprint": {
-        "x": 3777.4,
-        "y": 5276.6,
+        "x": 3857.4,
+        "y": 5256.6,
         "rx": 96.5,
         "ry": 24
       },
       "communityRole": "workplace",
-      "z": 5288.6
+      "z": 5268.6
     },
     {
       "id": "hamlet-reedwhistle-smokehouse",
       "name": "smokehouse",
       "asset": "smokehouse",
       "src": "/pixi-art/home-hamlets/reedwhistle/smokehouse.svg",
-      "x": 3534.9,
-      "y": 5371.7,
+      "x": 3414.9,
+      "y": 5271.7,
       "width": 270.7,
       "height": 251.9,
       "scale": 1,
@@ -9281,7 +9140,7 @@
       "zone": "reedwhistle",
       "order": 112,
       "communityRole": "workplace",
-      "z": 5431.1
+      "z": 5331.1
     },
     {
       "id": "hamlet-reedwhistle-fish-basket-a",
@@ -9388,8 +9247,8 @@
       "name": "lighthouse",
       "asset": "lighthouse",
       "src": "/pixi-art/home-hamlets/reedwhistle/lighthouse.svg",
-      "x": 4673.9,
-      "y": 5486.9,
+      "x": 4613.9,
+      "y": 5526.9,
       "width": 241.2,
       "height": 415.4,
       "scale": 1,
@@ -9405,13 +9264,13 @@
         28.9
       ],
       "footprint": {
-        "x": 4673.9,
-        "y": 5435.1,
+        "x": 4613.9,
+        "y": 5475.1,
         "rx": 96.5,
         "ry": 33.8
       },
       "communityRole": "workplace",
-      "z": 5486.9
+      "z": 5526.9
     },
     {
       "id": "hamlet-reedwhistle-lighthouse-rock-right",
@@ -9466,35 +9325,12 @@
       "z": 5493.6
     },
     {
-      "id": "home-farm-enclosure",
-      "name": "Joined crop garden",
-      "asset": "farm-enclosure",
-      "src": "/pixi-art/home-review/farm-enclosure.svg",
-      "x": 4960,
-      "y": -745,
-      "width": 700,
-      "height": 240,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "z": -744,
-      "noShadow": true,
-      "footprint": {
-        "x": 4960,
-        "y": -835,
-        "rx": 315,
-        "ry": 70
-      }
-    },
-    {
       "id": "home-windmill-sails",
       "name": "Windmill sails",
       "asset": "windmill-sails",
       "src": "/pixi-art/home-review/windmill-sails.svg",
       "x": 5764.8518,
-      "y": -787.7474080882353,
+      "y": -827.7474080882353,
       "width": 379.08599999999996,
       "height": 379.1068014705882,
       "scale": 1,
@@ -9502,32 +9338,10 @@
         "x": 0.5,
         "y": 0.5
       },
-      "z": -495.9,
+      "z": -535.9,
       "noShadow": true,
       "spinPeriod": 9,
       "zone": "clovercrust"
-    },
-    {
-      "id": "home-beach-spare-lounger",
-      "name": "Beach lounger",
-      "asset": "beach-lounger",
-      "src": "/pixi-art/home-review/beach-lounger.svg",
-      "x": 4480,
-      "y": 2660,
-      "width": 160,
-      "height": 145,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9
-      },
-      "noShadow": true,
-      "footprint": {
-        "x": 4480,
-        "y": 2650,
-        "rx": 54,
-        "ry": 24
-      }
     },
     {
       "id": "review-willow-oak",
@@ -10047,31 +9861,6 @@
         "ry": 21.2
       },
       "z": 5320
-    },
-    {
-      "id": "review-seedshare-seat",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bench.svg",
-      "x": 4272,
-      "y": 220,
-      "width": 107.2,
-      "height": 73.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 48,
-      "footprint": {
-        "x": 4272,
-        "y": 211.39999999999998,
-        "rx": 32.2,
-        "ry": 12.9
-      },
-      "z": 220
     },
     {
       "id": "review-willow-picnic",
@@ -17057,8 +16846,8 @@
     {
       "id": "clovercrust",
       "point": [
-        5450,
-        -249
+        5390,
+        -150
       ]
     },
     {
@@ -17140,15 +16929,6 @@
       "resolution": 1
     },
     {
-      "id": "home-pond-bridge",
-      "src": "/pixi-art/home-review/home-pond-bridge.svg",
-      "x": 1116.4615384615386,
-      "y": 2460,
-      "width": 1047.0769230769233,
-      "height": 244,
-      "resolution": 1.5
-    },
-    {
       "id": "home-west-bridge",
       "src": "/pixi-art/home-review/home-west-bridge.svg",
       "x": 685.8850747228745,
@@ -17209,15 +16989,6 @@
       "y": 3140.9475080736574,
       "width": 626.0219851609695,
       "height": 791.3568738445028,
-      "resolution": 1.5
-    },
-    {
-      "id": "river-crossing-7",
-      "src": "/pixi-art/home-review/river-crossing-7.svg",
-      "x": 4873.701560826652,
-      "y": 1478.2013697032783,
-      "width": 651.6614639111613,
-      "height": 288.3277136107015,
       "resolution": 1.5
     },
     {
@@ -17321,18 +17092,6 @@
       "b": [
         1980,
         3800
-      ],
-      "w": 100,
-      "boatPassUnder": true
-    },
-    {
-      "a": [
-        4930,
-        1650
-      ],
-      "b": [
-        5450,
-        1690
       ],
       "w": 100,
       "boatPassUnder": true
@@ -22265,13 +22024,6 @@
       "h": 679.9499999999998
     },
     {
-      "id": "old-jetty-5",
-      "x": 5251.99,
-      "y": 1660.2,
-      "w": 519.8199999999997,
-      "h": 127.57999999999993
-    },
-    {
       "id": "existing-deck-0",
       "x": 356.11111111111114,
       "y": 3816.944444444445,
@@ -22587,13 +22339,6 @@
       "h": 90
     },
     {
-      "id": "river-crossing-7",
-      "x": 5300,
-      "y": 1670,
-      "w": 390,
-      "h": 130
-    },
-    {
       "id": "lily-outflow-bridge",
       "x": 1650,
       "y": 2930,
@@ -22637,12 +22382,6 @@
       "river": "old-shore-canal",
       "x": 665.1800000000001,
       "y": 847.05
-    },
-    {
-      "id": "river-crossing-7",
-      "river": "mill-stream",
-      "x": 1232,
-      "y": 504.59999999999997
     }
   ],
   "arches": [
@@ -22719,19 +22458,6 @@
       ],
       "w": 112,
       "r": 35.76780785070323
-    },
-    {
-      "a": [
-        4930,
-        1650
-      ],
-      "b": [
-        5450,
-        1690
-      ],
-      "w": 112,
-      "r": 23.817386745685525,
-      "squash": 0.62
     },
     {
       "a": [
@@ -53205,20 +52931,6 @@
   },
   "homeArches": [
     {
-      "id": "home-pond-bridge",
-      "a": [
-        1188,
-        2630
-      ],
-      "b": [
-        2092,
-        2630
-      ],
-      "w": 112,
-      "r": 24.000000000000007,
-      "squash": 0.62
-    },
-    {
       "id": "home-west-bridge",
       "a": [
         1137.84,
@@ -53313,20 +53025,6 @@
     },
     {
       "a": [
-        4930,
-        1650
-      ],
-      "b": [
-        5450,
-        1690
-      ],
-      "w": 112,
-      "r": 23.817386745685525,
-      "squash": 0.62,
-      "id": "river-crossing-7"
-    },
-    {
-      "a": [
         1520,
         2930
       ],
@@ -53342,9 +53040,15 @@
   ],
   "reviewWater": true,
   "reviewProps": {
+    "1": {
+      "x": 2420,
+      "y": 2062
+    },
     "3": {
       "src": "/pixi-art/home-review/beach-kiosk.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 4680,
+      "y": 3170
     },
     "17": {
       "x": 1290,
@@ -53378,11 +53082,15 @@
     },
     "48": {
       "src": "/pixi-art/home-review/umbrella-gold.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 4980,
+      "y": 2800
     },
     "49": {
       "src": "/pixi-art/home-review/beach-towel.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 5000,
+      "y": 3115
     },
     "50": {
       "x": 4375,
@@ -53456,6 +53164,25 @@
     "spur-cover-1": {
       "x": 4740,
       "y": 1900
+    },
+    "seat-pond-3": {
+      "src": "/pixi-art/home-review/hill/bench.svg",
+      "name": "Garden bench",
+      "asset": "garden-bench",
+      "width": 200,
+      "height": 130,
+      "scale": 0.8,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "noShadow": true,
+      "footprint": {
+        "x": 1858.3042766954393,
+        "y": 2367.4769884423467,
+        "rx": 70,
+        "ry": 19
+      }
     }
   },
   "polishMicrotexture": true,

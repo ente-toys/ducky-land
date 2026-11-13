@@ -48,7 +48,7 @@ export async function collectPlacedArt(root) {
     const world=trimWorld(raw),props=createPlacements(world,geometry({...world,obstacles:[]}).walkable);
     export const themes=[...new Set(WORLD_ISLANDS.map(i=>i.theme??'home'))].map(id=>({id,art:mapFor(id).art}));
     export const entries=[...HOME_TILES.map(e=>({...e,mipmaps:false})),...JETTIES,
-      {src:'/pixi-art/library-steps.svg',width:280,height:260,resolution:1.5},...HOME_DECKS,...props,...art.floating,
+      ...HOME_DECKS,...props,...art.floating,
       {src:'/pixi-art/water-texture.svg',resolution:1},
       {src:'/pixi-art/lake-race.svg',width:1500,height:950,resolution:1},
       {src:'/pixi-art/decals/plaza-paving.svg',width:980,height:780,resolution:1},

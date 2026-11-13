@@ -1,3 +1,4 @@
+import {readyTexture} from './ready-texture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -77,7 +78,7 @@ test('Enabled raster fixture loads visible standing crops through the raster poo
  },release:src=>{textures.get(src)?.destroy(true);textures.delete(src);},destroy(){}};
  const groundPool=createGroundPool(loader);let loaded;
  try{
-  loaded=await loadThemeArt({id:'raster-fixture',art:'/raster-fixture/art.json',origin:{x:3500,y:600},width:1000,height:1000},{groundPool,acquire:async()=>Texture.EMPTY,release(){},rasterLoaderFactory:()=>loader});
+  loaded=await loadThemeArt({id:'raster-fixture',art:'/raster-fixture/art.json',origin:{x:3500,y:600},width:1000,height:1000},{groundPool,acquire:async()=>readyTexture(),release(){},rasterLoaderFactory:()=>loader});
   assert(loaded.rasterPool);assert(loaded.props.some(p=>p.id==='fixture-stage'));
   const camera={x:4000,y:1050,zoom:1.8},views=loaded.groundStreams.map(stream=>({stream,camera,width:1400,height:1000}));
   groundPool.update(views,2);loaded.rasterPool.update(views,2);

@@ -261,8 +261,7 @@ export class PixiIsland {
       const decals = homeDecals(props);
       const flats = [{src: '/pixi-art/lake-race.svg', x: 3400, y: 1050, width: 1500, height: 950, resolution: 1, topLeft: true},
         {src: '/pixi-art/decals/plaza-paving.svg', x: 2330, y: 1980, width: 980, height: 780, resolution: 1, topLeft: true}, ...decals.map(d => ({...d, resolution: 2.5})), ...HOME_GROUND_DECALS.map(d => ({...d, resolution: 2.5}))];
-      const STEPS = [{src: '/pixi-art/library-steps.svg', x: 2780, y: 1370, width: 280, height: 260, resolution: 1.5}];
-      const decks = [...JETTIES, ...STEPS, ...HOME_DECKS];
+      const decks = [...JETTIES, ...HOME_DECKS];
       this.groundPool=createGroundPool({acquire:acquireGround,release});
       const entries = [...decks, ...props, ...art.floating, {src:'/pixi-art/water-texture.svg'}, ...flats.map(e=>({...e,ground:true}))].map(entry=>({...entry}));
 
