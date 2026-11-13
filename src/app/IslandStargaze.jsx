@@ -98,10 +98,6 @@ export default function IslandStargaze({island, playing, offline = false}) {
       Look through the telescope <kbd>Enter</kbd>
     </button>}
     {open && <dialog ref={dialog} className="pixi-stargaze" aria-labelledby="stargaze-title" onClose={() => setOpen(false)}>
-      <header className="pixi-stargaze-counts">
-        <h2 id="stargaze-title">{counts ? `${number(counts.total)} stars` : 'Counting the stars…'}</h2>
-        {counts && <p>{number(counts.online)} online</p>}
-      </header>
       <button className="pixi-stargaze-close" aria-label="Back to the island" onClick={() => setOpen(false)} autoFocus>
         <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg>
       </button>
@@ -110,6 +106,9 @@ export default function IslandStargaze({island, playing, offline = false}) {
           <canvas ref={canvas} tabIndex={0} aria-label="Night sky. Drag or use arrow keys to explore. Scroll, pinch, or use plus and minus to zoom. Home finds your star. Tap a star, or press Enter for the nearest star, to see its name."/>
           <button className="pixi-stargaze-tag" ref={tag} hidden title="Find your star">Your star</button>
           <div className="pixi-stargaze-tag pixi-stargaze-name" ref={nameTag} role="status" aria-live="polite" aria-atomic="true" hidden/>
+          <header className="pixi-stargaze-counts">
+            <h2 id="stargaze-title">{counts ? `${number(counts.total)} stars` : 'Counting the stars…'}</h2>
+          </header>
         </div>
       </div>
       {error && <p className="pixi-stargaze-news" role="alert">{sky ? 'The sky could not refresh. Trying again…' : error}</p>}
