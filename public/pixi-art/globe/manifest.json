@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "02a850af5329894f6915547adcb8769ce0a8c8f7fa3d7b48880e521d3bdffe0c",
+      "modelSha256": "3089069057b88c8ea1490853dd677ac0c9736fccf80e0d310acacc4f8e16c462",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -1047,15 +1047,15 @@
         },
         {
           "path": "src/world/home/building-footprints.js",
-          "sha256": "4a1160764047b7bdeeaae22f08ee680e711ed64f505e6780f224d94166ff687a"
+          "sha256": "6b4b718122e3e581551c01ea9096f4745563cddf60a1ea56d3660a855c3a5046"
         },
         {
           "path": "src/world/home/building-silhouettes.json",
-          "sha256": "c38414e6f45db2f1a0dee33da662cca80e87732e8625676cd81bb5e04f4a60b4"
+          "sha256": "2f9efeece33caf2ff7181a565887716557d1c3d2d0885b95e5590015de3c4cab"
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "c69730f4c5c169476d0aa0c20d83e1b91050bfb5564a4a9db0f10e6b43138cd7"
+          "sha256": "bb0a538b065d7c80d2d7524b5ed0f1b5ae0db95aa48d703e475410bd5583d8ee"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1075,11 +1075,19 @@
         },
         {
           "path": "src/world/home/placements.js",
-          "sha256": "9749f1719c3d28c65834ff5c80594229256f01397030cb4d6d9892ce9ba5d929"
+          "sha256": "b058bbad4b29edee47497cfde85c959de1a4fa31a86646e0474d05db3f1c278f"
         },
         {
           "path": "src/world/home/plaza-benches.js",
           "sha256": "d2693b5b501fb9207c60a5ce848a3ab2d521f194b84f86174a46f659e9f57630"
+        },
+        {
+          "path": "src/world/home/prop-base-silhouettes.json",
+          "sha256": "543a4c5ffd98a4c8a1805894b69bfbeba524ae603c9aba121e4621fb0e28e343"
+        },
+        {
+          "path": "src/world/home/prop-outline-rules.js",
+          "sha256": "6121c9007b247e87592b1fe3841395679d55c60002f1810910388aeed337fff7"
         },
         {
           "path": "src/world/home/sleep-poses.json",
@@ -1087,7 +1095,7 @@
         },
         {
           "path": "src/world/home/sleep-spots.js",
-          "sha256": "450728f675f17c5043fb7eeb3fddad9e187398b0f1152371ec68d6f8de737c3d"
+          "sha256": "7222025e1078dad16c78184c4104f03ee2b0086f4eaee28bcfae924650dd36ec"
         },
         {
           "path": "src/world/home/walk-shapes.json",
@@ -1102,7 +1110,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "e6dcd7a5ae5634101bd501e1f4ff7cf13385b44473233be2248fc7b9d4caa68f"
+      "sha256": "71e52f905a2a35005203721e90d18b5aa70e574fb3b9a7017420e3b637e0dd17"
     },
     "groundSha256": "b1e7fc18d785f15a0b28ced4bf0f1eec47a16985d0abdd9c0a18723220ef5d5c",
     "src": "/pixi-art/globe/home.svg",
@@ -2163,7 +2171,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
+          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -2190,7 +2198,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "6520b1155a7d36203695bef51c861dace970d262e36edeba4c1b272f422b36de"
+      "sha256": "9519ecaef796826cde8d7982759b7c0fab798942e4b4135764fcdfa492036a8a"
     },
     "groundSha256": "93fc36f9e96743bbb13cca5daa13f81f4640d965f1355529d28bbe8ae3c2cc49",
     "src": "/pixi-art/globe/sunflower.svg",
@@ -4975,7 +4983,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
+          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -5002,7 +5010,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "39c2634d89900e16d52c3d7e289a0c3b6e90fb224f40a4c3e05dee4ec71fddf8"
+      "sha256": "2bf56d3a2eba7829d3be9dc9dc2412406e3ff5ac902a9cff6806f60fa428d62f"
     },
     "groundSha256": "4a2bfe012c25cde81a98819c586f7730ce716f938aa26be92c03181cb0b11678",
     "src": "/pixi-art/globe/pink.svg",
@@ -7491,7 +7499,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
+          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -7518,7 +7526,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "820bf6920be048056efccb0d5508068f5d0f4ca6a6e213e9e89f4c874288261b"
+      "sha256": "d5130c82b6eff5688bdaa1977af337c0149fefc3c2a9e46d1e3fc8f1686e57ce"
     },
     "groundSha256": "ea61027ea4a464cda5792d4cf4479fedb6bb15ff49fe196529c63104a7a48ee9",
     "src": "/pixi-art/globe/library.svg",
@@ -8515,7 +8523,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
+          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -8542,7 +8550,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "3bce574d032aeafe865b94658b867ac7e228d2d2dbc54c3dd6ea6996757dcde1"
+      "sha256": "55b613e9bb04611eee81a86b386c95ffe636a0c0866bf7ca71125139e3343c0d"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
@@ -8967,7 +8975,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
+          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -8994,7 +9002,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "0e0844b458c4f9a27e2e2f0823be973ff78d034917609bd1dc3a5deba3a03179"
+      "sha256": "8c1722ce68dff7f605ab749eea12d2eb019104a52a912f179d70e56c727a96a4"
     },
     "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
@@ -10595,7 +10603,7 @@
         },
         {
           "path": "scripts/globe-perf/snapshot.mjs",
-          "sha256": "22fcb02920b27aacda8b583c6e733b00c62e4dd84151ace121eddd2f54a5b14f"
+          "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
         {
           "path": "scripts/globe-svg/build.mjs",
@@ -10622,7 +10630,7 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "43daeb5aabef3a3014b1e2fcd1d0d206924d2cfde7716e2cbc8c69c4ebe2408c"
+      "sha256": "45dbd1cc706fed45a7a741ec839c1dcdf0841b3837464b0961ac4c6e0d7d3a34"
     },
     "groundSha256": "2fdaf51c505df0bc6703d582052b7ebf887085beafe964d8bbdf50495e6a2790",
     "src": "/pixi-art/globe/snow.svg",

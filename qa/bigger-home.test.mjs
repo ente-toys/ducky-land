@@ -9,7 +9,10 @@ import {MUSEUM_DOOR} from '../src/gameplay/player-motion.js';
 
 test('bigger Home retains original landmark and save coordinates, every community connects to the plaza',()=>{
   const m=HOME_MAP,n=m.nav();
-  assert.deepEqual(m.spawn,{x:original.zones.plaza.spawn[0],y:original.zones.plaza.spawn[1]});
+  assert.deepEqual(m.spawn,{x:2820,y:2600},'spawn clears the traced plaza bench');
+  assert.equal(m.spawn.x,original.zones.plaza.spawn[0]);
+  assert.equal(m.spawn.y,original.zones.plaza.spawn[1]-40,'only the spawn moves, scenery and saved coordinates stay fixed');
+  assert.ok(n.walkable(m.spawn.x,m.spawn.y));
   assert.deepEqual(m.world.props,original.props);
   assert.ok(n.walkable(MUSEUM_DOOR.out.x,MUSEUM_DOOR.out.y));
   for(const {id,point} of expansion.places){

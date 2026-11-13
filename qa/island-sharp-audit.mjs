@@ -16,7 +16,6 @@ import poses from '../src/world/home/sleep-poses.json' with {type: 'json'};
 import homeArt from '../src/world/home/art-manifest.json' with {type: 'json'};
 import {HOME_KITES} from '../src/rendering/pixi/environment/home-kites.js';
 import {SLEEP_ROOT, SLEEP_SIZE} from '../src/world/home/sleep-spots.js';
-import {harborClear} from '../src/gameplay/islands.js';
 
 export const THEMES = ['sunflower', 'pink', 'library'];
 export const VIEWPORTS = [[1000, 600], [1400, 1000], [1985, 1180], [2560, 1440]];
@@ -48,7 +47,7 @@ export function homeModel() {
     const bundled = await build({entryPoints: [resolve('src/world/home/placements.js')],
       bundle: true, platform: 'node', format: 'esm', write: false});
     const P = await import('data:text/javascript;base64,' + Buffer.from(bundled.outputFiles[0].text).toString('base64'));
-    const props = P.createPlacements().filter(harborClear);
+    const props = P.createPlacements();
     const art = {ground: {tiles: P.HOME_TILES}, props: props.filter(p => p.asset !== 'rowboat'),
       decks: [...P.JETTIES, ...P.HOME_DECKS],
       flats: [{src: '/pixi-art/lake-race.svg', x: 3400, y: 1050, width: 1500, height: 950, resolution: 1, topLeft: true},

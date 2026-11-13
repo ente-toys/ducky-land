@@ -100,7 +100,7 @@ export const trimWorld = w => trimWith(w, OLD_JETTY, OLD_PAD);
 const placeWorld = w => trimWith(w, new Set([3940, 3320, 2320]), new Set([3930, 3340, 2290]));
 const archMid = ARCHES.map(({a, b}) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
 const underArch = w => archMid.some(([x, y]) => Math.hypot((w.a[0] + w.b[0]) / 2 - x, (w.a[1] + w.b[1]) / 2 - y) < 60) ? {...w, boatPassUnder: true} : w;
-export const walkWorld = (world, props) => ({...world, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
+export const walkWorld = (world, props) => ({...world, navigationCellSize: 24, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
   water: [...world.water, ...(expansion.riverWater ?? [])], bridges: [...world.bridges.filter(b => !(b.x === 1640 && b.y === 2630)), ...(expansion.riverBridges ?? [])],
   walkways: [...world.walkways.map(underArch), ...(expansion.walkways ?? []).map(underArch), {a: [1165, 3000], b: [1095, 3098], w: 120, boatPassUnder: true}, {a: [1092, 3060], b: [942, 3405], w: 110, boatPassUnder: true}]});
 
@@ -402,6 +402,7 @@ export function obstaclesFor(props, world) {
   for (const p of props) {
     const i = typeof p.id === 'number' ? p.id : -1, src = byProp[i], orig = world.props[i];
     const m = p.grow || 1;
+    if (p.outlineKind && !p.footprint) continue;
     if (p.footprint) out.push(p.footprint);
     else if (src && !isPlant(p)) out.push({...src, x: p.x + (src.x - orig.x) * m, y: p.y + (src.y - orig.y) * m, rx: src.rx * m, ry: src.ry * m});
     else if (isTree(p)) out.push({x: p.x, y: p.y - 9, rx: 31, ry: 22});
@@ -428,9 +429,12 @@ export function sleepSpots(world, props, walkable, sizes) {
 
 export const HOME_ORIGIN = expansion.origin;
 export const HOME_TILES = [...expansion.tiles, ...original.ground.tiles.map(t=>({...t,src:t.src.replace('/pixi-art/','/pixi-art/home-expansion/')}))];
-export function createPlacements() {
+export function createUnoutlinedPlacements() {
   const base=placeWorld(homeOriginalWorld);
-  return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable).filter(p=>!(expansion.homeArches && p.id === 16)), ...expansion.props].map(p=>{const edit=expansion.reviewProps?.[p.id];if(!edit)return p;const q={...p,...edit};if(p.footprint&&!edit.footprint&&(edit.x!==undefined||edit.y!==undefined)){const dx=q.x-p.x,dy=q.y-p.y;q.footprint=p.footprint.poly?{poly:p.footprint.poly.map(([x,y])=>[x+dx,y+dy])}:{...p.footprint,x:p.footprint.x+dx,y:p.footprint.y+dy};}return q;}).map(solidBuilding);
+  return [...createOriginalPlacements(base, geometry({...base,obstacles:[]}).walkable).filter(p=>!(expansion.homeArches && p.id === 16)), ...expansion.props].map(p=>{const edit=expansion.reviewProps?.[p.id];if(!edit)return p;const q={...p,...edit};if(p.footprint&&!edit.footprint&&(edit.x!==undefined||edit.y!==undefined)){const dx=q.x-p.x,dy=q.y-p.y;q.footprint=p.footprint.poly?{poly:p.footprint.poly.map(([x,y])=>[x+dx,y+dy])}:{...p.footprint,x:p.footprint.x+dx,y:p.footprint.y+dy};}return q;});
+}
+export function createPlacements() {
+  return createUnoutlinedPlacements().map(solidBuilding);
 }
 export function homeDecals(props) {
   const base=placeWorld(homeOriginalWorld), old=geometry({...base,obstacles:[]}).walkable;

@@ -37,7 +37,11 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
   const out = [], bad = [];
   const why = (x, y, pose, r, tree) => {
     if (tree) return null;
-    if (!walkable(x, y) || !walkable(x - r * .8, y) || !walkable(x + r * .8, y)) return 'not ground';
+    // The Home pose radius includes ground furniture (a leaf, box, etc.).
+    // Test support beneath the Ducky with the same 22-unit body clearance as
+    // walking, rather than treating that entire illustration as a standing body.
+    const support = home ? Math.min(22, r * .8) : r * .8;
+    if (!walkable(x, y) || !walkable(x - support, y) || !walkable(x + support, y)) return 'not ground';
     if (islet(x, y) || deck(x, y) || steps(x, y)) return 'deck/bridge/stair';
     if (onPath(x, y) < 60 + r * .35) return 'path';
     const zone = avoid.find(a => inEllipse(x, y, a.x, a.y, a.rx, a.ry));

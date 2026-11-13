@@ -1,4 +1,6 @@
 import silhouettes from './building-silhouettes.json' with {type: 'json'};
+import bases from './prop-base-silhouettes.json' with {type: 'json'};
+import {propOutlineKind} from './prop-outline-rules.js';
 
 // Opaque SVG silhouettes, normalized to the authored view box. Blocking the
 // projected roof as well as the walls prevents a Ducky disappearing beneath it.
@@ -16,7 +18,9 @@ function clearance(poly, pad = 8) {
 }
 
 export function buildingFootprint(prop) {
-  const outline = silhouettes[prop.src];
+  const kind = propOutlineKind(prop);
+  if (kind !== 'solid' && kind !== 'base') return null;
+  const outline = kind === 'base' ? bases[prop.src] : silhouettes[prop.src];
   if (!outline) return null;
   const w = prop.width * (prop.scale ?? 1), h = prop.height * (prop.scale ?? 1);
   if (prop.spinPeriod) {
@@ -33,9 +37,14 @@ export function buildingFootprint(prop) {
 
 export function solidBuilding(prop) {
   const footprint = buildingFootprint(prop);
-  if (!footprint) return prop;
+  const outlineKind = propOutlineKind(prop);
+  if (!footprint) {
+    if (outlineKind === 'solid' || outlineKind === 'base') throw Error(`Missing Home outline: ${prop.src}`);
+    const {footprint: oldFootprint, ...rest} = prop;
+    return {...rest, outlineKind, z: -100000, sortY: -100000};
+  }
   // Sort at the front of the solid, including overhangs extending below its
   // anchor. A Ducky on the approach is in front; one above the roof is behind.
   const sortY = Math.max(...footprint.poly.map(p => p[1]));
-  return {...prop, footprint, z: sortY, sortY};
+  return {...prop, outlineKind, footprint, z: sortY, sortY};
 }

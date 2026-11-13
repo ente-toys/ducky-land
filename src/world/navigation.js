@@ -1,5 +1,5 @@
 import {geometry} from '../../assets/world/island-geometry.mjs';
-export function createNavigation(world,{cellSize=32,walkable:customWalkable}={}){
+export function createNavigation(world,{cellSize=world.navigationCellSize??32,walkable:customWalkable}={}){
 const walkable=customWalkable??geometry(world).walkable;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const X0=world.origin?.x ?? 0,Y0=world.origin?.y ?? 0;

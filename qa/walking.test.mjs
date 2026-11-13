@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {inShape} from '../assets/world/island-geometry.mjs';
 import {createNavigation} from '../src/world/navigation.js';
 import {DUCK_RADIUS, EASE_IN, EASE_OUT, RUN_SPEED, WALK_SPEED, separateActors, setWalkDestination, walkStep} from '../src/gameplay/player-motion.js';
 
@@ -37,7 +38,7 @@ function shallowHits(edges) {
     if (length < 150) continue;
     const tx = (b[0]-a[0])/length, ty = (b[1]-a[1])/length, mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
     const start = [[mid[0]-ty*30, mid[1]+tx*30], [mid[0]+ty*30, mid[1]-tx*30]].find(p => nav.walkable(...p));
-    if (!start || world.obstacles.some(o => !o.poly && Math.hypot(o.x-start[0], o.y-start[1]) < Math.max(o.rx, o.ry)+150)) continue;
+    if (!start || world.obstacles.some(o => inShape(...start,o,150))) continue;
     for (const d of DIRS) {
       const l = Math.hypot(...d), along = Math.abs(d[0]/l*tx + d[1]/l*ty);
       if (nav.walkable(start[0]+d[0]/l*60, start[1]+d[1]/l*60) || along < Math.cos(50*Math.PI/180) || along > Math.cos(10*Math.PI/180)) continue;

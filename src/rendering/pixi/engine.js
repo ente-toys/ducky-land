@@ -41,7 +41,7 @@ import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
 import {createBoatBuildView} from './boat-build-view.js';
 import {isletUnder} from '../../gameplay/boat-build.js';
-import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborClear, harborWorld, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
+import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, harborWorld, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
 import {isletWalks} from '../../world/islet-walk.js';
 import {reframeIslet} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf} from '../../world/island-maps.js';
@@ -227,8 +227,7 @@ export class PixiIsland {
       if (this.disposed) return;
       this.plantReactions=createPlantReactions(this.air,leafTexture);
       this.rinkTrails=createRinkTrails(this.decks);
-      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable)
-        .filter(prop => !this.room || harborClear(prop)), local = this.room ? harborWorld(walkWorld(world, props)) : walkWorld(world, props);
+      const props = createPlacements(world, geometry({...world, obstacles: []}).walkable), local = this.room ? harborWorld(walkWorld(world, props)) : walkWorld(world, props);
       globalThis.__duckyProps = props.map(p => ({id: p.id, name: p.name, asset: p.asset, x: Math.round(p.x), y: Math.round(p.y), scale: p.scale, src: p.src}));
       const beds = sleepSpots(local, props, geometry(local).walkable, napWidths), walk = {...local, obstacles: [...local.obstacles, ...beds.map(sleeperFootprint)]};
       this.sim = createSimulation(walk, 8612, {sleepingNpcs: true, npcCount: beds.length});
