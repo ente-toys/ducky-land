@@ -55,7 +55,9 @@ test('Home retains all hundred residents, their poses and stories on clear groun
    assert.ok(approach&&walk.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...approach).length,`${bed.pose}: reachable from spawn`);
    const actor={x:from[0],y:from[1],previousX:from[0],previousY:from[1],turn:0,action:0,travel:0,path:[],until:0};
    assert.ok(setWalkDestination(actor,walk,...to),`server finds a route around ${bed.pose} at ${bed.x},${bed.y}, from ${from} to ${to}`);
-   for(let k=0;k<600&&actor.path.length;k++){
+   const routeLength=actor.path.reduce((sum,p,i)=>{const q=i?actor.path[i-1]:from;return sum+Math.hypot(p[0]-q[0],p[1]-q[1]);},0);
+   const maxSteps=Math.ceil((routeLength/245+5)/.05);
+   for(let k=0;k<maxSteps&&actor.path.length;k++){
     walkStep(actor,walk,.05,k*.05,{x:0,y:0});
     assert.ok(walk.walkable(actor.x,actor.y),'every simulated server step stays on walkable ground');
     assert.ok(!inShape(actor.x,actor.y,f),'never steps through a resident');

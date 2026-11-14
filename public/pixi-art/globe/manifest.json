@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "6504166663eb57986572b7e58fdafcdec2d767db8bcfde2eb53b96dc13ca124d",
+      "modelSha256": "d0ef6330ed001d2f9acc61669f3fdc0b7080037145f2ed1724ef71ab207e65fb",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -19,11 +19,11 @@
         },
         {
           "path": "assets/world/home-sleep-more.json",
-          "sha256": "7200e3f4e550a93f0e72a559d06056d6121a4e8af5c11d3752944e213b065775"
+          "sha256": "2dc5f871fdd9bf6cf6b167530d90c4bdecc139dfbf94267c25d1c48ed7aedf9e"
         },
         {
           "path": "assets/world/home-sleep-outer.json",
-          "sha256": "a43286e785ccd136b825d24f3d99e1893616e81ae3c19e820e9177756ee9a219"
+          "sha256": "9240167476fe86206d1b29ca329eab06a3a2f4e67b4e8cdfb7634bd71969afc4"
         },
         {
           "path": "assets/world/island-geometry.mjs",
@@ -442,6 +442,10 @@
           "sha256": "20f48ae26bd81bd28b835a6d3303e0ccd3258a4984a3be420427b7459293181a"
         },
         {
+          "path": "public/pixi-art/home-hamlets/butterbill/square-flowerbed.svg",
+          "sha256": "7ec2f8e50e78df760509db3c9f0fee02d1a25835c2a2270c81702f1a024e2851"
+        },
+        {
           "path": "public/pixi-art/home-hamlets/butterbill/tree-birch.svg",
           "sha256": "3cd1f3dac206a9b79398c4d21d8b50253b87dd4dcd7a263ab8ab2454444a143d"
         },
@@ -680,6 +684,10 @@
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/tree-round-oak.svg",
           "sha256": "5f6979e885aff06661d08d5208f5d95788f0d26805f4f354a049731891bc287d"
+        },
+        {
+          "path": "public/pixi-art/home-hamlets/petalpatch/tree-slender-birch.svg",
+          "sha256": "83464b903f744678e34a70981e30287ad0f98930770659a3dee0aceb09ffae2d"
         },
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/tree-spreading-oak.svg",
@@ -991,15 +999,15 @@
         },
         {
           "path": "src/world/home/building-silhouettes.json",
-          "sha256": "f85d323bbeed286107362fe18b252b796746f0c6ea9f97c4fcbe72740a1d0f0c"
+          "sha256": "3c5d162d50d71970b79800f6e5a24c9fa674274d213d314d01a50f6e0bc70d84"
         },
         {
           "path": "src/world/home/front-body-silhouettes.json",
-          "sha256": "ff9f1a608be7ee1c254e8773f8c03e662ce5be72c14a1cf188fe5078b67f0f7d"
+          "sha256": "66a5efc46de77a28c031ea95a7367bd87bb43af4eb406f7b7b01411556e2fd11"
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "693d48443c852ec98fa0764003e55d2ddb8446f3a3f15f32235d10cdbe28b359"
+          "sha256": "2e0e0e23a774a5861ae9a785686bed2562ea2b72e8645032274e9ea9f4706915"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1035,7 +1043,7 @@
         },
         {
           "path": "src/world/home/sleep-spots.js",
-          "sha256": "e013a22f038fd58a4fa7d66f39e8937304ba0d8d48379bd6e145a9b46cedca81"
+          "sha256": "0f4d5c69f3f2db8c5a9d9ff6dea338f772db94099a5561c894f49c819c9bf8fd"
         },
         {
           "path": "src/world/home/walk-shapes.json",
@@ -1050,15 +1058,15 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "146ed55dbf15d89d6d65bb957302b2c7aef7e3e8f71ad738e7a043b410424a91"
+      "sha256": "f7cfa2392bd5885d84fe9aed1d56cc66da73a1106dc61d7d704f36527d5ced99"
     },
-    "groundSha256": "d2516fd901cfa126c4d41763dd752bbb12fdb2643558a482dea7d7d5a88942c9",
+    "groundSha256": "dddbf340591c9c37fbe7ffb512aa8561b0dd33aec741be13b64e96b528c9ab21",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "1f3d27c8e7fa43d45a6c7f0ed9a21ce70df5a9f73b1abaf749971b60bc03f71c",
+    "sha256": "160abdfc2b5ab3ddc359a545cf3d6d85f416ed555c32bd3d4d30e34a3aaa25c2",
     "width": 1024,
     "height": 768,
-    "bytes": 1141195,
-    "groundBytes": 956787,
+    "bytes": 1149147,
+    "groundBytes": 954138,
     "quality": {
       "tolerance": 0.4,
       "minArea": 0.2,
@@ -1067,7 +1075,7 @@
     },
     "worldPaths": 0,
     "walkways": 1,
-    "flats": 825,
+    "flats": 793,
     "decks": 9,
     "bridgeDetails": 0
   },

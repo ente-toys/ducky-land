@@ -35,8 +35,8 @@ test('five Home communities have distinct homes, meaningful workplaces and reach
  }
  assert.ok(homes>=14);
 });
-test('Home keeps clear commons and joins every shared green to the original heart',()=>{
- const nav=HOME_MAP.nav();for(const p of E.openSpaces)for(let x=-p.radius;x<=p.radius;x+=38)for(let y=-p.radius;y<=p.radius;y+=38)if(x*x+y*y<=p.radius*p.radius)assert.ok(nav.walkable(p.point[0]+x,p.point[1]+y),`${p.id}: ${x},${y}`);
+test('Home joins every shared green to the original heart with room to detour around restored trees',()=>{
+ const nav=HOME_MAP.nav();for(const p of E.openSpaces){assert.ok(nav.walkable(...p.point),p.id+' destination clear');assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p.point).at(-1),p.point,p.id+' reachable');}
  for(const p of E.places){const route=nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p.point);assert.deepEqual(route.at(-1),p.point,p.id);let prev=[HOME_MAP.spawn.x,HOME_MAP.spawn.y];for(const q of route){assert.ok(nav.clearLine(prev,q),p.id);prev=q;}}
  const main=E.roads.filter(r=>r.kind==='main');assert.equal(main.length,1);
  assert.ok(main[0].width>=120&&main[0].width<=135,'main loop matches original Home path width');

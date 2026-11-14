@@ -1,0 +1,3 @@
+import fs from 'node:fs';import {loadPlacements} from './data.mjs';import {geometry} from '../../assets/world/island-geometry.mjs';import {candidateConnectivity} from './candidate-connectivity.mjs';
+const P=await loadPlacements(),ps=P.createPlacements(),raw=JSON.parse(fs.readFileSync('assets/world/world.json')),w=P.harborWorld(P.walkWorld(P.trimWorld(raw),ps)),beds=P.sleepSpots(w,ps,geometry(w).walkable,P.sleepHalfWidths(.88*.24*3));
+const target=JSON.parse(process.argv[2]);for(const id of process.argv.slice(3)){let check=candidateConnectivity(w,ps,beds.map(P.sleeperFootprint),new Set(id.split(',')),raw.zones.plaza.spawn,target);console.log(id,check([]));}

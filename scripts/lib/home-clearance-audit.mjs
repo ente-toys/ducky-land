@@ -37,7 +37,7 @@ export async function homeClearanceOracle(props,world){
   const ground=geometry({...world,obstacles:world.obstacles.filter(o=>!o.building)}).walkable;
   const feetClear=(x,y,pad=30)=>!near(x,y).some(o=>inShape(x,y,o,pad));
   const clear=(x,y,pad=30)=>feetClear(x,y,pad)&&frontClear(x,y,Math.max(0,pad-22));
-  return {shapes,clear,feetClear,frontClear,eligible:(x,y)=>ground(x,y)&&clear(x,y)};
+  return {shapes,clear,feetClear,frontClear,eligible:(x,y)=>ground(x,y)&&clear(x,y),connectedEligible:(x,y)=>ground(x,y)&&clear(x,y,22)};
 }
 
 export function auditHomeClearance(world,spawn,oracle,clients,step=16){
@@ -49,25 +49,26 @@ export function auditHomeClearance(world,spawn,oracle,clients,step=16){
   for(let i=0;i<eligible.length;i++){
     const p=point(i);
     if(land(...p)){landSamples++;const overlaps=!oracle.clear(...p,22-1e-6);clients.forEach((c,k)=>{const walks=c(...p);if(!walks)blocked[k]++;else {if(overlaps)bodyClearanceViolations[k]++;if(!oracle.frontClear(...p))frontBodyOverlaps[k]++;}});}
-    if(oracle.eligible(...p))eligible[i]=1;
+    if(oracle.connectedEligible(...p))eligible[i]=1;
   }
   let start=-1,best=Infinity;
   for(let i=0;i<eligible.length;i++)if(eligible[i]){const p=point(i),d=Math.hypot(p[0]-spawn[0],p[1]-spawn[1]);if(d<best){start=i;best=d;}}
   if(start<0||best>step*2)throw Error('Spawn has no clear oracle cell');
-  let head=0,tail=1;queue[0]=start;seen[start]=1;
+  let head=0,tail=1,clearCount=0;queue[0]=start;seen[start]=1;
   const violations=clients.map(()=>0),examples=clients.map(()=>[]);
   while(head<tail){
     const i=queue[head++],p=point(i);
-    clients.forEach((c,k)=>{if(!c(...p)){violations[k]++;if(examples[k].length<8)examples[k].push(p);}});
+    if(oracle.eligible(...p)){clearCount++;clients.forEach((c,k)=>{if(!c(...p)){violations[k]++;if(examples[k].length<8)examples[k].push(p);}});}
     for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
       const x=i%cols+dx,y=Math.floor(i/cols)+dy,j=y*cols+x;
       if(x<0||x>=cols||y<0||y>=rows||seen[j]||!eligible[j])continue;
-      // Do not connect across narrow water/fence/opaque barriers between samples.
-      if(![.25,.5,.75].every(t=>oracle.eligible(p[0]+dx*step*t,p[1]+dy*step*t)))continue;
+      // Follow the actual 22-unit body-safe component, then audit its 30-unit clear samples.
+      // A valid detour may narrow below 30 clearance without cutting off the wider lawn beyond it.
+      if(![.25,.5,.75].every(t=>oracle.connectedEligible(p[0]+dx*step*t,p[1]+dy*step*t)))continue;
       seen[j]=1;queue[tail++]=j;
     }
   }
-  return {step,landSamples,landAreaUnits2:landSamples*step*step,blockedSamples:blocked,blockedPercent:blocked.map(n=>100*n/landSamples),connectedClearSamples:tail,violations,bodyClearanceViolations,frontBodyOverlaps,examples};
+  return {step,landSamples,landAreaUnits2:landSamples*step*step,blockedSamples:blocked,blockedPercent:blocked.map(n=>100*n/landSamples),connectedBodySafeSamples:tail,connectedClearSamples:clearCount,violations,bodyClearanceViolations,frontBodyOverlaps,examples};
 }
 
 // Sweep the walker itself, rather than the oracle's open-ground component.

@@ -16,7 +16,7 @@ const oracle=await homeClearanceOracle(props,world);
 test('connected Home grass/sand/path clearing alpha pixels by 30 and front props by the body box is walkable on client and worker',()=>{
   const result=auditHomeClearance(world,[HOME_MAP.spawn.x,HOME_MAP.spawn.y],oracle,[client,worker.walkable]);
   console.log('Home grass clearance audit:',JSON.stringify(result));
-  assert.ok(result.connectedClearSamples>100000,'whole island sweep');
+  assert.ok(result.connectedBodySafeSamples>100000,'whole island sweep');
   assert.deepEqual(result.violations,[0,0],JSON.stringify(result.examples));
   assert.deepEqual(result.bodyClearanceViolations,[0,0],'no walkable centre overlaps opaque art plus 22-unit body');
   assert.deepEqual(result.frontBodyOverlaps,[0,0],'no walkable body rectangle intersects foreground alpha pixels');

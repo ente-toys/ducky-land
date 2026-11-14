@@ -138,8 +138,9 @@ test('click-to-move eases in and brakes into the exact target without overshooti
     const a = duck(x, y), end = setWalkDestination(a, nav, tx, ty), points = a.path.slice();
     assert.ok(end, 'route found');
     const travel = [];
+    const routeLength=points.reduce((sum,p,i)=>{const q=i?points[i-1]:[x,y];return sum+Math.hypot(p[0]-q[0],p[1]-q[1]);},0);
     let t = 0;
-    while (a.path.length && t < 30) {
+    while (a.path.length && t < routeLength/WALK_SPEED+5) {
       const left = a.path.length;
       walkStep(a, nav, dt, t += dt, ZERO);
       travel.push(a.travel);
@@ -179,7 +180,8 @@ test('a click far out at sea (or mid-pond) walks to the nearest shore toward the
     assert.ok(!nav.walkable(end[0]+(tx-end[0])/l*30, end[1]+(ty-end[1])/l*30), 'stops at the water line');
     const a = duck(x, y);
     setWalkDestination(a, nav, tx, ty);
-    for (let t = 0; a.path.length && t < 40; t += .05) walkStep(a, nav, .05, t, ZERO);
+    const routeLength=a.path.reduce((sum,p,i)=>{const q=i?a.path[i-1]:[x,y];return sum+Math.hypot(p[0]-q[0],p[1]-q[1]);},0);
+    for (let t = 0; a.path.length && t < routeLength/WALK_SPEED+5; t += .05) walkStep(a, nav, .05, t, ZERO);
     assert.deepEqual([a.x, a.y], end);
   }
 });
@@ -242,4 +244,14 @@ test('a duck pressed against the shore is never pushed into the sea', () => {
     checked++;
   }
   assert.ok(checked >= 10);
+});
+
+test('narrow continuous Home grass gaps beside restored props remain reachable',()=>{
+  const start=world.zones.plaza.spawn;
+  for(const point of [[-1062.2222222222222,611.8888888888891],[5977.777777777777,-604.1111111111109],[1961.7777777777778,1683.8888888888891],[2297.777777777778,307.88888888888914],[-662.2222222222222,771.8888888888891]]){
+    assert.ok(nav.walkable(...point),'body-safe grass');
+    const path=nav.route(...start,...point);
+    assert.deepEqual(path.at(-1),point,'click reaches the small grass pocket');
+    assert.ok(path.every((p,i)=>nav.clearLine(i?path[i-1]:start,p)),'detour segments retain collision clearance');
+  }
 });

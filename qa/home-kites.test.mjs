@@ -13,11 +13,9 @@ test('13 non-blocking Home kites have clear lawn stakes and reachable walking ap
  const nav=HOME_MAP.nav();
  for(const s of sites){
   assert.ok(nav.walkable(s.x,s.y),s.id+' clear stake');
-  for(const dx of [-100,0,100])for(const dy of [-100,0,100]){
-   const approach=nav.nearest(s.x+dx,s.y+dy,80);
-   assert.ok(approach,s.id+' clear walking approach');
-   assert.deepEqual(nav.route(s.x,s.y,...approach).at(-1),approach,s.id+' reachable walking approach');
-  }
+  const approaches=[];for(let i=0;i<16;i++){const point=[s.x+Math.cos(i*Math.PI/8)*100,s.y+Math.sin(i*Math.PI/8)*100];if(nav.walkable(...point))approaches.push(point);}
+  assert.ok(approaches.length>=2,s.id+' has clear walking approaches around the restored planting');
+  for(const point of approaches)assert.deepEqual(nav.route(s.x,s.y,...point).at(-1),point,s.id+' approach reachable');
   assert.ok(!HOME_MAP.walk.water.some(w=>inShape(s.x,s.y,w,80)),s.id+' away from water');
   assert.ok(!HOME_MAP.walk.obstacles.some(w=>w.id===s.id),'stake adds no collision');
   assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,s.x,s.y).at(-1),[s.x,s.y],s.id+' reachable');

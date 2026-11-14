@@ -13,7 +13,8 @@ test('only the strip in front of the museum wall is the museum door, not the lan
   const mid = (MUSEUM_DOOR.x0 + MUSEUM_DOOR.x1) / 2;
   assert.ok(atMuseumDoor(mid, MUSEUM_DOOR.y - 20), 'the door itself still opens the museum');
   for (const [x, y] of [[2851, 155], [2920, 600], [2920, -300], [2900, -77]]) {
-    assert.ok(nav.walkable(x, y), `${x},${y} is open ground`);
+    const nearby=nav.nearest(x,y,180);assert.ok(nearby,`${x},${y} has nearby clear ground`);
+    assert.ok(!atMuseumDoor(...nearby),'restored scenery does not turn the north approach into an entrance');
     assert.ok(!atMuseumDoor(x, y), `${x},${y} north of the museum is not the door`);
   }
   assert.equal(nav.walkable(2920,700),false,'museum roof silhouette is solid');

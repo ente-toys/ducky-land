@@ -22,8 +22,9 @@ test('bigger Home retains original landmark and save coordinates, every communit
     let prev=[m.spawn.x,m.spawn.y];for(const p of route){assert.ok(n.clearLine(prev,p),id+' has no blocked route segment');prev=p;}
   }
   const west=[-544,2033],north=[2900,-77];
-  for(const point of [west,north])assert.ok(n.walkable(...point));
-  assert.deepEqual(n.route(...west,...north).at(-1),north);
+  const approaches=[west,north].map(point=>n.nearest(...point,180));
+  for(const point of approaches)assert.ok(point,'nearby saved-coordinate approach survives restored scenery');
+  assert.deepEqual(n.route(...approaches[0],...approaches[1]).at(-1),approaches[1]);
 });
 
 test('bigger Home has ten afloat moorings, walkable boarding points and usable west-coast docking',()=>{

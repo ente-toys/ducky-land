@@ -1008,7 +1008,9 @@ test('bigger Home accepts walking destinations west of the original origin and r
   await request('/test/expire-resume');
   const login=await signIn(9391),a=await socket(login.session);
   try {
-    const start={x:-544,y:2033},target={x:-544,y:2100};
+    // The restored grove occupies the former fixture. The adjacent west lawn
+    // retains the same negative-coordinate walk and saved-position coverage.
+    const start={x:-600,y:2033},target={x:-600,y:2100};
     assert.ok(mapOf('home').nav().clearLine([start.x,start.y],[target.x,target.y]));
     await request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose:{...start,path:[],mode:'walking'}})});
     await eventually(()=>a.duck()?.x===start.x);
