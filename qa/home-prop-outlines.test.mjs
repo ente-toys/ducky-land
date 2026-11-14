@@ -18,7 +18,7 @@ const client=geometry(P.walkWorld(P.trimWorld(HOME_MAP.world),props)).walkable;
 test('every Home prop has a generated outline and every solid outline is blocked on client and worker',()=>{
   assert.ok(props.length>=804);
   for(const p of props){
-    assert.ok(outlines[p.src]?.length>=3,`${p.id}: art traced`);
+    assert.ok(outlines[p.src]?.every(r=>r.length>=3),`${p.id}: art traced`);
     const kind=propOutlineKind(p);
     assert.equal(p.outlineKind,kind);
     if(kind!=='solid'){
@@ -26,7 +26,7 @@ test('every Home prop has a generated outline and every solid outline is blocked
       assert.ok(p.z<HOME_MAP.origin.y-10000,`${p.id}: beneath all Duckies`);
       continue;
     }
-    const poly=p.footprint.poly;
+    const poly=[p.footprint.poly,...(p.footprint.parts??[])].flat();
     assert.ok(poly.flat().every(Number.isFinite),`${p.id}: valid geometry`);
     assert.equal(p.z,Math.max(...poly.map(p=>p[1])),`${p.id}: depth uses blocker base`);
     const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]);let samples=0;
@@ -86,9 +86,9 @@ test('trees, lamps and reeds use the full drawing and clear authored route corri
   assert.ok(tall.length>=260);
   for(const p of tall){
     assert.equal(p.outlineKind,'solid',`${p.id}: entire drawing blocks`);
-    for(const [u,v] of outlines[p.src]){
+    for(const [u,v] of outlines[p.src].flat()){
       const x=p.x+(p.flip?p.anchor.x-u:u-p.anchor.x)*p.width*p.scale,y=p.y+(v-p.anchor.y)*p.height*p.scale;
-      assert.ok(inShape(x,y,p.footprint),`${p.id}: full outline enclosed`);
+      assert.ok(inShape(x,y,p.footprint,p.footprint.clearance),`${p.id}: full outline enclosed`);
     }
     for(const r of routes)for(const point of r.samples)assert.equal(inShape(...point,p.footprint,r.width/2+16),false,`${p.id}: canopy covers ${r.id}`);
   }

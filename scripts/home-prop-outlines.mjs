@@ -4,30 +4,15 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {build} from 'esbuild';
 import sharp from 'sharp';
 import {propOutlineKind} from '../src/world/home/prop-outline-rules.js';
+import {alphaContours} from './lib/alpha-contour.mjs';
 const SIZE = 256;
 async function placements() {
   const bundle = await build({stdin:{resolveDir:process.cwd(),contents:`export * from './src/world/home/placements.js'; export {harborWorld} from './src/gameplay/islands.js'; export {sleepHalfWidths} from './src/world/home/sleep-spots.js';`},bundle:true,platform:'node',format:'esm',write:false});
   return import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text+'\n//# sourceURL=home-prop-data.mjs').toString('base64'));
 }
-// Convex envelope of the opaque pixel cells, including their outside corners.
-// Like the original building trace, this conservatively closes transparent holes.
-function hull(points) {
-  const sorted=[...new Map(points.map(p=>[p.join(','),p])).values()].sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
-  const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
-  const half=ps=>{const out=[];for(const p of ps){while(out.length>1&&cross(out.at(-2),out.at(-1),p)<=0)out.pop();out.push(p);}return out;};
-  return [...half(sorted).slice(0,-1),...half(sorted.toReversed()).slice(0,-1)].map(p=>p.map(v=>v/SIZE));
-}
 async function trace(svg) {
   const {data}=await sharp(Buffer.from(svg)).resize(SIZE,SIZE,{fit:'fill'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
-  let bottom=0;
-  for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++)if(data[(y*SIZE+x)*4+3]>32){bottom=Math.max(bottom,y+1);}
-  const points=[];
-  for(let y=0;y<bottom;y++){
-    let left=SIZE,right=-1;
-    for(let x=0;x<SIZE;x++)if(data[(y*SIZE+x)*4+3]>32){left=Math.min(left,x);right=x;}
-    if(right>=0)points.push([left,y],[right+1,y],[left,y+1],[right+1,y+1]);
-  }
-  const poly=hull(points);if(poly.length<3)throw Error('Empty SVG trace');return poly;
+  return alphaContours(data,SIZE);
 }
 const P=await placements(), props=P.createUnoutlinedPlacements();
 const full={};

@@ -3,35 +3,27 @@ import {propOutlineKind} from './prop-outline-rules.js';
 
 // Opaque SVG silhouettes, normalized to the authored view box. Blocking the
 // projected roof as well as the walls prevents a Ducky disappearing beneath it.
-// The extra 8 units plus navigation’s 16-unit padding clear the 22-unit Duck body.
-// Keep these in world data: both the renderer and worker consume this geometry.
-function clearance(poly, pad = 8) {
-  const area = poly.reduce((a,p,i) => {const q=poly[(i+1)%poly.length];return a+p[0]*q[1]-q[0]*p[1];},0);
-  if (area < 0) poly = poly.toReversed();
-  const normal = (a,b) => {const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);return [dy/len,-dx/len];};
-  return poly.map((p,i) => {
-    const a=normal(poly[(i+poly.length-1)%poly.length],p),b=normal(p,poly[(i+1)%poly.length]);
-    const k=pad/(1+a[0]*b[0]+a[1]*b[1]);
-    return [p[0]+(a[0]+b[0])*k,p[1]+(a[1]+b[1])*k];
-  });
-}
-
+// Clearance is applied once by shared geometry, as distance to these contours.
+// One raster pixel covers simplification error; it is not a second body pad.
 export function buildingFootprint(prop) {
   const kind = propOutlineKind(prop);
   if (kind !== 'solid') return null;
-  const outline = silhouettes[prop.src];
-  if (!outline) return null;
+  const contours = silhouettes[prop.src];
+  if (!contours) return null;
+  const outline = contours.flat();
   const w = prop.width * (prop.scale ?? 1), h = prop.height * (prop.scale ?? 1);
   if (prop.spinPeriod) {
     const radius = Math.max(...outline.map(([u,v]) => Math.hypot((u-prop.anchor.x)*w,(v-prop.anchor.y)*h)));
     // Circumscribe the full animated sweep, not only the initial blade pose.
-    const r = (radius + 8) / Math.cos(Math.PI/32);
-    return {prop: prop.id, building: true, poly: Array.from({length:32},(_,i) => [prop.x+r*Math.cos(i*Math.PI/16),prop.y+r*Math.sin(i*Math.PI/16)])};
+    const r = radius / Math.cos(Math.PI/32);
+    return {prop: prop.id, building: true, clearance: 22, poly: Array.from({length:32},(_,i) => [prop.x+r*Math.cos(i*Math.PI/16),prop.y+r*Math.sin(i*Math.PI/16)])};
   }
-  return {prop: prop.id, building: true, poly: clearance(outline.map(([u, v]) => [
+  const rings = contours.map(ring => ring.map(([u,v]) => [
     prop.x + (prop.flip ? prop.anchor.x - u : u - prop.anchor.x) * w,
     prop.y + (v - prop.anchor.y) * h,
-  ]))};
+  ]));
+  return {prop: prop.id, building: true, clearance: 22 + Math.max(w,h) / 256,
+    poly: rings[0], ...(rings.length > 1 ? {parts: rings.slice(1)} : {})};
 }
 
 export function solidBuilding(prop) {
@@ -44,6 +36,6 @@ export function solidBuilding(prop) {
   }
   // Sort at the front of the solid, including overhangs extending below its
   // anchor. A Ducky on the approach is in front; one above the roof is behind.
-  const sortY = Math.max(...footprint.poly.map(p => p[1]));
+  const sortY = Math.max(...[footprint.poly, ...(footprint.parts ?? [])].flat().map(p => p[1]));
   return {...prop, outlineKind, footprint, z: sortY, sortY};
 }

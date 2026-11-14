@@ -17,7 +17,7 @@ function reference(world,x,y) {
     if (!deck&&!islet) return false;
   }
   const bridge=world.bridges.some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
-  return (bridge||!world.water.some(o=>inShape(x,y,o,20)))&&!world.obstacles.some(o=>inShape(x,y,o,16));
+  return (bridge||!world.water.some(o=>inShape(x,y,o,20)))&&!world.obstacles.some(o=>inShape(x,y,o,o.clearance??16));
 }
 
 test('accelerated walking geometry matches unindexed collision checks on all thirteen maps',()=>{
