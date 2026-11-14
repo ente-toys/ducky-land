@@ -183,7 +183,6 @@ export function prerenderArt() {
               // sides of a continuous join slightly different colours.
               bytes = await image.webp({quality: job.quality, lossless: job.lossless, alphaQuality: 100, effort: 0}).toBuffer(); rendered++;
             }
-            this.emitFile({type: 'asset', fileName, source: bytes});
             sheetBytes.set(config.base+fileName,bytes.length);
             return bytes;
           })());
@@ -254,6 +253,13 @@ export function prerenderArt() {
       // even where native-size caps make several scales numerically equal.
       const tierOrder=[0,6,7,1,2,3,4,5,8];
       for(const e of Object.values(manifest))e.tiers.sort((a,b)=>tierOrder.indexOf(Number(a.group.split('/').at(-1)))-tierOrder.indexOf(Number(b.group.split('/').at(-1))));
+      // Ship a single-piece WebP only where no sheet frame covers that tier
+      // (oversized pieces). Sheets cover everything else; emitting every piece
+      // would push the deploy past the host's file-count limit.
+      const pieceFiles=new Set();
+      for(const e of Object.values(manifest))for(const t of e.tiers)if(!t.sheet&&t.url)pieceFiles.add(t.url.slice(config.base.length));
+      for(const fileName of pieceFiles){const bytes=await emitted.get(fileName);if(bytes)this.emitFile({type:'asset',fileName,source:bytes});}
+      config.logger.info(`Prerender art: ${pieceFiles.size} single-piece WebP kept (no sheet frame)`);
       for(const [src,e] of Object.entries(manifest))if(/^\/pixi-duck\/view-.*-body-/.test(src))e.svgText=await readFile(path.join(config.publicDir,src),'utf8');
       const json = JSON.stringify(manifest), fileName = `${DIRECTORY}/manifest-${hash(json)}.json`;
       this.emitFile({type: 'asset', fileName, source: json});
