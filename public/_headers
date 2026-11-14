@@ -1,0 +1,8 @@
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/art-prerender/*
+  Cache-Control: public, max-age=31536000, immutable
+/pixi-art/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=604800
+/pixi-duck/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=604800
