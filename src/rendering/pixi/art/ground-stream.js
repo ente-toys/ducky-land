@@ -142,9 +142,6 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
               if(dead){if(!lease.released)tile.release(src);leases.delete(src);return;}
               for(const entry of entries)if(entry.src===src){
                 entry.sprite.texture=lease.texture;fitGroundSprite(entry,lease.texture);entry.sprite.visible=entry.render!==false;
-                const refit=()=>{if(!dead&&!entry.sprite.destroyed)fitGroundSprite(entry,lease.texture);};
-                lease.texture.on('update',refit);
-                (stream.textureListeners??=[]).push(()=>lease.texture.off('update',refit));
               }
             }));
             const failed=results.find(r=>r.status==='rejected');if(failed)console.warn('Ground preparation: accepting missing piece',failed.reason);
@@ -154,11 +151,10 @@ export function createGroundPool({acquire, release, budget = GROUND_BUDGET_BYTES
           })();
           return stream.preparing;
         },
-        destroy(){if(dead)return;dead=true;for(const off of stream.textureListeners??[])off();for(const lease of pinned.get(stream)?.values()??[]){lease.released=true;lease.release(lease.src);}pinned.delete(stream);streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
+        destroy(){if(dead)return;dead=true;for(const lease of pinned.get(stream)?.values()??[]){lease.released=true;lease.release(lease.src);}pinned.delete(stream);streams.delete(stream);lastSignature='';zooms.delete(stream);for(const tile of entries){desired.delete(tile);drop(tile);for(const entry of cache.get(tile)?.values()??[])discard(entry);cache.delete(tile);tile.sprite.destroy();}}};
       streams.add(stream);return stream;
     },
     update(views,dpr=1,fastZoom=false) {
-      views=views.map(v=>v.stream.fallbackStream?{...v,stream:v.stream.fallbackStream}:v);
       const pinnedViews=views.filter(v=>streams.has(v.stream)&&v.stream.pinned);
       for(const stream of streams)if(stream.pinned){
         const cameras=pinnedViews.filter(v=>v.stream===stream);
