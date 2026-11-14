@@ -1,3 +1,4 @@
+import {groundMeshEntry} from '../art/ground-mesh.js';
 import {BufferImageSource, Container, GlProgram, Graphics, Mesh, MeshGeometry, Shader} from 'pixi.js';
 import {PALETTE} from '../../shared/palette.js';
 import {TILT} from '../../shared/camera.js';
@@ -380,7 +381,13 @@ export async function createWater({app, world, art, layer, objects, props, motio
   try {
     const pond = world.water[0], rect = {x: pond.x - pond.rx - 35, y: pond.y - pond.ry - 35, width: pond.rx * 2 + 70, height: pond.ry * 2 + 70};
     const sea = null;
-    bodies.push(makeBody({id: 'pond', rect, cols: 97, rows: 65, mask: await groundMask(art.ground.tiles, rect, 1.2), parent: layer}));
+    const meshGround=await groundMeshEntry('home');
+    let pondMask;
+    if(meshGround?.waterMask){
+      try{const m=meshGround.waterMask,[c,ctx]=canvas(m.width,m.height);const image=new Image();image.src=m.url;await image.decode();ctx.drawImage(image,0,0);pondMask={width:m.width,height:m.height,data:ctx.getImageData(0,0,m.width,m.height).data};c.width=c.height=1;}catch(error){console.warn('Home water mask unavailable; using authored tiles',error);}
+    }
+    pondMask??=await groundMask(art.ground.tiles,rect,1.2);
+    bodies.push(makeBody({id: 'pond', rect, cols: 97, rows: 65, mask: pondMask, parent: layer}));
     const coveRect = {x: 3560, y: 1210, width: 1140, height: 650};
     bodies.push(makeBody({id: 'cove', rect: coveRect, cols: 121, rows: 73,
       mask: await artMask('/pixi-art/lake-race.svg', coveRect, 1368, 780), parent: layer}));
