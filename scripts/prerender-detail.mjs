@@ -41,12 +41,16 @@ export async function prerenderDetailSheets(sheets,{root,output,base='/',cache=n
      bytes=await sharp({create:{width:sheet.width,height:sheet.height,channels:4,background:'#00000000'}}).composite(composites)
        .webp({quality:92,alphaQuality:100,effort:0,lossless:sheet.ground}).toBuffer();
     }
-    emit(fileName,bytes);return {url:base+fileName,bytes:bytes.length,body:bytes};
+    return {fileName,url:base+fileName,bytes:bytes.length,body:bytes};
    })());
    results[k]=await cache.get(key);
   }
  }));
  const result={raster:results.map(r=>r.url),rasterBytes:results.reduce((n,r)=>n+r.bytes,0)};
+ // A packed view fetches only the pack, so its sheets ship as loose files only
+ // when some unpacked view also uses them.
+ const emitted=cache.emitted??=new Set();
+ if(results.length<=24)for(const r of results)if(!emitted.has(r.fileName)){emitted.add(r.fileName);emit(r.fileName,r.body);}
  if(results.length>24){
   const body=Buffer.concat(results.map(r=>r.body)),fileName=`art-prerender/detail-pack-${hash(body).slice(0,24)}.bin`;
   let offset=0;const ranges=results.map(r=>{const pair=[offset,r.bytes];offset+=r.bytes;return pair;});

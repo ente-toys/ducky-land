@@ -21,7 +21,9 @@ export function pruneUnusedArt(){
    }
    const code=(await Promise.all((await readdir(path.join(out,'assets'))).filter(n=>n.endsWith('.js')).map(n=>readFile(path.join(out,'assets',n),'utf8')))).join('\n');
    let removed=0;
-   for(const src of candidates){if(code.includes(src))continue;await rm(path.join(out,src),{force:true});removed++;}
+   // Duck, boat and globe art can be fetched by a built-up path the scan cannot see; always keep it.
+   const keep=src=>code.includes(src)||/^\/(pixi-duck|pixi-art\/boat|pixi-art\/globe)\//.test(src);
+   for(const src of candidates){if(keep(src))continue;await rm(path.join(out,src),{force:true});removed++;}
    config.logger.info(`Pruned ${removed} build-only art files from the output`);
   }};
 }
