@@ -460,7 +460,7 @@
   cursor: pointer;
   transition: scale 160ms var(--pixi-ease-out), opacity 180ms ease, box-shadow 160ms ease;
 }
-.pixi-world-map .pixi-world-map:focus-visible { outline: 3px solid #564537; outline-offset: 4px; }
+.pixi-world-map:focus-visible { outline: 3px solid #564537; outline-offset: 4px; }
 @media (hover: hover) { .pixi-world-map:not(:disabled):hover { scale: 1.03; box-shadow: 0 0 0 2px #fff9df, 0 5px 14px #10171966; } }
 .pixi-world-map:not(:disabled):active { scale: .98; }
 .pixi-world-map:disabled { cursor: default; pointer-events: none; }
