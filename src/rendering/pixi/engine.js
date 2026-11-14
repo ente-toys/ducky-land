@@ -381,6 +381,8 @@ export class PixiIsland {
         if (this.disposed) {this.travelView.dispose(); return;}
         this.travelView.fx.waterSplash=(x,y)=>{if (this.artShown === 'home') this.waterFX?.splash(x,y,.85,30);};
         this.switchIsland(this.room.islandId);
+        // a watcher has no Duck to follow: look at the middle of the island being watched, not the open sea
+        if(!this.player){const m=this.mapHere();this.camera.x=this.target.x=m.cx;this.camera.y=this.target.y=m.cy;}
         this.karmaView=await createKarmaView(this);
         createBoatBuildView(this).then(view => {if (this.disposed) view.destroy(); else this.boatBuild=view;});
       }

@@ -7,7 +7,7 @@ import React, {act} from 'react';
 for (const {name,dev,query,offline,signInAvailable=true} of [
   {name:'the dev shortcut starts offline play in development',dev:true,query:'?dev=1',offline:true},
   {name:'production ignores the dev shortcut',dev:false,query:'?dev=1',offline:false},
-  {name:'production offers guest play even when GitHub sign-in is unavailable',dev:false,query:'',offline:false,signInAvailable:false},
+  {name:'production guests only watch, even when GitHub sign-in is unavailable',dev:false,query:'',offline:false,signInAvailable:false},
   {name:'production guest play starts without a session or room connection',dev:false,query:'?offline',offline:true},
 ]) test(name,async t=>{
   const {outputFiles:[bundle]}=await build({
@@ -42,13 +42,11 @@ for (const {name,dev,query,offline,signInAvailable=true} of [
   assert.equal(engines[0].room===null,offline);
   assert.deepEqual(requests,offline?[]:['/api/session']);
   assert.equal(sockets.length,offline?0:1);
-  const guestLink=document.querySelector('.pixi-guest-play a[href="?offline"]');
+  assert.equal(document.querySelector('a[href="?offline"]'),null);
   if (offline) {
-    assert.equal(guestLink,null);
     assert.equal(document.querySelector('.pixi-live a[href="/"]').textContent,'Back to live');
   } else {
-    assert.equal(guestLink.textContent,'Continue as guest');
-    assert.equal(Boolean(document.querySelector('a[href="/auth/github/start"]')),signInAvailable);
+    assert.equal(Boolean(document.querySelector('.pixi-live a[href="/auth/github/start"]')),signInAvailable);
   }
   assert.equal(document.body.textContent.includes('Playing without sign-in'),offline);
   assert.equal(document.body.textContent.includes('Sign out'),false);

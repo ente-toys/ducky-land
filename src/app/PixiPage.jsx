@@ -20,7 +20,7 @@ const notices = {
   'players-full':'There’s no room to join right now. You can still watch.',
   'taken-over':'Your duck is playing in another tab.',
   expired:'Your session expired.',
-  'star-required':'Star ente/ente to play. You can still watch.',
+  'star-required':'Star ente/ente to explore and play.',
 };
 
 const authNotices = {
@@ -28,8 +28,6 @@ const authNotices = {
   failed:'GitHub sign-in failed. Try again.',
   'star-check':'Could not check your GitHub star. Please sign in again.',
 };
-
-const githubSignInLabel = <><img src="/github-mark.svg" width="18" height="18" alt=""/>Play with GitHub</>;
 
 export default function PixiPage() {
   const host = useRef(null);
@@ -151,7 +149,9 @@ export default function PixiPage() {
   const retryLive = status === 'spectators-full';
   const starRequired = session?.user && !session.user.canPlay;
   const retryPlay = session?.user?.canPlay && ['players-full','taken-over','watching'].includes(status);
-  return <main ref={page} className={`pixi-page${guest ? ' pixi-page--guest' : ''}`}>
+  // a visitor who cannot play yet only watches: no duck, so no profile circle, and the sign-in ask sits top right
+  const watchOnly = !offline && status !== 'playing' && (guest || starRequired);
+  return <main ref={page} className={`pixi-page${watchOnly ? ' pixi-page--watch' : ''}`}>
     <div className="pixi-host" ref={host}/>
     <img className="pixi-ente-logo" src="/ente-wordmark-white.svg" alt="Ente" width="844" height="264"/>
     <div className="pixi-chat-layer">
@@ -161,11 +161,15 @@ export default function PixiPage() {
     {/* status and the odd action stay top right, but only when there is something to say; the profile button
         takes over outfit, friends and sign out */}
     {!error && (() => {
-      const message = notice || arrival || (offline ? 'Playing without sign-in' : notices[status]) || (status === 'playing' ? '' : 'Watching live');
-      const actions = offline || starRequired || retryLive || retryPlay;
+      const message = notice || arrival || (offline ? 'Playing without sign-in' : notices[status])
+        || (guest ? 'Sign in to explore and play' : starRequired ? notices['star-required'] : status === 'playing' ? '' : 'Watching live');
+      const actions = offline || starRequired || retryLive || retryPlay || guest;
       return (message || actions) && <aside className="pixi-live" aria-label="Live island">
         {message && <div role="status">{message}</div>}
         {offline && <a href={location.pathname}>Back to live</a>}
+        {guest && (session.signInAvailable
+          ? <a className="pixi-live-signin" href="/auth/github/start"><img src="/github-mark.svg" width="16" height="16" alt=""/>Sign in</a>
+          : <button disabled>Sign-in unavailable</button>)}
         {starRequired && <button onClick={() => setStarDialogOpen(true)}>Unlock play</button>}
         {retryLive && <button onClick={() => room.current?.connect(room.current.wantsPlay)}>Retry live view</button>}
         {retryPlay && <button onClick={() => room.current?.connect()}>
@@ -173,19 +177,11 @@ export default function PixiPage() {
         </button>}
       </aside>;
     })()}
-    {!error && (session?.user || status === 'playing' || offline) && <IslandProfile session={session} room={room} island={island}
+    {!error && !watchOnly && (session?.user || status === 'playing' || offline) && <IslandProfile session={session} room={room} island={island}
       status={status} indoors={indoors} notificationHost={notificationHost} offline={offline} onSignOut={logout} signingOut={signingOut}/>}
     {!error && status === 'playing' && <div className="pixi-chat-dock">
       <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>
     </div>}
-    {!error && guest && <aside className="pixi-guest-play" aria-labelledby="pixi-guest-heading">
-      <h2 id="pixi-guest-heading">Your duck is waiting</h2>
-      <p>Explore on your own or sign in to play online.</p>
-      {session.signInAvailable
-        ? <a href="/auth/github/start">{githubSignInLabel} <span aria-hidden="true">→</span></a>
-        : <><button disabled>{githubSignInLabel}</button><small>Sign-in is unavailable right now.</small></>}
-      <a className="pixi-guest-offline" href="?offline">Continue as guest</a>
-    </aside>}
     {!error && <div className="pixi-bottom-hud">
       <IslandTravel travel={travel} playing={status==='playing' || offline} room={room} island={island} notice={travelNotice}/>
       <IslandStargaze island={island} playing={status==='playing' || offline} offline={offline}/>
