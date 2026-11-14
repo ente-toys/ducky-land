@@ -2,12 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import {readFileSync} from 'node:fs';
 import {productionProxy,productionSignIn} from './scripts/vite-production-proxy.mjs';
-import {groundMesh} from './scripts/vite-ground-mesh.mjs';
 import {prerenderArt} from './scripts/vite-prerender-art.mjs';
 
 export default defineConfig({
   appType: 'mpa',
-  plugins: [react(), productionSignIn(), groundMesh(), prerenderArt(), {
+  plugins: [react(), productionSignIn(), prerenderArt(), {
     name: 'share-theme-walk-data',
     apply: 'build',
     enforce: 'post',

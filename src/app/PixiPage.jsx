@@ -87,7 +87,6 @@ export default function PixiPage() {
       if (['expired','signed-out','star-required'].includes(state)) refresh();
     }, (id,text) => island.current?.showChat(id,text), setOnline, setLatestJoin, state => {
       setTravel(state);
-      void island.current?.prepareIsland(state.islandId).catch(()=>{});
     }, setTravelNotice);
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,

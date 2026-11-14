@@ -1,5 +1,3 @@
-import {mapArtInFrames} from './art/island-preparation.js';
-import {loadPrerenderManifest} from './art/whole-svg-loader.js';
 import {createDuckFeedback} from './feedback.js';
 import { Assets, Container, Graphics, Sprite } from 'pixi.js';
 import {ART_TEXTURE} from './art/art-texture.js';
@@ -27,7 +25,7 @@ async function library(){
     const sources=new Set(['/pixi-art/karma/golden-feather.svg',...SLEEP_ASSETS,...data.views.flatMap(v=>v.parts.map(p=>p.url))]);
     await Promise.all([
       Promise.all([...sources].map(loadTexture)),
-      mapArtInFrames(data.views,async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}}),
+      Promise.all(data.views.map(async view=>{try{view.morph=await bodyShapes(view);}catch{view.morph=null;}})),
     ]);
     return data;
   })().catch(error=>{libraryPromise=undefined;throw error;});
@@ -44,8 +42,7 @@ function sampleRing(svg,d){
 }
 async function bodyShapes(view){
   const part=view.parts.find(p=>p.role==='body');if(!part||typeof document==='undefined')return null;
-  const prerender=await loadPrerenderManifest([part.url]);
-  const text=prerender[part.url]?.svgText??await (await fetch(part.url)).text(),doc=new DOMParser().parseFromString(text,'image/svg+xml');
+  const text=await (await fetch(part.url)).text(),doc=new DOMParser().parseFromString(text,'image/svg+xml');
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.style.cssText='position:absolute;width:0;height:0;visibility:hidden';document.body.appendChild(svg);
   const pick=color=>[...doc.querySelectorAll('path')].find(p=>(p.getAttribute('fill')||'').toLowerCase()===color);
   const [gx,gy]=view.ground,toGround=pts=>pts&&pts.map(([x,y])=>[x-gx,y-gy]);
