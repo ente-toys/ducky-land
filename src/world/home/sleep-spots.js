@@ -5,7 +5,7 @@ export const SLEEP_ROOT = .88 * .24 * 3;
 export const sleepHalfWidths = (rootScale = SLEEP_ROOT) => Object.fromEntries(Object.entries(poses.poses).map(([n, p]) => [n, (p.box[2] - p.box[0]) * p.k * SLEEP_SIZE * rootScale / 3 / 2]));
 
 export const SLEEP_SPOTS = {
-  nod: [['tree-0', 0, false], ['tree-19', 0, true], ['tree-1', 0, false], ['tree-20', 0, true]],
+  nod: [['tree-0', 0, false], ['tree-15', 0, true], ['tree-1', 0, false], ['tree-20', 0, true]],
   hammock: [[900, 1640, false], [3920, 1120, true]],
   rock: [[2150, 1130, false], [1200, 1420, true], [3950, 3260, false]],
   leaf: [[1820, 1500, false], [4790, 1420, true], [1480, 3110, false], [3560, 2480, true]],

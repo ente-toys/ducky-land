@@ -1,4 +1,5 @@
 import test from 'node:test';
+import moveReview from './fixtures/home-moves-review.json' with {type:'json'};
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import sharp from 'sharp';
@@ -16,7 +17,7 @@ const props=P.createPlacements(), nav=HOME_MAP.nav();
 const client=geometry(P.walkWorld(P.trimWorld(HOME_MAP.world),props)).walkable;
 
 test('every Home prop has a generated outline and every solid outline is blocked on client and worker',()=>{
-  assert.ok(props.length>=804);
+  assert.equal(props.length,804-moveReview.filter(r=>r.verdict==='REMOVED'&&r.layer!=='deck').length,'only explicitly reviewed props removed');
   for(const p of props){
     assert.ok(outlines[p.src]?.every(r=>r.length>=3),`${p.id}: art traced`);
     const kind=propOutlineKind(p);
@@ -86,7 +87,7 @@ test('classification uses art tokens and size without mistaking neighbourhood na
 
 test('trees, lamps and reeds use the full drawing and clear authored route corridors',()=>{
   const tall=props.filter(p=>/(?<![a-z])(?:tree|oak|birch|palm|lamp|lantern|reeds|cattail)/.test(p.asset+' '+p.src.split('/').at(-1)));
-  assert.ok(tall.length>=260);
+  assert.ok(tall.length>=260-moveReview.filter(r=>r.verdict==='REMOVED'&&r.layer!=='deck').length,'remaining tall props all audited below');
   for(const p of tall){
     assert.equal(p.outlineKind,'solid',`${p.id}: entire drawing blocks`);
     for(const [u,v] of outlines[p.src].flat()){

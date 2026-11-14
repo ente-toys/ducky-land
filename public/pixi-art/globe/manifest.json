@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "43649e168aa0ef0aa31eb052e1c70e6da2bf40194711dec032bf17979b2718c6",
+      "modelSha256": "6504166663eb57986572b7e58fdafcdec2d767db8bcfde2eb53b96dc13ca124d",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -442,10 +442,6 @@
           "sha256": "20f48ae26bd81bd28b835a6d3303e0ccd3258a4984a3be420427b7459293181a"
         },
         {
-          "path": "public/pixi-art/home-hamlets/butterbill/square-flowerbed.svg",
-          "sha256": "7ec2f8e50e78df760509db3c9f0fee02d1a25835c2a2270c81702f1a024e2851"
-        },
-        {
           "path": "public/pixi-art/home-hamlets/butterbill/tree-birch.svg",
           "sha256": "3cd1f3dac206a9b79398c4d21d8b50253b87dd4dcd7a263ab8ab2454444a143d"
         },
@@ -684,10 +680,6 @@
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/tree-round-oak.svg",
           "sha256": "5f6979e885aff06661d08d5208f5d95788f0d26805f4f354a049731891bc287d"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/petalpatch/tree-slender-birch.svg",
-          "sha256": "83464b903f744678e34a70981e30287ad0f98930770659a3dee0aceb09ffae2d"
         },
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/tree-spreading-oak.svg",
@@ -999,15 +991,15 @@
         },
         {
           "path": "src/world/home/building-silhouettes.json",
-          "sha256": "3c5d162d50d71970b79800f6e5a24c9fa674274d213d314d01a50f6e0bc70d84"
+          "sha256": "f85d323bbeed286107362fe18b252b796746f0c6ea9f97c4fcbe72740a1d0f0c"
         },
         {
           "path": "src/world/home/front-body-silhouettes.json",
-          "sha256": "2fecd2caf37e281c8a90975f9d4adf16972b1fc8267fa248fc13ec0f8fd5ce5f"
+          "sha256": "ff9f1a608be7ee1c254e8773f8c03e662ce5be72c14a1cf188fe5078b67f0f7d"
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "c91ef98acb094648f9fd5ee8dbe95f22e9faa4b03ee1822cbd016749275e2a40"
+          "sha256": "693d48443c852ec98fa0764003e55d2ddb8446f3a3f15f32235d10cdbe28b359"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1027,7 +1019,7 @@
         },
         {
           "path": "src/world/home/placements.js",
-          "sha256": "d1f0379494befd8ba64793269161c3c0fd7d4d3e8d5cadf9b4ec8cf8a7f62eac"
+          "sha256": "a7106a3eb43d99b0584a6a079e239cfac7952c10f575d35325d90b1a99dbb4c6"
         },
         {
           "path": "src/world/home/plaza-benches.js",
@@ -1043,7 +1035,7 @@
         },
         {
           "path": "src/world/home/sleep-spots.js",
-          "sha256": "0f4d5c69f3f2db8c5a9d9ff6dea338f772db94099a5561c894f49c819c9bf8fd"
+          "sha256": "e013a22f038fd58a4fa7d66f39e8937304ba0d8d48379bd6e145a9b46cedca81"
         },
         {
           "path": "src/world/home/walk-shapes.json",
@@ -1058,15 +1050,15 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "3e637f1683f730fcadaedd062a36c6c6549fe37c75097be72ca0792486c6dad2"
+      "sha256": "146ed55dbf15d89d6d65bb957302b2c7aef7e3e8f71ad738e7a043b410424a91"
     },
-    "groundSha256": "236addc25ae0e97a66f2e812b58575a5a182a11e3c115824d4f513d9770e577a",
+    "groundSha256": "d2516fd901cfa126c4d41763dd752bbb12fdb2643558a482dea7d7d5a88942c9",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "2c91b3d930e86711153c4cc5aa38ce3a2d0b2afeb613982d6ba7bca53b8cf5fe",
+    "sha256": "1f3d27c8e7fa43d45a6c7f0ed9a21ce70df5a9f73b1abaf749971b60bc03f71c",
     "width": 1024,
     "height": 768,
-    "bytes": 1151385,
-    "groundBytes": 956389,
+    "bytes": 1141195,
+    "groundBytes": 956787,
     "quality": {
       "tolerance": 0.4,
       "minArea": 0.2,
@@ -1075,7 +1067,7 @@
     },
     "worldPaths": 0,
     "walkways": 1,
-    "flats": 820,
+    "flats": 825,
     "decks": 9,
     "bridgeDetails": 0
   },

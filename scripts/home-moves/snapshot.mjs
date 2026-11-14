@@ -1,0 +1,11 @@
+import {writeFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {loadPlacements,compact} from './data.mjs';
+const B=await loadPlacements('ente/main'),C=await loadPlacements();
+const before=B.createPlacements().map(compact),current=C.createPlacements().map(compact);
+const map=new Map(before.map(p=>[String(p.id),p]));
+const moved=current.filter(p=>{const b=map.get(String(p.id));return b&&(p.x!==b.x||p.y!==b.y);});
+writeFileSync('review/moves/baseline.json',JSON.stringify({ref:execFileSync('git',['rev-parse','ente/main']).toString().trim(),props:before,tiles:B.HOME_TILES,decks:B.HOME_DECKS}));
+writeFileSync('review/moves/round7.json',JSON.stringify({props:current,moved:moved.map(p=>String(p.id))}));
+console.log('Resolved moved',moved.length,'baseline',before.length,'current',current.length);
+console.log(moved.map(p=>{const b=map.get(String(p.id));return `${p.id} ${p.asset??p.name} (${b.x},${b.y}) -> (${p.x},${p.y}) ${Math.hypot(p.x-b.x,p.y-b.y).toFixed(1)}`}).join('\n'));
