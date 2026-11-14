@@ -2,6 +2,7 @@
 export function propOutlineKind(prop) {
   const name = `${prop.src.split('/').at(-1)} ${prop.asset ?? ''} ${prop.name ?? ''}`.toLowerCase();
   const w = prop.width * (prop.scale ?? 1), h = prop.height * (prop.scale ?? 1);
+  if (/bush|shrub|hedge/.test(name)) return 'solid';
   if (/shadow|oven-smoke|bunting|banner/.test(name)) return 'decoration';
   if (/bridge|jetty|boardwalk/.test(name)) return 'walkway';
   if (/towel|blanket|rug|puddle|petals?(?:[ ._-]|$)|sand-speck|path-stone/.test(name)) return 'decal';

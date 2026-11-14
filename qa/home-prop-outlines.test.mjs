@@ -16,7 +16,7 @@ const props=P.createPlacements(), nav=HOME_MAP.nav();
 const client=geometry(P.walkWorld(P.trimWorld(HOME_MAP.world),props)).walkable;
 
 test('every Home prop has a generated outline and every solid outline is blocked on client and worker',()=>{
-  assert.ok(props.length>=819);
+  assert.ok(props.length>=804);
   for(const p of props){
     assert.ok(outlines[p.src]?.length>=3,`${p.id}: art traced`);
     const kind=propOutlineKind(p);
@@ -41,7 +41,7 @@ test('every Home prop has a generated outline and every solid outline is blocked
   }
 });
 
-test('opaque solid art is covered, including flipped props and the animated sail sweep',async()=>{
+test('opaque solid art is covered, including flipped props',async()=>{
   const rasters=new Map();
   for(const p of props.filter(p=>p.outlineKind==='solid')){
     if(!rasters.has(p.src))rasters.set(p.src,await sharp('public'+p.src).resize(48,48,{fit:'fill'}).ensureAlpha().raw().toBuffer());
@@ -76,6 +76,7 @@ test('classification uses art tokens and size without mistaking neighbourhood na
   assert.equal(propOutlineKind(p('/lanternleaf/bush-green.svg')),'solid');
   assert.equal(propOutlineKind(p('/flowerpot-daisies.svg')),'solid');
   assert.equal(propOutlineKind(p('/wildflowers.svg')),'decal');
+  assert.equal(propOutlineKind(p('/bush-flowering.svg')),'solid');
   assert.equal(propOutlineKind(p('/wildflowers.svg',300,200)),'solid');
   assert.equal(propOutlineKind(p('/tree-oak.svg',200,350)),'solid');
 });

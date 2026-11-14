@@ -1950,29 +1950,6 @@
       "tint": 16777215
     },
     {
-      "id": "bigger-community-528",
-      "name": "raised-bed-1179",
-      "asset": "raised-bed-1179",
-      "src": "/pixi-art/home-expansion-c/raised-bed-1179.svg",
-      "x": 4177.777777777778,
-      "y": -261.11111111111114,
-      "width": 300,
-      "height": 115,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 4177.777777777778,
-        "y": -276.11111111111114,
-        "rx": 115,
-        "ry": 28
-      }
-    },
-    {
       "id": "bigger-community-531",
       "name": "picnic-table",
       "asset": "picnic-table",
@@ -2085,98 +2062,6 @@
       },
       "resolution": 1.25,
       "zone": "commons"
-    },
-    {
-      "id": "bigger-community-538",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 1844.4444444444446,
-      "y": 5333.333333333334,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 1844.4444444444446,
-        "y": 5323.333333333334,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
-      "id": "bigger-community-539",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 2022.2222222222224,
-      "y": 5422.222222222223,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2022.2222222222224,
-        "y": 5412.222222222223,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
-      "id": "bigger-community-540",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 2611.1111111111113,
-      "y": 5361.111111111111,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2611.1111111111113,
-        "y": 5351.111111111111,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
-      "id": "bigger-community-541",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 2866.666666666667,
-      "y": 5355.555555555556,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2866.666666666667,
-        "y": 5345.555555555556,
-        "rx": 65,
-        "ry": 22
-      }
     },
     {
       "id": "bigger-community-543",
@@ -5619,7 +5504,8 @@
         "ry": 44.3
       },
       "communityRole": "workplace",
-      "z": -329
+      "z": -329,
+      "enterable": false
     },
     {
       "id": "hamlet-lanternleaf-bandstand-pot-left",
@@ -5799,189 +5685,6 @@
       "z": -275.4
     },
     {
-      "id": "hamlet-lanternleaf-garden-bed",
-      "name": "vegetable-bed",
-      "asset": "vegetable-bed",
-      "src": "/pixi-art/home-hamlets/lanternleaf/vegetable-bed.svg",
-      "x": 3437.4,
-      "y": -90.5,
-      "width": 402,
-      "height": 191.6,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 62,
-      "noShadow": true,
-      "footprint": {
-        "x": 3437.4,
-        "y": -138.8,
-        "rx": 180.9,
-        "ry": 56.3
-      },
-      "communityRole": "workplace",
-      "z": -90.5
-    },
-    {
-      "id": "hamlet-lanternleaf-garden-rear-fence",
-      "name": "vegetable-fence-back",
-      "asset": "vegetable-fence-back",
-      "src": "/pixi-art/home-hamlets/lanternleaf/vegetable-fence-back.svg",
-      "x": 3437.4,
-      "y": -156.2,
-      "width": 402,
-      "height": 155.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 63,
-      "noShadow": true,
-      "footprint": {
-        "x": 3437.4,
-        "y": -164.2,
-        "rx": 201,
-        "ry": 12
-      },
-      "z": -90
-    },
-    {
-      "id": "hamlet-lanternleaf-tomatoes",
-      "name": "crop-tomato-trellis",
-      "asset": "crop-tomato-trellis",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-tomato-trellis.svg",
-      "x": 3468.3,
-      "y": -193.7,
-      "width": 180.9,
-      "height": 120.6,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 64,
-      "noShadow": true,
-      "footprint": {
-        "x": 3468.3,
-        "y": -215.4,
-        "rx": 81.4,
-        "ry": 25.3
-      },
-      "z": -89.5
-    },
-    {
-      "id": "hamlet-lanternleaf-cabbage-left",
-      "name": "crop-cabbage-row",
-      "asset": "crop-cabbage-row",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-cabbage-row.svg",
-      "x": 3350.3,
-      "y": -166.9,
-      "width": 85.8,
-      "height": 59,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 65,
-      "noShadow": true,
-      "footprint": {
-        "x": 3350.3,
-        "y": -177.2,
-        "rx": 38.6,
-        "ry": 12
-      },
-      "z": -89
-    },
-    {
-      "id": "hamlet-lanternleaf-cabbage-right",
-      "name": "crop-cabbage-row",
-      "asset": "crop-cabbage-row",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-cabbage-row.svg",
-      "x": 3418.7,
-      "y": -149.5,
-      "width": 85.8,
-      "height": 59,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 66,
-      "noShadow": true,
-      "footprint": {
-        "x": 3418.7,
-        "y": -159.8,
-        "rx": 38.6,
-        "ry": 12
-      },
-      "z": -88.5
-    },
-    {
-      "id": "hamlet-lanternleaf-carrots",
-      "name": "crop-carrot-row",
-      "asset": "crop-carrot-row",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-carrot-row.svg",
-      "x": 3521.9,
-      "y": -136.1,
-      "width": 132.7,
-      "height": 92.5,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 67,
-      "noShadow": true,
-      "footprint": {
-        "x": 3521.9,
-        "y": -152,
-        "rx": 59.7,
-        "ry": 18.6
-      },
-      "z": -88
-    },
-    {
-      "id": "hamlet-lanternleaf-garden-front-fence",
-      "name": "vegetable-fence-front",
-      "asset": "vegetable-fence-front",
-      "src": "/pixi-art/home-hamlets/lanternleaf/vegetable-fence-front.svg",
-      "x": 3437.4,
-      "y": -79.8,
-      "width": 402,
-      "height": 131.3,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 68,
-      "noShadow": true,
-      "footprint": {
-        "x": 3437.4,
-        "y": -87.8,
-        "rx": 201,
-        "ry": 12
-      },
-      "z": -79.8
-    },
-    {
       "id": "hamlet-lanternleaf-bush-below-garden",
       "name": "bush-white",
       "asset": "bush-white",
@@ -6010,7 +5713,7 @@
       "id": "hamlet-lanternleaf-garden-shed",
       "name": "Seedshare greenhouse",
       "asset": "seedshare-greenhouse",
-      "src": "/pixi-art/themes/community/hamlets/sproutshare/greenhouse.svg",
+      "src": "/pixi-art/home-hamlets/lanternleaf/greenhouse-closed.svg",
       "x": 2238.1,
       "y": -90.5,
       "width": 327,
@@ -6034,7 +5737,8 @@
         "ry": 45.8
       },
       "communityRole": "workplace",
-      "z": -90.5
+      "z": -90.5,
+      "enterable": false
     },
     {
       "id": "hamlet-lanternleaf-shed-daisy-pot",
@@ -6569,36 +6273,6 @@
         "ry": 9.8
       },
       "z": -526.8
-    },
-    {
-      "id": "hamlet-clovercrust-mill",
-      "name": "windmill",
-      "asset": "windmill",
-      "src": "/pixi-art/home-hamlets/clovercrust/windmill.svg",
-      "x": 5766.5,
-      "y": -536,
-      "width": 241.2,
-      "height": 364.5,
-      "scale": 1.23,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 35,
-      "shadowSize": [
-        112,
-        23
-      ],
-      "footprint": {
-        "x": 5766.5,
-        "y": -587.8,
-        "rx": 96.5,
-        "ry": 33.8
-      },
-      "communityRole": "workplace",
-      "z": -536
     },
     {
       "id": "hamlet-clovercrust-mill-right-flowers",
@@ -8882,44 +8556,6 @@
       "z": 4960.8
     },
     {
-      "id": "hamlet-reedwhistle-cottage-netmaker",
-      "name": "cottage-netmaker",
-      "asset": "cottage-netmaker",
-      "src": "/pixi-art/home-hamlets/reedwhistle/cottage-netmaker.svg",
-      "x": 3654.1,
-      "y": 5078.2,
-      "width": 388.6,
-      "height": 375.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "order": 80,
-      "shadowSize": [
-        132.12400000000002,
-        21.373
-      ],
-      "footprint": {
-        "x": 3654.1,
-        "y": 5005.8,
-        "rx": 155.4,
-        "ry": 54.4
-      },
-      "communityRole": "home",
-      "door": [
-        3654.1,
-        5118.2
-      ],
-      "z": 5118.9,
-      "shadowOffset": [
-        0,
-        -8
-      ]
-    },
-    {
       "id": "hamlet-reedwhistle-netmaker-flowers",
       "name": "flower-pot-daisies",
       "asset": "flower-pot-daisies",
@@ -9323,25 +8959,6 @@
         "ry": 8
       },
       "z": 5493.6
-    },
-    {
-      "id": "home-windmill-sails",
-      "name": "Windmill sails",
-      "asset": "windmill-sails",
-      "src": "/pixi-art/home-review/windmill-sails.svg",
-      "x": 5764.8518,
-      "y": -827.7474080882353,
-      "width": 379.08599999999996,
-      "height": 379.1068014705882,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "z": -535.9,
-      "noShadow": true,
-      "spinPeriod": 9,
-      "zone": "clovercrust"
     },
     {
       "id": "review-willow-oak",
@@ -16931,10 +16548,10 @@
     {
       "id": "home-west-bridge",
       "src": "/pixi-art/home-review/home-west-bridge.svg",
-      "x": 685.8850747228745,
-      "y": 2907.9027615236596,
-      "width": 673.7853262074472,
-      "height": 612.15083177726,
+      "x": 719.0785178392297,
+      "y": 2820.698957151437,
+      "width": 754.3364905918676,
+      "height": 917.6450926491334,
       "resolution": 1.5
     },
     {
@@ -17108,6 +16725,19 @@
       "w": 112,
       "boatPassUnder": true,
       "reviewWater": true
+    },
+    {
+      "id": "home-west-bridge",
+      "a": [
+        1137.84,
+        3066.05
+      ],
+      "b": [
+        1100,
+        3560
+      ],
+      "w": 112,
+      "boatPassUnder": true
     }
   ],
   "harborWater": {
@@ -17182,7 +16812,6 @@
       ],
       "workplaces": [
         "hamlet-lanternleaf-bandstand",
-        "hamlet-lanternleaf-garden-bed",
         "hamlet-lanternleaf-garden-shed"
       ]
     },
@@ -17206,7 +16835,6 @@
         140
       ],
       "workplaces": [
-        "hamlet-clovercrust-mill",
         "hamlet-clovercrust-silo",
         "hamlet-clovercrust-barn"
       ]
@@ -17241,7 +16869,6 @@
       "residents": "Fishing families, boat menders and the dock keepers on the south quay",
       "homes": [
         "hamlet-reedwhistle-cottage-fishers",
-        "hamlet-reedwhistle-cottage-netmaker",
         "hamlet-reedwhistle-cottage-harbour"
       ],
       "center": [
@@ -22010,13 +21637,6 @@
       "h": 526
     },
     {
-      "id": "old-jetty-2",
-      "x": 1039.0149999999999,
-      "y": 3241.74,
-      "w": 281.64999999999986,
-      "h": 435.37999999999965
-    },
-    {
       "id": "old-jetty-3",
       "x": 2304.895,
       "y": 3561.995,
@@ -22344,6 +21964,27 @@
       "y": 2930,
       "w": 280,
       "h": 100
+    },
+    {
+      "id": "home-west-bridge",
+      "poly": [
+        [
+          1082.0036017317889,
+          3061.7725441634398
+        ],
+        [
+          1044.163601731789,
+          3555.7225441634396
+        ],
+        [
+          1155.836398268211,
+          3564.2774558365604
+        ],
+        [
+          1193.676398268211,
+          3070.3274558365606
+        ]
+      ]
     }
   ],
   "crossings": [
@@ -22844,8 +22485,16 @@
           1810
         ],
         [
-          2920,
+          2965,
           1620
+        ],
+        [
+          2965,
+          1350
+        ],
+        [
+          2920,
+          1190
         ]
       ],
       "terminal": "library stair"
@@ -23044,12 +22693,12 @@
           3066
         ],
         [
-          940,
-          3417
+          1100,
+          3560
         ],
         [
-          1020,
-          3640
+          1160,
+          3720
         ],
         [
           1150,
@@ -23292,16 +22941,16 @@
       "width": 104,
       "points": [
         [
-          -650,
-          590
+          117,
+          1278
         ],
         [
-          -450,
-          590
+          -280,
+          1250
         ],
         [
-          -450,
-          450
+          -280,
+          865
         ]
       ],
       "terminal": "doorstep"
@@ -23334,34 +22983,6 @@
         [
           3390,
           -430
-        ]
-      ],
-      "terminal": "doorstep"
-    },
-    {
-      "id": "clovercrust-mill",
-      "kind": "lane",
-      "width": 104,
-      "points": [
-        [
-          5300,
-          40
-        ],
-        [
-          5320,
-          -180
-        ],
-        [
-          5500,
-          -300
-        ],
-        [
-          5690,
-          -360
-        ],
-        [
-          5766,
-          -496
         ]
       ],
       "terminal": "doorstep"
@@ -24692,90 +24313,6 @@
         ]
       ],
       "width": 0
-    },
-    {
-      "id": "stargazing-northeast",
-      "width": 104,
-      "points": [
-        [
-          6570,
-          1295
-        ],
-        [
-          6540,
-          1320
-        ],
-        [
-          6480,
-          1350
-        ],
-        [
-          6430,
-          1375
-        ],
-        [
-          6200,
-          1370
-        ],
-        [
-          6100,
-          1470
-        ],
-        [
-          6000,
-          1480
-        ],
-        [
-          5850,
-          1470
-        ],
-        [
-          5740,
-          1540
-        ],
-        [
-          5660,
-          1650
-        ]
-      ],
-      "kind": "lane",
-      "terminal": "stargazing hill"
-    },
-    {
-      "id": "stargazing-southwest",
-      "width": 104,
-      "points": [
-        [
-          -400,
-          4550
-        ],
-        [
-          -450,
-          4510
-        ],
-        [
-          -450,
-          4435
-        ],
-        [
-          -420,
-          4350
-        ],
-        [
-          -150,
-          4300
-        ],
-        [
-          50,
-          4260
-        ],
-        [
-          200,
-          4066
-        ]
-      ],
-      "kind": "lane",
-      "terminal": "stargazing hill"
     }
   ],
   "hamletDecals": [
@@ -52927,7 +52464,7 @@
     "main": 128,
     "lane": 104,
     "surface": "/pixi-art/home-review/path-network.svg",
-    "routes": 31
+    "routes": 28
   },
   "homeArches": [
     {
@@ -52937,8 +52474,8 @@
         3066.05
       ],
       "b": [
-        940.19,
-        3417.43
+        1100,
+        3560
       ],
       "w": 112,
       "r": 27.67419387316977
@@ -53097,32 +52634,32 @@
       "y": 3055
     },
     "51": {
-      "x": 5070,
-      "y": 3070
+      "x": 5240,
+      "y": 2990
     },
     "52": {
-      "x": 5090,
-      "y": 3105
+      "x": 5290,
+      "y": 3040
     },
     "53": {
       "x": 4425,
       "y": 3090
     },
     "54": {
-      "x": 5040,
-      "y": 3120
+      "x": 5210,
+      "y": 3060
     },
     "55": {
       "x": 4395,
       "y": 3075
     },
     "56": {
-      "x": 5130,
-      "y": 3100
+      "x": 5330,
+      "y": 3135
     },
     "57": {
-      "x": 5090,
-      "y": 3160
+      "x": 5250,
+      "y": 3250
     },
     "seat-beach": {
       "asset": "bench-wood-front",
@@ -53185,8 +52722,8 @@
       }
     },
     "plaza-lamp-1": {
-      "x": 2970.637421128212,
-      "y": 2101.013249511436
+      "x": 2980,
+      "y": 2110
     },
     "plaza-lamp-2": {
       "x": 3138.130588709009,
@@ -53293,15 +52830,15 @@
       "y": 1000
     },
     "bigger-community-522": {
-      "x": -434.44444444444446,
-      "y": 1091.111111111111
+      "x": -500,
+      "y": 1080
     },
     "bigger-community-536": {
       "x": 6644.444444444444,
       "y": 3377.777777777778
     },
     "bigger-community-537": {
-      "x": 6076.666666666667,
+      "x": 6030,
       "y": 3393.3333333333335
     },
     "bigger-community-566": {
@@ -53595,6 +53132,58 @@
     "review-hay-birch": {
       "x": 2540,
       "y": 5120
+    },
+    "hamlet-clovercrust-mill-left-shrub": {
+      "x": 5650,
+      "y": -565
+    },
+    "hamlet-clovercrust-mill-right-flowers": {
+      "x": 5790,
+      "y": -600
+    },
+    "polish-farm-under1": {
+      "x": 4780,
+      "y": -560
+    },
+    "hamlet-petalpatch-shrub-southeast": {
+      "x": -400,
+      "y": 4130
+    },
+    "p2-garden-quay-shoulder-3": {
+      "x": 3650,
+      "y": 5160
+    },
+    "polish-willow-under2": {
+      "x": 6800,
+      "y": 3160
+    },
+    "p3-garden-farm-border-1": {
+      "x": 4740,
+      "y": -925
+    },
+    "p3-garden-farm-border-2": {
+      "x": 4885,
+      "y": -865
+    },
+    "p3-garden-farm-border-3": {
+      "x": 5190,
+      "y": -970
+    },
+    "p3-garden-farm-border-5": {
+      "x": 4775,
+      "y": -840
+    },
+    "p3-garden-farm-border-6": {
+      "x": 4960,
+      "y": -955
+    },
+    "p3-garden-farm-border-7": {
+      "x": 5240,
+      "y": -865
+    },
+    "review-willow-picnic": {
+      "x": 6340,
+      "y": 3110
     }
   },
   "polishMicrotexture": true,

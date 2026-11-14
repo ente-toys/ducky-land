@@ -6,9 +6,12 @@
       true
     ],
     [
-      "hamlet-petalpatch-birch-northeast",
-      0,
-      false
+      50,
+      3300,
+      false,
+      {
+        "ground": true
+      }
     ]
   ],
   "hammock": [

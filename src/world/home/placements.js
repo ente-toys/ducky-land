@@ -9,7 +9,7 @@ import layout from './layout.json';
 import rawPaths from './paths.json';
 import shapes from './walk-shapes.json';
 import {inShape} from '../../../assets/world/island-geometry.mjs';
-import {SLEEP_SPOTS as BASE_SLEEP_SPOTS, resolveSleepSpots, sleeperFootprint} from './sleep-spots.js';
+import {SLEEP_SPOTS as BASE_SLEEP_SPOTS, resolveSleepSpots, homeSleeperFootprint as sleeperFootprint} from './sleep-spots.js';
 import homeSleepExtra from '../../../assets/world/home-sleep-extra.json';
 import homeSleepOuter from '../../../assets/world/home-sleep-outer.json';
 import homeSleepMore from '../../../assets/world/home-sleep-more.json';
@@ -75,7 +75,7 @@ export const JETTIES = expansion.homeArches ? [] : [
 ].map(([n, x, y, width, height]) => ({src: `/pixi-art/bridge-jetty-${n}.svg`, x, y, width, height, resolution: 1.5}));
 const ARCHES = expansion.homeArches ?? [
   {a: [1188, 2630], b: [2092, 2630], r: 88, w: 112, squash: 72 / 112},
-  {a: [1137.84, 3066.05], b: [940.19, 3417.43], r: 70, w: 84},
+  {a: [1137.84, 3066.05], b: [1100, 3560], r: 70, w: 84},
   ...(expansion.arches ?? []),
 ];
 export {deckX} from './bridge-projection.mjs';
@@ -102,7 +102,7 @@ const archMid = ARCHES.map(({a, b}) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
 const underArch = w => archMid.some(([x, y]) => Math.hypot((w.a[0] + w.b[0]) / 2 - x, (w.a[1] + w.b[1]) / 2 - y) < 60) ? {...w, boatPassUnder: true} : w;
 export const walkWorld = (world, props) => ({...world, navigationCellSize: 24, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
   water: [...world.water, ...(expansion.riverWater ?? [])], bridges: [...world.bridges.filter(b => !(b.x === 1640 && b.y === 2630)), ...(expansion.riverBridges ?? [])],
-  walkways: [...world.walkways.map(underArch), ...(expansion.walkways ?? []).map(underArch), {a: [1165, 3000], b: [1095, 3098], w: 120, boatPassUnder: true}, {a: [1092, 3060], b: [942, 3405], w: 110, boatPassUnder: true}]});
+  walkways: [...world.walkways.map(underArch), ...(expansion.walkways ?? []).map(underArch), {a: [1165, 3000], b: [1095, 3098], w: 120, boatPassUnder: true}]});
 
 const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 1;
 const SAND = [[2820, 2390, 562, 398], [4775, 2654, 478, 540], [4132, 1530, 682, 447], [1640, 2630, 470, 300]];
@@ -395,10 +395,9 @@ export function decalsFor(world, props, walkable) {
   return out;
 }
 
-const SCENERY = [{poly: [[4390, 1225], [4450, 1192], [4490, 1185], [4560, 1218], [4600, 1262], [4615, 1300], [4590, 1340], [4520, 1340], [4410, 1290]]}];
 export function obstaclesFor(props, world) {
   const byProp = world.props.map(o => world.obstacles.find(b => b.x === o.x && o.y - b.y >= 0 && o.y - b.y < 30));
-  const used = new Set(byProp.filter(Boolean)), out = [...world.obstacles.filter(b => !used.has(b) && !(b.x === 2820 && b.y === 2312)), ...SCENERY];
+  const used = new Set(byProp.filter(Boolean)), out = [...world.obstacles.filter(b => !used.has(b) && !(b.x === 2820 && b.y === 2312))];
   for (const p of props) {
     const i = typeof p.id === 'number' ? p.id : -1, src = byProp[i], orig = world.props[i];
     const m = p.grow || 1;

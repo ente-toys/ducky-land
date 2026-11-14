@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="673.7853262074472" height="612.15083177726" viewBox="685.8850747228745 2907.9027615236596 673.7853262074472 612.15083177726"><g transform="matrix(0.9943 -0.4262 0.5501 1.1531 687.8851 3114.4716)">
+<svg xmlns="http://www.w3.org/2000/svg" width="754.3364905918676" height="917.6450926491334" viewBox="719.0785178392297 2820.698957151437 754.3364905918676 917.6450926491334"><g transform="matrix(0.8056618438283847 -0.17337332410604617 0.3454922404026419 1.3082211921294333 -838.1707560682095 -747.7504830276255)"><g transform="matrix(0.9943 -0.4262 0.5501 1.1531 687.8851 3114.4716)">
   <title>Honeywood footbridge, northeast</title>
   <desc>Hand-drawn solid bridge, 420 by 120 world units. The path rises northeast from the near bank at lower left. A 45-degree ground rotation is projected with 0.62 depth, and a 24-unit vertical crown. Cross-planks remain straight; both rails share one arch.</desc>
   <g stroke="#39472d" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"><!-- Back rail, drawn behind the deck. -->
@@ -26,4 +26,4 @@
     <path fill="none" stroke-width=".65" d="M134 290 L134 302 M193 239 L193 251 M253 194 L253 206 M312 158 L312 170 M371 129 L371 141 M431 107 L431 119"/>
     <path fill="none" stroke-width="1.5" d="M134 287 L134 287.4 M193 235 L193 235.4 M253 190 L253 190.4 M312 154 L312 154.4 M371 125 L371 125.4 M431 103 L431 103.4"/>
   </g>
-</g></svg>
+</g></g></svg>

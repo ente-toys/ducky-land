@@ -492,7 +492,7 @@ export class PixiIsland {
 
   createAmbient() {
     this.weather=createWeather(world,this.air);
-    this.surf = createBeachSurf(this.water, shoreOf(world), HOME_MOUTHS);
+    this.surf = createBeachSurf(this.water, shoreOf(world), HOME_MOUTHS, {softRipples:true});
     const rowingProp = this.props.find(prop => prop.asset === 'rowboat');
     this.rowboat = null;
     this.boats = this.room ? null : createMooredBoats(this.water, world.islets, {x: 2980, y: 2005}, {coast: world.coast});

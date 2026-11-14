@@ -420,7 +420,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
     for (const p of art.floating || []) if (/lily|pad/i.test(p.src || p.asset || '')) {
       for (const b of [pondBody, cove]) if (b.contains(p.x, p.y)) b.sources.push({x:p.x, y:p.y, strength:.065, radius:14, phase:p.x*.017});
     }
-    const fall = new Graphics({label: 'Water - spring flow'}); layer.addChild(fall); roots.push(fall);
 
     function splashBody(b, x, y, strength, radius) {
       if (!b) return false;
@@ -487,13 +486,6 @@ export async function createWater({app, world, art, layer, objects, props, motio
       for (const b of bodies) {
         if (b.dirty && b.mesh.visible) {b.field.pack(); b.heights.update(); b.dirty = false;}
         b.uniforms.uMix = reduced ? 1 : accumulator / WATER_STEP; b.uniforms.uTime = reduced ? 0 : time + accumulator; b.uniforms.uCalm = Number(reduced);
-      }
-      fall.clear();
-      if (!reduced && cove.mesh.visible) {
-        for (let i = 0; i < 4; i++) {
-          const u = (time * 1.25 + i / 4) % 1, y = 1203 + 145 * u * u, x = y < 1260 ? 4479 + Math.sin(u * 7) * 8 : 4497;
-          fall.moveTo(x, y).lineTo(x + 1, y + 5 + u * 6).stroke({color: PALETTE.cream, width: 2.5, alpha: .65 * Math.sin(u * Math.PI), cap: 'round'});
-        }
       }
       stats.steps = steps; stats.cpuMs = performance.now() - start; samples.push(stats.cpuMs); if (samples.length > 240) samples.shift();
     }

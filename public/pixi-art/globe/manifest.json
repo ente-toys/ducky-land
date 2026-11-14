@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "dca320f54a8b5d6f2fc7feb6c0c67ba267255426b2ac719a46860ba6aee2dc53",
+      "modelSha256": "429f852e3e5a1abbfabfe3476f4dffa4af85518c322f76b26a6e05817492fc6f",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -19,11 +19,11 @@
         },
         {
           "path": "assets/world/home-sleep-more.json",
-          "sha256": "85d2ee101c6b80796828fea7d65305dcc4eeaaa8957f854a5360a24fcde3eb5f"
+          "sha256": "7200e3f4e550a93f0e72a559d06056d6121a4e8af5c11d3752944e213b065775"
         },
         {
           "path": "assets/world/home-sleep-outer.json",
-          "sha256": "97ef3f84705c6fdce506a657df135a2526817d4636e12c56bc9dc3bddcb93728"
+          "sha256": "a43286e785ccd136b825d24f3d99e1893616e81ae3c19e820e9177756ee9a219"
         },
         {
           "path": "assets/world/island-geometry.mjs",
@@ -134,252 +134,244 @@
           "sha256": "f2eb6c321d5181254802968d0a99ea3743b5eca1a1c8a4bc46ee87b9c2e055c7"
         },
         {
-          "path": "public/pixi-art/home-expansion-c/flour-sacks.svg",
-          "sha256": "6a3a10d012af27d875bf1e6e74f47008fbf29bd81654f22567f7830207abfa28"
-        },
-        {
-          "path": "public/pixi-art/home-expansion-c/raised-bed-1179.svg",
-          "sha256": "b6b9e0f8ef8285772abdc8347f09f7e4a761b578814c916aacbdb076a1961ed4"
-        },
-        {
           "path": "public/pixi-art/home-expansion-g/ground-0-0.svg",
-          "sha256": "2aec73e6ea7faa9ce02bfc6aadd3e3c68c1d93eb78ddc82ff32a0c3648bff90f"
+          "sha256": "6f75790935d4620c0774a61813b028806b7e4e63d6f794e95f755c7284e62076"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-1.svg",
-          "sha256": "ca1c3f2425fc8d897d541f07c6132bc4785daaa0e7b5242672fe713bc0b38445"
+          "sha256": "7da080e08829b027077e7b6e2ca74776f3cc2eca423f0fc06ddd3a931f1ec401"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-2.svg",
-          "sha256": "afb82a226560a214df031987b3d1ca3d2676e9098aafdf8f92e88ad7d6b168ef"
+          "sha256": "7853ebf66b66a30133ca3b6ff6c0a2f4cb06f2ab2726db323f021816f261cc05"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-3.svg",
-          "sha256": "f99ec79a3835a9a5d21b4fba1f560fa80a93c5e3b77db152ae4dabcfdf6dd911"
+          "sha256": "1fab52b7a8014326a8aa2a97eaec3018f5f2bbbeb020d18cd597264f6b9a650b"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-4.svg",
-          "sha256": "9eb64de36c4715610519448c56f7310326f0d450ee753d7ed2a226189cfd962d"
+          "sha256": "a26495da5fe8339a94a341438525a613d7eafc5900edd212106e1609a6444194"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-5.svg",
-          "sha256": "5efa2bd519c320356155e5dcbaf464d41d6dbbc196864e12394dd33ca53862ca"
+          "sha256": "49ca63b8ea2c64146e31c5e3af995c9c0de31320240149a9a893350b6c9db477"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-6.svg",
-          "sha256": "16944738702c80298042a7dc6c41cc3617032fc8cde354ddf0fa2d9f4a5f1fe5"
+          "sha256": "9914aa017de33630814194e3e5876c431358fb07069f0364acfbae4e039b48a6"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-7.svg",
-          "sha256": "e4d33aa4b0ac236d90cf6f48405094d6318c6bb9ff014588448913746bdd382a"
+          "sha256": "5f21cf9755975ad4d4c7f18f6ce691f2b3d77432926bf536f7d26078ee72da21"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-0.svg",
-          "sha256": "5eaa002c2324a129a6a8cbc391476428f855ce3b23faf911ad3808499393fc07"
+          "sha256": "2cf668a70f82352a83c3ba1686da4a53a47e5c8acf4daacbf317f211966a5e2b"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-1.svg",
-          "sha256": "5ffde11ca119547671d75b5d2bc390c6a39193bd64379ebb3c78d8e40f97ea53"
+          "sha256": "defce49b16d4ff4291c48445369aa4115b138a6e4923c5f713aa1eed0eb22914"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-2.svg",
-          "sha256": "3400f36942d634ff2ef0a10660f6f82468bfd1f0631eb8be1ee7e29dfc3e1c79"
+          "sha256": "68d0bfac98d9f525c2400604faed80f5567b0d0f8e0e5a836ebb0af1b5490b16"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-3.svg",
-          "sha256": "a1859501784bb6acc323f84334066beae2a699d6b7ddec8dde075b4d88a25490"
+          "sha256": "8f2789b84292a22cfc411579573017cc3b83b031ba937b4894356036d4e104b8"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-4.svg",
-          "sha256": "468cef6bda011e44a0feeff4b7b6348fb57bc25163e886e02969a937efb445aa"
+          "sha256": "7b31741ff85d411c766248f9f4938ff7a14499fc50049e62504cb1ec47342666"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-5.svg",
-          "sha256": "39cf74cae60fe0a6f039db040d156c6df4ed4ed24c1dd34ba8b8434d05eb6e40"
+          "sha256": "c9d18a65777da1b66c6e67420a5b5efb023e6d50d2cee65f70b6f9ea390ceff4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-6.svg",
-          "sha256": "1033efedbc4d1a976bc48cb383cf3ea734ae1138d6d6bb8d555805253c83176c"
+          "sha256": "b81ae432ea385bbc3afebae5f517972e3f1fb8e893660d5920463d22fad49727"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-7.svg",
-          "sha256": "bc2a67879ee284516369775e7e1b5416f1db8f2d0e67e3dd4caacec6c78a0449"
+          "sha256": "278d0461e6e6cb0536f1872f90be5a17400f71ddbc2e9cdbc6a4d230be952d27"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-0.svg",
-          "sha256": "0a79ac19d3f083db5ff38590f0032149db4b31ea63b060c2fb7633dc4fbcb151"
+          "sha256": "80ba7111428bed200b6544429029e89c78d9c61150d37788a55c7bb6dca953c3"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-1.svg",
-          "sha256": "faedf583f0cad759648ae944c82e9128afca08eb822b5fa3e7c9d105c668b5bd"
+          "sha256": "834b6befd61f2cf145634378f8d344f8105a8994310a757dc826f16b620d7e5f"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-2.svg",
-          "sha256": "f046e3f8e52b9cac007b9d2e35d6ffb8479348e743106273da245abd2bd6f8da"
+          "sha256": "1dd5c6a6a8f3602651951de0715e6b7e44daf1548ae4298975139d5ae5bfe655"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-3.svg",
-          "sha256": "bc2adfad550367f59977bb60536ca43e1e467783d0d0f308c21413e080d9a8bb"
+          "sha256": "4d9a6e870ffd060dcacd31595a914a60e02fd89e137c3d785d0dc7396d8905fa"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-4.svg",
-          "sha256": "4359ab4fe4a7fa2da66022884f6532d5b17447fa83329795944d84cf25b90b38"
+          "sha256": "ee858f0622eba25f45702b98b80c277272ce7dc7f12950f9bd51e606508bd554"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-5.svg",
-          "sha256": "07f4b76032aa39a28c5973555454e29e1cc26cc352b26416cebec787c792e26a"
+          "sha256": "eb9457502c510a705c478c62f379263cf24eac8129f7ef8b3c2989b11eef47af"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-6.svg",
-          "sha256": "69b13845f632ca6ec30b50f62e13327fe2198c7345323edce9f006dbcb4ff653"
+          "sha256": "18c9da388420fb3e112bcc702e7e21c7c0872c8e4387598461b5718637783713"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-7.svg",
-          "sha256": "e3d06af5af16daafe843fef9fcb7fbbed4894f59239067f81046f47b36bb96ba"
+          "sha256": "95c35e5c4d5c91bc8ea68a51ade301c803d8b86491a0d820732039c940e414bf"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-0.svg",
-          "sha256": "ee99b8bc228cc5576d29310f1b15290025e7b01629f497e11d9c1e2028c5eec4"
+          "sha256": "e22e2b0bb2d553b575641b517c7a2b83bb0123bbfe742a6f98c149a7124568e9"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-1.svg",
-          "sha256": "57534b6e681d502281e345b35fe486bb9cbd6cb253f4c1213dea4f46240d3fee"
+          "sha256": "5804c502675b01d21cad31ff09063cea97254b83ffb21205af932302e9c14349"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-2.svg",
-          "sha256": "ed7c71a8b44048d38c42a3fa0a7fe5cc200ed8de9a59ee9698246846c66f70f7"
+          "sha256": "2aa8c8122635525cff8558777dfee70dab502c52b3e0c59262c4c99e9f61cf15"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-3.svg",
-          "sha256": "7e347c133514d47e3ee2c8d119eb91e51ab0d3f5172c7a7dfa9e9da39244de46"
+          "sha256": "473efedb6db9ac1ed7119961ef3db10d4df2cf4040e0f7b884f73681585fbe99"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-4.svg",
-          "sha256": "8349e3eef8281380950c85d1442d21f6808f700041f038db87d79a91b27e62cf"
+          "sha256": "b8d94351e144c25325efe6b6e4ae8de7b72d2aa606679dc7aa6c99bd04f3e3f4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-5.svg",
-          "sha256": "3ccd7b1fc582aa8fd10b29002b77ccd8ecc3e73687b6171d39025c503f35e0e1"
+          "sha256": "bc5e23446d9f61f9bd30b5afe71c6ec84ae885b3d5a408aeb8d4a2bd0dc63b87"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-6.svg",
-          "sha256": "e123fad17f267bd0f01b01398cbd1d5812397b316070a9297b329946218f339b"
+          "sha256": "d0e11fa999ebcda38221ab729898df5c68f2d4f811f296934e1df571a272e1d2"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-7.svg",
-          "sha256": "e504b76a16ef6bec8a5074916d24e461824164a657c2ea53ab0b47c005728754"
+          "sha256": "ab469fcc1bd8afc2b83499036c36d2074a8896a8636c4355f4c11bbd90ca403e"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-0.svg",
-          "sha256": "969b1c5c70eaa8c3fef02cdb79904d749839a0af5b341f79b60a7bbd07751cd3"
+          "sha256": "611af637bbf1e1af278a284828c71f7f54225cf358ac92e388f2beecd57b78eb"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-1.svg",
-          "sha256": "0dda29eb259b7e54f0133cd3f9aeae1b56988b359920fbbe73c4b49d4539d01a"
+          "sha256": "e2a3130b460c6407ca92a951ee5654a4c41e2fbe748bbdeeb2f3d25169565d53"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-2.svg",
-          "sha256": "cc29c52f93a20c6543973d9bd6f24869ebc106dfd963efb8a80bbd565097cbe8"
+          "sha256": "f7c96de71a1ce373d90f2aa3667f085e37d3ccc4bdd6c115428ac375e3170eff"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-3.svg",
-          "sha256": "ed66b7543141d7f3f53ab69a564638862f3ec6c478ad1cbf1acdaeee5e559828"
+          "sha256": "16c7a801cebffd5798171817e80c569a41e6778cb567adbec44979cf93df5ea0"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-4.svg",
-          "sha256": "0e38f6018c9f0828dd63bb7eec78756318f0b78d21e951e1533d9e2968293b86"
+          "sha256": "6340820d2d8e8a77d5c446552dee2ba9e9a6c1f5d91509c1869737ff7245bb9e"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-5.svg",
-          "sha256": "fdcf1e085d375d8be989a1c1224fe37e73339ea71d1b4c05c967cb0c80402cdd"
+          "sha256": "2f2a4773a49bbea6cab151f612c4f9754cebae3eac6a88cfb490876fe85c99cd"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-6.svg",
-          "sha256": "8e483a78a650e1802d1a9ffb4cdefeda181bda4624e9dd90e1cb6540fb7744e9"
+          "sha256": "447d9b3747f232c1fe0c5258c65e3c62ec51e0cb222556c6ab4f4f489dbd242e"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-7.svg",
-          "sha256": "2f8cd95d6215d8dbcc3b304e095ad19de4702a386da8f295994a61d62bf2b8bd"
+          "sha256": "9ff12d625c0e31b3c979624f55a3a6a73f8c6e680bf497afd9074bd6d7335d8a"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-0.svg",
-          "sha256": "2edc5c38355d31ad5dfe0c2938f298ac517961cb54568fe243c7ee363942e9ea"
+          "sha256": "e21089041e1ae0b2bc70f4fe0d8b862e6947cf7e3824a8bdd3f05f22a4fc2033"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-1.svg",
-          "sha256": "a9d57938eea26dca8cf6e35e5efef7afff05517abe65ee220b62bb6c23f50ff5"
+          "sha256": "61daaf4e802f5e12372181ef4afb03cc056929cdeb772039fd30f69a0d0098cb"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-2.svg",
-          "sha256": "94991c8cd879bfcb864e905872a4cf620e04f1a694c71aa8ae56325c348e7761"
+          "sha256": "15f949757395cf67486ed0034936766257bdad3dab8633307f5ab50389973834"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-3.svg",
-          "sha256": "7d2556e592e89a3f8a148c01bd4d27c7a6d02aa95911c98c64c68bcd6b0ea4e5"
+          "sha256": "b75e0f4f18e88e9305eb054415e4b53b7ed855b2f186811ad9ef064b20d56dbf"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-4.svg",
-          "sha256": "4d09dcf905251924c321cd467500197c3bce515e23b1aec5ccbc8b7847efaa1f"
+          "sha256": "4c06135e56c0dff70241872f0b0cd9793fac3ad859c34a9541fe8a3bc4708ef4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-5.svg",
-          "sha256": "4248d9c64d64a8b869c7bead6a870cb47130bbc0a5eacd2fce227cea4f27c8e9"
+          "sha256": "ff6b5d2ec73383015efcb20c06072063fd8f6102187f3efa5a95bb53a6217b5a"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-6.svg",
-          "sha256": "8978f78cb46784f1be12f75d8a289a5043ac25d9e91d14b57764d6b1ab70b50d"
+          "sha256": "b88944ce280b3a93d12ed1bd71f43734e24bf537f2387444a30c09edcba5c4e1"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-7.svg",
-          "sha256": "939fbcef8913e73e50dfa22bb15f2edfe7a972923ae8af605d86d8f22538716b"
+          "sha256": "31c84abae1f5008d5f43088700076f6fdb4a3702724241f68f190738a1eb4955"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c0.svg",
-          "sha256": "53a61d0d72c6a1d1dc4e887da8ab80fa699088a050423791748b2d1e391f1b4b"
+          "sha256": "2b2a35beb62658bfc0d481bdfa8fb21c66000401ffe3c8426d3a8a7c45906af2"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c1.svg",
-          "sha256": "6df80826abb0578468c7951765485351a904b15b5fb0cd5caeb4859edf6c2c21"
+          "sha256": "d074cbdcec518f2b001616b549eda1cb1b13e222dcd54a6180c1350acb830bac"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c2.svg",
-          "sha256": "c4bd5ae3dc0ce219ffe1192069f87a646850e09c1a94362a8b2fd3e576de9072"
+          "sha256": "f0f421276044a7323a853794471e14ef74b4555f9cfec91a40549fdf281e640d"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c3.svg",
-          "sha256": "a7b899d9d50f31dbb9110ec62fd72271332efe2104e1e9516c19e9c069187c97"
+          "sha256": "f0fe1e7c0466b8d9f116ccff2dad10b6fadbd646ebb078f6e320b00f415b95df"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c0.svg",
-          "sha256": "54b7059aba35fd273ac3ce4b80edce36ca805e9dda8b39ee05f10d599f80dba7"
+          "sha256": "d36ea94248f07e66420a07d2bf9ccac55dd831e87a6f8b691667e195c57b6940"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c1.svg",
-          "sha256": "52aa86836e12e9fbbe1a04d3b27dbc7601b78cec5569f0b410c05e9e2611ebbd"
+          "sha256": "4201eaadd3f12ac078c2d0c2048c9f36003564b6c2b6a725e43f71ced190a2a4"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c2.svg",
-          "sha256": "018a5dbb0d86f9ce455ca762efca900650e6cdf802b1c53c078ef4bdc32ddb83"
+          "sha256": "af54946bc130a9859f625473a59630b6987c559cc3a175b9e34230bbdbc659be"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c3.svg",
-          "sha256": "095aa9f44cf75567d84f51d172580a43492a483bd7c840a1c3ce972b6221ddaa"
+          "sha256": "5f97179bcb37b36262447c73fb2d0f2a93cbcd96bd2bf5995ac1badcf25d1eeb"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c0.svg",
-          "sha256": "d1195674c63183ce4b3bf98b0bfe1e00da4c82fc2c9fc1c0d8b392bc37753819"
+          "sha256": "083c267ecc854ac4167cb80f142fdf76cb958934c4733d5e66b20ee1af704064"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c1.svg",
-          "sha256": "6b51ae60c7757936a924a5845402314812148cdb8f4e37829f33e56e148127f0"
+          "sha256": "0bd0fde8f2c52119c008c1d2376a53cb308284c2379a8b2da850a5ff212b2fbd"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c2.svg",
-          "sha256": "3fdfe081c7dd087c40339084709b15f812c0444356d469bd68b6f8d5e0cceaf1"
+          "sha256": "cc5a41e2ae2022eb7e8adffbe4f2002d6342f421b2ce314074e7ca1320872ee3"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c3.svg",
-          "sha256": "3c3b230cb5cd126b6175b44a10b23c9f9676486c7808b22d8401177cf451c862"
+          "sha256": "a234740cb0cdd5e4ed3b41ed8a65aba5e700b059bfd3b2c3ff0dde9252f8e1a1"
         },
         {
           "path": "public/pixi-art/home-hamlets/butterbill/bakery.svg",
@@ -439,7 +431,7 @@
         },
         {
           "path": "public/pixi-art/home-hamlets/butterbill/house-petaldoor.svg",
-          "sha256": "67ea327a10a982ed5023eb6517d6b593a7cd637bacc6f5f1f1d31c761773c759"
+          "sha256": "557b64ab9068f2d5225a0f40f78cb78610ebab5c0b6ff7ada225bd30685bc5c7"
         },
         {
           "path": "public/pixi-art/home-hamlets/butterbill/lamp.svg",
@@ -562,12 +554,8 @@
           "sha256": "246dc8880f72a4338cdb662bb7d4ace59362fa13ab1943307f7078a89416e0b7"
         },
         {
-          "path": "public/pixi-art/home-hamlets/clovercrust/windmill.svg",
-          "sha256": "7cef676f402a934f2c76a7ff0856d21ed75d562dbfb38e79a6796f13e2e37d89"
-        },
-        {
           "path": "public/pixi-art/home-hamlets/lanternleaf/bandstand.svg",
-          "sha256": "887f6cd1317a38a863919ef76a920cca737df8b986a8892234a383c7c8928f8f"
+          "sha256": "5e1a5b3b2fa87d6e6e5870a5f1f6f6711b66136b2e37b5967b07185534419f0e"
         },
         {
           "path": "public/pixi-art/home-hamlets/lanternleaf/bush-green.svg",
@@ -578,24 +566,16 @@
           "sha256": "34e5f799bf97e098f77e6746950ecda6f4282d9394e6973d386b59f6fee77cdc"
         },
         {
-          "path": "public/pixi-art/home-hamlets/lanternleaf/crop-cabbage-row.svg",
-          "sha256": "83a786864eb7e45bc51f6ea603c603c7eecc21ccedff9172200fd84801e69080"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/lanternleaf/crop-carrot-row.svg",
-          "sha256": "9b1348e214f2ece3e56f6df61f54c9bd4af33381bd80a2cf6ba9ed56e7a17d19"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/lanternleaf/crop-tomato-trellis.svg",
-          "sha256": "4df7ee3b204e95a5750220808e79b7eb0a6431fabd85d1af213a57b18d93c851"
-        },
-        {
           "path": "public/pixi-art/home-hamlets/lanternleaf/flower-pot-daisy.svg",
           "sha256": "c93613b73b69cb9dce135c8a7adbc79afad0b24e4b5fd6911bd591a27f6653cf"
         },
         {
           "path": "public/pixi-art/home-hamlets/lanternleaf/flower-pot.svg",
           "sha256": "77adfc6559c63e4a96d22cec4a781cb61dfd2de848df4642e90e2a122e06aab6"
+        },
+        {
+          "path": "public/pixi-art/home-hamlets/lanternleaf/greenhouse-closed.svg",
+          "sha256": "079ee1ba1e23259977cad196929d6a254fb49e357c08716f882f0e4406a634eb"
         },
         {
           "path": "public/pixi-art/home-hamlets/lanternleaf/house-blue.svg",
@@ -607,7 +587,7 @@
         },
         {
           "path": "public/pixi-art/home-hamlets/lanternleaf/house-yellow.svg",
-          "sha256": "05c05a640a9213a5da58af45e7ddc7b34349979153bd7474011c8c1a03dd3849"
+          "sha256": "5d1211d2b8dc2dae5a3fab427633d17b5abec92827aee4b84aea288ce53dc279"
         },
         {
           "path": "public/pixi-art/home-hamlets/lanternleaf/lamp.svg",
@@ -636,18 +616,6 @@
         {
           "path": "public/pixi-art/home-hamlets/lanternleaf/tree-oak-wide.svg",
           "sha256": "88df5252e2212e1ed75fd2932940878047e5f29bd01d763d51b095850252e39a"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/lanternleaf/vegetable-bed.svg",
-          "sha256": "f09e6b8bfa0a6d6ed9ddda0bc48d0b6fc12e9fe2dd2d60b8e0d3f0352288d602"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/lanternleaf/vegetable-fence-back.svg",
-          "sha256": "353eb623cbb6a78267d364b0dc6e0de9d395086ac847d0328e15f376eabe7921"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/lanternleaf/vegetable-fence-front.svg",
-          "sha256": "cf8cbb1e5ecd1f061f64a10543998d4dba89414234254e939f828beaec53e22c"
         },
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/brush-pot.svg",
@@ -687,7 +655,7 @@
         },
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/house-domed-pottery-shop.svg",
-          "sha256": "edc4d0c85ea8af1ce1c55cdd9b256529c8444f2ca4b95a0baca55817d80173c8"
+          "sha256": "1f2140d9104e295445c81ce5985e77a5493d3f70e26a2e1a8014c246a7899870"
         },
         {
           "path": "public/pixi-art/home-hamlets/petalpatch/house-pottery-cottage.svg",
@@ -732,10 +700,6 @@
         {
           "path": "public/pixi-art/home-hamlets/reedwhistle/cottage-harbour.svg",
           "sha256": "036ba8dce229ae9d8eeca4f0784ccf4ff300e3247e6ce3465227365cf9698f02"
-        },
-        {
-          "path": "public/pixi-art/home-hamlets/reedwhistle/cottage-netmaker.svg",
-          "sha256": "bbbc472c4137a1236b9b27b4b2faada6d6c24da423111b9e9a62bb955890842f"
         },
         {
           "path": "public/pixi-art/home-hamlets/reedwhistle/fish-basket-large.svg",
@@ -787,7 +751,7 @@
         },
         {
           "path": "public/pixi-art/home-hamlets/reedwhistle/smokehouse.svg",
-          "sha256": "9bac7bcc50fc1b7161ddbee8864414aba8364dc903f915ac2e57306978e5c5d9"
+          "sha256": "ef287d088813c4b2ce3779edd2207df801835c7d3532e654801d0ad99013f8bc"
         },
         {
           "path": "public/pixi-art/home-hamlets/reedwhistle/tree-birch.svg",
@@ -827,7 +791,7 @@
         },
         {
           "path": "public/pixi-art/home-review/home-west-bridge.svg",
-          "sha256": "8963b16f9b1d4fac21846233cfb14a605c976417ba28ca95d58af2aef21e50f9"
+          "sha256": "8977cf1924adb2bb4a25886a29b9d6a96bf965502501d896e3261dde2fd6eb99"
         },
         {
           "path": "public/pixi-art/home-review/lighthouse-shadow.svg",
@@ -874,12 +838,8 @@
           "sha256": "06c5ade6bbd11b5f73ffb5275b37e02ce7cd51612c56e0ac66e7e29495698036"
         },
         {
-          "path": "public/pixi-art/home-review/windmill-sails.svg",
-          "sha256": "00085a03212e0795a285422e6f4b62ad8693e81e84ba161bbb4b02b32f829689"
-        },
-        {
           "path": "public/pixi-art/lake-race.svg",
-          "sha256": "e1868eb4d244476520bd7466911cf7da46d2df62f9c0904334c226c2fe46f794"
+          "sha256": "500fa4ec8ad808291a6e728b7022c25404945f4c60d4fb67159f536768df0fc6"
         },
         {
           "path": "public/pixi-art/plants/bush-1.svg",
@@ -1010,10 +970,6 @@
           "sha256": "4535f5ff2c9968361b82db7b0910f2c30d79360c1674ba6a59b891bab5f26d4a"
         },
         {
-          "path": "public/pixi-art/themes/community/hamlets/sproutshare/greenhouse.svg",
-          "sha256": "e20b10293345be90047ea29acbfd8ba4c1f634ac2ffd0484cf4bcface3b2997f"
-        },
-        {
           "path": "scripts/globe-perf/snapshot.mjs",
           "sha256": "64bf6bd6e92a1fb4eed58cb71f0df9b0ba047954f74aeb60c5f12930b70f0836"
         },
@@ -1047,11 +1003,11 @@
         },
         {
           "path": "src/world/home/building-silhouettes.json",
-          "sha256": "8b367345a899d7f0eb53aa92faa41df0dbcf71ac9fd6386fbbeebc6dad0c4278"
+          "sha256": "fe70a453519ca8bc9fc10d8846ac6c0de756c3cb10ca94f1de182af046f48f40"
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "e0b8319bb223ef2ee362de038c8f16ebb737611deb8c5f3e1e98da0b88250ee6"
+          "sha256": "bad0b868763b862c74b5dfc6f583c2dc54c0e84c0a43558640479daab2c6fa91"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1059,7 +1015,7 @@
         },
         {
           "path": "src/world/home/home-routes.json",
-          "sha256": "efcf95d2c9c6ba2cfae1489883f524ca65efaf8df65771ccfedefaa7124eafbd"
+          "sha256": "81ab20315f452827a7fa0e8d8a741b1a965754cc3e224571ff60b2cdc789525f"
         },
         {
           "path": "src/world/home/layout.json",
@@ -1071,7 +1027,7 @@
         },
         {
           "path": "src/world/home/placements.js",
-          "sha256": "b058bbad4b29edee47497cfde85c959de1a4fa31a86646e0474d05db3f1c278f"
+          "sha256": "5e819bdd877fe57af32159521f3c93970911b05f2ccc00a0cec1883bbb340fd4"
         },
         {
           "path": "src/world/home/plaza-benches.js",
@@ -1079,7 +1035,7 @@
         },
         {
           "path": "src/world/home/prop-outline-rules.js",
-          "sha256": "58098aaed0473a62e6918b6f2ec1cbe5b14ad9654edff76cd31f0a91376700da"
+          "sha256": "3589326cea0f353e019b4de4b53361ba64fb08b3b85d4c8649b93ad5507a1729"
         },
         {
           "path": "src/world/home/sleep-poses.json",
@@ -1087,7 +1043,7 @@
         },
         {
           "path": "src/world/home/sleep-spots.js",
-          "sha256": "45028f98609454d8879de242ff458fbf3c876c66596614187b1b912a63a9f80e"
+          "sha256": "0f4d5c69f3f2db8c5a9d9ff6dea338f772db94099a5561c894f49c819c9bf8fd"
         },
         {
           "path": "src/world/home/walk-shapes.json",
@@ -1102,15 +1058,15 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "fd88e5139f6400cb7ad29fbb2d2c81836174e58fc7e47862db605d9bf2cb7510"
+      "sha256": "4c2af243ac93d762516dffda94e02d221432d051722da94f7af942c9670cc555"
     },
-    "groundSha256": "e5304fbb94cf8634ce2175d0303888302a0938dce7005552dd84cd551cdc2028",
+    "groundSha256": "4cd25f59fcab4b897719cca731a5c99a681e144272e4765e402e924e7e044ee7",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "321841b7ae1fd17818de5d29ff3ad6db5da3846553b61489c158eb8f9ef07647",
+    "sha256": "94f91f010431d9552d9a7c073414342dba8eb8aaa52f787bc6b434003ef5e367",
     "width": 1024,
     "height": 768,
-    "bytes": 1171736,
-    "groundBytes": 967778,
+    "bytes": 1151249,
+    "groundBytes": 956232,
     "quality": {
       "tolerance": 0.4,
       "minArea": 0.2,

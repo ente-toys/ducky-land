@@ -52,9 +52,9 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
     return hit ? `prop ${hit.id}` : null;
   };
   for (const [pose, list] of Object.entries(spots ?? {})) for (const spot of Array.isArray(list) ? list : []) {
-    const r = sizes[pose], tree = pose === 'nod' && props.find(p => p.id === spot?.[0]);
+    const r = sizes[pose], tree = pose === 'nod' && !spot?.[3]?.ground && props.find(p => p.id === spot?.[0]);
     const [x, y, flip] = tree ? [tree.x + (spot[1] ?? 0), tree.y + 14, spot[2]] : Array.isArray(spot) ? spot : [NaN, NaN];
-    let reason = !(pose in SLEEP_COUNTS) ? 'unknown pose' : pose === 'nod' && !tree ? `no tree ${spot?.[0]}` : !Number.isFinite(x) || !Number.isFinite(y) ? 'bad point' : why(x, y, pose, r, tree);
+    let reason = !(pose in SLEEP_COUNTS) ? 'unknown pose' : pose === 'nod' && !tree && !spot?.[3]?.ground ? `no tree ${spot?.[0]}` : !Number.isFinite(x) || !Number.isFinite(y) ? 'bad point' : why(x, y, pose, r, tree);
     const seat = props.find(p=>p.id===spot?.[3]?.seat&&p.occupiedBySleeper&&p.finalRole==='bench'&&p.contact===false)?.id;
     const near = !reason && [...occupied, ...out].find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && !(seat && s.seat && seat !== s.seat) && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
     reason ||= near && `near ${near.pose}`;
@@ -75,3 +75,9 @@ export function sleepShapeProblems(spots, total = SLEEP_TOTAL) {
   return out;
 }
 export const sleeperFootprint = bed => ({x: bed.x, y: bed.y - 6, rx: bed.r * .9, ry: Math.min(34, Math.max(22, bed.r * .42)), sleeper: true});
+
+// Home residents block their visible body, including the space above their feet.
+export const homeSleeperFootprint = bed => {
+  const r = Math.min(48, Math.max(34, bed.r * .6));
+  return {x: bed.x, y: bed.y - 32, rx: r, ry: r, sleeper: true};
+};
