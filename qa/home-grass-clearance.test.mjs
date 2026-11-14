@@ -15,7 +15,6 @@ const oracle=await homeClearanceOracle(props,world);
 
 test('connected Home grass/sand/path clearing alpha pixels by 30 and front props by the body box is walkable on client and worker',()=>{
   const result=auditHomeClearance(world,[HOME_MAP.spawn.x,HOME_MAP.spawn.y],oracle,[client,worker.walkable]);
-  console.log('Home grass clearance audit:',JSON.stringify(result));
   assert.ok(result.connectedBodySafeSamples>100000,'whole island sweep');
   assert.deepEqual(result.violations,[0,0],JSON.stringify(result.examples));
   assert.deepEqual(result.bodyClearanceViolations,[0,0],'no walkable centre overlaps opaque art plus 22-unit body');
@@ -29,7 +28,6 @@ test('boss oak/birch/yellow cottage grass near 3178,-805 is clear and reachable'
   for(let y=-925;y<=-625;y+=8)for(let x=3050;x<=3350;x+=8)if(oracle.clear(x,y)&&client(x,y))candidates.push([x,y]);
   candidates.sort((a,b)=>Math.hypot(a[0]-3178,a[1]+805)-Math.hypot(b[0]-3178,b[1]+805));
   const point=candidates[0];assert.ok(point,'nearby body-safe grass remains');
-  console.log('Oak/birch grass safe point:',point);
   assert.ok(oracle.clear(...point),'at least 30 units from opaque drawing');
   assert.ok(client(...point));assert.ok(worker.walkable(...point));
   assert.deepEqual(worker.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...point).at(-1),point);
@@ -63,7 +61,6 @@ test('red roof cottage flowering-bush/oak gap at Lanternleaf stays walkable',()=
   candidates.sort((a,b)=>Math.hypot(a[0]-3208,a[1]+840)-Math.hypot(b[0]-3208,b[1]+840));
   const point=candidates[0];
   assert.ok(point,'a 30-unit-clear centre exists in the gap');
-  console.log('Boss flowering bush/oak gap:',JSON.stringify({width,point}));
   assert.ok(Number.isFinite(width)&&width>=60,`opaque gap is ${width} units`);
   assert.ok(oracle.clear(...point),'gap centre clears every opaque prop by 30');
   assert.ok(client(...point));assert.ok(worker.walkable(...point));
@@ -79,7 +76,6 @@ test('reported bush-over-body point is blocked on both implementations',()=>{
 test('every spawn-connected 16-unit Home sample has zero foreground pixel/body intersections',()=>{
   for(const [name,walkable] of [['client',client],['worker',worker.walkable]]){
     const result=auditConnectedBodies(world,[HOME_MAP.spawn.x,HOME_MAP.spawn.y],oracle,walkable);
-    console.log('Connected body raster audit:',name,JSON.stringify(result));
     assert.ok(result.samples>100000);
     assert.equal(result.overlaps,0,JSON.stringify(result.examples));
   }

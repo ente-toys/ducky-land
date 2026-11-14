@@ -14,12 +14,10 @@ test('Home standing box contains every direction and allowed hat frame with moti
     half=Math.max(half,Math.abs(p.bounds[0]-v.ground[0])*k,Math.abs(p.bounds[2]-v.ground[0])*k);
     height=Math.max(height,(v.ground[1]-p.bounds[1])*k);
   }
-  console.log('Standing sprite world bounds:',{width:half*2,height});
   for(const e of m.wardrobe.filter(e=>e.slot==='cap'&&OUTFIT_OPTIONS.cap.includes(e.index)))for(const frames of Object.values(e.frames))for(const f of frames)if(f.visible){
     half=Math.max(half,Math.abs(f.rect[0])*k,Math.abs(f.rect[0]+f.rect[2])*k);
     height=Math.max(height,-f.rect[1]*k);
   }
-  console.log('Sprite including allowed caps:',{width:half*2,height,box:HOME_DUCK_BODY});
   assert.ok(HOME_DUCK_BODY.width/2>=half+4);
   assert.ok(HOME_DUCK_BODY.height>=height+8);
 });

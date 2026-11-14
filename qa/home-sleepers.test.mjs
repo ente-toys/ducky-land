@@ -5,7 +5,6 @@ import {readFileSync} from 'node:fs';
 import {geometry,inShape,inPoly} from '../assets/world/island-geometry.mjs';
 import {HOME_MAP} from '../src/world/island-maps.js';
 import {HOME_SLEEP_TOTAL,sleepHalfWidths,homeSleeperFootprint as sleeperFootprint} from '../src/world/home/sleep-spots.js';
-import treeMoves from './fixtures/home-resident-tree-moves.json' with {type:'json'};
 import relocations from './fixtures/home-canopy-relocations.json' with {type:'json'};
 import originalBeds from './fixtures/home-original-sleepers.json' with {type:'json'};
 import eightyBeds from './fixtures/home-eighty-sleepers.json' with {type:'json'};
@@ -22,7 +21,7 @@ test('Home retains all hundred residents, their poses and stories on clear groun
   const props=P.createPlacements(),world=P.walkWorld(P.trimWorld(JSON.parse(readFileSync('assets/world/world.json'))),props);
   const beds=P.sleepSpots(world,props,geometry(world).walkable,sleepHalfWidths());
   assert.equal(beds.length,HOME_SLEEP_TOTAL);assert.deepEqual(beds.bad,[]);
-  const relocated=old=>old.map(b=>{const move=relocations.find(m=>m.pose===b.pose&&m.from[0]===b.x&&m.from[1]===b.y);const tree=b.tree&&props.find(p=>p.id===(treeMoves[b.tree]??b.tree));return {...b,...(tree?{tree:tree.id,x:tree.x,y:tree.y+14}:move?{x:move.to[0],y:move.to[1]}:{})};});
+  const relocated=old=>old.map(b=>{const move=relocations.find(m=>m.pose===b.pose&&m.from[0]===b.x&&m.from[1]===b.y);const tree=b.tree&&props.find(p=>p.id===b.tree);return {...b,...(tree?{tree:tree.id,x:tree.x,y:tree.y+14}:move?{x:move.to[0],y:move.to[1]}:{})};});
   assert.deepEqual(JSON.parse(JSON.stringify(beds.slice(0,40))),relocated(originalBeds),'original positions, poses, flips, trees and animation order survive');
   const added=beds.slice(40);
   assert.equal(added.length,60);

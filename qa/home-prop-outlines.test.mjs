@@ -1,5 +1,4 @@
 import test from 'node:test';
-import moveReview from './fixtures/home-moves-review.json' with {type:'json'};
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import sharp from 'sharp';
