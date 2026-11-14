@@ -4,20 +4,22 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {build} from 'esbuild';
 import sharp from 'sharp';
 import {propOutlineKind} from '../src/world/home/prop-outline-rules.js';
+import {frontBodyMask} from './lib/front-body-mask.mjs';
 import {alphaContours} from './lib/alpha-contour.mjs';
 const SIZE = 256;
+const rasters=new Map();
 async function placements() {
   const bundle = await build({stdin:{resolveDir:process.cwd(),contents:`export * from './src/world/home/placements.js'; export {harborWorld} from './src/gameplay/islands.js'; export {sleepHalfWidths} from './src/world/home/sleep-spots.js';`},bundle:true,platform:'node',format:'esm',write:false});
   return import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text+'\n//# sourceURL=home-prop-data.mjs').toString('base64'));
 }
 async function trace(svg) {
   const {data}=await sharp(Buffer.from(svg)).resize(SIZE,SIZE,{fit:'fill'}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
-  return alphaContours(data,SIZE);
+  return {data,contours:alphaContours(data,SIZE)};
 }
 const P=await placements(), props=P.createUnoutlinedPlacements();
 const full={};
 for(const src of [...new Set(props.map(p=>p.src))].sort()) {
-  const svg=readFileSync('public'+src,'utf8');full[src]=await trace(svg);
+  const svg=readFileSync('public'+src,'utf8');const traced=await trace(svg);full[src]=traced.contours;rasters.set(src,traced.data);
 }
 writeFileSync('src/world/home/building-silhouettes.json','{\n'+Object.entries(full).map(([k,v])=>' '+JSON.stringify(k)+':'+JSON.stringify(v)).join(',\n')+'\n}'+'\n');
 console.log(JSON.stringify({props:props.length,arts:Object.keys(full).length,kinds:props.reduce((a,p)=>{const k=propOutlineKind(p);a[k]=(a[k]??0)+1;return a;},{})}));
@@ -25,10 +27,14 @@ if(process.argv.includes('--outlines-only'))process.exit(0);
 // Bundle again after the new catalogues exist, so baked and runtime geometry agree.
 const Q=await placements(), world=JSON.parse(readFileSync('assets/world/world.json'));
 const {geometry}=await import('../assets/world/island-geometry.mjs');
-const ps=Q.createPlacements(), local=Q.harborWorld(Q.walkWorld(Q.trimWorld(world),ps));
-const beds=Q.sleepSpots(local,ps,geometry(local).walkable,Q.sleepHalfWidths(.88*.24*3));
+const ps=Q.createPlacements(), masks={};
+for(const p of ps.filter(p=>p.outlineKind==='solid'))masks[p.id]=frontBodyMask(rasters.get(p.src),p,p.sortY);
+writeFileSync('src/world/home/front-body-silhouettes.json',JSON.stringify(masks)+'\n');
+const R=await placements(), finalProps=R.createPlacements();
+const local=R.harborWorld(R.walkWorld(R.trimWorld(world),finalProps));
+const beds=R.sleepSpots(local,finalProps,geometry(local).walkable,R.sleepHalfWidths(.88*.24*3));
 if(beds.bad.length)throw Error(`Unresolved sleepers: ${JSON.stringify(beds.bad)}`);
-const walk={...local,obstacles:[...local.obstacles,...beds.map(Q.sleeperFootprint)]};
+const walk={...local,obstacles:[...local.obstacles,...beds.map(R.sleeperFootprint)]};
 const keys=['navigationCellSize','width','height','origin','coast','obstacles','walkways','bridges','islets','water','boardwalk'];
 console.log(JSON.stringify({props:props.length,arts:Object.keys(full).length,kinds:props.reduce((a,p)=>{const k=propOutlineKind(p);a[k]=(a[k]??0)+1;return a;},{}),sleepers:beds.length}));
 

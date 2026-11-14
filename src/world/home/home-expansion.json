@@ -52581,9 +52581,13 @@
   ],
   "reviewWater": true,
   "reviewProps": {
+    "0": {
+      "x": 2932,
+      "y": 2338
+    },
     "1": {
-      "x": 2420,
-      "y": 2062
+      "x": 2556,
+      "y": 2166
     },
     "3": {
       "src": "/pixi-art/home-review/beach-kiosk.svg",
@@ -52683,12 +52687,12 @@
       }
     },
     "grow-bush-4": {
-      "x": 4050,
-      "y": 430
+      "x": 4122,
+      "y": 502
     },
     "grow-tree-5": {
-      "x": 4590,
-      "y": 200
+      "x": 4206,
+      "y": 88
     },
     "grow-bush-1": {
       "x": 255,
@@ -52730,7 +52734,7 @@
       "y": 2110
     },
     "plaza-lamp-2": {
-      "x": 3138.130588709009,
+      "x": 3130.130588709009,
       "y": 2564.1777109755267
     },
     "plaza-lamp-3": {
@@ -52738,7 +52742,7 @@
       "y": 2502.064345594497
     },
     "tree-0": {
-      "x": 1668.75,
+      "x": 1700.75,
       "y": 1119.5061728395062
     },
     "tree-1": {
@@ -52746,8 +52750,8 @@
       "y": 2442.8395061728397
     },
     "tree-2": {
-      "x": 4088.125,
-      "y": 1117.695473251029
+      "x": 4072.125,
+      "y": 1197.695473251029
     },
     "tree-3": {
       "x": 1884.375,
@@ -52802,8 +52806,8 @@
       "y": 2637.636031092821
     },
     "tree-19": {
-      "x": 3043.5546875,
-      "y": 2990.118884316415
+      "x": 3059.5546875,
+      "y": 2998.118884316415
     },
     "tree-20": {
       "x": 4500.8984375,
@@ -52823,11 +52827,11 @@
     },
     "grow-tree-3": {
       "x": 3430,
-      "y": 320
+      "y": 328
     },
     "grow-tree-4": {
-      "x": 3810,
-      "y": 395
+      "x": 3706,
+      "y": 347
     },
     "bigger-community-423": {
       "x": 3830,
@@ -52838,8 +52842,8 @@
       "y": 1080
     },
     "bigger-community-536": {
-      "x": 6644.444444444444,
-      "y": 3377.777777777778
+      "x": 6980.444444444444,
+      "y": 3737.777777777778
     },
     "bigger-community-537": {
       "x": 6030,
@@ -52878,12 +52882,12 @@
       "y": 973.8
     },
     "hamlet-lanternleaf-lamp-west": {
-      "x": 2547.4,
-      "y": -322.3
+      "x": 2619.4,
+      "y": -314.3
     },
     "hamlet-lanternleaf-lamp-east": {
-      "x": 3182.5,
-      "y": -288.3
+      "x": 3254.5,
+      "y": -232.3
     },
     "hamlet-clovercrust-oak-east": {
       "x": 5854.9,
@@ -52898,8 +52902,8 @@
       "y": 101.6
     },
     "hamlet-clovercrust-birch-southeast": {
-      "x": 5711.4,
-      "y": 432.6
+      "x": 5727.4,
+      "y": 488.6
     },
     "hamlet-petalpatch-oak-north": {
       "x": -629.6,
@@ -52942,11 +52946,11 @@
       "y": 2323.019356805365
     },
     "bigger-community-506": {
-      "x": 555.5555555555555,
+      "x": 547.5555555555555,
       "y": -481.1111111111111
     },
     "bigger-community-525": {
-      "x": 554.4444444444445,
+      "x": 546.4444444444445,
       "y": -304.44444444444446
     },
     "grove-s2-3": {
@@ -52954,36 +52958,36 @@
       "y": 5540
     },
     "hamlet-lanternleaf-oak-bottom-right": {
-      "x": 3123.5,
-      "y": 194.9
+      "x": 3083.5,
+      "y": 250.9
     },
     "hamlet-clovercrust-oak-top": {
-      "x": 4344.6,
+      "x": 4424.6,
       "y": -666.8
     },
     "hamlet-clovercrust-oak-northwest": {
-      "x": 4127.2,
-      "y": -416
+      "x": 4191.2,
+      "y": -392
     },
     "hamlet-reedwhistle-east-upper-oak": {
-      "x": 4988.7,
+      "x": 4924.7,
       "y": 5097.7
     },
     "review-pear-west": {
       "x": 740,
-      "y": -720
+      "y": -800
     },
     "p2-garden-northwest-1": {
-      "x": -1170,
-      "y": -570
+      "x": -1146,
+      "y": -530
     },
     "p2-garden-east-farm-rim-1": {
       "x": 6885,
-      "y": -430
+      "y": -398
     },
     "plaza-lamp-0": {
-      "x": 2414.1262823152483,
-      "y": 2192.7363164737785
+      "x": 2430.1262823152483,
+      "y": 2168.7363164737785
     },
     "tree-9": {
       "x": 1997.65625,
@@ -53002,16 +53006,16 @@
       "y": -320
     },
     "hamlet-butterbill-north-east-birch": {
-      "x": -231.60000000000002,
-      "y": 31.799999999999997
+      "x": -119.60000000000002,
+      "y": 95.8
     },
     "hamlet-butterbill-hammock-left-tree": {
       "x": -152.7,
       "y": 70.9
     },
     "hamlet-butterbill-east-great-oak": {
-      "x": -52.6,
-      "y": 700.2
+      "x": -76.6,
+      "y": 724.2
     },
     "hamlet-lanternleaf-birch-northwest": {
       "x": 2218.7,
@@ -53058,8 +53062,8 @@
       "y": 2550
     },
     "p2-garden-southeast-clearing-0": {
-      "x": 6730,
-      "y": 3790
+      "x": 6778,
+      "y": 3822
     },
     "p2-garden-hay-coast-0": {
       "x": 1260,
@@ -53074,12 +53078,12 @@
       "y": 1507.7777777777778
     },
     "bigger-community-526": {
-      "x": 943.3333333333334,
-      "y": -597.7777777777778
+      "x": 967.3333333333334,
+      "y": -637.7777777777778
     },
     "bigger-community-527": {
       "x": 1207.7777777777778,
-      "y": -350
+      "y": -358
     },
     "grove-w2-3": {
       "x": -1620,
@@ -53098,8 +53102,8 @@
       "y": 6.100000000000001
     },
     "review-pear-back": {
-      "x": 820,
-      "y": -680
+      "x": 852,
+      "y": -728
     },
     "polish-north-round": {
       "x": 1760,
@@ -53107,7 +53111,7 @@
     },
     "p2-garden-pearbutton-1": {
       "x": 450,
-      "y": -720
+      "y": -800
     },
     "p2-garden-north-ridge-0": {
       "x": 2270,
@@ -53126,15 +53130,15 @@
       "y": 3975
     },
     "bigger-community-428": {
-      "x": 2534.4444444444443,
-      "y": 5211.111111111111
+      "x": 2566.4444444444443,
+      "y": 5235.111111111111
     },
     "review-hay-oak": {
-      "x": 2590,
-      "y": 5310
+      "x": 2630,
+      "y": 5318
     },
     "review-hay-birch": {
-      "x": 2540,
+      "x": 2588,
       "y": 5120
     },
     "hamlet-clovercrust-mill-left-shrub": {
@@ -53158,8 +53162,8 @@
       "y": 5160
     },
     "polish-willow-under2": {
-      "x": 6800,
-      "y": 3160
+      "x": 6752,
+      "y": 3144
     },
     "p3-garden-farm-border-1": {
       "x": 4740,
@@ -53170,8 +53174,8 @@
       "y": -865
     },
     "p3-garden-farm-border-3": {
-      "x": 5190,
-      "y": -970
+      "x": 5198,
+      "y": -1002
     },
     "p3-garden-farm-border-5": {
       "x": 4775,
@@ -53188,6 +53192,310 @@
     "review-willow-picnic": {
       "x": 6340,
       "y": 3110
+    },
+    "grow-bush-5": {
+      "x": 4300,
+      "y": 3499
+    },
+    "bigger-community-500": {
+      "x": 472.22222222222223,
+      "y": -805.5555555555555
+    },
+    "grove-s2-2": {
+      "x": 372,
+      "y": 5250
+    },
+    "hamlet-clovercrust-cottage-gold": {
+      "x": 5651.6,
+      "y": 88
+    },
+    "hamlet-reedwhistle-lighthouse": {
+      "x": 4541.9,
+      "y": 5526.9
+    },
+    "review-pear-harvest-crate": {
+      "x": 1104,
+      "y": -422
+    },
+    "polish-orchard-under1": {
+      "x": 682,
+      "y": -446
+    },
+    "polish-orchard-under2": {
+      "x": 771,
+      "y": -388
+    },
+    "plaza-planter-0": {
+      "x": 2331.592088721057,
+      "y": 2430.0019323823267
+    },
+    "bush-2": {
+      "x": 2043.8125,
+      "y": 1933.1275720164608
+    },
+    "bush-5": {
+      "x": 2388.640625,
+      "y": 907.0644718792867
+    },
+    "bigger-community-427": {
+      "x": 7196.222222222223,
+      "y": 3365.3333333333335
+    },
+    "bigger-community-535": {
+      "x": 6692,
+      "y": 2777.777777777778
+    },
+    "grove-w1-1": {
+      "x": -1820,
+      "y": 1990
+    },
+    "grove-w2-1": {
+      "x": -1770,
+      "y": 2600
+    },
+    "hamlet-butterbill-north-east-oak": {
+      "x": -596.3,
+      "y": 67.6
+    },
+    "hamlet-butterbill-far-east-oak": {
+      "x": -28.700000000000003,
+      "y": 103.8
+    },
+    "hamlet-butterbill-west-birch": {
+      "x": -1612.6,
+      "y": 274
+    },
+    "hamlet-butterbill-hammock-right-tree": {
+      "x": 41,
+      "y": 139
+    },
+    "hamlet-butterbill-honeyroof-cottage": {
+      "x": -471.6,
+      "y": 436.3
+    },
+    "hamlet-butterbill-honeyroof-right-pot": {
+      "x": -391.5,
+      "y": 428.3
+    },
+    "hamlet-butterbill-north-east-lamp": {
+      "x": -602.2,
+      "y": 394.7
+    },
+    "hamlet-butterbill-flower-island": {
+      "x": -815.6,
+      "y": 562
+    },
+    "hamlet-lanternleaf-oak-east": {
+      "x": 3717.7,
+      "y": -589
+    },
+    "hamlet-lanternleaf-lamp-northeast": {
+      "x": 3103.7,
+      "y": -639.9
+    },
+    "hamlet-lanternleaf-bench-east": {
+      "x": 3273,
+      "y": -235
+    },
+    "hamlet-lanternleaf-bandstand": {
+      "x": 2848,
+      "y": -321
+    },
+    "hamlet-lanternleaf-bandstand-pot-right": {
+      "x": 2973,
+      "y": -320
+    },
+    "hamlet-lanternleaf-hammock-birch": {
+      "x": 3772.8,
+      "y": -283.4
+    },
+    "hamlet-clovercrust-birch-west": {
+      "x": 4124.8,
+      "y": -309.7
+    },
+    "hamlet-clovercrust-cottage-red": {
+      "x": 4417.1,
+      "y": -305.6
+    },
+    "hamlet-clovercrust-hay": {
+      "x": 5136,
+      "y": 60
+    },
+    "hamlet-clovercrust-lamp-northwest": {
+      "x": 4654.6,
+      "y": -110.2
+    },
+    "hamlet-clovercrust-oak-west": {
+      "x": 4201,
+      "y": 26.5
+    },
+    "hamlet-clovercrust-gold-cottage-left-shrub": {
+      "x": 5460.6,
+      "y": -0.2
+    },
+    "hamlet-clovercrust-cottage-blue": {
+      "x": 4482.8,
+      "y": 129.9
+    },
+    "hamlet-clovercrust-blue-cottage-pink-pot": {
+      "x": 4644.6,
+      "y": 101.6
+    },
+    "hamlet-clovercrust-bush-southwest": {
+      "x": 4477.7,
+      "y": 417.9
+    },
+    "hamlet-clovercrust-bush-south": {
+      "x": 5052.3,
+      "y": 373.4
+    },
+    "hamlet-petalpatch-birch-west": {
+      "x": -1763.7,
+      "y": 3344.6
+    },
+    "hamlet-petalpatch-cottage-shrub-left": {
+      "x": -1290.2,
+      "y": 3371.3
+    },
+    "hamlet-petalpatch-pottery-cottage": {
+      "x": -1087.6,
+      "y": 3362.4
+    },
+    "polish-bread-under3": {
+      "x": -187,
+      "y": 566
+    },
+    "polish-willow-under3": {
+      "x": 6772,
+      "y": 3122
+    },
+    "polish-quay-under1": {
+      "x": 4915,
+      "y": 5220
+    },
+    "p2-garden-west-bank-0": {
+      "x": -1880,
+      "y": 2225
+    },
+    "p2-garden-west-bank-7": {
+      "x": -1809,
+      "y": 3042
+    },
+    "p2-garden-willow-shore-6": {
+      "x": 7240,
+      "y": 3086
+    },
+    "p2-garden-willow-shore-13": {
+      "x": 6413,
+      "y": 3560
+    },
+    "p3-garden-willow-clearing-2": {
+      "x": 6918,
+      "y": 2850
+    },
+    "grove-w3-1": {
+      "x": -290,
+      "y": 2056
+    },
+    "grove-w3-3": {
+      "x": -290,
+      "y": 2222
+    },
+    "grove-w3-4": {
+      "x": -374,
+      "y": 2190
+    },
+    "grove-m2-1": {
+      "x": 4610,
+      "y": 4250
+    },
+    "grove-m2-2": {
+      "x": 4714,
+      "y": 4190
+    },
+    "grove-m2-3": {
+      "x": 4642,
+      "y": 4350
+    },
+    "grove-sw1-1": {
+      "x": -1528,
+      "y": 4698
+    },
+    "hamlet-butterbill-north-east-sapling": {
+      "x": -446.5,
+      "y": -225.6
+    },
+    "hamlet-lanternleaf-bush-bottom-right": {
+      "x": 3050.1,
+      "y": -22.2
+    },
+    "hamlet-clovercrust-oak-bottom-right": {
+      "x": 5876.3,
+      "y": 340.2
+    },
+    "hamlet-petalpatch-oak-southwest": {
+      "x": -1806.1,
+      "y": 4223.6
+    },
+    "polish-east-oak": {
+      "x": 6614,
+      "y": 544
+    },
+    "polish-pottery-under2": {
+      "x": -1580,
+      "y": 4234
+    },
+    "hamlet-butterbill-cafe-west-chair": {
+      "x": -1322.8,
+      "y": 547.6
+    },
+    "hamlet-butterbill-cafe-west-table": {
+      "x": -1358,
+      "y": 625
+    },
+    "hamlet-butterbill-cafe-east-table": {
+      "x": -1132.7,
+      "y": 547.6
+    },
+    "hamlet-butterbill-cafe-east-front-chair": {
+      "x": -1150.2,
+      "y": 547.6
+    },
+    "hamlet-butterbill-west-lane-pot": {
+      "x": -802,
+      "y": 758
+    },
+    "hamlet-butterbill-bread-cart": {
+      "x": -1371,
+      "y": 796.5
+    },
+    "hamlet-clovercrust-cart": {
+      "x": 5153.2,
+      "y": -6.200000000000003
+    },
+    "hamlet-reedwhistle-fish-basket-a": {
+      "x": 3616,
+      "y": 5484
+    },
+    "review-hay-work": {
+      "x": 2336,
+      "y": 5264
+    },
+    "hamlet-lanternleaf-bench-west": {
+      "x": 2609,
+      "y": -403
+    },
+    "hamlet-lanternleaf-garden-shed": {
+      "x": 2214.1,
+      "y": -66.5
+    },
+    "hamlet-lanternleaf-shed-daisy-pot": {
+      "x": 2379,
+      "y": -160.3
+    },
+    "hamlet-lanternleaf-shed-pots": {
+      "x": 2356.4,
+      "y": -122.7
     }
   },
   "polishMicrotexture": true,

@@ -26,6 +26,9 @@ test('every Home prop has a generated outline and every solid outline is blocked
       assert.ok(p.z<HOME_MAP.origin.y-10000,`${p.id}: beneath all Duckies`);
       continue;
     }
+    assert.ok(p.bodyFootprint?.bodyBlock,`${p.id}: foreground body mask exists`);
+    assert.equal(p.bodyFootprint.clearance,0,'body dilation has no second clearance');
+    assert.ok(Math.max(...[p.bodyFootprint.poly,...(p.bodyFootprint.parts??[])].flat().map(q=>q[1]))<=p.sortY+1e-8,'body mask stops at render depth');
     const poly=[p.footprint.poly,...(p.footprint.parts??[])].flat();
     assert.ok(poly.flat().every(Number.isFinite),`${p.id}: valid geometry`);
     assert.equal(p.z,Math.max(...poly.map(p=>p[1])),`${p.id}: depth uses blocker base`);

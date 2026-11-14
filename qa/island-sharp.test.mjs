@@ -10,7 +10,7 @@ import {cropSVG, RASTER_ART_BUDGET_BYTES, RASTER_ART_UTILIZATION} from '../src/r
 
 const report = await audit();
 const flush = () => new Promise(setImmediate);
-const counts = {home: [60, 9, 3285, 803, 11], sunflower: [72, 15, 423, 2148, 0],
+const counts = {home: [60, 9, 3288, 803, 11], sunflower: [72, 15, 423, 2148, 0],
   pink: [176, 6, 1321, 1007, 0], library: [104, 19, 3146, 1785, 3]};
 
 test('sharpness audit visits every live static layer, including generated Home decals and floating pads', () => {

@@ -29,7 +29,7 @@ test('Home retains all hundred residents, their poses and stories on clear groun
   assert.equal(Object.values(more).flat().length,20);
   for(const bed of beds.slice(80))for(const route of routes)for(const point of route.samples)assert.equal(inShape(...point,sleeperFootprint(bed),16),false,'new residents clear every authored route');
   assert.deepEqual(Object.values(outer).map(s=>s.length),Array(8).fill(5),'five of every approved pose');
-  const walk=HOME_MAP.nav(),ground=geometry(world).walkable;
+  const walk=HOME_MAP.nav(),ground=geometry({...world,obstacles:world.obstacles.filter(o=>!o.bodyBlock)}).walkable;
   for(const bed of added){
    assert.equal(inPoly(bed.x,bed.y,originalWorld.coast),false,'new resident is on the outer island');
    assert.equal(world.water.some(w=>inShape(bed.x,bed.y,w)),false,'dry ground');

@@ -606,11 +606,16 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     a.send({type:'destination',x:world.origin.x-10000,y:world.origin.y-10000});
     await delay(150);
     assert.deepEqual(guest.duck(id),spawn);
-    a.send({type:'input',x:1,y:0});
-    await eventually(() => guest.duck(id)?.x > spawn.x+25);
+    // The real standing box can close one side of spawn. Exercise manual
+    // movement along a clear lane rather than assuming the east grass fits.
+    const direction=[[1,0],[-1,0],[0,1],[0,-1]].find(([x,y])=>nav.clearLine([spawn.x,spawn.y],[spawn.x+x*60,spawn.y+y*60]));
+    assert.ok(direction,'spawn has a clear manual walking lane');
+    const progress=duck=>(duck.x-spawn.x)*direction[0]+(duck.y-spawn.y)*direction[1];
+    a.send({type:'input',x:direction[0],y:direction[1]});
+    await eventually(() => progress(guest.duck(id)) > 25);
     await eventually(() => a.duck()?.action === 0);
     const stopped = guest.duck(id);
-    assert.ok(stopped.x-spawn.x <= 100,'stale input must stop at the allowed speed');
+    assert.ok(progress(stopped) <= 100,'stale input must stop at the allowed speed');
     assert.ok(nav.walkable(stopped.x,stopped.y));
 
     const [tx,ty] = nav.nearest(spawn.x,spawn.y+150);

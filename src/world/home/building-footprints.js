@@ -1,3 +1,4 @@
+import bodyMasks from './front-body-silhouettes.json' with {type:'json'};
 import silhouettes from './building-silhouettes.json' with {type: 'json'};
 import {propOutlineKind} from './prop-outline-rules.js';
 
@@ -37,5 +38,7 @@ export function solidBuilding(prop) {
   // Sort at the front of the solid, including overhangs extending below its
   // anchor. A Ducky on the approach is in front; one above the roof is behind.
   const sortY = Math.max(...[footprint.poly, ...(footprint.parts ?? [])].flat().map(p => p[1]));
-  return {...prop, outlineKind, footprint, z: sortY, sortY};
+  const rings=bodyMasks[prop.id]?.map(r=>r.map(([x,y])=>[prop.x+x,prop.y+y]));
+  const bodyFootprint=rings?{prop:prop.id,building:true,bodyBlock:true,clearance:0,poly:rings[0],...(rings.length>1?{parts:rings.slice(1)}:{})}:null;
+  return {...prop, outlineKind, footprint, bodyFootprint, z: sortY, sortY};
 }

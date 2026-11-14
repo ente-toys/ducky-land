@@ -1,3 +1,4 @@
+import {build} from 'esbuild';
 import {placeRigid} from '../src/world/rigid.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import E from '../src/world/home/home-expansion.json' with {type:'json'};
@@ -7,6 +8,9 @@ import {HOME_MAP} from '../src/world/island-maps.js';
 import {canSail,originOffset} from '../src/gameplay/islands.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import S from '../scripts/home-10/shore.json' with {type:'json'};
+const bundle=await build({entryPoints:['src/world/home/placements.js'],bundle:true,platform:'node',format:'esm',write:false});
+const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+const rendered=new Map(P.createPlacements().map(p=>[p.id,p]));
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
 test('Home communities keep C coast, map coordinates, working harbour and both piers',()=>{
  const near=(p,q)=>Math.round(p[0])===q[0]&&Math.round(p[1])===q[1],i=C.coast.findIndex(p=>near(p,S.coast.after)),j=C.coast.findIndex(p=>near(p,S.coast.before));
@@ -24,8 +28,8 @@ test('five Home communities have distinct homes, meaningful workplaces and reach
  const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);let homes=0;
  for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=(c.id==='reedwhistle'?2:3),c.id);assert.ok(c.workplaces.length>=2,c.id);
   for(const id of c.workplaces){const p=E.props.find(p=>p.id===id);assert.equal(p.zone,c.id);assert.equal(p.communityRole,'workplace');}
-  for(const id of c.homes){const p=E.props.find(p=>p.id===id);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
-   assert.ok(!nav.walkable(p.footprint.x,p.footprint.y),'house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
+  for(const id of c.homes){const p=rendered.get(id);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
+   assert.ok(!nav.walkable(...p.footprint.poly[0]),'house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
    assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...door).at(-1),door,`${c.name} ${id} doorstep route`);
   }
  }

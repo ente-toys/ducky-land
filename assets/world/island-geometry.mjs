@@ -3,7 +3,16 @@ function edgeDist(x,y,p){let d=Infinity;for(let i=0,j=p.length-1;i<p.length;j=i+
 function nearEdge(x,y,p,pad){for(let i=0,j=p.length-1;i<p.length;j=i++){const a=p[j],b=p[i];
  if(x<Math.min(a[0],b[0])-pad||x>Math.max(a[0],b[0])+pad||y<Math.min(a[1],b[1])-pad||y>Math.max(a[1],b[1])+pad)continue;
  const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));if(Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)<pad)return true;}return false;}
-export const inShape=(x,y,o,pad=0)=>o.parts ? [o.poly,...o.parts].some(poly=>inShape(x,y,{poly},pad)) : o.poly?(pad<0?inPoly(x,y,o.poly)&&edgeDist(x,y,o.poly)>-pad:inPoly(x,y,o.poly)||pad>0&&nearEdge(x,y,o.poly,pad)):((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;
+// Body masks have exact, unsimplified pixel edges and zero clearance. Index
+// their edges by row so the first navigation grid does not scan every stair-step
+// vertex at every cell (which can consume a fresh manual input's expiry window).
+const bodyRows=new WeakMap();
+function inBodyMask(x,y,o){
+ let rows=bodyRows.get(o);
+ if(!rows){rows=[o.poly,...(o.parts??[])].map(poly=>polygonIndex(poly));bodyRows.set(o,rows);}
+ return rows.some(contains=>contains(x,y));
+}
+export const inShape=(x,y,o,pad=0)=>o.bodyBlock&&pad===0?inBodyMask(x,y,o):o.parts ? [o.poly,...o.parts].some(poly=>inShape(x,y,{poly},pad)) : o.poly?(pad<0?inPoly(x,y,o.poly)&&edgeDist(x,y,o.poly)>-pad:inPoly(x,y,o.poly)||pad>0&&nearEdge(x,y,o.poly,pad)):((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;
 export function shapeIndex(list,pad,CELL=256){
  const cells=new Map(),key=(c,r)=>c*65536+r;
  for(const o of list){
