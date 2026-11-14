@@ -3,7 +3,7 @@
     "sources": {
       "version": 1,
       "theme": "home",
-      "modelSha256": "429f852e3e5a1abbfabfe3476f4dffa4af85518c322f76b26a6e05817492fc6f",
+      "modelSha256": "7c205ba5a1735b03323a764e545010d4deb7969935e8cf550ac4544e79e1d13f",
       "files": [
         {
           "path": "assets/manifest.json",
@@ -135,243 +135,243 @@
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-0.svg",
-          "sha256": "6f75790935d4620c0774a61813b028806b7e4e63d6f794e95f755c7284e62076"
+          "sha256": "36db054d4adf4697f4be863e958718cb25085f4ab38755bf6b89d840b48aca73"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-1.svg",
-          "sha256": "7da080e08829b027077e7b6e2ca74776f3cc2eca423f0fc06ddd3a931f1ec401"
+          "sha256": "c3be3cd11f5425047448748c6954c49a03c9dd24c3ebf2cfd8e646acc907590c"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-2.svg",
-          "sha256": "7853ebf66b66a30133ca3b6ff6c0a2f4cb06f2ab2726db323f021816f261cc05"
+          "sha256": "fb1bb6eacc5be86499ade6596034d6ec27f62d78eeb4638d5e4a82ecaa85565f"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-3.svg",
-          "sha256": "1fab52b7a8014326a8aa2a97eaec3018f5f2bbbeb020d18cd597264f6b9a650b"
+          "sha256": "d733c5e885a6875322c5cab00d8333fedb8d782fef2325c476679fb607b9412c"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-4.svg",
-          "sha256": "a26495da5fe8339a94a341438525a613d7eafc5900edd212106e1609a6444194"
+          "sha256": "c3006a4a342574bf3a0c8953f1d5c3fe099c5e96540d0c02d2c91fcf90cd51b8"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-5.svg",
-          "sha256": "49ca63b8ea2c64146e31c5e3af995c9c0de31320240149a9a893350b6c9db477"
+          "sha256": "b82adfee2439315d1c2b3890234509aba7cac6fdedc088e360b6a6b3decd28be"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-6.svg",
-          "sha256": "9914aa017de33630814194e3e5876c431358fb07069f0364acfbae4e039b48a6"
+          "sha256": "ea93be8fc629e051958ef961ada001c41e5002c6a4d470944e64f15d652477da"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-0-7.svg",
-          "sha256": "5f21cf9755975ad4d4c7f18f6ce691f2b3d77432926bf536f7d26078ee72da21"
+          "sha256": "5beafa0fcc0ff5d89dd1d26132f40a1af3946c5358961b092b0876d79bb18025"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-0.svg",
-          "sha256": "2cf668a70f82352a83c3ba1686da4a53a47e5c8acf4daacbf317f211966a5e2b"
+          "sha256": "38d2814655e2a935a1481d513f1a473e0c668364c3f9e2876edf8586e2f4f1ad"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-1.svg",
-          "sha256": "defce49b16d4ff4291c48445369aa4115b138a6e4923c5f713aa1eed0eb22914"
+          "sha256": "354a80f239e304accd23b72bbec7a0584f533178545cb43e2caf5f6692c6262f"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-2.svg",
-          "sha256": "68d0bfac98d9f525c2400604faed80f5567b0d0f8e0e5a836ebb0af1b5490b16"
+          "sha256": "44e6636bd16111a88ef48eeb6a2afc493b314d7b7fa5f49276bc61ac0258d28e"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-3.svg",
-          "sha256": "8f2789b84292a22cfc411579573017cc3b83b031ba937b4894356036d4e104b8"
+          "sha256": "4cc12c608fbf188b86dc351f8ca5435b9545c70146bf225410e545a2f5fd0b71"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-4.svg",
-          "sha256": "7b31741ff85d411c766248f9f4938ff7a14499fc50049e62504cb1ec47342666"
+          "sha256": "6ae6a0defef83e1fc3b95530fd9a4be787b7ea3b0e8f0121824aded02cac24d1"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-5.svg",
-          "sha256": "c9d18a65777da1b66c6e67420a5b5efb023e6d50d2cee65f70b6f9ea390ceff4"
+          "sha256": "2be8bf3bdae86880e70004e2d2047ed809fedb77705aab71d6bbdf22e63d61a1"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-6.svg",
-          "sha256": "b81ae432ea385bbc3afebae5f517972e3f1fb8e893660d5920463d22fad49727"
+          "sha256": "770c8fed43c195374effb599b29692061e03d42a98b55a72f1294b56efea85a1"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-1-7.svg",
-          "sha256": "278d0461e6e6cb0536f1872f90be5a17400f71ddbc2e9cdbc6a4d230be952d27"
+          "sha256": "2dc690d47b4891ccc13763715dc1d942168ccda01e5bced1bf3d68d14e70f8e5"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-0.svg",
-          "sha256": "80ba7111428bed200b6544429029e89c78d9c61150d37788a55c7bb6dca953c3"
+          "sha256": "6341de2828f23ac4b88dc624e1545acd7dc8ced35760ef69aedc760dfb0b01b4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-1.svg",
-          "sha256": "834b6befd61f2cf145634378f8d344f8105a8994310a757dc826f16b620d7e5f"
+          "sha256": "82d1ebcf5128c30571962e4e1e05a262996ff8581fd746402ebef9baa0a8dbf4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-2.svg",
-          "sha256": "1dd5c6a6a8f3602651951de0715e6b7e44daf1548ae4298975139d5ae5bfe655"
+          "sha256": "8d8b2b03fd9ee1463fa8f7175fb75b60566f7d386c7bbdbda6b5887e95608f71"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-3.svg",
-          "sha256": "4d9a6e870ffd060dcacd31595a914a60e02fd89e137c3d785d0dc7396d8905fa"
+          "sha256": "6d35e03c54f58225477c9617b4fd565a84ddc951ccd742d280dcaa02a44fea46"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-4.svg",
-          "sha256": "ee858f0622eba25f45702b98b80c277272ce7dc7f12950f9bd51e606508bd554"
+          "sha256": "892dce026ab5d885325731542261f28e9942227e907272c14af5772248515ad9"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-5.svg",
-          "sha256": "eb9457502c510a705c478c62f379263cf24eac8129f7ef8b3c2989b11eef47af"
+          "sha256": "570171143cb320a57a75c3e428671f0e13cc1913998af6708deb45b09b922084"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-6.svg",
-          "sha256": "18c9da388420fb3e112bcc702e7e21c7c0872c8e4387598461b5718637783713"
+          "sha256": "4515092beb78b4d3c61f316ffb4616a1af6f29caa9ba83003a9a27874a2d1808"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-2-7.svg",
-          "sha256": "95c35e5c4d5c91bc8ea68a51ade301c803d8b86491a0d820732039c940e414bf"
+          "sha256": "fa2fd517e7a9f421c6ce32de749138512ebe2f7bca9fcd2293ff1cee5f986349"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-0.svg",
-          "sha256": "e22e2b0bb2d553b575641b517c7a2b83bb0123bbfe742a6f98c149a7124568e9"
+          "sha256": "d71348b4ea4be8804d52e03702ad3ed55351425783d835cb0305253a4e01f695"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-1.svg",
-          "sha256": "5804c502675b01d21cad31ff09063cea97254b83ffb21205af932302e9c14349"
+          "sha256": "3af48dded724cc3b45a82c96bc7f7f3e28391ec66474889d64215030181c27ba"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-2.svg",
-          "sha256": "2aa8c8122635525cff8558777dfee70dab502c52b3e0c59262c4c99e9f61cf15"
+          "sha256": "8ca209a37962d581b6494b053f6491b5b921c5333bf320581f83b638e1ada485"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-3.svg",
-          "sha256": "473efedb6db9ac1ed7119961ef3db10d4df2cf4040e0f7b884f73681585fbe99"
+          "sha256": "a5636b3c4192fd010dcdd9b1b4721a4594485aab6c34b19b5b80fb2e40c0dc37"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-4.svg",
-          "sha256": "b8d94351e144c25325efe6b6e4ae8de7b72d2aa606679dc7aa6c99bd04f3e3f4"
+          "sha256": "7be49d8e039fca8b50677a67f37832e8911ea24989438b5d3fb8cbda82b7f7da"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-5.svg",
-          "sha256": "bc5e23446d9f61f9bd30b5afe71c6ec84ae885b3d5a408aeb8d4a2bd0dc63b87"
+          "sha256": "b7d73f6dafb73ef28951e4fd16d1bfb126adb4a83de28d95791b12662e9f1479"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-6.svg",
-          "sha256": "d0e11fa999ebcda38221ab729898df5c68f2d4f811f296934e1df571a272e1d2"
+          "sha256": "4e3588f207cc971e74bf1b416e450dc428b3822b52dac5d80751bf8bf9442a6d"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-3-7.svg",
-          "sha256": "ab469fcc1bd8afc2b83499036c36d2074a8896a8636c4355f4c11bbd90ca403e"
+          "sha256": "bdb03b019dd57bfd83ee61a8f95f9021de698b7012089b572c2b779929ee6855"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-0.svg",
-          "sha256": "611af637bbf1e1af278a284828c71f7f54225cf358ac92e388f2beecd57b78eb"
+          "sha256": "f9e8cb0afca032e33ab1458cf8abd2032fbefa4e847d6626245ddff51a7462fa"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-1.svg",
-          "sha256": "e2a3130b460c6407ca92a951ee5654a4c41e2fbe748bbdeeb2f3d25169565d53"
+          "sha256": "e48be497b46461c93345c44a3ab2fe50f293635af5284e47c673ae93eaecdd6b"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-2.svg",
-          "sha256": "f7c96de71a1ce373d90f2aa3667f085e37d3ccc4bdd6c115428ac375e3170eff"
+          "sha256": "77c94b5896adf6dd53f24b4e4cdce81f903b562a83b1a0acccdfbe2b8548433c"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-3.svg",
-          "sha256": "16c7a801cebffd5798171817e80c569a41e6778cb567adbec44979cf93df5ea0"
+          "sha256": "0ed3413e1127a58e21d10a8514cf646814ad8c9b50c2e5d4c0c0c6028e52d27d"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-4.svg",
-          "sha256": "6340820d2d8e8a77d5c446552dee2ba9e9a6c1f5d91509c1869737ff7245bb9e"
+          "sha256": "2bcd6709f92336951880dfd2a7081eba043e6a87e1a228ff018759f16122c107"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-5.svg",
-          "sha256": "2f2a4773a49bbea6cab151f612c4f9754cebae3eac6a88cfb490876fe85c99cd"
+          "sha256": "278a5ac5b8ae15b4c4db1a44264b351071138a8c545ae583dcc68899ddf8ab4a"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-6.svg",
-          "sha256": "447d9b3747f232c1fe0c5258c65e3c62ec51e0cb222556c6ab4f4f489dbd242e"
+          "sha256": "64a84c23f00d1f08602aee25344eb062aaf158a1b3c841ed32294d04fac6e62a"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-4-7.svg",
-          "sha256": "9ff12d625c0e31b3c979624f55a3a6a73f8c6e680bf497afd9074bd6d7335d8a"
+          "sha256": "5877f1698ed527d772df48079d318db5702ae766e69a8640d544a97b1aace101"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-0.svg",
-          "sha256": "e21089041e1ae0b2bc70f4fe0d8b862e6947cf7e3824a8bdd3f05f22a4fc2033"
+          "sha256": "d70d58b1a090ee715037451fd89978e32ddbabd2a42c634b0eedc3d97fda5af4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-1.svg",
-          "sha256": "61daaf4e802f5e12372181ef4afb03cc056929cdeb772039fd30f69a0d0098cb"
+          "sha256": "07bb9ef0bb683b024a0e57d364a5cabb9ca29bf711079a78458229250234bc25"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-2.svg",
-          "sha256": "15f949757395cf67486ed0034936766257bdad3dab8633307f5ab50389973834"
+          "sha256": "4e935f7c42752d48bc1320bd323a8b15dfd8a5cdd40ac800c1ef15b3f663e181"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-3.svg",
-          "sha256": "b75e0f4f18e88e9305eb054415e4b53b7ed855b2f186811ad9ef064b20d56dbf"
+          "sha256": "f001ae4b01bbfa010b3322047248c9e62f37ef91e1ae86f27499b9533dd9b2d2"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-4.svg",
-          "sha256": "4c06135e56c0dff70241872f0b0cd9793fac3ad859c34a9541fe8a3bc4708ef4"
+          "sha256": "e1f25a6232fa0541306b07cdd9228eeacea928804bbb068bce015e2b8bf7f1d4"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-5.svg",
-          "sha256": "ff6b5d2ec73383015efcb20c06072063fd8f6102187f3efa5a95bb53a6217b5a"
+          "sha256": "4bb71023d38f34dfba3450f2c1b75fb85d4b540074f35718ee69d56a7e3957c3"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-6.svg",
-          "sha256": "b88944ce280b3a93d12ed1bd71f43734e24bf537f2387444a30c09edcba5c4e1"
+          "sha256": "db85eee920f7d6fd89e55db944b7af4b9db99979d3529e317914e3fa3a345278"
         },
         {
           "path": "public/pixi-art/home-expansion-g/ground-5-7.svg",
-          "sha256": "31c84abae1f5008d5f43088700076f6fdb4a3702724241f68f190738a1eb4955"
+          "sha256": "39427cc0434a8ca0ce5d75ab580d3aaa48126a7e936dee8152d03bc93a3e0cc9"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c0.svg",
-          "sha256": "2b2a35beb62658bfc0d481bdfa8fb21c66000401ffe3c8426d3a8a7c45906af2"
+          "sha256": "aa70b7fa3c99ba2687c15f7a43ac7b4768b27e5884c98295454738644a799568"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c1.svg",
-          "sha256": "d074cbdcec518f2b001616b549eda1cb1b13e222dcd54a6180c1350acb830bac"
+          "sha256": "11816cb5ad6e19d3a6df4622e0e4f1071716ffb2f52a49c9fc8e7ecea0dfc4cd"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c2.svg",
-          "sha256": "f0f421276044a7323a853794471e14ef74b4555f9cfec91a40549fdf281e640d"
+          "sha256": "741ae12836aa7fe17ca944017bfbd49116f5a83601ac1a64e5a3916d27b0d40f"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r0-c3.svg",
-          "sha256": "f0fe1e7c0466b8d9f116ccff2dad10b6fadbd646ebb078f6e320b00f415b95df"
+          "sha256": "45a536664facc7ccf930a425e1fdfbb2fb91ad5fa90c6af4e496a40d647fe0af"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c0.svg",
-          "sha256": "d36ea94248f07e66420a07d2bf9ccac55dd831e87a6f8b691667e195c57b6940"
+          "sha256": "8aee2f1c5c698df34b9e813fb39a6aad707e49a596fd08c5590bf5d996affce2"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c1.svg",
-          "sha256": "4201eaadd3f12ac078c2d0c2048c9f36003564b6c2b6a725e43f71ced190a2a4"
+          "sha256": "322d64f011c162eee683696f8c1babb3c47195bbe983d215534a112b66d54f68"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c2.svg",
-          "sha256": "af54946bc130a9859f625473a59630b6987c559cc3a175b9e34230bbdbc659be"
+          "sha256": "132a56fe65c4f7a30e74cee602d99c6d487d32df23a9dd405fed8c188c9ceb36"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r1-c3.svg",
-          "sha256": "5f97179bcb37b36262447c73fb2d0f2a93cbcd96bd2bf5995ac1badcf25d1eeb"
+          "sha256": "f21767a2998d19a55e669fa9b49b14afe0aad8415343202f4d8255d9547f8ed1"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c0.svg",
-          "sha256": "083c267ecc854ac4167cb80f142fdf76cb958934c4733d5e66b20ee1af704064"
+          "sha256": "7a9a2c3d264f121ce2d9c891030d9af3b4b4dd88376b7be5fdded452041dc979"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c1.svg",
-          "sha256": "0bd0fde8f2c52119c008c1d2376a53cb308284c2379a8b2da850a5ff212b2fbd"
+          "sha256": "312b81b2db324da3c765da40036736cf92580df7c496c2b2c3f477e675f8569d"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c2.svg",
-          "sha256": "cc5a41e2ae2022eb7e8adffbe4f2002d6342f421b2ce314074e7ca1320872ee3"
+          "sha256": "9ac49aa3d14ebacb2610ecf4560504ddc3882784f1776e42da20458e4fbc4c3a"
         },
         {
           "path": "public/pixi-art/home-expansion/ground-r2-c3.svg",
-          "sha256": "a234740cb0cdd5e4ed3b41ed8a65aba5e700b059bfd3b2c3ff0dde9252f8e1a1"
+          "sha256": "c7012f0d167918f8d478890a53d26aa8e97f80765c99adb239e428c7acfc247b"
         },
         {
           "path": "public/pixi-art/home-hamlets/butterbill/bakery.svg",
@@ -790,10 +790,6 @@
           "sha256": "4719e48116c9535cd5ec60fbe63a151fdfa05b10c391f2397122d6dc24533712"
         },
         {
-          "path": "public/pixi-art/home-review/home-west-bridge.svg",
-          "sha256": "8977cf1924adb2bb4a25886a29b9d6a96bf965502501d896e3261dde2fd6eb99"
-        },
-        {
           "path": "public/pixi-art/home-review/lighthouse-shadow.svg",
           "sha256": "dbe87472e0f1346e2592a924e3da1890142c431448d31cf5b158c9521a3e946e"
         },
@@ -1007,7 +1003,7 @@
         },
         {
           "path": "src/world/home/home-expansion.json",
-          "sha256": "bad0b868763b862c74b5dfc6f583c2dc54c0e84c0a43558640479daab2c6fa91"
+          "sha256": "0c92d6e22d345089cfff67664dfcdf6133f5d0ab38895a0cb454efd8c48c9be2"
         },
         {
           "path": "src/world/home/home-original-world.json",
@@ -1015,7 +1011,7 @@
         },
         {
           "path": "src/world/home/home-routes.json",
-          "sha256": "81ab20315f452827a7fa0e8d8a741b1a965754cc3e224571ff60b2cdc789525f"
+          "sha256": "55f368a1ec21eb693da98c9e86e9e754618118e500607844f017850702da56a9"
         },
         {
           "path": "src/world/home/layout.json",
@@ -1027,7 +1023,7 @@
         },
         {
           "path": "src/world/home/placements.js",
-          "sha256": "5e819bdd877fe57af32159521f3c93970911b05f2ccc00a0cec1883bbb340fd4"
+          "sha256": "23b7b268e3af0bb038cf6bfe7d8d704ba0f2a689d8e999853a800931b7a6a600"
         },
         {
           "path": "src/world/home/plaza-benches.js",
@@ -1058,15 +1054,15 @@
           "sha256": "0b81bb5ee6f33feb0db9eb60280edfa7aa960a84f4ac92936a326a611d7763b4"
         }
       ],
-      "sha256": "4c2af243ac93d762516dffda94e02d221432d051722da94f7af942c9670cc555"
+      "sha256": "a07b8dc2c5848fe78c2004df618bdb5fd1a10c3fc3828589b1c3cec58e93d300"
     },
-    "groundSha256": "4cd25f59fcab4b897719cca731a5c99a681e144272e4765e402e924e7e044ee7",
+    "groundSha256": "d389f3e206fda2b5eede02cc3f8f1591d5b353593ccf29d4954235b64214ea52",
     "src": "/pixi-art/globe/home.svg",
-    "sha256": "94f91f010431d9552d9a7c073414342dba8eb8aaa52f787bc6b434003ef5e367",
+    "sha256": "556c2e113252e5ccc5958d431bdbf564096d2d88c2e33ee967810b9d0aaa89bf",
     "width": 1024,
     "height": 768,
-    "bytes": 1151249,
-    "groundBytes": 956232,
+    "bytes": 1151232,
+    "groundBytes": 956222,
     "quality": {
       "tolerance": 0.4,
       "minArea": 0.2,
@@ -1075,7 +1071,7 @@
     },
     "worldPaths": 0,
     "walkways": 1,
-    "flats": 818,
+    "flats": 817,
     "decks": 9,
     "bridgeDetails": 0
   },

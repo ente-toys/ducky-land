@@ -102,7 +102,7 @@ const archMid = ARCHES.map(({a, b}) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
 const underArch = w => archMid.some(([x, y]) => Math.hypot((w.a[0] + w.b[0]) / 2 - x, (w.a[1] + w.b[1]) / 2 - y) < 60) ? {...w, boatPassUnder: true} : w;
 export const walkWorld = (world, props) => ({...world, navigationCellSize: 24, coast: expansion.coast, obstacles: [...obstaclesFor(props, homeOriginalWorld), ...(expansion.obstacles ?? [])],
   water: [...world.water, ...(expansion.riverWater ?? [])], bridges: [...world.bridges.filter(b => !(b.x === 1640 && b.y === 2630)), ...(expansion.riverBridges ?? [])],
-  walkways: [...world.walkways.map(underArch), ...(expansion.walkways ?? []).map(underArch), {a: [1165, 3000], b: [1095, 3098], w: 120, boatPassUnder: true}]});
+  walkways: [...world.walkways.filter(w => !(expansion.homeArches && w.a[0] === 1130 && w.a[1] === 3080)).map(underArch), ...(expansion.walkways ?? []).map(underArch)]});
 
 const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 1;
 const SAND = [[2820, 2390, 562, 398], [4775, 2654, 478, 540], [4132, 1530, 682, 447], [1640, 2630, 470, 300]];

@@ -1,5 +1,5 @@
 """Authored route remap; polygon union is geometry, never prop scattering."""
-import json,sys,math
+import json,sys,math,re
 sys.path.insert(0,'/private/tmp/ducky-community-python')
 from shapely.geometry import LineString,Polygon,Point
 from shapely.ops import unary_union
@@ -55,6 +55,13 @@ Path('scripts/home-review/water-surface.svgfrag').write_text(f'<g data-name="Hom
 surface=merged.difference(wet)
 svg=f'<g data-name="Home unified paths"><path d="{path(surface)}" fill="#e4c567" transform="translate(0 3)" fill-rule="evenodd"/><path d="{path(surface)}" fill="#fde48c" fill-rule="evenodd"/></g>'
 Path('scripts/home-review/path-surface.svgfrag').write_text(svg)
+# Home renders paths baked into both original and expansion ground tiles.
+# Keep those shared drawings in sync with the authored route network.
+for folder in ['home-expansion', 'home-expansion-g']:
+ for tile in Path('public/pixi-art',folder).glob('ground-*.svg'):
+  source=tile.read_text()
+  updated,count=re.subn(r'<g data-name="Home unified paths">.*?</g>',lambda _:svg,source,flags=re.S)
+  if count:tile.write_text(updated)
 Path('public/pixi-art/home-review').mkdir(parents=True,exist_ok=True)
 Path('public/pixi-art/home-review/path-network.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{E["width"]}" height="{E["height"]}" viewBox="{E["origin"]["x"]} {E["origin"]["y"]} {E["width"]} {E["height"]}">{svg}</svg>')
 Path('src/world/home/home-routes.json').write_text(json.dumps([dict(id=r['id'],width=r['width'],samples=sample(r['points'])) for r in R]))
