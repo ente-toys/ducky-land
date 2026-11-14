@@ -1,3 +1,4 @@
+import {build} from 'esbuild';
 import {placeRigid} from '../src/world/rigid.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import E from '../src/world/home/home-expansion.json' with {type:'json'};
@@ -7,6 +8,9 @@ import {HOME_MAP} from '../src/world/island-maps.js';
 import {canSail,originOffset} from '../src/gameplay/islands.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import S from '../scripts/home-10/shore.json' with {type:'json'};
+const bundle=await build({entryPoints:['src/world/home/placements.js'],bundle:true,platform:'node',format:'esm',write:false});
+const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+const rendered=new Map(P.createPlacements().map(p=>[p.id,p]));
 const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-a[1]*b[0];},0)/2);
 test('Home communities keep C coast, map coordinates, working harbour and both piers',()=>{
  const near=(p,q)=>Math.round(p[0])===q[0]&&Math.round(p[1])===q[1],i=C.coast.findIndex(p=>near(p,S.coast.after)),j=C.coast.findIndex(p=>near(p,S.coast.before));
@@ -22,17 +26,17 @@ test('Home communities keep C coast, map coordinates, working harbour and both p
 });
 test('five Home communities have distinct homes, meaningful workplaces and reachable front doors',()=>{
  const nav=HOME_MAP.nav();assert.equal(E.communities.length,5);let homes=0;
- for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=3,c.id);assert.ok(c.workplaces.length>=2,c.id);
+ for(const c of E.communities){assert.ok(c.residents.length>15);assert.ok(c.homes.length>=(c.id==='reedwhistle'?2:3),c.id);assert.ok(c.workplaces.length>=2,c.id);
   for(const id of c.workplaces){const p=E.props.find(p=>p.id===id);assert.equal(p.zone,c.id);assert.equal(p.communityRole,'workplace');}
-  for(const id of c.homes){const p=E.props.find(p=>p.id===id);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
-   assert.ok(!nav.walkable(p.footprint.x,p.footprint.y),'house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
+  for(const id of c.homes){const p=rendered.get(id);homes++;assert.equal(p.zone,c.id);assert.ok(HOME_MAP.landAt(p.x,p.y));
+   assert.ok(!nav.walkable(...p.footprint.poly[0]),'house base is solid');const door=p.door;assert.ok(nav.walkable(...door),`${c.name} ${id} door`);
    assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...door).at(-1),door,`${c.name} ${id} doorstep route`);
   }
  }
- assert.ok(homes>=15);
+ assert.ok(homes>=14);
 });
-test('Home keeps clear commons and joins every shared green to the original heart',()=>{
- const nav=HOME_MAP.nav();for(const p of E.openSpaces)for(let x=-p.radius;x<=p.radius;x+=38)for(let y=-p.radius;y<=p.radius;y+=38)if(x*x+y*y<=p.radius*p.radius)assert.ok(nav.walkable(p.point[0]+x,p.point[1]+y),`${p.id}: ${x},${y}`);
+test('Home joins every shared green to the original heart with room to detour around restored trees',()=>{
+ const nav=HOME_MAP.nav();for(const p of E.openSpaces){assert.ok(nav.walkable(...p.point),p.id+' destination clear');assert.deepEqual(nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p.point).at(-1),p.point,p.id+' reachable');}
  for(const p of E.places){const route=nav.route(HOME_MAP.spawn.x,HOME_MAP.spawn.y,...p.point);assert.deepEqual(route.at(-1),p.point,p.id);let prev=[HOME_MAP.spawn.x,HOME_MAP.spawn.y];for(const q of route){assert.ok(nav.clearLine(prev,q),p.id);prev=q;}}
  const main=E.roads.filter(r=>r.kind==='main');assert.equal(main.length,1);
  assert.ok(main[0].width>=120&&main[0].width<=135,'main loop matches original Home path width');

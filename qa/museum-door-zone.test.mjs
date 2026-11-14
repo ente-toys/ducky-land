@@ -12,10 +12,13 @@ test('only the strip in front of the museum wall is the museum door, not the lan
   const nav = navOf('home');
   const mid = (MUSEUM_DOOR.x0 + MUSEUM_DOOR.x1) / 2;
   assert.ok(atMuseumDoor(mid, MUSEUM_DOOR.y - 20), 'the door itself still opens the museum');
-  for (const [x, y] of [[2851, 155], [2920, 700], [2920, -300], [2900, -77]]) {
-    assert.ok(nav.walkable(x, y), `${x},${y} is open ground`);
+  for (const [x, y] of [[2851, 155], [2920, 600], [2920, -300], [2900, -77]]) {
+    const nearby=nav.nearest(x,y,180);assert.ok(nearby,`${x},${y} has nearby clear ground`);
+    assert.ok(!atMuseumDoor(...nearby),'restored scenery does not turn the north approach into an entrance');
     assert.ok(!atMuseumDoor(x, y), `${x},${y} north of the museum is not the door`);
   }
+  assert.equal(nav.walkable(2920,700),false,'museum roof silhouette is solid');
+  assert.ok(!atMuseumDoor(2920,700),'roof is not the entrance');
   // every walkable point the zone covers is the door strip, which only the plaza side can reach
   for (let x = MUSEUM_DOOR.x0 + 2; x < MUSEUM_DOOR.x1; x += 8)
     for (let y = HOME_MAP.origin.y; y < MUSEUM_DOOR.y; y += 8)

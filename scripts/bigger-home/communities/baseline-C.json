@@ -2778,29 +2778,6 @@
       }
     },
     {
-      "id": "bigger-C-raised-bed-1179",
-      "name": "raised-bed-1179",
-      "asset": "raised-bed-1179",
-      "src": "/pixi-art/home-expansion-c/raised-bed-1179.svg",
-      "x": 4750.222222222223,
-      "y": -644.0000000000001,
-      "width": 300,
-      "height": 115,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "windmill-gardens",
-      "footprint": {
-        "x": 4750.222222222223,
-        "y": -659.0000000000001,
-        "rx": 115,
-        "ry": 28
-      }
-    },
-    {
       "id": "bigger-C-raised-bed-1208",
       "name": "raised-bed-1208",
       "asset": "raised-bed-1208",
@@ -7844,29 +7821,6 @@
         "y": -274.66666666666686,
         "rx": 97,
         "ry": 34
-      }
-    },
-    {
-      "id": "bigger-C-flour-sacks",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 5239.111111111111,
-      "y": -790.666666666667,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "working-garden",
-      "footprint": {
-        "x": 5239.111111111111,
-        "y": -802.666666666667,
-        "rx": 83,
-        "ry": 26
       }
     },
     {

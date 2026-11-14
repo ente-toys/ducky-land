@@ -3,14 +3,24 @@ function edgeDist(x,y,p){let d=Infinity;for(let i=0,j=p.length-1;i<p.length;j=i+
 function nearEdge(x,y,p,pad){for(let i=0,j=p.length-1;i<p.length;j=i++){const a=p[j],b=p[i];
  if(x<Math.min(a[0],b[0])-pad||x>Math.max(a[0],b[0])+pad||y<Math.min(a[1],b[1])-pad||y>Math.max(a[1],b[1])+pad)continue;
  const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1)));if(Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)<pad)return true;}return false;}
-export const inShape=(x,y,o,pad=0)=>o.poly?(pad<0?inPoly(x,y,o.poly)&&edgeDist(x,y,o.poly)>-pad:inPoly(x,y,o.poly)||pad>0&&nearEdge(x,y,o.poly,pad)):((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;
+// Body masks have exact, unsimplified pixel edges and zero clearance. Index
+// their edges by row so the first navigation grid does not scan every stair-step
+// vertex at every cell (which can consume a fresh manual input's expiry window).
+const bodyRows=new WeakMap();
+function inBodyMask(x,y,o){
+ let rows=bodyRows.get(o);
+ if(!rows){rows=[o.poly,...(o.parts??[])].map(poly=>polygonIndex(poly));bodyRows.set(o,rows);}
+ return rows.some(contains=>contains(x,y));
+}
+export const inShape=(x,y,o,pad=0)=>o.bodyBlock&&pad===0?inBodyMask(x,y,o):o.parts ? [o.poly,...o.parts].some(poly=>inShape(x,y,{poly},pad)) : o.poly?(pad<0?inPoly(x,y,o.poly)&&edgeDist(x,y,o.poly)>-pad:inPoly(x,y,o.poly)||pad>0&&nearEdge(x,y,o.poly,pad)):((x-o.x)/(o.rx+pad))**2+((y-o.y)/(o.ry+pad))**2<1;
 export function shapeIndex(list,pad,CELL=256){
  const cells=new Map(),key=(c,r)=>c*65536+r;
  for(const o of list){
+  const margin = o.clearance ?? pad;
   let x0,y0,x1,y1;
-  if(o.poly){x0=Infinity;y0=Infinity;x1=-Infinity;y1=-Infinity;for(const [px,py] of o.poly){if(px<x0)x0=px;if(px>x1)x1=px;if(py<y0)y0=py;if(py>y1)y1=py;}}
+  if(o.poly){x0=Infinity;y0=Infinity;x1=-Infinity;y1=-Infinity;for(const [px,py] of [o.poly,...(o.parts??[])].flat()){if(px<x0)x0=px;if(px>x1)x1=px;if(py<y0)y0=py;if(py>y1)y1=py;}}
   else{x0=o.x-o.rx;x1=o.x+o.rx;y0=o.y-o.ry;y1=o.y+o.ry;}
-  x0-=pad+1;y0-=pad+1;x1+=pad+1;y1+=pad+1;
+  x0-=margin+1;y0-=margin+1;x1+=margin+1;y1+=margin+1;
   for(let c=Math.floor(x0/CELL);c<=Math.floor(x1/CELL);c++)for(let r=Math.floor(y0/CELL);r<=Math.floor(y1/CELL);r++){const k=key(c,r);if(!cells.has(k))cells.set(k,[]);cells.get(k).push(o);}
  }
  const none=[];
@@ -63,7 +73,7 @@ export function geometry(world){
   bridgeNear??=shapeIndex(world.bridges.map(b=>({...b,rx:Math.max(0,b.w/2-8),ry:Math.max(0,b.h/2-12)})),0);
   const bridge=bridgeNear(x,y).some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
   waterNear??=shapeIndex(world.water,20);solidNear??=shapeIndex(world.obstacles,16);
-  return (bridge||!waterNear(x,y).some(o=>inShape(x,y,o,20)))&&!solidNear(x,y).some(o=>inShape(x,y,o,16));
+  return (bridge||!waterNear(x,y).some(o=>inShape(x,y,o,20)))&&!solidNear(x,y).some(o=>inShape(x,y,o,o.clearance??16));
  }
  return {walkable,inPoly:(x,y,p=world.coast)=>inPoly(x,y,p),ellipse};
 }

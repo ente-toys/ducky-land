@@ -1,5 +1,5 @@
 import {geometry} from '../../assets/world/island-geometry.mjs';
-export function createNavigation(world,{cellSize=32,walkable:customWalkable}={}){
+export function createNavigation(world,{cellSize=world.navigationCellSize??32,walkable:customWalkable}={}){
 const walkable=customWalkable??geometry(world).walkable;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const X0=world.origin?.x ?? 0,Y0=world.origin?.y ?? 0;
@@ -16,14 +16,21 @@ function nearest(x,y,radius=150){
  return null;
 }
 function clearLine(a,b){let n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/3);for(let i=1;i<=n;i++)if(!walkable(a[0]+(b[0]-a[0])*i/n,a[1]+(b[1]-a[1])*i/n))return false;return true;}
+let fineNavigation;
 function route(sx,sy,tx,ty){
  const near=nearest(tx,ty),target=near||shoreToward(sx,sy,tx,ty);if(!target)return [];
  if(clearLine([sx,sy],target))return [target];
- const path=search(sx,sy,target);if(path.length||near)return path;
+ const path=search(sx,sy,target);if(path.length)return path;
+ // Small restored-tree gaps can fall between the primary Home grid samples.
+ if(CELL>8&&world.navigationCellSize===16&&walkable(tx,ty)){
+  fineNavigation??=createNavigation(world,{cellSize:8,walkable});
+  const fine=fineNavigation.route(sx,sy,tx,ty);if(fine.length)return fine;
+ }
+ if(near)return path;
  const edge=reachToward(sx,sy,tx,ty);return edge?[edge]:[];
 }
 function search(sx,sy,target){
- function nearCell(x,y){const c=cell(x,y);if(grid[c])return c;for(let r=1;r<6;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){let xx=Math.floor((x-X0)/CELL)+dx,yy=Math.floor((y-Y0)/CELL)+dy,id=yy*COLS+xx;if(xx>=0&&xx<COLS&&yy>=0&&yy<ROWS&&grid[id]&&clearLine([x,y],point(id)))return id;}return -1;}
+ function nearCell(x,y){const c=cell(x,y);if(grid[c]&&clearLine([x,y],point(c)))return c;for(let r=1;r<6;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){let xx=Math.floor((x-X0)/CELL)+dx,yy=Math.floor((y-Y0)/CELL)+dy,id=yy*COLS+xx;if(xx>=0&&xx<COLS&&yy>=0&&yy<ROWS&&grid[id]&&clearLine([x,y],point(id)))return id;}return -1;}
  const start=nearCell(sx,sy),end=nearCell(...target);if(start<0||end<0)return [];
  const cost=new Float32Array(grid.length).fill(Infinity),parent=new Int32Array(grid.length).fill(-1),closed=new Uint8Array(grid.length),heap=[];
  const heuristic=id=>{const a=point(id),b=point(end);return Math.hypot(a[0]-b[0],a[1]-b[1])/CELL;};

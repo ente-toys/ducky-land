@@ -441,40 +441,6 @@
   ],
   "props": [
     {
-      "id": "bigger-community-422",
-      "name": "tree-4",
-      "asset": "tree-4",
-      "src": "/pixi-art/plants/tree-4.svg",
-      "x": 833.3333333333334,
-      "y": -94.44444444444444,
-      "width": 200,
-      "height": 280,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
-      "id": "bigger-community-423",
-      "name": "tree-3",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 4060,
-      "y": 740,
-      "width": 300,
-      "height": 380,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
       "id": "bigger-community-424",
       "name": "tree-4",
       "asset": "tree-4",
@@ -509,23 +475,6 @@
       "zone": "commons"
     },
     {
-      "id": "bigger-community-426",
-      "name": "tree-4",
-      "asset": "tree-4",
-      "src": "/pixi-art/plants/tree-4.svg",
-      "x": 6622.222222222223,
-      "y": 2750,
-      "width": 200,
-      "height": 280,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
       "id": "bigger-community-427",
       "name": "tree-3",
       "asset": "tree-3",
@@ -534,23 +483,6 @@
       "y": 3333.3333333333335,
       "width": 300,
       "height": 380,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
-      "id": "bigger-community-428",
-      "name": "tree-4",
-      "asset": "tree-4",
-      "src": "/pixi-art/plants/tree-4.svg",
-      "x": 2444.4444444444443,
-      "y": 5161.111111111111,
-      "width": 200,
-      "height": 280,
       "scale": 1.05,
       "anchor": {
         "x": 0.5,
@@ -739,23 +671,6 @@
       "width": 48,
       "height": 36,
       "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "verges"
-    },
-    {
-      "id": "bigger-community-440",
-      "name": "bush-1",
-      "asset": "bush-1",
-      "src": "/pixi-art/plants/bush-1.svg",
-      "x": 2245,
-      "y": 290,
-      "width": 130,
-      "height": 100,
-      "scale": 0.9,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -977,23 +892,6 @@
       "width": 48,
       "height": 36,
       "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "verges"
-    },
-    {
-      "id": "bigger-community-456",
-      "name": "bush-1",
-      "asset": "bush-1",
-      "src": "/pixi-art/plants/bush-1.svg",
-      "x": 4683.333333333334,
-      "y": 3600,
-      "width": 130,
-      "height": 100,
-      "scale": 0.9,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -1249,23 +1147,6 @@
       "width": 48,
       "height": 36,
       "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "verges"
-    },
-    {
-      "id": "bigger-community-476",
-      "name": "bush-1",
-      "asset": "bush-1",
-      "src": "/pixi-art/plants/bush-1.svg",
-      "x": -180,
-      "y": 2570,
-      "width": 130,
-      "height": 100,
-      "scale": 0.9,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -1597,23 +1478,6 @@
       "zone": "verges"
     },
     {
-      "id": "bigger-community-500",
-      "name": "bush-1",
-      "asset": "bush-1",
-      "src": "/pixi-art/plants/bush-1.svg",
-      "x": 472.22222222222223,
-      "y": -705.5555555555555,
-      "width": 130,
-      "height": 100,
-      "scale": 0.9,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "verges"
-    },
-    {
       "id": "bigger-community-505",
       "name": "lamp-lantern",
       "asset": "lamp-lantern",
@@ -1752,29 +1616,6 @@
       }
     },
     {
-      "id": "bigger-community-514",
-      "name": "bench-wood",
-      "asset": "bench-wood",
-      "src": "/pixi-art/detail/street--bench-wood.svg",
-      "x": 611,
-      "y": 582,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 611,
-        "y": 572,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
       "id": "bigger-community-515",
       "name": "bench-wood",
       "asset": "bench-wood-left",
@@ -1793,52 +1634,6 @@
       "footprint": {
         "x": 5190,
         "y": 530,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-517",
-      "name": "bench-wood",
-      "asset": "bench-wood-back",
-      "src": "/pixi-art/detail/street--bench-wood-back.svg",
-      "x": 2702,
-      "y": 4481,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2702,
-        "y": 4471,
-        "rx": 70,
-        "ry": 24
-      }
-    },
-    {
-      "id": "bigger-community-518",
-      "name": "bench-wood",
-      "asset": "bench-wood-back",
-      "src": "/pixi-art/detail/street--bench-wood-back.svg",
-      "x": 1121,
-      "y": 4197,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9740820734341252
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 1121,
-        "y": 4187,
         "rx": 70,
         "ry": 24
       }
@@ -1866,31 +1661,6 @@
         "ry": 22
       },
       "flip": false,
-      "tint": 16777215
-    },
-    {
-      "id": "bigger-community-522",
-      "name": "Tree",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": -394.44444444444446,
-      "y": 1361.111111111111,
-      "width": 260,
-      "height": 360,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "commons",
-      "footprint": {
-        "x": -394.44444444444446,
-        "y": 1352.111111111111,
-        "rx": 31,
-        "ry": 22
-      },
-      "flip": true,
       "tint": 16777215
     },
     {
@@ -1937,31 +1707,6 @@
       "footprint": {
         "x": -372.22222222222223,
         "y": 1818.7777777777778,
-        "rx": 31,
-        "ry": 22
-      },
-      "flip": false,
-      "tint": 16777215
-    },
-    {
-      "id": "bigger-community-525",
-      "name": "Tree",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": 594.4444444444445,
-      "y": -394.44444444444446,
-      "width": 260,
-      "height": 360,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "commons",
-      "footprint": {
-        "x": 594.4444444444445,
-        "y": -403.44444444444446,
         "rx": 31,
         "ry": 22
       },
@@ -2017,29 +1762,6 @@
       },
       "flip": false,
       "tint": 16777215
-    },
-    {
-      "id": "bigger-community-528",
-      "name": "raised-bed-1179",
-      "asset": "raised-bed-1179",
-      "src": "/pixi-art/home-expansion-c/raised-bed-1179.svg",
-      "x": 4177.777777777778,
-      "y": -261.11111111111114,
-      "width": 300,
-      "height": 115,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 4177.777777777778,
-        "y": -276.11111111111114,
-        "rx": 115,
-        "ry": 28
-      }
     },
     {
       "id": "bigger-community-531",
@@ -2105,161 +1827,18 @@
       "zone": "commons"
     },
     {
-      "id": "bigger-community-535",
-      "name": "tree-3",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 6700,
-      "y": 2777.777777777778,
-      "width": 300,
-      "height": 380,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
-      "id": "bigger-community-536",
-      "name": "tree-3",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 6544.444444444444,
-      "y": 3377.777777777778,
-      "width": 300,
-      "height": 380,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
-      "id": "bigger-community-537",
-      "name": "tree-3",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 6166.666666666667,
-      "y": 3233.3333333333335,
-      "width": 300,
-      "height": 380,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons"
-    },
-    {
-      "id": "bigger-community-538",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 1844.4444444444446,
-      "y": 5333.333333333334,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 1844.4444444444446,
-        "y": 5323.333333333334,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
-      "id": "bigger-community-539",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 2022.2222222222224,
-      "y": 5422.222222222223,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2022.2222222222224,
-        "y": 5412.222222222223,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
-      "id": "bigger-community-540",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 2611.1111111111113,
-      "y": 5361.111111111111,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2611.1111111111113,
-        "y": 5351.111111111111,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
-      "id": "bigger-community-541",
-      "name": "flour-sacks",
-      "asset": "flour-sacks",
-      "src": "/pixi-art/home-expansion-c/flour-sacks.svg",
-      "x": 2866.666666666667,
-      "y": 5355.555555555556,
-      "width": 230,
-      "height": 170,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.25,
-      "zone": "commons",
-      "footprint": {
-        "x": 2866.666666666667,
-        "y": 5345.555555555556,
-        "rx": 65,
-        "ry": 22
-      }
-    },
-    {
       "id": "bigger-community-543",
-      "name": "bench-wood",
-      "asset": "bench-wood-back",
-      "src": "/pixi-art/detail/street--bench-wood-back.svg",
+      "name": "Wooden bench",
+      "asset": "garden-bench",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
       "x": -939,
       "y": 1374,
-      "width": 818,
-      "height": 463,
-      "scale": 0.18,
+      "width": 200,
+      "height": 113,
+      "scale": 0.8,
       "anchor": {
         "x": 0.5,
-        "y": 0.9740820734341252
+        "y": 1
       },
       "resolution": 1.25,
       "zone": "commons",
@@ -2267,8 +1846,9 @@
         "x": -939,
         "y": 1364,
         "rx": 70,
-        "ry": 24
-      }
+        "ry": 19
+      },
+      "noShadow": true
     },
     {
       "id": "bigger-community-545",
@@ -2869,25 +2449,6 @@
       "tint": 16055020
     },
     {
-      "id": "grove-w3-1",
-      "name": "Tree",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": -330,
-      "y": 2080,
-      "width": 300,
-      "height": 380,
-      "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": false,
-      "tint": 16775146
-    },
-    {
       "id": "grove-w3-2",
       "name": "Tree",
       "asset": "tree-5",
@@ -2905,44 +2466,6 @@
       "zone": "groves",
       "flip": true,
       "tint": 16777215
-    },
-    {
-      "id": "grove-w3-3",
-      "name": "Tree",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": -290,
-      "y": 2230,
-      "width": 260,
-      "height": 360,
-      "scale": 1.2,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": false,
-      "tint": 16055020
-    },
-    {
-      "id": "grove-w3-4",
-      "name": "Tree",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": -430,
-      "y": 2190,
-      "width": 150,
-      "height": 380,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": false,
-      "tint": 16775146
     },
     {
       "id": "grove-n1-1",
@@ -3538,63 +3061,6 @@
       "tint": 16777215
     },
     {
-      "id": "grove-m2-1",
-      "name": "Tree",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 4650,
-      "y": 4250,
-      "width": 300,
-      "height": 380,
-      "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": false,
-      "tint": 16055020
-    },
-    {
-      "id": "grove-m2-2",
-      "name": "Tree",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": 4770,
-      "y": 4190,
-      "width": 150,
-      "height": 380,
-      "scale": 1.2,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": true,
-      "tint": 16775146
-    },
-    {
-      "id": "grove-m2-3",
-      "name": "Tree",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": 4730,
-      "y": 4350,
-      "width": 260,
-      "height": 360,
-      "scale": 1.25,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": false,
-      "tint": 16777215
-    },
-    {
       "id": "grove-m2-4",
       "name": "Tree",
       "asset": "tree-5",
@@ -3612,44 +3078,6 @@
       "zone": "groves",
       "flip": false,
       "tint": 16055020
-    },
-    {
-      "id": "grove-s1-1",
-      "name": "Tree",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 620,
-      "y": 4400,
-      "width": 300,
-      "height": 380,
-      "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": false,
-      "tint": 16775146
-    },
-    {
-      "id": "grove-s1-2",
-      "name": "Tree",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": 740,
-      "y": 4350,
-      "width": 150,
-      "height": 380,
-      "scale": 1.2,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": true,
-      "tint": 16777215
     },
     {
       "id": "grove-s1-3",
@@ -3726,25 +3154,6 @@
       "zone": "groves",
       "flip": false,
       "tint": 16055020
-    },
-    {
-      "id": "grove-s2-3",
-      "name": "Tree",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 520,
-      "y": 5360,
-      "width": 300,
-      "height": 380,
-      "scale": 1.3,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "groves",
-      "flip": true,
-      "tint": 16775146
     },
     {
       "id": "grove-s2-4",
@@ -4014,78 +3423,6 @@
       "z": -185.6
     },
     {
-      "id": "hamlet-butterbill-north-east-oak",
-      "name": "tree-oak-broad",
-      "asset": "tree-oak-broad",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
-      "x": -524.3,
-      "y": 59.6,
-      "width": 274.7,
-      "height": 332.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -524.3,
-        "y": 49.6,
-        "rx": 24.7,
-        "ry": 14
-      },
-      "z": 59.6
-    },
-    {
-      "id": "hamlet-butterbill-far-east-oak",
-      "name": "tree-oak-broad",
-      "asset": "tree-oak-broad",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
-      "x": -68.7,
-      "y": 87.8,
-      "width": 282.7,
-      "height": 342.6,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -68.7,
-        "y": 77.8,
-        "rx": 25.4,
-        "ry": 14
-      },
-      "z": 87.8
-    },
-    {
-      "id": "hamlet-butterbill-north-east-birch",
-      "name": "tree-birch",
-      "asset": "tree-birch",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-birch.svg",
-      "x": -261.6,
-      "y": 91.8,
-      "width": 120.6,
-      "height": 311,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -261.6,
-        "y": 81.8,
-        "rx": 12,
-        "ry": 14
-      },
-      "z": 91.8
-    },
-    {
       "id": "hamlet-butterbill-east-round-tree",
       "name": "tree-oak-round",
       "asset": "tree-oak-round",
@@ -4156,54 +3493,6 @@
         "ry": 14
       },
       "z": 125.3
-    },
-    {
-      "id": "hamlet-butterbill-hammock-left-tree",
-      "name": "tree-oak-slender",
-      "asset": "tree-oak-slender",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-slender.svg",
-      "x": -202.7,
-      "y": 170.9,
-      "width": 138,
-      "height": 206.5,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -202.7,
-        "y": 160.9,
-        "rx": 12.4,
-        "ry": 14
-      },
-      "z": 170.9
-    },
-    {
-      "id": "hamlet-butterbill-hammock-right-tree",
-      "name": "tree-oak-broad",
-      "asset": "tree-oak-broad",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
-      "x": 9,
-      "y": 195,
-      "width": 277.4,
-      "height": 336.1,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": 9,
-        "y": 185,
-        "rx": 25,
-        "ry": 14
-      },
-      "z": 195
     },
     {
       "id": "hamlet-butterbill-north-flower-bush",
@@ -4345,7 +3634,7 @@
       "name": "house-honeyroof",
       "asset": "house-honeyroof",
       "src": "/pixi-art/home-hamlets/butterbill/house-honeyroof.svg",
-      "x": -387.6,
+      "x": -407.6,
       "y": 452.3,
       "width": 337.7,
       "height": 369.8,
@@ -4361,14 +3650,14 @@
         18.5735
       ],
       "footprint": {
-        "x": -387.6,
+        "x": -407.6,
         "y": 387,
         "rx": 135.1,
         "ry": 47.3
       },
       "communityRole": "home",
       "door": [
-        -387.6,
+        -407.6,
         492.3
       ],
       "z": 452.3,
@@ -4535,30 +3824,6 @@
         "ry": 14
       },
       "z": 496.5
-    },
-    {
-      "id": "hamlet-butterbill-east-great-oak",
-      "name": "tree-oak-broad",
-      "asset": "tree-oak-broad",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
-      "x": -52.6,
-      "y": 570.2,
-      "width": 268,
-      "height": 324.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -52.6,
-        "y": 560.2,
-        "rx": 24.1,
-        "ry": 14
-      },
-      "z": 570.2
     },
     {
       "id": "hamlet-butterbill-bakery-bread-rack",
@@ -4814,79 +4079,6 @@
       "z": 595.6
     },
     {
-      "id": "hamlet-butterbill-flower-island",
-      "name": "square-flowerbed",
-      "asset": "square-flowerbed",
-      "src": "/pixi-art/home-hamlets/butterbill/square-flowerbed.svg",
-      "x": -791.6,
-      "y": 538,
-      "width": 191.6,
-      "height": 144.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "noShadow": true,
-      "footprint": {
-        "x": -791.6,
-        "y": 515,
-        "rx": 86.2,
-        "ry": 26.8
-      },
-      "z": 538
-    },
-    {
-      "id": "hamlet-butterbill-square-west-bench",
-      "name": "bench-left",
-      "asset": "bench-left",
-      "src": "/pixi-art/home-hamlets/butterbill/bench-left.svg",
-      "x": -894.8,
-      "y": 588.9,
-      "width": 116.6,
-      "height": 99.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -894.8,
-        "y": 579.6,
-        "rx": 35,
-        "ry": 14
-      },
-      "z": 588.9
-    },
-    {
-      "id": "hamlet-butterbill-square-east-bench",
-      "name": "bench-right",
-      "asset": "bench-right",
-      "src": "/pixi-art/home-hamlets/butterbill/bench-right.svg",
-      "x": -730,
-      "y": 625,
-      "width": 116.6,
-      "height": 99.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -730,
-        "y": 615.7,
-        "rx": 35,
-        "ry": 14
-      },
-      "z": 625
-    },
-    {
       "id": "hamlet-butterbill-south-west-lamp",
       "name": "lamp",
       "asset": "lamp",
@@ -4989,8 +4181,8 @@
       "name": "house-petaldoor",
       "asset": "house-petaldoor",
       "src": "/pixi-art/home-hamlets/butterbill/house-petaldoor.svg",
-      "x": -310.5,
-      "y": 779.2,
+      "x": -270.5,
+      "y": 819.2,
       "width": 365.8,
       "height": 340.4,
       "scale": 1,
@@ -5005,17 +4197,17 @@
         20.119
       ],
       "footprint": {
-        "x": -310.5,
-        "y": 710,
+        "x": -270.5,
+        "y": 750,
         "rx": 146.3,
         "ry": 51.2
       },
       "communityRole": "home",
       "door": [
-        -310.5,
-        819.2
+        -270.5,
+        859.2
       ],
-      "z": 779.2,
+      "z": 819.2,
       "shadowOffset": [
         0,
         -8
@@ -5097,30 +4289,6 @@
       },
       "communityRole": "workplace",
       "z": 772.5
-    },
-    {
-      "id": "hamlet-butterbill-south-west-oak",
-      "name": "tree-oak-round",
-      "asset": "tree-oak-round",
-      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-round.svg",
-      "x": -1057.6,
-      "y": 903.8,
-      "width": 207.7,
-      "height": 234,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "butterbill",
-      "footprint": {
-        "x": -1057.6,
-        "y": 893.8,
-        "rx": 18.7,
-        "ry": 14
-      },
-      "z": 903.8
     },
     {
       "id": "hamlet-butterbill-east-flower-bush",
@@ -5659,53 +4827,53 @@
     },
     {
       "id": "hamlet-lanternleaf-bench-west",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bench.svg",
-      "x": 2593.2,
-      "y": -385.3,
-      "width": 107.2,
-      "height": 73.7,
-      "scale": 1,
+      "name": "Gazebo bench",
+      "asset": "bench-wood-right",
+      "src": "/pixi-art/detail/street--bench-wood-right.svg",
+      "x": 2585,
+      "y": -355,
+      "width": 818,
+      "height": 463,
+      "scale": 0.28,
       "anchor": {
         "x": 0.5,
-        "y": 1
+        "y": 0.9740820734341252
       },
-      "resolution": 1.5,
+      "resolution": 1.4,
       "zone": "lanternleaf",
       "order": 48,
       "footprint": {
-        "x": 2593.2,
-        "y": -393.9,
-        "rx": 32.2,
-        "ry": 12.9
+        "x": 2585,
+        "y": -385,
+        "rx": 30,
+        "ry": 62
       },
-      "z": -385.3
+      "z": -355
     },
     {
       "id": "hamlet-lanternleaf-bench-east",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bench.svg",
-      "x": 3200,
-      "y": -330,
-      "width": 107.2,
-      "height": 73.7,
-      "scale": 1,
+      "name": "Gazebo bench",
+      "asset": "bench-wood-left",
+      "src": "/pixi-art/detail/street--bench-wood-left.svg",
+      "x": 3185,
+      "y": -355,
+      "width": 818,
+      "height": 463,
+      "scale": 0.28,
       "anchor": {
         "x": 0.5,
-        "y": 1
+        "y": 0.9740820734341252
       },
-      "resolution": 1.5,
+      "resolution": 1.4,
       "zone": "lanternleaf",
       "order": 49,
       "footprint": {
-        "x": 3200,
-        "y": -338.59999999999997,
-        "rx": 32.2,
-        "ry": 12.9
+        "x": 3185,
+        "y": -385,
+        "rx": 30,
+        "ry": 62
       },
-      "z": -330
+      "z": -355
     },
     {
       "id": "hamlet-lanternleaf-bandstand",
@@ -5735,7 +4903,8 @@
         "ry": 44.3
       },
       "communityRole": "workplace",
-      "z": -329
+      "z": -329,
+      "enterable": false
     },
     {
       "id": "hamlet-lanternleaf-bandstand-pot-left",
@@ -5840,31 +5009,6 @@
       "z": -318.3
     },
     {
-      "id": "hamlet-lanternleaf-oak-southwest",
-      "name": "tree-oak-tall",
-      "asset": "tree-oak-tall",
-      "src": "/pixi-art/home-hamlets/lanternleaf/tree-oak-tall.svg",
-      "x": 1978.2,
-      "y": -215.1,
-      "width": 257.3,
-      "height": 313.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 55,
-      "footprint": {
-        "x": 1978.2,
-        "y": -225.1,
-        "rx": 23.2,
-        "ry": 14
-      },
-      "z": -215.1
-    },
-    {
       "id": "hamlet-lanternleaf-hammock-tree",
       "name": "tree-oak-tall",
       "asset": "tree-oak-tall",
@@ -5888,214 +5032,6 @@
         "ry": 14
       },
       "z": -303.6
-    },
-    {
-      "id": "hamlet-lanternleaf-hammock-birch",
-      "name": "tree-birch-slender",
-      "asset": "tree-birch-slender",
-      "src": "/pixi-art/home-hamlets/lanternleaf/tree-birch-slender.svg",
-      "x": 3836.8,
-      "y": -275.4,
-      "width": 160.8,
-      "height": 308.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 57,
-      "footprint": {
-        "x": 3836.8,
-        "y": -285.4,
-        "rx": 14.5,
-        "ry": 14
-      },
-      "z": -275.4
-    },
-    {
-      "id": "hamlet-lanternleaf-garden-bed",
-      "name": "vegetable-bed",
-      "asset": "vegetable-bed",
-      "src": "/pixi-art/home-hamlets/lanternleaf/vegetable-bed.svg",
-      "x": 3437.4,
-      "y": -90.5,
-      "width": 402,
-      "height": 191.6,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 62,
-      "noShadow": true,
-      "footprint": {
-        "x": 3437.4,
-        "y": -138.8,
-        "rx": 180.9,
-        "ry": 56.3
-      },
-      "communityRole": "workplace",
-      "z": -90.5
-    },
-    {
-      "id": "hamlet-lanternleaf-garden-rear-fence",
-      "name": "vegetable-fence-back",
-      "asset": "vegetable-fence-back",
-      "src": "/pixi-art/home-hamlets/lanternleaf/vegetable-fence-back.svg",
-      "x": 3437.4,
-      "y": -156.2,
-      "width": 402,
-      "height": 155.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 63,
-      "noShadow": true,
-      "footprint": {
-        "x": 3437.4,
-        "y": -164.2,
-        "rx": 201,
-        "ry": 12
-      },
-      "z": -90
-    },
-    {
-      "id": "hamlet-lanternleaf-tomatoes",
-      "name": "crop-tomato-trellis",
-      "asset": "crop-tomato-trellis",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-tomato-trellis.svg",
-      "x": 3468.3,
-      "y": -193.7,
-      "width": 180.9,
-      "height": 120.6,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 64,
-      "noShadow": true,
-      "footprint": {
-        "x": 3468.3,
-        "y": -215.4,
-        "rx": 81.4,
-        "ry": 25.3
-      },
-      "z": -89.5
-    },
-    {
-      "id": "hamlet-lanternleaf-cabbage-left",
-      "name": "crop-cabbage-row",
-      "asset": "crop-cabbage-row",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-cabbage-row.svg",
-      "x": 3350.3,
-      "y": -166.9,
-      "width": 85.8,
-      "height": 59,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 65,
-      "noShadow": true,
-      "footprint": {
-        "x": 3350.3,
-        "y": -177.2,
-        "rx": 38.6,
-        "ry": 12
-      },
-      "z": -89
-    },
-    {
-      "id": "hamlet-lanternleaf-cabbage-right",
-      "name": "crop-cabbage-row",
-      "asset": "crop-cabbage-row",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-cabbage-row.svg",
-      "x": 3418.7,
-      "y": -149.5,
-      "width": 85.8,
-      "height": 59,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 66,
-      "noShadow": true,
-      "footprint": {
-        "x": 3418.7,
-        "y": -159.8,
-        "rx": 38.6,
-        "ry": 12
-      },
-      "z": -88.5
-    },
-    {
-      "id": "hamlet-lanternleaf-carrots",
-      "name": "crop-carrot-row",
-      "asset": "crop-carrot-row",
-      "src": "/pixi-art/home-hamlets/lanternleaf/crop-carrot-row.svg",
-      "x": 3521.9,
-      "y": -136.1,
-      "width": 132.7,
-      "height": 92.5,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 67,
-      "noShadow": true,
-      "footprint": {
-        "x": 3521.9,
-        "y": -152,
-        "rx": 59.7,
-        "ry": 18.6
-      },
-      "z": -88
-    },
-    {
-      "id": "hamlet-lanternleaf-garden-front-fence",
-      "name": "vegetable-fence-front",
-      "asset": "vegetable-fence-front",
-      "src": "/pixi-art/home-hamlets/lanternleaf/vegetable-fence-front.svg",
-      "x": 3437.4,
-      "y": -79.8,
-      "width": 402,
-      "height": 131.3,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 68,
-      "noShadow": true,
-      "footprint": {
-        "x": 3437.4,
-        "y": -87.8,
-        "rx": 201,
-        "ry": 12
-      },
-      "z": -79.8
     },
     {
       "id": "hamlet-lanternleaf-bush-below-garden",
@@ -6124,13 +5060,13 @@
     },
     {
       "id": "hamlet-lanternleaf-garden-shed",
-      "name": "garden-shed",
-      "asset": "garden-shed",
-      "src": "/pixi-art/home-hamlets/lanternleaf/garden-shed.svg",
+      "name": "Seedshare greenhouse",
+      "asset": "seedshare-greenhouse",
+      "src": "/pixi-art/home-hamlets/lanternleaf/greenhouse-closed.svg",
       "x": 2238.1,
       "y": -90.5,
       "width": 327,
-      "height": 284.1,
+      "height": 301,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -6150,7 +5086,8 @@
         "ry": 45.8
       },
       "communityRole": "workplace",
-      "z": -90.5
+      "z": -90.5,
+      "enterable": false
     },
     {
       "id": "hamlet-lanternleaf-shed-daisy-pot",
@@ -6252,81 +5189,6 @@
         "ry": 8
       },
       "z": -136.1
-    },
-    {
-      "id": "hamlet-lanternleaf-bush-bottom-left",
-      "name": "bush-white",
-      "asset": "bush-white",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bush-white.svg",
-      "x": 2700.4,
-      "y": -15.5,
-      "width": 154.1,
-      "height": 106.5,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 76,
-      "footprint": {
-        "x": 2700.4,
-        "y": -27.5,
-        "rx": 46.2,
-        "ry": 18.5
-      },
-      "z": -15.5
-    },
-    {
-      "id": "hamlet-lanternleaf-bush-bottom-right",
-      "name": "bush-white",
-      "asset": "bush-white",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bush-white.svg",
-      "x": 3042.1,
-      "y": -22.2,
-      "width": 146.1,
-      "height": 100.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 77,
-      "footprint": {
-        "x": 3042.1,
-        "y": -33.9,
-        "rx": 43.8,
-        "ry": 17.5
-      },
-      "z": -22.2
-    },
-    {
-      "id": "hamlet-lanternleaf-oak-bottom-left",
-      "name": "tree-oak-wide",
-      "asset": "tree-oak-wide",
-      "src": "/pixi-art/home-hamlets/lanternleaf/tree-oak-wide.svg",
-      "x": 2608,
-      "y": 190.9,
-      "width": 246.6,
-      "height": 232.1,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 80,
-      "footprint": {
-        "x": 2608,
-        "y": 180.9,
-        "rx": 22.2,
-        "ry": 14
-      },
-      "z": 190.9
     },
     {
       "id": "hamlet-lanternleaf-oak-bottom-right",
@@ -6637,31 +5499,6 @@
       "z": -642.1
     },
     {
-      "id": "hamlet-clovercrust-oak-northwest",
-      "name": "oak-broad",
-      "asset": "oak-broad",
-      "src": "/pixi-art/home-hamlets/clovercrust/oak-broad.svg",
-      "x": 4177.2,
-      "y": -496,
-      "width": 298.8,
-      "height": 331.5,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 33,
-      "footprint": {
-        "x": 4177.2,
-        "y": -506,
-        "rx": 26.9,
-        "ry": 14
-      },
-      "z": -496
-    },
-    {
       "id": "hamlet-clovercrust-mill-left-shrub",
       "name": "bush-round",
       "asset": "bush-round",
@@ -6685,36 +5522,6 @@
         "ry": 9.8
       },
       "z": -526.8
-    },
-    {
-      "id": "hamlet-clovercrust-mill",
-      "name": "windmill",
-      "asset": "windmill",
-      "src": "/pixi-art/home-hamlets/clovercrust/windmill.svg",
-      "x": 5766.5,
-      "y": -496,
-      "width": 241.2,
-      "height": 364.5,
-      "scale": 1.23,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 35,
-      "shadowSize": [
-        112,
-        23
-      ],
-      "footprint": {
-        "x": 5766.5,
-        "y": -547.8,
-        "rx": 96.5,
-        "ry": 33.8
-      },
-      "communityRole": "workplace",
-      "z": -496
     },
     {
       "id": "hamlet-clovercrust-mill-right-flowers",
@@ -6956,31 +5763,6 @@
       "z": -391.5
     },
     {
-      "id": "hamlet-clovercrust-birch-west",
-      "name": "birch",
-      "asset": "birch",
-      "src": "/pixi-art/home-hamlets/clovercrust/birch.svg",
-      "x": 4084.8,
-      "y": -309.7,
-      "width": 160.8,
-      "height": 325.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 48,
-      "footprint": {
-        "x": 4084.8,
-        "y": -319.7,
-        "rx": 14.5,
-        "ry": 14
-      },
-      "z": -309.7
-    },
-    {
       "id": "hamlet-clovercrust-cottage-red",
       "name": "cottage-red-roof",
       "asset": "cottage-red-roof",
@@ -7068,31 +5850,6 @@
         "ry": 8
       },
       "z": -289.1
-    },
-    {
-      "id": "hamlet-clovercrust-oak-east",
-      "name": "oak-broad",
-      "asset": "oak-broad",
-      "src": "/pixi-art/home-hamlets/clovercrust/oak-broad.svg",
-      "x": 5854.9,
-      "y": -165,
-      "width": 306.9,
-      "height": 340.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 54,
-      "footprint": {
-        "x": 5854.9,
-        "y": -175,
-        "rx": 27.6,
-        "ry": 14
-      },
-      "z": -165
     },
     {
       "id": "hamlet-clovercrust-hay",
@@ -7221,112 +5978,12 @@
       "z": -126.2
     },
     {
-      "id": "hamlet-clovercrust-oak-west",
-      "name": "oak-broad",
-      "asset": "oak-broad",
-      "src": "/pixi-art/home-hamlets/clovercrust/oak-broad.svg",
-      "x": 4137,
-      "y": 2.5,
-      "width": 306.9,
-      "height": 340.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 61,
-      "footprint": {
-        "x": 4137,
-        "y": -7.5,
-        "rx": 27.6,
-        "ry": 14
-      },
-      "z": 2.5
-    },
-    {
-      "id": "hamlet-clovercrust-oak-west-companion",
-      "name": "oak-round",
-      "asset": "oak-round",
-      "src": "/pixi-art/home-hamlets/clovercrust/oak-round.svg",
-      "x": 4261.7,
-      "y": -90,
-      "width": 139.4,
-      "height": 171,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 62,
-      "footprint": {
-        "x": 4261.7,
-        "y": -100,
-        "rx": 12.5,
-        "ry": 14
-      },
-      "z": 3
-    },
-    {
-      "id": "hamlet-clovercrust-gold-cottage-left-shrub",
-      "name": "bush-flowering",
-      "asset": "bush-flowering",
-      "src": "/pixi-art/home-hamlets/clovercrust/bush-flowering.svg",
-      "x": 5388.6,
-      "y": -0.2,
-      "width": 89.8,
-      "height": 56.9,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 63,
-      "footprint": {
-        "x": 5388.6,
-        "y": -7.4,
-        "rx": 26.9,
-        "ry": 10.8
-      },
-      "z": -0.2
-    },
-    {
-      "id": "hamlet-clovercrust-gold-cottage-back-shrub",
-      "name": "bush-round",
-      "asset": "bush-round",
-      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
-      "x": 5777.2,
-      "y": -56.5,
-      "width": 121.9,
-      "height": 72.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 64,
-      "footprint": {
-        "x": 5777.2,
-        "y": -66.2,
-        "rx": 36.6,
-        "ry": 14.6
-      },
-      "z": -56.5
-    },
-    {
       "id": "hamlet-clovercrust-cottage-gold",
       "name": "cottage-gold-roof",
       "asset": "cottage-gold-roof",
       "src": "/pixi-art/home-hamlets/clovercrust/cottage-gold-roof.svg",
       "x": 5595.6,
-      "y": 36,
+      "y": 56,
       "width": 392.6,
       "height": 377.9,
       "scale": 1,
@@ -7343,16 +6000,16 @@
       ],
       "footprint": {
         "x": 5595.6,
-        "y": -37,
+        "y": -17,
         "rx": 157,
         "ry": 55
       },
       "communityRole": "home",
       "door": [
         5595.6,
-        76
+        96
       ],
-      "z": 48.5,
+      "z": 68.5,
       "shadowOffset": [
         0,
         -8
@@ -7461,31 +6118,6 @@
       "z": 53.4
     },
     {
-      "id": "hamlet-clovercrust-blue-cottage-back-shrub",
-      "name": "bush-round",
-      "asset": "bush-round",
-      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
-      "x": 4301.9,
-      "y": 45.4,
-      "width": 126,
-      "height": 75.1,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 70,
-      "footprint": {
-        "x": 4301.9,
-        "y": 35.3,
-        "rx": 37.8,
-        "ry": 15.1
-      },
-      "z": 45.4
-    },
-    {
       "id": "hamlet-clovercrust-cottage-blue",
       "name": "cottage-blue-roof",
       "asset": "cottage-blue-roof",
@@ -7522,31 +6154,6 @@
         0,
         -8
       ]
-    },
-    {
-      "id": "hamlet-clovercrust-reading-bench",
-      "name": "reading-bench",
-      "asset": "reading-bench",
-      "src": "/pixi-art/home-hamlets/clovercrust/reading-bench.svg",
-      "x": 4623.5,
-      "y": 96.3,
-      "width": 101.8,
-      "height": 65.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 72,
-      "footprint": {
-        "x": 4623.5,
-        "y": 88.1,
-        "rx": 30.6,
-        "ry": 12.2
-      },
-      "z": 154.4
     },
     {
       "id": "hamlet-clovercrust-blue-cottage-pink-pot",
@@ -7597,31 +6204,6 @@
         "y": 142,
         "rx": 14.5,
         "ry": 8
-      },
-      "z": 154.4
-    },
-    {
-      "id": "hamlet-clovercrust-blue-cottage-left-bush",
-      "name": "bush-round",
-      "asset": "bush-round",
-      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
-      "x": 4316.6,
-      "y": 101.6,
-      "width": 91.1,
-      "height": 54.3,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 76,
-      "footprint": {
-        "x": 4316.6,
-        "y": 94.4,
-        "rx": 27.3,
-        "ry": 10.9
       },
       "z": 154.4
     },
@@ -7724,31 +6306,6 @@
         "ry": 17.4
       },
       "z": 325.4
-    },
-    {
-      "id": "hamlet-clovercrust-bush-southeast",
-      "name": "bush-round",
-      "asset": "bush-round",
-      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
-      "x": 5211.7,
-      "y": 261.1,
-      "width": 139.4,
-      "height": 83.1,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "clovercrust",
-      "order": 85,
-      "footprint": {
-        "x": 5211.7,
-        "y": 250,
-        "rx": 41.8,
-        "ry": 16.7
-      },
-      "z": 261.1
     },
     {
       "id": "hamlet-clovercrust-oak-southeast",
@@ -7926,81 +6483,6 @@
       "z": 3234.6
     },
     {
-      "id": "hamlet-petalpatch-oak-northeast",
-      "name": "tree-round-oak",
-      "asset": "tree-round-oak",
-      "src": "/pixi-art/home-hamlets/petalpatch/tree-round-oak.svg",
-      "x": -329.4,
-      "y": 3335.1,
-      "width": 226.5,
-      "height": 340.4,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "order": 14,
-      "footprint": {
-        "x": -329.4,
-        "y": 3325.1,
-        "rx": 20.4,
-        "ry": 14
-      },
-      "z": 3335.1
-    },
-    {
-      "id": "hamlet-petalpatch-birch-northeast",
-      "name": "tree-birch",
-      "asset": "tree-birch",
-      "src": "/pixi-art/home-hamlets/petalpatch/tree-birch.svg",
-      "x": -280,
-      "y": 3390,
-      "width": 246.6,
-      "height": 437,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "order": 15,
-      "footprint": {
-        "x": -280,
-        "y": 3380,
-        "rx": 22.2,
-        "ry": 14
-      },
-      "z": 3390
-    },
-    {
-      "id": "hamlet-petalpatch-oak-studio-back",
-      "name": "tree-spreading-oak",
-      "asset": "tree-spreading-oak",
-      "src": "/pixi-art/home-hamlets/petalpatch/tree-spreading-oak.svg",
-      "x": -470.1,
-      "y": 3357.9,
-      "width": 254.6,
-      "height": 294.1,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "order": 16,
-      "footprint": {
-        "x": -470.1,
-        "y": 3347.9,
-        "rx": 22.9,
-        "ry": 14
-      },
-      "z": 3357.9
-    },
-    {
       "id": "hamlet-petalpatch-shrub-west",
       "name": "bush-white-flowers",
       "asset": "bush-white-flowers",
@@ -8024,31 +6506,6 @@
         "ry": 21.5
       },
       "z": 3550.8
-    },
-    {
-      "id": "hamlet-petalpatch-cottage-shrub-left",
-      "name": "bush-low-green",
-      "asset": "bush-low-green",
-      "src": "/pixi-art/home-hamlets/petalpatch/bush-low-green.svg",
-      "x": -1290.2,
-      "y": 3379.3,
-      "width": 77.7,
-      "height": 48.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "order": 19,
-      "footprint": {
-        "x": -1290.2,
-        "y": 3373.1,
-        "rx": 23.3,
-        "ry": 9.3
-      },
-      "z": 3379.3
     },
     {
       "id": "hamlet-petalpatch-shop-shrub-left",
@@ -8105,8 +6562,8 @@
       "name": "house-pottery-cottage",
       "asset": "house-pottery-cottage",
       "src": "/pixi-art/home-hamlets/petalpatch/house-pottery-cottage.svg",
-      "x": -1031.6,
-      "y": 3470.4,
+      "x": -1071.6,
+      "y": 3450.4,
       "width": 562.8,
       "height": 423.4,
       "scale": 1,
@@ -8122,17 +6579,17 @@
         24
       ],
       "footprint": {
-        "x": -1031.6,
-        "y": 3382.4,
+        "x": -1071.6,
+        "y": 3362.4,
         "rx": 225.1,
         "ry": 70
       },
       "communityRole": "home",
       "door": [
-        -1031.6,
-        3510.4
+        -1071.6,
+        3490.4
       ],
-      "z": 3470.4,
+      "z": 3450.4,
       "shadowOffset": [
         0,
         -8
@@ -8300,8 +6757,8 @@
       "name": "pottery-drying-rack",
       "asset": "pottery-drying-rack",
       "src": "/pixi-art/home-hamlets/petalpatch/pottery-drying-rack.svg",
-      "x": -680,
-      "y": 3840,
+      "x": -660,
+      "y": 3920,
       "width": 178.2,
       "height": 206.4,
       "scale": 1,
@@ -8317,13 +6774,13 @@
         16
       ],
       "footprint": {
-        "x": -680,
-        "y": 3828,
+        "x": -660,
+        "y": 3908,
         "rx": 53.5,
         "ry": 21.4
       },
       "communityRole": "workplace",
-      "z": 3840
+      "z": 3920
     },
     {
       "id": "hamlet-petalpatch-brush-pot",
@@ -8425,31 +6882,6 @@
         "ry": 13.5
       },
       "z": 3922.2
-    },
-    {
-      "id": "hamlet-petalpatch-birch-east",
-      "name": "tree-slender-birch",
-      "asset": "tree-slender-birch",
-      "src": "/pixi-art/home-hamlets/petalpatch/tree-slender-birch.svg",
-      "x": -210,
-      "y": 3950,
-      "width": 176.9,
-      "height": 399.3,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "order": 46,
-      "footprint": {
-        "x": -210,
-        "y": 3940,
-        "rx": 15.9,
-        "ry": 14
-      },
-      "z": 3950
     },
     {
       "id": "hamlet-petalpatch-reading-flower-shrub",
@@ -8600,31 +7032,6 @@
         "ry": 14
       },
       "z": 4247.6
-    },
-    {
-      "id": "hamlet-petalpatch-oak-southeast",
-      "name": "tree-spreading-oak",
-      "asset": "tree-spreading-oak",
-      "src": "/pixi-art/home-hamlets/petalpatch/tree-spreading-oak.svg",
-      "x": -294.6,
-      "y": 4169.9,
-      "width": 327,
-      "height": 377.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "petalpatch",
-      "order": 56,
-      "footprint": {
-        "x": -294.6,
-        "y": 4159.9,
-        "rx": 29.4,
-        "ry": 14
-      },
-      "z": 4169.9
     },
     {
       "id": "hamlet-petalpatch-flowers-cottage-west",
@@ -8964,8 +7371,8 @@
       "name": "cottage-fishers",
       "asset": "cottage-fishers",
       "src": "/pixi-art/home-hamlets/reedwhistle/cottage-fishers.svg",
-      "x": 4148.6,
-      "y": 4960.3,
+      "x": 4308.6,
+      "y": 4600.3,
       "width": 345.7,
       "height": 377.9,
       "scale": 1,
@@ -8981,80 +7388,17 @@
         19.0135
       ],
       "footprint": {
-        "x": 4148.6,
-        "y": 4893.9,
+        "x": 4308.6,
+        "y": 4533.9,
         "rx": 138.3,
         "ry": 48.4
       },
       "communityRole": "home",
       "door": [
-        4148.6,
-        5000.3
+        4308.6,
+        4640.3
       ],
-      "z": 4960.3,
-      "shadowOffset": [
-        0,
-        -8
-      ]
-    },
-    {
-      "id": "hamlet-reedwhistle-middle-birch",
-      "name": "tree-birch",
-      "asset": "tree-birch",
-      "src": "/pixi-art/home-hamlets/reedwhistle/tree-birch.svg",
-      "x": 4383.1,
-      "y": 4953.6,
-      "width": 135.3,
-      "height": 255.3,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "order": 65,
-      "footprint": {
-        "x": 4383.1,
-        "y": 4943.6,
-        "rx": 12.2,
-        "ry": 14
-      },
-      "z": 4960.8
-    },
-    {
-      "id": "hamlet-reedwhistle-cottage-netmaker",
-      "name": "cottage-netmaker",
-      "asset": "cottage-netmaker",
-      "src": "/pixi-art/home-hamlets/reedwhistle/cottage-netmaker.svg",
-      "x": 3654.1,
-      "y": 5078.2,
-      "width": 388.6,
-      "height": 375.2,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "reedwhistle",
-      "order": 80,
-      "shadowSize": [
-        132.12400000000002,
-        21.373
-      ],
-      "footprint": {
-        "x": 3654.1,
-        "y": 5005.8,
-        "rx": 155.4,
-        "ry": 54.4
-      },
-      "communityRole": "home",
-      "door": [
-        3654.1,
-        5118.2
-      ],
-      "z": 5118.9,
+      "z": 4600.3,
       "shadowOffset": [
         0,
         -8
@@ -9238,8 +7582,8 @@
       "name": "fishing-net-rack",
       "asset": "fishing-net-rack",
       "src": "/pixi-art/home-hamlets/reedwhistle/fishing-net-rack.svg",
-      "x": 3777.4,
-      "y": 5288.6,
+      "x": 3857.4,
+      "y": 5268.6,
       "width": 321.6,
       "height": 166.2,
       "scale": 1,
@@ -9255,21 +7599,21 @@
         28.9
       ],
       "footprint": {
-        "x": 3777.4,
-        "y": 5276.6,
+        "x": 3857.4,
+        "y": 5256.6,
         "rx": 96.5,
         "ry": 24
       },
       "communityRole": "workplace",
-      "z": 5288.6
+      "z": 5268.6
     },
     {
       "id": "hamlet-reedwhistle-smokehouse",
       "name": "smokehouse",
       "asset": "smokehouse",
       "src": "/pixi-art/home-hamlets/reedwhistle/smokehouse.svg",
-      "x": 3534.9,
-      "y": 5371.7,
+      "x": 3414.9,
+      "y": 5271.7,
       "width": 270.7,
       "height": 251.9,
       "scale": 1,
@@ -9281,7 +7625,7 @@
       "zone": "reedwhistle",
       "order": 112,
       "communityRole": "workplace",
-      "z": 5431.1
+      "z": 5331.1
     },
     {
       "id": "hamlet-reedwhistle-fish-basket-a",
@@ -9388,8 +7732,8 @@
       "name": "lighthouse",
       "asset": "lighthouse",
       "src": "/pixi-art/home-hamlets/reedwhistle/lighthouse.svg",
-      "x": 4673.9,
-      "y": 5486.9,
+      "x": 4613.9,
+      "y": 5526.9,
       "width": 241.2,
       "height": 415.4,
       "scale": 1,
@@ -9405,13 +7749,13 @@
         28.9
       ],
       "footprint": {
-        "x": 4673.9,
-        "y": 5435.1,
+        "x": 4613.9,
+        "y": 5475.1,
         "rx": 96.5,
         "ry": 33.8
       },
       "communityRole": "workplace",
-      "z": 5486.9
+      "z": 5526.9
     },
     {
       "id": "hamlet-reedwhistle-lighthouse-rock-right",
@@ -9466,70 +7810,6 @@
       "z": 5493.6
     },
     {
-      "id": "home-farm-enclosure",
-      "name": "Joined crop garden",
-      "asset": "farm-enclosure",
-      "src": "/pixi-art/home-review/farm-enclosure.svg",
-      "x": 4960,
-      "y": -745,
-      "width": 700,
-      "height": 240,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "z": -744,
-      "noShadow": true,
-      "footprint": {
-        "x": 4960,
-        "y": -835,
-        "rx": 315,
-        "ry": 70
-      }
-    },
-    {
-      "id": "home-windmill-sails",
-      "name": "Windmill sails",
-      "asset": "windmill-sails",
-      "src": "/pixi-art/home-review/windmill-sails.svg",
-      "x": 5764.8518,
-      "y": -787.7474080882353,
-      "width": 379.08599999999996,
-      "height": 379.1068014705882,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "z": -495.9,
-      "noShadow": true,
-      "spinPeriod": 9,
-      "zone": "clovercrust"
-    },
-    {
-      "id": "home-beach-spare-lounger",
-      "name": "Beach lounger",
-      "asset": "beach-lounger",
-      "src": "/pixi-art/home-review/beach-lounger.svg",
-      "x": 4480,
-      "y": 2660,
-      "width": 160,
-      "height": 145,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 0.9
-      },
-      "noShadow": true,
-      "footprint": {
-        "x": 4480,
-        "y": 2650,
-        "rx": 54,
-        "ry": 24
-      }
-    },
-    {
       "id": "review-willow-oak",
       "name": "tree-3",
       "asset": "tree-3",
@@ -9539,40 +7819,6 @@
       "width": 300,
       "height": 380,
       "scale": 1.12,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-willow-round",
-      "name": "tree-1",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": 6490,
-      "y": 2790,
-      "width": 260,
-      "height": 360,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-willow-birch",
-      "name": "tree-5",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": 6660,
-      "y": 2870,
-      "width": 150,
-      "height": 380,
-      "scale": 1.1,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -9650,74 +7896,6 @@
       "zone": "authored-commons"
     },
     {
-      "id": "review-coast-oak",
-      "name": "tree-3",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 6970,
-      "y": 2310,
-      "width": 300,
-      "height": 380,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-coast-round",
-      "name": "tree-1",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": 7160,
-      "y": 2330,
-      "width": 260,
-      "height": 360,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-coast-birch",
-      "name": "tree-5",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": 7300,
-      "y": 2420,
-      "width": 150,
-      "height": 380,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-coast-under",
-      "name": "bush-2",
-      "asset": "bush-2",
-      "src": "/pixi-art/plants/bush-2.svg",
-      "x": 6900,
-      "y": 2370,
-      "width": 168,
-      "height": 110,
-      "scale": 1.2,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
       "id": "review-coast-low",
       "name": "bush-4",
       "asset": "bush-4",
@@ -9744,23 +7922,6 @@
       "width": 44,
       "height": 36,
       "scale": 1.5,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-pear-west",
-      "name": "tree-1",
-      "asset": "tree-1",
-      "src": "/pixi-art/plants/tree-1.svg",
-      "x": 620,
-      "y": -560,
-      "width": 260,
-      "height": 360,
-      "scale": 1.1,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -9803,23 +7964,6 @@
       "zone": "authored-commons"
     },
     {
-      "id": "review-pear-low",
-      "name": "bush-2",
-      "asset": "bush-2",
-      "src": "/pixi-art/plants/bush-2.svg",
-      "x": 570,
-      "y": -480,
-      "width": 168,
-      "height": 110,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
       "id": "review-pear-flowers",
       "name": "flower-1",
       "asset": "flower-1",
@@ -9829,40 +7973,6 @@
       "width": 48,
       "height": 36,
       "scale": 1.5,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-hay-oak",
-      "name": "tree-3",
-      "asset": "tree-3",
-      "src": "/pixi-art/plants/tree-3.svg",
-      "x": 2360,
-      "y": 5250,
-      "width": 300,
-      "height": 380,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-hay-birch",
-      "name": "tree-5",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": 2520,
-      "y": 5120,
-      "width": 150,
-      "height": 380,
-      "scale": 1,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -9956,40 +8066,6 @@
       "zone": "authored-commons"
     },
     {
-      "id": "review-dune-a",
-      "name": "bush-3",
-      "asset": "bush-3",
-      "src": "/pixi-art/plants/bush-3.svg",
-      "x": 4340,
-      "y": 2570,
-      "width": 116,
-      "height": 104,
-      "scale": 0.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
-      "id": "review-dune-b",
-      "name": "bush-1",
-      "asset": "bush-1",
-      "src": "/pixi-art/plants/bush-1.svg",
-      "x": 4400,
-      "y": 2430,
-      "width": 130,
-      "height": 100,
-      "scale": 0.75,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-commons"
-    },
-    {
       "id": "review-dune-c",
       "name": "bush-4",
       "asset": "bush-4",
@@ -10047,31 +8123,6 @@
         "ry": 21.2
       },
       "z": 5320
-    },
-    {
-      "id": "review-seedshare-seat",
-      "name": "bench",
-      "asset": "bench",
-      "src": "/pixi-art/home-hamlets/lanternleaf/bench.svg",
-      "x": 4272,
-      "y": 220,
-      "width": 107.2,
-      "height": 73.7,
-      "scale": 1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "lanternleaf",
-      "order": 48,
-      "footprint": {
-        "x": 4272,
-        "y": 211.39999999999998,
-        "rx": 32.2,
-        "ry": 12.9
-      },
-      "z": 220
     },
     {
       "id": "review-willow-picnic",
@@ -10352,40 +8403,6 @@
       "zone": "authored-polish"
     },
     {
-      "id": "polish-orchard-under1",
-      "name": "bush-2",
-      "asset": "bush-2",
-      "src": "/pixi-art/plants/bush-2.svg",
-      "x": 690,
-      "y": -470,
-      "width": 168,
-      "height": 110,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-polish"
-    },
-    {
-      "id": "polish-orchard-under2",
-      "name": "bush-4",
-      "asset": "bush-4",
-      "src": "/pixi-art/plants/bush-4.svg",
-      "x": 835,
-      "y": -420,
-      "width": 140,
-      "height": 100,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-polish"
-    },
-    {
       "id": "polish-orchard-under3",
       "name": "bush-3",
       "asset": "bush-3",
@@ -10590,23 +8607,6 @@
       "zone": "authored-polish"
     },
     {
-      "id": "polish-bread-under3",
-      "name": "bush-3",
-      "asset": "bush-3",
-      "src": "/pixi-art/plants/bush-3.svg",
-      "x": -195,
-      "y": 550,
-      "width": 116,
-      "height": 104,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-polish"
-    },
-    {
       "id": "polish-bread-flower1",
       "name": "flower-1",
       "asset": "flower-1",
@@ -10769,23 +8769,6 @@
       "width": 48,
       "height": 36,
       "scale": 1.8,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-polish"
-    },
-    {
-      "id": "polish-lantern-under1",
-      "name": "bush-3",
-      "asset": "bush-3",
-      "src": "/pixi-art/plants/bush-3.svg",
-      "x": 2110,
-      "y": -320,
-      "width": 116,
-      "height": 104,
-      "scale": 1.1,
       "anchor": {
         "x": 0.5,
         "y": 1
@@ -11372,57 +9355,6 @@
       "zone": "authored-polish"
     },
     {
-      "id": "p2-garden-northwest-0",
-      "name": "tree-4",
-      "asset": "tree-4",
-      "src": "/pixi-art/plants/tree-4.svg",
-      "x": -1060,
-      "y": -510,
-      "width": 200,
-      "height": 280,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
-      "id": "p2-garden-northwest-1",
-      "name": "tree-2",
-      "asset": "tree-2",
-      "src": "/pixi-art/plants/tree-2.svg",
-      "x": -1190,
-      "y": -570,
-      "width": 180,
-      "height": 360,
-      "scale": 1.04,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
-      "id": "p2-garden-northwest-2",
-      "name": "tree-5",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": -910,
-      "y": -450,
-      "width": 150,
-      "height": 380,
-      "scale": 0.92,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
       "id": "p2-garden-northwest-3",
       "name": "bush-2",
       "asset": "bush-2",
@@ -11593,40 +9525,6 @@
       "zone": "authored-garden"
     },
     {
-      "id": "p2-garden-pearbutton-1",
-      "name": "tree-5",
-      "asset": "tree-5",
-      "src": "/pixi-art/plants/tree-5.svg",
-      "x": 460,
-      "y": -710,
-      "width": 150,
-      "height": 380,
-      "scale": 1.06,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
-      "id": "p2-garden-pearbutton-2",
-      "name": "tree-4",
-      "asset": "tree-4",
-      "src": "/pixi-art/plants/tree-4.svg",
-      "x": 1470,
-      "y": -470,
-      "width": 200,
-      "height": 280,
-      "scale": 1.1,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
       "id": "p2-garden-pearbutton-3",
       "name": "bush-2",
       "asset": "bush-2",
@@ -11635,23 +9533,6 @@
       "y": -585,
       "width": 168,
       "height": 110,
-      "scale": 1.15,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
-      "id": "p2-garden-pearbutton-4",
-      "name": "bush-4",
-      "asset": "bush-4",
-      "src": "/pixi-art/plants/bush-4.svg",
-      "x": 520,
-      "y": -520,
-      "width": 140,
-      "height": 100,
       "scale": 1.15,
       "anchor": {
         "x": 0.5,
@@ -14415,40 +12296,6 @@
       "zone": "authored-garden"
     },
     {
-      "id": "p2-garden-quay-shoulder-3",
-      "name": "bush-3",
-      "asset": "bush-3",
-      "src": "/pixi-art/plants/bush-3.svg",
-      "x": 3500,
-      "y": 5120,
-      "width": 116,
-      "height": 104,
-      "scale": 0.95,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
-      "id": "p2-garden-quay-shoulder-4",
-      "name": "flower-1",
-      "asset": "flower-1",
-      "src": "/pixi-art/plants/flower-1.svg",
-      "x": 3420,
-      "y": 5190,
-      "width": 48,
-      "height": 36,
-      "scale": 1.5,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
       "id": "p3-garden-pond-north-0",
       "name": "bush-4",
       "asset": "bush-4",
@@ -15129,23 +12976,6 @@
       "zone": "authored-garden"
     },
     {
-      "id": "p3-garden-willow-clearing-0",
-      "name": "bush-4",
-      "asset": "bush-4",
-      "src": "/pixi-art/plants/bush-4.svg",
-      "x": 6730,
-      "y": 2760,
-      "width": 140,
-      "height": 100,
-      "scale": 1.05,
-      "anchor": {
-        "x": 0.5,
-        "y": 1
-      },
-      "resolution": 1.5,
-      "zone": "authored-garden"
-    },
-    {
       "id": "p3-garden-willow-clearing-1",
       "name": "bush-2",
       "asset": "bush-2",
@@ -15255,13 +13085,13 @@
     },
     {
       "id": "home-hill-northeast-bench",
-      "name": "stargazing-bench",
+      "name": "Wooden bench",
       "asset": "stargazing-bench",
-      "src": "/pixi-art/home-review/hill/bench.svg",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
       "x": 6345,
       "y": 1260,
       "width": 200,
-      "height": 130,
+      "height": 113,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -15324,13 +13154,13 @@
     },
     {
       "id": "home-hill-southwest-bench",
-      "name": "stargazing-bench",
+      "name": "Wooden bench",
       "asset": "stargazing-bench",
-      "src": "/pixi-art/home-review/hill/bench.svg",
+      "src": "/pixi-art/detail/street--bench-wood.svg",
       "x": -605,
       "y": 4510,
       "width": 200,
-      "height": 130,
+      "height": 113,
       "scale": 1,
       "anchor": {
         "x": 0.5,
@@ -15367,6 +13197,1360 @@
         "rx": 16,
         "ry": 10
       }
+    },
+    {
+      "id": "bigger-community-422",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 833.3333333333334,
+      "y": -94.44444444444444,
+      "width": 200,
+      "height": 280,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "bigger-community-423",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4060,
+      "y": 740,
+      "width": 300,
+      "height": 380,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "bigger-community-426",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 6622.222222222223,
+      "y": 2750,
+      "width": 200,
+      "height": 280,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "bigger-community-428",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 2444.4444444444443,
+      "y": 5161.111111111111,
+      "width": 200,
+      "height": 280,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "bigger-community-440",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 2245,
+      "y": 290,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "verges"
+    },
+    {
+      "id": "bigger-community-456",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 4683.333333333334,
+      "y": 3600,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "verges"
+    },
+    {
+      "id": "bigger-community-476",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": -180,
+      "y": 2570,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "verges"
+    },
+    {
+      "id": "bigger-community-500",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 472.22222222222223,
+      "y": -705.5555555555555,
+      "width": 130,
+      "height": 100,
+      "scale": 0.9,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "verges"
+    },
+    {
+      "id": "bigger-community-522",
+      "name": "Tree",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": -394.44444444444446,
+      "y": 1361.111111111111,
+      "width": 260,
+      "height": 360,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "commons",
+      "flip": true,
+      "tint": 16777215
+    },
+    {
+      "id": "bigger-community-525",
+      "name": "Tree",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 594.4444444444445,
+      "y": -394.44444444444446,
+      "width": 260,
+      "height": 360,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "commons",
+      "flip": false,
+      "tint": 16777215
+    },
+    {
+      "id": "bigger-community-535",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6700,
+      "y": 2777.777777777778,
+      "width": 300,
+      "height": 380,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "bigger-community-536",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6544.444444444444,
+      "y": 3377.777777777778,
+      "width": 300,
+      "height": 380,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "bigger-community-537",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6166.666666666667,
+      "y": 3233.3333333333335,
+      "width": 300,
+      "height": 380,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.25,
+      "zone": "commons"
+    },
+    {
+      "id": "grove-w3-1",
+      "name": "Tree",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": -330,
+      "y": 2080,
+      "width": 300,
+      "height": 380,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16775146
+    },
+    {
+      "id": "grove-w3-3",
+      "name": "Tree",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": -290,
+      "y": 2230,
+      "width": 260,
+      "height": 360,
+      "scale": 1.2,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16055020
+    },
+    {
+      "id": "grove-w3-4",
+      "name": "Tree",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": -430,
+      "y": 2190,
+      "width": 150,
+      "height": 380,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16775146
+    },
+    {
+      "id": "grove-m2-1",
+      "name": "Tree",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 4650,
+      "y": 4250,
+      "width": 300,
+      "height": 380,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16055020
+    },
+    {
+      "id": "grove-m2-2",
+      "name": "Tree",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 4770,
+      "y": 4190,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": true,
+      "tint": 16775146
+    },
+    {
+      "id": "grove-m2-3",
+      "name": "Tree",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 4730,
+      "y": 4350,
+      "width": 260,
+      "height": 360,
+      "scale": 1.25,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16777215
+    },
+    {
+      "id": "grove-s1-1",
+      "name": "Tree",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 620,
+      "y": 4400,
+      "width": 300,
+      "height": 380,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": false,
+      "tint": 16775146
+    },
+    {
+      "id": "grove-s1-2",
+      "name": "Tree",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 740,
+      "y": 4350,
+      "width": 150,
+      "height": 380,
+      "scale": 1.2,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": true,
+      "tint": 16777215
+    },
+    {
+      "id": "grove-s2-3",
+      "name": "Tree",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 520,
+      "y": 5360,
+      "width": 300,
+      "height": 380,
+      "scale": 1.3,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "groves",
+      "flip": true,
+      "tint": 16775146
+    },
+    {
+      "id": "hamlet-butterbill-north-east-oak",
+      "name": "tree-oak-broad",
+      "asset": "tree-oak-broad",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
+      "x": -524.3,
+      "y": 59.6,
+      "width": 274.7,
+      "height": 332.9,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-butterbill-far-east-oak",
+      "name": "tree-oak-broad",
+      "asset": "tree-oak-broad",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
+      "x": -68.7,
+      "y": 87.8,
+      "width": 282.7,
+      "height": 342.6,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-butterbill-north-east-birch",
+      "name": "tree-birch",
+      "asset": "tree-birch",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-birch.svg",
+      "x": -261.6,
+      "y": 91.8,
+      "width": 120.6,
+      "height": 311,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-butterbill-hammock-left-tree",
+      "name": "tree-oak-slender",
+      "asset": "tree-oak-slender",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-slender.svg",
+      "x": -202.7,
+      "y": 170.9,
+      "width": 138,
+      "height": 206.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-butterbill-hammock-right-tree",
+      "name": "tree-oak-broad",
+      "asset": "tree-oak-broad",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
+      "x": 9,
+      "y": 195,
+      "width": 277.4,
+      "height": 336.1,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-butterbill-east-great-oak",
+      "name": "tree-oak-broad",
+      "asset": "tree-oak-broad",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-broad.svg",
+      "x": -52.6,
+      "y": 570.2,
+      "width": 268,
+      "height": 324.7,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-butterbill-flower-island",
+      "name": "square-flowerbed",
+      "asset": "square-flowerbed",
+      "src": "/pixi-art/home-hamlets/butterbill/square-flowerbed.svg",
+      "x": -791.6,
+      "y": 538,
+      "width": 191.6,
+      "height": 144.7,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill",
+      "noShadow": true
+    },
+    {
+      "id": "hamlet-butterbill-south-west-oak",
+      "name": "tree-oak-round",
+      "asset": "tree-oak-round",
+      "src": "/pixi-art/home-hamlets/butterbill/tree-oak-round.svg",
+      "x": -1057.6,
+      "y": 903.8,
+      "width": 207.7,
+      "height": 234,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "butterbill"
+    },
+    {
+      "id": "hamlet-lanternleaf-oak-southwest",
+      "name": "tree-oak-tall",
+      "asset": "tree-oak-tall",
+      "src": "/pixi-art/home-hamlets/lanternleaf/tree-oak-tall.svg",
+      "x": 1978.2,
+      "y": -215.1,
+      "width": 257.3,
+      "height": 313.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "lanternleaf",
+      "order": 55
+    },
+    {
+      "id": "hamlet-lanternleaf-hammock-birch",
+      "name": "tree-birch-slender",
+      "asset": "tree-birch-slender",
+      "src": "/pixi-art/home-hamlets/lanternleaf/tree-birch-slender.svg",
+      "x": 3836.8,
+      "y": -275.4,
+      "width": 160.8,
+      "height": 308.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "lanternleaf",
+      "order": 57
+    },
+    {
+      "id": "hamlet-lanternleaf-bush-bottom-left",
+      "name": "bush-white",
+      "asset": "bush-white",
+      "src": "/pixi-art/home-hamlets/lanternleaf/bush-white.svg",
+      "x": 2700.4,
+      "y": -15.5,
+      "width": 154.1,
+      "height": 106.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "lanternleaf",
+      "order": 76
+    },
+    {
+      "id": "hamlet-lanternleaf-bush-bottom-right",
+      "name": "bush-white",
+      "asset": "bush-white",
+      "src": "/pixi-art/home-hamlets/lanternleaf/bush-white.svg",
+      "x": 3042.1,
+      "y": -22.2,
+      "width": 146.1,
+      "height": 100.9,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "lanternleaf",
+      "order": 77
+    },
+    {
+      "id": "hamlet-lanternleaf-oak-bottom-left",
+      "name": "tree-oak-wide",
+      "asset": "tree-oak-wide",
+      "src": "/pixi-art/home-hamlets/lanternleaf/tree-oak-wide.svg",
+      "x": 2608,
+      "y": 190.9,
+      "width": 246.6,
+      "height": 232.1,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "lanternleaf",
+      "order": 80
+    },
+    {
+      "id": "hamlet-clovercrust-oak-northwest",
+      "name": "oak-broad",
+      "asset": "oak-broad",
+      "src": "/pixi-art/home-hamlets/clovercrust/oak-broad.svg",
+      "x": 4177.2,
+      "y": -496,
+      "width": 298.8,
+      "height": 331.5,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 33
+    },
+    {
+      "id": "hamlet-clovercrust-birch-west",
+      "name": "birch",
+      "asset": "birch",
+      "src": "/pixi-art/home-hamlets/clovercrust/birch.svg",
+      "x": 4084.8,
+      "y": -309.7,
+      "width": 160.8,
+      "height": 325.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 48
+    },
+    {
+      "id": "hamlet-clovercrust-oak-east",
+      "name": "oak-broad",
+      "asset": "oak-broad",
+      "src": "/pixi-art/home-hamlets/clovercrust/oak-broad.svg",
+      "x": 5854.9,
+      "y": -165,
+      "width": 306.9,
+      "height": 340.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 54
+    },
+    {
+      "id": "hamlet-clovercrust-oak-west",
+      "name": "oak-broad",
+      "asset": "oak-broad",
+      "src": "/pixi-art/home-hamlets/clovercrust/oak-broad.svg",
+      "x": 4137,
+      "y": 2.5,
+      "width": 306.9,
+      "height": 340.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 61
+    },
+    {
+      "id": "hamlet-clovercrust-oak-west-companion",
+      "name": "oak-round",
+      "asset": "oak-round",
+      "src": "/pixi-art/home-hamlets/clovercrust/oak-round.svg",
+      "x": 4261.7,
+      "y": -90,
+      "width": 139.4,
+      "height": 171,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 62
+    },
+    {
+      "id": "hamlet-clovercrust-gold-cottage-left-shrub",
+      "name": "bush-flowering",
+      "asset": "bush-flowering",
+      "src": "/pixi-art/home-hamlets/clovercrust/bush-flowering.svg",
+      "x": 5388.6,
+      "y": -0.2,
+      "width": 89.8,
+      "height": 56.9,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 63
+    },
+    {
+      "id": "hamlet-clovercrust-gold-cottage-back-shrub",
+      "name": "bush-round",
+      "asset": "bush-round",
+      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
+      "x": 5777.2,
+      "y": -56.5,
+      "width": 121.9,
+      "height": 72.7,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 64
+    },
+    {
+      "id": "hamlet-clovercrust-blue-cottage-back-shrub",
+      "name": "bush-round",
+      "asset": "bush-round",
+      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
+      "x": 4301.9,
+      "y": 45.4,
+      "width": 126,
+      "height": 75.1,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 70
+    },
+    {
+      "id": "hamlet-clovercrust-blue-cottage-left-bush",
+      "name": "bush-round",
+      "asset": "bush-round",
+      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
+      "x": 4316.6,
+      "y": 101.6,
+      "width": 91.1,
+      "height": 54.3,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 76
+    },
+    {
+      "id": "hamlet-clovercrust-bush-southeast",
+      "name": "bush-round",
+      "asset": "bush-round",
+      "src": "/pixi-art/home-hamlets/clovercrust/bush-round.svg",
+      "x": 5211.7,
+      "y": 261.1,
+      "width": 139.4,
+      "height": 83.1,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "clovercrust",
+      "order": 85
+    },
+    {
+      "id": "hamlet-petalpatch-oak-northeast",
+      "name": "tree-round-oak",
+      "asset": "tree-round-oak",
+      "src": "/pixi-art/home-hamlets/petalpatch/tree-round-oak.svg",
+      "x": -329.4,
+      "y": 3335.1,
+      "width": 226.5,
+      "height": 340.4,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "petalpatch",
+      "order": 14
+    },
+    {
+      "id": "hamlet-petalpatch-birch-northeast",
+      "name": "tree-birch",
+      "asset": "tree-birch",
+      "src": "/pixi-art/home-hamlets/petalpatch/tree-birch.svg",
+      "x": -280,
+      "y": 3390,
+      "width": 246.6,
+      "height": 437,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "petalpatch",
+      "order": 15
+    },
+    {
+      "id": "hamlet-petalpatch-oak-studio-back",
+      "name": "tree-spreading-oak",
+      "asset": "tree-spreading-oak",
+      "src": "/pixi-art/home-hamlets/petalpatch/tree-spreading-oak.svg",
+      "x": -470.1,
+      "y": 3357.9,
+      "width": 254.6,
+      "height": 294.1,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "petalpatch",
+      "order": 16
+    },
+    {
+      "id": "hamlet-petalpatch-cottage-shrub-left",
+      "name": "bush-low-green",
+      "asset": "bush-low-green",
+      "src": "/pixi-art/home-hamlets/petalpatch/bush-low-green.svg",
+      "x": -1290.2,
+      "y": 3379.3,
+      "width": 77.7,
+      "height": 48.2,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "petalpatch",
+      "order": 19
+    },
+    {
+      "id": "hamlet-petalpatch-birch-east",
+      "name": "tree-slender-birch",
+      "asset": "tree-slender-birch",
+      "src": "/pixi-art/home-hamlets/petalpatch/tree-slender-birch.svg",
+      "x": -210,
+      "y": 3950,
+      "width": 176.9,
+      "height": 399.3,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "petalpatch",
+      "order": 46
+    },
+    {
+      "id": "hamlet-petalpatch-oak-southeast",
+      "name": "tree-spreading-oak",
+      "asset": "tree-spreading-oak",
+      "src": "/pixi-art/home-hamlets/petalpatch/tree-spreading-oak.svg",
+      "x": -294.6,
+      "y": 4169.9,
+      "width": 327,
+      "height": 377.7,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "petalpatch",
+      "order": 56
+    },
+    {
+      "id": "hamlet-reedwhistle-middle-birch",
+      "name": "tree-birch",
+      "asset": "tree-birch",
+      "src": "/pixi-art/home-hamlets/reedwhistle/tree-birch.svg",
+      "x": 4383.1,
+      "y": 4953.6,
+      "width": 135.3,
+      "height": 255.3,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "reedwhistle",
+      "order": 65
+    },
+    {
+      "id": "review-willow-round",
+      "name": "tree-1",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 6490,
+      "y": 2790,
+      "width": 260,
+      "height": 360,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-willow-birch",
+      "name": "tree-5",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 6660,
+      "y": 2870,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-coast-oak",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 6970,
+      "y": 2310,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-coast-round",
+      "name": "tree-1",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 7160,
+      "y": 2330,
+      "width": 260,
+      "height": 360,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-coast-birch",
+      "name": "tree-5",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 7300,
+      "y": 2420,
+      "width": 150,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-coast-under",
+      "name": "bush-2",
+      "asset": "bush-2",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 6900,
+      "y": 2370,
+      "width": 168,
+      "height": 110,
+      "scale": 1.2,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-pear-west",
+      "name": "tree-1",
+      "asset": "tree-1",
+      "src": "/pixi-art/plants/tree-1.svg",
+      "x": 620,
+      "y": -560,
+      "width": 260,
+      "height": 360,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-pear-low",
+      "name": "bush-2",
+      "asset": "bush-2",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 570,
+      "y": -480,
+      "width": 168,
+      "height": 110,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-hay-oak",
+      "name": "tree-3",
+      "asset": "tree-3",
+      "src": "/pixi-art/plants/tree-3.svg",
+      "x": 2360,
+      "y": 5250,
+      "width": 300,
+      "height": 380,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-hay-birch",
+      "name": "tree-5",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 2520,
+      "y": 5120,
+      "width": 150,
+      "height": 380,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-dune-a",
+      "name": "bush-3",
+      "asset": "bush-3",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 4340,
+      "y": 2570,
+      "width": 116,
+      "height": 104,
+      "scale": 0.8,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "review-dune-b",
+      "name": "bush-1",
+      "asset": "bush-1",
+      "src": "/pixi-art/plants/bush-1.svg",
+      "x": 4400,
+      "y": 2430,
+      "width": 130,
+      "height": 100,
+      "scale": 0.75,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-commons"
+    },
+    {
+      "id": "polish-orchard-under1",
+      "name": "bush-2",
+      "asset": "bush-2",
+      "src": "/pixi-art/plants/bush-2.svg",
+      "x": 690,
+      "y": -470,
+      "width": 168,
+      "height": 110,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-polish"
+    },
+    {
+      "id": "polish-orchard-under2",
+      "name": "bush-4",
+      "asset": "bush-4",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 835,
+      "y": -420,
+      "width": 140,
+      "height": 100,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-polish"
+    },
+    {
+      "id": "polish-bread-under3",
+      "name": "bush-3",
+      "asset": "bush-3",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": -195,
+      "y": 550,
+      "width": 116,
+      "height": 104,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-polish"
+    },
+    {
+      "id": "polish-lantern-under1",
+      "name": "bush-3",
+      "asset": "bush-3",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 2110,
+      "y": -320,
+      "width": 116,
+      "height": 104,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-polish"
+    },
+    {
+      "id": "p2-garden-northwest-0",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": -1060,
+      "y": -510,
+      "width": 200,
+      "height": 280,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-northwest-1",
+      "name": "tree-2",
+      "asset": "tree-2",
+      "src": "/pixi-art/plants/tree-2.svg",
+      "x": -1190,
+      "y": -570,
+      "width": 180,
+      "height": 360,
+      "scale": 1.04,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-northwest-2",
+      "name": "tree-5",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": -910,
+      "y": -450,
+      "width": 150,
+      "height": 380,
+      "scale": 0.92,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-pearbutton-1",
+      "name": "tree-5",
+      "asset": "tree-5",
+      "src": "/pixi-art/plants/tree-5.svg",
+      "x": 460,
+      "y": -710,
+      "width": 150,
+      "height": 380,
+      "scale": 1.06,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-pearbutton-2",
+      "name": "tree-4",
+      "asset": "tree-4",
+      "src": "/pixi-art/plants/tree-4.svg",
+      "x": 1470,
+      "y": -470,
+      "width": 200,
+      "height": 280,
+      "scale": 1.1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-pearbutton-4",
+      "name": "bush-4",
+      "asset": "bush-4",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 520,
+      "y": -520,
+      "width": 140,
+      "height": 100,
+      "scale": 1.15,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-quay-shoulder-3",
+      "name": "bush-3",
+      "asset": "bush-3",
+      "src": "/pixi-art/plants/bush-3.svg",
+      "x": 3500,
+      "y": 5120,
+      "width": 116,
+      "height": 104,
+      "scale": 0.95,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p2-garden-quay-shoulder-4",
+      "name": "flower-1",
+      "asset": "flower-1",
+      "src": "/pixi-art/plants/flower-1.svg",
+      "x": 3420,
+      "y": 5190,
+      "width": 48,
+      "height": 36,
+      "scale": 1.5,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
+    },
+    {
+      "id": "p3-garden-willow-clearing-0",
+      "name": "bush-4",
+      "asset": "bush-4",
+      "src": "/pixi-art/plants/bush-4.svg",
+      "x": 6730,
+      "y": 2760,
+      "width": 140,
+      "height": 100,
+      "scale": 1.05,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "resolution": 1.5,
+      "zone": "authored-garden"
     }
   ],
   "coast": [
@@ -17057,8 +16241,8 @@
     {
       "id": "clovercrust",
       "point": [
-        5450,
-        -249
+        5390,
+        -150
       ]
     },
     {
@@ -17140,21 +16324,12 @@
       "resolution": 1
     },
     {
-      "id": "home-pond-bridge",
-      "src": "/pixi-art/home-review/home-pond-bridge.svg",
-      "x": 1116.4615384615386,
-      "y": 2460,
-      "width": 1047.0769230769233,
-      "height": 244,
-      "resolution": 1.5
-    },
-    {
       "id": "home-west-bridge",
-      "src": "/pixi-art/home-review/home-west-bridge.svg",
-      "x": 685.8850747228745,
-      "y": 2907.9027615236596,
-      "width": 673.7853262074472,
-      "height": 612.15083177726,
+      "src": "/pixi-art/home-review/river-crossing-6.svg",
+      "x": 989.7714306776238,
+      "y": 3055.9475080736574,
+      "width": 626.0219851609695,
+      "height": 791.3568738445028,
       "resolution": 1.5
     },
     {
@@ -17209,15 +16384,6 @@
       "y": 3140.9475080736574,
       "width": 626.0219851609695,
       "height": 791.3568738445028,
-      "resolution": 1.5
-    },
-    {
-      "id": "river-crossing-7",
-      "src": "/pixi-art/home-review/river-crossing-7.svg",
-      "x": 4873.701560826652,
-      "y": 1478.2013697032783,
-      "width": 651.6614639111613,
-      "height": 288.3277136107015,
       "resolution": 1.5
     },
     {
@@ -17327,18 +16493,6 @@
     },
     {
       "a": [
-        4930,
-        1650
-      ],
-      "b": [
-        5450,
-        1690
-      ],
-      "w": 100,
-      "boatPassUnder": true
-    },
-    {
-      "a": [
         1520,
         2930
       ],
@@ -17349,6 +16503,19 @@
       "w": 112,
       "boatPassUnder": true,
       "reviewWater": true
+    },
+    {
+      "id": "home-west-bridge",
+      "a": [
+        1480,
+        3260
+      ],
+      "b": [
+        1138,
+        3715
+      ],
+      "w": 100,
+      "boatPassUnder": true
     }
   ],
   "harborWater": {
@@ -17423,7 +16590,6 @@
       ],
       "workplaces": [
         "hamlet-lanternleaf-bandstand",
-        "hamlet-lanternleaf-garden-bed",
         "hamlet-lanternleaf-garden-shed"
       ]
     },
@@ -17447,7 +16613,6 @@
         140
       ],
       "workplaces": [
-        "hamlet-clovercrust-mill",
         "hamlet-clovercrust-silo",
         "hamlet-clovercrust-barn"
       ]
@@ -17482,7 +16647,6 @@
       "residents": "Fishing families, boat menders and the dock keepers on the south quay",
       "homes": [
         "hamlet-reedwhistle-cottage-fishers",
-        "hamlet-reedwhistle-cottage-netmaker",
         "hamlet-reedwhistle-cottage-harbour"
       ],
       "center": [
@@ -17527,7 +16691,7 @@
       "name": "Willowrest Green",
       "point": [
         6427.777777777778,
-        3011.1111111111113
+        3160
       ],
       "use": "shaded east-coast picnic and reading lawn"
     },
@@ -17535,8 +16699,8 @@
       "id": "hay-meadow",
       "name": "Cloverhay Common",
       "point": [
-        2338.888888888889,
-        5333.333333333334
+        2360,
+        5360
       ],
       "use": "haymaking beside a clear running lawn"
     },
@@ -22251,25 +21415,11 @@
       "h": 526
     },
     {
-      "id": "old-jetty-2",
-      "x": 1039.0149999999999,
-      "y": 3241.74,
-      "w": 281.64999999999986,
-      "h": 435.37999999999965
-    },
-    {
       "id": "old-jetty-3",
       "x": 2304.895,
       "y": 3561.995,
       "w": 115.93000000000029,
       "h": 679.9499999999998
-    },
-    {
-      "id": "old-jetty-5",
-      "x": 5251.99,
-      "y": 1660.2,
-      "w": 519.8199999999997,
-      "h": 127.57999999999993
     },
     {
       "id": "existing-deck-0",
@@ -22587,18 +21737,32 @@
       "h": 90
     },
     {
-      "id": "river-crossing-7",
-      "x": 5300,
-      "y": 1670,
-      "w": 390,
-      "h": 130
-    },
-    {
       "id": "lily-outflow-bridge",
       "x": 1650,
       "y": 2930,
       "w": 280,
       "h": 100
+    },
+    {
+      "id": "home-west-bridge",
+      "poly": [
+        [
+          1435.235443000773,
+          3226.3527945192623
+        ],
+        [
+          1093.235443000773,
+          3681.3527945192623
+        ],
+        [
+          1182.764556999227,
+          3748.6472054807377
+        ],
+        [
+          1524.764556999227,
+          3293.6472054807377
+        ]
+      ]
     }
   ],
   "crossings": [
@@ -22637,12 +21801,6 @@
       "river": "old-shore-canal",
       "x": 665.1800000000001,
       "y": 847.05
-    },
-    {
-      "id": "river-crossing-7",
-      "river": "mill-stream",
-      "x": 1232,
-      "y": 504.59999999999997
     }
   ],
   "arches": [
@@ -22719,19 +21877,6 @@
       ],
       "w": 112,
       "r": 35.76780785070323
-    },
-    {
-      "a": [
-        4930,
-        1650
-      ],
-      "b": [
-        5450,
-        1690
-      ],
-      "w": 112,
-      "r": 23.817386745685525,
-      "squash": 0.62
     },
     {
       "a": [
@@ -23118,8 +22263,16 @@
           1810
         ],
         [
-          2920,
+          2965,
           1620
+        ],
+        [
+          2965,
+          1350
+        ],
+        [
+          2920,
+          1190
         ]
       ],
       "terminal": "library stair"
@@ -23310,20 +22463,24 @@
           2930
         ],
         [
-          1240,
-          2975
+          1370,
+          3020
+        ],
+        [
+          1360,
+          3120
+        ],
+        [
+          1480,
+          3260
         ],
         [
           1138,
-          3066
+          3715
         ],
         [
-          940,
-          3417
-        ],
-        [
-          1020,
-          3640
+          1160,
+          3780
         ],
         [
           1150,
@@ -23566,16 +22723,16 @@
       "width": 104,
       "points": [
         [
-          -650,
-          590
+          117,
+          1278
         ],
         [
-          -450,
-          590
+          -280,
+          1250
         ],
         [
-          -450,
-          450
+          -280,
+          865
         ]
       ],
       "terminal": "doorstep"
@@ -23608,34 +22765,6 @@
         [
           3390,
           -430
-        ]
-      ],
-      "terminal": "doorstep"
-    },
-    {
-      "id": "clovercrust-mill",
-      "kind": "lane",
-      "width": 104,
-      "points": [
-        [
-          5300,
-          40
-        ],
-        [
-          5320,
-          -180
-        ],
-        [
-          5500,
-          -300
-        ],
-        [
-          5690,
-          -360
-        ],
-        [
-          5766,
-          -496
         ]
       ],
       "terminal": "doorstep"
@@ -24966,90 +24095,6 @@
         ]
       ],
       "width": 0
-    },
-    {
-      "id": "stargazing-northeast",
-      "width": 104,
-      "points": [
-        [
-          6570,
-          1295
-        ],
-        [
-          6540,
-          1320
-        ],
-        [
-          6480,
-          1350
-        ],
-        [
-          6430,
-          1375
-        ],
-        [
-          6200,
-          1370
-        ],
-        [
-          6100,
-          1470
-        ],
-        [
-          6000,
-          1480
-        ],
-        [
-          5850,
-          1470
-        ],
-        [
-          5740,
-          1540
-        ],
-        [
-          5660,
-          1650
-        ]
-      ],
-      "kind": "lane",
-      "terminal": "stargazing hill"
-    },
-    {
-      "id": "stargazing-southwest",
-      "width": 104,
-      "points": [
-        [
-          -400,
-          4550
-        ],
-        [
-          -450,
-          4510
-        ],
-        [
-          -450,
-          4435
-        ],
-        [
-          -420,
-          4350
-        ],
-        [
-          -150,
-          4300
-        ],
-        [
-          50,
-          4260
-        ],
-        [
-          200,
-          4066
-        ]
-      ],
-      "kind": "lane",
-      "terminal": "stargazing hill"
     }
   ],
   "hamletDecals": [
@@ -53201,35 +52246,21 @@
     "main": 128,
     "lane": 104,
     "surface": "/pixi-art/home-review/path-network.svg",
-    "routes": 31
+    "routes": 28
   },
   "homeArches": [
     {
-      "id": "home-pond-bridge",
-      "a": [
-        1188,
-        2630
-      ],
-      "b": [
-        2092,
-        2630
-      ],
-      "w": 112,
-      "r": 24.000000000000007,
-      "squash": 0.62
-    },
-    {
       "id": "home-west-bridge",
       "a": [
-        1137.84,
-        3066.05
+        1480,
+        3260
       ],
       "b": [
-        940.19,
-        3417.43
+        1138,
+        3715
       ],
       "w": 112,
-      "r": 27.67419387316977
+      "r": 35.76780785070323
     },
     {
       "a": [
@@ -53313,20 +52344,6 @@
     },
     {
       "a": [
-        4930,
-        1650
-      ],
-      "b": [
-        5450,
-        1690
-      ],
-      "w": 112,
-      "r": 23.817386745685525,
-      "squash": 0.62,
-      "id": "river-crossing-7"
-    },
-    {
-      "a": [
         1520,
         2930
       ],
@@ -53342,9 +52359,19 @@
   ],
   "reviewWater": true,
   "reviewProps": {
+    "0": {
+      "x": 2820,
+      "y": 2370
+    },
+    "1": {
+      "x": 2416,
+      "y": 2042
+    },
     "3": {
       "src": "/pixi-art/home-review/beach-kiosk.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 4324,
+      "y": 2694
     },
     "17": {
       "x": 1290,
@@ -53370,19 +52397,27 @@
         "y": 2555.8,
         "rx": 140.4,
         "ry": 44.2
-      }
+      },
+      "x": 4860,
+      "y": 2600
     },
     "47": {
       "src": "/pixi-art/home-review/umbrella-coral.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 4560,
+      "y": 2560
     },
     "48": {
       "src": "/pixi-art/home-review/umbrella-gold.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 4952,
+      "y": 2840
     },
     "49": {
       "src": "/pixi-art/home-review/beach-towel.svg",
-      "noShadow": true
+      "noShadow": true,
+      "x": 4790,
+      "y": 3120
     },
     "50": {
       "x": 4375,
@@ -53437,10 +52472,6 @@
       "x": 4050,
       "y": 430
     },
-    "grow-tree-5": {
-      "x": 4800,
-      "y": 410
-    },
     "grow-bush-1": {
       "x": 255,
       "y": 1690
@@ -53450,12 +52481,909 @@
       "y": 1920
     },
     "grow-tree-2": {
-      "x": 300,
-      "y": 2150
+      "x": 668,
+      "y": 1974
     },
     "spur-cover-1": {
       "x": 4740,
       "y": 1900
+    },
+    "seat-pond-3": {
+      "src": "/pixi-art/detail/street--bench-wood.svg",
+      "name": "Wooden bench",
+      "asset": "garden-bench",
+      "width": 200,
+      "height": 113,
+      "scale": 0.8,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "noShadow": true,
+      "footprint": {
+        "x": 1858.3042766954393,
+        "y": 2367.4769884423467,
+        "rx": 70,
+        "ry": 19
+      },
+      "x": 1858.3042766954393,
+      "y": 2377.4769884423467
+    },
+    "plaza-lamp-1": {
+      "x": 2984.637421128212,
+      "y": 2089.013249511436
+    },
+    "plaza-lamp-2": {
+      "x": 3158.130588709009,
+      "y": 2564.1777109755267
+    },
+    "plaza-lamp-3": {
+      "x": 2569.2785363995267,
+      "y": 2628.064345594497
+    },
+    "tree-0": {
+      "x": 1702.75,
+      "y": 1145.5061728395062
+    },
+    "tree-1": {
+      "x": 4088.75,
+      "y": 2442.8395061728397
+    },
+    "tree-13": {
+      "x": 4773.828125,
+      "y": 1984.4307270233196
+    },
+    "tree-20": {
+      "x": 4452.8984375,
+      "y": 1181.4604481024235
+    },
+    "tree-23": {
+      "x": 3702.212890625,
+      "y": 991.4040542600214
+    },
+    "grow-tree-1": {
+      "x": -44,
+      "y": 1156
+    },
+    "bigger-community-566": {
+      "x": 833.3333333333334,
+      "y": 3494.444444444445
+    },
+    "grove-s1-3": {
+      "x": 866,
+      "y": 4540
+    },
+    "grove-s1-4": {
+      "x": 720,
+      "y": 4500
+    },
+    "hamlet-butterbill-south-west-lamp": {
+      "x": -1003,
+      "y": 605
+    },
+    "hamlet-butterbill-south-east-lamp": {
+      "x": -615.4,
+      "y": 685.4
+    },
+    "hamlet-lanternleaf-lamp-west": {
+      "x": 2535.4,
+      "y": -306.3
+    },
+    "hamlet-lanternleaf-lamp-east": {
+      "x": 3148.5,
+      "y": -270.3
+    },
+    "hamlet-clovercrust-lamp-southwest": {
+      "x": 4701.9,
+      "y": -39.599999999999994
+    },
+    "hamlet-clovercrust-lamp-southeast": {
+      "x": 5226.5,
+      "y": 101.6
+    },
+    "hamlet-clovercrust-birch-southeast": {
+      "x": 5691.4,
+      "y": 432.6
+    },
+    "hamlet-petalpatch-oak-north": {
+      "x": -645.6,
+      "y": 3218.6
+    },
+    "hamlet-petalpatch-lamp-east": {
+      "x": -744,
+      "y": 4137.4
+    },
+    "p2-garden-petal-south-7": {
+      "x": -502,
+      "y": 4850
+    },
+    "tree-22": {
+      "x": 1421.30859375,
+      "y": 2323.019356805365
+    },
+    "bigger-community-506": {
+      "x": 493.55555555555554,
+      "y": -361.1111111111111
+    },
+    "hamlet-lanternleaf-oak-bottom-right": {
+      "x": 3083.5,
+      "y": 250.9
+    },
+    "hamlet-clovercrust-oak-top": {
+      "x": 4404.6,
+      "y": -760.8
+    },
+    "hamlet-reedwhistle-east-upper-oak": {
+      "x": 5082.7,
+      "y": 4995.7
+    },
+    "p2-garden-east-farm-rim-1": {
+      "x": 6917,
+      "y": -400
+    },
+    "plaza-lamp-0": {
+      "x": 2374.1262823152483,
+      "y": 2242.7363164737785
+    },
+    "tree-9": {
+      "x": 2097.65625,
+      "y": 1000.3429355281207
+    },
+    "tree-15": {
+      "x": 1818.359375,
+      "y": 2144.5587562871515
+    },
+    "bigger-community-512": {
+      "x": 1077.7777777777778,
+      "y": 5483.333333333334
+    },
+    "grove-ne1-1": {
+      "x": 6250,
+      "y": -300
+    },
+    "hamlet-lanternleaf-birch-northwest": {
+      "x": 2208.7,
+      "y": -822.2
+    },
+    "hamlet-lanternleaf-birch-west": {
+      "x": 1999.6,
+      "y": -593
+    },
+    "polish-north-lowtree": {
+      "x": 1960,
+      "y": -980
+    },
+    "p2-garden-cider-west-0": {
+      "x": -1725,
+      "y": 1030
+    },
+    "p2-garden-cider-west-2": {
+      "x": -1830,
+      "y": 1300
+    },
+    "p2-garden-cider-south-0": {
+      "x": -1370,
+      "y": 2470
+    },
+    "p2-garden-southeast-clearing-0": {
+      "x": 6690,
+      "y": 3890
+    },
+    "p2-garden-hay-coast-0": {
+      "x": 1200,
+      "y": 5485
+    },
+    "hamlet-lanternleaf-oak-northwest": {
+      "x": 2381.5,
+      "y": -843.6
+    },
+    "bigger-community-425": {
+      "x": -1700,
+      "y": 1477.7777777777778
+    },
+    "bigger-community-526": {
+      "x": 1045.3333333333335,
+      "y": -505.7777777777778
+    },
+    "bigger-community-527": {
+      "x": 1339.7777777777778,
+      "y": -278
+    },
+    "grove-w2-3": {
+      "x": -1610,
+      "y": 2560
+    },
+    "grove-se2-2": {
+      "x": 6380,
+      "y": 4290
+    },
+    "hamlet-butterbill-north-birch": {
+      "x": -1072.3,
+      "y": -12.7
+    },
+    "hamlet-butterbill-east-round-tree": {
+      "x": -383.6,
+      "y": 26.1
+    },
+    "review-pear-back": {
+      "x": 908,
+      "y": -718
+    },
+    "polish-north-round": {
+      "x": 1780,
+      "y": -1120
+    },
+    "p2-garden-north-ridge-0": {
+      "x": 2250,
+      "y": -1210
+    },
+    "p2-garden-cider-west-1": {
+      "x": -1580,
+      "y": 1150
+    },
+    "p2-garden-cider-south-1": {
+      "x": -1160,
+      "y": 2550
+    },
+    "p2-garden-southeast-clearing-1": {
+      "x": 6865,
+      "y": 3975
+    },
+    "hamlet-clovercrust-mill-left-shrub": {
+      "x": 5684.7,
+      "y": -526.8
+    },
+    "hamlet-clovercrust-mill-right-flowers": {
+      "x": 5908.2,
+      "y": -532
+    },
+    "polish-farm-under1": {
+      "x": 4470,
+      "y": -300
+    },
+    "hamlet-petalpatch-shrub-southeast": {
+      "x": -600,
+      "y": 3950
+    },
+    "polish-willow-under2": {
+      "x": 6650,
+      "y": 3090
+    },
+    "p3-garden-farm-border-1": {
+      "x": 4740,
+      "y": -925
+    },
+    "p3-garden-farm-border-2": {
+      "x": 4885,
+      "y": -865
+    },
+    "p3-garden-farm-border-3": {
+      "x": 5090,
+      "y": -850
+    },
+    "p3-garden-farm-border-5": {
+      "x": 4810,
+      "y": -820
+    },
+    "p3-garden-farm-border-6": {
+      "x": 4940,
+      "y": -810
+    },
+    "p3-garden-farm-border-7": {
+      "x": 5085,
+      "y": -795
+    },
+    "review-willow-picnic": {
+      "x": 6445,
+      "y": 3100
+    },
+    "grow-bush-5": {
+      "x": 4300,
+      "y": 3499
+    },
+    "grove-s2-2": {
+      "x": 372,
+      "y": 5130
+    },
+    "hamlet-clovercrust-cottage-gold": {
+      "x": 5651.6,
+      "y": 4,
+      "door": [
+        5651.6,
+        44
+      ]
+    },
+    "hamlet-reedwhistle-lighthouse": {
+      "x": 4473.9,
+      "y": 5342.9
+    },
+    "review-pear-harvest-crate": {
+      "x": 1080,
+      "y": -390
+    },
+    "plaza-planter-0": {
+      "x": 2347.592088721057,
+      "y": 2414.0019323823267
+    },
+    "bush-2": {
+      "x": 2107.8125,
+      "y": 1933.1275720164608
+    },
+    "bush-5": {
+      "x": 2356.640625,
+      "y": 907.0644718792867
+    },
+    "bigger-community-427": {
+      "x": 7172.222222222223,
+      "y": 3333.3333333333335
+    },
+    "grove-w1-1": {
+      "x": -1900,
+      "y": 1990
+    },
+    "grove-w2-1": {
+      "x": -1850,
+      "y": 2600
+    },
+    "hamlet-butterbill-west-birch": {
+      "x": -1660.6,
+      "y": 258
+    },
+    "hamlet-butterbill-honeyroof-cottage": {
+      "x": -395.6,
+      "y": 420.3,
+      "door": [
+        -395.6,
+        460.3
+      ]
+    },
+    "hamlet-butterbill-honeyroof-right-pot": {
+      "x": -391.5,
+      "y": 428.3
+    },
+    "hamlet-butterbill-north-east-lamp": {
+      "x": -634.2,
+      "y": 410.7
+    },
+    "hamlet-lanternleaf-oak-east": {
+      "x": 3717.7,
+      "y": -597
+    },
+    "hamlet-lanternleaf-lamp-northeast": {
+      "x": 3103.7,
+      "y": -639.9
+    },
+    "hamlet-lanternleaf-bench-east": {
+      "x": 3200,
+      "y": -330
+    },
+    "hamlet-lanternleaf-bandstand": {
+      "x": 2872,
+      "y": -329
+    },
+    "hamlet-lanternleaf-bandstand-pot-right": {
+      "x": 3045,
+      "y": -320
+    },
+    "hamlet-clovercrust-cottage-red": {
+      "x": 4417.1,
+      "y": -289.6,
+      "door": [
+        4417.1,
+        -249.60000000000002
+      ]
+    },
+    "hamlet-clovercrust-hay": {
+      "x": 5200,
+      "y": 60
+    },
+    "hamlet-clovercrust-lamp-northwest": {
+      "x": 4726.6,
+      "y": -126.2
+    },
+    "hamlet-clovercrust-cottage-blue": {
+      "x": 4498.8,
+      "y": 153.9,
+      "door": [
+        4498.8,
+        193.9
+      ]
+    },
+    "hamlet-clovercrust-blue-cottage-pink-pot": {
+      "x": 4708.6,
+      "y": 101.6
+    },
+    "hamlet-clovercrust-bush-southwest": {
+      "x": 4533.7,
+      "y": 417.9
+    },
+    "hamlet-clovercrust-bush-south": {
+      "x": 4796.3,
+      "y": 325.4
+    },
+    "hamlet-petalpatch-birch-west": {
+      "x": -1851.7,
+      "y": 3360.6
+    },
+    "hamlet-petalpatch-pottery-cottage": {
+      "x": -1055.6,
+      "y": 3470.4,
+      "door": [
+        -1055.6,
+        3510.4
+      ]
+    },
+    "polish-willow-under3": {
+      "x": 6780,
+      "y": 3130
+    },
+    "polish-quay-under1": {
+      "x": 4875,
+      "y": 5220
+    },
+    "p2-garden-west-bank-0": {
+      "x": -1920,
+      "y": 2225
+    },
+    "p2-garden-west-bank-7": {
+      "x": -1865,
+      "y": 3050
+    },
+    "p2-garden-willow-shore-6": {
+      "x": 7200,
+      "y": 3070
+    },
+    "p2-garden-willow-shore-13": {
+      "x": 6485,
+      "y": 3560
+    },
+    "p3-garden-willow-clearing-2": {
+      "x": 6990,
+      "y": 2850
+    },
+    "grove-sw1-1": {
+      "x": -1600,
+      "y": 4610
+    },
+    "hamlet-butterbill-north-east-sapling": {
+      "x": -430.5,
+      "y": -337.6
+    },
+    "hamlet-clovercrust-oak-bottom-right": {
+      "x": 5876.3,
+      "y": 340.2
+    },
+    "hamlet-petalpatch-oak-southwest": {
+      "x": -1806.1,
+      "y": 4247.6
+    },
+    "polish-east-oak": {
+      "x": 6590,
+      "y": 520
+    },
+    "polish-pottery-under2": {
+      "x": -1580,
+      "y": 4250
+    },
+    "hamlet-butterbill-cafe-west-chair": {
+      "x": -1290.8,
+      "y": 563.6
+    },
+    "hamlet-butterbill-cafe-west-table": {
+      "x": -1310,
+      "y": 625
+    },
+    "hamlet-butterbill-cafe-east-table": {
+      "x": -1140.7,
+      "y": 587.6
+    },
+    "hamlet-butterbill-cafe-east-front-chair": {
+      "x": -1174.2,
+      "y": 595.6
+    },
+    "hamlet-butterbill-west-lane-pot": {
+      "x": -850,
+      "y": 750
+    },
+    "hamlet-butterbill-bread-cart": {
+      "x": -1347,
+      "y": 772.5
+    },
+    "hamlet-clovercrust-cart": {
+      "x": 5113.2,
+      "y": -126.2
+    },
+    "hamlet-reedwhistle-fish-basket-a": {
+      "x": 3600,
+      "y": 5420
+    },
+    "review-hay-work": {
+      "x": 2280,
+      "y": 5320
+    },
+    "hamlet-lanternleaf-bench-west": {
+      "x": 2593.2,
+      "y": -385.3
+    },
+    "hamlet-lanternleaf-garden-shed": {
+      "x": 2222.1,
+      "y": -90.5
+    },
+    "hamlet-lanternleaf-shed-daisy-pot": {
+      "x": 2403,
+      "y": -184.3
+    },
+    "hamlet-lanternleaf-shed-pots": {
+      "x": 2428.4,
+      "y": -122.7
+    },
+    "hamlet-butterbill-petaldoor-cottage": {
+      "x": -302.5,
+      "y": 803.2,
+      "door": [
+        -302.5,
+        843.2
+      ]
+    },
+    "hamlet-petalpatch-drying-shelves": {
+      "x": -656,
+      "y": 3840
+    },
+    "hamlet-reedwhistle-cottage-fishers": {
+      "x": 4188.6,
+      "y": 4600.3,
+      "door": [
+        4188.6,
+        4640.3
+      ]
+    },
+    "hamlet-reedwhistle-net-rack": {
+      "x": 3777.4,
+      "y": 5288.6
+    },
+    "hamlet-reedwhistle-smokehouse": {
+      "x": 3534.9,
+      "y": 5283.7
+    },
+    "hamlet-clovercrust-barrel": {
+      "x": 5763.8,
+      "y": 7.8
+    },
+    "tree-2": {
+      "x": 4006.125,
+      "y": 983.6954732510288
+    },
+    "tree-3": {
+      "x": 1924.375,
+      "y": 1269.522633744856
+    },
+    "tree-8": {
+      "x": 3317.65625,
+      "y": 3033.2318244170096
+    },
+    "tree-11": {
+      "x": 2463.28125,
+      "y": 736.5075445816186
+    },
+    "tree-12": {
+      "x": 3469.03125,
+      "y": 1769.8902606310012
+    },
+    "tree-21": {
+      "x": 1878.30859375,
+      "y": 863.7600975461056
+    },
+    "flower-2": {
+      "x": 4238.75,
+      "y": 2420.8395061728397
+    },
+    "grow-tree-3": {
+      "x": 3246,
+      "y": 526
+    },
+    "grow-tree-5": {
+      "x": 4800,
+      "y": 410
+    },
+    "bigger-community-422": {
+      "x": 953.3333333333334,
+      "y": 73.55555555555556
+    },
+    "bigger-community-423": {
+      "x": 4028,
+      "y": 740
+    },
+    "bigger-community-426": {
+      "x": 6622.222222222223,
+      "y": 2758
+    },
+    "bigger-community-500": {
+      "x": 360.22222222222223,
+      "y": -505.55555555555554
+    },
+    "bigger-community-522": {
+      "x": -282.44444444444446,
+      "y": 1377.111111111111
+    },
+    "bigger-community-525": {
+      "x": 482.44444444444446,
+      "y": -194.44444444444446
+    },
+    "bigger-community-535": {
+      "x": 6700,
+      "y": 2785.777777777778
+    },
+    "bigger-community-536": {
+      "x": 6624.444444444444,
+      "y": 3601.777777777778
+    },
+    "bigger-community-537": {
+      "x": 5942.666666666667,
+      "y": 3281.3333333333335
+    },
+    "grove-s1-1": {
+      "x": 620,
+      "y": 4392
+    },
+    "grove-s2-3": {
+      "x": 632,
+      "y": 5520
+    },
+    "hamlet-butterbill-north-east-oak": {
+      "x": -524.3,
+      "y": 51.6
+    },
+    "hamlet-butterbill-far-east-oak": {
+      "x": -68.7,
+      "y": -56.2
+    },
+    "hamlet-butterbill-north-east-birch": {
+      "x": -261.6,
+      "y": 27.799999999999997
+    },
+    "hamlet-butterbill-hammock-left-tree": {
+      "x": -202.7,
+      "y": 50.900000000000006
+    },
+    "hamlet-butterbill-hammock-right-tree": {
+      "x": 9,
+      "y": 83
+    },
+    "hamlet-butterbill-flower-island": {
+      "x": -719.6,
+      "y": 754
+    },
+    "hamlet-butterbill-south-west-oak": {
+      "x": -1153.6,
+      "y": 855.8
+    },
+    "hamlet-lanternleaf-oak-southwest": {
+      "x": 1962.2,
+      "y": -31.099999999999994
+    },
+    "hamlet-lanternleaf-hammock-birch": {
+      "x": 3764.8,
+      "y": -291.4
+    },
+    "hamlet-clovercrust-oak-northwest": {
+      "x": 3977.2,
+      "y": -576
+    },
+    "hamlet-clovercrust-birch-west": {
+      "x": 3916.8,
+      "y": -365.7
+    },
+    "hamlet-clovercrust-oak-east": {
+      "x": 5910.9,
+      "y": -197
+    },
+    "hamlet-clovercrust-oak-west": {
+      "x": 4129,
+      "y": 58.5
+    },
+    "hamlet-clovercrust-oak-west-companion": {
+      "x": 4253.7,
+      "y": -34
+    },
+    "hamlet-clovercrust-gold-cottage-left-shrub": {
+      "x": 5364.6,
+      "y": 63.8
+    },
+    "hamlet-clovercrust-gold-cottage-back-shrub": {
+      "x": 5833.2,
+      "y": -16.5
+    },
+    "hamlet-petalpatch-oak-northeast": {
+      "x": -153.39999999999998,
+      "y": 3223.1
+    },
+    "hamlet-petalpatch-birch-northeast": {
+      "x": -104,
+      "y": 3278
+    },
+    "hamlet-petalpatch-oak-studio-back": {
+      "x": -294.1,
+      "y": 3245.9
+    },
+    "hamlet-petalpatch-cottage-shrub-left": {
+      "x": -1314.2,
+      "y": 3379.3
+    },
+    "hamlet-petalpatch-oak-southeast": {
+      "x": -158.60000000000002,
+      "y": 4217.9
+    },
+    "review-coast-oak": {
+      "x": 6874,
+      "y": 2182
+    },
+    "review-coast-round": {
+      "x": 7272,
+      "y": 2122
+    },
+    "review-coast-birch": {
+      "x": 7060,
+      "y": 2356
+    },
+    "review-coast-under": {
+      "x": 6868,
+      "y": 2298
+    },
+    "review-pear-west": {
+      "x": 508,
+      "y": -360
+    },
+    "review-pear-low": {
+      "x": 458,
+      "y": -280
+    },
+    "review-dune-a": {
+      "x": 4316,
+      "y": 2410
+    },
+    "review-dune-b": {
+      "x": 4392,
+      "y": 2366
+    },
+    "polish-orchard-under1": {
+      "x": 810,
+      "y": -302
+    },
+    "polish-orchard-under2": {
+      "x": 955,
+      "y": -252
+    },
+    "polish-bread-under3": {
+      "x": -195,
+      "y": 542
+    },
+    "p2-garden-northwest-0": {
+      "x": -916,
+      "y": -606
+    },
+    "p2-garden-northwest-1": {
+      "x": -1334,
+      "y": -378
+    },
+    "p2-garden-northwest-2": {
+      "x": -702,
+      "y": -546
+    },
+    "p2-garden-pearbutton-1": {
+      "x": 348,
+      "y": -510
+    },
+    "p2-garden-pearbutton-2": {
+      "x": 1406,
+      "y": -566
+    },
+    "p2-garden-pearbutton-4": {
+      "x": 408,
+      "y": -320
+    },
+    "p2-garden-quay-shoulder-3": {
+      "x": 3532,
+      "y": 5064
+    },
+    "p2-garden-quay-shoulder-4": {
+      "x": 3404,
+      "y": 5190
+    },
+    "hamlet-clovercrust-birch-east": {
+      "x": 5991.3,
+      "y": -32.2
+    },
+    "polish-farm-under2": {
+      "x": 5966,
+      "y": -482
+    },
+    "polish-farm-flower2": {
+      "x": 6041,
+      "y": -397
+    },
+    "p3-garden-willow-clearing-3": {
+      "x": 6720,
+      "y": 2828
+    },
+    "polish-orchard-flower1": {
+      "x": 735,
+      "y": -227
+    },
+    "hamlet-butterbill-east-lane-pot": {
+      "x": -595.7,
+      "y": 753.6
+    },
+    "hamlet-lanternleaf-hammock-tree": {
+      "x": 3614.5,
+      "y": -295.6
+    },
+    "p2-garden-northwest-11": {
+      "x": -475,
+      "y": -537
+    },
+    "bigger-community-552": {
+      "x": 4164.222222222223,
+      "y": 72.66666666666667
+    },
+    "bigger-community-553": {
+      "x": 4208.666666666667,
+      "y": 44.888888888888886
+    },
+    "review-pear-east": {
+      "x": 1242,
+      "y": -568
+    },
+    "polish-orchard-birch": {
+      "x": 1300,
+      "y": -866
+    },
+    "p2-garden-pearbutton-5": {
+      "x": 1482,
+      "y": -358
+    },
+    "p2-garden-pearbutton-6": {
+      "x": 1617,
+      "y": -283
+    },
+    "p2-garden-pearbutton-8": {
+      "x": 1532,
+      "y": -263
+    },
+    "p2-garden-pearbutton-9": {
+      "x": 1637,
+      "y": -213
+    },
+    "p2-garden-pearbutton-0": {
+      "x": 218,
+      "y": -500
+    },
+    "p2-garden-pearbutton-3": {
+      "x": 278,
+      "y": -385
+    },
+    "p2-garden-pearbutton-7": {
+      "x": 263,
+      "y": -300
+    },
+    "p2-garden-north-ridge-12": {
+      "x": 4044,
+      "y": -907
+    },
+    "p2-garden-north-ridge-13": {
+      "x": 4197,
+      "y": -827
+    },
+    "p2-garden-north-ridge-15": {
+      "x": 4190,
+      "y": -757
+    },
+    "p2-garden-northwest-3": {
+      "x": -1192,
+      "y": -475
+    },
+    "p2-garden-northwest-6": {
+      "x": -1204,
+      "y": -360
     }
   },
   "polishMicrotexture": true,
@@ -53543,5 +53471,6 @@
         ]
       ]
     }
-  ]
+  ],
+  "removedProps": []
 }

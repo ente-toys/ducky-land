@@ -1,3 +1,4 @@
+import {ART_TIMEOUT_MS} from '../src/rendering/pixi/art/art-recovery.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -171,7 +172,7 @@ test('theme loader owns Iceland life and its smoke lease, including failed acqui
     const failed = createIcelandLifeLifecycle(snow, manifest, {acquire:async () => {throw Error('smoke unavailable');}, release:src => released.push(src)});
     t.mock.timers.enable({apis:['setTimeout']});
     const pending=failed.ensure(null, []);await new Promise(setImmediate);
-    t.mock.timers.tick(4000);
+    t.mock.timers.tick(ART_TIMEOUT_MS);
     const degraded=await pending;assert.ok(degraded);assert.equal(failed.current,degraded);failed.destroy();
   } finally {art?.destroy(); globalThis.fetch = fetchBefore;}
 });

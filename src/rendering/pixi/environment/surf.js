@@ -24,7 +24,7 @@ export const surfRuns = (SHORE) => SHORE.flatMap((ring, r) => {
 });
 const HOME_RUNS = surfRuns(SHORE);
 
-export function createBeachSurf(layer, rings = null, calm = []) {
+export function createBeachSurf(layer, rings = null, calm = [], {softRipples = false} = {}) {
   const runs = rings ? surfRuns(rings) : HOME_RUNS;
   const waves = [0, 1/3, 2/3].map(phase => {
     const crest = new Graphics({label:'Beach surf'});
@@ -72,7 +72,7 @@ export function createBeachSurf(layer, rings = null, calm = []) {
           const fade = Math.min(1, age * 6, (1 - age) * 8);
           if (fade <= .01) continue;
           trace(crest, run, clock, cycle, false);
-          crest.stroke({color:PALETTE.cream, width:20 + 14 * age, alpha:.14 * fade, cap:'butt', join:'round'});
+          crest.stroke({color:PALETTE.cream, width:softRipples ? 5 + 3 * age : 20 + 14 * age, alpha:(softRipples ? .10 : .14) * fade, cap:softRipples ? 'round' : 'butt', join:'round'});
           const foam = fade * Math.min(1, Math.max(0, (age - .55) * 8));
           if (foam <= .01) continue;
           trace(crest, run, clock, cycle, true);

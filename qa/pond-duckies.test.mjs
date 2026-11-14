@@ -1,3 +1,4 @@
+import {readyTexture} from './ready-texture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -82,7 +83,7 @@ test('every keeper and its archived ripple art is clean flat SVG',()=>{
 
 test('runtime owns every assigned Ducky, pauses hidden layers and releases all water FX and leases on leave',async()=>{
  const leased=[],released=[];
- const layer=await loadPondDuckies('home',{acquire:async src=>{leased.push(src);return Texture.EMPTY;},release:src=>released.push(src)});
+ const layer=await loadPondDuckies('home',{acquire:async src=>{leased.push(src);return readyTexture();},release:src=>released.push(src)});
  assert.equal(layer.entries.length,PONDS.filter(p=>p.island==='home').reduce((n,p)=>n+p.duckies.length,0));assert(leased.every(s=>s.endsWith('-duck.svg')));
  assert(!leased.some(s=>s.includes('-ripple.svg')),'traced water sprites are never loaded');
  for(const p of PONDS.filter(p=>p.island==='home'))assert.equal(layer.entries.filter(e=>e.pond===p).length,p.duckies.length);
@@ -103,14 +104,15 @@ test('runtime owns every assigned Ducky, pauses hidden layers and releases all w
  assert(engine.includes('this.scene.getChildIndex(this.decks)'),'pond layer is below bridge decks');
 });
 
-test('a failed sprite acquisition releases successful and failed leases',async()=>{
+test('a transient failed sprite acquisition recovers and releases every lease',async()=>{
  const leased=[],released=[];
- await assert.rejects(loadPondDuckies('pink',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return Texture.EMPTY;},release:src=>released.push(src)}),/fixture/);
+ const layer=await loadPondDuckies('pink',{acquire:async src=>{leased.push(src);if(leased.length===2)throw Error('fixture');return readyTexture();},release:src=>released.push(src)});
+ assert(layer.entries.length>0);layer.destroy();
  assert.deepEqual(leased.sort(),released.sort());
 });
 
 const visible=()=>true;
-const load=map=>loadPondDuckies(map,{tilt:.6,acquire:async()=>Texture.EMPTY,release:()=>{}});
+const load=map=>loadPondDuckies(map,{tilt:.6,acquire:async()=>readyTexture(),release:()=>{}});
 function tick(layer,from,to,step=.05){
  for(let time=from;time<to;time+=step)layer.update(time,false,visible);
  layer.update(to,false,visible);

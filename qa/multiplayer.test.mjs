@@ -606,11 +606,16 @@ test('two GitHub sessions and a guest share server-owned movement, emotes and pr
     a.send({type:'destination',x:world.origin.x-10000,y:world.origin.y-10000});
     await delay(150);
     assert.deepEqual(guest.duck(id),spawn);
-    a.send({type:'input',x:1,y:0});
-    await eventually(() => guest.duck(id)?.x > spawn.x+25);
+    // The real standing box can close one side of spawn. Exercise manual
+    // movement along a clear lane rather than assuming the east grass fits.
+    const direction=[[1,0],[-1,0],[0,1],[0,-1]].find(([x,y])=>nav.clearLine([spawn.x,spawn.y],[spawn.x+x*60,spawn.y+y*60]));
+    assert.ok(direction,'spawn has a clear manual walking lane');
+    const progress=duck=>(duck.x-spawn.x)*direction[0]+(duck.y-spawn.y)*direction[1];
+    a.send({type:'input',x:direction[0],y:direction[1]});
+    await eventually(() => progress(guest.duck(id)) > 25);
     await eventually(() => a.duck()?.action === 0);
     const stopped = guest.duck(id);
-    assert.ok(stopped.x-spawn.x <= 100,'stale input must stop at the allowed speed');
+    assert.ok(progress(stopped) <= 100,'stale input must stop at the allowed speed');
     assert.ok(nav.walkable(stopped.x,stopped.y));
 
     const [tx,ty] = nav.nearest(spawn.x,spawn.y+150);
@@ -1003,7 +1008,9 @@ test('bigger Home accepts walking destinations west of the original origin and r
   await request('/test/expire-resume');
   const login=await signIn(9391),a=await socket(login.session);
   try {
-    const start={x:-544,y:2033},target={x:-544,y:2100};
+    // The restored grove occupies the former fixture. The adjacent west lawn
+    // retains the same negative-coordinate walk and saved-position coverage.
+    const start={x:-600,y:2033},target={x:-600,y:2100};
     assert.ok(mapOf('home').nav().clearLine([start.x,start.y],[target.x,target.y]));
     await request('/test/travel',{method:'POST',body:JSON.stringify({id:a.welcome.id,pose:{...start,path:[],mode:'walking'}})});
     await eventually(()=>a.duck()?.x===start.x);

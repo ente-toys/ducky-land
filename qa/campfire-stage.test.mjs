@@ -1,3 +1,4 @@
+import {readyTexture} from './ready-texture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -83,7 +84,7 @@ test('Campfire static centre view loads and draws the stage and cabinets',async 
  const previousFetch=globalThis.fetch;t.after(()=>globalThis.fetch=previousFetch);
  globalThis.fetch=async url=>({ok:true,json:async()=>read('public'+url)});
  const textures=new Map(),released=[],objects=new Container();
- const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release(){}});
+ const groundPool=createGroundPool({acquire:async()=>readyTexture(),release(){}});
  let loaded;
  try{
   loaded=await loadThemeArt({...map,art:'/pixi-art/themes/community/art.json'},{groundPool,
@@ -110,11 +111,11 @@ test('Campfire static centre view loads and draws the stage and cabinets',async 
 
 test('Campfire static art preserves the existing animated hearth and releases its artwork',async()=>{
  const fetch=globalThis.fetch,objects=new Container();let acquired=0,released=0;
- const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
+ const groundPool=createGroundPool({acquire:async()=>readyTexture(),release:()=>{}});
  globalThis.fetch=async url=>({ok:true,json:async()=>read('public'+url)});
  let loaded;
  try{
-  loaded=await loadThemeArt({...map,art:'/pixi-art/themes/community/art.json'},{groundPool,acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
+  loaded=await loadThemeArt({...map,art:'/pixi-art/themes/community/art.json'},{groundPool,acquire:async()=>{acquired++;return readyTexture();},release:()=>released++});
   await attachCentreMotion(loaded, objects);
   const flame=loaded.props.find(p=>p.id==='campfire-flame').sprite;
   const rest=[flame.x,flame.y,flame.scale.x,flame.scale.y];

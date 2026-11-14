@@ -9,7 +9,10 @@ import {MUSEUM_DOOR} from '../src/gameplay/player-motion.js';
 
 test('bigger Home retains original landmark and save coordinates, every community connects to the plaza',()=>{
   const m=HOME_MAP,n=m.nav();
-  assert.deepEqual(m.spawn,{x:original.zones.plaza.spawn[0],y:original.zones.plaza.spawn[1]});
+  assert.deepEqual(m.spawn,{x:2820,y:2600},'spawn clears the traced plaza bench');
+  assert.equal(m.spawn.x,original.zones.plaza.spawn[0]);
+  assert.equal(m.spawn.y,original.zones.plaza.spawn[1]-40,'only the spawn moves, scenery and saved coordinates stay fixed');
+  assert.ok(n.walkable(m.spawn.x,m.spawn.y));
   assert.deepEqual(m.world.props,original.props);
   assert.ok(n.walkable(MUSEUM_DOOR.out.x,MUSEUM_DOOR.out.y));
   for(const {id,point} of expansion.places){
@@ -19,8 +22,9 @@ test('bigger Home retains original landmark and save coordinates, every communit
     let prev=[m.spawn.x,m.spawn.y];for(const p of route){assert.ok(n.clearLine(prev,p),id+' has no blocked route segment');prev=p;}
   }
   const west=[-544,2033],north=[2900,-77];
-  for(const point of [west,north])assert.ok(n.walkable(...point));
-  assert.deepEqual(n.route(...west,...north).at(-1),north);
+  const approaches=[west,north].map(point=>n.nearest(...point,180));
+  for(const point of approaches)assert.ok(point,'nearby saved-coordinate approach survives restored scenery');
+  assert.deepEqual(n.route(...approaches[0],...approaches[1]).at(-1),approaches[1]);
 });
 
 test('bigger Home has ten afloat moorings, walkable boarding points and usable west-coast docking',()=>{

@@ -9,9 +9,9 @@ export const SLEEP_SPOTS = {
   hammock: [[900, 1640, false], [3920, 1120, true]],
   rock: [[2150, 1130, false], [1200, 1420, true], [3950, 3260, false]],
   leaf: [[1820, 1500, false], [4790, 1420, true], [1480, 3110, false], [3560, 2480, true]],
-  book: [[2660, 1290, false], [1380, 1850, true], [4320, 3230, false], [2230, 2400, true]],
+  book: [[2560, 1195, false], [1375, 1850, true], [4320, 3230, false], [2230, 2400, true]],
   chair: [[5150, 2875, true], [4575, 2225, true]],
-  wing: [[700, 2250, true], [3080, 3260, false], [3350, 1375, true], [4980, 1850, false], [2300, 2750, true]],
+  wing: [[700, 2250, true], [3080, 3260, false], [3385, 1375, true], [4980, 1850, false], [2300, 2750, true]],
   box: [[780, 2600, false], [2000, 3150, true], [3350, 850, false], [4375, 2000, true]],
 };
 export const SLEEP_COUNTS = Object.fromEntries(Object.entries(SLEEP_SPOTS).map(([pose, list]) => [pose, list.length]));
@@ -37,7 +37,11 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
   const out = [], bad = [];
   const why = (x, y, pose, r, tree) => {
     if (tree) return null;
-    if (!walkable(x, y) || !walkable(x - r * .8, y) || !walkable(x + r * .8, y)) return 'not ground';
+    // The Home pose radius includes ground furniture (a leaf, box, etc.).
+    // Test support beneath the Ducky with the same 22-unit body clearance as
+    // walking, rather than treating that entire illustration as a standing body.
+    const support = home ? Math.min(22, r * .8) : r * .8;
+    if (!walkable(x, y) || !walkable(x - support, y) || !walkable(x + support, y)) return 'not ground';
     if (islet(x, y) || deck(x, y) || steps(x, y)) return 'deck/bridge/stair';
     if (onPath(x, y) < 60 + r * .35) return 'path';
     const zone = avoid.find(a => inEllipse(x, y, a.x, a.y, a.rx, a.ry));
@@ -48,9 +52,9 @@ export function resolveSleepSpots(world, props, walkable, sizes = sleepHalfWidth
     return hit ? `prop ${hit.id}` : null;
   };
   for (const [pose, list] of Object.entries(spots ?? {})) for (const spot of Array.isArray(list) ? list : []) {
-    const r = sizes[pose], tree = pose === 'nod' && props.find(p => p.id === spot?.[0]);
+    const r = sizes[pose], tree = pose === 'nod' && !spot?.[3]?.ground && props.find(p => p.id === spot?.[0]);
     const [x, y, flip] = tree ? [tree.x + (spot[1] ?? 0), tree.y + 14, spot[2]] : Array.isArray(spot) ? spot : [NaN, NaN];
-    let reason = !(pose in SLEEP_COUNTS) ? 'unknown pose' : pose === 'nod' && !tree ? `no tree ${spot?.[0]}` : !Number.isFinite(x) || !Number.isFinite(y) ? 'bad point' : why(x, y, pose, r, tree);
+    let reason = !(pose in SLEEP_COUNTS) ? 'unknown pose' : pose === 'nod' && !tree && !spot?.[3]?.ground ? `no tree ${spot?.[0]}` : !Number.isFinite(x) || !Number.isFinite(y) ? 'bad point' : why(x, y, pose, r, tree);
     const seat = props.find(p=>p.id===spot?.[3]?.seat&&p.occupiedBySleeper&&p.finalRole==='bench'&&p.contact===false)?.id;
     const near = !reason && [...occupied, ...out].find(s => Math.hypot(s.x - x, (s.y - y) * 1.3) < Math.max(300, s.r + r + 100) || (s.pose === pose && !(seat && s.seat && seat !== s.seat) && Math.hypot(s.x - x, s.y - y) < (pose === 'chair' ? 850 : 900)));
     reason ||= near && `near ${near.pose}`;
@@ -71,3 +75,9 @@ export function sleepShapeProblems(spots, total = SLEEP_TOTAL) {
   return out;
 }
 export const sleeperFootprint = bed => ({x: bed.x, y: bed.y - 6, rx: bed.r * .9, ry: Math.min(34, Math.max(22, bed.r * .42)), sleeper: true});
+
+// Home residents block their visible body, including the space above their feet.
+export const homeSleeperFootprint = bed => {
+  const r = Math.min(48, Math.max(34, bed.r * .6));
+  return {x: bed.x, y: bed.y - 32, rx: r, ry: r, sleeper: true};
+};

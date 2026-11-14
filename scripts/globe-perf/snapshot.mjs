@@ -9,7 +9,7 @@ const bundle=await build({entryPoints:[root+'/src/world/home/placements.js'],bun
 const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
 export function homeLayers(){
  const world=P.trimWorld(mapOf('home').world),props=P.createPlacements(world,geometry({...world,obstacles:[]}).walkable);
- return {tiles:P.HOME_TILES,flats:[{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...P.homeDecals(props)],decks:[...P.HOME_DECKS,...P.JETTIES,{src:'/pixi-art/library-steps.svg',x:2780,y:1370,width:280,height:260}],props};
+ return {tiles:P.HOME_TILES,flats:[{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...P.homeDecals(props)],decks:[...P.HOME_DECKS,...P.JETTIES],props};
 }
 export async function snapshot(island,{groundOnly=false}={}){
   const m=mapOf(island.id),K=1024/Math.max(m.width,m.height),W=Math.round(m.width*K),H=Math.round(m.height*K),layers=[];
@@ -30,7 +30,7 @@ export async function snapshot(island,{groundOnly=false}={}){
    for(const p of P.HOME_TILES)await add(p,'ground');
    if(!groundOnly){
    for(const p of [{src:'/pixi-art/lake-race.svg',x:3400,y:1050,width:1500,height:950,topLeft:true},{src:'/pixi-art/decals/plaza-paving.svg',x:2330,y:1980,width:980,height:780,topLeft:true},...P.homeDecals(props)])await add(p,'flat');
-   for(const p of [...P.HOME_DECKS,...P.JETTIES,{src:'/pixi-art/library-steps.svg',x:2780,y:1370,width:280,height:260}])await add(p,'deck');
+   for(const p of [...P.HOME_DECKS,...P.JETTIES])await add(p,'deck');
    for(const p of props.sort((a,b)=>a.y-b.y))await add(p,'prop');
    }
   }else{
@@ -51,6 +51,5 @@ export function homeArtwork(){
  ...P.homeDecals(props).map(p=>({...p,resolution:2.5})),
  {src:'/pixi-art/lake-race.svg',width:1500,height:950,resolution:1},
  {src:'/pixi-art/decals/plaza-paving.svg',width:980,height:780,resolution:1},
- {src:'/pixi-art/library-steps.svg',width:280,height:260,resolution:1.5},
  ...JSON.parse(readFileSync('src/world/home/art-manifest.json')).floating];
 }

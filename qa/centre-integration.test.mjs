@@ -1,3 +1,4 @@
+import {readyTexture} from './ready-texture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -20,8 +21,8 @@ test('all six theme manifests load, release textures and resolve their authored 
   assert.equal(readyThemes().length,6);assert.equal(THEME_OF.size,6);
   for(const theme of readyThemes()) {
    let acquired=0,released=0;
-   const groundPool=createGroundPool({acquire:async()=>Texture.EMPTY,release:()=>{}});
-   const art=await loadThemeArt(mapFor(theme),{groundPool,acquire:async()=>{acquired++;return Texture.EMPTY;},release:()=>released++});
+   const groundPool=createGroundPool({acquire:async()=>readyTexture(),release:()=>{}});
+   const art=await loadThemeArt(mapFor(theme),{groundPool,acquire:async()=>{acquired++;return readyTexture();},release:()=>released++});
    const records=art.props.filter(p=>p.centrePiece?.animate);
    assert.equal(records.length,animated[theme]??0,theme+' animated layers');
    assert.ok(art.props.every(p=>!p.centrePiece||!p.wind),theme+' centre layers have no wind');

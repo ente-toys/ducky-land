@@ -3,7 +3,7 @@
   "hammock": [[3720, -190, true], [300, 300, false]],
   "rock": [[420, 2480, false]],
   "leaf": [[450, 1700, true], [4150, 3480, false]],
-  "book": [[3860, -930, false]],
+  "book": [[3860, -935, false]],
   "wing": [[330, 1400, false], [2720, 300, true]],
   "box": [[700, 1000, false], [4950, 780, true]]
 }
