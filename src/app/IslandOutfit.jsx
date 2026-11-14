@@ -1,14 +1,9 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Application} from 'pixi.js';
-import {createDuck, getDuckWardrobe, preloadOutfitFrames} from '../rendering/pixi/duck.js';
+import {createDuck, getDuckWardrobe} from '../rendering/pixi/duck.js';
 import {OUTFIT_OPTIONS, randomOutfit, sameOutfit} from '../gameplay/outfits.js';
 
 const outfitRows = {cap:'Hats', shades:'Glasses', shoes:'Shoes'};
-// The preview duck only ever faces you, so it only needs the front picture of each item.
-const PREVIEW_ANGLES = ['0'];
-const offered = wardrobe => wardrobe.filter(item => OUTFIT_OPTIONS[item.slot]?.includes(item.index));
-// The items an outfit is wearing, so the full set of pictures can be fetched for the duck in the world.
-const wornItems = (wardrobe, outfit) => wardrobe.filter(item => item.slot !== 'acc' && outfit[item.slot] === item.index);
 
 // The editor's item grid: one slot at a time (the tabs pick it), round tiles in a 4-up grid.
 export function OutfitGrid({wardrobe, slot, outfit, disabled, onChange}) {
@@ -23,7 +18,7 @@ export function OutfitGrid({wardrobe, slot, outfit, disabled, onChange}) {
   </div>;
 }
 
-function OutfitPreview({outfit, onBusy, onError, onShown}) {
+function OutfitPreview({outfit, onBusy, onError}) {
   const host = useRef(null);
   const rig = useRef(null);
   const initial = useRef(outfit);
@@ -41,7 +36,7 @@ function OutfitPreview({outfit, onBusy, onError, onShown}) {
         app.canvas.setAttribute('aria-hidden','true');
         Object.assign(app.canvas.style,{width:'100%',height:'100%'});
         host.current.appendChild(app.canvas);
-        duck = await createDuck({outfit:initial.current, angles:PREVIEW_ANGLES});
+        duck = await createDuck({outfit:initial.current});
         if (disposed) {duck.dispose(); return;}
         duck.root.scale.set(.95);
         duck.root.position.set(180,320);
@@ -71,14 +66,13 @@ function OutfitPreview({outfit, onBusy, onError, onShown}) {
   useEffect(() => {
     if (!rig.current) return;
     let active = true;
+    onBusy(true);
     onError('');
-    // No busy state here: a cached outfit swaps in during this call, an uncached one needs only its front
-    // pictures, and a newer pick simply supersedes this one (setOutfit drops stale requests)
-    rig.current.setOutfit(outfit).then(() => {if (active) onShown?.(outfit);}).catch(() => {
+    rig.current.setOutfit(outfit).catch(() => {
       if (active) onError('This outfit could not load. Randomize to try another.');
-    });
+    }).finally(() => {if (active) onBusy(false);});
     return () => {active = false;};
-  }, [outfit,onError,onShown]);
+  }, [outfit,onBusy,onError]);
 
   return <div className="pixi-outfit-preview" ref={host} role="img" aria-label="Your duck wearing the preview outfit"/>;
 }
@@ -94,7 +88,6 @@ export function OutfitEditor({initial, island, offline, onClose, initialTab = 'c
   const [wardrobe,setWardrobe] = useState(null);
   const [wardrobeError,setWardrobeError] = useState('');
   const [tab,setTab] = useState(initialTab);
-  const [settled,setSettled] = useState(null);
   const changed = !sameOutfit(initial,draft);
 
   useEffect(() => {
@@ -111,36 +104,11 @@ export function OutfitEditor({initial, island, offline, onClose, initialTab = 'c
     return () => {controller.abort(); element.close();};
   }, [island]);
 
-  // Warm every item's front picture (about 15 MB of textures, once), the open tab's first, so a click or
-  // Randomize shows on the next frame instead of waiting on a fetch and decode per click. Starts after the preview
-  // duck is up, so it never queues ahead of the duck's own pictures; switching tabs moves that tab to the front.
-  const warmed = useRef(false);
-  useEffect(() => {
-    if (busy || !wardrobe) return;
-    const signal = lifetime.current.signal;
-    const all = offered(wardrobe).filter(item => item.slot !== 'acc');
-    const first = preloadOutfitFrames(all.filter(item => item.slot === tab), {angles:PREVIEW_ANGLES, urgent:true});
-    if (warmed.current) {first.catch(() => {}); return;}
-    warmed.current = true;
-    first.then(() => {if (!signal.aborted) return preloadOutfitFrames(all, {angles:PREVIEW_ANGLES, urgent:true});}).catch(() => {});
-  }, [busy, wardrobe, tab]);
-
-  // Once a pick has settled on screen, fetch the rest of its pictures (the other eight angles) for the duck
-  // in the world, so Done puts it on with no wait. Debounced, so browsing does not pull every item's set.
-  const shown = useCallback(outfit => setSettled(outfit), []);
-  useEffect(() => {
-    if (!wardrobe || !settled) return;
-    const timer = setTimeout(() => {preloadOutfitFrames(wornItems(wardrobe, settled)).catch(() => {});}, 400);
-    return () => clearTimeout(timer);
-  }, [wardrobe, settled]);
-
   async function save() {
     if (saving || busy || previewError || !changed) return;
     const signal = lifetime.current.signal;
     setSaving(true);
     setSaveError('');
-    // overlap the save with fetching the other angles, in case Done came before the debounced prefetch
-    if (wardrobe) preloadOutfitFrames(wornItems(wardrobe, draft)).catch(() => {});
     try {
       if (offline) {
         await island.current.setPlayerOutfit(draft);
@@ -173,7 +141,7 @@ export function OutfitEditor({initial, island, offline, onClose, initialTab = 'c
         {/* the stand lives in the same box as the duck, so his feet always land on it */}
         <div className="pixi-outfit-figure">
           <span className="pixi-outfit-stand" aria-hidden="true"/>
-          <OutfitPreview outfit={draft} onBusy={setBusy} onError={setPreviewError} onShown={shown}/>
+          <OutfitPreview outfit={draft} onBusy={setBusy} onError={setPreviewError}/>
         </div>
         {busy && <p className="pixi-outfit-status sr-only" role="status">Loading outfit</p>}
       </div>
