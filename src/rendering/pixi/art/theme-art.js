@@ -1,7 +1,6 @@
-import {loadPrerenderManifest} from './whole-svg-loader.js';
 import {acquireArt, recoverArt, artPlaceholder} from './art-recovery.js';
 import {mapArtInFrames} from './island-preparation.js';
-import {planIslandArt,planIslandSheets} from './island-budget.js';
+import {planIslandArt} from './island-budget.js';
 import largeArtTiles from './large-art-tiles.json' with {type:'json'};
 import {artResolution} from '../../shared/art-resolution.js';
 import {propZ} from '../../shared/flat-props.js';
@@ -9,7 +8,6 @@ import {Container, Graphics, Sprite} from 'pixi.js';
 import {rasterTiles,RASTER_GROUND_TILE_SIZE,RASTER_ART_BUDGET_BYTES,RASTER_ART_UTILIZATION} from './theme-raster.js';
 import {createRasterLoader} from './theme-art-stream.js';
 import {createIcelandRasterLoader,icelandPieceTile,icelandWarmupTiles} from './iceland-art-stream.js';
-import {groundMeshEntry,createMeshGroundStream} from './ground-mesh.js';
 import {createGroundPool} from './ground-stream.js';
 
 import {loadPondDuckies} from '../environment/pond-duckies.js';
@@ -19,7 +17,7 @@ import {createIcelandLifeLifecycle} from '../environment/iceland-life.js';
 const WIND = /tree|reeds|cattails|flower|leaf|bush|flag|bunting|banner|umbrella|sunflower/i;
 const NO_SHADOW = /bunting|banner|flag|bridge|blanket|lily|shell|reeds|rug|path|paving/i;
 
-async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader, prepare=false, dpr=2, defaultZoom=.65, cancelled=()=>false}) {
+async function buildThemeArt(map, {acquire, release, groundPool, tilt=1, rasterLoaderFactory=createRasterLoader,icelandRasterLoaderFactory=createIcelandRasterLoader, prepare=false, dpr=2, defaultZoom=.65, cancelled=()=>false}) {
   const [manifest, centre] = await Promise.all([
     recoverArt(async()=>{
       const response=await fetch(map.art);
@@ -36,8 +34,7 @@ async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=
   const base = map.art.slice(0, map.art.lastIndexOf('/') + 1);
   const url = src => /^(\/|https?:|data:)/.test(src) ? src : base + src;
   const props = (manifest.props ?? []).filter(p => !(map.id === 'snow' && manifest.icelandFinal && p.finalKind === 'smoke'));
-  const allTiles=manifest.ground?.tiles??[],meshEntry=await groundMeshEntry(map.art.includes('/bog-arena/')?'bog-arena':map.id);
-  const tiles = meshEntry?allTiles.filter(t=>!t.src.endsWith('.svg')):allTiles, decks = manifest.decks ?? [], flats = manifest.flats ?? [];
+  const tiles = manifest.ground?.tiles ?? [], decks = manifest.decks ?? [], flats = manifest.flats ?? [];
   const floating = manifest.floating ?? [];
   const iceland=!prepare&&map.id==='snow'&&Boolean(manifest.icelandFinal);
   const crisp=!prepare&&manifest.raster?.enabled===true;
@@ -53,8 +50,8 @@ async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=
   entries.forEach((entry, i) => resolutions.set(sources[i], Math.max(resolutions.get(sources[i]) ?? 0, artResolution({...entry,src:sources[i]},entry.resolution))));
   if(prepare)for(const p of tiles){const src=url(p.src);resolutions.set(src,Math.max(resolutions.get(src)??0,p.resolution??1));}
   if (manifest.kites?.length) for (const src of KITE_ASSETS) resolutions.set(src, 2);
-  let artPlan=prepare?planIslandArt([...entries.map(e=>({...e,src:url(e.src)})),...tiles.map(e=>({...e,src:url(e.src),mipmaps:false})),...(manifest.kites?.length?KITE_ASSETS.map(src=>({src,resolution:2})):[])],{dpr,defaultZoom}):null;
-  if(artPlan){artPlan=planIslandSheets(artPlan,await loadPrerenderManifest([...artPlan.resolutions.keys()]));resolutions=artPlan.resolutions;}
+  const artPlan=prepare?planIslandArt([...entries.map(e=>({...e,src:url(e.src)})),...tiles.map(e=>({...e,src:url(e.src),mipmaps:false})),...(manifest.kites?.length?KITE_ASSETS.map(src=>({src,resolution:2})):[])],{dpr,defaultZoom}):null;
+  if(artPlan)resolutions=artPlan.resolutions;
   const uniqueSources = [...new Set([...sources,...(manifest.kites?.length?KITE_ASSETS:[])])];
   const loaded=new Array(uniqueSources.length),leased=new Set();let cursor=0;
   await Promise.all(Array.from({length:4},async()=>{
@@ -74,14 +71,8 @@ async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=
   const ground = new Container({label: `Theme ${map.id} - ground`}), deckLayer = new Container({label: `Theme ${map.id} - decks`});
   const shadows = new Container({label: `Theme ${map.id} - shadows`});
   let k = 0;
-  // Bog's authored PNG terrain is below its newer SVG terrain. Keep both
-  // below decals while preserving that paint order on mesh and fallback paths.
-  const rasterLayer=meshEntry&&tiles.length?new Container({label:`${map.id} raster ground base`}):ground;
-  if(rasterLayer!==ground)ground.addChild(rasterLayer);
-  const tileGround=(pieces,layer=rasterLayer)=>crisp?groundPool.create(pieces.flatMap(p=>rasterTiles(p,url(p.src),undefined,RASTER_GROUND_TILE_SIZE).map(({localX,localY,...t})=>t)),layer,undefined,raster):groundPool.create(iceland?pieces.map(t=>({...t,priority:-1})):pieces,layer,url);
-  const rasterGround=tiles.length?tileGround(tiles):null;
-  const groundStream=meshEntry?createMeshGroundStream(map.id,ground,{entry:meshEntry,renderer,index:rasterLayer===ground?0:1,fallback:layer=>tileGround(allTiles.filter(t=>t.src.endsWith('.svg')),layer)}):rasterGround;
-  const groundStreams=[...new Set([rasterGround,groundStream].filter(Boolean))];
+  const groundStream=crisp?groundPool.create(tiles.flatMap(p=>rasterTiles(p,url(p.src),undefined,RASTER_GROUND_TILE_SIZE).map(({localX,localY,...t})=>t)),
+  ground,undefined,raster):groundPool.create(iceland?tiles.map(t=>({...t,priority:-1})):tiles,ground,url),groundStreams=[groundStream];
   const icelandSprite=(p,layer,anchor)=>{
     const node=new Container({label:p.id});node.position.set(p.x,p.y);layer?.addChild(node);
     groundStreams.push(rasterPool.create([icelandPieceTile(p,url(p.src),anchor)],node,undefined,raster));
@@ -112,7 +103,7 @@ async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=
   };
   // Prepared scenes reveal all at once. Their loading view is sea + Duck, so
   // allocating a low-density whole-island underlay only wastes texture memory.
-  if((!prepare&&!meshEntry)||manifest.degraded){
+  if(!prepare||manifest.degraded){
     let terrain;
     terrain=await acquireArt(acquire,release,`/pixi-art/globe/${map.id}-ground.svg`,1);
     const fallback=new Sprite(terrain);fallback.position.set(map.origin.x,map.origin.y);fallback.width=map.width;fallback.height=map.height;ground.addChildAt(fallback,0);
@@ -190,7 +181,7 @@ async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=
       groundStreams.forEach(s=>s.destroy());
       rasterPool?.destroy();
       raster?.destroy();
-      if((!prepare&&!meshEntry)||manifest.degraded)release(`/pixi-art/globe/${map.id}-ground.svg`);
+      if(!prepare||manifest.degraded)release(`/pixi-art/globe/${map.id}-ground.svg`);
       for (const c of groups) if(!c.destroyed)c.destroy({children: true});
       for (const p of standing) p.sprite.destroy();
       uniqueSources.forEach(src => release(src));
@@ -201,7 +192,7 @@ async function buildThemeArt(map, {acquire, release, groundPool, renderer, tilt=
     result.pondDuckies=await loadPondDuckies(map.id,{acquire,release,tilt});
     groups.push(result.pondDuckies.root);
   } catch(error) {console.warn(`theme ${map.id}: optional life unavailable`,error);}
-  if(prepare||meshEntry) {
+  if(prepare) {
     try {await Promise.all(groundStreams.map(stream=>stream.prepare({zoom:1.8,dpr,resolutions})));}
     catch(error){console.warn(`theme ${map.id}: ground preparation degraded`,error);}
   }
