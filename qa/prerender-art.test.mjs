@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {DOMAdapter,Loader} from 'pixi.js';
 import {createCanvas,Image} from '@napi-rs/canvas';
 import {readFile} from 'node:fs/promises';
-import {prerenderSources,collectPlacedArt} from '../scripts/vite-prerender-art.mjs';
+import {prerenderSources,collectPlacedArt,addMainDetailTiers,buildIslandIndex} from '../scripts/vite-prerender-art.mjs';
 import {mapFor} from '../src/world/island-maps.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import {createWholeSVGLoader,selectPrerenderTier,loadedSVGTextures} from '../src/rendering/pixi/art/whole-svg-loader.js';
@@ -20,10 +20,11 @@ test('build collects the active map art paths, including Bog arena, and every pr
   for(const id of new Set(WORLD_ISLANDS.map(i=>i.theme??'home'))){
     const map=mapFor(id);if(!map.art)continue;
     const art=JSON.parse(await readFile('public'+map.art,'utf8')),base=map.art.slice(0,map.art.lastIndexOf('/')+1);
-    for(const piece of [...art.ground.tiles,...art.decks??[],...art.flats??[],...art.props??[],...art.floating??[]]){
+    for(const piece of [...art.decks??[],...art.flats??[],...art.props??[],...art.floating??[]]){
       assert(sources.has(piece.src.startsWith('/')?piece.src:base+piece.src),`${id}: missing ${piece.src}`);
     }
   }
+  assert(![...sources].some(src=>/\/ground-[^/]+\.svg$/.test(src)), 'Ground SVG tiles use the mesh build');
   assert([...sources].some(src=>src.startsWith('/pixi-art/themes/bog-arena/')));
   assert(sources.has('/pixi-duck/float/parts/f4_ring-duck.svg'));
 });
@@ -38,16 +39,16 @@ test('manifest selects the smallest sufficient tier and never substitutes unknow
   assert.equal(selectPrerenderTier({},'/fixture.svg'),null);
 });
 
-test('build tiers cover 1x/2x preparation density, native caps, repeated placements and ground bleed',()=>{
+test('build tiers preserve uniform screen density, repeated placements and ground bleed',()=>{
   const plan=prerenderSources([
     {src:'/fixture.svg',width:5,height:2.5,resolution:2},
     {src:'/fixture.svg',width:10,height:5,scale:2,resolution:1.5},
     {src:'/ground.svg',width:40,height:20,resolution:1,mipmaps:false},
     {src:'/legacy.webp',width:20,height:10},
   ],{'/fixture.svg':[20,10],'/ground.svg':[40,20]});
-  assert.deepEqual(plan.get('/fixture.svg').scales,[1.5,1.5]);
+  assert.deepEqual(plan.get('/fixture.svg').scales,[.25,.5,.75,1,1.5,2,.3,.4]);
   assert.equal(plan.get('/ground.svg').padding,2);
-  assert.deepEqual(plan.get('/ground.svg').scales,[1,1]);
+  assert.deepEqual(plan.get('/ground.svg').scales,[.25,.5,.75,1,1.5,2,.3,.4]);
   assert.equal(plan.size,2);
   assert.throws(()=>prerenderSources([{src:'/new.svg'}],{}),/native dimensions/);
 });
@@ -115,4 +116,26 @@ test('dev, new art, unavailable bitmaps, and broken generated images retain the 
     if(pad)assert.deepEqual([...canvas.getContext('2d').getImageData(0,0,1,1).data],[203,113,57,255]);
     loader.unload(texture);
   }
+});
+
+
+test('extra detail tiers cover main at every DPR without changing landing densities',async()=>{
+ const entries=[{src:'/fixture.svg',theme:'home',width:10,height:10,resolution:2}],sizes={'/fixture.svg':[10,10]};
+ const sources=prerenderSources(entries,sizes),landing=[...sources.get('/fixture.svg').scales];
+ addMainDetailTiers(entries,sizes,sources);
+ const scales=sources.get('/fixture.svg').scales;
+ assert.deepEqual(scales.slice(0,landing.length),landing);
+ const {planIslandArt}=await import('../scripts/ground-mesh/main-art-plan.mjs');
+ for(const dpr of [1,2,3])for(const defaultZoom of [.26,.9,1.8])
+  assert(scales.at(-1)>=planIslandArt(entries,{dpr,defaultZoom,sourceSizes:sizes}).resolutions.get('/fixture.svg'));
+});
+
+
+test('unsupported landing oversampling cannot masquerade as a main-equivalent complete set',()=>{
+ const src='/fixture.svg',entries=[{src,theme:'home',width:10,height:10}];
+ const manifest={[src]:{w:10,h:10,padding:0,tiers:[1,2].map((scale,i)=>({scale,url:`/${i}.webp`,sheet:`/${i}.webp`,group:`home/props/${i}`,sheetWidth:32,sheetHeight:32}))}};
+ const index=buildIslandIndex(entries,manifest,'/main.js');
+ const unsupported=index.islands.home[3].views.find(v=>v.zoom===1.8);
+ assert(unsupported.limits.every(limit=>limit===0),'every viewport rejects an incomplete landing set');
+ assert(unsupported.detail.length,'detail still uses the available top tier instead of dropping art');
 });

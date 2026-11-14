@@ -1,3 +1,4 @@
+import {loadPrerenderManifest} from './art/whole-svg-loader.js';
 import {buildBoatAtlas} from './boat-atlas.js';
 import {uploadIsland} from './art/island-preparation.js';
 import {Assets, Rectangle, Texture} from 'pixi.js';
@@ -130,6 +131,17 @@ export function prepareBoatViews(renderer,{buildAtlas=buildBoatAtlas,cancelled=(
   return prepared??= (async()=>{
     const bank=await loadBoatViews();
     const manifest=await loadManifest();
+    const files=[...new Set(Object.values(manifest.views).flatMap(v=>[v.file,v.front,v.rigFront].filter(Boolean)))];
+    const prerender=await loadPrerenderManifest(files.map(file=>DIR+file));
+    if(files.every(file=>prerender[DIR+file]?.tiers.some(t=>t.sheet))){
+      const textures=new Map(await Promise.all(files.map(async file=>{
+        const initial=Assets.cache.has(DIR+file)?Assets.get(DIR+file):null;
+        return [file,initial??await Assets.load({src:DIR+file+'?boatAtlas=1',data:{resolution:.25,autoGenerateMipmaps:true,prerenderSource:DIR+file}})];
+      })));
+      if(cancelled())return bank;
+      if(renderer)await uploadIsland(renderer,[],{sources:[...textures.values()].map(t=>t.source),cancelled});
+      bank.replace(manifestViews(manifest,file=>{const texture=textures.get(file)??null;if(texture)textureFiles.set(texture,file);return texture;}));return bank;
+    }
     const atlas=await buildAtlas(manifest,{cancelled});
     try{
       if(renderer)await uploadIsland(renderer,[],{sources:[atlas.source],cancelled});
