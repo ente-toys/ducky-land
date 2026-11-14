@@ -1,19 +1,5 @@
 import {Rectangle, Sprite, Texture} from 'pixi.js';
 
-// A sheet frame is in sheet pixels, while orig/trim retain authored units.
-export function sliceCentreTexture(texture,y,height) {
-  const frame=texture.frame,ink=texture.trim??new Rectangle(0,0,texture.width,texture.height);
-  const top=y*texture.height,bottom=(y+height)*texture.height;
-  const first=Math.max(top,ink.y),last=Math.max(first,Math.min(bottom,ink.y+ink.height));
-  const ratio=frame.height/ink.height;
-  const result=new Texture({source:texture.source,dynamic:true,
-    frame:new Rectangle(frame.x,frame.y+(first-ink.y)*ratio,frame.width,(last-first)*ratio),
-    orig:new Rectangle(0,0,texture.width,texture.height*height),
-    trim:new Rectangle(ink.x,first-top,ink.width,last-first)});
-  (texture.artViews??=new Set()).add({texture:result,y,height});
-  return result;
-}
-
 export function animatePieces(records, seconds, reduced = false) {
   for (const {piece, sprite:s, flip=false} of records) {
     const a=piece.animate;
@@ -49,9 +35,9 @@ export async function attachCentreMotion(art, objects) {
   if(art.id==='pink' && !art.props.some(p=>p.centrePiece?.id==='dancer-stand')) {
     const dancer=art.props.find(p=>p.centrePiece?.id==='dancer' && p.src?.endsWith('centre/dancer.svg'));
     if(dancer) {
-      const s=dancer.sprite,texture=s.texture,cut=842/1145;
+      const s=dancer.sprite,texture=s.texture,frame=texture.frame,cut=842/1145;
       const view=(y,h)=>{
-        const t=sliceCentreTexture(texture,y,h);
+        const t=new Texture({source:texture.source,frame:new Rectangle(frame.x,frame.y+frame.height*y,frame.width,frame.height*h)});
         textureViews.push(t);return t;
       };
       const stand=new Sprite(view(cut,1-cut));

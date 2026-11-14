@@ -14,16 +14,9 @@ export const nextArtFrame = () => new Promise(resolve => {
   check();
 });
 
-// Readiness work must progress even while the player moves. Idle background
-// jobs can still use nextArtFrame's activity-aware scheduling above.
-export const preparationFrame=()=>new Promise(resolve=>{
-  if(globalThis.requestAnimationFrame)requestAnimationFrame(()=>resolve());
-  else setTimeout(resolve,0);
-});
-
 // Async decodes overlap, while synchronous raster work uses a small frame
 // budget. Small pictures share a turn; a large indivisible raster yields next.
-export function createArtQueue({concurrency = 4, yieldFrame = preparationFrame,
+export function createArtQueue({concurrency = 4, yieldFrame = nextArtFrame,
   now = () => performance.now(), frameBudgetMs = 14, batchSize = 256} = {}) {
   const waiting = [], rasters = [];
   let running = 0, scheduled = false;
@@ -54,7 +47,7 @@ export function createArtQueue({concurrency = 4, yieldFrame = preparationFrame,
 
 // Scene/rig construction also needs a budget: hundreds of resolved promises
 // otherwise create one uninterrupted microtask train after the last decode.
-export async function mapArtInFrames(items, visit, {yieldFrame=preparationFrame,
+export async function mapArtInFrames(items, visit, {yieldFrame=nextArtFrame,
   now=()=>performance.now(),frameBudgetMs=14,batchSize=1024,cancelled=()=>false}={}) {
   const results=[];let start=now(),count=0;
   for(let i=0;i<items.length;i++){
@@ -66,7 +59,7 @@ export async function mapArtInFrames(items, visit, {yieldFrame=preparationFrame,
   return results;
 }
 
-function textureSources(roots) {
+export function textureSources(roots) {
   const sources = new Set();
   const visit = node => {
     if (!node || node.destroyed) return;
@@ -103,10 +96,10 @@ async function requiredTextureSources(roots,timeoutMs) {
 }
 
 const uploaded=new WeakMap();
-export async function uploadIsland(renderer, roots, {sources = [], requiredRoots = [], yieldFrame = preparationFrame, cancelled = () => false, batchSize = 64, frameBudgetMs = 8, batchBytes = 128 * 1048576, now = () => performance.now(), timeoutMs=ART_TIMEOUT_MS} = {}) {
+export async function uploadIsland(renderer, roots, {sources = [], requiredRoots = [], yieldFrame = nextArtFrame, cancelled = () => false, batchSize = 4, frameBudgetMs = 5, batchBytes = 16 * 1048576, now = () => performance.now(), timeoutMs=ART_TIMEOUT_MS} = {}) {
   if(cancelled())return;
   let warmed=uploaded.get(renderer);if(!warmed)uploaded.set(renderer,warmed=new WeakSet());
-  let count=0,bytes=0,start=now(),started=false;
+  let count=0,bytes=0,start=0;
   // Keep the whole-island barrier for healthy pictures, including hidden
   // ground. A failed piece is accepted once and cannot pin readiness forever.
   let required=await requiredTextureSources(requiredRoots,timeoutMs);
@@ -115,7 +108,7 @@ export async function uploadIsland(renderer, roots, {sources = [], requiredRoots
     if(cancelled())return;
     if(!source||source===Texture.EMPTY.source||source.destroyed||warmed.has(source))continue;
     const size=(source.pixelWidth??1)*(source.pixelHeight??1)*4;
-    if(!started||!count||bytes+size>batchBytes){await recoverArt(yieldFrame,{label:'Island upload frame',timeoutMs});count=0;bytes=0;start=now();}
+    if(!count||bytes+size>batchBytes){await recoverArt(yieldFrame,{label:'Island upload frame',timeoutMs});count=0;bytes=0;start=now();}
     if(cancelled())return;
     required=await requiredTextureSources(requiredRoots,timeoutMs);
     for(const current of required)if(!warmed.has(current))pending.add(current);
@@ -125,7 +118,7 @@ export async function uploadIsland(renderer, roots, {sources = [], requiredRoots
       if(renderer.texture.bindSource)renderer.texture.bindSource(source);
       else renderer.texture.initSource(source);
     },{label:source.label||'Island GPU upload',timeoutMs});
-    warmed.add(source);started=true;count++;bytes+=size;
+    warmed.add(source);count++;bytes+=size;
     if(count>=batchSize||now()-start>=frameBudgetMs)count=0;
     required=await requiredTextureSources(requiredRoots,timeoutMs);
     for(const current of required)if(!warmed.has(current))pending.add(current);
