@@ -4,6 +4,7 @@
   "compatibility_date": "2026-11-02",
   "workers_dev": false,
   "preview_urls": false,
+  "limits": {"cpu_ms": 60000},
   "durable_objects": {"bindings": [{"name": "ISLAND", "class_name": "IslandRoom"}]},
   "migrations": [{"tag": "v1", "new_sqlite_classes": ["IslandRoom"]}]
 }
