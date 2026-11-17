@@ -386,7 +386,11 @@ function chartRoute(id,from,to,others) {
     const dx=b.x-a.x,dy=b.y-a.y,l2=dx*dx+dy*dy;
     return others.every(p=>{
       const t=l2?Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/l2)):0;
-      return seaBoatSeparated({x:a.x+dx*t,y:a.y+dy*t},p,BOAT_GAP+1);
+      // Movement can stop just inside the planner's extra pixel of clearance.
+      // Let the first edge leave that position without getting any closer;
+      // every subsequent edge still keeps the full planning margin.
+      const gap=a.x===from.x&&a.y===from.y?Math.min(BOAT_GAP+1,Math.hypot(wrapSea(a.x-p.x),a.y-p.y)):BOAT_GAP+1;
+      return seaBoatSeparated({x:a.x+dx*t,y:a.y+dy*t},p,gap-1e-7);
     });
   };
   const clearLine=(id,a,b)=>lineRoom(a,b)&&clearSeaLine(id,a,b);
@@ -473,6 +477,24 @@ export function setSailDestination(actor,x,y,boats=[]) {
   return [x,y];
 }
 
+const clearBoatStep=(actor,x,y,others)=>others.every(p=>seaBoatSeparated({x,y},p,BOAT_GAP+.1) || Math.hypot(wrapSea(x-p.x),y-p.y)>Math.hypot(wrapSea(actor.x-p.x),actor.y-p.y));
+function slideBoatStep(actor,x,y,others) {
+  let dx=x-actor.x,dy=y-actor.y;
+  // Remove the inward component, keeping the glancing part of the requested
+  // movement. A few passes handle contacts with more than one nearby boat.
+  for(let pass=0;pass<3;pass++){
+    let changed=false;
+    for(const p of others){
+      if(seaBoatSeparated({x:actor.x+dx,y:actor.y+dy},p,BOAT_GAP+.1))continue;
+      const nx=wrapSea(actor.x-p.x),ny=actor.y-p.y,length=Math.hypot(nx,ny);
+      if(!length)continue;
+      const inward=(dx*nx+dy*ny)/length;
+      if(inward<0){dx-=nx/length*inward;dy-=ny/length*inward;changed=true;}
+    }
+    if(!changed)break;
+  }
+  return {x:actor.x+dx,y:actor.y+dy};
+}
 // Polar coast water uses the same continuous movement as every other island.
 export function sailStep(actor,dt,input,now=null,boats=[]) {
   const others=otherBoatPositions(actor,boats);
@@ -487,9 +509,15 @@ export function sailStep(actor,dt,input,now=null,boats=[]) {
   if (distance) {
     const steps=Math.ceil(travel/6);
     for (let i=0;i<steps;i++) {
-      const x=actor.x+dx/distance*travel/steps, y=actor.y+dy/distance*travel/steps;
+      let x=actor.x+dx/distance*travel/steps, y=actor.y+dy/distance*travel/steps;
       // A boat already inside another's gap may still sail away from it, never closer, so no boat is ever boxed in.
-      const boatInWay=!others.every(p=>seaBoatSeparated({x,y},p,BOAT_GAP+.1) || Math.hypot(wrapSea(x-p.x),y-p.y)>Math.hypot(wrapSea(actor.x-p.x),actor.y-p.y));
+      let boatInWay=!clearBoatStep(actor,x,y,others);
+      if(manual&&boatInWay){
+        const slide=slideBoatStep(actor,x,y,others);
+        if(clearBoatStep(actor,slide.x,slide.y,others)&&canSail(slide.x,slide.y,actor.islandId)){
+          ({x,y}=slide);boatInWay=false;
+        }
+      }
       if (boatInWay || !canSail(x,y,actor.islandId)) {
         // A boat moored or sailing across a planned course: plan round it instead of stopping (a few tries).
         const goal=!manual&&target?(actor.sailRoute?.at(-1)??target):null, docking=actor.docking;
