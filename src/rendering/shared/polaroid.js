@@ -44,7 +44,52 @@ function drawCaption(context, x, y, width, height, family, player) {
   context.fillText(`@${player}`, x, baseline);
 }
 
-export function renderPolaroid(viewport, layers, background, {player = ''} = {}) {
+function drawNameplates(context, viewport, nameLayer, border, width, height) {
+  const window = viewport.ownerDocument.defaultView;
+  const layerStyle = window.getComputedStyle(nameLayer);
+  const opacity = Number(layerStyle.opacity);
+  if (!opacity || layerStyle.visibility !== 'visible') return;
+
+  const frame = viewport.getBoundingClientRect();
+  context.save();
+  context.beginPath();
+  context.rect(border, border, width, height);
+  context.clip();
+  context.translate(border, border);
+  context.scale(width / frame.width, height / frame.height);
+  context.globalAlpha = opacity;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+
+  for (const label of nameLayer.children) {
+    if (label.hidden) continue;
+    const box = label.getBoundingClientRect();
+    if (!box.width || !box.height || box.right <= frame.left || box.left >= frame.right ||
+        box.bottom <= frame.top || box.top >= frame.bottom) continue;
+
+    const style = window.getComputedStyle(label);
+    const x = box.left - frame.left;
+    const y = box.top - frame.top;
+    const stroke = parseFloat(style.borderTopWidth);
+    context.beginPath();
+    context.roundRect(x + stroke / 2, y + stroke / 2, box.width - stroke, box.height - stroke,
+      Math.max(0, parseFloat(style.borderTopLeftRadius) - stroke / 2));
+    context.fillStyle = style.backgroundColor;
+    context.fill();
+    if (stroke > 0) {
+      context.lineWidth = stroke;
+      context.strokeStyle = style.borderTopColor;
+      context.stroke();
+    }
+    context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    context.fillStyle = style.color;
+    context.fillText(label.textContent, x + box.width / 2, y + box.height / 2);
+  }
+
+  context.restore();
+}
+
+export function renderPolaroid(viewport, layers, background, {player = '', nameLayer} = {}) {
   const [source] = layers;
   const {clientWidth, clientHeight} = viewport;
   if (!clientWidth || !clientHeight || !source.width || !source.height) {
@@ -70,6 +115,7 @@ export function renderPolaroid(viewport, layers, background, {player = ''} = {})
   for (const layer of layers) {
     context.drawImage(layer, border, border, width, height);
   }
+  if (nameLayer?.children.length) drawNameplates(context, viewport, nameLayer, border, width, height);
 
   const document = viewport.ownerDocument;
   return loadCaptionFont(document).then(hasFont => {

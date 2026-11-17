@@ -2067,7 +2067,7 @@ export class PixiIsland {
     request.encoding = true;
     clearTimeout(request.timeout);
     try {
-      renderPolaroid(this.host, [this.canvas], '#86cee6', {player: request.player}).then(
+      renderPolaroid(this.host, [this.canvas], '#86cee6', {player: request.player, nameLayer: this.nameLayer}).then(
         blob => this.finishPhoto(request, null, blob), error => this.finishPhoto(request, error));
     } catch (error) {
       this.finishPhoto(request, error);
