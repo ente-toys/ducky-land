@@ -8,29 +8,19 @@ import {seaViewPose} from '../src/world/sea-view.js';
 import {flatRigid,unplaceRigid} from '../src/world/rigid.js';
 import {ISLETS} from '../src/world/islets.js';
 import {placeIslet,unplaceIslet} from '../src/world/islet-placement.js';
-import {canSail,sailStep,applySeaCurrent,migrateSeaPosition,harborOf,dockingSpot,SAIL_SPEED,navOf,setSailDestination,BOAT_GAP,boatRoom,sailRoute} from '../src/gameplay/islands.js';
+import {canSail,sailStep,migrateSeaPosition,harborOf,dockingSpot,SAIL_SPEED,navOf,setSailDestination,BOAT_GAP,boatRoom,sailRoute} from '../src/gameplay/islands.js';
 import {dot} from '../src/world/sphere.js';
 const close=(a,b,t=1e-7)=>assert.ok(Math.abs(a-b)<t,`${a} != ${b}`);
 const local=(id,x,y)=>{const m=mapOf(id),c=FLAT_POSITIONS[id];return {islandId:id,x:x-c.x+m.cx,y:y-c.y+m.cy};};
 
-test('north and south currents from every island and longitude deliver sailing boats to the right harbour',()=>{
+test('crossing either polar latitude never redirects a boat in any departure frame',()=>{
  for(const i of WORLD_ISLANDS)for(const sign of [-1,1])for(const x of [-39990,-12000,0,27000,39990,120010]){
-  // Start in the open current approach, using each departure island's local frame.
-  // A pole's own harbour apron is deliberately exempt from redelivery.
-  const pole=sign<0?'isle-55':'isle-249';if(i.id===pole&&x===0)continue;
   const p={...local(i.id,x,sign*(SEA_HEIGHT/2-2)),mode:'sailing',path:[],action:0};
-  if(!canSail(p.x,p.y,p.islandId))continue; // real polar land still blocks boats
-  sailStep(p,.05,{x:0,y:sign});assert.equal(p.seaCurrent,pole,`${i.id} ${x} ${sign}`);
-  assert.equal(applySeaCurrent(p),true);assert.equal(p.islandId,pole);
-  assert.deepEqual({x:p.x,y:p.y},harborOf(pole).water);assert.equal(p.mode,'sailing');assert.equal(p.docking,false);
-  assert.ok(canSail(p.x,p.y,pole));
-  sailStep(p,.05,{x:0,y:sign});assert.equal(p.seaCurrent,undefined,'harbour apron never loops');
+  if(!canSail(p.x,p.y,p.islandId))continue;
+  const before={...p};sailStep(p,.05,{x:0,y:sign});
+  assert.equal(p.seaCurrent,undefined);assert.equal(p.islandId,i.id);
+  close(p.x,before.x);close(p.y,before.y+sign*SAIL_SPEED*.05);
  }
-});
-test('current capacity rejection leaves a boat at sea and can retry without consuming Bog entry',()=>{
- const p={...local('home',30000,20001),mode:'sailing',seaCurrent:'isle-249'};
- assert.equal(applySeaCurrent(p,()=>false),false);assert.equal(p.islandId,'home');
- assert.equal(applySeaCurrent(p),true);assert.equal(p.mode,'sailing');assert.equal(p.docking,false);
 });
 test('east and west follow globe longitude spacing; sailing x is continuous for repeated seam crossings',()=>{
  const order=['home','blossom','isle-251','sunset','isle-250','home'];
@@ -73,7 +63,7 @@ test('legacy sea saves recover at their own harbour once; new saves and walking/
  }
 });
 
-test('complete north and south passages from each island side reach a current without a boundary wall',()=>{
+test('complete north and south passages preserve the chosen course without a harbour teleport',()=>{
  for(const i of WORLD_ISLANDS)for(const sign of [-1,1]){
   const c=FLAT_POSITIONS[i.id],m=mapOf(i.id),startY=Math.max(-19000,Math.min(19000,c.y));
   // Use the island's open sea flank. Scenery and coastline remain real obstacles.
@@ -85,9 +75,10 @@ test('complete north and south passages from each island side reach a current wi
   }
   assert.notEqual(x,null,`${i.id}: open ${sign<0?'north':'south'} passage`);
   const p={...local(i.id,x,startY),mode:'sailing',path:[],action:0};
-  for(let n=0;n<2000&&!p.seaCurrent;n++)sailStep(p,.1,{x:0,y:sign});
-  assert.equal(p.seaCurrent,sign<0?'isle-55':'isle-249');assert.ok(applySeaCurrent(p));
-  assert.equal(p.islandId,sign<0?'isle-55':'isle-249');
+  const steps=Math.ceil(Math.abs(sign*21000-startY)/(SAIL_SPEED*.1));
+  for(let n=0;n<steps;n++)sailStep(p,.1,{x:0,y:sign});
+  assert.equal(p.seaCurrent,undefined);assert.equal(p.islandId,i.id);
+  close(seaPosition(i.id,p).y,startY+sign*SAIL_SPEED*.1*steps,.01);
  }
 });
 test('harbour docking and beach landing survive a complete east or west lap',()=>{
@@ -138,11 +129,11 @@ test('tap routes around islands work when the nearest destination lies beyond th
  }
 });
 
-test('outer polar harbour aprons flow back to their harbour before any world boundary',()=>{
+test('boats can sail beyond both polar islands without resetting to port',()=>{
  for(const [id,sign]of [['isle-55',-1],['isle-249',1]]){
   const p={...local(id,0,sign*26499),mode:'sailing',path:[],action:0};
-  assert.ok(canSail(p.x,p.y,id));sailStep(p,.05,{x:0,y:sign});assert.equal(p.seaCurrent,id);
-  assert.ok(applySeaCurrent(p));assert.deepEqual({x:p.x,y:p.y},harborOf(id).water);
+  const before={...p};assert.ok(canSail(p.x,p.y,id));sailStep(p,.05,{x:0,y:sign});
+  assert.equal(p.seaCurrent,undefined);close(p.x,before.x);close(p.y,before.y+sign*SAIL_SPEED*.05);
  }
 });
 

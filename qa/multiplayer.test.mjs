@@ -1117,7 +1117,7 @@ test('new tabs, reloads and sign-ins start on Home after playing away', async ()
   }
 });
 
-test('wrapping sea: two real sockets see seam neighbours, currents keep Bog ticket, and saved sea versions restore safely', async()=>{
+test('wrapping sea: sockets preserve seam and polar courses, Bog tickets, and saved sea versions', async()=>{
   await request('/test/expire-session');await request('/test/expire-resume');await request('/test/reset-boats');
   const first=await signIn(9505),second=await signIn(9506),a=await socket(first.session),b=await socket(second.session);
   const setup=(c,pose,steps=0)=>request('/test/travel',{method:'POST',body:JSON.stringify({id:c.welcome.id,pose,steps})});
@@ -1150,13 +1150,22 @@ test('wrapping sea: two real sockets see seam neighbours, currents keep Bog tick
     await setup(a,{seaVersion:0});await request('/test/restore');
     await eventually(()=>Math.abs(a.duck().x-HARBOR.water.x)<1);assert.ok(Math.abs(a.duck().y-HARBOR.water.y)<1);
     await setup(a,{islandId:'home',x:home.cx+30000,y:home.cy+19990,seaVersion:1});
-    a.send({type:'input',x:0,y:1});await eventually(()=>a.snapshot.islandId==='isle-249');
-    assert.equal(a.duck().mode,'sailing');assert.ok(Math.abs(a.duck().x-harborOf('isle-249').water.x)<1);
+    a.send({type:'input',x:0,y:1});await eventually(()=>a.duck().y>home.cy+20030);
+    a.send({type:'input',x:0,y:0});
+    assert.equal(a.snapshot.islandId,'home','crossing the southern latitude keeps the departure frame');
+    assert.equal(a.duck().mode,'sailing');assert.ok(Math.abs(a.duck().x-home.cx-30000)<1);
+    // Paid entry is still checked at the actual Bog shore, without a current delivering the boat there.
+    await setup(a,{islandId:'home',...mapPoint('isle-249','home',harborOf('isle-249').water),sailTarget:null,sailRoute:null,docking:false});
     a.send({type:'disembark'});await eventually(()=>a.messages.some(m=>m.type==='travel-notice'&&/feather|karma|ticket/i.test(m.text)));
-    assert.equal(a.duck().mode,'sailing','Bog current never bypasses the paid entry');
+    assert.equal(a.duck().mode,'sailing','polar sailing never bypasses the paid Bog entry');
     await setup(b,{islandId:'home',x:home.cx+30000,y:home.cy-19990,seaVersion:1});
-    b.send({type:'input',x:0,y:-1});await eventually(()=>b.snapshot.islandId==='isle-55');
-    assert.equal(b.duck().mode,'sailing');b.send({type:'disembark'});await eventually(()=>b.duck().mode==='walking');
+    b.send({type:'input',x:0,y:-1});await eventually(()=>b.duck().y<home.cy-20030);
+    b.send({type:'input',x:0,y:0});
+    assert.equal(b.snapshot.islandId,'home','crossing the northern latitude never resets to Iceland port');
+    assert.equal(b.duck().mode,'sailing');assert.ok(Math.abs(b.duck().x-home.cx-30000)<1);
+    await setup(b,{islandId:'home',...mapPoint('isle-55','home',harborOf('isle-55').water),sailTarget:null,sailRoute:null,docking:false});
+    b.send({type:'disembark'});await eventually(()=>b.duck().mode==='walking');
+    assert.equal(b.snapshot.islandId,'isle-55');
   }finally{a.close();b.close();}
 });
 

@@ -473,12 +473,10 @@ export function setSailDestination(actor,x,y,boats=[]) {
   return [x,y];
 }
 
-// Around a pole island you sail freely; the current only takes you once you head well out into the polar ice.
-const POLE_SEA_MARGIN=4000;
+// Polar coast water uses the same continuous movement as every other island.
 export function sailStep(actor,dt,input,now=null,boats=[]) {
   const others=otherBoatPositions(actor,boats);
-  const startY=FLAT_POSITIONS[actor.islandId].y+actor.y-mapOf(actor.islandId).cy;
-  if(Math.abs(startY)<=SEA_HEIGHT/2)delete actor.seaCurrent;
+  delete actor.seaCurrent; // Discard obsolete current state from an older session.
   const manual=Boolean(input.x || input.y);
   if (manual) {actor.sailTarget=null; actor.sailRoute=null; actor.docking=false;}
   const target=actor.sailTarget;
@@ -503,12 +501,6 @@ export function sailStep(actor,dt,input,now=null,boats=[]) {
       }
       actor.reroutes=0;
       actor.x=x; actor.y=y;
-      const gy=FLAT_POSITIONS[actor.islandId].y+actor.y-mapOf(actor.islandId).cy;
-      if(Math.abs(gy)<=SEA_HEIGHT/2)delete actor.seaCurrent;
-      const pole=gy < -SEA_HEIGHT/2?'isle-55':gy > SEA_HEIGHT/2?'isle-249':null;
-      if(pole && (Math.abs(gy)>=SEA_HEIGHT/2+6500 || actor.islandId!==pole || Math.abs(wrapSea(actor.x-mapOf(pole).cx))>mapOf(pole).width/2+POLE_SEA_MARGIN)) {
-        actor.seaCurrent=pole; actor.sailTarget=null;actor.sailRoute=null;break;
-      }
     }
     actor.turn=Math.atan2(dx,dy);
     if (target && near(actor,target,1)) actor.sailTarget=actor.sailRoute?.shift() ?? null;
@@ -539,15 +531,6 @@ export function crossIsland(actor,allow=() => true,boats=[]) {
   return true;
 }
 
-// Current delivery is sailing only. Landing still goes through capacity and Bog ticket checks.
-export function applySeaCurrent(actor,allow=()=>true,boats=[]){
- const id=actor.seaCurrent;if(!id||(id!==actor.islandId&&!allow(id)))return false;
- const at=freeBoatPosition({...actor,islandId:id,...harborOf(id).water},boats,4160);
- if(!at)return false;
- delete actor.seaCurrent;
- Object.assign(actor,{islandId:id,...at,path:[],travel:0,sailTarget:null,sailRoute:null,docking:false,exitLocked:false,seaVersion:SEA_VERSION});
- return true;
-}
 // Preserve old islet visitors relative to their artwork when its chart centre moves.
 function migratedIsletPoint(actor){
  const m=mapOf(actor.islandId);

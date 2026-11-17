@@ -3,7 +3,7 @@ import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {nonNeighbourLanding} from './non-neighbour-fixture.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,applySeaCurrent,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach,fillMoorings,retireBoat,boatHome,boatSlot,MOORING_CLEAR,SAIL_SPEED,harborApproachClear,boatRoom} from '../src/gameplay/islands.js';
+import {ISLANDS,HARBOR,harborOf,SEA_BOUNDS,offshoreProgress,createBoats,canSail,canDock,sailStep,setSailDestination,crossIsland,destinationsFor,boatSpots,boardingPoint,landingSpot,landingApproach,fillMoorings,retireBoat,boatHome,boatSlot,MOORING_CLEAR,SAIL_SPEED,harborApproachClear,boatRoom} from '../src/gameplay/islands.js';
 
 import {createNavigation} from '../src/world/navigation.js';
 import {offsetOf} from '../src/world/world-map.js';
@@ -98,7 +98,7 @@ test('a tapped neighbour is reached by sailing round the coasts', () => {
     let distance=0,at=a;
     for(const point of route){distance+=Math.hypot(point.x-at.x,point.y-at.y);at=point;}
     const maxSteps=Math.ceil(distance/(SAIL_SPEED*.05))+route.length;
-    for (let i=0;i<maxSteps && a.sailTarget;i++) {assert.ok(canSail(a.x,a.y)); sailStep(a,.05,ZERO);if(applySeaCurrent(a))break;}
+    for (let i=0;i<maxSteps && a.sailTarget;i++) {assert.ok(canSail(a.x,a.y)); sailStep(a,.05,ZERO);}
     assert.equal(a.sailTarget,null,'the planned voyage finishes');
     const arrived=a.islandId===destination.destination?harborOf(a.islandId).water:destination.dock;
     assert.ok(Math.hypot(a.x-arrived.x,a.y-arrived.y)<1,'arrived at the named jetty');
@@ -121,7 +121,6 @@ test('clouds build offshore before destination islands are reached', () => {
     const maxSteps=Math.ceil(distance/(SAIL_SPEED*.05))+route.length;
     for (let i=0;i<maxSteps && a.sailTarget;i++) {
       sailStep(a,.05,ZERO);
-      if(applySeaCurrent(a))break;
       assert.ok(canSail(a.x,a.y,'home'),'the complete voyage stays in open water');
       clouds ||= offshoreProgress(a)>0;
       if (crossIsland(a)) break;
