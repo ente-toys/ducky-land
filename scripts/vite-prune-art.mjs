@@ -9,7 +9,8 @@ export function pruneUnusedArt(){
  let config;
  return {name:'prune-unused-art',apply:'build',
   configResolved(value){config=value;},
-  async closeBundle(){
+  // Pruning needs files on disk. closeBundle also runs when the build fails.
+  async writeBundle(){
    const out=path.resolve(config.root,config.build.outDir),dir=path.join(out,'art-prerender');
    const {groundTiles,ISLANDS}=await nativeImport(new URL('./ground-mesh/build.mjs',import.meta.url).href);
    const candidates=new Set();
