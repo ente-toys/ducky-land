@@ -46,6 +46,8 @@ export class RoomClient {
     this.boats = [];
     this.boatTracks = new Map();
     this.tracks = new Map();
+    this.globeOpen = false;
+    this.globeSubscriptionId = 0;
     this.reset();
   }
 
@@ -79,6 +81,8 @@ export class RoomClient {
     this.tick = -1;
     this.snapshotPlayers = new Map();
     this.snapshotBoats = new Map();
+    this.globeFeed = false;
+    this.clearGlobePlayers();
     this.karma=0;this.feathers=[];this.featherIsland=null;
     this.pending = [];
     this.input = ZERO;
@@ -100,6 +104,7 @@ export class RoomClient {
     const url = new URL('/api/room', location.href);
     url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
     url.searchParams.set('play', play ? '1' : '0');
+    url.searchParams.set('globeFeed', '1');
     const held = play && !reconnecting ? takeArrivalSocket() : null;
     const socket = this.socket = held?.socket ?? new WebSocket(url);
     let full = false;
@@ -123,6 +128,12 @@ export class RoomClient {
       if (socket !== this.socket) return;
       if (data === 'pong') { pendingPing = null; return; }
       const message = JSON.parse(data);
+      if (message.type === 'globe-players') {
+        if (this.globeFeed && this.globeOpen && message.subscriptionId === this.globeSubscriptionId) {
+          this.globePlayers = message.players;
+        }
+        return;
+      }
       if(message.type==='karma-state'){
         this.karma=message.balance;this.feathers=message.feathers;this.featherIsland=message.islandId;
       }
@@ -155,7 +166,13 @@ export class RoomClient {
       if (message.type === 'joined') this.onJoin(message);
       if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
-        if (message.type === 'welcome') {this.onFriendsChanged(); socket.send(JSON.stringify({type: 'updates'}));}
+        if (message.type === 'welcome') {
+          this.globeFeed = message.globeFeed === true;
+          if (this.globeOpen) this.sendGlobeSubscription();
+          this.onFriendsChanged();
+          socket.send(JSON.stringify({type: 'updates'}));
+        }
+        if (['expired', 'signed-out'].includes(message.reason)) this.clearGlobePlayers();
         this.failures = 0;
         this.id = message.id;
         this.arrival = message.arrival ?? null;
@@ -185,9 +202,30 @@ export class RoomClient {
     }
   }
 
+  clearGlobePlayers() {
+    this.globePlayers = [];
+    this.legacyGlobePlayers = [];
+  }
+
+  setGlobeOpen(open) {
+    if (open === this.globeOpen) return;
+    this.globeOpen = open;
+    this.globeSubscriptionId++;
+    this.globePlayers = open && !this.globeFeed ? this.legacyGlobePlayers : [];
+    this.sendGlobeSubscription();
+  }
+
+  sendGlobeSubscription() {
+    if (!this.globeFeed || this.socket?.readyState !== WebSocket.OPEN) return;
+    this.socket.send(JSON.stringify({type: 'globe-subscription', open: this.globeOpen, subscriptionId: this.globeSubscriptionId}));
+  }
+
   snapshot({epoch,tick,players,self,online,islandId='home',boats=[],globePlayers=[]}) {
     if (epoch === this.epoch && tick <= this.tick) return;
-    this.globePlayers = globePlayers;
+    if (!this.globeFeed) {
+      this.legacyGlobePlayers = globePlayers;
+      if (this.globeOpen) this.globePlayers = globePlayers;
+    }
     this.snapshotPlayers = new Map(players.map(p => [p.id, p]));
     this.snapshotBoats = new Map(boats.map(b => [b.id, b]));
     const own=players.find(pose => pose.id === this.id);
@@ -457,6 +495,7 @@ export class RoomClient {
   }
 
   dispose() {
+    this.globeOpen = false;
     this.resolveInitialIsland?.(null);
     this.resolveInitialIsland=null;
     clearInterval(this.heartbeat);

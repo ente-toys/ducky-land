@@ -119,7 +119,10 @@ export default function PixiPage({signedInEntry = false}) {
         arrivalTimer = setTimeout(() => setArrival(''), 4000);
         if (offline) setTravel({islandId:island.current.islandId,mode:'walking',available:0});
       },
-      onError:() => setError(true),onInteriorChange:setIndoors,onGlobeChange:setGlobeOpen,onPhotoReady:()=>setCameraReady(true)});
+      onError:() => setError(true), onInteriorChange:setIndoors, onGlobeChange:open => {
+        setGlobeOpen(open);
+        if (!offline) client.setGlobeOpen(open);
+      }, onPhotoReady:()=>setCameraReady(true)});
     island.current = game;
     // the island's art is in once its canvas says ready (mount resolves earlier, while the art still streams in)
     const drawnPoll = setInterval(() => {if (host.current?.querySelector('canvas[data-state="ready"]')) {clearInterval(drawnPoll); finishHomeHeadStart(); requestAnimationFrame(() => setWorldDrawn(true));}}, 150);

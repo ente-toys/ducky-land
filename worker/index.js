@@ -18,6 +18,7 @@ import {RoomKarma} from './karma.js';
 
 const STARGAZER_LIMIT = 5000;
 const RESUME_MS = 15_000;
+const GLOBE_UPDATE_MS = 500;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
 const ZERO = {x:0,y:0};
@@ -87,6 +88,7 @@ export class IslandRoom {
     this.ctx = ctx;
     this.sql = ctx.storage.sql;
     this.connections = new Map();
+    this.globeSubscribers = new Set();
     this.tickCount = 0;
     this.epoch = crypto.randomUUID();
     this.sql.exec(`CREATE TABLE IF NOT EXISTS flows (
@@ -144,6 +146,7 @@ export class IslandRoom {
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()};
       this.connections.set(socket, restored);
+      if (restored.globeFeed && restored.globeSubscriptionId !== undefined) this.globeSubscribers.add(socket);
       this.recoverSailingPosition(actor);
       this.attach(socket, restored);
     }
@@ -154,6 +157,7 @@ export class IslandRoom {
       if(saved&&!(this.bog??=new LiveBogRoom(this)).open(socket,saved))socket.close(1008,'Bog visit ended');
     }
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
+    this.updateGlobeTimer();
   }
 
   navFor(islandId='home') { return navOf(islandId); }
@@ -461,7 +465,9 @@ export class IslandRoom {
     if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return reply({}, 426);
     const digest = request.headers.get('X-Session-Digest');
     const user = this.session(digest, now);
-    const wantsPlayer = new URL(request.url).searchParams.get('play') === '1';
+    const params = new URL(request.url).searchParams;
+    const wantsPlayer = params.get('play') === '1';
+    const globeFeed = params.get('globeFeed') === '1';
     const canPlay = user?.canPlay && wantsPlayer;
     const previous = canPlay ? [...this.connections].find(([,info]) => info.actor && info.account === user.account) : undefined;
     const resume = canPlay && this.sql.exec('SELECT pose FROM resumes WHERE account=? AND expires>?', user.account, now).toArray()[0];
@@ -477,7 +483,7 @@ export class IslandRoom {
     }
     const playing = Boolean(canPlay && (from || saved || spawn));
     const [client, socket] = Object.values(new WebSocketPair());
-    const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login,
+    const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login, globeFeed,
       input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
@@ -499,6 +505,7 @@ export class IslandRoom {
     this.connections.set(socket, info);
     this.attach(socket, info);
     this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
+      ...(globeFeed ? {globeFeed:true} : {}),
       ...(spawn ? {arrival:spawn.name} : {}),
       reason:user && wantsPlayer && !user.canPlay ? 'star-required' : null});
     if (playing && !previous && !resume) {
@@ -515,13 +522,47 @@ export class IslandRoom {
   }
 
   attach(socket, info) {
-    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas} = info;
-    socket.serializeAttachment({actor:actor ? savedPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas});
+    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId} = info;
+    socket.serializeAttachment({actor:actor ? savedPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId});
   }
 
   send(socket, message) {
     if (socket.readyState !== 1) return;
     try { socket.send(JSON.stringify(message)); } catch { socket.close(1011, 'Connection lost'); }
+  }
+
+  serializeGlobePlayers(named, now) {
+    const players = [];
+    for (const info of this.connections.values()) {
+      if (!info.actor || (info.expires && info.expires <= now)) continue;
+      const {id, islandId = 'home', x, y, mode = 'walking'} = info.actor;
+      players.push({id, islandId, x:r2(x), y:r2(y), mode, ...(named && info.login ? {login:info.login} : {})});
+    }
+    return JSON.stringify(players);
+  }
+
+  broadcastGlobe(recipients = this.globeSubscribers) {
+    const now = Date.now(), lists = new Map();
+    for (const socket of recipients) {
+      const info = this.connections.get(socket);
+      if (!info || socket.readyState !== 1) {
+        this.globeSubscribers.delete(socket);
+        continue;
+      }
+      const named = Boolean(info.digest && info.expires > now);
+      if (!lists.has(named)) lists.set(named, this.serializeGlobePlayers(named, now));
+      this.sendText(socket, `{"type":"globe-players","subscriptionId":${info.globeSubscriptionId},"players":${lists.get(named)}}`);
+    }
+    this.updateGlobeTimer();
+  }
+
+  updateGlobeTimer() {
+    if (this.globeSubscribers.size && this.globeTimer == null) {
+      this.globeTimer = setInterval(() => this.broadcastGlobe(), GLOBE_UPDATE_MS);
+    } else if (!this.globeSubscribers.size && this.globeTimer != null) {
+      clearInterval(this.globeTimer);
+      this.globeTimer = null;
+    }
   }
 
   broadcast() {
@@ -539,11 +580,7 @@ export class IslandRoom {
       const group = groups.get(islandId);
       group.guests.push(pose); group.named.push({...pose, login:info.login, accountId:info.account});
     }
-    const globePlayers = named => [...this.connections.values()].filter(info => info.actor).map(info => {
-      const {id, islandId, x, y, mode} = wirePose(info.actor);
-      return {id, islandId, x, y, mode, ...(named && info.login ? {login:info.login} : {})};
-    });
-    const globe = {named:globePlayers(true), guests:globePlayers(false)};
+    const legacyGlobeFields = new Map();
     const shared = new Map(), empty = {guests:[], named:[]};
     const text = (islandId, named, info) => {
       const combatSelf=!!info.actor&&combatAccounts.has(info.account);
@@ -563,7 +600,7 @@ export class IslandRoom {
         } else if(localViewer)poses=poses.map(p=>seaViewPose(localViewer,p));
         const visibleBoats=chartViewer?this.boats.map(b=>seaViewPose(info.actor,b,b.islandId===islandId?Infinity:8000)).filter(Boolean):this.boats.filter(b=>b.islandId===islandId).map(b=>localViewer?seaViewPose(localViewer,b):b);
         const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
-        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(visibleBoats.map(wireBoat))},"players":${JSON.stringify(players)},"globePlayers":${JSON.stringify(named ? globe.named : globe.guests)},"self":`);
+        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(visibleBoats.map(wireBoat))},"players":${JSON.stringify(players)},"self":`);
       }
       return shared.get(key);
     };
@@ -576,19 +613,24 @@ export class IslandRoom {
       const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
         ownBoats:owned.get(info.account) ?? []}) : 'null';
       const named = !!(info.digest && info.expires > now);
-      const full = text(islandId, named, info) + self + '}';
-      if (!info.deltas) {this.sendText(socket, full); continue;}
+      let globeField = '';
+      if (!info.globeFeed) {
+        if (!legacyGlobeFields.has(named)) legacyGlobeFields.set(named, `,"globePlayers":${this.serializeGlobePlayers(named, now)}`);
+        globeField = legacyGlobeFields.get(named);
+      }
+      const full = text(islandId, named, info) + self;
+      if (!info.deltas) {this.sendText(socket, full + globeField + '}'); continue;}
       this.snapshotGroups ??= new Map();
       const key = `${named ? 1 : 0}|${islandId}${info.actor&&combatAccounts.has(info.account)?'|'+info.account:''}`;
       let group = this.snapshotGroups.get(key);
       if (group?.tick !== tick) {
-        const snapshot = JSON.parse(full);
+        const snapshot = JSON.parse(full + '}');
         group = {tick, players: new Map(snapshot.players.map(p => [p.id, p])), boats: new Map(snapshot.boats.map(b => [b.id, b])), patches: new WeakMap()};
         this.snapshotGroups.set(key, group);
       }
       const base = info.snapshotBase;
       if (!base || base.key !== key || tick - base.fullTick >= 50) {
-        this.sendText(socket, full);
+        this.sendText(socket, full + globeField + '}');
         info.snapshotBase = {key, group, fullTick: tick};
         continue;
       }
@@ -606,7 +648,8 @@ export class IslandRoom {
         patch = {players: diff(base.group.players, group.players), boats: diff(base.group.boats, group.boats)};
         group.patches.set(base.group, patch);
       }
-      this.sendText(socket, JSON.stringify({type: 'delta', epoch: this.epoch, tick, baseTick: base.group.tick, islandId, online, globePlayers:named ? globe.named : globe.guests, ...patch, self: JSON.parse(self)}));
+      const delta = JSON.stringify({type: 'delta', epoch: this.epoch, tick, baseTick: base.group.tick, islandId, online, ...patch, self: JSON.parse(self)});
+      this.sendText(socket, globeField ? delta.slice(0, -1) + globeField + '}' : delta);
       info.snapshotBase = {key, group, fullTick: base.fullTick};
     }
   }
@@ -669,10 +712,11 @@ export class IslandRoom {
     const info = this.connections.get(socket);
     if (!info) return;
     const now = Date.now();
-    if (info.expires && now >= info.expires) {
+    const expired = info.expires && now >= info.expires;
+    if (expired) {
       this.expire(now);
       this.ctx.waitUntil(this.scheduleExpiry());
-      return;
+      if (!this.connections.has(socket)) return;
     }
     info.tokens = Math.min(30, info.tokens + (now-info.tokenTime)*.024) - 1;
     info.tokenTime = now;
@@ -682,6 +726,23 @@ export class IslandRoom {
     }
     let command;
     try { command = JSON.parse(message); } catch { return; }
+    if (command?.type === 'globe-subscription') {
+      const {open, subscriptionId} = command;
+      if (!info.globeFeed || typeof open !== 'boolean' || !Number.isSafeInteger(subscriptionId) || subscriptionId < 1) return;
+      const activeId = open ? subscriptionId : undefined;
+      if (activeId === info.globeSubscriptionId) return;
+      info.globeSubscriptionId = activeId;
+      this.attach(socket, info);
+      if (open) {
+        this.globeSubscribers.add(socket);
+        this.broadcastGlobe([socket]);
+      } else {
+        this.globeSubscribers.delete(socket);
+        this.updateGlobeTimer();
+      }
+      return;
+    }
+    if (expired) return;
     if (command?.type === 'updates') {
       info.deltas = true;
       info.snapshotBase = null;
@@ -902,6 +963,7 @@ export class IslandRoom {
     const info = this.connections.get(socket);
     if (!info) return;
     this.connections.delete(socket);
+    if (this.globeSubscribers.delete(socket)) this.updateGlobeTimer();
     if (info.actor) {
       this.saveLocation(info.account,info.actor);
       const now = Date.now();

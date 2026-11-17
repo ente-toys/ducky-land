@@ -210,7 +210,10 @@ export async function connect({request,env}, fetchGitHub = fetch) {
     const check = await checkPlayAccess(env,key,fetchGitHub);
     if (check.error && check.status !== 401) return json({error:check.error},check.status);
   }
-  return room(env).fetch(new Request('https://island.internal/room?play='+play,{headers}));
+  const roomUrl = new URL('https://island.internal/room');
+  roomUrl.searchParams.set('play', play);
+  if (url.searchParams.get('globeFeed') === '1') roomUrl.searchParams.set('globeFeed', '1');
+  return room(env).fetch(new Request(roomUrl,{headers}));
 }
 
 export async function connectBog({request,env}) {

@@ -160,10 +160,10 @@ test('OAuth state is bound to its cookie and consumed on success, cancellation a
   assert.equal((await request('/api/session',{headers:{Cookie:good.session}}).then(r=>r.json())).user,null);
 });
 
-async function socket(cookie, play = true, {keepSnapshots = true} = {}) {
+async function socket(cookie, play = true, {keepSnapshots = true, globeFeed = false} = {}) {
   const headers = {Upgrade:'websocket', Origin:origin};
   if (cookie) headers.Cookie = cookie;
-  const response = await request('/api/room?play='+(play ? '1' : '0'),{headers});
+  const response = await request('/api/room?play='+(play ? '1' : '0')+(globeFeed ? '&globeFeed=1' : ''),{headers});
   assert.equal(response.status,101);
   const ws = response.webSocket;
   const messages = [];
@@ -1141,18 +1141,47 @@ test('wrapping sea: two real sockets see seam neighbours, currents keep Bog tick
   }finally{a.close();b.close();}
 });
 
-test('globe pins include unrelated players across islands and hide names from guests', async () => {
+test('only subscribed globe viewers receive cross-island pins, with guest privacy and idle updates', async () => {
   const first=await signIn(9701), second=await signIn(9702);
-  const a=await socket(first.session), b=await socket(second.session), guest=await socket();
+  const opts={globeFeed:true};
+  const a=await socket(first.session,true,opts), b=await socket(second.session,true,opts);
+  const guest=await socket(null,false,opts), legacy=await socket(null,false);
   try {
     await eventually(()=>a.duck() && b.duck());
+    assert.equal(a.welcome.globeFeed,true);
+    assert.ok(!('globeFeed' in legacy.welcome));
+    assert.ok(!('globePlayers' in a.messages.find(m=>m.type==='snapshot')));
+    const lastSnapshot=b.snapshot.tick;
+    b.send({type:'updates'});
+    await eventually(()=>b.snapshot.tick>lastSnapshot);
     await position(b,{islandId:'sunset',...mapOf('sunset').spawn,path:[]});
-    const pin=await eventually(()=>a.snapshot?.globePlayers?.find(p=>p.id===b.welcome.id && p.islandId==='sunset'));
+    assert.ok(await eventually(()=>legacy.snapshot?.globePlayers?.find(p=>p.id===b.welcome.id && p.islandId==='sunset')));
+    assert.ok(legacy.snapshot.globePlayers.every(p=>!('login' in p)));
+    await position(b,{x:mapOf('sunset').spawn.x+1});
+    await eventually(()=>b.messages.some(m=>m.type==='delta'));
+    assert.ok(b.messages.filter(m=>['snapshot','delta'].includes(m.type)).every(m=>!('globePlayers' in m)));
+    assert.ok(!a.messages.some(m=>m.type==='globe-players'));
+
+    const feeds=client=>client.messages.filter(m=>m.type==='globe-players');
+    a.send({type:'globe-subscription',open:true,subscriptionId:1});
+    guest.send({type:'globe-subscription',open:true,subscriptionId:1});
+    const firstGlobe=await eventually(()=>feeds(a)[0]);
+    const pin=firstGlobe.players.find(p=>p.id===b.welcome.id && p.islandId==='sunset');
+    assert.equal(firstGlobe.subscriptionId,1);
     assert.ok(pin.login);
     assert.ok(!a.snapshot.players.some(p=>p.id===b.welcome.id),'walking snapshots remain local');
-    await eventually(()=>guest.snapshot?.globePlayers?.some(p=>p.id===b.welcome.id));
-    assert.ok(guest.snapshot.globePlayers.every(p=>!('login' in p)));
+    const guestGlobe=await eventually(()=>feeds(guest)[0]);
+    assert.ok(guestGlobe.players.some(p=>p.id===b.welcome.id));
+    assert.ok(guestGlobe.players.every(p=>!('login' in p)));
+    await delay(250);
+    assert.equal(feeds(a).length,1,'first frame arrives before the periodic update');
+    await eventually(()=>feeds(a).length>=2);
+    assert.ok(!feeds(b).length);
+
+    guest.send({type:'globe-subscription',open:false,subscriptionId:2});
+    const framesBeforeClose=feeds(guest).length;
     b.close();
-    await eventually(()=>!a.snapshot.globePlayers.some(p=>p.id===b.welcome.id));
-  } finally {a.close(); b.close(); guest.close();}
+    await eventually(()=>!feeds(a).at(-1).players.some(p=>p.id===b.welcome.id));
+    assert.equal(feeds(guest).length,framesBeforeClose);
+  } finally {a.close(); b.close(); guest.close(); legacy.close();}
 });

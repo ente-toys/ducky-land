@@ -90,3 +90,114 @@ test('the client merges partial movement and departures, then reconnects on a mi
   receive({...delta, tick: 4, baseTick: 1});
   assert.equal(sockets.length, 2);
 });
+
+test('globe subscriptions follow the view across welcomes and reconnects', t => {
+  t.mock.timers.enable({apis: ['setTimeout']});
+  const originalSocket = globalThis.WebSocket, originalLocation = globalThis.location;
+  const sockets = [];
+  globalThis.location = {href: 'http://localhost/'};
+  globalThis.WebSocket = class {
+    static OPEN = 1;
+    readyState = 1;
+    sent = [];
+    constructor(url) {this.url = url; sockets.push(this);}
+    send(text) {this.sent.push(JSON.parse(text));}
+    receive(packet) {this.onmessage({data:JSON.stringify(packet)});}
+    close() {this.readyState = 3; this.onclose?.({code:1006});}
+  };
+  const client = new RoomClient(() => {});
+  t.after(() => {client.dispose(); globalThis.WebSocket = originalSocket; globalThis.location = originalLocation;});
+  const pins = [{id:'friend', islandId:'sunset', x:20, y:40, mode:'walking'}];
+  const feed = subscriptionId => ({type:'globe-players', subscriptionId, players:pins});
+  const snapshot = {type:'snapshot', epoch:'room', tick:1, players:[], boats:[], self:null};
+  const subscriptions = socket => socket.sent.filter(message => message.type === 'globe-subscription');
+
+  client.connect(false);
+  const first = sockets[0];
+  assert.equal(first.url.searchParams.get('globeFeed'), '1');
+  client.setGlobeOpen(true);
+  assert.deepEqual(first.sent, []);
+  first.receive({type:'welcome', id:null, globeFeed:true});
+  assert.deepEqual(subscriptions(first), [{type:'globe-subscription', open:true, subscriptionId:1}]);
+  first.receive(feed(1));
+  first.receive(snapshot);
+  assert.deepEqual(client.globePlayers, pins);
+  assert.equal(client.tick, 1);
+
+  client.setGlobeOpen(false);
+  client.setGlobeOpen(true);
+  assert.deepEqual(subscriptions(first).slice(1).map(({open,subscriptionId}) => [open,subscriptionId]), [[false,2],[true,3]]);
+  first.receive(feed(1));
+  assert.deepEqual(client.globePlayers, []);
+  first.receive(feed(3));
+  assert.deepEqual(client.globePlayers, pins);
+
+  first.close();
+  assert.deepEqual(client.globePlayers, []);
+  t.mock.timers.tick(350);
+  const second = sockets[1];
+  second.receive({type:'welcome', id:null, globeFeed:true});
+  assert.equal(subscriptions(second)[0].subscriptionId, 3);
+  first.receive(feed(3));
+  assert.deepEqual(client.globePlayers, []);
+  second.receive(feed(3));
+  assert.deepEqual(client.globePlayers, pins);
+
+  client.setGlobeOpen(false);
+  second.close();
+  t.mock.timers.tick(350);
+  const third = sockets[2];
+  third.receive({type:'welcome', id:null, globeFeed:true});
+  assert.deepEqual(subscriptions(third), []);
+  assert.deepEqual(client.globePlayers, []);
+
+  client.connect(false, true);
+  const legacy = sockets[3];
+  legacy.receive({type:'welcome', id:null});
+  legacy.receive({...snapshot, globePlayers:pins});
+  assert.deepEqual(client.globePlayers, []);
+  client.setGlobeOpen(true);
+  assert.deepEqual(client.globePlayers, pins);
+  assert.deepEqual(subscriptions(legacy), []);
+  legacy.receive({...snapshot, tick:2, globePlayers:[]});
+  assert.deepEqual(client.globePlayers, []);
+});
+
+test('the globe timer runs once per room and stops after the last subscriber leaves', async t => {
+  const room = await makeRoom();
+  t.mock.timers.enable({apis: ['setInterval']});
+  const viewer = addPlayer(room, 0, {x:2980, y:2005});
+  const peer = addPlayer(room, 1, {x:2990, y:2005});
+  let saved;
+  viewer.socket.serializeAttachment = info => {saved = info;};
+  viewer.socket.deserializeAttachment = () => saved;
+  for (const player of [viewer, peer]) room.connections.get(player.socket).globeFeed = true;
+  const subscribe = (player, open, subscriptionId) => room.webSocketMessage(player.socket, JSON.stringify({type:'globe-subscription', open, subscriptionId}));
+  const feeds = player => player.socket.notes.filter(message => message.type === 'globe-players');
+  subscribe(viewer, true, 1);
+  assert.equal(feeds(viewer).length, 1);
+  const timer = room.globeTimer;
+  subscribe(peer, true, 1);
+  assert.equal(room.globeTimer, timer);
+  t.mock.timers.tick(499);
+  assert.equal(feeds(viewer).length, 1);
+  t.mock.timers.tick(1);
+  assert.equal(feeds(viewer).length, 2);
+  assert.equal(feeds(peer).length, 2);
+  const attachment = saved;
+  room.webSocketClose(peer.socket);
+  subscribe(viewer, false, 2);
+  assert.equal(room.globeTimer, null);
+  t.mock.timers.tick(500);
+  assert.equal(feeds(viewer).length, 2);
+
+  saved = attachment;
+  room.ctx.getWebSockets = () => [viewer.socket];
+  const restored = new IslandRoom(room.ctx);
+  assert.ok(restored.globeTimer);
+  t.mock.timers.tick(500);
+  assert.equal(feeds(viewer).length, 3);
+  assert.equal(feeds(viewer).at(-1).subscriptionId, 1);
+  restored.webSocketClose(viewer.socket);
+  assert.equal(restored.globeTimer, null);
+});
