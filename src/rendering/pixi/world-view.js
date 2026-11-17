@@ -1,6 +1,7 @@
 import {visiblePlayerMarkers} from '../shared/player-markers.js';
+import {globePlayerPoint} from '../shared/globe-player-point.js';
 import {horizonRatio,pixelChart,lensAngle} from '../../world/sphere-projection.js';
-import {spherePoint,localPoint,viewFrame,seaPoint,seaHeading} from '../../world/sphere-coordinates.js';
+import {spherePoint,localPoint,viewFrame,seaHeading} from '../../world/sphere-coordinates.js';
 import {WORLD_GEO,worldIsland,WORLD_ISLANDS} from '../../world/world-map.js';
 import {dot,expMap} from '../../world/sphere.js';
 import {flatRigid} from '../../world/rigid.js';
@@ -500,7 +501,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       this.tagsOut = ease((t - .12) / .15);
       this.pinIn = me ? this.tagsOut : 0;
       if (me) {
-        const point=me.mode==='sailing'?seaPoint(id,me):spherePoint(id,me),p=project(me.x,me.y,point);
+        const point=globePlayerPoint(id,me),p=project(me.x,me.y,point);
         this.seaPin={...lonLat(point),heading:me.turn??0};
         bearing.clear();
         if(me.mode==='sailing') {
@@ -523,7 +524,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       const candidates=[];
       for (const player of this.players ?? []) {
         let point;
-        try {point=player.mode==='sailing'?seaPoint(player.islandId,player):spherePoint(player.islandId,player);} catch {continue;}
+        try {point=globePlayerPoint(player.islandId,player);} catch {continue;}
         if (!point) continue;
         const p=project(0,0,point);
         candidates.push({player,p,alpha:this.tagsOut*ease(p.face/.25)});

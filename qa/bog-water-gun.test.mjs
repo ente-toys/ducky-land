@@ -88,6 +88,26 @@ test('room prediction and authority keep the same pointer direction while moving
   assert.ok(p.x<1000&&p.facing>0);room.dispose();
 });
 
+test('a parked mouse cannot lock walking facing, while held spray aims through strafing and release restores turning',()=>{
+  const {sim,p}=fixture();let ws;
+  class Socket{readyState=1;bufferedAmount=0;constructor(){ws=this;}send(data){sim.input(p.id,JSON.parse(data));}close(){}}
+  const room=new BogCombatRoom({Socket,profile:'x'.repeat(36),url:'ws://local',navigation:{walkable:()=>true,clearLine:()=>true}});
+  ws.onmessage({data:JSON.stringify({type:'arena-welcome',id:p.id})});ws.onmessage({data:JSON.stringify(sim.snapshot())});
+  room.setAim(()=>({x:room.player.x+400,y:room.player.y}));
+  let now=0;
+  const step=vector=>{room.step(1/60,vector,now+=100);sim.step(1/60);};
+  const directions=[[0,1,0],[1,1,Math.PI/4],[1,0,Math.PI/2],[1,-1,3*Math.PI/4],[0,-1,Math.PI],[-1,-1,-3*Math.PI/4],[-1,0,-Math.PI/2],[-1,1,-Math.PI/4]];
+  try{
+    for(const [x,y,facing]of directions){step({x,y});assert.equal(room.facing,facing);assert.equal(p.facing,facing);}
+    room.setFire(true);
+    for(const [x,y]of directions){step({x,y});assert.ok(Math.abs(room.facing-Math.PI/2)<.01);assert.ok(Math.abs(p.facing-room.facing)<.01);}
+    room.setFire(false);
+    for(const [x,y,facing]of directions){step({x,y});assert.equal(room.facing,facing);assert.equal(p.facing,facing);}
+    room.setAim(null);room.setFire(true);step({x:-1,y:0});assert.equal(room.facing,-Math.PI/2,'keyboard-only spray follows movement');
+    room.stopInput();assert.equal(room.fire,false);assert.equal(room.aim,null);
+  }finally{room.dispose();}
+});
+
 test('a hundred simultaneous sprays cannot starve later players at the shot cap',()=>{
   const sim=createBogCombat({blockers:[],hideBushes:[],pickupSpots:[],bounds:{width:20000,height:20000},pads:()=>[{x:1000,y:1000}]});
   const players=Array.from({length:100},(_,i)=>{

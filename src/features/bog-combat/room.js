@@ -8,7 +8,7 @@ export class BogCombatRoom {
     this.islandId=islandId;this.mode='walking';this.boats=[];this.alpha=1;this.fire=false;this.facing=0;this.aim=null;this.muzzle=null;
     this.client=new ArenaClient({...options,onStatus,onSnapshot:snapshot=>{
       const self=snapshot.players.find(p=>p.id===this.client.id);
-      if(self&&!this.aim)this.facing=self.facing??this.facing;
+      if(self&&(!this.fire||!this.aim))this.facing=self.facing??this.facing;
       onSnapshot(snapshot,self);
     }});
   }
@@ -30,7 +30,9 @@ export class BogCombatRoom {
     const player=this.client.view()??this.player;
     const muzzle=this.muzzle?.();
     const origin=muzzle??player;
-    const target=this.aim?.();
+    // A parked cursor must not lock ordinary walking into a strafe. Keep
+    // pointer aiming while spray is held, including through automatic reloads.
+    const target=this.fire?this.aim?.():null;
     this.facing=target&&origin&&Math.hypot(target.x-origin.x,target.y-origin.y)>4
       ?Math.atan2(target.x-origin.x,target.y-origin.y):movementFacing(vector,this.facing);
     this.client.control(vector,this.facing,living&&this.fire,dt,now,this.queuedEmote,muzzle&&player?{x:muzzle.x-player.x,y:muzzle.y-player.y}:null,target?this.facing:heldAimFacing(this.facing));
