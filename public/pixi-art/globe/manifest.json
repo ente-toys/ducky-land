@@ -1059,14 +1059,14 @@
         },
         {
           "path": "src/world/prop-outlines/islands.js",
-          "sha256": "2f1fb0eae94ccb5e292d23c430a1045e9d41b01d42affe78e59af2ae1f5b6684"
+          "sha256": "c3defb7e67c9d6f4b04497ea1a5f99be09dbb061b33aea001f946f980796ee64"
         },
         {
           "path": "src/world/world-map.js",
           "sha256": "939595f5fbd64d88d0b7b11d0695db67edb515664887aef8efc894b9140fcbaf"
         }
       ],
-      "sha256": "5c9d00120f45e9189fb43309ad2bb50e7f1b26ff1e3e86446447b53b74a3d38b"
+      "sha256": "130d9b34412835966d06106b864e44d9485754db98669603a0214ba83499a9d8"
     },
     "groundSha256": "dddbf340591c9c37fbe7ffb512aa8561b0dd33aec741be13b64e96b528c9ab21",
     "src": "/pixi-art/globe/home.svg",

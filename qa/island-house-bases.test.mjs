@@ -1,3 +1,4 @@
+import {furnitureDepth,usesFurnitureDepth} from '../src/rendering/pixi/furniture-depth.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mapOf,makeMap} from '../src/world/island-maps.js';
@@ -77,4 +78,15 @@ test('Bog keeps every prop foot and body blocker, including its cottage cover',(
  const map=mapOf('isle-249');
  assert.ok(!map.walk.obstacles.some(o=>o.homeHouseBase));
  for(const p of map.world.props)for(const o of [p.footprint,p.bodyFootprint].filter(Boolean))if(blocks(o,p))assert.ok(map.walk.obstacles.includes(o),p.id);
+});
+
+for(const id of ['sunset','isle-251','isle-250'])test(`${id}: every house keeps rear and front depth in the furniture layer`,()=>{
+  assert.ok(usesFurnitureDepth(id));
+  const props=mapOf(id).world.props.filter(p=>islandHouseCut(p)!==null);
+  assert.ok(props.length>=20);
+  for(const p of props){
+    const points=[p.footprint.poly,...(p.footprint.parts??[])].flat(),top=Math.min(...points.map(q=>q[1])),z=p.sortY??p.z??p.y,y=top+(z-top)*.2;
+    assert.ok(furnitureDepth([p],p.x,y)<z,`${p.id}: behind the roof`);
+    assert.equal(furnitureDepth([p],p.x,z+100),z+100,`${p.id}: in front of the house`);
+  }
 });

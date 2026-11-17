@@ -1,9 +1,11 @@
+import {usesHouseBase} from '../../world/prop-outlines/islands.js';
 import {shapeIndex} from '../../../assets/world/island-geometry.mjs';
 import {propBodyPadding} from '../../world/home/prop-outline-rules.js';
 import {HOME_DUCK_BODY} from '../../world/home/duck-body.js';
 const indexes=new WeakMap();
 // Feet cannot enter a solid outline. At its open sides, draw the standing
 // duck in front of furniture instead of reserving an invisible full-body box.
+// Houses keep base-line depth so their roofs cover Duckies walking behind.
 // Trees keep their original canopy mask and depth. Island packs and Home
 // both carry the original footprints, so this also works for remote Duckies.
 export function furnitureDepth(props,x,y,depth=y){
@@ -13,7 +15,7 @@ export function furnitureDepth(props,x,y,depth=y){
  if(!near){
   const shapes=[];
   for(const p of props){
-   if(!p.src||!p.footprint||propBodyPadding(p).width!==48)continue;
+   if(!p.src||!p.footprint||propBodyPadding(p).width!==48||usesHouseBase(p.footprint,true))continue;
    // Some footprints are ellipses or part lists without a poly: only use real [x,y] points, skip the rest.
    const rings=[p.footprint.poly,...(p.footprint.parts??[]).map(r=>Array.isArray(r)?r:r?.poly)].filter(Array.isArray),points=rings.flat().filter(q=>Array.isArray(q)&&Number.isFinite(q[0])&&Number.isFinite(q[1]));
    if(!points.length&&!p.footprint.propBase)continue;

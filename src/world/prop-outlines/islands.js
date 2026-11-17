@@ -18,7 +18,8 @@ function houseBase(f) {
   const {parts, ...rest} = f;
   return base.length ? {...rest, homeHouseBase: true, poly: base[0], ...(base.length > 1 ? {parts: base.slice(1)} : {})} : f;
 }
+export const usesHouseBase = (o, island = false) => isHouse(o) && (!island || !ISLAND_NON_HOUSE.test(`${o.prop ?? ''} ${o.name ?? ''} ${o.id ?? ''}`));
 export const homeHouseBases = (obstacles, island = false) => {
-  const house = o => isHouse(o) && (!island || !ISLAND_NON_HOUSE.test(`${o.prop ?? ''} ${o.name ?? ''} ${o.id ?? ''}`));
+  const house = o => usesHouseBase(o, island);
   return obstacles.filter(o => !(o.bodyBlock && house(o))).map(o => o.poly && !o.homeHouseBase && house(o) ? houseBase(o) : o);
 };

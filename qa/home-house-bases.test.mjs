@@ -5,7 +5,7 @@ import {HOME_MAP, makeMap} from '../src/world/island-maps.js';
 import {geometry} from '../assets/world/island-geometry.mjs';
 import raw from '../assets/world/walk-world.json' with {type:'json'};
 import {homeHouseBases} from '../src/world/prop-outlines/islands.js';
-import {homeHouseCut} from './home-house-rule.mjs';
+import {homeHouseCut,islandHouseCut} from './home-house-rule.mjs';
 
 const bundle=await build({stdin:{resolveDir:process.cwd(),contents:`export {computeHomeScene} from './src/world/home/startup-scene.js';`},bundle:true,platform:'node',format:'esm',write:false});
 const P=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
@@ -71,4 +71,18 @@ test('band clamps, disconnected parts and excluded house names retain their rule
   const map=makeMap('other',{world,harbor:{jetty:{foot:[0,0],tip:[0,400]}},addJetty:false});
   assert.equal(map.walk.obstacles[0].homeHouseBase,true,'other islands use house bases');
   assert.deepEqual(makeMap('bog-arena',{world,harbor:{jetty:{foot:[0,0],tip:[0,400]}},addJetty:false}).walk.obstacles,world.obstacles,'Bog keeps full house blockers');
+});
+
+test('Duckies behind every Home house stay behind its roof instead of sorting on top',async()=>{
+  const {furnitureDepth}=await import('../src/rendering/pixi/furniture-depth.js');
+  let checked=0;
+  for(const p of scene.props.filter(p=>islandHouseCut(p)!==null)){
+    const points=[p.footprint.poly,...(p.footprint.parts??[])].flat(),top=Math.min(...points.map(q=>q[1]));
+    const y=top+(p.z-top)*.2;
+    assert.ok(y<p.z);
+    assert.ok(furnitureDepth([p],p.x,y,y)<p.z,`${p.id}: standing behind the house must not draw over its roof`);
+    assert.equal(furnitureDepth([p],p.x,p.z+100),p.z+100,`${p.id}: front depth stays in front`);
+    checked++;
+  }
+  assert.ok(checked>=20,'covers the real Home houses');
 });
