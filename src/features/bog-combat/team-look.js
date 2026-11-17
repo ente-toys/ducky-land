@@ -9,11 +9,6 @@ export function loadEvilLook(){
  }).catch(error=>{loading=null;throw error;});
 }
 
-let karmaLoading;
-export function loadKarmaLook(){
- const urls=import.meta.glob('./assets/karma-ducky/*.svg',{query:'?url',import:'default',eager:true});
- return karmaLoading??=Promise.all(Object.entries(urls).map(async([file,url])=>[file.split('/').at(-1),await Assets.load(url)])).then(entries=>{
-  const textures=new Map(entries);
-  return Object.freeze({textures,outfit:Object.freeze({shades:6})});
- }).catch(error=>{karmaLoading=null;throw error;});
-}
+// Karma uses the original yellow walking textures, including full wing outlines.
+const karmaLook=Object.freeze({textures:new Map(),outfit:Object.freeze({shades:6})});
+export function loadKarmaLook(){return Promise.resolve(karmaLook);}

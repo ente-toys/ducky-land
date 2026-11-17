@@ -45,7 +45,7 @@ test('seven-second hiding is omitted from enemies, visible to allies, untaggable
  hit(sim,p);sim.step(1/60);assert.equal(p.lives,3);advance(sim,3.05);
  assert.ok(p.shieldUntil>sim.state.time);
  sim.input(p.id,{seq:0,x:0,y:0,fire:true});sim.step(1/60);
- assert.equal(p.ammo,11);assert.ok(p.shieldUntil<=sim.state.time);
+ assert.equal(p.ammo,RULES.ammoCapacity-1);assert.ok(p.shieldUntil<=sim.state.time);
  assert.equal(sim.snapshot('evil').players.length,1);
  p.hits=RULES.hitsPerHeart-1;hit(sim,p);sim.step(1/60);assert.equal(p.lives,2);
 });

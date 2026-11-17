@@ -61,7 +61,7 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
         <div className="bog-hud-group"><small>{note?'Status':`Paint ${ammo}/${RULES.ammoCapacity}`}</small>
           <div className="bog-hud-ammo"><img className="bog-combat-popper-icon" src={popperIcon(mine)} alt="" aria-hidden="true"/>
             {note?<span className="bog-hud-note" role="status">{note}</span>
-              :<div className={`bog-hud-paint bog-hud-paint-${mine}`} role="img" aria-label={`Paint ${ammo} of ${RULES.ammoCapacity}`}>{Array.from({length:RULES.ammoCapacity},(_,i)=><i key={i} className={i<ammo?'':'empty'}/>)}</div>}
+              :<div className={`bog-hud-paint bog-hud-paint-${mine}`} role="img" aria-label={`Paint ${ammo} of ${RULES.ammoCapacity}`}>{Array.from({length:12},(_,i)=><i key={i} className={i<Math.ceil(ammo/RULES.ammoCapacity*12)?'':'empty'}/>)}</div>}
           </div></div>
       </div>
     </div>

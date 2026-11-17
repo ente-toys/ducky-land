@@ -10,9 +10,8 @@ export function demoBotCount(search){
 }
 export function createDemo(combat,count,{random=Math.random}={}){
   const sim=createBogCombat(combat),brains=new Map(),sockets=new Set();
-  const match={winner:null,restartAt:0,round:1};
   const heroId='bot-0';
-  const {think}=createBotController(sim,combat,{random,showcase:true,heroId});
+  const {think,step:stepBots}=createBotController(sim,combat,{random,heroId});
   const metrics={cpuMs:0,maxCpuMs:0};
   for(let i=0;i<count;i++){
     const team=i%2?'evil':'karma',p=sim.join({id:`bot-${i}`,name:i===0?'Ducky':BOG_BOT_NAMES[i-1],team});
@@ -32,21 +31,13 @@ export function createDemo(combat,count,{random=Math.random}={}){
     constructor(options){super({...options,Socket:LocalSocket});this.demoSpectator=!options.team;this.demo=true;}
     step(dt,input,now=performance.now()){
       const start=performance.now();
-      if(!match.winner)for(const [id,b]of brains)think(sim.state.players.get(id),b);
+      for(const [id,b]of brains)think(sim.state.players.get(id),b);
+      stepBots();
       super.step(dt,input,now);
-      if(!match.winner){
-        sim.step(dt);
-        if(sim.state.scores.karma>=30){match.winner='karma';match.restartAt=now+4200;}
-      }else if(now>=match.restartAt){
-        const players=[...sim.state.players.values()].map(p=>({id:p.id,name:p.name,team:p.team,profile:p.profile,bot:p.bot}));
-        for(const p of players)sim.leave(p.id);
-        sim.state.shots=[];sim.state.splats=[];sim.state.events=[];sim.state.scores.karma=sim.state.scores.evil=0;
-        for(const {bot,...p}of players){sim.join(p).bot=bot;const b=brains.get(p.id);if(b)Object.assign(b,{path:[],planAt:0,retreat:false,reactAt:0});}
-        match.winner=null;match.round++;
-      }
+      sim.step(dt);
       if(sim.state.tick%3===0)for(const socket of sockets)if(socket.readyState===1)socket.publish();
       metrics.cpuMs=performance.now()-start;metrics.maxCpuMs=Math.max(metrics.maxCpuMs,metrics.cpuMs);
     }
   }
-  return {sim,metrics,match,heroId,Room:DemoRoom,Socket:LocalSocket};
+  return {sim,metrics,heroId,Room:DemoRoom,Socket:LocalSocket};
 }

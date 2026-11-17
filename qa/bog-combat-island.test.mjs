@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {Container,Texture} from 'pixi.js';
+import {RULES} from '../src/features/bog-combat/rules.js';
 import {walkStep} from '../src/gameplay/player-motion.js';
 import {createBogCombat} from '../src/features/bog-combat/sim.js';
 import {walkingActor} from '../src/features/bog-combat/physics.js';
@@ -14,19 +15,19 @@ import {normalizeBogBlockers} from '../src/features/bog-combat/blockers.js';
 import {combatForBogEnvironment} from '../src/features/bog-combat/environment.js';
 import guns from '../src/features/bog-combat/assets/guns.json' with {type:'json'};
 
-test('Bog walking, Shift acceleration, braking and sliding are identical to the island player',()=>{
+test('Bog walking, Shift acceleration, braking and sliding are the island movement model at Bog speed',()=>{
   const nav={walkable:(x,y)=>x>0&&x<500&&y>0&&y<500,clearLine(from,to){return this.walkable(...from)&&this.walkable(...to);}};
   const arena=createBogCombat({navigation:nav,blockers:[],bounds:{width:500,height:500},pads:()=>[{x:250,y:250}]});
   const p=arena.join({id:'a',team:'karma'}),reference=walkingActor(p);
   for(let i=0;i<360;i++){
     const control=i<30?{x:1,y:0}:i<120?{x:1,y:1,run:true}:i<180?{x:-1,y:0}:i<240?{x:0,y:0}:{x:-1,y:-1,run:true};
     arena.input('a',{seq:i,...control,fire:false});arena.step(1/60);
-    walkStep(reference,nav,1/60,arena.state.time,control);
+    walkStep(reference,nav,1/60,arena.state.time,control,{speedMultiplier:RULES.moveSpeed});
     for(const key of ['x','y','pace','turn','travel','action'])assert.equal(p[key],reference[key],`${key} at frame ${i}`);
   }
 });
 
-test('all eight facing directions use island axes and mouse-style aim packets cannot steer paint',()=>{
+test('all eight facing directions use island axes and precise facing aims independently of movement',()=>{
   for(const x of [-1,0,1])for(const y of [-1,0,1]){
     if(!x&&!y)continue;
     const facing=movementFacing({x,y}),vector=facingVector(facing),length=Math.hypot(x,y);
@@ -35,7 +36,7 @@ test('all eight facing directions use island axes and mouse-style aim packets ca
   }
   const arena=createBogCombat(),p=arena.join({id:'a',team:'karma'});
   arena.input('a',{seq:0,x:0,y:1,facing:Math.PI,ax:1,ay:0,fire:true});arena.step(1/60);
-  assert.equal(p.facing,0);assert.equal(arena.state.shots[0].dx,0);assert.equal(arena.state.shots[0].dy,1);
+  assert.equal(p.facing,Math.PI);assert.ok(Math.abs(arena.state.shots[0].dx)<1e-9);assert.equal(arena.state.shots[0].dy,-1);
 });
 
 test('shoot captures Space, J and left click while island movement and Shift keep their original listeners',()=>{
@@ -63,7 +64,7 @@ test('the room adapter keeps one shared movement step and ignores movement while
   receive({type:'arena-welcome',id:'self'});
   const snapshot=(tick,alive)=>({type:'arena-snapshot',tick,time:tick/60,scores:{karma:0,evil:0},shots:[],splats:[],players:[{id:'self',team:'karma',name:'Ducky',alive,x:100,y:100,turn:0,facing:0,ack:-1,stats:{},ammo:12}]});
   receive(snapshot(1,true));const reference=walkingActor(room.player),control={x:1,y:-1,run:true};
-  room.setFire(true);room.step(1/60,control,100);walkStep(reference,navigation,1/60,2/60,control);
+  room.setFire(true);room.step(1/60,control,100);walkStep(reference,navigation,1/60,2/60,control,{speedMultiplier:RULES.moveSpeed});
   assert.equal(room.player.x,reference.x);assert.equal(room.player.y,reference.y);assert.equal(room.player.pace,reference.pace);
   assert.equal(ws.sent[0].fire,true);assert.equal(ws.sent[0].run,true);assert.equal(room.poses()[0].mode,'walking');assert.deepEqual(room.poses()[0].outfit,{});
   receive(snapshot(2,false));room.step(1/60,control,200);assert.equal(room.player.x,100);assert.equal(ws.sent.at(-1).fire,false);assert.equal(ws.sent.at(-1).x,0);

@@ -1,3 +1,4 @@
+import {RULES} from './rules.js';
 import {KARMA_REQUIRED} from './entry.js';
 import {trapFocus} from './BogDock.jsx';
 
@@ -21,8 +22,8 @@ export function BogWelcome({dialog, onEnter, onLeave, status}) {
         <p className="bog-ticket-lede">A paint fight in the swamp. You pick your side on the next screen.</p>
         <dl className="bog-ticket-fields">
           <div><dt>Team</dt><dd>Karma or Evil</dd></div>
-          <div><dt>Popper</dt><dd>12 splats a load</dd></div>
-          <div><dt>Hearts</dt><dd>5, three splats each</dd></div>
+          <div><dt>Popper</dt><dd>{RULES.ammoCapacity} droplets a tank</dd></div>
+          <div><dt>Hearts</dt><dd>{RULES.lives}, {RULES.hitsPerHeart} droplets each</dd></div>
           <div><dt>Costs</dt><dd><img src="/pixi-art/karma/golden-feather.svg" alt=""/>{KARMA_REQUIRED} golden feathers</dd></div>
         </dl>
         <div className="bog-ticket-actions">

@@ -392,7 +392,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.angry=p.angry>.02&&face;
     if(p.angry>.02&&face&&!appearance?.outfit?.shades)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
-  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false,ice=null}={}){
+  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false,ice=null,aiming=false}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     sailing=isSailing;
     seated=isSeated;
@@ -412,7 +412,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     turnLean+=(clamp(-turnRate*.035*gait,-.13,.13)*(reducedMotion?0:1)-turnLean)*(1-Math.exp(-dt/.12));
     if(!walking&&currentAction===0&&!reducedMotion){lookAt-=dt;if(lookAt<=0){const r=((Math.sin(elapsed*12.9898+phase)*43758.5453)%1+1)%1;lookGoal=r<.4?{x:0,y:0}:{x:(r-.7)*26,y:(r*7%1-.5)*6};lookAt=1.6+r*2.4;}}else lookGoal={x:0,y:0};
     const ls=1-Math.exp(-dt/.09);look.x+=(lookGoal.x-look.x)*ls;look.y+=(lookGoal.y-look.y)*ls;
-    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/.24));
+    turnAngle+=angleDifference(safe(turn),turnAngle)*(1-Math.exp(-dt/(aiming?.065:.24)));
     const degrees=turnAngle*180/Math.PI,target=views.reduce((best,v)=>Math.abs(angleDifference(v.spec.angle*Math.PI/180,turnAngle))<Math.abs(angleDifference(best.spec.angle*Math.PI/180,turnAngle))?v:best,current);
     if(target!==current&&Math.abs(angleDifference(current.spec.angle*Math.PI/180,turnAngle))>Math.PI/views.length){
       current.root.visible=false;

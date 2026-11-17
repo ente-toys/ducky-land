@@ -78,9 +78,9 @@ test('five pickups occupy walkable Mid, Site A/B and two lane spots, with a twen
   assert.deepEqual(spots.map(s=>s.kind),['paint','paint','shield','shield','paint'],'paint and shield only: one of each per side plus Mid');
   for(const s of spots)assert.ok(BOG_COMBAT.navigation.walkable(s.x,s.y));
   const {sim,p}=fixture({pickupSpots:[{id:'paint',kind:'paint',x:200,y:400}]});p.ammo=2;p.reloadAt=100;sim.step(1/60);
-  assert.equal(p.ammo,12);assert.equal(p.reloadAt,0);assert.equal(sim.state.pickups[0].readyAt,sim.state.time+20);
+  assert.equal(p.ammo,RULES.ammoCapacity);assert.equal(p.reloadAt,0);assert.equal(sim.state.pickups[0].readyAt,sim.state.time+20);
   const exported=sim.snapshot('karma').pickups;exported[0].readyAt=0;assert.ok(sim.state.pickups[0].readyAt>0);
-  p.ammo=2;p.topUpAt=Infinity;advance(sim,19.9);assert.equal(p.ammo,2,'only the pickup refills here (top-up held off)');advance(sim,.15);assert.equal(p.ammo,12);
+  p.ammo=2;p.topUpAt=Infinity;advance(sim,19.9);assert.equal(p.ammo,2,'only the pickup refills here (top-up held off)');advance(sim,.15);assert.equal(p.ammo,RULES.ammoCapacity);
 });
 test('a part-empty tank tops up one paint at a time once you stop shooting; an empty one still reloads in one go',()=>{
   const {sim,p}=fixture({pickupSpots:[]});

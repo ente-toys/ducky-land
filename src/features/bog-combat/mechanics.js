@@ -6,16 +6,32 @@ import {isCombatHidden} from './hide-bushes.js';
 
 const sight={point:{x:0,y:0},fraction:1,blocker:null};
 export function assistShot(shot,player,players,blockers,time){
-  let nearest=RULES.range*RULES.range,target=null;
+  const origin=Number.isFinite(shot.x)&&Number.isFinite(shot.y)?shot:player;
+  let nearest=RULES.range*RULES.range,best=-1,target=null;
   const cosine=Math.cos(RULES.aimCone);
   for(const enemy of players){
     if(!enemy.alive||enemy.team===player.team||isCombatHidden(enemy,time))continue;
-    const dx=enemy.x-player.x,dy=enemy.y-player.y,d2=dx*dx+dy*dy;
-    if(d2<=0||d2>nearest||(dx*shot.dx+dy*shot.dy)/Math.sqrt(d2)<cosine)continue;
-    if(traceShot(player,enemy,blockers,sight).blocker)continue;
-    nearest=d2;target=enemy;
+    const dx=enemy.x-origin.x,dy=enemy.y-origin.y,d2=dx*dx+dy*dy;
+    if(d2<=0||d2>RULES.range*RULES.range)continue;
+    const alignment=(dx*shot.dx+dy*shot.dy)/Math.sqrt(d2);
+    if(alignment<cosine||alignment<best-1e-9||(Math.abs(alignment-best)<1e-9&&d2>=nearest))continue;
+    if(traceShot(origin,enemy,blockers,sight).blocker)continue;
+    nearest=d2;best=alignment;target=enemy;
   }
-  if(target){const d=Math.sqrt(nearest);shot.dx=(target.x-player.x)/d;shot.dy=(target.y-player.y)/d;}
+  if(target){
+    let dx=target.x-origin.x,dy=target.y-origin.y;
+    // Lead a moving target by projectile flight time, within the same small assist cone.
+    const velocity=target.heading,pace=Math.min(target.travel??0,target.pace??0);
+    const vx=(velocity?.[0]??0)*pace,vy=(velocity?.[1]??0)*pace;
+    const a=vx*vx+vy*vy-RULES.shotSpeed**2,b=2*(dx*vx+dy*vy),c=dx*dx+dy*dy;
+    const discriminant=b*b-4*a*c;
+    const t=discriminant>=0&&Math.abs(a)>1e-9?(-b-Math.sqrt(discriminant))/(2*a):0;
+    if(t>0&&t<=RULES.range/RULES.shotSpeed){
+      const lead={x:target.x+vx*t,y:target.y+vy*t},lx=lead.x-origin.x,ly=lead.y-origin.y,len=Math.hypot(lx,ly);
+      if(len<=RULES.range&&(lx*shot.dx+ly*shot.dy)/len>=cosine&&!traceShot(origin,lead,blockers,sight).blocker){dx=lx;dy=ly;}
+    }
+    const d=Math.hypot(dx,dy);shot.dx=dx/d;shot.dy=dy/d;
+  }
   return shot;
 }
 
@@ -41,7 +57,7 @@ function advance(p,nav,dx,dy){
   }
 }
 export function combatWalkStep(p,nav,dt,time,input){
-  p.facing=movementFacing(input,p.facing??0);
+  p.facing=Number.isFinite(input.facing)?input.facing:movementFacing(input,p.facing??0);
   if(input.dodge)startDodge(p,input.dodge,time-dt,input);
   const left=Math.max(0,Math.min(dt,(p.dodgeUntil??0)-(time-dt)));
   if(left>0){
@@ -50,5 +66,10 @@ export function combatWalkStep(p,nav,dt,time,input){
     p.pace=0;p.travel=Math.hypot(p.x-x,p.y-y)/dt;p.action=p.travel>.001?1:0;
     return;
   }
-  walkStep(p,nav,dt,time,input);
+  const before=p.turn;
+  walkStep(p,nav,dt,time,input,{speedMultiplier:RULES.moveSpeed});
+  if(Number.isFinite(input.facing)){
+    const delta=Math.atan2(Math.sin(p.facing-before),Math.cos(p.facing-before));
+    p.turn=before+delta*(1-Math.exp(-18*dt));
+  }
 }

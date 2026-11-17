@@ -11,18 +11,11 @@ const base=new URL('../src/features/bog-combat/assets/evil-ducky/',import.meta.u
 const manifest=JSON.parse(fs.readFileSync(new URL('../public/pixi-duck/manifest.json',import.meta.url)));
 const banned=/<(?:image|linearGradient|radialGradient|filter)\b|data:/i;
 
-test('all eight Evil directions preserve live paths with approved fills and clipped profile wing endings',()=>{
+test('all eight Evil directions preserve live paths with approved fills and complete original wing strokes',()=>{
  for(const view of manifest.views)for(const part of view.parts.filter(p=>['body','wing','tuft'].includes(p.role))){
   const live=fs.readFileSync(new URL('../public'+part.url,import.meta.url),'utf8');
   const devil=fs.readFileSync(new URL(part.url.split('/').at(-1),base),'utf8');
-  const profileWing=part.role==='wing'&&Math.abs(view.angle)===90;
-  let expected=live.replace(/#ffd525/ig,'#EF5144').replace(/#ffe161/ig,'#FF9C90');
-  if(profileWing){
-   const clip=view.angle===90?'M0 0H320V400H600V600H0Z':'M290 0H600V600H0V388H290Z';
-   expected=expected.replace('<defs />',`<defs><clipPath id="wing-outline"><path d="${clip}"/></clipPath></defs>`).replace('<path id="Vector_15"','<path clip-path="url(#wing-outline)" id="Vector_15"');
-   const karma=fs.readFileSync(new URL('../src/features/bog-combat/assets/karma-ducky/'+part.url.split('/').at(-1),import.meta.url),'utf8');
-   assert.equal(karma,expected.replaceAll('#EF5144','#FFD525'),'both teams trim the same profile ending');
-  }
+  const expected=live.replace(/#ffd525/ig,'#EF5144').replace(/#ffe161/ig,'#FF9C90');
   assert.equal(devil,expected,part.url);
   assert.doesNotMatch(devil,banned);
  }
@@ -58,10 +51,6 @@ test('Karma alone has flat black shades and white/yellow padlock poppers in ever
  const dropped=fs.readFileSync(new URL('ghosts/karma-popper.svg',dir),'utf8');
  for(const colour of ['#FFFFFF','#FFD525','#232323'])assert.ok(dropped.includes(colour));
  assert.match(dropped,/id="karma-padlock"/);assert.doesNotMatch(dropped,banned);
- for(const file of fs.readdirSync(new URL('karma-ducky/',dir))){
-  const svg=fs.readFileSync(new URL('karma-ducky/'+file,dir),'utf8');
-  assert.doesNotMatch(svg,banned);assert.match(svg,/#232323/);
- }
  const hud=fs.readFileSync(new URL('../src/features/bog-combat/BogGame.jsx',import.meta.url),'utf8');
  assert.ok(hud.includes('/pixi-art/themes/bog-arena/hud/'));assert.ok(hud.includes("'karma-padlock'"));
  assert.ok(fs.readFileSync(new URL('../public/pixi-art/themes/bog-arena/hud/karma-padlock-popper.svg',import.meta.url),'utf8').includes('id="karma-padlock"'));

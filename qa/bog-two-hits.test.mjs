@@ -16,11 +16,11 @@ function fire(sim,shooter){
   assert.ok(sim.input(shooter.id,{seq:shooter.seq+1,x:0,y:0,fire:true}));
   sim.step(1/60);
   assert.ok(sim.input(shooter.id,{seq:shooter.seq+1,x:0,y:0,fire:false}));
-  advance(sim,RULES.fireDelay);
+  advance(sim,Math.max(RULES.fireDelay,.18));
 }
 const snapshotVictim=sim=>sim.snapshot().players.find(p=>p.id==='victim');
 
-test('first paint hit leaves a hit splat without a tag; second hit loses a heart and respawns with no hits',()=>{
+test('individual droplets accumulate damage before a full stream loses a heart and respawns with no hits',()=>{
   const {sim,shooter,victim}=fixture(),lives=victim.lives;
   assert.equal(victim.hits,0);
   fire(sim,shooter);

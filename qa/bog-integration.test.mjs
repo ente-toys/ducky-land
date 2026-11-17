@@ -59,7 +59,11 @@ test('real-map lobby -> both clients walk to mid -> shoot/tag -> respawn -> save
     assert.deepEqual(lobbyData.counts,{karma:1,evil:1});
     const step=async(controls={})=>{
       now+=1000/60;
-      for(const c of [a,b])c.control(controls[c.id]??{x:0,y:0},0,controls[c.id]?.fire??false,1/60,now);
+      for(const c of [a,b]){
+        const input=controls[c.id]??{x:0,y:0};
+        const facing=input.x||input.y?Math.atan2(input.x,input.y):c.predicted?.facing??0;
+        c.control(input,facing,input.fire??false,1/60,now);
+      }
       room.step();if(room.arena.state.tick%3===0){room.broadcast();await Promise.resolve();}
     };
     const walk=async(c,target)=>{

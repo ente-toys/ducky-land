@@ -57,7 +57,7 @@ test('combat fades whole Duckies during spawn hiding and bush hiding, and restor
     for(const p of players){const root=new Container();objects.addChild(root);liveRigs.set(p.id,{rig:{root,dispose(){root.removeFromParent();root.destroy({children:true});}}});}
     class Room{
       client={snapshot:{tick:1,time:10,players,shots:[],splats:[],events:[]},receivedAt:performance.now()};
-      setFire(){}dispose(){}
+      setAim(){}setFire(){}dispose(){}
     }
     const engine={canvas:document.querySelector('canvas'),objects,liveRigs,stopInput(){},dispose(){},renderLiveDucks(poses){for(const p of poses){const root=liveRigs.get(p.id).rig.root;root.visible=true;root.alpha=.7;root.tint=0x777777;}}};
     layer=await attachBogCombat(engine,{navigation:nav,Room,loadGun:async()=>[],loadGhosts:async()=>({}),loadPickups:async()=>({}),loadLeaves:async()=>Texture.EMPTY});

@@ -1,3 +1,4 @@
+import {botMuzzleOffset,heldAimFacing} from './muzzle.js';
 import {traceShot} from './physics.js';
 import {movementFacing,facingVector} from './facing.js';
 import {RULES} from './rules.js';
@@ -83,7 +84,8 @@ export function createBotController(sim,combat,{random=Math.random,showcase=fals
       }
     }
     if(router)p.path=b.path;
-    const packet=b.packet;packet.seq=++b.seq;packet.x=x;packet.y=y;packet.run=run;packet.fire=fire;sim.input(p.id,packet);
+    const muzzle=botMuzzleOffset(movementFacing({x,y},p.facing),p.team,b.muzzle??=( {}));
+    const packet=b.packet;packet.aimFacing=heldAimFacing(movementFacing({x,y},p.facing));packet.mx=muzzle.x;packet.my=muzzle.y;packet.seq=++b.seq;packet.x=x;packet.y=y;packet.run=run;packet.fire=fire;sim.input(p.id,packet);
     if(router&&b.path.length||fire&&!b.retreat&&!dodging){packet.seq=++b.seq;packet.x=packet.y=0;packet.run=false;sim.input(p.id,packet);}
   }
   return {think,step:()=>router?.step(),prepare:b=>router?.prepare(b)};

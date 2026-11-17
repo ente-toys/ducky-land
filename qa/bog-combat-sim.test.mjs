@@ -20,7 +20,7 @@ test('only gun C Popper uses review range and projectile speed',()=>{
   assert.equal(RULES.range,10*D);assert.equal(RULES.shotSpeed,28*D);
   const {arena,b}=fixture();b.x=1100;shot(arena);arena.step(1/60);const s=arena.state.shots[0];
   assert.ok(Math.abs(s.x-100-RULES.shotSpeed/60)<1e-7);
-  advance(arena,.5);assert.equal(b.alive,true);assert.equal(arena.state.shots.length,0);assert.ok(arena.state.splats.length);
+  arena.input('a',{seq:1,x:0,y:0,fire:false});advance(arena,.5);assert.equal(b.alive,true);assert.equal(arena.state.shots.length,0);assert.ok(arena.state.splats.length);
 });
 test('swept collision catches a fast shot even when neither endpoint is inside the duck',()=>{
   assert.equal(circleHit({x:0,y:0},{x:100,y:0},{x:50,y:0},10),.4);
@@ -46,7 +46,7 @@ test('nearest enemy consumes the shot, friendly fire passes through teammates',(
 });
 test('tagged duck cannot move or fire and respawns at its own base after three seconds',()=>{
   const {arena,b}=fixture();b.hits=RULES.hitsPerHeart-1;shot(arena);advance(arena,.3);const position={x:b.x,y:b.y};
-  shot(arena,'b',10,{x:-1,ax:-1});advance(arena,.3);assert.equal(b.x,position.x);assert.equal(b.y,position.y);assert.equal(arena.state.shots.length,0);
+  shot(arena,'b',10,{x:-1,ax:-1});advance(arena,.3);assert.equal(b.x,position.x);assert.equal(b.y,position.y);assert.equal(arena.state.shots.filter(s=>s.owner==='b').length,0);
   advance(arena,2.5);assert.equal(b.alive,false);advance(arena,.3);assert.equal(b.alive,true);assert.equal(b.x,450);assert.equal(b.base,'evil');assert.ok(b.shieldUntil>arena.state.time);
 });
 test('spawn hiding is seven seconds and firing breaks your own protection',()=>{
@@ -57,7 +57,7 @@ test('inputs cannot teleport, increase movement speed, report hits or bypass fir
   const {arena,a,b}=fixture();b.x=1100;
   assert.ok(shot(arena,'a',1,{x:999,score:9999,kills:999,hit:'b'}));advance(arena,.1);
   assert.ok(a.x<=124.50001);assert.equal(a.stats.tags,0);assert.equal(b.alive,true);
-  for(let i=2;i<20;i++)shot(arena,'a',i);assert.equal(arena.state.shots.length,1);
+  const count=arena.state.shots.length;for(let i=2;i<20;i++)shot(arena,'a',i);assert.equal(arena.state.shots.length,count);
   assert.equal(shot(arena,'a',1),false);assert.equal(shot(arena,'a',20,{x:NaN}),false);assert.equal(shot(arena,'a',20,{ax:Infinity}),false);
   advance(arena,.8);assert.equal(arena.state.shots.length,0);assert.ok(a.x<200,'stale movement input stops after 350 ms');
 });

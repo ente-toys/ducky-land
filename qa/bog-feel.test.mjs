@@ -72,7 +72,7 @@ test('authoritative pickups chime once for the local collector, without replay o
   try{
     observe();sim.step(1/60);observe();assert.deepEqual(sounds,[],'another collector stays silent');
     self.x=300;self.ammo=2;sim.step(1/60);const collected=observe();
-    assert.equal(self.ammo,12);assert.equal(collected.pickups[0].collectedBy,'you');assert.deepEqual(sounds,['pickup']);
+    assert.equal(self.ammo,RULES.ammoCapacity);assert.equal(collected.pickups[0].collectedBy,'you');assert.deepEqual(sounds,['pickup']);
     feel.observe(collected,collected.players[0]);sim.step(1/60);observe();assert.deepEqual(sounds,['pickup']);
     const replay=[];createCombatFeedback({onPickup:p=>replay.push(p.id)}).observe(collected,collected.players[0]);assert.deepEqual(replay,[]);
     self.x=900;sim.step(1/60);const delayed=sim.snapshot();delayed.time+=1;

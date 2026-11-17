@@ -72,21 +72,22 @@ export class ArenaClient{
   }
   view(alpha=1){return this.predicted?displayedPlayer(this.predicted,this.previous,alpha,this.offsetX,this.offsetY,this.display):null;}
   queueDodge(){if(this.self?.alive)this.dodgeSerial++;}
-  control(vector,facing,fire,dt,now=performance.now(),emote=null){
+  control(vector,facing,fire,dt,now=performance.now(),emote=null,muzzle=null,aimFacing=facing){
     const self=this.self;
     if(emote)this.queuedEmote=emote;
     const run=vector.run===true,held=!!fire;
-    const changed=this.lastControl.dodge!==this.dodgeSerial||this.lastControl.x!==vector.x||this.lastControl.y!==vector.y||this.lastControl.run!==run||this.lastControl.fire!==held||this.lastControl.facing!==facing;
+    const changed=this.lastControl.dodge!==this.dodgeSerial||this.lastControl.x!==vector.x||this.lastControl.y!==vector.y||this.lastControl.run!==run||this.lastControl.fire!==held||this.lastControl.facing!==facing||this.lastControl.aimFacing!==aimFacing||this.lastControl.mx!==muzzle?.x||this.lastControl.my!==muzzle?.y;
     const elapsed=now-this.lastSend;
     const send=this.id&&!this.closed&&this.socket.readyState===1&&elapsed+1e-7>=ARENA_INPUT_INTERVAL&&(changed||this.queuedEmote||elapsed>=ARENA_INPUT_KEEPALIVE)&&this.socket.bufferedAmount<=4096;
-    if(send){this.lastSend=now;Object.assign(this.lastControl,{x:vector.x,y:vector.y,run,fire:held,facing,dodge:this.dodgeSerial});this.socket.send(JSON.stringify({type:'arena-input',seq:this.seq++,x:vector.x,y:vector.y,run,facing,fire:held,...(this.dodgeSerial?{dodge:this.dodgeSerial}:{}),...(this.queuedEmote?{emote:this.queuedEmote}:{})}));this.queuedEmote=null;}
+    if(send){this.lastSend=now;Object.assign(this.lastControl,{x:vector.x,y:vector.y,run,fire:held,facing,aimFacing,dodge:this.dodgeSerial,mx:muzzle?.x,my:muzzle?.y});this.socket.send(JSON.stringify({type:'arena-input',seq:this.seq++,x:vector.x,y:vector.y,run,facing,fire:held,...(aimFacing!==facing?{aimFacing}:{}),...(muzzle?{mx:muzzle.x,my:muzzle.y}:{}),...(this.dodgeSerial?{dodge:this.dodgeSerial}:{}),...(this.queuedEmote?{emote:this.queuedEmote}:{})}));this.queuedEmote=null;}
     if(self?.alive&&this.predicted&&dt>0){
       if(!this.previous)this.previous={};this.previous.x=this.predicted.x;this.previous.y=this.predicted.y;this.previous.turn=this.predicted.turn;
       this.time=(this.time??this.snapshot.time??0)+dt;if(emote)playEmote(this.predicted,emote,this.time);
-      this.predictionInput.x=vector.x;this.predictionInput.y=vector.y;this.predictionInput.run=run;this.predictionInput.dodge=this.dodgeSerial;
+      this.predictionInput.x=vector.x;this.predictionInput.y=vector.y;this.predictionInput.run=run;this.predictionInput.facing=facing;this.predictionInput.dodge=this.dodgeSerial;
       combatWalkStep(this.predicted,this.nav,dt,this.time,this.predictionInput);
+      this.predicted.aimFacing=aimFacing;
       const command=this.commands[this.commandIndex++%this.commands.length];if(this.pending.length===this.commands.length)this.pending.shift();
-      command.seq=this.seq-1;command.dt=dt;command.input.x=vector.x;command.input.y=vector.y;command.input.run=vector.run===true;command.input.dodge=this.dodgeSerial;this.pending.push(command);
+      command.seq=this.seq-1;command.dt=dt;command.input.x=vector.x;command.input.y=vector.y;command.input.run=vector.run===true;command.input.facing=facing;command.input.dodge=this.dodgeSerial;this.pending.push(command);
       const decay=Math.exp(-19*dt);this.offsetX*=decay;this.offsetY*=decay;
     }
   }

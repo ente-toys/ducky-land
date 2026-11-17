@@ -102,7 +102,7 @@ export function slideStep(nav, x, y, vx, vy) {
   return from;
 }
 
-export function walkStep(actor, nav, dt, now, input) {
+export function walkStep(actor, nav, dt, now, input, {speedMultiplier=1}={}) {
   actor.jumpLeft = Math.max(0, (actor.jumpLeft ?? 0) - dt);
   actor.previousX = actor.x;
   actor.previousY = actor.y;
@@ -124,10 +124,10 @@ export function walkStep(actor, nav, dt, now, input) {
     actor.action = 0;
     return;
   }
-  const before = actor.pace || 0, top = manual && input.run === true ? RUN_SPEED : WALK_SPEED;
+  const before = actor.pace || 0, top = (manual && input.run === true ? RUN_SPEED : WALK_SPEED)*speedMultiplier;
   let pace;
-  if (coast) pace = Math.max(0, before - (before > WALK_SPEED ? RUN_SPEED/EASE_OUT : BRAKE)*dt);
-  else if (before > top) pace = Math.max(top, before - (RUN_SPEED-WALK_SPEED)/EASE_OUT*dt);
+  if (coast) pace = Math.max(0, before - (before > WALK_SPEED*speedMultiplier ? RUN_SPEED*speedMultiplier/EASE_OUT : BRAKE*speedMultiplier)*dt);
+  else if (before > top) pace = Math.max(top, before - (RUN_SPEED-WALK_SPEED)*speedMultiplier/EASE_OUT*dt);
   else pace = Math.min(top, before + top/EASE_IN*dt);
   if (next) {
     let left = distance;

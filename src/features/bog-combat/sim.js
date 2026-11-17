@@ -63,14 +63,16 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
   function input(id,m){
     const p=state.players.get(id);if(!m||!p||!Number.isSafeInteger(m.seq)||m.seq<=p.seq||![m.x,m.y].every(Number.isFinite)||typeof m.fire!=='boolean')return false;
     if(Math.max(Math.abs(m.x),Math.abs(m.y),Math.abs(m.facing??0))>1e6)return false;
+    if(m.aimFacing!==undefined&&(!Number.isFinite(m.aimFacing)||Math.abs(m.aimFacing)>1e6))return false;
     if(m.facing!==undefined&&!Number.isFinite(m.facing))return false;
     if((m.ax!==undefined&&!Number.isFinite(m.ax))||(m.ay!==undefined&&!Number.isFinite(m.ay)))return false;
+    if((m.mx!==undefined||m.my!==undefined)&&(!Number.isFinite(m.mx)||!Number.isFinite(m.my)||Math.hypot(m.mx,m.my)>96))return false;
     if(m.dodge!==undefined&&(!Number.isSafeInteger(m.dodge)||m.dodge<0))return false;
     const v=unit(m.x,m.y);p.seq=m.seq;p.inputAt=state.time;
     if(!p.alive){p.dodgeSerial=Math.max(p.dodgeSerial,m.dodge??0);p.input=idle();return true;}
     if(m.dodge>p.dodgeSerial)p.dodgeQueued=Math.max(p.dodgeQueued,m.dodge);
-    p.facing=movementFacing(v,p.facing??0);const aim=facingVector(p.facing);
-    p.input={...v,run:m.run===true,ax:aim.x,ay:aim.y,fire:m.fire};
+    p.facing=m.facing===undefined?movementFacing(v,p.facing??0):Math.atan2(Math.sin(m.facing),Math.cos(m.facing));p.aimFacing=m.aimFacing??p.facing;const aim=facingVector(p.aimFacing);
+    p.input={...v,run:m.run===true,...(m.facing===undefined?{}:{facing:p.facing}),ax:aim.x,ay:aim.y,mx:m.mx??0,my:m.my??0,muzzle:m.mx!==undefined,fire:m.fire};
     if(Number.isInteger(m.emote)&&m.emote>=2&&m.emote<=9)playEmote(p,m.emote,state.time);
     return true;
   }
@@ -106,9 +108,13 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     p.ammo--;if(p.ammo===0)p.reloadAt=state.time+RULES.reloadSeconds;p.topUpAt=state.time+RULES.paintTopUpDelay;
     p.nextFire=state.time+RULES.fireDelay;p.shieldUntil=state.time;
     p.bushRevealUntil=state.time+BUSH_REVEAL_SECONDS;
-    const id=++nextShot;
-    shot.id=id;shot.owner=p.id;shot.team=p.team;shot.bot=p.bot;shot.x=p.x;shot.y=p.y;shot.dx=p.input.ax;shot.dy=p.input.ay;shot.left=RULES.range;shot.colour=p.team==='karma'?0:id%4;
-    assistShot(shot,p,state.players.values(),blockers,state.time);state.shots.push(shot);
+    const id=++nextShot;p.lastShotId=id;p.lastShotAt=state.time;
+    shot.id=id;shot.owner=p.id;shot.team=p.team;shot.bot=p.bot;shot.muzzle=!!p.input.muzzle;shot.x=p.x+(p.input.mx??0);shot.y=p.y+(p.input.my??0);shot.dx=p.input.ax;shot.dy=p.input.ay;shot.left=RULES.range;shot.colour=p.team==='karma'?0:id%4;
+    // A barrel against cover must hit that cover, never spawn a shot beyond it.
+    const muzzleWall=traceShot(p,shot,blockers,wallResult);
+    if(muzzleWall.blocker){splat(shot,muzzleWall.point,'wall');shotPool.push(shot);return;}
+    if(p.bot||!p.input.muzzle)assistShot(shot,p,state.players.values(),blockers,state.time);
+    state.shots.push(shot);
   }
   function step(dt){
     if(!Number.isFinite(dt)||dt<=0)return;
@@ -144,7 +150,7 @@ export function createBogCombat({blockers=getBogBlockers(),bounds=BOG_COMBAT.bou
     kept=0;for(const e of state.events)if(state.time-e.time<8)state.events[kept++]=e;state.events.length=kept;
   }
   function snapshot(team=null){return {type:'arena-snapshot',tick:state.tick,time:state.time,practice:state.practice,pickups:state.pickups.map(p=>({...p})),events:structuredClone(state.events),scores:{...state.scores},
-    players:[...state.players.values()].filter(p=>!team||p.team===team||!isCombatHidden(p,state.time)).map(p=>({id:p.id,name:p.name,team:p.team,x:p.x,y:p.y,ax:p.ax??1,ay:p.ay??0,action:p.action,travel:p.travel,pace:p.pace,heading:p.heading?[...p.heading]:null,turn:p.turn,facing:p.facing??0,until:p.until,emoteVersion:p.emoteVersion,alive:p.alive,dodgeUntil:p.dodgeUntil,dodgeProtectedUntil:p.dodgeProtectedUntil,dodgeReadyAt:p.dodgeReadyAt,dodgeX:p.dodgeX,dodgeY:p.dodgeY,dodgeSerial:p.dodgeSerial,hitShield:p.hitShield,hitShieldUntil:p.hitShieldUntil,karma:p.karma,lives:p.lives,hits:p.hits??0,out:p.out,bot:p.bot,respawnAt:p.respawnAt,shieldUntil:p.shieldUntil,bushId:p.bushId,bushHidden:isBushHidden(p,state.time),bushRevealUntil:p.bushRevealUntil,bushEntry:p.bushEntry??0,bushEnteredAt:p.bushEnteredAt,ack:p.seq,streak:p.streak,ammo:p.ammo,reloadAt:p.reloadAt,medalCase:{...p.medalCase},stats:{...p.stats}})),
+    players:[...state.players.values()].filter(p=>!team||p.team===team||!isCombatHidden(p,state.time)).map(p=>({id:p.id,name:p.name,team:p.team,x:p.x,y:p.y,ax:p.ax??1,ay:p.ay??0,action:p.action,travel:p.travel,pace:p.pace,heading:p.heading?[...p.heading]:null,turn:p.turn,facing:p.facing??0,aimFacing:p.aimFacing??p.facing??0,until:p.until,emoteVersion:p.emoteVersion,alive:p.alive,dodgeUntil:p.dodgeUntil,dodgeProtectedUntil:p.dodgeProtectedUntil,dodgeReadyAt:p.dodgeReadyAt,dodgeX:p.dodgeX,dodgeY:p.dodgeY,dodgeSerial:p.dodgeSerial,hitShield:p.hitShield,hitShieldUntil:p.hitShieldUntil,karma:p.karma,lives:p.lives,hits:p.hits??0,out:p.out,bot:p.bot,respawnAt:p.respawnAt,shieldUntil:p.shieldUntil,bushId:p.bushId,bushHidden:isBushHidden(p,state.time),bushRevealUntil:p.bushRevealUntil,bushEntry:p.bushEntry??0,bushEnteredAt:p.bushEnteredAt,ack:p.seq,streak:p.streak,ammo:p.ammo,lastShotId:p.lastShotId??0,lastShotAt:p.lastShotAt??-1,reloadAt:p.reloadAt,medalCase:{...p.medalCase},stats:{...p.stats}})),
     shots:state.shots.map(s=>({...s})),splats:state.splats.map(s=>({...s}))};}
   return {state,join,leave,input,step,snapshot};
 }

@@ -75,7 +75,7 @@ test('only actual firing reveals for two seconds, repeated shots extend it, and 
   const {sim,p}=fixture();enter(sim,p);p.facing=-Math.PI/2;
   input(sim,p,{fire:true});sim.step(1/60);input(sim,p);
   const first=p.bushRevealUntil;assert.equal(first,sim.state.time+BUSH_REVEAL_SECONDS);
-  assert.equal(p.ammo,11);assert.ok(seen(sim,'evil',p.id));assert.equal(isBushHidden(p,sim.state.time),false);
+  assert.equal(p.ammo,RULES.ammoCapacity-1);assert.ok(seen(sim,'evil',p.id));assert.equal(isBushHidden(p,sim.state.time),false);
   advance(sim,.4);input(sim,p,{fire:true});sim.step(1/60);input(sim,p);assert.ok(p.bushRevealUntil>first);
   const until=p.bushRevealUntil;
   p.x=500;sim.step(1/60);enter(sim,p);assert.equal(p.bushRevealUntil,until);assert.ok(seen(sim,'evil',p.id));

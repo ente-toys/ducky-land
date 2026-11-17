@@ -1,6 +1,6 @@
 export const BOG_TIPS=Object.freeze([
   'WASD / arrows to move, Shift to run',
-  'Space to shoot, your paint goes where you face',
+  'Aim with the mouse. Hold click or Space to spray.',
   'Tagged? You respawn hidden for 7 s. 5 lives, then you paddle to a random islet.',
 ]);
 const actions=['move','shoot','tagged'],seenThisSession=new Set();
