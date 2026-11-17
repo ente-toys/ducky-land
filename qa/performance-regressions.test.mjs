@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {makeRoom, addPlayer} from './room-harness.mjs';
+import {makeRoom, addPlayer, fakeSocket} from './room-harness.mjs';
 import {RoomClient} from '../src/multiplayer/room-client.js';
 import {IslandRoom} from '../worker/index.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 test('delta updates preserve poses, remove departed players and reset after island and privacy changes', async () => {
   const room = await makeRoom();
@@ -200,4 +201,103 @@ test('the globe timer runs once per room and stops after the last subscriber lea
   assert.equal(feeds(viewer).at(-1).subscriptionId, 1);
   restored.webSocketClose(viewer.socket);
   assert.equal(restored.globeTimer, null);
+});
+
+test('an idle reconnect burst sends immediate baselines and one shared presence update', async t => {
+  const room = await makeRoom();
+  t.mock.timers.enable({apis: ['setTimeout']});
+  const NativeResponse = globalThis.Response, OriginalPair = globalThis.WebSocketPair;
+  let joinedSocket;
+  globalThis.WebSocketPair = class {
+    constructor() {this[0] = fakeSocket(); this[1] = joinedSocket = fakeSocket();}
+  };
+  globalThis.Response = class extends NativeResponse {
+    constructor(body, options) {
+      super(body, options?.status === 101 ? {...options, status:200} : options);
+    }
+  };
+  t.after(() => {globalThis.Response = NativeResponse; globalThis.WebSocketPair = OriginalPair;});
+
+  const spawn = mapOf('home').spawn;
+  const viewer = addPlayer(room, 0, spawn);
+  const players = Array.from({length:20}, (_, index) => addPlayer(room, index+1, spawn));
+  room.connections.get(viewer.socket).deltas = true;
+  const gameplay = [];
+  viewer.socket.send = text => {
+    const message = JSON.parse(text);
+    if (message.type === 'snapshot' || message.type === 'delta') gameplay.push(message);
+  };
+  room.broadcast();
+  const baseline = gameplay[0];
+  assert.equal(baseline.online, 21);
+
+  for (const player of players) room.webSocketClose(player.socket);
+  const deadline = room.presenceTimer;
+  t.mock.timers.tick(50);
+  const join = account => {
+    const url = 'https://island.example/room?globeFeed=1&play='+(account ? '1' : '0');
+    const headers = {Upgrade:'websocket', ...(account ? {'X-Session-Digest':account} : {})};
+    room.join(new Request(url, {headers}), Date.now());
+    return joinedSocket;
+  };
+  for (const player of players.slice(0,18)) {
+    const socket = join(player.account);
+    const initial = JSON.parse(socket.last);
+    const pose = initial.players.find(pose => pose.id === player.actor.id);
+    assert.equal(pose.x, player.actor.x);
+    assert.equal(pose.y, player.actor.y);
+    room.webSocketMessage(socket, JSON.stringify({type:'updates'}));
+    const deltaBase = JSON.parse(socket.last);
+    assert.ok(deltaBase.tick > initial.tick);
+    room.webSocketMessage(socket, JSON.stringify({type:'updates'}));
+    assert.equal(JSON.parse(socket.last).tick, deltaBase.tick);
+  }
+  const spectator = join();
+  assert.equal(JSON.parse(spectator.last).online, 20);
+  room.webSocketMessage(spectator, JSON.stringify({type:'watch', islandId:'sunset'}));
+  assert.equal(JSON.parse(spectator.last).islandId, 'sunset');
+  assert.equal(room.presenceTimer, deadline);
+  t.mock.timers.tick(49);
+  assert.equal(gameplay.length, 1);
+  t.mock.timers.tick(1);
+  assert.equal(gameplay.length, 2);
+  const batch = gameplay[1];
+  assert.equal(batch.type, 'delta');
+  assert.equal(batch.baseTick, baseline.tick);
+  assert.equal(batch.online, 20);
+  assert.deepEqual(batch.players.removed, players.slice(18).map(player => player.actor.id));
+  assert.equal(room.presenceTimer, null);
+  t.mock.timers.tick(200);
+  assert.equal(gameplay.length, 2);
+});
+
+test('the normal movement broadcast absorbs pending presence changes', async t => {
+  const room = await makeRoom();
+  t.mock.timers.enable({apis: ['setTimeout', 'setInterval']});
+  const spawn = mapOf('home').spawn;
+  const viewer = addPlayer(room, 0, spawn);
+  const peer = addPlayer(room, 1, {x:spawn.x+120, y:spawn.y});
+  room.connections.get(viewer.socket).deltas = true;
+  room.broadcast();
+  const baseline = JSON.parse(viewer.socket.last);
+  const deltas = () => viewer.socket.notes.filter(message => message.type === 'delta');
+
+  room.webSocketMessage(viewer.socket, JSON.stringify({type:'input', seq:1, x:1, y:0}));
+  t.mock.timers.tick(25);
+  room.webSocketClose(peer.socket);
+  assert.ok(room.presenceTimer);
+  t.mock.timers.tick(25);
+  t.mock.timers.tick(50);
+  assert.equal(room.presenceTimer, null);
+  const [first] = deltas();
+  assert.equal(first.baseTick, baseline.tick);
+  assert.equal(first.online, 1);
+  assert.deepEqual(first.players.removed, [peer.actor.id]);
+  assert.notEqual(viewer.actor.x, spawn.x);
+  t.mock.timers.tick(25);
+  assert.equal(deltas().length, 1);
+  t.mock.timers.tick(25);
+  t.mock.timers.tick(50);
+  assert.equal(deltas().length, 2);
+  assert.equal(deltas()[1].baseTick, first.tick);
 });

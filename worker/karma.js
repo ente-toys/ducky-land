@@ -61,9 +61,9 @@ export class RoomKarma {
     }
     if(needsPersist)this.persist();
   }
-  broadcast(now){
+  broadcast(now,recipients=this.room.connections){
     const shared=new Map();
-    for(const [socket,info]of this.room.connections){
+    for(const [socket,info]of recipients){
       const islandId=info.actor?.islandId??info.islandId??'home',balance=info.account&&info.expires>now?this.balance(info.account):0;
       const key=`${this.room.epoch}:${this.pool.version}:${islandId}:${balance}`;
       if(info.karmaKey===key)continue;

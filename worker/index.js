@@ -18,6 +18,7 @@ import {RoomKarma} from './karma.js';
 
 const STARGAZER_LIMIT = 5000;
 const RESUME_MS = 15_000;
+const PRESENCE_UPDATE_MS = 100;
 const GLOBE_UPDATE_MS = 500;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
@@ -516,7 +517,8 @@ export class IslandRoom {
           ...(viewerInfo.digest && viewerInfo.expires > now ? {login:user.login} : {})});
       }
     }
-    this.broadcast();
+    this.broadcast(socket);
+    if (this.connections.size > 1) this.schedulePresenceBroadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
     return new Response(null, {status:101, webSocket:client});
   }
@@ -565,9 +567,27 @@ export class IslandRoom {
     }
   }
 
-  broadcast() {
+  schedulePresenceBroadcast() {
+    if (!this.connections.size) {
+      this.clearPresenceBroadcast();
+    } else if (this.presenceTimer == null) {
+      this.presenceTimer = setTimeout(() => this.broadcast(), PRESENCE_UPDATE_MS);
+    }
+  }
+
+  clearPresenceBroadcast() {
+    if (this.presenceTimer == null) return;
+    clearTimeout(this.presenceTimer);
+    this.presenceTimer = null;
+  }
+
+  broadcast(target = null) {
+    if (!target) this.clearPresenceBroadcast();
+    const info = target ? this.connections.get(target) : null;
+    if (target ? !info : !this.connections.size) return;
+    const recipients = target ? [[target, info]] : this.connections;
     const now = Date.now();
-    this.karma.broadcast(now);
+    this.karma.broadcast(now, recipients);
     const online = new Set([...this.connections].map(([socket,info]) =>
       info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
@@ -607,7 +627,7 @@ export class IslandRoom {
     // built boats by owner, once per broadcast (each player's self block lists theirs)
     const owned = new Map();
     for (const boat of this.boats) if (boat.owner) owned.set(boat.owner, [...(owned.get(boat.owner) ?? []), boat.id]);
-    for (const [socket, info] of this.connections) {
+    for (const [socket, info] of recipients) {
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
       const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
@@ -744,16 +764,19 @@ export class IslandRoom {
     }
     if (expired) return;
     if (command?.type === 'updates') {
+      if (info.deltas) return;
       info.deltas = true;
       info.snapshotBase = null;
       this.attach(socket, info);
-      this.broadcast();
+      this.broadcast(socket);
       return;
     }
     if (command?.type === 'watch' && !info.actor && islandFor(command.islandId)) {
+      if ((info.islandId ?? 'home') === command.islandId) return;
       info.islandId = command.islandId;
+      info.snapshotBase = null;
       this.attach(socket,info);
-      this.broadcast();
+      this.broadcast(socket);
       return;
     }
     if (!info.actor) return;
@@ -973,7 +996,7 @@ export class IslandRoom {
       }
     }
     if (info.actor && !this.session(info.digest)) this.releaseBoat(info.actor.id);
-    this.broadcast();
+    this.schedulePresenceBroadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
   }
 
