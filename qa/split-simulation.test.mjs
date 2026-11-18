@@ -54,6 +54,9 @@ test(
     }
     export class TestSea extends SeaSimulation {
       async fetch(request) {
+        const path=new URL(request.url).pathname;
+        if(path==='/activate' && this.env.HOLD_ACTIVATION==='1')return new Response(null,{status:503});
+        if(path==='/fixture/staged')return Response.json(this.room.sql.exec('SELECT count(*) AS count FROM incoming').one().count);
         const response=await super.fetch(request);
         if(new URL(request.url).pathname==='/stage' && response.ok && !this.lostStage) {
           this.lostStage=true;
@@ -93,6 +96,7 @@ test(
       env={...env,ISLAND_ROOM_NAME:world};
       const ctx={env,request,data:{}};
       if(url.pathname==='/economy')return internalPost(worldStub(env,world),'/fixture/economy',{});
+      if(url.pathname==='/staged')return simulationStub(env,world,'sea').fetch('https://island.internal/fixture/staged');
       if(url.pathname==='/stage-status')return internalPost(worldStub(env,world),'/fixture/stages',{});
       if(url.pathname==='/session') return createTestSession(ctx);
       if(url.pathname==='/room') return connect(ctx);
@@ -110,11 +114,11 @@ test(
       write: false,
     });
     const storage = await mkdtemp(pathJoin(tmpdir(), 'ducky-crossing-'));
-    const start = (hold) =>
+    const start = (hold, holdActivation = false) =>
       new Miniflare(
         convertV4MiniflareOptions({
           resourcePersistencePath: storage,
-          bindings: {HOLD_COMMIT: hold ? '1' : '0'},
+          bindings: {HOLD_COMMIT: hold ? '1' : '0', HOLD_ACTIVATION: holdActivation ? '1' : '0'},
           modules: [{type: 'ESModule', path: 'index.js', contents: bundle.outputFiles[0].text}],
           compatibilityDate: '2026-11-02',
           durableObjects: Object.fromEntries(
@@ -195,11 +199,16 @@ test(
     assert.ok(handoff);
     // Drop both isolates with the source journal and destination prepare on disk.
     await runtime.dispose();
-    runtime = start(false);
+    runtime = start(false, true);
     await runtime.ready;
     await waitAsync(async () =>
       (await (await request('/stage-status')).json()).some((row) => row.state === 'committed')
     );
+    assert.equal(await (await request('/staged')).json(), 1);
+    // Now the directory has committed, but the destination still has only its prepare.
+    await runtime.dispose();
+    runtime = start(false);
+    await runtime.ready;
     const sailor = await join('play=1&testSession=' + token + '&resume=' + dock.actor);
     assert.equal(sailor.welcome.id, dock.actor);
     assert.equal(sailor.snapshot.players.find((p) => p.id === dock.actor).mode, 'sailing');

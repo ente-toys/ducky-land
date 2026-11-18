@@ -4,6 +4,12 @@ Publish the room Worker and its additive migration before publishing Pages with 
 
 The existing world object's name remains its storage identity. Each simulation key also contains that world name. Preview and production must have different world names when they share the Worker. The top-level Worker exposes no public migration endpoint.
 
+## Baseline
+
+During the November 18 stress test, Sentry recorded a 5.35-second tick gap with 106 connections in the shared room. [Incident logs](https://aswinasok.sentry.io/explore/logs/?logsQuery=operation%3Atick_gap&start=2026-11-18T10%3A40%3A00&end=2026-11-18T10%3A50%3A00)
+
+At deployed commit `d76854ff`, the existing Home harness measured 34.12 MiB/s of full snapshots for 100 players over 20 seconds. A separate 30-second local workerd run joined 250 players in bursts, kept 100 walkers on Home, and exercised sailing, friends, and the globe. Its p99 active tick gap was 57 ms, its maximum was 58 ms, and p95 join-to-first-snapshot was 28 ms. Both observers stayed connected. The multi-second production gap did not recur locally.
+
 ## Before merging
 
 Run the project build and tests, the two Wrangler bundle checks, and the local Workers load harness. The harness creates its own Miniflare runtime. It runs three 30-minute trials by default.
