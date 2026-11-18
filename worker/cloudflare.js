@@ -4,7 +4,7 @@ import {sentryOptions} from '../server/sentry.js';
 import {IslandRoom as Room} from './index.js';
 
 const routes = new Set([
-  '/room', '/bog-room', '/friends', '/outfit', '/stars', '/stars/count', '/flow', '/consume',
+  '/room', '/bog-room', '/sled-room', '/friends', '/outfit', '/stars', '/stars/count', '/flow', '/consume',
   '/session/new', '/session/access', '/session/get', '/session/revoke',
 ]);
 

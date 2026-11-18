@@ -75,6 +75,7 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
     if (x < (world.origin?.x ?? 0) - 600 || y < (world.origin?.y ?? 0) - 600 || x > (world.origin?.x ?? 0) + W + 600 || y > (world.origin?.y ?? 0) + H + 600) return false;
     if (onJetty(x, y, 4) || coastContains(x,y) && !riverAt(x,y)) return true;
     if (islets.some(([cx, cy, rx, ry]) => inShape(x, y, {x: cx, y: cy, rx, ry}))) return true;
+    if ((world.solidLand ?? []).some(poly => inPoly(x, y, poly))) return true;
     return solidDecks.some(({a,w,dx,dy,l2,x0,x1,y0,y1})=>{
       if(x<x0||x>x1||y<y0||y>y1)return false;
       const t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/l2));
@@ -206,7 +207,8 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
   let FIELD = null;
   const field = () => FIELD ??= landDistance(landAt, W, H, world.origin);
   const spawn = harbor.spawn ?? world.zones?.plaza?.spawn ?? [W / 2, H / 2];
-  return {id, width: W, height: H, origin: world.origin ?? {x:0,y:0}, cx:(world.origin?.x ?? 0)+W/2, cy:(world.origin?.y ?? 0)+H/2, get world(){buildWalking();return world;}, get walk(){buildWalking();return walkMap;}, get baseWalk(){buildWalking();return baseWalk;}, get sleepers(){buildWalking();return beds;}, JETTY, HARBOR, spawn: {x: spawn[0], y: spawn[1]}, landAt, nav, shoreFor, boatSpots, field,
+  // a map that grew on one side keeps its old centre (world.centre), so its island stays put in the sea
+  return {id, width: W, height: H, origin: world.origin ?? {x:0,y:0}, cx:world.centre?.x ?? (world.origin?.x ?? 0)+W/2, cy:world.centre?.y ?? (world.origin?.y ?? 0)+H/2, get world(){buildWalking();return world;}, get walk(){buildWalking();return walkMap;}, get baseWalk(){buildWalking();return baseWalk;}, get sleepers(){buildWalking();return beds;}, JETTY, HARBOR, spawn: {x: spawn[0], y: spawn[1]}, landAt, nav, shoreFor, boatSpots, field,
     art, sea, home: id === 'home', centre: centre ?? coastCentre(walking.coast)};
 }
 

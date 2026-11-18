@@ -20,9 +20,11 @@ test('neighbour meshes are rigid: true size, right angles, centre on the flat ma
   const ex={x:b.x-a.x,y:b.y-a.y},ny={x:d.x-a.x,y:d.y-a.y};
   assert.ok(Math.abs(ex.x*ny.x+ex.y*ny.y)/(m.width*m.height)<1e-5,'no shear');
   assert.ok(ex.x*ny.y-ex.y*ny.x>0,'not mirrored');
-  const centre=mapPoint(to,from,{x:m.cx,y:m.cy}),mid={x:(a.x+c.x)/2,y:(a.y+c.y)/2};
+  // the middle of the map's rectangle (a map grown on one side keeps its old centre, so use the rectangle itself)
+  const middle={x:m.origin.x+m.width/2,y:m.origin.y+m.height/2};
+  const centre=mapPoint(to,from,middle),mid={x:(a.x+c.x)/2,y:(a.y+c.y)/2};
   assert.ok(len(centre,mid)<.05,'centre exactly where the flat map puts it');
-  assert.ok(Math.abs(placeRigid(from,to,{x:m.cx,y:m.cy}).x-centre.x)<1e-6);
+  assert.ok(Math.abs(placeRigid(from,to,middle).x-centre.x)<1e-6);
   geometry.destroy();
  }
 });

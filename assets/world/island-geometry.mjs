@@ -172,7 +172,7 @@ export function geometry(world){
   };
  }
  let waterAt=null,solidAtPoint=null;
- let waterNear=null,solidNear=null,bridgeNear=null,coastAt=null,coastContains=null,walkwayNear=null;
+ let waterNear=null,solidNear=null,bridgeNear=null,coastAt=null,coastContains=null,walkwayNear=null,landsAt=null;
  function boardAt(x,y){
   if(!world.walkways)return Math.abs(x-world.boardwalk.x)<world.boardwalk.w/2-12&&Math.abs(y-world.boardwalk.y)<world.boardwalk.h/2+25;
   // Pagepond's and Campfire's fine fallback grids sample a large sea box. Reject distant
@@ -190,7 +190,9 @@ export function geometry(world){
   if(!(side===2?(coastContains?coastContains(x,y):inPoly(x,y,world.coast)):side===1)){
    const board=boardAt(x,y);
    const isle=world.islets.some(a=>((x-a[0])/(a[2]-20))**2+((y-a[1])/(a[3]-20))**2<1);
-   if(!board&&!isle)return false;
+   // extra walkable ground outside the coastline (the sled hill island's plaza)
+   landsAt??=(world.lands??[]).map(poly=>polygonIndex(poly,16));
+   if(!board&&!isle&&!landsAt.some(contains=>contains(x,y)))return false;
   }
   bridgeNear??=shapeIndex(world.bridges.map(b=>({...b,rx:Math.max(0,b.w/2-8),ry:Math.max(0,b.h/2-12)})),0);
   const bridge=bridgeNear(x,y).some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);

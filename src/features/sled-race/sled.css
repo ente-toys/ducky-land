@@ -1,0 +1,59 @@
+/* Sled race: the island's cream-and-ink UI over a full-screen race canvas. */
+.sled-race { --ink:#332b23; --line:#564537; --cream:#fff9df; --shadow:0 3px 0 #56453755; --ease:cubic-bezier(.23,1,.32,1);
+  position:fixed; inset:0; z-index:100; color:var(--ink); font:15px/1.45 system-ui,sans-serif; user-select:none; touch-action:none; }
+.sled-race-canvas, .sled-race-canvas canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.sled-race button { min-height:40px; padding:0 16px; border:1px solid var(--line); border-radius:12px; background:var(--cream); color:var(--ink); box-shadow:var(--shadow); font:600 15px/1 system-ui,sans-serif; cursor:pointer; }
+.sled-race button.primary { background:#ffda69; }
+.sled-race button:active { translate:0 2px; box-shadow:0 1px 0 #56453755; }
+.sled-race button:focus-visible { outline:3px solid var(--line); outline-offset:3px; }
+.sled-race kbd { padding:1px 6px; border:1px solid #56453799; border-radius:6px; background:var(--cream); font:600 12px/1.3 system-ui,sans-serif; }
+.sled-race-note { position:absolute; left:50%; top:50%; translate:-50% -50%; margin:0; padding:10px 18px; border:1px solid var(--line); border-radius:12px; background:var(--cream); box-shadow:var(--shadow); }
+.sled-hud-place, .sled-hud-course { position:absolute; top:max(16px, env(safe-area-inset-top)); display:flex; align-items:baseline; gap:8px; padding:6px 14px; border:1px solid var(--line); border-radius:12px; background:var(--cream); box-shadow:var(--shadow); }
+.sled-hud-place { left:max(16px, env(safe-area-inset-left)); }
+.sled-hud-place strong { font-size:28px; line-height:1; }
+.sled-hud-course { left:50%; translate:-50% 0; }
+.sled-hud-course strong { font-variant-numeric:tabular-nums; min-width:5ch; text-align:right; }
+.sled-hud-leave { position:absolute; top:max(16px, env(safe-area-inset-top)); right:max(16px, env(safe-area-inset-right)); }
+.sled-hud-rail { position:absolute; right:max(24px, env(safe-area-inset-right)); top:96px; bottom:96px; width:10px; margin:0; padding:0; list-style:none; border-radius:5px; background:#ffffffaa; border:1px solid #56453766; }
+.sled-hud-rail li { position:absolute; left:50%; top:calc(var(--at) * 100%); width:14px; height:14px; translate:-50% -50%; border:2px solid var(--line); border-radius:50%; background:#fff; }
+.sled-hud-rail li.bot { background:#d8e2ea; }
+.sled-hud-rail li.me { width:20px; height:20px; background:#ffda69; z-index:1; }
+.sled-hud-flag { position:absolute; left:50%; top:96px; translate:-50% 0; margin:0; padding:6px 14px; border-radius:12px; border:1px solid var(--line); font-weight:700; box-shadow:var(--shadow); animation:sled-pop .25s cubic-bezier(.34,1.56,.64,1); }
+.sled-hud-flag.boost { background:#d9f3ff; }
+.sled-hud-flag.crash { background:#ffe0d6; }
+.sled-hud-count { position:absolute; left:50%; top:50%; translate:-50% -50%; margin:0; font:800 96px/1 system-ui,sans-serif; color:var(--ink); text-shadow:0 4px 0 #fff9df; animation:sled-pop .35s cubic-bezier(.34,1.56,.64,1); }
+.sled-hud-keys { position:absolute; left:50%; bottom:max(20px, env(safe-area-inset-bottom)); translate:-50% 0; margin:0; padding:6px 12px; border-radius:12px; background:#fff9dfcc; font-size:13px; }
+.sled-results { position:absolute; left:50%; top:50%; translate:-50% -50%; box-sizing:border-box; width:min(420px, calc(100vw - 32px)); max-height:calc(100svh - 32px); overflow-y:auto; padding:24px; border:2px solid var(--line); border-radius:24px; background:var(--cream); box-shadow:0 4px 0 #56453755, 0 16px 40px #332b2333; animation:sled-pop .3s var(--ease); }
+.sled-results h2 { margin:0 0 12px; font-size:22px; text-align:center; }
+.sled-results ol { margin:0; padding:0; list-style:none; display:grid; gap:6px; }
+.sled-results li { display:grid; grid-template-columns:3.2em 1fr auto; align-items:center; gap:8px; padding:6px 10px; border-radius:10px; background:#fff; border:1px solid #56453733; }
+.sled-results li.me { background:#ffda69; border-color:var(--line); }
+.sled-results .place { font-weight:800; }
+.sled-results .time { font-variant-numeric:tabular-nums; }
+.sled-results em, .sled-race .bot-badge { margin-left:8px; padding:1px 6px; border-radius:6px; background:#d8e2ea; font:700 11px/1.4 system-ui,sans-serif; font-style:normal; }
+.sled-medals { margin:14px 0 0; padding:0; list-style:none; display:grid; gap:6px; }
+.sled-medals li { padding:8px 10px; border-radius:10px; background:#d9f3ff; border:1px solid #56453733; font-size:14px; }
+.sled-results-actions { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px; }
+@keyframes sled-pop { from { scale:.85; opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .sled-hud-flag, .sled-hud-count, .sled-results { animation:none; } }
+
+/* The sled hill pop-up and lobby, in the same cream-and-ink style. */
+.sled-entry { --ink:#332b23; --line:#564537; --cream:#fff9df; position:fixed; inset:0; z-index:90; display:grid; place-items:center; padding:16px; background:#332b2333; color:var(--ink); font:15px/1.45 system-ui,sans-serif; }
+.sled-entry-card { box-sizing:border-box; width:min(400px, 100%); padding:22px 22px 18px; border:2px solid var(--line); border-radius:24px; background:var(--cream); box-shadow:0 4px 0 #56453755, 0 16px 40px #332b2333; animation:sled-pop .3s cubic-bezier(.23,1,.32,1); }
+.sled-entry-card h2 { margin:0 0 8px; font-size:22px; }
+.sled-entry-card p { margin:0 0 10px; }
+.sled-entry-count { font-weight:700; font-variant-numeric:tabular-nums; }
+.sled-entry-note { padding:6px 10px; border-radius:10px; background:#d9f3ff; }
+.sled-entry-seats { margin:0 0 12px; padding:0; list-style:none; display:grid; gap:6px; }
+.sled-entry-seats li { display:flex; justify-content:space-between; padding:6px 10px; border-radius:10px; border:1px solid #56453733; background:#fff; }
+.sled-entry-seats li.me { background:#ffda69; border-color:var(--line); }
+.sled-entry-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.sled-entry-actions button { min-height:40px; padding:0 16px; border:1px solid var(--line); border-radius:12px; background:var(--cream); color:var(--ink); box-shadow:0 3px 0 #56453755; font:600 15px/1 system-ui,sans-serif; cursor:pointer; }
+.sled-entry-actions button.primary { background:#ffda69; }
+.sled-entry-actions button:disabled { opacity:.55; cursor:default; }
+.sled-entry-actions button:focus-visible { outline:3px solid var(--line); outline-offset:3px; }
+@media (prefers-reduced-motion: reduce) { .sled-entry-card { animation:none; } }
+
+/* the hop button, only where there is no keyboard */
+.sled-hud-jump { display:none; position:absolute; right:max(24px, env(safe-area-inset-right)); bottom:max(24px, env(safe-area-inset-bottom)); width:84px; height:84px; border-radius:50% !important; background:#ffda69 !important; font-size:17px !important; }
+@media (pointer: coarse) { .sled-hud-jump { display:block; } .sled-hud-keys { display:none; } }

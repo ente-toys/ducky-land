@@ -8,7 +8,7 @@ import {seaViewPose} from '../src/world/sea-view.js';
 import {flatRigid,unplaceRigid} from '../src/world/rigid.js';
 import {ISLETS} from '../src/world/islets.js';
 import {placeIslet,unplaceIslet} from '../src/world/islet-placement.js';
-import {canSail,sailStep,migrateSeaPosition,harborOf,dockingSpot,SAIL_SPEED,navOf,setSailDestination,BOAT_GAP,boatRoom,sailRoute} from '../src/gameplay/islands.js';
+import {POLE_ROOM,canSail,sailStep,migrateSeaPosition,harborOf,dockingSpot,SAIL_SPEED,navOf,setSailDestination,BOAT_GAP,boatRoom,sailRoute} from '../src/gameplay/islands.js';
 import {dot} from '../src/world/sphere.js';
 const close=(a,b,t=1e-7)=>assert.ok(Math.abs(a-b)<t,`${a} != ${b}`);
 const local=(id,x,y)=>{const m=mapOf(id),c=FLAT_POSITIONS[id];return {islandId:id,x:x-c.x+m.cx,y:y-c.y+m.cy};};
@@ -131,7 +131,7 @@ test('tap routes around islands work when the nearest destination lies beyond th
 
 test('boats can sail beyond both polar islands without resetting to port',()=>{
  for(const [id,sign]of [['isle-55',-1],['isle-249',1]]){
-  const p={...local(id,0,sign*26499),mode:'sailing',path:[],action:0};
+  const p={...local(id,0,sign*(SEA_HEIGHT/2+POLE_ROOM-500)),mode:'sailing',path:[],action:0};
   const before={...p};assert.ok(canSail(p.x,p.y,id));sailStep(p,.05,{x:0,y:sign});
   assert.equal(p.seaCurrent,undefined);close(p.x,before.x);close(p.y,before.y+sign*SAIL_SPEED*.05);
  }

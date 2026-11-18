@@ -52,13 +52,16 @@ export const destinationsFor = id => {
   }
   return DEST.get(id);
 };
+// Past the poles the sea runs on POLE_ROOM beyond the chart's edge, clear of the farthest polar land (Iceland's sled
+// hill island).
+export const POLE_ROOM=9500;
 export function seaBoundsFor(id='home') {
   fresh();
   if (!BOUNDS.has(id)) {
     const m=mapOf(id),c=FLAT_POSITIONS[id];
-    // Extra polar coast room preserves existing harbours, moorings and walking.
+    // Extra polar coast room preserves existing harbours, moorings and walking (and Iceland's sled hill island).
     BOUNDS.set(id,{x0:m.cx-SEA_WIDTH/2-20000,x1:m.cx+SEA_WIDTH/2+20000,
-      y0:m.cy-c.y-SEA_HEIGHT/2-7000,y1:m.cy-c.y+SEA_HEIGHT/2+7000});
+      y0:m.cy-c.y-SEA_HEIGHT/2-POLE_ROOM,y1:m.cy-c.y+SEA_HEIGHT/2+POLE_ROOM});
   }
   return BOUNDS.get(id);
 }
