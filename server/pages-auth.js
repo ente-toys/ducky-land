@@ -1,6 +1,3 @@
-import {logger} from '@sentry/cloudflare';
-import {roomBindingFlags} from './sentry.js';
-
 const sessionCookie = '__Host-ducky_session';
 const flowCookie = '__Host-ducky_oauth';
 const cookieAge = 7 * 24 * 60 * 60;
@@ -44,24 +41,19 @@ function room(env) {
   return env.ISLAND.get(env.ISLAND.idFromName(env.ISLAND_ROOM_NAME ?? 'main-island'));
 }
 
-async function fetchRoom(env, request) {
+async function fetchRoom(env, request, contextData) {
   try {
     return await room(env).fetch(request);
   } catch (error) {
-    if (env.SENTRY_DSN) {
-      logger.error('Room binding failed', {
-        room_binding_route: new URL(request.url).pathname,
-        ...roomBindingFlags(error),
-      });
-    }
+    if (contextData) contextData.roomBindingFailure = {route: new URL(request.url).pathname, error};
     throw error;
   }
 }
 
-function call(env, path, data) {
+function call(env, path, data, contextData) {
   return fetchRoom(env, new Request('https://island.internal'+path, {
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),
-  }));
+  }), contextData);
 }
 
 function configured(env) {
@@ -228,7 +220,7 @@ export async function friends({request,env}) {
   }
 }
 
-export async function connect({request,env}, fetchGitHub = fetch) {
+export async function connect({request,env,data}, fetchGitHub = fetch) {
   const url = new URL(request.url);
   if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return json({},426);
   if (request.headers.get('Origin') !== url.origin) return json({},403);
@@ -238,7 +230,7 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   if (testToken !== null) {
     if (!tokenPattern.test(testToken)) return json({},403);
     key = await digest(testToken);
-    const result = await call(env,'/session/get',{digest:key});
+    const result = await call(env,'/session/get',{digest:key},data);
     if (!result.ok) return json({},503);
     const user = await result.json();
     if (!user?.account?.startsWith('test-') || !user.canPlay) return json({},403);
@@ -248,7 +240,7 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   if (key) headers.set('X-Session-Digest',key);
   const play = url.searchParams.get('play') === '1' ? '1' : '0';
   if (key && play === '1' && testToken === null) {
-    const check = await checkPlayAccess(env,key,fetchGitHub);
+    const check = await checkPlayAccess(env,key,fetchGitHub,data);
     if (check.error && check.status !== 401) return json({error:check.error},check.status);
   }
   const roomUrl = new URL('https://island.internal/room');
@@ -256,10 +248,10 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   const resumeId = url.searchParams.get('resume');
   if (play === '1' && resumeId) roomUrl.searchParams.set('resume', resumeId);
   if (url.searchParams.get('globeFeed') === '1') roomUrl.searchParams.set('globeFeed', '1');
-  return fetchRoom(env, new Request(roomUrl,{headers}));
+  return fetchRoom(env, new Request(roomUrl,{headers}), data);
 }
 
-export async function connectBog({request,env}) {
+export async function connectBog({request,env,data}) {
   const url=new URL(request.url);
   if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return json({},426);
   if(request.headers.get('Origin')!==url.origin)return json({},403);
@@ -268,15 +260,15 @@ export async function connectBog({request,env}) {
   const headers=new Headers({Upgrade:'websocket','X-Session-Digest':key});
   const params=new URLSearchParams();
   for(const k of ['team','mode'])if(url.searchParams.has(k))params.set(k,url.searchParams.get(k));
-  return fetchRoom(env, new Request('https://island.internal/bog-room?'+params,{headers}));
+  return fetchRoom(env, new Request('https://island.internal/bog-room?'+params,{headers}), data);
 }
 
-async function checkPlayAccess(env, key, fetchGitHub) {
-  const result = await call(env,'/session/get',{digest:key});
+async function checkPlayAccess(env, key, fetchGitHub, contextData) {
+  const result = await call(env,'/session/get',{digest:key},contextData);
   if (!result.ok) return {error:'Session unavailable. Please try again.',status:503};
   const user = await result.json();
   if (!user?.githubToken) {
-    if (user) await call(env,'/session/access',{digest:key,canPlay:false});
+    if (user) await call(env,'/session/access',{digest:key,canPlay:false},contextData);
     return {error:'Please sign in again to check your GitHub star.',status:401};
   }
   let starred;
@@ -288,12 +280,12 @@ async function checkPlayAccess(env, key, fetchGitHub) {
     return {error:'Could not check your GitHub star. Please try again.',status:503};
   }
   if (![204,404].includes(starred.status)) {
-    await call(env,'/session/access',{digest:key,canPlay:false});
+    await call(env,'/session/access',{digest:key,canPlay:false},contextData);
     return {error:starred.status === 401 ? 'Please sign in again to check your GitHub star.' :
       'Could not check your GitHub star. Please try again.',status:starred.status === 401 ? 401 : 503};
   }
   const canPlay = starred.status === 204;
-  const saved = await call(env,'/session/access',{digest:key,canPlay,starred:canPlay});
+  const saved = await call(env,'/session/access',{digest:key,canPlay,starred:canPlay},contextData);
   if (!saved.ok) return {error:'Could not update play access. Please try again.',status:503};
   return {canPlay};
 }

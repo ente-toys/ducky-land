@@ -1,5 +1,5 @@
 import {captureException, logger, sentryPagesPlugin} from '@sentry/cloudflare';
-import {sentryOptions} from '../server/sentry.js';
+import {roomBindingFlags, sentryOptions} from '../server/sentry.js';
 
 const routes = new Set([
   '/api/friends', '/api/outfit', '/api/play-access', '/api/room', '/api/session', '/api/stars',
@@ -18,8 +18,11 @@ export const onRequest = [
     try {
       response = await context.next();
     } catch (error) {
+      const failure = context.data?.roomBindingFailure;
       logger.error('Pages request failed', {route, duration_ms: Date.now() - started,
-        ray_id: context.request.headers.get('CF-Ray')});
+        ray_id: context.request.headers.get('CF-Ray'),
+        ...(failure && failure.error === error && {room_binding_route: failure.route, ...roomBindingFlags(error)}),
+      });
       throw error;
     }
     logger[response.status >= 500 ? 'error' : 'info']('Pages request completed', {

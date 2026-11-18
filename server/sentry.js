@@ -5,7 +5,7 @@ const errorTypes = new Set([
 ]);
 const spanAttributes = ['sentry.op', 'sentry.origin', 'http.request.method', 'http.response.status_code', 'app.route'];
 const logMessages = new Set(['Pages request completed', 'Pages request failed', 'Room request completed', 'Room request failed', 'Room socket closed', 'Room socket error',
-  'Room binding failed', 'Room socket rejected', 'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
+  'Room socket rejected', 'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
 const roomBindingRoutes = new Set(['/room', '/bog-room', '/consume', '/flow', '/friends', '/outfit',
   '/session/access', '/session/get', '/session/new', '/session/revoke', '/stars', '/stars/count']);
 const roomFailureFlags = ['overloaded', 'retryable', 'remote'];
@@ -116,7 +116,7 @@ export function sentryOptions(env, service, routes) {
           ...(environment && {'sentry.environment': environment}),
           ...(release && {'sentry.release': release}),
           ...(routes.has(attributes.route) && {route: attributes.route}),
-          ...(log.message === 'Room binding failed' && roomBindingRoutes.has(attributes.room_binding_route) && {
+          ...(log.message === 'Pages request failed' && roomBindingRoutes.has(attributes.room_binding_route) && {
             room_binding_route: attributes.room_binding_route, ...roomBindingFlags(attributes),
           }),
           ...(log.message === 'Pages request failed' && typeof attributes.ray_id === 'string' &&
