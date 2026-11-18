@@ -371,3 +371,70 @@ test('a refilled boat appears at its mooring, never slides in from the sailing o
   assert.equal(fresh.travel,0);
   room.dispose();
 });
+
+test('diagnostics keep the first reconnect trigger and record the authoritative resumed pose', async t => {
+  const triggers = ['transport_close', 'heartbeat_timeout', 'snapshot_mismatch'];
+  for (const reason of triggers) await t.test(reason, t => {
+    let clock = 0;
+    let heartbeat;
+    let retry;
+    t.mock.method(performance, 'now', () => clock);
+    t.mock.method(globalThis, 'setInterval', callback => { heartbeat = callback; });
+    t.mock.method(globalThis, 'setTimeout', callback => { retry = callback; });
+    globalThis.location = {href: 'https://room.example/'};
+    globalThis.document = {hidden: false};
+    t.after(() => {
+      delete globalThis.location;
+      delete globalThis.document;
+    });
+    t.mock.property(globalThis, 'WebSocket', class {
+      static OPEN = 1;
+      readyState = 1;
+      send() {}
+      close() {}
+    });
+
+    const events = [];
+    const room = new RoomClient(() => {});
+    room.onReconnectDiagnostic = event => events.push(event);
+    t.after(() => room.dispose());
+    const receive = (message, socket = room.socket) => socket.onmessage({data: JSON.stringify(message)});
+    room.connect();
+    room.socket.onopen();
+    const old = room.socket;
+    receive({type: 'welcome', id: 'player'});
+    receive({type: 'snapshot', ...packet(1)});
+    old.onmessage({data: 'pong'});
+    clock = 5000;
+    if (reason === 'transport_close') {
+      old.onclose({code: 1006, wasClean: false, reason: 'private reason'});
+      retry();
+    } else if (reason === 'heartbeat_timeout') {
+      heartbeat();
+      clock = 15_000;
+      heartbeat();
+    } else {
+      receive({type: 'delta', epoch: 'epoch', islandId: 'home', baseTick: 0, tick: 2});
+    }
+    old.onclose({code: 1006, wasClean: false});
+    room.socket.onclose({code: 1006, wasClean: false});
+    retry();
+    assert.deepEqual(events.map(event => event.reason), [reason]);
+    assert.equal(events[0].epoch, 'epoch');
+    assert.equal(events[0].tick, 1);
+    assert.equal(events[0].sincePongMs, clock);
+    assert.equal(events[0].sinceSnapshotMs, clock);
+    assert.doesNotMatch(JSON.stringify(events), /private reason|"player"/);
+    if (reason === 'transport_close') assert.equal(events[0].wasClean, false);
+    if (reason === 'snapshot_mismatch') assert.equal(events[0].baseTick, 0);
+
+    receive({type: 'welcome', id: 'player'});
+    receive({type: 'snapshot', ...packet(1), epoch: 'restored'});
+    assert.equal(events[1].event, 'reconnected');
+    assert.equal(events[1].reason, reason);
+    assert.equal(events[1].epoch, 'restored');
+    assert.equal(events[1].startedAt, events[0].at);
+    assert.equal(events[1].samePlayer, true);
+    assert.deepEqual(events[1].after, {x: 1800, y: 430, island: 'home', mode: 'walking'});
+  });
+});

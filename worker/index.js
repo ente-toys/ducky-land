@@ -225,6 +225,7 @@ export class IslandRoom {
     this.savedBoatRows = next;
     this.savedCheckpointRows = checkpoints;
     this.legacyBoats = false;
+    return true;
   }
 
   parkBoat(boat,landing=null) {

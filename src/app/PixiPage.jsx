@@ -1,4 +1,4 @@
-import {testSession} from './test-session.js';
+import {guestReconnectDiagnostics, testSession} from './test-session.js';
 import {useEffect, useRef, useState} from 'react';
 import {PixiIsland} from '../rendering/pixi/engine.js';
 import {RoomClient} from '../multiplayer/room-client.js';
@@ -113,6 +113,7 @@ export default function PixiPage({signedInEntry = false}) {
       setTravel(state);
       void island.current?.prepareIsland(state.islandId).catch(()=>{});
     }, setTravelNotice);
+    client.onReconnectDiagnostic = guestReconnectDiagnostics();
     room.current = offline ? null : client;
     const game = new PixiIsland({room:offline ? null : client, chatLayer:chatLayer.current, chatEditor, nameLayer:nameLayer.current,
       randomArrival:offline, onArrival:name => {

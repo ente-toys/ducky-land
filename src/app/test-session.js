@@ -19,3 +19,13 @@ export function testSession() {
 export function authenticateTestSocket(url) {
   if (token) url.searchParams.set('testSession', token);
 }
+
+export function guestReconnectDiagnostics() {
+  try {
+    if (testing && sessionStorage.getItem('ducky-reconnect-diagnostics') === '1') {
+      return event => console.info('Ducky Land reconnect', event);
+    }
+  } catch {
+    // Guest play still works if the browser disables storage.
+  }
+}

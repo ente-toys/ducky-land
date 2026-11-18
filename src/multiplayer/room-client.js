@@ -92,9 +92,32 @@ export class RoomClient {
     this.prev = null; this.alpha = 1;
   }
 
+  recordReconnect(reason, details = {}) {
+    if (!this.onReconnectDiagnostic || this.reconnectIncident) return;
+    const now = performance.now();
+    const pose = this.snapshotPlayers.get(this.id);
+    const since = timestamp => timestamp == null ? null : Math.round(now - timestamp);
+    this.reconnectIncident = {
+      at: Date.now(), reason, epoch: this.epoch ?? null, tick: this.tick,
+      sincePongMs: since(this.lastPongAt), sinceSnapshotMs: since(this.lastSnapshotAt),
+      before: this.diagnosticPosition(pose), player: this.id, boat: pose?.boatId,
+    };
+    const {player, boat, ...event} = this.reconnectIncident;
+    this.onReconnectDiagnostic({event: 'reconnect', ...event, ...details});
+  }
+
+  diagnosticPosition(pose) {
+    return pose ? {x: pose.x, y: pose.y, island: pose.islandId, mode: pose.mode} : null;
+  }
+
   connect(play = true, reconnecting = false) {
     this.wantsPlay = play;
-    if (!reconnecting) this.resumeId = null;
+    if (!reconnecting) {
+      this.resumeId = null;
+      this.reconnectIncident = null;
+    }
+    this.lastPongAt = null;
+    this.lastSnapshotAt = null;
     clearTimeout(this.retryTimer);
     clearInterval(this.heartbeat);
     const old = this.socket;
@@ -118,7 +141,10 @@ export class RoomClient {
       this.heartbeat = setInterval(() => {
         if (document.hidden) { pendingPing = null; return; }
         if (pendingPing !== null) {
-          if (nowSeconds()-pendingPing > 9) this.connect(this.wantsPlay, true);
+          if (nowSeconds()-pendingPing > 9) {
+            this.recordReconnect('heartbeat_timeout');
+            this.connect(this.wantsPlay, true);
+          }
           return;
         }
         if (socket.readyState === WebSocket.OPEN) {
@@ -129,7 +155,11 @@ export class RoomClient {
     };
     socket.onmessage = ({data}) => {
       if (socket !== this.socket) return;
-      if (data === 'pong') { pendingPing = null; return; }
+      if (data === 'pong') {
+        pendingPing = null;
+        if (this.onReconnectDiagnostic) this.lastPongAt = performance.now();
+        return;
+      }
       const message = JSON.parse(data);
       if (message.type === 'globe-players') {
         if (this.globeFeed && this.globeOpen && message.subscriptionId === this.globeSubscriptionId) {
@@ -154,6 +184,9 @@ export class RoomClient {
       if (message.type === 'friends-changed') this.onFriendsChanged();
       if (message.type === 'delta') {
         if (message.epoch !== this.epoch || message.baseTick !== this.tick || message.islandId !== this.islandId) {
+          this.recordReconnect('snapshot_mismatch', {
+            receivedEpoch: message.epoch, baseTick: message.baseTick, receivedTick: message.tick,
+          });
           this.connect(this.wantsPlay, true);
           return;
         }
@@ -186,9 +219,10 @@ export class RoomClient {
         this.onStatus(this.id ? 'playing' : message.reason ?? 'watching');
       }
     };
-    socket.onclose = ({code}) => {
+    socket.onclose = ({code, wasClean}) => {
       if (socket !== this.socket) return;
       clearInterval(this.heartbeat);
+      if (!full && code !== 4001) this.recordReconnect('transport_close', {code, wasClean});
       this.reset();
       if (full || code === 4001) {
         this.onStatus('spectators-full');
@@ -232,6 +266,19 @@ export class RoomClient {
     this.snapshotPlayers = new Map(players.map(p => [p.id, p]));
     this.snapshotBoats = new Map(boats.map(b => [b.id, b]));
     const own=players.find(pose => pose.id === this.id);
+    if (this.onReconnectDiagnostic) {
+      this.lastSnapshotAt = performance.now();
+      const incident = this.reconnectIncident;
+      if (incident && (own && self || !this.wantsPlay)) {
+        this.reconnectIncident = null;
+        this.onReconnectDiagnostic({
+          event: 'reconnected', at: Date.now(), startedAt: incident.at, reason: incident.reason,
+          epoch, tick, after: this.diagnosticPosition(own),
+          samePlayer: Boolean(own && own.id === incident.player),
+          sameBoat: Boolean(own && own.boatId === incident.boat),
+        });
+      }
+    }
     const mode=own?.mode ?? 'walking';
     if(this.mode==='sailing'&&mode==='walking')this.arrivalBoatId=this.player?.boatId;
     const changed=this.islandId !== islandId || this.mode !== mode || this.epoch !== epoch;
