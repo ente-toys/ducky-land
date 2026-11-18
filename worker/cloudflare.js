@@ -141,6 +141,12 @@ class MonitoredRoom extends Room {
     return {connections: this.connections.size, players, watchers: this.connections.size - players};
   }
 
+  reportSocketRejection(reason, code) {
+    roomLog('warn', 'Room socket rejected', {
+      ...this.diagnostics, rejection_reason: reason, close_code: code, connections: this.connections.size,
+    });
+  }
+
   async fetch(request) {
     const route = new URL(request.url).pathname;
     const started = Date.now();

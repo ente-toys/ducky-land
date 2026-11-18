@@ -771,8 +771,14 @@ export class IslandRoom {
     }
     info.tokens = Math.min(30, info.tokens + (now-info.tokenTime)*.024) - 1;
     info.tokenTime = now;
-    if (info.tokens < 0 || typeof message !== 'string' || message.length > 512) {
-      socket.close(1008, 'Invalid or excessive commands');
+    let rejectionReason;
+    if (info.tokens < 0) rejectionReason = 'rate_limit';
+    else if (typeof message !== 'string') rejectionReason = 'non_text_message';
+    else if (message.length > 512) rejectionReason = 'message_too_large';
+    if (rejectionReason) {
+      const closeCode = 1008;
+      this.reportSocketRejection?.(rejectionReason, closeCode);
+      socket.close(closeCode, 'Invalid or excessive commands');
       return;
     }
     let command;

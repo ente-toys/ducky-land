@@ -5,7 +5,8 @@ const errorTypes = new Set([
 ]);
 const spanAttributes = ['sentry.op', 'sentry.origin', 'http.request.method', 'http.response.status_code', 'app.route'];
 const logMessages = new Set(['Pages request completed', 'Pages request failed', 'Room request completed', 'Room request failed', 'Room socket closed', 'Room socket error',
-  'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
+  'Room socket rejected', 'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
+const socketRejectionReasons = new Set(['rate_limit', 'non_text_message', 'message_too_large']);
 const logNumbers = ['status', 'duration_ms', 'connections', 'players', 'watchers', 'close_code',
   'count', 'mean_ms', 'max_ms', 'slow_count', 'last_checkpoint_ms', 'last_confirmed_checkpoint_ms'];
 const roomOperations = new Set(['initialize', 'tick', 'tick_gap', 'checkpoint', 'checkpoint_sync', 'alarm', 'alarm_schedule', 'socket_close', 'socket_error']);
@@ -112,6 +113,8 @@ export function sentryOptions(env, service, routes) {
           ...(typeof attributes.room_epoch === 'string' && uuid.test(attributes.room_epoch) && {room_epoch: attributes.room_epoch}),
           ...(typeof attributes.worker_version === 'string' && uuid.test(attributes.worker_version) && {worker_version: attributes.worker_version}),
           ...(typeof attributes.was_clean === 'boolean' && {was_clean: attributes.was_clean}),
+          ...(log.message === 'Room socket rejected' && socketRejectionReasons.has(attributes.rejection_reason) &&
+            {rejection_reason: attributes.rejection_reason}),
           ...Object.fromEntries(logNumbers.filter(key => Number.isFinite(attributes[key])).map(key => [key, attributes[key]])),
         },
       };
