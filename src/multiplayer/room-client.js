@@ -197,7 +197,7 @@ export class RoomClient {
       this.onStatus('reconnecting');
       this.failures = (this.failures ?? 0) + 1;
       this.retryTimer = setTimeout(() => this.connect(this.wantsPlay, true),
-        Math.min(5000, 350 * 2 ** (this.failures-1)));
+        Math.min(5000, 350 * 2 ** (this.failures-1)) * (.5 + Math.random() * .5));
     };
     if (held) {
       if (socket.readyState === 1) socket.onopen();

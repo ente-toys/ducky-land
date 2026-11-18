@@ -17,7 +17,8 @@ import {BUILD_COOLDOWN, buildSpot, strandedIslet} from '../src/gameplay/boat-bui
 import {RoomKarma} from './karma.js';
 
 const STARGAZER_LIMIT = 5000;
-const RESUME_MS = 15_000;
+const RESUME_MS = 30_000;
+const CHECKPOINT_MS = 1_000;
 const PRESENCE_UPDATE_MS = 100;
 const GLOBE_UPDATE_MS = 500;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
@@ -134,6 +135,10 @@ export class IslandRoom {
     this.boats = boats.filter(boat => boat?.parked !== true || boat.occupant ||
       (islandFor(boat.islandId) && canSail(boat.x,boat.y,boat.islandId)));
     this.savedBoatRows = new Map(saved ? [] : rows.map(row => [row.id, row.state]));
+    this.sql.exec('CREATE TABLE IF NOT EXISTS room_checkpoints (account TEXT PRIMARY KEY, digest TEXT NOT NULL, pose TEXT NOT NULL)');
+    this.savedCheckpointRows = new Map(this.sql.exec('SELECT account,digest,pose FROM room_checkpoints').toArray()
+      .map(row => [row.account, row]));
+    this.checkpointAt = 0;
     fillMoorings(this.boats);
     this.legacyBoats = Boolean(saved);
     for (const socket of ctx.getWebSockets()) {
@@ -149,6 +154,7 @@ export class IslandRoom {
       this.recoverSailingPosition(actor);
       this.attach(socket, restored);
     }
+    this.restoreCheckpoints(Date.now());
     this.reconcileBoats();
     this.karma=new RoomKarma(this);
     for(const socket of ctx.getWebSockets()){
@@ -157,29 +163,73 @@ export class IslandRoom {
     }
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
     this.updateGlobeTimer();
+    ctx.waitUntil(this.scheduleExpiry());
   }
 
   navFor(islandId='home') { return navOf(islandId); }
 
-  saveBoats() {
+  restoreCheckpoints(now) {
+    // A reset can remove the sockets before webSocketClose gets a chance to save a resume.
+    const live = new Set([...this.connections.values()].filter(info => info.actor).map(info => info.account));
+    const orphaned = [...this.savedCheckpointRows.values()].filter(row => !live.has(row.account));
+    if (!orphaned.length) return;
+    const restore = () => {
+      for (const row of orphaned) {
+        const session = this.session(row.digest, now);
+        if (session?.canPlay && session.account === row.account) {
+          this.sql.exec('INSERT OR IGNORE INTO resumes VALUES(?,?,?)', row.account, row.pose, now+RESUME_MS);
+        }
+        this.sql.exec('DELETE FROM room_checkpoints WHERE account=?', row.account);
+      }
+    };
+    if (this.ctx.storage.transactionSync) this.ctx.storage.transactionSync(restore);
+    else restore();
+    for (const {account} of orphaned) this.savedCheckpointRows.delete(account);
+  }
+
+  saveBoats(now = Date.now(), departed = null) {
+    // Commit sailing poses with their boats so a restart can't restore different versions of them.
     for(const boat of this.boats)boat.seaVersion=SEA_VERSION;
     const next = new Map(this.boats.map(boat => [String(boat.id), JSON.stringify(boat)]));
+    const checkpoints = new Map();
+    for (const {actor, account, digest, expires} of this.connections.values()) {
+      if (actor && account && digest && expires > now) checkpoints.set(account, {digest, pose:JSON.stringify(savedPose(actor))});
+    }
+    const changedBoats = [...next].filter(([id, state]) => this.savedBoatRows.get(id) !== state);
+    const removedBoats = [...this.savedBoatRows.keys()].filter(id => !next.has(id));
+    const changedCheckpoints = [...checkpoints].filter(([account, row]) => {
+      const previous = this.savedCheckpointRows.get(account);
+      return previous?.digest !== row.digest || previous.pose !== row.pose;
+    });
+    const removedCheckpoints = [...this.savedCheckpointRows.keys()].filter(account => !checkpoints.has(account));
+    this.checkpointAt = now + CHECKPOINT_MS;
+    if (!changedBoats.length && !removedBoats.length && !changedCheckpoints.length &&
+        !removedCheckpoints.length && !this.legacyBoats && !departed) return;
     const save = () => {
-      for (const [id, state] of next) if (this.savedBoatRows.get(id) !== state) {
+      for (const [id, state] of changedBoats) {
         this.sql.exec('INSERT OR REPLACE INTO boat_states VALUES(?,?)', id, state);
       }
-      for (const id of this.savedBoatRows.keys()) if (!next.has(id)) this.sql.exec('DELETE FROM boat_states WHERE id=?', id);
+      for (const id of removedBoats) this.sql.exec('DELETE FROM boat_states WHERE id=?', id);
+      for (const [account, {digest, pose}] of changedCheckpoints) {
+        this.sql.exec('INSERT OR REPLACE INTO room_checkpoints VALUES(?,?,?)', account, digest, pose);
+      }
+      for (const account of removedCheckpoints) this.sql.exec('DELETE FROM room_checkpoints WHERE account=?', account);
+      if (departed) {
+        this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',
+          departed.account, JSON.stringify(savedPose(departed.actor)), now+RESUME_MS);
+      }
       if (this.legacyBoats) this.sql.exec('DELETE FROM boats WHERE id=1');
     };
     if (this.ctx.storage.transactionSync) this.ctx.storage.transactionSync(save);
     else save();
     this.savedBoatRows = next;
+    this.savedCheckpointRows = checkpoints;
     this.legacyBoats = false;
   }
 
   parkBoat(boat,landing=null) {
     retireBoat(this.boats,boat,landing);
-    this.saveBoats();
+    this.boatsDirty = true;
   }
 
   releaseBoat(actorId) {
@@ -226,7 +276,6 @@ export class IslandRoom {
   async fetch(request) {
     const {pathname} = new URL(request.url);
     const now = Date.now();
-    this.prune(now);
     this.expire(now);
     if (pathname === '/room') return this.join(request, now);
     if (pathname === '/bog-room') {
@@ -250,8 +299,9 @@ export class IslandRoom {
     }
     if (pathname === '/flow') {
       if (data.previous) this.sql.exec('DELETE FROM flows WHERE state=?', data.previous);
-      if (this.sql.exec('SELECT count(*) AS count FROM flows').one().count >= 256) return reply({}, 429);
+      if (this.sql.exec('SELECT count(*) AS count FROM flows WHERE expires>?', now).one().count >= 256) return reply({}, 429);
       this.sql.exec('INSERT INTO flows VALUES(?,?,?)', data.state, data.verifier, now+FLOW_MS);
+      this.ctx.waitUntil(this.scheduleExpiry());
       return reply({});
     }
     if (pathname === '/consume') {
@@ -268,6 +318,7 @@ export class IslandRoom {
       }
       this.sql.exec('INSERT INTO sessions (digest,account,login,expires,can_play,github_token) VALUES(?,?,?,?,?,?)',
         data.digest, data.account, data.login, now+SESSION_MS, data.canPlay === true ? 1 : 0, data.githubToken);
+      this.ctx.waitUntil(this.scheduleExpiry());
       return reply({});
     }
     if (pathname === '/session/access') {
@@ -473,7 +524,7 @@ export class IslandRoom {
       info.actor = {id:crypto.randomUUID(), turn:0, emoteVersion:0,
         islandId:'home',mode:'walking',boatId:null,...pose,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       recoverIsland(info.actor);
-      if (this.recoverSailingPosition(info.actor)) this.saveBoats();
+      this.recoverSailingPosition(info.actor);
       if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
@@ -484,6 +535,7 @@ export class IslandRoom {
     }
     this.ctx.acceptWebSocket(socket);
     this.connections.set(socket, info);
+    if (playing) this.saveBoats(now);
     this.attach(socket, info);
     this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
       ...(globeFeed ? {globeFeed:true} : {}),
@@ -682,22 +734,23 @@ export class IslandRoom {
         changed = true;
       }
     }
-    if (changed) this.broadcast();
+    if (changed) {
+      this.saveBoats(now);
+      this.broadcast();
+    }
   }
 
   async scheduleExpiry() {
-    let expires = Infinity;
-    for (const info of this.connections.values()) {
-      if (info.expires) expires = Math.min(expires, info.expires);
-    }
-    const resume = this.sql.exec('SELECT min(expires) AS next FROM resumes').one().next;
-    const next = Math.min(expires, resume ?? Infinity);
-    if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
-    else await this.ctx.storage.deleteAlarm();
+    const {next} = this.sql.exec('SELECT min(next) AS next FROM (SELECT min(expires) AS next FROM flows UNION ALL SELECT min(expires) AS next FROM sessions UNION ALL SELECT min(expires) AS next FROM resumes)').one();
+    if (next === this.expiryAt) return;
+    if (next === null) await this.ctx.storage.deleteAlarm();
+    else await this.ctx.storage.setAlarm(next);
+    this.expiryAt = next;
   }
 
   async alarm() {
     const now = Date.now();
+    this.expiryAt = undefined;
     this.prune(now);
     this.expire(now);
     this.broadcast();
@@ -876,6 +929,7 @@ export class IslandRoom {
   step() {
     const now = Date.now();
     let active = false;
+    let changedTravel = false;
     this.expire(now);
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
@@ -888,6 +942,7 @@ export class IslandRoom {
         if (!boat) info.landing=null;
         if (boat) {
           if (!info.landing && crossIsland(actor,id=>this.allowLanding(socket,info,id),this.boats)) {
+            changedTravel = true;
             info.input=ZERO;
             info.inputExpires=0;
           }
@@ -899,12 +954,14 @@ export class IslandRoom {
             Object.assign(actor,spot.islet?reframeIslet(actor.islandId,spot.islandId,ISLETS.find(i=>i.id===spot.islet),actor):unplaceRigid(actor.islandId,spot.islandId,actor)); actor.islandId=spot.islandId; info.islandId=spot.islandId;
             Object.assign(boat,{x:actor.x,y:actor.y,islandId:actor.islandId});
             this.parkBoat(boat,spot);
+            changedTravel = true;
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
           } else if (actor.docking && near(actor,actor.dockTarget??harborOf(actor.islandId).water,12)) {
             if (!this.allowLanding(socket,info,actor.islandId)||!this.chargeBogLanding(socket,info,actor.islandId)) continue;
             Object.assign(boat,unplaceRigid(actor.islandId,actor.islandId,boat));
             this.parkBoat(boat);
+            changedTravel = true;
             Object.assign(actor,{...harborOf(actor.islandId).land,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null});
             info.input=ZERO;
           }
@@ -926,6 +983,7 @@ export class IslandRoom {
             boat.occupant=actor.id; boat.departure=actor.islandId;
             if (boat.landing) boat.landing=null;
             Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false,jumpLeft:0});
+            changedTravel = true;
             info.input=ZERO;
           }
         }
@@ -942,10 +1000,10 @@ export class IslandRoom {
     for (const [islandId, walkers] of walking) if (walkers.length > 1 && separateActors(walkers,this.navFor(islandId),.05)) active=true;
     this.karma.update(now);
     for (const [socket,info] of this.connections) if (info.actor) this.attach(socket,info);
-    if (this.boats.some(boat => boat.occupant) || this.boatsDirty) {
+    if (changedTravel || this.boatsDirty || now >= this.checkpointAt || !active) {
+      if ((changedTravel || this.boatsDirty || this.boats.some(boat => boat.occupant)) && fillMoorings(this.boats)) active=true;
       this.boatsDirty = false;
-      if (fillMoorings(this.boats)) active=true;
-      this.saveBoats();
+      this.saveBoats(now);
     }
     this.stepCount = (this.stepCount ?? 0)+1;
     if (!active || this.stepCount % 2 === 0) this.broadcast();
@@ -963,12 +1021,10 @@ export class IslandRoom {
     if (this.globeSubscribers.delete(socket)) this.updateGlobeTimer();
     if (info.actor) {
       const now = Date.now();
-      if (this.session(info.digest,now)) {
-        this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',
-          info.account, JSON.stringify(savedPose(info.actor)), now+RESUME_MS);
-      }
+      const resumable = this.session(info.digest,now)?.canPlay;
+      if (!resumable) this.releaseBoat(info.actor.id);
+      this.saveBoats(now, resumable ? info : null);
     }
-    if (info.actor && !this.session(info.digest)) this.releaseBoat(info.actor.id);
     this.schedulePresenceBroadcast();
     this.ctx.waitUntil(this.scheduleExpiry());
   }

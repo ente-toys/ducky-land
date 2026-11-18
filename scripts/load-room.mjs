@@ -11,6 +11,8 @@ export async function loadTest({players: N = 100, island = 'blossom', seconds = 
     if (nav.walkable(x, y)) spots.push({x, y});
   }
   const players = spots.map((p, n) => addPlayer(room, n, {islandId: island, ...p}));
+  // The game negotiates the separate globe feed on every connection.
+  for (const player of players) room.connections.get(player.socket).globeFeed = true;
   room.timer = 'manual';
   room.broadcast();
   for (const p of players) {p.socket.sent = 0; p.socket.bytes = 0;}

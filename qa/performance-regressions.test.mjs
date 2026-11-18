@@ -234,14 +234,15 @@ test('an idle reconnect burst sends immediate baselines and one shared presence 
   for (const player of players) room.webSocketClose(player.socket);
   const deadline = room.presenceTimer;
   t.mock.timers.tick(50);
-  const join = account => {
-    const url = 'https://island.example/room?globeFeed=1&play='+(account ? '1' : '0');
+  const join = (account, resume) => {
+    const url = new URL('https://island.example/room?globeFeed=1&play='+(account ? '1' : '0'));
+    if (resume) url.searchParams.set('resume', resume);
     const headers = {Upgrade:'websocket', ...(account ? {'X-Session-Digest':account} : {})};
     room.join(new Request(url, {headers}), Date.now());
     return joinedSocket;
   };
   for (const player of players.slice(0,18)) {
-    const socket = join(player.account);
+    const socket = join(player.account, player.actor.id);
     const initial = JSON.parse(socket.last);
     const pose = initial.players.find(pose => pose.id === player.actor.id);
     assert.equal(pose.x, player.actor.x);
