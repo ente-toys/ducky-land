@@ -107,13 +107,16 @@ export class LiveBogRoom {
  eject(p){
   const destination=bogExitIslet(),text=`Out of lives! Paddled to ${destination.name}`;
   for(const [socket,info]of this.owner.connections)if(info.account===p.profile&&info.actor){
+   const before=this.owner.simulation && {actor:structuredClone(info.actor)};
    Object.assign(info.actor,{islandId:destination.islandId,x:destination.x,y:destination.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,
     action:0,until:0,jumpLeft:0,docking:false,sailTarget:null,sailRoute:null,exitLocked:false});
    Object.assign(info,{islandId:destination.islandId,input:{x:0,y:0},inputExpires:0,boarding:null,landing:null});
    this.owner.attach(socket,info);this.owner.send(socket,{type:'travel-notice',text});
+   if(this.owner.simulation)this.owner.transferIfNeeded(socket,info,null,before);
   }
   const resume=this.owner.sql.exec('SELECT pose FROM resumes WHERE account=?',p.profile).toArray()[0];
   if(resume){const pose={...JSON.parse(resume.pose),islandId:destination.islandId,x:destination.x,y:destination.y,mode:'walking',boatId:null};this.owner.sql.exec('UPDATE resumes SET pose=? WHERE account=?',JSON.stringify(pose),p.profile);}
+  this.owner.endCombatVisit?.(p.profile,p.entryId);
   this.owner.karma.endBogEntry(p.profile);
   for(const [socket,m]of [...this.members])if(m.account===p.profile){
    this.owner.send(socket,{type:'arena-exit',text,destination});this.close(socket);socket.close(1000,'Out of lives');

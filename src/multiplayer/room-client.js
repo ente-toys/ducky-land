@@ -118,6 +118,7 @@ export class RoomClient {
   }
 
   recordReconnect(reason, details = {}) {
+    this.reconnectReason ??= reason;
     if (!this.onReconnectDiagnostic || this.reconnectIncident) return;
     const now = performance.now();
     const pose = this.snapshotPlayers.get(this.id);
@@ -135,7 +136,7 @@ export class RoomClient {
     return pose ? {x: pose.x, y: pose.y, island: pose.islandId, mode: pose.mode} : null;
   }
 
-  connect(play = true, reconnecting = false) {
+  connect(play = true, reconnecting = false, handoff = false) {
     this.wantsPlay = play;
     if (!reconnecting) {
       this.resumeId = null;
@@ -149,12 +150,16 @@ export class RoomClient {
     clearInterval(this.heartbeat);
     const old = this.socket;
     this.socket = null;
-    old?.close();
-    this.reset();
-    this.onStatus(reconnecting ? 'reconnecting' : 'connecting');
+    if (handoff) this.leavingSocket ??= old;
+    if (old !== this.leavingSocket) old?.close();
+    if (!this.leavingSocket) this.reset();
+    if (!this.leavingSocket) this.onStatus(reconnecting ? 'reconnecting' : 'connecting');
     const url = new URL('/api/room', location.href);
     url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
     authenticateTestSocket(url);
+    if (url.searchParams.has('testSession') && this.reconnectReason) url.searchParams.set('reconnect',this.reconnectReason);
+    url.searchParams.set('protocol','2');
+    if (!play) url.searchParams.set('watch',this.watchDestination ?? this.islandId ?? 'home');
     url.searchParams.set('play', play ? '1' : '0');
     url.searchParams.set('globeFeed', '1');
     if (play && this.resumeId) url.searchParams.set('resume', this.resumeId);
@@ -227,11 +232,25 @@ export class RoomClient {
         merge(this.snapshotBoats, message.boats);
         this.snapshot({...message, players: [...this.snapshotPlayers.values()], boats: [...this.snapshotBoats.values()]});
       }
-      if (message.type === 'snapshot') this.snapshot(message);
+      if (message.type === 'transfer' && message.version === 1 && message.player === this.id) {
+        this.connect(true,true,true);
+        return;
+      }
+      if (message.type === 'snapshot') {
+        this.snapshot(message);
+        this.leavingSocket?.close();
+        this.leavingSocket = null;
+      }
+      if (this.splitWorld && (message.type === 'snapshot' || message.type === 'delta') && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({type:'snapshot-ack',epoch:message.epoch,tick:message.tick}));
+      }
       if (message.type === 'joined') this.onJoin(message);
       if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
         if (message.type === 'welcome') {
+          this.reconnectReason = null;
+          this.splitWorld = message.protocol === 2;
+          if (this.splitWorld && Number.isSafeInteger(message.ack)) this.seq=Math.max(this.seq,message.ack);
           this.overloadBackoff = false;
           this.globeFeed = message.globeFeed === true;
           if (this.globeOpen) this.sendGlobeSubscription();
@@ -242,7 +261,7 @@ export class RoomClient {
         this.failures = 0;
         this.id = this.resumeId = message.id;
         this.arrival = message.arrival ?? null;
-        if (!this.id) this.player = null;
+        if (!this.id && !this.leavingSocket) this.player = null;
         this.updateNearby();
         if (message.type === 'role' || ['players-full','star-required'].includes(message.reason)) this.wantsPlay = false;
         full = message.reason === 'spectators-full';
@@ -253,7 +272,7 @@ export class RoomClient {
       if (socket !== this.socket) return;
       clearInterval(this.heartbeat);
       if (!full && code !== 4001) this.recordReconnect('transport_close', {code, wasClean});
-      this.reset();
+      if (!this.leavingSocket) this.reset();
       if (full || code === 4001) {
         this.onStatus('spectators-full');
         return;
@@ -503,6 +522,12 @@ export class RoomClient {
 
   watch(islandId) {
     if (this.id || !islandFor(islandId) || this.socket?.readyState !== WebSocket.OPEN) return;
+    if (this.splitWorld) {
+      if (islandId === this.islandId && !this.leavingSocket) return;
+      this.watchDestination = islandId;
+      this.connect(false,true,true);
+      return;
+    }
     this.socket.send(JSON.stringify({type:'watch',islandId}));
   }
 
@@ -599,6 +624,8 @@ export class RoomClient {
     clearTimeout(this.retryTimer);
     const socket = this.socket;
     this.socket = null;
+    this.leavingSocket?.close();
+    this.leavingSocket = null;
     socket?.close();
     this.reset();
   }

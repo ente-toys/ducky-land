@@ -4,6 +4,7 @@ import {PixiIsland} from '../rendering/pixi/engine.js';
 import {RoomClient} from '../multiplayer/room-client.js';
 import IslandChat from './IslandChat.jsx';
 import IslandPresence from './IslandPresence.jsx';
+import {ISLANDS} from '../gameplay/islands.js';
 import StarDialog from './StarDialog.jsx';
 import ArrivalClouds from './ArrivalClouds.jsx';
 import {arrivalPending,rememberSignedIn} from './arrival.js';
@@ -232,6 +233,11 @@ export default function PixiPage({signedInEntry = false}) {
       <IslandStargaze island={island} playing={status==='playing' || offline} offline={offline}/>
       <div className="pixi-notifications" ref={setNotificationHost}>
         <IslandPresence online={online} latestJoin={latestJoin}>
+          {room.current?.splitWorld && ['watching','star-required','taken-over'].includes(status) &&
+            <select className="pixi-watch-island" aria-label="Watch an island" value={travel.islandId}
+              onChange={event => room.current?.watch(event.target.value)}>
+              {ISLANDS.map(({id,name}) => <option key={id} value={id}>{name}</option>)}
+            </select>}
           <IslandCamera island={island} ready={cameraReady} player={session?.user?.login}/>
         </IslandPresence>
       </div>

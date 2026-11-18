@@ -52,11 +52,11 @@ function publicPose(actor) {
 // Persist the chart version privately; wire poses keep their existing public shape.
 const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION});
 // a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
-function wireBoat({owner, ...boat}) {
+function wireBoat({owner, ownershipVersion, ...boat}) {
   return owner ? {...boat, built:true} : boat;
 }
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
-function wirePose(actor) {
+export function wirePose(actor) {
   const pose = publicPose(actor);
   if (pose.ice) pose.ice={phase:pose.ice.phase,elapsed:pose.ice.elapsed};
   pose.x = r2(pose.x); pose.y = r2(pose.y); pose.turn = r3(pose.turn); pose.travel = r2(pose.travel); pose.jumpLeft = r3(pose.jumpLeft);
@@ -101,7 +101,8 @@ export class IslandRoom {
     info.actor.karma=this.karma.balance(info.account);
     return true;
   }
-  constructor(ctx) {
+  constructor(ctx, bindings, simulation = null, inactiveWorld = false) {
+    this.simulation = simulation;
     this.ctx = ctx;
     this.sql = ctx.storage.sql;
     this.connections = new Map();
@@ -139,7 +140,7 @@ export class IslandRoom {
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
     this.sql.exec('CREATE TABLE IF NOT EXISTS boat_states (id TEXT PRIMARY KEY, state TEXT NOT NULL)');
     const rows = this.sql.exec('SELECT id,state FROM boat_states').toArray();
-    const boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : createBoats();
+    const boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : simulation ? [] : createBoats();
     for(const boat of boats) {
       if(boat.seaVersion!==SEA_VERSION && islandFor(boat.islandId) && (boat.occupant||boat.parked)) {
         const pose={...boat,mode:'sailing'};migrateSeaPosition(pose);Object.assign(boat,{x:pose.x,y:pose.y});
@@ -154,9 +155,9 @@ export class IslandRoom {
     this.savedCheckpointRows = new Map(this.sql.exec('SELECT account,digest,pose FROM room_checkpoints').toArray()
       .map(row => [row.account, row]));
     this.checkpointAt = 0;
-    fillMoorings(this.boats);
+    fillMoorings(this.boats, this.simulation?.owner ?? null);
     this.legacyBoats = Boolean(saved);
-    for (const socket of ctx.getWebSockets()) {
+    for (const socket of inactiveWorld ? [] : ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
@@ -169,10 +170,12 @@ export class IslandRoom {
       this.recoverSailingPosition(actor);
       this.attach(socket, restored);
     }
-    this.restoreCheckpoints(Date.now());
-    this.reconcileBoats();
+    if (!inactiveWorld) {
+      this.restoreCheckpoints(Date.now());
+      this.reconcileBoats();
+    }
     this.karma=new RoomKarma(this);
-    for(const socket of ctx.getWebSockets()){
+    for(const socket of inactiveWorld ? [] : ctx.getWebSockets()){
       const saved=socket.readyState===1&&socket.deserializeAttachment()?.bog;
       if(saved&&!(this.bog??=new LiveBogRoom(this)).open(socket,saved))socket.close(1008,'Bog visit ended');
     }
@@ -191,8 +194,8 @@ export class IslandRoom {
     const restore = () => {
       for (const row of orphaned) {
         const session = this.session(row.digest, now);
-        if (session?.canPlay && session.account === row.account) {
-          this.sql.exec('INSERT OR IGNORE INTO resumes VALUES(?,?,?)', row.account, row.pose, now+RESUME_MS);
+        if (this.simulation || session?.canPlay && session.account === row.account) {
+          this.sql.exec('INSERT OR IGNORE INTO resumes VALUES(?,?,?)', row.account, row.pose, this.simulation ? Number.MAX_SAFE_INTEGER : now+RESUME_MS);
         }
         this.sql.exec('DELETE FROM room_checkpoints WHERE account=?', row.account);
       }
@@ -231,7 +234,7 @@ export class IslandRoom {
       for (const account of removedCheckpoints) this.sql.exec('DELETE FROM room_checkpoints WHERE account=?', account);
       if (departed) {
         this.sql.exec('INSERT OR REPLACE INTO resumes VALUES(?,?,?)',
-          departed.account, JSON.stringify(savedPose(departed.actor)), now+RESUME_MS);
+          departed.account, JSON.stringify(savedPose(departed.actor)), this.simulation ? Number.MAX_SAFE_INTEGER : now+RESUME_MS);
       }
       if (this.legacyBoats) this.sql.exec('DELETE FROM boats WHERE id=1');
     };
@@ -244,7 +247,7 @@ export class IslandRoom {
   }
 
   parkBoat(boat,landing=null) {
-    retireBoat(this.boats,boat,landing);
+    retireBoat(this.boats,boat,landing,this.simulation?.owner ?? null);
     this.boatsDirty = true;
   }
 
@@ -255,9 +258,10 @@ export class IslandRoom {
 
   reconcileBoats() {
     const retained=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
+    if (this.simulation) for (const row of this.sql.exec('SELECT pose FROM resumes WHERE expires>?',Date.now())) retained.add(JSON.parse(row.pose).id);
     for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
     for (const boat of [...this.boats]) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
-    fillMoorings(this.boats);
+    fillMoorings(this.boats, this.simulation?.owner ?? null);
     this.saveBoats();
   }
 
@@ -337,13 +341,19 @@ export class IslandRoom {
       this.ctx.waitUntil(this.scheduleExpiry());
       return reply({});
     }
+    if (pathname === '/session/get') return reply(this.session(data.digest));
+    if (pathname === '/session/access' || pathname === '/session/revoke') return this.updateSession(pathname,data,now);
+    return reply({}, 404);
+  }
+
+  updateSession(pathname,data,now = Date.now()) {
     if (pathname === '/session/access') {
       this.sql.exec('UPDATE sessions SET can_play=? WHERE digest=?', data.canPlay === true ? 1 : 0, data.digest);
       const checked = this.session(data.digest, now);
       if (checked && typeof data.starred === 'boolean') this.stargazer(checked.account, data.starred);
       if (!data.canPlay) {
         const user = this.session(data.digest);
-        if (user) this.sql.exec('DELETE FROM resumes WHERE account=?',user.account);
+        if (user && !this.simulation) this.sql.exec('DELETE FROM resumes WHERE account=?',user.account);
         for (const [socket,info] of this.connections) {
           if (info.digest === data.digest && info.actor) this.demote(socket,info,'star-required');
         }
@@ -352,7 +362,6 @@ export class IslandRoom {
       }
       return reply({});
     }
-    if (pathname === '/session/get') return reply(this.session(data.digest));
     if (pathname === '/session/revoke') {
       this.sql.exec('DELETE FROM sessions WHERE digest=?', data.digest);
       for (const [socket, info] of this.connections) {
@@ -360,10 +369,9 @@ export class IslandRoom {
       }
       this.reconcileBoats();
       this.broadcast();
-      await this.scheduleExpiry();
+      this.ctx.waitUntil(this.scheduleExpiry());
       return reply({});
     }
-    return reply({}, 404);
   }
 
   migrateFriends() {
@@ -439,12 +447,15 @@ export class IslandRoom {
     return reply({outfit});
   }
 
-  friends(data, now) {
+  friends(data, now, nearbyAccount = null) {
     const user = this.session(data.digest, now);
     if (!user) return reply({error:'Please sign in again to manage friends.'}, 401);
     if (data.method === 'GET') return reply(this.friendState(user.account));
     let account;
-    if (data.method === 'POST') {
+    if (data.method === 'POST' && nearbyAccount) {
+      if (nearbyAccount === user.account) return reply({},400);
+      account = nearbyAccount;
+    } else if (data.method === 'POST') {
       if (typeof data.playerId !== 'string' || data.playerId.length > 64) return reply({error:'Invalid player.'},400);
       const entries = [...this.connections.entries()].filter(([socket,info]) =>
         socket.readyState === 1 && info.actor && info.expires > now);
@@ -498,6 +509,7 @@ export class IslandRoom {
   }
 
   pickSpawn(_account, occupied) {
+    if (this.simulation && this.simulation.owner !== 'home') return null;
     const home = mapOf('home');
     return pickWorldSpawn({occupied, hasRoom:id => id === 'home'}) ??
       {islandId:'home', ...home.spawn, name:islandFor('home').name};
@@ -518,9 +530,9 @@ export class IslandRoom {
     // Revalidate walking poses in case the map changed while the room was offline.
     const resumed = resume ? JSON.parse(resume.pose) : null;
     const live = previous?.[1].actor;
-    const resumable = resumeId && resumed?.id === resumeId &&
+    const resumable = (resumeId && resumed?.id === resumeId || this.simulation && resumed) &&
       (resumed.mode !== 'walking' || !islandFor(resumed.islandId) || this.standable(resumed));
-    const from = (live?.id === resumeId ? live : null) ?? (resumable ? resumed : null);
+    const from = (live && (live.id === resumeId || this.simulation) ? live : null) ?? (resumable ? resumed : null);
     let spawn = null;
     if (canPlay && !from) {
       const actors = [...this.connections.values()].flatMap(info => info.actor ? [info.actor] : []);
@@ -529,7 +541,7 @@ export class IslandRoom {
     }
     const playing = Boolean(canPlay && (from || spawn));
     const [client, socket] = Object.values(new WebSocketPair());
-    const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login, globeFeed,
+    const info = {actor:null, ...(this.simulation && {generation:Number(request.headers.get('X-Owner-Generation')),islandId:this.simulation.owner}), digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login, globeFeed,
       input:ZERO, inputExpires:0, tokens:SOCKET_COMMAND_BURST, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
@@ -541,7 +553,7 @@ export class IslandRoom {
         islandId:'home',mode:'walking',boatId:null,...pose,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       recoverIsland(info.actor);
       this.recoverSailingPosition(info.actor);
-      if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
+      if(!this.simulation && (info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking'))this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
       this.sql.exec('DELETE FROM resumes WHERE account=?', user.account);
@@ -551,9 +563,12 @@ export class IslandRoom {
     }
     this.ctx.acceptWebSocket(socket);
     this.connections.set(socket, info);
-    if (playing) this.saveBoats(now);
+    if (playing) {
+      info.ack = Number(request.headers.get('X-Transfer-Ack')) || 0;
+      this.saveBoats(now);
+    }
     this.attach(socket, info);
-    this.send(socket, {type:'welcome', id:info.actor?.id ?? null,
+    this.send(socket, {type:'welcome', id:info.actor?.id ?? null,...(this.simulation && {protocol:2,ack:info.ack}),
       ...(globeFeed ? {globeFeed:true} : {}),
       ...(spawn ? {arrival:spawn.name} : {}),
       reason:user && wantsPlayer && !user.canPlay ? 'star-required' : null});
@@ -573,7 +588,8 @@ export class IslandRoom {
 
   attach(socket, info) {
     const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId} = info;
-    socket.serializeAttachment({actor:actor ? savedPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId});
+    info.lastAttachmentAt = Date.now();
+    socket.serializeAttachment({...(this.simulation && {generation:info.generation,transferring:info.transferring}),actor:actor ? savedPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId});
   }
 
   send(socket, message) {
@@ -635,8 +651,9 @@ export class IslandRoom {
     if (target ? !info : !this.connections.size) return;
     const recipients = target ? [[target, info]] : this.connections;
     const now = Date.now();
-    this.karma.broadcast(now, recipients);
-    const online = new Set([...this.connections].map(([socket,info]) =>
+    if (this.simulation) this.broadcastKarma(now, recipients);
+    else this.karma.broadcast(now, recipients);
+    const online = this.remotePresence?.online ?? new Set([...this.connections].map(([socket,info]) =>
       info.account && info.expires > now ? info.account : socket)).size;
     const tick = ++this.tickCount;
     const groups = new Map();
@@ -648,6 +665,23 @@ export class IslandRoom {
       const group = groups.get(islandId);
       group.guests.push(pose); group.named.push({...pose, login:info.login, accountId:info.account});
     }
+    const liveAccounts = this.simulation && new Set([...this.connections.values()].filter(i=>i.actor).map(i=>i.account));
+    for (const peer of this.remotePresence?.players ?? []) {
+      if (!peer.pose || peer.owner === this.simulation.owner || liveAccounts.has(peer.account) ||
+          (peer.owner !== 'sea' && this.simulation.owner !== 'sea')) continue;
+      const island = peer.pose.islandId;
+      if (!groups.has(island)) groups.set(island,{guests:[],named:[]});
+      groups.get(island).guests.push(peer.pose);
+      groups.get(island).named.push({...peer.pose,login:peer.login,accountId:peer.account});
+    }
+    if(this.simulation && now >= (this.farPosesAt ?? 0)) {
+      this.farPoses=new Map();
+      for(const group of groups.values()) for(const pose of group.guests) {
+        this.farPoses.set(pose.id,{x:pose.x,y:pose.y,turn:pose.turn,travel:pose.travel,islandId:pose.islandId});
+      }
+      this.farPosesAt=now+1000;
+    }
+    const boatsForView = this.remoteBoats ? [...this.boats,...this.remoteBoats] : this.boats;
     const legacyGlobeFields = new Map();
     const shared = new Map(), empty = {guests:[], named:[]};
     const snapshotView = (islandId, named, info) => {
@@ -658,15 +692,24 @@ export class IslandRoom {
       const onIslet=actor&&ISLETS.some(i=>{if(i.home!==actor.islandId)return false;const p=FLAT_ISLETS[i.id];return near(actor,{x:m.cx+p.x,y:m.cy+p.y},i.radius+200);});
       const chartViewer=actor&&(actor.mode==='sailing'||onIslet)?actor:null;
       const localViewer={islandId,x:m.cx,y:m.cy};
-      const key = `${named ? 1 : 0}|${islandId}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}`;
+      // Cache viewers in the same square together. Players within one square
+      // of any viewer in it keep the full update rate; distant motion is sampled.
+      const cell = this.simulation && actor && !chartViewer && (groups.get(islandId)?.guests.length ?? 0)>=40 ?
+        {x:Math.floor(actor.x/1024),y:Math.floor(actor.y/1024)} : null;
+      const key = `${named ? 1 : 0}|${islandId}${cell?'|cell:'+cell.x+','+cell.y:''}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}`;
       if (!shared.has(key)) {
         const group = groups.get(islandId) ?? empty;
         let poses=named?group.named:group.guests;
+        if(cell) poses=poses.map(p=>{
+          if(Math.abs(Math.floor(p.x/1024)-cell.x)<=1 && Math.abs(Math.floor(p.y/1024)-cell.y)<=1) return p;
+          const prior=this.farPoses?.get(p.id);
+          return prior?.islandId===p.islandId ? {...p,...prior}:p;
+        });
         if(chartViewer) {
           poses=[...groups.values()].flatMap(g=>named?g.named:g.guests).map(p=>seaViewPose(info.actor,p,p.islandId===islandId?Infinity:8000))
             .filter(p=>p && (p.islandId===islandId || info.actor.mode==='sailing' || p.mode==='sailing'));
         } else if(localViewer)poses=poses.map(p=>seaViewPose(localViewer,p));
-        const visibleBoats=chartViewer?this.boats.map(b=>seaViewPose(info.actor,b,b.islandId===islandId?Infinity:8000)).filter(Boolean):this.boats.filter(b=>b.islandId===islandId).map(b=>localViewer?seaViewPose(localViewer,b):b);
+        const visibleBoats=chartViewer?boatsForView.map(b=>seaViewPose(info.actor,b,b.islandId===islandId?Infinity:8000)).filter(Boolean):boatsForView.filter(b=>b.islandId===islandId).map(b=>localViewer?seaViewPose(localViewer,b):b);
         const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
         shared.set(key, {key, players, boats: visibleBoats.map(wireBoat)});
       }
@@ -681,6 +724,16 @@ export class IslandRoom {
     const owned = new Map();
     for (const boat of this.boats) if (boat.owner) owned.set(boat.owner, [...(owned.get(boat.owner) ?? []), boat.id]);
     for (const [socket, info] of recipients) {
+      if (info.transferring) continue;
+      if (this.simulation && info.deltas) {
+        if ((info.unacknowledged ??= []).length >= 3) {
+          info.snapshotMissed = true;
+          continue;
+        }
+        if (info.snapshotMissed) info.snapshotBase = null;
+        info.snapshotMissed = false;
+        info.unacknowledged.push(tick);
+      }
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
       const self = actor ? {ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
@@ -732,7 +785,10 @@ export class IslandRoom {
   }
 
   demote(socket, info, reason) {
-    if (info.actor && reason !== 'taken-over') this.releaseBoat(info.actor.id);
+    if (info.actor && reason !== 'taken-over') {
+      if (this.simulation) this.saveBoats(Date.now(),info);
+      else this.releaseBoat(info.actor.id);
+    }
     info.islandId = info.actor?.islandId ?? info.islandId ?? 'home';
     info.actor = null;
     info.input = ZERO;
@@ -761,7 +817,7 @@ export class IslandRoom {
   }
 
   async scheduleExpiry() {
-    const {next} = this.sql.exec('SELECT min(next) AS next FROM (SELECT min(expires) AS next FROM flows UNION ALL SELECT min(expires) AS next FROM sessions UNION ALL SELECT min(expires) AS next FROM resumes)').one();
+    const {next} = this.sql.exec('SELECT min(next) AS next FROM (SELECT min(expires) AS next FROM flows UNION ALL SELECT min(expires) AS next FROM sessions UNION ALL SELECT min(expires) AS next FROM resumes WHERE expires<9007199254740991)').one();
     if (next === this.expiryAt) return;
     if (next === null) await this.ctx.storage.deleteAlarm();
     else await this.ctx.storage.setAlarm(next);
@@ -780,7 +836,7 @@ export class IslandRoom {
   webSocketMessage(socket, message) {
     if(this.bog?.members.has(socket)){this.bog.message(socket,message);return;}
     const info = this.connections.get(socket);
-    if (!info) return;
+    if (!info || info.transferring) return;
     const now = Date.now();
     const expired = info.expires && now >= info.expires;
     if (expired) {
@@ -797,10 +853,16 @@ export class IslandRoom {
       socket.close(closeCode, 'Invalid or excessive commands');
       return;
     }
-    const allowed = takeCommandToken(info, now);
     let command;
     try { command = JSON.parse(message); } catch { return; }
-    if (!allowed) {
+    if (command?.type === 'snapshot-ack' && this.simulation) {
+      if (command.epoch === this.epoch && info.unacknowledged?.includes(command.tick)) {
+        info.unacknowledged = info.unacknowledged.filter(tick => tick > command.tick);
+        if (info.snapshotMissed && !this.timer) this.broadcast(socket);
+      }
+      return;
+    }
+    if (!takeCommandToken(info, now)) {
       const actor = info.actor;
       const lastSequence = Math.max(info.ack, info.throttled?.seq ?? 0);
       if (!actor || expired || !Number.isSafeInteger(command?.seq) || command.seq <= lastSequence) return;
@@ -840,7 +902,7 @@ export class IslandRoom {
       return;
     }
     if (command?.type === 'watch' && !info.actor && islandFor(command.islandId)) {
-      if ((info.islandId ?? 'home') === command.islandId) return;
+      if (this.simulation || (info.islandId ?? 'home') === command.islandId) return;
       info.islandId = command.islandId;
       info.snapshotBase = null;
       this.attach(socket,info);
@@ -955,7 +1017,7 @@ export class IslandRoom {
         return;
     }
     info.ack = command.seq;
-    this.attach(socket, info);
+    if (command.type !== 'input' || now - (info.lastAttachmentAt ?? 0) >= CHECKPOINT_MS) this.attach(socket, info);
     if (!this.timer) this.timer = setInterval(() => this.step(),50);
   }
 
@@ -993,6 +1055,10 @@ export class IslandRoom {
         active ||= Boolean(info.throttled);
       }
       if (now >= info.inputExpires) info.input = ZERO;
+      const previousBoat = actor.boatId;
+      const crossing = this.simulation && (info.boarding || info.landing || actor.docking);
+      const before = crossing && {actor:structuredClone(actor),
+        boat:structuredClone(this.boats.find(b=>b.id === (previousBoat ?? info.boarding)) ?? null)};
       if (actor.mode === 'sailing') {
         this.recoverSailingPosition(actor);
         sailStep(actor,.05,info.input,now/1000,this.boats);
@@ -1046,6 +1112,7 @@ export class IslandRoom {
           }
         }
       }
+      if (this.simulation && this.transferIfNeeded(socket, info, previousBoat, before)) continue;
       active ||= !!(info.input.x || info.input.y || actor.travel || actor.path.length || actor.sailTarget || info.boarding || info.landing || actor.jumpLeft > 0 || actor.until > now/1000 || (actor.ice && actor.ice.phase!=='drift'));
     }
     const walking = new Map();
@@ -1056,10 +1123,13 @@ export class IslandRoom {
       walking.get(actor.islandId).push(actor);
     }
     for (const [islandId, walkers] of walking) if (walkers.length > 1 && separateActors(walkers,this.navFor(islandId),.05)) active=true;
-    this.karma.update(now);
-    for (const [socket,info] of this.connections) if (info.actor) this.attach(socket,info);
+    if (this.simulation) this.updateKarma(now);
+    else this.karma.update(now);
+    for (const [socket, info] of this.connections) {
+      if (info.actor && (changedTravel || !active || now - (info.lastAttachmentAt ?? 0) >= CHECKPOINT_MS)) this.attach(socket, info);
+    }
     if (changedTravel || this.boatsDirty || now >= this.checkpointAt || !active) {
-      if ((changedTravel || this.boatsDirty || this.boats.some(boat => boat.occupant)) && fillMoorings(this.boats)) active=true;
+      if ((changedTravel || this.boatsDirty || this.boats.some(boat => boat.occupant)) && fillMoorings(this.boats, this.simulation?.owner ?? null)) active=true;
       this.boatsDirty = false;
       this.saveBoats(now);
     }
@@ -1079,7 +1149,7 @@ export class IslandRoom {
     if (this.globeSubscribers.delete(socket)) this.updateGlobeTimer();
     if (info.actor) {
       const now = Date.now();
-      const resumable = this.session(info.digest,now)?.canPlay;
+      const resumable = this.simulation || this.session(info.digest,now)?.canPlay;
       if (!resumable) this.releaseBoat(info.actor.id);
       this.saveBoats(now, resumable ? info : null);
     }

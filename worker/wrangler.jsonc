@@ -23,6 +23,10 @@
     }
   },
   "limits": {"cpu_ms": 60000},
-  "durable_objects": {"bindings": [{"name": "ISLAND", "class_name": "IslandRoom"}]},
-  "migrations": [{"tag": "v1", "new_sqlite_classes": ["IslandRoom"]}]
+  "durable_objects": {"bindings": [{"name": "ISLAND", "class_name": "IslandRoom"},
+    {"name": "ISLAND_SIM", "class_name": "IslandSimulation"},
+    {"name": "SEA_SIM", "class_name": "SeaSimulation"},
+    {"name": "WORLD_PRESENCE", "class_name": "WorldPresence"}]},
+  "migrations": [{"tag": "v1", "new_sqlite_classes": ["IslandRoom"]},
+    {"tag":"v2-simulations","new_sqlite_classes":["IslandSimulation","SeaSimulation","WorldPresence"]}]
 }

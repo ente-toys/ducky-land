@@ -170,11 +170,10 @@ export function separateActors(actors, nav, dt) {
     if (!nav.clearLine([d.x, d.y], to)) return;
     d.x = to[0]; d.y = to[1]; moved = true;
   };
-  for (let i = 0; i < actors.length; i++) for (let j = i+1; j < actors.length; j++) {
-    const a = actors[i], b = actors[j];
-    if (a.sleeping && b.sleeping) continue;
+  function separatePair(a, b) {
+    if (a.sleeping && b.sleeping) return;
     let dx = b.x-a.x, dy = b.y-a.y, d = Math.hypot(dx, dy);
-    if (d >= space) continue;
+    if (d >= space) return;
     if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
     const nx = dx/d, ny = dy/d, push = Math.min(space-Math.hypot(b.x-a.x, b.y-a.y), most);
     for (const [me, other] of [[a, b], [b, a]]) {
@@ -184,6 +183,43 @@ export function separateActors(actors, nav, dt) {
     const side = closing ? push*.6 : 0, wa = a.sleeping ? 0 : b.sleeping ? 1 : .5, wb = 1-wa;
     nudge(a, (-nx*push - ny*side)*wa, (-ny*push + nx*side)*wa);
     nudge(b, (nx*push + ny*side)*wb, (ny*push - nx*side)*wb);
+  }
+
+  // A push can cross a cell boundary. Keep the buckets current and resume
+  // at the next actor index so sequential collision resolution is unchanged.
+  const cells = new Map();
+  const key = (x, y) => x + ',' + y;
+  const cellOf = actor => key(Math.floor(actor.x / space), Math.floor(actor.y / space));
+  const locations = [];
+  function relocate(index) {
+    const cell = cellOf(actors[index]);
+    if (locations[index] === cell) return false;
+    const old = cells.get(locations[index]);
+    old?.delete(index);
+    if (old?.size === 0) cells.delete(locations[index]);
+    if (!cells.has(cell)) cells.set(cell, new Set());
+    cells.get(cell).add(index);
+    locations[index] = cell;
+    return true;
+  }
+  for (let i = 0; i < actors.length; i++) relocate(i);
+  for (let i = 0; i < actors.length; i++) {
+    let next = i + 1;
+    while (next < actors.length) {
+      const x = Math.floor(actors[i].x / space), y = Math.floor(actors[i].y / space);
+      const candidates = [];
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+        for (const j of cells.get(key(x + dx, y + dy)) ?? []) {
+          if (j >= next) candidates.push(j);
+        }
+      }
+      next = actors.length;
+      for (const j of candidates.sort((a, b) => a - b)) {
+        separatePair(actors[i], actors[j]);
+        relocate(j);
+        if (relocate(i)) { next = j + 1; break; }
+      }
+    }
   }
   return moved;
 }

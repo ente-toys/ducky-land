@@ -1,7 +1,9 @@
 import {env} from 'cloudflare:workers';
 import {instrumentDurableObjectWithSentry, logger} from '@sentry/cloudflare';
 import {sentryOptions} from '../server/sentry.js';
-import {IslandRoom as Room} from './index.js';
+import {WorldService as Room} from './world-service.js';
+export {IslandSimulation, SeaSimulation} from './simulation.js';
+export {WorldPresence} from './world-presence.js';
 
 const routes = new Set([
   '/room', '/bog-room', '/friends', '/outfit', '/stars', '/stars/count', '/flow', '/consume',

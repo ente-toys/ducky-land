@@ -1213,3 +1213,19 @@ test('only subscribed globe viewers receive cross-island pins, with guest privac
     assert.equal(feeds(guest).length,framesBeforeClose);
   } finally {a.close(); b.close(); guest.close(); legacy.close();}
 });
+
+test('the spatial grid visits collisions in the same order across cell boundaries', async () => {
+  const {separateActors}=await import('../src/gameplay/player-motion.js');
+  const nav={clearLine:(_from,to)=>to[1] > -13};
+  const actors=Array.from({length:100},(_,i)=>({
+    x:((i*13)%31-15)*3, y:((i*7)%19-9)*2, previousX:(i%7)*4, previousY:i%5,
+    path:[[16,23]], sleeping:i%11===0,
+  }));
+  const reference=structuredClone(actors);
+  for(let tick=0;tick<5;tick++){
+    for(let i=0;i<reference.length;i++)for(let j=i+1;j<reference.length;j++)
+      separateActors([reference[i],reference[j]],nav,.05);
+    separateActors(actors,nav,.05);
+    assert.deepEqual(actors,reference);
+  }
+});

@@ -240,6 +240,14 @@
   gap: 8px;
   pointer-events: none;
 }
+.pixi-watch-island {
+  pointer-events: auto;
+  max-width: min(35vw, 12rem);
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+}
 .pixi-online {
   display: flex;
   align-items: center;

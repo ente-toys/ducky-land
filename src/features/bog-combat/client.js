@@ -19,7 +19,7 @@ export function profileToken(storage=globalThis.localStorage){
   return value;
 }
 export function arenaURL({team,name,profile},base=globalThis.location?.href||'http://localhost'){
-  const url=new URL('/arena-room',base);url.protocol=url.protocol==='https:'?'wss:':'ws:';
+  const url=new URL('/arena-room',base);url.searchParams.set('protocol','2');url.protocol=url.protocol==='https:'?'wss:':'ws:';
   for(const [k,v]of Object.entries({team,name,profile})){if(v!=null)url.searchParams.set(k,v);}return url;
 }
 export class ArenaClient{

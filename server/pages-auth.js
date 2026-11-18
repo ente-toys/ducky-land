@@ -1,3 +1,4 @@
+import {simulationStub, worldName, worldStub} from './simulation-routing.js';
 const sessionCookie = '__Host-ducky_session';
 const flowCookie = '__Host-ducky_oauth';
 const cookieAge = 7 * 24 * 60 * 60;
@@ -38,7 +39,7 @@ function redirect(to, cookies = []) {
 }
 
 function room(env) {
-  return env.ISLAND.get(env.ISLAND.idFromName(env.ISLAND_ROOM_NAME ?? 'main-island'));
+  return worldStub(env,worldName(env));
 }
 
 async function fetchRoom(env, request, contextData) {
@@ -54,6 +55,32 @@ function call(env, path, data, contextData) {
   return fetchRoom(env, new Request('https://island.internal'+path, {
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),
   }), contextData);
+}
+
+async function upgrade(env, roomRequest, original, key, contextData) {
+  if (!env.ISLAND_SIM) return fetchRoom(env,roomRequest,contextData);
+  const mode = await call(env,'/simulation/mode',{world:worldName(env),
+    target:original.searchParams.get('protocol')==='2'?env.WORLD_LAYOUT:undefined,id:env.WORLD_MIGRATION_ID},contextData);
+  // Pages and the Worker can deploy in either order from the same commit.
+  if (mode.status===404) return fetchRoom(env,roomRequest,contextData);
+  if (!mode.ok) return mode;
+  const {mode:layout} = await mode.json();
+  if (layout === 'legacy') return fetchRoom(env,roomRequest,contextData);
+  if (layout !== 'split') return json({error:'World maintenance'},503);
+  const url = new URL(roomRequest.url);
+  if (original.searchParams.get('protocol') !== '2') return json({error:'Reload to join the world'},426);
+  const watch = original.searchParams.get('watch') ?? 'home';
+  const play = url.pathname === '/bog-room' || url.searchParams.get('play') === '1';
+  const admission = await call(env,'/simulation/admit',{digest:key,play,watch},contextData);
+  if (!admission.ok) return admission;
+  const {owner} = await admission.json();
+  url.searchParams.set('watch',watch);
+  try {
+    return await simulationStub(env,worldName(env),owner).fetch(new Request(url,{headers:roomRequest.headers}));
+  } catch(error) {
+    if (contextData) contextData.roomBindingFailure = {route:url.pathname,error};
+    throw error;
+  }
 }
 
 function configured(env) {
@@ -245,10 +272,12 @@ export async function connect({request,env,data}, fetchGitHub = fetch) {
   }
   const roomUrl = new URL('https://island.internal/room');
   roomUrl.searchParams.set('play', play);
+  const reason=url.searchParams.get('reconnect');
+  if(testToken && ['heartbeat_timeout','snapshot_mismatch','transport_close'].includes(reason)) headers.set('X-Test-Reconnect',reason);
   const resumeId = url.searchParams.get('resume');
   if (play === '1' && resumeId) roomUrl.searchParams.set('resume', resumeId);
   if (url.searchParams.get('globeFeed') === '1') roomUrl.searchParams.set('globeFeed', '1');
-  return fetchRoom(env, new Request(roomUrl,{headers}), data);
+  return upgrade(env,new Request(roomUrl,{headers}),url,key,data);
 }
 
 export async function connectBog({request,env,data}) {
@@ -260,7 +289,7 @@ export async function connectBog({request,env,data}) {
   const headers=new Headers({Upgrade:'websocket','X-Session-Digest':key});
   const params=new URLSearchParams();
   for(const k of ['team','mode'])if(url.searchParams.has(k))params.set(k,url.searchParams.get(k));
-  return fetchRoom(env, new Request('https://island.internal/bog-room?'+params,{headers}), data);
+  return upgrade(env,new Request('https://island.internal/bog-room?'+params,{headers}),url,key,data);
 }
 
 async function checkPlayAccess(env, key, fetchGitHub, contextData) {

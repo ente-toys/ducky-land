@@ -573,3 +573,39 @@ test('diagnostics keep the first reconnect trigger and record the authoritative 
     assert.deepEqual(events[1].after, {x: 1800, y: 430, island: 'home', mode: 'walking'});
   });
 });
+
+
+test('a handoff keeps the source scene through a failed upgrade and accepts a fresh baseline', t => {
+  const originalLocation=Object.getOwnPropertyDescriptor(globalThis,'location');
+  Object.defineProperty(globalThis,'location',{configurable:true,value:{href:'https://room.example/'}});
+  t.after(()=>originalLocation ? Object.defineProperty(globalThis,'location',originalLocation) : delete globalThis.location);
+  class Socket {
+    static OPEN=1;
+    readyState=1;
+    sent=[];
+    send(data){this.sent.push(JSON.parse(data));}
+    close(){this.readyState=3;}
+  }
+  t.mock.property(globalThis,'WebSocket',Socket);
+  let retry;
+  t.mock.method(globalThis,'setTimeout',fn=>{retry=fn;});
+  const room=new RoomClient(()=>{});
+  t.after(()=>room.dispose());
+  const receive=(socket,message)=>socket.onmessage({data:JSON.stringify(message)});
+  room.connect(true);
+  const original=room.socket;
+  receive(original,{type:'welcome',id:'player',protocol:2});
+  receive(original,{type:'snapshot',...packet(15)});
+  receive(original,{type:'transfer',version:1,player:'player',generation:2});
+  assert.equal(original.readyState,1);
+  room.socket.onclose({code:1006,wasClean:false});
+  assert.equal(room.player.id,'player');
+  retry();
+  const destination=room.socket;
+  receive(destination,{type:'welcome',id:'player',protocol:2,ack:14});
+  receive(destination,{type:'snapshot',...packet(1,'sunset','sailing'),epoch:'destination'});
+  assert.equal(original.readyState,3);
+  assert.equal(room.mode,'sailing');
+  assert.equal(room.islandId,'sunset');
+  assert.deepEqual(destination.sent.at(-1),{type:'snapshot-ack',epoch:'destination',tick:1});
+});

@@ -134,7 +134,7 @@ function nextBoatId(islandId,slot,ids) {
   return id;
 }
 const atMooring = (boat,spot) => Boolean(spot) && boat.islandId === boatHome(boat) && boat.x === spot.x && boat.y === spot.y;
-export function fillMoorings(boats) {
+export function fillMoorings(boats, islandId = null) {
   const SPOTS=new Map(), spotsOf=id => {if (!SPOTS.has(id)) SPOTS.set(id,boatSpots(id)); return SPOTS.get(id);};
   const held=new Set(), ids=new Set(), keep=[];
   let moved=false;
@@ -172,16 +172,16 @@ export function fillMoorings(boats) {
     ids.add(boat.id); keep.push(boat);
   }
   let changed=moved || keep.length !== boats.length;
-  for (const island of ISLANDS) for (let slot=0,spots=spotsOf(island.id);slot<spots.length;slot++) {
+  for (const island of ISLANDS.filter(item => islandId === null || item.id === islandId)) for (let slot=0,spots=spotsOf(island.id);slot<spots.length;slot++) {
     if (held.has(`${island.id}|${slot}`)) continue;
     if (!harborApproachClear({...spots[slot],islandId:island.id}) || !boatRoom({...spots[slot],islandId:island.id},keep)) continue;
-    const id=nextBoatId(island.id,slot,ids);
+    const id=islandId === null ? nextBoatId(island.id,slot,ids) : `${island.id}-${slot}~${crypto.randomUUID()}`;
     ids.add(id); keep.push({...mooredBoat(island.id,slot,id),spawnedAt:Date.now()}); changed=true;
   }
   if (changed) boats.splice(0,boats.length,...keep);
   return changed;
 }
-export function retireBoat(boats,boat,landing=null) {
+export function retireBoat(boats,boat,landing=null,islandId=null) {
   const spot=boatSpot(boat), home=boatHome(boat);
   boat.occupant=null; boat.parked=true; boat.parkedAt=Date.now();
   if (landing) boat.landing={x:landing.x,y:landing.y};
@@ -194,7 +194,7 @@ export function retireBoat(boats,boat,landing=null) {
     const index=boats.indexOf(boat);
     if (index!==-1) boats.splice(index,1);
   }
-  fillMoorings(boats);
+  fillMoorings(boats,islandId);
 }
 
 const shoreFor=(x,y,nav,reach=280,map=null) => {
