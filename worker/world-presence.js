@@ -15,6 +15,7 @@ export class WorldPresence {
 
   async fetch(request) {
     const path = new URL(request.url).pathname;
+    const countOnly = path === '/player-count';
     const now = Date.now();
     const locations = path === '/locations' ? new Set((await request.json()).accounts) : null;
     if (path === '/publish') {
@@ -37,7 +38,7 @@ export class WorldPresence {
         now + leaseMs,
         JSON.stringify({players, watchers, watching, boats})
       );
-    } else if (path !== '/read' && !locations) return new Response(null, {status: 404});
+    } else if (path !== '/read' && !locations && !countOnly) return new Response(null, {status: 404});
     const latest = new Map(),
       fleets = new Map(),
       namedWatchers = new Set();
@@ -50,17 +51,20 @@ export class WorldPresence {
             latest.set(account, {account, islandId, x, y, mode});
         continue;
       }
-      for (const item of boats ?? []) {
-        const prior = fleets.get(item.boat.id);
-        if (!prior || (item.boat.ownershipVersion ?? 0) > (prior.boat.ownershipVersion ?? 0))
-          fleets.set(item.boat.id, item);
+      if (!countOnly) {
+        for (const item of boats ?? []) {
+          const prior = fleets.get(item.boat.id);
+          if (!prior || (item.boat.ownershipVersion ?? 0) > (prior.boat.ownershipVersion ?? 0))
+            fleets.set(item.boat.id, item);
+        }
+        for (const account of watching ?? []) namedWatchers.add(account);
+        spectators += watchers;
       }
-      for (const account of watching ?? []) namedWatchers.add(account);
-      spectators += watchers;
       for (const actor of players) {
         if (actor.generation === this.generations.get(actor.account)) latest.set(actor.account, actor);
       }
     }
+    if (countOnly) return Response.json(latest.size);
     if (locations) return Response.json({players: [...latest.values()]});
     for (const account of latest.keys()) namedWatchers.delete(account);
     return Response.json({

@@ -8,14 +8,14 @@ import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 
 test(
-  'split world migrates, routes Pages joins, transfers a sailing actor and boat, and rolls back',
+  'split world migrates, routes spawns and sailors, and returns unattended boats after restart',
   {timeout: 60000},
   async (t) => {
     const source = `
     import {WorldService} from './worker/world-service.js';
     import {IslandSimulation, SeaSimulation} from './worker/simulation.js';
     import {WorldPresence} from './worker/world-presence.js';
-    import {worldStub,simulationStub,internalPost} from './server/simulation-routing.js';
+    import {worldStub,simulationStub,presenceStub,internalPost} from './server/simulation-routing.js';
     import {connect,createTestSession,logout} from './server/pages-auth.js';
     import {boardingPoint,harborOf} from './src/gameplay/islands.js';
     export {WorldPresence};
@@ -68,6 +68,35 @@ test(
     export class FixtureIsland extends IslandSimulation {
       async fetch(request) {
         const path=new URL(request.url).pathname;
+        if(path==='/fixture/fleet')return Response.json(this.room.boats);
+        if(path==='/fixture/move-boat') {
+          const boat=this.room.boats.find(item=>item.id==='home-0');
+          this.room.boats=this.room.boats.filter(item=>item!==boat);
+          this.room.saveBoats();
+          const target=simulationStub(this.env,this.room.simulation.world,'blossom');
+          return internalPost(target,'/fixture/park-boat',boat);
+        }
+        if(path==='/fixture/park-boat') {
+          const boat=await request.json();
+          Object.assign(boat,{...harborOf('blossom').water,islandId:'blossom'});
+          this.room.parkBoat(boat);
+          this.room.boats.push(boat);
+          this.room.saveBoats();
+          return Response.json(boat);
+        }
+        if(path==='/fixture/age-boat') {
+          const boat=this.room.boats.find(item=>item.id==='home-0');
+          const {age}=await request.json();
+          this.room.returnIdleBoats(boat.parkedAt+age);
+          const pending=this.room.sql.exec('SELECT payload FROM boat_returns WHERE id=?',boat.id).toArray()[0];
+          await this.room.sendBoatReturns();
+          if(pending) {
+            const home=simulationStub(this.env,this.room.simulation.world,'home');
+            const retry=await internalPost(home,'/return-boat',JSON.parse(pending.payload));
+            if(!retry.ok)return retry;
+          }
+          return Response.json(this.room.boats.some(item=>item.id===boat.id));
+        }
         if(path==='/fixture/build'){
           const info=[...this.room.connections.values()].find(i=>i.actor);
           await internalPost(simulationStub(this.env,this.room.simulation.world,'blossom'),'/fixture/old-built',{account:info.account});
@@ -98,12 +127,23 @@ test(
       if(url.pathname==='/economy')return internalPost(worldStub(env,world),'/fixture/economy',{});
       if(url.pathname==='/staged')return simulationStub(env,world,'sea').fetch('https://island.internal/fixture/staged');
       if(url.pathname==='/stage-status')return internalPost(worldStub(env,world),'/fixture/stages',{});
+      if(url.pathname==='/seed-presence') {
+        const count=Number(url.searchParams.get('count'));
+        return internalPost(presenceStub(env,world),'/publish',{
+          owner:'isle-249',revision:count+1,watchers:25,
+          players:Array.from({length:count},(_,i)=>({account:'seed-'+i,generation:1})),
+        });
+      }
       if(url.pathname==='/session') return createTestSession(ctx);
       if(url.pathname==='/room') return connect(ctx);
       if(url.pathname==='/logout')return logout(ctx);
       if(url.pathname==='/migrate') return internalPost(worldStub(env,world),'/simulation/migrate',
         {id:url.searchParams.get('id'),target:url.searchParams.get('target'),world});
       if(url.pathname==='/build'||url.pathname==='/built')return simulationStub(env,world,url.searchParams.get('island')??'home').fetch('https://island.internal/fixture'+url.pathname);
+      if(url.pathname==='/fleet'||url.pathname==='/move-boat'||url.pathname==='/age-boat') {
+        const owner=url.searchParams.get('island')??'home';
+        return simulationStub(env,world,owner).fetch(new Request('https://island.internal/fixture'+url.pathname,request));
+      }
       if(url.pathname==='/dock')return simulationStub(env,world,'home').fetch('https://island.internal/fixture/dock');
       return new Response(null,{status:404});
     }}`;
@@ -253,5 +293,62 @@ test(
     assert.equal(restored.snapshot.players.find((p) => p.id === dock.actor).boatId, dock.boat);
     for (const {socket} of [other, watcher, player, sailor, guest, revoked, restored])
       if (socket.readyState === 1) socket.close();
+
+    assert.ok((await request('/migrate?world=spawn&target=split&id=spawn-cutover')).ok);
+    const newSpawnToken = async () => {
+      const response = await request('/session?world=spawn', {
+        method: 'POST',
+        headers: {'X-Multiplayer-Test-Id': '919c4104-faed-4a20-931c-9b3abec359ab', Origin: 'https://game.test'},
+      });
+      assert.equal(response.status, 200);
+      return (await response.json()).token;
+    };
+    const homeToken = await newSpawnToken();
+    assert.ok((await request('/seed-presence?world=spawn&count=14')).ok);
+    const homeSpawn = await join('world=spawn&play=1&testSession=' + homeToken);
+    assert.equal(homeSpawn.snapshot.islandId, 'home', 'spectators do not contribute to the threshold');
+    homeSpawn.socket.close();
+
+    const overflowToken = await newSpawnToken();
+    assert.ok((await request('/seed-presence?world=spawn&count=15')).ok);
+    const overflowParams = 'world=spawn&play=1&testSession=' + overflowToken;
+    const overflow = await join(overflowParams);
+    assert.ok(['blossom', 'sunset', 'isle-251', 'isle-250', 'isle-55'].includes(overflow.snapshot.islandId));
+    assert.ok(overflow.welcome.arrival);
+    assert.ok(overflow.snapshot.players.some((p) => p.id === overflow.welcome.id));
+    overflow.socket.close();
+    const rejoined = await join(overflowParams + '&resume=' + overflow.welcome.id);
+    assert.equal(rejoined.welcome.id, overflow.welcome.id);
+    assert.equal(rejoined.snapshot.islandId, overflow.snapshot.islandId);
+    rejoined.socket.close();
+
+    const boatFixture = async (path, options) => {
+      const response = await request(path, options);
+      const body = await response.text();
+      assert.equal(response.status, 200, `${path} returned ${response.status} ${body}`);
+      return JSON.parse(body);
+    };
+    const fleet = (island) => boatFixture('/fleet?world=spawn&island=' + island);
+    const homeFleet = await fleet('home');
+    const startingBoat = homeFleet.find((boat) => boat.id === 'home-0');
+    const blossomCount = (await fleet('blossom')).length;
+    const parked = await boatFixture('/move-boat?world=spawn');
+    assert.equal(parked.islandId, 'blossom');
+    assert.equal((await fleet('home')).length, homeFleet.length - 1);
+    assert.equal((await fleet('blossom')).length, blossomCount + 1);
+    await runtime.dispose();
+    runtime = start(false);
+    const saved = (await fleet('blossom')).find((boat) => boat.id === startingBoat.id);
+    assert.deepEqual([saved.x, saved.y, saved.parkedAt], [parked.x, parked.y, parked.parkedAt]);
+    const ageBoat = (age) => boatFixture('/age-boat?world=spawn&island=blossom', {
+      method: 'POST', body: JSON.stringify({age}),
+    });
+    const sixHours = 6 * 60 * 60 * 1000;
+    assert.equal(await ageBoat(sixHours - 1), true, 'still available one millisecond before six hours');
+    assert.equal(await ageBoat(sixHours), false, 'leaves the visiting island at the deadline');
+    assert.equal((await fleet('blossom')).length, blossomCount);
+    const returned = (await fleet('home')).filter((boat) => boat.id === startingBoat.id);
+    assert.equal(returned.length, 1, 'a retried return creates no duplicate');
+    assert.deepEqual([returned[0].x, returned[0].y], [startingBoat.x, startingBoat.y]);
   }
 );

@@ -42,7 +42,7 @@ test('40 sailing players resume the same boats and saved positions after a Worke
               const point = spots[i++];
               const boat = {id, ...point, islandId:'home', departure:'home', turn:0, occupant:info.actor.id, owner:info.account};
               this.boats.push(boat);
-              Object.assign(info.actor, point, {mode:'sailing', boatId:id, path:[]});
+              Object.assign(info.actor, point, {islandId:'home',mode:'sailing', boatId:id, path:[]});
             }
             this.saveBoats();
             this.sailingCheckpoints = 0;

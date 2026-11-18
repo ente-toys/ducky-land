@@ -47,7 +47,6 @@ import {copyHolding} from '../../world/sphere-shores.js';
 import {createWorldView} from './world-view.js';
 import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
-import {createBoatBuildView} from './boat-build-view.js';
 import {isletUnder} from '../../gameplay/boat-build.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
 import {isletWalks,isletAt} from '../../world/islet-walk.js';
@@ -378,7 +377,6 @@ export class PixiIsland {
         // a watcher has no Duck to follow: look at the middle of the island being watched, not the open sea
         if(!this.player){const m=this.mapHere();this.camera.x=this.target.x=m.cx;this.camera.y=this.target.y=m.cy;}
         this.karmaView=await createKarmaView(this);
-        createBoatBuildView(this).then(view => {if (this.disposed) view.destroy(); else this.boatBuild=view;});
       }
       if (this.randomArrival && !this.room) {
         const spawn = this.initialSpawn;
@@ -816,15 +814,13 @@ export class PixiIsland {
       const deck=boardingPoint(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
       if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
     }
-    return best ? {take: best.id} : this.boatBuild?.options() ?? {};
+    return best ? {take: best.id} : {};
   }
   travelAction() {
     if (this.globeBusy()) return;
     const options=this.travelOptions();
     if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
     else if (options.dock) this.dock();
-    else if (options.collect) this.boatBuild.collect();
-    else if (options.build) this.boatBuild.build();
   }
 
   dock(target) {
@@ -1907,7 +1903,6 @@ export class PixiIsland {
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible, now);
     this.karmaView?.update(dt,t,reduced,visible);
-    this.boatBuild?.update(dt,t,reduced,visible);
     this.plantReactions?.update(t);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});
     this.birds.forEach(item=>{const pose=birdPose(item.x,item.y,item.phase,t,reduced);item.root.position.set(pose.x,pose.y);item.root.rotation=pose.rotation;item.root.visible=visible(pose.x,pose.y,100);item.wings.forEach((wing,i)=>{wing.rotation=(i?1:-1)*(pose.flap-.4)*.45;wing.scale.y=.75+.25*Math.cos(pose.flap*3);});});
@@ -2240,7 +2235,6 @@ export class PixiIsland {
     this.cleanups.forEach(fn => fn());
     this.snowfall?.destroy();
     this.karmaView?.destroy();
-    this.boatBuild?.destroy();
     this.groundPool?.destroy();
     this.archipelago?.destroy(); this.worldView?.destroy();this.isletView?.destroy();
     this.clearChat();

@@ -872,7 +872,7 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
     assert.deepEqual([a.duck().x,a.duck().y],[spot.x,spot.y],'hops out onto the sand');
     const parked=await eventually(()=>boat()?.parked && !boat().occupant && {...boat()});
     assert.equal(parked.islandId,'home');
-    assert.equal(a.snapshot.boats.filter(b => !b.occupant).length,boatSpots().length+1,'every mooring and the parked boat remain');
+    assert.equal(a.snapshot.boats.filter(b => !b.occupant).length,boatSpots().length,'the parked boat stays in the fixed fleet');
     await request('/test/restore');
     await eventually(()=>boat()?.parked);
     assert.deepEqual([boat().x,boat().y],[parked.x,parked.y],'worker restoration preserves the beach landing');
@@ -905,14 +905,14 @@ test('docking off a beach sails the boat in beside the sand before the Ducky hop
   }
 });
 
-test('every island always shows all its moored boats: a taken boat is replaced, and docking elsewhere leaves that island full (boss 6 Nov)', async () => {
+test('a taken boat leaves its berth empty and remains on the island where it docks', async () => {
   await request('/test/expire-session');
   await request('/test/expire-resume');
   await request('/test/reset-boats');
   const [first,second]=await Promise.all([signIn(9330),signIn(9331)]);
   const [a,b]=await Promise.all([socket(first.session),socket(second.session)]);
   const setup=(client,pose,steps=0) => request('/test/travel',{method:'POST',body:JSON.stringify({id:client.welcome.id,pose,steps})});
-  const per=boatSpots().length, spot=boatSpots()[0], away={x:-120,y:1960};
+  const per=boatSpots().length, away={x:-120,y:1960};
   const mooredAt=(snapshot,slot) => snapshot.boats.find(boat => !boat.occupant && boat.x===boatSpots(snapshot.islandId)[slot].x && boat.y===boatSpots(snapshot.islandId)[slot].y);
   const allMoored=snapshot => boatSpots(snapshot.islandId).every((_,slot) => mooredAt(snapshot,slot));
   try {
@@ -924,16 +924,8 @@ test('every island always shows all its moored boats: a taken boat is replaced, 
     await eventually(() => a.duck()?.mode==='sailing');
     assert.equal(a.duck().boatId,taken);
     await setup(a,{...away,sailTarget:null,sailRoute:null,docking:false},1);
-    await eventually(() => mooredAt(b.snapshot,0) && mooredAt(b.snapshot,0).id!==taken);
-    assert.ok(allMoored(b.snapshot),'after taking a boat its mooring is full again');
-    assert.equal(b.snapshot.boats.length,per+1,'the moored boats plus the one A is sailing');
-    const refill=mooredAt(b.snapshot,0).id;
-    await setup(b,{...HARBOR.land,path:[]});
-    b.send({type:'board',boatId:refill});
-    await eventually(() => b.duck()?.mode==='sailing');
-    assert.equal(b.duck().boatId,refill);
-    await setup(b,{x:away.x,y:away.y+200,sailTarget:null,sailRoute:null,docking:false},1);
-    await eventually(() => allMoored(b.snapshot) && b.snapshot.boats.length===per+2);
+    await eventually(() => !mooredAt(b.snapshot,0));
+    assert.equal(b.snapshot.boats.length,per,'sailing does not create another boat');
     const exit=destinationsFor('home')[0];
     await setup(a,{...exit.dock,exitLocked:false},1);
     await eventually(() => a.snapshot.islandId===exit.destination);
@@ -946,7 +938,8 @@ test('every island always shows all its moored boats: a taken boat is replaced, 
     assert.ok(harborApproachClear(parked)&&boatRoom(parked,a.snapshot.boats),'the parked boat keeps every dock point and boat gap clear');
     assert.ok(allMoored(a.snapshot),`all ${perThere} of ${exit.destination}'s moorings are full`);
     assert.equal(a.snapshot.boats.filter(v=>v.islandId===exit.destination).length,perThere+1,'the parked arrival stays alongside the existing moorings');
-    for (const message of [...a.messages,...b.messages].filter(message => message.type==='snapshot')) assert.ok(message.boats.length>=boatSpots(message.islandId).length,`${message.islandId} showed ${message.boats.length} boats`);
+    await eventually(() => b.snapshot.boats.length===per-1);
+    assert.equal(mooredAt(b.snapshot,0),undefined);
   } finally {
     a.close();
     b.close();

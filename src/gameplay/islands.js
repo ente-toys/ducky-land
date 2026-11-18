@@ -109,10 +109,29 @@ export function harborApproachClear(actor) {
     return seaBoatSeparated(actor,water,BOAT_GAP+24);
   });
 }
-function parkedBoatPosition(boat,boats) {
+function parkedBoatPosition(boat,boats,reach) {
   const others=otherBoatPositions(boat,boats);
   return nearestBoatSpace(boat,p=>harborApproachClear({...boat,...p}) &&
-    others.every(q=>seaBoatSeparated(p,q,BOAT_GAP+1)) && canSail(p.x,p.y,boat.islandId));
+    others.every(q=>seaBoatSeparated(p,q,BOAT_GAP+1)) && canSail(p.x,p.y,boat.islandId),reach);
+}
+
+export function parkFleetBoat(boat, boats, now, landing) {
+  Object.assign(boat,{occupant:null, parked:true, parkedAt:now, landing:landing ? {x:landing.x,y:landing.y} : null});
+  delete boat.unattendedAt;
+  delete boat.returnRetryAt;
+  Object.assign(boat,parkedBoatPosition(boat,boats));
+}
+
+export function placeFleetBoatHome(boat, boats) {
+  const islandId=boatHome(boat), spot=boatSpot(boat);
+  if (!islandFor(islandId) || !spot) return null;
+  const home={...boat,...spot,islandId,departure:islandId,occupant:null,parked:false,landing:null};
+  const position=parkedBoatPosition(home,boats,4160);
+  if (!position) return null;
+  delete home.parkedAt;
+  delete home.unattendedAt;
+  delete home.returnRetryAt;
+  return {...home,...position};
 }
 // A refused ticket must leave room to turn and sail away, outside the dock cove.
 export function refusedLandingPosition(actor,islandId,boats=[]) {

@@ -1,5 +1,5 @@
 import {inPoly} from '../../assets/world/island-geometry.mjs';
-import {bogLandingNotice} from '../features/bog-combat/entry.js';
+import {BOG_ISLAND, bogLandingNotice} from '../features/bog-combat/entry.js';
 import {mapOf} from '../world/island-maps.js';
 import {placeIslet} from '../world/islet-placement.js';
 import {ISLETS} from '../world/islets.js';
@@ -7,6 +7,12 @@ import {isletWalk} from '../world/islet-walk.js';
 import {WORLD_ISLANDS} from '../world/world-map.js';
 import {atMuseumDoor, DUCK_RADIUS} from './player-motion.js';
 import {onIce} from './rink-slide.js';
+
+const overflowIslands = WORLD_ISLANDS.filter(({id}) => id !== 'home' && id !== BOG_ISLAND);
+
+export function pickSpawnIsland(onlinePlayers, random = Math.random) {
+  return onlinePlayers >= 15 ? overflowIslands[Math.floor(random() * overflowIslands.length)].id : 'home';
+}
 
 const clearance = Array.from({length:8}, (_, i) => {
   const angle = i * Math.PI / 4;

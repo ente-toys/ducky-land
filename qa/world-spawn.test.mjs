@@ -1,10 +1,17 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {pickWorldSpawn} from '../src/gameplay/world-spawn.js';
+import {pickSpawnIsland, pickWorldSpawn} from '../src/gameplay/world-spawn.js';
 import {isletWalks} from '../src/world/islet-walk.js';
 import {mapOf} from '../src/world/island-maps.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import {seeded} from './room-harness.mjs';
+
+test('Home is used below 15 online players and all five eligible islands are used at 15', () => {
+  const samples = [0, 0.2, 0.4, 0.6, 0.8];
+  assert.ok(samples.every(value => pickSpawnIsland(14, () => value) === 'home'));
+  assert.deepEqual(new Set(samples.map(value => pickSpawnIsland(15, () => value))),
+    new Set(['blossom', 'sunset', 'isle-251', 'isle-250', 'isle-55']));
+});
 
 test('every playable main island has safe, varied arrival points', () => {
   const random = seeded();

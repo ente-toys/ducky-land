@@ -5,6 +5,7 @@ import {presenceStub, simulationStub, internalPost} from '../server/simulation-r
 import {islandFor, near} from '../src/gameplay/islands.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
 import {randomOutfit} from '../src/gameplay/outfits.js';
+import {pickSpawnIsland} from '../src/gameplay/world-spawn.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
 
 const fail = (status = 409) => new Response(null, {status});
@@ -38,7 +39,7 @@ export class WorldService extends LegacyRoom {
     const user = this.session(data.digest);
     if (!user && path === '/session/revoke') await this.deliverNotices(data.digest);
     if (!user) return super.fetch(request);
-    const {owner} = this.directory.locate(user.account);
+    const owner = this.directory.find(user.account)?.owner ?? 'home';
     const sim = simulationStub(this.env, this.settings.world, owner);
     if (path === '/friends' || path === '/stars') {
       let targetAccount = data.accountId;
@@ -53,8 +54,8 @@ export class WorldService extends LegacyRoom {
       } else response = await super.fetch(request);
       if (response.ok && path === '/friends' && targetAccount && data.method !== 'GET') {
         for (const account of [user.account, targetAccount]) {
-          const location = this.directory.locate(account);
-          const dest = simulationStub(this.env, this.settings.world, location.owner);
+          const owner = this.directory.find(account)?.owner ?? 'home';
+          const dest = simulationStub(this.env, this.settings.world, owner);
           this.ctx.waitUntil(internalPost(dest, '/friends-changed', {account}).catch(() => {}));
         }
       }
@@ -126,6 +127,10 @@ export class WorldService extends LegacyRoom {
     super.reconcileBoats();
   }
 
+  boatReturnAt(boat) {
+    return this.settings && this.settings.mode !== 'legacy' ? Infinity : super.boatReturnAt(boat);
+  }
+
   async deliverNotices(digest) {
     const notices = digest
       ? this.sql.exec('SELECT * FROM session_notices WHERE digest=?', digest).toArray()
@@ -166,10 +171,18 @@ export class WorldService extends LegacyRoom {
     if (this.settings?.mode !== 'split') return fail(503);
     const {digest, account, owner, generation} = data;
     if (path === '/simulation/admit') {
-      const user = this.session(digest);
+      let user = this.session(digest);
+      let initialOwner;
+      if (data.play && user?.canPlay && !this.directory.find(user.account)) {
+        const count = await presenceStub(this.env, this.settings.world).fetch('https://island.internal/player-count')
+          .then(response => response.ok ? response.json() : 0).catch(() => 0);
+        if (this.settings?.mode !== 'split') return fail(503);
+        user = this.session(digest);
+        initialOwner = pickSpawnIsland(count);
+      }
       const playing = Boolean(data.play && user?.canPlay);
       const location = playing
-        ? this.directory.locate(user.account)
+        ? this.directory.locate(user.account, initialOwner)
         : {owner: islandFor(data.watch)?.id ?? 'home', generation: 0};
       if (playing && !this.sql.exec('SELECT 1 FROM outfits WHERE account=?', user.account).toArray().length)
         this.sql.exec('INSERT INTO outfits VALUES(?,?)', user.account, JSON.stringify(randomOutfit()));

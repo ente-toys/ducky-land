@@ -11,14 +11,15 @@ import {LiveBogRoom} from './bog-room.js';
 import {DURATIONS, playEmote, playSailEmote, SAIL_EMOTES, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/gameplay/player-motion.js';
 import {chatText} from '../src/multiplayer/chat.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
-import {migrateSeaPosition, islandFor, harborOf, boatSpots, boatRoom, freeBoatPosition, refusedLandingPosition, createBoats, near, canSail, setSailDestination, sailStep, crossIsland, boardingPoint, dockingSpot, HARBOR_ONLY, landingApproach, fillMoorings, retireBoat, navOf, canWalkTo} from '../src/gameplay/islands.js';
+import {migrateSeaPosition, islandFor, harborOf, boatSpots, boatRoom, freeBoatPosition, refusedLandingPosition, createBoats, near, canSail, setSailDestination, sailStep, crossIsland, boardingPoint, dockingSpot, HARBOR_ONLY, landingApproach, parkFleetBoat, placeFleetBoatHome, navOf, canWalkTo} from '../src/gameplay/islands.js';
 import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
-import {pickWorldSpawn} from '../src/gameplay/world-spawn.js';
-import {BUILD_COOLDOWN, buildSpot, strandedIslet} from '../src/gameplay/boat-build.js';
+import {pickSpawnIsland,pickWorldSpawn} from '../src/gameplay/world-spawn.js';
 import {RoomKarma} from './karma.js';
 
 const STARGAZER_LIMIT = 5000;
 const RESUME_MS = 30_000;
+const BOAT_RETURN_MS = 6 * 60 * 60 * 1000;
+export const BOAT_RETURN_RETRY_MS = 60_000;
 const CHECKPOINT_MS = 1_000;
 const PRESENCE_UPDATE_MS = 100;
 const GLOBE_UPDATE_MS = 500;
@@ -54,7 +55,7 @@ function publicPose(actor) {
 // Persist the chart version privately; wire poses keep their existing public shape.
 const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION});
 // a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
-function wireBoat({owner, ownershipVersion, buildRevision, ...boat}) {
+function wireBoat({owner, ownershipVersion, buildRevision, unattendedAt, returnRetryAt, ...boat}) {
   return owner ? {...boat, built:true} : boat;
 }
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
@@ -142,7 +143,7 @@ export class IslandRoom {
     const saved = this.sql.exec('SELECT state FROM boats WHERE id=1').toArray()[0];
     this.sql.exec('CREATE TABLE IF NOT EXISTS boat_states (id TEXT PRIMARY KEY, state TEXT NOT NULL)');
     const rows = this.sql.exec('SELECT id,state FROM boat_states').toArray();
-    const boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : simulation ? [] : createBoats();
+    const boats = saved ? JSON.parse(saved.state) : rows.length ? rows.map(row => JSON.parse(row.state)) : simulation || inactiveWorld ? [] : createBoats();
     for(const boat of boats) {
       if(boat.seaVersion!==SEA_VERSION && islandFor(boat.islandId) && (boat.occupant||boat.parked)) {
         const pose={...boat,mode:'sailing'};migrateSeaPosition(pose);Object.assign(boat,{x:pose.x,y:pose.y});
@@ -150,14 +151,12 @@ export class IslandRoom {
       }
       boat.seaVersion=SEA_VERSION;
     }
-    this.boats = boats.filter(boat => boat?.parked !== true || boat.occupant ||
-      (islandFor(boat.islandId) && canSail(boat.x,boat.y,boat.islandId)));
+    this.boats = boats;
     this.savedBoatRows = new Map(saved ? [] : rows.map(row => [row.id, row.state]));
     this.sql.exec('CREATE TABLE IF NOT EXISTS room_checkpoints (account TEXT PRIMARY KEY, digest TEXT NOT NULL, pose TEXT NOT NULL)');
     this.savedCheckpointRows = new Map(this.sql.exec('SELECT account,digest,pose FROM room_checkpoints').toArray()
       .map(row => [row.account, row]));
     this.checkpointAt = 0;
-    fillMoorings(this.boats, this.simulation?.owner ?? null);
     this.legacyBoats = Boolean(saved);
     for (const socket of inactiveWorld ? [] : ctx.getWebSockets()) {
       if (socket.readyState !== 1) continue;
@@ -248,9 +247,35 @@ export class IslandRoom {
     return true;
   }
 
-  parkBoat(boat,landing=null) {
-    retireBoat(this.boats,boat,landing,this.simulation?.owner ?? null);
+  parkBoat(boat,landing=null,now=Date.now()) {
+    parkFleetBoat(boat,this.boats,now,landing);
     this.boatsDirty = true;
+  }
+
+  boatReturnAt(boat) {
+    const since = boat.occupant ? boat.unattendedAt : boat.parked ? boat.parkedAt : undefined;
+    return Number.isFinite(since) ? Math.max(since + BOAT_RETURN_MS, boat.returnRetryAt ?? 0) : Infinity;
+  }
+
+  placeReturnedBoat(boat, now) {
+    const home = placeFleetBoatHome(boat,this.boats);
+    if (!home) {
+      boat.returnRetryAt = now + BOAT_RETURN_RETRY_MS;
+      return;
+    }
+    this.clearBoatResume(boat);
+    Object.assign(boat,home);
+    delete boat.parkedAt;
+    delete boat.unattendedAt;
+    delete boat.returnRetryAt;
+  }
+
+  clearBoatResume(boat) {
+    if (boat.occupant) this.sql.exec("DELETE FROM resumes WHERE json_extract(pose,'$.id')=?",boat.occupant);
+  }
+
+  returnIdleBoats(now) {
+    for (const boat of this.boats) if (this.boatReturnAt(boat) <= now) this.placeReturnedBoat(boat,now);
   }
 
   releaseBoat(actorId) {
@@ -259,12 +284,18 @@ export class IslandRoom {
   }
 
   reconcileBoats() {
-    const retained=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
-    if (this.simulation) for (const row of this.sql.exec('SELECT pose FROM resumes WHERE expires>?',Date.now())) retained.add(JSON.parse(row.pose).id);
-    for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',Date.now(),Date.now()).toArray()) retained.add(JSON.parse(row.pose).id);
-    for (const boat of [...this.boats]) if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat);
-    fillMoorings(this.boats, this.simulation?.owner ?? null);
-    this.saveBoats();
+    const now=Date.now();
+    const active=new Set([...this.connections.values()].filter(info => info.actor).map(info => info.actor.id));
+    const retained=new Set(active);
+    if (this.simulation) for (const row of this.sql.exec('SELECT pose FROM resumes WHERE expires>?',now)) retained.add(JSON.parse(row.pose).id);
+    for (const row of this.sql.exec('SELECT r.pose FROM resumes r JOIN sessions s ON s.account=r.account WHERE r.expires>? AND s.expires>? AND s.can_play=1',now,now).toArray()) retained.add(JSON.parse(row.pose).id);
+    for (const boat of this.boats) {
+      if (active.has(boat.occupant)) delete boat.unattendedAt;
+      else if (boat.occupant && !retained.has(boat.occupant)) this.parkBoat(boat,null,boat.unattendedAt ?? now);
+      else if (boat.occupant) boat.unattendedAt ??= now;
+      else if (boat.parked) boat.parkedAt ??= now;
+    }
+    this.saveBoats(now);
   }
 
   recoverSailingPosition(actor) {
@@ -510,11 +541,11 @@ export class IslandRoom {
     return Number.isFinite(x) && Number.isFinite(y) && canWalkTo(islandId, x, y) && this.navFor(islandId).walkable(x, y);
   }
 
-  pickSpawn(_account, occupied) {
-    if (this.simulation && this.simulation.owner !== 'home') return null;
-    const home = mapOf('home');
-    return pickWorldSpawn({occupied, hasRoom:id => id === 'home'}) ??
-      {islandId:'home', ...home.spawn, name:islandFor('home').name};
+  pickSpawn(_account, occupied, onlinePlayers = 0, initialSpawn = false) {
+    const islandId = this.simulation?.owner ?? pickSpawnIsland(onlinePlayers);
+    if (this.simulation && islandId !== 'home' && !initialSpawn) return null;
+    return pickWorldSpawn({occupied, hasRoom:id => id === islandId}) ??
+      {islandId, ...mapOf(islandId).spawn, name:islandFor(islandId).name};
   }
 
   join(request, now) {
@@ -539,7 +570,8 @@ export class IslandRoom {
     if (canPlay && !from) {
       const actors = [...this.connections.values()].flatMap(info => info.actor ? [info.actor] : []);
       const held = this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray().map(row => JSON.parse(row.pose));
-      spawn = this.pickSpawn(user.account, [...actors, ...held]);
+      spawn = this.pickSpawn(user.account, [...actors, ...held], actors.length,
+        request.headers.get('X-Initial-Spawn') === '1');
     }
     const playing = Boolean(canPlay && (from || spawn));
     const [client, socket] = Object.values(new WebSocketPair());
@@ -555,6 +587,8 @@ export class IslandRoom {
         islandId:'home',mode:'walking',boatId:null,...pose,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       recoverIsland(info.actor);
       this.recoverSailingPosition(info.actor);
+      const boat = this.boats.find(boat => boat.occupant === info.actor.id);
+      if (boat) delete boat.unattendedAt;
       if(!this.simulation && (info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking'))this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
       if (mapOf(info.actor.islandId).home && info.actor.mode === 'walking' && atMuseumDoor(info.actor.x,info.actor.y)) Object.assign(info.actor,{x,y,turn:0});
@@ -813,7 +847,7 @@ export class IslandRoom {
   demote(socket, info, reason) {
     this.sailRoutes?.cancel(info.actor);
     if (info.actor && reason !== 'taken-over') {
-      if (this.simulation) this.saveBoats(Date.now(),info);
+      if (this.simulation) this.saveSailingResume(info,Date.now());
       else this.releaseBoat(info.actor.id);
     }
     info.islandId = info.actor?.islandId ?? info.islandId ?? 'home';
@@ -844,7 +878,9 @@ export class IslandRoom {
   }
 
   async scheduleExpiry() {
-    const {next} = this.sql.exec('SELECT min(next) AS next FROM (SELECT min(expires) AS next FROM flows UNION ALL SELECT min(expires) AS next FROM sessions UNION ALL SELECT min(expires) AS next FROM resumes WHERE expires<9007199254740991)').one();
+    const {next: sessionExpiry} = this.sql.exec('SELECT min(next) AS next FROM (SELECT min(expires) AS next FROM flows UNION ALL SELECT min(expires) AS next FROM sessions UNION ALL SELECT min(expires) AS next FROM resumes WHERE expires<9007199254740991)').one();
+    const due = this.boats.reduce((earliest,boat) => Math.min(earliest,this.boatReturnAt(boat)),sessionExpiry ?? Infinity);
+    const next = Number.isFinite(due) ? due : null;
     if (next === this.expiryAt) return;
     if (next === null) await this.ctx.storage.deleteAlarm();
     else await this.ctx.storage.setAlarm(next);
@@ -856,6 +892,8 @@ export class IslandRoom {
     this.expiryAt = undefined;
     this.prune(now);
     this.expire(now);
+    this.returnIdleBoats(now);
+    this.saveBoats(now);
     this.broadcast();
     await this.scheduleExpiry();
   }
@@ -1001,22 +1039,7 @@ export class IslandRoom {
         break;
       }
       case 'build': {
-        // stranded on an islet: the client gathered the materials, the server checks the place and makes the boat
-        if (actor.mode !== 'walking' || !info.account || now-(info.lastBuild ?? -Infinity) < BUILD_COOLDOWN) break;
-        const usable=this.boats.filter(boat => !boat.owner || boat.owner === info.account);
-        const spot=strandedIslet(actor.islandId,actor,usable) && buildSpot(actor.islandId,actor,this.boats);
-        if (!spot) {this.send(socket,{type:'travel-notice',text:'Walk to the edge of the island to build your boat.'}); break;}
-        info.lastBuild=now;
-        if (this.simulation) {
-          this.buildBoat(info,spot);
-          break;
-        }
-        // one built boat per player: an old one left idle somewhere is replaced
-        this.boats=this.boats.filter(boat => boat.owner !== info.account || boat.occupant);
-        const id=`${actor.islandId}-0~built-${now.toString(36)}${Math.floor(Math.random()*1296).toString(36)}`;
-        this.boats.push({id,islandId:actor.islandId,x:spot.x,y:spot.y,turn:spot.turn,occupant:null,departure:actor.islandId,parked:true,owner:info.account});
-        this.saveBoats();
-        this.send(socket,{type:'boat-built',boatId:id,x:spot.x,y:spot.y});
+        this.send(socket,{type:'travel-notice',text:'Use an existing boat to travel between islands.'});
         break;
       }
       case 'disembark':
@@ -1157,6 +1180,8 @@ export class IslandRoom {
           else {
             if(actor.islandId===BOG_ISLAND)this.karma.endBogEntry(info.account);
             boat.occupant=actor.id; boat.departure=actor.islandId;
+            delete boat.unattendedAt;
+            delete boat.returnRetryAt;
             if (boat.landing) boat.landing=null;
             Object.assign(actor,{x:boat.x,y:boat.y,turn:boat.turn,mode:'sailing',boatId:boat.id,action:0,until:0,travel:0,pace:0,heading:null,sailTarget:null,exitLocked:false,jumpLeft:0});
             changedTravel = true;
@@ -1189,7 +1214,7 @@ export class IslandRoom {
       if (info.actor && (changedTravel || !active || now - (info.lastAttachmentAt ?? 0) >= CHECKPOINT_MS)) this.attach(socket, info);
     }
     if (changedTravel || this.boatsDirty || now >= this.checkpointAt || !active) {
-      if ((changedTravel || this.boatsDirty || this.boats.some(boat => boat.occupant)) && fillMoorings(this.boats, this.simulation?.owner ?? null)) active=true;
+      if (changedTravel || this.boatsDirty) this.ctx.waitUntil(this.scheduleExpiry());
       this.boatsDirty = false;
       this.saveBoats(now);
     }
@@ -1199,6 +1224,12 @@ export class IslandRoom {
       clearInterval(this.timer);
       this.timer = null;
     }
+  }
+
+  saveSailingResume(info, now) {
+    const boat = this.boats.find(boat => boat.occupant === info.actor.id);
+    if (boat) boat.unattendedAt = now;
+    this.saveBoats(now,info);
   }
 
   webSocketClose(socket) {
@@ -1212,7 +1243,8 @@ export class IslandRoom {
       const now = Date.now();
       const resumable = this.simulation || this.session(info.digest,now)?.canPlay;
       if (!resumable) this.releaseBoat(info.actor.id);
-      this.saveBoats(now, resumable ? info : null);
+      if (resumable) this.saveSailingResume(info,now);
+      else this.saveBoats(now);
     }
     this.schedulePresenceBroadcast();
     this.ctx.waitUntil(this.scheduleExpiry());

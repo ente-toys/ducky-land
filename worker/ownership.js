@@ -7,6 +7,8 @@ export class OwnershipDirectory {
     this.sql = storage.sql;
     this.sql.exec(`CREATE TABLE IF NOT EXISTS simulation_owners (
       account TEXT PRIMARY KEY, owner TEXT NOT NULL, generation INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS simulation_spawn_generations (
+      account TEXT PRIMARY KEY REFERENCES simulation_owners(account) ON DELETE CASCADE, generation INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS simulation_transfers (
       id TEXT PRIMARY KEY, account TEXT NOT NULL, source TEXT NOT NULL,
       destination TEXT NOT NULL, generation INTEGER NOT NULL, state TEXT NOT NULL, charge INTEGER NOT NULL);
@@ -16,9 +18,22 @@ export class OwnershipDirectory {
       ON simulation_transfers(account,destination,generation) WHERE state='committed';`);
   }
 
-  locate(account) {
-    this.sql.exec("INSERT OR IGNORE INTO simulation_owners VALUES(?, 'home', ?)", account, Date.now());
-    return this.sql.exec('SELECT owner,generation FROM simulation_owners WHERE account=?', account).one();
+  find(account) {
+    return this.sql.exec(`SELECT owner, o.generation, s.generation IS NOT NULL AS initialSpawn
+      FROM simulation_owners o LEFT JOIN simulation_spawn_generations s
+      ON s.account=o.account AND s.generation=o.generation WHERE o.account=?`, account).toArray()[0];
+  }
+
+  locate(account, initialOwner = 'home') {
+    const current = this.find(account);
+    if (current) return current;
+    const generation = Date.now();
+    const initialSpawn = initialOwner !== 'home';
+    return this.storage.transactionSync(() => {
+      this.sql.exec('INSERT INTO simulation_owners VALUES(?,?,?)', account, initialOwner, generation);
+      if (initialSpawn) this.sql.exec('INSERT INTO simulation_spawn_generations VALUES(?,?)', account, generation);
+      return {owner: initialOwner, generation, initialSpawn};
+    });
   }
 
   transfer(id) {

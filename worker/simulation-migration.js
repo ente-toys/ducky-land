@@ -1,4 +1,4 @@
-import {ISLANDS} from '../src/gameplay/islands.js';
+import {ISLANDS, placeFleetBoatHome} from '../src/gameplay/islands.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
 import {simulationStub, internalPost} from '../server/simulation-routing.js';
 
@@ -158,6 +158,7 @@ export async function migrateWorld(room, {id, world, target}) {
           room.settings = {world, mode: 'legacy'};
           kv.put('migration', {id, target, done: true});
         });
+        room.ctx.waitUntil(room.scheduleExpiry());
         return Response.json({id, target, done: true});
       }
       return rejected('Resume the current migration ID');
@@ -243,6 +244,7 @@ export async function migrateWorld(room, {id, world, target}) {
       }
     } else {
       const data = {players: [], boats: [], profiles: [], visits: []};
+      const pendingReturns = [];
       for (const owner of owners) {
         const committed = room.sql
           .exec(
@@ -259,6 +261,14 @@ export async function migrateWorld(room, {id, world, target}) {
           .map((t) => t.id);
         const part = await call(owner, '/migration/export', {id, committed, relinquished});
         for (const k of Object.keys(data)) data[k].push(...part[k]);
+        pendingReturns.push(...(part.pendingBoatReturns ?? []));
+      }
+      // A returned boat can be in the source journal after the destination has accepted it.
+      const present = new Set(data.boats.map((boat) => boat.id));
+      for (const boat of pendingReturns.sort((a,b) => b.ownershipVersion - a.ownershipVersion)) {
+        if (present.has(boat.id)) continue;
+        data.boats.push(placeFleetBoatHome(boat,data.boats) ?? boat);
+        present.add(boat.id);
       }
       // The global visit proves payment. Combat progress belongs to Bog and
       // may be newer than the receipt, or the sailor may never have rejoined.
@@ -278,6 +288,7 @@ export async function migrateWorld(room, {id, world, target}) {
       kv.put('migration', {...migration, done: true});
       room.sql.exec('INSERT OR REPLACE INTO finished_migrations VALUES(?,?)', id, target);
     });
+    room.ctx.waitUntil(room.scheduleExpiry());
     return Response.json({...migration, done: true});
   });
 }
@@ -299,12 +310,13 @@ export async function localMigration(room, path, {id, data, committed = [], reli
       room.ctx.storage.transactionSync(() => {
         replaceGameplay(room, data);
         room.sql.exec(
-          'DELETE FROM incoming; DELETE FROM outgoing; DELETE FROM pickup_claims; DELETE FROM pending_builds; DELETE FROM ended_visits;'
+          'DELETE FROM incoming; DELETE FROM outgoing; DELETE FROM pickup_claims; DELETE FROM pending_builds; DELETE FROM ended_visits; DELETE FROM boat_returns;'
         );
         kv.put('last-import', id);
         kv.delete('frozen');
       });
     }
+    room.ctx.waitUntil(room.scheduleExpiry());
     const persisted = {
       players: list(room, 'resumes'),
       boats: list(room, 'boat_states').map((row) => JSON.parse(row.state)),
@@ -334,9 +346,10 @@ export async function localMigration(room, path, {id, data, committed = [], reli
       if (boat) snapshot.boats.push(boat);
     }
     storeSnapshot(room, 'frozen-state', snapshot);
+    kv.put('frozen-boat-returns',list(room,'boat_returns').map(row => JSON.parse(row.payload)));
     kv.put('frozen', true);
     for (const socket of room.ctx.getWebSockets()) socket.close(1012, 'World maintenance');
     room.connections.clear();
   }
-  return Response.json(readSnapshot(room, 'frozen-state'));
+  return Response.json({...readSnapshot(room, 'frozen-state'), pendingBoatReturns:kv.get('frozen-boat-returns') ?? []});
 }
