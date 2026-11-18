@@ -22,6 +22,40 @@ test('Iceland weather budget reuses 180 Graphics, exposes 90 on phone and hides 
 
 import {cameraGame} from './helpers/pixi-engine.mjs';
 
+test('a slow crowded view reduces draw resolution and restores it for a photo', () => {
+ const game=cameraGame(), scales=[];
+ game.baseRenderResolution=2;game.frame=60;game.frameTimes=Array(60).fill(42);
+ game.app={renderer:{resize:(width,height,resolution)=>scales.push([width,height,resolution])}};
+ game.updateCrowdResolution(47);
+ game.updateCrowdResolution(48);
+ game.updateCrowdResolution(40);
+ game.pendingPhoto={};game.frame++;game.updateCrowdResolution(40);
+ assert.deepEqual(scales,[[1440,900,1.5],[1440,900,2]]);
+});
+
+test('crowd animation keeps nearby rigs current and moves every duck each frame', () => {
+ const game=cameraGame();
+ game.chatBubbles=new Map();game.arches=[];game.arrivalLift=()=>0;
+ const outfit={cap:1,shades:0,acc:0,shoes:0};
+ const poses=Array.from({length:28},(_,i)=>({id:i.toString(16).padStart(8,'0'),
+  player:i===27,x:i,y:0,mode:'walking',action:1,travel:245,turn:0,emoteVersion:0,outfit}));
+ const updates=poses.map(()=>[]);
+ for(const [i,pose] of poses.entries()){
+  game.liveRigs.set(pose.id,{isPlayer:pose.player,outfit,rig:{root:new Container(),update:(dt,options)=>updates[i].push({dt,...options})}});
+ }
+ game.renderLiveDucks(poses,.016,0,false,()=>true,0);
+ poses[25].x+=1;
+ game.renderLiveDucks(poses,.016,.016,false,()=>true,16);
+ assert.equal(updates[0].length,2);
+ assert.equal(updates[0][1].simpleTurns,false);
+ assert.equal(updates[27].length,2);
+ assert.equal(updates[25].length,1);
+ assert.equal(updates[25][0].simpleTurns,true);
+ assert.equal(game.liveRigs.get(poses[25].id).rig.root.x,poses[25].x);
+ game.renderLiveDucks(poses,.05,.066,false,()=>true,66);
+ assert.ok(updates[25][1].dt>.05);
+});
+
 test('walking and zoom only use prepared current art and cannot trigger neighbour acquisitions',()=>{
  const game=cameraGame();let acquired=0,released=0;
  game.ensureArt=()=>acquired++;game.freeArt=()=>released++;

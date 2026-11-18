@@ -19,7 +19,7 @@ export function startupSession(consume = false) {
 let early;
 export function startArrivalSocket(onIsland = () => {}) {
   if (early || !arrivalPending() || typeof WebSocket !== 'function') return;
-  const url=new URL('/api/room?play=1&globeFeed=1',location.href);
+  const url=new URL('/api/room?play=1&globeFeed=1&nearby=1',location.href);
   url.searchParams.set('protocol','2');
   authenticateTestSocket(url);
   url.protocol=url.protocol==='https:'?'wss:':'ws:';

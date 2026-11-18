@@ -1,15 +1,16 @@
 import {authenticateTestSocket} from '../app/test-session.js';
 import {nearestSeaX} from '../world/flat-layout.js';
+import {nearbyCell} from './nearby.js';
 import {isletAt} from '../world/islet-walk.js';
 import {takeArrivalSocket} from '../app/arrival-start.js';
-import {DURATIONS, playEmote, playSailEmote, RUN_SPEED, SAIL_EMOTES, startJump, setWalkDestination, walkStep} from '../gameplay/player-motion.js';
+import {DURATIONS, playEmote, playSailEmote, RUN_SPEED, WALK_SPEED, SAIL_EMOTES, startJump, setWalkDestination, walkStep} from '../gameplay/player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
 import {mapOf,islandMapReady} from '../world/island-maps.js';
 import {getPlayerKarma} from '../features/bog-combat/karma.js';
 import {bogLandingNotice} from '../features/bog-combat/entry.js';
 import {BOAT_UNVEIL} from '../gameplay/boat-build.js';
-import {islandFor, harborOf, destinationsFor, near, dockingSpot, refusedLandingPosition, landingApproach, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
+import {islandFor, harborOf, destinationsFor, near, dockingSpot, refusedLandingPosition, landingApproach, setSailDestination, sailStep, SAIL_SPEED, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
 
 const ZERO = {x:0,y:0};
 const HEARTBEAT_INTERVAL_MS = 5000;
@@ -17,6 +18,7 @@ const HEARTBEAT_TIMEOUT_MS = 9000;
 const POSITION_SNAP_DISTANCE = 90;
 const PEER_BLEND_SECONDS = .05;
 const PEER_LEAD_SECONDS = .05;
+const PEER_DELAY_SECONDS = .25;
 const moving = input => input.x !== 0 || input.y !== 0;
 const nowSeconds = () => performance.now() / 1000;
 
@@ -26,7 +28,10 @@ function sample(track, now) {
   const blend = Math.min(1, age / blendSeconds);
   const lead = Math.min(PEER_LEAD_SECONDS, Math.max(0, age-blendSeconds));
   const turn = to.turn - from.turn;
-  return {...to, jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-Math.max(0,now-poseAt)), x:from.x+(to.x-from.x)*blend+vx*lead, y:from.y+(to.y-from.y)*blend+vy*lead,
+  const walkingCorrection = track.recovery && to.mode === 'walking' && to.action <= 1 && blend < 1
+    ? Math.hypot(to.x-from.x,to.y-from.y)/blendSeconds : 0;
+  return {...to, ...(walkingCorrection > 1 && {action:1,travel:walkingCorrection}),
+    jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-Math.max(0,now-poseAt)), x:from.x+(to.x-from.x)*blend+vx*lead, y:from.y+(to.y-from.y)*blend+vy*lead,
     turn:from.turn+Math.atan2(Math.sin(turn), Math.cos(turn))*blend};
 }
 
@@ -56,10 +61,22 @@ function peerTrack(last, to, now) {
   const dx = to.x-nearestSeaX(last.to.x,to.x), dy = to.y-last.to.y;
   const distance = Math.hypot(dx,dy);
   const travel = Number.isFinite(to.travel) ? Math.max(0,to.travel) : 0;
-  if (distance > POSITION_SNAP_DISTANCE + travel * Math.min(1,elapsed)) return track;
+  const recovery = elapsed > PEER_DELAY_SECONDS ? {gap:elapsed,until:now+PEER_DELAY_SECONDS} : last.recovery;
+  const maxSpeed = to.mode === 'sailing' ? SAIL_SPEED : RUN_SPEED;
+  // A duck can have walked a normal distance during a gap and stopped before
+  // the last packet. Its final speed alone cannot identify a teleport.
+  const reachable = recovery ? maxSpeed * Math.min(2,recovery.gap) : travel * Math.min(1,elapsed);
+  if (distance > POSITION_SNAP_DISTANCE + reachable) return track;
   track.from = periodicFrom(last,to,now);
-  if (elapsed > .25) track.blendSeconds = .15;
-  if (elapsed > 0 && elapsed <= .25 && distance > 0 && travel > 0) {
+  if (recovery) {
+    // Bound the catch-up speed even when several fresh packets arrive together.
+    const speed = Math.min(maxSpeed, Math.max(WALK_SPEED,travel,last.to.travel ?? 0)) * 1.5;
+    const remaining = Math.hypot(to.x-track.from.x,to.y-track.from.y);
+    track.blendSeconds = Math.max(PEER_BLEND_SECONDS,remaining/speed);
+    if (track.blendSeconds > PEER_BLEND_SECONDS || now < recovery.until) track.recovery = recovery;
+    return track;
+  }
+  if (elapsed > 0 && distance > 0 && travel > 0) {
     const speed = Math.min(distance/elapsed,travel);
     track.vx = speed*dx/distance;
     track.vy = speed*dy/distance;
@@ -119,6 +136,7 @@ export class RoomClient {
     this.seq = 0;
     this.tick = -1;
     this.snapshotPlayers = new Map();
+    this.detachedSelfId = null;
     this.snapshotBoats = new Map();
     this.globeFeed = false;
     this.clearGlobePlayers();
@@ -152,6 +170,7 @@ export class RoomClient {
 
   connect(play = true, reconnecting = false, handoff = false) {
     this.wantsPlay = play;
+    if (play) this.watchDestination = null;
     if (!reconnecting) {
       this.resumeId = null;
       this.reconnectIncident = null;
@@ -160,6 +179,8 @@ export class RoomClient {
     }
     this.lastPongAt = null;
     this.lastSnapshotAt = null;
+    this.sentWatchCell = null;
+    this.lastWatchCellAt = -Infinity;
     clearTimeout(this.retryTimer);
     clearInterval(this.heartbeat);
     const old = this.socket;
@@ -173,6 +194,7 @@ export class RoomClient {
     authenticateTestSocket(url);
     if (url.searchParams.has('testSession') && this.reconnectReason) url.searchParams.set('reconnect',this.reconnectReason);
     url.searchParams.set('protocol','2');
+    url.searchParams.set('nearby','1');
     if (!play) url.searchParams.set('watch',this.watchDestination ?? this.islandId ?? 'home');
     url.searchParams.set('play', play ? '1' : '0');
     url.searchParams.set('globeFeed', '1');
@@ -242,6 +264,7 @@ export class RoomClient {
           for (const id of patch.removed) target.delete(id);
           for (const value of patch.changed) target.set(value.id, {...target.get(value.id), ...value});
         };
+        if (this.detachedSelfId) this.snapshotPlayers.delete(this.detachedSelfId);
         merge(this.snapshotPlayers, message.players);
         merge(this.snapshotBoats, message.boats);
         this.snapshot({...message, players: [...this.snapshotPlayers.values()], boats: [...this.snapshotBoats.values()]});
@@ -269,7 +292,7 @@ export class RoomClient {
           this.globeFeed = message.globeFeed === true;
           if (this.globeOpen) this.sendGlobeSubscription();
           this.onFriendsChanged();
-          socket.send(JSON.stringify({type: 'updates'}));
+          socket.send(JSON.stringify({type:'updates',nearby:true}));
         }
         if (['expired', 'signed-out'].includes(message.reason)) this.clearGlobePlayers();
         this.failures = 0;
@@ -323,6 +346,19 @@ export class RoomClient {
     this.socket.send(JSON.stringify({type: 'globe-subscription', open: this.globeOpen, subscriptionId: this.globeSubscriptionId}));
   }
 
+  watchNearby(islandId, camera) {
+    if (this.id || this.lastSnapshotAt === null || this.socket?.readyState !== WebSocket.OPEN ||
+        islandId !== this.islandId || islandId !== (this.watchDestination ?? islandId)) return;
+    const now = performance.now();
+    if (now - this.lastWatchCellAt < 250) return;
+    const {x,y} = nearbyCell(camera);
+    const key = `${islandId}|${x}|${y}`;
+    if (key === this.sentWatchCell) return;
+    this.socket.send(JSON.stringify({type:'watch-cell',islandId,x,y}));
+    this.sentWatchCell = key;
+    this.lastWatchCellAt = now;
+  }
+
   snapshot({epoch,tick,players,self,online,islandId='home',boats=[],globePlayers=[]}) {
     if (epoch === this.epoch && tick <= this.tick) return;
     const snapshotAt = performance.now();
@@ -335,7 +371,13 @@ export class RoomClient {
     }
     this.snapshotPlayers = new Map(players.map(p => [p.id, p]));
     this.snapshotBoats = new Map(boats.map(b => [b.id, b]));
-    const own=players.find(pose => pose.id === this.id);
+    this.detachedSelfId = null;
+    if (self?.pose?.id && self.pose.id === this.id && !this.snapshotPlayers.has(this.id)) {
+      this.detachedSelfId = this.id;
+      this.snapshotPlayers.set(this.id,self.pose);
+      players = [...players,self.pose];
+    }
+    const own=this.snapshotPlayers.get(this.id);
     this.authoritativePlayer = own;
     if (this.onReconnectDiagnostic) {
       const incident = this.reconnectIncident;
@@ -362,6 +404,7 @@ export class RoomClient {
       clearTimeout(this.chatTimer);
     }
     this.islandId=islandId;
+    if (this.watchDestination === islandId) this.watchDestination = null;
     this.mode=mode;
     this.epoch = epoch;
     this.tick = tick;

@@ -1,5 +1,6 @@
 import {seaViewPose} from '../src/world/sea-view.js';
-import {SEA_VERSION,FLAT_ISLETS} from '../src/world/flat-layout.js';
+import {SEA_VERSION,FLAT_ISLETS,nearestSeaX} from '../src/world/flat-layout.js';
+import {nearbyCell, validNearbyCell, nearbyIndex, nearbyPoses} from '../src/multiplayer/nearby.js';
 import {unplaceRigid} from '../src/world/rigid.js';
 import {reframeIslet} from '../src/world/islet-placement.js';
 import {ISLETS} from '../src/world/islets.js';
@@ -543,7 +544,7 @@ export class IslandRoom {
     const playing = Boolean(canPlay && (from || spawn));
     const [client, socket] = Object.values(new WebSocketPair());
     const info = {actor:null, ...(this.simulation && {generation:Number(request.headers.get('X-Owner-Generation')),islandId:this.simulation.owner}), digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login, globeFeed,
-      input:ZERO, inputExpires:0, tokens:SOCKET_COMMAND_BURST, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
+      nearby:params.get('nearby') === '1', input:ZERO, inputExpires:0, tokens:SOCKET_COMMAND_BURST, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
       const savedOutfit = this.sql.exec('SELECT outfit FROM outfits WHERE account=?',user.account).toArray()[0];
@@ -588,9 +589,9 @@ export class IslandRoom {
   }
 
   attach(socket, info) {
-    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId} = info;
+    const {actor,account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,nearby,watchCell,globeFeed,globeSubscriptionId} = info;
     info.lastAttachmentAt = Date.now();
-    socket.serializeAttachment({...(this.simulation && {generation:info.generation,transferring:info.transferring}),actor:actor ? savedPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,globeFeed,globeSubscriptionId});
+    socket.serializeAttachment({...(this.simulation && {generation:info.generation,transferring:info.transferring}),actor:actor ? savedPose(actor) : null, account,digest,expires,login,ack,lastDestination,lastEmote,tokens,tokenTime,islandId,deltas,nearby,watchCell,globeFeed,globeSubscriptionId});
   }
 
   send(socket, message) {
@@ -684,7 +685,7 @@ export class IslandRoom {
     }
     const boatsForView = this.remoteBoats ? [...this.boats,...this.remoteBoats] : this.boats;
     const legacyGlobeFields = new Map();
-    const shared = new Map(), empty = {guests:[], named:[]};
+    const shared = new Map(), indexes = new Map(), empty = {guests:[], named:[]};
     const snapshotView = (islandId, named, info) => {
       const combatSelf=!!info.actor&&combatAccounts.has(info.account);
       // Main-island walkers share a canonical packet, including wrapped sailors.
@@ -695,27 +696,39 @@ export class IslandRoom {
       const localViewer={islandId,x:m.cx,y:m.cy};
       // Cache viewers in the same square together. Players within one square
       // of any viewer in it keep the full update rate; distant motion is sampled.
-      const cell = this.simulation && actor && !chartViewer && (groups.get(islandId)?.guests.length ?? 0)>=40 ?
+      const cell = info.nearby ? (actor ? nearbyCell(actor) : info.watchCell ?? nearbyCell(m.spawn)) :
+        this.simulation && actor && !chartViewer && (groups.get(islandId)?.guests.length ?? 0)>=40 ?
         {x:Math.floor(actor.x/1024),y:Math.floor(actor.y/1024)} : null;
-      const scope = `${named ? 1 : 0}|${islandId}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}`;
+      const scope = `${named ? 1 : 0}|${islandId}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}${info.nearby?'|nearby':''}`;
       const key = cell ? `${scope}|cell:${cell.x},${cell.y}` : scope;
       if (!shared.has(key)) {
         const group = groups.get(islandId) ?? empty;
         let poses=named?group.named:group.guests;
-        if(this.simulation && !chartViewer) poses=poses.map(p=>{
+        if (info.nearby) {
+          const kind = actor?.mode === 'sailing' ? 'sea' : chartViewer ? 'islet' : 'land';
+          const indexKey = `${islandId}|${kind}|${named}`;
+          if (!indexes.has(indexKey)) {
+            const canonical = {islandId,x:m.cx,y:m.cy};
+            const candidates = chartViewer ? [...groups.values()].flatMap(g=>named?g.named:g.guests)
+              .filter(p=>p.islandId===islandId || kind==='sea' || p.mode==='sailing') : poses;
+            indexes.set(indexKey, nearbyIndex(candidates.map(p=>seaViewPose(canonical,p))));
+          }
+          poses = nearbyPoses(indexes.get(indexKey),cell);
+          if (chartViewer) poses=poses.map(p=>({...p,x:nearestSeaX(p.x,chartViewer.x)}));
+        } else if(this.simulation && !chartViewer) poses=poses.map(p=>{
           const nearby = !cell || (Math.abs(Math.floor(p.x/1024)-cell.x)<=1 && Math.abs(Math.floor(p.y/1024)-cell.y)<=1);
           const prior = nearby ? null : this.farPoses.get(p.id);
           return prior?.islandId===p.islandId
             ? {...p,...prior,positionSampleMs:FAR_POSITION_INTERVAL_MS}
             : {...p,positionSampleMs:0};
         });
-        if(chartViewer) {
+        if(!info.nearby && chartViewer) {
           poses=[...groups.values()].flatMap(g=>named?g.named:g.guests).map(p=>seaViewPose(info.actor,p,p.islandId===islandId?Infinity:8000))
             .filter(p=>p && (p.islandId===islandId || info.actor.mode==='sailing' || p.mode==='sailing'));
-        } else if(localViewer)poses=poses.map(p=>seaViewPose(localViewer,p));
+        } else if(!info.nearby && localViewer)poses=poses.map(p=>seaViewPose(localViewer,p));
         const visibleBoats=chartViewer?boatsForView.map(b=>seaViewPose(info.actor,b,b.islandId===islandId?Infinity:8000)).filter(Boolean):boatsForView.filter(b=>b.islandId===islandId).map(b=>localViewer?seaViewPose(localViewer,b):b);
         const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
-        shared.set(key, {scope, players, boats: visibleBoats.map(wireBoat)});
+        shared.set(key, {scope, players, playerIds:info.nearby ? new Set(players.map(p=>p.id)) : null, boats: visibleBoats.map(wireBoat)});
       }
       return shared.get(key);
     };
@@ -752,6 +765,9 @@ export class IslandRoom {
         globeField = legacyGlobeFields.get(named);
       }
       const view = snapshotView(islandId, named, info);
+      if (self && info.nearby && !view.playerIds.has(actor.id)) {
+        self.pose = named ? {...wirePose(actor),login:info.login,accountId:info.account} : wirePose(actor);
+      }
       if (!info.deltas) {this.sendText(socket, fullSnapshot(view, islandId, self, globeField)); continue;}
       // Deltas can describe a new spatial cell within the same chart and
       // identity scope. Full snapshots are needed when the scope itself changes.
@@ -905,16 +921,28 @@ export class IslandRoom {
     }
     if (expired) return;
     if (command?.type === 'updates') {
-      if (info.deltas) return;
+      if (info.deltas && (info.nearby || command.nearby !== true)) return;
       info.deltas = true;
+      info.nearby = command.nearby === true;
       info.snapshotBase = null;
       this.attach(socket, info);
       this.broadcast(socket);
       return;
     }
+    if (command?.type === 'watch-cell' && info.nearby && !info.actor &&
+        command.islandId === (info.islandId ?? 'home') && validNearbyCell(command)) {
+      const {x,y} = command;
+      if (now - (info.watchCellAt ?? -Infinity) < 200 || (info.watchCell?.x === x && info.watchCell.y === y)) return;
+      info.watchCell = {x,y};
+      info.watchCellAt = now;
+      this.attach(socket,info);
+      if (!this.timer) this.schedulePresenceBroadcast();
+      return;
+    }
     if (command?.type === 'watch' && !info.actor && islandFor(command.islandId)) {
       if (this.simulation || (info.islandId ?? 'home') === command.islandId) return;
       info.islandId = command.islandId;
+      info.watchCell = undefined;
       info.snapshotBase = null;
       this.attach(socket,info);
       this.broadcast(socket);

@@ -21,6 +21,17 @@ const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandI
   self:{ack:0,path:[],emoteLeft:0},
 });
 
+test('a player outside the capped peer list still receives its authoritative pose', () => {
+  const {room}=setup();
+  const snapshot=packet(1);
+  snapshot.self.pose=snapshot.players.pop();
+  room.snapshot(snapshot);
+  assert.equal(room.snapshotPlayers.get(room.id),snapshot.self.pose);
+  assert.equal(room.player.x,snapshot.self.pose.x);
+  assert.deepEqual(room.poses().map(p=>p.id),['player']);
+  room.dispose();
+});
+
 test('remote movement catches up sooner and stops predicting when updates stall', t => {
   let clock=0;
   t.mock.method(performance,'now',()=>clock);
@@ -46,6 +57,36 @@ test('remote movement catches up sooner and stops predicting when updates stall'
   clock=300;
   receive(4,2400,0);
   assert.equal(peerAt(.3),2400);
+});
+
+test('delayed nearby walkers recover smoothly through a burst, including when they stopped', t => {
+  let clock=0;
+  t.mock.method(performance,'now',()=>clock);
+  const {room}=setup();
+  t.after(()=>room.dispose());
+  let tick=0;
+  const receive=(at,x,travel)=>{
+    clock=at;
+    const snapshot=packet(++tick);
+    snapshot.players.push({...snapshot.players[0],id:'peer',x,travel,action:travel?1:0});
+    room.snapshot(snapshot);
+  };
+  const view=at=>room.poses(at/1000).find(pose=>pose.id==='peer');
+  receive(0,1800,245);
+  receive(100,1824.5,245);
+  const frozen=view(1249).x;
+  receive(1250,1849,245); // first frame released from a delayed burst
+  receive(1250,2045,245);
+  receive(1250,2069.5,0); // the duck completed its walk during the gap
+  assert.equal(view(1250).x,frozen);
+  assert.equal(view(1267).action,1);
+  assert.ok(view(1267).x-frozen<7);
+  receive(1350,2069.5,0);
+  assert.ok(view(1367).x-view(1350).x<7);
+  assert.equal(view(2200).x,2069.5);
+  assert.equal(view(2200).action,0);
+  receive(2600,5000,0);
+  assert.equal(view(2600).x,5000,'a real relocation still snaps');
 });
 
 test('distant positions interpolate through repeated snapshots and rejoin the nearby stream', t => {
@@ -524,7 +565,7 @@ test('fresh snapshots keep the socket alive while a pong is missing', t => {
   clock = 15_000;
   heartbeat();
   assert.strictEqual(room.socket, socket);
-  assert.deepEqual(socket.sent, ['{"type":"updates"}', 'ping', 'ping']);
+  assert.deepEqual(socket.sent, ['{"type":"updates","nearby":true}', 'ping', 'ping']);
 
   clock = 24_900;
   receive({type: 'snapshot', ...packet(2)});

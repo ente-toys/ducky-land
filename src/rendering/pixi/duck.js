@@ -392,7 +392,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     view.angry=p.angry>.02&&face;
     if(p.angry>.02&&face&&!appearance?.outfit?.shades)for(const eye of eyes){const {x,y}=eye.joint;const side=eye.side;view.brows.moveTo(x-side*17,y-20).lineTo(x+side*14,y-9).stroke({color:0x232323,width:6,alpha:p.angry,cap:'round'});}
   }
-  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false,ice=null,aiming=false}={}){
+  function update(dt,{action=0,speed=0,turn=0,time,reducedMotion=false,emoteVersion,persistentSleep=false,jump=null,sailing:isSailing=false,seated:isSeated=false,ice=null,aiming=false,simpleTurns=false}={}){
     if(disposed)return;dt=clamp(safe(dt),0,.1);elapsed+=dt;
     sailing=isSailing;
     seated=isSeated;
@@ -422,7 +422,7 @@ export async function createDuck({outfit={cap:8,shades:1,acc:0,shoes:2},seed=0,i
     }
     {const a=((degrees%360)+540)%360-180,i=a<byAngle[0].spec.angle?byAngle.length-1:byAngle.findIndex((v,k)=>k===byAngle.length-1||a<byAngle[k+1].spec.angle);
       const lo=byAngle[Math.max(0,i)],hi=byAngle[(Math.max(0,i)+1)%byAngle.length],span=((hi.spec.angle-lo.spec.angle)+360)%360||45,u=clamp((((a-lo.spec.angle)+360)%360)/span,0,1);
-      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||!other?{other:null,w:0,lo:false}:{other,w:current===lo?u:1-u,lo:current===lo,mid:String(((lo.spec.angle+span/2)%360+540)%360-180)};}
+      const other=current===lo?hi:current===hi?lo:null;glide=reducedMotion||simpleTurns||!other?{other:null,w:0,lo:false}:{other,w:current===lo?u:1-u,lo:current===lo,mid:String(((lo.spec.angle+span/2)%360+540)%360-180)};}
     const t=Number.isFinite(time)?time:elapsed;
     const sleeping = currentAction === 7;
     current.root.visible = !sleeping;

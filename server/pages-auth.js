@@ -277,6 +277,7 @@ export async function connect({request,env,data}, fetchGitHub = fetch) {
   const resumeId = url.searchParams.get('resume');
   if (play === '1' && resumeId) roomUrl.searchParams.set('resume', resumeId);
   if (url.searchParams.get('globeFeed') === '1') roomUrl.searchParams.set('globeFeed', '1');
+  if (url.searchParams.get('nearby') === '1') roomUrl.searchParams.set('nearby', '1');
   return upgrade(env,new Request(roomUrl,{headers}),url,key,data);
 }
 

@@ -15,11 +15,31 @@ import {SLEEP_COUNTS, SLEEP_SPOTS, SLEEP_TOTAL, HOME_SLEEP_TOTAL, resolveSleepSp
 import {canSail, destinationsFor, harborOf, islandOffset, originOffset, seaBoundsFor} from '../src/gameplay/islands.js';
 import {clockwise, shoreOf, surfRuns} from '../src/rendering/pixi/environment/surf.js';
 import {setWalkDestination, walkStep} from '../src/gameplay/player-motion.js';
-import {addPlayer, makeRoom, seeded, wander} from './room-harness.mjs';
+import {addPlayer, fakeSocket, makeRoom, seeded, wander} from './room-harness.mjs';
+import {nearbyCell} from '../src/multiplayer/nearby.js';
 import {loadTest} from '../scripts/load-room.mjs';
 
 const themedIslands = () => [...THEME_OF].filter(([, theme]) => readyThemes().includes(theme)).map(([id]) => id);
 const area = ring => ring.reduce((a, p, i) => {const q = ring[(i + 1) % ring.length]; return a + p[0] * q[1] - q[0] * p[1];}, 0) / 2;
+
+test('nearby views cap crowded snapshots, preserve self, and follow the spectator camera', async () => {
+  const room = await makeRoom();
+  const viewer = addPlayer(room, 1, {x: 1050, y: 1050});
+  for (let i = 2; i <= 101; i++) addPlayer(room, i, {x:1500+i/100, y:1500});
+  const far = addPlayer(room, 102, {x:9000, y:1500});
+  const guest = fakeSocket();
+  room.connections.set(guest, {islandId:'home', nearby:true, tokens:240, tokenTime:Date.now()});
+  room.connections.get(viewer.socket).nearby = true;
+  room.broadcast(viewer.socket);
+  const player = JSON.parse(viewer.socket.last);
+  assert.equal(player.players.length, 96);
+  assert.equal(player.self.pose.id, viewer.actor.id);
+  assert.ok(!player.players.some(p=>p.id===far.actor.id));
+
+  room.webSocketMessage(guest, JSON.stringify({type:'watch-cell',islandId:'home',...nearbyCell(far.actor)}));
+  room.broadcast(guest);
+  assert.deepEqual(JSON.parse(guest.last).players.map(p=>p.id), [far.actor.id]);
+});
 const sizes = sleepHalfWidths();
 
 test('a) sleepers: Home keeps its forty beds plus forty outer residents; every theme keeps its own approved count', () => {

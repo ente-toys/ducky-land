@@ -91,6 +91,8 @@ const renderJumpLeft = (left, accumulator) => left > 0
   ? Math.min(JUMP_SECONDS, left + SIM_STEP - accumulator)
   : 0;
 const CHAT_LABEL_GAP = 4;
+const DETAILED_CROWD_DUCKS = 24;
+const CROWD_ANIMATION_INTERVAL_MS = 67;
 const SHADOW_TINT = {sand: [PALETTE.sandShade, .18], grass: [PALETTE.deepLeaf, .15], water: [PALETTE.ink, .12]};
 const FOOTPRINT = [[/bench-wood-(left|right)/, .1, 2.4], [/fountain/, .25, .82], [/^tree-/, .3, .3], [/^(bush|flower)-/, .4, .32], [/lamp|pole/, .4, .34],
   [/lighthouse/, .3, .32], [/umbrella/, .32, .4], [/library/, .44, .26], [/boat/, .36, .3]];
@@ -152,8 +154,9 @@ export class PixiIsland {
     this.host = host;
     this.app = new Application();
     try {
+      this.baseRenderResolution = Math.min(this.renderResolution ?? (devicePixelRatio || 1), 2);
       await this.app.init({width: host.clientWidth || 1280, height: host.clientHeight || 720,
-        resolution: Math.min(this.renderResolution ?? (devicePixelRatio || 1), 2), autoDensity: true,
+        resolution: this.baseRenderResolution, autoDensity: true,
         antialias: true, background: '#6EC9DE', backgroundAlpha:this.transparent?0:1, preference: 'webgl', autoStart: false,
         sharedTicker: false});
       if (this.disposed) { this.app.destroy({removeView:true,releaseGlobalResources:false}, {children: true}); return; }
@@ -1624,6 +1627,18 @@ export class PixiIsland {
     };
   }
 
+  updateCrowdResolution(walkers) {
+    if (this.renderResolution != null || !this.baseRenderResolution ||
+        (!this.pendingPhoto && this.frame % 30 !== 0)) return;
+    const reduced = this.crowdResolutionReduced === true;
+    const slow = this.frameTimes.length >= 30 && this.frameTimes.filter(ms=>ms>33.4).length > this.frameTimes.length/3;
+    const crowded = walkers >= (reduced ? 32 : 48);
+    const next = crowded && !this.pendingPhoto && !this.globeOpen && (reduced || slow);
+    if (next === reduced) return;
+    this.crowdResolutionReduced = next;
+    this.app.renderer.resize(this.width,this.height,this.baseRenderResolution*(next ? .75 : 1));
+  }
+
   tick(now,{forceRender=false}={}) {
     if (this.disposed || this.contextRecovering || (document.hidden&&!forceRender)) return;
     const elapsed = Math.max(0, now - this.lastFrame);
@@ -1718,7 +1733,7 @@ export class PixiIsland {
         Object.assign(this.target, {x: player.x, y: player.y - 90}); Object.assign(this.camera, this.target, {zoom: this.camera.zoom}); this.follow = true;
       }
       if (this.interior?.active && this.globeOpen) this.closeGlobe();   // back to walking zoom indoors
-      if (this.interior?.active) {this.renderScreen(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}
+      if (this.interior?.active) {this.updateCrowdResolution(0); this.renderScreen(); this.raf = requestAnimationFrame(time => this.tick(time)); return;}
     }
     if(player?.action===1&&(input.x||input.y)&&!this.fitMode&&!this.birdEye&&!this.gestures.pointers.size){
       const x=this.width/2+(player.x-this.camera.x)*this.camera.zoom,y=this.height/2+(player.y-this.camera.y)*this.camera.zoom*TILT;
@@ -1886,6 +1901,7 @@ export class PixiIsland {
       }
     }
     if (player) this.bumpFrom = {x: player.x, y: player.y};
+    this.room?.watchNearby?.(this.islandId,this.camera);
     const live = this.room?.poses(now / 1000) ?? [];
     this.arts?.get(this.artShown)?.icelandLife?.current?.update(t, reduced, visible, flatVisible && this.scene.visible, player, live);
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
@@ -2087,6 +2103,11 @@ export class PixiIsland {
 
   renderLiveDucks(poses, dt, time, reducedMotion, visible, now) {
     const ids = new Set(poses.map(pose => pose.id)), sailers = [];
+    const visibleWalkers = poses.filter(p=>!p.player && p.mode==='walking' && visible(p.x,p.y,200));
+    const distance = p => (p.x-this.camera.x)**2 + (p.y-this.camera.y)**2;
+    const detailed = visibleWalkers.length > DETAILED_CROWD_DUCKS
+      ? new Set(visibleWalkers.sort((a,b)=>distance(a)-distance(b)).slice(0,DETAILED_CROWD_DUCKS).map(p=>p.id)) : null;
+    this.updateCrowdResolution(detailed ? visibleWalkers.length : 0);
     const scopeProps = this.artShown === 'home' ? this.props : this.arts?.get(this.artShown)?.props;
     for (const [id, entry] of this.liveRigs) {
       if (ids.has(id)) continue;
@@ -2181,7 +2202,22 @@ export class PixiIsland {
       rig.trackSnow?.(time, !this.interior?.active && pose.mode !== 'sailing' ? this.artShown : null,
         action, travel, reducedMotion, emoteVersion, snowMoved || pose.jumpLeft > 0);
       entry.snowX = x; entry.snowY = y;
-      if (rig.root.visible) rig.update(dt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:peer?.turn ?? look.turn, time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing'});
+      if (rig.root.visible) {
+        const simpleTurns = Boolean(detailed && !isPlayer && pose.mode==='walking' && action<=1 &&
+          !pose.jumpLeft && !pose.ice && !detailed.has(id));
+        entry.animationDt = (entry.animationDt ?? 0) + dt;
+        // Stagger the expensive joint updates. World positions still render every frame.
+        entry.animationOffset ??= (parseInt(id.slice(0,8),16) || 0) % CROWD_ANIMATION_INTERVAL_MS;
+        const slot = simpleTurns ? Math.floor((now + entry.animationOffset) / CROWD_ANIMATION_INTERVAL_MS) : null;
+        if (!simpleTurns || slot !== entry.animationSlot) {
+          rig.update(entry.animationDt, {action, ice:pose.mode==='sailing'?null:pose.ice, speed:look.speed, turn:peer?.turn ?? look.turn, time, reducedMotion, emoteVersion, jump:hop, sailing:pose.mode==='sailing', simpleTurns});
+          entry.animationDt = 0;
+          entry.animationSlot = slot;
+        }
+      } else {
+        entry.animationDt = 0;
+        entry.animationSlot = null;
+      }
       this.rinkTrails?.track(entry,x,y,travel,rig.root.visible&&look.deck&&pose.mode!=='sailing'&&!(pose.jumpLeft>0));
       if (pose.mode === 'sailing') sailers.push(look);
     }
