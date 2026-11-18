@@ -332,6 +332,9 @@ const clearSeaLine=(id,a,b) => {
   return true;
 };
 const CELL=125;
+// Share this limit across the origin, destination, and every alternate dock
+// target so one route cannot run an entire fine-grid search for each target.
+const FINE_ROUTE_VISITS=3000;
 // Keep the proven local grid phase through the chart migration. Sliding the grid
 // can turn an existing narrow canal route into a tangent to an authored bank.
 const LEGACY_CENTRES=Object.fromEntries([['home',{x:0,y:0}],...FLAT_RING.map((id,k)=>[id,{x:FLAT_RADIUS*Math.sin(k*Math.PI/3),y:-FLAT_RADIUS*Math.cos(k*Math.PI/3)}])]);
@@ -370,18 +373,19 @@ export function sailRoute(id,from,to,boats=[]) {
    const x=nearestSeaX(p.x,middle)-shift;
    return [-SEA_WIDTH,0,SEA_WIDTH].map(offset=>({...p,x:x+offset}));
  });
- let route=chartRoute(id,start,end,others);
+ const findRoute=chartPlanner(id,start,others);
+ let route=findRoute(end);
  // moored boats can wall in a harbour's dock point (Bog's three moorings sit 380-620 around it): aim for the
  // nearest free water beside it instead, and the arrival docks from there
  if(!route&&others.length)for(let r=BOAT_GAP+100;r<=BOAT_GAP+1000&&!route;r+=150){
    const ring=Array.from({length:16},(_,k)=>({x:end.x+Math.cos(k*Math.PI/8)*r,y:end.y+Math.sin(k*Math.PI/8)*r}))
      .filter(q=>canSail(q.x+shift,q.y,id)&&others.every(o=>seaBoatSeparated(q,o,BOAT_GAP+1)))
      .sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y));
-   for(const q of ring)if((route=chartRoute(id,start,q,others)))break;
+   for(const q of ring)if((route=findRoute(q)))break;
  }
  return route?.map(p=>({...p,x:p.x+shift}))??null;
 }
-function chartRoute(id,from,to,others) {
+function chartPlanner(id,from,others) {
   const lineRoom=(a,b)=>{
     const dx=b.x-a.x,dy=b.y-a.y,l2=dx*dx+dy*dy;
     return others.every(p=>{
@@ -394,74 +398,89 @@ function chartRoute(id,from,to,others) {
     });
   };
   const clearLine=(id,a,b)=>lineRoom(a,b)&&clearSeaLine(id,a,b);
-  if (clearLine(id,from,to)) return [to];
-  const {b,cols,rows,open:sea}=gridFor(id), open=others.length?sea.slice():sea, centre=i => ({x:b.x0+(i%cols+.5)*CELL,y:b.y0+(Math.floor(i/cols)+.5)*CELL});
-  const boatEdges=new Uint8Array(open.length);
-  // The cached sea grid stays immutable. Only cells near a live boat change.
-  for(const p of others){
-    const r=BOAT_GAP+CELL*Math.SQRT2/2+1;
-    const c0=Math.max(0,Math.floor((p.x-r-b.x0)/CELL)),c1=Math.min(cols-1,Math.floor((p.x+r-b.x0)/CELL));
-    const r0=Math.max(0,Math.floor((p.y-r-b.y0)/CELL)),r1=Math.min(rows-1,Math.floor((p.y+r-b.y0)/CELL));
-    for(let y=r0;y<=r1;y++)for(let x=c0;x<=c1;x++){
-      const i=y*cols+x,at=centre(i);
-      if(!seaBoatSeparated(at,p,r))boatEdges[i]=1;
-      if(!seaBoatSeparated(at,p,BOAT_GAP+1))open[i]=0;
-    }
-  }
-  const nearestOpen=p => {
-    const c0=Math.floor((p.x-b.x0)/CELL), r0=Math.floor((p.y-b.y0)/CELL);
-    for (let d=0;d<14;d++) for (let r=r0-d;r<=r0+d;r++) for (let c=c0-d;c<=c0+d;c++) {
-      if (r<0||c<0||r>=rows||c>=cols||!open[r*cols+c]) continue;
-      if (clearLine(id,p,centre(r*cols+c))) return r*cols+c;
-    }
-    return -1;
-  };
-  const connect=(p,step=60,limit=60)=>{
-    const direct=nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
-    const side=limit*2+1,total=side*side,start=limit*side+limit;
-    const prev=new Int32Array(total).fill(-1),queue=[start];prev[start]=start;
-    const point=i=>({x:p.x+(i%side-limit)*step,y:p.y+(Math.floor(i/side)-limit)*step});
-    for(let k=0;k<queue.length;k++){
-      const i=queue[k],at=point(i),c=Math.floor((at.x-b.x0)/CELL),r=Math.floor((at.y-b.y0)/CELL),cell=r*cols+c;
-      if(c>=0&&r>=0&&c<cols&&r<rows&&open[cell]&&clearLine(id,at,centre(cell))){
-        const points=[centre(cell)];for(let j=i;j!==start;j=prev[j])points.push(point(j));points.reverse();return {index:cell,points};
-      }
-      const row=Math.floor(i/side),col=i%side;
-      for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1],[1,-1],[-1,-1]]){
-        const nr=row+dr,nc=col+dc,j=nr*side+nc;if(nr<0||nc<0||nr>=side||nc>=side||prev[j]>=0)continue;
-        const q=point(j);if(canSail(q.x,q.y,id)&&clearLine(id,at,q)){prev[j]=i;queue.push(j);}
+  let plan;
+  return to => clearLine(id,from,to) ? [to] : (plan ??= prepare())(to);
+
+  function prepare() {
+    const {b,cols,rows,open:sea}=gridFor(id), open=others.length?sea.slice():sea, centre=i => ({x:b.x0+(i%cols+.5)*CELL,y:b.y0+(Math.floor(i/cols)+.5)*CELL});
+    const boatEdges=new Uint8Array(open.length);
+    // The cached sea grid stays immutable. Only cells near a live boat change.
+    for(const p of others){
+      const r=BOAT_GAP+CELL*Math.SQRT2/2+1;
+      const c0=Math.max(0,Math.floor((p.x-r-b.x0)/CELL)),c1=Math.min(cols-1,Math.floor((p.x+r-b.x0)/CELL));
+      const r0=Math.max(0,Math.floor((p.y-r-b.y0)/CELL)),r1=Math.min(rows-1,Math.floor((p.y+r-b.y0)/CELL));
+      for(let y=r0;y<=r1;y++)for(let x=c0;x<=c1;x++){
+        const i=y*cols+x,at=centre(i);
+        if(!seaBoatSeparated(at,p,r))boatEdges[i]=1;
+        if(!seaBoatSeparated(at,p,BOAT_GAP+1))open[i]=0;
       }
     }
-    return null;
-  };
-  const reach=p=>connect(p)??connect(p,20,180);
-  const entrance=reach(from),exit=entrance&&reach(to);if(!entrance||!exit)return null;
-  const start=entrance.index,goal=exit.index;
-  const prev=new Int32Array(cols*rows).fill(-1), queue=[start]; prev[start]=start;
-  for (let q=0;q<queue.length && prev[goal]<0;q++) {
-    const i=queue[q], c=i%cols, r=Math.floor(i/cols);
-    for (let dr=-1;dr<=1;dr++) for (let dc=-1;dc<=1;dc++) {
-      const nr=r+dr, nc=c+dc, n=nr*cols+nc;
-      // Check actual edges near boats instead of inflating every blocked cell by
-      // half its diagonal. That padding seals valid harbour escape corridors.
-      if ((dr||dc) && nr>=0 && nc>=0 && nr<rows && nc<cols && open[n] && prev[n]<0 && (!dr||!dc||open[r*cols+nc]&&open[nr*cols+c]) &&
-        (!(boatEdges[i]||boatEdges[n]) || lineRoom(centre(i),centre(n)))) {prev[n]=i; queue.push(n);}
-    }
+    let fineVisits=0;
+    const nearestOpen=p => {
+      const c0=Math.floor((p.x-b.x0)/CELL), r0=Math.floor((p.y-b.y0)/CELL);
+      for (let d=0;d<14;d++) for (let r=r0-d;r<=r0+d;r++) for (let c=c0-d;c<=c0+d;c++) {
+        if (Math.max(Math.abs(c-c0),Math.abs(r-r0))!==d || r<0||c<0||r>=rows||c>=cols||!open[r*cols+c]) continue;
+        if (fineVisits>=FINE_ROUTE_VISITS)return -1;
+        fineVisits++;
+        if (clearLine(id,p,centre(r*cols+c))) return r*cols+c;
+      }
+      return -1;
+    };
+    const connect=(p,step=60,limit=60)=>{
+      const direct=nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
+      const side=limit*2+1,total=side*side,start=limit*side+limit;
+      const prev=new Int32Array(total).fill(-1),queue=[start];prev[start]=start;
+      const point=i=>({x:p.x+(i%side-limit)*step,y:p.y+(Math.floor(i/side)-limit)*step});
+      for(let k=0;k<queue.length&&fineVisits<FINE_ROUTE_VISITS;k++,fineVisits++){
+        const i=queue[k],at=point(i),c=Math.floor((at.x-b.x0)/CELL),r=Math.floor((at.y-b.y0)/CELL),cell=r*cols+c;
+        if(c>=0&&r>=0&&c<cols&&r<rows&&open[cell]&&clearLine(id,at,centre(cell))){
+          const points=[centre(cell)];for(let j=i;j!==start;j=prev[j])points.push(point(j));points.reverse();return {index:cell,points};
+        }
+        const row=Math.floor(i/side),col=i%side;
+        for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1],[1,-1],[-1,-1]]){
+          const nr=row+dr,nc=col+dc,j=nr*side+nc;if(nr<0||nc<0||nr>=side||nc>=side||prev[j]>=0)continue;
+          const q=point(j);if(canSail(q.x,q.y,id)&&clearLine(id,at,q)){prev[j]=i;queue.push(j);}
+        }
+      }
+      return null;
+    };
+    const reach=p=>connect(p)??connect(p,20,180);
+    const entrance=reach(from);
+    if(!entrance)return () => null;
+    // Nearby dock alternatives all share this origin and obstacle grid.
+    const start=entrance.index;
+    const prev=new Int32Array(cols*rows).fill(-1), queue=[start]; prev[start]=start;
+    let cursor=0;
+    return to => {
+      const exit=reach(to);
+      if(!exit)return null;
+      const goal=exit.index;
+      while(cursor<queue.length && prev[goal]<0) {
+        const i=queue[cursor++], c=i%cols, r=Math.floor(i/cols);
+        for (let dr=-1;dr<=1;dr++) for (let dc=-1;dc<=1;dc++) {
+          const nr=r+dr, nc=c+dc, n=nr*cols+nc;
+          // Check actual edges near boats instead of inflating every blocked cell by
+          // half its diagonal. That padding seals valid harbour escape corridors.
+          if ((dr||dc) && nr>=0 && nc>=0 && nr<rows && nc<cols && open[n] && prev[n]<0 && (!dr||!dc||open[r*cols+nc]&&open[nr*cols+c]) &&
+              (!(boatEdges[i]||boatEdges[n]) || lineRoom(centre(i),centre(n)))) {prev[n]=i; queue.push(n);}
+        }
+      }
+      if(prev[goal]<0)return null;
+      const cells=[];
+      for (let i=goal;i!==start;i=prev[i]) cells.push(centre(i));
+      cells.push(centre(start));cells.reverse();cells.unshift(...entrance.points.slice(0,-1));cells.push(...exit.points.slice(0,-1).reverse(),to);
+      const route=[]; let at=from;
+      for (let k=0;k<cells.length;) {
+        if(!clearLine(id,at,cells[k]))return null;
+        let j=k,step=1,blocked=cells.length;
+        while(j+step<cells.length){const next=j+step;if(!clearLine(id,at,cells[next])){blocked=next;break;}j=next;step*=2;}
+        let lo=j+1,hi=Math.min(cells.length-1,blocked-1);
+        while(lo<=hi){const mid=(lo+hi)>>1;if(clearLine(id,at,cells[mid])){j=mid;lo=mid+1;}else hi=mid-1;}
+        route.push(cells[j]); at=cells[j]; k=j+1;
+      }
+      return route;
+    };
   }
-  if(prev[goal]<0)return null;
-  const cells=[];
-  for (let i=goal;i!==start;i=prev[i]) cells.push(centre(i));
-  cells.push(centre(start));cells.reverse();cells.unshift(...entrance.points.slice(0,-1));cells.push(...exit.points.slice(0,-1).reverse(),to);
-  const route=[]; let at=from;
-  for (let k=0;k<cells.length;) {
-    if(!clearLine(id,at,cells[k]))return null;
-    let j=k,step=1,blocked=cells.length;
-    while(j+step<cells.length){const next=j+step;if(!clearLine(id,at,cells[next])){blocked=next;break;}j=next;step*=2;}
-    let lo=j+1,hi=Math.min(cells.length-1,blocked-1);
-    while(lo<=hi){const mid=(lo+hi)>>1;if(clearLine(id,at,cells[mid])){j=mid;lo=mid+1;}else hi=mid-1;}
-    route.push(cells[j]); at=cells[j]; k=j+1;
-  }
-  return route;
 }
 
 export function setSailDestination(actor,x,y,boats=[]) {
