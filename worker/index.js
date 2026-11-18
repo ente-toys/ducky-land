@@ -23,9 +23,22 @@ const PRESENCE_UPDATE_MS = 100;
 const GLOBE_UPDATE_MS = 500;
 const SOCKET_COMMAND_BURST = 300;
 const SOCKET_COMMANDS_PER_SECOND = 240;
+const INPUT_TIMEOUT_MS = 350;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
 const ZERO = {x:0,y:0};
+
+function takeCommandToken(info, now) {
+  info.tokens = Math.min(SOCKET_COMMAND_BURST, info.tokens + (now - info.tokenTime) * SOCKET_COMMANDS_PER_SECOND / 1000);
+  info.tokenTime = now;
+  if (info.tokens < 1) return false;
+  info.tokens--;
+  return true;
+}
+
+function validMovementInput(command) {
+  return [-1, 0, 1].includes(command.x) && [-1, 0, 1].includes(command.y);
+}
 
 function reply(data, status = 200) {
   return Response.json(data, {status, headers:{'Cache-Control':'no-store'}});
@@ -771,11 +784,8 @@ export class IslandRoom {
       this.ctx.waitUntil(this.scheduleExpiry());
       if (!this.connections.has(socket)) return;
     }
-    info.tokens = Math.min(SOCKET_COMMAND_BURST, info.tokens + (now - info.tokenTime) * SOCKET_COMMANDS_PER_SECOND / 1000) - 1;
-    info.tokenTime = now;
     let rejectionReason;
-    if (info.tokens < 0) rejectionReason = 'rate_limit';
-    else if (typeof message !== 'string') rejectionReason = 'non_text_message';
+    if (typeof message !== 'string') rejectionReason = 'non_text_message';
     else if (message.length > 512) rejectionReason = 'message_too_large';
     if (rejectionReason) {
       const closeCode = 1008;
@@ -783,8 +793,23 @@ export class IslandRoom {
       socket.close(closeCode, 'Invalid or excessive commands');
       return;
     }
+    const allowed = takeCommandToken(info, now);
     let command;
     try { command = JSON.parse(message); } catch { return; }
+    if (!allowed) {
+      const actor = info.actor;
+      const lastSequence = Math.max(info.ack, info.throttled?.seq ?? 0);
+      if (!actor || expired || !Number.isSafeInteger(command?.seq) || command.seq <= lastSequence) return;
+      // Only movement may be deferred. Acknowledge dropped actions on the next
+      // tick so the client can clear any prediction for them.
+      let movement = info.throttled?.movement;
+      if (command.type === 'input' && validMovementInput(command) && (!command.islandId || command.islandId === actor.islandId)) {
+        movement = {command, islandId: actor.islandId, mode: actor.mode, receivedAt: now};
+      }
+      info.throttled = {seq: command.seq, movement};
+      if (!this.timer) this.timer = setInterval(() => this.step(),50);
+      return;
+    }
     if (command?.type === 'globe-subscription') {
       const {open, subscriptionId} = command;
       if (!info.globeFeed || typeof open !== 'boolean' || !Number.isSafeInteger(subscriptionId) || subscriptionId < 1) return;
@@ -829,7 +854,7 @@ export class IslandRoom {
       }
       return;
     }
-    if (!command || !Number.isSafeInteger(command.seq) || command.seq <= info.ack) return;
+    if (!command || !Number.isSafeInteger(command.seq) || command.seq <= Math.max(info.ack, info.throttled?.seq ?? 0)) return;
     const actor = info.actor;
     if (command.islandId && command.islandId !== actor.islandId) {
       info.ack=command.seq; this.attach(socket,info); this.broadcast(); return;
@@ -839,13 +864,8 @@ export class IslandRoom {
         startJump(actor);
         break;
       case 'input':
-        if (![-1,0,1].includes(command.x) || ![-1,0,1].includes(command.y)) return;
-        if (command.x || command.y) {info.boarding = null; info.landing = null;}
-        else if (command.stop === true) info.boarding = null;
-        if (command.stop === true && !info.landing) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
-        info.input = {x:command.x,y:command.y,run:command.run === true};
-        if (typeof command.reducedMotion==='boolean') actor.reducedMotion=command.reducedMotion;
-        info.inputExpires = now+350;
+        if (!validMovementInput(command)) return;
+        this.applyMovementInput(info, command, now);
         break;
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
@@ -935,6 +955,27 @@ export class IslandRoom {
     if (!this.timer) this.timer = setInterval(() => this.step(),50);
   }
 
+  applyMovementInput(info, command, receivedAt) {
+    const actor = info.actor;
+    if (command.x || command.y) {info.boarding = null; info.landing = null;}
+    else if (command.stop === true) info.boarding = null;
+    if (command.stop === true && !info.landing) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
+    info.input = {x:command.x,y:command.y,run:command.run === true};
+    if (typeof command.reducedMotion==='boolean') actor.reducedMotion=command.reducedMotion;
+    info.inputExpires = receivedAt + INPUT_TIMEOUT_MS;
+  }
+
+  applyThrottledCommands(info, now) {
+    const {seq, movement} = info.throttled;
+    if (movement && movement.command.seq > info.ack && now - movement.receivedAt < INPUT_TIMEOUT_MS &&
+        movement.islandId === info.actor.islandId && movement.mode === info.actor.mode) {
+      if (!takeCommandToken(info, now)) return;
+      this.applyMovementInput(info, movement.command, movement.receivedAt);
+    }
+    info.ack = Math.max(info.ack, seq);
+    info.throttled = null;
+  }
+
   step() {
     const now = Date.now();
     let active = false;
@@ -943,6 +984,10 @@ export class IslandRoom {
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       if (!actor) continue;
+      if (info.throttled) {
+        this.applyThrottledCommands(info, now);
+        active ||= Boolean(info.throttled);
+      }
       if (now >= info.inputExpires) info.input = ZERO;
       if (actor.mode === 'sailing') {
         this.recoverSailingPosition(actor);
