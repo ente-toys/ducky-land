@@ -52,7 +52,7 @@ function publicPose(actor) {
 // Persist the chart version privately; wire poses keep their existing public shape.
 const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION});
 // a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
-function wireBoat({owner, ownershipVersion, ...boat}) {
+function wireBoat({owner, ownershipVersion, buildRevision, ...boat}) {
   return owner ? {...boat, built:true} : boat;
 }
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
@@ -970,6 +970,10 @@ export class IslandRoom {
         const spot=strandedIslet(actor.islandId,actor,usable) && buildSpot(actor.islandId,actor,this.boats);
         if (!spot) {this.send(socket,{type:'travel-notice',text:'Walk to the edge of the island to build your boat.'}); break;}
         info.lastBuild=now;
+        if (this.simulation) {
+          this.buildBoat(info,spot);
+          break;
+        }
         // one built boat per player: an old one left idle somewhere is replaced
         this.boats=this.boats.filter(boat => boat.owner !== info.account || boat.occupant);
         const id=`${actor.islandId}-0~built-${now.toString(36)}${Math.floor(Math.random()*1296).toString(36)}`;

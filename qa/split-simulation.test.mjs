@@ -17,7 +17,7 @@ test(
     import {WorldPresence} from './worker/world-presence.js';
     import {worldStub,simulationStub,internalPost} from './server/simulation-routing.js';
     import {connect,createTestSession,logout} from './server/pages-auth.js';
-    import {boardingPoint} from './src/gameplay/islands.js';
+    import {boardingPoint,harborOf} from './src/gameplay/islands.js';
     export {WorldPresence};
     export class TestWorld extends WorldService {
       async fetch(request) {
@@ -64,7 +64,21 @@ test(
     }
     export class FixtureIsland extends IslandSimulation {
       async fetch(request) {
-        if(new URL(request.url).pathname==='/fixture/dock') {
+        const path=new URL(request.url).pathname;
+        if(path==='/fixture/build'){
+          const info=[...this.room.connections.values()].find(i=>i.actor);
+          await internalPost(simulationStub(this.env,this.room.simulation.world,'blossom'),'/fixture/old-built',{account:info.account});
+          this.room.buildBoat(info,{...harborOf('home').water,turn:0});
+          return Response.json(info.account);
+        }
+        if(path==='/fixture/old-built'){
+          const {account}=await request.json();
+          this.room.boats.push({id:'blossom-0~built-old',islandId:'blossom',...harborOf('blossom').water,turn:0,occupant:null,departure:'blossom',parked:true,owner:account});
+          this.room.saveBoats();
+          return Response.json({});
+        }
+        if(path==='/fixture/built')return Response.json(this.room.boats.filter(b=>b.owner).map(b=>b.id));
+        if(path==='/fixture/dock') {
           const info=[...this.room.connections.values()].find(i=>i.actor);
           const boat=this.room.boats.find(b=>!b.occupant);
           Object.assign(info.actor,boardingPoint(boat,this.room.navFor(info.actor.islandId)));
@@ -85,6 +99,7 @@ test(
       if(url.pathname==='/logout')return logout(ctx);
       if(url.pathname==='/migrate') return internalPost(worldStub(env,world),'/simulation/migrate',
         {id:url.searchParams.get('id'),target:url.searchParams.get('target'),world});
+      if(url.pathname==='/build'||url.pathname==='/built')return simulationStub(env,world,url.searchParams.get('island')??'home').fetch('https://island.internal/fixture'+url.pathname);
       if(url.pathname==='/dock')return simulationStub(env,world,'home').fetch('https://island.internal/fixture/dock');
       return new Response(null,{status:404});
     }}`;
@@ -168,6 +183,10 @@ test(
     assert.equal(isolated.welcome.protocol, 2);
     assert.deepEqual(isolated.snapshot.players, []);
     isolated.socket.close();
+    await request('/build');
+    const built = await wait(() => player.messages.find((m) => m.type === 'boat-built'));
+    assert.deepEqual(await (await request('/built?island=blossom')).json(), []);
+    assert.deepEqual(await (await request('/built?island=home')).json(), [built.boatId]);
     const dock = await (await request('/dock')).json();
     player.socket.send(JSON.stringify({type: 'board', boatId: dock.boat, seq: 1}));
     const handoff = await waitAsync(async () =>

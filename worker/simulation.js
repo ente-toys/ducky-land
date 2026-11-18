@@ -1,7 +1,7 @@
 import {localMigration} from './simulation-migration.js';
 import {IslandRoom, wirePose} from './index.js';
 import {internalPost, presenceStub, simulationStub, worldStub} from '../server/simulation-routing.js';
-import {islandFor, near} from '../src/gameplay/islands.js';
+import {ISLANDS, islandFor, near} from '../src/gameplay/islands.js';
 import {KARMA_RADIUS} from '../src/gameplay/karma-pool.js';
 import {mapOf} from '../src/world/island-maps.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
@@ -21,6 +21,8 @@ class LocalSimulation extends IslandRoom {
       CREATE TABLE IF NOT EXISTS received_versions (digest TEXT PRIMARY KEY,version INTEGER);
       CREATE TABLE IF NOT EXISTS arrival_acks (account TEXT PRIMARY KEY,generation INTEGER NOT NULL,ack INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS consumed_transfers (id TEXT PRIMARY KEY);
+      CREATE TABLE IF NOT EXISTS pending_builds (account TEXT PRIMARY KEY,payload TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS build_revisions (account TEXT PRIMARY KEY,revision INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS ended_visits (id TEXT PRIMARY KEY,account TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS pickup_claims (account TEXT PRIMARY KEY,payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS local_revision (id INTEGER PRIMARY KEY, revision INTEGER NOT NULL);
@@ -39,6 +41,7 @@ class LocalSimulation extends IslandRoom {
     this.startPublishing();
     this.ctx.waitUntil(this.retryOutgoing());
     this.ctx.waitUntil(this.deliverEndedVisits());
+    this.ctx.waitUntil(this.finishBuilds());
   }
 
   newHealth() {
@@ -96,6 +99,11 @@ class LocalSimulation extends IslandRoom {
   }
 
   publish() {
+    if (this.remotePresence && Date.now() - this.lastPresenceAt > 5000) {
+      this.remotePresence = null;
+      this.remoteBoats = [];
+      if (!this.timer) this.broadcast();
+    }
     if (this.publishing) return;
     this.publishing = true;
     const players = [];
@@ -147,6 +155,7 @@ class LocalSimulation extends IslandRoom {
                 !ownIds.has(b.boat.id)
             )
             .map((b) => b.boat);
+          if (!this.timer) this.broadcast();
         }
       })
       .catch(() => {})
@@ -274,6 +283,71 @@ class LocalSimulation extends IslandRoom {
         balance,
         feathers: this.feathers?.feathers ?? [],
       });
+    }
+  }
+
+  buildBoat(info, spot) {
+    const owner = this.simulation.owner;
+    const boat = {
+      id: owner + '-0~built-' + crypto.randomUUID(),
+      islandId: owner,
+      x: spot.x,
+      y: spot.y,
+      turn: spot.turn,
+      occupant: null,
+      departure: owner,
+      parked: true,
+      owner: info.account,
+    };
+    this.sql.exec(
+      'INSERT OR IGNORE INTO pending_builds VALUES(?,?)',
+      info.account,
+      JSON.stringify({
+        account: info.account,
+        digest: info.digest,
+        owner,
+        generation: info.generation,
+        boat,
+      })
+    );
+    this.ctx.waitUntil(this.finishBuilds());
+  }
+
+  async finishBuilds() {
+    if (this.building || this.ctx.storage.kv.get('frozen')) return;
+    this.building = true;
+    try {
+      for (const {payload} of this.sql.exec('SELECT payload FROM pending_builds').toArray()) {
+        const data = JSON.parse(payload);
+        const receipt = await this.control('build', data);
+        if (receipt.ok) {
+          const {revision} = await receipt.json();
+          await Promise.all(
+            [...ISLANDS.map((island) => island.id), 'sea'].map(async (owner) => {
+              const target = simulationStub(this.env, this.simulation.world, owner);
+              const cleared = await internalPost(target, '/retire-built', {account: data.account, revision});
+              if (!cleared.ok) throw Error('Boat replacement pending');
+            })
+          );
+          const latest = this.sql
+            .exec('SELECT revision FROM build_revisions WHERE account=?', data.account)
+            .one();
+          if (latest.revision === revision) {
+            const boat = {...data.boat, buildRevision: revision};
+            this.boats = [...this.boats.filter((b) => b.id !== boat.id), boat];
+            this.saveBoats();
+            for (const [socket, info] of this.connections)
+              if (info.actor && info.account === data.account)
+                this.send(socket, {type: 'boat-built', boatId: boat.id, x: boat.x, y: boat.y});
+            this.broadcast();
+          }
+        } else if (![403, 409].includes(receipt.status)) throw Error('Boat build pending');
+        this.sql.exec('DELETE FROM pending_builds WHERE account=?', data.account);
+      }
+    } finally {
+      this.building = false;
+      if (this.sql.exec('SELECT 1 FROM pending_builds LIMIT 1').toArray().length)
+        await this.ctx.storage.setAlarm(Date.now() + 1000);
     }
   }
 
@@ -451,7 +525,8 @@ class LocalSimulation extends IslandRoom {
     if (
       this.transferReady &&
       (this.pendingPickups?.size ||
-        this.sql.exec('SELECT 1 FROM ended_visits LIMIT 1').toArray().length ||
+        this.sql.exec('SELECT 1 FROM ended_visits UNION ALL SELECT 1 FROM pending_builds LIMIT 1').toArray()
+          .length ||
         this.sql.exec('SELECT id FROM outgoing LIMIT 1').toArray().length)
     ) {
       const retry = Date.now() + 1000,
@@ -465,11 +540,12 @@ class LocalSimulation extends IslandRoom {
     await this.retryOutgoing();
     for (const data of this.pendingPickups.values()) await this.finishPickup(data);
     await this.deliverEndedVisits();
+    await this.finishBuilds();
   }
 
   async fetch(request) {
     const url = new URL(request.url);
-    if (['/migration/export', '/migration/import'].includes(url.pathname))
+    if (['/migration/export', '/migration/import', '/migration/pending'].includes(url.pathname))
       return localMigration(this, url.pathname, await request.json());
     if (this.ctx.storage.kv.get('frozen')) return fail(503);
     if (url.pathname === '/activate') {
@@ -494,6 +570,23 @@ class LocalSimulation extends IslandRoom {
         data.generation + 1,
         JSON.stringify(data)
       );
+      return ok();
+    }
+    if (url.pathname === '/retire-built') {
+      const {account, revision} = await request.json();
+      this.sql.exec(
+        'INSERT INTO build_revisions VALUES(?,?) ON CONFLICT(account) DO UPDATE SET revision=max(revision,excluded.revision)',
+        account,
+        revision
+      );
+      const keep = this.boats.filter(
+        (b) => b.owner !== account || b.occupant || (b.buildRevision ?? 0) >= revision
+      );
+      if (keep.length !== this.boats.length) {
+        this.boats = keep;
+        this.saveBoats();
+        this.broadcast();
+      }
       return ok();
     }
     if (url.pathname === '/friends-changed') {
@@ -617,7 +710,7 @@ class LocalSimulation extends IslandRoom {
         this.karma.balances.set(user.account, charged.balance);
         this.karma.saveBogAdmission(user.account, charged.entry);
       } else if (!entry) this.karma.endBogEntry(user.account);
-      if (entry && this.karma.bogEntry(user.account)?.id !== entry.id) {
+      if (owner === BOG_ISLAND && entry && this.karma.bogEntry(user.account)?.id !== entry.id) {
         this.karma.saveBogAdmission(user.account, entry);
       }
       if (user.canPlay && url.searchParams.get('play') === '1' && url.pathname === '/room') {

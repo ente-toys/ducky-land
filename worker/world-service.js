@@ -21,6 +21,7 @@ export class WorldService extends LegacyRoom {
       CREATE TABLE IF NOT EXISTS simulation_sessions (digest TEXT,owner TEXT,expires INTEGER,PRIMARY KEY(digest,owner));
       CREATE TABLE IF NOT EXISTS session_versions (digest TEXT PRIMARY KEY, version INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS session_notices (digest TEXT, owner TEXT, version INTEGER, payload TEXT, PRIMARY KEY(digest,owner));
+      CREATE TABLE IF NOT EXISTS built_receipts (revision INTEGER PRIMARY KEY AUTOINCREMENT,boat TEXT UNIQUE NOT NULL,account TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS pickup_receipts (id TEXT PRIMARY KEY, account TEXT, result TEXT, expires INTEGER);`);
     this.settings = settings;
   }
@@ -244,10 +245,28 @@ export class WorldService extends LegacyRoom {
       });
       return result ? Response.json(result) : fail(403);
     }
+    if (path === '/simulation/build') {
+      const receipt = this.sql
+        .exec('SELECT revision FROM built_receipts WHERE boat=? AND account=?', data.boat.id, account)
+        .toArray()[0];
+      if (receipt) return Response.json(receipt);
+    }
     const session = this.session(digest);
     if (!session?.canPlay || session.account !== account) return fail(403);
     const current = this.directory.locate(account);
     if (current.owner !== owner || current.generation !== generation) return fail();
+    if (path === '/simulation/build') {
+      if (owner === 'sea' || data.boat.owner !== account || data.boat.islandId !== owner) return fail();
+      return Response.json(
+        this.sql
+          .exec(
+            'INSERT INTO built_receipts(boat,account) VALUES(?,?) RETURNING revision',
+            data.boat.id,
+            account
+          )
+          .one()
+      );
+    }
     if (path === '/simulation/arena-entry') {
       if (owner !== BOG_ISLAND) return fail(403);
       const entry = this.karma.beginBogEntry(account);

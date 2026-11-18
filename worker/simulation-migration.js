@@ -174,10 +174,22 @@ export async function migrateWorld(room, {id, world, target}) {
       generation: previous?.id === id ? previous.generation : Date.now(),
     };
     if (!previous || previous.id !== id) {
-      if (
-        room.sql.exec("SELECT id FROM simulation_transfers WHERE state='prepared' LIMIT 1").toArray().length
-      )
-        return rejected('Travel in progress');
+      if (target === 'legacy') {
+        // Already-paid effects finish at their current owner before it freezes.
+        // This check only reads local storage, so it can run with the world gate closed.
+        const pending = await Promise.all(
+          owners.map(async (owner) => {
+            const response = await internalPost(
+              simulationStub(room.env, world, owner),
+              '/migration/pending',
+              {}
+            );
+            if (!response.ok) throw Error('Unable to freeze ' + owner);
+            return response.json();
+          })
+        );
+        if (pending.some(Boolean)) return rejected('Retry while the last account changes finish');
+      }
       room.ctx.storage.transactionSync(() => {
         if (target === 'split') storeSnapshot(room, 'migration-source', freeze(room));
         kv.put('migration', migration);
@@ -247,6 +259,15 @@ export async function migrateWorld(room, {id, world, target}) {
         const part = await call(owner, '/migration/export', {id, committed, relinquished});
         for (const k of Object.keys(data)) data[k].push(...part[k]);
       }
+      // The global visit proves payment. Combat progress belongs to Bog and
+      // may be newer than the receipt, or the sailor may never have rejoined.
+      const combat = new Map(data.visits.map((v) => [v.account, v]));
+      data.visits = list(room, 'bog_entries').map((receipt) => {
+        const progress = combat.get(receipt.account);
+        return progress && JSON.parse(progress.state).id === JSON.parse(receipt.state).id
+          ? progress
+          : receipt;
+      });
       validate(data);
       for (const p of data.players) p.expires = Date.now() + day;
       room.ctx.storage.transactionSync(() => replaceGameplay(room, data));
@@ -262,11 +283,23 @@ export async function migrateWorld(room, {id, world, target}) {
 
 export async function localMigration(room, path, {id, data, committed = [], relinquished = []}) {
   const kv = room.ctx.storage.kv;
+  if (path === '/migration/pending')
+    return Response.json(
+      Boolean(
+        room.sql
+          .exec(
+            'SELECT 1 FROM pending_builds UNION ALL SELECT 1 FROM ended_visits UNION ALL SELECT 1 FROM pickup_claims LIMIT 1'
+          )
+          .toArray().length
+      )
+    );
   if (path === '/migration/import') {
     if (kv.get('last-import') !== id) {
       room.ctx.storage.transactionSync(() => {
         replaceGameplay(room, data);
-        room.sql.exec('DELETE FROM incoming; DELETE FROM outgoing;');
+        room.sql.exec(
+          'DELETE FROM incoming; DELETE FROM outgoing; DELETE FROM pickup_claims; DELETE FROM pending_builds; DELETE FROM ended_visits;'
+        );
         kv.put('last-import', id);
         kv.delete('frozen');
       });
@@ -281,6 +314,10 @@ export async function localMigration(room, path, {id, data, committed = [], reli
   }
   if (!kv.get('frozen')) {
     const snapshot = freeze(room);
+    if (room.simulation.owner !== BOG_ISLAND) {
+      snapshot.profiles = [];
+      snapshot.visits = [];
+    }
     for (const row of list(room, 'outgoing')) {
       if (relinquished.includes(row.id)) continue;
       const item = JSON.parse(row.payload);
