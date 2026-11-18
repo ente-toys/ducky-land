@@ -15,6 +15,11 @@
       "invocation_logs": true,
       "persist": true,
       "destinations": ["sentry-room-logs"]
+    },
+    "traces": {
+      "enabled": true,
+      "destinations": ["sentry-room-traces"],
+      "head_sampling_rate": 0.05
     }
   },
   "limits": {"cpu_ms": 60000},
